@@ -151,18 +151,7 @@ foreach ($aPeriodos as $oPeriodo) {
                 <td><?php db_select("tipoEmissao", $aEmissao, true, 1); ?></td>
             </tr>
 
-            <tr>
-                <td><label><b>Cálculo com base nos valores:</b></label></td>
-                <?
-                $aTipo = array(
-                    '0' => 'Selecione',
-                    '1' => 'Empenhados',
-                    '2' => 'Liquidados'
-                );
-                ?>
-                <td><?php db_select("tipoCalculo", $aTipo, true, 1); ?></td>
-            </tr>
-
+            <input type="hidden" name="tipoCalculo" value="2" />
 
             <tr>
                 <td>&nbsp; </td>

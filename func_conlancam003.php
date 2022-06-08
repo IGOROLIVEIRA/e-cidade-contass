@@ -13,7 +13,7 @@
  *  Este programa e distribuido na expectativa de ser util, mas SEM   
  *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
  *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais   
  *  detalhes.                                                         
  *                                                                    
  *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
@@ -39,7 +39,7 @@ include("classes/db_conplano_classe.php");
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
 
-$clconplano     = new cl_conplano;
+$clconplano     = new cl_conplano; 
 $clconlancamval = new cl_conlancamval;
 $clconlancamcompl = new cl_conlancamcompl;
 $clconlancamdig   = new cl_conlancamdig;
@@ -90,13 +90,13 @@ $anousu = db_getsession("DB_anousu");
     <input name="Fechar" type="button" id="fechar" value="Fechar" onClick="parent.db_iframe_conlancam003.hide();">
  
 	<?
-	if (isset($sql)) {
-	    $js_funcao="";
+	if (isset($sql)) {    
+	    $js_funcao="";   
             db_lovrot($sql,15,"()","","$js_funcao");
 	}   
-        echo "</form>";
+        echo "</form>"; 
 	?>
-   </center>
+   </center> 
 	</td>
   </tr>
 </table>

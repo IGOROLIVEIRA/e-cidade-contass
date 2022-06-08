@@ -97,7 +97,6 @@ class cl_solicitemunid {
        $this->erro_status = "0";
        return false;
      }
-       $this->pc17_codigo = $pc17_codigo; 
      if(($this->pc17_codigo == null) || ($this->pc17_codigo == "") ){ 
        $this->erro_sql = " Campo pc17_codigo nao declarado.";
        $this->erro_banco = "Chave Primaria zerada.";
@@ -197,9 +196,9 @@ class cl_solicitemunid {
        }
      }
      $sql .= " where ";
-     if($pc17_codigo!=null){
-       $sql .= " pc17_codigo = $this->pc17_codigo";
-     }
+    if($pc17_codigo!=null){
+      $sql .= " pc17_codigo = $this->pc17_codigo";
+    }
      $resaco = $this->sql_record($this->sql_query_file($this->pc17_codigo));
      if($this->numrows>0){
        for($conresaco=0;$conresaco<$this->numrows;$conresaco++){

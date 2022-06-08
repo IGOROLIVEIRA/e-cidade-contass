@@ -285,6 +285,9 @@ function js_adicionarItem() {
     return false;
 
   }
+
+
+
   js_divCarregando('Aguarde, adicionando item',"msgBox");
   var oParam            = new Object();
   oParam.iCodigoItem    = $F('pc95_codmater');

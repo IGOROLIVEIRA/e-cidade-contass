@@ -364,7 +364,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
             $('btnAditar').disabled = false;
             $('btnItens').disabled = false;
-
+            
             me.oTxtValorOriginal.setValue(js_formatar(oRetorno.valores.valororiginal, "f"));
             me.oTxtValorAtual.setValue(js_formatar(oRetorno.valores.valoratual, "f"));
 
@@ -1037,17 +1037,18 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
                 var qtanter = oSelecionados[iIndice].aCells[3].getValue().getNumber();
                 var vlranter = oSelecionados[iIndice].aCells[4].getValue().getNumber();
+                
                 if ($('oCboTipoAditivo').value == 9
                     && (oItemAdicionar.quantidade < qtanter || oItemAdicionar.valorunitario < vlranter)) {
-
                     lAditar = false;
-                    return alert("Não é possível realizar DESCRÉSCIMOS de itens no tipo ACRÉSCIMO de itens!");
+                    return alert("Não é possível realizar DESCRÉSCIMOS de itens no tipo ACRÉSCIMO de itens!");   
                 }
 
                 if ($('oCboTipoAditivo').value == 10
                     && (oItemAdicionar.quantidade > qtanter || oItemAdicionar.valorunitario > vlranter)) {
                     lAditar = false;
                     return alert("Não é possível realizar ACRÉSCIMOS de itens no tipo DESCRÉSCIMO de itens!");
+                    
                 }
 
                 if ($('oCboTipoAditivo').value == 13) {
@@ -1119,12 +1120,12 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
                         nValorDotacao += oDotacao.valor;
                     });
 
-                    if (lAditar && nValorDotacao.toFixed(2) != oItemAdicionar.valor.toFixed(2)) {
+/*                    if (lAditar && nValorDotacao.toFixed(2) != oItemAdicionar.valor.toFixed(2)) {
 
                         lAditar = false;
                         return alert("O valor da soma das Dotações do item " + oItem.descricaoitem.urlDecode() + " deve ser igual ao Valor Total do item.");
                     }
-
+*/
                     oItemAdicionar.dotacoes = oItem.dotacoes;
                 } else {
                     oItemAdicionar.dotacoes = oItem.dotacoesoriginal;
@@ -1540,10 +1541,17 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
         aItens.each(function (oItem, iSeq) {
           var aLinha = new Array();
+          valor1 = oItem.qtdeanterior.toString();
+          valor = valor1.split('.');
+            if(valor.length>1){
+                casas = valor[1].length;
+            }else{
+                casas = 2;
+            }
           aLinha[0] = oItem.codigoitem;
           aLinha[1] = oItem.descricaoitem.urlDecode();
-          aLinha[2] = js_formatar(oItem.qtdeanterior, 'f', 2);
-          aLinha[3] = js_formatar(oItem.vlunitanterior, 'f', 2);
+          aLinha[2] = js_formatar(oItem.qtdeanterior, 'f', casas);
+          aLinha[3] = js_formatar(oItem.vlunitanterior, 'f', 4);
 
             if (!oItem.novo) {
                 if (iTipoAditamento == 2) {
@@ -1854,22 +1862,30 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             nUnitario    = aLinha.aCells[6].getValue().getNumber(),
             nQuantidadeA = aLinha.aCells[3].getValue().getNumber(),//OC5304
             nUnitarioA   = Number(aLinha.aCells[4].getValue().split('.').join("").replace(",","."));//OC5304
-
+            valor1 = nQuantidade.toString();
+            valor = valor1.split('.');
+            if(valor.length>1){
+                casas = valor[1].length;
+            }else{
+                casas = 2;
+            }
+               
         aItensPosicao[iLinha].novaquantidade  = nQuantidade;
         aItensPosicao[iLinha].novounitario    = nUnitario;
 
         nValorTotal = nQuantidade * nUnitario;
         valorTotal  = nQuantidadeA * nUnitarioA;
 
+ 
         aLinha.aCells[7].setContent(js_formatar(nQuantidade * nUnitario, 'f', 2));
         aLinha.aCells[8].setContent( js_formatar(Math.abs(nValorTotal - valorTotal), 'f', 2));//Valor Aditado OC5304
 
         if (aItensPosicao[iLinha].servico == false && (aItensPosicao[iLinha].controlaquantidade == "t" || aItensPosicao[iLinha].controlaquantidade != "")) {
-            aLinha.aCells[9].setContent(js_formatar(Math.abs(nQuantidade - nQuantidadeA), 'f', 2) );//Quantidade Aditada OC5304
+            aLinha.aCells[9].setContent(js_formatar(Math.abs(nQuantidade - nQuantidadeA), 'f', casas) );//Quantidade Aditada OC5304
 
         }
         else if (aItensPosicao[iLinha].servico == true && aItensPosicao[iLinha].controlaquantidade == "t") {
-            aLinha.aCells[9].setContent(js_formatar(Math.abs(nQuantidade - nQuantidadeA), 'f', 2) );//Quantidade Aditada OC5304
+            aLinha.aCells[9].setContent(js_formatar(Math.abs(nQuantidade - nQuantidadeA), 'f', casas) );//Quantidade Aditada OC5304
         }
 
         me.salvarInfoDotacoes(iLinha);

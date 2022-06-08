@@ -76,11 +76,12 @@ class cl_empautoriza
     var $e54_codlicitacao = 0;
     var $e54_licoutrosorgaos = 0;
     var $e54_adesaoregpreco = 0;
-    var $e54_nummodalidade = null;
+    var $e54_nummodalidade = null; 
     var $e54_tipoautorizacao = null;
     var $e54_tipoorigem = null;
     var $e54_tipodespesa = null;
     var $e54_desconto = null;
+    var $e54_numerotermo = null;
     // cria propriedade com as variaveis do arquivo
     var $campos = "
                      e54_autori = int4 = Autorização
@@ -115,6 +116,7 @@ class cl_empautoriza
                      e54_tipoorigem = int4 = Tipo de Origem da Autorização - Disponiveis no manual do sicom
                      e54_tipoautorizacao = int4 = Tipo de Autorização 1-direta,2-licoutrosorgaos,3-licitacao,4-adesaoregpreco
                      e54_desconto = boolean = Desconto automático
+                     e54_numerotermo = int8 = numero do termo
                      ";
     //funcao construtor da classe
     function cl_empautoriza()
@@ -182,6 +184,7 @@ class cl_empautoriza
             $this->e54_tipoorigem = ($this->e54_tipoorigem == "" ? @$GLOBALS["HTTP_POST_VARS"]["e54_tipoorigem"] : $this->e54_tipoorigem);
             $this->e54_tipoautorizacao = ($this->e54_tipoautorizacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["e54_tipoautorizacao"] : $this->e54_tipoautorizacao);
             $this->e54_desconto = ($this->e54_desconto == "" ? @$GLOBALS["HTTP_POST_VARS"]["e54_desconto"] : $this->e54_desconto);
+            $this->e54_numerotermo = ($this->e54_numerotermo == "" ? @$GLOBALS["HTTP_POST_VARS"]["e54_numerotermo"] : $this->e54_numerotermo);
         } else {
             $this->e54_autori = ($this->e54_autori == "" ? @$GLOBALS["HTTP_POST_VARS"]["e54_autori"] : $this->e54_autori);
         }
@@ -209,14 +212,14 @@ class cl_empautoriza
             return false;
         }
         //
-        //           if($this->e54_codcom == null ){
+        //           if($this->e54_codcom == null ){    
         //           $this->erro_sql = " Campo Tipo de compr4 nao Informad0.".$this->e54_codcom.$_SESSION["e54_codcom"]."t99=>".$this->e54_codcom."<=";
         //           $this->erro_campo = "e54_codcom";
         //           $this->erro_banco = "";
         //           $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
         //           $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
         //           $this->erro_status = "0";
-        //           return false;
+        //           return false; 
         //         }
         /**
          * removido validação pois outras rotinas que utilizam essa classe para inserir estavam passando nessa validação
@@ -246,19 +249,22 @@ class cl_empautoriza
             $this->erro_status = "0";
             return false;
         }
-        if ($this->e54_numsol == null) {
+        if ($this->e54_numsol == null) { 
             $this->e54_numsol = "0";
         }
         if ($this->e54_anulad == null) {
             $this->e54_anulad = "null";
         }
-        if ($this->e54_emiss == null) {
+        if ($this->e54_emiss == null) { 
             $this->e54_emiss = "null";
         }
         if ($this->e54_gestaut == null || $this->e54_gestaut == "") {
             $this->e54_gestaut = 0;
         }
-        if ($this->e54_codtipo == null) {
+        if ($this->e54_numerotermo == null || $this->e54_numerotermo == "") {
+            $this->e54_numerotermo = "null";
+        }
+        if ($this->e54_codtipo == null || $this->e54_codtipo == 0 ) {
             $this->erro_sql = " Campo Tipo Empenho nao Informado.";
             $this->erro_campo = "e54_codtipo";
             $this->erro_banco = "";
@@ -295,6 +301,26 @@ class cl_empautoriza
             $this->erro_status = "0";
             return false;
         }
+        if ($this->e54_concarpeculiar == null) {
+            $this->erro_sql = " Campo Caracteristica Peculiar nao Informado.";
+            $this->erro_campo = "e54_concarpeculiar";
+            $this->erro_banco = "";
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_status = "0";
+            return false;
+        }
+        if ($this->e54_resumo == null) {
+            $this->erro_sql = " Campo Resumo nao Informado.";
+            $this->erro_campo = "e54_resumo";
+            $this->erro_banco = "";
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_status = "0";
+            return false;
+        }
+
+
 
         if ($e54_autori == "" || $e54_autori == null) {
             $result = db_query("select nextval('empautoriza_e54_autori_seq')");
@@ -364,6 +390,7 @@ class cl_empautoriza
                                           ,e54_tipoorigem
                                           ,e54_tipoautorizacao
                                           ,e54_desconto
+                                          ,e54_numerotermo
 
                            )
                     values (
@@ -399,6 +426,8 @@ class cl_empautoriza
                                    ," . ($this->e54_tipoorigem == "null" || $this->e54_tipoorigem == "" ? "null" : "'" . $this->e54_tipoorigem . "'") . "
                                    ," . ($this->e54_tipoautorizacao == "null" || $this->e54_tipoautorizacao == "" ? "null" : "'" . $this->e54_tipoautorizacao . "'") . "
                                    ,'$this->e54_desconto'
+                                   ,$this->e54_numerotermo
+                                   
                           )";
         $result = db_query($sql);
         if ($result == false) {
@@ -593,16 +622,26 @@ class cl_empautoriza
             if (isset($GLOBALS["HTTP_POST_VARS"]["e54_emiss_dia"])) {
                 $sql  .= $virgula . " e54_emiss = null ";
                 $virgula = ",";
-            }
+            } 
         }
         if (trim($this->e54_resumo) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e54_resumo"])) {
+
             $sql  .= $virgula . " e54_resumo = '$this->e54_resumo' ";
             $virgula = ",";
+            if (trim($this->e54_resumo) == null) {
+                $this->erro_sql = " Campo Resumo nao Informado.";
+                $this->erro_campo = "e54_resumo";
+                $this->erro_banco = "";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
         }
         if (trim($this->e54_codtipo) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e54_codtipo"])) {
             $sql  .= $virgula . " e54_codtipo = $this->e54_codtipo ";
             $virgula = ",";
-            if (trim($this->e54_codtipo) == null) {
+            if (trim($this->e54_codtipo) == null || trim($this->e54_codtipo) == 0) {
                 $this->erro_sql = " Campo Tipo Empenho nao Informado.";
                 $this->erro_campo = "e54_codtipo";
                 $this->erro_banco = "";
@@ -1782,7 +1821,7 @@ class cl_empautoriza
             " e54_autori = {$iCodAutori} "
         );
         $rsSolicitacao   = db_query($sSqlSolicitacao);
-
+        /* Aleteração OC15688
         if ($rsSolicitacao && pg_num_rows($rsSolicitacao) > 0) {
 
             $iCodigoProcessoCompra = db_utils::fieldsMemory($rsSolicitacao, 0)->pc80_codproc;
@@ -1793,7 +1832,7 @@ class cl_empautoriza
                               and e73_autori = {$iCodAutori}";
 
             $rsDeleta = db_query($sSqlDeleta);
-        }
+        }*/
 
         /*
          * Alteramos a situação da autorização de empenho para anulada

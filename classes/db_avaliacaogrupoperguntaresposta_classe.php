@@ -515,5 +515,53 @@ class cl_avaliacaogrupoperguntaresposta {
           }
           return $sql;
   }
+
+    function sql_query_UltimaResposta ( $db108_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){
+        $sql = "select ";
+        if($campos != "*" ){
+            $campos_sql = split("#",$campos);
+            $virgula = "";
+            for($i=0;$i<sizeof($campos_sql);$i++){
+                $sql .= $virgula.$campos_sql[$i];
+                $virgula = ",";
+            }
+        }else{
+            $sql .= $campos;
+        }
+        $sql .= " from avaliacaogrupoperguntaresposta ";
+        $sql .= "      inner join avaliacaoresposta       on  db106_sequencial = db108_avaliacaoresposta";
+        $sql .= "      inner join avaliacaogruporesposta  on  db107_sequencial = db108_avaliacaogruporesposta";
+        $sql .= "      inner join avaliacaoperguntaopcao  on  db104_sequencial = db106_avaliacaoperguntaopcao";
+        $sql .= "      inner join avaliacaopergunta       on  db103_sequencial = db104_avaliacaopergunta";
+        $sql .= "      inner join avaliacaogrupopergunta  on  db103_avaliacaogrupopergunta = db102_sequencial";
+        $sql .= "      inner join avaliacao               on  db102_avaliacao              = db101_sequencial";
+        $sql2 = " WHERE COALESCE(
+                     (SELECT db106_resposta::integer
+                      FROM avaliacaogrupoperguntaresposta
+                      JOIN avaliacaoresposta ON avaliacaogrupoperguntaresposta.db108_avaliacaoresposta=avaliacaoresposta.db106_sequencial
+                      JOIN avaliacaoperguntaopcao ON avaliacaoperguntaopcao.db104_sequencial = avaliacaoresposta.db106_avaliacaoperguntaopcao
+                      WHERE db108_avaliacaogruporesposta=db107_sequencial
+                          AND db104_identificadorcampo = 'instituicao'),0) IN (".db_getsession("DB_instit").",
+                                                                               0)
+    AND db107_datalancamento::varchar || db107_hora = (SELECT db107_datalancamento::varchar || db107_hora FROM avaliacaogruporesposta ORDER BY db107_sequencial DESC LIMIT 1)";
+        if($dbwhere==""){
+            if($db108_sequencial!=null ){
+                $sql2 .= " AND avaliacaogrupoperguntaresposta.db108_sequencial = $db108_sequencial ";
+            }
+        }else if($dbwhere != ""){
+            $sql2 .= " AND $dbwhere";
+        }
+        $sql .= $sql2;
+        if($ordem != null ){
+            $sql .= " order by ";
+            $campos_sql = split("#",$ordem);
+            $virgula = "";
+            for($i=0;$i<sizeof($campos_sql);$i++){
+                $sql .= $virgula.$campos_sql[$i];
+                $virgula = ",";
+            }
+        }
+        return $sql;
+    }
 }
 ?>

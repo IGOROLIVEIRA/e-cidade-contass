@@ -41,9 +41,9 @@ require_once("classes/db_empparametro_classe.php");
 /*
  * Configurações GED
 */
-require_once ("integracao_externa/ged/GerenciadorEletronicoDocumento.model.php");
-require_once ("integracao_externa/ged/GerenciadorEletronicoDocumentoConfiguracao.model.php");
-require_once ("libs/exceptions/BusinessException.php");
+require_once("integracao_externa/ged/GerenciadorEletronicoDocumento.model.php");
+require_once("integracao_externa/ged/GerenciadorEletronicoDocumentoConfiguracao.model.php");
+require_once("libs/exceptions/BusinessException.php");
 
 $oGet = db_utils::postMemory($_GET);
 
@@ -67,55 +67,56 @@ $cldb_departorg  = new cl_db_departorg;
 $classinatura    = new cl_assinatura;
 $clpcparam       = new cl_pcparam;
 $clorcreservasol = new cl_orcreservasol;
-$clempparametro	 = new cl_empparametro;
+$clempparametro     = new cl_empparametro;
 
-$sqlpref    = "select * from db_config where codigo = ".db_getsession("DB_instit");
+$sqlpref    = "select * from db_config where codigo = " . db_getsession("DB_instit");
 $resultpref = db_query($sqlpref);
-db_fieldsmemory($resultpref,0);
+db_fieldsmemory($resultpref, 0);
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 
-$result_pcparam = $clpcparam->sql_record($clpcparam->sql_query_file(db_getsession("DB_instit"),"pc30_comsaldo,pc30_permsemdotac,pc30_gerareserva,pc30_libdotac"));
-db_fieldsmemory($result_pcparam,0);
+$result_pcparam = $clpcparam->sql_record($clpcparam->sql_query_file(db_getsession("DB_instit"), "pc30_comsaldo,pc30_permsemdotac,pc30_gerareserva,pc30_libdotac"));
+db_fieldsmemory($result_pcparam, 0);
 
-$result02 = $clempparametro->sql_record($clempparametro->sql_query_file(db_getsession("DB_anousu"),"e30_numdec"));
-if($clempparametro->numrows>0) {
-    db_fieldsmemory($result02,0);
+$result02 = $clempparametro->sql_record($clempparametro->sql_query_file(db_getsession("DB_anousu"), "e30_numdec"));
+if ($clempparametro->numrows > 0) {
+    db_fieldsmemory($result02, 0);
 }
 
 $where_solicita = "";
-if(isset($ini) && trim($ini)!="") {
+if (isset($ini) && trim($ini) != "") {
     $where_solicita = " pc10_numero >= $ini";
 }
-if(isset($fim) && trim($fim)!="") {
+if (isset($fim) && trim($fim) != "") {
 
-    if($where_solicita == "") {
+    if ($where_solicita == "") {
         $where_solicita = " pc10_numero <= $fim";
-    }else{
+    } else {
         $where_solicita = " pc10_numero between $ini and $fim";
     }
 }
 
 $and = "";
-if($where_solicita!="") {
+if ($where_solicita != "") {
     $and = " and ";
 }
 
-if(isset($departamento) && trim($departamento)!="") {
+if (isset($departamento) && trim($departamento) != "") {
     $where_solicita .= " $and pc10_depto=$departamento ";
 }
 $where_teste = "";
-if(trim($where_solicita) != "") {
+if (trim($where_solicita) != "") {
     $where_teste = $where_solicita;
 }
-if($pc30_permsemdotac=='f') {
-    $result_test_dot = $clsolicitem->sql_record($clsolicitem->sql_query_dot(
-        null,
-        "pc11_codigo,
+if ($pc30_permsemdotac == 'f') {
+    $result_test_dot = $clsolicitem->sql_record(
+        $clsolicitem->sql_query_dot(
+            null,
+            "pc11_codigo,
 			pc11_quant,
 			sum(pc13_quant)",
-        "",
-        "",
-        "
+            "",
+            "",
+            "
 			group by pc10_numero,
 			pc10_depto,
 			pc11_codigo,
@@ -123,39 +124,40 @@ if($pc30_permsemdotac=='f') {
 			pc11_numero,
 			pc13_codigo
 			having   (pc11_quant > sum(pc13_quant) or pc13_codigo is null) and $where_teste
-			")
+			"
+        )
     );
 
 
-    if($clsolicitem->numrows > 0) {
+    if ($clsolicitem->numrows > 0) {
         //    db_redireciona("db_erros.php?fechar=true&db_erro=Existe item sem dotação ou sem quantidade total lançada em dotação!!");
         $lista_itens = "";
         $virgula     = "";
         $cod_item    = "";
-        for($i = 0; $i < pg_numrows($result_test_dot); $i++) {
+        for ($i = 0; $i < pg_numrows($result_test_dot); $i++) {
 
-            db_fieldsmemory($result_test_dot,$i);
+            db_fieldsmemory($result_test_dot, $i);
             if ($cod_item != $pc11_codigo) {
 
                 $cod_item     = $pc11_codigo;
-                $lista_itens .= $virgula.$cod_item;
+                $lista_itens .= $virgula . $cod_item;
                 $virgula      = ",";
             }
         }
         $dbwhere   = $where_teste . " and pc11_codigo in ($lista_itens)";
 
 
-        $res_itens = $clsolicitem->sql_record($clsolicitem->sql_query_pcmater(null,"distinct pc01_codmater,pc01_descrmater,pc11_codigo",null,$dbwhere));
+        $res_itens = $clsolicitem->sql_record($clsolicitem->sql_query_pcmater(null, "distinct pc01_codmater,pc01_descrmater,pc11_codigo", null, $dbwhere));
 
         $erro_msg  = "";
         if ($clsolicitem->numrows > 0) {
 
             $erro_msg = "Verifique o(s) item(ns) ";
             $virgula  = "";
-            for($i = 0; $i < pg_numrows($res_itens); $i++) {
+            for ($i = 0; $i < pg_numrows($res_itens); $i++) {
 
-                db_fieldsmemory($res_itens,$i);
-                $erro_msg .= $virgula."<b>".$pc01_codmater." - ".$pc01_descrmater."</b>";
+                db_fieldsmemory($res_itens, $i);
+                $erro_msg .= $virgula . "<b>" . $pc01_codmater . " - " . $pc01_descrmater . "</b>";
                 $virgula   = ",";
             }
             $erro_msg .= ". Estes item(ns) podem estar sem dotação ou sem quantidade total lançada em dotação!!";
@@ -164,11 +166,11 @@ if($pc30_permsemdotac=='f') {
         if ($erro_msg == "") {
             $erro_msg = "Existe item sem dotação ou sem quantidade total lançada em dotação!!";
         }
-        db_redireciona("db_erros.php?fechar=true&db_erro=".$erro_msg);
+        db_redireciona("db_erros.php?fechar=true&db_erro=" . $erro_msg);
     }
 }
 
-$where_solicita .= $and." pc10_correto='t' ";
+$where_solicita .= $and . " pc10_correto='t' ";
 
 $sCampos  = "pc10_numero, pc67_sequencial, pc10_data, pc10_resumo, pc12_vlrap, descrdepto, coddepto, nomeresponsavel, pc50_descr, pc10_login, nome,";
 $sCampos .= "pc10_solicitacaotipo,";
@@ -181,23 +183,24 @@ $sCampos .= "(select pc53_solicitapai";
 $sCampos .= "   from solicita s inner join solicitavinculo on pc53_solicitafilho = s.pc10_numero";
 $sCampos .= "  where s.pc10_numero = solicita.pc10_numero) as codigosolicitacaopai";
 
-$result_pesq_solicita = $clsolicita->sql_record($clsolicita->sql_query_solicita(null,$sCampos,'pc10_numero',$where_solicita));
+$result_pesq_solicita = $clsolicita->sql_record($clsolicita->sql_query_solicita(null, $sCampos, 'pc10_numero', $where_solicita));
 $numrows_solicita     = $clsolicita->numrows;
 
-if($numrows_solicita == 0) {
+if ($numrows_solicita == 0) {
     db_redireciona("db_erros.php?fechar=true&db_erro=Nenhum Registro Encontrado! Verifique seu departamento. ");
 }
 
 $erros = "";
 
-if ($pc30_permsemdotac=='f' ) {
+if ($pc30_permsemdotac == 'f') {
 
-    if ($pc30_gerareserva=='t') {
+    if ($pc30_gerareserva == 't') {
 
-        if ($pc30_comsaldo=="t") {
+        if ($pc30_comsaldo == "t") {
             $result_reservasaldo = $clorcreservasol->sql_record($clorcreservasol->sql_query_saldo(
                 null,
-                null,"
+                null,
+                "
 					round(o80_valor,2)  as valorreserva,
 					round(pc13_valor,2) as valordotacao,
 					pc11_numero,
@@ -205,26 +208,27 @@ if ($pc30_permsemdotac=='f' ) {
 					pc11_seq
 					",
                 "pc11_numero,pc11_codigo",
-                $where_solicita));
+                $where_solicita
+            ));
             $sol = "";
             $vir = "";
-            for ($i=0;$i<$clorcreservasol->numrows;$i++) {
+            for ($i = 0; $i < $clorcreservasol->numrows; $i++) {
 
-                db_fieldsmemory($result_reservasaldo,$i);
-                if ($valordotacao>$valorreserva) {
+                db_fieldsmemory($result_reservasaldo, $i);
+                if ($valordotacao > $valorreserva) {
 
-                    if ((int)(strlen("<BR>Solicitação: $pc11_numero<BR>Itens ")+strlen($erros)) < 220 && $sol!=$pc11_numero) {
+                    if ((int)(strlen("<BR>Solicitação: $pc11_numero<BR>Itens ") + strlen($erros)) < 220 && $sol != $pc11_numero) {
 
                         $sol = $pc11_numero;
                         $vir = "";
-                        if($erros != "") {
+                        if ($erros != "") {
                             $erros .= " sem saldo reservado<BR>";
                         }
                         $erros .= "<BR>Solicitação: $pc11_numero<BR>Itens ";
                     }
-                    if (strlen($pc11_codigo.$vir)+strlen($erros) < 220) {
+                    if (strlen($pc11_codigo . $vir) + strlen($erros) < 220) {
 
-                        $erros .= $vir." ".$pc11_codigo;
+                        $erros .= $vir . " " . $pc11_codigo;
                         $vir = ",";
                     }
                 }
@@ -241,13 +245,13 @@ if (trim($erros) == "") {
 
     $dbwhere         = "";
     $dbwhere_servico = "";
-    if (isset($ini) && trim($ini)!="") {
+    if (isset($ini) && trim($ini) != "") {
         $dbwhere = " pc11_numero >= $ini";
     }
-    if (isset($fim) && trim($fim)!="") {
-        if($dbwhere == ""){
+    if (isset($fim) && trim($fim) != "") {
+        if ($dbwhere == "") {
             $dbwhere = " pc11_numero <= $fim";
-        }else{
+        } else {
             $dbwhere = " pc11_numero between $ini and $fim";
         }
     }
@@ -264,14 +268,17 @@ if (trim($erros) == "") {
     $sSubQuery .= "      WHERE pcprocitem.pc81_solicitem = pc11_codigo                                                      ";
     $sSubQuery .= "        AND empautoriza.e54_anulad    IS NULL                                                            ";
 
-    $res_solservico   = $clsolicitem->sql_record($clsolicitem->sql_query_serv(null,"pc01_servico,pc11_servicoquantidade,pc11_codigo as codsol,pc11_vlrun","pc11_codigo",$dbwhere.$dbwhere_servico));
+    $res_solservico   = $clsolicitem->sql_record($clsolicitem->sql_query_serv(null, "pc01_servico,pc11_servicoquantidade,pc11_codigo as codsol,pc11_vlrun", "pc11_codigo", $dbwhere . $dbwhere_servico));
 
 
     //echo $clsolicitem->sql_query_serv(null,"pc01_servico,pc11_servicoquantidade,pc11_codigo as codsol,pc11_vlrun","pc11_codigo",$dbwhere.$dbwhere_servico); die();
 
 
-    $res_reservasaldo = $clorcreservasol->sql_record($clorcreservasol->sql_query_saldo(null,
-        null,"
+    $res_reservasaldo = $clorcreservasol->sql_record(
+        $clorcreservasol->sql_query_saldo(
+            null,
+            null,
+            "
 			round(o80_valor,2)  as valorreserva,
 			round(pc13_valor,2) as valordotacao,
 			pc11_numero,
@@ -279,9 +286,9 @@ if (trim($erros) == "") {
 			pc11_seq,
 			exists({$sSubQuery}) as autorizado
 			",
-        "pc11_numero,pc11_codigo",
-        $where_solicita
-    )
+            "pc11_numero,pc11_codigo",
+            $where_solicita
+        )
     );
 
     if ($clsolicitem->numrows > 0) {
@@ -289,14 +296,14 @@ if (trim($erros) == "") {
         $num_rows = $clsolicitem->numrows;
         if ($clorcreservasol->numrows > 0) {
             $num_rows_res = $clorcreservasol->numrows;
-        }else{
+        } else {
             $num_rows_res = 0;
         }
         $linha = 0;
         $autorizado = '';
-        for($i = 0; $i < $num_rows; $i++) {
+        for ($i = 0; $i < $num_rows; $i++) {
 
-            db_fieldsmemory($res_solservico,$i);
+            db_fieldsmemory($res_solservico, $i);
             $total_dotacao = 0;
             $total_reserva = 0;
             if ($autorizado == 't') {
@@ -305,7 +312,7 @@ if (trim($erros) == "") {
 
             for ($ii = $linha; $ii < $num_rows_res; $ii++) {
 
-                db_fieldsmemory($res_reservasaldo,$ii);
+                db_fieldsmemory($res_reservasaldo, $ii);
                 if ($codsol == $pc11_codigo) {
 
                     $total_dotacao += $valordotacao;
@@ -323,8 +330,9 @@ if (trim($erros) == "") {
             if ($pc01_servico == 'f' || $pc11_servicoquantidade == 'f') {
 
                 //Valida utilizando somente duas casas decimais
-                if ((round($total_reserva,2) < round($pc11_vlrun,2) || round($total_reserva,2) > round($pc11_vlrun,2)) ||
-                    (round($total_dotacao,2) < round($pc11_vlrun,2) || round($total_dotacao,2) > round($pc11_vlrun,2))){
+                if ((round($total_reserva, 2) < round($pc11_vlrun, 2) || round($total_reserva, 2) > round($pc11_vlrun, 2)) ||
+                    (round($total_dotacao, 2) < round($pc11_vlrun, 2) || round($total_dotacao, 2) > round($pc11_vlrun, 2))
+                ) {
 
                     if ($total_reserva == 0 && $total_dotacao == 0) {
                         $erros = "";
@@ -338,7 +346,6 @@ if (trim($erros) == "") {
                         $erros .= "difere do valor total do serviço";
                     }
                 }
-
             }
             if (trim($erros) != "") {
                 break;
@@ -359,26 +366,26 @@ if ($erros != "") {
 
 $pdf  = new scpdf();
 $pdf->Open();
-$pdf1 = new db_impcarne($pdf,'92');
+$pdf1 = new db_impcarne($pdf, '92');
 //$pdf1->modelo = 17;
-$pdf1->objpdf->SetTextColor(0,0,0);
+$pdf1->objpdf->SetTextColor(0, 0, 0);
 $pdf1->Snumero_ant = "";
 
 $pdf1->casadec    = @$e30_numdec;
 for ($contador = 0; $contador < $numrows_solicita; $contador++) {
 
-    db_fieldsmemory($result_pesq_solicita,$contador);
+    db_fieldsmemory($result_pesq_solicita, $contador);
     $pdf1->anulada    = !empty($pc67_sequencial);
     $pdf1->prefeitura = $nomeinst;
-    $pdf1->logo			  = $logo;
+    $pdf1->logo              = $logo;
     $pdf1->enderpref  = $ender;
     $pdf1->municpref  = $munic;
     $pdf1->telefpref  = $telef;
     $pdf1->emailpref  = $email;
-    $pdf1->emissao    = date("Y-m-d",db_getsession("DB_datausu"));
+    $pdf1->emissao    = date("Y-m-d", db_getsession("DB_datausu"));
     $pdf1->cgcpref    = $cgc;
-    $sec  = "______________________________"."\n"."Secretaria da Fazenda";
-    $pref = "______________________________"."\n"."Prefeito";
+    $sec  = "______________________________" . "\n" . "Secretaria da Fazenda";
+    $pref = "______________________________" . "\n" . "Prefeito";
 
     $pdf1->secfaz     = $classinatura->assinatura(1002);
     $pdf1->nompre     = $classinatura->assinatura(1000);
@@ -401,8 +408,12 @@ for ($contador = 0; $contador < $numrows_solicita; $contador++) {
      */
     $oDaoProcessoAdministrativo   = db_utils::getDao("solicitaprotprocesso");
     $sWhereProcessoAdministrativo = " pc90_solicita = {$pc10_numero}";
-    $sSqlProcessoAdministrativo   = $oDaoProcessoAdministrativo->sql_query_file(null, "pc90_numeroprocesso", null,
-        $sWhereProcessoAdministrativo);
+    $sSqlProcessoAdministrativo   = $oDaoProcessoAdministrativo->sql_query_file(
+        null,
+        "pc90_numeroprocesso",
+        null,
+        $sWhereProcessoAdministrativo
+    );
     $rsProcessoAdministrativo     = $oDaoProcessoAdministrativo->sql_record($sSqlProcessoAdministrativo);
     $sProcessoAdministrativo      = "";
     if ($oDaoProcessoAdministrativo->numrows > 0) {
@@ -411,8 +422,8 @@ for ($contador = 0; $contador < $numrows_solicita; $contador++) {
 
     $pdf1->processoAdministrativo = $sProcessoAdministrativo;
 
-    $result_orgunid   = $cldb_departorg->sql_record($cldb_departorg->sql_query_orgunid($coddepto,db_getsession('DB_anousu'),"o40_descr,o41_descr"));
-    db_fieldsmemory($result_orgunid,0);
+    $result_orgunid   = $cldb_departorg->sql_record($cldb_departorg->sql_query_orgunid($coddepto, db_getsession('DB_anousu'), "o40_descr,o41_descr"));
+    db_fieldsmemory($result_orgunid, 0);
     $pdf1->Sorgao     = $o40_descr;
     $pdf1->Sunidade   = $o41_descr;
 
@@ -426,9 +437,10 @@ for ($contador = 0; $contador < $numrows_solicita; $contador++) {
 
     $sCampos  = " distinct fc_estruturaldotacao(pc13_anousu,pc13_coddot) as estrutural, o55_projativ, o55_descr, ";
     $sCampos .= " o15_codigo, o15_descr, b.o56_descr as descrestrutural, pc13_codigo, pc13_anousu, pc13_coddot, pc13_quant, ";
-    $sCampos .= " pc13_valor, b.o56_elemento as do56_elemento, pc01_servico, pc11_seq, pc11_codigo, pc11_quant, ";
+    $sCampos .= " pc13_valor, b.o56_elemento as do56_elemento, pc01_servico, pc11_seq, pc11_codigo, pc11_quant,pc11_reservado, ";
     $sCampos .= " pc11_vlrun, pc11_prazo, pc11_pgto, pc11_resum, pc11_just, a.o56_descr as descrele,o41_descr, ";
-    $sCampos .= " m61_abrev, m61_descr, pc17_quant, pc01_codmater, pc01_descrmater||'-'||pc01_complmater as pc01_descrmater, (pc13_valor/pc13_quant) as pc13_valtot, ";
+    $sCampos .= " m61_abrev, m61_descr, pc17_quant, pc01_codmater, case when pc01_descrmater=pc01_complmater or pc01_complmater is null then pc01_descrmater else pc01_descrmater||'. '||pc01_complmater end as 
+    pc01_descrmater, (pc13_valor/pc13_quant) as pc13_valtot, ";
     $sCampos .= " (pc11_vlrun*pc11_quant) as pc11_valtot, m61_usaquant,a.o56_elemento as so56_elemento ";
 
     $sSqlBuscaPcDotac    = $clsolicitem->sql_query_relmod2(null, $sCampos, $sOrdem, $sWhere);
@@ -455,7 +467,7 @@ for ($contador = 0; $contador < $numrows_solicita; $contador++) {
     $pdf1->dprojativ      = 'o55_descr';
     $pdf1->dtiporec       = 'o15_descr';
     $pdf1->ddescrest      = 'descrestrutural';
-    $pdf1->item	          = 'pc11_seq';
+    $pdf1->item              = 'pc11_seq';
 
     if (isset($valor_orcado) && $valor_orcado == 't') {
 
@@ -486,7 +498,7 @@ for ($contador = 0; $contador < $numrows_solicita; $contador++) {
     $pdf1->selemento      = 'so56_elemento';
     $pdf1->sdelemento     = 'descrele';
 
-    $result_pesq_pcsugforn = $clpcsugforn->sql_record($clpcsugforn->sql_query($pc10_numero,null,"distinct z01_numcgm,z01_nome,z01_ender,z01_numero,z01_munic,z01_telef,z01_cgccpf",'z01_numcgm'));
+    $result_pesq_pcsugforn = $clpcsugforn->sql_record($clpcsugforn->sql_query($pc10_numero, null, "distinct z01_numcgm,z01_nome,z01_ender,z01_numero,z01_munic,z01_telef,z01_cgccpf", 'z01_numcgm'));
     $numrows_pcsugforn = $clpcsugforn->numrows;
     $pdf1->recorddosfornec = $result_pesq_pcsugforn;
     $pdf1->linhasdosfornec = $numrows_pcsugforn;
@@ -500,9 +512,9 @@ for ($contador = 0; $contador < $numrows_solicita; $contador++) {
     $pdf1->imprime();
     $pdf1->Snumero_ant = $pc10_numero;
 }
-if(isset($argv[1])){
+if (isset($argv[1])) {
     $pdf1->objpdf->Output("/tmp/teste.pdf");
-}else{
+} else {
 
 
     if ($oConfiguracaoGed->utilizaGED()) {
@@ -522,14 +534,12 @@ if(isset($argv[1])){
             $pdf1->objpdf->Output("tmp/{$sTipoDocumento}_{$pc10_numero}.pdf");
 
             $oGerenciador->moverArquivo(array($oStdDadosGED));
-
         } catch (Exception $eErro) {
-            db_redireciona("db_erros.php?fechar=true&db_erro=".$eErro->getMessage());
+            db_redireciona("db_erros.php?fechar=true&db_erro=" . $eErro->getMessage());
         } catch (SoapFault $eSFErro) {
-            db_redireciona("db_erros.php?fechar=true&db_erro=".$eSFErro->getMessage());
+            db_redireciona("db_erros.php?fechar=true&db_erro=" . $eSFErro->getMessage());
         }
     } else {
         $pdf1->objpdf->Output();
     }
 }
-?>

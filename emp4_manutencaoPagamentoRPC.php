@@ -162,7 +162,7 @@ require_once("model/orcamento/ReceitaOrcamentaria.model.php");
 require_once("model/orcamento/Recurso.model.php");
 require_once("model/orcamento/TribunalEstrutura.model.php");
 require_once("model/orcamento/Unidade.model.php");
-
+require_once("std/DBDate.php");
 
 require_once 'model/impressaoAutenticacao.php';
 
@@ -285,7 +285,7 @@ switch ($oParam->exec) {
     $lContaUnicaFundeb = false;
     $aParametrosCaixa = db_stdClass::getParametro("caiparametro", array(db_getsession("DB_instit")));
 
-    if (count($aParametrosCaixa) > 0) {
+	if (count($aParametrosCaixa) > 0) {
       $lContaUnicaFundeb = $aParametrosCaixa[0]->k29_cotaunicafundeb == "t" ? true : false;
     }
 
@@ -350,6 +350,15 @@ switch ($oParam->exec) {
 
           $oTransferencia = TransferenciaFactory::getInstance(null, $oMovimento->iCodNota);
 
+            $rsSlipFonte = db_query("SELECT k29_recurso FROM sliprecurso WHERE k29_slip = {$oMovimento->iCodNota}");
+
+            if (pg_numrows($rsSlipFonte) == 0 && db_getsession("DB_anousu") >= 2022) {
+                throw new Exception("Para efetuar o pagamento é necessário alterar o Slip informando a respectiva fonte de recursos");
+            }
+                
+            if (isset($oMovimento->iRecurso) && $oMovimento->iRecurso != '')
+                $oTransferencia->setFonteRecurso($oMovimento->iRecurso);
+            
 		  if (isset($oMovimento->iCodCheque) && $oMovimento->iCodCheque != '') {
 			$oTransferencia->setCheque($oMovimento->iCodCheque);
 		  }
@@ -413,7 +422,10 @@ switch ($oParam->exec) {
 
         $oAgenda->configurarPagamentos($oParam->dtPagamento, $oMovimento, $iCodigoOrdemAuxiliar, $oParam->lEmitirOrdeAuxiliar, $oParam->lEfetuarPagamento);
 
-        if (isset($oMovimento->iContaSaltes) && $oMovimento->iContaSaltes != "") {
+        if ( isset($oMovimento->iContaSaltes) && $oMovimento->iContaSaltes != "" ) {
+
+            $oContaTesouraria = new contaTesouraria($oMovimento->iContaSaltes);
+            $oContaTesouraria->validaContaPorDataMovimento($oParam->dtPagamento);
 
           $oContaTesouraria = new contaTesouraria($oMovimento->iContaSaltes);
           $oContaTesouraria->validaContaPorDataMovimento($oParam->dtPagamento);
@@ -468,7 +480,16 @@ switch ($oParam->exec) {
 
 			foreach ($oParam->aMovimentos as $oMovimento) {
 
-				$oOrdemPagamento = new ordemPagamento($oMovimento->iCodNota);
+        if (!empty($oParam->dtPagamento) && $oParam->dtPagamento != '//') {
+          $dtAuxData = new DBDate($oParam->dtPagamento);
+          $dtAuxData = $dtAuxData->getDate();
+          $data = $dtAuxData; // aqui ele atribui a data_para_pagamento enviada pelo usuário
+          unset($dtAuxData);
+        } else {
+            $data = date("Y-m-d", db_getsession("DB_datausu"));
+        }
+
+				$oOrdemPagamento = new ordemPagamento($oMovimento->iCodNota, $data);
 
 				if (isset($oMovimento->iCheque) && trim($oMovimento->iCheque) != '') {
 					$oOrdemPagamento->setCheque($oMovimento->iCheque);

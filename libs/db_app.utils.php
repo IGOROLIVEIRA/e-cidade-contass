@@ -59,27 +59,60 @@ class db_app {
           $sStringSufix  = "</script>";
           $directory     = "scripts";
 
-        } else if ($extension[0] == "css") {
+  public static function load($files) {
 
-          $sStringPrefix = "<link href='#filename' rel='stylesheet' type='text/css'>";
-          $sStringSufix  = "";
-          $directory     = "estilos";
+      $aFiles                       = array();
+      $aFiles["estilos.css"]        = "<link href='estilos.css' rel='stylesheet' type='text/css'>";
+      $aFiles["grid.style.css"]     = "<link href='estilos/grid.style.css' rel='stylesheet' type='text/css'>";
+      $aFiles["scripts.js"]         = "<script language='JavaScript' type='text/javascript' src='scripts/scripts.js?version=".DB_VERSION."'></script>";
+      $aFiles["strings.js"]         = "<script language='JavaScript' type='text/javascript' src='scripts/strings.js?version=".DB_VERSION."'></script>";
+      $aFiles["datagrid.widget.js"] = "<script language='JavaScript' type='text/javascript' src='scripts/datagrid.widget.js?version=".DB_VERSION."'></script>";
+      $aFiles["prototype.js"]       = "<script language='JavaScript' type='text/javascript' src='scripts/prototype.js?version=".DB_VERSION."'></script>";
 
-        }
-        if (file_exists("{$directory}/".trim($filename))) {
-          echo str_replace("#filename", "{$directory}/".trim($filename), $sStringPrefix)."{$sStringSufix}\n";
-        }else if (file_exists("{$directory}/widgets/".trim($filename))) {
-          echo str_replace("#filename", "{$directory}/widgets/".trim($filename), $sStringPrefix)."{$sStringSufix}\n";
-        }else if (file_exists("{$directory}/classes/".trim($filename))) {
-          echo str_replace("#filename", "{$directory}/classes/".trim($filename), $sStringPrefix)."{$sStringSufix}\n";
-        } else if (file_exists("ext/javascript/".trim($filename))) {
-          echo str_replace("#filename", "ext/javascript/".trim($filename), $sStringPrefix)."{$sStringSufix}\n";
-        } else {
-          echo "<!-- Arquivo não encontrado {$filename}. -->";
-          throw new Exception("Include {$filename} não existe");
-        }
+      if(is_array($files)){
+          $aFileToLoad =  $files;
+      }else{
+          $aFileToLoad =  explode(",", $files);
       }
-    }
+
+      foreach ($aFileToLoad as $index => $filename) {
+
+          if (isset($aFiles[trim($filename)])) {
+              echo $aFiles[trim($filename)]."\n";
+          } else {
+
+              $extension  = explode(".", trim($filename));
+              $extension  = array_reverse($extension);
+              $directory  = "";
+              $sStringPrefix = "";
+              $sStringSufix  = "";
+              if ($extension[0] == "js") {
+
+                  $sStringPrefix = "<script language='JavaScript' type='text/javascript' src='#filename'>";
+                  $sStringSufix  = "</script>";
+                  $directory     = "scripts";
+
+              } else if ($extension[0] == "css") {
+
+                  $sStringPrefix = "<link href='#filename' rel='stylesheet' type='text/css'>";
+                  $sStringSufix  = "";
+                  $directory     = "estilos";
+
+              }
+              if (file_exists("{$directory}/".trim($filename))) {
+                  echo str_replace("#filename", "{$directory}/".trim($filename), $sStringPrefix)."{$sStringSufix}\n";
+              }else if (file_exists("{$directory}/widgets/".trim($filename))) {
+                  echo str_replace("#filename", "{$directory}/widgets/".trim($filename), $sStringPrefix)."{$sStringSufix}\n";
+              }else if (file_exists("{$directory}/classes/".trim($filename))) {
+                  echo str_replace("#filename", "{$directory}/classes/".trim($filename), $sStringPrefix)."{$sStringSufix}\n";
+              } else if (file_exists("ext/javascript/".trim($filename))) {
+                  echo str_replace("#filename", "ext/javascript/".trim($filename), $sStringPrefix)."{$sStringSufix}\n";
+              } else {
+                  echo "<!-- Arquivo não encontrado {$filename}. -->";
+                  throw new Exception("Include {$filename} não existe");
+              }
+          }
+      }
   }
 
 

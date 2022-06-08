@@ -66,7 +66,7 @@ class Configuracao
     public function getFormulario($tipo)
     {
         $where  = "    rh211_esocialformulariotipo = {$tipo}";
-        $where .= "and rh211_versao = '" . $this->getVersao() . "'";
+        $where .= " and rh211_versao = '" . $this->getVersao() . "'";
 
         $dao = new \cl_esocialversaoformulario();
         $sql = $dao->sql_query_file(null, 'rh211_avaliacao', null, $where);

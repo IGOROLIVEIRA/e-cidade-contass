@@ -74,12 +74,10 @@ if (!isset($lReadOnly)){
 if( isset($_GET['lConsulta']) ) {
 	$r01_regist = $_GET['iMatricula'];
 }
+if ( !empty($iMatricula) ) {
 
-if ( !empty($oGet->iMatricula) ) {
-
-	$r01_regist = $oGet->iMatricula;
-	$matricula  = $oGet->iMatricula;
-}
+	$matric = $matricula = $r01_regist = $iMatricula;
+} 
 
 /**
  * GET - Define datas para consulta
@@ -526,9 +524,10 @@ $iMesImplantacao = $aImplantacao[1];
         $sSqlInformacoesServidor  = "SELECT {$sCampos}                                                                  ";
         $sSqlInformacoesServidor .= " FROM cgm                                                                          ";
         $sSqlInformacoesServidor .= "   INNER JOIN rhpessoal ON z01_numcgm  = rh01_numcgm                               ";
-        $sSqlInformacoesServidor .= "   INNER JOIN rhfuncao  ON rh01_funcao = rh37_funcao AND rh01_instit = rh37_instit ";
-        $sSqlInformacoesServidor .= " WHERE {$sWhere}                                                                   ";
-
+        $sSqlInformacoesServidor .= "   INNER JOIN rhpessoalmov ON (rh01_regist,rh01_instit) = (rh02_regist,rh02_instit) AND (rh02_anousu,rh02_mesusu) = ({$ano},{$mes})";
+        $sSqlInformacoesServidor .= "   INNER JOIN rhfuncao  ON rh02_funcao = rh37_funcao AND rh01_instit = rh37_instit ";
+        $sSqlInformacoesServidor .= " WHERE {$sWhere}                                                                   "; 
+            
         $dados = db_query($sSqlInformacoesServidor);
         db_fieldsmemory($dados,0);
 

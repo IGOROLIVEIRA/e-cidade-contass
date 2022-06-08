@@ -23,7 +23,6 @@ class cl_bodcasp202021 {
    var $si202_tiporegistro = 0;
    var $si202_faserecorcamentaria = 0;
    var $si202_vlsaldoexeantsupfin = 0;
-   var $si202_vlsaldoexeantrecredad = 0;
    var $si202_vltotalsaldoexeant = 0;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
@@ -34,7 +33,6 @@ class cl_bodcasp202021 {
                  si202_tiporegistro = int4 = si202_tiporegistro
                  si202_faserecorcamentaria = int4 = si202_faserecorcamentaria
                  si202_vlsaldoexeantsupfin = float4 = si202_vlsaldoexeantsupfin
-                 si202_vlsaldoexeantrecredad = float4 = si202_vlsaldoexeantrecredad
                  si202_vltotalsaldoexeant = float4 = si202_vltotalsaldoexeant
                  ";
    //funcao construtor da classe
@@ -62,7 +60,6 @@ class cl_bodcasp202021 {
        $this->si202_tiporegistro = ($this->si202_tiporegistro == ""?@$GLOBALS["HTTP_POST_VARS"]["si202_tiporegistro"]:$this->si202_tiporegistro);
        $this->si202_faserecorcamentaria = ($this->si202_faserecorcamentaria == ""?@$GLOBALS["HTTP_POST_VARS"]["si202_faserecorcamentaria"]:$this->si202_faserecorcamentaria);
        $this->si202_vlsaldoexeantsupfin = ($this->si202_vlsaldoexeantsupfin == ""?@$GLOBALS["HTTP_POST_VARS"]["si202_vlsaldoexeantsupfin"]:$this->si202_vlsaldoexeantsupfin);
-       $this->si202_vlsaldoexeantrecredad = ($this->si202_vlsaldoexeantrecredad == ""?@$GLOBALS["HTTP_POST_VARS"]["si202_vlsaldoexeantrecredad"]:$this->si202_vlsaldoexeantrecredad);
        $this->si202_vltotalsaldoexeant = ($this->si202_vltotalsaldoexeant == ""?@$GLOBALS["HTTP_POST_VARS"]["si202_vltotalsaldoexeant"]:$this->si202_vltotalsaldoexeant);
      }else{
        $this->si202_sequencial = ($this->si202_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si202_sequencial"]:$this->si202_sequencial);
@@ -88,9 +85,6 @@ class cl_bodcasp202021 {
      }
      if (empty($this->si202_vlsaldoexeantsupfin)) {
         $this->si202_vlsaldoexeantsupfin = 0;
-     }
-     if (empty($this->si202_vlsaldoexeantrecredad)) {
-        $this->si202_vlsaldoexeantrecredad = 0;
      }
      if (empty($this->si202_vltotalsaldoexeant)) {
         $this->si202_vltotalsaldoexeant = 0;
@@ -132,7 +126,6 @@ class cl_bodcasp202021 {
                                       ,si202_tiporegistro
                                       ,si202_faserecorcamentaria
                                       ,si202_vlsaldoexeantsupfin
-                                      ,si202_vlsaldoexeantrecredad
                                       ,si202_vltotalsaldoexeant
                        )
                 values (
@@ -143,7 +136,6 @@ class cl_bodcasp202021 {
                                ,$this->si202_tiporegistro
                                ,$this->si202_faserecorcamentaria
                                ,$this->si202_vlsaldoexeantsupfin
-                               ,$this->si202_vlsaldoexeantrecredad
                                ,$this->si202_vltotalsaldoexeant
                       )";
      $result = db_query($sql);
@@ -231,19 +223,7 @@ class cl_bodcasp202021 {
          return false;
        }
      }
-     if(trim($this->si202_vlsaldoexeantrecredad)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si202_vlsaldoexeantrecredad"])){
-       $sql  .= $virgula." si202_vlsaldoexeantrecredad = $this->si202_vlsaldoexeantrecredad ";
-       $virgula = ",";
-       if(trim($this->si202_vlsaldoexeantrecredad) == null ){
-         $this->erro_sql = " Campo si202_vlsaldoexeantrecredad não informado.";
-         $this->erro_campo = "si202_vlsaldoexeantrecredad";
-         $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
-         $this->erro_status = "0";
-         return false;
-       }
-     }
+
      if(trim($this->si202_vltotalsaldoexeant)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si202_vltotalsaldoexeant"])){
        $sql  .= $virgula." si202_vltotalsaldoexeant = $this->si202_vltotalsaldoexeant ";
        $virgula = ",";

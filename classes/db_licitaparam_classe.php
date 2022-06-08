@@ -48,6 +48,7 @@ class cl_licitaparam {
     var $l12_qtdediasliberacaoweb = 0;
     var $l12_tipoliberacaoweb = 0;
     var $l12_usuarioadjundica = null;
+    var $l12_validacadfornecedor = null;
     // cria propriedade com as variaveis do arquivo
     var $campos = "
                  l12_instit = int4 = Instituição 
@@ -55,7 +56,8 @@ class cl_licitaparam {
                  l12_escolheprotocolo = bool = Processo de Protocolo do Sistema 
                  l12_qtdediasliberacaoweb = int4 = Dias de disponibilidade 
                  l12_tipoliberacaoweb = int4 = Disp. licitação na web até o julgamento
-                 l12_usuarioadjundica = boll = Emitir usuario no relatorio de adjundicação 
+                 l12_usuarioadjundica = boll = Emitir usuario no relatorio de adjundicação
+                 l12_validacadfornecedor = boll = Validacao no Cadastro de Fornecedor 
                  ";
     //funcao construtor da classe
     function cl_licitaparam() {
@@ -81,6 +83,7 @@ class cl_licitaparam {
             $this->l12_qtdediasliberacaoweb = ($this->l12_qtdediasliberacaoweb == ""?@$GLOBALS["HTTP_POST_VARS"]["l12_qtdediasliberacaoweb"]:$this->l12_qtdediasliberacaoweb);
             $this->l12_tipoliberacaoweb = ($this->l12_tipoliberacaoweb == ""?@$GLOBALS["HTTP_POST_VARS"]["l12_tipoliberacaoweb"]:$this->l12_tipoliberacaoweb);
             $this->l12_usuarioadjundica = ($this->l12_usuarioadjundica == ""?@$GLOBALS["HTTP_POST_VARS"]["l12_usuarioadjundica"]:$this->l12_usuarioadjundica);
+            $this->l12_validacadfornecedor = ($this->l12_validacadfornecedor == "f"?@$GLOBALS["HTTP_POST_VARS"]["l12_validacadfornecedor"]:$this->l12_validacadfornecedor);
         }else{
             $this->l12_instit = ($this->l12_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["l12_instit"]:$this->l12_instit);
         }
@@ -149,6 +152,7 @@ class cl_licitaparam {
                                       ,l12_qtdediasliberacaoweb 
                                       ,l12_tipoliberacaoweb 
                                       ,l12_usuarioadjundica
+                                      ,l12_validacadfornecedor
                        )
                 values (
                                 $this->l12_instit 
@@ -157,6 +161,7 @@ class cl_licitaparam {
                                ," . ($this->l12_qtdediasliberacaoweb == "null" || $this->l12_qtdediasliberacaoweb == "" ? "null" : "'" . $this->l12_qtdediasliberacaoweb . "'") . " 
                                ,$this->l12_tipoliberacaoweb
                                ,'$this->l12_usuarioadjundica'
+                               ,'$this->l12_validacadfornecedor'
                       )";
         $result = db_query($sql);
         if($result==false){
@@ -233,6 +238,20 @@ class cl_licitaparam {
             if(trim($this->l12_escolheprotocolo) == null ){
                 $this->erro_sql = " Campo Processo de Protocolo do Sistema nao Informado.";
                 $this->erro_campo = "l12_escolheprotocolo";
+                $this->erro_banco = "";
+                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+        }
+
+        if(trim($this->l12_validacadfornecedor)!="" || isset($GLOBALS["HTTP_POST_VARS"]["l12_validacadfornecedor"])){
+            $sql  .= $virgula." l12_validacadfornecedor = '$this->l12_validacadfornecedor' ";
+            $virgula = ",";
+            if(trim($this->l12_validacadfornecedor) == null ){
+                $this->erro_sql = " Validacao no Cadastro de Fornecedores nao Informado.";
+                $this->erro_campo = "l12_validacadfornecedor";
                 $this->erro_banco = "";
                 $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
                 $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));

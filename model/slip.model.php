@@ -209,16 +209,17 @@ class slip {
          $this->iTipoAutenticacao  = $oDadosSlip->k17_autent;
          $this->iSlip = $iSlip;
          $this->iInstituicao = $oDadosSlip->k17_instit;
+         $this->iExercicioCompetenciaDevolucao = $oDadosSlip->k17_devolucao;
 
          /**
           * Pesquisamos as informacoes do recurso
           */
          $oDaoSlipRecurso = db_utils::getDao('sliprecurso');
-         $sSqlRecursos    = $oDaoSlipRecurso->sql_query(null,"*", "k29_recurso","k29_slip = {$this->iSlip}");
+         $sSqlRecursos    = $oDaoSlipRecurso->sql_query(null,"*", "k29_recurso", "k29_slip = {$this->iSlip}");
          $rsRecursos      = $oDaoSlipRecurso->sql_record($sSqlRecursos);
          $aRecursos       = db_utils::getCollectionByRecord($rsRecursos);
          foreach ($aRecursos as $oRecurso) {
-           $this->addRecurso($oRecurso->k29_sequencial, $oRecurso->k29_valor);
+           $this->addRecurso($oRecurso->k29_recurso, $oRecurso->k29_valor);
          }
 
       } else {
@@ -284,20 +285,17 @@ class slip {
       $sMsgErro = "Conta a Creditar(Pagar) não Informada";
     }
 
-    if ($this->iSlip != "" ) {
+    if ($this->iSlip != "") {
+        $clsliprecurso = db_utils::getDao("sliprecurso");
+        $clsliprecurso->excluir(null," k29_slip = ". $this->iSlip);
 
-      $numslip = $this->iSlip;
-      $clsliprecurso = db_utils::getDao("sliprecurso");
-      $clsliprecurso->excluir(null," k29_slip =".$this->iSlip);
-
-      if ($clsliprecurso->erro_status == 0) {
-
-        $sMsgErro = $clsliprecurso->erro_msg;
-        throw new Exception($sMsgErro);
-      }
+        if ($clsliprecurso->erro_status == 0) {
+            $sMsgErro = $clsliprecurso->erro_msg;
+            throw new Exception($sMsgErro);
+        }
 
       $clslipnum = db_utils::getDao("slipnum");
-      $clslipnum->excluir($numslip);
+      $clslipnum->excluir($this->iSlip);
 
       if ($clslipnum->erro_status == 0) {
 
@@ -306,7 +304,7 @@ class slip {
       }
 
       $clempageslip = db_utils::getDao("empageslip");
-      $sSqlMov = $clempageslip->sql_query_file(null,$numslip);
+      $sSqlMov = $clempageslip->sql_query_file(null, $this->iSlip);
       $rsMovSlip = $clempageslip->sql_record($sSqlMov);
 
       if ($clempageslip->numrows > 0) {
@@ -401,6 +399,7 @@ class slip {
     $clslip->k17_dtanu         = "";
     $clslip->k17_tipopagamento = "".$this->getTipoPagamento()."";
     $clslip->k17_situacao      = $this->getSituacao();
+    $clslip->k17_devolucao = $this->iExercicioCompetenciaDevolucao;
 
     if ($this->iSlip == null) {
       $clslip->incluir(null);
@@ -519,6 +518,7 @@ class slip {
         $clsliprecurso->k29_recurso  = $iRecurso;
         $clsliprecurso->k29_valor    = "$nValor";
         $clsliprecurso->incluir(null);
+
         if ($clsliprecurso->erro_status == 0) {
 
           $sMsgErro = $clsliprecurso->erro_msg;
@@ -960,19 +960,17 @@ class slip {
     return $this->aRecursos;
   }
 
-  /**
-   * Adiciona um Recurso ao Slip
-   *
-   * @param integer $iRecurso codigo do recurso
-   * @param float   $nValor valor do Recurso
-   */
-  final public function addRecurso($iRecurso, $nValor = 0) {
-    if ($this->aRecursos[$iRecurso]) {
-      $this->aRecursos[$iRecurso] += $nValor;
-    } else {
-      $this->aRecursos[$iRecurso] = $nValor;
+    /**
+     * Adiciona um Recurso ao Slip
+     *
+     * @param integer $iRecurso codigo do recurso
+     * @param float   $nValor valor do Recurso
+     */
+    final public function addRecurso($iRecurso, $nValor = 0) {
+        // Oc16590 - Limpo o array e acrescento apenas o novo recurso para evitar as fontes anteriormente acumuladas
+        $this->aRecursos = array();
+        $this->aRecursos[$iRecurso] = $nValor;
     }
-  }
 
   /**
    * @return string

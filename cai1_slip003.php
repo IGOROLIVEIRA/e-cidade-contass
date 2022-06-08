@@ -81,8 +81,12 @@ if (USE_PCASP) {
                    case when
                         conplanoconta_deb.c63_codcon is not null then reduz_debito.c61_codigo::text
                         else ''
-                   end as fonte_debito
-            from slip
+                   end as fonte_debito, ";
+            // Oc16590
+            $sql .= " k29_recurso, ";
+            $sql .= " orctiporec.o15_descr ";
+            // FIM Oc16590
+            $sql .= " from slip
                  left join db_usuarios on db_usuarios.id_usuario = slip.k17_id_usuario
                  left join sliptipooperacaovinculo         on sliptipooperacaovinculo.k153_slip = slip.k17_codigo
                  left join sliptipooperacao                on sliptipooperacaovinculo.k153_slipoperacaotipo = sliptipooperacao.k152_sequencial
@@ -117,8 +121,12 @@ if (USE_PCASP) {
                  left join cgm as controleinterno on controleinterno.z01_numcgm = controle.si166_numcgm
                  left join identificacaoresponsaveis ordenador on ordenador.si166_instit= k17_instit and ordenador.si166_tiporesponsavel=1
                  and ".db_getsession("DB_anousu")." BETWEEN DATE_PART('YEAR',ordenador.si166_dataini) AND DATE_PART('YEAR',ordenador.si166_datafim)
-                 left join cgm as ordenapagamento on ordenapagamento.z01_numcgm = ordenador.si166_numcgm
-            WHERE k17_instit = " . db_getsession('DB_instit');
+                 left join cgm as ordenapagamento on ordenapagamento.z01_numcgm = ordenador.si166_numcgm ";
+            // Oc16590
+            $sql .= " LEFT JOIN sliprecurso ON sliprecurso.k29_slip = slip.k17_codigo ";
+            $sql .= " LEFT JOIN orctiporec ON o15_codigo = sliprecurso.k29_recurso ";
+            // FIM Oc16590
+            $sql .= " WHERE k17_instit = " . db_getsession('DB_instit');
         // Condição da OC14441
         if ($numslip)
             $sql .= " AND slip.k17_codigo = {$numslip} ";

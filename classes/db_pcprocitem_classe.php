@@ -624,6 +624,7 @@ class cl_pcprocitem {
        $sql .= " join pcorcamitemproc on pc81_codprocitem = pc31_pcprocitem ";
        $sql .= " join pcorcamitem on pc31_orcamitem = pc22_orcamitem ";
        $sql .= " join pcorcamval on pc22_orcamitem = pc23_orcamitem ";
+       $sql .= " join itemprecoreferencia on pcorcamval.pc23_orcamitem = itemprecoreferencia.si02_itemproccompra";
        //$sql .= " join inner itemprecoreferencia on pc23_orcamitem = si02_itemproccompra ";
      }
      if($dbwhere==""){

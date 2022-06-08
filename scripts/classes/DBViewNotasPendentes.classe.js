@@ -93,15 +93,16 @@ DBViewNotasPendentes = function(sNameInstance, lUsaPCASP) {
      * Montamos a grid que vai mostrar as notas pendentes dos itens
      */
     oGridNotasPendentes              = new DBGrid('ctnGridNotasPendentes');
-    oGridNotasPendentes.nameInstance = 'oGridNotasPendentes';
-    var aCellWidth                   = new Array('17%','15%', '12%', '48%', '13%', '17%');
-    var aCellAlign                   = new Array('center', 'right', 'center', 'left', 'right', 'right');
-    var aHeaders                     = new Array('Ordem de Compra',
-                                                 'Valor da OC',
+    oGridNotasPendentes.nameInstance = 'oGridNotasPendentes_' + this.sNameInstance;
+    var aCellWidth                   = new Array('18%','15%', '12%', '38%', '13%', '15%','12%');
+    var aCellAlign                   = new Array('center', 'right', 'center', 'left', 'right', 'right','right');
+    var aHeaders                     = new Array('Nº Ordem de compra',
+                                                 'Valor da Ordem',
                                                  'Empenho',
                                                  'Item',
                                                  'Quantidade',
                                                  'Desdobramento',
+                                                 'Nota Fiscal',
                                                  'Codigo empnotaitembenspendente',
                                                  'Codigo Nota Item',
                                                  'numeroempenho');
@@ -111,11 +112,11 @@ DBViewNotasPendentes = function(sNameInstance, lUsaPCASP) {
     }
 
     oGridNotasPendentes.setHeight(200);
-    oGridNotasPendentes.setCellWidth(aCellWidth);
+    //oGridNotasPendentes.setCellWidth(aCellWidth);
     oGridNotasPendentes.setHeader(aHeaders);
-    oGridNotasPendentes.aHeaders[6 + this.iOffset].lDisplayed = false;
-    oGridNotasPendentes.aHeaders[7 + this.iOffset].lDisplayed = false;
-    oGridNotasPendentes.aHeaders[8 + this.iOffset].lDisplayed = false;
+    oGridNotasPendentes.aHeaders[7].lDisplayed = false;
+    oGridNotasPendentes.aHeaders[8].lDisplayed = false;
+    oGridNotasPendentes.aHeaders[9].lDisplayed = false;
     oGridNotasPendentes.setCellAlign(aCellAlign);
     oGridNotasPendentes.show($('ctnGridNotasPendentes'));
 
@@ -200,9 +201,7 @@ DBViewNotasPendentes = function(sNameInstance, lUsaPCASP) {
     if (oRetorno.aNotasPendentes.length == 0) {
       //$('db_opcao').disabled = true;
     } else {
-
       oRetorno.aNotasPendentes.each(function (oNotaPendente, iLinha) {
-
         var aLinha    = new Array();
             aLinha[0] = oNotaPendente.codigonota;
             aLinha[1] = js_formatar(oNotaPendente.valornota, "f");
@@ -210,9 +209,10 @@ DBViewNotasPendentes = function(sNameInstance, lUsaPCASP) {
             aLinha[3] = oNotaPendente.descricao.urlDecode();
             aLinha[4] = oNotaPendente.quantidade;
             aLinha[5] = oNotaPendente.desdobramento;
-            aLinha[6] = oNotaPendente.e137_sequencial;
-            aLinha[7] = oNotaPendente.codigoitemnota;
-            aLinha[8] = oNotaPendente.numeroempenho;
+            aLinha[6] = oNotaPendente.notafiscal;
+            aLinha[7] = oNotaPendente.e137_sequencial;
+            aLinha[8] = oNotaPendente.codigoitemnota;
+            aLinha[9] = oNotaPendente.numeroempenho;
 
         oGridNotasPendentes.addRow(aLinha);
 
@@ -270,13 +270,13 @@ DBViewNotasPendentes = function(sNameInstance, lUsaPCASP) {
      */
     var oDadosLinha = new Object();
 
-    oDadosLinha.iCodigoNota         = oGridNotasPendentes.aRows[iLinhaGrid].aCells[0 + this.iOffset].getContent();
-    oDadosLinha.nValorNota          = oGridNotasPendentes.aRows[iLinhaGrid].aCells[1 + this.iOffset].getContent();
-    oDadosLinha.iNumeroEmpenho      = oGridNotasPendentes.aRows[iLinhaGrid].aCells[8 + this.iOffset].getContent();
-    oDadosLinha.sDescricaoItem      = oGridNotasPendentes.aRows[iLinhaGrid].aCells[3 + this.iOffset].getContent();
-    oDadosLinha.iQuantidadeItem     = oGridNotasPendentes.aRows[iLinhaGrid].aCells[4 + this.iOffset].getContent();
-    oDadosLinha.iCodigoItemPendente = oGridNotasPendentes.aRows[iLinhaGrid].aCells[6 + this.iOffset].getContent();
-    oDadosLinha.iCodigoEmpNotaItem  = oGridNotasPendentes.aRows[iLinhaGrid].aCells[7 + this.iOffset].getContent();
+    oDadosLinha.iCodigoNota         = oGridNotasPendentes.aRows[iLinhaGrid].aCells[0].getContent();
+    oDadosLinha.nValorNota          = oGridNotasPendentes.aRows[iLinhaGrid].aCells[1].getContent();
+    oDadosLinha.iNumeroEmpenho      = oGridNotasPendentes.aRows[iLinhaGrid].aCells[9].getContent();
+    oDadosLinha.sDescricaoItem      = oGridNotasPendentes.aRows[iLinhaGrid].aCells[3].getContent();
+    oDadosLinha.iQuantidadeItem     = oGridNotasPendentes.aRows[iLinhaGrid].aCells[4].getContent();
+    oDadosLinha.iCodigoItemPendente = oGridNotasPendentes.aRows[iLinhaGrid].aCells[7].getContent();
+    oDadosLinha.iCodigoEmpNotaItem  = oGridNotasPendentes.aRows[iLinhaGrid].aCells[8].getContent();
 
     /**
      * Executa funcao definida passando como parametro dados da linha clicada

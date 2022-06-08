@@ -1,4 +1,5 @@
 <?php
+
 /**
  *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2016  DBSeller Servicos de Informatica
@@ -24,6 +25,7 @@
  *  Copia da licenca no diretorio licenca/licenca_en.txt
  *                                licenca/licenca_pt.txt
  */
+
 use ECidade\Configuracao\Formulario\Resposta\Repository\Resposta;
 use ECidade\Configuracao\Formulario\Arquivo\Yaml\Parser;
 use ECidade\Configuracao\Formulario\Arquivo\Yaml\Validator;
@@ -31,17 +33,18 @@ use ECidade\Configuracao\Formulario\Arquivo\Yaml\Dumper;
 use ECidade\Configuracao\Formulario\Importacao\Import;
 use ECidade\Configuracao\Formulario\Exportacao\Export;
 
-require_once ("libs/db_stdlib.php");
-require_once ("libs/db_conecta.php");
-require_once ("libs/db_sessoes.php");
-require_once ("libs/db_usuariosonline.php");
-require_once ("libs/db_app.utils.php");
-require_once ("libs/db_utils.php");
-require_once ("libs/JSON.php");
-require_once ("dbforms/db_funcoes.php");
+require_once("libs/db_stdlib.php");
+require_once("libs/db_conecta.php");
+require_once("libs/db_sessoes.php");
+require_once("libs/db_usuariosonline.php");
+require_once("libs/db_app.utils.php");
+require_once("libs/db_utils.php");
+require_once("libs/JSON.php");
+require_once("dbforms/db_funcoes.php");
+require_once("classes/db_avaliacaogrupoperguntaresposta_classe.php");
 
 $oJson = JSON::create();
-$oParam = $oJson->parse(str_replace("\\","",$_POST["json"]));
+$oParam = $oJson->parse(str_replace("\\", "", $_POST["json"]));
 
 $oRetorno = new stdClass();
 $oRetorno->erro = false;
@@ -52,17 +55,27 @@ try {
 
     switch ($oParam->exec) {
         case 'getDadosFormulario':
-
             $formulario = AvaliacaoRepository::getAvaliacaoByCodigo($oParam->formulario);
             $avaliacao  = new AvaliacaoAdapter($formulario);
 
             if (!empty($oParam->codigo_resposta)) {
 
-            $formulario->setAvaliacaoGrupo($oParam->codigo_resposta);
-            $avaliacao->setCodigoGrupoResposta($oParam->codigo_resposta);
+                $formulario->setAvaliacaoGrupo($oParam->codigo_resposta);
+                $avaliacao->setCodigoGrupoResposta($oParam->codigo_resposta);
             }
 
             $oRetorno->oFormulario = $avaliacao->getObject();
+
+            break;
+
+        case 'getUltimoGrupoResposta':
+
+            $oDaoAvaliacaogrupoperguntaresposta = new cl_avaliacaogrupoperguntaresposta();
+            $sqlUltimaResposta = $oDaoAvaliacaogrupoperguntaresposta->sql_query_UltimaResposta(null, "DISTINCT db108_avaliacaogruporesposta", "db108_avaliacaogruporesposta desc", "db101_sequencial = $oParam->formulario");
+            $rsResult   = $oDaoAvaliacaogrupoperguntaresposta->sql_record($sqlUltimaResposta);
+            $oDadosUltimaPergunta = db_utils::fieldsMemory($rsResult, 0);
+
+            $oRetorno->codigoResposta = $oDadosUltimaPergunta->db108_avaliacaogruporesposta;
 
             break;
 
@@ -78,7 +91,7 @@ try {
             $oResposta   = new \ECidade\Configuracao\Formulario\Resposta\Model\Resposta();
             $oResposta->setFormulario($oFormulario);
             $oResposta->setData(new DBDate(date('Y-m-d', db_getsession("DB_datausu"))));
-            if  (!empty($oParam->codigo_resposta)) {
+            if (!empty($oParam->codigo_resposta)) {
                 $oResposta = Resposta::getBydId($oFormulario, $oParam->codigo_resposta);
             }
 
@@ -115,7 +128,7 @@ try {
                     }
 
                     $sMensagem .= " preenchimento informado: {$iCodigoRespostaFormulario}  preenchimento encontrado: " . $aRespostas[0]->getCodigo();
-                    throw new BusinessException( $sMensagem);
+                    throw new BusinessException($sMensagem);
                 }
             }
 
@@ -175,7 +188,7 @@ try {
                 throw new Exception('Selecione um arquivo');
             }
 
-            $sDestino =  ECIDADE_PATH . "tmp". DS . $oFiles->file["name"];
+            $sDestino =  ECIDADE_PATH . "tmp" . DS . $oFiles->file["name"];
             move_uploaded_file($oFiles->file["tmp_name"], $sDestino);
 
             $oValidador = new Validator($sDestino);
@@ -192,7 +205,7 @@ try {
             break;
 
         case 'exportar':
-            if ( empty($oParam->formulario) ) {
+            if (empty($oParam->formulario)) {
                 throw new Exception("Informe o formulário.");
             }
 
@@ -219,7 +232,8 @@ echo $oJson->stringify($oRetorno);
  * @param $aPerguntasRespostas
  * @return array
  */
-function getPerguntas($aPerguntasRespostas) {
+function getPerguntas($aPerguntasRespostas)
+{
 
     $perguntas = array();
     foreach ($aPerguntasRespostas->grupos as $grupos) {
@@ -236,7 +250,8 @@ function getPerguntas($aPerguntasRespostas) {
  * @return array
  * @internal param $aPerguntasRespostas
  */
-function getRespostasDaPerguntas($pergunta) {
+function getRespostasDaPerguntas($pergunta)
+{
 
     $respostas = array();
     foreach ($pergunta->respostas as $resposta) {

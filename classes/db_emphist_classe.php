@@ -38,16 +38,18 @@ class cl_emphist {
    var $erro_status= null; 
    var $erro_sql   = null; 
    var $erro_banco = null;  
-   var $erro_msg   = null;  
+   var $erro_msg   = null;   
    var $erro_campo = null;  
    var $pagina_retorno = null; 
-   // cria variaveis do arquivo 
+   // cria variaveis do arquivo     
    var $e40_codhist = 0; 
    var $e40_descr = null; 
-   // cria propriedade com as variaveis do arquivo 
+   var $e40_historico = null;
+   // cria propriedade com as variaveis do arquivo   
    var $campos = "
-                 e40_codhist = int4 = Histórico 
-                 e40_descr = varchar(60) = Descrição 
+                 e40_codhist = int4 = Cód Histórico 
+                 e40_descr = varchar(60) = Descrição
+                 e40_historico = varchar(500) = Historico  
                  ";
    //funcao construtor da classe 
    function cl_emphist() { 
@@ -69,6 +71,7 @@ class cl_emphist {
      if($exclusao==false){
        $this->e40_codhist = ($this->e40_codhist == ""?@$GLOBALS["HTTP_POST_VARS"]["e40_codhist"]:$this->e40_codhist);
        $this->e40_descr = ($this->e40_descr == ""?@$GLOBALS["HTTP_POST_VARS"]["e40_descr"]:$this->e40_descr);
+       $this->e40_historico = ($this->e40_historico == ""?@$GLOBALS["HTTP_POST_VARS"]["e40_historico"]:$this->e40_historico);
      }else{
        $this->e40_codhist = ($this->e40_codhist == ""?@$GLOBALS["HTTP_POST_VARS"]["e40_codhist"]:$this->e40_codhist);
      }
@@ -96,11 +99,13 @@ class cl_emphist {
      }
      $sql = "insert into emphist(
                                        e40_codhist 
-                                      ,e40_descr 
+                                      ,e40_descr
+                                      ,e40_historico 
                        )
                 values (
                                 $this->e40_codhist 
-                               ,'$this->e40_descr' 
+                               ,'$this->e40_descr'
+                               ,'$this->e40_historico'
                       )";
      $result = db_query($sql); 
      if($result==false){ 
@@ -134,6 +139,7 @@ class cl_emphist {
        $resac = db_query("insert into db_acountkey values($acount,5585,'$this->e40_codhist','I')");
        $resac = db_query("insert into db_acount values($acount,886,5585,'','".AddSlashes(pg_result($resaco,0,'e40_codhist'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        $resac = db_query("insert into db_acount values($acount,886,5586,'','".AddSlashes(pg_result($resaco,0,'e40_descr'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = db_query("insert into db_acount values($acount,886,5586,'','".AddSlashes(pg_result($resaco,0,'e40_historico'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
      }
      return true;
    } 
@@ -168,6 +174,19 @@ class cl_emphist {
          return false;
        }
      }
+     if(trim($this->e40_historico)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e40_historico"])){ 
+      $sql  .= $virgula." e40_historico = '$this->e40_historico' ";
+      $virgula = ",";
+      // if(trim($this->e40_descr) == null ){ 
+      //   $this->erro_sql = " Campo Descrição nao Informado.";
+      //   $this->erro_campo = "e40_descr";
+      //   $this->erro_banco = "";
+      //   $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+      //   $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+      //   $this->erro_status = "0";
+      //   return false;
+      // }
+    }
      $sql .= " where ";
      if($e40_codhist!=null){
        $sql .= " e40_codhist = $this->e40_codhist";

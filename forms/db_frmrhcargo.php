@@ -29,45 +29,56 @@
 $clrhcargo->rotulo->label();
 ?>
 <form name="form1" method="post" action="">
-<center>
-<table border="0">
-  <tr>
-    <td nowrap title="<?=@$Trh04_codigo?>">
-       <?=@$Lrh04_codigo?>
-    </td>
-    <td>
-<?
-db_input('rh04_codigo',5,$Irh04_codigo,true,'text',3,"")
-?>
-    </td>
-  </tr>
-  <tr>
-    <td nowrap title="<?=@$Trh04_descr?>">
-       <?=@$Lrh04_descr?>
-    </td>
-    <td>
-<?
-db_input('rh04_descr',40,$Irh04_descr,true,'text',$db_opcao,"")
-?>
-    </td>
-  </tr>
-  </table>
-  </center>
-<input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> >
-<input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
+    <center>
+        <table border="0">
+            <tr>
+                <td nowrap title="<?= @$Trh04_codigo ?>">
+                    <?= @$Lrh04_codigo ?>
+                </td>
+                <td>
+                    <?
+                    db_input('rh04_codigo', 5, $Irh04_codigo, true, 'text', 3, "")
+                    ?>
+                </td>
+            </tr>
+            <tr>
+                <td nowrap title="<?= @$Trh04_descr ?>">
+                    <?= @$Lrh04_descr ?>
+                </td>
+                <td>
+                    <?
+                    db_input('rh04_descr', 40, $Irh04_descr, true, 'text', $db_opcao, "")
+                    ?>
+                </td>
+            </tr>
+            <tr>
+                <td nowrap title="<?= @$Trh04_cbo ?>">
+                    <?= @$Lrh04_cbo ?>
+                </td>
+                <td>
+                    <?
+                    db_input('rh04_cbo', 40, $Irh04_cbo, true, 'text', $db_opcao, "")
+                    ?>
+                </td>
+            </tr>
+        </table>
+    </center>
+    <input name="<?= ($db_opcao == 1 ? "incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "alterar" : "excluir")) ?>" type="submit" id="db_opcao" value="<?= ($db_opcao == 1 ? "Incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "Alterar" : "Excluir")) ?>" <?= ($db_botao == false ? "disabled" : "") ?>>
+    <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();">
 </form>
 <script>
-function js_pesquisa(){
-  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhcargo','func_rhcargo.php?funcao_js=parent.js_preenchepesquisa|rh04_codigo','Pesquisa',true);
-}
-function js_preenchepesquisa(chave){
-  db_iframe_rhcargo.hide();
-  <?
-  if($db_opcao!=1){
-    echo " location.href = '".basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"])."?chavepesquisa='+chave";
-  }
-  ?>
-}
-document.form1.rh04_descr.focus();
-document.form1.rh04_descr.select();
+    function js_pesquisa() {
+        js_OpenJanelaIframe('top.corpo', 'db_iframe_rhcargo', 'func_rhcargo.php?funcao_js=parent.js_preenchepesquisa|rh04_codigo', 'Pesquisa', true);
+    }
+
+    function js_preenchepesquisa(chave) {
+        db_iframe_rhcargo.hide();
+        <?
+        if ($db_opcao != 1) {
+            echo " location.href = '" . basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]) . "?chavepesquisa='+chave";
+        }
+        ?>
+    }
+    document.form1.rh04_descr.focus();
+    document.form1.rh04_descr.select();
 </script>

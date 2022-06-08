@@ -1492,4 +1492,3 @@ function sql_query_licitacao_dotacao ( $pc10_numero=null,$campos="*",$ordem=null
     	return $sql;
     }
 }
-?>

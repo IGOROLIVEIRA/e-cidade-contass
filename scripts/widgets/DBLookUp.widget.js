@@ -15,29 +15,71 @@ DBLookUp = function (oAncora, oInputID, oInputDescricao, oParametros) {
    */
   oParametros = oParametros || {};
 
-  this.iReferencia     = CurrentWindow.DBLookUp.repository.addInstance(this);
-  this.oAncora         = oAncora;
-  this.oInputID        = oInputID;
-  this.oInputDescricao = oInputDescricao;
-  this.oParametros     = {
-    "sArquivo"              : oParametros.sArquivo               || oParametros.arquivo                || this.oAncora.getAttribute('func-arquivo') || null,
-    "sLabel"                : oParametros.sLabel                 || oParametros.label                  || "Pesquisar",
-    "sQueryString"          : oParametros.sQueryString           || oParametros.queryString            || "",
-    "sDestinoLookUp"        : oParametros.sDestinoLookUp         || oParametros.destinoLookup          || "",
-    "sObjetoLookUp"         : oParametros.sObjetoLookUp          || oParametros.objetoLookup           || this.oAncora.getAttribute('func-objeto') || "db_pesquisa",
-    "aCamposAdicionais"     : oParametros.aCamposAdicionais      || oParametros.camposAdicionais       || [],
-    "fCallBack"             : oParametros.fCallBack              || oParametros.callBack               || null,
-    "aParametrosAdicionais" : oParametros.aParametrosAdicionais  || oParametros.parametrosAdicionais   || [],
-    "zIndex"                : oParametros.zIndex                 || oParametros.index                  || null,
-    "oBotaoParaDesabilitar" : oParametros.oBotaoParaDesabilitar  || oParametros.botaoParaDesabilitar   || ""
-  };
+  this.iReferencia     = DBLookUp.repository.addInstance(this);
+    this.oAncora         = oAncora;
+    this.oInputID        = oInputID;
+    this.oInputDescricao = oInputDescricao;
+    this.oParametros     = {
+        "sArquivo"              : oParametros.sArquivo               || oParametros.arquivo                || this.oAncora.getAttribute('func-arquivo') || null,
+        "sLabel"                : oParametros.sLabel                 || oParametros.label                  || "Pesquisar",
+        "sQueryString"          : oParametros.sQueryString           || oParametros.queryString            || "",
+        "sDestinoLookUp"        : oParametros.sDestinoLookUp         || oParametros.destinoLookup          || "",
+        "sObjetoLookUp"         : oParametros.sObjetoLookUp          || oParametros.objetoLookup           || this.oAncora.getAttribute('func-objeto') || "db_pesquisa",
+        "aCamposAdicionais"     : oParametros.aCamposAdicionais      || oParametros.camposAdicionais       || [],
+        "fCallBack"             : oParametros.fCallBack              || oParametros.callBack               || null,
+        "aParametrosAdicionais" : oParametros.aParametrosAdicionais  || oParametros.parametrosAdicionais   || [],
+        "zIndex"                : oParametros.zIndex                 || oParametros.index                  || null,
+        "oBotaoParaDesabilitar" : oParametros.oBotaoParaDesabilitar  || oParametros.botaoParaDesabilitar   || ""
+    };
 
-  this.oCallback  = {
-    onChange         : function(lErro) {},
-    onClick          : function() {}
-  };
+    this.oCallback  = {
+        onChange         : oParametros.fCallBack,
+        onClick          : oParametros.fCallBack
+    };
 
-  this.__init();
+    this.__init();
+
+    var lHabilitado = true;
+
+    this.habilitar = function() {
+
+        if (lHabilitado) {
+            return true;
+        }
+
+        this.oInputID.classList.remove("readonly");
+        this.oInputID.readOnly = false;
+
+        if ( !(this.oAncora instanceof HTMLInputElement) ){
+
+            this.oAncora.href = "javascript:;";
+            this.oAncora.classList.add("DBAncora");
+        }
+        this.oAncora.onclick   = this.eventFunctions.click.bind(this);
+        this.oInputID.onchange = this.eventFunctions.change.bind(this);
+        lHabilitado = true;
+    };
+
+    this.desabilitar = function() {
+
+        if (!lHabilitado) {
+            return true;
+        }
+
+        this.oInputID.readOnly = true;
+        this.oInputID.onchange = null;
+        this.oAncora.classList.remove("DBAncora");
+
+        if ( !(this.oAncora instanceof HTMLInputElement) ){
+
+            this.oInputID.classList.add("readonly");
+            this.oAncora.removeAttribute("href");
+        }
+        this.oAncora.onclick = null;
+
+        lHabilitado = false;
+    };
+};
 
   var lHabilitado = true;
 
@@ -213,13 +255,11 @@ DBLookUp.prototype.getQueryStringChange = function() {
  * @param iCodigo {Integer}
  * @param sDescricao {String}
  */
-DBLookUp.prototype.callBackClick = function(iCodigo, sDescricao) {
+DBLookUp.prototype.callBackClick = function(iCodigo, sDescricao, sCodigo, sDescr) {
 
-  this.oInputID.value        = iCodigo;
-  this.oInputDescricao.value = sDescricao;
-  var prefixo                = !!this.oParametros.sDestinoLookUp ? this.oParametros.sDestinoLookUp + '.' : '';
-  var oObjetoLookUp          = eval(prefixo + this.oParametros.sObjetoLookUp);
-
+  this.oInputID.value        = iCodigo || sCodigo;
+  this.oInputDescricao.value = sDescricao || sDescr;
+  var oObjetoLookUp          = eval(this.oParametros.sObjetoLookUp);
   oObjetoLookUp.hide();
   this.oCallback.onClick(arguments);
 

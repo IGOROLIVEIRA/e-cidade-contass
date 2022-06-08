@@ -44,6 +44,7 @@ class cl_orctiporec {
    // cria variaveis do arquivo
    var $o15_codigo = 0;
    var $o15_codstn = 0;
+   var $o15_codstnnovo = 0;
    var $o15_descr = null;
    var $o15_codtri = null;
    var $o15_finali = null;
@@ -86,7 +87,7 @@ class cl_orctiporec {
        $this->o15_codtri = ($this->o15_codtri == ""?@$GLOBALS["HTTP_POST_VARS"]["o15_codtri"]:$this->o15_codtri);
        $this->o15_finali = ($this->o15_finali == ""?@$GLOBALS["HTTP_POST_VARS"]["o15_finali"]:$this->o15_finali);
        $this->o15_tipo = ($this->o15_tipo == ""?@$GLOBALS["HTTP_POST_VARS"]["o15_tipo"]:$this->o15_tipo);
-       if($this->o15_datalimite == ""){
+      if($this->o15_datalimite == ""){
          $this->o15_datalimite_dia = ($this->o15_datalimite_dia == ""?@$GLOBALS["HTTP_POST_VARS"]["o15_datalimite_dia"]:$this->o15_datalimite_dia);
          $this->o15_datalimite_mes = ($this->o15_datalimite_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["o15_datalimite_mes"]:$this->o15_datalimite_mes);
          $this->o15_datalimite_ano = ($this->o15_datalimite_ano == ""?@$GLOBALS["HTTP_POST_VARS"]["o15_datalimite_ano"]:$this->o15_datalimite_ano);
@@ -111,9 +112,9 @@ class cl_orctiporec {
        $this->erro_status = "0";
        return false;
      }
-     if($this->o15_codstn == null ){
+     if($this->o15_codstnnovo == null ){
        $this->erro_sql = " Campo Código STN nao Informado.";
-       $this->erro_campo = "o15_codstn";
+       $this->erro_campo = "o15_codstnnovo";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -177,6 +178,7 @@ class cl_orctiporec {
                                       ,o15_datalimite
                                       ,o15_db_estruturavalor
                                       ,o15_codstn
+                                      ,o15_codstnnovo
                        )
                 values (
                                 $this->o15_codigo
@@ -187,6 +189,7 @@ class cl_orctiporec {
                                ,".($this->o15_datalimite == "null" || $this->o15_datalimite == ""?"null":"'".$this->o15_datalimite."'")."
                                ,$this->o15_db_estruturavalor
                                ,$this->o15_codstn
+                               ,$this->o15_codstnnovo
                       )";
      $result = db_query($sql);
      if($result==false){
@@ -244,21 +247,30 @@ class cl_orctiporec {
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "0";
          return false;
-       }
+       } 
      }
      if(trim($this->o15_codstn)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o15_codstn"])){
        $sql  .= $virgula." o15_codstn = $this->o15_codstn ";
        $virgula = ",";
-       if(trim($this->o15_codstn) == null ){
-         $this->erro_sql = " Código STN não informado.";
-         $this->erro_campo = "o15_codstn";
-         $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-         $this->erro_status = "0";
-         return false;
-       }
      }
+     if(trim($this->o15_codstn) == '' || trim($this->o15_codstn) == null){
+      $sql  .= $virgula." o15_codstn = null ";
+      $virgula = ",";
+    }
+    if(trim($this->o15_codstnnovo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o15_codstnnovo"])){
+       $sql  .= $virgula." o15_codstnnovo = $this->o15_codstnnovo ";
+       $virgula = ",";
+       if(trim($this->o15_codstnnovo) == null ){
+        $this->erro_sql = " Código STN não informado.";
+        $this->erro_campo = "o15_codstnnovo";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+    }
+     
      if(trim($this->o15_descr)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o15_descr"])){
        $sql  .= $virgula." o15_descr = '$this->o15_descr' ";
        $virgula = ",";

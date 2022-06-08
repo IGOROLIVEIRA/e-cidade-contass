@@ -1,7 +1,7 @@
 e-cidade			5432	cmpirapora
 e-cidade			5432	cmbocaiuva
 e-cidade			5432	cmcapitaoeneas
-e-cidade			5432	cmmoc
+cmmoc   			5432	cmmoc
 e-cidade			5432	fumasa
 e-cidade			5432	pmibiracatu
 e-cidade			5433	pmpatis
@@ -27,14 +27,12 @@ pmluislandia        5432    prefeituras
 pmitacambira        5432    prefeituras
 basemodeloppa       5432    prefeituras
 treinamento         5432    prefeituras
+pmsantafeminas      5432    prefeituras
+pmjanuaria_consulta    5432    prefeituras
 
-pmburitizeiro          5432    prefeituras2
-pmnovaporteirinha      5432    prefeituras2
-pmsantafeminas         5432    prefeituras2
+
 pmsaojoaomissoes       5432    prefeituras2
 pmcurraldedentro       5432    prefeituras2
-pmmontalvania          5432    prefeituras2
-pmjanuaria             5432    prefeituras2
 
 e-cidade               5432    pmubai
 
@@ -62,7 +60,6 @@ cmsantafe			5432	e-cidade
 cmsjponte			5432	e-cidade
 cmubai				5432	e-cidade
 cmvarzelandia			5432	e-cidade
-codanorte			5432	e-cidade
 converdegran			5432	e-cidade
 e-cidade-zerada-2019		5432	e-cidade
 emutur				5432	e-cidade
@@ -87,6 +84,7 @@ cisnorte            5432    e-cidade
 cisarp              5432    e-cidade
 hrjanauba           5432    e-cidade
 cmitacambira        5432    e-cidade
+arsan    			5432	e-cidade
 
 pmsaojoaomissoes    5432    e-cidadenovosclientes
 pmsantafeminas      5432    e-cidadenovosclientes
@@ -98,3 +96,17 @@ e-cidade            5432    pmnovaporteirinha
 e-cidade            5432    pmgraomogol
 
 e-cidade            5432    pmburitizeiro
+
+e-cidade            5432    pmmonteazul
+
+e-cidade            5432    pmmontalvania
+
+base_desenvolvimento   5432   teste
+
+e-cidade            5432    codanorte
+
+e-cidade            5432    pmserranopolis
+
+e-cidade            5432    pmsantafeminas
+
+e-cidade            5432    pmcurraldentro

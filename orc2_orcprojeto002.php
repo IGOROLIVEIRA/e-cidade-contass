@@ -48,7 +48,7 @@
  $projeto = (isset($o46_codlei)&&!empty($o46_codlei))?$o46_codlei:'null';
  $ano_anterior = ($anousu -1);
  $tem_superavit = false;
-
+ $processados = (isset($processados)&&!empty($processados))?$processados:'null'; 
 ///////////////////////////////////////////
 // defini a classe abaixo pra poder tirar o timpre conforme o caso
 class PDF_TIMBRE extends pdf1 {
@@ -76,6 +76,17 @@ if ($timbre =='s'){
  $pdf->setX(5);
  $artigo = 0;
 
+ if($processados == 1){ // so processador
+  $valorp = "and orcsuplemlan.o49_data is not null";
+  $valorp.= " and o49_codsup is not null  ";
+}
+if($processados == 2){ // não processados
+  $valorp = "and orcsuplem.o46_data is not null";
+  $valorp.= " and o49_codsup is null ";
+}  
+if($processados == 3){ // todos
+$valorp = "and orcsuplem.o46_data is not null";
+}
 
  /**
    * executa select para saber se é suplementação ou crédito especial
@@ -89,13 +100,17 @@ if ($timbre =='s'){
                 inner join orcsuplem on o46_codlei = orcprojeto.o39_codproj
                 inner join orcsuplemtipo on o48_tiposup = orcsuplem.o46_tiposup
                                                and orcsuplemtipo.o48_coddocsup >  0
-          where o39_codproj=$projeto
+                                               left outer join orcsuplemlan on
+                                               o49_codsup = orcsuplem.o46_codsup                          
+                where o39_codproj=$projeto
+                     $valorp                                     
 	  order by o46_data
 	  limit 1
          ";
+      
   $res= $auxiliar->sql_record($sql);
   db_fieldsmemory($res,0);
-//  db_criatabela($res);exit;
+//  db_criatabela($res);exit; 
   $xtipo = $o48_tiposup;
   // $xdata = $o46_data;
   $xdata = $o39_data;
@@ -133,9 +148,14 @@ if ($timbre =='s'){
                 left  join orcprojetoorcprojetolei on o39_codproj = o139_orcprojeto
                 inner join orcsuplemtipo on o48_tiposup = orcsuplem.o46_tiposup
                                       and orcsuplemtipo.o48_coddocsup >  0
-         where o39_codproj=$projeto
+                                      left outer join orcsuplemlan on
+                                      o49_codsup = orcsuplem.o46_codsup                          
+       where o39_codproj=$projeto
+            
+            $valorp	                             
 	       group by o139_orcprojeto,o39_numero,o39_data,o39_lei,o39_compllei,o39_leidata,o45_numlei, ano_lei
          ";
+  // echo $sql; exit;          
   $res= $auxiliar->sql_record($sql);
   //db_criatabela($res);exit;
 
@@ -149,7 +169,7 @@ if ($timbre =='s'){
     $projeto_tipo = 1;
   }
 
-  $sSqlSuplementacoes   = $clorcsuplem->sql_query(null,"*","o46_codsup","orcprojeto.o39_codproj= {$projeto}");
+  $sSqlSuplementacoes   = $clorcsuplem->sql_query(null,"*","o46_codsup","orcprojeto.o39_codproj= $projeto $valorp");
   $rsSuplementacoes     = $clorcsuplem->sql_record($sSqlSuplementacoes);
   $aSuplementacao       = db_utils::getCollectionByRecord($rsSuplementacoes);
   $valorutilizado       = 0;
@@ -325,7 +345,11 @@ if ($timbre =='s'){
                 inner join orcprojativ on o58_projativ  = o55_projativ  and o55_anousu = ".db_getsession("DB_anousu")."
 		            inner join orcsuplemtipo on o48_tiposup = orcsuplem.o46_tiposup
 		                                      and orcsuplemtipo.o48_coddocsup >  0
+                                          left outer join orcsuplemlan on
+                                          o49_codsup = orcsuplem.o46_codsup                          
          	where o39_codproj=$projeto
+               	
+                $valorp
 	     	 group by o47_coddot,
 	               o46_tiposup,
 							   o48_descr,
@@ -369,7 +393,11 @@ if ($timbre =='s'){
                 inner join orcprojativ on o08_projativ  = o55_projativ  and o55_anousu = o08_ano
                 inner join orcsuplemtipo on o48_tiposup = orcsuplem.o46_tiposup
                                           and orcsuplemtipo.o48_coddocsup >  0
+                                          left outer join orcsuplemlan on
+                                          o49_codsup = orcsuplem.o46_codsup                          
           where o39_codproj=$projeto
+                
+                $valorp
          group by 3,
                  o46_tiposup,
                  o48_descr,
@@ -385,8 +413,8 @@ if ($timbre =='s'){
                 o15_codigo,
                 o15_descr
         order by o58_orgao,o58_unidade,o58_projativ,o56_elemento ";
+  //  echo $sql." union all {$sSqlDotacaoPPA}";exit;
   $res= $auxiliar->sql_record($sql." union all {$sSqlDotacaoPPA}");
-   // db_criatabela($res);exit;
   $total = 0;
   if ($auxiliar->numrows > 0 ){
       for ($x=0;$x < $auxiliar->numrows ;$x++){
@@ -447,7 +475,11 @@ if ($timbre =='s'){
 	                               o58_anousu=o47_anousu
               inner join orcsuplemtipo on o48_tiposup = orcsuplem.o46_tiposup
                                       and orcsuplemtipo.o48_coddocred >  0
+                                      left outer join orcsuplemlan on
+                                      o49_codsup = orcsuplem.o46_codsup                         
          where o39_codproj=$projeto
+       
+         $valorp
 	 group by o39_codproj,
                   o39_texto,
 	          o48_descr,
@@ -459,6 +491,7 @@ if ($timbre =='s'){
 	          o47_anousu
          order by o58_orgao,o58_unidade,o58_projativ
          ";
+//  echo $sql;exit;     
  $res= $auxiliar->sql_record($sql);
  $tem_reduz = 0;
  if ($auxiliar->numrows>0 ) {
@@ -512,7 +545,11 @@ if ($timbre =='s'){
               inner join orcfontes on o57_codfon  =   orcreceita.o70_codfon and o57_anousu = orcsuplemrec.o85_anousu
               inner join orcsuplemtipo on o48_tiposup = orcsuplem.o46_tiposup
                                       and orcsuplemtipo.o48_arrecadmaior >  0
+                                      left outer join orcsuplemlan on
+                                      o49_codsup = orcsuplem.o46_codsup
           where o39_codproj=$projeto
+          
+          $valorp
          ";
 
    $sSqlPPA = "select
@@ -531,8 +568,13 @@ if ($timbre =='s'){
               inner join orcfontes on o57_codfon  =   o06_codrec and o57_anousu = o06_anousu
               inner join orcsuplemtipo on o48_tiposup = orcsuplem.o46_tiposup
                                       and orcsuplemtipo.o48_arrecadmaior >  0
+                                      left outer join orcsuplemlan on
+                                      o49_codsup = orcsuplem.o46_codsup                         
           where o39_codproj=$projeto
-         ";
+         
+          $valorp
+         ";    
+  //  echo  $sql." union all {$sSqlPPA}";exit;     
    $res= $auxiliar->sql_record($sql." union all {$sSqlPPA}");
    // db_criatabela($res);
    if ($auxiliar->numrows > 0 ) {

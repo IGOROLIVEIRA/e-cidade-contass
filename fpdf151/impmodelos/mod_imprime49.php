@@ -3,6 +3,7 @@
 $sSQLTomadorDBConfig = "SELECT numcgm FROM db_config WHERE cgc = '{$this->dadosTomador->z01_cgccpf}' and prefeitura is true";
 $rsTomadorDBConfig = db_query($sSQLTomadorDBConfig);
 $lTomadorEhPrefeitura = !!pg_num_rows($rsTomadorDBConfig);
+$oInstit = new Instituicao(db_getsession('DB_instit'));
 
 ##Modelo de nota Fiscal
 $confNumRows = pg_num_rows($this->rsConfig);
@@ -24,9 +25,9 @@ for ($j = 0; $j < $confNumRows; $j++) {
     $this->objpdf->Setfont('Arial', 'B', 10);
     $this->objpdf->rect(10, 2, 29, 28);
     $this->objpdf->Image('imagens/files/' . $this->logo, 19, $xlin - 12, 12);
-//    $this->objpdf->rect(39,2,121,28);
+    //$this->objpdf->rect(39,2,121,28);
     $this->objpdf->Setfont('Arial', 'B', 9);
-//    $this->objpdf->text(69, $xlin -15, $this->prefeitura);
+    //$this->objpdf->text(69, $xlin -15, $this->prefeitura);
     $this->objpdf->sety(2);
     $this->objpdf->setx($xlin + 19);
     $this->objpdf->cell(121, 5, "$this->prefeitura", "T", 1, "C");
@@ -45,20 +46,31 @@ for ($j = 0; $j < $confNumRows; $j++) {
     // Titulo
     $this->objpdf->sety($xlin + 3);
     $this->objpdf->setx($xlin + 19);
-    $this->objpdf->Setfont('Arial', 'B', 10);
-    $this->objpdf->cell(121, 5, "NOTA FISCAL DE SERVIÇOS ELETRÔNICA - AVULSA", 0, 1, "C");
+    $this->objpdf->Setfont('Arial', 'B', 10);    
+    if ($oInstit->getCodigoCliente() == Instituicao::COD_CLI_PMMONTALVANIA){
+        $this->objpdf->cell(121, 5, "NOTA FISCAL DE SERVIÇOS - AVULSA", 0, 1, "C");
+    }else{
+        $this->objpdf->cell(121, 5, "NOTA FISCAL DE SERVIÇOS ELETRÔNICA - AVULSA", 0, 1, "C");
+    }
 
-    //Descricao VIA
-    $this->objpdf->Setfont('Arial', '', 7);
-    $this->objpdf->sety(2);
-    $this->objpdf->setx(160);
-    $this->objpdf->cell(40, 28, $oConf->q67_via . "ª via - " . $oConf->q67_descr, 1, 1, "C");
+    if ($confNumRows > 1){
+        //Descricao VIA
+        $this->objpdf->Setfont('Arial', '', 7);
+        $this->objpdf->sety(2);
+        $this->objpdf->setx(160);
+        $this->objpdf->cell(40, 28, $oConf->q67_via . "ª via - " . $oConf->q67_descr, 1, 1, "C");
 
-    //Numero da Nota
-    $this->objpdf->Setfont('Arial', 'B', 10);
-    $this->objpdf->sety($xlin + 5);
-    $this->objpdf->setx(160);
-    $this->objpdf->cell(40, 5, "Nº " . $this->dadosPrestador->q51_numnota, 0, 1, "C");
+        //Numero da Nota
+        $this->objpdf->Setfont('Arial', 'B', 10);
+        $this->objpdf->sety($xlin + 5);
+        $this->objpdf->setx(160);
+        $this->objpdf->cell(40, 5, "Nº " . $this->dadosPrestador->q51_numnota, 0, 1, "C");
+    }else{
+        //Numero da nota
+        $this->objpdf->sety(2);
+        $this->objpdf->setx(160);
+        $this->objpdf->cell(40, 28, "Nº " . $this->dadosPrestador->q51_numnota, 1, 1, "C");
+    }
 
     //Data / Hora Emissão
     $this->objpdf->Setfont('Arial', 'B', 7);
@@ -325,10 +337,15 @@ for ($j = 0; $j < $confNumRows; $j++) {
     $fTotalNota = $this->fTotaliUni;
 
     // valor total da nota
-    if ($lTomadorEhPrefeitura) {
+    if ($lTomadorEhPrefeitura){
         $fTotalNota = $this->fTotaliUni - $this->fvlrIssqn - $this->fvlrInss - $this->fvlrIrrf;
     }
 
+    if ($lTomadorEhPrefeitura == null && ($oInstit->getCodigoCliente() == Instituicao::COD_CLI_PMGRAOMOGOL
+       || $oInstit->getCodigoCliente() == Instituicao::COD_CLI_MONTEAZUL)){        
+            $fTotalNota = $this->fTotaliUni - $this->fvlrInss - $this->fvlrIrrf;
+    }
+    
     $this->objpdf->setX(125);
     $this->objpdf->cell(40, 5, "Valor Total da Nota", 1, 0);
     $this->objpdf->Setfont('Arial', '', 10);
@@ -337,7 +354,16 @@ for ($j = 0; $j < $confNumRows; $j++) {
     $this->objpdf->sety(255);
     $this->objpdf->Setfont('Arial', 'B', 10);
     $this->objpdf->cell(30, 20,"Avisos", "LTB", 0, "C");
-    $this->objpdf->Setfont('Arial', '', 8);
-    $this->objpdf->rect(40, $this->yOld + 30, 160, 20);
-    $this->objpdf->MultiCell(165, 5,$this->texto_aviso, 0, "L");
+    $this->objpdf->Setfont('Arial', '', 8);    
+    if ($oInstit->getCodigoCliente() == Instituicao::COD_CLI_PMMONTALVANIA){
+        $this->objpdf->rect(40, $this->yOld + 30, 100, 20);
+        $this->objpdf->MultiCell(100, 5,$this->texto_aviso, 0, "L");
+        $this->objpdf->rect(140, $this->yOld + 30, 60, 20);
+        $this->objpdf->setX(160);
+        $this->objpdf->cell(30, 5,"Servidor(a) Emitente", 0, "C");
+    }else{
+        $this->objpdf->rect(40, $this->yOld + 30, 160, 20);
+        $this->objpdf->MultiCell(165, 5,$this->texto_aviso, 0, "L");
+    }
+
 }

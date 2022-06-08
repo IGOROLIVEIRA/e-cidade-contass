@@ -219,6 +219,7 @@ if (count($aParametrosEmpenho) > 0) {
                                                 </td>
                                                 <td colspan=3 nowrap>
                                                     <?php
+
                                                     $sWhere = "db83_tipoconta = 1";
                                                     /* [Extensão] - Filtro da Despesa */
 
@@ -239,8 +240,10 @@ if (count($aParametrosEmpenho) > 0) {
                                                         db_fieldsmemory($result05, $r);
                                                         $arr[$codtipo] = "{$e83_conta} - {$e83_descr} - {$c61_codigo}";
                                                     }
-                                                    $e83_codtipo = '0';
-                                                    db_select("e83_codtipo", $arr, true, 1, "onchange='js_setContaPadrao(this.value);' style='width:26em'");
+                                                    $e83_codtipo ='0';
+
+                                                    db_select("e83_codtipo",$arr,true,1,"onchange='js_setContaPadrao(this.value);' style='width:26em'");
+
                                                     ?>
                                                 </td>
                                             </tr>
@@ -931,7 +934,8 @@ if (count($aParametrosEmpenho) > 0) {
 
         js_removeObj("msgBox");
         js_liberaBotoes(true);
-        var oResponse = eval("(" + oAjax.responseText + ")");
+
+        var oResponse = eval("("+oAjax.responseText+")");
         gridNotas.clearAll(true);
         gridNotas.setStatus("");
         var iRowAtiva = 0;
@@ -1288,7 +1292,7 @@ if (count($aParametrosEmpenho) > 0) {
             sDisabled = "disabled='disabled'";
         }
 
-        return "<input value='" + sNumDoc + "' size='13' maxlength='15' id='numdoc" + iCodMov + "' " + sDisabled + ">";
+        return "<input value='"+sNumDoc+"' size='13' maxlength='15' id='numdoc"+iCodMov+"' "+sDisabled+">";
 
     }
 
@@ -1495,18 +1499,18 @@ if (count($aParametrosEmpenho) > 0) {
             return false;
 
         }
+        /*
         if (js_comparadata(sDataDia, $F('e42_dtpagamento'), ">")) {
-
             alert("Data Informada Inválida.\nData menor que a data do sistema");
             return false;
-
-        }
-        var oEnvio = new Object();
-        oEnvio.exec = "configurarPagamento";
-        oEnvio.lEfetuarPagamento = lEfetuarPagamento;
-        oEnvio.dtPagamento = $F('e42_dtpagamento');
-        oEnvio.aMovimentos = new Array();
-        oEnvio.lEmitirOrdeAuxiliar = false;
+        } 
+        */
+        var oEnvio                   = new Object();
+        oEnvio.exec                  = "configurarPagamento";
+        oEnvio.lEfetuarPagamento     = lEfetuarPagamento;
+        oEnvio.dtPagamento           = $F('e42_dtpagamento');
+        oEnvio.aMovimentos           = new Array();
+        oEnvio.lEmitirOrdeAuxiliar   = false;
         oEnvio.iOPAuxiliarManutencao = "";
         if ($('emitirordemauxiliar').checked) {
             oEnvio.lEmitirOrdeAuxiliar = true;
@@ -1541,17 +1545,17 @@ if (count($aParametrosEmpenho) > 0) {
         var sVirgula = "";
         for (var iMov = 0; iMov < aMovimentos.length; iMov++) {
 
-            var iForma = aMovimentos[iMov].aCells[9].getValue();
-            var iCodMov = aMovimentos[iMov].aCells[0].getValue();
-            var nValor = new Number(aMovimentos[iMov].aCells[15].getValue());
-            var sConCarPeculiar = aMovimentos[iMov].aCells[4].getValue();
-            var iNota = aMovimentos[iMov].aCells[5].getValue();
-            var iContaFornecedor = aMovimentos[iMov].aCells[8].getValue();
-            var iContaPagadora = aMovimentos[iMov].aCells[6].getValue();
-            var iContaSaltes = js_getContaSaltes($('ctapag' + aMovimentos[iMov].aCells[0].getValue()));
-            var dtAutoriza = $F('e42_dtpagamento');
-            var nValorRetencao = js_strToFloat(aMovimentos[iMov].aCells[14].getValue());
-            var lRetencaoMesAnterior = $('validarretencao' + iCodMov).innerHTML;
+            var iForma               = aMovimentos[iMov].aCells[9].getValue();
+            var iCodMov              = aMovimentos[iMov].aCells[0].getValue();
+            var nValor               = new Number(aMovimentos[iMov].aCells[15].getValue());
+            var sConCarPeculiar      = aMovimentos[iMov].aCells[4].getValue();
+            var iNota                = aMovimentos[iMov].aCells[5].getValue();
+            var iContaFornecedor     = aMovimentos[iMov].aCells[8].getValue();
+            var iContaPagadora       = aMovimentos[iMov].aCells[6].getValue();
+            var iContaSaltes         = js_getContaSaltes( $('ctapag'+aMovimentos[iMov].aCells[0].getValue()) );
+            var dtAutoriza           = $F('e42_dtpagamento');
+            var nValorRetencao       = js_strToFloat(aMovimentos[iMov].aCells[14].getValue());
+            var lRetencaoMesAnterior = $('validarretencao'+iCodMov).innerHTML;
 
             if (iForma != 1 && iForma != 2) {
                 var sNumDoc = aMovimentos[iMov].aCells[10].getValue().trim();
@@ -1559,8 +1563,8 @@ if (count($aParametrosEmpenho) > 0) {
 
             if (iForma == 2) {
 
-                var iCodCheque = aMovimentos[iMov].aCells[16].getValue().trim();
-                var iCheque = aMovimentos[iMov].aCells[10].getValue().trim();
+                var iCodCheque        = aMovimentos[iMov].aCells[16].getValue().trim();
+                var iCheque           = aMovimentos[iMov].aCells[10].getValue().trim();
 
             }
 
@@ -1617,16 +1621,16 @@ if (count($aParametrosEmpenho) > 0) {
             if (sConCarPeculiar == "Selecione") {
                 sConCarPeculiar = '';
             }
-            oMovimento = new Object();
-            oMovimento.iCodForma = iForma;
-            oMovimento.iCodMov = iCodMov;
-            oMovimento.nValor = nValor.valueOf();
-            oMovimento.iContaFornecedor = iContaFornecedor;
-            oMovimento.iContaPagadora = iContaPagadora;
-            oMovimento.iContaSaltes = iContaSaltes;
-            oMovimento.iCodNota = iNota;
-            oMovimento.nValorRetencao = nValorRetencao.valueOf();
-            oMovimento.sConCarPeculiar = sConCarPeculiar;
+            oMovimento                   = new Object();
+            oMovimento.iCodForma         = iForma;
+            oMovimento.iCodMov           = iCodMov;
+            oMovimento.nValor            = nValor.valueOf();
+            oMovimento.iContaFornecedor  = iContaFornecedor;
+            oMovimento.iContaPagadora    = iContaPagadora;
+            oMovimento.iContaSaltes      = iContaSaltes;
+            oMovimento.iCodNota          = iNota;
+            oMovimento.nValorRetencao    = nValorRetencao.valueOf();
+            oMovimento.sConCarPeculiar   = sConCarPeculiar;
 
             if (iForma != 1 && iForma != 2) {
                 oMovimento.sNumDoc = sNumDoc;
@@ -1634,8 +1638,8 @@ if (count($aParametrosEmpenho) > 0) {
 
             if (iForma == 2) {
 
-                oMovimento.iCheque = iCheque;
-                oMovimento.iCodCheque = iCodCheque;
+                oMovimento.iCheque       = iCheque;
+                oMovimento.iCodCheque    = iCodCheque;
 
             }
 
@@ -2231,9 +2235,9 @@ if (count($aParametrosEmpenho) > 0) {
 
     function selecionarConta(elemento, iCodMov) {
 
-        iContaPagadoraPadrao = document.getElementById("contapagpadrao" + iCodMov).value;
-        iContaSelecionada = elemento.getElementsByTagName("div")[0].textContent;
-        sDescConta = elemento.getElementsByTagName("span")[0].textContent
+        iContaPagadoraPadrao    = document.getElementById("contapagpadrao"+iCodMov).value;
+        iContaSelecionada       = elemento.getElementsByTagName("div")[0].textContent;
+        sDescConta              = elemento.getElementsByTagName("span")[0].textContent
 
         if (iContaPagadoraPadrao != '') {
 
@@ -2242,7 +2246,7 @@ if (count($aParametrosEmpenho) > 0) {
                 sMsgConfirm = 'A conta selecionada é diferente da Conta Pagadora informada anteriormente. ';
                 sMsgConfirm += 'Essa ação substituirá os dados. \n \nDeseja prosseguir?';
 
-                if (!confirm(sMsgConfirm)) {
+                if (!confirm(sMsgConfirm)){
                     return false;
                 } else {
                     js_atualizaContaPagadoraPadrao(iContaSelecionada, iCodMov);
@@ -2267,9 +2271,9 @@ if (count($aParametrosEmpenho) > 0) {
 
         js_divCarregando("Aguarde, Atualizando Conta Pagadora.", "msgBox");
 
-        var oAjax = new Ajax.Request('emp4_manutencaoPagamentoRPC.php', {
-            method: 'post',
-            parameters: 'json=' + Object.toJSON(oParam),
+        var oAjax  = new Ajax.Request('emp4_manutencaoPagamentoRPC.php', {
+            method    : 'post',
+            parameters: 'json='+Object.toJSON(oParam),
             onComplete: js_retornoAtualizaContaPagadoraPadrao
         });
 
@@ -2295,8 +2299,8 @@ if (count($aParametrosEmpenho) > 0) {
 
         if (aMovimentos.length > 0) {
 
-            var dtBase = $F('e42_dtpagamento');
-            var iCheque = $('iCheque').value;
+            var dtBase      = $F('e42_dtpagamento');
+            var iCheque     = $('iCheque').value;
 
             windowChequeItem = new windowAux('wndChequeItem', 'Emitir Cheque', 520, 180);
 
@@ -2397,23 +2401,23 @@ if (count($aParametrosEmpenho) > 0) {
         }
 
         oCheque = new Object();
-        oParam = new Object();
+        oParam  = new Object();
 
-        oCheque.sCredor = encodeURIComponent(aMovimentos[0][7]);
-        oCheque.dtData = dtData;
-        oCheque.aTotCheques = [];
-        oCheque.numeroCheque = iNumCheque;
-        oCheque.aNotasLiquidacao = aNotas;
+        oCheque.sCredor             = encodeURIComponent(aMovimentos[0][7]);
+        oCheque.dtData              = dtData;
+        oCheque.aTotCheques         = [];
+        oCheque.numeroCheque        = iNumCheque;
+        oCheque.aNotasLiquidacao    = aNotas;
 
-        oParam.exec = 'emitirCheque';
-        oParam.params = [];
-        oParam.params[0] = oCheque;
+        oParam.exec         = 'emitirCheque';
+        oParam.params       = [];
+        oParam.params[0]    = oCheque;
 
-        js_divCarregando("Aguarde, Efetuando emissão do cheques.", "msgBox");
+        js_divCarregando("Aguarde, Efetuando emissão do cheques.","msgBox");
 
-        var oAjax = new Ajax.Request('emp4_agendaPagamentoRPC.php', {
-            method: 'post',
-            parameters: 'json=' + Object.toJSON(oParam),
+        var oAjax  = new Ajax.Request('emp4_agendaPagamentoRPC.php', {
+            method    : 'post',
+            parameters: 'json='+Object.toJSON(oParam),
             onComplete: js_retornoEmissaoCheque
         });
 
@@ -2448,16 +2452,16 @@ if (count($aParametrosEmpenho) > 0) {
 
         var aData = strData.split('/');
 
-        var strData = '<input type="text" id="' + sNomeInput + '" value="' + strData + '" name="' + sNomeInput + '" maxlength="10" size="10" autocomplete="off" onKeyUp="return js_mascaraData(this,event);" onBlur="js_validaDbData(this);" onFocus="js_validaEntrada(this);" style="width: 70px;" >';
-        strData += '<input value="D" type="button" name="dtjs_' + sNomeInput + '" onclick="pegaPosMouse(event);show_calendar(\'' + sNomeInput + '\',\'none\'); " >';
-        strData += '<input name="' + sNomeInput + '_dia" type="hidden" title="" id="' + sNomeInput + '_dia" value="' + aData[0] + '" size="2"  maxlength="2" >';
-        strData += '<input name="' + sNomeInput + '_mes" type="hidden" title="" id="' + sNomeInput + '_mes" value="' + aData[1] + '" size="2"  maxlength="2" >';
-        strData += '<input name="' + sNomeInput + '_ano" type="hidden" title="" id="' + sNomeInput + '_ano" value="' + aData[2] + '" size="4"  maxlength="4" >';
+        var	strData  = '<input type="text" id="'+sNomeInput+'" value="'+strData+'" name="'+sNomeInput+'" maxlength="10" size="10" autocomplete="off" onKeyUp="return js_mascaraData(this,event);" onBlur="js_validaDbData(this);" onFocus="js_validaEntrada(this);" style="width: 70px;" >';
+            strData += '<input value="D" type="button" name="dtjs_'+sNomeInput+'" onclick="pegaPosMouse(event);show_calendar(\''+sNomeInput+'\',\'none\'); " >';
+            strData += '<input name="'+sNomeInput+'_dia" type="hidden" title="" id="'+sNomeInput+'_dia" value="'+aData[0]+'" size="2"  maxlength="2" >';
+            strData += '<input name="'+sNomeInput+'_mes" type="hidden" title="" id="'+sNomeInput+'_mes" value="'+aData[1]+'" size="2"  maxlength="2" >';
+            strData += '<input name="'+sNomeInput+'_ano" type="hidden" title="" id="'+sNomeInput+'_ano" value="'+aData[2]+'" size="4"  maxlength="4" >';
 
-        var sStringFunction = "js_comparaDatas" + sNomeInput + " = function(dia,mes,ano){ \n";
-        sStringFunction += "  var objData        = document.getElementById('" + sNomeInput + "'); \n";
-        sStringFunction += "  objData.value      = dia+'/'+mes+'/'+ano; \n";
-        sStringFunction += "} \n";
+        var sStringFunction  = "js_comparaDatas"+sNomeInput+" = function(dia,mes,ano){ \n";
+            sStringFunction += "  var objData        = document.getElementById('"+sNomeInput+"'); \n";
+            sStringFunction += "  objData.value      = dia+'/'+mes+'/'+ano; \n";
+            sStringFunction += "} \n";
 
         var script = document.createElement("SCRIPT");
         script.innerHTML = sStringFunction;

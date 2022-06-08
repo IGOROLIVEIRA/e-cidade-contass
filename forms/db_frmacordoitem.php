@@ -329,6 +329,7 @@ db_app::load("estilos.css, grid.style.css");
     desabilitaDotacao = true;
     isServico = 'f';
     isExecutado = new Array();
+    tipodispenca = '';
 
     function js_pesquisaac20_acordo(mostra) {
 
@@ -418,6 +419,8 @@ db_app::load("estilos.css, grid.style.css");
                     document.form1.ac20_pcmater.focus();
                     document.form1.ac20_pcmater.value = '';
                 } else {
+                    isServico = chave2;
+                    js_verificaServico();
                     js_getElementosMateriais();
                 }
             } else {
@@ -453,6 +456,7 @@ db_app::load("estilos.css, grid.style.css");
                 js_verificaServico();
                 js_getElementosMateriais();
             } else {
+
                 db_iframe_pcmater.hide();
                 alert(oRetorno.message.urlDecode());
                 return false;
@@ -614,6 +618,7 @@ db_app::load("estilos.css, grid.style.css");
         var oRetorno = eval("(" + oAjax.responseText + ")");
         iTipoContrato = oRetorno.iTipoContrato;
         var iTipocompra = oRetorno.tipocompra;
+        tipodispenca = iTipocompra;
 
         if (iTipocompra === '103' && oRetorno.iTipoContrato == 2 || iTipocompra === '102' && oRetorno.iTipoContrato == 2) {
 
@@ -953,6 +958,8 @@ db_app::load("estilos.css, grid.style.css");
         var CONTRATO_MANUAL = 3;
         var CONTRATO_EMPENHO = 6;
 
+
+
         if (iTipoContrato == CONTRATO_EMPENHO) {
             $('itensEmpenho').style.display = '';
         }
@@ -995,6 +1002,11 @@ db_app::load("estilos.css, grid.style.css");
             sAncora += "<strong>Código do Item:</strong>";
             sAncora += "</a>";
             $('tdMatMater').innerHTML = sAncora;
+        }
+
+        if ((tipodispenca === '102' || tipodispenca === '103') && iTipoContrato == CONTRATO_LICITACAO) {
+            $('ac20_elemento').disabled = false;
+            $('ac20_elemento').style.background = '#FFF';
         }
 
     }

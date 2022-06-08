@@ -216,9 +216,9 @@ class SicomArquivoDetalhamentodeObras extends SicomArquivoBase implements iPadAr
       $clcadobras202021->si199_codobra = $oDados20->obr01_numeroobra;
       $clcadobras202021->si199_situacaodaobra = $oDados20->obr02_situacao;
       $clcadobras202021->si199_dtsituacao = $oDados20->obr02_dtsituacao;
-      $clcadobras202021->si199_veiculopublicacao = $oDados20->obr02_veiculopublicacao;
+      $clcadobras202021->si199_veiculopublicacao = $this->removeCaracteres($oDados20->obr02_veiculopublicacao);
       $clcadobras202021->si199_dtpublicacao = $oDados20->obr02_dtpublicacao;
-      $clcadobras202021->si199_descsituacao = $oDados20->obr02_descrisituacao;
+      $clcadobras202021->si199_descsituacao = $this->removeCaracteres($oDados20->obr02_descrisituacao);
       $clcadobras202021->si199_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
       $clcadobras202021->si199_instit = db_getsession("DB_instit");
       $clcadobras202021->incluir(null);
@@ -293,9 +293,9 @@ class SicomArquivoDetalhamentodeObras extends SicomArquivoBase implements iPadAr
       $clcadobras302021->si201_codorgaoresp = $oDados30->si09_codorgaotce;
       $clcadobras302021->si201_codobra = $oDados30->obr01_numeroobra;
       $clcadobras302021->si201_tipomedicao = $oDados30->obr03_tipomedicao;
-      $clcadobras302021->si201_descoutrostiposmed = $oDados30->obr03_outrostiposmedicao;
-      $clcadobras302021->si201_nummedicao = $oDados30->obr03_nummedicao;
-      $clcadobras302021->si201_descmedicao = $oDados30->obr03_descmedicao;
+      $clcadobras302021->si201_descoutrostiposmed = $this->removeCaracteres($oDados30->obr03_outrostiposmedicao);
+      $clcadobras302021->si201_nummedicao = $this->removeCaracteres($oDados30->obr03_nummedicao);
+      $clcadobras302021->si201_descmedicao = $this->removeCaracteres($oDados30->obr03_descmedicao);
       $clcadobras302021->si201_dtiniciomedicao = $oDados30->obr03_dtiniciomedicao;
       $clcadobras302021->si201_dtfimmedicao = $oDados30->obr03_dtfimmedicao;
       $clcadobras302021->si201_dtmedicao = $oDados30->obr03_dtentregamedicao;

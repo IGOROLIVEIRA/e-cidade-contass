@@ -40,9 +40,9 @@ require_once("classes/db_db_depart_classe.php");
 /*
  * Configurações GED
 */
-require_once ("integracao_externa/ged/GerenciadorEletronicoDocumento.model.php");
-require_once ("integracao_externa/ged/GerenciadorEletronicoDocumentoConfiguracao.model.php");
-require_once ("libs/exceptions/BusinessException.php");
+require_once("integracao_externa/ged/GerenciadorEletronicoDocumento.model.php");
+require_once("integracao_externa/ged/GerenciadorEletronicoDocumentoConfiguracao.model.php");
+require_once("libs/exceptions/BusinessException.php");
 
 $oGet = db_utils::postMemory($_GET);
 $oConfiguracaoGed = GerenciadorEletronicoDocumentoConfiguracao::getInstance();
@@ -75,34 +75,54 @@ $oDaoDbDepart   = new cl_db_depart;
 $sqlpref  = "select db_config.*, cgm.z01_incest as inscricaoestadualinstituicao ";
 $sqlpref .= "  from db_config                                                     ";
 $sqlpref .= " inner join cgm on cgm.z01_numcgm = db_config.numcgm                 ";
-$sqlpref .=	"	where codigo = ".db_getsession("DB_instit");
+$sqlpref .=  "	where codigo = " . db_getsession("DB_instit");
 
 $resultpref = db_query($sqlpref);
-db_fieldsmemory($resultpref,0);
+db_fieldsmemory($resultpref, 0);
 
 $rsPcParam = $clpcparam->sql_record($clpcparam->sql_query(db_getsession("DB_instit")));
-if ($clpcparam->numrows > 0){
-  $oParam = db_utils::fieldsMemory($rsPcParam,0);
-}else{
+if ($clpcparam->numrows > 0) {
+  $oParam = db_utils::fieldsMemory($rsPcParam, 0);
+} else {
   db_redireciona("db_erros.php?fechar=true&db_erro=Não há parametros configurados para essa instituição.");
 }
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
-$txt_where='1=1';
+$txt_where = '1=1';
 
-if(isset($m51_codordem_ini) && $m51_codordem_ini!="" && isset($m51_codordem_fim) && $m51_codordem_fim!=""){
-   $txt_where .= " and  m51_codordem between $m51_codordem_ini and  $m51_codordem_fim";
-}else if(isset($m51_codordem_ini) && $m51_codordem_ini!=""){
-   $txt_where .= " and  m51_codordem>$m51_codordem_ini";
-}else  if(isset($m51_codordem_fim) && $m51_codordem_fim!=""){
-   $txt_where .= " and  m51_codordem<$m51_codordem_fim";
-}else if (isset($cods)&&$cods!=""){
-    $txt_where.=" and m51_codordem in ($cods) ";
+if (isset($m51_codordem_ini) && $m51_codordem_ini != "" && isset($m51_codordem_fim) && $m51_codordem_fim != "") {
+  $txt_where .= " and  m51_codordem between $m51_codordem_ini and  $m51_codordem_fim";
+} else if (isset($m51_codordem_ini) && $m51_codordem_ini != "") {
+  $txt_where .= " and  m51_codordem>$m51_codordem_ini";
+} else  if (isset($m51_codordem_fim) && $m51_codordem_fim != "") {
+  $txt_where .= " and  m51_codordem<$m51_codordem_fim";
+} else if (isset($cods) && $cods != "") {
+  $txt_where .= " and m51_codordem in ($cods) ";
 }
 
+if (isset($m51_codordem_ini) && $m51_codordem_ini == "" && isset($m51_codordem_fim) && $m51_codordem_fim == "") {
+  if ($fornecedor != "") {
+    $txt_where .= " and m51_numcgm IN ({$fornecedor}) ";
+  }
+  if ($data_ini != "") {
+    $txt_where .= " and m51_data>='{$data_ini}' ";
+  }
+  if ($data_fim != "") {
+    $txt_where .= " and m51_data<='{$data_fim}' ";
+  }
+}
 
+if (isset($m51_codordem_ini) && $m51_codordem_ini == "" && isset($m51_codordem_fim) && $m51_codordem_fim == "" && $fornecedor != "") {
+  if ($data_ini != "") {
+    $txt_where .= " and m51_data>='{$data_ini}' ";
+  }
+  if ($data_fim != "") {
+    $txt_where .= " and m51_data<='{$data_fim}' ";
+  }
+}
 
-$result = $clmatordem->sql_record($clmatordem->sql_query(null,"*","","$txt_where"));
-$num=$clmatordem->numrows;
+$result = $clmatordem->sql_record($clmatordem->sql_query(null, "*", "", "$txt_where"));
+
+$num = $clmatordem->numrows;
 
 
 $pdf = new scpdf();
@@ -113,13 +133,13 @@ $pdf1 = new db_impcarne($pdf, $oParam->pc30_modeloordemcompra);
 
 //$pdf1->modelo = 10;
 //$pdf1->nvias= 2 ;
-$pdf1->objpdf->SetTextColor(0,0,0);
+$pdf1->objpdf->SetTextColor(0, 0, 0);
 
 $flag_imprime = true;
 
-for($i = 0;$i < $num;$i++){
+for ($i = 0; $i < $num; $i++) {
 
-  db_fieldsmemory($result,$i);
+  db_fieldsmemory($result, $i);
 
   $sSqlDeptoOrigem = $oDaoDbDepart->sql_query_file(null, "*", null, "coddepto = {$m51_deptoorigem}");
 
@@ -128,7 +148,9 @@ for($i = 0;$i < $num;$i++){
   $iOrigem = db_utils::fieldsMemory($rsOrigem, 0)->coddepto;
 
 
-	$sqlItem = 	$clmatordemitem->sql_query_emiteordem(null,"distinct m52_codordem,
+  $sqlItem =   $clmatordemitem->sql_query_emiteordem(
+    null,
+    "distinct m52_codordem,
                                                          m52_sequen,
                                                          m52_quant,
                                                          m52_numemp,
@@ -137,11 +159,15 @@ for($i = 0;$i < $num;$i++){
                                                          e55_marca,
                                                          case when matunid.m61_abrev is null or matunid.m61_abrev = '' then coalesce(matunidaut.m61_abrev,coalesce(matunidsol.m61_abrev,'UN')) else coalesce(matunid.m61_abrev,coalesce(matunidsol.m61_abrev,'UN')) end as m61_abrev,
                                                          pcmater.pc01_descrmater,
+                                                         pcmater.pc01_complmater,
                                                          pc01_codmater,
+                                                         pc01_servico,
+                                                         e62_servicoquantidade,
 						         (case when solicitem.pc11_resum is null  or solicitem.pc11_resum ='' then pc01_complmater else solicitem.pc11_resum end)||'\n'||e55_descr AS e62_descr,
                                                         /* e62_descr,*/
                                                          empempenho.e60_codemp,
                                                          empempenho.e60_anousu,
+                                                         empempenho.e60_emiss,
                                                          e62_vltot,
                                                          e62_quant,
                                                          e54_conpag,
@@ -156,143 +182,136 @@ for($i = 0;$i < $num;$i++){
                                                               else  coalesce(trim(pcorcamval.pc23_obs),trim(pcorcamvalac.pc23_obs), '') end as pc23_obs,
 	                                                       pc50_descr,
 	                                                       e61_autori",
-                                                         "m52_numemp, m52_sequen",
-                                                         "m52_codordem = $m51_codordem");
-//echo($sqlItem);
+    "m52_numemp, m52_sequen",
+    "m52_codordem = $m51_codordem"
+  );
+  //echo ($sqlItem);
   //die();
-	$resultitem = $clmatordemitem->sql_record($sqlItem);
-//	db_criatabela($resultitem); exit;
+  $resultitem = $clmatordemitem->sql_record($sqlItem);
+  db_fieldsmemory($resultitem, $i)->e60_emiss;
 
-
-	$numrows=$clmatordemitem->numrows;
-  if ($numrows == 0){
+  $numrows = $clmatordemitem->numrows;
+  if ($numrows == 0) {
     $flag_imprime = false;
     continue;
   } else {
     $flag_imprime = true;
   }
 
-	$datahj=date("Y-m-d",db_getsession("DB_datausu"));
+  $datahj = date("Y-m-d", db_getsession("DB_datausu"));
 
-   $pdf1->prefeitura   = $nomeinst;
-   $pdf1->enderpref    = trim($ender).",".$numero;
-   $pdf1->municpref    = $munic;
-   $pdf1->uf           = $uf;
-   $pdf1->telefpref    = $telef;
-   $pdf1->logo		   = $logo;
-   $pdf1->emailpref    = $email;
+  $pdf1->prefeitura   = $nomeinst;
+  $pdf1->enderpref    = trim($ender) . "," . $numero;
+  $pdf1->municpref    = $munic;
+  $pdf1->uf           = $uf;
+  $pdf1->telefpref    = $telef;
+  $pdf1->logo       = $logo;
+  $pdf1->emailpref    = $email;
 
-   $pdf1->inscricaoestadual    = '';
-   if ($db21_usasisagua == 't') {
-   	$pdf1->inscricaoestadualinstituicao    = "Inscrição Estadual: ".$inscricaoestadualinstituicao;
-   }
+  $pdf1->inscricaoestadual    = '';
+  if ($db21_usasisagua == 't') {
+    $pdf1->inscricaoestadualinstituicao    = "Inscrição Estadual: " . $inscricaoestadualinstituicao;
+  }
 
-   $pdf1->numordem     = $m51_codordem;
-   $pdf1->dataordem    = $m51_data;
-   $pdf1->coddepto     = $m51_depto;
-   $pdf1->descrdepto   = $descrdepto;
-   $pdf1->numcgm       = $m51_numcgm;
-   $pdf1->nome         = $z01_nome;
-   $pdf1->email        = $z01_email;
-   $pdf1->cnpj         = $z01_cgccpf;
-   $pdf1->cgc          = $cgc;
-   $pdf1->url          = $url;
-   $pdf1->ender        = $z01_ender;
-   $pdf1->munic        = $z01_munic;
-   $pdf1->bairro       = strlen($z01_bairro) > 18 ? substr($z01_bairro, 0, 18) . '.' : $z01_bairro;
-   $pdf1->cep          = $z01_cep;
-   $pdf1->ufFornecedor = $z01_uf;
-   $pdf1->numero       = $z01_numero;
-   $pdf1->compl        = $z01_compl;
-   $pdf1->contato      = $z01_telcon;
-   $pdf1->telef_cont   = $z01_telef;
-   $pdf1->telef_fax		= $z01_fax;
-   $pdf1->recorddositens = $resultitem;
-   $pdf1->linhasdositens = $numrows;
-   $pdf1->emissao = $datahj;
-// $pdf1->item	      = 'm52_sequen';
-   $pdf1->obs            = $m51_obs;
-   $pdf1->sTipoCompra    = 'pc50_descr'; //campo do pg_result
-   $pdf1->empempenho      = 'e60_codemp';
-   $pdf1->anousuemp       = 'e60_anousu';
-   $pdf1->quantitem      = 'm52_quant';
-   $pdf1->unid           = 'm61_abrev';
-   $pdf1->condpag        = 'e54_conpag';
-   $pdf1->destino        = 'e54_destin';
-   $pdf1->autori        = 'e61_autori';
-   $pdf1->obs_ordcom_orcamval = "e55_marca";
-   $pdf1->sOrigem        = $iOrigem . " - " .$sOrigem;
-   //$pdf1->iOrigem        = $iOrigem;
-//   $pdf1->quantitememp   = 'e62_quant';
-$anousu=db_getsession("DB_anousu");
-$result_numdec=$clempparametro->sql_record($clempparametro->sql_query_file($anousu));
+  $pdf1->numordem     = $m51_codordem;
+  $pdf1->dataordem    = $m51_data;
+  $pdf1->coddepto     = $m51_depto;
+  $pdf1->descrdepto   = $descrdepto;
+  $pdf1->numcgm       = $m51_numcgm;
+  $pdf1->nome         = $z01_nome;
+  $pdf1->email        = $z01_email;
+  $pdf1->cnpj         = $z01_cgccpf;
+  $pdf1->cgc          = $cgc;
+  $pdf1->url          = $url;
+  $pdf1->ender        = $z01_ender;
+  $pdf1->munic        = $z01_munic;
+  $pdf1->bairro       = strlen($z01_bairro) > 18 ? substr($z01_bairro, 0, 18) . '.' : $z01_bairro;
+  $pdf1->cep          = $z01_cep;
+  $pdf1->ufFornecedor = $z01_uf;
+  $pdf1->numero       = $z01_numero;
+  $pdf1->compl        = $z01_compl;
+  $pdf1->contato      = $z01_telcon;
+  $pdf1->telef_cont   = $z01_telef;
+  $pdf1->telef_fax    = $z01_fax;
+  $pdf1->recorddositens = $resultitem;
+  $pdf1->linhasdositens = $numrows;
+  $pdf1->emissao = $datahj;
+  // $pdf1->item	      = 'm52_sequen';
+  $pdf1->obs            = $m51_obs;
+  $pdf1->sTipoCompra    = 'pc50_descr'; //campo do pg_result
+  $pdf1->empempenho     = 'e60_codemp';
+  $pdf1->anousuemp      = 'e60_anousu';
+  $pdf1->quantitem      = 'm52_quant';
+  $pdf1->unid           = 'm61_abrev';
+  $pdf1->condpag        = 'e54_conpag';
+  $pdf1->destino        = 'e54_destin';
+  $pdf1->autori         = 'e61_autori';
+  $pdf1->e60_emiss      = $e60_emiss;
 
-if ($clempparametro->numrows>0){
+  $pdf1->obs_ordcom_orcamval = "e55_marca";
+  $pdf1->sOrigem        = $iOrigem . " - " . $sOrigem;
+  //$pdf1->iOrigem        = $iOrigem;
+  //   $pdf1->quantitememp   = 'e62_quant';
+  $anousu = db_getsession("DB_anousu");
+  $result_numdec = $clempparametro->sql_record($clempparametro->sql_query_file($anousu));
 
-	db_fieldsmemory($result_numdec,0);
+  if ($clempparametro->numrows > 0) {
 
-}else{
+    db_fieldsmemory($result_numdec, 0);
+  } else {
 
-	$e30_numdec = 4 ;
+    $e30_numdec = 4;
+  }
 
+  $resultado = db_utils::fieldsMemory($resultitem, $n);
+
+  $pdf1->numdec         = $e30_numdec;
+  $pdf1->valoritem      = 'm52_valor';
+  $pdf1->vlrunitem      = 'm52_vlruni';
+  $pdf1->descricaoitem  = 'pc01_descrmater';
+  $pdf1->pc01_complmater  = 'pc01_complmater';
+  $pdf1->codmater       = 'pc01_codmater';
+  $pdf1->observacaoitem = 'e62_descr';
+  $pdf1->depto          = $m51_depto;
+  $pdf1->prazoent       = $m51_prazoent;
+  $pdf1->Snumeroproc    = "pc81_codproc";
+  $pdf1->Snumero        = "pc11_numero";
+  $pdf1->obs_ordcom_orcamval = "pc23_obs";
+
+  $pdf1->imprime();
 }
 
-   $pdf1->numdec         = $e30_numdec;
-   $pdf1->valoritem      = 'm52_valor';
-   $pdf1->vlrunitem      = 'm52_vlruni';
-   $pdf1->descricaoitem  = 'pc01_descrmater';
-   $pdf1->codmater       = 'pc01_codmater';
-   $pdf1->observacaoitem = 'e62_descr';
-   $pdf1->depto          = $m51_depto;
-   $pdf1->prazoent       = $m51_prazoent;
 
-   $pdf1->Snumeroproc    = "pc81_codproc";
-   $pdf1->Snumero        = "pc11_numero";
-   $pdf1->obs_ordcom_orcamval = "pc23_obs";
+if ($flag_imprime == true) {
 
-   $pdf1->imprime();
+  if ($oConfiguracaoGed->utilizaGED()) {
 
-}
+    try {
 
+      if (!empty($cods)) {
+        $m51_codordem_ini = $cods;
+      }
 
+      $sTipoDocumento = GerenciadorEletronicoDocumentoConfiguracao::ORDEM_COMPRA;
 
- if ($flag_imprime == true){
+      $oGerenciador = new GerenciadorEletronicoDocumento();
+      $oGerenciador->setLocalizacaoOrigem("tmp/");
+      $oGerenciador->setNomeArquivo("{$sTipoDocumento}_{$m51_codordem_ini}.pdf");
 
-   if ($oConfiguracaoGed->utilizaGED()) {
+      $oStdDadosGED        = new stdClass();
+      $oStdDadosGED->nome  = $sTipoDocumento;
+      $oStdDadosGED->tipo  = "NUMERO";
+      $oStdDadosGED->valor = $m51_codordem_ini;
+      $pdf1->objpdf->Output("tmp/{$sTipoDocumento}_{$m51_codordem_ini}.pdf");
+      $oGerenciador->moverArquivo(array($oStdDadosGED));
+    } catch (Exception $eErro) {
 
-     try {
+      db_redireciona("db_erros.php?fechar=true&db_erro=" . $eErro->getMessage());
+    }
+  } else {
 
-       if (!empty($cods)) {
-         $m51_codordem_ini = $cods;
-       }
-
-       $sTipoDocumento = GerenciadorEletronicoDocumentoConfiguracao::ORDEM_COMPRA;
-
-       $oGerenciador = new GerenciadorEletronicoDocumento();
-       $oGerenciador->setLocalizacaoOrigem("tmp/");
-       $oGerenciador->setNomeArquivo("{$sTipoDocumento}_{$m51_codordem_ini}.pdf");
-
-       $oStdDadosGED        = new stdClass();
-       $oStdDadosGED->nome  = $sTipoDocumento;
-       $oStdDadosGED->tipo  = "NUMERO";
-       $oStdDadosGED->valor = $m51_codordem_ini;
-       $pdf1->objpdf->Output("tmp/{$sTipoDocumento}_{$m51_codordem_ini}.pdf");
-       $oGerenciador->moverArquivo(array($oStdDadosGED));
-
-
-     } catch (Exception $eErro) {
-
-       db_redireciona("db_erros.php?fechar=true&db_erro=".$eErro->getMessage());
-     }
-   } else {
-
-     $pdf1->objpdf->Output();
-   }
-
-
- } else {
+    $pdf1->objpdf->Output();
+  }
+} else {
   db_redireciona("db_erros.php?fechar=true&db_erro=Verifique a(s) ordem(ns) selecionada(s).");
- }
-
-
-?>
+}

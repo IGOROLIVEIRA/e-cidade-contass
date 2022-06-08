@@ -90,16 +90,11 @@ db_app::load("estilos.css, grid.style.css");
                                 </td>
                                 <td>
                                     <?
-                                    db_input(
-                                        've62_veiculos',
-                                        10,
-                                        $Ive62_veiculos,
-                                        true,
-                                        'text',
-                                        $db_opcao,
-                                        " onchange='js_pesquisave62_veiculos(false);'"
-                                    );
-                                    db_input('ve01_placa', 10, $Ive01_placa, true, 'text', 3, '')
+                                    db_input('ve62_veiculos', 10, $Ive62_veiculos, true, 'text', $db_opcao, " onchange='js_pesquisave62_veiculos(false);'");
+                                    ?>
+                                    <strong>Placa:</strong>
+                                    <?
+                                    db_input('ve01_placa', 10, $Ive01_placa, true, 'text', $db_opcao, "onchange='js_pesquisaplaca(false);'");
                                     ?>
                                 </td>
                             </tr>
@@ -222,7 +217,7 @@ db_app::load("estilos.css, grid.style.css");
             ?>
             <tr>
                 <td nowrap title="<?= @$Tve62_tipogasto ?>">
-                    <? //= @$Lve62_tipogasto
+                    <? //= @$Lve62_tipogasto 
                     ?>
                     <strong>Tipo de gasto:</strong>
                 </td>
@@ -236,7 +231,7 @@ db_app::load("estilos.css, grid.style.css");
             </tr>
             <tr>
                 <td nowrap title="<?= @$Tve62_origemgasto ?>">
-                    <? //= @$Lve62_origemgasto
+                    <? //= @$Lve62_origemgasto 
                     ?>
                     <strong>Origem de gasto:</strong>
                 </td>
@@ -267,7 +262,7 @@ db_app::load("estilos.css, grid.style.css");
                     ?>
                 </td>
                 <td id="emp2">
-                    <? //db_ancora("Seq. Empenho", "js_pesquisae60_codemp(true);", 1);
+                    <? //db_ancora("Seq. Empenho", "js_pesquisae60_codemp(true);", 1); 
                     ?>
 
                     <?php db_input('si05_numemp', 10, $Isi05_numemp, true, 'hidden', 1); ?>
@@ -373,7 +368,7 @@ db_app::load("estilos.css, grid.style.css");
 
             <tr>
                 <td nowrap title="<?= @$Tve62_atestado ?>">
-                    <? //= @$Lve62_atestado
+                    <? //= @$Lve62_atestado 
                     ?>
                     <strong>Atestado de controle interno:</strong>
                 </td>
@@ -420,7 +415,7 @@ db_app::load("estilos.css, grid.style.css");
                                                     ?>
                                 </td>
                             </tr>
-                            <!--
+                            <!--         
                             <tr>
                                 <td nowrap title="<?= @$Tve63_vlruni ?>">
                                     <?= @$Lve63_vlruni ?>
@@ -450,7 +445,8 @@ db_app::load("estilos.css, grid.style.css");
                                 <td colspan="2" align="center">
                                     <span style="cursor:pointer; height: 17px !important;background-color: #d9d5d5; border-radius: 2px;font-family: Arial, Helvetica, sans-serif, verdana; font-size: 12px; height: 17px; border: 1px solid #999999;padding: 1px 8px; color: #2d2d54;"> <a onclick="incluir_item(event);">Incluir item</a>
                                     </span>
-
+                                </td>
+                            </tr>
                         </table>
 
                     </fieldset>
@@ -469,12 +465,8 @@ db_app::load("estilos.css, grid.style.css");
                                                 <td class="cabec"><strong>Quantidade</strong></td>
                                                 <td class="cabec"><strong>Valor Unit�rio</strong></td>
                                                 <td class="cabec"><strong>Valor Total</strong></td>
-                                                <!--<td class="cabec" id="material"><strong>Material</strong></td>
-                                            <td class="cabec" style="display:none;" id="descri"><strong>Descri��o do Material</strong></td>-->
                                                 <td class="cabec"><b>Op��es</b></td>
                                             </tr>
-
-
                                         </table>
                                     </td>
                                 </tr>
@@ -597,7 +589,7 @@ db_app::load("estilos.css, grid.style.css");
 
         foreach (json_decode(str_replace("\\", "", utf8_encode($itens))) as $item) {
 
-            $what = array("°", chr(13), chr(10), 'ä', 'ã', 'à', 'á', 'â', 'ê', 'ë', 'è', 'é', 'ï', 'ì', 'í', 'ö', 'õ', 'ò', 'ó', 'ô', 'ü', 'ù', 'ú', 'û', 'À', 'Á', 'Ã', 'É', 'Í', 'Ó', 'Ú', 'ñ', 'Ñ', 'ç', 'Ç', ' ', '-', '(', ')', ',', ';', ':', '|', '!', '"', '#', '$', '%', '&', '/', '=', '?', '~', '^', '>', '<', 'ª', 'º');
+            $what = array("°", chr(13), chr(10), 'ä', 'ã', 'à', 'á', 'â', 'ê', 'ë', 'è', 'é', 'ï', 'ì', 'í', 'ö', 'õ', 'ò', 'ó', 'ô', 'ü', 'ù', 'ú', 'û', 'À', 'Ý', 'Ã', 'É', 'Ý', 'Ó', 'Ú', 'ñ', 'Ñ', 'ç', 'Ç', ' ', '-', '(', ')', ',', ';', ':', '|', '!', '"', '#', '$', '%', '&', '/', '=', '?', '~', '^', '>', '<', 'ª', 'º');
             $by = array('', '', '', 'a', 'a', 'a', 'a', 'a', 'e', 'e', 'e', 'e', 'i', 'i', 'i', 'o', 'o', 'o', 'o', 'o', 'u', 'u', 'u', 'u', 'A', 'A', 'A', 'E', 'I', 'O', 'U', 'n', 'n', 'c', 'C', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
             $valor = str_replace($what, $by, $item->ve63_descr);
             $valorDescr = $valor;
@@ -915,10 +907,10 @@ db_app::load("estilos.css, grid.style.css");
 
     function js_pesquisave64_pcmater(mostra) {
         if (mostra == true) {
-            js_OpenJanelaIframe('CurrentWindow.corpo.iframe_veicmanut', 'db_iframe_pcmater', 'func_pcmater.php?funcao_js=parent.js_mostrapcmater1|pc01_codmater|pc01_descrmater', 'Pesquisa', true, '0');
+            js_OpenJanelaIframe('top.corpo.iframe_veicmanut', 'db_iframe_pcmater', 'func_pcmater.php?funcao_js=parent.js_mostrapcmater1|pc01_codmater|pc01_descrmater', 'Pesquisa', true, '0');
         } else {
             if (document.form1.ve64_pcmater.value != '') {
-                js_OpenJanelaIframe('CurrentWindow.corpo.iframe_veicmanut', 'db_iframe_pcmater', 'func_pcmater.php?pesquisa_chave=' + document.form1.ve64_pcmater.value + '&funcao_js=parent.js_mostrapcmater', 'Pesquisa', false);
+                js_OpenJanelaIframe('top.corpo.iframe_veicmanut', 'db_iframe_pcmater', 'func_pcmater.php?pesquisa_chave=' + document.form1.ve64_pcmater.value + '&funcao_js=parent.js_mostrapcmater', 'Pesquisa', false);
             } else {
                 document.form1.pc01_descrmater.value = '';
             }
@@ -982,6 +974,31 @@ db_app::load("estilos.css, grid.style.css");
             //alert("Selecione uma op��o Itens do Empenho");
         }
 
+    }
+
+
+    function js_pesquisaplaca(mostra) {
+        if (document.form1.ve01_placa.value != '') {
+            js_OpenJanelaIframe('top.corpo.iframe_veicmanut', 'db_iframe_veiculos', 'func_veiculosalt.php?pesquisa_chave_placa=' + document.form1.ve01_placa.value + '&funcao_js=parent.js_mostraveiculosplaca', 'Pesquisa', false);
+        } else {
+            document.form1.ve01_placa.value = '';
+        }
+    }
+
+    function js_mostraveiculosplaca(chave, chave2) {
+        document.form1.ve62_veiculos.value = chave;
+        js_OpenJanelaIframe('top.corpo.iframe_veicmanut', 'db_iframe_veiculos', 'func_veiculos.php?sigla=true&pesquisa_chave=' + document.form1.ve62_veiculos.value + '&funcao_js=parent.js_mostraveictipoabast', 'Pesquisa', false);
+        js_buscarultimaretirada(false);
+    }
+
+    function js_buscarultimaretirada(mostra) {
+        js_divCarregando('Aguarde... Carregando Retirada', 'msgbox');
+        js_OpenJanelaIframe('top.corpo.iframe_veicmanut', 'db_iframe_veicretirada', 'func_veicretirada.php?pesquisa_chave_veiculo=' + document.form1.ve62_veiculos.value + '&funcao_js=parent.js_mostraretirada', 'Pesquisa', false);
+    }
+
+    function js_mostraretirada(chave, erro, dtRetirada, sHoraRetirada) {
+        document.form1.ve65_veicretirada.value = chave;
+        js_removeObj("msgbox");
     }
 
     function js_mostraempempenho2(chave1, chave2, chave3, chave4) {
@@ -1235,26 +1252,10 @@ db_app::load("estilos.css, grid.style.css");
         } else if (valUti == "") {
             document.getElementById("result" + valor).value = "";
         } else {
-            var vlr = document.getElementById("vrl" + valor).value;
-            const myArr = vlr.split(",");
-
-            if (myArr[1] == 00) {
-                vlr = myArr[0];
-                const myArr1 = vlr.split(".");
-                vlr = myArr1[0] + "" + myArr1[1];
-            } else {
-                valo1 = myArr[0];
-                retorno1 = valo1.split(".");
-                if (retorno1[1] == undefined) {
-                    vlr = valo1 + "." + myArr[1];
-                } else {
-                    valo1 = retorno1[0] + "" + retorno1[1];
-                    vlr = valo1 + "." + myArr[1];
-                }
-
-            }
-            var resul = (quant * vlr);
-            resul = js_formatar(resul.toFixed(2), "f", 2);;
+            var strvlr = document.getElementById("vrl" + valor).value;
+            let vlr = Number(strvlr.split('.').join("").replace(",", "."));
+            var resul = (Number(quant) * Number(vlr));
+            resul = js_formatar(resul.toFixed(2), "f", 2);
             document.getElementById("result" + valor).value = resul;
             opSalvar = 1;
 
@@ -1530,7 +1531,7 @@ db_app::load("estilos.css, grid.style.css");
     function js_pesquisave66_veiccadoficinas(mostra) {
         var num_cgm = $F("numcgm_oficina");
         if (mostra == true) {
-            js_OpenJanelaIframe('CurrentWindow.corpo.iframe_veicmanut', 'db_iframe_veiccadoficinas', 'func_veiccadoficinasalt.php?chave_numcgm=' + num_cgm + '&funcao_js=parent.js_mostraveiccadoficinas1|ve27_codigo|z01_nome', 'Pesquisa', true);
+            js_OpenJanelaIframe('top.corpo.iframe_veicmanut', 'db_iframe_veiccadoficinas', 'func_veiccadoficinasalt.php?chave_numcgm=' + num_cgm + '&funcao_js=parent.js_mostraveiccadoficinas1|ve27_codigo|z01_nome', 'Pesquisa', true);
         } else {
             if (document.form1.ve66_veiccadoficinas.value != '') {
                 js_OpenJanelaIframe('CurrentWindow.corpo.iframe_veicmanut', 'db_iframe_veiccadoficinas', 'func_veiccadoficinasalt.php?pesquisa_chave=' + document.form1.ve66_veiccadoficinas.value + '&funcao_js=parent.js_mostraveiccadoficinas', 'Pesquisa', false);
@@ -1711,10 +1712,10 @@ db_app::load("estilos.css, grid.style.css");
 
     function js_pesquisave63_veicmanut(mostra) {
         if (mostra == true) {
-            js_OpenJanelaIframe('CurrentWindow.corpo.iframe_veicmanutitem', 'db_iframe_veicmanut', 'func_veicmanut.php?funcao_js=parent.js_mostraveicmanut1|ve62_codigo|ve62_codigo', 'Pesquisa', true, '0', '1', '775', '390');
+            js_OpenJanelaIframe('top.corpo.iframe_veicmanutitem', 'db_iframe_veicmanut', 'func_veicmanut.php?funcao_js=parent.js_mostraveicmanut1|ve62_codigo|ve62_codigo', 'Pesquisa', true, '0', '1', '775', '390');
         } else {
             if (document.form1.ve63_veicmanut.value != '') {
-                js_OpenJanelaIframe('CurrentWindow.corpo.iframe_veicmanutitem', 'db_iframe_veicmanut', 'func_veicmanut.php?pesquisa_chave=' + document.form1.ve63_veicmanut.value + '&funcao_js=parent.js_mostraveicmanut', 'Pesquisa', false);
+                js_OpenJanelaIframe('top.corpo.iframe_veicmanutitem', 'db_iframe_veicmanut', 'func_veicmanut.php?pesquisa_chave=' + document.form1.ve63_veicmanut.value + '&funcao_js=parent.js_mostraveicmanut', 'Pesquisa', false);
             } else {
                 document.form1.ve62_codigo.value = '';
             }

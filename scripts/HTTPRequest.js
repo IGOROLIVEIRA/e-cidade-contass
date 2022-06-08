@@ -35,6 +35,8 @@ request.send('http://dev23.dbseller.com.br:5300/dbportal_prj/api/v1/protocolo/cg
     _filter: [],
     _fields: [],
     _page: '',
+    _tipo: '',
+    _coluna: '',
 
     filter: function(filter) {
 
@@ -66,6 +68,28 @@ request.send('http://dev23.dbseller.com.br:5300/dbportal_prj/api/v1/protocolo/cg
     
       return this;
     },
+    
+    tipo: function(tipo) {
+
+      if (!tipo) {
+        return this._tipo;
+      }
+
+      this._tipo = tipo;
+
+      return this;
+    },
+
+    coluna: function(coluna) {
+
+      if (!coluna) {
+        return this._coluna;
+      }
+
+      this._coluna = coluna;
+
+      return this;
+    },
 
     send: function(url, options) {
 
@@ -75,7 +99,9 @@ request.send('http://dev23.dbseller.com.br:5300/dbportal_prj/api/v1/protocolo/cg
         method: options.method || 'GET',
         filter: options.filter || this.filter(),
         fields: options.fields || this.fields(),
-        page:   options.page   || this.page()
+        page:   options.page   || this.page(),
+        tipo:   options.tipo   || this.tipo(),
+        coluna: options.coluna   || this.coluna()
       };
 
       var filter = [];
@@ -97,7 +123,9 @@ request.send('http://dev23.dbseller.com.br:5300/dbportal_prj/api/v1/protocolo/cg
       var params = [
         'fields=' + _options.fields.join(','),
         filter.join('&'),
-        page
+        page,
+        'tipo=' + _options.tipo, 
+        'coluna=' + _options.coluna 
       ];
 
       return fetch(url + '?' + params.join('&'), {

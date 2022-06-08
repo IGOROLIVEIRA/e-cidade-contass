@@ -11,6 +11,23 @@ $rsTipo = db_query($sSqlTipo);
 $l20_tipoprocesso = db_utils::fieldsMemory($rsTipo, 0)->l03_pctipocompratribunal;
 $l20_tipojulg = db_utils::fieldsMemory($rsTipo,0)->l20_tipojulg;
 
+if(isset($l20_codigo)){
+   
+    if($l20_codigo!=""){
+            $comissao = $clliccomissaocgm->sql_record($clliccomissaocgm->sql_query_file(null,'l31_codigo,l31_liccomissao,l31_numcgm, (select cgm.z01_nome from cgm where z01_numcgm = l31_numcgm) as z01_nome, l31_tipo',null,"l31_licitacao=$l20_codigo"));
+        for($i=0;$i<$clliccomissaocgm->numrows;$i++){
+            $comisaoRes = db_utils::fieldsMemory($comissao, $i);
+        if($comisaoRes->l31_tipo==2){
+                $respRaticodigo = $comisaoRes->l31_numcgm;
+                $respRatinome = $comisaoRes->z01_nome;
+            }else if($comisaoRes->l31_tipo==8){
+                $respPubliccodigo = $comisaoRes->l31_numcgm;
+                $respPublicnome = $comisaoRes->z01_nome;
+            }
+        }
+    }  
+}
+
 ?>
 <form name="form1" method="post" action="" style="margin-left: 20%;margin-top: 2%;" onsubmit="return js_IHomologacao(this);">
     <fieldset style="width: 62.5%">
@@ -45,6 +62,20 @@ $l20_tipojulg = db_utils::fieldsMemory($rsTipo,0)->l20_tipojulg;
                     ?>
                 </td>
             </tr>
+            <tr>
+                                    <td nowrap title="<?=@$Tl20_codepartamento?>">
+                                        <?
+                                        db_ancora("Resp. Ratificação:","js_pesquisal31_numcgm(true,'respRaticodigo','respRatinome');",$db_opcao)
+
+                                        ?>
+                                    </td>
+                                    <td>
+                                        <?
+                                        db_input('respRaticodigo',10,$respRaticodigo,true,'text',$db_opcao,"onchange=js_pesquisal31_numcgm(false,'respRaticodigo','respRatinome');");
+                                        db_input('respRatinome',45,$respRaticodigo,true,'text',3,"");
+                                        ?>
+                                    </td>
+        </tr>
 
             <tr id="trdtlimitecredenciamento" style="display: none">
                 <td>
@@ -67,6 +98,20 @@ $l20_tipojulg = db_utils::fieldsMemory($rsTipo,0)->l20_tipojulg;
                     ?>
                 </td>
             </tr>
+            <tr>
+                                    <td nowrap title="<?=@$Tl20_codepartamento?>">
+                                        <?
+                                        db_ancora("Resp. pela Publicação:","js_pesquisal31_numcgm(true,'respPubliccodigo','respPublicnome');",$db_opcao)
+
+                                        ?>
+                                    </td>
+                                    <td>
+                                        <?
+                                        db_input('respPubliccodigo',10,$Il20_codepartamento,true,'text',$db_opcao,"onchange=js_pesquisal31_numcgm(false,'respPubliccodigo','respPublicnome');");
+                                        db_input('respPublicnome',45,$Il20_descricaodep,true,'text',3,"");
+                                        ?>
+                                    </td>
+        </tr>
 
             <tr>
                 <td nowrap title="<?=@$Tl20_veicdivulgacao?>">
@@ -389,9 +434,19 @@ $l20_tipojulg = db_utils::fieldsMemory($rsTipo,0)->l20_tipojulg;
 
     function js_IHomologacao() {
         let itens = getItensMarcados();
-
+        
         if (document.getElementById('l20_dtpubratificacao').value == '') {
             alert('Campo Data Publicação Termo de Ratificação não informado');
+            return false;
+        }
+
+        if(document.getElementById('respRaticodigo').value== ''){
+            alert('Campo Responsável pela Ratificação não informado.');
+            return false;
+        }
+
+        if(document.getElementById('respPubliccodigo').value == ''){
+            alert('Campo Responsável pela Publicação não informado.');
             return false;
         }
 
@@ -417,6 +472,8 @@ $l20_tipojulg = db_utils::fieldsMemory($rsTipo,0)->l20_tipojulg;
                 l20_dtpubratificacao       : document.getElementById('l20_dtpubratificacao').value,
                 l20_dtlimitecredenciamento : document.getElementById('l20_dtlimitecredenciamento').value,
                 l20_veicdivulgacao         : document.getElementById('l20_veicdivulgacao').value,
+                respRaticodigo             : document.getElementById('respRaticodigo').value,
+                respPubliccodigo           : document.getElementById('respPubliccodigo').value,
                 // l20_justificativa          : document.getElementById('l20_justificativa').value,
                 // l20_razao                  : document.getElementById('l20_razao').value,
                 itens                      : itensEnviar,
@@ -466,6 +523,16 @@ $l20_tipojulg = db_utils::fieldsMemory($rsTipo,0)->l20_tipojulg;
             return false;
         }
 
+        if(document.getElementById('respRaticodigo').value== ''){
+            alert('Campo Responsável pela Ratificação não informado.');
+            return false;
+        }
+
+        if(document.getElementById('respPubliccodigo').value == ''){
+            alert('Campo Responsável pela Publicação não informado.');
+            return false;
+        }
+
         var itensEnviar = [];
 
         try {
@@ -483,6 +550,8 @@ $l20_tipojulg = db_utils::fieldsMemory($rsTipo,0)->l20_tipojulg;
                 l20_dtpubratificacao       : document.getElementById('l20_dtpubratificacao').value,
                 l20_dtlimitecredenciamento : document.getElementById('l20_dtlimitecredenciamento').value,
                 l20_veicdivulgacao         : document.getElementById('l20_veicdivulgacao').value,
+                respRaticodigo             : document.getElementById('respRaticodigo').value,
+                respPubliccodigo           : document.getElementById('respPubliccodigo').value,
                 // l20_justificativa          : document.getElementById('l20_justificativa').value,
                 // l20_razao                  : document.getElementById('l20_razao').value,
                 itens                      : itensEnviar,
@@ -634,4 +703,37 @@ $l20_tipojulg = db_utils::fieldsMemory($rsTipo,0)->l20_tipojulg;
         document.getElementById('l20_objeto').value = '';
         document.getElementsByName("aItonsMarcados").value = '';
     }
+
+    var varNumCampo;
+    var varNomeCampo;
+    function js_pesquisal31_numcgm(mostra,numCampo,nomeCampo){
+        varNumCampo = numCampo;
+        varNomeCampo = nomeCampo;
+        
+        if(mostra==true){
+            js_OpenJanelaIframe('','db_iframe_cgm','func_nome.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome&filtro=1','Pesquisa',true,'0','1');
+        }else{
+            numcgm = document.getElementById(numCampo).value;
+            if(numcgm != ''){
+                js_OpenJanelaIframe('','db_iframe_cgm','func_nome.php?pesquisa_chave='+numcgm+'&funcao_js=parent.js_mostracgm&filtro=1','Pesquisa',false);
+            }else{
+                document.getElementById(numCampo).value = ""; 
+            }
+        }
+    }
+    
+    function js_mostracgm(erro,chave){
+        document.getElementById(varNomeCampo).value = chave; 
+        if(erro==true){ 
+          //  document.form1.l31_numcgm.focus(); 
+          document.getElementById(varNumCampo).value = "";
+          alert("Responsável não encontrado!");
+        }
+    }
+    function js_mostracgm1(chave1,chave2){
+
+    document.getElementById(varNumCampo).value = chave1;
+    document.getElementById(varNomeCampo).value = chave2;
+    db_iframe_cgm.hide(); 
+    } 
 </script>

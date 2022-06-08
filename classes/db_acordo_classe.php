@@ -1273,6 +1273,24 @@ class cl_acordo
         } else {
             $sql2 = $dbwhere;
         }
+        /**
+         * Alteração Oc15013 
+         */
+        if ($ac16_sequencial != "") {
+            $sql3 = " delete from conlancamacordo where c87_acordo = $ac16_sequencial";
+            $result2 = db_query($sql3);
+            if ($result2 == false) {
+                $this->erro_banco = str_replace("\n", "", @pg_last_error());
+                $this->erro_sql   = "conlancamacordo não excluido. Exclusão Abortada.\\n";
+                $this->erro_sql .= "Valores : " . $ac16_sequencial;
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                $this->numrows_excluir = 0;
+                return false;
+            }
+        }
+
         $result = db_query($sql . $sql2);
         if ($result == false) {
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
@@ -1334,7 +1352,7 @@ class cl_acordo
     {
         $sql = "select ";
         if ($campos != "*") {
-            $campos_sql = explode("#", $campos);
+            $campos_sql = split("#", $campos);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -1370,7 +1388,7 @@ class cl_acordo
         $sql .= $sql2;
         if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = explode("#", $ordem);
+            $campos_sql = split("#", $ordem);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -1379,12 +1397,66 @@ class cl_acordo
         }
         return $sql;
     }
+
+    function sql_query_acordoscredenciamento($ac16_sequencial = null, $campos = "*", $ordem = null, $dbwhere = "")
+    {
+        $sql = "select ";
+        if ($campos != "*") {
+            $campos_sql = split("#", $campos);
+            $virgula = "";
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
+                $virgula = ",";
+            }
+        } else {
+            $sql .= $campos;
+        }
+        $sql .= " from acordo ";
+        $sql .= " inner join liclicita on liclicita.l20_codigo = ac16_licitacao";
+        $sql .= " inner join cflicita on cflicita.l03_codigo = liclicita.l20_codtipocom";
+        $sql .= "      inner join cgm  on  cgm.z01_numcgm = acordo.ac16_contratado";
+        $sql .= "      inner join db_depart  on  db_depart.coddepto = acordo.ac16_coddepto";
+        $sql .= "      inner join db_depart as responsavel on responsavel.coddepto = acordo.ac16_deptoresponsavel";
+        $sql .= "      inner join acordogrupo  on  acordogrupo.ac02_sequencial = acordo.ac16_acordogrupo";
+        $sql .= "      inner join acordosituacao  on  acordosituacao.ac17_sequencial = acordo.ac16_acordosituacao";
+        $sql .= "      left join acordocomissao  on  acordocomissao.ac08_sequencial = acordo.ac16_acordocomissao";
+        //$sql .= "      left  join acordocategoria  on  acordocategoria.ac50_sequencial = acordo.ac16_acordocategoria";
+        //$sql .= "      inner join acordoclassificacao  on  acordoclassificacao.ac46_sequencial = acordo.ac16_acordoclassificacao";
+        $sql .= "      inner join db_config  on  db_config.codigo = db_depart.instit";
+        //$sql .= "      inner join db_datausuarios  on  db_datausuarios.id_usuario = db_depart.id_usuarioresp";
+        $sql .= "      inner join acordonatureza  on  acordonatureza.ac01_sequencial = acordogrupo.ac02_acordonatureza";
+        $sql .= "      inner join acordotipo  on  acordotipo.ac04_sequencial = acordogrupo.ac02_acordotipo";
+        //        $sql .= "      inner join cgm dpt on acordo.ac16_deptoresponsavel = dpt.z01_numcgm";
+        //$sql .= "      inner join db_config  as a on   a.codigo = acordocomissao.ac08_instit";
+        //$sql .= "      inner join acordocomissaotipo  on  acordocomissaotipo.ac43_sequencial = acordocomissao.ac08_acordocomissaotipo";
+        $sql2 = "";
+        if ($dbwhere == "") {
+            if ($ac16_sequencial != null) {
+                $sql2 .= " where acordo.ac16_sequencial = $ac16_sequencial ";
+            }
+        } else if ($dbwhere != "") {
+            $sql2 = " where $dbwhere ";
+        }
+        $sql .= $sql2;
+        if ($ordem != null) {
+            $sql .= " order by ";
+            $campos_sql = split("#", $ordem);
+            $virgula = "";
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
+                $virgula = ",";
+            }
+        }
+        return $sql;
+    }
+
+
     // funcao do sql
     function sql_query_file($ac16_sequencial = null, $campos = "*", $ordem = null, $dbwhere = "")
     {
         $sql = "select ";
         if ($campos != "*") {
-            $campos_sql = explode("#", $campos);
+            $campos_sql = split("#", $campos);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -1405,7 +1477,7 @@ class cl_acordo
         $sql .= $sql2;
         if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = explode("#", $ordem);
+            $campos_sql = split("#", $ordem);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -1425,22 +1497,55 @@ class cl_acordo
         $sSql .= "select distinct {$sCampos}";
         $sSql .= "       from acordo";
         $sSql .= "            inner join acordoposicao    on acordoposicao.ac26_acordo        = acordo.ac16_sequencial";
-        $sSql .= "            inner join acordoitem       on acordoitem.ac20_acordoposicao    = acordoposicao.ac26_sequencial";
-        $sSql .= "            left join acordoliclicitem on acordoliclicitem.ac24_acordoitem = acordoitem.ac20_sequencial";
-        $sSql .= "            left join liclicitem       on liclicitem.l21_codigo            = acordoliclicitem.ac24_liclicitem";
-        $sSql .= "            inner join liclicita        on liclicita.l20_codigo             = liclicitem.l21_codliclicita
- or liclicita.l20_codigo = acordo.ac16_licitacao ";
-        $sSql .= "            left join cgm on z01_numcgm = ac16_contratado ";
+        $sSql .= "            inner join liclicita ON liclicita.l20_codigo = acordo.ac16_licitacao";
+        $sSql .= "            inner join cgm on z01_numcgm = ac16_contratado  ";
         $sSql .= "  where 1 = 1 ";
         $sSql .= " {$sWhere} {$sOrder} ";
 
         return $sSql;
     }
+
+    function sql_queryAdesaoVinculadas($iCodigoAcordo = null, $sCampos = "*", $sOrder = null, $sWhere = "")
+    {
+
+        $sSql = "";
+        if (!empty($iCodigoAcordo)) {
+            $sWhere .= " and acordo.ac16_sequencial = {$iCodigoAcordo} ";
+        }
+
+        $sSql .= "select distinct {$sCampos}";
+        $sSql .= "       from acordo";
+        $sSql .= "            inner join acordoposicao    on acordoposicao.ac26_acordo        = acordo.ac16_sequencial";
+        $sSql .= "            inner join adesaoregprecos ON adesaoregprecos.si06_sequencial = acordo.ac16_adesaoregpreco";
+        $sSql .= "  where 1 = 1 ";
+        $sSql .= " {$sWhere} {$sOrder} ";
+
+        return $sSql;
+    }
+
+    function sql_queryLicitacoesOutrosOrgaosVinculadas($iCodigoAcordo = null, $sCampos = "*", $sOrder = null, $sWhere = "")
+    {
+
+        $sSql = "";
+        if (!empty($iCodigoAcordo)) {
+            $sWhere .= " and acordo.ac16_sequencial = {$iCodigoAcordo} ";
+        }
+
+        $sSql .= "select distinct {$sCampos}";
+        $sSql .= "       from acordo";
+        $sSql .= "            inner join acordoposicao    on acordoposicao.ac26_acordo        = acordo.ac16_sequencial";
+        $sSql .= "            INNER JOIN liclicitaoutrosorgaos ON liclicitaoutrosorgaos.lic211_sequencial = acordo.ac16_licoutroorgao";
+        $sSql .= "  where 1 = 1 ";
+        $sSql .= " {$sWhere} {$sOrder} ";
+
+        return $sSql;
+    }
+
     function sql_query_completo($ac16_sequencial = null, $campos = "*", $ordem = null, $dbwhere = "")
     {
         $sql = "select ";
         if ($campos != "*") {
-            $campos_sql = explode("#", $campos);
+            $campos_sql = split("#", $campos);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -1491,7 +1596,7 @@ class cl_acordo
         $sql .= $sql2;
         if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = explode("#", $ordem);
+            $campos_sql = split("#", $ordem);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -1524,7 +1629,7 @@ class cl_acordo
     {
         $sql = "select ";
         if ($campos != "*") {
-            $campos_sql = explode("#", $campos);
+            $campos_sql = split("#", $campos);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -1563,7 +1668,7 @@ class cl_acordo
         $sql .= $sql2;
         if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = explode("#", $ordem);
+            $campos_sql = split("#", $ordem);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -1618,7 +1723,7 @@ class cl_acordo
         if ($ordem != null) {
 
             $sSqlAutorizacoes .= " order by ";
-            $campos_sql = explode("#", $ordem);
+            $campos_sql = split("#", $ordem);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
 
@@ -1704,7 +1809,7 @@ class cl_acordo
     {
         $sql = "select ";
         if ($campos != "*") {
-            $campos_sql = explode("#", $campos);
+            $campos_sql = split("#", $campos);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -1734,7 +1839,7 @@ class cl_acordo
         $sql .= $sql2;
         if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = explode("#", $ordem);
+            $campos_sql = split("#", $ordem);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -1827,7 +1932,7 @@ class cl_acordo
         if ($ordem != null) {
 
             $sql       .= " order by ";
-            $campos_sql = explode("#", $ordem);
+            $campos_sql = split("#", $ordem);
             $virgula    = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
 
@@ -1842,7 +1947,7 @@ class cl_acordo
 
         $sql = "select ";
         if ($campos != "*") {
-            $campos_sql = explode("#", $campos);
+            $campos_sql = split("#", $campos);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -1876,7 +1981,7 @@ class cl_acordo
         $sql .= $sql2;
         if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = explode("#", $ordem);
+            $campos_sql = split("#", $ordem);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -1927,7 +2032,7 @@ class cl_acordo
     {
         $sql = "select ";
         if ($campos != "*") {
-            $campos_sql = explode("#", $campos);
+            $campos_sql = split("#", $campos);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -1962,7 +2067,7 @@ class cl_acordo
         $sql .= $sql2;
         if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = explode("#", $ordem);
+            $campos_sql = split("#", $ordem);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -2179,6 +2284,24 @@ class cl_acordo
     JOIN conlancamemp ON c75_numemp = e60_numemp
     JOIN conlancamdoc ON c71_codlan = c75_codlan
     {$sWhere} ";
+
+        return $sSql;
+    }
+
+    function sql_query_lancamentos_contrato($sCampos = "*", $iAcordo = null)
+    {
+
+        $sWhere = " WHERE 1 = 1 ";
+
+        if (!empty($iAcordo)) {
+            $sWhere .= " AND c87_acordo = {$iAcordo} ";
+        }
+
+        $sSql = " SELECT DISTINCT {$sCampos}
+                FROM conlancam
+                JOIN conlancamacordo ON c87_codlan = c70_codlan
+                JOIN conlancamdoc ON c71_codlan = c87_codlan
+                {$sWhere} ";
 
         return $sSql;
     }

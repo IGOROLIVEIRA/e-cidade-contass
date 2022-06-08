@@ -30,8 +30,8 @@ require_once("libs/db_conecta.php");
 require_once("libs/db_sessoes.php");
 require_once("libs/db_usuariosonline.php");
 require_once("libs/db_liborcamento.php");
-require_once ("libs/db_utils.php");
-require_once ("std/db_stdClass.php");
+require_once("libs/db_utils.php");
+require_once("std/db_stdClass.php");
 require_once("libs/db_app.utils.php");
 require_once("dbforms/db_funcoes.php");
 require_once("classes/db_solicitem_classe.php");
@@ -133,7 +133,7 @@ $iPactoPlano = null;
 db_postmemory($HTTP_GET_VARS);
 db_postmemory($HTTP_POST_VARS);
 
-$aParametrosOrcamento = db_stdClass::getParametro("orcparametro",array(db_getsession("DB_anousu")));
+$aParametrosOrcamento = db_stdClass::getParametro("orcparametro", array(db_getsession("DB_anousu")));
 
 $db_opcao = 1;
 $db_botao = true;
@@ -176,7 +176,7 @@ db_fieldsmemory($result_pcparam, 0);
 $oDaoSolicitaVInculo = db_utils::getDao("solicitavinculo");
 $iRegistroPreco      = '';
 $sWhere              = "pc53_solicitafilho = {$pc11_numero}";
-$sSqlRegistroPreco   = $oDaoSolicitaVInculo->sql_query(null,"pc53_solicitapai", null, $sWhere);
+$sSqlRegistroPreco   = $oDaoSolicitaVInculo->sql_query(null, "pc53_solicitapai", null, $sWhere);
 $rsRegistroPreco     = $oDaoSolicitaVInculo->sql_record($sSqlRegistroPreco);
 if ($oDaoSolicitaVInculo->numrows > 0) {
   $iRegistroPreco = db_utils::fieldsMemory($rsRegistroPreco, 0)->pc53_solicitapai;
@@ -185,7 +185,7 @@ if (isset($incluir) || isset($alterar)) {
 
   if (isset($incluir)) {
     $operacao = "Inclusão";
-    if ($pc30_contrandsol=='t') {
+    if ($pc30_contrandsol == 't') {
       // db_msgbox("Controle do Andamento da Solicitação!!Em manutenção!!Não é nescessário dar Andamento Inicial!!");
     }
   } else {
@@ -210,6 +210,16 @@ if (isset($incluir) || isset($alterar)) {
         $sqlerro = true;
         $erro_msg = "Usuário: \\n\\n$operacao abortada.\\nJustificativa para compra deve ter no mínimo $pc30_mincar caracteres.\\n\\nAdministrador:";
       }
+    }
+  }
+  if (isset($incluir)) {
+    $sSqlItens = $clsolicitem->sql_query_serv(null, "pc16_codmater as codmater", null, "pc11_numero = {$pc11_numero} and pc11_seq = {$pc11_seq}");
+    $rsItens = $clsolicitem->sql_record($sSqlItens);
+    if ($clsolicitem->numrows > 0) {
+      $codmater = db_utils::fieldsMemory($rsItens, 0)->codmater;
+      $naodig = true;
+      $sqlerro = true;
+      $erro_msg = "O item $codmater já foi incluído com o sequencial $pc11_seq nesta solicitação.";
     }
   }
 }
@@ -258,7 +268,7 @@ if (isset($incluir) && $sqlerro == false) {
           $result_pcproc = $clpcproc->sql_record($clpcproc->sql_query_file($codproc));
           if ($clpcproc->numrows == 0) {
             $clpcproc->pc80_codproc = $codproc;
-            $clpcproc->pc80_data    = date("Y-m-d",db_getsession("DB_datausu"));
+            $clpcproc->pc80_data    = date("Y-m-d", db_getsession("DB_datausu"));
             $clpcproc->pc80_usuario = db_getsession("DB_id_usuario");
             $clpcproc->pc80_depto   = db_getsession("DB_coddepto");
             $clpcproc->incluir($codproc);
@@ -280,7 +290,7 @@ if (isset($incluir) && $sqlerro == false) {
         if (isset($codliclicita) && trim($codliclicita) != "") {
           if (isset($codproc) && trim($codproc) == "") {
             // Cria o processo e insere na pcprocitem
-            $clpcproc->pc80_data    = date("Y-m-d",db_getsession("DB_datausu"));
+            $clpcproc->pc80_data    = date("Y-m-d", db_getsession("DB_datausu"));
             $clpcproc->pc80_usuario = db_getsession("DB_id_usuario");
             $clpcproc->pc80_depto   = db_getsession("DB_coddepto");
             $clpcproc->incluir(null);
@@ -316,25 +326,25 @@ if (isset($incluir) && $sqlerro == false) {
 
             // Rotina ficou faltando ser colocada apos alteracoes do modulo LICITACOES
             if ($sqlerro == false) {
-              $res_liclicita = $clliclicita->sql_record($clliclicita->sql_query_pco(null,"l20_tipojulg as tipojulg","l21_codigo desc","l20_codigo = $codliclicita"));
+              $res_liclicita = $clliclicita->sql_record($clliclicita->sql_query_pco(null, "l20_tipojulg as tipojulg", "l21_codigo desc", "l20_codigo = $codliclicita"));
               if ($clliclicita->numrows > 0) {  // Existem itens no lote
-                db_fieldsmemory($res_liclicita,0);
+                db_fieldsmemory($res_liclicita, 0);
               } else {
-                $res_liclicita = $clliclicita->sql_record($clliclicita->sql_query_file($codliclicita,"l20_tipojulg as tipojulg"));
-                if ($clliclicita->numrows > 0){
-                  db_fieldsmemory($res_liclicita,0);
+                $res_liclicita = $clliclicita->sql_record($clliclicita->sql_query_file($codliclicita, "l20_tipojulg as tipojulg"));
+                if ($clliclicita->numrows > 0) {
+                  db_fieldsmemory($res_liclicita, 0);
                 } else {
                   $sqlerro  = true;
                   $erro_msg = "Tipo de Julgamento não encontrado para Licitação $codliclicita. Verifique.";
                 }
               }
 
-              if ($sqlerro == false){
+              if ($sqlerro == false) {
                 $clliclicitemlote->l04_liclicitem = $codliclicitem;
 
                 if ($tipojulg == 1) {
                   // Julgamento por ITEM
-                  $descr_lote = "LOTE_AUTOITEM_".$pc11_codigo;
+                  $descr_lote = "LOTE_AUTOITEM_" . $pc11_codigo;
                 }
 
                 if ($tipojulg == 2) {
@@ -344,16 +354,16 @@ if (isset($incluir) && $sqlerro == false) {
 
                 if ($tipojulg == 3) {
                   // por LOTE
-                  $res_liclicitemlote = $clliclicitemlote->sql_record($clliclicitemlote->sql_query_file(null,"l04_descricao as descr_lote","l04_codigo desc","l04_liclicitem=$codliclicitem"));
+                  $res_liclicitemlote = $clliclicitemlote->sql_record($clliclicitemlote->sql_query_file(null, "l04_descricao as descr_lote", "l04_codigo desc", "l04_liclicitem=$codliclicitem"));
                   if ($clliclicitemlote->numrows > 0) {
-                    db_fieldsmemory($res_liclicitemlote,0);
-                    if (substr(trim($descr_lote),0,9) == "AUTO_LOTE") {
-                      $sequencial = intval(substr(trim($descr_lote),11,5)) + 1;
-                      $descr_lote = "AUTO_LOTE_".db_formatar($sequencial,"s","0",5,"e",0);
+                    db_fieldsmemory($res_liclicitemlote, 0);
+                    if (substr(trim($descr_lote), 0, 9) == "AUTO_LOTE") {
+                      $sequencial = intval(substr(trim($descr_lote), 11, 5)) + 1;
+                      $descr_lote = "AUTO_LOTE_" . db_formatar($sequencial, "s", "0", 5, "e", 0);
                     }
                   } else {
                     $sequencial = 1;
-                    $descr_lote = "AUTO_LOTE_".db_formatar($sequencial,"s","0",5,"e",0);
+                    $descr_lote = "AUTO_LOTE_" . db_formatar($sequencial, "s", "0", 5, "e", 0);
                   }
                 }
 
@@ -371,12 +381,14 @@ if (isset($incluir) && $sqlerro == false) {
             if ($sqlerro == false) {
               $codigo        = $clliclicitem->l21_codigo;
               $dbwhere_orcam = "l21_codliclicita = $codliclicita and l21_codigo != $codigo limit 1";
-              $result_pcorcamitem = $clpcorcamitem->sql_record($clpcorcamitem->sql_query_pcmaterlic(null,
-              "pc22_codorc as codorc",
-              null,
-              "$dbwhere_orcam"));
+              $result_pcorcamitem = $clpcorcamitem->sql_record($clpcorcamitem->sql_query_pcmaterlic(
+                null,
+                "pc22_codorc as codorc",
+                null,
+                "$dbwhere_orcam"
+              ));
               if ($clpcorcamitem->numrows > 0) {
-                db_fieldsmemory($result_pcorcamitem,0);
+                db_fieldsmemory($result_pcorcamitem, 0);
                 $clpcorcamitem->pc22_codorc = $codorc;
                 $clpcorcamitem->incluir(null);
                 if ($clpcorcamitem->erro_status == 0) {
@@ -402,9 +414,9 @@ if (isset($incluir) && $sqlerro == false) {
         if ($sqlerro == false) {
           $clsolicitalog->pc15_numsol  = $pc11_numero;
           if (isset($codproc) && !empty($codproc)) {
-          	$clsolicitalog->pc15_codproc = $codproc;
+            $clsolicitalog->pc15_codproc = $codproc;
           } else {
-          	$clsolicitalog->pc15_codproc = "0";
+            $clsolicitalog->pc15_codproc = "0";
           }
 
           if (isset($codliclicita) && trim($codliclicita) != "") {
@@ -417,7 +429,7 @@ if (isset($incluir) && $sqlerro == false) {
           $clsolicitalog->pc15_quant      = $pc11_quant;
           $clsolicitalog->pc15_vlrun      = $pc11_vlrun;
           $clsolicitalog->pc15_id_usuario = db_getsession("DB_id_usuario");
-          $clsolicitalog->pc15_data       = date("Y-m-d",db_getsession("DB_datausu"));
+          $clsolicitalog->pc15_data       = date("Y-m-d", db_getsession("DB_datausu"));
           $clsolicitalog->pc15_hora       = db_hora();
           $clsolicitalog->pc15_opcao      = "1";
           // Inclusao
@@ -440,8 +452,8 @@ if (isset($incluir) && $sqlerro == false) {
         db_redireciona("com1_solicitem001.php?pc11_numero=$pc11_numero");
       }
       $clsolicitempcmater->pc16_codmater = $pc16_codmater;
-      $clsolicitempcmater->pc16_solicitem = @ $pc11_codigo;
-      $clsolicitempcmater->incluir(@ $pc16_codmater, @ $pc11_codigo);
+      $clsolicitempcmater->pc16_solicitem = @$pc11_codigo;
+      $clsolicitempcmater->incluir(@$pc16_codmater, @$pc11_codigo);
       if ($clsolicitempcmater->erro_status == 0) {
         $sqlerro = true;
         $erro_msg = $clsolicitempcmater->erro_msg;
@@ -451,15 +463,12 @@ if (isset($incluir) && $sqlerro == false) {
         try {
 
           $oSolicitacao = new solicitacaoCompra($pc11_numero);
-          $oSolicitacao->vincularItemPacto($pc11_codigo, $o103_pactovalor,$pc11_quant,@($pc11_quant*$pc11_vlrun));
-
+          $oSolicitacao->vincularItemPacto($pc11_codigo, $o103_pactovalor, $pc11_quant, @($pc11_quant * $pc11_vlrun));
         } catch (Exception $eErro) {
 
           $sqlerro  = true;
           $erro_msg = $eErro->getMessage();
-
         }
-
       }
       if ($sqlerro == false) {
 
@@ -474,23 +483,22 @@ if (isset($incluir) && $sqlerro == false) {
         try {
 
           $oSolicitacao = new solicitacaoCompra($pc11_numero);
-          $oSolicitacao->addItemRegistroPreco($pc11_codigo,$pc16_codmater,$iRegistroPreco, $pc11_quant, $registroprecoorigem, $pc11_vlrun);
-
+          $oSolicitacao->addItemRegistroPreco($pc11_codigo, $pc16_codmater, $iRegistroPreco, $pc11_quant, $registroprecoorigem, $pc11_vlrun);
         } catch (Exception $eErro) {
 
           $sqlerro  = true;
           $erro_msg = $eErro->getMessage();
-
         }
       }
     }
     //if ((!isset($pc01_servico) || (isset($pc01_servico) && ($pc01_servico == "f" || trim($pc01_servico) == ""))) && $sqlerro == false) {
 
-   // echo "<br>" . $pc11_servicoquantidade; die();
+    // echo "<br>" . $pc11_servicoquantidade; die();
     if ($pc11_servicoquantidade == 'true' || $pc01_servico == "f" && $sqlerro == false) {
 
       $clsolicitemunid->pc17_unid = $pc17_unid;
       $clsolicitemunid->pc17_quant = $pc17_quant;
+      $clsolicitemunid->pc17_codigo = $pc11_codigo;
       $clsolicitemunid->incluir($pc11_codigo);
       if ($clsolicitemunid->erro_status == 0) {
         $erro_msg = $clsolicitemunid->erro_msg;
@@ -501,9 +509,10 @@ if (isset($incluir) && $sqlerro == false) {
      * Quando o Serviço Controlado por Quantidade: NÃO o sistema sete automaticamente a unidade de medida serviço para ele
      * @see: OC 3666
      */
-    if($pc11_servicoquantidade == 'false' && $pc01_servico == "t"){
+    if ($pc11_servicoquantidade == 'false' && $pc01_servico == "t") {
       $clsolicitemunid->pc17_unid = 999999;
       $clsolicitemunid->pc17_quant = 1;
+      $clsolicitemunid->pc17_codigo = $pc11_codigo;
       $clsolicitemunid->incluir($pc11_codigo);
       if ($clsolicitemunid->erro_status == 0) {
         $erro_msg = $clsolicitemunid->erro_msg;
@@ -550,7 +559,7 @@ db_fieldsmemory($result_pcparam1, 0);
 */
     if ($pc30_contrandsol == 't') {
       if ($sqlerro == false) {
-        $result_cgmpref = $cldb_config->sql_record($cldb_config->sql_query(null, "numcgm,z01_nome", null, "codigo=".db_getsession("DB_instit")));
+        $result_cgmpref = $cldb_config->sql_record($cldb_config->sql_query(null, "numcgm,z01_nome", null, "codigo=" . db_getsession("DB_instit")));
         db_fieldsmemory($result_cgmpref, 0);
         $clprotprocesso->p58_codigo     = $pc30_tipoprocsol;
         $clprotprocesso->p58_dtproc     = date('Y-m-d', db_getsession("DB_datausu"));
@@ -569,30 +578,30 @@ db_fieldsmemory($result_pcparam1, 0);
         $clprotprocesso->p58_instit     = db_getsession("DB_instit");
 
         $clprotprocesso->incluir(null);
-        $codproc=$clprotprocesso->p58_codproc;
+        $codproc = $clprotprocesso->p58_codproc;
         if ($clprotprocesso->erro_status == 0) {
           $sqlerro = true;
-          $erro_msg=$clprotprocesso->erro_msg;
+          $erro_msg = $clprotprocesso->erro_msg;
         }
       }
       if ($sqlerro == false) {
-        $clsolicitemprot->pc49_protprocesso=$codproc;
-        $clsolicitemprot->pc49_solicitem=$pc11_codigo;
+        $clsolicitemprot->pc49_protprocesso = $codproc;
+        $clsolicitemprot->pc49_solicitem = $pc11_codigo;
         $clsolicitemprot->incluir($pc11_codigo);
         if ($clsolicitemprot->erro_status == 0) {
           $sqlerro = true;
-          $erro_msg=$clsolicitem->erro_msg;
+          $erro_msg = $clsolicitem->erro_msg;
         }
       }
     }
 
-   if(isset($pc14_veiculos) && $pc01_veiculo == "t"){
-      if($sqlerro == false){
+    if (isset($pc14_veiculos) && $pc01_veiculo == "t") {
+      if ($sqlerro == false) {
         $clsolicitemveic->pc14_veiculos  = $pc14_veiculos;
         $clsolicitemveic->pc14_solicitem = $pc11_codigo;
         $clsolicitemveic->incluir(null);
 
-        if($clsolicitemveic->erro_status == 0){
+        if ($clsolicitemveic->erro_status == 0) {
           $sqlerro  = true;
           $erro_msg = $clsolicitemveic->erro_msg;
         }
@@ -659,10 +668,11 @@ db_fieldsmemory($result_pcparam1, 0);
 
     // Alteracao para verificar se Item jah empenhado nao pode ser alterado
     if (isset($param) && trim($param) != "") {
-      $result_pcproc = $clpcproc->sql_record($clpcproc->sql_query_autitem(null,
-      "distinct pc81_codprocitem",
-      null,
-      "pc81_solicitem = $pc11_codigo and
+      $result_pcproc = $clpcproc->sql_record($clpcproc->sql_query_autitem(
+        null,
+        "distinct pc81_codprocitem",
+        null,
+        "pc81_solicitem = $pc11_codigo and
 e55_sequen is not null and e54_anulad is null"
       ));
       if ($clpcproc->numrows > 0) {
@@ -673,9 +683,9 @@ e55_sequen is not null and e54_anulad is null"
       if ($sqlerro == false) {
         $clsolicitalog->pc15_numsol  = $pc11_numero;
         if (isset($codproc) && !empty($codproc)) {
-        	$clsolicitalog->pc15_codproc = $codproc;
+          $clsolicitalog->pc15_codproc = $codproc;
         } else {
-        	$clsolicitalog->pc15_codproc = "0";
+          $clsolicitalog->pc15_codproc = "0";
         }
 
         if (isset($codliclicita) && trim($codliclicita) != "") {
@@ -688,7 +698,7 @@ e55_sequen is not null and e54_anulad is null"
         $clsolicitalog->pc15_quant      = $pc11_quant;
         $clsolicitalog->pc15_vlrun      = $pc11_vlrun;
         $clsolicitalog->pc15_id_usuario = db_getsession("DB_id_usuario");
-        $clsolicitalog->pc15_data       = date("Y-m-d",db_getsession("DB_datausu"));
+        $clsolicitalog->pc15_data       = date("Y-m-d", db_getsession("DB_datausu"));
         $clsolicitalog->pc15_hora       = db_hora();
         $clsolicitalog->pc15_opcao      = "2";
         // Alteracao
@@ -700,7 +710,11 @@ e55_sequen is not null and e54_anulad is null"
         }
       }
     }
+
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //$clsolicitempcmater->excluir(@ $pc16_codmater, @ $pc11_codigo);
+
+    $sql_record = $clpcmaterele->sql_record($clpcmaterele->sql_query($pc16_codmater, null, "o56_codele,o56_descr,o56_elemento", "o56_descr"));
 
     if ($sqlerro == false) {
       $clsolicitem->alterar($pc11_codigo);
@@ -731,7 +745,7 @@ e55_sequen is not null and e54_anulad is null"
      * @see: OC 3666
      */
 
-    if($pc11_servicoquantidade == 'false' && $pc01_servico == "t"){
+    if ($pc11_servicoquantidade == 'false' && $pc01_servico == "t") {
       $clsolicitemunid->pc17_unid = 999999;
       $clsolicitemunid->pc17_quant = 1;
       $clsolicitemunid->pc17_codigo = $pc11_codigo;
@@ -747,7 +761,7 @@ e55_sequen is not null and e54_anulad is null"
       }
     }
     if ($sqlerro == false && isset($pc16_codmater) && $pc16_codmater != "") {
-      $clsolicitempcmater->excluir(@ $pc16_codmater, @ $pc11_codigo);
+      $clsolicitempcmater->excluir(@$pcmateranterior, @$pc11_codigo);
       if ($clsolicitempcmater->erro_status == 0) {
         $sqlerro = true;
         $erro_msg = $clsolicitempcmater->erro_msg;
@@ -762,15 +776,20 @@ e55_sequen is not null and e54_anulad is null"
     }
     if ($sqlerro == false && isset($pc16_codmater) && $pc16_codmater != "") {
       $clsolicitempcmater->pc16_codmater = $pc16_codmater;
-      $clsolicitempcmater->pc16_solicitem = @ $pc11_codigo;
-      $clsolicitempcmater->incluir(@ $pc16_codmater, @ $pc11_codigo);
+      $clsolicitempcmater->pc16_solicitem = @$pc11_codigo;
+      $clsolicitempcmater->incluir(@$pc16_codmater, @$pc11_codigo);
       if ($clsolicitempcmater->erro_status == 0) {
         $sqlerro = true;
         $erro_msg = $clsolicitempcmater->erro_msg;
         $erro_msg = str_replace("Inclusao", "Alteracao", $erro_msg);
       }
       if ($sqlerro == false) {
-        $clsolicitemele->incluir($pc11_codigo, $o56_codele);
+        if ($eleSub == "") {
+          $clsolicitemele->incluir($pc11_codigo, $o56_codele);
+        } else {
+          $clsolicitemele->incluir($pc11_codigo, $eleSub);
+        }
+
         if ($clsolicitemele->erro_status == 0) {
           $sqlerro = true;
           $erro_msg = $clsolicitemele->erro_msg;
@@ -783,13 +802,11 @@ e55_sequen is not null and e54_anulad is null"
 
         $oSolicitacao = new solicitacaoCompra($pc11_numero);
         $oSolicitacao->excluirVinculacaoItemPacto($pc11_codigo);
-        $oSolicitacao->vincularItemPacto($pc11_codigo, $o103_pactovalor,$pc11_quant,@($pc11_quant*$pc11_vlrun));
-
+        $oSolicitacao->vincularItemPacto($pc11_codigo, $o103_pactovalor, $pc11_quant, @($pc11_quant * $pc11_vlrun));
       } catch (Exception $eErro) {
 
         $sqlerro  = true;
         $erro_msg = $eErro->getMessage();
-
       }
     }
     if ($sqlerro == false && $pc30_seltipo == "t") {
@@ -819,14 +836,13 @@ e55_sequen is not null and e54_anulad is null"
       if ($numrows_pcdotac > 0) {
         $soma = 0;
         $arr_gerarel = array();
-        for ($i = 0; $i < $numrows_pcdotac; $i ++) {
+        for ($i = 0; $i < $numrows_pcdotac; $i++) {
           db_fieldsmemory($result_vlrun, $i);
           if ($pc30_gerareserva == "t") {
             //*******rotina que verifica se ainda existe saldo disponivel******************//
             //rotina para calcular o saldo final
             $result = db_dotacaosaldo(8, 2, 2, "true", "o58_coddot=$pc13_coddot", db_getsession("DB_anousu"));
             db_fieldsmemory($result, 0);
-
           }
 
           if ($pc11_vlrun != $pc11_vlrun_ant) {
@@ -849,7 +865,7 @@ e55_sequen is not null and e54_anulad is null"
                 $msg_alert2 = " - Quantidade de itens por dotação.\\n";
                 $quant = $pc11_quant * ($pc13_quant / $pc11_quant_ant);
                 $soma += $quant;
-                if (($i +1) == $numrows_pcdotac) {
+                if (($i + 1) == $numrows_pcdotac) {
                   if ($soma < $pc11_quant) {
                     $quant += $pc11_quant - $soma;
                   } else if ($soma > $pc11_quant) {
@@ -872,12 +888,14 @@ e55_sequen is not null and e54_anulad is null"
           }
 
           if ($pc30_gerareserva == "t") {
-            $result_altext = $clorcreservasol->sql_record($clorcreservasol->sql_query_orcreserva(null,
-                                                          null,
-                                                          "o80_codres,o80_valor",
-                                                          "",
-                                                          "o80_coddot = {$pc13_coddot}
-                                                           and pc13_codigo = {$pc13_codigo}"));
+            $result_altext = $clorcreservasol->sql_record($clorcreservasol->sql_query_orcreserva(
+              null,
+              null,
+              "o80_codres,o80_valor",
+              "",
+              "o80_coddot = {$pc13_coddot}
+                                                           and pc13_codigo = {$pc13_codigo}"
+            ));
             $numrows_altres = $clorcreservasol->numrows;
             if ($numrows_altres > 0) {
               db_fieldsmemory($result_altext, 0);
@@ -905,8 +923,8 @@ e55_sequen is not null and e54_anulad is null"
             $clpcdotac->pc13_codigo = $pc13_codigo;
             $clpcdotac->pc13_anousu = $pc13_anousu;
             $clpcdotac->pc13_coddot = $pc13_coddot;
-            $rsPcDotac   = $clpcdotac->sql_record($clpcdotac->sql_query_file($pc13_codigo, $pc13_anousu, $pc13_coddot,"pc13_sequencial"));
-            $oPcDotac    = db_utils::fieldsMemory($rsPcDotac,0);
+            $rsPcDotac   = $clpcdotac->sql_record($clpcdotac->sql_query_file($pc13_codigo, $pc13_anousu, $pc13_coddot, "pc13_sequencial"));
+            $oPcDotac    = db_utils::fieldsMemory($rsPcDotac, 0);
             $clpcdotac->pc13_sequencial = $oPcDotac->pc13_sequencial;
             $clpcdotac->alterar($oPcDotac->pc13_sequencial);
             if ($clpcdotac->erro_status == 0) {
@@ -916,18 +934,19 @@ e55_sequen is not null and e54_anulad is null"
             }
             if ($pc30_gerareserva == "t") {
               $result_altext = $clorcreservasol->sql_record($clorcreservasol->sql_query_orcreserva(
-                                                            null,
-                                                            null,
-                                                            "o80_codres,o80_valor",
-                                                            "",
-                                                            "o80_coddot     = {$pc13_coddot}
-                                                            and pc13_codigo = {$pc13_codigo}"));
+                null,
+                null,
+                "o80_codres,o80_valor",
+                "",
+                "o80_coddot     = {$pc13_coddot}
+                                                            and pc13_codigo = {$pc13_codigo}"
+              ));
               if ($sqlerro == false && isset($sqlerrosaldo) && $sqlerrosaldo == false && isset($o80_codres) && $o80_codres != "") {
                 $clorcreserva->atualiza_valor($o80_codres, $pc13_valor);
                 unset($o80_codres);
               } else if ($sqlerro == false && isset($sqlerrosaldo) && $sqlerrosaldo == true && isset($saldoreserva) && $saldoreserva > 0 && isset($o80_codres) && $o80_codres != "") {
                 $clorcreserva->atualiza_valor($o80_codres, $saldoreserva);
-                $msg_alert.= "Reserva de saldo gerada parcialmente.\\n";
+                $msg_alert .= "Reserva de saldo gerada parcialmente.\\n";
                 unset($o80_codres);
               } else if ($sqlerro == false && isset($sqlerrosaldo) && $sqlerrosaldo == true && isset($o80_codres) && $o80_codres != "") {
                 $clorcreservasol->excluir($oPcDotac->pc13_sequencial);
@@ -949,7 +968,7 @@ e55_sequen is not null and e54_anulad is null"
           }
         }
         if ($sqlerro == false) {
-          $msg_alert .= $msg_alert1.$msg_alert2.$msg_alertp;
+          $msg_alert .= $msg_alert1 . $msg_alert2 . $msg_alertp;
         }
       }
     }
@@ -957,7 +976,7 @@ e55_sequen is not null and e54_anulad is null"
       $alterarr = false;
       $result_altersol = $clpcdotac->sql_record($clpcdotac->sql_query_lefdotac(null, null, null, "pc11_codigo,pc11_quant,sum(pc13_quant) as pc13_quantalter", "", "pc11_numero=$pc11_numero group by pc11_codigo,pc11_quant"));
       if ($clpcdotac->numrows > 0) {
-        for ($i = 0; $i < $clpcdotac->numrows; $i ++) {
+        for ($i = 0; $i < $clpcdotac->numrows; $i++) {
           db_fieldsmemory($result_altersol, $i);
           $result_servico = $clsolicitem->sql_record($clsolicitem->sql_query_serv($pc11_codigo, "pc01_servico"));
           $numrows_servico = $clsolicitem->numrows;
@@ -996,20 +1015,21 @@ e55_sequen is not null and e54_anulad is null"
       }
     }
 
-    if(isset($pc14_veiculos)){
-      if($sqlerro == false){
-        $rsVeic = $clsolicitemveic->sql_record($clsolicitemveic->sql_query_file(null,"pc14_sequencial","","pc14_solicitem = $pc11_codigo"));
-        if($clsolicitemveic->numrows > 0){
-          db_fieldsmemory($rsVeic,0);
+    if (isset($pc14_veiculos)) {
+      if ($sqlerro == false) {
+        $rsVeic = $clsolicitemveic->sql_record($clsolicitemveic->sql_query_file(null, "pc14_sequencial", "", "pc14_solicitem = $pc11_codigo"));
+        if ($clsolicitemveic->numrows > 0) {
+          db_fieldsmemory($rsVeic, 0);
           $clsolicitemveic->pc14_veiculos = $pc14_veiculos;
           $clsolicitemveic->alterar($pc14_sequencial);
-          if($clsolicitemveic->erro_status == 0){
+          if ($clsolicitemveic->erro_status == 0) {
             $sqlerro  = true;
             $erro_msg = $clsolicitemveic->erro_msg;
           }
         }
       }
     }
+
     //$sqlerro = true;
     db_fim_transacao($sqlerro);
     if ($sqlerro == false) {
@@ -1028,10 +1048,11 @@ e55_sequen is not null and e54_anulad is null"
 
     if (isset($codproc) && trim($codproc) != "") {
       // Testa se Item nao esta com autorizacao de empenho
-      $result_pcproc = $clpcproc->sql_record($clpcproc->sql_query_autitem(null,
-      "distinct pc81_codprocitem",
-      null,
-      "pc80_codproc = $codproc and pc81_solicitem = $pc11_codigo and
+      $result_pcproc = $clpcproc->sql_record($clpcproc->sql_query_autitem(
+        null,
+        "distinct pc81_codprocitem",
+        null,
+        "pc80_codproc = $codproc and pc81_solicitem = $pc11_codigo and
 e55_sequen is not null and e54_anulad is null"
       ));
       //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1041,30 +1062,33 @@ e55_sequen is not null and e54_anulad is null"
       } else {
         // Exclusao de orçamento de processo de compras
         // Testa se item tem orcamento de processo de compras
-        $result_item = $clpcproc->sql_record($clpcproc->sql_query_autitem(null,
-        "distinct pc81_codprocitem as codprocitem",
-        null,
-        "pc80_codproc = $codproc and pc81_solicitem = $pc11_codigo"
-        ));
-        IF ($clpcproc->numrows > 0) {
-          db_fieldsmemory($result_item,0);
-          $result_pcorcamitem = $clpcorcamitem->sql_record($clpcorcamitem->sql_query_pcmaterproc(null,
-          "pc22_orcamitem as codorcitem,
-pc20_codorc    as codorc",
+        $result_item = $clpcproc->sql_record($clpcproc->sql_query_autitem(
           null,
-          "pc81_codprocitem = $codprocitem"
+          "distinct pc81_codprocitem as codprocitem",
+          null,
+          "pc80_codproc = $codproc and pc81_solicitem = $pc11_codigo"
+        ));
+        if ($clpcproc->numrows > 0) {
+          db_fieldsmemory($result_item, 0);
+          $result_pcorcamitem = $clpcorcamitem->sql_record($clpcorcamitem->sql_query_pcmaterproc(
+            null,
+            "pc22_orcamitem as codorcitem,
+pc20_codorc    as codorc",
+            null,
+            "pc81_codprocitem = $codprocitem"
           ));
           if ($clpcorcamitem->numrows > 0) {
-            db_fieldsmemory($result_pcorcamitem,0);
-            $result_pcorcamjulg = $clpcorcamjulg->sql_record($clpcorcamjulg->sql_query(null,
-            null,
-            "pc21_orcamforne as codforne",
-            null,
-            "pc24_orcamitem = $codorcitem"
+            db_fieldsmemory($result_pcorcamitem, 0);
+            $result_pcorcamjulg = $clpcorcamjulg->sql_record($clpcorcamjulg->sql_query(
+              null,
+              null,
+              "pc21_orcamforne as codforne",
+              null,
+              "pc24_orcamitem = $codorcitem"
             ));
             $numrows = $clpcorcamjulg->numrows;
 
-            $clpcorcamitemproc->excluir($codorcitem,$codprocitem);
+            $clpcorcamitemproc->excluir($codorcitem, $codprocitem);
             if ($clpcorcamitemproc->erro_status == 0) {
               $sqlerro  = true;
               $erro_msg = $clpcorcamitemproc->erro_msg;
@@ -1079,7 +1103,7 @@ pc20_codorc    as codorc",
             }
 
             if ($sqlerro == false) {
-              $clpcorcamval->excluir(null,$codorcitem);
+              $clpcorcamval->excluir(null, $codorcitem);
               if ($clpcorcamval->erro_status == 0) {
                 $sqlerro  = true;
                 $erro_msg = $clpcorcamval->erro_msg;
@@ -1095,7 +1119,7 @@ pc20_codorc    as codorc",
             }
 
             if ($sqlerro == false) {
-              $clpcorcamtroca->excluir(null,"pc25_orcamitem = $codorcitem");
+              $clpcorcamtroca->excluir(null, "pc25_orcamitem = $codorcitem");
               if ($clpcorcamtroca->erro_status == 0) {
                 $sqlerro  = true;
                 $erro_msg = $clpcorcamtroca->erro_msg;
@@ -1113,12 +1137,13 @@ pc20_codorc    as codorc",
             if ($sqlerro == false) {
               if ($numrows > 0) {
                 for ($i = 0; $i < $numrows; $i++) {
-                  db_fieldsmemory($result_pcorcamjulg,$i);
-                  $res_pcorcamjulg = $clpcorcamjulg->sql_record($clpcorcamjulg->sql_query(null,
-                  null,
-                  "pc24_pontuacao",
-                  null,
-                  "pc24_orcamforne = $codforne"
+                  db_fieldsmemory($result_pcorcamjulg, $i);
+                  $res_pcorcamjulg = $clpcorcamjulg->sql_record($clpcorcamjulg->sql_query(
+                    null,
+                    null,
+                    "pc24_pontuacao",
+                    null,
+                    "pc24_orcamforne = $codforne"
                   ));
                   if ($clpcorcamjulg->numrows > 0) {
                     $numrows = 0;
@@ -1126,9 +1151,9 @@ pc20_codorc    as codorc",
                   }
                 }
                 for ($i = 0; $i < $numrows; $i++) {
-                  db_fieldsmemory($result_pcorcamjulg,$i);
+                  db_fieldsmemory($result_pcorcamjulg, $i);
 
-                  $clpcorcamforne->excluir(null,"pc21_orcamforne = $codforne and pc21_codorc = $codorc");
+                  $clpcorcamforne->excluir(null, "pc21_orcamforne = $codforne and pc21_codorc = $codorc");
                   if ($clpcorcamforne->erro_status == 0) {
                     $sqlerro  = true;
                     $erro_msg = $clpcorcamforne->erro_msg;
@@ -1167,16 +1192,17 @@ where pc20_codorc = $codorc";
 
     if (isset($codliclicita) && trim($codliclicita) != "") {
 
-      $result_liclicitem = $clliclicitem->sql_record($clliclicitem->sql_query_inf(null,
-      "distinct l21_codigo",
-      null,
-      "l21_codliclicita = $codliclicita and pc81_solicitem = $pc11_codigo and
+      $result_liclicitem = $clliclicitem->sql_record($clliclicitem->sql_query_inf(
+        null,
+        "distinct l21_codigo",
+        null,
+        "l21_codliclicita = $codliclicita and pc81_solicitem = $pc11_codigo and
 e55_sequen is not null and e54_anulad is null"
       ));
       if ($clliclicitem->numrows > 0) {
         $flag_liclicita = true;
       } else {
-        db_fieldsmemory($result_liclicitem,0);
+        db_fieldsmemory($result_liclicitem, 0);
       }
 
       if ($flag_liclicita == true) {
@@ -1188,32 +1214,36 @@ e55_sequen is not null and e54_anulad is null"
     if ($sqlerro == false) {
       if (isset($codliclicita) && trim($codliclicita) != "") {
         // Testa se item tem orcamento em licitacao
-        $result_liclicitem = $clliclicitem->sql_record($clliclicitem->sql_query_inf(null,
-        "distinct l21_codigo as codlic",
-        null,
-        "l21_codliclicita = $codliclicita and pc81_solicitem = $pc11_codigo"
+        $result_liclicitem = $clliclicitem->sql_record($clliclicitem->sql_query_inf(
+          null,
+          "distinct l21_codigo as codlic",
+          null,
+          "l21_codliclicita = $codliclicita and pc81_solicitem = $pc11_codigo"
         ));
         if ($clliclicitem->numrows > 0) {
-          db_fieldsmemory($result_liclicitem,0);
+          db_fieldsmemory($result_liclicitem, 0);
         }
 
         if (isset($codlic) && trim($codlic) != "") {
           // Excluir orçamento de licitacao
-          $result_pcorcamitem = $clpcorcamitem->sql_record($clpcorcamitem->sql_query_pcmaterlic(null,
-          "pc22_orcamitem as codorcitem, pc22_codorc as codorc",
-          null,
-          "l21_codigo = $codlic"));
+          $result_pcorcamitem = $clpcorcamitem->sql_record($clpcorcamitem->sql_query_pcmaterlic(
+            null,
+            "pc22_orcamitem as codorcitem, pc22_codorc as codorc",
+            null,
+            "l21_codigo = $codlic"
+          ));
           if ($clpcorcamitem->numrows > 0) {
-            db_fieldsmemory($result_pcorcamitem,0);
-            $result_pcorcamjulg = $clpcorcamjulg->sql_record($clpcorcamjulg->sql_query(null,
-            null,
-            "pc21_orcamforne as codforne",
-            null,
-            "pc24_orcamitem = $codorcitem"
+            db_fieldsmemory($result_pcorcamitem, 0);
+            $result_pcorcamjulg = $clpcorcamjulg->sql_record($clpcorcamjulg->sql_query(
+              null,
+              null,
+              "pc21_orcamforne as codforne",
+              null,
+              "pc24_orcamitem = $codorcitem"
             ));
             $numrows = $clpcorcamjulg->numrows;
 
-            $clpcorcamitemlic->excluir(null,"pc26_liclicitem = $codlic");
+            $clpcorcamitemlic->excluir(null, "pc26_liclicitem = $codlic");
             if ($clpcorcamitemlic->erro_status == 0) {
               $sqlerro  = true;
               $erro_msg = $clpcorcamitemlic->erro_msg;
@@ -1228,7 +1258,7 @@ e55_sequen is not null and e54_anulad is null"
             }
 
             if ($sqlerro == false) {
-              $clpcorcamval->excluir(null,$codorcitem);
+              $clpcorcamval->excluir(null, $codorcitem);
               if ($clpcorcamval->erro_status == 0) {
                 $sqlerro  = true;
                 $erro_msg = $clpcorcamval->erro_msg;
@@ -1244,7 +1274,7 @@ e55_sequen is not null and e54_anulad is null"
             }
 
             if ($sqlerro == false) {
-              $clpcorcamtroca->excluir(null,"pc25_orcamitem = $codorcitem");
+              $clpcorcamtroca->excluir(null, "pc25_orcamitem = $codorcitem");
               if ($clpcorcamtroca->erro_status == 0) {
                 $sqlerro  = true;
                 $erro_msg = $clpcorcamtroca->erro_msg;
@@ -1261,12 +1291,13 @@ e55_sequen is not null and e54_anulad is null"
               if ($sqlerro == false) {
                 if ($numrows > 0) {
                   for ($i = 0; $i < $numrows; $i++) {
-                    db_fieldsmemory($result_pcorcamjulg,$i);
-                    $res_pcorcamjulg = $clpcorcamjulg->sql_record($clpcorcamjulg->sql_query(null,
-                    null,
-                    "pc24_pontuacao",
-                    null,
-                    "pc24_orcamforne = $codforne"
+                    db_fieldsmemory($result_pcorcamjulg, $i);
+                    $res_pcorcamjulg = $clpcorcamjulg->sql_record($clpcorcamjulg->sql_query(
+                      null,
+                      null,
+                      "pc24_pontuacao",
+                      null,
+                      "pc24_orcamforne = $codforne"
                     ));
                     if ($clpcorcamjulg->numrows > 0) {
                       $numrows = 0;
@@ -1275,9 +1306,9 @@ e55_sequen is not null and e54_anulad is null"
                   }
 
                   for ($i = 0; $i < $numrows; $i++) {
-                    db_fieldsmemory($result_pcorcamjulg,$i);
+                    db_fieldsmemory($result_pcorcamjulg, $i);
 
-                    $clpcorcamforne->excluir(null,"pc21_orcamforne = $codforne and pc21_codorc = $codorc");
+                    $clpcorcamforne->excluir(null, "pc21_orcamforne = $codforne and pc21_codorc = $codorc");
                     if ($clpcorcamforne->erro_status == 0) {
                       $sqlerro  = true;
                       $erro_msg = $clpcorcamforne->erro_msg;
@@ -1316,7 +1347,7 @@ where pc20_codorc = $codorc";
           }
           ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
           if ($sqlerro == false) {
-            $clliclicitemlote->excluir(null,"l04_liclicitem = $codlic");
+            $clliclicitemlote->excluir(null, "l04_liclicitem = $codlic");
             if ($clliclicitemlote->erro_status == 0) {
               $sqlerro  = true;
               $erro_msg = $clliclicitemlote->erro_msg;
@@ -1339,7 +1370,7 @@ where pc20_codorc = $codorc";
          * Excluir tambem da empautitempcprocitem
          * que possui relacionamento
          */
-        $clempautitempcprocitem->excluir("","e73_pcprocitem = {$codprocitem}");
+        $clempautitempcprocitem->excluir("", "e73_pcprocitem = {$codprocitem}");
         if ($clempautitempcprocitem->erro_status == 0) {
           $sqlerro  = true;
           $erro_msg = $clempautitempcprocitem->erro_msg;
@@ -1369,7 +1400,7 @@ where pc20_codorc = $codorc";
 
       $clsolicitalog->pc15_numsol  = $pc11_numero;
 
-      if(!isset($codproc) || $codproc == ""){
+      if (!isset($codproc) || $codproc == "") {
         $clsolicitalog->pc15_codproc = "0";
       } else {
         $clsolicitalog->pc15_codproc = $codproc;
@@ -1385,7 +1416,7 @@ where pc20_codorc = $codorc";
       $clsolicitalog->pc15_quant      = $pc11_quant;
       $clsolicitalog->pc15_vlrun      = $pc11_vlrun;
       $clsolicitalog->pc15_id_usuario = db_getsession("DB_id_usuario");
-      $clsolicitalog->pc15_data       = date("Y-m-d",db_getsession("DB_datausu"));
+      $clsolicitalog->pc15_data       = date("Y-m-d", db_getsession("DB_datausu"));
       $clsolicitalog->pc15_hora       = db_hora();
       $clsolicitalog->pc15_opcao      = "3";
       // Exclusao
@@ -1413,64 +1444,64 @@ where pc20_codorc = $codorc";
     //----------------------------------------------ROGERIO BAUM--------------------------------------------------------------------------
     //--------------------------TESTA SE EXISTE SE CONTROLA ANDAMENTO E SE EXISTIR ---------------------------------
     //---------------------ALGUM ANDAMENTO E PROCESSO EXCLUI TUDO REFERENTE AOS ANDAMENTOS---------------------------------
-    $result_andpadrao = $clsolandpadrao->sql_record($clsolandpadrao->sql_query_depto(null,"*",null,"pc47_solicitem = $pc11_codigo"));
+    $result_andpadrao = $clsolandpadrao->sql_record($clsolandpadrao->sql_query_depto(null, "*", null, "pc47_solicitem = $pc11_codigo"));
     $numrows_andpadrao = $clsolandpadrao->numrows;
-    if ($numrows_andpadrao>0) {
-      for ($wy=0; $wy<$numrows_andpadrao; $wy++) {
-        db_fieldsmemory($result_andpadrao,$wy);
-        if ($pc48_solandpadrao!="") {
+    if ($numrows_andpadrao > 0) {
+      for ($wy = 0; $wy < $numrows_andpadrao; $wy++) {
+        db_fieldsmemory($result_andpadrao, $wy);
+        if ($pc48_solandpadrao != "") {
           $clsolandpadraodepto->excluir($pc47_codigo);
-          if ($clsolandpadraodepto->erro_status==0) {
-            $sqlerro=true;
-            $erro_msg=$clsolandpadraodepto->erro_msg;
+          if ($clsolandpadraodepto->erro_status == 0) {
+            $sqlerro = true;
+            $erro_msg = $clsolandpadraodepto->erro_msg;
           }
         }
       }
-      $clsolandpadrao->excluir(null,"pc47_solicitem=$pc11_codigo");
-      if ($clsolandpadrao->erro_status==0) {
-        $sqlerro=true;
-        $erro_msg=$clsolandpadrao->erro_msg;
+      $clsolandpadrao->excluir(null, "pc47_solicitem=$pc11_codigo");
+      if ($clsolandpadrao->erro_status == 0) {
+        $sqlerro = true;
+        $erro_msg = $clsolandpadrao->erro_msg;
       }
     }
   }
 
   if ($sqlerro == false) {
-    $result_ordem=$clsolordemtransf->sql_record($clsolordemtransf->sql_query_file(null,"*",null,"pc41_solicitem=$pc11_codigo"));
-    if ($clsolordemtransf->numrows>0) {
-      $clsolordemtransf->excluir(null,"pc41_solicitem=$pc11_codigo");
+    $result_ordem = $clsolordemtransf->sql_record($clsolordemtransf->sql_query_file(null, "*", null, "pc41_solicitem=$pc11_codigo"));
+    if ($clsolordemtransf->numrows > 0) {
+      $clsolordemtransf->excluir(null, "pc41_solicitem=$pc11_codigo");
       if ($clsolordemtransf->erro_status == 0) {
-        $erro_msg=$clsolordemtransf->erro_msg;
-        $sqlerro=true;
+        $erro_msg = $clsolordemtransf->erro_msg;
+        $sqlerro = true;
       }
     }
   }
 
   if ($sqlerro == false) {
-    $result_andam = $clsolandam->sql_record($clsolandam->sql_query_and(null,"*",null,"pc43_solicitem = $pc11_codigo"));
+    $result_andam = $clsolandam->sql_record($clsolandam->sql_query_and(null, "*", null, "pc43_solicitem = $pc11_codigo"));
     $numrows_andam = $clsolandam->numrows;
-    if ($numrows_andam>0) {
-      for ($wy=0; $wy<$numrows_andam; $wy++) {
-        db_fieldsmemory($result_andam,$wy);
-        if ($pc42_solandam!="") {
+    if ($numrows_andam > 0) {
+      for ($wy = 0; $wy < $numrows_andam; $wy++) {
+        db_fieldsmemory($result_andam, $wy);
+        if ($pc42_solandam != "") {
           $clsolandamand->excluir($pc43_codigo);
-          if ($clsolandamand->erro_status==0) {
-            $sqlerro=true;
-            $erro_msg=$clsolandamand->erro_msg;
+          if ($clsolandamand->erro_status == 0) {
+            $sqlerro = true;
+            $erro_msg = $clsolandamand->erro_msg;
           }
         }
       }
-      $clsolandam->excluir(null,"pc43_solicitem=$pc11_codigo");
-      if ($clsolandam->erro_status==0) {
-        $sqlerro=true;
-        $erro_msg=$clsolandam->erro_msg;
+      $clsolandam->excluir(null, "pc43_solicitem=$pc11_codigo");
+      if ($clsolandam->erro_status == 0) {
+        $sqlerro = true;
+        $erro_msg = $clsolandam->erro_msg;
       }
     }
   }
 
   if ($sqlerro == false) {
     $result_protprocesso = $clsolicitemprot->sql_record($clsolicitemprot->sql_query_file($pc11_codigo));
-    if ($clsolicitemprot->numrows>0) {
-      db_fieldsmemory($result_protprocesso,0);
+    if ($clsolicitemprot->numrows > 0) {
+      db_fieldsmemory($result_protprocesso, 0);
 
       $clsolicitemprot->excluir($pc11_codigo);
       if ($clsolicitemprot->erro_status == 0) {
@@ -1478,10 +1509,10 @@ where pc20_codorc = $codorc";
         $erro_msg = $clsolicitemprot->erro_msg;
       }
 
-      $rsProcTransferProc =  $clproctransferproc->sql_record($clproctransferproc->sql_query_file(null,$pc49_protprocesso));
+      $rsProcTransferProc =  $clproctransferproc->sql_record($clproctransferproc->sql_query_file(null, $pc49_protprocesso));
       if ($clproctransferproc->numrows > 0) {
-         db_fieldsmemory($rsProcTransferProc,0);
-        $clproctransferproc->excluir(null,$p63_codproc);
+        db_fieldsmemory($rsProcTransferProc, 0);
+        $clproctransferproc->excluir(null, $p63_codproc);
         if ($clproctransferproc->erro_status == 0) {
           $sqlerro  = true;
           $erro_msg = $clproctransferproc->erro_msg;
@@ -1500,17 +1531,16 @@ where pc20_codorc = $codorc";
         $clprotprocesso->excluir($pc49_protprocesso);
         if ($clprotprocesso->erro_status == 0) {
           $sqlerro = true;
-          $erro_msg=$clprotprocesso->erro_msg;
+          $erro_msg = $clprotprocesso->erro_msg;
         }
       }
-
     }
   }
   //------------------------------------------------------------------------------------------------------------------------
   //------------------------------------------------------------------------------------------------------------------------
 
   if ($sqlerro == false) {
-    $clsolicitempcmater->excluir(null, @ $pc11_codigo);
+    $clsolicitempcmater->excluir(null, @$pc11_codigo);
     if ($clsolicitempcmater->erro_status == 0) {
       $sqlerro = true;
       $erro_msg = $clsolicitempcmater->erro_msg;
@@ -1532,62 +1562,58 @@ where pc20_codorc = $codorc";
   }
   if ($sqlerro == false) {
 
-//    if ($pc30_gerareserva == "t") {
-      $result_altext = $clorcreservasol->sql_record($clorcreservasol->sql_query_orcreserva(
-                                                    null,
-                                                    null,
-                                                    "o82_sequencial,o82_codres",
-                                                    "",
-                                                    "pc13_codigo = {$pc11_codigo}"));
-      $numrows_excres = $clorcreservasol->numrows;
-      if ($numrows_excres > 0) {
-        for ($i = 0; $i < $numrows_excres; $i ++) {
-          db_fieldsmemory($result_altext, $i);
-          $clorcreservasol->excluir($o82_sequencial);
-          $clorcreserva->excluir($o82_codres);
-        }
+    //    if ($pc30_gerareserva == "t") {
+    $result_altext = $clorcreservasol->sql_record($clorcreservasol->sql_query_orcreserva(
+      null,
+      null,
+      "o82_sequencial,o82_codres",
+      "",
+      "pc13_codigo = {$pc11_codigo}"
+    ));
+    $numrows_excres = $clorcreservasol->numrows;
+    if ($numrows_excres > 0) {
+      for ($i = 0; $i < $numrows_excres; $i++) {
+        db_fieldsmemory($result_altext, $i);
+        $clorcreservasol->excluir($o82_sequencial);
+        $clorcreserva->excluir($o82_codres);
       }
-//    }
+    }
+    //    }
 
-    $clpcdotac->excluir(null,"pc13_codigo = {$pc11_codigo}");
+    $clpcdotac->excluir(null, "pc13_codigo = {$pc11_codigo}");
     $erro_msg = $clpcdotac->erro_msg;
     if ($clpcdotac->erro_status == 0) {
       $sqlerro = true;
     }
-
-
   }
 
-  if($sqlerro == false){
-    $rsVeic = $clsolicitemveic->sql_record($clsolicitemveic->sql_query_file(null,"pc14_sequencial","","pc14_solicitem = $pc11_codigo"));
-    if($clsolicitemveic->numrows > 0){
-      db_fieldsmemory($rsVeic,0);
+  if ($sqlerro == false) {
+    $rsVeic = $clsolicitemveic->sql_record($clsolicitemveic->sql_query_file(null, "pc14_sequencial", "", "pc14_solicitem = $pc11_codigo"));
+    if ($clsolicitemveic->numrows > 0) {
+      db_fieldsmemory($rsVeic, 0);
       $clsolicitemveic->excluir($pc14_sequencial);
-      if($clsolicitemveic->erro_status == 0){
+      if ($clsolicitemveic->erro_status == 0) {
         $sqlerro  = true;
         $erro_msg = $clsolicitemveic->erro_msg;
       }
     }
   }
-    if (isset($o103_pactovalor) && $o103_pactovalor != "" && !$sqlerro) {
+  if (isset($o103_pactovalor) && $o103_pactovalor != "" && !$sqlerro) {
 
-        $oSolicitacao = new solicitacaoCompra($pc11_numero);
-        $oSolicitacao->excluirVinculacaoItemPacto($pc11_codigo);
+    $oSolicitacao = new solicitacaoCompra($pc11_numero);
+    $oSolicitacao->excluirVinculacaoItemPacto($pc11_codigo);
+  }
+  if ($sqlerro == false && $iRegistroPreco != "") {
 
+    try {
+
+      $oSolicitacao = new solicitacaoCompra($pc11_numero);
+      $oSolicitacao->removeItensRegitro($iRegistroPreco, $pc11_codigo);
+    } catch (Exception $eErro) {
+
+      $sqlerro  = true;
+      $erro_msg = $eErro->getMessage();
     }
-    if ($sqlerro == false && $iRegistroPreco != "") {
-
-      try {
-
-        $oSolicitacao = new solicitacaoCompra($pc11_numero);
-        $oSolicitacao->removeItensRegitro($iRegistroPreco, $pc11_codigo);
-
-      } catch (Exception $eErro) {
-
-        $sqlerro  = true;
-        $erro_msg = $eErro->getMessage();
-
-      }
   }
   if ($sqlerro == false) {
     $clsolicitem->excluir($pc11_codigo);
@@ -1610,7 +1636,7 @@ where pc20_codorc = $codorc";
     if ($valexc == '') {
       $valexc = 0;
     }
-    $clsolicitatipo->pc12_vlrap = "'".$valexc."'";
+    $clsolicitatipo->pc12_vlrap = "'" . $valexc . "'";
     $clsolicitatipo->pc12_numero = $pc11_numero;
     $clsolicitatipo->alterar($pc11_numero);
     if ($clsolicitatipo->erro_status == 0) {
@@ -1622,7 +1648,7 @@ where pc20_codorc = $codorc";
     $alterarr = false;
     $result_altersol = $clpcdotac->sql_record($clpcdotac->sql_query_lefdotac(null, null, null, "pc11_codigo,pc11_quant,sum(pc13_quant) as pc13_quantalter", "", "pc11_numero=$pc11_numero group by pc11_codigo,pc11_quant"));
     if ($clpcdotac->numrows > 0) {
-      for ($i = 0; $i < $clpcdotac->numrows; $i ++) {
+      for ($i = 0; $i < $clpcdotac->numrows; $i++) {
         db_fieldsmemory($result_altersol, $i);
         $result_servico = $clsolicitem->sql_record($clsolicitem->sql_query_serv($pc11_codigo, "pc01_servico"));
         $numrows_servico = $clsolicitem->numrows;
@@ -1666,7 +1692,7 @@ where pc20_codorc = $codorc";
     }
   }
 
-//  $sqlerro = true;
+  //  $sqlerro = true;
   db_fim_transacao($sqlerro);
   // A quantidade de itens das dotações serão atualizadas automaticamente!
 }
@@ -1687,14 +1713,14 @@ if (isset($opcao) && $opcao != "incluir") {
 
   $sCamposItem  = "pc11_numero, pc11_codigo, pc11_quant, pc11_vlrun, pc11_seq, pc11_liberado, pc11_prazo, ";
   $sCamposItem .= "pc11_pgto,pc11_resum,pc11_just";
-  $sWhere       = " pc11_codigo=".@$pc11_codigo." and pc11_numero=".@$pc11_numero;
+  $sWhere       = " pc11_codigo=" . @$pc11_codigo . " and pc11_numero=" . @$pc11_numero;
   $sSqlItem     = $clsolicitem->sql_query(null, $sCamposItem, '', $sWhere);
   $result_dad_solicitem = $clsolicitem->sql_record($sSqlItem);
   if ($clsolicitem->numrows > 0) {
 
     db_fieldsmemory($result_dad_solicitem, 0);
 
-    $sSqlMaterial = $clsolicitem->sql_query_pcmater(null, "pc16_codmater,pc01_descrmater", '', " pc16_solicitem=".@ $pc11_codigo);
+    $sSqlMaterial = $clsolicitem->sql_query_pcmater(null, "pc16_codmater,pc01_descrmater", '', " pc16_solicitem=" . @$pc11_codigo);
     $result_dad_solicitempcmater = $clsolicitem->sql_record($sSqlMaterial);
 
     if ($clsolicitem->numrows > 0) {
@@ -1720,17 +1746,18 @@ if (isset($opcao) && $opcao != "incluir") {
    * Consultamos o item da solicitacao para retorna o item do pacto.
    */
   $oDaoPactoSolicitaItem = db_utils::getDao("pactovalormovsolicitem");
-  $sSqlItemPacto         = $oDaoPactoSolicitaItem->sql_query_item(null,
-                                                                  'o87_sequencial as o103_pactovalor,
+  $sSqlItemPacto         = $oDaoPactoSolicitaItem->sql_query_item(
+    null,
+    'o87_sequencial as o103_pactovalor,
                                                                   o109_descricao',
-                                                                  null,
-                                                                  "o101_solicitem={$pc11_codigo}"
-                                                                 );
+    null,
+    "o101_solicitem={$pc11_codigo}"
+  );
 
-   $rsItemPacto         = $oDaoPactoSolicitaItem->sql_record($sSqlItemPacto);
-   if ($oDaoPactoSolicitaItem->numrows > 0) {
-      db_fieldsmemory($rsItemPacto,0);
-   }
+  $rsItemPacto         = $oDaoPactoSolicitaItem->sql_record($sSqlItemPacto);
+  if ($oDaoPactoSolicitaItem->numrows > 0) {
+    db_fieldsmemory($rsItemPacto, 0);
+  }
 }
 $lMostraItensPacto = false;
 if (isset($pc11_numero)) {
@@ -1744,7 +1771,7 @@ if (isset($pc11_numero)) {
   if (isset($aParametrosOrcamento[0]->o50_utilizapacto) && $aParametrosOrcamento[0]->o50_utilizapacto == "t") {
 
     $oDaoPactoSolicita = db_utils::getDao("orctiporecconveniosolicita");
-    $sSqlPacto         = $oDaoPactoSolicita->sql_query_file(null,"*",null,"o78_solicita={$pc11_numero}");
+    $sSqlPacto         = $oDaoPactoSolicita->sql_query_file(null, "*", null, "o78_solicita={$pc11_numero}");
     $rsPacto           = $oDaoPactoSolicita->sql_record($sSqlPacto);
     if ($oDaoPactoSolicita->numrows > 0) {
 
@@ -1756,40 +1783,43 @@ if (isset($pc11_numero)) {
 }
 ?>
 <html>
-<head>
-<title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta http-equiv="Expires" CONTENT="0">
-<?
 
-db_app::load("scripts.js, prototype.js, datagrid.widget.js,windowAux.widget.js,messageboard.widget.js, strings.js, AjaxRequest.js");
-db_app::load("classes/ultimosOrcamentos.classe.js");
-db_app::load("estilos.css, grid.style.css");
-?>
-<script>
-  lItemPacto = <?=$lMostraItensPacto?"true":"false"?>;
-</script>
-<link href="estilos.css" rel="stylesheet" type="text/css">
-<link href="estilos.css" rel="stylesheet" type="text/css">
-</head>
-<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
-  <tr>
-    <td height="100%" align="left" valign="top" bgcolor="#CCCCCC">
-    <center>
+<head>
+  <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Expires" CONTENT="0">
   <?
 
+  db_app::load("scripts.js, prototype.js, datagrid.widget.js,windowAux.widget.js,messageboard.widget.js, strings.js, AjaxRequest.js");
+  db_app::load("classes/ultimosOrcamentos.classe.js");
+  db_app::load("estilos.css, grid.style.css");
+  ?>
+  <script>
+    lItemPacto = <?= $lMostraItensPacto ? "true" : "false" ?>;
+  </script>
+  <link href="estilos.css" rel="stylesheet" type="text/css">
+  <link href="estilos.css" rel="stylesheet" type="text/css">
+</head>
 
-require_once ("forms/db_frmsolicitem.php");
-?>
-    </center>
-    </td>
-  </tr>
-</table>
+<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td height="100%" align="left" valign="top" bgcolor="#CCCCCC">
+        <center>
+          <?
+
+
+          require_once("forms/db_frmsolicitem.php");
+          ?>
+        </center>
+      </td>
+    </tr>
+  </table>
 </body>
+
 </html>
 <script>
-/*
+  /*
 function js_ver(){
   campo = "";
   x = document.form1;
@@ -1821,46 +1851,46 @@ function js_ver(){
 }
 */
 
-function teste() {
+  function teste() {
 
-  teste = new ultimosOrcamentos();
-  teste.setItem($F('pc16_codmater'))
-  teste.addUnidade($F('pc17_unid'))
-  teste.getOrcamentos();
-  teste.setCallBackMedia(function () {
+    teste = new ultimosOrcamentos();
+    teste.setItem($F('pc16_codmater'))
+    teste.addUnidade($F('pc17_unid'))
+    teste.getOrcamentos();
+    teste.setCallBackMedia(function() {
 
-     $('pc11_vlrun').value = js_strToFloat($F('mediaprecosorcamento'));
-     teste.window.destroy();
-  });
-  teste.showUltimosOrcamentos();
-}
-
-function  js_calculaMedia() {
-
-  if ($('pc16_codmater') != "") {
-
-    var oOrcamento = new ultimosOrcamentos();
-    oOrcamento.setItem($F('pc16_codmater'))
-    oOrcamento.addUnidade($F('pc17_unid'))
-    oOrcamento.getOrcamentos();
-    oOrcamento.onMediaCalculada = function() {
-
-      //$('pc11_vlrun').value = oOrcamento.getMediaPrecos();
-      oOrcamento.window.destroy();
-    }
-
-
-
+      $('pc11_vlrun').value = js_strToFloat($F('mediaprecosorcamento'));
+      teste.window.destroy();
+    });
+    teste.showUltimosOrcamentos();
   }
-}
-if ($('ultimosorcamentos')) {
-  $('ultimosorcamentos').observe('click', teste);
-}
+
+  function js_calculaMedia() {
+
+    if ($('pc16_codmater') != "") {
+
+      var oOrcamento = new ultimosOrcamentos();
+      oOrcamento.setItem($F('pc16_codmater'))
+      oOrcamento.addUnidade($F('pc17_unid'))
+      oOrcamento.getOrcamentos();
+      oOrcamento.onMediaCalculada = function() {
+
+        //$('pc11_vlrun').value = oOrcamento.getMediaPrecos();
+        oOrcamento.window.destroy();
+      }
+
+
+
+    }
+  }
+  if ($('ultimosorcamentos')) {
+    $('ultimosorcamentos').observe('click', teste);
+  }
 </script>
 <?
 if (isset($alterar) || isset($excluir) || isset($incluir)) {
   if (isset($param) && trim($param) != "") {
-    $parametro = "&param=".$param."&codproc=".$codproc."&codliclicita=".$codliclicita;
+    $parametro = "&param=" . $param . "&codproc=" . $codproc . "&codliclicita=" . $codliclicita;
   } else {
     $parametro = "";
   }
@@ -1872,23 +1902,23 @@ if (isset($alterar) || isset($excluir) || isset($incluir)) {
     $erro_msg = str_replace("\n", "\\n", $erro_msg);
     db_msgbox($erro_msg);
     if ($clsolicitem->erro_campo != "") {
-      echo "<script> document.form1.".$clsolicitem->erro_campo.".style.backgroundColor='#99A9AE';</script>";
-      echo "<script> document.form1.".$clsolicitem->erro_campo.".focus();</script>";
-    }
-    ;
+      echo "<script> document.form1." . $clsolicitem->erro_campo . ".style.backgroundColor='#99A9AE';</script>";
+      echo "<script> document.form1." . $clsolicitem->erro_campo . ".focus();</script>";
+    };
     if ($naodig == true) {
       echo "<script> document.form1.info.click();</script>";
       if (isset($alterar)) {
-        echo "<script> document.location.href = 'com1_solicitem001.php?pc11_numero=$pc11_numero&pc11_codigo=$pc11_codigo&opcao=alterar&selecao=".@$selecao."$parametro'; </script>";
+        echo "<script> document.location.href = 'com1_solicitem001.php?pc11_numero=$pc11_numero&pc11_codigo=$pc11_codigo&opcao=alterar&selecao=" . @$selecao . "$parametro'; </script>";
       }
     }
   } else {
-    echo "<script>CurrentWindow.corpo.iframe_solicita.location.href = 'com1_solicita005.php?chavepesquisa=$pc11_numero&ld=false$parametro'</script>";
+
+    echo "<script>top.corpo.iframe_solicita.location.href = 'com1_solicita005.php?chavepesquisa=$pc11_numero&ld=false$parametro'</script>";
     if ($pc30_sugforn == 't') {
       echo "<script> CurrentWindow.corpo.iframe_sugforn.location.href='com1_sugforn001.php?pc40_solic=$pc11_numero$parametro';</script>";
     }
     if (isset($excluir)) {
-      echo "<script> document.location.href = 'com1_solicitem001.php?pc11_numero=$pc11_numero&selecao=".@$selecao."$parametro'; </script>";
+      echo "<script> document.location.href = 'com1_solicitem001.php?pc11_numero=$pc11_numero&selecao=" . @$selecao . "$parametro'; </script>";
     }
   }
 }

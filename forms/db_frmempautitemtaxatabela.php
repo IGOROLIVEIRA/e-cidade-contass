@@ -118,9 +118,11 @@ $clrotulo->label("pc01_descrmater");
 
             </table>
         </fieldset>
+        
         <div class="container">
             <span id="textocontainer"><strong>Selecione uma tabela.</strong></span>
             <div>
+            
                 <table style="display: none" id="myTable" class="display nowrap">
                     <thead>
                     <tr>
@@ -135,6 +137,7 @@ $clrotulo->label("pc01_descrmater");
                         <th data-orderable="false">Vlr. Unit.</th>
                         <th data-orderable="false">Desc. %</th>
                         <th data-orderable="false">Total</th>
+                        <th data-orderable="false" style="display:none;">Teste</th>
                     </tr>
                     </thead>
                 </table>
@@ -269,7 +272,7 @@ $clrotulo->label("pc01_descrmater");
                 } else {
                     //js_loadTable();
                     alert(response.message.urlDecode());
-                    // top.corpo.iframe_empautidot.location.reload();
+                    top.corpo.iframe_empautidot.location.reload();
                     // window.location.reload();
                 }
             }
@@ -446,7 +449,7 @@ $clrotulo->label("pc01_descrmater");
             }
         });
     }
-
+    
     function mostrarElemento() {
 
         let select = $('#pc07_codele');

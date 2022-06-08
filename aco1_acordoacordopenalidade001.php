@@ -28,7 +28,7 @@
 require("libs/db_stdlib.php");
 require("libs/db_conecta.php");
 require("libs/db_utils.php");
-require("libs/db_app.utils.php");
+//require("libs/db_app.utils.php");
 require("std/db_stdClass.php");
 include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
@@ -43,29 +43,32 @@ $db_opcao = 22;
 $db_botao = false;
 ?>
 <html>
+
 <head>
-<title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta http-equiv="Expires" CONTENT="0">
-<?php
-db_app::load("scripts.js, datagrid.widget.js, strings.js, prototype.js");
-db_app::load("grid.style.css, estilos.css");
-?>
+    <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <meta http-equiv="Expires" CONTENT="0">
+    <?php
+    db_app::load("scripts.js, datagrid.widget.js, strings.js, prototype.js");
+    db_app::load("grid.style.css, estilos.css");
+    ?>
 </head>
-<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
+
+<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1">
     <center>
-	<?
-	include("forms/db_frmacordoacordopenalidade.php");
-	?>
+        <?
+        include("forms/db_frmacordoacordopenalidade.php");
+        ?>
     </center>
 </body>
+
 </html>
 <?
-if(isset($alterar) || isset($excluir) || isset($incluir)){
+if (isset($alterar) || isset($excluir) || isset($incluir)) {
     db_msgbox($erro_msg);
-    if($clacordoacordopenalidade->erro_campo!=""){
-        echo "<script> document.form1.".$clacordoacordopenalidade->erro_campo.".style.backgroundColor='#99A9AE';</script>";
-        echo "<script> document.form1.".$clacordoacordopenalidade->erro_campo.".focus();</script>";
+    if ($clacordoacordopenalidade->erro_campo != "") {
+        echo "<script> document.form1." . $clacordoacordopenalidade->erro_campo . ".style.backgroundColor='#99A9AE';</script>";
+        echo "<script> document.form1." . $clacordoacordopenalidade->erro_campo . ".focus();</script>";
     }
 }
 ?>

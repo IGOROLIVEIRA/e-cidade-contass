@@ -30,12 +30,21 @@ require_once("libs/db_utils.php");
 require_once("libs/JSON.php");
 require_once("classes/db_retencaoreceitas_classe.php");
 
+
 $oJson       = new Services_JSON();
 $oParametros = $oJson->decode(str_replace("\\","",$_GET["sFiltros"]));
 $sWhere = "e60_instit = ".db_getsession("DB_instit");
 if ($oParametros->iPagamento == 'p') {
   $sHeaderTipo = "Pagamento";
   $sWhere .= " and corrente.k12_estorn is false ";
+} if ($oParametros->iPagamento == 'nf') {
+  $sHeaderTipo = "NotaFiscal"; 
+  $datatime = mktime(12, 0, 0, date("m"), date("d"), date("Y"));
+  $anousu   = date("Y", $datatime);
+  $mesusu   = date("m", $datatime);
+  $diausu   = date("d", $datatime);         
+  $dataatual = $anousu.'-'.$mesusu.'-'.$diausu;     
+    
 } else {
   $sHeaderTipo = "Liquidacao";
 }
@@ -51,12 +60,16 @@ if ($oParametros->datainicial != "" && $oParametros->datafinal == "") {
    $sHeaderData  = "{$oParametros->datainicial} a {$oParametros->datainicial}";
 
 } else if ($oParametros->datainicial != "" && $oParametros->datafinal != "") {
+  
 
   $dataInicial = implode("-", array_reverse(explode("/", $oParametros->datainicial)));
   $dataFinal   = implode("-", array_reverse(explode("/", $oParametros->datafinal)));
   if ($oParametros->iPagamento == 'l') {
     $sWhere     .= "and retencao.e23_dtcalculo between '{$dataInicial}' and '{$dataFinal}'";
-  } else {
+  } else if ($oParametros->iPagamento == 'nf') {
+    $sWhere     .= "and (retencao.e23_dtcalculo between '{$dataInicial}' and '{$dataatual}') and e69_dtnota between '{$dataInicial}' and '{$dataFinal}'";
+  }
+   else {
    $sWhere     .= "and corrente.k12_data between '{$dataInicial}' and '{$dataFinal}'";
   }
   $sHeaderData  = "{$oParametros->datainicial} a {$oParametros->datafinal}";

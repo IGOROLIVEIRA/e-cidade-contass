@@ -31,429 +31,573 @@ $clrotulo = new rotulocampo;
 $clrotulo->label('z01_nome');
 ?>
 <style>
-
-  #r45_situac{
+  #r45_situac {
     width: 401px;
   }
-  #r45_codafadescr{
+
+  #r45_codafadescr {
     width: 355px;
   }
-  #r45_obs{
+
+  #r45_obs {
     width: 403px;
   }
-
-
 </style>
 
 <form name="form1" method="post" action="">
-<center>
+  <center>
 
-<fieldset style="margin-top: 20px; width: 40%;">
-<legend><b>Manutenção de Afastamentos</b></legend>
+    <fieldset style="margin-top: 20px; width: 45%;">
+      <legend><b>Manutenção de Afastamentos</b></legend>
 
-<table border="0">
-  <tr>
-    <td nowrap title="Ano / Mês de competência">
-    <input name="oid" type="hidden" value="<?=@$oid?>">
-      <b>Ano / Mês:</b>
-    </td>
-    <td colspan="3" nowrap>
-      <?
-      if(!isset($r45_anousu)){
-        $r45_anousu = db_anofolha();
-      }
-      db_input('r45_anousu',4,$Ir45_anousu,true,'text',3,"");
-      ?>
-      <b>/</b>
-      <?
-      if(!isset($r45_mesusu)){
-        $r45_mesusu = db_mesfolha();
-      }
-      db_input('r45_mesusu',2,$Ir45_mesusu,true,'text',3,"");
-      db_input('r45_codigo',4,$Ir45_codigo,true,'hidden',3,"");
-      ?>
-    </td>
-  </tr>
-  <tr>
-    <td nowrap title="<?=@$Tr45_regist?>">
-      <?
-      db_ancora($Lr45_regist,"js_pesquisar45_regist(true);",($db_opcao==1?1:3));
-      ?>
-    </td>
-    <td colspan="3" nowrap>
-      <?
-      db_input('r45_regist',6,$Ir45_regist,true,'text',($db_opcao==1?1:3),"onChange='js_pesquisar45_regist(false);'");
-      db_input('z01_nome',48,$Ir45_regist,true,'text',3,"");
-      ?>
-    </td>
-  </tr>
-  <tr>
-    <td nowrap title="<?=@$Tr45_situac?>">
-      <?=@$Lr45_situac?>
-    </td>
-    <td colspan="3" nowrap>
-      <?
-      $db_situac = Array(
-                         "2" => "2 - Afastado sem remuneração",
-                         "3" => "3 - Afastado acidente de trabalho +15 dias",
-                         "4" => "4 - Afastado serviço militar",
-                         "5" => "5 - Afastado licença gestante",
-                         "6" => "6 - Afastado doença +15 dias",
-                         "7" => "7 - Licença sem vencimento, cessão sem ônus",
-                         "8" => "8 - Afastado doença +30 dias",
-                         "22" => "9 - Licença por Motivo de Afastamento do Cônjuge",
-                         "10" => "10 - Afastado doença -15 dias",
-                         "11" => "11 - Licença para concorrer a mandato eletivo"
-                         // "12" => "12 - Prorrogação Licença Maternidade"
-                        );
-      db_select('r45_situac', $db_situac, true, ($db_opcao==1?1:3),"onChange = 'js_verificasituac(this.value)'");
-      ?>
-    </td>
-  </tr>
-    <tr style="display: none">
-        <td>
+      <table border="0">
+        <tr>
+          <td nowrap title="Ano / Mês de competência">
+            <input name="oid" type="hidden" value="<?= @$oid ?>">
+            <b>Ano / Mês:</b>
+          </td>
+          <td colspan="3" nowrap>
             <?
-            db_input('r45_situacaux',6,"",true,'text',$db_opcao);
+            if (!isset($r45_anousu)) {
+              $r45_anousu = db_anofolha();
+            }
+            db_input('r45_anousu', 4, $Ir45_anousu, true, 'text', 3, "");
             ?>
-        </td>
-    </tr>
-  <tr>
-    <td nowrap title="<?=@$Tr45_codafa?>">
-      <?=@$Lr45_codafa?>
-    </td>
-    <td colspan="3" nowrap>
-      <?
-      $result_codfa = $clcodmovsefip->sql_record($clcodmovsefip->sql_query_file(null,null,null,"r66_codigo,r66_descr","r66_descr","r66_anousu = ".db_anofolha()." and r66_mesusu = ".db_mesfolha()." and r66_tipo = 'A'"));
-      db_selectrecord("r45_codafa", $result_codfa, true, ($db_opcao==1?1:3), "", "", "", " - Selecione", "js_abrelista();");
-      ?>
-    </td>
-  </tr>
-  <tr>
-    <td nowrap title="<?=@$Tr45_codret?>">
-      <?=@$Lr45_codret?>
-    </td>
-    <td colspan="3" nowrap>
-      <?
-      $arr_codre = array();
-      $result_codre = $clmovcasadassefip->sql_record($clmovcasadassefip->sql_query(db_anofolha(),db_mesfolha(),$r45_codafa,null,"r67_reto"));
-      db_select("r45_codret", $arr_codre, true, ($db_opcao==1?1:3), "");
-      ?>
-    </td>
-  </tr>
-  <tr>
-    <td nowrap title="<?=@$Tr45_dtafas?>">
-      <?=@$Lr45_dtafas?>
-    </td>
-    <td nowrap width="40%">
-      <?
-      if(!isset($r45_dtafas_dia) || (isset($r45_dtafas_dia) && trim($r45_dtafas_dia) == "")){
-        $r45_dtafas_dia = date("d",db_getsession("DB_datausu"));
-      }
-      if(!isset($r45_dtafas_mes) || (isset($r45_dtafas_mes) && trim($r45_dtafas_mes) == "")){
-        $r45_dtafas_mes = date("m",db_getsession("DB_datausu"));
-      }
-      if(!isset($r45_dtafas_ano) || (isset($r45_dtafas_ano) && trim($r45_dtafas_ano) == "")){
-        $r45_dtafas_ano = date("Y",db_getsession("DB_datausu"));;
-      }
-      db_inputdata('r45_dtafas',@$r45_dtafas_dia,@$r45_dtafas_mes,@$r45_dtafas_ano,true,'text',($db_opcao==1?1:3),"onchange='js_somardias(3);'","","","parent.js_somardias(3);")
-      ?>
-    </td>
-    <td nowrap title="Dias de afastamento" align="right">
-      <b>Dias:</b>
-    </td>
-    <td nowrap>
-      <?
-      db_input('dias',3,0,true,'text',$db_opcao,"onchange='js_somardias(1);'");
-      ?>
-    </td>
-  </tr>
-  <tr>
-    <td nowrap title="<?=@$Tr45_dtreto?>">
-      <?=@$Lr45_dtreto?>
-    </td>
-    <td colspan="3" nowrap>
-      <?
-      db_inputdata('r45_dtreto',@$r45_dtreto_dia,@$r45_dtreto_mes,@$r45_dtreto_ano,true,'text',$db_opcao,"onchange='js_somardias(2);'","","","parent.js_somardias(2);")
-      ?>
-    </td>
-  <tr>
-     <td nowrap title="<?=@$Tr45_obs?>">
-        <?=@$Lr45_obs?>
-     </td>
-     <td colspan="3">
-      <?
-        db_textarea('r45_obs',10,50,$Ir45_obs,true,'text',$db_opcao,"");
-      ?>
-     </td>
-  </tr>
-</table>
-</fieldset>
-</center>
-<div style="margin-top: 10px;">
-  <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> onclick="return js_testacampos();">
-  <?php if ( $db_opcao != 1 ) : ?>
-    <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
-  <?php endif; ?>
-  <input type="button"    name="anteriores" id='anteriores' style="width:100px;" disabled="disabled" value="Anteriores"      onclick="js_PesquisaAfastamento('Afastamentos');" >
-</div>
+            <b>/</b>
+            <?
+            if (!isset($r45_mesusu)) {
+              $r45_mesusu = db_mesfolha();
+            }
+            db_input('r45_mesusu', 2, $Ir45_mesusu, true, 'text', 3, "");
+            db_input('r45_codigo', 4, $Ir45_codigo, true, 'hidden', 3, "");
+            ?>
+          </td>
+        </tr>
+        <tr>
+          <td nowrap title="<?= @$Tr45_regist ?>">
+            <?
+            db_ancora($Lr45_regist, "js_pesquisar45_regist(true);", ($db_opcao == 1 ? 1 : 3));
+            ?>
+          </td>
+          <td colspan="3" nowrap>
+            <?
+            db_input('r45_regist', 6, $Ir45_regist, true, 'text', ($db_opcao == 1 ? 1 : 3), "onChange='js_pesquisar45_regist(false);'");
+            db_input('z01_nome', 48, $Ir45_regist, true, 'text', 3, "");
+            ?>
+          </td>
+        </tr>
+        <tr>
+          <td nowrap title="<?= @$Tr45_situac ?>">
+            <?= @$Lr45_situac ?>
+          </td>
+          <td colspan="3" nowrap>
+            <?
+            $db_situac = array(
+              "NULL" => "Selecione",
+              "2" => "2 - Afastado sem remuneração",
+              "3" => "3 - Afastado acidente de trabalho +15 dias",
+              "4" => "4 - Afastado serviço militar",
+              "5" => "5 - Afastado licença gestante",
+              "6" => "6 - Afastado doença +15 dias",
+              "7" => "7 - Licença sem vencimento, cessão sem ônus",
+              "8" => "8 - Afastado doença +30 dias",
+              "22" => "9 - Licença por Motivo de Afastamento do Cônjuge",
+              "10" => "10 - Afastado doença -15 dias",
+              "11" => "11 - Licença para concorrer a mandato eletivo",
+              // "12" => "12 - Prorrogação Licença Maternidade",
+              "13" => "13 - Outras licenças remuneradas"
+            );
+            db_select('r45_situac', $db_situac, true, ($db_opcao == 1 ? 1 : 3), "onChange = 'js_verificasituac(this.value);js_changeCodAfastamento()'");
+            ?>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <?
+            db_ancora("Motivo Afastamento:", "js_pesquisarMotivoafasta(true);", $db_opcao);
+            ?>
+          </td>
+          <td colspan="3" nowrap>
+            <?
+            db_input('rh172_codigo', 6, $Irh172_codigo, true, 'text', 3, "onChange='js_pesquisarMotivoafasta(false);'");
+            db_input('rh172_descricao', 48, $Irh172_descricao, true, 'text', 3, "");
+            ?>
+          </td>
+        </tr>
+        <tr id="mesmadoenca" style="display: none;">
+          <td>
+            <strong>Mesma Doença do Afastamento Anterior:</strong>
+          </td>
+          <td>
+            <?
+            $arraytipos = array(
+              "N" => "Não",
+              "S" => "Sim"
+            );
+            db_select('r45_mesmadoenca', $arraytipos, true, $db_opcao, "");
+            ?>
+          </td>
+        </tr>
+        <tr style="display: none">
+          <td>
+            <?
+            db_input('r45_situacaux', 6, "", true, 'text', $db_opcao);
+            ?>
+          </td>
+        </tr>
+        <tr>
+          <td nowrap title="<?= @$Tr45_codafa ?>">
+            <?= @$Lr45_codafa ?>
+          </td>
+          <td colspan="3" nowrap>
+            <?
+            $result_codfa = $clcodmovsefip->sql_record($clcodmovsefip->sql_query_file(null, null, null, "r66_codigo,r66_descr", "r66_descr", "r66_anousu = " . db_anofolha() . " and r66_mesusu = " . db_mesfolha() . " and r66_tipo = 'A'"));
+            db_selectrecord("r45_codafa", $result_codfa, true, ($db_opcao == 1 ? 1 : 3), "", "", "", " - Selecione", "js_abrelista();");
+            ?>
+          </td>
+        </tr>
+        <tr>
+          <td nowrap title="<?= @$Tr45_codret ?>">
+            <?= @$Lr45_codret ?>
+          </td>
+          <td colspan="3" nowrap>
+            <?
+            $arr_codre = array();
+            $result_codre = $clmovcasadassefip->sql_record($clmovcasadassefip->sql_query(db_anofolha(), db_mesfolha(), $r45_codafa, null, "r67_reto"));
+            if ($db_opcao != 1) {
+              db_input('r45_codret', 6, "", true, 'text', 3);
+            } else {
+              db_select("r45_codret", $arr_codre, true, 1, "");
+            }
+            ?>
+          </td>
+        </tr>
+        <tr>
+          <td nowrap title="<?= @$Tr45_dtafas ?>">
+            <?= @$Lr45_dtafas ?>
+          </td>
+          <td nowrap width="40%">
+            <?
+            if (!isset($r45_dtafas_dia) || (isset($r45_dtafas_dia) && trim($r45_dtafas_dia) == "")) {
+              $r45_dtafas_dia = date("d", db_getsession("DB_datausu"));
+            }
+            if (!isset($r45_dtafas_mes) || (isset($r45_dtafas_mes) && trim($r45_dtafas_mes) == "")) {
+              $r45_dtafas_mes = date("m", db_getsession("DB_datausu"));
+            }
+            if (!isset($r45_dtafas_ano) || (isset($r45_dtafas_ano) && trim($r45_dtafas_ano) == "")) {
+              $r45_dtafas_ano = date("Y", db_getsession("DB_datausu"));;
+            }
+            db_inputdata('r45_dtafas', @$r45_dtafas_dia, @$r45_dtafas_mes, @$r45_dtafas_ano, true, 'text', ($db_opcao == 1 ? 1 : 3), "onchange='js_somardias(3);'", "", "", "parent.js_somardias(3);")
+            ?>
+          </td>
+          <td nowrap title="Dias de afastamento" align="right">
+            <b>Dias:</b>
+          </td>
+          <td nowrap>
+            <?
+            db_input('dias', 3, 0, true, 'text', $db_opcao, "onchange='js_somardias(1);'");
+            ?>
+          </td>
+        </tr>
+        <tr>
+          <td nowrap title="<?= @$Tr45_dtreto ?>">
+            <?= @$Lr45_dtreto ?>
+          </td>
+          <td colspan="3" nowrap>
+            <?
+            db_inputdata('r45_dtreto', @$r45_dtreto_dia, @$r45_dtreto_mes, @$r45_dtreto_ano, true, 'text', $db_opcao, "onchange='js_somardias(2);'", "", "", "parent.js_somardias(2);")
+            ?>
+          </td>
+        <tr>
+          <td nowrap title="<?= @$Tr45_obs ?>">
+            <?= @$Lr45_obs ?>
+          </td>
+          <td colspan="3">
+            <?
+            db_textarea('r45_obs', 10, 50, $Ir45_obs, true, 'text', $db_opcao, "");
+            ?>
+          </td>
+        </tr>
+      </table>
+    </fieldset>
+  </center>
+  <div style="margin-top: 10px;">
+    <input name="<?= ($db_opcao == 1 ? "incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "alterar" : "excluir")) ?>" type="submit" id="db_opcao" value="<?= ($db_opcao == 1 ? "Incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "Alterar" : "Excluir")) ?>" <?= ($db_botao == false ? "disabled" : "") ?> onclick="return js_testacampos();">
+    <?php if ($db_opcao != 1) : ?>
+      <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();">
+    <?php endif; ?>
+    <input type="button" name="anteriores" id='anteriores' style="width:100px;" disabled="disabled" value="Anteriores" onclick="js_PesquisaAfastamento('Afastamentos');">
+  </div>
 </form>
 <script>
-var time;
+  var time;
 
-function js_afastamentosAnteriores(iMatricula){
+  function js_afastamentosAnteriores(iMatricula) {
 
-  var sUrlRPC           = "pes1_afasta.RPC.php";
-  var oParametros       = new Object();
-  var msgDiv            = "Gerando arquivo CSV \n Aguarde ...";
-  var iAno              = $F("r45_anousu");
-  var iMes              = $F("r45_mesusu");
+    var sUrlRPC = "pes1_afasta.RPC.php";
+    var oParametros = new Object();
+    var msgDiv = "Gerando arquivo CSV \n Aguarde ...";
+    var iAno = $F("r45_anousu");
+    var iMes = $F("r45_mesusu");
 
-  oParametros.exec       = 'possuiAnteriores';
-  oParametros.iMatricula = iMatricula;
-  oParametros.iAno       = iAno;
-  oParametros.iMes       = iMes;
-
-
-  //js_divCarregando(msgDiv,'msgBox');
+    oParametros.exec = 'possuiAnteriores';
+    oParametros.iMatricula = iMatricula;
+    oParametros.iAno = iAno;
+    oParametros.iMes = iMes;
 
 
-   var oAjaxLista  = new Ajax.Request(sUrlRPC,
-                                             {method: "post",
-                                              parameters:'json='+Object.toJSON(oParametros),
-                                              onComplete: js_retornoAfastamentosAnteriores
-                                             });
+    //js_divCarregando(msgDiv,'msgBox');
 
-}
 
-function js_retornoAfastamentosAnteriores(oAjax){
+    var oAjaxLista = new Ajax.Request(sUrlRPC, {
+      method: "post",
+      parameters: 'json=' + Object.toJSON(oParametros),
+      onComplete: js_retornoAfastamentosAnteriores
+    });
+
+  }
+
+  function js_retornoAfastamentosAnteriores(oAjax) {
 
     //js_removeObj('msgBox');
-    var oRetorno = eval("("+oAjax.responseText+")");
+    var oRetorno = eval("(" + oAjax.responseText + ")");
 
     if (oRetorno.status == 1) {
-       $("anteriores").disabled = false;
+      $("anteriores").disabled = false;
     } else {
-       $("anteriores").disabled = true;
+      $("anteriores").disabled = true;
     }
-}
+  }
 
 
 
-function js_PesquisaAfastamento(solicitacao) {
+  function js_PesquisaAfastamento(solicitacao) {
 
-  var iMatricula = $F("r45_regist");
-  var iAno       = $F("r45_anousu");
-  var iMes       = $F("r45_mesusu");
+    var iMatricula = $F("r45_regist");
+    var iAno = $F("r45_anousu");
+    var iMes = $F("r45_mesusu");
 
-  if(iMatricula == null || iMatricula == ''){
+    if (iMatricula == null || iMatricula == '') {
 
-    alert('Selecione uma Matrícula');
+      alert('Selecione uma Matrícula');
+      return false;
+    }
+
+    js_OpenJanelaIframe('top.corpo', 'func_pesquisa', 'pes3_conspessoal002_detalhes.php?solicitacao=' + solicitacao + '&parametro=' + iMatricula + '&ano=' + iAno + '&mes=' + iMes + '', 'CONSULTA DE FUNCIONÁRIOS', true, '20');
+  }
+
+
+  function js_seleciona_campo_diar() {
+    document.form1.r45_dtreto_dia.focus();
+    clearInterval(time);
+  }
+
+  function js_abrelista() {
+    js_OpenJanelaIframe("top.corpo", "db_iframe_listaretorno", "func_retornoafasta.php?pesquisa_chave=" + document.form1.r45_codafa.value, "Pesquisa", false, "20");
+  }
+
+  function js_listarretorno(str_retorno) {
+    x = document.form1.r45_codret;
+    arr_retorno = new Array();
+    arr_retorno = str_retorno.split(",");
+    if (arr_retorno.length > 0) {
+      for (i = 0; i < x.length; i++) {
+        x.options[i] = null;
+      }
+      for (i = 0; i < arr_retorno.length; i++) {
+        x.options[i] = new Option(arr_retorno[i], arr_retorno[i]);
+      }
+    }
+  }
+
+  function js_testacampos() {
+
+    mensagem = false;
+    <?
+    if ($db_opcao == 1) {
+      echo "mensagem = true;";
+    }
+    ?>
+
+    if (document.form1.r45_regist.value == "") {
+      alert("Informe a matrícula do funcionário.");
+      document.form1.r45_regist.focus();
+    } else if (document.form1.r45_dtafas_ano.value == "" || document.form1.r45_dtafas_mes.value == "" || document.form1.r45_dtafas_dia.value == "") {
+      alert("Informe a data de afastamento.");
+      document.form1.r45_dtafas_dia.select();
+      document.form1.r45_dtafas_dia.focus();
+    } else if (!document.form1.r45_codafa.value.trim()) {
+      alert("Selecione um Afastamento Sefip.");
+    } else if (!document.form1.r45_codret.value.trim()) {
+      alert("Selecione um Retorno Sefip.");
+    } else if (!document.form1.r45_dtreto.value.trim()) {
+      alert("Informe a data final do afastamento.");
+    } else {
+      data_teste = new Date(<?= db_anofolha() ?>, (<?= db_mesfolha() ?> - 1), <?= db_dias_mes(db_anofolha(), db_mesfolha()) ?>);
+      data_afast = new Date(document.form1.r45_dtafas_ano.value, (document.form1.r45_dtafas_mes.value - 1), document.form1.r45_dtafas_dia.value);
+
+      if (data_afast > data_teste && mensagem == true) {
+        alert("Data de afastamento deve ser inferior \nao último dia do mês corrente da folha.");
+        document.form1.r45_dtafas_dia.select();
+        document.form1.r45_dtafas_dia.focus();
+      } else {
+        return true;
+      }
+    }
     return false;
   }
 
-  js_OpenJanelaIframe('CurrentWindow.corpo','func_pesquisa','pes3_conspessoal002_detalhes.php?solicitacao='+solicitacao+'&parametro='+iMatricula+'&ano='+iAno+'&mes='+iMes+'','CONSULTA DE FUNCIONÁRIOS',true,'20');
-}
+  function js_somardias(opcao) {
+    // 1 - dias
+    // 2 - data retorno
+    // 3 - data afastam
+    if (document.form1.r45_dtafas_ano.value != "" && document.form1.r45_dtafas_mes.value != "" && document.form1.r45_dtafas_dia.value != "") {
+      if (opcao == 1) {
 
+        dias = new Number(document.form1.dias.value);
+        if (dias > 0) {
+          dias += new Number(document.form1.r45_dtafas_dia.value);
+          mess = new Number(document.form1.r45_dtafas_mes.value);
+          mess -= 1;
 
-function js_seleciona_campo_diar(){
-  document.form1.r45_dtreto_dia.focus();
-  clearInterval(time);
-}
-function js_abrelista(){
-  js_OpenJanelaIframe("CurrentWindow.corpo","db_iframe_listaretorno","func_retornoafasta.php?pesquisa_chave="+document.form1.r45_codafa.value,"Pesquisa",false,"20");
-}
-function js_listarretorno(str_retorno){
-  x = document.form1.r45_codret;
-  arr_retorno = new Array();
-  arr_retorno = str_retorno.split(",");
-  if(arr_retorno.length > 0){
-    for(i=0; i<x.length; i++){
-      x.options[i] = null;
-    }
-    for(i=0; i<arr_retorno.length; i++){
-      x.options[i] = new Option(arr_retorno[i],arr_retorno[i]);
-    }
-  }
-}
-function js_testacampos(){
+          datafim = new Date(document.form1.r45_dtafas_ano.value, mess, (dias - 1));
 
-  mensagem = false;
-  <?
-  if($db_opcao == 1){
-    echo "mensagem = true;";
-  }
-  ?>
+          dia = datafim.getDate();
+          if (dia < 10) {
+            dia = "0" + dia;
+          }
 
-  if(document.form1.r45_regist.value == ""){
-    alert("Informe a matrícula do funcionário.");
-    document.form1.r45_regist.focus();
-  }else if(document.form1.r45_dtafas_ano.value == "" || document.form1.r45_dtafas_mes.value == "" || document.form1.r45_dtafas_dia.value == ""){
-    alert("Informe a data de afastamento.");
-    document.form1.r45_dtafas_dia.select();
-    document.form1.r45_dtafas_dia.focus();
-  }else if (!document.form1.r45_codafa.value.trim()) {
-    alert("Selecione um Afastamento Sefip.");
-  }else if (!document.form1.r45_codret.value.trim()) {
-    alert("Selecione um Retorno Sefip.");
-  }else if (!document.form1.r45_dtreto.value.trim()) {
-    alert("Informe a data final do afastamento.");
-  }else{
-    data_teste = new Date(<?=db_anofolha()?>,(<?=db_mesfolha()?> - 1),<?=db_dias_mes(db_anofolha(),db_mesfolha())?>);
-    data_afast = new Date(document.form1.r45_dtafas_ano.value,(document.form1.r45_dtafas_mes.value - 1),document.form1.r45_dtafas_dia.value);
+          mes = datafim.getMonth() + 1;
+          if (mes < 10) {
+            mes = "0" + mes;
+          }
 
-    if(data_afast > data_teste && mensagem == true){
-      alert("Data de afastamento deve ser inferior \nao último dia do mês corrente da folha.");
-      document.form1.r45_dtafas_dia.select();
-      document.form1.r45_dtafas_dia.focus();
-    }else{
-      return true;
-    }
-  }
-  return false;
-}
-function js_somardias(opcao){
-  // 1 - dias
-  // 2 - data retorno
-  // 3 - data afastam
-  if(document.form1.r45_dtafas_ano.value != "" && document.form1.r45_dtafas_mes.value != "" && document.form1.r45_dtafas_dia.value != ""){
-    if(opcao == 1){
+          ano = datafim.getFullYear();
 
-      dias = new Number(document.form1.dias.value);
-      if(dias > 0){
-        dias+= new Number(document.form1.r45_dtafas_dia.value);
-        mess = new Number(document.form1.r45_dtafas_mes.value);
-        mess-= 1;
-
-        datafim = new Date(document.form1.r45_dtafas_ano.value,mess,(dias - 1));
-
-        dia = datafim.getDate();
-        if(dia < 10){
-          dia = "0" + dia;
+          document.form1.r45_dtreto_dia.value = dia;
+          document.form1.r45_dtreto_mes.value = mes;
+          document.form1.r45_dtreto_ano.value = ano;
+          document.form1.r45_dtreto.value = dia + '/' + mes + '/' + ano;
+        } else {
+          alert("Informe a quantidade de dias de afastamento.");
+          document.form1.dias.select();
+          document.form1.dias.focus();
         }
+      } else if (opcao == 2) {
+        if (document.form1.r45_dtreto_ano.value != "" && document.form1.r45_dtreto_mes.value != "" && document.form1.r45_dtreto_dia.value != "") {
+          diaa = document.form1.r45_dtafas_dia.value;
+          mesa = new Number(document.form1.r45_dtafas_mes.value);
+          mesa -= 1;
+          anoa = document.form1.r45_dtafas_ano.value;
 
-        mes = datafim.getMonth() + 1;
-        if(mes < 10){
-          mes = "0" + mes;
-        }
+          diar = document.form1.r45_dtreto_dia.value;
+          mesr = new Number(document.form1.r45_dtreto_mes.value);
+          mesr -= 1;
+          anor = document.form1.r45_dtreto_ano.value;
 
-        ano = datafim.getFullYear();
-
-        document.form1.r45_dtreto_dia.value = dia;
-        document.form1.r45_dtreto_mes.value = mes;
-        document.form1.r45_dtreto_ano.value = ano;
-        document.form1.r45_dtreto.value = dia+'/'+mes+'/'+ano;
-      }else{
-        alert("Informe a quantidade de dias de afastamento.");
-        document.form1.dias.select();
-        document.form1.dias.focus();
-      }
-    }else if(opcao == 2){
-      if(document.form1.r45_dtreto_ano.value != "" && document.form1.r45_dtreto_mes.value != "" && document.form1.r45_dtreto_dia.value != ""){
-        diaa = document.form1.r45_dtafas_dia.value;
-        mesa = new Number(document.form1.r45_dtafas_mes.value);
-        mesa-= 1;
-        anoa = document.form1.r45_dtafas_ano.value;
-
-        diar = document.form1.r45_dtreto_dia.value;
-        mesr = new Number(document.form1.r45_dtreto_mes.value);
-        mesr-= 1;
-        anor = document.form1.r45_dtreto_ano.value;
-
-        dataa = new Date(anoa,mesa,diaa);
-        datar = new Date(anor,mesr,diar);
-        if(datar >= dataa){
-          diassoma = datar - dataa;
-          diassoma = diassoma / 86400000;
-          diassoma = new Number(diassoma);
-          diassoma+= 1;
-          diassoma = diassoma.toFixed(0);
-          document.form1.dias.value = diassoma;
-        }else{
-          alert("Data de retorno deve ser superior à data de afastamento.");
-          document.form1.r45_dtreto_dia.value = "";
-          document.form1.r45_dtreto_mes.value = "";
-          document.form1.r45_dtreto_ano.value = "";
-          document.form1.r45_dtreto.value = "";
+          dataa = new Date(anoa, mesa, diaa);
+          datar = new Date(anor, mesr, diar);
+          if (datar >= dataa) {
+            diassoma = datar - dataa;
+            diassoma = diassoma / 86400000;
+            diassoma = new Number(diassoma);
+            diassoma += 1;
+            diassoma = diassoma.toFixed(0);
+            document.form1.dias.value = diassoma;
+          } else {
+            alert("Data de retorno deve ser superior à data de afastamento.");
+            document.form1.r45_dtreto_dia.value = "";
+            document.form1.r45_dtreto_mes.value = "";
+            document.form1.r45_dtreto_ano.value = "";
+            document.form1.r45_dtreto.value = "";
+            document.form1.dias.value = ""
+            time = setInterval(js_seleciona_campo_diar, 10);
+          }
+        } else {
           document.form1.dias.value = ""
-          time = setInterval(js_seleciona_campo_diar,10);
         }
-      }else{
-        document.form1.dias.value = ""
-      }
-    }else if(opcao == 3){
-      if(document.form1.dias.value != ""){
-        js_somardias(1);
-      }else{
-        js_somardias(2);
+      } else if (opcao == 3) {
+        if (document.form1.dias.value != "") {
+          js_somardias(1);
+        } else {
+          js_somardias(2);
+        }
       }
     }
   }
-}
-function js_pesquisar45_regist(mostra){
-  if(mostra==true){
-    js_OpenJanelaIframe("CurrentWindow.corpo","db_iframe_rhpessoal","func_rhpessoalrescis.php?testarescisao=raf&funcao_js=parent.js_mostraregist1|rh01_regist|z01_nome|r30_perai|r30_per1i|rh05_recis","Pesquisa",true,"20");
-  }else{
-     if(document.form1.r45_regist.value != ""){
-       js_OpenJanelaIframe("CurrentWindow.corpo","db_iframe_rhpessoal","func_rhpessoalrescis.php?testarescisao=raf&pesquisa_chave="+document.form1.r45_regist.value+"&funcao_js=parent.js_mostraregist","Pesquisa",false,"20");
-     }else{
-       document.form1.z01_nome.value = "";
-     }
-  }
-}
-function js_mostraregist(chave,chave2,chave3,chave4,erro){
-  document.form1.z01_nome.value = chave;
-  js_afastamentosAnteriores(document.form1.r45_regist.value);
-  if(erro==true){
-    document.form1.r45_regist.focus();
-    document.form1.r45_regist.value = "";
-  }else{
-//    js_compara_datas(chave3);
-  }
-}
-function js_mostraregist1(chave1,chave2,chave3,chave4,chave5){
-  document.form1.r45_regist.value = chave1;
-  document.form1.z01_nome.value = chave2;
-  db_iframe_rhpessoal.hide();
-  js_afastamentosAnteriores(chave1);
-//  js_compara_datas(chave4);
-}
-function js_compara_datas(data){
-  data1 = "<?=(db_anofolha()."-".db_mesfolha()."-01")?>";
-  data2 = "<?=date("Y-m-d",mktime(0,0,0,db_mesfolha(),61,db_anofolha()))?>";
 
-  per  = new Date(data.substring(0,4),(data.substring(5,7) - 1),data.substring(8,10));
-  per1 = new Date(data1.substring(0,4),(data1.substring(5,7) - 1),data1.substring(8,10));
-  per2 = new Date(data2.substring(0,4),(data2.substring(5,7) - 1),data2.substring(8,10));
+  function js_pesquisar45_regist(mostra) {
+    if (mostra == true) {
+      js_OpenJanelaIframe("top.corpo", "db_iframe_rhpessoal", "func_rhpessoalrescis.php?testarescisao=raf&funcao_js=parent.js_mostraregist1|rh01_regist|z01_nome|r30_perai|r30_per1i|rh05_recis", "Pesquisa", true, "20");
+    } else {
+      if (document.form1.r45_regist.value != "") {
+        js_OpenJanelaIframe("top.corpo", "db_iframe_rhpessoal", "func_rhpessoalrescis.php?testarescisao=raf&pesquisa_chave=" + document.form1.r45_regist.value + "&funcao_js=parent.js_mostraregist", "Pesquisa", false, "20");
+      } else {
+        document.form1.z01_nome.value = "";
+      }
+    }
+  }
 
-  if(per > per1 && per < per2){
-    alert("AVISO: Funcionário com férias cadastradas.");
+  function js_mostraregist(chave, chave2, chave3, chave4, erro) {
+    document.form1.z01_nome.value = chave;
+    js_afastamentosAnteriores(document.form1.r45_regist.value);
+    if (erro == true) {
+      document.form1.r45_regist.focus();
+      document.form1.r45_regist.value = "";
+    } else {
+      //    js_compara_datas(chave3);
+    }
   }
-}
-function js_pesquisa(){
-  qry = "";
-  <?
-  if($db_opcao == 2 || $db_opcao == 22){
-  	echo "qry = 'retorno=true&';";
-  }
-  ?>
-  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_afasta','func_afasta.php?testarescisao=raf&'+qry+'funcao_js=parent.js_preenchepesquisa|r45_codigo','Pesquisa',true);
-}
-function js_preenchepesquisa(chave){
-  db_iframe_afasta.hide();
-  <?
-  if($db_opcao!=1){
-    echo " location.href = '".basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"])."?chavepesquisa='+chave";
-  }
-  ?>
-}
 
-function js_verificasituac(value) {
+  function js_mostraregist1(chave1, chave2, chave3, chave4, chave5) {
+    document.form1.r45_regist.value = chave1;
+    document.form1.z01_nome.value = chave2;
+    db_iframe_rhpessoal.hide();
+    js_afastamentosAnteriores(chave1);
+    //  js_compara_datas(chave4);
+  }
+
+  function js_compara_datas(data) {
+    data1 = "<?= (db_anofolha() . "-" . db_mesfolha() . "-01") ?>";
+    data2 = "<?= date("Y-m-d", mktime(0, 0, 0, db_mesfolha(), 61, db_anofolha())) ?>";
+
+    per = new Date(data.substring(0, 4), (data.substring(5, 7) - 1), data.substring(8, 10));
+    per1 = new Date(data1.substring(0, 4), (data1.substring(5, 7) - 1), data1.substring(8, 10));
+    per2 = new Date(data2.substring(0, 4), (data2.substring(5, 7) - 1), data2.substring(8, 10));
+
+    if (per > per1 && per < per2) {
+      alert("AVISO: Funcionário com férias cadastradas.");
+    }
+  }
+
+  function js_pesquisa() {
+    qry = "";
+    <?
+    if ($db_opcao == 2 || $db_opcao == 22) {
+      echo "qry = 'retorno=true&';";
+    }
+    ?>
+    js_OpenJanelaIframe('top.corpo', 'db_iframe_afasta', 'func_afasta.php?testarescisao=raf&' + qry + 'funcao_js=parent.js_preenchepesquisa|r45_codigo', 'Pesquisa', true);
+  }
+
+  function js_preenchepesquisa(chave) {
+    db_iframe_afasta.hide();
+    <?
+    if ($db_opcao != 1) {
+      echo " location.href = '" . basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]) . "?chavepesquisa='+chave";
+    }
+    ?>
+  }
+
+  function js_verificasituac(value) {
     let r45_situac = value;
 
-    if(r45_situac == 22){
-        document.getElementById('r45_situacaux').value = 9;
-    }else{
-        document.getElementById('r45_situacaux').value = '';
+    if (r45_situac == 22) {
+      document.getElementById('r45_situacaux').value = 9;
+    } else {
+      document.getElementById('r45_situacaux').value = '';
     }
-}
+
+    if (r45_situac == 3 || r45_situac == 6) {
+      js_VerificaAfastamento();
+    } else {
+      document.getElementById('mesmadoenca').style.display = 'none';
+    }
+  }
+
+  function js_pesquisarMotivoafasta(mostra) {
+    if (mostra == true) {
+      js_OpenJanelaIframe("top.corpo", "db_iframe_rhmotivoafasta", "func_rhmotivoafasta.php?&funcao_js=parent.js_mostraAfastaMotivo1|rh172_codigo|rh172_descricao", "Pesquisa", true, "20");
+    }
+    else {
+      if (document.form1.rh172_codigo.value != "") {
+        js_OpenJanelaIframe("top.corpo", "db_iframe_rhafasta", "func_rhmotivoafasta.php?&pesquisa_chave_codigo=" + document.form1.rh172_codigo.value + "&funcao_js=parent.js_mostraAfastaMotivo", "Pesquisa", false, "20");
+      } else {
+        document.form1.z01_nome.value = "";
+      }
+    }
+  }
+
+  function js_mostraAfastaMotivo1(codigo, descricao) {
+    document.form1.rh172_codigo.value = codigo;
+    document.form1.rh172_descricao.value = descricao;
+    db_iframe_rhmotivoafasta.hide();
+  }
+
+  function js_mostraAfastaMotivo(descricao, error) {
+    document.form1.rh172_descricao.value = descricao;
+  }
+
+
+  function js_VerificaAfastamento() {
+    var oParam = new Object();
+    oParam.exec = 'verificarAfastamentos';
+    oParam.iAno = $F("r45_anousu");
+    oParam.iMes = $F("r45_mesusu");
+    oParam.iMatricula = $F('r45_regist');
+    oParam.iDateAfast = $F('r45_dtafas');
+
+    var oAjax = new Ajax.Request(
+      'pes1_afasta.RPC.php', {
+        parameters: 'json=' + Object.toJSON(oParam),
+        asynchronous: false,
+        method: 'post',
+        onComplete: js_oResultAfastamento
+      });
+  }
+
+  function js_oResultAfastamento(oAjax) {
+    var oRetorno = eval('(' + oAjax.responseText + ")");
+    if (oRetorno.status == 2) {
+      document.getElementById('mesmadoenca').style.display = 'none';
+    } else {
+      document.getElementById('mesmadoenca').style.display = '';
+    }
+  }
+
+  function js_changeCodAfastamento()
+  {
+    let situacao = document.form1.r45_situac.value;
+    switch (situacao) {
+      case '2':
+      case '7':
+        document.form1.rh172_codigo.value = '05';
+        document.form1.r45_codafa.value = 'X ';
+        break;
+      case '5': 
+        document.form1.rh172_codigo.value = '17';
+        document.form1.r45_codafa.value = 'Q1';
+        break;
+      case '6': 
+        document.form1.rh172_codigo.value = '03';
+        document.form1.r45_codafa.value = 'P1';
+        break;
+      case '10': 
+        document.form1.rh172_codigo.value = '03';
+        document.form1.r45_codafa.value = 'P3';
+        break;
+      case '11': 
+        document.form1.rh172_codigo.value = '13';
+        document.form1.r45_codafa.value = 'Y ';
+        break;
+      case '13': 
+        document.form1.rh172_codigo.value = '10';
+        document.form1.r45_codafa.value = 'Y ';
+        break;
+      case '3': 
+        document.form1.rh172_codigo.value = '01';
+        document.form1.r45_codafa.value = 'O1';
+        break;
+      default:
+        document.form1.rh172_codigo.value = '';
+        document.form1.rh172_descricao.value = '';
+        document.form1.r45_codafa.value = '';
+        document.form1.r45_codafadescr.value = '';
+        document.form1.r45_codret.value = '';
+        break;
+    }
+    js_pesquisarMotivoafasta(false);
+    js_ProcCod_r45_codafa('r45_codafa','r45_codafadescr');
+    js_abrelista();
+  }
 </script>

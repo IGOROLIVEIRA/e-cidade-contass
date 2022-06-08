@@ -579,7 +579,7 @@ function query_empenhos($conta, $data_inicial, $data_final, $condicao_lancamento
     $sql .= " corrente.k12_conta = {$conta} ";
     $sql .= " AND ((corrente.k12_data between '{$data_inicial}' AND '{$data_final}') ";
     $sql .= "     {$condicao_implantacao} ";
-    $sql .= "     OR (k172_dataconciliacao > '{$data_final}' AND corrente.k12_data < '{$data_final}' ) ";
+    $sql .= "     OR (k172_dataconciliacao > '{$data_final}' AND corrente.k12_data <= '{$data_final}' ) ";
     $sql .= "     OR (k172_dataconciliacao BETWEEN '{$data_inicial}' AND '{$data_final}')) ";
     $sql .= " {$condicao_lancamento} ";
     $sql .= " AND c69_sequen IS NOT NULL ";
@@ -626,7 +626,7 @@ function query_baixa($conta, $inicio, $fim, $condicao, $implantacao)
     $sql .= "    WHERE ";
     $sql .= "        ((data between '{$inicio}' AND '{$fim}' AND k172_dataconciliacao IS NULL) ";
     $sql .= "            {$condicao_implantacao} ";
-    $sql .= "            OR (k172_dataconciliacao > '{$fim}' AND data < '{$fim}') ";
+    $sql .= "            OR (k172_dataconciliacao > '{$fim}' AND data <= '{$fim}') ";
     $sql .= "            OR (k172_dataconciliacao between '{$inicio}' AND '{$fim}')) ";
 
     return $sql;
@@ -644,7 +644,7 @@ function query_planilhas($conta, $inicio, $fim, $condicao_lancamento, $data_impl
     $sql  = query_padrao_rec($conta, $condicao_lancamento);
     $sql .= " ((data between '{$inicio}' AND '{$fim}') ";
     $sql .= " {$condicao_implantacao} ";
-    $sql .= " OR (k172_dataconciliacao > '{$fim}' AND data < '{$fim}') ";
+    $sql .= " OR (k172_dataconciliacao > '{$fim}' AND data <= '{$fim}') ";
     $sql .= " OR (k172_dataconciliacao BETWEEN '{$inicio}' AND '{$fim}')) ";
     return $sql;
 }
@@ -662,7 +662,7 @@ function query_transferencias_debito($conta, $data_inicial, $data_final, $condic
     $sql .= " corlanc.k12_conta = {$conta} ";
     $sql .= "     AND ((corlanc.k12_data between '{$data_inicial}' AND '{$data_final}') ";
     $sql .= "     {$condicao_implantacao} ";
-    $sql .= "     OR (k172_dataconciliacao > '{$data_final}' AND corlanc.k12_data < '{$data_final}' ) ";
+    $sql .= "     OR (k172_dataconciliacao > '{$data_final}' AND corlanc.k12_data <= '{$data_final}' ) ";
     $sql .= "      OR (k172_dataconciliacao BETWEEN '{$data_inicial}' AND '{$data_final}')) ";
     $sql .= " {$condicao_lancamento} ";
     $sql .= " AND e81_cancelado IS NULL ";
@@ -682,7 +682,7 @@ function query_transferencias_credito($conta, $data_inicial, $data_final, $condi
     $sql .= " corrente.k12_conta = {$conta} ";
     $sql .= " AND ((corrente.k12_data between '{$data_inicial}' AND '{$data_final}') ";
     $sql .= "     {$condicao_implantacao} ";
-    $sql .= "     OR (k172_dataconciliacao > '{$data_final}' AND corrente.k12_data < '{$data_final}' ) ";
+    $sql .= "     OR (k172_dataconciliacao > '{$data_final}' AND corrente.k12_data <= '{$data_final}' ) ";
     $sql .= "     OR (k172_dataconciliacao BETWEEN '{$data_inicial}' AND '{$data_final}')) ";
     $sql .= " {$condicao_lancamento} ";
     $sql .= " AND e81_cancelado IS NULL ";
@@ -774,7 +774,7 @@ function query_empenhos_total($conta, $data_inicial, $data_final, $data_implanta
     $sql .= " corrente.k12_conta = {$conta} ";
     $sql .= " AND ((corrente.k12_data between '{$data_inicial}' AND '{$data_final}' AND k172_dataconciliacao IS NULL) ";
     $sql .= "     {$condicao_implantacao} ";
-    $sql .= "     OR (k172_dataconciliacao > '{$data_final}' AND corrente.k12_data < '{$data_final}' )) ";
+    $sql .= "     OR (k172_dataconciliacao > '{$data_final}' AND corrente.k12_data <= '{$data_final}' )) ";
     $sql .= " AND c69_sequen IS NOT NULL ";
     $sql .= " AND corrente.k12_instit = " . db_getsession("DB_instit");
     $sql .= " AND " . condicao_retencao();
@@ -818,7 +818,7 @@ function query_baixa_total($conta, $inicio, $fim, $implantacao)
     $sql .= "    WHERE ";
     $sql .= "        ((data between '{$inicio}' AND '{$fim}' AND k172_dataconciliacao IS NULL) ";
     $sql .= "            {$condicao_implantacao} ";
-    $sql .= "            OR (k172_dataconciliacao > '{$fim}' AND data < '{$fim}')) ";
+    $sql .= "            OR (k172_dataconciliacao > '{$fim}' AND data <= '{$fim}')) ";
 
     return $sql;
 }
@@ -835,7 +835,7 @@ function query_planilha_total($conta, $data_inicial, $data_final, $data_implanta
     $sql  = query_padrao_rec($conta, "");
     $sql .= " ((data between '{$data_inicial}' AND '{$data_final}' AND k172_dataconciliacao IS NULL) ";
     $sql .= " {$condicao_implantacao} ";
-    $sql .= " OR (k172_dataconciliacao > '{$data_final}' AND data < '{$data_final}')) ";
+    $sql .= " OR (k172_dataconciliacao > '{$data_final}' AND data <= '{$data_final}')) ";
 
     return $sql;
 }
@@ -852,7 +852,7 @@ function query_transferencias_debito_total($conta, $data_inicial, $data_final, $
     $sql = query_padrao_slip_debito() . "
                 corlanc.k12_conta = {$conta}
                 AND ((corlanc.k12_data between '{$data_inicial}' AND '{$data_final}' AND k172_dataconciliacao IS NULL)
-                {$condicao_implantacao} OR (k172_dataconciliacao > '{$data_final}' AND corlanc.k12_data < '{$data_final}'))
+                {$condicao_implantacao} OR (k172_dataconciliacao > '{$data_final}' AND corlanc.k12_data <= '{$data_final}'))
                 AND e81_cancelado IS NULL
                 ";
 
@@ -872,7 +872,7 @@ function query_transferencias_credito_total($conta, $data_inicial, $data_final, 
             corrente.k12_conta = {$conta}
             AND ((corrente.k12_data between '{$data_inicial}' AND '{$data_final}' AND k172_dataconciliacao IS NULL)
             {$condicao_implantacao} OR (k172_dataconciliacao > '{$data_final}'
-            AND corrente.k12_data < '{$data_final}'))
+            AND corrente.k12_data <= '{$data_final}'))
             AND e81_cancelado IS NULL
         order by
             data,
@@ -1057,7 +1057,7 @@ function query_pendencias($conta, $data_inicial, $data_final, $tipo)
     $sql .= "     AND k172_mov = k173_mov ";
     $sql .= "     AND k172_conta = k173_conta ";
     $sql .= " WHERE ((k173_data BETWEEN '{$data_inicial}' AND '{$data_final}') ";
-    $sql .= "         OR (k172_dataconciliacao > '{$data_final}' AND k173_data < '{$data_final}') ";
+    $sql .= "         OR (k172_dataconciliacao > '{$data_final}' AND k173_data <= '{$data_final}') ";
     $sql .= "         OR (k172_dataconciliacao IS NULL AND k173_data < '{$data_inicial}') ";
     $sql .= "         OR (k172_dataconciliacao BETWEEN '{$data_inicial}' AND '{$data_final}')) ";
     $sql .= "     AND k173_conta = {$conta} ";

@@ -1,6 +1,6 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
+ *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2014  DBselller Servicos de Informatica
  *                            www.dbseller.com.br
  *                         e-cidade@dbseller.com.br
@@ -36,6 +36,7 @@ $clrotulo->label("eso01_db_formulas");
 $clrotulo->label("db148_nome");
 $clrotulo->label("db50_codigo");
 $clrotulo->label("db50_descr");
+echo $oPost->db_opcaoal;
 if (isset($oPost->db_opcaoal)) {
 
     $db_opcao = 33;
@@ -44,7 +45,7 @@ if (isset($oPost->db_opcaoal)) {
 
     $db_botao = true;
     $db_opcao = 2;
-} else if(isset($oPost->opcao) && $oPost->opcao == "excluir") {
+} else if (isset($oPost->opcao) && $oPost->opcao == "excluir") {
 
     $db_opcao = 3;
     $db_botao = true;
@@ -72,6 +73,7 @@ if (isset($oPost->db_opcaoal)) {
         $db103_mascara                = "";
         $db103_camposql               = "";
         $db103_perguntaidentificadora = "";
+        $db103_identificadorcampo     = "";
     }
 }
 
@@ -88,26 +90,27 @@ $aTipo = array(
 );
 ?>
 <form name="form1" method="post" action="">
-    <fieldset><legend><b>Pergunta</b></legend>
+    <fieldset>
+        <legend><b>Pergunta</b></legend>
         <table border="0" align="left" width="100%">
             <tr>
-                <td nowrap title="<?=@$Tdb103_avaliacaogrupopergunta?>">
+                <td nowrap title="<?= @$Tdb103_avaliacaogrupopergunta ?>">
                     <label for="db103_avaliacaogrupopergunta">
                         <b>Código do Grupo:</b>
                     </label>
                 </td>
                 <td colspan="3">
                     <?
-                    db_input('db103_sequencial',10,$Idb103_sequencial,true,'hidden',3,"");
-                    db_input('db103_avaliacaogrupopergunta',10,$Idb103_avaliacaogrupopergunta,true,'text',3,"");
-                    db_input('db102_descricao',40,@$Idb102_descricao,true,'text',3,'');
+                    db_input('db103_sequencial', 10, $Idb103_sequencial, true, 'hidden', 3, "");
+                    db_input('db103_avaliacaogrupopergunta', 10, $Idb103_avaliacaogrupopergunta, true, 'text', 3, "");
+                    db_input('db102_descricao', 40, @$Idb102_descricao, true, 'text', 3, '');
                     ?>
                 </td>
             </tr>
             <tr>
-                <td nowrap title="<?=@$Tdb103_descricao?>">
+                <td nowrap title="<?= @$Tdb103_descricao ?>">
                     <label for="db103_descricao">
-                        <?=@$Ldb103_descricao?>
+                        <?= @$Ldb103_descricao ?>
                     </label>
                 </td>
                 <td colspan="4">
@@ -117,26 +120,26 @@ $aTipo = array(
                 </td>
             </tr>
             <tr>
-                <td nowrap title="<?=@$Tdb103_identificador?>">
+                <td nowrap title="<?= @$Tdb103_identificador ?>">
                     <label for="db103_identificador">
-                        <?=@$Ldb103_identificador?>
+                        <?= @$Ldb103_identificador ?>
                     </label>
                 </td>
                 <td colspan="4">
                     <?
-                    db_input('db103_identificador',62,$Idb103_identificador,true,'text',$db_opcao,"");
+                    db_input('db103_identificador', 62, $Idb103_identificador, true, 'text', $db_opcao, "");
                     ?>
                 </td>
             </tr>
             <tr>
-                <td nowrap title="<?=@$Tdb103_avaliacaotiporesposta?>">
+                <td nowrap title="<?= @$Tdb103_avaliacaotiporesposta ?>">
                     <label for="db103_avaliacaotiporesposta">
-                        <?=@$Ldb103_avaliacaotiporesposta?>
+                        <?= @$Ldb103_avaliacaotiporesposta ?>
                     </label>
                 </td>
                 <td width="30%">
                     <?
-                    db_input('iTipoRespostaAnt',10,$iTipoRespostaAnt,true,'hidden',3,"");
+                    db_input('iTipoRespostaAnt', 10, $iTipoRespostaAnt, true, 'hidden', 3, "");
                     $sSqlAvaliacaoTipoResposta  = $clavaliacaotiporesposta->sql_query(null, "*", "db105_sequencial", "");
                     $rsSqlAvaliacaoTipoResposta = $clavaliacaotiporesposta->sql_record($sSqlAvaliacaoTipoResposta);
 
@@ -151,38 +154,38 @@ $aTipo = array(
                     db_select('db103_avaliacaotiporesposta', $aAvaliacaoTipoResposta, true, $db_opcao, " onchange='js_desabilitaselecionar(); toogleTipoMascara(this);'");
                     ?>
                 </td>
-                <td nowrap title="<?=@$Tdb103_ordem?>" width="10%">
+                <td nowrap title="<?= @$Tdb103_ordem ?>" width="10%">
                     <label for="db103_ordem">
-                        <?=@$Ldb103_ordem?>
+                        <?= @$Ldb103_ordem ?>
                     </label>
                 </td>
                 <td>
                     <?
-                    db_input('db103_ordem',10,$Idb103_ordem,true,'text',$db_opcao,"");
+                    db_input('db103_ordem', 10, $Idb103_ordem, true, 'text', $db_opcao, "");
                     ?>
                 </td>
             </tr>
             <tr>
-                <td nowrap title="<?=@$Tdb103_obrigatoria?>">
+                <td nowrap title="<?= @$Tdb103_obrigatoria ?>">
                     <label for="db103_obrigatoria">
-                        <?=@$Ldb103_obrigatoria?>
+                        <?= @$Ldb103_obrigatoria ?>
                     </label>
                 </td>
                 <td width="30%">
                     <?
-                    $x = array("f"=>"NÃO","t"=>"SIM");
-                    db_select('db103_obrigatoria',$x,true,$db_opcao,"");
+                    $x = array("f" => "NÃO", "t" => "SIM");
+                    db_select('db103_obrigatoria', $x, true, $db_opcao, "");
                     ?>
                 </td>
-                <td nowrap title="<?=@$Tdb103_ativo?>" width="10%">
+                <td nowrap title="<?= @$Tdb103_ativo ?>" width="10%">
                     <label for="db103_ativo">
-                        <?=@$Ldb103_ativo?>
+                        <?= @$Ldb103_ativo ?>
                     </label>
                 </td>
                 <td>
                     <?
-                    $x = array("t"=>"SIM","f"=>"NÃO");
-                    db_select('db103_ativo',$x,true,$db_opcao,"");
+                    $x = array("t" => "SIM", "f" => "NÃO");
+                    db_select('db103_ativo', $x, true, $db_opcao, "");
                     ?>
                 </td>
             </tr>
@@ -196,6 +199,18 @@ $aTipo = array(
                     <label id="lbl_db103_mascara" for="db103_mascara"><?php echo $Ldb103_mascara; ?></label>
                 </td>
                 <td><?php db_input('db103_mascara', 30, $Idb103_mascara, true, "text", $db_opcao); ?></td>
+            </tr>
+            <tr>
+                <td nowrap title="<?= @$Tdb103_identificadorcampo ?>">
+                    <label for="db103_identificadorcampo">
+                        <?= @$Ldb103_identificadorcampo ?>
+                    </label>
+                </td>
+                <td colspan="4">
+                    <?
+                    db_input('db103_identificadorcampo', 60, $Idb103_identificadorcampo, true, 'text', $db_opcao, "");
+                    ?>
+                </td>
             </tr>
             <tr>
                 <td nowrap title="<?php echo $Teso01_db_formulas; ?>">
@@ -243,7 +258,7 @@ $aTipo = array(
                                     </label>
                                 </td>
                                 <td>
-                                    <select id="db52_codigo" name="db52_codigo" style="width: 100%;" >
+                                    <select id="db52_codigo" name="db52_codigo" style="width: 100%;">
                                         <option value="0">Selecione</option>
                                     </select>
                                 </td>
@@ -274,7 +289,7 @@ $aTipo = array(
                                     <label id="lbldb103_perguntaidentificadora" for="db103_perguntaidentificadora"><b>Pergunta Identificadora do Formulário:</b></label>
                                 </td>
                                 <td>
-                                    <input type="checkbox" id="db103_perguntaidentificadora" name="db103_perguntaidentificadora" value="true" <?=$sMarcado;?>>
+                                    <input type="checkbox" id="db103_perguntaidentificadora" name="db103_perguntaidentificadora" value="true" <?= $sMarcado; ?>>
                                 </td>
                             </tr>
                         </table>
@@ -289,22 +304,14 @@ $aTipo = array(
         </tr>
         <tr align="center">
             <td>
-                <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>"
-                       type="submit" id="db_opcao" onclick="return js_validarcampos();"
-                       value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>"
-                    <?=($db_botao==false?"disabled":"")?>>
+                <input name="<?= ($db_opcao == 1 ? "incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "alterar" : "excluir")) ?>" type="submit" id="db_opcao" onclick="return js_validarcampos();" value="<?= ($db_opcao == 1 ? "Incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "Alterar" : "Excluir")) ?>" <?= ($db_botao == false ? "disabled" : "") ?>>
 
                 <? if ($db_opcao != 1) { ?>
-                    <input name="novo" type="button" id="cancelar" value="Novo" onclick="js_cancelar();"
-                        <?=($db_opcao==1||isset($oPost->db_opcaoal)?"style='visibility:hidden;'":"")?>>
+                    <input name="novo" type="button" id="cancelar" value="Novo" onclick="js_cancelar();" <?= ($db_opcao == 1 || isset($oPost->db_opcaoal) ? "style='visibility:hidden;'" : "") ?>>
 
-                    <input name="adicionarrespostas" type="button" id="adicionarrespostas" value="Adicionar Respostas"
-                           onclick="js_adicionarrespostas();"
-                        <?=($db_opcao==1||isset($oPost->db_opcaoal)?"style='visibility:hidden;'":"")?>
-                        <?=($db_opcao==3?"disabled":"")?>>
+                    <input name="adicionarrespostas" type="button" id="adicionarrespostas" value="Adicionar Respostas" onclick="js_adicionarrespostas();" <?= ($db_opcao == 1 || isset($oPost->db_opcaoal) ? "style='visibility:hidden;'" : "") ?> <?= ($db_opcao == 3 ? "disabled" : "") ?>>
 
-                    <input name="limparRespostas" type="button" id="limparRespostas" value="Limpar Respostas"
-                           onclick="js_limparRespostas();">
+                    <input name="limparRespostas" type="button" id="limparRespostas" value="Limpar Respostas" onclick="js_limparRespostas();">
                 <? } ?>
 
             </td>
@@ -319,10 +326,10 @@ $aTipo = array(
                 <?
                 $sWhere    = "db103_avaliacaogrupopergunta = {$db103_avaliacaogrupopergunta}";
                 $sCampos   = "db103_sequencial, db103_avaliacaotiporesposta, db103_avaliacaogrupopergunta, db103_descricao";
-                $sCampos  .= ", db103_identificador, db103_obrigatoria, db103_ativo, db103_ordem";
-                $chavepri  = array("db103_sequencial"=>@$db103_sequencial);
+                $sCampos  .= ", db103_identificador, db103_identificadorcampo, db103_obrigatoria, db103_ativo, db103_ordem";
+                $chavepri  = array("db103_sequencial" => @$db103_sequencial);
                 $cliframe_alterar_excluir->chavepri      = $chavepri;
-                $cliframe_alterar_excluir->sql           = $clavaliacaopergunta->sql_query_file(null,'avaliacaopergunta.*','db103_ordem',$sWhere);
+                $cliframe_alterar_excluir->sql           = $clavaliacaopergunta->sql_query_file(null, 'avaliacaopergunta.*', 'db103_ordem', $sWhere);
                 $cliframe_alterar_excluir->campos        = $sCampos;
                 $cliframe_alterar_excluir->legenda       = "ITENS LANÇADOS";
                 $cliframe_alterar_excluir->iframe_height = "160";
@@ -334,21 +341,21 @@ $aTipo = array(
     </table>
 </form>
 <script>
-    $('db102_descricao').style.width   = '79%';
-    $('db103_descricao').style.width   = '100%';
+    $('db102_descricao').style.width = '79%';
+    $('db103_descricao').style.width = '100%';
 
     require('scripts/widgets/DBLookUp.widget.js');
 
     var oParametrosLookUpFormula = {
-        sArquivo : "func_db_formulas.php",
-        sLabel   : "Pesquisa F?rmula"
+        sArquivo: "func_db_formulas.php",
+        sLabel: "Pesquisa F?rmula"
     };
     var oLookUpFormula = new DBLookUp($('lbl_eso01_db_formulas'), $('eso01_db_formulas'), $('db148_nome'), oParametrosLookUpFormula);
 
     var oLookUpLayout = new DBLookUp($('lblLayout'), $('db50_codigo'), $('db50_descr'), {
-        sArquivo : "func_db_layouttxt.php",
-        sLabel   : "Pesquisar Layouts",
-        callBack : function () {
+        sArquivo: "func_db_layouttxt.php",
+        sLabel: "Pesquisar Layouts",
+        callBack: function() {
 
             getLinhasDoLayout($F('db50_codigo'));
 
@@ -357,8 +364,11 @@ $aTipo = array(
 
     function getLinhasDoLayout(iCodigo) {
 
-        new AjaxRequest('hab1_cadastroavaliacao.RPC.php', {'exec':'getLinhasDoLayout', 'codigo_layout':iCodigo},
-            function (response, lErro) {
+        new AjaxRequest('hab1_cadastroavaliacao.RPC.php', {
+                'exec': 'getLinhasDoLayout',
+                'codigo_layout': iCodigo
+            },
+            function(response, lErro) {
 
                 $('db51_codigo').options.length = 1;
                 for (oLinha of response.linhas) {
@@ -384,8 +394,11 @@ $aTipo = array(
         if (iCodigo == 0) {
             return;
         }
-        new AjaxRequest('hab1_cadastroavaliacao.RPC.php', {'exec':'getCamposDaLinha', 'codigo_linha':iCodigo},
-            function (response, lErro) {
+        new AjaxRequest('hab1_cadastroavaliacao.RPC.php', {
+                'exec': 'getCamposDaLinha',
+                'codigo_linha': iCodigo
+            },
+            function(response, lErro) {
 
                 $('db52_codigo').options.length = 1;
                 for (campo of response.campos) {
@@ -397,39 +410,39 @@ $aTipo = array(
             }).setMessage('Aguarde, carregando campos...').execute();
     }
 
-    function toogleTipoMascara (oSelectAvaliacaoTipoResposta) {
+    function toogleTipoMascara(oSelectAvaliacaoTipoResposta) {
 
         var oLinhaTipoMascara = document.getElementById('db103_mascara').parentNode.parentNode;
         oLinhaTipoMascara.style.display = 'table-row';
 
-        if(typeof oSelectAvaliacaoTipoResposta != "object") {
+        if (typeof oSelectAvaliacaoTipoResposta != "object") {
             var oSelectAvaliacaoTipoResposta = document.getElementById('db103_avaliacaotiporesposta');
         }
 
-        if(oSelectAvaliacaoTipoResposta.value != 2) { // 2 - Dissertativa
+        if (oSelectAvaliacaoTipoResposta.value != 2) { // 2 - Dissertativa
             oLinhaTipoMascara.style.display = 'none';
         }
     }
 
-    function desabilitarMascara (oSelectTipo) {
+    function desabilitarMascara(oSelectTipo) {
 
-        var oMascara            = document.getElementById('db103_mascara');
-        var oCelulaMascara      = oMascara.parentNode;
+        var oMascara = document.getElementById('db103_mascara');
+        var oCelulaMascara = oMascara.parentNode;
         var oCelulaLabelMascara = oMascara.parentNode.previousElementSibling;
 
-        oCelulaMascara.style.display      = 'table-cell';
+        oCelulaMascara.style.display = 'table-cell';
         oCelulaLabelMascara.style.display = 'table-cell';
 
         oMascara.removeClassName('readonly');
         oMascara.removeAttribute('readonly');
 
-        if(typeof oSelectTipo != "object") {
+        if (typeof oSelectTipo != "object") {
             var oSelectTipo = document.getElementById('db103_tipo');
         }
 
-        if(oSelectTipo.value != 1) { // 1 - Texto
+        if (oSelectTipo.value != 1) { // 1 - Texto
 
-            oCelulaMascara.style.display      = 'none';
+            oCelulaMascara.style.display = 'none';
             oCelulaLabelMascara.style.display = 'none';
 
             oMascara.addClassName('readonly');
@@ -465,7 +478,7 @@ $aTipo = array(
 
     function js_desabilitaselecionar() {
 
-        var iAvaliacaoTipoResposta  = $('db103_avaliacaotiporesposta').value;
+        var iAvaliacaoTipoResposta = $('db103_avaliacaotiporesposta').value;
         if (iAvaliacaoTipoResposta != 0) {
             $('db103_avaliacaotiporesposta').options[0].disabled = true;
         }
@@ -476,12 +489,12 @@ $aTipo = array(
     function js_validarcampos() {
 
         var iAvaliacaoTipoResposta = $('db103_avaliacaotiporesposta').value;
-        var iOrdem                 = $('db103_ordem').value;
-        var sOpcao                 = $('db_opcao').value;
+        var iOrdem = $('db103_ordem').value;
+        var sOpcao = $('db_opcao').value;
 
         if (iAvaliacaoTipoResposta == 0) {
 
-            var sMsg  = "Usuario:\n\n";
+            var sMsg = "Usuario:\n\n";
             sMsg += " Informe o Tipo de Resposta!\n\n";
             alert(sMsg);
             return false;
@@ -489,7 +502,7 @@ $aTipo = array(
 
         if (iOrdem == '') {
 
-            var sMsg  = "Usuario:\n\n";
+            var sMsg = "Usuario:\n\n";
             sMsg += " Informe a Ordem!\n\n";
             alert(sMsg);
             return false;
@@ -498,29 +511,32 @@ $aTipo = array(
         return js_validaCaracteres();
     }
 
-    function js_cancelar(){
+    function js_cancelar() {
 
         var opcao = document.createElement("input");
-        opcao.setAttribute("type","hidden");
-        opcao.setAttribute("name","novo");
-        opcao.setAttribute("value","true");
+        opcao.setAttribute("type", "hidden");
+        opcao.setAttribute("name", "novo");
+        opcao.setAttribute("value", "true");
         document.form1.appendChild(opcao);
         document.form1.submit();
     }
 
     function js_adicionarrespostas() {
 
-        var sUrl = 'hab1_avaliacaoperguntaopcao001.php?db103_sequencial='+$('db103_sequencial').value;
-        js_OpenJanelaIframe('','db_iframe_avaliacaotiporesposta',sUrl,'Pesquisa',true,'0');
+        var sUrl = 'hab1_avaliacaoperguntaopcao001.php?db103_sequencial=' + $('db103_sequencial').value;
+        js_OpenJanelaIframe('', 'db_iframe_avaliacaotiporesposta', sUrl, 'Pesquisa', true, '0');
     }
 
     function js_limparRespostas() {
 
-        AjaxRequest.create('eso4_preenchimento.RPC.php', {exec: 'limparRespostas', pergunta: $F('db103_sequencial')}, function (response) {
+        AjaxRequest.create('eso4_preenchimento.RPC.php', {
+            exec: 'limparRespostas',
+            pergunta: $F('db103_sequencial')
+        }, function(response) {
 
             console.log(response);
 
-            if(response.mensagem) {
+            if (response.mensagem) {
                 alert(response.mensagem);
             }
 
@@ -534,9 +550,9 @@ $aTipo = array(
      */
     function js_validaCaracteres() {
 
-        var sValorInicial     = $F('db103_identificador').substring(0,1);
+        var sValorInicial = $F('db103_identificador').substring(0, 1);
         var sExpressaoInicial = /[A-Za-z]/;
-        var sRegExpInicial    = new RegExp(sExpressaoInicial);
+        var sRegExpInicial = new RegExp(sExpressaoInicial);
         var lResultadoInicial = sRegExpInicial.test(sValorInicial);
 
         if (sValorInicial == '') {
@@ -548,10 +564,10 @@ $aTipo = array(
 
         if (lResultadoInicial) {
 
-            var sValorCaracteres      = $F('db103_identificador').substring(1);
-            var sExpressaoCaracteres  = /^[A-Za-z0-9_]+?$/i;
-            var sRegExpCaracteres     = new RegExp(sExpressaoCaracteres);
-            var lResultadoCaracteres  = sRegExpCaracteres.test(sValorCaracteres);
+            var sValorCaracteres = $F('db103_identificador').substring(1);
+            var sExpressaoCaracteres = /^[A-Za-z0-9_-]+?$/i;
+            var sRegExpCaracteres = new RegExp(sExpressaoCaracteres);
+            var lResultadoCaracteres = sRegExpCaracteres.test(sValorCaracteres);
             if (!lResultadoCaracteres) {
 
                 alert('Não são permitidos caracteres especiais e espaços no campo Identificador.');
@@ -572,9 +588,9 @@ $aTipo = array(
         if (lAbrirFieldset) {
             oToogle.show(true);
         }
-        iCodigoLinha = '<?=$db51_codigo;?>';
-        iCodigoCampo = '<?=$db103_dblayoutcampo?>';
-        var bloquearCampo = <?=$bloquearCampo;?>;
+        iCodigoLinha = '<?= $db51_codigo; ?>';
+        iCodigoCampo = '<?= $db103_dblayoutcampo ?>';
+        var bloquearCampo = '<?= $bloquearCampo; ?>';
         if ($F('db50_codigo') != '') {
 
             oLookUpLayout.desabilitar();
@@ -601,11 +617,11 @@ $aTipo = array(
         }
 
         stringIdentificador = stringIdentificador.replace(/[^a-zA-Z 0-9]/g, '');
-        var identificador = stringIdentificador.replace(/ /g, '_').toLowerCase().substr(0, 50);
+        var identificador = stringIdentificador.replace(/ /g, '-').toLowerCase().substr(0, 40);
         return identificador;
     }
     $('db103_descricao').observe('blur', function() {
-        if ($F('db103_identificador') == ''){
+        if ($F('db103_identificador') == '') {
             $('db103_identificador').value = montarIdentificador(this.value);
         }
     });

@@ -28,14 +28,14 @@
 
 class cl_permissaodotacao
 {
-    var $dotacoes = null;
-    var $campos = " fc_estruturaldotacao(o58_anousu,o58_coddot) as o50_estrutdespesa, o58_coddot ";
-    var $result = null;
+  var $dotacoes = null;
+  var $campos = " fc_estruturaldotacao(o58_anousu,o58_coddot) as o50_estrutdespesa, o58_coddot ";
+  var $result = null;
 
-    function cl_permissaodotacao($anousu, $id_usuario)
-    {
-        global $db20_orgao, $db20_unidade, $db20_funcao, $db20_subfuncao, $db20_programa, $db20_projativ, $db20_codele, $db20_codigo;
-        $sql = "select 'usuario' as tipo ,p.*
+  function cl_permissaodotacao($anousu, $id_usuario)
+  {
+    global $db20_orgao, $db20_unidade, $db20_funcao, $db20_subfuncao, $db20_programa, $db20_projativ, $db20_codele, $db20_codigo;
+    $sql = "select 'usuario' as tipo ,p.*
     from db_permemp p
     inner join db_usupermemp u on u.db21_codperm = p.db20_codperm and
     u.db21_id_usuario = $id_usuario
@@ -48,61 +48,59 @@ class cl_permissaodotacao
     inner join db_depusuemp d on d.db22_codperm = p.db20_codperm and
     d.db22_coddepto = e.coddepto
     ";
-        $result = db_query($sql);
-        $this->dotacoes = "select " . $this->campos . "
+    $result = db_query($sql);
+    $this->dotacoes = "select " . $this->campos . "
     from orcdotacao
     where ";
-        for ($i = 0; $i < pg_numrows($result); $i++) {
-            db_fieldsmemory($result, $i);
-            $tem_and = "";
-            if ($db20_orgao > 0) {
-                $this->dotacoes .= " o58_orgao = $db20_orgao ";
-                $tem_and = " and ";
-            }
-            if ($db20_unidade > 0) {
-                $this->dotacoes .= $tem_and . " o58_unidade = $db20_unidade ";
-                $tem_and = " and ";
-            }
-            if ($db20_funcao > 0) {
-                $this->dotacoes .= $tem_and . " o58_funcao = $db20_funcao ";
-                $tem_and = " and ";
-            }
-            if ($db20_subfuncao > 0) {
-                $this->dotacoes .= $tem_and . " o58_subfuncao = $db20_subfuncao ";
-                $tem_and = " and ";
-            }
-            if ($db20_programa > 0) {
-                $this->dotacoes .= $tem_and . " o58_programa = $db20_programa ";
-                $tem_and = " and ";
-            }
-            if ($db20_projativ > 0) {
-                $this->dotacoes .= $tem_and . " o58_projativ = $db20_projativ ";
-                $tem_and = " and ";
-            }
-            if ($db20_codele > 0) {
-                $this->dotacoes .= $tem_and . " o58_codele = $db20_codele ";
-                $tem_and = " and ";
-            }
-            if ($db20_codigo > 0) {
-                $this->dotacoes .= $tem_and . " o58_codigo = $db20_codigo ";
-            }
-        }
-        $this->dotacoes .= " order by o50_estrutdespesa ";
+    for ($i = 0; $i < pg_numrows($result); $i++) {
+      db_fieldsmemory($result, $i);
+      $tem_and = "";
+      if ($db20_orgao > 0) {
+        $this->dotacoes .= " o58_orgao = $db20_orgao ";
+        $tem_and = " and ";
+      }
+      if ($db20_unidade > 0) {
+        $this->dotacoes .= $tem_and . " o58_unidade = $db20_unidade ";
+        $tem_and = " and ";
+      }
+      if ($db20_funcao > 0) {
+        $this->dotacoes .= $tem_and . " o58_funcao = $db20_funcao ";
+        $tem_and = " and ";
+      }
+      if ($db20_subfuncao > 0) {
+        $this->dotacoes .= $tem_and . " o58_subfuncao = $db20_subfuncao ";
+        $tem_and = " and ";
+      }
+      if ($db20_programa > 0) {
+        $this->dotacoes .= $tem_and . " o58_programa = $db20_programa ";
+        $tem_and = " and ";
+      }
+      if ($db20_projativ > 0) {
+        $this->dotacoes .= $tem_and . " o58_projativ = $db20_projativ ";
+        $tem_and = " and ";
+      }
+      if ($db20_codele > 0) {
+        $this->dotacoes .= $tem_and . " o58_codele = $db20_codele ";
+        $tem_and = " and ";
+      }
+      if ($db20_codigo > 0) {
+        $this->dotacoes .= $tem_and . " o58_codigo = $db20_codigo ";
+      }
     }
 
-    function retornarecord()
-    {
+  function retornarecord()
+  {
 
         $this->result = db_query($this->dotacoes);
 
-        return $this->result;
-    }
+    return $this->result;
+  }
 
-    function mostradotacao($funcao_js = null)
-    {
+  function mostradotacao($funcao_js = null)
+  {
 
-        db_lovrot($this->dotacoes, 15, "()", "", $funcao_js);
-    }
+    db_lovrot($this->dotacoes, 15, "()", "", $funcao_js);
+  }
 }
 
 //|00|//cl_estrutura
@@ -110,35 +108,106 @@ class cl_permissaodotacao
 //|15|//[variavel] = new cl_estrutura;
 class cl_estrutura
 {
-    // cria variaveis de erro
-    var $nomeform = "form1";
-    var $reload = false;
-    var $size = '50';
-    var $mascara = true;
-    var $input = false;
-    var $db_opcao = 1;
-    var $funcao_onchange = null;
-    var $autocompletar = false;
-    function estrutura($picture = null)
-    {
-        $rotuloc = new rotulocampo;
-        $clorcparametro = new cl_orcparametro;
-        $rotuloc->label($picture);
-        $title = "T" . $picture;
-        $label = "L" . $picture;
+  // cria variaveis de erro
+  var $nomeform = "form1";
+  var $reload = false;
+  var $size = '50';
+  var $mascara = true;
+  var $input = false;
+  var $db_opcao = 1;
+  var $funcao_onchange = null;
+  var $autocompletar = false;
+  function estrutura($picture = null)
+  {
+    $rotuloc = new rotulocampo;
+    $clorcparametro = new cl_orcparametro;
+    $rotuloc->label($picture);
+    $title = "T" . $picture;
+    $label = "L" . $picture;
 
-        global ${$label}, ${$title}, ${$picture}, $mascara;
-        if (!class_exists('cl_orcparametro')) {
-            db_msgbox('Classe orcparametro não incluida!');
-            exit;
+    global $$label, $$title, $$picture, $mascara;
+    if (!class_exists('cl_orcparametro')) {
+      db_msgbox('Classe orcparametro não incluida!');
+      exit;
+    }
+    $result = $clorcparametro->sql_record($clorcparametro->sql_query_file(db_getsession("DB_anousu"), "$picture as mascara"));
+    if ($clorcparametro->numrows > 0) {
+      db_fieldsmemory($result, 0);
+      $tamanho = strlen($mascara);
+    } else {
+      db_msgbox('Tabela Parametros Vazia, verifique as configurações do sistema ! ');
+      exit;
+    }
+    if ($this->funcao_onchange != null) {
+      if ($this->autocompletar == false && $this->reload == false) {
+        $funcao = $this->funcao_onchange;
+      } else {
+        $funcao = "onChange='js_mascara02_$picture(this.value);" . $this->funcao_onchange . ";'";
+      }
+    } else {
+      $funcao = "onChange=\"js_mascara02_$picture(this.value);\"";
+    }
+    if ($this->mascara == true) {
+?>
+      <tr>
+        <td nowrap title="Máscara do campo <?= @$picture ?>">
+          <b>Máscara:</b>
+        </td>
+        <td>
+
+          <input name="mascara" readonly disabled size='<?= $this->size ?>' type="text" value="<?= $mascara ?>">
+        </td>
+      </tr>
+    <?
+
+
+    }
+    if ($this->input == false) {
+    ?>
+      <tr>
+        <td nowrap title="<?= @$$title ?>">
+          <?= @$$label ?>
+        </td>
+        <td>
+        <?
+
+
+      }
+        ?>
+        <input title="<?= @$$title ?>" name="<?= $picture ?>" maxlength='<?= $tamanho ?>' size='<?= $this->size ?>' type="text" value="<?= @$$picture ?>" onKeyPress="return js_mascara01_<?= $picture ?>(event,this.value);" <?= $funcao ?> <?= ($this->db_opcao == 22 || $this->db_opcao == 33 || $this->db_opcao == 3 ? "readonly style=\"background-color:#DEB887\" " : "") ?>>
+        <?
+
+        if ($this->input == false) {
+        ?>
+        </td>
+      </tr>
+    <?
+
+
         }
-        $result = $clorcparametro->sql_record($clorcparametro->sql_query_file(db_getsession("DB_anousu"), "$picture as mascara"));
-        if ($clorcparametro->numrows > 0) {
-            db_fieldsmemory($result, 0);
-            $tamanho = strlen($mascara);
+    ?>
+    <script>
+      function js_mascara01_<?= $picture ?>(evt, obj) {
+        var evt = (evt) ? evt : (window.event) ? window.event : "";
+        if (evt.charCode > 47 && evt.charCode < 58) { //8:backspace|46:delete|190:.
+          str = '<?= $mascara ?>';
+          tam = obj.length;
+          dig = str.substr(tam, 1);
+          if (dig == ".") {
+            document.<?= $this->nomeform ?>.<?= $picture ?>.value = obj + ".";
+          }
+          return true;
+        } else if (evt.charCode == '0') {
+          return true;
         } else {
-            db_msgbox('Tabela Parametros Vazia, verifique as configurações do sistema ! ');
-            exit;
+          return false;
+        }
+      }
+
+      function js_mascara02_<?= $picture ?>(obj) {
+        obj = document.<?= $this->nomeform ?>.<?= $picture ?>.value;
+        while (obj.search(/\./) != '-1') {
+          obj = obj.replace(/\./, '');
         }
         if ($this->funcao_onchange != null) {
             if ($this->autocompletar == false && $this->reload == false) {
@@ -163,110 +232,59 @@ class cl_estrutura
         <?
 
 
-        }
-        if ($this->input == false) {
+        if ($this->autocompletar == true) {
         ?>
-            <tr>
-                <td nowrap title="<?= @${$title} ?>">
-                    <?= @${$label} ?>
-                </td>
-                <td>
-                <?
-
-
-            }
-                ?>
-                <input title="<?= @${$title} ?>" name="<?= $picture ?>" maxlength='<?= $tamanho ?>' size='<?= $this->size ?>' type="text" value="<?= @${$picture} ?>" onKeyPress="return js_mascara01_<?= $picture ?>(event,this.value);" <?= $funcao ?> <?= ($this->db_opcao == 22 || $this->db_opcao == 33 || $this->db_opcao == 3 ? "readonly style=\"background-color:#DEB887\" " : "") ?>>
-                <?
-
-                if ($this->input == false) {
-                ?>
-                </td>
-            </tr>
+          tam = <?= strlen(str_replace(".", "", $mascara)) ?>;
+          for (i = obj.length; i < tam; i++) {
+            obj = obj + "0";
+          }
         <?
 
 
-                }
+        }
         ?>
-        <script>
-            function js_mascara01_<?= $picture ?>(evt, obj) {
-                var evt = (evt) ? evt : (window.event) ? window.event : "";
-                if (evt.charCode > 47 && evt.charCode < 58) { //8:backspace|46:delete|190:.
-                    str = '<?= $mascara ?>';
-                    tam = obj.length;
-                    dig = str.substr(tam, 1);
-                    if (dig == ".") {
-                        document.<?= $this->nomeform ?>.<?= $picture ?>.value = obj + ".";
-                    }
-                    return true;
-                } else if (evt.charCode == '0') {
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-
-            function js_mascara02_<?= $picture ?>(obj) {
-                obj = document.<?= $this->nomeform ?>.<?= $picture ?>.value;
-                while (obj.search(/\./) != '-1') {
-                    obj = obj.replace(/\./, '');
-                }
-                <?
-
-
-                if ($this->autocompletar == true) {
-                ?>
-                    tam = <?= strlen(str_replace(".", "", $mascara)) ?>;
-                    for (i = obj.length; i < tam; i++) {
-                        obj = obj + "0";
-                    }
-                <?
+        //analise da estrutura passada
+        str = '<?= $mascara ?>';
+        nada = '';
+        matriz = str.split(nada);
+        tam = matriz.length;
+        arr = new Array();
+        cont = 0;
+        for (i = 0; i < tam; i++) {
+          if (matriz[i] == '.') {
+            arr[cont] = i;
+            cont++;
+          }
+        }
+        //fim
+        for (i = 0; i < arr.length; i++) {
+          pos = arr[i];
+          strpos = obj.substr(pos, 1);
+          if (strpos != '' && strpos != '.') {
+            ini = obj.slice(0, pos);
+            fim = obj.slice(pos);
+            obj = ini + "." + fim;
+          }
+        }
+        document.<?= $this->nomeform ?>.<?= $picture ?>.value = obj;
+        <?
 
 
-                }
-                ?>
-                //analise da estrutura passada
-                str = '<?= $mascara ?>';
-                nada = '';
-                matriz = str.split(nada);
-                tam = matriz.length;
-                arr = new Array();
-                cont = 0;
-                for (i = 0; i < tam; i++) {
-                    if (matriz[i] == '.') {
-                        arr[cont] = i;
-                        cont++;
-                    }
-                }
-                //fim
-                for (i = 0; i < arr.length; i++) {
-                    pos = arr[i];
-                    strpos = obj.substr(pos, 1);
-                    if (strpos != '' && strpos != '.') {
-                        ini = obj.slice(0, pos);
-                        fim = obj.slice(pos);
-                        obj = ini + "." + fim;
-                    }
-                }
-                document.<?= $this->nomeform ?>.<?= $picture ?>.value = obj;
-                <?
+        if ($this->reload == true) {
+        ?>
+          obj = document.createElement('input');
+          obj.setAttribute('name', 'atualizar');
+          obj.setAttribute('type', 'hidden');
+          obj.setAttribute('value', "atualizar");
+          document.<?= $this->nomeform ?>.appendChild(obj);
+          document.<?= $this->nomeform ?>.submit();
+        <?
 
 
-                if ($this->reload == true) {
-                ?>
-                    obj = document.createElement('input');
-                    obj.setAttribute('name', 'atualizar');
-                    obj.setAttribute('type', 'hidden');
-                    obj.setAttribute('value', "atualizar");
-                    document.<?= $this->nomeform ?>.appendChild(obj);
-                    document.<?= $this->nomeform ?>.submit();
-                <?
-
-
-                }
-                ?>
-            }
-        </script>
+        }
+        ?>
+      }
+    </script>
 <?
 
 
@@ -274,51 +292,51 @@ class cl_estrutura
 }
 function db_selinstit($dbclick = '', $largura = 500, $altura = 100)
 {
-    //#00#//db_selinstit
-    //#10#//Esta funcao mostra as instituiçoes para os usuarios que forem da prefeitura
-    //#15#//db_selinstit($dbclick='',$largura=500, $altura=100)
-    //#20#//$dbclick    : Funcao java script que será executada no onclick do da selecao dentro do iframa na func_selinstit.php
-    //#20#//$largura    : Largura em px que será gerado o iframe
-    //#20#//$altura     : Altura em px que será gerado o iframe
-    //#99#//Esta funcao lista as instituicoe para que o usuário possa selecionar os filtros nos relatiorios
-    //#99#//Para os usuário da prefeitura, sempre será listado as instituições.
-    $sql = "select * from db_config where codigo = " . db_getsession("DB_instit") . " and prefeitura = true";
-    $result = db_query($sql);
-    if (pg_numrows($result) > 0) {
-        echo "<input name='db_selinstit' type='hidden' value='' ><br>";
-        echo "<strong>Selecione a(s) Instituição(ões):</strong><br>";
-        echo "<iframe name='db_selinstit_iframe' width='" . $largura . "px' height='" . $altura . "px' src='func_selinstit.php?funcao=$dbclick'></iframe>";
-    } else {
+  //#00#//db_selinstit
+  //#10#//Esta funcao mostra as instituiçoes para os usuarios que forem da prefeitura
+  //#15#//db_selinstit($dbclick='',$largura=500, $altura=100)
+  //#20#//$dbclick    : Funcao java script que será executada no onclick do da selecao dentro do iframa na func_selinstit.php
+  //#20#//$largura    : Largura em px que será gerado o iframe
+  //#20#//$altura     : Altura em px que será gerado o iframe
+  //#99#//Esta funcao lista as instituicoe para que o usuário possa selecionar os filtros nos relatiorios
+  //#99#//Para os usuário da prefeitura, sempre será listado as instituições.
+  $sql = "select * from db_config where codigo = " . db_getsession("DB_instit") . " and prefeitura = true";
+  $result = db_query($sql);
+  if (pg_numrows($result) > 0) {
+    echo "<input name='db_selinstit' type='hidden' value='' ><br>";
+    echo "<strong>Selecione a(s) Instituição(ões):</strong><br>";
+    echo "<iframe name='db_selinstit_iframe' width='" . $largura . "px' height='" . $altura . "px' src='func_selinstit.php?funcao=$dbclick'></iframe>";
+  } else {
 
-        echo "<input name='db_selinstit' type='hidden' value='" . db_getsession("DB_instit") . "'>";
-    }
+    echo "<input name='db_selinstit' type='hidden' value='" . db_getsession("DB_instit") . "'>";
+  }
 }
 
 function db_selorcbalanco($balanco = true, $orcamento = true, $empliqpag = false)
 {
 
-    if ($balanco == true) {
-        echo "<tr>\n";
-        echo "  <td align=\"center\" colspan=\"2\">\n";
-        echo "  <fieldset id=\"tabelabalanco\"  align=\"center\">\n";
-        echo "  <legend align=\"center\"><strong>Balanço</strong></legend>\n";
-        echo "	  <table>\n";
-        if ($empliqpag == true) {
-            echo " 	   <tr>\n";
+  if ($balanco == true) {
+    echo "<tr>\n";
+    echo "  <td align=\"center\" colspan=\"2\">\n";
+    echo "  <fieldset id=\"tabelabalanco\"  align=\"center\">\n";
+    echo "  <legend align=\"center\"><strong>Balanço</strong></legend>\n";
+    echo "	  <table>\n";
+    if ($empliqpag == true) {
+      echo " 	   <tr>\n";
 
-            // a variavel que identifica o empenhado, liquidado, pago deve ser tratada na funcao javascript que
-            // roda no programas, funcap js_emite cfe exemplo orc2_despsecretaria001.php.
+      // a variavel que identifica o empenhado, liquidado, pago deve ser tratada na funcao javascript que
+      // roda no programas, funcap js_emite cfe exemplo orc2_despsecretaria001.php.
 
-            echo " 	   <td align='center' colspan='2'>\n";
-            echo "         <input type='radio' name='qual_tipo_balanco' value='2'  checked>\n";
-            echo " 	   <strong>Empenhado</strong>&nbsp&nbsp&nbsp\n";
-            echo "         <input type='radio' name='qual_tipo_balanco' value='3' >\n";
-            echo " 	   <strong>Liquidado</strong>&nbsp&nbsp&nbsp\n";
-            echo "         <input type='radio' name='qual_tipo_balanco' value='4' >\n";
-            echo " 	   <strong>Pago</strong>\n";
-            echo " 	   </td>\n";
-            echo " 	   </tr>\n";
-        }
+      echo " 	   <td align='center' colspan='2'>\n";
+      echo "         <input type='radio' name='qual_tipo_balanco' value='2'  checked>\n";
+      echo " 	   <strong>Empenhado</strong>&nbsp&nbsp&nbsp\n";
+      echo "         <input type='radio' name='qual_tipo_balanco' value='3' >\n";
+      echo " 	   <strong>Liquidado</strong>&nbsp&nbsp&nbsp\n";
+      echo "         <input type='radio' name='qual_tipo_balanco' value='4' >\n";
+      echo " 	   <strong>Pago</strong>\n";
+      echo " 	   </td>\n";
+      echo " 	   </tr>\n";
+    }
 
         echo " 	   <tr>\n";
         /*    echo "	    <td>\n";
@@ -373,136 +391,135 @@ function db_selorcbalanco($balanco = true, $orcamento = true, $empliqpag = false
     echo "       </tr>\n";
     echo "	   </table>\n";
     echo "	 </td>\n";*/
-        echo "	 <td>\n";
-        echo "	   <table border=\"0\"  width=\"240\" height=\"100\" style=\"border: 1px solid black\" cellpadding=\"0\" cellspacing=\"1\" >\n";
-        echo "	     <tr>\n";
-        echo "         <td align=\"center\" colspan=\"2\" title=\"Gera o saldo em um intervalo de datas\"><strong>Saldo Por Datas</strong></td>\n";
-        echo "	     </tr>\n";
-        echo "       <tr>\n";
-        echo "         <td nowrap align=\"right\" title=\"" . $GLOBALS["TDBtxt21"] . "\">\n";
-        echo $GLOBALS["LDBtxt21"];
-        echo "	       </td>\n";
-        echo "	       <td>\n";
-        $DBtxt21_ano = db_getsession("DB_anousu");
-        $DBtxt21_mes = '01';
-        $DBtxt21_dia = '01';
-        db_inputdata('DBtxt21', $DBtxt21_dia, $DBtxt21_mes, $DBtxt21_ano, true, 'text', 4);
-        echo "	       </td>";
-        echo "	      </tr>";
-        echo "	      <tr>";
-        echo "	        <td nowrap align=\"right\" title=\"" . $GLOBALS["TDBtxt22"] . "\">";
-        echo $GLOBALS["LDBtxt22"];
-        echo "	        </td>";
-        echo "	        <td>";
-        $DBtxt22_ano = db_getsession("DB_anousu");
-        $DBtxt22_mes = date("m", db_getsession("DB_datausu"));
-        $DBtxt22_dia = date("d", db_getsession("DB_datausu"));
-        db_inputdata('DBtxt22', $DBtxt22_dia, $DBtxt22_mes, $DBtxt22_ano, true, 'text', 4);
-        echo "	        </td>";
-        echo "        </tr>";
-        echo "        <tr>";
-        echo "          <td colspan=\"2\" align = \"center\">";
-        echo "            <input  name=\"emite2\" id=\"emite2\" type=\"button\" value=\"Processar\" onclick=\"js_emite(3,'B');\" >";
-        echo "          </td>";
-        echo "        </tr>";
-        echo "       </table>";
-        echo "	    </td>";
-        echo "	    </tr>";
-        echo "	  </table>";
-        echo "   </fieldset>";
-        echo "  </td>";
-    }
-    if ($orcamento == true) {
-        echo "  <td align=\"center\" colspan=\"2\">";
-        echo "	 <fieldset id=\"tabelabalanco\"  align=\"center\">";
-        echo "   <legend align=\"center\"><strong>Orçamento</strong></legend>";
-        echo "	   <table border=\"0\"  width=\"220\" height=\"100\" style=\"border: 1px solid black\" cellpadding=\"0\" cellspacing=\"1\" >";
-        echo "      <tr>";
-        echo "        <td align = \"center\">";
-        echo "          <input  name=\"emite2\" id=\"emite2\" type=\"button\" value=\"Processar\" onclick=\"js_emite(1,'O');\" >";
-        echo "        </td>";
-        echo "      </tr>";
-        echo "     </table>";
-        echo "	 </fieldset>";
-        echo "  </td>";
-    }
-    echo "</tr>";
+    echo "	 <td>\n";
+    echo "	   <table border=\"0\"  width=\"240\" height=\"100\" style=\"border: 1px solid black\" cellpadding=\"0\" cellspacing=\"1\" >\n";
+    echo "	     <tr>\n";
+    echo "         <td align=\"center\" colspan=\"2\" title=\"Gera o saldo em um intervalo de datas\"><strong>Saldo Por Datas</strong></td>\n";
+    echo "	     </tr>\n";
+    echo "       <tr>\n";
+    echo "         <td nowrap align=\"right\" title=\"" . $GLOBALS["TDBtxt21"] . "\">\n";
+    echo $GLOBALS["LDBtxt21"];
+    echo "	       </td>\n";
+    echo "	       <td>\n";
+    $DBtxt21_ano = db_getsession("DB_anousu");
+    $DBtxt21_mes = '01';
+    $DBtxt21_dia = '01';
+    db_inputdata('DBtxt21', $DBtxt21_dia, $DBtxt21_mes, $DBtxt21_ano, true, 'text', 4);
+    echo "	       </td>";
+    echo "	      </tr>";
+    echo "	      <tr>";
+    echo "	        <td nowrap align=\"right\" title=\"" . $GLOBALS["TDBtxt22"] . "\">";
+    echo $GLOBALS["LDBtxt22"];
+    echo "	        </td>";
+    echo "	        <td>";
+    $DBtxt22_ano = db_getsession("DB_anousu");
+    $DBtxt22_mes = date("m", db_getsession("DB_datausu"));
+    $DBtxt22_dia = date("d", db_getsession("DB_datausu"));
+    db_inputdata('DBtxt22', $DBtxt22_dia, $DBtxt22_mes, $DBtxt22_ano, true, 'text', 4);
+    echo "	        </td>";
+    echo "        </tr>";
+    echo "        <tr>";
+    echo "          <td colspan=\"2\" align = \"center\">";
+    echo "            <input  name=\"emite2\" id=\"emite2\" type=\"button\" value=\"Processar\" onclick=\"js_emite(3,'B');\" >";
+    echo "          </td>";
+    echo "        </tr>";
+    echo "       </table>";
+    echo "	    </td>";
+    echo "	    </tr>";
+    echo "	  </table>";
+    echo "   </fieldset>";
+    echo "  </td>";
+  }
+  if ($orcamento == true) {
+    echo "  <td align=\"center\" colspan=\"2\">";
+    echo "	 <fieldset id=\"tabelabalanco\"  align=\"center\">";
+    echo "   <legend align=\"center\"><strong>Orçamento</strong></legend>";
+    echo "	   <table border=\"0\"  width=\"220\" height=\"100\" style=\"border: 1px solid black\" cellpadding=\"0\" cellspacing=\"1\" >";
+    echo "      <tr>";
+    echo "        <td align = \"center\">";
+    echo "          <input  name=\"emite2\" id=\"emite2\" type=\"button\" value=\"Processar\" onclick=\"js_emite(1,'O');\" >";
+    echo "        </td>";
+    echo "      </tr>";
+    echo "     </table>";
+    echo "	 </fieldset>";
+    echo "  </td>";
+  }
+  echo "</tr>";
 }
 function db_le_mae_rec_sin($codigo, $nivel = false)
 {
-    $retorno = "";
-    $conta_mae = "";
-    if (substr($codigo, 13, 2) != '00') {
-        if ($nivel == true) {
-            $retorno = 10;
-        } else {
-            $retorno = substr($codigo, 0, 11) . '00';
-            $conta_mae = substr($codigo, 0, 11);
-        }
+  $retorno = "";
+  $conta_mae = "";
+  if (substr($codigo, 13, 2) != '00') {
+    if ($nivel == true) {
+      $retorno = 10;
+    } else {
+      $retorno = substr($codigo, 0, 11) . '00';
+      $conta_mae = substr($codigo, 0, 11);
     }
-    if (substr($codigo, 11, 4) != '0000') {
-        if ($nivel == true) {
-            $retorno = 9;
-        } else {
-            $retorno = substr($codigo, 0, 11) . '0000';
-            $conta_mae = substr($codigo, 0, 11);
-        }
+  }
+  if (substr($codigo, 11, 4) != '0000') {
+    if ($nivel == true) {
+      $retorno = 9;
+    } else {
+      $retorno = substr($codigo, 0, 11) . '0000';
+      $conta_mae = substr($codigo, 0, 11);
     }
-    if ($retorno == "" && substr($codigo, 9, 6) != '000000') {
-        if ($nivel == true) {
-            $retorno = 8;
-        } else {
-            $retorno = substr($codigo, 0, 9) . '000000';
-            $conta_mae = substr($codigo, 0, 9);
-        }
+  }
+  if ($retorno == "" && substr($codigo, 9, 6) != '000000') {
+    if ($nivel == true) {
+      $retorno = 8;
+    } else {
+      $retorno = substr($codigo, 0, 9) . '000000';
+      $conta_mae = substr($codigo, 0, 9);
     }
-    if ($retorno == "" && substr($codigo, 7, 8) != '00000000') {
-        if ($nivel == true) {
-            $retorno = 7;
-        } else {
-            $retorno = substr($codigo, 0, 7) . '00000000';
-            $conta_mae = substr($codigo, 0, 7);
-        }
+  }
+  if ($retorno == "" && substr($codigo, 7, 8) != '00000000') {
+    if ($nivel == true) {
+      $retorno = 7;
+    } else {
+      $retorno = substr($codigo, 0, 7) . '00000000';
+      $conta_mae = substr($codigo, 0, 7);
     }
-    if ($retorno == "" && substr($codigo, 5, 10) != '0000000000') {
-        if ($nivel == true) {
-            $retorno = 6;
-        } else {
-            $retorno = substr($codigo, 0, 5) . '0000000000';
-            $conta_mae = substr($codigo, 0, 5);
-        }
+  }
+  if ($retorno == "" && substr($codigo, 5, 10) != '0000000000') {
+    if ($nivel == true) {
+      $retorno = 6;
+    } else {
+      $retorno = substr($codigo, 0, 5) . '0000000000';
+      $conta_mae = substr($codigo, 0, 5);
     }
-    if ($retorno == "" && substr($codigo, 4, 11) != '00000000000') {
-        if ($nivel == true) {
-            $retorno = 5;
-        } else {
-            $retorno = substr($codigo, 0, 4) . '00000000000';
-            $conta_mae = substr($codigo, 0, 4);
-        }
+  }
+  if ($retorno == "" && substr($codigo, 4, 11) != '00000000000') {
+    if ($nivel == true) {
+      $retorno = 5;
+    } else {
+      $retorno = substr($codigo, 0, 4) . '00000000000';
+      $conta_mae = substr($codigo, 0, 4);
     }
-    if ($retorno == "" && substr($codigo, 3, 12) != '000000000000') {
-        if ($nivel == true) {
-            $retorno = 4;
-        } else {
-            $retorno = substr($codigo, 0, 3) . '000000000000';
-            $conta_mae = substr($codigo, 0, 3);
-        }
+  }
+  if ($retorno == "" && substr($codigo, 3, 12) != '000000000000') {
+    if ($nivel == true) {
+      $retorno = 4;
+    } else {
+      $retorno = substr($codigo, 0, 3) . '000000000000';
+      $conta_mae = substr($codigo, 0, 3);
     }
-    if ($retorno == "" && substr($codigo, 2, 13) != '0000000000000') {
-        if ($nivel == true) {
-            $retorno = 3;
-        } else {
-            $retorno = substr($codigo, 0, 2) . '0000000000000';
-            $conta_mae = substr($codigo, 0, 2);
-        }
+  }
+  if ($retorno == "" && substr($codigo, 2, 13) != '0000000000000') {
+    if ($nivel == true) {
+      $retorno = 3;
+    } else {
+      $retorno = substr($codigo, 0, 2) . '0000000000000';
+      $conta_mae = substr($codigo, 0, 2);
     }
-    if ($retorno == "" && substr($codigo, 1, 14) != '00000000000000') {
-        if ($nivel == true) {
-            $retorno = 2;
-        } else {
-            $retorno = substr($codigo, 0, 1) . '00000000000000';
-            $conta_mae = substr($codigo, 0, 1);
-        }
+  }
+  if ($retorno == "" && substr($codigo, 1, 14) != '00000000000000') {
+    if ($nivel == true) {
+      $retorno = 2;
+    } else {
+      $retorno = substr($codigo, 0, 1) . '00000000000000';
+      $conta_mae = substr($codigo, 0, 1);
     }
     if ($retorno == "") {
         if ($nivel == true) {
@@ -516,69 +533,68 @@ function db_le_mae_rec_sin($codigo, $nivel = false)
 
 function db_le_mae_rec($codigo, $nivel = false)
 {
-    $retorno = "";
-    if (substr($codigo, 13, 2) != '00') {
-        if ($nivel == true) {
-            $retorno = 10;
-        } else {
-            $retorno = substr($codigo, 0, 11) . '00';
-        }
+  $retorno = "";
+  if (substr($codigo, 13, 2) != '00') {
+    if ($nivel == true) {
+      $retorno = 10;
+    } else {
+      $retorno = substr($codigo, 0, 11) . '00';
     }
-    if (substr($codigo, 11, 4) != '0000') {
-        if ($nivel == true) {
-            $retorno = 9;
-        } else {
-            $retorno = substr($codigo, 0, 11) . '0000';
-        }
+  }
+  if (substr($codigo, 11, 4) != '0000') {
+    if ($nivel == true) {
+      $retorno = 9;
+    } else {
+      $retorno = substr($codigo, 0, 11) . '0000';
     }
-    if ($retorno == "" && substr($codigo, 9, 6) != '000000') {
-        if ($nivel == true) {
-            $retorno = 8;
-        } else {
-            $retorno = substr($codigo, 0, 9) . '000000';
-        }
+  }
+  if ($retorno == "" && substr($codigo, 9, 6) != '000000') {
+    if ($nivel == true) {
+      $retorno = 8;
+    } else {
+      $retorno = substr($codigo, 0, 9) . '000000';
     }
-    if ($retorno == "" && substr($codigo, 7, 8) != '00000000') {
-        if ($nivel == true) {
-            $retorno = 7;
-        } else {
-            $retorno = substr($codigo, 0, 7) . '00000000';
-        }
+  }
+  if ($retorno == "" && substr($codigo, 7, 8) != '00000000') {
+    if ($nivel == true) {
+      $retorno = 7;
+    } else {
+      $retorno = substr($codigo, 0, 7) . '00000000';
     }
-    if ($retorno == "" && substr($codigo, 5, 10) != '0000000000') {
-        if ($nivel == true) {
-            $retorno = 6;
-        } else {
-            $retorno = substr($codigo, 0, 5) . '0000000000';
-        }
+  }
+  if ($retorno == "" && substr($codigo, 5, 10) != '0000000000') {
+    if ($nivel == true) {
+      $retorno = 6;
+    } else {
+      $retorno = substr($codigo, 0, 5) . '0000000000';
     }
-    if ($retorno == "" && substr($codigo, 4, 11) != '00000000000') {
-        if ($nivel == true) {
-            $retorno = 5;
-        } else {
-            $retorno = substr($codigo, 0, 4) . '00000000000';
-        }
+  }
+  if ($retorno == "" && substr($codigo, 4, 11) != '00000000000') {
+    if ($nivel == true) {
+      $retorno = 5;
+    } else {
+      $retorno = substr($codigo, 0, 4) . '00000000000';
     }
-    if ($retorno == "" && substr($codigo, 3, 12) != '000000000000') {
-        if ($nivel == true) {
-            $retorno = 4;
-        } else {
-            $retorno = substr($codigo, 0, 3) . '000000000000';
-        }
+  }
+  if ($retorno == "" && substr($codigo, 3, 12) != '000000000000') {
+    if ($nivel == true) {
+      $retorno = 4;
+    } else {
+      $retorno = substr($codigo, 0, 3) . '000000000000';
     }
-    if ($retorno == "" && substr($codigo, 2, 13) != '0000000000000') {
-        if ($nivel == true) {
-            $retorno = 3;
-        } else {
-            $retorno = substr($codigo, 0, 2) . '0000000000000';
-        }
+  }
+  if ($retorno == "" && substr($codigo, 2, 13) != '0000000000000') {
+    if ($nivel == true) {
+      $retorno = 3;
+    } else {
+      $retorno = substr($codigo, 0, 2) . '0000000000000';
     }
-    if ($retorno == "" && substr($codigo, 1, 14) != '00000000000000') {
-        if ($nivel == true) {
-            $retorno = 2;
-        } else {
-            $retorno = substr($codigo, 0, 1) . '00000000000000';
-        }
+  }
+  if ($retorno == "" && substr($codigo, 1, 14) != '00000000000000') {
+    if ($nivel == true) {
+      $retorno = 2;
+    } else {
+      $retorno = substr($codigo, 0, 1) . '00000000000000';
     }
     if ($retorno == "") {
         if ($nivel == true) {
@@ -592,62 +608,61 @@ function db_le_mae_rec($codigo, $nivel = false)
 
 function db_le_mae($codigo, $nivel = false)
 {
-    $retorno = "";
-    if (substr($codigo, 11, 2) != '00') {
-        if ($nivel == true) {
-            $retorno = 9;
-        } else {
-            $retorno = substr($codigo, 0, 11) . '00';
-        }
+  $retorno = "";
+  if (substr($codigo, 11, 2) != '00') {
+    if ($nivel == true) {
+      $retorno = 9;
+    } else {
+      $retorno = substr($codigo, 0, 11) . '00';
     }
-    if ($retorno == "" && substr($codigo, 9, 4) != '0000') {
-        if ($nivel == true) {
-            $retorno = 8;
-        } else {
-            $retorno = substr($codigo, 0, 9) . '0000';
-        }
+  }
+  if ($retorno == "" && substr($codigo, 9, 4) != '0000') {
+    if ($nivel == true) {
+      $retorno = 8;
+    } else {
+      $retorno = substr($codigo, 0, 9) . '0000';
     }
-    if ($retorno == "" && substr($codigo, 7, 6) != '000000') {
-        if ($nivel == true) {
-            $retorno = 7;
-        } else {
-            $retorno = substr($codigo, 0, 7) . '000000';
-        }
+  }
+  if ($retorno == "" && substr($codigo, 7, 6) != '000000') {
+    if ($nivel == true) {
+      $retorno = 7;
+    } else {
+      $retorno = substr($codigo, 0, 7) . '000000';
     }
-    if ($retorno == "" && substr($codigo, 5, 8) != '00000000') {
-        if ($nivel == true) {
-            $retorno = 6;
-        } else {
-            $retorno = substr($codigo, 0, 5) . '00000000';
-        }
+  }
+  if ($retorno == "" && substr($codigo, 5, 8) != '00000000') {
+    if ($nivel == true) {
+      $retorno = 6;
+    } else {
+      $retorno = substr($codigo, 0, 5) . '00000000';
     }
-    if ($retorno == "" && substr($codigo, 4, 9) != '000000000') {
-        if ($nivel == true) {
-            $retorno = 5;
-        } else {
-            $retorno = substr($codigo, 0, 4) . '000000000';
-        }
+  }
+  if ($retorno == "" && substr($codigo, 4, 9) != '000000000') {
+    if ($nivel == true) {
+      $retorno = 5;
+    } else {
+      $retorno = substr($codigo, 0, 4) . '000000000';
     }
-    if ($retorno == "" && substr($codigo, 3, 10) != '0000000000') {
-        if ($nivel == true) {
-            $retorno = 4;
-        } else {
-            $retorno = substr($codigo, 0, 3) . '0000000000';
-        }
+  }
+  if ($retorno == "" && substr($codigo, 3, 10) != '0000000000') {
+    if ($nivel == true) {
+      $retorno = 4;
+    } else {
+      $retorno = substr($codigo, 0, 3) . '0000000000';
     }
-    if ($retorno == "" && substr($codigo, 2, 11) != '00000000000') {
-        if ($nivel == true) {
-            $retorno = 3;
-        } else {
-            $retorno = substr($codigo, 0, 2) . '00000000000';
-        }
+  }
+  if ($retorno == "" && substr($codigo, 2, 11) != '00000000000') {
+    if ($nivel == true) {
+      $retorno = 3;
+    } else {
+      $retorno = substr($codigo, 0, 2) . '00000000000';
     }
-    if ($retorno == "" && substr($codigo, 1, 12) != '000000000000') {
-        if ($nivel == true) {
-            $retorno = 2;
-        } else {
-            $retorno = substr($codigo, 0, 1) . '000000000000';
-        }
+  }
+  if ($retorno == "" && substr($codigo, 1, 12) != '000000000000') {
+    if ($nivel == true) {
+      $retorno = 2;
+    } else {
+      $retorno = substr($codigo, 0, 1) . '000000000000';
     }
     if ($retorno == "") {
         if ($nivel == true) {
@@ -670,9 +685,8 @@ function estruturalNivel($sEstrutural)
 
     for ($i = 1; $i < $iLaco; $i++) {
 
-        if ($iNiveis[$i] != 0) {
-            $iAux = $i + 1;
-        }
+    if ($iNiveis[$i] != 0) {
+      $iAux = $i + 1;
     }
     return $iAux;
 }
@@ -680,11 +694,11 @@ function estruturalNivel($sEstrutural)
 function criaContaMae($string)
 {
 
-    $string = db_formatar($string, "sistema");
-    $iNivel = estruturalNivel($string);
-    $stringnova = "";
-    $aNiveis = explode(".", $string);
-    for ($i = 0; $i < $iNivel; $i++) {
+  $string = db_formatar($string, "sistema");
+  $iNivel = estruturalNivel($string);
+  $stringnova = "";
+  $aNiveis = explode(".", $string);
+  for ($i = 0; $i < $iNivel; $i++) {
 
         $stringnova .=  $aNiveis[$i];
     }
@@ -696,10 +710,10 @@ function criaContaMae($string)
 function db_receitappa($anoini, $db_where = false, $retsql = false)
 {
 
-    $ano1 = $anoini;
-    $ano2 = $anoini + 1;
-    $ano3 = $anoini + 2;
-    $ano4 = $anoini + 3;
+  $ano1 = $anoini;
+  $ano2 = $anoini + 1;
+  $ano3 = $anoini + 2;
+  $ano4 = $anoini + 3;
 
     if ($db_where != false) {
         $where = $db_where;
@@ -752,105 +766,105 @@ function db_receitappa($anoini, $db_where = false, $retsql = false)
   a3 float8,
   a4 float8
   ) ");
-    //   db_query("create temporary table work_plano as $sql");
-    db_query("create index work_pl_estrut on work_pl(estrut)");
-    db_query("create index work_pl_estrutmae on work_pl(estrut_mae)");
-    $result = db_query($sql);
-    //  db_criatabela($result);exit;
-    $tot_a1 = 0;
-    $tot_a2 = 0;
-    $tot_a3 = 0;
-    $tot_a4 = 0;
+  //   db_query("create temporary table work_plano as $sql");
+  db_query("create index work_pl_estrut on work_pl(estrut)");
+  db_query("create index work_pl_estrutmae on work_pl(estrut_mae)");
+  $result = db_query($sql);
+  //  db_criatabela($result);exit;
+  $tot_a1 = 0;
+  $tot_a2 = 0;
+  $tot_a3 = 0;
+  $tot_a4 = 0;
 
-    global $seq;
-    global $estrut_mae;
-    global $estrut;
-    global $descr_rece;
-    global $recurso;
-    global $descr_recu;
-    global $a1;
-    global $a2;
-    global $a3;
-    global $a4;
+  global $seq;
+  global $estrut_mae;
+  global $estrut;
+  global $descr_rece;
+  global $recurso;
+  global $descr_recu;
+  global $a1;
+  global $a2;
+  global $a3;
+  global $a4;
 
-    global $saldo_anterior;
-    global $saldo_anterior_debito;
-    global $saldo_anterior_credito;
-    global $saldo_final;
-    global $result_estrut;
-    global $sinal_anterior;
-    global $sinal_final;
+  global $saldo_anterior;
+  global $saldo_anterior_debito;
+  global $saldo_anterior_credito;
+  global $saldo_final;
+  global $result_estrut;
+  global $sinal_anterior;
+  global $sinal_final;
 
-    $work_planomae = array();
-    $work_planoestrut = array();
-    $work_plano = array();
-    $seq = 0;
+  $work_planomae = array();
+  $work_planoestrut = array();
+  $work_plano = array();
+  $seq = 0;
 
-    for ($i = 0; $i < pg_numrows($result); $i++) {
-        //  for($i = 0;$i < 20;$i++){
-        db_fieldsmemory($result, $i);
+  for ($i = 0; $i < pg_numrows($result); $i++) {
+    //  for($i = 0;$i < 20;$i++){
+    db_fieldsmemory($result, $i);
 
-        $tot_a1 = $a1;
-        $tot_a2 = $a2;
-        $tot_a3 = $a3;
-        $tot_a4 = $a4;
+    $tot_a1 = $a1;
+    $tot_a2 = $a2;
+    $tot_a3 = $a3;
+    $tot_a4 = $a4;
 
-        $key = array_search("$estrut_mae", $work_planomae);
-        if ($key === false) { // não achou
-            $work_planomae[$seq] = $estrut_mae;
-            $work_planoestrut[$seq] = $estrut;
-            $work_plano[$seq] = array(0 => "$descr_rece", 1 => "$recurso   ", 2 => "$descr_recu", 3 => "$a1        ", 4 => "$a2        ", 5 => "$a3        ", 6 => "$a4        ");
-            $seq = $seq + 1;
-        } else {
-            $work_plano[$key][3] += $a1;
-            $work_plano[$key][4] += $a2;
-            $work_plano[$key][5] += $a3;
-            $work_plano[$key][6] += $a4;
-        }
-        $estrutural = $estrut;
-        for ($ii = 1; $ii < 10; $ii++) {
-            $estrutural = db_le_mae_conplano($estrutural);
-            $nivel = db_le_mae_conplano($estrutural, true);
-
-            $key = array_search("$estrutural", $work_planomae);
-            if ($key === false) { // não achou
-                // busca no banco e inclui
-                //echo "\n".$estrutural;
-                //echo "\n".$descr_rece;exit;
-                $res = db_query("select c60_descr as descr_rece,c60_finali,c60_codcon from conplano where c60_anousu = " . db_getsession("DB_anousu") . " and c60_estrut = '$estrutural'");
-                if ($res == false || pg_numrows($res) == 0) {
-                    db_redireciona("db_erros.php?fechar=true&db_erro=Está faltando cadastrar esse estrutural na contabilidade. Nível : $nivel  Estrutural : $estrutural - ano: " + db_getsession("DB_anousu"));
-                    exit;
-                }
-                db_fieldsmemory($res, 0);
-
-                $work_planomae[$seq] = $estrutural;
-                $work_planoestrut[$seq] = '';
-                $work_plano[$seq] = (array(0 => $descr_rece, 1 => $recurso, 2 => $descr_recu, 3 => $a1, 4 => $a2, 5 => $a3, 6 => $a4));
-                $seq++;
-            } else {
-                $work_plano[$key][3] += $tot_a1;
-                $work_plano[$key][4] += $tot_a2;
-                $work_plano[$key][5] += $tot_a3;
-                $work_plano[$key][6] += $tot_a4;
-            }
-            if ($nivel == 1)
-                break;
-        }
+    $key = array_search("$estrut_mae", $work_planomae);
+    if ($key === false) { // não achou
+      $work_planomae[$seq] = $estrut_mae;
+      $work_planoestrut[$seq] = $estrut;
+      $work_plano[$seq] = array(0 => "$descr_rece", 1 => "$recurso   ", 2 => "$descr_recu", 3 => "$a1        ", 4 => "$a2        ", 5 => "$a3        ", 6 => "$a4        ");
+      $seq = $seq + 1;
+    } else {
+      $work_plano[$key][3] += $a1;
+      $work_plano[$key][4] += $a2;
+      $work_plano[$key][5] += $a3;
+      $work_plano[$key][6] += $a4;
     }
+    $estrutural = $estrut;
+    for ($ii = 1; $ii < 10; $ii++) {
+      $estrutural = db_le_mae_conplano($estrutural);
+      $nivel = db_le_mae_conplano($estrutural, true);
 
-    for ($i = 0; $i < sizeof($work_planomae); $i++) {
-        $mae = $work_planomae[$i];
-        $estrut = $work_planoestrut[$i];
-        $descr_rece = $work_plano[$i][0];
-        $recurso = $work_plano[$i][1];
-        $descr_recu = $work_plano[$i][2];
-        $a1 = $work_plano[$i][3];
-        $a2 = $work_plano[$i][4];
-        $a3 = $work_plano[$i][5];
-        $a4 = $work_plano[$i][6];
+      $key = array_search("$estrutural", $work_planomae);
+      if ($key === false) { // não achou
+        // busca no banco e inclui
+        //echo "\n".$estrutural;
+        //echo "\n".$descr_rece;exit;
+        $res = db_query("select c60_descr as descr_rece,c60_finali,c60_codcon from conplano where c60_anousu = " . db_getsession("DB_anousu") . " and c60_estrut = '$estrutural'");
+        if ($res == false || pg_numrows($res) == 0) {
+          db_redireciona("db_erros.php?fechar=true&db_erro=Está faltando cadastrar esse estrutural na contabilidade. Nível : $nivel  Estrutural : $estrutural - ano: " + db_getsession("DB_anousu"));
+          exit;
+        }
+        db_fieldsmemory($res, 0);
 
-        $sql = "insert into work_pl
+        $work_planomae[$seq] = $estrutural;
+        $work_planoestrut[$seq] = '';
+        $work_plano[$seq] = (array(0 => $descr_rece, 1 => $recurso, 2 => $descr_recu, 3 => $a1, 4 => $a2, 5 => $a3, 6 => $a4));
+        $seq++;
+      } else {
+        $work_plano[$key][3] += $tot_a1;
+        $work_plano[$key][4] += $tot_a2;
+        $work_plano[$key][5] += $tot_a3;
+        $work_plano[$key][6] += $tot_a4;
+      }
+      if ($nivel == 1)
+        break;
+    }
+  }
+
+  for ($i = 0; $i < sizeof($work_planomae); $i++) {
+    $mae = $work_planomae[$i];
+    $estrut = $work_planoestrut[$i];
+    $descr_rece = $work_plano[$i][0];
+    $recurso = $work_plano[$i][1];
+    $descr_recu = $work_plano[$i][2];
+    $a1 = $work_plano[$i][3];
+    $a2 = $work_plano[$i][4];
+    $a3 = $work_plano[$i][5];
+    $a4 = $work_plano[$i][6];
+
+    $sql = "insert into work_pl
       values ('$mae',
       '$estrut',
       '$descr_rece',
@@ -885,7 +899,7 @@ function db_receitappa($anoini, $db_where = false, $retsql = false)
 //#20#//  $where = exemplo ->  " and o58_funcao=10"
 function db_rpsaldo($anousu = "", $w_instit = "=1", $dt_ini = "", $dt_fin = "", $where = "1=1", $coddoc = "")
 {
-    $sql = "
+  $sql = "
     select
     e91_codtipo,
     e90_descr,
@@ -979,115 +993,115 @@ function db_rpsaldo($anousu = "", $w_instit = "=1", $dt_ini = "", $dt_fin = "", 
 function db_dotacaosaldo($nivel = 8, $tipo_nivel = 1, $tipo_saldo = 2, $descr = true, $where = '', $anousu = null, $dataini = null, $datafim = null, $primeiro_fim = 8, $segundo_inicio = 0, $retsql = false, $tipo_balanco = 1, $desmembra_segundo_inicio = true, $subelemento = 'nao', $sinal = null)
 {
 
-    if ($anousu == null)
-        $anousu = db_getsession("DB_anousu");
+  if ($anousu == null)
+    $anousu = db_getsession("DB_anousu");
 
-    if ($dataini == null)
-        $dataini = date('Y-m-d', db_getsession('DB_datausu'));
+  if ($dataini == null)
+    $dataini = date('Y-m-d', db_getsession('DB_datausu'));
 
-    if ($datafim == null)
-        $datafim = date('Y-m-d', db_getsession('DB_datausu'));
+  if ($datafim == null)
+    $datafim = date('Y-m-d', db_getsession('DB_datausu'));
 
-    if ($where != '') {
-        $condicao = " and " . $where;
-    } else {
-        $condicao = "";
-    }
+  if ($where != '') {
+    $condicao = " and " . $where;
+  } else {
+    $condicao = "";
+  }
 
-    if ($tipo_balanco == 1) {
-        $tipo_pa = 'dot_ini';
-    } elseif ($tipo_balanco == 2) {
-        $tipo_pa = 'empenhado - anulado';
-    } elseif ($tipo_balanco == 3) {
-        $tipo_pa = 'liquidado';
-    } else {
-        $tipo_pa = 'pago';
-    }
-    $whereSinal = "";
-    if ($sinal == 1) {
-        //mostra dotações positivas
-        $whereSinal = " where (dot_ini + suplemen_acumulado - reduzido_acumulado - empenhado_acumulado + anulado_acumulado) > 0 ";
-    } else if ($sinal == 2) {
-        //mostra dotações negativas
-        $whereSinal = " where (dot_ini + suplemen_acumulado - reduzido_acumulado - empenhado_acumulado + anulado_acumulado) < 0 ";
-    }
-    //#00#//db_dotacaosaldo
-    //#10#//Esta funcao retorna o recordset do saldo das dotações
-    //#15#//db_dotacaosaldo($nivel=8, $tipo_nivel=1, $tipo_saldo=2, $descr=true, $where='', $anousu=null, $dataini=null, $datafim=null)
-    //#20#//$nivel      : Até qual o nível será apurado o saldo, pode ser:
-    //#20#//              1 - órgão
-    //#20#//              2 - unidade
-    //#20#//              3 - função
-    //#20#//              4 - subfuncao
-    //#20#//              5 - programa
-    //#20#//              6 - projeto de atividade
-    //#20#//              7 - elemento
-    //#20#//              8 - recurso
-    //#20#//
-    //#20#//              ex. quando solicitar nivel=8 usar tipo_nivel=2 para evitar duplicação de valores
-    //#20#//
-    //#20#//$tipo_nivel : especifica a maneira de como será apurado o resultado, pode ser:
-    //#20#//              1 - traz a árvore de elementos até o nível solicitado
-    //#20#//                  Ex.: 01                  300
-    //#20#//                       01.01               100
-    //#20#//                       01.01.01             50
-    //#20#//              2 - traz o saldo do nível escolhido
-    //#20#//                  Ex.: 01.01.01             50
-    //#20#//              3 - totaliza o saldo pelo nível escolhido
-    //#20#//                  Ex.: 00.00.01           1000
-    //#20#//
-    //#20#//
-    //#20#//$tipo_saldo : 1 - dotação inicial
-    //#20#//              2 - saldo no mes da dataini
-    //#20#//              3 - saldo por período
-    //#20#//              4 - saldo por período + acumulado do período
-    //#20#//
-    //#20#//$descr      : retorna o record set com as descrições ou não, o default é 'true'
-    //#20#//
-    //#20#//$where      : condição
-    //#20#//
-    //#20#//$anousu     : ano do orçamento
-    //#20#//
-    //#20#//$dataini    : data inicial do intervalo
-    //#20#//
-    //#20#//$datafim    : data final do intervalo
-    //#20#//
-    //#20#//$subelemento : algumas funcoes do pad usam esse parametro como "sim",para orcamentos no desdobramento
-    //#20#//
-    //#20#//
-    //#20#//
-    //#99#//
-    //#99#//  dot_ini   			: datacao inicial (valor do orcamento)
-    //#99#//  saldo_anterior		: saldo anterior ao intervalo de tempo
-    //#99#//  empenhado			: empenhado no intervalo
-    //#99#//  anulado			: anulado no intervalo
-    //#99#//  liquidado			: liquidado no intervalo
-    //#99#//  pago				: pago no intervalo
-    //#99#//  suplementado			: suplementado no intervalo
-    //#99#//  reduzido			: reduzido no intervalo
-    //#99#//  atual				: saldo atual
-    //#99#//  reservado			: reservado
-    //#99#//  atual_menos_reservado		: saldo atual menos o reservado
-    //#99#//  atual_a_pagar			:
-    //#99#//  atual_a_pagar_liquidado
-    //#99#//  empenhado_acumulado
-    //#99#//  anulado_acumulado
-    //#99#//  liquidado_acumulado
-    //#99#//  pago_acumulado
-    //#99#//  suplementado_acumulado
-    //#99#//  reduzido_acumulado
-    //#99#//
-    //#99#//
-    //#99#//
-    //#99#//
-    //#99#//
-    //#99#//
-    // funcao para gerar work
-    // db_query('begin');
-    //   substr(o56_elemento,1,7) as o58_elemento,
-    //   9999999 as o58_coddot,
+  if ($tipo_balanco == 1) {
+    $tipo_pa = 'dot_ini';
+  } elseif ($tipo_balanco == 2) {
+    $tipo_pa = 'empenhado - anulado';
+  } elseif ($tipo_balanco == 3) {
+    $tipo_pa = 'liquidado';
+  } else {
+    $tipo_pa = 'pago';
+  }
+  $whereSinal = "";
+  if ($sinal == 1) {
+    //mostra dotações positivas
+    $whereSinal = " where (dot_ini + suplemen_acumulado - reduzido_acumulado - empenhado_acumulado + anulado_acumulado) > 0 ";
+  } else if ($sinal == 2) {
+    //mostra dotações negativas
+    $whereSinal = " where (dot_ini + suplemen_acumulado - reduzido_acumulado - empenhado_acumulado + anulado_acumulado) < 0 ";
+  }
+  //#00#//db_dotacaosaldo
+  //#10#//Esta funcao retorna o recordset do saldo das dotações
+  //#15#//db_dotacaosaldo($nivel=8, $tipo_nivel=1, $tipo_saldo=2, $descr=true, $where='', $anousu=null, $dataini=null, $datafim=null)
+  //#20#//$nivel      : Até qual o nível será apurado o saldo, pode ser:
+  //#20#//              1 - órgão
+  //#20#//              2 - unidade
+  //#20#//              3 - função
+  //#20#//              4 - subfuncao
+  //#20#//              5 - programa
+  //#20#//              6 - projeto de atividade
+  //#20#//              7 - elemento
+  //#20#//              8 - recurso
+  //#20#//
+  //#20#//              ex. quando solicitar nivel=8 usar tipo_nivel=2 para evitar duplicação de valores
+  //#20#//
+  //#20#//$tipo_nivel : especifica a maneira de como será apurado o resultado, pode ser:
+  //#20#//              1 - traz a árvore de elementos até o nível solicitado
+  //#20#//                  Ex.: 01                  300
+  //#20#//                       01.01               100
+  //#20#//                       01.01.01             50
+  //#20#//              2 - traz o saldo do nível escolhido
+  //#20#//                  Ex.: 01.01.01             50
+  //#20#//              3 - totaliza o saldo pelo nível escolhido
+  //#20#//                  Ex.: 00.00.01           1000
+  //#20#//
+  //#20#//
+  //#20#//$tipo_saldo : 1 - dotação inicial
+  //#20#//              2 - saldo no mes da dataini
+  //#20#//              3 - saldo por período
+  //#20#//              4 - saldo por período + acumulado do período
+  //#20#//
+  //#20#//$descr      : retorna o record set com as descrições ou não, o default é 'true'
+  //#20#//
+  //#20#//$where      : condição
+  //#20#//
+  //#20#//$anousu     : ano do orçamento
+  //#20#//
+  //#20#//$dataini    : data inicial do intervalo
+  //#20#//
+  //#20#//$datafim    : data final do intervalo
+  //#20#//
+  //#20#//$subelemento : algumas funcoes do pad usam esse parametro como "sim",para orcamentos no desdobramento
+  //#20#//
+  //#20#//
+  //#20#//
+  //#99#//
+  //#99#//  dot_ini   			: datacao inicial (valor do orcamento)
+  //#99#//  saldo_anterior		: saldo anterior ao intervalo de tempo
+  //#99#//  empenhado			: empenhado no intervalo
+  //#99#//  anulado			: anulado no intervalo
+  //#99#//  liquidado			: liquidado no intervalo
+  //#99#//  pago				: pago no intervalo
+  //#99#//  suplementado			: suplementado no intervalo
+  //#99#//  reduzido			: reduzido no intervalo
+  //#99#//  atual				: saldo atual
+  //#99#//  reservado			: reservado
+  //#99#//  atual_menos_reservado		: saldo atual menos o reservado
+  //#99#//  atual_a_pagar			:
+  //#99#//  atual_a_pagar_liquidado
+  //#99#//  empenhado_acumulado
+  //#99#//  anulado_acumulado
+  //#99#//  liquidado_acumulado
+  //#99#//  pago_acumulado
+  //#99#//  suplementado_acumulado
+  //#99#//  reduzido_acumulado
+  //#99#//
+  //#99#//
+  //#99#//
+  //#99#//
+  //#99#//
+  //#99#//
+  // funcao para gerar work
+  // db_query('begin');
+  //   substr(o56_elemento,1,7) as o58_elemento,
+  //   9999999 as o58_coddot,
 
-    $sql = "
+  $sql = "
      CREATE TEMP TABLE IF NOT EXISTS work_dotacao (
        o58_instit integer,
        o58_anousu integer,
@@ -1143,7 +1157,7 @@ function db_dotacaosaldo($nivel = 8, $tipo_nivel = 1, $tipo_saldo = 2, $descr = 
      TRUNCATE work_dotacao;
    ";
 
-    $sql .= "INSERT INTO work_dotacao
+  $sql .= "INSERT INTO work_dotacao
     select *,
     (case when o55_tipo  = 1 then $tipo_pa else 0 end) as proj,
     (case when o55_tipo  = 2 then $tipo_pa else 0 end) as ativ,
@@ -1230,11 +1244,11 @@ function db_dotacaosaldo($nivel = 8, $tipo_nivel = 1, $tipo_saldo = 2, $descr = 
 
     /////// nivel 8 ///////////////
 
-    if (8 <= $primeiro_fim || ($desmembra_segundo_inicio == true && $segundo_inicio <= 8 || $desmembra_segundo_inicio == false && $segundo_inicio == 8)) {
-        $xnivel8 = '';
-        if ($nivel >= 8) {
-            if ($tipo_nivel == 1 || $tipo_nivel == 2) {
-                $xnivel8 = "o58_orgao,
+  if (8 <= $primeiro_fim || ($desmembra_segundo_inicio == true && $segundo_inicio <= 8 || $desmembra_segundo_inicio == false && $segundo_inicio == 8)) {
+    $xnivel8 = '';
+    if ($nivel >= 8) {
+      if ($tipo_nivel == 1 || $tipo_nivel == 2) {
+        $xnivel8 = "o58_orgao,
           o58_unidade,
           o58_funcao,
           o58_subfuncao,
@@ -1243,8 +1257,8 @@ function db_dotacaosaldo($nivel = 8, $tipo_nivel = 1, $tipo_saldo = 2, $descr = 
           o58_codele,
           o58_elemento,
           o58_coddot, ";
-            } elseif ($tipo_nivel == 3) {
-                $xnivel8 = "   -1 as o58_orgao,
+      } elseif ($tipo_nivel == 3) {
+        $xnivel8 = "   -1 as o58_orgao,
           -1 as o58_unidade,
           -1 as o58_funcao,
           -1 as o58_subfuncao,
@@ -1339,11 +1353,11 @@ function db_dotacaosaldo($nivel = 8, $tipo_nivel = 1, $tipo_saldo = 2, $descr = 
         }
         $nivel8 .= "o58_codigo
       ) as i";
-    } else {
-        $nivel8 = '';
-    }
+  } else {
+    $nivel8 = '';
+  }
 
-    /////// nivel 7 ///////////////
+  /////// nivel 7 ///////////////
 
     if (7 <= $primeiro_fim || ($desmembra_segundo_inicio == true && $segundo_inicio <= 7 || $desmembra_segundo_inicio == false && $segundo_inicio == 7)) {
         $xnivel7 = '';
@@ -1355,8 +1369,8 @@ function db_dotacaosaldo($nivel = 8, $tipo_nivel = 1, $tipo_saldo = 2, $descr = 
           o58_subfuncao,
           o58_programa,
           o58_projativ,";
-            } elseif ($tipo_nivel == 3) {
-                $xnivel7 = "   -1 as o58_orgao,
+      } elseif ($tipo_nivel == 3) {
+        $xnivel7 = "   -1 as o58_orgao,
           -1 as o58_unidade,
           -1 as o58_funcao,
           -1 as o58_subfuncao,
@@ -1450,11 +1464,11 @@ function db_dotacaosaldo($nivel = 8, $tipo_nivel = 1, $tipo_saldo = 2, $descr = 
         $nivel7 .= "   o58_codele,
       o58_elemento
       ) as g";
-    } else {
-        $nivel7 = '';
-    }
+  } else {
+    $nivel7 = '';
+  }
 
-    /////// nivel 6 ///////////////
+  /////// nivel 6 ///////////////
 
     if (6 <= $primeiro_fim || ($desmembra_segundo_inicio == true && $segundo_inicio <= 6 || $desmembra_segundo_inicio == false && $segundo_inicio == 6)) {
         $xnivel6 = '';
@@ -1465,8 +1479,8 @@ function db_dotacaosaldo($nivel = 8, $tipo_nivel = 1, $tipo_saldo = 2, $descr = 
           o58_funcao,
           o58_subfuncao,
           o58_programa,";
-            } elseif ($tipo_nivel == 3) {
-                $xnivel6 = "-1 as o58_orgao,
+      } elseif ($tipo_nivel == 3) {
+        $xnivel6 = "-1 as o58_orgao,
           -1 as o58_unidade,
           -1 as o58_funcao,
           -1 as o58_subfuncao,
@@ -1557,11 +1571,11 @@ function db_dotacaosaldo($nivel = 8, $tipo_nivel = 1, $tipo_saldo = 2, $descr = 
         }
         $nivel6 .= "   o58_projativ
       ) as f";
-    } else {
-        $nivel6 = '';
-    }
+  } else {
+    $nivel6 = '';
+  }
 
-    /////// nivel 5 ///////////////
+  /////// nivel 5 ///////////////
 
     if (5 <= $primeiro_fim || ($desmembra_segundo_inicio == true && $segundo_inicio <= 5 || $desmembra_segundo_inicio == false && $segundo_inicio == 5)) {
         $xnivel5 = '';
@@ -1571,8 +1585,8 @@ function db_dotacaosaldo($nivel = 8, $tipo_nivel = 1, $tipo_saldo = 2, $descr = 
           o58_unidade,
           o58_funcao,
           o58_subfuncao,";
-            } elseif ($tipo_nivel == 3) {
-                $xnivel5 = "-1 as o58_orgao,
+      } elseif ($tipo_nivel == 3) {
+        $xnivel5 = "-1 as o58_orgao,
           -1 as o58_unidade,
           -1 as o58_funcao,
           -1 as o58_subfuncao,";
@@ -1662,11 +1676,11 @@ function db_dotacaosaldo($nivel = 8, $tipo_nivel = 1, $tipo_saldo = 2, $descr = 
         }
         $nivel5 .= " o58_programa
       ) as e";
-    } else {
-        $nivel5 = '';
-    }
+  } else {
+    $nivel5 = '';
+  }
 
-    /////// nivel 4 ///////////////
+  /////// nivel 4 ///////////////
 
     if (4 <= $primeiro_fim || ($desmembra_segundo_inicio == true && $segundo_inicio <= 4 || $desmembra_segundo_inicio == false && $segundo_inicio == 4)) {
         $xnivel4 = '';
@@ -1675,8 +1689,8 @@ function db_dotacaosaldo($nivel = 8, $tipo_nivel = 1, $tipo_saldo = 2, $descr = 
                 $xnivel4 = "o58_orgao,
           o58_unidade,
           o58_funcao,";
-            } elseif ($tipo_nivel == 3) {
-                $xnivel4 = "-1 as o58_orgao,
+      } elseif ($tipo_nivel == 3) {
+        $xnivel4 = "-1 as o58_orgao,
           -1 as o58_unidade,
           -1 as o58_funcao,";
             }
@@ -1765,19 +1779,19 @@ function db_dotacaosaldo($nivel = 8, $tipo_nivel = 1, $tipo_saldo = 2, $descr = 
         }
         $nivel4 .= "o58_subfuncao
       ) as d";
-    } else {
-        $nivel4 = '';
-    }
+  } else {
+    $nivel4 = '';
+  }
 
-    if (3 <= $primeiro_fim || ($desmembra_segundo_inicio == true && $segundo_inicio <= 3 || $desmembra_segundo_inicio == false && $segundo_inicio == 3)) {
+  if (3 <= $primeiro_fim || ($desmembra_segundo_inicio == true && $segundo_inicio <= 3 || $desmembra_segundo_inicio == false && $segundo_inicio == 3)) {
 
         $xnivel3 = '';
         if ($nivel >= 3) {
             if ($tipo_nivel == 1 || $tipo_nivel == 2) {
                 $xnivel3 = " o58_orgao,
           o58_unidade,";
-            } elseif ($tipo_nivel == 3) {
-                $xnivel3 = " -1 as o58_orgao,
+      } elseif ($tipo_nivel == 3) {
+        $xnivel3 = " -1 as o58_orgao,
           -1 as o58_unidade,";
             }
         }
@@ -1865,11 +1879,11 @@ function db_dotacaosaldo($nivel = 8, $tipo_nivel = 1, $tipo_saldo = 2, $descr = 
         }
         $nivel3 .= "	      o58_funcao
       ) as c";
-    } else {
-        $nivel3 = '';
-    }
+  } else {
+    $nivel3 = '';
+  }
 
-    /////// nivel 2 ///////////////
+  /////// nivel 2 ///////////////
 
     if (2 <= $primeiro_fim || ($desmembra_segundo_inicio == true && $segundo_inicio <= 2 || $desmembra_segundo_inicio == false && $segundo_inicio == 2)) {
 
@@ -1956,15 +1970,15 @@ function db_dotacaosaldo($nivel = 8, $tipo_nivel = 1, $tipo_saldo = 2, $descr = 
       o58_orgao,
       o58_unidade
       ) as b";
-    } else {
-        $nivel2 = '';
-    }
+  } else {
+    $nivel2 = '';
+  }
 
-    ///////  nivel 1  /////////////////
+  ///////  nivel 1  /////////////////
 
-    if (1 <= $primeiro_fim || ($desmembra_segundo_inicio == true && $segundo_inicio <= 1 || $desmembra_segundo_inicio == false && $segundo_inicio == 1)) {
-        $nivel1 = " select ";
-        $nivel1 .= "  o58_orgao,
+  if (1 <= $primeiro_fim || ($desmembra_segundo_inicio == true && $segundo_inicio <= 1 || $desmembra_segundo_inicio == false && $segundo_inicio == 1)) {
+    $nivel1 = " select ";
+    $nivel1 .= "  o58_orgao,
       -1 as o58_unidade,
       -1 as o58_funcao,
       -1 as o58_subfuncao,
@@ -2117,8 +2131,9 @@ function db_dotacaosaldo($nivel = 8, $tipo_nivel = 1, $tipo_saldo = 2, $descr = 
                 $sql = $nivel8;
         }
     }
+  }
 
-    $sql .= " order by
+  $sql .= " order by
     o58_orgao,
     o58_unidade,
     o58_funcao,
@@ -2129,118 +2144,118 @@ function db_dotacaosaldo($nivel = 8, $tipo_nivel = 1, $tipo_saldo = 2, $descr = 
     o58_coddot
     ";
 
-    //$sql = " select * from ( $sql ) as l $condicao ";
-    //echo $sql;
-    //$result = db_query($sql);
-    //db_criatabela($result);exit;
+  //$sql = " select * from ( $sql ) as l $condicao ";
+  //echo $sql;
+  //$result = db_query($sql);
+  //db_criatabela($result);exit;
 
-    $xordem = '';
-    $junta = '';
-    // pesquisa as despesas
-    if ($primeiro_fim >= 1) {
-        $junta .= "case when o58_orgao = -1 then 0 else o58_orgao end as o58_orgao,o40_descr,";
-        $xordem .= "o58_orgao,o40_descr,";
-    }
-    if ($primeiro_fim >= 2) {
-        $junta .= "case when o58_unidade = -1 then 0 else o58_unidade end as o58_unidade,o41_descr,";
-        $xordem .= "o58_unidade,o41_descr,";
-    }
-    if ($primeiro_fim >= 3) {
-        $junta .= "case when o58_funcao = -1 then 0 else o58_funcao end as o58_funcao,o52_descr,";
-        $xordem .= "o58_funcao,o52_descr,";
-    }
-    if ($primeiro_fim >= 4) {
-        $junta .= "case when o58_subfuncao = -1 then 0 else o58_subfuncao end as o58_subfuncao,o53_descr,";
-        $xordem .= "o58_subfuncao,o53_descr,";
-    }
-    if ($primeiro_fim >= 5) {
-        $junta .= "case when o58_programa = -1 then 0 else o58_programa end as o58_programa,o54_descr,";
-        $xordem .= "o58_programa,o54_descr,";
-    }
-    if ($primeiro_fim >= 6) {
-        $junta .= "case when o58_projativ = -1 then 0 else o58_projativ end as o58_projativ,o55_descr,o55_finali,o55_tipopasta,o55_tipoensino,";
-        $xordem .= "o58_projativ,o55_descr,o55_finali,o55_tipopasta,o55_tipoensino,";
-    }
-    if ($primeiro_fim >= 7) {
-        $junta .= "o58_elemento,o56_descr,";
-        $xordem .= "o58_elemento,o56_descr,";
-    }
-    if ($primeiro_fim >= 8) {
-        $junta .= "case when o58_coddot = -1 then 0 else o58_coddot end as o58_coddot,case when o58_codigo = -1 then 0 else o58_codigo end as o58_codigo,o15_descr,";
-        $xordem .= "o58_codigo,o15_descr,o58_coddot ";
-    }
+  $xordem = '';
+  $junta = '';
+  // pesquisa as despesas
+  if ($primeiro_fim >= 1) {
+    $junta .= "case when o58_orgao = -1 then 0 else o58_orgao end as o58_orgao,o40_descr,";
+    $xordem .= "o58_orgao,o40_descr,";
+  }
+  if ($primeiro_fim >= 2) {
+    $junta .= "case when o58_unidade = -1 then 0 else o58_unidade end as o58_unidade,o41_descr,";
+    $xordem .= "o58_unidade,o41_descr,";
+  }
+  if ($primeiro_fim >= 3) {
+    $junta .= "case when o58_funcao = -1 then 0 else o58_funcao end as o58_funcao,o52_descr,";
+    $xordem .= "o58_funcao,o52_descr,";
+  }
+  if ($primeiro_fim >= 4) {
+    $junta .= "case when o58_subfuncao = -1 then 0 else o58_subfuncao end as o58_subfuncao,o53_descr,";
+    $xordem .= "o58_subfuncao,o53_descr,";
+  }
+  if ($primeiro_fim >= 5) {
+    $junta .= "case when o58_programa = -1 then 0 else o58_programa end as o58_programa,o54_descr,";
+    $xordem .= "o58_programa,o54_descr,";
+  }
+  if ($primeiro_fim >= 6) {
+    $junta .= "case when o58_projativ = -1 then 0 else o58_projativ end as o58_projativ,o55_descr,o55_finali,o55_tipopasta,o55_tipoensino,";
+    $xordem .= "o58_projativ,o55_descr,o55_finali,o55_tipopasta,o55_tipoensino,";
+  }
+  if ($primeiro_fim >= 7) {
+    $junta .= "o58_elemento,o56_descr,";
+    $xordem .= "o58_elemento,o56_descr,";
+  }
+  if ($primeiro_fim >= 8) {
+    $junta .= "case when o58_coddot = -1 then 0 else o58_coddot end as o58_coddot,case when o58_codigo = -1 then 0 else o58_codigo end as o58_codigo,o15_descr,";
+    $xordem .= "o58_codigo,o15_descr,o58_coddot ";
+  }
 
-    $virg = '';
-    if ($primeiro_fim < 8) {
-        $tu_para = false;
-        if ($segundo_inicio <= 1) {
-            $junta .= $virg . "case when o58_orgao = -1 then 0 else o58_orgao end::integer as o58_orgao,o40_descr";
-            $xordem .= "o58_orgao,o40_descr";
-            if ($desmembra_segundo_inicio == false) {
-                $tu_para = true;
-            }
-            $virg = ',';
-        }
-        if ($segundo_inicio <= 2 && $tu_para == false) {
-            $junta .= $virg . "case when o58_unidade = -1 then 0 else o58_unidade end::integer as o58_unidade,o41_descr";
-            $xordem .= $virg . "o58_unidade,o41_descr";
-            if ($desmembra_segundo_inicio == false) {
-                $tu_para = true;
-            }
-            $virg = ',';
-        }
-        if ($segundo_inicio <= 3 && $tu_para == false) {
-            $junta .= $virg . "case when o58_funcao = -1 then 0 else o58_funcao end::integer as o58_funcao,o52_descr";
-            $xordem .= $virg . "o58_funcao,o52_descr";
-            if ($desmembra_segundo_inicio == false) {
-                $tu_para = true;
-            }
-            $virg = ',';
-        }
-        if ($segundo_inicio <= 4 && $tu_para == false) {
-            $junta .= $virg . "case when o58_subfuncao = -1 then 0 else o58_subfuncao end::integer as o58_subfuncao,o53_descr";
-            $xordem .= $virg . "o58_subfuncao,o53_descr";
-            if ($desmembra_segundo_inicio == false) {
-                $tu_para = true;
-            }
-            $virg = ',';
-        }
-        if ($segundo_inicio <= 5 && $tu_para == false) {
-            $junta .= $virg . "case when o58_programa = -1 then 0 else o58_programa end::integer as o58_programa,o54_descr";
-            $xordem .= $virg . "o58_programa,o54_descr";
-            if ($desmembra_segundo_inicio == false) {
-                $tu_para = true;
-            }
-            $virg = ',';
-        }
-        if ($segundo_inicio <= 6 && $tu_para == false) {
-            $junta .= $virg . "case when o58_projativ = -1 then 0 else o58_projativ end::integer as o58_projativ,o55_descr,o55_finali";
-            $xordem .= $virg . "o58_projativ,o55_descr,o55_finali";
-            if ($desmembra_segundo_inicio == false) {
-                $tu_para = true;
-            }
-            $virg = ',';
-        }
-        if ($segundo_inicio <= 7 && $tu_para == false) {
-            $junta .= $virg . "o58_elemento,o56_descr";
-            $xordem .= $virg . "o58_elemento,o56_descr";
-            if ($desmembra_segundo_inicio == false) {
-                $tu_para = true;
-            }
-            $virg = ',';
-        }
-        if ($segundo_inicio <= 8 && $tu_para == false) {
-            $junta .= $virg . "case when o58_coddot = -1 then 0 else o58_coddot end::integer as o58_coddot,case when o58_codigo = -1 then 0 else o58_codigo end::integer as o58_codigo,o15_descr";
-            $xordem .= $virg . "o58_codigo,o15_descr,o58_coddot ";
-            if ($desmembra_segundo_inicio == false) {
-                $tu_para = true;
-            }
-            $virg = ',';
-        }
+  $virg = '';
+  if ($primeiro_fim < 8) {
+    $tu_para = false;
+    if ($segundo_inicio <= 1) {
+      $junta .= $virg . "case when o58_orgao = -1 then 0 else o58_orgao end::integer as o58_orgao,o40_descr";
+      $xordem .= "o58_orgao,o40_descr";
+      if ($desmembra_segundo_inicio == false) {
+        $tu_para = true;
+      }
+      $virg = ',';
     }
-    $junta .= $virg;
+    if ($segundo_inicio <= 2 && $tu_para == false) {
+      $junta .= $virg . "case when o58_unidade = -1 then 0 else o58_unidade end::integer as o58_unidade,o41_descr";
+      $xordem .= $virg . "o58_unidade,o41_descr";
+      if ($desmembra_segundo_inicio == false) {
+        $tu_para = true;
+      }
+      $virg = ',';
+    }
+    if ($segundo_inicio <= 3 && $tu_para == false) {
+      $junta .= $virg . "case when o58_funcao = -1 then 0 else o58_funcao end::integer as o58_funcao,o52_descr";
+      $xordem .= $virg . "o58_funcao,o52_descr";
+      if ($desmembra_segundo_inicio == false) {
+        $tu_para = true;
+      }
+      $virg = ',';
+    }
+    if ($segundo_inicio <= 4 && $tu_para == false) {
+      $junta .= $virg . "case when o58_subfuncao = -1 then 0 else o58_subfuncao end::integer as o58_subfuncao,o53_descr";
+      $xordem .= $virg . "o58_subfuncao,o53_descr";
+      if ($desmembra_segundo_inicio == false) {
+        $tu_para = true;
+      }
+      $virg = ',';
+    }
+    if ($segundo_inicio <= 5 && $tu_para == false) {
+      $junta .= $virg . "case when o58_programa = -1 then 0 else o58_programa end::integer as o58_programa,o54_descr";
+      $xordem .= $virg . "o58_programa,o54_descr";
+      if ($desmembra_segundo_inicio == false) {
+        $tu_para = true;
+      }
+      $virg = ',';
+    }
+    if ($segundo_inicio <= 6 && $tu_para == false) {
+      $junta .= $virg . "case when o58_projativ = -1 then 0 else o58_projativ end::integer as o58_projativ,o55_descr,o55_finali";
+      $xordem .= $virg . "o58_projativ,o55_descr,o55_finali";
+      if ($desmembra_segundo_inicio == false) {
+        $tu_para = true;
+      }
+      $virg = ',';
+    }
+    if ($segundo_inicio <= 7 && $tu_para == false) {
+      $junta .= $virg . "o58_elemento,o56_descr";
+      $xordem .= $virg . "o58_elemento,o56_descr";
+      if ($desmembra_segundo_inicio == false) {
+        $tu_para = true;
+      }
+      $virg = ',';
+    }
+    if ($segundo_inicio <= 8 && $tu_para == false) {
+      $junta .= $virg . "case when o58_coddot = -1 then 0 else o58_coddot end::integer as o58_coddot,case when o58_codigo = -1 then 0 else o58_codigo end::integer as o58_codigo,o15_descr";
+      $xordem .= $virg . "o58_codigo,o15_descr,o58_coddot ";
+      if ($desmembra_segundo_inicio == false) {
+        $tu_para = true;
+      }
+      $virg = ',';
+    }
+  }
+  $junta .= $virg;
 
-    $sql2 = "select " . $junta . "
+  $sql2 = "select " . $junta . "
     sum(dot_ini)                       as dot_ini,
     sum(saldo_anterior)                as saldo_anterior,
     sum(empenhado)                     as empenhado,
@@ -2300,12 +2315,98 @@ function db_dotacaosaldo($nivel = 8, $tipo_nivel = 1, $tipo_saldo = 2, $descr = 
             $resultdotacao = $sql;
         }
     }
+  }
 
-    return $resultdotacao;
+  return $resultdotacao;
 }
 
 function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr = true, $where = '', $anousu = null, $dataini = null, $datafim = null, $query = false, $campos = ' * ', $comit = true, $nivel_agrupar = 0)
 {
+
+  if ($anousu == null || $anousu == "")
+    $anousu = db_getsession("DB_anousu");
+
+  if ($dataini == null)
+    $dataini = date('Y-m-d', db_getsession('DB_datausu'));
+
+  if ($datafim == null)
+    $datafim = date('Y-m-d', db_getsession('DB_datausu'));
+
+  if ($where != '') {
+    $condicao = " and " . $where;
+  } else {
+    $condicao = "";
+  }
+
+  //$instit = db_getsession("DB_instit");
+
+  //#00#//db_receitaosaldo
+  //#10#//Esta funcao retorna o recordset do saldo das receitas
+  //#15#//db_receitasaldo($nivel=8, $tipo_nivel=1, $tipo_saldo=2, $descr=true, $where='', $anousu=null, $dataini=null, $datafim=null,$query=false)
+  //#20#//$nivel      : Até qual o nível será apurado o saldo, pode ser:
+  //#20#//              1 - classe
+  //#20#//              2 - grupo
+  //#20#//              3 - subgrupo
+  //#20#//              4 - elemento
+  //#20#//              5 - subelemento
+  //#20#//              6 - item
+  //#20#//              7 - subitem
+  //#20#//              8 - desdobramento1
+  //#20#//              9 - desdobramento2
+  //#20#//             10 - desdobramento3
+  //#20#//             11 - recurso
+  //#20#//
+  //#20#//$tipo_nivel : especifica a maneira de como será apurado o resultado, pode ser:
+  //#20#//              1 - traz a árvore de elementos até o nível solicitado
+  //#20#//                  Ex.: 4.1                  200
+  //#20#//                       4.1.1                100
+  //#20#//                       4.1.1.1               50
+  //#20#//                       4.1.1.2               50
+  //#20#//                       4.1.2                100
+  //#20#//                       4.1.2.1               50
+  //#20#//                       4.1.2.2               50
+  //#20#//              2 - traz o saldo do nível escolhido
+  //#20#//                  Ex.: 4.1.1.1               50
+  //#20#//              3 - totaliza o saldo pelo nível escolhido
+  //#20#//                  Ex.: 0.0.0.1             1000
+  //#20#//
+  //#20#//$tipo_saldo :
+  //#20#//	      1 - SALDO INICIAL DA RECEITA - ORCAMENTO
+  //#20#//	      2 - SALDO DA RECEITA  MENOS O ARRECADADO
+  //#20#//   	      3 - SALDO DA RECEITA  PELA CONTABILIDADE ...
+  //#20#//   	      4 - SALDO ACUMULADO POR MES
+  //#20#//
+  //#20#//$descr         : retorna o record set com as descrições ou não, o default é 'true'
+  //#20#//
+  //#20#//$where         : condição
+  //#20#//
+  //#20#//$anousu        : ano do orçamento
+  //#20#//
+  //#20#//$dataini       : data inicial do intervalo
+  //#20#//
+  //#20#//$datafim       : data final do intervalo
+  //#20#//
+  //#20#//$query         : retorna somente o sql, o default é retornar o recordset
+  //#20#//
+  //#20#//$nivel_agrupar : 0 - normal
+  //#20#//                 1 - agrupa na receita
+  //#20#//                 2 - nao agrupa na receita
+
+
+  //$nivel      = 2;
+  //$tipo_nivel = 1;
+  //$dataini    = date('Y-m-d',db_getsession("DB_datausu"));
+  //$datafim    = date('Y-m-d',db_getsession("DB_datausu"));
+  //$anousu     = db_getsession("DB_anousu");
+
+  // funcao para gerar work
+
+  if ($comit == true) {
+    db_query('begin');
+  }
+
+
+  if ($anousu > 2007) {
 
     if ($anousu == null || $anousu == "")
         $anousu = db_getsession("DB_anousu");
@@ -2396,8 +2497,8 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
         $sql = "
     create temp table work_receita as
     ";
-        if ($nivel_agrupar == 1) {
-            $sql .= "
+    if ($nivel_agrupar == 1) {
+      $sql .= "
 
       select classe,
              grupo,
@@ -2427,14 +2528,14 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
         }
         $sql .= "
     select ";
-        if ($nivel_agrupar == 1 || $nivel_agrupar == 2) {
-            $sql .= "
+    if ($nivel_agrupar == 1 || $nivel_agrupar == 2) {
+      $sql .= "
          case when substr(o57_fonte,1,2)='49' then '4' else substr(o57_fonte,1,1) end::int4 as classe,
       ";
-        } else if ($nivel_agrupar == 0) {
-            $sql .= " substr(o57_fonte,1,1)::int4 as classe, ";
-        }
-        $sql .= "
+    } else if ($nivel_agrupar == 0) {
+      $sql .= " substr(o57_fonte,1,1)::int4 as classe, ";
+    }
+    $sql .= "
     substr(o57_fonte,2,1)::int4  as grupo,
     substr(o57_fonte,3,1)::int4  as subgrupo,
     substr(o57_fonte,4,1)::int4  as elemento,
@@ -2468,8 +2569,8 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
 
 
 
-        if ($nivel_agrupar == 1) {
-            $sql .= "
+    if ($nivel_agrupar == 1) {
+      $sql .= "
       ) as x
       group by classe,
                grupo,
@@ -2510,8 +2611,8 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
         desdobramento2,
         desdobramento3,
         o70_codrec,";
-            } elseif ($tipo_nivel == 3) {
-                $xnivel11 = " 0 as classe,
+      } elseif ($tipo_nivel == 3) {
+        $xnivel11 = " 0 as classe,
         0 as grupo,
         0 as subgrupo,
         0 as elemento,
@@ -2572,8 +2673,8 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
     ) as m
      ";
 
-        //$result = db_query($nivel11);
-        //db_criatabela($result);exit;
+    //$result = db_query($nivel11);
+    //db_criatabela($result);exit;
 
         ///////// Nivel 10 /////////////
 
@@ -2589,8 +2690,8 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
         subitem,
         desdobramento1,
         desdobramento2,";
-            } elseif ($tipo_nivel == 3) {
-                $xnivel10 = " 0 as classe,
+      } elseif ($tipo_nivel == 3) {
+        $xnivel10 = " 0 as classe,
         0 as grupo,
         0 as subgrupo,
         0 as elemento,
@@ -2658,8 +2759,8 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
         item,
         subitem,
         desdobramento1,";
-            } elseif ($tipo_nivel == 3) {
-                $xnivel9 = " 0 as classe,
+      } elseif ($tipo_nivel == 3) {
+        $xnivel9 = " 0 as classe,
         0 as grupo,
         0 as subgrupo,
         0 as elemento,
@@ -2725,8 +2826,8 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
         subelemento,
         item,
         subitem,";
-            } elseif ($tipo_nivel == 3) {
-                $xnivel8 = " 0 as classe,
+      } elseif ($tipo_nivel == 3) {
+        $xnivel8 = " 0 as classe,
         0 as grupo,
         0 as subgrupo,
         0 as elemento,
@@ -2789,8 +2890,8 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
         elemento,
         subelemento,
         item,";
-            } elseif ($tipo_nivel == 3) {
-                $xnivel7 = " 0 as classe,
+      } elseif ($tipo_nivel == 3) {
+        $xnivel7 = " 0 as classe,
         0 as grupo,
         0 as subgrupo,
         0 as elemento,
@@ -2851,8 +2952,8 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
         subgrupo,
         elemento,
         subelemento,";
-            } elseif ($tipo_nivel == 3) {
-                $xnivel6 = " 0 as classe,
+      } elseif ($tipo_nivel == 3) {
+        $xnivel6 = " 0 as classe,
         0 as grupo,
         0 as subgrupo,
         0 as elemento,
@@ -2911,8 +3012,8 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
         grupo,
         subgrupo,
         elemento,";
-            } elseif ($tipo_nivel == 3) {
-                $xnivel5 = " 0 as classe,
+      } elseif ($tipo_nivel == 3) {
+        $xnivel5 = " 0 as classe,
         0 as grupo,
         0 as subgrupo,
         0 as elemento,";
@@ -2969,8 +3070,8 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
                 $xnivel4 = " classe,
         grupo,
         subgrupo,";
-            } elseif ($tipo_nivel == 3) {
-                $xnivel4 = " 0 as classe,
+      } elseif ($tipo_nivel == 3) {
+        $xnivel4 = " 0 as classe,
         0 as grupo,
         0 as subgrupo,";
             }
@@ -3025,8 +3126,8 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
             if ($tipo_nivel == 1 || $tipo_nivel == 2) {
                 $xnivel3 = " classe,
         grupo,";
-            } elseif ($tipo_nivel == 3) {
-                $xnivel3 = " 0 as classe,
+      } elseif ($tipo_nivel == 3) {
+        $xnivel3 = " 0 as classe,
         0 as grupo,";
             }
         }
@@ -3152,75 +3253,75 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
     from work_receita
     group by classe) as a ";
 
-        $sql = '';
+    $sql = '';
 
-        if ($nivel >= 1) {
-            $sql .= $nivel1;
-            if ($tipo_nivel > 1)
-                $sql = $nivel1;
-        }
-        if ($nivel >= 2) {
-            $sql .= " union all ";
-            $sql .= $nivel2;
-            if ($tipo_nivel > 1)
-                $sql = $nivel2;
-        }
-        if ($nivel >= 3) {
-            $sql .= " union all ";
-            $sql .= $nivel3;
-            if ($tipo_nivel > 1)
-                $sql = $nivel3;
-        }
-        if ($nivel >= 4) {
-            $sql .= " union all ";
-            $sql .= $nivel4;
-            if ($tipo_nivel > 1)
-                $sql = $nivel4;
-        }
-        if ($nivel >= 5) {
-            $sql .= " union all ";
-            $sql .= $nivel5;
-            if ($tipo_nivel > 1)
-                $sql = $nivel5;
-        }
-        if ($nivel >= 6) {
-            $sql .= " union all ";
-            $sql .= $nivel6;
-            if ($tipo_nivel > 1)
-                $sql = $nivel6;
-        }
-        if ($nivel >= 7) {
-            $sql .= " union all ";
-            $sql .= $nivel7;
-            if ($tipo_nivel > 1)
-                $sql = $nivel7;
-        }
-        if ($nivel >= 8) {
-            $sql .= " union all ";
-            $sql .= $nivel8;
-            if ($tipo_nivel > 1)
-                $sql = $nivel8;
-        }
-        if ($nivel >= 9) {
-            $sql .= " union all ";
-            $sql .= $nivel9;
-            if ($tipo_nivel > 1)
-                $sql = $nivel9;
-        }
-        if ($nivel >= 10) {
-            $sql .= " union all ";
-            $sql .= $nivel10;
-            if ($tipo_nivel > 1)
-                $sql = $nivel10;
-        }
+    if ($nivel >= 1) {
+      $sql .= $nivel1;
+      if ($tipo_nivel > 1)
+        $sql = $nivel1;
+    }
+    if ($nivel >= 2) {
+      $sql .= " union all ";
+      $sql .= $nivel2;
+      if ($tipo_nivel > 1)
+        $sql = $nivel2;
+    }
+    if ($nivel >= 3) {
+      $sql .= " union all ";
+      $sql .= $nivel3;
+      if ($tipo_nivel > 1)
+        $sql = $nivel3;
+    }
+    if ($nivel >= 4) {
+      $sql .= " union all ";
+      $sql .= $nivel4;
+      if ($tipo_nivel > 1)
+        $sql = $nivel4;
+    }
+    if ($nivel >= 5) {
+      $sql .= " union all ";
+      $sql .= $nivel5;
+      if ($tipo_nivel > 1)
+        $sql = $nivel5;
+    }
+    if ($nivel >= 6) {
+      $sql .= " union all ";
+      $sql .= $nivel6;
+      if ($tipo_nivel > 1)
+        $sql = $nivel6;
+    }
+    if ($nivel >= 7) {
+      $sql .= " union all ";
+      $sql .= $nivel7;
+      if ($tipo_nivel > 1)
+        $sql = $nivel7;
+    }
+    if ($nivel >= 8) {
+      $sql .= " union all ";
+      $sql .= $nivel8;
+      if ($tipo_nivel > 1)
+        $sql = $nivel8;
+    }
+    if ($nivel >= 9) {
+      $sql .= " union all ";
+      $sql .= $nivel9;
+      if ($tipo_nivel > 1)
+        $sql = $nivel9;
+    }
+    if ($nivel >= 10) {
+      $sql .= " union all ";
+      $sql .= $nivel10;
+      if ($tipo_nivel > 1)
+        $sql = $nivel10;
+    }
 
-        if ($nivel >= 11) {
-            $sql .= " union all ";
-            $sql .= $nivel11;
-            if ($tipo_nivel > 1) {
-                $sql = $nivel11;
-            }
-        }
+    if ($nivel >= 11) {
+      $sql .= " union all ";
+      $sql .= $nivel11;
+      if ($tipo_nivel > 1) {
+        $sql = $nivel11;
+      }
+    }
 
         //$res =  db_query($nivel11);
         //db_criatabela($res);exit;
@@ -3243,18 +3344,18 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
         //   $result = db_query($sql);
         //  db_criatabela($result);exit;
 
-        if ($nivel == 11 && $tipo_nivel == 3) {
-            $demaiscampos = '';
-            $demaiscampos1 = '';
-        } else {
-            if ($nivel_agrupar == 2) {
-                $demaiscampos = "distinct on (o57_fonte,o70_concarpeculiar) o57_fonte,o70_concarpeculiar, ";
-                $demaiscampos1 = "o57_fonte,o70_concarpeculiar,";
-            } else {
-                $demaiscampos = "distinct on (o57_fonte,o70_concarpeculiar) o57_fonte,o70_concarpeculiar, ";
-                $demaiscampos1 = "o57_fonte,o70_concarpeculiar,";
-            }
-        }
+    if ($nivel == 11 && $tipo_nivel == 3) {
+      $demaiscampos = '';
+      $demaiscampos1 = '';
+    } else {
+      if ($nivel_agrupar == 2) {
+        $demaiscampos = "distinct on (o57_fonte,o70_concarpeculiar) o57_fonte,o70_concarpeculiar, ";
+        $demaiscampos1 = "o57_fonte,o70_concarpeculiar,";
+      } else {
+        $demaiscampos = "distinct on (o57_fonte,o70_concarpeculiar) o57_fonte,o70_concarpeculiar, ";
+        $demaiscampos1 = "o57_fonte,o70_concarpeculiar,";
+      }
+    }
 
         $sql2 = "
     select $campos from (
@@ -3321,8 +3422,8 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
     saldo_prev_anterior
     ) as xx";
 
-        if ($nivel == 11) {
-            $sql2 .= " union all
+    if ($nivel == 11) {
+      $sql2 .= " union all
 								select $demaiscampos
 											 o70_codrec,
 											 o70_codigo,
@@ -3350,19 +3451,19 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
 											 lpad(desdobramento3,2,0)
 											 and o57_anousu = $anousu
 											 left outer join orctiporec on o70_codigo = o15_codigo";
-        }
+    }
 
-        if ($demaiscampos != "") {
-            $sql2 .= " order by o57_fonte";
-        }
+    if ($demaiscampos != "") {
+      $sql2 .= " order by o57_fonte";
+    }
 
-        //    echo $sql2;
-        //    $res =  db_query($sql2);
-        //    db_criatabela($res);exit;
+    //    echo $sql2;
+    //    $res =  db_query($sql2);
+    //    db_criatabela($res);exit;
 
 
 
-    } else {
+  } else {
 
         // aqui inicia o codigo de 2007
 
@@ -3420,8 +3521,8 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
         desdobramento2,
         desdobramento3,
         o70_codrec,";
-            } elseif ($tipo_nivel == 3) {
-                $xnivel11 = " 0 as classe,
+      } elseif ($tipo_nivel == 3) {
+        $xnivel11 = " 0 as classe,
         0 as grupo,
         0 as subgrupo,
         0 as elemento,
@@ -3490,8 +3591,8 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
         subitem,
         desdobramento1,
         desdobramento2,";
-            } elseif ($tipo_nivel == 3) {
-                $xnivel10 = " 0 as classe,
+      } elseif ($tipo_nivel == 3) {
+        $xnivel10 = " 0 as classe,
         0 as grupo,
         0 as subgrupo,
         0 as elemento,
@@ -3558,8 +3659,8 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
         item,
         subitem,
         desdobramento1,";
-            } elseif ($tipo_nivel == 3) {
-                $xnivel9 = " 0 as classe,
+      } elseif ($tipo_nivel == 3) {
+        $xnivel9 = " 0 as classe,
         0 as grupo,
         0 as subgrupo,
         0 as elemento,
@@ -3624,8 +3725,8 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
         subelemento,
         item,
         subitem,";
-            } elseif ($tipo_nivel == 3) {
-                $xnivel8 = " 0 as classe,
+      } elseif ($tipo_nivel == 3) {
+        $xnivel8 = " 0 as classe,
         0 as grupo,
         0 as subgrupo,
         0 as elemento,
@@ -3687,8 +3788,8 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
         elemento,
         subelemento,
         item,";
-            } elseif ($tipo_nivel == 3) {
-                $xnivel7 = " 0 as classe,
+      } elseif ($tipo_nivel == 3) {
+        $xnivel7 = " 0 as classe,
         0 as grupo,
         0 as subgrupo,
         0 as elemento,
@@ -3748,8 +3849,8 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
         subgrupo,
         elemento,
         subelemento,";
-            } elseif ($tipo_nivel == 3) {
-                $xnivel6 = " 0 as classe,
+      } elseif ($tipo_nivel == 3) {
+        $xnivel6 = " 0 as classe,
         0 as grupo,
         0 as subgrupo,
         0 as elemento,
@@ -3807,8 +3908,8 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
         grupo,
         subgrupo,
         elemento,";
-            } elseif ($tipo_nivel == 3) {
-                $xnivel5 = " 0 as classe,
+      } elseif ($tipo_nivel == 3) {
+        $xnivel5 = " 0 as classe,
         0 as grupo,
         0 as subgrupo,
         0 as elemento,";
@@ -3864,8 +3965,8 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
                 $xnivel4 = " classe,
         grupo,
         subgrupo,";
-            } elseif ($tipo_nivel == 3) {
-                $xnivel4 = " 0 as classe,
+      } elseif ($tipo_nivel == 3) {
+        $xnivel4 = " 0 as classe,
         0 as grupo,
         0 as subgrupo,";
             }
@@ -3919,8 +4020,8 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
             if ($tipo_nivel == 1 || $tipo_nivel == 2) {
                 $xnivel3 = " classe,
         grupo,";
-            } elseif ($tipo_nivel == 3) {
-                $xnivel3 = " 0 as classe,
+      } elseif ($tipo_nivel == 3) {
+        $xnivel3 = " 0 as classe,
         0 as grupo,";
             }
         }
@@ -4043,73 +4144,73 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
     from work_receita
     group by classe) as a ";
 
-        $sql = '';
+    $sql = '';
 
-        if ($nivel >= 1) {
-            $sql .= $nivel1;
-            if ($tipo_nivel > 1)
-                $sql = $nivel1;
-        }
-        if ($nivel >= 2) {
-            $sql .= " union all ";
-            $sql .= $nivel2;
-            if ($tipo_nivel > 1)
-                $sql = $nivel2;
-        }
-        if ($nivel >= 3) {
-            $sql .= " union all ";
-            $sql .= $nivel3;
-            if ($tipo_nivel > 1)
-                $sql = $nivel3;
-        }
-        if ($nivel >= 4) {
-            $sql .= " union all ";
-            $sql .= $nivel4;
-            if ($tipo_nivel > 1)
-                $sql = $nivel4;
-        }
-        if ($nivel >= 5) {
-            $sql .= " union all ";
-            $sql .= $nivel5;
-            if ($tipo_nivel > 1)
-                $sql = $nivel5;
-        }
-        if ($nivel >= 6) {
-            $sql .= " union all ";
-            $sql .= $nivel6;
-            if ($tipo_nivel > 1)
-                $sql = $nivel6;
-        }
-        if ($nivel >= 7) {
-            $sql .= " union all ";
-            $sql .= $nivel7;
-            if ($tipo_nivel > 1)
-                $sql = $nivel7;
-        }
-        if ($nivel >= 8) {
-            $sql .= " union all ";
-            $sql .= $nivel8;
-            if ($tipo_nivel > 1)
-                $sql = $nivel8;
-        }
-        if ($nivel >= 9) {
-            $sql .= " union all ";
-            $sql .= $nivel9;
-            if ($tipo_nivel > 1)
-                $sql = $nivel9;
-        }
-        if ($nivel >= 10) {
-            $sql .= " union all ";
-            $sql .= $nivel10;
-            if ($tipo_nivel > 1)
-                $sql = $nivel10;
-        }
-        if ($nivel >= 11) {
-            $sql .= " union all ";
-            $sql .= $nivel11;
-            if ($tipo_nivel > 1)
-                $sql = $nivel11;
-        }
+    if ($nivel >= 1) {
+      $sql .= $nivel1;
+      if ($tipo_nivel > 1)
+        $sql = $nivel1;
+    }
+    if ($nivel >= 2) {
+      $sql .= " union all ";
+      $sql .= $nivel2;
+      if ($tipo_nivel > 1)
+        $sql = $nivel2;
+    }
+    if ($nivel >= 3) {
+      $sql .= " union all ";
+      $sql .= $nivel3;
+      if ($tipo_nivel > 1)
+        $sql = $nivel3;
+    }
+    if ($nivel >= 4) {
+      $sql .= " union all ";
+      $sql .= $nivel4;
+      if ($tipo_nivel > 1)
+        $sql = $nivel4;
+    }
+    if ($nivel >= 5) {
+      $sql .= " union all ";
+      $sql .= $nivel5;
+      if ($tipo_nivel > 1)
+        $sql = $nivel5;
+    }
+    if ($nivel >= 6) {
+      $sql .= " union all ";
+      $sql .= $nivel6;
+      if ($tipo_nivel > 1)
+        $sql = $nivel6;
+    }
+    if ($nivel >= 7) {
+      $sql .= " union all ";
+      $sql .= $nivel7;
+      if ($tipo_nivel > 1)
+        $sql = $nivel7;
+    }
+    if ($nivel >= 8) {
+      $sql .= " union all ";
+      $sql .= $nivel8;
+      if ($tipo_nivel > 1)
+        $sql = $nivel8;
+    }
+    if ($nivel >= 9) {
+      $sql .= " union all ";
+      $sql .= $nivel9;
+      if ($tipo_nivel > 1)
+        $sql = $nivel9;
+    }
+    if ($nivel >= 10) {
+      $sql .= " union all ";
+      $sql .= $nivel10;
+      if ($tipo_nivel > 1)
+        $sql = $nivel10;
+    }
+    if ($nivel >= 11) {
+      $sql .= " union all ";
+      $sql .= $nivel11;
+      if ($tipo_nivel > 1)
+        $sql = $nivel11;
+    }
 
         $sql .= " order by
     classe,
@@ -4201,11 +4302,11 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
         db_query('commit');
     }
 
-    /**
-     * Validacao geracao do pad, quando pcasp ativo e rodar o balancete em ano anterior
-     */
-    $iAnoPcasp = 2013;
-    if (file_exists("config/pcasp.txt")) {
+  /**
+   * Validacao geracao do pad, quando pcasp ativo e rodar o balancete em ano anterior
+   */
+  $iAnoPcasp = 2013;
+  if (file_exists("config/pcasp.txt")) {
 
         $aArquivo  = file("config/pcasp.txt");
         if ($aArquivo[0] != '' && $aArquivo[0] > 2013) {
@@ -4213,11 +4314,11 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
         }
     }
 
-    $_SESSION["DB_ano_pcasp"] = $iAnoPcasp;
-    $sControlePcasp = $_SESSION["DB_use_pcasp"];
-    if ($anousu < intval($iAnoPcasp)) {
-        $_SESSION["DB_use_pcasp"] = 'f';
-    }
+  $_SESSION["DB_ano_pcasp"] = $iAnoPcasp;
+  $sControlePcasp = $_SESSION["DB_use_pcasp"];
+  if ($anousu < intval($iAnoPcasp)) {
+    $_SESSION["DB_use_pcasp"] = 'f';
+  }
 
     /**
      * Adicionado validação para que só realize o parse caso o ano desejado seja superior ao ano de inicio do PCASP.
@@ -4243,38 +4344,39 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
             $resultreceita = $sql;
         }
     }
-    $_SESSION["DB_use_pcasp"] = $sControlePcasp;
-    return $resultreceita;
+  }
+  $_SESSION["DB_use_pcasp"] = $sControlePcasp;
+  return $resultreceita;
 }
 
 class cl_permusuario_dotacao
 {
-    var $recordset = null;
-    var $numrows = null;
-    var $sql = null;
-    var $orgaos = null;
-    var $depart = null;
-    var $secretaria = null;
-    var $departamento = null;
-    var $msg_erro = null;
-    function cl_permusuario_dotacao($anousu, $idusuario, $elemento = null, $secretaria = null, $departamento = null, $tipoperm = 'M', $instit = "", $sWhere = null)
-    {
-        global $db20_orgao, $db20_unidade, $db20_funcao, $db20_subfuncao, $db20_programa, $db20_projativ, $db20_codele, $db20_codigo;
+  var $recordset = null;
+  var $numrows = null;
+  var $sql = null;
+  var $orgaos = null;
+  var $depart = null;
+  var $secretaria = null;
+  var $departamento = null;
+  var $msg_erro = null;
+  function cl_permusuario_dotacao($anousu, $idusuario, $elemento = null, $secretaria = null, $departamento = null, $tipoperm = 'M', $instit = "", $sWhere = null)
+  {
+    global $db20_orgao, $db20_unidade, $db20_funcao, $db20_subfuncao, $db20_programa, $db20_projativ, $db20_codele, $db20_codigo;
 
-        $instituicoes = empty($instit) ? db_getsession("DB_instit") : $instit;
+    $instituicoes = empty($instit) ? db_getsession("DB_instit") : $instit;
 
-        if ($secretaria != null) {
-            $this->secretaria = $secretaria;
-        }
-        if ($departamento != null) {
-            $this->departamento = $departamento;
-        }
-        if ($tipoperm != "") {
-            $tipoperm = "db20_tipoperm='$tipoperm' and";
-        } else {
-            $tipoperm = "";
-        }
-        $sqle = " SELECT o50_subelem
+    if ($secretaria != null) {
+      $this->secretaria = $secretaria;
+    }
+    if ($departamento != null) {
+      $this->departamento = $departamento;
+    }
+    if ($tipoperm != "") {
+      $tipoperm = "db20_tipoperm='$tipoperm' and";
+    } else {
+      $tipoperm = "";
+    }
+    $sqle = " SELECT o50_subelem
       FROM orcparametro
       WHERE o50_anousu = $anousu	";
 
@@ -4293,12 +4395,12 @@ class cl_permusuario_dotacao
       LEFT OUTER JOIN DB_DEPARTORG D ON DB20_ORGAO = D.DB01_ORGAO AND D.DB01_ANOUSU = " . db_getsession("DB_anousu") . "
       WHERE $tipoperm DB20_ANOUSU = $anousu
       ";
-        if (isset($secretaria)) {
-            $sqle .= " and DB20_ORGAO = $secretaria ";
-        }
-        if (isset($departamento)) {
-            $sqle .= " and db01_coddepto = $departamento ";
-        }
+    if (isset($secretaria)) {
+      $sqle .= " and DB20_ORGAO = $secretaria ";
+    }
+    if (isset($departamento)) {
+      $sqle .= " and db01_coddepto = $departamento ";
+    }
 
         $sqle .= "
       UNION
@@ -4314,12 +4416,12 @@ class cl_permusuario_dotacao
       LEFT OUTER JOIN DB_DEPART  ON DB20_ORGAO = DB01_ORGAO AND DB01_ANOUSU = " . db_getsession("DB_anousu") . "
       WHERE $tipoperm DB20_ANOUSU = $anousu
       ";
-        if (isset($secretaria)) {
-            $sqle .= " and DB20_ORGAO = $secretaria ";
-        }
-        if (isset($departamento)) {
-            $sqle .= " and db01_coddepto = $departamento ";
-        }
+    if (isset($secretaria)) {
+      $sqle .= " and DB20_ORGAO = $secretaria ";
+    }
+    if (isset($departamento)) {
+      $sqle .= " and db01_coddepto = $departamento ";
+    }
 
         $result = db_query($sqle);
 
@@ -4356,108 +4458,115 @@ class cl_permusuario_dotacao
         inner join orcelemento on o56_codele = o58_codele and
         o56_anousu = o58_anousu
         where ( ( ";
-            $sql_dotacoes = "";
-            for ($i = 0; $i < pg_numrows($result); $i++) {
-                db_fieldsmemory($result, $i);
-                if (!empty($tem_and)) {
-                    $sql_dotacoes .= " OR ( ";
-                    $tem_and = "";
-                }
-                if ($db20_orgao > 0) {
-                    $sql_dotacoes .= $tem_and . " o58_orgao = $db20_orgao ) ";
-                    $tem_and = " and ";
-                }
-                if ($db20_unidade > 0) {
-                    $sql_dotacoes .= $tem_and . " o58_unidade = $db20_unidade ";
-                    $tem_and = " and ";
-                }
-                if ($db20_funcao > 0) {
-                    $sql_dotacoes .= $tem_and . " o58_funcao = $db20_funcao ";
-                    $tem_and = " and ";
-                }
-                if ($db20_subfuncao > 0) {
-                    $sql_dotacoes .= $tem_and . " o58_subfuncao = $db20_subfuncao ";
-                    $tem_and = " and ";
-                }
-                if ($db20_programa > 0) {
-                    $sql_dotacoes .= $tem_and . " o58_programa = $db20_programa ";
-                    $tem_and = " and ";
-                }
-                if ($db20_projativ > 0) {
-                    $sql_dotacoes .= $tem_and . " o58_projativ = $db20_projativ ";
-                    $tem_and = " and ";
-                }
-                if ($db20_codele > 0) {
-                    $sql_dotacoes .= $tem_and . " o58_codele = $db20_codele ";
-                    $tem_and = " and ";
-                }
-                if ($db20_codigo > 0) {
-                    $sql_dotacoes .= $tem_and . " o58_codigo = $db20_codigo ";
-                    $tem_and = " and ";
-                }
-                $sql_dotacoes .= " ";
-            }
-            $dotacoes .= $sql_dotacoes;
-            $secretar .= $sql_dotacoes;
-            $departam .= $sql_dotacoes;
-
-            if ($dotacoes != "") {
-                $dotacoes .= " ) ";
-                $secretar .= " ) ";
-                $departam .= " ) ";
-                if ($elemento != null || $elemento != "") {
-                    $dotacoes .= " and o56_elemento like '$elemento%'";
-                    $secretar .= " and o56_elemento like '$elemento%'";
-                    $departam .= " and o56_elemento like '$elemento%'";
-                }
-
-                //$dotacoes .= " and o58_anousu = $anousu and o58_instit = ".db_getsession("DB_instit");
-                $dotacoes .= " and o58_anousu = $anousu and o58_instit in ($instituicoes) ";
-                if ($sWhere != null) {
-
-                    $dotacoes .= " and {$sWhere}";
-                }
-                require_once(("std/db_stdClass.php"));
-                $aParametroCompras = db_stdClass::getParametro("pcparam", array(db_getsession("DB_instit")));
-                if (
-                    $this->departamento != "" && isset($aParametroCompras[0]->pc30_dotacaopordepartamento)
-                    && $aParametroCompras[0]->pc30_dotacaopordepartamento == 't'
-                ) {
-
-                    $sSqlUnidade = "select * from db_departorg where db01_coddepto= $this->departamento and db01_anousu = {$anousu}";
-                    $rsUnidade   = db_query($sSqlUnidade);
-                    require_once(("libs/db_utils.php"));
-                    if (pg_num_rows($rsUnidade) > 0) {
-
-                        $iCodigoUnidade = db_utils::fieldsMemory($rsUnidade, 0)->db01_unidade;
-                        if ($iCodigoUnidade != "") {
-                            $dotacoes .= " and o58_unidade = {$iCodigoUnidade}";
-                        }
-                    }
-                }
-                $dotacoes .= " ORDER BY O50_ESTRUTDESPESA ";
-                //$secretar .= " and o58_anousu = $anousu and o58_instit = ".db_getsession("DB_instit");
-                $secretar .= " and o58_anousu = $anousu and o58_instit in ($instituicoes) ";
-                $secretar .= " ORDER BY O40_ORGAO ";
-                //$departam .= " and o58_anousu = $anousu and o58_instit = ".db_getsession("DB_instit");
-                $departam .= " and o58_anousu = $anousu and o58_instit in ($instituicoes)";
-                $departam .= " ORDER BY CODDEPTO ";
-                //echo $dotacoes;
-                $result = db_query($dotacoes);
-                if ($result == false || pg_numrows($result) == 0) {
-                    return false;
-                } else {
-                    $this->recordset = $result;
-                    $this->numrows = pg_numrows($result);
-                    $this->sql = $dotacoes;
-                    $this->orgaos = $secretar;
-                    $this->depart = $departam;
-                    return true;
-                }
-            } else {
-                return false;
-            }
+      $sql_dotacoes = "";
+      for ($i = 0; $i < pg_numrows($result); $i++) {
+        db_fieldsmemory($result, $i);
+        if (!empty($tem_and)) {
+          $sql_dotacoes .= " OR ( ";
+          $tem_and = "";
         }
+        if ($db20_orgao > 0) {
+          $sql_dotacoes .= $tem_and . " o58_orgao = $db20_orgao ) ";
+          $tem_and = " and ";
+        }
+        if ($db20_unidade > 0) {
+          $sql_dotacoes .= $tem_and . " o58_unidade = $db20_unidade ";
+          $tem_and = " and ";
+        }
+        if ($db20_funcao > 0) {
+          $sql_dotacoes .= $tem_and . " o58_funcao = $db20_funcao ";
+          $tem_and = " and ";
+        }
+        if ($db20_subfuncao > 0) {
+          $sql_dotacoes .= $tem_and . " o58_subfuncao = $db20_subfuncao ";
+          $tem_and = " and ";
+        }
+        if ($db20_programa > 0) {
+          $sql_dotacoes .= $tem_and . " o58_programa = $db20_programa ";
+          $tem_and = " and ";
+        }
+        if ($db20_projativ > 0) {
+          $sql_dotacoes .= $tem_and . " o58_projativ = $db20_projativ ";
+          $tem_and = " and ";
+        }
+        if ($db20_codele > 0) {
+          $sql_dotacoes .= $tem_and . " o58_codele = $db20_codele ";
+          $tem_and = " and ";
+        }
+        if ($db20_codigo > 0) {
+          $sql_dotacoes .= $tem_and . " o58_codigo = $db20_codigo ";
+          $tem_and = " and ";
+        }
+        $sql_dotacoes .= " ";
+      }
+      $dotacoes .= $sql_dotacoes;
+      $secretar .= $sql_dotacoes;
+      $departam .= $sql_dotacoes;
+
+      if ($dotacoes != "") {
+        $dotacoes .= " ) ";
+        $secretar .= " ) ";
+        $departam .= " ) ";
+
+        if ($elemento == 'null') {
+          $elemento = null;
+        }
+
+        if ($elemento == null) {
+        } else {
+
+          $dotacoes .= " and o56_elemento like '$elemento%'";
+          $secretar .= " and o56_elemento like '$elemento%'";
+          $departam .= " and o56_elemento like '$elemento%'";
+        }
+
+
+        //$dotacoes .= " and o58_anousu = $anousu and o58_instit = ".db_getsession("DB_instit");
+        $dotacoes .= " and o58_anousu = $anousu and o58_instit in ($instituicoes) ";
+        if ($sWhere != null) {
+
+          $dotacoes .= " and {$sWhere}";
+        }
+        require_once(("std/db_stdClass.php"));
+        $aParametroCompras = db_stdClass::getParametro("pcparam", array(db_getsession("DB_instit")));
+        if (
+          $this->departamento != "" && isset($aParametroCompras[0]->pc30_dotacaopordepartamento)
+          && $aParametroCompras[0]->pc30_dotacaopordepartamento == 't'
+        ) {
+
+          $sSqlUnidade = "select * from db_departorg where db01_coddepto= $this->departamento and db01_anousu = {$anousu}";
+          $rsUnidade   = db_query($sSqlUnidade);
+          require_once(("libs/db_utils.php"));
+          if (pg_num_rows($rsUnidade) > 0) {
+
+            $iCodigoUnidade = db_utils::fieldsMemory($rsUnidade, 0)->db01_unidade;
+            if ($iCodigoUnidade != "") {
+              $dotacoes .= " and o58_unidade = {$iCodigoUnidade}";
+            }
+          }
+        }
+        $dotacoes .= " ORDER BY O50_ESTRUTDESPESA ";
+        // $secretar .= " and o58_anousu = $anousu and o58_instit = ".db_getsession("DB_instit");
+        $secretar .= " and o58_anousu = $anousu and o58_instit in ($instituicoes) ";
+        $secretar .= " ORDER BY O40_ORGAO ";
+        //$departam .= " and o58_anousu = $anousu and o58_instit = ".db_getsession("DB_instit");
+        $departam .= " and o58_anousu = $anousu and o58_instit in ($instituicoes)";
+        $departam .= " ORDER BY CODDEPTO ";
+        // echo $dotacoes;
+        $result = db_query($dotacoes);
+        if ($result == false || pg_numrows($result) == 0) {
+          return false;
+        } else {
+          $this->recordset = $result;
+          $this->numrows = pg_numrows($result);
+          $this->sql = $dotacoes;
+          $this->orgaos = $secretar;
+          $this->depart = $departam;
+          return true;
+        }
+      } else {
+        return false;
+      }
     }
 }
 /**
@@ -4467,161 +4576,161 @@ class cl_permusuario_dotacao
  */
 class cl_selorcdotacao
 {
-    var $filtra_despesa = null;
-    var $instit = null;
-    var $orgao = null;
-    var $unidade = null;
-    var $funcao = null;
-    var $subfuncao = null;
-    var $programa = null;
-    var $projativ = null;
-    var $elemento = null;
-    var $desdobramento = null;
-    var $recurso = null;
+  var $filtra_despesa = null;
+  var $instit = null;
+  var $orgao = null;
+  var $unidade = null;
+  var $funcao = null;
+  var $subfuncao = null;
+  var $programa = null;
+  var $projativ = null;
+  var $elemento = null;
+  var $desdobramento = null;
+  var $recurso = null;
 
-    /* gets */
-    function getInstit()
-    {
-        return $this->instit;
+  /* gets */
+  function getInstit()
+  {
+    return $this->instit;
+  }
+  function getElemento()
+  {
+    return $this->elemento;
+  }
+  function getDesdobramento()
+  {
+    return $this->desdobramento;
+  }
+  function getDadosReceita($alias = true)
+  {
+    $txt = "1=1";
+    if ($alias == true) {
+      if ($this->recurso != null)
+        $txt .= " and d.o70_codigo in " . $this->recurso;
+    } else {
+      if ($this->recurso != null)
+        $txt .= " and o70_codigo in " . $this->recurso;
     }
-    function getElemento()
-    {
-        return $this->elemento;
-    }
-    function getDesdobramento()
-    {
-        return $this->desdobramento;
-    }
-    function getDadosReceita($alias = true)
-    {
-        $txt = "1=1";
-        if ($alias == true) {
-            if ($this->recurso != null)
-                $txt .= " and d.o70_codigo in " . $this->recurso;
-        } else {
-            if ($this->recurso != null)
-                $txt .= " and o70_codigo in " . $this->recurso;
-        }
-        return $txt;
-    }
-    //00//
-    //10// se $elemento = true default, retorna elemento, caso contratio nao retorna, nesse caso use o getElemento() para obte-lo
-    //10//
-    function getDados($alias = true, $ret_elemento = true)
-    {
-        $txt = "1=1";
-        if ($alias == true) {
-            if ($this->orgao != null)
-                $txt .= " and w.o58_orgao in" . $this->orgao;
-            if ($this->unidade != null)
-                $txt .= " and " . $this->unidade;
-            if ($this->funcao != null)
-                $txt .= " and w.o58_funcao in" . $this->funcao;
-            if ($this->subfuncao != null)
-                $txt .= " and w.o58_subfuncao in" . $this->subfuncao;
-            if ($this->programa != null)
-                $txt .= " and w.o58_programa in" . $this->programa;
-            if ($this->projativ != null)
-                $txt .= " and w.o58_projativ in" . $this->projativ;
-            /*
+    return $txt;
+  }
+  //00//
+  //10// se $elemento = true default, retorna elemento, caso contratio nao retorna, nesse caso use o getElemento() para obte-lo
+  //10//
+  function getDados($alias = true, $ret_elemento = true)
+  {
+    $txt = "1=1";
+    if ($alias == true) {
+      if ($this->orgao != null)
+        $txt .= " and w.o58_orgao in" . $this->orgao;
+      if ($this->unidade != null)
+        $txt .= " and " . $this->unidade;
+      if ($this->funcao != null)
+        $txt .= " and w.o58_funcao in" . $this->funcao;
+      if ($this->subfuncao != null)
+        $txt .= " and w.o58_subfuncao in" . $this->subfuncao;
+      if ($this->programa != null)
+        $txt .= " and w.o58_programa in" . $this->programa;
+      if ($this->projativ != null)
+        $txt .= " and w.o58_projativ in" . $this->projativ;
+      /*
               if ($this->elemento != null && $ret_elemento ==true)
               $txt .= " and e.o56_codele in".$this->elemento;
       */
-            if ($this->elemento != null  && $ret_elemento == true)
-                if (trim($this->elemento) != "") {
-                    $vet_elementos = split(",", $this->elemento);
-                    $and           = " and ";
-                    $or            = " or ";
-                    $elementos     = "e.o56_elemento like ";
-                    $str           = "";
-                    for ($xx = 0; $xx < count($vet_elementos); $xx++) {
-                        if ($xx == 0) {
-                            $str .= $and . "(" . $elementos . "'" . trim($vet_elementos[$xx]) . "%'";
-                        } else {
-                            $str .= $or . $elementos . "'" . trim($vet_elementos[$xx]) . "%'";
-                        }
-                    }
-                    $str .= ")";
-                    $txt .= $str;
-                }
-            if ($this->recurso != null)
-                $txt .= " and w.o58_codigo in" . $this->recurso;
-        } else {
-            if ($this->orgao != null)
-                $txt .= " and o58_orgao in" . $this->orgao;
-            if ($this->unidade != null)
-                $txt .= " and " . $this->unidade;
-            if ($this->funcao != null)
-                $txt .= " and o58_funcao in" . $this->funcao;
-            if ($this->subfuncao != null)
-                $txt .= " and o58_subfuncao in" . $this->subfuncao;
-            if ($this->programa != null)
-                $txt .= " and o58_programa in" . $this->programa;
-            if ($this->projativ != null)
-                $txt .= " and o58_projativ in " . $this->projativ;
-            if ($this->elemento != null  && $ret_elemento == true)
-                if (trim($this->elemento) != "") {
-                    $vet_elementos = split(",", $this->elemento);
-                    $and           = " and ";
-                    $or            = " or ";
-                    $elementos     = "o56_elemento like ";
-                    $str           = "";
-                    for ($xx = 0; $xx < count($vet_elementos); $xx++) {
-                        if ($xx == 0) {
-                            $str .= $and . "(" . $elementos . "'" . trim($vet_elementos[$xx]) . "%'";
-                        } else {
-                            $str .= $or . $elementos . "'" . trim($vet_elementos[$xx]) . "%'";
-                        }
-                    }
-                    $str .= ")";
-                    $txt .= $str;
-                }
-            if ($this->recurso != null)
-                $txt .= " and o58_codigo in " . $this->recurso;
+      if ($this->elemento != null  && $ret_elemento == true)
+        if (trim($this->elemento) != "") {
+          $vet_elementos = split(",", $this->elemento);
+          $and           = " and ";
+          $or            = " or ";
+          $elementos     = "e.o56_elemento like ";
+          $str           = "";
+          for ($xx = 0; $xx < count($vet_elementos); $xx++) {
+            if ($xx == 0) {
+              $str .= $and . "(" . $elementos . "'" . trim($vet_elementos[$xx]) . "%'";
+            } else {
+              $str .= $or . $elementos . "'" . trim($vet_elementos[$xx]) . "%'";
+            }
+          }
+          $str .= ")";
+          $txt .= $str;
         }
-        return $txt;
+      if ($this->recurso != null)
+        $txt .= " and w.o58_codigo in" . $this->recurso;
+    } else {
+      if ($this->orgao != null)
+        $txt .= " and o58_orgao in" . $this->orgao;
+      if ($this->unidade != null)
+        $txt .= " and " . $this->unidade;
+      if ($this->funcao != null)
+        $txt .= " and o58_funcao in" . $this->funcao;
+      if ($this->subfuncao != null)
+        $txt .= " and o58_subfuncao in" . $this->subfuncao;
+      if ($this->programa != null)
+        $txt .= " and o58_programa in" . $this->programa;
+      if ($this->projativ != null)
+        $txt .= " and o58_projativ in " . $this->projativ;
+      if ($this->elemento != null  && $ret_elemento == true)
+        if (trim($this->elemento) != "") {
+          $vet_elementos = split(",", $this->elemento);
+          $and           = " and ";
+          $or            = " or ";
+          $elementos     = "o56_elemento like ";
+          $str           = "";
+          for ($xx = 0; $xx < count($vet_elementos); $xx++) {
+            if ($xx == 0) {
+              $str .= $and . "(" . $elementos . "'" . trim($vet_elementos[$xx]) . "%'";
+            } else {
+              $str .= $or . $elementos . "'" . trim($vet_elementos[$xx]) . "%'";
+            }
+          }
+          $str .= ")";
+          $txt .= $str;
+        }
+      if ($this->recurso != null)
+        $txt .= " and o58_codigo in " . $this->recurso;
     }
-    function getParametros($nomes = false)
-    {
-        global $nomeinst, $o40_descr, $o41_unidade, $o41_descr, $o15_descr;
-        if ($nomes == true) {
-            $txt = "Instituição : " . $this->instit . "\n";
-            $txt .= "Orgao : " . $this->orgao . "\n";
-            $txt .= "Unidade: " . $this->unidade . "\n";
-            $txt .= "Função: " . $this->funcao . "\n";
-            $txt .= "Sub-Função: " . $this->subfuncao . "\n";
-            $txt .= "Programa: " . $this->programa . "\n";
-            $txt .= "Proj-Ativ: " . $this->projativ . "\n";
-            $txt .= "Elemento: " . $this->elemento . "\n";
-            $txt .= "Desdobramentos: " . $this->desdobramento . "\n";
-            $txt .= "Recurso: " . $this->recurso . "\n";
-            return $txt;
-        } else {
-            $it = "";
-            $og = "";
-            $un = "";
-            $rec = "";
+    return $txt;
+  }
+  function getParametros($nomes = false)
+  {
+    global $nomeinst, $o40_descr, $o41_unidade, $o41_descr, $o15_descr;
+    if ($nomes == true) {
+      $txt = "Instituição : " . $this->instit . "\n";
+      $txt .= "Orgao : " . $this->orgao . "\n";
+      $txt .= "Unidade: " . $this->unidade . "\n";
+      $txt .= "Função: " . $this->funcao . "\n";
+      $txt .= "Sub-Função: " . $this->subfuncao . "\n";
+      $txt .= "Programa: " . $this->programa . "\n";
+      $txt .= "Proj-Ativ: " . $this->projativ . "\n";
+      $txt .= "Elemento: " . $this->elemento . "\n";
+      $txt .= "Desdobramentos: " . $this->desdobramento . "\n";
+      $txt .= "Recurso: " . $this->recurso . "\n";
+      return $txt;
+    } else {
+      $it = "";
+      $og = "";
+      $un = "";
+      $rec = "";
 
-            $sql = "select nomeinst from db_config where codigo in " . $this->instit;
-            $rr = db_query($sql);
-            $sp = "";
-            for ($x = 0; $x < pg_numrows($rr); $x++) {
-                db_fieldsmemory($rr, $x);
-                $it = $it . $sp . $nomeinst;
-                $sp = ", ";
-            }
-            $sql = "select o40_descr from orcorgao where o40_anousu=" . db_getsession("DB_anousu") . " and o40_orgao in " . $this->orgao;
-            $rr = @db_query($sql);
-            if ($rr != false) {
-                $sp = "";
-                for ($x = 0; $x < @pg_numrows($rr); $x++) {
-                    db_fieldsmemory($rr, $x);
-                    $og = $og . $sp . $o40_descr;
-                    $sp = ", ";
-                }
-            }
+      $sql = "select nomeinst from db_config where codigo in " . $this->instit;
+      $rr = db_query($sql);
+      $sp = "";
+      for ($x = 0; $x < pg_numrows($rr); $x++) {
+        db_fieldsmemory($rr, $x);
+        $it = $it . $sp . $nomeinst;
+        $sp = ", ";
+      }
+      $sql = "select o40_descr from orcorgao where o40_anousu=" . db_getsession("DB_anousu") . " and o40_orgao in " . $this->orgao;
+      $rr = @db_query($sql);
+      if ($rr != false) {
+        $sp = "";
+        for ($x = 0; $x < @pg_numrows($rr); $x++) {
+          db_fieldsmemory($rr, $x);
+          $og = $og . $sp . $o40_descr;
+          $sp = ", ";
+        }
+      }
 
-            $sql = "select distinct o41_descr
+      $sql = "select distinct o41_descr
                   from orcunidade
                  inner join orcdotacao on o58_unidade = o41_unidade
                                       and o58_orgao   = o41_orgao
@@ -4629,161 +4738,139 @@ class cl_selorcdotacao
                  where o41_anousu = " . db_getsession("DB_anousu") . "
                    and " . $this->unidade;
 
-            $rr = @db_query($sql);
-            if ($rr != false) {
-                $sp = "";
-                for ($x = 0; $x < @pg_numrows($rr); $x++) {
-                    db_fieldsmemory($rr, $x);
-                    $un = $un . $sp . $o41_descr;
-                    $sp = ", ";
-                }
-            }
-            $sql = "select o15_descr from orctiporec
+      $rr = @db_query($sql);
+      if ($rr != false) {
+        $sp = "";
+        for ($x = 0; $x < @pg_numrows($rr); $x++) {
+          db_fieldsmemory($rr, $x);
+          $un = $un . $sp . $o41_descr;
+          $sp = ", ";
+        }
+      }
+      $sql = "select o15_descr from orctiporec
         where o15_codigo in " . $this->recurso;
-            $rr = @db_query($sql);
-            if ($rr != false) {
-                $sp = "";
-                for ($x = 0; $x < @pg_numrows($rr); $x++) {
-                    db_fieldsmemory($rr, $x);
-                    $rec = $rec . $sp . $o15_descr;
-                    $sp = ", ";
-                }
-            }
-
-            $txt = "Instituição : " . $it . "\n";
-            $txt .= "Orgao : " . $og . "\n";
-            $txt .= "Unidade: " . $un . "\n";
-            $txt .= "Função: " . $this->funcao . "\n";
-            $txt .= "Sub-Função: " . $this->subfuncao . "\n";
-            $txt .= "Programa: " . $this->programa . "\n";
-            $txt .= "Proj-Ativ: " . $this->projativ . "\n";
-            $txt .= "Elemento: " . $this->elemento . "\n";
-            $txt .= "Recurso: " . $rec . "\n";
-            return $txt;
+      $rr = @db_query($sql);
+      if ($rr != false) {
+        $sp = "";
+        for ($x = 0; $x < @pg_numrows($rr); $x++) {
+          db_fieldsmemory($rr, $x);
+          $rec = $rec . $sp . $o15_descr;
+          $sp = ", ";
         }
-    }
-    /* sets */
-    function setDados($filtro)
-    {
-        $this->filtra_despesa = $filtro;
-        $this->processa();
-    }
-    function processa()
-    {
-        // executa
-        $sele_work = "";
-        $sepi = "";
-        $sep = "";
-        $sepu = "";
-        $sepf = "";
-        $sepsf = "";
-        $sepo = "";
-        $sepp = "";
-        $sepe = "";
-        $sepc = "";
-        $sepdes = ""; // separador do desdobramento
-        $sele_work_instit = " ( ";
-        $sele_work_orgao = " ( ";
-        $sele_work_unidade = " ( ";
-        $sele_work_funcao = " ( ";
-        $sele_work_subfuncao = " ( ";
-        $sele_work_programa = " ( ";
-        $sele_work_projativ = " ( ";
-        $sele_work_elemento = " ";
-        $sele_work_desdobramento = " ( ";
-        $sele_work_recurso = " ( ";
-        $condicao_uniao = " ";
-        $estrut    = "";
-        if ($this->filtra_despesa != "geral") {
-            $qual_filtro = split('-', $this->filtra_despesa);
-            for ($f = 0; $f < sizeof($qual_filtro); $f++) {
-                $ver = split("_", $qual_filtro[$f]);
+      }
 
-                if ($ver[0] == "instit") {
-                    $sele_work_instit .= $sepi . $ver[1];
-                    $sepi = ",";
-                }
-                if ($ver[0] == "orgao") {
-                    $sele_work_orgao .= $sep . $ver[1];
-                    $sep = ",";
-                }
-                if ($ver[0] == "unidade") {
-                    $sele_work_unidade .= $sepu . " ( o58_orgao = " . $ver[1] . " and o58_unidade = " . $ver[2] . " ) ";
-                    $sepu = " or ";
-                }
-                if ($ver[0] == "funcao") {
-                    $sele_work_funcao .= $sepf . $ver[1];
-                    $sepf = ",";
-                }
-                if ($ver[0] == "subfuncao") {
-                    $sele_work_subfuncao .= $sepsf . $ver[1];
-                    $sepsf = ",";
-                }
-                if ($ver[0] == "programa") {
-                    $sele_work_programa .= $sepo . $ver[1];
-                    $sepo = ",";
-                }
-                if ($ver[0] == "projativ") {
-                    $sele_work_projativ .= $sepp . $ver[1];
-                    $sepp = ",";
-                }
-                if ($ver[0] == "des") {
-                    $sele_work_desdobramento .= $sepdes . $ver[1];
-                    $sepdes = ",";
-                }
-                if ($ver[0] == "ele") {
-                    $sql_elem = "select o56_elemento from orcelemento where o56_anousu = " . db_getsession("DB_anousu") . " and
+      $txt = "Instituição : " . $it . "\n";
+      $txt .= "Orgao : " . $og . "\n";
+      $txt .= "Unidade: " . $un . "\n";
+      $txt .= "Função: " . $this->funcao . "\n";
+      $txt .= "Sub-Função: " . $this->subfuncao . "\n";
+      $txt .= "Programa: " . $this->programa . "\n";
+      $txt .= "Proj-Ativ: " . $this->projativ . "\n";
+      $txt .= "Elemento: " . $this->elemento . "\n";
+      $txt .= "Recurso: " . $rec . "\n";
+      return $txt;
+    }
+  }
+  /* sets */
+  function setDados($filtro)
+  {
+    $this->filtra_despesa = $filtro;
+    $this->processa();
+  }
+  function processa()
+  {
+    // executa
+    $sele_work = "";
+    $sepi = "";
+    $sep = "";
+    $sepu = "";
+    $sepf = "";
+    $sepsf = "";
+    $sepo = "";
+    $sepp = "";
+    $sepe = "";
+    $sepc = "";
+    $sepdes = ""; // separador do desdobramento
+    $sele_work_instit = " ( ";
+    $sele_work_orgao = " ( ";
+    $sele_work_unidade = " ( ";
+    $sele_work_funcao = " ( ";
+    $sele_work_subfuncao = " ( ";
+    $sele_work_programa = " ( ";
+    $sele_work_projativ = " ( ";
+    $sele_work_elemento = " ";
+    $sele_work_desdobramento = " ( ";
+    $sele_work_recurso = " ( ";
+    $condicao_uniao = " ";
+    $estrut    = "";
+    if ($this->filtra_despesa != "geral") {
+      $qual_filtro = split('-', $this->filtra_despesa);
+      for ($f = 0; $f < sizeof($qual_filtro); $f++) {
+        $ver = split("_", $qual_filtro[$f]);
+
+        if ($ver[0] == "instit") {
+          $sele_work_instit .= $sepi . $ver[1];
+          $sepi = ",";
+        }
+        if ($ver[0] == "orgao") {
+          $sele_work_orgao .= $sep . $ver[1];
+          $sep = ",";
+        }
+        if ($ver[0] == "unidade") {
+          $sele_work_unidade .= $sepu . " ( o58_orgao = " . $ver[1] . " and o58_unidade = " . $ver[2] . " ) ";
+          $sepu = " or ";
+        }
+        if ($ver[0] == "funcao") {
+          $sele_work_funcao .= $sepf . $ver[1];
+          $sepf = ",";
+        }
+        if ($ver[0] == "subfuncao") {
+          $sele_work_subfuncao .= $sepsf . $ver[1];
+          $sepsf = ",";
+        }
+        if ($ver[0] == "programa") {
+          $sele_work_programa .= $sepo . $ver[1];
+          $sepo = ",";
+        }
+        if ($ver[0] == "projativ") {
+          $sele_work_projativ .= $sepp . $ver[1];
+          $sepp = ",";
+        }
+        if ($ver[0] == "des") {
+          $sele_work_desdobramento .= $sepdes . $ver[1];
+          $sepdes = ",";
+        }
+        if ($ver[0] == "ele") {
+          $sql_elem = "select o56_elemento from orcelemento where o56_anousu = " . db_getsession("DB_anousu") . " and
                                                                     o56_codele = " . $ver[1];
-                    $rr       = @db_query($sql_elem);
-                    $numrows  = @pg_numrows($rr);
-                    if ($rr != false) {
-                        for ($xx = 0; $xx < $numrows; $xx++) {
-                            $estrut = substr(pg_result($rr, $xx, "o56_elemento"), 0, 7);
-                            $sele_work_elemento .= $sepe . $estrut;
-                            $sepe = ",";
-                        }
-                    }
-                }
-                if ($ver[0] == "recurso") {
-                    $sele_work_recurso .= $sepc . $ver[1];
-                    $sepc = ",";
-                }
-                $condicao_uniao = " and ";
+          $rr       = @db_query($sql_elem);
+          $numrows  = @pg_numrows($rr);
+          if ($rr != false) {
+            for ($xx = 0; $xx < $numrows; $xx++) {
+              $estrut = substr(pg_result($rr, $xx, "o56_elemento"), 0, 7);
+              $sele_work_elemento .= $sepe . $estrut;
+              $sepe = ",";
             }
-
-            $sele_work_instit .= ")";
-            $sele_work_orgao .= ")";
-            $sele_work_unidade .= ")";
-            $sele_work_funcao .= ")";
-            $sele_work_subfuncao .= ")";
-            $sele_work_programa .= ")";
-            $sele_work_projativ .= ")";
-            //        $sele_work_elemento .= ")";
-            $sele_work_desdobramento .= ")";
-            $sele_work_recurso .= ")";
-            //echo $sele_work_elemento; exit;
+          }
         }
-        // atualiza instituição
-        if ($sepi != "")
-            $this->instit = $sele_work_instit;
-        if ($sep != "")
-            $this->orgao = $sele_work_orgao;
-        if ($sepu != "")
-            $this->unidade = $sele_work_unidade;
-        if ($sepf != "")
-            $this->funcao = $sele_work_funcao;
-        if ($sepsf != "")
-            $this->subfuncao = $sele_work_subfuncao;
-        if ($sepo != "")
-            $this->programa = $sele_work_programa;
-        if ($sepp != "")
-            $this->projativ = $sele_work_projativ;
-        if ($sepe != "")
-            $this->elemento = $sele_work_elemento;
-        if ($sepdes != "")
-            $this->desdobramento = $sele_work_desdobramento;
-        if ($sepc != "")
-            $this->recurso = $sele_work_recurso;
+        if ($ver[0] == "recurso") {
+          $sele_work_recurso .= $sepc . $ver[1];
+          $sepc = ",";
+        }
+        $condicao_uniao = " and ";
+      }
+
+      $sele_work_instit .= ")";
+      $sele_work_orgao .= ")";
+      $sele_work_unidade .= ")";
+      $sele_work_funcao .= ")";
+      $sele_work_subfuncao .= ")";
+      $sele_work_programa .= ")";
+      $sele_work_projativ .= ")";
+      //        $sele_work_elemento .= ")";
+      $sele_work_desdobramento .= ")";
+      $sele_work_recurso .= ")";
+      //  echo $sele_work_elemento; exit;
     }
 }
 ?>

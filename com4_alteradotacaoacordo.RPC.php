@@ -38,7 +38,7 @@ require_once("model/Dotacao.model.php");
 
 
 $oJson             = new services_json();
-$oParam            = $oJson->decode(db_stdClass::db_stripTagsJson(str_replace("\\","",$_POST["json"])));
+$oParam            = $oJson->decode(db_stdClass::db_stripTagsJson(str_replace("\\", "", $_POST["json"])));
 
 $oRetorno          = new stdClass();
 $oRetorno->status  = 1;
@@ -46,7 +46,7 @@ $oRetorno->message = 1;
 $lErro             = false;
 $sMensagem         = "";
 
-switch($oParam->exec) {
+switch ($oParam->exec) {
 
 	case "alteraDotacoesAcordo":
 
@@ -60,7 +60,7 @@ switch($oParam->exec) {
 
 			foreach ($oParam->aItens as $oItem) {
 
-				if(count($oAcordo->getAutorizacoes('', $oItem->iAnoDotacao))){
+				if (count($oAcordo->getAutorizacoes('', $oItem->iAnoDotacao))) {
 					throw new Exception('O contrato já possui autorização de empenho no ano vigente.');
 				}
 
@@ -69,7 +69,6 @@ switch($oParam->exec) {
 			}
 
 			db_fim_transacao(false);
-
 		} catch (Exception $eErro) {
 
 			$oRetorno->status = 2;
@@ -103,6 +102,7 @@ switch($oParam->exec) {
 				$oDotacaoAcordo = db_utils::fieldsMemory($rsDotacoes, $count);
 
 				$sSqlItens = "SELECT DISTINCT
+								ac20_sequencial,
 								ac20_pcmater,
 								ac20_ordem,
 								pc01_descrmater,
@@ -120,8 +120,7 @@ switch($oParam->exec) {
 							JOIN acordoitem ON ac22_acordoitem = ac20_sequencial
 							JOIN acordoposicao ON ac20_acordoposicao = ac26_sequencial
 							JOIN acordoposicaotipo ON ac26_acordoposicaotipo = ac27_sequencial
-							JOIN orcelemento ON o56_codele = ac20_elemento AND o56_anousu = o58_anousu
-							JOIN acordo ON ac26_acordo = ac16_sequencial
+							JOIN orcelemento ON o56_codele = ac20_elemento AND o56_anousu = '" . db_getsession('DB_anousu') . "'							JOIN acordo ON ac26_acordo = ac16_sequencial
 							JOIN cgm ON ac16_contratado = z01_numcgm
 							JOIN pcmater ON ac20_pcmater = pc01_codmater
 							WHERE ac20_acordoposicao = (SELECT max(ac26_sequencial)
@@ -141,6 +140,7 @@ switch($oParam->exec) {
 
 					$oDotacao = new stdClass();
 					$oDotacao->aItens = array();
+					$oDotacao->itemDotacao = "true";
 					for ($i = 0; $i < pg_num_rows($rsResultItens); $i++) {
 						$aItens = db_utils::fieldsMemory($rsResultItens, $i);
 						$iCodigoDotacao = $aItens->ac22_coddot . $aItens->ac22_anousu;
@@ -154,6 +154,7 @@ switch($oParam->exec) {
 						$oDotacao->lAutorizado = "false";
 
 						$oItem = new stdClass();
+						$oItem->sequencial = $aItens->ac20_sequencial;
 						$oItem->iItem = $aItens->ac20_pcmater;
 						$oItem->iOrdem = $aItens->ac20_ordem;
 						$oItem->sNomeItem = $aItens->pc01_descrmater;
@@ -166,19 +167,18 @@ switch($oParam->exec) {
 						$oItem->iCodigoItem = $aItens->ac20_sequencial;
 						$oItem->lAlterado = false;
 						$oItem->sElemento = $aItens->o56_elemento;
+						$oItem->itemDotacao = "true";
 						$oDotacao->aItens[] = $oItem;
 
 						if (!isset($aItensDotacao[$iCodigoDotacao])) {
 							$aItensDotacao[$iCodigoDotacao] = $oDotacao;
 						}
-
 					}
-
 				}
 
 				$oRetorno->aDotacoes = $aItensDotacao;
 				$oRetorno->iAnoSessao = db_getsession("DB_anousu");
-
+				$oRetorno->tipoSql = "update";
 			}
 		}
 		break;

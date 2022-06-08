@@ -81,6 +81,7 @@ $clliclicitem                = new cl_liclicitem;
 $oDaoSolicitaVinculo         = new cl_solicitavinculo();
 $oDaoProcessoAdministrativo  = new cl_solicitaprotprocesso();
 
+$trancaIte = 0;
 $opselec  = 2;
 $db_opcao = 22;
 $db_botao = false;
@@ -120,7 +121,8 @@ if (!isset($param)) {
 }
 
 if (isset($param) && trim($param) != "") {
-
+  $trancaIte = 1;
+  
   $parametro = "&param=".$param;
   if (isset($chavepesquisa) && trim($chavepesquisa) != "" && @$liberaaba == "false"){
 	  $dbwhere       = "pc11_numero = $chavepesquisa";

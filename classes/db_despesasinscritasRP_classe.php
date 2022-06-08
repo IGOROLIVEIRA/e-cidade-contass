@@ -33,21 +33,21 @@ class cl_despesasinscritasRP {
     public $c223_instit = 0;
     // cria propriedade com as variaveis do arquivo
     public $campos = "
-                 c223_sequencial = int8 = Sequencial 
-                 c223_codemp = int8 = Codigo Empenho 
+                 c223_sequencial = int8 = Sequencial
+                 c223_codemp = int8 = Codigo Empenho
                  c223_credor = int8 = Credor
-                 c223_fonte = int8 = Fonte de recurso 
-                 c223_vlrnaoliquidado = float8 = Valor Não Liquidado 
-                 c223_vlrliquidado = float8 = Valor Liquidado 
-                 c223_vlrdisRPNP = float8 = Valor Disponivel RPNP 
-                 c223_vlrdisRPP = float8 = Valor Disponivel RPP 
-                 c223_vlrsemdisRPNP = float8 = Valor Sem Disponibilidade RPNP 
-                 c223_vlrsemdisRPP = float8 = Valor Sem Disponiblidade RPP 
-                 c223_vlrdisptotal = float8 = Valor Disponivel Total 
-                 c223_vlrutilizado = float8 = Valor Utilizado 
-                 c223_vlrdisponivel = float8 = Valor Disponivel 
+                 c223_fonte = int8 = Fonte de recurso
+                 c223_vlrnaoliquidado = float8 = Valor Não Liquidado
+                 c223_vlrliquidado = float8 = Valor Liquidado
+                 c223_vlrdisRPNP = float8 = Valor Disponivel RPNP
+                 c223_vlrdisRPP = float8 = Valor Disponivel RPP
+                 c223_vlrsemdisRPNP = float8 = Valor Sem Disponibilidade RPNP
+                 c223_vlrsemdisRPP = float8 = Valor Sem Disponiblidade RPP
+                 c223_vlrdisptotal = float8 = Valor Disponivel Total
+                 c223_vlrutilizado = float8 = Valor Utilizado
+                 c223_vlrdisponivel = float8 = Valor Disponivel
                  c223_anousu = float8 = Ano Uso
-                 c223_instit = int8 = codigo da instituição 
+                 c223_instit = int8 = codigo da instituição
                  ";
 
     //funcao construtor da classe
@@ -221,36 +221,36 @@ class cl_despesasinscritasRP {
             return false;
         }
         $sql = "insert into despesasinscritasRP(
-                                       c223_sequencial 
-                                      ,c223_codemp 
+                                       c223_sequencial
+                                      ,c223_codemp
                                       ,c223_credor
-                                      ,c223_fonte 
-                                      ,c223_vlrnaoliquidado 
-                                      ,c223_vlrliquidado 
-                                      ,c223_vlrdisRPNP 
-                                      ,c223_vlrdisRPP 
-                                      ,c223_vlrsemdisRPNP 
-                                      ,c223_vlrsemdisRPP 
-                                      ,c223_vlrdisptotal 
-                                      ,c223_vlrutilizado 
-                                      ,c223_vlrdisponivel 
+                                      ,c223_fonte
+                                      ,c223_vlrnaoliquidado
+                                      ,c223_vlrliquidado
+                                      ,c223_vlrdisRPNP
+                                      ,c223_vlrdisRPP
+                                      ,c223_vlrsemdisRPNP
+                                      ,c223_vlrsemdisRPP
+                                      ,c223_vlrdisptotal
+                                      ,c223_vlrutilizado
+                                      ,c223_vlrdisponivel
                                       ,c223_anousu
-                                      ,c223_instit 
+                                      ,c223_instit
                        )
                 values (
-                                 nextval('despesasinscritasRP_c223_sequencial_seq') 
-                               ,$this->c223_codemp 
+                                 nextval('despesasinscritasRP_c223_sequencial_seq')
+                               ,$this->c223_codemp
                                ,'$this->c223_credor'
-                               ,$this->c223_fonte 
-                               ,".($this->c223_vlrnaoliquidado== "null" || $this->c223_vlrnaoliquidado == ""? 0 : "'".$this->c223_vlrnaoliquidado."'")." 
-                               ,".($this->c223_vlrliquidado   == "null" || $this->c223_vlrliquidado    == ""? 0 : "'".$this->c223_vlrliquidado."'")." 
-                               ,".($this->c223_vlrdisRPNP     == "null" || $this->c223_vlrdisRPNP      == ""? 0 : "'".$this->c223_vlrdisRPNP."'")." 
-                               ,".($this->c223_vlrdisRPP      == "null" || $this->c223_vlrdisRPP       == ""? 0 : "'".$this->c223_vlrdisRPP."'")." 
-                               ,".($this->c223_vlrdisRPNP  == 0 || $this->c223_vlrdisRPNP   == ""? $this->c223_vlrnaoliquidado : "'".$this->c223_vlrsemdisRPNP."'")." 
-                               ,".($this->c223_vlrdisRPP   == 0 || $this->c223_vlrdisRPP    == ""? $this->c223_vlrliquidado : "'".$this->c223_vlrsemdisRPP."'")." 
-                               ,".($this->c223_vlrdisptotal   == "null" || $this->c223_vlrdisptotal    == ""? 0 : "'".$this->c223_vlrdisptotal."'")." 
-                               ,".($this->c223_vlrutilizado   == "null" || $this->c223_vlrutilizado    == ""? 0 : "'".$this->c223_vlrutilizado."'")." 
-                               ,".($this->c223_vlrdisponivel  == "null" || $this->c223_vlrdisponivel   == ""? 0 : "'".$this->c223_vlrdisponivel."'")." 
+                               ,$this->c223_fonte
+                               ,".($this->c223_vlrnaoliquidado== "null" || $this->c223_vlrnaoliquidado == ""? 0 : "'".$this->c223_vlrnaoliquidado."'")."
+                               ,".($this->c223_vlrliquidado   == "null" || $this->c223_vlrliquidado    == ""? 0 : "'".$this->c223_vlrliquidado."'")."
+                               ,".($this->c223_vlrdisRPNP     == "null" || $this->c223_vlrdisRPNP      == ""? 0 : "'".$this->c223_vlrdisRPNP."'")."
+                               ,".($this->c223_vlrdisRPP      == "null" || $this->c223_vlrdisRPP       == ""? 0 : "'".$this->c223_vlrdisRPP."'")."
+                               ,".($this->c223_vlrdisRPNP  == 0 || $this->c223_vlrdisRPNP   == ""? $this->c223_vlrnaoliquidado : "'".$this->c223_vlrsemdisRPNP."'")."
+                               ,".($this->c223_vlrdisRPP   == 0 || $this->c223_vlrdisRPP    == ""? $this->c223_vlrliquidado : "'".$this->c223_vlrsemdisRPP."'")."
+                               ,".($this->c223_vlrdisptotal   == "null" || $this->c223_vlrdisptotal    == ""? 0 : "'".$this->c223_vlrdisptotal."'")."
+                               ,".($this->c223_vlrutilizado   == "null" || $this->c223_vlrutilizado    == ""? 0 : "'".$this->c223_vlrutilizado."'")."
+                               ,".($this->c223_vlrdisponivel  == "null" || $this->c223_vlrdisponivel   == ""? 0 : "'".$this->c223_vlrdisponivel."'")."
                                ,$this->c223_anousu
                                ,$this->c223_instit
                       )";
@@ -461,6 +461,19 @@ class cl_despesasinscritasRP {
             if (trim($this->c223_anousu) == null ) {
                 $this->erro_sql = " Campo Ano Uso não informado.";
                 $this->erro_campo = "c223_anousu";
+                $this->erro_banco = "";
+                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+        }
+        if (trim($this->c223_fonte)!="" || isset($GLOBALS["HTTP_POST_VARS"]["c223_fonte"])) {
+            $sql  .= $virgula." c223_fonte = $this->c223_fonte ";
+            $virgula = ",";
+            if (trim($this->c223_fonte) == null ) {
+                $this->erro_sql = " Campo Fonte não informado.";
+                $this->erro_campo = "c223_fonte";
                 $this->erro_banco = "";
                 $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
                 $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));

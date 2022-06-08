@@ -2565,8 +2565,16 @@ class cl_formulario_rel_pes
         if ($this->tipoarq == true) {
             $this->monta_select_tdrtable($this->arr_tipoarq, $this->tipoarqnome, 'Tipo de Arquivo', 'Tipo de Arquivo');
         }
-        if ($this->mostord == true) {
-            $this->monta_select_tdrtable($this->arr_mostord, $this->mornome, $this->tipordem . ":", $this->tipordem);
+      }
+      if((trim($this->strngtipores) != "" || count($this->arr_tipores) > 0)){
+        $this->monta_select_tdrtable($this->arr_tipores,$this->trenome,$this->tipresumo.":",$this->tipresumo,$this->onchres);
+        $this->arr_tipofil = empty($this->arr_tipofil) ? Array("0"=>"----------","i"=>"Intervalo","s"=>"Selecionados") : $this->arr_tipofil;
+        $valortipres = $this->trenome;
+        global $$valortipres;
+        if(trim($this->strngtipores) != "" && $$valortipres != "g"){
+          if((isset($GLOBALS[$this->trenome]) && $GLOBALS[$this->trenome] != $this->valortipores) || trim($this->resumopadrao) != "g"){
+            $this->monta_select_tdrtable($this->arr_tipofil,$this->tfinome,"Tipo de Filtro:","Tipo de Filtro",$this->onchres);
+          }
         }
 
         if ($this->mostasc == true) {

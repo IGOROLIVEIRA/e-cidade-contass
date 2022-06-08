@@ -42,6 +42,31 @@ class Evento
     private $md5;
 
     /**
+     * Ambiente Envio
+     *
+     * @var integer
+     */
+    private $tpAmb;
+
+    /**
+     * Início Validade das informações
+     *
+     * @var string
+     */
+    private $iniValid;
+
+    /**
+     * modo
+     *
+     * @var string
+     */
+    private $modo;
+
+    /**
+     * @var date
+     */
+    private $dt_alteracao;
+    /**
      * Undocumented function
      *
      * @param integer $tipoEvento
@@ -49,7 +74,7 @@ class Evento
      * @param string $responsavelPreenchimento
      * @param \stdClass $dados
      */
-    public function __construct($tipoEvento, $empregador, $responsavelPreenchimento, $dado)
+    public function __construct($tipoEvento, $empregador, $responsavelPreenchimento, $dado, $tpAmb, $iniValid, $modo, $dt_alteracao = null)
     {
         /**
          * @todo pesquisar exite na fila um evento do tipo: $tipoEvento para o : $responsavelPreenchimento
@@ -58,10 +83,14 @@ class Evento
          * @todo se houver e os $dados forem diferentes ( usar md5 ), altera / inclui novo registro e reagenda
          *
          */
-        $this->tipoEvento = $tipoEvento;
-        $this->empregador = $empregador;
+        $this->tipoEvento               = str_replace('S', '', $tipoEvento);
+        $this->empregador               = $empregador;
         $this->responsavelPreenchimento = $responsavelPreenchimento;
-        $this->dado = $dado;
+        $this->dado                     = $dado;
+        $this->tpAmb                    = $tpAmb;
+        $this->iniValid                 = $iniValid;
+        $this->modo                     = $modo;
+        $this->dt_alteracao             = $dt_alteracao;
 
         $dado = json_encode(\DBString::utf8_encode_all($this->dado));
         if (is_null($dado)) {
@@ -75,27 +104,26 @@ class Evento
         $where = array(
             "rh213_evento = {$this->tipoEvento}",
             "rh213_empregador = {$this->empregador}",
-            "rh213_responsavelpreenchimento = '{$this->responsavelPreenchimento}'"
+            "rh213_responsavelpreenchimento = '{$this->responsavelPreenchimento}'",
         );
 
         $where = implode(" and ", $where);
-        $dao = new \cl_esocialenvio();
-        $sql = $dao->sql_query_file(null, "*", null, $where);
-        $rs = db_query($sql);
+        $dao   = new \cl_esocialenvio();
+        $sql   = $dao->sql_query_file(null, "*", null, $where);
+        $rs    = db_query($sql);
 
         if (!$rs) {
-            throw new \Exception("Erro ao buscar registros.");
+            throw new \Exception("Erro ao buscar registros do evento para verificação.");
         }
 
-        if (pg_num_rows($rs) == 1) {
+        if (pg_num_rows($rs) > 0 && $this->modo === 'INC') {
             $md5Evento = \db_utils::fieldsMemory($rs, 0)->rh213_md5;
-            if ($md5Evento == $this->md5) {
-                return false;
+            $evtSituaccao = \db_utils::fieldsMemory($rs, 0)->rh213_situacao;
+            if ($md5Evento == $this->md5 && $evtSituaccao == \cl_esocialenvio::SITUACAO_ENVIADO) {
+                throw new \Exception("Já existe um envio do evento S-{$this->tipoEvento} com as mesmas informações.");
             }
         }
-        $codigoFila = pg_num_rows($rs) == 0 ? null : \db_utils::fieldsMemory($rs, 0)->rh213_sequencial;
-        $this->adicionarEvento($codigoFila);
-
+        $this->adicionarEvento();
         return true;
     }
 
@@ -104,25 +132,26 @@ class Evento
      *
      * @param integer $codigo
      */
-    private function adicionarEvento($codigo = null)
+    private function adicionarEvento()
     {
-        $daoFilaEsocial = new \cl_esocialenvio();
-        $daoFilaEsocial->rh213_sequencial = $codigo;
-        $daoFilaEsocial->rh213_evento = $this->tipoEvento;
-        $daoFilaEsocial->rh213_empregador = $this->empregador;
+        $dados                                          = $this->montarDadosAPI();
+
+        $daoFilaEsocial                                 = new \cl_esocialenvio();
+        $daoFilaEsocial->rh213_evento                   = $this->tipoEvento;
+        $daoFilaEsocial->rh213_empregador               = $this->empregador;
         $daoFilaEsocial->rh213_responsavelpreenchimento = $this->responsavelPreenchimento;
-        $daoFilaEsocial->rh213_dados = pg_escape_string(json_encode(\DBString::utf8_encode_all($this->dado)));
-        $daoFilaEsocial->rh213_md5 = $this->md5;
-        $daoFilaEsocial->rh213_situacao = 1;
+        $daoFilaEsocial->rh213_ambienteenvio            = $this->tpAmb;
 
-        if (empty($codigo)) {
+        $daoFilaEsocial->rh213_dados    = pg_escape_string(json_encode(\DBString::utf8_encode_all($dados)));
+        $daoFilaEsocial->rh213_md5      = $this->md5;
+        $daoFilaEsocial->rh213_situacao = \cl_esocialenvio::SITUACAO_NAO_ENVIADO;
+        $daoFilaEsocial->rh213_dataprocessamento = date('Y-m-d h:i:s');
+
+        if (is_object($dados) || count($dados) > 0) {
             $daoFilaEsocial->incluir(null);
-        } else {
-            $daoFilaEsocial->alterar($codigo);
-        }
-
-        if ($daoFilaEsocial->erro_status == 0) {
-            throw new \Exception("Não foi possível adicionar na fila.");
+            if ($daoFilaEsocial->erro_status == 0) {
+                throw new \Exception("Não foi possível adicionar na fila. \n {$daoFilaEsocial->erro_msg}");
+            }
         }
 
         $this->adicionarTarefa($daoFilaEsocial->rh213_sequencial);
@@ -146,5 +175,23 @@ class Evento
         $job->adicionarParametro("id_fila", $idFila);
         $job->setCaminhoPrograma('model/esocial/FilaESocialTask.model.php');
         $job->salvar();
+    }
+
+    /**
+     * Retorna dados para envio no formato requerido conforme cada Evento
+     *
+     * @param array stdClass
+     */
+    private function montarDadosAPI()
+    {
+        $sNomeClasse = "\ECidade\RecursosHumanos\ESocial\Agendamento\Eventos\EventoS" . $this->tipoEvento;
+        $evento = new $sNomeClasse($this->dado);
+        $evento->setIniValid($this->iniValid);
+        $evento->setModo($this->modo);
+        $evento->setDtAlteracao($this->dt_alteracao);
+        if (!is_object($evento)) {
+            throw new \Exception("Objeto S{$this->tipoEvento} não encontrado.");
+        }
+        return $evento->montarDados();
     }
 }

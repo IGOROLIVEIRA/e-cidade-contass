@@ -76,7 +76,9 @@ function js_relatorio() {
   var contassemmov         = obj.k29_contassemmovimento.value;
   var agruparfonte         = obj.agrupar_fonte.value;
   var fonte 			   = obj.o15_codigo.value;
-
+  var tipo_conta         = obj.tipo_conta.value;
+  var agrupar_tipo_conta 			   = obj.agrupar_tipo_conta.value;
+  
   jan = window.open('cai2_emissbol002.php?contasnegativas='+contasnegativas
                                                            +'&imprime_interferencia='+imprimeinterferencia
                                                            +'&ordem_conta='+ordemconta
@@ -88,6 +90,8 @@ function js_relatorio() {
                                                            +'&quebrarpag='+quebrarpag
                                                            +'&contassemmov='+contassemmov
                                                            +'&agrupar_fonte='+agruparfonte
+                                                           +'&tipo_conta='+tipo_conta
+                                                           +'&agrupar_tipo_conta='+agrupar_tipo_conta
 														   +'&fonte='+fonte,
                     '','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
   jan.moveTo(0,0);
@@ -327,9 +331,9 @@ function js_mostrarecurso1(chave1,chave2){
      <tr>
         <td align="right"><strong>Agrupar por Fonte:</strong></td>
         <td> &nbsp; &nbsp;
-          <select name="agrupar_fonte">
+          <select name="agrupar_fonte" onclick="verconta()">
             <option value = 'N'>Não</option>
-            <option value = 'S'>Sim</option>
+            <option value = 'S'>Sim</option>  
           </select>
         </td>
       </tr>
@@ -342,6 +346,25 @@ function js_mostrarecurso1(chave1,chave2){
 			?>
 		</td>
 	</tr>
+  <tr>
+        <td align="right"><strong>Tipo de Conta:</strong></td>
+        <td> &nbsp; &nbsp;
+          <select name="tipo_conta">
+            <option value = '0' selected>Todas</option>
+            <option value = '1'>Conta corrente</option>
+            <option value = '2'>Conta poupança</option>
+            <option value = '3'>Conta aplicação</option> 
+
+        </td>
+      </tr>
+      <tr>
+        <td align="right"><strong>Agrupar por tipo de Conta:</strong></td>
+        <td> &nbsp; &nbsp;
+          <select name="agrupar_tipo_conta">
+            <option value = '1'>Sim</option>
+            <option value = '2' selected>Não</option>
+          </td>
+      </tr>    
 
 	    <tr>
                <td width="25">&nbsp;</td>
@@ -369,3 +392,12 @@ function js_mostrarecurso1(chave1,chave2){
     ?>
 </body>
 </html>
+<script>
+function verconta(){
+  
+  if(document.form1.agrupar_fonte.value == 'S'){
+    document.form1.agrupar_tipo_conta.disabled=true
+    }  else
+    document.form1.agrupar_tipo_conta.disabled=false  
+}
+</script>

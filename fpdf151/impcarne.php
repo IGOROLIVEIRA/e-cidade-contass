@@ -103,6 +103,8 @@ include("assinatura.php");
  *  MODELO 76  -
  *  MODELO 77  -
  *  MODELO 78  - EMPENHOS FOLHA
+ *  MODELO 100 - MODELO DE RECIBO DE IPTU
+ *  MODELO 102 - MODELO DE RECIBO DE IPTU
  *
  */
 class db_impcarne extends cl_assinatura
@@ -753,7 +755,7 @@ class db_impcarne extends cl_assinatura
    * @param object  $objpdf    - Instancia da classe FPDF
    * @param integer $impmodelo - Numero do Modelo a ser utilizado.
    */
-  function __construct($objpdf, $impmodelo)
+  function db_impcarne($objpdf, $impmodelo)
   {
     $this->objpdf = $objpdf;
     $this->impmodelo = $impmodelo;
@@ -1334,6 +1336,7 @@ class db_impcarne extends cl_assinatura
     $sCodCliente = $sCodCliente->db21_codcli;
     $sCodCliente = str_pad($sCodCliente, 6, 0, STR_PAD_LEFT);
     $sInstit     = str_pad(db_getsession("DB_instit"), 2, 0, STR_PAD_LEFT);
+
     /** Extensao : Inicio [guia-itbi-recibo-mensagem-modelo-codcli15] */
     /** Extensao : Fim [guia-itbi-recibo-mensagem-modelo-codcli15] */
 

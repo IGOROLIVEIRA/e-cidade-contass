@@ -268,13 +268,14 @@ $clpublicacaoeperiodicidadergf->rotulo->label();
         if(CurrentWindow.corpo.iframe_dadoscomplementares.document.form1.c218_metarrecada.value == 1){
             CurrentWindow.corpo.dadoscomplementares.c218_dscmedidasadotadas = "";
         }
-        CurrentWindow.corpo.operacoesdecredito.c219_contopcredito = CurrentWindow.corpo.iframe_operacoesdecredito.document.form1.c219_contopcredito.value;
-        CurrentWindow.corpo.operacoesdecredito.c219_dsccontopcredito = CurrentWindow.corpo.iframe_operacoesdecredito.document.form1.c219_dsccontopcredito.value;
-        CurrentWindow.corpo.operacoesdecredito.c219_realizopcredito = CurrentWindow.corpo.iframe_operacoesdecredito.document.form1.c219_realizopcredito.value;
-        CurrentWindow.corpo.operacoesdecredito.c219_tiporealizopcreditocapta = CurrentWindow.corpo.iframe_operacoesdecredito.document.form1.c219_tiporealizopcreditocapta.value;
-        CurrentWindow.corpo.operacoesdecredito.c219_tiporealizopcreditoreceb = CurrentWindow.corpo.iframe_operacoesdecredito.document.form1.c219_tiporealizopcreditoreceb.value;
-        CurrentWindow.corpo.operacoesdecredito.c219_tiporealizopcreditoassundir = CurrentWindow.corpo.iframe_operacoesdecredito.document.form1.c219_tiporealizopcreditoassundir.value;
-        CurrentWindow.corpo.operacoesdecredito.c219_tiporealizopcreditoassunobg = CurrentWindow.corpo.iframe_operacoesdecredito.document.form1.c219_tiporealizopcreditoassunobg.value;
+        top.corpo.operacoesdecredito.c219_contopcredito = top.corpo.iframe_operacoesdecredito.document.form1.c219_contopcredito.value;
+        top.corpo.operacoesdecredito.c219_dscnumeroinst = top.corpo.iframe_operacoesdecredito.document.form1.c219_dscnumeroinst.value;
+        top.corpo.operacoesdecredito.c219_dsccontopcredito = top.corpo.iframe_operacoesdecredito.document.form1.c219_dsccontopcredito.value;
+        top.corpo.operacoesdecredito.c219_realizopcredito = top.corpo.iframe_operacoesdecredito.document.form1.c219_realizopcredito.value;
+        top.corpo.operacoesdecredito.c219_tiporealizopcreditocapta = top.corpo.iframe_operacoesdecredito.document.form1.c219_tiporealizopcreditocapta.value;
+        top.corpo.operacoesdecredito.c219_tiporealizopcreditoreceb = top.corpo.iframe_operacoesdecredito.document.form1.c219_tiporealizopcreditoreceb.value;
+        top.corpo.operacoesdecredito.c219_tiporealizopcreditoassundir = top.corpo.iframe_operacoesdecredito.document.form1.c219_tiporealizopcreditoassundir.value;
+        top.corpo.operacoesdecredito.c219_tiporealizopcreditoassunobg = top.corpo.iframe_operacoesdecredito.document.form1.c219_tiporealizopcreditoassunobg.value;
 
         CurrentWindow.corpo.publicacaoeperiodicidaderreo.c220_publiclrf = CurrentWindow.corpo.iframe_publicacaoeperiodicidaderreo.document.form1.c220_publiclrf.value;
         CurrentWindow.corpo.publicacaoeperiodicidaderreo.c220_dtpublicacaorelatoriolrf = CurrentWindow.corpo.iframe_publicacaoeperiodicidaderreo.document.form1.c220_dtpublicacaorelatoriolrf.value;

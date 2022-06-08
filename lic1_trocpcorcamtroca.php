@@ -554,9 +554,9 @@ ORDER BY $ordem";
 
                                         $descrlote = $l04_descricao;
                                         if($pc80_criterioadjudicacao == 1 || $pc80_criterioadjudicacao == 2){
-                                            echo "<tr>\n<td colspan='12' nowrap class='$bordas' align='left' height='30'><b>$l04_descricao</b>&nbsp;&nbsp;";
+                                            echo "<tr>\n<td colspan='12' nowrap class='$bordas' align='left' height='30' width='200'><b>$l04_descricao</b>&nbsp;&nbsp;";
                                         }else{
-                                            echo "<tr>\n<td colspan='9' nowrap class='$bordas' align='left' height='30'><b>$l04_descricao</b>&nbsp;&nbsp;";
+                                            echo "<tr>\n<td colspan='9' nowrap class='$bordas' align='left' height='30' width='200'><b>$l04_descricao</b>&nbsp;&nbsp;";
                                         }
                                         db_ancora("Trocar","js_troca('$l04_descricao',$orcamento,$pc23_orcamforne);",$db_tranca);
                                         echo "</td>\n</tr>\n";

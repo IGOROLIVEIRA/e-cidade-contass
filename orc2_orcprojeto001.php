@@ -76,22 +76,22 @@ function emite(){
 
    if (obj.o46_codlei.value ==''){
       alert('Preencha o Numero do Projeto ');
-   } else {
-      if (obj.modelo.value=='1'){
-          jan = window.open('orc2_orcprojeto002.php?o46_codlei='+obj.o46_codlei.value+'&timbre=s','','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0');
+   } else {  
+      if (obj.modelo.value=='1'){  
+          jan = window.open('orc2_orcprojeto002.php?o46_codlei='+obj.o46_codlei.value+'&processados='+obj.processados.value+'&timbre=s','','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0');
           jan.moveTo(0,0);
       } else if (obj.modelo.value=='2') {
-	  jan = window.open('orc2_orcprojeto003.php?o46_codlei='+obj.o46_codlei.value,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0');
+	  jan = window.open('orc2_orcprojeto003.php?o46_codlei='+obj.o46_codlei.value+'&processados='+obj.processados.value,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0');
           jan.moveTo(0,0);
       } else if (obj.modelo.value=='3') {
-          jan = window.open('orc2_orcprojeto004.php?o46_codlei='+obj.o46_codlei.value+'&timbre=s','','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0');
+          jan = window.open('orc2_orcprojeto004.php?o46_codlei='+obj.o46_codlei.value+'&processados='+obj.processados.value+'&timbre=s','','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0');
           jan.moveTo(0,0);
       } else if (obj.modelo.value=='4') {
-          jan = window.open('orc2_orcprojeto002.php?o46_codlei='+obj.o46_codlei.value+'&timbre=n','','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0');
+          jan = window.open('orc2_orcprojeto002.php?o46_codlei='+obj.o46_codlei.value+'&processados='+obj.processados.value+'&timbre=n','','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0');
           jan.moveTo(0,0);
       } else if (obj.modelo.value=='5') {
           // $ass = true;
-          jan = window.open('orc2_orcprojeto002.php?o46_codlei='+obj.o46_codlei.value+'&timbre=s&ass=s','','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0');
+          jan = window.open('orc2_orcprojeto002.php?o46_codlei='+obj.o46_codlei.value+'&processados='+obj.processados.value+'&timbre=s&ass=s','','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0');
           jan.moveTo(0,0);
       }
    }
@@ -124,10 +124,20 @@ function emite(){
           $m = array("1"=>"1-Com Timbre","2"=>"2-Dotacao Sintetica","3"=>"3-Com CodDot","4"=>"4-Sem Timbre","5-Com Assinatura");
           db_select("modelo",$m,True,1);
       ?>
-      </td>
-
+      </td> 
+   </tr>   
+      <tr>
+      <td nowrap align="right" colspan="1"><b>Suplementações: </b></td>    
+      <td colspan=2>  
+        <select name=processados>
+           <option value="1"> Processados  </option> 
+           <option value="2"> Não Processados </option>
+           <option value="3"> Todos </option>
+        </select>   
+     </td>
+ 
    </tr>
-
+          
    <tr>
       <td> &nbsp;  </td>
       <td colspan="2"  >  &nbsp;  </td>

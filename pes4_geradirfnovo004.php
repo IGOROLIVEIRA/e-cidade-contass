@@ -250,7 +250,7 @@ function js_detectaarquivo(arquivo,pdf){
         </td>
         <td align="left">
           <?php
-            db_input('dddresp', 4, 1, true, 'text', 2, '', null, null, null, 3);
+            db_input('dddresp', 4, 1, true, 'text', 2, '', null, null, null, 2);
 	        ?>
         </td>
         </tr>
@@ -582,7 +582,7 @@ function js_emitirDirf() {
     return false;
   }
 
-  if($F('dddresp').length < 3){
+  if($F('dddresp').length < 2){
 
     alert(_M(MENSAGENS+'ddd_invalido'));
     return false;

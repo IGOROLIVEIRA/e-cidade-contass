@@ -1009,7 +1009,7 @@ class cl_cgm {
         }
         $sql .= " where ";
         if($z01_numcgm!=null){
-            $sql .= " z01_numcgm = $this->z01_numcgm";
+            $sql .= " z01_numcgm = $z01_numcgm";
         }
         $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
         if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)

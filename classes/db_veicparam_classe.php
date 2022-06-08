@@ -49,6 +49,8 @@ class cl_veicparam {
    var $ve50_integrapatri = 0; 
    var $ve50_postoproprio = 0; 
    var $ve50_integrapessoal = 0; 
+   var $ve50_abastempenho = 0;
+   var $ve50_datacorte = null; 
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  ve50_codigo = int4 = Código Sequencial 
@@ -58,6 +60,8 @@ class cl_veicparam {
                  ve50_integrapatri = int4 = Integrado com Patrimonio 
                  ve50_postoproprio = int4 = Abastecimento Posto Proprio 
                  ve50_integrapessoal = int4 = Integração com módulo Pessoal 
+                 ve50_abastempenho = int4 = Validar Abastecimento por Empenho 
+                 ve50_datacorte = date = Valor de validação de empenho
                  ";
    //funcao construtor da classe 
    function cl_veicparam() { 
@@ -84,6 +88,8 @@ class cl_veicparam {
        $this->ve50_integrapatri = ($this->ve50_integrapatri == ""?@$GLOBALS["HTTP_POST_VARS"]["ve50_integrapatri"]:$this->ve50_integrapatri);
        $this->ve50_postoproprio = ($this->ve50_postoproprio == ""?@$GLOBALS["HTTP_POST_VARS"]["ve50_postoproprio"]:$this->ve50_postoproprio);
        $this->ve50_integrapessoal = ($this->ve50_integrapessoal == ""?@$GLOBALS["HTTP_POST_VARS"]["ve50_integrapessoal"]:$this->ve50_integrapessoal);
+       $this->ve50_abastempenho = ($this->ve50_abastempenho == ""?@$GLOBALS["HTTP_POST_VARS"]["ve50_abastempenho"]:$this->ve50_abastempenho);
+       $this->ve50_datacorte = ($this->ve50_datacorte == ""?@$GLOBALS["HTTP_POST_VARS"]["ve50_datacorte"]:$this->ve50_datacorte);
      }else{
        $this->ve50_codigo = ($this->ve50_codigo == ""?@$GLOBALS["HTTP_POST_VARS"]["ve50_codigo"]:$this->ve50_codigo);
      }
@@ -145,6 +151,15 @@ class cl_veicparam {
        $this->erro_status = "0";
        return false;
      }
+     if($this->ve50_abastempenho == null ){ 
+      $this->erro_sql = " Campo Validar Abastecimento por Empenhol nao Informado.";
+      $this->erro_campo = "ve50_abastempenho";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
      if($ve50_codigo == "" || $ve50_codigo == null ){
        $result = db_query("select nextval('veicparam_ve50_codigo_seq')"); 
        if($result==false){
@@ -184,7 +199,9 @@ class cl_veicparam {
                                       ,ve50_veiccadcategcnh 
                                       ,ve50_integrapatri 
                                       ,ve50_postoproprio 
-                                      ,ve50_integrapessoal 
+                                      ,ve50_integrapessoal
+                                      ,ve50_abastempenho
+                                      ,ve50_datacorte 
                        )
                 values (
                                 $this->ve50_codigo 
@@ -193,7 +210,9 @@ class cl_veicparam {
                                ,$this->ve50_veiccadcategcnh 
                                ,$this->ve50_integrapatri 
                                ,$this->ve50_postoproprio 
-                               ,$this->ve50_integrapessoal 
+                               ,$this->ve50_integrapessoal
+                               ,$this->ve50_abastempenho
+                               ,'$this->ve50_datacorte' 
                       )";
      $result = db_query($sql); 
      if($result==false){ 
@@ -331,6 +350,23 @@ class cl_veicparam {
          return false;
        }
      }
+     if(trim($this->ve50_abastempenho)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve50_abastempenho"])){ 
+      $sql  .= $virgula." ve50_abastempenho = $this->ve50_abastempenho ";
+      $virgula = ",";
+      if(trim($this->ve50_abastempenho) == null ){ 
+        $this->erro_sql = " Campo Validar Abastecimento por Empenho nao Informado.";
+        $this->erro_campo = "ve50_abastempenho";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+    }
+    if(trim($this->ve50_datacorte)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve50_datacorte"])){ 
+      $sql  .= $virgula." ve50_datacorte = '$this->ve50_datacorte' ";
+      $virgula = ",";
+    }
      $sql .= " where ";
      if($ve50_codigo!=null){
        $sql .= " ve50_codigo = $this->ve50_codigo";

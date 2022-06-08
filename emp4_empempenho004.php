@@ -1,9 +1,9 @@
 <?php
-/*
- *     E-cidade Software Publico para Gestao Municipal
- *  Copyright (C) 2014  DBSeller Servicos de Informatica
+/*       
+ *     E-cidade Software Publico para Gestao Municipal    
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica 
  *                            www.dbseller.com.br
- *                         e-cidade@dbseller.com.br
+ *                         e-cidade@dbseller.com.br     
  *
  *  Este programa e software livre; voce pode redistribui-lo e/ou
  *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
@@ -12,32 +12,33 @@
  *
  *  Este programa e distribuido na expectativa de ser util, mas SEM
  *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM  
  *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
- *  detalhes.
+ *  detalhes.   
  *
  *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
  *  junto com este programa; se nao, escreva para a Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
  *  02111-1307, USA.
  *
- *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *  Copia da licenca no diretorio licenca/licenca_en.txt 
  *                                licenca/licenca_pt.txt
- */
-require_once("libs/db_stdlib.php");
-require_once("libs/db_utils.php");
-require_once("std/db_stdClass.php");
-require_once("libs/db_conecta.php");
-require_once("libs/db_sessoes.php");
-require_once("libs/db_usuariosonline.php");
-require_once("dbforms/db_funcoes.php");
-require_once("libs/db_liborcamento.php");
-require_once("libs/db_libcontabilidade.php");
-require_once("classes/db_pagordem_classe.php");
-require_once("classes/db_pagordemnota_classe.php");
-require_once("classes/db_pagordemele_classe.php");
-require_once("classes/db_empnota_classe.php");
-require_once("classes/db_empnotaele_classe.php");
+ */   
+
+require_once ("libs/db_stdlib.php");
+require_once ("libs/db_utils.php");
+require_once  ("std/db_stdClass.php");
+require_once ("libs/db_conecta.php");
+require_once ("libs/db_sessoes.php");
+require_once ("libs/db_usuariosonline.php");
+require_once ("dbforms/db_funcoes.php");
+require_once ("libs/db_liborcamento.php");
+require_once ("libs/db_libcontabilidade.php");
+require_once ("classes/db_pagordem_classe.php");
+require_once ("classes/db_pagordemnota_classe.php");
+require_once ("classes/db_pagordemele_classe.php");
+require_once ("classes/db_empnota_classe.php");
+require_once ("classes/db_empnotaele_classe.php");
 
 //////////////////////////////Controle Andamento da SOlicitação de Compras/////////////////////
 require_once("classes/db_pcparam_classe.php");
@@ -129,21 +130,21 @@ db_app::import("contabilidade.contacorrente.AC.*");
 $clempautpresta   = new cl_empautpresta;
 $clempempenho          = new cl_empempenho;
 $clconplanoreduz  = new cl_conplanoreduz;
-$clempprestatip      = new cl_empprestatip;
-$clemppresta          = new cl_emppresta;
-$clempelemento      = new cl_empelemento;
-$clempempaut          =    new cl_empempaut;
-$clempempitem          = new cl_empempitem;
-$clempautoriza      = new cl_empautoriza;
-$clemphist          = new cl_emphist;
-$clempauthist          = new cl_empauthist;
-$clempemphist          = new cl_empemphist;
-$clemptipo          = new cl_emptipo;
-$clempautitem          = new cl_empautitem;
-$clempautidot          = new cl_empautidot;
-$clempparametro      = new cl_empparametro;
-$clcflicita          = new cl_cflicita;
-$clempparamnum      = new cl_empparamnum;
+$clempprestatip	  = new cl_empprestatip;
+$clemppresta	  	= new cl_emppresta;
+$clempelemento	  = new cl_empelemento;
+$clempempaut	  	=	new cl_empempaut;
+$clempempitem	  	= new cl_empempitem;
+$clempautoriza	  = new cl_empautoriza;
+$clemphist	      = new cl_emphist;
+$clempauthist	  	= new cl_empauthist;
+$clempemphist	  	= new cl_empemphist;
+$clemptipo	      = new cl_emptipo;
+$clempautitem	  	= new cl_empautitem; 
+$clempautidot	  	= new cl_empautidot;
+$clempparametro	  = new cl_empparametro; 
+$clcflicita	      = new cl_cflicita; 
+$clempparamnum	  = new cl_empparamnum;
 $clconcarpeculiar = new cl_concarpeculiar;
 $oDaoEmpenhoNl    = new cl_empempenhonl;
 $cldb_depusu          = new cl_db_depusu;
@@ -164,25 +165,25 @@ $clorcdotacao          = new cl_orcdotacao;
 $clorcreservaaut  = new cl_orcreservaaut;
 $clorcelemento    = new cl_orcelemento;
 
-require_once("classes/db_conlancam_classe.php");
-require_once("classes/db_conlancamele_classe.php");
-require_once("classes/db_conlancamlr_classe.php");
-require_once("classes/db_conlancamcgm_classe.php");
-require_once("classes/db_conlancamemp_classe.php");
-require_once("classes/db_conlancamval_classe.php");
-require_once("classes/db_conlancamdot_classe.php");
-require_once("classes/db_conlancamdoc_classe.php");
-require_once("classes/db_conlancamcompl_classe.php");
-require_once("classes/db_conlancamnota_classe.php");
+require_once ("classes/db_conlancam_classe.php");
+require_once ("classes/db_conlancamele_classe.php");
+require_once ("classes/db_conlancamlr_classe.php");
+require_once ("classes/db_conlancamcgm_classe.php");
+require_once ("classes/db_conlancamemp_classe.php");
+require_once ("classes/db_conlancamval_classe.php");
+require_once ("classes/db_conlancamdot_classe.php");
+require_once ("classes/db_conlancamdoc_classe.php");
+require_once ("classes/db_conlancamcompl_classe.php");
+require_once ("classes/db_conlancamnota_classe.php");
 
-$clconlancam          = new cl_conlancam;
-$clconlancamele      = new cl_conlancamele;
-$clconlancamlr      = new cl_conlancamlr;
-$clconlancamcgm      = new cl_conlancamcgm;
-$clconlancamemp      = new cl_conlancamemp;
-$clconlancamval      = new cl_conlancamval;
-$clconlancamdot      = new cl_conlancamdot;
-$clconlancamdoc      = new cl_conlancamdoc;
+$clconlancam	  	= new cl_conlancam;
+$clconlancamele	  = new cl_conlancamele;
+$clconlancamlr	  = new cl_conlancamlr;
+$clconlancamcgm	  = new cl_conlancamcgm;
+$clconlancamemp	  = new cl_conlancamemp;
+$clconlancamval	  = new cl_conlancamval;
+$clconlancamdot	  = new cl_conlancamdot; 
+$clconlancamdoc	  = new cl_conlancamdoc;
 $clconlancamcompl = new cl_conlancamcompl;
 $clconlancamnota  = new cl_conlancamnota;
 
@@ -513,12 +514,17 @@ if (isset($incluir)) {
         );
 
         $veConvMSC = $clempempenho->verificaConvenioSicomMSC($e54_autori, $anousu, $dados);
+  
         if ($veConvMSC > 0) {
-            $rsResult = $clconvconvenios->sql_record("select c206_sequencial from convconvenios where c206_sequencial = $e60_numconvenio");
-            if (!$rsResult) {
-                $sqlerro  = true;
-                $erro_msg = "Inclusão Abortada!\n É obrigatório informar o convênio para os empenhos de fontes 122, 123, 124 e 142.\n";
-            }
+
+          $rsResult = $clconvconvenios->sql_record("select c206_sequencial from convconvenios where c206_sequencial = $e60_numconvenio");
+         
+          if (!$rsResult) {
+            $sqlerro  = true;
+            $erro_msg = "Inclusão Abortada!\n É obrigatório informar o convênio para os empenhos de fontes 122, 123, 124, 142, 163, 171, 172, 173, 176, 177, 178, 181, 182 e 183.\n";
+         
+        }
+
         }
 
         if ($sqlerro == false) {
@@ -554,6 +560,7 @@ if (isset($incluir)) {
             $clempempenho->e60_destin         = $e54_destin;
             $clempempenho->e60_codtipo        = $e54_codtipo;
             $clempempenho->e60_resumo         = $e54_resumo;
+            $clempempenho->e60_informacaoop   = $e50_obs;
             $clempempenho->e60_instit         = db_getsession("DB_instit");
             $clempempenho->e60_datasentenca   = $e60_datasentenca;
             $clempempenho->e60_concarpeculiar = $e54_concarpeculiar;
@@ -595,10 +602,10 @@ if (isset($incluir)) {
 
             $aElementos = array('3319001', '3319003', '3319091', '3319092', '3319094', '3319191', '3319192', '3319194');
 
-            if (($tipoinstit == 5 || $tipoinstit == 6) &&
-                (in_array(substr($o56_elemento, 0, -4), $aElementosDesdobramento) || (in_array(substr($o56_elemento, 0, -6), $aElementos) && db_getsession("DB_anousu") >= 2021))
-            ) {
-                if ($e60_tipodespesa != 0) {
+            if ( ($tipoinstit == 5 || $tipoinstit == 6) &&
+                (in_array(substr($o56_elemento, 0 , -4), $aElementosDesdobramento) || (in_array(substr($o56_elemento, 0 , -6), $aElementos) && db_getsession("DB_anousu") >= 2021) )
+                ) {
+                if($e60_tipodespesa != 0) {
                     $clempempenho->e60_tipodespesa = $e60_tipodespesa;
                     $sqlerro = false;
                 } else {
@@ -627,36 +634,22 @@ if (isset($incluir)) {
                 }
             }
 
-            //VERIFICA CPF E CNPJ ZERADOS OC 7037
-            if ($sqlerro == false) {
-                $result_cgmzerado = db_query("select z01_cgccpf from cgm where z01_numcgm = {$e54_numcgm}");
+            if ($sqlerro==false) {
+
+                $result_cgmzerado = db_query("SELECT z01_cgccpf FROM cgm WHERE z01_numcgm = {$e54_numcgm}");
                 db_fieldsmemory($result_cgmzerado, 0)->z01_cgccpf;
 
-                if (strlen($z01_cgccpf) == 14) {
-                    if ($z01_cgccpf == '00000000000000') {
-                        $sqlerro = true;
-                        $erro_msg = "ERRO: Número do CNPJ está zerado. Corrija o CGM do fornecedor e tente novamente";
-                    }
-                } else {
-                    if ($z01_cgccpf == '' || $z01_cgccpf == null) {
-                        $sqlerro = true;
-                        $erro_msg = "ERRO: Número do CNPJ está zerado. Corrija o CGM do fornecedor e tente novamente";
-                    }
+                if (strlen($z01_cgccpf) != 14 && strlen($z01_cgccpf) != 11) {
+                    
+                    $sqlerro = true;
+                    $erro_msg = "ERRO!\nNúmero do CPF/CNPJ cadastrado está incorreto.\nCorrija o CGM do fornecedor e tente novamente!";
                 }
-
-                if (strlen($z01_cgccpf) == 11) {
-                    if ($z01_cgccpf == '00000000000') {
-                        $sqlerro = true;
-                        $erro_msg = "ERRO: Número do CPF está zerado. Corrija o CGM do fornecedor e tente novamente";
-                    }
-                } else {
-                    if ($z01_cgccpf == '' || $z01_cgccpf == null) {
-                        $sqlerro = true;
-                        $erro_msg = "ERRO: Número do CPF está zerado. Corrija o CGM do fornecedor e tente novamente";
-                    }
+                if ($z01_cgccpf == '00000000000000' || $z01_cgccpf == '00000000000') {
+                    
+                    $sqlerro = true;
+                    $erro_msg = "ERRO!\nNúmero do CPF/CNPJ cadastrado está zerado.\nCorrija o CGM do fornecedor e tente novamente!";
                 }
             }
-            //FIM OC 7037
 
             /* Ocorrência 11933
              * Valida se o parâmetro Atesto de Controle Interno está marcado como SIM
@@ -1018,9 +1011,7 @@ if (isset($incluir)) {
                 $oContaCorrenteDetalhe->setEmpenho($oEmpenhoFinanceiro);
                 $oContaCorrenteDetalhe->setRecurso($oDotacao->getDadosRecurso());
 
-                /**
-                 * Valida parametro de integracao da contabilidade com contratos
-                 */
+
                 $oEventoContabil     = new EventoContabil($c71_coddoc, $anousu);
                 $oLancamentoAuxiliar = new LancamentoAuxiliarEmpenho();
                 $oLancamentoAuxiliar->setCaracteristicaPeculiar($clempempenho->e60_concarpeculiar);
@@ -1034,37 +1025,45 @@ if (isset($incluir)) {
                 $oLancamentoAuxiliar->setContaCorrenteDetalhe($oContaCorrenteDetalhe);
                 $oEventoContabil->executaLancamento($oLancamentoAuxiliar);
 
-                /**
-                 * Pesquisa contrato do empenho
-                 * - caso exista gera lancamento
+                 /**
+                 * Valida parametro de integracao da contabilidade com contratos
                  */
-                $oDataImplantacao = new DBDate(date("Y-m-d", db_getsession('DB_datausu')));
-                $oInstituicao     = InstituicaoRepository::getInstituicaoByCodigo(db_getsession('DB_instit'));
-                if (ParametroIntegracaoPatrimonial::possuiIntegracaoContrato($oDataImplantacao, $oInstituicao)) {
+                // após 2021 este lançamento será feito no modulo de contratos.
+                if(db_getsession('DB_anousu') < 2022){
+                    /**
+                     * Pesquisa contrato do empenho
+                     * - caso exista gera lancamento
+                     */
+                    $oDataImplantacao = new DBDate(date("Y-m-d", db_getsession('DB_datausu')));
+                    $oInstituicao     = InstituicaoRepository::getInstituicaoByCodigo(db_getsession('DB_instit'));
+                    if (ParametroIntegracaoPatrimonial::possuiIntegracaoContrato($oDataImplantacao, $oInstituicao)) {
 
-                    $oDaoEmpenhoContrato = db_utils::getDao("empempenhocontrato");
-                    $sSqlContrato        = $oDaoEmpenhoContrato->sql_query_file(null, "e100_acordo", null, "e100_numemp = {$e60_numemp}");
+                        $oDaoEmpenhoContrato = db_utils::getDao("empempenhocontrato");
+                        $sSqlContrato        = $oDaoEmpenhoContrato->sql_query_file(null, "e100_acordo", null, "e100_numemp = {$e60_numemp}");
 
-                    $rsContrato = $oDaoEmpenhoContrato->sql_record($sSqlContrato);
+                        $rsContrato = $oDaoEmpenhoContrato->sql_record($sSqlContrato);
 
-                    if ($oDaoEmpenhoContrato->numrows > 0) {
+                        if ($oDaoEmpenhoContrato->numrows > 0) {
 
-                        $iCodigoAcordo         = db_utils::fieldsMemory($rsContrato, 0)->e100_acordo;
-                        $oAcordo               = new Acordo($iCodigoAcordo);
-                        $oEventoContabilAcordo = new EventoContabil(900, $anousu);
+                            $iCodigoAcordo         = db_utils::fieldsMemory($rsContrato, 0)->e100_acordo;
+                            $oAcordo               = new Acordo($iCodigoAcordo);
+                            $oEventoContabilAcordo = new EventoContabil(900, $anousu);
 
-                        $oLancamentoAuxiliarAcordo = new LancamentoAuxiliarAcordo();
-                        $oLancamentoAuxiliarAcordo->setEmpenho($oEmpenhoFinanceiro);
-                        $oLancamentoAuxiliarAcordo->setAcordo($oAcordo);
-                        $oLancamentoAuxiliarAcordo->setValorTotal($oEmpenhoFinanceiro->getValorEmpenho());
-                        $oLancamentoAuxiliarAcordo->setDocumento($oEventoContabilAcordo->getCodigoDocumento());
+                            $oLancamentoAuxiliarAcordo = new LancamentoAuxiliarAcordo();
+                            $oLancamentoAuxiliarAcordo->setEmpenho($oEmpenhoFinanceiro);
+                            $oLancamentoAuxiliarAcordo->setAcordo($oAcordo);
+                            $oLancamentoAuxiliarAcordo->setValorTotal($oEmpenhoFinanceiro->getValorEmpenho());
+                            $oLancamentoAuxiliarAcordo->setDocumento($oEventoContabilAcordo->getCodigoDocumento());
 
-                        $oContaCorrente = new ContaCorrenteDetalhe();
-                        $oContaCorrente->setAcordo($oAcordo);
-                        $oLancamentoAuxiliarAcordo->setContaCorrenteDetalhe($oContaCorrente);
-                        $oEventoContabilAcordo->executaLancamento($oLancamentoAuxiliarAcordo);
+                            $oContaCorrente = new ContaCorrenteDetalhe();
+                            $oContaCorrente->setAcordo($oAcordo);
+                            $oLancamentoAuxiliarAcordo->setContaCorrenteDetalhe($oContaCorrente);
+                            $oEventoContabilAcordo->executaLancamento($oLancamentoAuxiliarAcordo);
+                        }
                     }
                 }
+
+
             } catch (Exception $eErro) {
 
                 $erro_msg = $eErro->getMessage();

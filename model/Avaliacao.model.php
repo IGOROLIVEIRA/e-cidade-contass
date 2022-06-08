@@ -171,12 +171,16 @@ class Avaliacao {
                                                                );
 
       $rsGrupos  = $oDaoGrupoPerguntas->sql_record($sSqlGrupos);
+      
+      
       if ($oDaoGrupoPerguntas->numrows > 0) {
 
         $aGrupos = db_utils::getColectionByRecord($rsGrupos);
         foreach ($aGrupos as $oGrupo) {
           $this->aGrupos[] = new AvaliacaoGrupo($oGrupo->db102_sequencial);
         }
+      } else if($rsGrupos === false) {
+        throw new Exception("Erro ao buscar grupo de perguntas (".pg_last_error().")");
       }
     }
     return $this->aGrupos;

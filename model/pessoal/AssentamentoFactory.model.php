@@ -1,4 +1,4 @@
-<?php  
+<?php
 /*
  *     E-cidade Software Publico para Gestao Municipal                
  *  Copyright (C) 2015  DBSeller Servicos de Informatica             
@@ -26,64 +26,84 @@
  */
 
 /**
- * Factory para o gerenciar os Assentamentos do sistema, será 
- * responsavém por tratar os assentamentos e retornar uma instância 
+ * Factory para o gerenciar os Assentamentos do sistema, será
+ * responsavém por tratar os assentamentos e retornar uma instância
  * de Assentamento ou de AssentamentoSubstituicao
- * 
+ *
  * @author Renan Melo <renan@dbseller.com.br>
  * @package Pessoal
  */
 class AssentamentoFactory {
 
-  /**
-   * Arquivo de mensagens
-   */
-  const MENSAGEM = "recursoshumanos.pessoal.AssentamentoFactory.";
-  
-  private function __construct(){}
+    /**
+     * Arquivo de mensagens
+     */
+    const MENSAGEM = "recursoshumanos.pessoal.AssentamentoFactory.";
 
-  /**
-   * Retorna uma instância de AssentamentoSubstituicao caso o assentamento informado 
-   * por parâmetro for da Natureza substituição, caso contrário retorna uma 
-   * instância de Assentamento.
-   *
-   * @param  integer  $iCodigoAssentamento
-   * @return Assentamento - Caso a natureza do assentamento seja normal
-   *         AssentamentoSubstituicao - Caso a natureza do assentamento seja substituição
-   */
-  public static function getByCodigo($iCodigoAssentamento) {
-
-    if (empty($iCodigoAssentamento)) {
-      throw new BusinessException (self::MENSAGEM . 'codigo_nao_informado');
-    }
+    private function __construct(){}
 
     /**
-     * Montamos um objeto de assentamento para recuperar o seu tipo e consultar a natureza
+     * Retorna uma instância de AssentamentoSubstituicao caso o assentamento informado
+     * por parâmetro for da Natureza substituição, caso contrário retorna uma
+     * instância de Assentamento.
+     *
+     * @param  integer $iCodigoAssentamento
+     * @return Assentamento|AssentamentoSubstituicao|AssentamentoRRA
+     *
+     * @throws BusinessException
+     * @throws DBException
      */
-    $oAssentamento     = new Assentamento($iCodigoAssentamento);
-    $iTipoAssentamento = $oAssentamento->getTipoAssentamento();
+    public static function getByCodigo($iCodigoAssentamento) {
 
-    if(empty($iTipoAssentamento)) {
-      throw new BusinessException (self::MENSAGEM . 'erro_buscar_tipo_assentamento');
+        if (empty($iCodigoAssentamento)) {
+            throw new BusinessException (self::MENSAGEM . 'codigo_nao_informado');
+        }
+
+        /**
+         * Montamos um objeto de assentamento para recuperar o seu tipo e consultar a natureza
+         */
+        $oAssentamento     = new Assentamento($iCodigoAssentamento);
+        $iTipoAssentamento = $oAssentamento->getTipoAssentamento();
+
+        if(empty($iTipoAssentamento)) {
+            throw new BusinessException (self::MENSAGEM . 'erro_buscar_tipo_assentamento');
+        }
+
+        /**
+         * Verificamos se a natureza do assentamento é substituição.
+         */
+        $oDaoTipoAsse = new cl_tipoasse();
+        $rsTipoAsse   = $oDaoTipoAsse->sql_record($oDaoTipoAsse->sql_query_file($iTipoAssentamento, "h12_natureza"));
+
+        if (!$rsTipoAsse) {
+            throw new DBException(self::MENSAGEM . 'erro_buscar_assentamentos');
+        }
+        $oStdTipoAssentamento = db_utils::fieldsMemory($rsTipoAsse, 0);
+
+        switch ($oStdTipoAssentamento->h12_natureza) {
+
+            case Assentamento::NATUREZA_SUBSTITUICAO:
+
+                return new AssentamentoSubstituicao($iCodigoAssentamento);
+                break;
+
+            case Assentamento::NATUREZA_RRA:
+
+                return new AssentamentoRRA($iCodigoAssentamento);
+                break;
+
+            case Assentamento::NATUREZA_JUSTIFICATIVA:
+
+                return new \ECidade\RecursosHumanos\RH\Assentamento\AssentamentoJustificativa($iCodigoAssentamento);
+                break;
+
+            case Assentamento::NATUREZA_HE_MANUAL:
+                return new \ECidade\RecursosHumanos\RH\Assentamento\AssentamentoHoraExtraManual($iCodigoAssentamento);
+                break;
+
+            default:
+                return new Assentamento($iCodigoAssentamento);
+                break;
+        }
     }
-
-    /**
-     * Verificamos se a natureza do assentamento é substituição.
-     */
-    $oDaoTipoAsse = new cl_tipoasse();
-    $rsTipoAsse   = $oDaoTipoAsse->sql_record($oDaoTipoAsse->sql_query_file($iTipoAssentamento, "h12_natureza"));
-
-    if (!$rsTipoAsse) {
-      throw new DBException(self::MENSAGEM . 'erro_buscar_assentamentos');
-    } elseif(is_resource($rsTipoAsse) && $oDaoTipoAsse->numrows > 0){
-      $oStdTipoAssentamento = db_utils::fieldsMemory($rsTipoAsse, 0);
-    }
-
-    if ($oStdTipoAssentamento->h12_natureza == AssentamentoSubstituicao::CODIGO_NATUREZA) {
-      return new AssentamentoSubstituicao($iCodigoAssentamento);
-    }
-
-    return new Assentamento($iCodigoAssentamento);
-  }
-
 }

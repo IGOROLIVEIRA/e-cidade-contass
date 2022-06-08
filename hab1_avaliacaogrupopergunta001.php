@@ -75,8 +75,17 @@ if (isset($oPost->incluir)) {
       $clavaliacaogrupopergunta->db102_avaliacao     = $oPost->db102_avaliacao;
       $clavaliacaogrupopergunta->db102_descricao     = $oPost->db102_descricao;
       $clavaliacaogrupopergunta->db102_identificador = $oPost->db102_identificador;
+      $clavaliacaogrupopergunta->db102_identificadorcampo = $oPost->db102_identificadorcampo;
       $clavaliacaogrupopergunta->incluir(null);
       $erro_msg = $clavaliacaogrupopergunta->erro_msg;
+      if ($clavaliacaogrupopergunta->erro_status == 0) {
+        $sqlerro = true;
+      }
+    }
+    if(!$sqlerro) {
+
+      $clavaliacaogrupopergunta->db102_identificador = "{$oPost->db102_identificador}-$clavaliacaogrupopergunta->db102_sequencial";
+      $clavaliacaogrupopergunta->alterar($clavaliacaogrupopergunta->db102_sequencial);
       if ($clavaliacaogrupopergunta->erro_status == 0) {
         $sqlerro = true;
       }
@@ -113,6 +122,7 @@ if (isset($oPost->incluir)) {
       $clavaliacaogrupopergunta->db102_avaliacao     = $oPost->db102_avaliacao;
       $clavaliacaogrupopergunta->db102_descricao     = $oPost->db102_descricao;
       $clavaliacaogrupopergunta->db102_identificador = $oPost->db102_identificador;
+      $clavaliacaogrupopergunta->db102_identificadorcampo = $oPost->db102_identificadorcampo;
       $clavaliacaogrupopergunta->alterar($clavaliacaogrupopergunta->db102_sequencial);
       $erro_msg = $clavaliacaogrupopergunta->erro_msg;
       if ($clavaliacaogrupopergunta->erro_status == 0) {

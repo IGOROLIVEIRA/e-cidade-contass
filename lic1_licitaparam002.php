@@ -45,10 +45,11 @@ if(isset($alterar)){
    db_inicio_transacao();
    $result = $cllicitaparam->sql_record($cllicitaparam->sql_query(DB_getsession("DB_instit")));
    if($result==false || $cllicitaparam->numrows==0){
+     $cllicitaparam->l12_validacadfornecedor = $l12_validacadfornecedor;
      $cllicitaparam->l12_instit = DB_getsession("DB_instit");
      $cllicitaparam->incluir(DB_getsession("DB_instit"));
    }else {
-
+     $cllicitaparam->l12_validacadfornecedor = $l12_validacadfornecedor;
      $cllicitaparam->l12_instit = DB_getsession("DB_instit");
      $cllicitaparam->alterar(db_getsession("DB_instit"));
    }

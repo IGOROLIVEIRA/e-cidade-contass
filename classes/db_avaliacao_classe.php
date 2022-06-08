@@ -267,6 +267,10 @@ class cl_avaliacao {
          return false;
        }
      }
+     if(trim($this->db101_cargadados)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db101_cargadados"])){
+       $sql  .= $virgula." db101_cargadados = '$this->db101_cargadados' ";
+       $virgula = ",";
+     }
      $sql .= " where ";
      if($db101_sequencial!=null){
        $sql .= " db101_sequencial = $this->db101_sequencial";

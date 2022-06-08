@@ -262,12 +262,13 @@ $db_opcao = 1;
                     <td>
                       <?
                         $aPagamento  = array("p" => "Pagamento",
-                                             "l" => "Liquidacao");
+                                             "l" => "Liquidacao",
+                                            "nf" => "Competência NF");
                        db_select("pagamento", $aPagamento,true,1,"style='width:10em'");
                       ?>
                     </td>
                   </tr>
-                  <tr>
+                  <tr>  
                     <td>
                        <b>OP's:</b>
                     </td>
@@ -559,7 +560,7 @@ function js_emitir() {
 
   if ($F('datainicial') == "") {
 
-    alert('A data do inicial do pagamento deve ser informada');
+    alert('A Data do Inicial do período deve ser informada!');
     return false;
 
   }

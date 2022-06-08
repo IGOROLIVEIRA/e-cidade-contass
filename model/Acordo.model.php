@@ -26,6 +26,7 @@
  */
 
 require_once('model/empenho/AutorizacaoEmpenho.model.php');
+require_once("model/contrato/AcordoLancamentoContabil.model.php");
 
 /**
  * controle de acordos/contratos
@@ -1212,11 +1213,15 @@ class Acordo
      */
     public function setCpfsignatariocontratante()
     {
-        $sSql = "select si09_gestor from infocomplementaresinstit where si09_instit = " . db_getsession('DB_instit');
-        $iCgm = db_utils::fieldsMemory(db_query($sSql), 0)->si09_gestor;
+        $sSql = "select si166_numcgm from identificacaoresponsaveis where si166_tiporesponsavel = 1 and " . db_getsession('DB_anousu') . " between date_part('year',si166_dataini) and date_part('year',si166_datafim) and si166_instit = " . db_getsession('DB_instit');
+        $iCgm = db_utils::fieldsMemory(db_query($sSql), 0)->si166_numcgm;
 
         if ($iCgm == "") {
-            throw new Exception("O CPF do Siganatario Contratante não está corretamente configurado no cadastro desta instutuição. Acesse: Cofigurações->Cadastro->Instuição->Alteração.");
+            throw new Exception("CPF do Signatario Contratante não localizado");
+        }
+
+        if ($iCgm->numrows > 1) {
+            throw new Exception("Mais de um CPF cadastrado para o período. Conferir o Cadastro dos responsáveis SICOM");
         }
 
         $this->sCpfsignatariocontratante = CgmFactory::getInstanceByCgm($iCgm)->getCgccpf();
@@ -2669,6 +2674,85 @@ class Acordo
         return $this->aLicitacoes;
     }
 
+    public function getAdesaoRegPreco()
+    {
+
+        $oDaoAcordo        = db_utils::getDao("acordo");
+        $sCamposAdesao = " adesaoregprecos.si06_sequencial ";
+        $sSqlAdesao        = $oDaoAcordo->sql_queryAdesaoVinculadas($this->iCodigoAcordo, $sCamposAdesao);
+        $rsAdesaovinculada = $oDaoAcordo->sql_record($sSqlAdesao);
+        $oDaoAdesaoregpreco = db_utils::getDao("adesaoregprecos");
+
+        if ($oDaoAcordo->numrows > 0) {
+
+            for ($iAdesao = 0; $iAdesao < $oDaoAcordo->numrows; $iAdesao++) {
+
+                $iCodigoAdesao    = db_utils::fieldsMemory($rsAdesaovinculada, $iAdesao)->si06_sequencial;
+                $rsAdesao = $oDaoAdesaoregpreco->sql_record($oDaoAdesaoregpreco->sql_query($iCodigoAdesao, "si06_sequencial,si06_objetoadesao,si06_dataadesao,coddepto||'-'||descrdepto as departamento"));
+
+                for ($i = 0; $i < $oDaoAdesaoregpreco->numrows; $i++) {
+
+                    $oDadosAdesao = db_utils::fieldsMemory($rsAdesao, $i);
+                    $oStdAdesao   = new stdClass();
+                    $oStdAdesao->si06_sequencial = $oDadosAdesao->si06_sequencial;
+                    $oStdAdesao->si06_objetoadesao = $oDadosAdesao->si06_objetoadesao;
+                    $oStdAdesao->si06_dataadesao = $oDadosAdesao->si06_dataadesao;
+                    $oStdAdesao->departamento = $oDadosAdesao->departamento;
+                    $this->aAdesao[] = $oStdAdesao;
+                }
+            }
+        }
+
+        return $this->aAdesao;
+    }
+
+    public function getLicitacaoOutrosOrgaos()
+    {
+
+        $oDaoAcordo        = db_utils::getDao("acordo");
+        $sCamposLicitacoes = " liclicitaoutrosorgaos.lic211_sequencial ";
+        $sSqlLicitacaoOutrosOrgaos        = $oDaoAcordo->sql_queryLicitacoesOutrosOrgaosVinculadas($this->iCodigoAcordo, $sCamposLicitacoes);
+        $rsLicitacaoOutrosOrgaos          = $oDaoAcordo->sql_record($sSqlLicitacaoOutrosOrgaos);
+        $oDaoliclicitaoutrosorgaos        = db_utils::getDao("liclicitaoutrosorgaos");
+
+        if ($oDaoAcordo->numrows > 0) {
+
+            for ($iLicitacaoOutrosOrgaos = 0; $iLicitacaoOutrosOrgaos < $oDaoAcordo->numrows; $iLicitacaoOutrosOrgaos++) {
+
+                $iCodigoLicitacao    = db_utils::fieldsMemory($rsLicitacaoOutrosOrgaos, $iLicitacaoOutrosOrgaos)->lic211_sequencial;
+
+                $rsLicitacao = $oDaoliclicitaoutrosorgaos->sql_record($oDaoliclicitaoutrosorgaos->sql_query($iCodigoLicitacao, "lic211_sequencial,lic211_tipo"));
+
+                for ($i = 0; $i < $oDaoliclicitaoutrosorgaos->numrows; $i++) {
+
+                    $oDadosLicitacao = db_utils::fieldsMemory($rsLicitacao, $i);
+
+                    if ($oDadosLicitacao->lic211_tipo == "5") {
+                        $tipo = "5 - Licitação realizada por outro órgão ou entidade";
+                    } elseif ($oDadosLicitacao->lic211_tipo == "6") {
+                        $tipo = "6 - Dispensa ou Inexigibilidade realizada por outro órgão ou entidade";
+                    } elseif ($oDadosLicitacao->lic211_tipo == "7") {
+                        $tipo = "7 - Licitação - Regime Diferenciado de Contratações";
+                    } elseif ($oDadosLicitacao->lic211_tipo == "8") {
+                        $tipo = "8 - Licitação realizada por consorcio público ";
+                    } elseif ($oDadosLicitacao->lic211_tipo == "9") {
+                        $tipo = "9 - Licitação realizada por outro ente da federação ";
+                    }
+
+                    $oStdLicitacao   = new stdClass();
+                    $oStdLicitacao->lic211_sequencial   = $oDadosLicitacao->lic211_sequencial;
+                    $oStdLicitacao->lic211_tipo         = $tipo;
+                    $oStdLicitacao->data                = '';
+                    $oStdLicitacao->departamento        = '';
+
+                    $this->aLicitacaoOutrosOrgaos[]     = $oStdLicitacao;
+                }
+            }
+        }
+
+        return $this->aLicitacaoOutrosOrgaos;
+    }
+
     public function getProcessosDeCompras()
     {
 
@@ -3019,11 +3103,12 @@ class Acordo
     public function aditar($aItens, $iTipoAditamento, $dtVigenciaInicial, $dtVigenciaFinal, $sNumeroAditamento, $dtAssinatura, $dtPublicacao, $sDescricaoAlteracao, $sVeiculoDivulgacao, $iTipoalteracaoAditivo, $aSelecionados, $sVigenciaalterada, $lProvidencia)
     {
         $nValorItens = 0;
+        $nValorLancamentoContabil = 0;
 
         foreach ($aItens as $oItem) {
             $nValorItens += round($oItem->valorunitario * $oItem->quantidade, 2);
+            $nValorLancamentoContabil += round($oItem->valoraditado, 2);
         }
-
 
         /**
          * cancelamos a ultima posição do acordo.
@@ -3168,7 +3253,7 @@ class Acordo
             //
             //            }
             $oNovoItem->setQuantidade((float) $oItem->quantidade);
-            $oNovoItem->setValorAditado((float) $oItem->valoraditado); //OC5304
+            $oNovoItem->setValorAditado(round($oItem->valorunitario * $oItem->quantidade, 2)); //OC5304
             $oNovoItem->setQuantiAditada((float) $oItem->quantiaditada); //OC5304
             $oNovoItem->setValorUnitario((float) $oItem->valorunitario);
             $oNovoItem->setValorTotal(round($oItem->valorunitario * $oItem->quantidade, 2));
@@ -3212,6 +3297,16 @@ class Acordo
         $oNovaPosicao->setTipo($iTipoAditamento);
         $oNovaPosicao->save();
 
+        if ($nValorLancamentoContabil == 0) {
+            return $this;
+        }
+        $oAcordoLancamentoContabil = new AcordoLancamentoContabil();
+        $sHistorico = "Valor referente ao aditivo {$oNovaPosicao->getNumeroAditamento()} do contrato de código: {$this->getCodigoAcordo()}.";
+        if ($nValorLancamentoContabil > 0) {
+            $oAcordoLancamentoContabil->registraControleContrato($this->getCodigoAcordo(), $nValorLancamentoContabil, $sHistorico, $dtAssinatura);
+        } else {
+            $oAcordoLancamentoContabil->anulaRegistroControleContrato($this->getCodigoAcordo(), abs($nValorLancamentoContabil), $sHistorico, $dtAssinatura);
+        }
         return $this;
     }
 
@@ -3442,9 +3537,11 @@ class Acordo
             throw new BusinessException("Não foi possível apagar as dependências do acordo {$this->getCodigo()}.");
         }
 
+        /* Retirada dessa validação OC15013
+        
         if ($this->possuiLancamentoContabil()) {
             throw new BusinessException("O acordo {$this->getCodigo()} possui lançamento contábil vinculado. Procedimento abortado.");
-        }
+        }*/
 
         $oDataInicial = new DBDate($this->getDataInicial());
         $oDataFinal   = new DBDate($this->getDataFinal());
@@ -3452,7 +3549,7 @@ class Acordo
         /**
          * Valida se existe execução dentro do período do contrato, não permitindo a remoção
          */
-        if (!$this->verificaSeTemExecucaoPeriodo(null, $oDataInicial, $oDataFinal)) {
+        if (!$this->verificaSeTemExecucaoPeriodo(null, $oDataInicial, $oDataFinal)) { 
 
             $oDados               = new stdClass();
             $oDados->sDataInicial = $oDataInicial->getDate(DBDate::DATA_PTBR);
@@ -4040,13 +4137,13 @@ class Acordo
      */
     public function apostilar($aItens, $oApostila, $dtVigenciaInicial, $dtVigenciaFinal, $aSelecionados)
     {
-
         $nValorItens = 0;
+        $nValorLancamentoContabil = 0;
 
         foreach ($aItens as $oItem) {
             $nValorItens += round(abs($oItem->valorapostilado), 2);
+            $nValorLancamentoContabil += round($oItem->valorapostilado, 2);
         }
-
         /**
          * cancelamos a ultima posição do acordo.
          */
@@ -4088,6 +4185,7 @@ class Acordo
 
         $sAtualDtInicial = new DBDate($this->getDataInicial());
         $sAtualDtFim     = new DBDate($this->getDataFinal());
+
         $this->setDataInicial($dtVigenciaInicial);
         $this->setDataFinal($dtVigenciaFinal);
         $this->salvarAlteracoesContrato();
@@ -4157,6 +4255,19 @@ class Acordo
              * Alterado opcao para false para nao gerar reserva conforme solicitado por Mario
              */
             $oNovoItem->save(false);
+        }
+
+        if ($nValorLancamentoContabil == 0) {
+            return $this;
+        }
+
+        $oAcordoLancamentoContabil = new AcordoLancamentoContabil();
+        $sHistorico = "Valor referente ao apostilamento {$oNovaPosicao->getNumeroApostilamento()} do contrato de código: {$this->getCodigoAcordo()}.";
+        if ($nValorLancamentoContabil < 0) {
+            $oAcordoLancamentoContabil->registraControleContrato($this->getCodigoAcordo(), abs($nValorLancamentoContabil), $sHistorico, $oApostila->dataapostila);
+        }
+        if ($nValorLancamentoContabil > 0) {
+            $oAcordoLancamentoContabil->anulaRegistroControleContrato($this->getCodigoAcordo(), abs($nValorLancamentoContabil), $sHistorico, $oApostila->dataapostila);
         }
 
         return $this;

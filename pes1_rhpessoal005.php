@@ -67,95 +67,98 @@ $db_botao = false;
 $ano = db_anofolha();
 $mes = db_mesfolha();
 
-if(isset($alterar)){
-  $sqlerro=false;
+if (isset($alterar)) {
+  $sqlerro = false;
   db_inicio_transacao();
-  if(trim($rh01_anoche) == "" && $rh01_nacion != 10){
-  	$sqlerro = true;
-  	$erro_msg = "Ano de chegada invalido.";
+  if (trim($rh01_anoche) == "" && $rh01_nacion != 10) {
+    $sqlerro = true;
+    $erro_msg = "Ano de chegada invalido.";
   }
 
-  if($sqlerro == false){
+  if ($sqlerro == false) {
     $clrhpessoal->rh01_sicom = $rh01_sicom;
+    $clrhpessoal->rh01_concedido = $rh01_concedido;
+    $clrhpessoal->rh01_matorgaobeneficio = $rh01_matorgaobeneficio;
+    $clrhpessoal->rh01_cnpjrespmatricula = $rh01_cnpjrespmatricula;
     $clrhpessoal->alterar($rh01_regist);
     $erro_msg = $clrhpessoal->erro_msg;
-    if($clrhpessoal->erro_status==0){
-      $sqlerro=true;
+    if ($clrhpessoal->erro_status == 0) {
+      $sqlerro = true;
     }
 
-    if($sqlerro == false){
-  	  if(trim($rh15_banco)!=""){
-  	    $result_fgts = $clrhpesfgts->sql_record($clrhpesfgts->sql_query_file($rh01_regist));
-  	    if($clrhpesfgts->numrows > 0){
-    	  $clrhpesfgts->rh15_regist = $rh01_regist;
+    if ($sqlerro == false) {
+      if (trim($rh15_banco) != "") {
+        $result_fgts = $clrhpesfgts->sql_record($clrhpesfgts->sql_query_file($rh01_regist));
+        if ($clrhpesfgts->numrows > 0) {
+          $clrhpesfgts->rh15_regist = $rh01_regist;
           $clrhpesfgts->alterar($rh01_regist);
-  	    }else{
-  	  	  $clrhpesfgts->rh15_regist = $rh01_regist;
+        } else {
+          $clrhpesfgts->rh15_regist = $rh01_regist;
           $clrhpesfgts->incluir($rh01_regist);
-  	    }
-        if($clrhpesfgts->erro_status==0){
-          $erro_msg = $clrhpesfgts->erro_msg;
-          $sqlerro=true;
         }
-  	  }else{
-        $clrhpesfgts->excluir($rh01_regist);
-        if($clrhpesfgts->erro_status==0){
+        if ($clrhpesfgts->erro_status == 0) {
           $erro_msg = $clrhpesfgts->erro_msg;
-          $sqlerro=true;
-        }else{
-          unset($rh15_data_dia,$rh15_data_mes,$rh15_data_ano,$rh15_banco,$rh15_agencia,$rh15_agencia_d,$rh15_contac,$rh15_contac_d,$db90_descr);
+          $sqlerro = true;
+        }
+      } else {
+        $clrhpesfgts->excluir($rh01_regist);
+        if ($clrhpesfgts->erro_status == 0) {
+          $erro_msg = $clrhpesfgts->erro_msg;
+          $sqlerro = true;
+        } else {
+          unset($rh15_data_dia, $rh15_data_mes, $rh15_data_ano, $rh15_banco, $rh15_agencia, $rh15_agencia_d, $rh15_contac, $rh15_contac_d, $db90_descr);
         }
       }
     }
   }
 
-  if($sqlerro == false && trim($localrecebefoto) != ""){
+  if ($sqlerro == false && trim($localrecebefoto) != "") {
     $clrhfotos->excluir($rh01_numcgm);
-    if($clrhfotos->erro_status==0){
+    if ($clrhfotos->erro_status == 0) {
       $erro_msg = $clrhfotos->erro_msg;
-      $sqlerro=true;
-    }else{
+      $sqlerro = true;
+    } else {
 
-	  	// Abre o arquivo
-	  	$arquivograva = fopen($localrecebefoto,"rb");
-	  	// Le o arquivo inteiro
-	  	$dados = fread($arquivograva,filesize($localrecebefoto));
-	  	// Fecha o arquivo
-	    fclose($arquivograva);
+      // Abre o arquivo
+      $arquivograva = fopen($localrecebefoto, "rb");
+      // Le o arquivo inteiro
+      $dados = fread($arquivograva, filesize($localrecebefoto));
+      // Fecha o arquivo
+      fclose($arquivograva);
 
-	    // Criando o Objeto.
-	    $oidgrava = pg_lo_create($conn);
-	    $clrhfotos->rh50_oid    = $oidgrava;
-	    $clrhfotos->rh50_numcgm = $rh01_numcgm;
-	    $clrhfotos->incluir($rh01_numcgm);
-	    if($clrhfotos->erro_status==0){
-	      $erro_msg = $clrhfotos->erro_msg;
-	      $sqlerro=true;
-	    }
-			// Abrindo o objeto
-			$objeto = pg_lo_open($conn,$oidgrava,"w");
-			// Inserindo Dados no arquivo
-			pg_lo_write($objeto,$dados);
-			// Fechando a conexao com o objeto
-			pg_lo_close($objeto);
+      // Criando o Objeto.
+      $oidgrava = pg_lo_create($conn);
+      $clrhfotos->rh50_oid    = $oidgrava;
+      $clrhfotos->rh50_numcgm = $rh01_numcgm;
+      $clrhfotos->incluir($rh01_numcgm);
+      if ($clrhfotos->erro_status == 0) {
+        $erro_msg = $clrhfotos->erro_msg;
+        $sqlerro = true;
+      }
+      // Abrindo o objeto
+      $objeto = pg_lo_open($conn, $oidgrava, "w");
+      // Inserindo Dados no arquivo
+      pg_lo_write($objeto, $dados);
+      // Fechando a conexao com o objeto
+      pg_lo_close($objeto);
     }
   }
 
-  if($sqlerro == false){
+  if ($sqlerro == false) {
 
-    try{
+    try {
 
       $clrhcontratoemergencialrenovacao    = new cl_rhcontratoemergencialrenovacao;
       $sWhereContratoEmergencialRenovacoes = " rh163_matricula = {$rh01_regist}";
-      $sSqlContratosEmergenciais           = $clrhcontratoemergencialrenovacao->sql_query(null,"*", null, $sWhereContratoEmergencialRenovacoes);
+      $sSqlContratosEmergenciais           = $clrhcontratoemergencialrenovacao->sql_query(null, "*", null, $sWhereContratoEmergencialRenovacoes);
       $rsContratosEmergenciais             = db_query($sSqlContratosEmergenciais);
 
-      if(!$rsContratosEmergenciais) {
+      if (!$rsContratosEmergenciais) {
         throw new DbException("Error ao buscar total de contratos emergenciais para a matrícula");
       }
 
 
-      if(pg_num_rows($rsContratosEmergenciais) == 1) {
+      if (pg_num_rows($rsContratosEmergenciais) == 1) {
 
         $oDataInicioContrato = new DBDate($rh01_admiss);
         $oDataFimContrato    = new DBDate($rh164_datafim);
@@ -166,7 +169,7 @@ if(isset($alterar)){
 
         $clrhcontratoemergencialrenovacao->alterar($clrhcontratoemergencialrenovacao->rh164_sequencial);
 
-        if($clrhcontratoemergencialrenovacao->erro_status == 0){
+        if ($clrhcontratoemergencialrenovacao->erro_status == 0) {
           $erro_msg = $clrhcontratoemergencialrenovacao->erro_msg;
           $sqlerro  = true;
         }
@@ -182,193 +185,195 @@ if(isset($alterar)){
 
   db_fim_transacao($sqlerro);
 
-  $result = $clrhpessoal->sql_record($clrhpessoal->sql_query_com_temporarios($rh01_regist,"rh02_funcao, rh163_matricula","rh164_datafim desc"));
-  if($clrhpessoal->numrows > 0){
-    db_fieldsmemory($result,0);
-    if(!empty($rh163_matricula)){
+  $result = $clrhpessoal->sql_record($clrhpessoal->sql_query_com_temporarios($rh01_regist, "rh02_funcao, rh163_matricula", "rh164_datafim desc"));
+  if ($clrhpessoal->numrows > 0) {
+    db_fieldsmemory($result, 0);
+    if (!empty($rh163_matricula)) {
       $visibilityContratoEmergencial  = true;
       $contratoEmergencial = 't';
     }
   }
-
-}else if(isset($chavepesquisa)){
-   $db_opcao = 2;
-   $db_botao = true;
-   $visibilityContratoEmergencial = false;
-   $result = $clrhpessoal->sql_record($clrhpessoal->sql_query_com_temporarios($chavepesquisa, "*", "rh164_datafim desc"));
-   if($clrhpessoal->numrows > 0){
-     db_fieldsmemory($result,0);
-     if(!empty($rh163_matricula)){
-       $visibilityContratoEmergencial  = true;
-       $contratoEmergencial = 't';
-     }
-     $result_rhpesfgts = $clrhpesfgts->sql_record($clrhpesfgts->sql_query_banco($rh01_regist,"rh15_data,rh15_banco,rh15_agencia,rh15_agencia_d,rh15_contac,rh15_contac_d,db90_descr"));
-     if($clrhpesfgts->numrows > 0){
-     	db_fieldsmemory($result_rhpesfgts,0);
-     }
-   }
+} else if (isset($chavepesquisa)) {
+  $db_opcao = 2;
+  $db_botao = true;
+  $visibilityContratoEmergencial = false;
+  $result = $clrhpessoal->sql_record($clrhpessoal->sql_query_com_temporarios($chavepesquisa, "*", "rh164_datafim desc"));
+  if ($clrhpessoal->numrows > 0) {
+    db_fieldsmemory($result, 0);
+    if (!empty($rh163_matricula)) {
+      $visibilityContratoEmergencial  = true;
+      $contratoEmergencial = 't';
+    }
+    $result_rhpesfgts = $clrhpesfgts->sql_record($clrhpesfgts->sql_query_banco($rh01_regist, "rh15_data,rh15_banco,rh15_agencia,rh15_agencia_d,rh15_contac,rh15_contac_d,db90_descr"));
+    if ($clrhpesfgts->numrows > 0) {
+      db_fieldsmemory($result_rhpesfgts, 0);
+    }
+  }
 }
 ?>
 <html>
+
 <head>
-<title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta http-equiv="Expires" CONTENT="0">
-<?
+  <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Expires" CONTENT="0">
+  <?
   db_app::load("scripts.js, prototype.js, widgets/windowAux.widget.js,strings.js,widgets/dbtextField.widget.js,
                dbmessageBoard.widget.js,dbautocomplete.widget.js,dbcomboBox.widget.js,dates.js,
                datagrid.widget.js");
   db_app::load("estilos.css,grid.style.css");
-?>
-<link href="estilos.css" rel="stylesheet" type="text/css">
-<style type="text/css">
-  .fieldset-hr {
-    border:none;
-    border-top: 1px outset #000;
-  }
-</style>
+  ?>
+  <link href="estilos.css" rel="stylesheet" type="text/css">
+  <style type="text/css">
+    .fieldset-hr {
+      border: none;
+      border-top: 1px outset #000;
+    }
+  </style>
 </head>
-<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="document.form1.rh01_numcgm.select();" >
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
-  <tr>
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
-    <center>
-	<?
-	include("forms/db_frmrhpessoal.php");
-	?>
-    </center>
-	</td>
-  </tr>
-</table>
+
+<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="document.form1.rh01_numcgm.select();">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
+        <center>
+          <?
+          include("forms/db_frmrhpessoal.php");
+          ?>
+        </center>
+      </td>
+    </tr>
+  </table>
 </body>
+
 </html>
 <script>
-// form - formulario onde estao os campos
-// foco - campo que recebera foco no inicio
-// tfoco- true se programador quer que campo informado receba o foco e false se nao quer
-// inicio - indice inicial da tabulacao. Caso passado 0 (zero), a funcao comecara do 1 (um)
-// campo  - campo que recebera o foco ao sair do ultimo campo
-// tcampo - true se programador quer usar a variavel campo
-// VER COM PAULO
-function js_tabulacao(form,foco,tfoco,inicio,campo,tcampo){
-  eval("x = document."+form+";");
+  // form - formulario onde estao os campos
+  // foco - campo que recebera foco no inicio
+  // tfoco- true se programador quer que campo informado receba o foco e false se nao quer
+  // inicio - indice inicial da tabulacao. Caso passado 0 (zero), a funcao comecara do 1 (um)
+  // campo  - campo que recebera o foco ao sair do ultimo campo
+  // tcampo - true se programador quer usar a variavel campo
+  // VER COM PAULO
+  function js_tabulacao(form, foco, tfoco, inicio, campo, tcampo) {
+    eval("x = document." + form + ";");
 
-  if(inicio == 0){  // Seta indice inicial
-    indx = 1;
-  }else{
-    indx = inicio;
-  }
+    if (inicio == 0) { // Seta indice inicial
+      indx = 1;
+    } else {
+      indx = inicio;
+    }
 
-  mark = 0;
-  for(i=0; i<x.length; i++){
-    if(x.elements[i].disabled == false){                // Se campo estiver desabilitado, nao recebe tabIndex
-      if(x.elements[i].type == 'select-one'){           // Testa se campo e um select
-        if(x.elements[i].name == "rh01_sexo"){
-          if(x.rh01_regist.readOnly == true){
-            x.elements[i].tabIndex = 2;
-          }else{
-            x.elements[i].tabIndex = 3;
-          }
-        }else{
-          x.elements[i].tabIndex = indx;                // Seta indice da tabulacao
-        }
-        mark = i;
-        indx ++;                                        // Valor do proximo indice
-      }else if(x.elements[i].type == 'text'){           // Testa se campo e um text e nao e readOnly
-        if(x.elements[i].readOnly == false){
-          if(x.elements[i].name == "rh01_numcgm"){
-            if(x.rh01_regist.readOnly == true){
-              x.elements[i].tabIndex = 1;
-            }else{
+    mark = 0;
+    for (i = 0; i < x.length; i++) {
+      if (x.elements[i].disabled == false) { // Se campo estiver desabilitado, nao recebe tabIndex
+        if (x.elements[i].type == 'select-one') { // Testa se campo e um select
+          if (x.elements[i].name == "rh01_sexo") {
+            if (x.rh01_regist.readOnly == true) {
               x.elements[i].tabIndex = 2;
+            } else {
+              x.elements[i].tabIndex = 3;
             }
-          }else{
-            x.elements[i].tabIndex = indx;
+          } else {
+            x.elements[i].tabIndex = indx; // Seta indice da tabulacao
           }
-          indx ++;
           mark = i;
-        }else{
-          x.elements[i].tabIndex = x.length;
-        }
-      }else if(x.elements[i].type == 'checkbox'){       // Testa se campo e um checkbox
-        x.elements[i].tabIndex = indx;
-        indx ++;
-        mark = i;
-      }else if(x.elements[i].type == 'button'){         // Testa se o um botao, se for, testa se o botao ao lado das datas
-        if(x.elements[i].value != "D"){
+          indx++; // Valor do proximo indice
+        } else if (x.elements[i].type == 'text') { // Testa se campo e um text e nao e readOnly
+          if (x.elements[i].readOnly == false) {
+            if (x.elements[i].name == "rh01_numcgm") {
+              if (x.rh01_regist.readOnly == true) {
+                x.elements[i].tabIndex = 1;
+              } else {
+                x.elements[i].tabIndex = 2;
+              }
+            } else {
+              x.elements[i].tabIndex = indx;
+            }
+            indx++;
+            mark = i;
+          } else {
+            x.elements[i].tabIndex = x.length;
+          }
+        } else if (x.elements[i].type == 'checkbox') { // Testa se campo e um checkbox
           x.elements[i].tabIndex = indx;
-          indx ++;
+          indx++;
+          mark = i;
+        } else if (x.elements[i].type == 'button') { // Testa se o um botao, se for, testa se o botao ao lado das datas
+          if (x.elements[i].value != "D") {
+            x.elements[i].tabIndex = indx;
+            indx++;
+            mark = i;
+          }
+        } else if (x.elements[i].type == 'submit') { // Testa se e um botao do tipo submit
+          x.elements[i].tabIndex = indx;
+          indx++;
+          mark = i;
+        } else if (x.elements[i].type == 'reset') { // Testa se e um botao do tipo reset
+          x.elements[i].tabIndex = indx;
+          indx++;
           mark = i;
         }
-      }else if(x.elements[i].type == 'submit'){         // Testa se e um botao do tipo submit
-        x.elements[i].tabIndex = indx;
-        indx ++;
-        mark = i;
-      }else if(x.elements[i].type == 'reset'){          // Testa se e um botao do tipo reset
-        x.elements[i].tabIndex = indx;
-        indx ++;
-        mark = i;
+      }
+    }
+    if (tfoco == true) { // Se programador quer focar o campo informado, entrara
+      eval("x." + foco + ".focus();");
+    }
+    if (mark > 0 && 1 == 2) {
+      if (x.elements[mark]) {
+        if (x.elements[mark].onblur) {
+          x.elements[mark].onblur += eval("x." + campo + ".focus()");
+        } else {
+          x.elements[mark].onblur = eval("x." + campo + ".focus()");
+        }
       }
     }
   }
-  if(tfoco == true){                                    // Se programador quer focar o campo informado, entrara
-    eval("x."+foco+".focus();");
+  if (document.form1.rh01_regist.readOnly == true) {
+    js_tabulacao("form1", "rh01_numcgm", true, 0, "rh01_numcgm", true);
+  } else {
+    js_tabulacao("form1", "rh01_regist", true, 0, "rh01_regist", true);
   }
-  if(mark > 0 && 1==2){
-  	if(x.elements[mark]){
-  	  if(x.elements[mark].onblur){
-  	  	x.elements[mark].onblur+= eval("x."+campo+".focus()");
-  	  }else{
-  	  	x.elements[mark].onblur = eval("x."+campo+".focus()");
-  	  }
-  	}
-  }
-}
-if(document.form1.rh01_regist.readOnly == true){
-  js_tabulacao("form1","rh01_numcgm",true,0,"rh01_numcgm",true);
-}else{
-  js_tabulacao("form1","rh01_regist",true,0,"rh01_regist",true);
-}
 </script>
 <?
-if(isset($alterar)){
+if (isset($alterar)) {
   db_msgbox($erro_msg);
-  if($sqlerro==true){
-    if($clrhpessoal->erro_campo!=""){
-      echo "<script> document.form1.".$clrhpessoal->erro_campo.".style.backgroundColor='#99A9AE';</script>";
-      echo "<script> document.form1.".$clrhpessoal->erro_campo.".focus();</script>";
+  if ($sqlerro == true) {
+    if ($clrhpessoal->erro_campo != "") {
+      echo "<script> document.form1." . $clrhpessoal->erro_campo . ".style.backgroundColor='#99A9AE';</script>";
+      echo "<script> document.form1." . $clrhpessoal->erro_campo . ".focus();</script>";
     };
-  }else{
+  } else {
     $chavepesquisa = $rh01_regist;
     $liberaaba = true;
   }
 }
-if(isset($chavepesquisa)){
-	$rh01_regist = $chavepesquisa;
- echo "<script>
+if (isset($chavepesquisa)) {
+  $rh01_regist = $chavepesquisa;
+  echo "<script>
       function js_db_libera(){
          parent.document.formaba.rhpesdoc.disabled=false;
-         CurrentWindow.corpo.iframe_rhpesdoc.location.href='pes1_rhpesdoc001.php?rh16_regist=".@$rh01_regist."&z01_nome=$z01_nome&rhimp=".@$rhimp."';
-
+         top.corpo.iframe_rhpesdoc.location.href='pes1_rhpesdoc001.php?rh16_regist=" . @$rh01_regist . "&z01_nome=$z01_nome&rhimp=" . @$rhimp . "';
+         
          parent.document.formaba.rhpessoalmov.disabled=false;
-         CurrentWindow.corpo.iframe_rhpessoalmov.location.href='pes1_rhpessoalmov001.php?rh02_regist=".@$rh01_regist."&z01_nome=$z01_nome';
-
+         top.corpo.iframe_rhpessoalmov.location.href='pes1_rhpessoalmov001.php?rh02_regist=" . @$rh01_regist . "&rh01_admiss=" . @$rh01_admiss . "&z01_nome=$z01_nome';
+ 
          parent.document.formaba.rhdepend.disabled=false;
-         CurrentWindow.corpo.iframe_rhdepend.location.href='pes1_rhdepend001.php?rh31_regist=".@$rh01_regist."&vmenu=true&z01_nome=$z01_nome';
-
+         top.corpo.iframe_rhdepend.location.href='pes1_rhdepend001.php?rh31_regist=" . @$rh01_regist . "&vmenu=true&z01_nome=$z01_nome';
+         
          parent.document.formaba.rhsuspensaopag.disabled=false;
-         CurrentWindow.corpo.iframe_rhsuspensaopag.location.href='pes1_rhsuspensaopag001.php?iMatricula=".@$rh01_regist."';
-
+         top.corpo.iframe_rhsuspensaopag.location.href='pes1_rhsuspensaopag001.php?iMatricula=" . @$rh01_regist . "';
+         
      ";
-         if(isset($liberaaba)){
-           echo "  parent.mo_camada('rhpesdoc');";
-         }
- echo"}\n
+  if (isset($liberaaba)) {
+    echo "  parent.mo_camada('rhpesdoc');";
+  }
+  echo "}\n
     js_db_libera();
   </script>\n
  ";
 }
- if($db_opcao==22||$db_opcao==33){
-    echo "<script>document.form1.pesquisar.click();</script>";
- }
+if ($db_opcao == 22 || $db_opcao == 33) {
+  echo "<script>document.form1.pesquisar.click();</script>";
+}
 ?>

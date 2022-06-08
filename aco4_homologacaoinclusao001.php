@@ -51,200 +51,214 @@ $clrotulo->label("ac16_resumoobjeto");
 $clrotulo->label("ac10_obs");
 ?>
 <html>
+
 <head>
-<title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta http-equiv="Expires" CONTENT="0">
-<?
+  <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Expires" CONTENT="0">
+  <?
   db_app::load("scripts.js, strings.js, prototype.js, datagrid.widget.js");
   db_app::load("widgets/messageboard.widget.js, widgets/windowAux.widget.js");
   db_app::load("estilos.css, grid.style.css");
-?>
-<style>
-td {
-  white-space: nowrap;
-}
+  ?>
+  <style>
+    td {
+      white-space: nowrap;
+    }
 
-fieldset table td:first-child {
-  width: 80px;
-  white-space: nowrap;
-}
-</style>
+    fieldset table td:first-child {
+      width: 80px;
+      white-space: nowrap;
+    }
+  </style>
 </head>
+
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
-<table border="0" align="center" cellspacing="0" cellpadding="0" style="padding-top:40px;">
-  <tr>
-    <td valign="top" align="center">
-      <fieldset>
-        <legend><b>Finalizar Acordo</b></legend>
-	      <table align="center" border="0">
-	        <tr>
-	          <td title="<?=@$Tac16_sequencial?>" align="left">
-	            <?php db_ancora($Lac16_sequencial, "js_pesquisaac16_sequencial(true);",$db_opcao); ?>
-	          </td>
-	          <td align="left">
-	            <?
-                db_input('ac16_sequencial',10,$Iac16_sequencial,true,'text',
-                         $db_opcao," onchange='js_pesquisaac16_sequencial(false);'onkeyup='bloqueiaCampo(this.value);'");
-              ?>
-	          </td>
-	          <td align="left">
-              <?
-                db_input('ac16_resumoobjeto',40,$Iac16_resumoobjeto,true,'text',3);
-              ?>
-	          </td>
-	        </tr>
-		      <tr>
-		        <td colspan="3">
-		          <fieldset id="fieldsetobservacao" class="fieldsetinterno">
-		            <legend>
-		              <b>Observao</b>
-		            </legend>
-		              <?
-		                db_textarea('ac10_obs',5,64,$Iac10_obs,true,'text',$db_opcao,"");
-		              ?>
-		          </fieldset>
-		        </td>
-		      </tr>
-	      </table>
-      </fieldset>
-    </td>
-  </tr>
-  <tr>
-    <td>&nbsp;</td>
-  </tr>
-  <tr>
-    <td align="center">
-      <input id="incluir" name="incluir" type="button" value="Incluir" onclick="return js_homologarContrato();" disabled>
-    </td>
-  </tr>
-</table>
-<?
-  db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
-?>
+  <table border="0" align="center" cellspacing="0" cellpadding="0" style="padding-top:40px;">
+    <tr>
+      <td valign="top" align="center">
+        <fieldset>
+          <legend><b>Finalizar Acordo</b></legend>
+          <table align="center" border="0">
+            <tr>
+              <td title="<?= @$Tac16_sequencial ?>" align="left">
+                <?php db_ancora($Lac16_sequencial, "js_pesquisaac16_sequencial(true);", $db_opcao); ?>
+              </td>
+              <td align="left">
+                <?
+                db_input(
+                  'ac16_sequencial',
+                  10,
+                  $Iac16_sequencial,
+                  true,
+                  'text',
+                  $db_opcao,
+                  " onchange='js_pesquisaac16_sequencial(false);'onkeyup='bloqueiaCampo(this.value);'"
+                );
+                ?>
+              </td>
+              <td align="left">
+                <?
+                db_input('ac16_resumoobjeto', 40, $Iac16_resumoobjeto, true, 'text', 3);
+                ?>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="3">
+                <fieldset id="fieldsetobservacao" class="fieldsetinterno">
+                  <legend>
+                    <b>Observao</b>
+                  </legend>
+                  <?
+                  db_textarea('ac10_obs', 5, 64, $Iac10_obs, true, 'text', $db_opcao, "");
+                  ?>
+                </fieldset>
+              </td>
+            </tr>
+          </table>
+        </fieldset>
+      </td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <td align="center">
+        <input id="incluir" name="incluir" type="button" value="Incluir" onclick="return js_homologarContrato();" disabled>
+      </td>
+    </tr>
+  </table>
+  <?
+  db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit"));
+  ?>
 </body>
 <script>
-$('ac16_sequencial').style.width   = "100%";
-$('ac16_resumoobjeto').style.width = "100%";
+  $('ac16_sequencial').style.width = "100%";
+  $('ac16_resumoobjeto').style.width = "100%";
 
-var sUrl = 'con4_contratosmovimento.RPC.php';
-numeroAcordo = '';
-/**
- * Pesquisa acordos
- */
-function js_pesquisaac16_sequencial(lMostrar) {
+  var sUrl = 'con4_contratosmovimento.RPC.php';
+  numeroAcordo = '';
+
+  /**
+   * Pesquisa acordos ao clicar no botao Finalizar na tela de assinatura de acordo
+   */
+  js_pesquisaac16_sequencial(false);
+  /**
+   * Pesquisa acordos
+   */
+  function js_pesquisaac16_sequencial(lMostrar) {
     document.getElementById('incluir').disabled = true;
     if (lMostrar == true) {
 
-        var sUrl = 'func_acordo.php?semvigencia=true&funcao_js=parent.js_mostraacordo1|ac16_sequencial|ac16_resumoobjeto&iTipoFiltro=1&iTipo=2';
-        js_OpenJanelaIframe('CurrentWindow.corpo',
-                            'db_iframe_acordo',
-                            sUrl,
-                            'Pesquisar Acordo',
-                            true);
+      var sUrl = 'func_acordo.php?semvigencia=true&funcao_js=parent.js_mostraacordo1|ac16_sequencial|ac16_resumoobjeto&iTipoFiltro=1&iTipo=2';
+      js_OpenJanelaIframe('top.corpo',
+        'db_iframe_acordo',
+        sUrl,
+        'Pesquisar Acordo',
+        true);
     } else {
 
-        if ($('ac16_sequencial').value != '') {
+      if ($('ac16_sequencial').value != '') {
 
-            let sUrl = 'func_acordo.php?semvigencia=true&descricao=true&pesquisa_chave='+$('ac16_sequencial').value+
-                     '&funcao_js=parent.js_mostraacordo&iTipoFiltro=1&iTipo=2';
+        let sUrl = 'func_acordo.php?semvigencia=true&descricao=true&pesquisa_chave=' + $('ac16_sequencial').value +
+          '&funcao_js=parent.js_mostraacordo&iTipoFiltro=1&iTipo=2';
 
-            js_OpenJanelaIframe('CurrentWindow.corpo',
-                              'db_iframe_acordo',
-                              sUrl,
-                              'Pesquisar Acordo',
-                              false);
-        } else {
-            $('ac16_sequencial').value = '';
-        }
+        js_OpenJanelaIframe('top.corpo',
+          'db_iframe_acordo',
+          sUrl,
+          'Pesquisar Acordo',
+          false);
+      } else {
+        $('ac16_sequencial').value = '';
+      }
     }
-}
+  }
 
-/**
- * Retorno da pesquisa acordos
- */
-function js_mostraacordo(chave1,chave2,erro) {
+  /**
+   * Retorno da pesquisa acordos
+   */
+  function js_mostraacordo(chave1, chave2, erro) {
 
-  if (erro == true) {
-    $('ac16_sequencial').value   = '';
-    $('ac16_resumoobjeto').value = chave1;
-    $('ac16_sequencial').focus();
-  } else {
-    $('ac16_sequencial').value   = chave1;
+    if (erro == true) {
+      $('ac16_sequencial').value = '';
+      $('ac16_resumoobjeto').value = chave1;
+      $('ac16_sequencial').focus();
+    } else {
+      $('ac16_sequencial').value = chave1;
+      $('ac16_resumoobjeto').value = chave2;
+      numeroAcordo = chave1;
+      document.getElementById('incluir').disabled = false;
+    }
+  }
+
+  /**
+   * Retorno da pesquisa acordos
+   */
+  function js_mostraacordo1(chave1, chave2) {
+
+    $('ac16_sequencial').value = chave1;
     $('ac16_resumoobjeto').value = chave2;
     numeroAcordo = chave1;
-      document.getElementById('incluir').disabled = false;
-  }
-}
-
-/**
- * Retorno da pesquisa acordos
- */
-function js_mostraacordo1(chave1,chave2) {
-
-  $('ac16_sequencial').value    = chave1;
-  $('ac16_resumoobjeto').value  = chave2;
-    numeroAcordo =  chave1;
     document.getElementById('incluir').disabled = false;
-  db_iframe_acordo.hide();
-}
-
-/**
- * Incluir homologacao
- */
-function js_homologarContrato() {
-
-  if ($('ac16_sequencial').value == '') {
-
-    alert('Acordo no informado!');
-    return false;
+    db_iframe_acordo.hide();
   }
 
-  js_divCarregando('Aguarde incluindo finalizao...','msgBoxHomologacaoContrato');
+  /**
+   * Incluir homologacao
+   */
+  function js_homologarContrato() {
 
-  var oParam        = new Object();
-  oParam.exec       = "homologarContrato";
-  oParam.acordo     = $F('ac16_sequencial');
-  oParam.observacao = encodeURIComponent(tagString($F('ac10_obs')));
+    if ($('ac16_sequencial').value == '') {
 
-  var oAjax   = new Ajax.Request( sUrl, {
-                                          method: 'post',
-                                          parameters: 'json='+js_objectToJson(oParam),
-                                          onComplete: js_retornoDadosHomologacao
-                                        }
-                                );
-}
+      alert('Acordo no informado!');
+      return false;
+    }
 
-/**
- * Retorna os dados da homologacao
- */
-function js_retornoDadosHomologacao(oAjax) {
+    js_divCarregando('Aguarde incluindo finalizao...', 'msgBoxHomologacaoContrato');
 
-  js_removeObj("msgBoxHomologacaoContrato");
+    var oParam = new Object();
+    oParam.exec = "homologarContrato";
+    oParam.acordo = $F('ac16_sequencial');
+    oParam.observacao = encodeURIComponent(tagString($F('ac10_obs')));
 
-  var oRetorno = eval("("+oAjax.responseText+")");
-
-  $('ac16_sequencial').value   = "";
-  $('ac16_resumoobjeto').value = "";
-  $('ac10_obs').value          = "";
-
-  if (oRetorno.status == 2) {
-
-    alert(oRetorno.erro.urlDecode());
-    return false;
-  } else {
-
-    alert("Finalizado com Sucesso.");
-    return true;
+    var oAjax = new Ajax.Request(sUrl, {
+      method: 'post',
+      parameters: 'json=' + js_objectToJson(oParam),
+      onComplete: js_retornoDadosHomologacao
+    });
   }
-}
 
-function bloqueiaCampo(valor = ''){
-    if((numeroAcordo == valor) && valor != ''){
-        document.getElementById('incluir').disabled = false;
-        return;
+  /**
+   * Retorna os dados da homologacao
+   */
+  function js_retornoDadosHomologacao(oAjax) {
+
+    js_removeObj("msgBoxHomologacaoContrato");
+
+    var oRetorno = eval("(" + oAjax.responseText + ")");
+
+    $('ac16_sequencial').value = "";
+    $('ac16_resumoobjeto').value = "";
+    $('ac10_obs').value = "";
+
+    if (oRetorno.status == 2) {
+
+      alert(oRetorno.erro.urlDecode());
+      return false;
+    } else {
+
+      alert("Finalizado com Sucesso.");
+      return true;
+    }
+  }
+
+  function bloqueiaCampo(valor = '') {
+    if ((numeroAcordo == valor) && valor != '') {
+      document.getElementById('incluir').disabled = false;
+      return;
     }
     document.getElementById('incluir').disabled = true;
-}
+  }
 </script>
+
 </html>

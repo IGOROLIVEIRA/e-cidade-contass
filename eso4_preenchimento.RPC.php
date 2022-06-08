@@ -52,7 +52,7 @@ try {
             }
             $configuracao = new Configuracao();
 
-            $formularioId = $configuracao->getFormulario(Tipo::SERVIDOR);
+            $formularioId = $configuracao->getFormulario(Tipo::CADASTRAMENTO_INICIAL);
 
             $lTrazerSugestoes = false;
             if (!empty($oParam->trazerSugestoes)) {

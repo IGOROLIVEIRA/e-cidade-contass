@@ -522,7 +522,7 @@ if ($method == "getDados") {
 } else if ($method == "getInfoItem") {
   echo $json->encode($oORdemCompra->getInfoItem($objJson->iCodLanc, $objJson->iIndice));
 } else if ($method == "saveMaterial") {
-
+  $objJson->oMaterial->m60_codmatunid = $objJson->oMaterial->unidade;
   try {
 
     $oORdemCompra->saveMaterial($objJson->iCodLanc, $objJson->oMaterial);

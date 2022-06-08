@@ -12,9 +12,11 @@ require_once 'classes/db_acordoitem_classe.php';
 require_once 'classes/db_acordoaux_classe.php';
 require_once 'classes/db_parametroscontratos_classe.php';
 require_once 'classes/db_manutencaoacordo_classe.php';
+require_once 'classes/db_acordoposicao_classe.php';
 
 $clacordo = new cl_acordo;
 $clmanutencaoacordo = new cl_manutencaoacordo;
+$clacordoposicao = new cl_acordoposicao;
 
 $clacordo->rotulo->label();
 $clrotulo = new rotulocampo;
@@ -28,6 +30,7 @@ $clrotulo->label('ac16_licitacao');
 $clrotulo->label('l20_objeto');
 $clrotulo->label('ac16_dataassinatura');
 $clrotulo->label('ac35_dataassinaturatermoaditivo');
+$clrotulo->label('ac26_numeroaditamento');
 
 if (isset($alterar)) {
   if (empty($_POST['ac16_adesaoregpreco'])) {
@@ -49,24 +52,13 @@ db_postmemory($HTTP_POST_VARS);
 
 $anousu = db_getsession('DB_anousu');
 $instit = db_getsession('DB_instit');
+
+
+
 if (isset($alterar)) {
   $sqlerro = false;
   $aditivo = false;
   db_inicio_transacao();
-
-  $ac16_datainicio = implode('-', array_reverse(explode('/', $ac16_datainicio)));
-  $ac16_datafim = implode('-', array_reverse(explode('/', $ac16_datafim)));
-
-  if ($ac16_numeroacordo != $ac16_numeroacordo_old) {
-    $sWhere = "ac16_numeroacordo = '$ac16_numeroacordo' and ac16_anousu = $anousu and ac16_instit = $instit ";
-
-    $numero_geral = $clacordo->sql_record($clacordo->sql_query_file(null, '*', null, $sWhere));
-
-    if ($clacordo->numrows > 0) {
-      db_msgbox("Já existe acordo com o número $ac16_numeroacordo");
-      $erro = true;
-    }
-  }
 
   $rsPosicoes = db_query(
     "select distinct
@@ -99,14 +91,145 @@ if (isset($alterar)) {
                 where ac16_sequencial = '$ac16_sequencial'"
   );
 
+  $consultaAditivo = db_query("select distinct
+                ac26_sequencial as POSICAO,
+                            ac18_sequencial,
+                            ac16_datainicio,
+                            ac16_datafim,
+                            ac18_datainicio,
+                            ac18_datafim,
+                            ac35_dataassinaturatermoaditivo,
+                            ac26_numeroaditamento
+              from
+                acordoposicao
+              inner join acordo on
+                acordo.ac16_sequencial = acordoposicao.ac26_acordo
+                inner join acordoposicaotipo on
+                acordoposicaotipo.ac27_sequencial = acordoposicao.ac26_acordoposicaotipo
+                inner join cgm on
+                cgm.z01_numcgm = acordo.ac16_contratado
+                inner join db_depart on
+                db_depart.coddepto = acordo.ac16_coddepto
+                inner join acordogrupo on
+                acordogrupo.ac02_sequencial = acordo.ac16_acordogrupo
+                inner join acordosituacao on
+                acordosituacao.ac17_sequencial = acordo.ac16_acordosituacao
+                inner join acordocomissao on
+                acordocomissao.ac08_sequencial = acordo.ac16_acordocomissao
+                inner join acordovigencia on
+                ac26_sequencial = ac18_acordoposicao
+                inner join acordoposicaoaditamento on
+                ac26_sequencial = ac35_acordoposicao
+                inner join acordoposicaoperiodo on ac36_acordoposicao = ac26_sequencial
+                where ac16_sequencial = '$ac16_sequencial' order by posicao");
+
   if (pg_num_rows($rsPosicoes) > 1) {
     $aditivo = true;
+
+    $rsAditivo = db_query(
+      "select distinct
+        ac26_sequencial as POSICAO,
+                    ac18_sequencial,
+                    ac16_datainicio,
+                    ac16_datafim,
+                    ac18_datainicio,
+                    ac18_datafim,
+                    ac35_dataassinaturatermoaditivo,
+                    ac26_numeroaditamento
+      from
+        acordoposicao
+      inner join acordo on
+        acordo.ac16_sequencial = acordoposicao.ac26_acordo
+        inner join acordoposicaotipo on
+        acordoposicaotipo.ac27_sequencial = acordoposicao.ac26_acordoposicaotipo
+        inner join cgm on
+        cgm.z01_numcgm = acordo.ac16_contratado
+        inner join db_depart on
+        db_depart.coddepto = acordo.ac16_coddepto
+        inner join acordogrupo on
+        acordogrupo.ac02_sequencial = acordo.ac16_acordogrupo
+        inner join acordosituacao on
+        acordosituacao.ac17_sequencial = acordo.ac16_acordosituacao
+        inner join acordocomissao on
+        acordocomissao.ac08_sequencial = acordo.ac16_acordocomissao
+        inner join acordovigencia on
+        ac26_sequencial = ac18_acordoposicao
+        inner join acordoposicaoaditamento on
+        ac26_sequencial = ac35_acordoposicao
+        inner join acordoposicaoperiodo on ac36_acordoposicao = ac26_sequencial
+        where ac16_sequencial = '$ac16_sequencial' order by posicao"
+    );
+
+    for ($iCont = 0; $iCont < pg_num_rows($consultaAditivo); $iCont++) {
+      $oPosicao = db_utils::fieldsMemory($consultaAditivo, $iCont);
+      $numeroaditamento = "ac26_numeroaditamento_{$oPosicao->ac18_sequencial}";
+      $clacordoposicao->ac26_numeroaditamento = $$numeroaditamento;
+
+      if (empty($clacordoposicao->ac26_numeroaditamento)) {
+        db_msgbox("O preenchimento do número do aditamento é obrigatório !");
+        $erro = true;
+      }
+    }
   }
+
+  if ($ac16_dataassinatura == null) {
+    db_msgbox("O preenchimento da data de assinatura é obrigatório !");
+    $erro = true;
+  }
+
+  if ($ac16_numeroacordo == null) {
+    db_msgbox("O preenchimento do número do acordo é obrigatório !");
+    $erro = true;
+  }
+
+
+
+  if ($ac16_licitacao != null) {
+    $resultado = db_query("select * from liclicita where l20_codigo = '$ac16_licitacao'");
+    $licitacao = db_utils::fieldsMemory($resultado, 0);
+    $clacordo->ac16_numeroprocesso = $licitacao->l20_edital;
+
+    $resultadocflicita = db_query("Select * from cflicita inner join liclicita on cflicita.l03_codigo = liclicita.l20_codtipocom where l03_codigo = '$licitacao->l20_codtipocom' and l20_codigo = '$ac16_licitacao';
+    ");
+
+    $cflicita = db_utils::fieldsMemory($resultadocflicita, 0);
+    db_query("update acordo set ac16_numodalidade = '$licitacao->l20_numero', ac16_tipomodalidade = '$cflicita->l03_descr' WHERE ac16_sequencial = '$ac16_sequencial';");
+  }
+
+  $ac16_datainicio = implode('-', array_reverse(explode('/', $ac16_datainicio)));
+  $ac16_datafim = implode('-', array_reverse(explode('/', $ac16_datafim)));
+
+  if ($ac16_numeroacordo != $ac16_numeroacordo_old) {
+    $sWhere = "ac16_numeroacordo = '$ac16_numeroacordo' and ac16_anousu = $anousu and ac16_instit = $instit ";
+
+    $numero_geral = $clacordo->sql_record($clacordo->sql_query_file(null, '*', null, $sWhere));
+
+    if ($clacordo->numrows > 0) {
+      db_msgbox("Já existe acordo com o número $ac16_numeroacordo");
+      $erro = true;
+    }
+  }
+
+  if ($ac26_numeroaditamento != $ac26_numeroaditamento_old) {
+    $sWhere = "ac26_numeroaditamento = '$ac26_numeroaditamento' and ac26_acordo = $ac16_sequencial";
+
+    $numadt = $clacordoposicao->sql_record($clacordoposicao->sql_query(null, 'ac26_sequencial', null, $sWhere));
+
+    if ($clacordoposicao->numrows > 0) {
+      db_msgbox("Já existe aditamento com o número $ac26_numeroaditamento");
+      $erro = true;
+    }
+  }
+
+
   if (!isset($erro)) {
     for ($iCont = 0; $iCont < pg_num_rows($rsPosicoes); $iCont++) {
       $oPosicao = db_utils::fieldsMemory($rsPosicoes, $iCont);
 
       if ($aditivo) {
+
+
+
         $inicio = 'ac18_datainicio_' . $oPosicao->ac18_sequencial;
         $fim = 'ac18_datafim_' . $oPosicao->ac18_sequencial;
         $dataaditivo = 'ac35_dataassinaturatermoaditivo_' . $oPosicao->ac18_sequencial;
@@ -137,7 +260,12 @@ if (isset($alterar)) {
       $seq = pg_result($resmanut, 0, 0);
 
       $result = db_query("insert into db_manut_log values($seq,'Vigencia anterior: " . $oPosicao->ac16_datainicio . ' - ' . $oPosicao->ac16_datafim . ' atual: ' . $ac16_datainicio . ' - ' . $ac16_datafim . "  '," . db_getsession('DB_datausu') . ',' . db_getsession('DB_id_usuario') . ')');
+
+      $numeroaditamento = "ac26_numeroaditamento_{$oPosicao->ac18_sequencial}";
+      $clacordoposicao->ac26_numeroaditamento = $$numeroaditamento;
+      $clacordoposicao->alterar_numaditamento($oPosicao->posicao);
     }
+
     $clacordo->ac16_numero = $ac16_numeroacordo;
     $clacordo->alterar($ac16_sequencial);
 
@@ -160,6 +288,8 @@ if (isset($alterar)) {
 
       $clmanutencaoacordo->incluir();
     }
+
+
     if ($sqlerro == false) {
       db_msgbox('Alteração efetuada');
 
@@ -173,7 +303,8 @@ if (isset($alterar)) {
                             ac16_datafim,
                             ac18_datainicio,
                             ac18_datafim,
-                            ac35_dataassinaturatermoaditivo
+                            ac35_dataassinaturatermoaditivo,
+                            ac26_numeroaditamento
               from
                 acordoposicao
               inner join acordo on
@@ -235,7 +366,8 @@ if (isset($alterar)) {
                         ac16_datafim,
                         ac18_datainicio,
                         ac18_datafim,
-                        ac35_dataassinaturatermoaditivo
+                        ac35_dataassinaturatermoaditivo,
+                        ac26_numeroaditamento
           from
             acordoposicao
           inner join acordo on
@@ -268,6 +400,8 @@ if (isset($alterar)) {
   db_fieldsmemory($result, 0);
 
   $ac16_numeroacordo_old = $ac16_numeroacordo;
+
+  $ac26_numeroaditamento_old = $ac26_numeroaditamento;
 }
 
 ?>
@@ -296,6 +430,10 @@ if (isset($alterar)) {
     #fieldset_depart_responsavel table {
       margin: 0 auto;
     }
+
+    #ac16_objeto {
+      width: 100%;
+    }
   </style>
 </head>
 
@@ -321,6 +459,30 @@ if (isset($alterar)) {
                 <?php
                 db_input('ac16_sequencial', 10, $Iac16_sequencial, true, 'text', 1, "onchange='js_acordo(false);'");
                 db_input('ac16_resumoobjeto', 40, $Iac16_resumoobjeto, true, 'text', 3); ?>
+              </td>
+            </tr>
+
+            <tr>
+              <td colspan="2">
+                <fieldset>
+                  <legend>
+                    <b>Objeto</b>
+                  </legend>
+                  <table cellpadding="0" border="0" width="100%" class="table-vigencia">
+
+                    <tr>
+
+
+                      <td>
+                        <?
+                        db_textarea('ac16_objeto', 2, 2, $ac16_objeto, true, 'text', 2, "", "", "", "");
+                        ?>
+                      </td>
+
+                    </tr>
+
+                  </table>
+                </fieldset>
               </td>
             </tr>
 
@@ -561,9 +723,23 @@ if (isset($alterar)) {
                   <td colspan="2">
                     <fieldset class='fieldsetinterno'>
                       <legend>
-                        <b>Vigência Aditivos <?php echo $posicao ?></b>
+                        <b>Aditivo <?php echo $posicao ?></b>
                       </legend>
                       <table cellpadding="0" border="0" width="100%" class="table-vigencia">
+                        <tr width="1%">
+                          <td nowrap title="numero aditamento">
+                            <strong>Nº Aditamento: </strong>
+                          <td>
+                            <?php
+                            $numadtm = "ac26_numeroaditamento_{$ac18_sequencial}";
+                            $numadtmOld = "ac26_numeroaditamento_old_{$ac18_sequencial}";
+                            $$numadtm = $ac26_numeroaditamento;
+                            $$numadtmOld = $ac26_numeroaditamento;
+                            db_input("ac26_numeroaditamento_{$ac18_sequencial}", 10, $Iac26_sequencial, true, "text", 2, "");
+                            db_input("ac26_numeroaditamento_old_{$ac18_sequencial}", 10, $Iac26_sequencial, true, 'hidden', 2, "");
+                            ?>
+                          </td>
+                        </tr>
                         <tr>
                           <td width="1%">
                             <b>Inicio:</b>
@@ -626,6 +802,7 @@ if (isset($alterar)) {
     </div>
 
 </body>
+
 
 </html>
 <div style='position:absolute;top: 200px; left:15px;

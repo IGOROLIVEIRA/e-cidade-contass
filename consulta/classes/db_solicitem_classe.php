@@ -650,4 +650,3 @@ class cl_solicitem {
      return $sql;
   }
 }
-?>

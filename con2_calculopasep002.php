@@ -95,25 +95,59 @@ for ($x = 0; $x < pg_numrows($result); $x++) {
 }
 
 foreach ($aReceitas as $Receitas) {
-
-    if (strstr($Receitas->o57_fonte, '17181000000000')) $fTC1 += $Receitas->saldo_arrecadado;
-    if (strstr($Receitas->o57_fonte, '17281000000000')) $fTC2 += $Receitas->saldo_arrecadado;
-    if (strstr($Receitas->o57_fonte, '24181000000000')) $fTC3 += $Receitas->saldo_arrecadado;
-    if (strstr($Receitas->o57_fonte, '24281000000000')) $fTC4 += $Receitas->saldo_arrecadado;
-    if (strstr($Receitas->o57_fonte, '17380211000000')) $fTCons += $Receitas->saldo_arrecadado;
-    if (strstr($Receitas->o57_fonte, '17180121000000') || strstr($Receitas->o57_fonte, '17180131000000') || strstr($Receitas->o57_fonte, '17180141000000')) $fPFM += $Receitas->saldo_arrecadado;
-    if (strstr($Receitas->o57_fonte, '17180261000000')) $fFEP += $Receitas->saldo_arrecadado;
-    if (strstr($Receitas->o57_fonte, '17180611000000')) $fICMS += $Receitas->saldo_arrecadado;
-    if (strstr($Receitas->o57_fonte, '17180151000000')) $fITR += $Receitas->saldo_arrecadado;
-    if (strstr($Receitas->o57_fonte, '17280221000000') || strstr($Receitas->o57_fonte, '17180221000000')) $fCFM += $Receitas->saldo_arrecadado;
-    if (strstr($Receitas->o57_fonte, '17280141000000')) $fCIDE += $Receitas->saldo_arrecadado;
-    if (strstr($Receitas->o57_fonte, '17180211000000')) $fCFH += $Receitas->saldo_arrecadado;
-    if (strstr($Receitas->o57_fonte, '17189911000000')) $fFEX += $Receitas->saldo_arrecadado;
-    if (strstr($Receitas->o57_fonte, '17280131000000')) $fIPM += $Receitas->saldo_arrecadado;
-    if (strstr($Receitas->o57_fonte, '49500000000000')) $fTEUEDM += abs($Receitas->saldo_arrecadado);
-    if (strstr($Receitas->o57_fonte, '47000000000000')) $fRCI += abs($Receitas->saldo_arrecadado);
-    // if (strstr($Receitas->o57_fonte, '49813210041000') || strstr($Receitas->o57_fonte, '49813210401000')) $fRIRPPS += $Receitas->saldo_arrecadado;
+    if (db_getsession("DB_anousu") < 2022) {
+        if (strstr($Receitas->o57_fonte, '17181000000000')) $fTC1 += $Receitas->saldo_arrecadado;
+        if (strstr($Receitas->o57_fonte, '17281000000000')) $fTC2 += $Receitas->saldo_arrecadado;
+        if (strstr($Receitas->o57_fonte, '24181000000000')) $fTC3 += $Receitas->saldo_arrecadado;
+        if (strstr($Receitas->o57_fonte, '24281000000000')) $fTC4 += $Receitas->saldo_arrecadado;
+        if (strstr($Receitas->o57_fonte, '17380211000000')) $fTCons += $Receitas->saldo_arrecadado;
+        if (strstr($Receitas->o57_fonte, '17180121000000') || strstr($Receitas->o57_fonte, '17180131000000') || strstr($Receitas->o57_fonte, '17180141000000')) $fPFM += $Receitas->saldo_arrecadado;
+        if (strstr($Receitas->o57_fonte, '17180261000000')) $fFEP += $Receitas->saldo_arrecadado;
+        if (strstr($Receitas->o57_fonte, '17180611000000')) $fICMS += $Receitas->saldo_arrecadado;
+        if (strstr($Receitas->o57_fonte, '17180151000000')) $fITR += $Receitas->saldo_arrecadado;
+        if (strstr($Receitas->o57_fonte, '17280221000000') || strstr($Receitas->o57_fonte, '17180221000000')) $fCFM += $Receitas->saldo_arrecadado;
+        if (strstr($Receitas->o57_fonte, '17280141000000')) $fCIDE += $Receitas->saldo_arrecadado;
+        if (strstr($Receitas->o57_fonte, '17180211000000')) $fCFH += $Receitas->saldo_arrecadado;
+        if (strstr($Receitas->o57_fonte, '17189911000000')) $fFEX += $Receitas->saldo_arrecadado;
+        if (strstr($Receitas->o57_fonte, '17280131000000')) $fIPM += $Receitas->saldo_arrecadado;
+        if (strstr($Receitas->o57_fonte, '49500000000000')) $fTEUEDM += abs($Receitas->saldo_arrecadado);
+        if (strstr($Receitas->o57_fonte, '47000000000000')) $fRCI += abs($Receitas->saldo_arrecadado);
+        // if (strstr($Receitas->o57_fonte, '49813210041000') || strstr($Receitas->o57_fonte, '49813210401000')) $fRIRPPS += $Receitas->saldo_arrecadado;
+    }
+    // Oc16641 - Atualização de Receitas para 2022
+    if (db_getsession("DB_anousu") >= 2022) {
+        $fTC1 = atualizaSaldo($fTC1, $Receitas, array(417170000000000, 417240000000000, 417320000000000, 424140000000000, 424220000000000, 424320000000000));
+        $fTC2 = 0; // Removido da soma individual
+        $fTC3 = 0; // Removido da soma individual
+        $fTC4 = 0; // Removido da soma individual
+        $fTCons = atualizaSaldo($fTCons, $Receitas, array(417395000000000));
+        $fPFM = atualizaSaldo($fPFM, $Receitas, array(417115111000000, 417115121000000, 417115131000000));
+        $fFEP = atualizaSaldo($fFEP, $Receitas, array(417125241000000));
+        $fICMS = atualizaSaldo($fICMS, $Receitas, array(417195101000000, 417195801000000));
+        $fITR = atualizaSaldo($fITR, $Receitas, array(417115201000000));
+        $fCFM = atualizaSaldo($fCFM, $Receitas, array(417225101000000, 417125101000000));
+        $fCIDE = atualizaSaldo($fCIDE, $Receitas, array(417215301000000));
+        $fCFH = atualizaSaldo($fCFH, $Receitas, array(417125001000000));
+        $fFEX = atualizaSaldo($fFEX, $Receitas, array(417199901000000));
+        $fIPM = atualizaSaldo($fIPM, $Receitas, array(417215201000000));
+        $fTEUEDM = atualizaSaldo($fTEUEDM, $Receitas, array(495000000000000));
+        $fRCI = atualizaSaldo($fRCI, $Receitas, array(470000000000000));
+    }
 }
+
+function atualizaSaldo($valor, $receitas, $naturezas)
+{
+    // echo "<pre>";
+    foreach ($naturezas as $natureza) {
+        if ($receitas->o57_fonte == $natureza) {
+            $valor += abs($receitas->saldo_arrecadado);
+            // echo "Natureza Encontrada: $natureza Valor: $receitas->saldo_arrecadado <br/>";
+        }
+    }
+    // echo "</pre>";
+    return $valor;
+}
+
 db_query("drop table if exists work_receita");
 
 criarWorkReceita($sWhereReceita, array($anousu), $dtini, $dtfim);
@@ -957,7 +991,7 @@ ob_start();
                         </td>
                     </tr>
                     <tr style=''>
-                        <td class="s3 bdleft">ICMS - Desoneração das Exportações - LC n.º 87/96</td>
+                        <td class="s3 bdleft">ICMS - Desoneração das Exportações - LC n.º 87/96 / Transferência  LC n.º 176/2020</td>
                         <td class="s4">
                             <?php
                             echo db_formatar($fICMS, "f");

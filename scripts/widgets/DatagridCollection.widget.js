@@ -443,6 +443,13 @@
     },
 
     /**
+     * Define o valor de hasPesquisaConteudo
+     */
+    "setPesquisaConteudo": function (hasPesquisaConteudo) {
+      this.grid.hasPesquisaConteudo = hasPesquisaConteudo;
+    },
+
+    /**
      * Adiciona os itens selecionados
      */
     "addSelectedItens": function (item) {
@@ -488,6 +495,9 @@
           var header        = event.target;
           var tipoOrdenacao = header.getAttribute("data-type");
           var campo         = header.getAttribute("data-target");
+          if (!this.hasPesquisaConteudo && $(`${this.gridID}pesquisaConteudo`).value != '') {
+            this.pesquisaConteudo(campo);
+          }
           this.collection.sort(tipoOrdenacao, [campo], this.columns[campo].sortCallback || null);
 
           /**
@@ -520,6 +530,13 @@
         }.bind(this);
         iColuna++;
       }
+    },
+
+    /**
+     * Cria a pesquisa de conteudo
+     */
+    "pesquisaConteudo" : function(campo) {
+      parent.corpo.pesquisarPorConteudo($(`${this.gridID}pesquisaConteudo`).value, iCodigoFormulario, instituicao, iTipo, campo)
     },
 
     /**

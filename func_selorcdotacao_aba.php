@@ -426,9 +426,10 @@ function js_atualiza_variavel_retorno(objeto){
        db_fieldsmemory($result,$i);
 
        if (isset($orgaos_liberados[$o58_orgao])) {
+  
             ?>
-            <tr>
-            <td align='right'><input type='checkbox' name='orgao_<?=$o58_orgao?>' value='<?=$o58_orgao?>'<?=($porgao==$o58_orgao?"checked":"") ?> checked ></td>
+            <tr>  
+            <td align='right'><input type='checkbox' name='orgao_<?=$o58_orgao?>' value='<?=$o58_orgao?>'<?=($porgao==$o58_orgao?"checked":"") ?>  ></td>
             <td align='right'><?=$o58_orgao?></td>
             <td align='left' ><strong><?=$o40_descr?></strong></td>
             <tr>

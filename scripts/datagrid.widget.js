@@ -281,6 +281,14 @@ function DBGrid(sName) {
     return iFirstLineValid;
   }
 
+    /**
+     * Pesquisa de conteudo das colunas
+     * @type boolean
+     * @private
+     */
+    this.hasPesquisaConteudo  = false;
+
+    var me = this;
 
   /**
    * Garante que as colunas permaneçam alinhadas
@@ -608,64 +616,74 @@ function DBGrid(sName) {
       }
     }
 
-    sFooter += "</tr>";
-    return sFooter;
-  }
-  /**
-   * Define o tamanho das celulas
-   * @param  {array} aWidths array com o tamanho de cada celula ();
-   * @return Void
-   */
+    /**
+     * Renderiza a grid no nó especificado no parametro
+     * @param  {HTMLNode} oNode onde a grid sera incluida.
+     * @return void
+     * @type   void
+     */
+    this.show = function (oNode) {
 
-  this.setCellWidth = function (aWidths) {
-    this.aWidths = aWidths;
-  }
+        var sGrid = "<div class='gridcontainer' id='grid"+this.sName+"'>";
+        sGrid    += "<div class='header-container' >";
+        sGrid    += "<div class='grid-resize'>";
+        sGrid    += "<img src='"+this._IMGPATH+"/"+sImgSelection+"' border='0' onclick='"+sCallBackCols+"'>";
+        sGrid    += "<div style='clear: both;'></div>" // LIMPA O FLOAT DA IMAGEM
+        sGrid    += "</div>"  //FECHA DIV "grid-resize"
+        sGrid    += "<table class='table-header' rel='ignore-css'  id='table"+this.sName+"header'>";
+        sGrid    += this.renderHeader();
+        sGrid    += "</table>"; // FECHA TABELA DO HEADER table-header
+        sGrid    += "</div>";   // FECHA DIV "header-container"
+        // FIM DO HEADER    ---    INICIO DO BODY
+        sGrid    += "<div id='body-container-"+this.sName+"' class='body-container' style='height:"+me.iHeight+"px;'>";
+        sGrid    += "<table  class='table-body'  id='"+this.sName+"body'>";
+        sGrid    += this.renderRows(true, false);
+        sGrid    += "</table>"; // FECHA TABELA DO HEADER table-body
+        sGrid    += "</div>";    // FECHA DIV "body-container"
+        // FIM DO BODY     ----    INICIO DO FOOTER
+        sGrid    += "<div class='footer-container' >";
+        sGrid    += "<table class='table-footer'  id='table"+this.sName+"footer'>";
+        if (this.hasTotalizador) {
+            sGrid+= this.renderFooter();
+        }
+        sGrid    += "<tr style='text-align:left;'>";
+        sGrid    += "<td colspan='"+(this.aHeaders.length+2)+"'><div style='border:1px inset white;height:100%;padding:2px'>";
+        sGrid    += "<span> Total de Registros:</span><span style='color:blue;padding:3px' id='"+this.sName+"numrows'>0</span>";
+        sGrid    += "<span style='border-left:1px inset #eeeee2' id='"+this.sName+"status'>&nbsp;</span>&nbsp;";
+        if (this.hasTotalValue){
+            sGrid    += "<span style='padding-left: 58%'> Valor Total:</span><span style='color:#000;padding:3px' id='"+this.sName+"totalValue'>0.00</span>";
+        }
+        if (this.hasPesquisaConteudo){
+            sGrid    += "<span style='margin-right: 5px'> <input type='button' id='"+this.sName+"recomecar' ";
+            sGrid    += "onclick='$(\"filtro\").value = \"\";$(\""+this.sName+"pesquisaConteudo\").value = \"\"; btnPesquisarDados.click();' value='Recomeçar'></span>";
+            sGrid    += "<span style='margin-right: 5px'> Indique o Conteúdo:</span>";
+            sGrid    += "<span><input type='text' id='"+this.sName+"pesquisaConteudo' style='width: 160px'><span>";
+        }
 
-  /**
-   * define o alinhamento global das celulas
-   * @param  {array} aAligns array com oAlinhamento de cada celula;
-   * @return Void
-   * @type void
-   */
+        sGrid    += "</div></td></tr>";
+        sGrid    += "</table>"; //  FECHA TABLE "table_footer"
+        sGrid    += "</div>";   //  FECHA DIV "footer-container"
+        //
+        sGrid    += "</div>";   //  FECHA DIV "container"
 
-  this.setCellAlign = function(aAligns) {
-    this.aAligns = aAligns;
-  }
 
-  /**
-   * Seta se a grid mostrara um checkbox, no inicio de cada linha
-   * @param integer iCell Posição da array que contem o valor da checkbox (sera usado com indice.)
-   */
-  this.setCheckbox = function(iCell) {
 
-     this.hasCheckbox   = true;
-     this.checkBoxValue = iCell;
+        /*
+         * Se foi escolhido mostrar as colunas,
+         * mudamos a imagem, e criamos o dropdown com as colunas a serem escolhidas;
+         */
+        me.gridContainer      =  oNode;
+        me.gridContainerWidth =  oNode.scrollWidth - 25;
+        if (this.lAllowSelectCol) {
+            sGrid += this.drawSelectCol();
+        }
+        oNode.innerHTML = sGrid;
 
-  }
-  /**
-   * Define a altura
-   * @param {integer} iHeight define a altura
-   * @return void
-   */
-  this.setHeight = function (iHeight) {
-     this.iHeight = iHeight;
-  }
+        $("table"+this.sName+"header").style.width = me.gridContainerWidth;
+        $(this.sName+"body").style.width           = me.gridContainerWidth;
+        $("table"+this.sName+"footer").style.width = me.gridContainerWidth;
 
-  /**
-   * retorna as linhas da grid que estao marcadas como selecionadas
-   * @param {string} sTipoRetorno define como sera o retorno do metodo. caso object retorna os objetos tableRow selecionados
-   * caso array, retornara um array com os valores das linhas selecionadas.
-   *
-   * @return array
-   */
-  this.getSelection = function (sTipoRetorno) {
-
-    if (sTipoRetorno == null ) {
-       sTipoRetorno = "array";
-    }
-    var aSelecionados = new Array();
-    if (sTipoRetorno == "array") {
-      for (var iItensLength = 0; iItensLength < this.aRows.length; iItensLength++) {
+        // Subtrai o tamanho do scroll
 
         with (this.aRows[iItensLength]) {
           if (isSelected) {
@@ -1199,7 +1217,7 @@ function DBGrid(sName) {
     return $(this.sName+'status').innerHTML;
   }
   this.clickRow = function() {
-    
+
   };
 }
 

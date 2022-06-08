@@ -183,8 +183,10 @@ if (isset($incluir) && trim($incluir) != "") {
         <?
         if (isset($licitacao) && trim($licitacao) != "") {
             $sql_marca    = "";
-            $campos       = "l21_codigo,pc81_codprocitem,pc01_descrmater,l04_codigo,l04_descricao";
+            $campos       = "l21_codigo,pc81_codprocitem,pc01_codmater,pc01_descrmater,pc11_quant,si02_vlprecoreferencia,l04_codigo,l04_descricao,l21_reservado";
+
             $sql          = $clliclicitemlote->sql_query_licitacao(null, "distinct $campos", "pc81_codprocitem", "l21_codliclicita = $licitacao and l21_situacao = 0");
+
             $sql_disabled = $clliclicitemlote->sql_query_licitacao(null, "distinct $campos", "pc81_codprocitem", "l21_codliclicita = $licitacao and l21_situacao = 0 and l04_codigo is not null");
 
             $res_itenslote_desab = $clliclicitemlote->sql_record($sql_disabled);
@@ -236,7 +238,8 @@ if (isset($incluir) && trim($incluir) != "") {
                         <td nowrap align="right" title="<?= @$Tl04_descricao ?>"><?= @$Ll04_descricao ?></td>
                         <td nowrap align="left">
                             <?
-                            db_input("l04_descricao", 40, $Il04_descricao, true, "text", $db_opcao);
+                            //db_input("l04_descricao", 40, $Il04_descricao, true, "text", $db_opcao);
+                            db_textarea('l04_descricao', 4, 40, $Il04_descricao, true, 'text', $db_opcao, "onmouseout = 'oganizarTexto();'", "", "", 250);
                             ?>
                         </td>
                     </tr>
@@ -251,6 +254,35 @@ if (isset($incluir) && trim($incluir) != "") {
                     </tr>
                 </table>
                 <script>
+                    var input = document.querySelector('#l04_descricao');
+
+                    function log(e) {
+
+                        var regex = /[*|\":<>[\]{}`\\()';#@&$]/;
+                        var key = String.fromCharCode(e.keyCode);
+
+                        if (regex.test(key)) {
+                            e.preventDefault();
+                            return false;
+                        }
+                        var keyCode = e.keyCode ? e.keyCode : e.which ? e.which : e.charCode;
+                        if (keyCode == 13) {
+
+
+                            if (!e) var e = window.event;
+
+                            e.cancelBubble = true;
+                            e.returnValue = false;
+
+                            if (e.stopPropagation) {
+                                e.stopPropagation();
+                                e.preventDefault();
+                            }
+                        }
+                    };
+
+                    input.addEventListener('keypress', log);
+
                     function js_valida_dados() {
                         var contador = 0;
                         /*
@@ -265,6 +297,8 @@ if (isset($incluir) && trim($incluir) != "") {
                         var lista_itens = "";
                         var separador = "";
                         for (i = 0; i < lote.document.form1.elements.length; i++) {
+                            console.log(lote.document.form1.elements[i]);
+                            console.log(lote.document.form1.elements[i].checked);
                             if (lote.document.form1.elements[i].type == "checkbox") {
                                 if (lote.document.form1.elements[i].checked == true) {
                                     lista_itens += separador + lote.document.form1.elements[i].value;
@@ -273,7 +307,6 @@ if (isset($incluir) && trim($incluir) != "") {
                                 }
                             }
                         }
-
                         if (contador == 0) {
                             alert("Selecione um item.");
                             return false;
@@ -288,6 +321,25 @@ if (isset($incluir) && trim($incluir) != "") {
                     function js_fechar() {
                         parent.db_iframe_lotenovo.hide();
                         parent.itens_lote.location.href = 'lic1_liclicitemlote011.php?licitacao=<?= $licitacao ?>';
+                    }
+
+                    function oganizarTexto() {
+
+                        var texto = document.getElementById("l04_descricao").value;
+                        const myArr = texto.split("\n");
+                        var correcao = "";
+                        if (myArr.length > 0) {
+                            for (i = 0; i < myArr.length; i++) {
+                                if (i == 0) {
+                                    correcao = myArr[i];
+                                } else {
+                                    correcao += " " + myArr[i];
+                                }
+
+                            }
+                            document.getElementById("l04_descricao").value = correcao;
+                        }
+
                     }
                 </script>
     </center>
@@ -315,7 +367,6 @@ if (isset($incluir) && trim($incluir) != "") {
         }
 
         if (isset($erro_msg) && trim($erro_msg) != "") {
-            db_msgbox($erro_msg);
 
             /**
              * Se todos os itens foram vinculados a algum lote redireciona para a rotina de editais

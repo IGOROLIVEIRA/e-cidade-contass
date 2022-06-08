@@ -262,7 +262,7 @@ class cl_esocialcertificado {
      }
      $sql .= " where ";
      if ($rh214_sequencial!=null) {
-       $sql .= " rh214_sequencial = $this->rh214_sequencial";
+       $sql .= " rh214_sequencial = $rh214_sequencial";
      }
      $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
      /*if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
@@ -494,6 +494,16 @@ class cl_esocialcertificado {
       }
     }
     return $sql;
+  }
+
+  public function save() {
+
+    $result = $this->sql_record($this->sql_query_file(null, "rh214_sequencial", " rh214_sequencial desc", "rh214_cgm = {$this->rh214_cgm}"));
+    if ($this->numrows > 0) {
+      $rh214_sequencial = db_utils::fieldsMemory($result, 0)->rh214_sequencial;
+      return $this->alterar($rh214_sequencial);
+    }
+    return $this->incluir();
   }
 }
 ?>

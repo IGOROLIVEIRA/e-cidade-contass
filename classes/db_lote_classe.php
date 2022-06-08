@@ -54,6 +54,7 @@ class cl_lote {
    var $j34_zona = 0;
    var $j34_quamat = 0;
    var $j34_areapreservada = 0;
+   var $j34_histortestadaint = null;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  j34_idbql = int4 = Cód. Lote
@@ -68,6 +69,7 @@ class cl_lote {
                  j34_zona = int8 = Zona Fiscal
                  j34_quamat = int4 = Matrículas cadastradas
                  j34_areapreservada = float8 = Area Preservada
+                 j34_histortestadaint = text = Histórico - Testadas Internas
                  ";
    //funcao construtor da classe
    function cl_lote() {
@@ -99,6 +101,7 @@ class cl_lote {
        $this->j34_quamat = ($this->j34_quamat == ""?@$GLOBALS["HTTP_POST_VARS"]["j34_quamat"]:$this->j34_quamat);
        $this->j34_areapreservada = ($this->j34_areapreservada == ""?@$GLOBALS["HTTP_POST_VARS"]["j34_areapreservada"]:$this->j34_areapreservada);
        $this->j34_distrito = ($this->j34_distrito == ""?@$GLOBALS["HTTP_POST_VARS"]["j34_distrito"]:$this->j34_distrito);
+       $this->j34_histortestadaint = ($this->j34_histortestadaint == ""?@$GLOBALS["HTTP_POST_VARS"]["j34_histortestadaint"]:$this->j34_histortestadaint);
      }else{
        $this->j34_idbql = ($this->j34_idbql == ""?@$GLOBALS["HTTP_POST_VARS"]["j34_idbql"]:$this->j34_idbql);
      }
@@ -741,7 +744,8 @@ class cl_lote {
     $sSql  = "select lote.j34_setor,                                                      ";
     $sSql .= "       setor.j30_descr,                                                     ";
     $sSql .= "       lote.j34_quadra,                                                     ";
-    $sSql .= "       lote.j34_distrito,                                                     ";
+    $sSql .= "       lote.j34_distrito,                                                   ";
+    $sSql .= "       lote.j34_histortestadaint,                                           ";
     $sSql .= "       lote.j34_lote,                                                       ";
     $sSql .= "       lote.j34_area,                                                       ";
     $sSql .= "       lote.j34_bairro,                                                     ";

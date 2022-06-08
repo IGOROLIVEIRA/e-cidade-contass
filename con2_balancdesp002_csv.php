@@ -151,9 +151,44 @@ else
 
 
 $fp = fopen("tmp/baldesp.csv","w");
-fputs($fp,"Orgão;;Unidade;;Função;;Subfunção;;Programa;;ProjAtiv;;Elemento;;Recurso;;Reduz;DotIni;Suplem;Especial;Reduzido;Empenhado;Anulado;Liquidado;Pago;Empenhado_Acumulado;Anulado_acumulado;Liquidado_acumulado;Pago_acumulado\n");
+fputs($fp,"Orgão;;Unidade;;Função;;Subfunção;;Programa;;ProjAtiv;;Elemento;;Recurso;;Reduz;Saldo Inicial;Suplementações;Cred. Especiais;Reduções;Total Créditos;Saldo Disponível;Empenhado no Mês;Anulado no Mês;Emp Liquido No Mês;Liquidado no mês;Pago no mês;A Liquidar;Empenhado no ano;Anulado no ano;Emp Liquido No Ano;Liquidado no ano;Pago no ano;A Pagar Liquidado\n");
 while($ln = pg_fetch_array($result)){
-   $reduz = $ln["o58_coddot"] != 0 ? $ln["o58_coddot"]."-".db_CalculaDV($ln["o58_coddot"]) : $ln["o58_coddot"];
+  //validação para aparecer "vazio" no lugar de zero e 0
+  if($ln["o58_orgao"] == '0')   $ln["o58_orgao"] = '';
+  if($ln["o40_descr"] == '0')   $ln["o40_descr"] = '';  
+  if($ln["o58_unidade"] == '0') $ln["o58_unidade"] = '';
+  if($ln["o41_descr"] == '0')   $ln["o41_descr"] = '';  
+  if($ln["o58_funcao"] == '0')  $ln["o58_funcao"] = '';  
+  if($ln["o52_descr"] == '0')   $ln["o52_descr"] = '';
+  if($ln["o58_subfuncao"]=='0') $ln["o58_subfuncao"] = '';
+  if($ln["o53_descr"] == '0')   $ln["o53_descr"] = '';
+  if($ln["o58_projativ"]=='0')  $ln["o58_projativ"]='';
+  if($ln["o55_descr"] == '0')   $ln["o55_descr"] = '';
+  if($ln["o58_elemento"]=='0')  $ln["o58_elemento"] = '';
+  if($ln["o56_descr"] == '0')   $ln["o56_descr"] = '';
+  if($ln["o58_coddot"] == '0')  $ln["o58_coddot"] =''; 
+  if($ln["o58_codigo"] == '0')  $ln["o58_codigo"] = '';
+  if($ln["o15_descr"] == '0')   $ln["o15_descr"] = '';
+  if($ln["liquidado_acumulado"] == '0') $ln["liquidado_acumulado"] = '';
+  if($ln["dot_ini"] == '0') $ln["dot_ini"] = '';
+  if($ln["suplementado"] == '0') $ln["suplementado"] = '';
+  if($ln["especial"] == '0') $ln["especial"] = '';
+  if($ln["reduzido"] == '0') $ln["reduzido"] = '';
+  if($ln["empenhado"] == '0') $ln["empenhado"] = '';
+  if($ln["o58_programa"] == '0') $ln["o58_programa"] = '';
+  if($ln["o54_descr"] == '0') $ln["o54_descr"] = '';
+  if($ln["o54_descr"] == 'ENCARGOS ESPECIAIS') $ln["o58_programa"] = '0';
+  
+  if($ln["pago"] == '0') $ln["pago"] = '0';
+
+  if( $ln["o58_codigo"] == ''){
+    $ln["o15_descr"] = '';
+    $ln["o58_codigo"] = '';
+}
+
+
+
+   $reduz = $ln["o58_coddot"] != 0 ? $ln["o58_coddot"] : $ln["o58_coddot"];
    fputs($fp,$ln["o58_orgao"].";".$ln["o40_descr"].";".
              $ln["o58_unidade"].";".$ln["o41_descr"].";".
              $ln["o58_funcao"].";".$ln["o52_descr"].";".
@@ -164,19 +199,30 @@ while($ln = pg_fetch_array($result)){
              $ln["o58_codigo"].";".$ln["o15_descr"].";".
              $reduz.";"
 	     );
+     
    fputs($fp,db_formatar($ln["dot_ini"],'f').";".
              db_formatar($ln["suplementado_acumulado"],'f').";".
 	           db_formatar($ln["especial_acumulado"],'f').";".
              db_formatar($ln["reduzido_acumulado"],'f').";".
+             db_formatar($ln["dot_ini"] + $ln["suplementado_acumulado"] - $ln["reduzido_acumulado"],'f').";".
+            
+             db_formatar($ln["dot_ini"] + $ln["suplementado_acumulado"] - $ln["reduzido_acumulado"] -  $ln["empenhado_acumulado"] + $ln["anulado_acumulado"],'f').";".
              db_formatar($ln["empenhado"],'f').";".
              db_formatar($ln["anulado"],'f').";".
+             db_formatar($ln["empenhado"] - $ln["anulado"] ,'f').";".
              db_formatar($ln["liquidado"],'f').";".
              db_formatar($ln["pago"],'f').";".
+             db_formatar($ln["empenhado_acumulado"] -$ln["anulado_acumulado"] - $ln["liquidado_acumulado"],'f').";".
              db_formatar($ln["empenhado_acumulado"],'f').";".
              db_formatar($ln["anulado_acumulado"],'f').";".
-             db_formatar($ln["liquidado_acumulado"],'f').";".
-	           db_formatar($ln["pago_acumulado"],'f').";\n ");
+             db_formatar($ln["empenhado_acumulado"] -$ln["anulado_acumulado"] ,'f').";". 
+	           db_formatar($ln["liquidado_acumulado"],'f').";". 
+             db_formatar($ln["pago_acumulado"],'f').";".            
+             db_formatar($ln["liquidado_acumulado"] -$ln["pago_acumulado"] ,'f').";;\n ");
+            
+                 
 }
+
 
 echo "<html><body bgcolor='#cccccc'><center><a href='tmp/baldesp.csv'>Clique com botão direito para Salvar o arquivo <b>baldesp.csv</b></a></body></html>";
 fclose($fp);

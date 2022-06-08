@@ -42,16 +42,36 @@ $clrotulo->label("ac10_obs");
 $clrotulo->label("e50_obs");
 $clrotulo->label("e60_convenio");
 $clrotulo->label("e60_numconvenio");
-$clrotulo->label("e60_dataconvenio");
+$clrotulo->label("e60_dataconvenio"); 
 $clrotulo->label("e60_datasentenca");
 $clrotulo->label("e54_gestaut");
+$clrotulo->label("e40_codhist"); 
+$clrotulo->label("e40_historico"); 
+ 
+if(isset($e57_codhist)){
+    $query = "select e40_descr from emphist where e40_codhist = $e57_codhist";
+    $resultado = db_query($query);
+    $resultado = db_utils::fieldsMemory($resultado, 0);
+    $e40_descr=$resultado->e40_descr;
+}
+if(!$e57_codhist){
+    $query = "select distinct e57_codhist from empauthist where e57_codhist = 0";
+    $resultado = db_query($query);
+    $resultado = db_utils::fieldsMemory($resultado, 0);
+    $e57_codhist=$resultado->e57_codhist;
+    $query = "select e40_descr from emphist where e40_codhist = $e57_codhist";
+    $resultado = db_query($query);
+    $resultado = db_utils::fieldsMemory($resultado, 0);
+    $e40_descr=$resultado->e40_descr;
+}
+
 
 if ($db_opcao == 1) {
     $ac = "emp4_empempenho004.php";
 } else if ($db_opcao == 2 || $db_opcao == 22) {
-    // $ac="emp1_empautoriza005.php";
+    // $ac="emp1_empautoriza005.php"; 
 } else if ($db_opcao == 3 || $db_opcao == 33) {
-//  $ac="emp1_empautoriza006.php";
+    //  $ac="emp1_empautoriza006.php";
 }
 $db_disab = true;
 if (isset($chavepesquisa) && $db_opcao == 1) {
@@ -120,7 +140,7 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
                 if (pg_numrows($result_tran) == 0) {
                     $db_disab = false;
                 }
-            }// else {
+            } // else {
             //   $db_disab = false;
             //}
         }
@@ -129,7 +149,7 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
 ?>
 <form name="form1" method="post" action="<?= $ac ?>">
 
-    <fieldset style="width:800px">
+    <fieldset style="width:900px">
         <legend><strong>Emissão do Empenho</strong></legend>
 
 
@@ -142,27 +162,34 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
         db_input('iElemento', 20, "", true, 'hidden', 3);
         db_input('e60_numemp', 20, "", true, 'hidden', 3);
         ?>
-
+ 
         <center>
-            <table border="0">
+        <table border="0">
                 <tr>
                     <td nowrap title="<?= @$Te54_autori ?>">
                         <?= @$Le54_autori ?>
                     </td>
                     <td>
                         <?
-                        db_input('e54_autori', 10, $Ie54_autori, true, 'text', 3)
+                        db_input('e54_autori', 8, $Ie54_autori, true, 'text', 3);                      
+                        echo " ","<b></b>","&nbsp;&nbsp;&nbsp;&nbsp;";
+                        ?>
+                        <b> Data Autorização:</b>
+                        
+                        <?
+                          db_inputData('e54_emiss',@$e54_emiss_dia, @$e54_emiss_mes,@$e54_emiss_ano, true, 'text', 3);
                         ?>
                     </td>
+                   
                 </tr>
                 <tr>
                     <td nowrap title="<?= @$Te54_numcgm ?>">
-                        <?= $Le54_numcgm ?>
+                    <b> Credor:</b>
                     </td>
                     <td>
                         <?
-                        db_input('e54_numcgm', 10, $Ie54_numcgm, true, 'text', 3);
-                        db_input('z01_nome', 40, $Iz01_nome, true, 'text', 3, '');
+                        db_input('e54_numcgm', 8, $Ie54_numcgm, true, 'text', 3);
+                        db_input('z01_nome', 100, $Iz01_nome, true, 'text', 3);
                         ?>
                     </td>
                 </tr>
@@ -201,30 +228,40 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
                             if (isset($e54_codcom) && empty($tipocompra)) {
                                 $tipocompra = $e54_codcom;
                             }
-                            $result = $clcflicita->sql_record($clcflicita->sql_query_file(null, "l03_tipo,l03_descr", '', "l03_codcom=$tipocompra"));
+                            $instit = db_getsession("DB_instit");
+                            $result = $clcflicita->sql_record($clcflicita->sql_query_file(null, "l03_tipo,l03_descr", '', "l03_codcom=$tipocompra and l03_instit = $instit"));
                             if ($clcflicita->numrows > 0) {
                                 db_selectrecord("e54_tipol", $result, true, 1, "", "", "");
                                 $dop = $db_opcao;
                             } else {
+                                $e54_tipol2 = '';
                                 $e54_tipol = '';
                                 $e54_numerl = '';
-                                db_input('e54_tipol', 10, $Ie54_tipol, true, 'text', 3);
+                                db_input('e54_tipol2', 61, $Ie54_tipol, true, 'text', 3);
                                 $dop = '3';
                             }
                         } else {
                             $dop = '3';
                             $e54_tipol = '';
                             $e54_numerl = '';
-                            db_input('e54_tipol', 10, $Ie54_tipol, true, 'text', 3);
+                            db_input('e54_tipol', 11, $Ie54_tipol, true, 'text', 3);
                         }
                         ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td>    
                         <?= @$Le54_numerl ?>
+                    </td>
+                    <td>    
                         <?
                         db_input('e54_numerl', 8, $Ie54_numerl, true, 'text', 3, "onchange='js_validaNumLicitacao();'");
-                        ?>
+                        echo " ","<b></b>","&nbsp;&nbsp;&nbsp;&nbsp;";
+                        ?>         
                         <strong>Modalidade:</strong>
+    
                         <?
-                        db_input('e54_nummodalidade', 8, $e54_nummodalidade, true, 'text', 3, "");
+                        db_input('e54_nummodalidade', 61, $e54_nummodalidade, true, 'text', 3, "");
                         ?>
                     </td>
                 </tr>
@@ -239,19 +276,7 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
 
                         ?>
                     </td>
-                </tr>
-                <tr>
-                    <td nowrap title="<?= @$Te57_codhist ?>">
-                        <?= $Le57_codhist ?>
-                    </td>
-                    <td>
-                        <?
-
-                        $result = $clemphist->sql_record($clemphist->sql_query_file(null, "e40_codhist,e40_descr"));
-                        db_selectrecord("e57_codhist", $result, true, 1, "", "", "", "Nenhum");
-                        ?>
-                    </td>
-                </tr>
+                </tr>  
                 <tr>
                     <td nowrap title="<?= @$Te44_tipo ?>">
                         <?= $Le44_tipo ?>
@@ -303,7 +328,7 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
                                 and orcelemento.o56_anousu = $anoUsu
                                 where o56_elemento like '$oResult->estrutural%'
                                 and e55_autori = $e54_autori and o56_anousu = $anoUsu";
-
+                                   
                                     $result = $clempautitem->sql_record($sSql);
                                     $aEle = array();
                                     $aCodele = array();
@@ -317,16 +342,21 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
                                         foreach ($oResult as $oRow) {
                                             $aEle[$oRow->o56_codele] = $oRow->o56_descr;
                                             $aCodele[] = substr($oRow->o56_elemento, 0 , -6);
+                                            $aCodele2[] = $oRow->o56_elemento;
                                         }
+                                        
                                     }
 
                                     $result = $clempautitem->sql_record($clempautitem->sql_query_autoriza(null, null, "e55_codele", null, "e55_autori = $e54_autori"));
+                                    
                                     if ($clempautitem->numrows > 0) {
                                         $oResult = db_utils::fieldsMemory($result, 0);
                                     }
                                     $e56_codele = $oResult->e55_codele;
-
-                                    db_select("e56_codele", $aEle, true, 1);
+                                    $e56_codele2 = $oResult->e55_codele;
+                                    db_select("e56_codele", $aCodele2, true, 1);
+                                    db_select("e56_codele2", $aEle, true, 1);
+                                    
                                 }
                             }
                         } else {
@@ -344,7 +374,7 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
                     </td>
                     <td>
                         <?
-                        $arr  = array('0'=>'Não se aplica','1'=>'Benefícios Previdenciários do Poder Executivo','2'=>'Benefícios Previdenciários do Poder Legislativo');
+                        $arr  = array('0' => 'Não se aplica', '1' => 'Benefícios Previdenciários do Poder Executivo', '2' => 'Benefícios Previdenciários do Poder Legislativo');
 
                         $sSql = "SELECT si09_tipoinstit AS tipoinstit FROM infocomplementaresinstit WHERE si09_instit = " . db_getsession("DB_instit");
 
@@ -353,19 +383,23 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
 
                         if ($tipoinstit == 5 || $tipoinstit == 6) {
 
-                            $aElementos = array('3319001','3319003','3319091','3319092','3319094','3319191','3319192','3319194');
+                            $aElementos = array('3319001', '3319003', '3319091', '3319092', '3319094', '3319191', '3319192', '3319194');
 
-                            if(count(array_intersect($aElementos, $aCodele)) > 0) {
-                                $arr  = array('0'=>'Selecione','1'=>'Benefícios Previdenciários do Poder Executivo','2'=>'Benefícios Previdenciários do Poder Legislativo');
+                            if (db_getsession("DB_anousu") > 2021) {
+                                $aElementos = array('331900101', '331900102', '331900301', '331900302', '331909102', '331909103', '331909201', '331909203', '331909403', '331909413');
                             }
 
+                            if (count(array_intersect($aElementos, $aCodele)) > 0) {
+                                $arr  = array('0' => 'Selecione', '1' => 'Benefícios Previdenciários do Poder Executivo', '2' => 'Benefícios Previdenciários do Poder Legislativo');
+                            }
                         }
 
                         db_select("e60_tipodespesa", $arr, true, 1);
                         ?>
                     </td>
                 </tr>
-                <?php //var_dump($o56_elemento); ?>
+                <?php //var_dump($o56_elemento); 
+                ?>
                 <tr id="trFinalidadeFundeb" style="display: none;">
                     <td><b>Finalidade:</b></td>
                     <td>
@@ -388,8 +422,6 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
                         ?>
                     </td>
                 </tr>
-
-
                 <tr>
                     <td nowrap title="Gestor do Empenho">
                         <?php
@@ -399,38 +431,51 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
                     <td>
                         <?php
                         db_input("e54_gestaut", 10, $Ie54_gestaut, true, "text", 3);
-                        db_input("e54_nomedodepartamento", 50, 0, true, "text", 3);
+                        db_input("e54_nomedodepartamento", 10, 0, true, "text", 3);
 
                         $iCodDepartamentoAtual = empty($e54_gestaut) ? db_getsession('DB_coddepto') : $e54_gestaut;
                         $sNomDepartamentoAtual = db_utils::fieldsMemory(db_query(" SELECT descrdepto FROM db_depart WHERE coddepto = {$iCodDepartamentoAtual} "), 0)->descrdepto;
                         ?>
                     </td>
                 </tr>
+                <tr>
+                    <td nowrap title="<?= @$Te57_codhist ?>">
+                        <?= db_ancora(substr(@$Le40_codhist, 12, 50), "js_pesquisahistorico(true);", isset($emprocesso)&&$emprocesso==true?"1":"1"); ?>
+                    </td>
+                    <td nowrap="nowrap">
+                        <?  
+                            db_input('e57_codhist', 8, $Ie57_codhist, true, '', 1, " onchange='js_pesquisahistorico(false);'");
+                            if($db_opcao == 1)
+                                db_input('e40_descr', 45, $Ie40_descr, true, '', 3);                         
+                            else
+                                db_input('e40_descr', 45, $Ie40_descr, true, '', 3);                    
+                        ?>
+                    </td>
+                </tr>     
 
                 <tr>
                     <td nowrap title="<?= @$Te54_resumo ?>" valign='top' colspan="2">
 
-                        <fieldset>
+                        <fieldset style="width:500px">
                             <legend><strong><?= @$Le54_resumo ?></strong></legend>
                             <?php
-                            db_textarea('e54_resumo', 3, 90, $Ie54_resumo, true, 'text', $db_opcao, "");
+                            db_textarea('e54_resumo', 3, 10000, $Ie54_resumo, true, 'text', $db_opcao,"","","#FFFFFF");
                             ?>
                         </fieldset>
                     </td>
                 </tr>
                 <tr>
                     <td nowrap valign='top' colspan="2">
-                        <fieldset>
+                        <fieldset style="width:500px">
                             <legend><b>Informações da OP</b></legend>
                             <?php
+                          
                             if (isset($e54_resumo)) {
                                 $e50_obs = $e54_resumo;
                             }
-                            db_textarea('e54_resumo', 3, 90, $Ie54_resumo, true, 'text', $db_opcao, "", "e50_obs");
+                            db_textarea('e54_resumo', 3, 10000, $Ie54_resumo, true, 'text', $db_opcao, "", "e50_obs");
                             ?>
-                        </fieldset>
-                    </td>
-                    <td>
+                        </fieldset> 
                     </td>
                 </tr>
                 <?
@@ -438,10 +483,10 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
 
                 if ($anousu > 2007) {
                     ?>
-                    <tr>
+                    <tr style="display: none;">
                         <td nowrap title="<?= @$Te54_concarpeculiar ?>"><?
-                            db_ancora(@$Le54_concarpeculiar, "js_pesquisae54_concarpeculiar(true);", $db_opcao);
-                            ?></td>
+                                                                        db_ancora(@$Le54_concarpeculiar, "js_pesquisae54_concarpeculiar(true);", $db_opcao);
+                                                                        ?></td>
                         <td>
                             <?
                             if (isset($concarpeculiar) && trim(@$concarpeculiar) != "") {
@@ -453,7 +498,7 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
                             ?>
                         </td>
                     </tr>
-                    <?
+                <?
                 } else {
                     $e54_concarpeculiar = 0;
                     db_input("e54_concarpeculiar", 10, 0, true, "hidden", 3, "");
@@ -474,15 +519,17 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
                         <?php
                         db_input('ac16_sequencial', 10, $Iac16_sequencial, true, 'text',
                             $db_opcao, " onchange='js_pesquisaac16_sequencial(false);'");
-                        db_input('ac16_resumoobjeto', 40, $Iac16_resumoobjeto, true, 'text', 3);
+                        db_input('ac16_resumoobjeto', 50, $Iac16_resumoobjeto, true, 'text', 3);
                         $db_opcao = $db_opcao_antiga;
                         ?>
                     </td>
                 </tr>
                 <!--
                 <tr>
-                    <td nowrap title="<?//= @$Te60_convenio ?>">
-                        <?//= @$Le60_convenio ?>
+                    <td nowrap title="<? //= @$Te60_convenio 
+                                        ?>">
+                        <? //= @$Le60_convenio 
+                        ?>
                     </td>
                     <td>
                         <?
@@ -493,20 +540,22 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
                 </tr>
                 -->
                 <tr>
-                  <td nowrap title="Código c206_sequencial">
-                    <? db_ancora("Convênio","js_pesquisae60_numconvenio(true);",$db_opcao); ?>
+                  <td nowrap title="Código c206_sequencial" align="left">
+                    <? db_ancora("Convênio:","js_pesquisae60_numconvenio(true);",$db_opcao); ?>
                   </td>
-                  <td>
+                  <td align="left">
                       <?
-                      db_input('e60_numconvenio',11,$Ie60_numconvenio,true,'text',$db_opcao,"onChange='js_pesquisae60_numconvenio(false);'");
-                      db_input("c206_objetoconvenio",50,0,true,"text",3);
+                      db_input("e60_numconvenio",10,$Ie60_numconvenio,true,'text',$db_opcao,"onchange='js_pesquisae60_numconvenio(false);'");
+                      db_input("c206_objetoconvenio",49,$Ic206_objetoconvenio,true,'text',3);
                       ?>
                   </td>
                 </tr>
                 <!--
                 <tr>
-                    <td nowrap title="<?//= @$Te60_dataconvenio ?>">
-                        <?//= @$Le60_dataconvenio ?>
+                    <td nowrap title="<? //= @$Te60_dataconvenio 
+                                        ?>">
+                        <? //= @$Le60_dataconvenio 
+                        ?>
                     </td>
                     <td>
                         <?
@@ -515,40 +564,27 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
                     </td>
                 </tr>-->
                 <tr>
-                    <td nowrap title="Data da Sentença Judical">
-                        <strong>Data da Sentença Judical:</strong>
+                    <td nowrap title="Competência da Sentença Judicial">
+                        <strong>Competência da Sentença Judicial:</strong>
                     </td>
                     <td>
                         <?
-                        db_inputData('e60_datasentenca',@$e60_datasentenca_dia, @$e60_datasentenca_mes,@$e60_datasentenca_ano, true, 'text', $db_opcao);
+                        db_inputData('e60_datasentenca', @$e60_datasentenca_dia, @$e60_datasentenca_mes, @$e60_datasentenca_ano, true, 'text', $db_opcao);
                         ?>
                     </td>
                 </tr>
 
             </table>
-            <input
-                    name="<?= ($db_opcao == 1 ? "incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "alterar" : "excluir")) ?>"
-                    type="submit"
-                    id="db_opcao"
-                    onclick='return js_valida()' ;
-                    value="<?= ($db_opcao == 1 || $db_opcao == 33 ? "Empenhar e imprimir" : ($db_opcao == 2 || $db_opcao == 22 ? "Alterar" : "Excluir")) ?>"
-            "<?= ($db_botao == false ? "disabled" : ($db_disab == false ? "disabled" : "")) ?>" >
+            <input name="<?= ($db_opcao == 1 ? "incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "alterar" : "excluir")) ?>" type="submit" id="db_opcao" onclick='return js_valida()' ; value="<?= ($db_opcao == 1 || $db_opcao == 33 ? "Empenhar e imprimir" : ($db_opcao == 2 || $db_opcao == 22 ? "Alterar" : "Excluir")) ?>" "<?= ($db_botao == false ? "disabled" : ($db_disab == false ? "disabled" : "")) ?>">
 
             <? if ($db_opcao == 1) { ?>
-                <input name="op"
-                       type="button"
-
-                       value="Empenhar e não imprimir"
-                "<?= ($db_disab == false ? "disabled" : "") ?>" onclick="return js_naoimprimir();" >
+                <input name="op" type="button" value="Empenhar e não imprimir" "<?= ($db_disab == false ? "disabled" : "") ?>" onclick="return js_naoimprimir();">
             <? } ?>
 
-            <input name="lanc" type="button" id="lanc" value="Lançar autorizações"
-                   onclick="parent.location.href='emp1_empautoriza001.php';">
+            <input name="lanc" type="button" id="lanc" value="Lançar autorizações" onclick="parent.location.href='emp1_empautoriza001.php';">
 
             <?php $lDisable = empty($e60_numemp) ? "disabled" : ''; ?>
 
-            <input type="button" id="btnLancarCotasMensais" value="Manutenção das Cotas Mensais"
-                   onclick="manutencaoCotasMensais();" <?php echo $lDisable; ?> />
             <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar autorizações"
                    onclick="js_pesquisa();">
         </center>
@@ -557,10 +593,72 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
 <div id="ctnCotasMensais" class="container" style=" width: 500px;">
 </div>
 <style>
-    #e60_tipodespesa{ width: 282px; }#e44_tipo{width: 228px;}#e57_codhistdescr{width: 158px;}#e54_codtipodescr{width: 158px;}#e54_codtipo{width: 67px;}#e54_tipol{width: 67px;}#e54_tipoldescr{width: 158px;}#e54_codcom{width: 67px;}#z01_nome{width: 333px;}#e54_destin{width: 424px;}#e54_gestaut{width: 67px;}#e54_nomedodepartamento{width: 354px;}#ac16_resumoobjeto{width: 364px;}#e60_numconvenio{width: 83px;}#e54_resumo{width: 588px;}#e50_obs{width: 588px;}
+    #e60_tipodespesa{ width: 282px; }#e44_tipo{width: 228px;}#e57_codhistdescr{width: 158px;}#e54_codtipodescr{width: 158px;}#e54_codtipo{width: 67px;}#e54_tipol{width: 67px;}#e54_tipoldescr{width: 370px;}#e54_codcom{width: 67px;}#z01_nome{width: 333px;}#e54_destin{width: 424px;}#e54_gestaut{width: 67px;}#e54_nomedodepartamento{width: 354px;}#ac16_resumoobjeto{width: 364px;}#e60_numconvenio{width: 85px;}#e54_resumo{width: 588px;}#e50_obs{width: 588px;}
 </style>
 
 <script>
+// executar a primeira vez
+document.form1.e54_gestaut.value = '<?= $iCodDepartamentoAtual ?>';
+    document.form1.e54_nomedodepartamento.value = '<?= $sNomDepartamentoAtual ?>';
+/**
+     * Ajustes no layout
+     */
+    
+document.getElementById("e54_resumo").style.width="640px"; 
+document.getElementById("e50_obs").style.width="640px"; 
+document.getElementById("e54_emiss").style.width="71px"; 
+document.getElementById("e54_codcom").style.width="71px";  
+document.getElementById("e54_codcomdescr").style.width="367px"; 
+document.getElementById("e54_codtipo").style.width="70px";
+document.getElementById("e54_codtipodescr").style.width="367px";
+document.getElementById("z01_nome").style.width="367px";
+document.getElementById("e54_nummodalidade").style.width="100px";
+document.getElementById("e44_tipo").style.width="442px";
+document.getElementById("e56_codele").style.width="130px";
+document.getElementById("e56_codele2").style.width="312px";
+document.getElementById("e60_tipodespesa").style.width="442px";
+document.getElementById("e54_destin").style.width="442px";
+document.getElementById("e40_descr").style.width="367px";
+document.getElementById("e54_gestaut").style.width="80px";
+document.getElementById("e54_nomedodepartamento").style.width="359px";
+document.getElementById("c58_descr").style.width="360px";
+document.getElementById("ac16_resumoobjeto").style.width="360px";
+document.getElementById("e60_convenio").style.width="360px";
+document.getElementById("c206_objetoconvenio").style.width="2px";
+document.getElementById("e54_concarpeculiar").style.width="360px";
+document.getElementById("e54_tipol").style.width="710px";
+document.getElementById("e54_tipoldescr").style.width="730px";
+
+function js_pesquisahistorico(mostra) {
+      if (mostra == true) {
+        js_OpenJanelaIframe('', 'db_iframe_emphist', 'func_emphist.php?funcao_js=parent.js_mostrahistorico1|e40_codhist|e40_descr|e40_historico|e54_resumo', 'Pesquisa', true);
+      } else {
+        if (document.form1.e57_codhist.value != '') {
+          js_OpenJanelaIframe('', 'db_iframe_emphist', 'func_emphist.php?pesquisa_chave=' + document.form1.e57_codhist.value +'&funcao_js=parent.js_mostrahistorico', 'Pesquisa', false);
+        } else {
+          document.form1.e57_codhist.value = '';
+          document.form1.e40_descr.value = '';
+          document.form1.e54_resumo.value = '';
+        } 
+      }	
+	}
+  function js_mostrahistorico1(chave,chave1,chave2,chave3) {
+        
+           document.form1.e57_codhist.value = chave; 
+           document.form1.e54_resumo.value = chave2 ;
+           document.form1.e40_descr.value = chave1;
+              
+            db_iframe_emphist.hide();
+	}
+  	
+	function js_mostrahistorico(chave,chave1,erro) {
+		document.form1.e40_descr.value = chave;
+        document.form1.e54_resumo.value = chave1;
+                           
+        db_iframe_emphist.hide();   
+	}
+
+
 
 /*===========================================
     =            pesquisa 54_gestaut            =
@@ -593,9 +691,7 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
 
     }
 
-    // executar a primeira vez
-    document.form1.e54_gestaut.value = '<?= $iCodDepartamentoAtual ?>';
-    document.form1.e54_nomedodepartamento.value = '<?= $sNomDepartamentoAtual ?>';
+    
 
     /*=====  End of pesquisa 54_gestaut  ======*/
 
@@ -612,12 +708,14 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
      * funcao para avisar o usuario sobre liquidar empenho dos grupos 7, 8, 10
      * onde nao ira mais forçar pela ordem de compra
      */
-    $('id_1').observe('change', function () {
+    $('id_1').observe('change', function() {
 
         if ($F('lLiquidaMaterialConsumo') == 'true') {
 
             var sGrupo = '<?php echo $sGrupoDesdobramento; ?>';
-            var sMensagem = _M('financeiro.empenho.emp4_empempenho004.liquidacao_item_consumo_imediato', {sGrupo: sGrupo});
+            var sMensagem = _M('financeiro.empenho.emp4_empempenho004.liquidacao_item_consumo_imediato', {
+                sGrupo: sGrupo
+            });
             alert(sMensagem);
         }
     });
@@ -633,6 +731,7 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
             }
         }
     }
+
     function js_mostraconcarpeculiar(chave, erro) {
         document.form1.c58_descr.value = chave;
         if (erro == true) {
@@ -640,12 +739,23 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
             document.form1.e54_concarpeculiar.value = '';
         }
     }
+
     function js_mostraconcarpeculiar1(chave1, chave2) {
         document.form1.e54_concarpeculiar.value = chave1;
         document.form1.c58_descr.value = chave2;
         db_iframe_concarpeculiar.hide();
     }
+
     function js_naoimprimir() {
+        if (document.form1.e54_resumo.value == '') {
+             alert("Campo Resumo nao Informado.");
+             return false;
+        }
+        if (document.form1.e50_obs.value == '') {
+             alert("Campo Informações da OP nao Informado.")
+             return false;
+        }
+
         if (!js_valida()) {
             return false;
         }
@@ -656,6 +766,7 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
         document.form1.appendChild(obj);
         document.form1.incluir.click();
     }
+
     function js_reload(valor) {
         obj = document.createElement('input');
         obj.setAttribute('name', 'tipocompra');
@@ -664,6 +775,7 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
         document.form1.appendChild(obj);
         document.form1.submit();
     }
+
     function js_pesquisae54_numcgm(mostra) {
         if (mostra == true) {
             js_OpenJanelaIframe('CurrentWindow.corpo.iframe_empempenho', 'db_iframe_cgm', 'func_nome.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome', 'Pesquisa', true, 0);
@@ -675,6 +787,7 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
             }
         }
     }
+
     function js_mostracgm(erro, chave) {
         document.form1.z01_nome.value = chave;
         if (erro == true) {
@@ -682,11 +795,13 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
             document.form1.e54_numcgm.value = '';
         }
     }
+
     function js_mostracgm1(chave1, chave2) {
         document.form1.e54_numcgm.value = chave1;
         document.form1.z01_nome.value = chave2;
         db_iframe_cgm.hide();
     }
+
     function js_pesquisae54_login(mostra) {
         if (mostra == true) {
             js_OpenJanelaIframe('CurrentWindow.corpo.iframe_empempenho', 'db_iframe_db_usuarios', 'func_db_usuarios.php?funcao_js=parent.js_mostradb_usuarios1|id_usuario|nome', 'Pesquisa', true);
@@ -698,6 +813,7 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
             }
         }
     }
+
     function js_mostradb_usuarios(chave, erro) {
         document.form1.nome.value = chave;
         if (erro == true) {
@@ -705,24 +821,37 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
             document.form1.e54_login.value = '';
         }
     }
+
     function js_mostradb_usuarios1(chave1, chave2) {
         document.form1.e54_login.value = chave1;
         document.form1.nome.value = chave2;
         db_iframe_db_usuarios.hide();
     }
+
     function js_pesquisa() {
 
         //alert(666);
         js_OpenJanelaIframe('CurrentWindow.corpo.iframe_empempenho', 'db_iframe_orcreservaaut', 'func_orcreservaautnota.php?funcao_js=parent.js_preenchepesquisa|e54_autori|e55_codele', 'Pesquisa', true, 0);
     }
+
     function js_preenchepesquisa(chave, chave2) {
         // alert(chave2);
         db_iframe_orcreservaaut.hide();
         <?
-        echo " location.href = '".basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"])."?chavepesquisa='+chave+'&iElemento='+chave2";
+        echo " location.href = '" . basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]) . "?chavepesquisa='+chave+'&iElemento='+chave2";
         ?>
     }
+
     function js_valida() {
+
+        if (document.form1.e54_resumo.value == '') {
+             alert("Campo Resumo nao Informado.")
+             return false;
+        }
+        if (document.form1.e50_obs.value == '') {
+             alert("Campo Informações da OP nao Informado.")
+             return false;
+        }
         options = document.form1.op;
         sValor = '';
         for (var i = 0; i < options.length; i++) {
@@ -817,18 +946,17 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
     /**
      * Ajustes no layout
      */
-    $('e54_codcom').style.width = "15%";
-    $('e54_codtipo').style.width = "15%";
-    $('e57_codhist').style.width = "15%";
-    $('e151_codigo').style.width = "15%";
-    $('e54_codcomdescr').style.width = "84%";
-    $('e54_codtipodescr').style.width = "84%";
-    $('e57_codhistdescr').style.width = "84%";
-    $('e151_codigodescr').style.width = "84%";
-    $('e56_codele').style.width = "100%";
-    $('e44_tipo').style.width = "100%";
-    $('e54_resumo').style.width = "100%";
-    $('e50_obs').style.width = "100%";
+    // $('e54_codcom').style.width = "15%";
+    // $('e54_codtipo').style.width = "15%";
+    // $('e57_codhist').style.width = "15%";
+    // $('e151_codigo').style.width = "15%";
+    // $('e54_codcomdescr').style.width = "84%";
+    // $('e54_codtipodescr').style.width = "84%";
+    // $('e57_codhistdescr').style.width = "84%";
+    // $('e151_codigodescr').style.width = "84%";
+    // $('e56_codele').style.width = "100%";
+    // $('e44_tipo').style.width = "100%";
+    // $('e50_obs').style.width = "100%";
 
 
     function js_pesquisarRecursoDotacao() {
@@ -838,23 +966,22 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
         oParam.exec = "validarRecursoDotacaoPorAutorizacao";
         oParam.iCodigoAutorizacaoEmpenho = $F('e54_autori');
 
-        new Ajax.Request('emp4_empenhofinanceiro004.RPC.php',
-            {
-                method: 'post',
-                parameters: 'json=' + Object.toJSON(oParam),
-                onComplete: function (oAjax) {
+        new Ajax.Request('emp4_empenhofinanceiro004.RPC.php', {
+            method: 'post',
+            parameters: 'json=' + Object.toJSON(oParam),
+            onComplete: function(oAjax) {
 
-                    js_removeObj("msgBox");
-                    var oRetorno = eval("(" + oAjax.responseText + ")");
+                js_removeObj("msgBox");
+                var oRetorno = eval("(" + oAjax.responseText + ")");
 
-                    if (oRetorno.lFundeb) {
-                        $('trFinalidadeFundeb').style.display = '';
-                    } else {
-                        $('trFinalidadeFundeb').style.display = 'none';
-                    }
-
+                if (oRetorno.lFundeb) {
+                    $('trFinalidadeFundeb').style.display = '';
+                } else {
+                    $('trFinalidadeFundeb').style.display = 'none';
                 }
-            });
+
+            }
+        });
     }
 
     js_pesquisarRecursoDotacao();
@@ -870,29 +997,28 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
     }
 
     function js_pesquisae60_numconvenio(mostra) {
-      if(mostra==true){
-        js_OpenJanelaIframe('','db_iframe_convconvenios','func_convconvenios.php?funcao_js=parent.js_mostrae60_numconvenio1|c206_sequencial|c206_objetoconvenio','Pesquisa',true);
-      } else {
-          if(document.form1.e60_numconvenio.value != ''){
-              js_OpenJanelaIframe('','db_iframe_convconvenios','func_convconvenios.php?pesquisa_chave='+document.form1.e60_numconvenio.value+'&funcao_js=parent.js_mostrae60_numconvenio','Pesquisa',false);
-          }else{
-              document.form1.c206_objetoconvenio.value = '';
-          }
-      }
+        if (mostra == true) {
+            js_OpenJanelaIframe('', 'db_iframe_convconvenios', 'func_convconvenios.php?funcao_js=parent.js_mostrae60_numconvenio1|c206_sequencial|c206_objetoconvenio', 'Pesquisa', true);
+        } else {
+            if (document.form1.e60_numconvenio.value != '') {
+                js_OpenJanelaIframe('', 'db_iframe_convconvenios', 'func_convconvenios.php?pesquisa_chave=' + document.form1.e60_numconvenio.value + '&funcao_js=parent.js_mostrae60_numconvenio', 'Pesquisa', false);
+            } else {
+                document.form1.c206_objetoconvenio.value = '';
+            }
+        }
     }
 
-    function js_mostrae60_numconvenio(chave,erro){
+    function js_mostrae60_numconvenio(chave, erro) {
         document.form1.c206_objetoconvenio.value = chave;
-        if(erro==true){
+        if (erro == true) {
             document.form1.e60_numconvenio.focus();
             document.form1.e60_numconvenio.value = '';
         }
     }
 
-    function js_mostrae60_numconvenio1(chave1,chave2){
-        document.form1.e60_numconvenio.value     = chave1;
+    function js_mostrae60_numconvenio1(chave1, chave2) {
+        document.form1.e60_numconvenio.value = chave1;
         document.form1.c206_objetoconvenio.value = chave2;
         db_iframe_convconvenios.hide();
     }
-
 </script>

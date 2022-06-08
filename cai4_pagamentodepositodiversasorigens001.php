@@ -63,6 +63,7 @@ $oGet = db_utils::postMemory($_GET);
 </html>
 <script>
   var oDBViewSlipPagamento = new DBViewSlipPagamento("oDBViewSlipPagamento", 13, 1, $('ctnSlipPagamento'));
+  oDBViewSlipPagamento.setAno('<?php echo db_getsession('DB_anousu'); ?>');
   oDBViewSlipPagamento.show();
   oDBViewSlipPagamento.setPCASPAtivo('<?php echo db_getsession('DB_use_pcasp');?>');
   oDBViewSlipPagamento.start();

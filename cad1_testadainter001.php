@@ -237,7 +237,6 @@ function js_desabilita(dis){
     <center>
 	<?php
 	$rsLotes = $cllote->sql_record($cllote->sql_query(null,' * ',null," j34_setor = '".str_pad($j34_setor,4,"0",STR_PAD_LEFT)."' and j34_quadra = '".str_pad($j34_quadra,4,"0",STR_PAD_LEFT)."' "));
-
 	if ($cllote->numrows > 0) {
 
 		echo "<table width='30%' border='0' cellspacing='0' align='left'>";
@@ -419,6 +418,24 @@ function js_desabilita(dis){
   </form>
 </table>
 
+</div>
+<div class="container">
+<?php
+//Retorna o campo Histórico da Testadas Internas, importados de outros sistemas.
+//Visível na Testadas Internas somente se o campo j34_histortestadaint conter dados.
+	if ($idbql != '') {
+		$rsHistorico = $cllote->sql_record($cllote->sql_query(null,'j34_histortestadaint',null," j34_idbql = {$idbql} "));
+		
+		if ($cllote->numrows > 0){
+			db_fieldsmemory($rsHistorico,0);
+			if ($j34_histortestadaint!=null){
+				echo "$Lj34_histortestadaint";
+				echo "<br>";
+				db_textarea('j34_histortestadaint',7,90,$Ij34_histortestadaint,true,'text',$db_opcao=3,"");
+			}				
+		}
+	}
+?>
 </div>
 </body>
 </html>

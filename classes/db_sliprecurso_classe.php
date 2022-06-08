@@ -49,7 +49,7 @@ class cl_sliprecurso {
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  k29_sequencial = int4 = Sequencial 
-                 k29_slip = int4 = Código Slip 
+                 k29_slip = int4 = C?digo Slip 
                  k29_recurso = int4 = Recurso 
                  k29_valor = float8 = Valor 
                  ";
@@ -83,10 +83,10 @@ class cl_sliprecurso {
    function incluir ($k29_sequencial){ 
       $this->atualizacampos();
      if($this->k29_slip == null ){ 
-       $this->erro_sql = " Campo Código Slip nao Informado.";
+       $this->erro_sql = " Campo C?digo Slip nao Informado.";
        $this->erro_campo = "k29_slip";
        $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   = "Usu?rio: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
@@ -95,7 +95,7 @@ class cl_sliprecurso {
        $this->erro_sql = " Campo Recurso nao Informado.";
        $this->erro_campo = "k29_recurso";
        $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   = "Usu?rio: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
@@ -104,7 +104,7 @@ class cl_sliprecurso {
        $this->erro_sql = " Campo Valor nao Informado.";
        $this->erro_campo = "k29_valor";
        $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   = "Usu?rio: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
@@ -114,7 +114,7 @@ class cl_sliprecurso {
        if($result==false){
          $this->erro_banco = str_replace("\n","",@pg_last_error());
          $this->erro_sql   = "Verifique o cadastro da sequencia: sliprecurso_k29_sequencial_seq do campo: k29_sequencial"; 
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   = "Usu?rio: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "0";
          return false; 
@@ -123,9 +123,9 @@ class cl_sliprecurso {
      }else{
        $result = db_query("select last_value from sliprecurso_k29_sequencial_seq");
        if(($result != false) && (pg_result($result,0,0) < $k29_sequencial)){
-         $this->erro_sql = " Campo k29_sequencial maior que último número da sequencia.";
-         $this->erro_banco = "Sequencia menor que este número.";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_sql = " Campo k29_sequencial maior que ?ltimo n?mero da sequencia.";
+         $this->erro_banco = "Sequencia menor que este n?mero.";
+         $this->erro_msg   = "Usu?rio: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "0";
          return false;
@@ -136,7 +136,7 @@ class cl_sliprecurso {
      if(($this->k29_sequencial == null) || ($this->k29_sequencial == "") ){ 
        $this->erro_sql = " Campo k29_sequencial nao declarado.";
        $this->erro_banco = "Chave Primaria zerada.";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   = "Usu?rio: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
@@ -157,13 +157,13 @@ class cl_sliprecurso {
      if($result==false){ 
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){
-         $this->erro_sql   = "Ligação do SLIP com seus recurso ($this->k29_sequencial) nao Incluído. Inclusao Abortada.";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-         $this->erro_banco = "Ligação do SLIP com seus recurso já Cadastrado";
+         $this->erro_sql   = "Liga??o do SLIP com seus recurso ($this->k29_sequencial) nao Inclu?do. Inclusao Abortada.";
+         $this->erro_msg   = "Usu?rio: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_banco = "Liga??o do SLIP com seus recurso j? Cadastrado";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        }else{
-         $this->erro_sql   = "Ligação do SLIP com seus recurso ($this->k29_sequencial) nao Incluído. Inclusao Abortada.";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_sql   = "Liga??o do SLIP com seus recurso ($this->k29_sequencial) nao Inclu?do. Inclusao Abortada.";
+         $this->erro_msg   = "Usu?rio: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        }
        $this->erro_status = "0";
@@ -173,7 +173,7 @@ class cl_sliprecurso {
      $this->erro_banco = "";
      $this->erro_sql = "Inclusao efetuada com Sucesso\\n";
          $this->erro_sql .= "Valores : ".$this->k29_sequencial;
-     $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+     $this->erro_msg   = "Usu?rio: \\n\\n ".$this->erro_sql." \\n\\n";
      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
      $this->erro_status = "1";
      $this->numrows_incluir= pg_affected_rows($result);
@@ -202,7 +202,7 @@ class cl_sliprecurso {
          $this->erro_sql = " Campo Sequencial nao Informado.";
          $this->erro_campo = "k29_sequencial";
          $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   = "Usu?rio: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "0";
          return false;
@@ -212,10 +212,10 @@ class cl_sliprecurso {
        $sql  .= $virgula." k29_slip = $this->k29_slip ";
        $virgula = ",";
        if(trim($this->k29_slip) == null ){ 
-         $this->erro_sql = " Campo Código Slip nao Informado.";
+         $this->erro_sql = " Campo C?digo Slip nao Informado.";
          $this->erro_campo = "k29_slip";
          $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   = "Usu?rio: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "0";
          return false;
@@ -228,8 +228,9 @@ class cl_sliprecurso {
          $this->erro_sql = " Campo Recurso nao Informado.";
          $this->erro_campo = "k29_recurso";
          $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   = "Usu?rio: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_msg   .= $sql;
          $this->erro_status = "0";
          return false;
        }
@@ -241,7 +242,7 @@ class cl_sliprecurso {
          $this->erro_sql = " Campo Valor nao Informado.";
          $this->erro_campo = "k29_valor";
          $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   = "Usu?rio: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "0";
          return false;
@@ -271,9 +272,9 @@ class cl_sliprecurso {
      $result = db_query($sql);
      if($result==false){ 
        $this->erro_banco = str_replace("\n","",@pg_last_error());
-       $this->erro_sql   = "Ligação do SLIP com seus recurso nao Alterado. Alteracao Abortada.\\n";
+       $this->erro_sql   = "Liga??o do SLIP com seus recurso nao Alterado. Alteracao Abortada.\\n";
          $this->erro_sql .= "Valores : ".$this->k29_sequencial;
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   = "Usu?rio: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        $this->numrows_alterar = 0;
@@ -281,18 +282,18 @@ class cl_sliprecurso {
      }else{
        if(pg_affected_rows($result)==0){
          $this->erro_banco = "";
-         $this->erro_sql = "Ligação do SLIP com seus recurso nao foi Alterado. Alteracao Executada.\\n";
+         $this->erro_sql = "Liga??o do SLIP com seus recurso nao foi Alterado. Alteracao Executada.\\n";
          $this->erro_sql .= "Valores : ".$this->k29_sequencial;
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   = "Usu?rio: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "1";
          $this->numrows_alterar = 0;
          return true;
        }else{
          $this->erro_banco = "";
-         $this->erro_sql = "Alteração efetuada com Sucesso\\n";
+         $this->erro_sql = "Altera??o efetuada com Sucesso\\n";
          $this->erro_sql .= "Valores : ".$this->k29_sequencial;
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   = "Usu?rio: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "1";
          $this->numrows_alterar = pg_affected_rows($result);
@@ -335,9 +336,9 @@ class cl_sliprecurso {
      $result = db_query($sql.$sql2);
      if($result==false){ 
        $this->erro_banco = str_replace("\n","",@pg_last_error());
-       $this->erro_sql   = "Ligação do SLIP com seus recurso nao Excluído. Exclusão Abortada.\\n";
+       $this->erro_sql   = "Liga??o do SLIP com seus recurso nao Exclu?do. Exclus?o Abortada.\\n";
        $this->erro_sql .= "Valores : ".$k29_sequencial;
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   = "Usu?rio: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        $this->numrows_excluir = 0;
@@ -345,18 +346,18 @@ class cl_sliprecurso {
      }else{
        if(pg_affected_rows($result)==0){
          $this->erro_banco = "";
-         $this->erro_sql = "Ligação do SLIP com seus recurso nao Encontrado. Exclusão não Efetuada.\\n";
+         $this->erro_sql = "Liga??o do SLIP com seus recurso nao Encontrado. Exclus?o n?o Efetuada.\\n";
          $this->erro_sql .= "Valores : ".$k29_sequencial;
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   = "Usu?rio: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "1";
          $this->numrows_excluir = 0;
          return true;
        }else{
          $this->erro_banco = "";
-         $this->erro_sql = "Exclusão efetuada com Sucesso\\n";
+         $this->erro_sql = "Exclus?o efetuada com Sucesso\\n";
          $this->erro_sql .= "Valores : ".$k29_sequencial;
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   = "Usu?rio: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "1";
          $this->numrows_excluir = pg_affected_rows($result);
@@ -371,7 +372,7 @@ class cl_sliprecurso {
        $this->numrows    = 0;
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "Erro ao selecionar os registros.";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   = "Usu?rio: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
@@ -380,7 +381,7 @@ class cl_sliprecurso {
       if($this->numrows==0){
         $this->erro_banco = "";
         $this->erro_sql   = "Record Vazio na Tabela:sliprecurso";
-        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_msg   = "Usu?rio: \\n\\n ".$this->erro_sql." \\n\\n";
         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
         $this->erro_status = "0";
         return false;

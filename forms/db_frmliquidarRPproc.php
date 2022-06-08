@@ -501,6 +501,7 @@ if ($sfileName == "emp4_anularrpproc.php"){
          *  1 = RP nao processado
          *  2 = RP processado
          */
+        nTotalNotas = +nTotalNotas.toFixed(2);
         if (iTipo == 2) {
 
             /* Validações

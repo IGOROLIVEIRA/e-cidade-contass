@@ -817,7 +817,7 @@ $clrotulo->label("ac16_resumoobjeto");
         var oApostila = new Object();
         oApostila.dataapostila = $("si03_dataapostila").value;
         oApostila.tipoapostila = $("si03_tipoapostila").value;
-        oApostila.descrapostila = encodeURIComponent(tagString($("si03_descrapostila").value));
+        oApostila.descrapostila = $("si03_descrapostila").value;
         oApostila.tipoalteracaoapostila = $("si03_tipoalteracaoapostila").value;
         oApostila.numapostilamento = $("si03_numapostilamento").value;
 
@@ -903,7 +903,7 @@ $clrotulo->label("ac16_resumoobjeto");
             return false;
         }
 
-        new AjaxRequest(sUrlRpc, JSON.stringify(oParam), function(oRetorno, lErro) {
+        new AjaxRequest(sUrlRpc, oParam, function(oRetorno, lErro) {
 
                 if (lErro) {
                     return alert(oRetorno.message.urlDecode());

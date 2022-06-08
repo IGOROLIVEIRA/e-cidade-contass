@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 /**
@@ -197,12 +197,12 @@ class Dirf2012 extends Dirf {
     $sSqlDadosContabilidade .= "                                   and o41_anousu           = o58_anousu  ";
     $sSqlDadosContabilidade .= "                                   and o41_orgao            = o58_orgao  ";
     $sSqlDadosContabilidade .= " where c70_data between '{$this->iAno}-01-01' and '{$this->iAno}-12-31'";
-    $sSqlDadosContabilidade .= "   and o41_cnpj = '{$this->sCnpj}'";  
+    $sSqlDadosContabilidade .= "   and o41_cnpj = '{$this->sCnpj}'";
     $sSqlDadosContabilidade .= "   and c53_tipo in (30,31)";
 
     $sSqlDadosContabilidade .= "   and e60_instit = ".db_getsession("DB_instit");
 
-    $sSqlDadosContabilidade .= " AND o56_elemento IN ('3339036990000','3339039990000','3339036140000','3339036260000','3339039360000','3449051010000','3339032000000','3339036060000','3339039050000','3339039160000','3339039150000','3339034000000','3339036300000')  
+    $sSqlDadosContabilidade .= " AND o56_elemento IN ('3339036190000','3339036220000','3339036990000','3339039990000','3339036140000','3339036260000','3339039360000','3449051010000','3339032000000','3339036060000','3339039050000','3339039160000','3339039150000','3339034000000','3339036300000')
          AND NOT EXISTS (select rh76_numemp from rhempenhofolhaempenho where rh76_numemp = e60_numemp)";
     $sSqlDadosContabilidade .= " group by z01_numcgm,z01_cgccpf,z01_nome,6,7,c80_codord";
     $sSqlDadosContabilidade .= " order by z01_numcgm, 6, c80_codord   ";
@@ -364,7 +364,7 @@ class Dirf2012 extends Dirf {
         $sSqlDadosInss .= "    and e60_numcgm                    = {$oContribuinte->z01_numcgm} ";
         $sSqlDadosInss .= "    and extract(year from k105_data)  = {$this->iAno} ";
         $sSqlDadosInss .= "    and e60_instit = ".db_getsession("DB_instit");
-        
+
         $rsDadosInss = db_query($sSqlDadosInss);
         $nValorInss  = db_utils::fieldsMemory($rsDadosInss, 0)->retido;
 
@@ -563,7 +563,7 @@ class Dirf2012 extends Dirf {
     $sSqlTipoReceitas .= "        inner join rhdirfgeracao              on rh96_rhdirfgeracao                  = rh95_sequencial ";
     $sSqlTipoReceitas .= "        inner join cgm                        on z01_numcgm                          = rh96_numcgm     ";
     $sSqlTipoReceitas .= "  where rh95_ano = {$this->iAno}                ";
-    $sSqlTipoReceitas .= "    and (rh98_rhdirftipovalor in (6,16) ";
+    $sSqlTipoReceitas .= "    and (rh98_rhdirftipovalor in (7,6,16) ";
 
     if ($oDados->sAcima6000 == "S") {
 
@@ -781,7 +781,7 @@ class Dirf2012 extends Dirf {
                       for ($iMes = 1; $iMes <= 12; $iMes++) {
 
                           $sCampos  = "r52_regist,(r52_valor + r52_valfer + r52_valcom) AS valor,r52_val13,";
-                          $sCampos .= "CASE WHEN 
+                          $sCampos .= "CASE WHEN
                                        EXISTS (SELECT r20_regist FROM gerfres WHERE r20_regist=r52_regist AND r20_anousu=r52_anousu AND r20_mesusu=r52_mesusu)
                                        THEN r52_valres
                                        ELSE 0 END AS r52_valres";
@@ -1353,9 +1353,9 @@ class Dirf2012 extends Dirf {
                                 WHERE r52_anousu={$this->iAno}
                                     AND r52_mesusu={$this->iMes}
                                     AND a.z01_numcgm = {$cgm}
-                                    AND (SELECT sum(r52_valor + r52_valfer + r52_valcom + r52_val13 + r52_valres) FROM pensao p 
-                                    WHERE p.r52_numcgm = cgm.z01_numcgm 
-                                    AND p.r52_regist = pensao.r52_regist 
+                                    AND (SELECT sum(r52_valor + r52_valfer + r52_valcom + r52_val13 + r52_valres) FROM pensao p
+                                    WHERE p.r52_numcgm = cgm.z01_numcgm
+                                    AND p.r52_regist = pensao.r52_regist
                                     AND r52_anousu={$this->iAno}) > 0
                                 ORDER BY cgm.z01_cgccpf";
 

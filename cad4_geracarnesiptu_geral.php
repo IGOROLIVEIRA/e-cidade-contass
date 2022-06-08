@@ -568,8 +568,12 @@ if($linhasIptunump >0 ){
 				inner join db_uf on db12_uf=uf
 				where db_config.codigo = ".db_getsession("DB_instit");
     $resul =db_query($sqlpref);
-	$linhas = pg_num_rows($resul);
-    //$resul = $cldb_config->sql_record($cldb_config->sql_query(db_getsession("DB_instit"), "nomeinst as prefeitura, munic, to_char(tx_banc,'99.99') as tx_banc"));
+	  $linhas = pg_num_rows($resul);
+    
+    $result_tx  = db_query("select codmodelo, k03_tipo, to_char(k00_txban,'99.99') as tx_banc from arretipo where k00_tipo = $tipo_debito and k00_instit = ".db_getsession("DB_instit"));
+
+    db_fieldsmemory($result_tx, 0);
+    pg_free_result($result_tx);
 
     if($linhas>0){
       db_fieldsmemory($resul, 0); // pega o dados da prefa
@@ -862,6 +866,11 @@ where j18_anousu = iptucalc.j23_anousu and j21_matric = iptucalc.j23_matric limi
         for ($iCont=0; $iCont < pg_num_rows($rsDescrQuadro); $iCont++) {
           $pdf1->descrquadro .= db_utils::fieldsMemory($rsDescrQuadro, $iCont)->descrquadro."\n";
         }
+
+        if ($tx_banc > 0) {
+          $pdf1->descrquadro .= "Taxa Expediente - ".$tx_banc."\n";
+        }
+
         // trocado porque bage pediu
         if($oRegraEmissao->isCobranca()){
           $xender = strtoupper($j23_ender). ($j23_numero == "" ? "" : ', '.$j23_numero.'  '.$j23_compl);

@@ -94,6 +94,16 @@ if(isset($alterar)){
     $oDataManutencao = new DBDate($ve62_dtmanut);
     $datahoraManutencao = strtotime($oDataManutencao->getDate() . " " . $ve62_hora);
     $dataManutencao = $oDataManutencao->getDate();
+    $tipogasto = $ve62_tipogasto;
+
+    /*
+    * verifica se o tipo de gasto está preenchido
+    */
+    if($tipogasto=="0"){
+      db_msgbox("Tipo de gasto não selecionado.");
+      $sqlerro=true;
+      $erro_msg="Não foi possível incluir.";
+    }
     /*
      * verifica retirada e devolução vinculados a manutencão
      */

@@ -769,7 +769,7 @@ class licitacao
         }
 
         if ($lValidaHomologacao) {
-            $sWhere .= "and exists( select 1 from homologacaoadjudica where l20_codigo = l202_licitacao)";
+            $sWhere .= "and exists( select 1 from homologacaoadjudica where l20_codigo = l202_licitacao and l202_datahomologacao is not null)";
         }
 
         $sCampos         = "distinct l20_codigo as licitacao, l20_objeto as objeto, l20_numero as numero";
@@ -779,6 +779,7 @@ class licitacao
         if ($filtro) {
             $sWhere .= " AND l03_pctipocompratribunal {$filtro}";
         }
+        
         $sSqlLicitacoes  = $oDaoLicilicitem->sql_query_soljulg(
             null,
             $sCampos,
@@ -786,6 +787,7 @@ class licitacao
             $sWhere,
             true
         );
+        
 
         $rsLicitacoes    = $oDaoLicilicitem->sql_record($sSqlLicitacoes);
         return db_utils::getCollectionByRecord($rsLicitacoes, false, false, true);

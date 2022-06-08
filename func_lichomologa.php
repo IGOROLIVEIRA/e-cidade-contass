@@ -17,7 +17,7 @@ $clliclicita  = new cl_liclicita;
 
 $clliclicita->rotulo->label("l20_codigo");
 $clliclicita->rotulo->label("l20_numero");
-$clliclicita->rotulo->label("l20_edital");
+$clliclicita->rotulo->label("l20_edital"); 
 $clrotulo = new rotulocampo;
 $clrotulo->label("l03_descr");
 
@@ -67,7 +67,7 @@ $sWhereContratos = " and 1 = 1 ";
                             ?>
                         </td>
                     </tr>
-                    <tr>
+                    <tr> 
 
                     <tr>
                         <td width="4%" align="right" nowrap title="<?=$Tl03_descr?>">
@@ -107,6 +107,8 @@ $sWhereContratos = " and 1 = 1 ";
                 $dbwhere .= "((liclicita.l20_tipnaturezaproced = 2 and l20_licsituacao in (1,10)) or (l20_licsituacao in (13,10))) and l200_data <= '" . date('Y-m-d', db_getsession('DB_datausu')) . "'
              and l11_data <= '" . date('Y-m-d', db_getsession('DB_datausu')) . "' and ";
 
+            }else if(isset($homologacao) &&trim($homologacao) == "0") {
+                $dbwhere .= "l202_dataadjudicacao IS NOT NULL AND l202_datahomologacao IS NOT NULL AND ";
             }else{
                 $dbwhere .= "l20_licsituacao = 10 and l200_data <= '" . date('Y-m-d', db_getsession('DB_datausu')) . "'
              and l11_data <= '" . date('Y-m-d', db_getsession('DB_datausu')) . "' and l202_datahomologacao is not null and ";
@@ -191,7 +193,7 @@ $sWhereContratos = " and 1 = 1 ";
                         $campos = "liclicita.*, liclicitasituacao.l11_sequencial";
                     }
                 }
-                if(isset($homologacao) &&trim($homologacao) == "1") {
+                if(isset($homologacao) &&trim($homologacao) == "1") { 
                     $campos .= ', l08_descr as dl_Situação';
                 }else{
                     $campos .= ', l08_descr as dl_Situação,l202_dataadjudicacao,l202_datahomologacao,l202_sequencial';
@@ -224,10 +226,72 @@ $sWhereContratos = " and 1 = 1 ";
                         $sql = $clliclicitem->sql_query_inf("",$campos,"l20_codigo","1=1$dbwhere $whereHab");
                     }
                 }
+        
+                if($relatorio=="1"){
+                    $sql =  "select distinct liclicita.l20_codigo,
+                liclicita.l20_edital,
+                l20_anousu,
+                pctipocompra.pc50_descr,
+                liclicita.l20_numero,
+                (case
+                    when l20_nroedital is null then '-'
+                    else l20_nroedital::varchar
+                end) as l20_nroedital,
+                liclicita.l20_datacria as dl_Data_Abertura_Proc_Adm,
+                liclicita.l20_dataaber as dl_Data_Emis_Alt_Edital_Convite,
+                liclicita.l20_dtpublic as dl_Data_Publicação_DO,
+                liclicita.l20_objeto,
+                l08_descr as dl_Situação,
+                homologacaoadjudica.l202_dataadjudicacao,
+                homologacaoadjudica.l202_datahomologacao,
+                homologacaoadjudica.l202_sequencial
+                from
+                liclicita
+                inner join db_config on
+                db_config.codigo = liclicita.l20_instit
+                inner join db_usuarios on
+                db_usuarios.id_usuario = liclicita.l20_id_usucria
+                inner join cflicita on
+                cflicita.l03_codigo = liclicita.l20_codtipocom
+                inner join liclocal on
+                liclocal.l26_codigo = liclicita.l20_liclocal
+                inner join liccomissao on
+                liccomissao.l30_codigo = liclicita.l20_liccomissao
+                inner join licsituacao on
+                licsituacao.l08_sequencial = liclicita.l20_licsituacao
+                inner join cgm on
+                cgm.z01_numcgm = db_config.numcgm
+                inner join db_config as dbconfig on
+                dbconfig.codigo = cflicita.l03_instit
+                inner join pctipocompra on
+                pctipocompra.pc50_codcom = cflicita.l03_codcom
+                inner join bairro on
+                bairro.j13_codi = liclocal.l26_bairro
+                inner join ruas on
+                ruas.j14_codigo = liclocal.l26_lograd
+                left join liclicitaproc on
+                liclicitaproc.l34_liclicita = liclicita.l20_codigo
+                left join protprocesso on
+                protprocesso.p58_codproc = liclicitaproc.l34_protprocesso
+                left join liclicitem on
+                liclicita.l20_codigo = l21_codliclicita
+                left join acordoliclicitem on
+                liclicitem.l21_codigo = acordoliclicitem.ac24_liclicitem
+                left join liclancedital on
+                liclancedital.l47_liclicita = liclicita.l20_codigo
+                left join homologacaoadjudica on
+                    homologacaoadjudica.l202_licitacao = liclicita.l20_codigo
+                where
+                l20_licsituacao = 10
+                and l20_instit = 1
+                AND l03_pctipocompratribunal NOT IN (100,101,102,103)
+                and l202_datahomologacao is not null
+                order by
+                l20_codigo";
+                }            
+                db_lovrot($sql.' desc ',15,"()","",$funcao_js); 
 
-                db_lovrot($sql.' desc ',15,"()","",$funcao_js);
-
-            } else {
+            } else {  
 
                 if ($pesquisa_chave != null && $pesquisa_chave != "") {
                     if (isset($param) && trim($param) != ""){

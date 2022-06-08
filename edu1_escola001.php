@@ -172,7 +172,7 @@ if(isset($incluir)){
    $destino = exec("pwd")."/imagens/";
    if(!file_exists($destino.$name)){
     if(!@copy($tmp_name,$destino.$name)){
-     db_msgbox("Nï¿½O FOI POSSÍVEL EFETUAR UPLOAD. VERIFIQUE PERMISSÃO DO DIRETÓRIO $destino");
+     db_msgbox("NÃO FOI POSSÍVEL EFETUAR UPLOAD. VERIFIQUE PERMISSÃO DO DIRETÓRIO $destino");
     }
    }
   }

@@ -20,6 +20,7 @@ require_once("classes/db_homologacaoadjudica_classe.php");
 require_once("classes/db_liccomissaocgm_classe.php");
 require_once("classes/db_condataconf_classe.php");
 require_once("classes/db_manutencaolicitacao_classe.php");
+require_once("classes/db_liclicitasituacao_classe.php");
 
 $clrotulo = new rotulocampo;
 $clrotulo->label("pc10_numero");
@@ -48,6 +49,7 @@ $clhomologacao        = new cl_homologacaoadjudica;
 $clliccomissaocgm     = new cl_liccomissaocgm;
 $clpccfeditalnum      = new cl_pccfeditalnum;
 $clmanutencaolicitacao = new cl_manutencaolicitacao;
+$clliclicitasituacao  = new cl_liclicitasituacao;
 
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
@@ -148,19 +150,83 @@ if (isset($alterar)) {
     }
   }
 
-  if (!isset($erro) && !$erro_edital && $change == true) {
-    //print_r($_POST);exit;
-    $clliclicita->l20_numero = $l20_numero;
-    $clliclicita->l20_nroedital = $l20_nroedital;
-    $clliclicita->l20_codtipocom = $l20_codtipocom;
+  if ($l11_data != $l11_data_old) {
+    $change = true;
+  }
 
-    $clliclicita->alterar($l20_codigo, $descricao);
+  if ($l20_dtpubratificacao != $l20_dtpubratificacao_old) {
+    $change = true;
+  }
 
-    $db_opcao = 2;
+  if (!isset($erro)) {
+    //altera data homologação
+    if ($sqlerro == false) {
 
-    if ($clliclicita->erro_status == "0") {
-      $erro_msg = $clliclicita->erro_msg;
-      $sqlerro = true;
+      $result_dataHomologacao = $clliclicita->sql_record($clliclicita->sql_query(null, "distinct homologacaoadjudica.*", null, "l20_codigo = $l20_codigo"));
+
+
+      for ($iCont = 0; $iCont < pg_num_rows($result_dataHomologacao); $iCont++) {
+
+        $oPosicao = db_utils::fieldsMemory($result_dataHomologacao, $iCont);
+
+        $datahomologacao = 'l202_datahomologacao_' . $oPosicao->l202_sequencial;
+        $dataadjudicacao = 'l202_dataadjudicacao_' . $oPosicao->l202_sequencial;
+
+        $datah = '';
+        $dataa = '';
+
+        $datah = implode('-', array_reverse(explode('/', $$datahomologacao)));
+        $dataa = implode('-', array_reverse(explode('/', $$dataadjudicacao)));
+
+        $resultado = db_query("update homologacaoadjudica  set l202_datahomologacao = '$datah', l202_dataadjudicacao  = '$dataa' where l202_sequencial  = '$oPosicao->l202_sequencial'");
+        $sqlerro = false;
+      }
+    }
+
+    if (!isset($erro) && !$erro_edital && $change == true) {
+      //print_r($_POST);exit;
+      $clliclicita->l20_numero = $l20_numero;
+      $clliclicita->l20_nroedital = $l20_nroedital;
+      $clliclicita->l20_codtipocom = $l20_codtipocom;
+
+      $clliclicita->alterar($l20_codigo, $descricao);
+
+      $db_opcao = 2;
+
+      if ($clliclicita->erro_status == "0") {
+        $erro_msg = $clliclicita->erro_msg;
+        $sqlerro = true;
+      }
+
+      //altera data julgamento
+
+      if ($sqlerro == false) {
+        $result = $clliclicitasituacao->sql_record($clliclicitasituacao->sql_query(null, "l11_sequencial", "l11_sequencial desc", "l20_codigo = $l20_codigo and l11_licsituacao = 1"));
+        $clliclicitasituacao->l11_data = "$l11_data_ano-$l11_data_mes-$l11_data_dia";
+        $l11_sequencial = db_utils::fieldsMemory($result, 0)->l11_sequencial;
+        $clliclicitasituacao->l11_sequencial = $l11_sequencial;
+        $clliclicitasituacao->alterar($l11_sequencial);
+
+        if ($clliclicitasituacao->erro_status == "0") {
+          $erro_msg = $clliclicitasituacao->erro_msg;
+          $sqlerro = true;
+        }
+      }
+
+      //altera data publicação ratificação
+
+      if ($sqlerro == false) {
+        $result_dtrat = $clliclicita->sql_record($clliclicita->sql_query(null, "l20_codigo", null, "l20_codigo = $l20_codigo"));
+        $clliclicita->l20_dtpubratificacao = "$l20_dtpubratificacao_ano-$l20_dtpubratificacao_mes-$l20_dtpubratificacao_dia";
+        $l20_codigo = db_utils::fieldsMemory($result_dtrat, 0)->l20_codigo;
+        $clliclicita->l20_codigo = $l20_codigo;
+        $clliclicita->alterar_dtpubratificacao($l20_codigo);
+
+        if ($clliclicita->erro_status == "0") {
+          $erro_msg = $clliclicita->erro_msg;
+          $sqlerro = true;
+        }
+      }
     }
 
     $clmanutencaolicitacao->manutlic_licitacao = $l20_codigo;
@@ -188,6 +254,7 @@ if (isset($alterar)) {
   $sCampos .= "(select count(*) from liclicitem where l21_codliclicita = l20_codigo) as itens_lancados";
   $result = $clliclicita->sql_record($clliclicita->sql_query($chavepesquisa, $sCampos));
 
+
   if ($clliclicita->numrows > 0) {
 
     db_fieldsmemory($result, 0);
@@ -212,6 +279,14 @@ if (isset($alterar)) {
     $l20_numero_old    = $l20_numero;
     $l20_nroedital_old = $l20_nroedital;
     $manutlic_codunidsubanterior_old = $manutlic_codunidsubanterior_old;
+
+    $result = $clliclicitasituacao->sql_record($clliclicitasituacao->sql_query(null, 'l11_data', 'l11_sequencial desc', "l20_codigo = $chavepesquisa and l11_licsituacao = 1"));
+
+    db_fieldsmemory($result, 0);
+
+    $result_dtrat = $clliclicita->sql_record($clliclicita->sql_query(null, 'l20_dtpubratificacao', null, "l20_codigo = $chavepesquisa"));
+
+    db_fieldsmemory($resdtrat, 0);
   }
 }
 
@@ -285,6 +360,39 @@ if (isset($alterar)) {
               db_input('l20_numero_old', 10, $Il20_numero, true, 'hidden', 2, "");
               ?>
 
+              <tr>
+                <td nowrap title="Data Julgamento">
+                  <strong>Data Julgamento: </strong>
+                </td>
+                <td>
+                  <?
+                  db_inputdata('l11_data', @$l11_data_dia, @$l11_data_mes, @$l11_data_ano, true, 'text', $iCampo);
+                  ?>
+                </td>
+              </tr>
+              <?php
+              db_inputdata('l11_data_old', @$l11_data_dia, @$l11_data_mes, @$l11_data_ano, true, 'hidden', $iCampo);
+              ?>
+
+              <?php
+              $dtpub = array(100, 101, 102, 103);
+              if (in_array($chavepesquisa2, $dtpub)) :
+              ?>
+                <tr>
+                  <td nowrap title="Data Pub. Ratificação">
+                    <strong>Data Pub. Ratificação: </strong>
+                  </td>
+                  <td>
+                    <?
+                    db_inputdata('l20_dtpubratificacao', @$l20_dtpubratificacao_dia, @$l20_dtpubratificacao_mes, @$l20_dtpubratificacao_ano, true, 'text', $iCampo);
+                    ?>
+                  </td>
+                </tr>
+              <?
+                db_inputdata('l20_dtpubratificacao_old', @$l20_dtpubratificacao_dia, @$l20_dtpubratificacao_mes, @$l20_dtpubratificacao_ano, true, 'hidden', $iCampo);
+              endif;
+              ?>
+
               <?php
               if ($chavepesquisa2 != 101) :
                 if ($chavepesquisa2 != 100) :
@@ -317,6 +425,60 @@ if (isset($alterar)) {
                     </td>
                   </tr>
 
+
+
+                  <?php
+
+                  $result_dha = $clliclicita->sql_record($clliclicita->sql_query(null, "distinct homologacaoadjudica.*", null, "l20_codigo = $l20_codigo"));
+
+
+                  for ($i = 0; $i < pg_numrows($result_dha); $i++) :
+                    db_fieldsmemory($result_dha, $i);  ?>
+
+                    <tr>
+                      <td colspan="2">
+                        <fieldset class='fieldsetinterno'>
+                          <legend>
+                            <b>Código: <?php echo $l202_sequencial ?></b>
+                          </legend>
+
+                          <table cellpadding="0" border="0" width="100%" class="">
+
+
+
+                            <tr>
+                              <td nowrap title="Data Homologação">
+                                <strong>Data Homologação: </strong>
+                              </td>
+                              <td>
+                                <?
+                                db_inputdata("l202_datahomologacao_$l202_sequencial", @$l202_datahomologacao_dia, @$l202_datahomologacao_mes, @$l202_datahomologacao_ano, true, '', $iCampo);
+                                ?>
+                              </td>
+                            </tr>
+
+                            <tr>
+                              <td nowrap title="Data Adjudicação">
+                                <strong>Data Adjudicação: </strong>
+                              </td>
+                              <td>
+                                <?
+                                db_inputdata("l202_dataadjudicacao_$l202_sequencial", @$l202_dataadjudicacao_dia, @$l202_dataadjudicacao_mes, @$l202_dataadjudicacao_ano, true, '', $iCampo);
+                                ?>
+                              </td>
+                            </tr>
+
+                          </table>
+                        </fieldset>
+                      </td>
+                    </tr>
+
+
+
+                  <?php endfor; ?>
+
+
+
               <?php
                 endif;
               endif;
@@ -330,6 +492,9 @@ if (isset($alterar)) {
     </form>
     </div>
 
+    <?
+    db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit"));
+    ?>
 </body>
 
 </html>

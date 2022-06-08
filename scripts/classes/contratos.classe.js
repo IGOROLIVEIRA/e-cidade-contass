@@ -57,7 +57,7 @@ contrato = function () {
         if ($F('ac16_origem') == 1) {
             sTitulo = "Processo de compras";
         } else {
-            sTitulo = "licitações";
+            sTitulo = "Licitações";
         }
         var iLarguraJanela = 1200;
         var iAlturaJanela  = document.body.clientHeight;
@@ -76,7 +76,7 @@ contrato = function () {
         oJanela.setContent(sContent);
         oMessageBoard = new DBMessageBoard('messageboardlicitacao',
             sTitulo +" vencidas por "+$F('nomecontratado'),
-            'Escolha as licitações que far?o parte do contrato',
+            'Escolha as licitações que farão parte do contrato',
             $('windowwndLicitacoesVencidas_content')
         );
         oJanela.setShutDownFunction(function() {
@@ -88,6 +88,7 @@ contrato = function () {
          */
         $('btnConfirmarObjetos').observe("click", function (){
             me.confirmaSelecao();
+            me.verificacredenciamentotermo(oRetorno);
         });
         /*
          * Montamos a grid com os dados
@@ -188,7 +189,7 @@ contrato = function () {
                     if (js_search_in_array(oDados.itensSelecionados, oDados.itens[i].licitacao)) {
                         lMarcado = true;
                     }
-                    oGridDados.addRow(aLinha, false, false, lMarcado);
+                    oGridDados.addRow(aLinha);
                 }
             }
 
@@ -240,6 +241,23 @@ contrato = function () {
 
 
         }
+
+    this.verificacredenciamentotermo = function() {
+        var oParam     = new Object();
+        oParam.exec    = "verificaCredenciamentoTermo";
+        aItensSelecionados.each(function(oLinha, id) {
+            oParam.iLicitacao = oLinha.aCells[1].getContent();;
+        });
+
+        var oAjax   = new Ajax.Request(
+            sURL,
+            {
+                method    : 'post',
+                parameters: 'json='+Object.toJSON(oParam),
+                onComplete: me.retornoVerificaTermoCredenciamento
+            }
+        );
+    }
 //cntDados
 
         var oParam     = new Object();
@@ -324,6 +342,15 @@ contrato = function () {
             alert(oRetorno.message.urlDecode());
             $('ac16_acordogrupo').value = '';
             $('ac02_descricao').value   = '';
+            return false;
+        }
+    }
+
+    this.retornoVerificaTermoCredenciamento = function(oResponse){
+        var oRetorno = eval("("+oResponse.responseText+")");
+        if(oRetorno.status == 2){
+            alert(oRetorno.message.urlDecode());
+            location.href = 'aco1_acordo004.php';
             return false;
         }
     }

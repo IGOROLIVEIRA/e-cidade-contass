@@ -449,6 +449,12 @@ class cl_acordoposicao {
        }
      }
    }
+
+   function alterar_numaditamento ($ac26_sequencial){
+    $sql = "update acordoposicao set ac26_numeroaditamento = '$this->ac26_numeroaditamento' where ac26_sequencial = $ac26_sequencial";
+    $result = db_query($sql);
+   }
+
    // funcao para exclusao
    function excluir ($ac26_sequencial=null,$dbwhere=null) {
 
