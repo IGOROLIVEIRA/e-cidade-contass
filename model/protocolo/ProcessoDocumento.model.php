@@ -401,13 +401,15 @@ class ProcessoDocumento
     $oDaoProtprocessodocumento->p01_documento     = $this->iOi;
     $oDaoProtprocessodocumento->p01_nomedocumento = $this->sNomeDocumento;
     $oDaoProtprocessodocumento->p01_depart        = db_getsession('DB_coddepto');
+    $oDaoProtprocessodocumento->p01_nivelacesso = $this->iNivelAcesso;
     $oDaoProtprocessodocumento->incluir(null);
 
     /**
      * Erro ao incluir documento
      */
     if ($oDaoProtprocessodocumento->erro_status == "0") {
-      throw new Exception(_M(URL_MENSAGEM_PROCESSO_DOCUMENTO . 'erro_incluir_documento'));
+      throw new Exception($oDaoProtprocessodocumento->erro_sql);
+      //throw new Exception(_M(URL_MENSAGEM_PROCESSO_DOCUMENTO . 'erro_incluir_documento'));
     }
 
     $this->iCodigo = $oDaoProtprocessodocumento->p01_sequencial;

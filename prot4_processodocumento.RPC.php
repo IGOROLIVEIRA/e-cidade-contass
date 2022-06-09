@@ -35,7 +35,6 @@ require_once("std/db_stdClass.php");
 require_once("dbforms/db_funcoes.php");
 
 define("URL_MENSAGEM_PROT4PROCESSODOCUMENTO", "patrimonial.protocolo.prot4_processodocumento.");
-
 $oJson               = new services_json();
 $oParam              = $oJson->decode(str_replace("\\", "", $_POST["json"]));
 $oRetorno            = new stdClass();
@@ -86,7 +85,6 @@ try {
         $oStdErro = (object)array("sDepartamento" => "{$oDepartamentoAtual->getCodigo()} - {$oDepartamentoAtual->getNomeDepartamento()}");
         throw new BusinessException(_M(URL_MENSAGEM_PROT4PROCESSODOCUMENTO . "departamento_diferente_vinculo_documento", $oStdErro));
       }
-      ini_set("display_errors", "on");
       $oProcessoDocumento = new ProcessoDocumento($oParam->iCodigoDocumento);
       $oProcessoDocumento->setDescricao(db_stdClass::normalizeStringJsonEscapeString($oParam->sDescricaoDocumento));
       $oProcessoDocumento->setProcessoProtocolo($oProcessoProtocolo);

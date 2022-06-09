@@ -833,7 +833,7 @@ $oRotulo->label("z01_nome");
   function js_mostraProcesso(iCodigoProcesso, iNumeroProcesso, sNome) {
 
     $('p58_codproc').value = iCodigoProcesso;
-    $('p58_numero').value = iNumeroProcesso;
+    $('p58_numero').value = iCodigoProcesso;
     $('z01_nome').value = sNome;
     $('p01_descricao').value = '';
     $('uploadfile').disabled = false;
