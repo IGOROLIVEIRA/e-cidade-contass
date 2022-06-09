@@ -36,7 +36,7 @@ $sDepartamento = $oDepartamento->getNomeDepartamento();
 </head>
 
 <script>
-    function js_emite() {
+    function js_geraRelatorio() {
 
         var imprimir = document.getElementById("tipoImprimir").value;
         var sequencial = document.getElementById("ac16_sequencial").value;
@@ -97,7 +97,7 @@ $sDepartamento = $oDepartamento->getNomeDepartamento();
                     </table>
                 </fieldset>
                 <br>
-                <input type='submit' value='Gerar Relatório' onclick="js_emite();">
+                <input type='submit' value='Gerar Relatório' onclick="js_geraRelatorio();">
             </form>
         </div>
     </center>

@@ -102,7 +102,7 @@ for ($i = 0; $i < pg_numrows($sSqlItens); $i++) {
     $oPDF->cell(8, $iAlt, '', 0, 0, "C", 0);
     $oPDF->cell(10, $iAlt, $oDadosItens->ac20_ordem, 1, 0, "C", 2);
     $oPDF->cell(12, $iAlt, $oDadosItens->ac20_pcmater, 1, 0, "C", 2);
-    $oPDF->cell(180, $iAlt, $oDadosItens->pc01_descrmater, 1, 0, "C", 2);
+    $oPDF->cell(180, $iAlt, $oDadosItens->pc01_descrmater, 1, 0, "L", 2);
     $oPDF->cell(12, $iAlt, $oDadosItens->m61_descr, 1, 0, "C", 2);
     $oPDF->cell(14, $iAlt, $oDadosItens->ac20_quantidade, 1, 0, "C", 2);
     $oPDF->cell(18, $iAlt, 'R$ ' . db_formatar($oDadosItens->ac20_valorunitario, 'f'), 1, 0, "C", 2);
