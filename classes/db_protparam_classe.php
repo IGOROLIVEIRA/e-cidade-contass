@@ -61,6 +61,7 @@ class cl_protparam
   var $p90_db_documentotemplate = 0;
   var $p90_autprotocolo = 'f';
   var $p90_novatelaprotocolo = 'f';
+  var $p90_protocolosigiloso = 'f';
   // cria propriedade com as variaveis do arquivo
   var $campos = "
                  p90_emiterecib = bool = Emite recibo na inclusão do processo
@@ -978,7 +979,7 @@ class cl_protparam
     $result = db_query($sql);
     if ($result == false) {
       $this->erro_banco = str_replace("\n", "", @pg_last_error());
-      $this->erro_sql   = "Manutenção de Parametros do Protocolo nao Alterado. Alteracao Abortada.\\n";
+      $this->erro_sql   = $sql . "Manutenção de Parametros do Protocolo nao Alterado. Alteracao Abortada.\\n";
       $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
