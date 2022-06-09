@@ -877,7 +877,7 @@ if ($lBloquear) {
 
   function js_validaCaracteres(texto, campo) {
     let temporario = '';
-    temporario = texto.replace(/\n/g, ' ');
+    temporario = texto;
 
     /*Caracteres não permitidos na descrição e complemento material*/
     let charBuscados = [";", "'", "\"", "\\", "*", ":"];
@@ -895,7 +895,7 @@ if ($lBloquear) {
       /* Lança o erro quando a tecla Enter é pressionada. */
       if (window.event.keyCode == 13) {
         erro = true;
-        novoTexto = texto.replace(/(\r\n|\n|\r)/g, '');
+        novoTexto = texto.replace(/(\r\n|\r)/g, '');
       }
     }
 
