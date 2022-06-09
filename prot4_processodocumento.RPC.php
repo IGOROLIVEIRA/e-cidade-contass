@@ -50,6 +50,7 @@ try {
   switch ($oParam->exec) {
 
     case "carregarDocumentos":
+      $usuario = db_getsession('DB_id_usuario');
 
       $oProcessoProtocolo    = new processoProtocolo($oParam->iCodigoProcesso);
 
@@ -64,15 +65,24 @@ try {
         $oStdDocumento->iDepart             = $oProcessoDocumento->getDepart();
         $oDepartamento = new DBDepartamento($oProcessoDocumento->getDepart());
         $oStdDocumento->sDepartamento = urlencode($oDepartamento->getNomeDepartamento());
-
         $oStdDocumento->iDepartUsuario      = db_getsession("DB_coddepto");
+
+        $result = db_query("select * from perfispermanexo
+            inner join db_permherda p203_perfil on p203_perfil = id_perfil
+            where id_usuario = $usuario and p203_permanexo = $oStdDocumento->nivelacesso;
+            ");
+        $permissao = pg_num_rows($result);
+        if ($permissao == 0) {
+          $oStdDocumento->permissao = false;
+        } else {
+          $oStdDocumento->permissao = true;
+        }
 
         $aDocumentosRetorno[] = $oStdDocumento;
       }
       $oRetorno->aDocumentosVinculados = $aDocumentosRetorno;
 
       $oRetorno->andamento = $oProcessoProtocolo->getHaTramiteInicial($oProcessoProtocolo->getNumeroProcesso(), $oProcessoProtocolo->getAnoProcesso());
-
       break;
 
     case "salvarDocumento":

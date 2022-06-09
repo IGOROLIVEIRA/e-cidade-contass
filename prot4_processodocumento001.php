@@ -178,6 +178,8 @@ $oRotulo->label("z01_nome");
 </html>
 <script type="text/javascript">
   var descricaoDocumento = "";
+  var permissaoDocumentos = new Map();
+
 
   /**
    * Inserindo ID nos options do select de nível de acesso
@@ -268,6 +270,9 @@ $oRotulo->label("z01_nome");
 
             var oDocumento = oRetorno.aDocumentosVinculados[iIndice];
             var sDescricaoDocumento = oDocumento.sDescricaoDocumento;
+            permissaoDocumentos.set(oDocumento.iCodigoDocumento, oDocumento.permissao);
+            //alert(oDocumento.permissao);
+
             if (oDocumento.nivelacesso == "") {
               anexosSigilosos.push(iIndice);
               var nivelacesso = document.getElementById("0").innerText;
@@ -286,8 +291,12 @@ $oRotulo->label("z01_nome");
               }
 
               sHTMLBotoes += '<input type="button" value="Alterar" onClick="js_alterarDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + nivelacesso + '\' );" />  ';
-              sHTMLBotoes += '<input type="button" value="Download" onClick="js_downloadDocumento(' + oDocumento.iCodigoDocumento + ');" />  ';
+              if (oDocumento.permissao) {
+                sHTMLBotoes += '<input type="button" value="Download" onClick="js_downloadDocumento(' + oDocumento.iCodigoDocumento + ');" />  ';
 
+              } else {
+                sHTMLBotoes += '<input disabled type="button" value="Download" onClick="js_downloadDocumento(' + oDocumento.iCodigoDocumento + ');" />  ';
+              }
               $bBloquea = false;
 
             } else if (oDocumento.iDepartUsuario != oDocumento.iDepart && oRetorno.andamento > 0) {
@@ -309,6 +318,7 @@ $oRotulo->label("z01_nome");
               $bBloquea = false;
             }
 
+            sel = "<select id='p01_nivelacessodoc' name='select' class='field-size-max'>" + document.getElementById('p01_nivelacesso').innerHTML + "</select> ";
 
             var aLinha = [oDocumento.iCodigoDocumento, sDescricaoDocumento.urlDecode(), oDocumento.iDepart + ' - ' + oDocumento.sDepartamento, sHTMLBotoes];
             oGridDocumentos.addRow(aLinha, false, $bBloquea);
@@ -516,6 +526,7 @@ $oRotulo->label("z01_nome");
    * @return boolean
    */
   const js_downloadAnexos = () => {
+    console.log(permissaoDocumentos);
 
     js_divCarregando('Aguarde... Organizando documentos para o download', 'msgbox')
     const iCodigoProcesso = $('p58_codproc').value
@@ -533,9 +544,16 @@ $oRotulo->label("z01_nome");
     }
 
     if (codigosDosDocumentos.length == '1') {
-      js_downloadDocumento(codigosDosDocumentos[0])
-      js_removeObj("msgbox");
-      return false
+      if (permissaoDocumentos.get(codigosDosDocumentos[0]) == true) {
+        js_downloadDocumento(codigosDosDocumentos[0])
+        js_removeObj("msgbox");
+        return false;
+      } else {
+        alert('Sem permissão para fazer o download do documento selecionado');
+        js_removeObj("msgbox");
+        return false;
+      }
+
     }
 
     let documentos = []
@@ -550,8 +568,10 @@ $oRotulo->label("z01_nome");
 
       oCodigoDocumento.exec = 'download'
       oCodigoDocumento.iCodigoDocumento = codigoDoDocumento
+      if (permissaoDocumentos.get(codigoDoDocumento) == true) {
+        urlDosArquivos.push(js_arquivos(oCodigoDocumento))
 
-      urlDosArquivos.push(js_arquivos(oCodigoDocumento))
+      }
     })
 
     js_ziparAnexos(urlDosArquivos, nomeDoZip => {
