@@ -96,27 +96,39 @@ for ($i = 0; $i < pg_numrows($rs_acordo); $i++) {
 
   if (strlen($oDadosAcordo->objeto) > 76) {
     $linhas = floor(strlen($oDadosAcordo->objeto) / 58) + 1;
+    $decimal = strval(strlen($oDadosAcordo->objeto) / 58);
+    $decimal = substr($decimal, 2);
+    $decimal = "0." . $decimal;
+    $decimal = floatval($decimal);
+    if ($linhas > 10) {
+      $linhas = floor(strlen($oDadosAcordo->objeto) / 58) + 3;
+    }
+
+    if ($decimal > 0.15 && $decimal < 0.45) {
+      $linhas = floor(strlen($oDadosAcordo->objeto) / 58);
+    }
   }
 
+  $pdf->setfillcolor(235);
 
   $pdf->SetFont("Arial", "B", 9);
-  $pdf->Cell(20, 7, "Código", 1, 0, "C");
-  $pdf->Cell(30, 7, "Número/Ano", 1, 0, "C");
-  $pdf->Cell(90, 7, "Objeto", 1, 0, "C");
-  $pdf->Cell(70, 7, "Fornecedor", 1, 0, "C");
-  $pdf->Cell(20, 7, "Vigência", 1, 0, "C");
-  $pdf->Cell(20, 7, "Assinatura", 1, 0, "C");
-  $pdf->Cell(29, 7, "Valor", 1, 0, "C");
+  $pdf->Cell(20, 5, "Código", 1, 0, "C", 1);
+  $pdf->Cell(30, 5, "Número/Ano", 1, 0, "C", 1);
+  $pdf->Cell(90, 5, "Objeto", 1, 0, "C", 1);
+  $pdf->Cell(70, 5, "Fornecedor", 1, 0, "C", 1);
+  $pdf->Cell(20, 5, "Vigência", 1, 0, "C", 1);
+  $pdf->Cell(20, 5, "Assinatura", 1, 0, "C", 1);
+  $pdf->Cell(29, 5, "Valor", 1, 0, "C", 1);
 
   $pdf->Ln();
 
   $pdf->SetFont("Arial", "", 7);
 
 
-  $pdf->Cell(20, 7 * $linhas, $oDadosAcordo->sequencial, 1, 0, "C");
-  $pdf->Cell(30, 7 * $linhas, $oDadosAcordo->numero . "/" . $oDadosAcordo->ano, 1, 0, "C");
+  $pdf->Cell(20, 5 * $linhas, $oDadosAcordo->sequencial, 1, 0, "C");
+  $pdf->Cell(30, 5 * $linhas, $oDadosAcordo->numero . "/" . $oDadosAcordo->ano, 1, 0, "C");
   $yi = $pdf->getY();
-  $pdf->MultiCell(90, 7, $oDadosAcordo->objeto, 1, "C", 0);
+  $pdf->MultiCell(90, 5, $oDadosAcordo->objeto, 1, "C", 0);
 
   if ($pagina != $pdf->PageNo()) {
     $pdf->SetXY(150, $yi);
@@ -124,34 +136,35 @@ for ($i = 0; $i < pg_numrows($rs_acordo); $i++) {
     if ($pagina != 1) {
       $pdf->SetXY(150, $yi);
     } else {
-      $pdf->SetXY(150, 45 + $y);
+      $pdf->SetXY(150, 43 + $y);
     }
   }
 
-  $pdf->Cell(70, 7 * $linhas, substr($oDadosAcordo->contratado, 0, 50), 1, 0, "C");
-  $pdf->Cell(20, 7 * $linhas, date('d/m/Y', strtotime($oDadosAcordo->vencimento)), 1, 0, "C");
-  $pdf->Cell(20, 7 * $linhas, date('d/m/Y', strtotime($oDadosAcordo->assinatura)), 1, 0, "C");
-  $pdf->Cell(29, 7 * $linhas, 'R$' . number_format($oDadosAcordo->valor, 2, ',', '.'), 1, 0, "C");
+  $pdf->Cell(70, 5 * $linhas, substr($oDadosAcordo->contratado, 0, 50), 1, 0, "C");
+  $pdf->Cell(20, 5 * $linhas, date('d/m/Y', strtotime($oDadosAcordo->vencimento)), 1, 0, "C");
+  $pdf->Cell(20, 5 * $linhas, date('d/m/Y', strtotime($oDadosAcordo->assinatura)), 1, 0, "C");
+  $pdf->Cell(29, 5 * $linhas, 'R$' . number_format($oDadosAcordo->valor, 2, ',', '.'), 1, 0, "C");
   $pdf->Ln();
   $pdf->SetFont("Arial", "B", 9);
-  $pdf->Cell(230, 7, "Origem: " . $oDadosAcordo->origem, 1, 0, "L");
-  $pdf->Cell(49, 7, "Status: " . $oDadosAcordo->status, 1, 0, "L");
+  $pdf->Cell(230, 5, "Origem: " . $oDadosAcordo->origem, 1, 0, "L", 1);
+  $pdf->Cell(49, 5, "Status: " . $oDadosAcordo->status, 1, 0, "L", 1);
   $pdf->Ln();
 
   if ($oDadosAcordo->processolicitatorio != null) {
-    $pdf->Cell(140, 7, "Processo Licitatório: " . $oDadosAcordo->processolicitatorio, 1, 0, "L");
-    $pdf->Cell(90, 7, "Modalidade: " . $oDadosAcordo->modalidade, 1, 0, "L");
-    $pdf->Cell(49, 7, "Numeração: " . $oDadosAcordo->codmodalidade, 1, 0, "L");
+    $pdf->Cell(140, 5, "Processo Licitatório: " . $oDadosAcordo->processolicitatorio, 1, 0, "L", 1);
+    $pdf->Cell(90, 5, "Modalidade: " . $oDadosAcordo->modalidade, 1, 0, "L", 1);
+    $pdf->Cell(49, 5, "Numeração: " . $oDadosAcordo->codmodalidade, 1, 0, "L", 1);
     $pdf->Ln();
-    $y += 25 + (7 * $linhas);
+    $y += 19 + (5 * $linhas);
   } else {
-    $y += 18 + (7 * $linhas);
+    $y += 14 + (5 * $linhas);
   }
 
   if ($pagina != $pdf->PageNo()) {
     $y = $yi;
     $pagina = $pdf->PageNo();
   }
+
 
   $pdf->Ln(4);
 }
