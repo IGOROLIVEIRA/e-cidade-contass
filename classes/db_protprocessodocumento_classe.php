@@ -56,107 +56,131 @@ class cl_protprocessodocumento {
                  p01_documento = oid = Documento 
                  p01_nomedocumento = varchar(255) = Nome do documento 
                  p01_depart = int4 = Departamento
+                 p01_nivelacesso = int8 = Nível de acesso
                  ";
-   //funcao construtor da classe 
-   function cl_protprocessodocumento() { 
-     //classes dos rotulos dos campos
-     $this->rotulo = new rotulo("protprocessodocumento"); 
-     $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
-   }
-   //funcao erro 
-   function erro($mostra,$retorna) { 
-     if(($this->erro_status == "0") || ($mostra == true && $this->erro_status != null )){
-        echo "<script>alert(\"".$this->erro_msg."\");</script>";
-        if($retorna==true){
-           echo "<script>location.href='".$this->pagina_retorno."'</script>";
-        }
-     }
-   }
-   // funcao para atualizar campos
-   function atualizacampos($exclusao=false) {
-     if($exclusao==false){
-       $this->p01_sequencial = ($this->p01_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["p01_sequencial"]:$this->p01_sequencial);
-       $this->p01_protprocesso = ($this->p01_protprocesso == ""?@$GLOBALS["HTTP_POST_VARS"]["p01_protprocesso"]:$this->p01_protprocesso);
-       $this->p01_descricao = ($this->p01_descricao == ""?@$GLOBALS["HTTP_POST_VARS"]["p01_descricao"]:$this->p01_descricao);
-       $this->p01_documento = ($this->p01_documento == ""?@$GLOBALS["HTTP_POST_VARS"]["p01_documento"]:$this->p01_documento);
-       $this->p01_nomedocumento = ($this->p01_nomedocumento == ""?@$GLOBALS["HTTP_POST_VARS"]["p01_nomedocumento"]:$this->p01_nomedocumento);
-       $this->p01_depart = ($this->p01_depart == ""?@$GLOBALS["HTTP_POST_VARS"]["p01_depart"]:$this->p01_depart);
-     }else{
-       $this->p01_sequencial = ($this->p01_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["p01_sequencial"]:$this->p01_sequencial);
-     }
-   }
-   // funcao para inclusao
-   function incluir ($p01_sequencial){ 
-      $this->atualizacampos();
-     if($this->p01_protprocesso == null ){ 
-       $this->erro_sql = " Campo Número de Controle não informado.";
-       $this->erro_campo = "p01_protprocesso";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
-     }
-     if($this->p01_descricao == null ){ 
-       $this->erro_sql = " Campo Descrição não informado.";
-       $this->erro_campo = "p01_descricao";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
-     }
-     if($this->p01_documento == null ){ 
-       $this->erro_sql = " Campo Documento não informado.";
-       $this->erro_campo = "p01_documento";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
-     }
-     if($this->p01_nomedocumento == null ){ 
-       $this->erro_sql = " Campo Nome do documento não informado.";
-       $this->erro_campo = "p01_nomedocumento";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
-     }
-     if($p01_sequencial == "" || $p01_sequencial == null ){
-       $result = db_query("select nextval('protprocessodocumento_p01_sequencial_seq')"); 
-       if($result==false){
-         $this->erro_banco = str_replace("\n","",@pg_last_error());
-         $this->erro_sql   = "Verifique o cadastro da sequencia: protprocessodocumento_p01_sequencial_seq do campo: p01_sequencial"; 
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-         $this->erro_status = "0";
-         return false; 
-       }
-       $this->p01_sequencial = pg_result($result,0,0); 
-     }else{
-       $result = db_query("select last_value from protprocessodocumento_p01_sequencial_seq");
-       if(($result != false) && (pg_result($result,0,0) < $p01_sequencial)){
-         $this->erro_sql = " Campo p01_sequencial maior que último número da sequencia.";
-         $this->erro_banco = "Sequencia menor que este número.";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-         $this->erro_status = "0";
-         return false;
-       }else{
-         $this->p01_sequencial = $p01_sequencial; 
-       }
-     }
-     if(($this->p01_sequencial == null) || ($this->p01_sequencial == "") ){ 
-       $this->erro_sql = " Campo p01_sequencial nao declarado.";
-       $this->erro_banco = "Chave Primaria zerada.";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
-     }
-     $sql = "insert into protprocessodocumento(
+  //funcao construtor da classe 
+  function cl_protprocessodocumento()
+  {
+    //classes dos rotulos dos campos
+    $this->rotulo = new rotulo("protprocessodocumento");
+    $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
+  }
+  //funcao erro 
+  function erro($mostra, $retorna)
+  {
+    if (($this->erro_status == "0") || ($mostra == true && $this->erro_status != null)) {
+      echo "<script>alert(\"" . $this->erro_msg . "\");</script>";
+      if ($retorna == true) {
+        echo "<script>location.href='" . $this->pagina_retorno . "'</script>";
+      }
+    }
+  }
+  // funcao para atualizar campos
+  function atualizacampos($exclusao = false)
+  {
+    if ($exclusao == false) {
+      $this->p01_sequencial = ($this->p01_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["p01_sequencial"] : $this->p01_sequencial);
+      $this->p01_protprocesso = ($this->p01_protprocesso == "" ? @$GLOBALS["HTTP_POST_VARS"]["p01_protprocesso"] : $this->p01_protprocesso);
+      $this->p01_descricao = ($this->p01_descricao == "" ? @$GLOBALS["HTTP_POST_VARS"]["p01_descricao"] : $this->p01_descricao);
+      $this->p01_documento = ($this->p01_documento == "" ? @$GLOBALS["HTTP_POST_VARS"]["p01_documento"] : $this->p01_documento);
+      $this->p01_nomedocumento = ($this->p01_nomedocumento == "" ? @$GLOBALS["HTTP_POST_VARS"]["p01_nomedocumento"] : $this->p01_nomedocumento);
+      $this->p01_depart = ($this->p01_depart == "" ? @$GLOBALS["HTTP_POST_VARS"]["p01_depart"] : $this->p01_depart);
+      $this->p01_nivelacesso = ($this->p01_nivelacesso == "" ? @$GLOBALS["HTTP_POST_VARS"]["p01_nivelacesso"] : $this->p01_nivelacesso);
+    } else {
+      $this->p01_sequencial = ($this->p01_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["p01_sequencial"] : $this->p01_sequencial);
+    }
+  }
+  // funcao para inclusao
+  function incluir($p01_sequencial)
+  {
+    $this->atualizacampos();
+    if ($this->p01_protprocesso == null) {
+      $this->erro_sql = " Campo Número de Controle não informado.";
+      $this->erro_campo = "p01_protprocesso";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
+    if ($this->p01_descricao == null) {
+      $this->erro_sql = " Campo Descrição não informado.";
+      $this->erro_campo = "p01_descricao";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
+    if ($this->p01_documento == null) {
+      $this->erro_sql = " Campo Documento não informado.";
+      $this->erro_campo = "p01_documento";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
+    if ($this->p01_nomedocumento == null) {
+      $this->erro_sql = " Campo Nome do documento não informado.";
+      $this->erro_campo = "p01_nomedocumento";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
+
+    $protocolosigiloso = db_query("select * from protparam");
+    $protocolosigiloso = db_utils::fieldsMemory($protocolosigiloso, 0);
+
+    if ($protocolosigiloso->p90_protocolosigiloso == "t") {
+      if ($this->p01_nivelacesso == "") {
+        $this->erro_sql = " Campo Nível de acesso não informado.";
+        $this->erro_campo = "p01_nivelacesso";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+    } else {
+      $this->p01_nivelacesso = "null";
+    }
+
+    if ($p01_sequencial == "" || $p01_sequencial == null) {
+      $result = db_query("select nextval('protprocessodocumento_p01_sequencial_seq')");
+      if ($result == false) {
+        $this->erro_banco = str_replace("\n", "", @pg_last_error());
+        $this->erro_sql   = "Verifique o cadastro da sequencia: protprocessodocumento_p01_sequencial_seq do campo: p01_sequencial";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+      $this->p01_sequencial = pg_result($result, 0, 0);
+    } else {
+      $result = db_query("select last_value from protprocessodocumento_p01_sequencial_seq");
+      if (($result != false) && (pg_result($result, 0, 0) < $p01_sequencial)) {
+        $this->erro_sql = " Campo p01_sequencial maior que último número da sequencia.";
+        $this->erro_banco = "Sequencia menor que este número.";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+        $this->erro_status = "0";
+        return false;
+      } else {
+        $this->p01_sequencial = $p01_sequencial;
+      }
+    }
+    if (($this->p01_sequencial == null) || ($this->p01_sequencial == "")) {
+      $this->erro_sql = " Campo p01_sequencial nao declarado.";
+      $this->erro_banco = "Chave Primaria zerada.";
+      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
+    $sql = "insert into protprocessodocumento(
                                        p01_sequencial 
                                       ,p01_protprocesso 
                                       ,p01_descricao 
@@ -172,33 +196,33 @@ class cl_protprocessodocumento {
                                ,'$this->p01_nomedocumento' 
                                ,$this->p01_depart
                       )";
-     $result = db_query($sql); 
-     if($result==false){ 
-       $this->erro_banco = str_replace("\n","",@pg_last_error());
-       if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){
-         $this->erro_sql   = "protprocessodocumento ($this->p01_sequencial) nao Incluído. Inclusao Abortada.";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-         $this->erro_banco = "protprocessodocumento já Cadastrado";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       }else{
-         $this->erro_sql   = "protprocessodocumento ($this->p01_sequencial) nao Incluído. Inclusao Abortada.";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       }
-       $this->erro_status = "0";
-       $this->numrows_incluir= 0;
-       return false;
-     }
-     $this->erro_banco = "";
-     $this->erro_sql = "Inclusao efetuada com Sucesso\\n";
-         $this->erro_sql .= "Valores : ".$this->p01_sequencial;
-     $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-     $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-     $this->erro_status = "1";
-     $this->numrows_incluir= pg_affected_rows($result);
-     $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
-     if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
-       && ($lSessaoDesativarAccount === false))) {
+    $result = db_query($sql);
+    if ($result == false) {
+      $this->erro_banco = str_replace("\n", "", @pg_last_error());
+      if (strpos(strtolower($this->erro_banco), "duplicate key") != 0) {
+        $this->erro_sql   = "protprocessodocumento ($this->p01_sequencial) nao Incluído. Inclusao Abortada.";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_banco = "protprocessodocumento já Cadastrado";
+        $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+      } else {
+        $this->erro_sql   = "protprocessodocumento ($this->p01_sequencial) nao Incluído. Inclusao Abortada.";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+      }
+      $this->erro_status = "0";
+      $this->numrows_incluir = 0;
+      return false;
+    }
+    $this->erro_banco = "";
+    $this->erro_sql = $sql . "Inclusao efetuada com Sucesso\\n";
+    $this->erro_sql .= "Valores : " . $this->p01_sequencial;
+    $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+    $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+    $this->erro_status = "1";
+    $this->numrows_incluir = pg_affected_rows($result);
+    $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
+    if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
+      && ($lSessaoDesativarAccount === false))) {
 
        $resaco = $this->sql_record($this->sql_query_file($this->p01_sequencial  ));
        if(($resaco!=false)||($this->numrows!=0)){
@@ -524,4 +548,3 @@ class cl_protprocessodocumento {
      return $sql;
   }
 }
-?>

@@ -51,6 +51,8 @@ try {
 
     case "carregarDocumentos":
       $usuario = db_getsession('DB_id_usuario');
+      $protocolosigiloso = db_query("select * from protparam");
+      $protocolosigiloso = db_utils::fieldsMemory($protocolosigiloso, 0);
 
       $oProcessoProtocolo    = new processoProtocolo($oParam->iCodigoProcesso);
 
@@ -60,6 +62,9 @@ try {
 
         $oStdDocumento = new stdClass();
         $oStdDocumento->nivelacesso = $oProcessoDocumento->getNivelAcesso();
+        if ($oStdDocumento->nivelacesso == null) {
+          $oStdDocumento->nivelacesso = "null";
+        }
         $oStdDocumento->iCodigoDocumento    = $oProcessoDocumento->getCodigo();
         $oStdDocumento->sDescricaoDocumento = urlencode($oProcessoDocumento->getDescricao());
         $oStdDocumento->iDepart             = $oProcessoDocumento->getDepart();
@@ -67,16 +72,23 @@ try {
         $oStdDocumento->sDepartamento = urlencode($oDepartamento->getNomeDepartamento());
         $oStdDocumento->iDepartUsuario      = db_getsession("DB_coddepto");
 
-        $result = db_query("select * from perfispermanexo
-            inner join db_permherda p203_perfil on p203_perfil = id_perfil
-            where id_usuario = $usuario and p203_permanexo = $oStdDocumento->nivelacesso;
-            ");
-        $permissao = pg_num_rows($result);
-        if ($permissao == 0) {
-          $oStdDocumento->permissao = false;
-        } else {
-          $oStdDocumento->permissao = true;
+        if ($protocolosigiloso->p90_protocolosigiloso == "t") {
+          $result = db_query("select * from perfispermanexo
+          inner join db_permherda p203_perfil on p203_perfil = id_perfil
+          where id_usuario = $usuario and p203_permanexo = $oStdDocumento->nivelacesso;
+          ");
+          $permissao = pg_num_rows($result);
+          if ($permissao == 0) {
+            $oStdDocumento->permissao = false;
+          } else {
+            $oStdDocumento->permissao = true;
+          }
         }
+
+        if ($oStdDocumento->nivelacesso == "null") {
+          $oStdDocumento->nivelacesso = "";
+        }
+
 
         $aDocumentosRetorno[] = $oStdDocumento;
       }

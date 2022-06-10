@@ -33,18 +33,6 @@ require_once("libs/db_usuariosonline.php");
 require_once("libs/db_app.utils.php");
 require_once("dbforms/db_funcoes.php");
 
-$protocolosigiloso = db_query("select * from protparam");
-$protocolosigiloso = db_utils::fieldsMemory($protocolosigiloso, 0);
-
-if ($protocolosigiloso->p90_protocolosigiloso == "t") {
-  require_once("prot4_processodocumentoantigo001.php");
-  exit;
-}
-
-
-
-$iInstit     = db_getsession('DB_instit');
-$adm = db_getsession('DB_administrador');
 $iOpcaoProcesso = 1;
 $lExibirMenus   = true;
 
@@ -125,35 +113,6 @@ $oRotulo->label("z01_nome");
           </tr>
 
           <tr>
-            <td>
-              Nível de Acesso:
-            </td>
-            <td>
-              <?
-
-              $result = db_query("select * from permanexo");
-              $numrows = pg_numrows($result);
-              $permissoes = array();
-              $permissoes[0] =  'Selecione';
-              for ($i = 0; $i < $numrows; $i++) {
-
-                $permissoes[$i + 1] = pg_result($result, $i, "p202_tipo");
-              }
-
-
-              db_select(
-                'p01_nivelacesso',
-                $permissoes,
-                true,
-                $db_opcao,
-                "style='width:48%;'"
-              );
-
-              ?>
-            </td>
-          </tr>
-
-          <tr>
             <td nowrap title="<?php echo $Tp01_descricao; ?>">
               <?php echo $Lp01_descricao; ?>
             </td>
@@ -187,20 +146,6 @@ $oRotulo->label("z01_nome");
 
 </html>
 <script type="text/javascript">
-  var descricaoDocumento = "";
-  var permissaoDocumentos = new Map();
-
-
-  /**
-   * Inserindo ID nos options do select de nível de acesso
-   */
-
-  var select = document.getElementById('p01_nivelacesso');
-  for (var i = 0; i < select.options.length; i++) {
-    var value = select.options[i].value;
-    select.options[i].setAttribute("id", value);
-  }
-
   /**
    * Pesquisa processo do protocolo e depois os documentos anexados
    */
@@ -232,10 +177,7 @@ $oRotulo->label("z01_nome");
    */
   function js_buscarDocumentos() {
 
-    var instituicao = <?php print_r($iInstit) ?>;
-    var adm = <?php print_r($adm) ?>;
     var iCodigoProcesso = $('p58_codproc').value;
-
 
     if (empty(iCodigoProcesso)) {
       return false;
@@ -273,40 +215,16 @@ $oRotulo->label("z01_nome");
           oGridDocumentos.clearAll(true);
           var iDocumentos = oRetorno.aDocumentosVinculados.length;
 
-
-          var anexosSigilosos = new Array();
-
           for (var iIndice = 0; iIndice < iDocumentos; iIndice++) {
 
             var oDocumento = oRetorno.aDocumentosVinculados[iIndice];
             var sDescricaoDocumento = oDocumento.sDescricaoDocumento;
-            permissaoDocumentos.set(oDocumento.iCodigoDocumento, oDocumento.permissao);
-            //alert(oDocumento.permissao);
-
-            if (oDocumento.nivelacesso == "") {
-              anexosSigilosos.push(iIndice);
-              var nivelacesso = document.getElementById("0").innerText;
-
-            } else {
-              var nivelacesso = document.getElementById(oDocumento.nivelacesso).innerText;
-
-            }
-
 
             if (oDocumento.iDepartUsuario == oDocumento.iDepart && oRetorno.andamento == 0) {
-              var sHTMLBotoes = '';
-              if (instituicao == oDocumento.iDepart && adm == 1) {
-                sHTMLBotoes += '<input type="button" value="Alterar Acesso" onClick="js_alterarNivelAcessoDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + nivelacesso + '\' );" />  ';
 
-              }
+              var sHTMLBotoes = '<input type="button" value="Alterar" onClick="js_alterarDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\');" />  ';
+              sHTMLBotoes += '<input type="button" value="Download" onClick="js_downloadDocumento(' + oDocumento.iCodigoDocumento + ');" />  ';
 
-              sHTMLBotoes += '<input type="button" value="Alterar" onClick="js_alterarDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + nivelacesso + '\' );" />  ';
-              if (oDocumento.permissao) {
-                sHTMLBotoes += '<input type="button" value="Download" onClick="js_downloadDocumento(' + oDocumento.iCodigoDocumento + ');" />  ';
-
-              } else {
-                sHTMLBotoes += '<input disabled type="button" value="Download" onClick="js_downloadDocumento(' + oDocumento.iCodigoDocumento + ');" />  ';
-              }
               $bBloquea = false;
 
             } else if (oDocumento.iDepartUsuario != oDocumento.iDepart && oRetorno.andamento > 0) {
@@ -317,29 +235,19 @@ $oRotulo->label("z01_nome");
 
             } else if (oDocumento.iDepartUsuario == oDocumento.iDepart && oRetorno.andamento > 0) {
 
-              var sHTMLBotoes = '';
-              if (instituicao == oDocumento.iDepart && adm == 1) {
-                sHTMLBotoes += '<input type="button" value="Alterar Acesso" onClick="js_alterarNivelAcessoDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + nivelacesso + '\' );" />  ';
-
-              }
-              sHTMLBotoes = '<input type="button" value="Alterar" onClick="js_alterarDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + nivelacesso + '\');" />  ';
+              var sHTMLBotoes = '<input type="button" value="Alterar" onClick="js_alterarDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\');" />  ';
               sHTMLBotoes += '<input type="button" value="Download" onClick="js_downloadDocumento(' + oDocumento.iCodigoDocumento + ');" />  ';
 
               $bBloquea = false;
             }
 
-            sel = "<select id='p01_nivelacessodoc' name='select' class='field-size-max'>" + document.getElementById('p01_nivelacesso').innerHTML + "</select> ";
+
 
             var aLinha = [oDocumento.iCodigoDocumento, sDescricaoDocumento.urlDecode(), oDocumento.iDepart + ' - ' + oDocumento.sDepartamento, sHTMLBotoes];
             oGridDocumentos.addRow(aLinha, false, $bBloquea);
           }
 
           oGridDocumentos.renderRows();
-          for (var i = 0; i < anexosSigilosos.length; i++) {
-            linhaAnexo = anexosSigilosos[i];
-            document.getElementById('gridDocumentosrowgridDocumentos' + linhaAnexo).style.backgroundColor = "red";
-
-          }
         }
       }
     );
@@ -536,7 +444,6 @@ $oRotulo->label("z01_nome");
    * @return boolean
    */
   const js_downloadAnexos = () => {
-    console.log(permissaoDocumentos);
 
     js_divCarregando('Aguarde... Organizando documentos para o download', 'msgbox')
     const iCodigoProcesso = $('p58_codproc').value
@@ -554,16 +461,9 @@ $oRotulo->label("z01_nome");
     }
 
     if (codigosDosDocumentos.length == '1') {
-      if (permissaoDocumentos.get(codigosDosDocumentos[0]) == true) {
-        js_downloadDocumento(codigosDosDocumentos[0])
-        js_removeObj("msgbox");
-        return false;
-      } else {
-        alert('Sem permissão para fazer o download do documento selecionado');
-        js_removeObj("msgbox");
-        return false;
-      }
-
+      js_downloadDocumento(codigosDosDocumentos[0])
+      js_removeObj("msgbox");
+      return false
     }
 
     let documentos = []
@@ -578,10 +478,8 @@ $oRotulo->label("z01_nome");
 
       oCodigoDocumento.exec = 'download'
       oCodigoDocumento.iCodigoDocumento = codigoDoDocumento
-      if (permissaoDocumentos.get(codigoDoDocumento) == true) {
-        urlDosArquivos.push(js_arquivos(oCodigoDocumento))
 
-      }
+      urlDosArquivos.push(js_arquivos(oCodigoDocumento))
     })
 
     js_ziparAnexos(urlDosArquivos, nomeDoZip => {
@@ -601,118 +499,12 @@ $oRotulo->label("z01_nome");
    * @param string sDescricaoDocumento
    * @return void
    */
-  function js_alterarNivelAcessoDocumento(iCodigoDocumento, sDescricaoDocumento, nivelAcesso) {
+  function js_alterarDocumento(iCodigoDocumento, sDescricaoDocumento) {
 
     $('namefile').value = '';
     $('uploadfile').value = '';
     $('uploadfile').disabled = true;
     $('p01_descricao').value = sDescricaoDocumento.urlDecode();
-
-    descricaoDocumento = sDescricaoDocumento;
-    var select = document.querySelector('#p01_nivelacesso');
-    for (var i = 0; i < select.options.length; i++) {
-      if (select.options[i].text === nivelAcesso) {
-        select.selectedIndex = i;
-        break;
-      }
-    }
-
-    $('p01_descricao').disabled = true;
-
-    /**
-     * Altera acao do botao salvar
-     * @return void
-     */
-    $('btnSalvar').onclick = function() {
-
-      var iCodigoProcesso = $('p58_codproc').value;
-      var sDescricaoDocumento = descricaoDocumento;
-      var iNivelAcesso = $('p01_nivelacesso').value;
-
-      var oParam = new Object();
-
-      if (empty(iCodigoProcesso)) {
-
-        alert(_M(MENSAGENS + 'erro_processo_nao_informado'));
-        return false;
-      }
-      /*
-      if (empty(sDescricaoDocumento)) {
-
-        alert(_M(MENSAGENS + 'erro_descricao_nao_informada'));
-        return false;
-      }
-      */
-
-      js_divCarregando(_M(MENSAGENS + 'mensagem_salvando_documento'), 'msgbox');
-
-      oParam.exec = 'salvarDocumento';
-      oParam.iCodigoDocumento = iCodigoDocumento;
-      oParam.iCodigoProcesso = iCodigoProcesso;
-      oParam.sDescricaoDocumento = sDescricaoDocumento;
-      oParam.iNivelAcesso = iNivelAcesso;
-
-
-      var oAjax = new Ajax.Request(
-        sUrlRpc, {
-          parameters: 'json=' + Object.toJSON(oParam),
-          method: 'post',
-          asynchronous: false,
-          onComplete: function(oAjax) {
-
-            js_removeObj("msgbox");
-            var oRetorno = eval('(' + oAjax.responseText + ")");
-            var sMensagem = oRetorno.sMensagem.urlDecode();
-
-            if (oRetorno.iStatus > 1) {
-
-              alert(sMensagem);
-              return false;
-            }
-
-            $('btnSalvar').onclick = js_salvar;
-            $('namefile').value = '';
-            $('uploadfile').value = '';
-            $('uploadfile').disabled = false;
-            $('p01_descricao').value = '';
-
-            alert(sMensagem);
-            js_buscarDocumentos();
-          }
-        });
-
-      $('p01_descricao').disabled = false;
-      $('p01_nivelacesso').disabled = false;
-
-
-
-    }
-  }
-
-
-
-  /**
-   * Altera descricao de um documento
-   * @param integer iCodigoDocumento
-   * @param string sDescricaoDocumento
-   * @return void
-   */
-  function js_alterarDocumento(iCodigoDocumento, sDescricaoDocumento, nivelAcesso) {
-
-    $('namefile').value = '';
-    $('uploadfile').value = '';
-    $('uploadfile').disabled = true;
-    $('p01_descricao').value = sDescricaoDocumento.urlDecode();
-    var select = document.querySelector('#p01_nivelacesso');
-    for (var i = 0; i < select.options.length; i++) {
-      if (select.options[i].text === nivelAcesso) {
-        select.selectedIndex = i;
-        break;
-      }
-    }
-
-    $('p01_nivelacesso').disabled = true;
-
 
     /**
      * Altera acao do botao salvar
@@ -722,9 +514,7 @@ $oRotulo->label("z01_nome");
 
       var iCodigoProcesso = $('p58_codproc').value;
       var sDescricaoDocumento = encodeURIComponent(tagString($('p01_descricao').value));
-      var iNivelAcesso = $('p01_nivelacesso').value;
-
-      var oParam = new Object();
+      var oParametros = new Object();
 
       if (empty(iCodigoProcesso)) {
 
@@ -740,16 +530,14 @@ $oRotulo->label("z01_nome");
 
       js_divCarregando(_M(MENSAGENS + 'mensagem_salvando_documento'), 'msgbox');
 
-      oParam.exec = 'salvarDocumento';
-      oParam.iCodigoDocumento = iCodigoDocumento;
-      oParam.iCodigoProcesso = iCodigoProcesso;
-      oParam.sDescricaoDocumento = sDescricaoDocumento;
-      oParam.iNivelAcesso = iNivelAcesso;
-
+      oParametros.exec = 'salvarDocumento';
+      oParametros.iCodigoDocumento = iCodigoDocumento;
+      oParametros.iCodigoProcesso = iCodigoProcesso;
+      oParametros.sDescricaoDocumento = sDescricaoDocumento;
 
       var oAjax = new Ajax.Request(
         sUrlRpc, {
-          parameters: 'json=' + Object.toJSON(oParam),
+          parameters: 'json=' + Object.toJSON(oParametros),
           method: 'post',
           asynchronous: false,
           onComplete: function(oAjax) {
@@ -774,9 +562,6 @@ $oRotulo->label("z01_nome");
             js_buscarDocumentos();
           }
         });
-
-      $('p01_descricao').disabled = false;
-      $('p01_nivelacesso').disabled = false;
 
     }
   }
@@ -863,7 +648,7 @@ $oRotulo->label("z01_nome");
   function js_mostraProcesso(iCodigoProcesso, iNumeroProcesso, sNome) {
 
     $('p58_codproc').value = iCodigoProcesso;
-    $('p58_numero').value = iCodigoProcesso;
+    $('p58_numero').value = iNumeroProcesso;
     $('z01_nome').value = sNome;
     $('p01_descricao').value = '';
     $('uploadfile').disabled = false;
@@ -923,7 +708,6 @@ $oRotulo->label("z01_nome");
     var iCodigoDocumento = $('p01_sequencial').value;
     var sDescricaoDocumento = encodeURIComponent(tagString($('p01_descricao').value));
     var sCaminhoArquivo = $('namefile').value;
-    var iNivelAcesso = $('p01_nivelacesso').value;
 
 
     if (empty(iCodigoProcesso)) {
@@ -953,7 +737,7 @@ $oRotulo->label("z01_nome");
     oParametros.iCodigoProcesso = iCodigoProcesso;
     oParametros.sDescricaoDocumento = sDescricaoDocumento;
     oParametros.sCaminhoArquivo = sCaminhoArquivo;
-    oParametros.iNivelAcesso = iNivelAcesso;
+
 
     var oAjax = new Ajax.Request(
       sUrlRpc, {
