@@ -78,6 +78,7 @@ left join cflicita on l03_codigo = l20_codtipocom
 ORDER BY CAST(ac16_numeroacordo AS NUMERIC),ac16_sequencial";
 
 $rs_acordo = db_query($sql_acordo);
+$head2 = "Rol de Contratos";
 
 $pdf = new PDF('Landscape', 'mm', 'A4');
 $pdf->Open();
@@ -98,7 +99,6 @@ for ($i = 0; $i < pg_numrows($rs_acordo); $i++) {
   }
 
 
-
   $pdf->SetFont("Arial", "B", 9);
   $pdf->Cell(20, 7, "Código", 1, 0, "C");
   $pdf->Cell(30, 7, "Número/Ano", 1, 0, "C");
@@ -111,6 +111,7 @@ for ($i = 0; $i < pg_numrows($rs_acordo); $i++) {
   $pdf->Ln();
 
   $pdf->SetFont("Arial", "", 7);
+
 
   $pdf->Cell(20, 7 * $linhas, $oDadosAcordo->sequencial, 1, 0, "C");
   $pdf->Cell(30, 7 * $linhas, $oDadosAcordo->numero . "/" . $oDadosAcordo->ano, 1, 0, "C");
