@@ -831,5 +831,58 @@ class cl_acordoposicao {
 
   }
 
+  public function sql_query_empenhoautori_acordo($ac16_sequencial){
+        $sSql  = "select e54_autori";
+        $sSql .= "  from acordoposicao";
+        $sSql .= " inner join acordoitem on
+        ac20_acordoposicao = ac26_sequencial
+      inner join acordoitemexecutado on
+        ac20_sequencial = ac29_acordoitem
+      inner join acordoitemexecutadoempautitem on
+        ac29_sequencial = ac19_acordoitemexecutado
+      inner join empautitem on
+        e55_sequen = ac19_sequen
+        and ac19_autori = e55_autori
+      inner join empautoriza on
+        e54_autori = e55_autori
+      left join empempaut on
+        e61_autori = e54_autori
+      left join empempenho on
+        e61_numemp = e60_numemp
+      where
+        ac26_acordo = $ac16_sequencial
+      group by
+        e54_autori,
+        e54_emiss,
+        e60_codemp,
+        e60_anousu,
+        e60_numemp,
+        e54_anulad
+      union
+      select
+        distinct e54_autori
+      from
+        acordoposicao
+      inner join acordoitem on
+        ac20_acordoposicao = ac26_sequencial
+      inner join acordoitemexecutado on
+        ac20_sequencial = ac29_acordoitem
+      inner join acordoitemexecutadoperiodo on
+        ac29_sequencial = ac38_acordoitemexecutado
+      inner join acordoitemexecutadoempenho on
+        ac38_sequencial = ac39_acordoitemexecutadoperiodo
+      inner join empempenho on
+        ac39_numemp = e60_numemp
+      left join empempaut on
+        e60_numemp = e61_numemp
+      inner join empautoriza on
+        e54_autori = e61_autori
+      where
+        ac26_acordo = $ac16_sequencial
+      order by
+        e54_autori;";
+        return $sSql;
+  }
+
 }
 ?>

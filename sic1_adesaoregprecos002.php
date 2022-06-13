@@ -13,6 +13,10 @@ db_postmemory($HTTP_POST_VARS);
 $clcflicita        = new cl_cflicita;
 $cladesaoregprecos = new cl_adesaoregprecos;
 $clitensregpreco   = new cl_itensregpreco;
+$clacordo          = new cl_acordo;
+$clacordoposicao   = new cl_acordoposicao;
+$clempautoriza     = new cl_empautoriza;
+$cl_liclicita      = new cl_liclicita;
 
 $db_botao = true;
 $sqlerro  = false;
@@ -151,6 +155,9 @@ if (!$sqlerro) {
     db_inicio_transacao();
     $db_opcao = 2;
     $sqlerro  = false;
+    
+    
+
 
     //  /**
     //    * Verificar Encerramento Periodo Contabil
@@ -181,7 +188,55 @@ if (!$sqlerro) {
      */
 
     if ($sqlerro == false) {
+
+      if($si06_numeroadm!="" && $si06_numeroadm!=null){
+        $cladesaoregprecos->si06_numeroprc = $si06_numeroadm;
+      }
+      if($si06_anomodadm!="" && $si06_anomodadm!=null){
+        $cladesaoregprecos->si06_anoproc = $si06_anomodadm;
+      }
+      if($si06_nummodadm!="" && $si06_nummodadm!=null){
+        $cladesaoregprecos->si06_numlicitacao = $si06_nummodadm;
+      }
+      $cladesaoregprecos->si06_sequencial = $si06_sequencial;
       $cladesaoregprecos->alterar($si06_sequencial);
+
+
+      $sSqlItemacordo = $clacordo->sql_record($clacordo->sql_query_sequencial_acordo($si06_sequencial));
+      db_fieldsmemory($sSqlItemacordo, 0);
+      $sSqlItemacordoposicao = $clacordoposicao->sql_record($clacordoposicao->sql_query_empenhoautori_acordo($ac16_sequencial));
+      $numrows_unid = $clacordoposicao->numrows;
+      for ($i = 0; $i < $numrows_unid; $i++) {
+        db_fieldsmemory($sSqlItemacordoposicao, $i);
+        $clempautoriza->e54_nummodalidade = $si06_nummodadm;
+        $clempautoriza->e54_autori = $e54_autori;
+        $clempautoriza->alterar($e54_autori);
+      }
+
+      $sql ="select
+      distinct l20_codigo,
+      l20_anousu,
+      l20_numero,
+      l03_codcom,
+      l03_descr
+    from
+      empautitem
+    inner join empautitempcprocitem on
+      empautitempcprocitem.e73_sequen = empautitem.e55_sequen
+      and empautitempcprocitem.e73_autori = empautitem.e55_autori
+    inner join liclicitem on
+      liclicitem.l21_codpcprocitem = empautitempcprocitem.e73_pcprocitem
+    inner join liclicita on
+      liclicitem.l21_codliclicita = liclicita.l20_codigo
+    inner join cflicita on
+      liclicita.l20_codtipocom = cflicita.l03_codigo
+    inner join empautoriza on
+      empautoriza.e54_autori = empautitem.e55_autori
+    where
+      e55_autori = 33799";
+      
+      $cl_liclicita->sql_record($sql);      
+
     }
 
     if ($si06_processoporlote == 2) {
