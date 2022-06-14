@@ -254,6 +254,113 @@ if (isset($incluir)) {
         $limpa_dados = false; 
     }
 
+
+    $query = db_query("select o50_controlaexcessoarrecadacao from orcparametro where o50_anousu = " . db_getsession("DB_anousu"));
+    for ($i = 0; $i < pg_num_rows($query); $i++) {
+        $oResult = db_utils::fieldsMemory($query, $i);
+        $iExcesso = $oResult->o50_controlaexcessoarrecadacao;
+    }
+
+    if ($iExcesso == "t") {
+        if (in_array($tiposup, array(1004, 1025, 1012, 1019, 1009, 1010, 1029))) {
+            $fontes = $o58_codigo;
+            if (in_array($o58_codigo, array(118, 119)))
+                $fontes = '118, 119';
+            if (in_array($o58_codigo, array(100, 101, 102)))
+                $fontes = '100, 101, 102';
+            if (in_array($o58_codigo, array(166, 167)))
+                $fontes = '166, 167';
+
+            $sSql = "SELECT o70_codigo, SUM(saldo_a_arrecadar) saldo FROM (
+                select
+                    o70_codigo,
+                    cast(
+                        coalesce(nullif(substr(fc_receitasaldo, 68, 12), ''), '0') as float8
+                    ) as saldo_a_arrecadar
+                from(
+                        select
+                            o70_codigo,
+                            fc_receitasaldo(" . db_getsession("DB_anousu") . ", o70_codrec, 3, '" . db_getsession("DB_anousu") . "-01-01', '" . db_getsession("DB_anousu") . "-12-31')
+                        from
+                            orcreceita d
+                            inner join orcfontes e on d.o70_codfon = e.o57_codfon
+                            and e.o57_anousu = d.o70_anousu
+                        where
+                            o70_anousu = " . db_getsession("DB_anousu") . "
+                            and o70_instit in (" . db_getsession("DB_instit") . ")
+                            AND o70_codigo IN ($fontes)
+                        order by
+                            o57_fonte
+                    ) as X
+                    ) as y GROUP BY o70_codigo";
+                    
+            $qResult = db_query($sSql);
+            $valor = 0;
+            for ($i = 0; $i < pg_num_rows($qResult); $i++) {
+                $oResult = db_utils::fieldsMemory($qResult, $i);
+                $valor += -1 * $oResult->saldo;
+            }
+
+            if ($valor <= 0) {
+                db_msgbox("Não existe excesso de arrecadação para a fonte informada.");
+                $sqlerro = true;
+                $limpa_dados = false; 
+            } else {
+                // Segunda condicao
+                $sSql = "SELECT
+                            sum(o47_valor) as valor
+                        FROM
+                            orcsuplemval
+                        LEFT JOIN orcdotacao ON o47_coddot = o58_coddot
+                            AND o47_anousu = o58_anousu
+                        JOIN orcsuplem ON o47_codsup=o46_codsup
+                        WHERE
+                            o47_anousu = {$anousu}
+                            AND o58_codigo IN ($fontes)
+                            AND o47_valor > 0
+                            AND o46_instit in (" . db_getsession("DB_instit") . ")
+                            AND o46_tiposup IN (1004, 1025, 1012, 1019, 1009, 1010, 1029)
+                        GROUP BY o58_codigo
+                        UNION
+                        SELECT
+                            sum(o136_valor) as valor
+                        from
+                            orcsuplemdespesappa
+                            LEFT JOIN orcsuplemval ON o47_codsup = o136_orcsuplem
+                            LEFT JOIN orcdotacao ON o47_coddot = o58_coddot
+                            AND o47_anousu = o58_anousu
+                            JOIN orcsuplem ON o47_codsup=o46_codsup
+                        WHERE
+                            o47_anousu = {$anousu}
+                            AND o58_codigo IN ($fontes)
+                            AND o46_instit in (" . db_getsession("DB_instit") . ")
+                            AND o46_tiposup IN (1004, 1025, 1012, 1019, 1009, 1010, 1029)
+                            AND o136_valor > 0 
+                        GROUP BY o58_codigo";
+                $subResult = db_query($sSql);
+
+                $valorSuplementado = 0;
+                for ($y = 0; $y < pg_num_rows($subResult); $y++) {
+                    $oFonte = db_utils::fieldsMemory($subResult, $y);
+                    $valorSuplementado += $oFonte->valor;
+                }
+
+                if (number_format(($valor - $valorSuplementado), 2, ".", "") <= 0) {
+                    db_msgbox("Não existe excesso suficiente para realizar essa suplementação, saldo disponível 0,00");
+                    $sqlerro = true;
+                    $limpa_dados = false; 
+                } else {
+                    if (number_format(($valor - $valorSuplementado - $o47_valor), 2, ".", "") < 0) {
+                        $saldo = number_format($valor - $valorSuplementado, 2, ".", "");
+                        db_msgbox("Não existe excesso suficiente para realizar essa suplementação, saldo disponível {$saldo}");
+                        $sqlerro = true;
+                        $limpa_dados = false; 
+                    }
+                } 
+            }
+        }
+    }
+
     if ($tiposup == 1004 || $tiposup == 1009) {
 
         $sSqlFonte  = $clorcsuplemval->sql_query($o46_codsup, db_getsession("DB_anousu"), null, "o58_codigo");
