@@ -59,23 +59,34 @@ function js_relatorio2() {
   aData = document.getElementById('dataf').value.split("/");
   var dataf = aData[2]+'-'+aData[1]+'-'+aData[0];
   var query = "";
+  var contadorcontas = 0;
+  var contanova = 0;
 
   if(document.getElementById('contas')){
 	//Le os itens lançados na combo da conta
 		vir="";
 		listacontas="";
-
-		for(x=0;x<document.form1.contas.length;x++){
-
-            if (F.emitir_capa.value == 's') {
+		if(document.form1.contas.length==0){
+			contadorcontas = 1;
+			contanova = 0;
+		}else{
+			contadorcontas = document.form1.contas.length;
+			contanova = 1;
+		}
+		for(x=0;x<contadorcontas;x++){
+            if (F.emitir_capa.value == 's' && contanova == 1) {
                 sUrl = "cai4_concbancnovo002.php?conta_nova=" + document.form1.contas.options[x].value + "&data_inicial=" + datai + "&data_final=" + dataf + "&saldo_extrato=" + 0;
                 window.open(sUrl, '', 'location=0');
             }
-
-			listacontas+=vir+document.form1.contas.options[x].value;
+			if (F.emitir_capa.value == 's' && contanova == 0) {
+                sUrl = "cai4_concbancnovo002.php?conta_nova=" + contanova + "&data_inicial=" + datai + "&data_final=" + dataf + "&saldo_extrato=" + 0;
+                window.open(sUrl, '', 'location=0');
+            }
+			if(contanova == 1)
+				listacontas+=vir+document.form1.contas.options[x].value;
 		  vir=",";
 		}
-		if(listacontas!=""){
+		if(listacontas!="" && contanova == 1){
 			query +='conta=('+listacontas+')';
 		} else {
 			query +='conta=';
