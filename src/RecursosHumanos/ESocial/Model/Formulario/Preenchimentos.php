@@ -556,8 +556,11 @@ class Preenchimentos
                                                             and rescisao.r59_causa        = rhpesrescisao.rh05_causa
                                                             and rescisao.r59_caub         = rhpesrescisao.rh05_caub::char(2)
                         where h13_categoria in ('101', '106', '111', '301', '302', '303', '305', '306', '309', '312', '313', '902')
-                        and rh30_vinculo = 'A'
-                        and (
+                        and rh30_vinculo = 'A' ";
+        if ($matricula != null) {
+            $sql .= "and rh01_regist in ($matricula) ";
+        }
+        $sql .= "and (
 					            (
 					            (date_part('year',rhpessoal.rh01_admiss)::varchar || lpad(date_part('month',rhpessoal.rh01_admiss)::varchar,2,'0'))::integer <= 202207
 					            and (date_part('year',fc_getsession('DB_datausu')::date)::varchar || lpad(date_part('month',fc_getsession('DB_datausu')::date)::varchar,2,'0'))::integer <= 202207
@@ -568,11 +571,9 @@ class Preenchimentos
 					            and (date_part('year',fc_getsession('DB_datausu')::date)::varchar || lpad(date_part('month',fc_getsession('DB_datausu')::date)::varchar,2,'0'))::integer > 202207
 					            )
 				            ) order by z01_nome asc limit 1000";
-        // echo $sql;
-        // exit;
+
         $rs = \db_query($sql);
-        // db_criatabela($rs);
-        // exit;
+
         if (!$rs) {
             throw new \Exception("Erro ao buscar os preenchimentos do S2200");
         }
