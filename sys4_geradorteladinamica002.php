@@ -94,6 +94,9 @@ for ($i = 0; $i < pg_numrows($rs_acordo); $i++) {
 
   $oDadosAcordo = db_utils::fieldsMemory($rs_acordo, $i);
 
+
+
+
   if (strlen($oDadosAcordo->objeto) > 76) {
     $linhas = floor(strlen($oDadosAcordo->objeto) / 58) + 1;
     $decimal = strval(strlen($oDadosAcordo->objeto) / 58);
@@ -107,7 +110,14 @@ for ($i = 0; $i < pg_numrows($rs_acordo); $i++) {
     if ($decimal > 0.15 && $decimal < 0.45) {
       $linhas = floor(strlen($oDadosAcordo->objeto) / 58);
     }
+  } else {
+    $linhas = 1;
   }
+
+  if ($pdf->getY() >= 165) {
+    $pdf->Ln(210);
+  }
+
 
   $pdf->setfillcolor(235);
 
@@ -170,7 +180,6 @@ for ($i = 0; $i < pg_numrows($rs_acordo); $i++) {
     $y = $yi;
     $pagina = $pdf->PageNo();
   }
-
 
   $pdf->Ln(4);
 }
