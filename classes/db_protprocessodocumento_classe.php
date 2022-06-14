@@ -137,7 +137,7 @@ class cl_protprocessodocumento
     $protocolosigiloso = db_utils::fieldsMemory($protocolosigiloso, 0);
 
     if ($protocolosigiloso->p90_protocolosigiloso == "t") {
-      if ($this->p01_nivelacesso == "") {
+      if ($this->p01_nivelacesso == 0) {
         $this->erro_sql = " Campo Nível de acesso não informado.";
         $this->erro_campo = "p01_nivelacesso";
         $this->erro_banco = "";
@@ -207,7 +207,7 @@ class cl_protprocessodocumento
         $this->erro_banco = "protprocessodocumento já Cadastrado";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       } else {
-        $this->erro_sql   = "protprocessodocumento ($this->p01_sequencial) nao Incluído. Inclusao Abortada.";
+        $this->erro_sql   = $sql . "protprocessodocumento ($this->p01_sequencial) nao Incluído. Inclusao Abortada.";
         $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       }

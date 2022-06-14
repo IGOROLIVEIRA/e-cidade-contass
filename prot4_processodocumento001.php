@@ -36,7 +36,7 @@ require_once("dbforms/db_funcoes.php");
 $protocolosigiloso = db_query("select * from protparam");
 $protocolosigiloso = db_utils::fieldsMemory($protocolosigiloso, 0);
 
-if ($protocolosigiloso->p90_protocolosigiloso == "t") {
+if ($protocolosigiloso->p90_protocolosigiloso == "f") {
   require_once("prot4_processodocumentoantigo001.php");
   exit;
 }
