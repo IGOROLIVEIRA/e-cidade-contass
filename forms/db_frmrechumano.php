@@ -246,7 +246,7 @@ if( isset( $chavepesquisa ) ) {
       </table>
     </fieldset>
 
-    <fieldset>
+    <fieldset style="display:none ;">
       <legend>OUTROS DADOS</legend>
       <table>
         <tr>
