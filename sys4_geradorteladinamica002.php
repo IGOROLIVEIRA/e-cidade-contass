@@ -66,7 +66,7 @@ acordo.ac16_valor as valor,
 ac28_descricao as origem,
 ac17_descricao as status,
 l20_edital as processolicitatorio,
-l20_codtipocom as codmodalidade,
+l20_numero as codmodalidade,
 l03_descr as modalidade
 FROM acordo
 JOIN cgm ON z01_numcgm = ac16_contratado
@@ -142,7 +142,13 @@ for ($i = 0; $i < pg_numrows($rs_acordo); $i++) {
 
   $pdf->Cell(70, 5 * $linhas, substr($oDadosAcordo->contratado, 0, 50), 1, 0, "C");
   $pdf->Cell(20, 5 * $linhas, date('d/m/Y', strtotime($oDadosAcordo->vencimento)), 1, 0, "C");
-  $pdf->Cell(20, 5 * $linhas, date('d/m/Y', strtotime($oDadosAcordo->assinatura)), 1, 0, "C");
+
+  if ($oDadosAcordo->assinatura != null) {
+    $pdf->Cell(20, 5 * $linhas, date('d/m/Y', strtotime($oDadosAcordo->assinatura)), 1, 0, "C");
+  } else {
+    $pdf->Cell(20, 5 * $linhas, $oDadosAcordo->assinatura, 1, 0, "C");
+  }
+
   $pdf->Cell(29, 5 * $linhas, 'R$' . number_format($oDadosAcordo->valor, 2, ',', '.'), 1, 0, "C");
   $pdf->Ln();
   $pdf->SetFont("Arial", "B", 9);
@@ -152,7 +158,7 @@ for ($i = 0; $i < pg_numrows($rs_acordo); $i++) {
 
   if ($oDadosAcordo->processolicitatorio != null) {
     $pdf->Cell(140, 5, "Processo Licitatório: " . $oDadosAcordo->processolicitatorio, 1, 0, "L", 1);
-    $pdf->Cell(90, 5, "Modalidade: " . $oDadosAcordo->modalidade, 1, 0, "L", 1);
+    $pdf->Cell(90, 5, "Modalidade: " . strtolower($oDadosAcordo->modalidade), 1, 0, "L", 1);
     $pdf->Cell(49, 5, "Numeração: " . $oDadosAcordo->codmodalidade, 1, 0, "L", 1);
     $pdf->Ln();
     $y += 19 + (5 * $linhas);
