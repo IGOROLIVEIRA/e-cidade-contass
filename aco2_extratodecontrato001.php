@@ -35,10 +35,32 @@ $sDepartamento = $oDepartamento->getNomeDepartamento();
     ?>
 </head>
 
+<script>
+    function js_geraRelatorio() {
+
+        var imprimir = document.getElementById("tipoImprimir").value;
+        var sequencial = document.getElementById("ac16_sequencial").value;
+
+        if (imprimir == 1) {
+            jan = window.open('aco2_extratodecontrato002.php?&sequencial=' + sequencial,
+                'width=' + (screen.availWidth - 5) + ', height=' + (screen.availHeight - 40) + ', scrollbars=1, location=0');
+            jan.moveTo(0, 0);
+            return true;
+        }
+
+        if (imprimir == 2) {
+            jan = window.open('aco2_extratodecontrato003.php?&sequencial=' + sequencial,
+                'width=' + (screen.availWidth - 5) + ', height=' + (screen.availHeight - 40) + ', scrollbars=1, location=0');
+            jan.moveTo(0, 0);
+            return true;
+        }
+    }
+</script>
+
 <body bgcolor="#cccccc" style='margin-top: 30px'>
     <center>
         <div id='divContainer' style="width: 500px;">
-            <form name="form1" method="post" action="aco2_extratodecontrato002.php" target='extratodecontrato'>
+            <form name="form1" method="post" action="">
                 <fieldset>
                     <legend>Extrato de Contrato (Novo)</legend>
                     <table>
@@ -53,10 +75,29 @@ $sDepartamento = $oDepartamento->getNomeDepartamento();
                                 ?>
                             </td>
                         </tr>
+                        <tr>
+                            <td align="left">
+                                <b>
+                                    Imprimir:
+                                </b>
+                            </td>
+                            <td align="left" nowrap>
+                                <?
+                                $aValores = array(
+
+                                    1 => 'PDF',
+                                    2 => 'WORD',
+                                );
+                                db_select('tipoImprimir', $aValores, true, $db_opcao, "");
+                                ?>
+
+                            </td>
+
+                        </tr>
                     </table>
                 </fieldset>
                 <br>
-                <input type='submit' value='Gerar Relatório' onclick="return js_gerarRelatorio();">
+                <input type='submit' value='Gerar Relatório' onclick="js_geraRelatorio();">
             </form>
         </div>
     </center>
@@ -104,12 +145,5 @@ $sDepartamento = $oDepartamento->getNomeDepartamento();
         $('ac16_sequencial').value = chave1;
         $('ac16_resumoobjeto').value = chave2;
         db_iframe_acordo.hide();
-    }
-
-    function js_gerarRelatorio() {
-        jan = window.open('aco2_extratodecontrato002.php', 'extratodecontrato',
-            'width=' + (screen.availWidth - 5) + ', height=' + (screen.availHeight - 40) + ', scrollbars=1, location=0');
-        jan.moveTo(0, 0);
-        return true;
     }
 </script>
