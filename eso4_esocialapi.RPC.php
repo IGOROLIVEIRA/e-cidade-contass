@@ -286,10 +286,13 @@ try {
 
             db_fim_transacao(false);
 
-            $path = dirname(__FILE__);
-            exec('crontab -r');
-            file_put_contents('tmp/textfile.txt', "* * * * * (cd $path; php -q filaEsocial.php) \n\n");
+            //$path = dirname(__FILE__);
+            // exec('crontab -r');
+            // file_put_contents('tmp/textfile.txt', "* * * * * (cd $path; php -q filaEsocial.php) \n\n");
             //exec('crontab tmp/textfile.txt');
+            ob_start();
+            $response = system("php -q filaEsocial.php");
+            ob_end_clean();
 
             $oRetorno->sMessage = "Dados agendados para envio.";
             break;
