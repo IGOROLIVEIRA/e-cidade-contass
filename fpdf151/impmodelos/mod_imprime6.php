@@ -51,7 +51,7 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
     $this->objpdf->text($xcol + 2, $xlin + 15.5, 'Subfunção');
     $this->objpdf->text($xcol + 2, $xlin + 19, 'Programa');
     $this->objpdf->text($xcol + 2, $xlin + 22.5, 'Proj/Ativ');
-    $this->objpdf->text($xcol + 2, $xlin + 26, 'Rubrica');
+    $this->objpdf->text($xcol + 2, $xlin + 26, 'Elemento');
     $this->objpdf->text($xcol + 2, $xlin + 32.5, 'Recurso');
 
     if ($this->banco != "") {
@@ -68,6 +68,7 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
     $this->objpdf->text($xcol + 46, $xlin + 43, 'Nº da Modalidade');
     if($this->acordo != ''){
         $this->objpdf->text($xcol + 2, $xlin + 46.5, 'Acordo');
+        $this->objpdf->text($xcol + 46, $xlin + 46.5, 'Código Acordo');
     }
     $this->objpdf->text($xcol + 2, $xlin + 50, 'Tipo de Compra');
     if ($this->prazo_ent != "") {
@@ -105,6 +106,7 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
 
     if($this->acordo && $this->anoacordo){
         $this->objpdf->text($xcol + 17, $xlin + 46.5, ':  ' . $this->acordo.'/'.$this->anoacordo);
+        $this->objpdf->text($xcol + 67, $xlin + 46.5, ':  ' . $this->seqacordo);
     }
 
     $this->objpdf->text($xcol + 24, $xlin + 50, ':  ' . $this->descr_tipocompra);

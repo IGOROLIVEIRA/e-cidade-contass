@@ -137,7 +137,7 @@ $db_botao = true;
 </html>
 <script>
     function js_insereItens() {
-        
+
         let aItens = oItensLicitacao.oGridItens.aRows;
 
         let aSelecionados = aItens.filter(e => e.isSelected);
@@ -208,6 +208,7 @@ $db_botao = true;
         let oRetorno = eval("(" + oAjax.responseText + ")");
         let tipoJulgamento = "<?= $tipojulg ?>";
         let licitacao = "<?= $licitacao ?>";
+        let naturezaObj = "<?= $naturezaobj ?>";
 
         if (oRetorno.status == 1) {
             js_removeObj('msgbox');
@@ -220,6 +221,12 @@ $db_botao = true;
             if (tipoJulgamento == '3') {
                 parent.parent.iframe_liclicitemlote.location.href = `lic1_liclicitemlote001.php?licitacao=${licitacao}&tipojulg=${tipoJulgamento}`;
                 parent.parent.document.formaba.liclicitemlote.disabled = false;
+            }
+
+            if (tipoJulgamento == '1') {
+                if (naturezaObj == '1' || naturezaObj == '7') {
+                    parent.parent.window.location.href = `lic4_editalabas.php?licitacao=${licitacao}`;
+                }
             }
 
             let oParam = new Object();
@@ -240,10 +247,11 @@ $db_botao = true;
                 }
             });
 
-        }if (oRetorno.status == 2) {
+        }
+        if (oRetorno.status == 2) {
             js_removeObj('msgbox');
             alert('Inclusão abortada, processo de compra por lote!');
-        }else{
+        } else {
             //db_msgbox(@$erro_msg);
             db_msgbox("Operação Cancelada!!Contate Suporte!!");
         }

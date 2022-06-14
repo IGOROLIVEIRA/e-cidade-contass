@@ -32,6 +32,12 @@ $clpcorcamforne->rotulo->label();
 $clpcorcamval->rotulo->label();
 $clrotulo = new rotulocampo;
 
+$totalitens = 0;
+$visibilidadeEmpenhos = "hidden";
+$dataAbastecimento = null;
+
+
+
 if (isset($_POST["processar"])) {
     $contTama = 1;
 
@@ -42,6 +48,9 @@ if (isset($_POST["processar"])) {
     $dataF = $_POST["dataF"];
     $dataF = explode("/", $dataF);
     $dataF = $dataF[2] . "-" . $dataF[1] . "-" . $dataF[0];
+
+
+
 
 
 
@@ -100,7 +109,7 @@ if (isset($_POST["processar"])) {
         $highestRow = $objWorksheet->getHighestRow();
 
         $highestRow = $highestRow;
-
+        $visibilidadeEmpenhos = "";
 
         $i = 0;
         for ($row = 7; $row <= $highestRow; $row++) {
@@ -204,6 +213,7 @@ if (isset($_POST["processar"])) {
                 $i++;
             }
         }
+        $totalitens = $i;
         $arrayItensPlanilha = array();
 
         foreach ($dataArr as $keyRow => $Row) {
@@ -348,30 +358,68 @@ if (isset($_POST["processar"])) {
 
                 </td>
             </tr>
+
+
+
         </table>
     </center>
 </form>
+
+<table style="width: 70%; border: 0px solid black; visibility: <?php echo $visibilidadeEmpenhos; ?>">
+
+    <tr id="edicaoBloco">
+        <td colspan='2'>
+            <fieldset>
+                <legend>Empenho para abastecimentos</legend>
+                <table>
+                    <td>
+                        <?php db_ancora("Empenho:", "js_pesquisae60_codemp(true,0);", 1); ?>
+
+                    </td>
+                    <td>
+                        <?php db_input('e60_codemp', 10, $Ie60_codemp, true, 'text', 1, "placeholder='num/ano' onchange='js_pesquisae60_codemp(false,0);'") ?>
+                    </td>
+                    <td>
+                        <?
+                        db_input('z01_nome', 35, $Iz01_nome, true, 'text', 3, "", "", "", "");
+                        ?>
+                        <input type='button' id='btnAp?icar' value='Aplicar' onclick="aplicarEmpenho();">
+                    </td>
+                </table>
+
+        </td>
+
+    </tr>
+
+</table>
+
 <form name="form1" id="form1" method="post" action="" enctype="multipart/form-data">
-    <table style="width: 70%; border: 0px solid black;" id="tableResult">
+    <table class="DBGrid" style="width: 70%; border: 0px solid black;" id="tableResult">
 
 
         <tr>
-            <th style="border: 0px solid red; width:120px; background:#ffffff;">
+            <th class="table_header" style="width: 30px; cursor: pointer;" onclick="marcarTodos();">M</th>
+
+            <th style="border: 0px solid red; width:120px; background:#eeeff2; display:none">
+                Cód Abastecimento
+            </th>
+
+            <th style="border: 0px solid red; width:120px; background:#eeeff2;">
                 Placa
             </th>
 
-            <th style="border: 0px solid red; width:120px; background:#ffffff;">
+            <th style="border: 0px solid red; width:120px; background:#eeeff2;">
                 Data
             </th>
 
-            <th style="border: 0px solid red; width:100px; background:#ffffff;">
+            <th style="border: 0px solid red; width:100px; background:#eeeff2;">
                 Valor
             </th>
 
-            <th style="border: 0px solid red; width:200px; background:#ffffff;">
+            <th style="border: 0px solid red; width:200px; background:#eeeff2;">
                 Departamento
             </th>
-            <th style="background:#ffffff;">
+            <th style="background:#eeeff2;">
                 Empenho
             </th>
         </tr>
@@ -383,14 +431,37 @@ if (isset($_POST["processar"])) {
         if ($contTama == 1 && $tamanho == 0) {
             echo "<script>alert('Nenhum registro encontrato!')</script>";
         }
+        //var_dump($arrayItensPlanilha);
         foreach ($arrayItensPlanilha as $rown) {
 
+            $dataAbastecimento = $rown->data;
+
+            if ($dataAbastecimento == null) {
+                $dataAbastecimento = $rown->data;
+            }
+
+            if ($dataAbastecimento < $rown->data && $dataAbastecimento != null) {
+                $dataAbastecimento = $rown->data;
+            }
+
+
             echo "<tr style='background-color:#ffffff;'>";
-            echo "<td style='text-align:center;'>";
-            echo $rown->placa;
+
+            echo "<td id='abastecimento$i' style='text-align:center; display:none' >";
+            echo $rown->nota;
             echo "</td>";
 
             echo "<td style='text-align:center;'>";
+            echo "<input type='checkbox' class='marca_itens' name='aItonsMarcados[]' value='$i'> ";
+
+            echo "</td>";
+
+
+            echo "<td id='placa$i' style='text-align:center;' >";
+            echo $rown->placa;
+            echo "</td>";
+
+            echo "<td id='data$i' style='text-align:center;'>";
             $dataV = $rown->data;
             $dataV = explode("-", $dataV);
             echo $dataV[2] . "-" . $dataV[1] . "-" . $dataV[0];
@@ -414,16 +485,24 @@ if (isset($_POST["processar"])) {
         ?>
         </tr>
 
+        <tr style='background-color:#eeeff2;'>
+
+            <td colspan="6" align="center"> <strong>Total de itens:</strong>
+                <span class="nowrap" id="totalitens"> <?php echo $totalitens ?> </span>
+            </td>
+
+        </tr>
+
 
 
         <?
 
         echo
         "<tr>
-                            <td colspan='5' align='center'>
+                            <td colspan='6' align='center'>
                 
                                     
-                                <input type='button' id='db_opcao' value='Salvar'  " . ($db_botao == false ? "disabled" : "") . " onclick='js_verificarEmpenho();'>
+                                <input style='margin-top:10px;' type='button' id='db_opcao' value='Salvar'  " . ($db_botao == false ? "disabled" : "") . " onclick='js_verificarEmpenho();'>
                                 
                                 
                                 
@@ -492,6 +571,27 @@ if (isset($_POST["processar"])) {
             </th>
         </tr>
     </table>
+    <div id="divtblDataEmpenho">
+        <table style="width: 20%; border: 0px solid black; display: none;" id="tblDataEmpenho">
+
+            <tr>
+                <th colspan="1" style="text-align: center;">
+                    Veículos em que a data do empenho aplicado é maior que a data do abastecimento
+                </th>
+            <tr>
+
+            <tr style='background-color:#ffffff;'>
+                <th style="width: 150px;">
+                    Código
+                </th>
+                <th style="width: 150px;">
+                    Placa
+                </th>
+            </tr>
+
+
+        </table>
+    </div>
     <table style="width: 20%; border: 0px solid black; display: none;" id="tblBaixa">
 
         <tr>
@@ -568,6 +668,180 @@ if (isset($_POST["processar"])) {
 </form>
 
 <script>
+    var empenhoselecionado = "";
+    var dataempenho = "";
+    document.getElementById("z01_nome").value = "";
+    document.getElementById("e60_codemp").value = "";
+
+    function js_removelinha(linha) {
+        var tab = (document.all) ? document.all.tab : document.getElementById('tblDataEmpenho');
+        for (i = 0; i < tab.rows.length; i++) {
+            if (linha == tab.rows[i].id) {
+                tab.deleteRow(i);
+                break;
+            }
+        }
+    }
+
+    function aplicarEmpenho() {
+
+
+
+        var itens = getItensMarcados();
+        var gerartabela = 0;
+
+        if (itens.length < 1) {
+
+            alert('Selecione pelo menos um item da lista. ');
+            return;
+
+        }
+
+
+        var i = 0;
+
+        document.getElementById('tblDataEmpenho').remove();
+
+        var element = document.getElementById('divtblDataEmpenho');
+        element.innerHTML = ' <table style="width: 20%; border: 0px solid black; display: none;" id="tblDataEmpenho"><tr><th colspan="2" style="text-align: center;">Veículos em que a data do empenho aplicado é maior que a data do abastecimento</th><tr><tr style="background-color: #ffffff;"><th style="width: 150px;">Código</th><th style="width: 150px;">Placa</th></tr></table>'
+
+        itens.forEach(function(item) {
+
+
+
+            var id_empenho = 'empenho' + item.value;
+            var id_dataabastecimento = 'data' + item.value;
+            var data_abastecimento = document.getElementById(id_dataabastecimento).innerText;
+
+            var id_abastecimento = 'abastecimento' + item.value;
+            var abastecimento = document.getElementById(id_abastecimento).innerText;
+
+            var id_placa = 'placa' + item.value;
+            var placa = document.getElementById(id_placa).innerText;
+
+
+            var dataFormatada1 = new Date(data_abastecimento.substring(6, 10), data_abastecimento.substring(3, 5), data_abastecimento.substring(0, 2));
+            var dataFormatada2 = new Date(dataempenho);
+
+
+            if (dataFormatada2 > dataFormatada1) {
+                gerartabela = 1;
+                var tabela = document.getElementById("tblDataEmpenho");
+
+                var numeroLinhas = tabela.rows.length;
+
+                var tabela = document.getElementById("tblDataEmpenho");
+                var linha = tabela.insertRow(numeroLinhas);
+                var celula1 = linha.insertCell(0);
+                var celula2 = linha.insertCell(1);
+                celula1.innerHTML = " <div style='text-align:center'>" + abastecimento + "<div>";
+                celula2.innerHTML = " <div style='text-align:center'>" + placa + "<div>";
+            } else {
+                document.getElementById(id_empenho).value = empenhoselecionado;
+
+            }
+
+            i++;
+
+        });
+
+        if (gerartabela == 1) {
+            document.getElementById("tblDataEmpenho").style.display = "block";
+            return;
+        } else {
+
+            document.getElementById("tblDataEmpenho").style.display = "none";
+
+        }
+
+    }
+
+    function getItensMarcados() {
+        return aItens().filter(function(item) {
+            return item.checked;
+        });
+    }
+
+    function aItens() {
+        var itensNum = document.querySelectorAll('.marca_itens');
+
+        return Array.prototype.map.call(itensNum, function(item) {
+            return item;
+        });
+    }
+
+    function marcarTodos() {
+
+        aItens().forEach(function(item) {
+
+            var check = item.classList.contains('marcado');
+
+            if (check) {
+                item.classList.remove('marcado');
+            } else {
+                item.classList.add('marcado');
+            }
+            item.checked = !check;
+
+        });
+
+    }
+
+    function js_pesquisae60_codemp(mostra, controlador) {
+        if (mostra == true) {
+            var ve70_abast = "";
+            var e60_codemp = "";
+            var e60_numemp = "";
+            var datainicial = "<?php print $dataI; ?>";
+            var datafinal = "<?php print $dataF; ?>";
+            var dataAbastecimento = "<?php print $dataAbastecimento; ?>";
+
+
+
+            if (controlador == 0) {
+                js_OpenJanelaIframe('top.corpo', 'db_iframe_empempenho', 'func_empempenho.php?filtroabast=0&ve70_abast=' + ve70_abast + '&importacaoveiculo=1&dataAbastecimento=' + dataAbastecimento + '&funcao_js=parent.js_mostraempempenho2|e60_numemp|e60_codemp|e60_anousu|DB_e60_emiss|e60_numcgm|z01_nome', 'Pesquisa', true);
+            } else {
+                js_OpenJanelaIframe('top.corpo', 'db_iframe_empempenho', 'func_empempenho.php?filtroabast=1&ve70_abast=' + ve70_abast + '&importacaoveiculo=1&dataAbastecimento=' + dataAbastecimento + '&funcao_js=parent.js_mostraempempenho2|e60_numemp|e60_codemp|e60_anousu|DB_e60_emiss|e60_numcgm', 'Pesquisa', true);
+            }
+
+        } else {
+            var datainicial = "<?php print $dataI; ?>";
+            var datafinal = "<?php print $dataF; ?>";
+            var dataAbastecimento = "<?php print $dataAbastecimento; ?>";
+
+
+            e60_numemp = document.getElementById("e60_codemp").value;
+            js_OpenJanelaIframe('top.corpo', 'db_iframe_empempenho', 'func_empempenho.php?filtroabast=0&ve70_abast=' + ve70_abast + '&importacaoveiculo=1&dataAbastecimento=' + dataAbastecimento + '&pesquisa_chave=' + e60_numemp + '&funcao_js=parent.js_mostraempempenho&lPesquisaPorCodigoEmpenho=1', 'Pesquisa', false);
+        }
+    }
+
+    function js_mostraempempenho(chave1, chave2, chave3, chave4, chave5, chave6) {
+        if (chave2 == true) {
+            document.getElementById("z01_nome").value = "";
+            document.getElementById("e60_codemp").value = "";
+
+
+        } else if (chave2 == false) {
+            document.getElementById("z01_nome").value = "";
+
+        } else {
+            empenhoselecionado = chave1;
+            dataempenho = chave6;
+            document.getElementById("z01_nome").value = chave2;
+
+        }
+    }
+
+    function js_mostraempempenho2(chave1, chave2, chave3, chave4, chave5, chave6) {
+        empenhoselecionado = chave2 + "/" + chave3;
+        dataempenho = chave4;
+        document.getElementById("e60_codemp").value = empenhoselecionado;
+        document.getElementById("z01_nome").value = chave6;
+
+        db_iframe_empempenho.hide();
+
+    }
+
     function gerar() {
         window.location.href = "vei1_xlsabastecimentoPlanilha.php";
     }
@@ -649,6 +923,8 @@ if (isset($_POST["processar"])) {
         var opE = 0;
         var oRetorno = eval('(' + oAjax.responseText + ")");
         if (oRetorno.status == 2) {
+            alert(oRetorno.message.urlDecode() + "" + valorEmp);
+
             oRetorno.itens.forEach(function(oItem) {
                 if (opE == 0) {
                     valorEmp[opE] = oItem;
@@ -667,7 +943,6 @@ if (isset($_POST["processar"])) {
                 }
             });
 
-            alert(oRetorno.message.urlDecode() + "" + valorEmp);
 
         } else if (oRetorno.status == 3) {
             alert(oRetorno.message.urlDecode());

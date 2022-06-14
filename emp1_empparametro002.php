@@ -87,6 +87,12 @@ if((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Alterar
         $clempparametro->e30_empdataserv="false";
     }
 
+    if ($e30_empordemcron!="" && $e30_empordemcron=='t'){
+        $clempparametro->e30_empordemcron="true";
+    } else {
+        $clempparametro->e30_empordemcron="false";
+    }
+
     $clempparametro->e30_lqddataserv = ($e30_lqddataserv != "" && $e30_lqddataserv == "t") ? "true" : "false";
     $clempparametro->e30_controleprestacao = ($e30_controleprestacao != "" && $e30_controleprestacao == "t") ? "true" : "false";
 

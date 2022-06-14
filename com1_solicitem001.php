@@ -25,6 +25,8 @@
  *                                licenca/licenca_pt.txt
  */
 
+use ECidade\V3\Extension\Document;
+
 require_once("libs/db_stdlib.php");
 require_once("libs/db_conecta.php");
 require_once("libs/db_sessoes.php");
@@ -82,6 +84,7 @@ require_once("classes/db_proctransferproc_classe.php");
 require_once("model/itempacto.model.php");
 require_once("classes/solicitacaocompras.model.php");
 require_once("model/ItemEstimativa.model.php");
+require_once("classes/db_itemprecoreferencia_classe.php");
 
 $clsolicitem         = new cl_solicitem;
 $clsolicitemunid     = new cl_solicitemunid;
@@ -129,6 +132,8 @@ $clpcorcamfornelic   = new cl_pcorcamfornelic;
 $clsolicitalog       = new cl_solicitalog;
 $clliclicita         = new cl_liclicita;
 $clliclicitemlote    = new cl_liclicitemlote;
+$clitemprecoreferencia   = new cl_itemprecoreferencia;
+$cod_proc = null;
 $iPactoPlano = null;
 db_postmemory($HTTP_GET_VARS);
 db_postmemory($HTTP_POST_VARS);
@@ -673,7 +678,7 @@ db_fieldsmemory($result_pcparam1, 0);
         "distinct pc81_codprocitem",
         null,
         "pc81_solicitem = $pc11_codigo and
-e55_sequen is not null and e54_anulad is null"
+        e55_sequen is not null and e54_anulad is null"
       ));
       if ($clpcproc->numrows > 0) {
         $sqlerro  = true;
@@ -718,8 +723,66 @@ e55_sequen is not null and e54_anulad is null"
 
     if ($sqlerro == false) {
       $clsolicitem->alterar($pc11_codigo);
+
       if ($clsolicitem->erro_status == 0) {
         $sqlerro = true;
+        
+      }else{
+        $result_pcorcamval = $clpcorcamval->sql_record($clpcorcamval->sql_query_pcorcamval($pc11_codigo,$pc11_numero));
+        
+        
+        if($clpcorcamval->numrows > 0){
+          $quant_linha = $clpcorcamval->numrows;
+          for($i=0;$i<$quant_linha;$i++){
+            db_fieldsmemory($result_pcorcamval,$i);
+            
+            $clpcorcamval->pc23_quant = $pc11_quant;
+            $clpcorcamval->pc23_orcamforne = $pc23_orcamforne;
+            $clpcorcamval->pc23_orcamitem = $pc23_orcamitem;
+            $clpcorcamval->alterar($pc23_orcamforne,$pc23_orcamitem);
+            if ($clpcorcamval->erro_status == 0) {
+              $sqlerro = true;
+              $erro_msg = $clpcorcamval->erro_msg;
+  
+            }else{
+            
+              $result_valorpcorcamval = $clpcorcamval->sql_record($clpcorcamval->sql_query_atualizavalor($pc23_orcamforne, $pc23_orcamitem));
+              db_fieldsmemory($result_valorpcorcamval,0);
+              
+              $clpcorcamval->pc23_quant = $pc23_quant;
+              $clpcorcamval->pc23_vlrun = $pc23_vlrun;
+              $clpcorcamval->pc23_valor = $pc23_quant * $pc23_vlrun;
+              $clpcorcamval->alterar($pc23_orcamforne,$pc23_orcamitem);
+              $clpcorcamval->pc23_quant =0;
+              $clpcorcamval->pc23_vlrun = 0;
+              $clpcorcamval->pc23_valor = 0;
+              
+              
+              $result_codprocesso = $clitemprecoreferencia->sql_record($clitemprecoreferencia->sql_query_codprocesso($pc11_codigo));
+
+              if($clitemprecoreferencia->numrows > 0){
+                db_fieldsmemory($result_codprocesso,0);
+                $result_itemprecorefe = $clitemprecoreferencia->sql_record($clitemprecoreferencia->sql_query_precoreferencia($pc81_codproc));
+
+                if($clitemprecoreferencia->numrows > 0){
+                  db_fieldsmemory($result_itemprecorefe,0);
+                  $clitemprecoreferencia->si02_precoreferencia = $si01_sequencial;
+                  $clitemprecoreferencia->si02_itemproccompra = $pc23_orcamitem;
+                  $result_precoreferensequncial = $clitemprecoreferencia->sql_record($clitemprecoreferencia->sql_query_precoreferensequncial($si01_sequencial,$pc23_orcamitem));
+                  
+                  if ($clitemprecoreferencia->numrows > 0 ) {
+                    db_fieldsmemory($result_precoreferensequncial,0);
+                    $clitemprecoreferencia->si02_sequencial = $si02_sequencial;
+                    $clitemprecoreferencia->si02_qtditem = $pc23_quant;
+                    $clitemprecoreferencia->alterar($si02_sequencial);
+                  }
+                }
+              }
+
+            }
+          }
+          
+        }
       }
       $erro_msg = $clsolicitem->erro_msg;
     }
@@ -729,6 +792,7 @@ e55_sequen is not null and e54_anulad is null"
       $clsolicitemunid->pc17_unid = $pc17_unid;
       $clsolicitemunid->pc17_quant = $pc17_quant;
       $clsolicitemunid->pc17_codigo = $pc11_codigo;
+      
       $result_solicitemunid = $clsolicitemunid->sql_record($clsolicitemunid->sql_query_file($pc11_codigo));
       if ($clsolicitemunid->numrows > 0) {
         $clsolicitemunid->alterar($pc11_codigo);
@@ -1850,7 +1914,10 @@ function js_ver(){
   }
 }
 */
-
+  //$codigo_proc = localStorage.getItem("codigoprocesso");
+  
+   
+  
   function teste() {
 
     teste = new ultimosOrcamentos();

@@ -71,7 +71,7 @@ require_once("dbforms/db_funcoes.php");
           </tr>
         </table>
       </fieldset>
-      <input type="button" disabled='disabled' id='imprimir' value='Imprimir' name='imprimir' />
+      <input type="button" id='imprimir' value='Imprimir' name='imprimir' />
     </form>
   </div>
 </body>
@@ -103,7 +103,7 @@ var fFuncaoChangeEscola = function () {
   if (oEscolaSelecionada.codigo_escola == '') {
 
     oCalendario.limpar();
-    $('imprimir').setAttribute("disabled", "disabled");
+    //$('imprimir').setAttribute("disabled", "disabled");
   } else {
 
     oCalendario.setEscola(oEscolaSelecionada.codigo_escola);
@@ -112,7 +112,7 @@ var fFuncaoChangeEscola = function () {
 };
 
 var fFunctionLoadCalendario = function() {
-  $('imprimir').setAttribute("disabled", "disabled");
+  //$('imprimir').setAttribute("disabled", "disabled");
 };
 
 var fFunctionChangeCalendario = function() {
@@ -125,12 +125,12 @@ var fFunctionChangeCalendario = function() {
 
     if (mCalendarioSelecionado.length == 0) {
 
-      $('imprimir').setAttribute("disabled", "disabled");
+      //$('imprimir').setAttribute("disabled", "disabled");
       return false;
     } else {
       console.log(mCalendarioSelecionado);
       if (mCalendarioSelecionado.iCalendario != '') {
-        $('imprimir').removeAttribute("disabled");
+        //$('imprimir').removeAttribute("disabled");
       }
     }
 
@@ -141,12 +141,12 @@ var fFunctionChangeCalendario = function() {
 
     if (mCalendarioSelecionado.iCalendario == '') {
 
-      $('imprimir').setAttribute("disabled", "disabled");
+      //$('imprimir').setAttribute("disabled", "disabled");
       return false;
     } else {
 
       if (mCalendarioSelecionado.iCalendario != '') {
-        $('imprimir').removeAttribute("disabled");
+        //$('imprimir').removeAttribute("disabled");
       }
     }
 

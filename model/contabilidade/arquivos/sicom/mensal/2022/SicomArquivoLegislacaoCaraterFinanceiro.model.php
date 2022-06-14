@@ -61,13 +61,21 @@ class SicomArquivoLegislacaoCaraterFinanceiro
         // $xdata = $o46_data;
         $xdata = $oDados->o39_data;
 
-        if($xtipo < 1006 ||  $xtipo > 1014 ){
+        // if($xtipo < 1006 ||  $xtipo > 1014 ){
+        //     $tipo_sup = 'Crédito Suplementar';
+        // }elseif ($xtipo == 1014){
+        //     $tipo_sup = 'Crédito de Transferência';
+        // }else{
+        //     $tipo_sup = 'Crédito Especial';
+        // }
+
+        if($xtipo == 1006 ||  $xtipo == 1007 || $xtipo == 1008 ||  $xtipo == 1009 ||$xtipo == 1010 ||  $xtipo == 1023 || $xtipo == 1024 ||  $xtipo == 1025 || $xtipo == 1012){
+            $tipo_sup = 'Crédito Especial';  
+          }elseif ($xtipo == 1011 ||  $xtipo == 1018 || $xtipo == 1019 ||  $xtipo == 2026 ||$xtipo == 1013){
+            $tipo_sup = 'Crédito Extraordinário';
+          }else{
             $tipo_sup = 'Crédito Suplementar';
-        }elseif ($xtipo == 1014){
-            $tipo_sup = 'Crédito de Transferência';
-        }else{
-            $tipo_sup = 'Crédito Especial';
-        }
+          }
 
 
 

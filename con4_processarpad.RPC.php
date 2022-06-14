@@ -738,7 +738,7 @@ case "processarBalancete" :
       foreach ($aArrayArquivos as $oArquivo){
         $aListaArquivos .= " ".$oArquivo->caminho;
       }
-      //print_r($aListaArquivos);
+      // print_r($aListaArquivos);
       system("rm -f DCASP_DOC_{$oParam->tipoGeracao}_{$sInst}_{$iCodOrgao}_{$iAnoReferencia}.zip");
       system("bin/zip -q DCASP_DOC_{$oParam->tipoGeracao}_{$sInst}_{$iCodOrgao}_{$iAnoReferencia}.zip $aListaArquivos");
       //echo $aListaArquivos;

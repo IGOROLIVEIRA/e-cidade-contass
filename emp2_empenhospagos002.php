@@ -188,8 +188,10 @@ if (!empty($oPost->sCredoresSelecionados)) {
 
 $sWhereRecursosSelecionados = "";
 if (!empty($oPost->sRecursosSelecionados))  {
-  $sWhereRecursosSelecionados = "o15_codtri::integer in ({$oPost->sRecursosSelecionados})";
+  $oPost->sRecursosSelecionados = strtr($oPost->sRecursosSelecionados, "*", "'");
+  $sWhereRecursosSelecionados = "o15_codtri in ({$oPost->sRecursosSelecionados})";
   $aWhere[]                   = $sWhereRecursosSelecionados;
+ 
 }
 
 $sWhereAcordosSelecionados = "";
@@ -389,9 +391,9 @@ $sSqlBuscaEmpenhos .= "                   k12_autent) AS y                      
 $sSqlBuscaEmpenhos .= "     WHERE tipo = 'ext') AS todo                                                          																			";
 $sSqlBuscaEmpenhos .= " WHERE {$sWhereEmpenho}                                                          																					";
 $sSqlBuscaEmpenhos .= "   AND {$sImplodeWhere} {$sImplodeGroupBy} {$sImplodeOrderBy}                                                          												";
-
+// echo $sSqlBuscaEmpenhos;exit;
 $rsExecutaBuscaEmpenho = db_query($sSqlBuscaEmpenhos);
-//db_criatabela($rsExecutaBuscaEmpenho);die($sSqlBuscaEmpenhos);
+// db_criatabela($rsExecutaBuscaEmpenho);die($sSqlBuscaEmpenhos);
 $iLinhasRetornadasBuscaEmpenho = pg_num_rows($rsExecutaBuscaEmpenho);
 if ($iLinhasRetornadasBuscaEmpenho == 0) {
   db_redireciona("db_erros.php?fechar=true&db_erro=Não existem empenhos para o filtro selecionado.");

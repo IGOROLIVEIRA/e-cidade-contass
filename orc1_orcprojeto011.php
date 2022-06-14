@@ -51,9 +51,22 @@ if(isset($incluir)){
   db_inicio_transacao();
   $lErro = false;
   // inclui texto padrão
-  $o39_texto = "Art 2. -  Para cobertura do Crédito aberto de acordo com o Art 1.,";
-  $o39_texto.= " será usado como recurso as seguintes reduções orçamentárias:   ";
-
+  if($o39_tiposuplementacao == 1004 || $o39_tiposuplementacao == 1009 ||$o39_tiposuplementacao == 1025 || $o39_tiposuplementacao == 1027 ||$o39_tiposuplementacao == 1029){
+      $o39_texto = "Art 2. -  Para cobertura do Crédito aberto de acordo com o Art 1.,";
+      $o39_texto.= " será usado como recurso o excesso de arrecadação na fonte:   ";
+  }
+  elseif($o39_tiposuplementacao == 1003 || $o39_tiposuplementacao == 1008 ||$o39_tiposuplementacao == 1028 || $o39_tiposuplementacao == 2026 ){
+    $o39_texto = "Art 2. -  Para cobertura do Crédito aberto de acordo com o Art 1.,";
+    $o39_texto.= "  será usado como recurso o Superávit Financeiro apurado no Balanço Patrimonial anterior:   ";
+  }
+  elseif($o39_tiposuplementacao == 1011){
+    $o39_texto = "Art. 2º - Fica o serviço de contabilidade autorizado a promover as adequações necessárias na Lei Orçamentária Municipal";
+    $o39_texto.= "  e no Plano Plurianual vigente, com a respectiva ação.   ";
+  }
+  else{
+    $o39_texto = "Art 2. -  Para cobertura do Crédito aberto de acordo com o Art 1.,"; 
+    $o39_texto.= " será usado como recurso as seguintes reduções orçamentárias: ";
+  }
   if ($o39_usalimite == '0') {
 
     $clorcprojeto->erro_status = 0;

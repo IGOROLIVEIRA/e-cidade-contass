@@ -48,8 +48,12 @@ $bModalidadeAplic 			= db_utils::fieldsmemory(db_query($sSqlModalidadeAplic))->o
 $clorcprojeto = new cl_orcprojeto;
 $clorcprojlan = new cl_orcprojlan;
 $cldbusuarios = new cl_db_usuarios;
-$clorcsuplem  = new cl_orcsuplem;
+$clorcsuplem = new cl_orcsuplem;
 $clorcsuplemtipo = new cl_orcsuplemtipo;
+
+
+$clorcprojeto->rotulo->label();
+
 
 $db_opcao = 22;
 $db_botao = false;
@@ -58,11 +62,39 @@ if(isset($alterar)){
   db_inicio_transacao();
   $db_opcao = 2;
   $db_botao = true;
+  
   if(isset($o39_tiposuplementacao)){
     $clorcprojeto->o39_tiposuplementacao = $o39_tiposuplementacao;
+         
   }
+  if(isset($o39_texto)){
+  if($o39_tiposuplementacao == 1004 || $o39_tiposuplementacao == 1009 ||$o39_tiposuplementacao == 1025 || $o39_tiposuplementacao == 1027 ||$o39_tiposuplementacao == 1029){
+      $o39_texto = "Art 2. -  Para cobertura do Crédito aberto de acordo com o Art 1.,";
+      $o39_texto.= " será usado como recurso o excesso de arrecadação na fonte:   ";
+  }
+  elseif($o39_tiposuplementacao == 1003 || $o39_tiposuplementacao == 1008 ||$o39_tiposuplementacao == 1028 || $o39_tiposuplementacao == 2026 ){
+    $o39_texto = "Art 2. -  Para cobertura do Crédito aberto de acordo com o Art 1.,";
+    $o39_texto.= "  será usado como recurso o Superávit Financeiro apurado no Balanço Patrimonial anterior:   ";
+  }
+  elseif($o39_tiposuplementacao == 1011){
+    $o39_texto = "Art. 2º - Fica o serviço de contabilidade autorizado a promover as adequações necessárias na Lei Orçamentária Municipal";
+    $o39_texto.= "  e no Plano Plurianual vigente, com a respectiva ação.   ";
+  }
+  else{
+   $o39_texto = "Art 2. -  Para cobertura do Crédito aberto de acordo com o Art 1.,"; 
+   $o39_texto.= " será usado como recurso as seguintes reduções orçamentárias: ";
+ }
+    $clorcprojeto->o39_texto = $o39_texto;
+         
+  }
+
   $clorcprojeto->alterar($o39_codproj);
   db_fim_transacao();
+
+  echo "<script>
+  parent.iframe_emissao.location.href='orc1_orcprojeto012.php?o39_codproj=$o39_codproj&db_opcao=$db_opcao';
+  </script>
+  ";
 
 }else if(isset($chavepesquisa) && $chavepesquisa!=""){
    $db_opcao = 2;
