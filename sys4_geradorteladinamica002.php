@@ -67,7 +67,8 @@ ac28_descricao as origem,
 ac17_descricao as status,
 l20_edital as processolicitatorio,
 l20_numero as codmodalidade,
-l03_descr as modalidade
+l03_descr as modalidade,
+l20_exercicioedital as exercicioedital
 FROM acordo
 JOIN cgm ON z01_numcgm = ac16_contratado
 JOIN acordos.acordoorigem on ac28_sequencial = ac16_origem
@@ -172,7 +173,7 @@ for ($i = 0; $i < pg_numrows($rs_acordo); $i++) {
   $pdf->Ln();
 
   if ($oDadosAcordo->processolicitatorio != null) {
-    $pdf->Cell(140, 5, "Processo Licitatório: " . $oDadosAcordo->processolicitatorio, 1, 0, "L", 1);
+    $pdf->Cell(140, 5, "Processo Licitatório: " . $oDadosAcordo->processolicitatorio . "/" . $oDadosAcordo->exercicioedital, 1, 0, "L", 1);
     $pdf->Cell(90, 5, "Modalidade: " . IniciaisMaiusculas($oDadosAcordo->modalidade), 1, 0, "L", 1);
     $pdf->Cell(49, 5, "Numeração: " . $oDadosAcordo->codmodalidade, 1, 0, "L", 1);
     $pdf->Ln();
