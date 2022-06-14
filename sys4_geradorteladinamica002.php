@@ -168,7 +168,7 @@ for ($i = 0; $i < pg_numrows($rs_acordo); $i++) {
 
   if ($oDadosAcordo->processolicitatorio != null) {
     $pdf->Cell(140, 5, "Processo Licitatório: " . $oDadosAcordo->processolicitatorio, 1, 0, "L", 1);
-    $pdf->Cell(90, 5, "Modalidade: " . strtolower($oDadosAcordo->modalidade), 1, 0, "L", 1);
+    $pdf->Cell(90, 5, "Modalidade: " . IniciaisMaiusculas($oDadosAcordo->modalidade), 1, 0, "L", 1);
     $pdf->Cell(49, 5, "Numeração: " . $oDadosAcordo->codmodalidade, 1, 0, "L", 1);
     $pdf->Ln();
     $y += 19 + (5 * $linhas);
@@ -184,5 +184,18 @@ for ($i = 0; $i < pg_numrows($rs_acordo); $i++) {
   $pdf->Ln(4);
 }
 
+function IniciaisMaiusculas($string)
+{
+  $string = mb_strtolower(trim(preg_replace("/\s+/", " ", $string))); //transformo em minuscula toda a sentença
+  $palavras = explode(" ", $string); //explodo a sentença em um array
+  $t =  count($palavras); //conto a quantidade de elementos do array
+  for ($i = 0; $i < $t; $i++) { //entro em um for limitando pela quantidade de elementos do array
+    $retorno[$i] = ucfirst($palavras[$i]); //altero a primeira letra de cada palavra para maiuscula
+    if ($retorno[$i] == "Dos" || $retorno[$i] == "De" || $retorno[$i] == "Do" || $retorno[$i] == "Da" || $retorno[$i] == "E" || $retorno[$i] == "Das") :
+      $retorno[$i] = mb_strtolower($retorno[$i]); //converto em minuscula o elemento do array que contenha preposição de nome próprio
+    endif;
+  }
+  return implode(" ", $retorno);
+}
 
 $pdf->Output();
