@@ -1173,10 +1173,10 @@ class cl_empempenho
         $sql .= "       left join acordo   on empempenhocontrato.e100_acordo = acordo.ac16_sequencial ";
         $sql .= "       left join convconvenios on convconvenios.c206_sequencial = empempenho.e60_numconvenio ";
         $sql .= "       left join empresto on e91_numemp = e60_numemp ";
-        $sql .= "       inner join matordemitem on m52_numemp = e60_numemp ";
-        $sql .= "       inner join matordem on m51_codordem = m52_codordem ";
+        $sql .= "       left join matordemitem on m52_numemp = e60_numemp ";
+        $sql .= "       left join matordem on m51_codordem = m52_codordem ";
         $sql .= "       left join matordemanu on m53_codordem = m51_codordem ";
-        $sql .= " inner join matordemitemanu on m36_matordemitem = m52_codlanc ";
+        $sql .= " left join matordemitemanu on m36_matordemitem = m52_codlanc ";
 
         $sql2 = "";
         if ($dbwhere == "") {
