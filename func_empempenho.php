@@ -457,19 +457,50 @@ $rotulo->label("z01_cgccpf");
               //               SELECT e69_numemp FROM empnota)
               //               and empempenho.e60_numemp = $pesquisa_chave ";
 
-              if ($inclusaoordemcompra == true) {
-
-                if ($codemp == true) {
-                  $where .= " empempenho.e60_codemp = '$pesquisa_chave' and e60_vlremp >  (e60_vlranu + e60_vlrliq)";
-                }
-
-                if ($numemp == true) {
-                  $where .= " empempenho.e60_numemp = $pesquisa_chave and e60_vlremp >  (e60_vlranu + e60_vlrliq)";
-                }
-              }
 
               //$where .= "empempenho.e60_numemp = $pesquisa_chave and e60_vlremp >  (e60_vlranu + e60_vlrliq)";
               $sSql = $clempempenho->sql_query($pesquisa_chave, "*", null, $where, $filtroempelemento);
+            }
+
+            if ($inclusaoordemcompra == true) {
+
+              if ($codemp == true) {
+                $dbwhere = " where empempenho.e60_codemp = '$pesquisa_chave' ";
+              }
+
+              if ($numemp == true) {
+                $dbwhere = " where empempenho.e60_numemp = $pesquisa_chave ";
+              }
+
+              $campos = "";
+
+              $campos = "empempenho.e60_numemp,
+          empempenho.e60_codemp,
+          empempenho.e60_anousu,
+          e61_autori,
+          empempenho.e60_numcgm,
+          case when ac16_numeroacordo is null then si172_nrocontrato::varchar else (ac16_numeroacordo || '/' || ac16_anousu)::varchar end as si172_nrocontrato,
+          case when (select ac18_datafim from acordovigencia where ac18_acordoposicao in (select min(ac26_sequencial) from acordoposicao where ac26_acordo = acordo.ac16_sequencial) and ac18_ativo  = true) is null then si172_datafinalvigencia else (select ac18_datafim from acordovigencia where ac18_acordoposicao in (select min(ac26_sequencial) from acordoposicao where ac26_acordo = acordo.ac16_sequencial) and ac18_ativo  = true) end as si172_datafinalvigencia,
+          case when ac16_datafim is null then si174_novadatatermino else ac16_datafim end as si174_novadatatermino,
+          empempenho.e60_emiss as DB_e60_emiss,
+          cgm.z01_nome,
+          cgm.z01_cgccpf,
+          empempenho.e60_coddot,
+          e60_vlremp,
+          e60_vlrliq,
+          e60_vlrpag,
+          e60_vlranu,
+          RPAD(SUBSTR(convconvenios.c206_objetoconvenio,0,47),50,'...') AS c206_objetoconvenio,
+          m51_codordem,
+          m52_numemp,
+          sum(m52_valor) as somaordens
+          ";
+              $campos = " distinct " . $campos;
+              //$dbwhere .= "";
+              $dbwhere .= " group by m51_codordem,m52_numemp,e60_vlremp,empempenho.e60_numemp,empempaut.e61_autori,acordo.ac16_numeroacordo,contratos.si172_nrocontrato,acordo.ac16_anousu,acordo.ac16_sequencial,contratos.si172_datafinalvigencia,aditivoscontratos.si174_novadatatermino,cgm.z01_nome,cgm.z01_cgccpf,convconvenios.c206_objetoconvenio   having e60_vlremp > (case when sum(m52_valor) is null then 0 else sum(m52_valor) end) - (case when sum(m36_vrlanu) is null then 0 else sum(m36_vrlanu) end) ";
+              $dbwhere .= " and e60_instit = " . db_getsession("DB_instit") . " order by e60_numemp desc";
+
+              $sSql = $clempempenho->sql_query_inclusaoempenho(null, $campos, null, $dbwhere);
             }
 
             $result = $clempempenho->sql_record($sSql);
