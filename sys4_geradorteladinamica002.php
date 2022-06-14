@@ -78,6 +78,11 @@ left join cflicita on l03_codigo = l20_codtipocom
 ORDER BY CAST(ac16_numeroacordo AS NUMERIC),ac16_sequencial";
 
 $rs_acordo = db_query($sql_acordo);
+
+if (pg_numrows($rs_acordo) == 0) {
+  db_redireciona('db_erros.php?fechar=true&db_erro=Nenhum registro encontrado.');
+}
+
 $head2 = "Rol de Contratos";
 
 $pdf = new PDF('Landscape', 'mm', 'A4');
