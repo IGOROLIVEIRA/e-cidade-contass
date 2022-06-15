@@ -61,9 +61,9 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
   $this->objpdf->text($xcol+21,$xlin+42,':  '.$this->descr_tipocompra);
   $this->objpdf->text($xcol+85,$xlin+38,$this->coddot);
 
-  if ($ano < db_getsession("DB_anousu")) {
-    $this->objpdf->text($xcol+19,$xlin+38,'RESTOS A PAGAR ');
-  }
+  // if ($ano < db_getsession("DB_anousu")) {
+  //   // $this->objpdf->text($xcol+19,$xlin+38,'RESTOS A PAGAR ');
+  // }
   
   // retangulo dos dados do credor
   $this->objpdf->rect($xcol+106,$xlin+2,88,32,2,'DF','1234');

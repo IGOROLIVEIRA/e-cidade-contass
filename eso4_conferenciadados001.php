@@ -136,6 +136,7 @@ $mesfolha = DBPessoal::getMesFolha();
                             <option value="S2200">S2200</option>
                             <option value="S2300">S2300</option>
                             <option value="S2306">S2306</option>
+                            <option value="S2400">S2400</option>
                         </select>
                     </td>
                 </tr>
