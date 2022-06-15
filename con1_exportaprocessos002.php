@@ -282,14 +282,23 @@ if ($leiaute == 1) {
     }
 
     $clabre_arquivo = new cl_abre_arquivo("/tmp/licitacao_$l20_codigo.txt");
+
+    $numeroprocesso = 0;
+
     if ($clabre_arquivo->arquivo != false) {
 
         for ($w = 0; $w < pg_numrows($resultRegistro1); $w++) {
 
 
-
             fputs($clabre_arquivo->arquivo, pg_result($resultRegistro1, $w, "tiporegistro") . "|");
-            fputs($clabre_arquivo->arquivo, pg_result($resultRegistro1, $w, "edital") . "|");
+
+            if (pg_result($resultRegistro1, $w, "edital") == "") {
+                $numeroprocesso = pg_result($resultRegistro1, $w, "numprocesso");
+                fputs($clabre_arquivo->arquivo, $numeroprocesso . "|");
+            } else {
+                fputs($clabre_arquivo->arquivo, pg_result($resultRegistro1, $w, "edital") . "|");
+            }
+
             fputs($clabre_arquivo->arquivo, pg_result($resultRegistro1, $w, "exercicioedital") . "|");
             fputs($clabre_arquivo->arquivo, pg_result($resultRegistro1, $w, "numprocesso") . "|");
             fputs($clabre_arquivo->arquivo, pg_result($resultRegistro1, $w, "orgao") . "|");
@@ -307,35 +316,57 @@ if ($leiaute == 1) {
             fputs($clabre_arquivo->arquivo, "\n");
         }
 
+        $descricaoLote = "";
+        $sequencial = 0;
+        $sequencialLote = array();
+
         for ($w = 0; $w < pg_numrows($resultRegistro2); $w++) {
 
-
+            if ($descricaoLote != pg_result($resultRegistro2, $w, "descricaolote")) {
+                $sequencial++;
+                $sequencialLote[pg_result($resultRegistro2, $w, "numerodolote")] = $sequencial;
+                $descricaoLote = pg_result($resultRegistro2, $w, "descricaolote");
+            } else {
+                $sequencialLote[pg_result($resultRegistro2, $w, "numerodolote")] = $sequencial;
+            }
 
             fputs($clabre_arquivo->arquivo, pg_result($resultRegistro2, $w, "tiporegistro") . "|");
-            fputs($clabre_arquivo->arquivo, pg_result($resultRegistro2, $w, "edital") . "|");
+
+            if (pg_result($resultRegistro2, $w, "edital") == "") {
+                fputs($clabre_arquivo->arquivo, $numeroprocesso . "|");
+            } else {
+                fputs($clabre_arquivo->arquivo, pg_result($resultRegistro2, $w, "edital") . "|");
+            }
+
             fputs($clabre_arquivo->arquivo, pg_result($resultRegistro2, $w, "exercicioedital") . "|");
-            fputs($clabre_arquivo->arquivo, pg_result($resultRegistro2, $w, "numerodolote") . "|");
+            fputs($clabre_arquivo->arquivo, $sequencialLote[pg_result($resultRegistro2, $w, "numerodolote")] . "|");
             fputs($clabre_arquivo->arquivo, pg_result($resultRegistro2, $w, "descricaolote") . "|");
             fputs($clabre_arquivo->arquivo, pg_result($resultRegistro2, $w, "localentrega") . "|");
             fputs($clabre_arquivo->arquivo, pg_result($resultRegistro2, $w, "localdeentrega") . "|");
             fputs($clabre_arquivo->arquivo, pg_result($resultRegistro2, $w, "datadeentrega") . "|");
-            fputs($clabre_arquivo->arquivo, pg_result($resultRegistro2, $w, "garantia"));
+            fputs($clabre_arquivo->arquivo, pg_result($resultRegistro2, $w, "garantia") . "|");
+            fputs($clabre_arquivo->arquivo, pg_result($resultRegistro2, $w, "numerodolote"));
             fputs($clabre_arquivo->arquivo, "\n");
         }
 
         for ($w = 0; $w < pg_numrows($resultRegistro3); $w++) {
 
-
-
             fputs($clabre_arquivo->arquivo, pg_result($resultRegistro3, $w, "tiporegistro") . "|");
-            fputs($clabre_arquivo->arquivo, pg_result($resultRegistro3, $w, "edital") . "|");
+
+            if (pg_result($resultRegistro3, $w, "edital") == "") {
+                fputs($clabre_arquivo->arquivo, $numeroprocesso . "|");
+            } else {
+                fputs($clabre_arquivo->arquivo, pg_result($resultRegistro3, $w, "edital") . "|");
+            }
+
             fputs($clabre_arquivo->arquivo, pg_result($resultRegistro3, $w, "exercicioedital") . "|");
-            fputs($clabre_arquivo->arquivo, pg_result($resultRegistro3, $w, "numerodolote") . "|");
+            fputs($clabre_arquivo->arquivo, $sequencialLote[pg_result($resultRegistro2, $w, "numerodolote")] . "|");
             fputs($clabre_arquivo->arquivo, pg_result($resultRegistro3, $w, "numerodoitem") . "|");
             fputs($clabre_arquivo->arquivo, pg_result($resultRegistro3, $w, "unidade") . "|");
             fputs($clabre_arquivo->arquivo, pg_result($resultRegistro3, $w, "pc11_quant") . "|");
             fputs($clabre_arquivo->arquivo, pg_result($resultRegistro3, $w, "vlrun") . "|");
-            fputs($clabre_arquivo->arquivo, pg_result($resultRegistro3, $w, "pc01_descrmater"));
+            fputs($clabre_arquivo->arquivo, pg_result($resultRegistro3, $w, "pc01_descrmater") . "|");
+            fputs($clabre_arquivo->arquivo, pg_result($resultRegistro3, $w, "numerodolote"));
             fputs($clabre_arquivo->arquivo, "\n");
         }
 
