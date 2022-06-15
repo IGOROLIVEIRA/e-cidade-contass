@@ -832,7 +832,8 @@ class cl_acordoposicao {
   }
 
   public function sql_query_empenhoautori_acordo($ac16_sequencial){
-        $sSql  = "select e54_autori";
+        $sSql  = "select e54_autori,
+        e60_numemp";
         $sSql .= "  from acordoposicao";
         $sSql .= " inner join acordoitem on
         ac20_acordoposicao = ac26_sequencial
@@ -860,7 +861,8 @@ class cl_acordoposicao {
         e54_anulad
       union
       select
-        distinct e54_autori
+        distinct e54_autori,
+        e60_numemp
       from
         acordoposicao
       inner join acordoitem on

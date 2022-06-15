@@ -16,8 +16,8 @@ $clitensregpreco   = new cl_itensregpreco;
 $clacordo          = new cl_acordo;
 $clacordoposicao   = new cl_acordoposicao;
 $clempautoriza     = new cl_empautoriza;
-$cl_liclicita      = new cl_liclicita;
-
+$clliclicita       = new cl_liclicita;
+$clempempenho      = new cl_empempenho;
 $db_botao = true;
 $sqlerro  = false;
 
@@ -152,112 +152,90 @@ if (!$sqlerro) {
   }
 
   if (isset($alterar)) {
-    db_inicio_transacao();
-    $db_opcao = 2;
-    $sqlerro  = false;
-    
-    
-
-
-    //  /**
-    //    * Verificar Encerramento Periodo Contabil
-    //    */
-    //  if (!empty($si06_dataadesao)) {
-    //    $clcondataconf = new cl_condataconf;
-    //    if (!$clcondataconf->verificaPeriodoContabil($si06_dataadesao)) {
-    //      $cladesaoregprecos->erro_msg = $clcondataconf->erro_msg." $si06_dataadesao";
-    //      $cladesaoregprecos->erro_status="0";
-    //      $sqlerro  = true;
-    //    }
-    //  }
-
-    /**
-     * Verificar Encerramento Periodo Patrimonial
-     */
-    $dataadesao = db_utils::fieldsMemory(db_query($cladesaoregprecos->sql_query_file($si06_sequencial, "si06_dataadesao")), 0)->si06_dataadesao;
-
-    /*
-    if (!empty($si06_dataadesao)) {
-      $clcondataconf = new cl_condataconf;
-      if (!$clcondataconf->verificaPeriodoPatrimonial($dataadesao) || !$clcondataconf->verificaPeriodoPatrimonial($si06_dataadesao)) {
-        $cladesaoregprecos->erro_msg = $clcondataconf->erro_msg;
-        $cladesaoregprecos->erro_status = "0";
-        $sqlerro  = true;
-      }
-    }
-     */
-
-    if ($sqlerro == false) {
-
-      if($si06_numeroadm!="" && $si06_numeroadm!=null){
-        $cladesaoregprecos->si06_numeroprc = $si06_numeroadm;
-      }
-      if($si06_anomodadm!="" && $si06_anomodadm!=null){
-        $cladesaoregprecos->si06_anoproc = $si06_anomodadm;
-      }
-      if($si06_nummodadm!="" && $si06_nummodadm!=null){
-        $cladesaoregprecos->si06_numlicitacao = $si06_nummodadm;
-      }
-      $cladesaoregprecos->si06_sequencial = $si06_sequencial;
-      $cladesaoregprecos->alterar($si06_sequencial);
-
-
-      $sSqlItemacordo = $clacordo->sql_record($clacordo->sql_query_sequencial_acordo($si06_sequencial));
-      db_fieldsmemory($sSqlItemacordo, 0);
-      $sSqlItemacordoposicao = $clacordoposicao->sql_record($clacordoposicao->sql_query_empenhoautori_acordo($ac16_sequencial));
-      $numrows_unid = $clacordoposicao->numrows;
-      for ($i = 0; $i < $numrows_unid; $i++) {
-        db_fieldsmemory($sSqlItemacordoposicao, $i);
-        $clempautoriza->e54_nummodalidade = $si06_nummodadm;
-        $clempautoriza->e54_autori = $e54_autori;
-        $clempautoriza->alterar($e54_autori);
-      }
-
-      $sql ="select
-      distinct l20_codigo,
-      l20_anousu,
-      l20_numero,
-      l03_codcom,
-      l03_descr
-    from
-      empautitem
-    inner join empautitempcprocitem on
-      empautitempcprocitem.e73_sequen = empautitem.e55_sequen
-      and empautitempcprocitem.e73_autori = empautitem.e55_autori
-    inner join liclicitem on
-      liclicitem.l21_codpcprocitem = empautitempcprocitem.e73_pcprocitem
-    inner join liclicita on
-      liclicitem.l21_codliclicita = liclicita.l20_codigo
-    inner join cflicita on
-      liclicita.l20_codtipocom = cflicita.l03_codigo
-    inner join empautoriza on
-      empautoriza.e54_autori = empautitem.e55_autori
-    where
-      e55_autori = 33799";
+    if($si06_numeroadm!="" && $si06_numeroadm!=null && $si06_anomodadm!="" && $si06_anomodadm!=null && $si06_nummodadm!="" && $si06_nummodadm!=null){
+      db_inicio_transacao();
+      $db_opcao = 2;
+      $sqlerro  = false;
       
-      $cl_liclicita->sql_record($sql);      
+      
 
-    }
 
-    if ($si06_processoporlote == 2) {
-      $sSqlItens = $clitensregpreco->sql_query(null, "itensregpreco.*", null, "si07_sequencialadesao = {$si06_sequencial}");
-      $rsItens   = $clitensregpreco->sql_record($sSqlItens);
+      //  /**
+      //    * Verificar Encerramento Periodo Contabil
+      //    */
+      //  if (!empty($si06_dataadesao)) {
+      //    $clcondataconf = new cl_condataconf;
+      //    if (!$clcondataconf->verificaPeriodoContabil($si06_dataadesao)) {
+      //      $cladesaoregprecos->erro_msg = $clcondataconf->erro_msg." $si06_dataadesao";
+      //      $cladesaoregprecos->erro_status="0";
+      //      $sqlerro  = true;
+      //    }
+      //  }
 
-      for ($count = 0; $count < pg_num_rows($rsItens); $count++) {
-        $oItem = db_utils::fieldsMemory($rsItens, $count);
+      /**
+       * Verificar Encerramento Periodo Patrimonial
+       */
+      $dataadesao = db_utils::fieldsMemory(db_query($cladesaoregprecos->sql_query_file($si06_sequencial, "si06_dataadesao")), 0)->si06_dataadesao;
 
-        $clitensregpreco->si07_descricaolote = '';
-        $clitensregpreco->si07_numerolote    = '';
-        $clitensregpreco->si07_sequencialadesao = $si06_sequencial;
-        $clitensregpreco->alterar($oItem->si07_sequencial);
+      /*
+      if (!empty($si06_dataadesao)) {
+        $clcondataconf = new cl_condataconf;
+        if (!$clcondataconf->verificaPeriodoPatrimonial($dataadesao) || !$clcondataconf->verificaPeriodoPatrimonial($si06_dataadesao)) {
+          $cladesaoregprecos->erro_msg = $clcondataconf->erro_msg;
+          $cladesaoregprecos->erro_status = "0";
+          $sqlerro  = true;
+        }
       }
+      */
+
+      if ($sqlerro == false) {
+
+          $cladesaoregprecos->alterar($si06_sequencial);
+
+          $sSqlItemacordo = $clacordo->sql_record($clacordo->sql_query_sequencial_acordo($si06_sequencial));
+          db_fieldsmemory($sSqlItemacordo, 0);
+          $sSqlItemacordoposicao = $clacordoposicao->sql_record($clacordoposicao->sql_query_empenhoautori_acordo($ac16_sequencial));
+          $numrows_unid = $clacordoposicao->numrows;
+
+          for ($i = 0; $i < $numrows_unid; $i++) {
+            db_fieldsmemory($sSqlItemacordoposicao, $i);
+            $clempautoriza->e54_nummodalidade = $si06_nummodadm;
+            $clempautoriza->e54_autori = $e54_autori;
+            $clempautoriza->alterar($e54_autori);
+            if($e60_numemp!="" && $e60_numemp!=null){
+              $clempempenho->e60_numerol = $si06_numeroadm."/".$si06_anomodadm;
+              $clempempenho->e60_numemp = $e60_numemp;
+              $clempempenho->alterar($e60_numemp);
+            }
+          } 
+
+      }
+
+      if ($si06_processoporlote == 2) {
+        $sSqlItens = $clitensregpreco->sql_query(null, "itensregpreco.*", null, "si07_sequencialadesao = {$si06_sequencial}");
+        $rsItens   = $clitensregpreco->sql_record($sSqlItens);
+
+        for ($count = 0; $count < pg_num_rows($rsItens); $count++) {
+          $oItem = db_utils::fieldsMemory($rsItens, $count);
+
+          $clitensregpreco->si07_descricaolote = '';
+          $clitensregpreco->si07_numerolote    = '';
+          $clitensregpreco->si07_sequencialadesao = $si06_sequencial;
+          $clitensregpreco->alterar($oItem->si07_sequencial);       
+        }
+      }
+      db_fim_transacao();
+      $_SESSION["codigoAdesao"] = $si06_sequencial;
+      echo "<script>
+          parent.document.formaba.db_itens.disabled=false;
+          top.corpo.iframe_db_itens.location.href='sic1_itensregpreco001.php?codigoAdesao=" . $si06_sequencial . "';
+          </script>";
+    }else{
+      $sqlerro = true;
+      $erro_msg = 'Informe todas as informações do orgão de adesão!';
+      $campo = "si06_anomodadm";
     }
-    db_fim_transacao();
-    $_SESSION["codigoAdesao"] = $si06_sequencial;
-    echo "<script>
-        parent.document.formaba.db_itens.disabled=false;
-        top.corpo.iframe_db_itens.location.href='sic1_itensregpreco001.php?codigoAdesao=" . $si06_sequencial . "';
-        </script>";
+
   } else if (isset($chavepesquisa) || isset($_SESSION["codigoAdesao"])) {
     $db_opcao = 2;
     if (!isset($chavepesquisa)) {
@@ -368,7 +346,9 @@ if ($sqlerro) {
   }
 }*/
 if (isset($alterar)) {
+  
   if ($cladesaoregprecos->erro_status == "0") {
+    
     $cladesaoregprecos->erro(true, false);
     $db_botao = true;
     echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
@@ -377,6 +357,8 @@ if (isset($alterar)) {
       echo "<script> document.form1." . $cladesaoregprecos->erro_campo . ".focus();</script>";
     }
   } else {
+    echo "<script> document.form1." . $campo . ".style.backgroundColor='#99A9AE';</script>";
+    echo "<script> document.form1." . $campo . ".focus();</script>";
     $cladesaoregprecos->erro(true, false);
     $db_opcao = 22;
   }
