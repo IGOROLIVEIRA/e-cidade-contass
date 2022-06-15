@@ -83,7 +83,8 @@ $clpcgrupo->rotulo->label("pc03_descrgrupo");
   <tr> 
     <td align="center" valign="top"> 
       <?
-      $where = " pc03_ativo is true ";
+      $instit = "pc03_instit in (" . db_getsession('DB_instit').",0)";
+      $where = " pc03_ativo is true and $instit";
       if(!isset($pesquisa_chave)){
         if(isset($campos)==false){
            if(file_exists("funcoes/db_func_pcgrupo.php")==true){
@@ -102,7 +103,7 @@ $clpcgrupo->rotulo->label("pc03_descrgrupo");
         db_lovrot($sql,15,"()","",$funcao_js);
       }else{
         if($pesquisa_chave!=null && $pesquisa_chave!=""){
-          $result = $clpcgrupo->sql_record($clpcgrupo->sql_query($pesquisa_chave,"*",null,"pc03_codgrupo=$pesquisa_chave and $where"));
+          $result = $clpcgrupo->sql_record($clpcgrupo->sql_query($pesquisa_chave,"*",null,"pc03_codgrupo=$pesquisa_chave and $where and $instit"));
           if($clpcgrupo->numrows!=0){
             db_fieldsmemory($result,0);
             echo "<script>".$funcao_js."('$pc03_descrgrupo',false);</script>";
