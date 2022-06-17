@@ -584,4 +584,39 @@ class Preenchimentos
          */
         return \db_utils::getCollectionByRecord($rs);
     }
+
+    /**
+     * @param integer $codigoFormulario
+     * @return stdClass[]
+     */
+    public function buscarPreenchimentoS1200($codigoFormulario, $matricula=null)
+    {
+        $sql = "";
+        if ($matricula != null) {
+            $sql .= "and rh01_regist in ($matricula) ";
+        }
+        $sql .= "and (
+					            (
+					            (date_part('year',rhpessoal.rh01_admiss)::varchar || lpad(date_part('month',rhpessoal.rh01_admiss)::varchar,2,'0'))::integer <= 202207
+					            and (date_part('year',fc_getsession('DB_datausu')::date)::varchar || lpad(date_part('month',fc_getsession('DB_datausu')::date)::varchar,2,'0'))::integer <= 202207
+					            and (rh05_recis is null or (date_part('year',rh05_recis)::varchar || lpad(date_part('month',rh05_recis)::varchar,2,'0'))::integer > 202207)
+					            ) or (
+					            date_part('month',rhpessoal.rh01_admiss) = date_part('month',fc_getsession('DB_datausu')::date)
+					            and date_part('year',rhpessoal.rh01_admiss) = date_part('year',fc_getsession('DB_datausu')::date)
+					            and (date_part('year',fc_getsession('DB_datausu')::date)::varchar || lpad(date_part('month',fc_getsession('DB_datausu')::date)::varchar,2,'0'))::integer > 202207
+					            )
+				            ) order by z01_nome asc limit 1000";
+
+        $rs = \db_query($sql);
+
+        if (!$rs) {
+            throw new \Exception("Erro ao buscar os preenchimentos do S2200");
+        }
+
+
+        /**
+         * @todo busca os empregadores da instituição e adicona para cada rubriuca
+         */
+        return \db_utils::getCollectionByRecord($rs);
+    }
 }
