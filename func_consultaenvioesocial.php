@@ -65,7 +65,7 @@ $iInstit = db_getsession("DB_instit");
                                     <b>Situação:</b>
                                 </td>
                                 <td width="96%" align="left" nowrap>
-                                    <?
+                                    <?php
                                     $aSituacao = array("1" => "A ENVIAR", "3" => "PROCESSANDO ENVIO", "2" => "ENVIADO", "4" => "ERRO NO ENVIO");
                                     db_select('situacao', $aSituacao, true, 4, "");
                                     ?>
@@ -99,6 +99,7 @@ $iInstit = db_getsession("DB_instit");
       WHEN rh213_situacao = 4 THEN 'ERRO NO ENVIO'
       END AS rh213_situacao,rh215_recibo as dl_recibo,rh215_dataentrega as dl_entrega,
       rh213_protocolo as dl_protocolo,
+      rh213_dados as dl_dados,
       rh213_dataprocessamento,rh213_msgretorno";
 
                     if (isset($situacao) && !empty($situacao)) {

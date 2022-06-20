@@ -72,7 +72,7 @@ if(isset($alterar)){
       $o39_texto = "Art 2. -  Para cobertura do Crédito aberto de acordo com o Art 1.,";
       $o39_texto.= " será usado como recurso o excesso de arrecadação na fonte:   ";
   }
-  elseif($o39_tiposuplementacao == 1003 || $o39_tiposuplementacao == 1008 ||$o39_tiposuplementacao == 1028 || $o39_tiposuplementacao == 1026 ){
+  elseif($o39_tiposuplementacao == 1003 || $o39_tiposuplementacao == 1008 ||$o39_tiposuplementacao == 1028 || $o39_tiposuplementacao == 2026 ){
     $o39_texto = "Art 2. -  Para cobertura do Crédito aberto de acordo com o Art 1.,";
     $o39_texto.= "  será usado como recurso o Superávit Financeiro apurado no Balanço Patrimonial anterior:   ";
   }

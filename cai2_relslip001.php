@@ -92,8 +92,9 @@ function js_emite(){
   qry+= '&k145_numeroprocesso='+document.form1.k145_numeroprocesso.value;
   qry+= '&db_selinstit='+selinstit;
   qry+= '&codconta='+document.form1.c61_reduz.value;
+  qry+= '&codcontacred='+document.form1.c61_reduzcred.value;
   qry+= '&tiposlip='+document.form1.tiposlip.value;
-  qry+= '&movimento='+document.form1.movimento.value;
+  qry+= '&movimento='+"0";
   qry+= '&agrupar='+document.form1.agrupar.value;
   jan = window.open('cai2_relslip002.php?'+qry,'',
                     'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
@@ -118,10 +119,10 @@ function js_emite(){
 </table>
 <br>
 <table align="center" cellspacing='0' border="0">
-    <tr>
+    <tr >
         <td>
             <fieldset>
-                <table>
+                <table >
                     <form name="form1">
                         <tr>
                             <td nowrap title="<?=@$Tk17_codigo?>" align='left'>
@@ -130,7 +131,7 @@ function js_emite(){
                             <td>
                                 <? db_input('k17_codigo',14,$Ik17_codigo,true,'text',$db_opcao," onchange='js_pesquisak17_codigo(false);'")  ?>
                             </td>
-                            <td align="right">
+                            <td align="left">
                                 <? db_ancora("<b>até:</b>","js_pesquisak17_codigo02(true);",$db_opcao);  ?>
                                 <? db_input('k17_codigo',14,$Ik17_codigo,true,'text',$db_opcao," onchange='js_pesquisak17_codigo02(false);'","k17_codigo02")?>
                             </td>
@@ -142,8 +143,8 @@ function js_emite(){
                             <td>
                                 <?db_inputdata("data","","","","true","text",2);?>
                             </td>
-                            <td align="right">
-                                <b>à:</b><?db_inputdata("data1","","","","true","text",2);?>
+                            <td align="left">
+                                <b>&nbsp&nbsp   à:</b><?db_inputdata("data1","","","","true","text",2);?>
                             </td>
                         </tr>
                         <tr>
@@ -153,8 +154,8 @@ function js_emite(){
                             <td>
                                 <?db_inputdata("data_autenticacao","","","","true","text",2);?>
                             </td>
-                            <td align="right">
-                                <b>à:</b><?db_inputdata("data_autenticacao1","","","","true","text",2);?>
+                            <td align="left">
+                                <b>&nbsp&nbsp  à:</b><?db_inputdata("data_autenticacao1","","","","true","text",2);?>
                             </td>
                         </tr>
                         <tr>
@@ -163,23 +164,38 @@ function js_emite(){
                             </td>
                             <td colspan="2">
                                 <? db_input('k17_hist',10,$Ik17_hist,true,'text',$db_opcao," onchange='js_pesquisac50_codhist(false);'");
-                                   db_input('c50_descr',48,$Ic50_descr,true,'text',3); ?>
+                                   db_input('c50_descr',59,$Ic50_descr,true,'text',3); ?>
                             </td>
                         </tr>
                         <tr>
                             <td align="left">
-                                <?php db_ancora('Conta:',"js_pesquisac61_reduz(true);",$db_opcao); ?>
+                                <?php db_ancora('Conta Debito:',"js_pesquisac61_reduz(true);",$db_opcao); ?>
                             </td>
                             <td colspan="2">
                                 <?php db_input('c61_reduz',10,$Ic61_reduz,true,'text',$db_opcao,"onchange='js_pesquisac61_reduz(false);'");
-                                      db_input('c60_descr',39,$Ic60_descr,true,'text',3,'');
-                                      $movimento = array(
-                                              "0"=>"Todos",
-                                              "1"=>"Debito",
-                                              "2"=>"Credito");
-                                      db_select("movimento",$movimento,true,2); ?>
+                                      db_input('c60_descr',59,$Ic60_descr,true,'text',3,'');
+                                ?>
                             </td>
                         </tr>
+                        <tr>
+                            <td align="left">
+                                <?php db_ancora('Conta Credito:',"js_pesquisac61_reduzcred(true);",$db_opcao); ?>
+                            </td>
+                            <td colspan="2">
+                                <?php db_input('c61_reduzcred',10,$Ic61_reduzcred,true,'text',$db_opcao,"onchange='js_pesquisac61_reduzcred(false);'");
+                                      db_input('c60_descrcred',59,$Ic60_descrcred,true,'text',3,'');
+                                ?>
+                                
+                            </td>
+                        </tr>
+                        <script>
+                                    document.getElementById('c60_descr').style.width='82.5%';
+                                    document.getElementById('c60_descrcred').style.width='82.5%';
+                                    document.getElementById('c50_descr').style.width='82.5%';
+                                    document.getElementById('data1').style.width='32.4%';
+                                    document.getElementById('data_autenticacao1').style.width='32.4%';
+                                    
+                        </script>
                         <tr>
                             <td>
                                 <strong>Recurso:</strong>
@@ -257,7 +273,7 @@ function js_emite(){
                                         "3"=>"Conta Crédito");
                                 db_select("agrupar",$aAgrupar,true,2); ?>
                                 <script>
-                                    document.getElementById('agrupar').style.width='50%';
+                                    document.getElementById('agrupar').style.width='99.7%';
                                 </script>
                             </td>
                         </tr>
@@ -427,6 +443,40 @@ function js_mostrasaltes1(chave1,chave2){
 }
 
 /*=====  End of Busca Código da Conta  ======*/
+
+
+
+/*=============================================
+=            Busca Código da Conta Credito         =
+=============================================*/
+
+function js_pesquisac61_reduzcred(mostra){
+  if(mostra==true){
+    js_OpenJanelaIframe('','db_iframe_saltes','func_conplano.php?funcao_js=parent.js_mostrasaltescred1|c61_reduz|c60_descr','Pesquisa',true);
+  }else{
+    if(document.form1.c61_reduzcred.value != ''){
+       js_OpenJanelaIframe('','db_iframe_saltes',
+        'func_conplano.php?pesquisa_chave='+document.form1.c61_reduzcred.value+'&funcao_js=parent.js_mostrasaltescred&reduz=true','Pesquisa',false);
+    }else{
+      document.form1.c61_reduzcred.value = '';
+      document.form1.c60_descrcred.value = '';
+     }
+  }
+}
+function js_mostrasaltescred(chave,erro){
+  document.form1.c60_descrcred.value = chave;
+  if(erro==true){
+    document.form1.c61_reduzcred.focus();
+    document.form1.c61_reduzcred = '';
+  }
+}
+function js_mostrasaltescred1(chave1,chave2){
+  document.form1.c61_reduzcred.value = chave1;
+  document.form1.c60_descrcred.value = chave2;
+  db_iframe_saltes.hide();
+}
+
+/*=====  End of Busca Código da Conta Credito  ======*/
 
 </script>
 

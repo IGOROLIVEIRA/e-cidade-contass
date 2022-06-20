@@ -64,8 +64,10 @@ $sql = "select   k13_reduz,
 		                     inner join conplanoreduz on c61_anousu=c62_anousu and c61_reduz = c62_reduz and c61_instit = " . db_getsession("DB_instit") . "
 	                         inner join conplano      on c60_codcon = c61_codcon and c60_anousu=c61_anousu
 	                         left  join conplanoconta on c60_codcon = c63_codcon and c63_anousu=c60_anousu ";
-if($conta_nova != "") {
+if($conta_nova != "" and $conta_nova != 0) {
     $sql .= "where c61_reduz = {$conta_nova} ";
+}if($conta_nova == 0) {
+    $sql .= "where c61_reduz > 0 ";
 }
 $sql .= "  ) as x ";
 $sql .= " order by substr(k13_descr,1,3), k13_reduz ";

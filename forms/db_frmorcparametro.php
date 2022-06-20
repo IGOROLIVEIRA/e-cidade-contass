@@ -124,6 +124,18 @@ $clorcparametro->rotulo->label();
                                 ?>
                             </td>
                         </tr>
+
+                        <tr>
+                            <td>
+                                <strong>Controla excesso de arrecadação:</strong>
+                            </td>
+                            <td>
+                                <?
+                                $x = array("t"=>"Sim", "f"=>"Não");
+                                db_select('o50_controlaexcessoarrecadacao', $x, true, $db_opcao, "style='width:200px'");
+                                ?>
+                            </td>
+                        </tr>
                     </table>
                 </td>
             </tr>

@@ -45,11 +45,13 @@ class cl_pcgrupo {
    var $pc03_codgrupo = 0; 
    var $pc03_descrgrupo = null; 
    var $pc03_ativo = 'f'; 
+   var $pc03_instit = null;
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  pc03_codgrupo = int4 = Código do Grupo 
                  pc03_descrgrupo = varchar(40) = Descrição do Grupo 
                  pc03_ativo = bool = Ativo 
+                 pc03_instit = int4 = Codigo da instituicao 
                  ";
    //funcao construtor da classe 
    function cl_pcgrupo() { 
@@ -72,6 +74,7 @@ class cl_pcgrupo {
        $this->pc03_codgrupo = ($this->pc03_codgrupo == ""?@$GLOBALS["HTTP_POST_VARS"]["pc03_codgrupo"]:$this->pc03_codgrupo);
        $this->pc03_descrgrupo = ($this->pc03_descrgrupo == ""?@$GLOBALS["HTTP_POST_VARS"]["pc03_descrgrupo"]:$this->pc03_descrgrupo);
        $this->pc03_ativo = ($this->pc03_ativo == "f"?@$GLOBALS["HTTP_POST_VARS"]["pc03_ativo"]:$this->pc03_ativo);
+       $this->pc03_instit = ($this->pc03_instit == "f"?@$GLOBALS["HTTP_POST_VARS"]["pc03_instit"]:$this->pc03_instit);
      }else{
        $this->pc03_codgrupo = ($this->pc03_codgrupo == ""?@$GLOBALS["HTTP_POST_VARS"]["pc03_codgrupo"]:$this->pc03_codgrupo);
      }
@@ -97,6 +100,9 @@ class cl_pcgrupo {
        $this->erro_status = "0";
        return false;
      }
+     if($this->pc03_instit == null ){ 
+        $this->pc03_instit = db_getsession('DB_instit');
+      }
      if($pc03_codgrupo == "" || $pc03_codgrupo == null ){
        $result = db_query("select nextval('pcgrupo_pc03_codgrupo_seq')"); 
        if($result==false){
@@ -132,12 +138,14 @@ class cl_pcgrupo {
      $sql = "insert into pcgrupo(
                                        pc03_codgrupo 
                                       ,pc03_descrgrupo 
-                                      ,pc03_ativo 
+                                      ,pc03_ativo
+                                      ,pc03_instit 
                        )
                 values (
                                 $this->pc03_codgrupo 
                                ,'$this->pc03_descrgrupo' 
-                               ,'$this->pc03_ativo' 
+                               ,'$this->pc03_ativo'
+                               ,$this->pc03_instit 
                       )";
      $result = db_query($sql); 
      if($result==false){ 
