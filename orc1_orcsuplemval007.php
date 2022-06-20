@@ -186,7 +186,7 @@ if (isset($incluir)) {
                 $fonteAtual = $i . $fonte;
 
                 $clquadrosuperavitdeficit = new cl_quadrosuperavitdeficit;
-                $result = $clquadrosuperavitdeficit->sql_record($clquadrosuperavitdeficit->sql_query("null", "*", null, "c241_fonte = {$fonteAtual} AND c241_ano = {$anousu}"));
+                $result = $clquadrosuperavitdeficit->sql_record($clquadrosuperavitdeficit->sql_query("null", "*", null, "c241_fonte = {$fonteAtual} AND c241_ano = {$anousu} AND c241_instit = " . db_getsession("DB_instit")));
 
                 if (pg_num_rows($result) > 0) {
                     $existeQuadro = true;
@@ -205,6 +205,7 @@ if (isset($incluir)) {
                                 o47_anousu = {$anousu}
                                 AND concat('1', substring(o58_codigo::TEXT, 2, 2)) = '$fonteAtual'
                                 AND o47_valor > 0
+                                AND o46_instit IN (" . db_getsession("DB_instit") . ")
                                 AND o46_tiposup IN (2026, 1003, 1008, 1024)
                             GROUP BY concat('1', substring(o58_codigo::TEXT, 2, 2))
                             UNION
@@ -220,6 +221,7 @@ if (isset($incluir)) {
                         
                             WHERE
                                 o47_anousu = {$anousu}
+                                AND o46_instit IN (" . db_getsession("DB_instit") . ")
                                 AND concat('1', substring(o58_codigo::TEXT, 2, 2)) = '$fonteAtual'
                                 AND o46_tiposup IN (2026, 1003, 1008, 1024)
                             AND 
@@ -241,7 +243,9 @@ if (isset($incluir)) {
             $limpa_dados = false; 
         }
 
-        if ($o47_valor > $valorQuadro) {
+        $valorQuadro = number_format($valorQuadro, 2, ".", "");
+
+        if (number_format($o47_valor, 2, ".", "") > $valorQuadro) {
             db_msgbox("Não existe superávit suficiente para realizar essa suplementação, saldo disponível R$ {$valorQuadro}");
             $sqlerro = true;
             $limpa_dados = false; 
