@@ -46,226 +46,231 @@ $clprotprocesso->rotulo->label("p58_numero");
 
 ?>
 <html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-    <link href="estilos.css" rel="stylesheet" type="text/css">
-    <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
-  </head>
-<body class="body-default">
-<table height="100%" border="0"  align="center" cellspacing="0" bgcolor="#CCCCCC">
-  <tr>
-    <td height="63" align="center" valign="top">
-        <table width="35%" border="0" align="center" cellspacing="0">
-	     <form name="form2" method="post" action="" >
-           <tr>
-             <td align="left" width="4%" nowrap="" title="Número do Processo acompanhado do ano. Campo:p58_numero">
-               <strong>Número Processo:</strong>
-             </td>
-             <td align="left" width="96%" nowrap="">
 
-               <input type="text" autocomplete="off" onkeydown="return js_controla_tecla_enter(this,event);" oninput="js_ValidaCampos(this,0,'Número Processo','t','t',event);" onblur="js_ValidaMaiusculo(this,'t',event);" style="text-transform:uppercase;" maxlength="30" size="10" value="" id="chave_p58_numero" name="chave_p58_numero" title="Número do Processo acompanhado do ano. Campo:p58_numero">
-             </td>
-           </tr>
-          <tr>
-            <td width="4%" align="left" nowrap title="<?=$Tp58_numero?>">
-              <?=$Lp58_numero?>
-            </td>
-            <td width="96%" align="left" nowrap>
-              <?
-               db_input("p58_numero",10,$Ip58_numero,true,"text",4,"","chave_p58_numero");
-              ?>
-            </td>
-          </tr>
-          <tr>
-            <td width="4%" align="left" nowrap title="<?=$Tp58_requer?>">
-              <?=$Lp58_requer?>
-            </td>
-            <td width="96%" align="left" nowrap>
-              <?
-      		      db_input("p58_requer",50,$Ip58_requer,true,"text",4,"","chave_p58_requer");
-      		    ?>
-            </td>
-          </tr>
-          <tr>
-            <td colspan="2" align="center">
-              <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar">
-              <input name="limpar" type="reset" id="limpar" value="Limpar" >
-              <input name="Fechar" type="button" id="fechar" value="Fechar" onClick="parent.db_iframe_proc.hide();">
-             </td>
-          </tr>
-        </form>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <link href="estilos.css" rel="stylesheet" type="text/css">
+  <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+</head>
+
+<body class="body-default">
+  <table height="100%" border="0" align="center" cellspacing="0" bgcolor="#CCCCCC">
+    <tr>
+      <td height="63" align="center" valign="top">
+        <table width="35%" border="0" align="center" cellspacing="0">
+          <form name="form2" method="post" action="">
+            <tr>
+              <td align="left" width="4%" nowrap="" title="Número do Processo acompanhado do ano. Campo:p58_numero">
+                <strong>Número Processo:</strong>
+              </td>
+              <td align="left" width="96%" nowrap="">
+
+                <input type="text" autocomplete="off" onkeydown="return js_controla_tecla_enter(this,event);" oninput="js_ValidaCampos(this,0,'Número Processo','t','t',event);" onblur="js_ValidaMaiusculo(this,'t',event);" style="text-transform:uppercase;" maxlength="30" size="10" value="" id="chave_p58_numero" name="chave_p58_numero" title="Número do Processo acompanhado do ano. Campo:p58_numero">
+              </td>
+            </tr>
+            <tr>
+              <td width="4%" align="left" nowrap title="<?= $Tp58_numero ?>">
+                <?= $Lp58_numero ?>
+              </td>
+              <td width="96%" align="left" nowrap>
+                <?
+                db_input("p58_numero", 10, $Ip58_numero, true, "text", 4, "", "chave_p58_numero");
+                ?>
+              </td>
+            </tr>
+            <tr>
+              <td width="4%" align="left" nowrap title="<?= $Tp58_requer ?>">
+                <?= $Lp58_requer ?>
+              </td>
+              <td width="96%" align="left" nowrap>
+                <?
+                db_input("p58_requer", 50, $Ip58_requer, true, "text", 4, "", "chave_p58_requer");
+                ?>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2" align="center">
+                <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar">
+                <input name="limpar" type="reset" id="limpar" value="Limpar">
+                <input name="Fechar" type="button" id="fechar" value="Fechar" onClick="parent.db_iframe_proc.hide();">
+              </td>
+            </tr>
+          </form>
         </table>
       </td>
-  </tr>
-  <tr>
-    <td align="center" valign="top">
-      <?
-      $sLeft = "";
-      $where = " p58_instit = ".db_getsession("DB_instit");
+    </tr>
+    <tr>
+      <td align="center" valign="top">
+        <?
+        $sLeft = "";
+        $where = " p58_instit = " . db_getsession("DB_instit");
 
-      if(isset($grupo) && trim($grupo) != '' ){
-      	$where .= " and tipoproc.p51_tipoprocgrupo = $grupo";
-      }
-      if ( isset($tipo) && trim($tipo) != '' ) {
-        $where .= " and p58_codigo = {$tipo} ";
-      }
-      /**
-       * Filtro da consulta do ancora da pagina pro3_consultaprocesso001.php
-       */
-      if ( isset($iTipo) && trim($iTipo) != '' ) {
-        $where .= " and p58_codigo = {$iTipo} ";
-      }
+        if (isset($grupo) && trim($grupo) != '') {
+          $where .= " and tipoproc.p51_tipoprocgrupo = $grupo";
+        }
+        if (isset($tipo) && trim($tipo) != '') {
+          $where .= " and p58_codigo = {$tipo} ";
+        }
+        /**
+         * Filtro da consulta do ancora da pagina pro3_consultaprocesso001.php
+         */
+        if (isset($iTipo) && trim($iTipo) != '') {
+          $where .= " and p58_codigo = {$iTipo} ";
+        }
 
-      /**
-       * Se a variável "$lAnoAtual" for true, filtra os processos do ano setado na sessão
-       */
-      if(!empty($lAnoAtual) && $lAnoAtual){
-      	$where .= " and p58_ano = " . db_getsession("DB_anousu");
-      }
+        /**
+         * Se a variável "$lAnoAtual" for true, filtra os processos do ano setado na sessão
+         */
+        if (!empty($lAnoAtual) && $lAnoAtual) {
+          $where .= " and p58_ano = " . db_getsession("DB_anousu");
+        }
 
-      if ( isset($apensado) && trim($apensado) != '' ) {
-        $where .= " and not exists ( select *
+        if (isset($apensado) && trim($apensado) != '') {
+          $where .= " and not exists ( select *
                                        from processosapensados
                                       where p30_procapensado  = p58_codproc
                                          or p30_procprincipal = p58_codproc limit 1)
                     and p58_codproc != {$apensado} ";
-      }
-      /**
-       * removido instituição do select conforme solicitado na ocorrência 1526
-       * @see: Olhar as versoes anteriores do arquivo.
-       */
-
-      if (!isset($pesquisa_chave)) {
-
-        $campos  = "p58_dtproc,p51_descr,cast(p58_numero||'/'||p58_ano as varchar) as dl_Processo_Nº,z01_numcgm, z01_nome as dl_nome_ou_razão_social,p58_obs, cast(p58_numero||'/'||p58_ano as varchar) as dl_PROTOCOLO_GERAL,";
-        $campos .= "p58_codproc,p58_requer as DB_p58_requer, p58_numero";
-
+        }
         /**
-         * Campo de pesquisa
-         * Informou variavel pelo $_GET 'p58_codproc'
+         * removido instituição do select conforme solicitado na ocorrência 1526
+         * @see: Olhar as versoes anteriores do arquivo.
          */
-        if ( !empty($oGet->sCampoPesquisa) && $oGet->sCampoPesquisa == 'p58_codproc' ) {
 
-          $campos  = "p58_dtproc,p51_descr as Tipo,cast(p58_numero||'/'||p58_ano as varchar) as dl_Processo_Nº,z01_numcgm, z01_nome as dl_nome_ou_razão_social,p58_obs, cast(p58_numero||'/'||p58_ano as varchar) as dl_PROTOCOLO_GERAL,";
+        if (!isset($pesquisa_chave)) {
+
+          $campos  = "p58_dtproc,p51_descr,cast(p58_numeracao||'/'||p58_ano as varchar) as dl_Processo_Nº,z01_numcgm, z01_nome as dl_nome_ou_razão_social,p58_obs, cast(p58_numeracao||'/'||p58_ano as varchar) as dl_PROTOCOLO_GERAL,";
           $campos .= "p58_codproc,p58_requer as DB_p58_requer, p58_numero";
-        }
-
-        if (isset($chave_p58_numcgm) && (trim($chave_p58_numcgm)!="") ) {
-	         $sql = $clprotprocesso->sql_query(null,$campos,"p58_codproc desc","p58_numcgm = $chave_p58_numcgm  and $where");
-        } else if(isset($chave_p58_codproc) && (trim($chave_p58_codproc)!="") ) {
-
-        	 if(trim($where) != "") {
-        	 	$where .= " and p58_codproc = ".$chave_p58_codproc;
-        	 } else {
-        	 	$where .= " p58_codproc = ".$chave_p58_codproc;
-        	 }
-
-	         $sql = $clprotprocesso->sql_query($chave_p58_codproc,$campos,"p58_codproc desc", $where);
-
-        } else if(isset($chave_p58_requer) && (trim($chave_p58_requer)!="") ){
-	         $sql = $clprotprocesso->sql_query("",$campos,"p58_codproc desc"," p58_requer like '$chave_p58_requer%'  and $where");
-	      } else if (isset($chave_p58_numero) && (trim($chave_p58_numero)!="")) {
-
-           $aPartesNumero = explode("/", $chave_p58_numero);
-           $iAno = db_getsession("DB_anousu");
-           if (count($aPartesNumero) > 1) {
-              $iAno = $aPartesNumero[1];
-           }
-           $iNumero = $aPartesNumero[0];
-           $where  .= " and p58_ano = {$iAno} and p58_numero = '{$iNumero}'";
-           $sql     = $clprotprocesso->sql_query("",$campos,"p58_codproc desc",
-                                                "$where ");
-          } else if (isset($chave_p58_numero) && (trim($chave_p58_numero)!="")) {
-
-          $aPartesNumero = explode("/", $chave_p58_numero);
-          $iAno = db_getsession("DB_anousu");
-          if (count($aPartesNumero) > 1) {
-            $iAno = $aPartesNumero[1];
-          }
-          $iNumero = $aPartesNumero[0];
-          $where  .= " and p58_ano = {$iAno} and p58_numero = '{$iNumero}'";
-          $sql     = $clprotprocesso->sql_query("",$campos,"p58_codproc desc",
-              "$where ");
-        } else if(isset($chave_unica) and ($chave_unica != '')) {
-
-	         $sql = $clprotprocesso->sql_query($chave_unica, $campos);
-        } else {
-           $sql = $clprotprocesso->sql_query("",$campos,"p58_codproc desc",$where);
-        }
-      	$repassa = array();
-        if (isset($chave_p58_codproc)) {
-        	$repassa = array("chave_p58_codproc"=>$chave_p58_codproc);
-        }
-
-        db_lovrot($sql." ",15,"()","",$funcao_js,"","NoMe",$repassa);
-
-
-      } else {
-
-        if ( $pesquisa_chave != null && $pesquisa_chave != "" ) {
-
-          $aPesquisa = explode("/", $pesquisa_chave);
-          $iAno = db_getsession("DB_anousu");
-
-          if (count($aPesquisa) > 1) {
-            $iAno = $aPesquisa[1];
-          }
-
-          $sCampoPesquisa = 'p58_numero';
 
           /**
            * Campo de pesquisa
            * Informou variavel pelo $_GET 'p58_codproc'
            */
-          if ( !empty($oGet->sCampoPesquisa) ) {
-            $sCampoPesquisa = $oGet->sCampoPesquisa;
+          if (!empty($oGet->sCampoPesquisa) && $oGet->sCampoPesquisa == 'p58_codproc') {
+
+            $campos  = "p58_dtproc,p51_descr as Tipo,cast(p58_numeracao||'/'||p58_ano as varchar) as dl_Processo_Nº,z01_numcgm, z01_nome as dl_nome_ou_razão_social,p58_obs, cast(p58_numeracao||'/'||p58_ano as varchar) as dl_PROTOCOLO_GERAL,";
+            $campos .= "p58_codproc,p58_requer as DB_p58_requer, p58_numero";
           }
 
-          $sSql   = $clprotprocesso->sql_query("","*","","{$sCampoPesquisa} = '{$aPesquisa[0]}' and p58_ano = {$iAno} and $where");
-          $result = $clprotprocesso->sql_record($sSql);
+          if (isset($chave_p58_numcgm) && (trim($chave_p58_numcgm) != "")) {
+            $sql = $clprotprocesso->sql_query(null, $campos, "p58_codproc desc", "p58_numcgm = $chave_p58_numcgm  and $where");
+          } else if (isset($chave_p58_codproc) && (trim($chave_p58_codproc) != "")) {
 
-          if($clprotprocesso->numrows!=0) {
-
-            db_fieldsmemory($result,0);
-
-            if (isset($retobs) ) {
-              echo "<script>".$funcao_js."('$p58_numcgm','$p58_obs',false);</script>";
-            } elseif (isset($bCodproc)) {
-              
-              $sCampoRetorno = $p58_numero . '/' . $p58_ano;
-
-              if ( !empty($oGet->sCampoRetorno) ) {
-
-                $sCampoRetorno = $oGet->sCampoRetorno;
-                $sCampoRetorno = $$sCampoRetorno;
-              }
-              $sCgmEscape = addslashes($z01_nome);
-              echo "<script>". $funcao_js . "('$sCampoRetorno', '$sCgmEscape', '$p58_codproc', false); </script> ";
-
+            if (trim($where) != "") {
+              $where .= " and p58_codproc = " . $chave_p58_codproc;
             } else {
+              $where .= " p58_codproc = " . $chave_p58_codproc;
+            }
 
-              $sCampoRetorno = $p58_numero . '/' . $p58_ano;
+            $sql = $clprotprocesso->sql_query($chave_p58_codproc, $campos, "p58_codproc desc", $where);
+          } else if (isset($chave_p58_requer) && (trim($chave_p58_requer) != "")) {
+            $sql = $clprotprocesso->sql_query("", $campos, "p58_codproc desc", " p58_requer like '$chave_p58_requer%'  and $where");
+          } else if (isset($chave_p58_numero) && (trim($chave_p58_numero) != "")) {
 
-              if ( !empty($oGet->sCampoRetorno) ) {
+            $aPartesNumero = explode("/", $chave_p58_numero);
+            $iAno = db_getsession("DB_anousu");
+            if (count($aPartesNumero) > 1) {
+              $iAno = $aPartesNumero[1];
+            }
+            $iNumero = $aPartesNumero[0];
+            $where  .= " and p58_ano = {$iAno} and p58_numero = '{$iNumero}'";
+            $sql     = $clprotprocesso->sql_query(
+              "",
+              $campos,
+              "p58_codproc desc",
+              "$where "
+            );
+          } else if (isset($chave_p58_numero) && (trim($chave_p58_numero) != "")) {
 
-                $sCampoRetorno = $oGet->sCampoRetorno;
-                $sCampoRetorno = $$sCampoRetorno;
+            $aPartesNumero = explode("/", $chave_p58_numero);
+            $iAno = db_getsession("DB_anousu");
+            if (count($aPartesNumero) > 1) {
+              $iAno = $aPartesNumero[1];
+            }
+            $iNumero = $aPartesNumero[0];
+            $where  .= " and p58_ano = {$iAno} and p58_numero = '{$iNumero}'";
+            $sql     = $clprotprocesso->sql_query(
+              "",
+              $campos,
+              "p58_codproc desc",
+              "$where "
+            );
+          } else if (isset($chave_unica) and ($chave_unica != '')) {
+
+            $sql = $clprotprocesso->sql_query($chave_unica, $campos);
+          } else {
+            $sql = $clprotprocesso->sql_query("", $campos, "p58_codproc desc", $where);
+          }
+          $repassa = array();
+          if (isset($chave_p58_codproc)) {
+            $repassa = array("chave_p58_codproc" => $chave_p58_codproc);
+          }
+
+          db_lovrot($sql . " ", 15, "()", "", $funcao_js, "", "NoMe", $repassa);
+        } else {
+
+          if ($pesquisa_chave != null && $pesquisa_chave != "") {
+
+            $aPesquisa = explode("/", $pesquisa_chave);
+            $iAno = db_getsession("DB_anousu");
+
+            if (count($aPesquisa) > 1) {
+              $iAno = $aPesquisa[1];
+            }
+
+            $sCampoPesquisa = 'p58_numero';
+
+            /**
+             * Campo de pesquisa
+             * Informou variavel pelo $_GET 'p58_codproc'
+             */
+            if (!empty($oGet->sCampoPesquisa)) {
+              $sCampoPesquisa = $oGet->sCampoPesquisa;
+            }
+
+            $sSql   = $clprotprocesso->sql_query("", "*", "", "{$sCampoPesquisa} = '{$aPesquisa[0]}' and p58_ano = {$iAno} and $where");
+            $result = $clprotprocesso->sql_record($sSql);
+
+            if ($clprotprocesso->numrows != 0) {
+
+              db_fieldsmemory($result, 0);
+
+              if (isset($retobs)) {
+                echo "<script>" . $funcao_js . "('$p58_numcgm','$p58_obs',false);</script>";
+              } elseif (isset($bCodproc)) {
+
+                $sCampoRetorno = $p58_numero . '/' . $p58_ano;
+
+                if (!empty($oGet->sCampoRetorno)) {
+
+                  $sCampoRetorno = $oGet->sCampoRetorno;
+                  $sCampoRetorno = $$sCampoRetorno;
+                }
+                $sCgmEscape = addslashes($z01_nome);
+                echo "<script>" . $funcao_js . "('$sCampoRetorno', '$sCgmEscape', '$p58_codproc', false); </script> ";
+              } else {
+
+                $sCampoRetorno = $p58_numero . '/' . $p58_ano;
+
+                if (!empty($oGet->sCampoRetorno)) {
+
+                  $sCampoRetorno = $oGet->sCampoRetorno;
+                  $sCampoRetorno = $$sCampoRetorno;
+                }
+                $sCgmEscape = addslashes($z01_nome);
+                echo "<script>" . $funcao_js . "('$sCampoRetorno', '$sCgmEscape', false); </script> ";
               }
-              $sCgmEscape = addslashes($z01_nome);
-              echo "<script>". $funcao_js . "('$sCampoRetorno', '$sCgmEscape', false); </script> ";
-
+            } else {
+              echo "<script>" . $funcao_js . "('','Chave(" . $pesquisa_chave . ") não Encontrado',true);</script>";
             }
           } else {
-            echo "<script>".$funcao_js."('','Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
+            echo "<script>" . $funcao_js . "('','',false);</script>";
           }
-
-        } else {
-         echo "<script>".$funcao_js."('','',false);</script>";
         }
-      }
-      ?>
-    </td>
-  </tr>
-</table>
+        ?>
+      </td>
+    </tr>
+  </table>
 </body>
+
 </html>

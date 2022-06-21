@@ -151,7 +151,7 @@ class cl_permanexo
   }
 
   // funcao para alteracao
-  function alterar($oid = null, $perfis)
+  function alterar($sequencial = null, $perfis)
   {
     $this->atualizacampos();
     $sql = " update permanexo set ";
@@ -183,7 +183,7 @@ class cl_permanexo
       }
     }
     $sql .= " where ";
-    $sql .= "oid = '$oid'";
+    $sql .= "p202_sequencial = $sequencial";
     $result = db_query($sql);
     if ($result == false) {
       $this->erro_banco = str_replace("\n", "", @pg_last_error());
@@ -223,21 +223,33 @@ class cl_permanexo
   }
 
   // funcao para exclusao 
-  function excluir($oid = null, $dbwhere = null)
+  function excluir($sequencial = null, $dbwhere = null)
   {
+
+    $protprocessodocumento = db_query("select * from protprocessodocumento where p01_nivelacesso = $sequencial");
+
+    if (pg_num_rows($protprocessodocumento) == 0) {
+      $result = db_query("delete from perfispermanexo where p203_permanexo = $sequencial");
+    } else {
+      $this->erro_msg = "Uusário: permissões de anexo que estejam vinculadas a documentos não podem ser excluidas";
+      $this->erro_status = "0";
+      $this->numrows_excluir = 0;
+      return false;
+    }
+
 
     $sql = " delete from permanexo
                     where ";
     $sql2 = "";
     if ($dbwhere == null || $dbwhere == "") {
-      $sql2 = "oid = '$oid'";
+      $sql2 = "p202_sequencial = $sequencial";
     } else {
       $sql2 = $dbwhere;
     }
     $result = db_query($sql . $sql2);
     if ($result == false) {
       $this->erro_banco = str_replace("\n", "", @pg_last_error());
-      $this->erro_sql   = "Permissão de anexo nao Excluído. Exclusão Abortada.\\n";
+      $this->erro_sql   =  "Permissão de anexo nao Excluído. Exclusão Abortada.\\n";
       $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";

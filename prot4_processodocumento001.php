@@ -130,8 +130,11 @@ $oRotulo->label("z01_nome");
             </td>
             <td>
               <?
-
-              $result = db_query("select * from permanexo");
+              $usuario = db_getsession('DB_id_usuario');
+              $result = db_query("select distinct p203_permanexo,p202_sequencial,p202_tipo  from perfispermanexo
+              inner join db_permherda p203_perfil on p203_perfil = id_perfil
+              inner join permanexo  p203_permanexo on p203_permanexo  = p202_sequencial 
+              where id_usuario = $usuario");
               $numrows = pg_numrows($result);
               $permissoes = array();
               $permissoes[0] =  'Selecione';
@@ -295,18 +298,28 @@ $oRotulo->label("z01_nome");
 
             if (oDocumento.iDepartUsuario == oDocumento.iDepart && oRetorno.andamento == 0) {
               var sHTMLBotoes = '';
-              if (instituicao == oDocumento.iDepart && adm == 1) {
-                sHTMLBotoes += '<input type="button" value="Alterar Acesso" onClick="js_alterarNivelAcessoDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + nivelacesso + '\' );" />  ';
+              if (instituicao == oDocumento.iDepart && adm == 1 && oDocumento.permissao) {
+                sHTMLBotoes += '<input type="button"  value="Alterar Acesso" onClick="js_alterarNivelAcessoDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + nivelacesso + '\' );" />  ';
+                sHTMLBotoes += '<input type="button"  value="Alterar" onClick="js_alterarDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + nivelacesso + '\' );" />  ';
+                sHTMLBotoes += '<input type="button" value="Download" onClick="js_downloadDocumento(' + oDocumento.iCodigoDocumento + ');" />  ';
 
+              } else if (instituicao == oDocumento.iDepart && adm == 1 && !oDocumento.permissao) {
+                sHTMLBotoes += '<input type="button" style="width:50%;" value="Alterar Acesso" onClick="js_alterarNivelAcessoDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + nivelacesso + '\' );" />  ';
+                sHTMLBotoes += '<input type="button" style="width:48%;" value="Alterar" onClick="js_alterarDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + nivelacesso + '\' );" />  ';
+              } else if (instituicao == oDocumento.iDepart && adm != 1 && !oDocumento.permissao) {
+                sHTMLBotoes += '<input type="button" style="width:100%;" value="Alterar" onClick="js_alterarDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + nivelacesso + '\' );" />  ';
+
+              } else if (instituicao == oDocumento.iDepart && adm != 1 && oDocumento.permissao) {
+                sHTMLBotoes += '<input type="button"  value="Alterar" onClick="js_alterarDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + nivelacesso + '\' );" />  ';
+                sHTMLBotoes += '<input type="button" value="Download" onClick="js_downloadDocumento(' + oDocumento.iCodigoDocumento + ');" />  ';
               }
 
-              sHTMLBotoes += '<input type="button" value="Alterar" onClick="js_alterarDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + nivelacesso + '\' );" />  ';
-              if (oDocumento.permissao) {
+              /*if (oDocumento.permissao) {
                 sHTMLBotoes += '<input type="button" value="Download" onClick="js_downloadDocumento(' + oDocumento.iCodigoDocumento + ');" />  ';
 
               } else {
-                sHTMLBotoes += '<input disabled type="button" value="Download" onClick="js_downloadDocumento(' + oDocumento.iCodigoDocumento + ');" />  ';
-              }
+                //sHTMLBotoes += '<input disabled type="button" value="Download" onClick="js_downloadDocumento(' + oDocumento.iCodigoDocumento + ');" />  ';
+              }*/
               $bBloquea = false;
 
             } else if (oDocumento.iDepartUsuario != oDocumento.iDepart && oRetorno.andamento > 0) {

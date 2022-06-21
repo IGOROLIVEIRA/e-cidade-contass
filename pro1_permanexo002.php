@@ -14,7 +14,7 @@ if (isset($alterar)) {
   db_inicio_transacao();
   $db_opcao = 2;
   $perfis   = $HTTP_POST_VARS["aItonsMarcados"];
-  $clpermanexo->alterar($oid, $perfis);
+  $clpermanexo->alterar($p202_sequencial, $perfis);
   db_fim_transacao();
 } else if (isset($chavepesquisa)) {
   $db_opcao = 2;
@@ -47,7 +47,11 @@ if (isset($alterar)) {
       <td height="430" align="center" valign="top" bgcolor="#CCCCCC">
         <center>
           <?
-          include("forms/db_frmpermanexo.php");
+          if (db_getsession("DB_administrador") == "1") {
+            include("forms/db_frmpermanexo.php");
+          } else {
+            echo "Acesso restrito para administradores ";
+          }
           ?>
         </center>
       </td>

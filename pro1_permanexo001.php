@@ -18,7 +18,11 @@ $db_botao = true;
 if (isset($incluir)) {
   db_inicio_transacao();
   $perfis   = $HTTP_POST_VARS["aItonsMarcados"];
-  $clpermanexo->incluir($perfis);
+  if (count($perfis) == 0) {
+    echo '<script>alert("Usuário: é necessário selecionar um perfil de acesso para inclusão de uma permissão de anexo")</script>';
+  } else {
+    $clpermanexo->incluir($perfis);
+  }
   db_fim_transacao();
 }
 ?>

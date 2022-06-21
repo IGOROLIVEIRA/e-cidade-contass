@@ -13,7 +13,7 @@ $db_opcao = 33;
 if (isset($excluir)) {
   db_inicio_transacao();
   $db_opcao = 3;
-  $clpermanexo->excluir($oid);
+  $clpermanexo->excluir($p202_sequencial);
   db_fim_transacao();
 } else if (isset($chavepesquisa)) {
   $db_opcao = 3;
@@ -46,7 +46,11 @@ if (isset($excluir)) {
       <td height="430" align="center" valign="top" bgcolor="#CCCCCC">
         <center>
           <?
-          include("forms/db_frmpermanexo.php");
+          if (db_getsession("DB_administrador") == "1") {
+            include("forms/db_frmpermanexo.php");
+          } else {
+            echo "Acesso restrito para administradores ";
+          }
           ?>
         </center>
       </td>
