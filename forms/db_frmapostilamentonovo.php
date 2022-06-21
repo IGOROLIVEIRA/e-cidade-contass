@@ -1101,7 +1101,9 @@ $clrotulo->label("ac16_resumoobjeto");
         var oApostila = new Object();
         oApostila.dataapostila = $("si03_dataapostila").value;
         oApostila.tipoapostila = $("si03_tipoapostila").value;
+        console.log('antes');
         oApostila.descrapostila = encodeURIComponent(tagString($("si03_descrapostila").value));
+        console.log('depois');
         oApostila.tipoalteracaoapostila = $("si03_tipoalteracaoapostila").value;
         oApostila.numapostilamento = $("si03_numapostilamento").value;
 
@@ -1116,6 +1118,7 @@ $clrotulo->label("ac16_resumoobjeto");
         };
 
         var lAditar = true;
+        var quantidadeDotacoes = 0;
         aItensPosicao.forEach(function(oItem, iIndice) {
 
             if (!lAditar) {
@@ -1137,6 +1140,9 @@ $clrotulo->label("ac16_resumoobjeto");
             oItemAdicionar.valorapostilado = valorApostiladoReal;
             oItemAdicionar.dtexecucaoinicio = oItem.periodoini;
             oItemAdicionar.dtexecucaofim = oItem.periodofim;
+
+            quantidadeDotacoes = quantidadeDotacoes + oItem.dotacoes.length;
+
 
             if (oSelecionados[iIndice] != undefined) {
                 oItemAdicionar.quantidade = js_strToFloat(oSelecionados[iIndice].aCells[5].getValue());
@@ -1182,6 +1188,12 @@ $clrotulo->label("ac16_resumoobjeto");
 
             oParam.aItens.push(oItemAdicionar);
         });
+
+        if (quantidadeDotacoes == 0 && $("si03_tipoapostila").value == "03") {
+            return alert("Usuário: é necessário incluir dotação em no mínimo um item \n\ncaso o tipo de apostila for empenho de dotações orçamentárias");
+
+        }
+
 
         if (!lAditar) {
             return false;
