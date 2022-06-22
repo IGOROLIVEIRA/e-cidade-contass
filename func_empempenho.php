@@ -331,10 +331,8 @@ $rotulo->label("z01_cgccpf");
             $dbwhere .= " and e60_instit = " . db_getsession("DB_instit") . " order by e60_numemp desc";
 
             $sql = $clempempenho->sql_query_inclusaoempenho(null, $campos, null, $dbwhere);
-
-            //$dbwhere .= " and e60_vlremp >  (e60_vlranu + e60_vlrliq)";
           } else {
-            $sql = $clempempenho->sql_query(null, $campos, "e60_numemp desc", $whereRelCompra);
+            $sql = $clempempenho->sql_query(null, $campos, null, $whereRelCompra);
           }
 
           $result = $clempempenho->sql_record($sql);
