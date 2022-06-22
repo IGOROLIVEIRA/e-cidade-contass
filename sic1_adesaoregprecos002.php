@@ -18,6 +18,7 @@ $clacordoposicao   = new cl_acordoposicao;
 $clempautoriza     = new cl_empautoriza;
 $clliclicita       = new cl_liclicita;
 $clempempenho      = new cl_empempenho;
+$clempempaut       = new cl_empempaut;
 $db_botao = true;
 $sqlerro  = false;
 
@@ -190,25 +191,46 @@ if (!$sqlerro) {
 
       if ($sqlerro == false) {
 
+          
           $cladesaoregprecos->alterar($si06_sequencial);
 
           $sSqlItemacordo = $clacordo->sql_record($clacordo->sql_query_sequencial_acordo($si06_sequencial));
-          db_fieldsmemory($sSqlItemacordo, 0);
-          $sSqlItemacordoposicao = $clacordoposicao->sql_record($clacordoposicao->sql_query_empenhoautori_acordo($ac16_sequencial));
-          $numrows_unid = $clacordoposicao->numrows;
+          $numrows_unid = $clacordo->numrows;
+          
+          if($numrows_unid > 0){
+          
+            db_fieldsmemory($sSqlItemacordo, 0);
+            $sSqlItemacordoposicao = $clacordoposicao->sql_record($clacordoposicao->sql_query_empenhoautori_acordo($ac16_sequencial));
+            $numrows_unid = $clacordoposicao->numrows;
 
-          for ($i = 0; $i < $numrows_unid; $i++) {
-            db_fieldsmemory($sSqlItemacordoposicao, $i);
-            $clempautoriza->e54_nummodalidade = $si06_nummodadm;
-            $clempautoriza->e54_autori = $e54_autori;
-            $clempautoriza->alterar($e54_autori);
-            if($e60_numemp!="" && $e60_numemp!=null){
-              $clempempenho->e60_numerol = $si06_numeroadm."/".$si06_anomodadm;
-              $clempempenho->e60_numemp = $e60_numemp;
-              $clempempenho->alterar($e60_numemp);
+            for ($i = 0; $i < $numrows_unid; $i++) {
+              db_fieldsmemory($sSqlItemacordoposicao, $i);
+              $clempautoriza->e54_nummodalidade = $si06_nummodadm;
+              $clempautoriza->e54_autori = $e54_autori;
+              $clempautoriza->alterar($e54_autori);
+              if($e60_numemp!="" && $e60_numemp!=null){
+                $clempempenho->e60_numerol = $si06_numeroadm."/".$si06_anomodadm;
+                $clempempenho->e60_numemp = $e60_numemp;
+                $clempempenho->alterar($e60_numemp);
+              }
             }
-          } 
 
+          }else{
+            $sSqlItemempempaut = $clempempaut->sql_record($clempempaut->sql_query_empenhoautori($si06_anoproc,$si06_sequencial));
+            $numrows_unid = $clempempaut->numrows;
+            for ($i = 0; $i < $numrows_unid; $i++) {
+              db_fieldsmemory($sSqlItemempempaut, $i);
+              $clempautoriza->e54_nummodalidade = $si06_nummodadm;
+              $clempautoriza->e54_numerl = $si06_numeroadm."/".$si06_anomodadm;
+              $clempautoriza->e54_autori = $e61_autori;
+              $clempautoriza->alterar($e61_autori);
+              if($e61_numemp!="" && $e61_numemp!=null){
+                $clempempenho->e60_numerol = $si06_numeroadm."/".$si06_anomodadm;
+                $clempempenho->e60_numemp = $e61_numemp;
+                $clempempenho->alterar($e61_numemp);
+              }
+            }
+          }
       }
 
       if ($si06_processoporlote == 2) {
