@@ -454,7 +454,6 @@ class cl_empempaut {
     $sql = "select e61_autori, e61_numemp ";
     $sql .= "from empempaut inner join empautoriza on e61_autori = e54_autori ";
     $sql .= "where e54_adesaoregpreco = $si06_sequencial 	and e54_anousu = $si06_anoproc;";
-    db_msgbox($sql);
     return $sql;
   }
 }
