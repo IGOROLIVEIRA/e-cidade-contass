@@ -275,12 +275,33 @@ if (isset($incluir)) {
             if (in_array($o58_codigo, array(166, 167)))
                 $fontes = '166, 167';
 
-            $sSql = "SELECT o70_codigo, SUM(saldo_a_arrecadar) saldo FROM (
+            $sSql = "SELECT o70_codigo, SUM(saldo_arrecadado - saldo_inicial) saldo FROM (
                 select
                     o70_codigo,
-                    cast(
-                        coalesce(nullif(substr(fc_receitasaldo, 68, 12), ''), '0') as float8
-                    ) as saldo_a_arrecadar
+                    CAST(
+                        COALESCE(NULLIF(substr(fc_receitasaldo, 3, 12), ''), '0') AS float8
+                    ) AS saldo_inicial,
+                    CAST(
+                        COALESCE(NULLIF(substr(fc_receitasaldo, 16, 12), ''), '0') AS float8
+                    ) AS saldo_prevadic_acum,
+                    CAST(
+                        COALESCE(NULLIF(substr(fc_receitasaldo, 29, 12), ''), '0') AS float8
+                    ) AS saldo_inicial_prevadic,
+                    CAST(
+                        COALESCE(NULLIF(substr(fc_receitasaldo, 42, 12), ''), '0') AS float8
+                    ) AS saldo_anterior,
+                    CAST(
+                        COALESCE(NULLIF(substr(fc_receitasaldo, 55, 12), ''), '0') AS float8
+                    ) AS saldo_arrecadado,
+                    CAST(
+                        COALESCE(NULLIF(substr(fc_receitasaldo, 68, 12), ''), '0') AS float8
+                    ) AS saldo_a_arrecadar,
+                    CAST(
+                        COALESCE(NULLIF(substr(fc_receitasaldo, 81, 12), ''), '0') AS float8
+                    ) AS saldo_arrecadado_acumulado,
+                    CAST(
+                        COALESCE(NULLIF(substr(fc_receitasaldo, 94, 12), ''), '0') AS float8
+                    ) AS saldo_prev_anterior
                 from(
                         select
                             o70_codigo,
@@ -297,12 +318,13 @@ if (isset($incluir)) {
                             o57_fonte
                     ) as X
                     ) as y GROUP BY o70_codigo";
-                    
+       
+
             $qResult = db_query($sSql);
             $valor = 0;
             for ($i = 0; $i < pg_num_rows($qResult); $i++) {
                 $oResult = db_utils::fieldsMemory($qResult, $i);
-                $valor += -1 * $oResult->saldo;
+                $valor += $oResult->saldo;
             }
 
             if ($valor <= 0) {
