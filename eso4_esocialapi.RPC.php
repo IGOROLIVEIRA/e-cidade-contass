@@ -153,7 +153,7 @@ try {
             (select count(*) as certificado from esocialcertificado where rh214_cgm = z01_numcgm) as certificado';
             $oDaoDbConfig = db_utils::getDao("db_config");
             $sql = $oDaoDbConfig->sql_query(null, $campos, 'z01_numcgm', 'codigo = ' . db_getsession("DB_instit"));
-
+            
             $rs = db_query($sql);
 
             if (!$rs) {
@@ -266,7 +266,7 @@ try {
                 $dadosESocial->setReponsavelPeloPreenchimento($iCgm);
 
                 if (Tipo::getTipoFormulario($arquivo) != 37) {
-                    $dadosDoPreenchimento = $dadosESocial->getPorTipo(Tipo::getTipoFormulario($arquivo), $oParam->matricula);
+                    $dadosDoPreenchimento = $dadosESocial->getPorTipo(Tipo::getTipoFormulario($arquivo), $oParam->rubricas);
 
                     $formatter = FormatterFactory::get($arquivo);
                     $dadosTabela = $formatter->formatar($dadosDoPreenchimento);
@@ -276,7 +276,7 @@ try {
                         $eventoFila->adicionarFila();
                     }
                 } else {
-                    $dadosTabela = $dadosESocial->getPorTipo(Tipo::getTipoFormulario($arquivo), $oParam->matricula);
+                    $dadosTabela = $dadosESocial->getPorTipo(Tipo::getTipoFormulario($arquivo), $oParam->rubricas);
                     foreach (array_chunk($dadosTabela, 1) as $aTabela) {
                         $eventoFila = new Evento($arquivo, $iCgm, $iCgm, $aTabela, $oParam->tpAmb, "{$oParam->iAnoValidade}-{$oParam->iMesValidade}", $oParam->modo, $oParam->dtalteracao);
                         $eventoFila->adicionarFila();

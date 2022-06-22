@@ -104,11 +104,10 @@ $mesfolha = DBPessoal::getMesFolha();
                       ?>
                     </td>
                 </tr>
-                <tr>
+                <tr style="display:none;">
                     <td align="right"><label for="evento">Evento:</label></td>
                     <td>
                         <select name="evento" id="evento" style="width: 78%;">
-                            <option value="">selecione</option>
                             <option value="S2200">S1010</option>
                         </select>
                     </td>
@@ -197,7 +196,7 @@ var empregador = Object();
             }
 
             if (aRubricas.length == 0) {
-                alert('Selecione pelo menos uma matrícula.');
+                alert('Selecione pelo menos uma Rubrica.');
                 return;
             }
 
@@ -209,7 +208,7 @@ var empregador = Object();
                 'tpAmb': $F('tpAmb'),
                 'iAnoValidade': $F('anofolha'),
                 'iMesValidade': $F('mesfolha'),
-                'matricula': aRubricas.join(',')
+                'rubricas': aRubricas.join(',')
             }; //Codigo Tipo::CADASTRAMENTO_INICIAL
             new AjaxRequest('eso4_esocialapi.RPC.php', parametros, function(retorno) {
 
