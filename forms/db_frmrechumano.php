@@ -648,11 +648,11 @@ function js_valida() {
     return false;
   }
 
-  if( empty( $F('ed20_i_pais').trim() ) ) {
+  /*if( empty( $F('ed20_i_pais').trim() ) ) {
 
     alert( 'Selecione um país.' );
     return false;
-  }
+  }*/
 
   nacionalidade1 = document.form1.ed20_i_nacionalidade.value;
   pais1          = document.form1.ed20_i_pais.value;
