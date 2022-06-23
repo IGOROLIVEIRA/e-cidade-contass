@@ -509,6 +509,7 @@ class cl_acordoitem {
            $resac = db_query("insert into db_acount values($acount,2837,18056,'".AddSlashes(pg_result($resaco,$conresaco,'ac20_tipocontrole'))."','$this->ac20_tipocontrole',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        }
      }
+     db_msgbox($sql);
      $result = db_query($sql);
      if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());

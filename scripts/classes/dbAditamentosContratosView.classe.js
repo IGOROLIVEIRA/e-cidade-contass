@@ -343,9 +343,9 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
     this.ocultacampos = function () {
         
         if(me.oCboTipoAditivo.getValue()== 7 || me.oCboTipoAditivo.getValue()== 14){
-            $('descricaoaltera').style.display = 'none';
-        }else{
             $('descricaoaltera').style.display = '';
+        }else{
+            $('descricaoaltera').style.display = 'none';
         }
 
     }
@@ -933,8 +933,8 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
         me.oGridItens.getRows().forEach(function (oRow) {
             if (oRow.isSelected) {
-                oSelecionados[oRow.aCells[11].getValue()] = oRow;
-                iSelecionados.push(oRow.aCells[1].getValue());
+                oSelecionados[oRow.aCells[1].getValue()-1] = oRow;
+                iSelecionados.push(oRow.aCells[2].getValue());
             }
         });
 
@@ -1014,6 +1014,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             oItemAdicionar.controlaServico = oItem.ServicoQuantidade;
 
             //alert(oItem.ServicoQuantidade);
+            //alert("teste");
 
 
             // console.log('Qtde anterior: ', oItem.qtdeanterior);
@@ -1044,7 +1045,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
                     return alert("A nova data final do contrato deve ser maior que a data inserida!");
                 }
             }
-
+            
             if (oSelecionados[iIndice] != undefined) {
 
                 document.getElementById('btnRemoveItem').style.disabled = false;
@@ -1055,7 +1056,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
                 var nUnitarioA   = js_strToFloat(oSelecionados[iIndice].aCells[5].getValue());
                 var valorAditadoReal = oItemAdicionar.valor - (nQuantidadeA * nUnitarioA);
                 oItemAdicionar.valoraditado = valorAditadoReal;//OC5304
-                oItemAdicionar.quantiaditada = js_strToFloat(oSelecionados[iIndice].aCells[9].getValue());//OC5304
+                oItemAdicionar.quantiaditada = js_strToFloat(oSelecionados[iIndice].aCells[10].getValue());//OC5304
                 oItemAdicionar.dtexecucaoinicio = oSelecionados[iIndice].aCells[12].getValue();
                 oItemAdicionar.dtexecucaofim = oSelecionados[iIndice].aCells[13].getValue();
                 oItemAdicionar.tipoalteracaoitem = oSelecionados[iIndice].aCells[14].getValue();
