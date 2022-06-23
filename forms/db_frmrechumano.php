@@ -608,7 +608,7 @@ if( isset( $chavepesquisa ) ) {
        id="db_opcao"
        value="<?=( $db_opcao == 1 ? "Incluir" : ( $db_opcao == 2 || $db_opcao == 22 ? "Alterar" : "Excluir" ) )?>"
        <?=( $db_botao == false ? "disabled" : "" )?>
-       onclick="return js_valida();">
+       >
 <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
 <input name="novo" type="button" id="novo" value="Novo Registro" onclick="js_novo()" <?=$db_opcao == 1 ? "disabled" : ""?>>
 </form>
@@ -648,11 +648,11 @@ function js_valida() {
     return false;
   }
 
-  /*if( empty( $F('ed20_i_pais').trim() ) ) {
+  if( empty( $F('ed20_i_pais').trim() ) ) {
 
     alert( 'Selecione um país.' );
     return false;
-  }*/
+  }
 
   nacionalidade1 = document.form1.ed20_i_nacionalidade.value;
   pais1          = document.form1.ed20_i_pais.value;
