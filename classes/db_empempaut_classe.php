@@ -449,5 +449,12 @@ class cl_empempaut {
   			}
   			return $sql;
   			}
+
+  function sql_query_empenhoautori ($si06_anoproc,$si06_sequencial){
+    $sql = "select e61_autori, e61_numemp ";
+    $sql .= "from empempaut inner join empautoriza on e61_autori = e54_autori ";
+    $sql .= "where e54_adesaoregpreco = $si06_sequencial 	and e54_anousu = $si06_anoproc;";
+    return $sql;
+  }
 }
 ?>

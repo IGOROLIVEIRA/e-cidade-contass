@@ -2194,7 +2194,15 @@ class cl_acordo
         return $sSql;
     }
 
+    function sql_query_sequencial_acordo($si06_sequencial)
+    {
 
+        $sSql  = "select ac16_sequencial";
+        $sSql .= "  from acordo";
+        $sSql .= "  where ac16_adesaoregpreco = $si06_sequencial";
+
+        return $sSql;
+    }
 
     /**
      * Apaga dependências para apagar o acordo.
