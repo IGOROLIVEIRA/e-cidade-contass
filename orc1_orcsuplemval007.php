@@ -252,7 +252,7 @@ if (isset($incluir)) {
         }
     }
 
-    if (($tiposup != 1003 && $tiposup != 1008 && $tiposup != 2026 && $tiposup != 1024) && substr($o58_codigo, 0, 1) == 2) {
+    if ((!in_array($tiposup, array(1003, 1008, 2026, 1024, 1001, 1006, 1018, 1020, 1021, 1022, 1023, 1026))) && substr($o58_codigo, 0, 1) == 2) {
         db_msgbox("Usuário, inclusão abortada. Dotação incompatível com o tipo de suplementação utilizada");
         $sqlerro = true;
         $limpa_dados = false; 
