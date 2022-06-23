@@ -128,10 +128,10 @@ $oGet = db_utils::postMemory($_GET);
 $config = db_query("select * from db_config where codigo = ".db_getsession("DB_instit"));
 db_fieldsmemory($config,0);
 
-if ($db21_usadebitoitbi == 't') {
+if ($db21_usadebitoitbi == 't') {                                         
 
      $sSQL_ITBI = <<<SQL
-              select arrecad_itbi.k00_numpre
+              select arrecad_itbi.k00_numpre as numprearrecad, recibo.k00_numpre as numprerecibo 
                 from itbi
                     inner join itbinumpre on itbinumpre.it15_guia = itbi.it01_guia
                     inner join recibo on recibo.k00_numpre = itbinumpre.it15_numpre
@@ -139,19 +139,25 @@ if ($db21_usadebitoitbi == 't') {
                         where recibo.k00_numpre IN (select k00_numpre from disbanco where codret = $oGet->codret);
 SQL;
 
-    $resultItbi = db_query($sSQL_ITBI);
-    $oDadosArrecadItbi = db_utils::fieldsMemory($resultItbi, 0);
+    $resultItbi = db_query($sSQL_ITBI);    
 
-    if (!empty($oDadosArrecadItbi->k00_numpre)) {
-        $sSQL_ALTERA_NUMPRE_ITBI = "UPDATE disbanco
-                                      SET k00_numpre = {$oDadosArrecadItbi->k00_numpre}, k00_numpar = 1
-                                        WHERE disbanco.codret = {$oGet->codret}";
+    for ($iCont=0; $iCont < pg_num_rows($resultItbi); $iCont++) {
+        $numprearrecad =  db_utils::fieldsMemory($resultItbi,$iCont)->numprearrecad;
+        $numprerecibo =  db_utils::fieldsMemory($resultItbi,$iCont)->numprerecibo;
+        
+        $sSQL_ALTERA_NUMPRE_ITBI = "UPDATE disbanco 
+                                      SET k00_numpre = {$numprearrecad}, k00_numpar = 1 
+                                        WHERE disbanco.codret = {$oGet->codret} 
+                                        and disbanco.k00_numpre = {$numprerecibo}";
+                                          
         $result_itbi = db_query($sSQL_ALTERA_NUMPRE_ITBI);
 
         if (!$result_itbi) {
-            throw new Exception("Ocorreu um erro ao processar o registro {$oGet->codret}");
+            throw new Exception("Ocorreu um erro ao processar o registro {$numprerecibo} e codret {$oGet->codret}");
         }
+
     }
+    
 }
 
    	$sSql = "select fc_executa_baixa_banco($oGet->codret,'".date("Y-m-d",db_getsession("DB_datausu"))."')";
