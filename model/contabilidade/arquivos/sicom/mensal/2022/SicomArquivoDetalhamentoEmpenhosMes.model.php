@@ -362,7 +362,12 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
         adesaoacordo.si06_numeroadm processoadesaoacordo,
         adesaoacordo.si06_anomodadm anoadesaoacordo,
         l20_edital,
-        l20_anousu
+        l20_anousu,
+        lic211_sequencial,
+        lic211_numero,
+        lic211_anousu,
+        lic211_codunisubres,
+        lic211_codorgaoresplicit
 
         FROM empempenho
         JOIN orcdotacao ON e60_coddot = o58_coddot
@@ -392,6 +397,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
         LEFT JOIN acordoposicaoaditamento ON ac35_acordoposicao = ac26_sequencial
         LEFT JOIN manutencaoacordo ON manutac_acordo = ac16_sequencial
         LEFT JOIN manutencaolicitacao ON manutlic_licitacao = l20_codigo
+        LEFT JOIN liclicitaoutrosorgaos ON lic211_sequencial = e54_licoutrosorgaos
         WHERE e60_anousu = " . db_getsession("DB_anousu") . "
         AND o56_anousu = " . db_getsession("DB_anousu") . "
         AND o58_anousu = " . db_getsession("DB_anousu") . "
@@ -590,6 +596,8 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
         $oDadosEmpenho10->si106_nrosequencialtermoaditivo = $oEmpenho10->nrosequencialtermoaditivo; // campo 22
       }
 
+      
+
       $oDadosEmpenho10->si106_despdecconvenio = $oEmpenho10->despdecconvenio; // campo 23
       $oDadosEmpenho10->si106_nroconvenio = $oEmpenho10->nroconvenio; // campo 24
       $oDadosEmpenho10->si106_dataassinaturaconvenio = $oEmpenho10->dataassinaturaconvenio; // campo 25
@@ -618,10 +626,16 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
         $oDadosEmpenho10->si106_exercicioprocessolicitatorio = $oEmpenho10->anoadesao; // campo 32
 
       }
-      if ($oEmpenho10->si06_sequencial == '') {
+      if ($oEmpenho10->si06_sequencial == '' && $oEmpenho10->adesaoacordoseq == '') {
         $oDadosEmpenho10->si106_despdeclicitacao = $oEmpenho10->despdeclicitacao; // campo 29
         $oDadosEmpenho10->si106_nroprocessolicitatorio = $oEmpenho10->l20_edital; // campo 31
         $oDadosEmpenho10->si106_exercicioprocessolicitatorio = $oEmpenho10->l20_anousu; // campo 32
+      }
+      if($oEmpenho10->lic211_sequencial != ''){
+        $oDadosEmpenho10->si106_codorgaoresplicit = $oEmpenho10->lic211_codorgaoresplicit;
+        $oDadosEmpenho10->si106_codunidadesubresplicit = $oEmpenho10->lic211_codunisubres;
+        $oDadosEmpenho10->si106_nroprocessolicitatorio = $oEmpenho10->lic211_numero;
+        $oDadosEmpenho10->si106_exercicioprocessolicitatorio = $oEmpenho10->lic211_anousu;
       }
       $oDadosEmpenho10->si106_cpfordenador = substr($oEmpenho10->ordenador, 0, 11); // campo 34
 
