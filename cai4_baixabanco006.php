@@ -128,8 +128,7 @@ $oGet = db_utils::postMemory($_GET);
 $config = db_query("select * from db_config where codigo = ".db_getsession("DB_instit"));
 db_fieldsmemory($config,0);
 
-if ($db21_usadebitoitbi == 't') {
- // echo '<br> Entrei ITBI';                                        
+if ($db21_usadebitoitbi == 't') {                                         
 
      $sSQL_ITBI = <<<SQL
               select arrecad_itbi.k00_numpre as numprearrecad, recibo.k00_numpre as numprerecibo 
@@ -140,8 +139,7 @@ if ($db21_usadebitoitbi == 't') {
                         where recibo.k00_numpre IN (select k00_numpre from disbanco where codret = $oGet->codret);
 SQL;
 
-    $resultItbi = db_query($sSQL_ITBI);
-    // $oDadosArrecadItbi = db_utils::fieldsMemory($resultItbi, 0);
+    $resultItbi = db_query($sSQL_ITBI);    
 
     for ($iCont=0; $iCont < pg_num_rows($resultItbi); $iCont++) {
         $numprearrecad =  db_utils::fieldsMemory($resultItbi,$iCont)->numprearrecad;
@@ -151,7 +149,7 @@ SQL;
                                       SET k00_numpre = {$numprearrecad}, k00_numpar = 1 
                                         WHERE disbanco.codret = {$oGet->codret} 
                                         and disbanco.k00_numpre = {$numprerecibo}";
-  //echo '<br>'.$sSQL_ALTERA_NUMPRE_ITBI;                                        
+                                          
         $result_itbi = db_query($sSQL_ALTERA_NUMPRE_ITBI);
 
         if (!$result_itbi) {
