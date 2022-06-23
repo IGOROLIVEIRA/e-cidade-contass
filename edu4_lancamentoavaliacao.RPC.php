@@ -543,6 +543,7 @@ switch($oParam->exec) {
       $oDadosRegencias->lEncerrada        = $oDadosAproveitamento->isEncerrado();
       $oDadosRegencias->iTotalFaltas      = $oDadosAproveitamento->getTotalFaltas() -
                                             $oDadosAproveitamento->getTotalFaltasAbonadas();
+      $oDadosRegencias->iProcedimentoAvaliacao = $oRegencia->getProcedimentoAvaliacao()->getCodigo();
       $aAvaliacoes = $oDadosAproveitamento->getAvaliacoes();
       foreach ($aAvaliacoes as $oAvaliacao) {
 
