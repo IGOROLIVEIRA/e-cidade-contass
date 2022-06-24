@@ -246,6 +246,7 @@ if ($leiaute == 1) {
     3 as tiporegistro,
     l20_nroedital as edital,
     l20_exercicioedital as exercicioedital,
+    l04_descricao as  descricaolote,
     l04_codigo as numerodolote,
     l21_ordem as numerodoitem,
     m61_descr as unidade,
@@ -347,6 +348,10 @@ if ($leiaute == 1) {
             fputs($clabre_arquivo->arquivo, "\n");
         }
 
+        $descricaoLote = "";
+        $sequencial = 0;
+        $sequencialLote = array();
+
         for ($w = 0; $w < pg_numrows($resultRegistro3); $w++) {
 
             fputs($clabre_arquivo->arquivo, pg_result($resultRegistro3, $w, "tiporegistro") . "|");
@@ -357,8 +362,16 @@ if ($leiaute == 1) {
                 fputs($clabre_arquivo->arquivo, pg_result($resultRegistro3, $w, "edital") . "|");
             }
 
+            if ($descricaoLote != pg_result($resultRegistro3, $w, "descricaolote")) {
+                $sequencial++;
+                $sequencialLote[pg_result($resultRegistro3, $w, "numerodolote")] = $sequencial;
+                $descricaoLote = pg_result($resultRegistro3, $w, "descricaolote");
+            } else {
+                $sequencialLote[pg_result($resultRegistro3, $w, "numerodolote")] = $sequencial;
+            }
+
             fputs($clabre_arquivo->arquivo, pg_result($resultRegistro3, $w, "exercicioedital") . "|");
-            fputs($clabre_arquivo->arquivo, $sequencialLote[pg_result($resultRegistro2, $w, "numerodolote")] . "|");
+            fputs($clabre_arquivo->arquivo, $sequencialLote[pg_result($resultRegistro3, $w, "numerodolote")] . "|");
             fputs($clabre_arquivo->arquivo, pg_result($resultRegistro3, $w, "numerodoitem") . "|");
             fputs($clabre_arquivo->arquivo, pg_result($resultRegistro3, $w, "unidade") . "|");
             fputs($clabre_arquivo->arquivo, pg_result($resultRegistro3, $w, "pc11_quant") . "|");
