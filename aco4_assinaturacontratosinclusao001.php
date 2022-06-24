@@ -178,6 +178,26 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
               <td>&nbsp;</td>
             </tr>
             <tr>
+              <td align="left" title="<?= @$Tac16_datareferencia ?>">
+                <b>Data de Referência:</b>
+              </td>
+
+              <td align="left">
+                <?
+                db_inputdata(
+                  'ac16_datareferencia',
+                  @$ac16_datareferencia_dia,
+                  @$ac16_datareferencia_mes,
+                  @$ac16_datareferencia_ano,
+                  true,
+                  'text',
+                  $db_opcao
+                );
+                ?>
+              </td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
               <td align="left" title="<?= @$Tac16_veiculodivulgacao ?>">
                 <?= @$Lac16_veiculodivulgacao ?>
               </td>
