@@ -223,12 +223,11 @@ if ($leiaute == 1) {
         exit;
     }
 
-    $resultRegistro2 = db_query("select
+    $resultRegistro2 = db_query("select distinct
     2 as tiporegistro,
     l20_nroedital as edital,
     l20_exercicioedital as exercicioedital,
-    l04_codigo as numerodolote,
-    l04_descricao as descricaolote,
+    l04_descricao as  descricaolote,
     l20_liclocal as localentrega,
     l20_localentrega as localdeentrega,
     l20_prazoentrega as datadeentrega,
@@ -236,8 +235,7 @@ if ($leiaute == 1) {
     from liclicita
     join liclicitem on l21_codliclicita=l20_codigo
     join liclicitemlote on l04_liclicitem=l21_codigo
-    where l20_codigo= $l20_codigo
-    ORDER BY l21_ordem;");
+    where l20_codigo= $l20_codigo;");
 
     if (pg_numrows($resultRegistro2) == 0) {
         db_redireciona('db_erros.php?fechar=true&db_erro=Dados do Lote Edital Incompletos.');
@@ -344,8 +342,8 @@ if ($leiaute == 1) {
             fputs($clabre_arquivo->arquivo, pg_result($resultRegistro2, $w, "localentrega") . "|");
             fputs($clabre_arquivo->arquivo, pg_result($resultRegistro2, $w, "localdeentrega") . "|");
             fputs($clabre_arquivo->arquivo, pg_result($resultRegistro2, $w, "datadeentrega") . "|");
-            fputs($clabre_arquivo->arquivo, pg_result($resultRegistro2, $w, "garantia") . "|");
-            fputs($clabre_arquivo->arquivo, pg_result($resultRegistro2, $w, "numerodolote"));
+            fputs($clabre_arquivo->arquivo, pg_result($resultRegistro2, $w, "garantia"));
+            //fputs($clabre_arquivo->arquivo, pg_result($resultRegistro2, $w, "numerodolote"));
             fputs($clabre_arquivo->arquivo, "\n");
         }
 
