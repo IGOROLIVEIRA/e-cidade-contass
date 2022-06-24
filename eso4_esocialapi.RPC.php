@@ -261,11 +261,10 @@ try {
             db_inicio_transacao();
 
             $iCgm = $oParam->empregador;
-            //print_r($oParam);exit;
+
             foreach ($oParam->arquivos as $arquivo) {
                 $dadosESocial->setReponsavelPeloPreenchimento($iCgm);
-
-                if (Tipo::getTipoFormulario($arquivo) != 37) {
+                if (!in_array(Tipo::getTipoFormulario($arquivo), array(37,12))) {
                     $dadosDoPreenchimento = $dadosESocial->getPorTipo(Tipo::getTipoFormulario($arquivo), $oParam->matricula);
 
                     $formatter = FormatterFactory::get($arquivo);

@@ -591,29 +591,98 @@ class Preenchimentos
      */
     public function buscarPreenchimentoS1200($codigoFormulario, $matricula=null)
     {
-        $sql = "";
+        $sql = "select
+        distinct
+        1 as tpInsc,
+        cgc as nrInsc,
+        z01_cgccpf as cpfTrab,
+        rh51_indicadesconto as indMV,
+        case when length(rh51_cgcvinculo) = 14 then 1
+        when length(rh51_cgcvinculo) = 11 then 2
+        end as tpInsc2,
+        rh51_cgcvinculo as nrInsc2,
+        rh51_categoria as codCateg,
+        rh51_basefo as vlrRemunOE,
+        h13_categoria as codCateg,
+        'LOTA1' as codLotacao,
+        rh01_regist as matricula
+    from
+        rhpessoal
+    left join rhpessoalmov on
+        rh02_anousu = fc_getsession('DB_anousu')::int
+        and rh02_mesusu = date_part('month', fc_getsession('DB_datausu')::date)
+        and rh02_regist = rh01_regist
+        and rh02_instit = fc_getsession('DB_instit')::int
+    left join rhinssoutros    on rh51_seqpes                 = rh02_seqpes
+    left join rhlota on
+        rhlota.r70_codigo = rhpessoalmov.rh02_lota
+        and rhlota.r70_instit = rhpessoalmov.rh02_instit
+    inner join cgm on
+        cgm.z01_numcgm = rhpessoal.rh01_numcgm
+    inner join db_config on
+        db_config.codigo = rhpessoal.rh01_instit
+    inner join rhestcivil on
+        rhestcivil.rh08_estciv = rhpessoal.rh01_estciv
+    inner join rhraca on
+        rhraca.rh18_raca = rhpessoal.rh01_raca
+    left join rhfuncao on
+        rhfuncao.rh37_funcao = rhpessoalmov.rh02_funcao
+        and rhfuncao.rh37_instit = rhpessoalmov.rh02_instit
+    left join rhpescargo on
+        rhpescargo.rh20_seqpes = rhpessoalmov.rh02_seqpes
+    left join rhcargo on
+        rhcargo.rh04_codigo = rhpescargo.rh20_cargo
+        and rhcargo.rh04_instit = rhpessoalmov.rh02_instit
+    inner join rhinstrucao on
+        rhinstrucao.rh21_instru = rhpessoal.rh01_instru
+    inner join rhnacionalidade on
+        rhnacionalidade.rh06_nacionalidade = rhpessoal.rh01_nacion
+    left join rhpesrescisao on
+        rh02_seqpes = rh05_seqpes
+    left join rhsindicato on
+        rh01_rhsindicato = rh116_sequencial
+    inner join rhreajusteparidade on
+        rhreajusteparidade.rh148_sequencial = rhpessoal.rh01_reajusteparidade
+    left join rhpesdoc on
+        rhpesdoc.rh16_regist = rhpessoal.rh01_regist
+    left join rhdepend on
+        rhdepend.rh31_regist = rhpessoal.rh01_regist
+    left join rhregime on
+        rhregime.rh30_codreg = rhpessoalmov.rh02_codreg
+    left join rhpesfgts on
+        rhpesfgts.rh15_regist = rhpessoal.rh01_regist
+    inner join tpcontra on
+        tpcontra.h13_codigo = rhpessoalmov.rh02_tpcont
+    left join rhcontratoemergencial on
+        rh163_matricula = rh01_regist
+    left join rhcontratoemergencialrenovacao on
+        rh164_contratoemergencial = rh163_sequencial
+    left join jornadadetrabalho on
+        jt_sequencial = rh02_jornadadetrabalho
+    left join db_cgmbairro on
+        cgm.z01_numcgm = db_cgmbairro.z01_numcgm
+    left join bairro on
+        bairro.j13_codi = db_cgmbairro.j13_codi
+    left join db_cgmruas on
+        cgm.z01_numcgm = db_cgmruas.z01_numcgm
+    left join ruas on
+        ruas.j14_codigo = db_cgmruas.j14_codigo
+    left join rescisao on
+        rescisao.r59_anousu = rhpessoalmov.rh02_anousu
+        and rescisao.r59_mesusu = rhpessoalmov.rh02_mesusu
+        and rescisao.r59_regime = rhregime.rh30_regime
+        and rescisao.r59_causa = rhpesrescisao.rh05_causa
+        and rescisao.r59_caub = rhpesrescisao.rh05_caub::char(2)
+    where 1=1";
         if ($matricula != null) {
             $sql .= "and rh01_regist in ($matricula) ";
         }
-        $sql .= "and (
-					            (
-					            (date_part('year',rhpessoal.rh01_admiss)::varchar || lpad(date_part('month',rhpessoal.rh01_admiss)::varchar,2,'0'))::integer <= 202207
-					            and (date_part('year',fc_getsession('DB_datausu')::date)::varchar || lpad(date_part('month',fc_getsession('DB_datausu')::date)::varchar,2,'0'))::integer <= 202207
-					            and (rh05_recis is null or (date_part('year',rh05_recis)::varchar || lpad(date_part('month',rh05_recis)::varchar,2,'0'))::integer > 202207)
-					            ) or (
-					            date_part('month',rhpessoal.rh01_admiss) = date_part('month',fc_getsession('DB_datausu')::date)
-					            and date_part('year',rhpessoal.rh01_admiss) = date_part('year',fc_getsession('DB_datausu')::date)
-					            and (date_part('year',fc_getsession('DB_datausu')::date)::varchar || lpad(date_part('month',fc_getsession('DB_datausu')::date)::varchar,2,'0'))::integer > 202207
-					            )
-				            ) order by z01_nome asc limit 1000";
 
         $rs = \db_query($sql);
 
         if (!$rs) {
             throw new \Exception("Erro ao buscar os preenchimentos do S2200");
         }
-
-
         /**
          * @todo busca os empregadores da instituição e adicona para cada rubriuca
          */
