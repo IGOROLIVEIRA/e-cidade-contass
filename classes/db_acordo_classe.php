@@ -97,6 +97,10 @@ class cl_acordo
     var $ac16_licoutroorgao = null;
     var $ac16_adesaoregpreco = null;
     var $ac16_tipocadastro = null;
+    var $ac16_datareferencia_dia = null;
+    var $ac16_datareferencia_mes = null;
+    var $ac16_datareferencia_ano = null;
+    var $ac16_datareferencia = null;
     var $ac16_providencia = null;
     /**
      * A descrição do status do campo ac16_providencia podem ser checados na tabela providencia
@@ -143,6 +147,7 @@ class cl_acordo
  ac16_adesaoregpreco = int8 = adesao de registro de precos
  ac16_tipocadastro   = int8 = tipo de cadastro
  ac16_providencia = int4 = Status da Providência do Acordo
+ ac16_datareferencia = date = Data de referência para geração do SICOM
  ";
     //funcao construtor da classe
     function cl_acordo()
@@ -748,6 +753,17 @@ class cl_acordo
                 $virgula = ",";
             }
         }
+
+        if (trim($this->ac16_datareferencia) != "" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_datareferencia_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["ac16_datareferencia_dia"] != "")) {
+            $sql  .= $virgula . " ac16_datareferencia = '$this->ac16_datareferencia' ";
+            $virgula = ",";
+        } else {
+            if (isset($GLOBALS["HTTP_POST_VARS"]["ac16_datareferencia_dia"])) {
+                $sql  .= $virgula . " ac16_datareferencia = null ";
+                $virgula = ",";
+            }
+        }
+
         if (trim($this->ac16_contratado) != "" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_contratado"])) {
             $sql  .= $virgula . " ac16_contratado = $this->ac16_contratado ";
             $virgula = ",";
