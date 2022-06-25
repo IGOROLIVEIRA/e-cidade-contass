@@ -68,7 +68,7 @@ $lValidarValorUnitario = $oDadosParametros->pc30_gerareserva == 't';
 
 if (isset($pc11_numero) && (!isset($opcao) || (isset($opcao) && $opcao != "alterar" && $opcao != "excluir")) && isset($verificado)) {
 
-  //Verifica se estï¿½ sendo acessada a rotina pela acessa itens com Licitaï¿½ï¿½o ou processo de compras
+  //Verifica se está sendo acessada a rotina pela acessa itens com Licitação ou processo de compras
   $sql = " select max(pc11_seq) as pc11_seq
 	           from solicitem
 			   left join pcprocitem on pcprocitem.pc81_solicitem     = pc11_codigo
@@ -214,9 +214,9 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
       <tr>
         <td nowrap title="<?= @$Tpc16_codmater ?>">
           <?
-          // $tranca --> variï¿½vel q torna o campo pc16_codmater readOnly
+          // $tranca --> variável q torna o campo pc16_codmater readOnly
           $tranca = 1;
-          // $tquant --> variï¿½vel q passa para o iframe se valor ou quant ï¿½ readOnly
+          // $tquant --> variável q passa para o iframe se valor ou quant é readOnly
           $tquant = false;
 
           if (isset($pc11_codigo) && trim($pc11_codigo) != "") {
@@ -349,7 +349,7 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
                                       valor = new Number(x.pc11_quant.value);
                                       valor = valor.toString();
                                       if(arr_ksadecimalqtd[x.pc17_unid.value]=='f' && valor.indexOf('.')!=-1){
-                                        alert('Unidade selecionada nï¿½o permite quantidade com valor decimal. Verifique.');
+                                        alert('Unidade selecionada nÃo permite quantidade com valor decimal. Verifique.');
                                         x.pc11_quant.value = '" . $pc11_quant . "';
                                         x.pc11_quant.focus();
                                         x.pc11_quant.select();
@@ -488,7 +488,7 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
         ?>
         <td colspan="2">
           <? if ($pc30_maximodiasorcamento > 0) { ?>
-            <input type='button' value='ï¿½ltimos Orï¿½amentos' id='ultimosorcamentos'>
+            <input type='button' value='Últimos Orçamentos' id='ultimosorcamentos'>
           <? } ?>
           <input name="<?= ($db_opcao == 1 ? "incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "alterar" : "excluir")) ?>" type="submit" id="db_opcao" value="<?= ($db_opcao == 1 ? "Incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "Alterar" : "Excluir")) ?>" onclick='return js_testaQuant(<?= $db_opcao ?>)'>
           <?
@@ -563,7 +563,7 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
           if (substr($o56_elemento, 0, 7) == '3449052') {
             $aOpcoes = array("true" => "SIM");
           } else {
-            $aOpcoes = array("false" => "Nï¿½O", "true" => "SIM");
+            $aOpcoes = array("false" => "NÃO", "true" => "SIM");
           }
 
           db_select('pc11_servicoquantidade', $aOpcoes, true, $db_opcao, "onchange='js_habilitaCamposServico(this.value);'");
@@ -719,7 +719,7 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
                                 pc13_valor";
           $cliframe_alterar_excluir->sql = $clsolicitem->sql_query_pcmater(null, $sCampos, "pc11_seq, pc11_codigo", "$codigos pc11_numero= " . @$pc11_numero);
           $cliframe_alterar_excluir->campos = "pc11_seq,pc11_codigo,pc11_numero,pc13_coddot,pc19_orctiporec,pc01_codmater,pc01_descrmater,m61_descr,pc13_quant,pc13_valor";
-          $cliframe_alterar_excluir->legenda = "ITENS LANï¿½ADOS";
+          $cliframe_alterar_excluir->legenda = "ITENS LANÇADOS";
           $cliframe_alterar_excluir->iframe_height = "150";
           $cliframe_alterar_excluir->iframe_width = "100%";
           $cliframe_alterar_excluir->textocabec = "black";
@@ -730,7 +730,7 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
           $cliframe_alterar_excluir->sql_comparar = $sql_dot;
           $cliframe_alterar_excluir->sql_servico = $sql_servico;
           $cliframe_alterar_excluir->sql_reservasaldo = $sql_reservasaldo;
-          $cliframe_alterar_excluir->sql_disabled = $sSqlVerificaAut; // Desabilita Itens que tem Autorizaï¿½ï¿½o de Empenho
+          $cliframe_alterar_excluir->sql_disabled = $sSqlVerificaAut; // Desabilita Itens que tem Autorização de Empenho
           $cliframe_alterar_excluir->campos_comparar = "pc11_codigo";
 
           $val = 1;
@@ -742,7 +742,7 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
           $cliframe_alterar_excluir->opcoes = $val;
           $cliframe_alterar_excluir->fieldset = false;
           if (isset($pc11_codigo) && trim($pc11_codigo) != "") {
-            $cliframe_alterar_excluir->msg_vazio = ($db_opcao == 1 ? "Inclusï¿½o" : ($db_opcao == 2 || $db_opcao == 22 ? "Alteraï¿½ï¿½o" : "Exclusï¿½o")) . " do item $pc11_codigo";
+            $cliframe_alterar_excluir->msg_vazio = ($db_opcao == 1 ? "Inclusão" : ($db_opcao == 2 || $db_opcao == 22 ? "Alteração" : "Exclusão")) . " do item $pc11_codigo";
           } else {
             $cliframe_alterar_excluir->msg_vazio = "Cadastre o item";
           }
@@ -1241,7 +1241,7 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
     const val = valorEle.split("-");
     const num = val[1].split(" ");
     if ((num[1].substr(0, 7)) != (valorElem.substr(0, 7))) {
-      alert("Elemento do item selecionado diferente do item anterior, ï¿½ necessï¿½rio remover as dotaï¿½ï¿½es vinculadas ao item para a troca do material");
+      alert("Elemento do item selecionado diferente do item anterior, é necessário remover as dotações vinculadas ao item para a troca do material");
       var input = document.querySelector("#db_opcao");
       input.disabled = true;
       document.getElementById("codeleRow").style.display = "table-row";
@@ -1313,10 +1313,10 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
    *
    js_verificaServico()
    js_habilitaCamposServico(sServicoQuantidade)
-     aqui iremos verificar se o item ï¿½ serviço, agora se for sera possivel
+     aqui iremos verificar se o item é serviço, agora se for sera possivel
      alterar quantidades, unidades
-     e o usuario ainda terï¿½ que definir se ele serï¿½ controlado por quantidade ou
-     como ï¿½ hoje, controlando apenas pelo valor total
+     e o usuario ainda terá que definir se ele será controlado por quantidade ou
+     como é hoje, controlando apenas pelo valor total
      pc11_servicoquantidade
    */
   function js_verificaServico() {
@@ -1424,7 +1424,7 @@ if ($pc01_servico == 't' && substr($o56_elemento, 0, 7) != '34490') {
   echo "<script>                                                                   ";
   echo "  $('pc11_servicoquantidade').options.length = 0;                          ";
   echo "  $('pc11_servicoquantidade').options[0]     = new Option('SIM', 'true');  ";
-  echo "  $('pc11_servicoquantidade').options[1]     = new Option('Nï¿½O', 'false'); ";
+  echo "  $('pc11_servicoquantidade').options[1]     = new Option('NÃO', 'false'); ";
   echo "  $('pc11_servicoquantidade').value = false;";
 
   echo "  $('pc17_unid') .style.visibility           = 'hidden';                  ";
@@ -1445,7 +1445,7 @@ if ($pc01_servico == 't' && substr($o56_elemento, 0, 7) != '34490') {
   echo "<script>                                                                   ";
   echo "  $('pc11_servicoquantidade').options.length = 0;                          ";
   echo "  $('pc11_servicoquantidade').options[0]     = new Option('SIM', 'true');  ";
-  echo "  $('pc11_servicoquantidade').options[1]     = new Option('Nï¿½O', 'false'); ";
+  echo "  $('pc11_servicoquantidade').options[1]     = new Option('NÃO', 'false'); ";
   echo "  $('pc17_unid').style.visibility           = 'visible';                  ";
   echo "  $('pc17_quant').style.visibility           = 'visible';                  ";
   echo "  $('ctnServicoQuantidade').style.display='none'; ";
@@ -1460,18 +1460,13 @@ if ($pc01_servico == 't' && substr($o56_elemento, 0, 7) != '34490') {
 } else if (substr($o56_elemento, 0, 7) != '34490' && $pc01_servico == 'f') {
 
   echo "<script>                                                                   ";
-
   echo "  $('pc11_servicoquantidade').options.length = 0;                          ";
   echo "  $('pc11_servicoquantidade').options[0]     = new Option('SIM', 'true');  ";
-  echo "  $('pc11_servicoquantidade').options[1]     = new Option('Nï¿½O', 'false'); ";
+  echo "  $('pc11_servicoquantidade').options[1]     = new Option('NÃO', 'false'); ";
   echo "  $('pc17_unid').style.visibility           = 'visible';                  ";
   echo "  $('pc17_quant').style.visibility           = 'visible';                  ";
   echo "  document.form1.pc11_servicoquantidade.style.visibility  = 'hidden'; ";
   echo "  document.form1.pc11_servicoquantidade.value = 'false';  ";
-
-
-
-
   echo "</script>                                                                  ";
 }
 

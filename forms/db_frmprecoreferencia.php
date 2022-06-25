@@ -27,7 +27,7 @@ if ($si01_processocompra != "") {
 <form name="form1" method="post" action="">
   <center>
     <fieldset style="margin-left: 50%; margin-top: 10px;">
-      <legend>Preï¿½o de Referï¿½ncia</legend>
+      <legend>Preço de Referência</legend>
       <table border="0">
         <tr>
           <td nowrap title="<?= @$Tsi01_sequencial ?>">
