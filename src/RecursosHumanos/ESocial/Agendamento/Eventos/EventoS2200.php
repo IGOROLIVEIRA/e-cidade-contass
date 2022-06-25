@@ -72,7 +72,11 @@ class EventoS2200 extends EventoBase
 
             $oDadosAPI->evtAdmissao->endereco->brasil->tpLograd    = empty($oDados->tplograd) ? null : $oDados->tplograd;
             $oDadosAPI->evtAdmissao->endereco->brasil->dscLograd   = empty($oDados->dsclograd) ? null : $oDados->dsclograd;
+
             $oDadosAPI->evtAdmissao->endereco->brasil->nrLograd    =  $oDados->nrlograd;
+            if (empty($oDados->nrlograd) || $oDados->nrlograd == 0) {
+                $oDadosAPI->evtAdmissao->endereco->brasil->nrLograd   =  'S/N';
+            }
             $oDadosAPI->evtAdmissao->endereco->brasil->uf    =  $oDados->uf;
             $oDadosAPI->evtAdmissao->endereco->brasil->complemento = empty($oDados->complemento) ? null : $oDados->complemento;
             $oDadosAPI->evtAdmissao->endereco->brasil->bairro      = empty($oDados->bairro) ? null : $oDados->bairro;
