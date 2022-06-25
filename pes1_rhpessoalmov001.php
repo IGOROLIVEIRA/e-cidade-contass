@@ -791,9 +791,7 @@ if (isset($rh02_regist)) {
 if (isset($limparbanco) && $limparbanco == true) {
     unset($inputCodigoBanco, $inputNomeBanco, $inputNumeroAgencia, $inputDvAgencia, $inputNumeroConta, $inputDvConta);
 } else {
-
     try {
-
         $oServidor           = ServidorRepository::getInstanciaByCodigo($rh02_regist, $rh02_anousu, $rh02_mesusu);
         $oContaBancaria      = $oServidor->getContaBancaria();
 
@@ -831,7 +829,7 @@ if (isset($rh02_salari)) {
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
     <meta http-equiv="Expires" CONTENT="0">
     <script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
-    <?
+    <?php
     db_app::load("scripts.js");
     db_app::load("prototype.js");
     db_app::load("strings.js");
@@ -864,7 +862,7 @@ if (isset($rh02_salari)) {
 
 </html>
 
-<?
+<?php
 
 if ((isset($alterar) || isset($excluir) || isset($incluir)) && !$lErro) {
 
