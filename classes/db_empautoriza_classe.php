@@ -1953,4 +1953,9 @@ class cl_empautoriza
         }
         return $sql;
     }
+
+    function sql_autorioutrosorg_query ($lic211_sequencial){
+        $sql = "select e54_autori from empautoriza where e54_licoutrosorgaos = $lic211_sequencial";
+        return $sql;
+    }
 }

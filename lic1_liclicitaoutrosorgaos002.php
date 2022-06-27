@@ -8,6 +8,10 @@ include("dbforms/db_funcoes.php");
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
 $clliclicitaoutrosorgaos = new cl_liclicitaoutrosorgaos;
+$clpctipocompra = new cl_pctipocompra;
+$clempautoriza = new cl_empautoriza;
+$clempempaut = new cl_empempaut;
+$clempempenho = new cl_empempenho;
 $db_opcao = 22;
 $db_botao = false;
 $sqlerro  = false;
@@ -40,6 +44,22 @@ if(isset($alterar)){
 
     if($sqlerro==false){
         $clliclicitaoutrosorgaos->alterar($lic211_sequencial);
+        $resultipocompra = $clpctipocompra->sql_record($clpctipocompra->sql_tipocompra_query($lic211_tipo));
+        if($clpctipocompra->numrows == 1){
+          db_fieldsmemory($resultipocompra,0);
+          $resultautoriza = $clempautoriza->sql_record($clempautoriza->sql_autorioutrosorg_query($lic211_sequencial));
+          if($clempautoriza->numrows >0){
+            for($i=0;$i<$clempautoriza->numrows;$i++){
+              db_fieldsmemory($resultautoriza,$i);
+              $clempautoriza->sql_record("update empautoriza set e54_codcom = $pc50_codcom where e54_licoutrosorgaos = $lic211_sequencial");
+              $resultempautori = $clempempaut->sql_record($clempempaut->sql_empautori_query($e54_autori));
+              if($clempempaut->numrows == 1){
+                db_fieldsmemory($resultempautori,0);
+                $clempempenho->sql_record("update empempenho set e60_codcom = $pc50_codcom where e60_numemp = $e61_numemp");
+              }
+            }
+          }
+        }
     }
     db_fim_transacao();
 }else if(isset($chavepesquisa)){

@@ -456,5 +456,10 @@ class cl_empempaut {
     $sql .= "where e54_adesaoregpreco = $si06_sequencial 	and e54_anousu = $si06_anoproc;";
     return $sql;
   }
+
+  function sql_empautori_query ($pc50_codcom){
+    $sql = "select e61_numemp from empempaut where e61_autori = $pc50_codcom";
+    return $sql;
+  }
 }
 ?>

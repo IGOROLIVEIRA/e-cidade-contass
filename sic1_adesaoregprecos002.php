@@ -206,6 +206,7 @@ if (!$sqlerro) {
             for ($i = 0; $i < $numrows_unid; $i++) {
               db_fieldsmemory($sSqlItemacordoposicao, $i);
               $clempautoriza->e54_nummodalidade = $si06_nummodadm;
+              $clempautoriza->e54_numerl = $si06_numeroadm."/".$si06_anomodadm;
               $clempautoriza->e54_autori = $e54_autori;
               $clempautoriza->alterar($e54_autori);
               if($e60_numemp!="" && $e60_numemp!=null){
