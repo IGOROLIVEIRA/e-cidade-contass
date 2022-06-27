@@ -747,6 +747,8 @@ $sqlprinc .= "       j40_refant,";
 $sqlprinc .= "       j34_setor,";
 $sqlprinc .= "       j34_quadra,";
 $sqlprinc .= "       j34_lote,";
+$sqlprinc .= "       j34_distrito,";
+$sqlprinc .= "       j01_unidade,";
 $sqlprinc .= "       j04_quadraregimo,";
 $sqlprinc .= "       j04_loteregimo,";
 $sqlprinc .= "       substr(fc_iptuender,001,40) as j23_ender, ";
@@ -772,6 +774,8 @@ $sqlprinc .= "              j40_refant,";
 $sqlprinc .= "              j34_setor,";
 $sqlprinc .= "              j34_quadra,";
 $sqlprinc .= "              j34_lote,";
+$sqlprinc .= "              j34_distrito,";
+$sqlprinc .= "              j01_unidade,";
 $sqlprinc .= "              j04_quadraregimo,";
 $sqlprinc .= "              j04_loteregimo,";
 $sqlprinc .= "              fc_iptuender(j23_matric) ";
@@ -862,6 +866,8 @@ for ($vez = 0; $vez <= 1; $vez++) {
       if ($debugar_passou == 1) {
         echo $j23_matric . "<br>";
       }
+
+      $inscricaoimobiliaria = ''.str_pad($j34_distrito, 2, "0", STR_PAD_LEFT).$j34_setor.$j34_quadra.$j34_lote.$j01_unidade.'';
 
       db_atutermometro($i,$quantidade,'termometro');
 
@@ -3263,6 +3269,8 @@ for ($vez = 0; $vez <= 1; $vez++) {
               fputs($clabre_arquivo->arquivo, str_pad(substr($j05_descr,0,40), 40));
               fputs($clabre_arquivo->arquivo, str_pad($j06_quadraloc,          10));
               fputs($clabre_arquivo->arquivo, str_pad($j06_lote,               10));
+              fputs($clabre_arquivo->arquivo, str_pad(db_formatar($taxa_bancaria, 'f', ' ', 10),"0",STR_PAD_LEFT));
+              fputs($clabre_arquivo->arquivo, str_pad($inscricaoimobiliaria, 20));
             }
 
           } else {
@@ -3273,6 +3281,8 @@ for ($vez = 0; $vez <= 1; $vez++) {
               fputs($clabre_arquivo->arquivo, db_contador("DESCRSETORLOCALIZACAO",      "DESCRICAO DO SETOR DE LOCALIZACAO",      $contador,40));
               fputs($clabre_arquivo->arquivo, db_contador("QUADRALOCALIZACAO",          "QUADRA DE LOCALIZACAO",                  $contador,10));
               fputs($clabre_arquivo->arquivo, db_contador("LOTELOCALIZACAO",            "LOTE DE LOCALIZACAO",                    $contador,10));
+              fputs($clabre_arquivo->arquivo, db_contador("TAXAEXPEDIENTE",             "TAXA EXPEDIENTE",                        $contador,10));
+              fputs($clabre_arquivo->arquivo, db_contador("INSCRICAOIMOBILIARIA",       "INSCRICAO IMOBILIARIA",                  $contador,20));
             }
 
           }
