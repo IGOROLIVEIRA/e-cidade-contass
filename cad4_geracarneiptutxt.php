@@ -2605,7 +2605,7 @@ for ($vez = 0; $vez <= 1; $vez++) {
               fputs($clabre_arquivo->arquivo, str_pad($j36_testad, 20));
               fputs($clabre_arquivo->arquivo, str_pad($j34_area, 20));
               fputs($clabre_arquivo->arquivo, str_pad($j39_area, 20));
-              fputs($clabre_arquivo->arquivo, str_pad($inscricaoimobiliaria, 20));
+              fputs($clabre_arquivo->arquivo, str_pad($j40_refant, 20));
               fputs($clabre_arquivo->arquivo, str_pad(db_formatar($j23_arealo, 'f', ' ', 18), 18, ' ', STR_PAD_LEFT));
               fputs($clabre_arquivo->arquivo, str_pad(db_formatar($j23_m2terr, 'f', ' ', 18), 18, ' ', STR_PAD_LEFT));
             }
@@ -3270,6 +3270,7 @@ for ($vez = 0; $vez <= 1; $vez++) {
               fputs($clabre_arquivo->arquivo, str_pad($j06_quadraloc,          10));
               fputs($clabre_arquivo->arquivo, str_pad($j06_lote,               10));
               fputs($clabre_arquivo->arquivo, str_pad(db_formatar($taxa_bancaria, 'f', ' ', 10),"0",STR_PAD_LEFT));
+              fputs($clabre_arquivo->arquivo, str_pad($inscricaoimobiliaria, 20));
             }
 
           } else {
@@ -3281,6 +3282,7 @@ for ($vez = 0; $vez <= 1; $vez++) {
               fputs($clabre_arquivo->arquivo, db_contador("QUADRALOCALIZACAO",          "QUADRA DE LOCALIZACAO",                  $contador,10));
               fputs($clabre_arquivo->arquivo, db_contador("LOTELOCALIZACAO",            "LOTE DE LOCALIZACAO",                    $contador,10));
               fputs($clabre_arquivo->arquivo, db_contador("TAXAEXPEDIENTE",             "TAXA EXPEDIENTE",                        $contador,10));
+              fputs($clabre_arquivo->arquivo, db_contador("INSCRICAOIMOBILIARIA",       "INSCRICAO IMOBILIARIA",                  $contador,20));
             }
 
           }
