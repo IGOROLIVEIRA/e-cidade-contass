@@ -35,7 +35,6 @@ require_once("std/db_stdClass.php");
 require_once("libs/db_conecta.php");
 require_once("libs/db_sessoes.php");
 require_once("std/DBTime.php");
-require_once("std/DBDate.php");
 include("libs/PHPExcel/Classes/PHPExcel.php");
 require_once("classes/db_veicretirada_classe.php");
 require_once("classes/db_veicdevolucao_classe.php");

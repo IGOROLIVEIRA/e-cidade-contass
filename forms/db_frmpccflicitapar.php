@@ -31,6 +31,7 @@ $cliframe_alterar_excluir = new cl_iframe_alterar_excluir;
 $clpccflicitapar->rotulo->label();
 $clrotulo = new rotulocampo;
 $clrotulo->label("l03_codigo");
+
 if(isset($db_opcaoal)){
    $db_opcao=33;
     $db_botao=false;
