@@ -227,6 +227,7 @@ $clrotulo->label("ac16_resumoobjeto");
     var opcao = document.form1.controle.value;
     var elemento = "";
     var elemento_dotacao = "";
+    var dotacaoIncluida = false;
 
     function pesquisadotacao() {
 
@@ -507,6 +508,7 @@ $clrotulo->label("ac16_resumoobjeto");
             oDadosHint.idLinha = `oGridItensrowoGridItens${iSeq}`;
             oDadosHint.sText = sTextEvent;
             aDadosHintGrid.push(oDadosHint);
+
 
             if (oItem.dotacoesoriginal == undefined) {
 
@@ -818,6 +820,7 @@ $clrotulo->label("ac16_resumoobjeto");
         oTxtDotacao.setValue("");
         oTxtSaldoDotacao.setValue("");
         oTxtValorDotacao.setValue("0,00");
+        dotacaoIncluida = true;
         preencheGridDotacoes(iLinha);
     }
 
@@ -1057,6 +1060,7 @@ $clrotulo->label("ac16_resumoobjeto");
 
         });
 
+        dotacaoIncluida = true;
         return alert('Dotação aplicada aos itens selecionados');
 
 
@@ -1116,7 +1120,6 @@ $clrotulo->label("ac16_resumoobjeto");
         };
 
         var lAditar = true;
-        var quantidadeDotacoes = 0;
         aItensPosicao.forEach(function(oItem, iIndice) {
 
             if (!lAditar) {
@@ -1139,7 +1142,6 @@ $clrotulo->label("ac16_resumoobjeto");
             oItemAdicionar.dtexecucaoinicio = oItem.periodoini;
             oItemAdicionar.dtexecucaofim = oItem.periodofim;
 
-            quantidadeDotacoes = quantidadeDotacoes + oItem.dotacoes.length;
 
 
             if (oSelecionados[iIndice] != undefined) {
@@ -1187,7 +1189,7 @@ $clrotulo->label("ac16_resumoobjeto");
             oParam.aItens.push(oItemAdicionar);
         });
 
-        if (quantidadeDotacoes == 0 && $("si03_tipoapostila").value == "03") {
+        if (dotacaoIncluida == false && $("si03_tipoapostila").value == "03") {
             return alert("Usuário: é necessário incluir dotação em no mínimo um item \n\ncaso o tipo de apostila for empenho de dotações orçamentárias");
 
         }
