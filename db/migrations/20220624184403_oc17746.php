@@ -7,8 +7,8 @@ class Oc17746 extends AbstractMigration
 
     public function up()
     {
-        $sql = 'ALTER TABLE acordo
-        ADD ac16_datareferencia date null;';
+        $sql = "ALTER TABLE acordo ADD ac16_datareferencia date null;
+                ALTER TABLE apostilamento ADD si03_datareferencia date null;";
         $this->execute($sql);
     }
 }
