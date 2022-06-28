@@ -540,7 +540,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         me.oGridItens.setCheckbox(0);
         me.oGridItens.setCellAlign(['center', 'center', "left", "right","right", "right", "center", "right", "center", "center", "center", "center", "center"]);
         me.oGridItens.setCellWidth(["5%", "5%", "30%", "7%", "9%", "7%", "9%", "9%", "6%", "6%", "2%", "9%","9%"]);
-        me.oGridItens.setHeader(["Ordem", "Cód", "Item", "Qtd Atual", "Valor Atual", "Qtd Final", "Vl Final", "Vl Total", "Vl Aditado", "Qtd Aditada", "Dotações", "Inicio Exec", "Fim Exec","Tipo"]);
+        me.oGridItens.setHeader(["Ordem", "Código", "Descrição", "Qtd Atual", "Valor Atual", "Qtd Final", "Valor Final", "Valor Total", "Qtd Aditada", "Valor Aditado", "Dotações", "Inicio Exec", "Fim Exec","Tipo"]);
         //me.oGridItens.aHeaders[11].lDisplayed = false;
         me.oGridItens.aHeaders[14].lDisplayed = false;
         me.oGridItens.aHeaders[11].lDisplayed = false;
@@ -1562,6 +1562,19 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
     this.preencheItens = function (aItens) {
 
+
+
+        var sizeLabelItens = 0;
+        if (aItens.length < 12) {
+            sizeLabelItens = (aItens.length / 2) * 50;
+            sizeLabelItens = sizeLabelItens + "px";
+            document.getElementById('body-container-oGridItens').style.height = sizeLabelItens;
+
+        } else {
+            document.getElementById('body-container-oGridItens').style.height = "340px";
+
+        }
+
         me.oGridItens.clearAll(true);
 
         var aEventsIn  = ["onmouseover"];
@@ -1634,18 +1647,20 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             aLinha[6] = oInputUnitario.toInnerHtml();
             aLinha[7] = js_formatar(nQuantidade * nUnitario, 'f', 2);
 
+            
             /*OC5304*/
-            oInputAditado = new DBTextField('valoraditado' + iSeq, 'valoraditado' + iSeq, js_formatar(0, 'f', 2));
-            oInputAditado.addStyle("width", "100%");
-            oInputAditado.setClassName("text-right");
-            oInputAditado.setReadOnly(true);
-            aLinha[8] = oInputAditado.toInnerHtml();
-
             oInputQtAditada = new DBTextField('quantiaditada' + iSeq, 'quantiaditada' + iSeq, js_formatar(0, 'f', 2));
             oInputQtAditada.addStyle("width", "100%");
             oInputQtAditada.setClassName("text-right");
             oInputQtAditada.setReadOnly(true);
-            aLinha[9] = oInputQtAditada.toInnerHtml();
+            aLinha[8] = oInputQtAditada.toInnerHtml();
+            
+            
+            oInputAditado = new DBTextField('valoraditado' + iSeq, 'valoraditado' + iSeq, js_formatar(0, 'f', 2));
+            oInputAditado.addStyle("width", "100%");
+            oInputAditado.setClassName("text-right");
+            oInputAditado.setReadOnly(true);
+            aLinha[9] = oInputAditado.toInnerHtml();
             /*FIM*/
 
 
@@ -1794,7 +1809,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
                 aLinha[5] = oInputQuantidade.toInnerHtml();
                 if ($('oCboTipoAditivo').value == 9 || $('oCboTipoAditivo').value == 10 || $('oCboTipoAditivo').value == 11 || $('oCboTipoAditivo').value == 14) {
                     oInputQtAditada.setValue(js_formatar(1, "f", 2));//OC5304
-                    aLinha[9] = oInputQtAditada.toInnerHtml();//OC5304
+                    aLinha[8] = oInputQtAditada.toInnerHtml();//OC5304
                 }
 
             }
@@ -1908,14 +1923,14 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
  
         aLinha.aCells[8].setContent(js_formatar(nQuantidade * nUnitario, 'f', 2));
-        aLinha.aCells[9].setContent( js_formatar(Math.abs(nValorTotal - valorTotal), 'f', 2));//Valor Aditado OC5304
+        aLinha.aCells[10].setContent( js_formatar(Math.abs(nValorTotal - valorTotal), 'f', 2));//Valor Aditado OC5304
 
         if (aItensPosicao[iLinha].servico == false && (aItensPosicao[iLinha].controlaquantidade == "t" || aItensPosicao[iLinha].controlaquantidade != "")) {
-            aLinha.aCells[10].setContent(js_formatar(Math.abs(nQuantidade - nQuantidadeA), 'f', casas) );//Quantidade Aditada OC5304
+            aLinha.aCells[9].setContent(js_formatar(Math.abs(nQuantidade - nQuantidadeA), 'f', casas) );//Quantidade Aditada OC5304
 
         }
         else if (aItensPosicao[iLinha].servico == true && aItensPosicao[iLinha].controlaquantidade == "t") {
-            aLinha.aCells[10].setContent(js_formatar(Math.abs(nQuantidade - nQuantidadeA), 'f', casas) );//Quantidade Aditada OC5304
+            aLinha.aCells[9].setContent(js_formatar(Math.abs(nQuantidade - nQuantidadeA), 'f', casas) );//Quantidade Aditada OC5304
         }
 
         me.salvarInfoDotacoes(iLinha);
