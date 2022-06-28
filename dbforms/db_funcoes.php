@@ -672,13 +672,13 @@ function db_selectrecord($nome, $record, $dbcadastro, $db_opcao = 3, $js_script 
 		if ($numcol == 2) {
       //OC17312 OCULTA A CAIXA DO NUMERO SEQUENCIAL DA MODALIDADE - PEDIDO FEITO PELA ANALISE
       if($nome=="l20_codtipocom"){
-
+        
         ?>
-
+        
         <select style ="display : none" name="<?=$nome?>" id="<?=$nome?>"
         <?
       }elseif($nome!="l20_codtipocom"){
-
+        
         ?>
         <select name="<?=$nome?>" id="<?=$nome?>"
         <?
