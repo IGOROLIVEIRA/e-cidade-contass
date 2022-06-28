@@ -85,6 +85,27 @@ $clrotulo->label("ac16_resumoobjeto");
                 </td>
             </tr>
 
+            <tr id="trdatareferencia" style="display:none;">
+                <td align="left" title="<?= @$Tsi03_datareferencia ?>">
+                    <b>Data de Referência:</b>
+                </td>
+
+                <td align="left">
+                    <?
+                    db_inputdata(
+                        'si03_datareferencia',
+                        @$si03_datareferencia_dia,
+                        @$si03_datareferencia_mes,
+                        @$si03_datareferencia_ano,
+                        true,
+                        'text',
+                        $db_opcao
+                    );
+                    ?>
+                </td>
+                <td>&nbsp;</td>
+            </tr>
+
 
             <tr>
                 <td nowrap nowrap title="<?= @$Tsi03_descrapostila ?>">
@@ -1086,6 +1107,7 @@ $clrotulo->label("ac16_resumoobjeto");
             return alert("Obrigatório informar a descrição da Apostila.");
         }
 
+
         oGridItens.getRows().forEach(function(oRow) {
 
             if (oRow.isSelected) {
@@ -1190,7 +1212,11 @@ $clrotulo->label("ac16_resumoobjeto");
         new AjaxRequest(sUrlRpc, oParam, function(oRetorno, lErro) {
 
                 if (lErro) {
-                    return alert(oRetorno.message.urlDecode());
+                    if (oRetorno.datareferencia) {
+                        document.getElementById("trdatareferencia").style.display = 'contents';
+                    }
+                    return alert(oRetorno.message.urlDecode() + oRetorno.datareferencia);
+
                 }
 
                 alert("Apostilamento realizado com sucesso.");
