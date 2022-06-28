@@ -32,15 +32,16 @@
  * @package Contratos
  */
 require_once("model/AcordoMovimentacao.model.php");
-class AcordoAssinatura extends AcordoMovimentacao {
+class AcordoAssinatura extends AcordoMovimentacao
+{
 
   /**
    * Tipo da Movimentação
    *
    * @var integer
    */
-	protected $iTipo               = 2;
-	
+  protected $iTipo               = 2;
+
   /**
    * Data do Movimento
    *
@@ -60,41 +61,51 @@ class AcordoAssinatura extends AcordoMovimentacao {
    * @var
    */
   protected $sVeiculoDivulgacao;
-	
+
   /**
    * Código do Movimento de Cancelamento
    *
    * @var integer
    */
-	protected $iCodigoCancelamento = 13;
+  protected $iCodigoCancelamento = 13;
+
+  /**
+   * Data de Referência SICOM
+   *
+   * @var string
+   */
+  protected $dtReferencia         = '';
 
   /**
    * Método construtor
    * 
    * @param integer $iCodigo
    */
-  public function __construct($iCodigo = null) {
-  	
-  	parent::__construct($iCodigo);
+  public function __construct($iCodigo = null)
+  {
+
+    parent::__construct($iCodigo);
   }
-  
+
   /**
    * Seta o tipo de acordo para a assinatura, alterado para protected para nao poder atribuir um novo valor
    * 
    * @param integer $iTipo
    */
-  public function setTipo($iTipo) {
-  	
-  	$this->iTipo = 2;
+  public function setTipo($iTipo)
+  {
+
+    $this->iTipo = 2;
   }
-  
+
   /**
    * Seta a data da movimentação
    * 
    * @param string $dtMovimento
    * @return AcordoAssinatura
    */
-  public function setDataMovimento($dtMovimento = '') {
+  public function setDataMovimento($dtMovimento = '')
+  {
 
     $this->dtMovimento = $dtMovimento;
     return $this;
@@ -135,35 +146,56 @@ class AcordoAssinatura extends AcordoMovimentacao {
     $this->sVeiculoDivulgacao = $sVeiculoDivulgacao;
     return $this;
   }
-  
+
+  /**
+   * @return string
+   */
+  public function getDataReferencia()
+  {
+    return $this->dtReferencia;
+  }
+
+  /**
+   * @param string $dtPublicacao
+   * @return AcordoAssinatura
+   */
+  public function setDataReferencia($dtReferencia)
+  {
+    $this->dtReferencia = $dtReferencia;
+    return $this;
+  }
+
   /**
    * Persiste os dados da Acordo Movimentacao na base de dados
    *
    * @return AcordoAssinatura
    */
-  public function save() {
+  public function save()
+  {
     parent::save();
     $iCodigoAcordo = $this->getAcordo();
-    
+
     $oDaoAcordo                      = db_utils::getDao("acordo");
     $oDaoAcordo->ac16_sequencial     = $iCodigoAcordo;
     $oDaoAcordo->ac16_dataassinatura = $this->dtMovimento;
     $oDaoAcordo->ac16_datapublicacao = $this->getDataPublicacao();
     $oDaoAcordo->ac16_veiculodivulgacao = $this->getVeiculoDivulgacao();
+    $oDaoAcordo->ac16_datareferencia = $this->dtReferencia;
     $oDaoAcordo->alterar($oDaoAcordo->ac16_sequencial);
     if ($oDaoAcordo->erro_status == 0) {
-      throw new Exception($oDaoAcordo->erro_msg);	
+      throw new Exception($oDaoAcordo->erro_msg);
     }
 
     return $this;
   }
-  
+
   /**
    * Cancela o movimento
    *
    * @return AcordoAssinatura
    */
-  public function cancelar() {
+  public function cancelar()
+  {
 
     parent::cancelar();
     $iCodigoAcordo = $this->getAcordo();
@@ -173,24 +205,25 @@ class AcordoAssinatura extends AcordoMovimentacao {
     $oDaoAcordo->ac16_dataassinatura = "null";
     $oDaoAcordo->alterar($oDaoAcordo->ac16_sequencial);
     if ($oDaoAcordo->erro_status == 0) {
-      throw new Exception($oDaoAcordo->erro_msg); 
+      throw new Exception($oDaoAcordo->erro_msg);
     }
 
     return $this;
   }
 
-    /**
-     * @return Boolean
-     */
-    public function verificaPeriodoPatrimonial($sData = null) {
-        return parent::verificaPeriodoPatrimonial($sData);
-    }
+  /**
+   * @return Boolean
+   */
+  public function verificaPeriodoPatrimonial($sData = null)
+  {
+    return parent::verificaPeriodoPatrimonial($sData);
+  }
 
   /**
    * @return Boolean
    */
-  public function verificaPeriodoContabil() {
+  public function verificaPeriodoContabil()
+  {
     return parent::verificaPeriodoContabil();
   }
 }
-?>

@@ -178,6 +178,7 @@ switch ($oParam->exec) {
 
             $oDataMovimentacao = new DBDate($oParam->dtmovimentacao);
             $oDataPublicacao = new DBDate($oParam->dtpublicacao);
+            $oDataReferencia = null;
 
             db_inicio_transacao();
             $oAssinatura = new AcordoAssinatura();
@@ -186,6 +187,12 @@ switch ($oParam->exec) {
             $oAssinatura->setDataPublicacao($oDataPublicacao->getDate());
             $oAssinatura->setVeiculoDivulgacao($oParam->veiculodivulgacao);
             $oAssinatura->setObservacao($sObservacao);
+            if ($oParam->dtreferencia != null) {
+                $oDataReferencia = new DBDate($oParam->dtreferencia);
+                $oAssinatura->setDataReferencia($oDataReferencia->getDate());
+            } else {
+                $oAssinatura->setDataReferencia($oDataMovimentacao->getDate());
+            }
             $oAcordo = new Acordo($oParam->acordo);
 
             if (!$oAssinatura->verificaPeriodoPatrimonial()) {

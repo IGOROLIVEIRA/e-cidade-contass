@@ -177,7 +177,7 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
               </td>
               <td>&nbsp;</td>
             </tr>
-            <tr>
+            <tr id="trdatareferencia" style="display:none;">
               <td align="left" title="<?= @$Tac16_datareferencia ?>">
                 <b>Data de Referência:</b>
               </td>
@@ -382,6 +382,7 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
     oParam.dtpublicacao = $F('ac16_datapublicacao');
     oParam.veiculodivulgacao = encodeURIComponent(tagString($F('ac16_veiculodivulgacao')));
     oParam.observacao = encodeURIComponent(tagString($F('ac10_obs')));
+    oParam.dtreferencia = $F('ac16_datareferencia');
 
     /**
      * Verificar Encerramento Periodo Patrimonial
@@ -394,10 +395,33 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
     var partesData = $("c99_datapat_hidden").value.split("-");
     var dataPatrimonial = new Date(partesData[0], partesData[1] - 1, partesData[2]);
 
+    //    DATA DE REFERÊNCIA
+    var partesData = oParam.dtreferencia.split("/");
+    var dataReferencia = new Date(partesData[2], partesData[1] - 1, partesData[0]);
+
+
+    if (oParam.dtreferencia != "") {
+      if (dataReferencia <= dataPatrimonial) {
+        alert("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
+        return;
+      }
+
+    } else {
+      oParam.dtreferencia = null;
+      if (document.getElementById("trdatareferencia").style.display == 'contents') {
+        alert('Data de referência não informada!');
+        return;
+      }
+
+    }
+
     if (dataMovimento <= dataPatrimonial) {
+      document.getElementById("trdatareferencia").style.display = 'contents';
       alert("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
       return;
     }
+
+
 
     js_divCarregando('Aguarde incluindo assinatura...', 'msgBoxAssianturaContrato');
 
