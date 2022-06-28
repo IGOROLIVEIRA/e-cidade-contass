@@ -155,3 +155,6 @@ if (!isset($pesquisa_chave)) {
 <?
 }
 ?>
+<script>
+  document.getElementsByName("m51_obs")[0].value = "Descrição";
+</script>
