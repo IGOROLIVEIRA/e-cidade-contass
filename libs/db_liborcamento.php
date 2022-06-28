@@ -87,11 +87,13 @@ class cl_permissaodotacao
         $this->dotacoes .= $tem_and . " o58_codigo = $db20_codigo ";
       }
     }
+    $this->dotacoes .= " order by o50_estrutdespesa ";
+  }
 
   function retornarecord()
   {
 
-        $this->result = db_query($this->dotacoes);
+    $this->result = db_query($this->dotacoes);
 
     return $this->result;
   }
@@ -209,26 +211,6 @@ class cl_estrutura
         while (obj.search(/\./) != '-1') {
           obj = obj.replace(/\./, '');
         }
-        if ($this->funcao_onchange != null) {
-            if ($this->autocompletar == false && $this->reload == false) {
-                $funcao = $this->funcao_onchange;
-            } else {
-                $funcao = "onChange='js_mascara02_$picture(this.value);" . $this->funcao_onchange . ";'";
-            }
-        } else {
-            $funcao = "onChange=\"js_mascara02_$picture(this.value);\"";
-        }
-        if ($this->mascara == true) {
-?>
-            <tr>
-                <td nowrap title="Máscara do campo <?= @$picture ?>">
-                    <b>Máscara:</b>
-                </td>
-                <td>
-
-                    <input name="mascara" readonly disabled size='<?= $this->size ?>' type="text" value="<?= $mascara ?>">
-                </td>
-            </tr>
         <?
 
 
@@ -288,7 +270,7 @@ class cl_estrutura
 <?
 
 
-    }
+  }
 }
 function db_selinstit($dbclick = '', $largura = 500, $altura = 100)
 {
@@ -338,8 +320,8 @@ function db_selorcbalanco($balanco = true, $orcamento = true, $empliqpag = false
       echo " 	   </tr>\n";
     }
 
-        echo " 	   <tr>\n";
-        /*    echo "	    <td>\n";
+    echo " 	   <tr>\n";
+    /*    echo "	    <td>\n";
     echo "	     <table border=\"0\" width=\"220\"  height=\"100\" style=\"border: 1px solid black\" cellpadding=\"0\" cellspacing=\"1\" >\n";
     echo "	      <tr>\n";
     echo "          <td align=\"center\" colspan=\"2\" title=\"Gera o saldo em um intervalo de meses\"><strong>Saldo Por Mês</strong></td>\n";
@@ -521,14 +503,15 @@ function db_le_mae_rec_sin($codigo, $nivel = false)
       $retorno = substr($codigo, 0, 1) . '00000000000000';
       $conta_mae = substr($codigo, 0, 1);
     }
-    if ($retorno == "") {
-        if ($nivel == true) {
-            $retorno = 1;
-        } else {
-            $retorno = $codigo;
-        }
+  }
+  if ($retorno == "") {
+    if ($nivel == true) {
+      $retorno = 1;
+    } else {
+      $retorno = $codigo;
     }
-    return $conta_mae;
+  }
+  return $conta_mae;
 }
 
 function db_le_mae_rec($codigo, $nivel = false)
@@ -596,14 +579,15 @@ function db_le_mae_rec($codigo, $nivel = false)
     } else {
       $retorno = substr($codigo, 0, 1) . '00000000000000';
     }
-    if ($retorno == "") {
-        if ($nivel == true) {
-            $retorno = 1;
-        } else {
-            $retorno = $codigo;
-        }
+  }
+  if ($retorno == "") {
+    if ($nivel == true) {
+      $retorno = 1;
+    } else {
+      $retorno = $codigo;
     }
-    return $retorno;
+  }
+  return $retorno;
 }
 
 function db_le_mae($codigo, $nivel = false)
@@ -664,31 +648,33 @@ function db_le_mae($codigo, $nivel = false)
     } else {
       $retorno = substr($codigo, 0, 1) . '000000000000';
     }
-    if ($retorno == "") {
-        if ($nivel == true) {
-            $retorno = 1;
-        } else {
-            $retorno = $codigo;
-        }
+  }
+  if ($retorno == "") {
+    if ($nivel == true) {
+      $retorno = 1;
+    } else {
+      $retorno = $codigo;
     }
-    return $retorno;
+  }
+  return $retorno;
 }
 
 
 function estruturalNivel($sEstrutural)
 {
 
-    $iNiveis = array();
-    $iAux    = 1;
-    $iNiveis = explode(".", $sEstrutural);
-    $iLaco   = count($iNiveis);
+  $iNiveis = array();
+  $iAux    = 1;
+  $iNiveis = explode(".", $sEstrutural);
+  $iLaco   = count($iNiveis);
 
-    for ($i = 1; $i < $iLaco; $i++) {
+  for ($i = 1; $i < $iLaco; $i++) {
 
     if ($iNiveis[$i] != 0) {
       $iAux = $i + 1;
     }
-    return $iAux;
+  }
+  return $iAux;
 }
 
 function criaContaMae($string)
@@ -700,9 +686,9 @@ function criaContaMae($string)
   $aNiveis = explode(".", $string);
   for ($i = 0; $i < $iNivel; $i++) {
 
-        $stringnova .=  $aNiveis[$i];
-    }
-    return $stringnova;
+    $stringnova .=  $aNiveis[$i];
+  }
+  return $stringnova;
 }
 
 ///////// cria estrutura de balancete para as receitas do ppa
@@ -715,13 +701,13 @@ function db_receitappa($anoini, $db_where = false, $retsql = false)
   $ano3 = $anoini + 2;
   $ano4 = $anoini + 3;
 
-    if ($db_where != false) {
-        $where = $db_where;
-    } else {
-        $where = '';
-    }
+  if ($db_where != false) {
+    $where = $db_where;
+  } else {
+    $where = '';
+  }
 
-    $sql = "
+  $sql = "
   select
   o57_fonte  as estrut_mae,
   o57_fonte  as estrut,
@@ -753,9 +739,9 @@ function db_receitappa($anoini, $db_where = false, $retsql = false)
   o15_descr
   order by o57_fonte
   ";
-    //echo $sql;exit;
-    // db_criatabela(db_query($sql));exit;
-    db_query("create temporary table work_pl(
+  //echo $sql;exit;
+  // db_criatabela(db_query($sql));exit;
+  db_query("create temporary table work_pl(
   estrut_mae varchar(15),
   estrut varchar(15),
   descr_rece varchar(50),
@@ -876,20 +862,20 @@ function db_receitappa($anoini, $db_where = false, $retsql = false)
       $a4)
 
       ";
-        db_query($sql);
-    }
+    db_query($sql);
+  }
 
-    $sql = "select *
+  $sql = "select *
     from work_pl
     order by estrut_mae,estrut";
 
-    if ($retsql == false) {
-        $result_final = db_query($sql);
-        //      db_criatabela($result_final); exit;
-        return $result_final;
-    } else {
-        return $sql;
-    }
+  if ($retsql == false) {
+    $result_final = db_query($sql);
+    //      db_criatabela($result_final); exit;
+    return $result_final;
+  } else {
+    return $sql;
+  }
 }
 
 //#00#// db_rpsaldo()
@@ -978,8 +964,8 @@ function db_rpsaldo($anousu = "", $w_instit = "=1", $dt_ini = "", $dt_fin = "", 
 
     ";
 
-    $result = db_query($sql);
-    return $result;
+  $result = db_query($sql);
+  return $result;
 }
 
 /////////////////////////
@@ -1240,9 +1226,9 @@ function db_dotacaosaldo($nivel = 8, $tipo_nivel = 1, $tipo_saldo = 2, $descr = 
     ) as xxx
     ";
 
-    $result1 = db_query($sql);
+  $result1 = db_query($sql);
 
-    /////// nivel 8 ///////////////
+  /////// nivel 8 ///////////////
 
   if (8 <= $primeiro_fim || ($desmembra_segundo_inicio == true && $segundo_inicio <= 8 || $desmembra_segundo_inicio == false && $segundo_inicio == 8)) {
     $xnivel8 = '';
@@ -1267,9 +1253,9 @@ function db_dotacaosaldo($nivel = 8, $tipo_nivel = 1, $tipo_saldo = 2, $descr = 
           -1 as o58_codele,
           ''::varchar as o58_elemento,
           -1 as o58_coddot, ";
-            }
-        }
-        $nivel8 = "select
+      }
+    }
+    $nivel8 = "select
       $xnivel8
       o58_codigo,
       dot_ini,
@@ -1340,8 +1326,8 @@ function db_dotacaosaldo($nivel = 8, $tipo_nivel = 1, $tipo_saldo = 2, $descr = 
       sum(reservado_ate_data)                         as reservado_ate_data
       from work_dotacao
       group by ";
-        if ($tipo_nivel != 3) {
-            $nivel8 .= "o58_orgao,
+    if ($tipo_nivel != 3) {
+      $nivel8 .= "o58_orgao,
         o58_unidade,
         o58_funcao,
         o58_subfuncao,
@@ -1350,8 +1336,8 @@ function db_dotacaosaldo($nivel = 8, $tipo_nivel = 1, $tipo_saldo = 2, $descr = 
         o58_codele,
         o58_elemento,
         o58_coddot ,";
-        }
-        $nivel8 .= "o58_codigo
+    }
+    $nivel8 .= "o58_codigo
       ) as i";
   } else {
     $nivel8 = '';
@@ -1359,11 +1345,11 @@ function db_dotacaosaldo($nivel = 8, $tipo_nivel = 1, $tipo_saldo = 2, $descr = 
 
   /////// nivel 7 ///////////////
 
-    if (7 <= $primeiro_fim || ($desmembra_segundo_inicio == true && $segundo_inicio <= 7 || $desmembra_segundo_inicio == false && $segundo_inicio == 7)) {
-        $xnivel7 = '';
-        if ($nivel >= 7) {
-            if ($tipo_nivel == 1 || $tipo_nivel == 2) {
-                $xnivel7 = " o58_orgao,
+  if (7 <= $primeiro_fim || ($desmembra_segundo_inicio == true && $segundo_inicio <= 7 || $desmembra_segundo_inicio == false && $segundo_inicio == 7)) {
+    $xnivel7 = '';
+    if ($nivel >= 7) {
+      if ($tipo_nivel == 1 || $tipo_nivel == 2) {
+        $xnivel7 = " o58_orgao,
           o58_unidade,
           o58_funcao,
           o58_subfuncao,
@@ -1376,9 +1362,9 @@ function db_dotacaosaldo($nivel = 8, $tipo_nivel = 1, $tipo_saldo = 2, $descr = 
           -1 as o58_subfuncao,
           -1 as o58_programa,
           -1 as o58_projativ,";
-            }
-        }
-        $nivel7 = "select
+      }
+    }
+    $nivel7 = "select
       $xnivel7
       o58_codele,
       o58_elemento,
@@ -1453,15 +1439,15 @@ function db_dotacaosaldo($nivel = 8, $tipo_nivel = 1, $tipo_saldo = 2, $descr = 
       sum(reservado_ate_data)                         as reservado_ate_data
       from work_dotacao
       group by ";
-        if ($tipo_nivel != 3) {
-            $nivel7 .= "o58_orgao,
+    if ($tipo_nivel != 3) {
+      $nivel7 .= "o58_orgao,
         o58_unidade,
         o58_funcao,
         o58_subfuncao,
         o58_programa,
         o58_projativ,";
-        }
-        $nivel7 .= "   o58_codele,
+    }
+    $nivel7 .= "   o58_codele,
       o58_elemento
       ) as g";
   } else {
@@ -1470,11 +1456,11 @@ function db_dotacaosaldo($nivel = 8, $tipo_nivel = 1, $tipo_saldo = 2, $descr = 
 
   /////// nivel 6 ///////////////
 
-    if (6 <= $primeiro_fim || ($desmembra_segundo_inicio == true && $segundo_inicio <= 6 || $desmembra_segundo_inicio == false && $segundo_inicio == 6)) {
-        $xnivel6 = '';
-        if ($nivel >= 6) {
-            if ($tipo_nivel == 1 || $tipo_nivel == 2) {
-                $xnivel6 = " o58_orgao,
+  if (6 <= $primeiro_fim || ($desmembra_segundo_inicio == true && $segundo_inicio <= 6 || $desmembra_segundo_inicio == false && $segundo_inicio == 6)) {
+    $xnivel6 = '';
+    if ($nivel >= 6) {
+      if ($tipo_nivel == 1 || $tipo_nivel == 2) {
+        $xnivel6 = " o58_orgao,
           o58_unidade,
           o58_funcao,
           o58_subfuncao,
@@ -1485,9 +1471,9 @@ function db_dotacaosaldo($nivel = 8, $tipo_nivel = 1, $tipo_saldo = 2, $descr = 
           -1 as o58_funcao,
           -1 as o58_subfuncao,
           -1 as o58_programa,";
-            }
-        }
-        $nivel6 = "select
+      }
+    }
+    $nivel6 = "select
       $xnivel6
       o58_projativ,
       -1 as o58_codele,
@@ -1562,14 +1548,14 @@ function db_dotacaosaldo($nivel = 8, $tipo_nivel = 1, $tipo_saldo = 2, $descr = 
       sum(reservado_ate_data)            as reservado_ate_data
       from work_dotacao
       group by ";
-        if ($tipo_nivel != 3) {
-            $nivel6 .= "o58_orgao,
+    if ($tipo_nivel != 3) {
+      $nivel6 .= "o58_orgao,
         o58_unidade,
         o58_funcao,
         o58_subfuncao,
         o58_programa, ";
-        }
-        $nivel6 .= "   o58_projativ
+    }
+    $nivel6 .= "   o58_projativ
       ) as f";
   } else {
     $nivel6 = '';
@@ -1577,11 +1563,11 @@ function db_dotacaosaldo($nivel = 8, $tipo_nivel = 1, $tipo_saldo = 2, $descr = 
 
   /////// nivel 5 ///////////////
 
-    if (5 <= $primeiro_fim || ($desmembra_segundo_inicio == true && $segundo_inicio <= 5 || $desmembra_segundo_inicio == false && $segundo_inicio == 5)) {
-        $xnivel5 = '';
-        if ($nivel >= 5) {
-            if ($tipo_nivel == 1 || $tipo_nivel == 2) {
-                $xnivel5 = "o58_orgao,
+  if (5 <= $primeiro_fim || ($desmembra_segundo_inicio == true && $segundo_inicio <= 5 || $desmembra_segundo_inicio == false && $segundo_inicio == 5)) {
+    $xnivel5 = '';
+    if ($nivel >= 5) {
+      if ($tipo_nivel == 1 || $tipo_nivel == 2) {
+        $xnivel5 = "o58_orgao,
           o58_unidade,
           o58_funcao,
           o58_subfuncao,";
@@ -1590,9 +1576,9 @@ function db_dotacaosaldo($nivel = 8, $tipo_nivel = 1, $tipo_saldo = 2, $descr = 
           -1 as o58_unidade,
           -1 as o58_funcao,
           -1 as o58_subfuncao,";
-            }
-        }
-        $nivel5 = "select
+      }
+    }
+    $nivel5 = "select
       $xnivel5
       o58_programa,
       -1 as o58_projativ,
@@ -1668,13 +1654,13 @@ function db_dotacaosaldo($nivel = 8, $tipo_nivel = 1, $tipo_saldo = 2, $descr = 
       sum(reservado_ate_data)            as reservado_ate_data
       from work_dotacao
       group by ";
-        if ($tipo_nivel != 3) {
-            $nivel5 .= "o58_orgao,
+    if ($tipo_nivel != 3) {
+      $nivel5 .= "o58_orgao,
         o58_unidade,
         o58_funcao,
         o58_subfuncao, ";
-        }
-        $nivel5 .= " o58_programa
+    }
+    $nivel5 .= " o58_programa
       ) as e";
   } else {
     $nivel5 = '';
@@ -1682,20 +1668,20 @@ function db_dotacaosaldo($nivel = 8, $tipo_nivel = 1, $tipo_saldo = 2, $descr = 
 
   /////// nivel 4 ///////////////
 
-    if (4 <= $primeiro_fim || ($desmembra_segundo_inicio == true && $segundo_inicio <= 4 || $desmembra_segundo_inicio == false && $segundo_inicio == 4)) {
-        $xnivel4 = '';
-        if ($nivel >= 4) {
-            if ($tipo_nivel == 1 || $tipo_nivel == 2) {
-                $xnivel4 = "o58_orgao,
+  if (4 <= $primeiro_fim || ($desmembra_segundo_inicio == true && $segundo_inicio <= 4 || $desmembra_segundo_inicio == false && $segundo_inicio == 4)) {
+    $xnivel4 = '';
+    if ($nivel >= 4) {
+      if ($tipo_nivel == 1 || $tipo_nivel == 2) {
+        $xnivel4 = "o58_orgao,
           o58_unidade,
           o58_funcao,";
       } elseif ($tipo_nivel == 3) {
         $xnivel4 = "-1 as o58_orgao,
           -1 as o58_unidade,
           -1 as o58_funcao,";
-            }
-        }
-        $nivel4 = "select
+      }
+    }
+    $nivel4 = "select
       $xnivel4
       o58_subfuncao,
       -1 as o58_programa,
@@ -1772,12 +1758,12 @@ function db_dotacaosaldo($nivel = 8, $tipo_nivel = 1, $tipo_saldo = 2, $descr = 
       sum(reservado_ate_data)            as reservado_ate_data
       from work_dotacao
       group by ";
-        if ($tipo_nivel != 3) {
-            $nivel4 .= "o58_orgao,
+    if ($tipo_nivel != 3) {
+      $nivel4 .= "o58_orgao,
         o58_unidade,
         o58_funcao, ";
-        }
-        $nivel4 .= "o58_subfuncao
+    }
+    $nivel4 .= "o58_subfuncao
       ) as d";
   } else {
     $nivel4 = '';
@@ -1785,17 +1771,17 @@ function db_dotacaosaldo($nivel = 8, $tipo_nivel = 1, $tipo_saldo = 2, $descr = 
 
   if (3 <= $primeiro_fim || ($desmembra_segundo_inicio == true && $segundo_inicio <= 3 || $desmembra_segundo_inicio == false && $segundo_inicio == 3)) {
 
-        $xnivel3 = '';
-        if ($nivel >= 3) {
-            if ($tipo_nivel == 1 || $tipo_nivel == 2) {
-                $xnivel3 = " o58_orgao,
+    $xnivel3 = '';
+    if ($nivel >= 3) {
+      if ($tipo_nivel == 1 || $tipo_nivel == 2) {
+        $xnivel3 = " o58_orgao,
           o58_unidade,";
       } elseif ($tipo_nivel == 3) {
         $xnivel3 = " -1 as o58_orgao,
           -1 as o58_unidade,";
-            }
-        }
-        $nivel3 = "select
+      }
+    }
+    $nivel3 = "select
       $xnivel3
       o58_funcao,
       -1 as o58_subfuncao,
@@ -1873,11 +1859,11 @@ function db_dotacaosaldo($nivel = 8, $tipo_nivel = 1, $tipo_saldo = 2, $descr = 
       sum(reservado_ate_data)            as reservado_ate_data
       from work_dotacao
       group by ";
-        if ($tipo_nivel != 3) {
-            $nivel3 .= "      o58_orgao,
+    if ($tipo_nivel != 3) {
+      $nivel3 .= "      o58_orgao,
         o58_unidade,";
-        }
-        $nivel3 .= "	      o58_funcao
+    }
+    $nivel3 .= "	      o58_funcao
       ) as c";
   } else {
     $nivel3 = '';
@@ -1885,12 +1871,12 @@ function db_dotacaosaldo($nivel = 8, $tipo_nivel = 1, $tipo_saldo = 2, $descr = 
 
   /////// nivel 2 ///////////////
 
-    if (2 <= $primeiro_fim || ($desmembra_segundo_inicio == true && $segundo_inicio <= 2 || $desmembra_segundo_inicio == false && $segundo_inicio == 2)) {
+  if (2 <= $primeiro_fim || ($desmembra_segundo_inicio == true && $segundo_inicio <= 2 || $desmembra_segundo_inicio == false && $segundo_inicio == 2)) {
 
-        $nivel2 = "  select ";
-        $nivel2 .= "   o58_orgao,
+    $nivel2 = "  select ";
+    $nivel2 .= "   o58_orgao,
       o58_unidade,";
-        $nivel2 .= "
+    $nivel2 .= "
       -1 as o58_funcao,
       -1 as o58_subfuncao,
       -1 as o58_programa,
@@ -2054,82 +2040,81 @@ function db_dotacaosaldo($nivel = 8, $tipo_nivel = 1, $tipo_saldo = 2, $descr = 
       sum(reservado_ate_data)            as reservado_ate_data
       from work_dotacao
       group by o58_orgao) as a ";
-    } else {
-        $nivel1 = '';
-    }
-    $sql = '';
+  } else {
+    $nivel1 = '';
+  }
+  $sql = '';
 
-    if ($nivel >= 1) {
-        if ($nivel1 != '') {
-            $sql .= $nivel1;
-            if ($tipo_nivel > 1)
-                $sql = $nivel1;
-        }
+  if ($nivel >= 1) {
+    if ($nivel1 != '') {
+      $sql .= $nivel1;
+      if ($tipo_nivel > 1)
+        $sql = $nivel1;
     }
+  }
 
-    if ($nivel >= 2) {
-        if ($nivel2 != '') {
-            if ($sql != '')
-                $sql .= " union all ";
-            $sql .= $nivel2;
-            if ($tipo_nivel > 1)
-                $sql = $nivel2;
-        }
+  if ($nivel >= 2) {
+    if ($nivel2 != '') {
+      if ($sql != '')
+        $sql .= " union all ";
+      $sql .= $nivel2;
+      if ($tipo_nivel > 1)
+        $sql = $nivel2;
     }
+  }
 
-    if ($nivel >= 3) {
-        if ($nivel3 != '') {
-            if ($sql != '')
-                $sql .= " union all ";
-            $sql .= $nivel3;
-            if ($tipo_nivel > 1)
-                $sql = $nivel3;
-        }
+  if ($nivel >= 3) {
+    if ($nivel3 != '') {
+      if ($sql != '')
+        $sql .= " union all ";
+      $sql .= $nivel3;
+      if ($tipo_nivel > 1)
+        $sql = $nivel3;
     }
-    if ($nivel >= 4) {
-        if ($nivel4 != '') {
-            if ($sql != '')
-                $sql .= " union all ";
-            $sql .= $nivel4;
-            if ($tipo_nivel > 1)
-                $sql = $nivel4;
-        }
+  }
+  if ($nivel >= 4) {
+    if ($nivel4 != '') {
+      if ($sql != '')
+        $sql .= " union all ";
+      $sql .= $nivel4;
+      if ($tipo_nivel > 1)
+        $sql = $nivel4;
     }
-    if ($nivel >= 5) {
-        if ($nivel5 != '') {
-            if ($sql != '')
-                $sql .= " union all ";
-            $sql .= $nivel5;
-            if ($tipo_nivel > 1)
-                $sql = $nivel5;
-        }
+  }
+  if ($nivel >= 5) {
+    if ($nivel5 != '') {
+      if ($sql != '')
+        $sql .= " union all ";
+      $sql .= $nivel5;
+      if ($tipo_nivel > 1)
+        $sql = $nivel5;
     }
-    if ($nivel >= 6) {
-        if ($nivel6 != '') {
-            if ($sql != '')
-                $sql .= " union all ";
-            $sql .= $nivel6;
-            if ($tipo_nivel > 1)
-                $sql = $nivel6;
-        }
+  }
+  if ($nivel >= 6) {
+    if ($nivel6 != '') {
+      if ($sql != '')
+        $sql .= " union all ";
+      $sql .= $nivel6;
+      if ($tipo_nivel > 1)
+        $sql = $nivel6;
     }
-    if ($nivel >= 7) {
-        if ($nivel7 != '') {
-            if ($sql != '')
-                $sql .= " union all ";
-            $sql .= $nivel7;
-            if ($tipo_nivel > 1)
-                $sql = $nivel7;
-        }
+  }
+  if ($nivel >= 7) {
+    if ($nivel7 != '') {
+      if ($sql != '')
+        $sql .= " union all ";
+      $sql .= $nivel7;
+      if ($tipo_nivel > 1)
+        $sql = $nivel7;
     }
-    if ($nivel >= 8) {
-        if ($nivel8 != '') {
-            if ($sql != '')
-                $sql .= " union all ";
-            $sql .= $nivel8;
-            if ($tipo_nivel > 1)
-                $sql = $nivel8;
-        }
+  }
+  if ($nivel >= 8) {
+    if ($nivel8 != '') {
+      if ($sql != '')
+        $sql .= " union all ";
+      $sql .= $nivel8;
+      if ($tipo_nivel > 1)
+        $sql = $nivel8;
     }
   }
 
@@ -2302,18 +2287,17 @@ function db_dotacaosaldo($nivel = 8, $tipo_nivel = 1, $tipo_saldo = 2, $descr = 
     group by " . $xordem . "
     order by " . $xordem;
 
-    if ($descr == true) {
-        if ($retsql == false) {
-            $resultdotacao = db_query($sql2);
-        } else {
-            $resultdotacao = $sql2;
-        }
+  if ($descr == true) {
+    if ($retsql == false) {
+      $resultdotacao = db_query($sql2);
     } else {
-        if ($retsql == false) {
-            $resultdotacao = db_query($sql);
-        } else {
-            $resultdotacao = $sql;
-        }
+      $resultdotacao = $sql2;
+    }
+  } else {
+    if ($retsql == false) {
+      $resultdotacao = db_query($sql);
+    } else {
+      $resultdotacao = $sql;
     }
   }
 
@@ -2408,93 +2392,8 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
 
   if ($anousu > 2007) {
 
-    if ($anousu == null || $anousu == "")
-        $anousu = db_getsession("DB_anousu");
 
-    if ($dataini == null)
-        $dataini = date('Y-m-d', db_getsession('DB_datausu'));
-
-    if ($datafim == null)
-        $datafim = date('Y-m-d', db_getsession('DB_datausu'));
-
-    if ($where != '') {
-        $condicao = " and " . $where;
-    } else {
-        $condicao = "";
-    }
-
-    //$instit = db_getsession("DB_instit");
-
-    //#00#//db_receitaosaldo
-    //#10#//Esta funcao retorna o recordset do saldo das receitas
-    //#15#//db_receitasaldo($nivel=8, $tipo_nivel=1, $tipo_saldo=2, $descr=true, $where='', $anousu=null, $dataini=null, $datafim=null,$query=false)
-    //#20#//$nivel      : Até qual o nível será apurado o saldo, pode ser:
-    //#20#//              1 - classe
-    //#20#//              2 - grupo
-    //#20#//              3 - subgrupo
-    //#20#//              4 - elemento
-    //#20#//              5 - subelemento
-    //#20#//              6 - item
-    //#20#//              7 - subitem
-    //#20#//              8 - desdobramento1
-    //#20#//              9 - desdobramento2
-    //#20#//             10 - desdobramento3
-    //#20#//             11 - recurso
-    //#20#//
-    //#20#//$tipo_nivel : especifica a maneira de como será apurado o resultado, pode ser:
-    //#20#//              1 - traz a árvore de elementos até o nível solicitado
-    //#20#//                  Ex.: 4.1                  200
-    //#20#//                       4.1.1                100
-    //#20#//                       4.1.1.1               50
-    //#20#//                       4.1.1.2               50
-    //#20#//                       4.1.2                100
-    //#20#//                       4.1.2.1               50
-    //#20#//                       4.1.2.2               50
-    //#20#//              2 - traz o saldo do nível escolhido
-    //#20#//                  Ex.: 4.1.1.1               50
-    //#20#//              3 - totaliza o saldo pelo nível escolhido
-    //#20#//                  Ex.: 0.0.0.1             1000
-    //#20#//
-    //#20#//$tipo_saldo :
-    //#20#//	      1 - SALDO INICIAL DA RECEITA - ORCAMENTO
-    //#20#//	      2 - SALDO DA RECEITA  MENOS O ARRECADADO
-    //#20#//   	      3 - SALDO DA RECEITA  PELA CONTABILIDADE ...
-    //#20#//   	      4 - SALDO ACUMULADO POR MES
-    //#20#//
-    //#20#//$descr         : retorna o record set com as descrições ou não, o default é 'true'
-    //#20#//
-    //#20#//$where         : condição
-    //#20#//
-    //#20#//$anousu        : ano do orçamento
-    //#20#//
-    //#20#//$dataini       : data inicial do intervalo
-    //#20#//
-    //#20#//$datafim       : data final do intervalo
-    //#20#//
-    //#20#//$query         : retorna somente o sql, o default é retornar o recordset
-    //#20#//
-    //#20#//$nivel_agrupar : 0 - normal
-    //#20#//                 1 - agrupa na receita
-    //#20#//                 2 - nao agrupa na receita
-
-
-    //$nivel      = 2;
-    //$tipo_nivel = 1;
-    //$dataini    = date('Y-m-d',db_getsession("DB_datausu"));
-    //$datafim    = date('Y-m-d',db_getsession("DB_datausu"));
-    //$anousu     = db_getsession("DB_anousu");
-
-    // funcao para gerar work
-
-    if ($comit == true) {
-        db_query('begin');
-    }
-
-
-    if ($anousu > 2007) {
-
-
-        $sql = "
+    $sql = "
     create temp table work_receita as
     ";
     if ($nivel_agrupar == 1) {
@@ -2525,8 +2424,8 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
       from (
 
     ";
-        }
-        $sql .= "
+    }
+    $sql .= "
     select ";
     if ($nivel_agrupar == 1 || $nivel_agrupar == 2) {
       $sql .= "
@@ -2586,21 +2485,21 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
                o70_codigo
 
       ";
-        }
+    }
 
-        $result = db_query($sql);
-        //$result = db_query("select * from work_receita");
-        //db_criatabela($result);exit;
+    $result = db_query($sql);
+    //$result = db_query("select * from work_receita");
+    //db_criatabela($result);exit;
 
-        //$nivel = 11;
-        //$tipo_nivel = 2;
+    //$nivel = 11;
+    //$tipo_nivel = 2;
 
-        ///////// Nivel 11 /////////////
+    ///////// Nivel 11 /////////////
 
-        $xnivel11 = '';
-        if ($nivel >= 11) {
-            if ($tipo_nivel == 1 || $tipo_nivel == 2) {
-                $xnivel11 = " classe,
+    $xnivel11 = '';
+    if ($nivel >= 11) {
+      if ($tipo_nivel == 1 || $tipo_nivel == 2) {
+        $xnivel11 = " classe,
         grupo,
         subgrupo,
         elemento,
@@ -2623,9 +2522,9 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
         0 as desdobramento2,
         0 as desdobramento3,
         0 as o70_codrec,";
-            }
-        }
-        $nivel11 = " select
+      }
+    }
+    $nivel11 = " select
     $xnivel11
     o70_concarpeculiar,
     o70_codigo,
@@ -2653,8 +2552,8 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
     from work_receita
     group by ";
 
-        if ($tipo_nivel != 3) {
-            $nivel11 .= "     classe,
+    if ($tipo_nivel != 3) {
+      $nivel11 .= "     classe,
       grupo,
       subgrupo,
       elemento,
@@ -2666,8 +2565,8 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
       desdobramento3,
       o70_codrec,
 ";
-        }
-        $nivel11 .= "
+    }
+    $nivel11 .= "
     o70_codigo,
     o70_concarpeculiar
     ) as m
@@ -2676,12 +2575,12 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
     //$result = db_query($nivel11);
     //db_criatabela($result);exit;
 
-        ///////// Nivel 10 /////////////
+    ///////// Nivel 10 /////////////
 
-        $xnivel10 = '';
-        if ($nivel >= 10) {
-            if ($tipo_nivel == 1 || $tipo_nivel == 2) {
-                $xnivel10 = " classe,
+    $xnivel10 = '';
+    if ($nivel >= 10) {
+      if ($tipo_nivel == 1 || $tipo_nivel == 2) {
+        $xnivel10 = " classe,
         grupo,
         subgrupo,
         elemento,
@@ -2700,9 +2599,9 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
         0 as subitem,
         0 as desdobramento1,
         0 as desdobramento2,";
-            }
-        }
-        $nivel10 = " select
+      }
+    }
+    $nivel10 = " select
     $xnivel10
     desdobramento3,
     0 as o70_codrec,
@@ -2731,8 +2630,8 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
     from work_receita
     group by ";
 
-        if ($tipo_nivel != 3) {
-            $nivel10 .= "      classe,
+    if ($tipo_nivel != 3) {
+      $nivel10 .= "      classe,
       grupo,
       subgrupo,
       elemento,
@@ -2742,16 +2641,16 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
       desdobramento1,
       desdobramento2,
       ";
-        }
-        $nivel10 .= "	      desdobramento3
+    }
+    $nivel10 .= "	      desdobramento3
     ) as l";
 
-        ///////// Nivel 9 /////////////
+    ///////// Nivel 9 /////////////
 
-        $xnivel9 = '';
-        if ($nivel >= 9) {
-            if ($tipo_nivel == 1 || $tipo_nivel == 2) {
-                $xnivel9 = " classe,
+    $xnivel9 = '';
+    if ($nivel >= 9) {
+      if ($tipo_nivel == 1 || $tipo_nivel == 2) {
+        $xnivel9 = " classe,
         grupo,
         subgrupo,
         elemento,
@@ -2768,9 +2667,9 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
         0 as item,
         0 as subitem,
         0 as desdobramento1,";
-            }
-        }
-        $nivel9 = " select
+      }
+    }
+    $nivel9 = " select
     $xnivel9
     desdobramento2,
     0 as desdobramento3,
@@ -2801,8 +2700,8 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
     from work_receita
     group by ";
 
-        if ($tipo_nivel != 3) {
-            $nivel9 .= "      classe,
+    if ($tipo_nivel != 3) {
+      $nivel9 .= "      classe,
       grupo,
       subgrupo,
       elemento,
@@ -2810,16 +2709,16 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
       item,
       subitem,
       desdobramento1,";
-        }
-        $nivel9 .= "	      desdobramento2
+    }
+    $nivel9 .= "	      desdobramento2
     ) as i";
 
-        ///////// Nivel 8 //////////////
+    ///////// Nivel 8 //////////////
 
-        $xnivel8 = '';
-        if ($nivel >= 8) {
-            if ($tipo_nivel == 1 || $tipo_nivel == 2) {
-                $xnivel8 = " classe,
+    $xnivel8 = '';
+    if ($nivel >= 8) {
+      if ($tipo_nivel == 1 || $tipo_nivel == 2) {
+        $xnivel8 = " classe,
         grupo,
         subgrupo,
         elemento,
@@ -2834,9 +2733,9 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
         0 as subelemento,
         0 as item,
         0 as subitem,";
-            }
-        }
-        $nivel8 = " select
+      }
+    }
+    $nivel8 = " select
     $xnivel8
     desdobramento1,
     0 as desdobramento2,
@@ -2867,24 +2766,24 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
     from work_receita
     group by ";
 
-        if ($tipo_nivel != 3) {
-            $nivel8 .= "      classe,
+    if ($tipo_nivel != 3) {
+      $nivel8 .= "      classe,
       grupo,
       subgrupo,
       elemento,
       subelemento,
       item,
       subitem,";
-        }
-        $nivel8 .= "	      desdobramento1
+    }
+    $nivel8 .= "	      desdobramento1
     ) as h";
 
-        ///////// Nivel 7 //////////////
+    ///////// Nivel 7 //////////////
 
-        $xnivel7 = '';
-        if ($nivel >= 7) {
-            if ($tipo_nivel == 1 || $tipo_nivel == 2) {
-                $xnivel7 = " classe,
+    $xnivel7 = '';
+    if ($nivel >= 7) {
+      if ($tipo_nivel == 1 || $tipo_nivel == 2) {
+        $xnivel7 = " classe,
         grupo,
         subgrupo,
         elemento,
@@ -2897,9 +2796,9 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
         0 as elemento,
         0 as subelemento,
         0 as item,";
-            }
-        }
-        $nivel7 = " select
+      }
+    }
+    $nivel7 = " select
     $xnivel7
     subitem,
     0 as desdobramento1,
@@ -2931,23 +2830,23 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
     from work_receita
     group by ";
 
-        if ($tipo_nivel != 3) {
-            $nivel7 .= "      classe,
+    if ($tipo_nivel != 3) {
+      $nivel7 .= "      classe,
       grupo,
       subgrupo,
       elemento,
       subelemento,
       item,";
-        }
-        $nivel7 .= "	      subitem
+    }
+    $nivel7 .= "	      subitem
     ) as g";
 
-        ///////// Nivel 6 //////////////
+    ///////// Nivel 6 //////////////
 
-        $xnivel6 = '';
-        if ($nivel >= 6) {
-            if ($tipo_nivel == 1 || $tipo_nivel == 2) {
-                $xnivel6 = " classe,
+    $xnivel6 = '';
+    if ($nivel >= 6) {
+      if ($tipo_nivel == 1 || $tipo_nivel == 2) {
+        $xnivel6 = " classe,
         grupo,
         subgrupo,
         elemento,
@@ -2958,9 +2857,9 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
         0 as subgrupo,
         0 as elemento,
         0 as subelemento,";
-            }
-        }
-        $nivel6 = " select
+      }
+    }
+    $nivel6 = " select
     $xnivel6
     item,
     0 as subitem,
@@ -2993,22 +2892,22 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
     from work_receita
     group by ";
 
-        if ($tipo_nivel != 3) {
-            $nivel6 .= "      classe,
+    if ($tipo_nivel != 3) {
+      $nivel6 .= "      classe,
       grupo,
       subgrupo,
       elemento,
       subelemento,";
-        }
-        $nivel6 .= "	      item
+    }
+    $nivel6 .= "	      item
     ) as f";
 
-        ///////// Nivel 5 //////////////
+    ///////// Nivel 5 //////////////
 
-        $xnivel5 = '';
-        if ($nivel >= 5) {
-            if ($tipo_nivel == 1 || $tipo_nivel == 2) {
-                $xnivel5 = " classe,
+    $xnivel5 = '';
+    if ($nivel >= 5) {
+      if ($tipo_nivel == 1 || $tipo_nivel == 2) {
+        $xnivel5 = " classe,
         grupo,
         subgrupo,
         elemento,";
@@ -3017,9 +2916,9 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
         0 as grupo,
         0 as subgrupo,
         0 as elemento,";
-            }
-        }
-        $nivel5 = " select
+      }
+    }
+    $nivel5 = " select
     $xnivel5
     subelemento,
     0 as item,
@@ -3053,30 +2952,30 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
     from work_receita
     group by ";
 
-        if ($tipo_nivel != 3) {
-            $nivel5 .= "      classe,
+    if ($tipo_nivel != 3) {
+      $nivel5 .= "      classe,
       grupo,
       subgrupo,
       elemento,";
-        }
-        $nivel5 .= "	      subelemento
+    }
+    $nivel5 .= "	      subelemento
     ) as e";
 
-        ///////// Nivel 4 //////////////
+    ///////// Nivel 4 //////////////
 
-        $xnivel4 = '';
-        if ($nivel >= 4) {
-            if ($tipo_nivel == 1 || $tipo_nivel == 2) {
-                $xnivel4 = " classe,
+    $xnivel4 = '';
+    if ($nivel >= 4) {
+      if ($tipo_nivel == 1 || $tipo_nivel == 2) {
+        $xnivel4 = " classe,
         grupo,
         subgrupo,";
       } elseif ($tipo_nivel == 3) {
         $xnivel4 = " 0 as classe,
         0 as grupo,
         0 as subgrupo,";
-            }
-        }
-        $nivel4 = " select
+      }
+    }
+    $nivel4 = " select
     $xnivel4
     elemento,
     0 as subelemento,
@@ -3111,27 +3010,27 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
     from work_receita
     group by ";
 
-        if ($tipo_nivel != 3) {
-            $nivel4 .= "      classe,
+    if ($tipo_nivel != 3) {
+      $nivel4 .= "      classe,
       grupo,
       subgrupo,";
-        }
-        $nivel4 .= "	      elemento
+    }
+    $nivel4 .= "	      elemento
     ) as d";
 
-        ///////// Nivel 3 //////////////
+    ///////// Nivel 3 //////////////
 
-        $xnivel3 = '';
-        if ($nivel >= 3) {
-            if ($tipo_nivel == 1 || $tipo_nivel == 2) {
-                $xnivel3 = " classe,
+    $xnivel3 = '';
+    if ($nivel >= 3) {
+      if ($tipo_nivel == 1 || $tipo_nivel == 2) {
+        $xnivel3 = " classe,
         grupo,";
       } elseif ($tipo_nivel == 3) {
         $xnivel3 = " 0 as classe,
         0 as grupo,";
-            }
-        }
-        $nivel3 = " select
+      }
+    }
+    $nivel3 = " select
     $xnivel3
     subgrupo,
     0 as elemento,
@@ -3167,17 +3066,17 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
     from work_receita
     group by ";
 
-        if ($tipo_nivel != 3) {
-            $nivel3 .= "      classe,
+    if ($tipo_nivel != 3) {
+      $nivel3 .= "      classe,
       grupo,";
-        }
-        $nivel3 .= "	      subgrupo
+    }
+    $nivel3 .= "	      subgrupo
     ) as c";
 
-        ///////// Nivel 2 //////////////
+    ///////// Nivel 2 //////////////
 
-        $nivel2 = " select ";
-        $nivel2 .= " classe,
+    $nivel2 = " select ";
+    $nivel2 .= " classe,
     grupo,
     0 as subgrupo,
     0 as elemento,
@@ -3216,10 +3115,10 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
     grupo
     ) as a ";
 
-        ///////// Nivel 1 //////////////
+    ///////// Nivel 1 //////////////
 
-        $nivel1 = " select ";
-        $nivel1 .= " classe,
+    $nivel1 = " select ";
+    $nivel1 .= " classe,
     0 as grupo,
     0 as subgrupo,
     0 as elemento,
@@ -3323,10 +3222,10 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
       }
     }
 
-        //$res =  db_query($nivel11);
-        //db_criatabela($res);exit;
+    //$res =  db_query($nivel11);
+    //db_criatabela($res);exit;
 
-        $sql .= " order by
+    $sql .= " order by
     classe,
     grupo,
     subgrupo,
@@ -3340,9 +3239,9 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
     o70_codrec,
     o70_concarpeculiar,
     o70_codigo";
-        //echo $sql;
-        //   $result = db_query($sql);
-        //  db_criatabela($result);exit;
+    //echo $sql;
+    //   $result = db_query($sql);
+    //  db_criatabela($result);exit;
 
     if ($nivel == 11 && $tipo_nivel == 3) {
       $demaiscampos = '';
@@ -3357,7 +3256,7 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
       }
     }
 
-        $sql2 = "
+    $sql2 = "
     select $campos from (
     select $demaiscampos o70_codrec,
     o70_codigo,o57_descr,
@@ -3465,9 +3364,9 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
 
   } else {
 
-        // aqui inicia o codigo de 2007
+    // aqui inicia o codigo de 2007
 
-        $sql = "create temp table work_receita as
+    $sql = "create temp table work_receita as
     select
     substr(o57_fonte,1,1)::int4  as classe,
     substr(o57_fonte,2,1)::int4  as grupo,
@@ -3498,19 +3397,19 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
     ) as x
     ";
 
-        $result = db_query($sql);
-        //db_criatabela($result); exit;
-        //$result = db_query("select * from work_receita");db_criatabela($result);exit;
+    $result = db_query($sql);
+    //db_criatabela($result); exit;
+    //$result = db_query("select * from work_receita");db_criatabela($result);exit;
 
-        //$nivel = 11;
-        //$tipo_nivel = 2;
+    //$nivel = 11;
+    //$tipo_nivel = 2;
 
-        ///////// Nivel 11 /////////////
+    ///////// Nivel 11 /////////////
 
-        $xnivel11 = '';
-        if ($nivel >= 11) {
-            if ($tipo_nivel == 1 || $tipo_nivel == 2) {
-                $xnivel11 = " classe,
+    $xnivel11 = '';
+    if ($nivel >= 11) {
+      if ($tipo_nivel == 1 || $tipo_nivel == 2) {
+        $xnivel11 = " classe,
         grupo,
         subgrupo,
         elemento,
@@ -3533,9 +3432,9 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
         0 as desdobramento2,
         0 as desdobramento3,
         0 as o70_codrec,";
-            }
-        }
-        $nivel11 = " select
+      }
+    }
+    $nivel11 = " select
     $xnivel11
     o70_codigo,
     saldo_inicial,
@@ -3561,8 +3460,8 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
     from work_receita
     group by ";
 
-        if ($tipo_nivel != 3) {
-            $nivel11 .= "     classe,
+    if ($tipo_nivel != 3) {
+      $nivel11 .= "     classe,
       grupo,
       subgrupo,
       elemento,
@@ -3573,16 +3472,16 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
       desdobramento2,
       desdobramento3,
       o70_codrec,";
-        }
-        $nivel11 .= "
+    }
+    $nivel11 .= "
     o70_codigo
     ) as m";
-        ///////// Nivel 10 /////////////
+    ///////// Nivel 10 /////////////
 
-        $xnivel10 = '';
-        if ($nivel >= 10) {
-            if ($tipo_nivel == 1 || $tipo_nivel == 2) {
-                $xnivel10 = " classe,
+    $xnivel10 = '';
+    if ($nivel >= 10) {
+      if ($tipo_nivel == 1 || $tipo_nivel == 2) {
+        $xnivel10 = " classe,
         grupo,
         subgrupo,
         elemento,
@@ -3601,9 +3500,9 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
         0 as subitem,
         0 as desdobramento1,
         0 as desdobramento2,";
-            }
-        }
-        $nivel10 = " select
+      }
+    }
+    $nivel10 = " select
     $xnivel10
     desdobramento3,
     0 as o70_codrec,
@@ -3631,8 +3530,8 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
     from work_receita
     group by ";
 
-        if ($tipo_nivel != 3) {
-            $nivel10 .= "      classe,
+    if ($tipo_nivel != 3) {
+      $nivel10 .= "      classe,
       grupo,
       subgrupo,
       elemento,
@@ -3642,16 +3541,16 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
       desdobramento1,
       desdobramento2,
       ";
-        }
-        $nivel10 .= "	      desdobramento3
+    }
+    $nivel10 .= "	      desdobramento3
     ) as l";
 
-        ///////// Nivel 9 /////////////
+    ///////// Nivel 9 /////////////
 
-        $xnivel9 = '';
-        if ($nivel >= 9) {
-            if ($tipo_nivel == 1 || $tipo_nivel == 2) {
-                $xnivel9 = " classe,
+    $xnivel9 = '';
+    if ($nivel >= 9) {
+      if ($tipo_nivel == 1 || $tipo_nivel == 2) {
+        $xnivel9 = " classe,
         grupo,
         subgrupo,
         elemento,
@@ -3668,9 +3567,9 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
         0 as item,
         0 as subitem,
         0 as desdobramento1,";
-            }
-        }
-        $nivel9 = " select
+      }
+    }
+    $nivel9 = " select
     $xnivel9
     desdobramento2,
     0 as desdobramento3,
@@ -3700,8 +3599,8 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
     from work_receita
     group by ";
 
-        if ($tipo_nivel != 3) {
-            $nivel9 .= "      classe,
+    if ($tipo_nivel != 3) {
+      $nivel9 .= "      classe,
       grupo,
       subgrupo,
       elemento,
@@ -3709,16 +3608,16 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
       item,
       subitem,
       desdobramento1,";
-        }
-        $nivel9 .= "	      desdobramento2
+    }
+    $nivel9 .= "	      desdobramento2
     ) as i";
 
-        ///////// Nivel 8 //////////////
+    ///////// Nivel 8 //////////////
 
-        $xnivel8 = '';
-        if ($nivel >= 8) {
-            if ($tipo_nivel == 1 || $tipo_nivel == 2) {
-                $xnivel8 = " classe,
+    $xnivel8 = '';
+    if ($nivel >= 8) {
+      if ($tipo_nivel == 1 || $tipo_nivel == 2) {
+        $xnivel8 = " classe,
         grupo,
         subgrupo,
         elemento,
@@ -3733,9 +3632,9 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
         0 as subelemento,
         0 as item,
         0 as subitem,";
-            }
-        }
-        $nivel8 = " select
+      }
+    }
+    $nivel8 = " select
     $xnivel8
     desdobramento1,
     0 as desdobramento2,
@@ -3765,24 +3664,24 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
     from work_receita
     group by ";
 
-        if ($tipo_nivel != 3) {
-            $nivel8 .= "      classe,
+    if ($tipo_nivel != 3) {
+      $nivel8 .= "      classe,
       grupo,
       subgrupo,
       elemento,
       subelemento,
       item,
       subitem,";
-        }
-        $nivel8 .= "	      desdobramento1
+    }
+    $nivel8 .= "	      desdobramento1
     ) as h";
 
-        ///////// Nivel 7 //////////////
+    ///////// Nivel 7 //////////////
 
-        $xnivel7 = '';
-        if ($nivel >= 7) {
-            if ($tipo_nivel == 1 || $tipo_nivel == 2) {
-                $xnivel7 = " classe,
+    $xnivel7 = '';
+    if ($nivel >= 7) {
+      if ($tipo_nivel == 1 || $tipo_nivel == 2) {
+        $xnivel7 = " classe,
         grupo,
         subgrupo,
         elemento,
@@ -3795,9 +3694,9 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
         0 as elemento,
         0 as subelemento,
         0 as item,";
-            }
-        }
-        $nivel7 = " select
+      }
+    }
+    $nivel7 = " select
     $xnivel7
     subitem,
     0 as desdobramento1,
@@ -3828,23 +3727,23 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
     from work_receita
     group by ";
 
-        if ($tipo_nivel != 3) {
-            $nivel7 .= "      classe,
+    if ($tipo_nivel != 3) {
+      $nivel7 .= "      classe,
       grupo,
       subgrupo,
       elemento,
       subelemento,
       item,";
-        }
-        $nivel7 .= "	      subitem
+    }
+    $nivel7 .= "	      subitem
     ) as g";
 
-        ///////// Nivel 6 //////////////
+    ///////// Nivel 6 //////////////
 
-        $xnivel6 = '';
-        if ($nivel >= 6) {
-            if ($tipo_nivel == 1 || $tipo_nivel == 2) {
-                $xnivel6 = " classe,
+    $xnivel6 = '';
+    if ($nivel >= 6) {
+      if ($tipo_nivel == 1 || $tipo_nivel == 2) {
+        $xnivel6 = " classe,
         grupo,
         subgrupo,
         elemento,
@@ -3855,9 +3754,9 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
         0 as subgrupo,
         0 as elemento,
         0 as subelemento,";
-            }
-        }
-        $nivel6 = " select
+      }
+    }
+    $nivel6 = " select
     $xnivel6
     item,
     0 as subitem,
@@ -3889,22 +3788,22 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
     from work_receita
     group by ";
 
-        if ($tipo_nivel != 3) {
-            $nivel6 .= "      classe,
+    if ($tipo_nivel != 3) {
+      $nivel6 .= "      classe,
       grupo,
       subgrupo,
       elemento,
       subelemento,";
-        }
-        $nivel6 .= "	      item
+    }
+    $nivel6 .= "	      item
     ) as f";
 
-        ///////// Nivel 5 //////////////
+    ///////// Nivel 5 //////////////
 
-        $xnivel5 = '';
-        if ($nivel >= 5) {
-            if ($tipo_nivel == 1 || $tipo_nivel == 2) {
-                $xnivel5 = " classe,
+    $xnivel5 = '';
+    if ($nivel >= 5) {
+      if ($tipo_nivel == 1 || $tipo_nivel == 2) {
+        $xnivel5 = " classe,
         grupo,
         subgrupo,
         elemento,";
@@ -3913,9 +3812,9 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
         0 as grupo,
         0 as subgrupo,
         0 as elemento,";
-            }
-        }
-        $nivel5 = " select
+      }
+    }
+    $nivel5 = " select
     $xnivel5
     subelemento,
     0 as item,
@@ -3948,30 +3847,30 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
     from work_receita
     group by ";
 
-        if ($tipo_nivel != 3) {
-            $nivel5 .= "      classe,
+    if ($tipo_nivel != 3) {
+      $nivel5 .= "      classe,
       grupo,
       subgrupo,
       elemento,";
-        }
-        $nivel5 .= "	      subelemento
+    }
+    $nivel5 .= "	      subelemento
     ) as e";
 
-        ///////// Nivel 4 //////////////
+    ///////// Nivel 4 //////////////
 
-        $xnivel4 = '';
-        if ($nivel >= 4) {
-            if ($tipo_nivel == 1 || $tipo_nivel == 2) {
-                $xnivel4 = " classe,
+    $xnivel4 = '';
+    if ($nivel >= 4) {
+      if ($tipo_nivel == 1 || $tipo_nivel == 2) {
+        $xnivel4 = " classe,
         grupo,
         subgrupo,";
       } elseif ($tipo_nivel == 3) {
         $xnivel4 = " 0 as classe,
         0 as grupo,
         0 as subgrupo,";
-            }
-        }
-        $nivel4 = " select
+      }
+    }
+    $nivel4 = " select
     $xnivel4
     elemento,
     0 as subelemento,
@@ -4005,27 +3904,27 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
     from work_receita
     group by ";
 
-        if ($tipo_nivel != 3) {
-            $nivel4 .= "      classe,
+    if ($tipo_nivel != 3) {
+      $nivel4 .= "      classe,
       grupo,
       subgrupo,";
-        }
-        $nivel4 .= "	      elemento
+    }
+    $nivel4 .= "	      elemento
     ) as d";
 
-        ///////// Nivel 3 //////////////
+    ///////// Nivel 3 //////////////
 
-        $xnivel3 = '';
-        if ($nivel >= 3) {
-            if ($tipo_nivel == 1 || $tipo_nivel == 2) {
-                $xnivel3 = " classe,
+    $xnivel3 = '';
+    if ($nivel >= 3) {
+      if ($tipo_nivel == 1 || $tipo_nivel == 2) {
+        $xnivel3 = " classe,
         grupo,";
       } elseif ($tipo_nivel == 3) {
         $xnivel3 = " 0 as classe,
         0 as grupo,";
-            }
-        }
-        $nivel3 = " select
+      }
+    }
+    $nivel3 = " select
     $xnivel3
     subgrupo,
     0 as elemento,
@@ -4060,17 +3959,17 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
     from work_receita
     group by ";
 
-        if ($tipo_nivel != 3) {
-            $nivel3 .= "      classe,
+    if ($tipo_nivel != 3) {
+      $nivel3 .= "      classe,
       grupo,";
-        }
-        $nivel3 .= "	      subgrupo
+    }
+    $nivel3 .= "	      subgrupo
     ) as c";
 
-        ///////// Nivel 2 //////////////
+    ///////// Nivel 2 //////////////
 
-        $nivel2 = " select ";
-        $nivel2 .= " classe,
+    $nivel2 = " select ";
+    $nivel2 .= " classe,
     grupo,
     0 as subgrupo,
     0 as elemento,
@@ -4108,10 +4007,10 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
     grupo
     ) as a ";
 
-        ///////// Nivel 1 //////////////
+    ///////// Nivel 1 //////////////
 
-        $nivel1 = " select ";
-        $nivel1 .= " classe,
+    $nivel1 = " select ";
+    $nivel1 .= " classe,
     0 as grupo,
     0 as subgrupo,
     0 as elemento,
@@ -4212,7 +4111,7 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
         $sql = $nivel11;
     }
 
-        $sql .= " order by
+    $sql .= " order by
     classe,
     grupo,
     subgrupo,
@@ -4225,17 +4124,17 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
     desdobramento3,
     o70_codrec,
     o70_codigo";
-        //echo $sql;
-        //$result = db_query($sql);
-        //db_criatabela($result);exit;
+    //echo $sql;
+    //$result = db_query($sql);
+    //db_criatabela($result);exit;
 
-        if ($nivel == 11 && $tipo_nivel == 3) {
-            $demaiscampos = '';
-        } else {
-            $demaiscampos = "distinct on (o57_fonte,o57_descr) o57_fonte,o57_descr, o70_codrec,";
-        }
+    if ($nivel == 11 && $tipo_nivel == 3) {
+      $demaiscampos = '';
+    } else {
+      $demaiscampos = "distinct on (o57_fonte,o57_descr) o57_fonte,o57_descr, o70_codrec,";
+    }
 
-        $sql2 = "
+    $sql2 = "
     select $campos from (
     select $demaiscampos
     o70_codigo,
@@ -4292,15 +4191,15 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
     desdobramento3,
     o70_codrec desc)as yy) as xx";
 
-        // aqui termina o codigo de 2007
-    }
+    // aqui termina o codigo de 2007
+  }
 
 
-    //db_criatabela(db_query($sql2));
-    //exit;
-    if ($comit == true) {
-        db_query('commit');
-    }
+  //db_criatabela(db_query($sql2));
+  //exit;
+  if ($comit == true) {
+    db_query('commit');
+  }
 
   /**
    * Validacao geracao do pad, quando pcasp ativo e rodar o balancete em ano anterior
@@ -4308,11 +4207,11 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
   $iAnoPcasp = 2013;
   if (file_exists("config/pcasp.txt")) {
 
-        $aArquivo  = file("config/pcasp.txt");
-        if ($aArquivo[0] != '' && $aArquivo[0] > 2013) {
-            $iAnoPcasp = $aArquivo[0];
-        }
+    $aArquivo  = file("config/pcasp.txt");
+    if ($aArquivo[0] != '' && $aArquivo[0] > 2013) {
+      $iAnoPcasp = $aArquivo[0];
     }
+  }
 
   $_SESSION["DB_ano_pcasp"] = $iAnoPcasp;
   $sControlePcasp = $_SESSION["DB_use_pcasp"];
@@ -4320,29 +4219,28 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
     $_SESSION["DB_use_pcasp"] = 'f';
   }
 
-    /**
-     * Adicionado validação para que só realize o parse caso o ano desejado seja superior ao ano de inicio do PCASP.
-     * Essa validação foi criada devido a criação do arquivo do PAD BALREC_ANT estava dando problema
-     */
-    if ((int)$anousu >= (int)$iAnoPcasp) {
+  /**
+   * Adicionado validação para que só realize o parse caso o ano desejado seja superior ao ano de inicio do PCASP.
+   * Essa validação foi criada devido a criação do arquivo do PAD BALREC_ANT estava dando problema
+   */
+  if ((int)$anousu >= (int)$iAnoPcasp) {
 
-        $sql2 = analiseQueryPlanoOrcamento($sql2, $anousu);
-        $sql  = analiseQueryPlanoOrcamento($sql, $anousu);
-    }
+    $sql2 = analiseQueryPlanoOrcamento($sql2, $anousu);
+    $sql  = analiseQueryPlanoOrcamento($sql, $anousu);
+  }
 
 
-    if ($descr == true) {
-        if ($query == false) {
-            $resultreceita = db_query($sql2);
-        } else {
-            $resultreceita = $sql2;
-        }
+  if ($descr == true) {
+    if ($query == false) {
+      $resultreceita = db_query($sql2);
     } else {
-        if ($query == false) {
-            $resultreceita = db_query($sql);
-        } else {
-            $resultreceita = $sql;
-        }
+      $resultreceita = $sql2;
+    }
+  } else {
+    if ($query == false) {
+      $resultreceita = db_query($sql);
+    } else {
+      $resultreceita = $sql;
     }
   }
   $_SESSION["DB_use_pcasp"] = $sControlePcasp;
@@ -4380,16 +4278,16 @@ class cl_permusuario_dotacao
       FROM orcparametro
       WHERE o50_anousu = $anousu	";
 
-        $result = db_query($sqle);
-        if (pg_numrows($result) == 0) {
-            $this->msg_erro = "Parametro do orçamento não encontrado para o exercício: $anousu";
-            return false;
-        }
-        $subele = pg_result($result, 0, 0);
-        if ($subele == 'f') {
-            $elemento = substr($elemento, 0, 7);
-        }
-        $sqle = " SELECT 'USUARIO' AS TIPO ,DB_PERMEMP.*
+    $result = db_query($sqle);
+    if (pg_numrows($result) == 0) {
+      $this->msg_erro = "Parametro do orçamento não encontrado para o exercício: $anousu";
+      return false;
+    }
+    $subele = pg_result($result, 0, 0);
+    if ($subele == 'f') {
+      $elemento = substr($elemento, 0, 7);
+    }
+    $sqle = " SELECT 'USUARIO' AS TIPO ,DB_PERMEMP.*
       FROM DB_PERMEMP
       INNER JOIN DB_USUPERMEMP U ON U.DB21_CODPERM = DB20_CODPERM AND U.DB21_ID_USUARIO = $idusuario
       LEFT OUTER JOIN DB_DEPARTORG D ON DB20_ORGAO = D.DB01_ORGAO AND D.DB01_ANOUSU = " . db_getsession("DB_anousu") . "
@@ -4402,7 +4300,7 @@ class cl_permusuario_dotacao
       $sqle .= " and db01_coddepto = $departamento ";
     }
 
-        $sqle .= "
+    $sqle .= "
       UNION
       SELECT 'SETOR' AS TIPO ,DB_PERMEMP.*
       FROM DB_PERMEMP
@@ -4423,11 +4321,11 @@ class cl_permusuario_dotacao
       $sqle .= " and db01_coddepto = $departamento ";
     }
 
-        $result = db_query($sqle);
+    $result = db_query($sqle);
 
-        if ($result != false && pg_numrows($result) > 0) {
-            $tem_and = "";
-            $dotacoes = " select fc_estruturaldotacao(o58_anousu,o58_coddot) as o50_estrutdespesa,
+    if ($result != false && pg_numrows($result) > 0) {
+      $tem_and = "";
+      $dotacoes = " select fc_estruturaldotacao(o58_anousu,o58_coddot) as o50_estrutdespesa,
         o58_coddot,
         o41_unidade,o41_descr,
         o55_descr,
@@ -4443,13 +4341,13 @@ class cl_permusuario_dotacao
         inner join orcprojativ on o58_projativ = o55_projativ
         and o58_anousu = o55_anousu
         where (( ";
-            $secretar = " select distinct o40_orgao,o40_descr
+      $secretar = " select distinct o40_orgao,o40_descr
         from orcdotacao
         inner join orcorgao on o40_anousu = " . db_getsession("DB_anousu") . " and o40_orgao = o58_orgao
         inner join orcelemento on o56_codele = o58_codele and
         o56_anousu = o58_anousu
         where ( (  ";
-            $departam = " select distinct coddepto,descrdepto
+      $departam = " select distinct coddepto,descrdepto
         from orcdotacao
         inner join orcorgao on o40_anousu = " . db_getsession("DB_anousu") . " and o40_orgao = o58_orgao
         inner join db_departorg on db01_orgao    = o40_orgao and db01_anousu = o40_anousu
@@ -4568,6 +4466,7 @@ class cl_permusuario_dotacao
         return false;
       }
     }
+  }
 }
 /**
  *  usada para gerar a condição de pesquisa
@@ -4872,5 +4771,27 @@ class cl_selorcdotacao
       $sele_work_recurso .= ")";
       //  echo $sele_work_elemento; exit;
     }
+    // atualiza instituição
+    if ($sepi != "")
+      $this->instit = $sele_work_instit;
+    if ($sep != "")
+      $this->orgao = $sele_work_orgao;
+    if ($sepu != "")
+      $this->unidade = $sele_work_unidade;
+    if ($sepf != "")
+      $this->funcao = $sele_work_funcao;
+    if ($sepsf != "")
+      $this->subfuncao = $sele_work_subfuncao;
+    if ($sepo != "")
+      $this->programa = $sele_work_programa;
+    if ($sepp != "")
+      $this->projativ = $sele_work_projativ;
+    if ($sepe != "")
+      $this->elemento = $sele_work_elemento;
+    if ($sepdes != "")
+      $this->desdobramento = $sele_work_desdobramento;
+    if ($sepc != "")
+      $this->recurso = $sele_work_recurso;
+  }
 }
 ?>

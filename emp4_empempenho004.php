@@ -317,11 +317,6 @@ if(isset($incluir)) {
 
       if (strtotime(db_utils::fieldsMemory(db_query($sSqlLicitacao), 0)->e54_emiss) > strtotime($dDataMovimento)) {
 
-        db_msgbox("Não é permitido emitir empenhos de licitações cuja data da autorização (".date("d/m/Y",strtotime(db_utils::fieldsMemory(db_query($sSqlLicitacao), 0)->e54_emiss)) .") seja maior que a data de emissão do empenho (".$e60_emiss.").");
-        db_redireciona("emp4_empempenho004.php");
-
-      }
-
             db_msgbox("Não é permitido emitir empenhos de licitações cuja data da autorização (" . date("d/m/Y", strtotime(db_utils::fieldsMemory(db_query($sSqlLicitacao), 0)->e54_emiss)) . ") seja maior que a data de emissão do empenho (" . date("d/m/Y", db_getsession('DB_datausu')) . ").");
             db_redireciona("emp4_empempenho004.php");
         }
