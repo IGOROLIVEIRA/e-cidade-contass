@@ -754,15 +754,7 @@ class cl_acordo
             }
         }
 
-        if (trim($this->ac16_datareferencia) != "" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_datareferencia_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["ac16_datareferencia_dia"] != "")) {
-            $sql  .= $virgula . " ac16_datareferencia = '$this->ac16_datareferencia' ";
-            $virgula = ",";
-        } else {
-            if (isset($GLOBALS["HTTP_POST_VARS"]["ac16_datareferencia_dia"])) {
-                $sql  .= $virgula . " ac16_datareferencia = null ";
-                $virgula = ",";
-            }
-        }
+
 
         if (trim($this->ac16_contratado) != "" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_contratado"])) {
             $sql  .= $virgula . " ac16_contratado = $this->ac16_contratado ";
@@ -1196,7 +1188,7 @@ class cl_acordo
         $result = db_query($sql);
         if ($result == false) {
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
-            $this->erro_sql   = "Acordo nao Alterado. Alteracao Abortada.\\n";
+            $this->erro_sql   =  "Acordo nao Alterado. Alteracao Abortada.\\n";
             $this->erro_sql .= "Valores : " . $this->ac16_sequencial;
             $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));

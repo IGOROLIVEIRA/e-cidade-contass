@@ -1157,7 +1157,7 @@ class AcordoPosicao
      * @param string $sDescricaoAlteracao descricao da alteração
      * @param string $sVeiculoDivulgacao veiculo de divulgacao
      */
-    function salvarSaldoAditamento($nValorSaldo, $dtAssinatura, $dtPublicacao, $sDescricaoAlteracao, $sVeiculoDivulgacao)
+    function salvarSaldoAditamento($nValorSaldo, $dtAssinatura, $dtPublicacao, $sDescricaoAlteracao, $sVeiculoDivulgacao, $datareferencia)
     {
 
         if (!empty($this->iCodigo)) {
@@ -1169,6 +1169,11 @@ class AcordoPosicao
             $oDaoAcordoPosicaoAditamento->ac35_datapublicacao                     = $dtPublicacao;
             $oDaoAcordoPosicaoAditamento->ac35_descricaoalteracao                 = utf8_decode($sDescricaoAlteracao);
             $oDaoAcordoPosicaoAditamento->ac35_veiculodivulgacao                  = utf8_decode($sVeiculoDivulgacao);
+            if ($datareferencia == "") {
+                $oDaoAcordoPosicaoAditamento->ac35_datareferencia = $oDaoAcordoPosicaoAditamento->ac35_dataassinaturatermoaditivo;
+            } else {
+                $oDaoAcordoPosicaoAditamento->ac35_datareferencia = $datareferencia;
+            }
             $oDaoAcordoPosicaoAditamento->incluir(null);
         }
     }
