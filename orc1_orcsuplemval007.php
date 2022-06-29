@@ -186,7 +186,7 @@ if (isset($incluir)) {
                 $fonteAtual = $i . $fonte;
 
                 $clquadrosuperavitdeficit = new cl_quadrosuperavitdeficit;
-                $result = $clquadrosuperavitdeficit->sql_record($clquadrosuperavitdeficit->sql_query("null", "*", null, "c241_fonte = {$fonteAtual} AND c241_ano = {$anousu}"));
+                $result = $clquadrosuperavitdeficit->sql_record($clquadrosuperavitdeficit->sql_query("null", "*", null, "c241_fonte = {$fonteAtual} AND c241_ano = {$anousu} AND c241_instit = " . db_getsession("DB_instit")));
 
                 if (pg_num_rows($result) > 0) {
                     $existeQuadro = true;
@@ -205,6 +205,7 @@ if (isset($incluir)) {
                                 o47_anousu = {$anousu}
                                 AND concat('1', substring(o58_codigo::TEXT, 2, 2)) = '$fonteAtual'
                                 AND o47_valor > 0
+                                AND o46_instit IN (" . db_getsession("DB_instit") . ")
                                 AND o46_tiposup IN (2026, 1003, 1008, 1024)
                             GROUP BY concat('1', substring(o58_codigo::TEXT, 2, 2))
                             UNION
@@ -220,6 +221,7 @@ if (isset($incluir)) {
                         
                             WHERE
                                 o47_anousu = {$anousu}
+                                AND o46_instit IN (" . db_getsession("DB_instit") . ")
                                 AND concat('1', substring(o58_codigo::TEXT, 2, 2)) = '$fonteAtual'
                                 AND o46_tiposup IN (2026, 1003, 1008, 1024)
                             AND 
@@ -241,14 +243,16 @@ if (isset($incluir)) {
             $limpa_dados = false; 
         }
 
-        if ($o47_valor > $valorQuadro) {
+        $valorQuadro = number_format($valorQuadro, 2, ".", "");
+
+        if (number_format($o47_valor, 2, ".", "") > $valorQuadro) {
             db_msgbox("Não existe superávit suficiente para realizar essa suplementação, saldo disponível R$ {$valorQuadro}");
             $sqlerro = true;
             $limpa_dados = false; 
         }
     }
 
-    if (($tiposup != 1003 && $tiposup != 1008 && $tiposup != 2026 && $tiposup != 1024) && substr($o58_codigo, 0, 1) == 2) {
+    if ((!in_array($tiposup, array(1003, 1008, 2026, 1024, 1001, 1006, 1018, 1020, 1021, 1022, 1023, 1026))) && substr($o58_codigo, 0, 1) == 2) {
         db_msgbox("Usuário, inclusão abortada. Dotação incompatível com o tipo de suplementação utilizada");
         $sqlerro = true;
         $limpa_dados = false; 
@@ -271,12 +275,33 @@ if (isset($incluir)) {
             if (in_array($o58_codigo, array(166, 167)))
                 $fontes = '166, 167';
 
-            $sSql = "SELECT o70_codigo, SUM(saldo_a_arrecadar) saldo FROM (
+            $sSql = "SELECT o70_codigo, SUM(saldo_arrecadado - saldo_inicial) saldo FROM (
                 select
                     o70_codigo,
-                    cast(
-                        coalesce(nullif(substr(fc_receitasaldo, 68, 12), ''), '0') as float8
-                    ) as saldo_a_arrecadar
+                    CAST(
+                        COALESCE(NULLIF(substr(fc_receitasaldo, 3, 12), ''), '0') AS float8
+                    ) AS saldo_inicial,
+                    CAST(
+                        COALESCE(NULLIF(substr(fc_receitasaldo, 16, 12), ''), '0') AS float8
+                    ) AS saldo_prevadic_acum,
+                    CAST(
+                        COALESCE(NULLIF(substr(fc_receitasaldo, 29, 12), ''), '0') AS float8
+                    ) AS saldo_inicial_prevadic,
+                    CAST(
+                        COALESCE(NULLIF(substr(fc_receitasaldo, 42, 12), ''), '0') AS float8
+                    ) AS saldo_anterior,
+                    CAST(
+                        COALESCE(NULLIF(substr(fc_receitasaldo, 55, 12), ''), '0') AS float8
+                    ) AS saldo_arrecadado,
+                    CAST(
+                        COALESCE(NULLIF(substr(fc_receitasaldo, 68, 12), ''), '0') AS float8
+                    ) AS saldo_a_arrecadar,
+                    CAST(
+                        COALESCE(NULLIF(substr(fc_receitasaldo, 81, 12), ''), '0') AS float8
+                    ) AS saldo_arrecadado_acumulado,
+                    CAST(
+                        COALESCE(NULLIF(substr(fc_receitasaldo, 94, 12), ''), '0') AS float8
+                    ) AS saldo_prev_anterior
                 from(
                         select
                             o70_codigo,
@@ -293,12 +318,13 @@ if (isset($incluir)) {
                             o57_fonte
                     ) as X
                     ) as y GROUP BY o70_codigo";
-                    
+       
+
             $qResult = db_query($sSql);
             $valor = 0;
             for ($i = 0; $i < pg_num_rows($qResult); $i++) {
                 $oResult = db_utils::fieldsMemory($qResult, $i);
-                $valor += -1 * $oResult->saldo;
+                $valor += $oResult->saldo;
             }
 
             if ($valor <= 0) {
