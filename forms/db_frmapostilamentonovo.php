@@ -1190,7 +1190,7 @@ $clrotulo->label("ac16_resumoobjeto");
         });
 
         if (dotacaoIncluida == false && $("si03_tipoapostila").value == "03") {
-            return alert("Usuário: é necessário incluir dotação em no mínimo um item \n\ncaso o tipo de apostila for empenho de dotações orçamentárias");
+            return alert("Usuário: É necessário a inserção de dotação em no mínimo um item.");
 
         }
 
