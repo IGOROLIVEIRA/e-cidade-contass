@@ -84,7 +84,7 @@ $db_opcao = 1;
         <table align="center" border="0">
 
             <tr>
-                <th align="center" colspan="3"> Relatorio de Execução de Superavit </th>
+                <th align="center" colspan="3"> Relatorio de Execução do Superavit </th>
             </tr>
 
             <tr>

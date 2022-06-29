@@ -48,8 +48,8 @@ $classinatura = new cl_assinatura;
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 //db_postmemory($HTTP_SERVER_VARS,2);
 
-$xinstit = split("-", $db_selinstit);
-$resultinst = pg_exec("select codigo,nomeinst,nomeinstabrev from db_config where codigo in (" . str_replace('-', ', ', $db_selinstit) . ") ");
+$xinstit = str_split("-", $db_selinstit);
+$resultinst = pg_query("select codigo,nomeinst,nomeinstabrev from db_config where codigo in (" . str_replace('-', ', ', $db_selinstit) . ") ");
 $descr_inst = '';
 $xvirg = '';
 $flag_abrev = false;
@@ -67,7 +67,7 @@ for ($xins = 0; $xins < pg_numrows($resultinst); $xins++) {
 
 $head6 = "PERÍODO : " . db_formatar($dt_ini, 'd') . " A " . db_formatar($dt_fim, 'd');
 
-$head3 = "EXECUÇÃO DE EXCESSO DE ARRECADAÇÃO ";
+$head3 = "EXECUÇÃO DO EXCESSO DE ARRECADAÇÃO ";
 $head4 = "EXERCÍCIO: " . db_getsession("DB_anousu");
 
 if ($flag_abrev == false) {
@@ -95,115 +95,123 @@ $datafin = $dt_fim;
 
 $db_filtro = ' o70_instit in (' . str_replace('-', ', ', $db_selinstit) . ')';
 
-$sql = "SELECT o70_codigo, SUM(saldo_arrecadado - saldo_inicial) excesso FROM (
-    select
-        o70_codigo,
-        CAST(
-            COALESCE(NULLIF(substr(fc_receitasaldo, 3, 12), ''), '0') AS float8
-        ) AS saldo_inicial,
-        CAST(
-            COALESCE(NULLIF(substr(fc_receitasaldo, 16, 12), ''), '0') AS float8
-        ) AS saldo_prevadic_acum,
-        CAST(
-            COALESCE(NULLIF(substr(fc_receitasaldo, 29, 12), ''), '0') AS float8
-        ) AS saldo_inicial_prevadic,
-        CAST(
-            COALESCE(NULLIF(substr(fc_receitasaldo, 42, 12), ''), '0') AS float8
-        ) AS saldo_anterior,
-        CAST(
-            COALESCE(NULLIF(substr(fc_receitasaldo, 55, 12), ''), '0') AS float8
-        ) AS saldo_arrecadado,
-        CAST(
-            COALESCE(NULLIF(substr(fc_receitasaldo, 68, 12), ''), '0') AS float8
-        ) AS saldo_a_arrecadar,
-        CAST(
-            COALESCE(NULLIF(substr(fc_receitasaldo, 81, 12), ''), '0') AS float8
-        ) AS saldo_arrecadado_acumulado,
-        CAST(
-            COALESCE(NULLIF(substr(fc_receitasaldo, 94, 12), ''), '0') AS float8
-        ) AS saldo_prev_anterior
-    from(
-            select
-                o70_codigo,
-                fc_receitasaldo({$anousu}, o70_codrec, 3, '{$dt_ini}', '{$dt_ini}')
-            from
-                orcreceita d
-                inner join orcfontes e on d.o70_codfon = e.o57_codfon
-                and e.o57_anousu = d.o70_anousu
-            where
-                o70_anousu = {$anousu}
-                and o70_instit in (" . str_replace('-', ', ', $db_selinstit) . ")
-            order by
-                o57_fonte
-        ) as X
-        ) as y GROUP BY o70_codigo ORDER BY o70_codigo";
+$sSql = "SELECT 
+        o70_codigo, 
+        SUM(saldo_arrecadado - saldo_inicial) saldo_excesso 
+    FROM (
+        select
+            o70_codigo,
+            CAST(
+                COALESCE(NULLIF(substr(fc_receitasaldo, 3, 12), ''), '0') AS float8
+            ) AS saldo_inicial,
+            CAST(
+                COALESCE(NULLIF(substr(fc_receitasaldo, 16, 12), ''), '0') AS float8
+            ) AS saldo_prevadic_acum,
+            CAST(
+                COALESCE(NULLIF(substr(fc_receitasaldo, 29, 12), ''), '0') AS float8
+            ) AS saldo_inicial_prevadic,
+            CAST(
+                COALESCE(NULLIF(substr(fc_receitasaldo, 42, 12), ''), '0') AS float8
+            ) AS saldo_anterior,
+            CAST(
+                COALESCE(NULLIF(substr(fc_receitasaldo, 55, 12), ''), '0') AS float8
+            ) AS saldo_arrecadado,
+            CAST(
+                COALESCE(NULLIF(substr(fc_receitasaldo, 68, 12), ''), '0') AS float8
+            ) AS saldo_a_arrecadar,
+            CAST(
+                COALESCE(NULLIF(substr(fc_receitasaldo, 81, 12), ''), '0') AS float8
+            ) AS saldo_arrecadado_acumulado,
+            CAST(
+                COALESCE(NULLIF(substr(fc_receitasaldo, 94, 12), ''), '0') AS float8
+            ) AS saldo_prev_anterior
+        from(
+                select
+                    o70_codigo,
+                    fc_receitasaldo({$anousu}, o70_codrec, 3, '{$dt_ini}', '{$dt_fim}')
+                from
+                    orcreceita d
+                    inner join orcfontes e on d.o70_codfon = e.o57_codfon
+                    and e.o57_anousu = d.o70_anousu
+                where
+                    o70_anousu = {$anousu}
+                    and o70_instit in (" . str_replace('-', ', ', $db_selinstit) . ")
+                order by
+                    o57_fonte
+            ) as X
+            ) as y GROUP BY o70_codigo ORDER BY o70_codigo";
 
-$result = pg_exec($sql);
-$arrayExcesso = array();
-for ($i = 0; $i < pg_numrows($result); $i++) {
-    db_fieldsmemory($result, $i);
-    if (array_key_exists($o70_codigo, $arrayExcesso)) {
-        if ($excesso > 0) {
-            $arrayExcesso[$o70_codigo]["A"] += $excesso;
-            $arrayExcesso[$o70_codigo]["D"] = 0;
-        }
-    } else {
-        if ($excesso > 0) {
-            $arrayExcesso[$o70_codigo]["A"] = $excesso;
-            $arrayExcesso[$o70_codigo]["D"] = 0;
-        }
-    }
+$qResult  = pg_query($sSql);
+$aExcesso = array();
+
+for ($i = 0; $i < pg_numrows($qResult); $i++) {
+    db_fieldsmemory($qResult, $i);
+    $iChave = fonteAgrupada($o70_codigo);
+
+    if (array_key_exists($iChave, $aExcesso)) {
+        $aExcesso[$iChave]["A"] += $saldo_excesso;
+        continue;
+    } 
+
+    // Cria a posição do array
+    $aExcesso[$iChave]["A"] = $saldo_excesso;
+    $aExcesso[$iChave]["D"] = 0;
 }
 
+foreach ($aExcesso as $iChave => $aData) {
+    if ($aData["A"] <= 0)
+        unset($aExcesso[$iChave]);
+}
 
 $sSql = "SELECT
-        o58_codigo fonte,
-                            sum(o47_valor) as valor
-                        FROM
-                            orcsuplemval
-                        LEFT JOIN orcdotacao ON o47_coddot = o58_coddot
-                            AND o47_anousu = o58_anousu
-                        JOIN orcsuplem ON o47_codsup=o46_codsup
-                        WHERE
-                            o47_anousu = {$anousu}
-                            AND o47_valor > 0
-                            AND o46_instit in (" . str_replace('-', ', ', $db_selinstit) . ")
-                            AND o46_tiposup IN (1004, 1025, 1012, 1019, 1009, 1010, 1029)
-                        GROUP BY o58_codigo
-                        UNION
-                        SELECT
-                            o58_codigo fonte,
-                            sum(o136_valor) as valor
-                        from
-                            orcsuplemdespesappa
-                            LEFT JOIN orcsuplemval ON o47_codsup = o136_orcsuplem
+            o58_codigo,
+            sum(o47_valor) as valor
+                            FROM
+                                orcsuplemval
                             LEFT JOIN orcdotacao ON o47_coddot = o58_coddot
-                            AND o47_anousu = o58_anousu
+                                AND o47_anousu = o58_anousu
                             JOIN orcsuplem ON o47_codsup=o46_codsup
-                        WHERE
-                            o47_anousu = {$anousu}
-                            AND o46_instit in (" . str_replace('-', ', ', $db_selinstit) . ")
-                            AND o46_tiposup IN (1004, 1025, 1012, 1019, 1009, 1010, 1029)
-                            AND o136_valor > 0 
-                        GROUP BY o58_codigo";
-
+                            WHERE
+                                o47_anousu = {$anousu}
+                                AND o47_valor > 0
+                                AND o58_instit in (" . str_replace('-', ', ', $db_selinstit) . ")
+                                AND o46_tiposup IN (1004, 1025, 1012, 1019, 1009, 1010, 1029)
+                            GROUP BY o58_codigo
+                            UNION
+                            SELECT
+                                o58_codigo fonte,
+                                sum(o136_valor) as valor
+                            from
+                                orcsuplemdespesappa
+                                LEFT JOIN orcsuplemval ON o47_codsup = o136_orcsuplem
+                                LEFT JOIN orcdotacao ON o47_coddot = o58_coddot
+                                AND o47_anousu = o58_anousu
+                                JOIN orcsuplem ON o47_codsup=o46_codsup
+                            WHERE
+                                o47_anousu = {$anousu}
+                                AND o58_instit in (" . str_replace('-', ', ', $db_selinstit) . ")
+                                AND o46_tiposup IN (1004, 1025, 1012, 1019, 1009, 1010, 1029)
+                                AND o136_valor > 0 
+                            GROUP BY o58_codigo";
+                            
 $subResult = db_query($sSql);
 
 $valorSuplementado = 0;
 
 for ($y = 0; $y < pg_num_rows($subResult); $y++) {
     $oFonte = db_utils::fieldsMemory($subResult, $y);
+    $iChave = fonteAgrupada($oFonte->o58_codigo);
 
-    if (array_key_exists($oFonte->fonte, $arrayExcesso)) {
-        $arrayExcesso[$oFonte->fonte]["B"] += $oFonte->valor;
-        $arrayExcesso[$oFonte->fonte]["D"] = 0;
-    } else {
-        $arrayExcesso[$oFonte->fonte]["B"] = $oFonte->valor;
-        $arrayExcesso[$oFonte->fonte]["D"] = 0;
-    }
+    if (array_key_exists($iChave, $aExcesso)) {
+        $aExcesso[$iChave]["B"] += $oFonte->valor;
+        continue;
+    } 
+
+    $aExcesso[$iChave]["B"] = $oFonte->valor;
+    $aExcesso[$iChave]["D"] = 0;
 }
 
-$sSql = "SELECT fonte, SUM(dot_ini) dot_ini, SUM(suplementado) suplementado, SUM(reduzido) reduzido FROM (select
+$sSql = "SELECT fonte, SUM(dot_ini) dot_ini, SUM(suplementado) suplementado, SUM(reduzido) reduzido, SUM(empenhado - anulado) empenhado FROM (select
 o58_codigo fonte,
 substr(fc_dotacaosaldo, 3, 12) :: float8 as dot_ini,
 substr(fc_dotacaosaldo, 16, 12) :: float8 as saldo_anterior,
@@ -259,12 +267,10 @@ from(
 $subResult = db_query($sSql);
 for ($y = 0; $y < pg_num_rows($subResult); $y++) {
     $despesa = db_utils::fieldsMemory($subResult, $y);
-
-    if (array_key_exists($despesa->fonte, $arrayExcesso)) {
-
-        $arrayExcesso[$despesa->fonte]["D"] += $despesa->dot_ini + $despesa->suplementado - $despesa->reduzido;
-        $arrayExcesso[$despesa->fonte]["E"] += $despesa->empenhado;
-        $arrayExcesso[$despesa->fonte]["F"] += $arrayExcesso[$despesa->fonte]["D"] - $arrayExcesso[$despesa->fonte]["E"];
+    $iChave = fonteAgrupada($despesa->fonte);
+    if (array_key_exists($iChave, $aExcesso)) {
+        $aExcesso[$iChave]["D"] += $despesa->dot_ini + $despesa->suplementado - $despesa->reduzido;
+        $aExcesso[$iChave]["E"] += $despesa->empenhado;
     }
 }
 //db_criatabela($result);
@@ -279,7 +285,9 @@ $total_e = 0;
 $total_f = 0;
 $total_g = 0;
 
-foreach ($arrayExcesso as $fonte => $data) {
+ksort($aExcesso);
+
+foreach ($aExcesso as $fonte => $data) {
     if ($pdf->gety() > $pdf->h - 30 || $pagina == 1) {
         $pagina = 0;
         $pdf->addpage();
@@ -315,23 +323,31 @@ foreach ($arrayExcesso as $fonte => $data) {
         $pdf->ln(9);
     }
 
+    $data["C"] = (($data["B"] - $data["A"]) > 0) ? ($data["B"] - $data["A"]) : 0;
+    $data["F"] = $data["D"] - $data["E"];
+    $data["G"] = (($data["C"] - $data["F"]) > 0) ? ($data["C"] - $data["F"]) : 0;
+
     $pdf->setfont('arial', '', 6);
+    $fonte = $fonte == 100 ? "100/ 101 / 102" : $fonte;
+    $fonte = $fonte == 118 ? "118 / 119" : $fonte;
+    $fonte = $fonte == 166 ? "166 / 167" : $fonte;
+
     $pdf->cell(24, $alt, db_formatar($fonte, 'recurso'), 0, 0, "C", 0);
     $pdf->cell(24, $alt, db_formatar($data["A"], 'f'), 0, 0, "R", 0);
     $pdf->cell(24, $alt, db_formatar($data["B"], 'f'), 0, 0, "R", 0);
-    $pdf->cell(24, $alt, db_formatar($data["B"] - $data["A"], 'f'), 0, 0, "R", 0);
+    $pdf->cell(24, $alt, db_formatar($data["C"], 'f'), 0, 0, "R", 0);
     $pdf->cell(24, $alt, db_formatar($data["D"], 'f'), 0, 0, "R", 0);
     $pdf->cell(24, $alt, db_formatar($data["E"], 'f'), 0, 0, "R", 0);
     $pdf->cell(24, $alt, db_formatar($data["F"], 'f'), 0, 0, "R", 0);
-    $pdf->cell(24, $alt, db_formatar($data["B"] - $data["A"] - $data["F"], 'f'), 0, 1, "R", 0);
+    $pdf->cell(24, $alt, db_formatar($data["G"], 'f'), 0, 1, "R", 0);
 
     $total_a += $data["A"];
     $total_b += $data["B"];
-    $total_c += $data["B"] - $data["A"];
+    $total_c += $data["C"];
     $total_d += $data["D"];
     $total_e += $data["E"];
     $total_f += $data["F"];
-    $total_g += $data["B"] - $data["A"] - $data["F"];
+    $total_g += $data["G"];
 }
 $pdf->setfont('arial', 'B', 6);
 $pdf->cell(24, $alt, 'TOTAL ', 0, 0, "C", 0);
@@ -358,3 +374,23 @@ $pdf->setxy($largura, $pos);
 $pdf->multicell($largura, 2, $ass_cont, 0, "C", 0, 0);
 
 $pdf->Output();
+
+/**
+ * Função para agrupamento de fontes
+ * @author widouglas
+ * @param integer $fonte
+ * @return integer
+ */
+function fonteAgrupada($fonte) 
+{
+    if (in_array($fonte, array(101, 102)))
+        return 100;
+
+    if ($fonte == 119)
+        return 118;
+
+    if ($fonte == 167)
+        return 166;
+
+    return $fonte;
+}

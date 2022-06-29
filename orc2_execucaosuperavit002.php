@@ -67,7 +67,7 @@ for ($xins = 0; $xins < pg_numrows($resultinst); $xins++) {
 
 $head6 = "PERÍODO : " . db_formatar($dt_ini, 'd') . " A " . db_formatar($dt_fim, 'd');
 
-$head3 = "EXECUÇÃO DE SUPERÁVIT ";
+$head3 = "EXECUÇÃO DO SUPERÁVIT ";
 $head4 = "EXERCÍCIO: " . db_getsession("DB_anousu");
 
 if ($flag_abrev == false) {
@@ -126,7 +126,7 @@ $sSql = "SELECT
                         WHERE
                             o47_anousu = {$anousu}
                             AND o47_valor > 0
-                            AND o46_instit in (" . str_replace('-', ', ', $db_selinstit) . ")
+                            AND o58_instit in (" . str_replace('-', ', ', $db_selinstit) . ")
                             AND o46_tiposup IN (2026, 1003, 1028, 1008, 1024)
                         GROUP BY o58_codigo
                         UNION
@@ -141,7 +141,7 @@ $sSql = "SELECT
                             JOIN orcsuplem ON o47_codsup=o46_codsup
                         WHERE
                             o47_anousu = {$anousu}
-                            AND o46_instit in (" . str_replace('-', ', ', $db_selinstit) . ")
+                            AND o58_instit in (" . str_replace('-', ', ', $db_selinstit) . ")
                             AND o46_tiposup IN (2026, 1003, 1028, 1008, 1024)
                             AND o136_valor > 0 
                         GROUP BY o58_codigo";
@@ -152,17 +152,18 @@ $valorSuplementado = 0;
 
 for ($y = 0; $y < pg_num_rows($subResult); $y++) {
     $oFonte = db_utils::fieldsMemory($subResult, $y);
-    $oFonte->fonte = 2 . substr($oFonte->fonte, 1, 2);
-    if (array_key_exists($oFonte->fonte, $arrayExcesso)) {
-        $arrayExcesso[$oFonte->fonte]["B"] += $oFonte->valor;
-        $arrayExcesso[$oFonte->fonte]["D"] = 0;
-    } else {
-        $arrayExcesso[$oFonte->fonte]["B"] = $oFonte->valor;
-        $arrayExcesso[$oFonte->fonte]["D"] = 0;
+    if (substr($oFonte->fonte, 0, 1) == 2) {
+        if (array_key_exists($oFonte->fonte, $arrayExcesso)) {
+            $arrayExcesso[$oFonte->fonte]["B"] += $oFonte->valor;
+            $arrayExcesso[$oFonte->fonte]["D"] = 0;
+        } else {
+            $arrayExcesso[$oFonte->fonte]["B"] = $oFonte->valor;
+            $arrayExcesso[$oFonte->fonte]["D"] = 0;
+        }
     }
 }
 
-$sSql = "SELECT fonte, SUM(dot_ini) dot_ini, SUM(suplementado) suplementado, SUM(reduzido) reduzido FROM (select
+$sSql = "SELECT fonte, SUM(dot_ini) dot_ini, SUM(suplementado) suplementado, SUM(reduzido) reduzido, SUM(empenhado - anulado) empenhado FROM (select
 o58_codigo fonte,
 substr(fc_dotacaosaldo, 3, 12) :: float8 as dot_ini,
 substr(fc_dotacaosaldo, 16, 12) :: float8 as saldo_anterior,
@@ -218,12 +219,12 @@ from(
 $subResult = db_query($sSql);
 for ($y = 0; $y < pg_num_rows($subResult); $y++) {
     $despesa = db_utils::fieldsMemory($subResult, $y);
-    $despesa->fonte = 2 . substr($despesa->fonte, 1, 2);
-    if (array_key_exists($despesa->fonte, $arrayExcesso)) {
-
-        $arrayExcesso[$despesa->fonte]["D"] += $despesa->dot_ini + $despesa->suplementado - $despesa->reduzido;
-        $arrayExcesso[$despesa->fonte]["E"] += $despesa->empenhado;
-        $arrayExcesso[$despesa->fonte]["F"] += $arrayExcesso[$despesa->fonte]["D"] - $arrayExcesso[$despesa->fonte]["E"];
+    if (substr($despesa->fonte, 0, 1) == 2) {
+        if (array_key_exists($despesa->fonte, $arrayExcesso)) {
+            $arrayExcesso[$despesa->fonte]["D"] += $despesa->dot_ini + $despesa->suplementado - $despesa->reduzido;
+            $arrayExcesso[$despesa->fonte]["E"] += $despesa->empenhado;
+            $arrayExcesso[$despesa->fonte]["F"] += $arrayExcesso[$despesa->fonte]["D"] - $arrayExcesso[$despesa->fonte]["E"];
+        }
     }
 }
 //db_criatabela($result);
@@ -274,23 +275,27 @@ foreach ($arrayExcesso as $fonte => $data) {
         $pdf->ln(9);
     }
 
+    $data["C"] = (($data["B"] - $data["A"]) > 0) ? ($data["B"] - $data["A"]) : 0;
+    $data["G"] = (($data["C"] - $data["F"]) > 0) ? ($data["C"] - $data["F"]) : 0;
+    $data["G"] = $data["E"] == 0 ? 0 : $data["G"];
+
     $pdf->setfont('arial', '', 6);
     $pdf->cell(24, $alt, db_formatar($fonte, 'recurso'), 0, 0, "C", 0);
     $pdf->cell(24, $alt, db_formatar($data["A"], 'f'), 0, 0, "R", 0);
     $pdf->cell(24, $alt, db_formatar($data["B"], 'f'), 0, 0, "R", 0);
-    $pdf->cell(24, $alt, db_formatar($data["B"] - $data["A"], 'f'), 0, 0, "R", 0);
+    $pdf->cell(24, $alt, db_formatar($data["C"], 'f'), 0, 0, "R", 0);
     $pdf->cell(24, $alt, db_formatar($data["D"], 'f'), 0, 0, "R", 0);
     $pdf->cell(24, $alt, db_formatar($data["E"], 'f'), 0, 0, "R", 0);
     $pdf->cell(24, $alt, db_formatar($data["F"], 'f'), 0, 0, "R", 0);
-    $pdf->cell(24, $alt, db_formatar($data["B"] - $data["A"] - $data["F"], 'f'), 0, 1, "R", 0);
+    $pdf->cell(24, $alt, db_formatar($data["G"], 'f'), 0, 1, "R", 0);
 
     $total_a += $data["A"];
     $total_b += $data["B"];
-    $total_c += $data["B"] - $data["A"];
+    $total_c += $data["C"];
     $total_d += $data["D"];
     $total_e += $data["E"];
     $total_f += $data["F"];
-    $total_g += $data["B"] - $data["A"] - $data["F"];
+    $total_g += $data["G"];
 }
 $pdf->setfont('arial', 'B', 6);
 $pdf->cell(24, $alt, 'TOTAL ', 0, 0, "C", 0);
