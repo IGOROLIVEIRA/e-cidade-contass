@@ -108,8 +108,8 @@ if ($si01_processocompra != "") {
           <td><strong>Imprimir Justificativa: </strong></td>
           <td>
             <?php
-            $x = array('n' => 'Não', 's' => 'Sim');
-            db_select('impjustificativa', $x, true, $db_opcao, "style = 'width: 91px;'");
+            $x = array('f' => 'Não', 't' => 'Sim');
+            db_select('si01_impjustificativa', $x, true, $db_opcao, "style = 'width: 91px;'");
             ?>
           </td>
         </tr>

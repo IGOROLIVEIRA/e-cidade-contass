@@ -113,14 +113,14 @@ if (isset($solicita) && trim($solicita) != "") {
 
       if (oCampo.checked) {
 
-        if (top.corpo.arr_dados.indexOf(oCampo.name) == -1) {
-          top.corpo.arr_dados.push(oCampo.name);
+        if ((window.CurrentWindow || parent.CurrentWindow).corpo.arr_dados.indexOf(oCampo.name) == -1) {
+          (window.CurrentWindow || parent.CurrentWindow).corpo.arr_dados.push(oCampo.name);
         }
       } else {
-        top.corpo.arr_dados.remove(oCampo.name);
+        (window.CurrentWindow || parent.CurrentWindow).corpo.arr_dados.remove(oCampo.name);
       }
 
-      top.corpo.document.form1.valores.value = top.corpo.arr_dados.valueOf();
+      (window.CurrentWindow || parent.CurrentWindow).corpo.document.form1.valores.value = (window.CurrentWindow || parent.CurrentWindow).corpo.arr_dados.valueOf();
     }
 
     function js_setornosetimp(campo, SN) {
@@ -129,9 +129,9 @@ if (isset($solicita) && trim($solicita) != "") {
 
       if (SN == true) {
 
-        for (i = 0; i < top.corpo.arr_impor.length; i++) {
+        for (i = 0; i < (window.CurrentWindow || parent.CurrentWindow).corpo.arr_impor.length; i++) {
 
-          if (top.corpo.arr_impor[i] == campo) {
+          if ((window.CurrentWindow || parent.CurrentWindow).corpo.arr_impor[i] == campo) {
 
             cont++;
             break;
@@ -144,15 +144,15 @@ if (isset($solicita) && trim($solicita) != "") {
       if (eval('document.form1.' + campo + '.checked') == true) {
 
         if (cont == 0) {
-          top.corpo.arr_impor.push(campo);
+          (window.CurrentWindow || parent.CurrentWindow).corpo.arr_impor.push(campo);
         }
       } else {
 
         if (cont > 0) {
-          top.corpo.arr_impor.splice(i, 1);
+          (window.CurrentWindow || parent.CurrentWindow).corpo.arr_impor.splice(i, 1);
         }
       }
-      top.corpo.document.form1.importa.value = top.corpo.arr_impor.valueOf();
+      (window.CurrentWindow || parent.CurrentWindow).corpo.document.form1.importa.value = (window.CurrentWindow || parent.CurrentWindow).corpo.arr_impor.valueOf();
     }
 
     function js_marcacampos() {
@@ -161,18 +161,18 @@ if (isset($solicita) && trim($solicita) != "") {
       campo = "";
       for (i = 0; i < document.form1.length; i++) {
         if (document.form1.elements[i].type == 'checkbox' && document.form1.elements[i].name.search('imp') == -1) {
-          if (top.corpo.document.form1.valores.value.search(document.form1.elements[i].name) != -1) {
+          if ((window.CurrentWindow || parent.CurrentWindow).corpo.document.form1.valores.value.search(document.form1.elements[i].name) != -1) {
             document.form1.elements[i].checked = true;
             campo = document.form1.elements[i].name;
-            for (ii = 0; ii < top.corpo.arr_dados.length; ii++) {
-              if (top.corpo.arr_dados[ii] == campo) {
+            for (ii = 0; ii < (window.CurrentWindow || parent.CurrentWindow).corpo.arr_dados.length; ii++) {
+              if ((window.CurrentWindow || parent.CurrentWindow).corpo.arr_dados[ii] == campo) {
                 erro++;
                 break;
               }
             }
 
             if (erro == 0 && campo != "") {
-              top.corpo.arr_dados.push(campo);
+              (window.CurrentWindow || parent.CurrentWindow).corpo.arr_dados.push(campo);
             }
           }
         }
@@ -182,7 +182,7 @@ if (isset($solicita) && trim($solicita) != "") {
     function js_marcacamposimp() {
       for (i = 0; i < document.form1.length; i++) {
         if (document.form1.elements[i].type == 'checkbox') {
-          if (top.corpo.document.form1.importa.value.search(document.form1.elements[i].name) != -1) {
+          if ((window.CurrentWindow || parent.CurrentWindow).corpo.document.form1.importa.value.search(document.form1.elements[i].name) != -1) {
             document.form1.elements[i].checked = true;
           }
         }

@@ -31,6 +31,7 @@ if (isset($incluir)) {
     $clprecoreferencia->si01_tipoOrcamento  = 4;
     $clprecoreferencia->si01_numcgmCotacao = $respCotacaocodigo;
     $clprecoreferencia->si01_numcgmOrcamento = $respOrcacodigo;
+    $clprecoreferencia->si01_impjustificativa = $si01_impjustificativa;
     $datesistema = date("d/m/Y", db_getsession('DB_datausu'));
     if ($si01_datacotacao > $datesistema) {
         $msg = "Data da Cotação maior que data do Sistema";
