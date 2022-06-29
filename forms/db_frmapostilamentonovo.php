@@ -85,7 +85,7 @@ $clrotulo->label("ac16_resumoobjeto");
                 </td>
             </tr>
 
-            <tr id="trdatareferencia" style="display:none;">
+            <tr id="trdatareferencia" style="display: none;">
                 <td align="left" title="<?= @$Tsi03_datareferencia ?>">
                     <b>Data de Referência:</b>
                 </td>
@@ -228,6 +228,7 @@ $clrotulo->label("ac16_resumoobjeto");
 </table>
 <input type='button' disabled id='btnSalvar' value='Salvar' onclick="apostilar();">
 <script>
+    document.getElementById("si03_datareferencia").style.width = "80px"
     document.getElementById("si03_tipoalteracaoapostila").disabled = true;
     sUrlRpc = 'con4_contratoapostilamento.RPC.php';
     aItensPosicao = new Array();
@@ -1107,6 +1108,9 @@ $clrotulo->label("ac16_resumoobjeto");
             return alert("Obrigatório informar a descrição da Apostila.");
         }
 
+        if ($("si03_datareferencia").value == "" && document.getElementById("trdatareferencia").style.display != 'none') {
+            return alert("Obrigatório informar a data de Referencia.");
+        }
 
         oGridItens.getRows().forEach(function(oRow) {
 
@@ -1126,6 +1130,8 @@ $clrotulo->label("ac16_resumoobjeto");
         oApostila.descrapostila = encodeURIComponent(tagString($("si03_descrapostila").value));
         oApostila.tipoalteracaoapostila = $("si03_tipoalteracaoapostila").value;
         oApostila.numapostilamento = $("si03_numapostilamento").value;
+        oApostila.datareferencia = $("si03_datareferencia").value;
+
 
         var oParam = {
             exec: "processarApostilamento",

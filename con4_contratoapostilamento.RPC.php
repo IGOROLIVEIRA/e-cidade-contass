@@ -115,9 +115,20 @@ try {
 
                 $result = db_query($sNSQL);
                 $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
+
+                $datareferencia = implode("-", array_reverse(explode("/", $oParam->oApostila->datareferencia)));
+
+
+                if ($oParam->oApostila->datareferencia != "") {
+                    if ($c99_datapat != "" && $datareferencia <= $c99_datapat) {
+                        throw new Exception(' O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.');
+                    }
+                }
+
                 $dateassinatura = implode("-", array_reverse(explode("/", $oParam->oApostila->dataapostila)));
 
-                if ($dateassinatura != "") {
+
+                if ($dateassinatura != "" && $oParam->oApostila->datareferencia == "") {
                     if ($c99_datapat != "" && $dateassinatura <= $c99_datapat) {
                         throw new Exception(' O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.');
                     }

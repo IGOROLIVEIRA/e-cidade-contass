@@ -1788,6 +1788,11 @@ class AcordoPosicao
             $oDaoApostilamento->si03_acordo = $this->getAcordo();
             $oDaoApostilamento->si03_acordoposicao = $this->getCodigo();
             $oDaoApostilamento->si03_numcontrato = "null";
+            if ($oApostila->datareferencia == "") {
+                $oDaoApostilamento->si03_datareferencia = $oDaoApostilamento->si03_dataapostila;
+            } else {
+                $oDaoApostilamento->si03_datareferencia = implode("-", array_reverse(explode("/", $oApostila->datareferencia)));
+            }
             $oDaoApostilamento->incluir(null);
             if ($oDaoApostilamento->erro_status == 0) {
                 throw new Exception("Erro ao salvar apostilamento.\n{$oDaoApostilamento->erro_msg}");
