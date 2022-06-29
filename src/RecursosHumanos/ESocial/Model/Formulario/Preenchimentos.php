@@ -570,7 +570,7 @@ class Preenchimentos
 					            and date_part('year',rhpessoal.rh01_admiss) = date_part('year',fc_getsession('DB_datausu')::date)
 					            and (date_part('year',fc_getsession('DB_datausu')::date)::varchar || lpad(date_part('month',fc_getsession('DB_datausu')::date)::varchar,2,'0'))::integer > 202207
 					            )
-				            ) order by z01_nome asc limit 1000";
+				            ) order by z01_nome asc";
 
         $rs = \db_query($sql);
 
