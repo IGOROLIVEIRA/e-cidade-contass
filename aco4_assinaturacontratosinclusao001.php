@@ -415,7 +415,8 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
 
     }
 
-    if (dataMovimento <= dataPatrimonial) {
+
+    if (dataMovimento <= dataPatrimonial && oParam.dtreferencia == null) {
       document.getElementById("trdatareferencia").style.display = 'contents';
       alert("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
       return;

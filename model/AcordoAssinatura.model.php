@@ -182,6 +182,7 @@ class AcordoAssinatura extends AcordoMovimentacao
     $oDaoAcordo->ac16_veiculodivulgacao = $this->getVeiculoDivulgacao();
     $oDaoAcordo->ac16_datareferencia = $this->dtReferencia;
     $oDaoAcordo->alterar($oDaoAcordo->ac16_sequencial);
+    db_query("UPDATE acordo SET ac16_datareferencia = '$this->dtReferencia' WHERE ac16_sequencial = $iCodigoAcordo");
     if ($oDaoAcordo->erro_status == 0) {
       throw new Exception($oDaoAcordo->erro_msg);
     }

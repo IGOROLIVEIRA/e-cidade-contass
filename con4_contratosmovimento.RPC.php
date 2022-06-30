@@ -194,10 +194,11 @@ switch ($oParam->exec) {
                 $oAssinatura->setDataReferencia($oDataMovimentacao->getDate());
             }
             $oAcordo = new Acordo($oParam->acordo);
-
+            /*
             if (!$oAssinatura->verificaPeriodoPatrimonial()) {
                 $lAcordoValido = false;
             }
+            */
 
             if ($oAcordo->getNaturezaAcordo($oParam->acordo) == "1") {
                 if ($oAcordo->getObras($oParam->acordo) == null) {

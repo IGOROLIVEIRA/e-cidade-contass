@@ -194,38 +194,59 @@ class cl_acordomovimentacao
       if ($this->ac10_datareferencia == "") {
         $this->ac10_datareferencia = $this->ac10_datamovimento;
       }
+
+      $sql = "insert into acordomovimentacao(
+              ac10_sequencial 
+            ,ac10_acordomovimentacaotipo 
+            ,ac10_acordo 
+            ,ac10_id_usuario 
+            ,ac10_datamovimento 
+            ,ac10_hora 
+            ,ac10_obs
+            ,ac10_datareferencia
+      )
+      values (
+      $this->ac10_sequencial 
+      ,$this->ac10_acordomovimentacaotipo 
+      ,$this->ac10_acordo 
+      ,$this->ac10_id_usuario 
+      ," . ($this->ac10_datamovimento == "null" || $this->ac10_datamovimento == "" ? "null" : "'" . $this->ac10_datamovimento . "'") . " 
+      ,'$this->ac10_hora' 
+      ,'$this->ac10_obs'
+      ,'$this->ac10_datareferencia'
+      )";
+    } else {
+      $sql = "insert into acordomovimentacao(
+              ac10_sequencial 
+            ,ac10_acordomovimentacaotipo 
+            ,ac10_acordo 
+            ,ac10_id_usuario 
+            ,ac10_datamovimento 
+            ,ac10_hora 
+            ,ac10_obs
+      )
+      values (
+      $this->ac10_sequencial 
+      ,$this->ac10_acordomovimentacaotipo 
+      ,$this->ac10_acordo 
+      ,$this->ac10_id_usuario 
+      ," . ($this->ac10_datamovimento == "null" || $this->ac10_datamovimento == "" ? "null" : "'" . $this->ac10_datamovimento . "'") . " 
+      ,'$this->ac10_hora' 
+      ,'$this->ac10_obs'
+      )";
     }
 
-    $sql = "insert into acordomovimentacao(
-                                       ac10_sequencial 
-                                      ,ac10_acordomovimentacaotipo 
-                                      ,ac10_acordo 
-                                      ,ac10_id_usuario 
-                                      ,ac10_datamovimento 
-                                      ,ac10_hora 
-                                      ,ac10_obs
-                                      ,ac10_datareferencia
-                       )
-                values (
-                                $this->ac10_sequencial 
-                               ,$this->ac10_acordomovimentacaotipo 
-                               ,$this->ac10_acordo 
-                               ,$this->ac10_id_usuario 
-                               ," . ($this->ac10_datamovimento == "null" || $this->ac10_datamovimento == "" ? "null" : "'" . $this->ac10_datamovimento . "'") . " 
-                               ,'$this->ac10_hora' 
-                               ,'$this->ac10_obs'
-                               ,'$this->ac10_datareferencia'
-                      )";
+
     $result = db_query($sql);
     if ($result == false) {
       $this->erro_banco = str_replace("\n", "", @pg_last_error());
       if (strpos(strtolower($this->erro_banco), "duplicate key") != 0) {
-        $this->erro_sql   =  $sql . "Acordo Movimentação ($this->ac10_sequencial) nao Incluído. Inclusao Abortada.";
+        $this->erro_sql   =   "Acordo Movimentação ($this->ac10_sequencial) nao Incluído. Inclusao Abortada.";
         $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_banco = "Acordo Movimentação já Cadastrado";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       } else {
-        $this->erro_sql   = "Acordo Movimentação ($this->ac10_sequencial) nao Incluído. Inclusao Abortada.";
+        $this->erro_sql   = $sql . "Acordo Movimentação ($this->ac10_sequencial) nao Incluído. Inclusao Abortada.";
         $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       }
