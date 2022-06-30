@@ -84,8 +84,8 @@ try {
       $oDaoBensDispensaTombamento->e139_justificativa  = $oParametros->sJustificativa;
       $oDaoBensDispensaTombamento->e139_codcla         = $oParametros->iClassificacao;
       $oDaoBensDispensaTombamento->e139_codordem       = $oParametros->iCodigoNota;
-
-      $oDaoBensDispensaTombamento->e139_datadispensa   = date("Y-m-d",db_getsession("DB_datausu"));
+      $dataaquisicao = explode('/',$oParametros->dataaquisicao);
+      $oDaoBensDispensaTombamento->e139_datadispensa   = $dataaquisicao[2].'-'.$dataaquisicao[1].'-'.$dataaquisicao[0];
       $oDaoBensDispensaTombamento->incluir(null);
 
       if ($oDaoBensDispensaTombamento->erro_status == "0") {
@@ -171,8 +171,9 @@ echo $oJson->encode($oRetorno);
  * @return true
  */
 function processarLancamento($iCodigoDocumento, $iCodigoItemEstoque, $iCodigoItemNota, $oParametros) {
-
+ 
   $oDataImplantacao  = new DBDate(date("Y-m-d", db_getsession('DB_datausu')));
+ 
   $oInstituicao      = new Instituicao(db_getsession('DB_instit'));
 
   /**
@@ -230,7 +231,9 @@ function processarLancamento($iCodigoDocumento, $iCodigoItemEstoque, $iCodigoIte
     }
   }
   $aItensEmpenho = $oEmpenhoFinanceiro->getItens();
-
+  $dataaquisicao = explode('/',$oParametros->dataaquisicao);
+  $oDataEstorno  = $dataaquisicao[2].'-'.$dataaquisicao[1].'-'.$dataaquisicao[0];
+  
   $oEventoContabil = new EventoContabil($iCodigoDocumento, db_getsession("DB_anousu"));
 
   $nValorNota = $oParametros->nValorNota;
@@ -256,7 +259,7 @@ function processarLancamento($iCodigoDocumento, $iCodigoItemEstoque, $iCodigoIte
   $oLancamentoAuxiliarEmLiquidacao->setValorTotal($nValorNota);
   $oLancamentoAuxiliarEmLiquidacao->setContaCorrenteDetalhe($oContaCorrenteDetalhe);
 
-  $oEventoContabil->executaLancamento($oLancamentoAuxiliarEmLiquidacao);
-
+  $oEventoContabil->executaLancamento($oLancamentoAuxiliarEmLiquidacao,$oDataEstorno);
+  
   return true;
 }

@@ -107,7 +107,9 @@ switch ($oParam->exec) {
       $oBemLote->setHora(db_hora());
       $oBemLote->setUsuario(db_getsession("DB_id_usuario"));
       $oBemLote->setDescricao($oParam->descr_lote);
-
+ 
+      session_start();
+      $_SESSION['contabilizado'] = $oParam->contabilizado;
 
       if (!$lLoteCadastrado) {
 

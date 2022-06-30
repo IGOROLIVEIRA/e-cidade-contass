@@ -44,6 +44,7 @@ $clrotulo->label("m71_codmatestoque");
 $clrotulo->label("t64_descr");
 $clrotulo->label("t64_class");
 $clrotulo->label("t64_codcla");
+$clrotulo->label("t52_dtaqu");
 
 $iOpcaoAncora = 1;
 $lEstorno     = false;
@@ -191,7 +192,14 @@ if (!empty($oGet->lEstorno) && $oGet->lEstorno == 'true') {
               ?>
             </td>
           </tr>
-
+          <tr>
+          <td title="<?php echo $Tt52_dtaqu ?>"><?= $lEstorno ? "Data do estorno: " : $Lt52_dtaqu; ?></td>
+          <td colspan="6">
+            <?php
+            db_inputdata('t52_dtaqu', @$t52_dtaqu_dia, @$t52_dtaqu_mes, @$t52_dtaqu_ano, true, 'text', $db_opcao, "");
+            ?>
+          </td>
+        </tr>
           <tr>
             <td nowrap title="<?php echo $Te139_justificativa; ?>" colspan="2">
               <fieldset style="margin-top:10px;">
@@ -331,6 +339,15 @@ if (!empty($oGet->lEstorno) && $oGet->lEstorno == 'true') {
       }
 
       /**
+       * data de tombamento
+       */
+      if (empty($('t52_dtaqu').value)) {
+
+      alert(_M(MENSAGENS + 'data_nao_informada'));
+      return false;
+      }
+
+      /**
        * Classificação
        * Só valida se for processamento
        */
@@ -358,6 +375,7 @@ if (!empty($oGet->lEstorno) && $oGet->lEstorno == 'true') {
       oParametros.iClassificacao = $F('t64_codcla');
       oParametros.sDescricaoItem = encodeURIComponent(tagString($F('pc01_descrmater')));
       oParametros.iQuantidadeItem = $F('iQuantidadeItem');
+      oParametros.dataaquisicao = $F('t52_dtaqu');
 
       var oAjax = new Ajax.Request(sRPC, {
         method: "post",
