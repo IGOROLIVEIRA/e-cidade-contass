@@ -383,22 +383,28 @@ switch ($oParam->exec) {
     case "rescindirContrato":
 
         try {
-
             db_inicio_transacao();
-
             $oAcordo = new Acordo($oParam->acordo);
 
             $oRecisao = new AcordoRescisao();
             $oRecisao->setAcordo($oParam->acordo);
             $nValorRescisao = str_replace(',', '.', $oParam->valorrescisao);
             $dtMovimento = implode("-", array_reverse(explode("/", $oParam->dtmovimentacao)));
+            $dataReferencia = implode("-", array_reverse(explode("/", $oParam->datareferencia)));
             $oRecisao->setDataMovimento($dtMovimento);
             $oRecisao->setObservacao($sObservacao);
             $oRecisao->setValorRescisao($nValorRescisao);
 
+            if ($dataReferencia == "") {
+                $oRecisao->setDataReferencia($dtMovimento);
+            } else {
+                $oRecisao->setDataReferencia($dataReferencia);
+            }
+
+            /*
             if (!$oRecisao->verificaPeriodoPatrimonial()) {
                 $lAcordoValido = false;
-            }
+            } */
 
             if ($oRecisao->getValorRescisao() > $oAcordo->getValorContrato()) {
                 throw new Exception("O valor rescindido não pode ser maior que o valor do acordo.");
@@ -415,7 +421,7 @@ switch ($oParam->exec) {
 
             db_fim_transacao(true);
             $oRetorno->status = 2;
-            $oRetorno->erro   = urlencode(str_replace("\\n", "\n", $eExeption->getMessage()));
+            $oRetorno->erro   =  urlencode(str_replace("\\n", "\n", $eExeption->getMessage()));
         }
 
         break;
