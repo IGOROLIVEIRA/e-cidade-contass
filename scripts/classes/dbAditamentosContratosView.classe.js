@@ -1056,13 +1056,13 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
                 var nUnitarioA   = js_strToFloat(oSelecionados[iIndice].aCells[5].getValue());
                 var valorAditadoReal = oItemAdicionar.valor - (nQuantidadeA * nUnitarioA);
                 oItemAdicionar.valoraditado = valorAditadoReal;//OC5304
-                oItemAdicionar.quantiaditada = js_strToFloat(oSelecionados[iIndice].aCells[10].getValue());//OC5304
+                oItemAdicionar.quantiaditada = js_strToFloat(oSelecionados[iIndice].aCells[9].getValue());//OC5304
                 oItemAdicionar.dtexecucaoinicio = oSelecionados[iIndice].aCells[12].getValue();
                 oItemAdicionar.dtexecucaofim = oSelecionados[iIndice].aCells[13].getValue();
                 oItemAdicionar.tipoalteracaoitem = oSelecionados[iIndice].aCells[14].getValue();
                 oItemAdicionar.servico = oItem.servico;
                 oItemAdicionar.controlaServico = oItem.servico;
-                //alert(oItemAdicionar.servico);
+
 
                 var qtanter = oSelecionados[iIndice].aCells[4].getValue().getNumber();
                 var vlranter = oSelecionados[iIndice].aCells[5].getValue().getNumber();
@@ -1197,7 +1197,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         if (!lAditar) {
             return false;
         }
-
+        
         new AjaxRequest(me.sUrlRpc, oParam, function (oRetorno, lErro) {
 
             if (lErro) {
@@ -1209,6 +1209,9 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
         }).setMessage("Aguarde, aditando contrato.")
             .execute();
+
+
+            
     }
 
     /**
@@ -1923,7 +1926,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
  
         aLinha.aCells[8].setContent(js_formatar(nQuantidade * nUnitario, 'f', 2));
-        aLinha.aCells[10].setContent( js_formatar(Math.abs(nValorTotal - valorTotal), 'f', 2));//Valor Aditado OC5304
+        
 
         if (aItensPosicao[iLinha].servico == false && (aItensPosicao[iLinha].controlaquantidade == "t" || aItensPosicao[iLinha].controlaquantidade != "")) {
             aLinha.aCells[9].setContent(js_formatar(Math.abs(nQuantidade - nQuantidadeA), 'f', casas) );//Quantidade Aditada OC5304
@@ -1932,6 +1935,8 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         else if (aItensPosicao[iLinha].servico == true && aItensPosicao[iLinha].controlaquantidade == "t") {
             aLinha.aCells[9].setContent(js_formatar(Math.abs(nQuantidade - nQuantidadeA), 'f', casas) );//Quantidade Aditada OC5304
         }
+
+        aLinha.aCells[10].setContent( js_formatar(Math.abs(nValorTotal - valorTotal), 'f', 2));//Valor Aditado OC5304
 
         me.salvarInfoDotacoes(iLinha);
     }
