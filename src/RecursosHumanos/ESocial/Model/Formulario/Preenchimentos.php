@@ -605,7 +605,12 @@ class Preenchimentos
         rh51_basefo as vlrRemunOE,
         h13_categoria as codCateg,
         'LOTA1' as codLotacao,
-        rh01_regist as matricula
+        rh01_regist as matricula,
+        case when rh02_ocorre = 2 then 2
+        when rh02_ocorre = 3 then 3
+        when rh02_ocorre = 4 then 4
+        else 1
+        end as grauExp
     from
         rhpessoal
     left join rhpessoalmov on
@@ -673,7 +678,8 @@ class Preenchimentos
         and rescisao.r59_regime = rhregime.rh30_regime
         and rescisao.r59_causa = rhpesrescisao.rh05_causa
         and rescisao.r59_caub = rhpesrescisao.rh05_caub::char(2)
-    where 1=1";
+    where 1=1 and rh01_regist = 288771";
+
         if ($matricula != null) {
             $sql .= "and rh01_regist in ($matricula) ";
         }

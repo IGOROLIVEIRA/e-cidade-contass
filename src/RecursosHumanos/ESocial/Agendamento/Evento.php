@@ -119,7 +119,7 @@ class Evento
         if (pg_num_rows($rs) > 0 && $this->modo === 'INC') {
             $md5Evento = \db_utils::fieldsMemory($rs, 0)->rh213_md5;
             $evtSituaccao = \db_utils::fieldsMemory($rs, 0)->rh213_situacao;
-            if ($md5Evento == $this->md5 && $evtSituaccao == \cl_esocialenvio::SITUACAO_ENVIADO) {
+            if ($md5Evento == $this->md5) {
                 throw new \Exception("Já existe um envio do evento S-{$this->tipoEvento} com as mesmas informações.");
             }
         }
