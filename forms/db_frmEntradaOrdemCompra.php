@@ -174,6 +174,20 @@ if (count($aParametrosEmpenho) > 0) {
             db_select('e11_tipodocumentofiscal', $aItens, true, 1, "onchange=js_abreNotaExtra()");
             ?>
             <a href='#' onclick='js_abreNotaExtra()' style='display: none' id='dadosnotacomplementar'>Outros Dados</a> </td>
+
+            <!-- Oc17910 -->
+            <td>
+                <div class='cgm_emitente'><?php db_ancora("<strong><u>CGM Emitente:&nbsp;</u></strong>", "js_pesquisaz01_numcgm(true);", ""); ?><div>
+            </td>
+            <td>
+                <div class='cgm_emitente'>
+                    <?php
+                        db_input('z01_numcgm', 10, "", true, 'text', "", " onchange='js_pesquisaz01_numcgm(false);'", "", "", "");
+                        db_input('descricao_emitente', 36, "", true, 'text', 3, '');
+                    ?>
+                </div>
+            </td>
+            <!-- .end Oc19710 -->
         </tr>
 
       <?php
