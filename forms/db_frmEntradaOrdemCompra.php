@@ -174,7 +174,8 @@ if (count($aParametrosEmpenho) > 0) {
             db_select('e11_tipodocumentofiscal', $aItens, true, 1, "onchange=js_abreNotaExtra()");
             ?>
             <a href='#' onclick='js_abreNotaExtra()' style='display: none' id='dadosnotacomplementar'>Outros Dados</a> </td>
-
+            <td></td>
+            <td></td>
             <!-- Oc17910 -->
             <td>
                 <div class='cgm_emitente'><?php db_ancora("<strong><u>CGM Emitente:&nbsp;</u></strong>", "js_pesquisaz01_numcgm(true);", ""); ?><div>
