@@ -2014,6 +2014,14 @@ class empenho {
       return false;
     }
   }
+
+    function gerarOrdemCompraControleEmitente($iNumNota, $nTotal,$aItens,$lLiquidar=false,$dDataNota = null, $sHistorico = null,
+    $lIniciaTransacao=true, $oInfoNota = null, $iNfe = null, $sChaveAcesso = null, $sSerie = null,
+    $iCompDesp = '', $iContaPagadora = null, $iCgmEmitente = 0, $lVerificaContaPagadora = true) {
+        return $this->gerarOrdemCompra($iNumNota, $nTotal,$aItens,$lLiquidar,$dDataNota, $sHistorico,
+        $lIniciaTransacao, $oInfoNota , $iNfe, $sChaveAcesso , $sSerie,
+        $iCompDesp, $iContaPagadora, $lVerificaContaPagadora, $iCgmEmitente);
+    }
   /**
    *  funcao para para gerar OC's ,
    *  @param integer $iNumNota numero da nota, float $nTotali valor total da nota,mixed $aItens [,boolean $lLiquidar,date $dDataNota]
@@ -2021,7 +2029,7 @@ class empenho {
    */
   function gerarOrdemCompra($iNumNota, $nTotal,$aItens,$lLiquidar=false,$dDataNota = null, $sHistorico = null,
                             $lIniciaTransacao=true, $oInfoNota = null, $iNfe = null, $sChaveAcesso = null, $sSerie = null,
-                            $iCompDesp = '', $iContaPagadora = null, $lVerificaContaPagadora = true){
+                            $iCompDesp = '', $iContaPagadora = null, $lVerificaContaPagadora = true, $iCgmEmitente = 0){
     $this->lSqlErro  = false;
     $this->sErroMsg  = '';
     $this->iPagOrdem = '';
@@ -2193,7 +2201,9 @@ class empenho {
       $objEmpNota->e69_notafiscaleletronica = $iNfe;
       $objEmpNota->e69_chaveacesso          = $sChaveAcesso;
       $objEmpNota->e69_nfserie              = $sSerie;
+      $objEmpNota->e69_cgmemitente          = $iCgmEmitente;
       $objEmpNota->incluir(null);
+
 
       if ($objEmpNota->erro_status == 0){
 
