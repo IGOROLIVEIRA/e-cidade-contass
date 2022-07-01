@@ -115,7 +115,7 @@ function js_carregarValores(oRetorno) {
 
 function js_carregarValoresSuplementados(oRetorno) {
     var valores = JSON.parse(oRetorno.responseText.urlDecode());
-    console.log(valores);
+
     valores.fonte.forEach(function(fonte, b) {
         if (document.form1['aFonte[' + fonte.fonte + '][suplementado]']) {
             document.form1['aFonte[' + fonte.fonte + '][suplementado]'].value = fonte.valor;
@@ -219,7 +219,6 @@ function js_CalculaDisponibilidade(fonte) {
 }
 
 function validaForm(form) {
-    console.log(form);
     return true;
 }
 </script>

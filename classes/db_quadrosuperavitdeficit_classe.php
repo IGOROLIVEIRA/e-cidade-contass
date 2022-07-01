@@ -74,6 +74,7 @@ class cl_quadrosuperavitdeficit
             $this->erro_status = "0";
             return false;
         }
+
         if ($this->c241_valor == null) {
             $this->erro_sql = " Campo Valor não informado.";
             $this->erro_campo = "c241_valor";
