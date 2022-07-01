@@ -53,10 +53,6 @@ class cl_acordomovimentacao
   var $ac10_datamovimento = null;
   var $ac10_hora = null;
   var $ac10_obs = null;
-  var $ac10_datareferencia_dia = null;
-  var $ac10_datareferencia_mes = null;
-  var $ac10_datareferencia_ano = null;
-  var $ac10_datareferencia = null;
   // cria propriedade com as variaveis do arquivo 
   var $campos = "
                  ac10_sequencial = int4 = Sequencial 
@@ -66,7 +62,6 @@ class cl_acordomovimentacao
                  ac10_datamovimento = date = Data Movimentação 
                  ac10_hora = char(5) = Hora 
                  ac10_obs = text = Observação
-                 ac10_datareferencia = date = Data Referencia  
                  ";
   //funcao construtor da classe 
   function cl_acordomovimentacao()
@@ -190,51 +185,25 @@ class cl_acordomovimentacao
       return false;
     }
 
-    if ($this->ac10_acordomovimentacaotipo == 6) {
-      if ($this->ac10_datareferencia == "") {
-        $this->ac10_datareferencia = $this->ac10_datamovimento;
-      }
+    $sql = "insert into acordomovimentacao(
+              ac10_sequencial 
+            ,ac10_acordomovimentacaotipo 
+            ,ac10_acordo 
+            ,ac10_id_usuario 
+            ,ac10_datamovimento 
+            ,ac10_hora 
+            ,ac10_obs
+      )
+      values (
+      $this->ac10_sequencial 
+      ,$this->ac10_acordomovimentacaotipo 
+      ,$this->ac10_acordo 
+      ,$this->ac10_id_usuario 
+      ," . ($this->ac10_datamovimento == "null" || $this->ac10_datamovimento == "" ? "null" : "'" . $this->ac10_datamovimento . "'") . " 
+      ,'$this->ac10_hora' 
+      ,'$this->ac10_obs'
+      )";
 
-      $sql = "insert into acordomovimentacao(
-              ac10_sequencial 
-            ,ac10_acordomovimentacaotipo 
-            ,ac10_acordo 
-            ,ac10_id_usuario 
-            ,ac10_datamovimento 
-            ,ac10_hora 
-            ,ac10_obs
-            ,ac10_datareferencia
-      )
-      values (
-      $this->ac10_sequencial 
-      ,$this->ac10_acordomovimentacaotipo 
-      ,$this->ac10_acordo 
-      ,$this->ac10_id_usuario 
-      ," . ($this->ac10_datamovimento == "null" || $this->ac10_datamovimento == "" ? "null" : "'" . $this->ac10_datamovimento . "'") . " 
-      ,'$this->ac10_hora' 
-      ,'$this->ac10_obs'
-      ,'$this->ac10_datareferencia'
-      )";
-    } else {
-      $sql = "insert into acordomovimentacao(
-              ac10_sequencial 
-            ,ac10_acordomovimentacaotipo 
-            ,ac10_acordo 
-            ,ac10_id_usuario 
-            ,ac10_datamovimento 
-            ,ac10_hora 
-            ,ac10_obs
-      )
-      values (
-      $this->ac10_sequencial 
-      ,$this->ac10_acordomovimentacaotipo 
-      ,$this->ac10_acordo 
-      ,$this->ac10_id_usuario 
-      ," . ($this->ac10_datamovimento == "null" || $this->ac10_datamovimento == "" ? "null" : "'" . $this->ac10_datamovimento . "'") . " 
-      ,'$this->ac10_hora' 
-      ,'$this->ac10_obs'
-      )";
-    }
 
 
     $result = db_query($sql);

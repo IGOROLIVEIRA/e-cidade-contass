@@ -358,13 +358,13 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
 
     if (dataInserida <= dataPatrimonial && $('ac10_datareferencia').value == '') {
       document.getElementById("trdatareferencia").style.display = 'contents';
-      alert("O períodosss já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
+      alert("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
       return;
     }
 
     if ($F('ac10_datareferencia').value != "") {
       if (dataReferencia <= dataPatrimonial) {
-        alert("O períodosis já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
+        alert("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
         return;
       }
 

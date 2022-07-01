@@ -329,7 +329,6 @@ abstract class AcordoMovimentacao
       $oDaoAcordoMovimentacao->ac10_id_usuario        = db_getsession('DB_id_usuario');
       $oDaoAcordoMovimentacao->ac10_datamovimento     = empty($this->dtMovimento) ? date("Y-m-d", db_getsession("DB_datausu")) : $this->dtMovimento;
       $oDaoAcordoMovimentacao->ac10_hora              = db_hora();
-      $oDaoAcordoMovimentacao->ac10_datareferencia = $this->datareferencia;
 
       $oDaoAcordoMovimentacao->incluir(null);
       if ($oDaoAcordoMovimentacao->erro_status == 0) {

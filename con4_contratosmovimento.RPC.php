@@ -397,9 +397,7 @@ switch ($oParam->exec) {
             $oRecisao->setValorRescisao($nValorRescisao);
 
             if ($dataReferencia == "") {
-                $oRecisao->setDataReferencia($dtMovimento);
-            } else {
-                $oRecisao->setDataReferencia($dataReferencia);
+                $dataReferencia =  $dtMovimento;
             }
 
             /*
@@ -412,6 +410,7 @@ switch ($oParam->exec) {
             }
 
             $oRecisao->save();
+            db_query("UPDATE acordo SET ac16_datareferenciarescisao = '$dataReferencia'  WHERE ac16_sequencial = $oParam->acordo");
 
             $oAcordoLancamentoContabil = new AcordoLancamentoContabil();
             $sHistorico = "Valor referente a rescisão do contrato com o código: {$oAcordo->getCodigoAcordo()}.";

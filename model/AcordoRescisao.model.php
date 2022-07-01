@@ -49,12 +49,6 @@ class AcordoRescisao extends AcordoMovimentacao
    */
   protected $dtMovimento         = '';
 
-  /**
-   * Data de Referencia
-   *
-   * @var string
-   */
-  protected $datareferencia         = '';
 
 
   /**
@@ -104,16 +98,6 @@ class AcordoRescisao extends AcordoMovimentacao
     $this->dtMovimento = $dtMovimento;
   }
 
-  /**
-   * Seta a data de referencia
-   *
-   * @param string $datareferencia
-   */
-  public function setDataReferencia($datareferencia = '')
-  {
-
-    $this->datareferencia = $datareferencia;
-  }
 
   /**
    * @param float $nValorRescisao
