@@ -367,7 +367,7 @@ switch ($objJson->method) {
     /**
      * Pode ser que o método gerarOrdemCompra retorne false ou um JSON
      */
-    $oRetorno = $objEmpenho->gerarOrdemCompraControleEmitente(
+    $oRetorno = $objEmpenho->gerarOrdemCompra(
       $objJson->e69_nota,
       $objJson->valorTotal,
       $objJson->notas,
@@ -381,6 +381,7 @@ switch ($objJson->method) {
       $objJson->e69_nfserie,
       $objJson->e50_compdesp,
       $objJson->e83_codtipo,
+      true,
       $objJson->iCgmEmitente
     );
 

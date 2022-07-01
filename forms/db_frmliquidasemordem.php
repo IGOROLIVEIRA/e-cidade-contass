@@ -152,8 +152,8 @@ if (USE_PCASP) {
                 <tr>
                     <!-- Oc17910 -->
                     <td><b>NF Matriz/Filial: </b></td>
-                    <td colspan="2">
-                        <select name="nf_matriz_filial" id="nf_matriz_filial" style='width:315px'>
+                    <td colspan="3">
+                        <select name="nf_matriz_filial" id="nf_matriz_filial" style='width:100%'>
                             <option value='s'>Sim</option>
                             <option value='n' selected>Não</option>
                         </select>
@@ -1075,7 +1075,7 @@ if (USE_PCASP) {
       oInfoNota.sSerieFiscal         = sSerieFiscal;
 
       oParam.oInfoNota = oInfoNota;
-        console.log(oParam);
+
       url      = 'emp4_liquidacao004.php';
       oAjax    = new Ajax.Request(
         url,

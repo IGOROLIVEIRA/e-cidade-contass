@@ -281,7 +281,7 @@ if (count($aParametrosEmpenho) > 0) {
             <strong>Processo Administrativo:</strong>
         </td>
         <td>
-            <?php db_input('e04_numeroprocesso', 10, '', true, 'text', $db_opcao); ?>
+            <?php db_input('e04_numeroprocesso', 50, '', true, 'text', $db_opcao); ?>
         </td>
         <!-- .end Oc1790 -->
 
