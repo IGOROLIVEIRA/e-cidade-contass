@@ -184,14 +184,11 @@ class EventoS2200 extends EventoBase
                 $oDadosAPI->evtAdmissao->vinculo->infoContrato->remuneracao = null;
             }
 
-            if (!empty($oDados->tpcontr)) {
+            if ($oDados->tpregtrab != 2) {
                 $oDadosAPI->evtAdmissao->vinculo->infoContrato->duracao->tpContr = $oDados->tpcontr;
                 //$oDadosAPI->evtAdmissao->vinculo->infoContrato->duracao->dtTerm = empty($oDados->dtterm) ? null : $oDados->dtterm;
-                $oDadosAPI->evtAdmissao->vinculo->infoContrato->duracao->clauAssec = empty($oDados->clauassec) ? null : $oDados->clauassec;
-                $oDadosAPI->evtAdmissao->vinculo->infoContrato->duracao->objDet = empty($oDados->objdet) ? null : $oDados->objdet;
-            } else {
-                //unset($oDadosAPI->evtAdmissao->vinculo->infoContrato->duracao);
-                $oDadosAPI->evtAdmissao->vinculo->infoContrato->duracao  = null;
+                //$oDadosAPI->evtAdmissao->vinculo->infoContrato->duracao->clauAssec = empty($oDados->clauassec) ? null : $oDados->clauassec;
+                //$oDadosAPI->evtAdmissao->vinculo->infoContrato->duracao->objDet = empty($oDados->objdet) ? null : $oDados->objdet;
             }
 
             if (!empty($oDados->tpinsc_localtrabgeral)) {

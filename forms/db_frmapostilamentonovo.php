@@ -227,6 +227,7 @@ $clrotulo->label("ac16_resumoobjeto");
     var opcao = document.form1.controle.value;
     var elemento = "";
     var elemento_dotacao = "";
+    var dotacaoIncluida = false;
 
     function pesquisadotacao() {
 
@@ -507,6 +508,7 @@ $clrotulo->label("ac16_resumoobjeto");
             oDadosHint.idLinha = `oGridItensrowoGridItens${iSeq}`;
             oDadosHint.sText = sTextEvent;
             aDadosHintGrid.push(oDadosHint);
+
 
             if (oItem.dotacoesoriginal == undefined) {
 
@@ -818,6 +820,7 @@ $clrotulo->label("ac16_resumoobjeto");
         oTxtDotacao.setValue("");
         oTxtSaldoDotacao.setValue("");
         oTxtValorDotacao.setValue("0,00");
+        dotacaoIncluida = true;
         preencheGridDotacoes(iLinha);
     }
 
@@ -1057,6 +1060,7 @@ $clrotulo->label("ac16_resumoobjeto");
 
         });
 
+        dotacaoIncluida = true;
         return alert('Dotação aplicada aos itens selecionados');
 
 
@@ -1101,7 +1105,7 @@ $clrotulo->label("ac16_resumoobjeto");
         var oApostila = new Object();
         oApostila.dataapostila = $("si03_dataapostila").value;
         oApostila.tipoapostila = $("si03_tipoapostila").value;
-        oApostila.descrapostila = encodeURIComponent(tagString($("si03_descrapostila").value));
+        oApostila.descrapostila = $("si03_descrapostila").value;
         oApostila.tipoalteracaoapostila = $("si03_tipoalteracaoapostila").value;
         oApostila.numapostilamento = $("si03_numapostilamento").value;
 
@@ -1137,6 +1141,8 @@ $clrotulo->label("ac16_resumoobjeto");
             oItemAdicionar.valorapostilado = valorApostiladoReal;
             oItemAdicionar.dtexecucaoinicio = oItem.periodoini;
             oItemAdicionar.dtexecucaofim = oItem.periodofim;
+
+
 
             if (oSelecionados[iIndice] != undefined) {
                 oItemAdicionar.quantidade = js_strToFloat(oSelecionados[iIndice].aCells[5].getValue());
@@ -1182,6 +1188,12 @@ $clrotulo->label("ac16_resumoobjeto");
 
             oParam.aItens.push(oItemAdicionar);
         });
+
+        if (dotacaoIncluida == false && $("si03_tipoapostila").value == "03") {
+            return alert("Usuário: É necessário a inserção de dotação em no mínimo um item.");
+
+        }
+
 
         if (!lAditar) {
             return false;
