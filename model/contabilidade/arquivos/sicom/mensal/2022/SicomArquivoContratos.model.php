@@ -565,7 +565,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             $clcontratos10->si83_codunidadesub = $sCodUnidade;
             $clcontratos10->si83_nrocontrato = $oDados10->ac16_numeroacordo;
             $clcontratos10->si83_exerciciocontrato = $oDados10->ac16_anousu;
-            $clcontratos10->si83_dataassinatura = $oDados10->ac16_datareferencia;
+            $clcontratos10->si83_dataassinatura = $oDados10->ac16_dataassinatura;
             $clcontratos10->si83_contdeclicitacao = $oDados10->contdeclicitacao;
             $clcontratos10->si83_codorgaoresp = '';
             if ($oDados10->contdeclicitacao == 1 || $oDados10->contdeclicitacao == 8) {
@@ -1213,7 +1213,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                 $clcontratos20->si87_nrocontrato = $oDados20->ac16_numero;
                 $clcontratos20->si87_dtassinaturacontoriginal = $oDados20->ac16_dataassinatura;
                 $clcontratos20->si87_nroseqtermoaditivo = $oDados20->ac26_numeroaditamento;
-                $clcontratos20->si87_dtassinaturatermoaditivo = $oDados20->ac35_datareferencia;
+                $clcontratos20->si87_dtassinaturatermoaditivo = $oDados20->ac35_dataassinaturatermoaditivo;
                 $clcontratos20->si87_tipotermoaditivo = $this->getTipoTermoAditivo($oAcordoPosicao);
                 $clcontratos20->si87_dscalteracao = substr($this->removeCaracteres($oDados20->ac35_descricaoalteracao), 0, 250);
                 $oDataTermino = new DBDate($oAcordoPosicao->getVigenciaFinal()); //317
@@ -1500,7 +1500,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                             $oDados21->ac16_numero = $oDados20->ac16_numero;
                             $oDados21->ac16_dataassinatura = $oDados20->ac16_dataassinatura;
                             $oDados21->ac26_numeroaditamento = $oDados20->ac26_numeroaditamento;
-                            $oDados21->ac35_dataassinaturatermoaditivo = $oDados20->ac35_datareferencia;
+                            $oDados21->ac35_dataassinaturatermoaditivo = $oDados20->ac35_dataassinaturatermoaditivo;
                             $oDados21->si87_tipotermoaditivo = $this->getTipoTermoAditivo($oAcordoPosicao);
                             $oDados21->si87_dscalteracao = substr($this->removeCaracteres($oDados20->ac35_descricaoalteracao), 0, 250);
 
@@ -1583,7 +1583,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                         $clcontratos20->si87_nrocontrato = $dados->ac16_numero;
                         $clcontratos20->si87_dtassinaturacontoriginal = $dados->ac16_dataassinatura;
                         $clcontratos20->si87_nroseqtermoaditivo = $dados->ac26_numeroaditamento;
-                        $clcontratos20->si87_dtassinaturatermoaditivo =  $dados->ac35_datareferencia;
+                        $clcontratos20->si87_dtassinaturatermoaditivo =  $dados->ac35_dataassinaturatermoaditivo;
                         $clcontratos20->si87_tipotermoaditivo = $dados->si87_tipotermoaditivo;
                         $clcontratos20->si87_dscalteracao = $dados->si87_dscalteracao;
                         $clcontratos20->si87_novadatatermino = $dados->si87_novadatatermino;
@@ -1694,7 +1694,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             $clcontratos30->si89_dtassinaturacontoriginal = $oDados30->si03_dataassinacontrato;
             $clcontratos30->si89_tipoapostila = $oDados30->si03_tipoapostila;
             $clcontratos30->si89_nroseqapostila = $oDados30->si03_numapostilamento;
-            $clcontratos30->si89_dataapostila = $oDados30->si03_datareferencia;
+            $clcontratos30->si89_dataapostila = $oDados30->si03_dataapostila;
             $clcontratos30->si89_tipoalteracaoapostila = $oDados30->tipoalteracaoapostila;
             $clcontratos30->si89_dscalteracao = substr($this->removeCaracteres($oDados30->si03_descrapostila), 0, 250);
             $clcontratos30->si89_valorapostila = $oDados30->si03_valorapostila;
@@ -1751,7 +1751,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             $clcontratos40->si91_codunidadesub              = $sCodUnidadeSub;
             $clcontratos40->si91_nrocontrato                = $oDados40->ac16_numeroacordo;
             $clcontratos40->si91_dtassinaturacontoriginal   = $oDados40->ac16_dataassinatura;
-            $clcontratos40->si91_datarescisao               = $oDados40->ac16_datareferenciarescisao;
+            $clcontratos40->si91_datarescisao               = $oDados40->ac16_datarescisao;
             $clcontratos40->si91_valorcancelamentocontrato  = $oDados40->ac16_valorrescisao;
             $clcontratos40->si91_mes                        = date('m', strtotime($this->sDataFinal));
             $clcontratos40->si91_instit                     = $oDados40->ac16_instit;
