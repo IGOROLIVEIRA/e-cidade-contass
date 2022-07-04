@@ -325,7 +325,7 @@ $rotulo->label("z01_cgccpf");
             m52_numemp,
             sum(m52_valor) as somaordens
             ";
-            $campos = " distinct " . $campos;
+            $campos = " distinct on (empempenho.e60_numemp, empempenho.e60_codemp)" . $campos;
             $dbwhere = "";
             $dbwhere = " group by m51_codordem,m52_numemp,e60_vlremp,empempenho.e60_numemp,empempaut.e61_autori,acordo.ac16_numeroacordo,contratos.si172_nrocontrato,acordo.ac16_anousu,acordo.ac16_sequencial,contratos.si172_datafinalvigencia,aditivoscontratos.si174_novadatatermino,cgm.z01_nome,cgm.z01_cgccpf,convconvenios.c206_objetoconvenio   having e60_vlremp > (case when sum(m52_valor) is null then 0 else sum(m52_valor) end) - (case when sum(m36_vrlanu) is null then 0 else sum(m36_vrlanu) end) ";
             $dbwhere .= " and e60_instit = " . db_getsession("DB_instit") . " order by e60_numemp desc";
@@ -335,6 +335,7 @@ $rotulo->label("z01_cgccpf");
             $sql = $clempempenho->sql_query(null, $campos, null, $whereRelCompra);
           }
 
+          echo $sql;
           $result = $clempempenho->sql_record($sql);
         ?>
 
