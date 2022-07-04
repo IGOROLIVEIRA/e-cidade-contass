@@ -947,19 +947,29 @@ class Bem {
       /**
        * Só executa se bem for uma inclusão manual ($lRealizarEscrituracao == false)
        */
-    	if ($lIncorporacaoBem == true && !$lRealizarEscrituracao && USE_PCASP && $lIntegracaoFinanceiro) {
+      require_once "classes/db_parametrointegracaopatrimonial_classe.php";
+      $clBens = new cl_parametrointegracaopatrimonial;
+      $rsBem = $clBens->sql_record($clBens->sql_query_file(null, '*', null, " c01_modulo = 1"));     
+      $oBemIntegracao= db_utils::fieldsMemory($rsBem, 0);
+      $integracao = $oBemIntegracao->c01_modulo;
+      
+      if($_SESSION['contabilizado'] == 'nao' && $integracao){ 
+        if ($lIncorporacaoBem == true && !$lRealizarEscrituracao && USE_PCASP && $lIntegracaoFinanceiro) {
 
-        $oLancamentoauxiliarBem = new LancamentoAuxiliarBem();
-        $oEventoContabil        = new EventoContabil(700, db_getsession('DB_anousu'));
-        $oLancamentoauxiliarBem->setValorTotal($this->getValorAquisicao());
-        $oLancamentoauxiliarBem->setBem($this);
-        $oLancamentoauxiliarBem->setObservacaoHistorico("{$this->getObservacao()} | Código do Bem: {$this->iCodigoBem}.");
+          $oLancamentoauxiliarBem = new LancamentoAuxiliarBem();
+          $oEventoContabil        = new EventoContabil(700, db_getsession('DB_anousu'));
+          
+          $oLancamentoauxiliarBem->setValorTotal($this->getValorAquisicao());
+          $oLancamentoauxiliarBem->setBem($this);
+          $oLancamentoauxiliarBem->setObservacaoHistorico("{$this->getObservacao()} | Código do Bem: {$this->iCodigoBem}.");
 
-        $aLancamentos      = $oEventoContabil->getEventoContabilLancamento();
-        $oLancamentoauxiliarBem->setHistorico($aLancamentos[0]->getHistorico());
-        $oEventoContabil->executaLancamento($oLancamentoauxiliarBem);
-    	}
-    }
+          $aLancamentos      = $oEventoContabil->getEventoContabilLancamento();
+          $oLancamentoauxiliarBem->setHistorico($aLancamentos[0]->getHistorico());
+          $oEventoContabil->executaLancamento($oLancamentoauxiliarBem,$this->dtAquisicao);
+        }
+      }
+      unset($_SESSION['contabilizado']);
+  }
 
   }
 

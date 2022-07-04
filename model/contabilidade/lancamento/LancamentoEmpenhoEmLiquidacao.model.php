@@ -79,6 +79,18 @@ class LancamentoEmpenhoEmLiquidacao {
         $oLancamentoAuxiliarEmLiquidacao->setSaida(true);
       }
     }
+  if ($iCodigoDocumentoExecutar == 208) {
+     
+        require_once "classes/db_bens_classe.php";
+        $clBens = new cl_bens;
+        $rsBem = $clBens->sql_record($clBens->sql_query_file(null, 't52_dtaqu', null, " t52_bem in (select e136_bens from empnota 
+										  join empnotaitem on e72_codnota = e69_codnota
+										  join bensempnotaitem on e72_sequencial = e136_empnotaitem	
+										  where e69_codnota = {$oStdDadosLancamento->iCodigoNotaLiquidacao})"));
+        $bemInclusao = db_utils::fieldsMemory($rsBem, 0);
+        $dataInclusao = $bemInclusao->t52_dtaqu;   
+       
+    }
 
     $oLancamentoAuxiliarEmLiquidacao->setContaCorrenteDetalhe($oContaCorrenteDetalhe);
     $oLancamentoAuxiliarEmLiquidacao->setObservacaoHistorico($oStdDadosLancamento->sObservacaoHistorico);
@@ -88,6 +100,11 @@ class LancamentoEmpenhoEmLiquidacao {
     $oLancamentoAuxiliarEmLiquidacao->setCodigoDotacao($oStdDadosLancamento->iCodigoDotacao);
     $oLancamentoAuxiliarEmLiquidacao->setCodigoNotaLiquidacao($oStdDadosLancamento->iCodigoNotaLiquidacao);
     $oLancamentoAuxiliarEmLiquidacao->setValorTotal($oStdDadosLancamento->nValorTotal);
+
+    if ($iCodigoDocumentoExecutar == 208) {
+        return $oEventoContabil->executaLancamento($oLancamentoAuxiliarEmLiquidacao, $dataInclusao);
+    }
+
     return $oEventoContabil->executaLancamento($oLancamentoAuxiliarEmLiquidacao);
   }
 
@@ -159,3 +176,5 @@ class LancamentoEmpenhoEmLiquidacao {
   }
 
 }
+?>
+
