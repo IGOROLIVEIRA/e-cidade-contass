@@ -27,7 +27,7 @@ for($rRubricas = 0; $rRubricas < pg_num_rows($rsRubricasResposta); $rRubricas ++
         left join avaliacaoresposta on db106_avaliacaoperguntaopcao = db104_sequencial
         left join avaliacaogrupoperguntaresposta ON db106_sequencial = db108_avaliacaoresposta
         left join avaliacaogruporesposta ON db107_sequencial = db108_avaliacaogruporesposta
-        where db101_sequencial = 3000016 ORDER BY db102_sequencial";
+        where db101_sequencial = 3000016 and db103_avaliacaogrupopergunta = 3000217  ORDER BY db102_sequencial";
     $rsAvaliacaoGrupoPergunta = pg_query($sql);
     //GRUPO
     for($AvGrup = 0; $AvGrup < pg_num_rows($rsAvaliacaoGrupoPergunta); $AvGrup ++){
@@ -38,6 +38,7 @@ for($rRubricas = 0; $rRubricas < pg_num_rows($rsRubricasResposta); $rRubricas ++
         $sqlPerguntas = "SELECT *
                 FROM avaliacaopergunta
                 WHERE db103_avaliacaogrupopergunta = $oDadosAvaliacaoGrupoPergunta->db102_sequencial
+                AND db103_sequencial IN (3000945,3000944,3000946,3000947,3000949,4000361,4000362)
                 ORDER BY db103_sequencial";
         $rsAvaliacaoPergunta = pg_query($sqlPerguntas);
         for($Avpergunta = 0; $Avpergunta < pg_num_rows($rsAvaliacaoPergunta); $Avpergunta ++){
