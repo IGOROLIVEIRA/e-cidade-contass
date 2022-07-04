@@ -13,7 +13,6 @@ require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2022/GerarCONT
 require_once("model/Acordo.model.php");
 require_once("model/AcordoPosicao.model.php");
 require_once("model/AcordoRescisao.model.php");
-
 //echo '<pre>';ini_set("display_errors", 1);
 /**
  * Contratos Sicom Acompanhamento Mensal
@@ -467,10 +466,9 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                 LEFT JOIN cflicita c2 ON l2.l20_codtipocom = c2.l03_codigo
                 LEFT JOIN pctipocompra p2 ON p2.pc50_codcom = c2.l03_codcom
                 INNER JOIN acordogrupo ON ac02_sequencial = ac16_acordogrupo
-                WHERE ac16_dataassinatura <= '{$this->sDataFinal}'
-                AND ac16_dataassinatura >= '{$this->sDataInicial}'
+                WHERE ac16_datareferencia <= '{$this->sDataFinal}'
+                AND ac16_datareferencia >= '{$this->sDataInicial}'
                 AND ac16_instit = " . db_getsession("DB_instit");
-
         $rsResult10 = db_query($sSql);
 
         db_inicio_transacao();
@@ -1162,7 +1160,8 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
           AND ac16_instit = " . db_getsession("DB_instit") . " ORDER BY ac26_sequencial ";
 
         $rsResult20 = db_query($sSql);
-        //echo $sSql; db_criatabela($rsResult20);
+        //echo $sSql;
+        //db_criatabela($rsResult20);
         $oDadosAgrupados20 = array();
         for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) {
 
@@ -1647,7 +1646,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
        si03_numcontratoanosanteriores,
        si03_acordo,
        si03_acordoposicao,
-       si03_datareferencia
+       si03_datareferencia,
        manutac_codunidsubanterior
         FROM apostilamento
         INNER JOIN acordo ON si03_acordo=ac16_sequencial
@@ -1656,7 +1655,6 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
         AND si03_datareferencia >= '{$this->sDataInicial}'
         AND si03_instit = " . db_getsession("DB_instit");
         $rsResult30 = db_query($sSql);
-
         for ($iCont30 = 0; $iCont30 < pg_num_rows($rsResult30); $iCont30++) {
 
             $oDados30 = db_utils::fieldsMemory($rsResult30, $iCont30);
