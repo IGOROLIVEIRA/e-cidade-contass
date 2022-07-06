@@ -130,7 +130,7 @@ try {
 
                 if ($dateassinatura != "" && $oParam->oApostila->datareferencia == "") {
                     if ($c99_datapat != "" && $dateassinatura <= $c99_datapat) {
-                        throw new Exception(' O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.');
+                        throw new Exception(' O período já foi encerrado para envio do SICOM. Preencha o campo Data de Referência com uma data no mês subsequente.');
                     }
                 }
             }
