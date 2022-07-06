@@ -1929,14 +1929,14 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         
 
         if (aItensPosicao[iLinha].servico == false && (aItensPosicao[iLinha].controlaquantidade == "t" || aItensPosicao[iLinha].controlaquantidade != "")) {
-            aLinha.aCells[9].setContent(js_formatar(Math.abs(nQuantidade - nQuantidadeA), 'f', casas) );//Quantidade Aditada OC5304
+            aLinha.aCells[9].setContent(js_formatar((nQuantidade - nQuantidadeA), 'f', casas) );//Quantidade Aditada OC5304
 
         }
         else if (aItensPosicao[iLinha].servico == true && aItensPosicao[iLinha].controlaquantidade == "t") {
-            aLinha.aCells[9].setContent(js_formatar(Math.abs(nQuantidade - nQuantidadeA), 'f', casas) );//Quantidade Aditada OC5304
+            aLinha.aCells[9].setContent(js_formatar((nQuantidade - nQuantidadeA), 'f', casas) );//Quantidade Aditada OC5304
         }
 
-        aLinha.aCells[10].setContent( js_formatar(Math.abs(nValorTotal - valorTotal), 'f', 2));//Valor Aditado OC5304
+        aLinha.aCells[10].setContent( js_formatar((nValorTotal - valorTotal), 'f', 2));//Valor Aditado OC5304
 
         me.salvarInfoDotacoes(iLinha);
     }
