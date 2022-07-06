@@ -11,7 +11,7 @@ LEFT JOIN avaliacaoperguntaopcao ON db104_avaliacaopergunta = db103_sequencial
 LEFT JOIN avaliacaoresposta ON db106_avaliacaoperguntaopcao = db104_sequencial
 LEFT JOIN avaliacaogrupoperguntaresposta ON db106_sequencial = db108_avaliacaoresposta
 LEFT JOIN avaliacaogruporesposta ON db107_sequencial = db108_avaliacaogruporesposta
-WHERE db103_sequencial = 3000944 order by db106_sequencial";
+WHERE db103_sequencial in (3000944,4000132) order by db106_sequencial";
 $rsRubricasResposta = pg_query($sqlRubricasRespostas);
 $pdf = new PDF();
 $pdf->Open();
@@ -38,7 +38,7 @@ for($rRubricas = 0; $rRubricas < pg_num_rows($rsRubricasResposta); $rRubricas ++
         $sqlPerguntas = "SELECT *
                 FROM avaliacaopergunta
                 WHERE db103_avaliacaogrupopergunta = $oDadosAvaliacaoGrupoPergunta->db102_sequencial
-                AND db103_sequencial IN (3000945,3000944,3000946,3000947,3000949,4000361,4000362)
+                AND db103_sequencial IN (3000945,3000944,3000946,3000947,3000949,4000361,4000362,3000940,3000948)
                 ORDER BY db103_sequencial";
         $rsAvaliacaoPergunta = pg_query($sqlPerguntas);
         for($Avpergunta = 0; $Avpergunta < pg_num_rows($rsAvaliacaoPergunta); $Avpergunta ++){
