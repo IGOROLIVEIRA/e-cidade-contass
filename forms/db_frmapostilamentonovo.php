@@ -1233,7 +1233,7 @@ $clrotulo->label("ac16_resumoobjeto");
                     if (oRetorno.datareferencia) {
                         document.getElementById("trdatareferencia").style.display = 'contents';
                     }
-                    return alert(oRetorno.message.urlDecode() + oRetorno.datareferencia);
+                    return alert(oRetorno.message.urlDecode());
 
                 }
 

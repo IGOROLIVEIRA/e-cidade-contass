@@ -404,7 +404,13 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
       if (dataReferencia <= dataPatrimonial) {
         alert("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
         return;
+      } else {
+        if (dataReferencia.getMonth() == dataPatrimonial.getMonth() && dataReferencia.getFullYear() == dataPatrimonial.getFullYear()) {
+          alert("Usuário: A data de referência deverá ser no mês posterior ao mês da data inserida.");
+          return;
+        }
       }
+
 
     } else {
       oParam.dtreferencia = null;
