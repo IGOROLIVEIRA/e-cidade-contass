@@ -51,6 +51,7 @@ if (isset($o85_codrec) and !$o85_codrec== "")  {
 }	
 ?>
 <script>
+
 // --------------------
 function valida_dados(){
 
@@ -64,7 +65,8 @@ function valida_dados(){
 }
 
 </script>
-<form name="form1" method="post" action="">
+<form name="form1" method="post" action="" id="formorcsuplemrec">
+    <input type="hidden" id="suplementado" name="suplementado" value="0"/>
 <center>
 <table border=0 >
 <tr>
@@ -163,19 +165,76 @@ function valida_dados(){
 ?>
 
 </form>
+
 <script>
-function js_pesquisao85_codrec(){
-   js_OpenJanelaIframe('','db_iframe_orcreceita','func_orcreceita.php?funcao_js=parent.js_mostracodrec|o70_codrec','Pesquisa',true,0);
+
+// Oc16754
+function js_pesquisao85_codrec() {
+    conferirSuplementacao(<?=$o46_codsup?>);
+    js_OpenJanelaIframe('','db_iframe_orcreceita','func_orcreceita.php?funcao_js=parent.js_mostracodrec|o70_codrec','Pesquisa',true,0);
 }
+
 function js_mostracodrec(chave1) {
-  
-  if ($('o06_sequencial')) {
-    $('o06_sequencial').value   = '';
-  }
-  db_iframe_orcreceita.hide();
-  document.form1.o85_codrec.value=chave1;
-  document.form1.pesquisa_rec.click();
+    if ($('o06_sequencial')) {
+        $('o06_sequencial').value   = '';
+    }
+
+    db_iframe_orcreceita.hide();
+    document.form1.o85_codrec.value=chave1;
+
+    if (!foiSuplementado()) {
+        bloquearReceita();
+        return;
+    }
+
+    document.form1.pesquisa_rec.click();
 }
+
+document.form1.o85_codrec.addEventListener("change", function() {
+    conferirSuplementacao(<?=$o46_codsup?>);
+    if (!foiSuplementado())
+        bloquearReceita();
+});
+
+function foiSuplementado() {
+    var tipo_sup = <?=$tiposup?>;
+    if (document.form1.suplementado.value == 0 && (tipo_sup == "1004" || tipo_sup == "1019")) {
+        return false;
+    } 
+    return true;
+}
+
+function bloquearReceita() {
+    alert("Necessário preencher primeiro o reduzido da dotação");
+    document.form1.o85_codrec.value = "";
+    document.form1.o50_estrutreceita.value = "";
+    document.form1.o57_descr.value = "";
+    document.form1.o15_descr.value = "";
+    document.form1.o70_codigo.value = "";
+    document.form1.o85_valor.value = "";
+}
+
+function conferirSuplementacao(cod_sup) {
+    var oParam = new Object();
+    oParam.iCodSup = cod_sup;
+    var sParam = js_objectToJson(oParam);
+    var sJson = '{"exec": "getSuplementacao", "params": ' + sParam + '}';
+    var url = "orc4_suplementacoes.RPC.php";
+    
+    var oAjax = new Ajax.Request(url,
+        {
+            method: 'post',
+            parameters: 'json=' + sJson,
+            onComplete: js_retornoGetDadosSuplementacao
+        } 
+    );
+}
+
+function js_retornoGetDadosSuplementacao(oAjax) {
+    oRetorno = eval("("+oAjax.responseText+")");
+    document.form1.suplementado.value = oRetorno.suplementado;
+}
+// Final da Oc16754
 
 function js_pesquisa_estimativa(mostra) {
 
@@ -212,18 +271,15 @@ function js_retornoGetDadosReceita(oAjax) {
   
   js_removeObj('msgBox');
   oRetorno = eval("("+oAjax.responseText+")");
-  if (oRetorno.status == 1) {
-    
-    $('o85_codrec').value   = '';
-    $('o50_estrutreceita').value    = oRetorno.dadosreceita.estrutural.urlDecode();
-    $('o57_descr').value    = oRetorno.dadosreceita.o57_descr.urlDecode();
-    $('o70_codigo').value   = oRetorno.dadosreceita.c61_codigo;
-    $('o15_descr').value   = oRetorno.dadosreceita.o15_descr;
-    
-  } else {
-  
-    alert('Estimativa informada não possui estrutura válida.')
-    $('o07_sequencial').value = '';
-  }
+    if (oRetorno.status == 1) {  
+        $('o85_codrec').value   = '';
+        $('o50_estrutreceita').value    = oRetorno.dadosreceita.estrutural.urlDecode();
+        $('o57_descr').value    = oRetorno.dadosreceita.o57_descr.urlDecode();
+        $('o70_codigo').value   = oRetorno.dadosreceita.c61_codigo;
+        $('o15_descr').value   = oRetorno.dadosreceita.o15_descr;
+    } else {
+        alert('Estimativa informada não possui estrutura válida.')
+        $('o07_sequencial').value = '';
+    }
 }
 </script>

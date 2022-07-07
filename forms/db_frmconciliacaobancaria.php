@@ -381,8 +381,8 @@ db_app::load("widgets/windowAux.widget.js");
         }
 
         var sParam  = js_objectToJson(oParam);
-        var sJson   = '{"exec": "RegistrarSaldoExtrato", "params": ['+ sParam + ']}';
-        var oAjax   = new Ajax.Request('cai4_conciliacaoBancariaNovo.RPC.php',
+        var sJson   = '{"exec": "getSuplementacao", "params": ['+ sParam + ']}';
+        var oAjax   = new Ajax.Request('orc4_suplementacoes.RPC.php',
             {
                 method    : 'post',
                 parameters: 'json=' + sJson
