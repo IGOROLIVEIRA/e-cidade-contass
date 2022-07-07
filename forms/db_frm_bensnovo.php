@@ -105,6 +105,7 @@ $oDataAtual   = new DBDate(date("d/m/Y", db_getsession("DB_datausu")));
 $oInstituicao = new Instituicao(db_getsession("DB_instit"));
 
 $lPossuiIntegracaoPatrimonial = ParametroIntegracaoPatrimonial::possuiIntegracaoPatrimonio($oDataAtual, $oInstituicao);
+$integracao = ParametroIntegracaoPatrimonial::possuiIntegracaoPatrimonio($oDataAtual, $oInstituicao);
 ?>
 
 <fieldset style="text-align: left;" id="fieldsetBensNovo">
@@ -165,9 +166,22 @@ $lPossuiIntegracaoPatrimonial = ParametroIntegracaoPatrimonial::possuiIntegracao
         </tr>
         <tr>
           <td title="<?php echo $Tt52_dtaqu ?>"><?php echo $Lt52_dtaqu; ?></td>
-          <td colspan="6">
+          <td colspan="1">
             <?php
-            db_inputdata('t52_dtaqu', @$t52_dtaqu_dia, @$t52_dtaqu_mes, @$t52_dtaqu_ano, true, 'text', $db_opcao, "");
+            db_inputdata('t52_dtaqu', @$t52_dtaqu_dia, @$t52_dtaqu_mes, @$t52_dtaqu_ano, true, 'text', 1, "");
+                        
+            ?>
+          </td>
+          <td><label id='contabilizador' style="font-weight: bold;">Bem já contabilizado via empenho:</label> 
+          </td>
+          <td > <?
+              $bloquear = $db_opcao;
+              if($db_opcao == 2)
+                  $bloquear = 3;
+
+              $contabilizado = array(''=>'Selecione', 'sim'=>'Sim', 'nao'=>'Não');
+              db_select('contabilizado', $contabilizado, true, $bloquear, 'style="width: 90px"');
+              
             ?>
           </td>
         </tr>
@@ -446,7 +460,11 @@ $lPossuiIntegracaoPatrimonial = ParametroIntegracaoPatrimonial::possuiIntegracao
   var iParametroPlaca = null;
   var bemComCalculo = false;
   var lPossuiIntegracaoPatrimonial = false;
-
+  var integracao = "<?php print $integracao; ?>";
+  if(integracao){   
+      $("contabilizado").style.display = "table-row";
+      $("contabilizador").style.display = "table-row";
+  }
   /**
    * Função chamada ao iniciar
    */
@@ -1046,6 +1064,7 @@ $lPossuiIntegracaoPatrimonial = ParametroIntegracaoPatrimonial::possuiIntegracao
       alert(_M("patrimonial.patrimonio.db_frm_bensnovo.informe_placa_bem"));
       return false;
     }
+    
     oObject.t52_bem = $F("t52_bem");
     oObject.sPlaca = $F("sPlaca");
     oObject.t41_placa = $F("t41_placa");
@@ -1067,11 +1086,17 @@ $lPossuiIntegracaoPatrimonial = ParametroIntegracaoPatrimonial::possuiIntegracao
     oObject.t66_sequencial = $F("t66_sequencial");
     oObject.t65_sequencial = $F("t65_sequencial");
     oObject.iCodigoItemNota = $F("iCodigoItemNota");
-
+    oObject.contabilizado = encodeURIComponent(tagString($F("contabilizado")));
+ 
     oObject.obser = encodeURIComponent(tagString($F("obser")));
     oObject.acao = encodeURIComponent(tagString("Incluir"));
     if ($F("db_opcao") == "Alterar") {
       oObject.acao = encodeURIComponent(tagString("Alterar"));
+    }
+    
+    if ($F("contabilizado").trim() == "") {
+      alert("Campo Bem já contabilizado via empenho obrigatório.");
+      return false;
     }
 
     if ($F("obser").trim() == "") {

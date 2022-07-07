@@ -54,18 +54,10 @@
     $rsCotacao = $cl_docparag->sql_record($sSqlCotacao);
     $sAssinaturaCotacao = db_utils::fieldsMemory($rsCotacao, 0)->db02_texto;
 
-    $sSql = "select distinct si01_datacotacao, si01_numcgmcotacao FROM pcproc
-            JOIN pcprocitem ON pc80_codproc = pc81_codproc
-            JOIN pcorcamitemproc ON pc81_codprocitem = pc31_pcprocitem
-            JOIN pcorcamitem ON pc31_orcamitem = pc22_orcamitem
-            JOIN pcorcamval ON pc22_orcamitem = pc23_orcamitem
-            JOIN pcorcamforne ON pc21_orcamforne = pc23_orcamforne
-            JOIN solicitem ON pc81_solicitem = pc11_codigo
-            JOIN solicitempcmater ON pc11_codigo = pc16_solicitem
-            JOIN pcmater ON pc16_codmater = pc01_codmater
-            JOIN itemprecoreferencia ON pc23_orcamitem = si02_itemproccompra
-            JOIN precoreferencia ON itemprecoreferencia.si02_precoreferencia = precoreferencia.si01_sequencial
-            WHERE pc80_codproc = {$codigo_preco} {$sCondCrit} and pc23_vlrun <> 0";
+    $sSql = "SELECT si01_datacotacao,
+                    si01_numcgmcotacao
+                    FROM precoreferencia
+                WHERE si01_processocompra = {$codigo_preco}";
     $rsResultData = db_query($sSql) or die(pg_last_error());
 
     $head3 = "Preço de Referência";

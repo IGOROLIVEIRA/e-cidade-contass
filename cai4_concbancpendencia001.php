@@ -499,7 +499,7 @@ function tipoDocumentoLancamento($tipo_lancamento)
         }
 
         if (document.form1.observacao.value.trim() == "") {
-            alert("Histótico não informado.");
+            alert("Histórico não informado.");
             return false;
         }
 

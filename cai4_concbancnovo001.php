@@ -56,6 +56,14 @@ $clsaltes = new cl_saltes;
 			.pendente {
 				background-color: rgb(222, 184, 135);
 			}
+
+			.pendente-entrada {
+				background-color: #63c5da;
+			}
+
+			.pendente-saida {
+				background-color: #f08080;
+			}
 		</style>
 	</head>
 	<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >

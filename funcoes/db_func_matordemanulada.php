@@ -25,5 +25,4 @@
  *                                licenca/licenca_pt.txt 
  */
 
-$campos = "distinct matordem.m51_codordem,matordem.m51_data,matordemanu.m53_data,matordem.m51_numcgm,cgm.z01_nome,matordem.m51_depto,db_depart.descrdepto";
-?>
+$campos = "distinct matordem.m51_codordem,matordem.m51_data,matordemanu.m53_data,matordem.m51_numcgm,cgm.z01_nome,m51_obs,matordem.m51_depto,db_depart.descrdepto";

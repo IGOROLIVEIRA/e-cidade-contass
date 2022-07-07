@@ -246,7 +246,7 @@ if( isset( $chavepesquisa ) ) {
       </table>
     </fieldset>
 
-    <fieldset>
+    <fieldset style="display:none ;">
       <legend>OUTROS DADOS</legend>
       <table>
         <tr>
@@ -608,7 +608,7 @@ if( isset( $chavepesquisa ) ) {
        id="db_opcao"
        value="<?=( $db_opcao == 1 ? "Incluir" : ( $db_opcao == 2 || $db_opcao == 22 ? "Alterar" : "Excluir" ) )?>"
        <?=( $db_botao == false ? "disabled" : "" )?>
-       onclick="return js_valida();">
+       >
 <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
 <input name="novo" type="button" id="novo" value="Novo Registro" onclick="js_novo()" <?=$db_opcao == 1 ? "disabled" : ""?>>
 </form>

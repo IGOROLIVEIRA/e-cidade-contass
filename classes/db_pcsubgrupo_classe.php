@@ -47,7 +47,8 @@ class cl_pcsubgrupo {
    var $pc04_codgrupo = 0; 
    var $pc04_codtipo = 0; 
    var $pc04_ativo = 'f'; 
-   var $pc04_tipoutil = 0; 
+   var $pc04_tipoutil = 0;
+   var $pc04_instit = null; 
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  pc04_codsubgrupo = int4 = Código do Subgrupo 
@@ -56,6 +57,7 @@ class cl_pcsubgrupo {
                  pc04_codtipo = int4 = Código do Tipo 
                  pc04_ativo = bool = Ativo 
                  pc04_tipoutil = int4 = Utilizado 
+                 pc04_instit = int4 = codigo da instituicao
                  ";
    //funcao construtor da classe 
    function cl_pcsubgrupo() { 
@@ -81,6 +83,7 @@ class cl_pcsubgrupo {
        $this->pc04_codtipo = ($this->pc04_codtipo == ""?@$GLOBALS["HTTP_POST_VARS"]["pc04_codtipo"]:$this->pc04_codtipo);
        $this->pc04_ativo = ($this->pc04_ativo == "f"?@$GLOBALS["HTTP_POST_VARS"]["pc04_ativo"]:$this->pc04_ativo);
        $this->pc04_tipoutil = ($this->pc04_tipoutil == ""?@$GLOBALS["HTTP_POST_VARS"]["pc04_tipoutil"]:$this->pc04_tipoutil);
+       $this->pc04_instit = ($this->pc04_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["pc04_instit"]:$this->pc04_instit);
      }else{
        $this->pc04_codsubgrupo = ($this->pc04_codsubgrupo == ""?@$GLOBALS["HTTP_POST_VARS"]["pc04_codsubgrupo"]:$this->pc04_codsubgrupo);
      }
@@ -133,6 +136,9 @@ class cl_pcsubgrupo {
        $this->erro_status = "0";
        return false;
      }
+     if($this->pc04_instit == null ){ 
+      $this->pc04_instit = db_getsession('DB_instit');
+    }
      if($pc04_codsubgrupo == "" || $pc04_codsubgrupo == null ){
        $result = db_query("select nextval('pcsubgrupo_pc04_codsubgrupo_seq')"); 
        if($result==false){
@@ -171,7 +177,8 @@ class cl_pcsubgrupo {
                                       ,pc04_codgrupo 
                                       ,pc04_codtipo 
                                       ,pc04_ativo 
-                                      ,pc04_tipoutil 
+                                      ,pc04_tipoutil
+                                      ,pc04_instit 
                        )
                 values (
                                 $this->pc04_codsubgrupo 
@@ -179,7 +186,8 @@ class cl_pcsubgrupo {
                                ,$this->pc04_codgrupo 
                                ,$this->pc04_codtipo 
                                ,'$this->pc04_ativo' 
-                               ,$this->pc04_tipoutil 
+                               ,$this->pc04_tipoutil
+                               ,$this->pc04_instit 
                       )";
      $result = db_query($sql); 
      if($result==false){ 

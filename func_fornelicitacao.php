@@ -49,132 +49,142 @@ $lValidaRepr = isset($validaRepresentante);
 
 ?>
 <html>
+
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
     <link href="estilos.css" rel="stylesheet" type="text/css">
     <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
 </head>
-<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
-<table height="100%" border="0" align="center" cellspacing="0" bgcolor="#CCCCCC">
-    <tr>
-        <td height="63" align="center" valign="top">
-            <table width="35%" border="0" align="center" cellspacing="0">
-                <form name="form2" method="post" action="">
-                    <tr>
-                        <td width="4%" align="right" nowrap title="<?= $Tz01_numcgm ?>">
-							<?= $Lz01_numcgm ?>
-                        </td>
-                        <td width="96%" align="left" nowrap>
-							<?
-							db_input("z01_numcgm", 8, $Iz01_numcgm, true, "text", 4, "", "chave_z01_numcgm");
-							?>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td width="4%" align="right" nowrap title="<?= $Tz01_nome ?>">
-							<?= $Lz01_nome ?>
-                        </td>
-                        <td width="96%" align="left" nowrap>
-							<?
-							db_input("z01_nome", 40, $Iz01_nome, true, "text", 4, "", "chave_z01_nome");
-							?>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td width="4%" align="right" nowrap title="<?= $Tz01_cgccpf; ?>"><?= $Lz01_cgccpf; ?></td>
-                        <td>
-							<?
-							db_input("z01_cgccpf", 25, $Iz01_cgccpf, true, "text", 4, "", "chave_z01_cgccpf");
-							?>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td width="4%" align="right" nowrap title="<?= $Tpc60_dtlanc ?>">
-							<?= $Lpc60_dtlanc ?>
-                        </td>
-                        <td width="96%" align="left" nowrap>
-							<?
-							db_input("pc60_dtlanc", 10, $Ipc60_dtlanc, true, "text", 4, "", "chave_pc60_dtlanc");
-							?>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2" align="center">
-                            <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar">
-                            <input name="limpar" type="reset" id="limpar" value="Limpar">
-                            <input name="Fechar" type="button" id="fechar" value="Fechar"
-                                   onClick="parent.db_iframe_pcforne.hide();">
-                        </td>
-                    </tr>
-                </form>
-            </table>
-        </td>
-    </tr>
 
-	<?php if ($lValidaRepr): ?>
+<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+    <table height="100%" border="0" align="center" cellspacing="0" bgcolor="#CCCCCC">
         <tr>
-            <td>
-                <p style="font-weight: bold;"><br>
-                    Se o contratado que você procura não está disponível, verifique se este está
-                    cadastrado como fornecedor e se possui representante legal informado.
-                </p>
+            <td height="63" align="center" valign="top">
+                <table width="35%" border="0" align="center" cellspacing="0">
+                    <form name="form2" method="post" action="">
+                        <tr>
+                            <td width="4%" align="right" nowrap title="<?= $Tz01_numcgm ?>">
+                                <b>CGM</b>
+                            </td>
+                            <td width="96%" align="left" nowrap>
+                                <?
+                                db_input("z01_numcgm", 8, $Iz01_numcgm, true, "text", 4, "", "chave_z01_numcgm");
+                                ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="4%" align="right" nowrap title="<?= $Tz01_nome ?>">
+                                <?= $Lz01_nome ?>
+                            </td>
+                            <td width="96%" align="left" nowrap>
+                                <?
+                                db_input("z01_nome", 40, $Iz01_nome, true, "text", 4, "", "chave_z01_nome");
+                                ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="4%" align="right" nowrap title="<?= $Tz01_cgccpf; ?>"><?= $Lz01_cgccpf; ?></td>
+                            <td>
+                                <?
+                                db_input("z01_cgccpf", 25, $Iz01_cgccpf, true, "text", 4, "", "chave_z01_cgccpf");
+                                ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="4%" align="right" nowrap title="<?= $Tpc60_dtlanc ?>">
+                                <?= $Lpc60_dtlanc ?>
+                            </td>
+                            <td width="96%" align="left" nowrap>
+                                <?
+                                db_input("pc60_dtlanc", 10, $Ipc60_dtlanc, true, "text", 4, "", "chave_pc60_dtlanc");
+                                ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" align="center">
+                                <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar">
+                                <input name="limpar" type="reset" id="limpar" value="Limpar">
+                                <input name="Fechar" type="button" id="fechar" value="Fechar" onClick="parent.db_iframe_pcforne.hide();">
+                            </td>
+                        </tr>
+                    </form>
+                </table>
             </td>
         </tr>
-	<?php endif; ?>
 
-    <tr>
-        <td align="center" valign="top">
-			<?
+        <?php if ($lValidaRepr) : ?>
+            <tr>
+                <td>
+                    <p style="font-weight: bold;"><br>
+                        Se o contratado que você procura não está disponível, verifique se este está
+                        cadastrado como fornecedor e se possui representante legal informado.
+                    </p>
+                </td>
+            </tr>
+        <?php endif; ?>
 
-			if (isset($campos) == false) {
-				$campos = "DISTINCT z01_numcgm, trim(from z01_nome) as z01_nome, z01_cgccpf";
-			}
+        <tr>
+            <td align="center" valign="top">
+                <?
 
-            $sWhere = '';
+                if (isset($campos) == false) {
+                    $campos = "DISTINCT z01_numcgm, trim(from z01_nome) as z01_nome, z01_cgccpf";
+                }
 
-            if($comp_ini && !$comp_fim){
-                $sWhere .= ' pc11_numero = ' . $comp_ini;
-            }
+                $sWhere = '';
 
-            if(!$comp_ini && $comp_fim){
-                $sWhere .= ' pc11_numero = ' . $comp_fim;
-            }
+                if ($comp_ini && !$comp_fim) {
+                    $sWhere .= ' pc11_numero = ' . $comp_ini;
+                }
 
-            if($comp_ini && $comp_fim){
-                $sWhere .= ' pc11_numero >= ' . $comp_ini . ' AND pc11_numero <= ' . $comp_fim;
-            }
+                if (!$comp_ini && $comp_fim) {
+                    $sWhere .= ' pc11_numero = ' . $comp_fim;
+                }
 
-			if (!isset($pesquisa_chave)) {
+                if ($comp_ini && $comp_fim) {
+                    $sWhere .= ' pc11_numero >= ' . $comp_ini . ' AND pc11_numero <= ' . $comp_fim;
+                }
 
-				if (isset($chave_pc60_numcgm) && (trim($chave_pc60_numcgm) != "")) {
-					$sql = $clliclicitemlote->sql_query_julgamento($chave_pc60_numcgm, $campos, "z01_numcgm", $sWhere);
-				} else if (isset($chave_z01_nome) && (trim($chave_z01_nome) != "")) {
-					$sql = $clliclicitemlote->sql_query_julgamento("", $campos, "z01_nome", " z01_nome like '$chave_z01_nome%' AND " . $sWhere);
-				} else if (isset($chave_z01_cgccpf) && (trim($chave_z01_cgccpf) != "")) {
-					$sql = $clliclicitemlote->sql_query_julgamento("", $campos, "z01_cgccpf", " z01_cgccpf like '$chave_z01_cgccpf%' AND " . $sWhere);
-				} else {
-					$sql = $clliclicitemlote->sql_query_julgamento("", $campos, 'z01_nome', $sWhere);
-				}
-				db_lovrot($sql, 15, "()", "", $funcao_js);
-			} else {
-				if ($pesquisa_chave != null && $pesquisa_chave != "") {
-					$result = $clliclicitemlote->sql_record($clliclicitemlote->sql_query_julgamento('', $campos, null,
-                        'z01_numcgm = ' . $pesquisa_chave));
-					echo $clliclicitemlote->sql_query_julgamento('', $campos, null,
-						'z01_numcgm = ' . $pesquisa_chave);
-					if ($clliclicitemlote->numrows != 0) {
-						db_fieldsmemory($result, 0);
-							echo "<script>" . $funcao_js . "('$z01_nome',false);</script>";
-					} else {
-						echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") não Encontrado',true);</script>";
-					}
-				} else {
-					echo "<script>" . $funcao_js . "('',false);</script>";
-				}
-			}
-			?>
-        </td>
-    </tr>
-</table>
+                if (!isset($pesquisa_chave)) {
+
+                    if (isset($chave_z01_numcgm) && (trim($chave_z01_numcgm) != "")) {
+                        $sql = $clliclicitemlote->sql_query_julgamento($chave_z01_numcgm, $campos, "z01_numcgm", $sWhere);
+                    } else if (isset($chave_z01_nome) && (trim($chave_z01_nome) != "")) {
+                        $sql = $clliclicitemlote->sql_query_julgamento("", $campos, "z01_nome", " z01_nome like '$chave_z01_nome%' " . $sWhere);
+                    } else if (isset($chave_z01_cgccpf) && (trim($chave_z01_cgccpf) != "")) {
+                        $sql = $clliclicitemlote->sql_query_julgamento("", $campos, "z01_cgccpf", " z01_cgccpf like '$chave_z01_cgccpf%' " . $sWhere);
+                    } else {
+                        $sql = $clliclicitemlote->sql_query_julgamento("", $campos, 'z01_nome', $sWhere);
+                    }
+                    db_lovrot($sql, 15, "()", "", $funcao_js);
+                } else {
+                    if ($pesquisa_chave != null && $pesquisa_chave != "") {
+                        $result = $clliclicitemlote->sql_record($clliclicitemlote->sql_query_julgamento(
+                            '',
+                            $campos,
+                            null,
+                            'z01_numcgm = ' . $pesquisa_chave
+                        ));
+                        echo $clliclicitemlote->sql_query_julgamento(
+                            '',
+                            $campos,
+                            null,
+                            'z01_numcgm = ' . $pesquisa_chave
+                        );
+                        if ($clliclicitemlote->numrows != 0) {
+                            db_fieldsmemory($result, 0);
+                            echo "<script>" . $funcao_js . "('$z01_nome',false);</script>";
+                        } else {
+                            echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") não Encontrado',true);</script>";
+                        }
+                    } else {
+                        echo "<script>" . $funcao_js . "('',false);</script>";
+                    }
+                }
+                ?>
+            </td>
+        </tr>
+    </table>
 </body>
+
 </html>

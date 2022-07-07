@@ -177,8 +177,15 @@ if (isset($alterar)) {
 
         $datah = implode('-', array_reverse(explode('/', $$datahomologacao)));
         $dataa = implode('-', array_reverse(explode('/', $$dataadjudicacao)));
-
-        $resultado = db_query("update homologacaoadjudica  set l202_datahomologacao = '$datah', l202_dataadjudicacao  = '$dataa' where l202_sequencial  = '$oPosicao->l202_sequencial'");
+        if($datah != null || $datah != ''){
+          if($dataa != null || $dataa != ''){
+            $resultado = db_query("update homologacaoadjudica set l202_datahomologacao = '$datah', l202_dataadjudicacao  = '$dataa' where l202_sequencial  = '$oPosicao->l202_sequencial'");
+          }else{
+            $resultado = db_query("update homologacaoadjudica set l202_datahomologacao = '$datah' where l202_sequencial  = '$oPosicao->l202_sequencial'");
+          }
+        }elseif($dataa != null || $dataa != ''){
+          $resultado = db_query("update homologacaoadjudica set l202_dataadjudicacao  = '$dataa' where l202_sequencial  = '$oPosicao->l202_sequencial'");
+        }
         $sqlerro = false;
       }
     }
