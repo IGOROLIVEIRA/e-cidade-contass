@@ -72,7 +72,11 @@ class EventoS2200 extends EventoBase
 
             $oDadosAPI->evtAdmissao->endereco->brasil->tpLograd    = empty($oDados->tplograd) ? null : $oDados->tplograd;
             $oDadosAPI->evtAdmissao->endereco->brasil->dscLograd   = empty($oDados->dsclograd) ? null : $oDados->dsclograd;
+
             $oDadosAPI->evtAdmissao->endereco->brasil->nrLograd    =  $oDados->nrlograd;
+            if (empty($oDados->nrlograd) || $oDados->nrlograd == 0) {
+                $oDadosAPI->evtAdmissao->endereco->brasil->nrLograd   =  'S/N';
+            }
             $oDadosAPI->evtAdmissao->endereco->brasil->uf    =  $oDados->uf;
             $oDadosAPI->evtAdmissao->endereco->brasil->complemento = empty($oDados->complemento) ? null : $oDados->complemento;
             $oDadosAPI->evtAdmissao->endereco->brasil->bairro      = empty($oDados->bairro) ? null : $oDados->bairro;
@@ -180,14 +184,11 @@ class EventoS2200 extends EventoBase
                 $oDadosAPI->evtAdmissao->vinculo->infoContrato->remuneracao = null;
             }
 
-            if (!empty($oDados->tpcontr)) {
+            if ($oDados->tpregtrab != 2) {
                 $oDadosAPI->evtAdmissao->vinculo->infoContrato->duracao->tpContr = $oDados->tpcontr;
-                $oDadosAPI->evtAdmissao->vinculo->infoContrato->duracao->dtTerm = empty($oDados->dtterm) ? null : $oDados->dtterm;
-                $oDadosAPI->evtAdmissao->vinculo->infoContrato->duracao->clauAssec = empty($oDados->clauassec) ? null : $oDados->clauassec;
-                $oDadosAPI->evtAdmissao->vinculo->infoContrato->duracao->objDet = empty($oDados->objdet) ? null : $oDados->objdet;
-            } else {
-                //unset($oDadosAPI->evtAdmissao->vinculo->infoContrato->duracao);
-                $oDadosAPI->evtAdmissao->vinculo->infoContrato->duracao  = null;
+                //$oDadosAPI->evtAdmissao->vinculo->infoContrato->duracao->dtTerm = empty($oDados->dtterm) ? null : $oDados->dtterm;
+                //$oDadosAPI->evtAdmissao->vinculo->infoContrato->duracao->clauAssec = empty($oDados->clauassec) ? null : $oDados->clauassec;
+                //$oDadosAPI->evtAdmissao->vinculo->infoContrato->duracao->objDet = empty($oDados->objdet) ? null : $oDados->objdet;
             }
 
             if (!empty($oDados->tpinsc_localtrabgeral)) {

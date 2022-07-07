@@ -20,11 +20,13 @@ class cl_quadrosuperavitdeficit
     public $c241_fonte = 0;
     public $c241_valor = 0;
     public $c241_ano = 0;
+    public $c241_instit = 0;
     // cria propriedade com as variaveis do arquivo
     public $campos = "
                  c241_fonte = int8 = Fonte
                  c241_valor = float8 = Valor
                  c241_ano = int4 = Ano
+                 c241_instit = int4 = Instituicao
                  ";
 
     //funcao construtor da classe
@@ -53,6 +55,7 @@ class cl_quadrosuperavitdeficit
             $this->c241_fonte = ($this->c241_fonte == "" ? @$GLOBALS["HTTP_POST_VARS"]["c241_fonte"] : $this->c241_fonte);
             $this->c241_valor = ($this->c241_valor == "" ? @$GLOBALS["HTTP_POST_VARS"]["c241_valor"] : $this->c241_valor);
             $this->c241_ano = ($this->c241_ano == "" ? @$GLOBALS["HTTP_POST_VARS"]["c241_ano"] : $this->c241_ano);
+            $this->c241_instit = ($this->c241_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["c241_instit"] : $this->c241_instit);
         } else {
         }
     }
@@ -71,6 +74,7 @@ class cl_quadrosuperavitdeficit
             $this->erro_status = "0";
             return false;
         }
+
         if ($this->c241_valor == null) {
             $this->erro_sql = " Campo Valor não informado.";
             $this->erro_campo = "c241_valor";
@@ -91,8 +95,18 @@ class cl_quadrosuperavitdeficit
             return false;
         }
 
-        $sql = "insert into quadrosuperavitdeficit(c241_fonte, c241_valor, c241_ano)
-                values ($this->c241_fonte, $this->c241_valor, $this->c241_ano) ";
+        if ($this->c241_instit == null) {
+            $this->erro_sql = " Campo Instituição não informado.";
+            $this->erro_campo = "c241_instituicao";
+            $this->erro_banco = "";
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_status = "0";
+            return false;
+        }
+
+        $sql = "insert into quadrosuperavitdeficit(c241_fonte, c241_valor, c241_ano, c241_instit)
+                values ($this->c241_fonte, $this->c241_valor, $this->c241_ano, $this->c241_instit) ";
 
         $result = db_query($sql);
         if ($result == false) {
@@ -173,8 +187,22 @@ class cl_quadrosuperavitdeficit
             }
         }
 
+        if (trim($this->c241_instit) != "" || isset($GLOBALS["HTTP_POST_VARS"]["c241_instit"])) {
+            $sql  .= $virgula . " c241_instit = $this->c241_instit ";
+            $virgula = ",";
+            if (trim($this->c241_instit) == null) {
+                $this->erro_sql = " Campo Instituição não informado.";
+                $this->erro_campo = "c241_instit";
+                $this->erro_banco = "";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+        }
+
         $sql .= " where ";
-        $sql .= "c241_fonte = '$this->c241_fonte'";
+        $sql .= "c241_fonte = '$this->c241_fonte' AND c241_instit = $this->c241_instit ";
         $result = db_query($sql);
         if ($result == false) {
             $this->erro_banco = str_replace("\n", "", @pg_last_error());

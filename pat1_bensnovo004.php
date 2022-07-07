@@ -62,6 +62,13 @@ if (isset($oGet->iCodigoEmpNotaItem) && !empty($oGet->iCodigoEmpNotaItem)) {
   $lMostraViewNotasPendentes = 'false';
   $iCodigoNota               = $oGet->iCodigoEmpNotaItem;
 }
+//Saber se possui integração patrimonial
+require_once "classes/db_parametrointegracaopatrimonial_classe.php";
+$clBens = new cl_parametrointegracaopatrimonial;
+$rsBem = $clBens->sql_record($clBens->sql_query_file(null, '*', null, " c01_modulo = 1"));     
+$oBemIntegracao= db_utils::fieldsMemory($rsBem, 0);
+$integracao = $oBemIntegracao->c01_modulo;
+
 ?>
 
 <html>
@@ -209,6 +216,12 @@ if (isset($oGet->iCodigoEmpNotaItem) && !empty($oGet->iCodigoEmpNotaItem)) {
 
 <script>
   lMostraViewNotasPendentes = <?php echo $lMostraViewNotasPendentes; ?>;
+  var integracao = "<?php print $integracao; ?>";
+  if(!integracao)  {
+      $("contabilizado").style.display = 'none';
+      document.getElementById("contabilizador").style.display = 'none';
+      $("contabilizado").value = 'nao';
+  }    
 
   if (lMostraViewNotasPendentes == true) {
 
@@ -269,7 +282,7 @@ if (isset($oGet->iCodigoEmpNotaItem) && !empty($oGet->iCodigoEmpNotaItem)) {
       $("t52_descr").value = oRetorno.pc01_descrmater;
       $("iCodigoItemNota").value = <?php echo $iCodigoNota; ?>;
 
-      $("t52_dtaqu").style.backgroundColor = '#DEB887';
+      $("t52_dtaqu").style.backgroundColor = '#FFFFFF';
       $("t52_numcgm").style.backgroundColor = '#DEB887';
       $("z01_nome").style.backgroundColor = '#DEB887';
       $("vlAquisicao").style.backgroundColor = '#DEB887';
@@ -279,6 +292,10 @@ if (isset($oGet->iCodigoEmpNotaItem) && !empty($oGet->iCodigoEmpNotaItem)) {
       $("t52_numcgm").readOnly = true;
       $("z01_nome").readOnly = true;
       $("vlAquisicao").readOnly = true;
+
+      $("contabilizado").style.display = 'none';
+      document.getElementById("contabilizador").style.display = 'none';
+      $("contabilizado").value = 'nao';
     }
   }
 </script>

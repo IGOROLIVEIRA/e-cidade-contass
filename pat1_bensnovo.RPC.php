@@ -371,7 +371,9 @@ switch ($oParam->exec) {
       if (empty($oParam->obser)) {
         throw new Exception("Informe a observação do lançamento.");
       }
-
+      session_start();
+      $_SESSION['contabilizado'] = $oParam->contabilizado;
+     
       $oBem->setObservacao(addslashes(db_stdClass::normalizeStringJson($oParam->obser)));
       $oBem->setInstituicao(db_getsession("DB_instit"));
       $oBem->setCodigoItemNota($oParam->iCodigoItemNota);
