@@ -460,7 +460,13 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
       alert(oRetorno.erro.urlDecode());
       return false;
     } else {
-
+      $('ac16_sequencial').value = "";
+      $('ac16_datareferencia').value = "";
+      $('ac10_datamovimento').value = "";
+      $('ac16_datapublicacao').value = "";
+      $('ac16_veiculodivulgacao').value = "";
+      $('ac10_obs').value = "";
+      document.getElementById("trdatareferencia").style.display == 'none'
       alert("Inclusão efetuada com Sucesso.");
       return true;
     }

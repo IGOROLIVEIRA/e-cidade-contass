@@ -405,8 +405,10 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
     $('ac16_sequencial').value = "";
     $('ac16_resumoobjeto').value = "";
     $('ac10_datamovimento').value = "";
+    $('ac10_datareferencia').value = "";
     $('ac16_valorrescisao').value = "";
     $('ac10_obs').value = "";
+    document.getElementById("trdatareferencia").style.display = 'none'
 
     if (oRetorno.status == 2) {
 

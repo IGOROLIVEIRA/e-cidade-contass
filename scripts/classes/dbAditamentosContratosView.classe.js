@@ -90,7 +90,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
     sContent += "   <tr>";
     sContent += "     <td> ";
     sContent += "       <fieldset> ";
-    sContent += "         <legend>Dados do Acordo</legend>";
+    sContent += "         <legend>Dados dos Acordo</legend>";
     sContent += "         <table width='100%'> ";
 
     sContent += "           <tr> ";
@@ -362,6 +362,8 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         }
 
         me.oGridItens.clearAll(true);
+        
+            document.getElementById("trdatareferencia").style.display = 'none';
 
         new AjaxRequest(me.sUrlRpc, oParam, function (oRetorno, lErro) {
 
@@ -383,6 +385,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             me.oTxtDataFinalCompara.setData(aDataFinal[0], aDataFinal[1], aDataFinal[2]);
             me.oTxtDataAssinatura.setValue('');
             me.oTxtDataPublicacao.setValue('');
+            me.oTxtDataReferencia.setValue('');
             me.oTextAreaDescricaoAlteracao.setValue('');
             me.oTxtVeiculoDivulgacao.setValue('');
             me.oTxtNumeroAditamento.setValue(oRetorno.seqaditivo);
@@ -1197,6 +1200,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
                 }
                 return alert(oRetorno.message.urlDecode());
             }
+            document.getElementById("trdatareferencia").style.display = 'none';
 
             alert("Aditamento realizado com sucesso.");
             me.pesquisarDadosAcordo()

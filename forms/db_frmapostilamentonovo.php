@@ -1308,6 +1308,8 @@ $clrotulo->label("ac16_resumoobjeto");
         $("si03_descrapostila").value = "";
         $("si03_tipoalteracaoapostila").value = 1;
         $("si03_numapostilamento").value = "";
+        $("si03_datareferencia").value = "";
+        document.getElementById("trdatareferencia").style.display = 'none';
     }
     //js_changeTipoApostila();
     js_pesquisaac16_sequencial(true);
