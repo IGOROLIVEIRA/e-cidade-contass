@@ -132,7 +132,7 @@ $integracao = ParametroIntegracaoPatrimonial::possuiIntegracaoPatrimonio($oDataA
 	              db_inputdata('t52_dtaqu',@$t52_dtaqu_dia,@$t52_dtaqu_mes,@$t52_dtaqu_ano,true,'text',$db_opcao,"");
 	            ?>
 	          </td>
-            <td><label id='contabilizador' style="font-weight: bold;">Bem já contabilizado via empenho:</label> 
+            <td><label id='contabilizador' style="font-weight: bold;">O bem a ser inserido possui dispensa de tombamento:</label> 
           </td>
           <td > <?
               $bloquear = $db_opcao;
