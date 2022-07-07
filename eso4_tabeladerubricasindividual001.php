@@ -108,7 +108,7 @@ $mesfolha = DBPessoal::getMesFolha();
                     <td align="right"><label for="evento">Evento:</label></td>
                     <td>
                         <select name="evento" id="evento" style="width: 78%;">
-                            <option value="S2200">S1010</option>
+                            <option value="S1010">S1010</option>
                         </select>
                     </td>
                 </tr>
@@ -201,7 +201,7 @@ var empregador = Object();
             }
 
             var parametros = {
-                'exec': 'transmitir',
+                'exec': 'transmitirrubricas',
                 'arquivos': aArquivosSelecionados,
                 'empregador': $F('cboEmpregador'),
                 'modo': $F('modo'),

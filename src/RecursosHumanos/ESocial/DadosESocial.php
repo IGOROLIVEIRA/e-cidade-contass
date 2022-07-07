@@ -42,18 +42,21 @@ class DadosESocial
      * @param integer $tipo
      * @return ECidade\RecursosHumanos\ESocial\Model\Formulario\DadosPreenchimento[]
      */
-    public function getPorTipo($tipo, $matricula=null)
+    public function getPorTipo($tipo, $codigoindividual=null)
     {
         $this->tipo = $tipo;
         // echo $tipo;
         // exit;
         switch ($tipo) {
             case '37':
-                return $this->buscaPreenchimentos($matricula);
+                return $this->buscaPreenchimentos($codigoindividual);
+                break;
+            case '2':
+                return $this->buscaPreenchimentos($codigoindividual);
                 break;
 
             default:
-                $preenchimentos = $this->buscaPreenchimentos($matricula);
+                $preenchimentos = $this->buscaPreenchimentos($codigoindividual);
 
                 $this->buscaRespostas($preenchimentos);
                 /**
@@ -76,7 +79,7 @@ class DadosESocial
      * @throws \Exception
      * @return \stdClass[]
      */
-    private function buscaPreenchimentos($matricula = null)
+    private function buscaPreenchimentos($codigoindividual = null)
     {
         // echo $this->tipo;
         // exit;
@@ -92,6 +95,7 @@ class DadosESocial
             case Tipo::LOTACAO_TRIBUTARIA:
                 return $preenchimento->buscarUltimoPreenchimentoLotacao($formularioId);
             case Tipo::RUBRICA:
+                return $preenchimento->buscarPreenchimentoS1010($formularioId, $codigoindividual);
             case Tipo::CARGO:
             case Tipo::CARREIRA:
             case Tipo::FUNCAO:
@@ -106,9 +110,9 @@ class DadosESocial
             case Tipo::TSV_ALT_CONTR:
             case Tipo::CD_BENEF_IN:
             case Tipo::AFASTAMENTO_TEMPORARIO:
-                return $preenchimento->buscarUltimoPreenchimentoInstituicao($formularioId, $matricula);
+                return $preenchimento->buscarUltimoPreenchimentoInstituicao($formularioId, $codigoindividual);
             case Tipo::CADASTRAMENTO_INICIAL:
-                return $preenchimento->buscarPreenchimentoS2200($formularioId, $matricula);
+                return $preenchimento->buscarPreenchimentoS2200($formularioId, $codigoindividual);
             default:
                 throw new Exception('Tipo não encontrado.');
         }
