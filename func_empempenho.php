@@ -468,11 +468,11 @@ $rotulo->label("z01_cgccpf");
             if ($inclusaoordemcompra == true) {
 
               if ($codemp == true) {
-                $dbwhere = " where empempenho.e60_codemp = '$pesquisa_chave' ";
+                $dbwhere = " WHERE empempenho.e60_codemp = '$pesquisa_chave' ";
               }
 
               if ($numemp == true) {
-                $dbwhere = " where empempenho.e60_numemp = $pesquisa_chave ";
+                $dbwhere = " WHERE empempenho.e60_numemp = $pesquisa_chave ";
               }
 
               $campos = "";
@@ -493,10 +493,10 @@ $rotulo->label("z01_cgccpf");
               e60_vlrliq,
               e60_vlrpag,
               e60_vlranu,
-              RPAD(SUBSTR(convconvenios.c206_objetoconvenio,0,47),50,'...') AS c206_objetoconvenio,
+              RPAD(SUBSTR(convconvenios.c206_objetoconvenio,0,47),50,'...') AS c206_objetoconvenio
               ";
               $campos = " distinct " . $campos;
-              $dbwhere = " WHERE e60_vlremp >
+              $dbwhere .= " and e60_vlremp >
             (SELECT sum(m52_valor) AS totalemordemdecompra
              FROM matordemitem
              WHERE m52_numemp = e60_numemp) -
@@ -506,7 +506,6 @@ $rotulo->label("z01_cgccpf");
              WHERE m52_numemp = e60_numemp)
             and e60_vlremp > e60_vlranu ";
               $dbwhere .= " and e60_instit = " . db_getsession("DB_instit") . " order by e60_numemp desc";
-
               $sSql = $clempempenho->sql_query_inclusaoempenho(null, $campos, null, $dbwhere);
             }
 
