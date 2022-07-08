@@ -226,7 +226,7 @@ class Preenchimentos
     public function buscarPreenchimentoS1010($codigoFormulario, $rubrica){
         if($rubrica != null){
             $andRubricas = "
-                AND rh27_rubric IN ('$rubrica')
+                AND rh27_rubric IN (".str_replace(' ','',$rubrica).")
             ";
         }
         $sql = "

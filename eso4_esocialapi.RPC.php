@@ -267,7 +267,6 @@ try {
 
                 if (Tipo::getTipoFormulario($arquivo) != 37) {
                     $dadosDoPreenchimento = $dadosESocial->getPorTipo(Tipo::getTipoFormulario($arquivo), $oParam->matricula);
-
                     $formatter = FormatterFactory::get($arquivo);
                     $dadosTabela = $formatter->formatar($dadosDoPreenchimento);
 
@@ -304,27 +303,36 @@ try {
         case "transmitirrubricas":
             $dadosESocial = new DadosESocial();
 
-            db_inicio_transacao();
+            $dao = new cl_db_config();
+            $sql = $dao->sql_query_file(null, "numcgm", null, "codigo = " . db_getsession("DB_instit"));
 
-            $iCgm = $oParam->empregador;
+            $rs = db_query($sql);
+            $iCgm = db_utils::fieldsMemory($rs, 0)->numcgm;
             
-            foreach ($oParam->arquivos as $arquivo) {
-                $dadosESocial->setReponsavelPeloPreenchimento($iCgm);
+            //Rubricas a serem enviadas
+            $seqRubricas = $oParam->rubricas;
+            $explode_seq = explode(',', $seqRubricas);
+            $aRubricas = array();
+            foreach ($explode_seq as $rub){
+                $aRubricas[] = "'" . $rub . "'";
+            }
+            $stringRubricas = implode(",", $aRubricas);
 
-                $dadosTabela = $dadosESocial->getPorTipo(Tipo::RUBRICA, $oParam->rubricas);
+            $dadosESocial->setReponsavelPeloPreenchimento($iCgm);
+            $dadosDoPreenchimento = $dadosESocial->getPorTipo(Tipo::RUBRICA,$stringRubricas);
 
-                foreach (array_chunk($dadosTabela, 1) as $aTabela) {
-                    $eventoFila = new Evento($arquivo, $iCgm, $iCgm, $aTabela, $oParam->tpAmb, "{$oParam->iAnoValidade}-{$oParam->iMesValidade}", $oParam->modo, $oParam->dtalteracao);
-                    $eventoFila->adicionarFila();
-                }
-            }   
-            db_fim_transacao(false);
+            $formatter = FormatterFactory::get(Tipo::S1010);
+            $dadosTabelaRubricas = $formatter->formatar($dadosDoPreenchimento);
+            /**
+             * Limitado array em 50 pois e o maximo que um lote pode enviar
+             */
+            foreach (array_chunk($dadosTabelaRubricas, 50) as $aTabelaRubricas) {
+                $eventoFila = new Evento(Tipo::S1010, $iCgm, $iCgm, $aTabelaRubricas);
+                $eventoFila->adicionarFila();
+            }
 
-            ob_start();
-            $response = system("php -q filaEsocial.php");
-            ob_end_clean();
+            $oRetorno->sMessage = "Dados das Rúbricas agendados para envio.";
 
-            $oRetorno->sMessage = "Dados agendados para envio.";
         break;
     }
 } catch (Exception $eErro) {
