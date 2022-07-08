@@ -325,15 +325,17 @@ $rotulo->label("z01_cgccpf");
             $campos = " distinct " . $campos;
             $dbwhere = "";
             $dbwhere = " WHERE e60_vlremp >
-            (SELECT sum(m52_valor) AS totalemordemdecompra
+            (SELECT case when sum(m52_valor)  is null then 0 else sum(m52_valor) end as totalemordemdecompra
              FROM matordemitem
              WHERE m52_numemp = e60_numemp) -
-            (SELECT sum(m36_vrlanu) AS totalemordemdecompraanulado
+            (SELECT case when sum(m36_vrlanu) is null then 0 else sum(m36_vrlanu) end AS totalemordemdecompraanulado
              FROM matordemitem
              INNER JOIN matordemitemanu ON m36_matordemitem = m52_codlanc
              WHERE m52_numemp = e60_numemp)
             and e60_vlremp > e60_vlranu ";
             $dbwhere .= " and e60_instit = " . db_getsession("DB_instit") . " order by e60_numemp desc";
+
+
 
             $sql = $clempempenho->sql_query_inclusaoempenho(null, $campos, null, $dbwhere);
           } else {
@@ -497,11 +499,11 @@ $rotulo->label("z01_cgccpf");
               ";
               $campos = " distinct " . $campos;
               $dbwhere .= " and e60_vlremp >
-            (SELECT sum(m52_valor) AS totalemordemdecompra
-             FROM matordemitem
-             WHERE m52_numemp = e60_numemp) -
-            (SELECT sum(m36_vrlanu) AS totalemordemdecompraanulado
-             FROM matordemitem
+              (SELECT case when sum(m52_valor)  is null then 0 else sum(m52_valor) end as totalemordemdecompra
+              FROM matordemitem
+              WHERE m52_numemp = e60_numemp) -
+             (SELECT case when sum(m36_vrlanu) is null then 0 else sum(m36_vrlanu) end AS totalemordemdecompraanulado
+              FROM matordemitem
              INNER JOIN matordemitemanu ON m36_matordemitem = m52_codlanc
              WHERE m52_numemp = e60_numemp)
             and e60_vlremp > e60_vlranu ";
