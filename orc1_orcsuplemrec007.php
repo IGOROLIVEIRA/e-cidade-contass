@@ -76,6 +76,12 @@ if (isset($incluir)) {
 					$sqlerro = true;
 					$limpa_dados = false;
 				}
+			}else if(db_utils::fieldsMemory($rsFonte, 0)->o58_codigo == 166 or db_utils::fieldsMemory($rsFonte, 0)->o58_codigo == 167){
+				if($o70_codigo != 166 and $o70_codigo != 167){
+					db_msgbox("Não é possível incluir receita com fonte diferente da fonte das dotações suplementadas");
+					$sqlerro = true;
+					$limpa_dados = false;
+				}
 			}else if ($o70_codigo != db_utils::fieldsMemory($rsFonte, 0)->o58_codigo) {
 				db_msgbox("Não é possível incluir receita com fonte diferente da fonte das dotações suplementadas");
 				$sqlerro = true;
