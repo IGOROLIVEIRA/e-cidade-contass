@@ -100,9 +100,10 @@ class Evento
     }
 
     public function adicionarFila()
-    {
+    {   
+        $tipoEvento = str_replace('Individual', '', $this->tipoEvento);
         $where = array(
-            "rh213_evento = {$this->tipoEvento}",
+            "rh213_evento = {$tipoEvento}",
             "rh213_empregador = {$this->empregador}",
             "rh213_responsavelpreenchimento = '{$this->responsavelPreenchimento}'",
         );
@@ -135,9 +136,9 @@ class Evento
     private function adicionarEvento()
     {
         $dados                                          = $this->montarDadosAPI();
-
+        $tipoEvento = str_replace('Individual', '', $this->tipoEvento);
         $daoFilaEsocial                                 = new \cl_esocialenvio();
-        $daoFilaEsocial->rh213_evento                   = $this->tipoEvento;
+        $daoFilaEsocial->rh213_evento                   = $tipoEvento;
         $daoFilaEsocial->rh213_empregador               = $this->empregador;
         $daoFilaEsocial->rh213_responsavelpreenchimento = $this->responsavelPreenchimento;
         $daoFilaEsocial->rh213_ambienteenvio            = $this->tpAmb;
@@ -146,7 +147,6 @@ class Evento
         $daoFilaEsocial->rh213_md5      = $this->md5;
         $daoFilaEsocial->rh213_situacao = \cl_esocialenvio::SITUACAO_NAO_ENVIADO;
         $daoFilaEsocial->rh213_dataprocessamento = date('Y-m-d h:i:s');
-
         if (is_object($dados) || count($dados) > 0) {
             $daoFilaEsocial->incluir(null);
             if ($daoFilaEsocial->erro_status == 0) {

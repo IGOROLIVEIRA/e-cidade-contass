@@ -303,12 +303,6 @@ try {
         case "transmitirrubricas":
             $dadosESocial = new DadosESocial();
 
-            $dao = new cl_db_config();
-            $sql = $dao->sql_query_file(null, "numcgm", null, "codigo = " . db_getsession("DB_instit"));
-
-            $rs = db_query($sql);
-            $iCgm = db_utils::fieldsMemory($rs, 0)->numcgm;
-            
             //Rubricas a serem enviadas
             $seqRubricas = $oParam->rubricas;
             $explode_seq = explode(',', $seqRubricas);
@@ -318,17 +312,13 @@ try {
             }
             $stringRubricas = implode(",", $aRubricas);
 
+            $iCgm = $oParam->empregador;
             $dadosESocial->setReponsavelPeloPreenchimento($iCgm);
             $dadosDoPreenchimento = $dadosESocial->getPorTipo(Tipo::RUBRICA,$stringRubricas);
-
-            $formatter = FormatterFactory::get(Tipo::S1010);
-            $dadosTabelaRubricas = $formatter->formatar($dadosDoPreenchimento);
-            /**
-             * Limitado array em 50 pois e o maximo que um lote pode enviar
-             */
-            foreach (array_chunk($dadosTabelaRubricas, 50) as $aTabelaRubricas) {
-                $eventoFila = new Evento(Tipo::S1010, $iCgm, $iCgm, $aTabelaRubricas);
-                $eventoFila->adicionarFila();
+            $arquivo = "S1010Individual";
+            foreach (array_chunk($dadosDoPreenchimento, 1) as $aTabela) {
+               $eventoFila = new Evento($arquivo, $iCgm, $iCgm, $aTabela, $oParam->tpAmb, "{$oParam->iAnoValidade}-{$oParam->iMesValidade}", $oParam->modo, $oParam->dtalteracao);
+               $eventoFila->adicionarFila();
             }
 
             $oRetorno->sMessage = "Dados das Rúbricas agendados para envio.";
