@@ -151,6 +151,9 @@ switch ($oParam->exec) {
             $oRetorno->acordo        = $oAcordo->getCodigoAcordo();
             $oRetorno->datamovimento = date("Y-m-d", db_getsession("DB_datausu"));
             $oRetorno->descricao     = urlencode($oAcordo->getResumoObjeto());
+            $dataReferencia = db_query("select ac16_datareferencia from acordo where ac16_sequencial = $oRetorno->acordo");
+            $dataReferencia = pg_result($dataReferencia, 0, 'ac16_datareferencia');
+            $oRetorno->datareferencia = $dataReferencia;
         } catch (Exception $eExeption) {
 
             db_fim_transacao(true);
@@ -336,9 +339,11 @@ switch ($oParam->exec) {
 
             $oAssinatura = new AcordoAssinatura($oParam->codigo);
 
+            /*
             if (!$oAssinatura->verificaPeriodoPatrimonial()) {
                 $lAcordoValido = false;
-            }
+            } 
+            */
             $oAssinatura->setDataMovimento();
             $oAssinatura->setObservacao($sObservacao);
             $oAssinatura->cancelar();
@@ -369,6 +374,10 @@ switch ($oParam->exec) {
             $oRetorno->datamovimento = date("Y-m-d", db_getsession("DB_datausu"));
             $oRetorno->datamovimentoantiga = $oRecisao->getDataMovimento();
             $oRetorno->descricao     = urlencode($oAcordo->getResumoObjeto());
+
+            $dataReferencia = db_query("select ac16_datareferenciarescisao from acordo where ac16_sequencial = $oRetorno->acordo ");
+            $dataReferencia = pg_result($dataReferencia, 0, 'ac16_datareferenciarescisao');
+            $oRetorno->datarescisao = $dataReferencia;
         } catch (Exception $eExeption) {
 
             db_fim_transacao(true);
@@ -438,10 +447,11 @@ switch ($oParam->exec) {
             $oRecisao = new AcordoRescisao($oParam->codigo);
             $nValorRescisao = floatval(str_replace(',', '.', $oParam->valorrescisao));
 
+            /*
             if (!$oRecisao->verificaPeriodoPatrimonial()) {
                 $lAcordoValido = false;
             }
-
+            */
             $oRecisao->setDataMovimento();
             $oRecisao->setValorRescisao(0);
             $oRecisao->setObservacao($sObservacao);
