@@ -606,10 +606,10 @@ class Preenchimentos
         h13_categoria as codCateg,
         'LOTA1' as codLotacao,
         rh01_regist as matricula,
-        case when rh02_ocorre = 2 then 2
-        when rh02_ocorre = 3 then 3
-        when rh02_ocorre = 4 then 4
-        else 1
+        case when rh02_ocorre = '2' then 2
+        when rh02_ocorre = '3' then 3
+        when rh02_ocorre = '4' then 4
+        else '1'
         end as grauExp
     from
         rhpessoal
@@ -678,7 +678,18 @@ class Preenchimentos
         and rescisao.r59_regime = rhregime.rh30_regime
         and rescisao.r59_causa = rhpesrescisao.rh05_causa
         and rescisao.r59_caub = rhpesrescisao.rh05_caub::char(2)
-    where 1=1 and rh01_regist = 288771";
+    where h13_categoria in ('101', '106', '111', '301', '302', '303', '305', '306', '309', '312', '313', '902')
+    and rh30_vinculo = 'A'
+    and
+	exists (select
+	1
+from
+	gerfsal
+where
+	r14_anousu = fc_getsession('DB_anousu')::int
+	and r14_mesusu = date_part('month', fc_getsession('DB_datausu')::date)
+	and r14_instit = fc_getsession('DB_instit')::int
+	and r14_regist = rhpessoal.rh01_regist)";
 
         if ($matricula != null) {
             $sql .= "and rh01_regist in ($matricula) ";
@@ -687,7 +698,7 @@ class Preenchimentos
         $rs = \db_query($sql);
 
         if (!$rs) {
-            throw new \Exception("Erro ao buscar os preenchimentos do S2200");
+            throw new \Exception("Erro ao buscar os preenchimentos do S1200");
         }
         /**
          * @todo busca os empregadores da instituição e adicona para cada rubriuca

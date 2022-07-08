@@ -145,7 +145,6 @@ $oParam = JSON::create()->parse(str_replace('\\', "", $_POST["json"]));
 $oRetorno = new stdClass();
 $oRetorno->iStatus = 1;
 $oRetorno->sMessage = '';
-
 try {
     switch ($oParam->exec) {
         case "getEmpregadores":
@@ -277,7 +276,7 @@ try {
                 } else {
                     $dadosTabela = $dadosESocial->getPorTipo(Tipo::getTipoFormulario($arquivo), $oParam->matricula);
                     foreach (array_chunk($dadosTabela, 1) as $aTabela) {
-                        $eventoFila = new Evento($arquivo, $iCgm, $iCgm, $aTabela, $oParam->tpAmb, "{$oParam->iAnoValidade}-{$oParam->iMesValidade}", $oParam->modo, $oParam->dtalteracao);
+                        $eventoFila = new Evento($arquivo, $iCgm, $iCgm, $aTabela, $oParam->tpAmb, "{$oParam->iAnoValidade}-{$oParam->iMesValidade}", $oParam->modo, $oParam->dtalteracao, $oParam->indapuracao);
                         $eventoFila->adicionarFila();
                     }
                 }

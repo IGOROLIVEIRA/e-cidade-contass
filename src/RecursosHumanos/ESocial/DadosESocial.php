@@ -82,7 +82,9 @@ class DadosESocial
      */
     private function buscaPreenchimentos($matricula = null)
     {
+        // echo 'tst';
         // echo $this->tipo;
+        // echo Tipo::REMUNERACAO_TRABALHADOR;
         // exit;
         $configuracao = new Configuracao();
         $formularioId = $configuracao->getFormulario($this->tipo);

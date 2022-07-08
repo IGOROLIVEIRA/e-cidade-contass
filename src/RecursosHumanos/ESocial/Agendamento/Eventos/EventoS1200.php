@@ -31,22 +31,21 @@ class EventoS1200 extends EventoBase
     public function montarDados()
     {
         $aDadosAPI = array();
-
         $iSequencial = 1;
         foreach ($this->dados as $oDados) {
-            // print_r($oDados);
-            // exit;
-            //$this->buscarRubricas($oDados->vinculo->matricula);
             $oDadosAPI                                   = new \stdClass;
             $oDadosAPI->evtRemun                      = new \stdClass;
             $oDadosAPI->evtRemun->sequencial          = $iSequencial;
+            $oDadosAPI->evtRemun->modo                = $this->modo;
             $oDadosAPI->evtRemun->indRetif            = 1;
             $oDadosAPI->evtRemun->nrRecibo            = null;
 
-            // $oDadosAPI->evtRemun->indapuracao         = $oDados->indapuracao;
-            // $oDadosAPI->evtRemun->perapur             = $oDados->perapur;
-            $oDadosAPI->evtRemun->cpfTrab             = $oDados->cpfTrab;
-
+            $oDadosAPI->evtRemun->indapuracao         = $this->indapuracao;
+            $oDadosAPI->evtRemun->perapur             = date('Y-m');
+            if ($oDados->indapuracao == 2) {
+                $oDadosAPI->evtRemun->perapur         = date('Y');
+            }
+            $oDadosAPI->evtRemun->cpftrab             = $oDados->cpftrab;
             $oDadosAPI->evtRemun->infomv->indmv       = $oDados->indmv;
             $oDadosAPI->evtRemun->infomv->remunoutrempr->tpinsc = 1;
             $oDadosAPI->evtRemun->infomv->remunoutrempr->nrinsc  = $oDados->cgc;
@@ -56,25 +55,25 @@ class EventoS1200 extends EventoBase
             $oDadosAPI->evtRemun->dmdev->idedmdev  = $this->buscarIdentificador($oDados->matricula);
             $oDadosAPI->evtRemun->dmdev->codcateg  = $oDados->codcateg;
 
-
             $oDadosAPI->evtRemun->dmdev->remunperapur->matricula   = $oDados->matricula;
-            $oDadosAPI->evtRemun->dmdev->remunperapur->itensremun->idetabrubr   = 'tabrub1';
-            echo 'leras';
-            exit;
-            $oDadosAPI->evtRemun->dmdev->remunperapur->itensremun->vrrubr   = $this->buscarValorRubrica($oDados->matricula);
+
+            $oDadosAPI->evtRemun->dmdev->remunperapur->itensremun->codrubr     =
+            $oDadosAPI->evtRemun->dmdev->remunperapur->itensremun->idetabrubr  = 'tabrub1';
+            $oDadosAPI->evtRemun->dmdev->remunperapur->itensremun->vrrubr      = $this->buscarValorRubrica($oDados->matricula);
             $oDadosAPI->evtRemun->dmdev->remunperapur->itensremun->indapurir   = 0;
 
-            $oDadosAPI->evtRemun->dmdev->remunperapur->infoagnocivo->grauexp = $oDados->grauExp;
-
+            if (!empty($oDados->grauExp)) {
+                $oDadosAPI->evtRemun->dmdev->remunperapur->infoagnocivo->grauexp = $oDados->grauExp;
+            }
             //$oDadosAPI->evtRemun->dtAlteracao         = '2021-01-29'; //$oDados->altContratual->dtAlteracao;
         }
 
         $aDadosAPI[] = $oDadosAPI;
         $iSequencial++;
 
-        echo '<pre>';
-        print_r($aDadosAPI);
-        exit;
+        // echo '<pre>';
+        // print_r($aDadosAPI);
+        // exit;
         return $aDadosAPI;
     }
 
@@ -118,7 +117,7 @@ class EventoS1200 extends EventoBase
                         case
                         when '{$arquivo}' = 'gerfsal' then 1
                         when '{$arquivo}' = 'gerfcom' then 3
-                        when '{$arquivo}' = 'gerffer' then 4
+                        when '{$arquivo}' = 'gerfs13' then 4
                         end as ideDmDev
                         from {$arquivo}
                         where ".$sigla."anousu = '".$iAnoUsu."'
@@ -128,7 +127,6 @@ class EventoS1200 extends EventoBase
             }
 
             $rsIdentificadores = db_query($sql);
-
             if ($rsIdentificadores) {
                 $oIdentificadores = \db_utils::fieldsMemory($rsIdentificadores, 0);
                 if (!empty($oIdentificadores->idedmdev)) {
@@ -171,7 +169,7 @@ class EventoS1200 extends EventoBase
             }
             if ($opcao) {
                 $sql = "  select distinct
-                        {$sigla}valor
+                        {$sigla}valor as valor
                         from {$arquivo}
                         where ".$sigla."anousu = '".$iAnoUsu."'
                         and  ".$sigla."mesusu = '".$iMesusu."'
@@ -179,15 +177,10 @@ class EventoS1200 extends EventoBase
                         and {$sigla}regist = $matricula";
             }
 
-            $rsValor = db_query($sql);
-            echo $sql;
-            db_criatabela($rsValor);
-            exit;
-            if ($rsValor) {
-                $oValor = \db_utils::fieldsMemory($rsValor, 0);
-                if (!empty($oValor->idedmdev)) {
-                    $aValor[] = $oValor->idedmdev;
-                }
+            $rsValores = db_query($sql);
+            for ($iCont = 0; $iCont < pg_num_rows($rsValores); $iCont++) {
+                $oValor = \db_utils::fieldsMemory($rsValores, $iCont);
+                $aValor[] = $oValor->valor;
             }
         }
         return $aValor;
