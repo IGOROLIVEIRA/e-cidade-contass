@@ -155,6 +155,7 @@ class cl_acordoposicaoaditamento
       $this->ac35_veiculodivulgacao = 'null';
     }
 
+
     $sql = "insert into acordoposicaoaditamento(
                                        ac35_sequencial
                                       ,ac35_valor
@@ -173,7 +174,7 @@ class cl_acordoposicaoaditamento
                                ," . ($this->ac35_datapublicacao == "null" ? "null" : "'" . $this->ac35_datapublicacao . "'") . "
                                ,'$this->ac35_descricaoalteracao'
                                ,'$this->ac35_veiculodivulgacao'
-                               ,'$this->ac35_datareferencia'
+                               ," . ($this->ac35_datareferencia == "null" ? "null" : "'" . $this->ac35_datareferencia . "'") . "
                       )";
     $result = db_query($sql);
     if ($result == false) {
