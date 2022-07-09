@@ -57,20 +57,15 @@ class EventoS1200 extends EventoBase
 
             $oDadosAPI->evtRemun->dmdev->remunperapur->matricula   = $oDados->matricula;
 
-            $oDadosAPI->evtRemun->dmdev->remunperapur->itensremun->codrubr     =
-            $oDadosAPI->evtRemun->dmdev->remunperapur->itensremun->idetabrubr  = 'tabrub1';
-            $oDadosAPI->evtRemun->dmdev->remunperapur->itensremun->vrrubr      = $this->buscarValorRubrica($oDados->matricula);
-            $oDadosAPI->evtRemun->dmdev->remunperapur->itensremun->indapurir   = 0;
+            $oDadosAPI->evtRemun->dmdev->remunperapur->itensremun  = $this->buscarValorRubrica($oDados->matricula);
 
             if (!empty($oDados->grauExp)) {
                 $oDadosAPI->evtRemun->dmdev->remunperapur->infoagnocivo->grauexp = $oDados->grauExp;
             }
             //$oDadosAPI->evtRemun->dtAlteracao         = '2021-01-29'; //$oDados->altContratual->dtAlteracao;
+            $aDadosAPI[] = $oDadosAPI;
+            $iSequencial++;
         }
-
-        $aDadosAPI[] = $oDadosAPI;
-        $iSequencial++;
-
         // echo '<pre>';
         // print_r($aDadosAPI);
         // exit;
@@ -169,7 +164,8 @@ class EventoS1200 extends EventoBase
             }
             if ($opcao) {
                 $sql = "  select distinct
-                        {$sigla}valor as valor
+                        {$sigla}valor as valor,
+                        {$sigla}rubric as rubrica
                         from {$arquivo}
                         where ".$sigla."anousu = '".$iAnoUsu."'
                         and  ".$sigla."mesusu = '".$iMesusu."'
@@ -178,11 +174,20 @@ class EventoS1200 extends EventoBase
             }
 
             $rsValores = db_query($sql);
+            // echo $sql;
+            // db_criatabela($rsValores);
+            // exit;
             for ($iCont = 0; $iCont < pg_num_rows($rsValores); $iCont++) {
-                $oValor = \db_utils::fieldsMemory($rsValores, $iCont);
-                $aValor[] = $oValor->valor;
+                $oResult = \db_utils::fieldsMemory($rsValores, $iCont);
+                $oFormatado = new \stdClass;
+                $oFormatado->codrubr    = $oResult->rubrica;
+                $oFormatado->idetabrubr = 'tabrub1';
+                $oFormatado->vrrubr     = $oResult->valor;
+                $oFormatado->indapurir  = 0;
+
+                $aItens[] = $oFormatado;
             }
         }
-        return $aValor;
+        return $aItens;
     }
 }
