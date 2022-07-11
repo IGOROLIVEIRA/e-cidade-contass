@@ -298,6 +298,9 @@ $rotulo->label("z01_cgccpf");
             if (isset($chave_z01_nome) && $chave_z01_nome != "") {
               $whereRelCompra .= " AND z01_nome LIKE '%$chave_z01_nome%'";
             }
+
+
+            $sql = $clempempenho->sql_query(null, $campos, null, $whereRelCompra);
           }
 
           if ($inclusaoordemcompra == true) {
@@ -338,10 +341,7 @@ $rotulo->label("z01_cgccpf");
 
 
             $sql = $clempempenho->sql_query_inclusaoempenho(null, $campos, null, $dbwhere);
-          } else {
-            $sql = $clempempenho->sql_query(null, $campos, null, $whereRelCompra);
           }
-
           $result = $clempempenho->sql_record($sql);
         ?>
 
