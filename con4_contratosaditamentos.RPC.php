@@ -37,6 +37,7 @@ $oParam            = json_decode(str_replace("\\", "", $_POST["json"]));
 $oRetorno          = new stdClass();
 $oRetorno->erro    = false;
 $oRetorno->message = '';
+$oRetorno->datareferencia = false;
 
 
 try {
@@ -194,6 +195,7 @@ try {
 
                 if ($dateassinatura != "" && $oParam->datareferencia == "") {
                     if ($c99_datapat != "" && $dateassinatura <= $c99_datapat) {
+                        $oRetorno->datareferencia = true;
                         throw new Exception(' O período já foi encerrado para envio do SICOM. Preencha o campo Data de Referência com uma data no mês subsequente.');
                     }
                 }
@@ -256,7 +258,10 @@ try {
 
                 if ($dateassinatura != "" && $oParam->datareferencia == "") {
                     if ($c99_datapat != "" && $dateassinatura <= $c99_datapat) {
+                        $oRetorno->datareferencia = true;
                         throw new Exception(' O período já foi encerrado para envio do SICOM. Preencha o campo Data de Referência com uma data no mês subsequente.');
+                    } else {
+                        $oParam->datareferencia = $oParam->sData;
                     }
                 }
             }
@@ -281,10 +286,17 @@ try {
             $oAditivo->ac35_datapublicacao = $sDataPublicacao;
             $oAditivo->ac35_veiculodivulgacao = $sVeiculoDivulgacao;
 
+            $dataref = $oParam->datareferencia;
+            $dataref = str_replace("/", "-", $dataref);
+            $dataref =  date('Y-m-d', strtotime($dataref));
+
             $oAditivo->alterar($iCodigoAditivo);
             if ($oAditivo->erro_status == 0) {
                 throw new Exception($oAditivo->erro_msg);
             } else {
+                db_query("UPDATE acordoposicaoaditamento
+                SET datareferencia = '$dataref'
+                WHERE ac35_sequencial = $iCodigoAditivo");
                 $oRetorno->message = "Assinatura salva com sucesso";
             }
 
@@ -297,7 +309,6 @@ try {
 
     db_fim_transacao(true);
     $oRetorno->erro  = true;
-    $oRetorno->datareferencia = true;
     $oRetorno->message = urlencode($eErro->getMessage());
 }
 

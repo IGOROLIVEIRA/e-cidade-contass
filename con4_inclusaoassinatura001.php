@@ -394,13 +394,21 @@ $clrotulo->label("ac10_obs");
         method: 'post',
         parameters: 'json=' + Object.toJSON(oParam),
         onComplete: function(o) {
+          var oRetorno = eval("(" + o.responseText + ")");
           alert((eval("(" + o.responseText + ")").message).urlDecode());
-          document.form1.iCodigoAditivo.value = '';
-          document.form1.sDescricaoAditivo.value = '';
-          document.form1.sData.value = '';
-          document.form1.sDataPublicacao.value = '';
-          document.form1.sVeiculoDivulgacao.value = '';
-          js_carregaAditamentos();
+
+          if (oRetorno.datareferencia == true) {
+            document.getElementById("trdatareferencia").style.display = 'contents';
+          } else {
+            document.form1.iCodigoAditivo.value = '';
+            document.form1.sDescricaoAditivo.value = '';
+            document.form1.sData.value = '';
+            document.form1.sDataPublicacao.value = '';
+            document.form1.sVeiculoDivulgacao.value = '';
+            js_carregaAditamentos();
+          }
+
+
         }
       });
   }
