@@ -64,6 +64,7 @@ class cl_pcmater {
    var $pc01_justificativa = null;
    var $pc01_dataalteracao = null;
    var $pc01_instit = null;
+   var $pc01_codmaterant = null;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  pc01_codmater = int4 = Código do Material
@@ -88,6 +89,7 @@ class cl_pcmater {
                  pc01_justificativa = varchar(100) = Justificativa da Alteração
                  pc01_dataalteracao = date = Data da Alteração
                  pc01_instit = int = instituicao do item
+                 pc01_codmaterant = int4 = codigo material anterior
                  ";
    //funcao construtor da classe
    function cl_pcmater() {
@@ -125,6 +127,7 @@ class cl_pcmater {
        $this->pc01_justificativa = ($this->pc01_justificativa == "f"?@$GLOBALS["HTTP_POST_VARS"]["pc01_justificativa"]:$this->pc01_justificativa);
        $this->pc01_dataalteracao = ($this->pc01_dataalteracao == "f"?@$GLOBALS["HTTP_POST_VARS"]["pc01_dataalteracao"]:$this->pc01_dataalteracao);
        $this->pc01_instit = ($this->pc01_instit == "f"?@$GLOBALS["HTTP_POST_VARS"]["pc01_instit"]:$this->pc01_instit);
+       $this->pc01_codmaterant = ($this->pc01_codmaterant == "f"?@$GLOBALS["HTTP_POST_VARS"]["pc01_codmaterant"]:$this->pc01_codmaterant);
      }else{
        $this->pc01_codmater = ($this->pc01_codmater == ""?@$GLOBALS["HTTP_POST_VARS"]["pc01_codmater"]:$this->pc01_codmater);
      }
@@ -243,6 +246,10 @@ class cl_pcmater {
      if($this->pc01_instit == null ){ 
         $this->pc01_instit = db_getsession('DB_instit');
       }
+      
+      if($this->pc01_codmaterant == null ){ 
+        $this->pc01_codmaterant = "0";
+      }
 
      if($pc01_codmater == "" || $pc01_codmater == null ){
        $result = db_query("select nextval('pcmater_pc01_codmater_seq')");
@@ -296,6 +303,7 @@ class cl_pcmater {
                                       ,pc01_taxa
                                       ,pc01_obras
                                       ,pc01_instit
+                                      ,pc01_codmaterant
                        )
                 values (
                                 $this->pc01_codmater
@@ -317,6 +325,7 @@ class cl_pcmater {
                                ,'$this->pc01_taxa'
                                ,'$this->pc01_obras'
                                ,$this->pc01_instit
+                               ,$this->pc01_codmaterant
                       )";
      $result = db_query($sql);
      if($result==false){
@@ -1017,6 +1026,7 @@ class cl_pcmater {
      $sql .= "      inner join pcorcamitemlic   on l21_codigo = pc26_liclicitem";
      $sql .= "      inner join pcorcamjulg      on pc26_orcamitem = pc24_orcamitem and pc24_pontuacao = 1";
      $sql .= "      inner join pcorcamforne     on pc24_orcamforne = pc21_orcamforne";
+     $sql .= "      left  join pcorcamval       on pc21_orcamforne = pc23_orcamforne and pc24_orcamitem = pc23_orcamitem";
      $sql .= "      inner join cgm              on pc21_numcgm = z01_numcgm";
      $sql .= "      left  join orcelemento      on  orcelemento.o56_codele  = pc07_codele and orcelemento.o56_anousu = ".db_getsession("DB_anousu");
      $sql .= "      inner join solicitemregistropreco   on pc57_solicitem = pc11_codigo";

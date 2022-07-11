@@ -67,6 +67,7 @@ class cl_empnota {
    var $e69_notafiscaleletronica = 0;
    var $e69_chaveacesso = null;
    var $e69_nfserie = null;
+   var $e69_cgmemitente = null;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  e69_codnota = int4 = Nota
@@ -82,6 +83,7 @@ class cl_empnota {
                  e69_notafiscaleletronica = int8 = Tipo de Nota Fiscal Eletrônica
                  e69_chaveacesso = varchar(60) = Chave de Acesso
                  e69_nfserie = varchar(8) = Série da Nota
+                 e69_cgmemitente = int4 = CGM do Emitente
                  ";
    //funcao construtor da classe
    function cl_empnota() {
@@ -142,6 +144,7 @@ class cl_empnota {
        $this->e69_notafiscaleletronica = ($this->e69_notafiscaleletronica == ""?@$GLOBALS["HTTP_POST_VARS"]["e69_notafiscaleletronica"]:$this->e69_notafiscaleletronica);
        $this->e69_chaveacesso = ($this->e69_chaveacesso == ""?@$GLOBALS["HTTP_POST_VARS"]["e69_chaveacesso"]:$this->e69_chaveacesso);
        $this->e69_nfserie = ($this->e69_nfserie == ""?@$GLOBALS["HTTP_POST_VARS"]["e69_nfserie"]:$this->e69_nfserie);
+        $this->e69_cgmemitente = ($this->e69_cgmemitente == ""?@$GLOBALS["HTTP_POST_VARS"]["e69_cgmemitente"]:$this->e69_cgmemitente);       
      }else{
        $this->e69_codnota = ($this->e69_codnota == ""?@$GLOBALS["HTTP_POST_VARS"]["e69_codnota"]:$this->e69_codnota);
      }
@@ -299,6 +302,7 @@ class cl_empnota {
                                       ,e69_notafiscaleletronica
                                       ,e69_chaveacesso
                                       ,e69_nfserie
+                                      ,e69_cgmemitente
                        )
                 values (
                                 $this->e69_codnota
@@ -314,6 +318,7 @@ class cl_empnota {
                               ,".($this->e69_notafiscaleletronica == 0 || $this->e69_notafiscaleletronica == '' ? '3' : $this->e69_notafiscaleletronica)."
                               ,'".($this->e69_chaveacesso == '' ? 'null' : $this->e69_chaveacesso)."'
                               ,'".($this->e69_nfserie == '' ? 'S/N' : $this->e69_nfserie)."'
+                              ,'".($this->e69_cgmemitente == '' ? 0 : $this->e69_cgmemitente)."'
                       )";
      $result = db_query($sql);
      if($result==false){
@@ -325,7 +330,7 @@ class cl_empnota {
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        }else{
          $this->erro_sql   = "Notas empenho ($this->e69_codnota) nao Incluído. Inclusao Abortada.";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   = "Usuário: \\n\\n ".$sql . " -- " . $this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        }
        $this->erro_status = "0";
@@ -567,6 +572,11 @@ class cl_empnota {
          return false;
        }
      }
+        if(trim($this->e69_cgmemitente)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e69_cgmemitente"])){
+            $sql  .= $virgula." e69_cgmemitente = '{$this->e69_cgmemitente}' ";
+            $virgula = ",";
+        }
+
      if(trim($this->e69_nfserie)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e69_nfserie"])){
        $sql  .= $virgula." e69_nfserie = '{$this->e69_nfserie}' ";
        $virgula = ",";

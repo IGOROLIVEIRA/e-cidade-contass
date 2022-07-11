@@ -840,17 +840,20 @@ class cl_empagetipo {
       $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codtri in ('100','170')) and";  
     }elseif(substr($iFonteEmpenho, 1, 2) == '60'){
       $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codtri in ('186')) and";
-    }elseif($iAnoUsu > 2021 and $iAnoEmpenho <2022){
+    }elseif(substr($iFonteEmpenho, 1, 2) == '22'){
+        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codtri in ('$iFonteEmpenho','122')) and";
+    }elseif(substr($iFonteEmpenho, 1, 2) != '60'){ // OC11508 Verificação adicionada para permitir utilização do recurso 160/260 na fonte 100
+      $whereFonte = " ";
+      $whereFonte2 = " AND (SELECT substr(o15_codtri,2,2) FROM orctiporec WHERE o15_codigo = c61_codigo) = (SELECT substr(o15_codtri,2,2) FROM orctiporec WHERE o15_codigo = o58_codigo) ";
+    }
+    if($iAnoUsu > 2021 and $iAnoEmpenho <2022){
       if(substr($iFonteEmpenho, 1, 2) == '22'){
-      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codtri in ('$iFonteEmpenho','171')) and";  
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codtri in ('$iFonteEmpenho','171','122')) and";  
       }elseif(substr($iFonteEmpenho, 1, 2) == '23'){
         $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codtri in ('$iFonteEmpenho','176')) and";
       }elseif(substr($iFonteEmpenho, 1, 2) == '24'){
         $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codtri in ('$iFonteEmpenho','181')) and";
       } 
-    }elseif(substr($iFonteEmpenho, 1, 2) != '60'){ // OC11508 Verificação adicionada para permitir utilização do recurso 160/260 na fonte 100
-      $whereFonte = " ";
-      $whereFonte2 = " AND (SELECT substr(o15_codtri,2,2) FROM orctiporec WHERE o15_codigo = c61_codigo) = (SELECT substr(o15_codtri,2,2) FROM orctiporec WHERE o15_codigo = o58_codigo) ";
     }
 
     $sSql .= "from empagetipo left join ";
@@ -880,8 +883,10 @@ class cl_empagetipo {
       $sSql .= " and c61_anousu =".db_getsession("DB_anousu");
     }
     /* OC11508 Verificação adicionada para permitir utilização do recurso 160/260 na fonte 100 */
-    if(substr($iFonteEmpenho, 1, 2) == '60') {
-      $sSql .= " and e83_descr like '%FEP' ";
+    if($iAnoUsu < 2022){
+        if(substr($iFonteEmpenho, 1, 2) == '60') {
+          $sSql .= " and e83_descr like '%FEP' ";
+        }
     }
     /* OC12503 Verificação adicionada para permitir utilização do recurso 161/261 na fonte 100 */
     if(substr($iFonteEmpenho, 1, 2) == '61') {

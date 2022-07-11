@@ -63,7 +63,7 @@ $oRetorno->message = "";
 
 switch ($oParam->exec) {
 
-  case "getProcessoAdministrativo" :
+  case "getProcessoAdministrativo":
 
     $oDaoSolicitaProtProcesso = new cl_solicitaprotprocesso();
     $sSqlProcesso = $oDaoSolicitaProtProcesso->sql_query_file(null, "*", null, " pc90_solicita = {$oParam->iSolicitacao} ");
@@ -74,14 +74,14 @@ switch ($oParam->exec) {
       $oRetorno->pc90_numeroprocesso = $sProcesso;
     }
 
-  break;
+    break;
 
 
 
   case "getTipoLicitacao":
 
     $oDaoCfgLiclicita          = db_utils::getDao("cflicita");
-    $sSqlTipoLicitacao         = $oDaoCfgLiclicita->sql_query_file(null,"l03_tipo, l03_descr", '', "l03_codcom = {$oParam->iTipoCompra}");
+    $sSqlTipoLicitacao         = $oDaoCfgLiclicita->sql_query_file(null, "l03_tipo, l03_descr", '', "l03_codcom = {$oParam->iTipoCompra}");
     $rsTipoLicitacao           = $oDaoCfgLiclicita->sql_record($sSqlTipoLicitacao);
     $oRetorno->aTiposLicitacao = array();
 
@@ -92,18 +92,18 @@ switch ($oParam->exec) {
       }
     }
 
-      /*
+    /*
        * Busca os Tipos de Compra
        */
-      $sSqlPcTipoCompra   = $oDaoPcTipoCompra->sql_query_file(null, 'pc50_codcom, pc50_descr,pc50_pctipocompratribunal','',"pc50_codcom = {$oParam->iTipoCompra}");
-      $rsExecPcTipoCompra = $oDaoPcTipoCompra->sql_record($sSqlPcTipoCompra);
-      $oRetorno->tipocompratribunal = db_utils::fieldsMemory($rsExecPcTipoCompra, 0)->pc50_pctipocompratribunal;
+    $sSqlPcTipoCompra   = $oDaoPcTipoCompra->sql_query_file(null, 'pc50_codcom, pc50_descr,pc50_pctipocompratribunal', '', "pc50_codcom = {$oParam->iTipoCompra}");
+    $rsExecPcTipoCompra = $oDaoPcTipoCompra->sql_record($sSqlPcTipoCompra);
+    $oRetorno->tipocompratribunal = db_utils::fieldsMemory($rsExecPcTipoCompra, 0)->pc50_pctipocompratribunal;
 
 
-  break;
-  /**
-   * Busca os Tipos de Compra
-   */
+    break;
+    /**
+     * Busca os Tipos de Compra
+     */
   case "getTipoCompraEmpenho":
 
     /**
@@ -141,7 +141,7 @@ switch ($oParam->exec) {
 
     if ($rsResumo && pg_num_rows($rsResumo) > 0) {
 
-      $oResumo           = db_utils::fieldsMemory($rsResumo,0, false, false, false);
+      $oResumo           = db_utils::fieldsMemory($rsResumo, 0, false, false, false);
       $oRetorno->sResumo = utf8_encode($oResumo->pc10_resumo);
     }
 
@@ -171,41 +171,41 @@ switch ($oParam->exec) {
     !isset($oParam->iOrigemDados) ? $oParam->iOrigemDados = "" : $oParam->iOrigemDados;
     switch ($oParam->iOrigemDados) {
 
-    	case 1:
+      case 1:
 
-    		$oDaoPcProc         = db_utils::getDao('pcproc');
-    		$sSqlProcessoCompra = $oDaoPcProc->sql_query_tipocompra($oParam->iCodigo, "pc50_codcom");
-    		$rsProcessoCompra   = $oDaoPcProc->sql_record($sSqlProcessoCompra);
-    		if ($oDaoPcProc->numrows > 0) {
+        $oDaoPcProc         = db_utils::getDao('pcproc');
+        $sSqlProcessoCompra = $oDaoPcProc->sql_query_tipocompra($oParam->iCodigo, "pc50_codcom");
+        $rsProcessoCompra   = $oDaoPcProc->sql_record($sSqlProcessoCompra);
+        if ($oDaoPcProc->numrows > 0) {
 
-    			$iTipoCompra                  = db_utils::fieldsMemory($rsProcessoCompra, 0)->pc50_codcom;
-    			$oRetorno->iTipoCompraInicial = $iTipoCompra;
-    		}
+          $iTipoCompra                  = db_utils::fieldsMemory($rsProcessoCompra, 0)->pc50_codcom;
+          $oRetorno->iTipoCompraInicial = $iTipoCompra;
+        }
 
-    		break;
+        break;
 
-    	case 2:
+      case 2:
 
-    		$oDaoSolicita        = db_utils::getDao('solicita');
-    		$sSqlBuscaTipoCompra = $oDaoSolicita->sql_query_tipocompra($oParam->iCodigo, "pc50_codcom");
-    		$rsBuscaTipoCompra   = $oDaoSolicita->sql_record($sSqlBuscaTipoCompra);
-    		if ($oDaoSolicita->numrows > 0) {
+        $oDaoSolicita        = db_utils::getDao('solicita');
+        $sSqlBuscaTipoCompra = $oDaoSolicita->sql_query_tipocompra($oParam->iCodigo, "pc50_codcom");
+        $rsBuscaTipoCompra   = $oDaoSolicita->sql_record($sSqlBuscaTipoCompra);
+        if ($oDaoSolicita->numrows > 0) {
 
-    			$iTipoCompra = db_utils::fieldsMemory($rsBuscaTipoCompra, 0)->pc50_codcom;
-    			$oRetorno->iTipoCompraInicial = $iTipoCompra;
-    		}
-    		break;
+          $iTipoCompra = db_utils::fieldsMemory($rsBuscaTipoCompra, 0)->pc50_codcom;
+          $oRetorno->iTipoCompraInicial = $iTipoCompra;
+        }
+        break;
 
-    	default:
+      default:
 
-    		$oDaoLicLicita       = db_utils::getDao('liclicita');
-    		$sSqlBuscaTipoCompra = $oDaoLicLicita->sql_query($oParam->iCodigo, "pc50_codcom");
-    		$rsBuscaTipoCompra   = $oDaoLicLicita->sql_record($sSqlBuscaTipoCompra);
-    		if ($oDaoLicLicita->numrows > 0) {
+        $oDaoLicLicita       = db_utils::getDao('liclicita');
+        $sSqlBuscaTipoCompra = $oDaoLicLicita->sql_query($oParam->iCodigo, "pc50_codcom");
+        $rsBuscaTipoCompra   = $oDaoLicLicita->sql_record($sSqlBuscaTipoCompra);
+        if ($oDaoLicLicita->numrows > 0) {
 
-    			$iTipoCompra = db_utils::fieldsMemory($rsBuscaTipoCompra, 0)->pc50_codcom;
-    			$oRetorno->iTipoCompraInicial = $iTipoCompra;
-    		}
+          $iTipoCompra = db_utils::fieldsMemory($rsBuscaTipoCompra, 0)->pc50_codcom;
+          $oRetorno->iTipoCompraInicial = $iTipoCompra;
+        }
     }
 
     /*
@@ -218,7 +218,7 @@ switch ($oParam->exec) {
 
     if ($oDaoEmpTipo->numrows > 0) {
 
-      for($iRow = 0; $iRow < $oDaoEmpTipo->numrows; $iRow++) {
+      for ($iRow = 0; $iRow < $oDaoEmpTipo->numrows; $iRow++) {
 
         $oDadosTipoEmpenho = db_utils::fieldsMemory($rsExecTipoEmpenho, $iRow, false, false, true);
         $aTipoEmpenho[]    = $oDadosTipoEmpenho;
@@ -231,35 +231,35 @@ switch ($oParam->exec) {
       $oRetorno->status = 0;
     }
 
-  break;
+    break;
 
-  /**
-   * Busca os Itens para uma Autorização
-   */
+    /**
+     * Busca os Itens para uma Autorização
+     */
   case "getItensParaAutorizacao":
 
     $oLicitacao       = new licitacao($oParam->iCodigo);
     $oRetorno->aItens = $oLicitacao->getItensParaAutorizacao();
 
-  break;
+    break;
 
-    case "getDados":
-        $oDaoLicLicita       = db_utils::getDao('liclicita');
-        $sSqlDadoslicitacao = $oDaoLicLicita->sql_query_file($oParam->iCodigo,"l20_numero,l20_edital as numerolicitacao,l20_anousu,l20_codtipocom as tipocompra");
-        $rsResult   = $oDaoLicLicita->sql_record($sSqlDadoslicitacao);
-        $oDados = db_utils::fieldsMemory($rsResult,0);
+  case "getDados":
+    $oDaoLicLicita       = db_utils::getDao('liclicita');
+    $sSqlDadoslicitacao = $oDaoLicLicita->sql_query_file($oParam->iCodigo, "l20_numero,l20_edital as numerolicitacao,l20_anousu,l20_codtipocom as tipocompra");
+    $rsResult   = $oDaoLicLicita->sql_record($sSqlDadoslicitacao);
+    $oDados = db_utils::fieldsMemory($rsResult, 0);
 
-        $oRetorno->numerolicitacao = $oDados->numerolicitacao;
-        $oRetorno->l20_numero = $oDados->l20_numero;
-        $oRetorno->l20_anousu = $oDados->l20_anousu;
-        $oRetorno->tipocompra = $oDados->tipocompra;
-        $oRetorno->licitacao = 't';
+    $oRetorno->numerolicitacao = $oDados->numerolicitacao;
+    $oRetorno->l20_numero = $oDados->l20_numero;
+    $oRetorno->l20_anousu = $oDados->l20_anousu;
+    $oRetorno->tipocompra = $oDados->tipocompra;
+    $oRetorno->licitacao = 't';
 
     break;
 
-  /**
-   * Gera Autorização
-   */
+    /**
+     * Gera Autorização
+     */
   case "gerarAutorizacoes":
     /* Ocorrência 2630
     * Validações de datas para geração de autorizações de empenhos e geração de empenhos
@@ -267,105 +267,101 @@ switch ($oParam->exec) {
     * 2. Validar impedimento para geração de autorizações de empenhos de licitações que não estejam homologadas.
     */
     $sSqlDataHomologacao = "select l202_datahomologacao from homologacaoadjudica where l202_licitacao = {$oParam->iCodigo}";
-    if(pg_num_rows(db_query($sSqlDataHomologacao)) > 0) {
+    if (pg_num_rows(db_query($sSqlDataHomologacao)) > 0) {
       if (strtotime(db_utils::fieldsMemory(db_query($sSqlDataHomologacao), 0)->l202_datahomologacao) > db_getsession('DB_datausu')) {
         $oRetorno->status  = 2;
-        $oRetorno->message = urlencode("Não é permitido gerar autorizações de licitações cuja data de homologadação (".date("d/m/Y",strtotime(db_utils::fieldsMemory(db_query($sSqlDataHomologacao), 0)->l202_datahomologacao)) .") seja maior que a data da autorização (".date("d/m/Y",db_getsession('DB_datausu')).").");
+        $oRetorno->message = urlencode("Não é permitido gerar autorizações de licitações cuja data de homologadação (" . date("d/m/Y", strtotime(db_utils::fieldsMemory(db_query($sSqlDataHomologacao), 0)->l202_datahomologacao)) . ") seja maior que a data da autorização (" . date("d/m/Y", db_getsession('DB_datausu')) . ").");
         break;
       }
-    }else{
+    } else {
       $oRetorno->status  = 2;
       $oRetorno->message = urlencode("Não é permitido gerar autorizações de licitações não homologadas.");
       break;
     }
 
+    /**
+     * controle de encerramento peri. contabil
+     */
+    $clcondataconf = new cl_condataconf;
+    $resultControle = $clcondataconf->sql_record($clcondataconf->sql_query_file(db_getsession('DB_anousu'), db_getsession('DB_instit'), 'c99_data'));
+    db_fieldsmemory($resultControle, 0);
+
+    $dtSistema = date("Y-m-d", db_getsession("DB_datausu"));
+
+    if ($dtSistema <= $c99_data) {
+      $oRetorno->status  = 2;
+      $oRetorno->message = urlencode("Encerramento do periodo contabil para " . implode('/', array_reverse(explode('-', $c99_data))));
+      break;
+    }
+
+    if (!isset($oParam->aAutorizacoes)) {
+
+      $oRetorno->status  = 2;
+      $oRetorno->message = urlencode("Há muitos itens selecionados. É necessário selecionar menos itens para gerar a autorização de empenho.");
+    } else {
+
+      try {
+
         /**
-         * controle de encerramento peri. contabil
+         * corrigimos as strings antes de salvarmos os dados
          */
-        $clcondataconf = new cl_condataconf;
-        $resultControle = $clcondataconf->sql_record($clcondataconf->sql_query_file(db_getsession('DB_anousu'),db_getsession('DB_instit'),'c99_data'));
-        db_fieldsmemory($resultControle,0);
+        foreach ($oParam->aAutorizacoes as $oAutorizacao) {
 
-        $dtSistema = date("Y-m-d", db_getsession("DB_datausu"));
-
-        if($dtSistema <= $c99_data  ){
-          $oRetorno->status  = 2;
-          $oRetorno->message = urlencode("Encerramento do periodo contabil para ". implode('/',array_reverse(explode('-',$c99_data))) );
-          break;
-        }
-
-		if (!isset($oParam->aAutorizacoes)) {
-
-			$oRetorno->status  = 2;
-			$oRetorno->message = urlencode("Há muitos itens selecionados. É necessário selecionar menos itens para gerar a autorização de empenho.");
-
-		} else {
-
-	    try {
-
-	      /**
-	       * corrigimos as strings antes de salvarmos os dados
-	       */
-	      foreach ($oParam->aAutorizacoes as $oAutorizacao) {
-
-	        $oAutorizacao->destino           = addslashes(utf8_decode(db_stdClass::db_stripTagsJson(urldecode($oAutorizacao->destino))));
+          $oAutorizacao->destino           = addslashes(utf8_decode(db_stdClass::db_stripTagsJson(urldecode($oAutorizacao->destino))));
           $oAutorizacao->sContato          = addslashes(utf8_decode(db_stdClass::db_stripTagsJson(urldecode($oAutorizacao->sContato))));
           $oAutorizacao->sOutrasCondicoes  = addslashes(utf8_decode(db_stdClass::db_stripTagsJson(urldecode($oAutorizacao->sOutrasCondicoes))));
-	        $oAutorizacao->condicaopagamento = addslashes(utf8_decode(db_stdClass::db_stripTagsJson(urldecode($oAutorizacao->condicaopagamento))));
-	        $oAutorizacao->prazoentrega      = addslashes(utf8_decode(db_stdClass::db_stripTagsJson(urldecode($oAutorizacao->prazoentrega))));
-	        $oAutorizacao->resumo            = addslashes(utf8_decode(db_stdClass::db_stripTagsJson(urldecode($oAutorizacao->resumo))));
+          $oAutorizacao->condicaopagamento = addslashes(utf8_decode(db_stdClass::db_stripTagsJson(urldecode($oAutorizacao->condicaopagamento))));
+          $oAutorizacao->prazoentrega      = addslashes(utf8_decode(db_stdClass::db_stripTagsJson(urldecode($oAutorizacao->prazoentrega))));
+          $oAutorizacao->resumo            = addslashes(utf8_decode(db_stdClass::db_stripTagsJson(urldecode($oAutorizacao->resumo))));
 
-	        foreach ($oAutorizacao->itens as $oItem) {
-	          $oItem->observacao = addslashes(utf8_decode(db_stdClass::db_stripTagsJson(urldecode($oItem->observacao))));
-	        }
-	      }
+          foreach ($oAutorizacao->itens as $oItem) {
+            $oItem->observacao = addslashes(utf8_decode(db_stdClass::db_stripTagsJson(urldecode($oItem->observacao))));
+          }
+        }
 
-	      db_inicio_transacao();
-	      $oLicitacao = new licitacao($oParam->iCodigo);
-	      $oRetorno->autorizacoes = $oLicitacao->gerarAutorizacoes($oParam->aAutorizacoes);
-	      db_fim_transacao(false);
+        db_inicio_transacao();
+        $oLicitacao = new licitacao($oParam->iCodigo);
+        $oRetorno->autorizacoes = $oLicitacao->gerarAutorizacoes($oParam->aAutorizacoes);
+        db_fim_transacao(false);
 
-	      $oRetorno->status  = 1;
-	      $oRetorno->message = urlencode("Autorização efetuada com sucesso.");
+        $oRetorno->status  = 1;
+        $oRetorno->message = urlencode("Autorização efetuada com sucesso.");
+      } catch (Exception $eErro) {
 
-	    } catch (Exception $eErro) {
+        $oRetorno->status  = 2;
+        $oRetorno->message = urlencode($eErro->getMessage());
+        db_fim_transacao(true);
+      }
+    }
 
-	      $oRetorno->status  = 2;
-	      $oRetorno->message = urlencode($eErro->getMessage());
-	      db_fim_transacao(true);
-	    }
-		}
-
-  break;
+    break;
 
   case "getFonercedoresLic":
 
-  try {
+    try {
 
-    $oRetorno->cgms = getFonercedoresLic($oParam->licitacao);
+      $oRetorno->cgms = getFonercedoresLic($oParam->licitacao);
+    } catch (Exception $e) {
+      $oRetorno->erro = $e->getMessage();
+      $oRetorno->status   = 2;
+    }
 
-  } catch (Exception $e) {
-    $oRetorno->erro = $e->getMessage();
-    $oRetorno->status   = 2;
-  }
-
-  break;
+    break;
 
   case "verificaSaldoCriterio":
 
-  try {
+    try {
 
-    $oRetorno->itens   = verificaSaldoCriterio($oParam->e55_autori,$oParam->e55_item,$oParam->tipoitem,$oParam->pc94_sequencial);
-    $oRetorno->itensqt = verificaSaldoCriterioItemQuantidade($oParam->e55_autori,$oParam->e55_item);
+      $oRetorno->itens   = verificaSaldoCriterio($oParam->e55_autori, $oParam->e55_item, $oParam->tipoitem, $oParam->pc94_sequencial);
+      $oRetorno->itensqt = verificaSaldoCriterioItemQuantidade($oParam->e55_autori, $oParam->e55_item);
+    } catch (Exception $e) {
+      $oRetorno->erro = $e->getMessage();
+      $oRetorno->status   = 2;
+    }
 
-  } catch (Exception $e) {
-    $oRetorno->erro = $e->getMessage();
-    $oRetorno->status   = 2;
-  }
+    break;
 
-  break;
-
-  case "validaSolicitacaoRegP" :
+  case "validaSolicitacaoRegP":
 
     $sSQL = "SELECT l202_datahomologacao
               FROM solicita
@@ -388,17 +384,18 @@ switch ($oParam->exec) {
 
     $rsConsulta = db_query($sSQL);
     $dataH = db_utils::getCollectionByRecord($rsConsulta);
-    if (date("Y-m-d", db_getsession("DB_datausu")) < date('Y-m-d',strtotime($dataH[0]->l202_datahomologacao))) {
+    if (date("Y-m-d", db_getsession("DB_datausu")) < date('Y-m-d', strtotime($dataH[0]->l202_datahomologacao))) {
       $oRetorno->validacao = 0;
-      $oRetorno->datahomologacao = date('d/m/Y',strtotime($dataH[0]->l202_datahomologacao));
+      $oRetorno->datahomologacao = date('d/m/Y', strtotime($dataH[0]->l202_datahomologacao));
     } else {
-        $oRetorno->validacao = 1;
+      $oRetorno->validacao = 1;
     }
 
-  break;
+    break;
 }
 
-function getFonercedoresLic($licitacao) {
+function getFonercedoresLic($licitacao)
+{
   $sSQL = "SELECT DISTINCT z01_numcgm ,z01_nome
   FROM liclicitem
     INNER JOIN pcprocitem ON liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem
@@ -424,7 +421,7 @@ function getFonercedoresLic($licitacao) {
     LEFT JOIN pctipo ON pctipo.pc05_codtipo = pcsubgrupo.pc04_codtipo
     LEFT JOIN solicitemele ON solicitemele.pc18_solicitem = solicitem.pc11_codigo
     LEFT JOIN orcelemento ON orcelemento.o56_codele = solicitemele.pc18_codele
-      AND orcelemento.o56_anousu = ".db_getsession("DB_datausu")."
+      AND orcelemento.o56_anousu = " . db_getsession("DB_datausu") . "
     LEFT JOIN empautitempcprocitem ON empautitempcprocitem.e73_pcprocitem = pcprocitem.pc81_codprocitem
     LEFT JOIN empautitem ON empautitem.e55_autori = empautitempcprocitem.e73_autori
       AND empautitem.e55_sequen = empautitempcprocitem.e73_sequen
@@ -440,7 +437,8 @@ function getFonercedoresLic($licitacao) {
   return $oCgm;
 }
 
-function verificaSaldoCriterio($e55_autori, $e55_item, $tipoitem, $pc94_sequencial) {
+function verificaSaldoCriterio($e55_autori, $e55_item, $tipoitem, $pc94_sequencial)
+{
   $sSQL = "";
   if (strcasecmp($tipoitem, 'item') === 0) {
     $sSQL = "
@@ -451,7 +449,7 @@ function verificaSaldoCriterio($e55_autori, $e55_item, $tipoitem, $pc94_sequenci
          and e55_item = {$e55_item}
     ";
   } else {
-      $sSQL = "
+    $sSQL = "
       select sum(e55_vltot) as totalitens
       from empautitem
        inner join empautoriza on e54_autori = e55_autori
@@ -469,10 +467,10 @@ function verificaSaldoCriterio($e55_autori, $e55_item, $tipoitem, $pc94_sequenci
   $rsConsulta = db_query($sSQL);
   $oItens = db_utils::getCollectionByRecord($rsConsulta);
   return $oItens;
-
 }
 
-function verificaSaldoCriterioItemQuantidade($e55_autori, $e55_item) {
+function verificaSaldoCriterioItemQuantidade($e55_autori, $e55_item)
+{
 
   $sSQL = "
    select sum(e55_quant) as totalitensqt
@@ -488,4 +486,3 @@ function verificaSaldoCriterioItemQuantidade($e55_autori, $e55_item) {
 }
 
 echo $oJson->encode($oRetorno);
-?>

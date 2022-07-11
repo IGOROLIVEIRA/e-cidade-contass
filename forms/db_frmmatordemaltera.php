@@ -246,7 +246,7 @@ if (isset($m51_codordem) && $m51_codordem != '') {
                                 </td>
                                 <td colspan='3' align='left'>
                                     <?
-                                    db_textarea("m51_obs", "", "90", $Im51_obs, true, 'text', 3);
+                                    db_textarea("m51_obs", "", "90", $Im51_obs, true, 'text', 3,"onkeyup = 'return js_validaCaracteres(this.value, m51_obs.id)';");
                                     ?>
                                 </td>
 
@@ -365,7 +365,7 @@ if (isset($m51_codordem) && $m51_codordem != '') {
                         <td colspan='3' align='left'>
                             <?
                                     $obs = $m51_obs;
-                                    db_textarea("m51_obs", "", "90", $Im51_obs, true, 'text', 1);
+                                    db_textarea("m51_obs", "", "90", $Im51_obs, true, 'text', 1,"onkeyup = 'return js_validaCaracteres(this.value, m51_obs.id)';");
                             ?>
                         </td>
                     <?
@@ -419,7 +419,7 @@ if (isset($m51_codordem) && $m51_codordem != '') {
         js_OpenJanelaIframe('', 'db_iframe_altcgm', 'prot1_cadcgm002.php?chavepesquisa=' + cgm + '&testanome=true&autoc=true', 'Altera Cgm', true);
     }
 
-    function js_buscavalores() {
+    function js_buscavalores() {  
         obj = itens.document.form1;
 
         let aItens = [];
@@ -475,17 +475,17 @@ if (isset($m51_codordem) && $m51_codordem != '') {
 
         let oParam = new Object();
         let body = document.form1;
-
+        let obs = body.m51_obs.value.toUpperCase();
         oParam.m51_prazoent = body.m51_prazoent.value;
         oParam.m51_codordem = body.m51_codordem.value;
         oParam.coddepto = body.coddepto.value;
         oParam.coddeptodescr = body.coddeptodescr.value;
-        oParam.obs = body.m51_obs.value;
+        oParam.obs = encodeURIComponent(obs.replace('\'',''));
+        oParam.obs = obs.replace('%0A','\n');
         oParam.m51_data = body.m51_data.value;
         oParam.m51_deptoorigem = body.m51_deptoorigem.value;
         oParam.itens = aItens;
         oParam.altera = true;
-
         let oAjax = new Ajax.Request('emp1_ordemcompraaltera002.php', {
             method: 'post',
             parameters: 'json=' + Object.toJSON(oParam),
@@ -539,6 +539,55 @@ if (isset($m51_codordem) && $m51_codordem != '') {
             document.form1.coddepto.value = '';
         }
     }
+
+
+    function js_validaCaracteres(texto, campo) {
+    let temporario = '';
+    temporario = texto;
+    
+    /*Caracteres não permitidos na descrição e complemento material*/
+    let charBuscados = [";", "'", "\"", "\\", "*", ":"];
+    let novoTexto = temporario;
+    let erro = '';
+
+    charBuscados.map(caractere => {
+      if (texto.includes(caractere)) {
+        erro = true;
+      }
+    })
+
+
+    if (window.event) {
+      /* Lança o erro quando a tecla Enter é pressionada. */
+      if (window.event.keyCode == 13) {
+        erro = true;
+        novoTexto = texto.replace(/(\r\n|\r)/g, '');
+      }
+    }
+
+    /* Remove os caracteres contidos no array charBuscados */
+    novoTexto = novoTexto.match(/[^;\*\\\:\"\']/gm);
+
+    for (let cont = 0; cont < novoTexto.length; cont++) {
+
+      /* Remove aspas duplas e simples pelo código, pelo fato de virem de fontes diferentes*/
+
+      if (novoTexto[cont].charCodeAt(0) == 8221 || novoTexto[cont].charCodeAt(0) == 8220 || novoTexto[cont].charCodeAt(0) == 8216) {
+        novoTexto[cont] = '';
+        erro = true;
+      }
+    }
+
+    // if(erro){
+    //   alert('Caractere não permitido para inclusão!');
+    // }
+
+    novoTexto = novoTexto.join('');
+
+      //alert(novoTexto);
+      document.form1.m51_obs.value = novoTexto;
+     
+  }
 </script>
 </body>
 

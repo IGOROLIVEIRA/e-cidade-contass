@@ -1208,7 +1208,7 @@ class ordemCompra {
     return $iIndiceNovo+1;
   }
 
-  function confirmaEntrada($iNumNota, $dtDataNota, $dtDataRecebe, $nValorNota, $aItens, $oInfoNota = null, $sObservacao, $sNumeroProcesso=null,$sNotaFiscalEletronica=null,$sChaveAcesso=null,$sNumeroSerie=null,$confEntrada=TRUE) {
+  function confirmaEntrada($iNumNota, $dtDataNota, $dtDataRecebe, $nValorNota, $aItens, $oInfoNota = null, $sObservacao, $sNumeroProcesso=null,$sNotaFiscalEletronica=null,$sChaveAcesso=null,$sNumeroSerie=null,$confEntrada=TRUE, $iCgmEmitente=0) {
 
     //Devemos estar dentro de uma transação.
     if (!db_utils::inTransaction()) {
@@ -1433,6 +1433,7 @@ class ordemCompra {
           $oDaoEmpNota->e69_notafiscaleletronica = $sNotaFiscalEletronica;
           $oDaoEmpNota->e69_chaveacesso          = $sChaveAcesso;
           $oDaoEmpNota->e69_nfserie              = $sNumeroSerie;
+          $oDaoEmpNota->e69_cgmemitente          = $iCgmEmitente;
           $oDaoEmpNota->incluir(null);
           if ($oDaoEmpNota->erro_status == 0 ) {
 

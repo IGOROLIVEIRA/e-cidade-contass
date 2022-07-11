@@ -211,7 +211,7 @@ $sWhereContratos = " and 1 = 1 ";
                 }else{
                     $sql = $clliclicita->sql_queryContratosContass(""," " .$campos,"l20_codigo","$dbwhere $dbwhere_instit $sWhereContratos $whereHab",$situacao);
                 }
-
+                
                 if (isset($param) && trim($param) != ""){
                     $dbwhere = " and (e55_sequen is null or (e55_sequen is not null and e54_anulad is not null))";
                     if(isset($chave_l20_codigo) && (trim($chave_l20_codigo)!="") ){
@@ -226,7 +226,7 @@ $sWhereContratos = " and 1 = 1 ";
                         $sql = $clliclicitem->sql_query_inf("",$campos,"l20_codigo","1=1$dbwhere $whereHab");
                     }
                 }
-        
+                
                 if($relatorio=="1"){
                     $sql =  "select distinct liclicita.l20_codigo,
                 liclicita.l20_edital,
@@ -283,12 +283,12 @@ $sWhereContratos = " and 1 = 1 ";
                     homologacaoadjudica.l202_licitacao = liclicita.l20_codigo
                 where
                 l20_licsituacao = 10
-                and l20_instit = 1
+                and l20_instit = ".db_getsession("DB_instit")."
                 AND l03_pctipocompratribunal NOT IN (100,101,102,103)
                 and l202_datahomologacao is not null
                 order by
                 l20_codigo";
-                }            
+                }  
                 db_lovrot($sql.' desc ',15,"()","",$funcao_js); 
 
             } else {  

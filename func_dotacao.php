@@ -45,7 +45,7 @@ if ($clpermusuario_dotacao->sql != "") {
 }
 $dtAnousu = db_getsession("DB_anousu");
 
-$rsResult = db_query("select * from orcdotacao where o58_coddot = $oParam->dotacao");
+$rsResult = db_query("select * from orcdotacao where o58_coddot = $oParam->dotacao and o58_anousu = $dtAnousu");
 $projativ = db_utils::fieldsMemory($rsResult, 0)->o58_projativ;
 $codele = db_utils::fieldsMemory($rsResult, 0)->o58_codele;
 $result = db_query("select * from orcprojativ where o55_projativ = $projativ and o55_anousu = $dtAnousu ");
