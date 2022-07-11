@@ -215,6 +215,11 @@ class Instituicao {
    */
   protected $sDataContabilidade;
 
+    /**
+     * @var bool
+     */
+  protected $usaDebitosItbi;
+
 
   /**
    * Metodo construtor
@@ -227,7 +232,7 @@ class Instituicao {
       $oDaoDBConfig  = db_utils::getDao("db_config");
 
       $sCampos       = "nomeinst, prefeitura, si09_tipoinstit, numcgm, cgc, munic, logo, nomeinstabrev, ender, numero,";
-      $sCampos      .= "telef, url, uf, db21_compl, email, db21_usasisagua, ";
+      $sCampos      .= "telef, url, uf, db21_compl, email, db21_usasisagua, db21_usadebitoitbi, ";
       $sCampos      .= " (select db21_codcli from db_config where prefeitura is true) as db21_codcli,db21_habitantes,dtcont ";
 
       $sSqlDBConfig  = $oDaoDBConfig->sql_query_file($iSequencial, $sCampos);
@@ -256,6 +261,7 @@ class Instituicao {
         $this->lUsaSisagua           = $oDadoInstituicao->db21_usasisagua == 't';
         $this->iHabitantes           = $oDadoInstituicao->db21_habitantes;
         $this->sDataContabilidade    = $oDadoInstituicao->dtcont;
+        $this->usaDebitosItbi        = $oDadoInstituicao->db21_usadebitoitbi;
       }
     }
     return true;
@@ -610,5 +616,12 @@ class Instituicao {
     $this->sDataContabilidade = $sDataContabilidade;
     return $this;
   }
+
+  /**
+   * @return bool
+   */
+  public function getUsaDebitosItbi()
+  {
+    return $this->usaDebitosItbi;
+  }
 }
-?>
