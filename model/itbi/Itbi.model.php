@@ -71,18 +71,22 @@ class Itbi
     public function processarTransferenciaAutomatica($iCodRet)
     {
         $oParItbi = new Paritbi(db_getsession('DB_anousu'));
-        if($oParItbi->getTransfautomatica() == 't') {
-            $oDisbanco = new Disbanco();
-            $aDisbanco = $oDisbanco->getNumpresByCodRet($iCodRet);
 
-            foreach ($aDisbanco as $obj) {
+        if($oParItbi->getTransfautomatica() === false) {
+            return;
+        }
 
-                $oItbi = $this->getinstanceByNumpre($obj->k00_numpre);
-                if ($oItbi->it01_guia != null) {
-                    $this->_processarTransferenciaAutomatica($oItbi);
-                }
+        $oDisbanco = new Disbanco();
+        $aDisbanco = $oDisbanco->getNumpresByCodRet($iCodRet);
+
+        foreach ($aDisbanco as $obj) {
+
+            $oItbi = $this->getinstanceByNumpre($obj->k00_numpre);
+            if ($oItbi->it01_guia != null) {
+                $this->_processarTransferenciaAutomatica($oItbi);
             }
         }
+
     }
 
     public function getNumpre()
