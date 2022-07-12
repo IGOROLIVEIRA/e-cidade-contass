@@ -21,13 +21,20 @@ class Itbinumpre {
         return $this;
     }
 
+    /**
+     * @throws BusinessException
+     */
     public function getInstanceByNumpre($iNumpre)
     {
         if(empty($iNumpre)){
-            throw new Exception('Numpre não informado!');
+            throw new BusinessException('Numpre não informado!');
         }
 
         $iNumpre = $this->getNumpre($iNumpre);
+
+        if(empty($iNumpre)){
+            throw new BusinessException('Numpre não encontrado!');
+        }
 
         $oItbinumpre = db_utils::getDao('itbinumpre');
         $oItbinumpre = current(db_utils::getCollectionByRecord($oItbinumpre->sql_record($oItbinumpre->sql_query(null, "*", null, "it15_numpre = {$iNumpre}"))));
@@ -55,7 +62,7 @@ class Itbinumpre {
 
     /**
      * @param $iNumpre
-     * @return int
+     * @return int | null
      */
     public function getNumpre($iNumpre)
     {
@@ -71,6 +78,8 @@ class Itbinumpre {
         if (empty($arrecadItbi) === false) {
             return $arrecadItbi->k00_numpre;
         }
+
+        return null;
     }
 
 }
