@@ -153,7 +153,7 @@ try {
             (select count(*) as certificado from esocialcertificado where rh214_cgm = z01_numcgm) as certificado';
             $oDaoDbConfig = db_utils::getDao("db_config");
             $sql = $oDaoDbConfig->sql_query(null, $campos, 'z01_numcgm', 'codigo = ' . db_getsession("DB_instit"));
-
+            
             $rs = db_query($sql);
 
             if (!$rs) {
@@ -267,7 +267,6 @@ try {
 
                 if (Tipo::getTipoFormulario($arquivo) != 37) {
                     $dadosDoPreenchimento = $dadosESocial->getPorTipo(Tipo::getTipoFormulario($arquivo), $oParam->matricula);
-
                     $formatter = FormatterFactory::get($arquivo);
                     $dadosTabela = $formatter->formatar($dadosDoPreenchimento);
 
@@ -301,6 +300,36 @@ try {
             $clesocialenvio = db_utils::getDao("esocialenvio");
             $oRetorno->lUpdate = $clesocialenvio->checkQueue();
             break;
+        case "transmitirrubricas":
+            $dadosESocial = new DadosESocial();
+            db_inicio_transacao();
+
+            //Rubricas a serem enviadas
+            $seqRubricas = $oParam->rubricas;
+            $explode_seq = explode(',', $seqRubricas);
+            $aRubricas = array();
+            foreach ($explode_seq as $rub){
+                $aRubricas[] = "'" . $rub . "'";
+            }
+            $stringRubricas = implode(",", $aRubricas);
+
+            $iCgm = $oParam->empregador;
+            $dadosESocial->setReponsavelPeloPreenchimento($iCgm);
+            $dadosDoPreenchimento = $dadosESocial->getPorTipo(Tipo::RUBRICA,$stringRubricas);
+            $arquivo = "S1010Individual";
+            foreach (array_chunk($dadosDoPreenchimento, 1) as $aTabela) {
+               $eventoFila = new Evento($arquivo, $iCgm, $iCgm, $aTabela, $oParam->tpAmb, "{$oParam->iAnoValidade}-{$oParam->iMesValidade}", $oParam->modo, $oParam->dtalteracao);
+               $eventoFila->adicionarFila();
+            }
+            db_fim_transacao(false);
+
+            ob_start();
+            $response = system("php -q filaEsocial.php");
+            ob_end_clean();
+
+            $oRetorno->sMessage = "Dados das Rúbricas agendados para envio.";
+
+        break;
     }
 } catch (Exception $eErro) {
     if (db_utils::inTransaction()) {
