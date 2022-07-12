@@ -513,11 +513,13 @@ if (isset($oPost->processar)) {
    * casos extremos onde não exista outra alternativa.
    *
    */
-  //Liberação adicional para a prefeitura de Pirapora, usuário 2050 - Gisele Pereira Cunha
-  if((db_getsession("DB_id_usuario") == 1) || ($oInstit->getCodigoCliente() == Instituicao::COD_CLI_PMPIRAPORA && db_getsession("DB_id_usuario")==2050)) {
-    echo "<script> document.form1.processar.disabled = false </script>";
-  } else {
-    echo "<script> alert('Rotina bloqueada!') </script>";
+  //Liberação adicional para a prefeitura de Pirapora, usuários 2046 (Renata Cristina Cabral Lopes) - 2050 (Gisele Pereira Cunha)
+  $arrayusuarios = array('2046','2050');
+  if ((db_getsession("DB_id_usuario") == 1) || ( $oInstit->getCodigoCliente() == Instituicao::COD_CLI_PMPIRAPORA && 
+       in_array(db_getsession("DB_id_usuario"), $arrayusuarios) ) ) {
+      echo "<script> document.form1.processar.disabled = false </script>";
+    } else {
+      echo "<script> alert('Rotina bloqueada!') </script>";
   }
 
   db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit"));
