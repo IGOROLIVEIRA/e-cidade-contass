@@ -181,13 +181,13 @@ try {
 
 
                 if ($oParam->datareferencia != "") {
+
+                    if (substr($c99_datapat, 0, 4) == substr($datareferencia, 0, 4) && mb_substr($c99_datapat, 5, 2) == mb_substr($datareferencia, 5, 2)) {
+                        throw new Exception('Usuário: A data de referência deverá ser no mês posterior ao mês da data inserida.');
+                    }
+
                     if ($c99_datapat != "" && $datareferencia <= $c99_datapat) {
                         throw new Exception(' O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.');
-                    } else {
-
-                        if (substr($c99_datapat, 0, 4) == substr($datareferencia, 0, 4) && mb_substr($c99_datapat, 5, 2) == mb_substr($datareferencia, 5, 2)) {
-                            throw new Exception('Usuário: A data de referência deverá ser no mês posterior ao mês da data inserida.');
-                        }
                     }
                 }
 
@@ -244,13 +244,13 @@ try {
 
 
                 if ($oParam->datareferencia != "") {
+
+                    if (substr($c99_datapat, 0, 4) == substr($datareferencia, 0, 4) && mb_substr($c99_datapat, 5, 2) == mb_substr($datareferencia, 5, 2)) {
+                        throw new Exception('Usuário: A data de referência deverá ser no mês posterior ao mês da data inserida.');
+                    }
+
                     if ($c99_datapat != "" && $datareferencia <= $c99_datapat) {
                         throw new Exception(' O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.');
-                    } else {
-
-                        if (substr($c99_datapat, 0, 4) == substr($datareferencia, 0, 4) && mb_substr($c99_datapat, 5, 2) == mb_substr($datareferencia, 5, 2)) {
-                            throw new Exception('Usuário: A data de referência deverá ser no mês posterior ao mês da data inserida.');
-                        }
                     }
                 }
 
@@ -290,12 +290,14 @@ try {
             $dataref = str_replace("/", "-", $dataref);
             $dataref =  date('Y-m-d', strtotime($dataref));
 
+
             $oAditivo->alterar($iCodigoAditivo);
             if ($oAditivo->erro_status == 0) {
                 throw new Exception($oAditivo->erro_msg);
             } else {
+
                 db_query("UPDATE acordoposicaoaditamento
-                SET datareferencia = '$dataref'
+                SET ac35_datareferencia = '$dataref'
                 WHERE ac35_sequencial = $iCodigoAditivo");
                 $oRetorno->message = "Assinatura salva com sucesso";
             }

@@ -367,7 +367,7 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
 
 
     if (datareferencia <= dataPatrimonial) {
-      alert("O períodosss já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato o suporte.");
+      alert("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato o suporte.");
       return;
     }
 

@@ -120,12 +120,13 @@ try {
 
 
                 if ($oParam->oApostila->datareferencia != "") {
+
+                    if (substr($c99_datapat, 0, 4) == substr($datareferencia, 0, 4) && mb_substr($c99_datapat, 5, 2) == mb_substr($datareferencia, 5, 2)) {
+                        throw new Exception('Usuário: A data de referência deverá ser no mês posterior ao mês da data inserida.');
+                    }
+
                     if ($c99_datapat != "" && $datareferencia <= $c99_datapat) {
                         throw new Exception(' O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.');
-                    } else {
-                        if (substr($c99_datapat, 0, 4) == substr($datareferencia, 0, 4) && mb_substr($c99_datapat, 5, 2) == mb_substr($datareferencia, 5, 2)) {
-                            throw new Exception('Usuário: A data de referência deverá ser no mês posterior ao mês da data inserida.');
-                        }
                     }
                 }
 

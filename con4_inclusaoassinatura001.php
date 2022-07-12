@@ -405,6 +405,8 @@ $clrotulo->label("ac10_obs");
             document.form1.sData.value = '';
             document.form1.sDataPublicacao.value = '';
             document.form1.sVeiculoDivulgacao.value = '';
+            document.form1.datareferencia.value = '';
+            document.getElementById("trdatareferencia").style.display = 'none';
             js_carregaAditamentos();
           }
 
