@@ -514,9 +514,9 @@ if (isset($oPost->processar)) {
    *
    */
   //Liberação adicional para a prefeitura de Pirapora, usuários 2046 (Renata Cristina Cabral Lopes) - 2050 (Gisele Pereira Cunha)
-  $arrayusuarios = array('2046','2050');
+  $arrayUsuarios = array('2046','2050');
   if ((db_getsession("DB_id_usuario") == 1) || ( $oInstit->getCodigoCliente() == Instituicao::COD_CLI_PMPIRAPORA && 
-       in_array(db_getsession("DB_id_usuario"), $arrayusuarios) ) ) {
+       in_array(db_getsession("DB_id_usuario"), $arrayUsuarios) ) ) {
       echo "<script> document.form1.processar.disabled = false </script>";
     } else {
       echo "<script> alert('Rotina bloqueada!') </script>";
