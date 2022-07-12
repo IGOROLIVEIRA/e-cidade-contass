@@ -1,5 +1,5 @@
 <?php
-
+require_once "ArrecadItbi.model.php";
 class Itbinumpre {
 
     public $it15_guia;
