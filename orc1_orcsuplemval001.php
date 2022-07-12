@@ -300,6 +300,10 @@ if(isset($incluir)){
         if($o50_controlafote10011006 == 't'){
             /*valida fonte 100*/
             $validacao = array(100, 101, 102);
+
+            echo substr($oEstruturalSupl->dl_estrutural, 38, 3) . PHP_EOL;
+            echo substr($oEstruturalDotacaoEnviada->dl_estrutural, 38, 3) . PHP_EOL;
+
             if (substr($oEstruturalSupl->dl_estrutural, 38, 3) == 100 && !in_array(substr($oEstruturalDotacaoEnviada->dl_estrutural, 38, 3), $validacao)) {
                 $sqlerro = true;
                 db_msgbox("Usuário, inclusão abortada. Dotação incompatível com o tipo de suplementação utilizada");
@@ -338,7 +342,7 @@ if(isset($incluir)){
                 $limpa_dados = false;
             }
 
-            /*valida fonte 166*/
+            /* Adicionando a validação da fonte 166 - OC17881 */
             $validacao = array(166, 167);
             if (substr($oEstruturalSupl->dl_estrutural, 38, 3) == 166 && !in_array(substr($oEstruturalDotacaoEnviada->dl_estrutural, 38, 3), $validacao)) {
                 $sqlerro = true;
@@ -346,7 +350,7 @@ if(isset($incluir)){
                 $limpa_dados = false;
             }
 
-            /*valida fonte 167*/
+            /* Adicionando a validação da fonte 167 - OC17881 */
             $validacao = array(166, 167);
             if (substr($oEstruturalSupl->dl_estrutural, 38, 3) == 167 && !in_array(substr($oEstruturalDotacaoEnviada->dl_estrutural, 38, 3), $validacao)) {
                 $sqlerro = true;
@@ -355,7 +359,8 @@ if(isset($incluir)){
             }
         
             /*valida diferente*/
-            $validacao = array(100, 101, 102, 118, 119, 166, 167);
+            /* Adicionando a validação das fontes com primeiro digito separado - OC17881 */
+            $validacao = array(100, 101, 102, 118, 119, 166, 167, 200, 201, 202, 218, 219, 266, 267);
             if (!in_array(substr($oEstruturalSupl->dl_estrutural, 38, 3), $validacao)) {
                 if (substr($oEstruturalDotacaoEnviada->dl_estrutural, 38, 3) != substr($oEstruturalSupl->dl_estrutural, 38, 3)){
                     $sqlerro = true;
@@ -364,7 +369,7 @@ if(isset($incluir)){
                 }
             }
 
-            /*valida fonte 200*/
+            /* Adicionando a validação da fonte 200 - OC17881 */
             $validacao = array(200, 201, 202);
             if (substr($oEstruturalSupl->dl_estrutural, 38, 3) == 200 && !in_array(substr($oEstruturalDotacaoEnviada->dl_estrutural, 38, 3), $validacao)) {
                 $sqlerro = true;
@@ -372,7 +377,7 @@ if(isset($incluir)){
                 $limpa_dados = false;
             }
         
-            /*valida fonte 101*/
+            /* Adicionando a validação da fonte 201 - OC17881 */
             $validacao = array(200, 201);
             if (substr($oEstruturalSupl->dl_estrutural, 38, 3) == 201 && !in_array(substr($oEstruturalDotacaoEnviada->dl_estrutural, 38, 3), $validacao)) {
                 $sqlerro = true;
@@ -380,15 +385,15 @@ if(isset($incluir)){
                 $limpa_dados = false;
             }
         
-            /*valida fonte 102*/
-            $validacao = array(200,202);
+            /* Adicionando a validação da fonte 202 - OC17881 */
+            $validacao = array(200, 202);
             if (substr($oEstruturalSupl->dl_estrutural, 38, 3) == 202 && !in_array(substr($oEstruturalDotacaoEnviada->dl_estrutural, 38, 3), $validacao)) {
                 $sqlerro = true;
                 db_msgbox("Usuário, inclusão abortada. Dotação incompatível com o tipo de suplementação utilizada");
                 $limpa_dados = false;
             }
         
-            /*valida fonte 118*/
+            /* Adicionando a validação da fonte 218 - OC17881 */
             $validacao = array(218, 219);
             if (substr($oEstruturalSupl->dl_estrutural, 38, 3) == 218 && !in_array(substr($oEstruturalDotacaoEnviada->dl_estrutural, 38, 3), $validacao)) {
                 $sqlerro = true;
@@ -396,7 +401,7 @@ if(isset($incluir)){
                 $limpa_dados = false;
             }
         
-            /*valida fonte 119*/
+            /* Adicionando a validação da fonte 219 - OC17881 */
             $validacao = array(218, 219);
             if (substr($oEstruturalSupl->dl_estrutural, 38, 3) == 219 && !in_array(substr($oEstruturalDotacaoEnviada->dl_estrutural, 38, 3), $validacao)) {
                 $sqlerro = true;
@@ -404,7 +409,7 @@ if(isset($incluir)){
                 $limpa_dados = false;
             }
 
-            /*valida fonte 166*/
+            /* Adicionando a validação da fonte 266 - OC17881 */
             $validacao = array(266, 267);
             if (substr($oEstruturalSupl->dl_estrutural, 38, 3) == 266 && !in_array(substr($oEstruturalDotacaoEnviada->dl_estrutural, 38, 3), $validacao)) {
                 $sqlerro = true;
@@ -412,25 +417,16 @@ if(isset($incluir)){
                 $limpa_dados = false;
             }
 
-            /*valida fonte 167*/
+            /* Adicionando a validação da fonte 267 - OC17881 */
             $validacao = array(266, 267);
             if (substr($oEstruturalSupl->dl_estrutural, 38, 3) == 267 && !in_array(substr($oEstruturalDotacaoEnviada->dl_estrutural, 38, 3), $validacao)) {
                 $sqlerro = true;
                 db_msgbox("Usuário, inclusão abortada. Dotação incompatível com o tipo de suplementação utilizada");
                 $limpa_dados = false;
             }
-        
-            /*valida diferente*/
-            $validacao = array(200, 201, 202, 218, 219, 266, 267);
-            if (!in_array(substr($oEstruturalSupl->dl_estrutural, 38, 3), $validacao)) {
-                if (substr($oEstruturalDotacaoEnviada->dl_estrutural, 38, 3) != substr($oEstruturalSupl->dl_estrutural, 38, 3)) {
-                    $sqlerro = true;
-                    db_msgbox("Usuário, inclusão abortada. Dotação incompatível com o tipo de suplementação utilizada");
-                    $limpa_dados = false;
-                }
-            }
         }
     }
+
     if($tiposup == 1020 || $tiposup == 1021 || $tiposup == 1022){
         $sSqlEstruturalDotacaoEnviada = "SELECT fc_estruturaldotacao(".db_getsession('DB_anousu').",o58_coddot) AS dl_estrutural
             FROM orcdotacao d

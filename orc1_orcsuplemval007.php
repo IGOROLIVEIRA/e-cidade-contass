@@ -485,9 +485,11 @@ WHERE o58_anousu=" . db_getsession('DB_anousu') . "
                     $limpa_dados = false;
                 }
             }
+            
             if ($o50_controlafote1017 == 't') {
                 /*valida fonte (100,101,102,118,119) OC 9112 */
-                $dotacoes = array(100, 101, 102, 118, 119);
+                // Adicionar Validação da fontes 166 e 167 - OC17881
+                $dotacoes = array(100, 101, 102, 118, 119, 166, 167);
                 if (!in_array(substr($oEstruturalDotacaoEnviada->dl_estrutural, 38), $dotacoes)) {
                     $sqlerro = true;
                     db_msgbox("Usuário, inclusão abortada. Dotação incompatível com o tipo de suplementação utilizada");
