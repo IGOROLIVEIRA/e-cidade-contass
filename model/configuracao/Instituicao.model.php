@@ -622,6 +622,6 @@ class Instituicao {
    */
   public function getUsaDebitosItbi()
   {
-    return $this->usaDebitosItbi;
+    return (boolean) $this->usaDebitosItbi;
   }
 }
