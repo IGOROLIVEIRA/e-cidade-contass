@@ -184,6 +184,7 @@ class EventoS2200 extends EventoBase
                 $oDadosAPI->evtAdmissao->vinculo->infoContrato->remuneracao = null;
             }
 
+            $oDadosAPI->evtAdmissao->vinculo->infoContrato->duracao = null;
             if ($oDados->tpregtrab != 2) {
                 $oDadosAPI->evtAdmissao->vinculo->infoContrato->duracao->tpContr = $oDados->tpcontr;
                 //$oDadosAPI->evtAdmissao->vinculo->infoContrato->duracao->dtTerm = empty($oDados->dtterm) ? null : $oDados->dtterm;

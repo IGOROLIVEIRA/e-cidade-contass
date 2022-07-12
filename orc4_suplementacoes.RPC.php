@@ -49,6 +49,7 @@ $clorcsuplem     = new cl_orcsuplem;
 $clorcprojeto    = new cl_orcprojeto;
 db_app::import("orcamento.suplementacao.*");
 db_app::import("Dotacao");
+
 $aParametros         = db_stdClass::getParametro("orcparametro", array(db_getsession("DB_anousu")));
 $oParametroOrcamento = $aParametros[0];
 
@@ -59,8 +60,9 @@ $oRetorno          = new stdClass;
 $oRetorno->status  = 1;
 $oRetorno->message = "";
 $oRetorno->itens   = array();
-switch ($oParam->exec) {
 
+switch ($oParam->exec) {
+    
     case "getDadosDotacaoPPA":
 
         $oDaoPPADotacao   = db_utils::getDao("ppadotacao");
@@ -212,6 +214,13 @@ switch ($oParam->exec) {
             $oRetorno->message = urlencode($eErro->getMessage());
         }
         break;
+    case 'getSuplementacao':
+        // OC16754
+        $clorcsuplem = new cl_orcsuplemval;
+        $clorcsuplem->sql_record($clorcsuplem->sql_query_file($oParam->params->iCodSup, db_getsession("DB_anousu")));
+        $oRetorno->suplementado = $clorcsuplem->numrows;
+        break;
 }
+
 echo $oJson->encode($oRetorno);
 ?>
