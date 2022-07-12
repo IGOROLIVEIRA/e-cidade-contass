@@ -302,6 +302,7 @@ try {
             break;
         case "transmitirrubricas":
             $dadosESocial = new DadosESocial();
+            db_inicio_transacao();
 
             //Rubricas a serem enviadas
             $seqRubricas = $oParam->rubricas;
@@ -320,6 +321,11 @@ try {
                $eventoFila = new Evento($arquivo, $iCgm, $iCgm, $aTabela, $oParam->tpAmb, "{$oParam->iAnoValidade}-{$oParam->iMesValidade}", $oParam->modo, $oParam->dtalteracao);
                $eventoFila->adicionarFila();
             }
+            db_fim_transacao(false);
+
+            ob_start();
+            $response = system("php -q filaEsocial.php");
+            ob_end_clean();
 
             $oRetorno->sMessage = "Dados das Rúbricas agendados para envio.";
 

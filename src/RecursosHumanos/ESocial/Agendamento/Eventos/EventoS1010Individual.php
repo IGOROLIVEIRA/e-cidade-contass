@@ -41,7 +41,7 @@ class EventoS1010Individual extends EventoBase
             $oDadosAPI->evtTabRubrica             = new \stdClass;
             $oDadosAPI->evtTabRubrica->sequencial = $iSequencial;
             $oDadosAPI->evtTabRubrica->codRubr    = $oDado->codrubr;
-            $oDadosAPI->evtTabRubrica->ideTabRubr = $oDado->ideTabRubr;
+            $oDadosAPI->evtTabRubrica->ideTabRubr = 'TABRUB1';
             $oDadosAPI->evtTabRubrica->inivalid   = $this->iniValid;
             if (!empty($this->fimValid)) {
                 $oDadosAPI->evtTabRubrica->fimvalid = $this->fimValid;

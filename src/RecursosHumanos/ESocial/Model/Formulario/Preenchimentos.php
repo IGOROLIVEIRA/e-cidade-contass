@@ -271,8 +271,7 @@ class Preenchimentos
             AND rh27_codincidfgts IS NOT NULL
             AND rh27_codincidregime IS NOT NULL
             AND rh27_rubric NOT IN ('R978')
-            AND rh27_instit = 1
-        ";
+            AND rh27_instit = ".db_getsession('DB_instit');
         $rsRubrica = \db_query($sql);
 
         if (!$rsRubrica) {
