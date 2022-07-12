@@ -49,6 +49,8 @@ parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 //db_postmemory($HTTP_SERVER_VARS,2);
 
 $xinstit = split("-", $db_selinstit);
+$sInstituicoesPorVirgula = str_replace('-', ', ', $db_selinstit);
+
 $resultinst = pg_exec("select codigo,nomeinst,nomeinstabrev from db_config where codigo in ({$sInstituicoesPorVirgula}) ");
 $descr_inst = '';
 $xvirg = '';
@@ -92,8 +94,6 @@ $alt = 4;
 $anousu  = db_getsession("DB_anousu");
 $dataini = $dt_ini;
 $datafin = $dt_fim;
-
-$sInstituicoesPorVirgula = str_replace('-', ', ', $db_selinstit);
 
 $db_filtro = " o70_instit in ({$sInstituicoesPorVigula}) ";
 
