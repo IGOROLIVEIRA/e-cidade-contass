@@ -51,7 +51,9 @@ class DadosESocial
             case '37':
                 return $this->buscaPreenchimentos($matricula);
                 break;
-
+                case '2':
+                    return $this->buscaPreenchimentos($matricula);
+                    break;
             default:
                 $preenchimentos = $this->buscaPreenchimentos($matricula);
 
@@ -92,6 +94,7 @@ class DadosESocial
             case Tipo::LOTACAO_TRIBUTARIA:
                 return $preenchimento->buscarUltimoPreenchimentoLotacao($formularioId);
             case Tipo::RUBRICA:
+                return $preenchimento->buscarPreenchimentoS1010($formularioId, $matricula);
             case Tipo::CARGO:
             case Tipo::CARREIRA:
             case Tipo::FUNCAO:
@@ -105,7 +108,6 @@ class DadosESocial
             case Tipo::TSV_INICIO:
             case Tipo::TSV_ALT_CONTR:
             case Tipo::CD_BENEF_IN:
-            case Tipo::AFASTAMENTO_TEMPORARIO:
                 return $preenchimento->buscarUltimoPreenchimentoInstituicao($formularioId, $matricula);
             case Tipo::CADASTRAMENTO_INICIAL:
                 return $preenchimento->buscarPreenchimentoS2200($formularioId, $matricula);
@@ -166,7 +168,6 @@ class DadosESocial
             case Tipo::TSV_INICIO:
             case Tipo::TSV_ALT_CONTR:
             case Tipo::CD_BENEF_IN:
-            case Tipo::AFASTAMENTO_TEMPORARIO:
                 return $preenchimento->pk;
             default:
                 throw new Exception('Tipo não encontrado.');
