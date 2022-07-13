@@ -689,7 +689,7 @@ where
 	r14_anousu = fc_getsession('DB_anousu')::int
 	and r14_mesusu = date_part('month', fc_getsession('DB_datausu')::date)
 	and r14_instit = fc_getsession('DB_instit')::int
-	and r14_regist = rhpessoal.rh01_regist)";
+	and r14_regist = rhpessoal.rh01_regist) limit 1";
 
         if ($matricula != null) {
             $sql .= "and rh01_regist in ($matricula) ";

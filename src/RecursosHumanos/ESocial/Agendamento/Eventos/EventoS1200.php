@@ -46,7 +46,9 @@ class EventoS1200 extends EventoBase
                 $oDadosAPI->evtRemun->perapur         = date('Y');
             }
             $oDadosAPI->evtRemun->cpftrab             = $oDados->cpftrab;
-            $oDadosAPI->evtRemun->infomv->indmv       = $oDados->indmv;
+            if (!empty($oDados->indmv)) {
+                $oDadosAPI->evtRemun->infomv->indmv       = $oDados->indmv;
+            }
             $oDadosAPI->evtRemun->infomv->remunoutrempr->tpinsc = 1;
             $oDadosAPI->evtRemun->infomv->remunoutrempr->nrinsc  = $oDados->cgc;
             $oDadosAPI->evtRemun->infomv->remunoutrempr->codcateg  = $oDados->codcateg;
@@ -86,26 +88,26 @@ class EventoS1200 extends EventoBase
         foreach ($aPontos as $opcao) {
             switch ($opcao) {
                 case 'salario':
-                $sigla          = 'r14_';
-                $arquivo        = 'gerfsal';
-                $sTituloCalculo = 'Salário';
-                break;
+                    $sigla          = 'r14_';
+                    $arquivo        = 'gerfsal';
+                    $sTituloCalculo = 'Salário';
+                    break;
 
                 case 'complementar':
-                $sigla          = 'r48_';
-                $arquivo        = 'gerfcom';
-                $sTituloCalculo = 'Complementar';
-                break;
+                    $sigla          = 'r48_';
+                    $arquivo        = 'gerfcom';
+                    $sTituloCalculo = 'Complementar';
+                    break;
 
                 case '13salario':
-                $sigla          = 'r35_';
-                $arquivo        = 'gerfs13';
-                $sTituloCalculo = '13? Sal?rio';
-                break;
+                    $sigla          = 'r35_';
+                    $arquivo        = 'gerfs13';
+                    $sTituloCalculo = '13? Sal?rio';
+                    break;
 
                 default:
-                continue;
-                break;
+                    continue;
+                    break;
             }
             if ($opcao) {
                 $sql = "  select distinct
@@ -141,26 +143,26 @@ class EventoS1200 extends EventoBase
         foreach ($aPontos as $opcao) {
             switch ($opcao) {
                 case 'salario':
-                $sigla          = 'r14_';
-                $arquivo        = 'gerfsal';
-                $sTituloCalculo = 'Salário';
-                break;
+                    $sigla          = 'r14_';
+                    $arquivo        = 'gerfsal';
+                    $sTituloCalculo = 'Salário';
+                    break;
 
                 case 'complementar':
-                $sigla          = 'r48_';
-                $arquivo        = 'gerfcom';
-                $sTituloCalculo = 'Complementar';
-                break;
+                    $sigla          = 'r48_';
+                    $arquivo        = 'gerfcom';
+                    $sTituloCalculo = 'Complementar';
+                    break;
 
                 case '13salario':
-                $sigla          = 'r35_';
-                $arquivo        = 'gerfs13';
-                $sTituloCalculo = '13? Sal?rio';
-                break;
+                    $sigla          = 'r35_';
+                    $arquivo        = 'gerfs13';
+                    $sTituloCalculo = '13? Sal?rio';
+                    break;
 
                 default:
-                continue;
-                break;
+                    continue;
+                    break;
             }
             if ($opcao) {
                 $sql = "  select distinct
