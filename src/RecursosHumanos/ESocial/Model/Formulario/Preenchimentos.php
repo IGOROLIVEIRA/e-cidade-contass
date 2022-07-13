@@ -229,37 +229,40 @@ class Preenchimentos
                 AND rh27_rubric IN (".str_replace(' ','',$rubrica).")
             ";
         }
-        $sql = "
-                SELECT rh27_rubric AS codrubr,
-            rh27_instit AS instituicao,
-            rh27_descr AS dscRubr,
-            CASE
-                WHEN rh27_pd =1 THEN '3003778'
-                WHEN rh27_pd =2 THEN '3003777'
-                WHEN rh27_pd =3
-                        AND rh27_rubric IN ('R992',
-                                            'R991',
-                                            'R981',
-                                            'R982',
-                                            'R983',
-                                            'R997',
-                                            'R999') THEN '3003776'
-                WHEN rh27_pd =3
-                        AND rh27_rubric IN ('R984') THEN '3003775'
-            END AS tpRubr,
-            rh27_codincidprev AS codIncCP,
-            rh27_codincidirrf AS codIncIRRF,
-            rh27_codincidfgts AS codIncFGTS,
-            rh27_codincidregime AS codIncCPRP,
-            CASE
-                WHEN rh27_tetoremun = 't' THEN '4000566'
-                ELSE '4000567'
-            END AS tetoRemun,
-            'TABRUB1' AS codidentpadrao,
-            (SELECT r11_anousu||''||r11_mesusu AS anofolha
-            FROM cfpess
-            ORDER BY r11_anousu DESC
-            LIMIT 1), e991_rubricasesocial AS natRubr
+        $sql = "SELECT
+        rh27_rubric AS codrubr,
+        rh27_instit AS instituicao,
+        rh27_descr AS dscRubr,
+        rh27_pd AS tpRubr,
+ 
+     (SELECT db104_valorresposta
+      FROM avaliacaopergunta
+      INNER JOIN avaliacaoperguntaopcao ON db104_avaliacaopergunta = db103_sequencial
+      WHERE db104_sequencial = rh27_codincidprev) AS codIncCP,
+ 
+     (SELECT db104_valorresposta
+      FROM avaliacaopergunta
+      INNER JOIN avaliacaoperguntaopcao ON db104_avaliacaopergunta = db103_sequencial
+      WHERE db104_sequencial = rh27_codincidirrf) AS codIncIRRF,
+ 
+     (SELECT db104_valorresposta
+      FROM avaliacaopergunta
+      INNER JOIN avaliacaoperguntaopcao ON db104_avaliacaopergunta = db103_sequencial
+      WHERE db104_sequencial = rh27_codincidfgts) AS codIncFGTS,
+ 
+     (SELECT db104_valorresposta
+      FROM avaliacaopergunta
+      INNER JOIN avaliacaoperguntaopcao ON db104_avaliacaopergunta = db103_sequencial
+      WHERE db104_sequencial = rh27_codincidregime) AS codIncCPRP,
+        CASE
+            WHEN rh27_tetoremun = 't' THEN 'S'
+            ELSE 'N'
+        END AS tetoRemun,
+        'TABRUB1' AS codidentpadrao,
+     (SELECT r11_anousu||''||r11_mesusu AS anofolha
+      FROM cfpess
+      ORDER BY r11_anousu DESC
+      LIMIT 1), e991_rubricasesocial AS natRubr
         FROM rhrubricas
         INNER JOIN baserubricasesocial ON e991_rubricas = rh27_rubric
         AND e991_instit = rh27_instit

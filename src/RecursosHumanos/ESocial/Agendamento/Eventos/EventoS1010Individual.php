@@ -34,6 +34,7 @@ class EventoS1010Individual extends EventoBase
 
         foreach ($this->dados as $oDado) {
 
+
             if (!isset($oDado->natrubr)) {
                 continue;
             }
@@ -47,23 +48,26 @@ class EventoS1010Individual extends EventoBase
                 $oDadosAPI->evtTabRubrica->fimvalid = $this->fimValid;
             }
             $oDadosAPI->evtTabRubrica->modo         = $this->modo;
-            // var_dump($oDado);
-            // exit;
 
-            $oDadosAPI->evtTabRubrica->dadosRubrica = $oDado->dadosRubrica;
-
+            $oDadosAPI->evtTabRubrica->dadosRubrica->dscrubr = $oDado->dscrubr;
+            $oDadosAPI->evtTabRubrica->dadosRubrica->natrubr = intval($oDado->natrubr);
+            $oDadosAPI->evtTabRubrica->dadosRubrica->tprubr = $oDado->tprubr;
             if (!empty($oDado->codinccp)) {
-                $oDadosAPI->evtTabRubrica->ideProcessoCP = $oDado->codinccp;
+                $oDadosAPI->evtTabRubrica->dadosRubrica->codinccp = $oDado->codinccp;
             }
             if (!empty($oDado->codincirrf)) {
-                $oDadosAPI->evtTabRubrica->ideProcessoIRRF = $oDado->codincirrf;
+                $oDadosAPI->evtTabRubrica->dadosRubrica->codincirrf = $oDado->codincirrf;
             }
             if (!empty($oDado->codincfgts)) {
-                $oDadosAPI->evtTabRubrica->ideProcessoFGTS = $oDado->codincfgts;
+                $oDadosAPI->evtTabRubrica->dadosRubrica->codincfgts = $oDado->codincfgts;
             }
             if (!empty($oDado->ideProcessoSIND->nrProc)) {
-                $oDadosAPI->evtTabRubrica->ideProcessoSIND = $oDado->ideProcessoSIND;
+                $oDadosAPI->evtTabRubrica->dadosRubrica->codinccprp = $oDado->codinccprp;
             }
+            if (!empty($oDado->tetoremun)) {
+                $oDadosAPI->evtTabRubrica->dadosRubrica->tetoremun = $oDado->tetoremun;
+            }
+
             $aDadosAPI[] = $oDadosAPI;
             $iSequencial++;
         }
