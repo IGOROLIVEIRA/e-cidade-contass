@@ -3249,13 +3249,33 @@ order by
     {
 
         $oDaoAcordoitem  = new cl_acordoitem;
-        $iNumeroAditamentoAnterior = $iNumeroAditamento - 1;
-        $sCampos    = "acordoitem.ac20_valortotal AS totalanterior";
+        $iNumeroAditamentoAnterior = $iNumeroAditamento;
+        $sCampos    = "acordoitem.ac20_valoraditado AS totalanterior";
         $sWhere     = "ac26_numero = {$iNumeroAditamentoAnterior} and ac16_sequencial = {$this->getPosicao()->getAcordo()} AND ac20_ordem = {$this->getOrdem()} AND ac20_pcmater = " . $this->getMaterial()->getMaterial();
         $sSqlItens  = $oDaoAcordoitem->sql_query_transparencia($sCampos, null, $sWhere);
         $rsItem     = $oDaoAcordoitem->sql_record($sSqlItens);
+        //var_dump($sSqlItens);
+        return db_utils::fieldsMemory($rsItem, 0)->totalanterior;
+    }
 
-        return abs(db_utils::fieldsMemory($rsItem, 0)->totalanterior);
+
+
+    /**
+     * Retorna o valor total do aditamento anterior ao informado
+     * Necessario para o sicom
+     * @param integer $iNumeroAditamento
+     */
+    public function getValorTotalPosicaoAnteriors($iNumeroAditamento)
+    {
+
+        $oDaoAcordoitem  = new cl_acordoitem;
+        $iNumeroAditamentoAnterior = $iNumeroAditamento - 1;
+        $sCampos    = "acordoitem.ac20_valorunitario AS totalanterior";
+        $sWhere     = "ac26_numero = {$iNumeroAditamentoAnterior} and ac16_sequencial = {$this->getPosicao()->getAcordo()} AND ac20_ordem = {$this->getOrdem()} AND ac20_pcmater = " . $this->getMaterial()->getMaterial();
+        $sSqlItens  = $oDaoAcordoitem->sql_query_transparencia($sCampos, null, $sWhere);
+        $rsItem     = $oDaoAcordoitem->sql_record($sSqlItens);
+        //var_dump($sSqlItens);
+        return db_utils::fieldsMemory($rsItem, 0)->totalanterior;
     }
 
     /**
