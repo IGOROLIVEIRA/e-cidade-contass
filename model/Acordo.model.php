@@ -1720,7 +1720,7 @@ class Acordo
 
             $oDaoAcordo->alterar($this->getCodigoAcordo());
             if ($oDaoAcordo->erro_status == 0) {
-                throw new Exception("Erro ao salvar acordo.\nErro: {$oDaoAcordo->erro_msg}");
+                throw new Exception("Erro ao salvar acordos.\nErro: {$oDaoAcordo->erro_msg}");
             }
             $oPosicao = $this->getUltimaPosicao();
             $oPosicao->setPosicaoPeriodo($this->getDataInicial(), $this->getDataFinal(), $this->getPeriodoComercial())->save();
@@ -3111,7 +3111,7 @@ class Acordo
      * @return $this
      * @throws Exception
      */
-    public function aditar($aItens, $iTipoAditamento, $dtVigenciaInicial, $dtVigenciaFinal, $sNumeroAditamento, $dtAssinatura, $dtPublicacao, $sDescricaoAlteracao, $sVeiculoDivulgacao, $iTipoalteracaoAditivo, $aSelecionados, $sVigenciaalterada, $lProvidencia)
+    public function aditar($aItens, $iTipoAditamento, $dtVigenciaInicial, $dtVigenciaFinal, $sNumeroAditamento, $dtAssinatura, $dtPublicacao, $sDescricaoAlteracao, $sVeiculoDivulgacao, $iTipoalteracaoAditivo, $aSelecionados, $sVigenciaalterada, $lProvidencia, $datareferencia)
     {
         $nValorItens = 0;
         $nValorLancamentoContabil = 0;
@@ -3145,7 +3145,7 @@ class Acordo
 
         $oNovaPosicao->save();
 
-        $oNovaPosicao->salvarSaldoAditamento($nValorItens, $dtAssinatura, $dtPublicacao, $sDescricaoAlteracao, $sVeiculoDivulgacao);
+        $oNovaPosicao->salvarSaldoAditamento($nValorItens, $dtAssinatura, $dtPublicacao, $sDescricaoAlteracao, $sVeiculoDivulgacao, $datareferencia);
         $aTiposAlteracao = array();
 
         if (in_array($iTipoAditamento, array(

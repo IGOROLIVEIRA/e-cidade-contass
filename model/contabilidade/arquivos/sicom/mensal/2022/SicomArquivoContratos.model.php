@@ -13,9 +13,7 @@ require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2022/GerarCONT
 require_once("model/Acordo.model.php");
 require_once("model/AcordoPosicao.model.php");
 require_once("model/AcordoRescisao.model.php");
-
 //echo '<pre>';ini_set("display_errors", 1);
-
 /**
  * Contratos Sicom Acompanhamento Mensal
  * @author marcelo
@@ -468,10 +466,9 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                 LEFT JOIN cflicita c2 ON l2.l20_codtipocom = c2.l03_codigo
                 LEFT JOIN pctipocompra p2 ON p2.pc50_codcom = c2.l03_codcom
                 INNER JOIN acordogrupo ON ac02_sequencial = ac16_acordogrupo
-                WHERE ac16_dataassinatura <= '{$this->sDataFinal}'
-                AND ac16_dataassinatura >= '{$this->sDataInicial}'
+                WHERE ac16_datareferencia <= '{$this->sDataFinal}'
+                AND ac16_datareferencia >= '{$this->sDataInicial}'
                 AND ac16_instit = " . db_getsession("DB_instit");
-
         $rsResult10 = db_query($sSql);
 
         db_inicio_transacao();
@@ -1152,17 +1149,19 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                 ac26_vigenciaalterada,
                 ac26_data,
                 ac02_acordonatureza,
-                manutac_codunidsubanterior
+                manutac_codunidsubanterior,
+                ac35_datareferencia
         FROM acordoposicaoaditamento
         INNER JOIN acordoposicao ON ac26_sequencial = ac35_acordoposicao
         INNER JOIN acordo ON ac26_acordo = ac16_sequencial
         INNER JOIN acordogrupo ON ac16_acordogrupo = ac02_sequencial
         LEFT JOIN manutencaoacordo ON manutac_acordo = ac16_sequencial
-        WHERE ac35_dataassinaturatermoaditivo BETWEEN '{$this->sDataInicial}' AND '{$this->sDataFinal}'
+        WHERE ac35_datareferencia BETWEEN '{$this->sDataInicial}' AND '{$this->sDataFinal}'
           AND ac16_instit = " . db_getsession("DB_instit") . " ORDER BY ac26_sequencial ";
 
         $rsResult20 = db_query($sSql);
-        //echo $sSql; db_criatabela($rsResult20);
+        //echo $sSql;
+        //db_criatabela($rsResult20);
         $oDadosAgrupados20 = array();
         for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) {
 
@@ -1198,7 +1197,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             $result = db_query($sSql);
 
             $sCodUnidade = db_utils::fieldsMemory($result, 0)->codunidadesub;
-            
+
             /*
             * ESSE IF FOI CRIADO PARA SEPARAR OS TIPOS 11 e 14 DOS OUTROS TIPOS
             */
@@ -1247,7 +1246,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                         $rsMatServicoR21  = db_query($sqlServico);
                         $matServico = db_utils::fieldsMemory($rsMatServicoR21, 0);
                         if ($matServico->pc01_servico == "t" && $matServico->ac20_servicoquantidade == "f") {
-                            $valortotaladitado += $oAcordoItem->getValorAditado(); 
+                            $valortotaladitado += $oAcordoItem->getValorAditado();
                         } else {
                             //CALCULO O VALOR DO PRIMEIRO REGISTRO 20 
                             //2 = reequilibrio 5 = reajuste
@@ -1453,7 +1452,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                         $rsMatServicoR21  = db_query($sqlServico);
                         $matServico = db_utils::fieldsMemory($rsMatServicoR21, 0);
                         if ($matServico->pc01_servico == "t" && $matServico->ac20_servicoquantidade == "f") {
-                            $valortotaladitado += $oAcordoItem->getValorAditado(); 
+                            $valortotaladitado += $oAcordoItem->getValorAditado();
                         } else {
                             //CALCULO O VALOR DO PRIMEIRO REGISTRO 20 
                             //2 = reequilibrio 5 = reajuste
@@ -1484,7 +1483,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                 } else {
                     $tipoalteracao = 3;
                 }
-                
+
 
                 $clcontratos20->si87_tipoalteracaovalor = $tipoalteracao;
                 $clcontratos20->si87_valoraditivo = ($tipoalteracao == 3 ? 0 : abs($valortotaladitado));
@@ -1605,7 +1604,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                             }
                         }
                     }
-                }else{
+                } else {
                     $iTotalPosicaoAnterior = 0;
                     $iTotalPosicaoAditivo = 0;
                     $iQuantidadeAditada = 0;
@@ -1664,7 +1663,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                                 } else {
                                     $clcontratos21->si88_valorunitarioitem = abs($oAcordoItem->getValorUnitario());
                                 }
-                                
+
                                 $iTipoAlteraoItem = 1;
                                 $clcontratos21->si88_tipoalteracaoitem = $iTipoAlteraoItem;
 
@@ -1701,7 +1700,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                                 if ($clcontratos21->erro_status == 0) {
                                     throw new Exception($clcontratos21->erro_msg);
                                 }
-                            }else{
+                            } else {
                                 $iTotalPosicaoAnterior += $oAcordoItem->getValorTotalPosicaoAnterior($oDados20->ac26_numero);
                                 $iTotalPosicaoAditivo += $oAcordoItem->getValorTotal();
 
@@ -1752,9 +1751,9 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                                     $clcontratos21->si88_valorunitarioitem = abs($oAcordoItem->getValorUnitario());
                                 }
                                 $valortotaladitado = $oAcordoItem->getValorAditado();
-                                
-                                    $iTipoAlteraoItem = 1;
-                                
+
+                                $iTipoAlteraoItem = 1;
+
 
                                 $clcontratos21->si88_tipoalteracaoitem = $iTipoAlteraoItem;
 
@@ -1844,9 +1843,9 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                                 $clcontratos21->si88_valorunitarioitem = abs($oAcordoItem->getValorTotalPosicaoAnteriors($oDados20->ac26_numero));
                             }
                             $valortotaladitado = $oAcordoItem->getValorAditado();
-                            
-                                $iTipoAlteraoItem = 2;
-                            
+
+                            $iTipoAlteraoItem = 2;
+
 
                             $clcontratos21->si88_tipoalteracaoitem = $iTipoAlteraoItem;
 
@@ -1883,13 +1882,10 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                             if ($clcontratos21->erro_status == 0) {
                                 throw new Exception($clcontratos21->erro_msg);
                             }
-                        
-
-                            
-                        }else{
+                        } else {
                             $valortotaladitado = $oAcordoItem->getValorUnitario() - $oAcordoItem->getValorTotalPosicaoAnteriors($oDados20->ac26_numero);
                             if ($valortotaladitado != 0) {
-                            
+
                                 $iTotalPosicaoAnterior += $oAcordoItem->getValorTotalPosicaoAnterior($oDados20->ac26_numero);
                                 $iTotalPosicaoAditivo += $oAcordoItem->getValorTotal();
 
@@ -1940,9 +1936,9 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                                     $clcontratos21->si88_valorunitarioitem = abs($oAcordoItem->getValorUnitario());
                                 }
                                 $valortotaladitado = $oAcordoItem->getValorAditado();
-                                
-                                    $iTipoAlteraoItem = 1;
-                                
+
+                                $iTipoAlteraoItem = 1;
+
 
                                 $clcontratos21->si88_tipoalteracaoitem = $iTipoAlteraoItem;
 
@@ -2030,7 +2026,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                                 } else {
                                     $clcontratos21->si88_valorunitarioitem = abs($oAcordoItem->getValorTotalPosicaoAnteriors($oDados20->ac26_numero));
                                 }
-                                
+
                                 $iTipoAlteraoItem = 2;
                                 $clcontratos21->si88_tipoalteracaoitem = $iTipoAlteraoItem;
 
@@ -2069,7 +2065,6 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                                 }
                             }
                         }
-
                     }
                 }
             } //fim tipo 14 e 15
@@ -2160,15 +2155,15 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
        si03_numcontratoanosanteriores,
        si03_acordo,
        si03_acordoposicao,
+       si03_datareferencia,
        manutac_codunidsubanterior
         FROM apostilamento
         INNER JOIN acordo ON si03_acordo=ac16_sequencial
         LEFT JOIN manutencaoacordo ON manutac_acordo = ac16_sequencial
-        WHERE si03_dataapostila <='{$this->sDataFinal}'
-        AND si03_dataapostila >= '{$this->sDataInicial}'
+        WHERE si03_datareferencia <='{$this->sDataFinal}'
+        AND si03_datareferencia >= '{$this->sDataInicial}'
         AND si03_instit = " . db_getsession("DB_instit");
         $rsResult30 = db_query($sSql);
-
         for ($iCont30 = 0; $iCont30 < pg_num_rows($rsResult30); $iCont30++) {
 
             $oDados30 = db_utils::fieldsMemory($rsResult30, $iCont30);
@@ -2226,7 +2221,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
         $sSql = "SELECT *
           FROM acordo
           WHERE ac16_acordosituacao = 2
-            AND ac16_datarescisao BETWEEN '{$this->sDataInicial}' AND '{$this->sDataFinal}'
+            AND ac16_datareferenciarescisao BETWEEN '{$this->sDataInicial}' AND '{$this->sDataFinal}'
             AND ac16_instit = " . db_getsession("DB_instit");
 
         $rsResult40 = db_query($sSql);
