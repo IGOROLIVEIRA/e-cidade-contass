@@ -341,7 +341,6 @@ $rotulo->label("z01_cgccpf");
 
 
             $sql = $clempempenho->sql_query_inclusaoempenho(null, $campos, null, $dbwhere);
-            echo $sql;
           }
           $result = $clempempenho->sql_record($sql);
         ?>
