@@ -328,9 +328,15 @@ foreach ($aExcesso as $fonte => $data) {
     $data["G"] = (($data["C"] - $data["F"]) > 0) ? ($data["C"] - $data["F"]) : 0;
 
     $pdf->setfont('arial', '', 6);
-    $fonte = $fonte == 100 ? "100/ 101 / 102" : $fonte;
-    $fonte = $fonte == 118 ? "118 / 119" : $fonte;
-    $fonte = $fonte == 166 ? "166 / 167" : $fonte;
+
+    // Condições de exibição agrupada conforme OC17997
+    $fonte = $fonte == 100 ? db_formatar("100", "recurso") . " / " .
+        db_formatar("101", "recurso") . " / " .
+        db_formatar("102", "recurso") : $fonte;
+    $fonte = $fonte == 118 ? db_formatar("118", "recurso") . " / " .
+        db_formatar("119", "recurso") : $fonte;
+    $fonte = $fonte == 166 ? db_formatar("166", "recurso") . " / " .
+        db_formatar("167", "recurso") : $fonte;
 
     $pdf->cell(24, $alt, db_formatar($fonte, 'recurso'), 0, 0, "C", 0);
     $pdf->cell(24, $alt, db_formatar($data["A"], 'f'), 0, 0, "R", 0);

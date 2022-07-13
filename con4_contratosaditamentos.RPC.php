@@ -80,6 +80,7 @@ try {
                 $oItem                 = new stdClass();
 
                 $oItem->codigo         = $oItemPosicao->getCodigo();
+                //$oItem->ordem          = $oItemPosicao->getOrdem();
                 $oItem->codigoitem     = $oItemPosicao->getMaterial()->getMaterial();
                 $oItem->elemento       = $oItemPosicao->getDesdobramento();
                 $oItem->descricaoitem  = $oItemPosicao->getMaterial()->getDescricao();
