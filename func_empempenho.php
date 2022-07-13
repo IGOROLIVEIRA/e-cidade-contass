@@ -327,7 +327,7 @@ $rotulo->label("z01_cgccpf");
             ";
             $campos = " distinct " . $campos;
             $dbwhere = "";
-            $dbwhere = " WHERE e60_vlremp >
+            $dbwhere = " WHERE (e60_vlremp - e60_vlranu) >
             (SELECT case when sum(m52_valor)  is null then 0 else sum(m52_valor) end as totalemordemdecompra
              FROM matordemitem
              WHERE m52_numemp = e60_numemp) -
@@ -341,6 +341,7 @@ $rotulo->label("z01_cgccpf");
 
 
             $sql = $clempempenho->sql_query_inclusaoempenho(null, $campos, null, $dbwhere);
+            echo $sql;
           }
           $result = $clempempenho->sql_record($sql);
         ?>
@@ -498,7 +499,7 @@ $rotulo->label("z01_cgccpf");
               RPAD(SUBSTR(convconvenios.c206_objetoconvenio,0,47),50,'...') AS c206_objetoconvenio
               ";
               $campos = " distinct " . $campos;
-              $dbwhere .= " and e60_vlremp >
+              $dbwhere .= " and (e60_vlremp - e60_vlranu) >
               (SELECT case when sum(m52_valor)  is null then 0 else sum(m52_valor) end as totalemordemdecompra
               FROM matordemitem
               WHERE m52_numemp = e60_numemp) -
