@@ -173,7 +173,7 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
                     </td>
                     <td>
                         <?php
-                        db_input('e60_codemp', 8, $Ie60_codemp, true, 'text', $db_opcao);
+                        db_input('e60_codemp', 8, $Ie60_codemp, true, 'text', $db_opcao, "onchange='js_ValidaCampos(),'");
                         echo " ","<b></b>","&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
                         ?>
                         <b> Data Empenho:</b>
@@ -1006,6 +1006,16 @@ function js_pesquisahistorico(mostra) {
     }
 
     js_pesquisarRecursoDotacao();
+
+    function js_ValidaCampos() { 
+        var numero = document.form1.e60_codemp.value;
+        if (numero % 1 !== 0) {
+             alert("Campo de Número do Empenho informar apenas números inteiros.");
+             document.form1.e60_codemp.focus();
+                document.form1.e60_codemp.value = '';
+             return false;
+        }       
+    }       
 
     function js_validaNumLicitacao() {
 
