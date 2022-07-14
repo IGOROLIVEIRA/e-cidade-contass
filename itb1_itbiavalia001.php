@@ -1,31 +1,4 @@
-<?
-/*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
- */
-//ini_set('display_errors', 1);
-//error_reporting(E_ALL);
+<?php
 require("libs/db_stdlib.php");
 require("libs/db_conecta.php");
 include("libs/db_sessoes.php");
@@ -42,6 +15,8 @@ include("classes/db_paritbi_classe.php");
 require_once("classes/db_arrecad_classe.php");
 require_once("classes/db_arrematric_classe.php");
 require_once("classes/db_numpref_classe.php");
+require_once("model/itbi/Paritbi.model.php");
+require_once("model/recibo.model.php");
 
 $oPost = db_utils::postMemory($_POST);
 $oGet  = db_utils::postMemory($_GET);
@@ -117,8 +92,8 @@ SQL;
 
     $clarrecad->k00_numcgm = $oDadoCGM->it21_numcgm;
     $clarrecad->k00_dtoper = date('Y-m-d',db_getsession('DB_datausu'));
-    $clarrecad->k00_receit = 3;
-    $clarrecad->k00_hist   = 707;
+    $clarrecad->k00_receit = $parItbi->getReceita();
+    $clarrecad->k00_hist   = Paritbi::HISTCALC_DEFAULT;
     $clarrecad->k00_valor  = $clitbiavalia->it14_valorpaga;
     $clarrecad->k00_dtvenc = $clitbiavalia->it14_dtvenc;
     $clarrecad->k00_numpre = $clnumpref->sql_numpre();
@@ -134,6 +109,18 @@ SQL;
     }
 
     $sMsgErro = $clarrecad->erro_msg;
+
+      $oRecibo = new Recibo(1, $oDadoCGM->it21_numcgm);
+      $oRecibo->adicionarReceita($parItbi->getReceita(), $clitbiavalia->it14_valorpaga);
+      $oRecibo->setCodigoHistorico(Paritbi::HISTCALC_DEFAULT);
+      $oRecibo->setHistorico("Recibo de débito ITBI gerado para o ITBI {$clitbiavalia->it14_guia}");
+      $oRecibo->setVinculoCgm($oDadoCGM->it21_numcgm);
+      try {
+          $oRecibo->emiteRecibo();
+      } catch (Exception $e) {
+          $lSqlErro = true;
+          $sMsgErro = $e->getMessage();
+      }
 
     $sSQL = <<<SQL
 
