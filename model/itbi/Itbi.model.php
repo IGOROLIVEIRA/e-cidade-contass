@@ -82,7 +82,7 @@ class Itbi
         foreach ($aDisbanco as $obj) {
 
             $oItbi = $this->getinstanceByNumpre($obj->k00_numpre);
-            if ($oItbi->it01_guia != null) {
+            if (empty($oItbi) === false) {
                 $this->_processarTransferenciaAutomatica($oItbi);
             }
         }
@@ -99,10 +99,19 @@ class Itbi
         $this->Itbimatric->it06_matric;
     }
 
+    /**
+     * @param $iNumpre
+     * @return Itbi|null
+     * @throws BusinessException
+     */
     public function getinstanceByNumpre($iNumpre)
     {
         $oItbinumpre = new Itbinumpre();
         $oItbinumpre = $oItbinumpre->getInstanceByNumpre($iNumpre);
+
+        if(empty($oItbinumpre)) {
+            return null;
+        }
         return new Itbi($oItbinumpre->it15_guia);
     }
 
