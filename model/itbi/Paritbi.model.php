@@ -2,6 +2,8 @@
 
 class Paritbi {
 
+    const HISTCALC_DEFAULT = 707;
+
     private $it24_anousu;
     private $it24_grupoespbenfurbana;
     private $it24_grupotipobenfurbana;
@@ -16,6 +18,7 @@ class Paritbi {
     private $it24_grupopadraoconstrutivobenurbana;
     private $it24_cgmobrigatorio;
     private $it24_transfautomatica;
+    private $it24_receita;
 
     public function __construct($it24_anousu = null){
         if(!empty($it24_anousu)){
@@ -35,6 +38,10 @@ class Paritbi {
             $this->it24_grupopadraoconstrutivobenurbana = $oDaoParItbi->it24_grupopadraoconstrutivobenurbana;
             $this->it24_cgmobrigatorio = $oDaoParItbi->it24_cgmobrigatorio;
             $this->it24_transfautomatica = $oDaoParItbi->it24_transfautomatica;
+
+            $oDaoParReciboItbi = db_utils::getDao('parreciboitbi');
+            $oDaoParReciboItbi = current(db_utils::getCollectionByRecord($oDaoParReciboItbi->sql_record($oDaoParReciboItbi->sql_query())));
+            $this->it24_receita = $oDaoParReciboItbi->it17_codigo;
         }
     }
 
@@ -288,6 +295,11 @@ class Paritbi {
     {
         $this->it24_transfautomatica = $it24_transfautomatica;
         return $this;
+    }
+
+    public function getReceita()
+    {
+        return $this->it24_receita;
     }
 
 }
