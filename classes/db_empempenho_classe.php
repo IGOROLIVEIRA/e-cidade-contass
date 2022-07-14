@@ -27,7 +27,8 @@
 
 //MODULO: empenho
 //CLASSE DA ENTIDADE empempenho
-class cl_empempenho {
+class cl_empempenho
+{
     // cria variaveis de erro
     var $rotulo     = null;
     var $query_sql  = null;
@@ -35,7 +36,7 @@ class cl_empempenho {
     var $numrows_incluir = 0;
     var $numrows_alterar = 0;
     var $numrows_excluir = 0;
-    var $erro_status= null;
+    var $erro_status = null;
     var $erro_sql   = null;
     var $erro_banco = null;
     var $erro_msg   = null;
@@ -116,287 +117,291 @@ class cl_empempenho {
                  e60_vlrutilizado = float8 = Valor utilizado
                  ";
     //funcao construtor da classe
-    function cl_empempenho() {
+    function cl_empempenho()
+    {
         //classes dos rotulos dos campos
         $this->rotulo = new rotulo("empempenho");
         $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
     }
     //funcao erro
-    function erro($mostra,$retorna) {
-        if(($this->erro_status == "0") || ($mostra == true && $this->erro_status != null )){
-            echo "<script>alert(\"".$this->erro_msg."\");</script>";
-            if($retorna==true){
-                echo "<script>location.href='".$this->pagina_retorno."'</script>";
+    function erro($mostra, $retorna)
+    {
+        if (($this->erro_status == "0") || ($mostra == true && $this->erro_status != null)) {
+            echo "<script>alert(\"" . $this->erro_msg . "\");</script>";
+            if ($retorna == true) {
+                echo "<script>location.href='" . $this->pagina_retorno . "'</script>";
             }
         }
     }
     // funcao para atualizar campos
-    function atualizacampos($exclusao=false) {
-        if($exclusao==false){
-            $this->e60_numemp = ($this->e60_numemp == ""?@$GLOBALS["HTTP_POST_VARS"]["e60_numemp"]:$this->e60_numemp);
-            $this->e60_codemp = ($this->e60_codemp == ""?@$GLOBALS["HTTP_POST_VARS"]["e60_codemp"]:$this->e60_codemp);
-            $this->e60_anousu = ($this->e60_anousu == ""?@$GLOBALS["HTTP_POST_VARS"]["e60_anousu"]:$this->e60_anousu);
-            $this->e60_coddot = ($this->e60_coddot == ""?@$GLOBALS["HTTP_POST_VARS"]["e60_coddot"]:$this->e60_coddot);
-            $this->e60_numcgm = ($this->e60_numcgm == ""?@$GLOBALS["HTTP_POST_VARS"]["e60_numcgm"]:$this->e60_numcgm);
-            $this->e60_vlrutilizado = ($this->e60_vlrutilizado == ""?@$GLOBALS["HTTP_POST_VARS"]["e60_vlrutilizado"]:$this->e60_vlrutilizado);
-            if($this->e60_emiss == ""){
-                $this->e60_emiss_dia = ($this->e60_emiss_dia == ""?@$GLOBALS["HTTP_POST_VARS"]["e60_emiss_dia"]:$this->e60_emiss_dia);
-                $this->e60_emiss_mes = ($this->e60_emiss_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["e60_emiss_mes"]:$this->e60_emiss_mes);
-                $this->e60_emiss_ano = ($this->e60_emiss_ano == ""?@$GLOBALS["HTTP_POST_VARS"]["e60_emiss_ano"]:$this->e60_emiss_ano);
-                if($this->e60_emiss_dia != ""){
-                    $this->e60_emiss = $this->e60_emiss_ano."-".$this->e60_emiss_mes."-".$this->e60_emiss_dia;
+    function atualizacampos($exclusao = false)
+    {
+        if ($exclusao == false) {
+            $this->e60_numemp = ($this->e60_numemp == "" ? @$GLOBALS["HTTP_POST_VARS"]["e60_numemp"] : $this->e60_numemp);
+            $this->e60_codemp = ($this->e60_codemp == "" ? @$GLOBALS["HTTP_POST_VARS"]["e60_codemp"] : $this->e60_codemp);
+            $this->e60_anousu = ($this->e60_anousu == "" ? @$GLOBALS["HTTP_POST_VARS"]["e60_anousu"] : $this->e60_anousu);
+            $this->e60_coddot = ($this->e60_coddot == "" ? @$GLOBALS["HTTP_POST_VARS"]["e60_coddot"] : $this->e60_coddot);
+            $this->e60_numcgm = ($this->e60_numcgm == "" ? @$GLOBALS["HTTP_POST_VARS"]["e60_numcgm"] : $this->e60_numcgm);
+            $this->e60_vlrutilizado = ($this->e60_vlrutilizado == "" ? @$GLOBALS["HTTP_POST_VARS"]["e60_vlrutilizado"] : $this->e60_vlrutilizado);
+            if ($this->e60_emiss == "") {
+                $this->e60_emiss_dia = ($this->e60_emiss_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["e60_emiss_dia"] : $this->e60_emiss_dia);
+                $this->e60_emiss_mes = ($this->e60_emiss_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["e60_emiss_mes"] : $this->e60_emiss_mes);
+                $this->e60_emiss_ano = ($this->e60_emiss_ano == "" ? @$GLOBALS["HTTP_POST_VARS"]["e60_emiss_ano"] : $this->e60_emiss_ano);
+                if ($this->e60_emiss_dia != "") {
+                    $this->e60_emiss = $this->e60_emiss_ano . "-" . $this->e60_emiss_mes . "-" . $this->e60_emiss_dia;
                 }
             }
-            if($this->e60_vencim == ""){
-                $this->e60_vencim_dia = ($this->e60_vencim_dia == ""?@$GLOBALS["HTTP_POST_VARS"]["e60_vencim_dia"]:$this->e60_vencim_dia);
-                $this->e60_vencim_mes = ($this->e60_vencim_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["e60_vencim_mes"]:$this->e60_vencim_mes);
-                $this->e60_vencim_ano = ($this->e60_vencim_ano == ""?@$GLOBALS["HTTP_POST_VARS"]["e60_vencim_ano"]:$this->e60_vencim_ano);
-                if($this->e60_vencim_dia != ""){
-                    $this->e60_vencim = $this->e60_vencim_ano."-".$this->e60_vencim_mes."-".$this->e60_vencim_dia;
+            if ($this->e60_vencim == "") {
+                $this->e60_vencim_dia = ($this->e60_vencim_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["e60_vencim_dia"] : $this->e60_vencim_dia);
+                $this->e60_vencim_mes = ($this->e60_vencim_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["e60_vencim_mes"] : $this->e60_vencim_mes);
+                $this->e60_vencim_ano = ($this->e60_vencim_ano == "" ? @$GLOBALS["HTTP_POST_VARS"]["e60_vencim_ano"] : $this->e60_vencim_ano);
+                if ($this->e60_vencim_dia != "") {
+                    $this->e60_vencim = $this->e60_vencim_ano . "-" . $this->e60_vencim_mes . "-" . $this->e60_vencim_dia;
                 }
             }
-            $this->e60_vlrorc = ($this->e60_vlrorc == ""?@$GLOBALS["HTTP_POST_VARS"]["e60_vlrorc"]:$this->e60_vlrorc);
-            $this->e60_vlremp = ($this->e60_vlremp == ""?@$GLOBALS["HTTP_POST_VARS"]["e60_vlremp"]:$this->e60_vlremp);
-            $this->e60_vlrliq = ($this->e60_vlrliq == ""?@$GLOBALS["HTTP_POST_VARS"]["e60_vlrliq"]:$this->e60_vlrliq);
-            $this->e60_vlrpag = ($this->e60_vlrpag == ""?@$GLOBALS["HTTP_POST_VARS"]["e60_vlrpag"]:$this->e60_vlrpag);
-            $this->e60_vlranu = ($this->e60_vlranu == ""?@$GLOBALS["HTTP_POST_VARS"]["e60_vlranu"]:$this->e60_vlranu);
-            $this->e60_codtipo = ($this->e60_codtipo == ""?@$GLOBALS["HTTP_POST_VARS"]["e60_codtipo"]:$this->e60_codtipo);
-            $this->e60_resumo = ($this->e60_resumo == ""?@$GLOBALS["HTTP_POST_VARS"]["e60_resumo"]:$this->e60_resumo);
-            $this->e60_informacaoop = ($this->e60_informacaoop == ""?@$GLOBALS["HTTP_POST_VARS"]["e60_informacaoop"]:$this->e60_informacaoop);
-            $this->e60_destin = ($this->e60_destin == ""?@$GLOBALS["HTTP_POST_VARS"]["e60_destin"]:$this->e60_destin);
-            $this->e60_salant = ($this->e60_salant == ""?@$GLOBALS["HTTP_POST_VARS"]["e60_salant"]:$this->e60_salant);
-            $this->e60_instit = ($this->e60_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["e60_instit"]:$this->e60_instit);
-            $this->e60_codcom = ($this->e60_codcom == ""?@$GLOBALS["HTTP_POST_VARS"]["e60_codcom"]:$this->e60_codcom);
-            $this->e60_tipol = ($this->e60_tipol == ""?@$GLOBALS["HTTP_POST_VARS"]["e60_tipol"]:$this->e60_tipol);
-            $this->e60_numerol = ($this->e60_numerol == ""?@$GLOBALS["HTTP_POST_VARS"]["e60_numerol"]:$this->e60_numerol);
-            $this->migra_elemento = ($this->migra_elemento == ""?@$GLOBALS["HTTP_POST_VARS"]["migra_elemento"]:$this->migra_elemento);
-            $this->e60_concarpeculiar = ($this->e60_concarpeculiar == ""?@$GLOBALS["HTTP_POST_VARS"]["e60_concarpeculiar"]:$this->e60_concarpeculiar);
-            $this->e60_convenio = ($this->e60_convenio == ""?@$GLOBALS["HTTP_POST_VARS"]["e60_convenio"]:$this->e60_convenio);
-            $this->e60_numconvenio = ($this->e60_numconvenio == ""?@$GLOBALS["HTTP_POST_VARS"]["e60_numconvenio"]:$this->e60_numconvenio);
-            if($this->e60_dataconvenio == ""){
-                $this->e60_dataconvenio_dia = ($this->e60_dataconvenio_dia == ""?@$GLOBALS["HTTP_POST_VARS"]["e60_dataconvenio_dia"]:$this->e60_dataconvenio_dia);
-                $this->e60_dataconvenio_mes = ($this->e60_dataconvenio_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["e60_dataconvenio_mes"]:$this->e60_dataconvenio_mes);
-                $this->e60_dataconvenio_ano = ($this->e60_dataconvenio_ano == ""?@$GLOBALS["HTTP_POST_VARS"]["e60_dataconvenio_ano"]:$this->e60_dataconvenio_ano);
-                if($this->e60_dataconvenio_dia != ""){
-                    $this->e60_dataconvenio = $this->e60_dataconvenio_ano."-".$this->e60_dataconvenio_mes."-".$this->e60_dataconvenio_dia;
+            $this->e60_vlrorc = ($this->e60_vlrorc == "" ? @$GLOBALS["HTTP_POST_VARS"]["e60_vlrorc"] : $this->e60_vlrorc);
+            $this->e60_vlremp = ($this->e60_vlremp == "" ? @$GLOBALS["HTTP_POST_VARS"]["e60_vlremp"] : $this->e60_vlremp);
+            $this->e60_vlrliq = ($this->e60_vlrliq == "" ? @$GLOBALS["HTTP_POST_VARS"]["e60_vlrliq"] : $this->e60_vlrliq);
+            $this->e60_vlrpag = ($this->e60_vlrpag == "" ? @$GLOBALS["HTTP_POST_VARS"]["e60_vlrpag"] : $this->e60_vlrpag);
+            $this->e60_vlranu = ($this->e60_vlranu == "" ? @$GLOBALS["HTTP_POST_VARS"]["e60_vlranu"] : $this->e60_vlranu);
+            $this->e60_codtipo = ($this->e60_codtipo == "" ? @$GLOBALS["HTTP_POST_VARS"]["e60_codtipo"] : $this->e60_codtipo);
+            $this->e60_resumo = ($this->e60_resumo == "" ? @$GLOBALS["HTTP_POST_VARS"]["e60_resumo"] : $this->e60_resumo);
+            $this->e60_informacaoop = ($this->e60_informacaoop == "" ? @$GLOBALS["HTTP_POST_VARS"]["e60_informacaoop"] : $this->e60_informacaoop);
+            $this->e60_destin = ($this->e60_destin == "" ? @$GLOBALS["HTTP_POST_VARS"]["e60_destin"] : $this->e60_destin);
+            $this->e60_salant = ($this->e60_salant == "" ? @$GLOBALS["HTTP_POST_VARS"]["e60_salant"] : $this->e60_salant);
+            $this->e60_instit = ($this->e60_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["e60_instit"] : $this->e60_instit);
+            $this->e60_codcom = ($this->e60_codcom == "" ? @$GLOBALS["HTTP_POST_VARS"]["e60_codcom"] : $this->e60_codcom);
+            $this->e60_tipol = ($this->e60_tipol == "" ? @$GLOBALS["HTTP_POST_VARS"]["e60_tipol"] : $this->e60_tipol);
+            $this->e60_numerol = ($this->e60_numerol == "" ? @$GLOBALS["HTTP_POST_VARS"]["e60_numerol"] : $this->e60_numerol);
+            $this->migra_elemento = ($this->migra_elemento == "" ? @$GLOBALS["HTTP_POST_VARS"]["migra_elemento"] : $this->migra_elemento);
+            $this->e60_concarpeculiar = ($this->e60_concarpeculiar == "" ? @$GLOBALS["HTTP_POST_VARS"]["e60_concarpeculiar"] : $this->e60_concarpeculiar);
+            $this->e60_convenio = ($this->e60_convenio == "" ? @$GLOBALS["HTTP_POST_VARS"]["e60_convenio"] : $this->e60_convenio);
+            $this->e60_numconvenio = ($this->e60_numconvenio == "" ? @$GLOBALS["HTTP_POST_VARS"]["e60_numconvenio"] : $this->e60_numconvenio);
+            if ($this->e60_dataconvenio == "") {
+                $this->e60_dataconvenio_dia = ($this->e60_dataconvenio_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["e60_dataconvenio_dia"] : $this->e60_dataconvenio_dia);
+                $this->e60_dataconvenio_mes = ($this->e60_dataconvenio_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["e60_dataconvenio_mes"] : $this->e60_dataconvenio_mes);
+                $this->e60_dataconvenio_ano = ($this->e60_dataconvenio_ano == "" ? @$GLOBALS["HTTP_POST_VARS"]["e60_dataconvenio_ano"] : $this->e60_dataconvenio_ano);
+                if ($this->e60_dataconvenio_dia != "") {
+                    $this->e60_dataconvenio = $this->e60_dataconvenio_ano . "-" . $this->e60_dataconvenio_mes . "-" . $this->e60_dataconvenio_dia;
                 }
             }
-            if($this->e60_datasentenca == ""){
-                $this->e60_datasentenca_dia = ($this->e60_datasentenca_dia == ""?@$GLOBALS["HTTP_POST_VARS"]["e60_datasentenca_dia"]:$this->e60_datasentenca_dia);
-                $this->e60_datasentenca_mes = ($this->e60_datasentenca_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["e60_datasentenca_mes"]:$this->e60_datasentenca_mes);
-                $this->e60_datasentenca_ano = ($this->e60_datasentenca_ano == ""?@$GLOBALS["HTTP_POST_VARS"]["e60_datasentenca_ano"]:$this->e60_datasentenca_ano);
-                if($this->e60_datasentenca_dia != ""){
-                    $this->e60_datasentenca = $this->e60_datasentenca_ano."-".$this->e60_datasentenca_mes."-".$this->e60_datasentenca_dia;
+            if ($this->e60_datasentenca == "") {
+                $this->e60_datasentenca_dia = ($this->e60_datasentenca_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["e60_datasentenca_dia"] : $this->e60_datasentenca_dia);
+                $this->e60_datasentenca_mes = ($this->e60_datasentenca_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["e60_datasentenca_mes"] : $this->e60_datasentenca_mes);
+                $this->e60_datasentenca_ano = ($this->e60_datasentenca_ano == "" ? @$GLOBALS["HTTP_POST_VARS"]["e60_datasentenca_ano"] : $this->e60_datasentenca_ano);
+                if ($this->e60_datasentenca_dia != "") {
+                    $this->e60_datasentenca = $this->e60_datasentenca_ano . "-" . $this->e60_datasentenca_mes . "-" . $this->e60_datasentenca_dia;
                 }
             }
-        }else{
-            $this->e60_numemp = ($this->e60_numemp == ""?@$GLOBALS["HTTP_POST_VARS"]["e60_numemp"]:$this->e60_numemp);
+        } else {
+            $this->e60_numemp = ($this->e60_numemp == "" ? @$GLOBALS["HTTP_POST_VARS"]["e60_numemp"] : $this->e60_numemp);
         }
-        $this->e60_tipodespesa = ($this->e60_tipodespesa == ""?@$GLOBALS["HTTP_POST_VARS"]["e60_tipodespesa"]:$this->e60_tipodespesa);
+        $this->e60_tipodespesa = ($this->e60_tipodespesa == "" ? @$GLOBALS["HTTP_POST_VARS"]["e60_tipodespesa"] : $this->e60_tipodespesa);
     }
     // funcao para inclusao
-    function incluir ($e60_numemp){
+    function incluir($e60_numemp)
+    {
         $this->atualizacampos();
-        if($this->e60_codemp == null ){
+        if ($this->e60_codemp == null) {
             $this->erro_sql = " Campo Empenho nao Informado.";
             $this->erro_campo = "e60_codemp";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
-        if($this->e60_anousu == null ){
+        if ($this->e60_anousu == null) {
             $this->erro_sql = " Campo Exercício nao Informado.";
             $this->erro_campo = "e60_anousu";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
-        if($this->e60_coddot == null ){
+        if ($this->e60_coddot == null) {
             $this->erro_sql = " Campo Dotação nao Informado.";
             $this->erro_campo = "e60_coddot";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
-        if($this->e60_numcgm == null ){
+        if ($this->e60_numcgm == null) {
             $this->erro_sql = " Campo Numcgm nao Informado.";
             $this->erro_campo = "e60_numcgm";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
-        if($this->e60_emiss == null ){
+        if ($this->e60_emiss == null) {
             $this->erro_sql = " Campo Data Emissão nao Informado.";
             $this->erro_campo = "e60_emiss_dia";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
-        if($this->e60_vencim == null ){
+        if ($this->e60_vencim == null) {
             $this->erro_sql = " Campo Vencimento nao Informado.";
             $this->erro_campo = "e60_vencim_dia";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
-        if($this->e60_vlrorc == null ){
+        if ($this->e60_vlrorc == null) {
             $this->erro_sql = " Campo Valor Orçado nao Informado.";
             $this->erro_campo = "e60_vlrorc";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
-        if($this->e60_vlremp == null ){
+        if ($this->e60_vlremp == null) {
             $this->erro_sql = " Campo Valor Empenho nao Informado.";
             $this->erro_campo = "e60_vlremp";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
-        if($this->e60_vlrliq == null ){
+        if ($this->e60_vlrliq == null) {
             $this->erro_sql = " Campo Valor Liquidado nao Informado.";
             $this->erro_campo = "e60_vlrliq";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
-        if($this->e60_vlrpag == null ){
+        if ($this->e60_vlrpag == null) {
             $this->erro_sql = " Campo Valor Pago nao Informado.";
             $this->erro_campo = "e60_vlrpag";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
-        if($this->e60_vlranu == null ){
+        if ($this->e60_vlranu == null) {
             $this->erro_sql = " Campo Valor Anulado nao Informado.";
             $this->erro_campo = "e60_vlranu";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
-        if($this->e60_codtipo == null ){
+        if ($this->e60_codtipo == null) {
             $this->erro_sql = " Campo Tipo Empenho nao Informado.";
             $this->erro_campo = "e60_codtipo";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
-        if($this->e60_salant == null ){
+        if ($this->e60_salant == null) {
             $this->e60_salant = "0";
         }
-        if($this->e60_instit == null ){
+        if ($this->e60_instit == null) {
             $this->erro_sql = " Campo codigo da instituicao nao Informado.";
             $this->erro_campo = "e60_instit";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
-        if($this->e60_codcom == null ){
+        if ($this->e60_codcom == null) {
             $this->erro_sql = " Campo Tipo de compra nao Informado.";
             $this->erro_campo = "e60_codcom";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
-        if($this->e60_concarpeculiar == null ){
+        if ($this->e60_concarpeculiar == null) {
             $this->erro_sql = " Campo Caracteristica Peculiar nao Informado.";
             $this->erro_campo = "e60_concarpeculiar";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
-        if($this->e60_numconvenio == null && $this->e60_convenio == 1){
+        if ($this->e60_numconvenio == null && $this->e60_convenio == 1) {
             $this->erro_sql = " Campo Número Convênio nao Informado.";
             $this->erro_campo = "e60_numconvenio";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
-        if($this->e60_dataconvenio == null && $this->e60_convenio == 1){
+        if ($this->e60_dataconvenio == null && $this->e60_convenio == 1) {
             $this->erro_sql = " Campo Data Convênio nao Informado.";
             $this->erro_campo = "e60_dataconvenio_dia";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
-        if($e60_numemp == "" || $e60_numemp == null ){
+        if ($e60_numemp == "" || $e60_numemp == null) {
             $result = db_query("select nextval('empempenho_e60_numemp_seq')");
-            if($result==false){
-                $this->erro_banco = str_replace("\n","",@pg_last_error());
+            if ($result == false) {
+                $this->erro_banco = str_replace("\n", "", @pg_last_error());
                 $this->erro_sql   = "Verifique o cadastro da sequencia: empempenho_e60_numemp_seq do campo: e60_numemp";
-                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
             }
-            $this->e60_numemp = pg_result($result,0,0);
-        }else{
+            $this->e60_numemp = pg_result($result, 0, 0);
+        } else {
             $result = db_query("select last_value from empempenho_e60_numemp_seq");
-            if(($result != false) && (pg_result($result,0,0) < $e60_numemp)){
+            if (($result != false) && (pg_result($result, 0, 0) < $e60_numemp)) {
                 $this->erro_sql = " Campo e60_numemp maior que último número da sequencia.";
                 $this->erro_banco = "Sequencia menor que este número.";
-                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
-            }else{
+            } else {
                 $this->e60_numemp = $e60_numemp;
             }
         }
-        if(($this->e60_numemp == null) || ($this->e60_numemp == "") ){
+        if (($this->e60_numemp == null) || ($this->e60_numemp == "")) {
             $this->erro_sql = " Campo e60_numemp nao declarado.";
             $this->erro_banco = "Chave Primaria zerada.";
-            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
         /*OC4401*/
-        if($this->e60_id_usuario == null ){
+        if ($this->e60_id_usuario == null) {
             $this->erro_sql = " Ocorreu um erro ao buscar o ID do usuário!";
             $this->erro_campo = "e60_id_usuario";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
         /*FIM - OC4401*/
-        if($this->e60_vlrutilizado == null ){
+        if ($this->e60_vlrutilizado == null) {
             $this->e60_vlrutilizado = 0;
         }
         $sql = "insert into empempenho(
@@ -437,8 +442,8 @@ class cl_empempenho {
                                ,$this->e60_anousu
                                ,$this->e60_coddot
                                ,$this->e60_numcgm
-                               ,".($this->e60_emiss == "null" || $this->e60_emiss == ""?"null":"'".$this->e60_emiss."'")."
-                               ,".($this->e60_vencim == "null" || $this->e60_vencim == ""?"null":"'".$this->e60_vencim."'")."
+                               ," . ($this->e60_emiss == "null" || $this->e60_emiss == "" ? "null" : "'" . $this->e60_emiss . "'") . "
+                               ," . ($this->e60_vencim == "null" || $this->e60_vencim == "" ? "null" : "'" . $this->e60_vencim . "'") . "
                                ,$this->e60_vlrorc
                                ,$this->e60_vlremp
                                ,$this->e60_vlrliq
@@ -455,495 +460,494 @@ class cl_empempenho {
                                ,'$this->e60_numerol'
                                ,'$this->migra_elemento'
                                ,'$this->e60_concarpeculiar'
-                               ,".($this->e60_convenio == ""? "2" : $this->e60_convenio)."
-                               ,".($this->e60_numconvenio == ""? "null" : $this->e60_numconvenio)."
-                               ,".($this->e60_dataconvenio == "null" || $this->e60_dataconvenio == ""?"null":"'".$this->e60_dataconvenio."'")."
-                               ,".($this->e60_datasentenca == "null" || $this->e60_datasentenca == ""?"null":"'".$this->e60_datasentenca."'")."
+                               ," . ($this->e60_convenio == "" ? "2" : $this->e60_convenio) . "
+                               ," . ($this->e60_numconvenio == "" ? "null" : $this->e60_numconvenio) . "
+                               ," . ($this->e60_dataconvenio == "null" || $this->e60_dataconvenio == "" ? "null" : "'" . $this->e60_dataconvenio . "'") . "
+                               ," . ($this->e60_datasentenca == "null" || $this->e60_datasentenca == "" ? "null" : "'" . $this->e60_datasentenca . "'") . "
                                ,$this->e60_id_usuario
                                ,$this->e60_tipodespesa
                                ,$this->e60_vlrutilizado
                       )";
         $result = db_query($sql);
-        if($result==false){
-            $this->erro_banco = str_replace("\n","",@pg_last_error());
-            if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){
+        if ($result == false) {
+            $this->erro_banco = str_replace("\n", "", @pg_last_error());
+            if (strpos(strtolower($this->erro_banco), "duplicate key") != 0) {
                 $this->erro_sql   = "Empenhos na prefeitura ($this->e60_numemp) nao Incluído. Inclusao Abortada.";
-                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_banco = "Empenhos na prefeitura já Cadastrado";
-                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-            }else{
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            } else {
                 $this->erro_sql   = "Empenhos na prefeitura ($this->e60_numemp) nao Incluído. Inclusao Abortada.";
-                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             }
             $this->erro_status = "0";
-            $this->numrows_incluir= 0;
+            $this->numrows_incluir = 0;
             return false;
         }
         $this->erro_banco = "";
         $this->erro_sql = "Inclusao efetuada com Sucesso\\n";
-        $this->erro_sql .= "Valores : ".$this->e60_numemp;
-        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        $this->erro_sql .= "Valores : " . $this->e60_numemp;
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "1";
-        $this->numrows_incluir= pg_affected_rows($result);
+        $this->numrows_incluir = pg_affected_rows($result);
         $resaco = $this->sql_record($this->sql_query_file($this->e60_numemp));
-        if(($resaco!=false)||($this->numrows!=0)){
+        if (($resaco != false) || ($this->numrows != 0)) {
             $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-            $acount = pg_result($resac,0,0);
-            $resac = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
+            $acount = pg_result($resac, 0, 0);
+            $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
             $resac = db_query("insert into db_acountkey values($acount,5594,'$this->e60_numemp','I')");
-            $resac = db_query("insert into db_acount values($acount,889,5594,'','".AddSlashes(pg_result($resaco,0,'e60_numemp'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-            $resac = db_query("insert into db_acount values($acount,889,5595,'','".AddSlashes(pg_result($resaco,0,'e60_codemp'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-            $resac = db_query("insert into db_acount values($acount,889,5596,'','".AddSlashes(pg_result($resaco,0,'e60_anousu'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-            $resac = db_query("insert into db_acount values($acount,889,5597,'','".AddSlashes(pg_result($resaco,0,'e60_coddot'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-            $resac = db_query("insert into db_acount values($acount,889,5598,'','".AddSlashes(pg_result($resaco,0,'e60_numcgm'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-            $resac = db_query("insert into db_acount values($acount,889,5599,'','".AddSlashes(pg_result($resaco,0,'e60_emiss'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-            $resac = db_query("insert into db_acount values($acount,889,5600,'','".AddSlashes(pg_result($resaco,0,'e60_vencim'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-            $resac = db_query("insert into db_acount values($acount,889,5656,'','".AddSlashes(pg_result($resaco,0,'e60_vlrorc'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-            $resac = db_query("insert into db_acount values($acount,889,5657,'','".AddSlashes(pg_result($resaco,0,'e60_vlremp'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-            $resac = db_query("insert into db_acount values($acount,889,5658,'','".AddSlashes(pg_result($resaco,0,'e60_vlrliq'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-            $resac = db_query("insert into db_acount values($acount,889,5659,'','".AddSlashes(pg_result($resaco,0,'e60_vlrpag'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-            $resac = db_query("insert into db_acount values($acount,889,5660,'','".AddSlashes(pg_result($resaco,0,'e60_vlranu'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-            $resac = db_query("insert into db_acount values($acount,889,5661,'','".AddSlashes(pg_result($resaco,0,'e60_codtipo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-            $resac = db_query("insert into db_acount values($acount,889,5662,'','".AddSlashes(pg_result($resaco,0,'e60_resumo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-            $resac = db_query("insert into db_acount values($acount,889,5662,'','".AddSlashes(pg_result($resaco,0,'e60_informacaoop'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-            $resac = db_query("insert into db_acount values($acount,889,5679,'','".AddSlashes(pg_result($resaco,0,'e60_destin'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-            $resac = db_query("insert into db_acount values($acount,889,5684,'','".AddSlashes(pg_result($resaco,0,'e60_salant'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-            $resac = db_query("insert into db_acount values($acount,889,5663,'','".AddSlashes(pg_result($resaco,0,'e60_instit'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-            $resac = db_query("insert into db_acount values($acount,889,5889,'','".AddSlashes(pg_result($resaco,0,'e60_codcom'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-            $resac = db_query("insert into db_acount values($acount,889,5890,'','".AddSlashes(pg_result($resaco,0,'e60_tipol'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-            $resac = db_query("insert into db_acount values($acount,889,5891,'','".AddSlashes(pg_result($resaco,0,'e60_numerol'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-            $resac = db_query("insert into db_acount values($acount,889,7383,'','".AddSlashes(pg_result($resaco,0,'migra_elemento'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-            $resac = db_query("insert into db_acount values($acount,889,10817,'','".AddSlashes(pg_result($resaco,0,'e60_concarpeculiar'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+            $resac = db_query("insert into db_acount values($acount,889,5594,'','" . AddSlashes(pg_result($resaco, 0, 'e60_numemp')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+            $resac = db_query("insert into db_acount values($acount,889,5595,'','" . AddSlashes(pg_result($resaco, 0, 'e60_codemp')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+            $resac = db_query("insert into db_acount values($acount,889,5596,'','" . AddSlashes(pg_result($resaco, 0, 'e60_anousu')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+            $resac = db_query("insert into db_acount values($acount,889,5597,'','" . AddSlashes(pg_result($resaco, 0, 'e60_coddot')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+            $resac = db_query("insert into db_acount values($acount,889,5598,'','" . AddSlashes(pg_result($resaco, 0, 'e60_numcgm')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+            $resac = db_query("insert into db_acount values($acount,889,5599,'','" . AddSlashes(pg_result($resaco, 0, 'e60_emiss')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+            $resac = db_query("insert into db_acount values($acount,889,5600,'','" . AddSlashes(pg_result($resaco, 0, 'e60_vencim')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+            $resac = db_query("insert into db_acount values($acount,889,5656,'','" . AddSlashes(pg_result($resaco, 0, 'e60_vlrorc')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+            $resac = db_query("insert into db_acount values($acount,889,5657,'','" . AddSlashes(pg_result($resaco, 0, 'e60_vlremp')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+            $resac = db_query("insert into db_acount values($acount,889,5658,'','" . AddSlashes(pg_result($resaco, 0, 'e60_vlrliq')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+            $resac = db_query("insert into db_acount values($acount,889,5659,'','" . AddSlashes(pg_result($resaco, 0, 'e60_vlrpag')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+            $resac = db_query("insert into db_acount values($acount,889,5660,'','" . AddSlashes(pg_result($resaco, 0, 'e60_vlranu')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+            $resac = db_query("insert into db_acount values($acount,889,5661,'','" . AddSlashes(pg_result($resaco, 0, 'e60_codtipo')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+            $resac = db_query("insert into db_acount values($acount,889,5662,'','" . AddSlashes(pg_result($resaco, 0, 'e60_resumo')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+            $resac = db_query("insert into db_acount values($acount,889,5662,'','" . AddSlashes(pg_result($resaco, 0, 'e60_informacaoop')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+            $resac = db_query("insert into db_acount values($acount,889,5679,'','" . AddSlashes(pg_result($resaco, 0, 'e60_destin')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+            $resac = db_query("insert into db_acount values($acount,889,5684,'','" . AddSlashes(pg_result($resaco, 0, 'e60_salant')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+            $resac = db_query("insert into db_acount values($acount,889,5663,'','" . AddSlashes(pg_result($resaco, 0, 'e60_instit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+            $resac = db_query("insert into db_acount values($acount,889,5889,'','" . AddSlashes(pg_result($resaco, 0, 'e60_codcom')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+            $resac = db_query("insert into db_acount values($acount,889,5890,'','" . AddSlashes(pg_result($resaco, 0, 'e60_tipol')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+            $resac = db_query("insert into db_acount values($acount,889,5891,'','" . AddSlashes(pg_result($resaco, 0, 'e60_numerol')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+            $resac = db_query("insert into db_acount values($acount,889,7383,'','" . AddSlashes(pg_result($resaco, 0, 'migra_elemento')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+            $resac = db_query("insert into db_acount values($acount,889,10817,'','" . AddSlashes(pg_result($resaco, 0, 'e60_concarpeculiar')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         }
         return true;
     }
     // funcao para alteracao
-    function alterar ($e60_numemp=null) {
+    function alterar($e60_numemp = null)
+    {
         $this->atualizacampos();
         $sql = " update empempenho set ";
         $virgula = "";
-        if(trim($this->e60_numemp)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e60_numemp"])){
-            $sql  .= $virgula." e60_numemp = $this->e60_numemp ";
+        if (trim($this->e60_numemp) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e60_numemp"])) {
+            $sql  .= $virgula . " e60_numemp = $this->e60_numemp ";
             $virgula = ",";
-            if(trim($this->e60_numemp) == null ){
+            if (trim($this->e60_numemp) == null) {
                 $this->erro_sql = " Campo Número nao Informado.";
                 $this->erro_campo = "e60_numemp";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
             }
         }
-        if(trim($this->e60_codemp)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e60_codemp"])){
-            $sql  .= $virgula." e60_codemp = '$this->e60_codemp' ";
+        if (trim($this->e60_codemp) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e60_codemp"])) {
+            $sql  .= $virgula . " e60_codemp = '$this->e60_codemp' ";
             $virgula = ",";
-            if(trim($this->e60_codemp) == null ){
+            if (trim($this->e60_codemp) == null) {
                 $this->erro_sql = " Campo Empenho nao Informado.";
                 $this->erro_campo = "e60_codemp";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
             }
         }
-        if(trim($this->e60_anousu)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e60_anousu"])){
-            $sql  .= $virgula." e60_anousu = $this->e60_anousu ";
+        if (trim($this->e60_anousu) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e60_anousu"])) {
+            $sql  .= $virgula . " e60_anousu = $this->e60_anousu ";
             $virgula = ",";
-            if(trim($this->e60_anousu) == null ){
+            if (trim($this->e60_anousu) == null) {
                 $this->erro_sql = " Campo Exercício nao Informado.";
                 $this->erro_campo = "e60_anousu";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
             }
         }
-        if(trim($this->e60_coddot)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e60_coddot"])){
-            $sql  .= $virgula." e60_coddot = $this->e60_coddot ";
+        if (trim($this->e60_coddot) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e60_coddot"])) {
+            $sql  .= $virgula . " e60_coddot = $this->e60_coddot ";
             $virgula = ",";
-            if(trim($this->e60_coddot) == null ){
+            if (trim($this->e60_coddot) == null) {
                 $this->erro_sql = " Campo Dotação nao Informado.";
                 $this->erro_campo = "e60_coddot";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
             }
         }
-        if(trim($this->e60_numcgm)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e60_numcgm"])){
-            $sql  .= $virgula." e60_numcgm = $this->e60_numcgm ";
+        if (trim($this->e60_numcgm) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e60_numcgm"])) {
+            $sql  .= $virgula . " e60_numcgm = $this->e60_numcgm ";
             $virgula = ",";
-            if(trim($this->e60_numcgm) == null ){
+            if (trim($this->e60_numcgm) == null) {
                 $this->erro_sql = " Campo Numcgm nao Informado.";
                 $this->erro_campo = "e60_numcgm";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
             }
         }
-        if(trim($this->e60_emiss)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e60_emiss_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["e60_emiss_dia"] !="") ){
-            $sql  .= $virgula." e60_emiss = '$this->e60_emiss' ";
+        if (trim($this->e60_emiss) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e60_emiss_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["e60_emiss_dia"] != "")) {
+            $sql  .= $virgula . " e60_emiss = '$this->e60_emiss' ";
             $virgula = ",";
-            if(trim($this->e60_emiss) == null ){
+            if (trim($this->e60_emiss) == null) {
                 $this->erro_sql = " Campo Data Emissão nao Informado.";
                 $this->erro_campo = "e60_emiss_dia";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
             }
-        }     else{
-            if(isset($GLOBALS["HTTP_POST_VARS"]["e60_emiss_dia"])){
-                $sql  .= $virgula." e60_emiss = null ";
+        } else {
+            if (isset($GLOBALS["HTTP_POST_VARS"]["e60_emiss_dia"])) {
+                $sql  .= $virgula . " e60_emiss = null ";
                 $virgula = ",";
-                if(trim($this->e60_emiss) == null ){
+                if (trim($this->e60_emiss) == null) {
                     $this->erro_sql = " Campo Data Emissão nao Informado.";
                     $this->erro_campo = "e60_emiss_dia";
                     $this->erro_banco = "";
-                    $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-                    $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                    $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                    $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                     $this->erro_status = "0";
                     return false;
                 }
             }
         }
-        if(trim($this->e60_vencim)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e60_vencim_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["e60_vencim_dia"] !="") ){
-            $sql  .= $virgula." e60_vencim = '$this->e60_vencim' ";
+        if (trim($this->e60_vencim) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e60_vencim_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["e60_vencim_dia"] != "")) {
+            $sql  .= $virgula . " e60_vencim = '$this->e60_vencim' ";
             $virgula = ",";
-            if(trim($this->e60_vencim) == null ){
+            if (trim($this->e60_vencim) == null) {
                 $this->erro_sql = " Campo Vencimento nao Informado.";
                 $this->erro_campo = "e60_vencim_dia";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
             }
-        }     else{
-            if(isset($GLOBALS["HTTP_POST_VARS"]["e60_vencim_dia"])){
-                $sql  .= $virgula." e60_vencim = null ";
+        } else {
+            if (isset($GLOBALS["HTTP_POST_VARS"]["e60_vencim_dia"])) {
+                $sql  .= $virgula . " e60_vencim = null ";
                 $virgula = ",";
-                if(trim($this->e60_vencim) == null ){
+                if (trim($this->e60_vencim) == null) {
                     $this->erro_sql = " Campo Vencimento nao Informado.";
                     $this->erro_campo = "e60_vencim_dia";
                     $this->erro_banco = "";
-                    $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-                    $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                    $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                    $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                     $this->erro_status = "0";
                     return false;
                 }
             }
         }
-        if(trim($this->e60_vlrorc)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e60_vlrorc"])){
-            $sql  .= $virgula." e60_vlrorc = $this->e60_vlrorc ";
+        if (trim($this->e60_vlrorc) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e60_vlrorc"])) {
+            $sql  .= $virgula . " e60_vlrorc = $this->e60_vlrorc ";
             $virgula = ",";
-            if(trim($this->e60_vlrorc) == null ){
+            if (trim($this->e60_vlrorc) == null) {
                 $this->erro_sql = " Campo Valor Orçado nao Informado.";
                 $this->erro_campo = "e60_vlrorc";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
             }
         }
-        if(trim($this->e60_vlremp)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e60_vlremp"])){
-            $sql  .= $virgula." e60_vlremp = $this->e60_vlremp ";
+        if (trim($this->e60_vlremp) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e60_vlremp"])) {
+            $sql  .= $virgula . " e60_vlremp = $this->e60_vlremp ";
             $virgula = ",";
-            if(trim($this->e60_vlremp) == null ){
+            if (trim($this->e60_vlremp) == null) {
                 $this->erro_sql = " Campo Valor Empenho nao Informado.";
                 $this->erro_campo = "e60_vlremp";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
             }
         }
-        if(trim($this->e60_vlrliq)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e60_vlrliq"])){
-            $sql  .= $virgula." e60_vlrliq = $this->e60_vlrliq ";
+        if (trim($this->e60_vlrliq) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e60_vlrliq"])) {
+            $sql  .= $virgula . " e60_vlrliq = $this->e60_vlrliq ";
             $virgula = ",";
-            if(trim($this->e60_vlrliq) == null ){
+            if (trim($this->e60_vlrliq) == null) {
                 $this->erro_sql = " Campo Valor Liquidado nao Informado.";
                 $this->erro_campo = "e60_vlrliq";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
             }
         }
-        if(trim($this->e60_vlrpag)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e60_vlrpag"])){
-            $sql  .= $virgula." e60_vlrpag = $this->e60_vlrpag ";
+        if (trim($this->e60_vlrpag) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e60_vlrpag"])) {
+            $sql  .= $virgula . " e60_vlrpag = $this->e60_vlrpag ";
             $virgula = ",";
-            if(trim($this->e60_vlrpag) == null ){
+            if (trim($this->e60_vlrpag) == null) {
                 $this->erro_sql = " Campo Valor Pago nao Informado.";
                 $this->erro_campo = "e60_vlrpag";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
             }
         }
-        if(trim($this->e60_vlranu)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e60_vlranu"])){
-            $sql  .= $virgula." e60_vlranu = $this->e60_vlranu ";
+        if (trim($this->e60_vlranu) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e60_vlranu"])) {
+            $sql  .= $virgula . " e60_vlranu = $this->e60_vlranu ";
             $virgula = ",";
-            if(trim($this->e60_vlranu) == null ){
+            if (trim($this->e60_vlranu) == null) {
                 $this->erro_sql = " Campo Valor Anulado nao Informado.";
                 $this->erro_campo = "e60_vlranu";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
             }
         }
-        if(trim($this->e60_codtipo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e60_codtipo"])){
-            $sql  .= $virgula." e60_codtipo = $this->e60_codtipo ";
+        if (trim($this->e60_codtipo) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e60_codtipo"])) {
+            $sql  .= $virgula . " e60_codtipo = $this->e60_codtipo ";
             $virgula = ",";
-            if(trim($this->e60_codtipo) == null ){
+            if (trim($this->e60_codtipo) == null) {
                 $this->erro_sql = " Campo Tipo Empenho nao Informado.";
                 $this->erro_campo = "e60_codtipo";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
             }
         }
-        if(trim($this->e60_resumo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e60_resumo"])){
-            $sql  .= $virgula." e60_resumo = '$this->e60_resumo' ";
+        if (trim($this->e60_resumo) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e60_resumo"])) {
+            $sql  .= $virgula . " e60_resumo = '$this->e60_resumo' ";
             $virgula = ",";
         }
-        if(trim($this->e60_informacaoop)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e60_informacaoop"])){
-            $sql  .= $virgula." e60_informacaoop = '$this->e60_informacaoop' ";
+        if (trim($this->e60_informacaoop) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e60_informacaoop"])) {
+            $sql  .= $virgula . " e60_informacaoop = '$this->e60_informacaoop' ";
             $virgula = ",";
         }
-        if(trim($this->e60_destin)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e60_destin"])){
-            $sql  .= $virgula." e60_destin = '$this->e60_destin' ";
+        if (trim($this->e60_destin) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e60_destin"])) {
+            $sql  .= $virgula . " e60_destin = '$this->e60_destin' ";
             $virgula = ",";
         }
-        if(trim($this->e60_salant)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e60_salant"])){
-            if(trim($this->e60_salant)=="" && isset($GLOBALS["HTTP_POST_VARS"]["e60_salant"])){
-                $this->e60_salant = "0" ;
+        if (trim($this->e60_salant) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e60_salant"])) {
+            if (trim($this->e60_salant) == "" && isset($GLOBALS["HTTP_POST_VARS"]["e60_salant"])) {
+                $this->e60_salant = "0";
             }
-            $sql  .= $virgula." e60_salant = $this->e60_salant ";
+            $sql  .= $virgula . " e60_salant = $this->e60_salant ";
             $virgula = ",";
         }
-        if(trim($this->e60_instit)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e60_instit"])){
-            $sql  .= $virgula." e60_instit = $this->e60_instit ";
+        if (trim($this->e60_instit) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e60_instit"])) {
+            $sql  .= $virgula . " e60_instit = $this->e60_instit ";
             $virgula = ",";
-            if(trim($this->e60_instit) == null ){
+            if (trim($this->e60_instit) == null) {
                 $this->erro_sql = " Campo codigo da instituicao nao Informado.";
                 $this->erro_campo = "e60_instit";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
             }
         }
-        if(trim($this->e60_codcom)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e60_codcom"])){
-            $sql  .= $virgula." e60_codcom = $this->e60_codcom ";
+        if (trim($this->e60_codcom) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e60_codcom"])) {
+            $sql  .= $virgula . " e60_codcom = $this->e60_codcom ";
             $virgula = ",";
-            if(trim($this->e60_codcom) == null ){
+            if (trim($this->e60_codcom) == null) {
                 $this->erro_sql = " Campo Tipo de compra nao Informado.";
                 $this->erro_campo = "e60_codcom";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
             }
         }
-        if(trim($this->e60_tipol)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e60_tipol"])){
-            $sql  .= $virgula." e60_tipol = '$this->e60_tipol' ";
+        if (trim($this->e60_tipol) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e60_tipol"])) {
+            $sql  .= $virgula . " e60_tipol = '$this->e60_tipol' ";
             $virgula = ",";
         }
-        if(trim($this->e60_numerol)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e60_numerol"])){
-            $sql  .= $virgula." e60_numerol = '$this->e60_numerol' ";
+        if (trim($this->e60_numerol) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e60_numerol"])) {
+            $sql  .= $virgula . " e60_numerol = '$this->e60_numerol' ";
             $virgula = ",";
         }
-        if(trim($this->migra_elemento)!="" || isset($GLOBALS["HTTP_POST_VARS"]["migra_elemento"])){
-            $sql  .= $virgula." migra_elemento = '$this->migra_elemento' ";
+        if (trim($this->migra_elemento) != "" || isset($GLOBALS["HTTP_POST_VARS"]["migra_elemento"])) {
+            $sql  .= $virgula . " migra_elemento = '$this->migra_elemento' ";
             $virgula = ",";
         }
-        if(trim($this->e60_concarpeculiar)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e60_concarpeculiar"])){
-            $sql  .= $virgula." e60_concarpeculiar = '$this->e60_concarpeculiar' ";
+        if (trim($this->e60_concarpeculiar) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e60_concarpeculiar"])) {
+            $sql  .= $virgula . " e60_concarpeculiar = '$this->e60_concarpeculiar' ";
             $virgula = ",";
-            if(trim($this->e60_concarpeculiar) == null ){
+            if (trim($this->e60_concarpeculiar) == null) {
                 $this->erro_sql = " Campo Caracteristica Peculiar nao Informado.";
                 $this->erro_campo = "e60_concarpeculiar";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
             }
         }
-        if(trim($this->e60_convenio)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e60_convenio"])){
-            $sql  .= $virgula." e60_convenio = ".($this->e60_convenio == ''? 'null' : $this->e60_convenio);
+        if (trim($this->e60_convenio) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e60_convenio"])) {
+            $sql  .= $virgula . " e60_convenio = " . ($this->e60_convenio == '' ? 'null' : $this->e60_convenio);
             $virgula = ",";
         }
-        if(trim($this->e60_numconvenio)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e60_numconvenio"])){
-            $sql  .= $virgula." e60_numconvenio = ".($this->e60_numconvenio == ''? 'null' : $this->e60_numconvenio);
+        if (trim($this->e60_numconvenio) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e60_numconvenio"])) {
+            $sql  .= $virgula . " e60_numconvenio = " . ($this->e60_numconvenio == '' ? 'null' : $this->e60_numconvenio);
             $virgula = ",";
-            if(trim($this->e60_numconvenio) == null && $this->e60_convenio == 1){
+            if (trim($this->e60_numconvenio) == null && $this->e60_convenio == 1) {
                 $this->erro_sql = " Campo Número Convênio nao Informado.";
                 $this->erro_campo = "e60_numconvenio";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
             }
         }
-        if(trim($this->e60_tipodespesa)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e60_tipodespesa"])){
-            $sql  .= $virgula." e60_tipodespesa = ".($this->e60_tipodespesa == ''? 'null' : $this->e60_tipodespesa);
+        if (trim($this->e60_tipodespesa) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e60_tipodespesa"])) {
+            $sql  .= $virgula . " e60_tipodespesa = " . ($this->e60_tipodespesa == '' ? 'null' : $this->e60_tipodespesa);
             $virgula = ",";
-            if(trim($this->e60_tipodespesa) == null){
+            if (trim($this->e60_tipodespesa) == null) {
                 $this->erro_sql = " Campo Tipo de Despesa não Informado.";
                 $this->erro_campo = "e60_tipodespesa";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
             }
         }
-        if(trim($this->e60_dataconvenio)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e60_dataconvenio_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["e60_dataconvenio_dia"] !="") ){
-            $sql  .= $virgula." e60_dataconvenio = '$this->e60_dataconvenio' ";
+        if (trim($this->e60_dataconvenio) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e60_dataconvenio_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["e60_dataconvenio_dia"] != "")) {
+            $sql  .= $virgula . " e60_dataconvenio = '$this->e60_dataconvenio' ";
             $virgula = ",";
-            if(trim($this->e60_dataconvenio) == null && $this->e60_convenio == 1){
+            if (trim($this->e60_dataconvenio) == null && $this->e60_convenio == 1) {
                 $this->erro_sql = " Campo Data Convênio nao Informado.";
                 $this->erro_campo = "e60_dataconvenio_dia";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
             }
-        }     else{
-            if(isset($GLOBALS["HTTP_POST_VARS"]["e60_dataconvenio_dia"])){
-                $sql  .= $virgula." e60_dataconvenio = null ";
+        } else {
+            if (isset($GLOBALS["HTTP_POST_VARS"]["e60_dataconvenio_dia"])) {
+                $sql  .= $virgula . " e60_dataconvenio = null ";
                 $virgula = ",";
-                if(trim($this->e60_dataconvenio) == null && $this->e60_convenio == 1){
+                if (trim($this->e60_dataconvenio) == null && $this->e60_convenio == 1) {
                     $this->erro_sql = " Campo Data Convênio nao Informado.";
                     $this->erro_campo = "e60_dataconvenio_dia";
                     $this->erro_banco = "";
-                    $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-                    $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                    $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                    $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                     $this->erro_status = "0";
                     return false;
                 }
             }
         }
-        if(trim($this->e60_datasentenca)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e60_datasentenca_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["e60_datasentenca_dia"] !="") ){
-            $sql  .= $virgula." e60_datasentenca = '$this->e60_datasentenca' ";
+        if (trim($this->e60_datasentenca) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e60_datasentenca_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["e60_datasentenca_dia"] != "")) {
+            $sql  .= $virgula . " e60_datasentenca = '$this->e60_datasentenca' ";
             $virgula = ",";
-
-        }else{
-            if(isset($GLOBALS["HTTP_POST_VARS"]["e60_datasentenca_dia"])){
-                $sql  .= $virgula." e60_datasentenca = null ";
+        } else {
+            if (isset($GLOBALS["HTTP_POST_VARS"]["e60_datasentenca_dia"])) {
+                $sql  .= $virgula . " e60_datasentenca = null ";
                 $virgula = ",";
-
             }
         }
         $sql .= " where ";
-        if($e60_numemp!=null){
+        if ($e60_numemp != null) {
             $sql .= " e60_numemp = $this->e60_numemp";
         }
         $resaco = $this->sql_record($this->sql_query_file($this->e60_numemp));
-        if($this->numrows>0){
-            for($conresaco=0;$conresaco<$this->numrows;$conresaco++){
+        if ($this->numrows > 0) {
+            for ($conresaco = 0; $conresaco < $this->numrows; $conresaco++) {
                 $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-                $acount = pg_result($resac,0,0);
-                $resac = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
+                $acount = pg_result($resac, 0, 0);
+                $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
                 $resac = db_query("insert into db_acountkey values($acount,5594,'$this->e60_numemp','A')");
-                if(isset($GLOBALS["HTTP_POST_VARS"]["e60_numemp"]) || $this->e60_numemp != "")
-                    $resac = db_query("insert into db_acount values($acount,889,5594,'".AddSlashes(pg_result($resaco,$conresaco,'e60_numemp'))."','$this->e60_numemp',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                if(isset($GLOBALS["HTTP_POST_VARS"]["e60_codemp"]) || $this->e60_codemp != "")
-                    $resac = db_query("insert into db_acount values($acount,889,5595,'".AddSlashes(pg_result($resaco,$conresaco,'e60_codemp'))."','$this->e60_codemp',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                if(isset($GLOBALS["HTTP_POST_VARS"]["e60_anousu"]) || $this->e60_anousu != "")
-                    $resac = db_query("insert into db_acount values($acount,889,5596,'".AddSlashes(pg_result($resaco,$conresaco,'e60_anousu'))."','$this->e60_anousu',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                if(isset($GLOBALS["HTTP_POST_VARS"]["e60_coddot"]) || $this->e60_coddot != "")
-                    $resac = db_query("insert into db_acount values($acount,889,5597,'".AddSlashes(pg_result($resaco,$conresaco,'e60_coddot'))."','$this->e60_coddot',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                if(isset($GLOBALS["HTTP_POST_VARS"]["e60_numcgm"]) || $this->e60_numcgm != "")
-                    $resac = db_query("insert into db_acount values($acount,889,5598,'".AddSlashes(pg_result($resaco,$conresaco,'e60_numcgm'))."','$this->e60_numcgm',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                if(isset($GLOBALS["HTTP_POST_VARS"]["e60_emiss"]) || $this->e60_emiss != "")
-                    $resac = db_query("insert into db_acount values($acount,889,5599,'".AddSlashes(pg_result($resaco,$conresaco,'e60_emiss'))."','$this->e60_emiss',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                if(isset($GLOBALS["HTTP_POST_VARS"]["e60_vencim"]) || $this->e60_vencim != "")
-                    $resac = db_query("insert into db_acount values($acount,889,5600,'".AddSlashes(pg_result($resaco,$conresaco,'e60_vencim'))."','$this->e60_vencim',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                if(isset($GLOBALS["HTTP_POST_VARS"]["e60_vlrorc"]) || $this->e60_vlrorc != "")
-                    $resac = db_query("insert into db_acount values($acount,889,5656,'".AddSlashes(pg_result($resaco,$conresaco,'e60_vlrorc'))."','$this->e60_vlrorc',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                if(isset($GLOBALS["HTTP_POST_VARS"]["e60_vlremp"]) || $this->e60_vlremp != "")
-                    $resac = db_query("insert into db_acount values($acount,889,5657,'".AddSlashes(pg_result($resaco,$conresaco,'e60_vlremp'))."','$this->e60_vlremp',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                if(isset($GLOBALS["HTTP_POST_VARS"]["e60_vlrliq"]) || $this->e60_vlrliq != "")
-                    $resac = db_query("insert into db_acount values($acount,889,5658,'".AddSlashes(pg_result($resaco,$conresaco,'e60_vlrliq'))."','$this->e60_vlrliq',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                if(isset($GLOBALS["HTTP_POST_VARS"]["e60_vlrpag"]) || $this->e60_vlrpag != "")
-                    $resac = db_query("insert into db_acount values($acount,889,5659,'".AddSlashes(pg_result($resaco,$conresaco,'e60_vlrpag'))."','$this->e60_vlrpag',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                if(isset($GLOBALS["HTTP_POST_VARS"]["e60_vlranu"]) || $this->e60_vlranu != "")
-                    $resac = db_query("insert into db_acount values($acount,889,5660,'".AddSlashes(pg_result($resaco,$conresaco,'e60_vlranu'))."','$this->e60_vlranu',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                if(isset($GLOBALS["HTTP_POST_VARS"]["e60_codtipo"]) || $this->e60_codtipo != "")
-                    $resac = db_query("insert into db_acount values($acount,889,5661,'".AddSlashes(pg_result($resaco,$conresaco,'e60_codtipo'))."','$this->e60_codtipo',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                if(isset($GLOBALS["HTTP_POST_VARS"]["e60_resumo"]) || $this->e60_resumo != "")
-                    $resac = db_query("insert into db_acount values($acount,889,5662,'".AddSlashes(pg_result($resaco,$conresaco,'e60_resumo'))."','$this->e60_resumo',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                if(isset($GLOBALS["HTTP_POST_VARS"]["e60_informacaoop"]) || $this->e60_informacaoop != "")
-                    $resac = db_query("insert into db_acount values($acount,889,5662,'".AddSlashes(pg_result($resaco,$conresaco,'e60_informacaoop'))."','$this->e60_informacaoop',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                if(isset($GLOBALS["HTTP_POST_VARS"]["e60_destin"]) || $this->e60_destin != "")
-                    $resac = db_query("insert into db_acount values($acount,889,5679,'".AddSlashes(pg_result($resaco,$conresaco,'e60_destin'))."','$this->e60_destin',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                if(isset($GLOBALS["HTTP_POST_VARS"]["e60_salant"]) || $this->e60_salant != "")
-                    $resac = db_query("insert into db_acount values($acount,889,5684,'".AddSlashes(pg_result($resaco,$conresaco,'e60_salant'))."','$this->e60_salant',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                if(isset($GLOBALS["HTTP_POST_VARS"]["e60_instit"]) || $this->e60_instit != "")
-                    $resac = db_query("insert into db_acount values($acount,889,5663,'".AddSlashes(pg_result($resaco,$conresaco,'e60_instit'))."','$this->e60_instit',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                if(isset($GLOBALS["HTTP_POST_VARS"]["e60_codcom"]) || $this->e60_codcom != "")
-                    $resac = db_query("insert into db_acount values($acount,889,5889,'".AddSlashes(pg_result($resaco,$conresaco,'e60_codcom'))."','$this->e60_codcom',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                if(isset($GLOBALS["HTTP_POST_VARS"]["e60_tipol"]) || $this->e60_tipol != "")
-                    $resac = db_query("insert into db_acount values($acount,889,5890,'".AddSlashes(pg_result($resaco,$conresaco,'e60_tipol'))."','$this->e60_tipol',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                if(isset($GLOBALS["HTTP_POST_VARS"]["e60_numerol"]) || $this->e60_numerol != "")
-                    $resac = db_query("insert into db_acount values($acount,889,5891,'".AddSlashes(pg_result($resaco,$conresaco,'e60_numerol'))."','$this->e60_numerol',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                if(isset($GLOBALS["HTTP_POST_VARS"]["migra_elemento"]) || $this->migra_elemento != "")
-                    $resac = db_query("insert into db_acount values($acount,889,7383,'".AddSlashes(pg_result($resaco,$conresaco,'migra_elemento'))."','$this->migra_elemento',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                if(isset($GLOBALS["HTTP_POST_VARS"]["e60_concarpeculiar"]) || $this->e60_concarpeculiar != "")
-                    $resac = db_query("insert into db_acount values($acount,889,10817,'".AddSlashes(pg_result($resaco,$conresaco,'e60_concarpeculiar'))."','$this->e60_concarpeculiar',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+                if (isset($GLOBALS["HTTP_POST_VARS"]["e60_numemp"]) || $this->e60_numemp != "")
+                    $resac = db_query("insert into db_acount values($acount,889,5594,'" . AddSlashes(pg_result($resaco, $conresaco, 'e60_numemp')) . "','$this->e60_numemp'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                if (isset($GLOBALS["HTTP_POST_VARS"]["e60_codemp"]) || $this->e60_codemp != "")
+                    $resac = db_query("insert into db_acount values($acount,889,5595,'" . AddSlashes(pg_result($resaco, $conresaco, 'e60_codemp')) . "','$this->e60_codemp'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                if (isset($GLOBALS["HTTP_POST_VARS"]["e60_anousu"]) || $this->e60_anousu != "")
+                    $resac = db_query("insert into db_acount values($acount,889,5596,'" . AddSlashes(pg_result($resaco, $conresaco, 'e60_anousu')) . "','$this->e60_anousu'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                if (isset($GLOBALS["HTTP_POST_VARS"]["e60_coddot"]) || $this->e60_coddot != "")
+                    $resac = db_query("insert into db_acount values($acount,889,5597,'" . AddSlashes(pg_result($resaco, $conresaco, 'e60_coddot')) . "','$this->e60_coddot'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                if (isset($GLOBALS["HTTP_POST_VARS"]["e60_numcgm"]) || $this->e60_numcgm != "")
+                    $resac = db_query("insert into db_acount values($acount,889,5598,'" . AddSlashes(pg_result($resaco, $conresaco, 'e60_numcgm')) . "','$this->e60_numcgm'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                if (isset($GLOBALS["HTTP_POST_VARS"]["e60_emiss"]) || $this->e60_emiss != "")
+                    $resac = db_query("insert into db_acount values($acount,889,5599,'" . AddSlashes(pg_result($resaco, $conresaco, 'e60_emiss')) . "','$this->e60_emiss'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                if (isset($GLOBALS["HTTP_POST_VARS"]["e60_vencim"]) || $this->e60_vencim != "")
+                    $resac = db_query("insert into db_acount values($acount,889,5600,'" . AddSlashes(pg_result($resaco, $conresaco, 'e60_vencim')) . "','$this->e60_vencim'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                if (isset($GLOBALS["HTTP_POST_VARS"]["e60_vlrorc"]) || $this->e60_vlrorc != "")
+                    $resac = db_query("insert into db_acount values($acount,889,5656,'" . AddSlashes(pg_result($resaco, $conresaco, 'e60_vlrorc')) . "','$this->e60_vlrorc'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                if (isset($GLOBALS["HTTP_POST_VARS"]["e60_vlremp"]) || $this->e60_vlremp != "")
+                    $resac = db_query("insert into db_acount values($acount,889,5657,'" . AddSlashes(pg_result($resaco, $conresaco, 'e60_vlremp')) . "','$this->e60_vlremp'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                if (isset($GLOBALS["HTTP_POST_VARS"]["e60_vlrliq"]) || $this->e60_vlrliq != "")
+                    $resac = db_query("insert into db_acount values($acount,889,5658,'" . AddSlashes(pg_result($resaco, $conresaco, 'e60_vlrliq')) . "','$this->e60_vlrliq'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                if (isset($GLOBALS["HTTP_POST_VARS"]["e60_vlrpag"]) || $this->e60_vlrpag != "")
+                    $resac = db_query("insert into db_acount values($acount,889,5659,'" . AddSlashes(pg_result($resaco, $conresaco, 'e60_vlrpag')) . "','$this->e60_vlrpag'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                if (isset($GLOBALS["HTTP_POST_VARS"]["e60_vlranu"]) || $this->e60_vlranu != "")
+                    $resac = db_query("insert into db_acount values($acount,889,5660,'" . AddSlashes(pg_result($resaco, $conresaco, 'e60_vlranu')) . "','$this->e60_vlranu'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                if (isset($GLOBALS["HTTP_POST_VARS"]["e60_codtipo"]) || $this->e60_codtipo != "")
+                    $resac = db_query("insert into db_acount values($acount,889,5661,'" . AddSlashes(pg_result($resaco, $conresaco, 'e60_codtipo')) . "','$this->e60_codtipo'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                if (isset($GLOBALS["HTTP_POST_VARS"]["e60_resumo"]) || $this->e60_resumo != "")
+                    $resac = db_query("insert into db_acount values($acount,889,5662,'" . AddSlashes(pg_result($resaco, $conresaco, 'e60_resumo')) . "','$this->e60_resumo'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                if (isset($GLOBALS["HTTP_POST_VARS"]["e60_informacaoop"]) || $this->e60_informacaoop != "")
+                    $resac = db_query("insert into db_acount values($acount,889,5662,'" . AddSlashes(pg_result($resaco, $conresaco, 'e60_informacaoop')) . "','$this->e60_informacaoop'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                if (isset($GLOBALS["HTTP_POST_VARS"]["e60_destin"]) || $this->e60_destin != "")
+                    $resac = db_query("insert into db_acount values($acount,889,5679,'" . AddSlashes(pg_result($resaco, $conresaco, 'e60_destin')) . "','$this->e60_destin'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                if (isset($GLOBALS["HTTP_POST_VARS"]["e60_salant"]) || $this->e60_salant != "")
+                    $resac = db_query("insert into db_acount values($acount,889,5684,'" . AddSlashes(pg_result($resaco, $conresaco, 'e60_salant')) . "','$this->e60_salant'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                if (isset($GLOBALS["HTTP_POST_VARS"]["e60_instit"]) || $this->e60_instit != "")
+                    $resac = db_query("insert into db_acount values($acount,889,5663,'" . AddSlashes(pg_result($resaco, $conresaco, 'e60_instit')) . "','$this->e60_instit'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                if (isset($GLOBALS["HTTP_POST_VARS"]["e60_codcom"]) || $this->e60_codcom != "")
+                    $resac = db_query("insert into db_acount values($acount,889,5889,'" . AddSlashes(pg_result($resaco, $conresaco, 'e60_codcom')) . "','$this->e60_codcom'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                if (isset($GLOBALS["HTTP_POST_VARS"]["e60_tipol"]) || $this->e60_tipol != "")
+                    $resac = db_query("insert into db_acount values($acount,889,5890,'" . AddSlashes(pg_result($resaco, $conresaco, 'e60_tipol')) . "','$this->e60_tipol'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                if (isset($GLOBALS["HTTP_POST_VARS"]["e60_numerol"]) || $this->e60_numerol != "")
+                    $resac = db_query("insert into db_acount values($acount,889,5891,'" . AddSlashes(pg_result($resaco, $conresaco, 'e60_numerol')) . "','$this->e60_numerol'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                if (isset($GLOBALS["HTTP_POST_VARS"]["migra_elemento"]) || $this->migra_elemento != "")
+                    $resac = db_query("insert into db_acount values($acount,889,7383,'" . AddSlashes(pg_result($resaco, $conresaco, 'migra_elemento')) . "','$this->migra_elemento'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                if (isset($GLOBALS["HTTP_POST_VARS"]["e60_concarpeculiar"]) || $this->e60_concarpeculiar != "")
+                    $resac = db_query("insert into db_acount values($acount,889,10817,'" . AddSlashes(pg_result($resaco, $conresaco, 'e60_concarpeculiar')) . "','$this->e60_concarpeculiar'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
             }
         }
         $result = db_query($sql);
-        if($result==false){
-            $this->erro_banco = str_replace("\n","",@pg_last_error());
+        if ($result == false) {
+            $this->erro_banco = str_replace("\n", "", @pg_last_error());
             $this->erro_sql   = "Empenhos na prefeitura nao Alterado. Alteracao Abortada.\\n";
-            $this->erro_sql .= "Valores : ".$this->e60_numemp;
-            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            $this->erro_sql .= "Valores : " . $this->e60_numemp;
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             $this->numrows_alterar = 0;
             return false;
-        }else{
-            if(pg_affected_rows($result)==0){
+        } else {
+            if (pg_affected_rows($result) == 0) {
                 $this->erro_banco = "";
                 $this->erro_sql = "Empenhos na prefeitura nao foi Alterado. Alteracao Executada.\\n";
-                $this->erro_sql .= "Valores : ".$this->e60_numemp;
-                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_sql .= "Valores : " . $this->e60_numemp;
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "1";
                 $this->numrows_alterar = 0;
                 return true;
-            }else{
+            } else {
                 $this->erro_banco = "";
                 $this->erro_sql = "Alteração efetuada com Sucesso\\n";
-                $this->erro_sql .= "Valores : ".$this->e60_numemp;
-                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_sql .= "Valores : " . $this->e60_numemp;
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "1";
                 $this->numrows_alterar = pg_affected_rows($result);
                 return true;
@@ -951,82 +955,83 @@ class cl_empempenho {
         }
     }
     // funcao para exclusao
-    function excluir ($e60_numemp=null,$dbwhere=null) {
-        if($dbwhere==null || $dbwhere==""){
+    function excluir($e60_numemp = null, $dbwhere = null)
+    {
+        if ($dbwhere == null || $dbwhere == "") {
             $resaco = $this->sql_record($this->sql_query_file($e60_numemp));
-        }else{
-            $resaco = $this->sql_record($this->sql_query_file(null,"*",null,$dbwhere));
+        } else {
+            $resaco = $this->sql_record($this->sql_query_file(null, "*", null, $dbwhere));
         }
-        if(($resaco!=false)||($this->numrows!=0)){
-            for($iresaco=0;$iresaco<$this->numrows;$iresaco++){
+        if (($resaco != false) || ($this->numrows != 0)) {
+            for ($iresaco = 0; $iresaco < $this->numrows; $iresaco++) {
                 $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-                $acount = pg_result($resac,0,0);
-                $resac = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
+                $acount = pg_result($resac, 0, 0);
+                $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
                 $resac = db_query("insert into db_acountkey values($acount,5594,'$e60_numemp','E')");
-                $resac = db_query("insert into db_acount values($acount,889,5594,'','".AddSlashes(pg_result($resaco,$iresaco,'e60_numemp'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                $resac = db_query("insert into db_acount values($acount,889,5595,'','".AddSlashes(pg_result($resaco,$iresaco,'e60_codemp'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                $resac = db_query("insert into db_acount values($acount,889,5596,'','".AddSlashes(pg_result($resaco,$iresaco,'e60_anousu'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                $resac = db_query("insert into db_acount values($acount,889,5597,'','".AddSlashes(pg_result($resaco,$iresaco,'e60_coddot'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                $resac = db_query("insert into db_acount values($acount,889,5598,'','".AddSlashes(pg_result($resaco,$iresaco,'e60_numcgm'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                $resac = db_query("insert into db_acount values($acount,889,5599,'','".AddSlashes(pg_result($resaco,$iresaco,'e60_emiss'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                $resac = db_query("insert into db_acount values($acount,889,5600,'','".AddSlashes(pg_result($resaco,$iresaco,'e60_vencim'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                $resac = db_query("insert into db_acount values($acount,889,5656,'','".AddSlashes(pg_result($resaco,$iresaco,'e60_vlrorc'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                $resac = db_query("insert into db_acount values($acount,889,5657,'','".AddSlashes(pg_result($resaco,$iresaco,'e60_vlremp'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                $resac = db_query("insert into db_acount values($acount,889,5658,'','".AddSlashes(pg_result($resaco,$iresaco,'e60_vlrliq'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                $resac = db_query("insert into db_acount values($acount,889,5659,'','".AddSlashes(pg_result($resaco,$iresaco,'e60_vlrpag'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                $resac = db_query("insert into db_acount values($acount,889,5660,'','".AddSlashes(pg_result($resaco,$iresaco,'e60_vlranu'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                $resac = db_query("insert into db_acount values($acount,889,5661,'','".AddSlashes(pg_result($resaco,$iresaco,'e60_codtipo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                $resac = db_query("insert into db_acount values($acount,889,5662,'','".AddSlashes(pg_result($resaco,$iresaco,'e60_resumo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                $resac = db_query("insert into db_acount values($acount,889,5662,'','".AddSlashes(pg_result($resaco,$iresaco,'e60_informacaoop'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                $resac = db_query("insert into db_acount values($acount,889,5679,'','".AddSlashes(pg_result($resaco,$iresaco,'e60_destin'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                $resac = db_query("insert into db_acount values($acount,889,5684,'','".AddSlashes(pg_result($resaco,$iresaco,'e60_salant'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                $resac = db_query("insert into db_acount values($acount,889,5663,'','".AddSlashes(pg_result($resaco,$iresaco,'e60_instit'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                $resac = db_query("insert into db_acount values($acount,889,5889,'','".AddSlashes(pg_result($resaco,$iresaco,'e60_codcom'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                $resac = db_query("insert into db_acount values($acount,889,5890,'','".AddSlashes(pg_result($resaco,$iresaco,'e60_tipol'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                $resac = db_query("insert into db_acount values($acount,889,5891,'','".AddSlashes(pg_result($resaco,$iresaco,'e60_numerol'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                $resac = db_query("insert into db_acount values($acount,889,7383,'','".AddSlashes(pg_result($resaco,$iresaco,'migra_elemento'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                $resac = db_query("insert into db_acount values($acount,889,10817,'','".AddSlashes(pg_result($resaco,$iresaco,'e60_concarpeculiar'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+                $resac = db_query("insert into db_acount values($acount,889,5594,'','" . AddSlashes(pg_result($resaco, $iresaco, 'e60_numemp')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                $resac = db_query("insert into db_acount values($acount,889,5595,'','" . AddSlashes(pg_result($resaco, $iresaco, 'e60_codemp')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                $resac = db_query("insert into db_acount values($acount,889,5596,'','" . AddSlashes(pg_result($resaco, $iresaco, 'e60_anousu')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                $resac = db_query("insert into db_acount values($acount,889,5597,'','" . AddSlashes(pg_result($resaco, $iresaco, 'e60_coddot')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                $resac = db_query("insert into db_acount values($acount,889,5598,'','" . AddSlashes(pg_result($resaco, $iresaco, 'e60_numcgm')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                $resac = db_query("insert into db_acount values($acount,889,5599,'','" . AddSlashes(pg_result($resaco, $iresaco, 'e60_emiss')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                $resac = db_query("insert into db_acount values($acount,889,5600,'','" . AddSlashes(pg_result($resaco, $iresaco, 'e60_vencim')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                $resac = db_query("insert into db_acount values($acount,889,5656,'','" . AddSlashes(pg_result($resaco, $iresaco, 'e60_vlrorc')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                $resac = db_query("insert into db_acount values($acount,889,5657,'','" . AddSlashes(pg_result($resaco, $iresaco, 'e60_vlremp')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                $resac = db_query("insert into db_acount values($acount,889,5658,'','" . AddSlashes(pg_result($resaco, $iresaco, 'e60_vlrliq')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                $resac = db_query("insert into db_acount values($acount,889,5659,'','" . AddSlashes(pg_result($resaco, $iresaco, 'e60_vlrpag')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                $resac = db_query("insert into db_acount values($acount,889,5660,'','" . AddSlashes(pg_result($resaco, $iresaco, 'e60_vlranu')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                $resac = db_query("insert into db_acount values($acount,889,5661,'','" . AddSlashes(pg_result($resaco, $iresaco, 'e60_codtipo')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                $resac = db_query("insert into db_acount values($acount,889,5662,'','" . AddSlashes(pg_result($resaco, $iresaco, 'e60_resumo')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                $resac = db_query("insert into db_acount values($acount,889,5662,'','" . AddSlashes(pg_result($resaco, $iresaco, 'e60_informacaoop')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                $resac = db_query("insert into db_acount values($acount,889,5679,'','" . AddSlashes(pg_result($resaco, $iresaco, 'e60_destin')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                $resac = db_query("insert into db_acount values($acount,889,5684,'','" . AddSlashes(pg_result($resaco, $iresaco, 'e60_salant')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                $resac = db_query("insert into db_acount values($acount,889,5663,'','" . AddSlashes(pg_result($resaco, $iresaco, 'e60_instit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                $resac = db_query("insert into db_acount values($acount,889,5889,'','" . AddSlashes(pg_result($resaco, $iresaco, 'e60_codcom')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                $resac = db_query("insert into db_acount values($acount,889,5890,'','" . AddSlashes(pg_result($resaco, $iresaco, 'e60_tipol')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                $resac = db_query("insert into db_acount values($acount,889,5891,'','" . AddSlashes(pg_result($resaco, $iresaco, 'e60_numerol')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                $resac = db_query("insert into db_acount values($acount,889,7383,'','" . AddSlashes(pg_result($resaco, $iresaco, 'migra_elemento')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                $resac = db_query("insert into db_acount values($acount,889,10817,'','" . AddSlashes(pg_result($resaco, $iresaco, 'e60_concarpeculiar')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
             }
         }
         $sql = " delete from empempenho
                     where ";
         $sql2 = "";
-        if($dbwhere==null || $dbwhere ==""){
-            if($e60_numemp != ""){
-                if($sql2!=""){
+        if ($dbwhere == null || $dbwhere == "") {
+            if ($e60_numemp != "") {
+                if ($sql2 != "") {
                     $sql2 .= " and ";
                 }
                 $sql2 .= " e60_numemp = $e60_numemp ";
             }
-        }else{
+        } else {
             $sql2 = $dbwhere;
         }
-        $result = db_query($sql.$sql2);
-        if($result==false){
-            $this->erro_banco = str_replace("\n","",@pg_last_error());
+        $result = db_query($sql . $sql2);
+        if ($result == false) {
+            $this->erro_banco = str_replace("\n", "", @pg_last_error());
             $this->erro_sql   = "Empenhos na prefeitura nao Excluído. Exclusão Abortada.\\n";
-            $this->erro_sql .= "Valores : ".$e60_numemp;
-            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            $this->erro_sql .= "Valores : " . $e60_numemp;
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             $this->numrows_excluir = 0;
             return false;
-        }else{
-            if(pg_affected_rows($result)==0){
+        } else {
+            if (pg_affected_rows($result) == 0) {
                 $this->erro_banco = "";
                 $this->erro_sql = "Empenhos na prefeitura nao Encontrado. Exclusão não Efetuada.\\n";
-                $this->erro_sql .= "Valores : ".$e60_numemp;
-                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_sql .= "Valores : " . $e60_numemp;
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "1";
                 $this->numrows_excluir = 0;
                 return true;
-            }else{
+            } else {
                 $this->erro_banco = "";
                 $this->erro_sql = "Exclusão efetuada com Sucesso\\n";
-                $this->erro_sql .= "Valores : ".$e60_numemp;
-                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_sql .= "Valores : " . $e60_numemp;
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "1";
                 $this->numrows_excluir = pg_affected_rows($result);
                 return true;
@@ -1034,45 +1039,47 @@ class cl_empempenho {
         }
     }
     // funcao do recordset
-    function sql_record($sql) {
+    function sql_record($sql)
+    {
         $result = db_query($sql);
-        if($result==false){
+        if ($result == false) {
             $this->numrows    = 0;
-            $this->erro_banco = str_replace("\n","",@pg_last_error());
+            $this->erro_banco = str_replace("\n", "", @pg_last_error());
             $this->erro_sql   = "Erro ao selecionar os registros";
-            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
         $this->numrows = pg_numrows($result);
-        if($this->numrows==0){
+        if ($this->numrows == 0) {
             $this->erro_banco = "";
             $this->erro_sql   = "Record Vazio na Tabela:empempenho";
-            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
         return $result;
     }
     // funcao do sql
-    function sql_query ( $e60_numemp=null,$campos="*",$ordem=null,$dbwhere="", $filtroempelemento ="", $limit = ''){
+    function sql_query($e60_numemp = null, $campos = "*", $ordem = null, $dbwhere = "", $filtroempelemento = "", $limit = '')
+    {
         $sql = "select ";
-        if($campos != "*" ){
-            $campos_sql = split("#",$campos);
+        if ($campos != "*") {
+            $campos_sql = split("#", $campos);
             $virgula = "";
-            for($i=0;$i<sizeof($campos_sql);$i++){
-                $sql .= $virgula.$campos_sql[$i];
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
                 $virgula = ",";
             }
-        }else{
+        } else {
             $sql .= $campos;
         }
         $sql .= " from empempenho ";
         $sql .= "      inner join cgm  on  cgm.z01_numcgm = empempenho.e60_numcgm";
         $sql .= "      inner join empelemento  on  empempenho.e60_numemp = empelemento.e64_numemp";
-        if($filtroempelemento == 1) {
+        if ($filtroempelemento == 1) {
             $sql .= "      inner join orcelemento elementoempenho  on  elementoempenho.o56_codele = empelemento.e64_codele  and elementoempenho.o56_anousu = empempenho.e60_anousu";
         }
         $sql .= "      inner join db_config  on  db_config.codigo = empempenho.e60_instit";
@@ -1100,72 +1107,144 @@ class cl_empempenho {
         $sql .= "       left join convconvenios on convconvenios.c206_sequencial = empempenho.e60_numconvenio ";
         $sql .= "       left join empresto on e91_numemp = e60_numemp";
         $sql2 = "";
-        if($dbwhere==""){
-            if($e60_numemp!=null ){
+        if ($dbwhere == "") {
+            if ($e60_numemp != null) {
                 $sql2 .= " where empempenho.e60_numemp = $e60_numemp ";
             }
-        }else if($dbwhere != ""){
+        } else if ($dbwhere != "") {
             $sql2 = " where $dbwhere";
         }
         $sql .= $sql2;
-        if($ordem != null ){
+        if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = split("#",$ordem);
+            $campos_sql = split("#", $ordem);
             $virgula = "";
-            for($i=0;$i<sizeof($campos_sql);$i++){
-                $sql .= $virgula.$campos_sql[$i];
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
                 $virgula = ",";
             }
         }
-        if($limit){
-          $sql.=" limit $limit ";
+        if ($limit) {
+            $sql .= " limit $limit ";
         }
         return $sql;
     }
-    // funcao do sql
-    function sql_query_file ( $e60_numemp=null,$campos="*",$ordem=null,$dbwhere=""){
+
+    function sql_query_inclusaoempenho($e60_numemp = null, $campos = "*", $ordem = null, $dbwhere = "", $filtroempelemento = "", $limit = '')
+    {
         $sql = "select ";
-        if($campos != "*" ){
-            $campos_sql = split("#",$campos);
+        if ($campos != "*") {
+            $campos_sql = split("#", $campos);
             $virgula = "";
-            for($i=0;$i<sizeof($campos_sql);$i++){
-                $sql .= $virgula.$campos_sql[$i];
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
                 $virgula = ",";
             }
-        }else{
+        } else {
+            $sql .= $campos;
+        }
+        $sql .= " from empempenho ";
+        $sql .= "      inner join cgm  on  cgm.z01_numcgm = empempenho.e60_numcgm";
+        $sql .= "      inner join empelemento  on  empempenho.e60_numemp = empelemento.e64_numemp";
+        if ($filtroempelemento == 1) {
+            $sql .= "      inner join orcelemento elementoempenho  on  elementoempenho.o56_codele = empelemento.e64_codele  and elementoempenho.o56_anousu = empempenho.e60_anousu";
+        }
+        $sql .= "      inner join db_config  on  db_config.codigo = empempenho.e60_instit";
+        $sql .= "      inner join orcdotacao  on  orcdotacao.o58_anousu = empempenho.e60_anousu and  orcdotacao.o58_coddot = empempenho.e60_coddot";
+        $sql .= "      inner join pctipocompra  on  pctipocompra.pc50_codcom = empempenho.e60_codcom";
+        $sql .= "      inner join emptipo  on  emptipo.e41_codtipo = empempenho.e60_codtipo";
+        $sql .= "      inner join concarpeculiar  on  concarpeculiar.c58_sequencial = empempenho.e60_concarpeculiar";
+        $sql .= "      inner join db_config  as a on   a.codigo = orcdotacao.o58_instit";
+        $sql .= "      inner join orctiporec  on  orctiporec.o15_codigo = orcdotacao.o58_codigo";
+        $sql .= "      inner join orcfuncao  on  orcfuncao.o52_funcao = orcdotacao.o58_funcao";
+        $sql .= "      inner join orcsubfuncao  on  orcsubfuncao.o53_subfuncao = orcdotacao.o58_subfuncao";
+        $sql .= "      inner join orcprograma  on  orcprograma.o54_anousu = orcdotacao.o58_anousu and  orcprograma.o54_programa = orcdotacao.o58_programa";
+        $sql .= "      inner join orcelemento  on  orcelemento.o56_codele = orcdotacao.o58_codele  and orcelemento.o56_anousu = orcdotacao.o58_anousu";
+        $sql .= "      inner join orcprojativ  on  orcprojativ.o55_anousu = orcdotacao.o58_anousu and  orcprojativ.o55_projativ = orcdotacao.o58_projativ";
+        $sql .= "      inner join orcorgao  on  orcorgao.o40_anousu = orcdotacao.o58_anousu and  orcorgao.o40_orgao = orcdotacao.o58_orgao";
+        $sql .= "      inner join orcunidade  on  orcunidade.o41_anousu = orcdotacao.o58_anousu and  orcunidade.o41_orgao = orcdotacao.o58_orgao and  orcunidade.o41_unidade = orcdotacao.o58_unidade";
+        $sql .= "      left  join empcontratos on si173_empenho::varchar = e60_codemp and e60_anousu = si173_anoempenho";
+        $sql .= "      left join contratos on si173_codcontrato = si172_sequencial";
+        $sql .= "      LEFT JOIN aditivoscontratos on extract(year from si174_dataassinaturacontoriginal) = si172_exerciciocontrato and (si174_nrocontrato = si172_nrocontrato)";
+        $sql .= "       left join empempaut            on empempenho.e60_numemp  = empempaut.e61_numemp   ";
+        $sql .= "       left join empautoriza          on empempaut.e61_autori   = empautoriza.e54_autori ";
+        $sql .= "       left join db_depart            on empautoriza.e54_autori = db_depart.coddepto ";
+        $sql .= "       left join empempenhocontrato   on empempenho.e60_numemp = empempenhocontrato.e100_numemp ";
+        $sql .= "       left join acordo   on empempenhocontrato.e100_acordo = acordo.ac16_sequencial ";
+        $sql .= "       left join convconvenios on convconvenios.c206_sequencial = empempenho.e60_numconvenio ";
+        $sql .= "       left join empresto on e91_numemp = e60_numemp ";
+
+        $sql2 = "";
+        if ($dbwhere == "") {
+            if ($e60_numemp != null) {
+                $sql2 .= " where empempenho.e60_numemp = $e60_numemp ";
+            }
+        } else if ($dbwhere != "") {
+            $sql2 = "  $dbwhere";
+        }
+        $sql .= $sql2;
+        if ($ordem != null) {
+            $sql .= " order by ";
+            $campos_sql = split("#", $ordem);
+            $virgula = "";
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
+                $virgula = ",";
+            }
+        }
+        if ($limit) {
+            $sql .= " limit $limit ";
+        }
+        return $sql;
+    }
+
+
+    // funcao do sql
+    function sql_query_file($e60_numemp = null, $campos = "*", $ordem = null, $dbwhere = "")
+    {
+        $sql = "select ";
+        if ($campos != "*") {
+            $campos_sql = split("#", $campos);
+            $virgula = "";
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
+                $virgula = ",";
+            }
+        } else {
             $sql .= $campos;
         }
         $sql .= " from empempenho ";
         $sql2 = "";
-        if($dbwhere==""){
-            if($e60_numemp!=null ){
+        if ($dbwhere == "") {
+            if ($e60_numemp != null) {
                 $sql2 .= " where empempenho.e60_numemp = $e60_numemp ";
             }
-        }else if($dbwhere != ""){
+        } else if ($dbwhere != "") {
             $sql2 = " where $dbwhere";
         }
         $sql .= $sql2;
-        if($ordem != null ){
+        if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = split("#",$ordem);
+            $campos_sql = split("#", $ordem);
             $virgula = "";
-            for($i=0;$i<sizeof($campos_sql);$i++){
-                $sql .= $virgula.$campos_sql[$i];
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
                 $virgula = ",";
             }
         }
         return $sql;
     }
-    function sql_query_codord ( $e60_numemp=null,$campos="*",$ordem=null,$dbwhere=""){
+    function sql_query_codord($e60_numemp = null, $campos = "*", $ordem = null, $dbwhere = "")
+    {
         $sql = "select ";
-        if($campos != "*" ){
-            $campos_sql = split("#",$campos);
+        if ($campos != "*") {
+            $campos_sql = split("#", $campos);
             $virgula = "";
-            for($i=0;$i<sizeof($campos_sql);$i++){
-                $sql .= $virgula.$campos_sql[$i];
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
                 $virgula = ",";
             }
-        }else{
+        } else {
             $sql .= $campos;
         }
         $sql .= " from empempenho ";
@@ -1174,36 +1253,36 @@ class cl_empempenho {
         $sql .= "      left join matordem     on m51_codordem        = m52_codordem";
         $sql .= "      inner join cgm          on matordem.m51_numcgm = cgm.z01_numcgm ";
         $sql2 = "";
-        if($dbwhere==""){
-            if($e60_numemp!=null ){
+        if ($dbwhere == "") {
+            if ($e60_numemp != null) {
                 $sql2 .= " where empempenho.e60_numemp = $e60_numemp ";
             }
-        }else if($dbwhere != ""){
+        } else if ($dbwhere != "") {
             $sql2 = " where $dbwhere";
         }
         $sql .= $sql2;
-        if($ordem != null ){
+        if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = split("#",$ordem);
+            $campos_sql = split("#", $ordem);
             $virgula = "";
-            for($i=0;$i<sizeof($campos_sql);$i++){
-                $sql .= $virgula.$campos_sql[$i];
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
                 $virgula = ",";
             }
         }
         return $sql;
-
     }
-    function sql_query_consulta ( $e60_numemp=null,$campos="*",$ordem=null,$dbwhere=""){
+    function sql_query_consulta($e60_numemp = null, $campos = "*", $ordem = null, $dbwhere = "")
+    {
         $sql = "select ";
-        if($campos != "*" ){
-            $campos_sql = split("#",$campos);
+        if ($campos != "*") {
+            $campos_sql = split("#", $campos);
             $virgula = "";
-            for($i=0;$i<sizeof($campos_sql);$i++){
-                $sql .= $virgula.$campos_sql[$i];
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
                 $virgula = ",";
             }
-        }else{
+        } else {
             $sql .= $campos;
         }
         $sql .= " from empempenho ";
@@ -1232,51 +1311,52 @@ class cl_empempenho {
         $sql .= "    				db20_codigo	= o58_codigo";
         $sql .= "      inner join db_usupermemp on db21_codperm = db20_codperm and db21_id_usuario = " . db_getsession("DB_id_usuario");
         $sql2 = "";
-        if($dbwhere==""){
-            if($e60_numemp!=null ){
+        if ($dbwhere == "") {
+            if ($e60_numemp != null) {
                 $sql2 .= " where empempenho.e60_numemp = $e60_numemp ";
             }
-        }else if($dbwhere != ""){
+        } else if ($dbwhere != "") {
             $sql2 = " where $dbwhere";
         }
         $sql .= $sql2;
-        if($ordem != null ){
+        if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = split("#",$ordem);
+            $campos_sql = split("#", $ordem);
             $virgula = "";
-            for($i=0;$i<sizeof($campos_sql);$i++){
-                $sql .= $virgula.$campos_sql[$i];
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
                 $virgula = ",";
             }
         }
         return $sql;
     }
-    function sql_query_valorutilizado($numemp=null){
+    function sql_query_valorutilizado($numemp = null)
+    {
         $sql = " update empempenho set e60_vlrutilizado = $this->e60_vlrutilizado where e60_numemp = $numemp";
 
         $result = db_query($sql);
-        if($result==false){
-            $this->erro_banco = str_replace("\n","",@pg_last_error());
+        if ($result == false) {
+            $this->erro_banco = str_replace("\n", "", @pg_last_error());
             $this->erro_sql   = "Empenhos na prefeitura nao Alterado. Alteracao Abortada.\\n";
-            $this->erro_sql .= "Valores : ".$this->e60_numemp;
-            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            $this->erro_sql .= "Valores : " . $this->e60_numemp;
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             $this->numrows_alterar = 0;
             return false;
         }
-
     }
-    function sql_query_doc ( $e60_numemp=null,$campos="*",$ordem=null,$dbwhere=""){
+    function sql_query_doc($e60_numemp = null, $campos = "*", $ordem = null, $dbwhere = "")
+    {
         $sql = "select ";
-        if($campos != "*" ){
-            $campos_sql = split("#",$campos);
+        if ($campos != "*") {
+            $campos_sql = split("#", $campos);
             $virgula = "";
-            for($i=0;$i<sizeof($campos_sql);$i++){
-                $sql .= $virgula.$campos_sql[$i];
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
                 $virgula = ",";
             }
-        }else{
+        } else {
             $sql .= $campos;
         }
 
@@ -1308,35 +1388,36 @@ class cl_empempenho {
         $sql .= "      left join emphist on emphist.e40_codhist = empemphist.e63_codhist";
         $sql2 = "";
 
-        if($dbwhere==""){
-            if($e60_numemp!=null ){
+        if ($dbwhere == "") {
+            if ($e60_numemp != null) {
                 $sql2 .= " where empempenho.e60_numemp = $e60_numemp ";
             }
-        }else if($dbwhere != ""){
+        } else if ($dbwhere != "") {
             $sql2 = " where $dbwhere";
         }
         $sql .= $sql2;
-        if($ordem != null ){
+        if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = split("#",$ordem);
+            $campos_sql = split("#", $ordem);
             $virgula = "";
-            for($i=0;$i<sizeof($campos_sql);$i++){
-                $sql .= $virgula.$campos_sql[$i];
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
                 $virgula = ",";
             }
         }
         return $sql;
     }
-    function sql_query_empnome($e60_numemp=null,$campos="*",$ordem=null,$dbwhere=""){
+    function sql_query_empnome($e60_numemp = null, $campos = "*", $ordem = null, $dbwhere = "")
+    {
         $sql = "select ";
-        if($campos != "*" ){
-            $campos_sql = split("#",$campos);
+        if ($campos != "*") {
+            $campos_sql = split("#", $campos);
             $virgula = "";
-            for($i=0;$i<sizeof($campos_sql);$i++){
-                $sql .= $virgula.$campos_sql[$i];
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
                 $virgula = ",";
             }
-        }else{
+        } else {
             $sql .= $campos;
         }
         $sql .= " from empempenho ";
@@ -1344,20 +1425,20 @@ class cl_empempenho {
         $sql .= "      inner join empelemento  on  e64_numemp = e60_numemp";
         $sql .= "      left join empempenholiberado  on  e22_numemp = e60_numemp";
         $sql2 = "";
-        if($dbwhere==""){
-            if($e60_numemp!=null ){
+        if ($dbwhere == "") {
+            if ($e60_numemp != null) {
                 $sql2 .= " where empempenho.e60_numemp = $e60_numemp ";
             }
-        }else if($dbwhere != ""){
+        } else if ($dbwhere != "") {
             $sql2 = " where $dbwhere";
         }
         $sql .= $sql2;
-        if($ordem != null ){
+        if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = split("#",$ordem);
+            $campos_sql = split("#", $ordem);
             $virgula = "";
-            for($i=0;$i<sizeof($campos_sql);$i++){
-                $sql .= $virgula.$campos_sql[$i];
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
                 $virgula = ",";
             }
         }
@@ -1369,7 +1450,8 @@ class cl_empempenho {
      * @param  string $sWhere
      * @return string
      */
-    function sql_query_empresto($sCampos = "*", $sOrdem = null, $sWhere = "") {
+    function sql_query_empresto($sCampos = "*", $sOrdem = null, $sWhere = "")
+    {
 
         $sSql  = " select {$sCampos}                                    ";
         $sSql .= "  from empempenho                                     ";
@@ -1385,7 +1467,8 @@ class cl_empempenho {
         return $sSql;
     }
 
-    function sql_query_encerramento_empresto($sCampos = "*", $sOrdem = null, $sWhere = "") {
+    function sql_query_encerramento_empresto($sCampos = "*", $sOrdem = null, $sWhere = "")
+    {
 
         $sSql  = " select {$sCampos}                                    ";
         $sSql .= "  from empempenho                                     ";
@@ -1400,16 +1483,17 @@ class cl_empempenho {
         }
         return $sSql;
     }
-    function sql_query_hist ( $e60_numemp=null,$campos="*",$ordem=null,$dbwhere=""){
+    function sql_query_hist($e60_numemp = null, $campos = "*", $ordem = null, $dbwhere = "")
+    {
         $sql = "select ";
-        if($campos != "*" ){
-            $campos_sql = split("#",$campos);
+        if ($campos != "*") {
+            $campos_sql = split("#", $campos);
             $virgula = "";
-            for($i=0;$i<sizeof($campos_sql);$i++){
-                $sql .= $virgula.$campos_sql[$i];
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
                 $virgula = ",";
             }
-        }else{
+        } else {
             $sql .= $campos;
         }
         $sql .= " from empempenho ";
@@ -1435,35 +1519,36 @@ class cl_empempenho {
         $sql .= "      left join empemphist on empemphist.e63_numemp = empempenho.e60_numemp ";
         $sql .= "      left join emphist on emphist.e40_codhist = empemphist.e63_codhist";
         $sql2 = "";
-        if($dbwhere==""){
-            if($e60_numemp!=null ){
+        if ($dbwhere == "") {
+            if ($e60_numemp != null) {
                 $sql2 .= " where empempenho.e60_numemp = $e60_numemp ";
             }
-        }else if($dbwhere != ""){
+        } else if ($dbwhere != "") {
             $sql2 = " where $dbwhere";
         }
         $sql .= $sql2;
-        if($ordem != null ){
+        if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = split("#",$ordem);
+            $campos_sql = split("#", $ordem);
             $virgula = "";
-            for($i=0;$i<sizeof($campos_sql);$i++){
-                $sql .= $virgula.$campos_sql[$i];
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
                 $virgula = ",";
             }
         }
         return $sql;
     }
-    function sql_query_impconsulta ( $e60_numemp=null,$campos="*",$ordem=null,$dbwhere=""){
+    function sql_query_impconsulta($e60_numemp = null, $campos = "*", $ordem = null, $dbwhere = "")
+    {
         $sql = "select ";
-        if($campos != "*" ){
-            $campos_sql = split("#",$campos);
+        if ($campos != "*") {
+            $campos_sql = split("#", $campos);
             $virgula = "";
-            for($i=0;$i<sizeof($campos_sql);$i++){
-                $sql .= $virgula.$campos_sql[$i];
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
                 $virgula = ",";
             }
-        }else{
+        } else {
             $sql .= $campos;
         }
         $sql .= " from empempenho ";
@@ -1473,35 +1558,36 @@ class cl_empempenho {
         $sql .= "      inner join orcdotacao  on  orcdotacao.o58_anousu = empempenho.e60_anousu and  orcdotacao.o58_coddot = empempenho.e60_coddot";
         $sql .= "      inner join pctipocompra  on  pctipocompra.pc50_codcom = empempenho.e60_codcom";
         $sql2 = "";
-        if($dbwhere==""){
-            if($e60_numemp!=null ){
+        if ($dbwhere == "") {
+            if ($e60_numemp != null) {
                 $sql2 .= " where empempenho.e60_numemp = $e60_numemp ";
             }
-        }else if($dbwhere != ""){
+        } else if ($dbwhere != "") {
             $sql2 = " where $dbwhere";
         }
         $sql .= $sql2;
-        if($ordem != null ){
+        if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = split("#",$ordem);
+            $campos_sql = split("#", $ordem);
             $virgula = "";
-            for($i=0;$i<sizeof($campos_sql);$i++){
-                $sql .= $virgula.$campos_sql[$i];
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
                 $virgula = ",";
             }
         }
         return $sql;
     }
-    function sql_query_itemmaterial($pc01_codmater=null,$campos="*",$ordem=null,$dbwhere=""){
+    function sql_query_itemmaterial($pc01_codmater = null, $campos = "*", $ordem = null, $dbwhere = "")
+    {
         $sql = "select ";
-        if($campos != "*" ){
-            $campos_sql = split("#",$campos);
+        if ($campos != "*") {
+            $campos_sql = split("#", $campos);
             $virgula = "";
-            for($i=0;$i<sizeof($campos_sql);$i++){
-                $sql .= $virgula.$campos_sql[$i];
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
                 $virgula = ",";
             }
-        }else{
+        } else {
             $sql .= $campos;
         }
         $sql .= " from empempenho ";
@@ -1515,35 +1601,36 @@ class cl_empempenho {
         $sql .= "      left join pagordem  on  pagordem.e50_numemp = empempenho.e60_numemp";
 
         $sql2 = "";
-        if($dbwhere==""){
-            if($pc01_codmater!=null ){
+        if ($dbwhere == "") {
+            if ($pc01_codmater != null) {
                 $sql2 .= " where pcmater.pc01_codmater = $pc01_codmater ";
             }
-        }else if($dbwhere != ""){
+        } else if ($dbwhere != "") {
             $sql2 = " where $dbwhere";
         }
         $sql .= $sql2;
-        if($ordem != null ){
+        if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = split("#",$ordem);
+            $campos_sql = split("#", $ordem);
             $virgula = "";
-            for($i=0;$i<sizeof($campos_sql);$i++){
-                $sql .= $virgula.$campos_sql[$i];
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
                 $virgula = ",";
             }
         }
         return $sql;
     }
-    function sql_query_itensadquiridos($pc01_codmater=null,$campos="*",$ordem=null,$dbwhere=""){
+    function sql_query_itensadquiridos($pc01_codmater = null, $campos = "*", $ordem = null, $dbwhere = "")
+    {
         $sql = "select ";
-        if($campos != "*" ){
-            $campos_sql = split("#",$campos);
+        if ($campos != "*") {
+            $campos_sql = split("#", $campos);
             $virgula = "";
-            for($i=0;$i<sizeof($campos_sql);$i++){
-                $sql .= $virgula.$campos_sql[$i];
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
                 $virgula = ",";
             }
-        }else{
+        } else {
             $sql .= $campos;
         }
         $sql .= " from empempenho ";
@@ -1566,26 +1653,27 @@ class cl_empempenho {
         $sql .= "      inner join orcunidade  on  orcunidade.o41_anousu = orcdotacao.o58_anousu and  orcunidade.o41_orgao = orcdotacao.o58_orgao and  orcunidade.o41_unidade = orcdotacao.o58_unidade";
 
         $sql2 = "";
-        if($dbwhere==""){
-            if($pc01_codmater!=null ){
+        if ($dbwhere == "") {
+            if ($pc01_codmater != null) {
                 $sql2 .= " where pcmater.pc01_codmater = $pc01_codmater ";
             }
-        }else if($dbwhere != ""){
+        } else if ($dbwhere != "") {
             $sql2 = " where $dbwhere";
         }
         $sql .= $sql2;
-        if($ordem != null ){
+        if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = split("#",$ordem);
+            $campos_sql = split("#", $ordem);
             $virgula = "";
-            for($i=0;$i<sizeof($campos_sql);$i++){
-                $sql .= $virgula.$campos_sql[$i];
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
                 $virgula = ",";
             }
         }
         return $sql;
     }
-    function sql_query_liberarempenho( $e60_numemp=null,$campos="*",$ordem="",$dbwhere="" ){
+    function sql_query_liberarempenho($e60_numemp = null, $campos = "*", $ordem = "", $dbwhere = "")
+    {
 
         if (isset($ordem) && $ordem != "") {
             $ordem = " order by {$ordem}";
@@ -1599,16 +1687,17 @@ class cl_empempenho {
 
         return $sSql;
     }
-    function sql_query_relatorio ( $e60_numemp=null,$campos="*",$ordem=null,$dbwhere="", $sqlanulado=""){
+    function sql_query_relatorio($e60_numemp = null, $campos = "*", $ordem = null, $dbwhere = "", $sqlanulado = "")
+    {
         $sql = "select ";
-        if($campos != "*" ){
-            $campos_sql = split("#",$campos);
+        if ($campos != "*") {
+            $campos_sql = split("#", $campos);
             $virgula = "";
-            for($i=0;$i<sizeof($campos_sql);$i++){
-                $sql .= $virgula.$campos_sql[$i];
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
                 $virgula = ",";
             }
-        }else{
+        } else {
             $sql .= $campos;
         }
         $sql .= " from empempenho ";
@@ -1648,35 +1737,36 @@ class cl_empempenho {
         $sql .= $sqlanulado;
 
         $sql2 = "";
-        if($dbwhere==""){
-            if($e60_numemp!=null ){
+        if ($dbwhere == "") {
+            if ($e60_numemp != null) {
                 $sql2 .= " where empempenho.e60_numemp = $e60_numemp ";
             }
-        }else if($dbwhere != ""){
+        } else if ($dbwhere != "") {
             $sql2 = " where $dbwhere";
         }
         $sql .= $sql2;
-        if($ordem != null ){
+        if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = split("#",$ordem);
+            $campos_sql = split("#", $ordem);
             $virgula = "";
-            for($i=0;$i<sizeof($campos_sql);$i++){
-                $sql .= $virgula.$campos_sql[$i];
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
                 $virgula = ",";
             }
         }
         return $sql;
     }
-    function sql_query_resto ( $e60_numemp=null,$campos="*",$ordem=null,$dbwhere=""){
+    function sql_query_resto($e60_numemp = null, $campos = "*", $ordem = null, $dbwhere = "")
+    {
         $sql = "select ";
-        if($campos != "*" ){
-            $campos_sql = split("#",$campos);
+        if ($campos != "*") {
+            $campos_sql = split("#", $campos);
             $virgula = "";
-            for($i=0;$i<sizeof($campos_sql);$i++){
-                $sql .= $virgula.$campos_sql[$i];
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
                 $virgula = ",";
             }
-        }else{
+        } else {
             $sql .= $campos;
         }
         $sql .= " from empresto ";
@@ -1704,26 +1794,27 @@ class cl_empempenho {
         $sql .= "      inner join pctipocompra on pctipocompra.pc50_codcom = empempenho.e60_codcom ";
         $sql2 = "";
 
-        if($dbwhere==""){
-            if($e60_numemp!=null ){
-                $sql2 .= " where empresto.e91_anousu = ".db_getsession("DB_anousu")." and empresto.e91_numemp = $e60_numemp ";
+        if ($dbwhere == "") {
+            if ($e60_numemp != null) {
+                $sql2 .= " where empresto.e91_anousu = " . db_getsession("DB_anousu") . " and empresto.e91_numemp = $e60_numemp ";
             }
-        }else if($dbwhere != ""){
+        } else if ($dbwhere != "") {
             $sql2 = " where $dbwhere";
         }
         $sql .= $sql2;
-        if($ordem != null ){
+        if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = split("#",$ordem);
+            $campos_sql = split("#", $ordem);
             $virgula = "";
-            for($i=0;$i<sizeof($campos_sql);$i++){
-                $sql .= $virgula.$campos_sql[$i];
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
                 $virgula = ",";
             }
         }
         return $sql;
     }
-    function sql_query_saldo($e60_numemp,$e64_codele=0){
+    function sql_query_saldo($e60_numemp, $e64_codele = 0)
+    {
         $sql = "select
                     		substr(saldo,16,12)::float8 as e60_vlremp,
                     		substr(saldo,29,12)::float8 as e60_vlranu,
@@ -1731,7 +1822,7 @@ class cl_empempenho {
                     		substr(saldo,55,12)::float8 as e60_vlrpag,
                 	    	substr(saldo,68,12)::float8 as vlr_proc,
               	        	substr(saldo,81,12)::float8 as vlr_nproc
-                	  from ( select fc_empsaldo(".$e60_numemp.",".$e64_codele.") as saldo ) as x  ";
+                	  from ( select fc_empsaldo(" . $e60_numemp . "," . $e64_codele . ") as saldo ) as x  ";
 
         return $sql;
     }
@@ -1743,7 +1834,8 @@ class cl_empempenho {
      * @author: Rodrigo@contass
      * @return string
      */
-    function sql_query_saldo_encerramento_rp(){
+    function sql_query_saldo_encerramento_rp()
+    {
 
         $sql = "SELECT * FROM
                     (SELECT e60_numemp,
@@ -1800,9 +1892,9 @@ class cl_empempenho {
                           INNER JOIN orcunidade ON o58_orgao = o41_orgao AND o58_unidade = o41_unidade AND o41_anousu = o58_anousu
                           INNER JOIN orcorgao ON o40_orgao = o41_orgao AND o40_anousu = o41_anousu
                           LEFT JOIN infocomplementaresinstit ON codigo = si09_instit
-                          WHERE e60_anousu = ".db_getsession("DB_anousu")."
-                            AND e60_instit = ".db_getsession("DB_instit")."
-                            AND c70_data BETWEEN '".db_getsession("DB_anousu")."-01-01' AND '".db_getsession("DB_anousu")."-12-31'
+                          WHERE e60_anousu = " . db_getsession("DB_anousu") . "
+                            AND e60_instit = " . db_getsession("DB_instit") . "
+                            AND c70_data BETWEEN '" . db_getsession("DB_anousu") . "-01-01' AND '" . db_getsession("DB_anousu") . "-12-31'
                           GROUP BY e60_numemp ) AS restos) AS x
                 WHERE valor_nao_processado > 0
                     OR valor_processado > 0
@@ -1817,7 +1909,8 @@ class cl_empempenho {
      * @author: igor@contass
      * @return string
      */
-    function sql_query_saldo_abertura_rp($anousu, $numemp){
+    function sql_query_saldo_abertura_rp($anousu, $numemp)
+    {
         $sqlperiodo = " SELECT (vlremp - vlrliq) AS valor_nao_processado,
                                 (vlrliq - vlrpag) AS valor_processado
                            FROM
@@ -1833,9 +1926,9 @@ class cl_empempenho {
                              INNER JOIN conhistdoc ON c53_coddoc = c71_coddoc
                              INNER JOIN conlancam ON c70_codlan = c75_codlan
                              INNER JOIN empresto ON e91_numemp = e60_numemp
-                             WHERE e91_anousu = ".db_getsession("DB_anousu")."
-                               AND c70_data BETWEEN e60_emiss AND '".$anousu."-12-31'
-                               AND e60_instit = ".db_getsession("DB_instit")."
+                             WHERE e91_anousu = " . db_getsession("DB_anousu") . "
+                               AND c70_data BETWEEN e60_emiss AND '" . $anousu . "-12-31'
+                               AND e60_instit = " . db_getsession("DB_instit") . "
                                AND e60_numemp= $numemp
                             ) AS X ";
 
@@ -1843,16 +1936,17 @@ class cl_empempenho {
         return $sqlperiodo;
     }
 
-    function sql_query_buscaempenhos ( $e60_numemp=null,$campos="*",$ordem=null,$dbwhere=""){
+    function sql_query_buscaempenhos($e60_numemp = null, $campos = "*", $ordem = null, $dbwhere = "")
+    {
         $sql = "select ";
-        if($campos != "*" ){
-            $campos_sql = split("#",$campos);
+        if ($campos != "*") {
+            $campos_sql = split("#", $campos);
             $virgula = "";
-            for($i=0;$i<sizeof($campos_sql);$i++){
-                $sql .= $virgula.$campos_sql[$i];
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
                 $virgula = ",";
             }
-        }else{
+        } else {
             $sql .= $campos;
         }
         $sql .= " FROM empempenho                                                                ";
@@ -1865,35 +1959,36 @@ class cl_empempenho {
         $sql .= "   INNER JOIN orcelemento ON orcelemento.o56_codele   = orcdotacao.o58_codele   ";
         $sql .= "                         AND orcelemento.o56_anousu   = orcdotacao.o58_anousu   ";
         $sql2 = "";
-        if($dbwhere==""){
-            if($e60_numemp!=null ){
+        if ($dbwhere == "") {
+            if ($e60_numemp != null) {
                 $sql2 .= " where empempenho.e60_numemp = $e60_numemp ";
             }
-        }else if($dbwhere != ""){
+        } else if ($dbwhere != "") {
             $sql2 = " where $dbwhere";
         }
         $sql .= $sql2;
-        if($ordem != null ){
+        if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = split("#",$ordem);
+            $campos_sql = split("#", $ordem);
             $virgula = "";
-            for($i=0;$i<sizeof($campos_sql);$i++){
-                $sql .= $virgula.$campos_sql[$i];
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
                 $virgula = ",";
             }
         }
         return $sql;
     }
-    function sql_query_buscaestornos ( $e60_numemp=null,$campos="*",$ordem=null,$dbwhere=""){
+    function sql_query_buscaestornos($e60_numemp = null, $campos = "*", $ordem = null, $dbwhere = "")
+    {
         $sql = "select ";
-        if($campos != "*" ){
-            $campos_sql = split("#",$campos);
+        if ($campos != "*") {
+            $campos_sql = split("#", $campos);
             $virgula = "";
-            for($i=0;$i<sizeof($campos_sql);$i++){
-                $sql .= $virgula.$campos_sql[$i];
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
                 $virgula = ",";
             }
-        }else{
+        } else {
             $sql .= $campos;
         }
         $sql .= " FROM empempenho                                                           ";
@@ -1902,35 +1997,36 @@ class cl_empempenho {
         $sql .= "   INNER JOIN orcdotacao  ON orcdotacao.o58_anousu = empempenho.e60_anousu ";
         $sql .= "                         AND orcdotacao.o58_coddot = empempenho.e60_coddot ";
         $sql2 = "";
-        if($dbwhere==""){
-            if($e60_numemp!=null ){
+        if ($dbwhere == "") {
+            if ($e60_numemp != null) {
                 $sql2 .= " where empempenho.e60_numemp = $e60_numemp ";
             }
-        }else if($dbwhere != ""){
+        } else if ($dbwhere != "") {
             $sql2 = " where $dbwhere";
         }
         $sql .= $sql2;
-        if($ordem != null ){
+        if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = split("#",$ordem);
+            $campos_sql = split("#", $ordem);
             $virgula = "";
-            for($i=0;$i<sizeof($campos_sql);$i++){
-                $sql .= $virgula.$campos_sql[$i];
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
                 $virgula = ",";
             }
         }
         return $sql;
     }
-    function sql_query_buscaliquidacoes ( $e60_numemp=null,$campos="*",$ordem=null,$dbwhere=""){
+    function sql_query_buscaliquidacoes($e60_numemp = null, $campos = "*", $ordem = null, $dbwhere = "")
+    {
         $sql = "select ";
-        if($campos != "*" ){
-            $campos_sql = split("#",$campos);
+        if ($campos != "*") {
+            $campos_sql = split("#", $campos);
             $virgula = "";
-            for($i=0;$i<sizeof($campos_sql);$i++){
-                $sql .= $virgula.$campos_sql[$i];
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
                 $virgula = ",";
             }
-        }else{
+        } else {
             $sql .= $campos;
         }
         $sql .= " FROM empempenho                                                                ";
@@ -1942,20 +2038,20 @@ class cl_empempenho {
         $sql .= "                          AND orcdotacao.o58_coddot   = empempenho.e60_coddot   ";
         $sql .= "   INNER JOIN db_config    ON db_config.codigo        = empempenho.e60_instit   ";
         $sql2 = "";
-        if($dbwhere==""){
-            if($e60_numemp!=null ){
+        if ($dbwhere == "") {
+            if ($e60_numemp != null) {
                 $sql2 .= " where empempenho.e60_numemp = $e60_numemp ";
             }
-        }else if($dbwhere != ""){
+        } else if ($dbwhere != "") {
             $sql2 = " where $dbwhere";
         }
         $sql .= $sql2;
-        if($ordem != null ){
+        if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = split("#",$ordem);
+            $campos_sql = split("#", $ordem);
             $virgula = "";
-            for($i=0;$i<sizeof($campos_sql);$i++){
-                $sql .= $virgula.$campos_sql[$i];
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
                 $virgula = ",";
             }
         }
@@ -1966,16 +2062,17 @@ class cl_empempenho {
      * metodo para consultar empenhos vinculados a contrados
      */
 
-    function sql_query_empenhocontrato($e60_numemp=null,$campos="*",$ordem=null,$dbwhere=""){
+    function sql_query_empenhocontrato($e60_numemp = null, $campos = "*", $ordem = null, $dbwhere = "")
+    {
         $sql = "select ";
-        if($campos != "*" ){
-            $campos_sql = split("#",$campos);
+        if ($campos != "*") {
+            $campos_sql = split("#", $campos);
             $virgula = "";
-            for($i=0;$i<sizeof($campos_sql);$i++){
-                $sql .= $virgula.$campos_sql[$i];
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
                 $virgula = ",";
             }
-        }else{
+        } else {
             $sql .= $campos;
         }
         $sql .= " FROM empempenho                                                                            ";
@@ -1983,20 +2080,20 @@ class cl_empempenho {
         $sql .= " left join empautoriza          on empempaut.e61_autori   = empautoriza.e54_autori          ";
         $sql .= " left join empempenhocontrato on  empempenho.e60_numemp = empempenhocontrato.e100_numemp    ";
         $sql2 = "";
-        if($dbwhere==""){
-            if($e60_numemp!=null ){
+        if ($dbwhere == "") {
+            if ($e60_numemp != null) {
                 $sql2 .= " where empempenho.e60_numemp = $e60_numemp ";
             }
-        }else if($dbwhere != ""){
+        } else if ($dbwhere != "") {
             $sql2 = " where $dbwhere";
         }
         $sql .= $sql2;
-        if($ordem != null ){
+        if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = split("#",$ordem);
+            $campos_sql = split("#", $ordem);
             $virgula = "";
-            for($i=0;$i<sizeof($campos_sql);$i++){
-                $sql .= $virgula.$campos_sql[$i];
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
                 $virgula = ",";
             }
         }
@@ -2004,16 +2101,17 @@ class cl_empempenho {
     }
 
 
-    function sql_query_itens_consulta_empenho($e60_numemp=null,$campos="*",$ordem=null,$dbwhere=""){
+    function sql_query_itens_consulta_empenho($e60_numemp = null, $campos = "*", $ordem = null, $dbwhere = "")
+    {
         $sql = "select ";
-        if($campos != "*" ){
-            $campos_sql = split("#",$campos);
+        if ($campos != "*") {
+            $campos_sql = split("#", $campos);
             $virgula = "";
-            for($i=0;$i<sizeof($campos_sql);$i++){
-                $sql .= $virgula.$campos_sql[$i];
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
                 $virgula = ",";
             }
-        }else{
+        } else {
             $sql .= $campos;
         }
         $sql .= "  from fc_saldoitensempenho({$e60_numemp}) ";
@@ -2045,36 +2143,37 @@ class cl_empempenho {
         $sql .= "                                                    and pcorcamvalpai.pc23_orcamforne      = pcorcamjulgpai.pc24_orcamforne ";
         $sql .= "       left join orcdotacao on o58_coddot = e60_coddot and o58_anousu = e60_anousu";
         $sql2 = "";
-        if($dbwhere==""){
-            if($e60_numemp!=null ){
+        if ($dbwhere == "") {
+            if ($e60_numemp != null) {
                 $sql2 .= " where empempenho.e60_numemp = $e60_numemp ";
             }
-        }else if($dbwhere != ""){
+        } else if ($dbwhere != "") {
             $sql2 = " where $dbwhere";
         }
         $sql .= $sql2;
-        if($ordem != null ){
+        if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = split("#",$ordem);
+            $campos_sql = split("#", $ordem);
             $virgula = "";
-            for($i=0;$i<sizeof($campos_sql);$i++){
-                $sql .= $virgula.$campos_sql[$i];
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
                 $virgula = ",";
             }
         }
         return $sql;
     }
 
-    function sql_queryMovimentacaoPatrimonial ( $e60_numemp=null,$campos="*",$ordem=null,$dbwhere=""){
+    function sql_queryMovimentacaoPatrimonial($e60_numemp = null, $campos = "*", $ordem = null, $dbwhere = "")
+    {
         $sql = "select ";
-        if($campos != "*" ){
-            $campos_sql = split("#",$campos);
+        if ($campos != "*") {
+            $campos_sql = split("#", $campos);
             $virgula = "";
-            for($i=0;$i<sizeof($campos_sql);$i++){
-                $sql .= $virgula.$campos_sql[$i];
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
                 $virgula = ",";
             }
-        }else{
+        } else {
             $sql .= $campos;
         }
         $sql .= " from empempenho ";
@@ -2097,20 +2196,20 @@ class cl_empempenho {
         $sql .= "      inner join conlancam on conlancamemp.c75_codlan = conlancam.c70_codlan";
         $sql .= "      inner join conlancamdoc on conlancam.c70_codlan = conlancamdoc.c71_codlan";
         $sql2 = "";
-        if($dbwhere==""){
-            if($e60_numemp!=null ){
+        if ($dbwhere == "") {
+            if ($e60_numemp != null) {
                 $sql2 .= " where empempenho.e60_numemp = $e60_numemp ";
             }
-        }else if($dbwhere != ""){
+        } else if ($dbwhere != "") {
             $sql2 = " where $dbwhere";
         }
         $sql .= $sql2;
-        if($ordem != null ){
+        if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = split("#",$ordem);
+            $campos_sql = split("#", $ordem);
             $virgula = "";
-            for($i=0;$i<sizeof($campos_sql);$i++){
-                $sql .= $virgula.$campos_sql[$i];
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
                 $virgula = ",";
             }
         }
@@ -2118,16 +2217,17 @@ class cl_empempenho {
     }
 
 
-    function sql_queryProcessoAdministrativo( $e60_numemp=null,$campos="*",$ordem=null,$dbwhere=""){
+    function sql_queryProcessoAdministrativo($e60_numemp = null, $campos = "*", $ordem = null, $dbwhere = "")
+    {
         $sql = "select ";
-        if($campos != "*" ){
-            $campos_sql = split("#",$campos);
+        if ($campos != "*") {
+            $campos_sql = split("#", $campos);
             $virgula = "";
-            for($i=0;$i<sizeof($campos_sql);$i++){
-                $sql .= $virgula.$campos_sql[$i];
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
                 $virgula = ",";
             }
-        }else{
+        } else {
             $sql .= $campos;
         }
         $sql .= " from empempenho ";
@@ -2139,20 +2239,20 @@ class cl_empempenho {
         $sql .= "        inner join empautorizaprocesso on e61_autori = e150_empautoriza ";
 
         $sql2 = "";
-        if($dbwhere==""){
-            if($e60_numemp!=null ){
+        if ($dbwhere == "") {
+            if ($e60_numemp != null) {
                 $sql2 .= " where empempenho.e60_numemp = $e60_numemp ";
             }
-        }else if($dbwhere != ""){
+        } else if ($dbwhere != "") {
             $sql2 = " where $dbwhere";
         }
         $sql .= $sql2;
-        if($ordem != null ){
+        if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = split("#",$ordem);
+            $campos_sql = split("#", $ordem);
             $virgula = "";
-            for($i=0;$i<sizeof($campos_sql);$i++){
-                $sql .= $virgula.$campos_sql[$i];
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
                 $virgula = ",";
             }
         }
@@ -2160,7 +2260,8 @@ class cl_empempenho {
     }
 
 
-    public function sql_query_cota_mensal($e60_numemp = null,$campos="*",$ordem=null,$dbwhere=""){
+    public function sql_query_cota_mensal($e60_numemp = null, $campos = "*", $ordem = null, $dbwhere = "")
+    {
 
         $sql  = "select {$campos} ";
         $sql .= " from empempenho ";
@@ -2174,12 +2275,13 @@ class cl_empempenho {
             $sql .= " where {$dbwhere}";
         }
 
-        if(!empty($ordem)){
+        if (!empty($ordem)) {
             $sql .= " order by {$ordem} ";
         }
         return $sql;
     }
-    public function sql_query_classificacao_credor($sCampos = "*", $sWhere = null) {
+    public function sql_query_classificacao_credor($sCampos = "*", $sWhere = null)
+    {
 
         $sSql  = " select {$sCampos} ";
         $sSql .= "   from empempenho ";
@@ -2193,7 +2295,8 @@ class cl_empempenho {
         return $sSql;
     }
 
-    public function sql_query_contrato_empenho($iItem,$iAcordo){
+    public function sql_query_contrato_empenho($iItem, $iAcordo)
+    {
 
         $sql = "select sum(e62_quant) as qtdempenhada from acordoposicao
             inner join acordoitem on ac20_acordoposicao = ac26_sequencial
@@ -2209,7 +2312,8 @@ class cl_empempenho {
         return $sql;
     }
 
-    public function sql_query_empenho_classificacao_nota($sCampos = "*", $sWhere = null) {
+    public function sql_query_empenho_classificacao_nota($sCampos = "*", $sWhere = null)
+    {
 
         $sSql  = " select {$sCampos} ";
         $sSql .= "   from empempenho ";
@@ -2231,7 +2335,8 @@ class cl_empempenho {
         return $sSql;
     }
 
-    public function verificaConvenioSicomMSC($codigo, $ano, $dados) {
+    public function verificaConvenioSicomMSC($codigo, $ano, $dados)
+    {
 
         $codigo = $dados->sigla == 'e60' ? "'{$codigo}'" :  $codigo;
 
@@ -2245,22 +2350,23 @@ class cl_empempenho {
         return pg_num_rows(db_query($sSQL));
     }
 
-    function sql_manut_dados ( $e60_numemp=null,$campos="*",$ordem=null,$dbwhere="", $filtroempelemento ="", $limit = ''){
+    function sql_manut_dados($e60_numemp = null, $campos = "*", $ordem = null, $dbwhere = "", $filtroempelemento = "", $limit = '')
+    {
         $sql = "select ";
-        if($campos != "*" ){
-            $campos_sql = split("#",$campos);
+        if ($campos != "*") {
+            $campos_sql = split("#", $campos);
             $virgula = "";
-            for($i=0;$i<sizeof($campos_sql);$i++){
-                $sql .= $virgula.$campos_sql[$i];
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
                 $virgula = ",";
             }
-        }else{
+        } else {
             $sql .= $campos;
         }
         $sql .= " from empempenho ";
         $sql .= "      inner join cgm  on  cgm.z01_numcgm = empempenho.e60_numcgm";
         $sql .= "      inner join empelemento  on  empempenho.e60_numemp = empelemento.e64_numemp";
-        if($filtroempelemento == 1) {
+        if ($filtroempelemento == 1) {
             $sql .= "      inner join orcelemento elementoempenho  on  elementoempenho.o56_codele = empelemento.e64_codele  and elementoempenho.o56_anousu = empempenho.e60_anousu";
         }
         $sql .= "      inner join db_config  on  db_config.codigo = empempenho.e60_instit";
@@ -2290,30 +2396,31 @@ class cl_empempenho {
         $sql .= "   inner join empanulado  ON empanulado.e94_numemp = empempenho.e60_numemp ";
 
         $sql2 = "";
-        if($dbwhere==""){
-            if($e60_numemp!=null ){
+        if ($dbwhere == "") {
+            if ($e60_numemp != null) {
                 $sql2 .= " where empempenho.e60_numemp = $e60_numemp ";
             }
-        }else if($dbwhere != ""){
+        } else if ($dbwhere != "") {
             $sql2 = " where $dbwhere";
         }
         $sql .= $sql2;
-        if($ordem != null ){
+        if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = split("#",$ordem);
+            $campos_sql = split("#", $ordem);
             $virgula = "";
-            for($i=0;$i<sizeof($campos_sql);$i++){
-                $sql .= $virgula.$campos_sql[$i];
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
                 $virgula = ",";
             }
         }
-        if($limit){
-          $sql.=" limit $limit ";
+        if ($limit) {
+            $sql .= " limit $limit ";
         }
         return $sql;
     }
 
-    public function getDespesasCusteadosComSuperavit($iAnoUsu, $sDataInicial, $sDataFinal, $sInstituicoes, $sCampos = '*', $sWhere = '', $sOrder = '') {
+    public function getDespesasCusteadosComSuperavit($iAnoUsu, $sDataInicial, $sDataFinal, $sInstituicoes, $sCampos = '*', $sWhere = '', $sOrder = '')
+    {
 
         $sSql  = "select $sCampos                                                                                                                                           ";
         $sSql .= " from (                                                                                                                                                   ";
@@ -2362,16 +2469,17 @@ class cl_empempenho {
         $sSql .= "      inner join orctiporec on o15_codigo = o58_codigo                                                                                                    ";
 
         if (!empty($sWhere)) {
-          $sSql .= " where {$sWhere} ";
+            $sSql .= " where {$sWhere} ";
         }
 
         if (!empty($sOrder)) {
-          $sSql .= " order by {$sOrder} ";
+            $sSql .= " order by {$sOrder} ";
         }
         return db_utils::getColectionByRecord(db_query($sSql));
-      }
+    }
 
-      public function getEmpenhosMovimentosPeriodo($iAnoUsu, $sDataInicial, $sDataFinal, $sInstituicoes, $sCampos = '*', $sWhere = '', $sOrder = '') {
+    public function getEmpenhosMovimentosPeriodo($iAnoUsu, $sDataInicial, $sDataFinal, $sInstituicoes, $sCampos = '*', $sWhere = '', $sOrder = '')
+    {
 
         $sSql  = "select $sCampos                                                                                                                                           ";
         $sSql .= " from (                                                                                                                                                   ";
@@ -2426,31 +2534,33 @@ class cl_empempenho {
         $sSql .= " ) as x                                                                                                                                                   ";
 
         if (!empty($sWhere)) {
-          $sSql .= " where {$sWhere} ";
+            $sSql .= " where {$sWhere} ";
         }
 
         if (!empty($sOrder)) {
-          $sSql .= " order by {$sOrder} ";
+            $sSql .= " order by {$sOrder} ";
         }
         return db_utils::getColectionByRecord(db_query($sSql));
-      }
+    }
 
-      public function slq_ultimo_empenho($dtini, $dtfim, $instits){
+    public function slq_ultimo_empenho($dtini, $dtfim, $instits)
+    {
         $sSql  = " select max(e60_codemp::int8) as e60_codemp";
         $sSql .= "   from empempenho ";
         $sSql .= "    where e60_emiss between '{$dtini}' and '{$dtfim}' and e60_instit in ($instits) ";
         return $sSql;
-      }
+    }
 
-      public function sql_prox_data_empenho($anoUsu, $instit, $where, $order) {
-          $sSql  = "select e60_codemp as codemp, e60_emiss as emiss from empempenho ";
-          $sSql .= " where e60_instit = {$instit} and e60_anousu={$anoUsu} ";
-          if($where != ""){
-              $sSql .= " and  {$where}";
-          }
-          $sSql .= $order;
-          $sSql .= " limit 1";
+    public function sql_prox_data_empenho($anoUsu, $instit, $where, $order)
+    {
+        $sSql  = "select e60_codemp as codemp, e60_emiss as emiss from empempenho ";
+        $sSql .= " where e60_instit = {$instit} and e60_anousu={$anoUsu} ";
+        if ($where != "") {
+            $sSql .= " and  {$where}";
+        }
+        $sSql .= $order;
+        $sSql .= " limit 1";
 
-          return $sSql;
-      }
+        return $sSql;
+    }
 }

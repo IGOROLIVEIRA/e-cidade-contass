@@ -90,7 +90,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
     sContent += "   <tr>";
     sContent += "     <td> ";
     sContent += "       <fieldset> ";
-    sContent += "         <legend>Dados do Acordo</legend>";
+    sContent += "         <legend>Dados dos Acordo</legend>";
     sContent += "         <table width='100%'> ";
 
     sContent += "           <tr> ";
@@ -137,6 +137,13 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
     sContent += "               <label class=\"bold\" for=\"oTxtDataPublicacao\">Data de Publicacao:</label>";
     sContent += "             </td>";
     sContent += "             <td id=\"ctnDataPublicacao\"></td>";
+    sContent += "           </tr> ";
+
+    sContent += "             <tr id='trdatareferencia' style='display: none;'>"
+    sContent += "             <td nowrap > ";
+    sContent += "               <label class=\"bold\" for=\"oTxtDataReferencia\">Data de Referencia:</label>";
+    sContent += "             </td>";
+    sContent += "             <td  id=\"ctnDataReferencia\"></td>";
     sContent += "           </tr> ";
 
     sContent += "           <tr id=\"descricaoaltera\"> ";
@@ -379,6 +386,8 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         
 
         me.oGridItens.clearAll(true);
+        
+            document.getElementById("trdatareferencia").style.display = 'none';
 
         new AjaxRequest(me.sUrlRpc, oParam, function (oRetorno, lErro) {
 
@@ -400,6 +409,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             me.oTxtDataFinalCompara.setData(aDataFinal[0], aDataFinal[1], aDataFinal[2]);
             me.oTxtDataAssinatura.setValue('');
             me.oTxtDataPublicacao.setValue('');
+            me.oTxtDataReferencia.setValue('');
             me.oTextAreaDescricaoAlteracao.setValue('');
             me.oTxtVeiculoDivulgacao.setValue('');
             me.oTxtNumeroAditamento.setValue(oRetorno.seqaditivo);
@@ -446,6 +456,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
          */
         me.oTxtDataAssinatura = new DBTextFieldData('oTxtDataAssinatura', me.sInstance + '.oTxtDataAssinatura', '');
         me.oTxtDataAssinatura.show($('ctnDataAssinatura'));
+        
 
 
         /**
@@ -453,6 +464,12 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
          */
         me.oTxtDataPublicacao = new DBTextFieldData('oTxtDataPublicacao', me.sInstance + '.oTxtDataPublicacao', '');
         me.oTxtDataPublicacao.show($('ctnDataPublicacao'));
+
+        /**
+         * Data da referência
+         */
+         me.oTxtDataReferencia = new DBTextFieldData('oTxtDataReferencia', me.sInstance + '.oTxtDataReferencia', '');
+         me.oTxtDataReferencia.show($('ctnDataReferencia'));
 
         /**
          * Descricao da Alteração
@@ -539,7 +556,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         me.oGridItens.nameInstance = me.sInstance + '.oGridItens';
         me.oGridItens.setCheckbox(0);
         me.oGridItens.setCellAlign(['center', 'center', "left", "right","right", "right", "center", "right", "center", "center", "center", "center", "center"]);
-        me.oGridItens.setCellWidth(["5%", "5%", "30%", "7%", "9%", "7%", "9%", "9%", "6%", "6%", "2%", "9%","9%"]);
+        me.oGridItens.setCellWidth(["5%", "5%", "28%", "7%", "9%", "7%", "9%", "9%", "6%", "8%", "2%", "9%","9%"]);
         me.oGridItens.setHeader(["Ordem", "Código", "Descrição", "Qtd Atual", "Valor Atual", "Qtd Final", "Valor Final", "Valor Total", "Qtd Aditada", "Valor Aditado", "Dotações", "Inicio Exec", "Fim Exec","Tipo"]);
         //me.oGridItens.aHeaders[11].lDisplayed = false;
         me.oGridItens.aHeaders[14].lDisplayed = false;
@@ -922,6 +939,11 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             return alert("Obrigatório informar a data de Publicacao do aditivo.");
         }
 
+        if (me.oTxtDataReferencia.getValue() == "" && document.getElementById("trdatareferencia").style.display != 'none') {
+            return alert("Obrigatório informar a data de Referencia.");
+        }
+
+
         var dataAssinatura = me.oTxtDataAssinatura.getValue().split("/");
         var dtAssinatura   =  dataAssinatura[2] + "-" + dataAssinatura[1] + "-" + dataAssinatura[0];
         var dataPublicacao = me.oTxtDataPublicacao.getValue().split("/");
@@ -963,6 +985,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             datafinal: me.oTxtDataFinal.getValue(),
             dataassinatura: me.oTxtDataAssinatura.getValue(),
             datapublicacao: me.oTxtDataPublicacao.getValue(),
+            datareferencia: me.oTxtDataReferencia.getValue(),
             descricaoalteracao: me.oTextAreaDescricaoAlteracao.getValue(),
             veiculodivulgacao: me.oTxtVeiculoDivulgacao.getValue(),
             tipoaditamento: me.iTipoAditamento,
@@ -1201,8 +1224,12 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         new AjaxRequest(me.sUrlRpc, oParam, function (oRetorno, lErro) {
 
             if (lErro) {
+                if (oRetorno.datareferencia) {
+                    document.getElementById("trdatareferencia").style.display = 'contents';
+                }
                 return alert(oRetorno.message.urlDecode());
             }
+            document.getElementById("trdatareferencia").style.display = 'none';
 
             alert("Aditamento realizado com sucesso.");
             me.pesquisarDadosAcordo()
