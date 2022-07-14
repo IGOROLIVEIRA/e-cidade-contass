@@ -33,7 +33,7 @@ class Itbinumpre {
         $iNumpre = $this->getNumpre($iNumpre);
 
         if(empty($iNumpre)){
-            throw new BusinessException('Numpre não encontrado!');
+            return null;
         }
 
         $oItbinumpre = db_utils::getDao('itbinumpre');
