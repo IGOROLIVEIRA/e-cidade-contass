@@ -30,6 +30,7 @@ require_once("libs/db_conecta.php");
 require_once("libs/db_sessoes.php");
 require_once("libs/db_usuariosonline.php");
 require_once("dbforms/db_funcoes.php");
+include("dbforms/db_classesgenericas.php");
 require_once("libs/db_app.utils.php");
 
 $clrotulo = new rotulocampo;
@@ -144,7 +145,36 @@ db_app::load("scripts.js,
        <td>
      
      </tr>
-     
+
+        <!-- Oc18018 -->
+        <tr>
+            <td>
+          		<?
+    		        $oFiltroRecursos = new cl_arquivo_auxiliar;
+                    $oFiltroRecursos->cabecalho                 = "<strong>Recursos</strong>";
+                    $oFiltroRecursos->codigo                    = "o15_codigo";
+					$oFiltroRecursos->descr                     = "o15_descr";
+					$oFiltroRecursos->nomeobjeto                = 'recursos';
+					$oFiltroRecursos->funcao_js                 = 'js_mostraRecurso';
+					$oFiltroRecursos->funcao_js_hide            = 'js_mostraRecursoHide';
+					$oFiltroRecursos->func_arquivo              = "func_orctiporec.php";
+					$oFiltroRecursos->nomeiframe                = "db_iframe_orctiporec";
+					$oFiltroRecursos->vwidth 				    = '500';
+					$oFiltroRecursos->db_opcao                  = 2;
+					$oFiltroRecursos->tipo                      = 2;
+					$oFiltroRecursos->top 				        = 0;
+					$oFiltroRecursos->linhas                    = 5;
+					$oFiltroRecursos->nome_botao                = 'lancarRecurso';
+					$oFiltroRecursos->lFuncaoPersonalizada      = true;
+					$oFiltroRecursos->obrigarselecao            = false;
+					$oFiltroRecursos->localjan			        = '';
+                    $oFiltroRecursos->tamanho_campo_descricao   = 40;
+					$oFiltroRecursos->funcao_gera_formulario();
+				?>
+            </td>
+        </tr>
+        <!-- .end Oc18018 -->
+
     </table>
     </fieldset>
     </form>
@@ -246,7 +276,7 @@ function js_abre(){
    if(query == ''){
      alert("Selecione alguma ordem de pagamento ou indique o período!");
    }else{
-     var sUrl = 'emp2_emitenotaliq002.php?aFornecedor=' + aFornecedores + '&historico=' + historico + '&valor_ordem=' + valor_ordem + query;
+        var sUrl = 'emp2_emitenotaliq002.php?aFornecedor=' + aFornecedores + '&historico=' + historico + '&valor_ordem=' + valor_ordem + "&recursos="+ js_campo_recebe_valores_recursos() + query;
      jan = window.open(sUrl,
                        '',
                        'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
