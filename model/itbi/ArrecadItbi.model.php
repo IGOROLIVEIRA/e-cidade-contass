@@ -16,7 +16,7 @@ class ArrecadItbi
         }
 
         $arrecadItbi = db_utils::getDao('arrecad_itbi');
-        $arrecadItbi = current(db_utils::getCollectionByRecord($arrecadItbi->sql_record($arrecadItbi->sql_query(null, "*", null, "k00_numpre = {$numpre}"))));
+        $arrecadItbi = current(db_utils::getCollectionByRecord($arrecadItbi->sql_record($arrecadItbi->sql_query_file(null, "*", null, "k00_numpre = {$numpre}"))));
 
         if(empty($arrecadItbi) === true) {
             return null;
