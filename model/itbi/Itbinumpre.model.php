@@ -1,5 +1,5 @@
 <?php
-require_once "ArrecadItbi.model.php";
+
 class Itbinumpre {
 
     public $it15_guia;
@@ -23,6 +23,7 @@ class Itbinumpre {
 
     /**
      * @throws BusinessException
+     * @return Itbinumpre | null
      */
     public function getInstanceByNumpre($iNumpre)
     {
@@ -30,14 +31,12 @@ class Itbinumpre {
             throw new BusinessException('Numpre não informado!');
         }
 
-        $iNumpre = $this->getNumpre($iNumpre);
-
-        if(empty($iNumpre)){
-            return null;
-        }
-
         $oItbinumpre = db_utils::getDao('itbinumpre');
         $oItbinumpre = current(db_utils::getCollectionByRecord($oItbinumpre->sql_record($oItbinumpre->sql_query(null, "*", null, "it15_numpre = {$iNumpre}"))));
+
+        if(empty($oItbinumpre->it15_sequencial)){
+            return null;
+        }
 
         return new Itbinumpre($oItbinumpre->it15_sequencial);
     }
@@ -49,8 +48,11 @@ class Itbinumpre {
      */
     public function findAllByItbi($it15_guia)
     {
+        /**
+         * @var $oItbinumpre cl_itbinumpre
+         */
         $oItbinumpre = db_utils::getDao('itbinumpre');
-        $oItbinumpre = db_utils::getCollectionByRecord($oItbinumpre->sql_record($oItbinumpre->sql_query(null, "*", null, "it15_guia = {$it15_guia}")));
+        $oItbinumpre = db_utils::getCollectionByRecord($oItbinumpre->sql_record($oItbinumpre->sql_query(null, "*", "it15_ultimaguia DESC", "it15_guia = {$it15_guia}")));
 
         foreach ($oItbinumpre as $obj) {
             $this->aItbinumpre[] = new Itbinumpre($obj->it15_sequencial);
@@ -59,27 +61,4 @@ class Itbinumpre {
         return $this->aItbinumpre;
 
     }
-
-    /**
-     * @param $iNumpre
-     * @return int | null
-     */
-    public function getNumpre($iNumpre)
-    {
-        $oInstit = new Instituicao(db_getsession('DB_instit'));
-
-        if ($oInstit->getUsaDebitosItbi() === false) {
-            return $iNumpre;
-        }
-
-        $arrecadItbi = new ArrecadItbi();
-        $arrecadItbi = $arrecadItbi->getInstanceByNumpre($iNumpre);
-
-        if (empty($arrecadItbi) === false) {
-            return $arrecadItbi->k00_numpre;
-        }
-
-        return null;
-    }
-
 }

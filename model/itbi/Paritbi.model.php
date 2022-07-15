@@ -3,6 +3,7 @@
 class Paritbi {
 
     const HISTCALC_DEFAULT = 707;
+    const TIPO_DEBITO_DEFAULT = 29;
 
     private $it24_anousu;
     private $it24_grupoespbenfurbana;

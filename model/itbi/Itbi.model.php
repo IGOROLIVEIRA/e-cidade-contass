@@ -5,6 +5,8 @@ require_once "Itbinome.model.php";
 require_once "Paritbi.model.php";
 require_once "Transfautomaticas.model.php";
 require_once "model/cadastro/Imovel.model.php";
+require_once "model/configuracao/Instituicao.model.php";
+require_once "Itbiavalia.model.php";
 class Itbi
 {
     public $it01_guia;
@@ -29,6 +31,11 @@ class Itbi
     public $Itbinumpre;
     public $Itbimatric;
     public $Itbinome;
+    public $ItbiAvalia;
+    /**
+     * @var Paritbi
+     */
+    public $parItbi;
 
     public function __construct($it01_guia = null)
     {
@@ -58,6 +65,8 @@ class Itbi
             $this->Itbinome = new Itbinome();
             $this->Itbinome = $this->Itbinome->findByItbi($it01_guia);
             $this->Itbinumpre = $this->getItbinumpre();
+            $this->parItbi = new Paritbi(db_getsession('DB_anousu'));
+            $this->ItbiAvalia = new Itbiavalia($this->it01_guia);
         }
         return $this;
     }
@@ -70,9 +79,7 @@ class Itbi
      */
     public function processarTransferenciaAutomatica($iCodRet)
     {
-        $oParItbi = new Paritbi(db_getsession('DB_anousu'));
-
-        if($oParItbi->getTransfautomatica() === false) {
+        if($this->parItbi->getTransfautomatica() === false) {
             return;
         }
 
@@ -84,11 +91,15 @@ class Itbi
             $oItbi = $this->getinstanceByNumpre($obj->k00_numpre);
             if (empty($oItbi) === false) {
                 $this->_processarTransferenciaAutomatica($oItbi);
+                $this->removeNumpreArrecad($obj->k00_numpre);
             }
         }
-
     }
 
+    /**
+     * Retorna o último numpre gerado para o ITBI
+     * @return int
+     */
     public function getNumpre()
     {
         return current($this->Itbinumpre)->it15_numpre;
@@ -209,4 +220,41 @@ class Itbi
         $oTransf->incluir();
     }
 
+    /**
+     * @param $iNumpre
+     * @return void
+     */
+    private function removeNumpreArrecad($iNumpre)
+    {
+        $oInstit = new Instituicao(db_getsession('DB_instit'));
+
+        if ($oInstit->getUsaDebitosItbi() === false) {
+            return;
+        }
+
+        $arrecad = db_utils::getDao('arrecad');
+        $arrecad->sql_record($arrecad->excluir(null, "k00_numpre = {$iNumpre}"));
+    }
+
+    public function incluirArrecad()
+    {
+        $clarrecad = db_utils::getDao('arrecad');
+        $clarrecad->k00_numcgm = $this->getCompradorPrincipal()->getCgm();
+        $clarrecad->k00_dtoper = date('Y-m-d',db_getsession('DB_datausu'));
+        $clarrecad->k00_receit = $this->parItbi->getReceita();
+        $clarrecad->k00_hist   = Paritbi::HISTCALC_DEFAULT;
+        $clarrecad->k00_valor  = $this->ItbiAvalia->it14_valorpaga;
+        $clarrecad->k00_dtvenc = $this->ItbiAvalia->it14_dtvenc;
+        $clarrecad->k00_numpre = $this->getNumpre();
+        $clarrecad->k00_numpar = 1;
+        $clarrecad->k00_numtot = 1;
+        $clarrecad->k00_numdig = '0';
+        $clarrecad->k00_tipo   = Paritbi::TIPO_DEBITO_DEFAULT;
+        $clarrecad->k00_tipojm = '0';
+        $clarrecad->incluir();
+
+        if ($clarrecad->erro_status == 0) {
+            throw new LogicException('Erro ao inserir arrecad do ITBI');
+        }
+    }
 }
