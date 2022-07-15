@@ -25,7 +25,7 @@
  *                                licenca/licenca_pt.txt
  */
 
-require_once( "fpdf151/pdf.php" );
+require_once("fpdf151/pdf.php");
 
 /**
  * Classe base para os relatórios de Diário de classe
@@ -35,7 +35,8 @@ require_once( "fpdf151/pdf.php" );
  * @author    Andrio Costa <andrio.costa@dbseller.com.br>
  * @version   $Revision: 1.21 $
  */
-class RelatorioDiarioClasseBase extends PDF {
+class RelatorioDiarioClasseBase extends PDF
+{
 
   /**
    * Instância de Turma
@@ -205,9 +206,10 @@ class RelatorioDiarioClasseBase extends PDF {
    * Contém uma estrutura organizada dos cabeçalho
    * @var array
    */
-  protected $aEstruturaCabecalho =array();
+  protected $aEstruturaCabecalho = array();
 
-  public function __construct( Turma $oTurma, Etapa $oEtapa, AvaliacaoPeriodica $oAvaliacaoPeriodica ) {
+  public function __construct(Turma $oTurma, Etapa $oEtapa, AvaliacaoPeriodica $oAvaliacaoPeriodica)
+  {
 
     parent::fpdf('L');
     $this->oTurma              = $oTurma;
@@ -216,14 +218,14 @@ class RelatorioDiarioClasseBase extends PDF {
     $this->aMatriculas         = $oTurma->getAlunosMatriculadosNaTurmaPorSerie($oEtapa);
     $this->SetMargins(8, 10);
     $this->SetAutoPageBreak(true, 10);
-
   }
 
   /**
    * Adiciona uma regência para impressão
    * @param Regencia $oRegencia
    */
-  public function adicionarRegencias( Regencia $oRegencia ) {
+  public function adicionarRegencias(Regencia $oRegencia)
+  {
     $this->aRegencias[] = $oRegencia;
   }
 
@@ -231,7 +233,8 @@ class RelatorioDiarioClasseBase extends PDF {
    * Define número de colunas da grade
    * @param int $iDiasLetivos
    */
-  public function setDiasLetivos($iDiasLetivos) {
+  public function setDiasLetivos($iDiasLetivos)
+  {
     $this->iDiasLetivos = $iDiasLetivos;
   }
 
@@ -239,7 +242,8 @@ class RelatorioDiarioClasseBase extends PDF {
    * Define se devemos exibir a data do período de avaliação informado.
    * @param boolean $lExibirDataPeriodo
    */
-  public function setExibirDataPeriodo($lExibirDataPeriodo) {
+  public function setExibirDataPeriodo($lExibirDataPeriodo)
+  {
     $this->lExibirDataPeriodo = $lExibirDataPeriodo;
   }
 
@@ -247,7 +251,8 @@ class RelatorioDiarioClasseBase extends PDF {
    * Define se devemos exibir os pontos na grade
    * @param boolean $lExibirPontos
    */
-  public function setExibirPontos($lExibirPontos) {
+  public function setExibirPontos($lExibirPontos)
+  {
     $this->lExibirPontos = $lExibirPontos;
   }
 
@@ -255,7 +260,8 @@ class RelatorioDiarioClasseBase extends PDF {
    * Define se devemos exibir alunos que trocaram de turma no relatório
    * @param boolean $lExibirTrocaTurma
    */
-  public function setExibirTrocaTurma($lExibirTrocaTurma) {
+  public function setExibirTrocaTurma($lExibirTrocaTurma)
+  {
     $this->lExibirTrocaTurma = $lExibirTrocaTurma;
   }
 
@@ -264,7 +270,8 @@ class RelatorioDiarioClasseBase extends PDF {
    * Só é considerada se $lRegistroManual for TRUE
    * @param boolean $lInformarDiasLetivos
    */
-  public function setInformarDiasLetivos($lInformarDiasLetivos) {
+  public function setInformarDiasLetivos($lInformarDiasLetivos)
+  {
     $this->lInformarDiasLetivos = $lInformarDiasLetivos;
   }
 
@@ -272,7 +279,8 @@ class RelatorioDiarioClasseBase extends PDF {
    * Define se devemos buscar as informações do Lançamento da Frequência/Conteúdo ou se será manual
    * @param boolean $lRegistroManual
    */
-  public function setRegistroManual($lRegistroManual) {
+  public function setRegistroManual($lRegistroManual)
+  {
     $this->lRegistroManual = $lRegistroManual;
   }
 
@@ -280,7 +288,8 @@ class RelatorioDiarioClasseBase extends PDF {
    * Define se será listado apenas alunos com situação MATRICULADO
    * @param boolean $lSomenteMatriculados
    */
-  public function setSomenteMatriculados($lSomenteMatriculados) {
+  public function setSomenteMatriculados($lSomenteMatriculados)
+  {
     $this->lSomenteMatriculados = $lSomenteMatriculados;
   }
 
@@ -288,7 +297,8 @@ class RelatorioDiarioClasseBase extends PDF {
    * Define a AvaliacaoPeriodica
    * @param AvaliacaoPeriodica $oAvaliacaoPeriodica
    */
-  public function setAvaliacaoPeriodica(AvaliacaoPeriodica $oAvaliacaoPeriodica) {
+  public function setAvaliacaoPeriodica(AvaliacaoPeriodica $oAvaliacaoPeriodica)
+  {
     $this->oAvaliacaoPeriodica = $oAvaliacaoPeriodica;
   }
 
@@ -296,7 +306,8 @@ class RelatorioDiarioClasseBase extends PDF {
    * Define a etapa
    * @param Etapa $oEtapa
    */
-  public function setEtapa(Etapa $oEtapa) {
+  public function setEtapa(Etapa $oEtapa)
+  {
     $this->oEtapa = $oEtapa;
   }
 
@@ -304,7 +315,8 @@ class RelatorioDiarioClasseBase extends PDF {
    * Define a turma
    * @param Turma $oTurma
    */
-  public function setTurma(Turma $oTurma) {
+  public function setTurma(Turma $oTurma)
+  {
     $this->oTurma = $oTurma;
   }
 
@@ -312,7 +324,8 @@ class RelatorioDiarioClasseBase extends PDF {
    * Atribui a Regencia atual da turma a propriedade oRegenciaAtual
    * @param Regencia $oRegencia
    */
-  public function setRegenciaAtual( Regencia $oRegencia ) {
+  public function setRegenciaAtual(Regencia $oRegencia)
+  {
     $this->oRegenciaAtual = $oRegencia;
   }
 
@@ -320,15 +333,17 @@ class RelatorioDiarioClasseBase extends PDF {
    * Diz para o Diario de Classe que devemos calcular o modelo como disciplina globalizada
    * @param $lTurmaGlobalizada
    */
-  public function setTurmaGlobalizada( $lTurmaGlobalizada ) {
-    $this->lTurmaGlobalizada= $lTurmaGlobalizada;
+  public function setTurmaGlobalizada($lTurmaGlobalizada)
+  {
+    $this->lTurmaGlobalizada = $lTurmaGlobalizada;
   }
 
   /**
    * Define se devemos exibir a descrição do período de avaliação no subcabeçalho
    * @param $lExibirLinhaDataPeriodo
    */
-  public function setExibirLinhaDataPeriodo( $lExibirLinhaDataPeriodo ) {
+  public function setExibirLinhaDataPeriodo($lExibirLinhaDataPeriodo)
+  {
     $this->lExibirLinhaDataPeriodo = $lExibirLinhaDataPeriodo;
   }
 
@@ -336,7 +351,8 @@ class RelatorioDiarioClasseBase extends PDF {
    * Define se devemos exibir a idade do aluno ao lado do nome do aluno
    * @param bool $lExibirIdade
    */
-  protected function setExibirIdade( $lExibirIdade ) {
+  protected function setExibirIdade($lExibirIdade)
+  {
     $this->lExibirIdade = $lExibirIdade;
   }
 
@@ -344,15 +360,16 @@ class RelatorioDiarioClasseBase extends PDF {
   /**
    * Sobreescreve o método Header do model PDF para que monte um cabeçalho para os novos diarios de classe
    */
-  public function Header() {
-    
+  public function Header()
+  {
+
     $sDocente = "";
 
     $oInstituicao = InstituicaoRepository::getInstituicaoByCodigo(db_getsession("DB_instit"));
     $sImagem      = $oInstituicao->getImagemLogo();
 
-    $this->Image("imagens/files/{$sImagem}",11,9,13);
-    foreach ( $this->oRegenciaAtual->getDocentes() as $oDocente) {
+    $this->Image("imagens/files/{$sImagem}", 11, 9, 13);
+    foreach ($this->oRegenciaAtual->getDocentes() as $oDocente) {
 
       $sDocente = $oDocente->getNome();
       break;
@@ -363,12 +380,12 @@ class RelatorioDiarioClasseBase extends PDF {
     $iTamanhoLinha = 120;
 
     $this->SetFont('Arial', 'B', '7');
-    $this->SetXY($iPosicaoX,8);
+    $this->SetXY($iPosicaoX, 8);
 
     $sNomeEscola       = $this->oTurma->getEscola()->getNome();
     $iCodigoReferencia = $this->oTurma->getEscola()->getCodigoReferencia();
 
-    if ( $iCodigoReferencia != null ) {
+    if ($iCodigoReferencia != null) {
       $sNomeEscola = "{$iCodigoReferencia} - {$sNomeEscola}";
     }
 
@@ -384,7 +401,7 @@ class RelatorioDiarioClasseBase extends PDF {
     $iPosicaoX     = 140;
     $iTamanhoLinha = 90;
 
-    $this->SetXY($iPosicaoX,8);
+    $this->SetXY($iPosicaoX, 8);
 
     $sCurso = $this->oTurma->getBaseCurricular()->getCurso()->getNome();
     $this->Cell($iTamanhoLinha, $iAlturaLinha, "Curso: {$sCurso}", 0, 0, "L");
@@ -394,10 +411,10 @@ class RelatorioDiarioClasseBase extends PDF {
     $this->Cell($iTamanhoLinha, $iAlturaLinha, "Turma: {$this->oTurma->getDescricao()}", 0, 0, "L");
 
     $sEtapa = $this->oEtapa->getNome();
-    if ( $this->lTurmaMultEtapa ) {
+    if ($this->lTurmaMultEtapa) {
 
       $aEtapaTurma = array();
-      foreach ($this->oTurma->getEtapas() as $oEtapaTurma ) {
+      foreach ($this->oTurma->getEtapas() as $oEtapaTurma) {
         $aEtapaTurma[] = $oEtapaTurma->getEtapa()->getNome();
       }
 
@@ -411,7 +428,7 @@ class RelatorioDiarioClasseBase extends PDF {
     $sPeriodo = $this->oAvaliacaoPeriodica->getPeriodoAvaliacao()->getDescricao();
     $this->Cell($iTamanhoLinha, $iAlturaLinha, "Período: {$sPeriodo}", 0, 0, "L");
 
-    $iTotalAulas = $this->oRegenciaAtual->getTotalDeAulasNoPeriodo( $this->oAvaliacaoPeriodica->getPeriodoAvaliacao() );
+    $iTotalAulas = $this->oRegenciaAtual->getTotalDeAulasNoPeriodo($this->oAvaliacaoPeriodica->getPeriodoAvaliacao());
     $this->Cell($iTamanhoLinha, $iAlturaLinha, "Aulas Dadas: {$iTotalAulas}", 0, 1, "L");
 
     $this->SetX($iPosicaoX);
@@ -421,7 +438,7 @@ class RelatorioDiarioClasseBase extends PDF {
     $this->SetX($iPosicaoX);
     $this->Cell($iTamanhoLinha, $iAlturaLinha, "Regente: {$sDocente}", 0, 1, "L");
 
-    $this->roundedrect( 8, 8, 280, 20, 2, '', '1234' );
+    $this->roundedrect(8, 8, 280, 20, 2, '', '1234');
   }
 
 
@@ -432,30 +449,31 @@ class RelatorioDiarioClasseBase extends PDF {
    *
    * @return array
    */
-  protected function estruturaSubCabecalho() {
+  protected function estruturaSubCabecalho()
+  {
 
-    if ( count($this->aEstruturaCabecalho) > 0) {
-      return $this->aEstruturaCabecalho ;
+    if (count($this->aEstruturaCabecalho) > 0) {
+      return $this->aEstruturaCabecalho;
     }
 
     $aTipoFrquenciaTurmaGlobalizadas = array('F', 'FA');
 
     $this->aSubCabecalho = array();
     $aEstrutura          = array();
-    foreach ( $this->aRegencias as $oRegencia ) {
+    foreach ($this->aRegencias as $oRegencia) {
 
-      if ( $this->lTurmaGlobalizada  && !in_array($oRegencia->getFrequenciaGlobal(), $aTipoFrquenciaTurmaGlobalizadas) ) {
+      if ($this->lTurmaGlobalizada  && !in_array($oRegencia->getFrequenciaGlobal(), $aTipoFrquenciaTurmaGlobalizadas)) {
         continue;
       }
 
       $oDadosEstrutura = $this->getDadosPadraoSubCabecalho();
-      if ( $this->lRegistroManual ) {
+      if ($this->lRegistroManual) {
         $aEstrutura[$oRegencia->getCodigo()] = $this->calcularColunaGradeRegistroManual($oDadosEstrutura);
       } else {
 
-        $oEstruturaCalculada = $this->calcularColunaGradeRegistroControleFrequencia($oDadosEstrutura, $oRegencia );
+        $oEstruturaCalculada = $this->calcularColunaGradeRegistroControleFrequencia($oDadosEstrutura, $oRegencia);
 
-        if ( empty($oEstruturaCalculada) ) {
+        if (empty($oEstruturaCalculada)) {
           continue;
         }
         $aEstrutura[$oRegencia->getCodigo()] = $oEstruturaCalculada;
@@ -464,7 +482,7 @@ class RelatorioDiarioClasseBase extends PDF {
 
     $this->aEstruturaCabecalho = $aEstrutura;
 
-    return $this->aEstruturaCabecalho ;
+    return $this->aEstruturaCabecalho;
   }
 
   /**
@@ -472,7 +490,8 @@ class RelatorioDiarioClasseBase extends PDF {
    * Definimos a largura das colunas por página
    * @return stdClass
    */
-  private function getDadosPadraoSubCabecalho() {
+  private function getDadosPadraoSubCabecalho()
+  {
 
     $oDadosBasicos                       = new stdClass();
     $oDadosBasicos->iTamanhoGrade        = $this->getTamanhoGrade();
@@ -490,7 +509,8 @@ class RelatorioDiarioClasseBase extends PDF {
    * @param Regencia $oRegencia
    * @return stdClass
    */
-  private function calcularColunaGradeRegistroControleFrequencia( $oDadosEstrutura, Regencia $oRegencia ) {
+  private function calcularColunaGradeRegistroControleFrequencia($oDadosEstrutura, Regencia $oRegencia)
+  {
 
     $oPeriodoAvaliacao = $this->oAvaliacaoPeriodica->getPeriodoAvaliacao();
     $oGradeHorario     = new GradeHorario($this->oTurma, $this->oEtapa);
@@ -519,17 +539,17 @@ class RelatorioDiarioClasseBase extends PDF {
     $oDadosEstrutura->iNumeroColunas      = count($aDiasOrganizados);
     $oDadosEstrutura->iLarguraCelulaGrade = $oDadosEstrutura->iTamanhoGrade / $oDadosEstrutura->iNumeroColunas;
 
-    if ($oDadosEstrutura->iNumeroColunas < $this->iNumeroMinimoColunaFalta ) {
+    if ($oDadosEstrutura->iNumeroColunas < $this->iNumeroMinimoColunaFalta) {
 
       $oDadosEstrutura->iLarguraCelulaGrade  = $oDadosEstrutura->iTamanhoGrade / $this->iNumeroMinimoColunaFalta;
       $oDadosEstrutura->iNumeroColunasVazias = $this->iNumeroMinimoColunaFalta - $oDadosEstrutura->iNumeroColunas;
     }
 
     if ($oDadosEstrutura->iLarguraCelulaGrade > 5) {
-      $oDadosEstrutura = $this->recalculaLarguraCelulaGrade( $oDadosEstrutura );
+      $oDadosEstrutura = $this->recalculaLarguraCelulaGrade($oDadosEstrutura);
     }
 
-    $oDadosEstrutura = $this->organizaDatasSubCabecalho( $aDiasOrganizados, $oDadosEstrutura );
+    $oDadosEstrutura = $this->organizaDatasSubCabecalho($aDiasOrganizados, $oDadosEstrutura);
 
     return $oDadosEstrutura;
   }
@@ -540,16 +560,17 @@ class RelatorioDiarioClasseBase extends PDF {
    * @param $oDadosEstrutura
    * @return stdClass
    */
-  private function calcularColunaGradeRegistroManual( $oDadosEstrutura ) {
+  private function calcularColunaGradeRegistroManual($oDadosEstrutura)
+  {
 
     $iTamanhoGrade = $oDadosEstrutura->iTamanhoGrade;
     $oDadosEstrutura->iLarguraCelulaGrade = 5;
     $oDadosEstrutura->aMeses = array();
 
-    if ( $this->lInformarDiasLetivos ) {
+    if ($this->lInformarDiasLetivos) {
 
       $oPeriodoAvaliacao = $this->oAvaliacaoPeriodica->getPeriodoAvaliacao();
-      $aDatasCalendario  = $this->oTurma->getCalendario()->getDatasLetivoNoPeriodo( $oPeriodoAvaliacao );
+      $aDatasCalendario  = $this->oTurma->getCalendario()->getDatasLetivoNoPeriodo($oPeriodoAvaliacao);
 
       $aDatasLetivas = array();
       foreach ($aDatasCalendario as $oDataCalendario) {
@@ -564,11 +585,10 @@ class RelatorioDiarioClasseBase extends PDF {
       $oDadosEstrutura->iLarguraCelulaGrade = $iTamanhoGrade / $oDadosEstrutura->iNumeroColunas;
 
       if ($oDadosEstrutura->iLarguraCelulaGrade > 5) {
-        $oDadosEstrutura = $this->recalculaLarguraCelulaGrade( $oDadosEstrutura, count($aDatasLetivas) );
+        $oDadosEstrutura = $this->recalculaLarguraCelulaGrade($oDadosEstrutura, count($aDatasLetivas));
       }
 
-      $oDadosEstrutura = $this->organizaDatasSubCabecalho( $aDatasLetivas, $oDadosEstrutura );
-
+      $oDadosEstrutura = $this->organizaDatasSubCabecalho($aDatasLetivas, $oDadosEstrutura);
     } else {
 
       $oDadosEstrutura->iNumeroColunas      = $this->iDiasLetivos;
@@ -576,7 +596,7 @@ class RelatorioDiarioClasseBase extends PDF {
       $oDadosEstrutura->aMeses              = array();
 
       if ($oDadosEstrutura->iLarguraCelulaGrade > 5) {
-        $oDadosEstrutura = $this->recalculaLarguraCelulaGrade( $oDadosEstrutura );
+        $oDadosEstrutura = $this->recalculaLarguraCelulaGrade($oDadosEstrutura);
       }
     }
 
@@ -589,14 +609,15 @@ class RelatorioDiarioClasseBase extends PDF {
    * @param $oDadosEstrutura  estrutura das colunas da página atual
    * @return stdClass
    */
-  private function organizaDatasSubCabecalho( $aDatas, $oDadosEstrutura ) {
+  private function organizaDatasSubCabecalho($aDatas, $oDadosEstrutura)
+  {
 
-    foreach ( $aDatas as $oDataPeriodo ) {
+    foreach ($aDatas as $oDataPeriodo) {
 
       $oDia           = new stdClass();
       $oDia->iDia     = $oDataPeriodo->oData->getDia();
       $oDia->iPeriodo = $oDataPeriodo->iPeriodo;
-      if ( !array_key_exists( $oDataPeriodo->oData->getMes(), $oDadosEstrutura->aMeses ) ) {
+      if (!array_key_exists($oDataPeriodo->oData->getMes(), $oDadosEstrutura->aMeses)) {
 
         $oDias          = new stdClass();
         $oDias->aDias   = array();
@@ -617,7 +638,8 @@ class RelatorioDiarioClasseBase extends PDF {
    * @param $oDadosEstrutura
    * @return stdClass
    */
-  protected function recalculaLarguraCelulaGrade( $oDadosEstrutura ) {
+  protected function recalculaLarguraCelulaGrade($oDadosEstrutura)
+  {
 
     $iSobra = $oDadosEstrutura->iLarguraCelulaGrade - 5;
 
@@ -632,24 +654,25 @@ class RelatorioDiarioClasseBase extends PDF {
    * Calcula o disponivel para o calculo da grade
    * @return int
    */
-  private function getTamanhoGrade() {
+  private function getTamanhoGrade()
+  {
 
     $iTamanhoDisponivelGrade = $this->iLarguraPagina - $this->iLarguraColunaNome - $this->iLarguraColunaNumero;
 
-    if ( $this->lExibirAvaliacao ) {
+    if ($this->lExibirAvaliacao) {
       $iTamanhoDisponivelGrade -= ($this->iNumeroColunasAvaliacao * $this->iLarguraColunaPadrao);
     }
 
-    if ( $this->lExibirFaltas ) {
+    if ($this->lExibirFaltas) {
       $iTamanhoDisponivelGrade -= $this->iLarguraColunaPadrao;
     }
 
-    if ( $this->lExibirAvaliacao || $this->lExibirFaltas ) {
+    if ($this->lExibirAvaliacao || $this->lExibirFaltas) {
       $iTamanhoDisponivelGrade -= $this->iLarguraColunaNumero;
     }
 
-    if ($this->lTurmaGlobalizada ) {
-      $iTamanhoDisponivelGrade -= (count( $this->getRegenciasQueControlamAvaliacao() ) * $this->iLarguraColunaPadrao);
+    if ($this->lTurmaGlobalizada) {
+      $iTamanhoDisponivelGrade -= (count($this->getRegenciasQueControlamAvaliacao()) * $this->iLarguraColunaPadrao);
     }
 
     return $iTamanhoDisponivelGrade;
@@ -659,13 +682,14 @@ class RelatorioDiarioClasseBase extends PDF {
    * Retorna as disciplinas da turma na etapa selecionada que controlam avaliação
    * @return Regencia[]
    */
-  private function getRegenciasQueControlamAvaliacao() {
+  private function getRegenciasQueControlamAvaliacao()
+  {
 
-    if ( count( $this->aRegenciasGlobalizadasQueControlamAvaliacao) == 0) {
+    if (count($this->aRegenciasGlobalizadasQueControlamAvaliacao) == 0) {
 
-      foreach ( $this->oTurma->getDisciplinasPorEtapa($this->oEtapa) as $oRegencia ) {
+      foreach ($this->oTurma->getDisciplinasPorEtapa($this->oEtapa) as $oRegencia) {
 
-        if ( $oRegencia->getFrequenciaGlobal() == 'F' ) {
+        if ($oRegencia->getFrequenciaGlobal() == 'F') {
           continue;
         }
         $this->aRegenciasGlobalizadasQueControlamAvaliacao[] = $oRegencia;
@@ -678,13 +702,14 @@ class RelatorioDiarioClasseBase extends PDF {
    * Escreve o subCabeçalho
    * @param $oEstrutura
    */
-  protected function escreverSubCabecalho( $oEstrutura ) {
+  protected function escreverSubCabecalho($oEstrutura)
+  {
 
     $this->AddPage();
     $this->SetFont("arial", 'B', 8);
     $this->AliasNbPages();
     $this->ln(0.3);
-    if ( $this->lExibirLinhaDataPeriodo ) {
+    if ($this->lExibirLinhaDataPeriodo) {
       $this->imprimeLinhaDescricaoPeriodo();
     }
 
@@ -695,7 +720,7 @@ class RelatorioDiarioClasseBase extends PDF {
     $this->Cell($oEstrutura->iLarguraColunaNome - 10, 4, $this->sTituloColunaNome, 1, 0, "C");
     $this->Cell(10, 4, "Dia >", 1, 0, "C");
 
-    if ( count( $oEstrutura->aMeses ) == 0 ) {
+    if (count($oEstrutura->aMeses) == 0) {
 
       for ($i = 0; $i < $oEstrutura->iNumeroColunas; $i++) {
         $this->Cell($oEstrutura->iLarguraCelulaGrade, 4, "", 1);
@@ -703,7 +728,7 @@ class RelatorioDiarioClasseBase extends PDF {
     } else {
 
       $this->SetFont("arial", '', 6);
-      foreach ($oEstrutura->aMeses as $oMes ) {
+      foreach ($oEstrutura->aMeses as $oMes) {
 
         foreach ($oMes->aDias as $oDia) {
           $this->Cell($oEstrutura->iLarguraCelulaGrade, 4, $oDia->iDia, 1, 0, "C");
@@ -711,7 +736,6 @@ class RelatorioDiarioClasseBase extends PDF {
       }
 
       $this->escreverColunasFaltasEmBranco($oEstrutura);
-
     }
 
     $this->escreverColunaNumeroAluno();
@@ -724,13 +748,14 @@ class RelatorioDiarioClasseBase extends PDF {
   /**
    * Imprime a descrição do período de avaliação do subCabeçalho
    */
-  private function imprimeLinhaDescricaoPeriodo() {
+  private function imprimeLinhaDescricaoPeriodo()
+  {
 
     $sDataInicio = "___/___/_____";
     $sDataFim    = "___/___/_____";
 
     $oPeriodoAvaliacao = $this->oAvaliacaoPeriodica->getPeriodoAvaliacao();
-    if ( $this->lExibirDataPeriodo ) {
+    if ($this->lExibirDataPeriodo) {
 
       $oPeriodoCalendario = $this->oTurma->getCalendario()->getPeriodoCalendarioPorPeriodoAvaliacao($oPeriodoAvaliacao);
       $sDataInicio        = $oPeriodoCalendario->getDataInicio()->convertTo(DBDate::DATA_PTBR);
@@ -743,31 +768,35 @@ class RelatorioDiarioClasseBase extends PDF {
     $this->SetFont("arial", 'B', 8);
     $this->SetFillColor(245);
     $this->ln(0.5);
-    $this->Cell($this->iLarguraPagina, 4, $sPeriodo, '', 1, "C", 1 );
+    $this->Cell($this->iLarguraPagina, 4, $sPeriodo, '', 1, "C", 1);
   }
 
   /**
    * Imprime a linha dos meses do subCabeçalho
    * @param $oEstrutura
    */
-  private function imprimeLinhaMeses( $oEstrutura ) {
+  private function imprimeLinhaMeses($oEstrutura)
+  {
 
     $iPrimeiraColuna = $oEstrutura->iLarguraColunaNumero + $oEstrutura->iLarguraColunaNome - 10;
     $this->Cell($iPrimeiraColuna, 4, "", 1);
     $this->Cell(10, 4, "Mês >", 1);
+    $meses = array(1 => 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro');
 
-    if ( count( $oEstrutura->aMeses ) == 0 ) {
+    if (count($oEstrutura->aMeses) == 0) {
       $this->Cell($oEstrutura->iLarguraCelulaGrade * $oEstrutura->iNumeroColunas, 4, "", 1);
     } else {
 
-      foreach ($oEstrutura->aMeses as $iMes => $oMes ) {
+      foreach ($oEstrutura->aMeses as $iMes => $oMes) {
 
+        $mes = substr($iMes, 1);
+        $mes = intval($mes);
+        $mes = $meses[$mes];
         $iLarguraColunaMes = count($oMes->aDias) * $oEstrutura->iLarguraCelulaGrade;
-        $this->Cell($iLarguraColunaMes, 4, $iMes, 1, 0, "C");
+        $this->Cell($iLarguraColunaMes, 4,  $mes, 1, 0, "C");
       }
 
       $this->escreverColunasFaltasEmBranco($oEstrutura);
-
     }
 
     $this->escreverColunaNumeroAluno("Nº");
@@ -777,18 +806,19 @@ class RelatorioDiarioClasseBase extends PDF {
     $this->Ln();
   }
 
-  private function escreverColunasDisciplinasGlobalizada($lImpimeDescricao) {
+  private function escreverColunasDisciplinasGlobalizada($lImpimeDescricao)
+  {
 
-    if ( $this->lTurmaGlobalizada ) {
+    if ($this->lTurmaGlobalizada) {
 
-      foreach ($this->getRegenciasQueControlamAvaliacao() as $oRegencia ) {
+      foreach ($this->getRegenciasQueControlamAvaliacao() as $oRegencia) {
 
         $sDescricao = "";
-        if ( $lImpimeDescricao ) {
+        if ($lImpimeDescricao) {
           $sDescricao = $oRegencia->getDisciplina()->getAbreviatura();
         }
         $this->SetFont("arial", '', 6);
-        $this->Cell ($this->iLarguraColunaPadrao, 4, $sDescricao, 1, 0, 'C');
+        $this->Cell($this->iLarguraColunaPadrao, 4, $sDescricao, 1, 0, 'C');
         $this->SetFont("arial", 'B', 7);
       }
     }
@@ -799,17 +829,18 @@ class RelatorioDiarioClasseBase extends PDF {
    * @param bool $lTitulo true  escreve o Label título
    *                      false escreve as colunas para lançamento da avaliacao
    */
-  private function escreverColunasAvaliacao ( $lTitulo = true ) {
+  private function escreverColunasAvaliacao($lTitulo = true)
+  {
 
-    if ( $this->lExibirAvaliacao ) {
+    if ($this->lExibirAvaliacao) {
 
-      if ( $lTitulo ) {
+      if ($lTitulo) {
 
         $iLarguraColunaAvaliacao = $this->iNumeroColunasAvaliacao * $this->iLarguraColunaPadrao;
         $this->Cell($iLarguraColunaAvaliacao, 4, "Avaliações", 1, 0, "C");
       } else {
 
-        for ( $i = 0; $i < $this->iNumeroColunasAvaliacao; $i++ ) {
+        for ($i = 0; $i < $this->iNumeroColunasAvaliacao; $i++) {
           $this->Cell($this->iLarguraColunaPadrao, 4, "", 1, 0, "C");
         }
       }
@@ -820,9 +851,10 @@ class RelatorioDiarioClasseBase extends PDF {
    * Escreve a coluna com o numero do aluno quando necessario
    * @param string $sValor pode ser tando o titulo da coluna numero do aluno como o próprio nº do aluno
    */
-  private function escreverColunaNumeroAluno ( $sValor = '') {
+  private function escreverColunaNumeroAluno($sValor = '')
+  {
 
-    if ( $this->lExibirAvaliacao || $this->lExibirFaltas ) {
+    if ($this->lExibirAvaliacao || $this->lExibirFaltas) {
       $this->Cell($this->iLarguraColunaPadrao, 4, $sValor, 1, 0, "C");
     }
   }
@@ -831,9 +863,10 @@ class RelatorioDiarioClasseBase extends PDF {
    * Escreve a coluna para informar o total de faltas
    * @param string $sTitulo titulo da Coluna
    */
-  private function escreverColunaFalta($sTitulo = '') {
+  private function escreverColunaFalta($sTitulo = '')
+  {
 
-    if ( $this->lExibirFaltas ) {
+    if ($this->lExibirFaltas) {
       $this->Cell($this->iLarguraColunaPadrao, 4, $sTitulo, 1, 0, "C");
     }
   }
@@ -848,22 +881,23 @@ class RelatorioDiarioClasseBase extends PDF {
    *
    * @return array
    */
-  private function organizarListaAlunos() {
+  private function organizarListaAlunos()
+  {
 
-    if ( count($this->aAlunosOrganizados) > 0 ) {
+    if (count($this->aAlunosOrganizados) > 0) {
       return $this->aAlunosOrganizados;
     }
 
     $aMatriculas = $this->aMatriculas;
 
-    foreach ( $this->estruturaSubCabecalho() as $iRegencia => $oEstrutura ) {
+    foreach ($this->estruturaSubCabecalho() as $iRegencia => $oEstrutura) {
 
       $oRegencia = RegenciaRepository::getRegenciaByCodigo($iRegencia);
       $iPagina   = 0;
 
       db_inicio_transacao();
 
-      foreach ($aMatriculas as $iIndice => $oMatricula ) {
+      foreach ($aMatriculas as $iIndice => $oMatricula) {
 
         // Usado metodo getDisciplinasPorDisciplina por causa das turmas com mais de uma etapa.
         $oDiarioDiscplina   = $oMatricula->getDiarioDeClasse()->getDisciplinasPorDisciplina($oRegencia->getDisciplina());
@@ -880,7 +914,6 @@ class RelatorioDiarioClasseBase extends PDF {
       db_fim_transacao();
     }
     return $this->aAlunosOrganizados;
-
   }
 
   /**
@@ -888,7 +921,8 @@ class RelatorioDiarioClasseBase extends PDF {
    * @param $iRegencia código da regência
    * @return array
    */
-  protected function getAlunos($iRegencia) {
+  protected function getAlunos($iRegencia)
+  {
 
     $aAlunos = $this->organizarListaAlunos();
     return $aAlunos[$iRegencia];
@@ -902,13 +936,17 @@ class RelatorioDiarioClasseBase extends PDF {
    * @param $oDadosAluno stclas com os dados do aluno avaliado
    * @return bool
    */
-  protected function validaSituacaoAluno($oDadosAluno) {
+  protected function validaSituacaoAluno($oDadosAluno)
+  {
 
-    if ( ($oDadosAluno->oMatricula->getSituacao() == 'TROCA DE TURMA')
-         && !$this->lExibirTrocaTurma) {
+    if (($oDadosAluno->oMatricula->getSituacao() == 'TROCA DE TURMA')
+      && !$this->lExibirTrocaTurma
+    ) {
       return false;
-    } elseif ( $this->lSomenteMatriculados &&
-               !in_array($oDadosAluno->oMatricula->getSituacao(), array('TROCA DE TURMA', 'MATRICULADO'))) {
+    } elseif (
+      $this->lSomenteMatriculados &&
+      !in_array($oDadosAluno->oMatricula->getSituacao(), array('TROCA DE TURMA', 'MATRICULADO'))
+    ) {
       return false;
     }
 
@@ -921,16 +959,17 @@ class RelatorioDiarioClasseBase extends PDF {
    * @param $aAlunos    Lista de alunos de uma regência
    * @param $oEstrutura Dados da estrutuda de uma regência
    */
-  protected function escreverCorpo( $aAlunos, $oEstrutura ) {
+  protected function escreverCorpo($aAlunos, $oEstrutura)
+  {
 
-    foreach ( $aAlunos as $aAlunosPagina ) {
+    foreach ($aAlunos as $aAlunosPagina) {
 
-      $this->escreverSubCabecalho( $oEstrutura );
+      $this->escreverSubCabecalho($oEstrutura);
 
       $iAlunosImpressos = 0;
-      foreach ( $aAlunosPagina as $oDadosAluno ) {
+      foreach ($aAlunosPagina as $oDadosAluno) {
 
-        if ( !$this->validaSituacaoAluno($oDadosAluno) ) {
+        if (!$this->validaSituacaoAluno($oDadosAluno)) {
           continue;
         }
 
@@ -940,22 +979,22 @@ class RelatorioDiarioClasseBase extends PDF {
         $this->Cell($oEstrutura->iLarguraColunaNome, 4, $oDadosAluno->oMatricula->getAluno()->getNome(), 1, 0, "L");
 
         // Escreve a Idade do aluno ao lado do nome do aluno
-        if ( $this->lExibirIdade && !$this->lExibirEtapa ) {
+        if ($this->lExibirIdade && !$this->lExibirEtapa) {
 
-          $this->SetX( $this->GetX() - $this->iLarguraColunaPadrao );
+          $this->SetX($this->GetX() - $this->iLarguraColunaPadrao);
           $this->Cell($this->iLarguraColunaPadrao, 4, $oDadosAluno->oMatricula->getAluno()->getIdade(), 1, 0, "C");
         }
 
         // Escreve a etapa ao lado da coluna do nome do aluno
-        if ( !$this->lExibirIdade && $this->lExibirEtapa ) {
+        if (!$this->lExibirIdade && $this->lExibirEtapa) {
 
-          $this->SetX( $this->GetX() - ($this->iLarguraColunaPadrao * 2)  );
+          $this->SetX($this->GetX() - ($this->iLarguraColunaPadrao * 2));
           $this->Cell(($this->iLarguraColunaPadrao * 2), 4, $oDadosAluno->oMatricula->getEtapaDeOrigem()->getNomeAbreviado(), "TBR", 0, "C");
         }
 
-        if ( $oDadosAluno->oMatricula->getSituacao() == 'MATRICULADO' ) {
+        if ($oDadosAluno->oMatricula->getSituacao() == 'MATRICULADO') {
 
-          if ( !$this->validaAlunoAmparado($oDadosAluno->oMatricula, $oEstrutura) ) {
+          if (!$this->validaAlunoAmparado($oDadosAluno->oMatricula, $oEstrutura)) {
             $this->imprimirGradeFaltasAluno($oDadosAluno->aFaltas, $oEstrutura);
           }
         } else {
@@ -968,17 +1007,17 @@ class RelatorioDiarioClasseBase extends PDF {
         $this->escreverColunaFalta();
 
         $this->ln();
-        $iAlunosImpressos ++;
+        $iAlunosImpressos++;
       }
 
-      if ( $iAlunosImpressos < $this->iNumeroAlunosPagina ) {
+      if ($iAlunosImpressos < $this->iNumeroAlunosPagina) {
 
-        for ( $i = $iAlunosImpressos; $i < $this->iNumeroAlunosPagina; $i++) {
+        for ($i = $iAlunosImpressos; $i < $this->iNumeroAlunosPagina; $i++) {
 
           $this->Cell($oEstrutura->iLarguraColunaNumero, 4, "", 1, 0, "C");
           $this->Cell($oEstrutura->iLarguraColunaNome,   4, "", 1, 0, "L");
 
-          $this->imprimirCelulasGradeFaltaSemAlunos( $oEstrutura );
+          $this->imprimirCelulasGradeFaltaSemAlunos($oEstrutura);
 
           $this->escreverColunaNumeroAluno();
           $this->escreverColunasAvaliacao(false);
@@ -991,7 +1030,6 @@ class RelatorioDiarioClasseBase extends PDF {
 
       $this->escreverAssinatura();
     }
-
   }
 
   /**
@@ -999,30 +1037,31 @@ class RelatorioDiarioClasseBase extends PDF {
    * @param $aFaltas    array com as faltas do aluno
    * @param $oEstrutura estrutura base do subCabeçalho
    */
-  private function imprimirGradeFaltasAluno($aFaltas, $oEstrutura) {
+  private function imprimirGradeFaltasAluno($aFaltas, $oEstrutura)
+  {
 
-    if ( count($oEstrutura->aMeses) == 0) {
+    if (count($oEstrutura->aMeses) == 0) {
 
       for ($i = 0; $i < $oEstrutura->iNumeroColunas; $i++) {
 
         $this->exibePontos($oEstrutura->iLarguraCelulaGrade);
         $this->Cell($oEstrutura->iLarguraCelulaGrade, 4, "", 1);
       }
-
     } else {
 
-      foreach ($oEstrutura->aMeses as $iMes =>  $oMes ) {
+      foreach ($oEstrutura->aMeses as $iMes =>  $oMes) {
 
         foreach ($oMes->aDias as $oDia) {
 
           $sFalta = "";
-          if ( !$this->lRegistroManual ) {
+          if (!$this->lRegistroManual) {
 
-            foreach ( $aFaltas as $oFaltaAluno ) {
+            foreach ($aFaltas as $oFaltaAluno) {
 
-              if ( ($oFaltaAluno->getData()->getMes() == $iMes) &&
-                   ($oFaltaAluno->getData()->getDia() == $oDia->iDia) &&
-                   ($oFaltaAluno->getPeriodo() == $oDia->iPeriodo ) ) {
+              if (($oFaltaAluno->getData()->getMes() == $iMes) &&
+                ($oFaltaAluno->getData()->getDia() == $oDia->iDia) &&
+                ($oFaltaAluno->getPeriodo() == $oDia->iPeriodo)
+              ) {
 
                 $sFalta = "F";
                 break;
@@ -1030,7 +1069,7 @@ class RelatorioDiarioClasseBase extends PDF {
             }
           }
 
-          if ( empty ($sFalta) ) {
+          if (empty($sFalta)) {
             $this->exibePontos($oEstrutura->iLarguraCelulaGrade);
           }
           $this->Cell($oEstrutura->iLarguraCelulaGrade, 4, $sFalta, 1, 0, "C");
@@ -1038,18 +1077,17 @@ class RelatorioDiarioClasseBase extends PDF {
       }
 
       $this->escreverColunasFaltasEmBranco($oEstrutura);
-
     }
-
   }
 
   /**
    * Imprime as linhas no Diário
    * @param $oEstrutura
    */
-  private function imprimirCelulasGradeFaltaSemAlunos ($oEstrutura) {
+  private function imprimirCelulasGradeFaltaSemAlunos($oEstrutura)
+  {
 
-    if ( count($oEstrutura->aMeses) == 0) {
+    if (count($oEstrutura->aMeses) == 0) {
 
       for ($i = 0; $i < $oEstrutura->iNumeroColunas; $i++) {
 
@@ -1058,7 +1096,7 @@ class RelatorioDiarioClasseBase extends PDF {
       }
     } else {
 
-      foreach ($oEstrutura->aMeses as $iMes =>  $oMes ) {
+      foreach ($oEstrutura->aMeses as $iMes =>  $oMes) {
 
         foreach ($oMes->aDias as $oDia) {
 
@@ -1074,54 +1112,56 @@ class RelatorioDiarioClasseBase extends PDF {
    * Imprime os pontos na grade de faltas
    * @param $iLarguraCelula
    */
-  private function exibePontos( $iLarguraCelula ) {
+  private function exibePontos($iLarguraCelula)
+  {
 
     if ($this->lExibirPontos) {
 
       $iY = $this->getY();
       $iX = $this->getX();
 
-      $this->Setfont('arial','B',12);
-      $this->Text($iX + ($iLarguraCelula * 30 / 95), $iY + 2.5 , ".");
+      $this->Setfont('arial', 'B', 12);
+      $this->Text($iX + ($iLarguraCelula * 30 / 95), $iY + 2.5, ".");
       $this->SetFont("arial", '', 6);
     }
-
   }
 
   /**
    * Escreve a assinatura padrão dos modelos, com exceção do modelo 3, que sobrescreve o método
    */
-  protected function escreverAssinatura() {
+  protected function escreverAssinatura()
+  {
 
     $iTamanhoLinha = 140.5;
     $iAlturaLinha  = 5;
 
     $sTexto = "Entregue em ____/____/____ POR " . str_repeat("_", 31);
-    $this->Cell( $iTamanhoLinha, $iAlturaLinha, $sTexto, 1, 0, "L" );
-    $sTexto = "Revisado em ____/____/____ POR " . str_repeat("_", 39); 
-    $this->Cell( $iTamanhoLinha, $iAlturaLinha, $sTexto, 1, 1, "L" );
-    $sTexto = "Processado em ____/____/____ POR " . str_repeat("_", 29); 
-    $this->Cell( $iTamanhoLinha, $iAlturaLinha, $sTexto, 1, 0, "L" );
-    $sTexto = "Assinatura do professor ____/____/____ POR " . str_repeat("_", 29); 
-    $this->Cell( $iTamanhoLinha, $iAlturaLinha, $sTexto, 1, 0, "L" );
+    $this->Cell($iTamanhoLinha, $iAlturaLinha, $sTexto, 1, 0, "L");
+    $sTexto = "Revisado em ____/____/____ POR " . str_repeat("_", 39);
+    $this->Cell($iTamanhoLinha, $iAlturaLinha, $sTexto, 1, 1, "L");
+    $sTexto = "Processado em ____/____/____ POR " . str_repeat("_", 29);
+    $this->Cell($iTamanhoLinha, $iAlturaLinha, $sTexto, 1, 0, "L");
+    $sTexto = "Assinatura do professor ____/____/____ POR " . str_repeat("_", 29);
+    $this->Cell($iTamanhoLinha, $iAlturaLinha, $sTexto, 1, 0, "L");
   }
 
   /**
    * Renderiza o documento
    */
-  public function escrever() {
+  public function escrever()
+  {
 
     $this->estruturaSubCabecalho();
 
-    if ( count($this->aEstruturaCabecalho) == 0) {
-      throw new Exception ("Nenhuma regência(s) selecionada(s) possuem grade de horário.");
+    if (count($this->aEstruturaCabecalho) == 0) {
+      throw new Exception("Nenhuma regência(s) selecionada(s) possuem grade de horário.");
     }
 
     $this->Open();
-    foreach ( $this->aEstruturaCabecalho as $iRegencia => $oEstrutura ) {
+    foreach ($this->aEstruturaCabecalho as $iRegencia => $oEstrutura) {
 
       $this->oRegenciaAtual = RegenciaRepository::getRegenciaByCodigo($iRegencia);
-      $this->escreverCorpo( $this->getAlunos($iRegencia), $oEstrutura);
+      $this->escreverCorpo($this->getAlunos($iRegencia), $oEstrutura);
     }
 
     $this->Output();
@@ -1132,15 +1172,16 @@ class RelatorioDiarioClasseBase extends PDF {
    * @param $sSituacao     Situação do aluno que esta sendo impresso
    * @param $iTamanhoLinha Tamanho da linha
    */
-  protected function imprimeSituacaoAluno( $sSituacao, $iTamanhoLinha ) {
+  protected function imprimeSituacaoAluno($sSituacao, $iTamanhoLinha)
+  {
 
     $this->SetFont("arial", "B", 7);
     $sSituacaoImprimir = $sSituacao;
-    if ( !$this->lSomenteMatriculados && in_array($sSituacao, $this->aSituacaoTransferido) ) {
+    if (!$this->lSomenteMatriculados && in_array($sSituacao, $this->aSituacaoTransferido)) {
       $sSituacaoImprimir = "TRANSFERIDO";
     }
 
-    $this->Cell($iTamanhoLinha , 4, $sSituacaoImprimir, 1, 0, 'C');
+    $this->Cell($iTamanhoLinha, 4, $sSituacaoImprimir, 1, 0, 'C');
     $this->SetFont("arial", "", $this->iTamanhoFonteGrade);
   }
 
@@ -1154,7 +1195,8 @@ class RelatorioDiarioClasseBase extends PDF {
    *
    * @param $oEstrutura
    */
-  protected function escreverColunasFaltasEmBranco($oEstrutura) {
+  protected function escreverColunasFaltasEmBranco($oEstrutura)
+  {
 
     if ($oEstrutura->iNumeroColunasVazias > 0) {
 
@@ -1171,12 +1213,13 @@ class RelatorioDiarioClasseBase extends PDF {
    * @param $oEstrutura
    * @return bool
    */
-  protected function validaAlunoAmparado(Matricula $oMatricula, $oEstrutura) {
+  protected function validaAlunoAmparado(Matricula $oMatricula, $oEstrutura)
+  {
 
     $oAvaliacaoDisciplina = $this->getDiarioAvaliacaoDisciplinaAluno($oMatricula);
-    $oAvaliacaoPeriodo    = $oAvaliacaoDisciplina->getAvaliacoesPorOrdem( $this->oAvaliacaoPeriodica->getOrdemSequencia() );
+    $oAvaliacaoPeriodo    = $oAvaliacaoDisciplina->getAvaliacoesPorOrdem($this->oAvaliacaoPeriodica->getOrdemSequencia());
 
-    if ( $oAvaliacaoPeriodo->isAmparado() ) {
+    if ($oAvaliacaoPeriodo->isAmparado()) {
 
       $this->SetFont("arial", "B", 8);
       $this->Cell($oEstrutura->iTamanhoGrade, 4, "AMPARADO", 1, 0, 'C');
@@ -1191,9 +1234,9 @@ class RelatorioDiarioClasseBase extends PDF {
    * @param Matricula $oMatricula
    * @return DiarioAvaliacaoDisciplina
    */
-  protected function getDiarioAvaliacaoDisciplinaAluno( Matricula $oMatricula) {
+  protected function getDiarioAvaliacaoDisciplinaAluno(Matricula $oMatricula)
+  {
 
     return $oMatricula->getDiarioDeClasse()->getDisciplinasPorDisciplina($this->oRegenciaAtual->getDisciplina());
   }
-
 }
