@@ -107,7 +107,7 @@ class Itbi
 
     public function getMatric()
     {
-        $this->Itbimatric->it06_matric;
+        return $this->Itbimatric->it06_matric;
     }
 
     /**
@@ -239,7 +239,7 @@ class Itbi
     public function incluirArrecad()
     {
         $clarrecad = db_utils::getDao('arrecad');
-        $clarrecad->k00_numcgm = $this->getCompradorPrincipal()->getCgm();
+        $clarrecad->k00_numcgm = $this->getCgmArrecad();
         $clarrecad->k00_dtoper = date('Y-m-d',db_getsession('DB_datausu'));
         $clarrecad->k00_receit = $this->parItbi->getReceita();
         $clarrecad->k00_hist   = Paritbi::HISTCALC_DEFAULT;
@@ -256,5 +256,27 @@ class Itbi
         if ($clarrecad->erro_status == 0) {
             throw new LogicException('Erro ao inserir arrecad do ITBI');
         }
+    }
+
+    /**
+     * @return int
+     * @throws Exception
+     */
+    public function getCgmArrecad()
+    {
+        $compradorPrincipal = $this->getCompradorPrincipal();
+        $transmitentePrincipal = $this->getTransmitentePrincipal();
+
+        if(empty($compradorPrincipal) === false) {
+            return $compradorPrincipal->getCgm();
+        }
+
+        if(empty($transmitentePrincipal) === false) {
+            return $transmitentePrincipal->getCgm();
+        }
+
+        $imovel = new Imovel($this->getMatric());
+
+        return $imovel->getProprietarioPrincipal()->getCodigo();
     }
 }
