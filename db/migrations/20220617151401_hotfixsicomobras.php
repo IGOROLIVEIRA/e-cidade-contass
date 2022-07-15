@@ -8,7 +8,7 @@ class Hotfixsicomobras extends AbstractMigration
     public function up()
     {
         $sql = "
-        
+
             BEGIN;
                 DROP TABLE exeobras102022;
 
@@ -30,9 +30,7 @@ class Hotfixsicomobras extends AbstractMigration
                     si197_mes int8 NULL,
                     si197_instit int4 NULL
                 )
-                WITH (
-                    OIDS=TRUE
-                );
+
             COMMIT;
         ";
         $this->execute($sql);
