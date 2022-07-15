@@ -36,16 +36,18 @@ parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 
 $oDaoRecHumano = new cl_rechumano();
 $oDaoRotulo    = new rotulocampo();
-$oDaoRotulo->label( "ed20_i_codigo" );
-$oDaoRotulo->label( "z01_numcgm" );
-$oDaoRotulo->label( "z01_nome" );
+$oDaoRotulo->label("ed20_i_codigo");
+$oDaoRotulo->label("z01_numcgm");
+$oDaoRotulo->label("z01_nome");
 ?>
 <html>
+
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
   <link href="estilos.css" rel="stylesheet" type="text/css">
   <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
 </head>
+
 <body bgcolor=#CCCCCC>
   <div class="container">
     <form class="form-container" name="form" method="post">
@@ -60,7 +62,7 @@ $oDaoRotulo->label( "z01_nome" );
             </td>
             <td>
               <?php
-                db_input( 'ed20_i_codigo', 10, $Ied20_i_codigo, true, "text", 1, "", "chave_ed20_i_codigo" );
+              db_input('ed20_i_codigo', 10, $Ied20_i_codigo, true, "text", 1, "", "chave_ed20_i_codigo");
               ?>
             </td>
           </tr>
@@ -72,7 +74,7 @@ $oDaoRotulo->label( "z01_nome" );
             </td>
             <td>
               <?php
-                db_input( 'z01_numcgm', 10, $Iz01_numcgm, true, "text", 1, "", "chave_z01_numcgm" );
+              db_input('z01_numcgm', 10, $Iz01_numcgm, true, "text", 1, "", "chave_z01_numcgm");
               ?>
             </td>
           </tr>
@@ -84,87 +86,118 @@ $oDaoRotulo->label( "z01_nome" );
             </td>
             <td>
               <?php
-                db_input( 'z01_nome', 40, $Iz01_nome, true, "text", 1, "", "chave_z01_nome" );
+              db_input('z01_nome', 40, $Iz01_nome, true, "text", 1, "", "chave_z01_nome");
               ?>
             </td>
           </tr>
         </table>
       </fieldset>
       <input id="btnPesquisar" name="btnPesquisar" type="submit" value="Pesquisar" />
-      <input id="btnFechar"    name="btnFechar"    type="button" value="Fechar" onClick="parent.db_iframe_diretor.hide();">
+      <input id="btnFechar" name="btnFechar" type="button" value="Fechar" onClick="parent.db_iframe_diretor.hide();">
     </form>
   </div>
   <div class="container">
     <?
+
     $iEscola = db_getsession("DB_coddepto");
 
-    $sCampos = "rechumano.ed20_i_codigo,
-                  case
-                       when ed20_i_tiposervidor = 1
-                       then cgmrh.z01_nome
-                       else cgmcgm.z01_nome
-                   end as z01_nome,
-                  atividaderh.ed01_c_exigeato,
-                  case
-                       when ed20_i_tiposervidor = 1
-                       then rechumanopessoal.ed284_i_rhpessoal
-                       else rechumanocgm.ed285_i_cgm
-                   end as dl_identificacao,
-                  case
-                       when ed20_i_tiposervidor = 1
-                       then cgmrh.z01_cgccpf
-                       else cgmcgm.z01_cgccpf
-                   end as dl_cpf,
-                  (select ativrh.ed01_c_descr
-                     from rechumanoativ as ativ
-                          inner join atividaderh as ativrh on ativrh.ed01_i_codigo = ativ.ed22_i_atividade
-                    where ativ.ed22_i_rechumanoescola = ed75_i_codigo
-                      and ed01_i_funcaoadmin = 2
-                    order by ed01_c_regencia desc
-                    limit 1) as dl_atividade";
+    if ($chave_ed20_i_codigo == "" && $chave_z01_numcgm == "" && $chave_z01_nome == "") {
 
-    if( !isset( $pesquisa_chave ) ) {
-
-      $sWhere   = "ed75_i_escola = {$iEscola} AND ed01_i_funcaoadmin = 2";
-
-      if ( isset( $chave_ed20_i_codigo ) && !empty( $chave_ed20_i_codigo ) ) {
-        $sWhere .= " AND rechumano.ed20_i_codigo = {$chave_ed20_i_codigo}";
-      }
-
-      if ( isset( $chave_z01_numcgm ) && !empty( $chave_z01_numcgm ) ) {
-        $sWhere .= " AND z01_numcgm = {$chave_z01_numcgm}";
-      }
-
-      if ( isset( $chave_z01_nome ) && !empty( $chave_z01_nome ) ) {
-        $sWhere .= " AND (cgmrh.z01_nome ilike '$chave_z01_nome%' OR cgmcgm.z01_nome ilike '$chave_z01_nome%')";
-      }
-
-      $sSql     = $oDaoRecHumano->sql_query_escola( "", "distinct {$sCampos}", "z01_nome", $sWhere );
       $aRepassa = array();
 
-      db_lovrot( @$sSql, 15, "()", "", $funcao_js, "", "NoMe", $aRepassa );
+      $instit = db_getsession("DB_instit");
+      $ano = db_anofolha();
+      $mes = db_mesfolha();
+      $escola = db_getsession("DB_coddepto");
+      $orderby = " ORDER BY z01_nome,ed01_c_descr";
+      $sql = "SELECT ed20_i_codigo,
+                     case when ed20_i_tiposervidor = 1 then cgmrh.z01_nome else cgmcgm.z01_nome end as z01_nome,
+                     ed01_c_exigeato,
+                     case when ed20_i_tiposervidor = 1 then rechumanopessoal.ed284_i_rhpessoal else rechumanocgm.ed285_i_cgm end as identificacao,
+                     case when ed20_i_tiposervidor = 1 then cgmrh.z01_cgccpf else cgmcgm.z01_cgccpf end as z01_cgccpf,
+                     ed01_c_descr 
+              FROM rechumano
+               inner join rechumanoescola on ed75_i_rechumano = ed20_i_codigo
+               left join rechumanoativ on ed22_i_rechumanoescola = ed75_i_codigo
+               left join atividaderh on ed01_i_codigo = ed22_i_atividade
+               left join rechumanopessoal  on  rechumanopessoal.ed284_i_rechumano = rechumano.ed20_i_codigo
+               left join rhpessoal  on  rhpessoal.rh01_regist = rechumanopessoal.ed284_i_rhpessoal
+               left join rhpessoalmov on rhpessoalmov.rh02_anousu  = $ano
+                                          and rhpessoalmov.rh02_mesusu  = $mes
+                                          and rhpessoalmov.rh02_regist  = rhpessoal.rh01_regist
+                                          and rhpessoalmov.rh02_instit  = $instit
+               left join rhregime as regimerh on  regimerh.rh30_codreg = rhpessoalmov.rh02_codreg
+               left join cgm as cgmrh on  cgmrh.z01_numcgm = rhpessoal.rh01_numcgm
+               left join rechumanocgm  on  rechumanocgm.ed285_i_rechumano = rechumano.ed20_i_codigo
+               left join cgm as cgmcgm on  cgmcgm.z01_numcgm = rechumanocgm.ed285_i_cgm
+               left join rhregime as regimecgm on  regimecgm.rh30_codreg = rechumano.ed20_i_rhregime
+              WHERE ed75_i_escola = $escola AND ed01_i_codigo = 5
+              $orderby
+             ";
+      echo "<script>" . $funcao_js . "('123', '123', '123', '123', '123', false);</script>";
+
+      db_lovrot($sql, 15, "()", "", $funcao_js, "", "NoMe", $aRepassa);
     } else {
 
-      if( $pesquisa_chave != null && $pesquisa_chave != "" ) {
+      if ($chave_ed20_i_codigo != "" || $chave_z01_numcgm != "" || $chave_z01_nome != "") {
 
-        $sWhere      = "ed20_i_codigo = {$pesquisa_chave} AND ed75_i_escola = {$iEscola}";
-        $sSql        = $oDaoRecHumano->sql_query_escola( "", $campos, "z01_nome", $sWhere );
-        $rsRecHumano = $oDaoRecHumano->sql_record( $sSql );
-        if( $oDaoRecHumano->numrows != 0 ) {
 
-          db_fieldsmemory( $rsRecHumano, 0 );
-          echo "<script>".$funcao_js."('{$ed20_i_codigo}', '{$z01_nome}', '{$dl_identificacao}', '{$dl_cpf}', '{$dl_atividade}', false);</script>";
-        } else {
-          echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
+        if ($chave_ed20_i_codigo != "") {
+          $where = " AND ed20_i_codigo = {$chave_ed20_i_codigo}";
+        }
+
+        if ($chave_z01_numcgm != "") {
+          $where = " AND z01_numcgm = {$chave_z01_numcgm}";
+        }
+
+        if ($chave_z01_nome != "") {
+          $where = " AND cgmrh.z01_nome ilike '$chave_z01_nome%'";
+        }
+
+        $instit = db_getsession("DB_instit");
+        $ano = db_anofolha();
+        $mes = db_mesfolha();
+        $escola = db_getsession("DB_coddepto");
+        $orderby = " ORDER BY z01_nome,ed01_c_descr";
+        $sql = "SELECT ed20_i_codigo,
+                     case when ed20_i_tiposervidor = 1 then cgmrh.z01_nome else cgmcgm.z01_nome end as z01_nome,
+                     ed01_c_exigeato,
+                     case when ed20_i_tiposervidor = 1 then rechumanopessoal.ed284_i_rhpessoal else rechumanocgm.ed285_i_cgm end as identificacao,
+                     case when ed20_i_tiposervidor = 1 then cgmrh.z01_cgccpf else cgmcgm.z01_cgccpf end as z01_cgccpf,
+                     ed01_c_descr 
+              FROM rechumano
+               inner join rechumanoescola on ed75_i_rechumano = ed20_i_codigo
+               left join rechumanoativ on ed22_i_rechumanoescola = ed75_i_codigo
+               left join atividaderh on ed01_i_codigo = ed22_i_atividade
+               left join rechumanopessoal  on  rechumanopessoal.ed284_i_rechumano = rechumano.ed20_i_codigo
+               left join rhpessoal  on  rhpessoal.rh01_regist = rechumanopessoal.ed284_i_rhpessoal
+               left join rhpessoalmov on rhpessoalmov.rh02_anousu  = $ano
+                                          and rhpessoalmov.rh02_mesusu  = $mes
+                                          and rhpessoalmov.rh02_regist  = rhpessoal.rh01_regist
+                                          and rhpessoalmov.rh02_instit  = $instit
+               left join rhregime as regimerh on  regimerh.rh30_codreg = rhpessoalmov.rh02_codreg
+               left join cgm as cgmrh on  cgmrh.z01_numcgm = rhpessoal.rh01_numcgm
+               left join rechumanocgm  on  rechumanocgm.ed285_i_rechumano = rechumano.ed20_i_codigo
+               left join cgm as cgmcgm on  cgmcgm.z01_numcgm = rechumanocgm.ed285_i_cgm
+               left join rhregime as regimecgm on  regimecgm.rh30_codreg = rechumano.ed20_i_rhregime
+              WHERE ed75_i_escola = $escola AND ed01_i_codigo = 5
+              $where
+              $orderby
+             ";
+        $result = db_query($sql);
+        db_fieldsmemory($result, 0);
+        if (pg_numrows($result) != 0) {
+          echo "<script>" . "parent.js_mostrarechumano1('$ed20_i_codigo', '$z01_nome', '$ed01_c_exigeato', '$identificacao', '$z01_cgccpf', '$ed01_c_descr');</script>";
         }
       } else {
-        echo "<script>".$funcao_js."('',false);</script>";
+        echo "<script>" . $funcao_js . "('',false);</script>";
       }
     }
     ?>
   </div>
 </body>
+
 </html>
 <script>
-  js_tabulacaoforms( "form", "chave_ed20_i_codigo", true, 1, "chave_ed20_i_codigo", true );
+  js_tabulacaoforms("form", "chave_ed20_i_codigo", true, 1, "chave_ed20_i_codigo", true);
 </script>
