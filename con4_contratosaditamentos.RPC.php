@@ -42,6 +42,8 @@ $oParam           = $oJson->decode(str_replace("\\", "", $_POST["json"]));
 $oRetorno          = new stdClass();
 $oRetorno->erro    = false;
 $oRetorno->message = '';
+$oRetorno->datareferencia = false;
+
 
 try {
 
@@ -85,6 +87,7 @@ try {
                 $oItem                 = new stdClass();
 
                 $oItem->codigo         = $oItemPosicao->getCodigo();
+                //$oItem->ordem          = $oItemPosicao->getOrdem();
                 $oItem->codigoitem     = $oItemPosicao->getMaterial()->getMaterial();
                 $oItem->elemento       = $oItemPosicao->getDesdobramento();
                 $oItem->descricaoitem  = $oItemPosicao->getMaterial()->getDescricao();
@@ -158,7 +161,6 @@ try {
             break;
 
         case "processarAditamento":
-
             $clcondataconf = new cl_condataconf;
 
             if ($sqlerro == false) {
@@ -181,11 +183,27 @@ try {
 
                 $result = db_query($sNSQL);
                 $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
+                $datareferencia = implode("-", array_reverse(explode("/", $oParam->datareferencia)));
+
+
+
+                if ($oParam->datareferencia != "") {
+
+                    if (substr($c99_datapat, 0, 4) == substr($datareferencia, 0, 4) && mb_substr($c99_datapat, 5, 2) == mb_substr($datareferencia, 5, 2)) {
+                        throw new Exception('Usuário: A data de referência deverá ser no mês posterior ao mês da data inserida.');
+                    }
+
+                    if ($c99_datapat != "" && $datareferencia <= $c99_datapat) {
+                        throw new Exception(' O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.');
+                    }
+                }
+
                 $dateassinatura = implode("-", array_reverse(explode("/", $oParam->dataassinatura)));
 
-                if ($dateassinatura != "") {
+                if ($dateassinatura != "" && $oParam->datareferencia == "") {
                     if ($c99_datapat != "" && $dateassinatura <= $c99_datapat) {
-                        throw new Exception(' O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.');
+                        $oRetorno->datareferencia = true;
+                        throw new Exception(' O período já foi encerrado para envio do SICOM. Preencha o campo Data de Referência com uma data no mês subsequente.');
                     }
                 }
             }
@@ -200,7 +218,7 @@ try {
             }
 
             $oContrato = AcordoRepository::getByCodigo($oParam->iAcordo); //var_dump($oParam->sVigenciaalterada);
-            $oContrato->aditar($oParam->aItens, $oParam->tipoaditamento, $oParam->datainicial, $oParam->datafinal, $oParam->sNumeroAditamento, $oParam->dataassinatura, $oParam->datapublicacao, $oParam->descricaoalteracao, $oParam->veiculodivulgacao, $oParam->tipoalteracaoaditivo, $oParam->aSelecionados, $oParam->sVigenciaalterada, $oParam->lProvidencia);
+            $oContrato->aditar($oParam->aItens, $oParam->tipoaditamento, $oParam->datainicial, $oParam->datafinal, $oParam->sNumeroAditamento, $oParam->dataassinatura, $oParam->datapublicacao, $oParam->descricaoalteracao, $oParam->veiculodivulgacao, $oParam->tipoalteracaoaditivo, $oParam->aSelecionados, $oParam->sVigenciaalterada, $oParam->lProvidencia, $oParam->datareferencia);
 
             break;
 
@@ -228,11 +246,29 @@ try {
             if ($sqlerro == false) {
                 $result = db_query($clcondataconf->sql_query_file(db_getsession('DB_anousu'), db_getsession('DB_instit')));
                 $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
+                $datareferencia = implode("-", array_reverse(explode("/", $oParam->datareferencia)));
+
+
+
+                if ($oParam->datareferencia != "") {
+
+                    if (substr($c99_datapat, 0, 4) == substr($datareferencia, 0, 4) && mb_substr($c99_datapat, 5, 2) == mb_substr($datareferencia, 5, 2)) {
+                        throw new Exception('Usuário: A data de referência deverá ser no mês posterior ao mês da data inserida.');
+                    }
+
+                    if ($c99_datapat != "" && $datareferencia <= $c99_datapat) {
+                        throw new Exception(' O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.');
+                    }
+                }
+
                 $dateassinatura = implode("-", array_reverse(explode("/", $oParam->sData)));
 
-                if ($dateassinatura != "") {
+                if ($dateassinatura != "" && $oParam->datareferencia == "") {
                     if ($c99_datapat != "" && $dateassinatura <= $c99_datapat) {
-                        throw new Exception(' O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.');
+                        $oRetorno->datareferencia = true;
+                        throw new Exception(' O período já foi encerrado para envio do SICOM. Preencha o campo Data de Referência com uma data no mês subsequente.');
+                    } else {
+                        $oParam->datareferencia = $oParam->sData;
                     }
                 }
             }
@@ -257,10 +293,19 @@ try {
             $oAditivo->ac35_datapublicacao = $sDataPublicacao;
             $oAditivo->ac35_veiculodivulgacao = $sVeiculoDivulgacao;
 
+            $dataref = $oParam->datareferencia;
+            $dataref = str_replace("/", "-", $dataref);
+            $dataref =  date('Y-m-d', strtotime($dataref));
+
+
             $oAditivo->alterar($iCodigoAditivo);
             if ($oAditivo->erro_status == 0) {
                 throw new Exception($oAditivo->erro_msg);
             } else {
+
+                db_query("UPDATE acordoposicaoaditamento
+                SET ac35_datareferencia = '$dataref'
+                WHERE ac35_sequencial = $iCodigoAditivo");
                 $oRetorno->message = "Assinatura salva com sucesso";
             }
 

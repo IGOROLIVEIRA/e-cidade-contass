@@ -1085,6 +1085,8 @@ class cl_arquivo_auxiliar {
 //|30|//Setar o nome da janela
    var $nomejanela = "Pesquisa";
 // Quando preenchido usado para passar como parameto ao campo func_arquivo
+    var $tamanho_campo_label = 10;
+//|30|//Setar o tamanho do label do campo
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //|30|//
@@ -1127,7 +1129,7 @@ class cl_arquivo_auxiliar {
     }
 
     db_ancora($labelAncora,"js_BuscaDadosArquivo".$this->nomeobjeto."(true);",$this->db_opcao);
-    db_input($this->codigo,8,'',true,'text',$this->db_opcao," onchange='js_BuscaDadosArquivo".$this->nomeobjeto."(false);' tabIndex='0'");
+    db_input($this->codigo, $this->tamanho_campo_label,'',true,'text',$this->db_opcao," onchange='js_BuscaDadosArquivo".$this->nomeobjeto."(false);' tabIndex='0'");
 
     if($this->tipo==1)
       echo "            <br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp";

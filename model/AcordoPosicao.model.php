@@ -1155,7 +1155,7 @@ class AcordoPosicao
      * @param string $sDescricaoAlteracao descricao da alteração
      * @param string $sVeiculoDivulgacao veiculo de divulgacao
      */
-    function salvarSaldoAditamento($nValorSaldo, $dtAssinatura, $dtPublicacao, $sDescricaoAlteracao, $sVeiculoDivulgacao)
+    function salvarSaldoAditamento($nValorSaldo, $dtAssinatura, $dtPublicacao, $sDescricaoAlteracao, $sVeiculoDivulgacao, $datareferencia)
     {
 
         if (!empty($this->iCodigo)) {
@@ -1167,6 +1167,11 @@ class AcordoPosicao
             $oDaoAcordoPosicaoAditamento->ac35_datapublicacao                     = $dtPublicacao;
             $oDaoAcordoPosicaoAditamento->ac35_descricaoalteracao                 = utf8_decode($sDescricaoAlteracao);
             $oDaoAcordoPosicaoAditamento->ac35_veiculodivulgacao                  = utf8_decode($sVeiculoDivulgacao);
+            if ($datareferencia == "") {
+                $oDaoAcordoPosicaoAditamento->ac35_datareferencia = $oDaoAcordoPosicaoAditamento->ac35_dataassinaturatermoaditivo;
+            } else {
+                $oDaoAcordoPosicaoAditamento->ac35_datareferencia = $datareferencia;
+            }
             $oDaoAcordoPosicaoAditamento->incluir(null);
         }
     }
@@ -1786,6 +1791,11 @@ class AcordoPosicao
             $oDaoApostilamento->si03_acordo = $this->getAcordo();
             $oDaoApostilamento->si03_acordoposicao = $this->getCodigo();
             $oDaoApostilamento->si03_numcontrato = "null";
+            if ($oApostila->datareferencia == "") {
+                $oDaoApostilamento->si03_datareferencia = $oDaoApostilamento->si03_dataapostila;
+            } else {
+                $oDaoApostilamento->si03_datareferencia = implode("-", array_reverse(explode("/", $oApostila->datareferencia)));
+            }
             $oDaoApostilamento->incluir(null);
             if ($oDaoApostilamento->erro_status == 0) {
                 throw new Exception("Erro ao salvar apostilamento.\n{$oDaoApostilamento->erro_msg}");

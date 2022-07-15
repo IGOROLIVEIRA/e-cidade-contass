@@ -419,7 +419,7 @@ if (isset($m51_codordem) && $m51_codordem != '') {
         js_OpenJanelaIframe('', 'db_iframe_altcgm', 'prot1_cadcgm002.php?chavepesquisa=' + cgm + '&testanome=true&autoc=true', 'Altera Cgm', true);
     }
 
-    function js_buscavalores() {
+    function js_buscavalores() {  
         obj = itens.document.form1;
 
         let aItens = [];
@@ -475,12 +475,13 @@ if (isset($m51_codordem) && $m51_codordem != '') {
 
         let oParam = new Object();
         let body = document.form1;
-        let obs = body.m51_obs.value
+        let obs = body.m51_obs.value.toUpperCase();
         oParam.m51_prazoent = body.m51_prazoent.value;
         oParam.m51_codordem = body.m51_codordem.value;
         oParam.coddepto = body.coddepto.value;
         oParam.coddeptodescr = body.coddeptodescr.value;
         oParam.obs = encodeURIComponent(obs.replace('\'',''));
+        oParam.obs = obs.replace('%0A','\n');
         oParam.m51_data = body.m51_data.value;
         oParam.m51_deptoorigem = body.m51_deptoorigem.value;
         oParam.itens = aItens;
@@ -542,8 +543,8 @@ if (isset($m51_codordem) && $m51_codordem != '') {
 
     function js_validaCaracteres(texto, campo) {
     let temporario = '';
-    temporario = texto.replace(/\n/g, ' ');
-
+    temporario = texto;
+    
     /*Caracteres não permitidos na descrição e complemento material*/
     let charBuscados = [";", "'", "\"", "\\", "*", ":"];
     let novoTexto = temporario;
@@ -560,7 +561,7 @@ if (isset($m51_codordem) && $m51_codordem != '') {
       /* Lança o erro quando a tecla Enter é pressionada. */
       if (window.event.keyCode == 13) {
         erro = true;
-        novoTexto = texto.replace(/(\r\n|\n|\r)/g, '');
+        novoTexto = texto.replace(/(\r\n|\r)/g, '');
       }
     }
 

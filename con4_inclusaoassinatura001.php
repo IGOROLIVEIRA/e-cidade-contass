@@ -52,6 +52,7 @@ $clrotulo->label("ac10_datamovimento");
 $clrotulo->label("ac10_obs");
 ?>
 <html>
+
 <head>
   <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
@@ -73,6 +74,7 @@ $clrotulo->label("ac10_obs");
     }
   </style>
 </head>
+
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
   <table border="0" align="center" cellspacing="0" cellpadding="0" style="padding-top:40px;">
     <form id="form1" action="" name="form1">
@@ -82,18 +84,25 @@ $clrotulo->label("ac10_obs");
             <legend><b>Assinatura de aditamentos</b></legend>
             <table align="center" border="0">
               <tr>
-                <td title="<?=@$Tac16_sequencial?>" align="left">
-                  <?php db_ancora($Lac16_sequencial, "js_pesquisaac16_sequencial(true);",$db_opcao); ?>
+                <td title="<?= @$Tac16_sequencial ?>" align="left">
+                  <?php db_ancora($Lac16_sequencial, "js_pesquisaac16_sequencial(true);", $db_opcao); ?>
                 </td>
                 <td align="left">
                   <?
-                  db_input('ac16_sequencial',10,$Iac16_sequencial,true,'text',
-                   $db_opcao," onchange='js_pesquisaac16_sequencial(false);'");
-                   ?>
-                 </td>
-                 <td align="left">
+                  db_input(
+                    'ac16_sequencial',
+                    10,
+                    $Iac16_sequencial,
+                    true,
+                    'text',
+                    $db_opcao,
+                    " onchange='js_pesquisaac16_sequencial(false);'"
+                  );
+                  ?>
+                </td>
+                <td align="left">
                   <?
-                  db_input('ac16_resumoobjeto',40,$Iac16_resumoobjeto,true,'text',3);
+                  db_input('ac16_resumoobjeto', 40, $Iac16_resumoobjeto, true, 'text', 3);
                   ?>
                 </td>
               </tr>
@@ -107,271 +116,304 @@ $clrotulo->label("ac10_obs");
         <td></td>
       </tr>
 
-    </table>
-    <br>
-    <div id="ctnGridItens" style="width:80%; text-align:center; margin:0 auto;"></div>
-    <br>
-    <table border="0" id="assinatura" align="center" cellspacing="0" cellpadding="0" style="padding-top:40px;">
-      <tr>
-        <td valign="top" align="center">
-          <fieldset>
-            <legend><b>Clique duplo sobre o aditamento que deseja assinar</b></legend>
-            <table align="center" border="0">
-              <tr>
-                <td title="Código do Aditivo" align="left">
-                  <b>Código do Aditivo:</b>
-                </td>
-                <td align="left">
-                  <?
-                  db_input('iCodigoAditivo',14,"",true,'text',
-                   3," onchange=''");
-                   ?>
-                 </td>
-                 <td align="left">
-                  <?
-                  db_input('sDescricaoAditivo',40,"",true,'text',3);
-                  ?>
-                </td>
-              </tr>
-              <tr>
-                <td title="Data" align="left">
-                  <b>Data de Assinatura</b>
-                </td>
-                <td align="left">
-                  <?
-                  db_inputdata("sData", "", "", "", true, 'text', 1, "", "", "","none","","", "");
-                  ?>
-                </td>
-                <td align="left">
+  </table>
+  <br>
+  <div id="ctnGridItens" style="width:80%; text-align:center; margin:0 auto;"></div>
+  <br>
+  <table border="0" id="assinatura" align="center" cellspacing="0" cellpadding="0" style="padding-top:40px;">
+    <tr>
+      <td valign="top" align="center">
+        <fieldset>
+          <legend><b>Clique duplo sobre o aditamento que deseja assinar</b></legend>
+          <table align="center" border="0">
+            <tr>
+              <td title="Código do Aditivo" align="left">
+                <b>Código do Aditivo:</b>
+              </td>
+              <td align="left">
+                <?
+                db_input(
+                  'iCodigoAditivo',
+                  14,
+                  "",
+                  true,
+                  'text',
+                  3,
+                  " onchange=''"
+                );
+                ?>
+              </td>
+              <td align="left">
+                <?
+                db_input('sDescricaoAditivo', 40, "", true, 'text', 3);
+                ?>
+              </td>
+            </tr>
+            <tr>
+              <td title="Data" align="left">
+                <b>Data de Assinatura</b>
+              </td>
+              <td align="left">
+                <?
+                db_inputdata("sData", "", "", "", true, 'text', 1, "", "", "", "none", "", "", "");
+                ?>
+              </td>
+              <td align="left">
 
-                </td>
-              </tr>
-              <tr>
-                <td title="Data" align="left">
-                  <b>Data da publicação</b>
-                </td>
-                <td align="left">
-                  <?
-                  db_inputdata("sDataPublicacao", "", "", "", true, 'text', 1, "", "", "","none","","", "");
-                  ?>
-                </td>
-                <td align="left">
+              </td>
+            </tr>
+            <tr>
+              <td title="Data" align="left">
+                <b>Data da publicação</b>
+              </td>
+              <td align="left">
+                <?
+                db_inputdata("sDataPublicacao", "", "", "", true, 'text', 1, "", "", "", "none", "", "", "");
+                ?>
+              </td>
+              <td align="left">
 
-                </td>
-              </tr>
-              <tr>
-                <td title="Data" align="left">
-                  <b>Veículo de divulgação</b>
-                </td>
-                <td align="left" colspan="2">
-                  <?
-                  db_input('sVeiculoDivulgacao',40,"",true,'text',1);
-                  ?>
-                </td>
+              </td>
+            </tr>
+            <tr id="trdatareferencia" style="display:none;">
+              <td align="left">
+                <b>Data de Referência:</b>
+              </td>
 
-              </tr>
+              <td align="left">
+                <?
+                db_inputdata("datareferencia", "", "", "", true, 'text', 1, "", "", "", "none", "", "", "");
+
+                ?>
+              </td>
+              <td>&nbsp;</td>
+            </tr>
+            <tr>
+              <td title="Data" align="left">
+                <b>Veículo de divulgação</b>
+              </td>
+              <td align="left" colspan="2">
+                <?
+                db_input('sVeiculoDivulgacao', 40, "", true, 'text', 1);
+                ?>
+              </td>
+
+            </tr>
 
 
-            </table>
-          </fieldset>
-        </td>
-      </tr>
-      <tr>
-        <td></td>
-      </tr>
+          </table>
+        </fieldset>
+      </td>
+    </tr>
+    <tr>
+      <td></td>
+    </tr>
 
-    </table>
-    <br>
-    <table width="100%">
-      <tr>
-        <td align="center">
-          <input id="incluir" name="incluir" type="button" value="Salvar Assinatura" onclick="return js_salvaAssinatura();">
-        </td>
-      </tr>
+  </table>
+  <br>
+  <table width="100%">
+    <tr>
+      <td align="center">
+        <input id="incluir" name="incluir" type="button" value="Salvar Assinatura" onclick="return js_salvaAssinatura();">
+      </td>
+    </tr>
     </form>
   </table>
   <?
-  db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
+  db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit"));
   ?>
 </body>
 <script>
-  $('ac16_sequencial').style.width   = "100%";
+  $('ac16_sequencial').style.width = "100%";
   $('ac16_resumoobjeto').style.width = "100%";
 
-/**
- * Pesquisa acordos
- */
- function js_pesquisaac16_sequencial(lMostrar) {
+  /**
+   * Pesquisa acordos
+   */
+  function js_pesquisaac16_sequencial(lMostrar) {
 
-  if (lMostrar == true) {
+    if (lMostrar == true) {
 
-    var sUrl = 'func_acordo.php?funcao_js=parent.js_mostraacordo1|ac16_sequencial|ac16_resumoobjeto';
-    js_OpenJanelaIframe('CurrentWindow.corpo',
-      'db_iframe_acordo',
-      sUrl,
-      'Pesquisar Acordo',
-      true);
-  } else {
-
-    if ($('ac16_sequencial').value != '') {
-
-      var sUrl = 'func_acordo.php?descricao=true&pesquisa_chave='+$('ac16_sequencial').value+
-      '&funcao_js=parent.js_mostraacordo';
-
-      js_OpenJanelaIframe('CurrentWindow.corpo',
+      var sUrl = 'func_acordo.php?funcao_js=parent.js_mostraacordo1|ac16_sequencial|ac16_resumoobjeto';
+      js_OpenJanelaIframe('top.corpo',
         'db_iframe_acordo',
         sUrl,
         'Pesquisar Acordo',
-        false);
+        true);
     } else {
-     $('ac16_sequencial').value = '';
-   }
- }
-}
 
-/**
- * Retorno da pesquisa acordos
- */
- function js_mostraacordo(chave1,chave2,erro) {
-  // alert(chave1);
-  // alert(chave2);
-  if (erro == true) {
+      if ($('ac16_sequencial').value != '') {
 
-    $('ac16_sequencial').value   = '';
-    $('ac16_resumoobjeto').value = chave1;
-    $('ac16_sequencial').focus();
-  } else {
+        var sUrl = 'func_acordo.php?descricao=true&pesquisa_chave=' + $('ac16_sequencial').value +
+          '&funcao_js=parent.js_mostraacordo';
 
-    $('ac16_sequencial').value   = chave1;
-    $('ac16_resumoobjeto').value = chave2;
-  }
-  js_carregaAditamentos();
-}
-
-/**
- * Retorno da pesquisa acordos
- */
- function js_mostraacordo1(chave1,chave2) {
-  // alert(chave1);
-  // alert(chave2);
-  $('ac16_sequencial').value    = chave1;
-  $('ac16_resumoobjeto').value  = chave2;
-  js_carregaAditamentos();
-  db_iframe_acordo.hide();
-
-
-
-}
-function js_carregaAditamentos(){
-  db_iframe_acordo.hide();
-
-  oGridItens              = new DBGrid("oGridItens");
-  oGridItens.nameInstance   = "oGridItens";
-  oGridItens.setCheckbox(true);
-
-  oGridItens.setHeight(200);
-  oGridItens.setCellAlign(new Array("center", "center", "center","center", "center"));
-  oGridItens.setHeader(new Array("Código",
-    "Número",
-    "Tipo",
-    "Assinatura",
-    "Publicação",
-    ));
-  oGridItens.selectSingle = function (oCheckbox, sRow, oRow) {
-    document.form1.iCodigoAditivo.value = (oRow.aCells[1].getValue());
-    document.form1.sDescricaoAditivo.value = (oRow.aCells[3].getValue());
-
-  }
-
-  oGridItens.show($('ctnGridItens'));
-
-  oGridItens.clearAll(true);
-
-
-  sUrl = 'con4_contratosmovimentacoesfinanceiras.RPC.php';
-
-  var oParam = new Object();
-  oParam.exec = "getPosicoesAcordo";
-  oParam.iAcordo = $F('ac16_sequencial');
-
-  var oAjax = new Ajax.Request(
-    sUrl,
-    {
-      method: 'post',
-      parameters: 'json=' + Object.toJSON(oParam),
-      onComplete: function(o){
-
-        var oRetorno = eval("(" + o.responseText + ")").posicoes;
-        oRetorno.forEach(function(aditivo){
-          if(aditivo.codigoaditivo!=""){
-                    var aLinha = new Array();
-                    aLinha[0]  = aditivo.codigoaditivo;
-                    aLinha[1]  = aditivo.numero;
-                    aLinha[2]  = aditivo.descricaotipo.urlDecode();
-                    aLinha[3]  = (aditivo.dataassinatura == null || aditivo.dataassinatura == "") ? '-' : (aditivo.dataassinatura);
-                    aLinha[4]  = (aditivo.datapublicacao == null || aditivo.datapublicacao == "") ? '-' : (aditivo.datapublicacao);
-                    disabled = false;
-                    if(aditivo.dataassinatura != null && aditivo.dataassinatura != ""){
-                      disabled = true;
-                    }
-                    oGridItens.addRow(aLinha, true, disabled, false);
-          }
-        });
+        js_OpenJanelaIframe('top.corpo',
+          'db_iframe_acordo',
+          sUrl,
+          'Pesquisar Acordo',
+          false);
+      } else {
+        $('ac16_sequencial').value = '';
       }
     }
-    );
-  oGridItens.renderRows();
-
-  //mete o ajax de busca
-
-}
-function  js_salvaAssinatura(){
-  sUrl = 'con4_contratosaditamentos.RPC.php';
-
-  var oParam = new Object();
-
-  oParam.exec = "salvaAssinatura";
-  if($F('ac16_sequencial') == ""){
-    alert("Preencha o campo Código do Acordo");
-    return false;
   }
-  if($F('iCodigoAditivo') == ""){
-    alert("Selecione um aditivo");
-    return false;
-  }
-  if($F('sData') == ""){
-    alert("Preencha o campo data de assinatura");
-    return false;
-  }
-  if($F('sDataPublicacao') == ""){
-    alert("Preencha o campo data da publicação");
-    return false;
-  }
-  if($F('sVeiculoDivulgacao') == ""){
-    alert("Preencha o campo veículo de divulgação");
-    return false;
-  }
-  oParam.iAcordo = $F('ac16_sequencial');
-  oParam.iCodigoAditivo = $F('iCodigoAditivo');
-  oParam.sData = $F('sData');
-  oParam.sDataPublicacao = $F('sDataPublicacao');
-  oParam.sVeiculoDivulgacao = $F('sVeiculoDivulgacao');
 
-  var oAjax = new Ajax.Request(
-    sUrl,
-    {
-      method: 'post',
-      parameters: 'json=' + Object.toJSON(oParam),
-      onComplete: function(o){
-        alert((eval("(" + o.responseText + ")").message).urlDecode());
-        document.form1.iCodigoAditivo.value = '';
-        document.form1.sDescricaoAditivo.value = '';
-        document.form1.sData.value = '';
-        document.form1.sDataPublicacao.value = '';
-        document.form1.sVeiculoDivulgacao.value = '';
-        js_carregaAditamentos();
+  /**
+   * Retorno da pesquisa acordos
+   */
+  function js_mostraacordo(chave1, chave2, erro) {
+    // alert(chave1);
+    // alert(chave2);
+    if (erro == true) {
+
+      $('ac16_sequencial').value = '';
+      $('ac16_resumoobjeto').value = chave1;
+      $('ac16_sequencial').focus();
+    } else {
+
+      $('ac16_sequencial').value = chave1;
+      $('ac16_resumoobjeto').value = chave2;
+    }
+    js_carregaAditamentos();
+  }
+
+  /**
+   * Retorno da pesquisa acordos
+   */
+  function js_mostraacordo1(chave1, chave2) {
+    // alert(chave1);
+    // alert(chave2);
+    $('ac16_sequencial').value = chave1;
+    $('ac16_resumoobjeto').value = chave2;
+    js_carregaAditamentos();
+    db_iframe_acordo.hide();
+
+
+
+  }
+
+  function js_carregaAditamentos() {
+    db_iframe_acordo.hide();
+
+    oGridItens = new DBGrid("oGridItens");
+    oGridItens.nameInstance = "oGridItens";
+    oGridItens.setCheckbox(true);
+
+    oGridItens.setHeight(200);
+    oGridItens.setCellAlign(new Array("center", "center", "center", "center", "center"));
+    oGridItens.setHeader(new Array("Código",
+      "Número",
+      "Tipo",
+      "Assinatura",
+      "Publicação",
+    ));
+    oGridItens.selectSingle = function(oCheckbox, sRow, oRow) {
+      document.form1.iCodigoAditivo.value = (oRow.aCells[1].getValue());
+      document.form1.sDescricaoAditivo.value = (oRow.aCells[3].getValue());
+
+    }
+
+    oGridItens.show($('ctnGridItens'));
+
+    oGridItens.clearAll(true);
+
+
+    sUrl = 'con4_contratosmovimentacoesfinanceiras.RPC.php';
+
+    var oParam = new Object();
+    oParam.exec = "getPosicoesAcordo";
+    oParam.iAcordo = $F('ac16_sequencial');
+
+    var oAjax = new Ajax.Request(
+      sUrl, {
+        method: 'post',
+        parameters: 'json=' + Object.toJSON(oParam),
+        onComplete: function(o) {
+
+          var oRetorno = eval("(" + o.responseText + ")").posicoes;
+          oRetorno.forEach(function(aditivo) {
+            if (aditivo.codigoaditivo != "") {
+              var aLinha = new Array();
+              aLinha[0] = aditivo.codigoaditivo;
+              aLinha[1] = aditivo.numero;
+              aLinha[2] = aditivo.descricaotipo.urlDecode();
+              aLinha[3] = (aditivo.dataassinatura == null || aditivo.dataassinatura == "") ? '-' : (aditivo.dataassinatura);
+              aLinha[4] = (aditivo.datapublicacao == null || aditivo.datapublicacao == "") ? '-' : (aditivo.datapublicacao);
+              disabled = false;
+              if (aditivo.dataassinatura != null && aditivo.dataassinatura != "") {
+                disabled = true;
+              }
+              oGridItens.addRow(aLinha, true, disabled, false);
+            }
+          });
+        }
       }
-    });
-}
+    );
+    oGridItens.renderRows();
+
+    //mete o ajax de busca
+
+  }
+
+  function js_salvaAssinatura() {
+    sUrl = 'con4_contratosaditamentos.RPC.php';
+
+    var oParam = new Object();
+
+    oParam.exec = "salvaAssinatura";
+    if ($F('ac16_sequencial') == "") {
+      alert("Preencha o campo Código do Acordo");
+      return false;
+    }
+    if ($F('iCodigoAditivo') == "") {
+      alert("Selecione um aditivo");
+      return false;
+    }
+    if ($F('sData') == "") {
+      alert("Preencha o campo data de assinatura");
+      return false;
+    }
+    if ($F('sDataPublicacao') == "") {
+      alert("Preencha o campo data da publicação");
+      return false;
+    }
+    if ($F('sVeiculoDivulgacao') == "") {
+      alert("Preencha o campo veículo de divulgação");
+      return false;
+    }
+    oParam.iAcordo = $F('ac16_sequencial');
+    oParam.iCodigoAditivo = $F('iCodigoAditivo');
+    oParam.sData = $F('sData');
+    oParam.sDataPublicacao = $F('sDataPublicacao');
+    oParam.sVeiculoDivulgacao = $F('sVeiculoDivulgacao');
+    oParam.datareferencia = $F('datareferencia');
+
+
+    var oAjax = new Ajax.Request(
+      sUrl, {
+        method: 'post',
+        parameters: 'json=' + Object.toJSON(oParam),
+        onComplete: function(o) {
+          var oRetorno = eval("(" + o.responseText + ")");
+          alert((eval("(" + o.responseText + ")").message).urlDecode());
+
+          if (oRetorno.datareferencia == true) {
+            document.getElementById("trdatareferencia").style.display = 'contents';
+          } else {
+            document.form1.iCodigoAditivo.value = '';
+            document.form1.sDescricaoAditivo.value = '';
+            document.form1.sData.value = '';
+            document.form1.sDataPublicacao.value = '';
+            document.form1.sVeiculoDivulgacao.value = '';
+            document.form1.datareferencia.value = '';
+            document.getElementById("trdatareferencia").style.display = 'none';
+            js_carregaAditamentos();
+          }
+
+
+        }
+      });
+  }
 </script>
+
 </html>

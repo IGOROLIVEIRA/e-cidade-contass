@@ -83,7 +83,7 @@ $clpcsubgrupo->rotulo->label("pc04_descrsubgrupo");
   <tr> 
     <td align="center" valign="top"> 
       <?
-      $where = " pc04_ativo is true ";
+      $where = " pc04_ativo is true and pc04_instit in (".db_getsession('DB_instit').",0)";
       if(!isset($pesquisa_chave)){
         if(isset($campos)==false){
            if(file_exists("funcoes/db_func_pcsubgrupo.php")==true){

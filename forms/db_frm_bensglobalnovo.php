@@ -69,6 +69,7 @@ $oDataAtual   = new DBDate(date("d/m/Y", db_getsession("DB_datausu")));
 $oInstituicao = new Instituicao(db_getsession("DB_instit"));
 
 $lPossuiIntegracaoPatrimonial = ParametroIntegracaoPatrimonial::possuiIntegracaoPatrimonio($oDataAtual, $oInstituicao);
+$integracao = ParametroIntegracaoPatrimonial::possuiIntegracaoPatrimonio($oDataAtual, $oInstituicao);
 ?>
 
 <fieldset style="text-align: left; width: 800px; ">
@@ -126,11 +127,23 @@ $lPossuiIntegracaoPatrimonial = ParametroIntegracaoPatrimonial::possuiIntegracao
 	        </tr>
 	        <tr >
 	          <td title="<?=$Tt52_dtaqu?>"><?=$Lt52_dtaqu?></td>
-	          <td colspan="6">
+	          <td colspan="1">
 	            <?
 	              db_inputdata('t52_dtaqu',@$t52_dtaqu_dia,@$t52_dtaqu_mes,@$t52_dtaqu_ano,true,'text',$db_opcao,"");
 	            ?>
 	          </td>
+            <td><label id='contabilizador' style="font-weight: bold;">O bem a ser inserido possui dispensa de tombamento:</label> 
+          </td>
+          <td > <?
+              $bloquear = $db_opcao;
+              if($db_opcao == 2)
+                  $bloquear = 3;
+
+              $contabilizado = array(''=>'Selecione', 'sim'=>'Sim', 'nao'=>'Não');
+              db_select('contabilizado', $contabilizado, true, $bloquear, 'style="width: 90px"');
+              
+            ?>
+          </td>
 	        </tr>
 
 	        <tr>
@@ -445,6 +458,17 @@ var iParametro;
 var dbOpcao = <?= $db_opcao ?>;
 var iParametroPlaca = null;
 var lPossuiIntegracaoPatrimonial = false;
+var integracao = "<?php print $integracao; ?>";
+
+if(integracao){   
+    $("contabilizado").style.display = "table-row";
+    $("contabilizador").style.display = "table-row";
+    $("contabilizado").value = '';
+}else{
+    $("contabilizado").style.display = 'none';
+    document.getElementById("contabilizador").style.display = 'none';
+    $("contabilizado").value = 'nao';
+}    
 
 /**
  * Função chamada ao iniciar
@@ -1033,6 +1057,8 @@ function salvarDados() {
    oObject.garantia          = $F("garantia");
    oObject.obser             = encodeURIComponent(tagString($F("obser")));
    oObject.empenhosistema    = $F("emp_sistema");
+   oObject.contabilizado = $F("contabilizado");
+ 
 
    if (oObject.t41_placa.trim() == "") {
 
@@ -1046,6 +1072,10 @@ function salvarDados() {
      return false;
 
    }
+   if ($F("contabilizado").trim() == "") {
+      alert("Campo Bem já contabilizado via empenho obrigatório.");
+      return false;
+    }
 
    if (typeof lViewNotasPendentes != "undefined" && !lViewNotasPendentes) {
      oObject.iCodigoNotaItem = oUrl.iCodigoEmpNotaItem;
@@ -1444,7 +1474,10 @@ function getDadosNota () {
 
   var oGet = js_urlToObject();
   if (oGet.iCodigoEmpNotaItem != "") {
-
+    $("contabilizado").style.display = 'none';
+    document.getElementById("contabilizador").style.display = 'none';
+    $("contabilizado").value = 'nao';
+    
     var oObject          = new Object();
     oObject.exec         = 'getDadosNota';
     oObject.iEmpNotaItem = oGet.iCodigoEmpNotaItem;

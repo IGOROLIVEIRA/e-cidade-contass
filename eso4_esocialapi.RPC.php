@@ -153,7 +153,7 @@ try {
             (select count(*) as certificado from esocialcertificado where rh214_cgm = z01_numcgm) as certificado';
             $oDaoDbConfig = db_utils::getDao("db_config");
             $sql = $oDaoDbConfig->sql_query(null, $campos, 'z01_numcgm', 'codigo = ' . db_getsession("DB_instit"));
-
+            
             $rs = db_query($sql);
 
             if (!$rs) {
@@ -265,31 +265,34 @@ try {
             foreach ($oParam->arquivos as $arquivo) {
                 $dadosESocial->setReponsavelPeloPreenchimento($iCgm);
 
-                $dadosDoPreenchimento = $dadosESocial->getPorTipo(Tipo::getTipoFormulario($arquivo), $oParam->matricula);
-                // echo '<pre>';
-                // var_dump($dadosDoPreenchimento);
-                // exit;
+                if (Tipo::getTipoFormulario($arquivo) != 37) {
+                    $dadosDoPreenchimento = $dadosESocial->getPorTipo(Tipo::getTipoFormulario($arquivo), $oParam->matricula);
+                    $formatter = FormatterFactory::get($arquivo);
+                    $dadosTabela = $formatter->formatar($dadosDoPreenchimento);
 
-                $formatter = FormatterFactory::get($arquivo);
-                $dadosTabela = $formatter->formatar($dadosDoPreenchimento);
-                // echo '<pre>';
-                // var_dump($dadosTabela);
-                // exit;
-                /**
-                 * Limitado array em 50 pois e o maximo que um lote pode enviar
-                 */
-
-                foreach (array_chunk($dadosTabela, 50) as $aTabela) {
-                    $eventoFila = new Evento($arquivo, $iCgm, $iCgm, $aTabela, $oParam->tpAmb, "{$oParam->iAnoValidade}-{$oParam->iMesValidade}", $oParam->modo, $oParam->dtalteracao);
-                    $eventoFila->adicionarFila();
+                    foreach (array_chunk($dadosTabela, 50) as $aTabela) {
+                        $eventoFila = new Evento($arquivo, $iCgm, $iCgm, $aTabela, $oParam->tpAmb, "{$oParam->iAnoValidade}-{$oParam->iMesValidade}", $oParam->modo, $oParam->dtalteracao);
+                        $eventoFila->adicionarFila();
+                    }
+                } else {
+                    $dadosTabela = $dadosESocial->getPorTipo(Tipo::getTipoFormulario($arquivo), $oParam->matricula);
+                    foreach (array_chunk($dadosTabela, 1) as $aTabela) {
+                        $eventoFila = new Evento($arquivo, $iCgm, $iCgm, $aTabela, $oParam->tpAmb, "{$oParam->iAnoValidade}-{$oParam->iMesValidade}", $oParam->modo, $oParam->dtalteracao);
+                        $eventoFila->adicionarFila();
+                    }
                 }
             }
 
             db_fim_transacao(false);
 
+            //$path = dirname(__FILE__);
+            // exec('crontab -r');
+            // file_put_contents('tmp/textfile.txt', "* * * * * (cd $path; php -q filaEsocial.php) \n\n");
+            //exec('crontab tmp/textfile.txt');
             ob_start();
             $response = system("php -q filaEsocial.php");
             ob_end_clean();
+
             $oRetorno->sMessage = "Dados agendados para envio.";
             break;
 
@@ -297,6 +300,36 @@ try {
             $clesocialenvio = db_utils::getDao("esocialenvio");
             $oRetorno->lUpdate = $clesocialenvio->checkQueue();
             break;
+        case "transmitirrubricas":
+            $dadosESocial = new DadosESocial();
+            db_inicio_transacao();
+
+            //Rubricas a serem enviadas
+            $seqRubricas = $oParam->rubricas;
+            $explode_seq = explode(',', $seqRubricas);
+            $aRubricas = array();
+            foreach ($explode_seq as $rub){
+                $aRubricas[] = "'" . $rub . "'";
+            }
+            $stringRubricas = implode(",", $aRubricas);
+
+            $iCgm = $oParam->empregador;
+            $dadosESocial->setReponsavelPeloPreenchimento($iCgm);
+            $dadosDoPreenchimento = $dadosESocial->getPorTipo(Tipo::RUBRICA,$stringRubricas);
+            $arquivo = "S1010Individual";
+            foreach (array_chunk($dadosDoPreenchimento, 1) as $aTabela) {
+               $eventoFila = new Evento($arquivo, $iCgm, $iCgm, $aTabela, $oParam->tpAmb, "{$oParam->iAnoValidade}-{$oParam->iMesValidade}", $oParam->modo, $oParam->dtalteracao);
+               $eventoFila->adicionarFila();
+            }
+            db_fim_transacao(false);
+
+            ob_start();
+            $response = system("php -q filaEsocial.php");
+            ob_end_clean();
+
+            $oRetorno->sMessage = "Dados das Rúbricas agendados para envio.";
+
+        break;
     }
 } catch (Exception $eErro) {
     if (db_utils::inTransaction()) {

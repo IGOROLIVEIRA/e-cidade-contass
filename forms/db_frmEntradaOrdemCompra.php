@@ -131,6 +131,20 @@ if (count($aParametrosEmpenho) > 0) {
             ?>
             <a href='#' onclick='js_abreNotaExtra()' style='display: none' id='dadosnotacomplementar'>Outros Dados</a>
           </td>
+
+            <!-- Oc17910 -->
+            <td>
+                <div class='cgm_emitente'><?php db_ancora("<strong><u>CGM Emitente:&nbsp;</u></strong>", "js_pesquisaz01_numcgm(true);", ""); ?><div>
+            </td>
+            <td>
+                <div class='cgm_emitente'>
+                    <?php
+                        db_input('z01_numcgm', 10, "", true, 'text', "", " onchange='js_pesquisaz01_numcgm(false);'", "", "", "");
+                        db_input('descricao_emitente', 36, "", true, 'text', 3, '');
+                    ?>
+                </div>
+            </td>
+            <!-- .end Oc19710 -->
         </tr>
       <?php
     } else {
@@ -160,7 +174,21 @@ if (count($aParametrosEmpenho) > 0) {
             db_select('e11_tipodocumentofiscal', $aItens, true, 1, "onchange=js_abreNotaExtra()");
             ?>
             <a href='#' onclick='js_abreNotaExtra()' style='display: none' id='dadosnotacomplementar'>Outros Dados</a> </td>
-
+            <td></td>
+            <td></td>
+            <!-- Oc17910 -->
+            <td>
+                <div class='cgm_emitente'><?php db_ancora("<strong><u>CGM Emitente:&nbsp;</u></strong>", "js_pesquisaz01_numcgm(true);", ""); ?><div>
+            </td>
+            <td>
+                <div class='cgm_emitente'>
+                    <?php
+                        db_input('z01_numcgm', 10, "", true, 'text', "", " onchange='js_pesquisaz01_numcgm(false);'", "", "", "");
+                        db_input('descricao_emitente', 36, "", true, 'text', 3, '');
+                    ?>
+                </div>
+            </td>
+            <!-- .end Oc19710 -->
         </tr>
 
       <?php
@@ -178,11 +206,39 @@ if (count($aParametrosEmpenho) > 0) {
           db_input('z01_nome', 36, $Iz01_nome, true, 'text', 3);
           ?>
         </td>
-        <td><b><?= $Le69_numero; ?>
+        <td><?= $Le69_numero; ?>
         </td>
         <td>
           <?php
           db_input('e69_numero', 15, $Ie69_numero, true, 'text', 3, "onchange='js_verificaNota(this.value);'");
+          ?>
+        </td>
+
+        <!-- Oc17910 -->
+        <td><b>NF Matriz/Filial: </b></td>
+        <td>
+            <select name="nf_matriz_filial" id="nf_matriz_filial" style='width:315px'>
+                <option value='s'>Sim</option>
+                <option value='n' selected>Não</option>
+            </select>
+        </td>
+        <!-- end Oc1790 -->
+
+      </tr>
+      <tr>
+        <td nowrap align="left" title="<?= @$descrdepto ?>">
+          <?= @$Lm51_depto ?>
+        </td>
+        <td>
+          <?php
+          db_input('m51_depto', 10, $Im51_depto, true, 'text', 3);
+          db_input('descrdepto', 36, $Idescrdepto, true, 'text', 3);
+          ?>
+        </td>
+        <td><?= $Le69_dtnota ?></td>
+        <td>
+          <?php
+          db_inputdata('e69_dtnota', null, null, null, true, 'text', 1, "");
           ?>
         </td>
 
@@ -201,39 +257,9 @@ if (count($aParametrosEmpenho) > 0) {
           db_select('e69_notafiscaleletronica', $aNfEletronica, true, 1, "onchange='js_tipoChave(this.value);' style='width:315px'"); //
           ?>
         </td>
-
       </tr>
       <tr>
-        <td nowrap align="left" title="<?= @$descrdepto ?>">
-          <?= @$Lm51_depto ?>
-        </td>
         <td>
-          <?php
-          db_input('m51_depto', 10, $Im51_depto, true, 'text', 3);
-          db_input('descrdepto', 36, $Idescrdepto, true, 'text', 3);
-          ?>
-        </td>
-        <td><b><?= $Le69_dtnota ?></b></td>
-        <td>
-          <?php
-          db_inputdata('e69_dtnota', null, null, null, true, 'text', 1, "");
-          ?>
-        </td>
-
-        <td><b>Chave Acesso: </b>
-        </td>
-        <td>
-          <?php
-          /**
-           * Acrescentado por causa do sicom
-           */
-          db_input('e69_chaveacesso', 43, 0, true, 'text', 1, "onchange='js_verificaChaveAcesso(this.value);'", "", "", "", 44);
-          ?>
-        </td>
-
-      </tr>
-      <tr>
-      <td>
           <?php
             db_ancora("<strong><u>Depto. Consumo:&nbsp;</u></strong>", "js_pesquisa_coddeptoConsu(true);", "");
           ?>
@@ -244,11 +270,40 @@ if (count($aParametrosEmpenho) > 0) {
             db_input('descrdeptoconsumo', 36, "", true, 'text', 3, '');
           ?>
         </td>
-        <td><b><?= $Le69_dtrecebe ?></b></td>
+        <td><?= $Le69_dtrecebe ?></td>
         <td>
           <?php
           $dtRecebe = explode("-", date("d-m-Y", db_getsession("DB_datausu")));
           db_inputdata('e69_dtrecebe', $dtRecebe[0], $dtRecebe[1], $dtRecebe[2], true, 'text', 1, "");
+          ?>
+        </td>
+
+        <td><b>Chave Acesso: </b>
+        </td>
+        <td>
+          <?php
+          /**
+           * Acrescentado por causa do sicom
+           */
+          db_input('e69_chaveacesso', 52, 0, true, 'text', 1, "onchange='js_verificaChaveAcesso(this.value);'", "", "", "", 44);
+          ?>
+        </td>
+
+      </tr>
+      <tr>
+        <!-- Oc17910 -->
+        <td>
+            <strong>Processo Administrativo:</strong>
+        </td>
+        <td>
+            <?php db_input('e04_numeroprocesso', 50, '', true, 'text', $db_opcao); ?>
+        </td>
+        <!-- .end Oc1790 -->
+
+        <td nowrap align="left" title=""><?= $Le70_valor; ?></td>
+        <td>
+          <?php
+          db_input('e70_valor', 15, $Ie70_valor, true, 'text', 3, "onblur='js_setValorAlancar()' onKeyUp=\"js_ValidaCampos(this,4,'','','',event)\" ");
           ?>
         </td>
 
@@ -263,27 +318,6 @@ if (count($aParametrosEmpenho) > 0) {
           ?>
         </td>
 
-      </tr>
-      <tr>
-        <td nowrap align="left" title=""><b>Valor da Ordem de Compra:</b></td>
-        <td>
-          <?php
-          db_input('m51_valortotal', 10, $Im51_valortotal, true, 'text', 3)
-          ?>
-        </td>
-
-        <td nowrap align="left" title=""><b><?= $Le70_valor; ?></b></td>
-        <td>
-          <?php
-          db_input('e70_valor', 15, $Ie70_valor, true, 'text', 3, "onblur='js_setValorAlancar()' onKeyUp=\"js_ValidaCampos(this,4,'','','',event)\" ");
-          ?>
-        </td>
-        <td>
-          <strong>Processo Administrativo:</strong>
-        </td>
-        <td>
-          <?php db_input('e04_numeroprocesso', 10, '', true, 'text', $db_opcao); ?>
-        </td>
       </tr>
 
       <tr>
@@ -389,7 +423,7 @@ if (count($aParametrosEmpenho) > 0) {
                   $oItens = db_utils::fieldsMemory($rsUnidades, $i);
                   $aUnidades[$oItens->m61_codmatunid] = $oItens->m61_descr;
                 }
-                
+
                 db_select('unidadeentrada', $aUnidades, true, 1, "style='width:200pt'");
                 ?>
               </td>
@@ -860,7 +894,7 @@ if (count($aParametrosEmpenho) > 0) {
     js_removeObj("msgBox");
     js_bloqueiaLiberaBotao(false);
     var campo_consumo_imediato = document.getElementById("consumo_imediato").value;
-    
+
     if ($F('sJson') != '' && lSalvo == false) {
 
       var oItemAnt = eval("(" + $F('sJson') + ")");
@@ -874,7 +908,7 @@ if (count($aParametrosEmpenho) > 0) {
       if ($F('quantunid') != oItemAnt.quantunidade) {
         lModificado = true;
       }
-      // if ($F('unidadeentrada') != oItemAnt.unidade) { 
+      // if ($F('unidadeentrada') != oItemAnt.unidade) {
       //   lModificado = true;
       //  }
       if ($F('matmater') != oItemAnt.m63_codmatmater) {
@@ -907,7 +941,7 @@ if (count($aParametrosEmpenho) > 0) {
     }else{
       $('consumoImediato').value = oItemAtivo.consumoImediato;
     }
-    
+
     $('qtdeRecebido').value = oItemAtivo.m52_quant;
     $('valorRecebido').value = new Number(oItemAtivo.m52_valor).toFixed(2);
     $('saldovalor').innerHTML = new Number(oItemAtivo.saldovalor).toFixed(2);
@@ -925,8 +959,8 @@ if (count($aParametrosEmpenho) > 0) {
     $('descrdeptoconsumo').value = oItemAtivo.descrdeptoconsumo.urlDecode();
     $('cc08_sequencial').value = oItemAtivo.cc08_sequencial;
     $('cc08_descricao').value = oItemAtivo.cc08_descricao.urlDecode();
-    lSalvo = false; 
-    
+    lSalvo = false;
+
     //adicionada condição para habilitar o campo quantidade quando o item for controlado por quantidade
     if (oItemAtivo.pc01_servico == 't' && oItemAtivo.sServicoQuantidade == 'f') {
 
@@ -1425,12 +1459,12 @@ if (count($aParametrosEmpenho) > 0) {
    * Abre a lookup para cadastro de um novo item.
    */
   function js_novomatmater() {
-    
+
     oObject = $F('sJson');
     var oItemAtivo = eval("(" + oObject + ")");
     cod = oItemAtivo.pc01_codmater;
     numemp = oItemAtivo.e60_numemp;
-    sequen = oItemAtivo.e62_sequencial;  
+    sequen = oItemAtivo.e62_sequencial;
     js_OpenJanelaIframe('top.corpo', 'iframe_material',
       'mat1_matmater011.php?m63_codpcmater=' + cod + '&numemp=' + numemp + '&sequen=' + sequen + '&lLotes=1',
       'Incluir Item de Entrada Novo', true);
@@ -1520,11 +1554,16 @@ if (count($aParametrosEmpenho) > 0) {
 
   }
 
-  function verificaChave() {
+  function verificaChave(matriz) {
     if ($('e69_notafiscaleletronica').value != 2 && $('e69_notafiscaleletronica').value != 3) {
+        if (matriz == true) {
+            var cgm_emitente =  $('m51_numcgm').value;
+        } else {
+            var cgm_emitente =  $('z01_numcgm').value;
+        }
       var params = {
         exec: 'validachave',
-        cgm: $('m51_numcgm').value,
+        cgm: cgm_emitente,
         chave: $('e69_chaveacesso').value,
         data: $('e69_dtnota').value,
         tipo: $('e69_notafiscaleletronica').value,
@@ -1546,7 +1585,7 @@ if (count($aParametrosEmpenho) > 0) {
    * faz algumas verificações antes de realmente fazer o envio.
    */
   function js_confirmaEntrada() {
-    
+
     if (confirm('Confirma a entrada dos Itens Selecionados no estoque?')) {
 
       //Número da nota, é obrigatorio
@@ -1591,7 +1630,7 @@ if (count($aParametrosEmpenho) > 0) {
       var partesData = strData.split("/");
       var data = new Date(partesData[2], partesData[1] - 1, partesData[0]);
       if(data > new Date()){
-        
+
         alert("Data não pode ser maior que a data atual");
         return false;
       }
@@ -1694,6 +1733,7 @@ if (count($aParametrosEmpenho) > 0) {
       var nBaseCalculoSubst = $F('e11_basecalculosubstitutotrib');
       var nValorICMSSubst = $F('e11_valoricmssubstitutotrib');
       var sSerieFiscal = $F('e11_seriefiscal');
+
       if (iControlaPit == 1) {
         /**
          * Caso o documento fiscal for do tipo 50, devemos obrigar o usuário
@@ -1737,6 +1777,7 @@ if (count($aParametrosEmpenho) > 0) {
       var sJson = '{"method":"confirmarEntrada","m51_codordem":"' + $F('m51_codordem') + '","m51_depto":"' + $F('m51_depto') + '","codDeptoConsumo":"' + $F('coddeptoconsumo') + '",';
       sJson += '"sNumero":"' + sNumero + '","dtDataNota":"' + $F('e69_dtnota') + '", "e04_numeroprocesso": "' + sProcessoAdministrativo + '",';
       sJson += '"sNotaFiscalEletronica":"' + $F('e69_notafiscaleletronica') + '","sChaveAcesso":"' + $F('e69_chaveacesso') + '", "sNumeroSerie": "' + $F('e69_nfserie') + '",';
+      sJson += '"iCgmEmitente":' + $F('z01_numcgm') + ",";
       sJson += '"oInfoNota":{"iCfop":"' + iCfop + '","iTipoDocumentoFiscal":"' + iTipoDocumentoFiscal + '","iInscrSubstituto":"' + iInscrSubstituto + '",';
       sJson += '"nBaseCalculoICMS":"' + nBaseCalculoICMS + '","n;ValorICMS":"' + nValorICMS + '","nBaseCalculoSubst":"' + nBaseCalculoSubst + '",';
       sJson += '"nValorICMSSubst":"' + nValorICMSSubst + '","sSerieFiscal":"' + sSerieFiscal + '"},';
@@ -1877,7 +1918,7 @@ if (count($aParametrosEmpenho) > 0) {
         var sId = itens[i].id.replace('chk', '');
         var nValorLinha = new Number($('saldovalor' + sId).innerHTML);
         if (obj.checked == true) {
-          
+
           itens[i].checked = true;
           nValorLancado += nValorLinha;
           js_marcaItensSession(true);
@@ -2164,7 +2205,7 @@ if (count($aParametrosEmpenho) > 0) {
     var oRetorno = eval("(" + oAjax.responseText + ")");
     if (oRetorno.status == 1) {
 
-      alert("A nota fiscal selecionada, jï¿½ possui o(s) empenho(s): " + oRetorno.sEmpenho + " vinculado(s).");
+      alert("A nota fiscal selecionada, já possui o(s) empenho(s): " + oRetorno.sEmpenho + " vinculado(s).");
     }
 
   }
@@ -2230,7 +2271,12 @@ if (count($aParametrosEmpenho) > 0) {
 
     var resto = soma_ponderada % 11;
     if ((aChave[43] == (11 - resto)) || ((resto == 0 || resto == 1) && (aChave[43] == 0))) {
-      return verificaChave();
+        var matriz = true;
+        var nf_matriz_filial = document.getElementById('nf_matriz_filial');
+        if (nf_matriz_filial.options[nf_matriz_filial.selectedIndex].value == 's') {
+            matriz = false;
+        }
+        return verificaChave(matriz);
     } else {
       alert("Chave de Acesso inválida ");
       $('e69_chaveacesso').value = '';
@@ -2238,6 +2284,71 @@ if (count($aParametrosEmpenho) > 0) {
     }
 
   }
+
+    // Oc17910
+    var nf_matriz_filial = document.getElementById('nf_matriz_filial');
+    mostrar_cgm_emitente("n");
+
+    nf_matriz_filial.addEventListener('change', function() {
+        var selected_option_value = nf_matriz_filial.options[nf_matriz_filial.selectedIndex].value;
+        mostrar_cgm_emitente(selected_option_value);
+    });
+
+    function mostrar_cgm_emitente(condicao) {
+        var cgm_emitente = document.getElementsByClassName('cgm_emitente');
+
+        if (condicao == "s") {
+            cgm_emitente[0].hidden = false;
+            cgm_emitente[1].hidden = false;
+            return;
+        }
+        cgm_emitente[0].hidden = true;
+        cgm_emitente[1].hidden = true;
+        return;
+    }
+
+    function js_pesquisaz01_numcgm(mostra){
+        if(mostra==true){
+            js_OpenJanelaIframe('',
+                'func_nome',
+                'func_nome.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome',
+                'Pesquisar CGM',
+                true,
+                22,
+                0,
+                document.body.getWidth() - 12,
+                document.body.scrollHeight - 30);
+        }else{
+            if(document.form1.z01_numcgm.value != ''){
+
+                js_OpenJanelaIframe('',
+                    'func_nome',
+                    'func_nome.php?pesquisa_chave='+document.form1.z01_numcgm.value+
+                    '&funcao_js=parent.js_mostracgm',
+                    'Pesquisar CGM',
+                    false,
+                    22,
+                    0,
+                    document.width-12,
+                    document.body.scrollHeight-30);
+            }else{
+                document.form1.descricao_emitente.value = '';
+            }
+        }
+    }
+    function js_mostracgm(erro,chave){
+        document.form1.descricao_emitente.value = chave;
+        if(erro==true){
+            document.form1.z01_numcgm.focus();
+            document.form1.z01_numcgm.value = '';
+        }
+    }
+
+    function js_mostracgm1(chave1,chave2){
+        document.form1.z01_numcgm.value = chave1;
+        document.form1.descricao_emitente.value = chave2;
+        func_nome.hide();
+    }
 </script>
 <?
 echo "<script>js_consultaOrdem({$m51_codordem});

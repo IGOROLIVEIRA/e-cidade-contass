@@ -96,6 +96,10 @@ class cl_acordo
     var $ac16_licoutroorgao = null;
     var $ac16_adesaoregpreco = null;
     var $ac16_tipocadastro = null;
+    var $ac16_datareferencia_dia = null;
+    var $ac16_datareferencia_mes = null;
+    var $ac16_datareferencia_ano = null;
+    var $ac16_datareferencia = null;
     var $ac16_providencia = null;
     /**
      * A descriï¿½ï¿½o do status do campo ac16_providencia podem ser checados na tabela providencia
@@ -141,7 +145,8 @@ class cl_acordo
  ac16_licoutroorgao = int8 = licitacao de outros orgaos
  ac16_adesaoregpreco = int8 = adesao de registro de precos
  ac16_tipocadastro   = int8 = tipo de cadastro
- ac16_providencia = int4 = Status da Providï¿½ncia do Acordo
+ ac16_providencia = int4 = Status da Providência do Acordo
+ ac16_datareferencia = date = Data de referência para geração do SICOM
  ";
     //funcao construtor da classe
     function cl_acordo()
@@ -747,6 +752,9 @@ class cl_acordo
                 $virgula = ",";
             }
         }
+
+
+
         if (trim($this->ac16_contratado) != "" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_contratado"])) {
             $sql  .= $virgula . " ac16_contratado = $this->ac16_contratado ";
             $virgula = ",";
@@ -1179,7 +1187,7 @@ class cl_acordo
         $result = db_query($sql);
         if ($result == false) {
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
-            $this->erro_sql   = "Acordo nao Alterado. Alteracao Abortada.\\n";
+            $this->erro_sql   =  "Acordo nao Alterado. Alteracao Abortada.\\n";
             $this->erro_sql .= "Valores : " . $this->ac16_sequencial;
             $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
@@ -2192,7 +2200,15 @@ class cl_acordo
         return $sSql;
     }
 
+    function sql_query_sequencial_acordo($si06_sequencial)
+    {
 
+        $sSql  = "select ac16_sequencial";
+        $sSql .= "  from acordo";
+        $sSql .= "  where ac16_adesaoregpreco = $si06_sequencial";
+
+        return $sSql;
+    }
 
     /**
      * Apaga dependï¿½ncias para apagar o acordo.

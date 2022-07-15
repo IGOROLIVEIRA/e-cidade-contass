@@ -956,6 +956,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 
 			  $iCodSis     = 0;
 			  $conta       = 0;
+			  $instituicao = db_getsession("DB_instit");
 
               if ($oMovi->codctbtransf != 0 && $oMovi->codctbtransf != '') {
                 $sqlcontatransf = "SELECT si09_codorgaotce||(c63_banco::integer)::varchar
@@ -972,6 +973,18 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                                                WHEN db83_tipoconta IN (2, 3) THEN 2
                                                ELSE 1
                                            END AS tipo,
+                                           CASE
+                                                WHEN (SELECT si09_tipoinstit FROM infocomplementaresinstit
+                                                      WHERE si09_instit = $instituicao) = 5 AND db83_tipoconta IN (2, 3)
+                                                  THEN db83_tipoaplicacao::varchar
+                                                ELSE ''
+                                            END AS tipoaplicacao,
+                                            CASE
+                                                WHEN (SELECT si09_tipoinstit FROM infocomplementaresinstit
+                                                      WHERE si09_instit = $instituicao) = 5 AND db83_tipoconta IN (2, 3)
+                                                  THEN db83_nroseqaplicacao::varchar
+                                                ELSE ''
+                                            END AS nroseqaplicacao,
                                           o15_codtri
                                     FROM saltes
                                     JOIN conplanoreduz ON k13_reduz = c61_reduz AND c61_anousu = " . db_getsession("DB_anousu") . "
@@ -997,9 +1010,16 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                 } else {
 
                   $contaTransf = db_utils::fieldsMemory($rsConta, 0)->contadebito;
+                  $contaTransfTipo = db_utils::fieldsMemory($rsConta, 0)->tipo;
+                  
+                  if ($oRegistro10->si09_tipoinstit == 5 && $contaTransfTipo == 2) {
+                    
+                    $contaTransf .= db_utils::fieldsMemory($rsConta, 0)->tipoaplicacao;
+                    $contaTransf .= db_utils::fieldsMemory($rsConta, 0)->nroseqaplicacao;
+                  }
+                  
                   $conta = $aBancosAgrupados[$contaTransf]->si95_codctb;
-                  $recurso = $aBancosAgrupados[$contaTransf]->recurso;
-
+                                    
                 }
 
 
@@ -1047,10 +1067,13 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 				$oDadosMovi21->si97_saldocec = $oMovi->saldocec;
                 $oDadosMovi21->si97_dscoutrasmov = ($oMovi->tipoentrsaida == 99 ? 'Recebimento Extra Orcamentario' :
                     ($iTipoEntrSaida == 10 ? 'Estorno de recebimentos' : ' '));
+
                 $oDadosMovi21->si97_codctbtransf = (in_array($iTipoEntrSaida, $this->aTiposObrigConta)
 					&& ($iCodSis != 5) && ($oCtb20->si96_codctb != $conta)) ? $conta : 0;
+
                 $oDadosMovi21->si97_codfontectbtransf = (in_array($iTipoEntrSaida, $this->aTiposObrigFonte)
 					&& ($iCodSis != 5 || ($iCodSis == 5 && ($iTipoEntrSaida == 11 || $iTipoEntrSaida == 18))) && ($oCtb20->si96_codctb != $conta)) ? $oMovi->codfontectbtransf : 0;
+
 				$oDadosMovi21->si97_saldocectransf = (in_array($iTipoEntrSaida, $this->aTiposObrigFonte)
 					&& ($iCodSis != 5 || ($iCodSis == 5 && $iTipoEntrSaida == 11 && $oMovi->tipomovimentacao != 2) ) && ($oCtb20->si96_codctb != $conta)) ? $oMovi->saldocectransf : 0;
                 $oDadosMovi21->si97_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
