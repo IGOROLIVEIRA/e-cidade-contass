@@ -254,7 +254,7 @@ class Itbi
         $clarrecad->incluir();
 
         if ($clarrecad->erro_status == 0) {
-            throw new LogicException('Erro ao inserir arrecad do ITBI');
+            throw new LogicException('Erro ao inserir arrecad do ITBI: '. $clarrecad->erro_msg);
         }
     }
 
@@ -278,5 +278,21 @@ class Itbi
         $imovel = new Imovel($this->getMatric());
 
         return $imovel->getProprietarioPrincipal()->getCodigo();
+    }
+
+    /**
+     * @param $numpre
+     * @return void
+     */
+    public function removeArrecad($numpre = null)
+    {
+        if(empty($numpre) === true) {
+            return;
+        }
+        /**
+         * @var $clarrecad cl_arrecad
+         */
+        $clarrecad = db_utils::getDao('arrecad');
+        $clarrecad->excluir_arrecad_inc_arrecant($numpre);
     }
 }

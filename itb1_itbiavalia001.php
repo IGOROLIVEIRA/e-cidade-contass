@@ -12,9 +12,6 @@ include("classes/db_itbidadosimovel_classe.php");
 include("classes/db_itbiavalia_classe.php");
 include("classes/db_itbiavaliaformapagamentovalor_classe.php");
 include("classes/db_paritbi_classe.php");
-require_once("classes/db_arrecad_classe.php");
-require_once("classes/db_arrematric_classe.php");
-require_once("classes/db_numpref_classe.php");
 require_once("model/itbi/Paritbi.model.php");
 require_once("model/itbi/Itbi.model.php");
 require_once("model/recibo.model.php");
@@ -28,9 +25,6 @@ $clitbiavaliaformapagamentovalor = new cl_itbiavaliaformapagamentovalor();
 $clitbi = new cl_itbi();
 $clitbidadosimovel = new cl_itbidadosimovel();
 $clparitbi = new cl_paritbi();
-$clarrecad = new cl_arrecad();
-$clarrematric = new cl_arrematric;
-$clnumpref = new cl_numpref();
 
 $tipo = "";
 $db_opcao = 2;
@@ -74,16 +68,6 @@ if (isset($oPost->liberar)) {
 
         $sMsgErro = $clitbiavalia->erro_msg;
 
-    }
-
-    if ($oInstituicao->getUsaDebitosItbi() === true && $lSqlErro === false) {
-        $itbi = new Itbi($clitbiavalia->it14_guia);
-        try {
-            $itbi->incluirArrecad();
-        } catch (Exception $ex) {
-            $lSqlErro = true;
-            $sMsgErro = $ex->getMessage();
-        }
     }
 
     if (!$lSqlErro) {
