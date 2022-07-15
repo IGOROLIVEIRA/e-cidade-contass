@@ -29,7 +29,7 @@ class Hotfixsicomobras extends AbstractMigration
                     si197_linkobra text NULL,
                     si197_mes int8 NULL,
                     si197_instit int4 NULL
-                )
+                );
 
             COMMIT;
         ";
