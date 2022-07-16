@@ -25,16 +25,16 @@
  *                                licenca/licenca_pt.txt
  */
 
-require_once("libs/db_stdlib.php");
-require_once("libs/db_utils.php");
-require_once("std/db_stdClass.php");
-require_once("libs/db_conecta.php");
-require_once("libs/db_sessoes.php");
-require_once("dbforms/db_funcoes.php");
-require_once("libs/db_liborcamento.php");
-require_once("classes/empenho.php");
-require_once("libs/JSON.php");
-require_once("classes/lancamentoContabil.model.php");
+require_once(modification("libs/db_stdlib.php"));
+require_once(modification("libs/db_utils.php"));
+require_once(modification("std/db_stdClass.php"));
+require_once(modification("libs/db_conecta.php"));
+require_once(modification("libs/db_sessoes.php"));
+require_once(modification("dbforms/db_funcoes.php"));
+require_once(modification("libs/db_liborcamento.php"));
+require_once(modification("classes/empenho.php"));
+require_once(modification("libs/JSON.php"));
+require_once(modification("classes/lancamentoContabil.model.php"));
 
 $oJson             = new services_json();
 $oParam            = $oJson->decode(db_stdClass::db_stripTagsJson(str_replace("\\","",$_POST["json"])));

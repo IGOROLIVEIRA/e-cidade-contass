@@ -31,8 +31,8 @@
  * Revis�o$Author: dbmauricio $
  * @version $Revision: 1.220 $
  */
-require_once("classes/db_contranslan_classe.php");
-require_once("dbforms/db_funcoes.php");
+require_once(modification("classes/db_contranslan_classe.php"));
+require_once(modification("dbforms/db_funcoes.php"));
 
 
 //|00|//cl_despdesdobramento
@@ -447,7 +447,7 @@ class cl_receita_saldo_mes
         global $o70_anousu, $o70_codrec, $o57_fonte, $o57_descr, $janeiro, $fevereiro, $marco, $abril, $maio, $junho, $julho, $agosto, $setembro, $outubro, $novembro, $dezembro, $o70_valor, $adicional;
         global $prev_jan, $prev_fev, $prev_mar, $prev_abr, $prev_mai, $prev_jun, $prev_jul, $prev_ago, $prev_set, $prev_out, $prev_nov, $prev_dez;
 
-        require_once("libs/db_utils.php");
+        require_once(modification("libs/db_utils.php"));
         if ($this->sql == null)
             $this->sql_query($this->receita);
 
@@ -1421,7 +1421,7 @@ class cl_translan extends cl_contranslan
          * Verificamos a que grupo o desdobramento do empenho se refere e aplicamos o
          * documento de acordo com este grupo
          */
-        require_once("classes/empenho.php");
+        require_once(modification("classes/empenho.php"));
         $iUltimoDocumentoExecutado = empenho::buscaUltimoDocumentoExecutado($iNumEmp, db_getsession('DB_anousu'));
         if (USE_PCASP) {
 
@@ -1749,7 +1749,7 @@ class cl_translan extends cl_contranslan
          * Verificamos a que grupo o desdobramento do empenho se refere e aplicamos o
          * documento de acordo com este grupo
          */
-        require_once("classes/empenho.php");
+        require_once(modification("classes/empenho.php"));
         $iUltimoDocumentoExecutado = empenho::buscaUltimoDocumentoExecutado($iNumEmp, db_getsession('DB_anousu'));
         $oGrupoOrcamento = GrupoContaOrcamento::getGrupoConta($iDesdobramentoEmpenho, $anousu);
         if ($oGrupoOrcamento && USE_PCASP) {
@@ -2116,7 +2116,7 @@ class cl_translan extends cl_contranslan
 
         $cont = 0;
 
-        require_once("classes/empenho.php");
+        require_once(modification("classes/empenho.php"));
         //declara array para verifica��o
         $arr_lans = array();
         for ($i = 0; $i < $this->numrows; $i++) {
@@ -2199,7 +2199,7 @@ class cl_translan extends cl_contranslan
         $this->cl_zera_variaveis();
         $this->coddoc = $iCodDoc;
 
-        require_once("classes/empenho.php");
+        require_once(modification("classes/empenho.php"));
         $codele = $this->getVinculoPcasp($codele);
 
         if ($codele != "") {
@@ -5044,8 +5044,8 @@ function calcula_rcl($anousu, $dtini, $dtfin, $db_selinstit, $matriz = false)
 function calcula_rcl2($anousu, $dtini, $dtfin, $db_selinstit, $matriz = false, $codrel = 5, $data = 0)
 {
 
-    require_once("libs/db_utils.php");
-    require_once("model/linhaRelatorioContabil.model.php");
+    require_once(modification("libs/db_utils.php"));
+    require_once(modification("model/linhaRelatorioContabil.model.php"));
     global $o57_fonte, $janeiro, $fevereiro, $marco, $abril, $maio, $junho, $julho, $agosto, $setembro, $outubro, $novembro, $dezembro, $bimestre, $dt;
 
     if ($data == 0) {
@@ -5323,10 +5323,10 @@ function notasExplicativas($oPdf, $iCodRel, $sPeriodo, $iTam, $lFonte = true)
 {
 
     if (!class_exists("cl_orcparamrelnota")) {
-        require_once("classes/db_orcparamrelnota_classe.php");
+        require_once(modification("classes/db_orcparamrelnota_classe.php"));
     }
     if (!class_exists("db_utils")) {
-        require_once("libs/db_utils.php");
+        require_once(modification("libs/db_utils.php"));
     }
 
     /**

@@ -1,62 +1,62 @@
 <?
-require_once("libs/db_stdlib.php");
-require_once("libs/db_app.utils.php");
-require_once("libs/db_conecta.php");
-require_once("libs/db_sessoes.php");
-require_once("libs/db_usuariosonline.php");
-require_once("dbforms/db_funcoes.php");
-require_once("libs/db_app.utils.php");
+require_once(modification("libs/db_stdlib.php"));
+require_once(modification("libs/db_app.utils.php"));
+require_once(modification("libs/db_conecta.php"));
+require_once(modification("libs/db_sessoes.php"));
+require_once(modification("libs/db_usuariosonline.php"));
+require_once(modification("dbforms/db_funcoes.php"));
+require_once(modification("libs/db_app.utils.php"));
 db_app::import("exceptions.*");
 db_app::import("configuracao.*");
-require_once("model/CgmFactory.model.php");
-require_once("model/CgmBase.model.php");
-require_once("model/CgmJuridico.model.php");
-require_once("model/CgmFisico.model.php");
-require_once("model/Dotacao.model.php");
-require_once('model/empenho/EmpenhoFinanceiro.model.php');
-require_once("libs/db_libcontabilidade.php");
+require_once(modification("model/CgmFactory.model.php"));
+require_once(modification("model/CgmBase.model.php"));
+require_once(modification("model/CgmJuridico.model.php"));
+require_once(modification("model/CgmFisico.model.php"));
+require_once(modification("model/Dotacao.model.php"));
+require_once(modification('model/empenho/EmpenhoFinanceiro.model.php'));
+require_once(modification("libs/db_libcontabilidade.php"));
 
 //------------------------------------------------------
 //   Arquivos que verificam se o boletim já foi liberado ou naum
-require_once("classes/db_boletim_classe.php");
+require_once(modification("classes/db_boletim_classe.php"));
 $clverficaboletim = new cl_verificaboletim(new cl_boletim);
 //------------------------------------------------------
 
-require_once("libs/db_liborcamento.php");
-require_once("classes/db_orcdotacao_classe.php");
-require_once("classes/db_empempenho_classe.php");
-require_once("classes/db_empelemento_classe.php");
-require_once("classes/db_empparametro_classe.php");
-require_once("classes/db_pagordem_classe.php");
-require_once("classes/db_pagordemele_classe.php");
+require_once(modification("libs/db_liborcamento.php"));
+require_once(modification("classes/db_orcdotacao_classe.php"));
+require_once(modification("classes/db_empempenho_classe.php"));
+require_once(modification("classes/db_empelemento_classe.php"));
+require_once(modification("classes/db_empparametro_classe.php"));
+require_once(modification("classes/db_pagordem_classe.php"));
+require_once(modification("classes/db_pagordemele_classe.php"));
 $clpagordem = new cl_pagordem;
 $clpagordemele = new cl_pagordemele;
 $clempempenho = new cl_empempenho;
 $clempelemento = new cl_empelemento;
 $clorcdotacao = new cl_orcdotacao;
 $clempparamentro = new cl_empparametro;
-require_once("libs/db_utils.php");
-require_once("classes/ordemPagamento.model.php");
-require_once("model/retencaoNota.model.php");
+require_once(modification("libs/db_utils.php"));
+require_once(modification("classes/ordemPagamento.model.php"));
+require_once(modification("model/retencaoNota.model.php"));
 
-require_once("classes/db_conlancam_classe.php");
-require_once("classes/db_conlancamele_classe.php");
-require_once("classes/db_conlancampag_classe.php");
-require_once("classes/db_conlancamcgm_classe.php");
-require_once("classes/db_conparlancam_classe.php");
-require_once("classes/db_conlancamemp_classe.php");
-require_once("classes/db_conlancamval_classe.php");
-require_once("classes/db_conlancamdot_classe.php");
-require_once("classes/db_conlancamdoc_classe.php");
-require_once("classes/db_conlancamcompl_classe.php");
-require_once("classes/db_saltes_classe.php");
-require_once("classes/db_conplanoreduz_classe.php");
-require_once("classes/db_conlancamlr_classe.php");
-require_once("classes/db_conlancamord_classe.php");
-require_once("classes/db_empord_classe.php");
-require_once("classes/db_empprestaitem_classe.php");
-require_once("classes/db_retencaoreceitas_classe.php");
-require_once("classes/db_retencaoempagemov_classe.php");
+require_once(modification("classes/db_conlancam_classe.php"));
+require_once(modification("classes/db_conlancamele_classe.php"));
+require_once(modification("classes/db_conlancampag_classe.php"));
+require_once(modification("classes/db_conlancamcgm_classe.php"));
+require_once(modification("classes/db_conparlancam_classe.php"));
+require_once(modification("classes/db_conlancamemp_classe.php"));
+require_once(modification("classes/db_conlancamval_classe.php"));
+require_once(modification("classes/db_conlancamdot_classe.php"));
+require_once(modification("classes/db_conlancamdoc_classe.php"));
+require_once(modification("classes/db_conlancamcompl_classe.php"));
+require_once(modification("classes/db_saltes_classe.php"));
+require_once(modification("classes/db_conplanoreduz_classe.php"));
+require_once(modification("classes/db_conlancamlr_classe.php"));
+require_once(modification("classes/db_conlancamord_classe.php"));
+require_once(modification("classes/db_empord_classe.php"));
+require_once(modification("classes/db_empprestaitem_classe.php"));
+require_once(modification("classes/db_retencaoreceitas_classe.php"));
+require_once(modification("classes/db_retencaoempagemov_classe.php"));
 
 $clconlancam      = new cl_conlancam;
 $clconlancamele   = new cl_conlancamele;
@@ -77,15 +77,15 @@ $clconlancamlr    = new cl_conlancamlr;
 /**
  * adicionados para incluir a agenda
  */
-require_once("classes/db_empage_classe.php");
-require_once("classes/db_empagetipo_classe.php");
-require_once("classes/db_empagemov_classe.php");
-require_once("classes/db_empagemovforma_classe.php");
-require_once("classes/db_empagemovconta_classe.php");
-require_once("classes/db_empord_classe.php");
-require_once("classes/db_empagepag_classe.php");
-require_once("classes/db_empageslip_classe.php");
-require_once("classes/db_pcfornecon_classe.php");
+require_once(modification("classes/db_empage_classe.php"));
+require_once(modification("classes/db_empagetipo_classe.php"));
+require_once(modification("classes/db_empagemov_classe.php"));
+require_once(modification("classes/db_empagemovforma_classe.php"));
+require_once(modification("classes/db_empagemovconta_classe.php"));
+require_once(modification("classes/db_empord_classe.php"));
+require_once(modification("classes/db_empagepag_classe.php"));
+require_once(modification("classes/db_empageslip_classe.php"));
+require_once(modification("classes/db_pcfornecon_classe.php"));
 $clempage = new cl_empage;
 $clempagetipo = new cl_empagetipo;
 $clempagemov = new cl_empagemov;
@@ -98,10 +98,10 @@ $clpcfornecon = new cl_pcfornecon;
 
 
 
-require_once("classes/db_cfautent_classe.php");
+require_once(modification("classes/db_cfautent_classe.php"));
 $clcfautent = new cl_cfautent;
 
-require_once("libs/db_libcaixa.php");
+require_once(modification("libs/db_libcaixa.php"));
 $clautenticar = new cl_autenticar;
 
 //retorna os arrays de lancamento...
@@ -128,7 +128,7 @@ db_postmemory($HTTP_POST_VARS);
 								 WHERE c71_coddoc IN
 									 (SELECT c53_coddoc FROM conhistdoc
 									  WHERE c53_tipo IN (30, 31, 11, 21, 414, 90, 92))
-								   AND c80_codlan NOT IN									
+								   AND c80_codlan NOT IN
 								   /* OC 2672 - Inserida condição para que não se apague os lançamentos dos descontos.*/
 									 (SELECT e33_conlancam FROM pagordemdescontolanc
 									  WHERE e33_pagordemdesconto IN (SELECT e34_sequencial FROM pagordemdesconto
@@ -338,8 +338,8 @@ db_postmemory($HTTP_POST_VARS);
 						DELETE FROM empagenotasordem where e43_empagemov in (select e82_codmov from w_mov);
 						DELETE FROM empagemovslips where k107_empagemov in (select e82_codmov from w_mov);
 						DELETE FROM empagemovconta where e98_codmov in (select e82_codmov from w_mov);
-				
-				
+
+
 						UPDATE empelemento
 						   SET e64_vlrpag = (select  round(sum(case when c71_coddoc in (select c53_coddoc
 																						  from conhistdoc
@@ -416,31 +416,31 @@ db_postmemory($HTTP_POST_VARS);
 
 				";
 				//echo pg_last_error();exit;
-	    
+
 		    //echo $sqlExcluirOp;exit;
-	  	
-	  	    $sqlOpPaga = "select c71_data as datapag 
-	  	    				from conlancamdoc 
-	  	    				join conlancamord on c80_codlan = c71_codlan 
-	  	    				where c71_coddoc in (select c53_coddoc from conhistdoc where c53_tipo in (30)) 
+
+	  	    $sqlOpPaga = "select c71_data as datapag
+	  	    				from conlancamdoc
+	  	    				join conlancamord on c80_codlan = c71_codlan
+	  	    				where c71_coddoc in (select c53_coddoc from conhistdoc where c53_tipo in (30))
 	  	    				  and c80_codord = {$e50_codord} limit 1";
 	  	    $rsSqlOpPaga = db_query($sqlOpPaga);
-	  	    
+
 	  	    if(pg_num_rows($rsSqlOpPaga) > 0){
-		  	    
+
 	  	    	$DtPagamento  = db_utils::fieldsMemory($rsSqlOpPaga, 0)->datapag;
-	  	    	
-	  	    	$sqlMesFechado = "SELECT * FROM condataconf  where c99_anousu = ".db_getsession("DB_anousu")." and c99_data >= '{$DtPagamento}' and 
+
+	  	    	$sqlMesFechado = "SELECT * FROM condataconf  where c99_anousu = ".db_getsession("DB_anousu")." and c99_data >= '{$DtPagamento}' and
 	  	    	c99_instit = ".db_getsession("DB_instit");
-	  	    	
+
 	  	    	$rsSqlMesFechado = db_query($sqlMesFechado);
-	  	        
+
 		  	    if(pg_num_rows($rsSqlMesFechado) > 0){
-		        	
+
 			        echo "<script> alert('Autenticação não excluída EXISTE ENCERRAMENTO de periodo contabil para esta data!');</script>";
-			        
+
 			        db_redireciona('emp1_emppagamentoexcluirpagamento001.php');
-			        
+
 		  	    }else{
                     db_inicio_transacao();
 		  	    	$rsExluirPagOp = db_query($sqlExcluirOp);
@@ -613,7 +613,7 @@ db_postmemory($HTTP_POST_VARS);
                         }
                     }
                     db_fim_transacao($sqlerro);
-		  	    	
+
 					 if ($rsExluirPagOp == false) {
 					    echo "<script> alert('Houve um erro ao excluir o pagamento!');</script>";
 			            db_redireciona('emp1_emppagamentoexcluirpagamento001.php');
@@ -625,16 +625,16 @@ db_postmemory($HTTP_POST_VARS);
 			           db_redireciona('emp1_emppagamentoexcluirpagamento001.php');
 					 }
 		  	    }
-		        
+
 	  	    }else{
 	  	    	echo "<script> alert('Ordem de Pagamento ainda não autenticada!');</script>";
-		        
+
 		        db_redireciona('emp1_emppagamentoexcluirpagamento001.php');
 	  	    }
-	        
+
 	      } catch (Exception $erro) {
-	
+
 	        echo "<script> alert('Pagamento NÃO excluído!');</script>";
-	        
+
 	        db_redireciona('emp1_emppagamentoexcluirpagamento001.php');
 	      }

@@ -28,78 +28,78 @@
 ini_set("ERROR_REPORTING", "E_ALL & ~ E_NOTICE");
 
 
-require_once("libs/db_stdlib.php");
-require_once("libs/db_utils.php");
-require_once("libs/db_app.utils.php");
-require_once("std/db_stdClass.php");
-require_once("libs/db_conecta.php");
-require_once("libs/db_sessoes.php");
-require_once("libs/JSON.php");
-require_once("libs/db_usuariosonline.php");
-require_once("dbforms/db_funcoes.php");
-require_once("libs/db_libcontabilidade.php");
-require_once("libs/db_liborcamento.php");
+require_once(modification("libs/db_stdlib.php"));
+require_once(modification("libs/db_utils.php"));
+require_once(modification("libs/db_app.utils.php"));
+require_once(modification("std/db_stdClass.php"));
+require_once(modification("libs/db_conecta.php"));
+require_once(modification("libs/db_sessoes.php"));
+require_once(modification("libs/JSON.php"));
+require_once(modification("libs/db_usuariosonline.php"));
+require_once(modification("dbforms/db_funcoes.php"));
+require_once(modification("libs/db_libcontabilidade.php"));
+require_once(modification("libs/db_liborcamento.php"));
 
-require_once("classes/db_orcdotacao_classe.php");
-require_once("classes/db_orctiporec_classe.php");
-require_once("classes/db_empempenho_classe.php");
-require_once("classes/db_empelemento_classe.php");
-require_once("classes/db_pagordem_classe.php");
-require_once("classes/db_pagordemele_classe.php");
-require_once("classes/db_pagordemnota_classe.php");
-require_once("classes/db_pagordemval_classe.php");
-require_once("classes/db_pagordemrec_classe.php");
-require_once("classes/db_pagordemtiporec_classe.php");
-require_once("classes/db_empnota_classe.php");
-require_once("classes/db_empnotaele_classe.php");
-require_once("classes/db_tabrec_classe.php");
-require_once("classes/db_conplanoreduz_classe.php");
-require_once("classes/db_conlancam_classe.php");
-require_once("classes/db_conlancamemp_classe.php");
-require_once("classes/db_conlancamdoc_classe.php");
-require_once("classes/db_conlancamele_classe.php");
-require_once("classes/db_conlancamnota_classe.php");
-require_once("classes/db_conlancamcgm_classe.php");
-require_once("classes/db_conlancamdot_classe.php");
-require_once("classes/db_conlancamval_classe.php");
-require_once("classes/db_conlancamlr_classe.php");
-require_once("classes/db_conlancamcompl_classe.php");
-require_once("classes/db_conlancamord_classe.php");
-require_once("classes/lancamentoContabil.model.php");
+require_once(modification("classes/db_orcdotacao_classe.php"));
+require_once(modification("classes/db_orctiporec_classe.php"));
+require_once(modification("classes/db_empempenho_classe.php"));
+require_once(modification("classes/db_empelemento_classe.php"));
+require_once(modification("classes/db_pagordem_classe.php"));
+require_once(modification("classes/db_pagordemele_classe.php"));
+require_once(modification("classes/db_pagordemnota_classe.php"));
+require_once(modification("classes/db_pagordemval_classe.php"));
+require_once(modification("classes/db_pagordemrec_classe.php"));
+require_once(modification("classes/db_pagordemtiporec_classe.php"));
+require_once(modification("classes/db_empnota_classe.php"));
+require_once(modification("classes/db_empnotaele_classe.php"));
+require_once(modification("classes/db_tabrec_classe.php"));
+require_once(modification("classes/db_conplanoreduz_classe.php"));
+require_once(modification("classes/db_conlancam_classe.php"));
+require_once(modification("classes/db_conlancamemp_classe.php"));
+require_once(modification("classes/db_conlancamdoc_classe.php"));
+require_once(modification("classes/db_conlancamele_classe.php"));
+require_once(modification("classes/db_conlancamnota_classe.php"));
+require_once(modification("classes/db_conlancamcgm_classe.php"));
+require_once(modification("classes/db_conlancamdot_classe.php"));
+require_once(modification("classes/db_conlancamval_classe.php"));
+require_once(modification("classes/db_conlancamlr_classe.php"));
+require_once(modification("classes/db_conlancamcompl_classe.php"));
+require_once(modification("classes/db_conlancamord_classe.php"));
+require_once(modification("classes/lancamentoContabil.model.php"));
 
-require_once("model/configuracao/Instituicao.model.php");
-require_once("interfaces/ILancamentoAuxiliar.interface.php");
-require_once("interfaces/IRegraLancamentoContabil.interface.php");
-require_once("model/contabilidade/planoconta/interface/ISistemaConta.interface.php");
+require_once(modification("model/configuracao/Instituicao.model.php"));
+require_once(modification("interfaces/ILancamentoAuxiliar.interface.php"));
+require_once(modification("interfaces/IRegraLancamentoContabil.interface.php"));
+require_once(modification("model/contabilidade/planoconta/interface/ISistemaConta.interface.php"));
 
-require_once("model/contabilidade/contacorrente/ContaCorrenteFactory.model.php");
-require_once("model/contabilidade/contacorrente/ContaCorrenteBase.model.php");
-require_once("model/financeiro/ContaBancaria.model.php");
-require_once("model/contabilidade/planoconta/ContaPlano.model.php");
-require_once("model/contabilidade/planoconta/ClassificacaoConta.model.php");
-require_once("model/contabilidade/planoconta/ContaCorrente.model.php");
-require_once("model/contabilidade/planoconta/ContaOrcamento.model.php");
-require_once("model/contabilidade/planoconta/ContaPlanoPCASP.model.php");
+require_once(modification("model/contabilidade/contacorrente/ContaCorrenteFactory.model.php"));
+require_once(modification("model/contabilidade/contacorrente/ContaCorrenteBase.model.php"));
+require_once(modification("model/financeiro/ContaBancaria.model.php"));
+require_once(modification("model/contabilidade/planoconta/ContaPlano.model.php"));
+require_once(modification("model/contabilidade/planoconta/ClassificacaoConta.model.php"));
+require_once(modification("model/contabilidade/planoconta/ContaCorrente.model.php"));
+require_once(modification("model/contabilidade/planoconta/ContaOrcamento.model.php"));
+require_once(modification("model/contabilidade/planoconta/ContaPlanoPCASP.model.php"));
 require_once(Modification::getFile('model/agendaPagamento.model.php'));
-require_once("model/retencaoNota.model.php");
-require_once("model/ordemCompra.model.php");
+require_once(modification("model/retencaoNota.model.php"));
+require_once(modification("model/ordemCompra.model.php"));
 
-require_once("model/contabilidade/planoconta/SistemaContaCompensado.model.php");
-require_once("model/contabilidade/planoconta/SistemaContaFinanceiroBanco.model.php");
-require_once("model/contabilidade/planoconta/SistemaContaFinanceiroCaixa.model.php");
-require_once("model/contabilidade/planoconta/SistemaContaFinanceiroExtraOrcamentaria.model.php");
-require_once("model/contabilidade/planoconta/SistemaContaFinanceiro.model.php");
-require_once("model/contabilidade/planoconta/SistemaContaPatrimonial.model.php");
-require_once("model/contabilidade/planoconta/SistemaContaOrcamentario.model.php");
-require_once("model/contabilidade/planoconta/SistemaContaNaoAplicado.model.php");
+require_once(modification("model/contabilidade/planoconta/SistemaContaCompensado.model.php"));
+require_once(modification("model/contabilidade/planoconta/SistemaContaFinanceiroBanco.model.php"));
+require_once(modification("model/contabilidade/planoconta/SistemaContaFinanceiroCaixa.model.php"));
+require_once(modification("model/contabilidade/planoconta/SistemaContaFinanceiroExtraOrcamentaria.model.php"));
+require_once(modification("model/contabilidade/planoconta/SistemaContaFinanceiro.model.php"));
+require_once(modification("model/contabilidade/planoconta/SistemaContaPatrimonial.model.php"));
+require_once(modification("model/contabilidade/planoconta/SistemaContaOrcamentario.model.php"));
+require_once(modification("model/contabilidade/planoconta/SistemaContaNaoAplicado.model.php"));
 
-require_once("model/contabilidade/planoconta/SubSistemaConta.model.php");
-require_once("model/contabilidade/planoconta/SistemaConta.model.php");
+require_once(modification("model/contabilidade/planoconta/SubSistemaConta.model.php"));
+require_once(modification("model/contabilidade/planoconta/SistemaConta.model.php"));
 
 require_once(Modification::getFile("classes/empenho.php"));
-require_once("model/CgmFactory.model.php");
+require_once(modification("model/CgmFactory.model.php"));
 
-require_once("model/Dotacao.model.php");
+require_once(modification("model/Dotacao.model.php"));
 
 
 db_app::import("exceptions.*");
@@ -404,7 +404,7 @@ switch ($objJson->method) {
         // Condicao da OC17910
         if ($objJson->iCgmEmitente > "0")
             $sSqlCgm   = $oDaoCgm->sql_query_file($objJson->iCgmEmitente);
-        else 
+        else
             $sSqlCgm   = $oDaoCgm->sql_query_file($objJson->cgm);
       $rsCgm     = $oDaoCgm->sql_record($sSqlCgm);
       $oDadosCgm = db_utils::fieldsMemory($rsCgm,0);

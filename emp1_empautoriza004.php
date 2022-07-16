@@ -146,17 +146,17 @@ if (isset($incluir)) {
 
   }
     if ($sqlerro==false) {
-        
+
         $result_cgmzerado = db_query("SELECT z01_cgccpf FROM cgm WHERE z01_numcgm = {$e54_numcgm}");
         db_fieldsmemory($result_cgmzerado, 0)->z01_cgccpf;
 
         if (strlen($z01_cgccpf) != 14 && strlen($z01_cgccpf) != 11) {
-            
+
             $sqlerro = true;
             $erro_msg = "ERRO!\nNúmero do CPF/CNPJ cadastrado está incorreto.\nCorrija o CGM do fornecedor e tente novamente!";
         }
         if ($z01_cgccpf == '00000000000000' || $z01_cgccpf == '00000000000') {
-            
+
             $sqlerro = true;
             $erro_msg = "ERRO!\nNúmero do CPF/CNPJ cadastrado está zerado.\nCorrija o CGM do fornecedor e tente novamente!";
         }
@@ -287,14 +287,14 @@ if (isset($incluir)) {
 
       $result_cgmzerado = db_query("SELECT z01_cgccpf FROM cgm WHERE z01_numcgm = {$e54_numcgm}");
       db_fieldsmemory($result_cgmzerado, 0)->z01_cgccpf;
-  
+
       if (strlen($z01_cgccpf) != 14 && strlen($z01_cgccpf) != 11) {
-          
+
           $sqlerro = true;
           $erro_msg = "ERRO!\nNúmero do CPF/CNPJ cadastrado está incorreto.\nCorrija o CGM do fornecedor e tente novamente!";
       }
       if ($z01_cgccpf == '00000000000000' || $z01_cgccpf == '00000000000') {
-          
+
           $sqlerro = true;
           $erro_msg = "ERRO!\nNúmero do CPF/CNPJ cadastrado está zerado.\nCorrija o CGM do fornecedor e tente novamente!";
       }
