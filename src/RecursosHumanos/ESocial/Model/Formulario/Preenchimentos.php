@@ -223,10 +223,11 @@ class Preenchimentos
         });
     }
 
-    public function buscarPreenchimentoS1010($codigoFormulario, $rubrica){
-        if($rubrica != null){
+    public function buscarPreenchimentoS1010($codigoFormulario, $rubrica)
+    {
+        if ($rubrica != null) {
             $andRubricas = "
-                AND rh27_rubric IN (".str_replace(' ','',$rubrica).")
+                AND rh27_rubric IN (".str_replace(' ', '', $rubrica).")
             ";
         }
         $sql = "
@@ -277,7 +278,7 @@ class Preenchimentos
         if (!$rsRubrica) {
             throw new \Exception("Erro ao buscar os preenchimentos do S1010");
         }
-        
+
         /**
          * @todo busca os empregadores da instituição e adicona para cada rubrica
          */
@@ -361,10 +362,20 @@ class Preenchimentos
                  when rh01_nacion = 64 then 728
                  end as paisNascto,
             105 as paisnac,
-
-                case when ruas.j14_tipo is null then 'R'
-                else j88_sigla
-                end as tpLograd,
+            (select j88_sigla from cgm intcgm
+            inner join patrimonio.cgmendereco as cgmendereco on (intcgm.z01_numcgm=cgmendereco.z07_numcgm)
+            inner join configuracoes.endereco as endereco on (cgmendereco.z07_endereco = endereco.db76_sequencial)
+            inner join cadenderlocal on cadenderlocal.db75_sequencial = db76_sequencial
+            inner join cadenderbairrocadenderrua on db87_sequencial = db75_cadenderbairrocadenderrua
+             inner join cadenderbairro     on  db73_sequencial  = db87_cadenderbairro
+             inner join cadenderrua        on  db74_sequencial  = db87_cadenderrua
+             inner join cadendermunicipio  on  db72_sequencial  = db73_cadendermunicipio
+             inner join cadendermunicipio  as a on a.db72_sequencial = db74_cadendermunicipio
+             inner join cadenderestado     on  db71_sequencial  = a.db72_cadenderestado
+             inner join cadenderpais       on  db70_sequencial  = db71_cadenderpais
+             inner join cadenderruaruastipo on db85_cadenderrua = db74_sequencial
+             inner join ruastipo           on  j88_codigo       = db85_ruastipo
+            where z01_numcgm = intcgm.z01_numcgm limit 1) as tpLograd,
                 z01_ender as dscLograd,
                 z01_numero  as nrLograd,
                 z01_compl as complemento,

@@ -69,7 +69,6 @@ class EventoS2200 extends EventoBase
             $oDadosAPI->evtAdmissao->CNH                 = empty($oDados->CNH->nrRegCnh) ? null : $oDados->CNH;
 
             //$oDadosAPI->evtAdmissao->endereco->brasil    = empty($oDados->brasil) ? null : $oDados->brasil;
-
             $oDadosAPI->evtAdmissao->endereco->brasil->tpLograd    = empty($oDados->tplograd) ? null : $oDados->tplograd;
             $oDadosAPI->evtAdmissao->endereco->brasil->dscLograd   = empty($oDados->dsclograd) ? null : $oDados->dsclograd;
 
@@ -122,7 +121,7 @@ class EventoS2200 extends EventoBase
                 $oDadosAPI->evtAdmissao->vinculo->infoCeletista->indAdmissao       = $oDados->indadmissao;
                 $oDadosAPI->evtAdmissao->vinculo->infoCeletista->tpRegJor          = $oDados->tpregjor;
                 $oDadosAPI->evtAdmissao->vinculo->infoCeletista->natAtividade      = $oDados->natatividade;
-                $oDadosAPI->evtAdmissao->vinculo->infoCeletista->dtBase            = $oDados->dtbase;
+                //$oDadosAPI->evtAdmissao->vinculo->infoCeletista->dtBase            = $oDados->dtbase;
                 $oDadosAPI->evtAdmissao->vinculo->infoCeletista->cnpjSindCategProf = $oDados->cnpjsindcategprof;
 
                 $oDadosAPI->evtAdmissao->vinculo->infoCeletista->opcFGTS = $oDados->opcfgts;
@@ -138,7 +137,8 @@ class EventoS2200 extends EventoBase
                 //$oDadosAPI->evtAdmissao->vinculo->infoEstatutario = $oDados->infoEstatutario;
                 $oDadosAPI->evtAdmissao->vinculo->infoEstatutario->tpProv       = $oDados->tpprov;
                 $oDadosAPI->evtAdmissao->vinculo->infoEstatutario->dtExercicio  = $oDados->dtexercicio;
-                if (!empty($oDados->tpplanrp)) {
+
+                if ($oDados->tpplanrp == 0) {
                     $oDadosAPI->evtAdmissao->vinculo->infoEstatutario->tpPlanRP     = $oDados->tpplanrp;
                 }
                 if ($oDados->indtetorgps == 'N') {
