@@ -26,8 +26,8 @@
  */
 
 //MODULO: empenho
-require_once("classes/db_empparametro_classe.php");
-require_once("dbforms/db_classesgenericas.php");
+require_once(modification("classes/db_empparametro_classe.php"));
+require_once(modification("dbforms/db_classesgenericas.php"));
 $cliframe_alterar_excluir = new cl_iframe_alterar_excluir;
 $clempparametro = new cl_empparametro;
 

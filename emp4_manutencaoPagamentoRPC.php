@@ -39,14 +39,13 @@ require_once(modification("model/CgmBase.model.php"));
 require_once(modification("model/CgmJuridico.model.php"));
 require_once(modification("model/CgmFisico.model.php"));
 require_once(modification("model/Dotacao.model.php"));
-require_once(Modification::getFile('model/agendaPagamento.model.php'));
+require_once(modification('model/agendaPagamento.model.php'));
 require_once(modification("model/impressaoCheque.model.php"));
 require_once(modification('model/empenho/EmpenhoFinanceiro.model.php'));
 require_once(modification('model/empenho/EmpenhoFinanceiroItem.model.php'));
 require_once(modification('model/MaterialCompras.model.php'));
 require_once(modification("classes/ordemPagamento.model.php"));
-//require_once "model/caixa/ArrecadacaoReceitaOrcamentaria.model.php";
-require_once "model/caixa/AutenticacaoArrecadacao.model.php";
+require_once(modification("model/caixa/AutenticacaoArrecadacao.model.php"));
 require_once(modification("model/contabilidade/contacorrente/ContaCorrenteFactory.model.php"));
 require_once(modification("model/contabilidade/contacorrente/ContaCorrenteBase.model.php"));
 require_once(modification("model/financeiro/ContaBancaria.model.php"));
@@ -55,12 +54,10 @@ require_once(modification("model/contabilidade/planoconta/ClassificacaoConta.mod
 require_once(modification("model/contabilidade/planoconta/ContaCorrente.model.php"));
 require_once(modification("model/contabilidade/planoconta/ContaOrcamento.model.php"));
 require_once(modification("model/contabilidade/planoconta/ContaPlanoPCASP.model.php"));
-//db_app::import("exceptions.*");
 require_once(modification("libs/exceptions/BusinessException.php"));
 require_once(modification("libs/exceptions/DBException.php"));
 require_once(modification("libs/exceptions/FileException.php"));
 require_once(modification("libs/exceptions/ParameterException.php"));
-//db_app::import("configuracao.*");
 require_once(modification("model/configuracao/Agenda.model.php"));
 require_once(modification("model/configuracao/DBDepartamento.model.php"));
 require_once(modification("model/configuracao/DBDivisaoDepartamento.model.php"));
@@ -164,7 +161,7 @@ require_once(modification("model/orcamento/TribunalEstrutura.model.php"));
 require_once(modification("model/orcamento/Unidade.model.php"));
 require_once(modification("std/DBDate.php"));
 
-require_once 'model/impressaoAutenticacao.php';
+require_once modification('model/impressaoAutenticacao.php');
 
 $oGet     = db_utils::postMemory($_GET);
 $oJson    = new services_json();
