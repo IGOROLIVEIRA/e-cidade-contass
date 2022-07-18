@@ -361,12 +361,9 @@ if($clitbiconstr->numrows  > 0){
 /********************************************************** T R A N S M I T E N T E S *****************************************************************************************/
 /*============================================================================================================================================================================*/
 
-//die($clitbinome->sql_queryguia("","it03_nome as z01_nome,it03_sexo,it03_cpfcnpj as z01_cgccpf,it03_endereco as z01_ender,it03_numero,it03_compl,it03_cxpostal,it03_bairro as z01_bairro,it03_munic as z01_munic,it03_uf as z01_uf,it03_cep as z01_cep,it03_mail,it22_itbi,it22_setor as j34_setor,it22_quadra as j34_quadra,it22_lote as j34_lote,it22_descrlograd as j14_nome,it22_numero as j39_numero,it22_compl,it06_matric,it04_codigo,it04_descr,it04_desconto,it04_obs,it04_aliquota,itbi.*,itburbano.*,itbirural.*,itbiavalia.*",""," it03_guia  = $itbi and upper(it03_tipo)  = 'T' and it03_princ = 't' "));
-
 $result1 = $clitbinome->sql_record($clitbinome->sql_queryguia("","z01_numcgm,it03_nome as z01_nome,z01_telef as fonetransmitente,it03_mail as mailtransmitente ,it03_sexo,it03_cpfcnpj as z01_cgccpf,it03_endereco as z01_ender,it03_numero,it03_compl,it03_cxpostal,it03_bairro as z01_bairro,it03_munic as z01_munic,it03_uf as z01_uf,it03_cep as z01_cep,it03_mail,it22_itbi,it22_setor as j34_setor,it22_quadra as j34_quadra,j34_distrito,it22_lote as j34_lote,it22_descrlograd as j14_nome,j13_descr,it22_numero as j39_numero,it22_compl as j39_compl,it06_matric,it04_codigo,it04_descr,it04_desconto,it04_obs,itbi.*,itburbano.*,itbirural.*,itbiavalia.*",""," it03_guia  = $itbi and upper(it03_tipo)  = 'T' and it03_princ = 't' "));
 
 if($clitbinome->numrows  > 0){
-  //db_criatabela($result1);exit;
   db_fieldsmemory($result1,0);
 }
 
