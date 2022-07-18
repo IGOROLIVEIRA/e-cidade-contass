@@ -218,10 +218,11 @@ if(isset($confirmar)){
       $result_orcreservaaut = $clorcreservaaut->sql_record($clorcreservaaut->sql_query_file(null,"*","","o83_autori=$e56_autori"));
       if($clorcreservaaut->numrows > 0){
      echo "
-           <script>
-		CurrentWindow.corpo.iframe_empautitem.location.href='emp1_empautitem001.php?db_opcaoal=3&e55_autori=$e56_autori';\n
-		parent.document.formaba.empautret.disabled=false;
-	   </script>
+          <script>
+              if (typeof CurrentWindow !== 'undefined')
+                  CurrentWindow.corpo.iframe_empautitem.location.href='emp1_empautitem001.php?db_opcaoal=3&e55_autori=$e56_autori';\n
+              parent.document.formaba.empautret.disabled=false;
+          </script>
           ";
       }
     }
@@ -306,8 +307,13 @@ if(isset($confirmar)||isset($cancelar)){
 
 }else{
 
-  if(isset($e54_valor)){
-    echo "<script>CurrentWindow.corpo.iframe_empautret.setValorNota($e54_valor);</script>";
+  if (isset($e54_valor)) {
+      echo "
+          <script>
+              if (typeof CurrentWindow.corpo.iframe_empautret.setValorNota !== 'undefined') {  
+                  CurrentWindow.corpo.iframe_empautret.setValorNota($e54_valor);
+              }
+          </script>";
   }
 }
 if(!isset($o47_coddot) || (isset($o47_coddot) && trim($o47_coddot) == "")){

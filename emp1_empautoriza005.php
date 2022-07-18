@@ -383,17 +383,18 @@ if (isset($chavepesquisa)) {
   if ($anulacao == false && $emprocesso == false) {
     echo "
            <script>
+           console.log('Estou testando');
 	       function js_libera(recar){
 		          parent.document.formaba.empautitem.disabled=false;\n
 		          parent.document.formaba.empautidot.disabled=false;\n
 		          parent.document.formaba.prazos.disabled=false;\n
 		          parent.document.formaba.anulacao.disabled=false;\n
-                  // parent.document.formaba.empautret.disabled=false;\n
-                  // top.corpo.iframe_empautret.location.href='emp1_empautret001.php?e66_autori=$e54_autori&inclusao=true';\n
-		          top.corpo.iframe_empautitem.location.href='emp1_empautitem001.php?e55_autori=$e54_autori';\n
-		          top.corpo.iframe_prazos.location.href='emp1_empautoriza007.php?chavepesquisa=$e54_autori';\n
-		          top.corpo.iframe_anulacao.location.href='emp1_empautoriza006.php?e54_autori=$e54_autori';\n
-		          top.corpo.iframe_empautidot.location.href='emp1_empautidot001.php?e56_autori=$e54_autori';\n
+              parent.document.formaba.empautret.disabled=false;\n
+              CurrentWindow.corpo.iframe_empautret.location.href='emp1_empautret001.php?e66_autori=$e54_autori&inclusao=true';\n
+              CurrentWindow.corpo.iframe_empautitem.location.href='emp1_empautitem001.php?e55_autori=$e54_autori';\n
+		          CurrentWindow.corpo.iframe_prazos.location.href='emp1_empautoriza007.php?chavepesquisa=$e54_autori';\n
+		          CurrentWindow.corpo.iframe_anulacao.location.href='emp1_empautoriza006.php?e54_autori=$e54_autori';\n
+		          CurrentWindow.corpo.iframe_empautidot.location.href='emp1_empautidot001.php?e56_autori=$e54_autori';\n
 	       }
 	       js_libera();
            </script>
@@ -407,12 +408,12 @@ if (isset($chavepesquisa)) {
                 parent.document.formaba.empautidot.disabled=false;\n
                 parent.document.formaba.prazos.disabled=false;\n
                 parent.document.formaba.anulacao.disabled=false;\n
-                // parent.document.formaba.empautret.disabled=false;\n
-                // top.corpo.iframe_empautret.location.href='emp1_empautret001.php?e66_autori=$e54_autori&inclusao=true';\n
-                top.corpo.iframe_empautitem.location.href='emp1_empautitem001.php?db_opcaoal=33&e55_autori=$e54_autori';\n
-                top.corpo.iframe_prazos.location.href='emp1_empautoriza007.php?db_opcao=33&chavepesquisa=$e54_autori';\n
-                top.corpo.iframe_anulacao.location.href='emp1_empautoriza006.php?e54_autori=$e54_autori';\n
-                top.corpo.iframe_empautidot.location.href='emp1_empautidot001.php?anulacao=true&db_opcao=33&e56_autori=$e54_autori';\n
+                parent.document.formaba.empautret.disabled=false;\n
+                CurrentWindow.corpo.iframe_empautret.location.href='emp1_empautret001.php?e66_autori=$e54_autori&inclusao=true';\n
+                CurrentWindow.corpo.iframe_empautitem.location.href='emp1_empautitem001.php?db_opcaoal=33&e55_autori=$e54_autori';\n
+                CurrentWindow.corpo.iframe_prazos.location.href='emp1_empautoriza007.php?db_opcao=33&chavepesquisa=$e54_autori';\n
+                CurrentWindow.corpo.iframe_anulacao.location.href='emp1_empautoriza006.php?e54_autori=$e54_autori';\n
+                CurrentWindow.corpo.iframe_empautidot.location.href='emp1_empautidot001.php?anulacao=true&db_opcao=33&e56_autori=$e54_autori';\n
               }
               js_bloqueia();
             </script>
@@ -425,12 +426,12 @@ if (isset($chavepesquisa)) {
                 parent.document.formaba.empautidot.disabled=false;\n
                 parent.document.formaba.prazos.disabled=true;\n
                 parent.document.formaba.anulacao.disabled=true;\n
-                // parent.document.formaba.empautret.disabled=false;\n
-                // top.corpo.iframe_empautret.location.href='emp1_empautret001.php?e66_autori=$e54_autori&inclusao=true';\n
-                top.corpo.iframe_empautitem.location.href='emp1_empautitem001.php?db_opcaoal=33&e55_autori=$e54_autori';\n
-                top.corpo.iframe_prazos.location.href='emp1_empautoriza007.php?db_opcao=33&chavepesquisa=$e54_autori';\n
-                top.corpo.iframe_anulacao.location.href='emp1_empautoriza006.php?db_opcao=33&e54_autori=$e54_autori';\n
-                top.corpo.iframe_empautidot.location.href='emp1_empautidot001.php?anulacao=true&db_opcao=33&e56_autori=$e54_autori';\n
+                parent.document.formaba.empautret.disabled=false;\n
+                CurrentWindow.corpo.iframe_empautret.location.href='emp1_empautret001.php?e66_autori=$e54_autori&inclusao=true';\n
+                CurrentWindow.corpo.iframe_empautitem.location.href='emp1_empautitem001.php?db_opcaoal=33&e55_autori=$e54_autori';\n
+                CurrentWindow.corpo.iframe_prazos.location.href='emp1_empautoriza007.php?db_opcao=33&chavepesquisa=$e54_autori';\n
+                CurrentWindow.corpo.iframe_anulacao.location.href='emp1_empautoriza006.php?db_opcao=33&e54_autori=$e54_autori';\n
+                CurrentWindow.corpo.iframe_empautidot.location.href='emp1_empautidot001.php?anulacao=true&db_opcao=33&e56_autori=$e54_autori';\n
               }
               js_bloqueia();
             </script>
