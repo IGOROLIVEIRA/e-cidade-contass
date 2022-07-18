@@ -236,8 +236,12 @@ class Itbi
         $arrecad->sql_record($arrecad->excluir(null, "k00_numpre = {$iNumpre}"));
     }
 
-    public function incluirArrecad()
+    public function incluirArrecad($numpre = null)
     {
+        if(empty($numpre) === true) {
+            return;
+        }
+
         $clarrecad = db_utils::getDao('arrecad');
         $clarrecad->k00_numcgm = $this->getCgmArrecad();
         $clarrecad->k00_dtoper = date('Y-m-d',db_getsession('DB_datausu'));
@@ -245,7 +249,7 @@ class Itbi
         $clarrecad->k00_hist   = Paritbi::HISTCALC_DEFAULT;
         $clarrecad->k00_valor  = $this->ItbiAvalia->it14_valorpaga;
         $clarrecad->k00_dtvenc = $this->ItbiAvalia->it14_dtvenc;
-        $clarrecad->k00_numpre = $this->getNumpre();
+        $clarrecad->k00_numpre = $numpre;
         $clarrecad->k00_numpar = 1;
         $clarrecad->k00_numtot = 1;
         $clarrecad->k00_numdig = '0';

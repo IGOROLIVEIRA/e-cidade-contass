@@ -471,7 +471,7 @@ if ($lLiberado && $tipoguia != "q") {
 
   if ($oInstituicao->getUsaDebitosItbi() === true) {
       try {
-        $oItbi->incluirArrecad();
+        $oItbi->incluirArrecad($numpre);
       } catch (Exception $ex) {
         $sqlerro = true;
         $erromsg = $ex->getMessage();
