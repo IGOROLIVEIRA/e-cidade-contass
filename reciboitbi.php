@@ -437,7 +437,7 @@ $pdf1->cgc = $cgc;
  * Verifica se a guia está liberada para emissão
  * Caso não esteja não gera recibo
  */
-if ($lLiberado and $tipoguia != "q") {
+if ($lLiberado && $tipoguia != "q") {
 
 /**************************************************    I N S E R E   O   R E C I B O    **********************************************************************************/
 // Não Insere Recibo quando não estiver liberada
