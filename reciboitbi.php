@@ -61,6 +61,7 @@ require_once("model/regraEmissao.model.php");
 require_once("model/convenio.model.php");
 require_once("classes/db_itbiretificacao_classe.php");
 require_once("model/configuracao/Instituicao.model.php");
+require_once("model/itbi/Itbi.model.php");
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 
 try {
