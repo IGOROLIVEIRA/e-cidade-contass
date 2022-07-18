@@ -1066,7 +1066,7 @@ $pdf1->tipoguia                  = @$tipoguia;
 
 $pdf1->lRetificado 				 = $lRetificado;
 
-if ($db21_usadebitoitbi == 't') {
+if ($oInstituicao->getUsaDebitosItbi() === true) {
     $pdf1->vlrhis       = $oDadoCorrecoes->vlrhis      != "" ? (float)$oDadoCorrecoes->vlrhis      : (float)"0,00";
     $pdf1->vlrcor       = $oDadoCorrecoes->vlrcor      != "" ? (float)$oDadoCorrecoes->vlrcor      : (float)"0,00";
     $pdf1->vlrjuros     = $oDadoCorrecoes->vlrjuros    != "" ? (float)$oDadoCorrecoes->vlrjuros    : (float)"0,00";
