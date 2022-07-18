@@ -600,7 +600,7 @@ if(isset($tx_banc) && $tx_banc != '' && $tx_banc > 0){
 
 // #################################### Atualização dos valores do ITBI
 if ($oInstituicao->getUsaDebitosItbi() === true) {
-    $sSQL_guia_numpre    = $clitbinumpre->sql_record($clitbinumpre->sql_query(null,"*",""," it15_guia = {$itbi}"));
+  $resultGuiaNumpre    = $clitbinumpre->sql_record($clitbinumpre->sql_query(null,"*",""," it15_guia = {$itbi}"));
 
   $oDado = db_utils::fieldsMemory($resultGuiaNumpre,0);
   $ano = db_getsession('DB_anousu');
@@ -617,7 +617,7 @@ if ($oInstituicao->getUsaDebitosItbi() === true) {
                 substr(fc_calcula,28,13)::float8+
                 substr(fc_calcula,41,13)::float8-
                 substr(fc_calcula,54,13)::float8) as total
-                FROM fc_calcula($oDado->k00_numpre, 1, 3, '$data'::date, '$data'::date, $ano);
+                FROM fc_calcula($oDado->it15_numpre, 1, 3, '$data'::date, '$data'::date, $ano);
 SQL;
 
   $resultCorrecoes = db_query($sSQL);
