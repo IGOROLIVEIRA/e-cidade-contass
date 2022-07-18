@@ -599,17 +599,9 @@ if(isset($tx_banc) && $tx_banc != '' && $tx_banc > 0){
 }
 
 // #################################### Atualização dos valores do ITBI
-if ($db21_usadebitoitbi == 't') {
-  $sSQL_guia_numpre = <<<SQL
-      select arrecad_itbi.k00_numpre, arrecad.*
-      from arrecad_itbi
-          inner join arrecad on arrecad.k00_numpre = arrecad_itbi.k00_numpre
-          inner join itbi on itbi.it01_guia = arrecad_itbi.it01_guia
-            where itbi.it01_guia = $itbi;
+if ($oInstituicao->getUsaDebitosItbi() === true) {
+    $sSQL_guia_numpre    = $clitbinumpre->sql_record($clitbinumpre->sql_query(null,"*",""," it15_guia = {$itbi}"));
 
-SQL;
-
-  $resultGuiaNumpre = db_query($sSQL_guia_numpre);
   $oDado = db_utils::fieldsMemory($resultGuiaNumpre,0);
   $ano = db_getsession('DB_anousu');
   $data = (isset($novadatavencimento) && !empty($novadatavencimento)) ? implode("-", array_reverse(explode("/", $novadatavencimento))) : date("Y-m-d", db_getsession("DB_datausu"));
@@ -981,7 +973,7 @@ $pdf1->it06_matric               =@$it06_matric;
 $pdf1->j39_numero                =@$j39_numero;
 $pdf1->j39_compl                 =@$j39_compl;
 $pdf1->db21_usadistritounidade   =@$db21_usadistritounidade;
-$pdf1->db21_usadebitoitbi        =@$db21_usadebitoitbi;
+$pdf1->db21_usadebitoitbi        =@$oInstituicao->getUsaDebitosItbi() === true ? 't' : 'f';
 $pdf1->j34_distrito              =@$j34_distrito;
 $pdf1->j34_setor                 =@$j34_setor;
 $pdf1->j34_quadra                =@$j34_quadra;
