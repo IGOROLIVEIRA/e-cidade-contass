@@ -446,7 +446,7 @@ if ($lLiberado && $tipoguia != "q") {
   $numpre       = $clnumpref->sql_numpre();
   $numpre_ficha = $numpre;
   $resnumpre    = $clitbinumpre->sql_record($clitbinumpre->sql_query(null,"*",""," it15_guia = {$itbi}"));
-  $itbi = new Itbi($itbi);
+  $oItbi = new Itbi($itbi);
   $oInstituicao = new Instituicao(db_getsession('DB_instit','1'));
   /**
    * Se existirem guias emitidas altera a situação de ultima emitida para false
@@ -460,7 +460,7 @@ if ($lLiberado && $tipoguia != "q") {
       $clitbinumpre->it15_ultimaguia = 'f';
       $clitbinumpre->alterar($oItbiNumpre->it15_sequencial);
       if ($oInstituicao->getUsaDebitosItbi() === true) {
-          $itbi->removeArrecad($oItbiNumpre->it15_numpre);
+          $oItbi->removeArrecad($oItbiNumpre->it15_numpre);
       }
     }
   }
@@ -470,9 +470,8 @@ if ($lLiberado && $tipoguia != "q") {
   $clitbinumpre->incluir(null);
 
   if ($oInstituicao->getUsaDebitosItbi() === true) {
-      $itbi = new Itbi($itbi);
       try {
-        $itbi->incluirArrecad();
+        $oItbi->incluirArrecad();
       } catch (Exception $ex) {
         $sqlerro = true;
         $erromsg = $ex->getMessage();
