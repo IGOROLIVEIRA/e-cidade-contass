@@ -656,10 +656,10 @@ class cl_esocialenvio
         }
     }
 
-    public function setProtocolo($rh213_protocolo)
+    public function setProtocolo($rh213_sequencial, $rh213_protocolo)
     {
         $this->erro_status = "1";
-        $sql = "UPDATE esocialenvio SET rh213_protocolo = '$rh213_protocolo' ";
+        $sql = "UPDATE esocialenvio SET rh213_protocolo = '{$rh213_protocolo}' WHERE rh213_sequencial = {$rh213_sequencial}";
 
         $result = db_query($sql);
         if ($result == false) {
