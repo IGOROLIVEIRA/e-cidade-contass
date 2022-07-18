@@ -25,15 +25,15 @@
  *                                licenca/licenca_pt.txt
  */
 
-require("libs/db_stdlib.php");
-require("libs/db_conecta.php");
-include("libs/db_sessoes.php");
-include("libs/db_usuariosonline.php");
-include("dbforms/db_funcoes.php");
+require(modification("libs/db_stdlib.php"));
+require(modification("libs/db_conecta.php"));
+include(modification("libs/db_sessoes.php"));
+include(modification("libs/db_usuariosonline.php"));
+include(modification("dbforms/db_funcoes.php"));
 
-include("libs/db_libcaixa_ze.php");
-$cllayouts_bb = new cl_layouts_bb;
-$cllayouts_bs = new cl_layouts_bs;
+include(modification("libs/db_libcaixa_ze.php"));
+$cllayouts_bb = new LayoutBB;
+$cllayouts_bs = new LayoutBS;
 
 include("classes/db_empagetipo_classe.php");
 include("classes/db_empage_classe.php");

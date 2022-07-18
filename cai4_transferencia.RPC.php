@@ -1,13 +1,13 @@
 <?php
-require_once("libs/db_stdlib.php");
-require_once("std/db_stdClass.php");
-require_once("libs/db_utils.php");
-require_once("libs/db_app.utils.php");
-require_once("libs/db_conecta.php");
-require_once("libs/db_sessoes.php");
-require_once("libs/JSON.php");
-require_once("libs/db_libcontabilidade.php");
-require_once("dbforms/db_funcoes.php");
+require_once(modification("libs/db_stdlib.php"));
+require_once(modification("std/db_stdClass.php"));
+require_once(modification("libs/db_utils.php"));
+require_once(modification("libs/db_app.utils.php"));
+require_once(modification("libs/db_conecta.php"));
+require_once(modification("libs/db_sessoes.php"));
+require_once(modification("libs/JSON.php"));
+require_once(modification("libs/db_libcontabilidade.php"));
+require_once(modification("dbforms/db_funcoes.php"));
 require_once("model/slip.model.php");
 require_once("interfaces/ILancamentoAuxiliar.interface.php");
 require_once("interfaces/IRegraLancamentoContabil.interface.php");
@@ -303,7 +303,7 @@ switch ($oParam->exec) {
       $oTransferencia->setObservacao(db_stdClass::normalizeStringJsonEscapeString($oParam->k17_texto));
       $oTransferencia->setData(date("Y-m-d",db_getsession("DB_datausu")));
       $oTransferencia->setProcessoAdministrativo(db_stdClass::normalizeStringJsonEscapeString($oParam->k145_numeroprocesso));
-      
+
       /**
        * Verifica qual transferência financeira o slip é originário
        * Usa essa informação para que a transferência seja marcada como recebida, na tabela transferenciafinanceirarecebimento
@@ -391,7 +391,7 @@ switch ($oParam->exec) {
       $oRetorno->iSituacao              = $oTransferencia->getSituacao();
       $oRetorno->dtData                 = $oTransferencia->getData();
       $oRetorno->iDevolucao             = $oTransferencia->getDevolucao();
-        
+
       $rsSlipFonte = db_query("SELECT k29_recurso FROM sliprecurso WHERE k29_slip = {$oParam->k17_codigo}");
       $oRetorno->iCodigoFonte = db_utils::fieldsMemory($rsSlipFonte, 0)->k29_recurso ? db_utils::fieldsMemory($rsSlipFonte, 0)->k29_recurso : '';
 

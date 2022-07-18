@@ -46,6 +46,13 @@ $oDaoBensModelo = db_utils::getDao('bensmodelo');
 $db_opcao = 1;
 $db_botao = true;
 
+//Saber se possui integraÁ„o patrimonial
+require_once "classes/db_parametrointegracaopatrimonial_classe.php";
+$clBens = new cl_parametrointegracaopatrimonial;
+$rsBem = $clBens->sql_record($clBens->sql_query_file(null, '*', null, " c01_modulo = 1"));     
+$oBemIntegracao= db_utils::fieldsMemory($rsBem, 0);
+$integracao = $oBemIntegracao->c01_modulo;
+
 $lUsaPCASP = "false";
 if (USE_PCASP) {
   $lUsaPCASP = "true";
@@ -196,6 +203,16 @@ if (USE_PCASP) {
   var sUrl = window.location.search;
   var oUrl = null;
   var lViewNotasPendentes = true;
+
+  var integracao = "<?php print $integracao; ?>";
+
+  if(integracao)  {
+      $("contabilizado").style.display = "table-row";
+      $("contabilizador").style.display = "table-row";
+      $("contabilizado").value = '';
+  }    
+  $("t52_dtaqu").style.backgroundColor = '#FFFFFF';
+  
   if (sUrl) {
 
     oUrl = js_urlToObject(sUrl);
@@ -204,13 +221,13 @@ if (USE_PCASP) {
     }
   }
   if (lViewNotasPendentes) {
-
+  
     /**
      * Direciona o usu√°rio para a inclus√£o de bens Individual ou Global, dependendo
      * da quantidade do item.
      */
     function loadDadosBem(oDadosLinha) {
-
+      
       var iQuantidadeItem = oDadosLinha.iQuantidadeItem;
       var iCodigoEmpNotaItem = oDadosLinha.iCodigoEmpNotaItem;
 

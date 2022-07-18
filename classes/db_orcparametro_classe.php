@@ -59,6 +59,7 @@ class cl_orcparametro {
     /*OC10197*/
     var $o50_controlafote1017 = null;
     var $o50_controlafote10011006 = null;
+    var $o50_controlaexcessoarrecadacao = null;
     // cria propriedade com as variaveis do arquivo
     var $campos = "
                  o50_anousu = int4 = Exercício
@@ -76,6 +77,7 @@ class cl_orcparametro {
                  o50_motivosuplementacao = char(1) = Motivo Suplementacao
                  o50_controlafote1017 = bool = Controla fonte de recursos em suplementações (1017)
                  o50_controlafote10011006 = bool = Controla fonte de recursos em suplementações (1001 e 1006)
+                 o50_controlaexcessoarrecadacao = bool
                  ";
     //funcao construtor da classe
     function cl_orcparametro() {
@@ -113,6 +115,7 @@ class cl_orcparametro {
             $this->o50_controlafote1017 = ($this->o50_controlafote1017 == ""?@$GLOBALS["HTTP_POST_VARS"]["o50_controlafote1017"]:$this->o50_controlafote1017);
             $this->o50_controlafote10011006 = ($this->o50_controlafote10011006 == ""?@$GLOBALS["HTTP_POST_VARS"]["o50_controlafote10011006"]:$this->o50_controlafote10011006);
             /*FIM OC10197*/
+            $this->o50_controlaexcessoarrecadacao = ($this->o50_controlaexcessoarrecadacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["o50_controlaexcessoarrecadacao"] : $this->o50_controlaexcessoarrecadacao);
         }else{
             $this->o50_anousu = ($this->o50_anousu == ""?@$GLOBALS["HTTP_POST_VARS"]["o50_anousu"]:$this->o50_anousu);
         }
@@ -244,6 +247,7 @@ class cl_orcparametro {
                                       ,o50_motivosuplementacao
                                       ,o50_controlafote1017
                                       ,o50_controlafote10011006
+                                      ,o50_controlaexcessoarrecadacao
                        )
                 values (
                                 $this->o50_anousu
@@ -261,6 +265,7 @@ class cl_orcparametro {
                                ,'$this->o50_motivosuplementacao'
                                ,".($this->o50_controlafote1017 == "null" || $this->o50_controlafote1017 == ""?"null":"'".$this->o50_controlafote1017."'")."
                                ,".($this->o50_controlafote10011006 == "null" || $this->o50_controlafote10011006 == ""?"null":"'".$this->o50_controlafote10011006."'")."
+                               ,".($this->o50_controlaexcessoarrecadacao == "null" || $this->o50_controlaexcessoarrecadacao == ""?"null":"'".$this->o50_controlaexcessoarrecadacao."'")."
                       )";
         $result = db_query($sql);
         if($result==false){
@@ -510,6 +515,20 @@ class cl_orcparametro {
             }
         }
         /*FIM OC10197*/
+        if(trim($this->o50_controlaexcessoarrecadacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o50_controlaexcessoarrecadacao"])){
+            $sql  .= $virgula." o50_controlaexcessoarrecadacao = '$this->o50_controlaexcessoarrecadacao' ";
+            $virgula = ",";
+            if(trim($this->o50_controlaexcessoarrecadacao) == null ){
+                $this->erro_sql = " Campo Controle de Excesso de Arrecadação não informado.";
+                $this->erro_campo = "o50_motivosuplementacao";
+                $this->erro_banco = "";
+                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+        }
+        
         $sql .= " where ";
         if($o50_anousu!=null){
             $sql .= " o50_anousu = $this->o50_anousu";

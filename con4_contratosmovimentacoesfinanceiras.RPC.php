@@ -402,7 +402,18 @@ switch ($oParam->exec) {
                 $oAcordoPosicao = new AcordoPosicao($oPosicao->codigo);
                 $DataAssinatura = implode("-", array_reverse(explode("/", $oAcordoPosicao->getDataAssinatura())));
 
-                if (($c99_datapat != "" && $DataAssinatura != '') && $DataAssinatura <= $c99_datapat) {
+                if (isset($oParam->exclusaoaditamento)) {
+                    $dataReferencia = db_query("select * from acordoposicaoaditamento where ac35_acordoposicao = $oPosicao->codigo");
+                    $dataReferencia = pg_result($dataReferencia, 0, 'ac35_datareferencia');
+                    $dataReferencia = implode("-", array_reverse(explode("/", $dataReferencia)));
+                } else {
+                    $dataReferencia = db_query("select * from apostilamento where si03_acordoposicao = $oPosicao->codigo");
+                    $dataReferencia = pg_result($dataReferencia, 0, 'si03_datareferencia');
+                    $dataReferencia = implode("-", array_reverse(explode("/", $dataReferencia)));
+                }
+
+
+                if (($c99_datapat != "" && $dataReferencia != '') && $dataReferencia <= $c99_datapat) {
                     $erro_msg = "O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.";
                     $oRetorno->status = 1;
                     throw new BusinessException($erro_msg);

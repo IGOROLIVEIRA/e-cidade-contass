@@ -1,54 +1,59 @@
 <?
 //MODULO: configuracoes
 //CLASSE DA ENTIDADE contabancaria
-class cl_contabancaria { 
-   // cria variaveis de erro 
-   var $rotulo     = null; 
-   var $query_sql  = null; 
-   var $numrows    = 0; 
-   var $numrows_incluir = 0; 
-   var $numrows_alterar = 0; 
-   var $numrows_excluir = 0; 
-   var $erro_status= null; 
-   var $erro_sql   = null; 
-   var $erro_banco = null;  
-   var $erro_msg   = null;  
-   var $erro_campo = null;  
-   var $pagina_retorno = null; 
-   // cria variaveis do arquivo 
-   var $db83_sequencial = 0; 
-   var $db83_descricao = null; 
-   var $db83_bancoagencia = 0; 
-   var $db83_conta = null; 
-   var $db83_dvconta = null; 
-   var $db83_identificador = null; 
-   var $db83_codigooperacao = null; 
-   var $db83_tipoconta = 0; 
+class cl_contabancaria {
+   // cria variaveis de erro
+   var $rotulo     = null;
+   var $query_sql  = null;
+   var $numrows    = 0;
+   var $numrows_incluir = 0;
+   var $numrows_alterar = 0;
+   var $numrows_excluir = 0;
+   var $erro_status= null;
+   var $erro_sql   = null;
+   var $erro_banco = null;
+   var $erro_msg   = null;
+   var $erro_campo = null;
+   var $pagina_retorno = null;
+   // cria variaveis do arquivo
+   var $db83_sequencial = 0;
+   var $db83_descricao = null;
+   var $db83_bancoagencia = 0;
+   var $db83_conta = null;
+   var $db83_dvconta = null;
+   var $db83_identificador = null;
+   var $db83_codigooperacao = null;
+   var $db83_tipoconta = 0;
    var $db83_contaplano = 'f';
    var $db83_convenio = null;
-   var $db83_tipoaplicacao = 0; 
-   // cria propriedade com as variaveis do arquivo 
+   var $db83_tipoaplicacao = 0;
+   // cria propriedade com as variaveis do arquivo
    var $campos = "
-                 db83_sequencial = int4 = Codigo sequencial da conta bancaria 
-                 db83_descricao = varchar(100) = Descrição da Conta 
-                 db83_bancoagencia = int4 = Codigo da Agencia 
-                 db83_conta = varchar(15) = Conta 
-                 db83_dvconta = varchar(1) = Digito da Conta 
-                 db83_identificador = char(14) = Identificador (CNPJ ) 
-                 db83_codigooperacao = varchar(4) = Código da Operação 
-                 db83_tipoconta = int4 = Tipo Conta 
+                 db83_sequencial = int4 = Codigo sequencial da conta bancaria
+                 db83_descricao = varchar(100) = Descrição da Conta
+                 db83_bancoagencia = int4 = Codigo da Agencia
+                 db83_conta = varchar(15) = Conta
+                 db83_dvconta = varchar(1) = Digito da Conta
+                 db83_identificador = char(14) = Identificador (CNPJ )
+                 db83_codigooperacao = varchar(4) = Código da Operação
+                 db83_tipoconta = int4 = Tipo Conta
                  db83_contaplano = bool = Conta plano
                  db83_convenio = int8 = Convênio
-                 db83_tipoaplicacao = int8 = Tipo Aplicação 
+                 db83_tipoaplicacao = int8 = Tipo Aplicação
                  ";
-   //funcao construtor da classe 
-   function cl_contabancaria() { 
+
+   function __construct()
+   {
+        $this->cl_contabancaria();
+   }
+   //funcao construtor da classe
+   function cl_contabancaria() {
      //classes dos rotulos dos campos
-     $this->rotulo = new rotulo("contabancaria"); 
+     $this->rotulo = new rotulo("contabancaria");
      $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
    }
-   //funcao erro 
-   function erro($mostra,$retorna) { 
+   //funcao erro
+   function erro($mostra,$retorna) {
      if(($this->erro_status == "0") || ($mostra == true && $this->erro_status != null )){
         echo "<script>alert(\"".$this->erro_msg."\");</script>";
         if($retorna==true){
@@ -75,9 +80,9 @@ class cl_contabancaria {
      }
    }
    // funcao para inclusao
-   function incluir ($db83_sequencial){ 
+   function incluir ($db83_sequencial){
       $this->atualizacampos();
-     if($this->db83_descricao == null ){ 
+     if($this->db83_descricao == null ){
        $this->erro_sql = " Campo Descrição da Conta nao Informado.";
        $this->erro_campo = "db83_descricao";
        $this->erro_banco = "";
@@ -86,7 +91,7 @@ class cl_contabancaria {
        $this->erro_status = "0";
        return false;
      }
-     if($this->db83_bancoagencia == null ){ 
+     if($this->db83_bancoagencia == null ){
        $this->erro_sql = " Campo Codigo da Agencia nao Informado.";
        $this->erro_campo = "db83_bancoagencia";
        $this->erro_banco = "";
@@ -95,7 +100,7 @@ class cl_contabancaria {
        $this->erro_status = "0";
        return false;
      }
-     if($this->db83_conta == null ){ 
+     if($this->db83_conta == null ){
        $this->erro_sql = " Campo Conta nao Informado.";
        $this->erro_campo = "db83_conta";
        $this->erro_banco = "";
@@ -104,7 +109,7 @@ class cl_contabancaria {
        $this->erro_status = "0";
        return false;
      }
-     if($this->db83_dvconta == null ){ 
+     if($this->db83_dvconta == null ){
        $this->erro_sql = " Campo Digito da Conta nao Informado.";
        $this->erro_campo = "db83_dvconta";
        $this->erro_banco = "";
@@ -113,7 +118,7 @@ class cl_contabancaria {
        $this->erro_status = "0";
        return false;
      }
-     if($this->db83_identificador == null ){ 
+     if($this->db83_identificador == null ){
        $this->erro_sql = " Campo Identificador (CNPJ ) nao Informado.";
        $this->erro_campo = "db83_identificador";
        $this->erro_banco = "";
@@ -122,10 +127,10 @@ class cl_contabancaria {
        $this->erro_status = "0";
        return false;
      }
-     if($this->db83_tipoconta == null ){ 
+     if($this->db83_tipoconta == null ){
        $this->db83_tipoconta = "0";
      }
-     if($this->db83_contaplano == null ){ 
+     if($this->db83_contaplano == null ){
        $this->erro_sql = " Campo Conta plano nao Informado.";
        $this->erro_campo = "db83_contaplano";
        $this->erro_banco = "";
@@ -135,16 +140,16 @@ class cl_contabancaria {
        return false;
      }
      if($db83_sequencial == "" || $db83_sequencial == null ){
-       $result = db_query("select nextval('contabancaria_db83_sequencial_seq')"); 
+       $result = db_query("select nextval('contabancaria_db83_sequencial_seq')");
        if($result==false){
          $this->erro_banco = str_replace("\n","",@pg_last_error());
-         $this->erro_sql   = "Verifique o cadastro da sequencia: contabancaria_db83_sequencial_seq do campo: db83_sequencial"; 
+         $this->erro_sql   = "Verifique o cadastro da sequencia: contabancaria_db83_sequencial_seq do campo: db83_sequencial";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "0";
-         return false; 
+         return false;
        }
-       $this->db83_sequencial = pg_result($result,0,0); 
+       $this->db83_sequencial = pg_result($result,0,0);
      }else{
        $result = db_query("select last_value from contabancaria_db83_sequencial_seq");
        if(($result != false) && (pg_result($result,0,0) < $db83_sequencial)){
@@ -155,10 +160,10 @@ class cl_contabancaria {
          $this->erro_status = "0";
          return false;
        }else{
-         $this->db83_sequencial = $db83_sequencial; 
+         $this->db83_sequencial = $db83_sequencial;
        }
      }
-     if(($this->db83_sequencial == null) || ($this->db83_sequencial == "") ){ 
+     if(($this->db83_sequencial == null) || ($this->db83_sequencial == "") ){
        $this->erro_sql = " Campo db83_sequencial nao declarado.";
        $this->erro_banco = "Chave Primaria zerada.";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -167,33 +172,33 @@ class cl_contabancaria {
        return false;
      }
      $sql = "insert into contabancaria(
-                                       db83_sequencial 
-                                      ,db83_descricao 
-                                      ,db83_bancoagencia 
-                                      ,db83_conta 
-                                      ,db83_dvconta 
-                                      ,db83_identificador 
-                                      ,db83_codigooperacao 
-                                      ,db83_tipoconta 
+                                       db83_sequencial
+                                      ,db83_descricao
+                                      ,db83_bancoagencia
+                                      ,db83_conta
+                                      ,db83_dvconta
+                                      ,db83_identificador
+                                      ,db83_codigooperacao
+                                      ,db83_tipoconta
                                       ,db83_contaplano
                                       ,db83_convenio
-                                      ,db83_tipoaplicacao 
+                                      ,db83_tipoaplicacao
                        )
                 values (
-                                $this->db83_sequencial 
-                               ,'$this->db83_descricao' 
-                               ,$this->db83_bancoagencia 
-                               ,'$this->db83_conta' 
-                               ,'$this->db83_dvconta' 
-                               ,'$this->db83_identificador' 
-                               ,'$this->db83_codigooperacao' 
-                               ,$this->db83_tipoconta 
+                                $this->db83_sequencial
+                               ,'$this->db83_descricao'
+                               ,$this->db83_bancoagencia
+                               ,'$this->db83_conta'
+                               ,'$this->db83_dvconta'
+                               ,'$this->db83_identificador'
+                               ,'$this->db83_codigooperacao'
+                               ,$this->db83_tipoconta
                                ,'$this->db83_contaplano'
                                ,$this->db83_convenio
-                               ,$this->db83_tipoaplicacao 
+                               ,$this->db83_tipoaplicacao
                       )";
-     $result = db_query($sql); 
-     if($result==false){ 
+     $result = db_query($sql);
+     if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){
          $this->erro_sql   = "Cadastro de contas bancaria ($this->db83_sequencial) nao Incluído. Inclusao Abortada.";
@@ -233,16 +238,16 @@ class cl_contabancaria {
        $resac = db_query("insert into db_acount values($acount,2740,18251,'','".AddSlashes(pg_result($resaco,0,'db83_contaplano'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
      }
      return true;
-   } 
+   }
    // funcao para alteracao
-   function alterar ($db83_sequencial=null) { 
+   function alterar ($db83_sequencial=null) {
       $this->atualizacampos();
      $sql = " update contabancaria set ";
      $virgula = "";
-     if(trim($this->db83_sequencial)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db83_sequencial"])){ 
+     if(trim($this->db83_sequencial)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db83_sequencial"])){
        $sql  .= $virgula." db83_sequencial = $this->db83_sequencial ";
        $virgula = ",";
-       if(trim($this->db83_sequencial) == null ){ 
+       if(trim($this->db83_sequencial) == null ){
          $this->erro_sql = " Campo Codigo sequencial da conta bancaria nao Informado.";
          $this->erro_campo = "db83_sequencial";
          $this->erro_banco = "";
@@ -252,10 +257,10 @@ class cl_contabancaria {
          return false;
        }
      }
-     if(trim($this->db83_descricao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db83_descricao"])){ 
+     if(trim($this->db83_descricao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db83_descricao"])){
        $sql  .= $virgula." db83_descricao = '$this->db83_descricao' ";
        $virgula = ",";
-       if(trim($this->db83_descricao) == null ){ 
+       if(trim($this->db83_descricao) == null ){
          $this->erro_sql = " Campo Descrição da Conta nao Informado.";
          $this->erro_campo = "db83_descricao";
          $this->erro_banco = "";
@@ -265,10 +270,10 @@ class cl_contabancaria {
          return false;
        }
      }
-     if(trim($this->db83_bancoagencia)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db83_bancoagencia"])){ 
+     if(trim($this->db83_bancoagencia)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db83_bancoagencia"])){
        $sql  .= $virgula." db83_bancoagencia = $this->db83_bancoagencia ";
        $virgula = ",";
-       if(trim($this->db83_bancoagencia) == null ){ 
+       if(trim($this->db83_bancoagencia) == null ){
          $this->erro_sql = " Campo Codigo da Agencia nao Informado.";
          $this->erro_campo = "db83_bancoagencia";
          $this->erro_banco = "";
@@ -278,10 +283,10 @@ class cl_contabancaria {
          return false;
        }
      }
-     if(trim($this->db83_conta)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db83_conta"])){ 
+     if(trim($this->db83_conta)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db83_conta"])){
        $sql  .= $virgula." db83_conta = '$this->db83_conta' ";
        $virgula = ",";
-       if(trim($this->db83_conta) == null ){ 
+       if(trim($this->db83_conta) == null ){
          $this->erro_sql = " Campo Conta nao Informado.";
          $this->erro_campo = "db83_conta";
          $this->erro_banco = "";
@@ -291,10 +296,10 @@ class cl_contabancaria {
          return false;
        }
      }
-     if(trim($this->db83_dvconta)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db83_dvconta"])){ 
+     if(trim($this->db83_dvconta)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db83_dvconta"])){
        $sql  .= $virgula." db83_dvconta = '$this->db83_dvconta' ";
        $virgula = ",";
-       if(trim($this->db83_dvconta) == null ){ 
+       if(trim($this->db83_dvconta) == null ){
          $this->erro_sql = " Campo Digito da Conta nao Informado.";
          $this->erro_campo = "db83_dvconta";
          $this->erro_banco = "";
@@ -304,10 +309,10 @@ class cl_contabancaria {
          return false;
        }
      }
-     if(trim($this->db83_identificador)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db83_identificador"])){ 
+     if(trim($this->db83_identificador)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db83_identificador"])){
        $sql  .= $virgula." db83_identificador = '$this->db83_identificador' ";
        $virgula = ",";
-       if(trim($this->db83_identificador) == null ){ 
+       if(trim($this->db83_identificador) == null ){
          $this->erro_sql = " Campo Identificador (CNPJ ) nao Informado.";
          $this->erro_campo = "db83_identificador";
          $this->erro_banco = "";
@@ -317,21 +322,21 @@ class cl_contabancaria {
          return false;
        }
      }
-     if(trim($this->db83_codigooperacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db83_codigooperacao"])){ 
+     if(trim($this->db83_codigooperacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db83_codigooperacao"])){
        $sql  .= $virgula." db83_codigooperacao = '$this->db83_codigooperacao' ";
        $virgula = ",";
      }
-     if(trim($this->db83_tipoconta)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db83_tipoconta"])){ 
-        if(trim($this->db83_tipoconta)=="" && isset($GLOBALS["HTTP_POST_VARS"]["db83_tipoconta"])){ 
-           $this->db83_tipoconta = "0" ; 
-        } 
+     if(trim($this->db83_tipoconta)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db83_tipoconta"])){
+        if(trim($this->db83_tipoconta)=="" && isset($GLOBALS["HTTP_POST_VARS"]["db83_tipoconta"])){
+           $this->db83_tipoconta = "0" ;
+        }
        $sql  .= $virgula." db83_tipoconta = $this->db83_tipoconta ";
        $virgula = ",";
      }
-     if(trim($this->db83_contaplano)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db83_contaplano"])){ 
+     if(trim($this->db83_contaplano)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db83_contaplano"])){
        $sql  .= $virgula." db83_contaplano = '$this->db83_contaplano' ";
        $virgula = ",";
-       if(trim($this->db83_contaplano) == null ){ 
+       if(trim($this->db83_contaplano) == null ){
          $this->erro_sql = " Campo Conta plano nao Informado.";
          $this->erro_campo = "db83_contaplano";
          $this->erro_banco = "";
@@ -341,11 +346,11 @@ class cl_contabancaria {
          return false;
        }
      }
-     if(trim($this->db83_convenio)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db83_convenio"])){ 
+     if(trim($this->db83_convenio)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db83_convenio"])){
        $sql  .= $virgula." db83_convenio = '$this->db83_convenio' ";
        $virgula = ",";
      }
-     if(trim($this->db83_tipoaplicacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db83_tipoaplicacao"])){ 
+     if(trim($this->db83_tipoaplicacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["db83_tipoaplicacao"])){
        $sql  .= $virgula." db83_tipoaplicacao = '$this->db83_tipoaplicacao' ";
        $virgula = ",";
      }
@@ -381,7 +386,7 @@ class cl_contabancaria {
        }
      }
      $result = db_query($sql);
-     if($result==false){ 
+     if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "Cadastro de contas bancaria nao Alterado. Alteracao Abortada.\\n";
          $this->erro_sql .= "Valores : ".$this->db83_sequencial;
@@ -409,14 +414,14 @@ class cl_contabancaria {
          $this->erro_status = "1";
          $this->numrows_alterar = pg_affected_rows($result);
          return true;
-       } 
-     } 
-   } 
-   // funcao para exclusao 
-   function excluir ($db83_sequencial=null,$dbwhere=null) { 
+       }
+     }
+   }
+   // funcao para exclusao
+   function excluir ($db83_sequencial=null,$dbwhere=null) {
      if($dbwhere==null || $dbwhere==""){
        $resaco = $this->sql_record($this->sql_query_file($db83_sequencial));
-     }else{ 
+     }else{
        $resaco = $this->sql_record($this->sql_query_file(null,"*",null,$dbwhere));
      }
      if(($resaco!=false)||($this->numrows!=0)){
@@ -450,7 +455,7 @@ class cl_contabancaria {
        $sql2 = $dbwhere;
      }
      $result = db_query($sql.$sql2);
-     if($result==false){ 
+     if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "Cadastro de contas bancaria nao Excluído. Exclusão Abortada.\\n";
        $this->erro_sql .= "Valores : ".$db83_sequencial;
@@ -478,11 +483,11 @@ class cl_contabancaria {
          $this->erro_status = "1";
          $this->numrows_excluir = pg_affected_rows($result);
          return true;
-       } 
-     } 
-   } 
-   // funcao do recordset 
-   function sql_record($sql) { 
+       }
+     }
+   }
+   // funcao do recordset
+   function sql_record($sql) {
      $result = db_query($sql);
      if($result==false){
        $this->numrows    = 0;
@@ -504,8 +509,8 @@ class cl_contabancaria {
       }
      return $result;
    }
-   // funcao do sql 
-   function sql_query ( $db83_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){ 
+   // funcao do sql
+   function sql_query ( $db83_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = explode("#",$campos);
@@ -523,8 +528,8 @@ class cl_contabancaria {
      $sql2 = "";
      if($dbwhere==""){
        if($db83_sequencial!=null ){
-         $sql2 .= " where contabancaria.db83_sequencial = $db83_sequencial "; 
-       } 
+         $sql2 .= " where contabancaria.db83_sequencial = $db83_sequencial ";
+       }
      }else if($dbwhere != ""){
        $sql2 = " where $dbwhere";
      }
@@ -540,8 +545,8 @@ class cl_contabancaria {
      }
      return $sql;
   }
-   // funcao do sql 
-   function sql_query_file ( $db83_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){ 
+   // funcao do sql
+   function sql_query_file ( $db83_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = explode("#",$campos);
@@ -557,8 +562,8 @@ class cl_contabancaria {
      $sql2 = "";
      if($dbwhere==""){
        if($db83_sequencial!=null ){
-         $sql2 .= " where contabancaria.db83_sequencial = $db83_sequencial "; 
-       } 
+         $sql2 .= " where contabancaria.db83_sequencial = $db83_sequencial ";
+       }
      }else if($dbwhere != ""){
        $sql2 = " where $dbwhere";
      }
@@ -574,7 +579,7 @@ class cl_contabancaria {
      }
      return $sql;
   }
-   function sql_query_concilia( $db83_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){ 
+   function sql_query_concilia( $db83_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = explode("#",$campos);
@@ -593,8 +598,8 @@ class cl_contabancaria {
      $sql2 = "";
      if($dbwhere==""){
        if($db83_sequencial!=null ){
-         $sql2 .= " where contabancaria.db83_sequencial = $db83_sequencial "; 
-       } 
+         $sql2 .= " where contabancaria.db83_sequencial = $db83_sequencial ";
+       }
      }else if($dbwhere != ""){
        $sql2 = " where $dbwhere";
      }

@@ -54,7 +54,6 @@ class FilaESocialTask extends Task implements iTarefa
         }
 
         foreach ($array_global as $row) {
-
             try {
 
                 /**
@@ -92,9 +91,7 @@ class FilaESocialTask extends Task implements iTarefa
 
     private function enviar($conn, $dadosEnvio)
     {
-
         try {
-
             $dao = new \cl_esocialenvio();
             $daoEsocialCertificado = new \cl_esocialcertificado();
             $sql = $daoEsocialCertificado->sql_query(null, "rh214_senha as senha,rh214_certificado as certificado, cgc as nrinsc, z01_nome as nmRazao", "rh214_sequencial", "rh214_cgm = {$dadosEnvio->rh213_empregador}");
@@ -130,7 +127,7 @@ class FilaESocialTask extends Task implements iTarefa
             /**
              * Esperar alguns segundos pois em muitos casos, o lote ainda não havia sido processado
              */
-            sleep(15);
+            //sleep(15);
             $exportar = new ESocial(Registry::get('app.config'), "consulta.php");
             $exportar->setDados($dados);
             $retorno = $exportar->request();
@@ -185,7 +182,6 @@ class FilaESocialTask extends Task implements iTarefa
         }
 
         foreach ($array_global as $row) {
-
             try {
 
                 /**
@@ -220,7 +216,6 @@ class FilaESocialTask extends Task implements iTarefa
                 }
 
                 for ($iCont = 0; $iCont < pg_num_rows($rs); $iCont++) {
-
                     $dadosConsulta = \db_utils::fieldsMemory($rs, $iCont);
                     $fase = $this->getFaseEvento($dadosConsulta->rh213_evento);
                     $dados = array($dadosCertificado, json_decode($dadosConsulta->rh213_dados), $dadosConsulta->rh213_evento, $dadosConsulta->rh213_ambienteenvio, $fase);

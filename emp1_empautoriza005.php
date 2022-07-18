@@ -24,6 +24,7 @@
  *  Copia da licenca no diretorio licenca/licenca_en.txt
  *                                licenca/licenca_pt.txt
  */
+
 require_once("libs/db_stdlib.php");
 require_once("libs/db_conecta.php");
 require_once("libs/db_sessoes.php");
@@ -76,10 +77,10 @@ $sUrlEmpenho      = "emp1_empempenho001.php";
 $rsemparam = $clempparametro->sql_record($clempparametro->sql_query(db_getsession("DB_anousu")));
 
 if ($clempparametro->numrows > 0) {
-    db_fieldsmemory($rsemparam, 0);
-    if ($e30_notaliquidacao != '') {
-        $sUrlEmpenho      = "emp4_empempenho001.php";
-    }
+  db_fieldsmemory($rsemparam, 0);
+  if ($e30_notaliquidacao != '') {
+    $sUrlEmpenho      = "emp4_empempenho001.php";
+  }
 }
 
 $anulacao = false; //padrao
@@ -87,14 +88,14 @@ $sqlerro = false;
 
 if (isset($alterar)) {
 
-    try {
-        $oFornecedor = new fornecedor($e54_numcgm);
-        $oFornecedor->verificaBloqueioAutorizacaoEmpenho(null);
-        $iStatusBloqueio = $oFornecedor->getStatusBloqueio();
-    } catch (Exception $eException) {
-        $sqlerro  = true;
-        $erro_msg = $eException->getMessage();
-    }
+  try {
+    $oFornecedor = new fornecedor($e54_numcgm);
+    $oFornecedor->verificaBloqueioAutorizacaoEmpenho(null);
+    $iStatusBloqueio = $oFornecedor->getStatusBloqueio();
+  } catch (Exception $eException) {
+    $sqlerro  = true;
+    $erro_msg = $eException->getMessage();
+  }
 
   if (!$sqlerro) {
 
@@ -236,21 +237,20 @@ if (isset($alterar) && !$sqlerro) {
     if ($oDaoEmpenhoProcessoAdminitrativo->numrows > 0) {
       $e150_sequencial = db_utils::fieldsMemory($rsProcessoAdministrativo, 0)->e150_sequencial;
     }
+    if (!empty($e150_sequencial)) {
 
-    if ($e44_tipo == "4") {
-        $resultParamento = db_query("SELECT e30_controleprestacao FROM empparametro WHERE e39_anousu = " . date("Y", db_getsession("DB_datausu")));
-        db_fieldsmemory($resultParamento, 0)->e30_controleprestacao;
+      $oDaoEmpenhoProcessoAdminitrativo->e150_numeroprocesso = $e150_numeroprocesso;
+      $oDaoEmpenhoProcessoAdminitrativo->e150_empautoriza    = $e54_autori;
+      $oDaoEmpenhoProcessoAdminitrativo->e150_sequencial     = $e150_sequencial;
+      $oDaoEmpenhoProcessoAdminitrativo->alterar($e150_sequencial);
 
-        if ($e30_controleprestacao == 't') {
-            $resultPrestacaoContas = db_query("SELECT e60_numemp FROM empempenho e LEFT JOIN emppresta er ON e.e60_numemp = er.e45_numemp WHERE e60_numcgm = {$e54_numcgm} AND e45_acerta IS NULL AND er.e45_tipo = 4 LIMIT 1");
-            db_fieldsmemory($resultPrestacaoContas, 0)->e60_numemp;
+      if ($oDaoEmpenhoProcessoAdminitrativo->erro_status == 0) {
 
-            if ($e60_numemp) {
-                $erro_msg = "Não é possível emitir Autorização de Empenho para credor que possua Prestação de Contas pendente!";
-                $sqlerro = true;
-            }
-        }
+        $sqlerro  = true;
+        $erro_msg = $oDaoEmpenhoProcessoAdminitrativo->erro_msg;
+      }
     }
+  }
 
   if ($e44_tipo == "4") {
     $resultParamento = db_query("SELECT e30_controleprestacao FROM empparametro WHERE e39_anousu = " . date("Y", db_getsession("DB_datausu")));
@@ -304,18 +304,9 @@ if (isset($alterar) && !$sqlerro) {
     if ($clempauthist->numrows > 0) {
       db_fieldsmemory($result, 0);
     }
-}
 
-if (isset($e54_autori)) {
-    $emprocesso = false;
-    $result_autoriza_de_pc = $clpcprocitem->sql_record($clpcprocitem->sql_query_itememautoriza(null, "e55_sequen", "", " e55_autori=$e54_autori and e54_anulad is null "));
-    if ($clpcprocitem->numrows > 0) {
-
-        $db_botao = true;
-        $emprocesso = true;
-    }
     /**
-     * Verifica se autorizacao é de contrato
+     * Busca os Dados do Processo administrativo
      */
     $sWhereProcessoAdministrativo = " e150_empautoriza = {$e54_autori}";
     $sSqlProcessoAdministrativo   = $oDaoEmpenhoProcessoAdminitrativo->sql_query_file(
@@ -393,16 +384,16 @@ if (isset($chavepesquisa)) {
     echo "
            <script>
 	       function js_libera(recar){
-		  parent.document.formaba.empautitem.disabled=false;\n
-		  parent.document.formaba.empautidot.disabled=false;\n
-		  parent.document.formaba.prazos.disabled=false;\n
-		  parent.document.formaba.anulacao.disabled=false;\n
+		          parent.document.formaba.empautitem.disabled=false;\n
+		          parent.document.formaba.empautidot.disabled=false;\n
+		          parent.document.formaba.prazos.disabled=false;\n
+		          parent.document.formaba.anulacao.disabled=false;\n
                   // parent.document.formaba.empautret.disabled=false;\n
-                  // CurrentWindow.corpo.iframe_empautret.location.href='emp1_empautret001.php?e66_autori=$e54_autori&inclusao=true';\n
-		  CurrentWindow.corpo.iframe_empautitem.location.href='emp1_empautitem001.php?e55_autori=$e54_autori';\n
-		  CurrentWindow.corpo.iframe_prazos.location.href='emp1_empautoriza007.php?chavepesquisa=$e54_autori';\n
-		  CurrentWindow.corpo.iframe_anulacao.location.href='emp1_empautoriza006.php?e54_autori=$e54_autori';\n
-		  CurrentWindow.corpo.iframe_empautidot.location.href='emp1_empautidot001.php?e56_autori=$e54_autori';\n
+                  // top.corpo.iframe_empautret.location.href='emp1_empautret001.php?e66_autori=$e54_autori&inclusao=true';\n
+		          top.corpo.iframe_empautitem.location.href='emp1_empautitem001.php?e55_autori=$e54_autori';\n
+		          top.corpo.iframe_prazos.location.href='emp1_empautoriza007.php?chavepesquisa=$e54_autori';\n
+		          top.corpo.iframe_anulacao.location.href='emp1_empautoriza006.php?e54_autori=$e54_autori';\n
+		          top.corpo.iframe_empautidot.location.href='emp1_empautidot001.php?e56_autori=$e54_autori';\n
 	       }
 	       js_libera();
            </script>
@@ -417,11 +408,11 @@ if (isset($chavepesquisa)) {
                 parent.document.formaba.prazos.disabled=false;\n
                 parent.document.formaba.anulacao.disabled=false;\n
                 // parent.document.formaba.empautret.disabled=false;\n
-                // CurrentWindow.corpo.iframe_empautret.location.href='emp1_empautret001.php?e66_autori=$e54_autori&inclusao=true';\n
-                CurrentWindow.corpo.iframe_empautitem.location.href='emp1_empautitem001.php?db_opcaoal=33&e55_autori=$e54_autori';\n
-                CurrentWindow.corpo.iframe_prazos.location.href='emp1_empautoriza007.php?db_opcao=33&chavepesquisa=$e54_autori';\n
-                CurrentWindow.corpo.iframe_anulacao.location.href='emp1_empautoriza006.php?e54_autori=$e54_autori';\n
-                CurrentWindow.corpo.iframe_empautidot.location.href='emp1_empautidot001.php?anulacao=true&db_opcao=33&e56_autori=$e54_autori';\n
+                // top.corpo.iframe_empautret.location.href='emp1_empautret001.php?e66_autori=$e54_autori&inclusao=true';\n
+                top.corpo.iframe_empautitem.location.href='emp1_empautitem001.php?db_opcaoal=33&e55_autori=$e54_autori';\n
+                top.corpo.iframe_prazos.location.href='emp1_empautoriza007.php?db_opcao=33&chavepesquisa=$e54_autori';\n
+                top.corpo.iframe_anulacao.location.href='emp1_empautoriza006.php?e54_autori=$e54_autori';\n
+                top.corpo.iframe_empautidot.location.href='emp1_empautidot001.php?anulacao=true&db_opcao=33&e56_autori=$e54_autori';\n
               }
               js_bloqueia();
             </script>
@@ -435,17 +426,17 @@ if (isset($chavepesquisa)) {
                 parent.document.formaba.prazos.disabled=true;\n
                 parent.document.formaba.anulacao.disabled=true;\n
                 // parent.document.formaba.empautret.disabled=false;\n
-                // CurrentWindow.corpo.iframe_empautret.location.href='emp1_empautret001.php?e66_autori=$e54_autori&inclusao=true';\n
-                CurrentWindow.corpo.iframe_empautitem.location.href='emp1_empautitem001.php?db_opcaoal=33&e55_autori=$e54_autori';\n
-                CurrentWindow.corpo.iframe_prazos.location.href='emp1_empautoriza007.php?db_opcao=33&chavepesquisa=$e54_autori';\n
-                CurrentWindow.corpo.iframe_anulacao.location.href='emp1_empautoriza006.php?db_opcao=33&e54_autori=$e54_autori';\n
-                CurrentWindow.corpo.iframe_empautidot.location.href='emp1_empautidot001.php?anulacao=true&db_opcao=33&e56_autori=$e54_autori';\n
+                // top.corpo.iframe_empautret.location.href='emp1_empautret001.php?e66_autori=$e54_autori&inclusao=true';\n
+                top.corpo.iframe_empautitem.location.href='emp1_empautitem001.php?db_opcaoal=33&e55_autori=$e54_autori';\n
+                top.corpo.iframe_prazos.location.href='emp1_empautoriza007.php?db_opcao=33&chavepesquisa=$e54_autori';\n
+                top.corpo.iframe_anulacao.location.href='emp1_empautoriza006.php?db_opcao=33&e54_autori=$e54_autori';\n
+                top.corpo.iframe_empautidot.location.href='emp1_empautidot001.php?anulacao=true&db_opcao=33&e56_autori=$e54_autori';\n
               }
               js_bloqueia();
             </script>
            ";
-        }
     }
+  }
 }
 
 /////////////////////////////////////////////

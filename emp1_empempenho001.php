@@ -24,13 +24,13 @@
  *  Copia da licenca no diretorio licenca/licenca_en.txt
  *                                licenca/licenca_pt.txt
  */
-require("libs/db_stdlib.php");
-require("libs/db_conecta.php");
-require("libs/db_utils.php");
-include("libs/db_sessoes.php");
-include("libs/db_usuariosonline.php");
-include("dbforms/db_funcoes.php");
-include("dbforms/db_classesgenericas.php");
+require_once("libs/db_stdlib.php");
+require_once("libs/db_conecta.php");
+require_once("libs/db_utils.php");
+include_once("libs/db_sessoes.php");
+include_once("libs/db_usuariosonline.php");
+include_once("dbforms/db_funcoes.php");
+include_once("dbforms/db_classesgenericas.php");
 
 $clcriaabas     = new cl_criaabas;
 $clrotulo       = new rotulocampo;

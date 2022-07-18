@@ -1243,7 +1243,7 @@ db_app::load("estilos.css, grid.style.css");
         var valUti = document.getElementById("qtUtilizada" + valor).value;
 
         if (valUti != "") {
-            var quant = parseInt(valUti);
+            var quant = parseFloat(valUti);
         }
 
         if (quant > quantItem) {

@@ -45,19 +45,38 @@ class DadosESocial
     public function getPorTipo($tipo, $matricula=null)
     {
         $this->tipo = $tipo;
+        // echo $tipo;
+        // exit;
+        switch ($tipo) {
+            case '37':
+                return $this->buscaPreenchimentos($matricula);
+                break;
+                case '2':
+                    return $this->buscaPreenchimentos($matricula);
+                    break;
+            default:
+                $preenchimentos = $this->buscaPreenchimentos($matricula);
 
-        $preenchimentos = $this->buscaPreenchimentos($matricula);
+                $this->buscaRespostas($preenchimentos);
+                /**
+                 * @todo Quando for o empregador, temos que buscar os dados da escala do servidor do e-cidade.
+                 *       Não é possível representar a escala do servidor no formulário.
+                 *       Talvez outras informações de outros cadastros também serão buscadas do e-cidade
+                 */
+                if ($tipo == Tipo::EMPREGADOR) {
+                }
 
         $this->buscaRespostas($preenchimentos);
         /**
          * @todo Quando for o empregador, temos que buscar os dados da escala do servidor do e-cidade.
-         *       Nï¿½o ï¿½ possï¿½vel representar a escala do servidor no formulï¿½rio.
+         *       Não ï¿½ possï¿½vel representar a escala do servidor no formulï¿½rio.
          *       Talvez outras informaï¿½ï¿½es de outros cadastros tambï¿½m serï¿½o buscadas do e-cidade
          */
         if ($tipo == Tipo::EMPREGADOR) {
         }
 
-        return  $this->dados;
+                break;
+        }
     }
 
     /**
@@ -68,6 +87,8 @@ class DadosESocial
      */
     private function buscaPreenchimentos($matricula = null)
     {
+        // echo $this->tipo;
+        // exit;
         $configuracao = new Configuracao();
         $formularioId = $configuracao->getFormulario($this->tipo);
         $preenchimento = new Preenchimentos();
@@ -80,6 +101,7 @@ class DadosESocial
             case Tipo::LOTACAO_TRIBUTARIA:
                 return $preenchimento->buscarUltimoPreenchimentoLotacao($formularioId);
             case Tipo::RUBRICA:
+                return $preenchimento->buscarPreenchimentoS1010($formularioId, $matricula);
             case Tipo::CARGO:
             case Tipo::CARREIRA:
             case Tipo::FUNCAO:
@@ -87,9 +109,15 @@ class DadosESocial
             case Tipo::AMBIENTE:
             case Tipo::PROCESSOSAJ:
             case Tipo::PORTUARIO:
-            case Tipo::CADASTRAMENTO_INICIAL:
             case Tipo::ESTABELECIMENTOS:
-                return $preenchimento->buscarUltimoPreenchimentoInstituicao($formularioId);
+            case Tipo::ALTERACAODEDADOS:
+            case Tipo::ALTERACAO_CONTRATO:
+            case Tipo::TSV_INICIO:
+            case Tipo::TSV_ALT_CONTR:
+            case Tipo::CD_BENEF_IN:
+                return $preenchimento->buscarUltimoPreenchimentoInstituicao($formularioId, $matricula);
+            case Tipo::CADASTRAMENTO_INICIAL:
+                return $preenchimento->buscarPreenchimentoS2200($formularioId, $matricula);
             default:
                 throw new Exception('Tipo nï¿½o encontrado.');
         }
@@ -147,7 +175,6 @@ class DadosESocial
             case Tipo::TSV_INICIO:
             case Tipo::TSV_ALT_CONTR:
             case Tipo::CD_BENEF_IN:
-            case Tipo::AFASTAMENTO_TEMPORARIO:
                 return $preenchimento->pk;
             default:
                 throw new Exception('Tipo nï¿½o encontrado.');

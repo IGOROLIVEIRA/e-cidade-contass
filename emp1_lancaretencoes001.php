@@ -31,7 +31,7 @@ require("libs/db_utils.php");
 include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
 require("classes/empenho.php");
-include_once("dbforms/db_funcoes.php"); // OC 2799 - Problema lançamento de retenções em OP
+require_once(modification("dbforms/db_funcoes.php")); // OC 2799 - Problema lançamento de retenções em OP
 $clrotulo = new rotulocampo;
 $clrotulo->label("e60_numemp");
 $clrotulo->label("e60_codemp");

@@ -219,7 +219,6 @@ function js_CalculaDisponibilidade(fonte) {
 }
 
 function validaForm(form) {
-    console.log(form);
     return true;
 }
 </script>

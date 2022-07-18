@@ -85,6 +85,27 @@ $clrotulo->label("ac16_resumoobjeto");
                 </td>
             </tr>
 
+            <tr id="trdatareferencia" style="display: none;">
+                <td align="left" title="<?= @$Tsi03_datareferencia ?>">
+                    <b>Data de Referência:</b>
+                </td>
+
+                <td align="left">
+                    <?
+                    db_inputdata(
+                        'si03_datareferencia',
+                        @$si03_datareferencia_dia,
+                        @$si03_datareferencia_mes,
+                        @$si03_datareferencia_ano,
+                        true,
+                        'text',
+                        $db_opcao
+                    );
+                    ?>
+                </td>
+                <td>&nbsp;</td>
+            </tr>
+
 
             <tr>
                 <td nowrap nowrap title="<?= @$Tsi03_descrapostila ?>">
@@ -207,6 +228,7 @@ $clrotulo->label("ac16_resumoobjeto");
 </table>
 <input type='button' disabled id='btnSalvar' value='Salvar' onclick="apostilar();">
 <script>
+    document.getElementById("si03_datareferencia").style.width = "80px"
     document.getElementById("si03_tipoalteracaoapostila").disabled = true;
     sUrlRpc = 'con4_contratoapostilamento.RPC.php';
     aItensPosicao = new Array();
@@ -227,6 +249,7 @@ $clrotulo->label("ac16_resumoobjeto");
     var opcao = document.form1.controle.value;
     var elemento = "";
     var elemento_dotacao = "";
+    var dotacaoIncluida = false;
 
     function pesquisadotacao() {
 
@@ -507,6 +530,7 @@ $clrotulo->label("ac16_resumoobjeto");
             oDadosHint.idLinha = `oGridItensrowoGridItens${iSeq}`;
             oDadosHint.sText = sTextEvent;
             aDadosHintGrid.push(oDadosHint);
+
 
             if (oItem.dotacoesoriginal == undefined) {
 
@@ -808,6 +832,7 @@ $clrotulo->label("ac16_resumoobjeto");
         oTxtDotacao.setValue("");
         oTxtSaldoDotacao.setValue("");
         oTxtValorDotacao.setValue("0,00");
+        dotacaoIncluida = true;
         preencheGridDotacoes(iLinha);
     }
 
@@ -1047,6 +1072,7 @@ $clrotulo->label("ac16_resumoobjeto");
 
         });
 
+        dotacaoIncluida = true;
         return alert('Dotação aplicada aos itens selecionados');
 
 
@@ -1076,6 +1102,10 @@ $clrotulo->label("ac16_resumoobjeto");
             return alert("Obrigatário informar a descrição da Apostila.");
         }
 
+        if ($("si03_datareferencia").value == "" && document.getElementById("trdatareferencia").style.display != 'none') {
+            return alert("Obrigatório informar a data de Referencia.");
+        }
+
         oGridItens.getRows().forEach(function(oRow) {
 
             if (oRow.isSelected) {
@@ -1093,6 +1123,8 @@ $clrotulo->label("ac16_resumoobjeto");
         oApostila.descrapostila = $("si03_descrapostila").value;
         oApostila.tipoalteracaoapostila = $("si03_tipoalteracaoapostila").value;
         oApostila.numapostilamento = $("si03_numapostilamento").value;
+        oApostila.datareferencia = $("si03_datareferencia").value;
+
 
         var oParam = {
             exec: "processarApostilamento",
@@ -1126,6 +1158,8 @@ $clrotulo->label("ac16_resumoobjeto");
             oItemAdicionar.valorapostilado = valorApostiladoReal;
             oItemAdicionar.dtexecucaoinicio = oItem.periodoini;
             oItemAdicionar.dtexecucaofim = oItem.periodofim;
+
+
 
             if (oSelecionados[iIndice] != undefined) {
                 oItemAdicionar.quantidade = js_strToFloat(oSelecionados[iIndice].aCells[5].getValue());
@@ -1172,6 +1206,12 @@ $clrotulo->label("ac16_resumoobjeto");
             oParam.aItens.push(oItemAdicionar);
         });
 
+        if (dotacaoIncluida == false && $("si03_tipoapostila").value == "03") {
+            return alert("Usuário: É necessário a inserção de dotação em no mínimo um item.");
+
+        }
+
+
         if (!lAditar) {
             return false;
         }
@@ -1179,7 +1219,11 @@ $clrotulo->label("ac16_resumoobjeto");
         new AjaxRequest(sUrlRpc, oParam, function(oRetorno, lErro) {
 
                 if (lErro) {
+                    if (oRetorno.datareferencia) {
+                        document.getElementById("trdatareferencia").style.display = 'contents';
+                    }
                     return alert(oRetorno.message.urlDecode());
+
                 }
 
                 alert("Apostilamento realizado com sucesso.");
@@ -1253,6 +1297,8 @@ $clrotulo->label("ac16_resumoobjeto");
         $("si03_descrapostila").value = "";
         $("si03_tipoalteracaoapostila").value = 1;
         $("si03_numapostilamento").value = "";
+        $("si03_datareferencia").value = "";
+        document.getElementById("trdatareferencia").style.display = 'none';
     }
     //js_changeTipoApostila();
     js_pesquisaac16_sequencial(true);

@@ -103,6 +103,14 @@ if(isset($e60_codemp_ini) && $e60_codemp_ini != "") {
     $dbwhere = " {$str} ";
 }
 
+// Condição de filtro de fonte Oc18018
+if (isset($recursos) && $recursos != "") {
+    if(strlen($dbwhere) > 0) {
+        $dbwhere .= " and ";
+    }
+    $dbwhere .= " o58_codigo in ($recursos) ";
+}
+
 if(isset($codordem) && $codordem != ''){
   if(strlen($dbwhere) > 0) {
 	  $dbwhere .= " and ";

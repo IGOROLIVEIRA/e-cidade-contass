@@ -91,17 +91,18 @@ $clpcgrupo->rotulo->label("pc03_descrgrupo");
            $campos = "pcgrupo.*";
            }
         }
+        $where = "pc03_instit in (" . db_getsession('DB_instit').",0)";
         if(isset($chave_pc03_codgrupo) && (trim($chave_pc03_codgrupo)!="") ){
-	         $sql = $clpcgrupo->sql_query($chave_pc03_codgrupo,$campos,"pc03_codgrupo");
+	         $sql = $clpcgrupo->sql_query($chave_pc03_codgrupo,$campos,"pc03_codgrupo","$where");
         }else if(isset($chave_pc03_descrgrupo) && (trim($chave_pc03_descrgrupo)!="") ){
-	         $sql = $clpcgrupo->sql_query("",$campos,"pc03_descrgrupo"," pc03_descrgrupo like '$chave_pc03_descrgrupo%' ");
+	         $sql = $clpcgrupo->sql_query("",$campos,"pc03_descrgrupo"," pc03_descrgrupo like '$chave_pc03_descrgrupo%' and $where ");
         }else{
-           $sql = $clpcgrupo->sql_query("",$campos,"pc03_codgrupo","");
+           $sql = $clpcgrupo->sql_query("",$campos,"pc03_codgrupo","$where");
         }
         db_lovrot($sql,15,"()","",$funcao_js);
       }else{
         if($pesquisa_chave!=null && $pesquisa_chave!=""){
-          $result = $clpcgrupo->sql_record($clpcgrupo->sql_query($pesquisa_chave));
+          $result = $clpcgrupo->sql_record($clpcgrupo->sql_query($pesquisa_chave,"*",null,"$where"));
           if($clpcgrupo->numrows!=0){
             db_fieldsmemory($result,0);
             echo "<script>".$funcao_js."('$pc03_descrgrupo',false);</script>";

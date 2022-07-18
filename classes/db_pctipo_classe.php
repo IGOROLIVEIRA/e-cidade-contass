@@ -45,11 +45,13 @@ class cl_pctipo {
    var $pc05_codtipo = 0; 
    var $pc05_descr = null; 
    var $pc05_ativo = 'f'; 
+   var $pc05_instit = null;
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  pc05_codtipo = int4 = Código do Tipo 
                  pc05_descr = varchar(40) = Descrição do Tipo 
                  pc05_ativo = bool = Ativo 
+                 pc05_instit = int4 = codigo da instituicao
                  ";
    //funcao construtor da classe 
    function cl_pctipo() { 
@@ -72,6 +74,7 @@ class cl_pctipo {
        $this->pc05_codtipo = ($this->pc05_codtipo == ""?@$GLOBALS["HTTP_POST_VARS"]["pc05_codtipo"]:$this->pc05_codtipo);
        $this->pc05_descr = ($this->pc05_descr == ""?@$GLOBALS["HTTP_POST_VARS"]["pc05_descr"]:$this->pc05_descr);
        $this->pc05_ativo = ($this->pc05_ativo == "f"?@$GLOBALS["HTTP_POST_VARS"]["pc05_ativo"]:$this->pc05_ativo);
+       $this->pc05_instit = ($this->pc05_instit == "f"?@$GLOBALS["HTTP_POST_VARS"]["pc05_instit"]:$this->pc05_instit);
      }else{
        $this->pc05_codtipo = ($this->pc05_codtipo == ""?@$GLOBALS["HTTP_POST_VARS"]["pc05_codtipo"]:$this->pc05_codtipo);
      }
@@ -97,6 +100,9 @@ class cl_pctipo {
        $this->erro_status = "0";
        return false;
      }
+     if($this->pc05_instit == null ){ 
+      $this->pc05_instit = db_getsession('DB_instit');
+    }
      if($pc05_codtipo == "" || $pc05_codtipo == null ){
        $result = db_query("select nextval('pctipo_pc05_codtipo_seq')"); 
        if($result==false){
@@ -132,12 +138,14 @@ class cl_pctipo {
      $sql = "insert into pctipo(
                                        pc05_codtipo 
                                       ,pc05_descr 
-                                      ,pc05_ativo 
+                                      ,pc05_ativo
+                                      ,pc05_instit 
                        )
                 values (
                                 $this->pc05_codtipo 
                                ,'$this->pc05_descr' 
                                ,'$this->pc05_ativo' 
+                               ,$this->pc05_instit
                       )";
      $result = db_query($sql); 
      if($result==false){ 

@@ -77,7 +77,7 @@
           $('#enviar').attr('disabled', false);
           var data = JSON.parse(xhr.responseText);
 
-          if (data.message == 'ExtensÃ£o desativada: Desktop') {
+          if (data.message == 'Extensão desativada: Desktop') {
             return close();
           }
 

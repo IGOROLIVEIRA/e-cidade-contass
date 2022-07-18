@@ -634,7 +634,7 @@ function js_geraOrdem() {
 
    }
    oParams.aNotas        = aNotasEnviar;
-   var sJsonPars         = oParams.toSource();
+   var sJsonPars         = Object.toJSON(oParams);
    sJsonPars             = sJsonPars.replace("(","");
    sJsonPars             = sJsonPars.replace(")","");
    js_divCarregando("Aguarde, processando.","msgBox");
@@ -690,7 +690,7 @@ function js_incluir(){
   }
 
   oParams.aNotas        = aNotasEnviar;
-  var sJsonPars         = oParams.toSource();
+  var sJsonPars         = Object.toJSON(oParams);
   sJsonPars             = sJsonPars.replace("(","");
   sJsonPars             = sJsonPars.replace(")","");
   js_divCarregando("Aguarde, Retirando Movimentos da Autorização.","msgBox");
@@ -752,7 +752,7 @@ function js_desautorizaOrdem() {
 
    }
    oParams.aNotas        = aNotasEnviar;
-   var sJsonPars         = oParams.toSource();
+   var sJsonPars         = Object.toJSON(oParams);
    sJsonPars             = sJsonPars.replace("(","");
    sJsonPars             = sJsonPars.replace(")","");
    js_divCarregando("Aguarde, Retirando Movimentos da Autorização.","msgBox");
