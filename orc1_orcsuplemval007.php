@@ -252,7 +252,8 @@ if (isset($incluir)) {
         }
     }
 
-    if ((!in_array($tiposup, array(1003, 1008, 2026, 1024, 1001, 1006, 1018, 1020, 1021, 1022, 1023, 1026))) && substr($o58_codigo, 0, 1) == 2) {
+    // Novos tiposup adicionados na OC18040
+    if ((!in_array($tiposup, array(1001, 1002, 1003, 1006, 1007, 1008, 1011, 1012, 1013, 1014, 1015, 1016, 1017, 1018, 1019, 1020, 1021, 1022, 1023, 1024, 1026, 1027, 1028, 2026))) && substr($o58_codigo, 0, 1) == 2) {
         db_msgbox("Usuário, inclusão abortada. Dotação incompatível com o tipo de suplementação utilizada");
         $sqlerro = true;
         $limpa_dados = false; 
