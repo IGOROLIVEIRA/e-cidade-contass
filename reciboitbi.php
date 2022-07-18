@@ -604,7 +604,7 @@ if ($oInstituicao->getUsaDebitosItbi() === true) {
 
   $oDado = db_utils::fieldsMemory($resultGuiaNumpre,0);
   $ano = db_getsession('DB_anousu');
-  $data = (isset($novadatavencimento) && !empty($novadatavencimento)) ? implode("-", array_reverse(explode("/", $novadatavencimento))) : date("Y-m-d", db_getsession("DB_datausu"));
+  $data = empty($novadatavencimento) === false ? implode("-", array_reverse(explode("/", $novadatavencimento))) : date("Y-m-d", db_getsession("DB_datausu"));
 
   $sSQL = <<<SQL
               select
