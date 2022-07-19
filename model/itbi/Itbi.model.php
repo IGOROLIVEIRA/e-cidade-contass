@@ -36,6 +36,10 @@ class Itbi
      * @var Paritbi
      */
     public $parItbi;
+    /**
+     * @var cancelamentoDebitos
+     */
+    protected $cancelamentoDebitos;
 
     public function __construct($it01_guia = null)
     {
@@ -67,6 +71,7 @@ class Itbi
             $this->Itbinumpre = $this->getItbinumpre();
             $this->parItbi = new Paritbi(db_getsession('DB_anousu'));
             $this->ItbiAvalia = new Itbiavalia($this->it01_guia);
+            $this->cancelamentoDebitos = new cancelamentoDebitos();
         }
         return $this;
     }
@@ -287,16 +292,24 @@ class Itbi
     /**
      * @param $numpre
      * @return void
+     * @throws Exception
      */
     public function removeArrecad($numpre = null)
     {
+        $aDadosDebitos = array();
+
         if(empty($numpre) === true) {
             return;
         }
-        /**
-         * @var $clarrecad cl_arrecad
-         */
-        $clarrecad = db_utils::getDao('arrecad');
-        $clarrecad->excluir_arrecad_inc_arrecant($numpre);
+        $this->cancelamentoDebitos->setArreHistTXT('Cancelamento de débito ITBI');
+        $this->cancelamentoDebitos->setTipoCancelamento(cancelamentoDebitos::TIPO_CANCELAMENTO_NORMAL);
+
+        $aDadosDebitos['Numpre']  = $numpre;
+        $aDadosDebitos['Numpar']  = 1;
+        $aDadosDebitos['Receita'] = $this->parItbi->getReceita();
+
+        $aDebitos[] = $aDadosDebitos;
+
+        $this->cancelamentoDebitos->geraCancelamento($aDebitos);
     }
 }
