@@ -31,6 +31,7 @@ require_once("fpdf151/scpdf.php");
 
 require_once("libs/db_conecta.php");
 require_once("libs/db_utils.php");
+require_once("libs/db_sql.php");
 
 require_once("dbforms/db_funcoes.php");
 require_once("classes/db_itbiavalia_classe.php");
