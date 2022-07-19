@@ -49,10 +49,15 @@ class EventoS1200 extends EventoBase
             if (!empty($oDados->indmv)) {
                 $oDadosAPI->evtRemun->infomv->indmv       = $oDados->indmv;
             }
-            $oDadosAPI->evtRemun->infomv->remunoutrempr->tpinsc = 1;
-            $oDadosAPI->evtRemun->infomv->remunoutrempr->nrinsc  = $oDados->cgc;
-            $oDadosAPI->evtRemun->infomv->remunoutrempr->codcateg  = $oDados->codcateg;
-            $oDadosAPI->evtRemun->infomv->remunoutrempr->vlrremunoe  = $oDados->vlrremunoe;
+
+            $oRemunoutrempr = new \stdClass;
+            $oRemunoutrempr->tpinsc      = 1;
+            $oRemunoutrempr->nrinsc      = $oDados->cgc;
+            $oRemunoutrempr->codcateg    = $oDados->codcateg;
+            $oRemunoutrempr->vlrremunoe  = $oDados->vlrremunoe;
+            $aRemunoutrempr[] = $oRemunoutrempr;
+
+            $oDadosAPI->evtRemun->infomv->remunoutrempr->tpinsc = $aRemunoutrempr;
 
             $oDadosAPI->evtRemun->dmdev->idedmdev  = $this->buscarIdentificador($oDados->matricula);
             $oDadosAPI->evtRemun->dmdev->codcateg  = $oDados->codcateg;
@@ -68,9 +73,9 @@ class EventoS1200 extends EventoBase
             $aDadosAPI[] = $oDadosAPI;
             $iSequencial++;
         }
-        // echo '<pre>';
-        // print_r($aDadosAPI);
-        // exit;
+        echo '<pre>';
+        print_r($aDadosAPI);
+        exit;
         return $aDadosAPI;
     }
 
