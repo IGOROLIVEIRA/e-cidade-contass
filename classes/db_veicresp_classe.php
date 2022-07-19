@@ -369,7 +369,7 @@ class cl_veicresp {
        $sql .= $campos;
      }
      $sql .= " from veicresp ";
-     $sql .= "      inner join cgm            on cgm.z01_numcgm       = veicresp.ve02_numcgm";
+     /*$sql .= "      inner join cgm            on cgm.z01_numcgm       = veicresp.ve02_numcgm";
      $sql .= "      inner join veiculos       on veiculos.ve01_codigo = veicresp.ve02_veiculo";
      $sql .= "      inner join ceplocalidades on ceplocalidades.cp05_codlocalidades = veiculos.ve01_ceplocalidades";
      $sql .= "      inner join veiccadtipo    on veiccadtipo.ve20_codigo   = veiculos.ve01_veiccadtipo";
@@ -383,7 +383,7 @@ class cl_veicresp {
      $sql .= "      inner join veiccadproced   on veiccadproced.ve25_codigo   = veiculos.ve01_veiccadproced";
      $sql .= "      inner join veiccadpotencia on veiccadpotencia.ve31_codigo = veiculos.ve01_veiccadpotencia";
      $sql .= "      inner join veiccadcateg    on veiccadcateg.ve32_codigo    = veiculos.ve01_veiccadcateg";
-     $sql2 = "";
+     $sql2 = "";*/
      if($dbwhere==""){
        if($ve02_codigo!=null ){
          $sql2 .= " where veicresp.ve02_codigo = $ve02_codigo "; 
