@@ -28,9 +28,12 @@
 
 class cancelamentoDebitos {
 
+  const TIPO_CANCELAMENTO_NORMAL = 1;
+  const TIPO_CANCELAMENTO_RENUNCIA = 2;
+
   public $iCodCancDebitos         = null; 
   public $sArreHistTXT            = "CANCELAMENTO DE DÉBITOS";
-  public $iTipoCancelamento       = 1;
+  public $iTipoCancelamento       = self::TIPO_CANCELAMENTO_NORMAL;
   public $iCadAcao;
   /**
    * Historico do Processamento do Cancelamento do Debito
