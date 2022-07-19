@@ -484,6 +484,8 @@ if (empty($iTipoSolicitacao) && !empty($pc10_solicitacaotipo)) {
   $iTipoSolicitacao      = $pc10_solicitacaotipo;
   $iOpcaoTipoSolicitacao = 3;
 }
+
+
 ?>
 <html>
 
@@ -558,8 +560,13 @@ if (isset($alterar) && $erro_msg != "") {
       echo "<script> document.form1." . $clbens->erro_campo . ".style.backgroundColor='#99A9AE';</script>";
       echo "<script> document.form1." . $clbens->erro_campo . ".focus();</script>";
     };
+  } else {
+    echo  "<script>alert('$erro_msg');</script>";
   }
 }
+
+
+
 if (isset($chavepesquisa)) {
   echo "
   <script>
