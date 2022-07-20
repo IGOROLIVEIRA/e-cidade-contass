@@ -55,7 +55,7 @@ $msgvencida   = '';
 $nomearquivos = '';
 $limit        = '';
 $tipo_debito  = $k00_tipo;
-$k03_class     = $k03_tipo;
+$k03_class    = $k03_tipo;
 
 if (isset($imprimir) && $imprimir == 'socotunica') {
 
