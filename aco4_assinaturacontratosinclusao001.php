@@ -158,8 +158,8 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
               <td>&nbsp;</td>
             </tr>
             <tr>
-              <td align="left" title="<?= @$Tac16_datapublicacao ?>">
-                <?= @$Lac16_datapublicacao ?>
+              <td align="left" title="Data da publicação do contrato ou termo de parceria. &#013;Campo:ac16_datapublicacao">
+                <b> Data de publicação </b>
               </td>
 
               <td align="left">
@@ -198,8 +198,8 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
               <td>&nbsp;</td>
             </tr>
             <tr>
-              <td align="left" title="<?= @$Tac16_veiculodivulgacao ?>">
-                <?= @$Lac16_veiculodivulgacao ?>
+              <td align="left" title="Veí­culo de divulgação onde o contrato ou termo de parceria foi publicado.&#013;Campo:ac16_veiculodivulgacao">
+                <b> Veículo de divulgação </b>
               </td>
               <td align="left" colspan="2">
                 <?
