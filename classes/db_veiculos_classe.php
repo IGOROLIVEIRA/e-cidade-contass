@@ -532,7 +532,7 @@ class cl_veiculos
     return true;
   }
   // funcao para alteracao
-  function alterar($ve01_codigo = null, $si04_tipoveiculo)
+  function alterar($ve01_codigo, $si04_tipoveiculo = null)
   {
     $this->atualizacampos();
 

@@ -78,7 +78,7 @@ switch ($oParam->exec){
             $oTransferencia->ve80_coddeptodestino  = $oRetorno->departamento_destino;
             $oTransferencia->incluir(null);
 
-            if ($oTransferencia->erro_status != 1) {
+            if ($oTransferencia->erro_status == "0") {
                 throw new Exception($oTransferencia->erro_msg);
             }
 
@@ -148,11 +148,11 @@ switch ($oParam->exec){
                 $oBaixa->ve04_veiccadtipobaixa = 7;
                 $oBaixa->incluir(null);
 
-                if ($oVeicTransf->erro_status != 1) {
+                if ($oVeicTransf->erro_status == "0") {
                     throw new Exception($oVeicTransf->erro_msg);
                 }
 
-                if ($oBaixa->erro_status != 1) {
+                if ($oBaixa->erro_status == "0") {
                     throw new Exception($oBaixa->erro_msg);
                 }
 
@@ -207,7 +207,7 @@ switch ($oParam->exec){
 
                 $clveiculos->incluir(null, $iTipoVeiculo);
 
-                if ($clveiculos->erro_status != 1) {
+                if ($clveiculos->erro_status == "0") {
                     throw new Exception($clveiculos->erro_msg);
                 }
 
