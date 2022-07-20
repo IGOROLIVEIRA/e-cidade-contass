@@ -1375,7 +1375,7 @@ class cl_veiculos
 
     if (is_null($sHoraBase) or trim($sHoraBase) == "") {
       //$sHoraBase = date("H:m");
-      $sHoraBase = "24:59";
+      $sHoraBase = "23:59";
     }
 
     // Select para Buscar Medida da Ultima Retirada, Ultima Devolução ou Ultimo Abastecimento com base numa Data e Hora
