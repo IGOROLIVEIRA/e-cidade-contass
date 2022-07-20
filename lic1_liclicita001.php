@@ -189,7 +189,7 @@ if (isset($incluir)) {
 		}
 	}
 	//verifica se as duas modalidades esto configuradas.
-	
+
 	$result_modalidade = $clpccflicitapar->sql_record($clpccflicitapar->sql_query_modalidade(null, "*", null, "l25_codcflicita = $l20_codtipocom and l25_anousu = $anousu and l03_instit = $instit"));
 	if ($clpccflicitapar->numrows == 0) {
 		$erro_msg = "Verifique se esta configurado a numeração de licitação por modalidade.";
@@ -212,13 +212,13 @@ if (isset($incluir)) {
 		$sqlerro = true;
 	}
 	if ($oPost->modalidade_tribunal != 100 && $oPost->modalidade_tribunal != 101 && $oPost->modalidade_tribunal != 102 && $oPost->modalidade_tribunal != 103) {
-		if($l20_leidalicitacao == 1){
-			if($l20_mododisputa == 0){
-			$erro_msg = "Selecione um modo de disputa para a licitação.";
-			$nomeCampo = "l20_mododisputa";
-			$sqlerro = true;
+		if ($l20_leidalicitacao == 1) {
+			if ($l20_mododisputa == 0) {
+				$erro_msg = "Selecione um modo de disputa para a licitação.";
+				$nomeCampo = "l20_mododisputa";
+				$sqlerro = true;
 			}
-		}	
+		}
 	}
 
 	//numeracao por modalidade
@@ -359,7 +359,7 @@ if (isset($incluir)) {
 			$clliclicita->l20_instit      = db_getsession("DB_instit");
 
 			$clliclicita->l20_criterioadjudicacao = $l20_criterioadjudicacao; //OC3770
-			$clliclicita->incluir(null);
+			$clliclicita->incluir(null, null);
 
 			if ($clliclicita->erro_status == "0") {
 				$erro_msg = $clliclicita->erro_msg;
@@ -369,9 +369,9 @@ if (isset($incluir)) {
 
 		if (!$sqlerro && $lprocsis == 's') {
 
-            $clliclicitaproc->l34_liclicita    = $clliclicita->l20_codigo;
-            $clliclicitaproc->l34_protprocesso = $l34_protprocesso;
-            $clliclicitaproc->incluir(null);
+			$clliclicitaproc->l34_liclicita    = $clliclicita->l20_codigo;
+			$clliclicitaproc->l34_protprocesso = $l34_protprocesso;
+			$clliclicitaproc->incluir(null);
 
 			if ($clliclicitaproc->erro_status == 0) {
 				$erro_msg = $clliclicitaproc->erro_msg;
