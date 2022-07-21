@@ -382,8 +382,8 @@ class cl_veicresp {
      $sql .= "      inner join veiccadcategcnh on veiccadcategcnh.ve30_codigo = veiculos.ve01_veiccadcategcnh";
      $sql .= "      inner join veiccadproced   on veiccadproced.ve25_codigo   = veiculos.ve01_veiccadproced";
      $sql .= "      inner join veiccadpotencia on veiccadpotencia.ve31_codigo = veiculos.ve01_veiccadpotencia";
-     $sql .= "      inner join veiccadcateg    on veiccadcateg.ve32_codigo    = veiculos.ve01_veiccadcateg";
-     $sql2 = "";*/
+     $sql .= "      inner join veiccadcateg    on veiccadcateg.ve32_codigo    = veiculos.ve01_veiccadcateg";*/
+     $sql2 = "";
      if($dbwhere==""){
        if($ve02_codigo!=null ){
          $sql2 .= " where veicresp.ve02_codigo = $ve02_codigo "; 
