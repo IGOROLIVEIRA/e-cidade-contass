@@ -784,12 +784,11 @@ class obrasDadosComplementares
        * quando já houver endereco cadastrado e mesmo código de obra, não deve executar o comando de inclusão na tabela obrascodigos
        */
 
-      if(!pg_num_rows($rsCodigo)>0) {
+      if (!pg_num_rows($rsCodigo) > 0) {
         $oDaoObrasCodigo->db151_codigoobra = $this->getCodigoObra();
         $oDaoObrasCodigo->db151_liclicita = $this->getLicita();
-        $oDaoObrasCodigo->incluir();
-
-      if ($oDaoObrasCodigo->erro_status == '0') {
+        $oDaoObrasCodigo->incluir($this->getCodigoObra());
+        if ($oDaoObrasCodigo->erro_status == '0') {
           throw new Exception($oDaoObrasCodigo->erro_msg);
         }
       } else if ($oDaoObrasCodigo->numrows && $iTipoJulgamento == 3) {
@@ -980,7 +979,7 @@ class obrasDadosComplementares
         }
         $oDaoObras->alterar('', $sWhere);
       } else {
-        $oDaoObras->incluir();
+        $oDaoObras->incluir("");
       }
 
       if ($oDaoObras->erro_status == '0') {
