@@ -46,36 +46,50 @@ class EventoS1200 extends EventoBase
                 $oDadosAPI->evtRemun->perapur         = date('Y');
             }
             $oDadosAPI->evtRemun->cpftrab             = $oDados->cpftrab;
-            if (!empty($oDados->indmv)) {
+
+            if (strlen($oDados->indmv) > 0) {
                 $oDadosAPI->evtRemun->infomv->indmv       = $oDados->indmv;
             }
 
             $oRemunoutrempr = new \stdClass;
             $oRemunoutrempr->tpinsc      = 1;
-            $oRemunoutrempr->nrinsc      = $oDados->cgc;
+            $oRemunoutrempr->nrinsc      = $oDados->nrinsc;
             $oRemunoutrempr->codcateg    = $oDados->codcateg;
-            $oRemunoutrempr->vlrremunoe  = $oDados->vlrremunoe;
+            if (strlen($oDados->vlrremunoe) > 0) {
+                $oRemunoutrempr->vlrremunoe  = $oDados->vlrremunoe;
+            }
             $aRemunoutrempr[] = $oRemunoutrempr;
 
-            $oDadosAPI->evtRemun->infomv->remunoutrempr->tpinsc = $aRemunoutrempr;
+            $oDadosAPI->evtRemun->infomv->remunoutrempr = $aRemunoutrempr;
 
-            $oDadosAPI->evtRemun->dmdev->idedmdev  = $this->buscarIdentificador($oDados->matricula);
-            $oDadosAPI->evtRemun->dmdev->codcateg  = $oDados->codcateg;
+            $oDmdev = new \stdClass;
+            $oDmdev->idedmdev  = $this->buscarIdentificador($oDados->matricula);
+            $oDmdev->codcateg  = $oDados->codcateg;
+            $oDmdev->remunperapur->matricula   = $oDados->matricula;
+            $oDmdev->remunperapur->itensremun  = $this->buscarValorRubrica($oDados->matricula);
 
-            $oDadosAPI->evtRemun->dmdev->remunperapur->matricula   = $oDados->matricula;
+            // $oDadosAPI->evtRemun->dmdev->idedmdev  = $this->buscarIdentificador($oDados->matricula);
+            // $oDadosAPI->evtRemun->dmdev->codcateg  = $oDados->codcateg;
 
-            $oDadosAPI->evtRemun->dmdev->remunperapur->itensremun  = $this->buscarValorRubrica($oDados->matricula);
+            // $oDadosAPI->evtRemun->dmdev->remunperapur->matricula   = $oDados->matricula;
+
+            // $oDadosAPI->evtRemun->dmdev->remunperapur->itensremun  = $this->buscarValorRubrica($oDados->matricula);
 
             if (!empty($oDados->grauExp)) {
-                $oDadosAPI->evtRemun->dmdev->remunperapur->infoagnocivo->grauexp = $oDados->grauExp;
+                //$oDadosAPI->evtRemun->dmdev->remunperapur->infoagnocivo->grauexp = $oDados->grauExp;
+                $oDmdev->remunperapur->infoagnocivo->grauexp = $oDados->grauExp;
             }
+
+            $aDmdev[] = $oDmdev;
+            $oDadosAPI->evtRemun->dmdev = $aDmdev;
+
             //$oDadosAPI->evtRemun->dtAlteracao         = '2021-01-29'; //$oDados->altContratual->dtAlteracao;
             $aDadosAPI[] = $oDadosAPI;
             $iSequencial++;
         }
-        echo '<pre>';
-        print_r($aDadosAPI);
-        exit;
+        // echo '<pre>';
+        // print_r($aDadosAPI);
+        // exit;
         return $aDadosAPI;
     }
 

@@ -601,7 +601,6 @@ class Preenchimentos
         when length(rh51_cgcvinculo) = 11 then 2
         end as tpInsc2,
         rh51_cgcvinculo as nrInsc2,
-        rh51_categoria as codCateg,
         rh51_basefo as vlrRemunOE,
         h13_categoria as codCateg,
         'LOTA1' as codLotacao,
@@ -680,6 +679,7 @@ class Preenchimentos
         and rescisao.r59_caub = rhpesrescisao.rh05_caub::char(2)
     where h13_categoria in ('101', '106', '111', '301', '302', '303', '305', '306', '309', '312', '313', '902')
     and rh30_vinculo = 'A'
+    and rh02_regist = 288967
     and
 	exists (select
 	1
@@ -689,7 +689,8 @@ where
 	r14_anousu = fc_getsession('DB_anousu')::int
 	and r14_mesusu = date_part('month', fc_getsession('DB_datausu')::date)
 	and r14_instit = fc_getsession('DB_instit')::int
-	and r14_regist = rhpessoal.rh01_regist) limit 1";
+	and r14_regist = rhpessoal.rh01_regist)
+    and rh05_recis is null";
 
         if ($matricula != null) {
             $sql .= "and rh01_regist in ($matricula) ";
