@@ -112,7 +112,11 @@ class EventoS2200 extends EventoBase
             $oDadosAPI->evtAdmissao->vinculo->tpRegTrab = $oDados->tpregtrab;
             $oDadosAPI->evtAdmissao->vinculo->tpRegPrev = $oDados->tpregprev;
             $oDadosAPI->evtAdmissao->vinculo->nrRecInfPrelim = $oDados->nrrecinfprelim;
-            $oDadosAPI->evtAdmissao->vinculo->cadIni = $oDados->cadini;
+
+            $oDadosAPI->evtAdmissao->vinculo->cadIni = 'N';
+            if ($oDados->cadini == 4001011) {
+                $oDadosAPI->evtAdmissao->vinculo->cadIni = 'S';
+            }
 
             if (!empty($oDados->dtadm)) {
                 //$oDadosAPI->evtAdmissao->vinculo->infoCeletista = $oDados->infoCeletista;
