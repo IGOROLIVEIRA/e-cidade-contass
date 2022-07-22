@@ -25,18 +25,18 @@
  *                                licenca/licenca_pt.txt 
  */
 
-require_once ("libs/db_stdlibwebseller.php");
-require_once ("libs/db_stdlib.php");
-require_once ("libs/db_conecta.php");
-require_once ("libs/db_sessoes.php");
-require_once ("libs/db_utils.php");
-require_once ("libs/db_app.utils.php");
-require_once ("libs/db_usuariosonline.php");
-require_once ("classes/db_feriado_classe.php");
-require_once ("classes/db_calendario_classe.php");
-require_once ("classes/db_regencia_classe.php");
-require_once ("dbforms/db_funcoes.php");
-require_once ("std/DBDate.php");
+require_once("libs/db_stdlibwebseller.php");
+require_once("libs/db_stdlib.php");
+require_once("libs/db_conecta.php");
+require_once("libs/db_sessoes.php");
+require_once("libs/db_utils.php");
+require_once("libs/db_app.utils.php");
+require_once("libs/db_usuariosonline.php");
+require_once("classes/db_feriado_classe.php");
+require_once("classes/db_calendario_classe.php");
+require_once("classes/db_regencia_classe.php");
+require_once("dbforms/db_funcoes.php");
+require_once("std/DBDate.php");
 
 db_app::import("exceptions.*");
 
@@ -59,45 +59,45 @@ $rsPeriodoCalendario   = $clcalendario->sql_record($sSqlPeriodoCalendario);
 
 $oPeriodoCalendario = db_utils::fieldsMemory($rsPeriodoCalendario, 0);
 
-$oDBDateInicio = new DBDate( $oPeriodoCalendario->ed52_d_inicio );
-$oDBDateFim    = new DBDate( $oPeriodoCalendario->ed52_d_fim );
+$oDBDateInicio = new DBDate($oPeriodoCalendario->ed52_d_inicio);
+$oDBDateFim    = new DBDate($oPeriodoCalendario->ed52_d_fim);
 
 if (isset($incluir)) {
-  
+
   $clferiado->pagina_retorno = "edu1_feriado001.php?ed54_i_calendario=$ed54_i_calendario&ed52_c_descr=$ed52_c_descr";
   db_inicio_transacao();
-  
+
   $iIntervalo = 0;
-  
+
   if (isset($oPost->ed54_d_data) && !empty($oPost->ed54_d_data)) {
     $oData = new DBDate($oPost->ed54_d_data);
   }
-  
+
   if (isset($oPost->datafinal) && !empty($oPost->datafinal)) {
     $oDataFinal = new DBDate($oPost->datafinal);
   }
-  
+
   if (isset($oData) && isset($oDataFinal)) {
-    
+
     if ($oData->getTimeStamp() > $oDataFinal->getTimeStamp()) {
-      
+
       db_msgbox("Data Inicial maior que a final.");
       return false;
     }
-    
+
     $iIntervalo = DBDate::calculaIntervaloEntreDatas($oDataFinal, $oData, "d");
   }
-  
+
   for ($i = 0; $i <= $iIntervalo; $i++) {
-    
-    $iTimestamp = mktime (0, 0, 0, $oData->getMes(), $oData->getDia()+$i, $oData->getAno());
+
+    $iTimestamp = mktime(0, 0, 0, $oData->getMes(), $oData->getDia() + $i, $oData->getAno());
     $dtIncluir  = date("Y-m-d", $iTimestamp);
     $iDiaSemana = date("N", $iTimestamp);
-    
+
     $sDiaSemana = "";
-    
+
     switch ($iDiaSemana) {
-      
+
       case 1:
         $sDiaSemana = "SEGUNDA";
         break;
@@ -120,140 +120,147 @@ if (isset($incluir)) {
         $sDiaSemana = "DOMINGO";
         break;
     }
-    
+
     $clferiado->ed54_c_diasemana = "$sDiaSemana";
     $clferiado->ed54_d_data      = "{$dtIncluir}";
     $clferiado->incluir($ed54_i_codigo);
+    db_msgbox($clferiado->erro_sql);
   }
-  
+
   db_fim_transacao();
-  
 }
 
 if (isset($alterar)) {
-  
+
   $clferiado->pagina_retorno = "edu1_feriado001.php?ed54_i_calendario=$ed54_i_calendario&ed52_c_descr=$ed52_c_descr";
   db_inicio_transacao();
-  
+
   $db_opcao = 2;
   $clferiado->alterar($ed54_i_codigo);
-  
+  db_msgbox($clferiado->erro_sql);
+
+
   db_fim_transacao();
-  
 }
 
 if (isset($excluir)) {
-  
+
   $clferiado->pagina_retorno = "edu1_feriado001.php?ed54_i_calendario=$ed54_i_calendario&ed52_c_descr=$ed52_c_descr";
   db_inicio_transacao();
-  
+
   $db_opcao = 3;
   $clferiado->excluir($ed54_i_codigo);
-  
+
   db_fim_transacao();
-  
 }
 ?>
 <html>
+
 <head>
-<title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta http-equiv="Expires" CONTENT="0">
-<script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
-<script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
-<link href="estilos.css" rel="stylesheet" type="text/css">
+  <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Expires" CONTENT="0">
+  <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+  <script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
+  <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
-<body bgcolor="#CCCCCC" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
- <tr>
-  <td height="430" valign="top" bgcolor="#CCCCCC">
-   <br>
-   <center>
-   <fieldset style="width:95%"><legend><b>Feriados e Eventos do Calendário <?=$ed52_c_descr?></b></legend>
-    <?include("forms/db_frmferiado.php");?>
-   </fieldset>
-   </center>
-  </td>
- </tr>
-</table>
+
+<body bgcolor="#CCCCCC" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td height="430" valign="top" bgcolor="#CCCCCC">
+        <br>
+        <center>
+          <fieldset style="width:95%">
+            <legend><b>Feriados e Eventos do Calendário <?= $ed52_c_descr ?></b></legend>
+            <? include("forms/db_frmferiado.php"); ?>
+          </fieldset>
+        </center>
+      </td>
+    </tr>
+  </table>
 </body>
+
 </html>
 <?
-if(@$erro_fer==true){
- echo "<script> document.form1.ed54_d_".@$campo_erro."_dia.style.backgroundColor='#99A9AE';</script>";
- echo "<script> document.form1.ed54_d_".@$campo_erro."_mes.style.backgroundColor='#99A9AE';</script>";
- echo "<script> document.form1.ed54_d_".@$campo_erro."_ano.style.backgroundColor='#99A9AE';</script>";
- echo "<script> document.form1.ed54_d_".@$campo_erro."_dia.focus();</script>";
+if (@$erro_fer == true) {
+  echo "<script> document.form1.ed54_d_" . @$campo_erro . "_dia.style.backgroundColor='#99A9AE';</script>";
+  echo "<script> document.form1.ed54_d_" . @$campo_erro . "_mes.style.backgroundColor='#99A9AE';</script>";
+  echo "<script> document.form1.ed54_d_" . @$campo_erro . "_ano.style.backgroundColor='#99A9AE';</script>";
+  echo "<script> document.form1.ed54_d_" . @$campo_erro . "_dia.focus();</script>";
 }
 if (isset($incluir)) {
 
- if (@$erro_fer==false) {
+  if (@$erro_fer == false) {
 
-  if ($clferiado->erro_status=="0") {
+    if ($clferiado->erro_status == "0") {
 
-   $clferiado->erro(true,false);
-   $db_botao=true;
-   echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
-   if($clferiado->erro_campo!=""){
-    echo "<script> document.form1.".$clferiado->erro_campo.".style.backgroundColor='#99A9AE';</script>";
-    echo "<script> document.form1.".$clferiado->erro_campo.".focus();</script>";
-   };
-  }else{
-   $sql1 = $clcalendario->sql_query("","ed52_i_codigo,ed52_c_aulasabado",""," ed52_i_codigo = $ed54_i_calendario");
-   $result1 = $clcalendario->sql_record($sql1);
-   db_fieldsmemory($result1,0);
-   ?>
-   <script>
-    iframe_sabado2.location.href = "edu1_calendario004.php?calendario=<?=$ed52_i_codigo?>&sabado=<?=$ed52_c_aulasabado?>&feriado";
-   </script>
-   <?
-   //$clferiado->erro(true,true);
-  };
- }
+      $clferiado->erro(true, false);
+      $db_botao = true;
+      echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
+      if ($clferiado->erro_campo != "") {
+        echo "<script> document.form1." . $clferiado->erro_campo . ".style.backgroundColor='#99A9AE';</script>";
+        echo "<script> document.form1." . $clferiado->erro_campo . ".focus();</script>";
+      };
+    } else {
+      $sql1 = $clcalendario->sql_query("", "ed52_i_codigo,ed52_c_aulasabado", "", " ed52_i_codigo = $ed54_i_calendario");
+      $result1 = $clcalendario->sql_record($sql1);
+      db_fieldsmemory($result1, 0);
+?>
+      <script>
+        iframe_sabado2.location.href = "edu1_calendario004.php?calendario=<?= $ed52_i_codigo ?>&sabado=<?= $ed52_c_aulasabado ?>&feriado";
+      </script>
+    <?
+      //$clferiado->erro(true,true);
+    };
+  }
 };
-if(isset($alterar)){
- if(@$erro_fer==false){
-  if($clferiado->erro_status=="0"){
-   $clferiado->erro(true,false);
-   $db_botao=true;
-   echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
-   if($clferiado->erro_campo!=""){
-    echo "<script> document.form1.".$clferiado->erro_campo.".style.backgroundColor='#99A9AE';</script>";
-    echo "<script> document.form1.".$clferiado->erro_campo.".focus();</script>";
-   };
-  }else{
-   $sql1 = $clcalendario->sql_query("","ed52_i_codigo,ed52_c_aulasabado",""," ed52_i_codigo = $ed54_i_calendario");
-   $result1 = $clcalendario->sql_record($sql1);
-   db_fieldsmemory($result1,0);
-   ?>
-   <script>
-    iframe_sabado2.location.href = "edu1_calendario004.php?calendario=<?=$ed52_i_codigo?>&sabado=<?=$ed52_c_aulasabado?>&feriado";
-   </script>
-   <?
-  };
- }
-};
-if(isset($excluir)){
- if(@$erro_fer==false){
-  if($clferiado->erro_status=="0"){
-   $clferiado->erro(true,false);
-  }else{
-   $sql1 = $clcalendario->sql_query("","ed52_i_codigo,ed52_c_aulasabado",""," ed52_i_codigo = $ed54_i_calendario");
-   $result1 = $clcalendario->sql_record($sql1);
-   db_fieldsmemory($result1,0);
-   ?>
-   <script>
-    iframe_sabado2.location.href = "edu1_calendario004.php?calendario=<?=$ed52_i_codigo?>&sabado=<?=$ed52_c_aulasabado?>&feriado";
-   </script>
-   <?
-   //$clferiado->erro(true,true);
-  };
- }
-};
-
-if (isset($cancelar) ) {
+if (isset($alterar)) {
+  if (@$erro_fer == false) {
+    if ($clferiado->erro_status == "0") {
+      $clferiado->erro(true, false);
+      $db_botao = true;
+      echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
+      if ($clferiado->erro_campo != "") {
+        echo "<script> document.form1." . $clferiado->erro_campo . ".style.backgroundColor='#99A9AE';</script>";
+        echo "<script> document.form1." . $clferiado->erro_campo . ".focus();</script>";
+      };
+    } else {
+      $sql1 = $clcalendario->sql_query("", "ed52_i_codigo,ed52_c_aulasabado", "", " ed52_i_codigo = $ed54_i_calendario");
+      $result1 = $clcalendario->sql_record($sql1);
+      db_fieldsmemory($result1, 0);
+    ?>
+      <script>
+        iframe_sabado2.location.href = "edu1_calendario004.php?calendario=<?= $ed52_i_codigo ?>&sabado=<?= $ed52_c_aulasabado ?>&feriado";
+      </script>
+    <?
+    };
+  }
 
   $clferiado->pagina_retorno = "edu1_feriado001.php?ed54_i_calendario=$ed54_i_calendario&ed52_c_descr=$ed52_c_descr";
-  echo "<script>location.href='".$clferiado->pagina_retorno."'</script>";
+  echo "<script>location.href='" . $clferiado->pagina_retorno . "'</script>";
+};
+if (isset($excluir)) {
+  if (@$erro_fer == false) {
+    if ($clferiado->erro_status == "0") {
+      $clferiado->erro(true, false);
+    } else {
+      $sql1 = $clcalendario->sql_query("", "ed52_i_codigo,ed52_c_aulasabado", "", " ed52_i_codigo = $ed54_i_calendario");
+      $result1 = $clcalendario->sql_record($sql1);
+      db_fieldsmemory($result1, 0);
+    ?>
+      <script>
+        iframe_sabado2.location.href = "edu1_calendario004.php?calendario=<?= $ed52_i_codigo ?>&sabado=<?= $ed52_c_aulasabado ?>&feriado";
+      </script>
+<?
+      //$clferiado->erro(true,true);
+    };
+  }
+};
+
+if (isset($cancelar)) {
+
+  $clferiado->pagina_retorno = "edu1_feriado001.php?ed54_i_calendario=$ed54_i_calendario&ed52_c_descr=$ed52_c_descr";
+  echo "<script>location.href='" . $clferiado->pagina_retorno . "'</script>";
 }
 ?>
