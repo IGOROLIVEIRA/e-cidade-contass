@@ -235,22 +235,22 @@ class Preenchimentos
         rh27_instit AS instituicao,
         rh27_descr AS dscRubr,
         rh27_pd AS tpRubr,
- 
+
      (SELECT db104_valorresposta
       FROM avaliacaopergunta
       INNER JOIN avaliacaoperguntaopcao ON db104_avaliacaopergunta = db103_sequencial
       WHERE db104_sequencial = rh27_codincidprev) AS codIncCP,
- 
+
      (SELECT db104_valorresposta
       FROM avaliacaopergunta
       INNER JOIN avaliacaoperguntaopcao ON db104_avaliacaopergunta = db103_sequencial
       WHERE db104_sequencial = rh27_codincidirrf) AS codIncIRRF,
- 
+
      (SELECT db104_valorresposta
       FROM avaliacaopergunta
       INNER JOIN avaliacaoperguntaopcao ON db104_avaliacaopergunta = db103_sequencial
       WHERE db104_sequencial = rh27_codincidfgts) AS codIncFGTS,
- 
+
      (SELECT db104_valorresposta
       FROM avaliacaopergunta
       INNER JOIN avaliacaoperguntaopcao ON db104_avaliacaopergunta = db103_sequencial
@@ -483,12 +483,11 @@ class Preenchimentos
                 case when r33_tiporegime = '1' then 1
                 when r33_tiporegime = '2' then 2
                 end as tpRegPrev,
-                case when DATE_PART('YEAR',rh01_admiss) <= 2021 and DATE_PART('MONTH',rh01_admiss) <= 11 then 'S'
-                when DATE_PART('YEAR',rh01_admiss) < 2021 and DATE_PART('MONTH',rh01_admiss) <= 12 then 'S'
-                when DATE_PART('YEAR',rh01_admiss) = 2021 and DATE_PART('MONTH',rh01_admiss) = 12 then 'N'
-                when DATE_PART('YEAR',rh01_admiss) >= 2021 then 'N'
+                case when DATE_PART('YEAR',rh01_admiss) < 2021 then 'S'
+               	when DATE_PART('YEAR',rh01_admiss) = 2021 and DATE_PART('MONTH',rh01_admiss) < 11 then 'S'
+               	when DATE_PART('YEAR',rh01_admiss) = 2021 and DATE_PART('MONTH',rh01_admiss) = 11 and DATE_PART('DAY',rh01_admiss) <= 21  then 'S'
+                else 'N'
                 end as cadIni,
-
                 case when (h13_categoria = 101 or h13_categoria = 106 or h13_categoria = 111) then rh01_admiss
                 end as dtAdm,
                 case when (h13_categoria = 101 or h13_categoria = 106 or h13_categoria = 111) and (rh01_tipadm = 1 or rh01_tipadm = 2) then 1
