@@ -68,7 +68,7 @@ class EventoS1200 extends EventoBase
             $oDmdev->remunperapur->matricula   = $oDados->matricula;
             $oDmdev->remunperapur->itensremun  = $this->buscarValorRubrica($oDados->matricula);
 
-            // $oDadosAPI->evtRemun->dmdev->idedmdev  = $this->buscarIdentificador($oDados->matricula);
+            $oDadosAPI->evtRemun->dmdev->idedmdev  = $this->buscarIdentificador($oDados->matricula);
             // $oDadosAPI->evtRemun->dmdev->codcateg  = $oDados->codcateg;
 
             // $oDadosAPI->evtRemun->dmdev->remunperapur->matricula   = $oDados->matricula;
@@ -145,12 +145,13 @@ class EventoS1200 extends EventoBase
             $rsIdentificadores = db_query($sql);
             if ($rsIdentificadores) {
                 $oIdentificadores = \db_utils::fieldsMemory($rsIdentificadores, 0);
-                if (!empty($oIdentificadores->idedmdev)) {
-                    $aIdentificadores[] = $oIdentificadores->idedmdev;
-                }
+                // if (!empty($oIdentificadores->idedmdev)) {
+                //     $aIdentificadores[] = $oIdentificadores->idedmdev;
+                // }
+                return $oIdentificadores->idedmdev;
             }
         }
-        return $aIdentificadores;
+        //return $aIdentificadores;
     }
 
     private function buscarValorRubrica($matricula)
