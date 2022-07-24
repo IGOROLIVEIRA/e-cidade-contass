@@ -66,6 +66,13 @@ class Evento
      * @var date
      */
     private $dt_alteracao;
+
+    /**
+     * @var string
+     */
+    private $indapuracao;
+
+
     /**
      * Undocumented function
      *
@@ -74,7 +81,7 @@ class Evento
      * @param string $responsavelPreenchimento
      * @param \stdClass $dados
      */
-    public function __construct($tipoEvento, $empregador, $responsavelPreenchimento, $dado, $tpAmb, $iniValid, $modo, $dt_alteracao = null)
+    public function __construct($tipoEvento, $empregador, $responsavelPreenchimento, $dado, $tpAmb, $iniValid, $modo, $dt_alteracao = null, $indapuracao = null)
     {
         /**
          * @todo pesquisar exite na fila um evento do tipo: $tipoEvento para o : $responsavelPreenchimento
@@ -91,6 +98,7 @@ class Evento
         $this->iniValid                 = $iniValid;
         $this->modo                     = $modo;
         $this->dt_alteracao             = $dt_alteracao;
+        $this->indapuracao              = $indapuracao;
 
         $dado = json_encode(\DBString::utf8_encode_all($this->dado));
         if (is_null($dado)) {
@@ -120,7 +128,7 @@ class Evento
         if (pg_num_rows($rs) > 0 && $this->modo === 'INC') {
             $md5Evento = \db_utils::fieldsMemory($rs, 0)->rh213_md5;
             $evtSituaccao = \db_utils::fieldsMemory($rs, 0)->rh213_situacao;
-            if ($md5Evento == $this->md5 && $evtSituaccao == \cl_esocialenvio::SITUACAO_ENVIADO) {
+            if ($md5Evento == $this->md5) {
                 throw new \Exception("Já existe um envio do evento S-{$this->tipoEvento} com as mesmas informações.");
             }
         }
@@ -187,6 +195,7 @@ class Evento
         $evento->setIniValid($this->iniValid);
         $evento->setModo($this->modo);
         $evento->setDtAlteracao($this->dt_alteracao);
+        $evento->setIndApuracao($this->indapuracao);
         if (!is_object($evento)) {
             throw new \Exception("Objeto S{$this->tipoEvento} não encontrado.");
         }

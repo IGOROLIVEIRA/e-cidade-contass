@@ -51,9 +51,14 @@ class DadosESocial
             case '37':
                 return $this->buscaPreenchimentos($matricula);
                 break;
-                case '2':
-                    return $this->buscaPreenchimentos($matricula);
-                    break;
+
+            case '12':
+                return $this->buscaPreenchimentos($matricula);
+                break;
+
+            case '2':
+                return $this->buscaPreenchimentos($matricula);
+                break;
             default:
                 $preenchimentos = $this->buscaPreenchimentos($matricula);
 
@@ -80,7 +85,9 @@ class DadosESocial
      */
     private function buscaPreenchimentos($matricula = null)
     {
+        // echo 'tst';
         // echo $this->tipo;
+        // echo Tipo::REMUNERACAO_TRABALHADOR;
         // exit;
         $configuracao = new Configuracao();
         $formularioId = $configuracao->getFormulario($this->tipo);
@@ -111,6 +118,8 @@ class DadosESocial
                 return $preenchimento->buscarUltimoPreenchimentoInstituicao($formularioId, $matricula);
             case Tipo::CADASTRAMENTO_INICIAL:
                 return $preenchimento->buscarPreenchimentoS2200($formularioId, $matricula);
+            case Tipo::REMUNERACAO_TRABALHADOR:
+                return $preenchimento->buscarPreenchimentoS1200($formularioId, $matricula);
             default:
                 throw new Exception('Tipo não encontrado.');
         }
