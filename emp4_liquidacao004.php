@@ -380,7 +380,9 @@ switch ($objJson->method) {
       $objJson->e69_chaveacesso,
       $objJson->e69_nfserie,
       $objJson->e50_compdesp,
-      $objJson->e83_codtipo
+      $objJson->e83_codtipo,
+      true,
+      $objJson->iCgmEmitente
     );
 
     if (isset($objJson->verificaChave) && $objJson->verificaChave == 1 && $objJson->e69_notafiscaleletronica != 2 && $objJson->e69_notafiscaleletronica != 3) {
@@ -398,7 +400,12 @@ switch ($objJson->method) {
       $nfKey   = substr($objJson->e69_chaveacesso,25,9);
 
       $oDaoCgm   = db_utils::getDao("cgm");
-      $sSqlCgm   = $oDaoCgm->sql_query_file($objJson->cgm);
+
+        // Condicao da OC17910
+        if ($objJson->iCgmEmitente > "0")
+            $sSqlCgm   = $oDaoCgm->sql_query_file($objJson->iCgmEmitente);
+        else 
+            $sSqlCgm   = $oDaoCgm->sql_query_file($objJson->cgm);
       $rsCgm     = $oDaoCgm->sql_record($sSqlCgm);
       $oDadosCgm = db_utils::fieldsMemory($rsCgm,0);
 

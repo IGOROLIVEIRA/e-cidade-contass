@@ -30,7 +30,8 @@
  * 
  * @package Contratos
  */
-abstract class AcordoMovimentacao {
+abstract class AcordoMovimentacao
+{
 
   /**
    * Código para Mapeamento ORM
@@ -38,13 +39,20 @@ abstract class AcordoMovimentacao {
    * @var integer
    */
   protected $iCodigo             = null;
-  
+
   /**
    * Data do Movimento
    *
    * @var string
    */
   protected $dtMovimento         = '';
+
+  /**
+   * Data de Referencia
+   *
+   * @var string
+   */
+  protected $datareferencia         = '';
 
   /**
    * Hora do Movimento
@@ -59,7 +67,7 @@ abstract class AcordoMovimentacao {
    * @var string
    */
   protected $sObservacao         = '';
-  
+
   /**
    * Código do Usuário
    *
@@ -73,148 +81,159 @@ abstract class AcordoMovimentacao {
    * @var integer
    */
   protected $iAcordo             = null;
-  
+
   /**
    * Tipo da Movimentação
    *
    * @var integer
    */
   protected $iTipo               = null;
-  
+
   /**
    * Código do Movimento de Cancelamento
    *
    * @var integer
    */
   protected $iCodigoCancelamento = null;
-  
+
   /**
    * Constante do caminho da mensagem do model
    * @var string
    */
   const CAMINHO_MENSAGENS = 'patrimonial.contratos.AcordoMovimentacao.';
-  
+
   /**
    * Retorna a data de movimentação
    * 
    * @return string
    */
-  public function getDataMovimento() {
+  public function getDataMovimento()
+  {
 
     return $this->dtMovimento;
   }
-  
+
   /**
    * Retorna o código de movimentação
    * 
    * @return integer
    */
-  public function getCodigo() {
+  public function getCodigo()
+  {
 
     return $this->iCodigo;
   }
-  
+
   /**
    * Retorna o id do usuário logado no sistema
    * 
    * @return integer
    */
-  public function getUsuario() {
+  public function getUsuario()
+  {
 
     return $this->iUsuario;
   }
-  
+
   /**
    * Retorna a hora atual
    * 
    * @return string
    */
-  public function getHora() {
+  public function getHora()
+  {
 
     return $this->sHora;
   }
-  
+
   /**
    * Retorna o acordo
    * 
    * @return integer
    */
-  public function getAcordo() {
+  public function getAcordo()
+  {
 
     return $this->iAcordo;
   }
-  
+
   /**
    * Retorna o tipo de acordo
    * 
    * @return integer
    */
-  public function getTipo() {
+  public function getTipo()
+  {
 
     return $this->iTipo;
   }
-  
+
   /**
    * Retorna a observação da movimentação
    * 
    * @return string
    */
-  public function getObservacao() {
+  public function getObservacao()
+  {
 
     return $this->sObservacao;
   }
-  
+
   /**
    * Seta o acordo de movimentação
    * 
    * @param integer $iAcordo
    */
-  public function setAcordo($iAcordo) {
+  public function setAcordo($iAcordo)
+  {
 
     $this->iAcordo = $iAcordo;
   }
-  
+
   /**
    * Seta o tipo de acordo para a movimentação
    * 
    * @param integer $iTipo
    */
-  public function setTipo($iTipo) {
+  public function setTipo($iTipo)
+  {
 
     $this->iTipo = $iTipo;
   }
-  
+
   /**
    * Seta a observação da movimentação
    * 
    * @param string $sObservacao
    */
-  public function setObservacao($sObservacao) {
+  public function setObservacao($sObservacao)
+  {
 
     $this->sObservacao = $sObservacao;
   }
-  
+
   /**
    * Método construtor
    * 
    * @param integer $iCodigo
    */
-  public function __construct($iCodigo = null) {
-  	
+  public function __construct($iCodigo = null)
+  {
+
     if (!empty($iCodigo)) {
-    	
-    	$oDaoAcordoMovimentacao     = db_utils::getDao("acordomovimentacao");
-    	$sWhere                     = "ac10_sequencial = {$iCodigo}";
-    	$sSqlAcordoMovimentacao     = $oDaoAcordoMovimentacao->sql_query(null, "*", null, $sWhere);
-    	$rsSqlAcordoMovimentacao    = $oDaoAcordoMovimentacao->sql_record($sSqlAcordoMovimentacao);
-    	$iNumRowsAcordoMovimentacao = $oDaoAcordoMovimentacao->numrows;
-    	
+
+      $oDaoAcordoMovimentacao     = db_utils::getDao("acordomovimentacao");
+      $sWhere                     = "ac10_sequencial = {$iCodigo}";
+      $sSqlAcordoMovimentacao     = $oDaoAcordoMovimentacao->sql_query(null, "*", null, $sWhere);
+      $rsSqlAcordoMovimentacao    = $oDaoAcordoMovimentacao->sql_record($sSqlAcordoMovimentacao);
+      $iNumRowsAcordoMovimentacao = $oDaoAcordoMovimentacao->numrows;
+
       if ($iNumRowsAcordoMovimentacao == 0) {
         throw new Exception("Nenhum Registro Encontrado para o Código de Movimentação {$iCodigo}!");
       }
-    	
+
       $oAcordoMovimentacao = db_utils::fieldsMemory($rsSqlAcordoMovimentacao, 0);
-      
+
       $this->iCodigo       = $oAcordoMovimentacao->ac10_sequencial;
       $this->dtMovimento   = $oAcordoMovimentacao->ac10_datamovimento;
       $this->sHora         = $oAcordoMovimentacao->ac10_hora;
@@ -224,129 +243,134 @@ abstract class AcordoMovimentacao {
       $this->setTipo($oAcordoMovimentacao->ac10_acordomovimentacaotipo);
     }
   }
-  
+
   /**
    * Persiste os dados da Acordo Movimentacao na base de dados
    *
    * @return AcordoMovimentacao
    */
-  public function save() {
-  	
+  public function save()
+  {
+
     if (!db_utils::inTransaction()) {
       throw new Exception("Não existe transação Ativa.");
     }
-  	
-  	$iTipo = $this->getTipo();
+
+    $iTipo = $this->getTipo();
     if (empty($iTipo)) {
-      throw new Exception("Tipo de movimentação não informado!\nInclusão não efetuada.");  
+      throw new Exception("Tipo de movimentação não informado!\nInclusão não efetuada.");
     }
-  	
+
     $iAcordo = $this->getAcordo();
     if (empty($iAcordo)) {
-      throw new Exception("Acordo da movimentação não informado!\nInclusão não efetuada.");  
+      throw new Exception("Acordo da movimentação não informado!\nInclusão não efetuada.");
     }
-    
+
     $oDaoAcordoMovimentacao                              = db_utils::getDao("acordomovimentacao");
     $oDaoAcordoMovimentacao->ac10_acordomovimentacaotipo = $this->getTipo();
     $oDaoAcordoMovimentacao->ac10_acordo                 = $this->getAcordo();
     $oDaoAcordoMovimentacao->ac10_obs                    = $this->getObservacao();
-    
+
     $iCodigo = $this->iCodigo;
     if (!empty($iCodigo)) {
-    	
-    	/**
-    	 * Altera movimentacao corrente
-    	 */
-    	$oDaoAcordoMovimentacao->ac10_sequencial             = $this->iCodigo;
+
+      /**
+       * Altera movimentacao corrente
+       */
+      $oDaoAcordoMovimentacao->ac10_sequencial             = $this->iCodigo;
       $oDaoAcordoMovimentacao->ac10_id_usuario             = $this->iUsuario;
       $oDaoAcordoMovimentacao->ac10_datamovimento          = $this->dtMovimento;
       $oDaoAcordoMovimentacao->ac10_hora                   = $this->sHora;
       $oDaoAcordoMovimentacao->alterar($oDaoAcordoMovimentacao->ac10_sequencial);
       if ($oDaoAcordoMovimentacao->erro_status == 0) {
-        throw new Exception($oDaoAcordoMovimentacao->erro_msg);	
+        throw new Exception($oDaoAcordoMovimentacao->erro_msg);
       }
-      
     } else {
 
       /**
        * Verifica se já possui movimentação corrente
        */
-    	$sCampos                           = " ac10_acordomovimentacaotipo,ac10_sequencial,ac25_acordomovimentacao,";
-    	$sCampos                          .= " ac25_acordomovimentacaocancela,ac10_acordo              ";
-    	$sWhere                            = "      ac10_acordomovimentacaotipo = {$this->getTipo()}    ";
-    	$sWhere                           .= " and ac10_acordo                 = {$this->getAcordo()}  ";
-    	// incluidos os tipos de movimentacao que podem se repetir, paralisações e reativações
-    	$sWhere                           .= " and ac10_acordomovimentacaotipo not in (16,17,18,19) ";
-    	
-    	$sSqlAcordoMovimentacaoCancela     = $oDaoAcordoMovimentacao->sql_query_verificacancelado(null, $sCampos,
-    	                                                                                          null, $sWhere);
-    	$rsSqlAcordoMovimentacaoCancela    = $oDaoAcordoMovimentacao->sql_record($sSqlAcordoMovimentacaoCancela);
-    	
-    	$iNumRowsAcordoMovimentacaoCancela = $oDaoAcordoMovimentacao->numrows;
-    	
+      $sCampos                           = " ac10_acordomovimentacaotipo,ac10_sequencial,ac25_acordomovimentacao,";
+      $sCampos                          .= " ac25_acordomovimentacaocancela,ac10_acordo              ";
+      $sWhere                            = "      ac10_acordomovimentacaotipo = {$this->getTipo()}    ";
+      $sWhere                           .= " and ac10_acordo                 = {$this->getAcordo()}  ";
+      // incluidos os tipos de movimentacao que podem se repetir, paralisações e reativações
+      $sWhere                           .= " and ac10_acordomovimentacaotipo not in (16,17,18,19) ";
+
+      $sSqlAcordoMovimentacaoCancela     = $oDaoAcordoMovimentacao->sql_query_verificacancelado(
+        null,
+        $sCampos,
+        null,
+        $sWhere
+      );
+      $rsSqlAcordoMovimentacaoCancela    = $oDaoAcordoMovimentacao->sql_record($sSqlAcordoMovimentacaoCancela);
+
+      $iNumRowsAcordoMovimentacaoCancela = $oDaoAcordoMovimentacao->numrows;
+
       if ($iNumRowsAcordoMovimentacaoCancela > 0) {
 
-	      for ($iInd = 0; $iInd < $iNumRowsAcordoMovimentacaoCancela; $iInd++) {
-	        
-	      	/**
-	      	 * Se possuir movimentacao corrente nao inclui
-	      	 */
-	        $oAcordoMovimentacaoCancela = db_utils::fieldsMemory($rsSqlAcordoMovimentacaoCancela, $iInd);
-	        if (empty($oAcordoMovimentacaoCancela->ac25_acordomovimentacaocancela)) {
-	        	
-	        	$sMsg = "Acordo {$this->getAcordo()} já possui movimentação corrente!\nInclusão não efetuada.";
-	          throw new Exception($sMsg);
-	        }
-	      }
+        for ($iInd = 0; $iInd < $iNumRowsAcordoMovimentacaoCancela; $iInd++) {
+
+          /**
+           * Se possuir movimentacao corrente nao inclui
+           */
+          $oAcordoMovimentacaoCancela = db_utils::fieldsMemory($rsSqlAcordoMovimentacaoCancela, $iInd);
+          if (empty($oAcordoMovimentacaoCancela->ac25_acordomovimentacaocancela)) {
+
+            $sMsg = "Acordo {$this->getAcordo()} já possui movimentação corrente!\nInclusão não efetuada.";
+            throw new Exception($sMsg);
+          }
+        }
       }
-    	
+
       /**
        * Inclui uma nova movimentação
        */
-	    $oDaoAcordoMovimentacao->ac10_id_usuario        = db_getsession('DB_id_usuario');
-	    $oDaoAcordoMovimentacao->ac10_datamovimento     = empty($this->dtMovimento) ? date("Y-m-d",db_getsession("DB_datausu")) : $this->dtMovimento;
-	    $oDaoAcordoMovimentacao->ac10_hora              = db_hora();
-    	$oDaoAcordoMovimentacao->incluir(null);
+      $oDaoAcordoMovimentacao->ac10_id_usuario        = db_getsession('DB_id_usuario');
+      $oDaoAcordoMovimentacao->ac10_datamovimento     = empty($this->dtMovimento) ? date("Y-m-d", db_getsession("DB_datausu")) : $this->dtMovimento;
+      $oDaoAcordoMovimentacao->ac10_hora              = db_hora();
+
+      $oDaoAcordoMovimentacao->incluir(null);
       if ($oDaoAcordoMovimentacao->erro_status == 0) {
-        throw new Exception($oDaoAcordoMovimentacao->erro_msg); 
+        throw new Exception($oDaoAcordoMovimentacao->erro_msg);
       }
       $this->iCodigo = $oDaoAcordoMovimentacao->ac10_sequencial;
     }
 
     return $this;
-    
   }
-  
+
   /**
    * Cancela o movimento na base de dados
    *
    * @return AcordoMovimentacao
    */
-  public function cancelar() {
-  	
+  public function cancelar()
+  {
+
     if (!db_utils::inTransaction()) {
       throw new Exception("Não existe Transação Ativa.");
     }
-  	
-  	$iCodigo = $this->iCodigo;
-  	if (empty($iCodigo)) {
-  	  throw new Exception("Código para o cancelamento não informado!\nCancelamento não efetuado.");	
-  	}
-  	
-  	$iTipo = $this->getTipo();
-    if (empty($iTipo)) {
-      throw new Exception("Tipo de movimentação não informado!\nCancelamento não efetuado.");  
+
+    $iCodigo = $this->iCodigo;
+    if (empty($iCodigo)) {
+      throw new Exception("Código para o cancelamento não informado!\nCancelamento não efetuado.");
     }
-    
+
+    $iTipo = $this->getTipo();
+    if (empty($iTipo)) {
+      throw new Exception("Tipo de movimentação não informado!\nCancelamento não efetuado.");
+    }
+
     $iAcordo = $this->getAcordo();
     if (empty($iAcordo)) {
-      throw new Exception("Acordo da movimentação não informado!\nCancelamento não efetuado.");  
+      throw new Exception("Acordo da movimentação não informado!\nCancelamento não efetuado.");
     }
-  	
+
     $oDaoAcordo                        = db_utils::getDao("acordo");
-  	$oDaoAcordoMovimentacao            = db_utils::getDao("acordomovimentacao");
+    $oDaoAcordoMovimentacao            = db_utils::getDao("acordomovimentacao");
     $oDaoAcordoMovimentacaoCancela     = db_utils::getDao("acordomovimentacaocancela");
-    
+
     /**
      * Verifica se já possui movimentação cancelada
      */
@@ -355,14 +379,18 @@ abstract class AcordoMovimentacao {
     $sWhere                            = "    ac10_sequencial             = {$this->iCodigo}     ";
     $sWhere                           .= "and ac10_acordomovimentacaotipo = {$this->getTipo()}   ";
     $sWhere                           .= "and ac10_acordo                 = {$this->getAcordo()} ";
-    $sSqlAcordoMovimentacaoCancela     = $oDaoAcordoMovimentacao->sql_query_verificacancelado(null, $sCampos,
-                                                                                              null, $sWhere);
+    $sSqlAcordoMovimentacaoCancela     = $oDaoAcordoMovimentacao->sql_query_verificacancelado(
+      null,
+      $sCampos,
+      null,
+      $sWhere
+    );
     $rsSqlAcordoMovimentacaoCancela    = $oDaoAcordoMovimentacao->sql_record($sSqlAcordoMovimentacaoCancela);
     $iNumRowsAcordoMovimentacaoCancela = $oDaoAcordoMovimentacao->numrows;
-    
+
     if ($iNumRowsAcordoMovimentacaoCancela > 0) {
-        
-    	/**
+
+      /**
        * Se já possuir movimentacao, não efetua o cancelamento
        */
       $oAcordoMovimentacaoCancela = db_utils::fieldsMemory($rsSqlAcordoMovimentacaoCancela, 0);
@@ -370,21 +398,21 @@ abstract class AcordoMovimentacao {
         throw new Exception("O movimento {$this->iCodigo} já foi cancelado!\nCancelamento não efetuado.");
       }
     }
-    
+
     /**
      * Inclui uma nova movimentação
      */
     $oDaoAcordoMovimentacao->ac10_acordomovimentacaotipo = $this->iCodigoCancelamento;
     $oDaoAcordoMovimentacao->ac10_acordo                 = $this->getAcordo();
-    $oDaoAcordoMovimentacao->ac10_obs                    = $this->getObservacao();  
+    $oDaoAcordoMovimentacao->ac10_obs                    = $this->getObservacao();
     $oDaoAcordoMovimentacao->ac10_id_usuario             = db_getsession('DB_id_usuario');
-    $oDaoAcordoMovimentacao->ac10_datamovimento          = date("Y-m-d",db_getsession("DB_datausu"));
+    $oDaoAcordoMovimentacao->ac10_datamovimento          = date("Y-m-d", db_getsession("DB_datausu"));
     $oDaoAcordoMovimentacao->ac10_hora                   = db_hora();
     $oDaoAcordoMovimentacao->incluir(null);
     if ($oDaoAcordoMovimentacao->erro_status == 0) {
-      throw new Exception($oDaoAcordoMovimentacao->erro_msg); 
+      throw new Exception($oDaoAcordoMovimentacao->erro_msg);
     }
-    
+
     /**
      * Inclui um novo cancelamento
      */
@@ -392,9 +420,9 @@ abstract class AcordoMovimentacao {
     $oDaoAcordoMovimentacaoCancela->ac25_acordomovimentacaocancela = $this->iCodigo;
     $oDaoAcordoMovimentacaoCancela->incluir(null);
     if ($oDaoAcordoMovimentacaoCancela->erro_status == 0) {
-      throw new Exception($oDaoAcordoMovimentacaoCancela->erro_msg); 
+      throw new Exception($oDaoAcordoMovimentacaoCancela->erro_msg);
     }
-    
+
     /**
      * Acerta movimentacao corrente para alterar um movimento anterior
      */
@@ -403,33 +431,34 @@ abstract class AcordoMovimentacao {
     $sWhere                     = "ac10_sequencial < {$this->iCodigo} and ac10_acordo = " . $this->iAcordo;
     $sOrderBy                   = "ac10_sequencial desc limit 1                  ";
     $sSqlAcordoMovimentacao     = $oDaoAcordoMovimentacao->sql_query_acertaracordo(null, $sCampos, $sOrderBy, $sWhere);
-    
+
     $rsSqlAcordoMovimentacao    = db_query($sSqlAcordoMovimentacao);
     $iNumRowsAcordoMovimentacao = pg_num_rows($rsSqlAcordoMovimentacao);
     if ($iNumRowsAcordoMovimentacao > 0) {
-    	
-    	/**
-    	 * Altera situacao do movimento
-    	 */
+
+      /**
+       * Altera situacao do movimento
+       */
       $oAcordoMovimentacao             = db_utils::fieldsMemory($rsSqlAcordoMovimentacao, 0);
       $oDaoAcordo->ac16_sequencial     = $oAcordoMovimentacao->ac10_acordo;
       $oDaoAcordo->ac16_acordosituacao = $oAcordoMovimentacao->ac09_acordosituacao;
-      $rsDataAssinatura = db_query('SELECT ac16_dataassinatura from acordo where ac16_sequencial = '.$oAcordoMovimentacao->ac10_acordo);
-      $oDaoAcordo->ac16_dataassinatura = db_utils::fieldsMemory( $rsDataAssinatura, 0)->ac16_dataassinatura;
+      $rsDataAssinatura = db_query('SELECT ac16_dataassinatura from acordo where ac16_sequencial = ' . $oAcordoMovimentacao->ac10_acordo);
+      $oDaoAcordo->ac16_dataassinatura = db_utils::fieldsMemory($rsDataAssinatura, 0)->ac16_dataassinatura;
       $oDaoAcordo->alterar($oDaoAcordo->ac16_sequencial);
-      
+
       if ($oDaoAcordo->erro_status == 0) {
         throw new Exception($oDaoAcordo->erro_msg);
       }
     }
     return $this;
   }
-/**
+  /**
    * corrige as reservas de saldo 
    *
    */
-  protected function corrigeReservas() {
-    
+  protected function corrigeReservas()
+  {
+
     $oContrato       = new Acordo($this->getAcordo());
     $iOrigemContrato = $oContrato->getOrigem();
     $oUltimaPosicao  = $oContrato->getUltimaPosicao();
@@ -447,21 +476,21 @@ abstract class AcordoMovimentacao {
           $oDaoPcProcitem   = db_utils::getDao("pcprocitem");
           $sSqlDadosDotacao = $oDaoPcProcitem->sql_query_dotac($oOrigemItem->codigo, "pcdotac.*");
           $rsDotacoes       = $oDaoPcProcitem->sql_record($sSqlDadosDotacao);
-          
+
           $oDaoReservalSolicitacao = db_utils::getDao("orcreservasol");
           $oDaoReserva             = db_utils::getDao("orcreserva");
           if ($oDaoPcProcitem->numrows > 0) {
-            
+
             for ($iDot = 0; $iDot < $oDaoPcProcitem->numrows; $iDot++) {
-              
-              $oDotacao       = db_utils::fieldsMemory($rsDotacoes, $iDot);  
+
+              $oDotacao       = db_utils::fieldsMemory($rsDotacoes, $iDot);
               $oDotacaoSaldo  = new Dotacao($oDotacao->pc13_coddot, $oDotacao->pc13_anousu);
               $nSaldoReservar = $oDotacao->pc13_valor;
               if (round($oDotacaoSaldo->getSaldoFinal() <= $oDotacao->pc13_valor, 2)) {
                 $nSaldoReservar = $oDotacaoSaldo->getSaldoFinal();
               }
               if ($nSaldoReservar > 0) {
-                
+
                 $oDaoReserva->o80_anousu = $oDotacao->pc13_anousu;
                 $oDaoReserva->o80_coddot = $oDotacao->pc13_coddot;
                 $oDaoReserva->o80_dtini  = date("Y-m-d", db_getsession("DB_datausu"));
@@ -471,19 +500,19 @@ abstract class AcordoMovimentacao {
                 $oDaoReserva->o80_descr  = "reserva de saldo";
                 $oDaoReserva->o80_justificativa  = "reserva de saldo";
                 $oDaoReserva->incluir(null);
-                
+
                 if ($oDaoReserva->erro_status == 0) {
-                  
+
                   $sMessage = "Erro ao reservar saldo!\n{$oDaoReserva->erro_msg}";
                   throw new Exception($sMessage);
                 }
-                
+
                 $oDaoReservalSolicitacao->o82_codres    = $oDaoReserva->o80_codres;
                 $oDaoReservalSolicitacao->o82_solicitem = $oDotacao->pc13_codigo;
                 $oDaoReservalSolicitacao->o82_pcdotac   = $oDotacao->pc13_sequencial;
                 $oDaoReservalSolicitacao->incluir(null);
                 if ($oDaoReservalSolicitacao->erro_status == 0) {
-                  
+
                   $sMessage = "Erro ao reservar saldo!\n{$oDaoReservalSolicitacao->erro_msg}";
                   throw new Exception($sMessage);
                 }
@@ -491,7 +520,7 @@ abstract class AcordoMovimentacao {
             }
           }
         } else if ($oOrigemItem->tipo == 2) {
-          
+
           /**
            * Verificamos na licitacao qual o codigo do item da solicitacao.
            */
@@ -501,17 +530,17 @@ abstract class AcordoMovimentacao {
           $oDaoReservalSolicitacao = db_utils::getDao("orcreservasol");
           $oDaoReserva             = db_utils::getDao("orcreserva");
           if ($oDaoLicLicitem->numrows > 0) {
-            
+
             for ($iDot = 0; $iDot < $oDaoLicLicitem->numrows; $iDot++) {
-              
-              $oDotacao       = db_utils::fieldsMemory($rsDotacoes, $iDot);  
+
+              $oDotacao       = db_utils::fieldsMemory($rsDotacoes, $iDot);
               $oDotacaoSaldo  = new Dotacao($oDotacao->pc13_coddot, $oDotacao->pc13_anousu);
               $nSaldoReservar = $oDotacao->pc13_valor;
               if (round($oDotacaoSaldo->getSaldoFinal() <= $oDotacao->pc13_valor, 2)) {
                 $nSaldoReservar = $oDotacaoSaldo->getSaldoFinal();
               }
               if ($nSaldoReservar > 0) {
-                
+
                 $oDaoReserva->o80_anousu = $oDotacao->pc13_anousu;
                 $oDaoReserva->o80_coddot = $oDotacao->pc13_coddot;
                 $oDaoReserva->o80_dtini  = date("Y-m-d", db_getsession("DB_datausu"));
@@ -521,19 +550,19 @@ abstract class AcordoMovimentacao {
                 $oDaoReserva->o80_descr  = "reserva de saldo";
                 $oDaoReserva->o80_justificativa  = "reserva de saldo";
                 $oDaoReserva->incluir(null);
-                
+
                 if ($oDaoReserva->erro_status == 0) {
-                  
+
                   $sMessage = "Erro ao reservar saldo!\n{$oDaoReserva->erro_msg}";
                   throw new Exception($sMessage);
                 }
-                
+
                 $oDaoReservalSolicitacao->o82_codres    = $oDaoReserva->o80_codres;
                 $oDaoReservalSolicitacao->o82_solicitem = $oDotacao->pc13_codigo;
                 $oDaoReservalSolicitacao->o82_pcdotac   = $oDotacao->pc13_sequencial;
                 $oDaoReservalSolicitacao->incluir(null);
                 if ($oDaoReservalSolicitacao->erro_status == 0) {
-                  
+
                   $sMessage = "Erro ao reservar saldo!\n{$oDaoReservalSolicitacao->erro_msg}";
                   throw new Exception($sMessage);
                 }
@@ -542,37 +571,39 @@ abstract class AcordoMovimentacao {
           }
         }
       }
-    } 
+    }
   }
-  
+
   /**
    * Remove um acordomovimentacao
    * 
    * @throws DBException
    * @throws BusinessException
    */
-  public function remover() {
-    
-    if ( !db_utils::inTransaction() ) {
-      throw new DBException( _M( self::CAMINHO_MENSAGENS."sem_transacao_ativa" ) );
+  public function remover()
+  {
+
+    if (!db_utils::inTransaction()) {
+      throw new DBException(_M(self::CAMINHO_MENSAGENS . "sem_transacao_ativa"));
     }
-    
-    if ( $this->getCodigo() == null ) {
-      throw new BusinessException( _M( self::CAMINHO_MENSAGENS."sequencial_nao_existente" ) );
+
+    if ($this->getCodigo() == null) {
+      throw new BusinessException(_M(self::CAMINHO_MENSAGENS . "sequencial_nao_existente"));
     }
-      
+
     $oDaoAcordoMovimentacao = new cl_acordomovimentacao();
-    $oDaoAcordoMovimentacao->excluir( $this->getCodigo() );
-    
-    if ( $oDaoAcordoMovimentacao->erro_status == 0 ) {
-      throw new BusinessException( $oDaoAcordoMovimentacao->erro_msg );
+    $oDaoAcordoMovimentacao->excluir($this->getCodigo());
+
+    if ($oDaoAcordoMovimentacao->erro_status == 0) {
+      throw new BusinessException($oDaoAcordoMovimentacao->erro_msg);
     }
   }
 
   /**
    * @return Boolean
    */
-  public function verificaPeriodoContabil($sData = null) {
+  public function verificaPeriodoContabil($sData = null)
+  {
     if ($sData == null) {
       $sData = $this->dtMovimento;
     }
@@ -584,14 +615,15 @@ abstract class AcordoMovimentacao {
     return $retorno;
   }
 
-    public function verificaPeriodoPatrimonial(){
-        $sData = $this->dtMovimento;
-        $oDaoCondataconf = db_utils::getDao("condataconf");
-        $retorno = $oDaoCondataconf->verificaPeriodoPatrimonial($sData);
-        if (!$retorno) {
-            throw new Exception($oDaoCondataconf->erro_msg);
-        }
-
-        return $retorno;
+  public function verificaPeriodoPatrimonial()
+  {
+    $sData = $this->dtMovimento;
+    $oDaoCondataconf = db_utils::getDao("condataconf");
+    $retorno = $oDaoCondataconf->verificaPeriodoPatrimonial($sData);
+    if (!$retorno) {
+      throw new Exception($oDaoCondataconf->erro_msg);
     }
+
+    return $retorno;
+  }
 }

@@ -123,34 +123,103 @@ class SicomArquivoNotasFiscais extends SicomArquivoBase implements iPadArquivoBa
      */
     db_inicio_transacao();
 
-    $sSql = "select distinct  '10' as tiporegistro,
-              empnota.e69_codnota as codnotafiscal,
-              si09_codorgaotce as codorgao,
-              empnota.e69_numero as nfnumero,
-              case when empnota.e69_notafiscaleletronica = 2 OR empnota.e69_notafiscaleletronica = 3 then empnota.e69_nfserie else ' ' end as nfserie,
-              (case length(cgm.z01_cgccpf) when 11 then 1
-                else 2
-              end) as tipodocumento,
-              cgm.z01_cgccpf  as nrodocumento,
-              REPLACE(cgm.z01_incest,'.','') as nroinscestadual,
-              cgm.z01_incmunici as nroinscmunicipal,
-              cadendermunicipio.db72_descricao as nomemunicipio,
-              cgm.z01_cep as cepmunicipio,
-              cgm.z01_uf as ufcredor,
-              empnota.e69_notafiscaleletronica as notafiscaleletronica,
-              case when empnota.e69_notafiscaleletronica=1 or empnota.e69_notafiscaleletronica=4 then empnota.e69_chaveacesso else ' ' end as chaveacesso,
-              case when empnota.e69_notafiscaleletronica=2 then empnota.e69_chaveacesso else ' ' end as outrachaveacesso,
-              ' ' as nfaidf,
-              empnota.e69_dtnota as dtemissaonf,
-              ' ' as dtvencimentonf,
-              (select sum(empnotaitem.e72_vlrliq) from empenho.empnotaitem as empnotaitem where empnotaitem.e72_codnota = empnota.e69_codnota) as nfvalortotal,
-              0.0 as nfvalordesconto,
-              (select sum(empnotaitem.e72_vlrliq) from empenho.empnotaitem as empnotaitem where empnotaitem.e72_codnota = empnota.e69_codnota) as nfvalorliquido
-            from empenho.empnota as empnota
-            inner join empenho.empempenho as empempenho on (empnota.e69_numemp=empempenho.e60_numemp)
-            inner join  protocolo.cgm as cgm on (empempenho.e60_numcgm=cgm.z01_numcgm)
-            inner join configuracoes.db_config as db_config on (empempenho.e60_instit=db_config.codigo)
-            inner join patrimonio.cgmendereco as cgmendereco on (cgm.z01_numcgm=cgmendereco.z07_numcgm and z07_tipo = 'P')
+    $sSql = "select
+            distinct '10' as tiporegistro,
+            empnota.e69_codnota as codnotafiscal,
+            si09_codorgaotce as codorgao,
+            empnota.e69_numero as nfnumero,
+            case
+                when empnota.e69_notafiscaleletronica = 2
+                OR empnota.e69_notafiscaleletronica = 3 then empnota.e69_nfserie
+                else ' '
+            end as nfserie,
+            CASE 
+                WHEN cgmfilial.z01_cgccpf IS NOT NULL
+                THEN (
+                    case
+                        length(cgmfilial.z01_cgccpf)
+                        when 11 then 1
+                        else 2
+                    end
+                ) 
+            ELSE 
+                (
+                    case
+                        length(cgm.z01_cgccpf)
+                        when 11 then 1
+                        else 2
+                    end
+                ) 
+            END as tipodocumento,
+            CASE 
+                WHEN cgmfilial.z01_cgccpf IS NOT NULL
+                THEN cgmfilial.z01_cgccpf
+                ELSE cgm.z01_cgccpf
+            END as nrodocumento,
+            CASE 
+                WHEN cgmfilial.z01_cgccpf IS NOT NULL
+                THEN REPLACE(cgmfilial.z01_incest, '.', '') 
+                ELSE REPLACE(cgm.z01_incest, '.', '') 
+            END as nroinscestadual,
+            CASE 
+                WHEN cgmfilial.z01_cgccpf IS NOT NULL
+                THEN cgmfilial.z01_incmunici 
+                ELSE cgm.z01_incmunici
+            END as nroinscmunicipal,
+            cadendermunicipio.db72_descricao as nomemunicipio,
+            CASE 
+                WHEN cgmfilial.z01_cgccpf IS NOT NULL
+                THEN cgmfilial.z01_cep 
+                ELSE cgm.z01_cep
+            END as cepmunicipio,
+            CASE 
+                WHEN cgmfilial.z01_cgccpf IS NOT NULL
+                THEN cgmfilial.z01_uf 
+                ELSE cgm.z01_uf
+            END as ufcredor,
+            empnota.e69_notafiscaleletronica as notafiscaleletronica,
+            case
+                when empnota.e69_notafiscaleletronica = 1
+                or empnota.e69_notafiscaleletronica = 4 then empnota.e69_chaveacesso
+                else ' '
+            end as chaveacesso,
+            case
+                when empnota.e69_notafiscaleletronica = 2 then empnota.e69_chaveacesso
+                else ' '
+            end as outrachaveacesso,
+            ' ' as nfaidf,
+            empnota.e69_dtnota as dtemissaonf,
+            ' ' as dtvencimentonf,
+            (
+                select
+                    sum(empnotaitem.e72_vlrliq)
+                from
+                    empenho.empnotaitem as empnotaitem
+                where
+                    empnotaitem.e72_codnota = empnota.e69_codnota
+            ) as nfvalortotal,
+            0.0 as nfvalordesconto,
+            (
+                select
+                    sum(empnotaitem.e72_vlrliq)
+                from
+                    empenho.empnotaitem as empnotaitem
+                where
+                    empnotaitem.e72_codnota = empnota.e69_codnota
+            ) as nfvalorliquido
+        from
+            empenho.empnota as empnota
+            inner join empenho.empempenho as empempenho on (empnota.e69_numemp = empempenho.e60_numemp)
+            inner join protocolo.cgm as cgm on (empempenho.e60_numcgm = cgm.z01_numcgm)
+            left join protocolo.cgm as cgmfilial on (empnota.e69_cgmemitente = cgmfilial.z01_numcgm AND cgmfilial.z01_numcgm <> 0)
+            inner join configuracoes.db_config as db_config on (empempenho.e60_instit = db_config.codigo)
+            inner join patrimonio.cgmendereco as cgmendereco on (
+                ((cgmfilial.z01_numcgm = cgmendereco.z07_numcgm AND cgmfilial.z01_cgccpf IS NOT NULL)
+                OR 
+                (cgm.z01_numcgm = cgmendereco.z07_numcgm AND cgmfilial.z01_cgccpf IS NULL)
+                )
+                and z07_tipo = 'P'
+            )
             inner join configuracoes.endereco as endereco on (cgmendereco.z07_endereco = endereco.db76_sequencial)
             inner join configuracoes.cadenderlocal as cadenderlocal on (endereco.db76_cadenderlocal = cadenderlocal.db75_sequencial)
             inner join configuracoes.cadenderbairrocadenderrua as cadenderbairrocadenderrua  on (cadenderbairrocadenderrua.db87_sequencial = cadenderlocal.db75_cadenderbairrocadenderrua)
@@ -302,10 +371,29 @@ class SicomArquivoNotasFiscais extends SicomArquivoBase implements iPadArquivoBa
       $sSql = "select '20' as tiporegistro,
         empnota.e69_numero as nfnumero,
         case when empnota.e69_notafiscaleletronica = 2 OR empnota.e69_notafiscaleletronica = 3 then empnota.e69_nfserie else ' ' end as nfserie,
-        (case length(cgm.z01_cgccpf) when 11 then 1
-                else 2
-              end) as tipodocumento,
-        cgm.z01_cgccpf  as nrodocumento,
+        CASE 
+            WHEN cgmfilial.z01_cgccpf IS NOT NULL
+            THEN (
+                case
+                    length(cgmfilial.z01_cgccpf)
+                    when 11 then 1
+                    else 2
+                end
+            ) 
+        ELSE 
+            (
+                case
+                    length(cgm.z01_cgccpf)
+                    when 11 then 1
+                    else 2
+                end
+            ) 
+        END as tipodocumento,
+        CASE 
+            WHEN cgmfilial.z01_cgccpf IS NOT NULL
+            THEN cgmfilial.z01_cgccpf
+            ELSE cgm.z01_cgccpf
+        END as nrodocumento,
         case when empnota.e69_notafiscaleletronica=1 or empnota.e69_notafiscaleletronica=4 then empnota.e69_chaveacesso else ' ' end as chaveacesso,
         empnota.e69_dtnota as dtemissaonf,
         lpad((CASE WHEN o40_codtri = '0'
@@ -324,6 +412,7 @@ class SicomArquivoNotasFiscais extends SicomArquivoBase implements iPadArquivoBa
       inner join empenho.pagordem as pagordem on (pagordemnota.e71_codord=pagordem.e50_codord)
       inner join orcamento.orcdotacao as orcdotacao on (empempenho.e60_coddot = orcdotacao.o58_coddot)
       inner join cgm on (empempenho.e60_numcgm=cgm.z01_numcgm)
+      left join protocolo.cgm as cgmfilial on (empnota.e69_cgmemitente = cgmfilial.z01_numcgm AND cgmfilial.z01_numcgm <> 0)
       left join infocomplementaresinstit on si09_instit = empempenho.e60_instit
       LEFT JOIN orcunidade on o58_anousu = o41_anousu and o58_orgao = o41_orgao and o58_unidade = o41_unidade
       LEFT JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu

@@ -456,5 +456,9 @@ class cl_pctipocompra {
 			$sql .= " LIMIT ".$limite;
 		return $sql;
 	}
+  function sql_tipocompra_query ($lic211_tipo){
+    $sql = "select pc50_codcom from pctipocompra where pc50_pctipocompratribunal = 10$lic211_tipo";
+    return $sql;
+  }
 }
 ?>

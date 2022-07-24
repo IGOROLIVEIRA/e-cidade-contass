@@ -32,14 +32,15 @@
  * @package Contratos
  */
 require_once("model/AcordoMovimentacao.model.php");
-class AcordoRescisao extends AcordoMovimentacao {
+class AcordoRescisao extends AcordoMovimentacao
+{
 
   /**
    * Tipo da Movimentação
    *
    * @var integer
    */
-	protected $iTipo               = 6;
+  protected $iTipo               = 6;
 
   /**
    * Data do Movimento
@@ -47,6 +48,8 @@ class AcordoRescisao extends AcordoMovimentacao {
    * @var string
    */
   protected $dtMovimento         = '';
+
+
 
   /**
    * Código do Movimento de Cancelamento
@@ -67,9 +70,10 @@ class AcordoRescisao extends AcordoMovimentacao {
    *
    * @param integer $iCodigo
    */
-  public function __construct($iCodigo = null) {
+  public function __construct($iCodigo = null)
+  {
 
-  	parent::__construct($iCodigo);
+    parent::__construct($iCodigo);
   }
 
   /**
@@ -77,9 +81,10 @@ class AcordoRescisao extends AcordoMovimentacao {
    *
    * @return integer $iTipo
    */
-  public function setTipo($iTipo) {
+  public function setTipo($iTipo)
+  {
 
-  	$this->iTipo = 6;
+    $this->iTipo = 6;
   }
 
   /**
@@ -87,22 +92,26 @@ class AcordoRescisao extends AcordoMovimentacao {
    *
    * @param string $dtMovimento
    */
-  public function setDataMovimento($dtMovimento = '') {
+  public function setDataMovimento($dtMovimento = '')
+  {
 
     $this->dtMovimento = $dtMovimento;
   }
 
+
   /**
    * @param float $nValorRescisao
    */
-  public function setValorRescisao($nValorRescisao = 0) {
+  public function setValorRescisao($nValorRescisao = 0)
+  {
     $this->nValorRescisao = floatval($nValorRescisao);
   }
 
   /**
    * @return string $nValorRescisao
    */
-  public function getValorRescisao() {
+  public function getValorRescisao()
+  {
     return $this->nValorRescisao;
   }
 
@@ -112,7 +121,8 @@ class AcordoRescisao extends AcordoMovimentacao {
    *
    * @return AcordoRescisao
    */
-  public function save() {
+  public function save()
+  {
 
     parent::save();
     $iCodigoAcordo = $this->getAcordo();
@@ -135,7 +145,8 @@ class AcordoRescisao extends AcordoMovimentacao {
    *
    * @return AcordoRescisao
    */
-  public function cancelar() {
+  public function cancelar()
+  {
 
     $iCodigoAcordo = $this->getAcordo();
     $oDaoAcordo                      = db_utils::getDao("acordo");
@@ -148,7 +159,7 @@ class AcordoRescisao extends AcordoMovimentacao {
     }
 
     parent::cancelar();
-  /**
+    /**
      * verificamos o tipo do acordo
      */
     $oContrato       = new Acordo($this->getAcordo());
@@ -218,7 +229,8 @@ class AcordoRescisao extends AcordoMovimentacao {
    *
    * @return AcordoRescisao
    */
-  public function desfazerCancelamento() {
+  public function desfazerCancelamento()
+  {
 
 
     if (!db_utils::inTransaction()) {
@@ -252,7 +264,7 @@ class AcordoRescisao extends AcordoMovimentacao {
     $rsSqlAcordoMovimentacaoCancela    = $oDaoAcordoMovimentacaoCancela->sql_record($sSqlAcordoMovimentacaoCancela);
     $iNumRowsAcordoMovimentacaoCancela = $oDaoAcordoMovimentacaoCancela->numrows;
     if ($iNumRowsAcordoMovimentacaoCancela == 0) {
-    	throw new Exception("Não existe cancelamento dessa rescisão!\nProcessamento cancelado.");
+      throw new Exception("Não existe cancelamento dessa rescisão!\nProcessamento cancelado.");
     }
 
     $oMovimentoCancelado = db_utils::fieldsMemory($rsSqlAcordoMovimentacaoCancela, 0);
@@ -264,7 +276,7 @@ class AcordoRescisao extends AcordoMovimentacao {
     $oDaoAcordoMovimentacao->ac10_acordo                 = $this->getAcordo();
     $oDaoAcordoMovimentacao->ac10_obs                    = $this->getObservacao();
     $oDaoAcordoMovimentacao->ac10_id_usuario             = db_getsession('DB_id_usuario');
-    $oDaoAcordoMovimentacao->ac10_datamovimento          = date("Y-m-d",db_getsession("DB_datausu"));
+    $oDaoAcordoMovimentacao->ac10_datamovimento          = date("Y-m-d", db_getsession("DB_datausu"));
     $oDaoAcordoMovimentacao->ac10_hora                   = db_hora();
     $oDaoAcordoMovimentacao->incluir(null);
     if ($oDaoAcordoMovimentacao->erro_status == 0) {
@@ -290,22 +302,23 @@ class AcordoRescisao extends AcordoMovimentacao {
     if ($oDaoAcordo->erro_status == 0) {
       throw new Exception($oDaoAcordo->erro_msg);
     }
-  	$this->corrigeReservas();
+    $this->corrigeReservas();
     return $this;
   }
-
-    /**
-     * @return Boolean
-     */
-    public function verificaPeriodoPatrimonial() {
-        return parent::verificaPeriodoPatrimonial();
-    }
 
   /**
    * @return Boolean
    */
-  public function verificaPeriodoContabil($sData = null) {
+  public function verificaPeriodoPatrimonial()
+  {
+    return parent::verificaPeriodoPatrimonial();
+  }
+
+  /**
+   * @return Boolean
+   */
+  public function verificaPeriodoContabil($sData = null)
+  {
     return parent::verificaPeriodoContabil($sData);
   }
 }
-?>

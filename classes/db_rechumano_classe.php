@@ -249,14 +249,8 @@ class cl_rechumano {
      if($this->ed20_i_codigoinep == null ){ 
        $this->ed20_i_codigoinep = "null";
      }
-     if($this->ed20_i_pais == null ){ 
-       $this->erro_sql = " Campo País nao Informado.";
-       $this->erro_campo = "ed20_i_pais";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->ed20_i_pais == null || $this->ed20_i_pais == " "){ 
+      $this->ed20_i_pais = 10;
      }
      if($this->ed20_i_tiposervidor == null ){ 
        $this->erro_sql = " Campo Servidor da Prefeitura nao Informado.";
@@ -387,7 +381,7 @@ class cl_rechumano {
                                ,$this->ed20_i_censocartorio 
                                ,$this->ed20_i_zonaresidencia
                       )";
-     $result = db_query($sql); 
+     $result = db_query($sql);
      if($result==false){ 
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){

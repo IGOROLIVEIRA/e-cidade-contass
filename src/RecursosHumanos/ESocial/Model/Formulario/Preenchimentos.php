@@ -223,6 +223,71 @@ class Preenchimentos
         });
     }
 
+    public function buscarPreenchimentoS1010($codigoFormulario, $rubrica)
+    {
+        if ($rubrica != null) {
+            $andRubricas = "
+                AND rh27_rubric IN (".str_replace(' ', '', $rubrica).")
+            ";
+        }
+        $sql = "SELECT
+        rh27_rubric AS codrubr,
+        rh27_instit AS instituicao,
+        rh27_descr AS dscRubr,
+        rh27_pd AS tpRubr,
+
+     (SELECT db104_valorresposta
+      FROM avaliacaopergunta
+      INNER JOIN avaliacaoperguntaopcao ON db104_avaliacaopergunta = db103_sequencial
+      WHERE db104_sequencial = rh27_codincidprev) AS codIncCP,
+
+     (SELECT db104_valorresposta
+      FROM avaliacaopergunta
+      INNER JOIN avaliacaoperguntaopcao ON db104_avaliacaopergunta = db103_sequencial
+      WHERE db104_sequencial = rh27_codincidirrf) AS codIncIRRF,
+
+     (SELECT db104_valorresposta
+      FROM avaliacaopergunta
+      INNER JOIN avaliacaoperguntaopcao ON db104_avaliacaopergunta = db103_sequencial
+      WHERE db104_sequencial = rh27_codincidfgts) AS codIncFGTS,
+
+     (SELECT db104_valorresposta
+      FROM avaliacaopergunta
+      INNER JOIN avaliacaoperguntaopcao ON db104_avaliacaopergunta = db103_sequencial
+      WHERE db104_sequencial = rh27_codincidregime) AS codIncCPRP,
+        CASE
+            WHEN rh27_tetoremun = 't' THEN 'S'
+            ELSE 'N'
+        END AS tetoRemun,
+        'TABRUB1' AS codidentpadrao,
+     (SELECT r11_anousu||''||r11_mesusu AS anofolha
+      FROM cfpess
+      ORDER BY r11_anousu DESC
+      LIMIT 1), e991_rubricasesocial AS natRubr
+        FROM rhrubricas
+        INNER JOIN baserubricasesocial ON e991_rubricas = rh27_rubric
+        AND e991_instit = rh27_instit
+        INNER JOIN rubricasesocial ON e991_rubricasesocial = e990_sequencial
+        WHERE rh27_pd IS NOT NULL
+            $andRubricas
+            AND rh27_codincidprev IS NOT NULL
+            AND rh27_codincidirrf IS NOT NULL
+            AND rh27_codincidfgts IS NOT NULL
+            AND rh27_codincidregime IS NOT NULL
+            AND rh27_rubric NOT IN ('R978')
+            AND rh27_instit = ".db_getsession('DB_instit');
+        $rsRubrica = \db_query($sql);
+
+        if (!$rsRubrica) {
+            throw new \Exception("Erro ao buscar os preenchimentos do S1010");
+        }
+
+        /**
+         * @todo busca os empregadores da instituição e adicona para cada rubrica
+         */
+        return \db_utils::getCollectionByRecord($rsRubrica);
+    }
+
     /**
      * @param integer $codigoFormulario
      * @return stdClass[]
@@ -300,10 +365,20 @@ class Preenchimentos
                  when rh01_nacion = 64 then 728
                  end as paisNascto,
             105 as paisnac,
-
-                case when ruas.j14_tipo is null then 'R'
-                else j88_sigla
-                end as tpLograd,
+            (select j88_sigla from cgm intcgm
+            inner join patrimonio.cgmendereco as cgmendereco on (intcgm.z01_numcgm=cgmendereco.z07_numcgm)
+            inner join configuracoes.endereco as endereco on (cgmendereco.z07_endereco = endereco.db76_sequencial)
+            inner join cadenderlocal on cadenderlocal.db75_sequencial = db76_sequencial
+            inner join cadenderbairrocadenderrua on db87_sequencial = db75_cadenderbairrocadenderrua
+             inner join cadenderbairro     on  db73_sequencial  = db87_cadenderbairro
+             inner join cadenderrua        on  db74_sequencial  = db87_cadenderrua
+             inner join cadendermunicipio  on  db72_sequencial  = db73_cadendermunicipio
+             inner join cadendermunicipio  as a on a.db72_sequencial = db74_cadendermunicipio
+             inner join cadenderestado     on  db71_sequencial  = a.db72_cadenderestado
+             inner join cadenderpais       on  db70_sequencial  = db71_cadenderpais
+             inner join cadenderruaruastipo on db85_cadenderrua = db74_sequencial
+             inner join ruastipo           on  j88_codigo       = db85_ruastipo
+            where z01_numcgm = intcgm.z01_numcgm limit 1) as tpLograd,
                 z01_ender as dscLograd,
                 z01_numero  as nrLograd,
                 z01_compl as complemento,
@@ -408,12 +483,11 @@ class Preenchimentos
                 case when r33_tiporegime = '1' then 1
                 when r33_tiporegime = '2' then 2
                 end as tpRegPrev,
-                case when DATE_PART('YEAR',rh01_admiss) <= 2021 and DATE_PART('MONTH',rh01_admiss) <= 11 then 'S'
-                when DATE_PART('YEAR',rh01_admiss) < 2021 and DATE_PART('MONTH',rh01_admiss) <= 12 then 'S'
-                when DATE_PART('YEAR',rh01_admiss) = 2021 and DATE_PART('MONTH',rh01_admiss) = 12 then 'N'
-                when DATE_PART('YEAR',rh01_admiss) >= 2021 then 'N'
+                case when DATE_PART('YEAR',rh01_admiss) < 2021 then 'S'
+               	when DATE_PART('YEAR',rh01_admiss) = 2021 and DATE_PART('MONTH',rh01_admiss) < 11 then 'S'
+               	when DATE_PART('YEAR',rh01_admiss) = 2021 and DATE_PART('MONTH',rh01_admiss) = 11 and DATE_PART('DAY',rh01_admiss) <= 21  then 'S'
+                else 'N'
                 end as cadIni,
-
                 case when (h13_categoria = 101 or h13_categoria = 106 or h13_categoria = 111) then rh01_admiss
                 end as dtAdm,
                 case when (h13_categoria = 101 or h13_categoria = 106 or h13_categoria = 111) and (rh01_tipadm = 1 or rh01_tipadm = 2) then 1
@@ -570,7 +644,7 @@ class Preenchimentos
 					            and date_part('year',rhpessoal.rh01_admiss) = date_part('year',fc_getsession('DB_datausu')::date)
 					            and (date_part('year',fc_getsession('DB_datausu')::date)::varchar || lpad(date_part('month',fc_getsession('DB_datausu')::date)::varchar,2,'0'))::integer > 202207
 					            )
-				            ) order by z01_nome asc limit 1000";
+				            ) order by z01_nome asc";
 
         $rs = \db_query($sql);
 

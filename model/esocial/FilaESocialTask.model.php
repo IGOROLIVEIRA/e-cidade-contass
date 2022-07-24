@@ -119,7 +119,7 @@ class FilaESocialTask extends Task implements iTarefa
 
             $dados[] = $exportar->getProtocoloEnvioLote();
 
-            $dao->setProtocolo($exportar->getProtocoloEnvioLote());
+            $dao->setProtocolo($dadosEnvio->rh213_sequencial, $exportar->getProtocoloEnvioLote());
             if ($dao->erro_status == "0") {
                 throw new Exception("Não foi possível adicionar o protocolo.");
             }
@@ -127,7 +127,7 @@ class FilaESocialTask extends Task implements iTarefa
             /**
              * Esperar alguns segundos pois em muitos casos, o lote ainda não havia sido processado
              */
-            sleep(2);
+            sleep(5);
             $exportar = new ESocial(Registry::get('app.config'), "consulta.php");
             $exportar->setDados($dados);
             $retorno = $exportar->request();

@@ -69,7 +69,10 @@ if(isset($ordem) && $ordem != ""){
 }
 
 $sql =  "
-	select	h.*, 
+	select (select j13_descr from iptubase         
+	        inner join lote on j01_idbql = j34_idbql 
+	        inner join bairro on j13_codi = j34_bairro 
+	        where j01_matric = h.j01_matric) as bairro, h.*, 
 					(select j23_m2terr from iptucalc where j23_anousu = $ano1 and j23_matric = h.j01_matric) as j23_m2terr_ano1,
 					(select j23_arealo from iptucalc where j23_anousu = $ano1 and j23_matric = h.j01_matric) as j23_arealo_ano1,
 					(select j23_areaed from iptucalc where j23_anousu = $ano1 and j23_matric = h.j01_matric) as j23_areaed_ano1,
@@ -147,6 +150,7 @@ if ($clabre_arquivo->arquivo != false) {
 	fputs($clabre_arquivo->arquivo, "areaedif$ano2;");
 	fputs($clabre_arquivo->arquivo, "vlrvenalterreno$ano2;");
 	fputs($clabre_arquivo->arquivo, "vlrvenaledif$ano2;");
+	fputs($clabre_arquivo->arquivo, "bairro;");
 	fputs($clabre_arquivo->arquivo, "\n");
 
 }
@@ -186,6 +190,7 @@ for ($i = 0;$i < $numrows;$i++){
 	fputs($clabre_arquivo->arquivo, trim(db_formatar($j23_areaed_ano2   ,'f')).";");
 	fputs($clabre_arquivo->arquivo, trim(db_formatar($j23_vlrter_ano2   ,'f')).";");
 	fputs($clabre_arquivo->arquivo, trim(db_formatar($j23_vlredi_ano2   ,'f')).";");
+	fputs($clabre_arquivo->arquivo, trim($bairro).";");
 	fputs($clabre_arquivo->arquivo, "\n");
 	
 }

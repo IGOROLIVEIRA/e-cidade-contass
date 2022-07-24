@@ -398,6 +398,7 @@ class cl_orcsuplemval {
   }
    // funcao do sql 
    function sql_query_file ( $o47_codsup=null,$o47_anousu=null,$o47_coddot=null,$campos="*",$ordem=null,$dbwhere=""){ 
+
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = split("#",$campos);
