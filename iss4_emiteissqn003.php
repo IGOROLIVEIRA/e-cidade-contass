@@ -55,6 +55,7 @@ $msgvencida   = '';
 $nomearquivos = '';
 $limit        = '';
 $tipo_debito  = $k00_tipo;
+$k03_class    = $k03_tipo;
 
 if (isset($imprimir) && $imprimir == 'socotunica') {
 
@@ -183,7 +184,7 @@ if (isset($ord) && $ord == "escritorio") {
   $ordena        = "";
 }
 
-if ( $k03_tipo == 19 ) {
+if ( $k03_class == 19 ) {
 
   $sql = "select * from (
 				   select y69_numpre as q01_numpre,
@@ -226,7 +227,7 @@ if ( $k03_tipo == 19 ) {
 			order by $ordenaescrito
     	$ordena
       $limit";
-} elseif ($k03_tipo == 5) {
+} elseif ($k03_class == 5) {
 
   $sql = "select * from (
 				   select y69_numpre as q01_numpre,

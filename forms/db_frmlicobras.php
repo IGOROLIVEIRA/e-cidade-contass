@@ -518,7 +518,7 @@ $cllicobras->rotulo->label();
         document.form1.obr05_sequencial.value = oRetorno.dados[0].obr05_sequencial;
         document.form1.obr05_responsavel.value = oRetorno.dados[0].obr05_responsavel;
         document.form1.obr05_tiporesponsavel.value = oRetorno.dados[0].obr05_tiporesponsavel;
-        document.form1.z01_nome.value = oRetorno.dados[0].z01_nome;
+        document.form1.z01_nome.value = oRetorno.dados[0].z01_nome.urlDecode();
         document.form1.obr05_tiporegistro.value = oRetorno.dados[0].obr05_tiporegistro;
         document.form1.obr05_numregistro.value = oRetorno.dados[0].obr05_numregistro;
         document.form1.obr05_dscoutroconselho.value = oRetorno.dados[0].obr05_dscoutroconselho;

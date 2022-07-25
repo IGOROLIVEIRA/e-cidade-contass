@@ -107,6 +107,8 @@ switch($oParam->exec) {
         $sWhere .= "and obr05_tiporegistro = $oParam->obr05_tiporegistro and obr05_vinculoprofissional = $oParam->obr05_vinculoprofissional";
         $resultresp = $cllicobrasresponsaveis->sql_record($cllicobrasresponsaveis->sql_query(null,"*",null,$sWhere));
         db_fieldsmemory($resultresp,0);
+        print_r($cllicobrasresponsaveis->sql_query(null,"*",null,$sWhere));
+        exit;
 
         try{
 
@@ -139,7 +141,7 @@ switch($oParam->exec) {
             }
 
             $result_dtcadcgm = $clhistoricocgm->sql_record($clhistoricocgm->sql_query_file(null,"z09_datacadastro","","z09_numcgm = $oParam->obr05_responsavel and z09_tipo = 1"));
-            db_fieldsmemory($result_dtcadcgm, 0)->z09_datacadastro;
+            db_utils::fieldsmemory($result_dtcadcgm, 0)->z09_datacadastro;
             $datacgm = (implode("/",(array_reverse(explode("-",$z09_datacadastro)))));
             $date = (implode("/",(array_reverse(explode("-",date("Y-m-d", db_getsession('DB_datausu')))))));
             $dtsessao = DateTime::createFromFormat('d/m/Y', $date);
@@ -241,11 +243,12 @@ switch($oParam->exec) {
 
     case 'getDadosResponsavel':
         $cllicobrasresponsaveis = new cl_licobrasresponsaveis();
-        $rsResponsaveis = $cllicobrasresponsaveis->sql_record($cllicobrasresponsaveis->sql_query(null,"*",null,"obr05_sequencial = $oParam->iCodigo"));
+        $rsResponsaveis = $cllicobrasresponsaveis->sql_record($cllicobrasresponsaveis->sql_query(null,"licobrasresponsaveis.*,z01_numcgm,z01_nome,licobras.*",null,"obr05_sequencial = $oParam->iCodigo"));
 
         for ($iCont = 0; $iCont < pg_num_rows($rsResponsaveis); $iCont++) {
             $oDadosResponsavel = db_utils::fieldsMemory($rsResponsaveis, $iCont);
 
+            $oDadosResponsavel->z01_nome = urlencode($oDadosResponsavel->z01_nome);
             $oRetorno->dados[] = $oDadosResponsavel;
         }
         break;
