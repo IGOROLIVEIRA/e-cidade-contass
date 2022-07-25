@@ -7,6 +7,8 @@ class Oc17949 extends AbstractMigration
     public function up()
     {
         $this->createMenuInscricaoDA();
+        $this->createParametroProced();
+        $this->createTableItbiDivida();
     }
 
     private function createMenuInscricaoDA()
@@ -44,15 +46,16 @@ SQL;
                 it36_data date NOT NULL,
                 it36_usuario int8 NOT NULL,
                 it36_observacao varchar(200),
-                CONSTRAINT itbi_divida_pk PRIMARY KEY (it36_guia, it36_coddiv));
+                CONSTRAINT itbi_divida_pk PRIMARY KEY (it36_guia, it36_coddiv)
                 );
             ALTER TABLE itbi.itbi_divida
-            ADD CONSTRAINT itbi_didiva_itbi FOREIGN KEY (it01_guia)
-            REFERENCES it36_guia;
+            ADD CONSTRAINT itbi_didiva_itbi FOREIGN KEY (it36_guia)
+            REFERENCES itbi;
 
             ALTER TABLE itbi.itbi_divida
-            ADD CONSTRAINT itbi_didiva_divida FOREIGN KEY (v01_coddiv)
-            REFERENCES it36_coddiv;
+            ADD CONSTRAINT itbi_didiva_divida FOREIGN KEY (it36_coddiv)
+            REFERENCES divida;
+            COMMIT;
 SQL;
         $this->execute($sql);
     }
