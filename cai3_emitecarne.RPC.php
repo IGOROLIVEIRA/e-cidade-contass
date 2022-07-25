@@ -518,6 +518,12 @@ switch ($oParam->exec) {
          */
         foreach ($aChecks as $iInd => $aVal) {
 
+          $aRecibos[$oRegraEmissao->k48_sequencial] = [];
+          $aCompara[$oRegraEmissao->k48_sequencial] = [];
+          $aNumparCompara[$oRegraEmissao->k48_sequencial] = [];
+          $aNumpreCompara[$oRegraEmissao->k48_sequencial] = [];
+          $aNumpres_emissao[$oRegraEmissao->k48_sequencial] = [];
+
           if ( ($aVal["Numpar"] >= $oRegraEmissao->k48_parcini) && ($aVal["Numpar"] <= $oRegraEmissao->k48_parcfim) ) {
 
             $aRecibos[$oRegraEmissao->k48_sequencial][]         =  "(k00_numpre in({$aVal['Numpre']}) and k00_numpar = {$aVal['Numpar']})";
