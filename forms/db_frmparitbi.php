@@ -31,7 +31,6 @@ $clrotulo = new rotulocampo;
 $clrotulo->label("j32_descr");
 $clrotulo->label('z01_numcgm');
 $clrotulo->label('z01_nome');
-$clrotulo->label("v03_descr");
 ?>
 <fieldset>
   <legend>
@@ -156,7 +155,7 @@ $clrotulo->label("v03_descr");
                   <?php db_input('it24_proced',10,"",true,'text',1,'onchange="js_pesquisaProcedencia(false);"');  ?>
               </td>
               <td>
-                  <?php db_input('v03_descr' , 40, $Iv03_descr  , true, 'text', 3 , '');  ?>
+                  <?php db_input('v03_descr' , 40, "", true, 'text', 3 , '');  ?>
               </td>
             </tr>
               <tr>
@@ -615,11 +614,11 @@ function js_valida(){
 function js_pesquisaProcedencia( mostra ) {
 
     if( mostra === true ) {
-        js_OpenJanelaIframe('top.corpo.iframe_procdiver','db_iframe_proced','func_proced.php?funcao_js=parent.js_mostraproced1|v03_codigo|v03_descr','Pesquisa',true,'0');
+        js_OpenJanelaIframe('top.corpo','db_iframe_proced','func_proced.php?funcao_js=parent.js_mostraproced1|v03_codigo|v03_descr','Pesquisa',true,'0');
     }else{
 
         if ( document.form1.dv09_proced.value !== '' ) {
-            js_OpenJanelaIframe('top.corpo.iframe_procdiver','db_iframe_proced','func_proced.php?pesquisa_chave='+document.form1.dv09_proced.value+'&funcao_js=parent.js_mostraproced','Pesquisa',false,'0','1','775','390');
+            js_OpenJanelaIframe('top.corpo','db_iframe_proced','func_proced.php?pesquisa_chave='+document.form1.dv09_proced.value+'&funcao_js=parent.js_mostraproced','Pesquisa',false,'0','1','775','390');
         }else{
             document.form1.v03_descr.value = '';
         }
@@ -640,7 +639,7 @@ function js_mostraproced( chave, erro ) {
 function js_mostraproced1( chave1, chave2 ) {
 
     document.form1.it24_proced.value = chave1;
-    document.form1.it24_proced.value = chave2;
+    document.form1.v03_descr.value = chave2;
     db_iframe_proced.hide();
 }
 </script>

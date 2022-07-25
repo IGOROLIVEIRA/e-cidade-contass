@@ -134,6 +134,7 @@ if (isset($oPost->incluir)) {
    $sCampos .= " e.j32_descr as nomeutilterrarural,               ";
    $sCampos .= " f.j32_descr as nomedistrterrarural               ";
    $sCampos .= " ,g.j32_descr as nomegrupopadraoconstrutivourbana  ";
+   $sCampos .= " ,proced.v03_descr  ";
 
    $rsVerificaParam = $clparitbi->sql_record($clparitbi->sql_query_dados_paritbi(db_getsession('DB_anousu'),$sCampos));
 

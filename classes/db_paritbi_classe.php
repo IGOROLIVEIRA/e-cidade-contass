@@ -811,6 +811,7 @@ class cl_paritbi {
   	$sql .= "      inner join cargrup e on  e.j32_grupo = paritbi.it24_grupoutilterrarural            ";
   	$sql .= "      inner join cargrup f on  f.j32_grupo = paritbi.it24_grupodistrterrarural           ";
   	$sql .= "      left join cargrup g on  g.j32_grupo = paritbi.it24_grupopadraoconstrutivobenurbana ";
+  	$sql .= "      left join proced on proced.v03_codigo = paritbi.it24_proced ";
 
   	$sql2 = "";
   	if($dbwhere==""){
