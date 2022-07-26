@@ -460,5 +460,22 @@ class cl_conplanocontabancaria {
      }
      return $sql;
   }
+
+  public function sql_conplanoCtaBancAberturaExercicio($iAnousuOrigem, $iAnousuDestino, $iInstit)
+  {
+      $sSql = " SELECT DISTINCT ON (c61_codcon, c61_instit)
+                       (NEXTVAL('conplanocontabancaria_c56_sequencial_seq')) AS c56_sequencial,
+                       c56_contabancaria,
+                       c56_codcon, {$iAnousuDestino} AS c56_anousu
+                FROM conplanocontabancaria
+                JOIN conplanoreduz ON (c61_codcon, c61_anousu, c61_instit) = (c56_codcon, c56_anousu, {$iInstit})
+                WHERE c56_anousu = {$iAnousuOrigem}
+                  AND c56_codcon NOT IN
+                        (SELECT c56_codcon FROM conplanocontabancaria WHERE c56_anousu = {$iAnousuDestino})
+                  AND c56_codcon IN
+                        (SELECT c60_codcon FROM conplano WHERE c60_anousu = {$iAnousuDestino})";
+
+      return $sSql;
+  }
 }
 ?>
