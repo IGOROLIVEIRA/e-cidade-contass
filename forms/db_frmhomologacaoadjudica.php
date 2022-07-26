@@ -566,6 +566,27 @@ db_app::load("estilos.css, grid.style.css");
 
     }
 
+    function gerar() {
+        var pdf = document.getElementById("pdf");
+        var word = document.getElementById("word");
+        var ilicita = document.getElementById("l202_licitacao").value;
+        var sequencial = document.getElementById("l202_sequencial").value;
+        var nome = document.getElementById("respHomolognome").value;
+        var data = document.getElementById("l202_datahomologacao").value;
+        var valor = document.getElementById('valor').value;
+
+        if (pdf.checked) {
+            jan = window.open('lic1_homologacaoadjudica004.php?impjust=$impjustificativa&codigo_preco=' + ilicita + '&nome=' + nome + '&sequencial=' + sequencial + '&data=' + data + '&valor=' + valor + '&quant_casas=2&tipoprecoreferencia=',
+                'width=' + (screen.availWidth - 5) + ',height=' + (screen.availHeight - 40) + ',scrollbars=1,location=0 ');
+            jan.moveTo(0, 0);
+        } else if (word.checked) {
+            jan = window.open('lic1_homologacaoadjudica005.php?impjust=$impjustificativa&codigo_preco=' + ilicita + '&nome=' + nome + '&sequencial=' + sequencial + '&data=' + data + '&valor=' + valor + '&quant_casas=2&tipoprecoreferencia=',
+                'width=' + (screen.availWidth - 5) + ',height=' + (screen.availHeight - 40) + ',scrollbars=1,location=0 ');
+            jan.moveTo(0, 0);
+        }
+        windowDotacaoItem.destroy();
+    }
+
 
     js_showGrid();
 </script>
