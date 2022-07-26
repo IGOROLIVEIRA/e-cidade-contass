@@ -1534,7 +1534,6 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                         //$iTotalPosicaoAditivo += $oAcordoItem->getValorTotal();
                     }
                 }
-                //var_dump($iTotalPosicaoAnterior);
 
                 /*
                 *tipo de alteracao contrato registro 20
