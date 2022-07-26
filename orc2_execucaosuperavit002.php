@@ -97,7 +97,7 @@ $datafin = $dt_fim;
 
 $db_filtro = " o70_instit in ({$sInstituicoesPorVigula}) ";
 
-$sql = "SELECT c241_fonte, SUM(c241_valor) valor FROM quadrosuperavitdeficit WHERE c241_valor > 0 AND c241_ano = {$anousu} AND c241_instit IN ({$sInstituicoesPorVirgula}) GROUP BY c241_fonte ORDER BY c241_fonte";
+$sql = "SELECT c241_fonte, SUM(c241_valor) valor FROM quadrosuperavitdeficit WHERE c241_ano = {$anousu} AND c241_instit IN ({$sInstituicoesPorVirgula}) GROUP BY c241_fonte ORDER BY c241_fonte";
 
 $result = pg_exec($sql);
 $arrayExcesso = array();
@@ -107,10 +107,11 @@ for ($i = 0; $i < pg_numrows($result); $i++) {
     $fonte = fonteAgrupada($c241_fonte);
 
     if (array_key_exists($fonte, $arrayExcesso)) {
-            $arrayExcesso[$fonte]["A"] += $valor;
-            $arrayExcesso[$fonte]["D"] = 0;     
-            continue;   
+        $arrayExcesso[$fonte]["A"] += $valor;
+        $arrayExcesso[$fonte]["D"] = 0;     
+        continue;   
     } 
+
     $arrayExcesso[$fonte]["A"] = $valor;
     $arrayExcesso[$fonte]["D"] = 0;  
 }
@@ -125,7 +126,6 @@ $sSql = "SELECT
         JOIN orcsuplem ON o47_codsup=o46_codsup
         WHERE
             o47_anousu = {$anousu}
-            AND o47_valor > 0
             AND o58_instit in ({$sInstituicoesPorVirgula})
             AND o46_tiposup IN (2026, 1003, 1028, 1008, 1024)
         GROUP BY o58_codigo
@@ -143,7 +143,6 @@ $sSql = "SELECT
             o47_anousu = {$anousu}
             AND o58_instit in ({$sInstituicoesPorVirgula})
             AND o46_tiposup IN (2026, 1003, 1028, 1008, 1024)
-            AND o136_valor > 0 
         GROUP BY o58_codigo";
 
 $subResult = db_query($sSql);
@@ -285,18 +284,8 @@ foreach ($arrayExcesso as $fonte => $data) {
         $pdf->ln(9);
     }
 
-    $data["C"] = (($data["B"] - $data["A"]) > 0) ? ($data["B"] - $data["A"]) : 0;
-    $data["G"] = (($data["C"] - $data["F"]) > 0) ? ($data["C"] - $data["F"]) : 0;
-    $data["G"] = $data["E"] == 0 ? 0 : $data["G"];
-
-    // Condições de exibição agrupada conforme OC17997
-    $fonte = $fonte == 200 ? db_formatar("200", "recurso") . " / " .
-        db_formatar("201", "recurso") . " / " .
-        db_formatar("202", "recurso") : $fonte;
-    $fonte = $fonte == 218 ? db_formatar("218", "recurso") . " / " .
-        db_formatar("219", "recurso") : $fonte;
-    $fonte = $fonte == 266 ? db_formatar("266", "recurso") . " / " .
-        db_formatar("267", "recurso") : $fonte;
+    $data = tratarColunas($data);
+    $fonte = tratarAgrupamentoDescricaoFonte($fonte);
 
     $pdf->setfont('arial', '', 6);
     $pdf->cell(24, $alt, db_formatar($fonte, 'recurso'), 0, 0, "C", 0);
@@ -360,4 +349,43 @@ function fonteAgrupada($fonte)
         return "266";
 
     return 2 . $fonte;
+}
+
+/**
+ * Controla o fluxo e modificações necessárias na coluna Superávit (A)
+ */
+function tratarNegativados($valor)
+{
+    if ($valor < 0)
+        return 0;
+    return $valor;
+}
+
+/**
+ * Desmembramento da tratativa de colunas para melhor visualização do código
+ */
+function tratarColunas($data)
+{
+    $data["A"] = tratarNegativados($data["A"]);
+    $data["B"] = tratarNegativados($data["B"]);
+    $data["C"] = (($data["B"] - $data["A"]) > 0) ? ($data["B"] - $data["A"]) : 0;
+    $data["G"] = (($data["C"] - $data["F"]) > 0) ? ($data["C"] - $data["F"]) : 0;
+    $data["G"] = $data["E"] == 0 ? 0 : $data["G"];
+    return $data;
+}
+
+/**
+ * Desmembramento da tratativa de fontes para melhor visualização do código
+ */
+function tratarAgrupamentoDescricaoFonte($fonte)
+{
+    // Condições de exibição agrupada conforme OC17997
+    $fonte = $fonte == 200 ? db_formatar("200", "recurso") . " / " .
+        db_formatar("201", "recurso") . " / " .
+        db_formatar("202", "recurso") : $fonte;
+    $fonte = $fonte == 218 ? db_formatar("218", "recurso") . " / " .
+        db_formatar("219", "recurso") : $fonte;
+    $fonte = $fonte == 266 ? db_formatar("266", "recurso") . " / " .
+        db_formatar("267", "recurso") : $fonte;
+    return $fonte;
 }

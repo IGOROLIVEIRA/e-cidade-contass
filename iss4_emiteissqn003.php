@@ -198,7 +198,8 @@ if ( $k03_class == 19 ) {
 						inner join vistorias      on vistorias.y70_codvist      = vistinscr.y71_codvist
 						inner join tipovistorias  on vistorias.y70_tipovist     = tipovistorias.y77_codtipo
 						inner join vistorianumpre on vistorianumpre.y69_codvist = vistorias.y70_codvist
-            inner join arreinscr      on vistorianumpre.y69_numpre  = arreinscr.k00_numpre
+            inner join arreinscr      on vistorianumpre.y69_numpre  = arreinscr.k00_numpre 
+            inner join arrecad        on (arrecad.k00_numpre,arrecad.k00_tipo) = (vistorianumpre.y69_numpre,$tipo_debito)
             left  join recibounica    on recibounica.k00_numpre     = arreinscr.k00_numpre
 						$join join escrito        on escrito.q10_inscr          = issbase.q02_inscr
 						inner join cgm            on cgm.z01_numcgm             = issbase.q02_numcgm
@@ -217,6 +218,7 @@ if ( $k03_class == 19 ) {
 					   inner join tipovistorias  on vistorias.y70_tipovist      = tipovistorias.y77_codtipo
 					   inner join vistorianumpre on vistorianumpre.y69_codvist  = vistorias.y70_codvist
              inner join arreinscr      on vistorianumpre.y69_numpre   = arreinscr.k00_numpre
+             inner join arrecad        on (arrecad.k00_numpre,arrecad.k00_tipo) = (vistorianumpre.y69_numpre,$tipo_debito)
              left  join recibounica    on recibounica.k00_numpre      = arreinscr.k00_numpre
 					   $join join escrito        on escrito.q10_inscr           = issbase.q02_inscr
 					   inner join cgm            on cgm.z01_numcgm              = issbase.q02_numcgm
