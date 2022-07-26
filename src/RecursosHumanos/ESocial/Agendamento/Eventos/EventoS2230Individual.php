@@ -10,7 +10,7 @@ use ECidade\RecursosHumanos\ESocial\Agendamento\Eventos\EventoBase;
  * @package  ECidade\RecursosHumanos\ESocial\Agendamento\Eventos
  * @author   Robson de Jesus
  */
-class EventoS2230 extends EventoBase
+class EventoS2230Individual extends EventoBase
 {
 
     /**
@@ -39,22 +39,22 @@ class EventoS2230 extends EventoBase
             $oDadosAPI->evtAfastTemp->modo                                    = $this->modo;
             $oDadosAPI->evtAfastTemp->indRetif                                = 1;
             $oDadosAPI->evtAfastTemp->nrRecibo                                = null;
-            $oDadosAPI->evtAfastTemp->idevinculo->cpftrab                     = $oDados->ideVinculo->cpfTrab;
-            $oDadosAPI->evtAfastTemp->idevinculo->matricula                   = $oDados->ideVinculo->matricula;
+            $oDadosAPI->evtAfastTemp->idevinculo->cpftrab                     = $oDados->cpftrab;
+            $oDadosAPI->evtAfastTemp->idevinculo->matricula                   = $oDados->matricula;
             //$oDadosAPI->evtAfastTemp->idevinculo->codcateg                  = $oDados->ideVinculo->codCateg;
             
-            if($oDados->iniAfastamento->dtIniAfast != null){
-                $oDadosAPI->evtAfastTemp->iniafastamento->dtiniafast          = $oDados->iniAfastamento->dtIniAfast;
-                $oDadosAPI->evtAfastTemp->iniafastamento->codmotafast         = $oDados->iniAfastamento->codMotAfast;
-                if(!empty($oDados->perAquis->dtInicio)){
-                    $oDadosAPI->evtAfastTemp->iniafastamento->peraquis->dtinicio  = $oDados->perAquis->dtInicio;                
+            if($oDados->dtiniafast != null){
+                $oDadosAPI->evtAfastTemp->iniafastamento->dtiniafast          = $oDados->dtiniafast;
+                $oDadosAPI->evtAfastTemp->iniafastamento->codmotafast         = $oDados->codmotafast;
+                if(!empty($oDados->dtinicio)){
+                    $oDadosAPI->evtAfastTemp->iniafastamento->peraquis->dtinicio  = $oDados->dtinicio;                
                 }
-                if(!empty($oDados->perAquis->dtFim)){
-                    $oDadosAPI->evtAfastTemp->iniafastamento->peraquis->dtfim = $oDados->perAquis->dtFim;
+                if(!empty($oDados->dtfim)){
+                    $oDadosAPI->evtAfastTemp->iniafastamento->peraquis->dtfim = $oDados->dtfim;
                 }
             }
-            if(!empty($oDados->fimAfastamento->dtTermAfast)){
-                $oDadosAPI->evtAfastTemp->fimafastamento->dttermafast = $oDados->fimAfastamento->dtTermAfast;
+            if(!empty($oDados->dttermafastferias)){
+                $oDadosAPI->evtAfastTemp->fimafastamento->dttermafast = $oDados->dttermafastferias;
             }
 
             $aDadosAPI[] = $oDadosAPI;
