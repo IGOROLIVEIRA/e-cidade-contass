@@ -436,7 +436,7 @@ if (isset($chave_p58_requer)) {
                     }
 
 
-                    $where .= " and not exists (select 1 from arqproc where p68_codproc = p58_codproc) ";
+                    $where .= " and tipoproc.p51_tipoprocgrupo = 1 ";
                     if (!isset($pesquisa_chave)) {
 
                         if (isset($campos) == false) {
