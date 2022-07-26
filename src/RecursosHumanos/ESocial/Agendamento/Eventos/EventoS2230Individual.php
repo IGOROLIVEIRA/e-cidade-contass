@@ -31,7 +31,6 @@ class EventoS2230Individual extends EventoBase
     {
         $aDadosAPI = array();
         $iSequencial = 1;
-        
         foreach ($this->dados as $oDados) {
             $oDadosAPI                                                        = new \stdClass;
             $oDadosAPI->evtAfastTemp                                          = new \stdClass;
@@ -46,15 +45,17 @@ class EventoS2230Individual extends EventoBase
             if($oDados->dtiniafast != null){
                 $oDadosAPI->evtAfastTemp->iniafastamento->dtiniafast          = $oDados->dtiniafast;
                 $oDadosAPI->evtAfastTemp->iniafastamento->codmotafast         = $oDados->codmotafast;
-                if(!empty($oDados->dtinicio)){
-                    $oDadosAPI->evtAfastTemp->iniafastamento->peraquis->dtinicio  = $oDados->dtinicio;                
-                }
-                if(!empty($oDados->dtfim)){
-                    $oDadosAPI->evtAfastTemp->iniafastamento->peraquis->dtfim = $oDados->dtfim;
+                if($oDados->codmotafast == "15"){
+                    if(!empty($oDados->dtinicio)){
+                        $oDadosAPI->evtAfastTemp->iniafastamento->peraquis->dtinicio  = $oDados->dtinicio;                
+                    }
+                    if(!empty($oDados->dtfim)){
+                        $oDadosAPI->evtAfastTemp->iniafastamento->peraquis->dtfim = $oDados->dtfim;
+                    }
                 }
             }
-            if(!empty($oDados->dttermafastferias)){
-                $oDadosAPI->evtAfastTemp->fimafastamento->dttermafast = $oDados->dttermafastferias;
+            if(!empty($oDados->dttermafast)){
+                $oDadosAPI->evtAfastTemp->fimafastamento->dttermafast = $oDados->dttermafast;
             }
 
             $aDadosAPI[] = $oDadosAPI;
