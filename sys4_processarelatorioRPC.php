@@ -219,7 +219,7 @@ if (!$lErro) {
                 $lErro     = true;
                 $sRetorno = "Nenhum template cadastrado!";
             }
-        } else {
+        } else if($oRelatorio->db63_db_tiporelatorio == 1){
 
             $api->setFormat($sFormatoSaida);
             $sNomeRelatorio   = "tmp/geraRelatorio" . date("YmdHis") . db_getsession("DB_id_usuario") . "." . $sFormatoSaida;
@@ -274,9 +274,7 @@ if (!$lErro) {
 	  $sRetorno = "Nenhum relatório emcontrado!";
 	}
 
-                $sRetorno = $sNomeRelatorio;
-            }
-        }
+            
     } else {
         $lErro     = true;
         $sRetorno = "Nenhum relatório emcontrado!";

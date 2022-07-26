@@ -139,7 +139,7 @@ switch($oParam->exec) {
             }
 
             $result_dtcadcgm = $clhistoricocgm->sql_record($clhistoricocgm->sql_query_file(null,"z09_datacadastro","","z09_numcgm = $oParam->obr05_responsavel and z09_tipo = 1"));
-            db_fieldsmemory($result_dtcadcgm, 0)->z09_datacadastro;
+            db_utils::fieldsmemory($result_dtcadcgm, 0)->z09_datacadastro;
             $datacgm = (implode("/",(array_reverse(explode("-",$z09_datacadastro)))));
             $date = (implode("/",(array_reverse(explode("-",date("Y-m-d", db_getsession('DB_datausu')))))));
             $dtsessao = DateTime::createFromFormat('d/m/Y', $date);
@@ -241,11 +241,12 @@ switch($oParam->exec) {
 
     case 'getDadosResponsavel':
         $cllicobrasresponsaveis = new cl_licobrasresponsaveis();
-        $rsResponsaveis = $cllicobrasresponsaveis->sql_record($cllicobrasresponsaveis->sql_query(null,"*",null,"obr05_sequencial = $oParam->iCodigo"));
+        $rsResponsaveis = $cllicobrasresponsaveis->sql_record($cllicobrasresponsaveis->sql_query(null,"licobrasresponsaveis.*,z01_numcgm,z01_nome,licobras.*",null,"obr05_sequencial = $oParam->iCodigo"));
 
         for ($iCont = 0; $iCont < pg_num_rows($rsResponsaveis); $iCont++) {
             $oDadosResponsavel = db_utils::fieldsMemory($rsResponsaveis, $iCont);
 
+            $oDadosResponsavel->z01_nome = urlencode($oDadosResponsavel->z01_nome);
             $oRetorno->dados[] = $oDadosResponsavel;
         }
         break;
@@ -331,9 +332,9 @@ switch($oParam->exec) {
 
         $cllicitemobra = new cl_licitemobra();
         if($oParam->l20_codigo != ""){
-            $result = $cllicitemobra->sql_record($cllicitemobra->sql_query_itens_obras_licitacao(null,"*", null, "l21_codliclicita = {$oParam->l20_codigo} and pc01_obras = 't' and obr06_instit = ".db_getsession('DB_instit')));
+            $result = $cllicitemobra->sql_record($cllicitemobra->sql_query_itens_obras_licitacao(null,"licitemobra.*,pc01_codmater,pc01_descrmater", null, "l21_codliclicita = {$oParam->l20_codigo} and pc01_obras = 't' and obr06_instit = ".db_getsession('DB_instit')));
         }elseif ($oParam->pc80_codproc != ""){
-            $result = $cllicitemobra->sql_record($cllicitemobra->sql_query_itens_obras_processodecompras(null,"*", null, "pc80_codproc = {$oParam->pc80_codproc} and pc01_obras = 't' and obr06_instit = ".db_getsession('DB_instit')));
+            $result = $cllicitemobra->sql_record($cllicitemobra->sql_query_itens_obras_processodecompras(null,"licitemobra.*,pc01_codmater,pc01_descrmater", null, "pc80_codproc = {$oParam->pc80_codproc} and pc01_obras = 't' and obr06_instit = ".db_getsession('DB_instit')));
         }else{
             $oRetorno->message = "selecione um processo de compras ou uma licitacao";
         }

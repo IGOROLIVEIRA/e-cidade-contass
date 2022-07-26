@@ -195,6 +195,8 @@ class DBHttpRequest
         try {
             $arrXmlTags = array('<s:envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">','<s:body>','</s:body>','</s:envelope>');
             $objxml = new SimpleXMLElement(str_ireplace($arrXmlTags,"",$this->body));
+            // ver xml de retorno completo
+            // echo "<pre>","XML ENVIO";print_r($objxml);die;
             switch ($url) {
                 case 'run.php':
                     return $objxml->EnviarLoteEventosResult->eSocial->retornoEnvioLoteEventos;

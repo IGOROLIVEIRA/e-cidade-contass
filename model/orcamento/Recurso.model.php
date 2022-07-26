@@ -308,6 +308,17 @@ class Recurso {
                                                     $sWhereOrcTipoRec
                                                   );
     $rsSqlOrcTipoRec = $oDaoOrcTipoRec->sql_record($sSqlOrcTipoRec);
+
+    if (db_getsession("DB_anousu") < 2023){
+      $oDaoOrcTipoRec->o15_codtri = substr($oDaoOrcTipoRec->o15_codtri,0,3);
+      $iCodigoRecurso             = substr($iCodigoRecurso,0,3);
+    }
+
+    if (db_getsession("DB_anousu") > 2022){
+        $oDaoOrcTipoRec->o15_codtri = substr($oDaoOrcTipoRec->o15_codtri,0,7);
+        $iCodigoRecurso             = substr($iCodigoRecurso,0,7);
+      }
+
     if ($oDaoOrcTipoRec->numrows > 0 && !$this->lNovo) {
 
       $oDaoOrcTipoRec->o15_codigo = $iCodigoRecurso;

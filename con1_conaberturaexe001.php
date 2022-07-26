@@ -261,7 +261,11 @@ if (isset($p->incluir)) {
                     c60_codsis,
                     c60_codcla,
                     c60_consistemaconta,
-                    c60_identificadorfinanceiro,
+                    CASE
+                        WHEN c60_identificadorfinanceiro = '' OR c60_identificadorfinanceiro IS NULL 
+                          THEN 'N'
+                        ELSE c60_identificadorfinanceiro
+                    END AS c60_identificadorfinanceiro,
                     CASE
                         WHEN c60_naturezasaldo IS NULL THEN
                             CASE
