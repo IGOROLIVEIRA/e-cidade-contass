@@ -219,6 +219,10 @@ $sWhereContratos = " and 1 = 1 ";
                     $dbwhere .= " l03_pctipocompratribunal IN (100,101,102,103) AND ";
                 }
 
+                if ($credenciamentotermo == 'true') {
+                    $dbwhere .= " pc50_descr='INEXIGIBILIDADE POR CREDENCIAMENTO' or pc50_descr='DISPENSA POR CHAMADA PUBLICA' and";
+                }
+
                 if ($listacred == 'false') {
                     $dbwhere .= " l03_pctipocompratribunal NOT IN (102, 103) AND ";
                 }
@@ -244,6 +248,10 @@ $sWhereContratos = " and 1 = 1 ";
                             $campos = "liclicita.*, liclicitasituacao.l11_sequencial";
                         }
                     }
+
+
+
+
 
                     if ($dispensas) {
                         $campos = "distinct liclicita.l20_codigo,
@@ -274,6 +282,9 @@ $sWhereContratos = " and 1 = 1 ";
                     //                $campos .= ", l03_codcom as tipcom";
                     //                $campos .= ", l03_pctipocompratribunal as tipocomtribunal";
                     $campos .= ', l08_descr as dl_Situação';
+                    if ($credenciamentotermo == 'true') {
+                        $campos .= ",l20_veicdivulgacao,l20_dtpubratificacao";
+                    }
                     if (isset($chave_l20_codigo) && (trim($chave_l20_codigo) != "")) {
                         $sql = $clliclicita->sql_queryContratos(null, $campos, "l20_codigo", "$dbwhere  l20_codigo = $chave_l20_codigo and $dbwhere_instit");
                     } else if (isset($chave_l20_numero) && (trim($chave_l20_numero) != "")) {
@@ -408,6 +419,7 @@ $sWhereContratos = " and 1 = 1 ";
                         ORDER BY l20_codigo
           ";
                     }
+
                     $aRepassa = array();
                     db_lovrot($sql . ' desc ', 15, "()", "", $funcao_js, null, 'NoMe', $aRepassa, false);
                 } else {
@@ -544,6 +556,10 @@ $sWhereContratos = " and 1 = 1 ";
 </body>
 
 </html>
+<script>
+    document.getElementsByName("l20_veicdivulgacao")[0].value = "Veículo de Publicação";
+    document.getElementsByName("l20_dtpubratificacao")[0].value = "Publicação";
+</script>
 <?
 if (!isset($pesquisa_chave)) {
 ?>
