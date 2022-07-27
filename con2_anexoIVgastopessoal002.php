@@ -140,6 +140,8 @@ function getDespesasReceitas($iInstituicoes, $dtini, $dtfim, $iRpps)
 
     foreach ($oUltimoano as $oDados) {
         if ($oDados->o57_fonte == "410000000000000") {
+            echo "Pego o 410000000000000 <br/>" . PHP_EOL;
+            echo $oDados->saldo_arrecadado . "<br/>" . PHP_EOL;
             $fTotalarrecadado += $oDados->saldo_arrecadado;
         }
 
@@ -302,11 +304,7 @@ function getDespesasReceitas($iInstituicoes, $dtini, $dtfim, $iRpps)
         if ($oDados->o57_fonte == "412100484000000") {
             $fRRCSACOPSJ += $oDados->saldo_arrecadado;
         }
-        /*
-        if ($oDados->o57_fonte == "412180311020000") {
-            $fRRCSACOPSJ += $oDados->saldo_arrecadado;
-        }
-        */
+
         if ($oDados->o57_fonte == "412100481000000") {
             $fRRCPPSJ += $oDados->saldo_arrecadado;
         }
@@ -471,11 +469,7 @@ function getDespesasReceitas($iInstituicoes, $dtini, $dtfim, $iRpps)
             if ($oDados->o57_fonte == "412100484000000") {
                 $fRRCSACOPSJ += $oDados->saldo_arrecadado;
             }
-            /*
-            if ($oDados->o57_fonte == "412180311020000") {
-                $fRRCSACOPSJ += $oDados->saldo_arrecadado;
-            }
-            */
+
             if (substr($oDados->o57_fonte, 0, 9) == "412100481") {
                 $fRRCPPSJ += $oDados->saldo_arrecadado;
             }
@@ -669,11 +663,7 @@ function getDespesasReceitas($iInstituicoes, $dtini, $dtfim, $iRpps)
         if ($oDados->o57_fonte == "412100484000000") {
             $fRRCSACOPSJ += $oDados->saldo_arrecadado;
         }
-        /*
-        if ($oDados->o57_fonte == "412180311020000") {
-            $fRRCSACOPSJ += $oDados->saldo_arrecadado;
-        }
-*/
+
         if ($oDados->o57_fonte == "419900300000000") {
             $fRRCSICOPSJ += $oDados->saldo_arrecadado;
         }
