@@ -278,7 +278,7 @@ $cllicobras->rotulo->label();
 
                 js_OpenJanelaIframe('CurrentWindow.corpo',
                     'db_iframe_licobraslicitacao',
-                    'func_licobraslicitacao?licitacaosistema=' + licitacaosistema + '&funcao_js=parent.js_preencheLicitacaoanterior|obr07_sequencial|obr07_objeto|l44_descricao',
+                    'func_licobraslicitacao.php?licitacaosistema=' + licitacaosistema + '&funcao_js=parent.js_preencheLicitacaoanterior|obr07_sequencial|obr07_objeto|l44_descricao',
                     'Pesquisa Licitações', true);
             } else {
 
@@ -286,7 +286,7 @@ $cllicobras->rotulo->label();
 
                     js_OpenJanelaIframe('CurrentWindow.corpo',
                         'db_iframe_licobraslicitacao',
-                        'func_licobraslicitacao?licitacaosistema=' + licitacaosistema + '&pesquisa_chave=' +
+                        'func_licobraslicitacao.php?licitacaosistema=' + licitacaosistema + '&pesquisa_chave=' +
                         document.form1.obr01_licitacao.value + '&funcao_js=parent.js_preencheLicitacaoanterior2',
                         'Pesquisa', false);
                 } else {
