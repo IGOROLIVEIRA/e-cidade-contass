@@ -135,6 +135,7 @@ $mesfolha = DBPessoal::getMesFolha();
                             <option value="">selecione</option>
                             <option value="S2200">S-2200 - Cadastramento Inicial do Vínculo e Admissão/Ingresso de Trabalhador</option>
                             <option value="S2300">S-2300 - Trabalhador Sem Vínculo de Emprego/Estatutário - Início</option>
+                            <option value="S2230">S-2230 - Afastamento Temporário</option>
                             <option value="S2306">S-2306 - Trabalhador Sem Vínculo de Emprego/Estatutário - Alteração Contratual</option>
                             <option value="S2400">S-2400 - Cadastro de Beneficiário - Entes Públicos - Início</option>
                         </select>

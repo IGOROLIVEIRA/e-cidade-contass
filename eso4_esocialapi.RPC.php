@@ -263,7 +263,7 @@ try {
 
             foreach ($oParam->arquivos as $arquivo) {
                 $dadosESocial->setReponsavelPeloPreenchimento($iCgm);
-                if (!in_array(Tipo::getTipoFormulario($arquivo), array(37,12))) {
+                if (!in_array(Tipo::getTipoFormulario($arquivo), array(37,12,40))) {
                     $dadosDoPreenchimento = $dadosESocial->getPorTipo(Tipo::getTipoFormulario($arquivo), $oParam->matricula);
                     $formatter = FormatterFactory::get($arquivo);
                     $dadosTabela = $formatter->formatar($dadosDoPreenchimento);
@@ -274,6 +274,11 @@ try {
                     }
                 } else {
                     $dadosTabela = $dadosESocial->getPorTipo(Tipo::getTipoFormulario($arquivo), $oParam->matricula);
+                    //necessario para diferenciar envio individual do envio geral
+                    if($arquivo == "S2230"){
+                        $arquivo = "S2230Individual";
+                    }    
+                    ini_set("display_errors",'on');
                     foreach (array_chunk($dadosTabela, 1) as $aTabela) {
                         $eventoFila = new Evento($arquivo, $iCgm, $iCgm, $aTabela, $oParam->tpAmb, "{$oParam->iAnoValidade}-{$oParam->iMesValidade}", $oParam->modo, $oParam->dtalteracao, $oParam->indapuracao);
                         $eventoFila->adicionarFila();
