@@ -1,40 +1,40 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 
-require_once("fpdf151/pdf.php");
-require_once("libs/db_sql.php");
-require_once("libs/db_utils.php");
-require_once("libs/db_liborcamento.php");
-require_once("fpdf151/assinatura.php");
-require_once("classes/db_orcparamrel_classe.php");
-require_once("libs/db_libcontabilidade.php");
-require_once("libs/db_libtxt.php");
-require_once("dbforms/db_funcoes.php");
+require_once(modification("fpdf151/pdf.php"));
+require_once(modification("libs/db_sql.php"));
+require_once(modification("libs/db_utils.php"));
+require_once(modification("libs/db_liborcamento.php"));
+require_once(modification("fpdf151/assinatura.php"));
+require_once(modification("classes/db_orcparamrel_classe.php"));
+require_once(modification("libs/db_libcontabilidade.php"));
+require_once(modification("libs/db_libtxt.php"));
+require_once(modification("dbforms/db_funcoes.php"));
 
 $oGet = db_utils::postMemory($_GET);
 
@@ -152,7 +152,7 @@ $sSqlSaldoOrigem .= "        (select ";
 $sSqlSaldoOrigem .= "                round(sum(c70_valor),2)";
 $sSqlSaldoOrigem .= "           from conlancam ";
 $sSqlSaldoOrigem .= "                inner join conlancamrec on c70_codlan = c74_codlan";
-$sSqlSaldoOrigem .= "                inner join conlancamdoc on c71_codlan = c70_codlan"; 
+$sSqlSaldoOrigem .= "                inner join conlancamdoc on c71_codlan = c70_codlan";
 $sSqlSaldoOrigem .= "                inner join conhistdoc   on c71_coddoc = c53_coddoc";
 $sSqlSaldoOrigem .= "          where extract(month from  c70_data) between 1 and {$iMesFim} ";
 $sSqlSaldoOrigem .= "            and c70_anousu  = {$iAnoUsu}";
@@ -220,7 +220,7 @@ $sSqlSaldoOrigem    .= "            and o87_pactoplano = {$oGet->iPlano}";
 $sSqlSaldoOrigem    .= "            and o103_pactovalorsaldotipo = 2";
 $sSqlSaldoOrigem    .= "            and o103_contrapartida is true";
 $sSqlSaldoOrigem    .= "          ) as cp_realizado_trim_anterior ";
-$rsSaldoOrigem    = db_query($sSqlSaldoOrigem); 
+$rsSaldoOrigem    = db_query($sSqlSaldoOrigem);
 $oSaldoOrigem     = db_utils::fieldsMemory($rsSaldoOrigem,0);
 $oSaldoInicialAnteriorBird    = $oSaldoOrigem->saldo_inicial_anterior;
 $oSaldoInicialAnoAnteriorBird = $oSaldoOrigem->saldo_inicial_ano_anterior;
@@ -809,7 +809,7 @@ $pdf->cell(20, $alt, "", 1,0,"R");
 $pdf->cell(20, $alt, "", 1,1,"R");
 $pdf->ln();
 
-notasExplicativas(&$pdf,100000,$iNota,190,false);
+notasExplicativas($pdf,100000,$iNota,190,false);
 
 $pdf->Output();
 ?>
