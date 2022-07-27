@@ -370,7 +370,8 @@ if (isset($p->incluir)) {
                 return ($entry[key($entry)]);
             }, $aContasExistentes));
 
-            $where = "c60_estrut NOT IN ('$existeOrc') AND c60_anousu = {$clconaberturaexe->c91_anousuorigem} AND substr(c60_estrut,1,1) IN ('3','4') ORDER BY c60_estrut ";
+            $where = "c60_estrut NOT IN ('$existeOrc') AND c60_anousu = {$clconaberturaexe->c91_anousuorigem} AND substr(c60_estrut,1,1) IN ('3','4') 
+                      AND c60_codcon NOT IN (SELECT c60_codcon FROM conplanoorcamento WHERE c60_anousu = {$clconaberturaexe->c91_anousudestino}) ORDER BY c60_estrut";
 
             $sSqlPlanoOrcamentario = $oDaoPlanoOrcamentario->sql_query_file(null, null, "*", "", $where);
             $rsPlanoOrcamentario   = $oDaoPlanoOrcamentario->sql_record($sSqlPlanoOrcamentario);
@@ -466,7 +467,8 @@ if (isset($p->incluir)) {
 
         if ($oDaoAnalitico->numrows > 0) {
 
-          $where = "c60_estrut NOT IN ('$existeOrc') AND c60_anousu = {$clconaberturaexe->c91_anousudestino} AND substr(c60_estrut,1,1) IN ('3','4') ORDER BY c60_estrut ";
+          $where = "c60_estrut NOT IN ('$existeOrc') AND c60_anousu = {$clconaberturaexe->c91_anousudestino} AND substr(c60_estrut,1,1) IN ('3','4') 
+                    AND c60_codcon NOT IN (SELECT c60_codcon FROM conplanoorcamento WHERE c60_anousu = {$clconaberturaexe->c91_anousudestino}) ORDER BY c60_estrut";
 
           $sSqlPlanoOrcamentario = $oDaoPlanoOrcamentario->sql_query_file(null, null, "*", "", $where);
           $rsPlanoOrcamentario   = $oDaoPlanoOrcamentario->sql_record($sSqlPlanoOrcamentario);
