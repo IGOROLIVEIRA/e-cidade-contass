@@ -25,13 +25,13 @@
  *                                licenca/licenca_pt.txt
  */
 
-require_once("fpdf151/pdf.php");
-require_once("fpdf151/assinatura.php");
-require_once("libs/db_sql.php");
-require_once("libs/db_liborcamento.php");
-require_once("libs/db_libcontabilidade.php");
-require_once("libs/db_utils.php");
-require_once("dbforms/db_funcoes.php");
+require_once(modification("fpdf151/pdf.php"));
+require_once(modification("fpdf151/assinatura.php"));
+require_once(modification("libs/db_sql.php"));
+require_once(modification("libs/db_liborcamento.php"));
+require_once(modification("libs/db_libcontabilidade.php"));
+require_once(modification("libs/db_utils.php"));
+require_once(modification("dbforms/db_funcoes.php"));
 
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 
@@ -587,7 +587,7 @@ if ($valorf > 0 ) {
 $pdf->ln(14);
 
 if ($origem != "O") {
-  assinaturas(&$pdf,&$classinatura,'BG');
+  assinaturas($pdf,$classinatura,'BG');
 }
 
 $pdf->Output();
