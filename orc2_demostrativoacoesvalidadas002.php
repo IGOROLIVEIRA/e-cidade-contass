@@ -1,37 +1,36 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
-include ("fpdf151/pdf.php");
-//include ("fpdf151/fpdf.php");
-include ("libs/db_utils.php");
-include ("libs/db_sql.php");
-require_once("classes/db_ppadotacao_classe.php");
-require_once("classes/db_ppaestimativa_classe.php");
-require_once("model/ppaVersao.model.php");
+include(modification("fpdf151/pdf.php"));
+include(modification("libs/db_utils.php"));
+include(modification("libs/db_sql.php"));
+require_once(modification("classes/db_ppadotacao_classe.php"));
+require_once(modification("classes/db_ppaestimativa_classe.php"));
+require_once(modification("model/ppaVersao.model.php"));
 
 $oGet = db_utils::postMemory($_GET);
 $iModelo = $oGet->iModelo;
@@ -40,18 +39,18 @@ $clppaestimativa = new cl_ppaestimativa();
 $oDaoPPALei = db_utils::getDao("ppalei");
 $oPPAVersao      = new ppaVersao($oGet->ppaversao);
 $sListaInstit    = str_replace("-", ",", $oGet->sListaInstit);
-$sWhere  = "      o05_ppaversao = {$oGet->ppaversao}	 						"; 
-$sWhere .= "  AND o05_anoreferencia BETWEEN {$oGet->anoini} AND {$oGet->anofin} ";																	
+$sWhere  = "      o05_ppaversao = {$oGet->ppaversao}	 						";
+$sWhere .= "  AND o05_anoreferencia BETWEEN {$oGet->anoini} AND {$oGet->anofin} ";
 $sWhereAcao = $sWhere;
 $controle   = $oGet->lQuebra == "true"?true:false;
 $sWherePrograma  = "";
 $sWhereOrgao     = "";
 if (isset($oGet->programa) && $oGet->programa != "") {
-  $sWherePrograma = " AND o08_programa IN ({$oGet->programa})"; 
+  $sWherePrograma = " AND o08_programa IN ({$oGet->programa})";
 }
 
 if (isset($oGet->orgao) && $oGet->orgao != "") {
-  $sWhereOrgao = " AND o08_orgao IN({$oGet->orgao}) ";  
+  $sWhereOrgao = " AND o08_orgao IN({$oGet->orgao}) ";
 }
 
 $sSqlEstimativa  = " SELECT DISTINCT o08_programa, /* Programa do PPA */
@@ -63,20 +62,20 @@ $sSqlEstimativa  = " SELECT DISTINCT o08_programa, /* Programa do PPA */
                     LEFT JOIN orcindicaprograma ON orcindicaprograma.o18_orcprograma = orcprograma.o54_programa AND orcindicaprograma.o18_anousu = ".db_getsession('DB_anousu')."
                     WHERE $sWhere
                       AND o08_instit IN ({$sListaInstit}) {$sWherePrograma} {$sWhereOrgao}
-                    ORDER BY o08_programa";  
+                    ORDER BY o08_programa";
 
-$rsEstimativa 	   = pg_query($sSqlEstimativa); 
+$rsEstimativa 	   = pg_query($sSqlEstimativa);
 $iLinhasEstimativa = pg_num_rows($rsEstimativa);
-$aEstimativa	   = array();	 
+$aEstimativa	   = array();
 
 $valor = 0;
 $aTotalAcoes  = array();
 for ( $iInd=0; $iInd < $iLinhasEstimativa; $iInd++ ) {
 
-  $oDadosEstimativa = db_utils::fieldsMemory($rsEstimativa,$iInd);	
+  $oDadosEstimativa = db_utils::fieldsMemory($rsEstimativa,$iInd);
 
   $oDados = new stdClass();
-  
+
   $oDados->iPrograma     	 = $oDadosEstimativa->o08_programa;
   $oDados->sPrograma     	 = $oDadosEstimativa->o54_descr;
 
@@ -156,17 +155,17 @@ for ( $iInd=0; $iInd < $iLinhasEstimativa; $iInd++ ) {
                    ORDER BY o08_projativ, o05_anoreferencia";
 
   }
-  
+
   $rsConsultaAcoes 	= pg_query($sSqlAcoes);
-  
+
   $iLinhasAcoes    	= pg_num_rows($rsConsultaAcoes);
   $aAcoes 			= array();
-  
-  
+
+
   if ( $iLinhasAcoes > 0 ) {
 
   	for ( $iIndAcao=0; $iIndAcao < $iLinhasAcoes; $iIndAcao++ ) {
-  		
+
   	  $oDadosAcao = db_utils::fieldsMemory($rsConsultaAcoes,$iIndAcao);
 
   	  $oAcao = new stdClass();
@@ -175,13 +174,13 @@ for ( $iInd=0; $iInd < $iLinhasEstimativa; $iInd++ ) {
   	  $aAcoes[$oDadosAcao->o08_projativ]['sProduto']     = $oDadosAcao->o22_descrprod;
   	  $aAcoes[$oDadosAcao->o08_projativ]['sUnidade']     = $oDadosAcao->o20_descricao;
   		if ($iModelo == 2) {
-  	    
+
   	    if ($oDadosAcao->o05_anoreferencia != $oGet->iAno) {
-  	      
+
   	      $oDadosAcao->vinculado = "";
   	      $oDadosAcao->valor     = "";
   	      $oDadosAcao->o28_valor = "";
-  	      
+
   	    }
   	  }
   	  $aAcoes[$oDadosAcao->o08_projativ]['sUnidadeMed']  = $oDadosAcao->o55_descrunidade;
@@ -192,15 +191,15 @@ for ( $iInd=0; $iInd < $iLinhasEstimativa; $iInd++ ) {
   	}
 
   }
-  
-  
+
+
   $oDados->iLinhasAcoes = $iLinhasAcoes;
-  $oDados->aAcoes 		= $aAcoes;   
-  
-  
+  $oDados->aAcoes 		= $aAcoes;
+
+
   $aEstimativa[] = $oDados;
-  
-  
+
+
 }
 
 $mostra = 0;
@@ -224,18 +223,18 @@ if ( $oGet->selforma == "s" ) {
 	$head4 = "Forma de Emissão: Analítico";
 }
 if ($iModelo == 1) {
-  
+
   $head2  = "ANEXO DE OBJETIVOS , DIRETRIZES E METAS";
   $head3  = "PPA - {$oGet->anoini} - {$oGet->anofin}";
 
   //Modificação T25780
 //  $head4  = "Versão: ".$oPPAVersao->getVersao()."(".db_formatar($oPPAVersao->getDatainicio(),"d").")";
   //
-  
+
 } else {
-  
+
   $head2  = "LEI DE DIRETRIZES ORÇAMENTÁRIAS - EXERCÍCIO DE $oGet->iAno";
-}	
+}
 $head5 = "Perspectiva: ".$oPPAVersao->getVersao()."(".db_formatar($oPPAVersao->getDatainicio(),"d").")";
 $pdf = new PDF();
 $pdf->Open();
@@ -259,45 +258,45 @@ if ( $oGet->selforma == "s" ) {
 	if (!$controle) {
 	  $pdf->AddPage("L");
 	}
-	
+
   foreach ( $aEstimativa as $oEstimativa ) {
 
     $mostra = 0;
-    foreach ( $oEstimativa->aAcoes as $aDadosAcoes ) { 
-     
+    foreach ( $oEstimativa->aAcoes as $aDadosAcoes ) {
+
       foreach ( $aDadosAcoes['aExercicio'] as $iExercicio => $aDadosExerc ) {
         $mostra += $aDadosExerc['nValor'];
       }
     }
-		
+
     if ($mostra == 0) {
       continue;
     }
     if ($controle && $iPrograma != $oEstimativa->iPrograma) {
      $pdf->addpage("L");
     }
-		validaNovaPagina(&$pdf, 40); 
+		validaNovaPagina($pdf, 40);
 	  $pdf->setfont('arial','B', 8);
 	  $pdf->cell(18,$alt, "Programa:",0,0,"L");
-	  $pdf->cell(10,$alt,str_pad($oEstimativa->iPrograma, 4, '0', STR_PAD_LEFT) , 0, 0, "R"); 
-	  $pdf->cell(100,$alt, $oEstimativa->sPrograma, 0, 1, "L"); 
+	  $pdf->cell(10,$alt,str_pad($oEstimativa->iPrograma, 4, '0', STR_PAD_LEFT) , 0, 0, "R");
+	  $pdf->cell(100,$alt, $oEstimativa->sPrograma, 0, 1, "L");
 	  $iPosYDepois = $pdf->GetY();
 	  $iPosXIndicador = 162;
 	  $pdf->ln();
 	  if ( $oEstimativa->iLinhasAcoes > 0 ) {
-	  	
+
 	  	foreach ( $oEstimativa->aAcoes as $iProjAtiv => $aDadosAcoes ) {
-	  		
-	  		$nTotalGeral     = 0;	
+
+	  		$nTotalGeral     = 0;
 	  	  foreach ( $aDadosAcoes['aExercicio'] as $iExercicio => $aDadosExerc ){
 	  	    $nTotalRecurso    = $aDadosExerc['nValor'];
 	   	    $nTotalGeral	   += $nTotalRecurso;
 	  	  }
-  	    
+
 	  	  if ($nTotalGeral == 0) {
 	  	  	continue;
 	  	  }
-	     
+
 	  	  validaNovaPagina($pdf, 35);
 	  	  $pdf->setfont('arial','B', 8);
 	  	  $pdf->Cell(62,$alt,"Ação"	  							,"TBR",0,"C",1);
@@ -309,10 +308,10 @@ if ( $oGet->selforma == "s" ) {
 	      $pdf->Cell(40,$alt,"Metas"    					,"TRL" ,0,"C",1);
 	      $pdf->Cell(40,$alt,"Valor R$"    					,"TL" ,1,"C",1);
 	      $iPosYAntes  = $pdf->GetY();
-	    	
+
 	      $pdf->setfont('arial','', 8);
 	      $iAltDescr = ($alt);
-	  	
+
 	  	  $pdf->setfont('arial','', 8);
 	  	  //$pdf->multicell(62,$iAltDescr,str_pad(substr($aDadosAcoes["iAcao"]."-".$aDadosAcoes['sDescricao'],0,90),90," ",STR_PAD_RIGHT),"TR","L",0);
 	  	  $pdf->multicell(62,$iAltDescr,str_pad(substr($aDadosAcoes["iAcao"]."-".$aDadosAcoes['sDescricao'],0,90),4," ",STR_PAD_LEFT),"TR","L",0);
@@ -328,17 +327,17 @@ if ( $oGet->selforma == "s" ) {
 	   	  $nTotalLivre     = 0;
 	  	  $nTotalVinculado = 0;
 	  	  $nTotalMetas     = 0;
-	  	  $nTotalGeral     = 0;	
+	  	  $nTotalGeral     = 0;
 	  	  $iLinhasExerc	 = 0;
 	  	  $pdf->SetY($iPosYAntes);
 	      foreach ( $aDadosAcoes['aExercicio'] as $iExercicio => $aDadosExerc ){
-	  	  	
+
 	  	    $nTotalRecurso    = $aDadosExerc['nValor'];
 	   	    $nTotalGeral	   += $nTotalRecurso;
 	   	    $nTotalMetas     += $aDadosExerc['nQuantFisica'];
 	     		$tipo = "f";
 	        if ($iModelo == 2) {
- 	    
+
 			 	    if ($iExercicio != $oGet->iAno) {
 			 	      $iExercicio = "";
 			 	      $tipo = "";
@@ -349,11 +348,11 @@ if ( $oGet->selforma == "s" ) {
 	  	    $pdf->Cell(40,$alt,$aDadosExerc['nQuantFisica']	,"TBR",0,"R",0);
 	  	    $pdf->Cell(40,$alt,db_formatar($aDadosExerc['nValor'],$tipo)	,"TBL",1,"R",0);
 	  	    $iLinhasExerc++;
-	  
+
 	      }
 	  	  $pdf->SetY($iPosYAntes);
 	  	  for ($iSeq=0; $iSeq < 4; $iSeq++ ) {
-	
+
 	  	    $sBorda = "R";
 	  	    if ($iSeq == 3) {
 	  	      $sBorda = "RB";
@@ -363,12 +362,12 @@ if ( $oGet->selforma == "s" ) {
 	  	    $pdf->Cell(26,$alt,"",$sBorda ,0);
 	  	    $pdf->Cell(26,$alt,"",$sBorda ,0);
 	        $pdf->Cell(26,$alt,"",$sBorda ,1);
-	      }	
-	  	  $pdf->setfont('arial','B', 8);	
+	      }
+	  	  $pdf->setfont('arial','B', 8);
 	  	  $pdf->Cell(192,$alt,"Total da ação para os exercícios" ,"TBR",0,"R",0);
 	  	  $pdf->setfont('arial','' , 8);
 	  	  $pdf->Cell(40 ,$alt, $nTotalMetas ,"TBR",0,"R",0);
-	  	  $pdf->Cell(40 ,$alt,db_formatar($nTotalGeral,"f")	   ,"TBL",1,"R",0);  	
+	  	  $pdf->Cell(40 ,$alt,db_formatar($nTotalGeral,"f")	   ,"TBL",1,"R",0);
 	      $pdf->setfont('arial','B', 8);
 	      $pdf->ln();
 	  	}
@@ -381,19 +380,19 @@ if ( $oGet->selforma == "s" ) {
     $pdf->Cell(193,$alt,""          ,"TBR",0,"C",0);
     $pdf->Cell(40 ,$alt,"Ano"       ,"TBR",0,"C",0);
     $pdf->Cell(40 ,$alt,"Valor"       ,"TBR",1,"C",0);
-    
+
     $iY = $pdf->getY();
     $pdf->Cell(193,$alt*4," TOTAL PROGRAMA","TBR",1,"C",0);
     $pdf->setY($iY);
-    $nTotalGeral     = 0; 
+    $nTotalGeral     = 0;
     foreach ( $aTotalAcoes[$oEstimativa->iPrograma] as $iExercicio => $aDados ) {
-        
+
       $nTotalValor     = $aDados;
       $nTotalGeral     += $nTotalValor;
       $pdf->SetX(203);
       $pdf->Cell(40,$alt,$iExercicio                           ,"BR" ,0,"C",0);
       $pdf->Cell(40,$alt,db_formatar($nTotalValor,"f")        ,"TB" ,1,"R",0);
-        
+
     }
     $pdf->Cell(193,$alt,"Total dos Exercícios","TBR",0,"C",0);
     $pdf->Cell(40,$alt,""                               ,"BR" ,0,"C",0);
@@ -403,45 +402,45 @@ if ( $oGet->selforma == "s" ) {
 	}
 
 /*
- * Este parte do if tem a parte nova onde imprimi o relatorio analitico 
+ * Este parte do if tem a parte nova onde imprimi o relatorio analitico
  * detalhando o Programa e a Ação
- */	
+ */
 } else if ( $oGet->selforma == "a" ) {
-  
-  
+
+
   if (!$controle) {
     $pdf->AddPage("L");
   };
   $pdf->setfont('arial','B', 8);
   foreach ( $aEstimativa as $iInd => $oEstimativa ) {
-  	
+
    /*
-    *Faz a verificação dos registros que poderão ser mostrados	
+    *Faz a verificação dos registros que poderão ser mostrados
     * - Deverá  ter valor
-    *  - Deverão ter ações 
+    *  - Deverão ter ações
     */
-   foreach ( $oEstimativa->aAcoes as $iProjAtiv => $aDadosAcoes ) { 
-   
+   foreach ( $oEstimativa->aAcoes as $iProjAtiv => $aDadosAcoes ) {
+
    $mostra = 0;
    foreach ( $aDadosAcoes['aExercicio'] as $iExercicio => $aDadosExerc ) {
      $mostra += $aDadosExerc['nQuantFisica']+$aDadosExerc['nValor'];
    }
  }
- 
+
   if($mostra == 0) {
   	continue;
-  } 
+  }
  //validaNovaPagina(&$pdf, 40);
    if ($controle && $iPrograma != $oEstimativa->iPrograma) {
      $pdf->addpage("L");
     }
 	  $pdf->setfont('arial','B', 8);
 	  $pdf->cell(18,$alt, "Programa:",0,0,"L");
-	  $pdf->cell(10,$alt, str_pad($oEstimativa->iPrograma, 4, '0', STR_PAD_LEFT), 0, 0, "R"); 
-	  $pdf->cell(100,$alt, $oEstimativa->sPrograma, 0, 1, "L"); 
+	  $pdf->cell(10,$alt, str_pad($oEstimativa->iPrograma, 4, '0', STR_PAD_LEFT), 0, 0, "R");
+	  $pdf->cell(100,$alt, $oEstimativa->sPrograma, 0, 1, "L");
 	  $iPosYDepois = $pdf->GetY();
 	  $iPosXIndicador = 162;
-	  
+
 	  //Busca as informções detalhadas do programa e da ação
 	  $sSqlPrograma  = "select case when o54_tipoprograma = 1 then 'Programas Finalísticos' ";
 	  $sSqlPrograma .= "            when o54_tipoprograma = 2 then 'Programas de Apoio as Políticas Públicas e Áreas Especiais' ";
@@ -460,13 +459,13 @@ if ( $oGet->selforma == "s" ) {
 	  $sSqlPrograma .= "where o54_anousu 	 = ".db_getsession('DB_anousu');
 	  $sSqlPrograma .= "  and o54_programa = $oEstimativa->iPrograma";
 	  //die($sSqlPrograma);
-	  $resSqlPrograma	= pg_query($sSqlPrograma);  
+	  $resSqlPrograma	= pg_query($sSqlPrograma);
   	$iLinhaPrograma	= pg_num_rows($resSqlPrograma);
-  	
+
   	if ( $iLinhaPrograma > 0 ){
   		$oDadosPrograma = db_utils::fieldsMemory($resSqlPrograma,0);
   	} else {
-  	  
+
   		$oDadosPrograma = new	stdClass();
   		$oDadosPrograma->tipo						= "";
   		$oDadosPrograma->problema				= "";
@@ -477,10 +476,10 @@ if ( $oGet->selforma == "s" ) {
   		$oDadosPrograma->estrategia			= "";
   		$oDadosPrograma->dataini			  = "";
   		$oDadosPrograma->datafin		  	= "";
-  		
+
   	}
   	/**
-  	 * Consultamos os orgaos que estao vinculados a esse programa possui 
+  	 * Consultamos os orgaos que estao vinculados a esse programa possui
   	 */
   		$oDaoProgramaOrgao  = db_utils::getDao("orcprogramaorgao");
   		$sWhere             = "o12_orcprograma = {$oEstimativa->iPrograma}";
@@ -489,19 +488,19 @@ if ( $oGet->selforma == "s" ) {
   		$rsOrgaos           = $oDaoProgramaOrgao->sql_record($sSqlOrgaos);
 			//$pdf->ln();
 			$aOrgaos            = db_utils::getColectionByRecord($rsOrgaos);
-			
+
 			/**
-       * Consultamos os orgaos que estao vinculados a esse programa possui 
+       * Consultamos os orgaos que estao vinculados a esse programa possui
        */
       $oDaoProgramaUnidade  = db_utils::getDao("orcprogramaunidade");
       $sWhere               = "o14_orcprograma = {$oEstimativa->iPrograma}";
       $sWhere              .= "and o14_anousu  = ".db_getsession('DB_anousu');
       $sSqlUnidades         = $oDaoProgramaUnidade->sql_query(null,"o41_orgao,o41_unidade, o41_descr",
                                                               "o41_orgao,o41_unidade ",$sWhere);
-      
+
       $rsUnidades           = $oDaoProgramaUnidade->sql_record($sSqlUnidades);
       //$pdf->ln();
-      
+
       $aUnidades            = db_utils::getColectionByRecord($rsUnidades);
 			$pdf->setfont('arial','B', 8);
   		$pdf->cell(60,$alt, "Tipo de Programa:",0,0,"L");
@@ -526,7 +525,7 @@ if ( $oGet->selforma == "s" ) {
        	$pdf->multicell(210,$alt, $oDadosPrograma->problema, 0,"L");
       }
 	  	//$pdf->multicell(210,$alt, $oDadosPrograma->problema, 0,"L");
-	  	$pdf->setfont('arial','B', 8); 
+	  	$pdf->setfont('arial','B', 8);
 	  	$pdf->cell(60,$alt, "Finalidade:",0,0,"L");
 	  	$pdf->setfont('arial','', 8);
   		$texto = $pdf->Row_multicell(array('','','',stripslashes($oDadosPrograma->finalidade),'',''),
@@ -585,43 +584,43 @@ if ( $oGet->selforma == "s" ) {
        	$pdf->cell(60,$alt, "",0,0,"L");
        	$pdf->multicell(210,$alt, $oDadosPrograma->estrategia, 0,"L");
       }
-      
-	  	//$pdf->multicell(210,$alt, $oDadosPrograma->estrategia, 0,"L");     
+
+	  	//$pdf->multicell(210,$alt, $oDadosPrograma->estrategia, 0,"L");
   	 $pdf->setfont('arial','B', 8);
      $pdf->cell(60,$alt, "Orgãos:",0,1,"L");
      $pdf->setfont('arial','', 8);
      if (count($aOrgaos) > 0) {
 
        foreach ($aOrgaos as $oOrgao) {
-                  
+
          validaNovaPagina($pdf, 25);
          $pdf->setx(15);
-         $pdf->cell(10, $alt,$oOrgao->o40_orgao." - ",0,0,"R"); 
+         $pdf->cell(10, $alt,$oOrgao->o40_orgao." - ",0,0,"R");
          $pdf->cell(90, $alt,$oOrgao->o40_descr,0,1,"L");
-          
+
        }
      }
-     
+
      $pdf->setfont('arial','B', 8);
      $pdf->cell(60,$alt, "Unidades:",0,1,"L");
      $pdf->setfont('arial','', 8);
      if (count($aUnidades) > 0) {
 
        foreach ($aUnidades as $oUnidade) {
-                  
+
          validaNovaPagina($pdf, 25);
          $pdf->setx(15);
-         $pdf->cell(15, $alt,$oUnidade->o41_orgao.".{$oUnidade->o41_unidade} - ",0,0,"R"); 
+         $pdf->cell(15, $alt,$oUnidade->o41_orgao.".{$oUnidade->o41_unidade} - ",0,0,"R");
          $pdf->cell(90, $alt,$oUnidade->o41_descr,0,1,"L");
-          
+
        }
      }
-	  	  
+
 	  $pdf->ln();
 	  if ( $oEstimativa->iLinhasAcoes > 0 ) {
-	  	
+
 	  	foreach ( $oEstimativa->aAcoes as $iProjAtiv => $aDadosAcoes ){
-	  			  		
+
 	  		$sSqlAcao  = "select o55_finali as finalidade,    ";
 	  		$sSqlAcao .= "       o55_especproduto as produto, ";
 	  		$sSqlAcao .= "       case when o55_tipoacao = 1 then 'Orçamentária' ";
@@ -640,40 +639,40 @@ if ( $oGet->selforma == "s" ) {
 	  		$sSqlAcao .= " where o55_projativ = {$aDadosAcoes["iAcao"]}";
 	  		$sSqlAcao .= "  and  o55_anousu   = ".db_getsession('DB_anousu');
 	  		//$sSqlAcao .= "  and  o55_instit   = ".db_getsession('DB_instit');
-	  		
-	  		$resSqlAcao	= pg_query($sSqlAcao);  
+
+	  		$resSqlAcao	= pg_query($sSqlAcao);
   	    $iLinhaAcao	= pg_num_rows($resSqlAcao);
   	    $pdf->Ln();
   	    validaNovaPagina($pdf, 35);
   	    $iAltDescr = ($alt);
   	    $pdf->setfont('arial','B', 8);
-  	    
+
   	    //verifica a soma se for zero não mostra
-  	    
-  	   	$nTotalGeral     = 0;	
+
+  	   	$nTotalGeral     = 0;
 	  	  foreach ( $aDadosAcoes['aExercicio'] as $iExercicio => $aDadosExerc ){
 	  	    $nTotalRecurso    = $aDadosExerc['nValor'];
 	   	    $nTotalGeral	   += $nTotalRecurso;
 	  	  }
-  	    
+
 	  	  if ($nTotalGeral == 0) {
 	  	  	continue;
 	  	  }
-				
-  	    
+
+
   	    $pdf->cell(18,$alt, "Ação:",0,0,"L");
-	  		$pdf->cell(10,$alt, $aDadosAcoes["iAcao"], 0, 0, "R"); 
-	  		$pdf->cell(200,$alt, $aDadosAcoes['sDescricao'], 0, 1, "L"); 
-  	    
-  	    
+	  		$pdf->cell(10,$alt, $aDadosAcoes["iAcao"], 0, 0, "R");
+	  		$pdf->cell(200,$alt, $aDadosAcoes['sDescricao'], 0, 1, "L");
+
+
 		  	//$pdf->Cell(25,$alt,"Ação:"	  							,"",0,"L",0);
 		  	//$pdf->multicell(200,$iAltDescr,str_pad(substr($aDadosAcoes["iAcao"]."-".$aDadosAcoes['sDescricao'],0,90),90," ",STR_PAD_RIGHT),"","L",0);
-  	    
+
 		  	if ( $iLinhaAcao > 0 ){
 		  		$oDadosAcao1 = db_utils::fieldsMemory($resSqlAcao,0);
 		  	}else{
 		  		$oDadosAcao1 = new stdClass();
-		  		$oDadosAcao1->finalidade	= "";	
+		  		$oDadosAcao1->finalidade	= "";
 		  		$oDadosAcao1->produto 	 	= "";
 		  		$oDadosAcao1->tipo				= "";
 		  		$oDadosAcao1->forma				= "";
@@ -696,7 +695,7 @@ if ( $oGet->selforma == "s" ) {
           }
           validaNovaPagina($pdf, 25);
 			  	//$pdf->multicell(210,$alt, $oDadosAcao1->finalidade, 0,"L");
-			  	$pdf->setfont('arial','B', 8); 
+			  	$pdf->setfont('arial','B', 8);
 			  	$pdf->cell(60,$alt, "Especificação do Produto:",0,0,"L");
 			  	$pdf->setfont('arial','', 8);
 	  			$texto = $pdf->Row_multicell(array('','','',stripslashes($oDadosAcao1->produto),'',''),
@@ -709,7 +708,7 @@ if ( $oGet->selforma == "s" ) {
           }
 			  	//$pdf->multicell(210,$alt, $oDadosAcao1->produto, 0,"L");
 			  	validaNovaPagina($pdf, 25);
-			  	$pdf->setfont('arial','B', 8); 
+			  	$pdf->setfont('arial','B', 8);
 			  	$pdf->cell(60,$alt, "Tipo de Ação:",0,0,"L");
 			  	$pdf->setfont('arial','', 8);
 	  			$texto = $pdf->Row_multicell(array('','','',stripslashes($oDadosAcao1->tipo),'',''),
@@ -765,9 +764,9 @@ if ( $oGet->selforma == "s" ) {
           	$pdf->cell(60,$alt, "",0,0,"L");
           	$pdf->multicell(210,$alt, $oDadosAcao1->base, 0,"L");
           }
-			  	$pdf->multicell(210,$alt, $oDadosAcao1->base, 0,"L");     
-	  		  
-	     
+			  	$pdf->multicell(210,$alt, $oDadosAcao1->base, 0,"L");
+
+
 	  		//$pdf->Ln();
 	  	  validaNovaPagina($pdf, 35);
 	  	  $pdf->setfont('arial','B', 8);
@@ -780,10 +779,10 @@ if ( $oGet->selforma == "s" ) {
 	      $pdf->Cell(40,$alt,"Metas"    					,"TRL" ,0,"C",1);
 	      $pdf->Cell(40,$alt,"Valor R$"    					,"TL" ,1,"C",1);
 	      $iPosYAntes  = $pdf->GetY();
-	    	
+
 	      $pdf->setfont('arial','', 8);
 	      $iAltDescr = ($alt);
-	      	  	
+
 	  	  $pdf->setfont('arial','', 8);
 	  	  //$pdf->multicell(62,$iAltDescr,str_pad(substr($aDadosAcoes["iAcao"]."-".$aDadosAcoes['sDescricao'],0,90),90," ",STR_PAD_RIGHT),"TR","L",0);
 	  	  $pdf->setfont('arial','', 8);
@@ -798,17 +797,17 @@ if ( $oGet->selforma == "s" ) {
 	   	  $nTotalLivre     = 0;
 	  	  $nTotalVinculado = 0;
 	  	  $nTotalMetas     = 0;
-	  	  $nTotalGeral     = 0;	
+	  	  $nTotalGeral     = 0;
 	  	  $iLinhasExerc	 = 0;
 	  	  $pdf->SetY($iPosYAntes);
 	      foreach ( $aDadosAcoes['aExercicio'] as $iExercicio => $aDadosExerc ){
-	  	  	
+
 	  	    $nTotalRecurso    = $aDadosExerc['nValor'];
 	   	    $nTotalGeral	 += $nTotalRecurso;
 	   	    $nTotalMetas     += $aDadosExerc['nQuantFisica'];
 	   	    $tipo = "f";
 	        if ($iModelo == 2) {
- 	    
+
 			 	    if ($iExercicio != $oGet->iAno) {
 			 	      $iExercicio = "";
 			 	      $tipo = "";
@@ -817,15 +816,15 @@ if ( $oGet->selforma == "s" ) {
 	  	    $pdf->SetX(176);
 	  	    $pdf->Cell(26,$alt,$iExercicio  			     			,"BR" ,0,"C",0);
 	  	    $pdf->Cell(40,$alt,$aDadosExerc['nQuantFisica']	,"TBR",0,"R",0);
-	  	    
+
 	  	    $pdf->Cell(40,$alt,db_formatar($aDadosExerc['nValor'],$tipo)	,"TBL",1,"R",0);
-	  	    
+
 	  	    $iLinhasExerc++;
-	  
+
 	      }
 	  	  $pdf->SetY($iPosYAntes);
 	  	  for ($iSeq=0; $iSeq < 4; $iSeq++ ) {
-	
+
 	  	    $sBorda = "R";
 	  	    if ($iSeq == 3) {
 	  	      $sBorda = "RB";
@@ -835,12 +834,12 @@ if ( $oGet->selforma == "s" ) {
 	  	    $pdf->Cell(26,$alt,"",$sBorda ,0);
 	  	    $pdf->Cell(26,$alt,"",$sBorda ,0);
 	        $pdf->Cell(26,$alt,"",$sBorda ,1);
-	      }	
-	  	  $pdf->setfont('arial','B', 8);	
+	      }
+	  	  $pdf->setfont('arial','B', 8);
 	  	  $pdf->Cell(192,$alt,"Total da ação para os exercícios" ,"TBR",0,"R",0);
 	  	  $pdf->setfont('arial','' , 8);
 	  	  $pdf->Cell(40 ,$alt, $nTotalMetas ,"TBR",0,"R",0);
-	  	  $pdf->Cell(40 ,$alt,db_formatar($nTotalGeral,"f")	   ,"TBL",1,"R",0);  	
+	  	  $pdf->Cell(40 ,$alt,db_formatar($nTotalGeral,"f")	   ,"TBL",1,"R",0);
 	      $pdf->setfont('arial','B', 8);
 	      //$pdf->addpage("L");
 	      //$pdf->ln();
@@ -854,22 +853,22 @@ if ( $oGet->selforma == "s" ) {
     $pdf->Cell(193,$alt,""          ,"TBR",0,"C",0);
     $pdf->Cell(40 ,$alt,"Ano"       ,"TBR",0,"C",0);
     $pdf->Cell(40 ,$alt,"Valor"       ,"TBR",1,"C",0);
-    
+
     $iY = $pdf->getY();
     $pdf->Cell(193,$alt*4," TOTAL PROGRAMA","TBR",1,"C",0);
     $pdf->setY($iY);
-    
+
     $nTotalGeral  = 0;
     $nTotalValor = 0;
     foreach ( $aTotalAcoes[$oEstimativa->iPrograma] as $iExercicio => $aDados ) {
-        
+
       $nTotalValor     = $aDados;
       $nTotalGeral     += $nTotalValor;
-        
+
       $pdf->SetX(203);
       $pdf->Cell(40,$alt,$iExercicio                           ,"BR" ,0,"C",0);
       $pdf->Cell(40,$alt,db_formatar($nTotalValor,"f")        ,"TB" ,1,"R",0);
-        
+
     }
     $pdf->Cell(193,$alt,"Total dos Exercícios","TBR",0,"C",0);
     $pdf->Cell(40,$alt,""                               ,"BR" ,0,"C",0);
@@ -877,7 +876,7 @@ if ( $oGet->selforma == "s" ) {
     $iPrograma = $oEstimativa->iPrograma;
     $pdf->ln();
 	}
-	
+
 }
 /**
  * Totalizador Geral
@@ -887,30 +886,30 @@ validaNovaPagina($pdf, 35);
 $pdf->Cell(193,$alt,""          ,"TBR",0,"C",0);
 $pdf->Cell(40 ,$alt,"Ano"       ,"TBR",0,"C",0);
 $pdf->Cell(40 ,$alt,"Valor"       ,"TBR",1,"C",0);
-  
+
 $iY = $pdf->getY();
 $pdf->Cell(193,$alt*4," TOTAL GERAL","TBR",1,"C",0);
 $pdf->setY($iY);
-$nTotalGeral = 0;  
+$nTotalGeral = 0;
 foreach ( $aTotalAcoes as $oProjativ) {
-        
+
   foreach ( $oProjativ as $iExercicio => $aDados ) {
-        
+
     $nTotalValor     = $aDados;
     $nTotalGeral     += $nTotalValor;
     if (isset($aTotalFinal[$iExercicio])) {
-      $aTotalFinal[$iExercicio] += $nTotalValor; 
+      $aTotalFinal[$iExercicio] += $nTotalValor;
     } else {
       $aTotalFinal[$iExercicio]  = $nTotalValor;
     }
   }
 }
 foreach ( $aTotalFinal as $iExercicio => $nTotalValor) {
-  
+
   $pdf->SetX(203);
   $pdf->Cell(40,$alt,$iExercicio                           ,"BR" ,0,"C",0);
   $pdf->Cell(40,$alt,db_formatar($nTotalValor,"f")        ,"TB" ,1,"R",0);
-  
+
 }
 $pdf->Cell(193,$alt,"Total dos Exercícios","TBR",0,"C",0);
 $pdf->Cell(40,$alt,""                               ,"BR" ,0,"C",0);
@@ -919,14 +918,14 @@ $pdf->Output();
 
 
 function validaNovaPagina($pdf, $iAltura){
-	
+
  if ($pdf->getY() > $pdf->h - $iAltura){
-	
+
     $alt = 4;
     $pdf->addpage("L");
 
-  }	
-	
+  }
+
 }
 
 ?>

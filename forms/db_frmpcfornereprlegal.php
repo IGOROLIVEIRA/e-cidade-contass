@@ -190,10 +190,10 @@ if ((isset($incluir) || isset($alterar) || isset($excluir)) && $clpcfornereprleg
     let anousu = "<?= db_getsession('DB_anousu') ?>";
 
     if (mostra == true) {
-      js_OpenJanelaIframe('top.corpo.iframe_pcfornereprlegal', 'db_iframe_cgm', 'func_nome.php?funcao_js=top.corpo.iframe_pcfornereprlegal.js_mostracgm1|z01_numcgm|z01_nome', 'Pesquisa', true, 0);
+      js_OpenJanelaIframe('CurrentWindow.corpo.iframe_pcfornereprlegal', 'db_iframe_cgm', 'func_nome.php?funcao_js=CurrentWindow.corpo.iframe_pcfornereprlegal.js_mostracgm1|z01_numcgm|z01_nome', 'Pesquisa', true, 0);
     } else {
       if (document.form1.pc81_cgmresp.value != '') {
-        js_OpenJanelaIframe('top.corpo.iframe_pcfornereprlegal', 'db_iframe_cgm', 'func_nome.php?pesquisa_chave=' + document.form1.pc81_cgmresp.value + '&funcao_js=top.corpo.iframe_pcfornereprlegal.js_mostracgm', 'Pesquisa', false);
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_pcfornereprlegal', 'db_iframe_cgm', 'func_nome.php?pesquisa_chave=' + document.form1.pc81_cgmresp.value + '&funcao_js=CurrentWindow.corpo.iframe_pcfornereprlegal.js_mostracgm', 'Pesquisa', false);
       } else {
         document.form1.z01_nome1.value = '';
       }

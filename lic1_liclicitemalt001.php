@@ -74,6 +74,7 @@ if (isset($codprocesso) && $codprocesso != '') {
     );
     $rsFornec = $clliclicita->sql_record($sSqlFornec);
     if (pg_num_rows($rsFornec)) {
+        $erro_msg = "Existem fornecedores lançados, exclusão abortada";
         $sqlerro = true;
     }
 }
