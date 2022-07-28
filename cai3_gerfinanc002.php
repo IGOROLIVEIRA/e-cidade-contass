@@ -1337,9 +1337,7 @@ if(isset($HTTP_POST_VARS["ver_matric"]) && !isset($HTTP_POST_VARS["calculavalor"
         echo "<td class=\"borda\" style=\"font-size:11px\" align=\"right\" nowrap><input type=\"hidden\" id=\"\" value=\"\">".@$v07_parcel."&nbsp;</td>\n";
               }
             if(in_array($k03_tipo, array(15,18))){
-              $result_exerc = db_query("select distinct v14_certid as certid from divida inner join certdiv on  v14_coddiv = v01_coddiv where v01_numpre =".$REGISTRO[$i]["k00_numpre"]." and v01_numpar = ".$REGISTRO[$i]["k00_numpar"]." limit 1");
-              db_fieldsmemory($result_exerc,0);
-              echo "<td class=\"borda\" style=\"font-size:11px\" align=\"right\" nowrap><input type=\"hidden\" id=\"\" value=\"\">".@$certid."&nbsp;</td>\n";
+              echo "<td class=\"borda\" style=\"font-size:11px\" align=\"right\" nowrap><input type=\"hidden\" id=\"\" value=\"\">".getCda($REGISTRO[$i]["k00_numpre"],$REGISTRO[$i]["k00_numpar"])."&nbsp;</td>\n";
             }
           echo "<td class=\"borda\" style=\"font-size:11px\" ".($corDtoper==""?"":"bgcolor=$corDtoper")." nowrap>".adodb_date("d-m-Y",$dtoper)."</td>\n";
             echo "<td class=\"borda\" style=\"font-size:11px\" ".($corDtvenc==""?"":"bgcolor=$corDtvenc")." nowrap>".adodb_date("d-m-Y",$dtvenc)."</td>\n";
@@ -1635,9 +1633,7 @@ if(isset($HTTP_POST_VARS["ver_matric"]) && !isset($HTTP_POST_VARS["calculavalor"
           echo "<td class=\"borda\" style=\"font-size:11px\" align=\"right\" nowrap><input type=\"hidden\" id=\"\" value=\"\">".@$v07_parcel."&nbsp;</td>\n";
                 }
             if(in_array($k03_tipo, array(15,18))){
-              $result_exerc = db_query("select distinct v14_certid as certid from divida inner join certdiv on  v14_coddiv = v01_coddiv where v01_numpre =".$REGISTRO[$i]["k00_numpre"]." and v01_numpar = ".$REGISTRO[$i]["k00_numpar"]." limit 1");
-              db_fieldsmemory($result_exerc,0);
-              echo "<td class=\"borda\" style=\"font-size:11px\" align=\"right\" nowrap><input type=\"hidden\" id=\"\" value=\"\">".@$certid."&nbsp;</td>\n";
+              echo "<td class=\"borda\" style=\"font-size:11px\" align=\"right\" nowrap><input type=\"hidden\" id=\"\" value=\"\">".getCda($REGISTRO[$i]["k00_numpre"],$REGISTRO[$i]["k00_numpar"])."&nbsp;</td>\n";
             }
             $datajust = $REGISTRO[$i]["datajust"];
             //$data = date("Y-m-d");
@@ -1954,9 +1950,7 @@ if(isset($HTTP_POST_VARS["ver_matric"]) && !isset($HTTP_POST_VARS["calculavalor"
         echo "<td class=\"borda\" style=\"font-size:11px\" align=\"right\" nowrap><input type=\"hidden\" id=\"\" value=\"\">".@$v07_parcel."&nbsp;</td>\n";
               }
             if(in_array($k03_tipo, array(15,18))){
-              $result_exerc = db_query("select distinct v14_certid as certid from divida inner join certdiv on  v14_coddiv = v01_coddiv where v01_numpre =".$REGISTRO[$i]["k00_numpre"]." and v01_numpar = ".$REGISTRO[$i]["k00_numpar"]." limit 1");
-              db_fieldsmemory($result_exerc,0);
-              echo "<td class=\"borda\" style=\"font-size:11px\" align=\"right\" nowrap><input type=\"hidden\" id=\"\" value=\"\">".@$certid."&nbsp;</td>\n";
+              echo "<td class=\"borda\" style=\"font-size:11px\" align=\"right\" nowrap><input type=\"hidden\" id=\"\" value=\"\">".getCda(pg_result($result,$i,"k00_numpre"),pg_result($result,$i,"k00_numpar"))."&nbsp;</td>\n";
             }
 
           $datajust =  pg_result($result,$i,"datajust");
@@ -2088,6 +2082,16 @@ function verEntidade(){
   }else{
     return false;
   }
+}
+
+function getCda($numpre,$numpar)
+{  
+  $result_exerc = db_query("SELECT DISTINCT v14_certid AS certid 
+                            FROM divida 
+                            INNER JOIN certdiv ON v14_coddiv = v01_coddiv 
+                            WHERE v01_numpre =".$numpre." AND v01_numpar = ".$numpar." LIMIT 1");
+  
+  return (pg_result($result_exerc,0,'certid'));  
 }
 
 ?>
