@@ -1017,8 +1017,12 @@ if(isset($HTTP_POST_VARS["ver_matric"]) && !isset($HTTP_POST_VARS["calculavalor"
       if($k03_tipo==5){
         echo "<th title=\"Exercício\" class=\"borda\" style=\"font-size:12px\" nowrap>Exercício</th>\n";
         echo "<th title=\"Coddiv\" class=\"borda\" style=\"font-size:12px\" nowrap>Coddiv</th>\n";
-      }else if($k03_tipo==6 or $k03_tipo==13 or $k03_tipo==16 or $k03_tipo==17){//Se for parcelamento mostra o Nº do parcelamento
+      }
+      if($k03_tipo==6 or $k03_tipo==13 or $k03_tipo==16 or $k03_tipo==17){//Se for parcelamento mostra o Nº do parcelamento
         echo "<th title=\"Parcelamento\" class=\"borda\" style=\"font-size:12px\" nowrap>Parcelamento</th>\n";
+      }
+      if(in_array($k03_tipo, array(15,18))){
+        echo "<th title=\"CDA\" class=\"borda\" style=\"font-size:12px\" nowrap>CDA</th>\n";
       }
 
       echo "<th title=\"Data de Lançamento\" class=\"borda\" style=\"font-size:12px\" nowrap>Dt. oper.</th>\n";
@@ -1332,6 +1336,11 @@ if(isset($HTTP_POST_VARS["ver_matric"]) && !isset($HTTP_POST_VARS["calculavalor"
             }
         echo "<td class=\"borda\" style=\"font-size:11px\" align=\"right\" nowrap><input type=\"hidden\" id=\"\" value=\"\">".@$v07_parcel."&nbsp;</td>\n";
               }
+            if(in_array($k03_tipo, array(15,18))){
+              $result_exerc = db_query("select distinct v14_certid as certid from divida inner join certdiv on  v14_coddiv = v01_coddiv where v01_numpre =".$REGISTRO[$i]["k00_numpre"]." and v01_numpar = ".$REGISTRO[$i]["k00_numpar"]." limit 1");
+              db_fieldsmemory($result_exerc,0);
+              echo "<td class=\"borda\" style=\"font-size:11px\" align=\"right\" nowrap><input type=\"hidden\" id=\"\" value=\"\">".@$certid."&nbsp;</td>\n";
+            }
           echo "<td class=\"borda\" style=\"font-size:11px\" ".($corDtoper==""?"":"bgcolor=$corDtoper")." nowrap>".adodb_date("d-m-Y",$dtoper)."</td>\n";
             echo "<td class=\"borda\" style=\"font-size:11px\" ".($corDtvenc==""?"":"bgcolor=$corDtvenc")." nowrap>".adodb_date("d-m-Y",$dtvenc)."</td>\n";
           echo "<td class=\"borda\" style=\"font-size:11px\" nowrap>".(trim($REGISTRO[$i]["k01_descr"])==""?"&nbsp":$REGISTRO[$i]["k01_descr"])."</td>\n";
@@ -1625,6 +1634,11 @@ if(isset($HTTP_POST_VARS["ver_matric"]) && !isset($HTTP_POST_VARS["calculavalor"
               }
           echo "<td class=\"borda\" style=\"font-size:11px\" align=\"right\" nowrap><input type=\"hidden\" id=\"\" value=\"\">".@$v07_parcel."&nbsp;</td>\n";
                 }
+            if(in_array($k03_tipo, array(15,18))){
+              $result_exerc = db_query("select distinct v14_certid as certid from divida inner join certdiv on  v14_coddiv = v01_coddiv where v01_numpre =".$REGISTRO[$i]["k00_numpre"]." and v01_numpar = ".$REGISTRO[$i]["k00_numpar"]." limit 1");
+              db_fieldsmemory($result_exerc,0);
+              echo "<td class=\"borda\" style=\"font-size:11px\" align=\"right\" nowrap><input type=\"hidden\" id=\"\" value=\"\">".@$certid."&nbsp;</td>\n";
+            }
             $datajust = $REGISTRO[$i]["datajust"];
             //$data = date("Y-m-d");
             //echo "parcela = $datajust <br>";
@@ -1939,6 +1953,11 @@ if(isset($HTTP_POST_VARS["ver_matric"]) && !isset($HTTP_POST_VARS["calculavalor"
             }
         echo "<td class=\"borda\" style=\"font-size:11px\" align=\"right\" nowrap><input type=\"hidden\" id=\"\" value=\"\">".@$v07_parcel."&nbsp;</td>\n";
               }
+            if(in_array($k03_tipo, array(15,18))){
+              $result_exerc = db_query("select distinct v14_certid as certid from divida inner join certdiv on  v14_coddiv = v01_coddiv where v01_numpre =".$REGISTRO[$i]["k00_numpre"]." and v01_numpar = ".$REGISTRO[$i]["k00_numpar"]." limit 1");
+              db_fieldsmemory($result_exerc,0);
+              echo "<td class=\"borda\" style=\"font-size:11px\" align=\"right\" nowrap><input type=\"hidden\" id=\"\" value=\"\">".@$certid."&nbsp;</td>\n";
+            }
 
           $datajust =  pg_result($result,$i,"datajust");
           $data = db_getsession("DB_datausu");
