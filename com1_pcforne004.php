@@ -96,7 +96,7 @@ if (isset($incluir)) {
               <script>
                   function js_db_libera(){         
                     parent.document.formaba.pcfornecon.disabled=false;
-                    top.corpo.iframe_pcfornecon.location.href='com1_pcfornecon001.php?pc63_numcgm=" . @$pc60_numcgm . "';
+                    parent.CurrentWindow.corpo.iframe_pcfornecon.location.href='com1_pcfornecon001.php?pc63_numcgm=" . @$pc60_numcgm . "';
                 ";
         echo "}\n
                 js_db_libera();
