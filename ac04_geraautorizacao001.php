@@ -1011,7 +1011,7 @@ if ($x->consultarDataDoSistema == true) {
             aLinha.aCells[7].content.setValue(aLinha.aCells[5].getValue());
         } else {
 
-            var nValorTotal = new Number(aLinha.aCells[6].getValue() * aLinha.aCells[4].getValue().replace('.', '').replace(',', '.'));
+            var nValorTotal = new Number(aLinha.aCells[6].getValue() * aLinha.aCells[4].getValue().replace(/\./gi, '').replace(',', '.'));
             aLinha.aCells[7].content.setValue(js_formatar(nValorTotal.toFixed(2), "f", 2));
             //$("valoritem" + iLinha).value = js_formatar(new String(nValorTotal), "f",iCasasDecimais);
             $("valoritem" + iLinha).value = js_formatar(nValorTotal.toFixed(2), "f", 2);
@@ -1140,8 +1140,9 @@ if ($x->consultarDataDoSistema == true) {
             }
             aLinha[2].addEvent("onKeyPress", "return js_mask(event,\"0-9|.|-\")");
             aLinha[2].addEvent("onKeyDown", "return js_verifica(this,event,true)");
-
-            aLinha[3] = eval("valordot" + iDot + " = new DBTextField('valordot" + iDot + "','valordot" + iDot + "','" + oDotacao.valorexecutar + "')");
+            
+                    aLinha[3] = eval("valordot" + iDot + " = new DBTextField('valordot" + iDot + "','valordot" + iDot + "','" + oDotacao.valorexecutar + "')");
+             
             aLinha[3].addStyle("text-align", "right");
             aLinha[3].addStyle("height", "100%");
             aLinha[3].addStyle("width", "100px");
@@ -1179,7 +1180,7 @@ if ($x->consultarDataDoSistema == true) {
         var nValorTotalItem = js_strToFloat(oDadosItem.aCells[5].getValue());
         var nValorTotal = nValor;
         var nQuantAutorizar = Number(oDadosItem.aCells[6].getValue());
-        var nValorUnit = Number(oDadosItem.aCells[4].getValue().replace('.', '').replace(',', '.'));
+        var nValorUnit = Number(oDadosItem.aCells[4].getValue().replace(/\./gi, '').replace(',', '.'));
 
         aItensPosicao[iLinha].dotacoes.each(function(oDotacao, iDot) {
 
@@ -1243,7 +1244,7 @@ if ($x->consultarDataDoSistema == true) {
             oGridDotacoes.aRows[iDot].aCells[2].content.setValue(nValorObjeto);
             Obj.value = nValorObjeto;
         } else {
-            oGridDotacoes.aRows[iDot].aCells[3].content.setValue((nQuant * Number(oDadosItem.aCells[4].getValue().replace('.', '').replace(',', '.'))).toFixed(2));
+            oGridDotacoes.aRows[iDot].aCells[3].content.setValue((nQuant * Number(oDadosItem.aCells[4].getValue().replace(/\./gi, '').replace(',', '.'))).toFixed(2));
             $("valordot" + iDot).value = js_formatar(Number(oGridDotacoes.aRows[iDot].aCells[3].getValue()).toFixed(2), "f", 2);
         }
     }
