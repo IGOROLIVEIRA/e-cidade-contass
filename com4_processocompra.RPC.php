@@ -29,7 +29,7 @@
  * @author $Author: dbmauricio $
  * @version $Revision: 1.6 $
  */
-
+require_once("std/db_stdClass.php");
 require_once("libs/db_stdlib.php");
 require_once("libs/db_utils.php");
 require_once("libs/db_app.utils.php");
@@ -41,7 +41,7 @@ require_once("libs/JSON.php");
 define("MENSAGENS", "patrimonial.compras.com4_processocompra.");
 
 $oJson                  = new services_json();
-$oParam                 = $oJson->decode(str_replace("\\","",$_POST["json"]));
+$oParam                 = $oJson->decode(str_replace("\\", "", $_POST["json"]));
 $oRetorno               = new stdClass();
 $oRetorno->erro         = false;
 $oRetorno->sMessage     = '';
@@ -104,7 +104,7 @@ try {
       }
       $oRetorno->aLotes = $aLotes;
 
-    break;
+      break;
 
     case "getItens":
 
@@ -161,14 +161,14 @@ try {
 
         $oLote = $oProcessoCompra->getLotePorCodigo($oStdLote->lote);
         if (empty($oLote)) {
-          throw new BusinessException(_M(MENSAGENS.'lote_nao_encontrado'));
+          throw new BusinessException(_M(MENSAGENS . 'lote_nao_encontrado'));
         }
         $oLote->removerItens();
         foreach ($oStdLote->itens as $iCodigoItem) {
 
           $oItem = $oProcessoCompra->getItemPorCodigo($iCodigoItem);
           if (empty($oItem)) {
-            throw new BusinessException(_M(MENSAGENS.'item_nao_encontrado'));
+            throw new BusinessException(_M(MENSAGENS . 'item_nao_encontrado'));
           }
           $oLote->adicionarItem($oItem);
         }
@@ -226,9 +226,7 @@ try {
   }
 
   db_fim_transacao(false);
-
-
-} catch (Exception $eErro){
+} catch (Exception $eErro) {
 
   db_fim_transacao(true);
   $oRetorno->erro     = true;
