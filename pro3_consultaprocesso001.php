@@ -61,7 +61,7 @@ if (!isset($grupo)) {
 $resultConsulta = db_query("select * from protparam");
 $p90_novatelaprotocolo = db_utils::fieldsMemory($resultConsulta, 0)->p90_novatelaprotocolo;
 if ($p90_novatelaprotocolo == 'f') {
-  echo "aqui" . $p90_novatelaprotocolo;
+  //echo "aqui" . $p90_novatelaprotocolo;
 }
 
 ?>
