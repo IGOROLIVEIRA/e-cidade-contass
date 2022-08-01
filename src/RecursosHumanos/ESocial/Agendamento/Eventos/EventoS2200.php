@@ -218,9 +218,9 @@ class EventoS2200 extends EventoBase
             $aDadosAPI[] = $oDadosAPI;
             $iSequencial++;
         }
-        echo '<pre>';
-        print_r($aDadosAPI);
-        exit;
+        // echo '<pre>';
+        // print_r($aDadosAPI);
+        // exit;
         return $aDadosAPI;
     }
 

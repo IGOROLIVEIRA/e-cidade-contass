@@ -144,7 +144,8 @@ class Evento
     private function adicionarEvento()
     {
         $dados                                          = $this->montarDadosAPI();
-        $tipoEvento = str_replace('Individual', '', $this->tipoEvento);
+        //adicionado esse str_replace pra pegar o evendo quando o envio foi individual
+        $tipoEvento                                     = str_replace('Individual', '', $this->tipoEvento);
         $daoFilaEsocial                                 = new \cl_esocialenvio();
         $daoFilaEsocial->rh213_evento                   = $tipoEvento;
         $daoFilaEsocial->rh213_empregador               = $this->empregador;

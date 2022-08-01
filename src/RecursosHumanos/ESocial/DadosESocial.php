@@ -45,9 +45,12 @@ class DadosESocial
     public function getPorTipo($tipo, $matricula=null)
     {
         $this->tipo = $tipo;
-        // echo $tipo;
-        // exit;
+        //echo $tipo;
+        //exit;
         switch ($tipo) {
+            case '40':
+                return $this->buscaPreenchimentos($matricula);
+                break;
             case '37':
                 return $this->buscaPreenchimentos($matricula);
                 break;
@@ -88,10 +91,10 @@ class DadosESocial
      */
     private function buscaPreenchimentos($matricula = null)
     {
-        // echo 'tst';
-        // echo $this->tipo;
-        // echo Tipo::REMUNERACAO_TRABALHADOR;
-        // exit;
+         //echo 'tst';
+         //echo $this->tipo;
+         //echo Tipo::AFASTAMENTO_TEMPORARIO;
+         //exit;
         $configuracao = new Configuracao();
         $formularioId = $configuracao->getFormulario($this->tipo);
         $preenchimento = new Preenchimentos();
@@ -125,6 +128,8 @@ class DadosESocial
                 return $preenchimento->buscarPreenchimentoS1200($formularioId, $matricula);
             case Tipo::REMUNERACAO_SERVIDOR:
                 return $preenchimento->buscarPreenchimentoS1202($formularioId, $matricula);
+            case Tipo::AFASTAMENTO_TEMPORARIO:
+                return $preenchimento->buscarPreenchimentoS2230($formularioId, $matricula);
             default:
                 throw new Exception('Tipo não encontrado.');
         }
