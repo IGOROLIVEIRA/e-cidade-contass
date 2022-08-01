@@ -56,6 +56,12 @@ class cl_pagordem {
    var $e50_compdesp_mes = null;
    var $e50_compdesp_ano = null;
    var $e50_contapag = null;
+   var $e50_cattrabalhador = null;
+   var $e50_empresadesconto = null;
+   var $e50_contribuicaoPrev = null;
+   var $e50_valorremuneracao = null;
+   var $e50_valordesconto = null;
+   var $e50_datacompetencia = null;
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  e50_codord = int4 = Ordem 
@@ -67,6 +73,12 @@ class cl_pagordem {
                  e50_anousu = int4 = Ano da Ordem 
                  e50_compdesp = date = Competencia da Despesa
                  e50_contapag = int4 = Conta Pagadora
+                 e50_cattrabalhador = int4 = Categoria do Trabalhador
+                 e50_empresadesconto = int4 = Empresa que Efetuou o Desconto 
+                 e50_contribuicaoPrev = char = Indicador de Desconto da Contribuição Previdenciária
+                 e50_valorremuneracao = float8 = Valor da Remuneração
+                 e50_valordesconto = float8 = Valor do desconto
+                 e50_datacompetencia = date = Competência
                  ";
    //funcao construtor da classe 
    function cl_pagordem() { 
@@ -109,6 +121,14 @@ class cl_pagordem {
          }
        }
        $this->e50_contapag = ($this->e50_contapag == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_contapag"]:$this->e50_contapag);
+       $this->e50_cattrabalhador = ($this->e50_cattrabalhador == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_cattrabalhador"]:$this->e50_cattrabalhador);
+       $this->e50_empresadesconto = ($this->e50_empresadesconto == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_empresadesconto"]:$this->e50_empresadesconto);
+       $this->e50_contribuicaoPrev = ($this->e50_contribuicaoPrev == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_contribuicaoPrev"]:$this->e50_contribuicaoPrev); 
+       $this->e50_valorremuneracao = ($this->e50_valorremuneracao == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_valorremuneracao"]:$this->e50_valorremuneracao);
+       $this->e50_valordesconto = ($this->e50_valordesconto == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_valordesconto"]:$this->e50_valordesconto);
+       $this->e50_datacompetencia = ($this->e50_datacompetencia == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_datacompetencia"]:$this->e50_datacompetencia);
+
+       
      }else{
        $this->e50_codord = ($this->e50_codord == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_codord"]:$this->e50_codord);
      }
@@ -193,6 +213,7 @@ class cl_pagordem {
        $this->erro_status = "0";
        return false;
      }
+    
      $sql = "insert into pagordem(
                                        e50_codord 
                                       ,e50_numemp 
@@ -203,6 +224,12 @@ class cl_pagordem {
                                       ,e50_anousu 
                                       ,e50_compdesp 
                                       ,e50_contapag
+                                      ,e50_cattrabalhador 
+                                      ,e50_empresadesconto 
+                                      ,e50_contribuicaoPrev 
+                                      ,e50_valorremuneracao 
+                                      ,e50_valordesconto 
+                                      ,e50_datacompetencia 
                        )
                 values (
                                 $this->e50_codord 
@@ -213,8 +240,16 @@ class cl_pagordem {
                                ,'$this->e50_hora' 
                                ,$this->e50_anousu 
                                ,".($this->e50_compdesp == "null" || $this->e50_compdesp == ""?"null":"'".$this->e50_compdesp."'")." 
-                               ,".($this->e50_contapag == "null" || $this->e50_contapag == ""?"null":$this->e50_contapag)." 
+                               ,".($this->e50_contapag == "null" || $this->e50_contapag == ""?"null":$this->e50_contapag)."
+                               ,$this->e50_cattrabalhador 
+                               ,$this->e50_empresadesconto
+                               ,$this->e50_contribuicaoPrev  
+                               ,$this->e50_valorremuneracao 
+                               ,$this->e50_valordesconto 
+                               ,".($this->e50_datacompetencia == "null" || $this->e50_datacompetencia == ""?"null":"'".$this->e50_datacompetencia."'")."
+                                
                       )";
+                 
      $result = db_query($sql); 
      if($result==false){ 
        $this->erro_banco = str_replace("\n","",@pg_last_error());

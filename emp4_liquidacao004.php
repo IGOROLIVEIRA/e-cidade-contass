@@ -149,14 +149,18 @@ if ($oParam->e30_liberaempenho == 't') {
     $zerado = false;
 
     if (strlen($z01_cgccpf) == 14) {
+        $tipofornec = 'cnpj';
         if ($z01_cgccpf == '00000000000000') {
             $zerado = true;
+            
         }
     }
 
     if (strlen($z01_cgccpf) == 11) {
+        $tipofornec = 'cpf';
         if ($z01_cgccpf == '00000000000') {
             $zerado = true;
+           
         }
     }
 
@@ -172,6 +176,9 @@ switch ($objJson->method) {
   $sWhereEmpenho        = " e60_numemp =  {$objJson->iEmpenho}";
   $sSqlBuscaElemento    = $oDaoElementos->sql_query_estrut_empenho(null, "substr(o56_elemento,1,7) AS o56_elemento", null, $sWhereEmpenho);
   $rsBuscaElemento      = $oDaoElementos->sql_record($sSqlBuscaElemento);
+
+  $sSqlBuscaDesdobramento    = $oDaoElementos->sql_query_estrut_empenho(null, "substr(o56_elemento,1,9) AS o56_elemento", null, $sWhereEmpenho);
+  $rsBuscaDesdobramento      = $oDaoElementos->sql_record($sSqlBuscaDesdobramento);
 
   $oDaoPatriInst    = db_utils::getDao('cfpatriinstituicao');
   $sWherePatriInst  = " t59_instituicao = " . db_getsession('DB_instit');
@@ -230,6 +237,7 @@ switch ($objJson->method) {
     $oEmpenho->oGrupoElemento = $oGrupoElemento;
       $oEmpenho->LiberadoLic = $lBloquear;
       $oEmpenho->Zerado = $zerado;
+      $oEmpenho->Tipofornec = $tipofornec;
       echo $json->encode($oEmpenho);
 
   }
@@ -258,6 +266,7 @@ switch ($objJson->method) {
             $oEmpenho->oGrupoElemento = $oGrupoElemento;
             $oEmpenho->LiberadoLic = $lBloquear;
             $oEmpenho->Zerado = $zerado;
+            $oEmpenho->Tipofornec = $tipofornec;
             echo $json->encode($oEmpenho);
 
 
@@ -271,6 +280,7 @@ switch ($objJson->method) {
             $oEmpenho->oGrupoElemento = $oGrupoElemento;
               $oEmpenho->LiberadoLic = $lBloquear;
               $oEmpenho->Zerado = $zerado;
+              $oEmpenho->Tipofornec = $tipofornec;
               echo $json->encode($oEmpenho);
           }
         }
@@ -279,11 +289,14 @@ switch ($objJson->method) {
         // echo $objEmpenho->empenho2Json('',$item);
         $oEmpenho = json_decode($objEmpenho->empenho2Json('', $item));
         $oEmpenho->sEstrutural = db_utils::fieldsMemory($rsBuscaElemento, 0)->o56_elemento;
+        $oEmpenho->sDesdobramento = db_utils::fieldsMemory($rsBuscaDesdobramento, 0)->o56_elemento;
+        
         $oGrupoElemento->iGrupo = "";
         $oGrupoElemento->sGrupo = "";
         $oEmpenho->oGrupoElemento = $oGrupoElemento;
           $oEmpenho->LiberadoLic = $lBloquear;
           $oEmpenho->Zerado = $zerado;
+          $oEmpenho->Tipofornec = $tipofornec;
           echo $json->encode($oEmpenho);
       }
 
@@ -311,8 +324,9 @@ switch ($objJson->method) {
       }
 
       $sHistorico = db_stdClass::normalizeStringJsonEscapeString($objJson->historico);//addslashes(stripslashes(utf8_decode()))
-      $oRetorno   = $objEmpenho->liquidarAjax($objJson->iEmpenho, $objJson->notas, $sHistorico, $objJson->e50_compdesp, $objJson->e83_codtipo);
+      $oRetorno   = $objEmpenho->liquidarAjax($objJson->iEmpenho, $objJson->notas, $sHistorico, $objJson->e50_compdesp, $objJson->e83_codtipo,$objJson->cattrabalhador,$objJson->numempresa,$objJson->contribuicaoPrev,$objJson->valorremuneracao,$objJson->valordesconto,$objJson->competencia);
       $oDadosRetorno = $json->decode(str_replace("\\", "", $oRetorno));
+
       if ($oRetorno !== false) {
 
         if ($oDadosRetorno->erro == 1) {
@@ -382,7 +396,13 @@ switch ($objJson->method) {
       $objJson->e50_compdesp,
       $objJson->e83_codtipo,
       true,
-      $objJson->iCgmEmitente
+      $objJson->iCgmEmitente,
+      $objJson->cattrabalhador, 
+      $objJson->numempresa, 
+      $objJson->contribuicaoPrev,
+      $objJson->valorremuneracao,
+      $objJson->valordesconto,
+      $objJson->competencia
     );
 
     if (isset($objJson->verificaChave) && $objJson->verificaChave == 1 && $objJson->e69_notafiscaleletronica != 2 && $objJson->e69_notafiscaleletronica != 3) {
