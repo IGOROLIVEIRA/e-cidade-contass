@@ -52,7 +52,7 @@ $clrotulo->label("e53_vlrpag");
 if (isset($oGet->e69_codnota)) {
 
   $sSqlNota  = "select e69_codnota,";
-  $sSqlNota .= "       z01_nome,";
+  $sSqlNota .= "       cgm.z01_nome,";
   $sSqlNota .= "       e69_dtnota,";
   $sSqlNota .= "       e69_numero,";
   $sSqlNota .= "       e60_codemp||'/'||e60_anousu as codemp,";
@@ -60,17 +60,28 @@ if (isset($oGet->e69_codnota)) {
   $sSqlNota .= "       e70_vlrliq,";
   $sSqlNota .= "       e70_vlranu,";
   $sSqlNota .= "       e50_codord,";
-  $sSqlNota .= "       e53_vlrpag";
+  $sSqlNota .= "       e53_vlrpag,";
+  $sSqlNota .= "       e50_cattrabalhador,"; 
+  $sSqlNota .= "       ct01_descricaocategoria,";
+  $sSqlNota .= "       e50_empresadesconto,"; 
+  $sSqlNota .= "       empresa.z01_nome as nomeempresa,";
+  $sSqlNota .= "       e50_valorremuneracao,"; 
+  $sSqlNota .= "       e50_valordesconto,"; 
+  $sSqlNota .= "       e50_datacompetencia,";
+  $sSqlNota .= "       e50_contribuicaoprev";
   $sSqlNota .= "  from empnota ";
   $sSqlNota .= "          inner join empempenho   on e69_numemp  = e60_numemp";
-  $sSqlNota .= "          inner join cgm          on e60_numcgm  = z01_numcgm";
+  $sSqlNota .= "          inner join cgm as cgm   on e60_numcgm  = cgm.z01_numcgm";
   $sSqlNota .= "          inner join empnotaele   on e69_codnota = e70_codnota";
   $sSqlNota .= "          left  join pagordemnota on e71_codnota = e69_codnota";
   $sSqlNota .= "                                 and e71_anulado is false";
   $sSqlNota .= "          left  join pagordem    on  e71_codord = e50_codord";
   $sSqlNota .= "          left  join pagordemele  on e53_codord = e50_codord";
+  $sSqlNota .= "          left  join cgm as empresa on empresa.z01_numcgm = e50_empresadesconto";
+  $sSqlNota .= "          left join categoriatrabalhador on	ct01_codcategoria = e50_cattrabalhador";
   $sSqlNota .= "  where e69_codnota = {$oGet->e69_codnota}";
   $rsNota    = $oDaoEmpNota->sql_record($sSqlNota);
+ 
   if ($oDaoEmpNota->numrows > 0 ) {
 
     $oNotas      = db_utils::FieldsMemory($rsNota, 0);
@@ -83,6 +94,14 @@ if (isset($oGet->e69_codnota)) {
     $e70_vlranu  = $oNotas->e70_vlranu;
     $e53_vlrpag  = $oNotas->e53_vlrpag;
     $e50_codord  = $oNotas->e50_codord;
+    $e50_cattrabalhador = $oNotas->e50_cattrabalhador;
+    $ct01_descricaocategoria = $oNotas->ct01_descricaocategoria;
+    $e50_empresadesconto = $oNotas->e50_empresadesconto; 
+    $e50_valorremuneracao = $oNotas->e50_valorremuneracao;
+    $e50_valordesconto = $oNotas->e50_valordesconto;
+    $e50_datacompetencia = $oNotas->e50_datacompetencia;
+    $nomeempresa = $oNotas->nomeempresa;
+    $e50_contribuicaoprev = $oNotas->e50_contribuicaoprev;
 
   }
 }
@@ -180,6 +199,86 @@ if (isset($oGet->e69_codnota)) {
          </tr>
          </tr>
        </table>
+   </fieldset>
+   <fieldset>
+     <legend>
+       <b>eSocial</b>
+     </legend>
+     <table>
+     <table>
+         <tr>
+           <td>
+             <b>Categoria do Trabalhador:</b>
+           </td>
+           <td>
+              <?
+              db_input('e50_cattrabalhador', 10, $Ie50_cattrabalhador, true, 'text', 3);
+              ?>
+           </td>
+           <td>
+              <?
+              db_input('ct01_descricaocategoria', 40, $Ict01_descricaocategoria, true, 'text', 3);
+              ?>
+           </td>
+           <td>
+             <b>Valor da Remuneração:</b>
+           </td>
+           <td>
+              <?
+              db_input('e50_valorremuneracao', 10, $Ie50_valorremuneracao, true, 'text', 3);
+              ?>
+           </td>
+            <td>
+             <b>Valor o Desconto:</b>
+           </td>
+           <td>
+              <?
+              db_input('e50_valordesconto', 10, $Ie50_valordesconto, true, 'text', 3);
+              ?>
+           </td>
+         </tr>
+         <tr>
+         <td>
+             <b>Empresa que efetuou desconto:</b>
+           </td>
+           <td>
+              <?
+              db_input('e50_empresadesconto', 10, $Ie50_empresadesconto, true, 'text', 3);
+              ?>
+           </td>
+           <td>
+              <?
+              db_input('nomeempresa', 40, $Inomeempresa, true, 'text', 3);
+              ?>
+           </td>
+            <td>
+             <b>Competência</b> 
+           </td>
+           <td>
+              <?
+              if($e50_datacompetencia){
+                $data = explode("-",$e50_datacompetencia);
+                $e50_datacompetencia = $data[2]."-".$data[1]."-".$data[0];
+              }
+              db_input('e50_datacompetencia', 10, $Ie50_datacompetencia, true, 'text', 3);
+              ?>
+           </td>
+           </tr>
+           <tr>
+           <td colspan="2">
+             <b>Indicador de Desconto da Contribuição Previdenciária</b> 
+           </td>
+           <td>
+              <?
+              db_input('e50_contribuicaoprev', 10, $Ie50_contribuicaoprev, true, 'text', 3);
+              ?>
+           </td>
+           
+         </tr>
+         </tr>
+     </table>
+     </form>
+     <form name='form2' method='post'>
    </fieldset>
    <fieldset>
      <legend>
