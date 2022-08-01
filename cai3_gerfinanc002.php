@@ -1018,7 +1018,7 @@ if(isset($HTTP_POST_VARS["ver_matric"]) && !isset($HTTP_POST_VARS["calculavalor"
         echo "<th title=\"Exercício\" class=\"borda\" style=\"font-size:12px\" nowrap>Exercício</th>\n";
         echo "<th title=\"Coddiv\" class=\"borda\" style=\"font-size:12px\" nowrap>Coddiv</th>\n";
       }
-      if($k03_tipo==6 or $k03_tipo==13 or $k03_tipo==16 or $k03_tipo==17){//Se for parcelamento mostra o Nº do parcelamento
+      if(in_array($k03_tipo, array(6,13,16,17))){//Se for parcelamento mostra o Nº do parcelamento
         echo "<th title=\"Parcelamento\" class=\"borda\" style=\"font-size:12px\" nowrap>Parcelamento</th>\n";
       }
       if(in_array($k03_tipo, array(15,18))){
