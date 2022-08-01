@@ -288,6 +288,13 @@ if (USE_PCASP) {
                   <td id='empresa2'><? db_input('nomeempresa', 50, $Inomeempresa, true, 'text', 3, '');?></td>
         </tr>
         <tr>
+                  <td id='catremuneracao'><?=db_ancora('<b>Categoria do trabalhador na qual houve a remuneração:</b>',"js_pesquisaCatTrabalhadorremuneracao(true)",1)?></td>
+                  <td id='catremuneracao1'><? db_input('ct01_codcategoriaremuneracao', 15, $Ict01_codcategoriaremuneracao, true, 'text', 1,"onchange='js_pesquisaCatTrabalhadorremuneracao(false)'"); ?> </td>
+                  <td id='catremuneracao2'><? db_input('ct01_descricaocategoriaremuneracao', 50, $Ict01_descricaocategoriaremuneracao, true, 'text', 3, '');?></td>
+        </tr>
+        
+
+        <tr>
                   <td id='vlrremuneracao'><strong>Valor da Remuneração:</strong></td>
                   <td id='vlrremuneracao1'>
                     <?
@@ -552,6 +559,9 @@ if (USE_PCASP) {
       document.getElementById('empresa').style.display = "none";
       document.getElementById('empresa1').style.display = "none";
       document.getElementById('empresa2').style.display = "none";
+      document.getElementById('catremuneracao').style.display = "none";
+      document.getElementById('catremuneracao1').style.display = "none";
+      document.getElementById('catremuneracao2').style.display = "none";
       document.getElementById('vlrremuneracao').style.display = "none";
       document.getElementById('vlrremuneracao1').style.display = "none";
       document.getElementById('vlrdesconto').style.display = "none";
@@ -564,12 +574,17 @@ function validarcamposEsocial(){
       document.getElementById('empresa').style.display = "none";
       document.getElementById('empresa1').style.display = "none";
       document.getElementById('empresa2').style.display = "none";
+      document.getElementById('catremuneracao').style.display = "none";
+      document.getElementById('catremuneracao1').style.display = "none";
+      document.getElementById('catremuneracao2').style.display = "none";
       document.getElementById('vlrremuneracao').style.display = "none";
       document.getElementById('vlrremuneracao1').style.display = "none";
       document.getElementById('vlrdesconto').style.display = "none";
       document.getElementById('vlrdesconto1').style.display = "none";
       document.form1.numempresa.value = '';
       document.form1.nomeempresa.value = '';
+      document.form1.ct01_codcategoriaremuneracao.value = '';
+      document.form1.ct01_descricaocategoriaremuneracao.value = '';
       document.form1.valorremuneracao.value = '';
       document.form1.valordesconto.value = '';
       document.form1.competencia.value= '';
@@ -579,6 +594,9 @@ function validarcamposEsocial(){
       document.getElementById('empresa').style.display = "table-cell";
       document.getElementById('empresa1').style.display = "table-cell";
       document.getElementById('empresa2').style.display = "table-cell";
+      document.getElementById('catremuneracao').style.display = "table-cell";
+      document.getElementById('catremuneracao1').style.display = "table-cell";
+      document.getElementById('catremuneracao2').style.display = "table-cell";
       document.getElementById('vlrremuneracao1').style.display = "table-cell";
       document.getElementById('vlrremuneracao').style.display = "table-cell";
       document.getElementById('vlrdesconto').style.display = "table-cell";
@@ -996,6 +1014,10 @@ function validarcamposEsocial(){
       alert("Campo Empresa que efetuou desconto Obrigatorio")
       return false;
    }
+   if(!document.form1.ct01_codcategoriaremuneracao.value &&  opcao != '3' && (document.form1.contribuicaoPrev.value == '2' || document.form1.contribuicaoPrev.value == '3') &&  obj.Tipofornec =='cpf' && tipodesdobramento == '1' ){
+      alert("Campo Categoria do trabalhador na qual houve a remuneração Obrigatorio")
+      return false;
+   }
    if(!document.form1.valorremuneracao.value &&  opcao != '3' && (document.form1.contribuicaoPrev.value == '2' || document.form1.contribuicaoPrev.value == '3') &&  obj.Tipofornec =='cpf' && tipodesdobramento == '1' ){
       alert("Campo Valor da Remuneração Obrigatorio")
       return false;
@@ -1210,6 +1232,7 @@ function validarcamposEsocial(){
       oParam.cattrabalhador = encodeURIComponent($F('ct01_codcategoria'));
       oParam.numempresa = encodeURIComponent($F('numempresa'));
       oParam.contribuicaoPrev = $F('contribuicaoPrev');
+      oParam.cattrabalhadorremuneracao = $F('ct01_codcategoriaremuneracao');
       oParam.valorremuneracao = encodeURIComponent($F('valorremuneracao'));
       oParam.valordesconto = encodeURIComponent($F('valordesconto'));
       oParam.competencia = $F('competencia');
@@ -1276,6 +1299,8 @@ function validarcamposEsocial(){
       document.form1.ct01_codcategoria.value = '';
       document.form1.ct01_descricaocategoria.value = ''; 
       document.form1.contribuicaoPrev.value = '';
+      document.form1.ct01_codcategoriaremuneracao.value = '';
+      document.form1.ct01_descricaocategoriaremuneracao.value = '';   
       document.form1.numempresa.value = '';
       document.form1.nomeempresa.value = '';
       document.form1.valorremuneracao.value = '';
@@ -1412,6 +1437,18 @@ function validarcamposEsocial(){
       }
     }
   }
+  function js_pesquisaCatTrabalhadorremuneracao(mostra){
+  if(mostra==true){
+    js_OpenJanelaIframe('top.corpo','db_iframe_cgm','func_categoriatrabalhador.php?funcao_js=parent.js_mostraCatTrabalhadorremuneracao1|ct01_codcategoria|ct01_descricaocategoria','Pesquisa',true);
+  }else{
+     if(document.form1.ct01_codcategoriaremuneracao.value != ''){
+        js_OpenJanelaIframe('top.corpo','db_iframe_cgm','func_categoriatrabalhador.php?pesquisa_chave='+document.form1.ct01_codcategoriaremuneracao.value+'&funcao_js=parent.js_mostraCatTrabalhadorremuneracao','Pesquisa',false);
+     }else{
+       document.form1.ct01_codcategoriaremuneracao.value = '';
+       document.form1.ct01_descricaocategoriaremuneracao.value = '';
+     }
+  }
+}
   function js_pesquisaEmpresa(mostra){
     if(mostra==true){
       js_OpenJanelaIframe('top.corpo','db_iframe_cgm','func_nome.php?funcao_js=parent.js_mostraEmpresa1|z01_numcgm|z01_nome','Pesquisa',true);
@@ -1447,6 +1484,18 @@ function validarcamposEsocial(){
     document.form1.nomeempresa.value = chave2;
     db_iframe_cgm.hide();
   }
+  function js_mostraCatTrabalhadorremuneracao(erro,chave){
+  document.form1.ct01_descricaocategoriaremuneracao.value = chave;
+  if(erro==true){
+    document.form1.ct01_codcategoriaremuneracao.focus();
+    document.form1.ct01_codcategoriaremuneracao.value = '';
+  }
+}
+function js_mostraCatTrabalhadorremuneracao1(chave1,chave2){
+  document.form1.ct01_codcategoriaremuneracao.value = chave1;
+  document.form1.ct01_descricaocategoriaremuneracao.value = chave2;
+  db_iframe_cgm.hide();
+}
   function js_pesquisae49_numcgm(mostra){
     if(mostra==true){
       js_OpenJanelaIframe('top.corpo','db_iframe_cgm','func_nome.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome',

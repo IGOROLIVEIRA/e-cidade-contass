@@ -53,6 +53,7 @@ if (isset($oGet->e69_codnota)) {
 
   $sSqlNota  = "select e69_codnota,";
   $sSqlNota .= "       cgm.z01_nome,";
+  $sSqlNota .= "       cgm.z01_cgccpf,";
   $sSqlNota .= "       e69_dtnota,";
   $sSqlNota .= "       e69_numero,";
   $sSqlNota .= "       e60_codemp||'/'||e60_anousu as codemp,";
@@ -62,14 +63,16 @@ if (isset($oGet->e69_codnota)) {
   $sSqlNota .= "       e50_codord,";
   $sSqlNota .= "       e53_vlrpag,";
   $sSqlNota .= "       e50_cattrabalhador,"; 
-  $sSqlNota .= "       ct01_descricaocategoria,";
+  $sSqlNota .= "       cattrabalhador.ct01_descricaocategoria,";
   $sSqlNota .= "       e50_empresadesconto,"; 
   $sSqlNota .= "       empresa.z01_nome as nomeempresa,";
   $sSqlNota .= "       e50_valorremuneracao,"; 
   $sSqlNota .= "       e50_valordesconto,"; 
   $sSqlNota .= "       e50_datacompetencia,";
-  $sSqlNota .= "       e50_contribuicaoprev";
-  $sSqlNota .= "  from empnota ";
+  $sSqlNota .= "       e50_contribuicaoprev,";
+  $sSqlNota .= "       catremuneracao.ct01_descricaocategoria as descricaoremuneracao,";
+  $sSqlNota .= "       e50_cattrabalhadorremurenacao";
+  $sSqlNota .= "       from empnota ";
   $sSqlNota .= "          inner join empempenho   on e69_numemp  = e60_numemp";
   $sSqlNota .= "          inner join cgm as cgm   on e60_numcgm  = cgm.z01_numcgm";
   $sSqlNota .= "          inner join empnotaele   on e69_codnota = e70_codnota";
@@ -78,10 +81,11 @@ if (isset($oGet->e69_codnota)) {
   $sSqlNota .= "          left  join pagordem    on  e71_codord = e50_codord";
   $sSqlNota .= "          left  join pagordemele  on e53_codord = e50_codord";
   $sSqlNota .= "          left  join cgm as empresa on empresa.z01_numcgm = e50_empresadesconto";
-  $sSqlNota .= "          left join categoriatrabalhador on	ct01_codcategoria = e50_cattrabalhador";
+  $sSqlNota .= "          left join categoriatrabalhador as cattrabalhador on cattrabalhador.ct01_codcategoria = e50_cattrabalhador";
+  $sSqlNota .= "          left join categoriatrabalhador as catremuneracao on	catremuneracao.ct01_codcategoria = e50_cattrabalhadorremurenacao";
   $sSqlNota .= "  where e69_codnota = {$oGet->e69_codnota}";
   $rsNota    = $oDaoEmpNota->sql_record($sSqlNota);
- 
+//  echo $sSqlNota;exit;
   if ($oDaoEmpNota->numrows > 0 ) {
 
     $oNotas      = db_utils::FieldsMemory($rsNota, 0);
@@ -97,11 +101,14 @@ if (isset($oGet->e69_codnota)) {
     $e50_cattrabalhador = $oNotas->e50_cattrabalhador;
     $ct01_descricaocategoria = $oNotas->ct01_descricaocategoria;
     $e50_empresadesconto = $oNotas->e50_empresadesconto; 
+    $e50_cattrabalhadorremurenacao = $oNotas->e50_cattrabalhadorremurenacao;
+    $e50_descricaoremurenacao = $oNotas->descricaoremuneracao;
     $e50_valorremuneracao = $oNotas->e50_valorremuneracao;
     $e50_valordesconto = $oNotas->e50_valordesconto;
     $e50_datacompetencia = $oNotas->e50_datacompetencia;
     $nomeempresa = $oNotas->nomeempresa;
     $e50_contribuicaoprev = $oNotas->e50_contribuicaoprev;
+    $cpfcnpj =  $oNotas->z01_cgccpf;
 
   }
 }
@@ -200,8 +207,8 @@ if (isset($oGet->e69_codnota)) {
          </tr>
        </table>
    </fieldset>
-   <fieldset>
-     <legend>
+   <fieldset id='esocial'>
+     <legend >
        <b>eSocial</b>
      </legend>
      <table>
@@ -264,6 +271,21 @@ if (isset($oGet->e69_codnota)) {
               ?>
            </td>
            </tr>
+           <tr>
+            <td>
+             <b>Categoria do trabalhador na qual houve a remuneração:</b>
+           </td>
+           <td>
+              <?
+              db_input('e50_cattrabalhadorremurenacao', 10, $Ie50_cattrabalhadorremurenacao, true, 'text', 3);
+              ?>
+           </td>
+           <td>
+              <?
+              db_input('e50_descricaoremurenacao', 40, $Ie50_descricaoremurenacao, true, 'text', 3);
+              ?>
+           </td>
+            </tr>
            <tr>
            <td colspan="2">
              <b>Indicador de Desconto da Contribuição Previdenciária</b> 
@@ -378,3 +400,12 @@ if (isset($oGet->e69_codnota)) {
    </form>
 </body>
 </html>
+<script>
+    var db_opcao = "<?php print $cpfcnpj; ?>";
+    if(db_opcao.length == '11'){
+      document.getElementById('esocial').style.display = "table-cell";   
+    }else{
+      document.getElementById('esocial').style.display = "none";
+    }
+  
+</script>  

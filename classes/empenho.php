@@ -138,7 +138,7 @@ class empenho {
 
 
   function liquidar($numemp = "", $codele = "", $codnota = "", $valor = "", $historico = "", $sHistoricoOrdem='', $iCompDesp ='',
-                    $iContaPagadora = null, $lVerificaContaPagadora = true, $iCattrabalhador = null,$iNumempresa = null,$iContribuicaoPrev = null,$iValorremuneracao = null,$iValordesconto = null,$iCompetencia = null) {
+                    $iContaPagadora = null, $lVerificaContaPagadora = true, $iCattrabalhador = null,$iNumempresa = null,$iContribuicaoPrev = null,$iCattrabalhadorremuneracao = null,$iValorremuneracao = null,$iValordesconto = null,$iCompetencia = null) {
                        
     /*
      * Caso o usuário tenha marcado a opção 'Obriga Conta Pagadora na Liquidação'
@@ -406,7 +406,7 @@ class empenho {
     if ($sHistoricoOrdem == "") {
       $sHistoricoOrdem = $historico;
     }
-    $this->lancaOP($numemp, $codele, $codnota, $valor, null, $sHistoricoOrdem, $iCompDesp, $iContaPagadora,$iCattrabalhador,$iNumempresa,$iContribuicaoPrev,$iValorremuneracao,$iValordesconto,$iCompetencia);
+    $this->lancaOP($numemp, $codele, $codnota, $valor, null, $sHistoricoOrdem, $iCompDesp, $iContaPagadora,$iCattrabalhador,$iNumempresa,$iContribuicaoPrev,$iCattrabalhadorremuneracao,$iValorremuneracao,$iValordesconto,$iCompetencia);
 
 
     if ($this->erro_status != '0') {
@@ -1136,7 +1136,7 @@ class empenho {
    *
    */
   private function lancaOP($numemp = "", $codele = "", $codnota = "", $valor = "", $retencoes = "", $historico, $iCompDesp = '',
-                            $iContaPagadora = null,$iCattrabalhador = null,$iNumempresa = null,$iContribuicaoPrev = null,$iValorremuneracao = null,$iValordesconto = null,$iCompetencia = null ) {
+                            $iContaPagadora = null,$iCattrabalhador = null,$iNumempresa = null,$iContribuicaoPrev = null,$iCattrabalhadorremuneracao = null,$iValorremuneracao = null,$iValordesconto = null,$iCompetencia = null ) {
                                       
 
     if ($numemp == "" || $codele == "" || $codnota == "" || $valor == "") {
@@ -1160,7 +1160,8 @@ class empenho {
     $clpagordem->e50_anousu     = $this->anousu;
     $clpagordem->e50_compdesp   = $iCompDesp;
     $clpagordem->e50_contapag   = $iContaPagadora;
-    $clpagordem->e50_cattrabalhador = 'null';
+    $clpagordem->e50_cattrabalhador = 'null'; 
+    $clpagordem->e50_cattrabalhadorremurenacao = 'null';
     $clpagordem->e50_empresadesconto = 'null';
     $clpagordem->e50_contribuicaoPrev = 'null';
     $clpagordem->e50_valorremuneracao = 'null';
@@ -1171,7 +1172,9 @@ class empenho {
     if($iNumempresa)
       $clpagordem->e50_empresadesconto = $iNumempresa;
     if($iContribuicaoPrev)
-      $clpagordem->e50_contribuicaoPrev = $iContribuicaoPrev;  
+      $clpagordem->e50_contribuicaoPrev = $iContribuicaoPrev; 
+    if($iCattrabalhadorremuneracao)
+      $clpagordem->e50_cattrabalhadorremurenacao  = $iCattrabalhadorremuneracao;  
     if($iValorremuneracao)
       $clpagordem->e50_valorremuneracao = $iValorremuneracao;
     if($iValordesconto) 
@@ -1706,7 +1709,7 @@ class empenho {
    * @param string [historico] historico do procedimento
    * @return boolean;
    */
-  function liquidarAjax($iEmpenho,$aNotas, $sHistorico = '', $iCompDesp = '', $iContaPagadora = null, $iCattrabalhador = null,$iNumempresa = null,$iContribuicaoPrev = null,$iValorremuneracao = null,$iValordesconto = null,$iCompetencia = null){
+  function liquidarAjax($iEmpenho,$aNotas, $sHistorico = '', $iCompDesp = '', $iContaPagadora = null, $iCattrabalhador = null,$iNumempresa = null,$iContribuicaoPrev = null,$iCattrabalhadorremuneracao = null,$iValorremuneracao = null,$iValordesconto = null,$iCompetencia = null){
 
     (boolean)$this->lSqlErro = false;
     (string) $this->sMsgErro = false;
@@ -1761,7 +1764,7 @@ class empenho {
         //trata string
         $sHistorico = addslashes(stripslashes($sHistorico));
 
-        $this->liquidar($iEmpenho, $objEmpElem->e64_codele, $objNota->e69_codnota, $objNota->e70_valor, $sHistorico, '', $iCompDesp, $iContaPagadora,$lVerificaContaPagadora,  $iCattrabalhador,$iNumempresa,$iContribuicaoPrev,$iValorremuneracao,$iValordesconto,$iCompetencia);
+        $this->liquidar($iEmpenho, $objEmpElem->e64_codele, $objNota->e69_codnota, $objNota->e70_valor, $sHistorico, '', $iCompDesp, $iContaPagadora,$lVerificaContaPagadora,  $iCattrabalhador,$iNumempresa,$iContribuicaoPrev,$iCattrabalhadorremuneracao,$iValorremuneracao,$iValordesconto,$iCompetencia);
         if ($this->erro_status == "0"){
 
           $this->lSqlErro = true;
@@ -2043,7 +2046,7 @@ class empenho {
    */
   function gerarOrdemCompra($iNumNota, $nTotal,$aItens,$lLiquidar=false,$dDataNota = null, $sHistorico = null,
                             $lIniciaTransacao=true, $oInfoNota = null, $iNfe = null, $sChaveAcesso = null, $sSerie = null,
-                            $iCompDesp = '', $iContaPagadora = null, $lVerificaContaPagadora = true, $iCgmEmitente = 0, $iCattrabalhador = null,$iNumempresa = null, $iContribuicaoPrev = null,$iValorremuneracao = null,$iValordesconto = null,$iCompetencia = null ){
+                            $iCompDesp = '', $iContaPagadora = null, $lVerificaContaPagadora = true, $iCgmEmitente = 0, $iCattrabalhador = null,$iNumempresa = null, $iContribuicaoPrev = null,$iCattrabalhadorremuneracao = null,$iValorremuneracao = null,$iValordesconto = null,$iCompetencia = null ){
     $this->lSqlErro  = false;
     $this->sErroMsg  = '';
     $this->iPagOrdem = '';
@@ -2386,6 +2389,7 @@ class empenho {
                 $iCattrabalhador,
                 $iNumempresa,
                 $iContribuicaoPrev,
+                $iCattrabalhadorremuneracao,
                 $iValorremuneracao,
                 $iValordesconto,
                 $iCompetencia
