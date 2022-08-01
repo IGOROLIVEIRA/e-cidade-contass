@@ -120,15 +120,17 @@ if (isset ($processa_fontesdes) && ($processa_fontesdes == 'Processar')) {
 		db_fim_transacao($erro);
 	} //
 } //
-// programa
+//
 if (isset ($processa_receitas) && ($processa_receitas == 'Processar')) {
+    $instit = db_getsession("DB_instit");
 	$chaves = split('#', $chaves);
 	if (count($chaves) > 0) {
 		db_inicio_transacao();
+        $aEstruturalReceitasNaoIncluidas =  array();
 		for ($i = 0; $i < count($chaves); $i ++) {
 			if ($chaves[$i] == "")
 				continue;
-            $res = $clorcreceita->sql_record($clorcreceita->sql_query_plano($anousu_ant, $chaves[$i], "*",null,""));
+            $res = $clorcreceita->sql_record($clorcreceita->sql_query_plano(null, null, "*",null," o70_anousu=$anousu_ant and o70_codrec={$chaves[$i]} and o70_instit=$instit"));
 			if (($clorcreceita->numrows) > 0) {
 
 				db_fieldsmemory($res, 0);
@@ -138,17 +140,21 @@ if (isset ($processa_receitas) && ($processa_receitas == 'Processar')) {
 				$clorcreceita->o70_codfon         = $o70_codfon;
 				$clorcreceita->o70_codigo         = $o70_codigo;
                 if($anousu == 2023){
-                    $resEstrutNovo = $clconplanoorcamentoanalitica->sql_record($clconplanoorcamentoanalitica->sql_query(null, null, "*", null, " c60_anousu = ".$anousu." and c60_estrut= '".$o57_fonte."'"));
-                    $clorcreceita->o70_codfon         = $c61_codcon;
-				    $clorcreceita->o70_codigo         = $c61_codigo;
+                    $resEstrutNovo = $clorcfontes->sql_record($clorcfontes->sql_query_file(null, null, "*", null, " o57_anousu = ".$anousu." and o57_fonte= '".$o57_fonte."'"));
+                    $clorcreceita->o70_codfon         = db_utils::fieldsMemory($resEstrutNovo, 0)->o57_codfon;
+				    $clorcreceita->o70_codigo         = $aFontesNovas[$o70_codigo];
                 }
 				$clorcreceita->o70_valor          = $o70_valor;
 				$clorcreceita->o70_reclan         = "$o70_reclan";
 
 				$clorcreceita->o70_instit         = $o70_instit;
                 $clorcreceita->o70_concarpeculiar = $o70_concarpeculiar;
-
-				$clorcreceita->incluir($anousu, $o70_codrec);
+                if($clorcreceita->o70_codfon) {
+                    $clorcreceita->incluir($anousu, $o70_codrec);
+                }
+                if(!$clorcreceita->o70_codfon){
+                    $aEstruturalReceitasNaoIncluidas[] = $o57_fonte;
+                }
 				if ($clorcreceita->erro_status == '0') {
 					db_msgbox("Reduzido: ".$clorcreceita->o70_codrec." -> ".$clorcreceita->erro_msg);
 					$erro = true;
@@ -159,7 +165,12 @@ if (isset ($processa_receitas) && ($processa_receitas == 'Processar')) {
 		db_fim_transacao($erro);
 	} //
     if ($clorcreceita->erro_status != '0' && $erro != true) {
-        db_msgbox("Importação concluída com sucesso!");
+        if(!empty($aEstruturalReceitasNaoIncluidas)){
+            db_msgbox("Importação concluída com sucesso! Mas as receitas ".implode(",", $aEstruturalReceitasNaoIncluidas)." não foram incluídas por não existir estrutural no ano de {$anousu}!");
+        }
+        if(empty($aEstruturalReceitasNaoIncluidas)){
+            db_msgbox("Importação concluída com sucesso!");
+        }
         $erro = false;
     }
 } //
@@ -311,12 +322,12 @@ if (isset ($processa_receitas) && $processa_receitas == "Selecionar") {
 	$sql = "select o70_codrec,o57_fonte,o70_valor,o70_instit
 	            from orcreceita
 					 inner join orcfontes on o57_anousu=o70_anousu and o70_codfon=o57_codfon
-		        where o70_anousu=". (db_getsession("DB_anousu") - 1)."
+		        where o70_anousu=". (db_getsession("DB_anousu") - 1). " and o70_instit = ".db_getsession("DB_instit")."
 		        EXCEPT
 		        select  o70_codrec,o57_fonte,o70_valor,o70_instit
 		        from orcreceita
 					inner join orcfontes on o57_anousu=o70_anousu and o70_codfon=o57_codfon
-		        where o70_anousu=".db_getsession("DB_anousu")."
+		        where o70_anousu=".db_getsession("DB_anousu")." and o70_instit = ".db_getsession("DB_instit")."
 		        order by o57_fonte
 	          ";
 	$sql_marca = "";
