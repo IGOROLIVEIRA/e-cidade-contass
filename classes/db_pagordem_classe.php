@@ -59,6 +59,7 @@ class cl_pagordem {
    var $e50_cattrabalhador = null;
    var $e50_empresadesconto = null;
    var $e50_contribuicaoPrev = null;
+   var $e50_cattrabalhadorremurenacao = null;
    var $e50_valorremuneracao = null;
    var $e50_valordesconto = null;
    var $e50_datacompetencia = null;
@@ -76,6 +77,7 @@ class cl_pagordem {
                  e50_cattrabalhador = int4 = Categoria do Trabalhador
                  e50_empresadesconto = int4 = Empresa que Efetuou o Desconto 
                  e50_contribuicaoPrev = char = Indicador de Desconto da Contribuição Previdenciária
+                 e50_cattrabalhadorremurenacao = int4 = Categoria do trabalhador na qual houve a remuneração
                  e50_valorremuneracao = float8 = Valor da Remuneração
                  e50_valordesconto = float8 = Valor do desconto
                  e50_datacompetencia = date = Competência
@@ -124,6 +126,7 @@ class cl_pagordem {
        $this->e50_cattrabalhador = ($this->e50_cattrabalhador == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_cattrabalhador"]:$this->e50_cattrabalhador);
        $this->e50_empresadesconto = ($this->e50_empresadesconto == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_empresadesconto"]:$this->e50_empresadesconto);
        $this->e50_contribuicaoPrev = ($this->e50_contribuicaoPrev == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_contribuicaoPrev"]:$this->e50_contribuicaoPrev); 
+       $this->e50_cattrabalhadorremurenacao = ($this->e50_cattrabalhadorremurenacao == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_cattrabalhadorremurenacao"]:$this->e50_cattrabalhadorremurenacao);
        $this->e50_valorremuneracao = ($this->e50_valorremuneracao == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_valorremuneracao"]:$this->e50_valorremuneracao);
        $this->e50_valordesconto = ($this->e50_valordesconto == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_valordesconto"]:$this->e50_valordesconto);
        $this->e50_datacompetencia = ($this->e50_datacompetencia == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_datacompetencia"]:$this->e50_datacompetencia);
@@ -227,6 +230,7 @@ class cl_pagordem {
                                       ,e50_cattrabalhador 
                                       ,e50_empresadesconto 
                                       ,e50_contribuicaoPrev 
+                                      ,e50_cattrabalhadorremurenacao
                                       ,e50_valorremuneracao 
                                       ,e50_valordesconto 
                                       ,e50_datacompetencia 
@@ -244,12 +248,13 @@ class cl_pagordem {
                                ,$this->e50_cattrabalhador 
                                ,$this->e50_empresadesconto
                                ,$this->e50_contribuicaoPrev  
+                               ,$this->e50_cattrabalhadorremurenacao
                                ,$this->e50_valorremuneracao 
                                ,$this->e50_valordesconto 
                                ,".($this->e50_datacompetencia == "null" || $this->e50_datacompetencia == ""?"null":"'".$this->e50_datacompetencia."'")."
                                 
                       )";
-                 
+                //  echo $sql;exit;
      $result = db_query($sql); 
      if($result==false){ 
        $this->erro_banco = str_replace("\n","",@pg_last_error());
