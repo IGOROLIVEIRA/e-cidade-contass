@@ -152,7 +152,7 @@ try {
             (select count(*) as certificado from esocialcertificado where rh214_cgm = z01_numcgm) as certificado';
             $oDaoDbConfig = db_utils::getDao("db_config");
             $sql = $oDaoDbConfig->sql_query(null, $campos, 'z01_numcgm', 'codigo = ' . db_getsession("DB_instit"));
-            
+
             $rs = db_query($sql);
 
             if (!$rs) {
@@ -263,7 +263,7 @@ try {
 
             foreach ($oParam->arquivos as $arquivo) {
                 $dadosESocial->setReponsavelPeloPreenchimento($iCgm);
-                if (!in_array(Tipo::getTipoFormulario($arquivo), array(37,12))) {
+                if (!in_array(Tipo::getTipoFormulario($arquivo), array(37,40,12,13,))) {
                     $dadosDoPreenchimento = $dadosESocial->getPorTipo(Tipo::getTipoFormulario($arquivo), $oParam->matricula);
                     $formatter = FormatterFactory::get($arquivo);
                     $dadosTabela = $formatter->formatar($dadosDoPreenchimento);
@@ -274,6 +274,11 @@ try {
                     }
                 } else {
                     $dadosTabela = $dadosESocial->getPorTipo(Tipo::getTipoFormulario($arquivo), $oParam->matricula);
+                    //necessario para diferenciar envio individual do envio geral
+                    if ($arquivo == "S2230") {
+                        $arquivo = "S2230Individual";
+                    }
+                    ini_set("display_errors", 'on');
                     foreach (array_chunk($dadosTabela, 1) as $aTabela) {
                         $eventoFila = new Evento($arquivo, $iCgm, $iCgm, $aTabela, $oParam->tpAmb, "{$oParam->iAnoValidade}-{$oParam->iMesValidade}", $oParam->modo, $oParam->dtalteracao, $oParam->indapuracao);
                         $eventoFila->adicionarFila();
@@ -306,18 +311,18 @@ try {
             $seqRubricas = $oParam->rubricas;
             $explode_seq = explode(',', $seqRubricas);
             $aRubricas = array();
-            foreach ($explode_seq as $rub){
+            foreach ($explode_seq as $rub) {
                 $aRubricas[] = "'" . $rub . "'";
             }
             $stringRubricas = implode(",", $aRubricas);
 
             $iCgm = $oParam->empregador;
             $dadosESocial->setReponsavelPeloPreenchimento($iCgm);
-            $dadosDoPreenchimento = $dadosESocial->getPorTipo(Tipo::RUBRICA,$stringRubricas);
+            $dadosDoPreenchimento = $dadosESocial->getPorTipo(Tipo::RUBRICA, $stringRubricas);
             $arquivo = "S1010Individual";
             foreach (array_chunk($dadosDoPreenchimento, 1) as $aTabela) {
-               $eventoFila = new Evento($arquivo, $iCgm, $iCgm, $aTabela, $oParam->tpAmb, "{$oParam->iAnoValidade}-{$oParam->iMesValidade}", $oParam->modo, $oParam->dtalteracao);
-               $eventoFila->adicionarFila();
+                $eventoFila = new Evento($arquivo, $iCgm, $iCgm, $aTabela, $oParam->tpAmb, "{$oParam->iAnoValidade}-{$oParam->iMesValidade}", $oParam->modo, $oParam->dtalteracao);
+                $eventoFila->adicionarFila();
             }
             db_fim_transacao(false);
 
@@ -327,7 +332,7 @@ try {
 
             $oRetorno->sMessage = "Dados das Rúbricas agendados para envio.";
 
-        break;
+            break;
     }
 } catch (Exception $eErro) {
     if (db_utils::inTransaction()) {
