@@ -59,13 +59,41 @@ if (isset($incluir)) {
       width: 80px !important;
     }
 
+    /*
     #oGridItensrow0checkbox {
       width: 21px !important;
 
     }
 
+
     #col1 {
       width: 21px !important;
+
+    }
+    */
+
+    #tableoGridItensheader>tbody:nth-child(1)>tr:nth-child(1)>td:nth-child(1) {
+      width: 21px !important;
+
+    }
+
+    #oGridItensrow0checkbox {
+      width: 21px !important;
+
+    }
+
+    #tablegridDotacoesheader>tbody:nth-child(1)>tr:nth-child(1)>td:nth-child(1) {
+      width: 20% !important;
+
+    }
+
+    #tablegridDotacoesheader>tbody:nth-child(1)>tr:nth-child(1)>td:nth-child(2) {
+      width: 60% !important;
+
+    }
+
+    #tablegridDotacoesheader>tbody:nth-child(1)>tr:nth-child(1)>td:nth-child(3) {
+      width: 20% !important;
 
     }
 

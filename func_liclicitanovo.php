@@ -159,7 +159,7 @@ $sWhereContratos = " and 1 = 1 ";
             <td align="center" valign="top">
                 <?
                 $and            = "and ";
-                $dbwhere        = "1=1";
+                $dbwhere        = "";
                 //$dbwhere          = "l20_licsituacao = 0 or (cflicita.l03_pctipocompratribunal in (102,103) and l20_licsituacao = 10) and ";
 
                 if (isset($situacao) && trim($situacao) != '' && db_getsession('DB_id_usuario') != 1) {
@@ -240,7 +240,6 @@ $sWhereContratos = " and 1 = 1 ";
                     if ($pesquisa_chave != null && $pesquisa_chave != "") {
 
                         if (isset($param) && trim($param) != "") {
-
                             $result = $clliclicitem->sql_record($clliclicitem->sql_query_inf($pesquisa_chave));
 
                             if ($clliclicitem->numrows != 0) {
@@ -252,7 +251,7 @@ $sWhereContratos = " and 1 = 1 ";
                             }
                         } else {
                             $result = $clliclicita->sql_record($clliclicita->sql_queryContratos(null, "*", null, "$dbwhere l20_codigo = $pesquisa_chave $and $dbwhere_instit "));
-
+                            echo $clliclicita->sql_queryContratos(null, "*", null, "$dbwhere l20_codigo = $pesquisa_chave $and $dbwhere_instit ");
 
                             if ($clliclicita->numrows != 0) {
 

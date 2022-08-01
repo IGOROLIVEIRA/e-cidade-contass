@@ -144,7 +144,7 @@ if (!$sqlerro) {
                 alert('Inclusão efetuada com sucesso');
                 parent.document.formaba.db_itens.disabled=false;
                 parent.mo_camada('db_itens');
-                top.corpo.iframe_db_itens.location.href='sic1_itensregpreco001.php?codigoAdesao=" . $si06_sequencial . "';
+                parent.CurrentWindow.corpo.iframe_db_itens.location.href='sic1_itensregpreco001.php?codigoAdesao=" . $si06_sequencial . "';
             </script>";
       }
       //$cladesaoregprecos->erro(true,true);
@@ -153,12 +153,12 @@ if (!$sqlerro) {
   }
 
   if (isset($alterar)) {
-    if($si06_numeroadm!="" && $si06_numeroadm!=null && $si06_anomodadm!="" && $si06_anomodadm!=null && $si06_nummodadm!="" && $si06_nummodadm!=null){
+    if ($si06_numeroadm != "" && $si06_numeroadm != null && $si06_anomodadm != "" && $si06_anomodadm != null && $si06_nummodadm != "" && $si06_nummodadm != null) {
       db_inicio_transacao();
       $db_opcao = 2;
       $sqlerro  = false;
-      
-      
+
+
 
 
       //  /**
@@ -191,47 +191,46 @@ if (!$sqlerro) {
 
       if ($sqlerro == false) {
 
-          
-          $cladesaoregprecos->alterar($si06_sequencial);
 
-          $sSqlItemacordo = $clacordo->sql_record($clacordo->sql_query_sequencial_acordo($si06_sequencial));
-          $numrows_unid = $clacordo->numrows;
-          
-          if($numrows_unid > 0){
-          
-            db_fieldsmemory($sSqlItemacordo, 0);
-            $sSqlItemacordoposicao = $clacordoposicao->sql_record($clacordoposicao->sql_query_empenhoautori_acordo($ac16_sequencial));
-            $numrows_unid = $clacordoposicao->numrows;
+        $cladesaoregprecos->alterar($si06_sequencial);
 
-            for ($i = 0; $i < $numrows_unid; $i++) {
-              db_fieldsmemory($sSqlItemacordoposicao, $i);
-              $clempautoriza->e54_nummodalidade = $si06_nummodadm;
-              $clempautoriza->e54_numerl = $si06_numeroadm."/".$si06_anomodadm;
-              $clempautoriza->e54_autori = $e54_autori;
-              $clempautoriza->alterar($e54_autori);
-              if($e60_numemp!="" && $e60_numemp!=null){
-                $clempempenho->e60_numerol = $si06_numeroadm."/".$si06_anomodadm;
-                $clempempenho->e60_numemp = $e60_numemp;
-                $clempempenho->alterar($e60_numemp);
-              }
-            }
+        $sSqlItemacordo = $clacordo->sql_record($clacordo->sql_query_sequencial_acordo($si06_sequencial));
+        $numrows_unid = $clacordo->numrows;
 
-          }else{
-            $sSqlItemempempaut = $clempempaut->sql_record($clempempaut->sql_query_empenhoautori($si06_anoproc,$si06_sequencial));
-            $numrows_unid = $clempempaut->numrows;
-            for ($i = 0; $i < $numrows_unid; $i++) {
-              db_fieldsmemory($sSqlItemempempaut, $i);
-              $clempautoriza->e54_nummodalidade = $si06_nummodadm;
-              $clempautoriza->e54_numerl = $si06_numeroadm."/".$si06_anomodadm;
-              $clempautoriza->e54_autori = $e61_autori;
-              $clempautoriza->alterar($e61_autori);
-              if($e61_numemp!="" && $e61_numemp!=null){
-                $clempempenho->e60_numerol = $si06_numeroadm."/".$si06_anomodadm;
-                $clempempenho->e60_numemp = $e61_numemp;
-                $clempempenho->alterar($e61_numemp);
-              }
+        if ($numrows_unid > 0) {
+
+          db_fieldsmemory($sSqlItemacordo, 0);
+          $sSqlItemacordoposicao = $clacordoposicao->sql_record($clacordoposicao->sql_query_empenhoautori_acordo($ac16_sequencial));
+          $numrows_unid = $clacordoposicao->numrows;
+
+          for ($i = 0; $i < $numrows_unid; $i++) {
+            db_fieldsmemory($sSqlItemacordoposicao, $i);
+            $clempautoriza->e54_nummodalidade = $si06_nummodadm;
+            $clempautoriza->e54_numerl = $si06_numeroadm . "/" . $si06_anomodadm;
+            $clempautoriza->e54_autori = $e54_autori;
+            $clempautoriza->alterar($e54_autori);
+            if ($e60_numemp != "" && $e60_numemp != null) {
+              $clempempenho->e60_numerol = $si06_numeroadm . "/" . $si06_anomodadm;
+              $clempempenho->e60_numemp = $e60_numemp;
+              $clempempenho->alterar($e60_numemp);
             }
           }
+        } else {
+          $sSqlItemempempaut = $clempempaut->sql_record($clempempaut->sql_query_empenhoautori($si06_anoproc, $si06_sequencial));
+          $numrows_unid = $clempempaut->numrows;
+          for ($i = 0; $i < $numrows_unid; $i++) {
+            db_fieldsmemory($sSqlItemempempaut, $i);
+            $clempautoriza->e54_nummodalidade = $si06_nummodadm;
+            $clempautoriza->e54_numerl = $si06_numeroadm . "/" . $si06_anomodadm;
+            $clempautoriza->e54_autori = $e61_autori;
+            $clempautoriza->alterar($e61_autori);
+            if ($e61_numemp != "" && $e61_numemp != null) {
+              $clempempenho->e60_numerol = $si06_numeroadm . "/" . $si06_anomodadm;
+              $clempempenho->e60_numemp = $e61_numemp;
+              $clempempenho->alterar($e61_numemp);
+            }
+          }
+        }
       }
 
       if ($si06_processoporlote == 2) {
@@ -244,21 +243,20 @@ if (!$sqlerro) {
           $clitensregpreco->si07_descricaolote = '';
           $clitensregpreco->si07_numerolote    = '';
           $clitensregpreco->si07_sequencialadesao = $si06_sequencial;
-          $clitensregpreco->alterar($oItem->si07_sequencial);       
+          $clitensregpreco->alterar($oItem->si07_sequencial);
         }
       }
       db_fim_transacao();
       $_SESSION["codigoAdesao"] = $si06_sequencial;
       echo "<script>
           parent.document.formaba.db_itens.disabled=false;
-          top.corpo.iframe_db_itens.location.href='sic1_itensregpreco001.php?codigoAdesao=" . $si06_sequencial . "';
+          parent.CurrentWindow.corpo.iframe_db_itens.location.href='sic1_itensregpreco001.php?codigoAdesao=" . $si06_sequencial . "';
           </script>";
-    }else{
+    } else {
       $sqlerro = true;
       $erro_msg = 'Informe todas as informações do orgão de adesão!';
       $campo = "si06_anomodadm";
     }
-
   } else if (isset($chavepesquisa) || isset($_SESSION["codigoAdesao"])) {
     $db_opcao = 2;
     if (!isset($chavepesquisa)) {
@@ -310,7 +308,7 @@ if (!$sqlerro) {
     unset($_SESSION["codigoAdesao"]);
     echo "<script>
         parent.document.formaba.db_itens.disabled=false;
-        top.corpo.iframe_db_itens.location.href='sic1_itensregpreco001.php?codigoAdesao=" . $chavepesquisa . "';
+        parent.CurrentWindow.corpo.iframe_db_itens.location.href='sic1_itensregpreco001.php?codigoAdesao=" . $chavepesquisa . "';
         </script>";
     $result = $cladesaoregprecos->sql_record($cladesaoregprecos->sql_query($chavepesquisa, "*,cgm.z01_nome as z01_nomeorg,c.z01_nome as z01_nomeresp"));
     db_fieldsmemory($result, 0);
@@ -369,9 +367,9 @@ if ($sqlerro) {
   }
 }*/
 if (isset($alterar)) {
-  
+
   if ($cladesaoregprecos->erro_status == "0") {
-    
+
     $cladesaoregprecos->erro(true, false);
     $db_botao = true;
     echo "<script> document.form1.db_opcao.disabled=false;</script>  ";

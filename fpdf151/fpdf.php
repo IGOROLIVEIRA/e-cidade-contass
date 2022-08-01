@@ -2543,6 +2543,15 @@ class FPDF
                  $txt_dx,$txt_dy,$font_dx,$font_dy,
                  $x*$this->k,($this->h-$y)*$this->k,$txt);
         $this->_out($s);
+    }
+
+    function SetDash($black=false,$white=false)
+    {
+        if($black and $white)
+            $s=sprintf('[%.3f %.3f] 0 d',$black*$this->k,$white*$this->k);
+        else
+            $s='[] 0 d';
+        $this->_out($s);
     }    
 }
 
