@@ -1235,7 +1235,7 @@ switch ($oParam->exec) {
                                     $oDaopcprocitem = db_utils::getDao('pcprocitem');
                                     $oDaopcprocitem->pc81_codproc = $aItens[$count]->codproc;
                                     $oDaopcprocitem->pc81_solicitem = $oDaoSolicitemReservado->pc11_codigo;
-                                    $oDaopcprocitem->incluir();
+                                    $oDaopcprocitem->incluir(null);
 
                                     if (!$oDaopcprocitem->numrows_incluir) {
                                         $erro_msg = $oDaopcprocitem->erro_msg;
@@ -1309,7 +1309,7 @@ switch ($oParam->exec) {
                                         $oDaoDotacReserva->pc13_quant  = $aItens[$count]->qtdexclusiva;
                                         $oDaoDotacReserva->pc13_valor  = $oDotacaoItem->pc13_valor;
                                         $oDaoDotacReserva->pc13_codele = $oDotacaoItem->pc13_codele;
-                                        $oDaoDotacReserva->incluir();
+                                        $oDaoDotacReserva->incluir(null);
 
                                         if (!$oDaoDotacReserva->numrows_incluir) {
                                             $erro_msg = $oDaoDotacReserva->erro_msg;
@@ -1345,7 +1345,7 @@ switch ($oParam->exec) {
                                     $oDaoSolicitemUnidReservado->pc17_unid = $oSolicitemUnid->pc17_unid;
                                     $oDaoSolicitemUnidReservado->pc17_quant = $aItens[$count]->qtdexclusiva;
                                     $oDaoSolicitemUnidReservado->pc17_codigo = $oDaoSolicitemReservado->pc11_codigo;
-                                    $oDaoSolicitemUnidReservado->incluir();
+                                    $oDaoSolicitemUnidReservado->incluir(null);
 
                                     if (!$oDaoSolicitemUnidReservado->numrows_incluir) {
                                         $erro_msg = $oDaoSolicitemUnidReservado->erro_msg;
@@ -1549,7 +1549,7 @@ switch ($oParam->exec) {
                                     $oDaoLoteReservado->l04_descricao = $clliclicitemlotereservado->l04_descricao;
                                     $oDaoLoteReservado->l04_liclicitem = $clliclicitemlotereservado->l04_liclicitem;
                                     $oDaoLoteReservado->l04_seq = $seqlotereservado;
-                                    $oDaoLoteReservado->incluir();
+                                    $oDaoLoteReservado->incluir(null);
 
                                     if (!$oDaoLoteReservado->numrows_incluir) {
                                         $erro_msg = $oDaoLoteReservado->erro_msg;
