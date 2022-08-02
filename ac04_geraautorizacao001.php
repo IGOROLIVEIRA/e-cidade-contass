@@ -1088,7 +1088,11 @@ if ($x->consultarDataDoSistema == true) {
 
             // debug
             aItensPosicao[iLinha].dotacoes.each(function(oDotacao, iDot) {
-                var nValue = js_strToFloat(js_formatar(oGridDotacoes.aRows[iDot].aCells[3].getValue(), "f", 2));
+                if (tipo == 2) {
+                    var nValue = js_strToFloat(js_formatar(oGridDotacoes.aRows[iDot].aCells[7].getValue(), "f", 2));
+                } else {
+                    var nValue = js_strToFloat(js_formatar(oGridDotacoes.aRows[iDot].aCells[3].getValue(), "f", 2));
+                }
                 console.log(nValue);
                 oDotacao.valorexecutar = nValue;
                 var nQuant = js_strToFloat(js_formatar(oGridDotacoes.aRows[iDot].aCells[2].getValue(), "f", 4));
@@ -1115,8 +1119,11 @@ if ($x->consultarDataDoSistema == true) {
             console.log(oDotacao);
             //nValorDotacao = js_formatar(oDotacao.valorexecutar, "f", iCasasDecimais);
             // Valor da dotação
-            // nValorDotacao = js_formatar(js_roundDecimal(oDotacao.valorexecutar, 2), "f",2);
-            nValorDotacao = js_formatar(oDotacao.valorexecutar.toFixed(2), "f", 2);
+            nQuantAutori = oDotacao.quantidade;
+            //nValorDotacao = js_formatar(oDotacao.valorexecutar.toFixed(2), "f", 2);
+            
+            //var nValorDotacao = js_strToFloat(js_formatar(oGridDotacoes.aRows[iDot].aCells[7].getValue(), "f", 2));
+                
 
 
             aLinha = new Array();
@@ -1140,9 +1147,13 @@ if ($x->consultarDataDoSistema == true) {
             }
             aLinha[2].addEvent("onKeyPress", "return js_mask(event,\"0-9|.|-\")");
             aLinha[2].addEvent("onKeyDown", "return js_verifica(this,event,true)");
+            if (tipo == 2 && nQuantAutori != 0) {
+                aLinha[3] = eval("valordot" + iDot + " = new DBTextField('valordot" + iDot + "','valordot" + iDot + "','" + nValor + "')");
+            } else {
+                aLinha[3] = eval("valordot" + iDot + " = new DBTextField('valordot" + iDot + "','valordot" + iDot + "','" + oDotacao.valorexecutar + "')");
+            }
             
-                    aLinha[3] = eval("valordot" + iDot + " = new DBTextField('valordot" + iDot + "','valordot" + iDot + "','" + oDotacao.valorexecutar + "')");
-             
+            
             aLinha[3].addStyle("text-align", "right");
             aLinha[3].addStyle("height", "100%");
             aLinha[3].addStyle("width", "100px");
