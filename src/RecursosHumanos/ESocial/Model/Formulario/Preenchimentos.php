@@ -940,7 +940,7 @@ where
                 cadferia.r30_per1i AS dtiniafast,
                 '15' AS codmotafast,
                 '' AS infomesmomtv,
-                NULL AS dttermafast,
+                cadferia.r30_per1f AS dttermafast,
                 cadferia.r30_per1i AS dtiniafastferias,
                 cadferia.r30_perai AS dtinicio,
                 CASE
