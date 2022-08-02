@@ -1861,9 +1861,13 @@ where j18_anousu = ".db_getsession("DB_anousu")." and j21_matric = {$j01_matric}
     $pdf1->arrayreduzreceitas[$x] = $reduzreceita;
     $pdf1->arraydescrreceitas[$x] = $descrreceita;
 
-    $oInstit = new Instituicao(db_getsession('DB_instit'));
-    if($codreceita == 718 && $oInstit->getCodigoCliente() == Instituicao::COD_CLI_PMPIRAPORA){ //valor honorarios
-      $vlrhonorarios += $valor_corrigido;
+    $sqlHono = "select db21_honorarioadvocaticio
+                  from db_config 
+                  where prefeitura = true and codigo = ".db_getsession("DB_instit");
+    db_fieldsmemory($sqlHono, 0);
+
+    if($codreceita == $db21_honorarioadvocaticio){
+       $vlrhonorarios += $valor_corrigido; 
     }
 
     if ($k00_hist != 918) {
