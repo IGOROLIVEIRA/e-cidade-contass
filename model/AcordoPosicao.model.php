@@ -31,6 +31,8 @@ require_once("model/MaterialCompras.model.php");
 require_once("model/contrato/AcordoItemTipoCalculoFactory.model.php");
 require_once("std/DBDate.php");
 require_once("libs/exceptions/ParameterException.php");
+require_once("std/db_stdClass.php");
+
 
 /**
  * posicoes do acordo
