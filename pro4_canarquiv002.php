@@ -36,6 +36,7 @@ include("classes/db_protprocesso_classe.php");
 include("classes/db_proctransand_classe.php");
 include("classes/db_arqandam_classe.php");
 include("dbforms/db_funcoes.php");
+parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_SERVER_VARS);
 db_postmemory($HTTP_POST_VARS);
 $clprocandam = new cl_procandam;
@@ -46,7 +47,7 @@ $clarqandam = new cl_arqandam;
 
 $db_opcao = 1;
 $db_botao = true;
-if ((isset($QUERY_STRING["p58_codproc"]))) {
+if ((isset($p58_codproc))) {
     db_inicio_transacao();
     $sqlerro = false;
 
