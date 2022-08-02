@@ -13,7 +13,6 @@ use ECidade\RecursosHumanos\ESocial\Agendamento\Eventos\EventoBase;
  */
 class EventoS1202 extends EventoBase
 {
-
     /**
      *
      * @param \stdClass $dados
@@ -33,8 +32,8 @@ class EventoS1202 extends EventoBase
         $aDadosAPI = array();
         $iSequencial = 1;
         foreach ($this->dados as $oDados) {
-            $oDadosAPI                                   = new \stdClass;
-            $oDadosAPI->evtEvtRmnRPPS                      = new \stdClass;
+            $oDadosAPI                                   = new \stdClass();
+            $oDadosAPI->evtEvtRmnRPPS                      = new \stdClass();
             $oDadosAPI->evtEvtRmnRPPS->sequencial          = $iSequencial;
             $oDadosAPI->evtEvtRmnRPPS->modo                = $this->modo;
             $oDadosAPI->evtEvtRmnRPPS->indRetif            = 1;
@@ -47,7 +46,7 @@ class EventoS1202 extends EventoBase
             }
             $oDadosAPI->evtEvtRmnRPPS->cpftrab             = $oDados->cpftrab;
 
-            $oIdeestab = new \stdClass;
+            $oIdeestab = new \stdClass();
             $oIdeestab->idedmdev  = $this->buscarIdentificador($oDados->matricula);
             $oIdeestab->idedmdev  = $oIdeestab->codcateg;
             $oIdeestab->remumperant->matricula   = $oDados->matricula;
@@ -65,9 +64,9 @@ class EventoS1202 extends EventoBase
             $aDadosAPI[] = $oDadosAPI;
             $iSequencial++;
         }
-        echo '<pre>';
-        print_r($aDadosAPI);
-        exit;
+        // echo '<pre>';
+        // print_r($aDadosAPI);
+        // exit;
         return $aDadosAPI;
     }
 
@@ -180,7 +179,7 @@ class EventoS1202 extends EventoBase
             // exit;
             for ($iCont = 0; $iCont < pg_num_rows($rsValores); $iCont++) {
                 $oResult = \db_utils::fieldsMemory($rsValores, $iCont);
-                $oFormatado = new \stdClass;
+                $oFormatado = new \stdClass();
                 $oFormatado->codrubr    = $oResult->rubrica;
                 $oFormatado->idetabrubr = 'tabrub1';
                 $oFormatado->vrrubr     = $oResult->valor;
