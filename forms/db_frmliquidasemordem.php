@@ -263,14 +263,23 @@ if (USE_PCASP) {
       </tr>
       <td colspan="2"> 
  <fieldset id='esocial'><legend><b>eSocial</b></legend>
- <table >
+ <table ><tr>
+                <td>
+                <strong>Incide Contribuição Previdenciária:</strong>
+                <td colspan="4">
+                <?
+                  $aIncide = array('1'=>'Sim', '2'=>'Não');
+                  db_select('aIncide', $aIncide, true, 1, "onchange='mensagemesocial()'"); 
+                ?>
+                </td>
+        </tr>  
         <tr>
-                  <td ><?=db_ancora('<b>Categoria do Trabalhador:</b>',"js_pesquisaCatTrabalhador(true)",1)?></td>
-                  <td><? db_input('ct01_codcategoria', 15, $Ict01_codcategoria, true, 'text', 1,"onchange='js_pesquisaCatTrabalhador(false)'"); ?> </td>
-                  <td><? db_input('ct01_descricaocategoria', 50, $Ict01_descricaocategoria, true, 'text', 3, '');?></td>
+                  <td id='cattrab'><?=db_ancora('<b>Categoria do Trabalhador:</b>',"js_pesquisaCatTrabalhador(true)",1)?></td>
+                  <td id='cattrab1'><? db_input('ct01_codcategoria', 15, $Ict01_codcategoria, true, 'text', 1,"onchange='js_pesquisaCatTrabalhador(false)'"); ?> </td>
+                  <td id='cattrab2'><? db_input('ct01_descricaocategoria', 50, $Ict01_descricaocategoria, true, 'text', 3, '');?></td>
         </tr>
         <tr>
-                <td>
+                <td id='idcontri'>
                 <strong>Indicador de Desconto da Contribuição Previdenciária:</strong>
                 <td colspan="4">
                 <?
@@ -554,7 +563,64 @@ if (USE_PCASP) {
       js_consultaEmpenho(chave, <?=$operacao?>);
     }
   }
-  document.getElementById('idcompetencia').style.display = "none";
+  function mensagemesocial(){
+  if(document.form1.aIncide.value == '2'){
+    var r=confirm("Tem certeza de que não há incidência de contribuição previdenciária para este prestador? ");
+    if (r==true)
+      {
+      document.getElementById('idcontri').style.display = "none";
+      document.getElementById('cattrab').style.display = "none";
+      document.getElementById('cattrab1').style.display = "none";
+      document.getElementById('cattrab2').style.display = "none";
+      document.getElementById('ct01_codcategoria').style.display = "none";
+      document.getElementById('ct01_descricaocategoria').style.display = "none";
+      document.getElementById('contribuicaoPrev').style.display = "none";
+      document.getElementById('idcompetencia').style.display = "none";
+      document.getElementById('idcompetencia2').style.display = "none";
+      document.getElementById('empresa').style.display = "none";
+      document.getElementById('empresa1').style.display = "none";
+      document.getElementById('empresa2').style.display = "none";
+      document.getElementById('catremuneracao').style.display = "none";
+      document.getElementById('catremuneracao1').style.display = "none";
+      document.getElementById('catremuneracao2').style.display = "none";
+      document.getElementById('vlrremuneracao').style.display = "none";
+      document.getElementById('vlrremuneracao1').style.display = "none";
+      document.getElementById('vlrdesconto').style.display = "none";
+      document.getElementById('vlrdesconto1').style.display = "none";
+      document.form1.numempresa.value = '';
+      document.form1.nomeempresa.value = '';
+      document.form1.ct01_codcategoriaremuneracao.value = '';
+      document.form1.ct01_descricaocategoriaremuneracao.value = '';
+      document.form1.valorremuneracao.value = '';
+      document.form1.valordesconto.value = '';
+      document.form1.competencia.value= '';
+      }
+    else
+      {
+      document.form1.aIncide.value = '1';
+      return false;
+      }
+  }else{
+      document.getElementById('idcontri').style.display = "table-cell";
+      document.getElementById('cattrab').style.display = "table-cell";
+      document.getElementById('cattrab1').style.display = "table-cell";
+      document.getElementById('cattrab2').style.display = "table-cell";
+      document.getElementById('ct01_codcategoria').style.display = "table-cell";
+      document.getElementById('ct01_descricaocategoria').style.display = "table-cell";
+      document.getElementById('contribuicaoPrev').style.display = "table-cell";
+      document.form1.contribuicaoPrev.value = '';
+      document.form1.numempresa.value = '';
+      document.form1.nomeempresa.value = '';
+      document.form1.ct01_codcategoriaremuneracao.value = '';
+      document.form1.ct01_descricaocategoriaremuneracao.value = '';
+      document.form1.ct01_codcategoria.value = '';
+      document.form1.ct01_descricaocategoria.value = '';
+      document.form1.valorremuneracao.value = '';
+      document.form1.valordesconto.value = '';
+      document.form1.competencia.value= '';
+  }
+}
+      document.getElementById('idcompetencia').style.display = "none";
       document.getElementById('idcompetencia2').style.display = "none";
       document.getElementById('empresa').style.display = "none";
       document.getElementById('empresa1').style.display = "none";
@@ -1002,6 +1068,7 @@ function validarcamposEsocial(){
       return false;
 
     }
+  if(document.form1.aIncide.value == 1){ 
    if(opcao != '3' && !document.form1.ct01_codcategoria.value &&  obj.Tipofornec =='cpf' && tipodesdobramento == '1' ){
       alert("Campo Categoria do Trabalhador Obrigatorio")
       return false;
@@ -1030,6 +1097,7 @@ function validarcamposEsocial(){
       alert("Campo Competência Obrigatorio")
       return false;
    }
+  }
     $('pesquisar').disabled = true;
     $('confirmar').disabled = true;
     valorTotal = 0;
@@ -1886,4 +1954,6 @@ function js_mostraCatTrabalhadorremuneracao1(chave1,chave2){
         func_nome.hide();
     }
     $('contribuicaoPrev').style.width =' 489px';
+    $('aIncide').style.width =' 120px';
+
 </script>
