@@ -153,7 +153,7 @@ try {
             (select count(*) as certificado from esocialcertificado where rh214_cgm = z01_numcgm) as certificado';
             $oDaoDbConfig = db_utils::getDao("db_config");
             $sql = $oDaoDbConfig->sql_query(null, $campos, 'z01_numcgm', 'codigo = ' . db_getsession("DB_instit"));
-            
+
             $rs = db_query($sql);
 
             if (!$rs) {
@@ -261,7 +261,6 @@ try {
             db_inicio_transacao();
 
             $iCgm = $oParam->empregador;
-            //print_r($oParam);exit;
             foreach ($oParam->arquivos as $arquivo) {
                 $dadosESocial->setReponsavelPeloPreenchimento($iCgm);
 
@@ -308,18 +307,18 @@ try {
             $seqRubricas = $oParam->rubricas;
             $explode_seq = explode(',', $seqRubricas);
             $aRubricas = array();
-            foreach ($explode_seq as $rub){
+            foreach ($explode_seq as $rub) {
                 $aRubricas[] = "'" . $rub . "'";
             }
             $stringRubricas = implode(",", $aRubricas);
 
             $iCgm = $oParam->empregador;
             $dadosESocial->setReponsavelPeloPreenchimento($iCgm);
-            $dadosDoPreenchimento = $dadosESocial->getPorTipo(Tipo::RUBRICA,$stringRubricas);
+            $dadosDoPreenchimento = $dadosESocial->getPorTipo(Tipo::RUBRICA, $stringRubricas);
             $arquivo = "S1010Individual";
             foreach (array_chunk($dadosDoPreenchimento, 1) as $aTabela) {
-               $eventoFila = new Evento($arquivo, $iCgm, $iCgm, $aTabela, $oParam->tpAmb, "{$oParam->iAnoValidade}-{$oParam->iMesValidade}", $oParam->modo, $oParam->dtalteracao);
-               $eventoFila->adicionarFila();
+                $eventoFila = new Evento($arquivo, $iCgm, $iCgm, $aTabela, $oParam->tpAmb, "{$oParam->iAnoValidade}-{$oParam->iMesValidade}", $oParam->modo, $oParam->dtalteracao);
+                $eventoFila->adicionarFila();
             }
             db_fim_transacao(false);
 
@@ -329,7 +328,7 @@ try {
 
             $oRetorno->sMessage = "Dados das Rúbricas agendados para envio.";
 
-        break;
+            break;
     }
 } catch (Exception $eErro) {
     if (db_utils::inTransaction()) {
