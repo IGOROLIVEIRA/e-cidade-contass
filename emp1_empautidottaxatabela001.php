@@ -369,7 +369,7 @@ if (isset($confirmar) || isset($cancelar)) {
 } else {
 
   if (isset($e54_valor)) {
-    echo "<script>top.corpo.iframe_empautret.setValorNota($e54_valor);</script>";
+    echo "<script>CurrentWindow.corpo.iframe_empautret.setValorNota($e54_valor);</script>";
   }
 }
 if (!isset($o47_coddot) || (isset($o47_coddot) && trim($o47_coddot) == "")) {

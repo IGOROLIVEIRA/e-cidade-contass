@@ -382,7 +382,7 @@ if (isset($e56_autori) && $e56_autori != "") {
     if ($oDaoEmpAutItem->numrows > 0) {
 
         $iElemento = db_utils::fieldsMemory($rsOrcDotacao, 0)->e55_codele;
-        echo "<script> top.corpo.iframe_empautoriza.completaElemento(" . $iElemento . ");</script>";
+        echo "<script> CurrentWindow.corpo.iframe_empautoriza.completaElemento(" . $iElemento . ");</script>";
     }
 }
 ?>

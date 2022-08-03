@@ -557,8 +557,12 @@ $sWhereContratos = " and 1 = 1 ";
 
 </html>
 <script>
-    document.getElementsByName("l20_veicdivulgacao")[0].value = "Veículo de Publicação";
-    document.getElementsByName("l20_dtpubratificacao")[0].value = "Publicação";
+    if (typeof document.getElementsByName("l20_veicdivulgacao")[0] !== 'undefined') {
+        document.getElementsByName("l20_veicdivulgacao")[0].value = "Veículo de Publicação";
+    }
+    if (typeof document.getElementsByName("l20_dtpubratificacao")[0] !== 'undefined') {
+        document.getElementsByName("l20_dtpubratificacao")[0].value = "Publicação";
+    }
 </script>
 <?
 if (!isset($pesquisa_chave)) {

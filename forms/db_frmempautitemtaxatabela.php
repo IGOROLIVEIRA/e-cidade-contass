@@ -93,7 +93,7 @@ $clrotulo->label("pc01_descrmater");
                     </td>
                 </tr>
 
-                <tr id = "trelemento" style="height: 20px; display: none">
+                <tr id="trelemento" style="height: 20px; display: none">
                     <td nowrap title="">
                         <b>Ele. item</b>
                     </td>
@@ -118,27 +118,27 @@ $clrotulo->label("pc01_descrmater");
 
             </table>
         </fieldset>
-        
+
         <div class="container">
             <span id="textocontainer"><strong>Selecione uma tabela.</strong></span>
             <div>
-            
+
                 <table style="display: none" id="myTable" class="display nowrap">
                     <thead>
-                    <tr>
-                        <th data-orderable="false"></th>
-                        <th data-orderable="false">Código</th>
-                        <th data-orderable="false">Item</th>
-                        <th data-orderable="false">Descrição</th>
-                        <th data-orderable="false">Unidade</th>
-                        <th data-orderable="false">Marca</th>
-                        <th data-orderable="false">Serviço</th>
-                        <th data-orderable="false">Qtdd</th>
-                        <th data-orderable="false">Vlr. Unit.</th>
-                        <th data-orderable="false">Desc. %</th>
-                        <th data-orderable="false">Total</th>
-                        <th data-orderable="false" style="display:none;">Teste</th>
-                    </tr>
+                        <tr>
+                            <th data-orderable="false"></th>
+                            <th data-orderable="false">Código</th>
+                            <th data-orderable="false">Item</th>
+                            <th data-orderable="false">Descrição</th>
+                            <th data-orderable="false">Unidade</th>
+                            <th data-orderable="false">Marca</th>
+                            <th data-orderable="false">Serviço</th>
+                            <th data-orderable="false">Qtdd</th>
+                            <th data-orderable="false">Vlr. Unit.</th>
+                            <th data-orderable="false">Desc. %</th>
+                            <th data-orderable="false">Total</th>
+                            <th data-orderable="false" style="display:none;">Teste</th>
+                        </tr>
                     </thead>
                 </table>
             </div>
@@ -272,7 +272,7 @@ $clrotulo->label("pc01_descrmater");
                 } else {
                     //js_loadTable();
                     alert(response.message.urlDecode());
-                    top.corpo.iframe_empautidot.location.reload();
+                    parent.CurrentWindow.corpo.iframe_empautidot.location.reload();
                     // window.location.reload();
                 }
             }
@@ -326,6 +326,7 @@ $clrotulo->label("pc01_descrmater");
     }
 
     console.log($(this).find("input[type='checkbox']"));
+
     function js_mudaTabela(campo) {
         js_loadTable();
     }
@@ -449,7 +450,7 @@ $clrotulo->label("pc01_descrmater");
             }
         });
     }
-    
+
     function mostrarElemento() {
 
         let select = $('#pc07_codele');
@@ -475,14 +476,14 @@ $clrotulo->label("pc01_descrmater");
 
                 let elementos = JSON.parse(data);
 
-                if(elementos.elementos.length != 0){
-                    elementos.elementos.forEach(function (oElementos, ele) {
+                if (elementos.elementos.length != 0) {
+                    elementos.elementos.forEach(function(oElementos, ele) {
                         let option = document.createElement('option');
                         option.value = oElementos.pc07_codele;
                         option.text = oElementos.o56_descr;
                         select.append(option);
                     })
-                }else{
+                } else {
                     top.corpo.iframe_empautoriza.location.reload();
                 }
             }
@@ -491,7 +492,7 @@ $clrotulo->label("pc01_descrmater");
         // Libera a Selecao do Elemento
         let tabela = $('#chave_tabela').val();
 
-        if(tabela != ""){
+        if (tabela != "") {
             $('#trelemento').show();
         }
     }
