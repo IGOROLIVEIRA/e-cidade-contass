@@ -1068,8 +1068,8 @@ db_app::load("estilos.css, grid.style.css");
         windowDotacaoItem = new windowAux(
             'wndDotacoesItem',
             'Dotações Item ',
-            iWidth,
-            iHeight
+            400,
+            400
         );
         var sContent = "<div id='addDotacao'>";
         sContent += "<fieldset><legend><b>Adicionar Dotação</b>";
