@@ -1049,7 +1049,7 @@ function js_emiteCheques() {
     //js_bloqueiaBotoes(true);
     js_divCarregando("Aguarde, Efetuando emissão do cheques.","msgBox");
     var sJson  = '{"exec":"emitirCheque","params":[{"sCredor":"'+encodeURIComponent($F('credor'))+'","dtData":"'+$F('dtimp')+'",';
-    sJson     += '"aNotasLiquidacao":['+sJsonItens+'],"aTotCheques":'+aQtdCheques.toSource()+',"numeroCheque":"'+$F('numerocheque')+'"}]}';
+    sJson     += '"aNotasLiquidacao":['+sJsonItens+'],"aTotCheques":'+js_objectToJson(aQtdCheques)+',"numeroCheque":"'+$F('numerocheque')+'"}]}';
     url        = 'emp4_agendaPagamentoRPC.php';
     var oAjax  = new Ajax.Request(
                            url,
