@@ -7,11 +7,11 @@
             <table style="width: 100%;">
                 <tr>
                     <td>
-                        <input type="checkbox" value="S1200" id="S1200" />
+                        <input type="checkbox" value="S1200" id="S1200" onclick="js_1200_alt()" />
                         <label for="S1200">S-1200 - Remuneração de Trabalhador vinculado ao Regime Geral de Previd. Social</label><br>
                     </td>
                     <td>
-                        <input type="checkbox" value="S1202" id="S1202" />
+                        <input type="checkbox" value="S1202" id="S1202" onclick="js_1200_alt()" />
                         <label for="S1202">S-1202 - Remuneração de Servidor vinculado ao Regime Próprio de Previd. Social</label><br>
                     </td>
                 </tr>

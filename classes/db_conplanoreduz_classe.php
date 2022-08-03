@@ -739,5 +739,25 @@ class cl_conplanoreduz {
     }
     return $sql;
   }
+
+  public function sql_reduzAberturaExercicio($iAnousuOrigem, $iAnousuDestino, $iInstit)
+  {
+    $sSqlReduz = " SELECT conplanoreduz.*,
+                           tb1.c60_codcon AS c60_codcon2022,
+                           tb1.c60_estrut AS c60_estrut2022,
+                           tb2.c60_codcon AS c60_codcon2023,
+                           tb2.c60_estrut AS c60_estrut2023
+                    FROM conplanoreduz ";
+
+    $sSqlReduz .= " LEFT JOIN conplano tb1 ON (tb1.c60_codcon, tb1.c60_anousu) = (c61_codcon, c61_anousu) ";
+    $sSqlReduz .= " LEFT JOIN conplano tb2 ON (tb2.c60_estrut, tb2.c60_anousu) = (tb1.c60_estrut, {$iAnousuDestino}) ";
+    $sSqlReduz .= " LEFT JOIN conplanoreduz reduzexercicio ON (reduzexercicio.c61_reduz, reduzexercicio.c61_instit) = (conplanoreduz.c61_reduz, conplanoreduz.c61_instit) ";
+    $sSqlReduz .= " AND reduzexercicio.c61_anousu = {$iAnousuDestino} ";
+    $sSqlReduz .= " WHERE conplanoreduz.c61_anousu = {$iAnousuOrigem} ";
+    $sSqlReduz .= "   AND conplanoreduz.c61_instit = {$iInstit} ";
+    $sSqlReduz .= "   AND reduzexercicio.c61_anousu IS NULL ";
+
+    return $sSqlReduz;
+  }
 }
 ?>

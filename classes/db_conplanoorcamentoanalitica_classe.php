@@ -645,18 +645,22 @@ class cl_conplanoorcamentoanalitica {
    */
   function sql_query_analiticaProximoExercicio($iAnoAtual, $iAnoDestino, $iIntinst) {
 
-    $sSQl = "select conplanoorcamentoanalitica.* 																										";
-    $sSQl .= "  from conplanoorcamentoanalitica																												";
-    $sSQl .= "       inner join conplanoorcamento on conplanoorcamentoanalitica.c61_codcon = conplanoorcamento.c60_codcon   ";
-    $sSQl .= "                                    and conplanoorcamentoanalitica.c61_anousu = conplanoorcamento.c60_anousu  ";
-    $sSQl .= "       left join conplanoorcamentoanalitica  proximoexercicio   												";
-    $sSQl .= "                    on proximoexercicio.c61_reduz  = conplanoorcamentoanalitica.c61_reduz         		";
-    $sSQl .= "                   and proximoexercicio.c61_instit = conplanoorcamentoanalitica.c61_instit           ";
-    $sSQl .= "                   and proximoexercicio.c61_anousu = {$iAnoDestino} 										";
-    $sSQl .= " where conplanoorcamentoanalitica.c61_anousu = {$iAnoAtual}                                          ";
-    $sSQl .= "   and conplanoorcamentoanalitica.c61_instit = {$iIntinst}                                           ";
-    $sSQl .= "   and proximoexercicio.c61_anousu is null                                              ";
-    $sSQl .= "   and substr(conplanoorcamento.c60_estrut,1,1) in ('3','4')  ";
+    $sSQl = "SELECT conplanoorcamentoanalitica.*,
+                    tb1.c60_codcon AS c60_codcon2022,
+                    tb1.c60_estrut AS c60_estrut2022,
+                    tb2.c60_codcon AS c60_codcon2023,
+                    tb2.c60_estrut AS c60_estrut2023
+            FROM conplanoorcamentoanalitica ";
+
+    $sSQl .= " INNER JOIN conplanoorcamento tb1 ON (conplanoorcamentoanalitica.c61_codcon, conplanoorcamentoanalitica.c61_anousu) = (tb1.c60_codcon, tb1.c60_anousu) ";
+    $sSQl .= " LEFT JOIN conplanoorcamento tb2 ON (tb2.c60_estrut, tb2.c60_anousu) = (tb1.c60_estrut, {$iAnoDestino}) ";
+
+    $sSQl .= " LEFT JOIN conplanoorcamentoanalitica proximoexercicio ON (proximoexercicio.c61_reduz, proximoexercicio.c61_instit) = (conplanoorcamentoanalitica.c61_reduz, conplanoorcamentoanalitica.c61_instit) ";
+    $sSQl .= " AND proximoexercicio.c61_anousu = {$iAnoDestino} ";
+    $sSQl .= " WHERE conplanoorcamentoanalitica.c61_anousu = {$iAnoAtual} ";
+    $sSQl .= "   AND conplanoorcamentoanalitica.c61_instit = {$iIntinst} ";
+    $sSQl .= "   AND proximoexercicio.c61_anousu IS NULL ";
+    $sSQl .= "   AND substr(tb1.c60_estrut,1,1) IN ('3', '4') ";
 
     return $sSQl;
   }

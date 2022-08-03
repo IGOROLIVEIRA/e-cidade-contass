@@ -66,6 +66,13 @@ class Evento
      * @var date
      */
     private $dt_alteracao;
+
+    /**
+     * @var string
+     */
+    private $indapuracao;
+
+
     /**
      * Undocumented function
      *
@@ -74,7 +81,7 @@ class Evento
      * @param string $responsavelPreenchimento
      * @param \stdClass $dados
      */
-    public function __construct($tipoEvento, $empregador, $responsavelPreenchimento, $dado, $tpAmb, $iniValid, $modo, $dt_alteracao = null)
+    public function __construct($tipoEvento, $empregador, $responsavelPreenchimento, $dado, $tpAmb, $iniValid, $modo, $dt_alteracao = null, $indapuracao = null)
     {
         /**
          * @todo pesquisar exite na fila um evento do tipo: $tipoEvento para o : $responsavelPreenchimento
@@ -91,6 +98,7 @@ class Evento
         $this->iniValid                 = $iniValid;
         $this->modo                     = $modo;
         $this->dt_alteracao             = $dt_alteracao;
+        $this->indapuracao              = $indapuracao;
 
         $dado = json_encode(\DBString::utf8_encode_all($this->dado));
         if (is_null($dado)) {
@@ -136,7 +144,8 @@ class Evento
     private function adicionarEvento()
     {
         $dados                                          = $this->montarDadosAPI();
-        $tipoEvento = str_replace('Individual', '', $this->tipoEvento);
+        //adicionado esse str_replace pra pegar o evendo quando o envio foi individual
+        $tipoEvento                                     = str_replace('Individual', '', $this->tipoEvento);
         $daoFilaEsocial                                 = new \cl_esocialenvio();
         $daoFilaEsocial->rh213_evento                   = $tipoEvento;
         $daoFilaEsocial->rh213_empregador               = $this->empregador;
@@ -187,6 +196,7 @@ class Evento
         $evento->setIniValid($this->iniValid);
         $evento->setModo($this->modo);
         $evento->setDtAlteracao($this->dt_alteracao);
+        $evento->setIndApuracao($this->indapuracao);
         if (!is_object($evento)) {
             throw new \Exception("Objeto S{$this->tipoEvento} não encontrado.");
         }

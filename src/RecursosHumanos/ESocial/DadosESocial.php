@@ -45,15 +45,26 @@ class DadosESocial
     public function getPorTipo($tipo, $matricula=null)
     {
         $this->tipo = $tipo;
-        // echo $tipo;
-        // exit;
+        //echo $tipo;
+        //exit;
         switch ($tipo) {
+            case '40':
+                return $this->buscaPreenchimentos($matricula);
+                break;
             case '37':
                 return $this->buscaPreenchimentos($matricula);
                 break;
-                case '2':
-                    return $this->buscaPreenchimentos($matricula);
-                    break;
+
+            case '12':
+                return $this->buscaPreenchimentos($matricula);
+                break;
+
+            case '2':
+                return $this->buscaPreenchimentos($matricula);
+                break;
+            case '13':
+                return $this->buscaPreenchimentos($matricula);
+                break;
             default:
                 $preenchimentos = $this->buscaPreenchimentos($matricula);
 
@@ -80,8 +91,10 @@ class DadosESocial
      */
     private function buscaPreenchimentos($matricula = null)
     {
-        // echo $this->tipo;
-        // exit;
+         //echo 'tst';
+         //echo $this->tipo;
+         //echo Tipo::AFASTAMENTO_TEMPORARIO;
+         //exit;
         $configuracao = new Configuracao();
         $formularioId = $configuracao->getFormulario($this->tipo);
         $preenchimento = new Preenchimentos();
@@ -111,6 +124,12 @@ class DadosESocial
                 return $preenchimento->buscarUltimoPreenchimentoInstituicao($formularioId, $matricula);
             case Tipo::CADASTRAMENTO_INICIAL:
                 return $preenchimento->buscarPreenchimentoS2200($formularioId, $matricula);
+            case Tipo::REMUNERACAO_TRABALHADOR:
+                return $preenchimento->buscarPreenchimentoS1200($formularioId, $matricula);
+            case Tipo::REMUNERACAO_SERVIDOR:
+                return $preenchimento->buscarPreenchimentoS1202($formularioId, $matricula);
+            case Tipo::AFASTAMENTO_TEMPORARIO:
+                return $preenchimento->buscarPreenchimentoS2230($formularioId, $matricula);
             default:
                 throw new Exception('Tipo não encontrado.');
         }

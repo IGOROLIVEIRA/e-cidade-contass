@@ -87,6 +87,7 @@
 
     $sAssinatura = $cl_docparag->sql_query_doc('', '', 'db02_texto', '', $sWhere);
     $rs = $cl_docparag->sql_record($sAssinatura);
+
     $oLinha = db_utils::fieldsMemory($rs, 0)->db02_texto;
 
 
@@ -134,6 +135,7 @@
     $resultLici = db_utils::fieldsMemory($resultLici, 0);
     $tipojulgamento = $resultLici->l20_tipojulg;
     $oLibDocumento->l20_edital = $resultLici->l20_edital;
+    $oLibDocumento->l44_descricao = strtoupper($resultLici->l44_descricao);
     $oLibDocumento->l20_anousu = $resultLici->l20_anousu;
     $oLibDocumento->l20_objeto = $resultLici->l20_objeto;
 
