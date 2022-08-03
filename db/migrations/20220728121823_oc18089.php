@@ -9,8 +9,7 @@ class Oc18089 extends PostgresMigration
         $jsonDados = file_get_contents('db/migrations/20220728121800_oc18089.json');
         $aDados = json_decode($jsonDados);
 
-//        $aAberturaInstit = $this->fetchAll("SELECT DISTINCT c91_instit FROM conaberturaexe WHERE c91_anousudestino > 2022");
-        $aAberturaInstit = $this->fetchAll("SELECT DISTINCT codigo FROM db_config WHERE codigo = 1");
+        $aInstit = $this->fetchAll("SELECT DISTINCT codigo FROM db_config WHERE codigo = 1");
 
         foreach ($aDados->Inserir as $contasInserir) {
 
@@ -37,7 +36,7 @@ class Oc18089 extends PostgresMigration
 
             if ($contasInserir->Fonte != null) {
 
-                foreach ($aAberturaInstit as $instituicao) {
+                foreach ($aInstit as $instituicao) {
 
                     $sSqlVerificaReduz = "SELECT c61_reduz FROM conplanoorcamentoanalitica
                                            JOIN conplanoorcamento ON (c60_codcon, c60_anousu) = (c61_codcon, c61_anousu)
