@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -52,7 +52,7 @@ function js_emite(){
   jan = window.open('orc2_orcprevrecurso002.php?recurso='+recurso+'&mensal='+mensal+'&imprime_grafico='+imprime_grafico,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0');
   jan.moveTo(0,0);
 }
-</script>  
+</script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" bgcolor="#cccccc">
@@ -67,10 +67,10 @@ function js_emite(){
 
   <table  align="center">
     <form name="form1" method="post" action="">
- 
-       <tr>   
+
+       <tr>
          <td>
-           <?=db_ancora(@$Lo15_codigo,"js_codigo(true);",1); ?>           
+           <?=db_ancora(@$Lo15_codigo,"js_codigo(true);",1); ?>
          </td>
          <td>
          <?
@@ -78,7 +78,7 @@ function js_emite(){
             db_input("o15_descr",40,$Io15_descr,true,'text',3);
          ?>
          </td>
-       </tr> 
+       </tr>
       <tr >
         <td  align="left"  nowrap ><strong>Tipo :</strong>
         </td>
@@ -101,11 +101,11 @@ function js_emite(){
       </tr>
 
       <tr>
-        <td align = "center" colspan='2'> 
-          <input  name="emite2" id="emite2" type="button" value="Emitir Relat?rio" onclick="js_emite();" >
+        <td align = "center" colspan='2'>
+          <input  name="emite2" id="emite2" type="button" value="Emitir Relatório" onclick="js_emite();" >
         </td>
       </tr>
-					
+
   </form>
   </table>
 <?
@@ -120,14 +120,14 @@ function js_codigo(mostra){
   }else{
     if( document.form1.o15_codigo.value != ''){
       js_OpenJanelaIframe('','db_iframe_orctiporec','func_orctiporec.php?pesquisa_chave='+document.form1.o15_codigo.value+'&funcao_js=parent.js_mostraorctiporec','Pesquisa',false);
-     }       
+     }
   }
 }
 function js_mostraorctiporec(chave,erro){
-  document.form1.o15_descr.value = chave; 
-  if(erro==true){ 
-    document.form1.o15_codigo.focus(); 
-    document.form1.o15_codigo.value = ''; 
+  document.form1.o15_descr.value = chave;
+  if(erro==true){
+    document.form1.o15_codigo.focus();
+    document.form1.o15_codigo.value = '';
     return false;
   }
 }
@@ -135,7 +135,7 @@ function js_mostraorctiporec1(chave1,chave2){
   document.form1.o15_codigo.value = chave1;
   document.form1.o15_descr.value = chave2;
   db_iframe_orctiporec.hide();
-  
-}  
+
+}
 
 </script>

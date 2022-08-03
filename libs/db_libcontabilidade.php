@@ -32,7 +32,6 @@
  * @version $Revision: 1.220 $
  */
 require_once(modification("classes/db_contranslan_classe.php"));
-require_once(modification("dbforms/db_funcoes.php"));
 
 
 //|00|//cl_despdesdobramento

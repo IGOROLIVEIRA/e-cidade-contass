@@ -236,11 +236,11 @@ if ($clempautitem->numrows == 0) {
     $permissao_lancar = db_permissaomenu(db_getsession("DB_anousu"), 398, 3489);
     if ($permissao_lancar == "true") {
     ?>
-        <input name="lancemp" type="button" id="lancemp" value="Lançar Empenho" onclick="top.corpo.iframe_empautoriza.js_lanc_empenho();">
+        <input name="lancemp" type="button" id="lancemp" value="Lançar Empenho" onclick="CurrentWindow.corpo.iframe_empautoriza.js_lanc_empenho();">
     <?
     }
     ?>
-    <input name="relatorio" type="button" id="db_opcao" value="Relatório de autorização" onclick="top.corpo.iframe_empautoriza.js_relatorio();">
+    <input name="relatorio" type="button" id="db_opcao" value="Relatório de autorização" onclick="CurrentWindow.corpo.iframe_empautoriza.js_relatorio();">
 </form>
 <?
 if (isset($nops)) {
@@ -313,7 +313,7 @@ if (isset($tot) && $tot < 0 && empty($cancelar) && isset($pesquisa_dot)) {
     }
 
     function js_pesquisao47_coddot(mostra) {
-        elemento = top.corpo.iframe_empautitem.document.form1.pc07_codele.value;
+        elemento = CurrentWindow.corpo.iframe_empautitem.document.form1.pc07_codele.value;
         query = '';
         if (elemento != '') {
             query = "elemento=" + elemento + "&";
