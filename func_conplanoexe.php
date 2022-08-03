@@ -105,7 +105,7 @@ if (isset($db_instit) && $db_instit!=''){
         if(!isset($pesquisa_chave)){
           if(isset($campos)==false){
             if(file_exists("funcoes/db_func_conplanoexe.php")==true){
-              include("funcoes/db_func_conplanoexe.php");
+              require_once(modification("funcoes/db_func_conplanoexe.php"));
             }else{
               $campos = "conplanoexe.*";
             }

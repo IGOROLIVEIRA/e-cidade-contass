@@ -68,6 +68,9 @@ class FPDF
     var $creator;            // creator
     var $AliasNbPages;       // alias for total number of pages
     var $PDFVersion;         // PDF version number
+    var $StartPage; // pagina inicial
+    var $AccumulateNumberPages; // Se acumula ou n?o o Total de P?ginas de acordo com o StartPage
+
 
     /*******************************************************************************
      *                                                                              *
@@ -80,6 +83,8 @@ class FPDF
         $this->_dochecks();
         // Initialization of properties
         $this->page = 0;
+        $this->SetStartPage(1);
+        $this->SetAccumulateNumberPages(true);
         $this->n = 2;
         $this->buffer = '';
         $this->pages = array();
@@ -197,10 +202,10 @@ class FPDF
         // Set right margin
         $this->rMargin = $margin;
     }
-    
+
     function GetRightMargin() {
         return $this->rMargin;
-      }      
+      }
 
     function SetAutoPageBreak($auto, $margin = 0)
     {
@@ -388,7 +393,7 @@ class FPDF
     function PageNo()
     {
         // Get current page number
-        return $this->page;
+        return $this->page + $this->GetStartPage() - 1;
     }
 
     function SetDrawColor($r, $g = null, $b = null)
@@ -1144,7 +1149,7 @@ class FPDF
       }
     }
 
-    
+
 
     /*******************************************************************************
      *                                                                              *
@@ -1892,7 +1897,7 @@ class FPDF
     function bold() {
       $this->SetFont('','B');
     }
-   
+
     function endbold() {
       $this->SetFont('','');
     }
@@ -1947,37 +1952,37 @@ class FPDF
            {
                $this->Write(5,$text);
            }
-   
+
        }
    }
-   
+
      /**
       *  Retorna o altura disponivel para escrita
       *  @return integer
       */
      public function getAvailHeight() {
-   
+
         $nAlturaPagina = $this->h;
         $iPosicaoAtual = $this->getY();
         $iMargemBaixa  = $this->bMargin;
         $nResultado    = ( $nAlturaPagina - $iPosicaoAtual ) - $iMargemBaixa;
         return (float)$nResultado;
      }
-   
+
      /**
       * Retorna a largura disponível para escrita
       * @return float
       */
      public function getAvailWidth() {
-   
+
        $nLarguraPagina = $this->w;
        $iPosicaoAtual  = $this->getX();
        $iMargemDireita = $this->rMargin;
        $nResultado     = ( $nLarguraPagina - $iPosicaoAtual ) - $iMargemDireita;
-   
+
        return (float) $nResultado;
      }
-   
+
      function VCell($w, $h=0, $txt='', $border=0, $ln=0, $align='', $fill=false) {
        //Output a cell
        $k=$this->k;
@@ -2024,17 +2029,17 @@ class FPDF
            $s.=sprintf('%.2F %.2F m %.2F %.2F l S ',$x*$k,($this->h-$y)*$k,$x*$k,($this->h-($y+$h))*$k);
          else if(is_int(strpos($border,'l')))
            $s.=sprintf('q 2 w %.2F %.2F m %.2F %.2F l S Q ',$x*$k,($this->h-$y)*$k,$x*$k,($this->h-($y+$h))*$k);
-   
+
          if(is_int(strpos($border,'T')))
            $s.=sprintf('%.2F %.2F m %.2F %.2F l S ',$x*$k,($this->h-$y)*$k,($x+$w)*$k,($this->h-$y)*$k);
          else if(is_int(strpos($border,'t')))
            $s.=sprintf('q 2 w %.2F %.2F m %.2F %.2F l S Q ',$x*$k,($this->h-$y)*$k,($x+$w)*$k,($this->h-$y)*$k);
-   
+
          if(is_int(strpos($border,'R')))
            $s.=sprintf('%.2F %.2F m %.2F %.2F l S ',($x+$w)*$k,($this->h-$y)*$k,($x+$w)*$k,($this->h-($y+$h))*$k);
          else if(is_int(strpos($border,'r')))
            $s.=sprintf('q 2 w %.2F %.2F m %.2F %.2F l S Q ',($x+$w)*$k,($this->h-$y)*$k,($x+$w)*$k,($this->h-($y+$h))*$k);
-   
+
          if(is_int(strpos($border,'B')))
            $s.=sprintf('%.2F %.2F m %.2F %.2F l S ',$x*$k,($this->h-($y+$h))*$k,($x+$w)*$k,($this->h-($y+$h))*$k);
          else if(is_int(strpos($border,'b')))
@@ -2471,7 +2476,7 @@ class FPDF
         // se no. de caracteres impar adiciona 0 no comeco
         if(strlen($text)%2)
         $text = "0".$text;
-    
+
         $textlen = strlen($text);
         $barcodewidth  = ($textlen)*(3*$barcodethinwidth + 2*$barcodethickwidth)+($textlen)*(2.5)+(7*$barcodethinwidth + $barcodethickwidth)+3;
         // imprime na imagem o codigo de inicio
@@ -2509,7 +2514,7 @@ class FPDF
         $elementwidth = $barcodethinwidth;
         $this->Rect($xpos, $yp, $xpos + $elementwidth-$xpos, $barcodeheight,"F");
     }
-    
+
     function TextWithDirection($x,$y,$txt,$direction='R')
     {
         $txt=str_replace(')','\\)',str_replace('(','\\(',str_replace('\\','\\\\',$txt)));
@@ -2525,20 +2530,20 @@ class FPDF
             $s=sprintf('BT %.2f %.2f Td (%s) Tj ET',$x*$this->k,($this->h-$y)*$this->k,$txt);
         $this->_out($s);
     }
-    
+
     function TextWithRotation($x,$y,$txt,$txt_angle,$font_angle=0)
     {
         $txt=str_replace(')','\\)',str_replace('(','\\(',str_replace('\\','\\\\',$txt)));
-    
+
         $font_angle+=90+$txt_angle;
         $txt_angle*=M_PI/180;
         $font_angle*=M_PI/180;
-    
+
         $txt_dx=cos($txt_angle);
         $txt_dy=sin($txt_angle);
         $font_dx=cos($font_angle);
         $font_dy=sin($font_angle);
-    
+
         $s=sprintf('BT %.2f %.2f %.2f %.2f %.2f %.2f Tm (%s) Tj ET',
                  $txt_dx,$txt_dy,$font_dx,$font_dy,
                  $x*$this->k,($this->h-$y)*$this->k,$txt);
@@ -2552,7 +2557,32 @@ class FPDF
         else
             $s='[] 0 d';
         $this->_out($s);
-    }    
+    }
+
+    function SetStartPage($_startpage)
+    {
+    if($_startpage<1) {
+        $this->StartPage = 1;
+    } else {
+        $this->StartPage = $_startpage;
+    }
+    return;
+    }
+
+    function GetStartPage()
+    {
+        return $this->StartPage;
+    }
+
+    function SetAccumulateNumberPages($_accumulatenumberpages)
+    {
+        $this->AccumulateNumberPages = $_accumulatenumberpages;
+    }
+
+    function GetAccumulteNumberPages()
+    {
+        return $this->AccumulateNumberPages;
+    }
 }
 
 // Handle special IE contype request
