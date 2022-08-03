@@ -53,13 +53,15 @@ if(isset($excluir)){
   	$clveiculos->alterar($ve04_veiculo);
   	if($clveiculos->erro_status=="0"){
   		$sqlerro=true;
-  		$erro_msg=$clveiculos->erro_msg;  	
+  		$erro_msg=$clveiculos->erro_msg;
   	}
   }
   db_fim_transacao($sqlerro);
 }else if(isset($chavepesquisa)){
    $db_opcao = 3;
    $result = $clveicbaixa->sql_record($clveicbaixa->sql_query(null,"*",null," ve04_veiculo=$chavepesquisa ")); 
+   db_fieldsmemory($result,0);
+   $result = $clveiculos->sql_record($clveiculos->sql_query($chavepesquisa,"ve01_codigo,ve01_placa"));
    db_fieldsmemory($result,0);
    $db_botao = true;
 }
