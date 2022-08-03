@@ -40,7 +40,7 @@ $dataAbastecimento = null;
 
 if (isset($_POST["processar"])) {
     $contTama = 1;
-
+    $lFail = false;
     $dataI = $_POST["dataI"];
     $dataI = explode("/", $dataI);
     $dataI = $dataI[2] . "-" . $dataI[1] . "-" . $dataI[0];
@@ -74,7 +74,7 @@ if (isset($_POST["processar"])) {
         db_msgbox("Arquivo inválido! O arquivo selecionado deve ser do tipo .xlsx");
         unlink($nometmp);
         $lFail = true;
-        return false;
+
     }
 
     $files = glob('libs/Pat_xls_import/*');
@@ -88,12 +88,12 @@ if (isset($_POST["processar"])) {
     if (move_uploaded_file($_FILES["uploadfile"]["tmp_name"], $diretorio . $novo_nome)) {
 
         $href = $arquivoDocument;
-    } else {
+    } else if($lFail == false){
 
         db_msgbox("Erro ao enviar arquivo.");
         unlink($nometmp);
         $lFail = true;
-        return false;
+
     }
 
     $dir = "libs/Pat_xls_import/";
@@ -102,7 +102,7 @@ if (isset($_POST["processar"])) {
 
     if (!file_exists($arquivo)) {
         echo "<script>alert('Arquivo não localizado')</script>";
-    } else {
+    } else if($lFail == false){
 
         $objPHPExcel = PHPExcel_IOFactory::load($arquivo);
         $objWorksheet = $objPHPExcel->getActiveSheet();
@@ -153,7 +153,7 @@ if (isset($_POST["processar"])) {
                 $hours = round($val * 24);
                 $mins = round($val * 1440) - round($hours * 60);
                 $secs = round($val * 86400) - round($hours * 3600) - round($mins * 60);
-                $returnValue = (int) gmmktime($hours + 3, $mins, $secs);
+                $returnValue = (int) gmmktime($hours, $mins, $secs);
 
                 $hora = date('H:i', $returnValue);
             }
@@ -844,6 +844,7 @@ if (isset($_POST["processar"])) {
 
     function gerar() {
         window.location.href = "vei1_xlsabastecimentoPlanilha.php";
+        js_removeObj("msgbox");
     }
 
     function js_verificarEmpenho() {
