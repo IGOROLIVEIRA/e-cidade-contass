@@ -146,7 +146,7 @@ class EventoS2200 extends EventoBase
                 $oDadosAPI->evtAdmissao->vinculo->infoEstatutario->tpProv       = $oDados->tpprov;
                 $oDadosAPI->evtAdmissao->vinculo->infoEstatutario->dtExercicio  = $oDados->dtexercicio;
 
-                if (!empty($oDados->tpplanrp)) {
+                if ($oDados->tpplanrp == 0) {
                     $oDadosAPI->evtAdmissao->vinculo->infoEstatutario->tpPlanRP     = $oDados->tpplanrp;
                 }
                 if ($oDados->indtetorgps == 'N') {
@@ -211,9 +211,6 @@ class EventoS2200 extends EventoBase
             }
 
             //$oDadosAPI->evtAdmissao->vinculo->infoContrato->localTrabDom = empty($oDados->localtrabdom) ? null : $oDados->localtrabdom;
-
-
-
 
             $aDadosAPI[] = $oDadosAPI;
             $iSequencial++;
