@@ -249,7 +249,7 @@ if (isset ($processa_dotacao) && ($processa_dotacao == 'Processar')) {
     }else {
         for ($x = 0; $x < $rows; $x++) {
             db_fieldsmemory($res, $x);
-            $dot = db_dotacaosaldo(8, 2, 3, true, "o58_instit = " . $instit . " and o58_coddot=$o58_coddot", $anousu_ant, $anousu_ant . '-01-01', $datafinal);
+            $dot = db_dotacaosaldo(8, 2, 3, true, "o58_instit = " . $instit . " and o58_coddot =$o58_coddot", $anousu_ant, $anousu_ant . '-01-01', $datafinal);
 
             if (pg_numrows($dot) > 0) {
                 db_fieldsmemory($dot, 0);
@@ -264,13 +264,46 @@ if (isset ($processa_dotacao) && ($processa_dotacao == 'Processar')) {
                 if (isset($percent) && $percent == 'on' && ($percentual > 0) && $dotacao != 'zerada') {
                     // quando não for dotação zerada, e tiver percentual
                     if ($valor > 0) {
-                        $adicional = round(($valor * $percentual) / 100, 2);
+                        $adicional = round(($valor * $percentual) / 100, 0);
                         $valor = $valor + $adicional;
                     }
                 }
-                if($valor == 0){
-                    $valor = '0.00';
+                $valor = round($valor, 0);
+                if($valor <= 1000){
+                    $valor = '1000.00';
                 }
+                $whereExits  = " o58_anousu =".$anousu;
+                $whereExits .= " and o58_orgao =".$o58_orgao;
+                $whereExits .= " and o58_unidade =".$o58_unidade;
+                $whereExits .= " and o58_funcao =".$o58_funcao;
+                $whereExits .= " and o58_subfuncao =".$o58_subfuncao;
+                $whereExits .= " and o58_programa =".$o58_programa;
+                $whereExits .= " and o58_projativ =".$o58_projativ;
+                $whereExits .= " and o58_codele =".$o58_codele;
+
+                if($anousu == 2023){
+                    $whereExits .= " and o58_codigo = ".$aFontesNovas[$o58_codigo];
+                }
+
+                if($anousu != 2023){
+                    $whereExits .= " and o58_codigo = ".$o58_codigo;
+                }
+
+                $resDotacaoExits = $clorcdotacao->sql_record($clorcdotacao->sql_query(null, null, "*", null, $whereExits));
+                $o58_coddotExits = db_utils::fieldsMemory($resDotacaoExits, 0)->o58_coddot;
+                $o58_valorExits  = db_utils::fieldsMemory($resDotacaoExits, 0)->o58_valor;
+
+                if($o58_coddotExits){
+                    $clorcdotacao->o58_valor = $valor + $o58_valorExits;
+                    $clorcdotacao->alterar($anousu, $o58_coddotExits);
+                    if ($clorcdotacao->erro_status == '0') {
+                        db_msgbox($clorcdotacao->erro_msg);
+                        $erro = true;
+                        break;
+                    }
+                    continue;
+                }
+
                 // insere nas tabelas
                 $clorcdotacao->o58_anousu = $anousu;
                 $clorcdotacao->o58_coddot = $o58_coddot;
@@ -290,6 +323,7 @@ if (isset ($processa_dotacao) && ($processa_dotacao == 'Processar')) {
                 $clorcdotacao->o58_localizadorgastos = $o58_localizadorgastos;
                 $clorcdotacao->o58_datacriacao = $o58_datacriacao;
                 $clorcdotacao->o58_concarpeculiar = $o58_concarpeculiar;
+
                 $clorcdotacao->incluir($anousu, $o58_coddot);
                 if ($clorcdotacao->erro_status == '0') {
                     db_msgbox($clorcdotacao->erro_msg);
