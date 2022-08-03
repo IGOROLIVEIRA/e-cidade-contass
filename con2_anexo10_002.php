@@ -24,12 +24,12 @@
  *  Copia da licenca no diretorio licenca/licenca_en.txt
  *                                licenca/licenca_pt.txt
  */
-include("fpdf151/pdf.php");
-include("fpdf151/assinatura.php");
-include("libs/db_sql.php");
-include("libs/db_liborcamento.php");
-include("libs/db_libcontabilidade.php");
-include_once("dbforms/db_funcoes.php");
+include(modification("fpdf151/pdf.php"));
+include(modification("fpdf151/assinatura.php"));
+include(modification("libs/db_sql.php"));
+include(modification("libs/db_liborcamento.php"));
+include(modification("libs/db_libcontabilidade.php"));
+include_once(modification("dbforms/db_funcoes.php"));
 
 $classinatura = new cl_assinatura;
 

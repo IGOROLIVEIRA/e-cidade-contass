@@ -25,17 +25,17 @@
  *                                licenca/licenca_pt.txt
  */
 
-require_once("libs/db_stdlib.php");
-require_once("libs/db_utils.php");
-require_once("libs/db_app.utils.php");
-require_once("libs/db_conecta.php");
-require_once("libs/db_libdicionario.php");
-require_once("libs/db_libcontabilidade.php");
-require_once("dbforms/db_funcoes.php");
-require_once("libs/db_sessoes.php");
-require_once("libs/db_usuariosonline.php");
-require_once("dbforms/db_classesgenericas.php");
-require_once("classes/db_conparametro_classe.php");
+require_once(modification("libs/db_stdlib.php"));
+require_once(modification("libs/db_utils.php"));
+require_once(modification("libs/db_app.utils.php"));
+require_once(modification("libs/db_conecta.php"));
+require_once(modification("libs/db_libdicionario.php"));
+require_once(modification("libs/db_libcontabilidade.php"));
+require_once(modification("dbforms/db_funcoes.php"));
+require_once(modification("libs/db_sessoes.php"));
+require_once(modification("libs/db_usuariosonline.php"));
+require_once(modification("dbforms/db_classesgenericas.php"));
+require_once(modification("classes/db_conparametro_classe.php"));
 $clrotulo = new rotulocampo;
 $clrotulo->label("c52_descr");
 $clrotulo->label("c61_reduz");
@@ -114,13 +114,13 @@ $iOpcao = 1;
                 <legend><b>Plano de Contas PCASP</b></legend>
                 <table border="0" width="500px;">
                     <tr>
-                        <td><b>Cï¿½digo:</b></td>
+                        <td><b>Código:</b></td>
                         <td>
                             <?php
                             db_input("iCodigoConta", 5, false, 3, "text", 3);
                             ?>
 
-                            <b> Nï¿½ Registro Obrig TCE-MG:</b>
+                            <b> Número Registro Obrig TCE-MG:</b>
 
                             <?php
                             db_input("c60_nregobrig", 2, true, 3, "text", $db_opcao, "", "", "", "", 2);
@@ -149,7 +149,7 @@ $iOpcao = 1;
                         </td>
                     </tr>
                     <tr>
-                        <td><b>Tï¿½tulo:</b></td>
+                        <td><b>Título:</b></td>
                         <td>
                             <?php
                             db_input("sTitulo", 50, "0", true, "text", $db_opcao, "", "", "", "", 50);
@@ -183,7 +183,7 @@ $iOpcao = 1;
                         </td>
                     </tr>
                     <tr id="trIndicadorSuperavit" style="display: none;">
-                        <td nowrap="nowrap"><b>Indicador Superï¿½vit:</b></td>
+                        <td nowrap="nowrap"><b>Indicador Superávit:</b></td>
                         <td>
                             <?php
                             /*
@@ -215,7 +215,7 @@ $iOpcao = 1;
                         <td><b>Tipo de Conta</b></td>
                         <td>
                             <?php
-                            $aTipoConta = array(0 => "Sintï¿½tica", 1 => "Analï¿½tica");
+                            $aTipoConta = array(0 => "Sintética", 1 => "Analítica");
                             db_select("iTipoConta", $aTipoConta, true, $db_opcao, "onchange='js_verificaEstrutural();'");
                             ?>
                         </td>
@@ -238,7 +238,7 @@ $iOpcao = 1;
                         <td>
                             <?php
                             $aInfCompMSC = array(
-                                "" => "Selecione", 1 => "01 - Poder e Orgï¿½o", 2 => "02 - Atributos do Superï¿½vit Financeiro", 3 => "03 - Dï¿½vida Consolidada", 4 => "04 - Financeiro por Fonte", 5 => "05 - Fonte de recursos", 6 => "06 - Cï¿½lula da Receita", 7 => "07 - Cï¿½lula da Despesa", 8 => "08 - Financeiro por fonte mais DC", 9 => "09 - Restos a Pagar"
+                                "" => "Selecione", 1 => "01 - Poder e Orgão", 2 => "02 - Atributos do Superávit Financeiro", 3 => "03 - Dívida Consolidada", 4 => "04 - Financeiro por Fonte", 5 => "05 - Fonte de recursos", 6 => "06 - Célula da Receita", 7 => "07 - Célula da Despesa", 8 => "08 - Financeiro por fonte mais DC", 9 => "09 - Restos a Pagar"
                             );
                             db_select("c60_infcompmsc", $aInfCompMSC, true, $db_opcao, "");
                             ?>
@@ -251,11 +251,11 @@ $iOpcao = 1;
                                 <table>
                                     <tr>
                                         <td nowrap="nowrap">
-                                            <b>Tipo Lanï¿½amento</b>
+                                            <b>Tipo Lançamento</b>
                                         </td>
                                         <td>
                                             <?php
-                                            $aTipoLancamento = array(0 => "", 1 => "01-Depï¿½sitos e Consignaï¿½ï¿½es", 2 => "02-Dï¿½bitos de Tesouraria", 3 => "03-Ativo Realizï¿½vel", 4 => "04-Transferï¿½ncias Financeiras", 5 => "05-Valores Disponibilizados em Conta ï¿½nica do Tesouro Municipal", 9999 => "99-Outros");
+                                            $aTipoLancamento = array(0 => "", 1 => "01-Depósitos e Consignações", 2 => "02-Débitos de Tesouraria", 3 => "03-Ativo Realizável", 4 => "04-Transferências Financeiras", 5 => "05-Valores Disponibilizados em Conta única do Tesouro Municipal", 9999 => "99-Outros");
                                             db_select("iTipoLancamento", $aTipoLancamento, true, $db_opcao, "onchange='js_getSubtipo();'");
                                             ?>
                                         </td>
@@ -350,7 +350,7 @@ $iOpcao = 1;
                     <tr>
                         <td colspan="2">
                             <fieldset>
-                                <legend><b>Funï¿½ï¿½o</b></legend>
+                                <legend><b>Função</b></legend>
                                 <?php
                                 db_textarea("sFuncao", 3, 65, false, true, 'text', $db_opcao);
                                 ?>
@@ -811,7 +811,7 @@ $iOpcao = 1;
          */
         if (iDetalhamentoSistema == 7) {
             if (iTipoLancamento == "0") {
-                alert("Informe o tipo de lanï¿½amento.");
+                alert("Informe o tipo de lançamento.");
                 $("iTipoLancamento").style.backgroundColor = '#CDC9C9';
                 $("sTitulo").focus();
                 return false;
@@ -820,7 +820,7 @@ $iOpcao = 1;
 
         if (sEstrutural == "") {
 
-            alert("Informe a estrutura contï¿½bil do plano de contas.");
+            alert("Informe a estrutura contábil do plano de contas.");
             $("c90_estrutcontabil").style.backgroundColor = '#CDC9C9';
             $("sTitulo").focus();
             return false;
@@ -828,7 +828,7 @@ $iOpcao = 1;
 
         if (sTitulo == "") {
 
-            alert("Informe o tï¿½tulo do plano de contas.");
+            alert("Informe o título do plano de contas.");
             $("sTitulo").style.backgroundColor = '#CDC9C9';
             $("sTitulo").focus();
             return false;
@@ -836,7 +836,7 @@ $iOpcao = 1;
 
         if ($("sTitulo").value.length > 50) {
 
-            alert("O Tï¿½tulo do plano de contas excede o tamanho mï¿½ximo de caracteres (50).");
+            alert("O Título do plano de contas excede o tamanho máximo de caracteres (50).");
             $("sTitulo").style.backgroundColor = '#CDC9C9';
             $("sTitulo").focus();
             return false;
@@ -910,12 +910,12 @@ $iOpcao = 1;
 
         if (iTipoConta == 1) {
             if (iNaturezaReceita == '' && iEstrututalpermitido.contains(iEstrutValid)) {
-                alert('Natureza da Receita nï¿½o Informado !');
+                alert('Natureza da Receita não Informado !');
                 return false;
             }
 
             if (infCompMSC == '') {
-                alert('Informaï¿½ï¿½o Complementar da MSC nï¿½o Informado!');
+                alert('Informação Complementar da MSC não Informado!');
                 return false;
             }
         }
@@ -928,7 +928,7 @@ $iOpcao = 1;
 
             if ($("sIndicadorSuperavit").value == "N") {
 
-                alert("Selecione uma opï¿½ï¿½o para cï¿½lculo de superavit.");
+                alert("Selecione uma opção para cálculo de superavit.");
                 return false;
             } else {
                 sSuperavitFinanceiro = $("sIndicadorSuperavit").value;
@@ -941,7 +941,7 @@ $iOpcao = 1;
         if (iDetalhamentoSistema == 6) {
 
             if ($('iContaBancaria').value == "") {
-                alert("Informe uma conta bancï¿½ria.");
+                alert("Informe uma conta bancária.");
                 return false;
             }
         }
@@ -1243,9 +1243,9 @@ $iOpcao = 1;
             oWindowContaBancaria.destroy();
         });
 
-        var sMsgHelp = 'Informe os dados abaixo, caso a conta nï¿½o exista, ï¿½ necessï¿½rio acessar as rotinas de cadastro.';
+        var sMsgHelp = 'Informe os dados abaixo, caso a conta não exista, é necessário acessar as rotinas de cadastro.';
         oMessageBoard = new DBMessageBoard('msgBoard1',
-            'Vinculo com Conta Bancï¿½ria',
+            'Vinculo com Conta Bancária',
             sMsgHelp,
             oWindowContaBancaria.getContentContainer()
         );
@@ -1294,7 +1294,7 @@ $iOpcao = 1;
             alert(oRetorno.message.urlDecode());
         } else {
 
-            alert('Conta excluida com sucesso!');
+            alert('Conta excluída com sucesso!');
             $('form1').reset();
             $("btnPesquisar").click();
         }
