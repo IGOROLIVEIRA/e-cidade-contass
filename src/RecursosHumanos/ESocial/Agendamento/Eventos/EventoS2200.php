@@ -184,7 +184,7 @@ class EventoS2200 extends EventoBase
 
 
             if (!empty($oDados->vrsalfx) && !empty($oDados->undsalfixo)) {
-                $oDadosAPI->evtAdmissao->vinculo->infoContrato->remuneracao->vrSalFx = $oDados->vrsalfx;
+                $oDadosAPI->evtAdmissao->vinculo->infoContrato->remuneracao->vrSalFx = number_format($oDados->vrsalfx, 2, ".", "");
                 $oDadosAPI->evtAdmissao->vinculo->infoContrato->remuneracao->undSalFixo = $oDados->undsalfixo;
                 $oDadosAPI->evtAdmissao->vinculo->infoContrato->remuneracao->dscSalVar = empty($oDados->dscsalvar) ? null : $oDados->dscsalvar;
             } else {
