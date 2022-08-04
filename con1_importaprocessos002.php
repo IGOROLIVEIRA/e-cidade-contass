@@ -59,7 +59,7 @@ $aSeqPontuacao = array();
 $i = 0;
 foreach ($fieldsAll as $fields) {
 
-    if (count($fields) != 10) {
+    if (count($fields) != 11) {
         db_redireciona('db_erros.php?fechar=true&db_erro=Arquivo inválido ');
     }
 
@@ -144,7 +144,6 @@ foreach ($fieldsAll as $fields) {
         join cgm on z01_numcgm=pc21_numcgm
         join liclicitasituacao on l11_liclicita = l20_codigo
         where l20_codigo=$iLicitacao and l20_licsituacao=0 and z01_cgccpf = '$fields[9]' and l21_ordem = $fields[3]");
-
     if ($clliclicita->numrows == 0) {
         db_fim_transacao(true);
         db_redireciona("db_erros.php?fechar=true&db_erro=Importação abortada, o CNPJ: $fields[9] não foi localizado na base de dados. ");
@@ -182,12 +181,12 @@ $rsLiclicita = $clliclicita->sql_record("select distinct l20_codtipocom from lic
 $clliclicita->l20_licsituacao = 1;
 $clliclicita->l20_codtipocom = db_utils::fieldsMemory($rsLiclicita, 0)->l20_codtipocom;
 $clliclicita->l20_codigo = $iLicitacao;
-$clliclicita->alterar($iLicitacao);
+$clliclicita->alterar($iLicitacao, null, null);
 if ($clliclicita->erro_status == 0) {
     $erro_msg = $clliclicita->erro_msg;
     $sqlerro = true;
     db_redireciona("db_erros.php?fechar=true&db_erro=$clliclicita->erro_msg");
-    break;
+    return false;
 }
 
 $l11_sequencial                       = '';
@@ -203,7 +202,7 @@ if ($clliclicitasituacao->erro_status == 0) {
     $erro_msg = $clliclicitasituacao->erro_msg;
     $sqlerro = true;
     db_redireciona("db_erros.php?fechar=true&db_erro=$clliclicitasituacao->erro_msg");
-    break;
+    return false;
 }
 
 db_fim_transacao($sqlerro);
