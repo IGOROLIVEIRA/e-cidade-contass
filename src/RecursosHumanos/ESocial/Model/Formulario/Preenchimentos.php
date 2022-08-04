@@ -116,7 +116,7 @@ class Preenchimentos
      * @param integer $codigoFormulario
      * @return stdClass[]
      */
-    public function buscarUltimoPreenchimentoInstituicao($codigoFormulario, $matricula=null)
+    public function buscarUltimoPreenchimentoInstituicao($codigoFormulario, $matricula = null)
     {
         $where  = " db101_sequencial = {$codigoFormulario} ";
 
@@ -227,7 +227,7 @@ class Preenchimentos
     {
         if ($rubrica != null) {
             $andRubricas = "
-                AND rh27_rubric IN (".str_replace(' ', '', $rubrica).")
+                AND rh27_rubric IN (" . str_replace(' ', '', $rubrica) . ")
             ";
         }
         $sql = "SELECT
@@ -275,7 +275,7 @@ class Preenchimentos
             AND rh27_codincidfgts IS NOT NULL
             AND rh27_codincidregime IS NOT NULL
             AND rh27_rubric NOT IN ('R978')
-            AND rh27_instit = ".db_getsession('DB_instit');
+            AND rh27_instit = " . db_getsession('DB_instit');
         $rsRubrica = \db_query($sql);
 
         if (!$rsRubrica) {
@@ -292,7 +292,7 @@ class Preenchimentos
      * @param integer $codigoFormulario
      * @return stdClass[]
      */
-    public function buscarPreenchimentoS2200($codigoFormulario, $matricula=null)
+    public function buscarPreenchimentoS2200($codigoFormulario, $matricula = null)
     {
         $sql = "select distinct
                 rh02_instit AS instituicao,
@@ -663,7 +663,7 @@ class Preenchimentos
      * @param integer $codigoFormulario
      * @return stdClass[]
      */
-    public function buscarPreenchimentoS1200($codigoFormulario, $matricula=null)
+    public function buscarPreenchimentoS1200($codigoFormulario, $matricula = null)
     {
         $sql = "select
         distinct
@@ -783,7 +783,7 @@ where
      * @param integer $codigoFormulario
      * @return stdClass[]
      */
-    public function buscarPreenchimentoS1202($codigoFormulario, $matricula=null)
+    public function buscarPreenchimentoS1202($codigoFormulario, $matricula = null)
     {
         $sql = "select
         distinct
