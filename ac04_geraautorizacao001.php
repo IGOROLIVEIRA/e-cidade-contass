@@ -763,11 +763,10 @@ if ($x->consultarDataDoSistema == true) {
             var nQtdeAut = oItem.saldos.quantidadeautorizar.toFixed(4);
             var vTotal = oItem.valorunitario * oItem.quantidade;
             var vTotalAut = oItem.valorunitario * nQtdeAut;
-
+            
             //var nValorAut = js_formatar(js_roundDecimal(vTotal, 2), "f",2);
             // var nValorAut = js_formatar(js_roundDecimal(vTotalAut, 2), "f",2);
             var nValorAut = js_formatar(vTotalAut.toFixed(2), "f", 2);
-
             aLinha = new Array();
             aLinha[0] = oItem.codigomaterial;
             // Descrição
@@ -790,7 +789,7 @@ if ($x->consultarDataDoSistema == true) {
             if (oItem.servico && (oItem.lControlaQuantidade == "" || oItem.lControlaQuantidade == "f")) {
                 nQtdeAut = 1;
                 oItem.saldos.quantidadeautorizar = 1;
-                nValorAut = js_formatar(js_roundDecimal(oItem.saldos.valorautorizar, 2), 'f', 2);
+                nValorAut = js_formatar(js_roundDecimal(oItem.saldos.valorautorizar, 2), 'f', 2);   
             }
 
             aLinha[5] = eval("qtditem" + iSeq + " = new DBTextField('qtditem" + iSeq + "','qtditem" + iSeq + "','" + nQtdeAut + "')");
@@ -1119,8 +1118,10 @@ if ($x->consultarDataDoSistema == true) {
             // Valor da dotação
             nQuantAutori = oDotacao.quantidade;
             //nValorDotacao = js_formatar(oDotacao.valorexecutar.toFixed(2), "f", 2);
+
+            var nValorDotacao = js_strToFloat(js_formatar(aItensPosicao[iLinha].saldos.valorautorizar, "f", 2));
+
             
-            //var nValorDotacao = js_strToFloat(js_formatar(oGridDotacoes.aRows[iDot].aCells[7].getValue(), "f", 2));
 
 
             aLinha = new Array();
@@ -1144,7 +1145,12 @@ if ($x->consultarDataDoSistema == true) {
             }
             aLinha[2].addEvent("onKeyPress", "return js_mask(event,\"0-9|.|-\")");
             aLinha[2].addEvent("onKeyDown", "return js_verifica(this,event,true)");
-            aLinha[3] = eval("valordot" + iDot + " = new DBTextField('valordot" + iDot + "','valordot" + iDot + "','" + oDotacao.valorexecutar + "')");
+            if (tipo == 2 && oDotacao.quantidade != 0) {
+                aLinha[3] = eval("valordot" + iDot + " = new DBTextField('valordot" + iDot + "','valordot" + iDot + "','" + nValorDotacao + "')");
+                oDotacao.valorexecutar = nValorDotacao;
+            } else {
+                aLinha[3] = eval("valordot" + iDot + " = new DBTextField('valordot" + iDot + "','valordot" + iDot + "','" + oDotacao.valorexecutar + "')");
+            }
             aLinha[3].addStyle("text-align", "right");
             aLinha[3].addStyle("height", "100%");
             aLinha[3].addStyle("width", "100px");
