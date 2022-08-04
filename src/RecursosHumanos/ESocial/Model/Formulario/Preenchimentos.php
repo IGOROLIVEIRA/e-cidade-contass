@@ -514,6 +514,7 @@ class Preenchimentos
                 case when (h13_categoria = 301 or h13_categoria = 302 or h13_categoria = 303 or h13_categoria = 306 or h13_categoria = 309) then rh01_admiss
                 end as dtExercicio,
                 case when r33_tiporegime = '2' then 0
+                else 1
                 end as tpPlanRP,
                 case when r33_tiporegime = '2' then 'N'
                 end as indTetoRGPS,
