@@ -25,11 +25,11 @@
  *                                licenca/licenca_pt.txt
  */
 
-include("fpdf151/pdf.php");
-include("fpdf151/assinatura.php");
-include("libs/db_sql.php");
-include("libs/db_libcontabilidade.php");
-include_once("dbforms/db_funcoes.php"); // Problema ao gerar relatorio Bal. Geral - Desp. Orçada/Realiza (Anexo 11)
+include(modification("fpdf151/pdf.php"));
+include(modification("fpdf151/assinatura.php"));
+include(modification("libs/db_sql.php"));
+include(modification("libs/db_libcontabilidade.php"));
+include_once(modification("dbforms/db_funcoes.php")); // Problema ao gerar relatorio Bal. Geral - Desp. Orçada/Realiza (Anexo 11)
 
 
 $classinatura = new cl_assinatura;

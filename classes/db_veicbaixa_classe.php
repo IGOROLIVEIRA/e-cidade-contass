@@ -415,7 +415,7 @@ class cl_veicbaixa {
      } 
    } 
    // funcao para exclusao 
-   function excluir ($ve04_codigo=null,$dbwhere=null) { 
+   function excluir ($ve04_codigo,$dbwhere=null) { 
      if($dbwhere==null || $dbwhere==""){
        $resaco = $this->sql_record($this->sql_query_file($ve04_codigo));
      }else{ 
@@ -517,7 +517,7 @@ class cl_veicbaixa {
        $sql .= $campos;
      }
      $sql .= " from veicbaixa ";
-     $sql .= "      inner join db_usuarios  on  db_usuarios.id_usuario = veicbaixa.ve04_usuario";
+     /*$sql .= "      inner join db_usuarios  on  db_usuarios.id_usuario = veicbaixa.ve04_usuario";
      $sql .= "      inner join veiculos  on  veiculos.ve01_codigo = veicbaixa.ve04_veiculo";
      $sql .= "      inner join veiccadtipobaixa  on  veiccadtipobaixa.ve12_sequencial = veicbaixa.ve04_veiccadtipobaixa";
      $sql .= "      inner join veiccentral    on veiccentral.ve40_veiculos      = veiculos.ve01_codigo";
@@ -533,7 +533,7 @@ class cl_veicbaixa {
      $sql .= "      inner join veiccadproced  on  veiccadproced.ve25_codigo = veiculos.ve01_veiccadproced";
      $sql .= "      inner join veiccadpotencia  on  veiccadpotencia.ve31_codigo = veiculos.ve01_veiccadpotencia";
      $sql .= "      inner join veiccadcateg  as b on   b.ve32_codigo = veiculos.ve01_veiccadcateg";
-     $sql .= "      inner join veictipoabast  on  veictipoabast.ve07_sequencial = veiculos.ve01_veictipoabast";
+     $sql .= "      inner join veictipoabast  on  veictipoabast.ve07_sequencial = veiculos.ve01_veictipoabast";*/
      $sql2 = "";
      if($dbwhere==""){
        if($ve04_codigo!=null ){

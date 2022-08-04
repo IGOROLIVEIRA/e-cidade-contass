@@ -389,8 +389,8 @@ if (isset($chavepesquisa)) {
 		          parent.document.formaba.empautidot.disabled=false;\n
 		          parent.document.formaba.prazos.disabled=false;\n
 		          parent.document.formaba.anulacao.disabled=false;\n
-              parent.document.formaba.empautret.disabled=false;\n
-              CurrentWindow.corpo.iframe_empautret.location.href='emp1_empautret001.php?e66_autori=$e54_autori&inclusao=true';\n
+              //parent.document.formaba.empautret.disabled=false;\n
+              //CurrentWindow.corpo.iframe_empautret.location.href='emp1_empautret001.php?e66_autori=$e54_autori&inclusao=true';\n
               CurrentWindow.corpo.iframe_empautitem.location.href='emp1_empautitem001.php?e55_autori=$e54_autori';\n
 		          CurrentWindow.corpo.iframe_prazos.location.href='emp1_empautoriza007.php?chavepesquisa=$e54_autori';\n
 		          CurrentWindow.corpo.iframe_anulacao.location.href='emp1_empautoriza006.php?e54_autori=$e54_autori';\n

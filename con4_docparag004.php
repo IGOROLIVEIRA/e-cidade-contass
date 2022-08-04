@@ -53,7 +53,7 @@ if((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Alterar
    db_fieldsmemory($result,0);
    echo "<script>
           parent.document.formaba.parag.disabled=false;
-          CurrentWindow.corpo.iframe_parag.location.href='con4_docparag003.php?db03_docum=$db03_docum';
+          (window.CurrentWindow || parent.CurrentWindow || top).corpo.iframe_parag.location.href='con4_docparag003.php?db03_docum=$db03_docum';
          </script>";
    $db_botao = true;
 }

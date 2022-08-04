@@ -354,20 +354,20 @@ if (isset($e54_numcgm) && !empty($e54_numcgm)) {
 </head>
 
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1">
-<center>
-    <div style="margin-top: 25px; width: 600px;">
-        <?
-        include("forms/db_frmempautorizacredenciamento.php");
-        ?>
-    </div>
-</center>
+    <center>
+        <div style="margin-top: 25px; width: 600px;">
+            <?
+            include("forms/db_frmempautorizacredenciamento.php");
+            ?>
+        </div>
+    </center>
 </body>
 
 </html>
 <?
 if (isset($erro_msg)) {
     db_msgbox($erro_msg);
-//  db_redireciona("lic1_gerarempautorizacedrenciamento005.php");
+    //  db_redireciona("lic1_gerarempautorizacedrenciamento005.php");
 }
 //////////////////////////////////////////////////
 
@@ -378,8 +378,8 @@ if (isset($chavepesquisa)) {
 	      function js_libera(recar){
 		      parent.document.formaba.empautitem.disabled=false;\n
 		      parent.document.formaba.empautidot.disabled=false;\n
-		      top.corpo.iframe_empautitem.location.href='emp1_empautitemcredenciamentoitem.php?e55_autori=$e54_autori&e54_codlicitacao=$e54_codlicitacao&z01_numcgm=$e54_numcgm';\n
-		      top.corpo.iframe_empautidot.location.href='emp1_empautitemcredenciamentoitemdot.php?e56_autori=$e54_autori&z01_numcgm=$e54_numcgm';\n
+		      CurrentWindow.corpo.iframe_empautitem.location.href='emp1_empautitemcredenciamentoitem.php?e55_autori=$e54_autori&e54_codlicitacao=$e54_codlicitacao&z01_numcgm=$e54_numcgm';\n
+		      CurrentWindow.corpo.iframe_empautidot.location.href='emp1_empautitemcredenciamentoitemdot.php?e56_autori=$e54_autori&z01_numcgm=$e54_numcgm';\n
 	      }
 	      js_libera();
       </script>
@@ -391,8 +391,8 @@ if (isset($chavepesquisa)) {
               function js_bloqueia(recar){
                 parent.document.formaba.empautitem.disabled=false;\n
                 parent.document.formaba.empautidot.disabled=false;\n
-                top.corpo.iframe_empautitem.location.href='emp1_empautitemcredenciamentoitem.php?db_opcaoal=33&e55_autori=$e54_autori&e54_codlicitacao=$e54_codlicitacao&z01_numcgm=$e54_numcgm';\n
-                top.corpo.iframe_empautidot.location.href='emp1_empautitemcredenciamentoitemdot.php?anulacao=true&db_opcao=33&e56_autori=$e54_autori&z01_numcgm=$e54_numcgm';\n
+                CurrentWindow.corpo.iframe_empautitem.location.href='emp1_empautitemcredenciamentoitem.php?db_opcaoal=33&e55_autori=$e54_autori&e54_codlicitacao=$e54_codlicitacao&z01_numcgm=$e54_numcgm';\n
+                CurrentWindow.corpo.iframe_empautidot.location.href='emp1_empautitemcredenciamentoitemdot.php?anulacao=true&db_opcao=33&e56_autori=$e54_autori&z01_numcgm=$e54_numcgm';\n
               }
               js_bloqueia();
             </script>
@@ -403,8 +403,8 @@ if (isset($chavepesquisa)) {
               function js_bloqueia(recar){
                 parent.document.formaba.empautitem.disabled=false;\n
                 parent.document.formaba.empautidot.disabled=false;\n
-                top.corpo.iframe_empautitem.location.href='emp1_empautitemcredenciamentoitem.php?db_opcaoal=33&e55_autori=$e54_autori&e54_codlicitacao=$e54_codlicitacao';\n
-                top.corpo.iframe_empautidot.location.href='emp1_empautitemcredenciamentoitemdot.php?anulacao=true&db_opcao=33&e56_autori=$e54_autori';\n
+                CurrentWindow.corpo.iframe_empautitem.location.href='emp1_empautitemcredenciamentoitem.php?db_opcaoal=33&e55_autori=$e54_autori&e54_codlicitacao=$e54_codlicitacao';\n
+                CurrentWindow.corpo.iframe_empautidot.location.href='emp1_empautitemcredenciamentoitemdot.php?anulacao=true&db_opcao=33&e56_autori=$e54_autori';\n
               }
               js_bloqueia();
             </script>
@@ -426,7 +426,7 @@ if (isset($alterar)) {
         $clempautoriza->erro(true, false);
     }
     //echo "<script>alert('tst'); </script>";
-    echo "<script>top.corpo.iframe_empautitem.location.reload(); </script>";
+    echo "<script>CurrentWindow.corpo.iframe_empautitem.location.reload(); </script>";
 }
 if ($db_opcao == 22 && $anulacao == false) {
     echo "<script>document.form1.pesquisar.click();</script>";

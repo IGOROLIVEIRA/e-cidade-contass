@@ -1,34 +1,34 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
-include("fpdf151/pdf.php");
-include("fpdf151/assinatura.php");
-include("libs/db_sql.php");
-include("libs/db_libcontabilidade.php");
-include_once("dbforms/db_funcoes.php");
+require_once(modification("fpdf151/pdf.php"));
+require_once(modification("fpdf151/assinatura.php"));
+require_once(modification("libs/db_sql.php"));
+require_once(modification("libs/db_libcontabilidade.php"));
+require_once(modification("dbforms/db_funcoes.php"));
 
 $classinatura = new cl_assinatura;
 
@@ -48,8 +48,8 @@ $head5 = "ANEXO (4) EXERCÍCIO: ".db_getsession("DB_anousu");
 $anousu = db_getsession("DB_anousu");
 /*
 $sql = "
-        select * 
-	from orcelemento 
+        select *
+	from orcelemento
 	order by o56_elemento
        ";
 //echo $sql ; exit;
@@ -59,9 +59,9 @@ $sql = "
 $result = db_elementosaldo(0,2,'',db_getsession("DB_anousu"),null,null,false);
 //db_criatabela($result);exit;
 
-$pdf = new PDF(); 
-$pdf->Open(); 
-$pdf->AliasNbPages(); 
+$pdf = new PDF();
+$pdf->Open();
+$pdf->AliasNbPages();
 $pdf->addpage();
 $total = 0;
 $pdf->setfillcolor(235);
@@ -71,7 +71,7 @@ $alt = 4;
 $aux = 0;
 $col = 0;
 for($x = 0; $x < pg_numrows($result);$x++){
-   db_fieldsmemory($result,$x);  
+   db_fieldsmemory($result,$x);
    $aux = $elemento;
    if (substr($aux,1,12) == "000000000000")
       continue;
@@ -91,7 +91,7 @@ for($x = 0; $x < pg_numrows($result);$x++){
       $col = 7;
    else
       $col = 8;
-   
+
    $pdf->setfont('arial','',7);
    $pdf->cell($col,$alt,db_formatar($aux,'elemento'),0,0,"L",0);
    $pdf->cell($col+20,$alt,'',0,0,"L",0);
@@ -104,5 +104,5 @@ $pdf->ln(14);
 
 
 $pdf->Output();
-   
+
 ?>

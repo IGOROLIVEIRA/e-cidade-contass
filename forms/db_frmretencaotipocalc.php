@@ -47,7 +47,7 @@ db_input('e32_sequencial',10,$Ie32_sequencial,true,'text',$db_opcao,"")
     </td>
     <td>
 <?
-db_input('e32_descrição',30,$Ie32_descricao,true,'text',$db_opcao,"")
+db_input('e32_descricao',30,$Ie32_descricao,true,'text',$db_opcao,"")
 ?>
     </td>
   </tr>

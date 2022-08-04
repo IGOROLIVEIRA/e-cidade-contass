@@ -1,42 +1,42 @@
 <?php
 /*
- *     E-cidade Software Público para Gestão Municipal                
- *  Copyright (C) 2014  DBseller Serviços de Informática             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa é software livre; você pode redistribuí-lo e/ou     
- *  modificá-lo sob os termos da Licença Pública Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versão 2 da      
- *  Licença como (a seu critério) qualquer versão mais nova.          
- *                                                                    
- *  Este programa e distribuído na expectativa de ser útil, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implícita de              
- *  COMERCIALIZAÇÃO ou de ADEQUAÇÃO A QUALQUER PROPÓSITO EM           
- *  PARTICULAR. Consulte a Licença Pública Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Você deve ter recebido uma cópia da Licença Pública Geral GNU     
- *  junto com este programa; se não, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Cópia da licença no diretório licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Público para Gestão Municipal
+ *  Copyright (C) 2014  DBseller Serviços de Informática
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa é software livre; você pode redistribuí-lo e/ou
+ *  modificá-lo sob os termos da Licença Pública Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versão 2 da
+ *  Licença como (a seu critério) qualquer versão mais nova.
+ *
+ *  Este programa e distribuído na expectativa de ser útil, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implícita de
+ *  COMERCIALIZAÇÃO ou de ADEQUAÇÃO A QUALQUER PROPÓSITO EM
+ *  PARTICULAR. Consulte a Licença Pública Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Você deve ter recebido uma cópia da Licença Pública Geral GNU
+ *  junto com este programa; se não, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Cópia da licença no diretório licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
-require_once("libs/db_stdlib.php");
-require_once("libs/db_utils.php");
-require_once("libs/db_conecta.php");
-require_once("libs/db_sessoes.php");
-require_once("libs/db_usuariosonline.php");
-require_once("libs/db_liborcamento.php");
-require_once("dbforms/db_funcoes.php");
-require_once("dbforms/db_classesgenericas.php");
-require_once("classes/db_orcparamrel_classe.php");
-require_once("classes/db_orcparamrelnota_classe.php");
-require_once("classes/db_orcparamrelnotaperiodo_classe.php");
-require_once("model/relatorioContabil.model.php");
+require_once(modification("libs/db_stdlib.php"));
+require_once(modification("libs/db_utils.php"));
+require_once(modification("libs/db_conecta.php"));
+require_once(modification("libs/db_sessoes.php"));
+require_once(modification("libs/db_usuariosonline.php"));
+require_once(modification("libs/db_liborcamento.php"));
+require_once(modification("dbforms/db_funcoes.php"));
+require_once(modification("dbforms/db_classesgenericas.php"));
+require_once(modification("classes/db_orcparamrel_classe.php"));
+require_once(modification("classes/db_orcparamrelnota_classe.php"));
+require_once(modification("classes/db_orcparamrelnotaperiodo_classe.php"));
+require_once(modification("model/relatorioContabil.model.php"));
 
 $clorcparamrel            = new cl_orcparamrel;
 $clorcparamrelnota        = new cl_orcparamrelnota;
@@ -53,10 +53,10 @@ $clrotulo->label('o42_descrrel');
 
 $aPeriodos = array();
 
-db_postmemory($_POST);        
+db_postmemory($_POST);
 
 if (isset($oPost->o42_tamanhofontenota)) {
-  $o42_tamanhofontenota = $oPost->o42_tamanhofontenota; 
+  $o42_tamanhofontenota = $oPost->o42_tamanhofontenota;
 }
 
 if (isset($oPost->o42_tamanhofontedados)) {
@@ -77,8 +77,8 @@ $oPost = db_utils::postMemory($_POST);
 $aPeriodosRelatorios = $oRelatorio->getPeriodos();
 if (count($aPeriodosRelatorios)> 0) {
 
-  foreach ($aPeriodosRelatorios as $oPeriodo) { 
-    $aPeriodos[$oPeriodo->o114_sequencial] = $oPeriodo->o114_descricao; 
+  foreach ($aPeriodosRelatorios as $oPeriodo) {
+    $aPeriodos[$oPeriodo->o114_sequencial] = $oPeriodo->o114_descricao;
   }
 
 } else {
@@ -94,11 +94,11 @@ if (!isset($opcao)){
 }
 
 if (isset($opcao) && $opcao == "alterar" || $opcao == "excluir") {
-  
-  $sSqlPeriodos = $clorcparamrelnota->sql_query_file(null, null, null,null,"*", 
+
+  $sSqlPeriodos = $clorcparamrelnota->sql_query_file(null, null, null,null,"*",
                                                      null,"o42_sequencial = {$o42_sequencial}"
                                                      );
-  
+
   $res = $clorcparamrelnota->sql_record($sSqlPeriodos);
   if ($clorcparamrelnota->numrows > 0 ) {
     db_fieldsmemory($res, 0);
@@ -118,7 +118,7 @@ if (isset($opcao) && $opcao == "excluir"){
 }
 
 if (isset($gravar)) {
-  
+
   db_inicio_transacao();
 
   if (trim($o42_nota) == "" && trim($o42_fonte) == ""){
@@ -127,18 +127,18 @@ if (isset($gravar)) {
   }
 
   if ($sqlerro == false){
-    
+
     $clorcparamrelnota->o42_nota              = $o42_nota;
     $clorcparamrelnota->o42_fonte             = $o42_fonte;
-  
+
     $clorcparamrelnota->o42_periodo           = $o42_periodo;
     $clorcparamrelnota->o42_instit            = $instit;
     $clorcparamrelnota->o42_anousu            = $anousu;
     $clorcparamrelnota->o42_sequencial        = null;
     $clorcparamrelnota->o42_tamanhofontenota  = $o42_tamanhofontenota;
     $clorcparamrelnota->o42_tamanhofontedados = $o42_tamanhofontedados;
-    
- 
+
+
     $clorcparamrelnota->incluir($c83_codrel,$anousu,$instit,$o42_periodo);
     $erro_msg = $clorcparamrelnota->erro_msg;
     if ($clorcparamrelnota->erro_status == 0 ) {
@@ -146,7 +146,7 @@ if (isset($gravar)) {
     }
   }
   if (!$sqlerro) {
-    
+
     $aPeriodosRelatorios = $oRelatorio->getPeriodos();
     if (count($aPeriodosRelatorios) > 0) {
 
@@ -155,44 +155,44 @@ if (isset($gravar)) {
       $oDaoNotaPeriodo->o118_periodo         = $o42_periodo;
       $oDaoNotaPeriodo->incluir(null);
       if ($oDaoNotaPeriodo->erro_status == 0) {
-        
-        $erro_msg = $clorcparamrelnota->erro_msg;        
+
+        $erro_msg = $clorcparamrelnota->erro_msg;
         $sqlerro  = true;
-        
+
       }
-          
+
     }
   }
   db_fim_transacao($sqlerro);
-  
+
   $o42_tamanhofontenota  = 6;
   $o42_tamanhofontedados = 8;
 }
 
 if (isset($alterar)) {
-  
+
   db_inicio_transacao();
-  
-  $clorcparamrelnota->o42_sequencial        = $o42_sequencial; 
+
+  $clorcparamrelnota->o42_sequencial        = $o42_sequencial;
   $clorcparamrelnota->o42_nota              = $o42_nota;
   $clorcparamrelnota->o42_fonte             = $o42_fonte;
-  
+
   $clorcparamrelnota->o42_periodo           = $o42_periodo;
   $clorcparamrelnota->o42_instit            = $instit;
   $clorcparamrelnota->o42_anousu            = $anousu;
   $clorcparamrelnota->o42_codparrel         = $c83_codrel;
   $clorcparamrelnota->o42_tamanhofontenota  = $o42_tamanhofontenota;
   $clorcparamrelnota->o42_tamanhofontedados = $o42_tamanhofontedados;
-  
+
   $clorcparamrelnota->alterar($c83_codrel,$anousu,$instit,$o42_periodo);
   $erro_msg = $clorcparamrelnota->erro_msg;
   if ($clorcparamrelnota->erro_status == 0 ) {
     $sqlerro = true;
     db_msgbox($clorcparamrelnota->erro_msg);
   }
-  
+
   if (!$sqlerro) {
-    
+
     $aPeriodosRelatorios = $oRelatorio->getPeriodos();
     if (count($aPeriodosRelatorios) > 0) {
 
@@ -203,10 +203,10 @@ if (isset($alterar)) {
       $oDaoNotaPeriodo->incluir(null);
       $erro_msg = $clorcparamrelnota->erro_msg;
       if ($oDaoNotaPeriodo->erro_status == 0) {
-        
-       $erro_msg = $clorcparamrelnota->erro_msg;        
+
+       $erro_msg = $clorcparamrelnota->erro_msg;
        $sqlerro  = true;
-        
+
       }
     }
   }
@@ -229,19 +229,19 @@ if (isset($excluir)) {
   $clorcparamrelnota->o42_instit    = $instit;
   $clorcparamrelnota->o42_anousu    = $anousu;
   $clorcparamrelnota->o42_codparrel = $c83_codrel;
-  
+
   $clorcparamrelnota->excluir(null, null, null,null,"o42_sequencial={$o42_sequencial}");
   $erro_msg = $clorcparamrelnota->erro_msg;
   if ($clorcparamrelnota->erro_status == 0 ) {
-    
+
     $sqlerro = true;
     db_msgbox($clorcparamrelnota->erro_msg);
   }
-  $o42_sequencial   = "";  
+  $o42_sequencial   = "";
   db_fim_transacao($sqlerro);
 
   if ($sqlerro == false) {
-    
+
     $opcao    = "gravar";
     $db_opcao = 1;
   }
@@ -250,7 +250,7 @@ if (isset($excluir)) {
 }
 
 if ($db_opcao == 1) {
-  
+
   $o42_periodo    = "0";
   $o42_nota       = "";
   $o42_fonte      = "";
@@ -271,23 +271,23 @@ function js_limpar() {
 function js_verifica(opcao) {
 
   if (opcao == "gravar" || opcao == "alterar") {
-  
+
     if (document.form1.o42_periodo.value == "0") {
-    
+
       alert("Informe um periodo válido.");
       document.form1.o42_periodo.focus();
 
       return false;
     }
     if (document.form1.o42_tamanhofontenota.value == "0" || document.form1.o42_tamanhofontenota.value == "") {
-    
+
       alert("Tamanho da Fonte da Nota não pode ser vazio.");
       document.form1.o42_tamanhofontenota.focus();
 
       return false;
     }
     if (document.form1.o42_tamanhofontedados.value == "0" || document.form1.o42_tamanhofontedados.value == "") {
-    
+
       alert("Tamanho da Fonte da Fonte não pode ser vazio.");
       document.form1.o42_tamanhofontedados.focus();
 
@@ -307,14 +307,14 @@ function js_verifica(opcao) {
    <tr>
     <td>
       <table align="center" border=0>
-        <? 
+        <?
            db_input('c83_codrel',5,$Ic83_codrel,true,'hidden',3,"");
         ?>
          <tr>
             <td colspan="2" align=center title="<?=$To42_periodo?>"><?=$Lo42_periodo?>
             <?
 				      db_select("o42_periodo",$aPeriodos,true,$db_opcao,"");
-				
+
 				      if ($db_opcao == 3){
 				        $readonly = " readonly ";
 				        $style    = ";background-color:#DEB887;";
@@ -326,10 +326,10 @@ function js_verifica(opcao) {
 				    </td>
 				 </tr>
 			</table>
-			
+
       <fieldset>
         <legend><b><?php echo str_replace(':', null, $Lo42_nota); ?></b></legend>
-			  <table>	 
+			  <table>
           <tr>
             <td colspan="2">
 	            <?
@@ -337,7 +337,7 @@ function js_verifica(opcao) {
 	                db_input("o42_sequencial",10,0,true,"hidden");
 	              }
 	            ?>
-	            <textarea title="<?=$To42_nota?>" <?=$readonly?> style="font-family:Arial;font-size:12pt<?=$style?>" 
+	            <textarea title="<?=$To42_nota?>" <?=$readonly?> style="font-family:Arial;font-size:12pt<?=$style?>"
 	                      name=o42_nota rows=8 cols=100 value=<?=$o42_nota?> ><?=$o42_nota?></textarea>
             </td>
           </tr>
@@ -346,37 +346,37 @@ function js_verifica(opcao) {
               <b>Tamanho da Fonte:</b>
             </td>
             <td>
-              <? 
+              <?
                 db_input('o42_tamanhofontenota',10,$Io42_tamanhofontenota,true,'text',1,"");
               ?>
-            </td>  
+            </td>
           </tr>
         </table>
       </fieldset>
-      
+
       <fieldset>
         <legend><b><?=$Lo42_fonte?></b></legend>
         <table>
           <tr>
             <td colspan="2">
-             <textarea title="<?=$To42_fonte?>" <?=$readonly?> style="font-family:Arial;font-size:12pt<?=$style?>" 
+             <textarea title="<?=$To42_fonte?>" <?=$readonly?> style="font-family:Arial;font-size:12pt<?=$style?>"
                        name=o42_fonte rows=5 cols=100 value=<?=$o42_fonte?> ><?=$o42_fonte?></textarea>
             </td>
-          </tr> 
+          </tr>
           <tr>
             <td style="width: 150px;">
               <b>Tamanho da Fonte:</b>
             </td>
             <td>
-              <? 
+              <?
                 db_input('o42_tamanhofontedados',10,$Io42_tamanhofontedados,true,'text',1,"");
               ?>
-            </td>  
+            </td>
           </tr>
         </table>
       </fieldset>
       </table>
-      <table style="width: 980px;">      
+      <table style="width: 980px;">
 				 <tr>
 				   <td colspan=2 align="center"><input type=submit name="<?=$opcao?>" value=<?=ucfirst($opcao)?>>
 				   <?
@@ -404,34 +404,34 @@ function js_verifica(opcao) {
 									                                                                                o42_anousu,
 									                                                                                o42_instit,
 									                                                                                o42_sequencial,
-									                                                                                case when o118_sequencial is null then 
-									                                                                                    o42_periodo 
-									                                                                                  else 
+									                                                                                case when o118_sequencial is null then
+									                                                                                    o42_periodo
+									                                                                                  else
 									                                                                                   o114_sigla
-									                                                                                  end as o42_periodo,  
+									                                                                                  end as o42_periodo,
 									                                                                                o42_nota,
-									                                                                                o42_fonte"); 
+									                                                                                o42_fonte");
 									     $cliframe_alterar_excluir->campos  = "o42_sequencial,o42_periodo,o42_nota,o42_fonte";
 									     $cliframe_alterar_excluir->legenda = "Fonte/Notas Explicativas";
 									     $cliframe_alterar_excluir->iframe_height = "200";
 									     $cliframe_alterar_excluir->iframe_width  = "100%";
-									
-									     $clorcparamrelnota->sql_record($cliframe_alterar_excluir->sql); 
+
+									     $clorcparamrelnota->sql_record($cliframe_alterar_excluir->sql);
 									     if ($clorcparamrelnota->numrows == 0) {
 									       $cliframe_alterar_excluir->msg_vazio = "Nenhum registro cadastrado.";
 									     }
-									
+
 									     $cliframe_alterar_excluir->iframe_alterar_excluir(1);
 									   ?>
 				          </td>
-				       </tr> 
+				       </tr>
 				     </table>
 				   </td>
 				 </tr>
 				</table>
     </td>
    </tr>
-  </table> 
+  </table>
 </center>
 </form>
 <?

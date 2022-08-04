@@ -1,37 +1,37 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
-require_once("libs/db_stdlib.php");
-require_once("libs/db_conecta.php");
-require_once("libs/db_sessoes.php");
-require_once("libs/db_usuariosonline.php");
-require_once("dbforms/db_funcoes.php");
-require_once("libs/db_app.utils.php");
-require_once("libs/db_utils.php");
+require_once(modification("libs/db_stdlib.php"));
+require_once(modification("libs/db_conecta.php"));
+require_once(modification("libs/db_sessoes.php"));
+require_once(modification("libs/db_usuariosonline.php"));
+require_once(modification("dbforms/db_funcoes.php"));
+require_once(modification("libs/db_app.utils.php"));
+require_once(modification("libs/db_utils.php"));
 
 $oGet = db_utils::postMemory($_GET);
 
@@ -58,24 +58,24 @@ $oRotuloConhistdocRegra->label();
     <link href="estilos.css" rel="stylesheet" type="text/css">
     <link href="estilos/grid.style.css" rel="stylesheet" type="text/css">
   </head>
-  
+
   <body bgcolor="#CCCCCC" style="margin-top: 25px" >
   <center>
-  <div style="display: table;">    
+  <div style="display: table;">
   <form id="form1" name="form1">
     <div id="ctnFormularioRegra">
-    
+
       <div  style="width: 600; float:left">
-      <fieldset style=" height:300;">  
+      <fieldset style=" height:300;">
         <legend><b>Regra Operação para o Documento</b></legend>
         <table border="0">
-          
+
           <!-- Id Regra-->
           <tr>
             <td>
               <b>Código da Regra:</b>
             </td>
-            
+
             <td>
               <?
               db_input('c92_sequencial', 10, $Ic92_sequencial, true, 'text', 3);
@@ -85,7 +85,7 @@ $oRotuloConhistdocRegra->label();
           <!-- Documento -->
           <tr>
             <td><b>Documento:</b></td>
-            
+
             <td>
               <?
               $funcaoJsDocumento = "onchange = 'js_pesquisaDocumento(false);'";
@@ -96,26 +96,26 @@ $oRotuloConhistdocRegra->label();
               ?>
             </td>
           </tr>
-         
+
          <!--  Descricao -->
          <tr>
             <td>
               <b>Descrição:</b>
             </td>
-            
+
             <td>
               <?
               db_input('c92_descricao', 57, $Ic92_descricao, true, 'text', 1);
               ?>
             </td>
-          </tr>   
-        </table>  
-      
+          </tr>
+        </table>
+
         <!-- Regra Operacao Documento -->
-        <fieldset>  
+        <fieldset>
           <legend><b>Query</b></legend>
            <textarea id="c92_regra" name="c92_regra" rows="10" cols="70"></textarea>
-        </fieldset>   
+        </fieldset>
       </fieldset>
       </div>
       <div  style="width: 300; float:left">
@@ -131,7 +131,7 @@ $oRotuloConhistdocRegra->label();
         <input id="btnExcluir" type="button" name="btnExcluir" value='Excluir' onclick="js_excluir();">
       </center>
     </div>
-  </form>    
+  </form>
   </div>
   </center>
   </body>
@@ -164,7 +164,7 @@ function js_pesquisaVariavel() {
   if (iCodigoDocumento == "") {
     return false;
   }
-    
+
   js_divCarregando("Aguarde, pesquisando variavel do Documento...", "msgBox");
   var oAjax = new Ajax.Request(sUrlDocumentoContabil,
       {
@@ -179,14 +179,14 @@ function js_preencheGridVariavel(oAjax){
   js_removeObj("msgBox");
   var oRetornoVariavel = eval("("+oAjax.responseText+")");
   oDataGridVariavel.clearAll(true);
-  
+
   oRetornoVariavel.aVariavel.each(function (oVariavel , iLinha) {
 
     var aRow = new Array();
     aRow[0]  = oVariavel.c93_variavel;
     aRow[1]  = oVariavel.c93_descricao.urlDecode();
     oDataGridVariavel.addRow(aRow);
-  });  
+  });
   oDataGridVariavel.renderRows();
 }
 
@@ -215,7 +215,7 @@ function js_salvar() {
   if (!confirm(sMsgConfirm)) {
     return false;
   }
-  
+
   var oParam                = new Object();
   oParam.exec               = 'salvarRegra';
   oParam.c92_sequencial     = $F('c92_sequencial');
@@ -243,7 +243,7 @@ function js_finalizaSalvarRegra(oAjax) {
  * Função que exclui a Regra do banco
  */
 function js_excluir(){
-  
+
   var oParam                = new Object();
   oParam.exec               = 'excluirRegra';
   oParam.c92_sequencial     = $F('c92_sequencial');
@@ -253,7 +253,7 @@ function js_excluir(){
                                method:'post',
 										           parameters:'json='+Object.toJSON(oParam),
 										           onComplete: js_finalizaExcluirRegra});
-  
+
 }
 
 function js_finalizaExcluirRegra(oAjax) {
@@ -269,13 +269,13 @@ function js_finalizaExcluirRegra(oAjax) {
  * Valida o SQL de uma Regra
  */
 function js_validarSql(){
-  
+
   if($F('c92_regra') != "") {
-    
+
     var oParam        = new Object();
     oParam.exec       = 'validaSQL';
     oParam.c92_regra  = $F('c92_regra');
-    
+
     js_divCarregando("Aguarde, validando SQL...", "msgBox");
     var oAjax = new Ajax.Request(sUrlDocumentoContabil,{
                                  method:'post',
@@ -288,7 +288,7 @@ function js_finalizaValidacaoRegra(oAjax) {
 
   js_removeObj("msgBox");
   var oRetorno = eval("("+oAjax.responseText+")");
-	alert(oRetorno.message.urlDecode()); 
+	alert(oRetorno.message.urlDecode());
 }
 
 function js_pesquisaRegraDocumentoCadastrado() {
@@ -305,7 +305,7 @@ function js_pesquisaRegraDocumentoCadastrado() {
                                method:'post',
                                parameters:'json='+Object.toJSON(oParam),
                                onComplete: js_preencheFormularioAlteracao});
-  
+
 }
 
 function js_preencheFormularioAlteracao(oAjax) {
@@ -314,7 +314,7 @@ function js_preencheFormularioAlteracao(oAjax) {
   var oRetorno = eval("("+oAjax.responseText+")");
 	$("c92_sequencial").value = oRetorno.c92_sequencial;
 	$("c92_descricao").value  = oRetorno.c92_descricao.urlDecode();
-	$("c92_regra").value      = oRetorno.c92_regra;	
+	$("c92_regra").value      = oRetorno.c92_regra;
 
 	if ($F("c92_sequencial") != "") {
 		$("btnExcluir").disabled = false;
@@ -331,12 +331,12 @@ function js_pesquisaDocumento(lMostra) {
   if ($F('c57_sequencial') == "") {
     alert("Selecione o tipo de documento.");
     return false;
-  } 
-  
+  }
+
   var sUrlDocumento = "";
   if (lMostra) {
     sUrlDocumento = "func_conhistdoc.php?iCodigoTipoDocumento="+$F('c57_sequencial')+"&funcao_js=parent.js_preencheDocumento|c53_coddoc|c53_descr";
-  } else {                                          
+  } else {
     sUrlDocumento = "func_conhistdoc.php?iCodigoTipoDocumento="+$F('c57_sequencial')+"&pesquisa_chave="+$F("c53_coddoc")+"&funcao_js=parent.js_completaDocumento";
   }
   js_OpenJanelaIframe("", "db_iframe_conhistdoc", sUrlDocumento, "Pesquisa Documento", lMostra);

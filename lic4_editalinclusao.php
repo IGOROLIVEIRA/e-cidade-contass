@@ -163,7 +163,7 @@ if (isset($incluir) && isset($licitacao)) {
             $clliclicita = new cl_liclicita;
             $clliclicita->l20_cadinicial = 2;
             $clliclicita->l20_codigo = $codigolicitacao;
-            $clliclicita->alterar($codigolicitacao);
+            $clliclicita->alterar($codigolicitacao, null);
 
             if ($clliclicita->erro_status == "0") {
                 $erro_msg = $clliclicita->erro_msg;

@@ -25,23 +25,23 @@
  *                                licenca/licenca_pt.txt
  */
 
-require ("libs/db_stdlib.php");
-require ("libs/db_utils.php");
-require ("libs/db_conecta.php");
-include ("libs/db_sessoes.php");
-include ("libs/db_usuariosonline.php");
-include ("dbforms/db_funcoes.php");
-include ("libs/db_liborcamento.php");
-include ("classes/db_conrelinfo_classe.php");
-include ("classes/db_conrelvalor_classe.php");
-include ("classes/db_orcparamrel_classe.php");
-include ("classes/db_orcparamseq_classe.php");
-include ("classes/db_orcparamelemento_classe.php");
-include ("classes/db_orcparamrecurso_classe.php");
-include ("classes/db_orcparamsubfunc_classe.php");
-include ("classes/db_orcparamnivel_classe.php");
-include ("classes/db_orcparamfunc_classe.php");
-include ("model/linhaRelatorioContabil.model.php");
+require_once(modification("libs/db_stdlib.php"));
+require_once(modification("libs/db_utils.php"));
+require_once(modification("libs/db_conecta.php"));
+require_once(modification("libs/db_sessoes.php"));
+require_once(modification("libs/db_usuariosonline.php"));
+require_once(modification("dbforms/db_funcoes.php"));
+require_once(modification("libs/db_liborcamento.php"));
+require_once(modification("classes/db_conrelinfo_classe.php"));
+require_once(modification("classes/db_conrelvalor_classe.php"));
+require_once(modification("classes/db_orcparamrel_classe.php"));
+require_once(modification("classes/db_orcparamseq_classe.php"));
+require_once(modification("classes/db_orcparamelemento_classe.php"));
+require_once(modification("classes/db_orcparamrecurso_classe.php"));
+require_once(modification("classes/db_orcparamsubfunc_classe.php"));
+require_once(modification("classes/db_orcparamnivel_classe.php"));
+require_once(modification("classes/db_orcparamfunc_classe.php"));
+require_once(modification("model/linhaRelatorioContabil.model.php"));
 
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 db_postmemory($HTTP_POST_VARS);
@@ -133,7 +133,7 @@ function atualiza_nivel_exclusao($rel,$linha,$valor){
   	return $msg;
 }
 
-include("dbforms/Sajax.php");  // inclusão da biblioteda ajax
+require_once("dbforms/Sajax.php");  // inclusão da biblioteda ajax
 sajax_init();// Inicializar o sajax
 $sajax_debug_mode = 0;// para Debugar o sajax = 0 desligado 1 = ligado
 sajax_export("atualiza_nivel");// função exportada !

@@ -1,39 +1,39 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
-require_once ("fpdf151/pdf.php");
-require_once ("fpdf151/assinatura.php");
-require_once ("libs/db_sql.php");
-require_once ("libs/db_app.utils.php");
-require_once ("libs/db_stdlib.php");
-require_once ("libs/db_utils.php");
-require_once ("libs/db_liborcamento.php");
-require_once ("libs/db_libcontabilidade.php");
-require_once ("dbforms/db_funcoes.php");
+require_once("fpdf151/pdf.php");
+require_once("fpdf151/assinatura.php");
+require_once("libs/db_sql.php");
+require_once("libs/db_app.utils.php");
+require_once("libs/db_stdlib.php");
+require_once("libs/db_utils.php");
+require_once("libs/db_liborcamento.php");
+require_once("libs/db_libcontabilidade.php");
+require_once("dbforms/db_funcoes.php");
 
 db_app::import("relatorioContabil");
 db_app::import("contabilidade.relatorios.AnexoReceitaLegislacao");
@@ -74,9 +74,9 @@ $sVirgula     = "";
  * Monta uma String com as instituições recebidas
  */
 foreach ($oInstit as $key => $value) {
-  
+
   $sNomeInstit .= $sVirgula.$value->nomeinst;
-  $sCodInstit  .= "{$sVirgula}{$value->codigo}"; 
+  $sCodInstit  .= "{$sVirgula}{$value->codigo}";
   $sVirgula     = ", ";
 }
 
@@ -95,7 +95,7 @@ $head4 = "INSTITUIÇÕES : ".substr($sNomeInstit, 0, 180);
 
 
 /**
- * Busca os Balancetes 
+ * Busca os Balancetes
  */
 $oRelatorio    = new AnexoReceitaLegislacao($iAnoUsu, $iCodRelatorio, $iCodPeriodo);
 $oRelatorio->setInstituicoes($sCodInstit);
@@ -112,9 +112,9 @@ $aRelatorio = $oRelatorio->getDados();
 // Variável de controle para primeira Página
 $lPrimeiraPagina = true;
 
-$oPdf  = new PDF(); 
-$oPdf->Open(); 
-$oPdf->AliasNbPages();  
+$oPdf  = new PDF();
+$oPdf->Open();
+$oPdf->AliasNbPages();
 $oPdf->setfillcolor(241);
 $oPdf->setfont('arial','b',8);
 $oPdf->setleftmargin(10);
@@ -124,12 +124,12 @@ $oPdf->setleftmargin(10);
  * Itera sobre a Collection da Receita imprimindo seu conteúdo
  */
 foreach ($aRelatorio as $oReceita) {
-  
+
   /**
-   * Imprime Cabeçalho 
+   * Imprime Cabeçalho
    */
   if ($oPdf->gety() > $oPdf->h-30 || $lPrimeiraPagina) {
-        
+
     $lPrimeiraPagina = false;
     $oPdf->addpage("L");
     $oPdf->setfont('arial','B',8);
@@ -137,32 +137,32 @@ foreach ($aRelatorio as $oReceita) {
     $oPdf->cell(105, $iAlt, "  Descrição",     "B", 0, "L", 0);
     $oPdf->cell(30,  $iAlt,"Valor Estimado", "B", 0, "R", 0);
     $oPdf->cell(119, $iAlt,"Legislação",    "B", 0, "L", 0);
-    
+
     $oPdf->ln();
-  } 
-  
-  
+  }
+
+
   /**
    * Variável de controle para setar negrito quando forconta Sintética
-   */ 
+   */
   $sBold   = "";
   /**
    * Variável para identação do fonte
    */
-  $sEspaco = ""; 
+  $sEspaco = "";
   if ($oReceita->codigoReceita == 0) {
-      
+
     $sBold   = 'B';
     $sEspaco = "";
-    $oReceita->codigoReceita = '';   
+    $oReceita->codigoReceita = '';
   }
-  
+
   $sEstrutura = db_formatar($oReceita->estrutural,'receita');
   /**
    * Busca o número de níveis do Estrutural
    */
   $sEspaco    = nivelEstrutura($sEstrutura);
-  
+
   /**
    * Imprime as linhas do Relatório
    */
@@ -171,7 +171,7 @@ foreach ($aRelatorio as $oReceita) {
   $oPdf->cell(105, $iAlt, substr($sEspaco.$oReceita->descricao, 0, 80), 0, 0, "L");
   $oPdf->cell(30,  $iAlt, db_formatar($oReceita->valorEstimado,'f'),    0, 0, "R");
   $oPdf->cell(119, $iAlt, substr($oReceita->legislacao, 0, 80),         0, 1, "L");
-  
+
 }
 $oPdf->line(10, $oPdf->GetY(), $oPdf->w - 8, $oPdf->GetY());
 
@@ -187,7 +187,7 @@ $oPdf->Output();
  * @return String
  */
 function setIdentacao($iNivel) {
-  
+
   $sEspaco = "";
   if ($iNivel > 1) {
     $sEspaco = str_repeat("  ", $iNivel);
@@ -206,7 +206,7 @@ function nivelEstrutura($sStrutural) {
     $aNiveis = explode(".", $sStrutural);
     $iNivel  = 1;
     foreach ($aNiveis as $iIndice => $sNivel) {
-      
+
       $iTamanhoNivel = strlen($sNivel);
       if ($sNivel != str_repeat('0', $iTamanhoNivel)){
          $iNivel  = $iIndice+1;

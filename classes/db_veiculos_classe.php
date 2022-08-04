@@ -532,7 +532,7 @@ class cl_veiculos
     return true;
   }
   // funcao para alteracao
-  function alterar($ve01_codigo = null, $si04_tipoveiculo)
+  function alterar($ve01_codigo, $si04_tipoveiculo = null)
   {
     $this->atualizacampos();
 
@@ -1375,7 +1375,7 @@ class cl_veiculos
 
     if (is_null($sHoraBase) or trim($sHoraBase) == "") {
       //$sHoraBase = date("H:m");
-      $sHoraBase = "24:59";
+      $sHoraBase = "23:59";
     }
 
     // Select para Buscar Medida da Ultima Retirada, Ultima Devolução ou Ultimo Abastecimento com base numa Data e Hora
