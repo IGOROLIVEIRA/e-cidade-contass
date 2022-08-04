@@ -1,10 +1,10 @@
 <?
-require("libs/db_stdlib.php");
-require("libs/db_conecta.php");
-include("libs/db_sessoes.php");
-include("libs/db_usuariosonline.php");
-include("classes/db_identificacaoresponsaveis_classe.php");
-include("dbforms/db_funcoes.php");
+require(modification("libs/db_stdlib.php"));
+require(modification("libs/db_conecta.php"));
+include(modification("libs/db_sessoes.php"));
+include(modification("libs/db_usuariosonline.php"));
+include(modification("classes/db_identificacaoresponsaveis_classe.php"));
+include(modification("dbforms/db_funcoes.php"));
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
 $clidentificacaoresponsaveis = new cl_identificacaoresponsaveis;
@@ -14,7 +14,7 @@ $sqlerro  = false;
 if(isset($alterar)){
     db_inicio_transacao();
     $result_dtcadcgm = db_query("select z09_datacadastro from historicocgm where z09_numcgm = {$si166_numcgm} and z09_tipo = 1");
-    db_fieldsmemory($result_dtcadcgm, 0)->z09_datacadastro;
+    db_fieldsmemory($result_dtcadcgm, 0);
     $z09_datacadastro = (implode("/",(array_reverse(explode("-",$z09_datacadastro)))));
     if($sqlerro==false){
         $dtinicial = DateTime::createFromFormat('d/m/Y', $si166_dataini);
@@ -37,9 +37,10 @@ if(isset($alterar)){
     $result = $clidentificacaoresponsaveis->sql_record($clidentificacaoresponsaveis->sql_query($chavepesquisa));
     db_fieldsmemory($result, 0);
     $db_botao = true;
-  }else{
+}else{
     $db_opcao = 2;
     $result = $clidentificacaoresponsaveis->sql_record($clidentificacaoresponsaveis->sql_query($chavepesquisa,'*','',"si166_tiporesponsavel = 7 and si166_instit = ".db_getsession("DB_instit")));
+
     db_fieldsmemory($result, 0);
     $db_botao = true;
   }
@@ -55,7 +56,7 @@ if(isset($alterar)){
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-  <tr> 
+  <tr>
     <td width="360" height="18">&nbsp;</td>
     <td width="263">&nbsp;</td>
     <td width="25">&nbsp;</td>
@@ -63,8 +64,8 @@ if(isset($alterar)){
   </tr>
 </table>
 <table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
 	<?
 	include("forms/db_frmidentificacaoresponsaveis.php");
