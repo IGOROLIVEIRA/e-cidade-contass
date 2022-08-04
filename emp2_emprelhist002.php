@@ -245,7 +245,7 @@ $head6 = "Tipo : $inf  ";
 $pdf = new PDF(); // abre a classe
 $pdf->Open(); // abre o relatorio
 $pdf->AliasNbPages(); // gera alias para as paginas
-$pdf->AddPage('L'); // adiciona uma pagina
+$pdf->addPage('L'); // adiciona uma pagina
 $pdf->SetTextColor(0,0,0);
 $pdf->SetFillColor(235);
 $tam = '04';
@@ -275,7 +275,7 @@ if ($quebra=="g" and $tipo=="a"){
             db_fieldsmemory($res,$x,true);
             // testa novapagina
             if ($pdf->gety() > $pdf->h - 40){
- 	       $pdf->Addpage("L");
+ 	       $pdf->addpage("L");
 	    }
             if ($imprime_header==true)
     	    {
@@ -384,7 +384,7 @@ if ($quebra=="g" and $tipo=="s"){
             db_fieldsmemory($res,$x,true);
             // testa nova pagina
 	    if ($pdf->gety() > $pdf->h - 40){
- 	       $pdf->Addpage("L");
+ 	       $pdf->addpage("L");
 	    }
 
             if ($imprime_header==true)
@@ -443,7 +443,7 @@ if ($quebra=="o" and $tipo=="a"){
             db_fieldsmemory($res,$x,true);
 	    // testa nova pagina
             if ($pdf->gety() > $pdf->h - 40){
- 	        $pdf->Addpage("L");
+ 	        $pdf->addpage("L");
 	    }
 
             if ($imprime_header==true)
@@ -617,7 +617,7 @@ if ($quebra=="o" and $tipo=="s"){
             db_fieldsmemory($res,$x,true);
             // testa nova pagina
             if ($pdf->gety() > $pdf->h - 40){
- 	        $pdf->Addpage("L");
+ 	        $pdf->addpage("L");
 	    }
 
 
@@ -726,7 +726,7 @@ if ($quebra=="u" and $tipo=="a"){
             db_fieldsmemory($res,$x,true);
 	    // testa nova pagina
             if ($pdf->gety() > $pdf->h - 40){
- 	        $pdf->Addpage("L");
+ 	        $pdf->addpage("L");
 	    }
 	    if ($imprime_header==true)
     	    {
@@ -895,7 +895,7 @@ if ($quebra=="u" and $tipo=="s"){
             db_fieldsmemory($res,$x,true);
             // testa nova pagina
             if ($pdf->gety() > $pdf->h - 40){
- 	        $pdf->Addpage("L");
+ 	        $pdf->addpage("L");
 	    }
             if ($imprime_header==true)
     	    {

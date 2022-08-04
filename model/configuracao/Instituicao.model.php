@@ -202,6 +202,20 @@ class Instituicao {
    */
   protected $lUsaSisagua;
 
+  /**
+   * @var int
+   */
+  protected $iTipoInstit;
+
+  /**
+   * @var int
+   */
+  protected $iHabitantes;
+
+  /**
+   * @var int
+   */
+  protected $sDataContabilidade;
 
   /**
    * Instituicao constructor.
@@ -556,5 +570,55 @@ class Instituicao {
    */
   public function setUsaSisagua($lUsaSisagua) {
     $this->lUsaSisagua = $lUsaSisagua;
+  }
+
+  /**
+   * @return int
+   */
+  public function getTipoInstit()
+  {
+    return $this->iTipoInstit;
+  }
+
+  /**
+   * @param int $iTipoInstit
+   */
+  public function setTipoInstit($iTipoInstit)
+  {
+    $this->iTipoInstit = $iTipoInstit;
+  }
+
+  /**
+   * @return int
+   */
+  public function getHabitantes()
+  {
+    return $this->iHabitantes;
+  }
+
+  /**
+   * @param int $iHabitantes
+   */
+  public function setHabitantes($iHabitantes)
+  {
+    $this->iHabitantes = $iHabitantes;
+  }
+
+  /**
+   * @return mixed
+   */
+  public function getDataContabilidade()
+  {
+    return $this->sDataContabilidade;
+  }
+
+  /**
+   * @param mixed $sDataContabilidade
+   * @return Instituicao
+   */
+  public function setDataContabilidade($sDataContabilidade)
+  {
+    $this->sDataContabilidade = $sDataContabilidade;
+    return $this;
   }
 }

@@ -25,15 +25,17 @@
  *                                licenca/licenca_pt.txt
  */
 
-require_once "libs/db_stdlib.php";
-require_once "libs/db_conecta.php";
-include_once "libs/db_sessoes.php";
-include_once "libs/db_usuariosonline.php";
+include("libs/db_stdlib.php");
+include("libs/db_conecta.php");
+include("libs/db_sessoes.php");
+include("libs/db_usuariosonline.php");
 include("vendor/mpdf/mpdf/mpdf.php");
-include("libs/db_liborcamento.php");
-include("libs/db_libcontabilidade.php");
 include("libs/db_sql.php");
-require_once("classes/db_empresto_classe.php");
+include("dbforms/db_funcoes.php");
+include("libs/db_liborcamento.php");
+include(modification("libs/db_libcontabilidade.php"));
+include("classes/db_empresto_classe.php");
+
 $clselorcdotacao = new cl_selorcdotacao();
 $clempresto = new cl_empresto;
 

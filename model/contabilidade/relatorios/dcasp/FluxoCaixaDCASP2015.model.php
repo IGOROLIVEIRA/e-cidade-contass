@@ -410,7 +410,7 @@ class FluxoCaixaDCASP2015 extends RelatoriosLegaisBase {
 
     $oAssinatura = new cl_assinatura();
     $this->oPdf->ln(18);
-    assinaturas($this->oPdf, &$oAssinatura, 'BG', false, false);
+    assinaturas($this->oPdf, $oAssinatura, 'BG', false, false);
   }
 
   /**
