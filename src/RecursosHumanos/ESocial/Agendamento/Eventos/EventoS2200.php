@@ -145,7 +145,7 @@ class EventoS2200 extends EventoBase
                 //$oDadosAPI->evtAdmissao->vinculo->infoEstatutario = $oDados->infoEstatutario;
                 $oDadosAPI->evtAdmissao->vinculo->infoEstatutario->tpProv       = $oDados->tpprov;
                 $oDadosAPI->evtAdmissao->vinculo->infoEstatutario->dtExercicio  = $oDados->dtexercicio;
-                if ($oDados->tpplanrp !== 1) {
+                if ($oDados->tpplanrp != 1) {
                     $oDadosAPI->evtAdmissao->vinculo->infoEstatutario->tpPlanRP     = $oDados->tpplanrp;
                 }
                 if ($oDados->indtetorgps == 'N') {
