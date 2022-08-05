@@ -26,7 +26,7 @@ class Itbiavalia
         /**
          * @var $itbiAvalia cl_itbiavalia
          */
-        $itbiAvalia = db_utils::getDao('itbiAvalia');
+        $itbiAvalia = db_utils::getDao('itbiavalia');
         $itbiAvalia = current(db_utils::getCollectionByRecord($itbiAvalia->sql_record($itbiAvalia->sql_query($it14_guia))));
         $this->it14_guia = $itbiAvalia->it14_guia;
         $this->it14_dtvenc = $itbiAvalia->it14_dtvenc;
