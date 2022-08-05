@@ -1,4 +1,7 @@
 <?php
+
+use Model\Itbi\Paritbi;
+
 require_once "Itbinumpre.model.php";
 require_once "Itbimatric.model.php";
 require_once "Itbinome.model.php";
@@ -148,6 +151,22 @@ class Itbi
     }
 
     /**
+     * @return Itbinome[]
+     */
+    public function getDemaisCompradores()
+    {
+        $itbiNomes = array();
+        foreach($this->Itbinome as $obj)
+        {
+            if($obj->isComprador() && $obj->it03_princ === false){
+                $itbiNomes[] = $obj;
+            }
+        }
+
+        return $itbiNomes;
+    }
+
+    /**
      * Retorna o transmitente principal
      * @author Rodrigo Cabral <rodrigo.cabral@contassconsultoria.com.br>
      * @return Itbinome|null
@@ -161,6 +180,22 @@ class Itbi
             }
         }
         return null;
+    }
+
+    /**
+     * Retorna os demais transmitentes
+     * @return Itbinome[] | []
+     */
+    public function getDemaisTransmitentes()
+    {
+        $itbiNomes = array();
+        foreach($this->Itbinome as $obj)
+        {
+            if($obj->isTransmitente() && $obj->it03_princ === false){
+                $itbiNomes[] = $obj;
+            }
+        }
+        return $itbiNomes;
     }
 
     /**
@@ -268,25 +303,51 @@ class Itbi
     }
 
     /**
+     * @todo refatorar depois que for para o php 7
      * @return int
      * @throws Exception
      */
     public function getCgmArrecad()
     {
+        $cgmDevedor = "";
         $compradorPrincipal = $this->getCompradorPrincipal();
+        $demaisCompradores = $this->getDemaisCompradores();
         $transmitentePrincipal = $this->getTransmitentePrincipal();
+        $demaisTransmitentes = $this->getDemaisTransmitentes();
 
         if(empty($compradorPrincipal) === false) {
-            return $compradorPrincipal->getCgm();
+            $cgmDevedor = $compradorPrincipal->getCgm();
+        }
+
+        foreach ($demaisCompradores as $comprador) {
+            $cgm = $comprador->getCgm();
+            if(empty($cgm) !== false){
+                $cgmDevedor = $cgm;
+                break;
+            }
         }
 
         if(empty($transmitentePrincipal) === false) {
-            return $transmitentePrincipal->getCgm();
+            $cgmDevedor = $transmitentePrincipal->getCgm();
         }
 
-        $imovel = new Imovel($this->getMatric());
 
-        return $imovel->getProprietarioPrincipal()->getCodigo();
+        foreach ($demaisTransmitentes as $transmitente) {
+            $cgm = $transmitente->getCgm();
+            if(empty($cgm) !== false){
+                $cgmDevedor = $cgm;
+                break;
+            }
+        }
+
+        $imovel = $this->getMatric();
+
+        if(empty($imovel) === false) {
+            $imovel = new Imovel($this->getMatric());
+            $cgmDevedor = $imovel->getProprietarioPrincipal()->getCodigo();
+        }
+
+        return empty($cgmDevedor) === false ? $cgmDevedor : $this->parItbi->Parreciboitbi->it17_numcgm;
     }
 
     /**
