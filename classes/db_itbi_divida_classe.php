@@ -109,7 +109,7 @@ class cl_itbi_divida {
             $this->erro_status = "0";
             return false;
         }
-        $sql = "insert into transfautomaticas(
+        $sql = "insert into itbi_divida(
                                        it36_guia
                                       ,it36_coddiv
                                       ,it36_data
@@ -149,7 +149,7 @@ class cl_itbi_divida {
     // funcao para alteracao
     function alterar ( $it36_guia=null ) {
         $this->atualizacampos();
-        $sql = " update transfautomaticas set ";
+        $sql = " update itbi_divida set ";
         $virgula = "";
         if(trim($this->it36_guia)!="" || isset($GLOBALS["HTTP_POST_VARS"]["it36_guia"])){
             if(trim($this->it36_guia)=="" && isset($GLOBALS["HTTP_POST_VARS"]["it36_guia"])){
@@ -269,7 +269,7 @@ class cl_itbi_divida {
     // funcao para exclusao
     function excluir ( $it36_guia=null ) {
         $this->atualizacampos(true);
-        $sql = " delete from transfautomaticas
+        $sql = " delete from itbi_divida
                     where ";
         $sql2 = "";
         $sql2 = "it36_guia = $it36_guia";
@@ -323,7 +323,7 @@ class cl_itbi_divida {
         return $result;
     }
     // funcao do sql
-    function sql_query ( $it36_guia = null,$campos="transfautomaticas.it36_guia,*",$ordem=null,$dbwhere=""){
+    function sql_query ( $it36_guia = null,$campos="itbi_divida.it36_guia,*",$ordem=null,$dbwhere=""){
         $sql = "select ";
         if($campos != "*" ){
             $campos_sql = split("#",$campos);
@@ -335,11 +335,11 @@ class cl_itbi_divida {
         }else{
             $sql .= $campos;
         }
-        $sql .= " from transfautomaticas ";
+        $sql .= " from itbi_divida ";
         $sql2 = "";
         if($dbwhere==""){
             if( $it36_guia != "" && $it36_guia != null){
-                $sql2 = " where transfautomaticas.it36_guia = $it36_guia";
+                $sql2 = " where itbi_divida.it36_guia = $it36_guia";
             }
         }else if($dbwhere != ""){
             $sql2 = " where $dbwhere";
@@ -369,7 +369,7 @@ class cl_itbi_divida {
         }else{
             $sql .= $campos;
         }
-        $sql .= " from transfautomaticas ";
+        $sql .= " from itbi_divida ";
         $sql2 = "";
         if($dbwhere==""){
         }else if($dbwhere != ""){
@@ -387,5 +387,26 @@ class cl_itbi_divida {
         }
         return $sql;
     }
+
+    public function sql_query_vencidos($dataVencimento)
+    {
+        return "SELECT DISTINCT it01_guia
+               FROM itbi
+               INNER JOIN itbitransacao ON it04_codigo = it01_tipotransacao
+               INNER JOIN itbinome ON itbinome.it03_guia = itbi.it01_guia
+               AND itbinome.it03_tipo = 'C'
+               inner JOIN itbiavalia ON itbiavalia.it14_guia = itbi.it01_guia
+               LEFT JOIN itbicancela ON itbicancela.it16_guia = itbi.it01_guia
+               WHERE it14_dtvenc <= '{$dataVencimento}'
+                 AND NOT exists
+                   (SELECT arrepaga.k00_numpre
+                    FROM arrepaga
+                    INNER JOIN itbinumpre ON itbinumpre.it15_numpre = arrepaga.k00_numpre
+                    WHERE itbinumpre.it15_guia = itbi.it01_guia)
+                 AND it16_guia IS NULL
+                 AND NOT exists (
+                     SELECT 1 FROM itbi_divida where it16_guia = itbi.it01_guia
+                 )
+               ORDER BY 1";
+    }
 }
-?>
