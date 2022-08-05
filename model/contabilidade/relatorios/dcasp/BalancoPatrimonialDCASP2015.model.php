@@ -207,7 +207,7 @@ class BalancoPatrimonialDCASP2015 extends RelatoriosLegaisBase  {
     }
     $oAssinatura = new cl_assinatura();
     $this->oPdf->ln(18);
-    assinaturas($this->oPdf, &$oAssinatura, 'BG', false, false);
+    assinaturas($this->oPdf, $oAssinatura, 'BG', false, false);
   }
 
   /**
@@ -644,13 +644,13 @@ class BalancoPatrimonialDCASP2015 extends RelatoriosLegaisBase  {
 
   function sql_query_saldoInicialContaCorrente ($iInstit=false,$iFonte=null, $sIntituicoes, $iAno=null){
 
-        $sSqlReduzSuperavit = "select c61_reduz from conplano inner join conplanoreduz on c60_codcon=c61_codcon and c61_anousu=c60_anousu 
+        $sSqlReduzSuperavit = "select c61_reduz from conplano inner join conplanoreduz on c60_codcon=c61_codcon and c61_anousu=c60_anousu
                              where substr(c60_estrut,1,5)='82111' and c60_anousu=" . $iAno ." and c61_anousu=" . $iAno;
         $sWhere =  " AND conhistdoc.c53_tipo not in (1000) ";
 
         if($iAno==2016){
             $iAno = 2017;
-            $sSqlReduzSuperavit = "select c61_reduz from conplano inner join conplanoreduz on c60_codcon=c61_codcon and c61_anousu=c60_anousu 
+            $sSqlReduzSuperavit = "select c61_reduz from conplano inner join conplanoreduz on c60_codcon=c61_codcon and c61_anousu=c60_anousu
                              where substr(c60_estrut,1,5)='82910' and c60_anousu=2017 and c61_anousu=2017";
             $sWhere =  " AND conhistdoc.c53_tipo in (2023) ";
         }
@@ -704,8 +704,8 @@ class BalancoPatrimonialDCASP2015 extends RelatoriosLegaisBase  {
                                                AND c17_sequencial = 103
                                                AND c19_reduz IN ( $sSqlReduzSuperavit )
                                                AND c19_conplanoreduzanousu = " . $iAno . "
-                                               AND c19_orctiporec = {$iFonte} 
-                                               ".$sWhere."                                              
+                                               AND c19_orctiporec = {$iFonte}
+                                               ".$sWhere."
                                              GROUP BY c28_tipo),0) as debito) AS debitos";
 
         return $sSqlSaldos;

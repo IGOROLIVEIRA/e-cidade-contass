@@ -1,37 +1,37 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 /**
- * NotaPlanilhaRetencao 
- * 
- * @package 
+ * NotaPlanilhaRetencao
+ *
+ * @package
  * @version $id$
- * @author Rafael Nery       <rafael.nery@dbseller.com.br> 
- * @author Jeferson Belmiro  <jeferson.belmiro@dbseller.com.br> 
+ * @author Rafael Nery       <rafael.nery@dbseller.com.br>
+ * @author Jeferson Belmiro  <jeferson.belmiro@dbseller.com.br>
  *
  */
 class NotaPlanilhaRetencao {
@@ -47,106 +47,106 @@ class NotaPlanilhaRetencao {
    * @var unknown_type
    */
   private $oPlanilhaRetencao = null;
-  
+
   /**
    * Código da planilha de retencao
-   * 
+   *
    * @var integer
    * @access private
    */
   private $iCodigoPlanilha;
 
   /**
-   * Data da operacao 
-   * 
+   * Data da operacao
+   *
    * @var DBDate
    * @access private
    */
   private $oDataOperacao;
 
   /**
-   * Hora da operacao 
-   * 
+   * Hora da operacao
+   *
    * @var string
    * @access private
    */
   private $sHoraOperacao;
 
   /**
-   * Tipo de lancamento 
-   * 
+   * Tipo de lancamento
+   *
    * @var integer
    * @access private
    */
   private $iTipoLancamento;
-  
+
   /**
-   * Valida se esta retido 
-   * 
+   * Valida se esta retido
+   *
    * @var boolean
    * @access private
    */
-  private $lRetido;  
+  private $lRetido;
 
   /**
-   * status da nota 
-   * 
+   * status da nota
+   *
    * @var integer
    * @access private
    */
-  private $iStatus;   
+  private $iStatus;
 
   /**
-   * codigo da situacao 
-   * 
+   * codigo da situacao
+   *
    * @var integer
    * @access private
    */
-  private $iSituacao; 
-  
+  private $iSituacao;
+
   /**
-   * Data da nota fiscal 
-   * 
+   * Data da nota fiscal
+   *
    * @var DBDate
    * @access private
    */
   private $oDataNota;
-  
+
   /**
-   * CNPJ da nota fiscal 
-   * 
+   * CNPJ da nota fiscal
+   *
    * @var string
    * @access private
    */
-  private $sCNPJ;                    
+  private $sCNPJ;
 
   /**
-   * Serie da nota fiscal 
-   * 
+   * Serie da nota fiscal
+   *
    * @var string
    * @access private
    */
-  private $sSerie;       
+  private $sSerie;
 
   /**
-   * Nome na nota fiscal 
-   * 
+   * Nome na nota fiscal
+   *
    * @var string
    * @access private
    */
   private $sNome;
 
   /**
-   * Numero da Nota fiscal 
-   * 
+   * Numero da Nota fiscal
+   *
    * @var string
    * @access private
    */
-  private $iNumeroNota;       
+  private $iNumeroNota;
 
   /**
    * Valor do Serviço
-   * 
+   *
    * @var numeric
    * @access private
    */
@@ -154,7 +154,7 @@ class NotaPlanilhaRetencao {
 
   /**
    * Valor Retido na Nota
-   * 
+   *
    * @var numeric
    * @access private
    */
@@ -166,62 +166,62 @@ class NotaPlanilhaRetencao {
    * @var    numeric
    * @access private
    */
-  private $nAliquota;       
-  
+  private $nAliquota;
+
   /**
-   * Valor da Deducao 
-   * 
+   * Valor da Deducao
+   *
    * @var    numeric
    * @access private
    */
   private $nValorDeducao;
 
   /**
-   * Valor Base da Nota 
-   * 
+   * Valor Base da Nota
+   *
    * @var    numeric
    * @access private
    */
-  private $nValorBase;  
+  private $nValorBase;
 
   /**
-   * Valor do Imposto 
-   * 
+   * Valor do Imposto
+   *
    * @var numeric
    * @access private
    */
   private $nValorImposto;
 
   /**
-   * Descricao do Serviço 
-   * 
+   * Descricao do Serviço
+   *
    * @var srting
    * @access private
    */
-  private $sServico;    
+  private $sServico;
 
   /**
-   * Observacoes da Nota Fiscal 
-   * 
+   * Observacoes da Nota Fiscal
+   *
    * @var mixed
    * @access private
    */
-  private $sObservacoes;        
-  
+  private $sObservacoes;
+
   /**
-   * Codigo da Nota de Liquidação 
+   * Codigo da Nota de Liquidação
    * @var mixed
    * @access private
    */
   private $iCodigoNotaLiquidacao = null;
-  
+
   /**
    * Codigo da Nota PLanilha
    * @var integer
    * @access private
    */
   private $iCodigoNotaPlanilha = null;
-  
+
   /**
    * Construtor da Classe
    * @access public
@@ -230,12 +230,12 @@ class NotaPlanilhaRetencao {
   public function __construct( $iCodigoNotaPlanilha = null ) {
 
     if ( !empty($iCodigoNotaPlanilha) ) {
-      
+
       $oDadosPlanilha = db_utils::getDao('issplanit');
       $sSql = $oDadosPlanilha->sql_query_file($iCodigoNotaPlanilha);
       $rsDadosPLanilha = $oDadosPlanilha->sql_record($sSql);
       $oDadosPlanilha = db_utils::fieldsMemory($rsDadosPLanilha, 0);
-      
+
       $this->setCodigoPlanilha  ($oDadosPlanilha->q21_planilha            );
       $this->setDataOperacao    (new DBDate($oDadosPlanilha->q21_dataop)  );
       $this->setHoraOperacao    ($oDadosPlanilha->q21_horaop              );
@@ -258,54 +258,54 @@ class NotaPlanilhaRetencao {
       $this->setObservacoes     ($oDadosPlanilha->q21_obs                 );
     }
   }
-  
+
   /**
-   * Salva os Dados da Nota da Planilha de Retencao 
-   * 
+   * Salva os Dados da Nota da Planilha de Retencao
+   *
    * @access public
    * @return void
    */
   public function salvar($iCodigoNotaPlanilha = null) {
-    
+
     if (!db_utils::inTransaction()) {
       throw new Exception('Erro [0] - Não Existe transação ativa');
     }
-    
+
     $oDaoNotas = new cl_issplanit();
-    
-    $oDaoNotas->q21_planilha     = $this->getCodigoPlanilha();          
-    $oDaoNotas->q21_dataop       = $this->getDataOperacao()->getDate(); 
-    $oDaoNotas->q21_horaop       = $this->getHoraOperacao();            
-    $oDaoNotas->q21_tipolanc     = $this->getTipoLancamento();          
+
+    $oDaoNotas->q21_planilha     = $this->getCodigoPlanilha();
+    $oDaoNotas->q21_dataop       = $this->getDataOperacao()->getDate();
+    $oDaoNotas->q21_horaop       = $this->getHoraOperacao();
+    $oDaoNotas->q21_tipolanc     = $this->getTipoLancamento();
     $oDaoNotas->q21_retido       = $this->isRetido() ? 'true' : 'false';
     $oDaoNotas->q21_situacao     = $this->getSituacao();
     $oDaoNotas->q21_status       = $this->getStatus();
-    $oDaoNotas->q21_datanota     = $this->getDataNota()->getDate();     
-    $oDaoNotas->q21_cnpj         = $this->getCNPJ();                    
-    $oDaoNotas->q21_serie        = $this->getSerie();                   
-    $oDaoNotas->q21_nome         = $this->getNome();                    
-    $oDaoNotas->q21_nota         = $this->getNumeroNota();              
-    $oDaoNotas->q21_valorser     = $this->getValorServico();            
-    $oDaoNotas->q21_valor        = $this->getValorRetencao();           
-    $oDaoNotas->q21_aliq         = $this->getAliquota();                
-    $oDaoNotas->q21_valordeducao = $this->getValorDeducao();            
-    $oDaoNotas->q21_valorbase    = $this->getValorBase();               
-    $oDaoNotas->q21_valorimposto = $this->getValorImposto();            
-    $oDaoNotas->q21_servico      = $this->getDescricaoServico();        
-    $oDaoNotas->q21_obs          = $this->getObservacoes();             
-    
+    $oDaoNotas->q21_datanota     = $this->getDataNota()->getDate();
+    $oDaoNotas->q21_cnpj         = $this->getCNPJ();
+    $oDaoNotas->q21_serie        = $this->getSerie();
+    $oDaoNotas->q21_nome         = $this->getNome();
+    $oDaoNotas->q21_nota         = $this->getNumeroNota();
+    $oDaoNotas->q21_valorser     = $this->getValorServico();
+    $oDaoNotas->q21_valor        = $this->getValorRetencao();
+    $oDaoNotas->q21_aliq         = $this->getAliquota();
+    $oDaoNotas->q21_valordeducao = $this->getValorDeducao();
+    $oDaoNotas->q21_valorbase    = $this->getValorBase();
+    $oDaoNotas->q21_valorimposto = $this->getValorImposto();
+    $oDaoNotas->q21_servico      = $this->getDescricaoServico();
+    $oDaoNotas->q21_obs          = $this->getObservacoes();
+
     if ($iCodigoNotaPlanilha == null) {
       $oDaoNotas->incluir(null);
     } else {
-      
+
       $oDaoNotas->q21_sequencial = $iCodigoNotaPlanilha;
       $oDaoNotas->alterar($iCodigoNotaPlanilha);
     }
-    
+
     $this->iCodigoNotaPlanilha = $oDaoNotas->q21_sequencial;
-    
+
     if ($oDaoNotas->erro_status == 0) {
-      throw new Exception("Erro ao Lançar nota na planilha.\n{$oDaoNotas->erro_msg}"); 
+      throw new Exception("Erro ao Lançar nota na planilha.\n{$oDaoNotas->erro_msg}");
     }
 
     if ( !empty($this->iCodigoNotaLiquidacao) ) {
@@ -314,9 +314,9 @@ class NotaPlanilhaRetencao {
       $oDaoIssPlanOp->q96_issplanit = $this->getCodigoPlanilha();
       $oDaoIssPlanOp->q96_pagordem  = $this->getCodigoNotaLiquidacao();
       $oDaoIssPlanOp->incluir(null);
-      
+
       if ($oDaoIssPlanOp->erro_status == 0) {
-        throw new Exception('Erro ao incluir nota na planilha.'); 
+        throw new Exception('Erro ao incluir nota na planilha.');
       }
     }
 
@@ -324,15 +324,15 @@ class NotaPlanilhaRetencao {
   }
 
   /**
-   * Retorna o codigo da planilha 
-   * @return integer 
+   * Retorna o codigo da planilha
+   * @return integer
    */
   public function getCodigoPlanilha() {
     return $this->iCodigoPlanilha;
   }
 
   /**
-   * Define o codigo da planilha 
+   * Define o codigo da planilha
    * @param $iCodigoPlanilha
    */
   public function setCodigoPlanilha($iCodigoPlanilha) {
@@ -340,15 +340,15 @@ class NotaPlanilhaRetencao {
   }
 
   /**
-   * Retorna data de operacao 
-   * @return DBDate 
+   * Retorna data de operacao
+   * @return DBDate
    */
   public function getDataOperacao() {
     return $this->oDataOperacao;
   }
 
   /**
-   * Define data de operacao 
+   * Define data de operacao
    * @param $oDataOperacao
    */
   public function setDataOperacao($oDataOperacao) {
@@ -356,8 +356,8 @@ class NotaPlanilhaRetencao {
   }
 
   /**
-   * Retorna hora de operacao 
-   * @return string 
+   * Retorna hora de operacao
+   * @return string
    */
   public function getHoraOperacao() {
     return $this->sHoraOperacao;
@@ -373,14 +373,14 @@ class NotaPlanilhaRetencao {
 
   /**
    * Retorna o tipo de lancamento
-   * @return integer 
+   * @return integer
    */
   public function getTipoLancamento() {
     return $this->iTipoLancamento;
   }
 
   /**
-   * Define o tipo de lancamento 
+   * Define o tipo de lancamento
    * @param $iTipoLancamento
    */
   public function setTipoLancamento($iTipoLancamento) {
@@ -388,7 +388,7 @@ class NotaPlanilhaRetencao {
   }
 
   /**
-   * Valida se esta retido 
+   * Valida se esta retido
    * @return boolean
    */
   public function isRetido() {
@@ -405,7 +405,7 @@ class NotaPlanilhaRetencao {
 
   /**
    * Retorna o Status da nota da PLanilha
-   * @return 
+   * @return
    */
   public function getStatus() {
     return $this->iStatus;
@@ -418,10 +418,10 @@ class NotaPlanilhaRetencao {
   public function setStatus($iStatus) {
     $this->iStatus = $iStatus;
   }
-  
+
   /**
    * Retorna a Situacao
-   * @return 
+   * @return
    */
   public function getSituacao() {
     return $this->iSituacao;
@@ -453,7 +453,7 @@ class NotaPlanilhaRetencao {
 
   /**
    * Retorna o CNPJ da NOta
-   * @return 
+   * @return
    */
   public function getCNPJ() {
     return $this->sCNPJ;
@@ -469,7 +469,7 @@ class NotaPlanilhaRetencao {
 
   /**
    * Retorna a Serie da Nota Fisca
-   * @return 
+   * @return
    */
   public function getSerie() {
     return $this->sSerie;
@@ -485,7 +485,7 @@ class NotaPlanilhaRetencao {
 
   /**
    * Retorna o Nome da Nota Fiscal
-   * @return 
+   * @return
    */
   public function getNome() {
     return $this->sNome;
@@ -501,7 +501,7 @@ class NotaPlanilhaRetencao {
 
   /**
    * Retorna o Numero da Nota Fiscal
-   * @return 
+   * @return
    */
   public function getNumeroNota() {
     return $this->iNumeroNota;
@@ -517,7 +517,7 @@ class NotaPlanilhaRetencao {
 
   /**
    * Retorna o Valor do Serviço
-   * @return 
+   * @return
    */
   public function getValorServico() {
     return $this->nValorServico;
@@ -533,7 +533,7 @@ class NotaPlanilhaRetencao {
 
   /**
    * Retorna o Valor da Retenção na Nota Fiscal
-   * @return 
+   * @return
    */
   public function getValorRetencao() {
     return $this->nValorRetencao;
@@ -549,7 +549,7 @@ class NotaPlanilhaRetencao {
 
   /**
    * Retorna o Valor da Aliquota da Nota
-   * @return 
+   * @return
    */
   public function getAliquota() {
     return $this->nAliquota;
@@ -565,7 +565,7 @@ class NotaPlanilhaRetencao {
 
   /**
    * Retorna o Valor deuzido da NOta
-   * @return 
+   * @return
    */
   public function getValorDeducao() {
     return $this->nValorDeducao;
@@ -580,8 +580,8 @@ class NotaPlanilhaRetencao {
   }
 
   /**
-   * Retorna o Valor Base da Nota 
-   * @return 
+   * Retorna o Valor Base da Nota
+   * @return
    */
   public function getValorBase() {
     return $this->nValorBase;
@@ -597,7 +597,7 @@ class NotaPlanilhaRetencao {
 
   /**
    * Retorna o Valor do imposto
-   * @return 
+   * @return
    */
   public function getValorImposto() {
     return $this->nValorImposto;
@@ -613,7 +613,7 @@ class NotaPlanilhaRetencao {
 
   /**
    * Retorna a Descriacao do serviço da Nota
-   * @return 
+   * @return
    */
   public function getDescricaoServico() {
     return $this->sServico;
@@ -629,7 +629,7 @@ class NotaPlanilhaRetencao {
 
   /**
    * Retorna as Observações da Nota
-   * @return 
+   * @return
    */
   public function getObservacoes() {
     return $this->sObservacoes;
@@ -642,7 +642,7 @@ class NotaPlanilhaRetencao {
   public function setObservacoes($sObservacoes) {
     $this->sObservacoes = $sObservacoes;
   }
-  
+
   /**
    * Retorna o Codigo da Nota (sequencial)
    *
@@ -652,10 +652,10 @@ class NotaPlanilhaRetencao {
   public function getCodigoNotaPlanilha () {
     return  $this->iCodigoNotaPlanilha;
   }
-   
+
   /**
    * Retorna do Código da Liquidacao
-   * 
+   *
    * @access public
    * @return integer
    */
@@ -665,8 +665,8 @@ class NotaPlanilhaRetencao {
 
   /**
    * Define o Código da Liquidacao
-   * 
-   * @param  integer $iNotaLiquidacao 
+   *
+   * @param  integer $iNotaLiquidacao
    * @access public
    * @return void
    */

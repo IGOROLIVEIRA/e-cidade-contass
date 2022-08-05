@@ -25,17 +25,17 @@
  *                                licenca/licenca_pt.txt
  */
 
-require_once(modification("libs/db_stdlib.php"));
-require_once(modification("libs/db_utils.php"));
-require_once(modification("libs/db_app.utils.php"));
-require_once(modification("libs/db_conecta.php"));
-require_once(modification("libs/db_libdicionario.php"));
-require_once(modification("libs/db_libcontabilidade.php"));
-require_once(modification("dbforms/db_funcoes.php"));
-require_once(modification("libs/db_sessoes.php"));
-require_once(modification("libs/db_usuariosonline.php"));
-require_once(modification("dbforms/db_classesgenericas.php"));
-require_once(modification("classes/db_conparametro_classe.php"));
+require_once("libs/db_stdlib.php");
+require_once("libs/db_utils.php");
+require_once("libs/db_app.utils.php");
+require_once("libs/db_conecta.php");
+require_once("libs/db_libdicionario.php");
+require_once("libs/db_libcontabilidade.php");
+require_once("dbforms/db_funcoes.php");
+require_once("libs/db_sessoes.php");
+require_once("libs/db_usuariosonline.php");
+require_once("dbforms/db_classesgenericas.php");
+require_once("classes/db_conparametro_classe.php");
 $clrotulo = new rotulocampo;
 $clrotulo->label("c52_descr");
 $clrotulo->label("c61_reduz");
@@ -120,7 +120,7 @@ $iOpcao = 1;
                             db_input("iCodigoConta", 5, false, 3, "text", 3);
                             ?>
 
-                            <b> Número Registro Obrig TCE-MG:</b>
+                            <b> Nº Registro Obrig TCE-MG:</b>
 
                             <?php
                             db_input("c60_nregobrig", 2, true, 3, "text", $db_opcao, "", "", "", "", 2);
@@ -187,7 +187,7 @@ $iOpcao = 1;
                         <td>
                             <?php
                             /*
-                         * Organiza um array com os valores padrï¿½o cadastrado no dicionï¿½rio de dados
+                         * Organiza um array com os valores padrão cadastrado no dicionário de dados
                          */
                             $aIndicadorSuperavit = getValoresPadroesCampo("c60_identificadorfinanceiro");
                             $aRecordSuperavit    = array();
@@ -255,7 +255,7 @@ $iOpcao = 1;
                                         </td>
                                         <td>
                                             <?php
-                                            $aTipoLancamento = array(0 => "", 1 => "01-Depósitos e Consignações", 2 => "02-Débitos de Tesouraria", 3 => "03-Ativo Realizável", 4 => "04-Transferências Financeiras", 5 => "05-Valores Disponibilizados em Conta única do Tesouro Municipal", 9999 => "99-Outros");
+                                            $aTipoLancamento = array(0 => "", 1 => "01-Depósitos e Consignações", 2 => "02-Débitos de Tesouraria", 3 => "03-Ativo Realizável", 4 => "04-Transferências Financeiras", 5 => "05-Valores Disponibilizados em Conta Única do Tesouro Municipal", 9999 => "99-Outros");
                                             db_select("iTipoLancamento", $aTipoLancamento, true, $db_opcao, "onchange='js_getSubtipo();'");
                                             ?>
                                         </td>
@@ -280,7 +280,7 @@ $iOpcao = 1;
                                             <fieldset>
                                                 <legend>Incluir SubTipo</legend>
                                                 <b>SubTipo</b><?php db_input("c200_subtipo", 5, 1, 3, "text", $db_opcao, "", "", "", "", 4); ?>
-                                                <b>Descriï¿½ï¿½o</b><?php db_input("c200_descsubtipo", 35, 0, 3, "text", $db_opcao, "", "", "", "text-transform: uppercase;", 100); ?>
+                                                <b>Descrição</b><?php db_input("c200_descsubtipo", 35, 0, 3, "text", $db_opcao, "", "", "", "text-transform: uppercase;", 100); ?>
                                                 <input type="button" name="btnIncluirSubtipo" id="btnIncluirSubtipo" value="Adicionar" />
                                             </fieldset>
                                         </td>
@@ -303,7 +303,7 @@ $iOpcao = 1;
                                             <fieldset>
                                                 <legend>Incluir SubTipo</legend>
                                                 <b>Desdobra SubTipo</b><?php db_input("c201_desdobrasubtipo", 5, 1, 3, "text", $db_opcao, "", "", "", "", 4); ?>
-                                                <b>Descriï¿½ï¿½o</b><?php db_input("c201_descdesdobrasubtipo", 35, 0, 3, "text", $db_opcao, "", "", "", "text-transform: uppercase;", 100); ?>
+                                                <b>Descrição</b><?php db_input("c201_descdesdobrasubtipo", 35, 0, 3, "text", $db_opcao, "", "", "", "text-transform: uppercase;", 100); ?>
                                                 <input type="button" name="btnIncluirDesdobraSubtipo" id="btnIncluirDesdobraSubtipo" value="Adicionar" />
                                             </fieldset>
                                         </td>
@@ -314,7 +314,7 @@ $iOpcao = 1;
                     <tr id='trdivContaBancaria' style='display: none'>
                         <td>
                             <?php
-                            db_ancora("<b>Conta Bancï¿½ria:</b>", "js_abreContaBancaria(true)", $db_opcao);
+                            db_ancora("<b>Conta Bancária:</b>", "js_abreContaBancaria(true)", $db_opcao);
                             ?>
                         </td>
                         <td>
@@ -391,7 +391,7 @@ $iOpcao = 1;
     var detalhesistema = $("iDetalhamentoSistema").value;
 
     /**
-     * Funï¿½ï¿½o adicionada para incluir o subtipo conforme layout do sicom
+     * Função adicionada para incluir o subtipo conforme layout do sicom
      */
     $("btnIncluirSubtipo").observe("click", function() {
         //alert($("c200_subtipo").value);
@@ -558,7 +558,7 @@ $iOpcao = 1;
     }
 
     /**
-     * Funï¿½ï¿½o adicionada para incluir o desdobrasubtipo conforme layout do sicom
+     * Função adicionada para incluir o desdobrasubtipo conforme layout do sicom
      */
     $("btnIncluirDesdobraSubtipo").observe("click", function() {
         js_divCarregando("Cadastrando DesdobraSubTipo, aguarde...", "msgBox");
@@ -733,7 +733,7 @@ $iOpcao = 1;
     }
 
     /**
-     * Atualiza a conta removendo o indicador de superï¿½vit
+     * Atualiza a conta removendo o indicador de superávit
      */
     function removerIndicadorsuperavit() {
 
@@ -745,27 +745,27 @@ $iOpcao = 1;
                 if (lError) {
                     return alert(oResponse.message.urlDecode());
                 }
-            }).setMessage("Aguarde, alterando o indicador de superï¿½vit.")
+            }).setMessage("Aguarde, alterando o indicador de superávit.")
             .execute();
     }
 
     /**
-     * Valida o indicador de superï¿½vit
-     * Caso o indicador seja diferente de nï¿½o se aplica, deve ter algum reduzido cadastrado
+     * Valida o indicador de superávit
+     * Caso o indicador seja diferente de não se aplica, deve ter algum reduzido cadastrado
      */
     /**
-     * Funï¿½ï¿½o comentada pois nï¿½o estava deixando incluir uma conta com puperavit sem reduzido
+     * Função comentada pois não estava deixando incluir uma conta com puperavit sem reduzido
      */
     /*$('sIndicadorSuperavit').observe('change', function() {
 
       if ($("iSistemaConta").value == 2 && this.value != 'N') {
 
-        var oGridReduzidos = CurrentWindow.corpo.iframe_reduzido.oGridReduzido;
+        var oGridReduzidos = top.corpo.iframe_reduzido.oGridReduzido;
 
         if (oGridReduzidos == undefined || oGridReduzidos.getRows().length < 1) {
 
           this.value = 'N';
-          alert('Somente contas analï¿½ticas possuem Indicador de Superï¿½vit. ï¿½ necessï¿½rio cadastrar um reduzido para a conta.');
+          alert('Somente contas analíticas possuem Indicador de Superávit. É necessário cadastrar um reduzido para a conta.');
 
           if ($("iCodigoConta").value) {
             removerIndicadorsuperavit();
@@ -807,7 +807,7 @@ $iOpcao = 1;
         var sFuncao = encodeURIComponent(tagString($("sFuncao").value));
 
         /**
-         * Validaï¿½ï¿½es dos campos
+         * Validações dos campos
          */
         if (iDetalhamentoSistema == 7) {
             if (iTipoLancamento == "0") {
@@ -851,7 +851,7 @@ $iOpcao = 1;
         }
 
         /**
-         * retirado validaï¿½ï¿½o por que alguns clientes precisam salvar o desdobramento em branco
+         * retirado validação por que alguns clientes precisam salvar o desdobramento em branco
          * /
          /*if(iTipoLancamento=='1' && (iSubTipo=='1' || iSubTipo=='2' || iSubTipo=='3' || iSubTipo=='4')){
 	 if(iDesdobramento==""){
@@ -921,8 +921,8 @@ $iOpcao = 1;
         }
 
         /*
-         * Valida se o sistema de contas ï¿½ "Informaï¿½ï¿½es Patrimoniais - 2" caso seja, o indicador
-         * de superavit nï¿½o pode ser "Nï¿½O SE APLICA"
+         * Valida se o sistema de contas é "Informações Patrimoniais - 2" caso seja, o indicador
+         * de superavit não pode ser "NÃO SE APLICA"
          */
         if (iSistemaConta == 2) {
 
@@ -1021,7 +1021,7 @@ $iOpcao = 1;
 
     /**
      * Valida o Subsistema de contas escolhido e mostra a TR do indicador do superavit.
-     * Isso sï¿½ acontecerï¿½ caso o sub-sistema de contas escolhidos seja 2.
+     * Isso só acontecerá caso o sub-sistema de contas escolhidos seja 2.
      */
     function js_validaSistemaConta() {
         var iSistemaConta = $("iSistemaConta").value;
@@ -1043,11 +1043,11 @@ $iOpcao = 1;
     }
 
     /**
-     * Funï¿½ï¿½es de Pesquisa da Classificaï¿½ï¿½o do Sistema
+     * Funções de Pesquisa da Classificação do Sistema
      */
 
     /**
-     * Funï¿½ï¿½es de Pesquisa do Detalhamento do Sistema de contas
+     * Funções de Pesquisa do Detalhamento do Sistema de contas
      */
     function js_lookupDetalhamentoSistema(lMostra) {
 
@@ -1111,7 +1111,7 @@ $iOpcao = 1;
     }
 
     /**
-     * Funï¿½ï¿½es de Pesquisa do Sistema de Contas (Sub-Sistema)
+     * Funções de Pesquisa do Sistema de Contas (Sub-Sistema)
      */
     function js_lookupSistemaConta(lMostra) {
 
@@ -1226,13 +1226,13 @@ $iOpcao = 1;
 
 
     /**
-     *  Abre uma WINDOW com para preencher uma conta bancï¿½ria ou cadastrar uma nova caso nï¿½o exista
+     *  Abre uma WINDOW com para preencher uma conta bancária ou cadastrar uma nova caso não exista
      */
     function js_abreContaBancaria() {
 
         var iWidth = 650;
         var iHeight = 400;
-        oWindowContaBancaria = new windowAux('wndContaBAncaria', 'Infomar conta bancï¿½ria', iWidth, iHeight);
+        oWindowContaBancaria = new windowAux('wndContaBAncaria', 'Infomar conta bancária', iWidth, iHeight);
         var sContent = "<div id='msgContaBancaria' style='text-align:center;'>";
         sContent += "  <div id='divContaBancaria'>";
         sContent += "  </div>";
@@ -1271,7 +1271,7 @@ $iOpcao = 1;
     }
 
     /**
-     * Funï¿½ï¿½o que remove uma conta bancï¿½ria do sistema
+     * Função que remove uma conta bancária do sistema
      */
     function js_removerConta() {
 
@@ -1294,7 +1294,7 @@ $iOpcao = 1;
             alert(oRetorno.message.urlDecode());
         } else {
 
-            alert('Conta excluída com sucesso!');
+            alert('Conta excluida com sucesso!');
             $('form1').reset();
             $("btnPesquisar").click();
         }
@@ -1376,7 +1376,7 @@ $iOpcao = 1;
     });
 
     /**
-     * Funï¿½ï¿½o que retorna conta corrente de acordo com o inicial do estrutural
+     * Função que retorna conta corrente de acordo com o inicial do estrutural
      */
 
     function js_verificaContaEstrutural(sEstrutural) {
