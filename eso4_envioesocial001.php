@@ -107,6 +107,30 @@ $mesfolha = DBPessoal::getMesFolha();
                                                 </select>
                                             </td>
                                         </tr>
+                                        <tr id="tppgto_col" style="display:none">
+                                            <td align="left"><label>tpPgto:</label>
+                                                <select name="tppgto" id="tppgto" style="width: 76%;">
+                                                    <option value="1">Pagamento de remunera??o, conforme apurado em
+                                                        ideDmDev do S-1200
+                                                    </option>
+                                                    <option value="2">Pagamento de verbas rescis?rias conforme apurado
+                                                        em ideDmDev do S-2299
+                                                    </option>
+                                                    <option value="3">Pagamento de verbas rescis?rias conforme apurado
+                                                        em ideDmDev do S-2399
+                                                    </option>
+                                                    <option value="4">Pagamento de remunera??o conforme apurado em
+                                                        ideDmDev do S-1202
+                                                    </option>
+                                                    <option value="4">Pagamento de remunera??o conforme apurado em
+                                                        ideDmDev do S-1202
+                                                    </option>
+                                                    <option value="5">Pagamento de benef?cios previdenci?rios, conforme
+                                                        apurado em ideDmDev do S-1207
+                                                    </option>
+                                                </select>
+                                            </td>
+                                        </tr>
                                     </table>
                                 </fieldset>
                             </td>
@@ -299,6 +323,14 @@ $mesfolha = DBPessoal::getMesFolha();
             return true;
         }
         document.getElementById('indapuracao_col').style.display = 'none';
+    }
+
+    function js_1210_alt() {
+        if (document.getElementById('tppgto_col').style.display == 'none') {
+            document.getElementById('tppgto_col').style.display = 'inline';
+            return true;
+        }
+        document.getElementById('tppgto_col').style.display = 'none';
     }
 
     function js_dataalt() {
