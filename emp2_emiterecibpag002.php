@@ -123,7 +123,8 @@ $sSqlMovimentos = " SELECT * FROM
                             INNER JOIN pagordem ON empempenho.e60_numemp = pagordem.e50_numemp
                             INNER JOIN cgm ON cgm.z01_numcgm = empempenho.e60_numcgm
                             INNER JOIN conlancamord ON e50_codord = c80_codord
-                            INNER JOIN conlancamdoc on c80_codlan = c71_codlan AND c71_coddoc = 3 AND e80_data = c71_data
+                            INNER JOIN conlancamdoc on c80_codlan = c71_codlan  AND e80_data = c71_data
+                            INNER JOIN conhistdoc ON c71_coddoc = c71_coddoc AND c53_tipo = 30
                             INNER JOIN conlancamcompl on c80_codlan = c72_codlan
                         {$sWhere} ORDER BY k12_data) AS X {$sWhereData}";
 

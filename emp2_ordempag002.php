@@ -83,11 +83,11 @@ if (($dt_emp_ini!="--")&&($dt_emp_fim!="--")) {
   $where3=" and e60_emiss <= '$dt_emp_fim'   ";
 }
 
-if (($e60_numcgm!="--")&&($e60_numcgm!="--")) {
+if (($e60_numcgm!="--")&&($e60_numcgm!="--")&&($e60_numcgm!="")) {
   $where4 =" and e60_numcgm = $e60_numcgm ";
-}else if ($dt_emp_ini!="--"){
+}else if ($dt_emp_ini!="--"&&($dt_emp_ini!="")){
   $where4 =" and e60_numcgm >= $e60_numcgm ";
-}else if ($e60_numcgm!="--"){
+}else if ($e60_numcgm!="--"&&($e60_numcgm!="")){
   $where4 =" and e60_numcgm <= $e60_numcgm ";
 }
 
@@ -103,7 +103,8 @@ $head3 = "ORDENS DE PAGAMENTO";
 
 
 //die($clpagordem->sql_query_pagordemele(null,"e50_codord,e50_numemp,e60_numcgm,e50_obs,e50_data,z01_nome,sum(e53_valor)","e50_codord","  $where $where1 $where2 $where3 $where4 group by e50_codord,e50_numemp,e60_numcgm,e50_obs,e50_data,z01_nome"));
-$result=$clpagordem->sql_record($clpagordem->sql_query_pagordemele(null,"e50_codord,e50_numemp,e60_numcgm,e50_obs,e50_data,z01_nome,sum(e53_valor-e53_vlranu) as e53_valor ","$ordem"," e60_instit = " . db_getsession("DB_instit") .  " and $where $where1 $where2 $where3 $where4 group by e50_codord,e50_numemp,e60_numcgm,e50_obs,e50_data,z01_nome"));
+$result=$clpagordem->sql_record($clpagordem->sql_query_pagordemele(null,"e50_codord, e50_numemp, e60_numcgm, e50_obs, e50_data, z01_nome, sum(e53_valor-e53_vlranu) as e53_valor ","$ordem"," e60_instit = " . db_getsession("DB_instit") .  " and $where $where1 $where2 $where3 $where4 group by e50_codord,e50_numemp,e60_numcgm,e50_obs,e50_data,z01_nome"));
+
 if($clpagordem->numrows == 0){
   db_redireciona('db_erros.php?fechar=true&db_erro=Ordem de pagamento não Encontrada.');
   exit;

@@ -122,7 +122,7 @@ $lValidaRepr = isset($validaRepresentante);
       <?
       if (!isset($pesquisa_chave)) {
         if (isset($campos) == false) {
-          $campos = "pc60_numcgm,pc60_dtlanc,trim(from z01_nome) as z01_nome,z01_cgccpf";
+          $campos = "pc60_numcgm,pc60_dtlanc,z01_nome,z01_cgccpf";
         }
         if ($lValidaRepr) {
           $campos = ' DISTINCT ' . $campos;

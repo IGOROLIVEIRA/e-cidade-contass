@@ -1011,7 +1011,7 @@ class cl_pagordem
                 $virgula = ",";
             }
         }
-        //     echo $sql."<br><br>";
+             echo $sql."<br><br>";
         return $sql;
     }
     function sql_query_pagordemele2($e50_codord = null, $campos = "*", $ordem = null, $dbwhere = "")

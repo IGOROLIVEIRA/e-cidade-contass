@@ -42,7 +42,7 @@ $clrotulo->label("pc05_descr");
           ?>
         </td>
       </tr>
-
+      <!-- Campo ocultado conforme solicitado
       <tr>
         <td nowrap title="<?= @$Tpc04_codtipo ?>">
           <?
@@ -58,6 +58,7 @@ $clrotulo->label("pc05_descr");
           ?>
         </td>
       </tr>
+      -->
 
       <tr>
         <td nowrap title="<?= @$Tpc04_ativo ?>">

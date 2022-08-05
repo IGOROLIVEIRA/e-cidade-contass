@@ -400,7 +400,7 @@ for ($iInd = 0; $iInd < pg_num_rows($result_intra); $iInd++){
   $pdf->addpage();
   $pdf->cell(01,$alt,'RREO - ANEXO 7 (LRF, art. 53, inciso V)',"B",0,"L",0);
   $pdf->cell(279,$alt,'R$ 1,00',"B",1,"R",0);
-  writeHeader(&$pdf, $alt);
+  writeHeader($pdf, $alt);
   $pdf->setfont('arial','',4);
 
 
@@ -488,7 +488,7 @@ for ($x=0;$x<pg_numrows($result);$x++){
       $pdf->setfont('arial','b',7);
       $alt = 4;
       $pdf->addpage();
-      writeHeader(&$pdf, $alt);
+      writeHeader($pdf, $alt);
       $pdf->cell(280,$alt,"Continuação","B",0,"R");
       $pdf->setfont('arial','',4);
 
@@ -708,7 +708,7 @@ for ($x=0;$x<pg_numrows($result_intra);$x++) {
       $pdf->addpage();
       $pdf->ln();
       $pdf->cell(280, $alt, "Continuação","B", 1, "R");
-      writeHeader(&$pdf, $alt);
+      writeHeader($pdf, $alt);
       $pdf->setfont('arial','',4);
   }
 
@@ -919,9 +919,9 @@ if (!isset($arqinclude)) { // se este arquivo no esta incluido por outro
   }
 
   $oRelatorio  = new relatorioContabil(97, false);
-  $oRelatorio->getNotaExplicativa(&$pdf, $iCodigoPeriodo, 185);
+  $oRelatorio->getNotaExplicativa($pdf, $iCodigoPeriodo, 185);
   $pdf->ln(17);
-  assinaturas(&$pdf,&$classinatura,'LRF');
+  assinaturas($pdf,$classinatura,'LRF');
 
   $pdf->Output();
 

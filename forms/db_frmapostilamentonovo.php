@@ -557,7 +557,7 @@ $clrotulo->label("ac16_resumoobjeto");
             oDBHint.setText(oHint.sText);
             oDBHint.setShowEvents(aEventsIn);
             oDBHint.setHideEvents(aEventsOut);
-            oDBHint.setPosition('B', 'L');
+            //oDBHint.setPosition('B', 'L');
             oDBHint.setUseMouse(true);
             oDBHint.make($(oHint.idLinha), 2);
         });

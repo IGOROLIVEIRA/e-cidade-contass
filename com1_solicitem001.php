@@ -726,62 +726,58 @@ db_fieldsmemory($result_pcparam1, 0);
 
       if ($clsolicitem->erro_status == 0) {
         $sqlerro = true;
-        
-      }else{
-        $result_pcorcamval = $clpcorcamval->sql_record($clpcorcamval->sql_query_pcorcamval($pc11_codigo,$pc11_numero));
-        
-        
-        if($clpcorcamval->numrows > 0){
+      } else {
+        $result_pcorcamval = $clpcorcamval->sql_record($clpcorcamval->sql_query_pcorcamval($pc11_codigo, $pc11_numero));
+
+
+        if ($clpcorcamval->numrows > 0) {
           $quant_linha = $clpcorcamval->numrows;
-          for($i=0;$i<$quant_linha;$i++){
-            db_fieldsmemory($result_pcorcamval,$i);
-            
+          for ($i = 0; $i < $quant_linha; $i++) {
+            db_fieldsmemory($result_pcorcamval, $i);
+
             $clpcorcamval->pc23_quant = $pc11_quant;
             $clpcorcamval->pc23_orcamforne = $pc23_orcamforne;
             $clpcorcamval->pc23_orcamitem = $pc23_orcamitem;
-            $clpcorcamval->alterar($pc23_orcamforne,$pc23_orcamitem);
+            $clpcorcamval->alterar($pc23_orcamforne, $pc23_orcamitem);
             if ($clpcorcamval->erro_status == 0) {
               $sqlerro = true;
               $erro_msg = $clpcorcamval->erro_msg;
-  
-            }else{
-            
+            } else {
+
               $result_valorpcorcamval = $clpcorcamval->sql_record($clpcorcamval->sql_query_atualizavalor($pc23_orcamforne, $pc23_orcamitem));
-              db_fieldsmemory($result_valorpcorcamval,0);
-              
+              db_fieldsmemory($result_valorpcorcamval, 0);
+
               $clpcorcamval->pc23_quant = $pc23_quant;
               $clpcorcamval->pc23_vlrun = $pc23_vlrun;
               $clpcorcamval->pc23_valor = $pc23_quant * $pc23_vlrun;
-              $clpcorcamval->alterar($pc23_orcamforne,$pc23_orcamitem);
-              $clpcorcamval->pc23_quant =0;
+              $clpcorcamval->alterar($pc23_orcamforne, $pc23_orcamitem);
+              $clpcorcamval->pc23_quant = 0;
               $clpcorcamval->pc23_vlrun = 0;
               $clpcorcamval->pc23_valor = 0;
-              
-              
+
+
               $result_codprocesso = $clitemprecoreferencia->sql_record($clitemprecoreferencia->sql_query_codprocesso($pc11_codigo));
 
-              if($clitemprecoreferencia->numrows > 0){
-                db_fieldsmemory($result_codprocesso,0);
+              if ($clitemprecoreferencia->numrows > 0) {
+                db_fieldsmemory($result_codprocesso, 0);
                 $result_itemprecorefe = $clitemprecoreferencia->sql_record($clitemprecoreferencia->sql_query_precoreferencia($pc81_codproc));
 
-                if($clitemprecoreferencia->numrows > 0){
-                  db_fieldsmemory($result_itemprecorefe,0);
+                if ($clitemprecoreferencia->numrows > 0) {
+                  db_fieldsmemory($result_itemprecorefe, 0);
                   $clitemprecoreferencia->si02_precoreferencia = $si01_sequencial;
                   $clitemprecoreferencia->si02_itemproccompra = $pc23_orcamitem;
-                  $result_precoreferensequncial = $clitemprecoreferencia->sql_record($clitemprecoreferencia->sql_query_precoreferensequncial($si01_sequencial,$pc23_orcamitem));
-                  
-                  if ($clitemprecoreferencia->numrows > 0 ) {
-                    db_fieldsmemory($result_precoreferensequncial,0);
+                  $result_precoreferensequncial = $clitemprecoreferencia->sql_record($clitemprecoreferencia->sql_query_precoreferensequncial($si01_sequencial, $pc23_orcamitem));
+
+                  if ($clitemprecoreferencia->numrows > 0) {
+                    db_fieldsmemory($result_precoreferensequncial, 0);
                     $clitemprecoreferencia->si02_sequencial = $si02_sequencial;
                     $clitemprecoreferencia->si02_qtditem = $pc23_quant;
                     $clitemprecoreferencia->alterar($si02_sequencial);
                   }
                 }
               }
-
             }
           }
-          
         }
       }
       $erro_msg = $clsolicitem->erro_msg;
@@ -792,7 +788,7 @@ db_fieldsmemory($result_pcparam1, 0);
       $clsolicitemunid->pc17_unid = $pc17_unid;
       $clsolicitemunid->pc17_quant = $pc17_quant;
       $clsolicitemunid->pc17_codigo = $pc11_codigo;
-      
+
       $result_solicitemunid = $clsolicitemunid->sql_record($clsolicitemunid->sql_query_file($pc11_codigo));
       if ($clsolicitemunid->numrows > 0) {
         $clsolicitemunid->alterar($pc11_codigo);
@@ -1915,9 +1911,9 @@ function js_ver(){
 }
 */
   //$codigo_proc = localStorage.getItem("codigoprocesso");
-  
-   
-  
+
+
+
   function teste() {
 
     teste = new ultimosOrcamentos();
@@ -1980,7 +1976,7 @@ if (isset($alterar) || isset($excluir) || isset($incluir)) {
     }
   } else {
 
-    echo "<script>top.corpo.iframe_solicita.location.href = 'com1_solicita005.php?chavepesquisa=$pc11_numero&ld=false$parametro'</script>";
+    echo "<script>CurrentWindow.corpo.iframe_solicita.location.href = 'com1_solicita005.php?chavepesquisa=$pc11_numero&ld=false$parametro'</script>";
     if ($pc30_sugforn == 't') {
       echo "<script> CurrentWindow.corpo.iframe_sugforn.location.href='com1_sugforn001.php?pc40_solic=$pc11_numero$parametro';</script>";
     }
