@@ -1,6 +1,20 @@
 <?php
 
+namespace Model\Itbi;
+
+use cl_parreciboitbi;
+use db_utils;
+use DBException;
+use ProcedenciaDivida;
+
+require_once 'classes/db_parreciboitbi_classe.php';
+require_once 'model/divida/ProcedenciaDivida.model.php';
+
 class Paritbi {
+
+    const HISTCALC_DEFAULT = 707;
+    const TIPO_DEBITO_DEFAULT = 29;
+    const GRUPO_DEBITO_DEFAULT = 8;
 
     private $it24_anousu;
     private $it24_grupoespbenfurbana;
@@ -16,7 +30,21 @@ class Paritbi {
     private $it24_grupopadraoconstrutivobenurbana;
     private $it24_cgmobrigatorio;
     private $it24_transfautomatica;
+    private $it24_proced;
 
+    /**
+     * @var cl_parreciboitbi $Parreciboitbi
+     */
+    public $Parreciboitbi;
+
+    /**
+     * @var ProcedenciaDivida $ProcedenciaDivida
+     */
+    public $ProcedenciaDivida;
+
+    /**
+     * @throws DBException
+     */
     public function __construct($it24_anousu = null){
         if(!empty($it24_anousu)){
             $oDaoParItbi = db_utils::getDao('paritbi');
@@ -35,6 +63,11 @@ class Paritbi {
             $this->it24_grupopadraoconstrutivobenurbana = $oDaoParItbi->it24_grupopadraoconstrutivobenurbana;
             $this->it24_cgmobrigatorio = $oDaoParItbi->it24_cgmobrigatorio;
             $this->it24_transfautomatica = $oDaoParItbi->it24_transfautomatica;
+            $this->it24_proced = $oDaoParItbi->it24_proced;
+
+            $this->Parreciboitbi = db_utils::getDao('parreciboitbi');
+            $this->Parreciboitbi = current(db_utils::getCollectionByRecord($this->Parreciboitbi->sql_record($this->Parreciboitbi->sql_query(null, "*"))));
+            $this->ProcedenciaDivida = new ProcedenciaDivida($this->it24_proced);
         }
     }
 
@@ -288,6 +321,16 @@ class Paritbi {
     {
         $this->it24_transfautomatica = $it24_transfautomatica;
         return $this;
+    }
+
+    public function getReceita()
+    {
+        return $this->Parreciboitbi->it17_codigo;
+    }
+
+    public function getProced()
+    {
+        return $this->it24_proced;
     }
 
 }
