@@ -543,7 +543,7 @@ include("dbforms/db_funcoes.php");
 
                 with (oRetorno.itens[i]) {
 
-                    sRetorno += "<a  href='db_download.php?arquivo=" + caminho + "'>" + nome + "</a><br>";
+                    sRetorno += "<a target='_blank' href='db_download.php?arquivo=" + caminho + "'>" + nome + "</a><br>";
                 }
             }
 
