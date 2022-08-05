@@ -136,7 +136,7 @@ $clrotulo->label("o15_codigo");
                                 </td>
                               </tr>
                                   <tr>
-                                    <td style="">
+                                    <td>
                                       Anexos LOA:
                                     <div>&nbsp;</div>
                                     </td>
@@ -150,7 +150,7 @@ $clrotulo->label("o15_codigo");
                                       </td>
                                   </tr>
                                   <tr>
-                                    <td style="">
+                                    <td>
                                       Opção Semestralidade:
                                     <div>&nbsp;</div>
                                     </td>
@@ -164,7 +164,7 @@ $clrotulo->label("o15_codigo");
                                       </td>
                                   </tr>
                                   <tr>
-                                    <td style="">
+                                    <td>
                                       Desopção Semestralidade:
                                     <div>&nbsp;</div>
                                     </td>
@@ -328,7 +328,7 @@ function js_retornoProcessamento(oAjax) {
 
 	      with (oRetorno.itens[i]) {
 
-	        sRetorno += "<a  href='db_download.php?arquivo="+caminho+"'>"+nome+"</a><br>";
+	        sRetorno += "<a target='_blank' href='db_download.php?arquivo="+caminho+"'>"+nome+"</a><br>";
 	      }
 	    }
 

@@ -242,6 +242,7 @@ class SicomArquivoNotasFiscais extends SicomArquivoBase implements iPadArquivoBa
             order by empnota .e69_numero";
 
     $rsResult10 = db_query($sSql);
+
     $aDadosAgrupados = array();
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
@@ -257,7 +258,7 @@ class SicomArquivoNotasFiscais extends SicomArquivoBase implements iPadArquivoBa
         $clntf10->si143_codorgao = $oDados10->codorgao;
 
         $oDados10->nfnumero = str_replace("/", "", $oDados10->nfnumero);
-        if (ereg('[^0-9]', $oDados10->nfnumero)) {
+        if (preg_match('/[^0-9]/', $oDados10->nfnumero)) {
           //$clntf10->si143_nfnumero                  = null;
           continue;
         } else {
@@ -433,7 +434,7 @@ class SicomArquivoNotasFiscais extends SicomArquivoBase implements iPadArquivoBa
           $clntf20->si145_tiporegistro = 20;
 
           $oDados20->nfnumero = str_replace("/", "", $oDados20->nfnumero);
-          if (ereg('[^0-9]', $oDados20->nfnumero)) {
+          if (preg_match('/[^0-9]/', $oDados20->nfnumero)) {
             //$clntf20->si145_nfnumero                  = null;
             continue;
           } else {
