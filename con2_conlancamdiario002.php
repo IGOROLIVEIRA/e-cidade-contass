@@ -25,13 +25,14 @@
  *                                licenca/licenca_pt.txt
  */
 
-require_once(modification("fpdf151/pdf.php"));
-require_once(modification("fpdf151/assinatura.php"));
-require_once(modification("dbforms/db_funcoes.php"));
-require_once(modification("libs/db_utils.php"));
+include("fpdf151/fpdf.php");
+include("fpdf151/assinatura.php");
+include("dbforms/db_funcoes.php");
+include("libs/db_utils.php");
 
 $classinatura = new cl_assinatura;
-db_postmemory($HTTP_GET_VARS);
+parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
+//db_postmemory($HTTP_GET_VARS);
 
 $instituicao = str_replace('-',',',$db_selinstit);
 
@@ -116,7 +117,7 @@ if (isset($pagina_ini) && trim(@$pagina_ini)==""){
      $pagina_ini = 1;
 }
 
-$oPdf->SetStartPage($pagina_ini);
+$oPdf->setStartPage($pagina_ini);
 
 $iTotal    = 0;
 $iSubTotal = 0;

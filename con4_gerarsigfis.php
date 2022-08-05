@@ -401,7 +401,7 @@ $periodo = array("1"  => " 1 - Janeiro          ",
 
          with (oRetorno.lista[i]) {
 
-           sRetorno += "<a  href='db_download.php?arquivo="+caminho+"'>"+nome+"</a><br>";
+           sRetorno += "<a target='_blank' href='db_download.php?arquivo="+caminho+"'>"+nome+"</a><br>";
          }
        }
 

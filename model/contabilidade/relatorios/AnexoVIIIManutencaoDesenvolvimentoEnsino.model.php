@@ -678,7 +678,7 @@ class AnexoVIIIManutencaoDesenvolvimentoEnsino extends RelatoriosLegaisBase {
   private function escreverAssinaturas() {
 
     $oAssinatura = new cl_assinatura();
-    assinaturas($this->oPdf, &$oAssinatura,'LRF');
+    assinaturas($this->oPdf, $oAssinatura,'LRF');
     $this->oPdf->setAutoNewLineMulticell(true);
   }
 

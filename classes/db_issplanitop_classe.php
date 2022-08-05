@@ -51,6 +51,10 @@ class cl_issplanitop {
                  q96_issplanit = int8 = Codigo da issplanit
                  q96_pagordem = int8 = Codigo da ordem
                  ";
+   function __construct()
+   {
+    $this->cl_issplanitop();
+   }
    //funcao construtor da classe
    function cl_issplanitop() {
      //classes dos rotulos dos campos
@@ -139,6 +143,7 @@ class cl_issplanitop {
                                ,$this->q96_issplanit
                                ,$this->q96_pagordem
                       )";
+
      $result = db_query($sql);
      if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
@@ -410,7 +415,7 @@ class cl_issplanitop {
      $sql2 = "";
      if($dbwhere==""){
        if($q96_sequencial!=null ){
-         $sql2 .= " where issplaniCurrentWindow.q96_sequencial = $q96_sequencial ";
+         $sql2 .= " where issplanitop.q96_sequencial = $q96_sequencial ";
        }
      }else if($dbwhere != ""){
        $sql2 = " where $dbwhere";

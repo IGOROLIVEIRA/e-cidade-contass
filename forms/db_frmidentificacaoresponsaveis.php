@@ -8,7 +8,7 @@ $clrotulo->label("o40_descr");
 <form name="form1" method="post" action="">
   <center>
     <fieldset style="margin-left: 80px; margin-top: 10px;">
-      <legend>Identificaï¿½ï¿½o dos Resposï¿½veis</legend>
+      <legend>Identificação dos Resposáveis</legend>
       <table border="0">
         <tr>
           <td nowrap title="<?= @$Tsi166_sequencial ?>">
@@ -43,7 +43,7 @@ $clrotulo->label("o40_descr");
             <?
             //OC16203
             if (db_getsession("DB_modulo") != 952) {
-              $x = array('1' => 'Gestor', '2' => 'Contador', '3' => 'Controle Interno', '4' => 'Ordenador de Despesa por Delegaï¿½ï¿½o', '5' => 'Tesoureiro', '6' => 'Responsï¿½vel Pelo Orï¿½amento Municipal');
+              $x = array('1' => 'Gestor', '2' => 'Contador', '3' => 'Controle Interno', '4' => 'Ordenador de Despesa por Delegação', '5' => 'Tesoureiro', '6' => 'Responsável Pelo Orçamento Municipal');
             } else {
               $x = array('7' => 'Responsï¿½vel pelo envio');
             }
@@ -54,7 +54,7 @@ $clrotulo->label("o40_descr");
         </tr>
         <tr id="orgao" style="visibility: hidden;">
           <td nowrap title="<?= @$Tsi166_orgao ?>">
-            <? db_ancora("<b>Orgï¿½o</b>", "js_pesquisao41_orgao(true);", $db_opcao); ?>
+            <? db_ancora("<b>Orgão</b>", "js_pesquisao41_orgao(true);", $db_opcao); ?>
           </td>
           <td>
             <?
@@ -123,10 +123,10 @@ $clrotulo->label("o40_descr");
 <script>
   function js_pesquisasi166_numcgm(mostra) {
     if (mostra == true) {
-      js_OpenJanelaIframe('top.corpo', 'db_iframe_cgm', 'func_cgm.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome', 'Pesquisa', true);
+      js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_cgm', 'func_cgm.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome', 'Pesquisa', true);
     } else {
       if (document.form1.si166_numcgm.value != '') {
-        js_OpenJanelaIframe('top.corpo', 'db_iframe_cgm', 'func_cgm.php?pesquisa_chave=' + document.form1.si166_numcgm.value + '&funcao_js=parent.js_mostracgm', 'Pesquisa', false);
+        js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_cgm', 'func_cgm.php?pesquisa_chave=' + document.form1.si166_numcgm.value + '&funcao_js=parent.js_mostracgm', 'Pesquisa', false);
       } else {
         document.form1.z01_nome.value = '';
       }
@@ -148,7 +148,7 @@ $clrotulo->label("o40_descr");
   }
 
   function js_pesquisa() {
-    js_OpenJanelaIframe('top.corpo', 'db_iframe_identificacaoresponsaveis', 'func_identificacaoresponsaveis.php?funcao_js=parent.js_preenchepesquisa|si166_sequencial', 'Pesquisa', true);
+    js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_identificacaoresponsaveis', 'func_identificacaoresponsaveis.php?funcao_js=parent.js_preenchepesquisa|si166_sequencial', 'Pesquisa', true);
   }
 
   function js_preenchepesquisa(chave) {

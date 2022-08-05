@@ -25,13 +25,13 @@
  *                                licenca/licenca_pt.txt
  */
 
-require_once(modification("libs/db_stdlib.php"));
-require_once(modification("libs/db_conecta.php"));
-require_once(modification("libs/db_sessoes.php"));
-require_once(modification("libs/db_usuariosonline.php"));
-require_once(modification("dbforms/db_funcoes.php"));
-require_once(modification("libs/db_liborcamento.php"));
-require_once(modification("dbforms/db_classesgenericas.php"));
+require("libs/db_stdlib.php");
+require("libs/db_conecta.php");
+include("libs/db_sessoes.php");
+include("libs/db_usuariosonline.php");
+include("dbforms/db_funcoes.php");
+include("libs/db_liborcamento.php");
+include("dbforms/db_classesgenericas.php");
 
 db_postmemory($HTTP_POST_VARS);
 

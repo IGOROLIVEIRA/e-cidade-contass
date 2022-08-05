@@ -374,7 +374,7 @@ class cl_conplano {
     return true;
   }
   // funcao para alteracao
-  function alterar ($c60_codcon=null,$c60_anousu=null,$subtipo,$iTipoConta) {
+  function alterar ($c60_codcon=null,$c60_anousu=null,$subtipo=null,$iTipoConta=null) {
     $this->atualizacampos();
     $sql = " update conplano set ";
     $virgula = "";

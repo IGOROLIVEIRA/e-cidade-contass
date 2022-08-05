@@ -677,6 +677,7 @@ class ordemPagamento {
       $nValorTotalRetencoes = $oRetencaoNota->getValorRetencaoMovimento($this->getMovimentoAgenda(),false,
                                                                         $this->dtDataUsu );
       $nValorPagoTotalOrdem += $nValorTotalRetencoes;
+
       if ($nValorTotalRetencoes > 0) {
 
         $oRetencaoNota->setINotaLiquidacao($oDadosOrdem->e50_codord);
@@ -726,6 +727,7 @@ class ordemPagamento {
           $oLancam->setDotacao($oDadosOrdem->e60_coddot);
         }
         $oLancam->salvar();
+
         if ($this->iCodLanc == "") {
           $this->iCodLanc = $oLancam->getCodigoLancamento();
         }
@@ -2214,7 +2216,7 @@ class ordemPagamento {
      * Busca data do pagamento realizado
      */
     public function getDataPagamento() {
-      
+
         $oDaoConlancamEmp = db_utils::getDao("conlancamemp");
         $sWhere     = "    c75_numemp = {$this->getDadosOrdem()->e50_numemp} ";
         $sWhere     .= "    and c80_codord = {$this->iCodOrdem} ";
@@ -2225,7 +2227,7 @@ class ordemPagamento {
 
             $oLancamPag = db_utils::fieldsMemory($rsPag, 0);
             return $oLancamPag;
-            
+
         } else {
             throw new Exception("Lançamento de pagamento não encontrado.");
         }

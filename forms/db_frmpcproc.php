@@ -41,56 +41,56 @@ $val = false;
 <form name="form1" method="post" action="">
   <fieldset style="width:775px;">
     <legend>Dados do Processo de Compras</legend>
-    <table border="0"  width="100%">
+    <table border="0" width="100%">
 
-      <table border="0"  width="100%">
+      <table border="0" width="100%">
         <tr>
-          <td align="left" nowrap title="<?=@$Tpc10_numero?>">
+          <td align="left" nowrap title="<?= @$Tpc10_numero ?>">
             <strong>Solicitação: </strong>
           </td>
           <td align="left">
             <?
-              $desabilita = false;
-              $arr_numero = array();
-              $arr_index  = array();
+            $desabilita = false;
+            $arr_numero = array();
+            $arr_index  = array();
 
-              $where_liberado = "";
-              $selecionalibera = $clpcparam->sql_record($clpcparam->sql_query_file(db_getsession("DB_instit"),"pc30_liberado"));
-              if($clpcparam->numrows>0){
-                db_fieldsmemory($selecionalibera,0);
-                if($pc30_liberado=='f'){
-                  $where_liberado = " and pc11_liberado='t' ";
-                }
+            $where_liberado = "";
+            $selecionalibera = $clpcparam->sql_record($clpcparam->sql_query_file(db_getsession("DB_instit"), "pc30_liberado"));
+            if ($clpcparam->numrows > 0) {
+              db_fieldsmemory($selecionalibera, 0);
+              if ($pc30_liberado == 'f') {
+                $where_liberado = " and pc11_liberado='t' ";
               }
-              $sWhereSolicitaAnulada = " not exists (select 1 from solicitaanulada where pc67_solicita = pc10_numero) ";
-              $datausu = date("Y-m-d", db_getsession('DB_datausu'));
-              $sql_solicita = $clsolicitem->sql_record($clsolicitem->sql_query_pcmater(null,"distinct pc10_numero,pc10_data,pc10_resumo,descrdepto","pc10_numero desc","pc81_solicitem is null $where_liberado and pc10_correto='t' and {$sWhereSolicitaAnulada} and pc10_solicitacaotipo in(1,2) and pc10_data <= '$datausu' and extract(year from pc10_data) >= ".db_getsession("DB_anousu")));
-              for ($i=0;$i<$clsolicitem->numrows;$i++) {
+            }
+            $sWhereSolicitaAnulada = " not exists (select 1 from solicitaanulada where pc67_solicita = pc10_numero) ";
+            $datausu = date("Y-m-d", db_getsession('DB_datausu'));
+            $sql_solicita = $clsolicitem->sql_record($clsolicitem->sql_query_pcmater(null, "distinct pc10_numero,pc10_data,pc10_resumo,descrdepto", "pc10_numero desc", "pc81_solicitem is null $where_liberado and pc10_correto='t' and {$sWhereSolicitaAnulada} and pc10_solicitacaotipo in(1,2) and pc10_data <= '$datausu' and extract(year from pc10_data) >= " . db_getsession("DB_anousu")));
+            for ($i = 0; $i < $clsolicitem->numrows; $i++) {
 
-                db_fieldsmemory($sql_solicita,$i,true);
-                $arr_numero[$pc10_numero] = $pc10_numero;
-                $arr_index[$pc10_numero]  = $i;
-                $arr_data = explode("/",$pc10_data);
+              db_fieldsmemory($sql_solicita, $i, true);
+              $arr_numero[$pc10_numero] = $pc10_numero;
+              $arr_index[$pc10_numero]  = $i;
+              $arr_data = explode("/", $pc10_data);
 
-                if ($i == 0) {
-                  $pc10_data_dia = $arr_data[0];
-                  $pc10_data_mes = $arr_data[1];
-                  $pc10_data_ano = $arr_data[2];
-                }
+              if ($i == 0) {
+                $pc10_data_dia = $arr_data[0];
+                $pc10_data_mes = $arr_data[1];
+                $pc10_data_ano = $arr_data[2];
               }
-              if($clsolicitem->numrows>0){
-                db_fieldsmemory($sql_solicita,0,true);
-              }else{
-                $desabilita = true;
-              }
-              if (isset($cod) && $cod!="" && isset($arr_index[$cod])) {
+            }
+            if ($clsolicitem->numrows > 0) {
+              db_fieldsmemory($sql_solicita, 0, true);
+            } else {
+              $desabilita = true;
+            }
+            if (isset($cod) && $cod != "" && isset($arr_index[$cod])) {
 
-                $pc10_numero=$cod;
-                $val = true;
-              }
-              db_select('pc10_numero',$arr_numero,true,1,"onchange='js_mudasolicita();'");
-              if($val==true){
-                echo "<script>
+              $pc10_numero = $cod;
+              $val = true;
+            }
+            db_select('pc10_numero', $arr_numero, true, 1, "onchange='js_mudasolicita();'");
+            if ($val == true) {
+              echo "<script>
                         var_obj = document.getElementById('pc10_numero').length;
                   for(i=0;i<var_obj;i++){
                     if(document.getElementById('pc10_numero').options[i].value==$cod){
@@ -98,28 +98,28 @@ $val = false;
                     }
                   }
                 </script>";
-                db_fieldsmemory($sql_solicita,$arr_index[$cod]);
-                $arr_data = explode("-",$pc10_data);
+              db_fieldsmemory($sql_solicita, $arr_index[$cod]);
+              $arr_data = explode("-", $pc10_data);
 
-                $pc10_data_dia = $arr_data[2];
-                $pc10_data_mes = $arr_data[1];
-                $pc10_data_ano = $arr_data[0];
-              }
-              $result_pcproc = $clpcproc->sql_record('select last_value+1 as pc80_codproc from pcproc_pc80_codproc_seq');
-              if($clpcproc->numrows>0){
-          //db_fieldsmemory($result_pcproc,0);
-              }else{
-          //$pc80_codproc = 1;
-              }
+              $pc10_data_dia = $arr_data[2];
+              $pc10_data_mes = $arr_data[1];
+              $pc10_data_ano = $arr_data[0];
+            }
+            $result_pcproc = $clpcproc->sql_record('select last_value+1 as pc80_codproc from pcproc_pc80_codproc_seq');
+            if ($clpcproc->numrows > 0) {
+              //db_fieldsmemory($result_pcproc,0);
+            } else {
+              //$pc80_codproc = 1;
+            }
             ?>
           </td>
-          <td align="left" nowrap title="<?=@$Tpc80_codproc?>">
+          <td align="left" nowrap title="<?= @$Tpc80_codproc ?>">
             <strong>Processo de Compra: </strong>
           </td>
           <td align="left" nowrap>
-          <?
-            db_input('pc80_codproc',8,$Ipc80_codproc,true,'text',3);
-          ?>
+            <?
+            db_input('pc80_codproc', 8, $Ipc80_codproc, true, 'text', 3);
+            ?>
           </td>
         </tr>
         <tr>
@@ -127,17 +127,17 @@ $val = false;
             <label class="bold" for="pc10_data" id="lbl_pc10_data">Data da Solicitação:</label>
           </td>
           <td align="left" nowrap>
-          <?
-            db_inputdata('pc10_data',@$pc10_data_dia,@$pc10_data_mes,@$pc10_data_ano,true,'text',3);
-          ?>
+            <?
+            db_inputdata('pc10_data', @$pc10_data_dia, @$pc10_data_mes, @$pc10_data_ano, true, 'text', 3);
+            ?>
           </td>
-          <td align="left" nowrap title="<?=@$Tdescrdepto?>">
+          <td align="left" nowrap title="<?= @$Tdescrdepto ?>">
             <strong>Departamento: </strong>
           </td>
           <td align="left" nowrap>
-          <?
-            db_input('descrdepto',40,$Idescrdepto,true,'text',3);
-          ?>
+            <?
+            db_input('descrdepto', 40, $Idescrdepto, true, 'text', 3);
+            ?>
           </td>
         </tr>
         <tr>
@@ -147,11 +147,11 @@ $val = false;
           <td>
             <?php
 
-              $aOpcoesSituacao = array(
-                                   2 => 'Autorizado',
-                                   1 => 'Análise'
-                                 );
-              db_select('pc80_situacao',$aOpcoesSituacao,true,'', 'style="width:100%"');
+            $aOpcoesSituacao = array(
+              2 => 'Autorizado',
+              1 => 'Análise'
+            );
+            db_select('pc80_situacao', $aOpcoesSituacao, true, '', 'style="width:100%"');
             ?>
           </td>
           <td colspan="2"></td>
@@ -163,10 +163,12 @@ $val = false;
           <td>
             <?php
 
-              $aTipos = array( 1 => 'Item',
-                               2 => 'Lote' );
+            $aTipos = array(
+              1 => 'Item',
+              2 => 'Lote'
+            );
 
-              db_select('pc80_tipoprocesso', $aTipos, true, '', 'style="width:100%"');
+            db_select('pc80_tipoprocesso', $aTipos, true, '', 'style="width:100%"');
             ?>
           </td>
           <td colspan="2"></td>
@@ -179,19 +181,21 @@ $val = false;
           <td>
             <?php
 
-              $aCriterios = array('' => 'Selecione',
-                               3 => 'Outros',
-                               1 => 'Desconto sobre tabela',
-                               2 => 'Menor taxa ou percentual');
+            $aCriterios = array(
+              '' => 'Selecione',
+              3 => 'Outros',
+              1 => 'Desconto sobre tabela',
+              2 => 'Menor taxa ou percentual'
+            );
 
-              db_select('pc80_criterioadjudicacao', $aCriterios, true, '', 'style="width:100%"');
+            db_select('pc80_criterioadjudicacao', $aCriterios, true, '', 'style="width:100%"');
             ?>
           </td>
           <td colspan="2"></td>
         </tr>
         <!-- FIM - OC3770-->
         <tr>
-          <td align="left" nowrap title="<?=@$Tpc10_resumo?>" colspan="4">
+          <td align="left" nowrap title="<?= @$Tpc10_resumo ?>" colspan="4">
             <fieldset>
               <legend>Resumo do Processo de Compras</legend>
               <?
@@ -207,47 +211,46 @@ $val = false;
   <table border="0" align="center" width="800">
     <tr align="center">
       <td nowrap colspan="10">
-      	<fieldset>
-        	<legend><strong>Itens da Solicitação</strong></legend>
-          <iframe name="iframe_solicitem" id="solicitem" marginwidth="0" marginheight="0"
-                  frameborder="0" src="com1_gerasolicitem.php" width="100%"></iframe>
+        <fieldset>
+          <legend><strong>Itens da Solicitação</strong></legend>
+          <iframe name="iframe_solicitem" id="solicitem" marginwidth="0" marginheight="0" frameborder="0" src="com1_gerasolicitem.php" width="100%"></iframe>
         </fieldset>
       </td>
     </tr>
   </table>
 
   <?php
-    db_input('valores',50,0,true,'hidden',3);
-    db_input('importa',50,0,true,'hidden',3);
+  db_input('valores', 50, 0, true, 'hidden', 3);
+  db_input('importa', 50, 0, true, 'hidden', 3);
   ?>
 
-  <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?>>
+  <input name="<?= ($db_opcao == 1 ? "incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "alterar" : "excluir")) ?>" type="submit" id="db_opcao" value="<?= ($db_opcao == 1 ? "Incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "Alterar" : "Excluir")) ?>" <?= ($db_botao == false ? "disabled" : "") ?>>
 
   <?php
 
-    /**
-     * Buscamos o parâmetro pc30_liberado
-     * Caso este parâmetro esteja TRUE, o usuário pode cadastrar pendências para uma solicitação de compras, do contrários
-     * o botão que permite o cadastro não irá aparecer.
-     */
-    $sSqlLiberadoPcParam = $clpcparam->sql_query_file(db_getsession('DB_instit'), "pc30_liberado");
-    $rsPcParam           = $clpcparam->sql_record($sSqlLiberadoPcParam);
-    $lDadoLiberado       = false;
-    if ($clpcparam->numrows > 0) {
-      $lDadoLiberado = db_utils::fieldsMemory($rsPcParam, 0)->pc30_liberado == "f" ? true : false;
-    }
+  /**
+   * Buscamos o parâmetro pc30_liberado
+   * Caso este parâmetro esteja TRUE, o usuário pode cadastrar pendências para uma solicitação de compras, do contrários
+   * o botão que permite o cadastro não irá aparecer.
+   */
+  $sSqlLiberadoPcParam = $clpcparam->sql_query_file(db_getsession('DB_instit'), "pc30_liberado");
+  $rsPcParam           = $clpcparam->sql_record($sSqlLiberadoPcParam);
+  $lDadoLiberado       = false;
+  if ($clpcparam->numrows > 0) {
+    $lDadoLiberado = db_utils::fieldsMemory($rsPcParam, 0)->pc30_liberado == "f" ? true : false;
+  }
 
-    if ($lDadoLiberado) {
-      echo "<input type='button' name='btnPendenciaSolicitacao' id='btnPendenciaSolicitacao' value='Pendência' onclick='js_openWindowPendencia();'>";
-    }
+  if ($lDadoLiberado) {
+    echo "<input type='button' name='btnPendenciaSolicitacao' id='btnPendenciaSolicitacao' value='Pendência' onclick='js_openWindowPendencia();'>";
+  }
 
 
-    $result_pcproc = $clpcproc->sql_record($clpcproc->sql_query_file(null,"pc80_codproc"));
-    $enviadados = false;
-    if($clpcproc->numrows>0){
-      $enviadados = true;
-      echo '<input name="juntaropcao" type="button" id="juntaropcao" value="Juntar" '.($db_botao==false?"disabled":"").' onclick="js_juntaropcao();">&nbsp;&nbsp;&nbsp;&nbsp;';
-      echo "<script>
+  $result_pcproc = $clpcproc->sql_record($clpcproc->sql_query_file(null, "pc80_codproc"));
+  $enviadados = false;
+  if ($clpcproc->numrows > 0) {
+    $enviadados = true;
+    echo '<input name="juntaropcao" type="button" id="juntaropcao" value="Juntar" ' . ($db_botao == false ? "disabled" : "") . ' onclick="js_juntaropcao();">&nbsp;&nbsp;&nbsp;&nbsp;';
+    echo "<script>
               function js_juntaropcao(){
     	    numele = iframe_solicitem.document.form1.length;
     	    cont = 0;
@@ -290,22 +293,21 @@ $val = false;
     	  }
             </script>
     	";
-    }
+  }
   ?>
 </form>
 <script>
-
   function js_mudasolicita() {
-    location.href = 'com1_pcproc001.php?cod='+document.form1.pc10_numero.value;
+    location.href = 'com1_pcproc001.php?cod=' + document.form1.pc10_numero.value;
 
   }
-  if (document.form1.pc10_numero.value!=""){
-    CurrentWindow.corpo.iframe_solicitem.location.href= 'com1_gerasolicitem.php?solicita='+document.form1.pc10_numero.value+'&pc10_numero='+document.form1.pc10_numero.value;
+  if (document.form1.pc10_numero.value != "") {
+    CurrentWindow.corpo.iframe_solicitem.location.href = 'com1_gerasolicitem.php?solicita=' + document.form1.pc10_numero.value + '&pc10_numero=' + document.form1.pc10_numero.value;
   }
   <?
-    if($desabilita==true){
+  if ($desabilita == true) {
     echo "
-      numele = parent.document.form1.length;
+      numele = CurrentWindow.corpo.document.form1.length;
       cont = 0;
       for(i=0;i<numele;i++){
         if(CurrentWindow.corpo.document.form1.elements[i].type=='submit' || CurrentWindow.corpo.document.form1.elements[i].type=='button'){
@@ -313,7 +315,7 @@ $val = false;
         }
       }
       ";
-    }else{
+  } else {
     echo "
       numele = CurrentWindow.corpo.document.form1.length;
       cont = 0;
@@ -323,22 +325,22 @@ $val = false;
         }
       }
       ";
-    }
-   ?>
+  }
+  ?>
 
-   document.getElementById('pc10_numero').style.width = '100%';
-   document.getElementById('pc10_resumo').style.width = '100%';
-   document.getElementById('pc10_data').style.width = '100%';
+  document.getElementById('pc10_numero').style.width = '100%';
+  document.getElementById('pc10_resumo').style.width = '100%';
+  document.getElementById('pc10_data').style.width = '100%';
 
-   /**
-    * Função que abre a janela para cadastro de pendência para uma solicitação de compras.
-    */
-   function js_openWindowPendencia() {
+  /**
+   * Função que abre a janela para cadastro de pendência para uma solicitação de compras.
+   */
+  function js_openWindowPendencia() {
 
-     var iCodigoSolicitacao  = $F('pc10_numero');
-     // a flag 'cadastroprocessodecompras' foi adiciona para indicar ao programa que essa é a origem da opreração
-     var sUrlPendencia       = "com4_cadpendencias002.php?pc10_numero="+iCodigoSolicitacao+"&cadastroprocessodecompras=true";
-     var sTituloJanelaIframe = "Cadastro de Pendência da Solicitação: "+iCodigoSolicitacao;
-     js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_cadpendencia', sUrlPendencia, sTituloJanelaIframe ,true);
-   }
+    var iCodigoSolicitacao = $F('pc10_numero');
+    // a flag 'cadastroprocessodecompras' foi adiciona para indicar ao programa que essa é a origem da opreração
+    var sUrlPendencia = "com4_cadpendencias002.php?pc10_numero=" + iCodigoSolicitacao + "&cadastroprocessodecompras=true";
+    var sTituloJanelaIframe = "Cadastro de Pendência da Solicitação: " + iCodigoSolicitacao;
+    js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_cadpendencia', sUrlPendencia, sTituloJanelaIframe, true);
+  }
 </script>
