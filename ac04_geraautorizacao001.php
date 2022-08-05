@@ -980,8 +980,8 @@ if ($x->consultarDataDoSistema == true) {
             return;
         }
 
-        // $("valoritem"+iSeq).value = js_formatar(js_roundDecimal(value, 2),'f',2);
-        $("valoritem" + iSeq).value = js_formatar(value.toFixed(2), 'f', 2);
+        $("valoritem" + iSeq).value = js_formatar(js_roundDecimal(value, 2),'f',2);
+        //$("valoritem" + iSeq).value = js_formatar(value.toFixed(2), 'f', 2);
         //oDotacao.valorexecutar = $("valoritem"+iSeq).value;
         js_somaItens();
     }
@@ -1088,7 +1088,7 @@ if ($x->consultarDataDoSistema == true) {
             // debug
             aItensPosicao[iLinha].dotacoes.each(function(oDotacao, iDot) {
                 
-                    var nValue = js_strToFloat(js_formatar(oGridDotacoes.aRows[iDot].aCells[3].getValue(), "f", 2));
+                var nValue = js_strToFloat(js_formatar(oGridDotacoes.aRows[iDot].aCells[3].getValue(), "f", 2));
 
                 console.log(nValue);
                 oDotacao.valorexecutar = nValue;
@@ -1119,7 +1119,7 @@ if ($x->consultarDataDoSistema == true) {
             nQuantAutori = oDotacao.quantidade;
             //nValorDotacao = js_formatar(oDotacao.valorexecutar.toFixed(2), "f", 2);
 
-            var nValorDotacao = js_strToFloat(js_formatar(aItensPosicao[iLinha].saldos.valorautorizar, "f", 2));
+            var nValorDotacao = aItensPosicao[iLinha].saldos.valorautorizar;
 
             
 
@@ -1145,12 +1145,9 @@ if ($x->consultarDataDoSistema == true) {
             }
             aLinha[2].addEvent("onKeyPress", "return js_mask(event,\"0-9|.|-\")");
             aLinha[2].addEvent("onKeyDown", "return js_verifica(this,event,true)");
-            if (tipo == 2 && oDotacao.quantidade != 0) {
-                aLinha[3] = eval("valordot" + iDot + " = new DBTextField('valordot" + iDot + "','valordot" + iDot + "','" + nValorDotacao + "')");
-                oDotacao.valorexecutar = nValorDotacao;
-            } else {
-                aLinha[3] = eval("valordot" + iDot + " = new DBTextField('valordot" + iDot + "','valordot" + iDot + "','" + oDotacao.valorexecutar + "')");
-            }
+            
+                aLinha[3] = eval("valordot" + iDot + " = new DBTextField('valordot" + iDot + "','valordot" + iDot + "','" + js_formatar(js_roundDecimal(oDotacao.valorexecutar, 2), 'f', 2) + "')");
+            
             aLinha[3].addStyle("text-align", "right");
             aLinha[3].addStyle("height", "100%");
             aLinha[3].addStyle("width", "100px");
@@ -1196,6 +1193,9 @@ if ($x->consultarDataDoSistema == true) {
 
                 var nQuantDot = aItensPosicao[iLinha].dotacoes[iDot].quantidade;
                 aItensPosicao[iLinha].dotacoes[iDot].valorexecutar = js_round(nValorUnit * nQuantDot, 2);
+                if(aItensPosicao[iLinha].dotacoes.length == 1 && nQuantDot == 1){
+                    aItensPosicao[iLinha].dotacoes[iDot].valorexecutar = js_strToFloat(js_formatar(aItensPosicao[iLinha].saldos.valorautorizar, "f", 2));
+                }
                 return;
 
             }
@@ -1501,7 +1501,7 @@ if ($x->consultarDataDoSistema == true) {
                 var oDadosItem = aItensPosicao[aCells[9].getValue()];
                 oItem.codigo = oDadosItem.codigo;
                 oItem.quantidade = aCells[6].getValue();
-                oItem.valor = aCells[7].getValue();
+                oItem.valor = js_strToFloat(aCells[7].getValue());
                 var nTotal = oItem.valor;
                 oItem.posicao = iPosicaoAtual;
                 /**
