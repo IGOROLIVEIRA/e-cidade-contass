@@ -535,6 +535,7 @@ class cl_proced {
      $sql .= "      inner join cgm  on  cgm.z01_numcgm = db_config.numcgm";
      $sql .= "      inner join db_tipoinstit  on  db_tipoinstit.db21_codtipo = db_config.db21_tipoinstit";
      $sql .= "      inner join procedtipogrupo  on  procedtipogrupo.v29_sequencial = procedtipo.v28_grupo";
+     $sql .= "      inner join procedarretipo  on  procedarretipo.v06_proced = proced.v03_codigo";
      $sql2 = "";
      if($dbwhere==""){
        if($v03_codigo!=null ){
