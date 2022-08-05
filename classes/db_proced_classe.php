@@ -1,74 +1,74 @@
-<?
+<?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: divida
 //CLASSE DA ENTIDADE proced
-class cl_proced { 
-   // cria variaveis de erro 
-   var $rotulo     = null; 
-   var $query_sql  = null; 
-   var $numrows    = 0; 
-   var $numrows_incluir = 0; 
-   var $numrows_alterar = 0; 
-   var $numrows_excluir = 0; 
-   var $erro_status= null; 
-   var $erro_sql   = null; 
-   var $erro_banco = null;  
-   var $erro_msg   = null;  
-   var $erro_campo = null;  
-   var $pagina_retorno = null; 
-   // cria variaveis do arquivo 
-   var $v03_codigo = 0; 
-   var $v03_descr = null; 
-   var $v03_dcomp = null; 
-   var $v03_receit = 0; 
-   var $k00_hist = 0; 
-   var $v03_tributaria = 0; 
-   var $v03_instit = 0; 
-   var $v03_procedtipo = 0; 
-   // cria propriedade com as variaveis do arquivo 
+class cl_proced {
+   // cria variaveis de erro
+   var $rotulo     = null;
+   var $query_sql  = null;
+   var $numrows    = 0;
+   var $numrows_incluir = 0;
+   var $numrows_alterar = 0;
+   var $numrows_excluir = 0;
+   var $erro_status= null;
+   var $erro_sql   = null;
+   var $erro_banco = null;
+   var $erro_msg   = null;
+   var $erro_campo = null;
+   var $pagina_retorno = null;
+   // cria variaveis do arquivo
+   var $v03_codigo = 0;
+   var $v03_descr = null;
+   var $v03_dcomp = null;
+   var $v03_receit = 0;
+   var $k00_hist = 0;
+   var $v03_tributaria = 0;
+   var $v03_instit = 0;
+   var $v03_procedtipo = 0;
+   // cria propriedade com as variaveis do arquivo
    var $campos = "
-                 v03_codigo = int4 = Código 
-                 v03_descr = varchar(20) = Descrição Abreviada 
-                 v03_dcomp = varchar(40) = Descrição Completa 
-                 v03_receit = int4 = Receita de Dívida Ativa 
-                 k00_hist = int4 = Histórico de Cálculo 
-                 v03_tributaria = int4 = Tipo de Procedência 
-                 v03_instit = int4 = Cod. Instituição 
-                 v03_procedtipo = int4 = Tipo de Procedência 
+                 v03_codigo = int4 = Código
+                 v03_descr = varchar(20) = Descrição Abreviada
+                 v03_dcomp = varchar(40) = Descrição Completa
+                 v03_receit = int4 = Receita de Dívida Ativa
+                 k00_hist = int4 = Histórico de Cálculo
+                 v03_tributaria = int4 = Tipo de Procedência
+                 v03_instit = int4 = Cod. Instituição
+                 v03_procedtipo = int4 = Tipo de Procedência
                  ";
-   //funcao construtor da classe 
-   function cl_proced() { 
+   //funcao construtor da classe
+   function cl_proced() {
      //classes dos rotulos dos campos
-     $this->rotulo = new rotulo("proced"); 
+     $this->rotulo = new rotulo("proced");
      $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
    }
-   //funcao erro 
-   function erro($mostra,$retorna) { 
+   //funcao erro
+   function erro($mostra,$retorna) {
      if(($this->erro_status == "0") || ($mostra == true && $this->erro_status != null )){
         echo "<script>alert(\"".$this->erro_msg."\");</script>";
         if($retorna==true){
@@ -92,9 +92,9 @@ class cl_proced {
      }
    }
    // funcao para inclusao
-   function incluir ($v03_codigo){ 
+   function incluir ($v03_codigo){
       $this->atualizacampos();
-     if($this->v03_descr == null ){ 
+     if($this->v03_descr == null ){
        $this->erro_sql = " Campo Descrição Abreviada nao Informado.";
        $this->erro_campo = "v03_descr";
        $this->erro_banco = "";
@@ -103,7 +103,7 @@ class cl_proced {
        $this->erro_status = "0";
        return false;
      }
-     if($this->v03_dcomp == null ){ 
+     if($this->v03_dcomp == null ){
        $this->erro_sql = " Campo Descrição Completa nao Informado.";
        $this->erro_campo = "v03_dcomp";
        $this->erro_banco = "";
@@ -112,7 +112,7 @@ class cl_proced {
        $this->erro_status = "0";
        return false;
      }
-     if($this->v03_receit == null ){ 
+     if($this->v03_receit == null ){
        $this->erro_sql = " Campo Receita de Dívida Ativa nao Informado.";
        $this->erro_campo = "v03_receit";
        $this->erro_banco = "";
@@ -121,7 +121,7 @@ class cl_proced {
        $this->erro_status = "0";
        return false;
      }
-     if($this->k00_hist == null ){ 
+     if($this->k00_hist == null ){
        $this->erro_sql = " Campo Histórico de Cálculo nao Informado.";
        $this->erro_campo = "k00_hist";
        $this->erro_banco = "";
@@ -130,7 +130,7 @@ class cl_proced {
        $this->erro_status = "0";
        return false;
      }
-     if($this->v03_tributaria == null ){ 
+     if($this->v03_tributaria == null ){
        $this->erro_sql = " Campo Tipo de Procedência nao Informado.";
        $this->erro_campo = "v03_tributaria";
        $this->erro_banco = "";
@@ -139,7 +139,7 @@ class cl_proced {
        $this->erro_status = "0";
        return false;
      }
-     if($this->v03_instit == null ){ 
+     if($this->v03_instit == null ){
        $this->erro_sql = " Campo Cod. Instituição nao Informado.";
        $this->erro_campo = "v03_instit";
        $this->erro_banco = "";
@@ -148,7 +148,7 @@ class cl_proced {
        $this->erro_status = "0";
        return false;
      }
-     if($this->v03_procedtipo == null ){ 
+     if($this->v03_procedtipo == null ){
        $this->erro_sql = " Campo Tipo de Procedência nao Informado.";
        $this->erro_campo = "v03_procedtipo";
        $this->erro_banco = "";
@@ -158,16 +158,16 @@ class cl_proced {
        return false;
      }
      if($v03_codigo == "" || $v03_codigo == null ){
-       $result = db_query("select nextval('proced_v03_codigo_seq')"); 
+       $result = db_query("select nextval('proced_v03_codigo_seq')");
        if($result==false){
          $this->erro_banco = str_replace("\n","",@pg_last_error());
-         $this->erro_sql   = "Verifique o cadastro da sequencia: proced_v03_codigo_seq do campo: v03_codigo"; 
+         $this->erro_sql   = "Verifique o cadastro da sequencia: proced_v03_codigo_seq do campo: v03_codigo";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "0";
-         return false; 
+         return false;
        }
-       $this->v03_codigo = pg_result($result,0,0); 
+       $this->v03_codigo = pg_result($result,0,0);
      }else{
        $result = db_query("select last_value from proced_v03_codigo_seq");
        if(($result != false) && (pg_result($result,0,0) < $v03_codigo)){
@@ -178,10 +178,10 @@ class cl_proced {
          $this->erro_status = "0";
          return false;
        }else{
-         $this->v03_codigo = $v03_codigo; 
+         $this->v03_codigo = $v03_codigo;
        }
      }
-     if(($this->v03_codigo == null) || ($this->v03_codigo == "") ){ 
+     if(($this->v03_codigo == null) || ($this->v03_codigo == "") ){
        $this->erro_sql = " Campo v03_codigo nao declarado.";
        $this->erro_banco = "Chave Primaria zerada.";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -190,27 +190,27 @@ class cl_proced {
        return false;
      }
      $sql = "insert into proced(
-                                       v03_codigo 
-                                      ,v03_descr 
-                                      ,v03_dcomp 
-                                      ,v03_receit 
-                                      ,k00_hist 
-                                      ,v03_tributaria 
-                                      ,v03_instit 
-                                      ,v03_procedtipo 
+                                       v03_codigo
+                                      ,v03_descr
+                                      ,v03_dcomp
+                                      ,v03_receit
+                                      ,k00_hist
+                                      ,v03_tributaria
+                                      ,v03_instit
+                                      ,v03_procedtipo
                        )
                 values (
-                                $this->v03_codigo 
-                               ,'$this->v03_descr' 
-                               ,'$this->v03_dcomp' 
-                               ,$this->v03_receit 
-                               ,$this->k00_hist 
-                               ,$this->v03_tributaria 
-                               ,$this->v03_instit 
-                               ,$this->v03_procedtipo 
+                                $this->v03_codigo
+                               ,'$this->v03_descr'
+                               ,'$this->v03_dcomp'
+                               ,$this->v03_receit
+                               ,$this->k00_hist
+                               ,$this->v03_tributaria
+                               ,$this->v03_instit
+                               ,$this->v03_procedtipo
                       )";
-     $result = db_query($sql); 
-     if($result==false){ 
+     $result = db_query($sql);
+     if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){
          $this->erro_sql   = " ($this->v03_codigo) nao Incluído. Inclusao Abortada.";
@@ -249,16 +249,16 @@ class cl_proced {
        $resac = db_query("insert into db_acount values($acount,93,18162,'','".AddSlashes(pg_result($resaco,0,'v03_procedtipo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
      }
      return true;
-   } 
+   }
    // funcao para alteracao
-   function alterar ($v03_codigo=null) { 
+   function alterar ($v03_codigo=null) {
       $this->atualizacampos();
      $sql = " update proced set ";
      $virgula = "";
-     if(trim($this->v03_codigo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["v03_codigo"])){ 
+     if(trim($this->v03_codigo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["v03_codigo"])){
        $sql  .= $virgula." v03_codigo = $this->v03_codigo ";
        $virgula = ",";
-       if(trim($this->v03_codigo) == null ){ 
+       if(trim($this->v03_codigo) == null ){
          $this->erro_sql = " Campo Código nao Informado.";
          $this->erro_campo = "v03_codigo";
          $this->erro_banco = "";
@@ -268,10 +268,10 @@ class cl_proced {
          return false;
        }
      }
-     if(trim($this->v03_descr)!="" || isset($GLOBALS["HTTP_POST_VARS"]["v03_descr"])){ 
+     if(trim($this->v03_descr)!="" || isset($GLOBALS["HTTP_POST_VARS"]["v03_descr"])){
        $sql  .= $virgula." v03_descr = '$this->v03_descr' ";
        $virgula = ",";
-       if(trim($this->v03_descr) == null ){ 
+       if(trim($this->v03_descr) == null ){
          $this->erro_sql = " Campo Descrição Abreviada nao Informado.";
          $this->erro_campo = "v03_descr";
          $this->erro_banco = "";
@@ -281,10 +281,10 @@ class cl_proced {
          return false;
        }
      }
-     if(trim($this->v03_dcomp)!="" || isset($GLOBALS["HTTP_POST_VARS"]["v03_dcomp"])){ 
+     if(trim($this->v03_dcomp)!="" || isset($GLOBALS["HTTP_POST_VARS"]["v03_dcomp"])){
        $sql  .= $virgula." v03_dcomp = '$this->v03_dcomp' ";
        $virgula = ",";
-       if(trim($this->v03_dcomp) == null ){ 
+       if(trim($this->v03_dcomp) == null ){
          $this->erro_sql = " Campo Descrição Completa nao Informado.";
          $this->erro_campo = "v03_dcomp";
          $this->erro_banco = "";
@@ -294,10 +294,10 @@ class cl_proced {
          return false;
        }
      }
-     if(trim($this->v03_receit)!="" || isset($GLOBALS["HTTP_POST_VARS"]["v03_receit"])){ 
+     if(trim($this->v03_receit)!="" || isset($GLOBALS["HTTP_POST_VARS"]["v03_receit"])){
        $sql  .= $virgula." v03_receit = $this->v03_receit ";
        $virgula = ",";
-       if(trim($this->v03_receit) == null ){ 
+       if(trim($this->v03_receit) == null ){
          $this->erro_sql = " Campo Receita de Dívida Ativa nao Informado.";
          $this->erro_campo = "v03_receit";
          $this->erro_banco = "";
@@ -307,10 +307,10 @@ class cl_proced {
          return false;
        }
      }
-     if(trim($this->k00_hist)!="" || isset($GLOBALS["HTTP_POST_VARS"]["k00_hist"])){ 
+     if(trim($this->k00_hist)!="" || isset($GLOBALS["HTTP_POST_VARS"]["k00_hist"])){
        $sql  .= $virgula." k00_hist = $this->k00_hist ";
        $virgula = ",";
-       if(trim($this->k00_hist) == null ){ 
+       if(trim($this->k00_hist) == null ){
          $this->erro_sql = " Campo Histórico de Cálculo nao Informado.";
          $this->erro_campo = "k00_hist";
          $this->erro_banco = "";
@@ -320,10 +320,10 @@ class cl_proced {
          return false;
        }
      }
-     if(trim($this->v03_tributaria)!="" || isset($GLOBALS["HTTP_POST_VARS"]["v03_tributaria"])){ 
+     if(trim($this->v03_tributaria)!="" || isset($GLOBALS["HTTP_POST_VARS"]["v03_tributaria"])){
        $sql  .= $virgula." v03_tributaria = $this->v03_tributaria ";
        $virgula = ",";
-       if(trim($this->v03_tributaria) == null ){ 
+       if(trim($this->v03_tributaria) == null ){
          $this->erro_sql = " Campo Tipo de Procedência nao Informado.";
          $this->erro_campo = "v03_tributaria";
          $this->erro_banco = "";
@@ -333,10 +333,10 @@ class cl_proced {
          return false;
        }
      }
-     if(trim($this->v03_instit)!="" || isset($GLOBALS["HTTP_POST_VARS"]["v03_instit"])){ 
+     if(trim($this->v03_instit)!="" || isset($GLOBALS["HTTP_POST_VARS"]["v03_instit"])){
        $sql  .= $virgula." v03_instit = $this->v03_instit ";
        $virgula = ",";
-       if(trim($this->v03_instit) == null ){ 
+       if(trim($this->v03_instit) == null ){
          $this->erro_sql = " Campo Cod. Instituição nao Informado.";
          $this->erro_campo = "v03_instit";
          $this->erro_banco = "";
@@ -346,10 +346,10 @@ class cl_proced {
          return false;
        }
      }
-     if(trim($this->v03_procedtipo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["v03_procedtipo"])){ 
+     if(trim($this->v03_procedtipo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["v03_procedtipo"])){
        $sql  .= $virgula." v03_procedtipo = $this->v03_procedtipo ";
        $virgula = ",";
-       if(trim($this->v03_procedtipo) == null ){ 
+       if(trim($this->v03_procedtipo) == null ){
          $this->erro_sql = " Campo Tipo de Procedência nao Informado.";
          $this->erro_campo = "v03_procedtipo";
          $this->erro_banco = "";
@@ -389,7 +389,7 @@ class cl_proced {
        }
      }
      $result = db_query($sql);
-     if($result==false){ 
+     if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = " nao Alterado. Alteracao Abortada.\\n";
          $this->erro_sql .= "Valores : ".$this->v03_codigo;
@@ -417,14 +417,14 @@ class cl_proced {
          $this->erro_status = "1";
          $this->numrows_alterar = pg_affected_rows($result);
          return true;
-       } 
-     } 
-   } 
-   // funcao para exclusao 
-   function excluir ($v03_codigo=null,$dbwhere=null) { 
+       }
+     }
+   }
+   // funcao para exclusao
+   function excluir ($v03_codigo=null,$dbwhere=null) {
      if($dbwhere==null || $dbwhere==""){
        $resaco = $this->sql_record($this->sql_query_file($v03_codigo));
-     }else{ 
+     }else{
        $resaco = $this->sql_record($this->sql_query_file(null,"*",null,$dbwhere));
      }
      if(($resaco!=false)||($this->numrows!=0)){
@@ -457,7 +457,7 @@ class cl_proced {
        $sql2 = $dbwhere;
      }
      $result = db_query($sql.$sql2);
-     if($result==false){ 
+     if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = " nao Excluído. Exclusão Abortada.\\n";
        $this->erro_sql .= "Valores : ".$v03_codigo;
@@ -485,11 +485,11 @@ class cl_proced {
          $this->erro_status = "1";
          $this->numrows_excluir = pg_affected_rows($result);
          return true;
-       } 
-     } 
-   } 
-   // funcao do recordset 
-   function sql_record($sql) { 
+       }
+     }
+   }
+   // funcao do recordset
+   function sql_record($sql) {
      $result = db_query($sql);
      if($result==false){
        $this->numrows    = 0;
@@ -511,8 +511,8 @@ class cl_proced {
       }
      return $result;
    }
-   // funcao do sql 
-   function sql_query ( $v03_codigo=null,$campos="*",$ordem=null,$dbwhere=""){ 
+   // funcao do sql
+   function sql_query ( $v03_codigo=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = explode("#",$campos);
@@ -539,8 +539,8 @@ class cl_proced {
      $sql2 = "";
      if($dbwhere==""){
        if($v03_codigo!=null ){
-         $sql2 .= " where proced.v03_codigo = $v03_codigo "; 
-       } 
+         $sql2 .= " where proced.v03_codigo = $v03_codigo ";
+       }
      }else if($dbwhere != ""){
        $sql2 = " where $dbwhere";
      }
@@ -556,8 +556,8 @@ class cl_proced {
      }
      return $sql;
   }
-   // funcao do sql 
-   function sql_query_file ( $v03_codigo=null,$campos="*",$ordem=null,$dbwhere=""){ 
+   // funcao do sql
+   function sql_query_file ( $v03_codigo=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = explode("#",$campos);
@@ -573,8 +573,8 @@ class cl_proced {
      $sql2 = "";
      if($dbwhere==""){
        if($v03_codigo!=null ){
-         $sql2 .= " where proced.v03_codigo = $v03_codigo "; 
-       } 
+         $sql2 .= " where proced.v03_codigo = $v03_codigo ";
+       }
      }else if($dbwhere != ""){
        $sql2 = " where $dbwhere";
      }
