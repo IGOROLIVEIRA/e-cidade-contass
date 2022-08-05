@@ -1,415 +1,267 @@
 <?php
-/*
- *     E-cidade Software Publico para Gestao Municipal
- *  Copyright (C) 2009  DBselller Servicos de Informatica
- *                            www.dbseller.com.br
- *                         e-cidade@dbseller.com.br
- *
- *  Este programa e software livre; voce pode redistribui-lo e/ou
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
- *  publicada pela Free Software Foundation; tanto a versao 2 da
- *  Licenca como (a seu criterio) qualquer versao mais nova.
- *
- *  Este programa e distribuido na expectativa de ser util, mas SEM
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
- *  detalhes.
- *
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
- *  junto com este programa; se nao, escreva para a Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
- *  02111-1307, USA.
- *
- *  Copia da licenca no diretorio licenca/licenca_en.txt
- *                                licenca/licenca_pt.txt
- */
 
 require_once("libs/db_stdlib.php");
 require_once("libs/db_conecta.php");
 require_once("libs/db_sessoes.php");
 require_once("libs/db_usuariosonline.php");
+require_once("classes/db_arretipo_classe.php");
 require_once("dbforms/db_funcoes.php");
-require_once("classes/db_itbi_classe.php");
-require_once("classes/db_itbirural_classe.php");
-require_once("libs/db_utils.php");
-require_once("libs/db_app.utils.php");
-
 db_postmemory($HTTP_POST_VARS);
-
-$clitbi = new cl_itbi;
-$clitbirural = new cl_itbirural;
-$clrotulo = new rotulocampo;
-
-$clitbi->rotulo->label();
-$clitbirural->rotulo->label();
-$clrotulo->label('DBtxt23');
-$clrotulo->label('DBtxt25');
-$clrotulo->label('DBtxt27');
-$clrotulo->label('DBtxt28');
-
-$clrotulo->label("j34_setor");
-$clrotulo->label("j34_quadra");
-$clrotulo->label("j34_lote");
+$clarretipo = new cl_arretipo;
+$clrotulo   = new rotulocampo;
+$clrotulo->label("k00_tipo");
 
 ?>
-<html lang="">
+<html lang="pt-br">
 <head>
     <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-    <?php
-    db_app::load('grid.style.css');
-    db_app::load('estilos.css');
-    ?>
+    <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+    <script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
+    <script language="JavaScript" type="text/javascript" src="scripts/strings.js"></script>
+    <style type="text/css">
+        select {
+            width: 50%;
+        }
+    </style>
+    <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
-<body bgcolor=#CCCCCC leftmargin='0' topmargin='0' marginwidth='0' marginheight='0' onLoad='a=1' bgcolor='#cccccc'>
-<form name='form1' method='post' action=''>
-    <table align='center' border='0' width='100%'>
-        <tr>
-            <td>&nbsp;</td>
-        </tr>
-        <tr>
-            <td>&nbsp;</td>
-        </tr>
-        <tr>
-            <td>
-                <table align='center' cellpadding='0' cellspacing='0'>
-                    <tr>
-                        <td>
-                            <fieldset>
-                                <legend>
-                                    <b>Inscrição de Dívida Ativa de ITBI</b>
-                                </legend>
-                                <table border='0'>
-                                    <tr>
-                                        <td align='right'>
-                                            <?php
-                                            db_ancora('<b>Guia :</b>', 'js_pesquisait01_guia(true);', 1);
-                                            ?>
-                                        </td>
-                                        <td width='20'>
-                                            <?php
-                                            db_input('it01_guia_ini', 15, $Iit01_guia, true, 'text', 1, " onchange='js_pesquisait01_guia(false);'");
-                                            ?>
-                                        </td>
-                                        <td align='center'>
-                                            <b> a </b>
-                                        </td>
-                                        <td>
-                                            <?php
-                                            db_input('it01_guia_fim', 15, $Iit01_guia, true, 'text', 1, '');
-                                            ?>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td align='right'>
-                                            <b>Periodo de :</b>
-                                        </td>
-                                        <td width='20'>
-                                            <?php
-                                            db_inputdata('dtIni', '', '', '', true, 'text', 1, '');
-                                            ?>
-                                        </td>
-                                        <td align='center'>
-                                            <b> a </b>
-                                        </td>
-                                        <td>
-                                            <?php
-                                            db_inputdata('dtFim', '', '', '', true, 'text', 1, '');
-                                            ?>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td align='right'>
-                                            <b>Vencimento de :</b>
-                                        </td>
-                                        <td width='20'>
-                                            <?php
-                                            db_inputdata('dtVencIni', '', '', '', true, 'text', 1, '');
-                                            ?>
-                                        </td>
-                                        <td align='center'>
-                                            <b> a </b>
-                                        </td>
-                                        <td>
-                                            <?php
-                                            db_inputdata('dtVencFim', '', '', '', true, 'text', 1, '');
-                                            ?>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td align='right'>
-                                            <b>Logradouro :</b>
-                                        </td>
-                                        <td colspan='3'>
-                                            <?php
-                                            db_input('logradouroid', 40, '', true, 'hidden', 3);
-                                            db_input('it18_nomelograd', 40, $Iit18_nomelograd, true, 'text', 1);
-                                            ?>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td align='right'>
-                                            <b>Ordem :</b>
-                                        </td>
-                                        <td colspan='3'>
-                                            <?php
-                                            $aOrdem = array('g' => 'Guia',
-                                                'v' => 'Valor',
-                                                'n' => 'Nome');
-                                            db_select('ordem', $aOrdem, true, 2, " style='width:275px;'");
-                                            ?>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td align='right'>
-                                            <b>Modo :</b>
-                                        </td>
-                                        <td colspan='3'>
-                                            <table border='0' width='100%'>
-                                                <tr>
-                                                    <td width='50%'>
-                                                        <input type='radio' name='modoOrdem' value='asc' checked>Ascendente</input>
-                                                        <br>
-                                                        <input type='radio' name='modoOrdem'
-                                                               value='desc'>Descendente</input>
-                                                    </td>
-                                                    <td width='50%'>
-                                                        <input type='radio' name='modoImp' value='anal' checked>Análitico</input>
-                                                        <br>
-                                                        <input type='radio' name='modoImp'
-                                                               value='sint'>Sintético</input>
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td align='right'>
-                                            <b>Tipo :</b>
-                                        </td>
-                                        <td colspan='3'>
-                                            <?php
-                                            $aTipo = array('t' => 'Todos',
-                                                'u' => 'Urbano',
-                                                'r' => 'Rural');
+<body class="body-default" onload="alert('Esta rotina importa todos os débitos de ITBI para dívida ativa. Utilize-a com cuidado! Se você não tem certeza do que está fazendo, não faça sem entrar em contato com o suporte ou com o responsável pelo CPD da prefeitura!')">
 
-                                            db_select('tipo', $aTipo, true, 2, " style='width:275px;'");
-                                            ?>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td align='right'>
-                                            <b>Situaçao:</b>
-                                        </td>
-                                        <td colspan='3'>
-                                            <?php
-                                            $aSituacao = array('1' => 'Todos',
-                                                '2' => 'Aberto',
-                                                '3' => 'Pago',
-                                                '4' => 'Cancelado');
-                                            db_select('situacao', $aSituacao, true, 2, " style='width:275px;'");
-                                            ?>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td align='right'>
-                                            <b>Liberadas:</b>
-                                        </td>
-                                        <td colspan='3'>
-                                            <?php
-                                            $aLiberadas = array('t' => 'Todos',
-                                                's' => 'Sim',
-                                                'n' => 'Não');
-                                            db_select('liberadas', $aLiberadas, true, 2, " style='width:275px;'");
-                                            ?>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td align='right' nowrap title="<?= @$Tj34_setor ?>">
-                                            <?= $Lj34_setor ?>
-                                        </td>
-                                        <td colspan='3'>
-                                            <?php
-                                            db_input('j34_setor', 10, $Ij34_setor, true, 'text', 1);
-                                            ?>
-                                            <?= $Lj34_quadra ?>
-                                            <?php
-                                            db_input('j34_quadra', 10, $Ij34_quadra, true, 'text', 1);
-                                            ?>
-
-                                            <?= $Lj34_lote ?>
-                                            <?php
-                                            db_input('j34_lote', 10, $Ij34_lote, true, 'text', 1);
-                                            ?>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </fieldset>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <table align='center'>
-                                <tr>
-                                    <td>&nbsp;</td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <input name='emitir' id='emitir' type='button' value='Processar'
-                                               onclick='js_validar();'>
-                                    </td>
-                                </tr>
-                                <tr id="btn_confirmar" style="display: none;">
-                                    <td>
-                                        <input name='confirmar' id='confirmar' type='button' value='Confirmar'
-                                               onclick='js_confirmar();'>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-    </table>
-</form>
 <?php
-db_menu(db_getsession('DB_id_usuario'), db_getsession('DB_modulo'), db_getsession('DB_anousu'), db_getsession('DB_instit'));
-db_app::load('scripts.js');
-db_app::load('prototype.js');
-db_app::load('datagrid.widget.js');
-db_app::load('strings.js');
-db_app::load('/widgets/dbautocomplete.widget.js');
+db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
 ?>
+<div class="container">
+    <form name="form1" method="post">
+        <fieldset>
+            <legend>Importar Dívidas (ITBI)</legend>
+            <table class="form-container">
+                <tr>
+                    <td nowrap title="<?=$Tk00_tipo?>">Tipo de origem:</td>
+                    <td nowrap>
+                        <select name="tipor" id="tipor" onchange='js_habilita();' >
+                            <option value="0" >Escolha origem</option>
+                            <?php
 
-<script>
+                            $sSql = <<<SQL
+                                SELECT arretipo.k00_tipo,
+                                          arretipo.k00_descr
+                                   FROM arretipo
+                                   INNER JOIN cadtipo ON cadtipo.k03_tipo = arretipo.k03_tipo
+                                   WHERE cadtipo.k03_parcano IS TRUE
+                                     AND arretipo.k00_instit = 1
+                                     AND cadtipo.k03_tipo = 8
+                                   ORDER BY k00_tipo
+SQL;
+                            $result  = $clarretipo->sql_record($sSql);
+                            $numrows = $clarretipo->numrows;
+                            for($i=0;$i<$numrows;$i++){
 
-    const inputDtIni = document.querySelector('#dtIni');
-    const inputDtFim = document.querySelector('#dtFim');
-    const inputVencDtIni = document.querySelector('#dtVencIni');
-    const inputVencDtFim = document.querySelector('#dtVencFim');
-    const inputOrdem = document.querySelector('#ordem');
-    const inputTipo = document.querySelector('#tipo');
-    const inputSituacao = document.querySelector('#situacao');
-    const inputLiberadas = document.querySelector('#liberadas');
-    const inputGuiaIni = document.querySelector('#it01_guia_ini');
-    const inputGuiaFim = document.querySelector('#it01_guia_fim');
-    const inputLogradouro = document.querySelector('#it18_nomelograd');
-    const inputLogradouroId = document.querySelector('#logradouroid');
-    const inputSetor = document.querySelector('#j34_setor');
-    const inputQuadra = document.querySelector('#j34_quadra');
-    const inputLote = document.querySelector('#j34_lote');
-    const trButtonConfirmar = document.querySelector('#btn_confirmar');
-
-    const js_emite = () => {
-
-        let iInd;
-        let sModo = null;
-        let sModoImp = null;
-        const dtIni = inputDtIni.value;
-        const dtFim = inputDtFim.value;
-        const dtVencIni = inputVencDtIni.value;
-        const dtVencFim = inputVencDtFim.value;
-        const sOrdem = inputOrdem.value;
-        const sTipo = inputTipo.value;
-        const sSituacao = inputSituacao.value;
-        const sLiberadas = inputLiberadas.value;
-        const guiaIni = inputGuiaIni.value;
-        const guiaFim = inputGuiaFim.value;
-        const sLogradouro = inputLogradouro.value;
-        const sSetor = inputSetor.value;
-        const sQuadra = inputQuadra.value;
-        const sLote = inputLote.value;
-
-        const aObjModo = document.getElementsByName('modoOrdem');
-        for (iInd = 0; iInd < aObjModo.length; iInd++) {
-            if (aObjModo[iInd].checked) {
-                sModo = aObjModo[iInd].value;
-            }
-        }
-
-        const aObjModoImp = document.getElementsByName('modoImp');
-        for (iInd = 0; iInd < aObjModoImp.length; iInd++) {
-            if (aObjModoImp[iInd].checked) {
-                sModoImp = aObjModoImp[iInd].value;
-            }
-        }
-
-        let sQuery = '?ordem=' + sOrdem;
-        sQuery += '&modo=' + sModo;
-        sQuery += '&modoimp=' + sModoImp;
-        sQuery += '&dtini=' + dtIni;
-        sQuery += '&dtfim=' + dtFim;
-        sQuery += '&dtVencini=' + dtVencIni;
-        sQuery += '&dtVemcfim=' + dtVencFim;
-        sQuery += '&tipo=' + sTipo;
-        sQuery += '&situacao=' + sSituacao;
-        sQuery += '&liberadas=' + sLiberadas;
-        sQuery += '&guiaini=' + guiaIni;
-        sQuery += '&guiafim=' + guiaFim;
-        sQuery += '&sLogradouro=' + sLogradouro;
-        sQuery += '&sSetor=' + sSetor;
-        sQuery += '&sQuadra=' + sQuadra;
-        sQuery += '&sLote=' + sLote;
-
-        const sUrl = 'itb2_relresumoitbi002.php' + sQuery;
-
-        const sParam = 'width=' + (screen.availWidth - 20) + ',height=' + (screen.availHeight - 80) + ',scrollbars=1,location=0 ';
-        const jan = window.open(sUrl, '', sParam);
-        jan.moveTo(0, 0);
-    }
-
-    inputLogradouro.style.width = '275px';
-
-    oAutoComplete = new dbAutoComplete(inputLogradouro, 'itb2_pesquisalogradouro.RPC.php');
-    oAutoComplete.setTxtFieldId(inputLogradouroId);
-    oAutoComplete.show();
-
-    function js_validar() {
-        trButtonConfirmar.removeAttribute("style");
-        js_emite();
-    }
-
-    function js_pesquisait01_guia(mostra) {
-
-        const sUrl1 = 'func_itbi.php?funcao_js=parent.js_mostrarit01_guia|it01_guia';
-        const sUrl2 = 'func_itbi.php?pesquisa_chave=' + inputGuiaIni.value + '&funcao_js=parent.js_mostrarit01_guia1';
-
-        if (mostra === true) {
-            js_OpenJanelaIframe('', 'db_iframe_itbi', sUrl1, 'Pesquisa', true);
-        } else {
-
-            if (inputGuiaIni.value !== '') {
-                js_OpenJanelaIframe('', 'db_iframe_itbi', sUrl2, 'Pesquisa', false);
-            } else {
-                inputGuiaIni.value = '';
-            }
-        }
-    }
-
-    function js_mostrarit01_guia1(chave, erro) {
-
-        if (erro === true) {
-
-            alert(chave);
-            inputGuiaIni.value = '';
-            inputGuiaIni.focus();
-
-        } else {
-            inputGuiaIni.value = chave;
-        }
-    }
-
-    function js_mostrarit01_guia(chave) {
-
-        inputGuiaIni.value = chave;
-        db_iframe_itbi.hide();
-
-    }
-</script>
+                                db_fieldsmemory($result,$i,true);
+                                echo " <option value=\"$k00_tipo\" >$k00_descr</option> ";
+                            }
+                            ?>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td nowrap title="">Débitos a serem importados:</td>
+                    <td nowrap>
+                        <select disabled name="parc" id="parc" onchange='js_habilita();' >
+                            <option selected value="t">Totalmente vencidas</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr id='data_vencidas'>
+                    <td nowrap>Parcelas vencidas até:</td>
+                    <td nowrap>
+                        <?php
+                        $datavenc_dia = date('d',db_getsession("DB_datausu"));
+                        $datavenc_mes = date('m',db_getsession("DB_datausu"));
+                        $datavenc_ano = date('Y',db_getsession("DB_datausu"));
+                        db_inputdata('datavenc',$datavenc_dia,$datavenc_mes,$datavenc_ano,true,'text',1);
+                        ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td nowrap title="Processos registrado no sistema?">Processo do Sistema:</td>
+                    <td nowrap>
+                        <?php
+                        $lProcessoSistema = true;
+                        db_select('lProcessoSistema', array(true=>'SIM', false=>'NÃO'), true, 1, "onchange='js_processoSistema()'")
+                        ?>
+                    </td>
+                </tr>
+                <tr id="processoSistema">
+                    <td nowrap title="<?=@$Tp58_codproc?>">
+                        <?php
+                        db_ancora('Processo:', 'js_pesquisaProcesso(true)', 1);
+                        ?>
+                    </td>
+                    <td nowrap>
+                        <?php
+                        db_input('v01_processo', 10, false, true, 'text', 1, 'onchange="js_pesquisaProcesso(false)"') ;
+                        db_input('p58_requer', 40, false, true, 'text', 3);
+                        ?>
+                    </td>
+                </tr>
+                <tr id="processoExterno1" style="display: none;">
+                    <td nowrap title="Número do processo externo">Processo:</td>
+                    <td nowrap>
+                        <?php
+                        db_input('v01_processoExterno', 10, "", true, 'text', 1, null, null, null, "background-color: rgb(230, 228, 241);") ;
+                        ?>
+                    </td>
+                </tr>
+                <tr id="processoExterno2" style="display: none;">
+                    <td nowrap title="Titular do processo">Titular do Processo:</td>
+                    <td nowrap>
+                        <?php
+                        db_input('v01_titular', 54, 'false', true, 'text', 1) ;
+                        ?>
+                    </td>
+                </tr>
+                <tr id="processoExterno3" style="display: none;">
+                    <td nowrap title="Data do processo">Data do Processo:</td>
+                    <td nowrap>
+                        <?php
+                        db_inputdata('v01_dtprocesso', @$v01_dtprocesso_dia, @$v01_dtprocesso_mes, @$v01_dtprocesso_ano, true, 'text', 1);
+                        ?>
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+        <input name="pesquisa" type="button" onclick="js_abre();" disabled  value="Pesquisa" />
+    </form>
+</div>
 </body>
 </html>
+<script type="text/javascript">
+
+    /*
+     * FUNCOES DE PESQUISA
+     */
+    function js_pesquisaProcesso(lMostra) {
+
+        if (lMostra) {
+            js_OpenJanelaIframe('','db_iframe_matric', 'func_protprocesso.php?funcao_js=parent.js_mostraProcesso|p58_codproc|z01_nome','Pesquisa',true);
+        } else {
+            js_OpenJanelaIframe('','db_iframe_matric', 'func_protprocesso.php?pesquisa_chave='+document.form1.v01_processo.value+'&funcao_js=parent.js_mostraProcessoHidden','Pesquisa',false);
+        }
+
+    }
+    function js_mostraProcesso(iCodProcesso, sRequerente) {
+
+        document.form1.v01_processo.value = iCodProcesso;
+        document.form1.p58_requer.value  = sRequerente;
+        db_iframe_matric.hide();
+    }
+
+    function js_mostraProcessoHidden(iCodProcesso, sNome, lErro) {
+
+        if(lErro === true) {
+
+            document.form1.v01_processo.value = "";
+            document.form1.p58_requer.value   = sNome;
+        } else {
+            document.form1.p58_requer.value   = sNome;
+        }
+    }
+
+    /**
+     * funcao que trata se o processo é externo ou interno
+     */
+    function js_processoSistema() {
+
+        const lProcessoSistema = $F('lProcessoSistema');
+
+        if (lProcessoSistema === 1) {
+
+            document.getElementById('processoExterno1').style.display = 'none';
+            document.getElementById('processoExterno2').style.display = 'none';
+            document.getElementById('processoExterno3').style.display = 'none';
+            document.getElementById('processoSistema').style.display  = '';
+            $('v01_processo').value = "";
+            $('p58_requer').value   = "";
+        }	else {
+
+            document.getElementById('processoExterno1').style.display = '';
+            document.getElementById('processoExterno2').style.display = '';
+            document.getElementById('processoExterno3').style.display = '';
+            document.getElementById('processoSistema').style.display  = 'none';
+        }
+
+    }
+
+    function js_habilita(){
+
+        const sDebimporta = document.getElementById('parc').value;
+
+        if (sDebimporta === 'a') {
+            document.getElementById('data_vencidas').style.display = 'none';
+        }else{
+            document.getElementById('data_vencidas').style.display = '';
+        }
+
+        document.form1.pesquisa.disabled = document.form1.tipor.value === 0;
+    }
+    function js_abre(){
+
+        let data = '';
+
+        if (document.form1.datavenc_dia.value === '' ||
+            document.form1.datavenc_mes.value === '' || document.form1.datavenc_ano.value === ''){
+            alert("Informe corretamente a data do vencimento.");
+        } else {
+            data = document.form1.datavenc_ano.value+'-'+document.form1.datavenc_mes.value+'-'+document.form1.datavenc_dia.value;
+        }
+
+        if (confirm('Tem certeza de que quer importar mesmo todos os registros do tipo de debitos escolhido?') === true) {
+
+            if (confirm('Tem certeza mesmo?') === true) {
+                if (document.form1.tipor.value===0) {
+                    alert("Informe corretamente o tipo origem");
+                } else {
+
+                    const lProcessoSistema = parseInt($F('lProcessoSistema'));
+                    let iProcesso = "";
+                    let sTitular = "";
+                    let dDataProcesso = "";
+
+                    if (lProcessoSistema === 1) {
+
+                        iProcesso     = $F('v01_processo');
+                        sTitular      = "";
+                        dDataProcesso = "";
+                    } else {
+
+                        iProcesso     = $F('v01_processoExterno');
+                        sTitular      = $F("v01_titular");
+                        dDataProcesso = $F("v01_dtprocesso");
+                    }
+
+                    const oProcesso = {};
+                    oProcesso.lProcessoSistema = lProcessoSistema;
+                    oProcesso.iProcesso        = iProcesso;
+                    oProcesso.sTitular         = sTitular;
+                    oProcesso.dDataProcesso    = dDataProcesso;
+
+                    js_OpenJanelaIframe('top.corpo','db_iframe','itb1_inscrdivida002.php?oProcesso='+Object.toJSON(oProcesso)+'&k00_tipo_or='+document.form1.tipor.value+'&tipoparc='+document.form1.parc.value+'&datavenc='+data,'Pesquisa',true);
+                }
+            }
+        }
+    }
+
+    $("v01_processo").addClassName("field-size2");
+    $("p58_requer").addClassName("field-size9");
+    $("lProcessoSistema").setAttribute("rel","ignore-css");
+    $("lProcessoSistema").addClassName("field-size2");
+    $("v01_processoExterno").addClassName("field-size2");
+    $("v01_titular").addClassName("field-size9");
+    $("v01_dtprocesso").addClassName("field-size2");
+    $("datavenc").addClassName("field-size2");
+    $("parc").setAttribute("rel","ignore-css");
+    $("parc").addClassName("field-size5");
+    $("tipor").setAttribute("rel","ignore-css");
+    $("tipor").addClassName("field-size5");
+</script>
