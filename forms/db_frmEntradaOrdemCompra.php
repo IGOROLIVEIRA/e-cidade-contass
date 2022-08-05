@@ -321,6 +321,13 @@ if (count($aParametrosEmpenho) > 0) {
       </tr>
 
       <tr>
+            <td nowrap align="left" title=""><b>Valor da Ordem de Compra:</b></td>
+            <td>
+                <?php db_input('m51_valortotal', 10, $Im51_valortotal, true, 'text', 3) ?>
+            </td>
+        </tr>
+
+      <tr>
         <td align='left'><b>Obs:</b></td>
         <td colspan='3' align='left'>
           <?php
