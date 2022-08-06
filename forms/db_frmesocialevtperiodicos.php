@@ -21,7 +21,7 @@
                         <label for="S1207">S-1207 - Benefícios - Entes Públicos</label><br>
                     </td>
                     <td>
-                        <input type="checkbox" value="S1210" id="S1210" />
+                        <input type="checkbox" value="S1210" id="S1210" onclick="js_1210_alt()" />
                         <label for="S1210">S-1210 - Pagamentos de Rendimentos do Trabalho</label><br>
                     </td>
                 </tr>

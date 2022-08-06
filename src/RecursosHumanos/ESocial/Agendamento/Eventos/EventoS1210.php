@@ -44,7 +44,12 @@ class EventoS1210 extends EventoBase
             if ($oDados->indapuracao == 2) {
                 $oDadosAPI->evtPgtos->perapur         = date('Y');
             }
-            $oDadosAPI->evtPgtos->cpfBenef             = $oDados->cpftrab;
+            $oDadosAPI->evtPgtos->cpfbenef             = $oDados->cpftrab;
+
+            $oInfopgto = new \stdClass();
+            $oInfopgto->dtpgto    = date('Y-m');
+            $oInfopgto->tppgto    = $this->tppgto;
+            $oInfopgto->perRef  = $oInfopgto->codcateg;
 
             $oIdeestab = new \stdClass();
             $oIdeestab->idedmdev  = $this->buscarIdentificador($oDados->matricula);

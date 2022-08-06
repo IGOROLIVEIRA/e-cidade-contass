@@ -110,22 +110,22 @@ $mesfolha = DBPessoal::getMesFolha();
                                         <tr id="tppgto_col" style="display:none">
                                             <td align="left"><label>tpPgto:</label>
                                                 <select name="tppgto" id="tppgto" style="width: 76%;">
-                                                    <option value="1">Pagamento de remunera??o, conforme apurado em
+                                                    <option value="1">Pagamento de remuneração, conforme apurado em
                                                         ideDmDev do S-1200
                                                     </option>
-                                                    <option value="2">Pagamento de verbas rescis?rias conforme apurado
+                                                    <option value="2">Pagamento de verbas rescisórias conforme apurado
                                                         em ideDmDev do S-2299
                                                     </option>
-                                                    <option value="3">Pagamento de verbas rescis?rias conforme apurado
+                                                    <option value="3">Pagamento de verbas rescisórias conforme apurado
                                                         em ideDmDev do S-2399
                                                     </option>
-                                                    <option value="4">Pagamento de remunera??o conforme apurado em
+                                                    <option value="4">Pagamento de remuneração conforme apurado em
                                                         ideDmDev do S-1202
                                                     </option>
-                                                    <option value="4">Pagamento de remunera??o conforme apurado em
+                                                    <option value="4">Pagamento de remuneração conforme apurado em
                                                         ideDmDev do S-1202
                                                     </option>
-                                                    <option value="5">Pagamento de benef?cios previdenci?rios, conforme
+                                                    <option value="5">Pagamento de benefícios previdenciários, conforme
                                                         apurado em ideDmDev do S-1207
                                                     </option>
                                                 </select>

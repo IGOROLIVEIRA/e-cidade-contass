@@ -56,6 +56,11 @@ abstract class EventoBase
         $this->indapuracao = $indapuracao;
     }
 
+    public function setTppgto($tppgto)
+    {
+        $this->tppgto = $tppgto;
+    }
+
     /**
      * Retorna dados no formato necessario para envio
      * pela API sped-esocial

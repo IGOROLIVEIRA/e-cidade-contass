@@ -72,6 +72,11 @@ class Evento
      */
     private $indapuracao;
 
+    /**
+     * @var string
+     */
+    private $tppgto;
+
 
     /**
      * Undocumented function
@@ -81,7 +86,7 @@ class Evento
      * @param string $responsavelPreenchimento
      * @param \stdClass $dados
      */
-    public function __construct($tipoEvento, $empregador, $responsavelPreenchimento, $dado, $tpAmb, $iniValid, $modo, $dt_alteracao = null, $indapuracao = null)
+    public function __construct($tipoEvento, $empregador, $responsavelPreenchimento, $dado, $tpAmb, $iniValid, $modo, $dt_alteracao = null, $indapuracao = null, $tppgto = null)
     {
         /**
          * @todo pesquisar exite na fila um evento do tipo: $tipoEvento para o : $responsavelPreenchimento
@@ -99,6 +104,7 @@ class Evento
         $this->modo                     = $modo;
         $this->dt_alteracao             = $dt_alteracao;
         $this->indapuracao              = $indapuracao;
+        $this->tppgto                   = $tppgto;
 
         $dado = json_encode(\DBString::utf8_encode_all($this->dado));
         if (is_null($dado)) {
@@ -108,7 +114,7 @@ class Evento
     }
 
     public function adicionarFila()
-    {   
+    {
         $tipoEvento = str_replace('Individual', '', $this->tipoEvento);
         $where = array(
             "rh213_evento = {$tipoEvento}",
@@ -197,6 +203,7 @@ class Evento
         $evento->setModo($this->modo);
         $evento->setDtAlteracao($this->dt_alteracao);
         $evento->setIndApuracao($this->indapuracao);
+        $evento->setTppgto($this->tppgto);
         if (!is_object($evento)) {
             throw new \Exception("Objeto S{$this->tipoEvento} não encontrado.");
         }
