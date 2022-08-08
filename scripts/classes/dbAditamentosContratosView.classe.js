@@ -1883,10 +1883,11 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             }
 
             var oDadosHint           = new Object();
-            oDadosHint.idLinha   = `oGridItensrowoGridItens${iSeq}`;
+            oDadosHint.idLinha   = me.oGridItens.aRows[iSeq].aCells[3].sId;
             oDadosHint.sText     = sTextEvent;
-            aDadosHintGrid.push(oDadosHint);
+            aDadosHintGrid[iSeq] = oDadosHint;
 
+            
 
             if (oItem.dotacoesoriginal == undefined) {
 
