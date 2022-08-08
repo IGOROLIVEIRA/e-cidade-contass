@@ -15,7 +15,7 @@ class SiopeCsv extends Siope {
     protected $sLinha;
 
     public function gerarArquivoCSV(array $aDados, $tipo = null) {
-
+        
         //Despesa
         if ($tipo == 1) {
 
@@ -50,21 +50,20 @@ class SiopeCsv extends Siope {
             $this->abreArquivo();
            
             foreach ($aDados as $oReceita) {
-
               
-                if (!($oReceita->prev_atualizada == 0 && $oReceita->rec_realizada == 0  && $oReceita->ded_fundeb == 0
-                        && $oReceita->outras_ded == 0 && $oReceita->intra == 0)) {
-
+                if (!($oReceita['prev_atualizada'] == 0 && $oReceita['rec_realizada'] == 0  && $oReceita['ded_fundeb'] == 0
+                        && $oReceita['outras_ded'] == 0 && $oReceita['intra'] == 0)) {
+         
                     $aSiope[0] = 'V';
                     $aSiope[1] = '1';
                     $aSiope[2] = '1';
-                    $aSiope[3] = $this->getElementoReceitaFormat($oReceita->natureza);
-                    $aSiope[4] = $oReceita->descricao;
-                    $aSiope[5] = number_format($oReceita->prev_atualizada, 2, ',', '');
-                    $aSiope[6] = number_format($oReceita->rec_realizada, 2, ',', '');
-                    $aSiope[7] = number_format($oReceita->ded_fundeb, 2, ',', '');
-                    $aSiope[8] = number_format($oReceita->outras_ded, 2, ',', '');
-                    $aSiope[9] = number_format($oReceita->intra, 2, ',', '');
+                    $aSiope[3] = $this->getElementoReceitaFormat($oReceita['natureza']);
+                    $aSiope[4] = $oReceita['descricao'];
+                    $aSiope[5] = number_format($oReceita['prev_atualizada'], 2, ',', '');
+                    $aSiope[6] = number_format($oReceita['rec_realizada'], 2, ',', '');
+                    $aSiope[7] = number_format($oReceita['ded_fundeb'], 2, ',', '');
+                    $aSiope[8] = number_format($oReceita['outras_ded'], 2, ',', '');
+                    $aSiope[9] = number_format($oReceita['intra'], 2, ',', '');
 
                     $this->sLinha = $aSiope;
                     $this->adicionaLinha();

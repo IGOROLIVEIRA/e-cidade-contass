@@ -66,6 +66,13 @@ class Evento
      * @var date
      */
     private $dt_alteracao;
+
+    /**
+     * @var string
+     */
+    private $indapuracao;
+
+
     /**
      * Undocumented function
      *
@@ -74,7 +81,7 @@ class Evento
      * @param string $responsavelPreenchimento
      * @param \stdClass $dados
      */
-    public function __construct($tipoEvento, $empregador, $responsavelPreenchimento, $dado, $tpAmb, $iniValid, $modo, $dt_alteracao = null)
+    public function __construct($tipoEvento, $empregador, $responsavelPreenchimento, $dado, $tpAmb, $iniValid, $modo, $dt_alteracao = null, $indapuracao = null)
     {
         /**
          * @todo pesquisar exite na fila um evento do tipo: $tipoEvento para o : $responsavelPreenchimento
@@ -91,6 +98,7 @@ class Evento
         $this->iniValid                 = $iniValid;
         $this->modo                     = $modo;
         $this->dt_alteracao             = $dt_alteracao;
+        $this->indapuracao              = $indapuracao;
 
         $dado = json_encode(\DBString::utf8_encode_all($this->dado));
         if (is_null($dado)) {
@@ -101,8 +109,9 @@ class Evento
 
     public function adicionarFila()
     {
+        $tipoEvento = str_replace('Individual', '', $this->tipoEvento);
         $where = array(
-            "rh213_evento = {$this->tipoEvento}",
+            "rh213_evento = {$tipoEvento}",
             "rh213_empregador = {$this->empregador}",
             "rh213_responsavelpreenchimento = '{$this->responsavelPreenchimento}'",
         );
@@ -119,9 +128,9 @@ class Evento
         if (pg_num_rows($rs) > 0 && $this->modo === 'INC') {
             $md5Evento = \db_utils::fieldsMemory($rs, 0)->rh213_md5;
             $evtSituaccao = \db_utils::fieldsMemory($rs, 0)->rh213_situacao;
-            if ($md5Evento == $this->md5 && $evtSituaccao == \cl_esocialenvio::SITUACAO_ENVIADO) {
-                throw new \Exception("Já existe um envio do evento S-{$this->tipoEvento} com as mesmas informações.");
-            }
+            // if ($md5Evento == $this->md5 && $evtSituaccao == \cl_esocialenvio::SITUACAO_ENVIADO) {
+            //     throw new \Exception("Já existe um envio do evento S-{$this->tipoEvento} com as mesmas informações.");
+            // }
         }
         $this->adicionarEvento();
         return true;
@@ -135,9 +144,10 @@ class Evento
     private function adicionarEvento()
     {
         $dados                                          = $this->montarDadosAPI();
-
+        //adicionado esse str_replace pra pegar o evendo quando o envio foi individual
+        $tipoEvento                                     = str_replace('Individual', '', $this->tipoEvento);
         $daoFilaEsocial                                 = new \cl_esocialenvio();
-        $daoFilaEsocial->rh213_evento                   = $this->tipoEvento;
+        $daoFilaEsocial->rh213_evento                   = $tipoEvento;
         $daoFilaEsocial->rh213_empregador               = $this->empregador;
         $daoFilaEsocial->rh213_responsavelpreenchimento = $this->responsavelPreenchimento;
         $daoFilaEsocial->rh213_ambienteenvio            = $this->tpAmb;
@@ -146,7 +156,6 @@ class Evento
         $daoFilaEsocial->rh213_md5      = $this->md5;
         $daoFilaEsocial->rh213_situacao = \cl_esocialenvio::SITUACAO_NAO_ENVIADO;
         $daoFilaEsocial->rh213_dataprocessamento = date('Y-m-d h:i:s');
-
         if (is_object($dados) || count($dados) > 0) {
             $daoFilaEsocial->incluir(null);
             if ($daoFilaEsocial->erro_status == 0) {
@@ -187,6 +196,7 @@ class Evento
         $evento->setIniValid($this->iniValid);
         $evento->setModo($this->modo);
         $evento->setDtAlteracao($this->dt_alteracao);
+        $evento->setIndApuracao($this->indapuracao);
         if (!is_object($evento)) {
             throw new \Exception("Objeto S{$this->tipoEvento} não encontrado.");
         }

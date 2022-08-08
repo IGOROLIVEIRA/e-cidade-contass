@@ -151,6 +151,9 @@ switch ($oParam->exec) {
             $oRetorno->acordo        = $oAcordo->getCodigoAcordo();
             $oRetorno->datamovimento = date("Y-m-d", db_getsession("DB_datausu"));
             $oRetorno->descricao     = urlencode($oAcordo->getResumoObjeto());
+            $dataReferencia = db_query("select ac16_datareferencia from acordo where ac16_sequencial = $oRetorno->acordo");
+            $dataReferencia = pg_result($dataReferencia, 0, 'ac16_datareferencia');
+            $oRetorno->datareferencia = $dataReferencia;
         } catch (Exception $eExeption) {
 
             db_fim_transacao(true);
@@ -178,6 +181,7 @@ switch ($oParam->exec) {
 
             $oDataMovimentacao = new DBDate($oParam->dtmovimentacao);
             $oDataPublicacao = new DBDate($oParam->dtpublicacao);
+            $oDataReferencia = null;
 
             db_inicio_transacao();
             $oAssinatura = new AcordoAssinatura();
@@ -186,11 +190,18 @@ switch ($oParam->exec) {
             $oAssinatura->setDataPublicacao($oDataPublicacao->getDate());
             $oAssinatura->setVeiculoDivulgacao($oParam->veiculodivulgacao);
             $oAssinatura->setObservacao($sObservacao);
+            if ($oParam->dtreferencia != null) {
+                $oDataReferencia = new DBDate($oParam->dtreferencia);
+                $oAssinatura->setDataReferencia($oDataReferencia->getDate());
+            } else {
+                $oAssinatura->setDataReferencia($oDataMovimentacao->getDate());
+            }
             $oAcordo = new Acordo($oParam->acordo);
-
+            /*
             if (!$oAssinatura->verificaPeriodoPatrimonial()) {
                 $lAcordoValido = false;
             }
+            */
 
             if ($oAcordo->getNaturezaAcordo($oParam->acordo) == "1") {
                 if ($oAcordo->getObras($oParam->acordo) == null) {
@@ -328,9 +339,11 @@ switch ($oParam->exec) {
 
             $oAssinatura = new AcordoAssinatura($oParam->codigo);
 
+            /*
             if (!$oAssinatura->verificaPeriodoPatrimonial()) {
                 $lAcordoValido = false;
-            }
+            } 
+            */
             $oAssinatura->setDataMovimento();
             $oAssinatura->setObservacao($sObservacao);
             $oAssinatura->cancelar();
@@ -361,6 +374,10 @@ switch ($oParam->exec) {
             $oRetorno->datamovimento = date("Y-m-d", db_getsession("DB_datausu"));
             $oRetorno->datamovimentoantiga = $oRecisao->getDataMovimento();
             $oRetorno->descricao     = urlencode($oAcordo->getResumoObjeto());
+
+            $dataReferencia = db_query("select ac16_datareferenciarescisao from acordo where ac16_sequencial = $oRetorno->acordo ");
+            $dataReferencia = pg_result($dataReferencia, 0, 'ac16_datareferenciarescisao');
+            $oRetorno->datarescisao = $dataReferencia;
         } catch (Exception $eExeption) {
 
             db_fim_transacao(true);
@@ -376,28 +393,33 @@ switch ($oParam->exec) {
     case "rescindirContrato":
 
         try {
-
             db_inicio_transacao();
-
             $oAcordo = new Acordo($oParam->acordo);
 
             $oRecisao = new AcordoRescisao();
             $oRecisao->setAcordo($oParam->acordo);
             $nValorRescisao = str_replace(',', '.', $oParam->valorrescisao);
             $dtMovimento = implode("-", array_reverse(explode("/", $oParam->dtmovimentacao)));
+            $dataReferencia = implode("-", array_reverse(explode("/", $oParam->datareferencia)));
             $oRecisao->setDataMovimento($dtMovimento);
             $oRecisao->setObservacao($sObservacao);
             $oRecisao->setValorRescisao($nValorRescisao);
 
+            if ($dataReferencia == "") {
+                $dataReferencia =  $dtMovimento;
+            }
+
+            /*
             if (!$oRecisao->verificaPeriodoPatrimonial()) {
                 $lAcordoValido = false;
-            }
+            } */
 
             if ($oRecisao->getValorRescisao() > $oAcordo->getValorContrato()) {
                 throw new Exception("O valor rescindido não pode ser maior que o valor do acordo.");
             }
 
             $oRecisao->save();
+            db_query("UPDATE acordo SET ac16_datareferenciarescisao = '$dataReferencia'  WHERE ac16_sequencial = $oParam->acordo");
 
             $oAcordoLancamentoContabil = new AcordoLancamentoContabil();
             $sHistorico = "Valor referente a rescisão do contrato com o código: {$oAcordo->getCodigoAcordo()}.";
@@ -408,7 +430,7 @@ switch ($oParam->exec) {
 
             db_fim_transacao(true);
             $oRetorno->status = 2;
-            $oRetorno->erro   = urlencode(str_replace("\\n", "\n", $eExeption->getMessage()));
+            $oRetorno->erro   =  urlencode(str_replace("\\n", "\n", $eExeption->getMessage()));
         }
 
         break;
@@ -425,10 +447,11 @@ switch ($oParam->exec) {
             $oRecisao = new AcordoRescisao($oParam->codigo);
             $nValorRescisao = floatval(str_replace(',', '.', $oParam->valorrescisao));
 
+            /*
             if (!$oRecisao->verificaPeriodoPatrimonial()) {
                 $lAcordoValido = false;
             }
-
+            */
             $oRecisao->setDataMovimento();
             $oRecisao->setValorRescisao(0);
             $oRecisao->setObservacao($sObservacao);

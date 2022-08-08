@@ -211,7 +211,7 @@ class SicomArquivoNotasFiscais extends SicomArquivoBase implements iPadArquivoBa
             empenho.empnota as empnota
             inner join empenho.empempenho as empempenho on (empnota.e69_numemp = empempenho.e60_numemp)
             inner join protocolo.cgm as cgm on (empempenho.e60_numcgm = cgm.z01_numcgm)
-            left join protocolo.cgm as cgmfilial on (empnota.e69_cgmemitente = cgmfilial.z01_numcgm)
+            left join protocolo.cgm as cgmfilial on (empnota.e69_cgmemitente = cgmfilial.z01_numcgm AND cgmfilial.z01_numcgm <> 0)
             inner join configuracoes.db_config as db_config on (empempenho.e60_instit = db_config.codigo)
             inner join patrimonio.cgmendereco as cgmendereco on (
                 ((cgmfilial.z01_numcgm = cgmendereco.z07_numcgm AND cgmfilial.z01_cgccpf IS NOT NULL)
@@ -240,7 +240,7 @@ class SicomArquivoNotasFiscais extends SicomArquivoBase implements iPadArquivoBa
             and   date_part('month',pagordem.e50_data) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
             and empnota.e69_numero != 'S/N'
             order by empnota .e69_numero";
-    
+
     $rsResult10 = db_query($sSql);
     $aDadosAgrupados = array();
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
@@ -371,10 +371,29 @@ class SicomArquivoNotasFiscais extends SicomArquivoBase implements iPadArquivoBa
       $sSql = "select '20' as tiporegistro,
         empnota.e69_numero as nfnumero,
         case when empnota.e69_notafiscaleletronica = 2 OR empnota.e69_notafiscaleletronica = 3 then empnota.e69_nfserie else ' ' end as nfserie,
-        (case length(cgm.z01_cgccpf) when 11 then 1
-                else 2
-              end) as tipodocumento,
-        cgm.z01_cgccpf  as nrodocumento,
+        CASE 
+            WHEN cgmfilial.z01_cgccpf IS NOT NULL
+            THEN (
+                case
+                    length(cgmfilial.z01_cgccpf)
+                    when 11 then 1
+                    else 2
+                end
+            ) 
+        ELSE 
+            (
+                case
+                    length(cgm.z01_cgccpf)
+                    when 11 then 1
+                    else 2
+                end
+            ) 
+        END as tipodocumento,
+        CASE 
+            WHEN cgmfilial.z01_cgccpf IS NOT NULL
+            THEN cgmfilial.z01_cgccpf
+            ELSE cgm.z01_cgccpf
+        END as nrodocumento,
         case when empnota.e69_notafiscaleletronica=1 or empnota.e69_notafiscaleletronica=4 then empnota.e69_chaveacesso else ' ' end as chaveacesso,
         empnota.e69_dtnota as dtemissaonf,
         lpad((CASE WHEN o40_codtri = '0'
@@ -393,6 +412,7 @@ class SicomArquivoNotasFiscais extends SicomArquivoBase implements iPadArquivoBa
       inner join empenho.pagordem as pagordem on (pagordemnota.e71_codord=pagordem.e50_codord)
       inner join orcamento.orcdotacao as orcdotacao on (empempenho.e60_coddot = orcdotacao.o58_coddot)
       inner join cgm on (empempenho.e60_numcgm=cgm.z01_numcgm)
+      left join protocolo.cgm as cgmfilial on (empnota.e69_cgmemitente = cgmfilial.z01_numcgm AND cgmfilial.z01_numcgm <> 0)
       left join infocomplementaresinstit on si09_instit = empempenho.e60_instit
       LEFT JOIN orcunidade on o58_anousu = o41_anousu and o58_orgao = o41_orgao and o58_unidade = o41_unidade
       LEFT JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu

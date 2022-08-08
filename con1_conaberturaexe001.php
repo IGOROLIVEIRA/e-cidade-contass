@@ -249,78 +249,96 @@ if (isset($p->incluir)) {
       throw new Exception($sErro);
     }
 
-    $sql1 = "select 1 from conplano where c60_anousu = " . $clconaberturaexe->c91_anousudestino;
+    $sql1 = "SELECT c60_estrut FROM conplano WHERE c60_anousu = " . $clconaberturaexe->c91_anousudestino;
+    
     $rs = db_query($sql1);
+    $aContasExistentes = pg_fetch_all(db_query($sql1));
+    
+    $existePcasp =  implode("', '", array_map(function ($entry) {
+        return ($entry[key($entry)]);
+      }, $aContasExistentes));
+    
+    $sCamposConplano = "c60_codcon,
+                        c60_anousu,
+                        c60_estrut,
+                        c60_descr,
+                        c60_finali,
+                        c60_codsis,
+                        c60_codcla,
+                        c60_consistemaconta,
+                        CASE
+                            WHEN c60_identificadorfinanceiro = '' OR c60_identificadorfinanceiro IS NULL 
+                              THEN 'N'
+                            ELSE c60_identificadorfinanceiro
+                        END AS c60_identificadorfinanceiro,
+                        CASE
+                            WHEN c60_naturezasaldo IS NULL THEN
+                                CASE
+                                    WHEN substr(c60_estrut,1,1) IN ('1','3','5','7') THEN 1
+                                    WHEN substr(c60_estrut,1,1) IN ('2','4','6','8') THEN 2
+                                END
+                            ELSE c60_naturezasaldo
+                        END AS c60_naturezasaldo,
+                        c60_funcao,
+                        c60_tipolancamento,
+                        c60_desdobramneto,
+                        c60_subtipolancamento,
+                        c60_nregobrig,
+                        c60_cgmpessoa,
+                        c60_naturezadareceita,
+                        c60_infcompmsc";
+
     if (pg_num_rows($rs) == 0) {
 
-      $sCampos = "  c60_codcon,
-                    c60_anousu,
-                    c60_estrut,
-                    c60_descr,
-                    c60_finali,
-                    c60_codsis,
-                    c60_codcla,
-                    c60_consistemaconta,
-                    c60_identificadorfinanceiro,
-                    CASE
-                        WHEN c60_naturezasaldo IS NULL THEN
-                            CASE
-                                WHEN substr(c60_estrut,1,1) IN ('1','3','5','7') THEN 1
-                                WHEN substr(c60_estrut,1,1) IN ('2','4','6','8') THEN 2
-                            END
-                        ELSE c60_naturezasaldo
-                    END AS c60_naturezasaldo,
-                    c60_funcao,
-                    c60_tipolancamento,
-                    c60_desdobramneto,
-                    c60_subtipolancamento,
-                    c60_nregobrig,
-                    c60_cgmpessoa,
-                    c60_naturezadareceita,
-                    c60_infcompmsc";
+        $where = " c60_anousu = {$clconaberturaexe->c91_anousuorigem}";
+        $resultConplano1 = $clconplano->sql_record($clconplano->sql_query_file(null, null, $sCamposConplano, "", $where));
 
-      $rsPl = $clconplano->sql_record($clconplano->sql_query_file(null, null, $sCampos, "", "c60_anousu=" . $clconaberturaexe->c91_anousuorigem));
-      if ($clconplano->numrows > 0) {
+    } elseif ($existePcasp) {
 
-        echo "<script>document.getElementById('lblimp').innerHTML = 'Importando Plano de Contas - {$iAno}'</script>";
-        flush();
-        $iNumRows = $clconplano->numrows;
-        for($i = 0; $i < $iNumRows; $i ++) {
+        $where = " c60_estrut NOT IN ('{$existePcasp}') AND c60_anousu= {$clconaberturaexe->c91_anousuorigem}";
+        $resultConplano1 = $clconplano->sql_record($clconplano->sql_query_file(null, null, $sCamposConplano, "", $where));
+    }
 
-          db_atutermometro($i, $iNumRows, 'divimp2');
-          flush();
-          $oConp = db_utils::fieldsMemory($rsPl, $i);
-          $clconplano->c60_codcon                  = $oConp->c60_codcon;
-          $clconplano->c60_anousu                  = $clconaberturaexe->c91_anousudestino;
-          $clconplano->c60_estrut                  = $oConp->c60_estrut;
-          $clconplano->c60_descr                   = addslashes($oConp->c60_descr);
-          $clconplano->c60_finali                  = addslashes($oConp->c60_finali);
-          $clconplano->c60_codsis                  = $oConp->c60_codsis;
-          $clconplano->c60_codcla                  = $oConp->c60_codcla;
-          $clconplano->c60_consistemaconta         = $oConp->c60_consistemaconta;
-          $clconplano->c60_identificadorfinanceiro = $oConp->c60_identificadorfinanceiro;
-          $clconplano->c60_naturezasaldo           = $oConp->c60_naturezasaldo;
-          $clconplano->c60_funcao                  = addslashes($oConp->c60_funcao == "" ? "" : $oConp->c60_funcao);
-          $clconplano->c60_tipolancamento          = $oConp->c60_tipolancamento;
-          $clconplano->c60_desdobramneto           = $oConp->c60_desdobramneto;
-          $clconplano->c60_subtipolancamento       = $oConp->c60_subtipolancamento;
-          $clconplano->c60_nregobrig			   = $oConp->c60_nregobrig == '' ? 1 : $oConp->c60_nregobrig;
-          $clconplano->c60_cgmpessoa               = $oConp->c60_cgmpessoa;
-          $clconplano->c60_naturezadareceita       = $oConp->c60_naturezadareceita;
-          $clconplano->c60_infcompmsc              = $oConp->c60_infcompmsc;
-          $clconplano->incluir($oConp->c60_codcon, $clconplano->c60_anousu);
+    if ($clconplano->numrows > 0) {
 
+      echo "<script>document.getElementById('lblimp').innerHTML = 'Importando Plano de Contas PCASP - {$iAno}'</script>";
+      flush();
+      $iNumRows = $clconplano->numrows;
+      for($i = 0; $i < $iNumRows; $i ++) {
 
-          if ($clconplano->erro_status == "0") {
-            echo $clconplano->erro_msg;exit;
-            $sErro  = " [2] Erro ao incluir dados em conplano.<br>";
-            $sErro .= "Erro: {$clconaberturaexe->erro_msg}";
-            throw new Exception($sErro);
-          }
-        }
         db_atutermometro($i, $iNumRows, 'divimp2');
         flush();
+        $oConp = db_utils::fieldsMemory($resultConplano1, $i);
+        $clconplano->c60_codcon                  = $oConp->c60_codcon;
+        $clconplano->c60_anousu                  = $clconaberturaexe->c91_anousudestino;
+        $clconplano->c60_estrut                  = $oConp->c60_estrut;
+        $clconplano->c60_descr                   = addslashes($oConp->c60_descr);
+        $clconplano->c60_finali                  = addslashes($oConp->c60_finali);
+        $clconplano->c60_codsis                  = $oConp->c60_codsis;
+        $clconplano->c60_codcla                  = $oConp->c60_codcla;
+        $clconplano->c60_consistemaconta         = $oConp->c60_consistemaconta;
+        $clconplano->c60_identificadorfinanceiro = $oConp->c60_identificadorfinanceiro;
+        $clconplano->c60_naturezasaldo           = $oConp->c60_naturezasaldo;
+        $clconplano->c60_funcao                  = addslashes($oConp->c60_funcao == "" ? "" : $oConp->c60_funcao);
+        $clconplano->c60_tipolancamento          = $oConp->c60_tipolancamento;
+        $clconplano->c60_desdobramneto           = $oConp->c60_desdobramneto;
+        $clconplano->c60_subtipolancamento       = $oConp->c60_subtipolancamento;
+        $clconplano->c60_nregobrig			     = $oConp->c60_nregobrig == '' ? 1 : $oConp->c60_nregobrig;
+        $clconplano->c60_cgmpessoa               = $oConp->c60_cgmpessoa;
+        $clconplano->c60_naturezadareceita       = $oConp->c60_naturezadareceita;
+        $clconplano->c60_infcompmsc              = $oConp->c60_infcompmsc;
+        $clconplano->incluir($oConp->c60_codcon, $clconplano->c60_anousu);
+
+
+        if ($clconplano->erro_status == "0") {
+          echo $clconplano->erro_msg;exit;
+          $sErro  = " [2] Erro ao incluir dados em conplano.<br>";
+          $sErro .= "Erro: {$clconaberturaexe->erro_msg}";
+          throw new Exception($sErro);
+        }
       }
+      db_atutermometro($i, $iNumRows, 'divimp2');
+      flush();
     }
 
     /**
@@ -328,81 +346,84 @@ if (isset($p->incluir)) {
      */
     if (USE_PCASP) {
 
-      $iNumRows = 0;
-      $oDaoPlanoOrcamentario = db_utils::getDao("conplanoorcamento");
-      $sSqlPlanoOrcamentario = $oDaoPlanoOrcamentario->sql_query_file(null,
-                                                                      null,
-      																																"*",
-                                                                      "",
-                                                                      "c60_anousu={$clconaberturaexe->c91_anousudestino}");
-      $rsPlanoOrcamentario  = $oDaoPlanoOrcamentario->sql_record($sSqlPlanoOrcamentario);
+        echo "<script>document.getElementById('lblimp').innerHTML = 'Importando Plano de Contas Orçamentário - {$iAno}'</script>";
+        flush();
 
-      if ($oDaoPlanoOrcamentario->numrows == 0) {
+        $sWhere = " c60_anousu = {$clconaberturaexe->c91_anousudestino}";
 
-        $sSqlPlanoOrcamentario = null;
-        $rsPlanoOrcamentario   = null;
-        $sSqlPlanoOrcamentario = $oDaoPlanoOrcamentario->sql_query_file(null,
-                                                                        null,
-        																																"*",
-                                                                        "",
-                                                                        "c60_anousu={$clconaberturaexe->c91_anousuorigem} AND substr(c60_estrut,1,1) IN ('3','4') ");
-        $rsPlanoOrcamentario = $oDaoPlanoOrcamentario->sql_record($sSqlPlanoOrcamentario);
-        $iNumRows            = $oDaoPlanoOrcamentario->numrows;
-        if ($iNumRows > 0) {
+        $oDaoPlanoOrcamentario = db_utils::getDao("conplanoorcamento");
+        $sSqlPlanoOrcamentario = $oDaoPlanoOrcamentario->sql_query_file(null, null, "c60_estrut", "", $sWhere);
+        $rsPlanoOrcamentario   = $oDaoPlanoOrcamentario->sql_record($sSqlPlanoOrcamentario);
 
-          for ($i = 0; $i < $iNumRows; $i++) {
+        if ($oDaoPlanoOrcamentario->numrows == 0) {
 
-            db_atutermometro($i, $iNumRows, 'divimp2');
-            flush();
-            $oPlanoOrcarmento = db_utils::fieldsMemory($rsPlanoOrcamentario ,$i);
-            $oDaoPlanoOrcamentario->c60_codcon                  = $oPlanoOrcarmento->c60_codcon;
-            $oDaoPlanoOrcamentario->c60_anousu                  = $clconaberturaexe->c91_anousudestino;
-            $oDaoPlanoOrcamentario->c60_estrut                  = $oPlanoOrcarmento->c60_estrut;
-            $oDaoPlanoOrcamentario->c60_descr                   = addslashes($oPlanoOrcarmento->c60_descr);
-            $oDaoPlanoOrcamentario->c60_finali                  = addslashes($oPlanoOrcarmento->c60_finali);
-            $oDaoPlanoOrcamentario->c60_codsis                  = $oPlanoOrcarmento->c60_codsis;
-            $oDaoPlanoOrcamentario->c60_codcla                  = $oPlanoOrcarmento->c60_codcla;
-            $oDaoPlanoOrcamentario->c60_consistemaconta         = $oPlanoOrcarmento->c60_consistemaconta;
-            $oDaoPlanoOrcamentario->c60_identificadorfinanceiro = $oPlanoOrcarmento->c60_identificadorfinanceiro;
+            $where = "c60_anousu = {$clconaberturaexe->c91_anousuorigem} AND substr(c60_estrut,1,1) IN ('3','4') ORDER BY c60_estrut ";
 
-            if ($oPlanoOrcarmento->c60_naturezasaldo == "" || $oPlanoOrcarmento->c60_naturezasaldo == NULL) {
+            $sSqlPlanoOrcamentario = $oDaoPlanoOrcamentario->sql_query_file(null, null, "*", "", $where);
+            $rsPlanoOrcamentario   = $oDaoPlanoOrcamentario->sql_record($sSqlPlanoOrcamentario);
 
-                if (substr($oPlanoOrcarmento->c60_estrut,0,1) == 3) {
-                    $oDaoPlanoOrcamentario->c60_naturezasaldo = 1;
-                } elseif (substr($oPlanoOrcarmento->c60_estrut,0,1) == 4) {
-                    $oDaoPlanoOrcamentario->c60_naturezasaldo = 2;
+        } else {
+
+            $aContasExistentes = pg_fetch_all(db_query($sSqlPlanoOrcamentario));
+
+            $existeOrc =  implode("', '", array_map(function ($entry) {
+                return ($entry[key($entry)]);
+            }, $aContasExistentes));
+
+            $where = "c60_estrut NOT IN ('$existeOrc') AND c60_anousu = {$clconaberturaexe->c91_anousuorigem} AND substr(c60_estrut,1,1) IN ('3','4') 
+                      AND c60_codcon NOT IN (SELECT c60_codcon FROM conplanoorcamento WHERE c60_anousu = {$clconaberturaexe->c91_anousudestino}) ORDER BY c60_estrut";
+
+            $sSqlPlanoOrcamentario = $oDaoPlanoOrcamentario->sql_query_file(null, null, "*", "", $where);
+            $rsPlanoOrcamentario   = $oDaoPlanoOrcamentario->sql_record($sSqlPlanoOrcamentario);
+
+        }
+
+        if ($oDaoPlanoOrcamentario->numrows > 0) {
+
+            $iNumRows = $oDaoPlanoOrcamentario->numrows;
+
+            for ($i = 0; $i < $iNumRows; $i++) {
+
+                db_atutermometro($i, $iNumRows, 'divimp2');
+                flush();
+                $oPlanoOrcarmento = db_utils::fieldsMemory($rsPlanoOrcamentario, $i);
+                $oDaoPlanoOrcamentario->c60_codcon                  = $oPlanoOrcarmento->c60_codcon;
+                $oDaoPlanoOrcamentario->c60_anousu                  = $clconaberturaexe->c91_anousudestino;
+                $oDaoPlanoOrcamentario->c60_estrut                  = $oPlanoOrcarmento->c60_estrut;
+                $oDaoPlanoOrcamentario->c60_descr                   = addslashes($oPlanoOrcarmento->c60_descr);
+                $oDaoPlanoOrcamentario->c60_finali                  = addslashes($oPlanoOrcarmento->c60_finali);
+                $oDaoPlanoOrcamentario->c60_codsis                  = $oPlanoOrcarmento->c60_codsis;
+                $oDaoPlanoOrcamentario->c60_codcla                  = $oPlanoOrcarmento->c60_codcla;
+                $oDaoPlanoOrcamentario->c60_consistemaconta         = $oPlanoOrcarmento->c60_consistemaconta;
+                $oDaoPlanoOrcamentario->c60_identificadorfinanceiro = $oPlanoOrcarmento->c60_identificadorfinanceiro;
+                if ($oPlanoOrcarmento->c60_naturezasaldo == "" || $oPlanoOrcarmento->c60_naturezasaldo == NULL) {
+                    if (substr($oPlanoOrcarmento->c60_estrut, 0, 1) == 3) {
+                        $oDaoPlanoOrcamentario->c60_naturezasaldo = 1;
+                    } elseif (substr($oPlanoOrcarmento->c60_estrut, 0, 1) == 4) {
+                        $oDaoPlanoOrcamentario->c60_naturezasaldo = 2;
+                    } else {
+                        $oDaoPlanoOrcamentario->c60_naturezasaldo = 0;
+                    }
                 } else {
-                    $oDaoPlanoOrcamentario->c60_naturezasaldo = 0;
+                    $oDaoPlanoOrcamentario->c60_naturezasaldo = $oPlanoOrcarmento->c60_naturezasaldo;
                 }
+                $oDaoPlanoOrcamentario->c60_funcao                  = addslashes($oPlanoOrcarmento->c60_funcao == "" ? "" : $oPlanoOrcarmento->c60_funcao);
 
-            } else {
-                $oDaoPlanoOrcamentario->c60_naturezasaldo = $oPlanoOrcarmento->c60_naturezasaldo;
+                $oDaoPlanoOrcamentario->incluir($oPlanoOrcarmento->c60_codcon, $oDaoPlanoOrcamentario->c60_anousu);
+                if ($oDaoPlanoOrcamentario->erro_status == "0") {
+                    $sErro  = " [3] Erro ao incluir dados em conplanoorcamento.<br>";
+                    $sErro .= "Erro: {$oDaoPlanoOrcamentario->erro_msg}";
+                    throw new Exception($sErro);
+                }
             }
-
-            $oDaoPlanoOrcamentario->c60_funcao                  = addslashes($oPlanoOrcarmento->c60_funcao == "" ? "" : $oPlanoOrcarmento->c60_funcao);
-            $oDaoPlanoOrcamentario->incluir($oPlanoOrcarmento->c60_codcon, $oDaoPlanoOrcamentario->c60_anousu);
-
-            if ($oDaoPlanoOrcamentario->erro_status == "0") {
-
-               $sErro  = " [3] Erro ao incluir dados em conplanoorcamento.<br>";
-               $sErro .= "Erro: {$oDaoPlanoOrcamentario->erro_msg}";
-               throw new Exception($sErro);
-            }
-          }
         }
         db_atutermometro($i, $iNumRows, 'divimp2');
-      }
-      flush();
+        flush();
     }
 
-    echo "<script>document.getElementById('lblimp').innerHTML = 'Importando Contas Analíticas - {$iAno}'</script>";
+    echo "<script>document.getElementById('lblimp').innerHTML = 'Importando Contas Analíticas PCASP - {$iAno}'</script>";
     flush();
-    $sSqlReduz  = " SELECT conplanoreduz.* FROM conplanoreduz ";
-    $sSqlReduz .= " LEFT JOIN conplanoreduz reduzexercicio ON (reduzexercicio.c61_reduz, reduzexercicio.c61_instit) = (conplanoreduz.c61_reduz, conplanoreduz.c61_instit) ";
-    $sSqlReduz .= " AND reduzexercicio.c61_anousu = {$clconaberturaexe->c91_anousudestino} ";
-    $sSqlReduz .= " WHERE conplanoreduz.c61_anousu = {$clconaberturaexe->c91_anousuorigem} ";
-    $sSqlReduz .= "   AND conplanoreduz.c61_instit = {$clconaberturaexe->c91_instit} ";
-    $sSqlReduz .= "   AND reduzexercicio.c61_anousu IS NULL ";
+    $sSqlReduz  = $clconplanoreduz->sql_reduzAberturaExercicio($clconaberturaexe->c91_anousuorigem, $clconaberturaexe->c91_anousudestino, $clconaberturaexe->c91_instit);
     $rsRed = $clconplanoreduz->sql_record($sSqlReduz);
     if ($clconplanoreduz->numrows > 0) {
 
@@ -412,7 +433,7 @@ if (isset($p->incluir)) {
         db_atutermometro($i, $iNumRows, 'divimp2');
 
         $oConr = db_utils::fieldsMemory($rsRed, $i);
-        $clconplanoreduz->c61_codcon        = $oConr->c61_codcon;
+        $clconplanoreduz->c61_codcon        = $oConr->c60_codcon2022 != $oConr->c60_codcon2023 ? $oConr->c60_codcon2023 : $oConr->c60_codcon2022;
         $clconplanoreduz->c61_anousu        = $clconaberturaexe->c91_anousudestino;
         $clconplanoreduz->c61_reduz         = $oConr->c61_reduz;
         $clconplanoreduz->c61_instit        = $oConr->c61_instit;
@@ -434,23 +455,30 @@ if (isset($p->incluir)) {
      * Duplica registros de conplanoOrcamentoAnalitica para o exercercio destino.
      */
     if (USE_PCASP) {
+        echo "<script>document.getElementById('lblimp').innerHTML = 'Importando Contas Analíticas Plano Orçamentário - {$iAno}'</script>";
+        flush();
 
-      $iNumRows = 0;
-      $oDaoAnalitico = db_utils::getDao("conplanoorcamentoanalitica");
-      $sSqlAnalitico = $oDaoAnalitico->sql_query_analiticaProximoExercicio ($clconaberturaexe->c91_anousuorigem,
-                                                                            $clconaberturaexe->c91_anousudestino,
-                                                                            $clconaberturaexe->c91_instit);
-      $rsAnalitico   = $oDaoAnalitico->sql_record($sSqlAnalitico);
-      $iNumRows      = $oDaoAnalitico->numrows;
+        $iNumRows = 0;
+        $oDaoAnalitico = db_utils::getDao("conplanoorcamentoanalitica");
+        $sSqlAnalitico = $oDaoAnalitico->sql_query_analiticaProximoExercicio ($clconaberturaexe->c91_anousuorigem,
+                                                                                $clconaberturaexe->c91_anousudestino,
+                                                                                $clconaberturaexe->c91_instit);
+        $rsAnalitico   = $oDaoAnalitico->sql_record($sSqlAnalitico);
 
-      if ($iNumRows > 0) {
+        if ($oDaoAnalitico->numrows > 0) {
 
-        for($i = 0; $i < $iNumRows; $i ++) {
+          $where = "c60_estrut NOT IN ('$existeOrc') AND c60_anousu = {$clconaberturaexe->c91_anousudestino} AND substr(c60_estrut,1,1) IN ('3','4') 
+                    AND c60_codcon NOT IN (SELECT c60_codcon FROM conplanoorcamento WHERE c60_anousu = {$clconaberturaexe->c91_anousudestino}) ORDER BY c60_estrut";
 
-          db_atutermometro($i, $iNumRows, 'divimp2');
+          $sSqlPlanoOrcamentario = $oDaoPlanoOrcamentario->sql_query_file(null, null, "*", "", $where);
+          $rsPlanoOrcamentario   = $oDaoPlanoOrcamentario->sql_record($sSqlPlanoOrcamentario);
+
+          for($i = 0; $i < $oDaoAnalitico->numrows; $i ++) {
+
+          db_atutermometro($i, $oDaoAnalitico->numrows, 'divimp2');
 
           $oAnalitico                       = db_utils::fieldsMemory($rsAnalitico, $i);
-          $oDaoAnalitico->c61_codcon        = $oAnalitico->c61_codcon;
+          $oDaoAnalitico->c61_codcon        = ($oAnalitico->c60_codcon2022 != $oAnalitico->c60_codcon2023 && $oAnalitico->c60_codcon2023 != '') ? $oAnalitico->c60_codcon2023 : $oAnalitico->c60_codcon2022;
           $oDaoAnalitico->c61_anousu        = $clconaberturaexe->c91_anousudestino;
           $oDaoAnalitico->c61_reduz         = $oAnalitico->c61_reduz;
           $oDaoAnalitico->c61_instit        = $oAnalitico->c61_instit;
@@ -460,12 +488,12 @@ if (isset($p->incluir)) {
 
           if ($oDaoAnalitico->erro_status == "0") {
 
-            $sErro  = " [5] Erro ao incluir dados em conplanoorcamentoanalitica.<br>";
-            $sErro .= "Erro: {$oDaoAnalitico->erro_msg}";
-            throw new Exception($sErro);
+                $sErro  = " [5] Erro ao incluir dados em conplanoorcamentoanalitica.<br>";
+                $sErro .= "Erro: {$oDaoAnalitico->erro_msg}";
+                throw new Exception($sErro);
+            }
           }
         }
-      }
     }
 
     /* Registros da Conplanoexe */
@@ -927,7 +955,6 @@ if (isset($p->incluir)) {
     /**
      *  Duplicamos os dados da conplanoorcamentogrupo para o exercercio destino.
      */
-    $iNumRows           = 0;
     $oDaoOrcamentoGrupo = db_utils::getDao("conplanoorcamentogrupo");
     $sWhere             = "c21_anousu = {$clconaberturaexe->c91_anousudestino} and c21_instit = ". db_getsession("DB_instit");
     $sSqlOrcamentoGrupo = $oDaoOrcamentoGrupo->sql_query_file(null, "1", null, $sWhere);
@@ -937,10 +964,7 @@ if (isset($p->incluir)) {
     flush();
     if ($iNumRows == 0) {
 
-      $iNumRows           = 0;
-      $sWhere             = "     c21_anousu = {$clconaberturaexe->c91_anousuorigem} ";
-      $sWhere            .= " and c21_instit = {$clconaberturaexe->c91_instit} ";
-      $sSqlOrcamentoGrupo = $oDaoOrcamentoGrupo->sql_query_file(null, "*", null, $sWhere);
+      $sSqlOrcamentoGrupo = $oDaoOrcamentoGrupo->sql_aberturaExercicio($clconaberturaexe->c91_anousuorigem, $clconaberturaexe->c91_anousudestino, $clconaberturaexe->c91_instit);
       $rsOrcamentoGrupo   = $oDaoOrcamentoGrupo->sql_record($sSqlOrcamentoGrupo);
       $iNumRows           = $oDaoOrcamentoGrupo->numrows;
 
@@ -951,7 +975,7 @@ if (isset($p->incluir)) {
           db_atutermometro($i, $iNumRows, 'divimp2');
           $oOrcamentoGrupo = db_utils::fieldsMemory($rsOrcamentoGrupo, $i);
           $oDaoOrcamentoGrupo->c21_anousu     = $clconaberturaexe->c91_anousudestino;
-          $oDaoOrcamentoGrupo->c21_codcon     = $oOrcamentoGrupo->c21_codcon;
+          $oDaoOrcamentoGrupo->c21_codcon     = ($oOrcamentoGrupo->c60_codcon2022 != $oOrcamentoGrupo->c60_codcon2023 && $oOrcamentoGrupo->c60_codcon2023 == '') ? $oOrcamentoGrupo->c21_codcon : $oOrcamentoGrupo->c60_codcon2023;
           $oDaoOrcamentoGrupo->c21_congrupo   = $oOrcamentoGrupo->c21_congrupo;
           $oDaoOrcamentoGrupo->c21_instit     = $oOrcamentoGrupo->c21_instit;
           $oDaoOrcamentoGrupo->incluir(null);
@@ -970,22 +994,20 @@ if (isset($p->incluir)) {
     /**
      *  Duplicamos os dados da conplanoconplanoorcamento para o exercercio destino.
      */
-    $iNumRows      = 0;
-    $oDaoConplano  = db_utils::getDao("conplanoconplanoorcamento");
+
+    $clconplanoconplanoorcam      = new cl_conplanoconplanoorcamento();
     $sWhere        = "c72_anousu = {$clconaberturaexe->c91_anousudestino}";
-    $sSqlOrcamento = $oDaoConplano->sql_query_file(null, "1", null, $sWhere);
-    $rsOrcamento   = $oDaoConplano->sql_record($sSqlOrcamento);
-    $iNumRows      = $oDaoConplano->numrows;
-    echo "<script>document.getElementById('lblimp').innerHTML = 'Importando Vinculo das Contas Orçamentarias - {$iAno}'</script>";
+    $sSqlOrcamento = $clconplanoconplanoorcam->sql_query_file(null, "1", null, $sWhere);
+    $rsOrcamento   = $clconplanoconplanoorcam->sql_record($sSqlOrcamento);
+    $iNumRows      = $clconplanoconplanoorcam->numrows;
+    echo "<script>document.getElementById('lblimp').innerHTML = 'Importando Vinculo das Contas Orçamentarias com o PCASP - {$iAno}'</script>";
     flush();
     if ($iNumRows == 0) {
 
-      $iNumRows      = 0;
-      $sWhere        = "c72_anousu = {$clconaberturaexe->c91_anousuorigem}";
-      $sWhere        .= " and substr(c60_estrut,1,1) IN ('3','4')";
-      $sSqlOrcamento = $oDaoConplano->sql_query_conplanoorcamento(null, "*", null, $sWhere);
-      $rsOrcamento   = $oDaoConplano->sql_record($sSqlOrcamento);
-      $iNumRows      = $oDaoConplano->numrows;
+      $sSqlOrcamento = $clconplanoconplanoorcam->sql_vinculoAberturaExercicio($clconaberturaexe->c91_anousuorigem, $clconaberturaexe->c91_anousudestino);
+      $rsOrcamento   = $clconplanoconplanoorcam->sql_record($sSqlOrcamento);
+
+      $iNumRows      = $clconplanoconplanoorcam->numrows;
 
       if ($iNumRows > 0) {
 
@@ -994,6 +1016,10 @@ if (isset($p->incluir)) {
           db_atutermometro($i, $iNumRows, 'divimp2');
           $oOrcamentoVinculo                        = db_utils::fieldsMemory($rsOrcamento, $i);
           $oDaoConplanoCopia                        = db_utils::getDao("conplanoconplanoorcamento");
+
+          $oOrcamentoVinculo->c72_conplano          = ($oOrcamentoVinculo->cod_pcasp2022 != $oOrcamentoVinculo->cod_pcasp2023 && $oOrcamentoVinculo->cod_pcasp2023 != '') ? $oOrcamentoVinculo->cod_pcasp2023 : $oOrcamentoVinculo->cod_pcasp2022;
+          $oOrcamentoVinculo->c72_conplanoorcamento = ($oOrcamentoVinculo->cod_orcam2022 != $oOrcamentoVinculo->cod_orcam2023 && $oOrcamentoVinculo->cod_orcam2023 != '') ? $oOrcamentoVinculo->cod_orcam2023 : $oOrcamentoVinculo->cod_orcam2022;
+
           $oDaoConplanoCopia->c72_conplano          = $oOrcamentoVinculo->c72_conplano;
           $oDaoConplanoCopia->c72_conplanoorcamento = $oOrcamentoVinculo->c72_conplanoorcamento;
           $oDaoConplanoCopia->c72_anousu            = $clconaberturaexe->c91_anousudestino;
@@ -1015,19 +1041,8 @@ if (isset($p->incluir)) {
     echo "<script>document.getElementById('lblimp').innerHTML = 'Importando ConplanoContaCorrente - {$iAno}'</script>";
     flush();
 
-    $sqlConpCtaCor = " SELECT NEXTVAL('conplanocontacorrente_c18_sequencial_seq') AS c18_sequencial,
-                              c18_codcon,
-                              {$clconaberturaexe->c91_anousudestino} c18_anousu,
-                              c18_contacorrente
-                       FROM conplanocontacorrente
-                       JOIN conplanoreduz ON (c61_codcon, c61_anousu, c61_instit) = (c18_codcon, c18_anousu, {$clconaberturaexe->c91_instit})
-                       WHERE c18_anousu = {$clconaberturaexe->c91_anousuorigem}
-                         AND c18_codcon NOT IN
-                           (SELECT c18_codcon FROM conplanocontacorrente WHERE c18_anousu = {$clconaberturaexe->c91_anousudestino})
-                         AND c18_codcon IN
-                           (SELECT c60_codcon FROM conplano WHERE c60_anousu = {$clconaberturaexe->c91_anousudestino}) ";
-
-    $rsConpCtaCor = $clconplanocontacorrente->sql_record($sqlConpCtaCor);
+    $sqlConpCtaCor = $clconplanocontacorrente->sql_conplanoccAberturaExercicio($clconaberturaexe->c91_anousuorigem, $clconaberturaexe->c91_anousudestino, $clconaberturaexe->c91_instit);
+    $rsConpCtaCor  = $clconplanocontacorrente->sql_record($sqlConpCtaCor);
 
     if (pg_num_rows($rsConpCtaCor) > 0) {
 
@@ -1058,19 +1073,8 @@ if (isset($p->incluir)) {
     echo "<script>document.getElementById('lblimp').innerHTML = 'Importando ConplanoContaBancaria - {$iAno}'</script>";
     flush();
 
-    $sqlConpCtaBanc = " SELECT (NEXTVAL('conplanocontabancaria_c56_sequencial_seq')) AS c56_sequencial,
-                               c56_contabancaria,
-                               c56_codcon,
-                               {$clconaberturaexe->c91_anousudestino} AS c56_anousu
-                        FROM conplanocontabancaria
-                        JOIN conplanoreduz ON (c61_codcon, c61_anousu, c61_instit) = (c56_codcon, c56_anousu, {$clconaberturaexe->c91_instit})
-                        WHERE c56_anousu = {$clconaberturaexe->c91_anousuorigem}
-                          AND c56_codcon NOT IN
-                            (SELECT c56_codcon FROM conplanocontabancaria WHERE c56_anousu = {$clconaberturaexe->c91_anousudestino})
-                          AND c56_codcon IN
-                            (SELECT c60_codcon FROM conplano WHERE c60_anousu = {$clconaberturaexe->c91_anousudestino}) ";
-
-    $rsConpCtaBanc = $clconplanocontabancaria->sql_record($sqlConpCtaBanc);
+    $sqlConpCtaBanc = $clconplanocontabancaria->sql_conplanoCtaBancAberturaExercicio($clconaberturaexe->c91_anousuorigem, $clconaberturaexe->c91_anousudestino, $clconaberturaexe->c91_instit);
+    $rsConpCtaBanc  = $clconplanocontabancaria->sql_record($sqlConpCtaBanc);
 
     if (pg_num_rows($rsConpCtaBanc) > 0) {
 

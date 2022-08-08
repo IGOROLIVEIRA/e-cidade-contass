@@ -62,7 +62,7 @@ switch ($oParam->exec) {
                             $siopeDespesa->setNomeArquivo($sNomeArqDespesa);
                             $siopeDespesa->gerarSiope();
 
-                            if ($siopeDespesa->status == 2) {
+                            if ($siopeDespesa->status == 2 || $siopeDespesa->status == 3) {
 
                                 $sMensagem = substr($siopeDespesa->sMensagemDePara, 0, -2)." \n \n ";
                                 $sMensagem .= substr($siopeDespesa->sMensagemConvenio, 0, -2);
@@ -104,8 +104,13 @@ switch ($oParam->exec) {
                             $siopeReceita->setNomeArquivo($sNomeArqReceita);
                             $siopeReceita->gerarSiope();
 
-                            if ($siopeReceita->status == 2) {
+                            if ($siopeReceita->status == 3) {
                                 $oRetorno->message = "Não foi possível gerar a Receita. De/Para dos seguintes estruturais não encontrado: {$siopeReceita->sMensagem}";
+                                $oRetorno->status = 3;
+                            }
+
+                            if ($siopeReceita->status == 2) {
+                                $oRetorno->message = "As seguintes receitas não foram localizadas na tabela de receitas do Siope: {$siopeReceita->sMensagem}";
                                 $oRetorno->status = 2;
                             }
 
@@ -142,7 +147,7 @@ switch ($oParam->exec) {
 
 }
 
-if ($oRetorno->status == 2) {
+if ($oRetorno->status == 2 || $oRetorno->status == 3) {
     $oRetorno->message = utf8_encode($oRetorno->message);
 }
 echo $oJson->encode($oRetorno);

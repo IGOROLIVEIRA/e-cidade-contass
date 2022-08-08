@@ -119,7 +119,7 @@ $sSql .= "     inner join rhpessoal    on rh01_regist = rh02_regist ";
 $sSql .= "     inner join cgm          on rh01_numcgm = z01_numcgm  ";
 $sSql .= "     inner join rhlota       on r70_codigo  = rh02_lota   ";
 $sSql .= "		                        and r70_instit  = rh02_instit ";
-$sSql .= "     inner join rhfuncao     on rh37_funcao = rh01_funcao ";
+$sSql .= "     inner join rhfuncao     on rh37_funcao = rh02_funcao ";
 $sSql .= "                            and rh37_instit = rh02_instit ";
 $sSql .= "     left  join rhlotaexe    on rh26_codigo = r70_codigo  ";
 $sSql .= "                            and rh26_anousu = $ano        ";
