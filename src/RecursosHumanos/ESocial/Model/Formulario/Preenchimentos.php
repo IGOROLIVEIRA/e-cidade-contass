@@ -1025,9 +1025,10 @@ where
             $sql .= "and rh01_regist in ($matricula) ";
         }
         $rs = \db_query($sql);
-
+        // echo $sql;
+        // exit;
         if (!$rs) {
-            throw new \Exception("Erro ao buscar os preenchimentos do S1202");
+            throw new \Exception("Erro ao buscar os preenchimentos do S1210");
         }
         /**
          * @todo busca os empregadores da instituição e adicona para cada rubriuca

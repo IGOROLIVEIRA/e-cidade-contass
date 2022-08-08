@@ -83,8 +83,8 @@ $mesfolha = DBPessoal::getMesFolha();
                                                 </select>
                                             </td>
                                         </tr>
-                                        <tr id="dtalteracao" style="display:none">
-                                            <td align="left"><label>Data Alteração:</label>
+                                        <tr>
+                                            <td align="left" id="dtalteracao" style="display:none" style="width: 25%;"><label>Data Alteração:</label>
                                                 <?php
                                                 db_inputdata(
                                                     'dt_alteracao',
@@ -98,18 +98,14 @@ $mesfolha = DBPessoal::getMesFolha();
                                                 );
                                                 ?>
                                             </td>
-                                        </tr>
-                                        <tr id="indapuracao_col" style="display:none">
-                                            <td align="left"><label>indapuracao:</label>
-                                                <select name="indapuracao" id="indapuracao" style="width: 76%;">
+                                            <td align="left" id="indapuracao_col" style="display:none"><label>Apuração:</label>
+                                                <select name="indapuracao" id="indapuracao" style="width: 25%;">
                                                     <option value="1">Mensal</option>
                                                     <option value="2">Anual</option>
                                                 </select>
                                             </td>
-                                        </tr>
-                                        <tr id="tppgto_col" style="display:none">
-                                            <td align="left"><label>tpPgto:</label>
-                                                <select name="tppgto" id="tppgto" style="width: 76%;">
+                                            <td align="right" id="tppgto_col" style="display:none"><label>Tipo de Pagamento:</label>
+                                                <select name="tppgto" id="tppgto" style="width: 50%;">
                                                     <option value="1">Pagamento de remuneração, conforme apurado em
                                                         ideDmDev do S-1200
                                                     </option>

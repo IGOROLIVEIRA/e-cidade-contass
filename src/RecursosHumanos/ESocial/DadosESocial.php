@@ -42,7 +42,7 @@ class DadosESocial
      * @param integer $tipo
      * @return ECidade\RecursosHumanos\ESocial\Model\Formulario\DadosPreenchimento[]
      */
-    public function getPorTipo($tipo, $matricula=null)
+    public function getPorTipo($tipo, $matricula = null)
     {
         $this->tipo = $tipo;
         //echo $tipo;
@@ -63,6 +63,9 @@ class DadosESocial
                 return $this->buscaPreenchimentos($matricula);
                 break;
             case '13':
+                return $this->buscaPreenchimentos($matricula);
+                break;
+            case '15':
                 return $this->buscaPreenchimentos($matricula);
                 break;
             default:
@@ -91,10 +94,10 @@ class DadosESocial
      */
     private function buscaPreenchimentos($matricula = null)
     {
-         //echo 'tst';
-         //echo $this->tipo;
-         //echo Tipo::AFASTAMENTO_TEMPORARIO;
-         //exit;
+        //echo 'tst';
+        //echo $this->tipo;
+        //echo Tipo::AFASTAMENTO_TEMPORARIO;
+        //exit;
         $configuracao = new Configuracao();
         $formularioId = $configuracao->getFormulario($this->tipo);
         $preenchimento = new Preenchimentos();
@@ -128,6 +131,8 @@ class DadosESocial
                 return $preenchimento->buscarPreenchimentoS1200($formularioId, $matricula);
             case Tipo::REMUNERACAO_SERVIDOR:
                 return $preenchimento->buscarPreenchimentoS1202($formularioId, $matricula);
+            case Tipo::PAGAMENTOS_RENDIMENTOS:
+                return $preenchimento->buscarPreenchimentoS1210($formularioId, $matricula);
             case Tipo::AFASTAMENTO_TEMPORARIO:
                 return $preenchimento->buscarPreenchimentoS2230($formularioId, $matricula);
             default:
