@@ -530,14 +530,14 @@ switch ($oParam->exec) {
             if ($lLog) {
 
                 $oStdDadoItem                     = new stdClass();
-                $oStdDadoItem->iOrdem             = utf8_decode($oInfoLog->item[$i]->l21_ordem);
-                $oStdDadoItem->iCodigo            = utf8_decode($oInfoLog->item[$i]->l21_codigo);
-                $oStdDadoItem->sDescricaoMaterial = utf8_decode("{$oInfoLog->item[$i]->pc01_codmater} - {$oInfoLog->item[$i]->pc01_descrmater}");
+                $oStdDadoItem->iOrdem             = utf8_decode($oInfoLog->item[$iLinhaItem]->l21_ordem);
+                $oStdDadoItem->iCodigo            = utf8_decode($oInfoLog->item[$iLinhaItem]->l21_codigo);
+                $oStdDadoItem->sDescricaoMaterial = urlencode("{$oInfoLog->item[$iLinhaItem]->pc01_codmater} - {$oInfoLog->item[$iLinhaItem]->pc01_descrmater}");
                 $oStdDadoItem->sFornecedor        = "";
-                $oStdDadoItem->iQuantidade        = utf8_decode($oInfoLog->item[$i]->pc11_quant);
-                $oStdDadoItem->sUnidadeDeMedida   = utf8_decode($oInfoLog->item[$i]->m61_descr);
-                $oStdDadoItem->nValorUnitario     = utf8_decode($oInfoLog->item[$i]->pc11_vlrun);
-                $oStdDadoItem->sResumo            = utf8_decode($oInfoLog->item[$i]->pc11_resum);
+                $oStdDadoItem->iQuantidade        = utf8_decode($oInfoLog->item[$iLinhaItem]->pc11_quant);
+                $oStdDadoItem->sUnidadeDeMedida   = utf8_decode($oInfoLog->item[$iLinhaItem]->m61_descr);
+                $oStdDadoItem->nValorUnitario     = utf8_decode($oInfoLog->item[$iLinhaItem]->pc11_vlrun);
+                $oStdDadoItem->sResumo            = utf8_decode($oInfoLog->item[$iLinhaItem]->pc11_resum);
                 //$oStdDadoItem->sObservacao        = utf8_decode($oInfoLog->item[$i]->pc23_obs);
                 $aItensRetorno[] = $oStdDadoItem;
             } else {
