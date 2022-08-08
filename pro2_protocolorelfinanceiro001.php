@@ -187,7 +187,7 @@ db_postmemory($HTTP_POST_VARS);
           </tr>
           <tr>
             <td align="left" nowrap title="<?=$Tk17_codigo?>">
-               <? db_ancora(@$Lk17_codigo,"js_pesquisak17_codigo(true);");  ?>
+               <? db_ancora(@$Lk17_codigo,"js_pesquisak17_codigo(true);",1);  ?>
             </td>
             <td align="left" nowrap>
               <?
