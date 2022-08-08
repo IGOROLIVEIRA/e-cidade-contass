@@ -39,17 +39,18 @@ $clrotulo = new rotulocampo;
 $clrotulo->label("l20_codigo");
 
 // Funcao Locao para formatar um campo
-function lic2_relitenhtml002_formatar($valor, $separador, $delimitador) {
-  $del="";
-  if(!$oGet->ocultaCabecalho){
-      if($delimitador=="1") {
-        $del = "\"";
-      }else if($delimitador == "2") {
-        $del = "'";
-      }
+function lic2_relitenhtml002_formatar($valor, $separador, $delimitador)
+{
+  $del = "";
+  if (!$oGet->ocultaCabecalho) {
+    if ($delimitador == "1") {
+      $del = "\"";
+    } else if ($delimitador == "2") {
+      $del = "'";
+    }
   }
-  $valor = str_replace("\n"," ",$valor);
-  $valor = str_replace("\r"," ",$valor);
+  $valor = str_replace("\n", " ", $valor);
+  $valor = str_replace("\r", " ", $valor);
   return "{$del}{$valor}{$del}{$separador}";
 }
 
@@ -58,10 +59,9 @@ $campos .= ($oGet->ocultaCabecalho ? 'si02_vlprecoreferencia,' : 'pc11_codigo,')
 
 $campos .= "pc01_descrmater,pc11_resum,m61_descr,pc11_quant,pc11_vlrun,pcprocitem.pc81_codprocitem";
 
-$campos = "distinct ".$campos;
+$campos = "distinct " . $campos;
 
-$result_itens = $clliclicitem->sql_record($clliclicitem->sql_query_inf(null, "$campos", "l21_ordem", "l21_codliclicita = $l20_codigo and l20_instit = ".db_getsession("DB_instit")));
-
+$result_itens = $clliclicitem->sql_record($clliclicitem->sql_query_inf(null, "$campos", "l21_ordem", "l21_codliclicita = $l20_codigo and l20_instit = " . db_getsession("DB_instit")));
 if ($clliclicitem->numrows == 0) {
   db_redireciona('db_erros.php?fechar=true&db_erro=Não existem Itens cadastrados para Licitação.');
   exit;
@@ -72,50 +72,47 @@ if ($clabre_arquivo->arquivo != false) {
   $vir = $separador;
   $del = $oGet->ocultaCabecalho ? '' : $delimitador;
 
-  if(!$oGet->ocultaCabecalho){
-	  fputs($clabre_arquivo->arquivo, lic2_relitenhtml002_formatar("ITEM",     $vir, $del));
+  if (!$oGet->ocultaCabecalho) {
+    fputs($clabre_arquivo->arquivo, lic2_relitenhtml002_formatar("ITEM",     $vir, $del));
 
-	  if ( $layout != 2) {
-		fputs($clabre_arquivo->arquivo, lic2_relitenhtml002_formatar("SEQ ITEM", $vir, $del));
-	  }
-	  fputs($clabre_arquivo->arquivo, lic2_relitenhtml002_formatar("PRODUTO",  $vir, $del));
-	  fputs($clabre_arquivo->arquivo, lic2_relitenhtml002_formatar("QUANT.",   $vir, $del));
-	  fputs($clabre_arquivo->arquivo, lic2_relitenhtml002_formatar("UNID.",    $vir, $del));
-	  fputs($clabre_arquivo->arquivo, lic2_relitenhtml002_formatar("VALOR UNITÁRIO (R$)", $vir, $del));
-	  fputs($clabre_arquivo->arquivo, "\n");
+    if ($layout != 2) {
+      fputs($clabre_arquivo->arquivo, lic2_relitenhtml002_formatar("SEQ ITEM", $vir, $del));
+    }
+    fputs($clabre_arquivo->arquivo, lic2_relitenhtml002_formatar("PRODUTO",  $vir, $del));
+    fputs($clabre_arquivo->arquivo, lic2_relitenhtml002_formatar("QUANT.",   $vir, $del));
+    fputs($clabre_arquivo->arquivo, lic2_relitenhtml002_formatar("UNID.",    $vir, $del));
+    fputs($clabre_arquivo->arquivo, lic2_relitenhtml002_formatar("VALOR UNITÁRIO (R$)", $vir, $del));
+    fputs($clabre_arquivo->arquivo, "\n");
   }
 
-  for ($w = 0; $w < $clliclicitem->numrows; $w ++) {
+  for ($w = 0; $w < $clliclicitem->numrows; $w++) {
 
-	db_fieldsmemory($result_itens, $w);
+    db_fieldsmemory($result_itens, $w);
 
-	$ordem = $oGet->ocultaCabecalho ? $w + 1 : $l21_ordem;
-	$precounitario = $oGet->ocultaCabecalho ? $si02_vlprecoreferencia : $pc11_vlrun;
+    $ordem = $oGet->ocultaCabecalho ? $w + 1 : $l21_ordem;
+    $precounitario = $oGet->ocultaCabecalho ? $si02_vlprecoreferencia : $pc11_vlrun;
     fputs($clabre_arquivo->arquivo, lic2_relitenhtml002_formatar($ordem, $vir, $del));
-    if ( $layout != 2 && !$oGet->ocultaCabecalho) {
+    if ($layout != 2 && !$oGet->ocultaCabecalho) {
       fputs($clabre_arquivo->arquivo, lic2_relitenhtml002_formatar($pc81_codprocitem, $vir, $del));
     }
     fputs($clabre_arquivo->arquivo, lic2_relitenhtml002_formatar("{$pc01_descrmater} {$pc11_resum}", $vir, $del));
     fputs($clabre_arquivo->arquivo, lic2_relitenhtml002_formatar($pc11_quant, $vir, $del));
     fputs($clabre_arquivo->arquivo, lic2_relitenhtml002_formatar($m61_descr, $vir, $del));
 
-    if($oGet->ocultaCabecalho){
-        $precounitario = str_replace('.', ',', $precounitario);
-    }else{
-        $precounitario = db_formatar($precounitario, 'p');
+    if ($oGet->ocultaCabecalho) {
+      $precounitario = str_replace('.', ',', $precounitario);
+    } else {
+      $precounitario = db_formatar($precounitario, 'p');
     }
 
     fputs($clabre_arquivo->arquivo, lic2_relitenhtml002_formatar($precounitario, $vir, $del));
     fputs($clabre_arquivo->arquivo, "\n");
   }
-  
+
   fclose($clabre_arquivo->arquivo);
 
   echo "<script>";
-  echo "  jan = window.open('db_download.php?arquivo=".$clabre_arquivo->nomearq."','','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');";
+  echo "  jan = window.open('db_download.php?arquivo=" . $clabre_arquivo->nomearq . "','','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');";
   echo "  jan.moveTo(0,0);";
   echo "</script>";
-
 }
-
-?>
