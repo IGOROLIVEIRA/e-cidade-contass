@@ -43,7 +43,7 @@ $clrotulo->label("m63_codpcmater");
           <fieldset>
             <legend><b>Dados do Material</b></legend>
             <table>
-
+<!--
               <tr>
                 <td nowrap title="<?= @$Tm63_codpcmater ?>">
                   <?
@@ -56,7 +56,7 @@ $clrotulo->label("m63_codpcmater");
                   db_input('pc01_descrmater', 40, '', true, 'text', 3)
                   ?>
                 </td>
-              </tr>
+              </tr> -->
 
               <tr>
                 <td nowrap title="<?= @$Tm60_codmater ?>">
