@@ -259,6 +259,12 @@ if (isset($incluir)) {
         $limpa_dados = false; 
     }
 
+    if ((in_array($tiposup, array(1003, 1008, 1024, 1028, 2026))) && substr($o58_codigo, 0, 1) == 1) {
+        db_msgbox("Usuário, inclusão abortada. Dotação incompatível com o tipo de suplementação utilizada");
+        $sqlerro = true;
+        $limpa_dados = false; 
+    }
+
 
     $query = db_query("select o50_controlaexcessoarrecadacao from orcparametro where o50_anousu = " . db_getsession("DB_anousu"));
     for ($i = 0; $i < pg_num_rows($query); $i++) {
