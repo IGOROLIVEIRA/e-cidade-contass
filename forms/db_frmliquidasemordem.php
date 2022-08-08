@@ -307,7 +307,7 @@ if (USE_PCASP) {
                   <td id='vlrremuneracao'><strong>Valor da Remuneração:</strong></td>
                   <td id='vlrremuneracao1'>
                     <?
-                    db_input('valorremuneracao', 15, $Ivalorremuneracao, true, 'text', 1, '','','','text-align:right');
+                    db_input('valorremuneracao', 15, '4', true, 'text', 1, "onchange='casasdecimais(1)'",'','','text-align:right');
                     ?>
                   </td>
         </tr>
@@ -315,7 +315,7 @@ if (USE_PCASP) {
                   <td id='vlrdesconto'><strong>Valor do Desconto:</strong></td>
                   <td id='vlrdesconto1'>
                     <?
-                    db_input('valordesconto', 15, $Ivalordesconto, true, 'text', 1, '','','','text-align:right');
+                    db_input('valordesconto', 15, '4', true, 'text', 1, "onchange='casasdecimais(2)'",'','','text-align:right');
                     ?>
                   </td>
                 </tr>
@@ -563,6 +563,17 @@ if (USE_PCASP) {
       js_consultaEmpenho(chave, <?=$operacao?>);
     }
   }
+  function casasdecimais(escolha){
+         var valorremuneracao = (document.form1.valorremuneracao.value).indexOf('.');
+         var valordesconto = (document.form1.valordesconto.value).indexOf('.');
+         if(escolha == '1' && valorremuneracao > 0 ){
+          var virgula = document.form1.valorremuneracao.value.substring(valorremuneracao + 0);
+          document.form1.valorremuneracao.value = document.form1.valorremuneracao.value.substring(0, valorremuneracao)+virgula.substring(0,3);
+         }if(escolha == '2' && valordesconto > 0){
+          var virgula = document.form1.valordesconto.value.substring(valordesconto + 0);
+          document.form1.valordesconto.value = document.form1.valordesconto.value.substring(0, valordesconto)+virgula.substring(0,3);              
+         }                     
+}
   function mensagemesocial(){
   if(document.form1.aIncide.value == '2'){
     var r=confirm("Tem certeza de que não há incidência de contribuição previdenciária para este prestador? ");
