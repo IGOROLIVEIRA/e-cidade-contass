@@ -1469,9 +1469,9 @@ if ($tipo == "a" or 1 == 1) {
         }
         /* ----------- AGRUPAR POR FORNECEDOR -----------*/
         if ($repete != $e60_numcgm and $agrupar == "a") {
-            if ($quantimp > 1 or ($sememp == "s" and $quantimp > 0)) {
+            if ($quantimp > 0 or ($sememp == "s" and $quantimp > 0)) {
 
-                if (($quantimp > 1 and $sememp == "n") or ($quantimp > 0 and $sememp == "s")) {
+                if (($quantimp > 0 and $sememp == "n") or ($quantimp > 0 and $sememp == "s")) {
                     //$pdf->setX(125);
                     $pdf->SetFont('Arial', 'B', 7);
                     if ($sememp == "n") {
@@ -1554,8 +1554,8 @@ if ($tipo == "a" or 1 == 1) {
                 $t_total = $total;
             }
             /*  */
-            if ($quantimp > 1 or ($sememp == "s" and $quantimp > 0)) {
-                if (($quantimp > 1 and $sememp == "n") or ($quantimp > 0 and $sememp == "s")) {
+            if ($quantimp > 0 or ($sememp == "s" and $quantimp > 0)) {
+                if (($quantimp > 0 and $sememp == "n") or ($quantimp > 0 and $sememp == "s")) {
                     $pdf->SetFont('Arial', 'B', 7);
                     if ($agrupar == "d" and $sememp == "s") {
                         $pdf->Cell(45, $tam, "$e64_codele - $o56_elemento", $iBorda, 0, "C", 0);
@@ -1639,8 +1639,8 @@ if ($tipo == "a" or 1 == 1) {
 
         /*----------- AGRUPAR POR RECURSO -----------*/
         if ($repete_r != $o15_codigo and $agrupar == "r") {
-            if ($quantimp > 1 or ($sememp == "s" and $quantimp > 0)) {
-                if (($quantimp > 1 and $sememp == "n") or ($quantimp > 0 and $sememp == "s")) {
+            if ($quantimp > 0 or ($sememp == "s" and $quantimp > 0)) {
+                if (($quantimp > 0 and $sememp == "n") or ($quantimp > 0 and $sememp == "s")) {
                     //$pdf->setX(125);
                     $pdf->SetFont('Arial', 'B', 7);
                     if ($sememp == "n") {
@@ -1711,8 +1711,8 @@ if ($tipo == "a" or 1 == 1) {
 
         /* ----------- AGRUPAR POR ORGAO ----------- */
         if ($repete_r != $o58_orgao and $agrupar == "orgao") {
-            if ($quantimp > 1 or ($sememp == "s" and $quantimp > 0)) {
-                if (($quantimp > 1 and $sememp == "n") or ($quantimp > 0 and $sememp == "s")) {
+            if ($quantimp > 0 or ($sememp == "s" and $quantimp > 0)) {
+                if (($quantimp > 0 and $sememp == "n") or ($quantimp > 0 and $sememp == "s")) {
                     //$pdf->setX(125);
                     $pdf->SetFont('Arial', 'B', 7);
                     if ($sememp == "n") {
@@ -1794,8 +1794,8 @@ if ($tipo == "a" or 1 == 1) {
 
         /* ----------- AGRUPAR POR DOTAO ORAMENTRIA ----------- */
         if ($repete_r != $e60_coddot and $agrupar == "do") {
-            if ($quantimp > 1 or ($sememp == "s" and $quantimp > 0)) {
-                if (($quantimp > 1 and $sememp == "n") or ($quantimp > 0 and $sememp == "s")) {
+            if ($quantimp > 0 or ($sememp == "s" and $quantimp > 0)) {
+                if (($quantimp > 0 and $sememp == "n") or ($quantimp > 0 and $sememp == "s")) {
                     //$pdf->setX(125);
                     $pdf->SetFont('Arial', 'B', 7);
                     if ($sememp == "n") {
@@ -1906,8 +1906,8 @@ if ($tipo == "a" or 1 == 1) {
 
             $sContratoAtual = "{$ac16_sequencial}";
 
-            if ($quantimp >= 1 or ($sememp == "s" and $quantimp > 0)) {
-                if (($quantimp >= 1 and $sememp == "n") or ($quantimp > 0 and $sememp == "s")) {
+            if ($quantimp >= 0 or ($sememp == "s" and $quantimp > 0)) {
+                if (($quantimp >= 0 and $sememp == "n") or ($quantimp > 0 and $sememp == "s")) {
                     //$pdf->setX(125);
                     $pdf->SetFont('Arial', 'B', 7);
                     if ($sememp == "n") {
@@ -2381,7 +2381,118 @@ if ($tipo == "a" or 1 == 1) {
                     $dtotalliguidado = 0;
                     $dtotalnaoliguidado = 0;
                     $dtotalgeral = 0;         
+                }if ($agrupar == "a") {          
+                        $pdf->Cell(125, $tam, '', $base, 0, "R", $preenche);
+                        $pdf->Cell($iTamanhoCelula, $tam, ($sememp == "n" ? "TOTAL DE " : "") . db_formatar($quantimp, "s") . " EMPENHO" . ($quantimp == 1 ? "" : "S"), $base, 0, "L", $preenche);
+                        $pdf->Cell(18, $tam, db_formatar($t_emp, 'f'), $base, 0, "R", $preenche);
+                        $pdf->Cell(18, $tam, db_formatar($t_anu, 'f'), $base, 0, "R", $preenche);
+                        $pdf->Cell(18, $tam, db_formatar($t_liq, 'f'), $base, 0, "R", $preenche);
+                        $pdf->Cell(18, $tam, db_formatar($t_pag, 'f'), $base, 0, "R", $preenche);
+                        if ($saldopagar == "s") {
+                            $pdf->Cell(18, $tam, db_formatar($t_liq - $t_pag, 'f'), $base, 0, "R", $preenche);
+                            $pdf->Cell(18, $tam, db_formatar($t_emp - $t_anu - $t_liq, 'f'), $base, 0, "R", $preenche); //quebra linha
+                            $pdf->Cell(18, $tam, db_formatar($t_emp - $t_anu - $t_pag, 'f'), $base, 1, "R", $preenche); //quebra linha
+                        } else {
+                            $pdf->Ln();
+                        }
+                        $pdf->SetFont('Arial', '', 7);
+                        $pdf->Ln();
+                }if($agrupar == "c"){
+                    $pdf->Cell(125, $tam, '', $base, 0, "R", $preenche);
+                    $pdf->Cell($iTamanhoCelula, $tam, ($sememp == "n" ? "TOTAL DE " : "") . db_formatar($quantimp, "s") . " EMPENHO" . ($quantimp == 1 ? "" : "S"), $base, 0, "L", $preenche);
+                    $pdf->Cell(18, $tam, db_formatar($t_emp, 'f'), $base, 0, "R", $preenche);
+                    $pdf->Cell(18, $tam, db_formatar($t_anu, 'f'), $base, 0, "R", $preenche);
+                    $pdf->Cell(18, $tam, db_formatar($t_liq, 'f'), $base, 0, "R", $preenche);
+                    $pdf->Cell(18, $tam, db_formatar($t_pag, 'f'), $base, 0, "R", $preenche);
+                    if ($saldopagar == "s") {
+                        $pdf->Cell(18, $tam, db_formatar($t_liq - $t_pag, 'f'), $base, 0, "R", $preenche);
+                        $pdf->Cell(18, $tam, db_formatar($t_emp - $t_anu - $t_liq, 'f'), $base, 0, "R", $preenche); //quebra linha
+                        $pdf->Cell(18, $tam, db_formatar($t_emp - $t_anu - $t_pag, 'f'), $base, 1, "R", $preenche); //quebra linha
+                    } else {
+                        $pdf->Ln();
+                    }
+                    $pdf->SetFont('Arial', '', 7);   
+                    $pdf->Ln();
+                }if($agrupar == "orgao"){
+                    $pdf->Cell(125, $tam, '', $base, 0, "R", $preenche);
+                    $pdf->Cell($iTamanhoCelula, $tam, ($sememp == "n" ? "TOTAL DE " : "") . db_formatar($quantimp, "s") . " EMPENHO" . ($quantimp == 1 ? "" : "S"), $base, 0, "L", $preenche);
+                    $pdf->Cell(18, $tam, db_formatar($t_emp, 'f'), $base, 0, "R", $preenche);
+                    $pdf->Cell(18, $tam, db_formatar($t_anu, 'f'), $base, 0, "R", $preenche);
+                    $pdf->Cell(18, $tam, db_formatar($t_liq, 'f'), $base, 0, "R", $preenche);
+                    $pdf->Cell(18, $tam, db_formatar($t_pag, 'f'), $base, 0, "R", $preenche);
+                    if ($saldopagar == "s") {
+                        $pdf->Cell(18, $tam, db_formatar($t_liq - $t_pag, 'f'), $base, 0, "R", $preenche);
+                        $pdf->Cell(18, $tam, db_formatar($t_emp - $t_anu - $t_liq, 'f'), $base, 0, "R", $preenche); //quebra linha
+                        $pdf->Cell(18, $tam, db_formatar($t_emp - $t_anu - $t_pag, 'f'), $base, 1, "R", $preenche); //quebra linha
+                    } else {
+                        $pdf->Ln();
+                    }
+                    $pdf->SetFont('Arial', '', 7);
+                    $pdf->Ln();
+                }if($agrupar == "r"){
+                    $pdf->Cell(125, $tam, '', $base, 0, "R", $preenche);
+                    $pdf->Cell($iTamanhoCelula, $tam, ($sememp == "n" ? "TOTAL DE " : "") . db_formatar($quantimp, "s") . " EMPENHO" . ($quantimp == 1 ? "" : "S"), $base, 0, "L", $preenche);
+                    $pdf->Cell(18, $tam, db_formatar($t_emp, 'f'), $base, 0, "R", $preenche);
+                    $pdf->Cell(18, $tam, db_formatar($t_anu, 'f'), $base, 0, "R", $preenche);
+                    $pdf->Cell(18, $tam, db_formatar($t_liq, 'f'), $base, 0, "R", $preenche);
+                    $pdf->Cell(18, $tam, db_formatar($t_pag, 'f'), $base, 0, "R", $preenche);
+                    if ($saldopagar == "s") {
+                        $pdf->Cell(18, $tam, db_formatar($t_liq - $t_pag, 'f'), $base, 0, "R", $preenche);
+                        $pdf->Cell(18, $tam, db_formatar($t_emp - $t_anu - $t_liq, 'f'), $base, 0, "R", $preenche); //quebra linha
+                        $pdf->Cell(18, $tam, db_formatar($t_emp - $t_anu - $t_pag, 'f'), $base, 1, "R", $preenche); //quebra linha
+                    } else {
+                        $pdf->Ln();
+                    }
+                    $pdf->SetFont('Arial', '', 7);
+                    $pdf->Ln();
+                }if($agrupar == "gest"){
+                    $pdf->Cell(125, $tam, '', $base, 0, "R", $preenche);
+                    $pdf->Cell($iTamanhoCelula, $tam, ($sememp == "n" ? "TOTAL DE " : "") . db_formatar($quantimp, "s") . " EMPENHO" . ($quantimp == 1 ? "" : "S"), $base, 0, "L", $preenche);
+                    $pdf->Cell(18, $tam, db_formatar($t_emp, 'f'), $base, 0, "R", $preenche);
+                    $pdf->Cell(18, $tam, db_formatar($t_anu, 'f'), $base, 0, "R", $preenche);
+                    $pdf->Cell(18, $tam, db_formatar($t_liq, 'f'), $base, 0, "R", $preenche);
+                    $pdf->Cell(18, $tam, db_formatar($t_pag, 'f'), $base, 0, "R", $preenche);
+                    if ($saldopagar == "s") {
+                        $pdf->Cell(18, $tam, db_formatar($t_liq - $t_pag, 'f'), $base, 0, "R", $preenche);
+                        $pdf->Cell(18, $tam, db_formatar($t_emp - $t_anu - $t_liq, 'f'), $base, 0, "R", $preenche); //quebra linha
+                        $pdf->Cell(18, $tam, db_formatar($t_emp - $t_anu - $t_pag, 'f'), $base, 1, "R", $preenche); //quebra linha
+                    } else {
+                        $pdf->Ln();
+                    }
+                    $pdf->SetFont('Arial', '', 7);
+                }if($agrupar == "ta"){
+                    $pdf->Cell(125, $tam, '', $base, 0, "R", $preenche);
+                    $pdf->Cell($iTamanhoCelula, $tam, ($sememp == "n" ? "TOTAL DE " : "") . db_formatar($quantimp, "s") . " EMPENHO" . ($quantimp == 1 ? "" : "S"), $base, 0, "L", $preenche);
+                    $pdf->Cell(18, $tam, db_formatar($t_emp, 'f'), $base, 0, "R", $preenche);
+                    $pdf->Cell(18, $tam, db_formatar($t_anu, 'f'), $base, 0, "R", $preenche);
+                    $pdf->Cell(18, $tam, db_formatar($t_liq, 'f'), $base, 0, "R", $preenche);
+                    $pdf->Cell(18, $tam, db_formatar($t_pag, 'f'), $base, 0, "R", $preenche);
+                    if ($saldopagar == "s") {
+                        $pdf->Cell(18, $tam, db_formatar($t_liq - $t_pag, 'f'), $base, 0, "R", $preenche);
+                        $pdf->Cell(18, $tam, db_formatar($t_emp - $t_anu - $t_liq, 'f'), $base, 0, "R", $preenche); //quebra linha
+                        $pdf->Cell(18, $tam, db_formatar($t_emp - $t_anu - $t_pag, 'f'), $base, 1, "R", $preenche); //quebra linha
+                    } else {
+                        $pdf->Ln();
+                    }
+                    $pdf->SetFont('Arial', '', 7);
+                }if($agrupar == "do"){
+                    $pdf->Cell(125, $tam, '', $base, 0, "R", $preenche);
+                    $pdf->Cell($iTamanhoCelula, $tam, ($sememp == "n" ? "TOTAL DE " : "") . db_formatar($quantimp, "s") . " EMPENHO" . ($quantimp == 1 ? "" : "S"), $base, 0, "L", $preenche);
+                    $pdf->Cell(18, $tam, db_formatar($t_emp, 'f'), $base, 0, "R", $preenche);
+                    $pdf->Cell(18, $tam, db_formatar($t_anu, 'f'), $base, 0, "R", $preenche);
+                    $pdf->Cell(18, $tam, db_formatar($t_liq, 'f'), $base, 0, "R", $preenche);
+                    $pdf->Cell(18, $tam, db_formatar($t_pag, 'f'), $base, 0, "R", $preenche);
+                    if ($saldopagar == "s") {
+                        $pdf->Cell(18, $tam, db_formatar($t_liq - $t_pag, 'f'), $base, 0, "R", $preenche);
+                        $pdf->Cell(18, $tam, db_formatar($t_emp - $t_anu - $t_liq, 'f'), $base, 0, "R", $preenche); //quebra linha
+                        $pdf->Cell(18, $tam, db_formatar($t_emp - $t_anu - $t_pag, 'f'), $base, 1, "R", $preenche); //quebra linha
+                    } else {
+                        $pdf->Ln();
+                    }
+                    $pdf->SetFont('Arial', '', 7);
                 }
+                   
+                
 
                 $pdf->Cell(60, $tam, "TOTAL DE EMPENHOS: " . db_formatar($rows, "s"), "T", 0, "L", 1);
 
