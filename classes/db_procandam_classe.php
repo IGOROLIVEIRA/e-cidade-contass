@@ -102,7 +102,7 @@ class cl_procandam {
      }
    }
    // funcao para inclusao
-   function incluir ($p61_codandam){ 
+   function incluir ($p61_codandam=null){ 
       $this->atualizacampos();
      if($this->p61_codproc == null ){ 
        $this->erro_sql = " Campo Processo nao Informado.";
