@@ -275,9 +275,9 @@ if(isset($excluir)){
     $db_opcao = 3;
     $result = $clliclicita->sql_record($clliclicita->sql_query($chavepesquisa));
     db_fieldsmemory($result,0);
-    if ($l08_altera == "t"){
+    
         $db_botao = true;
-    }
+    
 }
 ?>
     <html>
