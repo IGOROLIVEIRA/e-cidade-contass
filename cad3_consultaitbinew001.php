@@ -72,7 +72,7 @@ db_fieldsmemory($config,0);
     <td>
       <strong>Guia:</strong>
     </td>
-    <td> 
+    <td>
      <?
        db_input('guia',10,"",true,'text',1,"");
      ?>
@@ -80,12 +80,12 @@ db_fieldsmemory($config,0);
   </tr>
   <tr>
     <td title="Pesquisa por nome do adquirente">
-      
+
       <?
        db_ancora("<strong>Adquirente</strong>",' js_cgm(true); ',1);
       ?>
     </td>
-    <td> 
+    <td>
      <?
 
        db_input('z01_numcgm',10,$Iz01_numcgm,true,'text',1,"onchange='js_cgm(false)'","z_numcgm");
@@ -99,7 +99,7 @@ db_fieldsmemory($config,0);
     <td title="Pesquisa por nome do transmitente">
       <strong>Transmitente: </strong>
     </td>
-    <td> 
+    <td>
      <?
        db_input('transmitente',48,"",true,'text',1,"");
      ?>
@@ -131,7 +131,7 @@ db_fieldsmemory($config,0);
     <td title="Pesquisa por tipo de ITBI">
       <strong>Tipo de ITBI: </strong>
     </td>
-    <td> 
+    <td>
      <?
       $x = array("u"=>"Urbana","r"=>"Rural");
       db_select('tipo',$x,true,1,"onClick='js_controlatipo(this.value);'");
@@ -152,7 +152,7 @@ db_fieldsmemory($config,0);
        db_ancora(@$Lj01_matric,"js_matric(true);",1);
        ?>
     </td>
-    <td> 
+    <td>
      <?
        db_input('j01_matric',10,$Ij01_matric,true,'text',1," onChange='js_matric(false)'");
        db_input('z01_nome',40,$Iz01_nome,true,'text',3,"")
@@ -199,13 +199,13 @@ db_fieldsmemory($config,0);
     </tr>
     <?php endif ?>
 
-  <tr> 
-    <td title="<?=@$Tj14_nome?>"> 
+  <tr>
+    <td title="<?=@$Tj14_nome?>">
        <?
        db_ancora(@$Lj14_nome,"js_ruas(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
       <?
        	db_input('j14_codigo',10,$Ij14_codigo,true,'text',$db_opcao," onChange='js_ruas(false)'");
       ?>
@@ -214,12 +214,12 @@ db_fieldsmemory($config,0);
       ?>
     </td>
   </tr>
-  
-	<tr> 
-		<td colspan="2" align="center"> 
+
+	<tr>
+		<td colspan="2" align="center">
 			<div id="pesquisa"></div>
 		</td>
-	</tr>	  
+	</tr>
 </table>
 </fieldset>
 </div>
@@ -233,18 +233,18 @@ function js_controlatipo(valor){
       document.getElementById('dadosurbana').style.display = '';
    }else{
       document.getElementById('dadosurbana').style.display = 'none';
-   }  
-  
+   }
+
 }
 
 function js_limpacampos(){
 	document.form1.guia.value  		  = '';
-    document.form1.j01_matric.value   = ''; 
-    document.form1.z01_nome.value     = ''; 
-    document.form1.j34_setor.value    = ''; 
-    document.form1.j34_quadra.value   = ''; 
-    document.form1.j14_codigo.value   = ''; 
-    document.form1.j14_nome.value     = ''; 
+    document.form1.j01_matric.value   = '';
+    document.form1.z01_nome.value     = '';
+    document.form1.j34_setor.value    = '';
+    document.form1.j34_quadra.value   = '';
+    document.form1.j14_codigo.value   = '';
+    document.form1.j14_nome.value     = '';
     document.form1.z_numcgm.value     = '';
     document.form1.adquirente.value   = '';
     document.form1.transmitente.value = '';
@@ -265,7 +265,7 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
 ?>
 <script>
 function js_consultaitbi() {
-  
+
   querystring = '';
   dtini = document.form1.dataini_ano.value+'-'+document.form1.dataini_mes.value+"-"+document.form1.dataini_dia.value;
   dtfim = document.form1.datafim_ano.value+'-'+document.form1.datafim_mes.value+"-"+document.form1.datafim_dia.value;
@@ -303,12 +303,12 @@ function js_consultaitbi() {
      if(dtini != '--'){
        querystring += '&dtini='+dtini;
      }else{
-       querystring += '&dtini=';     
+       querystring += '&dtini=';
      }
      if(dtfim != '--'){
        querystring += '&dtfim='+dtfim;
      }else{
-       querystring += '&dtfim=';       
+       querystring += '&dtfim=';
      }
      if (document.form1.guia.value != ""){
        querystring += '&codguia='+document.form1.guia.value;
@@ -324,18 +324,18 @@ function js_abreconsulta(chave){
 }
   function js_matric(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_matric','func_iptubaseitbi.php?funcao_js=parent.js_mostramatric1|j01_matric|z01_nome','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_matric','func_iptubaseitbi.php?funcao_js=parent.js_mostramatric1|j01_matric|z01_nome','Pesquisa',true);
   }else{
-    js_OpenJanelaIframe('top.corpo','db_iframe_matric','func_iptubaseitbi.php?pesquisa_chave='+document.form1.j01_matric.value+'&funcao_js=parent.js_mostramatric','Pesquisa',false);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_matric','func_iptubaseitbi.php?pesquisa_chave='+document.form1.j01_matric.value+'&funcao_js=parent.js_mostramatric','Pesquisa',false);
   }
 }
 
 function js_cgm(mostra){
   var cgm=document.form1.z_numcgm.value;
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe2','func_nome.php?funcao_js=parent.js_mostracgm|0|1','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe2','func_nome.php?funcao_js=parent.js_mostracgm|0|1','Pesquisa',true);
   }else{
-    js_OpenJanelaIframe('top.corpo','db_iframe2','func_nome.php?pesquisa_chave='+cgm+'&funcao_js=parent.js_mostracgm1','Pesquisa',false);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe2','func_nome.php?pesquisa_chave='+cgm+'&funcao_js=parent.js_mostracgm1','Pesquisa',false);
   }
 }
 function js_mostracgm(chave1,chave2){
@@ -350,12 +350,12 @@ function js_mostracgm1(erro, nome) {
     document.form1.z_numcgm.value = '';
   }
   document.form1.adquirente.value = nome;
-} 
+}
 function js_mostramatric(chave,erro){
-  document.form1.z01_nome.value = chave; 
-  if(erro==true){ 
-    document.form1.j01_matric.focus(); 
-    document.form1.j01_matric.value = ''; 
+  document.form1.z01_nome.value = chave;
+  if(erro==true){
+    document.form1.j01_matric.focus();
+    document.form1.j01_matric.value = '';
   }
 }
 function js_mostramatric1(chave1,chave2){
@@ -372,9 +372,9 @@ function js_mostrasetor(chave1,chave2){
 }
 function js_ruas(mostra){
   if(mostra == true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_ruas','func_ruasitbi.php?rural=1&funcao_js=parent.js_preenchepesquisa|j14_codigo|j14_nome','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_ruas','func_ruasitbi.php?rural=1&funcao_js=parent.js_preenchepesquisa|j14_codigo|j14_nome','Pesquisa',true);
   }else{
-    js_OpenJanelaIframe('top.corpo','db_iframe_ruas','func_ruasitbi.php?rural=1&funcao_js=parent.js_preenchepesquisa1&pesquisa_chave='+document.form1.j14_codigo.value,'Pesquisa',false);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_ruas','func_ruasitbi.php?rural=1&funcao_js=parent.js_preenchepesquisa1&pesquisa_chave='+document.form1.j14_codigo.value,'Pesquisa',false);
   }
 }
 function js_preenchepesquisa(chave,chave1){
@@ -397,13 +397,13 @@ if(isset($j01_matric) && $j01_matric != "" || 1==1){
 }elseif(isset($j34_setor) && $j34_setor != ""){
 //  echo "<script>js_OpenJanelaIframe('','db_iframe_consultaitbi','cad3_consultaitbinew002.php?j34_setor=$j34_setor&j14_codigo=$j14_codigo&j34_quadra=$j34_quadra&funcao_js=parent.js_abreconsulta|j01_matric','Pesquisa',true,30);</script>";
 }
-?>   
+?>
 
 <script>
 var oPesquisa = new DBViewPesquisaSetorQuadraLote('pesquisa', 'oPesquisa');
     oPesquisa.show();
     oPesquisa.appendForm();
-<? 
-	//echo "oPesquisa.setValues('{$setorCodigo}','{$quadra}','{$lote}');"; 
+<?
+	//echo "oPesquisa.setValues('{$setorCodigo}','{$quadra}','{$lote}');";
 ?>
 </script>

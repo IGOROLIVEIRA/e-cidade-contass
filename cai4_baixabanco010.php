@@ -190,7 +190,7 @@ function js_pesquisaarquivos(mostra){
   } else {
 
     if(document.form1.codret.value != ''){
-      js_OpenJanelaIframe('top.corpo','db_iframe_arquivos','func_disarq.php?'+sQuery+'pesquisa_chave='+document.form1.codret.value+'&funcao_js=parent.js_preenche_arquivos1','Pesquisa',true);
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_arquivos','func_disarq.php?'+sQuery+'pesquisa_chave='+document.form1.codret.value+'&funcao_js=parent.js_preenche_arquivos1','Pesquisa',true);
     }
   }
 }

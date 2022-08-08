@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
@@ -63,7 +63,7 @@ if(isset($HTTP_POST_VARS["inicial"])) {
   exit;
 }
 /**
- * Busca parâmetro partilha na tabela parjuridico 
+ * Busca parâmetro partilha na tabela parjuridico
  */
 $sSqlParametrosJuridico  = "select v19_partilha from parjuridico where v19_anousu = ".db_getsession('DB_anousu');
 $rsSqlParametrosJuridico = db_query($sSqlParametrosJuridico);
@@ -121,8 +121,8 @@ $sql=" select distinct
               v52_descr,
               z01_nome as nomeadvog
          from arrecad
-              inner join arreinstit on arreinstit.k00_numpre = arrecad.k00_numpre 
-                                   and arreinstit.k00_instit = ".db_getsession('DB_instit')." 
+              inner join arreinstit on arreinstit.k00_numpre = arrecad.k00_numpre
+                                   and arreinstit.k00_instit = ".db_getsession('DB_instit')."
                                    $tabela
               inner join arretipo             on arrecad.k00_tipo                = arretipo.k00_tipo
               inner join inicialnumpre        on inicialnumpre.v59_numpre        = arrecad.k00_numpre
@@ -136,7 +136,7 @@ $sql=" select distinct
                                              and processoforoinicial.v71_anulado is false
                left  join processoforo        on processoforo.v70_sequencial     = processoforoinicial.v71_processoforo
                left  join vara                on vara.v53_codvara                = processoforo.v70_vara
-         where $campo = $valor 
+         where $campo = $valor
            and k03_tipo = 18
            and v50_situacao = 1";
 
@@ -158,10 +158,10 @@ $numrows= pg_numrows($result);
     parent.document.getElementById("btcda").disabled          = true; //botao Certidao
     parent.document.getElementById("btcancela").disabled      = true; //botao Cancelamento
     parent.document.getElementById("btnSuspender").disabled   = true; //botao Parcelamento
-    parent.document.getElementById("btcarne").disabled        = true; //botao emite carne 
-    parent.document.getElementById("emisscarne").disabled     = true; //botao emite carne 
+    parent.document.getElementById("btcarne").disabled        = true; //botao emite carne
+    parent.document.getElementById("emisscarne").disabled     = true; //botao emite carne
     parent.document.getElementById("btjust").disabled         = true; //botao justifica
-    parent.document.getElementById("btnotifica").disabled     = true;   
+    parent.document.getElementById("btnotifica").disabled     = true;
 
     if ( parent.document.getElementById("enviar").value == 'Recibo'){
       parent.document.getElementById("enviar").disabled     = true; //botao Recibo
@@ -188,8 +188,8 @@ $numrows= pg_numrows($result);
 if($numrows>0){
   $sDesabilitaMarcarTodos = $lPartilha ? "display: none;" : "";
   echo "
-  <tr bgcolor=\"#FFCC66\">   \n  	
-  <th class=\"borda\" style=\"font-size:11px\" nowrap>O</td>\n  	  
+  <tr bgcolor=\"#FFCC66\">   \n
+  <th class=\"borda\" style=\"font-size:11px\" nowrap>O</td>\n
   <th title=\"Marca/Desmarca Todas\" class=\"borda\" style=\"font-size:12px\" nowrap><a id=\"marca\" href=\"\" style=\"color:black; $sDesabilitaMarcarTodos\" onclick=\"js_marca();return false\">M</a>
   <th class=\"borda\" style=\"font-size:11px\" title='$Tv50_inicial' nowrap>Inicial</th>\n
   <th class=\"borda\" style=\"font-size:11px\" title='Lista Débitos' nowrap>Rec</th>\n
@@ -202,8 +202,8 @@ if($numrows>0){
   <th class=\"borda\" style=\"font-size:11px\" title='$Tv53_descr'   nowrap>Vara</th>\n
   <th class=\"borda\" style=\"font-size:11px\" title='$Tv50_codmov'  nowrap>$RLv50_codmov</th>\n
   <th class=\"borda\" style=\"font-size:11px\" title='$Tv52_descr'   nowrap>$RLv52_descr</th>\n
-  </tr>  
-  ";	  
+  </tr>
+  ";
   $valor_total = 0;
   for($i=0; $i<$numrows; $i++){
     db_fieldsmemory($result,$i);
@@ -212,25 +212,25 @@ if($numrows>0){
                    arrecad.k00_numpre as numpres
               from inicial
                    inner join inicialcert on v51_inicial           =  v50_inicial
-                   inner join certdiv     on v51_certidao          = v14_certid 
-                   inner join divida      on v14_coddiv            = v01_coddiv  
+                   inner join certdiv     on v51_certidao          = v14_certid
+                   inner join divida      on v14_coddiv            = v01_coddiv
                    inner join arrecad     on arrecad.k00_numpre    = divida.v01_numpre
                                          and arrecad.k00_numpar    = divida.v01_numpar
-                   inner join arreinstit  on arreinstit.k00_numpre = arrecad.k00_numpre 
-                                         and arreinstit.k00_instit = ".db_getsession('DB_instit')." 
-             where v50_inicial = {$v50_inicial} 
+                   inner join arreinstit  on arreinstit.k00_numpre = arrecad.k00_numpre
+                                         and arreinstit.k00_instit = ".db_getsession('DB_instit')."
+             where v50_inicial = {$v50_inicial}
              union all
-            select distinct 
+            select distinct
                    arrecad.k00_numpre as numpres
               from inicial
                    inner join inicialcert on v51_inicial           =  v50_inicial
-                   inner join certter     on v51_certidao          = v14_certid 
-                   inner join termo       on v14_parcel            = v07_parcel  
+                   inner join certter     on v51_certidao          = v14_certid
+                   inner join termo       on v14_parcel            = v07_parcel
                    inner join arrecad     on arrecad.k00_numpre    = termo.v07_numpre
-                   inner join arreinstit  on arreinstit.k00_numpre = arrecad.k00_numpre 
-                                         and arreinstit.k00_instit = ".db_getsession('DB_instit')." 
+                   inner join arreinstit  on arreinstit.k00_numpre = arrecad.k00_numpre
+                                         and arreinstit.k00_instit = ".db_getsession('DB_instit')."
              where v50_inicial = {$v50_inicial}";
-     
+
     $result1 = pg_query($sql);
     $numrows1= pg_numrows($result1);
     $virgula = "";
@@ -268,11 +268,11 @@ if($numrows>0){
     $sLinhaRegistros .=  "  <input type='hidden' name='valorjuros$i' value='$valor_juros' id='valorjuros$i'>                                   ";
     $sLinhaRegistros .=  "  <input type='hidden' name='valormulta$i' value='$valor_multa' id='valormulta$i'>                                   ";
     $sLinhaRegistros .=  "  <td class=\"borda\" style=\"font-size:11px\" nowrap><a href='#' onclick=\"$funcao return false;\">MI</a></td>\n  	 ";
-    
+
     $sLinhaRegistros .=  "  <td class=\"borda\" style=\"font-size:11px\" id=\"coluna$i\" nowrap>                                               ";
     $sLinhaRegistros .=  "    <input style       =\"visibility:'visible'\"                                                                     ";
     $sLinhaRegistros .=  "           type        =\"checkbox\"                                                                                 ";
-    
+
     if($lPartilha){
       $sLinhaRegistros .=  "         class       ='check_processoforo'                                                                         ";
       $sLinhaRegistros .=  "         processoforo='$v70_codforo'                                                                               ";
@@ -284,7 +284,7 @@ if($numrows>0){
     $sLinhaRegistros .=  "           id          ='$i'                                                                                         ";
     $sLinhaRegistros .=  "           onClick     ='js_vermarcados();js_soma();{$sDisabilitaCheck}'>                                            ";
     $sLinhaRegistros .=  "  </td>                                                                                                              ";
-    
+
     $sLinhaRegistros .=  "  <td  style=\"font-size:11px\" title='$Tv50_inicial' nowrap>$v50_inicial</td>\n                                     ";
     $sLinhaRegistros .=  "  <td  style=\"font-size:11px\" title='Lista Receita' nowrap><a href='#' onclick='js_listaDebitos()'>DE</a></td>\n   ";
     $sLinhaRegistros .=  "  <td  style=\"font-size:11px\" title='Valor Total'   nowrap> ".db_formatar($valor_geral,'f')."</td>\n               ";
@@ -338,10 +338,10 @@ if($numrows>0){
  * Função para desabilitar os checkbox do processo do foro
  */
 function js_desabilitaProcessoForo(oElemento){
-  
-   var aChecks       = new Array();  
+
+   var aChecks       = new Array();
    var sProcessoForo = oElemento.getAttribute('processoforo');
-   
+
    $$('.check_processoforo').each(function(oCheckBox, iIndice){
      if(oCheckBox.checked){
        aChecks[iIndice] = new Array(oCheckBox.id);
@@ -350,11 +350,11 @@ function js_desabilitaProcessoForo(oElemento){
        oCheckBox.disabled = true;
      }
    });
-   
+
    if (aChecks.length == 0){
-     
+
      $$('.check_processoforo').each(function(oCheckBox){
-       
+
        if(oCheckBox.getAttribute('processoforo') != ""){
          oCheckBox.disabled = false;
        }
@@ -363,7 +363,7 @@ function js_desabilitaProcessoForo(oElemento){
 }
 
 function js_inicial(inicial){
-  js_OpenJanelaIframe('top.corpo','db_iframe12','cai3_gerfinanc040.php?tabela=<?=$tabela?>&campo=<?=$campo?>&valor=<?=$valor?>&origem=inicial&inicial='+inicial+'&tipo=<?=$tipo?>','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe12','cai3_gerfinanc040.php?tabela=<?=$tabela?>&campo=<?=$campo?>&valor=<?=$valor?>&origem=inicial&inicial='+inicial+'&tipo=<?=$tipo?>','Pesquisa',true);
 }
 
 function js_listaDebitos(){
@@ -371,7 +371,7 @@ function js_listaDebitos(){
 }
 
 function js_marca() {
-  
+
   var ID = document.getElementById('marca');
   var BT = parent.document.getElementById('btmarca');
 
@@ -382,7 +382,7 @@ function js_marca() {
   var permissao_cancelar     = <?=db_permissaomenu(db_getsession("DB_anousu"),81,4554)?>;
   var permissao_justif       = <?=db_permissaomenu(db_getsession("DB_anousu"),81,5024)?>;
   var permissao_suspender    = <?=db_permissaomenu(db_getsession("DB_anousu"),81,7653)?>;
-  
+
   if(!ID) {
 		return false;
 	}
@@ -437,11 +437,11 @@ function js_marca() {
   if ( ( k03_tipo == 13 || k03_tipo == 18 ) && perfil_procuradoria == 0 ) {
     parent.document.getElementById("enviar").disabled = true;//botao emite recibo
     parent.document.getElementById("btparc").disabled = true;
-    parent.document.getElementById("btcarne").disabled = true;	  
+    parent.document.getElementById("btcarne").disabled = true;
   }
 }
 function js_vermarcados(){
-  
+
   var permissao_parcelamento = <?=db_permissaomenu(db_getsession("DB_anousu"),81,3415)?>;
   var permissao_cancelar     = <?=db_permissaomenu(db_getsession("DB_anousu"),81,4554)?>;
   var permissao_justif       = <?=db_permissaomenu(db_getsession("DB_anousu"),81,5024)?>;
@@ -453,12 +453,12 @@ function js_vermarcados(){
   F = document.form1;
   for(i = 0;i < F.elements.length;i++) {
     if(F.elements[i].type == "checkbox"){
-      
+
       if(F.elements[i].checked == true){
 
         parent.document.js_parc = js_a;
 				//parent.document.getElementById('btparc').onclick = js_a();
-        
+
         if (parent.document.getElementById('btparc').disabled == true && permissao_parcelamento == true) {
           parent.document.getElementById("btparc").disabled = false; // botao parcelamento
         }
@@ -486,7 +486,7 @@ function js_vermarcados(){
         if (parent.document.getElementById('btnSuspender').disabled == true && permissao_suspender == true) {
           parent.document.getElementById("btnSuspender").disabled = true; // botao suspender
         }
-        
+
       }
     }
   }
@@ -494,7 +494,7 @@ function js_vermarcados(){
   if ( ( k03_tipo == 13 || k03_tipo == 18 ) && perfil_procuradoria == 0 ) {
     parent.document.getElementById("enviar").disabled = true;//botao emite recibo
     parent.document.getElementById("btparc").disabled = true;
-    parent.document.getElementById("btcarne").disabled = true;	  
+    parent.document.getElementById("btcarne").disabled = true;
   }
 
 }
@@ -530,14 +530,14 @@ function js_soma1(obj,linha) {
       parent.document.getElementById("btparc").disabled = false;//botao parcelamento
       parent.document.getElementById("btcda").disabled = false;//botao certidao
     }
-    parent.document.getElementById("btcarne").disabled = true;//botao emite carne	
-    parent.document.getElementById("btnotifica").disabled = false;	  
-//    parent.document.getElementById("btcarnep").disabled = false;//botao emite carne	
+    parent.document.getElementById("btcarne").disabled = true;//botao emite carne
+    parent.document.getElementById("btnotifica").disabled = false;
+//    parent.document.getElementById("btcarnep").disabled = false;//botao emite carne
   }
-  var indi = js_parse_int(obj.id);	  
-  
+  var indi = js_parse_int(obj.id);
+
   var total     = parent.document.getElementById('valor'+linha).innerHTML;
-  
+
   if(obj.checked == true){
     total += new Number(document.getElementById('total'+indi).value.replace(",",""));
   }else{
@@ -551,7 +551,7 @@ function js_soma1(obj,linha) {
     multa = Number(parent.document.getElementById('multa1').innerHTML) - multa;
     desconto = Number(parent.document.getElementById('desconto1').innerHTML) - desconto;
     total = Number(parent.document.getElementById('total1').innerHTML) - total;
-    
+
     parent.document.getElementById('valor3').innerHTML = valor.toFixed(2);
     parent.document.getElementById('valorcorr3').innerHTML = valorcorr.toFixed(2);
     parent.document.getElementById('juros3').innerHTML = juros.toFixed(2);
@@ -559,7 +559,7 @@ function js_soma1(obj,linha) {
     parent.document.getElementById('desconto3').innerHTML = desconto.toFixed(2);
     parent.document.getElementById('total3').innerHTML = total.toFixed(2);
   }
-  
+
 }
 
 function js_soma(linha) {
@@ -580,13 +580,13 @@ function js_soma(linha) {
   var tab = document.getElementById('tabdebitos');
   if(emrec == 't'){
     parent.document.getElementById("enviar").disabled = false;//botao emite recibo
-    parent.document.getElementById("btcarne").disabled = true;//botao carne	
-    parent.document.getElementById("btnotifica").disabled = false;	  
+    parent.document.getElementById("btcarne").disabled = true;//botao carne
+    parent.document.getElementById("btnotifica").disabled = false;
 //    parent.document.getElementById("btcarnep").disabled = false; //botao emite carne
   }
   for(var i = 0;i < F.length;i++) {
     if((F.elements[i].type == "checkbox" || F.elements[i].type == "submit") && (F.elements[i].checked == true || linha == 1)) {
-      var indi   = js_parse_int(F.elements[i].id);	  
+      var indi   = js_parse_int(F.elements[i].id);
       total      += new Number(document.getElementById('valor'+indi).value.replace(",",""));
       valorcorr  += new Number(document.getElementById('valorcorr'+indi).value.replace(",",""));
       valorjuros += new Number(document.getElementById('valorjuros'+indi).value.replace(",",""));
@@ -600,13 +600,13 @@ function js_soma(linha) {
   if(linha == 2) {
     total = Number(parent.document.getElementById('total1').innerHTML) - total;
   }
-  
+
       var aux = 0;
       for(i = 0;i < F.length;i++) {
         if(F.elements[i].type == "checkbox")
         if(F.elements[i].checked == true)
         aux = 1;
-      }  
+      }
       if(aux == 0) {
         parent.document.getElementById("enviar").disabled       = true
         parent.document.getElementById("btparc").disabled       = true
@@ -614,9 +614,9 @@ function js_soma(linha) {
         parent.document.getElementById("btcancela").disabled    = true
         parent.document.getElementById("btnSuspender").disabled = true
         parent.document.getElementById("btjust").disabled       = true
-        parent.document.getElementById("btcarne").disabled      = true   
-        parent.document.getElementById("emisscarne").disabled   = true    
-        parent.document.getElementById("btnotifica").disabled   = true    
+        parent.document.getElementById("btcarne").disabled      = true
+        parent.document.getElementById("emisscarne").disabled   = true
+        parent.document.getElementById("btnotifica").disabled   = true
         document.getElementById('marca').innerHTML              = "M";
         parent.document.getElementById('btmarca').value         = "Marcar Todas";
         parent.document.getElementById("geranotif").disabled    = true;
@@ -625,7 +625,7 @@ function js_soma(linha) {
   if ( ( k03_tipo == 13 || k03_tipo == 18 ) && perfil_procuradoria == 0 ) {
     parent.document.getElementById("enviar").disabled = true;//botao emite recibo
     parent.document.getElementById("btparc").disabled = true;
-    parent.document.getElementById("btcarne").disabled = true;	  
+    parent.document.getElementById("btcarne").disabled = true;
   }
 
 }

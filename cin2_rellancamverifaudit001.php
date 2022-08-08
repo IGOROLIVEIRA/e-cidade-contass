@@ -117,9 +117,9 @@ db_postmemory($_GET);
 function js_pesquisaProcessoAuditoria(lMostra) {
 
 if (lMostra) {
-    js_OpenJanelaIframe('top.corpo','db_iframe_processoaudit','func_processoaudit.php?funcao_js=parent.js_mostraProcessoAuditoria1|ci03_codproc|ci03_objaudit','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_processoaudit','func_processoaudit.php?funcao_js=parent.js_mostraProcessoAuditoria1|ci03_codproc|ci03_objaudit','Pesquisa',true);
 } else {
-    js_OpenJanelaIframe('top.corpo','db_iframe_processoaudit','func_processoaudit.php?pesquisa_chave='+document.form1.ci03_codproc.value+'&objetivo=true&funcao_js=parent.js_mostraProcessoAuditoria','Pesquisa',false);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_processoaudit','func_processoaudit.php?pesquisa_chave='+document.form1.ci03_codproc.value+'&objetivo=true&funcao_js=parent.js_mostraProcessoAuditoria','Pesquisa',false);
 }
 }
 

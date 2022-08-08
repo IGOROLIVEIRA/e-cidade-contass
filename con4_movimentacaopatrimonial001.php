@@ -384,7 +384,7 @@ function js_buscarEmpenho(lMostra) {
 
   if ( lMostra ) {
 
-    js_OpenJanelaIframe('top.corpo', 'db_iframe_empempenho',
+    js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_empempenho',
                         'func_empempenhoMovimentacaoPatrimonial.php?iDocumento='+ iDocumento +'&funcao_js=parent.js_retornoBuscaEmpenhoAncora|e60_numemp|e60_codemp|z01_nome',
                         'Pesquisa',true);
     return true;
@@ -400,7 +400,7 @@ function js_buscarEmpenho(lMostra) {
       sParametroAnoEmpenho = '&iAnoEmpenho=' + aCodigoEmpenho[1];
     }
 
-    js_OpenJanelaIframe('top.corpo','db_iframe_empempenho',
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_empempenho',
                         'func_empempenhoMovimentacaoPatrimonial.php?iDocumento=' + iDocumento + '&lPesquisaPorCodigoEmpenho=true' + sParametroAnoEmpenho +
                         '&pesquisa_chave=' + iCodigoEmpenho +
                         '&funcao_js=parent.js_retornoBuscaEmpenhoInput',
@@ -473,7 +473,7 @@ function js_buscarNota(lMostra) {
 
   if ( lMostra ) {
 
-    js_OpenJanelaIframe('top.corpo', 'db_iframe_nota',
+    js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_nota',
                         'func_empnotaMovimentacaoPatrimonial.php?iDocumento='+$F('iDocumento')+'&chave_e60_numemp=' + $F('e60_numemp') + '&funcao_js=parent.js_retornoBuscaNotaAncora|e69_codnota',
                         'Pesquisa',true);
     return true;
@@ -481,7 +481,7 @@ function js_buscarNota(lMostra) {
 
   if ( $F('e69_codnota') != '' ) {
 
-    js_OpenJanelaIframe('top.corpo','db_iframe_nota',
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_nota',
                         'func_empnotaMovimentacaoPatrimonial.php?iDocumento' + $F('iDocumento') + '&chave_e60_numemp=' + $F('e60_numemp') + 'pesquisa_chave=' + $F('e69_codnota') + '&descricao=true&lLancamento=true&funcao_js=parent.js_retornoBuscaNotaInput',
                         'Pesquisa', false);
   }

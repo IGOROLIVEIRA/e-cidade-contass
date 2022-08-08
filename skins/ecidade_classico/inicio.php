@@ -37,7 +37,7 @@
       oStatusBarRotina.value = oRotinaAberta.pathname.replace(/(.*)\/(.*$)/, '$2');
     }
 
-    var camada = top.corpo.document.createElement("DIV");
+    var camada = CurrentWindow.corpo.document.createElement("DIV");
     camada.setAttribute("id","pullOver");
     camada.setAttribute("align","center");
     camada.setAttribute("class","pullOver");
@@ -46,7 +46,7 @@
 
     camada.innerHTML = inner;
 
-    //top.corpo.document.body.appendChild(camada);
+    //CurrentWindow.corpo.document.body.appendChild(camada);
   }
 
 </script>

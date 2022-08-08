@@ -9,7 +9,7 @@ $claguasitesgoto->rotulo->label();
     <td nowrap title="<?=@$Tx09_codsitesgoto?>">
        <?=@$Lx09_codsitesgoto?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('x09_codsitesgoto',4,$Ix09_codsitesgoto,true,'text',3,"")
 ?>
@@ -19,7 +19,7 @@ db_input('x09_codsitesgoto',4,$Ix09_codsitesgoto,true,'text',3,"")
     <td nowrap title="<?=@$Tx09_nomesituacao?>">
        <?=@$Lx09_nomesituacao?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('x09_nomesituacao',30,$Ix09_nomesituacao,true,'text',$db_opcao,"")
 ?>
@@ -32,7 +32,7 @@ db_input('x09_nomesituacao',30,$Ix09_nomesituacao,true,'text',$db_opcao,"")
 </form>
 <script>
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_aguasitesgoto','func_aguasitesgoto.php?funcao_js=parent.js_preenchepesquisa|x09_codsitesgoto','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_aguasitesgoto','func_aguasitesgoto.php?funcao_js=parent.js_preenchepesquisa|x09_codsitesgoto','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_aguasitesgoto.hide();

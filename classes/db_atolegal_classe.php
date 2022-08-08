@@ -693,7 +693,7 @@ class cl_atolegal {
    function sql_query ( $ed05_i_codigo=null,$campos="*",$ordem=null,$dbwhere=""){ 
      $sql = "select ";
      if($campos != "*" ){
-       $campos_sql = split("#",$campos);
+       $campos_sql = explode("#",$campos);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -716,7 +716,7 @@ class cl_atolegal {
      $sql .= $sql2;
      if($ordem != null ){
        $sql .= " order by ";
-       $campos_sql = split("#",$ordem);
+       $campos_sql = explode("#",$ordem);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -729,7 +729,7 @@ class cl_atolegal {
    function sql_query_file ( $ed05_i_codigo=null,$campos="*",$ordem=null,$dbwhere=""){ 
      $sql = "select ";
      if($campos != "*" ){
-       $campos_sql = split("#",$campos);
+       $campos_sql = explode("#",$campos);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -750,7 +750,7 @@ class cl_atolegal {
      $sql .= $sql2;
      if($ordem != null ){
        $sql .= " order by ";
-       $campos_sql = split("#",$ordem);
+       $campos_sql = explode("#",$ordem);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -765,7 +765,7 @@ class cl_atolegal {
      
      if ($sCampos != "*" ) {
 
-       $sCamposSQL  = split("#", $sCampos);
+       $sCamposSQL  = explode("#", $sCampos);
        $sVirgula    = "";
 
        for ($i = 0; $i < sizeof($sCamposSQL); $i++) {
@@ -806,7 +806,7 @@ class cl_atolegal {
      if ($sOrdem != null) {
 
        $sSql       .= " order by ";
-       $sCamposSQL  = split("#", $sOrdem);
+       $sCamposSQL  = explode("#", $sOrdem);
        $sVirgula    = "";
 
        for ($i = 0; $i < sizeof($sCamposSQL); $i++) {

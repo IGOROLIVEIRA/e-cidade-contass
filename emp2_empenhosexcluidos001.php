@@ -26,15 +26,15 @@
  */
 //Ocorrência 3414
 
-require("libs/db_stdlib.php");
-require("libs/db_conecta.php");
-include("libs/db_sessoes.php");
-include("libs/db_usuariosonline.php");
-include("libs/db_liborcamento.php");
-include("dbforms/db_classesgenericas.php");
-include("dbforms/db_funcoes.php");
-include("classes/db_empenhosexcluidos_classe.php");
-include("classes/db_cgm_classe.php");
+require(modification("libs/db_stdlib.php"));
+require(modification("libs/db_conecta.php"));
+include(modification("libs/db_sessoes.php"));
+include(modification("libs/db_usuariosonline.php"));
+include(modification("libs/db_liborcamento.php"));
+include(modification("dbforms/db_classesgenericas.php"));
+include(modification("dbforms/db_funcoes.php"));
+include(modification("classes/db_empenhosexcluidos_classe.php"));
+include(modification("classes/db_cgm_classe.php"));
 
 $clempenhosexcluidos = new cl_empenhosexcluidos;
 $clcgm = new cl_cgm;
@@ -126,7 +126,7 @@ db_postmemory($_GET);
       <table class="center">
         <tr>
           <td nowrap title="<?=@$Te290_e60_numemp?>">
-            <? db_ancora('Empenho',"js_pesquisae290_e60_numemp(true);"); ?>
+            <? db_ancora('Empenho',"js_pesquisae290_e60_numemp(true);", ''); ?>
           </td>
           <td>
             <?php
@@ -157,7 +157,7 @@ db_postmemory($_GET);
       <table class="center">
         <tr>
           <td nowrap title="<?=@$Tz01_numcgm?>">
-            <? db_ancora('Credores',"js_pesquisa_cgm(true);"); ?>
+            <? db_ancora('Credores',"js_pesquisa_cgm(true);", ''); ?>
           </td>
           <td>
             <?php
@@ -194,7 +194,7 @@ db_postmemory($_GET);
 /* INÍCIO - Funções Empenhos Excluídos*/
 function js_pesquisae290_e60_numemp(mostra){
   if (mostra==true) {
-    js_OpenJanelaIframe('top.corpo','db_iframe_empenhosexcluidos','func_empenhosexcluidos.php?funcao_js=parent.js_mostraempempenhoexcl2|e290_e60_numemp|e290_z01_nome|e290_e60_anousu','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_empenhosexcluidos','func_empenhosexcluidos.php?funcao_js=parent.js_mostraempempenhoexcl2|e290_e60_numemp|e290_z01_nome|e290_e60_anousu','Pesquisa',true);
   } else {
      if (document.form1.e290_e60_numemp.value != '') {
         js_OpenJanelaIframe('','db_iframe_empenhosexcluidos','func_empenhosexcluidos.php?codemp='+document.form1.e290_e60_numemp.value+'&pesquisa_chave&funcao_js=parent.js_mostraempempenhoexcl','Pesquisa',false);
@@ -279,10 +279,10 @@ document.getElementById('btn-lancaremp').addEventListener('click', function(e) {
 
 function js_pesquisa_cgm(mostra){
   if (mostra==true) {
-    js_OpenJanelaIframe('top.corpo','db_iframe_cgm','func_cgm_empenho.php?funcao_js=parent.js_mostracgm1|e60_numcgm|z01_nome','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cgm','func_cgm_empenho.php?funcao_js=parent.js_mostracgm1|e60_numcgm|z01_nome','Pesquisa',true);
   } else {
      if (document.form1.z01_numcgm.value != '') {
-        js_OpenJanelaIframe('top.corpo','db_iframe_cgm','func_cgm_empenho.php?pesquisa_chave='+document.form1.z01_numcgm.value+'&funcao_js=parent.js_mostracgm','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cgm','func_cgm_empenho.php?pesquisa_chave='+document.form1.z01_numcgm.value+'&funcao_js=parent.js_mostracgm','Pesquisa',false);
      } else {
        document.form1.z01_nome.value = '';
      }

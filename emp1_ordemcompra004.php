@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //echo ($HTTP_SERVER_VARS['QUERY_STRING']);exit;
@@ -56,7 +56,7 @@ if (isset($anula)){
   $sqlerro = false;
   $m53_data="$m53_data_ano-$m53_data_mes-$m53_data_dia";
 
-  $clmatordemanu->m53_data = $m53_data; 
+  $clmatordemanu->m53_data = $m53_data;
   $clmatordemanu->m53_obs = $m53_obs;
   $clmatordemanu->incluir($m51_codordem);
   if($clmatordemanu->erro_status==0){
@@ -77,7 +77,7 @@ if (isset($anula)){
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-  <tr> 
+  <tr>
     <td width="360" height="18">&nbsp;</td>
     <td width="263">&nbsp;</td>
     <td width="25">&nbsp;</td>
@@ -85,18 +85,18 @@ if (isset($anula)){
   </tr>
 </table>
 <table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
+  <tr>
     <td height="430" align="left" valign="top" bgcolor="#CCCCCC"><center>
     <?
       include("forms/db_frmmatordem.php");
 
 if (isset($m51_codordem)&&trim($m51_codordem)!=""){
      $resultado = $clmatestoqueitemoc->sql_record($clmatestoqueitemoc->sql_query(null,null,
-             "m73_codmatordemitem",null,"m51_codordem = $m51_codordem and m73_cancelado is false"));     
-     
+             "m73_codmatordemitem",null,"m51_codordem = $m51_codordem and m73_cancelado is false"));
+
      if ($clmatestoqueitemoc->numrows > 0){
           db_msgbox("Ordem nao pode ser anulada itens ja em estoque!");
-          echo"<script>top.corpo.location.href='emp1_ordemcompra003.php';</script>";
+          echo"<script>CurrentWindow.corpo.location.href='emp1_ordemcompra003.php';</script>";
      }
 }
     ?></center></td>
@@ -111,8 +111,8 @@ if (isset($anula)){
     if($clmatordemanu->erro_campo!=""){
       echo "<script> document.form1.".$clmatordemanu->erro_campo.".style.backgroundColor='#99A9AE';</script>";
       echo "<script> document.form1.".$clmatordemanu->erro_campo.".focus();</script>";
-    }else{ 
-      echo"<script>top.corpo.location.href='emp1_ordemcompra003.php';</script>";
+    }else{
+      echo"<script>CurrentWindow.corpo.location.href='emp1_ordemcompra003.php';</script>";
     }
 }
 ?>

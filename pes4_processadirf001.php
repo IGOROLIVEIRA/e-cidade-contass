@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -46,13 +46,13 @@ $clrotulo->label("c61_reduz");
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta http-equiv="Expires" CONTENT="0">
 <?php
-db_app::load('prototype.js, 
-              strings.js, 
-              scripts.js, 
-              windowAux.widget.js, 
-              dbmessageBoard.widget.js, 
-              datagrid.widget.js, 
-              DBAbas.widget.js, 
+db_app::load('prototype.js,
+              strings.js,
+              scripts.js,
+              windowAux.widget.js,
+              dbmessageBoard.widget.js,
+              datagrid.widget.js,
+              DBAbas.widget.js,
               DBAbasItem.widget.js');
 
 db_app::load("estilos.css, grid.style.css, DBtab.style.css");
@@ -77,12 +77,12 @@ function js_emite(){
   if(document.form1.pref_fun){
     qry += '&pref_fun=' + document.form1.pref_fun.value;
   }
-  js_OpenJanelaIframe('top.corpo','db_iframe_geradirf','pes4_geradirf002.php?'+qry,'Gerando Arquivo',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_geradirf','pes4_geradirf002.php?'+qry,'Gerando Arquivo',true);
 }
 
 function js_erro(msg){
   //js_controlarodape(false);
-  top.corpo.db_iframe_geradirf.hide();
+  CurrentWindow.corpo.db_iframe_geradirf.hide();
   alert(msg);
 }
 function js_fechaiframe(){
@@ -99,7 +99,7 @@ function js_controlarodape(mostra){
 
 function js_detectaarquivo(arquivo,pdf){
 //  js_controlarodape(false);
-  top.corpo.db_iframe_geradirf.hide();
+  CurrentWindow.corpo.db_iframe_geradirf.hide();
   listagem = arquivo+"#Download Arquivo TXT |";
   listagem+= pdf+"#Download Relatório";
   js_montarlista(listagem,"form1");
@@ -107,9 +107,9 @@ function js_detectaarquivo(arquivo,pdf){
 
 </script>
 </head>
-<body bgcolor="#CCCCCC" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1"> 
+<body bgcolor="#CCCCCC" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1">
 
-<div id="ctnAbas" style="margin-top:20"></div> 
+<div id="ctnAbas" style="margin-top:20"></div>
 
 
   <div id="ctnProcessamento">
@@ -119,7 +119,7 @@ function js_detectaarquivo(arquivo,pdf){
         <table border='0'>
          <tr>
            <td>
-             <fieldset><legend><b>Processamento da DIRF</b></legend> 
+             <fieldset><legend><b>Processamento da DIRF</b></legend>
               <table>
           <tr>
             <td align="right" nowrap title="Digite o Ano Base" >
@@ -151,7 +151,7 @@ function js_detectaarquivo(arquivo,pdf){
          </fieldset>
          </td>
          </tr>
-         </tr> 
+         </tr>
            <td colspan="2">
           <fieldset>
             <legend><b>CNPJ</b></legend>
@@ -182,13 +182,13 @@ function js_detectaarquivo(arquivo,pdf){
         </td>
       </tr>
           <tr>
-             <td colspan="2" align = "center"> 
+             <td colspan="2" align = "center">
               <input  name="gera" id="gera" type="button" value="Gerar" onclick="js_processarDirf();" >
-              <input  name="btnCnpjUnidade" id="btnCnpjUnidade" type="button" value="Inconsistências CNPJ" 
+              <input  name="btnCnpjUnidade" id="btnCnpjUnidade" type="button" value="Inconsistências CNPJ"
                       onclick="js_verificaPendencias()">
             </td>
           </tr>
-         </table> 
+         </table>
       </form>
 
     </center>
@@ -203,9 +203,9 @@ function js_detectaarquivo(arquivo,pdf){
         <tr>
           <td>
             <?php
-            db_ancora("$Lc61_reduz", 'js_pesquisaConta(true);', 1); 
-            db_input('c61_reduz',  8, "", true, 'text', 1, "onchange='js_pesquisaConta(false);'"); 
-            db_input('c60_descr', 40, "", true, 'text', 3); 
+            db_ancora("$Lc61_reduz", 'js_pesquisaConta(true);', 1);
+            db_input('c61_reduz',  8, "", true, 'text', 1, "onchange='js_pesquisaConta(false);'");
+            db_input('c60_descr', 40, "", true, 'text', 3);
             ?>
           </td>
           <td align="right">
@@ -218,7 +218,7 @@ function js_detectaarquivo(arquivo,pdf){
             <div id="ctnDesdobramentos"></div>
           </td>
         </tr>
-      </table>         
+      </table>
     </fieldset>
 
   </div>
@@ -244,7 +244,7 @@ oDesdobramentos.show( $('ctnDesdobramentos') );
 oDesdobramentos.clearAll(true);
 
 /**
- * Bloque os botoes de adicionar e libera os botoes de remover 
+ * Bloque os botoes de adicionar e libera os botoes de remover
  */
 js_bloquearBotao('btnAdicionarConta', true);
 js_bloquearBotao('btnRemoverConta', false);
@@ -258,12 +258,12 @@ var oAbaProcessamento = oDBAba.adicionarAba("Processamento", $('ctnProcessamento
 var oAbaFinanceiro    = oDBAba.adicionarAba("Dados Financeiros", $('ctnFinanceiro'));
 
 /**
- * Singleton para adicionar/remover itens da grid das contas 
+ * Singleton para adicionar/remover itens da grid das contas
  */
 Desdobramentos = {
 
   /**
-   * Array com as contas 
+   * Array com as contas
    */
   aDesdobramentos: new Array(),
 
@@ -305,13 +305,13 @@ Desdobramentos = {
     }
 
     /**
-     * desbloquea botao Adicionar  
+     * desbloquea botao Adicionar
      */
     js_bloquearBotao('btnAdicionarConta', true);
 
-    $('c61_reduz').focus(); 
-    $('c61_reduz').value = ''; 
-    $('c60_descr').value = ''; 
+    $('c61_reduz').focus();
+    $('c61_reduz').value = '';
+    $('c60_descr').value = '';
 
     /**
      * Adiciona conta ao array e renderiza grid novamente
@@ -321,7 +321,7 @@ Desdobramentos = {
   },
 
   /**
-   * Remove conta e renderiza novamente grid, funcao montaGrid() 
+   * Remove conta e renderiza novamente grid, funcao montaGrid()
    */
   remover: function() {
 
@@ -339,7 +339,7 @@ Desdobramentos = {
   },
 
   /**
-   * Pescorre array com as contas e adiciona a grid 
+   * Pescorre array com as contas e adiciona a grid
    */
   montaGrid: function() {
 
@@ -361,14 +361,14 @@ Desdobramentos = {
       oDesdobramentos.addRow(aLinha);
     });
 
-    oDesdobramentos.renderRows();  
+    oDesdobramentos.renderRows();
   }
 
 }
 
 /**
- * Pesquca conta  
- * 
+ * Pesquca conta
+ *
  * @param bool lMostra - true mostra tela de pesquisa/ false pesquisa pelo input
  */
 function js_pesquisaConta(lMostra) {
@@ -381,21 +381,21 @@ function js_pesquisaConta(lMostra) {
   } else {
 
    if ( $F('c61_reduz') == '' ) {
-   
+
      js_bloquearBotao('btnAdicionarConta', true);
-     $('c60_descr').value = ''; 
+     $('c60_descr').value = '';
      return false;
    }
 
     sFuncao += 'js_pesquisaContaInput&pesquisa_chave=' + $F('c61_reduz');
   }
 
-  js_OpenJanelaIframe('top.corpo', 'db_iframe_conplanoreduz', sFuncao, 'Pesquisa', lMostra);
+  js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_conplanoreduz', sFuncao, 'Pesquisa', lMostra);
 }
 
 /**
- * Retorno da pesquisa da conta pela ancora  
- * 
+ * Retorno da pesquisa da conta pela ancora
+ *
  * @param integer iReduzido  - codigo do reduzido
  * @param string  sDescricao - descricao da conta
  */
@@ -409,10 +409,10 @@ function js_pesquisaContaAncora(iReduzido, sDescricao) {
 }
 
 /**
- * Retorno da pesquisa da conta pelo change do input 
- * 
+ * Retorno da pesquisa da conta pelo change do input
+ *
  * @param string sDescricao - descricao da conta
- * @param bool   lErro      - true caso nao encontre conta 
+ * @param bool   lErro      - true caso nao encontre conta
  */
 function js_pesquisaContaInput(sDescricao, lErro) {
 
@@ -430,15 +430,15 @@ function js_pesquisaContaInput(sDescricao, lErro) {
 }
 
 /**
- * Funcao para bloquear botao 
- * 
+ * Funcao para bloquear botao
+ *
  * @param string sId       - id do botao
  * @param bool   lBloquear - bloquear ou desbloquerar botao
  */
 function js_bloquearBotao(sId, lBloquear) {
 
   if ( lBloquear ) {
-  
+
     $(sId).setAttribute('disabled', 'true');
     return;
   }
@@ -449,7 +449,7 @@ function js_bloquearBotao(sId, lBloquear) {
 function js_processarDirf() {
 
   if ($F('ano_base') == "") {
- 
+
     alert('Informe o ano base!');
     return false;
   }
@@ -462,7 +462,7 @@ function js_processarDirf() {
   oParam.sCnpj            = $F('cnpj');
   oParam.lProcessaEmpenho = $F('dadosfinanceiros') == 's' ? true : false;
   oParam.aDesdobramentos  = Desdobramentos.getDesdobramentos();
-  oParam.exec             = 'processarDirf';  
+  oParam.exec             = 'processarDirf';
 
   js_divCarregando('Aguarde, processando Dados para a Dirf', 'msgBox');
 
@@ -477,19 +477,19 @@ function js_processarDirf() {
 }
 
 function js_retornoProcessaDirf(oAjax) {
-  
+
   $('frmProcessaDirf').enable();
   js_removeObj('msgBox');
   var oRetorno = eval("("+oAjax.responseText+")");
-  
+
   if (oRetorno.status == 1) {
-  
+
     alert('Processamento efetuado com sucesso.');
-    
+
     if ( oRetorno.aArquivosInconsistentes.length > 0) {
-        
+
     	var listagem = '';
-    	var sSepara = '';    	
+    	var sSepara = '';
       for (iIndice = 0; iIndice < oRetorno.aArquivosInconsistentes.length; iIndice++) {
     	  listagem += sSepara + oRetorno.aArquivosInconsistentes[iIndice].urlDecode()+"#Download Relatório de Inconsistências"+iIndice;
     	  sSepara = '|';
@@ -498,7 +498,7 @@ function js_retornoProcessaDirf(oAjax) {
 
       js_montarlista(listagem,"form1");
     }
-  
+
   } else {
     alert(oRetorno.message.urlDecode());
   }
@@ -509,7 +509,7 @@ function js_verificaPendencias() {
 
   $('frmProcessaDirf').disable();
   var oParam   = new Object();
-  oParam.exec  = 'getUnidadesCnpjInvalido';  
+  oParam.exec  = 'getUnidadesCnpjInvalido';
   js_divCarregando('Aguarde, pesquisar dados', 'msgBox');
   oAjax        = new Ajax.Request('pes4_processardirf.RPC.php',
                                   {
@@ -520,13 +520,13 @@ function js_verificaPendencias() {
 }
 
 function js_retornoUnidadesCnpjInvalido(oAjax) {
-  
-  js_removeObj('msgBox');  
+
+  js_removeObj('msgBox');
   if ($('wndUnidades')) {
     oWindowUnidades.shutDown();
   }
   var iWidth   = document.width/1.5;
-  var iHeight  = (document.body.clientHeight/1.5); 
+  var iHeight  = (document.body.clientHeight/1.5);
   var oRetorno    = eval("("+oAjax.responseText+")");
   oWindowUnidades = new windowAux('wndUnidades', 'Unidades Com CNPJ Inconsistentes', iWidth, iHeight);
   sContent  = "<div class='infoLancamentoContabil' style='text-align:center;padding:2px;width:99%'>";
@@ -538,13 +538,13 @@ function js_retornoUnidadesCnpjInvalido(oAjax) {
   oWindowUnidades.setContent(sContent);
   var sMsg  = "As unidades abaixo podem estar com o CNPJ inconsistente, o que poderá ocorrer divergências na DIRF.";
       sMsg += "Solicite à contabilidade a correção dos CNPJ, caso esteja incorreto. ";
-  oMessage  = new DBMessageBoard('msgboard', 
+  oMessage  = new DBMessageBoard('msgboard',
                                  'Unidades com cnpj Inválido',
                                  sMsg,
                                  $("windowwndUnidades_content"));
   oMessage.show();
   oWindowUnidades.setShutDownFunction(function (){
-     
+
     oWindowUnidades.destroy();
     $('frmProcessaDirf').enable();
   });
@@ -558,9 +558,9 @@ function js_retornoUnidadesCnpjInvalido(oAjax) {
   oWindowUnidades.show();
   oGridUnidades.clearAll(true);
   for (var i =0; i < oRetorno.unidades.length;i++) {
-   
-    with (oRetorno.unidades[i]){ 
-    
+
+    with (oRetorno.unidades[i]){
+
      var aLinha = new Array();
          aLinha[0]  = o41_orgao;
          aLinha[1]  = o41_unidade;

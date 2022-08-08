@@ -253,10 +253,10 @@ if (isset($chavepesquisa)) {
     		 parent.document.formaba.permemp.disabled=false;
     		 parent.document.formaba.permmenu.disabled=false;
          parent.document.formaba.lotacoes.disabled=false;
-         top.corpo.iframe_db_depusu.location.href='con1_db_depusu001.php?id_usuario=".@$id_usuario."&nome=".@addslashes($z01_nome)."';
-    		 top.corpo.iframe_permemp.location.href='con1_db_permemp001.php?id_usuario=".@$id_usuario."&nome=".@addslashes($z01_nome)."&nao_retorna=1';
-    		 top.corpo.iframe_permmenu.location.href='con4_permitensusu.php?usuario=".@$id_usuario."&nome=".@addslashes($z01_nome)."';
-         top.corpo.iframe_lotacoes.location.href='con4_permissaolotacao001.php?iCodigoUsuario=".@$id_usuario."&nome=".@addslashes($z01_nome)."';
+         CurrentWindow.corpo.iframe_db_depusu.location.href='con1_db_depusu001.php?id_usuario=".@$id_usuario."&nome=".@addslashes($z01_nome)."';
+    		 CurrentWindow.corpo.iframe_permemp.location.href='con1_db_permemp001.php?id_usuario=".@$id_usuario."&nome=".@addslashes($z01_nome)."&nao_retorna=1';
+    		 CurrentWindow.corpo.iframe_permmenu.location.href='con4_permitensusu.php?usuario=".@$id_usuario."&nome=".@addslashes($z01_nome)."';
+         CurrentWindow.corpo.iframe_lotacoes.location.href='con4_permissaolotacao001.php?iCodigoUsuario=".@$id_usuario."&nome=".@addslashes($z01_nome)."';
      ";
          if(isset($liberaaba)){
            echo "  parent.mo_camada('db_depusu');";

@@ -1,7 +1,7 @@
 <?php
-include ("../jpgraph.php");
-include ("../jpgraph_bar.php");
-include ("../jpgraph_line.php");
+include (__DIR__ . "/../jpgraph.php");
+include (__DIR__ . "/../jpgraph_bar.php");
+include (__DIR__ . "/../jpgraph_line.php");
 
 // Some "random" data
 $ydata  = array(10,120,80,190,260,170,60,40,20,230);

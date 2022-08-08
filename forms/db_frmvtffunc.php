@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: pessoal
@@ -58,7 +58,7 @@ if(isset($opcao)){
               db_ancora($Lr17_regist,"js_pesquisar17_regist(true)",(isset($opcao)?3:$db_opcao));
               ?>
             </td>
-            <td colspan="3"> 
+            <td colspan="3">
               <?
               db_input('r17_regist',8,$Ir17_regist,true,'text',(isset($opcao)?3:$db_opcao),"onchange='js_pesquisar17_regist(false)'");
               db_input('z01_numcgm',13,$Iz01_numcgm,true,'text',3,"");
@@ -72,7 +72,7 @@ if(isset($opcao)){
               db_ancora($Lr17_lotac,"",3);
               ?>
             </td>
-            <td colspan="3"> 
+            <td colspan="3">
               <?
               db_input('r17_lotac',8,$Ir17_lotac,true,'text',3);
               db_input('r70_estrut',13,$Ir70_estrut,true,'text',3);
@@ -80,13 +80,13 @@ if(isset($opcao)){
               ?>
             </td>
           </tr>
-          
+
           <tr>
             <td>
               <input type="button" value="Locais de Trabalho" onclick="js_cadastraLocaisTrabalho()" />
             </td>
           </tr>
-          
+
         </table>
       </fieldset>
     </td>
@@ -102,7 +102,7 @@ if(isset($opcao)){
               db_ancora(@$Lr17_codigo,"js_pesquisar17_codigo(true);",(isset($opcao)?3:$db_opcao));
               ?>
             </td>
-            <td colspan="3"> 
+            <td colspan="3">
               <?
               db_input('r17_codigo',8,$Ir17_codigo,true,'text',(isset($opcao)?3:$db_opcao)," onchange='js_pesquisar17_codigo(false);'");
               db_input('r16_descr',46,$Ir16_descr,true,'text',3,'');
@@ -113,7 +113,7 @@ if(isset($opcao)){
             <td nowrap title="<?=@$Tr17_tipo?>">
               <?=@$Lr17_tipo?>
             </td>
-            <td> 
+            <td>
               <?
               if(!isset($r17_tipo)){
                 $r17_tipo = "t";
@@ -125,7 +125,7 @@ if(isset($opcao)){
             <td nowrap title="<?=@$Tr17_difere?>" align="right">
               <?=@$Lr17_difere?>
             </td>
-            <td> 
+            <td>
               <?
               $x = array("f"=>"NAO","t"=>"SIM");
               db_select('r17_difere',$x,true,(isset($opcao)?3:$db_opcao));
@@ -136,7 +136,7 @@ if(isset($opcao)){
             <td nowrap title="<?=@$Tr17_quant?>">
               <?=@$Lr17_quant?>
             </td>
-            <td> 
+            <td>
               <?
               db_input('r17_quant',8,$Ir17_quant,true,'text',$db_opcao,"")
               ?>
@@ -144,7 +144,7 @@ if(isset($opcao)){
             <td nowrap title="<?=@$Tr17_situac?>" align="right">
               <?=@$Lr17_situac?>
             </td>
-            <td> 
+            <td>
               <?
               $x = array("A"=>"Ativo","I"=>"Inativo");
               db_select('r17_situac',$x,true,$db_opcao,"");
@@ -307,7 +307,7 @@ if(isset($opcao)){
       }else{
   $campo_quantidade = "quantvale(r17_codigo,r17_regist,r17_anousu,r17_mesusu,0,r17_difere,".db_getsession("DB_instit").") as ";
       }
-      $dbwhere = "r17_anousu = $ano and r17_mesusu = $mes and r17_regist = ".@$r17_regist; 
+      $dbwhere = "r17_anousu = $ano and r17_mesusu = $mes and r17_regist = ".@$r17_regist;
       if(isset($codigo) && trim($codigo) != "" && isset($difere) && trim($difere) != ""){
         $dbwhere.= " and (r17_codigo <> '".$codigo."' or (r17_codigo = '".$codigo."' and r17_difere <> '".$difere."'))";
       }
@@ -339,21 +339,21 @@ if(isset($opcao)){
 <script>
 
 /**
- * Exibe Componente de Manutenção de Locais de Trabalho 
+ * Exibe Componente de Manutenção de Locais de Trabalho
  * @access public
  * @return void
  */
 function js_cadastraLocaisTrabalho() {
 
   oLocaisTrabalho = new DBViewManutencaoLocalTrabalho('oLocaisTrabalho', 'locaisTrabalho');
-  oLocaisTrabalho.setCodigoServidor(<?php echo @$r17_regist; ?>); 
+  oLocaisTrabalho.setCodigoServidor(<?php echo @$r17_regist; ?>);
   oLocaisTrabalho.show();
 }
- 
+
 /**
- * js_verificatipo 
- * 
- * @param  valor valor 
+ * js_verificatipo
+ *
+ * @param  valor valor
  * @access public
  * @return void
  */
@@ -434,10 +434,10 @@ function js_verificatipo(valor){
 }
 function js_pesquisar17_regist(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_rhpessoal','func_rhpessoal.php?testarescisao=raf&funcao_js=parent.js_mostrapessoal1|rh01_regist|z01_nome&instit=<?=db_getsession("DB_instit")?>','Pesquisa',true,'20');
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhpessoal','func_rhpessoal.php?testarescisao=raf&funcao_js=parent.js_mostrapessoal1|rh01_regist|z01_nome&instit=<?=db_getsession("DB_instit")?>','Pesquisa',true,'20');
   }else{
-    if(document.form1.r17_regist.value != ''){ 
-      js_OpenJanelaIframe('top.corpo','db_iframe_rhpessoal','func_rhpessoal.php?testarescisao=raf&pesquisa_chave='+document.form1.r17_regist.value+'&funcao_js=parent.js_mostrapessoal&instit=<?=db_getsession("DB_instit")?>','Pesquisa',false);
+    if(document.form1.r17_regist.value != ''){
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhpessoal','func_rhpessoal.php?testarescisao=raf&pesquisa_chave='+document.form1.r17_regist.value+'&funcao_js=parent.js_mostrapessoal&instit=<?=db_getsession("DB_instit")?>','Pesquisa',false);
     }else{
       document.form1.z01_nome.value = '';
       document.form1.z01_numcgm.value = '';
@@ -456,10 +456,10 @@ function js_pesquisar17_regist(mostra){
   }
 }
 function js_mostrapessoal(chave,erro){
-  document.form1.z01_nome.value = chave; 
-  if(erro==true){ 
-    document.form1.r17_regist.focus(); 
-    document.form1.r17_regist.value = ''; 
+  document.form1.z01_nome.value = chave;
+  if(erro==true){
+    document.form1.r17_regist.focus();
+    document.form1.r17_regist.value = '';
   }else{
     document.form1.submit();
   }
@@ -472,20 +472,20 @@ function js_mostrapessoal1(chave1,chave2){
 }
 function js_pesquisar17_codigo(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_vtfempr','func_vtfempr.php?funcao_js=parent.js_mostravtfempr1|r16_codigo|r16_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_vtfempr','func_vtfempr.php?funcao_js=parent.js_mostravtfempr1|r16_codigo|r16_descr','Pesquisa',true);
   }else{
-    if(document.form1.r17_codigo.value != ''){ 
-      js_OpenJanelaIframe('top.corpo','db_iframe_vtfempr','func_vtfempr.php?pesquisa_chave='+document.form1.r17_codigo.value+'&funcao_js=parent.js_mostravtfempr','Pesquisa',false);
+    if(document.form1.r17_codigo.value != ''){
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_vtfempr','func_vtfempr.php?pesquisa_chave='+document.form1.r17_codigo.value+'&funcao_js=parent.js_mostravtfempr','Pesquisa',false);
     }else{
-      document.form1.r16_descr.value = ''; 
+      document.form1.r16_descr.value = '';
     }
   }
 }
 function js_mostravtfempr(chave,erro){
-  document.form1.r16_descr.value = chave; 
-  if(erro==true){ 
-    document.form1.r17_codigo.focus(); 
-    document.form1.r17_codigo.value = ''; 
+  document.form1.r16_descr.value = chave;
+  if(erro==true){
+    document.form1.r17_codigo.focus();
+    document.form1.r17_codigo.value = '';
   }
 }
 function js_mostravtfempr1(chave1,chave2){
@@ -494,7 +494,7 @@ function js_mostravtfempr1(chave1,chave2){
   db_iframe_vtfempr.hide();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_vtffunc','func_vtffunc.php?funcao_js=parent.js_preenchepesquisa|r17_anousu|r17_mesusu|r17_regist|r17_codigo|r17_difere','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_vtffunc','func_vtffunc.php?funcao_js=parent.js_preenchepesquisa|r17_anousu|r17_mesusu|r17_regist|r17_codigo|r17_difere','Pesquisa',true);
 }
 function js_preenchepesquisa(chave,chave1,chave2,chave3,chave4){
   db_iframe_vtffunc.hide();

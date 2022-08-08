@@ -13,7 +13,7 @@ $sArquivoLog  = 'log/enderecoCgm.txt';
 
 //$ConfigINI = parse_ini_file("db_config.ini");
 
-require_once ("../../../libs/db_conn.php");
+require_once (__DIR__ . "/../../../libs/db_conn.php");
 
 // ORIGEM 1
 /*

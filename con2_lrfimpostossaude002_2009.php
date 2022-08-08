@@ -689,14 +689,14 @@ $n2 = 10;
 
 // end se incluido em outro arquivo
 
-$xinstit = split("-", $db_selinstit);
+$xinstit = explode("-", $db_selinstit);
 $resultinst = pg_exec("select munic from db_config where codigo in (" . str_replace('-', ', ', $db_selinstit) . ") ");
 $descr_inst = '';
 db_fieldsmemory($resultinst, 0);
 $descr_inst = $munic;
 
-$vdt_ini = split("-", $dt_ini);
-$vdt_fin = split("-", $dt_fin);
+$vdt_ini = explode("-", $dt_ini);
+$vdt_fin = explode("-", $dt_fin);
 
 $head1 = "MUNICÍPIO DE " . strtoupper($descr_inst);
 $head2 = "RELATÓRIO RESUMIDO DA EXECUÇÃO ORÇAMENTÁRIA";

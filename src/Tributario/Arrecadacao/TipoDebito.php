@@ -8,7 +8,6 @@ use cl_arretipo;
 
 class TipoDebito {
 
-  CONST GRUPO_DEBITO_ISSQN_VARIAVEL = 3;
   /**
    * @var int
    */

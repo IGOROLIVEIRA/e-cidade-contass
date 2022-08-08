@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: prefeitura
@@ -41,7 +41,7 @@ if(isset($db_opcaoal)){
 }else if(isset($opcao) && $opcao=="excluir"){
     $db_opcao = 3;
     $db_botao=true;
-}else{  
+}else{
     $db_opcao = 1;
     $db_botao=true;
     if(isset($novo) || isset($alterar) ||   isset($excluir) || $db_opcao == 1 || (isset($incluir) && $sqlerro==false ) ){
@@ -49,7 +49,7 @@ if(isset($db_opcaoal)){
 			$w16_aguacortesituacao = "";
 			$x43_descr				= "";
    }
-} 
+}
 ?>
 <form name="form1" method="post" action="">
 <center>
@@ -62,7 +62,7 @@ if(isset($db_opcaoal)){
 		    <td nowrap title="<?=@$Tw16_sequencial?>">
 		       <?=@$Lw16_sequencial?>
 		    </td>
-		    <td> 
+		    <td>
 				<?
 				db_input('w16_sequencial',10,$Iw16_sequencial,true,'text',3,"")
 				?>
@@ -75,7 +75,7 @@ if(isset($db_opcaoal)){
 		       //db_ancora(@$Lw16_instit,"js_pesquisaw16_instit(true);",$db_opcao);
 		       ?>
 		    </td>
-		    <td> 
+		    <td>
 					<?
 					$w16_instit = db_getsession('DB_instit');
 					db_input('w16_instit',10,$Iw16_instit,true,'text',3," onchange='js_pesquisaw16_instit(false);'")
@@ -96,9 +96,9 @@ if(isset($db_opcaoal)){
 		      db_ancora(@$Lw16_aguacortesituacao,"js_pesquisaw16_aguacortesituacao(true);",$db_opcao1);
 		       ?>
 		    </td>
-		    <td> 
+		    <td>
 				<?
-				
+
 				db_input('w16_aguacortesituacao',10,$Iw16_aguacortesituacao,true,'text',$db_opcao1," onchange='js_pesquisaw16_aguacortesituacao(false);'")
 				?>
 		    <?
@@ -116,7 +116,7 @@ if(isset($db_opcaoal)){
 				    										 "2"=>"mostra os débitos, mas não permite emitir recibo",
 				    										 "3"=>"não mostra os débitos");
 				  	db_select("w16_recibodbpref",$aTipoDebito,true,$db_opcao,"");
-				?> 
+				?>
 				</td>
 		  </tr>
 		  <tr align="center">
@@ -131,9 +131,9 @@ if(isset($db_opcaoal)){
 </table>
   <table>
   	  <tr>
-	    <td valign="top"  align="center">  
+	    <td valign="top"  align="center">
 	      <?
-	                    
+
 		 	$chavepri= array("w16_sequencial"=>@$w16_sequencial);
 		 	$cliframe_alterar_excluir->chavepri=$chavepri;
 		 	$cliframe_alterar_excluir->sql     = $clconfigdbprefagua->sql_query(null,'*',"w16_sequencial", "w16_instit=".$w16_instit);
@@ -154,20 +154,20 @@ if(isset($db_opcaoal)){
 <script>
 function js_pesquisaw16_aguacortesituacao(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_aguacortesituacao','func_aguacortesituacao.php?funcao_js=parent.js_mostraaguacortesituacao1|x43_codsituacao|x43_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_aguacortesituacao','func_aguacortesituacao.php?funcao_js=parent.js_mostraaguacortesituacao1|x43_codsituacao|x43_descr','Pesquisa',true);
   }else{
-     if(document.form1.w16_aguacortesituacao.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_aguacortesituacao','func_aguacortesituacao.php?pesquisa_chave='+document.form1.w16_aguacortesituacao.value+'&funcao_js=parent.js_mostraaguacortesituacao','Pesquisa',false);
+     if(document.form1.w16_aguacortesituacao.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_aguacortesituacao','func_aguacortesituacao.php?pesquisa_chave='+document.form1.w16_aguacortesituacao.value+'&funcao_js=parent.js_mostraaguacortesituacao','Pesquisa',false);
      }else{
-       document.form1.x43_descr.value = ''; 
+       document.form1.x43_descr.value = '';
      }
   }
 }
 function js_mostraaguacortesituacao(chave,erro){
-  document.form1.x43_descr.value = chave; 
-  if(erro==true){ 
-    document.form1.w16_aguacortesituacao.focus(); 
-    document.form1.w16_aguacortesituacao.value = ''; 
+  document.form1.x43_descr.value = chave;
+  if(erro==true){
+    document.form1.w16_aguacortesituacao.focus();
+    document.form1.w16_aguacortesituacao.value = '';
   }
 }
 function js_mostraaguacortesituacao1(chave1,chave2){
@@ -177,20 +177,20 @@ function js_mostraaguacortesituacao1(chave1,chave2){
 }
 function js_pesquisaw16_instit(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_db_config','func_db_config.php?funcao_js=parent.js_mostradb_config1|codigo|nomeinst','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_config','func_db_config.php?funcao_js=parent.js_mostradb_config1|codigo|nomeinst','Pesquisa',true);
   }else{
-     if(document.form1.w16_instit.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_db_config','func_db_config.php?pesquisa_chave='+document.form1.w16_instit.value+'&funcao_js=parent.js_mostradb_config','Pesquisa',false);
+     if(document.form1.w16_instit.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_config','func_db_config.php?pesquisa_chave='+document.form1.w16_instit.value+'&funcao_js=parent.js_mostradb_config','Pesquisa',false);
      }else{
-       document.form1.nomeinst.value = ''; 
+       document.form1.nomeinst.value = '';
      }
   }
 }
 function js_mostradb_config(chave,erro){
-  document.form1.nomeinst.value = chave; 
-  if(erro==true){ 
-    document.form1.w16_instit.focus(); 
-    document.form1.w16_instit.value = ''; 
+  document.form1.nomeinst.value = chave;
+  if(erro==true){
+    document.form1.w16_instit.focus();
+    document.form1.w16_instit.value = '';
   }
 }
 function js_mostradb_config1(chave1,chave2){
@@ -199,7 +199,7 @@ function js_mostradb_config1(chave1,chave2){
   db_iframe_db_config.hide();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_configdbprefagua','func_configdbprefagua.php?funcao_js=parent.js_preenchepesquisa|w16_sequencial','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_configdbprefagua','func_configdbprefagua.php?funcao_js=parent.js_preenchepesquisa|w16_sequencial','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_configdbprefagua.hide();

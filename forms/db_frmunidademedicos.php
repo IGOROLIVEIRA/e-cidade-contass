@@ -48,11 +48,11 @@ $db_botao1 = false;
 $iPermiteAlteracao = 1;
 if(isset($opcao) && $opcao=="alterar"){
 
-	/*  
-	 Na alteracao verifico pela codigo da unidademedicos, 
+	/*
+	 Na alteracao verifico pela codigo da unidademedicos,
    pois pode ser que para certa ligacao unidademedicos - especmedico nao exista uma ligacao especmedico - prontproced, mas para outra exista
    e a alteracao dos campos unidade e especialidade desta ligacao unidademedicos - especmedico influenciam todas as outras ligacoes deste tipo, pois
-   os registros da unidademedicos sao 1 : n com a especmedico 
+   os registros da unidademedicos sao 1 : n com a especmedico
   */
   $sSql      = $oDaoprontprofatend->sql_query_vinculo_profissional(null, 'count(*) as quant', null, " s104_i_profissional = $sd27_i_codigo ");
   $rsResult1 = $oDaoprontprofatend->sql_record($sSql);
@@ -61,7 +61,7 @@ if(isset($opcao) && $opcao=="alterar"){
   } else {
   	$oQuant1->quant = 0;
   }
-  $sSql      = $oDaoprontproced->sql_query_procedimentos(null, 'count(*) as quant', null, " sd04_i_codigo = $sd04_i_codigo "); 
+  $sSql      = $oDaoprontproced->sql_query_procedimentos(null, 'count(*) as quant', null, " sd04_i_codigo = $sd04_i_codigo ");
   $rsResult2 = $oDaoprontproced->sql_record($sSql);
   if ($oDaoprontproced->erro_status != "0") {
     $oQuant2 = db_utils::fieldsmemory($rsResult2,0);
@@ -76,7 +76,7 @@ if(isset($opcao) && $opcao=="alterar"){
   $db_botao1 = true;
 
 }elseif(isset($opcao) && $opcao=="excluir" || isset($db_opcao) && $db_opcao==3){
- 
+
   $iPermiteAlteracao = 3;
   $db_botao1 = true;
   $db_opcao = 3;
@@ -152,7 +152,7 @@ if(isset($opcao) && $opcao=="alterar"){
                     <td width="100%" valign="top">
                       <fieldset><legend><b>Atendimento</b></legend>
                       <table border="0">
-                       
+
                       <tr>
                         <td nowrap align="right" title="<?=@$Tsd27_c_situacao?>">
                            <?=@$Lsd27_c_situacao?>
@@ -164,7 +164,7 @@ if(isset($opcao) && $opcao=="alterar"){
                          ?>
                         </td>
                       </tr>
-                      
+
                       <tr>
                         <td nowrap align="right" title="<?=@$Tsd04_c_sus?>">
                            <?=@$Lsd04_c_sus?>
@@ -213,7 +213,7 @@ if(isset($opcao) && $opcao=="alterar"){
           db_input('descrdepto',60,$Idescrdepto,true,'text',3,'')
           ?>
          </td>
-       </tr>       
+       </tr>
        <tr>
          <td nowrap title="<?=@$Tsd04_v_registroconselho?>">
             <?=@$Lsd04_v_registroconselho?>
@@ -275,12 +275,12 @@ if(isset($opcao) && $opcao=="alterar"){
            $rs   = $oDaoFarCbos->sql_record($sSql);
            $aX   = array();
            if ($oDaoFarCbos->numrows > 0) {
-            
+
              for ($iCont = 0; $iCont < $oDaoFarCbos->numrows; $iCont++) {
-     
+
                $oDados                     = db_utils::fieldsmemory($rs, $iCont);
                $aX[$oDados->fa53_i_codigo] = $oDados->fa53_c_descr;
-     
+
              }
 
            }
@@ -289,7 +289,7 @@ if(isset($opcao) && $opcao=="alterar"){
          </td>
        </tr>
 
-       
+
        <tr>
          <td nowrap title="<?=@$Tsd04_i_vinculo?>">
             <?
@@ -395,7 +395,7 @@ function js_pesquisasd04_i_cbo(mostra){
   if(mostra==true){
     js_OpenJanelaIframe('','db_iframe_rhcbo','func_rhcbosaude.php?funcao_js=parent.js_mostrarhcbo1|rh70_sequencial|rh70_estrutural|rh70_descr','Pesquisa',true);
   }else{
-     if(document.form1.sd27_i_rhcbo.value != ''){ 
+     if(document.form1.sd27_i_rhcbo.value != ''){
          //js_OpenJanelaIframe('','db_iframe_rhcbo','func_rhcbosaude.php?pesquisa_chave='+document.form1.sd27_i_rhcbo.value+'&funcao_js=parent.js_mostrarhcbo','Pesquisa',false);
          js_OpenJanelaIframe('','db_iframe_rhcbo','func_rhcbosaude.php?chave_rh70_sequencial='+document.form1.sd27_i_rhcbo.value+'&funcao_js=parent.js_mostrarhcbo1|rh70_sequencial|rh70_estrutural|rh70_descr','Pesquisa',true);
      }else{
@@ -409,8 +409,8 @@ function js_mostrarhcbo(chave1, chave2, chave3,erro){
   document.form1.rh70_descr.value = chave2;
   document.form1.sd27_i_rhcbo.value = chave3;
   if(erro==true){
-    document.form1.sd27_i_rhcbo.focus(); 
-    document.form1.sd27_i_rhcbo.value = ''; 
+    document.form1.sd27_i_rhcbo.focus();
+    document.form1.sd27_i_rhcbo.value = '';
   }
 }
 function js_mostrarhcbo1(chave1,chave2,chave3){
@@ -423,7 +423,7 @@ function js_pesquisasd04_i_vinculo(mostra){
   if(mostra==true){
     js_OpenJanelaIframe('','db_iframe_sau_modvinculo','func_sau_modvinculo.php?funcao_js=parent.js_mostrasau_modvinculo1|sd52_i_vinculacao|sd52_v_descricao','Pesquisa',true);
   }else{
-     if(document.form1.sd04_i_vinculo.value != ''){ 
+     if(document.form1.sd04_i_vinculo.value != ''){
         js_OpenJanelaIframe('','db_iframe_sau_modvinculo','func_sau_modvinculo.php?pesquisa_chave='+document.form1.sd04_i_vinculo.value+'&funcao_js=parent.js_mostrasau_modvinculo','Pesquisa',false);
      }else{
        document.form1.sd52_v_descricao.value = '';
@@ -436,9 +436,9 @@ function js_pesquisasd04_i_vinculo(mostra){
 }
 function js_mostrasau_modvinculo(chave,erro){
   document.form1.sd52_v_descricao.value = chave;
-  if(erro==true){ 
-    document.form1.sd04_i_vinculo.focus(); 
-    document.form1.sd04_i_vinculo.value = ''; 
+  if(erro==true){
+    document.form1.sd04_i_vinculo.focus();
+    document.form1.sd04_i_vinculo.value = '';
     document.form1.sd04_i_tipovinc.value = '';
     document.form1.sd53_v_descrvinculo.value = '';
     document.form1.sd04_i_subtipovinc.value = '';
@@ -520,7 +520,7 @@ function js_pesquisasd04_i_orgaoemissor(mostra){
   if(mostra==true){
     js_OpenJanelaIframe('','db_iframe_sau_orgaoemissor','func_sau_orgaoemissor.php?funcao_js=parent.js_mostrasau_orgaoemissor1|sd51_i_codigo|sd51_v_descricao','Pesquisa',true);
   }else{
-     if(document.form1.sd04_i_orgaoemissor.value != ''){ 
+     if(document.form1.sd04_i_orgaoemissor.value != ''){
         js_OpenJanelaIframe('','db_iframe_sau_orgaoemissor','func_sau_orgaoemissor.php?pesquisa_chave='+document.form1.sd04_i_orgaoemissor.value+'&funcao_js=parent.js_mostrasau_orgaoemissor','Pesquisa',false);
      }else{
        document.form1.sd51_v_descricao.value = '';
@@ -529,9 +529,9 @@ function js_pesquisasd04_i_orgaoemissor(mostra){
 }
 function js_mostrasau_orgaoemissor(chave,erro){
   document.form1.sd51_v_descricao.value = chave;
-  if(erro==true){ 
-    document.form1.sd04_i_orgaoemissor.focus(); 
-    document.form1.sd04_i_orgaoemissor.value = ''; 
+  if(erro==true){
+    document.form1.sd04_i_orgaoemissor.focus();
+    document.form1.sd04_i_orgaoemissor.value = '';
   }
 }
 function js_mostrasau_orgaoemissor1(chave1,chave2){
@@ -541,20 +541,20 @@ function js_mostrasau_orgaoemissor1(chave1,chave2){
 }
 function js_pesquisasd04_i_medico(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_medicos','func_medicos.php?funcao_js=parent.js_mostramedicos1|sd03_i_codigo|sd03_i_codigo','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_medicos','func_medicos.php?funcao_js=parent.js_mostramedicos1|sd03_i_codigo|sd03_i_codigo','Pesquisa',true);
   }else{
-     if(document.form1.sd04_i_medico.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_medicos','func_medicos.php?pesquisa_chave='+document.form1.sd04_i_medico.value+'&funcao_js=parent.js_mostramedicos','Pesquisa',false);
+     if(document.form1.sd04_i_medico.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_medicos','func_medicos.php?pesquisa_chave='+document.form1.sd04_i_medico.value+'&funcao_js=parent.js_mostramedicos','Pesquisa',false);
      }else{
-       document.form1.sd03_i_codigo.value = ''; 
+       document.form1.sd03_i_codigo.value = '';
      }
   }
 }
 function js_mostramedicos(chave,erro){
-  document.form1.sd03_i_codigo.value = chave; 
-  if(erro==true){ 
-    document.form1.sd04_i_medico.focus(); 
-    document.form1.sd04_i_medico.value = ''; 
+  document.form1.sd03_i_codigo.value = chave;
+  if(erro==true){
+    document.form1.sd04_i_medico.focus();
+    document.form1.sd04_i_medico.value = '';
   }
 }
 function js_mostramedicos1(chave1,chave2){
@@ -563,7 +563,7 @@ function js_mostramedicos1(chave1,chave2){
   db_iframe_medicos.hide();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_unidademedicos','func_unidademedicos.php?funcao_js=parent.js_preenchepesquisa|sd04_i_codigo','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_unidademedicos','func_unidademedicos.php?funcao_js=parent.js_preenchepesquisa|sd04_i_codigo','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_unidademedicos.hide();

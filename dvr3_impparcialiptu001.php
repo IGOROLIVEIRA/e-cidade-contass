@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once ("libs/db_stdlib.php");
@@ -66,7 +66,7 @@ if ( !($oParametros->prefeitura == 't' && $oGet->sTipo == 'iptu') && !($oParamet
 <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta http-equiv="Expires" CONTENT="0">
-<? 
+<?
 db_app::load('scripts.js, prototype.js, strings.js, datagrid.widget.js, windowAux.widget.js, DBViewImportacaoDiversos.classe.js, dbmessageBoard.widget.js');
 db_app::load('estilos.css, grid.style.css');
 ?>
@@ -84,7 +84,7 @@ db_app::load('estilos.css, grid.style.css');
           ?>
           </td>
           <td>
-          <?php 
+          <?php
           db_input("j01_matric", 10, $Ij01_matric, true, 'text', 1, "onchange='js_pesquisaMatricula(false)'");
           db_input("z01_nome"  , 40, $Iz01_nome  , true, 'text', 3);
           ?>
@@ -113,29 +113,29 @@ db_app::load('estilos.css, grid.style.css');
   <script type="text/javascript">
 
   function js_pesquisaDebitos() {
-    
+
     oImportacao = new DBViewImportacaoDiversos('oImportacao', 'importacao');
     oImportacao.setTipoPesquisa(2); //matricula
 
-    oImportacao.setCallBackFunction( function(){ window.location.reload(); } );        
-    
+    oImportacao.setCallBackFunction( function(){ window.location.reload(); } );
+
     var aChavesPesquisa = new Array();
-    aChavesPesquisa.push($F('j01_matric'));   
+    aChavesPesquisa.push($F('j01_matric'));
     oImportacao.setChavePesquisa(aChavesPesquisa);
-       
+
     oImportacao.show();
   }
 
   function js_pesquisaMatricula(lMostra){
 
   	if (lMostra == true){
-  	  
-  		js_OpenJanelaIframe('top.corpo','db_iframe_matric', 'func_iptubase.php?funcao_js=parent.js_mostraMatricula|j01_matric|z01_nome','Pesquisa',true);
-      
+
+  		js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_matric', 'func_iptubase.php?funcao_js=parent.js_mostraMatricula|j01_matric|z01_nome','Pesquisa',true);
+
     } else {
-  	  
-      js_OpenJanelaIframe('top.corpo','db_iframe_matric', 'func_iptubase.php?pesquisa_chave='+document.form1.j01_matric.value+'&funcao_js=parent.js_mostraMatriculaHidden','Pesquisa',false);
-      
+
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_matric', 'func_iptubase.php?pesquisa_chave='+document.form1.j01_matric.value+'&funcao_js=parent.js_mostraMatriculaHidden','Pesquisa',false);
+
     }
   }
 
@@ -143,9 +143,9 @@ db_app::load('estilos.css, grid.style.css');
 
   	document.form1.j01_matric.value = iMatricula;
   	document.form1.z01_nome.value   = sNome;
-  	
+
   	db_iframe_matric.hide();
-  	
+
   }
 
   function js_mostraMatriculaHidden(sNome, lErro) {
@@ -158,7 +158,7 @@ db_app::load('estilos.css, grid.style.css');
   	}
 
   }
-  
+
   </script>
 </body>
 </html>

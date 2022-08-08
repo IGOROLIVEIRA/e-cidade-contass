@@ -1,28 +1,28 @@
 <?php
 /**
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 /**
@@ -198,8 +198,8 @@ $aFolhaPagamento['B'] = db_utils::getCollectionByRecord($rsRegistroFinanceiro);
     #tabela-calculos th{
       border: 1px solid #bbb;
     }
-   
-    #tabela-calculos a { 
+
+    #tabela-calculos a {
     }
 
 
@@ -212,7 +212,7 @@ $aFolhaPagamento['B'] = db_utils::getCollectionByRecord($rsRegistroFinanceiro);
     }
 
     #tabela-calculos tr:first-child {
-      border-right:1px outset #D3D3D3;  
+      border-right:1px outset #D3D3D3;
       padding:0;
       margin:0;
       overflow: hidden;
@@ -224,7 +224,7 @@ $aFolhaPagamento['B'] = db_utils::getCollectionByRecord($rsRegistroFinanceiro);
       padding-right: 5px;
     }
 
-    #tabela-calculos tr.totais td[colspan='4'] { 
+    #tabela-calculos tr.totais td[colspan='4'] {
       text-align: center;
     }
 
@@ -236,15 +236,15 @@ $aFolhaPagamento['B'] = db_utils::getCollectionByRecord($rsRegistroFinanceiro);
     }
 
     #tabela-calculos tr td:nth-child(2) {
-      font-weight:bold; 
+      font-weight:bold;
       padding-left: 0px;
       padding-right: 14px;
     }
-      
+
     #tabela-calculos tr td:nth-child(1) {
       text-align: center;
     }
-  
+
     #tabela-calculos tr.totais {
       background-color: #DDDDDD;
       text-align: right;
@@ -346,7 +346,7 @@ $aFolhaPagamento['B'] = db_utils::getCollectionByRecord($rsRegistroFinanceiro);
 
     parent.document.formatu.opcao.value                     = "<?= $opcao; ?>";
     parent.document.getElementById('tituloFolha').innerHTML = 'Salário / Suplementar';
-  
+
     function js_alteraHeightSalario() {
 
       var
@@ -374,13 +374,13 @@ $aFolhaPagamento['B'] = db_utils::getCollectionByRecord($rsRegistroFinanceiro);
         'width=' + (screen.availWidth - 5) + ',height=' + (screen.availHeight - 40) + ',scrollbars=1,location=0'
       );
 
-      jan.moveTo(0,0);      
+      jan.moveTo(0,0);
     }
-  
+
     function js_Pesquisarubrica(rubrica) {
-      
+
       var janela = js_OpenJanelaIframe(
-        'top.corpo',
+        'CurrentWindow.corpo',
         'db_iframe_pesquisarubrica',
         'pes1_rhrubricas006.php?tela_pesquisa=true&chavepesquisa=' + rubrica,
         'Pesquisa',

@@ -733,10 +733,10 @@ function js_frmListaTelefones(){
 
 function js_pesquisaov02_situacaocidadao(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_situacaocidadao','func_situacaocidadao.php?funcao_js=parent.js_mostrasituacaocidadao1|ov16_sequencial|ov16_sequencial','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_situacaocidadao','func_situacaocidadao.php?funcao_js=parent.js_mostrasituacaocidadao1|ov16_sequencial|ov16_sequencial','Pesquisa',true);
   }else{
      if(document.form1.ov02_situacaocidadao.value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_situacaocidadao','func_situacaocidadao.php?pesquisa_chave='+document.form1.ov02_situacaocidadao.value+'&funcao_js=parent.js_mostrasituacaocidadao','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_situacaocidadao','func_situacaocidadao.php?pesquisa_chave='+document.form1.ov02_situacaocidadao.value+'&funcao_js=parent.js_mostrasituacaocidadao','Pesquisa',false);
      }else{
        document.form1.ov16_sequencial.value = '';
      }
@@ -768,7 +768,7 @@ function js_pesquisa(){
   }
 
   js_OpenJanelaIframe(
-                       'top.corpo',
+                       'CurrentWindow.corpo',
                        'db_iframe_cidadao',
                        sNomeLookup+'?'+sParametros,
                        'Pesquisa',

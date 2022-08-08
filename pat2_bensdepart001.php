@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -78,7 +78,7 @@ function js_abre(){
 
     var iDivDepart = document.getElementById("divisao").length;
     sDivDepartSelecionado = "";
-    
+
     for ( var dd = 0; dd < iDivDepart ; dd++ ) {
       if ( sDivDepartSelecionado == "" ) {
         sDivDepartSelecionado += document.getElementById("divisao")[dd].value;
@@ -90,50 +90,50 @@ function js_abre(){
 
     iDptos = document.getElementById("departamento").length;
     sValoresDpto = "";
-    
+
     for (var i = 0; i < iDptos; i++) {
-      
+
       if (sValoresDpto == "") {
         sValoresDpto += document.getElementById("departamento")[i].value;
       } else {
         sValoresDpto += ","+document.getElementById("departamento")[i].value;
       }
-      
+
     }
 
 
-  	qry = "";    
-  	
+  	qry = "";
+
   	if(document.getElementById('bens')){
 	    //Le os itens lançados na combo dos bens
 			vir="";
 		 	listaBens="";
-		 
+
 		 	for(x=0;x<document.form1.bens.length;x++){
 		  	listaBens+=vir+document.form1.bens.options[x].value;
 		  	vir=",";
 		 	}
-			if(listaBens!=""){ 	
+			if(listaBens!=""){
 				qry +='&bens=('+listaBens+')';
 			} else {
 				qry +='&bens=';
 			}
 		}
-  	
+
     if (document.getElementById('contas')) {
       //Le os itens lançados na combo dos bens
       var vir="";
       var sListaContas="";
-     
+
       for(var x = 0; x < document.form1.contas.length; x++) {
-      
+
         sListaContas += vir + document.form1.contas.options[x].value;
         vir=",";
-        
+
       }
       if (sListaContas != "") {
         qry +='&contas=('+sListaContas+')';
-        
+
       } else {
         qry +='&contas=';
       }
@@ -145,22 +145,22 @@ function js_abre(){
       //Le os itens lançados na combo dos situabens
       var vir="";
       var sListaSituaBens="";
-     
+
       for(var x = 0; x < document.form1.situabens.length; x++) {
-      
+
         sListaSituaBens += vir + document.form1.situabens.options[x].value;
         vir=",";
-        
+
       }
       if (sListaSituaBens != "") {
         qry +='&situabens=('+sListaSituaBens+')';
-        
+
       } else {
         qry +='&situabens=';
       }
     }
-        
-    
+
+
   	qry+= '&t52_baixainicio='+$F('t52_baixainicio');
   	qry+= '&t52_baixafim='+$F('t52_baixafim');
     qry+= '&opcao_obs='+document.form1.opcao_obs.value;
@@ -173,10 +173,10 @@ function js_abre(){
     qry+= '&t52_depart='+sValoresDpto;
     qry+= '&t30_depto='+sDivDepartSelecionado;
     qry+= '&usardivisao='+$('usardivisao').value;
-        
+
     testa = document.form1.t64_class.value;
     for(i=0;i<document.form1.t64_class.value.length;i++){
-      testa = testa.replace('.','');       
+      testa = testa.replace('.','');
     }
     var aListaConvenio  = js_campo_recebe_valores();
     var iMostraConvenio = $F('vinculoconvenio');
@@ -200,25 +200,25 @@ function js_escondeFieldset(){
 
      var oFields = document.getElementsByTagName("fieldset");
 
-     //Percorre os fieldset da pagina  
+     //Percorre os fieldset da pagina
      for(var i=0;i < oFields.length;i++){
-    
+
        var oCampo = oFields[i];
-       
+
        //CSS para UI
        oCampo.style.width = '560px';
        oCampo.style.cursor = 'pointer';
-       
+
        //Elementos Filhos
        var oLegend = oCampo.getElementsByTagName("legend");
-       var oTable = oCampo.getElementsByTagName("table");   
-       oTable[0].style.display  = 'none';  
+       var oTable = oCampo.getElementsByTagName("table");
+       oTable[0].style.display  = 'none';
        oLegend[0].style.background = 'url(imagens/seta.gif) no-repeat right';
-       oLegend[0].style.paddingRight  = '10px'; 
+       oLegend[0].style.paddingRight  = '10px';
        oLegend[0].observe('click', function () {
          js_mostraFieldset(this);
-       }) ; 
-          
+       }) ;
+
      }
 
 }
@@ -232,20 +232,20 @@ function js_escondeFieldset(){
 
 function js_mostraFieldset(oLegend){
 
-   var oTable  = (oLegend.parentNode).getElementsByTagName("table");   
+   var oTable  = (oLegend.parentNode).getElementsByTagName("table");
 
    if(oTable[0].style.display == 'block'){
-   
+
      oLegend.style.background = 'url(imagens/seta.gif) no-repeat right';
      oTable[0].style.display = 'none';
-  
+
    } else {
-  
+
      oLegend.style.background = 'url(imagens/setabaixo.gif) no-repeat right';
      oTable[0].style.display = 'block';
-  
+
   }
-  
+
 }
 </script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
@@ -283,23 +283,23 @@ function js_mostraFieldset(oLegend){
         $oAuxDpto->linhas         = 5;
         $oAuxDpto->vwidth         = 400;
         $oAuxDpto->nome_botao     = 'db_lanca';
-        $oAuxDpto->fieldset       = false;        
-        $oAuxDpto->funcao_gera_formulario();      
-      ?>    
+        $oAuxDpto->fieldset       = false;
+        $oAuxDpto->funcao_gera_formulario();
+      ?>
     </td>
   </tr>
-  
+
 	<tr id='tr_divisao' align='center'>
     <td colspan='4' align='center'>
        <div id='div_divisao' align="center">
-          <?        
+          <?
             db_input('lista_departamento', 10, true, 3, 'hidden', 3);
             db_input('lista_divdepartamento', 10, true, 3, 'hidden', 3);
-            
-            
-            $aTipos = array(0 => 'Sem as divisões selecionadas', 1 => 'Com as divisões selecionadas'); 
-            db_select('usardivisao', $aTipos, true, 1);          
-            
+
+
+            $aTipos = array(0 => 'Sem as divisões selecionadas', 1 => 'Com as divisões selecionadas');
+            db_select('usardivisao', $aTipos, true, 1);
+
             $oDptoDivisao->cabecalho      = "<strong>Divisão de Departamento</strong>";
             $oDptoDivisao->codigo         = "t30_codigo"; //chave de retorno da func
             $oDptoDivisao->descr          = "t30_descr";   //chave de retorno
@@ -319,12 +319,12 @@ function js_mostraFieldset(oLegend){
             $oDptoDivisao->linhas         = 5;
             $oDptoDivisao->vwidth         = 400;
             $oDptoDivisao->nome_botao     = 'db_lancadivisao';
-            $oDptoDivisao->fieldset       = false; 
-   
-            $oDptoDivisao->funcao_gera_formulario();      
-          ?> 
+            $oDptoDivisao->fieldset       = false;
+
+            $oDptoDivisao->funcao_gera_formulario();
+          ?>
         </div>
-	  </td>	
+	  </td>
   </tr>
 		<tr>
 			<td colspan=2>
@@ -349,7 +349,7 @@ function js_mostraFieldset(oLegend){
 			$aux_bem->vwidth = 400;
 			$aux_bem->nome_botao = 'db_lanca_bem';
 			$aux_bem->fieldset = false;
-			
+
 			$aux_bem->funcao_gera_formulario();
 			?>
 
@@ -442,7 +442,7 @@ function js_mostraFieldset(oLegend){
 		<tr>
 			<td align="right" nowrap title="Tipo de Agrupamento do Valor"><strong>Convênios
 			:&nbsp;&nbsp;</strong></td>
-			<td><? 
+			<td><?
 			$aConvenios = array (1 => "Ambos",
 			2 => "Apenas vinculado a convênios",
 			3 => "Apenas não vinculado a convênios"
@@ -490,7 +490,7 @@ function js_mostraFieldset(oLegend){
 			<td nowrap align="right" title="Características adicionais do bem"><b>Características
 			adicionais do bem:</b></td>
 			<td nowrap title=""><?
-			$matriz = array("N"=>"NÃO","S"=>"SIM"); 
+			$matriz = array("N"=>"NÃO","S"=>"SIM");
 			db_select("opcao_obs",$matriz,true,1);
 			?></td>
 		</tr>
@@ -505,21 +505,21 @@ function js_mostraFieldset(oLegend){
 		<tr>
 			<td nowrap align="right" title="Bens a serem listados"><b>Listar:</b></td>
 			<td nowrap title=""><?
-			$matriz_baix = array("t"=>"Todos","n"=>"Não Baixados", "b"=>"Baixados"); 
+			$matriz_baix = array("t"=>"Todos","n"=>"Não Baixados", "b"=>"Baixados");
 			db_select("opcao_baixados",$matriz_baix,true,1);
 			?></td>
 		</tr>
 		<tr>
 			<td nowrap align="right" title="Ordem"><b>Ordem:</b></td>
 			<td nowrap title=""><?
-			$matriz_ordem = array(1=>"Placa",2=>"Código", 3=>"Descrição"); 
+			$matriz_ordem = array(1=>"Placa",2=>"Código", 3=>"Descrição");
 			db_select("ordem",$matriz_ordem,true,1);
 			?></td>
 		</tr>
 		<tr>
 			<td nowrap align="right" title="quebradepagina"><b>Quebra de Página:</b></td>
 			<td nowrap title=""><?
-			$matriz_quebra = array(1=>"Não",2=>"Departamento / Divisão"); 
+			$matriz_quebra = array(1=>"Não",2=>"Departamento / Divisão");
 			db_select("quebra",$matriz_quebra,true,1);
 			?></td>
 		</tr>
@@ -537,21 +537,21 @@ function js_liberaDivisaoDpto() {
 
   $('div_divisao').style.display = "";
   $('tr_inicio_divisao').style.display = "";
-  
+
   for (var i = 0; i < document.getElementById("departamento").length; i++) {
-        
+
     var oRegistro = document.getElementById("departamento");
     oRegistro[i].observe('dblclick', function () {
-    
-      
-      if (document.form1.departamento.length == 1) { 
+
+
+      if (document.form1.departamento.length == 1) {
         $('tr_divisao').style.display = "none";
         $('div_divisao').style.display = "none";
         $('tr_inicio_divisao').style.display = "none";
         $('lista_departamento').value = '';
         $('lista_divdepartamento').value = '';
       }
-    });   
+    });
   }
 }
 
@@ -559,7 +559,7 @@ function js_liberaDivisaoDpto() {
 function js_lancaDivisaoDepartamento () {
   var iDivDepart = document.getElementById("divisao").length;
   sDivDepartSelecionado = "";
-  
+
   for ( var dd = 0; dd < iDivDepart ; dd++ ) {
     if ( sDivDepartSelecionado == "" ) {
       sDivDepartSelecionado += document.getElementById("divisao")[dd].value;
@@ -567,7 +567,7 @@ function js_lancaDivisaoDepartamento () {
       sDivDepartSelecionado += ","+document.getElementById("divisao")[dd].value;
     }
   }
-  
+
   $('lista_divdepartamento').value = sDivDepartSelecionado;
 }
 
@@ -575,31 +575,31 @@ function js_buscaDepartamentoSelecionado() {
 
   iDptos = document.getElementById("departamento").length;
   sValoresDpto = "";
-    
+
   for (var i = 0; i < iDptos; i++) {
-    
+
     if (sValoresDpto == "") {
       sValoresDpto += document.getElementById("departamento")[i].value;
     } else {
       sValoresDpto += ","+document.getElementById("departamento")[i].value;
     }
-    
+
   }
-  
+
   $('lista_departamento').value = sValoresDpto;
 }
 
-function js_pesquisat64_class(mostra){  
+function js_pesquisat64_class(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_clabens','func_clabens.php?funcao_js=parent.js_mostraclabens1|t64_class|t64_descr&analitica=true','Pesquisa',true);  
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_clabens','func_clabens.php?funcao_js=parent.js_mostraclabens1|t64_class|t64_descr&analitica=true','Pesquisa',true);
   }else{
-     testa = new String(document.form1.t64_class.value);     
+     testa = new String(document.form1.t64_class.value);
      if(testa != '' && testa != 0){
-       i = 0;       
+       i = 0;
        for(i = 0;i < document.form1.t64_class.value.length;i++){
-         testa = testa.replace('.','');       
+         testa = testa.replace('.','');
        }
-       js_OpenJanelaIframe('top.corpo','db_iframe_clabens','func_clabens.php?pesquisa_chave='+testa+'&funcao_js=parent.js_mostraclabens&analitica=true','Pesquisa',false);
+       js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_clabens','func_clabens.php?pesquisa_chave='+testa+'&funcao_js=parent.js_mostraclabens&analitica=true','Pesquisa',false);
      }else{
        document.form1.t64_descr.value = '';
      }
@@ -623,10 +623,10 @@ function js_mostraclabens1(chave1,chave2){
 function js_pesquisa_depart(mostra){
 
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_db_depart','func_db_depart.php?funcao_js=parent.js_mostradepart1|coddepto|descrdepto','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_depart','func_db_depart.php?funcao_js=parent.js_mostradepart1|coddepto|descrdepto','Pesquisa',true);
   }else{
-     if(document.form1.coddepto.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_db_depart','func_db_depart.php?pesquisa_chave='+document.form1.coddepto.value+'&funcao_js=parent.js_mostradepart','Pesquisa',false);
+     if(document.form1.coddepto.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_depart','func_db_depart.php?pesquisa_chave='+document.form1.coddepto.value+'&funcao_js=parent.js_mostradepart','Pesquisa',false);
      }else{
        document.form1.descrdepto.value = '';
        document.form1.submit();
@@ -634,10 +634,10 @@ function js_pesquisa_depart(mostra){
   }
 }
 function js_mostradepart(chave,erro){
-  document.form1.descrdepto.value = chave; 
-  if(erro==true){ 
-    document.form1.coddepto.focus(); 
-    document.form1.coddepto.value = ''; 
+  document.form1.descrdepto.value = chave;
+  if(erro==true){
+    document.form1.coddepto.focus();
+    document.form1.coddepto.value = '';
   }else{
   	document.form1.submit();
   }
@@ -653,7 +653,7 @@ function js_Maiusculo(obj) {
 	document.getElementById(obj).value = valor.toUpperCase();
 }
 function js_showCedentes() {
-  
+
   if ($F('vinculoconvenio') == 2) {
     $('listacedentes').style.display = "";
   } else {

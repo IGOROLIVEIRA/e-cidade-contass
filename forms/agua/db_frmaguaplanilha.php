@@ -12,7 +12,7 @@ $clrotulo->label("x01_numcgm");
     <input name="oid" type="hidden" value="<?=@$oid?>">
        <?=@$Lx24_exerc?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('x24_exerc',4,$Ix24_exerc,true,'text',$db_opcao,"")
 ?>
@@ -22,7 +22,7 @@ db_input('x24_exerc',4,$Ix24_exerc,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tx24_mes?>">
        <?=@$Lx24_mes?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('x24_mes',2,$Ix24_mes,true,'text',$db_opcao,"")
 ?>
@@ -34,7 +34,7 @@ db_input('x24_mes',2,$Ix24_mes,true,'text',$db_opcao,"")
        db_ancora(@$Lx24_matric,"js_pesquisax24_matric(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('x24_matric',10,$Ix24_matric,true,'text',$db_opcao," onchange='js_pesquisax24_matric(false);'")
 ?>
@@ -47,7 +47,7 @@ db_input('x01_numcgm',10,$Ix01_numcgm,true,'text',3,'')
     <td nowrap title="<?=@$Tx24_nome?>">
        <?=@$Lx24_nome?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('x24_nome',40,$Ix24_nome,true,'text',$db_opcao,"")
 ?>
@@ -57,7 +57,7 @@ db_input('x24_nome',40,$Ix24_nome,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tx24_codrua?>">
        <?=@$Lx24_codrua?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('x24_codrua',7,$Ix24_codrua,true,'text',$db_opcao,"")
 ?>
@@ -67,7 +67,7 @@ db_input('x24_codrua',7,$Ix24_codrua,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tx24_nomerua?>">
        <?=@$Lx24_nomerua?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('x24_nomerua',40,$Ix24_nomerua,true,'text',$db_opcao,"")
 ?>
@@ -77,7 +77,7 @@ db_input('x24_nomerua',40,$Ix24_nomerua,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tx24_numero?>">
        <?=@$Lx24_numero?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('x24_numero',5,$Ix24_numero,true,'text',$db_opcao,"")
 ?>
@@ -87,7 +87,7 @@ db_input('x24_numero',5,$Ix24_numero,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tx24_complemento?>">
        <?=@$Lx24_complemento?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('x24_complemento',10,$Ix24_complemento,true,'text',$db_opcao,"")
 ?>
@@ -97,7 +97,7 @@ db_input('x24_complemento',10,$Ix24_complemento,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tx24_zona?>">
        <?=@$Lx24_zona?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('x24_zona',5,$Ix24_zona,true,'text',$db_opcao,"")
 ?>
@@ -107,7 +107,7 @@ db_input('x24_zona',5,$Ix24_zona,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tx24_rota?>">
        <?=@$Lx24_rota?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('x24_rota',4,$Ix24_rota,true,'text',$db_opcao,"")
 ?>
@@ -117,7 +117,7 @@ db_input('x24_rota',4,$Ix24_rota,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tx24_pagina?>">
        <?=@$Lx24_pagina?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('x24_pagina',8,$Ix24_pagina,true,'text',$db_opcao,"")
 ?>
@@ -127,7 +127,7 @@ db_input('x24_pagina',8,$Ix24_pagina,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tx24_nrohidro?>">
        <?=@$Lx24_nrohidro?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('x24_nrohidro',15,$Ix24_nrohidro,true,'text',$db_opcao,"")
 ?>
@@ -141,20 +141,20 @@ db_input('x24_nrohidro',15,$Ix24_nrohidro,true,'text',$db_opcao,"")
 <script>
 function js_pesquisax24_matric(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_aguabase','func_aguabase.php?funcao_js=parent.js_mostraaguabase1|x01_matric|x01_numcgm','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_aguabase','func_aguabase.php?funcao_js=parent.js_mostraaguabase1|x01_matric|x01_numcgm','Pesquisa',true);
   }else{
-     if(document.form1.x24_matric.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_aguabase','func_aguabase.php?pesquisa_chave='+document.form1.x24_matric.value+'&funcao_js=parent.js_mostraaguabase','Pesquisa',false);
+     if(document.form1.x24_matric.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_aguabase','func_aguabase.php?pesquisa_chave='+document.form1.x24_matric.value+'&funcao_js=parent.js_mostraaguabase','Pesquisa',false);
      }else{
-       document.form1.x01_numcgm.value = ''; 
+       document.form1.x01_numcgm.value = '';
      }
   }
 }
 function js_mostraaguabase(chave,erro){
-  document.form1.x01_numcgm.value = chave; 
-  if(erro==true){ 
-    document.form1.x24_matric.focus(); 
-    document.form1.x24_matric.value = ''; 
+  document.form1.x01_numcgm.value = chave;
+  if(erro==true){
+    document.form1.x24_matric.focus();
+    document.form1.x24_matric.value = '';
   }
 }
 function js_mostraaguabase1(chave1,chave2){
@@ -163,7 +163,7 @@ function js_mostraaguabase1(chave1,chave2){
   db_iframe_aguabase.hide();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_aguaplanilha','func_aguaplanilha.php?funcao_js=parent.js_preenchepesquisa|0','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_aguaplanilha','func_aguaplanilha.php?funcao_js=parent.js_preenchepesquisa|0','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_aguaplanilha.hide();

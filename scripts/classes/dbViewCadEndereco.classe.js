@@ -1,4 +1,5 @@
 DBViewCadastroEndereco = function(sId, sNameInstance, iCodigoEndereco) {
+
   var me                = this;
 
   var iCodigoComplemento= '';
@@ -14,7 +15,6 @@ DBViewCadastroEndereco = function(sId, sNameInstance, iCodigoEndereco) {
   this.iCodigoRuasTipo        = '';
   this.iCodigoRuaTipo         = '';
   this.iCodigoCepRua          = '';
-  this.iCodigoIbge            = '';
   this.iTipoValidacao         = 1;
   this.iCodigoRuaMunicipio    = "";
   this.iCodigoBairroMunicipio = "";
@@ -29,7 +29,7 @@ DBViewCadastroEndereco = function(sId, sNameInstance, iCodigoEndereco) {
   this.lShowLoteamento        = true;
   this.lShowPontoReferencia   = true;
   this.lShowComplemento       = true;
-  this.sNameInstance          = sNameInstance;
+  this.sNameInstance          = sNameInstance || "window.repository.endereco.getInstance(" + window.repository.endereco.addInstance(this) +")";
   this.sNumero                = '';
   this.sId                    = sId;
   this.sComplemento           = '';
@@ -129,13 +129,6 @@ DBViewCadastroEndereco = function(sId, sNameInstance, iCodigoEndereco) {
   sContent += "           <b>Cep:</b>";
   sContent += "         </td>"
   sContent += "         <td id='ctnCodigoCepEnd"+sId+"' >"
-  sContent += "         </td>";
-  sContent += "         <td colspan='1'> &nbsp;";
-  sContent += "         </td>";
-  sContent += "         <td id='ctnLabelCodigoIbge"+sId+"' >";
-  sContent += "           <b>Código IBGE:</b>";
-  sContent += "         </td>"
-  sContent += "         <td id='ctnCodigoIbge"+sId+"' >"
   sContent += "         </td>";
   sContent += "         <td colspan='3'> &nbsp;";
   sContent += "         </td>";
@@ -518,15 +511,12 @@ DBViewCadastroEndereco = function(sId, sNameInstance, iCodigoEndereco) {
     $('txtDescrRua'+sId).style.backgroundColor        = '#FFFFFF';
     $('txtCepEnd'+sId).removeAttribute("readonly");
     $('txtCepEnd'+sId).style.backgroundColor          = '#FFFFFF';
-    $('txtCodigoIbge'+sId).removeAttribute("readonly");
-    $('txtCodigoIbge'+sId).style.backgroundColor      = '#FFFFFF';
     $('cboCodigoEstado'+sId).removeAttribute("readonly");
-    $('cboCodigoEstado'+sId).style.backgroundColor    = '#FFFFFF';
+    $('cboCodigoEstado'+sId).style.backgroundColor     = '#FFFFFF';
     $('cboRuasTipo'+sId).removeAttribute("readonly");
     $('cboRuasTipo'+sId).style.backgroundColor     = '#FFFFFF';
 
     var oRetorno = eval('('+oAjax.responseText+')');
-
 
     if (oRetorno.endereco != false) {
 
@@ -573,11 +563,12 @@ DBViewCadastroEndereco = function(sId, sNameInstance, iCodigoEndereco) {
         //$('txtDescrRua'+sId).style.backgroundColor = '#DEB887';
         me.setNomeRua($F('txtDescrRua'+sId));
         me.setRuasTipo(oRetorno.endereco[0].iruastipo);
-        $('txtCepEnd'+sId).value = $F('txtCep'+sId);
 
+        $('txtCepEnd'+sId).value = $F('txtCep'+sId);
         //$('txtCepEnd'+sId).setAttribute("readonly", "readonly");
         //$('txtCepEnd'+sId).style.backgroundColor = '#DEB887';
         me.setCepEndereco($F('txtCepEnd'+sId));
+
         me.oCboRuasTipo.setValue(oRetorno.endereco[0].iruatipo);
 
      /*} else {
@@ -713,6 +704,12 @@ DBViewCadastroEndereco = function(sId, sNameInstance, iCodigoEndereco) {
       return false;
     }
 
+    //var iEstado = '';
+
+    //if (oRetorno.pais[0].db70_sequencial == $F('cboCodigoPais'+sId)) {
+    //  iEstado = oRetorno.pais[0].db71_sequencial;
+    //}
+
     iEstado = -1;
     me.preencheCboEstados(oRetorno.itens, iEstado);
   }
@@ -746,13 +743,12 @@ DBViewCadastroEndereco = function(sId, sNameInstance, iCodigoEndereco) {
         onComplete : me.retornofindMunicipioByEstado
       }
     );
-
   }
 
   this.retornofindMunicipioByEstado = function (oAjax) {
+
     js_removeObj("msgBox");
     var oRetorno = eval('('+oAjax.responseText+')');
-
 
     if (oRetorno.status == 2) {
 
@@ -787,18 +783,6 @@ DBViewCadastroEndereco = function(sId, sNameInstance, iCodigoEndereco) {
       me.oCboCodigoMunicipio.setValue(iCodigoMunicipio)
       me.setMunicipio(iCodigoMunicipio);
     }
-
-    // let municipio = codigoMunicipio;
-    // let estado = codigoEstado;
-
-    // if(municipio && estado){
-    //   console.log('1s ', municipio);
-    //   console.log('2s ', estado);
-      me.buscaDescricoes();
-    //   codigoMunicipio = '';
-    //   codigoEstado = '';
-    // }
-
   }
 
   this.changeMunicipio = function() {
@@ -820,11 +804,6 @@ DBViewCadastroEndereco = function(sId, sNameInstance, iCodigoEndereco) {
     }
 
     me.setMunicipio($F('cboCodigoMunicipio'+sId));
-
-    // let municipio = document.getElementById('cboCodigoMunicipio'+sId).value;
-    // let estado    = document.getElementById('cboCodigoEstado'+sId).value;
-    me.buscaDescricoes();
-
   }
 
   me.oCboCodigoMunicipio = new DBComboBox('cboCodigoMunicipio'+sId, 'cboCodigoMunicipio'+sId);
@@ -867,78 +846,14 @@ DBViewCadastroEndereco = function(sId, sNameInstance, iCodigoEndereco) {
     return this.sNomeMunicipio;
   }
 
-  // this.onchangeMunicipio = function(){
-  //   let municipio = document.getElementById('cboCodigoMunicipio'+sId).value;
-  //   let estado    = document.getElementById('cboCodigoEstado'+sId).value;
-  //   me.buscaDescricoes(municipio, estado);
-  // }
-
-  // $('cboCodigoMunicipio'+sId).observe('change', me.onchangeMunicipio);
-
 /*-------------------------------------Fim da Manipulação do Município------------------------------------------------*/
-/*-------------------------------------Início da Manipulação do Código do IBGE------------------------------------------------*/
-
-
-this.findCodigoIbge = function(municipio, estado) {
-     /*
-     * Função em ajax que realiza a busca do Código do IBGE
-    */
-
-    var aMunic = document.getElementById('cboCodigoMunicipio'+sId).options;
-    aMunic.map((item) => {
-      console.log(item.descricao);
-    })
-    var oParam       = new Object();
-    oParam.cidade    = municipio;
-    oParam.estado    = estado;
-    oParam.exec      = 'getCodigoIbge'
-
-    var oAjax = new Ajax.Request(
-      sUrlRpc,
-      {
-        asynchronous: false,
-        parameters : 'json='+Object.toJSON(oParam),
-        method     : 'post',
-        onComplete : me.retornofindCodigoIbge
-      }
-    );
-}
-
-this.retornofindCodigoIbge = function(obj) {
-  oRetorno = eval('('+obj.responseText+')');
-  me.oTxtCodigoIbge.setValue(oRetorno);
-}
-
-me.oTxtCodigoIbge = new DBTextField('txtCodigoIbge'+sId, 'txtCodigoIbge'+sId, '');
-me.oTxtCodigoIbge.addEvent('onKeyUp',"js_ValidaCampos(this,1,\"Campo Código do IBGE\",\"f\",\"f\",event)");
-me.oTxtCodigoIbge.addStyle('width', '100%');
-me.oTxtCodigoIbge.setMaxLength(6);
-me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
-
-  /**
-   *Seta o Código do IBGE
-   *@param {varchar} iCodigoIbge
-   *@return void
-   */
-
-  this.setCodigoIbge = function(iCodigoIbge) {
-    this.iCodigoIbge = iCodigoIbge;
-  }
-  /**
-   *Retorna o Código do IBGE
-   *@return {varchar} com o código do IBGE
-   */
-  this.getCodigoIbge = function() {
-    return this.iCodigoIbge;
-  }
-
-/*-------------------------------------Fim do Código IBGE------------------------------------------------*/
 /*-------------------------------------Início da Manipulação do Bairro------------------------------------------------*/
 
   /*
    *Metodo para pesquisa da descrição do Bairro pelo codigo
    */
   this.findBairroByCodigo = function() {
+
     /*
      * Validação para verificar se o usuario ja preencheu o cadastro
      * e esta realizando modificações então exibe alerta na tela.
@@ -1115,7 +1030,7 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
     oParam.exec = 'findBairroByName';
     oParam.iCodigoEstado    = $F('cboCodigoEstado'+sId);
     oParam.iCodigoMunicipio = $F('cboCodigoMunicipio'+sId).trim();
-    oParam.sQuery = $F('txtDescrBairro'+sId);
+    oParam.sQuery = encodeURIComponent(tagString($F('txtDescrBairro'+sId)));
     sQuery       = 'json='+Object.toJSON(oParam);
     return sQuery;
   });
@@ -1125,17 +1040,15 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
   *@return void
   */
   this.setBairro = function(iCodigoBairro){
-
     this.iCodigoBairro = iCodigoBairro;
-  }
+  };
  /**
   *Retorna o codigo do bairro
   *@return {string} codigo do bairro
   */
   this.getBairro = function(){
-
     return this.iCodigoBairro;
-  }
+  };
 
 
   oAutoCompleteBairro.setCallBackFunction(function(id, label) {
@@ -1389,7 +1302,7 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
     oParam.iCodigoEstado    = $F('cboCodigoEstado'+sId);
     oParam.iCodigoMunicipio = $F('cboCodigoMunicipio'+sId).trim();
     oParam.iCodigoBairro    = $F('txtCodigoBairro'+sId).trim();
-    oParam.sQuery = $F('txtDescrRua'+sId);
+    oParam.sQuery = encodeURIComponent(tagString($F('txtDescrRua'+sId)));
     sQuery       = 'json='+Object.toJSON(oParam);
     return sQuery;
   });
@@ -1711,7 +1624,6 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
     }
     me.setCepEndereco($F('txtCepEnd'+sId));
     me.setModificado(true);
-
   }
 
 
@@ -1780,7 +1692,7 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
     oParam.iCodigoBairro = $F('txtCodigoBairro'+sId);
     oParam.iCodigoRua    = $F('txtCodigoRua'+sId);
     oParam.iCodigoNumero = $F('txtCodigoNumero'+sId);
-    oParam.sQuery = $F('txtDescrLoteamento'+sId);
+    oParam.sQuery = encodeURIComponent(tagString($F('txtDescrLoteamento'+sId)));
     sQuery       = 'json='+Object.toJSON(oParam);
     return sQuery;
   });
@@ -2145,6 +2057,7 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
       oEndereco.exec = 'buscaBairroRuaMunicipio';
       oEndereco.icodigoruamunicipio    = me.getCodigoRuaMunicipio();
       oEndereco.icodigobairromunicipio = me.getCodigoBairroMunicipio();
+      oEndereco.lCgmMunicipio          = true;
 
       var msgDiv = "Aguarde ...";
       js_divCarregando(msgDiv,'msgBox');
@@ -2185,6 +2098,7 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
       oEndereco.exec = 'buscaEndereco';
 
       oEndereco.icodigoendereco = me.getCodigoEndereco();
+
       var msgDiv = "Aguarde pesquisando os dados do endereço.";
       js_divCarregando(msgDiv,'msgBox');
 
@@ -2208,23 +2122,20 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
     js_removeObj('msgBox');
 
     var oRetorno = eval('('+oAjax.responseText+')');
-    console.log('Return...', oRetorno);
     var sExpReg  = new RegExp('\\\\n','g');
 
     if (oRetorno.status == 2) {
+
       me.close();
       return false;
     }
 
     if (!oRetorno) {
-
       alert("usuário:\n\nFalha ao buscar valores padrão!\n\nContate o administrador.\n\n");
-
     } else {
+
       $('cboCodigoPais'+sId).value = oRetorno.valoresPadrao[0].db70_sequencial;
       me.setPais(oRetorno.valoresPadrao[0].db70_sequencial);
-      /*$('txtDescrPais'+sId).value  = oRetorno.valoresPadrao[0].db70_descricao.urlDecode();
-      me.setNomePais(oRetorno.valoresPadrao[0].db70_descricao.urlDecode());*/
       var iEstado = oRetorno.valoresPadrao[0].db72_cadenderestado;
 
       me.preencheCboEstados(oRetorno.estados, iEstado);
@@ -2234,13 +2145,12 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
 
         me.setMunicipio('');
         me.setNomeMunicipio('');
-
       } else {
 
         me.setMunicipio(oRetorno.valoresPadrao[0].db72_sequencial);
-        $('cboCodigoMunicipio'+sId).value=me.getMunicipio();
-
+        $('cboCodigoMunicipio'+sId).value = me.getMunicipio();
       }
+
 
       $('txtDescrRua'+sId).value = oRetorno.bairroRuaMunicipio[0].srua.urlDecode();
       me.oTxtDescrRua.setReadOnly(true);
@@ -2258,7 +2168,6 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
       $('txtCepEnd'+sId).value = oRetorno.cepmunic[0].cep;
       me.setCepEndereco($F('txtCepEnd'+sId));
       me.oTxtCepEnd.setReadOnly(true);
-
     }
   }
   /**
@@ -2284,12 +2193,14 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
       alert("usuário:\n\nFalha ao buscar valores padrão!\n\nContate o administrador.\n\n");
 
     } else {
+
       var iEstado = oRetorno.valoresPadrao[0].db72_cadenderestado;
       var iPais   = oRetorno.valoresPadrao[0].db70_sequencial;
 
       me.preencheCboPaises(oRetorno.aPaises, iPais);
       me.preencheCboEstados(oRetorno.estados, iEstado);
       me.preencheCboRuasTipo(oRetorno.tiposRua, 3);
+
       if (oRetorno.municipio == false) {
 
         me.setMunicipio('');
@@ -2318,7 +2229,6 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
       alert(oRetorno.message.urlDecode().replace(sExpReg,'\n'));
     } else {
 
-
       $('cboCodigoPais'+sId).value            = oRetorno.endereco.iPais;
       me.setPais(oRetorno.endereco.iPais);
 
@@ -2343,9 +2253,6 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
       $('txtCepEnd'+sId).value                = oRetorno.endereco.sCep.urlDecode();
       me.setCepEndereco($F('txtCepEnd'+sId));
 
-      // $('txtCodigoIbge'+sId).value            = oRetorno.endereco.iIbge.urlDecode();
-      // me.setCodigoIbge($F('txtCodigoIbge'+sId));
-
       $('txtDescrCondominio'+sId).value       = oRetorno.endereco.sCondominio.urlDecode();
       me.setCondominio($F('txtDescrCondominio'+sId));
 
@@ -2365,12 +2272,11 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
 
       $('btnPesquisarNumero'+sId).disabled = false;
       me.setEstado(oRetorno.endereco.iEstado);
+
       me.oCboRuasTipo.setValue(oRetorno.endereco.iRuaTipo);
 
       me.setRuaTipo(oRetorno.endereco.iRuaTipo);
       me.setRuasTipo(oRetorno.endereco.iRuasTipo);
-
-      //$('btnSalvar'+sId).value = 'Alterar';
     }
 
   }
@@ -2385,8 +2291,7 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
     js_removeObj("msgBox");
 
     var oRetorno = eval('('+oAjax.responseText+')');
-    codigoMunicipio = oRetorno.endereco.iMunicipio;
-    codigoEstado    = oRetorno.endereco.iEstado;
+
     var sExpReg  = new RegExp('\\\\n','g');
 
     if (oRetorno.status == 2) {
@@ -2507,6 +2412,7 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
     if (iCodigoPais == '') {
        iCodigoPais = aValues[0].codigo;
     }
+
     me.oCboCodigoPais.setValue(iCodigoPais);
 
     if (iNumPaises > 0) {
@@ -2587,8 +2493,6 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
         me.setComplemento('');
         $('txtDescrPontoReferencia'+sId).value  = '';
         me.setPontoReferencia('');
-        $('txtCodigoIbge'+sId).value            = '';
-        me.setCodigoIbge('');
 
         //me.oCboRuasTipo.setValue(3);
         //me.setRuaTipo(3);
@@ -2620,8 +2524,6 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
         me.setComplemento('');
         $('txtDescrPontoReferencia'+sId).value  = '';
         me.setPontoReferencia('');
-        $('txtCodigoIbge'+sId).value            = '';
-        me.setCodigoIbge('');
         //me.oCboRuasTipo.setValue(3);
         //me.setRuaTipo(3);
         me.setRuasTipo('');
@@ -2650,8 +2552,6 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
         me.setComplemento('');
         $('txtDescrPontoReferencia'+sId).value  = '';
         me.setPontoReferencia('');
-        $('txtCodigoIbge'+sId).value            = '';
-        me.setCodigoIbge('');
         //me.oCboRuasTipo.setValue(3);
         //me.setRuaTipo(3);
         me.setRuasTipo('');
@@ -2675,8 +2575,6 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
         me.setComplemento('');
         $('txtDescrPontoReferencia'+sId).value  = '';
         me.setPontoReferencia('');
-        $('txtCodigoIbge'+sId).value            = '';
-        me.setCodigoIbge('');
         //me.oCboRuasTipo.setValue(3);
         //me.setRuaTipo(3);
         me.setRuasTipo('');
@@ -2697,8 +2595,6 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
         me.setComplemento('');
         $('txtDescrPontoReferencia'+sId).value  = '';
         me.setPontoReferencia('');
-        $('txtCodigoIbge'+sId).value            = '';
-        me.setCodigoIbge('');
         //me.oCboRuasTipo.setValue(3);
         //me.setRuaTipo(3);
         me.setRuasTipo('');
@@ -2783,21 +2679,20 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
     oEndereco.codigoEstado             = me.getEstado();
     oEndereco.codigoMunicipio          = me.getMunicipio();
     oEndereco.codigoBairro             = me.getBairro();
-    oEndereco.descricaoBairro          = me.getNomeBairro().toUpperCase();
+    oEndereco.descricaoBairro          = encodeURIComponent(tagString(me.getNomeBairro().toUpperCase()));
     oEndereco.codigoRua                = me.getRua();
-    oEndereco.descricaoRua             = me.getNomeRua().toUpperCase();
+    oEndereco.descricaoRua             = encodeURIComponent(tagString(me.getNomeRua().toUpperCase()));
     oEndereco.codigoLocal              = me.getCodigoLocal();
     oEndereco.numeroLocal              = me.getNumero();
     oEndereco.cepEndereco              = me.getCepEndereco();
     oEndereco.codigoEndereco           = me.getCodigoEndereco();
-    oEndereco.descricaoComplemento     = me.getComplemento().toUpperCase();
-    oEndereco.descricaoLoteamento      = me.getLoteamento().toUpperCase();
-    oEndereco.descricaoCondominio      = me.getCondominio().toUpperCase();
+    oEndereco.descricaoComplemento     = encodeURIComponent(tagString(me.getComplemento().toUpperCase()));
+    oEndereco.descricaoLoteamento      = encodeURIComponent(tagString(me.getLoteamento().toUpperCase()));
+    oEndereco.descricaoCondominio      = encodeURIComponent(tagString(me.getCondominio().toUpperCase()))
     oEndereco.codigoRuasTipo           = me.getRuasTipo();
     oEndereco.codigoRuaTipo            = me.getRuaTipo();
-    oEndereco.descricaoPontoReferencia = me.getPontoReferencia().toUpperCase();
+    oEndereco.descricaoPontoReferencia = encodeURIComponent(tagString(me.getPontoReferencia().toUpperCase()));
     oEndereco.codigoCepRua             = me.getCepRua();
-    // oEndereco.codigoIbge               = me.getCodigoIbge();
 
     oDados = new Object();
     oDados.exec    = 'salvarEndereco';
@@ -2924,39 +2819,24 @@ me.oTxtCodigoIbge.show($('ctnCodigoIbge'+sId));
   this.setCallBackFunction = function(sFunction) {
     this.callBackFunction = sFunction;
   }
-
-  this.buscaDescricoes = function (){
-    setTimeout(() => {
-      let aMunicipios = document.getElementById('cboCodigoMunicipio'+sId);
-      let aEstados    = document.getElementById('cboCodigoEstado'+sId);
-      var oParam = Object();
-
-      for (var cont = 0; cont < aEstados.options.length; cont++) {
-        if (aEstados.options[cont].value == aEstados.value){
-          oParam.estado = aEstados.options[cont].text;
-        }
-      }
-
-      oParam.cidade = aMunicipios.options[aMunicipios.selectedIndex].text;
-      oParam.exec = 'findCodigoIbge';
-
-      var oAjax = new Ajax.Request(
-        me.sUrlRpc,
-        {
-          parameters: 'json='+Object.toJSON(oParam),
-          method: 'post',
-          onComplete : me.preencheCodigo
-        });
-
-      }, 300);
-  }
-
-  this.preencheCodigo = function (oAjax){
-    var oRetorno = JSON.parse(oAjax.responseText);
-
-    me.setCodigoIbge(oRetorno);
-    $('txtCodigoIbge'+sId).value = oRetorno;
-
-  }
-
 }
+
+/**
+ * 'HAck' para utilização da View Endereços
+ */
+window.repository                  = window.repository                  || {};
+window.repository.endereco         = window.repository.endereco         || {};
+window.repository.endereco.counter = window.repository.endereco.counter || 0;
+
+window.repository.endereco.addInstance = function( ViewEndereco ) {
+
+  var instanceNumber = window.repository.endereco.counter++;
+  window.repository.endereco['DBViewCadastroEndereco_'+ instanceNumber] = ViewEndereco;
+  return instanceNumber;
+}
+
+window.repository.endereco.getInstance = function(instanceNumber) {
+  return window.repository.endereco['DBViewCadastroEndereco_'+ instanceNumber];
+};
+
+

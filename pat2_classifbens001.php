@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -68,23 +68,23 @@ function js_emite(){
 }
 function js_pesquisat64_class(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_clabens','func_clabens.php?funcao_js=parent.js_mostraclabens1|t64_class|t64_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_clabens','func_clabens.php?funcao_js=parent.js_mostraclabens1|t64_class|t64_descr','Pesquisa',true);
   }else{
      testa = new String(document.form1.t64_class.value);
-     if(testa != '' && testa != 0){	    
+     if(testa != '' && testa != 0){
        i = 0;
        for(i = 0;i < document.form1.t64_class.value.length;i++){
          testa = testa.replace('.','');
-       }				      
-       js_OpenJanelaIframe('top.corpo','db_iframe_clabens','func_clabens.php?pesquisa_chave='+testa+'&funcao_js=parent.js_mostraclabens','Pesquisa',false);
-     }else{    
-       document.form1.t64_descr.value = ''; 
+       }
+       js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_clabens','func_clabens.php?pesquisa_chave='+testa+'&funcao_js=parent.js_mostraclabens','Pesquisa',false);
+     }else{
+       document.form1.t64_descr.value = '';
      }
   }
 }
 function js_mostraclabens(chave,erro){
-  document.form1.t64_descr.value = chave; 
-  if(erro==true){ 
+  document.form1.t64_descr.value = chave;
+  if(erro==true){
     document.form1.t64_class.value = '';
     document.form1.t64_class.focus();
   }else{
@@ -96,28 +96,28 @@ function js_mostraclabens(chave,erro){
 }
 function js_mostraclabens1(chave1,chave2){
   document.form1.t64_class.value = chave1;
-  document.form1.t64_descr.value = chave2; 
+  document.form1.t64_descr.value = chave2;
   db_iframe_clabens.hide();
 }
 function js_pesquisat64_class1(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_clabens','func_clabens.php?funcao_js=parent.js_mostraclabens11|t64_class|t64_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_clabens','func_clabens.php?funcao_js=parent.js_mostraclabens11|t64_class|t64_descr','Pesquisa',true);
   }else{
      testa = new String(document.form1.t64_class1.value);
-     if(testa != '' && testa != 0){	    
+     if(testa != '' && testa != 0){
        i = 0;
        for(i = 0;i < document.form1.t64_class1.value.length;i++){
          testa = testa.replace('.','');
-       }				      
-       js_OpenJanelaIframe('top.corpo','db_iframe_clabens','func_clabens.php?pesquisa_chave='+testa+'&funcao_js=parent.js_mostraclabens2','Pesquisa',false);
-     }else{    
-       document.form1.t64_descr1.value = ''; 
+       }
+       js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_clabens','func_clabens.php?pesquisa_chave='+testa+'&funcao_js=parent.js_mostraclabens2','Pesquisa',false);
+     }else{
+       document.form1.t64_descr1.value = '';
      }
   }
 }
 function js_mostraclabens2(chave,erro){
-  document.form1.t64_descr1.value = chave; 
-  if(erro==true){ 
+  document.form1.t64_descr1.value = chave;
+  if(erro==true){
     document.form1.t64_class1.value = '';
     document.form1.t64_class1.focus();
   }else{
@@ -129,10 +129,10 @@ function js_mostraclabens2(chave,erro){
 }
 function js_mostraclabens11(chave1,chave2){
   document.form1.t64_class1.value = chave1;
-  document.form1.t64_descr1.value = chave2; 
+  document.form1.t64_descr1.value = chave2;
   db_iframe_clabens.hide();
 }
-</script>  
+</script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <body bgcolor=#CCCCCC>
@@ -140,8 +140,8 @@ function js_mostraclabens11(chave1,chave2){
   <fieldset>
     <legend>Relatórios - Bens por Classificação</legend>
     <table class="form-container">
-      <!--    
-      <tr> 
+      <!--
+      <tr>
         <td colspan=2  align="center">
           <strong>Opções:</strong>
           <select name="ver">
@@ -187,7 +187,7 @@ function js_mostraclabens11(chave1,chave2){
       	        <td align='right'>
       	        </td>
               </tr>
-              <tr>    
+              <tr>
                 <td align='right' nowrap title="<?=@$Tt64_class?>">
                   &emsp;
                   <?
@@ -195,10 +195,10 @@ function js_mostraclabens11(chave1,chave2){
                   ?>
                 </td>
                 <td>
-                  <?  
+                  <?
                     $result = $clcfpatri->sql_record($clcfpatri->sql_query_file());
                     $msg_erro = "";
-                    
+
                     if($clcfpatri->numrows==0){
                       $msg_erro = _M('patrimonial.patrimonio.pat2_classifbens001.estrutural_nao_cadastrado');
                       $t06_codcla = 0;
@@ -219,9 +219,9 @@ function js_mostraclabens11(chave1,chave2){
                         }else{
                           db_msgbox($msg_erro);
                         }
-                        
+
                     db_input('t64_descr',38,$It64_descr,true,'text',3,'')
-                  ?>      
+                  ?>
                 </td>
               </tr>
               <tr>
@@ -253,9 +253,9 @@ function js_mostraclabens11(chave1,chave2){
                     }else{
                       db_msgbox($msg_erro);
                     }
-                    
+
                     db_input('t64_descr1',38,$It64_descr,true,'text',3,'')
-                  ?>      
+                  ?>
                 </td>
               </tr>
             </table>
@@ -266,7 +266,7 @@ function js_mostraclabens11(chave1,chave2){
         <td nowrap title="Bens a serem listados"><b>Ordenar:</b></td>
         <td nowrap title="">
           <?
-            $ordenar = array(1=>"Placa",2=>"Descrição do bem", 3=>"Código do bem"); 
+            $ordenar = array(1=>"Placa",2=>"Descrição do bem", 3=>"Código do bem");
             db_select("ordenar",$ordenar,true,1);
           ?>
         </td>
@@ -275,7 +275,7 @@ function js_mostraclabens11(chave1,chave2){
         <td nowrap title="Bens a serem listados"><b>Listar:</b></td>
         <td nowrap title="">
           <?
-            $matriz_baix = array("t"=>"Todos","n"=>"Não Baixados", "b"=>"Baixados"); 
+            $matriz_baix = array("t"=>"Todos","n"=>"Não Baixados", "b"=>"Baixados");
             db_select("opcao_baixados",$matriz_baix,true,1);
           ?>
         </td>
@@ -307,8 +307,8 @@ function js_limpacampo(){
   //Retirar os pontos converter para numero ai verifica o valor.
   t64_class_temp = new Number(t64_class_temp.replace(/\./g,''));
   if (t64_class_temp == 0){
-    document.form1.t64_class.value='';  
-    document.form1.t64_descr.value='';  
+    document.form1.t64_class.value='';
+    document.form1.t64_descr.value='';
   }
 }
 
@@ -320,13 +320,13 @@ function js_limpacampo1(){
   //Retirar os pontos converter para numero ai verifica o valor.
   t64_class_temp1 = new Number(t64_class_temp1.replace(/\./g,''));
   if (t64_class_temp1 == 0){
-    document.form1.t64_class1.value='';  
-    document.form1.t64_descr1.value='';  
+    document.form1.t64_class1.value='';
+    document.form1.t64_descr1.value='';
   }
 }
 
 sChange1 = document.form1.t64_class1.getAttribute('onChange');
-document.form1.t64_class1.setAttribute('onChange',sChange1+";js_limpacampo1();"); 
+document.form1.t64_class1.setAttribute('onChange',sChange1+";js_limpacampo1();");
 
 </script>
 <script>

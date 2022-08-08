@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -129,7 +129,7 @@ if (isset($post->reemite)) {
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table  border="0" cellpadding="0" cellspacing="0">
-  <tr> 
+  <tr>
     <td width="360" height="18">&nbsp;</td>
     <td width="263">&nbsp;</td>
     <td width="25">&nbsp;</td>
@@ -148,7 +148,7 @@ if (isset($post->reemite)) {
        db_ancora(@$Lq51_numnota,"js_pesquisaq63_issnotaavulsa(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('q63_issnotaavulsa',10,$Iq63_issnotaavulsa,true,'hidden',$db_opcao,"onchange='js_pesquisaq63_issnotaavulsa(false);'");
 db_input('q51_numnota',10,$Iq51_numnota,true,'text',$db_opcao,"onchange='js_pesquisaq63_issnotaavulsa(false);'");
@@ -174,21 +174,21 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
 <script>
 function js_pesquisaq63_issnotaavulsa(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_issnotaavulsa','func_issnotaavulsacancelados.php?filtrabaixa=&funcao_js=parent.js_mostraissnotaavulsa1|q51_sequencial|z01_nome|q51_numnota','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_issnotaavulsa','func_issnotaavulsacancelados.php?filtrabaixa=&funcao_js=parent.js_mostraissnotaavulsa1|q51_sequencial|z01_nome|q51_numnota','Pesquisa',true);
   }else{
-     if(document.form1.q51_numnota.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_issnotaavulsa','func_issnotaavulsacancelados.php?filtrabaixa=1&filtranumpre=1&pesquisa_chave='+document.form1.q51_numnota.value+'&funcao_js=parent.js_mostraissnotaavulsa','Pesquisa',false);
+     if(document.form1.q51_numnota.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_issnotaavulsa','func_issnotaavulsacancelados.php?filtrabaixa=1&filtranumpre=1&pesquisa_chave='+document.form1.q51_numnota.value+'&funcao_js=parent.js_mostraissnotaavulsa','Pesquisa',false);
      }else{
-       document.form1.z01_nome.value = ''; 
+       document.form1.z01_nome.value = '';
      }
   }
 }
 function js_mostraissnotaavulsa(chave,erro,chave2){
-  document.form1.z01_nome.value       = chave; 
-  document.form1.q63_sequencial.value = chave2; 
-  if(erro==true){ 
-    document.form1.q51_numnota.focus(); 
-    document.form1.q51_numnota.value = ''; 
+  document.form1.z01_nome.value       = chave;
+  document.form1.q63_sequencial.value = chave2;
+  if(erro==true){
+    document.form1.q51_numnota.focus();
+    document.form1.q51_numnota.value = '';
   }
 }
 function js_mostraissnotaavulsa1(chave1,chave2,chave3){

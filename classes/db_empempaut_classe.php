@@ -305,7 +305,7 @@ class cl_empempaut {
    function sql_query ( $e61_numemp=null,$campos="*",$ordem=null,$dbwhere=""){ 
      $sql = "select ";
      if($campos != "*" ){
-       $campos_sql = split("#",$campos);
+       $campos_sql = explode("#",$campos);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -336,7 +336,7 @@ class cl_empempaut {
      $sql .= $sql2;
      if($ordem != null ){
        $sql .= " order by ";
-       $campos_sql = split("#",$ordem);
+       $campos_sql = explode("#",$ordem);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -348,7 +348,7 @@ class cl_empempaut {
    function sql_query_empenho ( $e61_numemp=null,$campos="*",$ordem=null,$dbwhere=""){ 
      $sql = "select ";
      if($campos != "*" ){
-       $campos_sql = split("#",$campos);
+       $campos_sql = explode("#",$campos);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -370,7 +370,7 @@ class cl_empempaut {
      $sql .= $sql2;
      if($ordem != null ){
        $sql .= " order by ";
-       $campos_sql = split("#",$ordem);
+       $campos_sql = explode("#",$ordem);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -382,7 +382,7 @@ class cl_empempaut {
    function sql_query_file ( $e61_numemp=null,$campos="*",$ordem=null,$dbwhere=""){ 
      $sql = "select ";
      if($campos != "*" ){
-       $campos_sql = split("#",$campos);
+       $campos_sql = explode("#",$campos);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -403,7 +403,7 @@ class cl_empempaut {
      $sql .= $sql2;
      if($ordem != null ){
        $sql .= " order by ";
-       $campos_sql = split("#",$ordem);
+       $campos_sql = explode("#",$ordem);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -416,7 +416,7 @@ class cl_empempaut {
   function sql_query_empenho_inscricaopassivo ($e61_numemp=null,$campos="*",$ordem=null,$dbwhere=""){
   	$sql = "select ";
   	if($campos != "*" ){
-  		$campos_sql = split("#",$campos);
+  		$campos_sql = explode("#",$campos);
   		$virgula = "";
   		for($i=0;$i<sizeof($campos_sql);$i++){
   			$sql .= $virgula.$campos_sql[$i];
@@ -440,7 +440,7 @@ class cl_empempaut {
   		$sql .= $sql2;
   		if($ordem != null ){
   		$sql .= " order by ";
-  			$campos_sql = split("#",$ordem);
+  			$campos_sql = explode("#",$ordem);
   			$virgula = "";
   			for($i=0;$i<sizeof($campos_sql);$i++){
   			$sql .= $virgula.$campos_sql[$i];
@@ -449,5 +449,17 @@ class cl_empempaut {
   			}
   			return $sql;
   			}
+
+  function sql_query_empenhoautori ($si06_anoproc,$si06_sequencial){
+    $sql = "select e61_autori, e61_numemp ";
+    $sql .= "from empempaut inner join empautoriza on e61_autori = e54_autori ";
+    $sql .= "where e54_adesaoregpreco = $si06_sequencial 	and e54_anousu = $si06_anoproc;";
+    return $sql;
+  }
+
+  function sql_empautori_query ($pc50_codcom){
+    $sql = "select e61_numemp from empempaut where e61_autori = $pc50_codcom";
+    return $sql;
+  }
 }
 ?>

@@ -70,14 +70,14 @@ db_postmemory($HTTP_SERVER_VARS);
 /*
  * Esta variável controla onde serão mostradas as LookUp's.
  *
- * Por padrão ela é setada com top.corpo, mas se estiver dentro de outro iframe, deve ser passado o nome deste frame
+ * Por padrão ela é setada com CurrentWindow.corpo, mas se estiver dentro de outro iframe, deve ser passado o nome deste frame
  * para que a lookup abra corretamente dentro deste iframe.
  *
  * Um exemplo é o cadastro de protocolo, que após incluir ou alterar o processo redireciona para este arquivo passando o
  * nome do iframe para abrir as LookUp's
  *
  */
-$sIframeLocation = "top.corpo";
+$sIframeLocation = "CurrentWindow.corpo";
 if (isset($sIframe)) {
   $sIframeLocation .= ".".$sIframe;
 }
@@ -876,7 +876,7 @@ function js_pesquisae60_codemp(mostra) {
   if (mostra==true) {
     js_OpenJanelaIframe("<?=$sIframeLocation?>",'db_iframe_empempenho02','func_empempenho.php?funcao_js=parent.js_mostraempempenho2|e60_codemp','Pesquisa',true);
   } else {
-     // js_OpenJanelaIframe('top.corpo','db_iframe_empempenho02','func_empempenho.php?pesquisa_chave='+document.form1.e60_numemp.value+'&funcao_js=parent.js_mostraempempenho','Pesqui
+     // js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_empempenho02','func_empempenho.php?pesquisa_chave='+document.form1.e60_numemp.value+'&funcao_js=parent.js_mostraempempenho','Pesqui
   }
 }
 

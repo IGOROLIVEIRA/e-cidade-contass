@@ -1,6 +1,6 @@
 <?
 set_time_limit(0);
-//include("../../../libs/db_conn.php");
+//include(__DIR__ . "/../../../libs/db_conn.php");
 
   $DB_SERVIDOR = "192.168.0.2";
   $DB_BASE     = "auto_carazinho_20091001_v2_2_8";

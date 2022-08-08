@@ -25,7 +25,9 @@
  *                                licenca/licenca_pt.txt
  */
 
-
+/**
+ * Class Instituicao
+ */
 class Instituicao {
 
   const TIPO_INSTIT_PREFEITURA = 2;
@@ -215,10 +217,10 @@ class Instituicao {
    */
   protected $sDataContabilidade;
 
-
   /**
-   * Metodo construtor
-   * carrega instituicao, de acordo com o Sequencial passado
+   * Instituicao constructor.
+   * @param null $iSequencial
+   * @throws DBException
    */
   public function __construct($iSequencial = null) {
 
@@ -226,39 +228,39 @@ class Instituicao {
 
       $oDaoDBConfig  = db_utils::getDao("db_config");
 
-      $sCampos       = "nomeinst, prefeitura, si09_tipoinstit, numcgm, cgc, munic, logo, nomeinstabrev, ender, numero,";
+      $sCampos       = "nomeinst, prefeitura, db21_tipoinstit, numcgm, cgc, munic, logo, nomeinstabrev, ender, numero,";
       $sCampos      .= "telef, url, uf, db21_compl, email, db21_usasisagua, ";
-      $sCampos      .= " (select db21_codcli from db_config where prefeitura is true) as db21_codcli,db21_habitantes,dtcont ";
+      $sCampos      .= " (select db21_codcli from db_config where prefeitura is true) as db21_codcli ";
 
       $sSqlDBConfig  = $oDaoDBConfig->sql_query_file($iSequencial, $sCampos);
       $rsDBConfig    = $oDaoDBConfig->sql_record($sSqlDBConfig);
+      if (!$rsDBConfig || $oDaoDBConfig->erro_status == "0") {
+        throw new DBException(_M(self::MENSAGEM . 'instituicao_nao_encontrada'));
+      }
 
       if ($oDaoDBConfig->numrows > 0) {
 
-        $oDadoInstituicao            = db_utils::fieldsMemory($rsDBConfig, 0);
-        $this->sDescricao            = $oDadoInstituicao->nomeinst;
-        $this->lPrefeitura           = $oDadoInstituicao->prefeitura;
-        $this->iSequencial           = $iSequencial;
-        $this->iTipoInstit           = $oDadoInstituicao->si09_tipoinstit;
-        $this->iCodigoCGM            = $oDadoInstituicao->numcgm;
-        $this->iCodigoCliente        = $oDadoInstituicao->db21_codcli;
-        $this->sCNPJ                 = $oDadoInstituicao->cgc;
-        $this->sMunicipio            = $oDadoInstituicao->munic;
-        $this->sEmail                = $oDadoInstituicao->email;
-        $this->sSite                 = $oDadoInstituicao->url;
-        $this->sImagemLogo           = $oDadoInstituicao->logo;
-        $this->sLogradouro           = $oDadoInstituicao->ender;
-        $this->sUf                   = $oDadoInstituicao->uf;
-        $this->sNumero               = $oDadoInstituicao->numero;
-        $this->sComplemento          = $oDadoInstituicao->db21_compl;
-        $this->sTelefone             = $oDadoInstituicao->telef;
-        $this->sDescricaoAbreviada   = $oDadoInstituicao->nomeinstabrev;
-        $this->lUsaSisagua           = $oDadoInstituicao->db21_usasisagua == 't';
-        $this->iHabitantes           = $oDadoInstituicao->db21_habitantes;
-        $this->sDataContabilidade    = $oDadoInstituicao->dtcont;
+        $oDadoInstituicao     = db_utils::fieldsMemory($rsDBConfig, 0);
+        $this->sDescricao     = $oDadoInstituicao->nomeinst;
+        $this->lPrefeitura    = $oDadoInstituicao->prefeitura;
+        $this->iSequencial    = $iSequencial;
+        $this->iTipo          = $oDadoInstituicao->db21_tipoinstit;
+        $this->iCodigoCGM     = $oDadoInstituicao->numcgm;
+        $this->iCodigoCliente = $oDadoInstituicao->db21_codcli;
+        $this->sCNPJ          = $oDadoInstituicao->cgc;
+        $this->sMunicipio     = $oDadoInstituicao->munic;
+        $this->sEmail         = $oDadoInstituicao->email;
+        $this->sSite          = $oDadoInstituicao->url;
+        $this->sImagemLogo    = $oDadoInstituicao->logo;
+        $this->sLogradouro    = $oDadoInstituicao->ender;
+        $this->sUf            = $oDadoInstituicao->uf;
+        $this->sNumero        = $oDadoInstituicao->numero;
+        $this->sComplemento   = $oDadoInstituicao->db21_compl;
+        $this->sTelefone      = $oDadoInstituicao->telef;
+        $this->sDescricaoAbreviada = $oDadoInstituicao->nomeinstabrev;
+        $this->lUsaSisagua         = $oDadoInstituicao->db21_usasisagua == 't';
       }
     }
-    return true;
   }
 
   /**
@@ -296,10 +298,20 @@ class Instituicao {
   /**
    * Retorna boolean referente a pertencer ou nao a Prefeitura
    * @return integer
+   * @deprecated
+   * @see prefeitura
    */
   public function isPrefeitura() {
     return $this->lPrefeitura;
   }
+
+  /**
+   * @return bool
+   */
+  public function prefeitura() {
+    return $this->lPrefeitura == 't';
+  }
+
 
   /**
    * Seta Sequencial da Inscricao
@@ -493,19 +505,22 @@ class Instituicao {
   /**
    * Retorna a Instituição por tipo
    * @return string
+   * @throws DBException
    */
   public function getDadosPrefeitura() {
 
     $oDaoDBConfig  = new cl_db_config();
 
-    $sCampos       = "nomeinst, si09_tipoinstit, numcgm, cgc, munic, logo, nomeinstabrev, ender, munic, ";
-    $sCampos      .= "bairro, telef, url, email, db21_codigomunicipoestado, numero, db21_compl, uf, cep, fax, db21_codcli,db21_habitantes,dtcont ";
+    $sCampos       = "nomeinst, db21_tipoinstit, numcgm, cgc, munic, logo, nomeinstabrev, ender, munic, ";
+    $sCampos      .= "bairro, telef, url, email, db21_codigomunicipoestado, numero, db21_compl, uf, cep, fax, db21_codcli ";
     $sSqlDBConfig  = $oDaoDBConfig->sql_query_file(null, $sCampos, null, "prefeitura is true");
 
     $rsDBConfig    = $oDaoDBConfig->sql_record($sSqlDBConfig);
+    if (!$rsDBConfig || $oDaoDBConfig->erro_status == "0") {
+      throw new DBException(_M(self::MENSAGEM . 'instituicao_nao_encontrada'));
+    }
 
     $oRetorno = new StdClass();
-
     if ($oDaoDBConfig->numrows > 0) {
 
       $oDadoInstituicao           = db_utils::fieldsMemory($rsDBConfig, 0);
@@ -526,19 +541,15 @@ class Instituicao {
       $this->sCep                 = $oDadoInstituicao->cep;
       $this->sFax                 = $oDadoInstituicao->fax;
       $this->iCodigoCliente       = $oDadoInstituicao->db21_codcli;
-      $this->iHabitantes          = $oDadoInstituicao->db21_habitantes;
-      $this->iTipoInstit          = $oDadoInstituicao->si09_tipoinstit;
-      $this->sDataContabilidade   = $oDadoInstituicao->dtcont;
 
       $oDaoMunicipio = new cl_cadendermunicipiosistema();
 
-      $sWhere  = "db72_descricao = '{$oDadoInstituicao->munic}'";
-      $sWhere .= " AND  db125_db_sistemaexterno = 4";
+      $sWhere  = "     to_ascii(db72_descricao, 'LATIN1') = '{$oDadoInstituicao->munic}' ";
+      $sWhere .= " and db71_sigla                         = '{$oDadoInstituicao->uf}'    ";
+      $sWhere .= " and db125_db_sistemaexterno            = 4                            ";
 
       $sSqlMunicipio        = $oDaoMunicipio->sql_query(null, 'db125_codigosistema', null, $sWhere);
-
       $rsCodigoIbgeMunicipio = $oDaoMunicipio->sql_record($sSqlMunicipio);
-
       if ( $rsCodigoIbgeMunicipio && pg_num_rows( $rsCodigoIbgeMunicipio ) > 0 ) {
         $this->sIbge           = db_utils::fieldsMemory($rsCodigoIbgeMunicipio, 0)->db125_codigosistema;
       }
@@ -611,4 +622,3 @@ class Instituicao {
     return $this;
   }
 }
-?>

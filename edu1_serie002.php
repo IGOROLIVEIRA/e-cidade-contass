@@ -25,21 +25,21 @@
  *                                licenca/licenca_pt.txt
  */
 
-require_once ("libs/db_stdlibwebseller.php");
-require_once ("libs/db_stdlib.php");
-require_once ("libs/db_conecta.php");
-require_once ("libs/db_sessoes.php");
-require_once ("libs/db_usuariosonline.php");
-require_once ("dbforms/db_funcoes.php");
+require_once("libs/db_stdlibwebseller.php");
+require_once("libs/db_stdlib.php");
+require_once("libs/db_conecta.php");
+require_once("libs/db_sessoes.php");
+require_once("libs/db_usuariosonline.php");
+require_once("dbforms/db_funcoes.php");
 
-parse_str( $_SERVER["QUERY_STRING"] );
-db_postmemory( $_POST );
+parse_str($_SERVER["QUERY_STRING"]);
+db_postmemory($_POST);
 
 $clserie  = new cl_serie;
 $db_opcao = 22;
 $db_botao = false;
 
-if( isset( $alterar ) ) {
+if (isset($alterar)) {
 
   $db_opcao = 2;
   $db_botao = true;
@@ -47,27 +47,28 @@ if( isset( $alterar ) ) {
   db_inicio_transacao();
   $clserie->alterar($ed11_i_codigo);
   db_fim_transacao();
-} else if( isset( $chavepesquisa ) ) {
+} else if (isset($chavepesquisa)) {
 
   $db_opcao = 2;
   $result   = $clserie->sql_record($clserie->sql_query($chavepesquisa));
 
-  db_fieldsmemory( $result, 0 );
+  db_fieldsmemory($result, 0);
   $db_botao = true;
 ?>
- <script>
-   parent.document.formaba.a2.disabled = false;
-   parent.document.formaba.a3.disabled = false;
+  <script>
+    parent.document.formaba.a2.disabled = false;
+    parent.document.formaba.a3.disabled = false;
 
-   top.corpo.iframe_a2.location.href = 'edu1_serieregimemat001.php?ed223_i_serie=<?=$ed11_i_codigo?>&ed11_c_descr=<?=$ed11_c_descr?>';
+    parent.iframe_a2.location.href = 'edu1_serieregimemat001.php?ed223_i_serie=<?= $ed11_i_codigo ?>&ed11_c_descr=<?= $ed11_c_descr ?>';
 
-   var sParametros = '?iEtapa=<?=$ed11_i_codigo?>&sEtapa=<?=$ed11_c_descr?>';
-   top.corpo.iframe_a3.location.href = 'edu1_vinculoserieetapacenso001.php' + sParametros;
- </script>
+    var sParametros = '?iEtapa=<?= $ed11_i_codigo ?>&sEtapa=<?= $ed11_c_descr ?>';
+    parent.iframe_a3.location.href = 'edu1_vinculoserieetapacenso001.php' + sParametros;
+  </script>
 <?php
 }
 ?>
 <html>
+
 <head>
   <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
@@ -76,45 +77,47 @@ if( isset( $alterar ) ) {
   <script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
   <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
+
 <body class="body-default">
 
-<?php
-include("forms/db_frmserie.php");
-?>
+  <?php
+  include("forms/db_frmserie.php");
+  ?>
 </body>
+
 </html>
 <script>
- js_tabulacaoforms("form1","ed11_i_ensino",true,1,"ed11_i_ensino",true);
+  js_tabulacaoforms("form1", "ed11_i_ensino", true, 1, "ed11_i_ensino", true);
 </script>
 <?php
-if( isset( $alterar ) ) {
+if (isset($alterar)) {
 
-  if( $clserie->erro_status == "0" ) {
+  if ($clserie->erro_status == "0") {
 
-    $clserie->erro( true, false );
+    $clserie->erro(true, false);
     $db_botao = true;
 
     echo "<script> document.form1.db_opcao.disabled=false;</script>";
 
-    if( $clserie->erro_campo != "" ) {
+    if ($clserie->erro_campo != "") {
 
-      echo "<script> document.form1.".$clserie->erro_campo.".style.backgroundColor='#99A9AE';</script>";
-      echo "<script> document.form1.".$clserie->erro_campo.".focus();</script>";
+      echo "<script> document.form1." . $clserie->erro_campo . ".style.backgroundColor='#99A9AE';</script>";
+      echo "<script> document.form1." . $clserie->erro_campo . ".focus();</script>";
     }
   } else {
 
-    $clserie->erro( true, false );
-    ?>
+    $clserie->erro(true, false);
+?>
     <script>
       parent.document.formaba.a2.disabled = false;
       parent.document.formaba.a3.disabled = false;
-      top.corpo.iframe_a2.location.href='edu1_serieregimemat001.php?ed223_i_serie=<?=$ed11_i_codigo?>&ed11_c_descr=<?=$ed11_c_descr?>';
+      parent.iframe_a2.location.href = 'edu1_serieregimemat001.php?ed223_i_serie=<?= $ed11_i_codigo ?>&ed11_c_descr=<?= $ed11_c_descr ?>';
       parent.mo_camada("a2");
     </script>
-    <?php
+<?php
   }
 }
 
-if( $db_opcao == 22 ) {
+if ($db_opcao == 22) {
   echo "<script>document.form1.pesquisar.click();</script>";
 }

@@ -351,15 +351,15 @@ if (!isset($arqinclude)) {
 	db_fieldsmemory($resultinst, 0);
 	$descr_inst = $munic;
 
-//$vdt_fin = split("-", $dt_fin);
+//$vdt_fin = explode("-", $dt_fin);
 
   $head2 = "MUNICÍPIO DE " . strtoupper($descr_inst) . " - " . strtoupper($uf);
   $head3 = "RELATÓRIO RESUMIDO DA EXECUÇÃO ORÇAMENTÁRIA";
   $head4 = "DEMONSTRATIVO DAS PARCERIAS PÚBLICO-PRIVADAS";
 
   $dados  = data_periodo($anousu,$periodo_selecionado);
-  $perini = split("-",$dados[0]);
-  $perfin = split("-",$dados[1]);
+  $perini = explode("-",$dados[0]);
+  $perfin = explode("-",$dados[1]);
 
   $txtper = strtoupper($dados["periodo"]);
   $mesini = db_mes($perini[1],1);

@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -52,11 +52,11 @@ parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
      $result01 = $cleditalrua->sql_record($cleditalrua->sql_query("","d02_contri","","d02_codedi=$d10_codedi"));
      $numrows01=$cleditalrua->numrows;
      if($numrows01>0){
-      db_fieldsmemory($result01,0); 
+      db_fieldsmemory($result01,0);
      }else{
-         db_redireciona("con3_conscontri001.php?lista=false&d40_codigo=$d01_codedi"); 
+         db_redireciona("con3_conscontri001.php?lista=false&d40_codigo=$d01_codedi");
      }
-  } 
+  }
 ?>
   <html>
   <head>
@@ -69,19 +69,19 @@ parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
   function js_consultar(){
     obj=document.form1;
     if(obj.j01_matric.value!=""){
-      js_OpenJanelaIframe('top.corpo','db_iframe','con3_conscontri011.php?contri='+obj.d02_contri.value+'&cod_matricula='+obj.j01_matric.value,'Pesquisa',true);
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe','con3_conscontri011.php?contri='+obj.d02_contri.value+'&cod_matricula='+obj.j01_matric.value,'Pesquisa',true);
     }else{
       alert("Selecione a matrícula.");
-    }  
-  }  
+    }
+  }
   function js_voltar(){
-    location.href="con3_conscontri001.php";  
+    location.href="con3_conscontri001.php";
   }
   </script>
   </head>
   <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
   <table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-    <tr> 
+    <tr>
       <td width="360">&nbsp;</td>
       <td width="263">&nbsp;</td>
       <td width="25">&nbsp;</td>
@@ -89,7 +89,7 @@ parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
     </tr>
   </table>
   <table width="790" height="100%" border="0" cellspacing="0" cellpadding="0">
-    <tr> 
+    <tr>
       <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
 	  <br>
       <center>
@@ -99,19 +99,19 @@ parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
       <td nowrap title="<?=@$Td02_contri?>">
       <?=$Ld02_contri?>
       </td>
-      <td> 
+      <td>
   <?
   if(isset($contribs)){
     $d02_contri=$contribs;
     $j01_matric="";
     $z01_nome="";
-  } 
+  }
   db_input('d02_contri',8,$Id02_contri,true,'text',3);
   ?>
       </td>
     </tr>
-        <tr> 
-          <td>     
+        <tr>
+          <td>
 <?=$Lj01_matric?>
           </td>
 	  <td>
@@ -130,7 +130,7 @@ parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
        <?
        $legenda="Lista  $d40_codigo";
        include("con3_conscontri008.php");
-       ?> 
+       ?>
       <br>
       </td>
     <tr>
@@ -150,7 +150,7 @@ parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
     </td>
   </tr>
 </table>
-    <? 
+    <?
       db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
     ?>
 </body>

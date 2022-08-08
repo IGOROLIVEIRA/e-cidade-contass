@@ -261,7 +261,7 @@ $total_saldo_arrecadado          =0;
 $total_saldo_arrecadado_acumulado=0;
 $total_saldo_a_arrecadar        = 0;
 
-$xinstit = split("-",$db_selinstit);
+$xinstit = explode("-",$db_selinstit);
 $resultinst = pg_exec("select codigo,nomeinst,nomeinstabrev from db_config where codigo in (".str_replace('-',', ',$db_selinstit).") ");
 $descr_inst = '';
 $xvirg = '';
@@ -289,11 +289,11 @@ $head2 = "RELATÓRIO RESUMIDO DA EXECUÇÃO ORÇAMENTÁRIA";
 $head3 = "DEMONSTRATIVO DE RECEITAS E DESPESAS COM DESENVOLVIMENTO E MANUTENÇÃO DO ENSINO -MDE";
 $head4 = "ORÇAMENTOS FISCAL E DA SEGURIDADE SOCIAL";
 $txt = strtoupper(db_mes('01'));
-$dt  = split("-",$dt_fin);
+$dt  = explode("-",$dt_fin);
 $txt.= " À ".strtoupper(db_mes($dt[1]))." $anousu/BIMESTRE ";;
-$dt  = split("-",$dt_ini);
+$dt  = explode("-",$dt_ini);
 $txt.= strtoupper(db_mes($dt[1]))."-";
-$dt  = split("-",$dt_fin);
+$dt  = explode("-",$dt_fin);
 $txt.= strtoupper(db_mes($dt[1]));
 $head5 = "$txt";
 

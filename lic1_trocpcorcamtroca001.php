@@ -238,6 +238,6 @@ if(isset($trocar)){
       echo "<script> document.form1.".$clpcorcamtroca->erro_campo.".focus();</script>";
     }
   }else{
-    echo "<script> top.corpo.location.href = 'lic1_pcorcamtroca001.php?pc20_codorc=$orcamento&pc21_orcamforne=$orcamforne&l20_codigo=$l20_codigo';</script>";
+    echo "<script> CurrentWindow.corpo.location.href = 'lic1_pcorcamtroca001.php?pc20_codorc=$orcamento&pc21_orcamforne=$orcamforne&l20_codigo=$l20_codigo';</script>";
   }
 }

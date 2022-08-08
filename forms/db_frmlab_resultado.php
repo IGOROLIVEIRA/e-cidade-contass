@@ -222,7 +222,7 @@ function js_mostrarequiitem1( chave1, chave2, requiitem ) {
 
 function js_pesquisa() {
   js_OpenJanelaIframe(
-                       'top.corpo',
+                       'CurrentWindow.corpo',
                        'db_iframe_lab_resultado',
                        'func_lab_resultado.php?funcao_js=parent.js_preenchepesquisa|la39_i_codigo',
                        'Pesquisa',

@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 /**
@@ -63,7 +63,7 @@ if ($db_opcao == 1) {
                 <?php db_input('rh119_sequencial', 6, $Irh119_sequencial, true, 'hidden', 3, ""); ?>
                 <label class="bold" for="rh119_rhelementoempdef" id="lbl_rh119_rhelementoempdef">
                   <?php
-                    db_ancora( $Srh119_rhelementoempdef . ':', 
+                    db_ancora( $Srh119_rhelementoempdef . ':',
                                "js_pesquisarh119_rhelementoempdef(true, false);", $db_opcao);
                   ?>
                 </label>
@@ -71,8 +71,8 @@ if ($db_opcao == 1) {
               <td>
                 <?php
                   db_input('rh119_rhelementoempdef', 10, $Irh119_rhelementoempdef, true, 'hidden', 3);
-                  db_input('rh38_codeledef', 5, $Irh38_codele, true, 'text', $db_opcao, " onchange='js_pesquisarh119_rhelementoempdef(false, false);'"); 
-                  db_input('o56_descrdef', 35, $Io56_descr, true, 'text', 3, ''); 
+                  db_input('rh38_codeledef', 5, $Irh38_codele, true, 'text', $db_opcao, " onchange='js_pesquisarh119_rhelementoempdef(false, false);'");
+                  db_input('o56_descrdef', 35, $Io56_descr, true, 'text', 3, '');
                 ?>
               </td>
             </tr>
@@ -80,7 +80,7 @@ if ($db_opcao == 1) {
               <td nowrap title="<?php echo $Trh119_rhelementoempnov; ?>" >
                 <label class="bold" for="rh119_rhelementoempnov" id="lbl_rh119_rhelementoempnov">
                   <?php
-                    db_ancora( $Srh119_rhelementoempnov . ':', 
+                    db_ancora( $Srh119_rhelementoempnov . ':',
                                "js_pesquisarh119_rhelementoempnov(true, false);", $db_opcao);
                   ?>
                 </label>
@@ -88,8 +88,8 @@ if ($db_opcao == 1) {
               <td>
                 <?php
                   db_input('rh119_rhelementoempnov', 10, $Irh119_rhelementoempnov, true, 'hidden', 3);
-                  db_input('rh38_codelenov', 5, $Irh38_codele, true, 'text', $db_opcao, " onchange='js_pesquisarh119_rhelementoempnov(false, false);'"); 
-                  db_input('o56_descrnov', 35, $Io56_descr, true, 'text', 3, ''); 
+                  db_input('rh38_codelenov', 5, $Irh38_codele, true, 'text', $db_opcao, " onchange='js_pesquisarh119_rhelementoempnov(false, false);'");
+                  db_input('o56_descrnov', 35, $Io56_descr, true, 'text', 3, '');
                 ?>
               </td>
             </tr>
@@ -102,9 +102,9 @@ if ($db_opcao == 1) {
         <?php endif; ?>
       </form>
     </div>
-    <?php db_menu( db_getsession("DB_id_usuario"), 
-                   db_getsession("DB_modulo"), 
-                   db_getsession("DB_anousu"), 
+    <?php db_menu( db_getsession("DB_id_usuario"),
+                   db_getsession("DB_modulo"),
+                   db_getsession("DB_anousu"),
                    db_getsession("DB_instit") ); ?>
   </body>
   <script>
@@ -112,29 +112,29 @@ if ($db_opcao == 1) {
     function js_pesquisarh119_rhelementoempdef(lExibeJanela, lSequencial) {
 
       if (lExibeJanela) {
-        js_OpenJanelaIframe( 'top.corpo', 
-                             'db_iframe_rhelementoempdef', 
-                             'func_rhelementoemp.php?funcao_js=parent.js_mostrarhelementoempdef1|rh38_seq|rh38_codele|o56_descr', 
+        js_OpenJanelaIframe( 'CurrentWindow.corpo',
+                             'db_iframe_rhelementoempdef',
+                             'func_rhelementoemp.php?funcao_js=parent.js_mostrarhelementoempdef1|rh38_seq|rh38_codele|o56_descr',
                              'Pesquisa Elemento Principal', true);
       } else {
         if (lSequencial && document.form1.rh119_rhelementoempdef.value != '') {
-          js_OpenJanelaIframe( 'top.corpo', 
-                             'db_iframe_rhelementoempdef', 
+          js_OpenJanelaIframe( 'CurrentWindow.corpo',
+                             'db_iframe_rhelementoempdef',
                              'func_rhelementoemp.php?'
                              + 'chave_rh38_seq=' + document.form1.rh119_rhelementoempdef.value
-                             +'&funcao_js=parent.js_mostrarhelementoempdef1|rh38_seq|rh38_codele|o56_descr', 
+                             +'&funcao_js=parent.js_mostrarhelementoempdef1|rh38_seq|rh38_codele|o56_descr',
                              'Pesquisa Elemento Principal', true);
         } else if (document.form1.rh38_codeledef.value != '') {
-          js_OpenJanelaIframe( 'top.corpo', 
-                               'db_iframe_rhelementoempdef', 
+          js_OpenJanelaIframe( 'CurrentWindow.corpo',
+                               'db_iframe_rhelementoempdef',
                                'func_rhelementoemp.php?'
                                + 'pesquisa_chave=' + document.form1.rh38_codeledef.value
-                               + '&funcao_js=parent.js_mostrarhelementoempdef', 
+                               + '&funcao_js=parent.js_mostrarhelementoempdef',
                                'Pesquisa Elemento Principal', false);
         } else {
-          document.form1.rh38_codeledef.value = ''; 
-          document.form1.o56_descrdef.value = ''; 
-          document.form1.rh119_rhelementoempdef.value = ''; 
+          document.form1.rh38_codeledef.value = '';
+          document.form1.o56_descrdef.value = '';
+          document.form1.rh119_rhelementoempdef.value = '';
         }
       }
     }
@@ -165,29 +165,29 @@ if ($db_opcao == 1) {
     function js_pesquisarh119_rhelementoempnov(lExibeJanela, lSequencial) {
 
       if (lExibeJanela) {
-        js_OpenJanelaIframe( 'top.corpo', 
-                             'db_iframe_rhelementoemp', 
-                             'func_rhelementoemp.php?funcao_js=parent.js_mostrarhelementoempnov1|rh38_seq|rh38_codele|o56_descr', 
+        js_OpenJanelaIframe( 'CurrentWindow.corpo',
+                             'db_iframe_rhelementoemp',
+                             'func_rhelementoemp.php?funcao_js=parent.js_mostrarhelementoempnov1|rh38_seq|rh38_codele|o56_descr',
                              'Pesquisa Elemento Novo', true);
       } else {
         if (lSequencial && document.form1.rh119_rhelementoempnov.value != '') {
-          js_OpenJanelaIframe( 'top.corpo', 
-                             'db_iframe_rhelementoemp', 
+          js_OpenJanelaIframe( 'CurrentWindow.corpo',
+                             'db_iframe_rhelementoemp',
                              'func_rhelementoemp.php?'
                              + 'chave_rh38_seq=' + document.form1.rh119_rhelementoempnov.value
-                             + '&funcao_js=parent.js_mostrarhelementoempnov1|rh38_seq|rh38_codele|o56_descr', 
+                             + '&funcao_js=parent.js_mostrarhelementoempnov1|rh38_seq|rh38_codele|o56_descr',
                              'Pesquisa Elemento Novo', true);
         } else if (document.form1.rh38_codelenov.value != '') {
-          js_OpenJanelaIframe( 'top.corpo', 
-                               'db_iframe_rhelementoemp', 
+          js_OpenJanelaIframe( 'CurrentWindow.corpo',
+                               'db_iframe_rhelementoemp',
                                'func_rhelementoemp.php?'
                                + 'pesquisa_chave=' + document.form1.rh38_codelenov.value
-                               + '&funcao_js=parent.js_mostrarhelementoempnov', 
+                               + '&funcao_js=parent.js_mostrarhelementoempnov',
                                'Pesquisa Elemento Novo', false);
         } else {
           document.form1.rh38_codelenov.value = '';
-          document.form1.o56_descrnov.value = ''; 
-          document.form1.rh119_rhelementoempnov.value = ''; 
+          document.form1.o56_descrnov.value = '';
+          document.form1.rh119_rhelementoempnov.value = '';
         }
       }
     }
@@ -216,9 +216,9 @@ if ($db_opcao == 1) {
     }
 
     function js_pesquisa() {
-      js_OpenJanelaIframe( 'top.corpo', 
-                           'db_iframe_rhempenhoelementopcasp', 
-                           'func_rhempenhoelementopcasp.php?funcao_js=parent.js_preenchepesquisa|rh119_sequencial', 
+      js_OpenJanelaIframe( 'CurrentWindow.corpo',
+                           'db_iframe_rhempenhoelementopcasp',
+                           'func_rhempenhoelementopcasp.php?funcao_js=parent.js_preenchepesquisa|rh119_sequencial',
                            'Pesquisa Desdobramento PCASP', true);
     }
 

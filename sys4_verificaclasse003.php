@@ -37,7 +37,7 @@
 	db_postmemory($_POST);
 	$usu= db_getsession("DB_id_usuario");
 
-	$arr = split("\|", $classes);
+	$arr = explode("\|", $classes);
 	$count = count($arr);
   
   $lErro = false;

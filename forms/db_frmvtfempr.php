@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: pessoal
@@ -57,7 +57,7 @@ $clrotulo->label("rh35_descr");
     <td nowrap title="<?=@$Tr16_codigo?>">
       <?=@$Lr16_codigo?>
     </td>
-    <td> 
+    <td>
       <?
       db_input('r16_codigo',4,$Ir16_codigo,true,'text',$db_opcao,"")
       ?>
@@ -67,7 +67,7 @@ $clrotulo->label("rh35_descr");
     <td nowrap title="<?=@$Tr16_descr?>">
       <?=@$Lr16_descr?>
     </td>
-    <td> 
+    <td>
       <?
       db_input('r16_descr',30,$Ir16_descr,true,'text',$db_opcao,"")
       ?>
@@ -77,7 +77,7 @@ $clrotulo->label("rh35_descr");
     <td nowrap title="<?=@$Tr16_valor?>">
       <?=@$Lr16_valor?>
     </td>
-    <td> 
+    <td>
       <?
       db_input('r16_valor',15,$Ir16_valor,true,'text',$db_opcao,"")
       ?>
@@ -87,7 +87,7 @@ $clrotulo->label("rh35_descr");
     <td nowrap title="<?=@$Tr16_perc?>">
       <?=@$Lr16_perc?>
     </td>
-    <td> 
+    <td>
       <?
       db_input('r16_perc',15,$Ir16_perc,true,'text',$db_opcao,"")
       ?>
@@ -99,7 +99,7 @@ $clrotulo->label("rh35_descr");
       db_ancora(@$Lr16_empres,"js_pesquisar16_empres(true);",$db_opcao);
       ?>
     </td>
-    <td> 
+    <td>
       <?
       db_input('r16_empres',4,$Ir16_empres,true,'text',$db_opcao," onchange='js_pesquisar16_empres(false);'")
       ?>
@@ -116,20 +116,20 @@ $clrotulo->label("rh35_descr");
 <script>
 function js_pesquisar16_empres(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_rhempresavt','func_rhempresavt.php?funcao_js=parent.js_mostrarhempresavt1|rh35_codigo|rh35_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhempresavt','func_rhempresavt.php?funcao_js=parent.js_mostrarhempresavt1|rh35_codigo|rh35_descr','Pesquisa',true);
   }else{
-    if(document.form1.r16_empres.value != ''){ 
-      js_OpenJanelaIframe('top.corpo','db_iframe_rhempresavt','func_rhempresavt.php?pesquisa_chave='+document.form1.r16_empres.value+'&funcao_js=parent.js_mostrarhempresavt','Pesquisa',false);
+    if(document.form1.r16_empres.value != ''){
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhempresavt','func_rhempresavt.php?pesquisa_chave='+document.form1.r16_empres.value+'&funcao_js=parent.js_mostrarhempresavt','Pesquisa',false);
     }else{
-      document.form1.rh35_descr.value = ''; 
+      document.form1.rh35_descr.value = '';
     }
   }
 }
 function js_mostrarhempresavt(chave,erro){
-  document.form1.rh35_descr.value = chave; 
-  if(erro==true){ 
-    document.form1.r16_empres.focus(); 
-    document.form1.r16_empres.value = ''; 
+  document.form1.rh35_descr.value = chave;
+  if(erro==true){
+    document.form1.r16_empres.focus();
+    document.form1.r16_empres.value = '';
   }
 }
 function js_mostrarhempresavt1(chave1,chave2){
@@ -138,7 +138,7 @@ function js_mostrarhempresavt1(chave1,chave2){
   db_iframe_rhempresavt.hide();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_vtfempr','func_vtfempr.php?funcao_js=parent.js_preenchepesquisa|r16_anousu|r16_mesusu|r16_codigo','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_vtfempr','func_vtfempr.php?funcao_js=parent.js_preenchepesquisa|r16_anousu|r16_mesusu|r16_codigo','Pesquisa',true);
 }
 function js_preenchepesquisa(chave,chave1,chave2){
   db_iframe_vtfempr.hide();

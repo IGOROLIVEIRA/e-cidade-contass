@@ -562,10 +562,10 @@ function js_fecha(){
 
 function js_pesquisait22_itbi(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_itbi','func_itbi.php?funcao_js=parent.js_mostraitbi1|it01_guia|it01_guia','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_itbi','func_itbi.php?funcao_js=parent.js_mostraitbi1|it01_guia|it01_guia','Pesquisa',true);
   }else{
      if(document.form1.it22_itbi.value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_itbi','func_itbi.php?pesquisa_chave='+document.form1.it22_itbi.value+'&funcao_js=parent.js_mostraitbi','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_itbi','func_itbi.php?pesquisa_chave='+document.form1.it22_itbi.value+'&funcao_js=parent.js_mostraitbi','Pesquisa',false);
      }else{
        document.form1.it01_guia.value = '';
      }

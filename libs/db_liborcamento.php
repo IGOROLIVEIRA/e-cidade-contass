@@ -4425,7 +4425,7 @@ class cl_permusuario_dotacao
 
           $dotacoes .= " and {$sWhere}";
         }
-        require_once(("std/db_stdClass.php"));
+        require_once(modification("std/db_stdClass.php"));
         $aParametroCompras = db_stdClass::getParametro("pcparam", array(db_getsession("DB_instit")));
         if (
           $this->departamento != "" && isset($aParametroCompras[0]->pc30_dotacaopordepartamento)
@@ -4434,7 +4434,7 @@ class cl_permusuario_dotacao
 
           $sSqlUnidade = "select * from db_departorg where db01_coddepto= $this->departamento and db01_anousu = {$anousu}";
           $rsUnidade   = db_query($sSqlUnidade);
-          require_once(("libs/db_utils.php"));
+          require_once(modification("libs/db_utils.php"));
           if (pg_num_rows($rsUnidade) > 0) {
 
             $iCodigoUnidade = db_utils::fieldsMemory($rsUnidade, 0)->db01_unidade;

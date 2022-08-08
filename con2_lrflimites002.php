@@ -57,7 +57,7 @@ $anousu_ant = (db_getsession("DB_anousu")-1);
 
 $orcparamrel = new cl_orcparamrel;
 
-$xinstit = split("-",$db_selinstit);
+$xinstit = explode("-",$db_selinstit);
 $resultinst = pg_exec("select codigo,nomeinst,nomeinstabrev from db_config where codigo in (".str_replace('-',', ',$db_selinstit).") ");
 $descr_inst = '';
 $xvirg = '';
@@ -81,8 +81,8 @@ for($xins = 0; $xins < pg_numrows($resultinst); $xins++){
 //$head5 = "ORCAMENTOS FISCAL E DA SEGURIDADE SOCIAL";
 
 $dt     = data_periodo($anousu,$periodo);
-$dt_ini = split("-",$dt[0]);
-$dt_fin = split("-",$dt[1]);
+$dt_ini = explode("-",$dt[0]);
+$dt_fin = explode("-",$dt[1]);
 
 $descr_periodo = "PERIODO: ".$dt["texto"];
 
@@ -122,8 +122,8 @@ if ($quadrimestre == 1) {
 //////////////////////////////////////////////////////////////////////////
 
 // data apresentada na tela 
-$dtd1 = split('-',$dt_ini);
-$dtd2 = split('-',$dt_fin);
+$dtd1 = explode('-',$dt_ini);
+$dtd2 = explode('-',$dt_fin);
 
 if ($v_receita_rcl=="s") {
   include("con2_lrfreceitacorrente002.php");

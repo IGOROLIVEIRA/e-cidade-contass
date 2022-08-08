@@ -25,17 +25,17 @@
  *                                licenca/licenca_pt.txt
  */
 
-require_once("libs/db_stdlib.php");
-require_once("libs/db_conecta.php");
-require_once("libs/db_sessoes.php");
-require_once("libs/db_usuariosonline.php");
-require_once("classes/db_contranslr_classe.php");
-require_once("classes/db_conplano_classe.php");
-require_once("classes/db_contranslan_classe.php");
-require_once("classes/db_pctipocompra_classe.php");
-require_once("classes/db_emprestotipo_classe.php");
-require_once("classes/db_db_config_classe.php");
-require_once("dbforms/db_funcoes.php");
+require_once(modification("libs/db_stdlib.php"));
+require_once(modification("libs/db_conecta.php"));
+require_once(modification("libs/db_sessoes.php"));
+require_once(modification("libs/db_usuariosonline.php"));
+require_once(modification("classes/db_contranslr_classe.php"));
+require_once(modification("classes/db_conplano_classe.php"));
+require_once(modification("classes/db_contranslan_classe.php"));
+require_once(modification("classes/db_pctipocompra_classe.php"));
+require_once(modification("classes/db_emprestotipo_classe.php"));
+require_once(modification("classes/db_db_config_classe.php"));
+require_once(modification("dbforms/db_funcoes.php"));
 
 $clrotulo = new rotulocampo;
 $clrotulo->label("c46_codhist");
@@ -962,7 +962,7 @@ function js_pesquisaDebito(lMostra, lPesquisaElemento){
     }
     sUrlHistorico  = "func_conplanoexe.php?pesquisa_chave="+sChavePesquisa+"&lEstrutural="+lPesquisaElemento+"&funcao_js=parent.js_completaDebito";
   }
-  js_OpenJanelaIframe("top.corpo.iframe_contranslr", "db_iframe_conplanoexe", sUrlHistorico, "Pesquisa Debito", lMostra);
+  js_OpenJanelaIframe("CurrentWindow.corpo.iframe_contranslr", "db_iframe_conplanoexe", sUrlHistorico, "Pesquisa Debito", lMostra);
 }
 
 function js_completaDebito(sDescricaoDebito,erro, sEstrutural, lEstrutural){
@@ -1008,7 +1008,7 @@ function js_pesquisaCredito(lMostra, lPesquisaElemento){
     }
     sUrlHistorico  = "func_conplanoexe.php?pesquisa_chave="+sChavePesquisa+"&lEstrutural="+lPesquisaElemento+"&funcao_js=parent.js_completaCredito";
   }
-  js_OpenJanelaIframe("top.corpo.iframe_contranslr", "db_iframe_conplanoexe_credito", sUrlHistorico, "Pesquisa Credito", lMostra);
+  js_OpenJanelaIframe("CurrentWindow.corpo.iframe_contranslr", "db_iframe_conplanoexe_credito", sUrlHistorico, "Pesquisa Credito", lMostra);
 }
 
 function js_completaCredito(sDescricaoCredito,erro, sEstrutural, lEstrutural){

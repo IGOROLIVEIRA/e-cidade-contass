@@ -275,7 +275,7 @@ function js_renderizarGrid() {
 function js_pesquisaPlanilha() {
 
   js_limpaGrid();
-  js_OpenJanelaIframe('top.corpo','db_iframe_placaixa','func_placaixa.php?lAutenticada=true&funcao_js=parent.js_getPlanilha|k80_codpla','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_placaixa','func_placaixa.php?lAutenticada=true&funcao_js=parent.js_getPlanilha|k80_codpla','Pesquisa',true);
 }
 
 

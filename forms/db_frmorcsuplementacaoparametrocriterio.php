@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: orcamento
@@ -40,7 +40,7 @@ if(isset($db_opcaoal)){
 }else if(isset($opcao) && $opcao=="excluir"){
     $db_opcao = 3;
     $db_botao=true;
-}else{  
+}else{
     $db_opcao = 1;
     $db_botao=true;
     if(isset($novo) || isset($alterar) ||   isset($excluir) || (isset($incluir) && $sqlerro==false ) ){
@@ -50,7 +50,7 @@ if(isset($db_opcaoal)){
      $o135_valor = "";
      $o135_fundamentacaolegal = "";
    }
-} 
+}
 global $o135_sequencial;
 ?>
 <div style="margin-left: 500px;">
@@ -63,7 +63,7 @@ global $o135_sequencial;
     <td nowrap title="<?=@$To135_sequencial?>">
        <?=@$Lo135_sequencial?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('o135_sequencial',10,$Io135_sequencial,true,'text',3,"")
 ?>
@@ -75,7 +75,7 @@ db_input('o135_sequencial',10,$Io135_sequencial,true,'text',3,"")
        db_ancora(@$Lo135_orcsuplementacaoparametro,"js_pesquisao135_orcsuplementacaoparametro(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('o135_orcsuplementacaoparametro',10,$Io135_orcsuplementacaoparametro,true,'text',3," onchange='js_pesquisao135_orcsuplementacaoparametro(false);'")
 ?>
@@ -88,7 +88,7 @@ db_input('o134_anousu',10,$Io134_anousu,true,'text',3,'',"","","display:none;")
     <td nowrap title="<?=@$To135_descricao?>">
        <?=@$Lo135_descricao?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('o135_descricao',50,$Io135_descricao,true,'text',$db_opcao,"")
 ?>
@@ -98,7 +98,7 @@ db_input('o135_descricao',50,$Io135_descricao,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$To135_nivel?>">
        <?=@$Lo135_nivel?>
     </td>
-    <td> 
+    <td>
 <?
 $x = array('6'=>'Ação','7'=>'Elemento','3'=>'Função','5'=>'Programa','8'=>'Recurso','1'=>'Órgão','4'=>'Subfunção','2'=>'Unidade');
 db_select('o135_nivel',$x,true,$db_opcao,"onchange='valida_nivel_valor();'");
@@ -109,30 +109,30 @@ db_select('o135_nivel',$x,true,$db_opcao,"onchange='valida_nivel_valor();'");
     <td nowrap title="<?=@$To135_valor?>">
        <?=@$Lo135_valor?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('o135_valor',50,$Io135_valor,true,'text',3,"")
 ?>
     </td>
   </tr>
   <tr>
-    <td colspan="2" align="center" nowrap title="<?=@$To135_fundamentacaolegal?>"> 
+    <td colspan="2" align="center" nowrap title="<?=@$To135_fundamentacaolegal?>">
       <fieldset style="width: 460px; margin-top: 20px;">
-        <legend><b><?=@$Lo135_fundamentacaolegal?></b></legend> 
+        <legend><b><?=@$Lo135_fundamentacaolegal?></b></legend>
           <?
             db_textarea('o135_fundamentacaolegal',10,47,$Io135_fundamentacaolegal,true,'text',$db_opcao,"");
           ?>
-          
-    </fieldset> 
+
+    </fieldset>
   </tr>
-</fieldset>  
-  
+</fieldset>
+
   </tr>
-</table>  
-</fieldset>  
-  
-  
-<table style="margin-top: 15px;">  
+</table>
+</fieldset>
+
+
+<table style="margin-top: 15px;">
   <tr>
     <td colspan="2" align="center">
  <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?>  >
@@ -142,7 +142,7 @@ db_input('o135_valor',50,$Io135_valor,true,'text',3,"")
   </table>
  <table style="margin-top: 15px;">
   <tr>
-    <td valign="top"  align="center">  
+    <td valign="top"  align="center">
     <?
    $iAnoUsu     = db_getsession("DB_anousu");
 	 $chavepri= array("o135_sequencial"=>@$o135_sequencial);
@@ -173,20 +173,20 @@ function js_cancelar(){
 }
 function js_pesquisao135_orcsuplementacaoparametro(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_orcsuplementacaoparametrocriterio','db_iframe_orcsuplementacaoparametro','func_orcsuplementacaoparametro.php?funcao_js=parent.js_mostraorcsuplementacaoparametro1|o134_anousu|o134_anousu','Pesquisa',true,'0','1','775','390');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_orcsuplementacaoparametrocriterio','db_iframe_orcsuplementacaoparametro','func_orcsuplementacaoparametro.php?funcao_js=parent.js_mostraorcsuplementacaoparametro1|o134_anousu|o134_anousu','Pesquisa',true,'0','1','775','390');
   }else{
-     if(document.form1.o135_orcsuplementacaoparametro.value != ''){ 
-        js_OpenJanelaIframe('top.corpo.iframe_orcsuplementacaoparametrocriterio','db_iframe_orcsuplementacaoparametro','func_orcsuplementacaoparametro.php?pesquisa_chave='+document.form1.o135_orcsuplementacaoparametro.value+'&funcao_js=parent.js_mostraorcsuplementacaoparametro','Pesquisa',false);
+     if(document.form1.o135_orcsuplementacaoparametro.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_orcsuplementacaoparametrocriterio','db_iframe_orcsuplementacaoparametro','func_orcsuplementacaoparametro.php?pesquisa_chave='+document.form1.o135_orcsuplementacaoparametro.value+'&funcao_js=parent.js_mostraorcsuplementacaoparametro','Pesquisa',false);
      }else{
-       document.form1.o134_anousu.value = ''; 
+       document.form1.o134_anousu.value = '';
      }
   }
 }
 function js_mostraorcsuplementacaoparametro(chave,erro){
-  document.form1.o134_anousu.value = chave; 
-  if(erro==true){ 
-    document.form1.o135_orcsuplementacaoparametro.focus(); 
-    document.form1.o135_orcsuplementacaoparametro.value = ''; 
+  document.form1.o134_anousu.value = chave;
+  if(erro==true){
+    document.form1.o135_orcsuplementacaoparametro.focus();
+    document.form1.o135_orcsuplementacaoparametro.value = '';
   }
 }
 function js_mostraorcsuplementacaoparametro1(chave1,chave2){
@@ -195,7 +195,7 @@ function js_mostraorcsuplementacaoparametro1(chave1,chave2){
   db_iframe_orcsuplementacaoparametro.hide();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_orcsuplementacaoparametrocriterio','func_orcsuplementacaoparametrocriterio.php?funcao_js=parent.js_preenchepesquisa|o135_sequencial','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_orcsuplementacaoparametrocriterio','func_orcsuplementacaoparametrocriterio.php?funcao_js=parent.js_preenchepesquisa|o135_sequencial','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_orcsuplementacaoparametrocriterio.hide();
@@ -225,7 +225,7 @@ function valida_nivel_valor(){
     document.getElementById('o135_valor').style.backgroundColor = 'rgb(222, 184, 135)';
     //alert('leitura');
   }
- 
+
 }
 document.getElementById('o135_fundamentacaolegal').style.width='100%';
 </script>

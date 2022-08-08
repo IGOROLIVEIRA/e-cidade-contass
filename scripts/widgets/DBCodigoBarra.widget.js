@@ -1,20 +1,23 @@
- /*
-  * @fileoverview Esse arquivo cria um componente com um campo de codigo de barras
-  * 
+ /**
+  * Esse arquivo cria um componente com um campo de codigo de barras
   * será possivel passar o label, limite de caracteres e a mensagem.
   *
-  * var oDBCodigoBarra = new DBCodigoBarra("Instancia do OBJ");
-	    oDBCodigoBarra.setLabelCodigoBarra("Lable do campo:");
-	    oDBCodigoBarra.setMaximoDigito(tamanhodo padrao do codigo de barra);
-	    oDBCodigoBarra.setMensagemLeitura('msgm de aguardadndo leitura');
-	    oDBCodigoBarra.criaComponentes();
-	    oDBCodigoBarra.show('container a ser exibido');
+  * @constructor
   *
-  * @author Rafael Lopes rafael.lopes@dbseller.com.br
-  * @author Bruno silva bruno.silva@dbseller.com.br
-  * @version 1.0 $
+  * @example
+  * var oDBCodigoBarra = new DBCodigoBarra("Instancia do OBJ");
+	* oDBCodigoBarra.setLabelCodigoBarra("Lable do campo:");
+	* oDBCodigoBarra.setMaximoDigito(tamanhodo padrao do codigo de barra);
+	* oDBCodigoBarra.setMensagemLeitura('msgm de aguardadndo leitura');
+	* oDBCodigoBarra.criaComponentes();
+	* oDBCodigoBarra.show('container a ser exibido');
+  *
+  * @author Rafael Lopes <rafael.lopes@dbseller.com.br>
+  * @author Bruno silva <bruno.silva@dbseller.com.br>
+  * @version $Revision: 1.8 $
+  * @param {String} sNomeCampo
+  * @param {String} sNameInstance
   */
-
 DBCodigoBarra = function (sNomeCampo, sNameInstance) {
 
   this.sLabelCodigoDeBarra    = "Código de Barras:";
@@ -67,7 +70,7 @@ DBCodigoBarra = function (sNomeCampo, sNameInstance) {
    * @param sAtributos
    */
   this.setAtributosBota = function(sAtributos)  {
-	  this.sAtributosBotao = sAtributos;  
+	  this.sAtributosBotao = sAtributos;
   };
 
   /**
@@ -111,18 +114,18 @@ DBCodigoBarra = function (sNomeCampo, sNameInstance) {
     oTxtLinhaDigitavel.show($('ctnLinhaDigitavel'));
 	  oTxtCodigoBarra.show($('ctnCodigoBarra'));
   };
-  
+
   /**
    * Libera o input do código de barra para que seja inserido valores
    */
   this.liberarCodigoDeBarra = function() {
-	
+
     this.fCallbackInicioLeitura();
     oTxtLinhaDigitavel.setValue('');
     oTxtCodigoBarra.setValue('');
 	  oTxtCodigoBarra.setReadOnly(false);
 	  $(this.sNomeCampo).setAttribute("style", this.sEstiloCssLeitura);
-	  
+
     var sNomeCampo = this.sNomeCampo;
 	  $(sNomeCampo).focus();
     js_divCarregando(this.sMensagemLeitura, 'msgBox');
@@ -130,19 +133,19 @@ DBCodigoBarra = function (sNomeCampo, sNameInstance) {
     /**
      * Ao clicar na div criada pela funcao js_divCarregando retorna o focu para o campo
      */
-    $('msgBoxmodal').onclick = function(event) { 
+    $('msgBoxmodal').onclick = function(event) {
       $(sNomeCampo).focus();
-      return false; 
+      return false;
     }
   };
-  
-  /**  
+
+  /**
    * Bloqueia a tecla tab para que, após o usuário clicar no botão, não permita sair do foco do campo input
    */
   this.bloquearTab = function(event) {
-    
+
     if (event.which == 9) {
-      
+
       event.preventDefault();
       event.stopPropagation();
       return false;
@@ -154,29 +157,29 @@ DBCodigoBarra = function (sNomeCampo, sNameInstance) {
    * @param event
    */
   this.lerCodigo = function(event) {
-    
+
     var oSelf = this;
-    
-	  if (event.keyCode == 27) { 
-	  	
+
+	  if (event.keyCode == 27) {
+
 	  	js_removeObj("msgBox");
 	  	$(this.sNomeCampo).value = '';
 	  	oTxtCodigoBarra.setReadOnly(true);
 	  }
-	  
+
 	  var iTotalCaractereCodigoBarra = $('txtCodigoBarra').value.length;
-	  
+
      if (iTotalCaractereCodigoBarra == this.iMaximoDigito) {
-	  
-	    if (event.keyCode == 13) { 
-	    	
+
+	    if (event.keyCode == 13) {
+
 	    	oTxtCodigoBarra.setReadOnly(true);
 	  	  js_removeObj("msgBox");
 	  	  oSelf.fCallbackAposLeitura(oSelf.processarCodigoDeBarra(true));
 	    }
-	  } 
+	  }
 	  if (event.keyCode == 13 && iTotalCaractereCodigoBarra > this.iMaximoDigito ) {
-	  	
+
 	  	$(this.sNomeCampo).value = '';
 	  	js_removeObj("msgBox");
 	  	js_divCarregando("Codigo de barra invalido, tente novamente ou pressione ESC para sair.", 'msgBox');
@@ -225,7 +228,7 @@ DBCodigoBarra = function (sNomeCampo, sNameInstance) {
       */
      var oDataInicial = new Date(1997, 9, 7);
      var iNumeroDias  = new Number(sCodigoBarra.substr(5, 4));
-     
+
      oDataInicial.setDate(oDataInicial.getDate() + iNumeroDias);
      var sDia = js_strLeftPad(oDataInicial.getDate(), 2, '0');
      var sMes = js_strLeftPad(oDataInicial.getMonth() + 1, 2, '0');

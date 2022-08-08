@@ -294,7 +294,7 @@ function js_copiacampo(){
 
 function js_mostraDepart(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_db_depart',
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_depart',
                         'func_db_depart.php?funcao_js=parent.js_mostracoddepto1|coddepto|descrdepto',
                         'Pesquisa de Departamentos',true);
   }
@@ -310,7 +310,7 @@ function js_mostracoddepto1(chave1,chave2) {
 
 function js_mostraAlmox(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_db_almox',
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_almox',
                         'func_db_almox.php?funcao_js=parent.js_mostraAlmox1|m91_codigo|descrdepto',
                         'Pesquisa de Almoxarifado',true);
   }

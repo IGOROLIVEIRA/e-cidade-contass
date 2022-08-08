@@ -36,7 +36,6 @@ require_once ("classes/db_veicretirada_classe.php");
 require_once ("classes/db_veiculos_classe.php");
 require_once ("classes/db_veicparam_classe.php");
 require_once ("classes/db_veictipoabast_classe.php");
-require_once ("std/DBDate.php");
 
 db_app::import("veiculos.*");
 db_postmemory($HTTP_POST_VARS);

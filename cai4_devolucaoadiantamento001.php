@@ -118,7 +118,7 @@
      * Abre a func de pesquisa do movimento
      */
     function pesquisaCodigoMovimento() {
-        js_OpenJanelaIframe( 'top.corpo',
+        js_OpenJanelaIframe( 'CurrentWindow.corpo',
                              'db_iframe_empagemov',
                              'func_empagemov.php?chave_empenho_conferido=1&funcao_js=parent.exibeCodigoMovimento|e81_codmov',
                              'Pesquisa Movimento', true, '25', '10', '775', '450' );
@@ -217,7 +217,7 @@
         if ($('iTipoDevolucao').value == 2) {
 
           e.preventDefault();
-          top.corpo.location = 'emp1_emppagamentoestornanota002.php?e81_codmov=' + $F('iCodigoMovimento')
+          CurrentWindow.corpo.location = 'emp1_emppagamentoestornanota002.php?e81_codmov=' + $F('iCodigoMovimento')
                                + '&pag_ord=true&origem_devolucao=true';
           return false;
         }

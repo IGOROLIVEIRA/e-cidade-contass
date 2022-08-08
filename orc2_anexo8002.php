@@ -1,43 +1,43 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
+ *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2014  DBSeller Servicos de Informatica
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 
-include("fpdf151/pdf.php");
-include("fpdf151/assinatura.php");
-include("libs/db_sql.php");
-include("libs/db_liborcamento.php");
-include("dbforms/db_funcoes.php");
+include(modification("fpdf151/pdf.php"));
+include(modification("fpdf151/assinatura.php"));
+include(modification("libs/db_sql.php"));
+include(modification("libs/db_liborcamento.php"));
+include(modification("dbforms/db_funcoes.php"));
 
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 db_postmemory($HTTP_POST_VARS);
 
 $classinatura = new cl_assinatura;
 
-$xinstit = split("-",$db_selinstit);
+$xinstit = explode("-",$db_selinstit);
 $resultinst = db_query("select codigo,nomeinstabrev from db_config where codigo in (".str_replace('-',', ',$db_selinstit).") ");
 $descr_inst = '';
 $xvirg = '';
@@ -74,16 +74,16 @@ for($xins = 0; $xins < pg_numrows($resultinst); $xins++){
   if ($nivela >= 8) {
     $sele_work .= " and exists (select 1 from t where t.o58_codigo = w.o58_codigo) ";
   }
- 
+
   db_query("begin");
   db_query("create temp table t(o58_orgao int8,o58_unidade int8,o58_funcao int8,o58_subfuncao int8,o58_programa int8,o58_projativ int8,o58_elemento int8,o58_codigo int8)");
-    
-  $xcampos = split("-",$orgaos);
-  
+
+  $xcampos = explode("-",$orgaos);
+
   for($i=0;$i < sizeof($xcampos);$i++){
      $where = '';
-     $virgula = ''; 
-     $xxcampos = split("_",$xcampos[$i]);
+     $virgula = '';
+     $xxcampos = explode("_",$xcampos[$i]);
      for($ii=0;$ii<sizeof($xxcampos);$ii++){
         if($ii > 0){
           $where .= $virgula.$xxcampos[$ii];
@@ -119,25 +119,25 @@ $datafin = $perfin;
  */
 
 if ($tipo_agrupa == 1) {
-  
+
   $xagrupa = "Geral";
   $grupoini = 0;
   $grupofin = 3;
   $sCampo = "";
-  $sOrdem = "";  
+  $sOrdem = "";
 } else if ($tipo_agrupa == 2) {
-  
+
   $xagrupa  = "Órgão";
   $grupoini = 1;
   $grupofin = 3;
   $sCampo = "o58_orgao, o40_descr, ";
-  $sOrdem = "o58_orgao, o40_descr, ";  
+  $sOrdem = "o58_orgao, o40_descr, ";
 } else {
-  
+
   $xagrupa = "Unidade";
   $grupoini = 8;
   $grupofin = 0;
-  
+
   $sCampo = " o58_orgao, o58_unidade, o41_descr,  o40_descr, ";
   $sOrdem = " o58_orgao, o58_unidade, o41_descr,  o40_descr, ";
 }
@@ -164,7 +164,7 @@ $head6 = "AGRUPAMENTO : ".$xagrupa;
 $tipo_balanco = 2; // empenhado
 if ($origem == "O"){
   $tipo_balanco = 1;
-}  
+}
 
 $sSql    = db_dotacaosaldo(5,1,3,true,$sele_work,$anousu,$dataini,$datafin,$grupoini,$grupofin,true,$tipo_balanco);
 
@@ -197,21 +197,21 @@ $sSql = "select o58_funcao,
                 atual_a_pagar,
                 atual_a_pagar_liquidado,
                 empenhado_acumulado,
-                anulado_acumulado,   
-                liquidado_acumulado,   
-                pago_acumulado,  
-                suplementado_acumulado,  
-                reduzido_acumulado,  
-                proj,  
-                ativ,  
-                oper,  
-                ordinario,   
+                anulado_acumulado,
+                liquidado_acumulado,
+                pago_acumulado,
+                suplementado_acumulado,
+                reduzido_acumulado,
+                proj,
+                ativ,
+                oper,
+                ordinario,
                 vinculado,
-                suplemen,  
-                suplemen_acumulado,  
+                suplemen,
+                suplemen_acumulado,
                 especial,
-                especial_acumulado 
-           from ({$sSql}) as final 
+                especial_acumulado
+           from ({$sSql}) as final
           order by {$sOrdem}
                    o58_funcao,
                    o52_descr,
@@ -231,9 +231,9 @@ $sSql = "select o58_funcao,
 
 $result = db_query($sSql);
 
-$pdf = new PDF(); 
-$pdf->Open(); 
-$pdf->AliasNbPages(); 
+$pdf = new PDF();
+$pdf->Open();
+$pdf->AliasNbPages();
 $pdf->setfillcolor(235);
 $pdf->setfont('arial','b',7);
 
@@ -256,7 +256,7 @@ for($i=0;$i<pg_numrows($result);$i++){
   if(empty($o58_funcao)){
     continue;
   }
-     
+
   if ($tipo_agrupa == 3){
     if ( $qualu != @$o58_orgao.@$o58_unidade ){
       $pagina = 1;
@@ -304,7 +304,7 @@ for($i=0;$i<pg_numrows($result);$i++){
        $pdf->cell(10,$alt,"UNIDADE ORÇAMENTÁRIA  -  ".db_formatar(@$o58_orgao,'orgao').db_formatar(@$o58_unidade,'orgao').'  -  '.@$o41_descr,0,1,"L",0);
        $pdf->cell(0,0.5,'',"TB",1,"C",0);
      }
-     
+
      $pdf->ln(2);
      $pdf->cell(25,$alt,"CÓDIGO",0,0,"L",0);
      $pdf->cell(80,$alt,"E S P E C I F I C A Ç Ã O",0,0,"L",0);
@@ -314,7 +314,7 @@ for($i=0;$i<pg_numrows($result);$i++){
      $pdf->cell(0,$alt,'',"T",1,"C",0);
   }
   $pdf->setfont('arial','',6);
-  
+
   if (empty($o56_projativ)) {
       if ($o58_programa == 0 && $o58_subfuncao == 0 ) {
          $pdf->setfont('arial','b',7);
@@ -373,6 +373,6 @@ $pdf->cell(25,$alt,db_formatar($totproj+$totativ,'f'),0,0,"R",0);
 $pdf->ln(14);
 
 if ($origem != "O") {
-  assinaturas(&$pdf,&$classinatura,'BG');
+  assinaturas($pdf,$classinatura,'BG');
 }
 $pdf->Output();

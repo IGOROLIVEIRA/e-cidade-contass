@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -50,70 +50,70 @@ $k101_tipo		   = "";
 $descrTipo		   = "";
 
 if (isset($oPost->incluir)) {
-	
+
    db_inicio_transacao();
-	
-   $clnotificaarratipodoc->k101_db_documento = $oPost->k101_db_documento; 
+
+   $clnotificaarratipodoc->k101_db_documento = $oPost->k101_db_documento;
    $clnotificaarratipodoc->k101_tipo		  = $oPost->k101_tipo;
    $clnotificaarratipodoc->incluir(null);
-	
+
    if ($clnotificaarratipodoc->erro_status == 0){
-	 $sMsgErro = $clnotificaarratipodoc->erro_msg;		
-	 $lSqlErro = true;	
+	 $sMsgErro = $clnotificaarratipodoc->erro_msg;
+	 $lSqlErro = true;
    }
-	
+
    db_fim_transacao($lSqlErro);
-   
+
 
 } else if (isset($oPost->alterar)) {
-	
+
    db_inicio_transacao();
-	
-   $clnotificaarratipodoc->k101_db_documento = $oPost->k101_db_documento; 
+
+   $clnotificaarratipodoc->k101_db_documento = $oPost->k101_db_documento;
    $clnotificaarratipodoc->k101_tipo		 = $oPost->k101_tipo;
    $clnotificaarratipodoc->alterar($oPost->k101_sequencial);
-	
+
    if ($clnotificaarratipodoc->erro_status == 0){
-	 $sMsgErro = $clnotificaarratipodoc->erro_msg;		
-	 $lSqlErro = true;	
+	 $sMsgErro = $clnotificaarratipodoc->erro_msg;
+	 $lSqlErro = true;
    }
-	
+
    db_fim_transacao($lSqlErro);
 
 } else if (isset($oPost->excluir)) {
-	
+
    db_inicio_transacao();
 
    $clnotificaarratipodoc->excluir($oPost->k101_sequencial);
-	
+
    if ($clnotificaarratipodoc->erro_status == 0){
-	 $sMsgErro = $clnotificaarratipodoc->erro_msg;		
-	 $lSqlErro = true;	
+	 $sMsgErro = $clnotificaarratipodoc->erro_msg;
+	 $lSqlErro = true;
    }
-	
+
    db_fim_transacao($lSqlErro);
 
 } else if (isset($oPost->opcao) && ( $oPost->opcao == "alterar" || $oPost->opcao == "excluir") ) {
-	
+
    $rsArretipoDoc = $clnotificaarratipodoc->sql_record($clnotificaarratipodoc->sql_query($oPost->k101_sequencial,"*",null,""));
-   
+
    if ($clnotificaarratipodoc->numrows > 0) {
-   	  $oArretipoDoc = db_utils::fieldsMemory($rsArretipoDoc,0); 
-   	 
+   	  $oArretipoDoc = db_utils::fieldsMemory($rsArretipoDoc,0);
+
    	  $k101_sequencial   = $oArretipoDoc->k101_sequencial;
    	  $k101_db_documento = $oArretipoDoc->k101_db_documento;
    	  $descrDocumento    = $oArretipoDoc->db03_descr;
    	  $k101_tipo		 = $oArretipoDoc->k101_tipo;
    	  $descrTipo		 = $oArretipoDoc->k00_descr;
-   
+
    }
-   
+
    if ( $oPost->opcao == "alterar"){
      $db_opcao = 2;
    } else {
 	 $db_opcao = 3;
    }
-   
+
 
 }
 
@@ -140,8 +140,8 @@ if (isset($oPost->incluir)) {
 <center>
   <form name="form1" method="post" action="">
   <table style="padding-top:15px;">
-    <tr> 
-      <td> 
+    <tr>
+      <td>
 		<fieldset>
 		  <table align="center">
 		    <tr>
@@ -177,14 +177,14 @@ if (isset($oPost->incluir)) {
     </tr>
     <tr align="center">
       <td>
-	    <input name=<?=($db_opcao==1?"incluir":($db_opcao==2?"alterar":"excluir"))?> type="submit" value=<?=($db_opcao==1?"Incluir":($db_opcao==2?"Alterar":"Excluir"))?>>	
+	    <input name=<?=($db_opcao==1?"incluir":($db_opcao==2?"alterar":"excluir"))?> type="submit" value=<?=($db_opcao==1?"Incluir":($db_opcao==2?"Alterar":"Excluir"))?>>
 	  </td>
     </tr>
 	<tr>
-	  <td valign="top"  align="center">  
+	  <td valign="top"  align="center">
 	    <?
 		  $chavepri= array("k101_sequencial"=>@$k101_sequencial);
-		  
+
 		  $cliframe_alterar_excluir->chavepri	    = $chavepri;
 		  $cliframe_alterar_excluir->sql     	    = $clnotificaarratipodoc->sql_query(null,"*",null,"");
 		  $cliframe_alterar_excluir->campos  	    = "k101_db_documento,db03_descr,k101_tipo,k00_descr";
@@ -204,53 +204,53 @@ if (isset($oPost->incluir)) {
 </body>
 </html>
 <script>
-  
+
   function js_pesquisaDoc(lMostra) {
   	if (lMostra) {
-	  js_OpenJanelaIframe("top.corpo","db_iframe_documentos","func_db_documento.php?funcao_js=parent.js_preencheDoc|db03_docum|db03_descr","Pesquisa",true);  	
+	  js_OpenJanelaIframe("CurrentWindow.corpo","db_iframe_documentos","func_db_documento.php?funcao_js=parent.js_preencheDoc|db03_docum|db03_descr","Pesquisa",true);
   	} else {
-  	  js_OpenJanelaIframe("top.corpo","db_iframe_documentos","func_db_documento.php?funcao_js=parent.js_preencheDoc1&pesquisa_chave="+document.form1.k101_db_documento.value,"Pesquisa",false);
+  	  js_OpenJanelaIframe("CurrentWindow.corpo","db_iframe_documentos","func_db_documento.php?funcao_js=parent.js_preencheDoc1&pesquisa_chave="+document.form1.k101_db_documento.value,"Pesquisa",false);
   	}
   }
-  
+
   function js_preencheDoc(iChave,sChave){
   	document.form1.k101_db_documento.value = iChave;
   	document.form1.descrDocumento.value	   = sChave;
     db_iframe_documentos.hide();
   }
-  
+
   function js_preencheDoc1(sChave,lErro){
 	document.form1.descrDocumento.value	 = sChave;
     if(lErro){
       document.form1.k101_db_documento.focus();
       document.form1.descrDocumento.value = "";
-    } 
+    }
   	db_iframe_documentos.hide();
-  } 
- 
- 
+  }
+
+
   function js_pesquisaTipo(lMostra) {
   	if (lMostra) {
-	  js_OpenJanelaIframe("top.corpo","db_iframe_tipo","func_arretipo.php?funcao_js=parent.js_preencheTipo|k00_tipo|k00_descr","Pesquisa",true);  	
+	  js_OpenJanelaIframe("CurrentWindow.corpo","db_iframe_tipo","func_arretipo.php?funcao_js=parent.js_preencheTipo|k00_tipo|k00_descr","Pesquisa",true);
   	} else {
-  	  js_OpenJanelaIframe("top.corpo","db_iframe_tipo","func_arretipo.php?funcao_js=parent.js_preencheTipo1&pesquisa_chave="+document.form1.k101_tipo.value,"Pesquisa",false);
+  	  js_OpenJanelaIframe("CurrentWindow.corpo","db_iframe_tipo","func_arretipo.php?funcao_js=parent.js_preencheTipo1&pesquisa_chave="+document.form1.k101_tipo.value,"Pesquisa",false);
   	}
   }
- 
+
  function js_preencheTipo(iChave,sChave){
   	document.form1.k101_tipo.value = iChave;
   	document.form1.descrTipo.value = sChave;
     db_iframe_tipo.hide();
   }
-  
+
   function js_preencheTipo1(sChave,lErro){
 	document.form1.descrTipo.value = sChave;
     if(lErro){
       document.form1.k101_tipo.focus();
       document.form1.descrTipo.value = "";
-    } 
+    }
   	db_iframe_tipo.hide();
-  } 
+  }
 
 </script>
 <?

@@ -225,7 +225,7 @@ $rotulo->label("z01_cgccpf");
           if (isset($chave_e60_numemp) && !empty($chave_e60_numemp)) {
             $sql = $clempempenho->sql_query($chave_e60_numemp,$campos,"e60_numemp","$dbwhere and e60_numemp=$chave_e60_numemp ",$filtroempelemento);
           } elseif (isset($chave_e60_codemp) && !empty($chave_e60_codemp)) {
-            $arr = split("/",$chave_e60_codemp);
+            $arr = explode("/",$chave_e60_codemp);
             if (count($arr) == 2  && isset($arr[1]) && $arr[1] != '' ) {
               $dbwhere_ano = " and e60_anousu = ".$arr[1];
             } elseif (count($arr) == 1) {

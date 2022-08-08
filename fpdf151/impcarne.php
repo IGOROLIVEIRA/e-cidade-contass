@@ -1,4 +1,5 @@
 <?
+
 include("assinatura.php");
 
 /**
@@ -1329,7 +1330,6 @@ class db_impcarne extends cl_assinatura
 
   function imprime()
   {
-
     $sSqlConfig  = "select db21_codcli from db_config where prefeitura is true";
     $rsSqlConfig = db_query($sSqlConfig);
     $sCodCliente = pg_fetch_object($rsSqlConfig, 0);

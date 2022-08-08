@@ -87,7 +87,7 @@ require_once "dbforms/db_funcoes.php";
           pesquisa : {
             busca : function() {
 
-              js_OpenJanelaIframe( 'top.corpo',
+              js_OpenJanelaIframe( 'CurrentWindow.corpo',
                                    'db_iframe_cronogramaperspectiva',
                                    'func_cronogramaperspectiva.php?funcao_js=parent.oPerspectiva.pesquisa.preenche|o124_sequencial|o124_descricao&tipo=1',
                                    'Pesquisa de Perspectiva',

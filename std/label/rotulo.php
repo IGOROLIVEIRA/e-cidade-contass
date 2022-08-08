@@ -1,25 +1,27 @@
-<?php 
+<?php
 
 /**
  * rotulo
- * 
- * @package 
+ *
+ * @package
  * @version $id$
- * @author <> 
+ * @author <>
  */
-class rotulo {
+class rotulo
+{
 
   private $oInstance;
   /**
-   * Construtor da classe 
+   * Construtor da classe
    *
    * @param string $sNomeTabela
    * @access public
    * @return void
    */
-  public function __construct( $sNomeTabela )  {
+  public function __construct($sNomeTabela)
+  {
 
-    if ( file_exists( "dd/tabelas/{$sNomeTabela}.dd.xml") ) {
+    if (file_exists("dd/tabelas/{$sNomeTabela}.dd.xml")) {
       $this->oInstance = new RotuloXML($sNomeTabela);
       return;
     }
@@ -28,15 +30,18 @@ class rotulo {
     return;
   }
 
-  public function label ($sNomeCampo = "" ) {
+  public function label($sNomeCampo = "")
+  {
     return $this->oInstance->label($sNomeCampo);
   }
 
-  public function rlabel ($sNomeCampo = "" ) {
+  public function rlabel($sNomeCampo = "")
+  {
     return $this->oInstance->rlabel($sNomeCampo);
   }
 
-  public function tlabel ($sNomeCampo = "") {
+  public function tlabel($sNomeCampo = "")
+  {
     return $this->oInstance->tlabel($sNomeCampo);
   }
 }

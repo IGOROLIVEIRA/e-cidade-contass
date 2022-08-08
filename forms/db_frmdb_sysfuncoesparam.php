@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: configuracoes
@@ -40,7 +40,7 @@ if(isset($db_opcaoal)){
 }else if(isset($opcao) && $opcao=="excluir"){
     $db_opcao = 3;
     $db_botao=true;
-}else{  
+}else{
     $db_opcao = 1;
     $db_botao=true;
     if(isset($novo) || isset($alterar) ||   isset($excluir) || (isset($incluir) && $sqlerro==false ) ){
@@ -53,7 +53,7 @@ if(isset($db_opcaoal)){
      $db42_valor_default = "";
      $db42_descricao = "";
    }
-} 
+}
 ?>
 <form name="form1" method="post" action="">
 <center>
@@ -62,7 +62,7 @@ if(isset($db_opcaoal)){
     <td nowrap title="<?=@$Tdb42_sysfuncoesparam?>">
        <?=@$Ldb42_sysfuncoesparam?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('db42_sysfuncoesparam',10,$Idb42_sysfuncoesparam,true,'text',3,"")
 ?>
@@ -74,7 +74,7 @@ db_input('db42_sysfuncoesparam',10,$Idb42_sysfuncoesparam,true,'text',3,"")
        db_ancora(@$Ldb42_funcao,"js_pesquisadb42_funcao(true);",3);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('db42_funcao',5,$Idb42_funcao,true,'text',3," onchange='js_pesquisadb42_funcao(false);'")
 ?>
@@ -87,7 +87,7 @@ db_input('nomefuncao',50,$Inomefuncao,true,'text',3,'')
     <td nowrap title="<?=@$Tdb42_ordem?>">
        <?=@$Ldb42_ordem?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('db42_ordem',5,$Idb42_ordem,true,'text',$db_opcao,"")
 ?>
@@ -97,7 +97,7 @@ db_input('db42_ordem',5,$Idb42_ordem,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tdb42_nome?>">
        <?=@$Ldb42_nome?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('db42_nome',20,$Idb42_nome,true,'text',$db_opcao,"")
 ?>
@@ -114,9 +114,9 @@ db_input('db42_nome',20,$Idb42_nome,true,'text',$db_opcao,"")
                  left join pg_class on pg_class.oid = pg_type.typrelid
             where pg_type.typname !~ '^pg_'
               and pg_type.typname !~ '^_'
-              and (pg_class.relkind is null 
+              and (pg_class.relkind is null
                or pg_class.relkind = 'c')
-            order by tipo, 
+            order by tipo,
                   typname ";
   $result    = pg_query($sql);
   $numrows   = pg_numrows($result);
@@ -131,7 +131,7 @@ db_input('db42_nome',20,$Idb42_nome,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tdb42_tipo?>">
        <?=@$Ldb42_tipo?>
     </td>
-    <td> 
+    <td>
 <?
 //db_input('db42_tipo',20,$Idb42_tipo,true,'text',$db_opcao,"")
 db_select('db42_tipo',$elementos,'',$db_opcao,"","","");
@@ -142,7 +142,7 @@ db_select('db42_tipo',$elementos,'',$db_opcao,"","","");
     <td nowrap title="<?=@$Tdb42_tamanho?>">
        <?=@$Ldb42_tamanho?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('db42_tamanho',10,$Idb42_tamanho,true,'text',$db_opcao,"")
 ?>
@@ -152,7 +152,7 @@ db_input('db42_tamanho',10,$Idb42_tamanho,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tdb42_precisao?>">
        <?=@$Ldb42_precisao?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('db42_precisao',10,$Idb42_precisao,true,'text',$db_opcao,"")
 ?>
@@ -162,7 +162,7 @@ db_input('db42_precisao',10,$Idb42_precisao,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tdb42_valor_default?>">
        <?=@$Ldb42_valor_default?>
     </td>
-    <td> 
+    <td>
 <?
 db_textarea('db42_valor_default',1,50,$Idb42_valor_default,true,'text',$db_opcao,"")
 ?>
@@ -172,7 +172,7 @@ db_textarea('db42_valor_default',1,50,$Idb42_valor_default,true,'text',$db_opcao
     <td nowrap title="<?=@$Tdb42_descricao?>">
        <?=@$Ldb42_descricao?>
     </td>
-    <td> 
+    <td>
 <?
 db_textarea('db42_descricao',5,50,$Idb42_descricao,true,'text',$db_opcao,"")
 ?>
@@ -187,7 +187,7 @@ db_textarea('db42_descricao',5,50,$Idb42_descricao,true,'text',$db_opcao,"")
   </table>
  <table>
   <tr>
-    <td valign="top"  align="center">  
+    <td valign="top"  align="center">
     <?
 	 $chavepri= array("db42_sysfuncoesparam"=>@$db42_sysfuncoesparam);
 	 $cliframe_alterar_excluir->chavepri=$chavepri;
@@ -215,20 +215,20 @@ function js_cancelar(){
 }
 function js_pesquisadb42_funcao(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_db_sysfuncoesparam','db_iframe_db_sysfuncoes','func_db_sysfuncoes.php?funcao_js=parent.js_mostradb_sysfuncoes1|codfuncao|nomefuncao','Pesquisa',true,'0');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_db_sysfuncoesparam','db_iframe_db_sysfuncoes','func_db_sysfuncoes.php?funcao_js=parent.js_mostradb_sysfuncoes1|codfuncao|nomefuncao','Pesquisa',true,'0');
   }else{
-     if(document.form1.db42_funcao.value != ''){ 
-        js_OpenJanelaIframe('top.corpo.iframe_db_sysfuncoesparam','db_iframe_db_sysfuncoes','func_db_sysfuncoes.php?pesquisa_chave='+document.form1.db42_funcao.value+'&funcao_js=parent.js_mostradb_sysfuncoes','Pesquisa',false);
+     if(document.form1.db42_funcao.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_db_sysfuncoesparam','db_iframe_db_sysfuncoes','func_db_sysfuncoes.php?pesquisa_chave='+document.form1.db42_funcao.value+'&funcao_js=parent.js_mostradb_sysfuncoes','Pesquisa',false);
      }else{
-       document.form1.nomefuncao.value = ''; 
+       document.form1.nomefuncao.value = '';
      }
   }
 }
 function js_mostradb_sysfuncoes(chave,erro){
-  document.form1.nomefuncao.value = chave; 
-  if(erro==true){ 
-    document.form1.db42_funcao.focus(); 
-    document.form1.db42_funcao.value = ''; 
+  document.form1.nomefuncao.value = chave;
+  if(erro==true){
+    document.form1.db42_funcao.focus();
+    document.form1.db42_funcao.value = '';
   }
 }
 function js_mostradb_sysfuncoes1(chave1,chave2){

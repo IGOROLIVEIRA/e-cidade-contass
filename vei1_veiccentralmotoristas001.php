@@ -38,14 +38,14 @@ db_postmemory($HTTP_POST_VARS);
 $clveicmotoristascentral  = new cl_veicmotoristascentral;
 $cliframe_alterar_excluir = new cl_iframe_alterar_excluir;
 
-if (!isset($ve41_veicmotoristas)){
+if (!isset($ve41_veicmotoristas)) {
   exit;
 }
 
 $db_opcao = 1;
 $db_botao = true;
 
-if (isset($novo)){
+if (isset($novo)) {
   unset($sequencial);
   unset($ve41_veiccadcentral);
   unset($ve41_dtini);
@@ -59,41 +59,41 @@ if (isset($novo)){
   unset($descrdepto);
 }
 
-if (isset($opcao)){
+if (isset($opcao)) {
   $dbwhere = "";
-  
-  if (isset($ve41_sequencial) && trim(@$ve41_sequencial) != ""){
+
+  if (isset($ve41_sequencial) && trim(@$ve41_sequencial) != "") {
     $dbwhere = "and ve41_sequencial = $ve41_sequencial";
   }
 
-  $res_veicmotoristascentral = $clveicmotoristascentral->sql_record($clveicmotoristascentral->sql_query(null,"ve41_sequencial,ve41_veiccadcentral,ve41_veicmotoristas,ve41_dtini,ve41_dtfim,descrdepto",null,"ve41_veicmotoristas = $ve41_veicmotoristas $dbwhere"));
-  if ($clveicmotoristascentral->numrows > 0){
-    db_fieldsmemory($res_veicmotoristascentral,0);
+  $res_veicmotoristascentral = $clveicmotoristascentral->sql_record($clveicmotoristascentral->sql_query(null, "ve41_sequencial,ve41_veiccadcentral,ve41_veicmotoristas,ve41_dtini,ve41_dtfim,descrdepto", null, "ve41_veicmotoristas = $ve41_veicmotoristas $dbwhere"));
+  if ($clveicmotoristascentral->numrows > 0) {
+    db_fieldsmemory($res_veicmotoristascentral, 0);
   }
 }
 
-if (isset($opcao) && $opcao == "alterar"){
+if (isset($opcao) && $opcao == "alterar") {
   $sequencial = $ve41_sequencial;
   $db_opcao   = 2;
 
-  $res_veicmotoristascentral = $clveicmotoristascentral->sql_record($clveicmotoristascentral->sql_query($sequencial,"ve41_veiccadcentral,ve41_dtini,ve41_dtfim,descrdepto"));
-  if ($clveicmotoristascentral->numrows > 0){
-    db_fieldsmemory($res_veicmotoristascentral,0);
+  $res_veicmotoristascentral = $clveicmotoristascentral->sql_record($clveicmotoristascentral->sql_query($sequencial, "ve41_veiccadcentral,ve41_dtini,ve41_dtfim,descrdepto"));
+  if ($clveicmotoristascentral->numrows > 0) {
+    db_fieldsmemory($res_veicmotoristascentral, 0);
   }
 }
 
-if(isset($incluir)){
+if (isset($incluir)) {
   $erro_msg = "";
   $sqlerro  = false;
 
-  if (isset($ve41_dtfim_dia) && trim($ve41_dtfim_dia) != ""){
-    $ve41_dtfim = $ve41_dtfim_ano."-".$ve41_dtfim_mes."-".$ve41_dtfim_dia;
+  if (isset($ve41_dtfim_dia) && trim($ve41_dtfim_dia) != "") {
+    $ve41_dtfim = $ve41_dtfim_ano . "-" . $ve41_dtfim_mes . "-" . $ve41_dtfim_dia;
   } else {
     $ve41_dtfim = null;
   }
 
-  $res_veicmotoristascentral = $clveicmotoristascentral->sql_record($clveicmotoristascentral->sql_query(null,"ve41_veicmotoristas",null,"ve41_veiccadcentral = $ve41_veiccadcentral and ve41_veicmotoristas = $ve41_veicmotoristas and ve41_dtini between '".$ve41_dtini_ano."-".$ve41_dtini_mes."-".$ve41_dtini_dia."' and coalesce(ve41_dtfim,cast('9999-12-31' as date))"));
-  if ($clveicmotoristascentral->numrows > 0){
+  $res_veicmotoristascentral = $clveicmotoristascentral->sql_record($clveicmotoristascentral->sql_query(null, "ve41_veicmotoristas", null, "ve41_veiccadcentral = $ve41_veiccadcentral and ve41_veicmotoristas = $ve41_veicmotoristas and ve41_dtini between '" . $ve41_dtini_ano . "-" . $ve41_dtini_mes . "-" . $ve41_dtini_dia . "' and coalesce(ve41_dtfim,cast('9999-12-31' as date))"));
+  if ($clveicmotoristascentral->numrows > 0) {
     $erro_msg                            = "Central já cadastrada para motorista. Verifique.";
     $clveicmotoristascentral->erro_campo = "ve41_veiccadcentral";
     $sqlerro = true;
@@ -101,28 +101,28 @@ if(isset($incluir)){
 
   db_inicio_transacao();
 
-  if ($sqlerro == false){
+  if ($sqlerro == false) {
     $clveicmotoristascentral->ve41_veicmotoristas = $ve41_veicmotoristas;
     $clveicmotoristascentral->ve41_veiccadcentral = $ve41_veiccadcentral;
 
-    if (isset($ve41_dtini_dia) && trim($ve41_dtini_dia) == ""){
+    if (isset($ve41_dtini_dia) && trim($ve41_dtini_dia) == "") {
       $clveicmotoristascentral->ve41_dtini = null;
-    } else{
-      $clveicmotoristascentral->ve41_dtini = $ve41_dtini_ano."-".$ve41_dtini_mes."-".$ve41_dtini_dia;
+    } else {
+      $clveicmotoristascentral->ve41_dtini = $ve41_dtini_ano . "-" . $ve41_dtini_mes . "-" . $ve41_dtini_dia;
     }
-    if (isset($ve41_dtfim_dia) && trim($ve41_dtfim_dia) != ""){
-      $clveicmotoristascentral->ve41_dtfim = $ve41_dtfim_ano."-".$ve41_dtfim_mes."-".$ve41_dtfim_dia;
+    if (isset($ve41_dtfim_dia) && trim($ve41_dtfim_dia) != "") {
+      $clveicmotoristascentral->ve41_dtfim = $ve41_dtfim_ano . "-" . $ve41_dtfim_mes . "-" . $ve41_dtfim_dia;
     } else {
       $clveicmotoristascentral->ve41_dtfim = null;
     }
 
     $clveicmotoristascentral->incluir(null);
     $erro_msg = $clveicmotoristascentral->erro_msg;
-    if ($clveicmotoristascentral->erro_status == 0){
+    if ($clveicmotoristascentral->erro_status == 0) {
       $sqlerro = true;
-      if (trim($clveicmotoristascentral->erro_campo) == ""){
+      if (trim($clveicmotoristascentral->erro_campo) == "") {
         $clveicmotoristascentral->erro_campo = "ve41_veiccadcentral";
-      } else if ($clveicmotoristascentral->erro_campo == "ve41_dtini_dia"){
+      } else if ($clveicmotoristascentral->erro_campo == "ve41_dtini_dia") {
         $clveicmotoristascentral->erro_campo = "ve41_dtini";
       }
     }
@@ -130,7 +130,7 @@ if(isset($incluir)){
 
   db_fim_transacao($sqlerro);
 
-  if ($sqlerro == false){
+  if ($sqlerro == false) {
     unset($ve41_sequencial);
     unset($sequencial);
     unset($ve41_veiccadcentral);
@@ -146,37 +146,37 @@ if(isset($incluir)){
   }
 }
 
-if (isset($alterar)){
+if (isset($alterar)) {
   $ve41_sequencial = $sequencial;
   $erro_msg        = "";
   $sqlerro         = false;
 
   db_inicio_transacao();
 
-  if ($sqlerro == false){
+  if ($sqlerro == false) {
     $clveicmotoristascentral->ve41_sequencial     = $ve41_sequencial;
     $clveicmotoristascentral->ve41_veiccadcentral = $ve41_veiccadcentral;
     $clveicmotoristascentral->ve41_veicmotoristas = $ve41_veicmotoristas;
 
-    if (isset($ve41_dtini_dia) && trim($ve41_dtini_dia) == ""){
+    if (isset($ve41_dtini_dia) && trim($ve41_dtini_dia) == "") {
       $clveicmotoristascentral->ve41_dtini = null;
-    } else{
-      $clveicmotoristascentral->ve41_dtini = $ve41_dtini_ano."-".$ve41_dtini_mes."-".$ve41_dtini_dia;
+    } else {
+      $clveicmotoristascentral->ve41_dtini = $ve41_dtini_ano . "-" . $ve41_dtini_mes . "-" . $ve41_dtini_dia;
     }
 
-    if (isset($ve41_dtfim_dia) && trim($ve41_dtfim_dia) != ""){
-      $clveicmotoristascentral->ve41_dtfim = $ve41_dtfim_ano."-".$ve41_dtfim_mes."-".$ve41_dtfim_dia;
+    if (isset($ve41_dtfim_dia) && trim($ve41_dtfim_dia) != "") {
+      $clveicmotoristascentral->ve41_dtfim = $ve41_dtfim_ano . "-" . $ve41_dtfim_mes . "-" . $ve41_dtfim_dia;
     } else {
       $clveicmotoristascentral->ve41_dtfim = null;
     }
-  
+
     $clveicmotoristascentral->alterar($ve41_sequencial);
     $erro_msg = $clveicmotoristascentral->erro_msg;
-    if ($clveicmotoristascentral->erro_status == 0){
+    if ($clveicmotoristascentral->erro_status == 0) {
       $sqlerro = true;
-      if (trim($clveicmotoristascentral->erro_campo) == ""){
+      if (trim($clveicmotoristascentral->erro_campo) == "") {
         $clveicmotoristascentral->erro_campo = "ve41_veiccadcentral";
-      } else if ($clveicmotoristascentral->erro_campo == "ve41_dtini_dia"){
+      } else if ($clveicmotoristascentral->erro_campo == "ve41_dtini_dia") {
         $clveicmotoristascentral->erro_campo = "ve41_dtini";
       }
     }
@@ -188,36 +188,39 @@ if (isset($alterar)){
 
 ?>
 <html>
+
 <head>
-<title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta http-equiv="Expires" CONTENT="0">
-<script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
-<link href="estilos.css" rel="stylesheet" type="text/css">
+  <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Expires" CONTENT="0">
+  <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+  <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
-<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
+
+<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
     <center>
-	<?
-	include("forms/db_frmveiccentralmotoristas.php");
-	?>
+      <?
+      include("forms/db_frmveiccentralmotoristas.php");
+      ?>
     </center>
-</table>
+  </table>
 </body>
+
 </html>
 <?
-if(isset($incluir)||isset($alterar)||isset($excluir)){
-  if($sqlerro == true){
-    $db_botao=true;
+if (isset($incluir) || isset($alterar) || isset($excluir)) {
+  if ($sqlerro == true) {
+    $db_botao = true;
     echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
 
-    if($clveicmotoristascentral->erro_campo!=""){
-      echo "<script> document.form1.".$clveicmotoristascentral->erro_campo.".style.backgroundColor='#99A9AE';</script>";
-      echo "<script> document.form1.".$clveicmotoristascentral->erro_campo.".focus();</script>";
+    if ($clveicmotoristascentral->erro_campo != "") {
+      echo "<script> document.form1." . $clveicmotoristascentral->erro_campo . ".style.backgroundColor='#99A9AE';</script>";
+      echo "<script> document.form1." . $clveicmotoristascentral->erro_campo . ".focus();</script>";
     }
   }
 
-  if (trim($erro_msg) != ""){
+  if (trim($erro_msg) != "") {
     db_msgbox($erro_msg);
   }
 }

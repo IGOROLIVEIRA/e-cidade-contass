@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -70,7 +70,7 @@ if((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Alterar
     $result = $clorcelemento->sql_record($clorcelemento->sql_query_file(null,null,'o56_codele',''," o56_anousu = ".db_getsession("DB_anousu")." and o56_elemento = '$o56_elemento' "));
   }
   if($result!=false && $clorcelemento->numrows > 0){
-    
+
     db_fieldsmemory($result,0);
     $clorcdotacao->o58_codele = $o56_codele;
     db_fieldsmemory($result,0);
@@ -79,22 +79,22 @@ if((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Alterar
       $erro_trans=true;
     }
     if($erro_trans!=true){
-      
+
       $rsContraPartida = $clorcdotacaocontr->sql_record($clorcdotacaocontr->sql_query_file($o58_anousu,$o58_coddot));
       if ($clorcdotacaocontr->numrows>0) {
-      
-        db_fieldsmemory($rsContraPartida, 0);        
+
+        db_fieldsmemory($rsContraPartida, 0);
 	   $clorcdotacaocontr->o61_anousu=$o58_anousu;
 	   $clorcdotacaocontr->o61_coddot=$o58_coddot;
        $clorcdotacaocontr->o61_codigo=$o61_codigo;
 	   $clorcdotacaocontr->excluir(null,"o61_coddot={$o61_coddot} and o61_anousu={$o61_anousu}");
 	   if($clorcdotacaocontr->erro_status==0){
-	    
+
 	     $erro_trans=true;
   	     $clorcdotacao->erro_msg = $clorcdotacaocontr->erro_msg;
-  	     
+
         }
-        
+
       }
     }
     if($erro_trans != true && @$o61_codigo!=""){
@@ -117,10 +117,10 @@ if((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Alterar
 }else if(isset($chavepesquisa)){
    $db_opcao = 2;
    if (!isset($o58_coddot)) {
-     $result = $clorcdotacaocontr->sql_record($clorcdotacaocontr->sql_query_file($chavepesquisa,$chavepesquisa1,'o61_codigo')); 
-     $result = $clorcdotacao->sql_record($clorcdotacao->sql_query($chavepesquisa,$chavepesquisa1)); 
+     $result = $clorcdotacaocontr->sql_record($clorcdotacaocontr->sql_query_file($chavepesquisa,$chavepesquisa1,'o61_codigo'));
+     $result = $clorcdotacao->sql_record($clorcdotacao->sql_query($chavepesquisa,$chavepesquisa1));
      db_fieldsmemory($result,0);
-   }  
+   }
    $db_botao = true;
 }
 
@@ -135,7 +135,7 @@ if((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Alterar
 
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="document.form1.DB_txtdotacao.focus();" >
- 
+
     <center>
 	<?
 	include("forms/db_frmorcdotacao001.php");
@@ -161,7 +161,7 @@ if(isset($chavepesquisa) && @$o15_tipo == 1){
   <script>
       function js_db_libera(){
          parent.document.formaba.orcdotacaocontr.disabled=false;
-         top.corpo.iframe_orcdotacaocontr.location.href='orc1_orcdotacaocontr001.php?o61_anousu=$o58_anousu&o61_coddot=$o58_coddot';
+         CurrentWindow.corpo.iframe_orcdotacaocontr.location.href='orc1_orcdotacaocontr001.php?o61_anousu=$o58_anousu&o61_coddot=$o58_coddot';
      ";
          if(isset($liberaaba)){
            echo "  parent.mo_camada('orcdotacaocontr');";

@@ -39,15 +39,15 @@ require_once("classes/db_emite_nota_empenho.php");
 /*
  * Configurações GED
 */
-require_once ("integracao_externa/ged/GerenciadorEletronicoDocumento.model.php");
-require_once ("integracao_externa/ged/GerenciadorEletronicoDocumentoConfiguracao.model.php");
-require_once ("libs/exceptions/BusinessException.php");
+require_once("integracao_externa/ged/GerenciadorEletronicoDocumento.model.php");
+require_once("integracao_externa/ged/GerenciadorEletronicoDocumentoConfiguracao.model.php");
+require_once("libs/exceptions/BusinessException.php");
 
 $oGet = db_utils::postMemory($_GET);
 $oConfiguracaoGed = GerenciadorEletronicoDocumentoConfiguracao::getInstance();
 if ($oConfiguracaoGed->utilizaGED()) {
 
-    if ( !empty($oGet->dtInicial) || !empty($oGet->dtFinal) ) {
+    if (!empty($oGet->dtInicial) || !empty($oGet->dtFinal)) {
 
         $sMsgErro  = "O parâmetro para utilização do GED (Gerenciador Eletrônico de Documentos) está ativado.<br><br>";
         $sMsgErro .= "Neste não é possível informar interválos de códigos ou datas.<br><br>";
@@ -57,7 +57,7 @@ if ($oConfiguracaoGed->utilizaGED()) {
 }
 
 
-$clempparametro	    = new cl_empparametro;
+$clempparametro        = new cl_empparametro;
 $clempautitem       = new cl_empautitem;
 $clcgmalt           = new cl_cgmalt;
 $cldb_pcforneconpad = new cl_pcforneconpad;
@@ -73,57 +73,55 @@ $head3 = "CADASTRO DE CÓDIGOS";
 $sqlpref  = "select db_config.*, cgm.z01_incest as inscricaoestadualinstituicao ";
 $sqlpref .= "  from db_config                                                     ";
 $sqlpref .= " inner join cgm on cgm.z01_numcgm = db_config.numcgm                 ";
-$sqlpref .=	"	where codigo = ".db_getsession("DB_instit");
+$sqlpref .=    "	where codigo = " . db_getsession("DB_instit");
 
 $resultpref = db_query($sqlpref);
 
-db_fieldsmemory($resultpref,0);
+db_fieldsmemory($resultpref, 0);
 
 $anousu = db_getsession("DB_anousu");
 $dbwhere = '1=1';
-if(isset($e60_numemp) && $e60_numemp != ''){
+if (isset($e60_numemp) && $e60_numemp != '') {
     $dbwhere     = " e60_numemp = $e60_numemp ";
     $sql         = "select e60_anousu as anousu from empempenho where $dbwhere";
     $res_empenho = @db_query($sql);
     $numrows_empenho = @pg_numrows($res_empenho);
-    if ($numrows_empenho != 0){
-        db_fieldsmemory($res_empenho,0);
+    if ($numrows_empenho != 0) {
+        db_fieldsmemory($res_empenho, 0);
     }
-} else if ((isset($e60_codemp) && $e60_codemp !='') && (isset($e60_codemp_fim) && $e60_codemp_fim !='')){
-    $arr = split("/",$e60_codemp);
-    $arr2 = split("/",$e60_codemp_fim);
-    if(count($arr) == 2  && isset($arr[1]) && $arr[1] != '' ){
-        $dbwhere_ano = " and e60_anousu = ".$arr[1];
+} else if ((isset($e60_codemp) && $e60_codemp != '') && (isset($e60_codemp_fim) && $e60_codemp_fim != '')) {
+    $arr = split("/", $e60_codemp);
+    $arr2 = split("/", $e60_codemp_fim);
+    if (count($arr) == 2  && isset($arr[1]) && $arr[1] != '') {
+        $dbwhere_ano = " and e60_anousu = " . $arr[1];
         $anousu = $arr[1];
-    }else{
-        $dbwhere_ano = " and e60_anousu = ".db_getsession("DB_anousu");
+    } else {
+        $dbwhere_ano = " and e60_anousu = " . db_getsession("DB_anousu");
     }
-    $dbwhere = "e60_codemp::integer >=".$arr[0]." and e60_codemp::integer <=".$arr2[0]."$dbwhere_ano";
-}else if (isset($e60_codemp) && $e60_codemp !=''){
-    $arr = split("/",$e60_codemp);
-    if(count($arr) == 2  && isset($arr[1]) && $arr[1] != '' ){
-        $dbwhere_ano = " and e60_anousu = ".$arr[1];
+    $dbwhere = "e60_codemp::integer >=" . $arr[0] . " and e60_codemp::integer <=" . $arr2[0] . "$dbwhere_ano";
+} else if (isset($e60_codemp) && $e60_codemp != '') {
+    $arr = split("/", $e60_codemp);
+    if (count($arr) == 2  && isset($arr[1]) && $arr[1] != '') {
+        $dbwhere_ano = " and e60_anousu = " . $arr[1];
         $anousu = $arr[1];
-    }else{
-        $dbwhere_ano = " and e60_anousu = ".db_getsession("DB_anousu");
+    } else {
+        $dbwhere_ano = " and e60_anousu = " . db_getsession("DB_anousu");
     }
-    $dbwhere = "e60_codemp='".$arr[0]."'$dbwhere_ano";
-
-}else{
-    if( isset($dtini_dia) ){
+    $dbwhere = "e60_codemp='" . $arr[0] . "'$dbwhere_ano";
+} else {
+    if (isset($dtini_dia)) {
         $dbwhere = " e60_emiss >= '$dtini_ano-$dtini_mes-$dtini_dia'";
 
-        if( isset($dtfim_dia) ){
+        if (isset($dtfim_dia)) {
             $dbwhere .= " and e60_emiss <= '$dtfim_ano-$dtfim_mes-$dtfim_dia'";
         }
     }
-
 }
 
-if(isset($listacgm) && $listacgm != ''){
-    if($ver == 'com')
+if (isset($listacgm) && $listacgm != '') {
+    if ($ver == 'com')
         $dbwhere .= "and cgm.z01_numcgm in ($listacgm)";
-    elseif($ver == 'sem')
+    elseif ($ver == 'sem')
         $dbwhere .= "and cgm.z01_numcgm not in ($listacgm)";
 }
 
@@ -132,41 +130,41 @@ $sqlemp = $clemite_nota_emp->get_sql_empenho(db_getsession("DB_anousu"), db_gets
 $result = db_query($sqlemp);
 //die($sqlemp); db_criatabela($result);exit;
 
-if (pg_numrows($result)==0){
+if (pg_numrows($result) == 0) {
     db_redireciona("db_erros.php?fechar=true&db_erro=Nenhum registro encontrado !  ");
 }
 
 $pdf = new scpdf();
 $pdf->Open();
-$pdf1 = new db_impcarne($pdf,'6');
-$pdf1->objpdf->SetTextColor(0,0,0);
+$pdf1 = new db_impcarne($pdf, '6');
+$pdf1->objpdf->SetTextColor(0, 0, 0);
 //$pdf1->objpdf->Output();
 
 //rotina que pega o numero de vias
 //add campo e30_impobslicempenho
 $sCampos      = "e30_nroviaemp,e30_numdec,e30_impobslicempenho,e30_dadosbancoempenho";
-$sSqlEmpParam = $clempparametro->sql_query_file(db_getsession("DB_anousu"),$sCampos);
+$sSqlEmpParam = $clempparametro->sql_query_file(db_getsession("DB_anousu"), $sCampos);
 $result02     = $clempparametro->sql_record($sSqlEmpParam);
-if($clempparametro->numrows == 0){
+if ($clempparametro->numrows == 0) {
     db_redireciona("db_erros.php?fechar=true&db_erro=Nenhum registro encontrado na empparametro!");
 }
 
-db_fieldsmemory($result02,0);
+db_fieldsmemory($result02, 0);
 
 //recebido variavel
 $pdf1->nvias              = $e30_nroviaemp;
 $pdf1->casadec            = $e30_numdec;
 $pdf1->dadosbancoemprenho = $e30_dadosbancoempenho;
 
-for ($i = 0;$i < pg_numrows($result);$i++) {
+for ($i = 0; $i < pg_numrows($result); $i++) {
 
-    db_fieldsmemory($result,$i);
+    db_fieldsmemory($result, $i);
 
     $sSqlPcFornecOnPad  = $cldb_pcforneconpad->sql_query(null, "*", null, "pc63_numcgm = {$e60_numcgm}");
     $rsSqlPcFornecOnPad = $cldb_pcforneconpad->sql_record($sSqlPcFornecOnPad);
 
     if (!$rsSqlPcFornecOnPad == false && $cldb_pcforneconpad->numrows > 0) {
-        $oPcFornecOnPad     = db_utils::fieldsMemory($rsSqlPcFornecOnPad,0);
+        $oPcFornecOnPad     = db_utils::fieldsMemory($rsSqlPcFornecOnPad, 0);
     } else {
 
         $oPcFornecOnPad = new stdClass();
@@ -190,20 +188,20 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
     }
 
     $sProcessoAdministrativo = $clemite_nota_emp->get_sql_processo_administrativo($e61_autori);
-    
+
     $sCondtipos = "";
     if (isset($tipos) && !empty($tipos)) {
-      $sCondtipos = " $tipos as tipos, ";
+        $sCondtipos = " $tipos as tipos, ";
     }
 
     $sqlitem    = $clemite_nota_emp->get_sql_item($sCondtipos, $e60_numemp);
     $resultitem = db_query($sqlitem);
     db_fieldsmemory($resultitem);
-    
-    $result_cgmalt=$clcgmalt->sql_record($clcgmalt->sql_query_file(null,"z05_numcgm as z01_numcgm,z05_nome as z01_nome,z05_telef as z01_telef,z05_ender as z01_ender,z05_numero as z01_numero,z05_munic as z01_munic,z05_cgccpf as z01_cgccpf,z05_cep as z01_cep"," abs(z05_data_alt - date '$e60_emiss') asc, z05_sequencia desc limit 1","z05_numcgm = $z01_numcgm and z05_data_alt > '$e60_emiss' "));
 
-    if ($clcgmalt->numrows>0) {
-        db_fieldsmemory($result_cgmalt,0);
+    $result_cgmalt = $clcgmalt->sql_record($clcgmalt->sql_query_file(null, "z05_numcgm as z01_numcgm,z05_nome as z01_nome,z05_telef as z01_telef,z05_ender as z01_ender,z05_numero as z01_numero,z05_munic as z01_munic,z05_cgccpf as z01_cgccpf,z05_cep as z01_cep", " abs(z05_data_alt - date '$e60_emiss') asc, z05_sequencia desc limit 1", "z05_numcgm = $z01_numcgm and z05_data_alt > '$e60_emiss' "));
+
+    if ($clcgmalt->numrows > 0) {
+        db_fieldsmemory($result_cgmalt, 0);
     }
 
     /**
@@ -215,17 +213,21 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
         $cgc      = $o41_cnpj;
     }
 
-    $sSqlFuncaoOrdenaPagamento = $clemite_nota_emp->get_sql_funcao_ordena_pagamento($cgmpaga, 
-                                                                                    date( 'Y',strtotime($e60_emiss)), 
-                                                                                    date('m',strtotime($e60_emiss)));
+    $sSqlFuncaoOrdenaPagamento = $clemite_nota_emp->get_sql_funcao_ordena_pagamento(
+        $cgmpaga,
+        date('Y', strtotime($e60_emiss)),
+        date('m', strtotime($e60_emiss))
+    );
 
-    $pdf1->cargoordenapagamento = db_utils::fieldsMemory(db_query($sSqlFuncaoOrdenaPagamento),0)->cargoordenapagamento;
+    $pdf1->cargoordenapagamento = db_utils::fieldsMemory(db_query($sSqlFuncaoOrdenaPagamento), 0)->cargoordenapagamento;
 
-    $sSqlFuncaoOrdenadespesa = $clemite_nota_emp->get_sql_funcao_ordena_despesa($cgmordenadespesa,
-                                                                                date( 'Y',strtotime($e60_emiss)),
-                                                                                date( 'm',strtotime($e60_emiss)));
+    $sSqlFuncaoOrdenadespesa = $clemite_nota_emp->get_sql_funcao_ordena_despesa(
+        $cgmordenadespesa,
+        date('Y', strtotime($e60_emiss)),
+        date('m', strtotime($e60_emiss))
+    );
 
-    $pdf1->cargoordenadespesa = db_utils::fieldsMemory(db_query($sSqlFuncaoOrdenadespesa),0)->cargoordenadespesa;
+    $pdf1->cargoordenadespesa = db_utils::fieldsMemory(db_query($sSqlFuncaoOrdenadespesa), 0)->cargoordenadespesa;
 
     //assinaturas
     $pdf1->ordenadespesa   =  $ordenadesp;
@@ -236,7 +238,7 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
     $pdf1->controleinterno =  $controleinterno;
     $pdf1->emptipo              = $e41_descr;
     $pdf1->prefeitura           = $nomeinst;
-    $pdf1->enderpref            = $ender.", ".$numero;
+    $pdf1->enderpref            = $ender . ", " . $numero;
     $pdf1->cgcpref              = $cgc;
     $pdf1->municpref            = $munic;
     $pdf1->telefpref            = $telef;
@@ -244,7 +246,7 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
 
     $pdf1->inscricaoestadualinstituicao    = '';
     if ($db21_usasisagua == 't') {
-        $pdf1->inscricaoestadualinstituicao    = "- Inscrição Estadual: ".$inscricaoestadualinstituicao;
+        $pdf1->inscricaoestadualinstituicao    = "- Inscrição Estadual: " . $inscricaoestadualinstituicao;
     }
 
     $pdf1->numcgm               = $z01_numcgm;
@@ -260,13 +262,13 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
     $pdf1->condicao_pagamento   = $e54_conpag;
     $pdf1->outras_condicoes     = $e54_codout;
     $pdf1->iBancoFornecedor     = $oPcFornecOnPad->pc63_banco;
-    $pdf1->iAgenciaForncedor    = $oPcFornecOnPad->pc63_agencia."-".$oPcFornecOnPad->pc63_agencia_dig;
-    $pdf1->iContaForncedor      = $oPcFornecOnPad->pc63_conta."-".$oPcFornecOnPad->pc63_conta_dig;
+    $pdf1->iAgenciaForncedor    = $oPcFornecOnPad->pc63_agencia . "-" . $oPcFornecOnPad->pc63_agencia_dig;
+    $pdf1->iContaForncedor      = $oPcFornecOnPad->pc63_conta . "-" . $oPcFornecOnPad->pc63_conta_dig;
     $pdf1->dotacao              = $estrutural;
     $pdf1->solicitacao          = $pc10_numero;
     $pdf1->num_licitacao        = $e60_numerol;
     $pdf1->cod_concarpeculiar   = $e60_concarpeculiar;
-    $pdf1->descr_concarpeculiar = substr($c58_descr,0,34);
+    $pdf1->descr_concarpeculiar = substr($c58_descr, 0, 34);
     $pdf1->logo                 = $logo;
     $pdf1->SdescrPacto          = $o74_descricao;
     $pdf1->iPlanoPacto          = $o78_pactoplano;
@@ -297,9 +299,9 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
     }
 
 
-    if (isset($resumo_lic) && $resumo_lic!=""){
-        if ($e30_impobslicempenho=='t') {
-            $pdf1->resumo = $resumo_lic."\n".$e60_resumo;
+    if (isset($resumo_lic) && $resumo_lic != "") {
+        if ($e30_impobslicempenho == 't') {
+            $pdf1->resumo = $resumo_lic . "\n" . $e60_resumo;
         } else {
             $pdf1->resumo = $e60_resumo;
         }
@@ -309,28 +311,28 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
 
 
     $Sresumo = $pdf1->resumo;
-    $vresumo = split("\n",$Sresumo);
+    $vresumo = split("\n", $Sresumo);
 
-    if (count($vresumo) > 1){
+    if (count($vresumo) > 1) {
         $Sresumo   = "";
         $separador = "";
-        for ($x = 0; $x < count($vresumo); $x++){
-            if (trim($vresumo[$x]) != ""){
+        for ($x = 0; $x < count($vresumo); $x++) {
+            if (trim($vresumo[$x]) != "") {
                 $separador = ". ";
-                $Sresumo  .= $vresumo[$x].$separador;
+                $Sresumo  .= $vresumo[$x] . $separador;
             }
         }
     }
 
-    if (count($vresumo) == 0){
-        $Sresumo = str_replace("\n",". ",$Sresumo);
+    if (count($vresumo) == 0) {
+        $Sresumo = str_replace("\n", ". ", $Sresumo);
     }
 
-    $Sresumo = str_replace("\r","",$Sresumo);
+    $Sresumo = str_replace("\r", "", $Sresumo);
 
-    $pdf1->resumo = substr($Sresumo,0,730);
+    $pdf1->resumo = substr($Sresumo, 0, 730);
 
-    if (in_array($e54_tipoautorizacao, array('0','1','2','3','4'))) {
+    if (in_array($e54_tipoautorizacao, array('0', '1', '2', '3', '4'))) {
 
         $oAutoriza = $clemite_nota_emp->get_dados_licitacao($e54_tipoautorizacao, $e54_autori, $pc50_descr);
 
@@ -339,7 +341,6 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
         $pdf1->resumo           = $e60_resumo;
         $pdf1->descr_tipocompra = $oAutoriza->descr_tipocompra;
         $pdf1->descr_modalidade = $oAutoriza->descr_modalidade;
-
     }
 
     $oAcordo = $clemite_nota_emp->get_acordo($e60_numemp);
@@ -348,7 +349,7 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
 
     if (!empty($e54_praent)) {
         $pdf1->prazo_ent              = $e54_praent;
-    }else{
+    } else {
         $pdf1->prazo_ent              = db_utils::fieldsMemory($resultitem, 0)->l20_prazoentrega;
     }
 
@@ -358,7 +359,7 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
     $pdf1->descricaoitem    = "pc01_descrmater";
     $pdf1->complmater       = "pc01_complmater";
 
-    $pdf1->orcado	        = $e60_vlrorc;
+    $pdf1->orcado            = $e60_vlrorc;
     $pdf1->saldo_ant        = $e60_salant;
     $pdf1->empenhado        = $e60_vlremp;
     $pdf1->numemp           = $e60_numemp;
@@ -398,28 +399,28 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
               from conplanoreduz
                    inner join conplano on c60_codcon = c61_codcon and c60_anousu=c61_anousu
                    inner join consistema on c52_codsis = c60_codsis
-             where c61_instit   = ".db_getsession("DB_instit")."
-               and c61_anousu   =".db_getsession("DB_anousu")."
+             where c61_instit   = " . db_getsession("DB_instit") . "
+               and c61_anousu   =" . db_getsession("DB_anousu") . "
                and c61_codigo   = $o58_codigo
                and c52_descrred = 'F' ";
     $result_conta = db_query($sql);
 
     if ($result_conta != false && (pg_numrows($result_conta) == 1)) {
 
-        db_fieldsmemory($result_conta,0);
-        $sqlconta     = "select * from conplanoconta where c63_codcon = $c61_codcon and c63_anousu = ".db_getsession("DB_anousu");
+        db_fieldsmemory($result_conta, 0);
+        $sqlconta     = "select * from conplanoconta where c63_codcon = $c61_codcon and c63_anousu = " . db_getsession("DB_anousu");
         $result_conta = db_query($sqlconta);
 
-        if (pg_result($result_conta,0) == 1) {
+        if (pg_result($result_conta, 0) == 1) {
 
-            db_fieldsmemory($result_conta,0);
+            db_fieldsmemory($result_conta, 0);
             $pdf1->banco            = $c63_banco;
             $pdf1->agencia          = $c63_agencia;
             $pdf1->conta            = $c63_conta;
         }
     }
 
-    $pdf1->emissao          = db_formatar($e60_emiss,'d');
+    $pdf1->emissao          = db_formatar($e60_emiss, 'd');
     $pdf1->texto            = "";
     $pdf1->imprime();
 }
@@ -441,12 +442,11 @@ if ($oConfiguracaoGed->utilizaGED()) {
         $oStdDadosGED->valor = $e60_numemp;
         $pdf1->objpdf->Output("tmp/{$sTipoDocumento}_{$e60_numemp}.pdf");
         $oGerenciador->moverArquivo(array($oStdDadosGED));
-
-    } catch (Exception $eErro) { 
-
-        db_redireciona("db_erros.php?fechar=true&db_erro=".$eErro->getMessage());
+    } catch (Exception $eErro) {
+        echo $eErro->getMessage();
+        exit;
+        db_redireciona("db_erros.php?fechar=true&db_erro=" . $eErro->getMessage());
     }
 } else {
     $pdf1->objpdf->Output();
 }
-?>

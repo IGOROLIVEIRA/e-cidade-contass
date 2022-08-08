@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Público para Gestão Municipal                
- *  Copyright (C) 2014  DBseller Serviços de Informática             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa é software livre; você pode redistribuí-lo e/ou     
- *  modificá-lo sob os termos da Licença Pública Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versão 2 da      
- *  Licença como (a seu critério) qualquer versão mais nova.          
- *                                                                    
- *  Este programa e distribuído na expectativa de ser útil, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implícita de              
- *  COMERCIALIZAÇÃO ou de ADEQUAÇÃO A QUALQUER PROPÓSITO EM           
- *  PARTICULAR. Consulte a Licença Pública Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Você deve ter recebido uma cópia da Licença Pública Geral GNU     
- *  junto com este programa; se não, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Cópia da licença no diretório licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Público para Gestão Municipal
+ *  Copyright (C) 2014  DBseller Serviços de Informática
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa é software livre; você pode redistribuí-lo e/ou
+ *  modificá-lo sob os termos da Licença Pública Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versão 2 da
+ *  Licença como (a seu critério) qualquer versão mais nova.
+ *
+ *  Este programa e distribuído na expectativa de ser útil, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implícita de
+ *  COMERCIALIZAÇÃO ou de ADEQUAÇÃO A QUALQUER PROPÓSITO EM
+ *  PARTICULAR. Consulte a Licença Pública Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Você deve ter recebido uma cópia da Licença Pública Geral GNU
+ *  junto com este programa; se não, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Cópia da licença no diretório licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -89,22 +89,22 @@ if ($cldb_almox->numrows > 0){
 <link href="estilos.css" rel="stylesheet" type="text/css">
 <script>
 function js_lancamentos(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_lancamentos','mat3_matconsultaiframe002.php?codmater='+document.form1.codmater.value+'&db_where='+document.form1.where.value+'&db_inner='+document.form1.inner.value,'Consulta Lançamentos',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_lancamentos','mat3_matconsultaiframe002.php?codmater='+document.form1.codmater.value+'&db_where='+document.form1.where.value+'&db_inner='+document.form1.inner.value,'Consulta Lançamentos',true);
 }
 function js_requisicoes(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_requisicao','mat3_matconsultaiframe004.php?codmater='+document.form1.codmater.value+'&db_where='+document.form1.where.value+'&db_inner='+document.form1.inner.value,'Consulta Requisições',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_requisicao','mat3_matconsultaiframe004.php?codmater='+document.form1.codmater.value+'&db_where='+document.form1.where.value+'&db_inner='+document.form1.inner.value,'Consulta Requisições',true);
 }
 function js_atendimentos(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_atendimento','mat3_matconsultaiframe005.php?codmater='+document.form1.codmater.value+'&db_where='+document.form1.where.value+'&db_inner='+document.form1.inner.value,'Consulta Atendimentos',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_atendimento','mat3_matconsultaiframe005.php?codmater='+document.form1.codmater.value+'&db_where='+document.form1.where.value+'&db_inner='+document.form1.inner.value,'Consulta Atendimentos',true);
 }
 function js_devolucoes(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_devolucoes','mat3_matconsultaiframe006.php?codmater='+document.form1.codmater.value+'&db_where='+document.form1.where.value+'&db_inner='+document.form1.inner.value,'Consulta Devoluções',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_devolucoes','mat3_matconsultaiframe006.php?codmater='+document.form1.codmater.value+'&db_where='+document.form1.where.value+'&db_inner='+document.form1.inner.value,'Consulta Devoluções',true);
 }
 function js_pontopedidos(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_pontopedidos','mat3_matconsultaiframe008.php?codmater='+document.form1.codmater.value+'&db_where='+document.form1.where.value+'&db_inner='+document.form1.inner.value+"&flag_almox=<?=$flag_almox?>",'Consulta Ponto Pedido',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_pontopedidos','mat3_matconsultaiframe008.php?codmater='+document.form1.codmater.value+'&db_where='+document.form1.where.value+'&db_inner='+document.form1.inner.value+"&flag_almox=<?=$flag_almox?>",'Consulta Ponto Pedido',true);
 }
 function js_lotes(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_lote','mat3_matconsultalotes.php?codmater='+document.form1.codmater.value+'&db_where='+document.form1.where.value+'&db_inner='+document.form1.inner.value+"&flag_almox=<?=$flag_almox?>",'Consulta Movimentações lote',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_lote','mat3_matconsultalotes.php?codmater='+document.form1.codmater.value+'&db_where='+document.form1.where.value+'&db_inner='+document.form1.inner.value+"&flag_almox=<?=$flag_almox?>",'Consulta Movimentações lote',true);
 }
 </script>
 <style>

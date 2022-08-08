@@ -498,10 +498,10 @@ for(x = 0; x < iframe.document.form1.elements.length; x ++){
 
 function js_pesquisa_certid(mostra){
 if (mostra==true){
-  js_OpenJanelaIframe('top.corpo','db_iframe_certid','func_certid.php?funcao_js=parent.js_mostracertid1|v13_certid','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_certid','func_certid.php?funcao_js=parent.js_mostracertid1|v13_certid','Pesquisa',true);
 }else{
   if (document.form1.v13_certid.value != ''){
-    js_OpenJanelaIframe('top.corpo','db_iframe_certid','func_certid.php?pesquisa_chave='+document.form1.v13_certid.value+'&funcao_js=parent.js_mostracertid','Pesquisa',false);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_certid','func_certid.php?pesquisa_chave='+document.form1.v13_certid.value+'&funcao_js=parent.js_mostracertid','Pesquisa',false);
   }else{
     document.form1.v13_certid.value = '';
   }

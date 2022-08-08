@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 /* MODULO DA EDUCAÇÃO */
@@ -66,15 +66,15 @@ $sSqlParametros    = $oDaoEduParametros->sql_query( "", "*", "", "ed233_i_escola
 $sResultParametros = $oDaoEduParametros->sql_record( $sSqlParametros );
 
 if ( $oDaoEduParametros->numrows > 0 ) {
-  db_fieldsmemory( $sResultParametros, 0 );  
+  db_fieldsmemory( $sResultParametros, 0 );
 }
 
 $sCamposSqlAlunoCurso    = " ed56_i_escola as escolaatual, ed56_c_situacao as sitatual ";
 $sOrderBySqlAlunoCurso   = " ed52_i_ano desc, ed56_i_codigo desc ";
 $sWhereSqlAlunoCurso     = " ed56_i_aluno = {$ed56_i_aluno} ";
-$sSqlAlunoCurso          = $oDaoAlunoCurso->sql_query("", 
-                                                      $sCamposSqlAlunoCurso, 
-                                                      $sOrderBySqlAlunoCurso, 
+$sSqlAlunoCurso          = $oDaoAlunoCurso->sql_query("",
+                                                      $sCamposSqlAlunoCurso,
+                                                      $sOrderBySqlAlunoCurso,
                                                       $sWhereSqlAlunoCurso
                                                      );
 $rsAlunoCurso            = $oDaoAlunoCurso->sql_record( $sSqlAlunoCurso );
@@ -90,8 +90,8 @@ if ( $oDaoAlunoCurso->numrows == 0 ) {
 
   if ( $escolaatual != $ed56_i_escola ) {
     $lLiberaMatricula = false;
-  } else if (    $sitatual == "MATRICULADO" 
-              || $sitatual == "TRANSFERIDO REDE" 
+  } else if (    $sitatual == "MATRICULADO"
+              || $sitatual == "TRANSFERIDO REDE"
               || $sitatual == "TRANSFERIDO FORA" ) {
     $lLiberaMatricula = false;
   } else {
@@ -102,31 +102,31 @@ if ( $oDaoAlunoCurso->numrows == 0 ) {
 if ( isset( $incluir ) ) {
 
   db_inicio_transacao();
-  
+
   $oDaoAlunoCurso->ed56_c_situacao = "CANDIDATO";
   $oDaoAlunoCurso->incluir(null);
-  
+
   $iMax = $oDaoAlunoCurso->ed56_i_codigo;
   $oDaoAlunoPossib->ed79_i_alunocurso = $iMax;
   $oDaoAlunoPossib->ed79_c_situacao   = "A";
   $oDaoAlunoPossib->incluir(null);
-  
+
   $sCamposHistorico = " ed61_i_codigo as codhistorico ";
   $sWhereHistorico  = " ed61_i_aluno = {$ed56_i_aluno} ";
   $sSqlHistorico    = $oDaoHistorico->sql_query( "", $sCamposHistorico, "", $sWhereHistorico );
   $rsHistorico      = $oDaoHistorico->sql_record( $sSqlHistorico );
-  
+
   for ( $iCont = 0; $iCont < $oDaoHistorico->numrows; $iCont++ ) {
-    
+
     db_fieldsmemory( $rsHistorico, $iCont );
     $oDaoHistorico->ed61_i_escola = $ed56_i_escola;
     $oDaoHistorico->ed61_i_codigo = $codhistorico;
-    $oDaoHistorico->alterar( $codhistorico ); 	
+    $oDaoHistorico->alterar( $codhistorico );
   }
 }
 
 if ( isset( $alterar ) ) {
- 
+
   if ( $ed56_i_calendario == "" ) {
 
     $oDaoAlunoCurso->erro_status = "0";
@@ -182,14 +182,14 @@ if ( isset( $alterar ) ) {
     if ( $lAlteraAlunoCurso ) {
 
       db_inicio_transacao();
-   
+
       $db_opcao                        = 2;
       $oDaoAlunoCurso->ed56_c_situacao = "CANDIDATO";
       $oDaoAlunoCurso->alterar($ed56_i_codigo);
-   
+
       $oDaoAlunoPossib->ed79_i_alunocurso = $ed56_i_codigo;
       $oDaoAlunoPossib->ed79_c_situacao   = "A";
-   
+
       if ($ed79_i_codigo == "") {
         $oDaoAlunoPossib->incluir(@$ed79_i_codigo);
       } else {
@@ -200,13 +200,13 @@ if ( isset( $alterar ) ) {
       $sWhereSqlHistorico  = " ed61_i_aluno = {$ed56_i_aluno} ";
       $sSqlHistorico       = $oDaoHistorico->sql_query("", $sCamposSqlHistorico, "", $sWhereSqlHistorico);
       $rsHistorico         = $oDaoHistorico->sql_record($sSqlHistorico);
-      
+
       for ($iCont =0; $iCont < $oDaoHistorico->numrows; $iCont++) {
-        
+
         db_fieldsmemory($rsHistorico, $iCont);
         $oDaoHistorico->ed61_i_escola = $ed56_i_escola;
         $oDaoHistorico->ed61_i_codigo = $codhistorico;
-        $oDaoHistorico->alterar($codhistorico); 	
+        $oDaoHistorico->alterar($codhistorico);
       } //Termina FOR
     }
   }
@@ -215,11 +215,11 @@ if ( isset( $alterar ) ) {
 if (isset($excluir)) {
 
   db_inicio_transacao();
-  
+
   $db_opcao = 3;
   $oDaoAlunoPossib->excluir("", " ed79_i_alunocurso = {$ed56_i_codigo}");
   $oDaoAlunoCurso->excluir($ed56_i_codigo);
-  
+
   db_fim_transacao();
 }
 
@@ -286,24 +286,24 @@ if (isset($incluirmatricula)) {
     db_fieldsmemory($rsMatricula2, 0);
     $errohist = false;
     $oParams  = loadConfig('edu_parametros', ' ed233_i_escola = '.$ed56_i_escola);
-  
+
     if ($oParams == null) {
       $oParams->ed233_c_consistirmat = 'N';
     }
 
     if (
-            $oParams->ed233_c_consistirmat == 'S' 
+            $oParams->ed233_c_consistirmat == 'S'
          && VerUltimoRegHistorico($ed56_i_aluno, $codetapaturma,$etapasturma) == true
          && $oParams->ed233_reclassificaetapaanterior == 'f'
        ) {
-   
+
       db_msgbox($msgequiv);// $msgequiv -> variável global da função VerUltimoRegHistorico
       db_redireciona("edu1_alunocurso001.php?ed56_i_aluno=$ed56_i_aluno&ed47_v_nome=$ed47_v_nome");
       exit;
     }
 
     if ($errohist == false) {
-   
+
       db_inicio_transacao();
 
       $lTrocaModalidade    = false;
@@ -312,7 +312,7 @@ if (isset($incluirmatricula)) {
       $sWhereAlunoPossib   = " ed56_i_aluno = $ed56_i_aluno ";
       $sSqlAlunoPossib     = $oDaoAlunoPossib->sql_query("", $sCamposAlunoPossib,"", $sWhereAlunoPossib);
       $rsAlunoPossib       = $oDaoAlunoPossib->sql_record($sSqlAlunoPossib);
-      
+
       if ($oDaoAlunoPossib->numrows == 0) {
 
         $oDaoAlunoCurso->ed56_i_escola        = $ed56_i_escola;
@@ -340,7 +340,7 @@ if (isset($incluirmatricula)) {
 
         db_fieldsmemory($rsAlunoPossib, 0);
         $ed79_i_turmaant   = $ed79_i_turmaant == "0" ? "" : $ed79_i_turmaant;
-    
+
         $oDaoAlunoCurso->ed56_c_situacao   = "MATRICULADO";
         $oDaoAlunoCurso->ed56_i_calendario = $ed57_i_calendario;
         $oDaoAlunoCurso->ed56_i_base       = $ed57_i_base;
@@ -359,17 +359,17 @@ if (isset($incluirmatricula)) {
           $lTrocaModalidade = true;
         }
       }
-      
+
       $sql2    = "UPDATE historico";
       $sql2   .= "   SET ed61_i_escola = {$ed56_i_escola} ";
       $sql2   .= " WHERE ed61_i_aluno = {$ed56_i_aluno} ";
       $query2  = db_query($sql2);
-      
+
       $sCamposMax     = " max(ed60_i_numaluno) ";
       $sWhereMax      = " ed60_i_turma = {$ed60_i_turma} ";
       $sSqlMax        = $oDaoMatricula->sql_query_file("" , $sCamposMax, "", $sWhereMax);
       $rsMaxMatricula = $oDaoMatricula->sql_record($sSqlMax);
-      
+
       db_fieldsmemory($rsMaxMatricula, 0);
       $max = $max == "" ? "" : ($max+1);
 
@@ -394,10 +394,10 @@ if (isset($incluirmatricula)) {
       $oDaoMatricula->ed60_c_parecer       = "N";
       $oDaoMatricula->ed60_tipoingresso    = $ed334_tipo;
       $oDaoMatricula->incluir(null);
-      
+
       $sitmatricula  = trim($sitanterior) == "CANDIDATO" ? "MATRICULAR" : "REMATRICULAR";
       $sitmatricula1 = trim($sitanterior) == "CANDIDATO" ? "MATRICULADO" : "REMATRICULADO";
-      
+
       $iUltimaMatricula                       = $oDaoMatricula->ed60_i_codigo;
 
       $oDaoMatriculaMov->ed229_i_matricula    = $iUltimaMatricula;
@@ -410,16 +410,16 @@ if (isset($incluirmatricula)) {
       $oDaoMatriculaMov->ed229_c_horaevento   = date("H:i");
       $oDaoMatriculaMov->ed229_d_data         = date("Y-m-d",db_getsession("DB_datausu"));
       $oDaoMatriculaMov->incluir(null);
-   
+
       $sCamposSql = " ed223_i_serie ";
       $sWhereSql  = " ed220_i_turma = {$ed60_i_turma} ";
       $sSql       = $oDaoTurmaSerieRegimeMat->sql_query("" , $sCamposSql, "", $sWhereSql);
       $rsEtapa    = $oDaoTurmaSerieRegimeMat->sql_record($sSql);
-      
+
       for ($iCont = 0; $iCont < $oDaoTurmaSerieRegimeMat->numrows; $iCont++) {
-    
+
         $oDadosTSRM = db_utils::fieldsmemory($rsEtapa, $iCont);
-        
+
         if ($codetapaturma == $oDadosTSRM->ed223_i_serie) {
           $sOrigem = "S";
         } else {
@@ -434,7 +434,7 @@ if (isset($incluirmatricula)) {
 
       $oDaoTurma->ed57_i_codigo  = $ed60_i_turma;
       $oDaoTurma->alterar($ed60_i_turma);
-      
+
       /**
        * Busca os turnos referentes vinculados a turma
        */
@@ -453,33 +453,33 @@ if (isset($incluirmatricula)) {
 
         $lErroTransacao  = true;
         $sMensagem       = "Não foi informado o turno para matricula.";
-        db_msgbox( $sMensagem ); 
+        db_msgbox( $sMensagem );
       }
 
       $sWhereTurmaTurnoReferente  = "     ed336_turma = {$ed60_i_turma}";
       $sWhereTurmaTurnoReferente .= " and ed336_turnoreferente in (" .implode(", ", $aTurnosReferente). ")";
-      $sSqlTurmaTurnoReferente    = $oDaoTurmaTurnoReferente->sql_query_file(null, 
-                                                                             "ed336_codigo", 
-                                                                             null, 
-                                                                             $sWhereTurmaTurnoReferente 
+      $sSqlTurmaTurnoReferente    = $oDaoTurmaTurnoReferente->sql_query_file(null,
+                                                                             "ed336_codigo",
+                                                                             null,
+                                                                             $sWhereTurmaTurnoReferente
                                                                             );
       $rsTurmaTurnoReferente     = db_query( $sSqlTurmaTurnoReferente );
       $iTotalTurmaTurnoReferente = pg_num_rows( $rsTurmaTurnoReferente );
-      
+
       if ( $rsTurmaTurnoReferente && $iTotalTurmaTurnoReferente > 0 ) {
 
         /**
-         * Percorre os turnos vinculados e inclui um novo registro na tabela matriculaturnoreferente, vinculando a 
+         * Percorre os turnos vinculados e inclui um novo registro na tabela matriculaturnoreferente, vinculando a
          * matrícula ao turno da turma
          */
         for ( $iContador = 0; $iContador < $iTotalTurmaTurnoReferente; $iContador++ ) {
 
           $iTurmaTurnoReferente = db_utils::fieldsMemory( $rsTurmaTurnoReferente, $iContador )->ed336_codigo;
-          
+
           $oDaoMatriculaTurnoReferente->ed337_turmaturnoreferente = $iTurmaTurnoReferente;
           $oDaoMatriculaTurnoReferente->ed337_matricula           = $iUltimaMatricula;
           $oDaoMatriculaTurnoReferente->incluir( null );
-          
+
           if ( $oDaoMatriculaTurnoReferente->erro_status == "0" ) {
 
             $lErroTransacao  = true;
@@ -489,32 +489,32 @@ if (isset($incluirmatricula)) {
           }
         }
       }
-      
+
       db_fim_transacao( $lErroTransacao );
 
       $lProgressaoAtiva = false;
-      
+
       $oAluno         = AlunoRepository::getAlunoByCodigo($ed56_i_aluno);
       $sMsgProgressao = "Aluno ". $oAluno->getNome() ." possui as seguintes dependências:\n";
       $sMsgPadrao     = "Matrícula efetuada com sucesso!";
 
       if ($lErroTransacao) {
-        $sMsgPadrao = "";        
+        $sMsgPadrao = "";
       }
-      
+
       foreach ($oAluno->getProgressaoParcial() as $oProgressaoParcial) {
-      
+
         if ($oProgressaoParcial->isAtiva()) {
-      
+
           $sMsgProgressao  .= "Etapa: " . $oProgressaoParcial->getEtapa()->getNome();
           $sMsgProgressao  .= " - Disciplina: " . $oProgressaoParcial->getDisciplina()->getNomeDisciplina() . ".";
           $sMsgProgressao  .= " - Ensino: " . $oProgressaoParcial->getEtapa()->getEnsino()->getNome() . ".\n";
           $lProgressaoAtiva = true;
         }
       }
-      
+
       if ($lProgressaoAtiva) {
-      
+
         $sMsgProgressao .= "\nAcesse: \n";
         $sMsgProgressao .= "Matrícula > Progressão Parcial > Ativar / Desativar: para desativar a progressão parcial.\n";
         $sMsgProgressao .= "Matrícula > Progressão Parcial > Vincular Aluno / Turma: para vincular a progressão do aluno em uma turma";
@@ -523,14 +523,14 @@ if (isset($incluirmatricula)) {
       if ( !empty($sMsgPadrao) ) {
         db_msgbox($sMsgPadrao);
       }
-      
+
       if (isset($importaaprov) && $importaaprov == "S") {
         db_redireciona("edu1_alunocurso002.php?ed56_i_aluno=$ed56_i_aluno&ed47_v_nome=$ed47_v_nome&desabilita".
                        "&matricula=$matricula&turmaorigem=$turmaorigem&turmadestino=$ed60_i_turma");
       } else {
         db_redireciona("edu1_alunocurso001.php?ed56_i_aluno=$ed56_i_aluno&ed47_v_nome=$ed47_v_nome&desabilita");
       }
-   
+
       exit;
     }
   }
@@ -555,9 +555,9 @@ if (isset($incluirmatricula)) {
   <div class="container">
     <fieldset>
       <? if ($lLiberaMatricula == true) { ?>
-      
+
         <legend>
-          <select id="escolha" name="escolha" style="font-weight:bold;font-size:9px;" 
+          <select id="escolha" name="escolha" style="font-weight:bold;font-size:9px;"
                   onchange="js_escolha(this.value);">
             <option value="C">Cursos do Aluno</option>
             <option value="M">Matricular Aluno</option>
@@ -565,7 +565,7 @@ if (isset($incluirmatricula)) {
         </legend>
         <?include("forms/db_frmalunocursomatr.php");?>
         <?include("forms/db_frmalunocurso.php");?>
-      
+
         <? if ($sitatual == "CANDIDATO" && !isset($opcao) && !isset($incluir)) { ?>
           <script>
             $('escolha').value                = "M";
@@ -592,13 +592,13 @@ if (isset($incluirmatricula)) {
 <script>
 
 function js_escolha(valor) {
- 
+
   if (valor == "C") {
-  
+
     $('alunomatricula').style.display = "none";
     $('alunocurso').style.display     = "";
   } else {
-    
+
     $('alunomatricula').style.display = "";
     $('alunocurso').style.display     = "none";
   }
@@ -610,14 +610,14 @@ function js_escolha(valor) {
 if (isset($incluir)) {
 
   $temerro = false;
-  
+
   if ($oDaoAlunoCurso->erro_status == "0") {
 
     $oDaoAlunoCurso->erro(true, false);
     $db_botao = true;
-  
+
     echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
-  
+
     if ($oDaoAlunoCurso->erro_campo != "") {
 
       echo "<script> document.form1.".$oDaoAlunoCurso->erro_campo.".style.backgroundColor='#99A9AE';</script>";
@@ -631,9 +631,9 @@ if (isset($incluir)) {
 
     $oDaoAlunoPossib->erro(true, false);
     $db_botao = true;
-  
+
     echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
-  
+
     if ($oDaoAlunoPossib->erro_campo != "") {
 
       echo "<script> document.form1.".$oDaoAlunoPossib->erro_campo.".style.backgroundColor='#99A9AE';</script>";
@@ -660,11 +660,11 @@ if (isset($alterar)) {
 
     $oDaoAlunoCurso->erro(true, false);
     $db_botao = true;
-  
+
     echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
-  
+
     if ($oDaoAlunoCurso->erro_campo != "") {
-   
+
       echo "<script> document.form1.".$oDaoAlunoCurso->erro_campo.".style.backgroundColor='#99A9AE';</script>";
       echo "<script> document.form1.".$oDaoAlunoCurso->erro_campo.".focus();</script>";
     }
@@ -673,12 +673,12 @@ if (isset($alterar)) {
   }
 
   if ($oDaoAlunoPossib->erro_status == "0") {
-    
+
     $oDaoAlunoPossib->erro(true, false);
     $db_botao = true;
-  
+
     echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
-  
+
     if($oDaoAlunoPossib->erro_campo != "") {
 
       echo "<script> document.form1.".$oDaoAlunoPossib->erro_campo.".style.backgroundColor='#99A9AE';</script>";
@@ -695,11 +695,11 @@ if (isset($alterar)) {
   ?>
 
   <script>
-    top.corpo.iframe_a1.location.href='edu1_alunodados002.php?chavepesquisa=<?=$ed56_i_aluno?>';
-    top.corpo.iframe_a2.location.href='edu1_aluno002.php?chavepesquisa=<?=$ed56_i_aluno?>';
-    top.corpo.iframe_a4.location.href='edu1_docaluno001.php?ed49_i_aluno=<?=$ed56_i_aluno?>&ed47_v_nome=<?=$ed47_v_nome?>';
-    top.corpo.iframe_a5.location.href='edu1_alunonecessidade001.php?ed214_i_aluno=<?=$ed56_i_aluno?>&ed47_v_nome=<?=$ed47_v_nome?>';
-    top.corpo.iframe_a6.location.href='edu1_historico000.php?ed61_i_aluno=<?=$ed56_i_aluno?>&ed47_v_nome=<?=$ed47_v_nome?>';
+    CurrentWindow.corpo.iframe_a1.location.href='edu1_alunodados002.php?chavepesquisa=<?=$ed56_i_aluno?>';
+    CurrentWindow.corpo.iframe_a2.location.href='edu1_aluno002.php?chavepesquisa=<?=$ed56_i_aluno?>';
+    CurrentWindow.corpo.iframe_a4.location.href='edu1_docaluno001.php?ed49_i_aluno=<?=$ed56_i_aluno?>&ed47_v_nome=<?=$ed47_v_nome?>';
+    CurrentWindow.corpo.iframe_a5.location.href='edu1_alunonecessidade001.php?ed214_i_aluno=<?=$ed56_i_aluno?>&ed47_v_nome=<?=$ed47_v_nome?>';
+    CurrentWindow.corpo.iframe_a6.location.href='edu1_historico000.php?ed61_i_aluno=<?=$ed56_i_aluno?>&ed47_v_nome=<?=$ed47_v_nome?>';
   </script>
   <?
 

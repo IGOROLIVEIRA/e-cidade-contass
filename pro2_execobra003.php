@@ -38,7 +38,6 @@ require_once('model/documentoTemplate.model.php');
 
 $oGet = db_utils::postMemory($_GET);
 
-ini_set("error_reporting","E_ALL & ~NOTICE");
 
 $clagata = new cl_dbagata("projetos/modelo_alvara.agt");
 

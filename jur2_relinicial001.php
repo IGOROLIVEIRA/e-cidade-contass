@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require ("libs/db_stdlib.php");
@@ -51,27 +51,27 @@ $instit=db_getsession("DB_instit");
   		<script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
   		<script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
   		<script>
-  			
+
   			function js_emite(){
-  			  				
-  			  var F = document.form1; 				
+
+  			  var F = document.form1;
   			  var sQuery  	 = "";
   			  var sOrigem    = "";
-  			  var sSeparador = "";  
+  			  var sSeparador = "";
   			  var aChkSituacao = js_getElementbyClass(form1,"origem");
-  			  
+
   			  for (var i=0; i < aChkSituacao.length; i++ ) {
   			    if (aChkSituacao[i].checked == true) {
   			  	 sOrigem += sSeparador+aChkSituacao[i].name;
       			 sSeparador = "|";
-      			} 
+      			}
   			  }
 
 			  if ( sOrigem == "" ) {
 			  	alert(_M('tributario.juridico.jur2_relinicial001.selecione_origem'));
 			  	return false;
-			  } 
-  			   
+			  }
+
   			  sQuery += '?numcgm='+F.z01_numcgm.value;
   			  sQuery += '&nvalminacao='+F.nvalminacao.value;
   			  sQuery += '&nvalmaxacao='+F.nvalmaxacao.value;
@@ -81,21 +81,21 @@ $instit=db_getsession("DB_instit");
   			  sQuery += '&advog='+F.v50_advog.value;
   			  sQuery += '&codvara='+F.v70_vara.value;
   			  sQuery += '&ordem='+F.ordem.value;
-  			  sQuery += '&origem='+sOrigem;  			  
+  			  sQuery += '&origem='+sOrigem;
   			  sQuery += '&listar='+F.listar.value;
   			  sQuery += '&selSituacao='+F.selSituacao.value;
   			  sQuery += '&selTipo='+F.selTipo.value;
   			  sQuery += '&dataini='+F.dataini_ano.value+"-"+F.dataini_mes.value+"-"+F.dataini_dia.value;
   			  sQuery += '&datafim='+F.datafim_ano.value+"-"+F.datafim_mes.value+"-"+F.datafim_dia.value;
-  				    				
+
   			  if(F.xdata){
   			    sQuery += '&xdata='+F.xdata.value;
   			  }
-  			  
+
   			  jan = window.open('jur2_relinicial002.php'+sQuery,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
   			  jan.moveTo(0,0);
 			}
-			
+
   		</script>
   		<link href="estilos.css" rel="stylesheet" type="text/css">
   		<style type="text/css">
@@ -104,26 +104,26 @@ $instit=db_getsession("DB_instit");
   	<body bgcolor=#CCCCCC>
 		  <form class="container" name="form1" method="post" action="jur3_emiteinicial021.php" onsubmit="return js_testacodforo();">
 			<fieldset>
-		 	  <legend>Relatórios - Lista de Inicial</legend>	
+		 	  <legend>Relatórios - Lista de Inicial</legend>
 		  	  <table class="form-container">
-  			    <tr>   
+  			    <tr>
       	  		<td title="<?=@$Tz01_numcgm?>">
       				  <? db_ancora($Lz01_numcgm,' js_cgm(true); ',1);?>
        		  	</td>
-       		 	  <td> 
+       		 	  <td>
       				  <?
       				 	  db_input('z01_numcgm',10,$Iz01_numcgm,true,'text',1,"onchange='js_cgm(false)'");
       					  db_input('z01_nome',48,0,true,'text',3,"","z01_nomecgm");
       				  ?>
       		 	  </td>
-      		  </tr>    
+      		  </tr>
 				    <tr>
 				      <td title="<?=@$Tv56_codsit?>">
       					<?
       				 	  db_ancora(@ $Lv56_codsit, "js_pesquisav56_codsit(true);", "1");
       					?>
 				      </td>
-				      <td> 
+				      <td>
       					<?
       					  db_input('v56_codsit', 10, $Iv56_codsit, true, 'text', "1", "onchange='js_pesquisav56_codsit(false);'");
       					  db_input('v52_descr', 48, $Iv52_descr, true, 'text', 3, '');
@@ -142,7 +142,7 @@ $instit=db_getsession("DB_instit");
     				      db_input('z01_nome', 48, $Iz01_nome, true, 'text', 3, '');
   					    ?>
       			  </td>
-    				</tr>  
+    				</tr>
     				<tr>
     		  	  <td title="<?=@$Tv70_vara?>">
       					<?
@@ -166,12 +166,12 @@ $instit=db_getsession("DB_instit");
       					  db_select("listar",$tipo_lista,true,1,"");
     				    ?>
 				      </td>
-			      </tr> 
+			      </tr>
 			 	    <tr>
       		    <td title="<?=@$Tv50_data?>">
 					      <?=@$Lv50_data?>
       			  </td>
-      		  	<td> 
+      		  	<td>
       					<?
       					  db_inputdata('dataini', "", "", "", true, 'text',1, "")
       					?>
@@ -184,7 +184,7 @@ $instit=db_getsession("DB_instit");
       		    <td>
                 Valor da ação:
       			  </td>
-      		  	<td> 
+      		  	<td>
       					<?
       			  	  db_input('nvalminacao',10,4,true,'text',1,"");
       					?>
@@ -198,7 +198,7 @@ $instit=db_getsession("DB_instit");
       		    <td>
                 Valor atualizado:
       			  </td>
-      		  	<td> 
+      		  	<td>
       					<?
       			  	  db_input('nvalminatu',10,4,true,'text',1,"");
       					?>
@@ -218,30 +218,30 @@ $instit=db_getsession("DB_instit");
     				  	    <td align="right" width="85px">
     				  	      <label><b>Matrícula</b></label>
     				  	    </td>
-    				  	    <td>   
+    				  	    <td>
     				  	      <input class="origem" name="M" id="chkMat"   type="checkbox" checked="true" onChange="js_marcatodas(false)" >
     				  	    </td>
     				  	    <td align="right" width="140px">
     				  	      <label><b>Inscrição</b></label>
     				  	    </td>
-    				  	    <td>   
+    				  	    <td>
     				  	      <input class="origem" name="I" id="chkInscr" type="checkbox" checked="true" onChange="js_marcatodas(false)">
-    				  	    </td>  				  	    
+    				  	    </td>
     				  	  </tr>
     				  	  <tr>
     				  	    <td align="right">
     				  	      <label><b>CGM</b></label>
     				  	    </td>
-    				  	    <td> 
+    				  	    <td>
     				  	      <input class="origem" name="C" id="chkCgm"   type="checkbox" checked="true" onChange="js_marcatodas(false)">
     				  	    </td>
     				  	    <td align="right">
     				  	      <label><b>Todos</b></label>
     				  	    </td>
-    				  	    <td> 
+    				  	    <td>
     				  	      <input class="origem" name="T" id="chkTodos" type="checkbox" checked="true" onChange="js_marcatodas(true)">
-    				  	    </td>  				  	    
-    				  	  </tr>  				  	  
+    				  	    </td>
+    				  	  </tr>
   				  	  </table>
   				    </td>
     				</tr>
@@ -266,7 +266,7 @@ $instit=db_getsession("DB_instit");
   					  		db_select("selTipo",$aTipo,true,1,"");
   				    	?>
     				  </td>
-    				</tr>  
+    				</tr>
 				    <tr>
   				    <td>
   					    Status:
@@ -279,7 +279,7 @@ $instit=db_getsession("DB_instit");
   				  	</td>
     				</tr>
 			  </table>
-			</fieldset>	
+			</fieldset>
       <input name="processar" type="button" id="processar" value="Processar" onclick='js_emite();' >
 		  </form>
 	<?
@@ -302,28 +302,28 @@ function js_mostracgm(chave1,chave2){
   db_iframe2.hide();
 }
 function js_mostracgm1(erro,chave){
-  document.form1.z01_nomecgm.value = chave; 
-  if(erro==true){ 
-    document.form1.z01_numcgm.focus(); 
-    document.form1.z01_numcgm.value = ''; 
+  document.form1.z01_nomecgm.value = chave;
+  if(erro==true){
+    document.form1.z01_numcgm.focus();
+    document.form1.z01_numcgm.value = '';
   }
 }
 function js_pesquisav70_vara(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_vara','func_vara.php?funcao_js=parent.js_mostravara1|v53_codvara|v53_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_vara','func_vara.php?funcao_js=parent.js_mostravara1|v53_codvara|v53_descr','Pesquisa',true);
   }else{
-     if(document.form1.v70_vara.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_vara','func_vara.php?pesquisa_chave='+document.form1.v70_vara.value+'&funcao_js=parent.js_mostravara','Pesquisa',false);
+     if(document.form1.v70_vara.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_vara','func_vara.php?pesquisa_chave='+document.form1.v70_vara.value+'&funcao_js=parent.js_mostravara','Pesquisa',false);
      }else{
-       document.form1.v53_descr.value = ''; 
+       document.form1.v53_descr.value = '';
      }
   }
 }
 function js_mostravara(chave,erro){
-  document.form1.v53_descr.value = chave; 
-  if(erro==true){ 
-    document.form1.v70_vara.focus(); 
-    document.form1.v70_vara.value = ''; 
+  document.form1.v53_descr.value = chave;
+  if(erro==true){
+    document.form1.v70_vara.focus();
+    document.form1.v70_vara.value = '';
   }
 }
 function js_mostravara1(chave1,chave2){
@@ -333,18 +333,18 @@ function js_mostravara1(chave1,chave2){
 }
 function js_pesquisav56_codsit(mostra){
 	if(mostra==true){
-    	js_OpenJanelaIframe('top.corpo','db_iframe_sit','func_situacao.php?funcao_js=parent.js_mostrasituacao1|0|1','Pesquisa',true);
+    	js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_sit','func_situacao.php?funcao_js=parent.js_mostrasituacao1|0|1','Pesquisa',true);
   	}else{
     	if(document.form1.v56_codsit.value!=""){
-      		js_OpenJanelaIframe('top.corpo','db_iframe_sit','func_situacao.php?pesquisa_chave='+document.form1.v56_codsit.value+'&funcao_js=parent.js_mostrasituacao','Pesquisa',false);
+      		js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_sit','func_situacao.php?pesquisa_chave='+document.form1.v56_codsit.value+'&funcao_js=parent.js_mostrasituacao','Pesquisa',false);
     	}
-  	}  	
+  	}
 }
 function js_mostrasituacao(chave,erro){
-	document.form1.v52_descr.value = chave; 
-    if(erro==true){ 
-    	document.form1.v56_codsit.focus(); 
-      	document.form1.v56_codsit.value = ''; 
+	document.form1.v52_descr.value = chave;
+    if(erro==true){
+    	document.form1.v56_codsit.focus();
+      	document.form1.v56_codsit.value = '';
     }
 }
 function js_mostrasituacao1(chave1,chave2){
@@ -354,18 +354,18 @@ function js_mostrasituacao1(chave1,chave2){
 }
 function js_pesquisav50_advog(mostra){
   	if(mostra==true){
-  		js_OpenJanelaIframe('top.corpo','db_iframe_adv','func_advog.php?funcao_js=parent.js_mostracgm3|0|z01_nome','Pesquisa',true);    	
+  		js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_adv','func_advog.php?funcao_js=parent.js_mostracgm3|0|z01_nome','Pesquisa',true);
   	}else{
   		if(document.form1.v50_advog.value!=""){
-      		js_OpenJanelaIframe('top.corpo','db_iframe_adv','func_advog.php?pesquisa_chave='+document.form1.v50_advog.value+'&funcao_js=parent.js_mostracgm4','Pesquisa',false);
-    	}    	
+      		js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_adv','func_advog.php?pesquisa_chave='+document.form1.v50_advog.value+'&funcao_js=parent.js_mostracgm4','Pesquisa',false);
+    	}
   	}
 }
 function js_mostracgm4(erro,chave){
-  	document.form1.z01_nome.value = chave; 
-  	if(erro==true){ 
-    	document.form1.v50_advog.focus(); 
-    	document.form1.v50_advog.value = ''; 
+  	document.form1.z01_nome.value = chave;
+  	if(erro==true){
+    	document.form1.v50_advog.focus();
+    	document.form1.v50_advog.value = '';
   	}
 }
 function js_mostracgm3(chave1,chave2){
@@ -384,7 +384,7 @@ function js_marcatodas(lPri){
 		for(var i=0; i < aChkSituacao.length; i++) {
 		  aChkSituacao[i].checked = false;
 		}
-	  }else{	
+	  }else{
 		for(var i=0; i < aChkSituacao.length; i++) {
 		  if (aChkSituacao[i].checked == false) {
 			aChkSituacao[i].checked = true;

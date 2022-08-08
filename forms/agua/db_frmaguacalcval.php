@@ -15,14 +15,14 @@ if(isset($db_opcaoal)){
 }else if(isset($opcao) && $opcao=="excluir"){
     $db_opcao = 3;
     $db_botao=true;
-}else{  
+}else{
     $db_opcao = 1;
     $db_botao=true;
     if(isset($novo) || isset($alterar) ||   isset($excluir) || (isset($incluir) && $sqlerro==false ) ){
      $x23_codconsumotipo = "";
      $x23_valor = "";
    }
-} 
+}
 ?>
 <form name="form1" method="post" action="">
 <center>
@@ -33,7 +33,7 @@ if(isset($db_opcaoal)){
        db_ancora(@$Lx23_codcalc,"js_pesquisax23_codcalc(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('x23_codcalc',5,$Ix23_codcalc,true,'text',$db_opcao," onchange='js_pesquisax23_codcalc(false);'")
 ?>
@@ -48,7 +48,7 @@ db_input('x22_matric',10,$Ix22_matric,true,'text',3,'')
        db_ancora(@$Lx23_codconsumotipo,"js_pesquisax23_codconsumotipo(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('x23_codconsumotipo',5,$Ix23_codconsumotipo,true,'text',$db_opcao," onchange='js_pesquisax23_codconsumotipo(false);'")
 ?>
@@ -61,7 +61,7 @@ db_input('x25_descr',40,$Ix25_descr,true,'text',3,'')
     <td nowrap title="<?=@$Tx23_valor?>">
        <?=@$Lx23_valor?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('x23_valor',15,$Ix23_valor,true,'text',$db_opcao,"")
 ?>
@@ -76,7 +76,7 @@ db_input('x23_valor',15,$Ix23_valor,true,'text',$db_opcao,"")
   </table>
  <table>
   <tr>
-    <td valign="top"  align="center">  
+    <td valign="top"  align="center">
     <?
 	 $chavepri= array("x23_codcalc"=>@$x23_codcalc,"x23_codconsumotipo"=>@$x23_codconsumotipo);
 	 $cliframe_alterar_excluir->chavepri=$chavepri;
@@ -103,20 +103,20 @@ function js_cancelar(){
 }
 function js_pesquisax23_codcalc(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_aguacalcval','db_iframe_aguacalc','func_aguacalc.php?funcao_js=parent.js_mostraaguacalc1|x22_codcalc|x22_matric','Pesquisa',true,'0','1','775','390');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_aguacalcval','db_iframe_aguacalc','func_aguacalc.php?funcao_js=parent.js_mostraaguacalc1|x22_codcalc|x22_matric','Pesquisa',true,'0','1','775','390');
   }else{
-     if(document.form1.x23_codcalc.value != ''){ 
-        js_OpenJanelaIframe('top.corpo.iframe_aguacalcval','db_iframe_aguacalc','func_aguacalc.php?pesquisa_chave='+document.form1.x23_codcalc.value+'&funcao_js=parent.js_mostraaguacalc','Pesquisa',false);
+     if(document.form1.x23_codcalc.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_aguacalcval','db_iframe_aguacalc','func_aguacalc.php?pesquisa_chave='+document.form1.x23_codcalc.value+'&funcao_js=parent.js_mostraaguacalc','Pesquisa',false);
      }else{
-       document.form1.x22_matric.value = ''; 
+       document.form1.x22_matric.value = '';
      }
   }
 }
 function js_mostraaguacalc(chave,erro){
-  document.form1.x22_matric.value = chave; 
-  if(erro==true){ 
-    document.form1.x23_codcalc.focus(); 
-    document.form1.x23_codcalc.value = ''; 
+  document.form1.x22_matric.value = chave;
+  if(erro==true){
+    document.form1.x23_codcalc.focus();
+    document.form1.x23_codcalc.value = '';
   }
 }
 function js_mostraaguacalc1(chave1,chave2){
@@ -126,20 +126,20 @@ function js_mostraaguacalc1(chave1,chave2){
 }
 function js_pesquisax23_codconsumotipo(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_aguacalcval','db_iframe_aguaconsumotipo','func_aguaconsumotipo.php?funcao_js=parent.js_mostraaguaconsumotipo1|x25_codconsumotipo|x25_descr','Pesquisa',true,'0','1','775','390');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_aguacalcval','db_iframe_aguaconsumotipo','func_aguaconsumotipo.php?funcao_js=parent.js_mostraaguaconsumotipo1|x25_codconsumotipo|x25_descr','Pesquisa',true,'0','1','775','390');
   }else{
-     if(document.form1.x23_codconsumotipo.value != ''){ 
-        js_OpenJanelaIframe('top.corpo.iframe_aguacalcval','db_iframe_aguaconsumotipo','func_aguaconsumotipo.php?pesquisa_chave='+document.form1.x23_codconsumotipo.value+'&funcao_js=parent.js_mostraaguaconsumotipo','Pesquisa',false);
+     if(document.form1.x23_codconsumotipo.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_aguacalcval','db_iframe_aguaconsumotipo','func_aguaconsumotipo.php?pesquisa_chave='+document.form1.x23_codconsumotipo.value+'&funcao_js=parent.js_mostraaguaconsumotipo','Pesquisa',false);
      }else{
-       document.form1.x25_descr.value = ''; 
+       document.form1.x25_descr.value = '';
      }
   }
 }
 function js_mostraaguaconsumotipo(chave,erro){
-  document.form1.x25_descr.value = chave; 
-  if(erro==true){ 
-    document.form1.x23_codconsumotipo.focus(); 
-    document.form1.x23_codconsumotipo.value = ''; 
+  document.form1.x25_descr.value = chave;
+  if(erro==true){
+    document.form1.x23_codconsumotipo.focus();
+    document.form1.x23_codconsumotipo.value = '';
   }
 }
 function js_mostraaguaconsumotipo1(chave1,chave2){

@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: TFD
@@ -43,7 +43,7 @@ $clrotulo->label("j13_codi");
     <td nowrap title="<?=@$Ttf13_i_codigo?>">
        <?=@$Ltf13_i_codigo?>
     </td>
-    <td> 
+    <td>
       <?
       db_input('tf13_i_codigo',10,$Itf13_i_codigo,true,'text',$db_opcao,"")
       ?>
@@ -53,7 +53,7 @@ $clrotulo->label("j13_codi");
     <td nowrap title="<?=@$Ttf21_i_pedidotfd?>">
       <?=@$Ltf13_i_pedidotfd?>
     </td>
-    <td> 
+    <td>
       <?
       db_input('tf13_i_pedidotfd',10,$Itf13_i_pedidotfd,true,'text',3,'');
       ?>
@@ -65,7 +65,7 @@ $clrotulo->label("j13_codi");
       echo '<b>Paciente</b>';
       ?>
     </td>
-    <td nowrap> 
+    <td nowrap>
       <?
       db_input('tf01_i_cgsund',10,$Itf01_i_cgsund,true,'text',3,'');
       db_input('z01_v_nome',50,$Iz01_v_nome,true,'text',3,'');
@@ -76,7 +76,7 @@ $clrotulo->label("j13_codi");
     <td nowrap title="<?=@$Ttf13_i_motivoacompanhamento?>">
        <?=@$Ltf13_i_motivoacompanhamento?>
     </td>
-    <td> 
+    <td>
       <?
       $dDataAtual = date("'Y-m-d'", db_getsession('DB_datausu'));
       $aX = array();
@@ -99,7 +99,7 @@ $clrotulo->label("j13_codi");
     <td nowrap title="<?=@$Ttf13_i_anulado?>">
       <?=@$Ltf13_i_anulado?>
     </td>
-    <td> 
+    <td>
       <?
       db_input('tf13_i_anulado',10,$Itf13_i_anulado,true,'text',3,"")
       ?>
@@ -300,7 +300,7 @@ js_getAcompanhantesPedidoTfd();
 function js_ajax(oParam, jsRetorno) {
 
 	var objAjax = new Ajax.Request(
-                         sUrl, 
+                         sUrl,
                          {
                           method    : 'post',
                           asynchronous: false,
@@ -339,7 +339,7 @@ function js_cria_datagrid() {
         aAligns[2] = 'center';
         aAligns[3] = 'center';
         aAligns[4] = 'center';
-        
+
         oDBGrid.setCellAlign(aAligns);
         oDBGrid.show($('grid_acompanhantes'));
         oDBGrid.clearAll(true);
@@ -361,7 +361,7 @@ function js_getAcompanhantesPedidoTfd() {
 }
 
 function js_retornogetAcompanhantesPedidoTfd(oRetorno) {
-  
+
   oRetorno = eval("("+oRetorno.responseText+")");
 
   if(oRetorno.iStatus != 1) {
@@ -370,7 +370,7 @@ function js_retornogetAcompanhantesPedidoTfd(oRetorno) {
 
   oRetorno.oAcompanhantes.each(
     function (oAcompanhantes) {
-        
+
       var aLinha = new Array();
       var sValor = '';
 
@@ -401,7 +401,7 @@ function js_retornogetAcompanhantesPedidoTfd(oRetorno) {
 oBotaoAnular = '';
 
 function js_anularAcompanhante(iCodigo, oButton) {
-  
+
   oButton.disabled = true;
   oBotaoAnular = oButton;
 
@@ -571,7 +571,7 @@ function js_retornogetInfoCgs(oRetorno) {
     dNasc = '';
   }
 
-  $('z01_v_ender').value = oRetorno.z01_v_ender.urlDecode(); 
+  $('z01_v_ender').value = oRetorno.z01_v_ender.urlDecode();
   $('z01_v_bairro').value = oRetorno.z01_v_bairro.urlDecode();
   $('z01_v_munic').value = oRetorno.z01_v_munic.urlDecode();
   $('z01_v_cep').value = oRetorno.z01_v_cep.urlDecode();
@@ -590,7 +590,7 @@ function js_retornogetInfoCgs(oRetorno) {
   $('s115_c_cartaosus').value = oRetorno.s115_c_cartaosus.urlDecode();
   $('s115_i_codigo').value = oRetorno.s115_i_codigo.urlDecode();
 
-  if(oRetorno.z01_i_cgsund != '') { 
+  if(oRetorno.z01_i_cgsund != '') {
 
     $('db_opcao').disabled = false;
     $('z01_i_cgsund2').value = oRetorno.z01_i_cgsund;
@@ -643,21 +643,21 @@ function js_atualizarCgs() {
   oParam.iCgs = $F('z01_i_cgsund2');
   oParam.z01_v_ender = $F('z01_v_ender');
   oParam.z01_v_bairro = $F('z01_v_bairro');
-  oParam.z01_v_munic = $F('z01_v_munic'); 
-  oParam.z01_v_cep = $F('z01_v_cep'); 
+  oParam.z01_v_munic = $F('z01_v_munic');
+  oParam.z01_v_cep = $F('z01_v_cep');
   oParam.z01_v_uf = $F('z01_v_uf');
-  oParam.z01_v_email = $F('z01_v_email'); 
+  oParam.z01_v_email = $F('z01_v_email');
   oParam.z01_v_telef = $F('z01_v_telef');
   oParam.z01_v_telcel = $F('z01_v_telcel');
   oParam.z01_d_nasc = $F('z01_d_nasc');
   oParam.z01_v_cgccpf = $F('z01_v_cgccpf');
-  oParam.z01_v_ident = $F('z01_v_ident'); 
-  oParam.z01_v_mae = $F('z01_v_mae'); 
-  oParam.z01_v_pai = $F('z01_v_pai'); 
+  oParam.z01_v_ident = $F('z01_v_ident');
+  oParam.z01_v_mae = $F('z01_v_mae');
+  oParam.z01_v_pai = $F('z01_v_pai');
   oParam.s115_c_cartaosus = $F('s115_c_cartaosus');
   oParam.s115_c_tipo = $F('s115_c_tipo');
   oParam.s115_i_codigo = $F('s115_i_codigo');
-  
+
   js_ajax(oParam, 'js_retornoatualizarCgs');
 
 }
@@ -696,11 +696,11 @@ function js_pesquisatf13_i_cgsund(mostra) {
     js_OpenJanelaIframe('','db_iframe_cgs_und','func_cgs_und.php?funcao_js=parent.js_mostracgs1|z01_i_cgsund|z01_v_nome','Pesquisa',true);
   } else {
 
-    if(document.form1.tf13_i_cgsund.value != '') { 
+    if(document.form1.tf13_i_cgsund.value != '') {
       js_OpenJanelaIframe('','db_iframe_cgs_und','func_cgs_und.php?pesquisa_chave='+document.form1.tf13_i_cgsund.value+'&funcao_js=parent.js_mostracgs','Pesquisa',false);
     } else {
 
-      document.form1.z01_v_nome2.value = ''; 
+      document.form1.z01_v_nome2.value = '';
       js_limpaInfoCgs();
 
     }
@@ -713,8 +713,8 @@ function js_mostracgs(chave,erro) {
   document.form1.z01_v_nome2.value = chave;
   if(erro==true) {
 
-    document.form1.tf13_i_cgsund.focus(); 
-    document.form1.tf13_i_cgsund.value = ''; 
+    document.form1.tf13_i_cgsund.focus();
+    document.form1.tf13_i_cgsund.value = '';
 
   } else {
     js_getInfoCgs();
@@ -740,20 +740,20 @@ function js_mostracgs1(chave1,chave2) {
 /*
 function js_pesquisatf13_i_motivoacompanhamento(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_tfd_motivoacompanhamento','func_tfd_motivoacompanhamento.php?funcao_js=parent.js_mostratfd_motivoacompanhamento1|tf08_i_codigo|tf08_i_codigo','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_tfd_motivoacompanhamento','func_tfd_motivoacompanhamento.php?funcao_js=parent.js_mostratfd_motivoacompanhamento1|tf08_i_codigo|tf08_i_codigo','Pesquisa',true);
   }else{
-     if(document.form1.tf13_i_motivoacompanhamento.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_tfd_motivoacompanhamento','func_tfd_motivoacompanhamento.php?pesquisa_chave='+document.form1.tf13_i_motivoacompanhamento.value+'&funcao_js=parent.js_mostratfd_motivoacompanhamento','Pesquisa',false);
+     if(document.form1.tf13_i_motivoacompanhamento.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_tfd_motivoacompanhamento','func_tfd_motivoacompanhamento.php?pesquisa_chave='+document.form1.tf13_i_motivoacompanhamento.value+'&funcao_js=parent.js_mostratfd_motivoacompanhamento','Pesquisa',false);
      }else{
-       document.form1.tf08_i_codigo.value = ''; 
+       document.form1.tf08_i_codigo.value = '';
      }
   }
 }
 function js_mostratfd_motivoacompanhamento(chave,erro){
-  document.form1.tf08_i_codigo.value = chave; 
-  if(erro==true){ 
-    document.form1.tf13_i_motivoacompanhamento.focus(); 
-    document.form1.tf13_i_motivoacompanhamento.value = ''; 
+  document.form1.tf08_i_codigo.value = chave;
+  if(erro==true){
+    document.form1.tf13_i_motivoacompanhamento.focus();
+    document.form1.tf13_i_motivoacompanhamento.value = '';
   }
 }
 function js_mostratfd_motivoacompanhamento1(chave1,chave2){
@@ -763,20 +763,20 @@ function js_mostratfd_motivoacompanhamento1(chave1,chave2){
 }
 function js_pesquisatf13_i_pedidotfd(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_tfd_pedidotfd','func_tfd_pedidotfd.php?funcao_js=parent.js_mostratfd_pedidotfd1|tf01_i_codigo|tf01_i_codigo','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_tfd_pedidotfd','func_tfd_pedidotfd.php?funcao_js=parent.js_mostratfd_pedidotfd1|tf01_i_codigo|tf01_i_codigo','Pesquisa',true);
   }else{
-     if(document.form1.tf13_i_pedidotfd.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_tfd_pedidotfd','func_tfd_pedidotfd.php?pesquisa_chave='+document.form1.tf13_i_pedidotfd.value+'&funcao_js=parent.js_mostratfd_pedidotfd','Pesquisa',false);
+     if(document.form1.tf13_i_pedidotfd.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_tfd_pedidotfd','func_tfd_pedidotfd.php?pesquisa_chave='+document.form1.tf13_i_pedidotfd.value+'&funcao_js=parent.js_mostratfd_pedidotfd','Pesquisa',false);
      }else{
-       document.form1.tf01_i_codigo.value = ''; 
+       document.form1.tf01_i_codigo.value = '';
      }
   }
 }
 function js_mostratfd_pedidotfd(chave,erro){
-  document.form1.tf01_i_codigo.value = chave; 
-  if(erro==true){ 
-    document.form1.tf13_i_pedidotfd.focus(); 
-    document.form1.tf13_i_pedidotfd.value = ''; 
+  document.form1.tf01_i_codigo.value = chave;
+  if(erro==true){
+    document.form1.tf13_i_pedidotfd.focus();
+    document.form1.tf13_i_pedidotfd.value = '';
   }
 }
 function js_mostratfd_pedidotfd1(chave1,chave2){
@@ -785,7 +785,7 @@ function js_mostratfd_pedidotfd1(chave1,chave2){
   db_iframe_tfd_pedidotfd.hide();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_tfd_acompanhantes','func_tfd_acompanhantes.php?funcao_js=parent.js_preenchepesquisa|tf13_i_codigo','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_tfd_acompanhantes','func_tfd_acompanhantes.php?funcao_js=parent.js_preenchepesquisa|tf13_i_codigo','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_tfd_acompanhantes.hide();

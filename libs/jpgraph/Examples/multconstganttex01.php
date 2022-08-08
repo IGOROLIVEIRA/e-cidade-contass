@@ -1,7 +1,7 @@
 <?php 
 // Gantt example 
-include ("../jpgraph.php"); 
-include ("../jpgraph_gantt.php"); 
+include (__DIR__ . "/../jpgraph.php"); 
+include (__DIR__ . "/../jpgraph_gantt.php"); 
 
 // Create the basic graph 
 $graph = new GanttGraph(); 

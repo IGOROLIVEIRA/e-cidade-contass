@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 
@@ -44,7 +44,7 @@ $oDaoRotulo->label("ed05_i_codigo");
           <td nowrap title="<?=@$Ted292_arquivo?>">
             <?=@$Led292_arquivo?>
           </td>
-          <td> 
+          <td>
             <?
               db_input('ed05_i_codigo',50,'',true,'hidden','');
               db_input('ed292_sequencial',50,'',true,'hidden','');
@@ -62,14 +62,14 @@ $oDaoRotulo->label("ed05_i_codigo");
           <td nowrap title="<?=@$Ted292_obs?>">
             <?=@$Led292_obs?>
           </td>
-          <td> 
+          <td>
             <?
               db_textarea('ed292_obs',3,100,$Ied292_obs,true,'text',$db_opcao,"")
             ?>
           </td>
         </tr>
         <tr>
-          <td> 
+          <td>
             <?
               db_input('ed292_ordem',10,$Ied292_ordem,true,'hidden','')
             ?>
@@ -78,12 +78,12 @@ $oDaoRotulo->label("ed05_i_codigo");
       </table>
     </fieldset>
   </center>
-  
+
   <br />
 
-  <input name="<?=($db_opcao == 1 ? "incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "alterar" : "excluir"))?>" 
-         type="submit" id="db_opcao" 
-         value="<?=($db_opcao == 1 ? "Incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "Alterar" : "Excluir"))?>" 
+  <input name="<?=($db_opcao == 1 ? "incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "alterar" : "excluir"))?>"
+         type="submit" id="db_opcao"
+         value="<?=($db_opcao == 1 ? "Incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "Alterar" : "Excluir"))?>"
          onclick="return js_valida();" <?=($db_botao == false ? "disabled" : "")?> />
   <input name="cancelar" type="button" id="cancelar" value="Cancelar" onclick="js_cancelaAcao();"
          <?=($db_opcao == 1 ? "disabled" : "")?> />
@@ -93,7 +93,7 @@ $oDaoRotulo->label("ed05_i_codigo");
 </form>
 
 <fieldset width="width=95%;"><legend><b>Arquivos Incluidos</b></legend>
-  
+
   <center>
   <div id="arquivosIncluidos"></div>
   </center>
@@ -127,11 +127,11 @@ function js_criaGridArquivosIncluidos() {
   aAligns[2]  = 'left';
   aAligns[3]  = 'left';
   aAligns[4]  = 'center';
-  
+
   oDBGrid.setCellAlign(aAligns);
   oDBGrid.show($('arquivosIncluidos'));
   oDBGrid.clearAll(true);
-  
+
   oDBGrid.showColumn(false, 1);
   return oDBGrid;
 
@@ -164,14 +164,14 @@ function js_retornoBuscaArquivos(oRetorno) {
   oRetorno = eval("("+oRetorno.responseText+")");
 
   if (oRetorno.iStatus != 1) {
-    
+
     alert(oRetorno.sMessage.urlDecode());
     return false;
 
   } else {
 
     var iTamResultado = oRetorno.aResultado.length;
-    
+
     if (parseInt(iTamResultado, 10) > 0) {
 
       iQuantArquivos = oRetorno.aResultado.length;
@@ -181,7 +181,7 @@ function js_retornoBuscaArquivos(oRetorno) {
       oDBGridArquivos.renderRows();
 
       for (var iCont = 0; iCont < oRetorno.aResultado.length; iCont++) {
-        
+
         sOpcoes  = "<span onclick='js_alterarAnexo("+oRetorno.aResultado[iCont].ed292_sequencial+","+
                                                      oRetorno.aResultado[iCont].ed292_atolegal+");'> A </span>";
         sOpcoes += "<span onclick='js_excluirAnexo("+oRetorno.aResultado[iCont].ed292_sequencial+","+
@@ -232,7 +232,7 @@ function js_alterarAnexo(iAnexo, iAtoLegal) {
 function js_valida() {
 
   var sArquivo = $('ed292_arquivo').value;
-  
+
   if ($('db_opcao').value == "Alterar" || $('db_opcao').value == "Excluir") {
     return true;
   }
@@ -250,10 +250,10 @@ function js_valida() {
 
 function js_ordenarCampos() {
 
-  js_OpenJanelaIframe('', 
-                      'db_iframe_ordenar', 
+  js_OpenJanelaIframe('',
+                      'db_iframe_ordenar',
                       'func_ordenarAnexosAtoLegal.php?iCodAtoLegal='+$('ed05_i_codigo').value,
-                      'Ordenar Arquivos', 
+                      'Ordenar Arquivos',
                       true);
 
 }
@@ -267,8 +267,8 @@ function js_cancelaAcao() {
 function js_novoRegistro() {
 
   parent.document.formaba.a2.disabled = true;
-  top.corpo.iframe_a2.location.href   = 'edu1_edu_anexoatolegal001.php';
-  top.corpo.iframe_a1.location.href   = 'edu1_atolegal001.php';
+  CurrentWindow.corpo.iframe_a2.location.href   = 'edu1_edu_anexoatolegal001.php';
+  CurrentWindow.corpo.iframe_a1.location.href   = 'edu1_atolegal001.php';
   location.href                       = 'edu1_atolegal001.php';
   parent.mo_camada('a1');
 
@@ -297,7 +297,7 @@ function js_retornoDownloadFile(oRetorno) {
     return false;
 
   } else {
-                        
+
     jan = window.open('db_download.php?arquivo='+oRetorno.sArquivo.urlDecode(), '',
                       'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
     jan.moveTo(0,0);

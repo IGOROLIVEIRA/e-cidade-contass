@@ -104,11 +104,11 @@ $clrotulo->label("cm04_c_descr");
 //busca cgm / falecido
 function js_pesquisacm01_i_codigo(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_a1','db_iframe_cgm','func_sepultamentos.php?funcao_js=parent.js_mostracgm1|cm01_i_codigo|z01_nome','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_a1','db_iframe_cgm','func_sepultamentos.php?funcao_js=parent.js_mostracgm1|cm01_i_codigo|z01_nome','Pesquisa',true);
   }else{
 
      if(document.form1.sepultamento.value != ''){
-        js_OpenJanelaIframe('top.corpo.iframe_a1','db_iframe_cgm','func_sepultamentos.php?pesquisa_chave='+document.form1.sepultamento.value+'&funcao_js=parent.js_mostracgm','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_a1','db_iframe_cgm','func_sepultamentos.php?pesquisa_chave='+document.form1.sepultamento.value+'&funcao_js=parent.js_mostracgm','Pesquisa',false);
      }else{
        document.form1.z01_nome.value = '';
      }
@@ -144,9 +144,9 @@ function js_valida(){
   parent.document.formaba.a2.disabled = false;
   parent.document.formaba.a3.disabled = false;
   parent.document.formaba.a4.disabled = false;
-  top.corpo.iframe_a2.location.href   = 'cem3_sepultamentos002.php?sepultamento=<?=$cm01_i_codigo?>';
-  top.corpo.iframe_a3.location.href   = 'cem3_sepultamentos003.php?sepultamento=<?=$cm01_i_codigo?>';
-  top.corpo.iframe_a4.location.href   = 'cem3_sepultamentos004.php?sepultamento=<?=$cm01_i_codigo?>';
+  CurrentWindow.corpo.iframe_a2.location.href   = 'cem3_sepultamentos002.php?sepultamento=<?=$cm01_i_codigo?>';
+  CurrentWindow.corpo.iframe_a3.location.href   = 'cem3_sepultamentos003.php?sepultamento=<?=$cm01_i_codigo?>';
+  CurrentWindow.corpo.iframe_a4.location.href   = 'cem3_sepultamentos004.php?sepultamento=<?=$cm01_i_codigo?>';
 <?}?>
 </script>
 </body>

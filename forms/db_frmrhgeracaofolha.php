@@ -100,7 +100,7 @@ form > fieldset > table > TBODY > tr > td:first-child {
         </td>
         <td align="left">
           <?php
-          
+
           $arr_pontos = Array("0" =>"Salário",
                               "1" =>"Adiantamento",
                               "3" =>"Rescisão",
@@ -110,32 +110,32 @@ form > fieldset > table > TBODY > tr > td:first-child {
                              );
       try {
           $oCompetencia         = new DBCompetencia($anofolha, $mesfolha);
-  
+
           /**
-          * Valida se a variável está ativa no db_conn, estando ativa, valida-se se a folha está aberta, caso esteja aberta, 
+          * Valida se a variável está ativa no db_conn, estando ativa, valida-se se a folha está aberta, caso esteja aberta,
           * não é possível fazer a geração para aquela folha, entao retiramos ela do select. E verifica-se também se
           * existe uma folha, caso não exista, ele retira também do select a folha.
           */
 
          if (DBPessoal::verificarUtilizacaoEstruturaSuplementar()) {
-    
-           if( (FolhaPagamentoSalario::hasFolhaAberta(DBPessoal::getCompetenciaFolha()) && FolhaPagamento::getFolhaCompetenciaTipo($oCompetencia, FolhaPagamento::TIPO_FOLHA_SALARIO)) 
+
+           if( (FolhaPagamentoSalario::hasFolhaAberta(DBPessoal::getCompetenciaFolha()) && FolhaPagamento::getFolhaCompetenciaTipo($oCompetencia, FolhaPagamento::TIPO_FOLHA_SALARIO))
                 || !FolhaPagamento::getFolhaCompetenciaTipo($oCompetencia, FolhaPagamento::TIPO_FOLHA_SALARIO) ) {
              unset($arr_pontos['0']);
            }
-           if ( (FolhaPagamentoComplementar::hasFolhaAberta(DBPessoal::getCompetenciaFolha()) && FolhaPagamento::getFolhaCompetenciaTipo($oCompetencia, FolhaPagamento::TIPO_FOLHA_COMPLEMENTAR)) 
+           if ( (FolhaPagamentoComplementar::hasFolhaAberta(DBPessoal::getCompetenciaFolha()) && FolhaPagamento::getFolhaCompetenciaTipo($oCompetencia, FolhaPagamento::TIPO_FOLHA_COMPLEMENTAR))
                 || !FolhaPagamento::getFolhaCompetenciaTipo($oCompetencia, FolhaPagamento::TIPO_FOLHA_COMPLEMENTAR) ) {
              unset($arr_pontos['5']);
            }
-           if ( (FolhaPagamentoSuplementar::hasFolhaAberta(DBPessoal::getCompetenciaFolha()) && FolhaPagamento::getFolhaCompetenciaTipo( $oCompetencia, FolhaPagamento::TIPO_FOLHA_SUPLEMENTAR)) 
+           if ( (FolhaPagamentoSuplementar::hasFolhaAberta(DBPessoal::getCompetenciaFolha()) && FolhaPagamento::getFolhaCompetenciaTipo( $oCompetencia, FolhaPagamento::TIPO_FOLHA_SUPLEMENTAR))
                 || !FolhaPagamento::getFolhaCompetenciaTipo($oCompetencia, FolhaPagamento::TIPO_FOLHA_SUPLEMENTAR) ) {
              unset($arr_pontos['6']);
            }
-    
+
           } else if ( !DBPessoal::verificarUtilizacaoEstruturaSuplementar() ) {
              unset($arr_pontos['6']);
           }
-       
+
        } catch (Exception $eException) {
          db_msgbox($eException->getMessage());
        }
@@ -203,15 +203,15 @@ form > fieldset > table > TBODY > tr > td:first-child {
 				    <td><?=$LlabelPercentualPago?></td>
 				    <td>
 				    <?php
-              db_input("labelPercentualPago", 
-              		     3, 
-              		     $IlabelPercentualPago, 
-              		     true, 
-              		     'text', 
+              db_input("labelPercentualPago",
+              		     3,
+              		     $IlabelPercentualPago,
+              		     true,
+              		     'text',
               		     1,
-              		     "onKeyUp='js_validaporcentagem(this);' 
-              		      onchange='js_verificacampos(this.name);' 
-              		      onPaste='js_validapaste(this);'", 
+              		     "onKeyUp='js_validaporcentagem(this);'
+              		      onchange='js_verificacampos(this.name);'
+              		      onPaste='js_validapaste(this);'",
               		     "percpago");
              ?>%</td>
 				  </tr>
@@ -219,25 +219,25 @@ form > fieldset > table > TBODY > tr > td:first-child {
 				    <td><strong>Faixa Líquida a Pagar (até): </strong></td>
 				    <td nowrap align="left">
 				    <?php
-					    db_input("labelFaixaValorLiquido", 
-					    		     15, 
-					    		     $IlabelFaixaValorLiquido, 
-					    		     true, 
-					    		     'text', 
-					    		     1, 
-					    		     "onchange='js_verificacampos(this.name);'", 
+					    db_input("labelFaixaValorLiquido",
+					    		     15,
+					    		     $IlabelFaixaValorLiquido,
+					    		     true,
+					    		     'text',
+					    		     1,
+					    		     "onchange='js_verificacampos(this.name);'",
 					    		     "pagarliq");
 					    echo "<strong>ou&nbsp;</strong>";
 					    $pagarperc = '100';
-					    db_input("labelFaixaValorLiquido", 
-					    		     3, 
-					    		     $IlabelFaixaValorLiquido, 
-					    		     true, 
-					    		     'text', 
-					    		     1, 
-					    		     "onKeyUp='js_validaporcentagem(this);' 
-					    		      onchange='js_verificacampos(this.name);' 
-					    		      onPaste='js_validapaste(this);'",  
+					    db_input("labelFaixaValorLiquido",
+					    		     3,
+					    		     $IlabelFaixaValorLiquido,
+					    		     true,
+					    		     'text',
+					    		     1,
+					    		     "onKeyUp='js_validaporcentagem(this);'
+					    		      onchange='js_verificacampos(this.name);'
+					    		      onPaste='js_validapaste(this);'",
 					    		     "pagarperc");
 				    ?>
 				    <strong>%</strong>
@@ -315,7 +315,7 @@ function js_combolista(iTipoFolha) {
  */
 
   function js_validapaste(objeto) {
-	  
+
     return setTimeout(function() {
     	   js_validaporcentagem(objeto);
        }, 5);
@@ -367,7 +367,7 @@ function js_combolista(iTipoFolha) {
  }
 
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_folha','func_folha.php?funcao_js=parent.js_preenchepesquisa|r38_regist','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_folha','func_folha.php?funcao_js=parent.js_preenchepesquisa|r38_regist','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_folha.hide();
@@ -625,7 +625,7 @@ function js_enviardados() {
     return false;
   } else {
 
-	 	js_OpenJanelaIframe(  "top.corpo","db_iframe_selecionaservidores",
+	 	js_OpenJanelaIframe(  "CurrentWindow.corpo","db_iframe_selecionaservidores",
                           "pes4_rhgeracaofolha.php",
                           "Seleção de Servidores",
                           true
@@ -636,20 +636,20 @@ function js_enviardados() {
 }
 
 function js_validaporcentagem(objeto) {
-	
+
   var MENSAGEM      = 'recursoshumanos/pessoal/db_frmrhgeracaofolha.';
   var oRegex        = /^[0-9]+$/;
   var sName         = "";
   var sValueDefault = "";
-  
- if (objeto.name == "pagarperc") { 
+
+ if (objeto.name == "pagarperc") {
    sName = "Faixa Líquida a Pagar (Percentual)";
-   sValueDefault = "100"; 
+   sValueDefault = "100";
  } else {
 	 sName = "Percentual Pago";
 	 sValueDefault = "";
  }
- 	 
+
  if(objeto.value.length == 1 && objeto.value == '0' ){
 
      alert( _M( MENSAGEM + 'zero_invalido', {sCampo: sName}) );
@@ -698,33 +698,33 @@ function js_geraFolha(aMatriculas){
   js_divCarregando( _M( MENSAGEM + 'carregando' ) , 'msgBox');
   var oAjax  = new Ajax.Request(me.sRPC,
                                 {method: 'post',
-                                 parameters: 'json='+Object.toJSON(oParam), 
+                                 parameters: 'json='+Object.toJSON(oParam),
                                  onComplete: function(oAjax) {
 
                                     var oRetorno = eval("("+oAjax.responseText+")");
                                     js_removeObj('msgBox');
-                                    
+
                                     if (oRetorno.status== "2") {
                                       alert(oRetorno.message.urlDecode());
                                     } else {
-                                        
+
                                       if (oRetorno.message != "") {
                                         alert(oRetorno.message.urlDecode());
                                       }
-                                      
+
                                       if (oRetorno.relatorio_inconsistencias && oRetorno.relatorio_inconsistencias != "") {
                                         if (confirm("Deseja emitir o relatório de inconsistencias?")) {
                                       	  jan = window.open(oRetorno.relatorio_inconsistencias,'','width  =' + (screen.availWidth - 5)+',height =' + (screen.availHeight - 40)+',scrollbars=1,location=0');
-                                          jan.moveTo(0, 0);  
-                                        }                                                     
+                                          jan.moveTo(0, 0);
+                                        }
                                       }
-                                    
+
                                       location.href = "pes4_rhgeracaofolha001.php";
-                                      
+
                                     }
-                                  
+
                                  }
-  
+
                                 })
 }
 

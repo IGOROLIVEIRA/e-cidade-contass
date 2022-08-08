@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: orcamento
@@ -42,7 +42,7 @@ $cliframe_seleciona = new cl_iframe_seleciona;
     <td nowrap title="<?=@$To49_codsup?>">
        <? db_ancora(@$Lo39_codproj,"js_pesquisao39_codproj(true);",$db_opcao);   ?>
     </td>
-    <td> 
+    <td>
        <? db_input('o39_codproj',4,'',true,'text',3,'') ?>
        <? db_input('o39_descr',60,'',true,'text',3,'')      ?>
     </td>
@@ -51,7 +51,7 @@ $cliframe_seleciona = new cl_iframe_seleciona;
     <td nowrap title="<?=@$To49_data?>">
        <?=@$Lo49_data?>
     </td>
-    <td> 
+    <td>
        <? db_inputdata('o49_data',@$o49_data_dia,@$o49_data_mes,@$o49_data_ano,true,'text',$db_opcao,"") ?>
     </td>
   </tr>
@@ -59,13 +59,13 @@ $cliframe_seleciona = new cl_iframe_seleciona;
 
 
   <td nowrap><b> Processar Projeto </b></td>
-    <td> 
+    <td>
      <input type='checkbox' name='processa_projeto' id='processa_projeto'>
        <i> * Processa todas as suplementações e fecha o projeto </i>
      <br>
     </td>
   </tr>
-  
+
   <!--  -->
   <tr>
    <td colspan=2 align=center>
@@ -77,7 +77,7 @@ $cliframe_seleciona = new cl_iframe_seleciona;
    </td>
    </tr>
   <!--  -->
- 
+
    </table>
   </center>
 
@@ -90,19 +90,19 @@ $cliframe_seleciona = new cl_iframe_seleciona;
 <script>
 
 
-function js_processa(){   
+function js_processa(){
   obj = document.form1;
   if (obj.o49_data_dia.value!='' && obj.o49_data_mes.value!='' && obj.o49_data_ano.value!='' ){
       js_gera_chaves();
       document.form1.submit();
-  } else { 
+  } else {
       alert('Preencha a Data !');
-  }    
+  }
 
-}  
+}
 function js_pesquisao39_codproj(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_orcprojeto','func_orcprojeto_np.php?funcao_js=parent.js_mostraprojeto|o39_codproj','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_orcprojeto','func_orcprojeto_np.php?funcao_js=parent.js_mostraprojeto|o39_codproj','Pesquisa',true);
   }
 }
 function js_mostraprojeto(chave,erro){
@@ -124,7 +124,7 @@ function js_initGrid() {
   }
 }
 function js_getSuplementacoesProjeto() {
-  
+
   var oParam         = new Object();
   oParam.iProjeto    = $F('o39_codproj');
   oParam.exec        = 'getSuplementacoesProjeto';
@@ -135,20 +135,20 @@ function js_getSuplementacoesProjeto() {
                                         method:'post',
                                         parameters:'json='+Object.toJSON(oParam),
                                         onComplete:js_retornoGetSuplementacoesProjeto
-                                        } 
+                                        }
                                        );
 }
 
 function js_retornoGetSuplementacoesProjeto(oAjax) {
-  
+
   js_removeObj('msgBox');
   var oRetorno = eval('('+oAjax.responseText+")");
   oGridSuplementacoes.clearAll(true);
   for (var i = 0; i < oRetorno.itens.length; i++) {
-    
+
     with (oRetorno.itens[i]) {
-      
-      var aLinha = new Array();  
+
+      var aLinha = new Array();
       aLinha[0]  = codigo;
       aLinha[1]  = tipo;
       aLinha[2]  = descricaotipo.urlDecode();
@@ -168,10 +168,10 @@ function js_processarSuplementacao() {
   oParam.dataprocessamento = $F('o49_data');
   oParam.lFecharProcesso   = $('processa_projeto').checked;
   if (oParam.lFecharProcesso) {
-  
+
     if (!confirm('Confirmar o processamento de todas as suplementações do Decreto?')) {
       return false;
-    } 
+    }
     oGridSuplementacoes.selectAll('mtodositensgridSuplementacoes',
                                   'checkboxgridSuplementacoes',
                                   'gridSuplementacoesrowgridSuplementacoes'
@@ -180,11 +180,11 @@ function js_processarSuplementacao() {
   oParam.aSuplementacoes   = new Array();
   var aSuplementacoes      = oGridSuplementacoes.getSelection('object');
   if (aSuplementacoes.length == 0) {
-  
+
     alert('nenhuma Suplementação foi Selecionada!');
     return false;
   }
-  
+
   aSuplementacoes.each(function(oSup, id) {
     oParam.aSuplementacoes.push(oSup.aCells[0].getValue());
   });
@@ -195,22 +195,22 @@ function js_processarSuplementacao() {
                                         method:'post',
                                         parameters:'json='+Object.toJSON(oParam),
                                         onComplete:js_retornoProcessarSuplementacao
-                                        } 
+                                        }
                                        );
 }
 
 function js_retornoProcessarSuplementacao(oAjax) {
-  
+
   js_removeObj('msgBox');
   var oRetorno = eval("("+oAjax.responseText+")");
   if (oRetorno.status == 1) {
-    
+
     alert('Suplementação(ões) processadas com sucesso.');
     js_getSuplementacoesProjeto();
-    
+
   } else {
     alert(oRetorno.message.urlDecode());
   }
-} 
+}
 js_initGrid();
 </script>

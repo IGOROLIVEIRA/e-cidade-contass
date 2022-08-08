@@ -166,8 +166,8 @@ if (isset($ve01_anomod) && $ve01_anomod==null){
 		
       if ($sqlerro == false){
         $ve01_codigo       = $clveiculos->ve01_codigo;
-        $vetor_comb        = split(",",$cod_comb);
-        $vetor_comb_padrao = split(",",$comb_padrao);
+        $vetor_comb        = explode(",",$cod_comb);
+        $vetor_comb_padrao = explode(",",$comb_padrao);
 
         $inc_comb          = array(array("ve06_veiculos","ve06_veiccadcomb","ve06_padrao"));
         $inc_contador      = 0;

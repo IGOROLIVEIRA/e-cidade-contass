@@ -205,7 +205,7 @@ $cllicobrasituacao->rotulo->label();
 </form>
 <script>
   function js_pesquisa(){
-    js_OpenJanelaIframe('top.corpo','db_iframe_licobrasituacao2','func_licobrasituacao.php?funcao_js=parent.js_preenchepesquisa|obr02_sequencial','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_licobrasituacao2','func_licobrasituacao.php?funcao_js=parent.js_preenchepesquisa|obr02_sequencial','Pesquisa',true);
   }
   function js_preenchepesquisa(chave){
     db_iframe_licobrasituacao2.hide();
@@ -226,7 +226,7 @@ $cllicobrasituacao->rotulo->label();
   function js_pesquisa_obra(mostra){
     if(mostra==true){
 
-      js_OpenJanelaIframe('top.corpo',
+      js_OpenJanelaIframe('CurrentWindow.corpo',
         'db_iframe_licobrasituacao',
         'func_licobras.php?pesquisa=true&funcao_js=parent.js_preencheObra|obr01_sequencial|l20_edital|l20_numero|l03_descr|obr01_numeroobra',
         'Pesquisa Obras',true);
@@ -234,7 +234,7 @@ $cllicobrasituacao->rotulo->label();
 
       if(document.form1.obr02_seqobra.value != ''){
 
-        js_OpenJanelaIframe('top.corpo',
+        js_OpenJanelaIframe('CurrentWindow.corpo',
           'db_iframe_licobrasituacao',
           'func_licobras.php?pesquisa=true&pesquisa_chave='+
           document.form1.obr02_seqobra.value+'&funcao_js=parent.js_preencheObra2',

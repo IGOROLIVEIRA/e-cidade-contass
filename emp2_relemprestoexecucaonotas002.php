@@ -110,7 +110,7 @@ function cabecalho(&$pdf, &$troca)
 
 }
 
-$xinstit = split("-", $db_selinstit);
+$xinstit = explode("-", $db_selinstit);
 $resultinst = pg_exec("select codigo,nomeinstabrev from db_config where codigo in (" . str_replace('-', ', ', $db_selinstit) . ") ");
 $descr_inst = '';
 $xvirg = '';
@@ -236,7 +236,7 @@ $dtini = $dtini_ano . "-" . $dtini_mes. "-" . $dtini_dia;
 $dtfim = $dtfim_ano . "-" . $dtfim_mes . "-" . $dtfim_dia;
 
 //filtro por agrupamento
-$arr_tipos = split(",",$vertipos);
+$arr_tipos = explode(",",$vertipos);
 $ultimo = count($arr_tipos)-1;
 $sql_order = "";
 $arr_vcampo;

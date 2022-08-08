@@ -130,13 +130,13 @@ function js_copiacampo() {
 function js_solicitade(mostra) {
 
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo',
+    js_OpenJanelaIframe('CurrentWindow.corpo',
                         'db_iframe_solicita',
                         'func_solicitamanutencaoreserva.php?funcao_js=parent.js_mostrasolicitade1|'+
                         'pc10_numero&param_depart=<?=db_getsession("DB_coddepto")?>&anuladas=1&dotacoes=true','Pesquisa',true);
   }else{
      if(document.form1.pc10_numerode.value != ''){
-        js_OpenJanelaIframe('top.corpo',
+        js_OpenJanelaIframe('CurrentWindow.corpo',
                             'db_iframe_solicita',
                             'func_solicitamanutencaoreserva.php?pesquisa_chave='+document.form1.pc10_numerode.value+
                             '&funcao_js=parent.js_mostrasolicitade&param_depart=<?=db_getsession("DB_coddepto")?>&anuladas=1&dotacoes=true',
@@ -165,7 +165,7 @@ function js_mostrasolicitade1(chave1,x) {
 function js_solicitaate(mostra){
 
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo',
+    js_OpenJanelaIframe('CurrentWindow.corpo',
                         'db_iframe_solicitaate',
                         'func_solicita.php?funcao_js=parent.js_mostrasolicitaate1|'+
                         'pc10_numero&param_depart=<?=db_getsession("DB_coddepto")?>',
@@ -174,7 +174,7 @@ function js_solicitaate(mostra){
 
      if (document.form1.pc10_numeroate.value != '') {
 
-        js_OpenJanelaIframe('top.corpo',
+        js_OpenJanelaIframe('CurrentWindow.corpo',
                             'db_iframe_solicitaate',
                             'func_solicita.php?pesquisa_chave='+
                             document.form1.pc10_numeroate.value+

@@ -53,7 +53,7 @@ $clconrelinfo      = new cl_conrelinfo;
 $clconrelvalor     = new cl_conrelvalor;
 $oOrcParamRelopcre = new cl_orcparamrelopcre;
 
-$xinstit = split("-",$db_selinstit);
+$xinstit = explode("-",$db_selinstit);
 $resultinst = pg_exec("select codigo,munic,nomeinst,nomeinstabrev from db_config where codigo in (".str_replace('-',', ',$db_selinstit).") ");
 $descr_inst = '';
 $xvirg = '';
@@ -109,7 +109,7 @@ $dt               = data_periodo($anousu,$periodo); // no dbforms/db_funcoes.php
 $dt_ini           = "{$anousu}-01-01";  // data inicial do periodo
 $dt_fim           = $dt[1];  // data final do período
 
-$dt = split('-',$dt_fim);  // mktime -- (mes,caddia,ano)
+$dt = explode('-',$dt_fim);  // mktime -- (mes,caddia,ano)
 $dt_ini_ant = date('Y-m-d',mktime(0,0,0,$dt[1]+1,"01",$anousu_ant));
 $dt_fim_ant = $anousu_ant.'-12-31';
 

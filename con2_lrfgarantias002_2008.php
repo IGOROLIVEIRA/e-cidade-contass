@@ -52,7 +52,7 @@ include_once("classes/db_conrelvalor_classe.php");
 $clconrelinfo  = new cl_conrelinfo;
 $clconrelvalor = new cl_conrelvalor;
 
-$xinstit = split("-",$db_selinstit);
+$xinstit = explode("-",$db_selinstit);
 $resultinst = pg_exec("select munic from db_config where codigo in (".str_replace('-',', ',$db_selinstit).") ");
 $lTem1Quad = false;
 $lTem2Quad = false;
@@ -82,7 +82,7 @@ $dDataFim3Q   = "{$anousu}-12-21";
 $dt_ini_ant   = $anousu_ant."-01-01";
 $dt_fim_ant   = $anousu_ant."-12-31";
 $mes_ini      = "JANEIRO";
-$dt           = split("-",$dt_fim);
+$dt           = explode("-",$dt_fim);
 $mes_fim      = db_mes($dt[1],1);
 $head6        = $mes_ini." A ".$mes_fim." DE ".$anousu;
 //******************************************************************
@@ -386,17 +386,17 @@ $valor3[6]    = $valor3[0] + $valor3[3];
 ///////////////////////////////////////////////////////////////////////////////////////////
 //                                 receita corrente liquida.
 //////////////////////////////////////////////////////////////////////////////////////////
-$dt = split("-",$dt_ini);
+$dt = explode("-",$dt_ini);
 $dt_ini_ant = $anousu_ant."-01-01";
 $dt_fim_ant = $anousu_ant."-12-31";
 
 // se o ano atual é bissexto deve subtrair 366 somente se a data for superior a 28/02/200X
-$dt = split('-',$dt_fim);  // mktime -- (mes,dia,ano)
+$dt = explode('-',$dt_fim);  // mktime -- (mes,dia,ano)
 $dt_ini_ant2 = $anousu_ant."-01-01";
 $dt_fim_ant2 = $anousu_ant."-12-31";  
 
 // receita 
-$dt3 = split("-",$dt_ini);
+$dt3 = explode("-",$dt_ini);
 $mes = $dt3[1];
 if ($mes == 12){
   $mes  = 11;

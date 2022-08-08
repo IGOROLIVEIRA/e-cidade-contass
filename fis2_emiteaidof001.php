@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -47,7 +47,7 @@ $clrotulo->label("y08_codigo");
 <script>
 function js_emite(){
   if (document.form1.y08_codigo.value!=""){
-    js_OpenJanelaIframe('top.corpo','db_iframe_aidof','func_aidof.php?pesquisa_chave='+document.form1.y08_codigo.value+'&funcao_js=parent.js_testacod','Pesquisa',false);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_aidof','func_aidof.php?pesquisa_chave='+document.form1.y08_codigo.value+'&funcao_js=parent.js_testacod','Pesquisa',false);
   }else{
   alert("Campo vazio!!");
   document.form1.y08_codigo.focus();
@@ -63,7 +63,7 @@ function js_testacod(cod,erro){
     jan.moveTo(0,0);
   }
 }
-</script>  
+</script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" bgcolor="#cccccc">
@@ -82,7 +82,7 @@ function js_testacod(cod,erro){
          <td >&nbsp;</td>
          <td >&nbsp;</td>
       </tr>
-  <tr> 
+  <tr>
     <td  align="left" nowrap title="<?=$Ty08_codigo?>">
     <?db_ancora(@$Ly08_codigo,"js_pesquisa_aidof(true);",1);?></td>
     <td align="left" nowrap>
@@ -94,7 +94,7 @@ function js_testacod(cod,erro){
         <td >&nbsp;</td>
       </tr>
       <tr>
-        <td colspan="2" align = "center"> 
+        <td colspan="2" align = "center">
           <input  name="emite2" id="emite2" type="button" value="Processar" onclick="js_emite();" >
         </td>
       </tr>
@@ -111,24 +111,24 @@ function js_testacod(cod,erro){
 
 function js_pesquisa_aidof(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_aidof','func_aidof.php?funcao_js=parent.js_mostraaidof1|y08_codigo','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_aidof','func_aidof.php?funcao_js=parent.js_mostraaidof1|y08_codigo','Pesquisa',true);
   }else{
-     if(document.form1.y08_codigo.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_aidof','func_aidof.php?pesquisa_chave='+document.form1.y08_codigo.value+'&funcao_js=parent.js_mostraaidof','Pesquisa',false);
+     if(document.form1.y08_codigo.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_aidof','func_aidof.php?pesquisa_chave='+document.form1.y08_codigo.value+'&funcao_js=parent.js_mostraaidof','Pesquisa',false);
      }else{
-       document.form1.y08_codigo.value = ''; 
+       document.form1.y08_codigo.value = '';
      }
   }
 }
 function js_mostraaidof(chave,erro){
-  document.form1.y08_codigo.value = chave; 
-  if(erro==true){ 
-    document.form1.y08_codigo.value = ''; 
-    document.form1.y08_codigo.focus(); 
+  document.form1.y08_codigo.value = chave;
+  if(erro==true){
+    document.form1.y08_codigo.value = '';
+    document.form1.y08_codigo.focus();
   }
 }
 function js_mostraaidof1(chave1){
-   document.form1.y08_codigo.value = chave1;  
+   document.form1.y08_codigo.value = chave1;
    db_iframe_aidof.hide();
 }
 </script>
@@ -136,7 +136,7 @@ function js_mostraaidof1(chave1){
 if(isset($ordem)){
   echo "<script>
        js_emite();
-       </script>";  
+       </script>";
 }
 $func_iframe = new janela('db_iframe','');
 $func_iframe->posX=1;

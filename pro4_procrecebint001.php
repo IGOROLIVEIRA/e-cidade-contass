@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -55,7 +55,7 @@ $clrotulo->label("nome");
 db_postmemory($HTTP_POST_VARS);
 /*
 if (isset($incluir)){
-  
+
   db_inicio_transacao();
   $sqlerro=false;
   $data= date("Y-m-d",db_getsession("DB_datausu"));
@@ -68,10 +68,10 @@ if (isset($incluir)){
   if ($clproctransferint->erro_status==0){
     db_msgbox("Erro - 11");
     $sqlerro=true;
-  } 
-  
+  }
+
   $codigo = $clproctransferint->p88_codigo;
-  
+
   if ($sqlerro==false){
     $clproctransferintusu->p89_codtransferint=$codigo;
     $clproctransferintusu->p89_usuario=$p89_usuario ;
@@ -80,17 +80,17 @@ if (isset($incluir)){
     if ($clproctransferintusu->erro_status==0){
     db_msgbox("Erro - 21");
       $sqlerro=true;
-    } 
+    }
   }
   if ($sqlerro==false){
-  
+
   $vt=$HTTP_POST_VARS;
   $ta=sizeof($vt);
   reset($vt);
   for($i=0; $i<$ta; $i++){
     $chave=key($vt);
     if(substr($chave,0,5)=="CHECK"){
-      $dados=split("_",$chave); 
+      $dados=split("_",$chave);
       $result1=$clprotprocesso->sql_record($clprotprocesso->sql_query_file($dados[1],"p58_codandam"));
       db_fieldsmemory($result1,0);
       $clproctransferintand->p87_codtransferint=$codigo;
@@ -99,7 +99,7 @@ if (isset($incluir)){
       $erro_msg = $clproctransferintand->erro_msg;
       if ($clproctransferintand->erro_status==0){
 	$sqlerro=true;
-      } 
+      }
     }
     $proximo=next($vt);
   }
@@ -114,26 +114,26 @@ if (isset($incluir)){
 <meta http-equiv="Expires" CONTENT="0">
 <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
 <script>
-function js_marca(obj){ 
+function js_marca(obj){
    var OBJ = document.form1;
    for(i=0;i<OBJ.length;i++){
      if(OBJ.elements[i].type == 'checkbox'){
-       OBJ.elements[i].checked = !(OBJ.elements[i].checked == true);            
+       OBJ.elements[i].checked = !(OBJ.elements[i].checked == true);
      }
    }
    return false;
 }
-</script>  
+</script>
 <style>
 .cabec {
 text-align: center;
 color: darkblue;
-background-color:#aacccc;       
+background-color:#aacccc;
 border-color: darkblue;
 }
 .corpo {
 color: black;
-background-color:#ccddcc;       
+background-color:#ccddcc;
 }
 </style>
 <link href="estilos.css" rel="stylesheet" type="text/css">
@@ -162,7 +162,7 @@ background-color:#ccddcc;
   <?   $usuario = db_getsession("DB_id_usuario");
        $result=($clproctransferint->sql_query(null,"p88_codigo,p88_data,p88_hora,p88_usuario,atual.id_usuario as usu_atual",null,"p89_usuario = $usuario "));
        $numrows=$clproctransferint->numrows;
-       if($numrows>0){ 
+       if($numrows>0){
           echo "
 	  <br><br>
 	  <table>
@@ -174,7 +174,7 @@ background-color:#ccddcc;
 	     <td class='cabec' align='center'  title='$Tp88_usuario'>".str_replace(":","",$Lp88_usuario)."</td>
 	     <td class='cabec' align='center'  title='$Tp88_usuario'>".str_replace(":","",$Lp88_usuario)."</td>
 	   </tr>
-          "; 	   
+          ";
        }else{
          echo "<br><br><b>Sem Transferências Internas!!</b>";
        }
@@ -195,8 +195,8 @@ background-color:#ccddcc;
 	 }
        }
 	 echo"
-	   </table>";	        
-       
+	   </table>";
+
 
   ?>
   </td>
@@ -204,7 +204,7 @@ background-color:#ccddcc;
   </table>
   </form>
 </center>
-<? 
+<?
 
 db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
 
@@ -213,8 +213,8 @@ if (isset($incluir)){
     if($sqlerro==true){
       echo "<script> document.form1.".$clproctransferint->erro_campo.".style.backgroundColor='#99A9AE';</script>";
       echo "<script> document.form1.".$clproctransferint->erro_campo.".focus();</script>";
-    }else{ 
-      echo"<script>top.corpo.location.href='pro4_tranferinter001.php';</script>";
+    }else{
+      echo"<script>CurrentWindow.corpo.location.href='pro4_tranferinter001.php';</script>";
     }
 }
 

@@ -18,20 +18,20 @@ if(isset($excluir)){
   $clempcontratos->excluir(null,'si173_codcontrato = '.$si172_sequencial);
   if($clempcontratos->erro_status==0){
     $sqlerro=true;
-  } 
-  $erro_msg = $clempcontratos->erro_msg; 
+  }
+  $erro_msg = $clempcontratos->erro_msg;
   $clcontratos->excluir($si172_sequencial);
   if($clcontratos->erro_status==0){
     $sqlerro=true;
-  } 
-  $erro_msg = $clcontratos->erro_msg; 
+  }
+  $erro_msg = $clcontratos->erro_msg;
   db_fim_transacao($sqlerro);
    $db_opcao = 3;
    $db_botao = true;
 }else if(isset($chavepesquisa)){
    $db_opcao = 3;
    $db_botao = true;
-   $result = $clcontratos->sql_record($clcontratos->sql_query_file($chavepesquisa)); 
+   $result = $clcontratos->sql_record($clcontratos->sql_query_file($chavepesquisa));
    db_fieldsmemory($result,0);
 }
 ?>
@@ -80,7 +80,7 @@ if(isset($chavepesquisa)){
   <script>
       function js_db_libera(){
          parent.document.formaba.empcontratos.disabled=false;
-         top.corpo.iframe_empcontratos.location.href='sic1_empcontratos001.php?db_opcaoal=33&si173_codcontrato=".@$si172_sequencial."';
+         CurrentWindow.corpo.iframe_empcontratos.location.href='sic1_empcontratos001.php?db_opcaoal=33&si173_codcontrato=".@$si172_sequencial."';
      ";
          if(isset($liberaaba)){
            echo "  parent.mo_camada('empcontratos');";

@@ -3,21 +3,11 @@
 DBGrid.prototype.setPesquisa = function (iColunaPesquisa) {
 
   /**
-   * Carrega os dados da TreeView
-   */
-//  var oEstiloDBTreeview      = document.createElement("link");
-//      oEstiloDBTreeview.href = "estilos/dbtreeview.style.css";
-//      oEstiloDBTreeview.rel  = "stylesheet";
-//      oEstiloDBTreeview.type = "text/css";
-//      document.getElementsByTagName("head")[0].appendChild(oEstiloDBTreeview);
-//
-  /**
    * Criando Variaveis de Referencia
    */
   var __parent                                = this;
   this.oPesquisa                              = new Object();
   var __this                                  = this.oPesquisa;
-  //var aLinhaGrid                              = __parent.aRows;
 
   /**
    * Criando DIV Principal
@@ -69,12 +59,15 @@ DBGrid.prototype.setPesquisa = function (iColunaPesquisa) {
 
     if (eEvento.which == 13) {
       __parent.oPesquisa.buscarDados();
+      eEvento.preventDefault();
     }
   });
 
-  __this.oInputPesquisa.observe("change", function (event) {
+  __this.oInputPesquisa.observe("blur", function (event) {
     __parent.oPesquisa.buscarDados();
+    eEvento.preventDefault();
   });
+
 
 
 /////////////////////////// Métodos \\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -99,11 +92,9 @@ DBGrid.prototype.setPesquisa = function (iColunaPesquisa) {
         iCountRows++;
 
       }
-    }
+  }
 
     __parent.setNumRows(iCountRows)
 
   }
-
-
 }

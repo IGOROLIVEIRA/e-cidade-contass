@@ -268,10 +268,10 @@ if(isset($l20_codigo)){
 
     function js_pesquisa(ratificacao=false){
         if(ratificacao) {
-            js_OpenJanelaIframe('top.corpo','db_iframe_publicratificacao',
+            js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_publicratificacao',
                 'func_liclicita.php?credenciamento=true&situacao=10&ratificacao=true&dispensas=true&ocultacampos=true&funcao_js=parent.js_preenchepesquisa|l20_codigo|l20_objeto|tipocomtribunal','Pesquisa',true);
         }else {
-            js_OpenJanelaIframe('top.corpo','db_iframe_publicratificacao',
+            js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_publicratificacao',
                 'func_liclicita.php?credenciamento=true&situacao=1&ratificacao=false&dispensas=true&ocultacampos=true&funcao_js=parent.js_preenchepesquisa|l20_codigo','Pesquisa',true);
         }
     }
@@ -332,11 +332,11 @@ if(isset($l20_codigo)){
      */
     function js_pesquisaLicitacao(mostra){
         if(mostra==true){
-            js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_liclicita.php?credenciamento=true'+(db_opcao == 1 ? '&situacao=1&ratificacao=false' : '&situacao=10&ratificacao=true')+
+            js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_liclicita','func_liclicita.php?credenciamento=true'+(db_opcao == 1 ? '&situacao=1&ratificacao=false' : '&situacao=10&ratificacao=true')+
             '+&dispensas=true&ocultacampos=true&funcao_js=parent.js_mostraliclicita1|l20_codigo|l20_objeto|tipocomtribunal','Pesquisa',true);
         }else{
             if(document.form1.l20_codigo.value != ''){
-                js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_liclicita.php?credenciamento=true'+
+                js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_liclicita','func_liclicita.php?credenciamento=true'+
                     (db_opcao == 1 ? '&situacao=1' : '&situacao=10')+
                     '&enviada=true&pesquisa_chave='+document.form1.l20_codigo.value+'&tipoproc=true&dispensas=true&ocultacampos=true&funcao_js=parent.js_mostraliclicita','Pesquisa',false);
             }else{

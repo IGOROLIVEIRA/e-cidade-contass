@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: issqn
@@ -48,7 +48,7 @@ db_input('cod_duplic',5,"",true,'hidden',3);
 // este campo sera preenchido apenas quando o sistema incluir um registro e for para alteração
 ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('q92_codigo',10,$Iq92_codigo,true,'text',3)
 ?>
@@ -58,7 +58,7 @@ db_input('q92_codigo',10,$Iq92_codigo,true,'text',3)
     <td nowrap title="<?=@$Tq92_descr?>">
        <?=@$Lq92_descr?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('q92_descr',54,$Iq92_descr,true,'text',$db_opcao,"")
 ?>
@@ -70,7 +70,7 @@ db_input('q92_descr',54,$Iq92_descr,true,'text',$db_opcao,"")
        db_ancora(@$Lcodbco,"js_banco(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('k15_codigo',10,$Ik15_codigo,true,'text',$db_opcao," onchange='js_banco(false);'","","E6E4F1")
 ?>
@@ -85,7 +85,7 @@ db_input('nomebco',40,$Inomebco,true,'text',3,'',"","E6E4F1")
        db_ancora(@$Lq92_tipo,"js_pesquisaq92_tipo(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('q92_tipo',10,$Iq92_tipo,true,'text',$db_opcao," onchange='js_pesquisaq92_tipo(false);'")
 ?>
@@ -100,7 +100,7 @@ db_input('k00_descr',40,$Ik00_descr,true,'text',3,'')
        db_ancora(@$Lq92_hist,"js_pesquisaq92_hist(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('q92_hist',10,$Iq92_hist,true,'text',$db_opcao," onchange='js_pesquisaq92_hist(false);'")
 ?>
@@ -114,7 +114,7 @@ db_input('k01_descr',40,$Ik01_descr,true,'text',3,'')
     <td nowrap title="<?=@$Tq92_vlrminimo?>">
        <?=$Lq92_vlrminimo?>
     </td>
-    <td> 
+    <td>
       <?
         db_input('q92_vlrminimo',10,$Iq92_vlrminimo,true,'text',$db_opcao,'');
       ?>
@@ -125,7 +125,7 @@ db_input('k01_descr',40,$Ik01_descr,true,'text',3,'')
     <td nowrap title="<?=@$Tq92_formacalcparcvenc?>">
        <?=$Lq92_formacalcparcvenc?>
     </td>
-    <td> 
+    <td>
       <?
         $xw = array(
                      '1'=>"Calcula todas parcelas vencidas",
@@ -142,9 +142,9 @@ db_input('k01_descr',40,$Ik01_descr,true,'text',3,'')
        <?
        db_ancora(@$Lq92_diasvcto,"",3);
        ?>
-		
-    </td> 
-    <td> 
+
+    </td>
+    <td>
 			<?
 			db_input('q92_diasvcto',10,$Iq92_diasvcto,true,'text',$db_opcao,"")
 			?>
@@ -168,17 +168,17 @@ if ($db_opcao==1){
 <script>
 function js_banco(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_cadvencdesc','db_iframe_banco','func_cadban.php?funcao_js=parent.js_mostrabanco1|k15_codigo|z01_nome','Pesquisa',true,0);
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_cadvencdesc','db_iframe_banco','func_cadban.php?funcao_js=parent.js_mostrabanco1|k15_codigo|z01_nome','Pesquisa',true,0);
   }else{
-    js_OpenJanelaIframe('top.corpo.iframe_cadvencdesc','db_iframe_banco','func_cadban.php?pesquisa_chave='+document.form1.k15_codigo.value+'&funcao_js=parent.js_mostrabanco','Pesquisa',false,0);
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_cadvencdesc','db_iframe_banco','func_cadban.php?pesquisa_chave='+document.form1.k15_codigo.value+'&funcao_js=parent.js_mostrabanco','Pesquisa',false,0);
   }
 }
 function js_mostrabanco(chave,erro){
   document.form1.nomebco.value = chave;
 
-  if(erro==true){ 
-    document.form1.k15_codigo.focus(); 
-    document.form1.k15_codigo.value = ''; 
+  if(erro==true){
+    document.form1.k15_codigo.focus();
+    document.form1.k15_codigo.value = '';
   }
 }
 function js_mostrabanco1(chave1,chave2){
@@ -188,16 +188,16 @@ function js_mostrabanco1(chave1,chave2){
 }
 function js_pesquisaq92_tipo(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_cadvencdesc','db_iframe_arretipo','func_arretipo.php?funcao_js=parent.js_mostraarretipo1|k00_tipo|k00_descr','Pesquisa',true,0);
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_cadvencdesc','db_iframe_arretipo','func_arretipo.php?funcao_js=parent.js_mostraarretipo1|k00_tipo|k00_descr','Pesquisa',true,0);
   }else{
-    js_OpenJanelaIframe('top.corpo.iframe_cadvencdesc','db_iframe_arretipo','func_arretipo.php?pesquisa_chave='+document.form1.q92_tipo.value+'&funcao_js=parent.js_mostraarretipo','Pesquisa',false,0);
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_cadvencdesc','db_iframe_arretipo','func_arretipo.php?pesquisa_chave='+document.form1.q92_tipo.value+'&funcao_js=parent.js_mostraarretipo','Pesquisa',false,0);
   }
 }
 function js_mostraarretipo(chave,erro){
-  document.form1.k00_descr.value = chave; 
-  if(erro==true){ 
-    document.form1.q92_tipo.focus(); 
-    document.form1.q92_tipo.value = ''; 
+  document.form1.k00_descr.value = chave;
+  if(erro==true){
+    document.form1.q92_tipo.focus();
+    document.form1.q92_tipo.value = '';
   }
 }
 function js_mostraarretipo1(chave1,chave2){
@@ -207,16 +207,16 @@ function js_mostraarretipo1(chave1,chave2){
 }
 function js_pesquisaq92_hist(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_cadvencdesc','db_iframe_histcalc','func_histcalc.php?funcao_js=parent.js_mostrahistcalc1|k01_codigo|k01_descr','Pesquisa',true,0);
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_cadvencdesc','db_iframe_histcalc','func_histcalc.php?funcao_js=parent.js_mostrahistcalc1|k01_codigo|k01_descr','Pesquisa',true,0);
   }else{
-    js_OpenJanelaIframe('top.corpo.iframe_cadvencdesc','db_iframe_histcalc','func_histcalc.php?pesquisa_chave='+document.form1.q92_hist.value+'&funcao_js=parent.js_mostrahistcalc','Pesquisa',false,0);
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_cadvencdesc','db_iframe_histcalc','func_histcalc.php?pesquisa_chave='+document.form1.q92_hist.value+'&funcao_js=parent.js_mostrahistcalc','Pesquisa',false,0);
   }
 }
 function js_mostrahistcalc(chave,erro){
-  document.form1.k01_descr.value = chave; 
-  if(erro==true){ 
-    document.form1.q92_hist.focus(); 
-    document.form1.q92_hist.value = ''; 
+  document.form1.k01_descr.value = chave;
+  if(erro==true){
+    document.form1.q92_hist.focus();
+    document.form1.q92_hist.value = '';
   }
 }
 function js_mostrahistcalc1(chave1,chave2){
@@ -225,7 +225,7 @@ function js_mostrahistcalc1(chave1,chave2){
   db_iframe_histcalc.hide();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo.iframe_cadvencdesc','db_iframe_cadvencdesc','func_cadvencdesc.php?funcao_js=parent.js_preenchepesquisa|q92_codigo','Pesquisa',true,0);
+  js_OpenJanelaIframe('CurrentWindow.corpo.iframe_cadvencdesc','db_iframe_cadvencdesc','func_cadvencdesc.php?funcao_js=parent.js_preenchepesquisa|q92_codigo','Pesquisa',true,0);
 }
 function js_preenchepesquisa(chave){
   db_iframe_cadvencdesc.hide();
@@ -236,7 +236,7 @@ function js_preenchepesquisa(chave){
   ?>
 }
 function js_pesquisavenc(){
-	js_OpenJanelaIframe('top.corpo.iframe_cadvencdesc','db_iframe_cadvencdesc','func_cadvencdesc.php?funcao_js=parent.js_duplic|q92_codigo|q92_descr|q92_vlrminimo','Pesquisa',true,0);
+	js_OpenJanelaIframe('CurrentWindow.corpo.iframe_cadvencdesc','db_iframe_cadvencdesc','func_cadvencdesc.php?funcao_js=parent.js_duplic|q92_codigo|q92_descr|q92_vlrminimo','Pesquisa',true,0);
 }
 function js_duplic(cod,descr,valor){
     db_iframe_cadvencdesc.hide();

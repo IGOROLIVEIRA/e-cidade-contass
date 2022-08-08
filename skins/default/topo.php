@@ -38,7 +38,7 @@
 
   function js_criaDIV() {
 
-    var camada = top.topo.document.createElement("DIV");
+    var camada = CurrentWindow.topo.document.createElement("DIV");
     camada.setAttribute("id","info");
     camada.setAttribute("align","center");
     camada.style.position             = "absolute";
@@ -72,13 +72,13 @@
 
     camada.innerHTML = sTabelaInformacoes;
 
-    top.topo.document.body.appendChild(camada);
+    CurrentWindow.topo.document.body.appendChild(camada);
   }
 
   function js_remDIV() {
 
-    if(top.topo.document.getElementById("info")){
-      top.topo.document.body.removeChild(top.topo.document.getElementById("info"));
+    if(CurrentWindow.topo.document.getElementById("info")){
+      CurrentWindow.topo.document.body.removeChild(CurrentWindow.topo.document.getElementById("info"));
     }
   }
 
@@ -97,10 +97,10 @@
   function js_minimizaTopo(){
 
     var frameQuadroPrincial = parent.document.getElementById("quadroprincipal");
-    var bTopo               = top.topo.document.getElementById("bTopo");
-    var controllerPull      = top.topo.document.getElementById("controllerPull");
-    var logoPrefeitura      = top.topo.document.getElementById("logoPrefeitura");
-    var mostraPreferencias  = top.topo.document.getElementById("mostraPreferencias");
+    var bTopo               = CurrentWindow.topo.document.getElementById("bTopo");
+    var controllerPull      = CurrentWindow.topo.document.getElementById("controllerPull");
+    var logoPrefeitura      = CurrentWindow.topo.document.getElementById("logoPrefeitura");
+    var mostraPreferencias  = CurrentWindow.topo.document.getElementById("mostraPreferencias");
 
     if( frameQuadroPrincial.rows == '15,*,19' ){
 

@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require ("libs/db_stdlib.php");
@@ -60,7 +60,7 @@ $clrotulo->label("e60_codemp");
 $clrotulo->label("pc01_descrmater");
 $clrotulo->label("e62_descr");
 $clrotulo->label("e70_valor");
-    
+
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
 
@@ -103,7 +103,7 @@ $numdec = 2;
   border-right-color: <?=$cor?>;
   border-bottom-color: <?=$cor?>;
   background-color: #999999;
-  */	 
+  */
 }
 <?//$cor="999999"?>
 .bordas_corp{
@@ -120,13 +120,13 @@ $numdec = 2;
 }
 </style>
 </head>
-<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onload="parent.js_calcalancar();" > 
+<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onload="parent.js_calcalancar();" >
 <table  border="0" cellspacing="0" cellpadding="0" width='100%'>
-<tr> 
-<td  align="left" valign="top" bgcolor="#CCCCCC"> 
+<tr>
+<td  align="left" valign="top" bgcolor="#CCCCCC">
 <form name='form1' >
 <center>
-<table border='0' >   
+<table border='0' >
 
 <?
 
@@ -160,14 +160,14 @@ if (isset ($m51_codordem) && $m51_codordem != "") {
   echo "</tr>";
   for ($i = 0; $i < $numrows; $i ++) {
     db_fieldsmemory($result, $i);
-    
+
     $e62_descr = str_replace(chr(10), " ", $e62_descr);
-    
+
     $valortotal = db_formatar($m52_valor, 'p');
     $m52_valor  =  db_formatar($m52_valor, 'p');
     $m52_quant  =  db_formatar($m52_quant, 'p');
     $valoruni = db_formatar($m52_valor / $m52_quant, 'p');
-    
+
     $result1 = $clmatestoqueitemoc->sql_record($clmatestoqueitemoc->sql_query_file(null, null, "*", "", "m73_codmatordemitem=$m52_codlanc"));
     $numrows1 = $clmatestoqueitemoc->numrows;
     if ($clmatestoqueitemoc->numrows != 0) {
@@ -187,7 +187,7 @@ if (isset ($m51_codordem) && $m51_codordem != "") {
         $quantidade = 0;
         $vlto = $m52_valor - $valor_estval;
       }
-      
+
       if (($quantidade == 0) && ($vlto == 0)) {
         $errosomaquant ++;
       } else {
@@ -205,7 +205,7 @@ if (isset ($m51_codordem) && $m51_codordem != "") {
           $conitens ++;
           $valor  = "total_$i";
           $$valor = db_formatar($vlto,"p");
-          
+
           echo "<tr>
           <td class='bordas_corp' align='center'><small><a onClick=\"js_consemp($e60_numemp);\" id=\"cons_emp\" href=#>$e60_codemp</a></small></td>
           <td class='bordas_corp' nowrap align='left' title='$e62_descr'><small>".substr($pc01_descrmater, 0, 20)."&nbsp;</small></td>
@@ -214,7 +214,7 @@ if (isset ($m51_codordem) && $m51_codordem != "") {
           echo "    <td class='bordas_corp' align='right'><b><small>";
           db_input("total_$i", 10, 0, true, 'text', 3);
           echo "</small></b></td>";
-          
+
           if ($pc01_servico == "f") {
             $val = "valor_$i";
             $quant = "quant_$e62_codele"."_"."$m52_numemp"."_".$m52_codlanc."_"."$i";
@@ -257,7 +257,7 @@ if (isset ($m51_codordem) && $m51_codordem != "") {
           $$q = $m52_quant;
           db_input("controle_$i", 10, 0, true, 'hidden', 3);
           echo "<td class='bordas_corp' align='left' nowrap ><small>";
-          
+
           $result_unid = $clmatunid->sql_record($clmatunid->sql_query_file(null, "case when m61_usaquant is true then to_char(m61_codmatunid,'99999') || 't' else to_char(m61_codmatunid,'99999') || 'f' end as m61_codmatunid, m61_abrev", "m61_codmatunid"));
           $couni = "codunid_$i";
           $$couni = '1f';
@@ -319,7 +319,7 @@ if (isset ($m51_codordem) && $m51_codordem != "") {
             $result_lancaitens = $clmatordemitement->sql_record($clmatordemitement->sql_query(null, '*', null, "m54_codmatordemitem=$m52_codlanc"));
             for ($y = 0; $y < $clmatordemitement->numrows; $y ++) {
               db_fieldsmemory($result_lancaitens, $y);
-              
+
               $vltot = $m54_valor_unitario * $m54_quantidade;
               $conitens ++;
               echo "<tr>";
@@ -366,8 +366,8 @@ if (isset ($m51_codordem) && $m51_codordem != "") {
         $conitens ++;
         $valor  = "total_$i";
         $$valor = db_formatar($valortotal,"p");
-        
-        echo "<tr>	    
+
+        echo "<tr>
         <td class='bordas_corp' align='center'><small><a onClick=\"js_consemp($e60_numemp);\" id=\"cons_emp\" href=#>$e60_codemp</a></small></td>
         <td class='bordas_corp' nowrap align='left' title='$e62_descr'><small>".substr($pc01_descrmater, 0, 20)."&nbsp;</small></td>
         <td class='bordas_corp' nowrap align='left' title='$e62_descr'><small>".substr($e62_descr, 0, 30)."&nbsp;</small></td>
@@ -465,12 +465,12 @@ if (isset ($m51_codordem) && $m51_codordem != "") {
           db_input("coditem_$i", 10, "", true, "hidden", 3);
           echo "<input name='escolhe' type='button' value='Escolher' onclick='js_escolhemater($pc01_codmater);' >";
         }
-        
+
         echo "</small></td>";
         echo " <td class='bordas_corp' align='center' nowrap ><small>
         <input name='lanc' type='button' value='Lançar' $disab  onclick='js_lanca($e62_codele,$m52_valor,$valoruni,$m52_numemp,$m52_codlanc,$i,$pc01_codmater);' >
         ";
-        
+
         $pc01_descrmater = addslashes($pc01_descrmater);
         $pc01_descrmater = str_replace(chr(10), " ", $pc01_descrmater);
         $e62_descr = addslashes($e62_descr);
@@ -478,18 +478,18 @@ if (isset ($m51_codordem) && $m51_codordem != "") {
         echo " </small></td>";
         ?>
         <td class='bordas_corp' align='center' nowrap ><small>
-        <input name='Incluir' type='button' value='Incluir' onclick='js_novomatmater(<?=@$pc01_codmater?>,<?=@$e62_numemp?>,<?=@$e62_sequen?>);' >	       
+        <input name='Incluir' type='button' value='Incluir' onclick='js_novomatmater(<?=@$pc01_codmater?>,<?=@$e62_numemp?>,<?=@$e62_sequen?>);' >
         <?
-        
-        
-        
+
+
+
         echo " </small></td>
         </tr> ";
         if ($clmatordemitement->numrows != 0) {
           $result_lancaitens = $clmatordemitement->sql_record($clmatordemitement->sql_query(null, '*', null, "m54_codmatordemitem=$m52_codlanc"));
           for ($y = 0; $y < $clmatordemitement->numrows; $y ++) {
             db_fieldsmemory($result_lancaitens, $y);
-            
+
             $vltot = db_formatar($m54_valor_unitario * $m54_quantidade, 'p');
             $m54_valor_unitario = db_formatar($m54_valor_unitario, 'p');
             $m54_quantidade = db_formatar($m54_quantidade, 'p');
@@ -528,9 +528,9 @@ if (isset ($m51_codordem) && $m51_codordem != "") {
     echo "<script>parent.document.form1.voltar.click()</script>";
   }
 }
-?>    
+?>
 </table>
-</form> 
+</form>
 </center>
 </td>
 </tr>
@@ -538,26 +538,26 @@ if (isset ($m51_codordem) && $m51_codordem != "") {
 <script>
 //-----------------------------------------------------------
 function js_recalcula(chave1,chave2){
-  
+
   var valor   = eval("document.form1."+chave1+".value");
-  
+
   if (valor.search(",")!=-1){
     valor=valor.replace(",",".");
     eval("document.form1."+chave1+".value="+valor);
   }
-  
+
   var valor   = new Number(valor);
-  
+
   total       = new Number(eval("document.form1."+chave2+".value"));
-  
+
   //val         = eval("document.form1."+chave1+".value");
   campo_total = eval("document.form1."+chave2);
-  
+
   if (isNaN(parseFloat(valor))){
     alert("Verifique o valor.");
     return false;
   }
-  
+
   if (valor <= 0){
     alert("Valor Recebido dever ser maior que zero!");
     return false;
@@ -568,7 +568,7 @@ function js_recalcula(chave1,chave2){
 }
 //-----------------------------------------------------------
 function js_consemp(numemp){
-  js_OpenJanelaIframe('top.corpo','db_iframe_empempenho001','func_empempenho001.php?e60_numemp='+numemp,'Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_empempenho001','func_empempenho001.php?e60_numemp='+numemp,'Pesquisa',true);
 }
 //-----------------------------------------------------------
 function js_verifica(max,quan,nome,valoruni,contador){
@@ -577,12 +577,12 @@ function js_verifica(max,quan,nome,valoruni,contador){
     alert("Verifique a quantidade.");
     return false;
   }
-  
+
   if (quan.search(",")!=-1){
     quan=quan.replace(",",".");
     eval("document.form1."+nome+".value="+quan);
   }
-  
+
   if (max<quan){
     alert("Informe uma quantidade valida!!");
     eval("document.form1."+nome+".value='';");
@@ -590,7 +590,7 @@ function js_verifica(max,quan,nome,valoruni,contador){
   }else{
     eval("document.form1.controle_"+contador+".value='"+quan+"'");
     /*i=nome.split("_");
-    pos=i[4];*/   
+    pos=i[4];*/
 		//var xn = new Number(55.15*1.5);
 		//alert(xn.toPrecision(3));
     quant=new Number(quan);
@@ -614,28 +614,28 @@ function js_lanca(codele,valor,valoruni,numemp,matordemitem,i,codpcmater){
   //  quant=eval("document.form1.controle_"+i+".value");
   quant=eval("document.form1.quant_"+codele+"_"+numemp+"_"+matordemitem+"_"+i+".value");
   codmatmater=eval("document.form1.coditem_"+i+".value");
-  quant_multi=eval("document.form1.qntmul_"+i+".value");  
+  quant_multi=eval("document.form1.qntmul_"+i+".value");
   valorunitario=eval("document.form1.valor_"+i+".value");
   valorunitario=valorunitario/quant;
-  codunid=eval("document.form1.codunid_"+i+".value");  
+  codunid=eval("document.form1.codunid_"+i+".value");
   cont=codunid.length;
   cont=new Number(cont);
   cont=cont-1;
   codunid=codunid.substring('0',cont);
-  
-  js_OpenJanelaIframe('top.corpo','db_iframe_lanca','mat1_lancaitens.php?incluir=incluir&codmatordemitem='+matordemitem+'&quantidade='+quant+'&codmatmater='+codmatmater+'&codpcmater='+codpcmater+'&valor_unitario='+valorunitario+'&codunid='+codunid+'&quant_multi='+quant_multi,'Pesquisa',false);
-  
+
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_lanca','mat1_lancaitens.php?incluir=incluir&codmatordemitem='+matordemitem+'&quantidade='+quant+'&codmatmater='+codmatmater+'&codpcmater='+codpcmater+'&valor_unitario='+valorunitario+'&codunid='+codunid+'&quant_multi='+quant_multi,'Pesquisa',false);
+
   // Versao antiga
-  //  js_OpenJanelaIframe('top.corpo','db_iframe_lanca','../mat1_lancaitens.php?codmatordemitem='+matordemitem+'&quantidade='+quant+'&codmatmater='+codmatmater+'&codpcmater='+codpcmater+'&valor_unitario='+valoruni,'Pesquisa',true);
+  //  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_lanca','../mat1_lancaitens.php?codmatordemitem='+matordemitem+'&quantidade='+quant+'&codmatmater='+codmatmater+'&codpcmater='+codpcmater+'&valor_unitario='+valoruni,'Pesquisa',true);
   //
 }
 //-----------------------------------------------------------
 function js_novomatmater(cod,numemp,sequen){
-  js_OpenJanelaIframe('top.corpo','iframe_material','mat1_matmater011.php?m63_codpcmater='+cod+'&numemp='+numemp+'&sequen='+sequen,'Incluir Item de Entrada Novo',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','iframe_material','mat1_matmater011.php?m63_codpcmater='+cod+'&numemp='+numemp+'&sequen='+sequen,'Incluir Item de Entrada Novo',true);
 }
 //-----------------------------------------------------------
 function js_excluilanc(codent){
-  js_OpenJanelaIframe('top.corpo','db_iframe_lanca','mat1_lancaitens.php?codent='+codent+'&excluir=excluir','Pesquisa',false,'0','0','0','0');
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_lanca','mat1_lancaitens.php?codent='+codent+'&excluir=excluir','Pesquisa',false,'0','0','0','0');
 }
 //-----------------------------------------------------------
 function js_unid(value,pos){
@@ -653,11 +653,11 @@ function js_unid(value,pos){
 }
 //-----------------------------------------------------------
 function js_escolhemater(codpcmater){
-  js_OpenJanelaIframe('top.corpo','db_iframe_matmater','func_matmaterentoc.php?codpcmater='+codpcmater+'&funcao_js=js_mostramatmater|m60_codmater','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_matmater','func_matmaterentoc.php?codpcmater='+codpcmater+'&funcao_js=js_mostramatmater|m60_codmater','Pesquisa',true);
 }
 function js_retor(){
   parent.db_iframe_matmater.hide();
-  document.form1.submit(); 
+  document.form1.submit();
 }
 //-----------------------------------------------------------
 </script>

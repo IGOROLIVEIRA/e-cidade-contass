@@ -121,14 +121,14 @@ $sql = $clrhpessoal->sql_query_pesquisa(
                                          $mes
                                        );
 
-                                       
+
 $result = $clrhpessoal->sql_record($sql);
 
 if($clrhpessoal->numrows == 0){
   echo "
         <script>
           alert('Matrícula Não Cadastrada ou sem Movimentação.');
-          top.corpo.location.href='pes2_ficharegistro001.php';
+          CurrentWindow.corpo.location.href='pes2_ficharegistro001.php';
         </script>
        ";
 }
@@ -353,7 +353,7 @@ $sql = "
      h13_descr as descr_contrato,
      rh01_observacao as observacao,
 		 rh01_regist as regist
-		 
+
 	from rhpessoal
 	  inner join rhpessoalmov   on rh02_anousu     = $ano
 		                         and rh02_mesusu     = $mes
@@ -362,12 +362,12 @@ $sql = "
     inner join rhregime       on rh30_codreg     = rh02_codreg
                              and rh30_instit     = rh02_instit
 	  left  join rhpeslocaltrab on rh56_seqpes     = rh02_seqpes
-		left  join rhlocaltrab    on rh55_codigo     = rh56_localtrab 
+		left  join rhlocaltrab    on rh55_codigo     = rh56_localtrab
 		                         and rh56_princ      = 't'
 		left  join rhtipoapos     on rh88_sequencial = rh02_rhtipoapos
  		inner join cgm            on z01_numcgm      = rh01_numcgm
    	left join rhfuncao        on rh37_funcao     = rh01_funcao
-                             and rh37_instit     = rh02_instit 
+                             and rh37_instit     = rh02_instit
 	  left join rhlota          on r70_codigo      = rh02_lota
                              and r70_instit      = rh02_instit
 		left join rhpescargo      on rh20_seqpes     = rh02_seqpes
@@ -375,7 +375,7 @@ $sql = "
                              and rh04_instit     = rh02_instit
     left join rhpesbanco      on rh44_seqpes     = rh02_seqpes
     left join rhpespadrao     on rh02_seqpes     = rh03_seqpes
-    left  join padroes        on  r02_anousu     = rh02_anousu 
+    left  join padroes        on  r02_anousu     = rh02_anousu
                              and  r02_mesusu     = rh02_mesusu
                              and  r02_regime     = rh30_regime
                              and  r02_codigo     = rh03_padrao
@@ -388,17 +388,17 @@ $sql = "
         left join db_config  on rh02_instit = codigo";
         if(!empty($selecao)){
 		  $sql .= " left join selecao    on r44_instit = rh02_instit";
-        } 
-		$sql .= " left outer join (select distinct r33_codtab,r33_nome 
-		                 from inssirf 
+        }
+		$sql .= " left outer join (select distinct r33_codtab,r33_nome
+		                 from inssirf
 				             where r33_anousu = $ano
-				               and r33_mesusu = $mes 
+				               and r33_mesusu = $mes
 					             and r33_instit = ".db_getsession("DB_instit")."
-                    ) as x on r33_codtab = rh02_tbprev+2 
+                    ) as x on r33_codtab = rh02_tbprev+2
         $where
        ";
 
-// 3791       
+// 3791
 // die($sql);
 //echo $sql;exit;
 $result = pg_exec($sql);
@@ -407,9 +407,9 @@ if($xxnum == 0 || $xxnum==false){
   db_redireciona('db_erros.php?fechar=true&db_erro=Não existem Códigos cadastrados no período de '.$mes.' / '.$ano);
 }
 $alt="5";
-$pdf = new FPDF(); 
-$pdf->Open(); 
-$pdf->AliasNbPages(); 
+$pdf = new FPDF();
+$pdf->Open();
+$pdf->AliasNbPages();
 $pdf->setfillcolor(235);
 $pdf->setfont('arial','b',10);
 $pdf->ln();
@@ -440,7 +440,7 @@ for($index=0; $index<$xxnum; $index ++){
   $pdf->cell(35,$alt,$RLr01_regist.":",0,0,"R",0);
   $pdf->setfont($fonte02,'',$tam02);
   $pdf->cell(60,$alt,$rh01_regist,0,0,"L",0);*/
-  
+
   //DA FIRMA
   $pdf->setfont($fonte01,$b01,$tam01);
   $pdf->cell(35,$alt,"Da Firma:",0,0,"R",0);
@@ -448,7 +448,7 @@ for($index=0; $index<$xxnum; $index ++){
   $pdf->cell(60,$alt,$nomeinst,0,0,"L",0);
 
   $pdf->ln();
-  
+
   //ENDEREÇO
   $pdf->setfont($fonte01,$b01,$tam01);
   $pdf->cell(30,$alt,$RLz01_ender.":",0,0,"R",0);
@@ -460,7 +460,7 @@ for($index=0; $index<$xxnum; $index ++){
   $pdf->cell(64,$alt,"CNPJ/CEI:",0,0,"R",0);
   $pdf->setfont($fonte02,$b02,$tam02);
   $pdf->cell(60,$alt,$cgc,0,0,"L",0);
-  
+
   //LINHA
   $pdf->Line(1,25,208,25);
   $pdf->Ln();
@@ -468,11 +468,11 @@ for($index=0; $index<$xxnum; $index ++){
   $pdf->setfont($fonte01,$b01,$tam01);
   $pdf->cell(35,$alt,"VISTO DA FISCALIZAÇÃO",0,0,"R",0);
   $pdf->ln(50);
-  
+
   //Quadro para visto
   $pdf->Rect(85,28,40,40);
-  
-  
+
+
   //LINHA
   $pdf->Line(1,70,208,70);
   //CGM
@@ -480,33 +480,33 @@ for($index=0; $index<$xxnum; $index ++){
   $pdf->cell(35,$alt,$RLz01_numcgm.":",0,0,"R",0);
   $pdf->setfont($fonte02,$b02,$tam02);
   $pdf->cell(60,$alt,$z01_numcgm,0,0,"L",0);*/
-  
+
   //NOME
   $pdf->cell(-20);
   $pdf->setfont($fonte01,$b01,$tam01);
   $pdf->cell(35,$alt,$RLz01_nome.":",0,0,"R",0);
   $pdf->setfont($fonte02,$b02,$tam02);
   $pdf->cell(60,$alt,$z01_nome,0,0,"L",0);
-  
+
   //DATA NASCIMENTO
   /*$pdf->setfont($fonte01,$b01,$tam01);
   $pdf->cell(35,$alt,$RLr01_nasc.":",0,0,"R",0);
   $pdf->setfont($fonte02,$b02,$tam02);
   $pdf->cell(60,$alt,db_formatar($rh01_nasc,'d'),0,0,"L",0);*/
-  
+
   //PORTADOR DA CTPS (CARTEIRA DE TRABALHO)
   $pdf->setfont($fonte01,$b01,$tam01);
   $pdf->cell(35,$alt,"Portador da C.T.P.S. n.:",0,0,"R",0);
   $pdf->setfont($fonte02,$b02,$tam02);
   $pdf->cell(40,$alt,$rh16_ctps_n.'-'.$rh16_ctps_s,0,0,"L",0);
-  
+
   //REG CONSELHO
   $pdf->setfont($fonte01,$b01,$tam01);
   $pdf->cell(0,$alt,"Reg. Conselho.:",0,0,"L",0);
   $pdf->cell(-15);
   $pdf->setfont($fonte02,$b02,$tam02);
   $pdf->cell(0,$alt,"",0,0,"L",0);
-  
+
   $pdf->ln();
 
   //CPF
@@ -521,7 +521,7 @@ for($index=0; $index<$xxnum; $index ++){
   $pdf->cell(29,$alt,"Título de Eleitor n:",0,0,"R",0);
   $pdf->setfont($fonte02,$b02,$tam02);
   $pdf->cell(25,$alt,"$rh16_titele/$rh16_zonael/$rh16_secaoe",0,0,"L",0);
-  
+
   //IDENTIDADE
   $pdf->setfont($fonte01,$b01,$tam01);
   $pdf->cell(37,$alt,$RLz01_ident.":",0,0,"R",0);
@@ -533,13 +533,13 @@ for($index=0; $index<$xxnum; $index ++){
   $pdf->cell(35,$alt,"Órgão Emissor:",0,0,"R",0);
   $pdf->setfont($fonte02,$b02,$tam02);
   $pdf->cell(1,$alt,$z01_identorgao,0,0,"L",0);
-  
+
   //Data
   $pdf->setfont($fonte01,$b01,$tam01);
   $pdf->cell(20,$alt,"Data:",0,0,"R",0);
   $pdf->setfont($fonte02,$b02,$tam02);
   $pdf->cell(5,$alt,"",0,0,"L",0);
-  
+
   $pdf->ln();
 
   //Data Admissão
@@ -547,7 +547,7 @@ for($index=0; $index<$xxnum; $index ++){
   $pdf->cell(30,$alt,"foi admitido em:",0,0,"R",0);
   $pdf->setfont($fonte02,$b02,$tam02);
   $pdf->cell(25,$alt,implode('/',array_reverse(explode('-',$rh01_admiss))),0,0,"L",0);
-  
+
   //LOTAÇÃO
   /*$pdf->setfont($fonte01,$b01,$tam01);
   $pdf->cell(35,$alt,$RLr01_lotac.":",0,0,"R",0);
@@ -562,7 +562,7 @@ for($index=0; $index<$xxnum; $index ++){
   $pdf->setfont($fonte02,$b02,$tam02);
   $pdf->cell(60,$alt,$rh30_regime.'-'.$descr_regime,0,0,"L",0);
   */
-  
+
   //Tab.Prev
   /*
   $pdf->setfont($fonte01,$b01,$tam01);
@@ -578,7 +578,7 @@ for($index=0; $index<$xxnum; $index ++){
   $pdf->setfont($fonte02,$b02,$tam02);
   $pdf->cell(60,$alt,"$rh30_vinculo-$descr_vinculo",0,0,"L",0);
   */
-  
+
   //Vínculo
   /*
   $pdf->setfont($fonte01,$b01,$tam01);
@@ -599,7 +599,7 @@ for($index=0; $index<$xxnum; $index ++){
   $pdf->cell(35,$alt,$RLr01_cbo.":",0,0,"R",0);
   $pdf->setfont($fonte02,$b02,$tam02);
   $pdf->cell(5,$alt,$rh37_cbo,0,0,"L",0);
-  
+
   //PADRÃO
   /*
   $pdf->setfont($fonte01,$b01,$tam01);
@@ -607,7 +607,7 @@ for($index=0; $index<$xxnum; $index ++){
   $pdf->setfont($fonte02,$b02,$tam02);
   $pdf->cell(60,$alt,$rh03_padrao.'-'.$r02_descr,0,0,"L",0);
   */
-  
+
   $pdf->ln();
 
   if (!empty($rh02_salari)) {
@@ -624,23 +624,23 @@ for($index=0; $index<$xxnum; $index ++){
 	  $pdf->cell(60,$alt,$rh02_salari ." (".extenso($r02_valor).")",0,0,"L",0);
   }
   $pdf->ln();
-  
+
   //TIPO SALÁRIO
   $pdf->setfont($fonte01,$b01,$tam01);
   $pdf->cell(12,$alt,"Por:",0,0,"R",0);
   $pdf->setfont($fonte02,$b02,$tam02);
-  if($rh02_tipsal == 'M'){ 
+  if($rh02_tipsal == 'M'){
     $pdf->cell(60,$alt,"Mês",0,0,"L",0);
   }
-  
+
   //HORÁRIO DE TRABALHO
   $pdf->setfont($fonte01,$b01,$tam01);
   $pdf->cell(12,$alt,"no seguinte horário de trabalho:",0,0,"R",0);
-  $pdf->setfont($fonte02,$b02,$tam02); 
+  $pdf->setfont($fonte02,$b02,$tam02);
   $pdf->cell(60,$alt," ",0,0,"L",0);
-  
+
   $pdf->ln(10);
-  
+
   /*$pdf->setfont($fonte01,$b01,$tam01);
   $pdf->cell(35,$alt,$RLr01_hrssem.":",0,0,"R",0);
   $pdf->setfont($fonte02,$b02,$tam02);
@@ -651,47 +651,47 @@ for($index=0; $index<$xxnum; $index ++){
   $pdf->setfont($fonte02,$b02,$tam02);
   $pdf->cell(60,$alt,$rh02_hrsmen,0,0,"L",0);
   */
-  
+
   //LINHA
   $pdf->Line(1,100,208,100);
   $pdf->cell(40);
   $pdf->setfont($fonte01,$b01,$tam01);
   $pdf->cell(0,0,"SITUAÇÃO PERANTE O FUNDO DE GARANTIA DO TEMPO DE SERVIÇO",0,0,"L",0);
-  
+
   $pdf->ln(4);
-  
+
   //OPÇÃO FGTS
   $pdf->setfont($fonte01,$b01,$tam01);
   $pdf->cell(31,$alt,"É optante?",0,0,"R",0);
   $pdf->setfont($fonte02,$b02,$tam02);
   $pdf->cell(20,$alt,(!empty($rh15_data)?"sim":"não"),0,0,"L",0);
-  
+
   //DATA DA OPÇÃO
   $pdf->setfont($fonte01,$b01,$tam01);
   $pdf->cell(31,$alt,"Data da opção:",0,0,"R",0);
   $pdf->setfont($fonte02,$b02,$tam02);
   $pdf->cell(20,$alt,$rh15_data,0,0,"L",0);
-  
+
   //DATA DA RETRATAÇÃO
   $pdf->setfont($fonte01,$b01,$tam01);
   $pdf->cell(31,$alt,"Data da retratação:",0,0,"R",0);
   $pdf->setfont($fonte02,$b02,$tam02);
   $pdf->cell(10,$alt," ",0,0,"L",0);
-  
+
   //BANCO DEPOSITÁRIO
   $pdf->setfont($fonte01,$b01,$tam01);
   $pdf->cell(35,$alt,"Banco depositário:",0,0,"R",0);
   $pdf->setfont($fonte02,$b02,$tam02);
   //$pdf->cell(60,$alt,(!empty($rh15_data)?trim($rh44_codban)."/".trim($rh44_agencia)."-".trim($rh44_dvagencia):" "),0,0,"L",0);
-  
+
   $pdf->Line(1,117,208,117);
-  
+
   $pdf->ln(10);
 
   $pdf->Line(72,117,72,194);
-  
+
   $pdf->Line(140,117,140,194);
-  
+
   ########################################################################$######################################
   $sql = "
 	  select *,
@@ -739,7 +739,7 @@ for($index=0; $index<$xxnum; $index ++){
 			when 21 then 'Argentino'
 			else 'Outros'
 		   end as descr_nacion
-																			       
+
 	  from rhpessoal
       inner join rhpessoalmov   on rh02_anousu = $ano
                                and rh02_mesusu = $mes
@@ -748,9 +748,9 @@ for($index=0; $index<$xxnum; $index ++){
 		  inner join cgm            on z01_numcgm  = rh01_numcgm
 		  inner join rhfuncao       on rh37_funcao = rh01_funcao
 		  inner join rhlota         on r70_codigo  = rh02_lota
-                               and r70_instit  = rh02_instit 
+                               and r70_instit  = rh02_instit
 	    left  join rhpeslocaltrab on rh56_seqpes = rh02_seqpes
-		  left  join rhlocaltrab    on rh55_codigo = rh56_localtrab 
+		  left  join rhlocaltrab    on rh55_codigo = rh56_localtrab
 		                           and rh56_princ  = 't'
 		  left join rhpescargo      on rh20_seqpes = rh02_seqpes
       left join rhcargo         on rh20_cargo  = rh04_codigo
@@ -760,93 +760,93 @@ for($index=0; $index<$xxnum; $index ++){
     left join rhpesfgts         on rh01_regist = rh15_regist
     left join rhpesdoc          on rh01_regist = rh16_regist
 		  where rh02_regist = $regist ;
-	   ";																			    
+	   ";
 //echo $sql;exit;
     $result1 = pg_exec($sql);
     db_fieldsmemory($result1,0);
-    
+
   //NACIONALIDADE
   $pdf->setfont($fonte01,$b01,$tam01);
   $pdf->cell(25,$alt,$RLr01_nacion.":",0,0,"R",0);
   $pdf->setfont($fonte02,$b02,$tam02);
   $pdf->cell(56,$alt,@$descr_nacion,0,0,"L",0);
-  
+
   //QUANDO ESTRANGEIRO
   $pdf->setfont($fonte01,$b01,"7");
   $pdf->cell(35,$alt,"Quando estrangeiro",0,0,"R",0);
-  
+
   $pdf->setfont($fonte01,$b01,"7");
   $pdf->cell(81,$alt,"PROGRAMA DE INTEGRAÇÃO SOCIAL (PIS)",0,0,"R",0);
-  
+
   $pdf->ln();
-   
+
   //FILHO DE E DE
   $pdf->setfont($fonte01,$b01,$tam01);
   $pdf->cell(6,$alt,"filho de:",0,0,"R",0);
   $pdf->setfont($fonte02,$b02,$tam02);
   $pdf->cell(51,$alt,$z01_pai,0,0,"L",0);
-  
-  
-  
+
+
+
   $pdf->ln();
-  
+
   $pdf->setfont($fonte01,$b01,$tam01);
   $pdf->cell(11,$alt,"e de:",0,0,"R",0);
   $pdf->setfont($fonte02,$b02,$tam02);
   $pdf->cell(60, $alt, $z01_mae, 0, 0, "L", 0);
-  
-   //Carteira modelo 19 n.º 
+
+   //Carteira modelo 19 n.º
   $pdf->setfont($fonte01,$b01,$tam01);
   $pdf->cell(29,$alt,"Carteira modelo 19 n.º :",0,0,"R",0);
   $pdf->setfont($fonte02,$b02,$tam02);
-  $pdf->cell(29,$alt,"",0,0,"L",0);	
-  
+  $pdf->cell(29,$alt,"",0,0,"L",0);
+
   $pdf->setfont($fonte01,$b01,$tam01);
   $pdf->cell(29,$alt,"Cadastrando em",0,0,"R",0);
   $pdf->setfont($fonte02,$b02,$tam02);
   $pdf->cell(60,$alt,"",0,0,"L",0);
-  
+
   $pdf->ln();
-  
+
   $pdf->setfont($fonte01,$b01,$tam01);
   $pdf->cell(21,$alt,"Nascido em:",0,0,"R",0);
   $pdf->setfont($fonte02,$b02,$tam02);
   $pdf->cell(60,$alt,$rh01_natura,0,0,"L",0);
- 
+
   $pdf->cell(35);
-  
+
   $pdf->setfont($fonte01,$b01,$tam01);
   $pdf->cell(29,$alt,"sob n.º",0,0,"R",0);
   $pdf->setfont($fonte02,$b02,$tam02);
   $pdf->cell(60,$alt,$rh16_pis,0,0,"L",0);
-  
+
   $pdf->ln();
-  
+
   $pdf->setfont($fonte01,$b01,$tam01);
   $pdf->cell(6,$alt,"a:",0,0,"R",0);
   $pdf->setfont($fonte02,$b02,$tam02);
   $pdf->cell(60,$alt,implode('/',array_reverse(explode('-',$rh01_nasc))),0,0,"L",0);
-  
+
   //n.º Registro Geral
   $pdf->setfont($fonte01,$b01,$tam01);
   $pdf->cell(26,$alt,"n.º Registro Geral:",0,0,"R",0);
   $pdf->setfont($fonte02,$b02,$tam02);
-  $pdf->cell(35,$alt,"",0,0,"L",0);	
-  
+  $pdf->cell(35,$alt,"",0,0,"L",0);
+
   $pdf->setfont($fonte01,$b01,$tam01);
   $pdf->cell(29,$alt,"dep. no Banco ",0,0,"R",0);
   $pdf->setfont($fonte02,$b02,$tam02);
   $pdf->cell(60,$alt,"",0,0,"L",0);
-  
+
   $pdf->ln();
-  
+
   $pdf->setfont($fonte01,$b01,$tam01);
   $pdf->cell(22,$alt,$RLr01_estciv.":",0,0,"R",0);
   $pdf->setfont($fonte02,$b02,$tam02);
   $pdf->cell(60,$alt,"$rh01_estciv-".@$descr_estciv,0,0,"L",0);
-  
+
   $pdf->ln();
-  
+
   ########################################################################################################################
     $sql = "
 	  select rh31_nome,
@@ -876,9 +876,9 @@ for($index=0; $index<$xxnum; $index ++){
 			  when '7' then 'Menor pobre ate 21 anos, com a guarda judicial'
                           when '8' then 'Pessoa absolutamente incapaz'
 		  end as rh31_irf
-	  from rhdepend 
+	  from rhdepend
 	  where rh31_regist=$regist
-    "; 
+    ";
     //echo $sql;exit;
   	$pdf->setfont($fonte01,$b01,$tam01);
 	$pdf->cell(33,$alt,"Nome do Cônjugue:",0,0,"R",0);
@@ -893,7 +893,7 @@ for($index=0; $index<$xxnum; $index ++){
 	  		$pdf->cell(60,$alt,$rh31_nome,0,0,"L",0);
     	}
     }
-  
+
   //Casado(a) c/ bras.?
   $pdf->setfont($fonte01,$b01,$tam01);
   if($z == 1){
@@ -903,35 +903,35 @@ for($index=0; $index<$xxnum; $index ++){
   }
   $pdf->setfont($fonte02,$b02,$tam02);
   $pdf->cell(27,$alt,"",0,0,"L",0);
-  
+
   $pdf->setfont($fonte01,$b01,$tam01);
   $pdf->cell(29,$alt,"Endereço",0,0,"R",0);
   $pdf->setfont($fonte02,$b02,$tam02);
   $pdf->cell(60,$alt,"",0,0,"L",0);
-  
+
   $pdf->ln();
-  //GRAU DE INSTRUÇÃO  
+  //GRAU DE INSTRUÇÃO
   $pdf->setfont($fonte01,$b01,$tam01);
   $pdf->cell(22,$alt,"Grau de Instrução:",0,0,"R",0);
   $pdf->setfont($fonte02,$b02,$tam02);
   $pdf->cell(39,$alt,$descr_instru,0,0,"L",0);
-  
+
   $pdf->setfont($fonte01,$b01,$tam01);
   $pdf->cell(33,$alt,"Nome do Cônjugue:",0,0,"R",0);
-	  		
+
   $pdf->ln();
   //RESIDÊNCIA
   $pdf->setfont($fonte01,$b01,$tam01);
   $pdf->cell(12,$alt,"Residência:",0,0,"R",0);
   $pdf->setfont($fonte02,$b02,$tam02);
   $pdf->cell(45,$alt,$z01_ender,0,0,"L",0);
-  
+
   //nome conjugue
   $pdf->setfont($fonte02,$b02,$tam02);
   $pdf->cell(60,$alt,$conjuge,0,0,"L",0);
-  
+
   $pdf->ln();
-  
+
   //numero
   $pdf->setfont($fonte01,$b01,$tam01);
   $pdf->cell(1,$alt,"Nº:",0,0,"R",0);
@@ -943,88 +943,88 @@ for($index=0; $index<$xxnum; $index ++){
   $pdf->cell(8,$alt,"Cep:",0,0,"R",0);
   $pdf->setfont($fonte02,$b02,$tam02);
   $pdf->cell(18,$alt,$z01_cep,0,0,"L",0);
-  
+
   $pdf->ln();
-  
+
   //bairro
   $pdf->setfont($fonte01,$b01,$tam01);
   $pdf->cell(5,$alt,"Bairro:",0,0,"R",0);
   $pdf->setfont($fonte02,$b02,$tam02);
   $pdf->cell(17,$alt,$z01_bairro,0,0,"L",0);
-  
+
   $pdf->ln();
-  
+
   //CIDADE
   $pdf->setfont($fonte01,$b01,$tam01);
   $pdf->cell(6,$alt,"Cidade:",0,0,"R",0);
   $pdf->setfont($fonte02,$b02,$tam02);
   $pdf->cell(16,$alt,$rh01_natura,0,0,"L",0);
-  
+
   //UF
   $pdf->setfont($fonte01,$b01,$tam01);
   $pdf->cell(18,$alt,"UF:",0,0,"R",0);
   $pdf->setfont($fonte02,$b02,$tam02);
   $pdf->cell(16,$alt,$z01_uf,0,0,"L",0);
-  
+
   $pdf->setfont($fonte01,$b01,$tam01);
   $pdf->cell(43,$alt,"Tem filhos brasileiros?",0,0,"R",0);
   $pdf->setfont($fonte02,$b02,$tam02);
   $pdf->cell(60,$alt,"",0,0,"L",0);
-  
+
   $pdf->ln();
-  
+
   $pdf->cell(45);
   $pdf->setfont($fonte01,$b01,$tam01);
   $pdf->cell(35,$alt,"Quantos?",0,0,"R",0);
   $pdf->setfont($fonte02,$b02,$tam02);
   $pdf->cell(48,$alt,"",0,0,"L",0);
-  
+
   $pdf->setfont($fonte01,$b01,$tam01);
   $pdf->cell(29,$alt,"Codigo Banco:",0,0,"R",0);
   $pdf->setfont($fonte02,$b02,$tam02);
   $pdf->cell(60,$alt,"",0,0,"L",0);
-  
+
   $pdf->ln();
   //Habilitação
   $pdf->setfont($fonte01,$b01,$tam01);
   $pdf->cell(32,$alt,"Cart. Nac. Habilitação n.º:",0,0,"R",0);
   $pdf->setfont($fonte02,$b02,$tam02);
   $pdf->cell(60,$alt," ",0,0,"L",0);
-  
+
   $pdf->setfont($fonte01,$b01,$tam01);
   $pdf->cell(15,$alt,"Data de chegada ao Brasil?",0,0,"R",0);
   $pdf->setfont($fonte02,$b02,$tam02);
   $pdf->cell(24,$alt,"",0,0,"L",0);
-  
+
   $pdf->setfont($fonte01,$b01,$tam01);
   $pdf->cell(29,$alt,"Codigo Agência:",0,0,"R",0);
   $pdf->setfont($fonte02,$b02,$tam02);
   $pdf->cell(60,$alt,"",0,0,"L",0);
-  
+
   $pdf->ln();
   //Habilitação
   $pdf->setfont($fonte01,$b01,$tam01);
   $pdf->cell(22,$alt,"Cert. Militar n.º:",0,0,"R",0);
   $pdf->setfont($fonte02,$b02,$tam02);
   $pdf->cell(40,$alt," ",0,0,"L",0);
-  
+
   $pdf->setfont($fonte01,$b01,$tam01);
   $pdf->cell(22,$alt,"Naturalizado",0,0,"R",0);
   $pdf->setfont($fonte02,$b02,$tam02);
   $pdf->cell(60,$alt,"",0,0,"L",0);
-  
+
   $pdf->ln();
-  
+
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   $pdf->Line(1,199,208,199);
-  
+
   $pdf->ln(3);
-  
+
   $pdf->setfont($fonte01,$b01,$tam01);
   $pdf->cell(22,$alt,"Beneficiários:",0,0,"R",0);
   $pdf->setfont($fonte02,$b02,$tam02);
   $pdf->cell(40,$alt," ",0,0,"L",0);
-  
+
   $pdf->Line(10,207,194,207);
   $pdf->Line(10,212,194,212);
   $pdf->Line(10,217,194,217);
@@ -1032,25 +1032,25 @@ for($index=0; $index<$xxnum; $index ++){
 
   //linha penultima
   $pdf->Line(1,230,208,230);
-  
+
   $pdf->ln(35);
-  
+
   $pdf->setfont($fonte01,$b01,$tam01);
   $pdf->cell(22,$alt,"Data Registro:",0,0,"R",0);
   $pdf->setfont($fonte02,$b02,$tam02);
   $pdf->cell(40,$alt,implode('/',array_reverse(explode('-',$rh01_admiss))),0,0,"L",0);
-  
+
   $pdf->Line(20,265,100,265);
   $pdf->ln(31);
   $pdf->cell(67,$alt,"Assinatura do Empregado",0,0,"R",0);
-  
+
   //linha final
   $pdf->Line(1,280,208,280);
-  
+
   $pdf->ln();
-  
+
   $pdf->AddPage();
-  
+
   $pdf->cell(58);
   $pdf->cell(0,0,"FICHA DE REGISTRO DOS EMPREGADOS",0,0,"L",0);
   $pdf->cell(-58);
@@ -1063,7 +1063,7 @@ for($index=0; $index<$xxnum; $index ++){
   $pdf->cell(35,$alt,$RLr01_regist.":",0,0,"R",0);
   $pdf->setfont($fonte02,'',$tam02);
   $pdf->cell(60,$alt,$rh01_regist,0,0,"L",0);*/
-  
+
   //DA FIRMA
   $pdf->setfont($fonte01,$b01,$tam01);
   $pdf->cell(35,$alt,"Da Firma:",0,0,"R",0);
@@ -1071,7 +1071,7 @@ for($index=0; $index<$xxnum; $index ++){
   $pdf->cell(60,$alt,$nomeinst,0,0,"L",0);
 
   $pdf->ln();
-  
+
   //ENDEREÇO
   $pdf->setfont($fonte01,$b01,$tam01);
   $pdf->cell(30,$alt,$RLz01_ender.":",0,0,"R",0);
@@ -1083,16 +1083,16 @@ for($index=0; $index<$xxnum; $index ++){
   $pdf->cell(64,$alt,"CNPJ/CEI:",0,0,"R",0);
   $pdf->setfont($fonte02,$b02,$tam02);
   $pdf->cell(60,$alt,$cgc,0,0,"L",0);
-  
+
   $pdf->Image("imagens/RelatorioPagina2.png", 0, 24, 220);
-  
+
   $pdf->Line(10,220,194,220);
   $pdf->Line(10,225,194,225);
   $pdf->Line(10,230,194,230);
   $pdf->Line(10,235,194,235);
 
   $pdf->Line(34,257,180,257);
-  
+
 }
 
 $pdf->Output();

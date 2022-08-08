@@ -712,7 +712,7 @@ $ed60_d_datamatricula = $ed60_d_datamatricula_dia."/".$ed60_d_datamatricula_mes.
 </html>
 <script>
 function js_pesquisatransf(){
- js_OpenJanelaIframe('top.corpo','db_iframe_transfescolafora','func_transfescolaforamatr.php?funcao_js=parent.js_mostraaluno|ed104_i_aluno|ed47_v_nome|descrserie|codserietransf|ed104_d_data','Pesquisa de alunos transferidos para fora da rede',true);
+ js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_transfescolafora','func_transfescolaforamatr.php?funcao_js=parent.js_mostraaluno|ed104_i_aluno|ed47_v_nome|descrserie|codserietransf|ed104_d_data','Pesquisa de alunos transferidos para fora da rede',true);
 }
 function js_mostraaluno(chave1,chave2,chave3,chave4,chave5){
  db_iframe_transfescolafora.hide();
@@ -724,7 +724,7 @@ function js_pesquisaed60_i_turma(){
   document.form2.ano_matr.style.backgroundColor='#99A9AE';
   document.form2.ano_matr.focus();
  }else{
-  js_OpenJanelaIframe('top.corpo','db_iframe_turma','func_turmamatrtransffora.php?codserietransf='+document.form2.codserietransf.value+'&anocalendario='+document.form2.ano_matr.value+'&aluno='+document.form2.ed56_i_aluno.value+'&funcao_js=parent.js_mostraturma1|ed57_i_codigo|ed57_c_descr|ed11_c_descr|ed52_c_descr|ed29_c_descr|ed31_c_descr|ed15_c_nome|ed11_i_codigo|ed52_i_codigo|ed29_i_codigo|ed31_i_codigo|ed15_i_codigo|ed57_i_nummatr|ed57_i_numvagas|ed11_i_sequencia|ed52_i_ano','Pesquisa de Turmas',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_turma','func_turmamatrtransffora.php?codserietransf='+document.form2.codserietransf.value+'&anocalendario='+document.form2.ano_matr.value+'&aluno='+document.form2.ed56_i_aluno.value+'&funcao_js=parent.js_mostraturma1|ed57_i_codigo|ed57_c_descr|ed11_c_descr|ed52_c_descr|ed29_c_descr|ed31_c_descr|ed15_c_nome|ed11_i_codigo|ed52_i_codigo|ed29_i_codigo|ed31_i_codigo|ed15_i_codigo|ed57_i_nummatr|ed57_i_numvagas|ed11_i_sequencia|ed52_i_ano','Pesquisa de Turmas',true);
  }
 }
 function js_mostraturma1(chave1,chave2,chave3,chave4,chave5,chave6,chave7,chave8,chave9,chave10,chave11,chave12,chave13,chave14,chave15,chave16){

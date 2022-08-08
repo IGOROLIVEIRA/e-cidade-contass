@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: contrib
@@ -37,13 +37,13 @@ $clrotulo->label("db03_descr");
 
 ?>
 <script>
-function js_marca(obj){ 
+function js_marca(obj){
 
    var OBJ = document.form1;
 
    for(i=0;i<OBJ.length;i++){
      if(OBJ.elements[i].type == 'checkbox'){
-       OBJ.elements[i].checked = !(OBJ.elements[i].checked == true);            
+       OBJ.elements[i].checked = !(OBJ.elements[i].checked == true);
      }
    }
 
@@ -58,7 +58,7 @@ function js_marca(obj){
       if(obj.elements[i].type=='checkbox' && obj.elements[i].checked ){
 	codigo += "XX"+obj.elements[i].name.substr(6);
       }
-    }	
+    }
     document.form1.codigo.value=codigo;
     return true;
   }
@@ -69,10 +69,10 @@ function js_marca(obj){
 <table border="0">
   <tr>
     <td nowrap title="<?=@$Td01_codedi?>">
-       <input name="codigo" type="hidden">    
+       <input name="codigo" type="hidden">
        <?=@$Ld01_codedi?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('d01_codedi',10,$Id01_codedi,true,'text',3,"")
 ?>
@@ -82,13 +82,13 @@ db_input('d01_codedi',10,$Id01_codedi,true,'text',3,"")
     <td nowrap title="<?=@$Td01_numero?>">
        <?=@$Ld01_numero?>
     </td>
-    <td> 
+    <td>
 <?
 if($db_opcao==22){
   $dbb=2;
 }else{
   $dbb=$db_opcao;
-}  
+}
 db_input('d01_numero',10,$Id01_numero,true,'text',$dbb,"")
 ?>
     </td>
@@ -97,7 +97,7 @@ db_input('d01_numero',10,$Id01_numero,true,'text',$dbb,"")
     <td nowrap title="<?=@$Td01_perc?>">
        <?=@$Ld01_perc?>
     </td>
-    <td> 
+    <td>
 <?
 if(!isset($d01_perc)){
   $d01_perc="0";
@@ -112,7 +112,7 @@ db_input('d01_perc',10,$Id01_perc,true,'text',$db_opcao,"")
        db_ancora(@$Ld01_receit,"js_pesquisad01_receit(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('d01_receit',10,$Id01_receit,true,'text',$db_opcao," onchange='js_pesquisad01_receit(false);'")?>
        <?
@@ -120,14 +120,14 @@ db_input('k02_descr',40,$Ik02_descr,true,'text',3,'')
        ?>
     </td>
   </tr>
-  
+
    <tr>
     <td nowrap title="<?=@$Td13_db_documento?>">
        <?
        db_ancora(@$Ld13_db_documento,"js_pesquisad13_db_documento(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
     <?
       db_input('d13_db_documento',10,$Id13_db_documento,true,'text',$db_opcao," onchange='js_pesquisad13_db_documento(false);'")
     ?>
@@ -136,13 +136,13 @@ db_input('k02_descr',40,$Ik02_descr,true,'text',3,'')
     ?>
     </td>
   </tr>
-  
-  
+
+
   <tr>
     <td nowrap title="<?=@$Td01_numtot?>">
        <?=@$Ld01_numtot?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('d01_numtot',10,$Id01_numtot,true,'text',$db_opcao)?>
     </td>
@@ -151,17 +151,17 @@ db_input('d01_numtot',10,$Id01_numtot,true,'text',$db_opcao)?>
     <td nowrap title="<?=@$Td01_privenc?>">
        <?=@$Ld01_privenc?>
     </td>
-    <td> 
+    <td>
      <?
      db_inputdata('d01_privenc',@$d01_privenc_dia,@$d01_privenc_mes,@$d01_privenc_ano,true,'text',$db_opcao,"");
-   ?>  
+   ?>
     </td>
   </tr>
   <tr>
     <td nowrap title="<?=@$Td01_perunica?>">
        <?=@$Ld01_perunica?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('d01_perunica',10,$Id01_perunica,true,'text',$db_opcao)?>
     </td>
@@ -170,7 +170,7 @@ db_input('d01_perunica',10,$Id01_perunica,true,'text',$db_opcao)?>
     <td nowrap title="<?=@$Td01_descr?>" valign="top">
        <?=@$Ld01_descr?>
     </td>
-    <td> 
+    <td>
 <?
 db_textarea('d01_descr',5,52,$Id01_descr,true,'text',$db_opcao,"");
 ?>
@@ -180,8 +180,8 @@ db_textarea('d01_descr',5,52,$Id01_descr,true,'text',$db_opcao,"");
       <td colspan="2" align="center">
       <input name="db_opcao" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> <?=($db_opcao==3?"":"onclick='return js_confirma();'")?>>
       <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
-    </td>  
-  </tr>  
+    </td>
+  </tr>
  <tr>
  </table>
  <table>
@@ -189,7 +189,7 @@ db_textarea('d01_descr',5,52,$Id01_descr,true,'text',$db_opcao,"");
    <td>
       <?
       if(isset($chavepesquisa) || isset($HTTP_POST_VARS["db_opcao"]) || $db_opcao=="1"){
-      ?>  
+      ?>
       <fieldset><Legend><b>Selecione as listas</b></legend>
        <iframe id="listas"  frameborder="0" name="listas" src="forms/db_frmeditaliframe.php?db_opcao=<?=$db_opcao?><?=(isset($d01_codedi)?"&d01_codedi=$d01_codedi":"")?>" height="200" width="850" scrolling="auto" >
 
@@ -197,7 +197,7 @@ db_textarea('d01_descr',5,52,$Id01_descr,true,'text',$db_opcao,"");
       </fieldset>
      <?
      }
-     ?> 
+     ?>
      </td>
      </tr>
      </table>
@@ -207,25 +207,25 @@ db_textarea('d01_descr',5,52,$Id01_descr,true,'text',$db_opcao,"");
 </form>
 <script>
 
-function js_pesquisad13_db_documento( mostra ){  
+function js_pesquisad13_db_documento( mostra ){
   if( mostra == true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_db_documento','func_editaldocalt.php?funcao_js=parent.js_mostradb_documento1|db03_docum|db03_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_documento','func_editaldocalt.php?funcao_js=parent.js_mostradb_documento1|db03_docum|db03_descr','Pesquisa',true);
   }else{
      if(document.form1.d13_db_documento.value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_db_documento','func_editaldocalt.php?pesquisa_chave='+document.form1.d13_db_documento.value+'&funcao_js=parent.js_mostradb_documento','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_documento','func_editaldocalt.php?pesquisa_chave='+document.form1.d13_db_documento.value+'&funcao_js=parent.js_mostradb_documento','Pesquisa',false);
      }else{
-       document.form1.db03_descr.value = ''; 
+       document.form1.db03_descr.value = '';
      }
   }
 }
 
 function js_mostradb_documento(chave,erro){
 
-  document.form1.db03_descr.value = chave; 
-  
-  if(erro==true){ 
-    document.form1.d13_db_documento.focus(); 
-    document.form1.d13_db_documento.value = ''; 
+  document.form1.db03_descr.value = chave;
+
+  if(erro==true){
+    document.form1.d13_db_documento.focus();
+    document.form1.d13_db_documento.value = '';
   }
 }
 
@@ -234,7 +234,7 @@ function js_mostradb_documento1(chave1,chave2){
   document.form1.db03_descr.value = chave2;
   db_iframe_db_documento.hide();
 }
-  
+
 function js_lista(mostra){
   document.form1.lanca.onclick = "";
   if(mostra==true){
@@ -247,12 +247,12 @@ function js_lista(mostra){
   }
 }
 function js_mostralista(chave,erro){
-  if(erro==true){ 
+  if(erro==true){
     alert("Lista inválida.");
-    document.form1.d40_codigo.focus(); 
+    document.form1.d40_codigo.focus();
   }else{
     document.form1.lanca.onclick = js_insere;
-  }  
+  }
 }
 function js_mostralista1(chave1,chave2){
   document.form1.d40_codigo.value = chave1;
@@ -270,10 +270,10 @@ function js_pesquisad01_receit(mostra){
   }
 }
 function js_mostratabrec(chave,erro){
-  document.form1.k02_descr.value = chave; 
-  if(erro==true){ 
-    document.form1.d01_receit.focus(); 
-    document.form1.d01_receit.value = ''; 
+  document.form1.k02_descr.value = chave;
+  if(erro==true){
+    document.form1.d01_receit.focus();
+    document.form1.d01_receit.value = '';
   }
 }
 function js_mostratabrec1(chave1,chave2){
@@ -291,7 +291,7 @@ function js_preenchepesquisa(chave){
   db_iframe.hide();
   <?
     if($db_opcao!=1){
-  ?>  
+  ?>
   location.href = '<?=basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"])?>'+"?chavepesquisa="+chave;
   <?
     }
@@ -309,6 +309,6 @@ $func_iframe->titulo='Pesquisa';
 $func_iframe->iniciarVisivel = false;
 $func_iframe->mostrar();
 if(($db_opcao==33 || $db_opcao==22) && empty($chavepesquisa)){
-  echo "\n<script>js_pesquisa();</script>";  
+  echo "\n<script>js_pesquisa();</script>";
 }
 ?>

@@ -17,17 +17,17 @@
 				textarea = '';
 				tipo     = '';
 				codproc  = '';
-				
+
 			    titulo   = document.form1.origem.value;
 			    origem   = document.form1.codorigem.value;
-				codproc  = document.form1.codproc.value;	  
+				codproc  = document.form1.codproc.value;
 				textarea = document.form1.textarea.value;
 				tipo     = document.form1.tipo.value;
 
 		//		alert('cod-'+origem+'\ntitulo-'+titulo+'\ntext area-'+textarea+'\ntipo-'+tipo+'\ncodproc-'+codproc);
 				if(confirm('Emite Certidão ' + document.form1.tipo.value)==true){
 					if(document.form1.cadrecibo.value == 't'){
-						js_recibo(titulo,origem,codproc,textarea,tipo);	
+						js_recibo(titulo,origem,codproc,textarea,tipo);
 					}else{
 						jan = window.open('cai2_emitecnd001.php?titulo='+titulo+'&origem='+origem+'&textarea='+textarea+'&tipo='+tipo+'&codproc='+codproc,'','weidth='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0');
 						jan.moveTo(0,0);
@@ -36,7 +36,7 @@
 			}
 
 			function js_recibo(titulo,origem,codproc,textarea,tipo){
-				js_OpenJanelaIframe('top.corpo','db_recibo','cai4_recibo001.php?mostramenu=t&titulo='+titulo+'&origem='+origem+'&codproc='+codproc+'&textarea='+textarea+'&tipo='+tipo,'Cadastro de recibo',true);
+				js_OpenJanelaIframe('CurrentWindow.corpo','db_recibo','cai4_recibo001.php?mostramenu=t&titulo='+titulo+'&origem='+origem+'&codproc='+codproc+'&textarea='+textarea+'&tipo='+tipo,'Cadastro de recibo',true);
 			}
 
 			function js_controlatextarea(objt,max,dv){
@@ -55,8 +55,8 @@
 			  }
 			}
 
-             
-			
+
+
 			</script>
   	</head>
   	<body bgcolor=#CCCCCC bgcolor="#CCCCCC" leftmargin="0" onload="parent.document.getElementById('processando').style.visibility = 'hidden';document.form1.codproc.focus()" topmargin="0" marginwidth="0" marginheight="0">
@@ -66,10 +66,10 @@
     			<input type="hidden" name="cadrecibo" value="">
     			<input type="hidden" name="origem" value="">
     			<input type="hidden" name="codorigem" value="">
-				<?	
+				<?
 					if(isset($matric)){
 		  		?>
-	  			<input type="hidden" name="matric" value="<?=$matric?>">	
+	  			<input type="hidden" name="matric" value="<?=$matric?>">
 	  	  		<?
 					}else if(isset($numcgm)){
 			  	?>
@@ -87,21 +87,21 @@
 				?>
 				<table width="100%">
 					<tr>
-				    	<td align="center"><font face="Arial, Helvetica, sans-serif"><strong>Certid&atilde;o 
+				    	<td align="center"><font face="Arial, Helvetica, sans-serif"><strong>Certid&atilde;o
 		    		  		<?=$tipo?> de D&eacute;bitos</strong></font></td>
 		  	  		</tr>
 		  			<tr>
 		    			<td>
 		      				<table width="100%">
-		        				<tr> 
+		        				<tr>
 		          					<td width="14%" align="right"><font face="Arial, Helvetica, sans-serif">Processo:</font></td>
 		          					<td width="86%"><input name="codproc" type="text" id="codproc" size="15" maxlength="12"></td>
 		        				</tr>
-		        				<tr> 
+		        				<tr>
 		          					<td align="right" valign="top"><font face="Arial, Helvetica, sans-serif">Hist&oacute;rico:</font></td>
-		          					<td><textarea name="textarea" cols="60" rows="5" onkeyup='js_controlatextarea(this.name,900,"r");'></textarea></td>	
+		          					<td><textarea name="textarea" cols="60" rows="5" onkeyup='js_controlatextarea(this.name,900,"r");'></textarea></td>
                                 </tr>
-		        				<tr> 
+		        				<tr>
                                     <td align="center" colspan=2><div id='r'>  </div></td>
 
 		        				</tr>
@@ -124,33 +124,33 @@
 </script>
 
 <?
-//	db_postmemory($HTTP_POST_VARS,2);  
+//	db_postmemory($HTTP_POST_VARS,2);
 //	db_postmemory($HTTP_SERVER_VARS,2);
 	parse_str(base64_decode($HTTP_SERVER_VARS['QUERY_STRING']));
-//  db_msgbox("tipo - ".$tipo_cert);  	
+//  db_msgbox("tipo - ".$tipo_cert);
 
-    flush();	
-	db_postmemory($HTTP_POST_VARS);  
+    flush();
+	db_postmemory($HTTP_POST_VARS);
 	db_postmemory($HTTP_SERVER_VARS);
-	
+
   	if($tipo_cert==1){
-	    echo "<script> document.form1.tipo.value = 1;</script>"; 
+	    echo "<script> document.form1.tipo.value = 1;</script>";
   		$tipo = "Positiva";
   	}else if($tipo_cert==0){
-	    echo "<script> document.form1.tipo.value = 0;</script>"; 
+	    echo "<script> document.form1.tipo.value = 0;</script>";
     	$tipo = "Regular";
   	}else{
-	    echo "<script> document.form1.tipo.value = 2;</script>"; 
+	    echo "<script> document.form1.tipo.value = 2;</script>";
     	$tipo = "Negativa";
   	}
-    flush();	
+    flush();
 	$rsNumpref = pg_query("select * from numpref where k03_anousu = ".db_getsession("DB_anousu"));
 //	db_criatabela($rsNumpref);
 	$numrows = pg_numrows($rsNumpref);
 	if ($numrows>0){
 	   db_fieldsmemory($rsNumpref,0);
        if(isset($k03_reccert) && $k03_reccert == 't'){
-			echo "<script>document.form1.cadrecibo.value = 't';</script>"; 
+			echo "<script>document.form1.cadrecibo.value = 't';</script>";
 	   }
 	}
 ?>

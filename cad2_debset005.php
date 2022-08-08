@@ -40,7 +40,7 @@ $clrotulo->label("z01_nome");
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
 if(isset($j37_quadra) && $j37_quadra != ""){
-  $quadra = split(",",$j37_quadra);
+  $quadra = explode(",",$j37_quadra);
   $vir = "";
   $qua = "";
   for($i=0;$i<count($quadra);$i++){
@@ -49,7 +49,7 @@ if(isset($j37_quadra) && $j37_quadra != ""){
   }
 }
 if(isset($j34_setor) && $j34_setor != ""){
-  $setor = split(",",$j34_setor);
+  $setor = explode(",",$j34_setor);
   $vir = "";
   $set = "";
   for($i=0;$i<count($setor);$i++){

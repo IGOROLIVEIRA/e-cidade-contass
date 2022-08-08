@@ -57,7 +57,7 @@ class MyPdf extends FPDF
                 {
                     $lineN ++;
                     $page = $this->page;
-                    $Line = ereg_replace("\"", "\\\"", $Line);
+                    $Line = str_replace("\"", "\\\"", $Line);
                     eval ("\$Line = \"$Line\";");
                 }
                 
@@ -121,7 +121,7 @@ class MyPdf extends FPDF
                 {
                     $lineN ++;
                     $page = $this->page;
-                    $Line = ereg_replace("\"", "\\\"", $Line);
+                    $Line = str_replace("\"", "\\\"", $Line);
                     eval ("\$Line = \"$Line\";");
                 }
                 
@@ -383,8 +383,18 @@ class MyPdf extends FPDF
                 if (file_exists($image_name))
                 {
                     $size = getimagesize($image_name);
-                    $this->Image($image_name, $this->GetX(), $this->GetY(), $size[0], $size[1]);
-                    $this->SetY($this->GetY() + $size[1]);
+
+                    $hasLogo = false;
+
+                    if (mb_strpos($image_name, 'logo') !== false && mb_strpos($image_name, 'agata') !== false) {
+                        $hasLogo = true;
+                    }
+
+                    $width = $hasLogo ? 68 : $size[0];
+                    $height = $hasLogo ? 74 : $size[1];
+
+                    $this->Image($image_name, $this->GetX(), $this->GetY(), $width, $height);
+                    $this->SetY($this->GetY() + $height);
                 }
                 $offset = strlen($Line);
             }
@@ -480,7 +490,7 @@ class MyPdf extends FPDF
                 
                 $this->SetX($x0 + $cellWidth);
                 $this->SetY($y0);
-                $this->Sets($x0 + $cellWidth);
+                //$this->Sets($x0 + $cellWidth);
                 #frameBC200lskjfaslfsdf #tab
             }
             else if (substr($Line,$pos,5)=='#elip')

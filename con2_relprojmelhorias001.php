@@ -124,9 +124,9 @@ function js_op(va){
 }
 function js_contri(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe','func_projmelhorias.php?funcao_js=parent.js_mostracontri1|d40_codigo|j14_nome','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe','func_projmelhorias.php?funcao_js=parent.js_mostracontri1|d40_codigo|j14_nome','Pesquisa',true);
   }else{
-    js_OpenJanelaIframe('top.corpo','db_iframe','func_projmelhorias.php?pesquisa_chave='+document.form1.d40_codigo.value+'&funcao_js=parent.js_mostracontri','Pesquisa',false);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe','func_projmelhorias.php?pesquisa_chave='+document.form1.d40_codigo.value+'&funcao_js=parent.js_mostracontri','Pesquisa',false);
   }
 }
 function js_mostracontri(chave,erro){

@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -45,7 +45,7 @@ $db_botao = true;
 $db_name  = "enviar";
 $btnFc    = '';
 if (isset($revoga)){
-    
+
   db_inicio_transacao();
   $sqlerro=false;
   $clliclicita->l20_licsituacao = '2';
@@ -53,7 +53,7 @@ if (isset($revoga)){
 	if ($clliclicita->erro_status == 0){
 
       $erro_msg = $clliclicita->erro_msg;
-			$sqlerro = true;		
+			$sqlerro = true;
 	}
 	if (!$sqlerro){
 
@@ -72,7 +72,7 @@ if (isset($revoga)){
 	}
 	db_fim_transacao($sqlerro);
 	if ($sqlerro == true){
-		
+
       db_msgbox($erro_msg);
 			//viar ;
 			$db_name = "revoga";
@@ -106,7 +106,7 @@ function js_enviar(){
 			}
   }
 }
-</script>  
+</script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="document.form1.l20_codigo.focus();" bgcolor="#cccccc">
@@ -125,14 +125,14 @@ function js_enviar(){
     <td ></td>
     <td ></td>
   </tr>
-  <tr> 
+  <tr>
     <td  align="left" nowrap title="<?=$Tl20_codigo?>">
     <b>
     <?db_ancora('Licitação',"js_pesquisa_liclicita(true);",1);?>&nbsp;:
-    </b> 
+    </b>
     </td>
     <td align="left" nowrap>
-      <? 
+      <?
         db_input("l20_codigo",6,$Il20_codigo,true,"text",4,"onblur='js_pesquisa_liclicita(false)'");
       ?>
     </td>
@@ -148,9 +148,9 @@ function js_enviar(){
 	?>
     <td><b><?=$Ll11_obs;?></b></td>
     <td><?
-		
+
 		db_textarea("l11_obs",5,30,$Il11_obs,true,'text',1);
-		
+
 		?>
 		</td>
 		<?
@@ -166,34 +166,34 @@ function js_enviar(){
 </table>
 </form>
 </center>
-<? 
+<?
    db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
 ?>
 <script>
 function js_pesquisa_liclicita(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_liclicitemanu.php?funcao_js=parent.js_mostraliclicita1|l20_codigo','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_liclicita','func_liclicitemanu.php?funcao_js=parent.js_mostraliclicita1|l20_codigo','Pesquisa',true);
   }else{
-     if(document.form1.l20_codigo.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_liclicitemanu.php?pesquisa_chave='+document.form1.l20_codigo.value+'&funcao_js=parent.js_mostraliclicita','Pesquisa',false);
+     if(document.form1.l20_codigo.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_liclicita','func_liclicitemanu.php?pesquisa_chave='+document.form1.l20_codigo.value+'&funcao_js=parent.js_mostraliclicita','Pesquisa',false);
      }else{
-       document.form1.l20_codigo.value = ''; 
+       document.form1.l20_codigo.value = '';
      }
   }
 }
 function js_mostraliclicita(chave,erro){
-  if(erro==true){ 
+  if(erro==true){
       document.form1.<?=$db_name;?>.disabled  = true;
       alert("Licitacao ja julgada,revogada  ou com autorizacao ativa.");
-      document.form1.l20_codigo.value = ''; 
-      document.form1.l20_codigo.focus(); 
+      document.form1.l20_codigo.value = '';
+      document.form1.l20_codigo.focus();
   } else {
       document.form1.<?=$db_name;?>.disabled  = false;
-      document.form1.l20_codigo.value = chave; 
+      document.form1.l20_codigo.value = chave;
   }
 }
 function js_mostraliclicita1(chave1){
-   document.form1.l20_codigo.value = chave1;  
+   document.form1.l20_codigo.value = chave1;
    db_iframe_liclicita.hide();
    document.form1.<?=$db_name;?>.disabled  = false;
 }

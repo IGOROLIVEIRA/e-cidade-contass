@@ -18,7 +18,7 @@ if(isset($db_opcaoal)){
 }else if(isset($opcao) && $opcao=="excluir"){
     $db_opcao = 3;
     $db_botao=true;
-}else{  
+}else{
     $db_opcao = 1;
     $db_botao=true;
     if(isset($novo) || isset($alterar) ||   isset($excluir) || (isset($incluir) && $sqlerro==false ) ){
@@ -49,7 +49,7 @@ if(isset($db_opcaoal)){
     <td nowrap title="<?=@$Tl206_sequencial?>">
        <?//=@$Ll206_sequencial?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('l206_sequencial',10,$Il206_sequencial,true,'hidden',$db_opcao,"")
 ?>
@@ -59,14 +59,14 @@ db_input('l206_sequencial',10,$Il206_sequencial,true,'hidden',$db_opcao,"")
     <td nowrap title="<?=@$Tl206_fornecedor?>">
        <?=@$Ll206_fornecedor ?>
     </td>
-    <td> 
+    <td>
 <?
    $sWhere     = "1!=1";
 	 if (isset($pc20_codorc) && !empty($pc20_codorc)) {
     $sWhere = " pc21_codorc=".@$pc20_codorc;
 	 }
    $result = $clpcorcamforne->sql_record($clpcorcamforne->sql_query(null,"pc21_numcgm,z01_nome","",$sWhere));
-   
+
    db_selectrecord("l206_fornecedor",$result,true,$db_opcao,"","","","","js_verificaforn()");
 
 //db_input('l206_fornecedor',10,$Il206_fornecedor,true,'text',$db_opcao," onchange='js_pesquisal206_fornecedor(false);'")
@@ -77,7 +77,7 @@ db_input('l206_sequencial',10,$Il206_sequencial,true,'hidden',$db_opcao,"")
     <td nowrap title="<?=@$Tl206_licitacao?>">
        <?=@$Ll206_licitacao?>
     </td>
-    <td> 
+    <td>
        <?
 db_input('l206_licitacao',11,$Il206_licitacao,true,'text',3,'')
        ?>
@@ -87,7 +87,7 @@ db_input('l206_licitacao',11,$Il206_licitacao,true,'text',3,'')
     <td nowrap title="<?=@$Tl206_representante?>">
        <?=@$Ll206_representante?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('l206_representante',100,$Il206_representante,true,'text',$db_opcao,"","","#E6E4F1")
 ?>
@@ -97,7 +97,7 @@ db_input('l206_representante',100,$Il206_representante,true,'text',$db_opcao,"",
     <td nowrap title="<?=@$Tl206_datahab?>">
        <?=@$Ll206_datahab?>
     </td>
-    <td> 
+    <td>
 <?
 db_inputdata('l206_datahab',@$l206_datahab_dia,@$l206_datahab_mes,@$l206_datahab_ano,true,'text',$db_opcao,"")
 ?>
@@ -107,7 +107,7 @@ db_inputdata('l206_datahab',@$l206_datahab_dia,@$l206_datahab_mes,@$l206_datahab
     <td nowrap title="<?=@$Tl206_numcertidaoinss?>">
        <?=@$Ll206_numcertidaoinss?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('l206_numcertidaoinss',30,$Il206_numcertidaoinss,true,'text',$db_opcao,"")
 ?>
@@ -117,7 +117,7 @@ db_input('l206_numcertidaoinss',30,$Il206_numcertidaoinss,true,'text',$db_opcao,
     <td nowrap title="<?=@$Tl206_dataemissaoinss?>">
        <?=@$Ll206_dataemissaoinss?>
     </td>
-    <td> 
+    <td>
 <?
 db_inputdata('l206_dataemissaoinss',@$l206_dataemissaoinss_dia,@$l206_dataemissaoinss_mes,@$l206_dataemissaoinss_ano,true,'text',$db_opcao,"")
 ?>
@@ -127,7 +127,7 @@ db_inputdata('l206_dataemissaoinss',@$l206_dataemissaoinss_dia,@$l206_dataemissa
     <td nowrap title="<?=@$Tl206_datavalidadeinss?>">
        <?=@$Ll206_datavalidadeinss?>
     </td>
-    <td> 
+    <td>
 <?
 db_inputdata('l206_datavalidadeinss',@$l206_datavalidadeinss_dia,@$l206_datavalidadeinss_mes,@$l206_datavalidadeinss_ano,true,'text',$db_opcao,"")
 ?>
@@ -137,7 +137,7 @@ db_inputdata('l206_datavalidadeinss',@$l206_datavalidadeinss_dia,@$l206_datavali
     <td nowrap title="<?=@$Tl206_numcertidaofgts?>">
        <?=@$Ll206_numcertidaofgts?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('l206_numcertidaofgts',30,$Il206_numcertidaofgts,true,'text',$db_opcao,"")
 ?>
@@ -147,7 +147,7 @@ db_input('l206_numcertidaofgts',30,$Il206_numcertidaofgts,true,'text',$db_opcao,
     <td nowrap title="<?=@$Tl206_dataemissaofgts?>">
        <?=@$Ll206_dataemissaofgts?>
     </td>
-    <td> 
+    <td>
 <?
 db_inputdata('l206_dataemissaofgts',@$l206_dataemissaofgts_dia,@$l206_dataemissaofgts_mes,@$l206_dataemissaofgts_ano,true,'text',$db_opcao,"")
 ?>
@@ -157,7 +157,7 @@ db_inputdata('l206_dataemissaofgts',@$l206_dataemissaofgts_dia,@$l206_dataemissa
     <td nowrap title="<?=@$Tl206_datavalidadefgts?>">
        <?=@$Ll206_datavalidadefgts?>
     </td>
-    <td> 
+    <td>
 <?
 db_inputdata('l206_datavalidadefgts',@$l206_datavalidadefgts_dia,@$l206_datavalidadefgts_mes,@$l206_datavalidadefgts_ano,true,'text',$db_opcao,"")
 ?>
@@ -167,7 +167,7 @@ db_inputdata('l206_datavalidadefgts',@$l206_datavalidadefgts_dia,@$l206_datavali
     <td nowrap title="<?=@$Tl206_numcertidaocndt?>">
        <?=@$Ll206_numcertidaocndt?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('l206_numcertidaocndt',30,$Il206_numcertidaocndt,true,'text',$db_opcao,"")
 ?>
@@ -177,7 +177,7 @@ db_input('l206_numcertidaocndt',30,$Il206_numcertidaocndt,true,'text',$db_opcao,
     <td nowrap title="<?=@$Tl206_dataemissaocndt?>">
        <?=@$Ll206_dataemissaocndt?>
     </td>
-    <td> 
+    <td>
 <?
 db_inputdata('l206_dataemissaocndt',@$l206_dataemissaocndt_dia,@$l206_dataemissaocndt_mes,@$l206_dataemissaocndt_ano,true,'text',$db_opcao,"")
 ?>
@@ -187,21 +187,21 @@ db_inputdata('l206_dataemissaocndt',@$l206_dataemissaocndt_dia,@$l206_dataemissa
     <td nowrap title="<?=@$Tl206_datavalidadecndt?>">
        <?=@$Ll206_datavalidadecndt?>
     </td>
-    <td> 
+    <td>
 <?
 db_inputdata('l206_datavalidadecndt',@$l206_datavalidadecndt_dia,@$l206_datavalidadecndt_mes,@$l206_datavalidadecndt_ano,true,'text',$db_opcao,"")
 ?>
     </td>
   </tr>
   </table>
-  
+
   </center>
 <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?>  >
  <input name="novo" type="button" id="cancelar" value="Novo" onclick="js_cancelar();" <?=($db_opcao==1||isset($db_opcaoal)?"style='visibility:hidden;'":"")?> >
 
 <table>
   <tr>
-    <td valign="top"  align="center">  
+    <td valign="top"  align="center">
     <?
 	 $chavepri= array("l206_sequencial"=>@$l206_sequencial);
 	 $cliframe_alterar_excluir->chavepri=$chavepri;
@@ -227,20 +227,20 @@ function js_cancelar(){
 	}
 function js_pesquisal206_fornecedor(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_pcforne','func_pcforne.php?funcao_js=parent.js_mostrapcforne1|pc60_numcgm|pc60_dtlanc','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_pcforne','func_pcforne.php?funcao_js=parent.js_mostrapcforne1|pc60_numcgm|pc60_dtlanc','Pesquisa',true);
   }else{
-     if(document.form1.l206_fornecedor.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_pcforne','func_pcforne.php?pesquisa_chave='+document.form1.l206_fornecedor.value+'&funcao_js=parent.js_mostrapcforne','Pesquisa',false);
+     if(document.form1.l206_fornecedor.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_pcforne','func_pcforne.php?pesquisa_chave='+document.form1.l206_fornecedor.value+'&funcao_js=parent.js_mostrapcforne','Pesquisa',false);
      }else{
-       document.form1.pc60_dtlanc.value = ''; 
+       document.form1.pc60_dtlanc.value = '';
      }
   }
 }
 function js_mostrapcforne(chave,erro){
-  document.form1.pc60_dtlanc.value = chave; 
-  if(erro==true){ 
-    document.form1.l206_fornecedor.focus(); 
-    document.form1.l206_fornecedor.value = ''; 
+  document.form1.pc60_dtlanc.value = chave;
+  if(erro==true){
+    document.form1.l206_fornecedor.focus();
+    document.form1.l206_fornecedor.value = '';
   }
 }
 function js_mostrapcforne1(chave1,chave2){
@@ -250,20 +250,20 @@ function js_mostrapcforne1(chave1,chave2){
 }
 function js_pesquisal206_licitacao(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_liclicita.php?funcao_js=parent.js_mostraliclicita1|l20_codigo|l20_codigo','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_liclicita','func_liclicita.php?funcao_js=parent.js_mostraliclicita1|l20_codigo|l20_codigo','Pesquisa',true);
   }else{
-     if(document.form1.l206_licitacao.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_liclicita.php?pesquisa_chave='+document.form1.l206_licitacao.value+'&funcao_js=parent.js_mostraliclicita','Pesquisa',false);
+     if(document.form1.l206_licitacao.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_liclicita','func_liclicita.php?pesquisa_chave='+document.form1.l206_licitacao.value+'&funcao_js=parent.js_mostraliclicita','Pesquisa',false);
      }else{
-       document.form1.l20_codigo.value = ''; 
+       document.form1.l20_codigo.value = '';
      }
   }
 }
 function js_mostraliclicita(chave,erro){
-  document.form1.l20_codigo.value = chave; 
-  if(erro==true){ 
-    document.form1.l206_licitacao.focus(); 
-    document.form1.l206_licitacao.value = ''; 
+  document.form1.l20_codigo.value = chave;
+  if(erro==true){
+    document.form1.l206_licitacao.focus();
+    document.form1.l206_licitacao.value = '';
   }
 }
 function js_mostraliclicita1(chave1,chave2){
@@ -272,7 +272,7 @@ function js_mostraliclicita1(chave1,chave2){
   db_iframe_liclicita.hide();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_habilitacaoforn','func_habilitacaoforn.php?funcao_js=parent.js_preenchepesquisa|l206_sequencial','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_habilitacaoforn','func_habilitacaoforn.php?funcao_js=parent.js_preenchepesquisa|l206_sequencial','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_habilitacaoforn.hide();

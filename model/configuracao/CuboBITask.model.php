@@ -25,19 +25,20 @@
  *                                licenca/licenca_pt.txt
  */
 
-require_once ('model/configuracao/Task.model.php');
-require_once ('interfaces/iTarefa.interface.php');
-
-require_once ("dbagata/classes/core/AgataAPI.class");
-require_once ("libs/db_libsys.php");
-require_once ("model/dbColunaRelatorio.php");
-require_once ("model/dbFiltroRelatorio.php");
-require_once ("model/dbVariaveisRelatorio.php");
-require_once ("model/dbGeradorRelatorio.model.php");
-require_once ("model/dbOrdemRelatorio.model.php");
-require_once ("model/dbPropriedadeRelatorio.php");
-require_once ("model/dbPropriedadeRelatorio.php");
-require_once ("std/DBFtp.model.php");
+require_once(modification('model/configuracao/Task.model.php'));
+require_once(modification('interfaces/iTarefa.interface.php'));
+require_once(modification('classes/db_db_relatorio_classe.php'));
+require_once(modification("dbagata/classes/core/AgataAPI.class"));
+require_once(modification("libs/db_libsys.php"));
+require_once(modification("model/dbColunaRelatorio.php"));
+require_once(modification("model/dbFiltroRelatorio.php"));
+require_once(modification("model/dbVariaveisRelatorio.php"));
+require_once(modification("model/dbGeradorRelatorio.model.php"));
+require_once(modification("model/dbOrdemRelatorio.model.php"));
+require_once(modification("model/dbPropriedadeRelatorio.php"));
+require_once(modification("model/dbPropriedadeRelatorio.php"));
+require_once(modification("std/DBFtp.model.php"));
+require_once(modification("std/DBString.php"));
 
 class CuboBITask extends Task implements iTarefa {
 
@@ -49,9 +50,9 @@ class CuboBITask extends Task implements iTarefa {
     parent::iniciar();
 
     /* Carrega os dados de conexão com o banco de dados */
-    require_once('libs/db_conn.php');
+    require_once(modification('libs/db_conn.php'));
     /* Variaveis de sessão e outras configurações */
-    require_once('libs/db_cubo_bi_config.php');
+    require_once(modification('libs/db_cubo_bi_config.php'));
 
     $sConnection = "host=$DB_SERVIDOR dbname=$DB_BASE port=$DB_PORTA user=$DB_USUARIO password=$DB_SENHA";
     global $conn;
@@ -62,20 +63,29 @@ class CuboBITask extends Task implements iTarefa {
 
       $aParametros     = $this->getTarefa()->getParametros();
       $iCodRelatorio   = $aParametros['iCubo'];
+
+      /**
+       * Busca o nome do relatorio
+       */
+      $oDao              = new cl_db_relatorio();
+      $sSqlNomeRelatorio = $oDao->sql_query_file($iCodRelatorio, "db63_nomerelatorio");
+      $rsNomeRelatorio   = db_query($sSqlNomeRelatorio);
+      $sNomeRelatorio    = db_utils::fieldsMemory($rsNomeRelatorio, 0)->db63_nomerelatorio;
+
+      $sNomeRelatorio = DBString::removerCaracteresEspeciais(DBString::removerAcentuacao($sNomeRelatorio));
+      $sNomeRelatorio = str_replace(" ", "_", $sNomeRelatorio);
+
+      // gera relatorio pelo agata
       $oRelatorio      = new dbGeradorRelatorio($iCodRelatorio);
-      $sNome           = "CuboBi_{$iCodRelatorio}_".date("YmdHis");
-      $sCaminhoArquivo = $_SESSION['DB_document_root'] . "/" . $oRelatorio->gerarRelatorio($sNome);
+      $sCaminhoArquivo = $_SESSION['DB_document_root'] . "/" . $oRelatorio->gerarRelatorio($sNomeRelatorio);
 
       /**
        * As primeira e segunda linha do arquivo esta sendo gerada em branca
        * Deletamos a primeira e terceira linha do arquivo
        */
-      $pFile = file($sCaminhoArquivo); // Lê todo o arquivo para um vetor
-      unset($pFile[2]); // Elininando a linha 3
-      unset($pFile[0]); // Elininando a linha 1
-      file_put_contents($sCaminhoArquivo, $pFile);
-
-      $sNomeArquivoNoServidor = "{$sNome}.csv";
+      $this->limpezaArquivo($sCaminhoArquivo);
+      
+      $sNomeArquivoNoServidor = "{$sNomeRelatorio}.csv";
       if ( file_exists($sCaminhoArquivo) ) {
 
         $oFtp            = new DBFtp();
@@ -86,15 +96,16 @@ class CuboBITask extends Task implements iTarefa {
         $oFtp->setPassiveMode( $configCuboBi['ftp']['passive_mode'] );
         $oFtp->setCaminhoArquivo( $sCaminhoArquivo );
         $oFtp->acessarDiretorio( $configCuboBi['ftp']['diretorio'] );
+        $oFtp->acessarDiretorio( $sNomeRelatorio );
 
         if ( !$oFtp->enviarArquivo() ) {
-          $this->log("Ocorreu um erro ao transmitir o arquivo {$sNome} para o servidor FTP.");
+          $this->log("Ocorreu um erro ao transmitir o arquivo {$sNomeRelatorio} para o servidor FTP.");
         }
 
         $oFtp->desconectar(true);
 
       } else {
-        $this->log("Ocorreu um erro ao gerar o arquivo {$sNome}.");
+        $this->log("Ocorreu um erro ao gerar o arquivo {$sNomeRelatorio}.");
       }
 
       db_fim_transacao(false);
@@ -119,5 +130,34 @@ class CuboBITask extends Task implements iTarefa {
    */
   public function abortar(){
 
+  }
+
+  /**
+   * Abre o arquivo para leitura e remove as primeira e terceira linha
+   */
+  private function limpezaArquivo($filepath) {
+    
+    $lines = array();
+    $lineCount = 0;
+
+    // le o conteudo do arquivo antes
+    $handler = fopen($filepath, 'r');
+    while( ($buffer = fgets($handler)) !== false ){
+
+      if ($lineCount === 0 || $lineCount === 2){
+        $lineCount++;
+        continue;
+      }
+      $lines[] = $buffer;
+      $lineCount++;
+    }
+    fclose($handler);
+
+    // escreve o conteudo arquivo sem as linhas desnecessarias
+    $handler = fopen($filepath, 'w');
+    foreach ($lines as $line) {
+      fwrite($handler, $line);
+    }
+    fclose($handler);
   }
 }

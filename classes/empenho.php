@@ -56,7 +56,7 @@ class empenho {
   private $iCodigoMovimento = null;
   public  $iCompDesp        = null;
   public $sMsgErro = '';
-  function empenho() {
+  function __construct(){
 
     //$this->setNumEmp($iEmpenho);
     if (!class_exists("cl_empempenho")){
@@ -2014,6 +2014,7 @@ class empenho {
       return false;
     }
   }
+
   /**
    *  funcao para para gerar OC's ,
    *  @param integer $iNumNota numero da nota, float $nTotali valor total da nota,mixed $aItens [,boolean $lLiquidar,date $dDataNota]
@@ -2021,7 +2022,7 @@ class empenho {
    */
   function gerarOrdemCompra($iNumNota, $nTotal,$aItens,$lLiquidar=false,$dDataNota = null, $sHistorico = null,
                             $lIniciaTransacao=true, $oInfoNota = null, $iNfe = null, $sChaveAcesso = null, $sSerie = null,
-                            $iCompDesp = '', $iContaPagadora = null, $lVerificaContaPagadora = true){
+                            $iCompDesp = '', $iContaPagadora = null, $lVerificaContaPagadora = true, $iCgmEmitente = 0){
     $this->lSqlErro  = false;
     $this->sErroMsg  = '';
     $this->iPagOrdem = '';
@@ -2193,7 +2194,9 @@ class empenho {
       $objEmpNota->e69_notafiscaleletronica = $iNfe;
       $objEmpNota->e69_chaveacesso          = $sChaveAcesso;
       $objEmpNota->e69_nfserie              = $sSerie;
+      $objEmpNota->e69_cgmemitente          = $iCgmEmitente;
       $objEmpNota->incluir(null);
+
 
       if ($objEmpNota->erro_status == 0){
 
@@ -2430,7 +2433,7 @@ class empenho {
    * @param   $nValorAnular valor total a ser anulado;
    * @returns   void;
    */
-  function anularEmpenho($aItens , $nValorAnular = 0,$sMotivo = null, $aSolicitacoes = null, $iTipoAnulacao, $lTransacao = true, $id_usuario){
+  function anularEmpenho($aItens , $nValorAnular = 0,$sMotivo = null, $aSolicitacoes = null, $iTipoAnulacao, $lTransacao = true, $id_usuario = null){
 
     if (!is_array($aItens)){
 
@@ -2466,13 +2469,12 @@ class empenho {
     $rsEmpElemento  = $clempelemento->sql_record($clempelemento->sql_query($this->numemp, null, "e64_vlranu,e64_vlremp,e64_codele"));
     $oElemento      = db_utils::fieldsMemory($rsEmpElemento, 0);
     $nTotalElemento = $oElemento->e64_vlranu + $nValorAnular;
-    if (bccomp($nTotalElemento,$oElemento->e64_vlremp) > 0){ // if $tot > $e64_vlremp
 
+    if (bccomp($nTotalElemento,$oElemento->e64_vlremp) > 0){ // if $tot > $e64_vlremp
       $this->lSqlErro = true;
       $this->sErroMsg = "Erro[12](Sem saldo no elemento para anular\nNão pode anular o valor digitado para o elemento $elemento do empenho. Verifique!";
       return false;
     }
-
     //classes utilizadas pelo metodo;
     require_once("libs/db_libcontabilidade.php");
     $clempparametro = $this->usarDao("empparametro", true);
@@ -3807,16 +3809,16 @@ class empenho {
 
     if(isset($oFiltro->codempini) && !empty($oFiltro->codempini)) {
 
-      $codempIni  = split("/",$oFiltro->codempini);
+      $codempIni  = explode("/",$oFiltro->codempini);
       if (isset($oFiltro->codempfim) && !empty($oFiltro->codempfim)) {
 
-        $codempFim  = split("/",$oFiltro->codempfim);
+        $codempFim  = explode("/",$oFiltro->codempfim);
         $str = "  ( ( e60_codemp::integer >= ".$codempIni[0]." AND e60_anousu = {$iAnoUso} )                          ";
         $str .= " AND ( e60_codemp::integer <= ".$codempFim[0]." AND e60_anousu = {$iAnoUso} ) )                      ";
 
       } else {
 
-        $codemp  = split("/",$oFiltro->codempini);
+        $codemp  = explode("/",$oFiltro->codempini);
         if (count($codemp) > 1) {
           $str = " e60_codemp = '".$codemp[0]."' AND e60_anousu = ".$codemp[1]." ";
         } else {
@@ -3837,12 +3839,12 @@ class empenho {
     if (isset($oFiltro->dtemissini) && isset($oFiltro->dtemissfim)) {
 
       if (!empty($oFiltro->dtemissini)) {
-        $dtDataIni = split("/", $oFiltro->dtemissini);
+        $dtDataIni = explode("/", $oFiltro->dtemissini);
         $dtDataIni = $dtDataIni[2]."-".$dtDataIni[1]."-".$dtDataIni[0];
       }
 
       if (!empty($oFiltro->dtemissini)) {
-        $dtDataFim = split("/", $oFiltro->dtemissfim);
+        $dtDataFim = explode("/", $oFiltro->dtemissfim);
         $dtDataFim = $dtDataFim[2]."-".$dtDataFim[1]."-".$dtDataFim[0];
       }
 

@@ -59,22 +59,7 @@
         <PreQuery></PreQuery>
         <PosQuery></PosQuery>
         <Query>
-            <Select>r30_regist as matric, z01_nome as nome, r30_ndias as dias, r30_perai as periodo_aquisitivo_inicial, r30_peraf as periodo_aquisitivo_final,
-                case
-                    WHEN r30_periodogozrecini is not null
-                                        then  r30_periodogozrecini
-                                    WHEN r30_proc2 is not null
-                                       then  r30_per2i
-                                        else  r30_per1i
-                                end as periodo_gozo_inicial,
-                                case
-                                  when r30_periodogozrecfim is not null
-                                   then  r30_periodogozrecfim
-                                  when r30_proc2 is not null
-                                  then  r30_per2f
-                                   else  r30_per1f
-                                  end as periodo_gozo_final
-            </Select>
+            <Select>r30_regist as matric, z01_nome as nome, r30_ndias as dias, r30_perai as periodo_aquisitivo_inicial, r30_peraf as periodo_aquisitivo_final, case WHEN r30_proc2 is not null then  r30_per2i else  r30_per1i end as periodo_gozo_inicial, case when r30_proc2 is not null then  r30_per2f else  r30_per1f end as periodo_gozo_final</Select>
             <From>cadferia         
        inner join rhpessoal      on rhpessoal.rh01_regist    = cadferia.r30_regist        
        inner join cgm            on cgm.z01_numcgm           = rhpessoal.rh01_numcgm
@@ -89,7 +74,7 @@
 
             <Where></Where>
             <GroupBy></GroupBy>
-            <OrderBy>cgm.z01_nome asc</OrderBy>
+            <OrderBy></OrderBy>
             <Config>
                 <Distinct></Distinct>
                 <OffSet>0</OffSet>

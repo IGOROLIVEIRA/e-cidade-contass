@@ -16,7 +16,7 @@ if(isset($db_opcaoal) && !isset($opcao) && !isset($excluir)){
   $db_opcao = 1;
   $db_botao=true;
   if(isset($novo) || isset($alterar) || isset($excluir) || (isset($incluir) && $sqlerro==false ) ){
-    
+
     $ci02_codquestao      = "";
     $ci02_numquestao      = "";
     $ci02_questao         = "";
@@ -27,7 +27,7 @@ if(isset($db_opcaoal) && !isset($opcao) && !isset($excluir)){
     $ci02_possivachadneg  = "";
 
   }
-} 
+}
 ?>
 <form name="form1" method="post" action="" <?= (isset($aProcesso) && $aProcesso != null) ? "onsubmit='js_submit()'" : "" ?>>
 <center>
@@ -38,7 +38,7 @@ if(isset($db_opcaoal) && !isset($opcao) && !isset($excluir)){
       <input name="ci02_codquestao" type="hidden" value="<?=@$ci02_codquestao?>">
         <?=@$Lci02_codquestao?>
       </td>
-      <td> 
+      <td>
   <?
   db_input('ci02_codquestao',11,$Ici02_codquestao,true,'text',3,"")
   ?>
@@ -48,7 +48,7 @@ if(isset($db_opcaoal) && !isset($opcao) && !isset($excluir)){
       <td nowrap title="<?=@$Tci02_numquestao?>">
         <?=@$Lci02_numquestao?>
       </td>
-      <td> 
+      <td>
   <?
   db_input('ci02_numquestao',11,$Ici02_numquestao,true,'text',$db_opcao,"")
   ?>
@@ -58,7 +58,7 @@ if(isset($db_opcaoal) && !isset($opcao) && !isset($excluir)){
       <td nowrap title="<?=@$Tci02_questao?>">
         <?=@$Lci02_questao?>
       </td>
-      <td> 
+      <td>
   <?
   db_textarea("ci02_questao",2,80, "", true, "text", $db_opcao, "", "", "",500);
   ?>
@@ -68,7 +68,7 @@ if(isset($db_opcaoal) && !isset($opcao) && !isset($excluir)){
       <td nowrap title="<?=@$Tci02_inforeq?>">
         <?=@$Lci02_inforeq?>
       </td>
-      <td> 
+      <td>
   <?
   db_textarea('ci02_inforeq',2,80,$Ici02_inforeq,true,'text',$db_opcao,"","","",500)
   ?>
@@ -78,7 +78,7 @@ if(isset($db_opcaoal) && !isset($opcao) && !isset($excluir)){
       <td nowrap title="<?=@$Tci02_fonteinfo?>">
         <?=@$Lci02_fonteinfo?>
       </td>
-      <td> 
+      <td>
   <?
   db_textarea('ci02_fonteinfo',2,80,$Ici02_fonteinfo,true,'text',$db_opcao,"","","",500)
   ?>
@@ -88,7 +88,7 @@ if(isset($db_opcaoal) && !isset($opcao) && !isset($excluir)){
       <td nowrap title="<?=@$Tci02_procdetal?>">
         <?=@$Lci02_procdetal?>
       </td>
-      <td> 
+      <td>
   <?
   db_textarea('ci02_procdetal',2,80,$Ici02_procdetal,true,'text',$db_opcao,"","","",500)
   ?>
@@ -98,7 +98,7 @@ if(isset($db_opcaoal) && !isset($opcao) && !isset($excluir)){
       <td nowrap title="<?=@$Tci02_objeto?>">
         <?=@$Lci02_objeto?>
       </td>
-      <td> 
+      <td>
   <?
   db_textarea('ci02_objeto',2,80,$Ici02_objeto,true,'text',$db_opcao,"","","",500)
   ?>
@@ -108,7 +108,7 @@ if(isset($db_opcaoal) && !isset($opcao) && !isset($excluir)){
       <td nowrap title="<?=@$Tci02_possivachadneg?>">
         <?=@$Lci02_possivachadneg?>
       </td>
-      <td> 
+      <td>
   <?
   db_textarea('ci02_possivachadneg',2,80,$Ici02_possivachadneg,true,'text',$db_opcao,"","","",500)
   ?>
@@ -133,7 +133,7 @@ if(isset($db_opcaoal) && !isset($opcao) && !isset($excluir)){
   </table>
 <table>
   <tr>
-    <td valign="top"  align="center">  
+    <td valign="top"  align="center">
     <?
   $chavepri= array("ci02_codquestao"=>@$ci02_codquestao);
   $cliframe_alterar_excluir->chavepri=$chavepri;
@@ -156,9 +156,9 @@ function js_cancelar(){
 	  opcao.setAttribute("value","true");
 	  document.form1.appendChild(opcao);
 	  document.form1.submit();
-	}  
+	}
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_questaoaudit','func_questaoaudit.php?funcao_js=parent.js_preenchepesquisa|0','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_questaoaudit','func_questaoaudit.php?funcao_js=parent.js_preenchepesquisa|0','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_questaoaudit.hide();
@@ -172,7 +172,7 @@ function js_preenchepesquisa(chave){
 function js_imprime() {
 
   var sUrl   = 'cin2_relquestaoaudit002.php';
-  var sQuery = '?iCodTipo='+document.form1.ci02_codtipo.value;  
+  var sQuery = '?iCodTipo='+document.form1.ci02_codtipo.value;
 
   jan = window.open(sUrl+sQuery,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0');
 
@@ -184,11 +184,11 @@ function js_imprime() {
 <? if (isset($aProcesso)) { ?>
 <script>
 function js_submit() {
-	
+
 	var aProcessos  = <?= $aProcesso ?>;
 
 	if (aProcessos.length > 0) {
-		
+
 		var iOpcao 		= <?= $db_opcao ?>;
 		var sMensagem 	= '';
 		var sOpcao 		= iOpcao == 2 ? 'alterar' : 'excluir';
@@ -198,13 +198,13 @@ function js_submit() {
 		sProcessos = '';
 
 		for (var i = 0; i < aProcessos.length; i++) {
-			
+
 			sProcessos += aProcessos[i].ci03_numproc+'/'+aProcessos[i].ci03_anoproc;
 
 			if (i < (aProcessos.length - 1)) {
 				sProcessos += ', ';
 			}
-			
+
 		}
 
 		sMensagem += sProcessos;
@@ -217,7 +217,7 @@ function js_submit() {
 
 		if ( !confirm(sMensagem) ) {
 			event.preventDefault();
-		} 
+		}
 
 	}
 

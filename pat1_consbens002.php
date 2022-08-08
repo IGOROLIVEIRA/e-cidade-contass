@@ -412,6 +412,6 @@ if ($oBem->getCedente() != null) {
 <script>
 
     function exibeImagem(id_bem){
-        js_OpenJanelaIframe('top.corpo','iframe_fotos','func_imagem.php?bem='+id_bem,'', true, 50, 120, 1200, 530);
+        js_OpenJanelaIframe('CurrentWindow.corpo','iframe_fotos','func_imagem.php?bem='+id_bem,'', true, 50, 120, 1200, 530);
     }
 </script>

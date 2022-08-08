@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -41,27 +41,27 @@ $db_opcao = 22;
 $db_botao = true;
 
 if(isset($alterar)){
-  $sqlerro = false;	
+  $sqlerro = false;
   db_inicio_transacao();
   $clcaitransf->k91_anousu     = db_getsession("DB_anousu");
   $clcaitransf->k91_instit     = db_getsession("DB_instit");
-  $clcaitransf->k91_descr      = $k91_descr; 
-  $clcaitransf->k91_finalidade = $k91_finalidade; 
-  $clcaitransf->k91_debito     = $k91_debito; 
-  $clcaitransf->k91_credito    = $k91_credito; 
+  $clcaitransf->k91_descr      = $k91_descr;
+  $clcaitransf->k91_finalidade = $k91_finalidade;
+  $clcaitransf->k91_debito     = $k91_debito;
+  $clcaitransf->k91_credito    = $k91_credito;
   $clcaitransf->alterar($k91_transf);
   if($clcaitransf->erro_status==0){
-	  $erro_msg = $clcaitransf->erro_msg; 	
+	  $erro_msg = $clcaitransf->erro_msg;
       $sqlerro  = true;
   }
   if($sqlerro==false) {
   	 $clcaitransfdest->k92_transf  = $clcaitransf->k91_transf;
-	 $clcaitransfdest->k92_instit  = $k92_instit; 
-	 $clcaitransfdest->k92_debito  = $k92_debito; 
-  	 $clcaitransfdest->k92_credito = $k92_credito; 
+	 $clcaitransfdest->k92_instit  = $k92_instit;
+	 $clcaitransfdest->k92_debito  = $k92_debito;
+  	 $clcaitransfdest->k92_credito = $k92_credito;
 	 $clcaitransfdest->alterar($clcaitransf->k91_transf);
 	  if($clcaitransfdest->erro_status==0){
-		  $erro_msg = $clcaitransfdest->erro_msg; 	
+		  $erro_msg = $clcaitransfdest->erro_msg;
 	   	  $sqlerro  = true;
       }
   }
@@ -79,7 +79,7 @@ else if(isset($chavepesquisa)) {
 					     k91_finalidade,
 					     k91_tipo,
 					     cp1.c60_descr as debito_descr,
-					     cp2.c60_descr as credito_descr					     
+					     cp2.c60_descr as credito_descr
 					     ",
 					     null,""));
 	if($clcaitransf->numrows > 0) {
@@ -91,7 +91,7 @@ else if(isset($chavepesquisa)) {
 						 k92_debito,
 						 k92_credito,
 						 cp1.c60_descr as dest_debito_descr,
-						 cp2.c60_descr as dest_credito_descr						 
+						 cp2.c60_descr as dest_credito_descr
 						 ",
     	                                         null,""));
 	if($clcaitransfdest->numrows > 0) {
@@ -100,8 +100,8 @@ else if(isset($chavepesquisa)) {
 
 
 	// agora atualiza a segunda aba com o codigo da transferencia
-        echo "<script> 
-	       top.corpo.iframe_lanc.location.href='cai1_caitransflanc001.php?k93_transf=$k91_transf';
+        echo "<script>
+	       CurrentWindow.corpo.iframe_lanc.location.href='cai1_caitransflanc001.php?k93_transf=$k91_transf';
 	      </script>
 	      ";
 }
@@ -116,8 +116,8 @@ else if(isset($chavepesquisa)) {
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
 	<?
 	include("forms/db_frmcaitransf.php");
@@ -148,7 +148,7 @@ if (isset ($chavepesquisa)) {
 	echo "
   <script>
       function js_db_libera(){
-         top.corpo.iframe_lanc.location.href='cai1_caitransflanc001.php?k93_transf=".@$k91_transf."';
+         CurrentWindow.corpo.iframe_lanc.location.href='cai1_caitransflanc001.php?k93_transf=".@$k91_transf."';
      ";
 	if (isset ($liberaaba)) {
 		if(isset($erro_horario)&&$erro_horario==false) {

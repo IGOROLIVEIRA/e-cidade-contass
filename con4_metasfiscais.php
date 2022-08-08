@@ -30,7 +30,7 @@ $clcriaabas     = new cl_criaabas;
     <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
       <?
       $clcriaabas->identifica = array("db_ldo"=>"Principal","db_anexo"=>"Anexo de Metas Fiscais");
-      $clcriaabas->src = array("db_ldo"=>"orc1_mtfis_ldo001.php","db_anexo"=>"orc1_mtfis_anexo001");
+      $clcriaabas->src = array("db_ldo"=>"orc1_mtfis_ldo001.php","db_anexo"=>"orc1_mtfis_anexo001.php");
       $clcriaabas->disabled = array("db_anexo"=>"true");
       $clcriaabas->sizecampo = array("db_ldo"=>"19","db_anexo"=>"18");
       $clcriaabas->cria_abas();

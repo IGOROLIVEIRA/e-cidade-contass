@@ -1,5 +1,11 @@
 var CONTEXT = this;
 
+/**
+ *  Cria uma modal
+ *
+ *  @constructor
+ *  @return {Object} 
+ */
 DBModal = function() {
 
   this.oDBMask = {};
@@ -33,7 +39,16 @@ DBModal = function() {
     onclick: this.destroy.bind(this),
     disabled: false,
     type: "button"
-  }]
+  }];
+
+  /**
+   * Mapa de eventos implementados pela classe
+   * @type {Object}
+   */
+  this.events = {
+    beforeDestroy: function() {},
+    afterDestroy: function() {}
+  }
 
   DBModal.dependencies();
 
@@ -204,12 +219,9 @@ DBModal.dependencies = function() {
     throw "Não é possível carregar as dependências (scripts.js não carregado)";
   }
 
-  console.log('Carregando estilos do componente.')
   require_once('estilos/widgets/DBModalBase.css');
 
   if ( !CONTEXT["DBMask"] ) {
-
-    console.log("Carregando dependência DBMask");
     require_once("scripts/widgets/DBMask.widget.js");
   }
 
@@ -219,6 +231,10 @@ DBModal.dependencies = function() {
  * Remove o componente
  */
 DBModal.prototype.destroy = function() {
+
+  if ( this.events['beforeDestroy'] ) {
+    this.events['beforeDestroy'].call(this);
+  }
 
   this.oDBMask.destroy();
 
@@ -233,6 +249,10 @@ DBModal.prototype.destroy = function() {
   this.oDivConteudo  = null;
 
   this.oDivRodape    = null;
+
+  if ( this.events['afterDestroy'] ) {
+    this.events['afterDestroy'].call(this);
+  }
 
 }
 

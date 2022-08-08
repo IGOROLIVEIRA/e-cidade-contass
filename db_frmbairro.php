@@ -9,7 +9,7 @@ $clbairro->rotulo->label();
     <td nowrap title="<?=@$Tj13_codi?>">
        <?=@$Lj13_codi?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('j13_codi',4,$Ij13_codi,true,'text',$db_opcao,"")
 ?>
@@ -19,7 +19,7 @@ db_input('j13_codi',4,$Ij13_codi,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tj13_descr?>">
        <?=@$Lj13_descr?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('j13_descr',40,$Ij13_descr,true,'text',$db_opcao,"")
 ?>
@@ -29,7 +29,7 @@ db_input('j13_descr',40,$Ij13_descr,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tj13_codant?>">
        <?=@$Lj13_codant?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('j13_codant',10,$Ij13_codant,true,'text',$db_opcao,"")
 ?>
@@ -39,7 +39,7 @@ db_input('j13_codant',10,$Ij13_codant,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tj13_rural?>">
        <?=@$Lj13_rural?>
     </td>
-    <td> 
+    <td>
 <?
 $x = array("f"=>"NAO","t"=>"SIM");
 db_select('j13_rural',$x,true,$db_opcao,"");
@@ -53,7 +53,7 @@ db_select('j13_rural',$x,true,$db_opcao,"");
 </form>
 <script>
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_bairro','func_bairro.php?funcao_js=parent.js_preenchepesquisa|j13_codi','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_bairro','func_bairro.php?funcao_js=parent.js_preenchepesquisa|j13_codi','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_bairro.hide();

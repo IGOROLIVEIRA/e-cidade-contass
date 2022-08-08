@@ -563,7 +563,7 @@ $clrhcbo->rotulo->label();
   function js_pesquisa() {
 
     <?php if (($db_opcao == 2 )  or ($db_opcao == 22) or ($db_opcao == 3) or ($db_opcao == 33)) { ?>
-    js_OpenJanelaIframe('top.corpo', 'db_iframe_ativid', 'func_atividalt.php?funcao_js=parent.js_preenchepesquisa|q03_ativ|q12_descr', 'Pesquisa', true);
+    js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_ativid', 'func_atividalt.php?funcao_js=parent.js_preenchepesquisa|q03_ativ|q12_descr', 'Pesquisa', true);
     <?php } else { ?>
     window.location = "iss1_ativid002.php";
     <?php } ?>
@@ -582,11 +582,11 @@ $clrhcbo->rotulo->label();
   function js_pesquisa_cbo(mostra) {
 
     if (mostra == true) {
-      js_OpenJanelaIframe('top.corpo', 'db_iframe_cbo', 'func_rhcboalt.php?funcao_js=parent.js_mostracbo|rh70_estrutural|rh70_descr|rh70_sequencial|tipo', 'Pesquisa', true);
+      js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_cbo', 'func_rhcboalt.php?funcao_js=parent.js_mostracbo|rh70_estrutural|rh70_descr|rh70_sequencial|tipo', 'Pesquisa', true);
     } else {
 
       if (document.form1.rh70_estrutural.value != '') {
-        js_OpenJanelaIframe('top.corpo', 'db_iframe_cbo', 'func_rhcboalt.php?pesquisa_chave=' + document.form1.rh70_estrutural.value + '&funcao_js=parent.js_mostracbo2', 'Pesquisa', false);
+        js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_cbo', 'func_rhcboalt.php?pesquisa_chave=' + document.form1.rh70_estrutural.value + '&funcao_js=parent.js_mostracbo2', 'Pesquisa', false);
       } else {
 
         document.form1.rh70_estrutural.value = '';
@@ -642,11 +642,11 @@ $clrhcbo->rotulo->label();
   function js_pesquisa_cnae(mostra) {
 
     if (mostra == true) {
-      js_OpenJanelaIframe('top.corpo', 'db_iframe_cnae', 'func_cnae.php?funcao_js=parent.js_mostracnae|q71_estrutural|q71_descr|q72_sequencial', 'Pesquisa', true);
+      js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_cnae', 'func_cnae.php?funcao_js=parent.js_mostracnae|q71_estrutural|q71_descr|q72_sequencial', 'Pesquisa', true);
     } else {
 
       if (document.form1.q71_estrutural.value != '') {
-        js_OpenJanelaIframe('top.corpo', 'db_iframe_cnae', 'func_cnae.php?pesquisa_chave=' + document.form1.q71_estrutural.value + '&funcao_js=parent.js_mostracnae2', 'Pesquisa', false);
+        js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_cnae', 'func_cnae.php?pesquisa_chave=' + document.form1.q71_estrutural.value + '&funcao_js=parent.js_mostracnae2', 'Pesquisa', false);
       } else {
 
         document.form1.q71_estrutural.value = '';
@@ -711,11 +711,11 @@ $clrhcbo->rotulo->label();
     }
 
     if (mostra == true) {
-      js_OpenJanelaIframe('top.corpo', 'db_iframe_ativid', 'func_classealt.php?' + filtrapessoa + 'funcao_js=parent.js_mostraclasse|q12_classe|q12_descr|q12_fisica|q12_calciss', 'Pesquisa', true);
+      js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_ativid', 'func_classealt.php?' + filtrapessoa + 'funcao_js=parent.js_mostraclasse|q12_classe|q12_descr|q12_fisica|q12_calciss', 'Pesquisa', true);
     } else {
 
       if (document.form1.q12_classe.value != '') {
-        js_OpenJanelaIframe('top.corpo', 'db_iframe_ativid', 'func_classealt.php?' + filtrapessoa + 'pesquisa_chave=' + document.form1.q12_classe.value + '&funcao_js=parent.js_mostraclasse2', 'Pesquisa', false);
+        js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_ativid', 'func_classealt.php?' + filtrapessoa + 'pesquisa_chave=' + document.form1.q12_classe.value + '&funcao_js=parent.js_mostraclasse2', 'Pesquisa', false);
       } else {
         document.form1.q12_classe.value = '';
       }
@@ -763,11 +763,11 @@ $clrhcbo->rotulo->label();
   function js_pesquisa_tipcalc(mostra) {
 
     if (mostra == true) {
-      js_OpenJanelaIframe('top.corpo', 'db_iframe_issportetipo', 'func_tipcalciss.php?funcao_js=parent.js_mostraportetipo1|q81_codigo|q81_descr', 'Pesquisa', true);
+      js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_issportetipo', 'func_tipcalciss.php?funcao_js=parent.js_mostraportetipo1|q81_codigo|q81_descr', 'Pesquisa', true);
     } else {
 
       if (document.form1.q80_tipcal.value != '') {
-        js_OpenJanelaIframe('top.corpo', 'db_iframe_issportetipo', 'func_tipcalciss.php?pesquisa_chave=' + document.form1.q80_tipcal.value + '&funcao_js=parent.js_mostraportetipo', 'Pesquisa', false);
+        js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_issportetipo', 'func_tipcalciss.php?pesquisa_chave=' + document.form1.q80_tipcal.value + '&funcao_js=parent.js_mostraportetipo', 'Pesquisa', false);
       } else {
         document.form1.q81_descr.value = '';
       }
@@ -800,11 +800,11 @@ $clrhcbo->rotulo->label();
   function js_pesquisa_servico(mostra) {
 
     if (mostra == true) {
-      js_OpenJanelaIframe('top.corpo', 'db_iframe_issgruposervico', 'func_issgruposervico.php?funcao_js=parent.js_mostraServico1|q126_sequencial|db121_descricao', 'Pesquisa', true);
+      js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_issgruposervico', 'func_issgruposervico.php?funcao_js=parent.js_mostraServico1|q126_sequencial|db121_descricao', 'Pesquisa', true);
     } else {
 
       if (document.form1.q127_sequencial.value != '') {
-        js_OpenJanelaIframe('top.corpo', 'db_iframe_issgruposervico', 'func_issgruposervico.php?pesquisa_chave=' + document.form1.q127_sequencial.value + '&funcao_js=parent.js_mostraServico', 'Pesquisa', false);
+        js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_issgruposervico', 'func_issgruposervico.php?pesquisa_chave=' + document.form1.q127_sequencial.value + '&funcao_js=parent.js_mostraServico', 'Pesquisa', false);
       } else {
         document.form1.db121_descricao.value = '';
       }

@@ -36,7 +36,7 @@ db_postmemory( $_POST );
 
 if (isset($j34_setor) && $j34_setor != "") {
 
-  $setor = split( ",", $j34_setor );
+  $setor = explode( ",", $j34_setor );
   $vir   = "";
   $set   = "";
 

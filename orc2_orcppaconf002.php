@@ -67,7 +67,7 @@ if ($clselorcdotacao->recurso!="")
   $sele_work .=" and o26_codigo in  ".$clselorcdotacao->recurso;
 
 
-$xinstit = split("-",$db_selinstit);
+$xinstit = explode("-",$db_selinstit);
 $resultinst = pg_exec("select codigo,nomeinst from db_config where codigo in (".str_replace('-',', ',$db_selinstit).") ");
 $descr_inst = '';
 $xvirg = '';

@@ -1,6 +1,6 @@
 <?php
-include ("../jpgraph.php");
-include ("../jpgraph_line.php");
+include (__DIR__ . "/../jpgraph.php");
+include (__DIR__ . "/../jpgraph_line.php");
 
 $datay1 = array(20,15,23,15);
 $datay2 = array(12,9,42,8);

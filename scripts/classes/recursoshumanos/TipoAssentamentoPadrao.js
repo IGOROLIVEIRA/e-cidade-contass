@@ -2,6 +2,16 @@
 
   var TipoAssentamentoPadrao = function() {
 
+    TipoAssentamentoPadrao.prototype.PADRAO                 = 1;
+    TipoAssentamentoPadrao.prototype.SUBSTITUICAO           = 2;
+    TipoAssentamentoPadrao.prototype.RRA                    = 3;
+    TipoAssentamentoPadrao.prototype.PONTO_ELETRONICO       = 4;
+    TipoAssentamentoPadrao.prototype.JUSTIFICATIVA          = 5;
+    TipoAssentamentoPadrao.prototype.DIA_EXTRA              = 6;
+    TipoAssentamentoPadrao.prototype.AUTORIZACAO_HORA_EXTRA = 7;
+    TipoAssentamentoPadrao.prototype.HORA_EXTRA_MANUAL      = 8;
+
+
     this.oDestino            = null;
     this.iCodigoAssentamento = null;
     this.sCaminhoFormulario  = null;

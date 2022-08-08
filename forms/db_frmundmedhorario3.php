@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: saude
@@ -62,7 +62,7 @@ if(isset($opcao) && $opcao=="alterar"){
     <td nowrap title="<?=@$Tsd30_i_codigo?>">
        <?=@$Lsd30_i_codigo?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('sd30_i_codigo',10,$Isd30_i_codigo,true,'text',3,"")
 ?>
@@ -108,7 +108,7 @@ db_input('z01_nome',80,$Iz01_nome,true,'text',3,'')
        db_ancora(@$Lsd30_i_diasemana,"js_pesquisasd30_i_diasemana(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('sd30_i_diasemana',5,$Isd30_i_diasemana,true,'text',$db_opcao," onchange='js_pesquisasd30_i_diasemana(false);'")
 ?>
@@ -178,16 +178,16 @@ function js_pesquisasd30_i_diasemana(mostra){
   if(mostra==true){
     js_OpenJanelaIframe('','db_iframe_diasemana','func_diasemana.php?funcao_js=parent.js_mostradiasemana1|ed32_i_codigo|ed32_c_descr','Pesquisa',true);
   }else{
-     if(document.form1.sd30_i_diasemana.value != ''){ 
+     if(document.form1.sd30_i_diasemana.value != ''){
         js_OpenJanelaIframe('','db_iframe_diasemana','func_diasemana.php?pesquisa_chave='+document.form1.sd30_i_diasemana.value+'&funcao_js=parent.js_mostradiasemana','Pesquisa',false);
      }else{
-       document.form1.ed32_i_codigo.value = ''; 
+       document.form1.ed32_i_codigo.value = '';
      }
   }
 }
 function js_mostradiasemana(chave,erro){
   document.form1.ed32_c_descr.value = chave;
-  if(erro==true){ 
+  if(erro==true){
     document.form1.sd30_i_diasemana.focus();
     document.form1.sd30_i_diasemana.value = '';
   }
@@ -199,20 +199,20 @@ function js_mostradiasemana1(chave1,chave2){
 }
 function js_pesquisasd30_i_undmed(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_unidademedicos','func_unidademedicos.php?funcao_js=parent.js_mostraunidademedicos1|sd04_i_codigo|sd04_i_medico','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_unidademedicos','func_unidademedicos.php?funcao_js=parent.js_mostraunidademedicos1|sd04_i_codigo|sd04_i_medico','Pesquisa',true);
   }else{
-     if(document.form1.sd30_i_undmed.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_unidademedicos','func_unidademedicos.php?pesquisa_chave='+document.form1.sd30_i_undmed.value+'&funcao_js=parent.js_mostraunidademedicos','Pesquisa',false);
+     if(document.form1.sd30_i_undmed.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_unidademedicos','func_unidademedicos.php?pesquisa_chave='+document.form1.sd30_i_undmed.value+'&funcao_js=parent.js_mostraunidademedicos','Pesquisa',false);
      }else{
-       document.form1.sd04_i_medico.value = ''; 
+       document.form1.sd04_i_medico.value = '';
      }
   }
 }
 function js_mostraunidademedicos(chave,erro){
-  document.form1.sd04_i_medico.value = chave; 
-  if(erro==true){ 
-    document.form1.sd30_i_undmed.focus(); 
-    document.form1.sd30_i_undmed.value = ''; 
+  document.form1.sd04_i_medico.value = chave;
+  if(erro==true){
+    document.form1.sd30_i_undmed.focus();
+    document.form1.sd30_i_undmed.value = '';
   }
 }
 function js_mostraunidademedicos1(chave1,chave2){
@@ -221,7 +221,7 @@ function js_mostraunidademedicos1(chave1,chave2){
   db_iframe_unidademedicos.hide();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_undmedhorario','func_undmedhorario.php?funcao_js=parent.js_preenchepesquisa|sd30_i_codigo','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_undmedhorario','func_undmedhorario.php?funcao_js=parent.js_preenchepesquisa|sd30_i_codigo','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_undmedhorario.hide();

@@ -39,16 +39,16 @@ if(isset($chavepesquisa)){
         <table width="100%">
           <tr>
             <td nowrap title="<?=@$Tx21_exerc?>" align="right">
-              <b><?=@$RLx21_exerc?>&nbsp;/&nbsp;<?=@$RLx21_mes?>:</b>  
+              <b><?=@$RLx21_exerc?>&nbsp;/&nbsp;<?=@$RLx21_mes?>:</b>
             </td>
-            <td nowrap> 
+            <td nowrap>
               <?
               if(!isset($x21_exerc) || (isset($x21_exerc) && trim($x21_exerc) == "")){
                 $x21_exerc = db_getsession("DB_anousu");
               }
               db_input('x21_exerc',4,$Ix21_exerc,true,'text',$db_opcao==1?1:3,"");
               ?>
-              <b>&nbsp;/&nbsp;</b>  
+              <b>&nbsp;/&nbsp;</b>
               <?
               if(!isset($x21_mes) || (isset($x21_mes) && trim($x21_mes) == "")){
                 $x21_mes = date("m",db_getsession("DB_datausu"));
@@ -58,14 +58,14 @@ if(isset($chavepesquisa)){
               	$x21_virou = "false";
               }
               db_input('x21_virou',6,$Ix21_virou,true,'hidden',3,"");
-              ?> 
+              ?>
             </td>
             <td nowrap title="<?=@$Tx21_dtleitura?>" align="right">
               <?
               db_ancora(@$Lx21_dtleitura,"",3);
               ?>
             </td>
-            <td nowrap colspan="3"> 
+            <td nowrap colspan="3">
               <?
               db_inputdata('x21_dtleitura',@$x21_dtleitura_dia,@$x21_dtleitura_mes,@$x21_dtleitura_ano,true,'text',$db_opcao,"","");
               ?>
@@ -77,13 +77,13 @@ if(isset($chavepesquisa)){
               db_ancora(@$Lx01_codrua,"js_pesquisax01_codrua(true);",$db_opcao==1?1:3);
               ?>
             </td>
-            <td nowrap colspan="5"> 
+            <td nowrap colspan="5">
               <?
               db_input('x01_codrua',8,$Ix01_codrua,true,'text',$db_opcao==1?1:3,"onchange='js_pesquisax01_codrua(false);'","x01_codruaref");
               ?>
               <?
               db_input('j14_nome',47,$Ij14_nome,true,'text',3,"","j14_nomeref");
-              ?> 
+              ?>
             </td>
           </tr>
           <tr>
@@ -92,7 +92,7 @@ if(isset($chavepesquisa)){
               db_ancora(@$Lx21_numcgm,"js_pesquisax21_numcgm(true);",$db_opcao);
               ?>
             </td>
-            <td nowrap colspan="5"> 
+            <td nowrap colspan="5">
               <?
               db_input('x21_numcgm',8,$Ix21_numcgm,true,'text',$db_opcao,"onchange='js_pesquisax21_numcgm(false);'","");
               ?>
@@ -116,7 +116,7 @@ if(isset($chavepesquisa)){
               db_ancora(@$Lx04_matric,"js_pesquisax04_matric(true);",$db_opcao==1?1:3);
               ?>
             </td>
-            <td nowrap colspan="5"> 
+            <td nowrap colspan="5">
               <?
               db_input('x04_matric',8,$Ix04_matric,true,'text',$db_opcao==1?1:3," onchange='js_pesquisax04_matric(false);'");
               ?>
@@ -125,16 +125,16 @@ if(isset($chavepesquisa)){
               </tr>
               <tr>
                 <td nowrap title="<?=@$Tx01_numcgm?>" align="right">
-                  <?=@$Lx01_numcgm?>  
+                  <?=@$Lx01_numcgm?>
                 </td>
-                <td colspan="5"> 
+                <td colspan="5">
               -->
               <?
               db_input('x01_numcgm',8,$Ix01_numcgm,true,'text',3,"");
               ?>
               <?
               db_input('z01_nome',36,$Iz01_nome,true,'text',3,"","z01_nomedad");
-              ?> 
+              ?>
             </td>
           </tr>
           <tr>
@@ -143,13 +143,13 @@ if(isset($chavepesquisa)){
               db_ancora(@$Lx01_codrua,"",3);
               ?>
             </td>
-            <td nowrap colspan="5"> 
+            <td nowrap colspan="5">
               <?
               db_input('x01_codrua',8,$Ix01_codrua,true,'text',3,"");
               ?>
               <?
               db_input('j14_nome',47,$Ij14_nome,true,'text',3,"");
-              ?> 
+              ?>
             </td>
           </tr>
           <tr>
@@ -158,7 +158,7 @@ if(isset($chavepesquisa)){
               db_ancora(@$Lx01_numero,"",3);
               ?>
             </td>
-            <td nowrap> 
+            <td nowrap>
               <?
               db_input('x01_numero',8,$Ix01_numero,true,'text',3,"");
               ?>
@@ -168,7 +168,7 @@ if(isset($chavepesquisa)){
               db_ancora(@$Lx01_letra,"",3);
               ?>
             </td>
-            <td nowrap> 
+            <td nowrap>
               <?
               db_input('x01_letra',8,$Ix01_letra,true,'text',3,"");
               ?>
@@ -178,7 +178,7 @@ if(isset($chavepesquisa)){
               db_ancora(@$Lx01_zona,"",3);
               ?>
             </td>
-            <td nowrap> 
+            <td nowrap>
               <?
               db_input('x01_zona',8,$Ix01_zona,true,'text',3,"");
               ?>
@@ -190,7 +190,7 @@ if(isset($chavepesquisa)){
               db_ancora(@$Lx01_qtdeconomia,"",3);
               ?>
             </td>
-            <td nowrap> 
+            <td nowrap>
               <?
               db_input('x01_qtdeconomia',8,$Ix01_qtdeconomia,true,'text',3,"");
               ?>
@@ -204,7 +204,7 @@ if(isset($chavepesquisa)){
               ?>
               </b>
             </td>
-            <td nowrap> 
+            <td nowrap>
               <?
               db_input('x01_multiplicador',8,0,true,'text',3,"");
               ?>
@@ -221,9 +221,9 @@ if(isset($chavepesquisa)){
         <table width="100%">
           <tr>
             <td nowrap title="<?=@$Tx04_nrohidro?>" align="right">
-              <?=@$Lx04_nrohidro?>  
+              <?=@$Lx04_nrohidro?>
             </td>
-            <td nowrap> 
+            <td nowrap>
               <?
               db_input('x04_nrohidro',30,$Ix04_nrohidro,true,'text',3,"");
               db_input('x21_codhidrometro',6,$Ix21_codhidrometro,true,'hidden',3,"");
@@ -235,7 +235,7 @@ if(isset($chavepesquisa)){
               db_ancora(@$Lx04_qtddigito,"",3);
               ?>
             </td>
-            <td nowrap> 
+            <td nowrap>
               <?
               db_input('x04_qtddigito',12,$Ix04_qtddigito,true,'text',3,"");
               ?>
@@ -247,15 +247,15 @@ if(isset($chavepesquisa)){
               db_ancora(@$Lx03_nomemarca,"",3);
               ?>
             </td>
-            <td nowrap> 
+            <td nowrap>
               <?
               db_input('x03_nomemarca',30,$Ix03_nomemarca,true,'text',3,"");
               ?>
             </td>
             <td nowrap title="<?=@$Tx15_diametro?>" align="right">
-              <?=@$Lx15_diametro?>  
+              <?=@$Lx15_diametro?>
             </td>
-            <td nowrap> 
+            <td nowrap>
               <?
               db_input('x15_diametro',12,$Ix15_diametro,true,'text',3,"");
               ?>
@@ -276,7 +276,7 @@ if(isset($chavepesquisa)){
               db_ancora(@$Lx21_situacao,"",3);
               ?>
             </td>
-            <td nowrap colspan="5"> 
+            <td nowrap colspan="5">
               <?
               db_input('x21_situacao',8,$Ix21_situacao,true,'text',3,"","x21_situacant");
               ?>
@@ -291,7 +291,7 @@ if(isset($chavepesquisa)){
               db_ancora(@$Lx21_numcgm,"",3);
               ?>
             </td>
-            <td nowrap colspan="5"> 
+            <td nowrap colspan="5">
               <?
               db_input('x21_numcgm',8,$Ix21_numcgm,true,'text',3,"","x21_numcgmant");
               ?>
@@ -306,22 +306,22 @@ if(isset($chavepesquisa)){
               db_ancora(@$Lx21_dtleitura,"",3);
               ?>
             </td>
-            <td nowrap colspan="3"> 
+            <td nowrap colspan="3">
               <?
               db_inputdata('x21_dtleitura',@$x21_dtleituraant_dia,@$x21_dtleituraant_mes,@$x21_dtleituraant_ano,true,'text',3,"","x21_dtleituraant");
               ?>
             </td>
             <td nowrap title="<?=@$Tx21_exerc?>" align="right">
-              <b><?=@$RLx21_exerc?>&nbsp;/&nbsp;<?=@$RLx21_mes?>:</b>  
+              <b><?=@$RLx21_exerc?>&nbsp;/&nbsp;<?=@$RLx21_mes?>:</b>
             </td>
-            <td nowrap> 
+            <td nowrap>
               <?
               db_input('x21_exerc',4,$Ix21_exerc,true,'text',3,"","x21_exercant");
               ?>
-              <b>/</b>  
+              <b>/</b>
               <?
               db_input('x21_mes',2,$Ix21_mes,true,'text',3,"","x21_mesant");
-              ?> 
+              ?>
             </td>
           </tr>
           <tr>
@@ -330,7 +330,7 @@ if(isset($chavepesquisa)){
               db_ancora(@$Lx21_leitura,"",3);
               ?>
             </td>
-            <td nowrap> 
+            <td nowrap>
               <?
               db_input('x21_leitura',8,$Ix21_leitura,true,'text',3,"","x21_leituraant");
               ?>
@@ -340,7 +340,7 @@ if(isset($chavepesquisa)){
               db_ancora(@$Lx21_consumo,"",3);
               ?>
             </td>
-            <td nowrap> 
+            <td nowrap>
               <?
               db_input('x21_consumo',8,$Iz01_nome,true,'text',3,"","x21_consumoant");
               ?>
@@ -350,7 +350,7 @@ if(isset($chavepesquisa)){
               db_ancora(@$Lx21_excesso,"",3);
               ?>
             </td>
-            <td nowrap> 
+            <td nowrap>
               <?
               db_input('x21_excesso',8,$Ix21_excesso,true,'text',3,"","x21_excessoant");
               ?>
@@ -371,7 +371,7 @@ if(isset($chavepesquisa)){
               db_ancora(@$Lx21_situacao,"js_pesquisax21_situacao(true);",$db_opcao);
               ?>
             </td>
-            <td nowrap colspan="5"> 
+            <td nowrap colspan="5">
               <?
               db_input('x21_situacao',8,$Ix21_situacao,true,'text',$db_opcao,"onchange='js_pesquisax21_situacao(false);'","");
               ?>
@@ -386,7 +386,7 @@ if(isset($chavepesquisa)){
               db_ancora(@$Lx21_leitura,"",3);
               ?>
             </td>
-            <td nowrap> 
+            <td nowrap>
               <?
               db_input('x21_leitura',8,$Ix21_leitura,true,'text',$db_opcao,"onchange='js_ver_leitura_anterior();'","");
               ?>
@@ -396,7 +396,7 @@ if(isset($chavepesquisa)){
               db_ancora(@$Lx21_consumo,"",3);
               ?>
             </td>
-            <td nowrap> 
+            <td nowrap>
               <?
               db_input('x21_consumo',8,$Iz01_nome,true,'text',(db_permissaomenu(db_getsession("DB_anousu"),4555,5070)=="true"?1:3),"","");
               ?>
@@ -406,7 +406,7 @@ if(isset($chavepesquisa)){
               db_ancora(@$Lx21_excesso,"",3);
               ?>
             </td>
-            <td nowrap> 
+            <td nowrap>
               <?
               db_input('x21_excesso',8,$Ix21_excesso,true,'text',(db_permissaomenu(db_getsession("DB_anousu"),4555,5071)=="true"?1:3),"","");
               ?>
@@ -499,7 +499,7 @@ function js_repete_leitura_anterior(repete){
 }
 function js_pesquisa_anterior(){
   if(document.form1.x04_matric.value != ""){
-    js_OpenJanelaIframe('top.corpo','db_iframe_anterior','agu3_agualeitura002.php?matric='+document.form1.x04_matric.value+'&ano='+document.form1.x21_exerc.value+'&mes='+document.form1.x21_mes.value,'Consulta leituras anteriores',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_anterior','agu3_agualeitura002.php?matric='+document.form1.x04_matric.value+'&ano='+document.form1.x21_exerc.value+'&mes='+document.form1.x21_mes.value,'Consulta leituras anteriores',true);
   }else{
     alert("Informe a matrícula.");
     document.form1.x04_matric.focus();
@@ -517,7 +517,7 @@ function js_retorna_dados_hidro(matricula){
   }else{
     qry+= "&mes=<?=date("m",db_getsession("DB_datausu"))?>";
   }
-  js_OpenJanelaIframe('top.corpo','db_iframe_retorna_dados_hidro','func_retorna_dados_hidro.php?matric='+matricula+qry,'Pesquisa',false);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_retorna_dados_hidro','func_retorna_dados_hidro.php?matric='+matricula+qry,'Pesquisa',false);
 }
 
 function js_valida_exerc_mes(){
@@ -527,7 +527,7 @@ function js_valida_exerc_mes(){
     document.form1.x21_mes.value = '';
     document.form1.x21_mes.focus();
     return false;
-  }  
+  }
   return true;
 }
 
@@ -537,14 +537,14 @@ function js_pesquisax04_matric(mostra){
     qry += "codrua="+document.form1.x01_codruaref.value+"&";
   }
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_aguabase','func_aguabasealt.php'+qry+'funcao_js=parent.js_mostraaguabase1|x01_matric|x01_numcgm|z01_nome|j14_codigo|j14_nome|x01_numero|x01_letra|x01_zona|x01_qtdeconomia|x01_multiplicador|x04_matric','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_aguabase','func_aguabasealt.php'+qry+'funcao_js=parent.js_mostraaguabase1|x01_matric|x01_numcgm|z01_nome|j14_codigo|j14_nome|x01_numero|x01_letra|x01_zona|x01_qtdeconomia|x01_multiplicador|x04_matric','Pesquisa',true);
   }else{
-     if(document.form1.x04_matric.value != ''){ 
-       js_OpenJanelaIframe('top.corpo','db_iframe_agualeiturista','func_aguabasealt.php'+qry+'pesquisa_chave='+document.form1.x04_matric.value+'&funcao_js=parent.js_mostraaguabase','Pesquisa',false);
+     if(document.form1.x04_matric.value != ''){
+       js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_agualeiturista','func_aguabasealt.php'+qry+'pesquisa_chave='+document.form1.x04_matric.value+'&funcao_js=parent.js_mostraaguabase','Pesquisa',false);
      }else{
-       document.form1.x04_matric.value = ''; 
-       document.form1.z01_nomedad.value   = ''; 
-       document.form1.x01_numcgm.value = ''; 
+       document.form1.x04_matric.value = '';
+       document.form1.z01_nomedad.value   = '';
+       document.form1.x01_numcgm.value = '';
        document.form1.x01_codrua.value = '';
        document.form1.j14_nome.value   = '';
        document.form1.x01_numero.value = '';
@@ -564,7 +564,7 @@ function js_pesquisax04_matric(mostra){
        document.form1.x21_leituraant.value = '';
        document.form1.x21_consumoant.value = '';
        document.form1.x21_excessoant.value = '';
-       document.form1.x21_situacao.value = '';       
+       document.form1.x21_situacao.value = '';
        document.form1.x17_descr.value  = '';
        document.form1.x21_dtleituraant_dia.value = '';
        document.form1.x21_dtleituraant_mes.value = '';
@@ -580,16 +580,16 @@ function js_pesquisax04_matric(mostra){
 }
 function js_mostraaguabase(chave1,chave2,chave3,chave4,chave5,chave6,chave7,chave8,chave9,chave10,erro){
   document.form1.z01_nomedad.value   = chave2;
-  if(erro==true || chave10 == ""){ 
+  if(erro==true || chave10 == ""){
     if(erro == false && chave10 == ""){
       document.form1.z01_nomedad.value   = "";
       alert("Matrícula sem hidrômetro cadastrado.");
     }
-    document.form1.x04_matric.value = ''; 
+    document.form1.x04_matric.value = '';
     js_pesquisax04_matric(false);
-    document.form1.x04_matric.focus(); 
+    document.form1.x04_matric.focus();
   }else{
-    document.form1.x01_numcgm.value = chave1; 
+    document.form1.x01_numcgm.value = chave1;
     document.form1.x01_codrua.value = chave3;
     document.form1.j14_nome.value   = chave4;
     document.form1.x01_numero.value = chave5;
@@ -616,27 +616,27 @@ function js_mostraaguabase1(chave1,chave2,chave3,chave4,chave5,chave6,chave7,cha
     db_iframe_aguabase.hide();
   }else{
     alert("Matrícula sem hidrômetro cadastrado.");
-    document.form1.x04_matric.value = ''; 
+    document.form1.x04_matric.value = '';
     js_pesquisax04_matric(false);
-    document.form1.x04_matric.focus(); 
+    document.form1.x04_matric.focus();
   }
 }
 function js_pesquisax21_situacao(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_aguasitleitura','func_aguasitleituraalt.php?funcao_js=parent.js_mostraaguasitleitura1|x17_codigo|x17_descr|x17_regra','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_aguasitleitura','func_aguasitleituraalt.php?funcao_js=parent.js_mostraaguasitleitura1|x17_codigo|x17_descr|x17_regra','Pesquisa',true);
   }else{
-     if(document.form1.x21_situacao.value != ''){ 
-       js_OpenJanelaIframe('top.corpo','db_iframe_aguasitleitura','func_aguasitleituraalt.php?pesquisa_chave='+document.form1.x21_situacao.value+'&funcao_js=parent.js_mostraaguasitleitura','Pesquisa',false);
+     if(document.form1.x21_situacao.value != ''){
+       js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_aguasitleitura','func_aguasitleituraalt.php?pesquisa_chave='+document.form1.x21_situacao.value+'&funcao_js=parent.js_mostraaguasitleitura','Pesquisa',false);
      }else{
-       document.form1.x17_descr.value = ''; 
+       document.form1.x17_descr.value = '';
      }
   }
 }
 function js_mostraaguasitleitura(chave,chave2,erro){
   document.form1.x17_descr.value = chave;
-  if(erro==true){ 
-    document.form1.x21_situacao.focus(); 
-    document.form1.x21_situacao.value = ''; 
+  if(erro==true){
+    document.form1.x21_situacao.focus();
+    document.form1.x21_situacao.value = '';
   }else{
     if(chave2 == "0"){
       js_repete_leitura_anterior(false);
@@ -657,20 +657,20 @@ function js_mostraaguasitleitura1(chave1,chave2,chave3){
 }
 function js_pesquisax21_numcgm(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_agualeiturista','func_agualeituristaalt.php?funcao_js=parent.js_mostraagualeiturista1|x16_numcgm|z01_nome','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_agualeiturista','func_agualeituristaalt.php?funcao_js=parent.js_mostraagualeiturista1|x16_numcgm|z01_nome','Pesquisa',true);
   }else{
-    if(document.form1.x21_numcgm.value != ''){ 
-      js_OpenJanelaIframe('top.corpo','db_iframe_agualeiturista','func_agualeituristaalt.php?pesquisa_chave='+document.form1.x21_numcgm.value+'&funcao_js=parent.js_mostraagualeiturista','Pesquisa',false);
+    if(document.form1.x21_numcgm.value != ''){
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_agualeiturista','func_agualeituristaalt.php?pesquisa_chave='+document.form1.x21_numcgm.value+'&funcao_js=parent.js_mostraagualeiturista','Pesquisa',false);
     }else{
-      document.form1.x16_numcgm.value = ''; 
+      document.form1.x16_numcgm.value = '';
     }
   }
 }
 function js_mostraagualeiturista(chave,erro){
-  document.form1.z01_nome.value = chave; 
-  if(erro==true){ 
-    document.form1.x21_numcgm.focus(); 
-    document.form1.x21_numcgm.value = ''; 
+  document.form1.z01_nome.value = chave;
+  if(erro==true){
+    document.form1.x21_numcgm.focus();
+    document.form1.x21_numcgm.value = '';
   }
 }
 function js_mostraagualeiturista1(chave1,chave2){
@@ -680,20 +680,20 @@ function js_mostraagualeiturista1(chave1,chave2){
 }
 function js_pesquisax01_codrua(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_ruas','func_ruas.php?funcao_js=parent.js_mostraruas1|j14_codigo|j14_nome','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_ruas','func_ruas.php?funcao_js=parent.js_mostraruas1|j14_codigo|j14_nome','Pesquisa',true);
   }else{
-    if(document.form1.x01_codruaref.value != ''){ 
-      js_OpenJanelaIframe('top.corpo','db_iframe_ruas','func_ruas.php?pesquisa_chave='+document.form1.x01_codruaref.value+'&funcao_js=parent.js_mostraruas','Pesquisa',false);
+    if(document.form1.x01_codruaref.value != ''){
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_ruas','func_ruas.php?pesquisa_chave='+document.form1.x01_codruaref.value+'&funcao_js=parent.js_mostraruas','Pesquisa',false);
     }else{
-      document.form1.j14_nomeref.value = ''; 
+      document.form1.j14_nomeref.value = '';
     }
   }
 }
 function js_mostraruas(chave,erro){
-  document.form1.j14_nomeref.value = chave; 
-  if(erro==true){ 
-    document.form1.x01_codruaref.focus(); 
-    document.form1.x01_codruaref.value = ''; 
+  document.form1.j14_nomeref.value = chave;
+  if(erro==true){
+    document.form1.x01_codruaref.focus();
+    document.form1.x01_codruaref.value = '';
   }
 }
 function js_mostraruas1(chave1,chave2){
@@ -702,7 +702,7 @@ function js_mostraruas1(chave1,chave2){
   db_iframe_ruas.hide();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_agualeitura','func_agualeitura.php?funcao_js=parent.js_preenchepesquisa|x21_codleitura&chave_x21_exerc=<?=$x21_exerc?>&chave_x21_mes=<?=$x21_mes?>','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_agualeitura','func_agualeitura.php?funcao_js=parent.js_preenchepesquisa|x21_codleitura&chave_x21_exerc=<?=$x21_exerc?>&chave_x21_mes=<?=$x21_mes?>','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_agualeitura.hide();

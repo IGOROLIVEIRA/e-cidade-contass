@@ -37,9 +37,9 @@ $cltipoausencia->rotulo->label();
         <td nowrap title="<?=@$Ted320_sequencial?>">
            <?=@$Led320_sequencial?>
         </td>
-        <td> 
+        <td>
           <?php
-          db_input('ed320_sequencial',10,$Ied320_sequencial,true,'hidden',$db_opcao,"");	
+          db_input('ed320_sequencial',10,$Ied320_sequencial,true,'hidden',$db_opcao,"");
           ?>
         </td>
       </tr>
@@ -47,7 +47,7 @@ $cltipoausencia->rotulo->label();
         <td nowrap title="<?=@$Ted320_descricao?>">
            <?=@$Led320_descricao?>
         </td>
-        <td> 
+        <td>
           <?php
           db_input('ed320_descricao',50,$Ied320_descricao,true,'text',$db_opcao,"")
           ?>
@@ -71,7 +71,7 @@ $cltipoausencia->rotulo->label();
 </form>
 <script>
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_tipoausencia','func_tipoausencia.php?funcao_js=parent.js_preenchepesquisa|ed320_sequencial','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_tipoausencia','func_tipoausencia.php?funcao_js=parent.js_preenchepesquisa|ed320_sequencial','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_tipoausencia.hide();

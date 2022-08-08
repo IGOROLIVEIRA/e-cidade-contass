@@ -114,8 +114,8 @@ echo "
      <script>
        function js_passaparam(opcao){
 				 qry  = 'verificado=ok';
-				 val  = top.corpo.iframe_solicita.document.form1.opselec.value;
-         val1  = top.corpo.iframe_solicita.document.form1.trancaIte.value;
+				 val  = CurrentWindow.corpo.iframe_solicita.document.form1.opselec.value;
+         val1  = CurrentWindow.corpo.iframe_solicita.document.form1.trancaIte.value;
 				 qry += '" . $parametro . "';
 
 				 opc = '';
@@ -167,8 +167,8 @@ if ($oDaoSolicitaVInculo->numrows > 0) {
 $trancaCodEle = 1;
 if (isset($pc11_codigo) && $pc11_codigo != '') {
 
-  // faremos uma query na pcdotac para ver se o item, possui dotação
-  // caso nao possua, podemos liberar a seleção de Sub elelemnto
+  // faremos uma query na pcdotac para ver se o item, possui dotaï¿½ï¿½o
+  // caso nao possua, podemos liberar a seleï¿½ï¿½o de Sub elelemnto
   $oDaoPcDotac = db_utils::getDao("pcdotac");
   $sSqlPcDotac = $oDaoPcDotac->sql_query_file(null, null, null, "*", null, "pc13_codigo = {$pc11_codigo}");
   $rsPcDotac   = $oDaoPcDotac->sql_record($sSqlPcDotac);
@@ -204,7 +204,7 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
         </td>
         <td nowrap>
           <?
-          db_input('pc11_seq', 8, $Ipc11_seq, true, 'text', $db_opcao);
+          db_input('pc11_seq', 8, $Ipc11_seq, true, 'text', 3);
           ?>
         </td>
         <td>
@@ -349,7 +349,7 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
                                       valor = new Number(x.pc11_quant.value);
                                       valor = valor.toString();
                                       if(arr_ksadecimalqtd[x.pc17_unid.value]=='f' && valor.indexOf('.')!=-1){
-                                        alert('Unidade selecionada não permite quantidade com valor decimal. Verifique.');
+                                        alert('Unidade selecionada nÃo permite quantidade com valor decimal. Verifique.');
                                         x.pc11_quant.value = '" . $pc11_quant . "';
                                         x.pc11_quant.focus();
                                         x.pc11_quant.select();
@@ -435,7 +435,7 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
           db_input('pc11_quant', 8, $Ipc11_quant, true, 'text', $db_opcao, ($db_opcao == 1 ? "onchange='js_verificainteger();'" : "onchange='js_verificainteger();'"))
           ?>
         </td>
-        <td nowrap title="Quantidade restante a ser lançada">
+        <td nowrap title="Quantidade restante a ser lanï¿½ada">
           <strong><?php echo ($iFormaControleRegistroPreco == aberturaRegistroPreco::CONTROLA_VALOR ? "Saldo" : "Quantidade restante"); ?>:</strong>
         </td>
         <td nowrap>
@@ -473,12 +473,12 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
         if (($pc11_vlrun == 0 || $pc11_vlrun == "") && $hidval != "hidden") {
           $pc11_vlrun = 1;
         }
-        db_input('pc11_vlrun', 8, $Ipc11_vlrun, true, $hidval, 3);
+        db_input('pc11_vlrun', 8, $Ipc11_vlrun, true, $hidval, $db_opcaovunit);
         if ($pc30_digval == 't') {
           echo "</td>";
         }
 
-        // Alteração feita para processo de compra e licitacao
+        // Alteraï¿½ï¿½o feita para processo de compra e licitacao
         if (isset($param) && trim($param) != "") {
           db_input("param", 10, "", false, "hidden", 3);
           db_input("codproc", 10, "", false, "hidden", 3);
@@ -717,7 +717,7 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
                                 m61_descr,
                                 pc13_quant,
                                 pc13_valor";
-          $cliframe_alterar_excluir->sql = $clsolicitem->sql_query_pcmater(null, $sCampos, "pc11_seq desc", "$codigos pc11_numero= " . @$pc11_numero);
+          $cliframe_alterar_excluir->sql = $clsolicitem->sql_query_pcmater(null, $sCampos, "pc11_seq, pc11_codigo", "$codigos pc11_numero= " . @$pc11_numero);
           $cliframe_alterar_excluir->campos = "pc11_seq,pc11_codigo,pc11_numero,pc13_coddot,pc19_orctiporec,pc01_codmater,pc01_descrmater,m61_descr,pc13_quant,pc13_valor";
           $cliframe_alterar_excluir->legenda = "ITENS LANÇADOS";
           $cliframe_alterar_excluir->iframe_height = "150";
@@ -766,7 +766,7 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
         <?
         $sql = "SELECT max(pc11_seq) as totalitens,
 	                           sum(pc11_vlrun*pc11_quant) as totalvalores,
-	                           pc10_solicitacaotipo	
+	                           pc10_solicitacaotipo
                         FROM solicitem
                         INNER JOIN solicita ON pc10_numero = pc11_numero
                         WHERE pc11_numero = {$pc11_numero} GROUP BY pc10_solicitacaotipo";
@@ -834,15 +834,15 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
     qry = "pc11_codigo=" + document.form1.pc11_codigo.value;
     qry += "&pc11_numero=" + document.form1.pc11_numero.value;
     qry += "&pc16_codmater=" + document.form1.pc16_codmater.value;
-    js_OpenJanelaIframe('top.corpo.iframe_solicitem', 'db_iframe', 'func_itenssol.php?' + qry, 'Pesquisa', true, '0');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_solicitem', 'db_iframe', 'func_itenssol.php?' + qry, 'Pesquisa', true, '0');
 
   }
 
   function js_pesquisave01_veiculo(mostra) {
     if (mostra == true) {
-      js_OpenJanelaIframe('top.corpo.iframe_solicitem', 'db_iframe_veiculos', 'func_veiculos.php?funcao_js=top.corpo.iframe_solicitem.js_mostraveiculo1|ve01_codigo|ve01_placa<?= $db_opcao == 1 ? "&opcao_bloq=3&opcao=f" : "&opcao_bloq=1&opcao=i" ?>', 'Pesquisa', true, '0');
+      js_OpenJanelaIframe('CurrentWindow.corpo.iframe_solicitem', 'db_iframe_veiculos', 'func_veiculos.php?funcao_js=CurrentWindow.corpo.iframe_solicitem.js_mostraveiculo1|ve01_codigo|ve01_placa<?= $db_opcao == 1 ? "&opcao_bloq=3&opcao=f" : "&opcao_bloq=1&opcao=i" ?>', 'Pesquisa', true, '0');
     } else if (document.form1.pc14_veiculos.value != '') {
-      js_OpenJanelaIframe('top.corpo.iframe_solicitem', 'db_iframe_veiculos', 'func_veiculos.php?pesquisa_chave=' + document.form1.pc14_veiculos.value + '&funcao_js=top.corpo.iframe_solicitem.js_mostraveiculo<?= $db_opcao == 1 ? "&opcao_bloq=3&opcao=f" : "&opcao_bloq=1&opcao=i" ?>', 'Pesquisa', false, '0');
+      js_OpenJanelaIframe('CurrentWindow.corpo.iframe_solicitem', 'db_iframe_veiculos', 'func_veiculos.php?pesquisa_chave=' + document.form1.pc14_veiculos.value + '&funcao_js=CurrentWindow.corpo.iframe_solicitem.js_mostraveiculo<?= $db_opcao == 1 ? "&opcao_bloq=3&opcao=f" : "&opcao_bloq=1&opcao=i" ?>', 'Pesquisa', false, '0');
     }
   }
 
@@ -876,21 +876,21 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
     }
     ?>
     if (mostra == true || iRegistroPrecoFuncao) {
-      js_OpenJanelaIframe('top.corpo.iframe_solicitem',
+      js_OpenJanelaIframe('CurrentWindow.corpo.iframe_solicitem',
         'db_iframe_pcmater',
-        '<?= $sUrlLookup ?>?funcao_js=top.corpo.iframe_solicitem.js_mostrapcmater1' +
+        '<?= $sUrlLookup ?>?funcao_js=CurrentWindow.corpo.iframe_solicitem.js_mostrapcmater1' +
         '|pc01_codmater|pc01_descrmater|o56_codele|pc01_veiculo<?= $sFiltro ?><?= $db_opcao == 1 ? "&opcao_bloq=3&opcao=f" : "&opcao_bloq=1&opcao=i" ?>' +
         '&iRegistroPreco=<?= $iRegistroPreco; ?>',
         'Pesquisa de Materiais',
         true, '0');
     } else {
       if (document.form1.pc16_codmater.value != '') {
-        js_OpenJanelaIframe('top.corpo.iframe_solicitem',
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_solicitem',
           'db_iframe_pcmater',
           '<?= $sUrlLookup ?>?pesquisa_chave=' +
           document.form1.pc16_codmater.value +
           '&iRegistroPreco=<?= $iRegistroPreco; ?>' +
-          '&funcao_js=top.corpo.iframe_solicitem.js_mostrapcmater<?= $db_opcao == 1 ? "&opcao_bloq=3&opcao=f" : "&opcao_bloq=1&opcao=i" ?>',
+          '&funcao_js=CurrentWindow.corpo.iframe_solicitem.js_mostrapcmater<?= $db_opcao == 1 ? "&opcao_bloq=3&opcao=f" : "&opcao_bloq=1&opcao=i" ?>',
           'Pesquisa', false, '0');
       } else {
         document.form1.pc01_descrmater.value = '';
@@ -996,7 +996,7 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
           obj=document.createElement('input');
           obj.setAttribute('name','opcao');
           obj.setAttribute('type','hidden');
-          obj.setAttribute('value','$opcao'); 
+          obj.setAttribute('value','$opcao');
           document.form1.appendChild(obj);
         ";
     }
@@ -1045,11 +1045,11 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
 
 
   function js_pesquisapc01_servico(codigo) {
-    js_OpenJanelaIframe('top.corpo.iframe_solicitem', 'db_iframe_pcmater', 'func_pcmater.php?funcao_js=top.corpo.iframe_solicitem.js_mostraservico|pc01_servico&chave_pc01_codmater=' + codigo, 'Pesquisa', false, '0', '1', '790', '405');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_solicitem', 'db_iframe_pcmater', 'func_pcmater.php?funcao_js=CurrentWindow.corpo.iframe_solicitem.js_mostraservico|pc01_servico&chave_pc01_codmater=' + codigo, 'Pesquisa', false, '0', '1', '790', '405');
   }
 
   function js_pesquisa() {
-    js_OpenJanelaIframe('top.corpo', 'db_iframe_solicitem', 'func_solicitem.php?funcao_js=top.corpo.iframe_solicitem.js_preenchepesquisa|pc11_codigo', 'Pesquisa', true, '0', '1', '790', '405');
+    js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_solicitem', 'func_solicitem.php?funcao_js=CurrentWindow.corpo.iframe_solicitem.js_preenchepesquisa|pc11_codigo', 'Pesquisa', true, '0', '1', '790', '405');
   }
 
   function js_preenchepesquisa(chave) {
@@ -1153,14 +1153,14 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
     var sFiltro = "&programa=1&projeto=1&item=1";
     if (mostra == true) {
 
-      js_OpenJanelaIframe('top.corpo.iframe_solicitem',
+      js_OpenJanelaIframe('CurrentWindow.corpo.iframe_solicitem',
         'db_iframe_pactovalor',
         'func_pactovalor.php?funcao_js=parent.js_mostrapactovalor1|o87_sequencial|dl_item' + sFiltro,
         'Pesquisa',
         true);
     } else {
       if (document.form1.o103_pactovalor.value != '') {
-        js_OpenJanelaIframe('top.corpo.iframe_solicitem',
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_solicitem',
           'db_iframe_pactovalor',
           'func_pactovalor.php?pesquisa_chave=' + document.form1.o103_pactovalor.value +
           '&funcao_js=parent.js_mostrapactovalor' + sFiltro, 'Pesquisa', false);
@@ -1460,7 +1460,6 @@ if ($pc01_servico == 't' && substr($o56_elemento, 0, 7) != '34490') {
 } else if (substr($o56_elemento, 0, 7) != '34490' && $pc01_servico == 'f') {
 
   echo "<script>                                                                   ";
-
   echo "  $('pc11_servicoquantidade').options.length = 0;                          ";
   echo "  $('pc11_servicoquantidade').options[0]     = new Option('SIM', 'true');  ";
   echo "  $('pc11_servicoquantidade').options[1]     = new Option('NÃO', 'false'); ";
@@ -1468,10 +1467,6 @@ if ($pc01_servico == 't' && substr($o56_elemento, 0, 7) != '34490') {
   echo "  $('pc17_quant').style.visibility           = 'visible';                  ";
   echo "  document.form1.pc11_servicoquantidade.style.visibility  = 'hidden'; ";
   echo "  document.form1.pc11_servicoquantidade.value = 'false';  ";
-
-
-
-
   echo "</script>                                                                  ";
 }
 

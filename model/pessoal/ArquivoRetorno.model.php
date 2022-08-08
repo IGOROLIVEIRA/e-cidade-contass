@@ -150,7 +150,7 @@ class ArquivoRetorno {
 
     protected function openFile()
     {
-        if (file_exists("../../tmp/{$this->sFile}")) {
+        if (file_exists(__DIR__ . "/../../tmp/{$this->sFile}")) {
             throw new Exception("Arquivo não encontrado.");
         }
         $this->file = fopen("tmp/{$this->sFile}","r");

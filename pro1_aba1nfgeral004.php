@@ -334,9 +334,9 @@ $tpProcessos = db_utils::getCollectionByRecord(db_query($sSQL));
                 fornecedores = [];
                 windowDadosFornecedor.destroy();
                 if (tipoNotificacao != 0) {
-                    top.corpo.iframe_aberturaprocesso.location.href    = 'pro1_aba2nfaberturaprocesso004.php';
-                    top.corpo.iframe_previsaodepagamento.location.href = 'pro1_aba3nfprevisaodepagamento004.php';
-                    top.corpo.iframe_geral.location.href= "pro1_aba1nfgeral004.php";
+                    CurrentWindow.corpo.iframe_aberturaprocesso.location.href    = 'pro1_aba2nfaberturaprocesso004.php';
+                    CurrentWindow.corpo.iframe_previsaodepagamento.location.href = 'pro1_aba3nfprevisaodepagamento004.php';
+                    CurrentWindow.corpo.iframe_geral.location.href= "pro1_aba1nfgeral004.php";
                     parent.mo_camada('previsaodepagamento');
                 }
             } else {

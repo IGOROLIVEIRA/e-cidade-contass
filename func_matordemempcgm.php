@@ -163,7 +163,7 @@ $clrotulo->label("m52_numemp");
         }else if(isset($z01_nome) && (trim($z01_nome))){
          $sql = $clmatordem->sql_query_anu("",$campos,"z01_nome","z01_nome like '$z01_nome%' and $where_inst");
        }else if(isset($chave_e60_codemp)&&(trim($chave_e60_codemp))){
-         $arr = split("/",$chave_e60_codemp);
+         $arr = explode("/",$chave_e60_codemp);
          if(count($arr) == 2  && isset($arr[1]) && $arr[1] != '' ){
           $dbwhere_ano = " and e60_anousu = ".$arr[1];
         }else if(count($arr)==1){

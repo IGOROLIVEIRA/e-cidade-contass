@@ -221,7 +221,7 @@ if(isset($pag_emp) && empty($confirmar)){
   $db_botao = true;
    //rotina que traz os dados de empempenho
    if(isset($e60_codemp) && $e60_codemp !=''){
-      $arr = split("/",$e60_codemp);
+      $arr = explode("/",$e60_codemp);
       if(count($arr) == 2  && isset($arr[1]) && $arr[1] != '' ){
 	$dbwhere_ano = " and e60_anousu = ".$arr[1];
       }else{

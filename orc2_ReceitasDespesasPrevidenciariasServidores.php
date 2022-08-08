@@ -57,7 +57,7 @@ include_once("libs/db_utils.php");
 //$clconrelvalor     = new cl_conrelvalor;
 //$oOrcParamRelopcre = new cl_orcparamrelopcre;
 //$clorcparamelemento = new cl_orcparamelemento();
-//$xinstit = split("-",$db_selinstit);
+//$xinstit = explode("-",$db_selinstit);
 //$resultinst = pg_exec("select codigo,munic,nomeinst,nomeinstabrev from db_config where codigo in (".str_replace('-',', ',$db_selinstit).") ");
 //$descr_inst = '';
 //$xvirg = '';

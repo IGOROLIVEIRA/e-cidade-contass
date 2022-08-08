@@ -43,7 +43,7 @@ if(isset($HTTP_POST_VARS["calculavalor"])) {
   for($i = 0;$i < $tam;$i++) {
    // if(abs($valores[$i]) != 0) {
       //$mat = base64_decode($numpres[$i]);
-      $mat = split("P",$numpres[$i]);
+      $mat = explode("P",$numpres[$i]);
       $numpre = $mat[0];	  
       $numpar = $mat[1];
       $sql = "update issvar set q05_vlrinf = ".$valores[$i]." where q05_numpre = $numpre and q05_numpar = $numpar";

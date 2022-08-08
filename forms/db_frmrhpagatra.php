@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: pessoal
@@ -51,7 +51,7 @@ $funcionario_na_justica = false;
               db_ancora(@$Lrh57_regist,"js_pesquisarh57_regist(true);",$db_opcao);
               ?>
             </td>
-            <td nowrap> 
+            <td nowrap>
               <?
               db_input('rh57_regist',6,$Irh57_regist,true,'text',$db_opcao," onchange='js_pesquisarh57_regist(false);'");
               ?>
@@ -83,7 +83,7 @@ $funcionario_na_justica = false;
             <td nowrap title="Ano / Mês" align="right">
               <b>Ano / Mês:</b>
             </td>
-            <td nowrap> 
+            <td nowrap>
               <?
               db_input('rh57_ano',4,$Irh57_ano,true,'text',3,"");
               ?>
@@ -96,7 +96,7 @@ $funcionario_na_justica = false;
             <td nowrap title="<?=@$Trh57_valorini?>">
               <?=@$Lrh57_valorini?>
             </td>
-            <td> 
+            <td>
               <?
               db_input('rh57_valorini',10,$Irh57_valorini,true,'text',3,"")
               ?>
@@ -104,7 +104,7 @@ $funcionario_na_justica = false;
             <td nowrap title="<?=@$Trh57_saldo?>">
               <?=@$Lrh57_saldo?>
             </td>
-            <td> 
+            <td>
               <?
               db_input('rh57_saldo',10,$Irh57_saldo,true,'text',3,"","valsaldo")
               ?>
@@ -116,7 +116,7 @@ $funcionario_na_justica = false;
               db_ancora(@$Lrh57_tipoatra,"js_pesquisarh57_tipoatra(true);",3);
               ?>
             </td>
-            <td colspan="5" nowrap> 
+            <td colspan="5" nowrap>
               <?
               db_input('rh57_tipoatra',10,$Irh57_tipoatra,true,'text',3," onchange='js_pesquisarh57_tipoatra(false);'")
               ?>
@@ -140,7 +140,7 @@ $funcionario_na_justica = false;
               db_ancora(@$Lrh58_tipoocor,"js_pesquisarh58_tipoocor(true);",$db_opcao);
               ?>
             </td>
-            <td colspan="3" nowrap> 
+            <td colspan="3" nowrap>
               <?
               db_input('rh58_tipoocor',8,$Irh58_tipoocor,true,'text',$db_opcao," onchange='js_pesquisarh58_tipoocor(false);'")
               ?>
@@ -156,7 +156,7 @@ $funcionario_na_justica = false;
               db_ancora(@$Lrh58_obs,"",3);
               ?>
             </td>
-            <td colspan="3" nowrap> 
+            <td colspan="3" nowrap>
               <?
               db_textarea("rh58_obs",3,52,$Irh58_obs,true,'text',$db_opcao);
               ?>
@@ -166,7 +166,7 @@ $funcionario_na_justica = false;
             <td nowrap title="<?=@$Trh58_data?>" align="right">
               <?=@$Lrh58_data?>
             </td>
-            <td> 
+            <td>
               <?
               db_inputdata("rh58_data",@$rh58_data_dia,@$rh58_data_mes,@$rh58_data_ano,true,'text',$db_opcao);
               db_input('rh58_codigo',6,$Irh58_codigo,true,'hidden',3,"");
@@ -175,7 +175,7 @@ $funcionario_na_justica = false;
             <td nowrap title="<?=@$Trh58_valor?>" align="right">
               <?=@$Lrh58_valor?>
             </td>
-            <td> 
+            <td>
               <?
               db_input('rh58_valor',10,$Irh58_valor,true,'text',$db_opcao,"onchange='js_verificavalor();'")
               ?>
@@ -217,7 +217,7 @@ $funcionario_na_justica = false;
   <tr>
     <td colspan="2">
       <?
-      $dbgroupby = "rh57_seq, rh57_ano, rh57_mes, rh57_regist, rh57_valorini, rh57_tipoatra"; 
+      $dbgroupby = "rh57_seq, rh57_ano, rh57_mes, rh57_regist, rh57_valorini, rh57_tipoatra";
       $dbhaving = " rh57_regist = ".$rh57_regist;
       if(isset($rh57_seq) && trim($rh57_seq) != ""){
         $dbhaving.= " and rh57_seq <> ".$rh57_seq;
@@ -229,7 +229,7 @@ $funcionario_na_justica = false;
       }
       $sql = $clrhpagatra->sql_query_tipoatras(null,
                                                "
-                                                distinct 
+                                                distinct
                                                 rh57_seq,
                                                 rh57_ano,
                                                 rh57_mes,
@@ -301,10 +301,10 @@ function js_verificavalor(){
 }
 function js_pesquisarh58_tipoocor(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_rhpagtipoocor','func_rhpagtipoocor.php?funcao_js=parent.js_mostrarhpagtipoocor1|rh59_codigo|rh59_descr|rh59_tipo','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhpagtipoocor','func_rhpagtipoocor.php?funcao_js=parent.js_mostrarhpagtipoocor1|rh59_codigo|rh59_descr|rh59_tipo','Pesquisa',true);
   }else{
      if(document.form1.rh58_tipoocor.value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_rhpagtipoocor','func_rhpagtipoocor.php?pesquisa_chave='+document.form1.rh58_tipoocor.value+'&funcao_js=parent.js_mostrarhpagtipoocor','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhpagtipoocor','func_rhpagtipoocor.php?pesquisa_chave='+document.form1.rh58_tipoocor.value+'&funcao_js=parent.js_mostrarhpagtipoocor','Pesquisa',false);
      }else{
        document.form1.rh59_descr.value = '';
      }
@@ -330,21 +330,21 @@ function js_mostrarhpagtipoocor1(chave1,chave2,chave3){
 }
 function js_pesquisarh57_regist(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_rhpessoal','func_rhpessoalrecis.php?funcao_js=parent.js_mostrarhpessoal1|rh01_regist|z01_nome|rh05_recis','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhpessoal','func_rhpessoalrecis.php?funcao_js=parent.js_mostrarhpessoal1|rh01_regist|z01_nome|rh05_recis','Pesquisa',true);
   }else{
-     if(document.form1.rh57_regist.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_rhpessoal','func_rhpessoalrecis.php?pesquisa_chave='+document.form1.rh57_regist.value+'&funcao_js=parent.js_mostrarhpessoal','Pesquisa',false);
+     if(document.form1.rh57_regist.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhpessoal','func_rhpessoalrecis.php?pesquisa_chave='+document.form1.rh57_regist.value+'&funcao_js=parent.js_mostrarhpessoal','Pesquisa',false);
      }else{
        location.href = "pes1_rhpagatra001.php";
-       document.form1.z01_nome.value = ''; 
+       document.form1.z01_nome.value = '';
      }
   }
 }
 function js_mostrarhpessoal(chave,admiss,seqpes,proc1,proc2,per1f,per2f,codreg,matipe,dtvinc,rescis,erro){
   document.form1.z01_nome.value = chave;
-  if(erro==true){ 
-    document.form1.rh57_regist.focus(); 
-    document.form1.rh57_regist.value = ''; 
+  if(erro==true){
+    document.form1.rh57_regist.focus();
+    document.form1.rh57_regist.value = '';
   }else if(rescis != ""){
     alert("ALERTA: Funcionário rescindido.");
   }
@@ -361,20 +361,20 @@ function js_mostrarhpessoal1(chave1,chave2,chave3){
 }
 function js_pesquisarh57_tipoatra(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_rhtipoatras','func_rhtipoatras.php?funcao_js=parent.js_mostrarhtipoatras1|rh60_codigo|rh60_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhtipoatras','func_rhtipoatras.php?funcao_js=parent.js_mostrarhtipoatras1|rh60_codigo|rh60_descr','Pesquisa',true);
   }else{
-     if(document.form1.rh57_tipoatra.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_rhtipoatras','func_rhtipoatras.php?pesquisa_chave='+document.form1.rh57_tipoatra.value+'&funcao_js=parent.js_mostrarhtipoatras','Pesquisa',false);
+     if(document.form1.rh57_tipoatra.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhtipoatras','func_rhtipoatras.php?pesquisa_chave='+document.form1.rh57_tipoatra.value+'&funcao_js=parent.js_mostrarhtipoatras','Pesquisa',false);
      }else{
-       document.form1.rh60_descr.value = ''; 
+       document.form1.rh60_descr.value = '';
      }
   }
 }
 function js_mostrarhtipoatras(chave,erro){
-  document.form1.rh60_descr.value = chave; 
-  if(erro==true){ 
-    document.form1.rh57_tipoatra.focus(); 
-    document.form1.rh57_tipoatra.value = ''; 
+  document.form1.rh60_descr.value = chave;
+  if(erro==true){
+    document.form1.rh57_tipoatra.focus();
+    document.form1.rh57_tipoatra.value = '';
   }
 }
 function js_mostrarhtipoatras1(chave1,chave2){
@@ -383,7 +383,7 @@ function js_mostrarhtipoatras1(chave1,chave2){
   db_iframe_rhtipoatras.hide();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_rhpagatra','func_rhpagatra.php?funcao_js=parent.js_preenchepesquisa|rh57_seq','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhpagatra','func_rhpagatra.php?funcao_js=parent.js_preenchepesquisa|rh57_seq','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_rhpagatra.hide();

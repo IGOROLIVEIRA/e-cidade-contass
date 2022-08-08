@@ -18,13 +18,13 @@ if(isset($alterar)){
 
     db_inicio_transacao();
     $db_opcao = 2;
-	
+
     if (isset($ci03_protprocesso_cod) && !empty($ci03_protprocesso_cod)) {
-		
+
 		$clprocessoaudit->ci03_protprocesso = $ci03_protprocesso_cod;
 		unset($ci03_protprocesso_cod);
 
-	} 
+	}
 
     $clprocessoaudit->alterar($ci03_codproc);
 
@@ -44,7 +44,7 @@ if(isset($alterar)){
         $sqlerro=true;
         $clprocessoaudit->erro_msg = $clprocessoaudit->erro_msg;
     }
-    
+
     $aDepts = explode(',', $departamentos);
 
     foreach($aDepts as $iCodDept) {
@@ -60,21 +60,21 @@ if(isset($alterar)){
             $clprocessoaudit->erro_msg = $clprocessoauditdepart->erro_msg;
         }
 
-    }    
+    }
 
     db_fim_transacao($sqlerro);
 
 } else if (isset($chavepesquisa)) {
-    
+
     $db_opcao = 2;
-	$result = $clprocessoaudit->sql_record($clprocessoaudit->sql_query($chavepesquisa)); 
+	$result = $clprocessoaudit->sql_record($clprocessoaudit->sql_query($chavepesquisa));
 	db_fieldsmemory($result,0);
-	
+
 	if (isset($ci03_protprocesso) && !empty($ci03_protprocesso)) {
 		$ci03_protprocesso = $p58_numero . '/' . $p58_ano;
 	}
-	
-    $db_botao = true;   
+
+    $db_botao = true;
 
 }
 
@@ -92,8 +92,8 @@ if(isset($alterar)){
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="790" border="0" cellspacing="0" cellpadding="0" align="center">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
 	<?
 	include("forms/db_frmprocessoaudit.php");
@@ -127,7 +127,7 @@ if(isset($chavepesquisa)){
     <script>
         function js_db_libera(){
           parent.document.formaba.processoauditquestoes.disabled=false;
-          top.corpo.iframe_processoauditquestoes.location.href='cin4_procaudit004.php?ci03_codproc=".@$ci03_codproc."';
+          CurrentWindow.corpo.iframe_processoauditquestoes.location.href='cin4_procaudit004.php?ci03_codproc=".@$ci03_codproc."';
       ";
           if(isset($liberaaba)){
             echo "  parent.mo_camada('processoauditquestoes');";

@@ -6,22 +6,22 @@
 // Author:	Johan Persson (johanp@aditus.nu)
 // Ver:		$Id: testsuit.php,v 1.1 2006/03/20 11:56:44 dbrogerio Exp $
 //
-// License:	This code is released under QPL 1.0 
-// Copyright (C) 2001,2002 Johan Persson 
+// License:	This code is released under QPL 1.0
+// Copyright (C) 2001,2002 Johan Persson
 //========================================================================
 
 //-------------------------------------------------------------------------
 //
 // Usage: testsuit.php[?type=1]    Generates all non image map scripts
-//        testsuit.php?type=2      Generates client side image map scripts 
-//       
+//        testsuit.php?type=2      Generates client side image map scripts
+//
 //-------------------------------------------------------------------------
 class TestDriver {
-    
+
     var $iType;
     var $iDir;
 
-    function TestDriver($aType=1,$aDir='') {
+    function __construct($aType=1,$aDir='') {
 	$this->iType = $aType;
 	if( $aDir == '' ) {
 	    $aDir = getcwd();
@@ -42,7 +42,7 @@ class TestDriver {
 	}
 	$d->Close();
 	if( count($a) == 0 ) {
-	    die("PANIC: Apache/PHP does not have enough permission to read the scripts in directory: $this->iDir");	    
+	    die("PANIC: Apache/PHP does not have enough permission to read the scripts in directory: $this->iDir");
 	}
 	sort($a);
 	return $a;
@@ -58,13 +58,13 @@ class TestDriver {
 	}
 	$d->Close();
 	if( count($a) == 0 ) {
-	    die("PANIC: Apache/PHP does not have enough permission to read the CSIM scripts in directory: $this->iDir");	    
+	    die("PANIC: Apache/PHP does not have enough permission to read the CSIM scripts in directory: $this->iDir");
 	}
 	sort($a);
 	return $a;
     }
 
-    
+
     function Run() {
 	switch( $this->iType ) {
 	    case 1:
@@ -82,7 +82,7 @@ class TestDriver {
 	echo "Testtype: " . ($this->iType==1 ? ' Standard images ':' Image map tests ');
 	echo "<br>Number of tests: $n<p>";
 	echo "<ol>";
-	
+
 	for( $i=0; $i<$n; ++$i ) {
 	    if( $this->iType ==1 ) {
 	    echo '<li><a href="show-example.php?target='.urlencode($files[$i]).'"><img src="'.$files[$i].'" border=0 align=top></a><br><strong>Filename:</strong> <i>'.basename($files[$i])."</i>\n";
@@ -104,5 +104,3 @@ if( empty($type) ) {
 
 $driver = new TestDriver($type);
 $driver->Run();
-
-?>

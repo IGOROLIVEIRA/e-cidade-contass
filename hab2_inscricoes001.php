@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -40,7 +40,7 @@ db_postmemory($HTTP_POST_VARS);
 <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta http-equiv="Expires" CONTENT="0">
-<?   
+<?
   db_app::load("scripts.js, strings.js, prototype.js");
   db_app::load("estilos.css, grid.style.css");
 ?>
@@ -59,25 +59,25 @@ db_postmemory($HTTP_POST_VARS);
          <td >
           <?
             db_inputdata('ht15_datalancamentoA','','','',true,'text',1,"");
-            echo " à "; 
+            echo " à ";
             db_inputdata('ht15_datalancamentoB','','','',true,'text',1,"");
           ?>
          </td>
       </tr>
       <tr>
          <td>
-         <b> 
+         <b>
          <?
               db_ancora('Inscrição',"js_pesquisaInscricao(true);",1);
            // db_selectrecord("ht15_habitsituacaoinscricao","ht13_sequencial, ht13_descricao",true,1);
-          ?> 
+          ?>
           </b>
          </td>
-         <td> 
+         <td>
 					<?
 					   db_input('ht15_sequencial',6,false,'','text',3," onchange='js_pesquisaInscricao(false);'");
 	           db_input('nome_inscricao',30,'text',3,'');
-	       ?>          
+	       ?>
          </td>
       </tr>
       <tr>
@@ -87,9 +87,9 @@ db_postmemory($HTTP_POST_VARS);
              $aOrdem = array( 'habitinscricao.ht15_datalancamento' => 'Data de Lançamento da Inscrição',
                               'cgm.z01_nome'                       => 'Nome do Candidato',
                               'habitprograma.ht01_sequencial'      => 'Programa',
-                              'habitinscricao.ht15_sequencial'     => 'Inscrição'   
+                              'habitinscricao.ht15_sequencial'     => 'Inscrição'
                              );
-             db_select('filtro_ordem',$aOrdem,true,1,'');            
+             db_select('filtro_ordem',$aOrdem,true,1,'');
           ?>
          </td>
       </tr>
@@ -102,14 +102,14 @@ db_postmemory($HTTP_POST_VARS);
                                '3' => 'Nome do candidato',
                                '4' => 'Programa'
                              );
-             db_select('filtro_quebra',$aQuebra,true,1,'');            
-          ?>         
+             db_select('filtro_quebra',$aQuebra,true,1,'');
+          ?>
          </td>
-      </tr>  
-      
+      </tr>
+
       <tr>
          <td colspan="2" align="center">
-         
+
               <?
                  $clProgramas                                = new cl_arquivo_auxiliar();
                  $clProgramas->codigo                        = "ht01_sequencial";
@@ -118,7 +118,7 @@ db_postmemory($HTTP_POST_VARS);
                  $clProgramas->funcao_js                     = 'js_mostra_programa';
                  $clProgramas->funcao_js_hide                = 'js_mostra_programa1';
                  $clProgramas->cabecalho                     = "<b>Lista de Programas</b>";
-                 $clProgramas->tipo                          = 2;   
+                 $clProgramas->tipo                          = 2;
                  $clProgramas->Labelancora                   = "Programas";
                  $clProgramas->func_arquivo                  = "func_habitprograma.php";
                  $clProgramas->passar_query_string_para_func = "&sListaInteresseCandidato='+js_getlist_candidatos()+'"; //filtro se os candidatos foram selecionados
@@ -129,8 +129,8 @@ db_postmemory($HTTP_POST_VARS);
                  $clProgramas->funcao_gera_formulario();
             ?>
          </td>
-      </tr>        
-          
+      </tr>
+
       <tr>
          <td colspan="2">
           <?
@@ -141,7 +141,7 @@ db_postmemory($HTTP_POST_VARS);
                  $clCandidatos->funcao_js                     = 'js_mostra_candidato';
                  $clCandidatos->funcao_js_hide                = 'js_mostra_candidato1';
                  $clCandidatos->cabecalho                     = "<b>Lista de Candidatos</b>";
-                 $clCandidatos->tipo                          = 2;   
+                 $clCandidatos->tipo                          = 2;
                  $clCandidatos->Labelancora                   = "Candidatos";
                  $clCandidatos->func_arquivo                  = "func_habitcandidato.php";
                  $clCandidatos->passar_query_string_para_func = "&sListaInteressePrograma='+js_getlist_programas()+'"; //filtro se os pragramas foram selecionados
@@ -149,21 +149,21 @@ db_postmemory($HTTP_POST_VARS);
                  $clCandidatos->vwidth                        = "500";
                  $clCandidatos->nome_botao                    = "cl_lancaCandidatos";
                  $clCandidatos->linhas                        = 5;
-                 $clCandidatos->funcao_gera_formulario();          
+                 $clCandidatos->funcao_gera_formulario();
           ?>
          </td>
-      </tr>  
+      </tr>
     </table>
-  </fieldset> 
+  </fieldset>
   <table style="margin-top: 10px;">
       <tr>
-        <td colspan="2" align = "center"> 
+        <td colspan="2" align = "center">
           <input  name="imprimir" id="imprimir" type="button" value="Imprimir" onclick="js_emite();" >
         </td>
-      </tr>  
+      </tr>
   </table>
-</form>   
-</center>   
+</form>
+</center>
 <?
   db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
 ?>
@@ -174,23 +174,23 @@ db_postmemory($HTTP_POST_VARS);
 function js_pesquisaInscricao(mostra){
 
   if (mostra == true) {
-    js_OpenJanelaIframe('top.corpo','db_iframe_orcelemento','func_habitinscricao.php?funcao_js=parent.js_mostraInscricao1|ht15_sequencial|z01_nome','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_orcelemento','func_habitinscricao.php?funcao_js=parent.js_mostraInscricao1|ht15_sequencial|z01_nome','Pesquisa',true);
   } else {
-  
+
      if(document.form1.ht15_sequencial.value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_orcelemento','func_habitinscricao.php?pesquisa_chave='+document.form1.ht15_sequencial.value+'&funcao_js=parent.js_mostraInscricao','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_orcelemento','func_habitinscricao.php?pesquisa_chave='+document.form1.ht15_sequencial.value+'&funcao_js=parent.js_mostraInscricao','Pesquisa',false);
      }else{
-       document.form1.ht15_sequencial.value = ''; 
+       document.form1.ht15_sequencial.value = '';
      }
   }
 }
 function js_mostraInscricao(chave,chave2,erro){
-  document.form1.ht15_sequencial.value = chave; 
+  document.form1.ht15_sequencial.value = chave;
   document.form1.nome_inscricao.value = chave2;
   if (erro == true) {
-   
-    document.form1.ht15_sequencial.focus(); 
-    document.form1.ht15_sequencial.value = ''; 
+
+    document.form1.ht15_sequencial.focus();
+    document.form1.ht15_sequencial.value = '';
   }
 }
 function js_mostraInscricao1(chave1,chave2){
@@ -213,7 +213,7 @@ function js_emite(){
     var iProgramas  = js_getlist_programas();
     var iCandidatos = js_getlist_candidatos();
     var sQuery  = "";
-    
+
 		    sQuery  = "?sDataA="     + sDataA;
 		    sQuery += "&sDataB="     + sDataB;
 		    sQuery += "&iInscricao="  + iInscricao;
@@ -235,7 +235,7 @@ function js_getlist_programas() {
           cria a lista de programas selecionados
       */
       for(iProg = 0; iProg < document.form1.elements['lista_programas'].length; iProg++){
-      
+
          sListaPrograma += (sVirgPrograma + document.form1.elements['lista_programas'].options[iProg].value);
          sVirgPrograma = ",";
       }
@@ -247,15 +247,15 @@ function js_getlist_candidatos(){
 
       var sListaCandidatos = "";
       var sVirgCandidatos  = "";
-      
+
       /*
           cria a lista de candidatos selecionados
       */
       for(iCand = 0; iCand < document.form1.elements['lista_candidatos'].length; iCand++){
-      
+
          sListaCandidatos += (sVirgCandidatos + document.form1.elements['lista_candidatos'].options[iCand].value);
          sVirgCandidatos = ",";
-      }      
+      }
       return sListaCandidatos;
 }
 

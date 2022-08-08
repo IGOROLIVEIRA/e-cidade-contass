@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once ("libs/db_stdlib.php");
@@ -73,7 +73,7 @@ if(isset($e80_data_ano)){
 }
 
 if(isset($atualizar)){
-  
+
   $sqlerro = false;
   db_inicio_transacao();
 
@@ -328,8 +328,8 @@ if(isset($atualizar)){
      $pc63_banco = db_formatar($pc63_banco,'s','0',3,'e',0);
      if ($codigomodelo==3 && $sqlerro == false) {
 
-       $arr_data  = split('-',$e87_data);
-	     $arr_datap = split('-',$e87_dataproc);
+       $arr_data  = explode('-',$e87_data);
+	     $arr_datap = explode('-',$e87_dataproc);
        $data      =  $arr_data[2].$arr_data[1].$arr_data[0];
 	     $dat_cred  = $arr_datap[2].$arr_datap[1].$arr_datap[0];
 	     /// criar campo de sequencia do arquivo no empagetipo.
@@ -469,7 +469,7 @@ if(isset($atualizar)){
         $densidadearquivo   = "01600";
         $usoprefeitura1     = $e90_codgera;
         $db_layouttxt       = new db_layouttxt(9,"tmp/".$nomearquivo, "A B");
-        db_setaPropriedadesLayoutTxt(&$db_layouttxt,1);
+        db_setaPropriedadesLayoutTxt($db_layouttxt,1);
       }
       ///// FINAL HEADER DO ARQUIVO
 
@@ -516,7 +516,7 @@ if(isset($atualizar)){
              $loteservico         = db_formatar($seq_header,'s','0',4,'e',0);
              $quantidadetotallote = ($seq_detalhe + 2);
              $valortotallote      = $valor_header;
-             db_setaPropriedadesLayoutTxt(&$db_layouttxt,4);
+             db_setaPropriedadesLayoutTxt($db_layouttxt,4);
              $valortotallote = 0;
              $valor_header = 0;
 
@@ -662,7 +662,7 @@ if(isset($atualizar)){
       $contalote = str_pad($c63_codigooperacao,4,"0",STR_PAD_LEFT).str_pad($conta_pre,8,"0",STR_PAD_LEFT);
       //$contalote	=	$conta_pre;
       $dvcontalote = $dvconta_pre;
-      db_setaPropriedadesLayoutTxt(&$db_layouttxt,2);
+      db_setaPropriedadesLayoutTxt($db_layouttxt,2);
     }
 	 }
 
@@ -865,14 +865,14 @@ if(isset($atualizar)){
         $diasvencimento = db_subdata($e87_dataproc,"d");
         $numparcelas = "00";
         $avisofavorecido = "0";
-        db_setaPropriedadesLayoutTxt(&$db_layouttxt,3,"A");
+        db_setaPropriedadesLayoutTxt($db_layouttxt,3,"A");
         $seq_detalhe += 1;
         $loteservico = db_formatar($seq_header,'s','0',4,'e',0);;
         $sequencialnolote = $seq_detalhe;
         $tipoinscricaofav = $conf;
         $datavencimento = $e87_dataproc;
         $valorvencimento = $valor;
-        db_setaPropriedadesLayoutTxt(&$db_layouttxt,3,"B");
+        db_setaPropriedadesLayoutTxt($db_layouttxt,3,"B");
         $registro += 1;
 	    }
 	    $valor_header += $valor;
@@ -884,7 +884,7 @@ if(isset($atualizar)){
 	    $loteservico = db_formatar($seq_header,'s','0',4,'e',0);
       $quantidadetotallote = ($seq_detalhe + 2);
       $valortotallote = $valor_header;
-      db_setaPropriedadesLayoutTxt(&$db_layouttxt,4);
+      db_setaPropriedadesLayoutTxt($db_layouttxt,4);
       $valortotallote = 0;
       $valor_header = 0;
     } else {
@@ -910,7 +910,7 @@ if(isset($atualizar)){
 	  	$loteservico = '99999';
       $quantidadelotesarq = db_formatar($seq_header,'s','0',4,'e',0);
       $quantidaderegistarq = $registro + $quantidadelotesarq +1;
-      db_setaPropriedadesLayoutTxt(&$db_layouttxt,5);
+      db_setaPropriedadesLayoutTxt($db_layouttxt,5);
     } else {
 	    ////  TRAILLER DO ARQUIVO
 	    $registro += 1;
@@ -999,7 +999,7 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
 <script>
 
 function js_empage(){
-    js_OpenJanelaIframe('top.corpo','db_iframe_empage','func_empage.php?funcao_js=parent.js_mostra|e80_codage|e80_data','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_empage','func_empage.php?funcao_js=parent.js_mostra|e80_codage|e80_data','Pesquisa',true);
 }
 function js_mostra(codage,data){
   arr = data.split('-');
@@ -1031,7 +1031,7 @@ if(isset($atualizar) ){
     echo "
     <script>
       function js_emitir(){
-        js_OpenJanelaIframe('top.corpo','db_iframe_download','db_download.php?arquivo=tmp/$nomearquivo','Download de arquivos',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_download','db_download.php?arquivo=tmp/$nomearquivo','Download de arquivos',false);
       }
       js_emitir();
     </script>

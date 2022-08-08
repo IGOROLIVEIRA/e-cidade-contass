@@ -696,7 +696,7 @@ class cl_sau_encaminhamentos {
    function sql_query ( $s142_i_codigo=null,$campos="*",$ordem=null,$dbwhere=""){ 
      $sql = "select ";
      if($campos != "*" ){
-       $campos_sql = split("#",$campos);
+       $campos_sql = explode("#",$campos);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -746,7 +746,7 @@ class cl_sau_encaminhamentos {
      $sql .= $sql2;
      if($ordem != null ){
        $sql .= " order by ";
-       $campos_sql = split("#",$ordem);
+       $campos_sql = explode("#",$ordem);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -759,7 +759,7 @@ class cl_sau_encaminhamentos {
    function sql_query_file ( $s142_i_codigo=null,$campos="*",$ordem=null,$dbwhere=""){ 
      $sql = "select ";
      if($campos != "*" ){
-       $campos_sql = split("#",$campos);
+       $campos_sql = explode("#",$campos);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -780,7 +780,7 @@ class cl_sau_encaminhamentos {
      $sql .= $sql2;
      if($ordem != null ){
        $sql .= " order by ";
-       $campos_sql = split("#",$ordem);
+       $campos_sql = explode("#",$ordem);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -796,7 +796,7 @@ class cl_sau_encaminhamentos {
                                                   $ordem = null, $dbwhere = "") { 
     $sql = "select ";
     if($campos != "" ){
-      $campos_sql = split("#",$campos);
+      $campos_sql = explode("#",$campos);
       $virgula = "";
       for($i=0;$i<sizeof($campos_sql);$i++){
         $sql .= $virgula.$campos_sql[$i];
@@ -852,7 +852,7 @@ class cl_sau_encaminhamentos {
     $sql .= $sql2.' and s142_i_codigo not in (select s149_i_encaminhamento from sau_encaminhanulado)';
     if($ordem != null ){
       $sql .= " order by ";
-      $campos_sql = split("#",$ordem);
+      $campos_sql = explode("#",$ordem);
       $virgula = "";
       for($i=0;$i<sizeof($campos_sql);$i++){
         $sql .= $virgula.$campos_sql[$i];
@@ -864,7 +864,7 @@ class cl_sau_encaminhamentos {
    function sql_query2 ( $s142_i_codigo=null,$campos="",$ordem=null,$dbwhere=""){ 
     $sql = "select ";
     if($campos != "" ){
-      $campos_sql = split("#",$campos);
+      $campos_sql = explode("#",$campos);
       $virgula = "";
       for($i=0;$i<sizeof($campos_sql);$i++){
         $sql .= $virgula.$campos_sql[$i];
@@ -918,7 +918,7 @@ class cl_sau_encaminhamentos {
     $sql .= $sql2;
     if($ordem != null ){
       $sql .= " order by ";
-      $campos_sql = split("#",$ordem);
+      $campos_sql = explode("#",$ordem);
       $virgula = "";
       for($i=0;$i<sizeof($campos_sql);$i++){
         $sql .= $virgula.$campos_sql[$i];

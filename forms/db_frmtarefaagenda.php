@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: atendimento
@@ -41,7 +41,7 @@ if(isset($db_opcaoal)){
 }else if(isset($opcao) && $opcao=="excluir"){
     $db_opcao = 3;
     $db_botao=true;
-}else{  
+}else{
     $db_opcao = 1;
     $db_botao=true;
 /*    if(isset($novo) || isset($alterar) ||   isset($excluir) || (isset($incluir) && $sqlerro==false ) ){
@@ -55,80 +55,80 @@ if(isset($db_opcaoal)){
      $at13_horafim = "";
    }
    */
-} 
+}
 ?>
 <form name="form1" method="post" action="">
 <center>
 <table border="0">
-  
+
   <tr>
   	<td nowrap colspan="2" align="right">
 		<input name="bt_voltar" type="button" value="Voltar" title="Voltar" onClick="js_voltar();">
   	</td>
-  </tr>	
-  
+  </tr>
+
   <tr>
     <td nowrap title="<?=@$Tat13_tarefa?>">
        <?=@$Lat13_tarefa?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('at13_tarefa',10,$Iat13_tarefa,true,'text',3,"");
 db_input('at13_sequencial',10,$Iat13_sequencial,true,'hidden',3,"");
 ?>
     </td>
   </tr>
-  
+
   <tr>
     <td nowrap title="<?=@$Tat13_dia?>">
        <?=@$Lat13_dia?>
     </td>
-    <td> 
+    <td>
 <?
 db_inputdata('at13_dia', @$at13_dia_dia, @$at13_dia_mes, @$at13_dia_ano, true, 'text', $db_opcao, "")
 ?>
     </td>
   </tr>
- 
+
       <tr>
     <td nowrap title="<?=@$Tat13_horaini?>">
        <?=@$Lat13_horaini?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('at13_horaini',5,   @$at13_horaini, true, 'text', $db_opcao,"onchange='js_verifica_hora(this.value,this.name)';")
 ?>
     </td>
-  </tr>      
-  
+  </tr>
+
     <tr>
     <td nowrap title="<?=@$Tat13_horafim?>">
        <?=@$Lat13_horafim?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('at13_horafim',5, @$at13_horafim, true, 'text', $db_opcao,"onchange='js_verifica_hora(this.value,this.name)';")
 ?>
     </td>
-  </tr>      
-  
+  </tr>
+
   <tr>
     <tr>
   	<td nowrap colspan="2" align="right">
-  	<input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> 
+  	<input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?>
 		<input name="novo" type="button" id="cancelar" value="Novo" onclick="js_cancelar();" <?=($db_opcao==1||isset($db_opcaoal)?"style='visibility:hidden;'":"")?>>
   	 </td>
-  </tr>	
-  
-  
+  </tr>
+
+
    <td colspan="2" align="center">
    </td>
   </tr>
   </table>
  <table>
   <tr>
-    <td valign="top"  align="center">  
-    
+    <td valign="top"  align="center">
+
     <?
 	 $chavepri= array("at13_sequencial"=>@$at13_sequencial,"at13_tarefa"=>@$at13_tarefa);
 	 $cliframe_alterar_excluir->chavepri=$chavepri;
@@ -142,10 +142,10 @@ db_input('at13_horafim',5, @$at13_horafim, true, 'text', $db_opcao,"onchange='js
     </td>
    </tr>
  </table>
-  
+
   <?
   $sql = "select distinct at77_id_usuario, at77_dataagenda,at77_hora, at77_observacao, at77_datavalidade , nome
-          from tarefaagenda 
+          from tarefaagenda
                inner join db_usuarios on at77_id_usuario = id_usuario
           where at77_tarefa = $at13_tarefa
           order by at77_dataagenda";
@@ -183,16 +183,16 @@ db_input('at13_horafim',5, @$at13_horafim, true, 'text', $db_opcao,"onchange='js
   </center>
 </form>
 <script>
-  
+
 function js_verifica_hora(valor,campo){
   erro= 0;
   ms  = "";
   hs  = "";
-  
+
   tam = "";
   pos = "";
   tam = valor.length;
-  pos = valor.indexOf(":");  
+  pos = valor.indexOf(":");
   if(pos!=-1){
     if(pos==0 || pos>3){
       erro++;
@@ -235,7 +235,7 @@ function js_verifica_hora(valor,campo){
       }
       hora = hs;
       minu = ms;
-    }    
+    }
   }
 
   if (document.form1.at13_horafim.value != "" && erro == 0) {
@@ -250,7 +250,7 @@ function js_verifica_hora(valor,campo){
             hs_ini = val_ini.substr(0,2);
        }
 
-       if (valor!=""){    
+       if (valor!=""){
             eval("document.form1."+campo+".value='"+hora+":"+minu+"';");
        }
 
@@ -267,24 +267,24 @@ function js_verifica_hora(valor,campo){
        if (hs_ini != "" && hs_fin != "") {
             if (hs_ini > hs_fin){
                  alert("Hora inicial maior que hora final");
-                 botao.disabled = true;		 
+                 botao.disabled = true;
                  erro           = 99;
             } else {
 	         botao.disabled = false;
 	    }
        }
-  }     
+  }
   if(erro>0){
-    if (erro < 99){ 
+    if (erro < 99){
          alert("Informe uma hora válida.");
     }
   }
-  if(valor!=""){    
+  if(valor!=""){
     eval("document.form1."+campo+".focus();");
     eval("document.form1."+campo+".value='"+hora+":"+minu+"';");
   }
-}  
-  
+}
+
 function js_cancelar(){
   var opcao = document.createElement("input");
   opcao.setAttribute("type","hidden");
@@ -295,6 +295,6 @@ function js_cancelar(){
 }
 function js_voltar() {
   parent.mo_camada('tarefa')
-  top.corpo.iframe_tarefa.document.form1.bt_voltar.click();	
+  CurrentWindow.corpo.iframe_tarefa.document.form1.bt_voltar.click();
 }
 </script>

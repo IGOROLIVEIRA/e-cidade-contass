@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: pessoal
@@ -92,7 +92,7 @@ if(!isset($mesfolha) || (isset($mesfolha) && trim($mesfolha) == "")){
     <td nowrap colspan="2">
     <?php
 	    db_input("folhaselecion", 3, 0, true, 'hidden', 3);
-  
+
       $arr_pontosgerfs_inicial = Array();
       $arr_pontosgerfs_final   = Array();
       $arr_pontos = Array("0" =>"Salário",
@@ -107,7 +107,7 @@ if(!isset($mesfolha) || (isset($mesfolha) && trim($mesfolha) == "")){
       $oCompetencia         = new DBCompetencia($anofolha, $mesfolha);
 
       /**
-       * Valida se a variável está ativa no db_conn, estando ativa, valida-se se a folha está aberta, caso esteja aberta, 
+       * Valida se a variável está ativa no db_conn, estando ativa, valida-se se a folha está aberta, caso esteja aberta,
        * não é possível fazer a geração para aquela folha, entao retiramos ela do multi-select. E verifica-se também se
        * existe uma folha, caso não exista, ele retira também do multi-select a folha.
        */
@@ -145,19 +145,19 @@ if(!isset($mesfolha) || (isset($mesfolha) && trim($mesfolha) == "")){
     } catch (Exception $eException) {
       db_msgbox($eException->getMessage());
     }
-    
+
 	    db_multiploselect("valor","descr", "", "", $arr_pontosgerfs_inicial, $arr_pontosgerfs_final, 6, 250, "", "", true, "js_complementar('c');");
 	  ?>
     </td>
   </tr>
   <?php
   if(isset($arr_pontosgerfs_final[5])){
-     
+
     $sSqlComplementar = $clgerfcom->sql_query_file($anofolha,$mesfolha,null,null,"distinct r48_semest as comp1,r48_semest as comp2");
     $result_gerfcom   = db_query($sSqlComplementar);
 
     if (DBPessoal::verificarUtilizacaoEstruturaSuplementar()){
-      
+
       $oDaoRhFolhaPagamento = new cl_rhfolhapagamento();
       $sWhereFolhaPagamento = "rh141_anousu = {$anofolha} and rh141_mesusu = {$mesfolha} and rh141_tipofolha = 3";
       $sSqlComplementar     = $oDaoRhFolhaPagamento->sql_query_file(null, 'rh141_codigo, rh141_codigo', null, $sWhereFolhaPagamento);
@@ -197,12 +197,12 @@ if(!isset($mesfolha) || (isset($mesfolha) && trim($mesfolha) == "")){
 
   <?php
   if (isset($arr_pontosgerfs_final[6]) && DBPessoal::verificarUtilizacaoEstruturaSuplementar()) {
-  
+
     $oDaoRhFolhaPagamento = new cl_rhfolhapagamento();
     $sWhereFolhaPagamento = "rh141_anousu = {$anofolha} and rh141_mesusu = {$mesfolha} and rh141_tipofolha = 6";
     $sSqlComplementar     = $oDaoRhFolhaPagamento->sql_query_file(null, 'rh141_codigo, rh141_codigo', null, $sWhereFolhaPagamento);
     $rsFolhaPagamento     = db_query($sSqlComplementar);
-    
+
     if(pg_num_rows($rsFolhaPagamento) > 0){
   ?>
   <tr>
@@ -332,7 +332,7 @@ function js_muda_anomes() {
   }
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_folha','func_folha.php?funcao_js=parent.js_preenchepesquisa|r38_regist','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_folha','func_folha.php?funcao_js=parent.js_preenchepesquisa|r38_regist','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_folha.hide();

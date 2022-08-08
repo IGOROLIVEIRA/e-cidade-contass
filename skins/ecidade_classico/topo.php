@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 ?>
 <style type="text/css">
@@ -49,9 +49,9 @@
   }
 
   function js_criaDIV() {
-    var camada = top.topo.document.createElement("DIV");
+    var camada = CurrentWindow.topo.document.createElement("DIV");
     camada.setAttribute("id","info");
-    camada.setAttribute("align","center");  
+    camada.setAttribute("align","center");
     camada.style.backgroundColor = "#FFFF99";
     camada.style.layerBackgroundColor = "#FFFF99";
     camada.style.position = "absolute";
@@ -62,25 +62,25 @@
     camada.style.width = "300px";
     camada.style.height = "20px";
     camada.innerHTML = '<table border="1" cellspacing="0" cellpadding="0"><tr><td style="font-size:10px;" bgcolor="#C4C400" nowrap><strong>Nome:</strong></td><td  style="font-size:10px" bgcolor="#C4C400" nowrap><?=@pg_result($result,0,0)?>&nbsp;</td><td  style="font-size:10px" bgcolor="#C4C400" nowrap><strong>Login:</strong></td><td  bgcolor="#C4C400" style="font-size:10px" nowrap><?=@pg_result($result,0,1)?>&nbsp;</td></tr><tr><td  style="font-size:10px" bgcolor="#C4C400" nowrap><strong>Base de Dados:&nbsp;</strong></td><td  style="font-size:10px"  bgcolor="#C4C400" nowrap>' + document.getElementById('auxAcesso').value + '&nbsp;</td><td  style="font-size:10px" bgcolor="#C4C400" nowrap><strong>Servidor:</strong></td><td  style="font-size:10px"  bgcolor="#C4C400" nowrap><?=$DB_SERVIDOR?>&nbsp;</td></tr><tr><td  style="font-size:10px" bgcolor="#C4C400" nowrap><strong>IP:</strong></td><td  style="font-size:10px"  bgcolor="#C4C400" nowrap><?=(isset($_SERVER["HTTP_X_FORWARDED_FOR"])?$_SERVER["HTTP_X_FORWARDED_FOR"]:$HTTP_SERVER_VARS['REMOTE_ADDR'])?>&nbsp;</td><td  style="font-size:10px" bgcolor="#C4C400" nowrap><strong>Local:</strong></td><td  style="font-size:10px" bgcolor="#C4C400" nowrap><?=$HTTP_SERVER_VARS['PHP_SELF'];?></td></tr></table>';
-    top.topo.document.body.appendChild(camada);
+    CurrentWindow.topo.document.body.appendChild(camada);
   }
-  
+
   function js_remDIV() {
-    if(top.topo.document.getElementById("info"))
-      top.topo.document.body.removeChild(top.topo.document.getElementById("info"));
+    if(CurrentWindow.topo.document.getElementById("info"))
+      CurrentWindow.topo.document.body.removeChild(CurrentWindow.topo.document.getElementById("info"));
   }
 </script>
 <body bgcolor=#CCCCCC style='margin-top:0px' leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
   <input type="hidden" id="auxAcesso" value="<?php echo $DB_BASE; ?>">
   <table width="100%" height="60" border="0" cellpadding="0" cellspacing="0">
-    <tr align="left" valign="bottom" bgcolor="#5786B2" class="arial"> 
-      <td align="center" valign="top"> 
+    <tr align="left" valign="bottom" bgcolor="#5786B2" class="arial">
+      <td align="center" valign="top">
         <table width="100%" height="60" border="0" cellpadding="0" cellspacing="0">
           <tr>
             <td height="45" valign="top" id="infoConfig" style="color:white;font-size:10px">&nbsp;</td>
           </tr>
           <tr>
-            <td valign="bottom" id='menuTopo' nowrap style="color:white;font-size:13px;font-weight: bold;"> 
+            <td valign="bottom" id='menuTopo' nowrap style="color:white;font-size:13px;font-weight: bold;">
               <a href="instit.php" style="text-decoration:none;color:white" target="corpo">Instituições</a> &nbsp;&nbsp;&nbsp;&nbsp;
               <a href="area.php" style="text-decoration:none;color:white" target="corpo">Áreas</a> &nbsp;&nbsp;&nbsp;&nbsp;
               <a href="corpo.php?link='modulos'" style="text-decoration:none;color:white" target="corpo">M&oacute;dulos</a> &nbsp;&nbsp;&nbsp;&nbsp;
@@ -103,7 +103,7 @@
   <input type="hidden" id="Hhora">
   <div align="center" id="sol" style="position:absolute; left:450px; top:11px; width:180px; height:45px; z-index:1; background-color: #00FFFF; border: 1px none #000000; visibility: hidden;">
     <br>
-    <a href='' id="msg_sol" class="arial" onclick="js_abrir();return false">  
+    <a href='' id="msg_sol" class="arial" onclick="js_abrir();return false">
       Solicita conversa
     </a>
   </div>

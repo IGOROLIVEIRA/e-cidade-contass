@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 $oRotulo = new rotulocampo;
@@ -42,7 +42,7 @@ $sSqlDbDepart    = $oDaoDbDepart->sql_query_dados_depart(null, $sCamposDbDepart,
 $rsDbDepart      = $oDaoDbDepart->sql_record($sSqlDbDepart);
 
 if ($oDaoDbDepart->numrows > 0) {
-  
+
   $oDadosDepartamento = db_utils::fieldsMemory($rsDbDepart, 0);
   $sMunicipio         = $oDadosDepartamento->munic;
   $sEstado            = $oDadosDepartamento->uf;
@@ -181,7 +181,7 @@ function js_retornoPesquisaEstados(oResponse) {
 
       oCboEstados.add(new Option(oEstado.sDescricao.urlDecode(), oEstado.iSequencial));
       if (!empty(sEstado) && sEstado == oEstado.sSigla.urlDecode() && iOpcao == 1) {
-        
+
         oCboEstados.options[oEstado.iSequencial].selected = true;
         js_pesquisaMunicipios();
       }
@@ -340,7 +340,7 @@ function js_pesquisaBairros(lMostra) {
       sUrl += '?funcao_js=parent.js_mostraBairros|db73_sequencial|db73_descricao|db72_sequencial|db71_sequencial|db73_sigla';
       sUrl += '&lMunicipioEstado';
 
-  js_OpenJanelaIframe('top.corpo', 'db_iframe_cadenderbairro', sUrl, 'Pesquisa Bairros', true);
+  js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_cadenderbairro', sUrl, 'Pesquisa Bairros', true);
 }
 
 /**

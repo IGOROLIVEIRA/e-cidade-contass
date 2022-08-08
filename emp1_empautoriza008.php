@@ -1,28 +1,28 @@
   <?
   /*
-   *     E-cidade Software Publico para Gestao Municipal                
-   *  Copyright (C) 2012  DBselller Servicos de Informatica             
-   *                            www.dbseller.com.br                     
-   *                         e-cidade@dbseller.com.br                   
-   *                                                                    
-   *  Este programa e software livre; voce pode redistribui-lo e/ou     
-   *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
-   *  publicada pela Free Software Foundation; tanto a versao 2 da      
-   *  Licenca como (a seu criterio) qualquer versao mais nova.          
-   *                                                                    
-   *  Este programa e distribuido na expectativa de ser util, mas SEM   
-   *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
-   *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
-   *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
-   *  detalhes.                                                         
-   *                                                                    
-   *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
-   *  junto com este programa; se nao, escreva para a Free Software     
-   *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
-   *  02111-1307, USA.                                                  
-   *  
-   *  Copia da licenca no diretorio licenca/licenca_en.txt 
-   *                                licenca/licenca_pt.txt 
+   *     E-cidade Software Publico para Gestao Municipal
+   *  Copyright (C) 2012  DBselller Servicos de Informatica
+   *                            www.dbseller.com.br
+   *                         e-cidade@dbseller.com.br
+   *
+   *  Este programa e software livre; voce pode redistribui-lo e/ou
+   *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+   *  publicada pela Free Software Foundation; tanto a versao 2 da
+   *  Licenca como (a seu criterio) qualquer versao mais nova.
+   *
+   *  Este programa e distribuido na expectativa de ser util, mas SEM
+   *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+   *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+   *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+   *  detalhes.
+   *
+   *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+   *  junto com este programa; se nao, escreva para a Free Software
+   *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+   *  02111-1307, USA.
+   *
+   *  Copia da licenca no diretorio licenca/licenca_en.txt
+   *                                licenca/licenca_pt.txt
    */
 
   require_once("libs/db_stdlib.php");
@@ -247,12 +247,12 @@
         parent.document.formaba.prazos.disabled=false;\n
         parent.document.formaba.anulacao.disabled=false;\n
                     // parent.document.formaba.empautret.disabled=false;\n
-                    // top.corpo.iframe_empautret.location.href='emp1_empautret001.php?e66_autori=$e54_autori&inclusao=true';\n
-        top.corpo.iframe_empautitem.location.href='emp1_empautitem001.php?e55_autori=$e54_autori';\n
-        top.corpo.iframe_prazos.location.href='emp1_empautoriza007.php?chavepesquisa=$e54_autori';\n
-        top.corpo.iframe_anulacao.location.href='emp1_empautoriza006.php?e54_autori=$e54_autori';\n
-        top.corpo.iframe_empautidot.location.href='emp1_empautidot001.php?e56_autori=$e54_autori';\n
-           }   
+                    // CurrentWindow.corpo.iframe_empautret.location.href='emp1_empautret001.php?e66_autori=$e54_autori&inclusao=true';\n
+        CurrentWindow.corpo.iframe_empautitem.location.href='emp1_empautitem001.php?e55_autori=$e54_autori';\n
+        CurrentWindow.corpo.iframe_prazos.location.href='emp1_empautoriza007.php?chavepesquisa=$e54_autori';\n
+        CurrentWindow.corpo.iframe_anulacao.location.href='emp1_empautoriza006.php?e54_autori=$e54_autori';\n
+        CurrentWindow.corpo.iframe_empautidot.location.href='emp1_empautidot001.php?e56_autori=$e54_autori';\n
+           }
            js_libera();
              </script>
            ";
@@ -266,11 +266,11 @@
                   parent.document.formaba.prazos.disabled=false;\n
                   parent.document.formaba.anulacao.disabled=false;\n
                   // parent.document.formaba.empautret.disabled=false;\n
-                  // top.corpo.iframe_empautret.location.href='emp1_empautret001.php?e66_autori=$e54_autori&inclusao=true';\n
-                  top.corpo.iframe_empautitem.location.href='emp1_empautitem001.php?db_opcaoal=33&e55_autori=$e54_autori';\n
-                  top.corpo.iframe_prazos.location.href='emp1_empautoriza007.php?db_opcao=33&chavepesquisa=$e54_autori';\n
-                  top.corpo.iframe_anulacao.location.href='emp1_empautoriza006.php?e54_autori=$e54_autori';\n
-                  top.corpo.iframe_empautidot.location.href='emp1_empautidot001.php?anulacao=true&db_opcao=33&e56_autori=$e54_autori';\n
+                  // CurrentWindow.corpo.iframe_empautret.location.href='emp1_empautret001.php?e66_autori=$e54_autori&inclusao=true';\n
+                  CurrentWindow.corpo.iframe_empautitem.location.href='emp1_empautitem001.php?db_opcaoal=33&e55_autori=$e54_autori';\n
+                  CurrentWindow.corpo.iframe_prazos.location.href='emp1_empautoriza007.php?db_opcao=33&chavepesquisa=$e54_autori';\n
+                  CurrentWindow.corpo.iframe_anulacao.location.href='emp1_empautoriza006.php?e54_autori=$e54_autori';\n
+                  CurrentWindow.corpo.iframe_empautidot.location.href='emp1_empautidot001.php?anulacao=true&db_opcao=33&e56_autori=$e54_autori';\n
                 }
                 js_bloqueia();
               </script>
@@ -284,11 +284,11 @@
                   parent.document.formaba.prazos.disabled=true;\n
                   parent.document.formaba.anulacao.disabled=true;\n
                   // parent.document.formaba.empautret.disabled=false;\n
-                  // top.corpo.iframe_empautret.location.href='emp1_empautret001.php?e66_autori=$e54_autori&inclusao=true';\n
-                  top.corpo.iframe_empautitem.location.href='emp1_empautitem001.php?db_opcaoal=33&e55_autori=$e54_autori';\n
-                  top.corpo.iframe_prazos.location.href='emp1_empautoriza007.php?db_opcao=33&chavepesquisa=$e54_autori';\n
-                  top.corpo.iframe_anulacao.location.href='emp1_empautoriza006.php?db_opcao=33&e54_autori=$e54_autori';\n
-                  top.corpo.iframe_empautidot.location.href='emp1_empautidot001.php?anulacao=true&db_opcao=33&e56_autori=$e54_autori';\n
+                  // CurrentWindow.corpo.iframe_empautret.location.href='emp1_empautret001.php?e66_autori=$e54_autori&inclusao=true';\n
+                  CurrentWindow.corpo.iframe_empautitem.location.href='emp1_empautitem001.php?db_opcaoal=33&e55_autori=$e54_autori';\n
+                  CurrentWindow.corpo.iframe_prazos.location.href='emp1_empautoriza007.php?db_opcao=33&chavepesquisa=$e54_autori';\n
+                  CurrentWindow.corpo.iframe_anulacao.location.href='emp1_empautoriza006.php?db_opcao=33&e54_autori=$e54_autori';\n
+                  CurrentWindow.corpo.iframe_empautidot.location.href='emp1_empautidot001.php?anulacao=true&db_opcao=33&e56_autori=$e54_autori';\n
                 }
                 js_bloqueia();
               </script>

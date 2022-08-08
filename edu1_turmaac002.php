@@ -185,21 +185,21 @@ if (isset($alterar)) {
    <?if ($ed268_i_tipoatend == 4) {?>
        parent.document.formaba.a2.disabled    = false;
        parent.document.formaba.a2.style.color = "black";
-       top.corpo.iframe_a2.location.href      = 'edu1_turmaacativ001.php?ed267_i_turmaac=<?=$ed268_i_codigo?>'+
+       CurrentWindow.corpo.iframe_a2.location.href      = 'edu1_turmaacativ001.php?ed267_i_turmaac=<?=$ed268_i_codigo?>'+
                                                 '&ed268_c_descr=<?=$ed268_c_descr?>'+
                                                 '&iCalendario=<?=$ed268_i_calendario?>';
        parent.document.formaba.a5.disabled    = false;
        parent.document.formaba.a5.style.color = "black";
-       top.corpo.iframe_a5.location.href      = 'edu1_turmaachorarioprofissional001.php?ed270_i_turmaac=<?=$ed268_i_codigo?>&ed268_i_tipoatend=<?=$ed268_i_tipoatend?> ';
+       CurrentWindow.corpo.iframe_a5.location.href      = 'edu1_turmaachorarioprofissional001.php?ed270_i_turmaac=<?=$ed268_i_codigo?>&ed268_i_tipoatend=<?=$ed268_i_tipoatend?> ';
    <?}?>
   parent.document.formaba.a4.disabled    = false;
   parent.document.formaba.a4.style.color = "black";
-  top.corpo.iframe_a4.location.href      = 'edu1_turmaacmatricula001.php?ed269_i_turmaac=<?=$ed268_i_codigo?>'+
+  CurrentWindow.corpo.iframe_a4.location.href      = 'edu1_turmaacmatricula001.php?ed269_i_turmaac=<?=$ed268_i_codigo?>'+
                                            '&ed268_c_descr=<?=$ed268_c_descr?>&ed268_i_calendario=<?=$ed268_i_calendario?>'+
                                            '&ed268_i_tipoatend=<?=$ed268_i_tipoatend?>';
   parent.document.formaba.a5.disabled    = false;
   parent.document.formaba.a5.style.color = "black";
-  top.corpo.iframe_a5.location.href      = 'edu1_turmaachorarioprofissional001.php?ed270_i_turmaac=<?=$ed268_i_codigo?>&ed268_i_tipoatend=<?=$ed268_i_tipoatend?>';
+  CurrentWindow.corpo.iframe_a5.location.href      = 'edu1_turmaachorarioprofissional001.php?ed270_i_turmaac=<?=$ed268_i_codigo?>&ed268_i_tipoatend=<?=$ed268_i_tipoatend?>';
  </script>
  <?
 }
@@ -251,22 +251,22 @@ if (isset($alterar)) {
    <?if ($ed268_i_tipoatend == 4) {?>
        parent.document.formaba.a2.disabled    = false;
        parent.document.formaba.a2.style.color = "black";
-       top.corpo.iframe_a2.location.href      = 'edu1_turmaacativ001.php?ed267_i_turmaac=<?=$ed268_i_codigo?>'+
+       CurrentWindow.corpo.iframe_a2.location.href      = 'edu1_turmaacativ001.php?ed267_i_turmaac=<?=$ed268_i_codigo?>'+
                                                 '&ed268_c_descr=<?=$ed268_c_descr?>';
        parent.document.formaba.a5.disabled    = false;
        parent.document.formaba.a5.style.color = "black";
-       top.corpo.iframe_a5.location.href      = 'edu1_turmaachorario001.php?ed222_i_turmaac=<?=$ed268_i_codigo?>'+
+       CurrentWindow.corpo.iframe_a5.location.href      = 'edu1_turmaachorario001.php?ed222_i_turmaac=<?=$ed268_i_codigo?>'+
                                                 '&ed268_c_descr=<?=$ed268_c_descr?>';
    <?}?>
     parent.document.formaba.a4.disabled    = false;
     parent.document.formaba.a4.style.color = "black";
-    top.corpo.iframe_a4.location.href      = 'edu1_turmaacmatricula001.php?ed269_i_turmaac=<?=$ed268_i_codigo?>'+
+    CurrentWindow.corpo.iframe_a4.location.href      = 'edu1_turmaacmatricula001.php?ed269_i_turmaac=<?=$ed268_i_codigo?>'+
                                              '&ed268_c_descr=<?=$ed268_c_descr?>&ed52_c_descr=<?=$ed52_c_descr?>'+
                                              '&codcalendario=<?=$ed268_i_calendario?>'+
                                              '&ed268_i_tipoatend=<?=$ed268_i_tipoatend?>';
     parent.document.formaba.a5.disabled    = false;
     parent.document.formaba.a5.style.color = "black";
-    top.corpo.iframe_a5.location.href      = 'edu1_turmaachorario001.php?ed270_i_turmaac=<?=$ed268_i_codigo?>'+
+    CurrentWindow.corpo.iframe_a5.location.href      = 'edu1_turmaachorario001.php?ed270_i_turmaac=<?=$ed268_i_codigo?>'+
                                              '&ed268_c_descr=<?=$ed268_c_descr?>&ed268_i_turno=<?=$ed268_i_turno?>'+
                                              '&codcalendario=<?=$ed268_i_calendario?>';
    </script>

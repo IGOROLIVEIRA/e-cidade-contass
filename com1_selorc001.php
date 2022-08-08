@@ -117,10 +117,10 @@ function js_pesquisa_pcorcam(mostra){
     }
   ?>
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_pcorcam','func_pcorcamlancval.php?funcao_js=parent.js_mostrapcorcam1|pc20_codorc|pc80_criterioadjudicacao'+qry,'Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_pcorcam','func_pcorcamlancval.php?funcao_js=parent.js_mostrapcorcam1|pc20_codorc|pc80_criterioadjudicacao'+qry,'Pesquisa',true);
   }else{
      if(document.form1.pc20_codorc.value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_pcorcam','func_pcorcamlancval.php?pesquisa_chave='+document.form1.pc20_codorc.value+'&funcao_js=parent.js_mostrapcorcam'+qry,'Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_pcorcam','func_pcorcamlancval.php?pesquisa_chave='+document.form1.pc20_codorc.value+'&funcao_js=parent.js_mostrapcorcam'+qry,'Pesquisa',false);
      }
   }
 }

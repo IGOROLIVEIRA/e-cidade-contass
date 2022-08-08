@@ -49,7 +49,7 @@ if ($oGet->sPeriodo == 'Mensal') {
 
 $dtAnousu      = db_getsession("DB_anousu");
 $sInstituicao  = db_getsession("DB_instit");
-$xinstit       = split("-",$oGet->sOrigem);
+$xinstit       = explode("-",$oGet->sOrigem);
 
 $rsInstituicao = db_query("select munic, uf from db_config where codigo in (".str_replace('-',', ',$oGet->sOrigem).") ");
 
@@ -83,13 +83,13 @@ if ($iNumeroLinhas != false){
 db_query("begin");
 db_query("create temp table t(o58_orgao int8,o58_unidade int8,o58_funcao int8,o58_subfuncao int8,o58_programa int8,o58_projativ int8,o58_elemento int8,o58_codigo int8)");
 
-$sCampos = split("-",$sOrgao);
+$sCampos = explode("-",$sOrgao);
 
 for($i = 0;$i < sizeof($sCampos);$i++){
 
   $sConcatenaWhere = '';
   $sVirgula        = '';
-  $sCamposSplit    = split("_",$sCampos[$i]);
+  $sCamposSplit    = explode("_",$sCampos[$i]);
 
   for($j = 0;$j < sizeof($sCamposSplit);$j++){
 
@@ -165,8 +165,8 @@ $sData         = $sSiglaPeriodo;
 $sDadosPeriodo = data_periodo($dtAnousu,$sData);
 
 $sPeriodoImpressao        = strtoupper($sDadosPeriodo["periodo"]);
-$sPeriodoInicioImpressao  = split("-",$sDadosPeriodo[0]);
-$sPeriodoFimImpressao     = split("-",$sDadosPeriodo[1]);
+$sPeriodoInicioImpressao  = explode("-",$sDadosPeriodo[0]);
+$sPeriodoFimImpressao     = explode("-",$sDadosPeriodo[1]);
 
 $sMesInicial = strtoupper(db_mes($sPeriodoInicioImpressao[1]));
 $sMesFim     = strtoupper(db_mes($sPeriodoFimImpressao[1]));
@@ -524,7 +524,7 @@ function calculaPercetual($oDespesas) {
 /**
  * Funções para impressão do pdf
  */
-function imprimirCabecalho(&$oPdf,$sTipoPeriodo,$sPeriodo,$iAlturaLinha,$sTipoFonte ='') {
+function imprimirCabecalho($oPdf,$sTipoPeriodo,$sPeriodo,$iAlturaLinha,$sTipoFonte ='') {
 
   $oPdf->setFontSize(5);
   $oPdf->setBold(true);
@@ -579,7 +579,7 @@ function imprimirCabecalho(&$oPdf,$sTipoPeriodo,$sPeriodo,$iAlturaLinha,$sTipoFo
 }
 
 
-function imprimirCabecalhoPaginasInternas(&$oPdf, $sTipoPeriodo, $sPeriodo, $iAlturaLinha, $sTipoFonte ='') {
+function imprimirCabecalhoPaginasInternas($oPdf, $sTipoPeriodo, $sPeriodo, $iAlturaLinha, $sTipoFonte ='') {
 
   if($oPdf->gety() > $oPdf->h-35) {
 
@@ -593,17 +593,17 @@ function imprimirCabecalhoPaginasInternas(&$oPdf, $sTipoPeriodo, $sPeriodo, $iAl
     $oPdf->cell($oPdf->getAvailWidth(),$iAlturaLinha,'R$ 1,00',"B",1,"R",0);
     $oPdf->setBold(false);
 
-    imprimirCabecalho(&$oPdf,$sTipoPeriodo,$sPeriodo,$iAlturaLinha,$sTipoFonte);
+    imprimirCabecalho($oPdf,$sTipoPeriodo,$sPeriodo,$iAlturaLinha,$sTipoFonte);
     $oPdf->setfont('arial',$sTipoFonte,5);
   }
 }
 
 
-function imprimeLinha(&$oPdf, $oDespesas, $sPeriodo, $sTipoPeriodo, $iAlturaLinha, $sDescricao = null, $sNivel = null, $sTipoFonte ='') {
+function imprimeLinha($oPdf, $oDespesas, $sPeriodo, $sTipoPeriodo, $iAlturaLinha, $sDescricao = null, $sNivel = null, $sTipoFonte ='') {
 
   $lImprimeInscritos = ($sTipoPeriodo == 'Bimestre' && $sPeriodo == "11");
 
-  imprimirCabecalhoPaginasInternas(&$oPdf,$sTipoPeriodo,$sPeriodo,$iAlturaLinha,$sTipoFonte);
+  imprimirCabecalhoPaginasInternas($oPdf,$sTipoPeriodo,$sPeriodo,$iAlturaLinha,$sTipoFonte);
 
   if (!isset($sDescricao)) {
     $sDescricao = $oDespesas->sDescricao;
@@ -653,7 +653,7 @@ function imprimeLinha(&$oPdf, $oDespesas, $sPeriodo, $sTipoPeriodo, $iAlturaLinh
  * @param string       $sTipoPeriodo  //tipo do periodo (bimestre ou mês)
  * @param integer      $iAlturaLinha  //altura da linha, na impressão
  */
-function imprimeGrupoDespesas(&$oPdf,$oDespesas,$sPeriodo,$sTipoPeriodo,$iAlturaLinha) {
+function imprimeGrupoDespesas($oPdf,$oDespesas,$sPeriodo,$sTipoPeriodo,$iAlturaLinha) {
 
   if(!isset($oDespesas->aFuncoes)) {
    return;
@@ -663,16 +663,16 @@ function imprimeGrupoDespesas(&$oPdf,$oDespesas,$sPeriodo,$sTipoPeriodo,$iAltura
 
   foreach ($oDespesas->aFuncoes as $oFuncao) {
 
-    imprimirCabecalhoPaginasInternas(&$oPdf,$sTipoPeriodo,$sPeriodo,$iAlturaLinha);
+    imprimirCabecalhoPaginasInternas($oPdf,$sTipoPeriodo,$sPeriodo,$iAlturaLinha);
     $oPdf->SetFont('arial', 'b', 5);
-    imprimeLinha(&$oPdf,$oFuncao,$sPeriodo,$sTipoPeriodo,$iAlturaLinha);
+    imprimeLinha($oPdf,$oFuncao,$sPeriodo,$sTipoPeriodo,$iAlturaLinha);
     $oPdf->SetFont('arial', '', 5);
 
     foreach($oFuncao->aSubfuncoes as $oSubfuncao) {
 
-      imprimirCabecalhoPaginasInternas(&$oPdf,$sTipoPeriodo,$sPeriodo,$iAlturaLinha);
+      imprimirCabecalhoPaginasInternas($oPdf,$sTipoPeriodo,$sPeriodo,$iAlturaLinha);
       $oPdf->SetFont('arial', '', 5);
-      imprimeLinha(&$oPdf,$oSubfuncao,$sPeriodo,$sTipoPeriodo,$iAlturaLinha,null,$sNivelSubfuncao);
+      imprimeLinha($oPdf,$oSubfuncao,$sPeriodo,$sTipoPeriodo,$iAlturaLinha,null,$sNivelSubfuncao);
 
     }
   }
@@ -758,7 +758,7 @@ $oDespesasIntra->nPercentualD = ($oDespesasIntra->nTotalLiquidado/$oDespesasExtr
  * Definições do PDF
  * inicio do algoritmo para impressão
  */
-calculaPercetual(&$oDespesasExtra);
+calculaPercetual($oDespesasExtra);
 
 $oPdf = new PDFDocument(PDFDocument::PRINT_LANDSCAPE);
 
@@ -779,34 +779,34 @@ $oPdf->setBold(true);
 
 $oPdf->cell($oPdf->getAvailWidth()*0.5, $iAlturaLinha, 'RREO - Anexo 2 (LRF, Art. 52, inciso II, alínea "c")', '', 0, "L", 0);
 $oPdf->cell($oPdf->getAvailWidth(), $iAlturaLinha, 'R$ 1,00', '', 1, "R", 0);
-imprimirCabecalho(&$oPdf, $sTipoPeriodo, $sPeriodo, $iAlturaLinha);
+imprimirCabecalho($oPdf, $sTipoPeriodo, $sPeriodo, $iAlturaLinha);
 
 //Imprime Despesas Exceto Intra-Orçamentarias, que não sejam RPPS e de Contingência
 $oDespesas = $oDespesasExtra;
 $oPdf->SetFont('arial', 'b', 5);
 $sDescricao = "DESPESAS (EXCETO INTRA-ORÇAMENTARIAS (I)";
 //totalizador das despesas
-imprimeLinha(&$oPdf,$oDespesas,$sPeriodo,$sTipoPeriodo,$iAlturaLinha,$sDescricao,null,'b');
+imprimeLinha($oPdf,$oDespesas,$sPeriodo,$sTipoPeriodo,$iAlturaLinha,$sDescricao,null,'b');
 
 //Totas as Despesas que não sejam Reserva RPPS e Contingência
 $oDespesas  = $oDespesas->oOutras;
-imprimeGrupoDespesas(&$oPdf,$oDespesas,$sPeriodo,$sTipoPeriodo,$iAlturaLinha);
+imprimeGrupoDespesas($oPdf,$oDespesas,$sPeriodo,$sTipoPeriodo,$iAlturaLinha);
 
 //Imprime Reserva Contingência
 $oPdf->SetFont('arial', 'b', 5);
 $oDespesas  = $oDespesasExtra->oContingencia;
 $sDescricao = "RESERVA DE CONTINGÊNCIA";
-imprimeLinha(&$oPdf,$oDespesas,$sPeriodo,$sTipoPeriodo,$iAlturaLinha,$sDescricao,null,'b');
+imprimeLinha($oPdf,$oDespesas,$sPeriodo,$sTipoPeriodo,$iAlturaLinha,$sDescricao,null,'b');
 $oPdf->SetFont('arial', '', 5);
-imprimeLinha(&$oPdf,$oDespesas,$sPeriodo,$sTipoPeriodo,$iAlturaLinha,$sDescricao, "  ");
+imprimeLinha($oPdf,$oDespesas,$sPeriodo,$sTipoPeriodo,$iAlturaLinha,$sDescricao, "  ");
 
 //Imprime Reserva RPPS
 $oPdf->SetFont('arial', 'b', 5);
 $oDespesas  = $oDespesasExtra->oRPPS;
 $sDescricao = "RESERVA DO RPPS";
-imprimeLinha(&$oPdf,$oDespesas,$sPeriodo,$sTipoPeriodo,$iAlturaLinha,$sDescricao,null,'b');
+imprimeLinha($oPdf,$oDespesas,$sPeriodo,$sTipoPeriodo,$iAlturaLinha,$sDescricao,null,'b');
 $oPdf->SetFont('arial', '', 5);
-imprimeLinha(&$oPdf,$oDespesas,$sPeriodo,$sTipoPeriodo,$iAlturaLinha,$sDescricao, "  ");
+imprimeLinha($oPdf,$oDespesas,$sPeriodo,$sTipoPeriodo,$iAlturaLinha,$sDescricao, "  ");
 
 /**
  * Despesas Intra-Orçamentárias
@@ -856,7 +856,7 @@ $oDespesas = $oDespesasIntra;
 $oPdf->SetFont('arial', 'b', 5);
 $sDescricao = "DESPESAS (INTRA-ORÇAMENTÁRIAS)(II)";
 //totalizador das despesas
-imprimeLinha(&$oPdf,$oDespesas,$sPeriodo,$sTipoPeriodo,$iAlturaLinha,$sDescricao,null,'b');
+imprimeLinha($oPdf,$oDespesas,$sPeriodo,$sTipoPeriodo,$iAlturaLinha,$sDescricao,null,'b');
 
 $nTotalDotacaoInicial             = $oDespesasExtra->nTotalDotacaoInicial            + $oDespesasIntra->nTotalDotacaoInicial;
 $nTotalDotacaoAtualizada          = $oDespesasExtra->nTotalDotacaoAtualizada         + $oDespesasIntra->nTotalDotacaoAtualizada;
@@ -868,7 +868,7 @@ $nTotalDespesasLiquidadasPeriodo  = $oDespesasExtra->nTotalDespesasLiquidadasPer
 $nTotalSaldoE                     = $oDespesasExtra->nSaldoE                         + $oDespesasIntra->nSaldoE;
 $nInscritos                       = $oDespesasExtra->nInscritos                      + $oDespesasIntra->nInscritos;
 
-imprimirCabecalhoPaginasInternas(&$oPdf,$sTipoPeriodo,$sPeriodo,$iAlturaLinha);
+imprimirCabecalhoPaginasInternas($oPdf,$sTipoPeriodo,$sPeriodo,$iAlturaLinha);
 $oPdf->setBold(true);
 $oPdf->cell($nWidth*$nFirstColumn, $iAltura, "TOTAL (III) = (I + II)","RTB",0,"L");
 $oPdf->cell($nWidth*0.08, $iAltura, db_formatar($nTotalDotacaoInicial, 'f'),"LRTB",0,"R");
@@ -895,19 +895,19 @@ if (isset($oDespesas->oOutras->aFuncoes) && !empty($oDespesas->oOutras->aFuncoes
   calculaPercetual($oDespesas);
 
   $oPdf->ln();
-  imprimirCabecalho(&$oPdf, $sTipoPeriodo, $sPeriodo, $iAlturaLinha);
+  imprimirCabecalho($oPdf, $sTipoPeriodo, $sPeriodo, $iAlturaLinha);
 
   $oPdf->SetFont('arial', 'b', 5);
   $sDescricao = "DESPESAS (INTRA-ORÇAMENTÁRIAS)(II)";
   //totalizador das despesas
-  imprimeLinha(&$oPdf,$oDespesas,$sPeriodo,$sTipoPeriodo,$iAlturaLinha,$sDescricao,null,'b');
+  imprimeLinha($oPdf,$oDespesas,$sPeriodo,$sTipoPeriodo,$iAlturaLinha,$sDescricao,null,'b');
 
   //Totas as Despesas que não sejam Reserva RPPS e Contingência
   $oDespesas  = $oDespesas->oOutras;
   $oPdf->SetFont('arial', 'b', 5);
-  imprimeGrupoDespesas(&$oPdf,$oDespesas,$sPeriodo,$sTipoPeriodo,$iAlturaLinha,null,'b');
+  imprimeGrupoDespesas($oPdf,$oDespesas,$sPeriodo,$sTipoPeriodo,$iAlturaLinha,null,'b');
 
-  imprimirCabecalhoPaginasInternas(&$oPdf,$sTipoPeriodo,$sPeriodo,$iAlturaLinha);
+  imprimirCabecalhoPaginasInternas($oPdf,$sTipoPeriodo,$sPeriodo,$iAlturaLinha);
 
   $oPdf->setBold(true);
   $oPdf->cell($nWidth*$nFirstColumn, $iAltura, "TOTAL","RTB",0,"L");
@@ -930,7 +930,7 @@ if (isset($oDespesas->oOutras->aFuncoes) && !empty($oDespesas->oOutras->aFuncoes
 }
 
 $oRelatorio  = new relatorioContabil(96, false);
-$oRelatorio->getNotaExplicativa(&$oPdf, $iCodigoPeriodo, 185);
+$oRelatorio->getNotaExplicativa($oPdf, $iCodigoPeriodo, 185);
 $oPdf->ln(5);
 
 if($oPdf->gety() > $oPdf->h-35) {
@@ -941,5 +941,5 @@ if($oPdf->gety() > $oPdf->h-35) {
   $oPdf->ln(30);
 }
 
-assinaturas(&$oPdf,&$oAssinatura,'LRF',false, false);
+assinaturas($oPdf,$oAssinatura,'LRF',false, false);
 $oPdf->showPDF("RREO_Anexo_II_DemonstrativoFuncaoSubfuncao_" . time());

@@ -16,7 +16,7 @@ $clrotulo->label("z01_nome");
             <td nowrap align="right" title="Código do recolhimento">
               <b>Código:</b>
             </td>
-            <td> 
+            <td>
               <?
               $codrec = "115";
               db_input('codrec',10,1,true,'text',3,"")
@@ -45,7 +45,7 @@ $clrotulo->label("z01_nome");
             <td nowrap align="right" title="Índice recolhimento FGTS">
               <b>Índice FGTS:</b>
             </td>
-            <td> 
+            <td>
               <?
               $indrecfgts = 1;
               $arr_indrecfgts = array("0"=>"Nenhum","1"=>"GFIP no prazo","2"=>"GFIP em atraso");
@@ -55,9 +55,9 @@ $clrotulo->label("z01_nome");
             <td nowrap align="right" title="Data recolhimento FGTS">
               <b>Data FGTS:</b>
             </td>
-            <td> 
+            <td>
               <?
-              db_inputdata("dtrecfgts", @$dtrecfgts_dia, @$dtrecfgts_mes, @$dtrecfgts_ano, true, 'text',1); 
+              db_inputdata("dtrecfgts", @$dtrecfgts_dia, @$dtrecfgts_mes, @$dtrecfgts_ano, true, 'text',1);
               ?>
             </td>
           </tr>
@@ -65,7 +65,7 @@ $clrotulo->label("z01_nome");
             <td nowrap align="right" title="Índice recolhimento INSS">
               <b>Índice INSS:</b>
             </td>
-            <td> 
+            <td>
               <?
               $indrecinss = 1;
               $arr_indrecinss = array("0"=>"Não gera GPS","1"=>"GPS no prazo","2"=>"GPS em atraso");
@@ -75,9 +75,9 @@ $clrotulo->label("z01_nome");
             <td nowrap align="right" title="Data recolhimento INSS">
               <b>Data INSS:</b>
             </td>
-            <td> 
+            <td>
               <?
-              db_inputdata("dtrecinss", @$dtrecinss_dia, @$dtrecinss_mes, @$dtrecinss_ano, true, 'text',1); 
+              db_inputdata("dtrecinss", @$dtrecinss_dia, @$dtrecinss_mes, @$dtrecinss_ano, true, 'text',1);
               ?>
             </td>
           </tr>
@@ -85,7 +85,7 @@ $clrotulo->label("z01_nome");
             <td nowrap align="right" title="Índice recolhimento atraso INSS">
               <b>Atraso INSS:</b>
             </td>
-            <td> 
+            <td>
               <?
               db_input('indatrasoinss',10,1,true,'text',1,"","")
               ?>
@@ -104,7 +104,7 @@ $clrotulo->label("z01_nome");
             <td nowrap align="right" title="Nome do contato">
               <b>Nome:</b>
             </td>
-            <td> 
+            <td>
               <?
               db_input('z01_nome',40,$Iz01_nome,true,'text',1,"","contato")
               ?>
@@ -112,7 +112,7 @@ $clrotulo->label("z01_nome");
             <td nowrap align="right" title="Fone">
               <b>Fone:</b>
             </td>
-            <td> 
+            <td>
               <?
               db_input('fone',10,1,true,'text',1,"","")
               ?>
@@ -131,7 +131,7 @@ $clrotulo->label("z01_nome");
             <td nowrap align="right" title="Alteração de endereço">
               <b>Alteração de endereço:</b>
             </td>
-            <td> 
+            <td>
               <?
               $alteraender = "N";
               $arr_alteraender = array("S"=>"Sim","N"=>"Não");
@@ -141,7 +141,7 @@ $clrotulo->label("z01_nome");
             <td nowrap align="right" title="Alteração de CNAE">
               <b>Alteração de CNAE:</b>
             </td>
-            <td> 
+            <td>
               <?
               $alteracnae = "N";
               $arr_alteracnae = array("S"=>"Sim","N"=>"Não");
@@ -153,7 +153,7 @@ $clrotulo->label("z01_nome");
             <td nowrap align="right" title="Código de terceiros">
               <b>Código de terceiros:</b>
             </td>
-            <td> 
+            <td>
               <?
               $codterceiro = "0000";
               db_input('codterceiro',10,1,true,'text',1,"","")
@@ -162,7 +162,7 @@ $clrotulo->label("z01_nome");
             <td nowrap align="right" title="Código CNAE fiscal">
               <b>Código CNAE fiscal:</b>
             </td>
-            <td> 
+            <td>
               <?
               $cnae = "7511600";
               db_input('cnae',10,1,true,'text',1,"","")
@@ -173,7 +173,7 @@ $clrotulo->label("z01_nome");
             <td nowrap align="right" title="Aliquota SAT">
               <b>Aliquota SAT:</b>
             </td>
-            <td> 
+            <td>
               <?
               db_input('aliqsat',10,1,true,'text',1,"","")
               ?>
@@ -181,7 +181,7 @@ $clrotulo->label("z01_nome");
             <td nowrap align="right" title="Código GPS">
               <b>Código GPS:</b>
             </td>
-            <td> 
+            <td>
               <?
               $codgps = "2402";
               db_input('codgps',10,1,true,'text',1,"","")
@@ -321,7 +321,7 @@ function js_controla_anomes(opcao){
   document.form1.submit();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_codmovsefip','func_codmovsefip.php?funcao_js=parent.js_preenchepesquisa|r66_anousu|r66_mesusu|r66_codigo','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_codmovsefip','func_codmovsefip.php?funcao_js=parent.js_preenchepesquisa|r66_anousu|r66_mesusu|r66_codigo','Pesquisa',true);
 }
 function js_preenchepesquisa(chave,chave1,chave2){
   db_iframe_codmovsefip.hide();

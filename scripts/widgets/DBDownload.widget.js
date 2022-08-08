@@ -6,15 +6,12 @@ require_once('scripts/strings.js');
 require_once('scripts/widgets/windowAux.widget.js');
 require_once('scripts/widgets/dbmessageBoard.widget.js');
 /**
- * @fileoverview Cria janela com lista de itens para download
+ * Cria janela com lista de itens para download
  *
  * @author Rafael Nery      <rafael.nery@dbseller.com.br>
  * @author Jeferson Belmiro <jeferson.belmiro@dbseller.com.br>
- */
-
-/**
- * DBDownload - Construtor da classe
  *
+ * @constructor
  * @return void
  */
 var DBDownload = function() {
@@ -225,6 +222,15 @@ DBDownload.prototype.show = function( oTarget ) {
   if ( this.oWindowAux instanceof windowAux ) {
     this.oWindowAux.show();
   }
+
+  var iHeight = 0;
+
+  for (var oElemento of this.oTarget.children) {
+    iHeight += oElemento.clientHeight;
+  }
+
+  this.oTarget.style['overflow-y'] = (this.oTarget.clientHeight < iHeight) ? "scroll" : "visible";
+
 }
 
 /**
@@ -234,6 +240,11 @@ DBDownload.prototype.show = function( oTarget ) {
 DBDownload.prototype.clear = function() {
 
   this.aFiles = new Array();
+
+  for (var iGroup in this.aGroups) {
+    this.aGroups[iGroup].aFiles = []
+  }
+
   this.close();
   return;
 }
@@ -244,7 +255,16 @@ DBDownload.prototype.clear = function() {
  */
 DBDownload.prototype.close = function() {
 
-  this.oWindowAux.destroy();
+  if (this.oWindowAux) {
+
+    this.oWindowAux.destroy();
+    this.oWindowAux = null;
+
+    this.oElementosHTML.oDivMessageBoard = document.createElement("DIV");
+    this.oElementosHTML.oDivList         = document.createElement("DIV");
+    this.oTarget = null;
+  }
+
   return;
 }
 

@@ -108,7 +108,7 @@ if ($adanterior == 0) {
                                         <th style="height: 25px; font-size:14px; background: #ffffff;">Tipo</th>
                                         <th style="height: 25px; font-size:14px; background: #ffffff;">Data Assinatura</th>
                                         <th style="height: 25px; font-size:14px; background: #ffffff;">Data Publicação</th>
-                                        <th style="height: 25px; font-size:14px; background: #ffffff;">Veiculo de Divulgação</th>
+                                        <th style="height: 25px; font-size:14px; background: #ffffff;">Veículo de Divulgação</th>
                                         <th style="height: 25px; font-size:14px; background: #ffffff;">Descrição da Alteração</th>
                                         <th style="height: 25px; font-size:14px; background: #ffffff;">Vigência</th>
                                     </tr>
@@ -119,7 +119,7 @@ if ($adanterior == 0) {
                                         <td style=""><?php echo date('d/m/Y', strtotime($oResult[0]->ac35_datapublicacao)); ?></td>
                                         <td style=""><?php echo $oResult[0]->ac35_veiculodivulgacao; ?></td>
                                         <td style=""><?php echo $oResult[0]->ac35_descricaoalteracao; ?></td>
-                                        <td style=""><?php echo date("d/m/Y", strtotime($oResult[0]->ac18_datainicio)) . " á " . date("d/m/Y", strtotime($oResult[0]->ac18_datafim)); ?></td>
+                                        <td style=""><?php echo date("d/m/Y", strtotime($oResult[0]->ac18_datainicio)) . " até " . date("d/m/Y", strtotime($oResult[0]->ac18_datafim)); ?></td>
                                     </tr>
                                 </table>
                             </td>
@@ -135,7 +135,7 @@ if ($adanterior == 0) {
                             <th style="height: 25px; font-size:14px; background: #ffffff;">Código Item</th>
                             <th style="height: 25px; font-size:14px; background: #ffffff;">Descrição</th>
                             <th style="height: 25px; font-size:14px; background: #ffffff;">Quantidade</th>
-                            <th style="height: 25px; font-size:14px; background: #ffffff;">Valor Unitário</th>
+                            <th style="height: 25px; font-size:14px; background: #ffffff;">Valor Unitario</th>
                             <th style="height: 25px; font-size:14px; background: #ffffff;">Valor Total</th>
                             <th style="height: 25px; font-size:14px; background: #ffffff;">Quantidade Aditada</th>
                             <th style="height: 25px; font-size:14px; background: #ffffff;">Valor Aditado</th>
@@ -225,14 +225,14 @@ if ($adanterior == 0) {
 
             </form>
 
-            <div style="margin-right:910px; width: 10%;  <?php if (strcmp($oResult[0]->tipoaditivo, "12-Alteração de Projeto/Especificação") != 0) {
+            <div style="margin-right:910px; width: 10%;  <?php if (strcmp($oResult[0]->tipoaditivo, "12-Alteraï¿½ï¿½o de Projeto/Especificaï¿½ï¿½o") != 0) {
                                                                 echo "display: none;";
                                                             } ?>">
                 <fieldset>
                     <legend style="font-size: 11px;"><b>Legenda</b></legend>
                     <table style='width: 100%; ' align="right">
                         <tr>
-                            <td style="height: 25px; font-size:12px; background: #7CFC00;"><strong>Itens incluídos</strong></td>
+                            <td style="height: 25px; font-size:12px; background: #7CFC00;"><strong>Itens incluï¿½dos</strong></td>
                         </tr>
                     </table>
                 </fieldset>

@@ -53,7 +53,7 @@ if (isset ($atualizar)) {
 	for ($i = 0; $i < $ta; $i ++) {
 		$chave = key($vt);
 		if (substr($chave, 0, 5) == "CHECK") {
-			$dados = split("_", $chave);
+			$dados = explode("_", $chave);
 			$clpcfornesubgrupo->pc76_pcforne = $pc76_pcforne;
 			$clpcfornesubgrupo->pc76_pcsubgrupo = $dados[1];
 			$clpcfornesubgrupo->incluir(null);

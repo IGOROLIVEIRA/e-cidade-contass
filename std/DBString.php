@@ -360,70 +360,70 @@ abstract class DBString {
       /**
        * Verifica se o nome tem no minimo 2 caracteres
        */
-      case DBString::NOME_REGRA_1:
-        return DBString::validarTamanhoMinimo($sNome, 2);
-        break;
+    case DBString::NOME_REGRA_1:
+      return DBString::validarTamanhoMinimo($sNome, 2);
+      break;
 
       /**
        *  Verifica se o nome é composto pelo menos por 1 espaco, ou seja, nome e sobrenome
        */
-      case DBString::NOME_REGRA_2:
+    case DBString::NOME_REGRA_2:
 
-        if ( !DBString::isNomeValido($sNome, DBString::NOME_REGRA_3) ) {
-          return false;
-        }
-        if ( strlen($aComposicaoNome[0]) < 2 || strlen($aComposicaoNome[1]) < 1 ) {
-          return false;
-        }
+      if ( !DBString::isNomeValido($sNome, DBString::NOME_REGRA_3) ) {
+        return false;
+      }
+      if ( strlen($aComposicaoNome[0]) < 2 || strlen($aComposicaoNome[1]) < 1 ) {
+        return false;
+      }
 
-        break;
+      break;
 
       /**
        *  Verifica se o nome é composto(nome e sobrenome)
        */
-      case DBString::NOME_REGRA_3:
+    case DBString::NOME_REGRA_3:
 
-        $aComposicaoNome = explode(' ', $sNome);
+      $aComposicaoNome = explode(' ', $sNome);
 
-        if ( count($aComposicaoNome) < 2 ) {
-          return false;
-        }
+      if ( count($aComposicaoNome) < 2 ) {
+        return false;
+      }
 
-        break;
+      break;
 
       /**
        *  Verifica se o nome possui mais de 4 letras repetidas em sequencia
        */
-      case DBString::NOME_REGRA_4:
+    case DBString::NOME_REGRA_4:
 
-        $sExpressao = '/([a-zA-ZÀ-ÿ\s])\1{3}/';
-        return preg_match( $sExpressao, $sNome ) ? false : true;
+      $sExpressao = '/([a-zA-ZÀ-ÿ\s])\1{3}/';
+      return preg_match( $sExpressao, $sNome ) ? false : true;
 
-        break;
+      break;
 
       /**
        *  Verifica se nome esta ascentuado, possui números ou caractéres especiais
        */
-      case DBString::NOME_REGRA_5:
+    case DBString::NOME_REGRA_5:
 
-        // $sExpressao = '/^([a-zA-Z\s]+)$/';
-        $sExpressao = '/[À-ÿ0-9.]/';
-        return preg_match($sExpressao, $sNome) ? false : true;
+      // $sExpressao = '/^([a-zA-Z\s]+)$/';
+      $sExpressao = '/[À-ÿ0-9.]/';
+      return preg_match($sExpressao, $sNome) ? false : true;
 
-        break;
+      break;
 
       /**
        * Verifica nome e sobrenome, se possui ao menos 2 caractéres em cada nome, se possui quatro letras repetidas
        * em sequencia e se possui caractéres especiais
        */
-      case DBString::NOME_REGRA_6:
+    case DBString::NOME_REGRA_6:
 
 
-        break;
+      break;
 
-      default:
-        throw new Exception("Regra Inválida");
-        break;
+    default:
+      throw new Exception("Regra Inválida");
+      break;
     }
 
     return true;
@@ -577,10 +577,10 @@ abstract class DBString {
 
     if ( $aString[count($aString)-2] != $sPrimeiroNome &&
       (strlen($aString[count($aString)-2]) == 2 ||
-        strlen($aString[count($aString)-2]) == 3 )) {
+      strlen($aString[count($aString)-2]) == 3 )) {
 
-      $sPref = $aString[count($aString)-2];
-    }
+        $sPref = $aString[count($aString)-2];
+      }
 
     $sUltimoNome    = array_pop($aString);
     return "{$sPrimeiroNome} {$sPref} {$sUltimoNome}";
@@ -778,7 +778,7 @@ abstract class DBString {
     return \DBString::formatStringRecursive($entrada, function($string) {
 
       if (!db_utils::isUTF8($string)) {
-        $string = utf8_encode($string);
+       $string = utf8_encode($string);
       }
       return $string;
     });
@@ -847,5 +847,18 @@ abstract class DBString {
     return $bytes;
   }
 
+  /**
+   * Slugify string
+   *
+   * @param string $string
+   * @return string
+   */
+  public static function slugify($string) {
 
+    $response = \DBString::removerAcentuacao($string);
+    $response = \DBString::removerCaracteresEspeciais($response);
+    $response = preg_replace("/\s+/",  "-", $response);
+    $response = mb_strtolower($response);
+    return $response;
+  }
 }

@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: pessoal
@@ -104,7 +104,7 @@ fieldset > table >tbody >tr > td> select {
         </td>
       </tr>
       <tr>
-        <td nowrap title="<?=@$Tr30_ndias?>">    
+        <td nowrap title="<?=@$Tr30_ndias?>">
         <?
           db_ancora(@$Lr30_ndias, "", 3);
         ?></td>
@@ -135,7 +135,7 @@ fieldset > table >tbody >tr > td> select {
         <?php db_ancora("<b>$RLr30_proc1:</b>", "", 3);?>
         </td>
         <td>
-        <?php 
+        <?php
           if( isset($r30_proc1)) {
             $r30_proc1 = implode("/", array_reverse(explode("/", $r30_proc1)));
           }
@@ -201,7 +201,7 @@ fieldset > table >tbody >tr > td> select {
       </tr>
       <tr id='dias-gozados1' style='display: none;'>
         <td><b>Dias Gozados</b></td>
-        <td ><? 
+        <td ><?
         db_input('r30_diasgozados1', 7, 1, true, 'text', $db_opcao, "readonly='readonly'");
         ?></td>
       </tr>
@@ -265,10 +265,10 @@ fieldset > table >tbody >tr > td> select {
           ?>
         </td>
       </tr>
-      
+
       <tr id='dias-gozados2' style='display: none;'>
         <td><b>Dias Gozados:</b></td>
-        <td ><? 
+        <td ><?
         db_input('r30_diasgozados2', 7, "", true, 'text', $db_opcao, "readonly='readonly'");
         ?></td>
       </tr>
@@ -277,7 +277,7 @@ fieldset > table >tbody >tr > td> select {
 <input
   name="<?=$db_opcao == 1 ? 'enviar' : ($db_opcao == 2 ? 'alterar' : 'excluir')?>"
   type="submit" id="db_opcao" value="Processar dados"
-  onclick="return js_verificadados();" <?php echo isset($r30_regist) && !empty($r30_regist) ? "" : "disabled"; ?>> 
+  onclick="return js_verificadados();" <?php echo isset($r30_regist) && !empty($r30_regist) ? "" : "disabled"; ?>>
 
 <input name="" type="button" value="Nova Pesquisa" onclick="js_pesquisar30_regist(true);" />
 
@@ -287,7 +287,7 @@ fieldset > table >tbody >tr > td> select {
   }
 ?>
 </div>
-<?php 
+<?php
  if(isset($r30_regist) && trim($r30_regist) != ""){
 
     echo "<fieldset>";
@@ -298,7 +298,7 @@ fieldset > table >tbody >tr > td> select {
     $cliframe_alterar_excluir->chavepri = $chavepri;
     $dbwhere = " r30_anousu = $r30_anousu and r30_mesusu = $r30_mesusu and r30_regist = $r30_regist ";
     $cliframe_alterar_excluir->sql = $clcadferia->sql_query_file(null,"r30_anousu, r30_mesusu, r30_regist, r30_perai, r30_peraf, r30_per1i,
-                                                                     r30_per1f, r30_proc1, r30_per2i, r30_per2f, r30_proc2, r30_ndias, 
+                                                                     r30_per1f, r30_proc1, r30_per2i, r30_per2f, r30_proc2, r30_ndias,
                                                                      r30_faltas, r30_abono","r30_per2i desc,r30_per1i desc ", $dbwhere);
     $cliframe_alterar_excluir->campos        = "r30_perai, r30_peraf, r30_ndias, r30_faltas, r30_abono, r30_per1i, r30_per1f, r30_proc1,r30_per2i, r30_per2f, r30_proc2";
     $cliframe_alterar_excluir->legenda       = "";
@@ -315,11 +315,11 @@ fieldset > table >tbody >tr > td> select {
 document.getElementById("r30_perai").addEventListener("keyup", function(e){js_verificaaquiini(e)}, false);
 function js_pesquisar30_regist(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_rhpessoal','func_rhpessoal.php?testarescisao=ar&funcao_js=parent.js_mostrapessoal1|rh01_regist|z01_nome&instit=<?=(db_getsession("DB_instit"))?>','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhpessoal','func_rhpessoal.php?testarescisao=ar&funcao_js=parent.js_mostrapessoal1|rh01_regist|z01_nome&instit=<?=(db_getsession("DB_instit"))?>','Pesquisa',true);
   }else{
 
-    if(document.form1.r30_regist.value != ''){ 
-      js_OpenJanelaIframe('top.corpo','db_iframe_rhpessoal','func_rhpessoal.php?testarescisao=ar&pesquisa_chave='+document.form1.r30_regist.value+'&funcao_js=parent.js_mostrapessoal&instit=<?=(db_getsession("DB_instit"))?>','Pesquisa',false);
+    if(document.form1.r30_regist.value != ''){
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhpessoal','func_rhpessoal.php?testarescisao=ar&pesquisa_chave='+document.form1.r30_regist.value+'&funcao_js=parent.js_mostrapessoal&instit=<?=(db_getsession("DB_instit"))?>','Pesquisa',false);
     }else{
 
       document.form1.z01_nome.value = '';
@@ -328,10 +328,10 @@ function js_pesquisar30_regist(mostra){
   }
 }
 function js_mostrapessoal(chave,erro){
-  document.form1.z01_nome.value = chave; 
-  if(erro==true){ 
-    document.form1.r30_regist.focus(); 
-    document.form1.r30_regist.value = ''; 
+  document.form1.z01_nome.value = chave;
+  if(erro==true){
+    document.form1.r30_regist.focus();
+    document.form1.r30_regist.value = '';
   }else{
     location.href = 'pes4_implantaferias001.php?r30_regist='+document.form1.r30_regist.value;
   }
@@ -381,7 +381,7 @@ function js_verificadados(){
     document.form1.r30_proc1.focus();
     retorno = false;
   }
- 
+
   var iAnoCompetenciaPagamentoGozo2 = parseInt(document.form1.r30_proc2.value.replace(/[^\d]/g, '').substr(2, 6));
   var iMesCompetenciaPagamentoGozo2 = parseInt(document.form1.r30_proc2.value.replace(/[^\d]/g, '').substr(0, 2));
   if(document.form1.r30_per2i != "") {
@@ -439,15 +439,15 @@ function js_mascaraCompetencia(oElemento, oEvento) {
   if (iMes.length > 0 && iMes.match(expr)) {
 
     oElemento.value = '';
-    return false;  
+    return false;
   }
 
-  if (iAno.length > 0 && iAno.match(expr)) { 
+  if (iAno.length > 0 && iAno.match(expr)) {
 
     oElemento.value = '';
     return false;
   }
- 
+
   /**
    * Verifica se o mês não é 0.
    */
@@ -474,7 +474,7 @@ function js_montaPeriodo(oInputInicio, oInputFinal) {
   /**
    * Define variáveis.
    */
-  
+
   var oEl  = document.form1.r30_tip1;
       iDia = new Number(oInputInicio.value.substring(0, 2)),
       iMes = new Number(oInputInicio.value.substring(3, 5)),
@@ -527,8 +527,8 @@ function js_verificaaquiini(e = null) {
 
   /**
    * Verifica se a função foi chamada através de um keyup
-   * e não executa caso não tenha sido teclado um número ou 
-   * o campo data de início não esteja completo 
+   * e não executa caso não tenha sido teclado um número ou
+   * o campo data de início não esteja completo
    */
   if ( e != null && e.type == "keyup" ) {
     if ( isNaN(e.key) ) {
@@ -728,7 +728,7 @@ $("r30_per2f").observe("change", function(){
 /*
  * Esta função realiza um calculo nos valores das datas selecionadas.
  * Se o total de dias for menor do que o intervalo das datas retorna erro
- * Se for menor Preenche os dias gozados do primeiro periodo com os dias entre as datas selecionadas e 
+ * Se for menor Preenche os dias gozados do primeiro periodo com os dias entre as datas selecionadas e
  * se houver, preenche os Diaz gozados do segundo período com os dias restantes.
  */
 function js_setDiasGozados(){
@@ -741,20 +741,20 @@ function js_setDiasGozados(){
   var dInicial     = implode("-", array_reverse(explode("/", $("r30_per1i").value)));
   var dFinal       = implode("-", array_reverse(explode("/", $("r30_per1f").value)));
 
-  
+
 
   if (iTipo.valueOf() == 12){
-    
+
     if (js_diferenca_datas(dInicial, dFinal, 3) || js_diferenca_datas(dInicial, dFinal, 4) == 'i' ){
       sMsg  = "Data Inicial não pode ser menor ou igual a data final.";
       lErro = true;
     } else {
-    
+
       var iDias = js_diferenca_datas(dInicial, dFinal, 'd');
-  
+
       if (iDias > iTotalDias.valueOf()) {
         sMsg  = "Dias Gozados não pode ser maior do que o Total de Dias a Gozar";
-        lErro = true;     
+        lErro = true;
       } else if (iDias == iTotalDias.valueOf()){
         $("r30_diasgozados1").value = iDias;
         $("r30_diasgozados2").value = 0;
@@ -777,7 +777,7 @@ function js_setDiasGozados(){
 
 
 function js_validaTotalDias() {
-    
+
   var iTipo        = $("r30_tip1").value;
   var oDataInicial = $("r30_per2i").value;
   var oDataFinal   = $("r30_per2f").value;
@@ -788,21 +788,21 @@ function js_validaTotalDias() {
   var dFinal       = implode("-", array_reverse(explode("/", $("r30_per2f").value)));
 
   var iTotalDiasPrimeiroPeriodo = $("r30_diasgozados1").value;
-  
+
   if (iTipo.valueOf() == 12) {
-    
+
     if (js_diferenca_datas(dInicial, dFinal, 3) || js_diferenca_datas(dInicial, dFinal, 4) == 'i') {
-     
+
       sMsg  = "Data Inicial não pode ser menor ou igual a data final.";
       lErro = true;
     } else {
-    
+
       var iDias = js_diferenca_datas(dInicial, dFinal, 'd');
 
       if (iDias > (iTotalDias.valueOf() - iTotalDiasPrimeiroPeriodo)) {
         sMsg  = "O intervalo das datas não podem utrapassar o total de dias gozados para o segundo período.";
-        lErro = true;     
-      } 
+        lErro = true;
+      }
     }
     if (lErro) {
       alert (sMsg);
@@ -819,20 +819,20 @@ function js_validaDataInicialSegundoPeriodo() {
   var iTipo        = $("r30_tip1").value;
   var sMsg         = "";
   var lErro        = false;
-  
+
   var dInicial                  = implode("-", array_reverse(explode("/", $("r30_per2i").value)));
   var dFinalPrimeiroPeriodo     = implode("-", array_reverse(explode("/", $("r30_per1f").value)));
-  
+
   if (iTipo.valueOf() == 12){
     if (js_diferenca_datas(dFinalPrimeiroPeriodo, dInicial, 3)) {
-    
+
       sMsg  = "Data Inicial não pode ser menor ou igual do que a data final do primeiro período.";
       lErro = true;
     } else if (js_diferenca_datas(dFinalPrimeiroPeriodo, dInicial, 4) == 'i') {
       sMsg  = "Data Inicial não pode igual a data final do primeiro período.";
       lErro = true;
     }
-    
+
     if (lErro) {
       alert (sMsg);
       $("r30_per2f").clear();
@@ -872,22 +872,22 @@ function js_validamtipo(){
     }
   }
   /*
-   * Caso seja selecionada a opção 12- dias livres 
+   * Caso seja selecionada a opção 12- dias livres
    */
   if (valmtipo == 12 ){
     $("dias-gozados1").style.display = "";
     $("dias-gozados2").style.display = "";
-    
+
     if (($("r30_per1i").value != "" ) && ($("r30_per1f").value != "")){
       js_setDiasGozados();
     }
-    
+
   } else {
     $("dias-gozados1").style.display = "none";
     $("dias-gozados2").style.display = "none";
   }
-  
-  
+
+
 }
 
 
@@ -895,8 +895,8 @@ function js_validamtipo(){
  * Function Explode do phpjs.org
  */
 function explode (delimiter, string, limit) {
-    // Splits a string on string separator and return array of components. If limit is positive only limit number of components is returned. If limit is negative all components except the last abs(limit) are returned.  
-    // 
+    // Splits a string on string separator and return array of components. If limit is positive only limit number of components is returned. If limit is negative all components except the last abs(limit) are returned.
+    //
     // version: 1103.1210
     // discuss at: http://phpjs.org/functions/explode    // +     original by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
     // +     improved by: kenneth
@@ -908,17 +908,17 @@ function explode (delimiter, string, limit) {
     // *     returns 2: ['a', 'bc=d']
     var emptyArray = {        0: ''
     };
- 
+
     // third argument is not required
     if (arguments.length < 2 || typeof arguments[0] == 'undefined' || typeof arguments[1] == 'undefined') {        return null;
     }
- 
+
     if (delimiter === '' || delimiter === false || delimiter === null) {
         return false;    }
- 
+
     if (typeof delimiter == 'function' || typeof delimiter == 'object' || typeof string == 'function' || typeof string == 'object') {
         return emptyArray;
-    } 
+    }
     if (delimiter === true) {
         delimiter = '1';
     }
@@ -937,8 +937,8 @@ function explode (delimiter, string, limit) {
  * Function Implode do phpjs.org
  */
 function implode (glue, pieces) {
-    // Joins array elements placing glue string between items and return one string  
-    // 
+    // Joins array elements placing glue string between items and return one string
+    //
     // version: 1103.1210
     // discuss at: http://phpjs.org/functions/implode    // +   original by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
     // +   improved by: Waldo Malqui Silva
@@ -969,17 +969,17 @@ function implode (glue, pieces) {
  * Function array_reverse do phpjs.org
  */
 function array_reverse (array) {
-    
+
     var aAux     = new Array();
     var itamanho = array.length;
     var iInicio  = 0;
-    
+
     for(var i = (itamanho-1); i >= 0; i--) {
-          
+
       aAux[iInicio] = array[i];
-      iInicio +=1;    
+      iInicio +=1;
     }
-       
+
     return aAux;
 }
 

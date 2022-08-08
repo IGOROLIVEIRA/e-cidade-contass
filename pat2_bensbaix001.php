@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -55,7 +55,7 @@ function js_abre () {
   var dDataFinal    = d.t55_dataFIM.value;
   var iPlacaInicial = d.placaini.value;
   var iPlacaFinal   = d.placafim.value;
-  
+
   // Data Inicial
   var iDataDiaIni = d.t55_dataINI_dia.value;
   var iDataMesIni = d.t55_dataINI_mes.value;
@@ -64,34 +64,34 @@ function js_abre () {
   var iDataDiaFim = d.t55_dataFIM_dia.value;
   var iDataMesFim = d.t55_dataFIM_mes.value;
   var iDataAnoFim = d.t55_dataFIM_ano.value;
-  
+
   var sDataInicial = "";
   var sDataFinal   = "";
 
-  
+
   if ( iPlacaInicial == '' && iPlacaFinal == '' && dDataInicial == '' && dDataFinal == '' ) {
-  
+
     alert (_M("patrimonial.patrimonio.pat2_bensbaix001.preencha_datas_placas"));
     return false;
   }
-  
+
   if ( iPlacaInicial != '' || iPlacaFinal != '' ) {
-  
+
     if ( iPlacaFinal != '' && new Number(iPlacaInicial) > new Number(iPlacaFinal) ) {
-    
+
       alert (_M("patrimonial.patrimonio.pat2_bensbaix001.placa_inicial_menor_placa_final"));
       return false;
     }
   }
-  
+
   if ( dDataInicial != '' || dDataFinal != '') {
-    
+
     sDataInicial = iDataAnoIni+"-"+iDataMesIni+"-"+iDataDiaIni;
     sDataFinal   = iDataAnoFim+"-"+iDataMesFim+"-"+iDataDiaFim;
-    
+
     dInicial = new Date (iDataAnoIni,iDataMesIni-1,iDataDiaIni);
     dFinal   = new Date (iDataAnoFim,iDataMesFim-1,iDataDiaFim);
-    
+
     if ( dInicial > dFinal ) {
       alert (_M("patrimonial.patrimonio.pat2_bensbaix001.data_inicial_menor_data_final"));
       return false;
@@ -103,18 +103,18 @@ function js_abre () {
     sOrder = $F('sOrder');
   }
 
-  
+
   var sQuery  = "pat2_bensbaix002.php?dataINI="+sDataInicial;
       sQuery += "&dataFIM="+sDataFinal;
       sQuery += "&placaInicial="+iPlacaInicial;
       sQuery += "&placaFinal="+iPlacaFinal;
       sQuery += "&sOrder=" + sOrder;
-  
+
   jan = window.open(sQuery,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0');
   jan.moveTo(0,0);
-  
+
 }
-</script>  
+</script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <body bgcolor=#CCCCCC>
@@ -122,7 +122,7 @@ function js_abre () {
   <fieldset>
     <legend>Baixa de Bens</legend>
     <table class="form-container">
-      <tr> 
+      <tr>
         <td nowrap title="Bens baixados no intervalo de data"> <? db_ancora(@$Lt55_baixa,"",3);?>  </td>
         <td nowrap>
           <?
@@ -150,26 +150,26 @@ function js_abre () {
           ?>
         </td>
       </tr>
-      
+
       <tr>
-      
+
       <td colspan="1"><strong>Ordenação: </strong> </td>
-      <td colspan="3"> 
-      
+      <td colspan="3">
+
         <select id='sOrder'>
           <option value=''>Selecione... </option>
           <option value='t64_descr'>Nome </option>
           <option value='t52_bem'>Sequencial </option>
           <option value='t52_ident'>Placa </option>
         </select>
-      
+
       </td>
-      
+
       </tr>
-      
-      
-      
-      
+
+
+
+
     </table>
   </fieldset>
   <input name="relatorio" type="button" onclick='js_abre ();' value="Gerar Relatório">
@@ -183,15 +183,15 @@ function js_abre () {
  * Funções para a seleção de Placa Inicial
  */
 function js_pesquisaPlacaInicial(mostra) {
-  
+
   if (mostra == true) {
 
     var sUrlOpenInicial = "func_bens.php?funcao_js=parent.js_preenchePlacaInicial|t52_ident";
-    js_OpenJanelaIframe('top.corpo', 'db_iframe_bens', sUrlOpenInicial, 'Pesquisa', true);
+    js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_bens', sUrlOpenInicial, 'Pesquisa', true);
   } else {
-  
+
     var sUrlOpenInicial = "func_bens.php?funcao_js=parent.js_preenchePlacaInicial|t52_ident";
-    js_OpenJanelaIframe('top.corpo', 'db_iframe_bens', sUrlOpenInicial, 'Pesquisa', false);
+    js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_bens', sUrlOpenInicial, 'Pesquisa', false);
   }
 }
 
@@ -207,19 +207,19 @@ function js_preenchePlacaInicial(placaInicial) {
  * Funções para a seleção de Placa Final
  */
 function js_pesquisaPlacaFinal(mostra) {
-  
+
   if (mostra == true) {
 
     var sUrlOpenFinal = "func_bens.php?funcao_js=parent.js_mostraplacafim1|t52_ident";
-    js_OpenJanelaIframe('top.corpo', 'db_iframe_bens', sUrlOpenFinal, 'Pesquisa', true);
+    js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_bens', sUrlOpenFinal, 'Pesquisa', true);
   } else {
 
-     if (document.form1.placafim.value != '') { 
-        
+     if (document.form1.placafim.value != '') {
+
        var sUrlOpenFinal = "func_bens.php?pesquisa_chave="+document.form1.placafim.value+"&lRetornoPlaca=true&funcao_js=parent.js_mostraplacafim";
-       js_OpenJanelaIframe('top.corpo', 'db_iframe_bens', sUrlOpenFinal, 'Pesquisa', false);
+       js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_bens', sUrlOpenFinal, 'Pesquisa', false);
      } else {
-       document.form1.placafim.value = ''; 
+       document.form1.placafim.value = '';
      }
   }
 }
@@ -230,7 +230,7 @@ function js_mostraplacafim(chave1, chave2) {
   if (chave2 == true) {
     document.form1.placafim.value = '';
   }
-  
+
   db_iframe_bens.hide();
 }
 
@@ -238,11 +238,11 @@ function js_mostraplacafim1(placaFinal) {
 
   var placaInicialCompara = document.form1.placaini.value;
   if (new Number(placaInicialCompara) < new Number(placaFinal)) {
-  
+
     document.form1.placafim.value = placaFinal;
     db_iframe_bens.hide();
   } else {
-	  
+
     alert (_M("patrimonial.patrimonio.pat2_bensbaix001.informe_placa_final_maior_placa_inicial", {placaInicialCompara: placaInicialCompara}));
     return false;
   }

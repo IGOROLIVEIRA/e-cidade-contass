@@ -964,8 +964,8 @@ $('cancelarAcao').observe('click', function () {
 
 function js_reloadAbas() {
 
-  top.corpo.iframe_a5.location.href = top.corpo.iframe_a5.location.href;
-  top.corpo.iframe_a6.location.href = top.corpo.iframe_a6.location.href;
+  CurrentWindow.corpo.iframe_a5.location.href = CurrentWindow.corpo.iframe_a5.location.href;
+  CurrentWindow.corpo.iframe_a6.location.href = CurrentWindow.corpo.iframe_a6.location.href;
 }
 
 </script>

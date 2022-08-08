@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: atendimento
@@ -40,7 +40,7 @@ if(isset($db_opcaoal)){
 }else if(isset($opcao) && $opcao=="excluir"){
     $db_opcao = 3;
     $db_botao=true;
-}else{  
+}else{
     $db_opcao = 1;
     $db_botao=true;
     if(isset($novo) || isset($alterar) ||   isset($excluir) || (isset($incluir) && $sqlerro==false ) ){
@@ -49,7 +49,7 @@ if(isset($db_opcaoal)){
 	    $at65_usuario    = "";
 	    $nome            = "";
    }
-} 
+}
 ?>
 <form name="form1" method="post" action="">
 <center>
@@ -61,7 +61,7 @@ db_input('at65_sequencial',10,$Iat65_sequencial,true,'hidden',$db_opcao,"")
     <td nowrap title="<?=@$Tat65_projeto?>">
        <?=@$Lat65_projeto?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('at65_projeto',10,$Iat65_projeto,true,'text',3,"")
 ?>
@@ -73,7 +73,7 @@ db_input('at65_projeto',10,$Iat65_projeto,true,'text',3,"")
        db_ancora("<b>Usuário:</b>","js_pesquisaat65_usuario(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('at65_usuario',10,$Iat65_usuario,true,'text',$db_opcao," onchange='js_pesquisaat65_usuario(false);'")
 ?>
@@ -91,7 +91,7 @@ db_input('nome',40,$Inome,true,'text',3,'')
   </table>
  <table>
   <tr>
-    <td valign="top"  align="center">  
+    <td valign="top"  align="center">
     <?
 	 $chavepri= array("at65_sequencial"=>@$at65_sequencial,"at65_projeto"=>@$at65_projeto);
 	 $cliframe_alterar_excluir->chavepri=$chavepri;
@@ -110,20 +110,20 @@ db_input('nome',40,$Inome,true,'text',3,'')
 <script>
 function js_pesquisaat65_usuario(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_db_projetosusu','db_iframe_db_usuarios','func_db_usuarios.php?funcao_js=parent.js_mostradb_usuarios1|id_usuario|nome','Pesquisa',true,'0');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_db_projetosusu','db_iframe_db_usuarios','func_db_usuarios.php?funcao_js=parent.js_mostradb_usuarios1|id_usuario|nome','Pesquisa',true,'0');
   }else{
-     if(document.form1.at65_usuario.value != ''){ 
-        js_OpenJanelaIframe('top.corpo.iframe_db_projetosusu','db_iframe_db_usuarios','func_db_usuarios.php?pesquisa_chave='+document.form1.at65_usuario.value+'&funcao_js=parent.js_mostradb_usuarios','Pesquisa',false);
+     if(document.form1.at65_usuario.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_db_projetosusu','db_iframe_db_usuarios','func_db_usuarios.php?pesquisa_chave='+document.form1.at65_usuario.value+'&funcao_js=parent.js_mostradb_usuarios','Pesquisa',false);
      }else{
-       document.form1.nome.value = ''; 
+       document.form1.nome.value = '';
      }
   }
 }
 function js_mostradb_usuarios(chave,erro){
-  document.form1.nome.value = chave; 
-  if(erro==true){ 
-    document.form1.at65_usuario.focus(); 
-    document.form1.at65_usuario.value = ''; 
+  document.form1.nome.value = chave;
+  if(erro==true){
+    document.form1.at65_usuario.focus();
+    document.form1.at65_usuario.value = '';
   }
 }
 function js_mostradb_usuarios1(chave1,chave2){

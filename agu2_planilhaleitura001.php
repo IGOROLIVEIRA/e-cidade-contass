@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -61,14 +61,14 @@ function js_emite(){
 
   if(document.form1.tipoArquivo.value == 1) {
 	  jan = window.open('agu2_planilhaleitura002.php?anousu='+document.form1.x21_exerc.value+'&mesusu='+document.form1.x21_mes.value+'&lista='+lista+'&condicao='+document.form1.ver.value+'&tipodoc='+document.form1.tipoArquivo.value+'&filtro='+document.form1.filtro.value ,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
-    	
+
 	  jan.moveTo(0,0);
   }else {
-		//js_OpenJanelaIframe('top.corpo','db_iframe_tarefa','ate2_contarefa001.php?menu=false&chavepesquisa='+tarefa,'Pesquisa',true,'30');
-		js_OpenJanelaIframe('top.corpo', 'db_iframe_arquivo', 'agu2_planilhaleitura002.php?anousu='+document.form1.x21_exerc.value+'&mesusu='+document.form1.x21_mes.value+'&lista='+lista+'&condicao='+document.form1.ver.value+'&tipodoc='+document.form1.tipoArquivo.value+'&filtro='+document.form1.filtro.value, 'Arquivo', false, 30);	
-  }	
+		//js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_tarefa','ate2_contarefa001.php?menu=false&chavepesquisa='+tarefa,'Pesquisa',true,'30');
+		js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_arquivo', 'agu2_planilhaleitura002.php?anousu='+document.form1.x21_exerc.value+'&mesusu='+document.form1.x21_mes.value+'&lista='+lista+'&condicao='+document.form1.ver.value+'&tipodoc='+document.form1.tipoArquivo.value+'&filtro='+document.form1.filtro.value, 'Arquivo', false, 30);
+  }
 }
-</script>  
+</script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" bgcolor="#cccccc">
@@ -88,22 +88,22 @@ function js_emite(){
 	</tr>
 	<tr>
 		<td nowrap title="<?=@$Tx21_exerc?>" align="right">
-			<b><?=@$RLx21_exerc?>&nbsp;/&nbsp;<?=@$RLx21_mes?>:</b>  
+			<b><?=@$RLx21_exerc?>&nbsp;/&nbsp;<?=@$RLx21_mes?>:</b>
 		</td>
-		<td nowrap> 
+		<td nowrap>
 		<?
 			if(!isset($x21_exerc) || (isset($x21_exerc) && trim($x21_exerc) == "")){
 				$x21_exerc = db_getsession("DB_anousu");
 			}
 			db_input('x21_exerc',4,$Ix21_exerc,true,'text',$db_opcao==1?1:3,"");
 		?>
-		<b>&nbsp;/&nbsp;</b>  
+		<b>&nbsp;/&nbsp;</b>
 		<?
 			if(!isset($x21_mes) || (isset($x21_mes) && trim($x21_mes) == "")){
 				$x21_mes = date("m",db_getsession("DB_datausu"));
 			}
 			db_input('x21_mes',2,$Ix21_mes,true,'text',$db_opcao==1?1:3,"");
-		?> 
+		?>
 		</td>
 	</tr>
 
@@ -137,7 +137,7 @@ function js_emite(){
       ?>
       </td>
     </tr>
-	
+
 	</table>
 	<table align="center">
 	<tr>
@@ -165,7 +165,7 @@ function js_emite(){
 		</td>
 	</tr>
 	<tr>
-		<td colspan="2" align = "center"> 
+		<td colspan="2" align = "center">
 		<input  name="emite2" id="emite2" type="button" value="Emitir Planilha" onclick="js_emite();" >
 		</td>
 	</tr>

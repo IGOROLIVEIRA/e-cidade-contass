@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -58,7 +58,7 @@ $db_opcao = 1;
 
 if ( !empty($oGet->lEstorno) && $oGet->lEstorno == 'true' ) {
   $db_opcao = 3;
-} 
+}
 ?>
 <html>
 <head>
@@ -70,7 +70,7 @@ if ( !empty($oGet->lEstorno) && $oGet->lEstorno == 'true' ) {
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" >
 
-  <center> 
+  <center>
 
     <?php db_input('c112_sequencial', 10, $Ic112_sequencial, true, 'hidden', 3); ?>
 
@@ -80,11 +80,11 @@ if ( !empty($oGet->lEstorno) && $oGet->lEstorno == 'true' ) {
 
       <table class="form-container">
 
-        <tr>   
+        <tr>
           <td>
             <?php db_ancora($Lc112_numcgm, 'js_pesquisaNome(true);', $db_opcao); ?>
           </td>
-          <td> 
+          <td>
             <?php
               db_input('c112_numcgm', 8, $Ic112_numcgm, true, 'text', $db_opcao, "onchange='js_pesquisaNome(false);'");
               db_input('z01_nome', 40, 0, true, 'text', 3);
@@ -96,7 +96,7 @@ if ( !empty($oGet->lEstorno) && $oGet->lEstorno == 'true' ) {
           <td nowrap title="<?php echo $Tc112_reconhecimentocontabiltipo; ?>">
             <?php echo $Lc112_reconhecimentocontabiltipo; ?>
           </td>
-          <td> 
+          <td>
             <?php db_select('c112_reconhecimentocontabiltipo', $aReconhecimentoContabilTipo, true, 1); ?>
           </td>
         </tr>
@@ -105,7 +105,7 @@ if ( !empty($oGet->lEstorno) && $oGet->lEstorno == 'true' ) {
           <td nowrap title="<?php echo $Tc112_processoadm; ?>">
             <?php echo $Lc112_processoadm; ?>
           </td>
-          <td> 
+          <td>
             <?php db_input('c112_processoadm', 20, $Ic112_processoadm, true, 'text', $db_opcao, "class='field-size-max'"); ?>
           </td>
         </tr>
@@ -114,14 +114,14 @@ if ( !empty($oGet->lEstorno) && $oGet->lEstorno == 'true' ) {
           <td nowrap title="<?php echo $Tc112_valor; ?>">
              <?php echo $Lc112_valor; ?>
           </td>
-          <td> 
+          <td>
             <?php db_input('c112_valor', 8, $Ic112_valor, true, 'text', $db_opcao); ?>
           </td>
         </tr>
 
         <tr>
           <td nowrap title="<?php echo $Tc72_complem; ?>" colspan="2">
-          
+
             <fieldset>
               <legend><?php echo $Lc72_complem; ?></legend>
               <?php db_textarea('c72_complem', 5, 40, $Ic72_complem, true, 'text', 1); ?>
@@ -148,17 +148,17 @@ if ( !empty($oGet->lEstorno) && $oGet->lEstorno == 'true' ) {
 var sRPC = 'con4_reconhecimentocontabil.RPC.php';
 
 /**
- * Objeto com parametros passados pela url 
+ * Objeto com parametros passados pela url
  */
 var oGet = js_urlToObject();
 
 /**
- * Caminho das mensagens do programa 
+ * Caminho das mensagens do programa
  */
 const MENSAGENS = 'financeiro.contabilidade.con4_reconhecimentocontabil001.';
 
 /**
- * Estorno 
+ * Estorno
  * Abre tela de pesquisa dos reconhecimentos para estornar
  */
 if ( oGet.lEstorno == 'true' ) {
@@ -174,8 +174,8 @@ if ( oGet.lEstorno == 'true' ) {
  */
 function js_buscar() {
 
-  js_OpenJanelaIframe('top.corpo', 'db_iframe_reconhecimentocontabil', 
-                      'func_reconhecimentocontabil.php?lEstorno=false&funcao_js=parent.js_retornoBusca|0', 'Pesquisa', 
+  js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_reconhecimentocontabil',
+                      'func_reconhecimentocontabil.php?lEstorno=false&funcao_js=parent.js_retornoBusca|0', 'Pesquisa',
                       true);
 }
 
@@ -213,7 +213,7 @@ function js_buscarDados(iReconhecimentoContabil) {
                                method     : "post",
                                parameters : 'json='+Object.toJSON(oParametros),
                                onComplete : js_retornoBuscarDados
-                              });  
+                              });
 
 }
 
@@ -229,10 +229,10 @@ function js_retornoBuscarDados(oAjax) {
 
   js_removeObj('msgBox');
   var oRetorno  = eval("("+oAjax.responseText+")");
-  var sMensagem = oRetorno.sMensagem.urlDecode(); 
+  var sMensagem = oRetorno.sMensagem.urlDecode();
 
   /**
-   * Erro no RPC 
+   * Erro no RPC
    */
   if ( oRetorno.iStatus > 1 ) {
     return alert(sMensagem);
@@ -256,8 +256,8 @@ function js_retornoBuscarDados(oAjax) {
 /**
  * Processar reconhecimento contabil
  * - lancamento e estorno
- * - inclusao: js_incluirReconhecimentoContabil() 
- * - estorno : js_estornarReconhecimentoContabil() 
+ * - inclusao: js_incluirReconhecimentoContabil()
+ * - estorno : js_estornarReconhecimentoContabil()
  *
  * @access public
  * @return boolean
@@ -265,7 +265,7 @@ function js_retornoBuscarDados(oAjax) {
 function js_processar() {
 
   /**
-   * Estorno 
+   * Estorno
    */
   if ( oGet.lEstorno == 'true' ) {
 
@@ -277,13 +277,13 @@ function js_processar() {
     }
 
     /**
-     * Texto complementar nao informado 
+     * Texto complementar nao informado
      */
     if ( $('c72_complem').value == '' ) {
 
       alert(_M(MENSAGENS + 'texto_complementar_nao_informado'));
       return false;
-    } 
+    }
 
     /**
      * Estorna lancamento
@@ -293,31 +293,31 @@ function js_processar() {
   }
 
   /**
-   * CGM nao inforamdo 
+   * CGM nao inforamdo
    */
   if ( $('c112_numcgm').value == '' ) {
-    
+
     alert(_M(MENSAGENS + 'cgm_nao_informado'));
     return false;
-  } 
+  }
 
   /**
-   * Processo nao inforamdo 
+   * Processo nao inforamdo
    */
   if ( $('c112_valor').value == '' ) {
 
     alert(_M(MENSAGENS + 'valor_nao_informado'));
     return false;
-  } 
+  }
 
   /**
-   * Texto complementar nao informado 
+   * Texto complementar nao informado
    */
   if ( $('c72_complem').value == '' ) {
 
     alert(_M(MENSAGENS + 'texto_complementar_nao_informado'));
     return false;
-  } 
+  }
 
   /**
    * Incluir reconhecimento contabil
@@ -348,7 +348,7 @@ function js_incluirReconhecimentoContabil() {
                                method     : "post",
                                parameters : 'json='+Object.toJSON(oParametros),
                                onComplete : js_retornoIncluirReconhencimentoContabil
-                              });  
+                              });
 
 }
 
@@ -364,17 +364,17 @@ function js_retornoIncluirReconhencimentoContabil(oAjax) {
 
   js_removeObj('msgBox');
   var oRetorno  = eval("("+oAjax.responseText+")");
-  var sMensagem = oRetorno.sMensagem.urlDecode(); 
+  var sMensagem = oRetorno.sMensagem.urlDecode();
 
   /**
-   * Erro no RPC 
+   * Erro no RPC
    * Nao recarrega tela
    */
-  if ( oRetorno.iStatus > 1 ) {    
+  if ( oRetorno.iStatus > 1 ) {
     return alert(sMensagem);
   }
 
-  alert(sMensagem);   
+  alert(sMensagem);
   js_recarregarTela();
 }
 
@@ -398,7 +398,7 @@ function js_estornarReconhecimentoContabil() {
                                method     : "post",
                                parameters : 'json='+Object.toJSON(oParametros),
                                onComplete : js_retornoEstornarReconhencimentoContabil
-                              });  
+                              });
 
 }
 
@@ -414,16 +414,16 @@ function js_retornoEstornarReconhencimentoContabil(oAjax) {
 
   js_removeObj('msgBox');
   var oRetorno  = eval("("+oAjax.responseText+")");
-  var sMensagem = oRetorno.sMensagem.urlDecode(); 
+  var sMensagem = oRetorno.sMensagem.urlDecode();
 
   /**
-   * Erro no RPC 
+   * Erro no RPC
    */
   if ( oRetorno.iStatus > 1 ) {
     alert(sMensagem);
   }
 
-  alert(sMensagem); 
+  alert(sMensagem);
   js_recarregarTela();
 }
 
@@ -449,18 +449,18 @@ function js_pesquisaNome(lMostrar) {
 
   if (lMostrar) {
 
-    js_OpenJanelaIframe('top.corpo','db_iframe2','func_nome.php?funcao_js=parent.js_retornoPesquisaNomeAncora|0|1','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe2','func_nome.php?funcao_js=parent.js_retornoPesquisaNomeAncora|0|1','Pesquisa',true);
     return true;
   }
 
   var iNumCgm = $('c112_numcgm').value;
-  js_OpenJanelaIframe('top.corpo','db_iframe2','func_nome.php?pesquisa_chave=' + iNumCgm + '&funcao_js=parent.js_retornoPesquisaNomeInput','Pesquisa',false);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe2','func_nome.php?pesquisa_chave=' + iNumCgm + '&funcao_js=parent.js_retornoPesquisaNomeInput','Pesquisa',false);
 
   return true;
 }
 
 /**
- * Retorno da pesquisa de cgm pelo ancora 
+ * Retorno da pesquisa de cgm pelo ancora
  *
  * @param iNumcgm $iNumcgm
  * @param sNome $sNome
@@ -484,12 +484,12 @@ function js_retornoPesquisaNomeAncora(iNumcgm, sNome) {
  */
 function js_retornoPesquisaNomeInput(lErro, sNome) {
 
-  $('z01_nome').value = sNome; 
+  $('z01_nome').value = sNome;
 
-  if (lErro) { 
+  if (lErro) {
 
-    $('c112_numcgm').focus(); 
-    $('c112_numcgm').value = ''; 
+    $('c112_numcgm').focus();
+    $('c112_numcgm').value = '';
   }
 }
 </script>

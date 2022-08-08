@@ -25,7 +25,7 @@ function js_processa(){
     <td nowrap title="<?=@$Tl204_sequencial?>">
        <?=@$Ll204_sequencial?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('l204_sequencial',10,$Il204_sequencial,true,'text',3,"")
 ?>
@@ -37,7 +37,7 @@ db_input('l204_sequencial',10,$Il204_sequencial,true,'text',3,"")
        db_ancora(@$Ll204_licitacao,"js_pesquisal204_licitacao(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('l204_licitacao',5,$Il204_licitacao,true,'text',3," onchange='js_pesquisal204_licitacao(false);'")
 ?>
@@ -47,7 +47,7 @@ db_input('l20_codigo',10,$Il20_codigo,true,'text',3,'')
        ?>
     </td>
   </tr>
-<? if(!empty($l204_licitacao)){ 
+<? if(!empty($l204_licitacao)){
 
      $iCodOrc = $cldescontotabela->getCodOrc($l204_licitacao);
 
@@ -56,7 +56,7 @@ db_input('l20_codigo',10,$Il20_codigo,true,'text',3,'')
     <td nowrap title="<?=@$Tl204_fornecedor?>">
        <?=@$Ll204_fornecedor?>
     </td>
-    <td> 
+    <td>
        <?//echo "string novo";
        $result = $cldescontotabela->sql_record($cldescontotabela->sql_query_fornec(null,"pc21_orcamforne,z01_nome","","pc21_codorc = $iCodOrc"));
        db_selectrecord("l204_fornecedor",$result,true,$db_opcao);
@@ -65,21 +65,21 @@ db_input('l20_codigo',10,$Il20_codigo,true,'text',3,'')
        	 location.href='lic1_descontotabela001.php'</script>";
        }
        if ($l204_fornecedor == '') {
-       	 $l204_fornecedor = db_utils::fieldsMemory($result, 0)->pc21_orcamforne; 
+       	 $l204_fornecedor = db_utils::fieldsMemory($result, 0)->pc21_orcamforne;
        }
        ?>
     </td>
   </tr>
-<? } ?> 
+<? } ?>
   </table>
   </center>
 <? if(!empty($l204_licitacao)){ ?>
 
     <? if($db_opcao == 1){ ?>
       <input id="db_opcao" type="submit" value="Incluir" onclick="js_submit()" name="incluir" tabindex="4">
-    <? }else{ ?>  
+    <? }else{ ?>
       <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit"  id="db_opcao" value="<?=($db_opcao==1?"Homologar":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> >
-    <? } ?>      
+    <? } ?>
 <? }else{ ?>
 <input name="processar" type="button" id="processar" value="Processar" onclick="js_processa()">
 <? } ?>
@@ -102,18 +102,18 @@ db_input('l20_codigo',10,$Il20_codigo,true,'text',3,'')
   $sql     = $cldescontotabela->sql_query_itens($l204_licitacao,'pc01_descrmater, pc01_complmater, pc01_codmater');
   $rsItens = db_query($sql);
     for ($iCont = 0; $iCont < pg_num_rows($rsItens); $iCont++) {
-      $oItem = db_utils::fieldsMemory($rsItens, $iCont);  
+      $oItem = db_utils::fieldsMemory($rsItens, $iCont);
 
-      if( $db_opcao == 1 && pg_num_rows($cldescontotabela->sql_record($cldescontotabela->sql_query(null,"l204_item,l204_valor","","l204_item = $oItem->pc01_codmater  and l204_licitacao = $l204_licitacao and l204_fornecedor = $l204_fornecedor"))) >= 1 ){ 
+      if( $db_opcao == 1 && pg_num_rows($cldescontotabela->sql_record($cldescontotabela->sql_query(null,"l204_item,l204_valor","","l204_item = $oItem->pc01_codmater  and l204_licitacao = $l204_licitacao and l204_fornecedor = $l204_fornecedor"))) >= 1 ){
 
-        echo 
-                    "<script> 
+        echo
+                    "<script>
                     document.getElementById('db_opcao').disabled                    = true;
                     document.getElementById('l204_licitacao').style.backgroundColor = '#DEB887';
                     document.getElementById('l204_licitacao').readOnly              = true;
                     </script>";
       }
-	
+
 
          $iValor=db_utils::fieldsMemory($cldescontotabela->sql_record($cldescontotabela->sql_query(null,"l204_item,l204_valor","","l204_item = $oItem->pc01_codmater and l204_licitacao = $l204_licitacao and l204_fornecedor = $l204_fornecedor")), 0)->l204_valor;
 
@@ -122,17 +122,17 @@ db_input('l20_codigo',10,$Il20_codigo,true,'text',3,'')
 	<td id="Dotacoesrow1cell0" class="linhagrid" nowrap="" style="text-align:left;width:50px;"><?=$oItem->pc01_codmater ?></td>
         <td title="<?php echo $oItem->pc01_descrmater .' - '. $oItem->pc01_complmater ?> " id="Dotacoesrow1cell0" class="linhagrid" nowrap="" style="text-align:left;;"><?=$oItem->pc01_descrmater ?></td>
         <td id="Dotacoesrow1cell3" class="linhagrid" nowrap="" style="text-align:center;">
-        <input id="item_<?=$oItem->pc01_codmater ?>" class="linhagrid" name="<?=$oItem->pc01_codmater ?>" 
-        <? 
-        if( $db_opcao == 3 || $db_opcao == 1 && pg_num_rows($cldescontotabela->sql_record($cldescontotabela->sql_query(null,"l204_item,l204_valor","","l204_item = $oItem->pc01_codmater and l204_licitacao = $l204_licitacao and l204_fornecedor = $l204_fornecedor"))) >= 1 ){ 
-        ?> 
-        style="background-color:#DEB887;" readonly 
+        <input id="item_<?=$oItem->pc01_codmater ?>" class="linhagrid" name="<?=$oItem->pc01_codmater ?>"
+        <?
+        if( $db_opcao == 3 || $db_opcao == 1 && pg_num_rows($cldescontotabela->sql_record($cldescontotabela->sql_query(null,"l204_item,l204_valor","","l204_item = $oItem->pc01_codmater and l204_licitacao = $l204_licitacao and l204_fornecedor = $l204_fornecedor"))) >= 1 ){
+        ?>
+        style="background-color:#DEB887;" readonly
         <?php } ?>
- 
-        value="<?php if(!empty($iValor)){ echo $iValor;  } ?>" type="text" style="width: 80px" 
+
+        value="<?php if(!empty($iValor)){ echo $iValor;  } ?>" type="text" style="width: 80px"
         onkeyup="js_ValidaCampos(this,4,'valor','f','f',event);" >
         </td>
-      </tr>   
+      </tr>
 <?//echo "<br>".$cldescontotabela->sql_query(null,"l204_item,l204_valor","","l204_item = $oItem->pc01_codmater");
     }
   }
@@ -156,20 +156,20 @@ function js_ProcCod_l204_fornecedor(proc,res) {
 
 function js_pesquisal204_licitacao(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_liclicita.php?funcao_js=parent.js_mostraliclicita1|l20_codigo|l20_edital|l20_anousu|l204_fornecedor','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_liclicita','func_liclicita.php?funcao_js=parent.js_mostraliclicita1|l20_codigo|l20_edital|l20_anousu|l204_fornecedor','Pesquisa',true);
   }else{
-     if(document.form1.l204_licitacao.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_liclicita.php?pesquisa_chave='+document.form1.l204_licitacao.value+'&funcao_js=parent.js_mostraliclicita','Pesquisa',false);
+     if(document.form1.l204_licitacao.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_liclicita','func_liclicita.php?pesquisa_chave='+document.form1.l204_licitacao.value+'&funcao_js=parent.js_mostraliclicita','Pesquisa',false);
      }else{
-       document.form1.l20_codigo.value = ''; 
+       document.form1.l20_codigo.value = '';
      }
   }
 }
 function js_mostraliclicita(chave,erro){
-  document.form1.l20_codigo.value = chave; 
-  if(erro==true){ 
-    document.form1.l204_licitacao.focus(); 
-    document.form1.l204_licitacao.value = ''; 
+  document.form1.l20_codigo.value = chave;
+  if(erro==true){
+    document.form1.l204_licitacao.focus();
+    document.form1.l204_licitacao.value = '';
   }
 }
 function js_mostraliclicita1(chave1,chave2,chave3,chave4){
@@ -179,20 +179,20 @@ function js_mostraliclicita1(chave1,chave2,chave3,chave4){
 }
 function js_pesquisal204_fornecedor(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_pcorcamforne','func_pcorcamforne.php?funcao_js=parent.js_mostrapcorcamforne1|pc21_orcamforne|pc21_codorc','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_pcorcamforne','func_pcorcamforne.php?funcao_js=parent.js_mostrapcorcamforne1|pc21_orcamforne|pc21_codorc','Pesquisa',true);
   }else{
-     if(document.form1.l204_fornecedor.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_pcorcamforne','func_pcorcamforne.php?pesquisa_chave='+document.form1.l204_fornecedor.value+'&funcao_js=parent.js_mostrapcorcamforne','Pesquisa',false);
+     if(document.form1.l204_fornecedor.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_pcorcamforne','func_pcorcamforne.php?pesquisa_chave='+document.form1.l204_fornecedor.value+'&funcao_js=parent.js_mostrapcorcamforne','Pesquisa',false);
      }else{
-       document.form1.pc21_codorc.value = ''; 
+       document.form1.pc21_codorc.value = '';
      }
   }
 }
 function js_mostrapcorcamforne(chave,erro){
-  document.form1.pc21_codorc.value = chave; 
-  if(erro==true){ 
-    document.form1.l204_fornecedor.focus(); 
-    document.form1.l204_fornecedor.value = ''; 
+  document.form1.pc21_codorc.value = chave;
+  if(erro==true){
+    document.form1.l204_fornecedor.focus();
+    document.form1.l204_fornecedor.value = '';
   }
 }
 function js_mostrapcorcamforne1(chave1,chave2){
@@ -201,7 +201,7 @@ function js_mostrapcorcamforne1(chave1,chave2){
   db_iframe_pcorcamforne.hide();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_descontotabela','func_descontotabela.php?funcao_js=parent.js_preenchepesquisa|l204_licitacao|l204_fornecedor','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_descontotabela','func_descontotabela.php?funcao_js=parent.js_preenchepesquisa|l204_licitacao|l204_fornecedor','Pesquisa',true);
 }
 function js_preenchepesquisa(chave1,chave2){
   db_iframe_descontotabela.hide();

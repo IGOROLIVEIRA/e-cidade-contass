@@ -2037,14 +2037,16 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
     function js_verificalei(lei) {
         let opcoesreg = document.getElementById('l20_tipliticacao').options;
         
-        tipo_modalidade = document.getElementById('l20_codtipocom').value;
+        let modalidade = document.form1.modalidade_tribunal.value;
         
         if (lei == 1) {
+            
             opcoesreg.add(new Option('6- Maior Retorno Econômico'), 6);
             opcoesreg.add(new Option('7- Maior desconto'), 7);
             opcoesreg.add(new Option('8- Melhor técnica ou conteúdo artístico'), 8);
-            if(tipo_modalidade != 8 && tipo_modalidade != 9 && tipo_modalidade != 10 && tipo_modalidade != 11){
-            document.getElementById('disputa').style.display = '';
+            if(modalidade != 100 && modalidade != 101 && modalidade != 102 && modalidade != 103){
+                document.getElementById('disputa').style.display = '';
+                
             }else{
                 document.getElementById('disputa').style.display = 'none';
             }  

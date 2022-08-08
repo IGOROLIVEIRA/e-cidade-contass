@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlibwebseller.php");
@@ -79,13 +79,13 @@ if(isset($excluir)){
     $sWhereBase .= "    escolabase.ed77_i_escola = $escola ";
     $sSqlBase    = $oDaoBase->sql_query_base("", "*", "", $sWhereBase);
     $rsBase      = $oDaoBase->sql_record($sSqlBase);
-  
+
     if ($oDaoBase->numrows > 0) {
       $lErro = true;
     }
 
   }
-  
+
   if (!$lErro) {
 
     db_inicio_transacao();
@@ -95,7 +95,7 @@ if(isset($excluir)){
     $clcursoturno->excluir(""," ed85_i_escola = $escola AND ed85_i_curso = $ed71_i_curso");
     $clcursoescola->excluir($ed71_i_codigo);
     db_fim_transacao();
-  
+
     $db_botao = false;
 
   } else {
@@ -142,8 +142,8 @@ if(isset($incluir)){
  }else{
   ?>
   <script>
-   top.corpo.iframe_a3.location.href='edu1_cursoturno001.php?ed85_i_curso=<?=$ed71_i_curso?>&ed29_c_descr=<?=$ed29_c_descr?>';
-   top.corpo.iframe_a4.location.href='edu1_cursoato001.php?ed71_i_curso=<?=$ed71_i_curso?>&ed29_c_descr=<?=$ed29_c_descr?>';
+   CurrentWindow.corpo.iframe_a3.location.href='edu1_cursoturno001.php?ed85_i_curso=<?=$ed71_i_curso?>&ed29_c_descr=<?=$ed29_c_descr?>';
+   CurrentWindow.corpo.iframe_a4.location.href='edu1_cursoato001.php?ed71_i_curso=<?=$ed71_i_curso?>&ed29_c_descr=<?=$ed29_c_descr?>';
   </script>
   <?
   $clcursoescola->erro(true,true);
@@ -161,8 +161,8 @@ if(isset($alterar)){
  }else{
   ?>
   <script>
-   top.corpo.iframe_a3.location.href='edu1_cursoturno001.php?ed85_i_curso=<?=$ed71_i_curso?>&ed29_c_descr=<?=$ed29_c_descr?>';
-   top.corpo.iframe_a4.location.href='edu1_cursoato001.php?ed71_i_curso=<?=$ed71_i_curso?>&ed29_c_descr=<?=$ed29_c_descr?>';
+   CurrentWindow.corpo.iframe_a3.location.href='edu1_cursoturno001.php?ed85_i_curso=<?=$ed71_i_curso?>&ed29_c_descr=<?=$ed29_c_descr?>';
+   CurrentWindow.corpo.iframe_a4.location.href='edu1_cursoato001.php?ed71_i_curso=<?=$ed71_i_curso?>&ed29_c_descr=<?=$ed29_c_descr?>';
   </script>
   <?
   $clcursoescola->erro(true,true);
@@ -174,8 +174,8 @@ if(isset($excluir)){
  }else{
   ?>
   <script>
-   top.corpo.iframe_a3.location.href='edu1_cursoturno001.php?ed85_i_curso=<?=$ed71_i_curso?>&ed29_c_descr=<?=$ed29_c_descr?>';
-   top.corpo.iframe_a4.location.href='edu1_cursoato001.php?ed71_i_curso=<?=$ed71_i_curso?>&ed29_c_descr=<?=$ed29_c_descr?>';
+   CurrentWindow.corpo.iframe_a3.location.href='edu1_cursoturno001.php?ed85_i_curso=<?=$ed71_i_curso?>&ed29_c_descr=<?=$ed29_c_descr?>';
+   CurrentWindow.corpo.iframe_a4.location.href='edu1_cursoato001.php?ed71_i_curso=<?=$ed71_i_curso?>&ed29_c_descr=<?=$ed29_c_descr?>';
   </script>
   <?
   $clcursoescola->erro(true,true);

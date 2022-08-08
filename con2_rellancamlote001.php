@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -54,12 +54,12 @@ function js_imprimir() {
   var data_fim   = document.form1.data2_ano.value+'-'+document.form1.data2_mes.value+'-'+document.form1.data2_dia.value;
   var data1      = new Date(document.form1.data1_ano.value,document.form1.data1_mes.value,document.form1.data1_dia.value,0,0,0);
   var data2      = new Date(document.form1.data2_ano.value,document.form1.data2_mes.value,document.form1.data2_dia.value,0,0,0);
-  
+
   if(data1.valueOf() > data2.valueOf()){
     alert('Data inicial maior que data final. Verifique!');
     return false;
   }
-  
+
   if(sel_instit==0){
       alert('Você não escolheu nenhuma Instituição. Verifique!');
       return false;
@@ -71,7 +71,7 @@ function js_imprimir() {
   }
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_conlancamdig','func_conlancamdig.php?funcao_js=parent.js_preenchepesquisa|c78_chave','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_conlancamdig','func_conlancamdig.php?funcao_js=parent.js_preenchepesquisa|c78_chave','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_conlancamdig.hide();
@@ -84,9 +84,9 @@ function js_preenchepesquisa(chave){
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr>
     <td>  &nbsp; </td>
-  </tr>  
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  </tr>
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
        <form name="form1" method="post" action="">
       <table border="0" width="48%">
@@ -106,14 +106,14 @@ function js_preenchepesquisa(chave){
         <tr>
           <td nowrap align=right><b>Período</b> </td>
 	  <td nowrap align=left>
-               <? 
+               <?
 	          $dia=  date("d",db_getsession("DB_datausu"));
 		  $mes=  date("m",db_getsession("DB_datausu"));
 		  $ano=  date("Y",db_getsession("DB_datausu"));
 		  $dia2= date("d",db_getsession("DB_datausu"));
 		  $mes2= date("m",db_getsession("DB_datausu"));
 		  $ano2= date("Y",db_getsession("DB_datausu"));
-	          db_inputdata('data1',@$dia,@$mes,@$ano,true,'text',1,"");   		          
+	          db_inputdata('data1',@$dia,@$mes,@$ano,true,'text',1,"");
                   echo " a ";
                   db_inputdata('data2',@$dia2,@$mes2,@$ano2,true,'text',1,"");
                ?>
@@ -124,7 +124,7 @@ function js_preenchepesquisa(chave){
             <input type="button" id="emite" value="Emite" onClick="js_imprimir()">
           </td>
 	 </tr>
-       </tr> 
+       </tr>
        </table>
        </center>
        </form>

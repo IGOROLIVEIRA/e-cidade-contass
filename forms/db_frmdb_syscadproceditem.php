@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: configuracoes
@@ -41,13 +41,13 @@ if(isset($db_opcaoal)){
 }else if(isset($opcao) && $opcao=="excluir"){
     $db_opcao = 3;
     $db_botao=true;
-}else{  
+}else{
     $db_opcao = 1;
     $db_botao=true;
     if(isset($novo) || isset($alterar) ||   isset($excluir) || (isset($incluir) && $sqlerro==false ) ){
      $id_item = "";
    }
-} 
+}
 ?>
 <form name="form1" method="post" action="">
 <center>
@@ -56,7 +56,7 @@ if(isset($db_opcaoal)){
     <td nowrap title="<?=@$Tseqproitem?>">
        <?=@$Lseqproitem?>
     </td>
-    <td> 
+    <td>
 <?
 if ( $db_opcao == 1 ){
 	$seqproitem = null;
@@ -71,7 +71,7 @@ db_input('seqproitem',6,$Iseqproitem,true,'text',3,"")
        db_ancora(@$Lcodproced,"js_pesquisacodproced(true);",3);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 ?>
     </td>
@@ -82,7 +82,7 @@ db_input('seqproitem',6,$Iseqproitem,true,'text',3,"")
        db_ancora("Selecione os Itens","js_pesquisaid_item(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('id_item',5,$Iid_item,true,'hidden',$db_opcao," onchange='js_pesquisaid_item(false);'");
 ?>
@@ -101,7 +101,7 @@ db_input('descricao',40,$Idescricao,true,'hidden',3,'')
   </table>
  <table>
   <tr>
-    <td valign="top"  align="center">  
+    <td valign="top"  align="center">
     <?
     if( isset ($codproced)){
 	 $chavepri= array("seqproitem"=>@$seqproitem,"codproced"=>@$codproced);
@@ -132,13 +132,13 @@ function js_pesquisaitemcad(item,modulo){
 	document.form1.itens.value = document.form1.itens.value+"-"+item;
 }
 function js_pesquisaid_item(mostra){
-    js_OpenJanelaIframe('top.corpo.iframe_db_syscadproceditem','db_iframe_db_syscadproceditem','con1_caditens002.php?proced=true','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_db_syscadproceditem','db_iframe_db_syscadproceditem','con1_caditens002.php?proced=true','Pesquisa',true);
 }
 function js_mostradb_itensmenu(chave,erro){
-  document.form1.descricao.value = chave; 
-  if(erro==true){ 
-    document.form1.id_item.focus(); 
-    document.form1.id_item.value = ''; 
+  document.form1.descricao.value = chave;
+  if(erro==true){
+    document.form1.id_item.focus();
+    document.form1.id_item.value = '';
   }
 }
 function js_mostradb_itensmenu1(chave1,chave2){
@@ -148,20 +148,20 @@ function js_mostradb_itensmenu1(chave1,chave2){
 }
 function js_pesquisacodproced(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_db_syscadproceditem','db_iframe_db_syscadproced','func_db_syscadproced.php?funcao_js=parent.js_mostradb_syscadproced1|codproced|descrproced','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_db_syscadproceditem','db_iframe_db_syscadproced','func_db_syscadproced.php?funcao_js=parent.js_mostradb_syscadproced1|codproced|descrproced','Pesquisa',true);
   }else{
-     if(document.form1.codproced.value != ''){ 
-        js_OpenJanelaIframe('top.corpo.iframe_db_syscadproceditem','db_iframe_db_syscadproced','func_db_syscadproced.php?pesquisa_chave='+document.form1.codproced.value+'&funcao_js=parent.js_mostradb_syscadproced','Pesquisa',false);
+     if(document.form1.codproced.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_db_syscadproceditem','db_iframe_db_syscadproced','func_db_syscadproced.php?pesquisa_chave='+document.form1.codproced.value+'&funcao_js=parent.js_mostradb_syscadproced','Pesquisa',false);
      }else{
-       document.form1.descrproced.value = ''; 
+       document.form1.descrproced.value = '';
      }
   }
 }
 function js_mostradb_syscadproced(chave,erro){
-  document.form1.descrproced.value = chave; 
-  if(erro==true){ 
-    document.form1.codproced.focus(); 
-    document.form1.codproced.value = ''; 
+  document.form1.descrproced.value = chave;
+  if(erro==true){
+    document.form1.codproced.focus();
+    document.form1.codproced.value = '';
   }
 }
 function js_mostradb_syscadproced1(chave1,chave2){

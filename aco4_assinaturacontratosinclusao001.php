@@ -158,8 +158,8 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
               <td>&nbsp;</td>
             </tr>
             <tr>
-              <td align="left" title="<?= @$Tac16_datapublicacao ?>">
-                <?= @$Lac16_datapublicacao ?>
+              <td align="left" title="Data da publicação do contrato ou termo de parceria. &#013;Campo:ac16_datapublicacao">
+                <b> Data de publicação </b>
               </td>
 
               <td align="left">
@@ -177,9 +177,29 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
               </td>
               <td>&nbsp;</td>
             </tr>
+            <tr id="trdatareferencia" style="display:none;">
+              <td align="left" title="<?= @$Tac16_datareferencia ?>">
+                <b>Data de Referência:</b>
+              </td>
+
+              <td align="left">
+                <?
+                db_inputdata(
+                  'ac16_datareferencia',
+                  @$ac16_datareferencia_dia,
+                  @$ac16_datareferencia_mes,
+                  @$ac16_datareferencia_ano,
+                  true,
+                  'text',
+                  $db_opcao
+                );
+                ?>
+              </td>
+              <td>&nbsp;</td>
+            </tr>
             <tr>
-              <td align="left" title="<?= @$Tac16_veiculodivulgacao ?>">
-                <?= @$Lac16_veiculodivulgacao ?>
+              <td align="left" title="Veí­culo de divulgação onde o contrato ou termo de parceria foi publicado.&#013;Campo:ac16_veiculodivulgacao">
+                <b> Veículo de divulgação </b>
               </td>
               <td align="left" colspan="2">
                 <?
@@ -362,6 +382,7 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
     oParam.dtpublicacao = $F('ac16_datapublicacao');
     oParam.veiculodivulgacao = encodeURIComponent(tagString($F('ac16_veiculodivulgacao')));
     oParam.observacao = encodeURIComponent(tagString($F('ac10_obs')));
+    oParam.dtreferencia = $F('ac16_datareferencia');
 
     /**
      * Verificar Encerramento Periodo Patrimonial
@@ -374,10 +395,41 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
     var partesData = $("c99_datapat_hidden").value.split("-");
     var dataPatrimonial = new Date(partesData[0], partesData[1] - 1, partesData[2]);
 
-    if (dataMovimento <= dataPatrimonial) {
-      alert("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
+    //    DATA DE REFERÊNCIA
+    var partesData = oParam.dtreferencia.split("/");
+    var dataReferencia = new Date(partesData[2], partesData[1] - 1, partesData[0]);
+
+
+    if (oParam.dtreferencia != "") {
+
+      if (dataReferencia.getMonth() == dataPatrimonial.getMonth() && dataReferencia.getFullYear() == dataPatrimonial.getFullYear()) {
+        alert("Usuário: A data de referência deverá ser no mês posterior ao mês da data inserida.");
+        return;
+      }
+
+      if (dataReferencia <= dataPatrimonial) {
+        alert("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
+        return;
+      }
+
+
+    } else {
+      oParam.dtreferencia = null;
+      if (document.getElementById("trdatareferencia").style.display == 'contents') {
+        alert('Data de referência não informada!');
+        return;
+      }
+
+    }
+
+
+    if (dataMovimento <= dataPatrimonial && oParam.dtreferencia == null) {
+      document.getElementById("trdatareferencia").style.display = 'contents';
+      alert("O período já foi encerrado para envio do SICOM. Preencha o campo Data de Referência com uma data no mês subsequente.");
       return;
     }
+
+
 
     js_divCarregando('Aguarde incluindo assinatura...', 'msgBoxAssianturaContrato');
 
@@ -409,7 +461,13 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
       alert(oRetorno.erro.urlDecode());
       return false;
     } else {
-
+      $('ac16_sequencial').value = "";
+      $('ac16_datareferencia').value = "";
+      $('ac10_datamovimento').value = "";
+      $('ac16_datapublicacao').value = "";
+      $('ac16_veiculodivulgacao').value = "";
+      $('ac10_obs').value = "";
+      document.getElementById("trdatareferencia").style.display == 'none'
       alert("Inclusão efetuada com Sucesso.");
       return true;
     }

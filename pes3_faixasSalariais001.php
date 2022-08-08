@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once 'libs/db_stdlib.php';
@@ -44,7 +44,7 @@ $oRotulo->label('r44_selec');
 
 /**
  * Periodo da folha, ano e mes atual de calculo
- */	 
+ */
 $iAnoFolha = db_anofolha();
 $iMesFolha = db_mesfolha();
 ?>
@@ -69,7 +69,7 @@ $iMesFolha = db_mesfolha();
 		</legend>
 
 		<form name="form1" method="post" action="">
-	
+
 			<table>
 
 				<tr>
@@ -86,7 +86,7 @@ $iMesFolha = db_mesfolha();
 						<strong>Listar Servidores:</strong>
 					</td>
 					<td nowrap>
-						<?php 
+						<?php
 						  $aOpcaoServidor = array("1" => "Não", "2" => "Sim");
 						  db_select('iServidor', $aOpcaoServidor, true, 1);
 						?>
@@ -97,7 +97,7 @@ $iMesFolha = db_mesfolha();
 				    <?php db_ancora('<b>Seleção:</b>', 'js_pesquisasel(true)', 1);?>
 				  </td>
 				  <td>
-				    <?php 
+				    <?php
 				      db_input('r44_selec', 5,  $Ir44_selec, true, 'text', 2, 'onchange="js_pesquisasel(false)"');
 				      db_input('r44_descr', 40, $Ir44_selec, true, 'text', 3, '');
 				    ?>
@@ -107,25 +107,25 @@ $iMesFolha = db_mesfolha();
 					<td nowrap title="Tipo de Relarório">
 						<strong>Quebra:</strong>
 					</td>
-					<td> 
+					<td>
             <?php
 							$aQuebras = array('geral' => 'Geral', 'regime' => 'Regime', 'lotacao' => 'Lotação', 'cargo' => 'Cargo');
 						  db_select('sQuebraRelatorio', $aQuebras, false, 2);
             ?>
 					</td>
-				</tr> 
- 
+				</tr>
+
 				<tr>
 					<td nowrap title="Tipo de Relarório">
 						<strong> Formato: </strong>
 					</td>
-					<td> 
+					<td>
             <?php
 							$aFormatos = array('pdf' => 'PDF', 'csv' => 'CSV');
 						  db_select('sFormatoRelatorio', $aFormatos, false, 2);
             ?>
 					</td>
-				</tr> 
+				</tr>
 
 				</table>
 
@@ -174,17 +174,17 @@ $iMesFolha = db_mesfolha();
 			<table>
 				<tr>
 
-					<td width="150"> 
+					<td width="150">
 						<strong>Valor inicial:</strong>
 						<?php db_input('iValorInicial', 5, 4, true, 'text', 1, '', '', '', '', '8'); ?>
 					</td>
 
-					<td width="150"> 
+					<td width="150">
 						<strong>Valor final:</strong>
 						<?php db_input('iValorFinal', 5, 4, true, 'text', 1, '', '', '', '', '8'); ?>
 					</td>
 
-					<td width="150"> 
+					<td width="150">
 						<input type="button" onclick="js_lancarFaixa();" value="Lancar faixa" />
 					</td>
 
@@ -208,22 +208,22 @@ $iMesFolha = db_mesfolha();
 
 <script type="text/javascript">
 
-var sUrlRPC  = 'pes3_faixasSalariais.RPC.php';  
+var sUrlRPC  = 'pes3_faixasSalariais.RPC.php';
 
-/** -------------------------------------------------------------------------------------------- 
- * 
+/** --------------------------------------------------------------------------------------------
+ *
  * Complementares - inicio
- * 
- */	 
+ *
+ */
 
 /**
  * Ao mudar periodo folha, ano e mes, pesquisa as complementares
- */	 
+ */
 function js_alteraPeriodoFolha() {
 
 	/**
 	 * Se linha com as complementares nao estiver visivel é pq nao foi selecionado tipo de folha complementar
-	 */	 
+	 */
 	if ( $('linhaComplementares').style.display == 'none' ) {
 		return false;
 	}
@@ -233,8 +233,8 @@ function js_alteraPeriodoFolha() {
 
 /**
  * Funcao chamada toda vez que for alterado os tipos de folha
- * @todo alterar de iComplementar para sComplementar, foi alterado de numero para string 
- */	 
+ * @todo alterar de iComplementar para sComplementar, foi alterado de numero para string
+ */
 function js_complementar() {
 
   var oSelecionados = $('selecionados');
@@ -260,8 +260,8 @@ function js_complementar() {
 
 			$('linhaComplementares').style.display = 'none';
 
-			$('complementares').innerHTML  = '';   
-			$('complementares').options[0] = new Option( 'Todos', 'todos' ); 	
+			$('complementares').innerHTML  = '';
+			$('complementares').options[0] = new Option( 'Todos', 'todos' );
 		}
 	}
 }
@@ -270,25 +270,25 @@ function js_getComplementares() {
 
   var oParametros  = new Object();
   var msgDiv       = "Pesquisando complementares. \n Aguarde ...";
-  
-  oParametros.exec      = 'getComplementares';  
+
+  oParametros.exec      = 'getComplementares';
 	oParametros.iAnoFolha = $F('iAnoFolha');
 	oParametros.iMesFolha = $F('iMesFolha');
-  
+
   js_divCarregando(msgDiv,'msgBox');
-   
+
 	var oAjax = new Ajax.Request(
-		sUrlRPC, 
+		sUrlRPC,
 		{
 			method     : 'post',
 			parameters : 'json=' + Object.toJSON(oParametros),
 			onComplete : js_retornoComplentares
 		}
-	);   
+	);
 }
 
 function js_retornoComplentares(oAjax) {
-  
+
   js_removeObj('msgBox');
 
   var oRetorno              = eval("("+oAjax.responseText+")");
@@ -302,69 +302,69 @@ function js_retornoComplentares(oAjax) {
 
 	/**
 	 * Limpa select com as complementares e cria option para todos
-	 */	 
+	 */
 	oComplentares.innerHTML               = '';
-	oComplentares.options[iIndiceOptions] = new Option( 'Todos', 'todos' ); 	
-  
+	oComplentares.options[iIndiceOptions] = new Option( 'Todos', 'todos' );
+
 	oLinhaComplementares.style.display = '';
 
 	/**
-	 * Erro 
-	 */	 
+	 * Erro
+	 */
 	if (oRetorno.iStatus > 1) {
 
 		var sErroComplementar = '<strong>' + sMensagem + '</strong>';
-				
+
 		/**
 		 * Exibe coluna com mensagem de erro
-		 */	 
+		 */
 		oColunaErroComplentar.innerHTML     = sErroComplementar;
 		oColunaErroComplentar.style.display = '';
 
 		/**
 		 * Esconde colunas das complementares e desabilita select
-		 */	 
+		 */
 		oColunaComplentares[0].style.display  = 'none';
 		oColunaComplentares[1].style.display  = 'none';
 		oComplentares.disabled = true;
 
 		return false;
-  } 
+  }
 
 	/**
 	 * Esconde linha com erro das complentares
-	 */	 
+	 */
 	oColunaErroComplentar.style.display = 'none';
 
 	/**
 	 * Exibe colunas das complementres
-	 */	 
+	 */
 	oColunaComplentares[0].style.display  = '';
 	oColunaComplentares[1].style.display  = '';
 	oComplentares.disabled = false;
 
 	for ( var iIndice = 0; iIndice < oRetorno.aComplementares.length; iIndice++ ) {
-		
+
 		var oComplentar = oRetorno.aComplementares[iIndice];
 
 		iIndiceOptions++;
-		oComplentares.options[iIndiceOptions] = new Option( oComplentar.r48_semest , oComplentar.r48_semest ); 	
+		oComplentares.options[iIndiceOptions] = new Option( oComplentar.r48_semest , oComplentar.r48_semest );
 	}
 
 }
 
 /**
- * 
+ *
  * Complementares - fim
  *
  * -------------------------------------------------------------------------------------------- */
 
 
-/** -------------------------------------------------------------------------------------------- 
+/** --------------------------------------------------------------------------------------------
  *
  * Grid faixas salariais - inicio
  *
- */	 
+ */
 
 var aAlinhamentosFaixas = new Array();
 var aHeaderFaixas       = new Array();
@@ -380,9 +380,9 @@ aHeaderFaixas[2] = 'Remover faixa';
 /**
  * Tamanho das colunas
  */
-aWidthFaixas[0] = '33%';  
-aWidthFaixas[1] = '33%';  
-aWidthFaixas[2] = '33%';  
+aWidthFaixas[0] = '33%';
+aWidthFaixas[1] = '33%';
+aWidthFaixas[2] = '33%';
 
 /**
  * Alinhamento das colunas
@@ -405,7 +405,7 @@ oGridFaixas.clearAll(true);
 
 /**
  * Lanca faixa salarial na grid
- */	 
+ */
 function js_lancarFaixa() {
 
 	var oValorInicial = $('iValorInicial');
@@ -432,20 +432,20 @@ function js_lancarFaixa() {
 
 	/**
 	 * Nao permite cadastrar faixas com mesmo intervalo
-	 */	 
+	 */
 	if ( !js_verificaFaixasLancadas([oValorInicial.value, oValorFinal.value]) ) {
 		return false;
 	}
 
 	/**
-	 * Adiciona faixa salarial na grid e renderiza 
-	 */	 
+	 * Adiciona faixa salarial na grid e renderiza
+	 */
 	FaixasSalariais.adicionarFaixa( new Number(oValorInicial.value), new Number(oValorFinal.value) );
   js_carregaGrid();
 
 	/**
 	 * Limpa os campos
-	 */	 
+	 */
 	oValorInicial.value = null;
 	oValorFinal.value   = null;
 }
@@ -453,7 +453,7 @@ function js_lancarFaixa() {
 /**
  * Valida faixas lancadas
  * Nao permite lancar faixas com mesmo intervalo
- */	 
+ */
 function js_verificaFaixasLancadas(aFaixa) {
 
   var iFaixaInicial = new Number(aFaixa[0]);
@@ -462,16 +462,16 @@ function js_verificaFaixasLancadas(aFaixa) {
 	if ( FaixasSalariais.getQuantidadeFaixas() > 0 ) {
 
 		for ( var iIndice = 0; iIndice < FaixasSalariais.getQuantidadeFaixas(); iIndice++) {
-      
+
 			var oFaixaSalarial  = FaixasSalariais.aFaixas[iIndice];
-			
+
 			var iFaixaInicialVetor = new Number(oFaixaSalarial.iValorInicial);
 			var iFaixaFinalVetor   = new Number(oFaixaSalarial.iValorFinal);
-			
-			var lValidaAntes  = iFaixaInicial < iFaixaInicialVetor && iFaixaFinal < iFaixaInicialVetor; 
-			var lValidaDepois = iFaixaInicial > iFaixaFinalVetor   && iFaixaFinal > iFaixaFinalVetor; 	
 
-			if ( !lValidaAntes && !lValidaDepois ) {                           
+			var lValidaAntes  = iFaixaInicial < iFaixaInicialVetor && iFaixaFinal < iFaixaInicialVetor;
+			var lValidaDepois = iFaixaInicial > iFaixaFinalVetor   && iFaixaFinal > iFaixaFinalVetor;
+
+			if ( !lValidaAntes && !lValidaDepois ) {
 
 				alert('Faixa não pode sobrepor outra faixa');
 			  return false;
@@ -484,7 +484,7 @@ function js_verificaFaixasLancadas(aFaixa) {
 
 /**
  * Remove faixa salarial da grid e renderiza grid
- */	 
+ */
 function js_removerFaixa( iIndice ) {
 
 	FaixasSalariais.removerFaixa(iIndice);
@@ -492,14 +492,14 @@ function js_removerFaixa( iIndice ) {
 }
 
 /**
- * Carrega os Dados da Grid na Tela e a Renderiza 
- */	 
+ * Carrega os Dados da Grid na Tela e a Renderiza
+ */
 function js_carregaGrid() {
-	
+
  oGridFaixas.clearAll(true);
 
  for ( var iIndice = 0; iIndice < FaixasSalariais.aFaixas.length; iIndice++ ) {
- 
+
    oFaixaSalarial = FaixasSalariais.aFaixas[iIndice];
 
 	 var aLinha = new Array();
@@ -511,27 +511,27 @@ function js_carregaGrid() {
  	oGridFaixas.addRow(aLinha);
  }
 
- oGridFaixas.renderRows(); 
+ oGridFaixas.renderRows();
 }
 
 /**
  * Singleton das faixas salariais
- */	 
+ */
 FaixasSalariais = {
 
 	/**
 	 * Array com as faixas salariais
-	 */	 
+	 */
 	aFaixas : new Array(),
-	
+
 	/**
 	 * Array com as faixas ordenandas
-	 */	 
+	 */
   aOrdemFaixas : new Array(),
 
 	/**
 	 * Adiciona faixa salaria
-	 */	 
+	 */
 	adicionarFaixa : function(iValorInicial, iValorFinal) {
 
 		var aOrdem = new Array();
@@ -558,7 +558,7 @@ FaixasSalariais = {
 
 	/**
 	 * Remove faixa salarial
-	 */	 
+	 */
 	removerFaixa : function( iIndiceFaixa ) {
 		FaixasSalariais.aOrdemFaixas.splice(iIndiceFaixa, 1);
 		FaixasSalariais.aFaixas.splice(iIndiceFaixa, 1);
@@ -566,31 +566,31 @@ FaixasSalariais = {
 
 	/**
 	 * Retorna total de faixas da grid
-	 */	 
+	 */
   getQuantidadeFaixas : function () {
 	  return FaixasSalariais.aFaixas.length;
-	}	
+	}
 
 }
 
 /**
- * 
+ *
  * Grid faixas salariais - fim
  *
  * -------------------------------------------------------------------------------------------- */
 
 
 
-/* -------------------------------------------------------------------------------------------- 
+/* --------------------------------------------------------------------------------------------
  *
  * Gerar relatorio - inicio
  *
- */ 
+ */
 
 /**
- * Valida formulario 
+ * Valida formulario
  * - obrigando usuario informar tipo de folha e a faixa salarial
- */	 
+ */
 function js_validaFormulario() {
 
 	var oTiposFolha      = $('selecionados').options;
@@ -619,8 +619,8 @@ function js_gerarRelatorio() {
 
   var oParametros  = new Object();
   var msgDiv       = "Gerando relatório. \n Aguarde ...";
-  
-  oParametros.exec              = 'gerarRelatorio';  
+
+  oParametros.exec              = 'gerarRelatorio';
 	oParametros.iAnoFolha         = $F('iAnoFolha');
 	oParametros.iMesFolha         = $F('iMesFolha');
 	oParametros.aFaixas           = new Array();
@@ -644,17 +644,17 @@ function js_gerarRelatorio() {
 	if ( FaixasSalariais.getQuantidadeFaixas() > 0 ) {
 	  oParametros.aFaixas   = FaixasSalariais.aFaixas;
   }
- 
+
   js_divCarregando(msgDiv, 'msgBox');
-   
+
 	var oAjax = new Ajax.Request(
-		sUrlRPC, 
+		sUrlRPC,
 		{
 			method     : 'post',
 			parameters : 'json=' + Object.toJSON(oParametros),
 			onComplete : js_retornoGerarRelatorio
 		}
-	);   
+	);
 
 }
 
@@ -667,7 +667,7 @@ function js_retornoGerarRelatorio(oAjax) {
 
 	/**
 	 * Erro
-	 */	 
+	 */
 	if ( oRetorno.iStatus > 1 ) {
 
 		alert( sMensagem );
@@ -675,11 +675,11 @@ function js_retornoGerarRelatorio(oAjax) {
 	}
 
 	var listagem  = oRetorno.sArquivo + "# Download do Arquivo - " + oRetorno.sArquivo;
-	js_montarlista(listagem,'form1');  
+	js_montarlista(listagem,'form1');
 }
 
 /**
- * 
+ *
  * Gerar relatorio - fim
  *
  * -------------------------------------------------------------------------------------------- */
@@ -690,19 +690,19 @@ function js_retornoGerarRelatorio(oAjax) {
 function js_pesquisasel(mostra) {
 
   if (mostra == true) {
-    js_OpenJanelaIframe('top.corpo', 
-                        'db_iframe_selecao', 
+    js_OpenJanelaIframe('CurrentWindow.corpo',
+                        'db_iframe_selecao',
                         'func_selecao.php?funcao_js=parent.js_mostrasel1|r44_selec|r44_descr',
                         'Pesquisa',
                         true
                        );
    } else {
-     
-     if (document.form1.r44_selec.value != '') { 
-       js_OpenJanelaIframe('top.corpo', 
-                           'db_iframe_selecao', 
-                           'func_selecao.php?pesquisa_chave='+document.form1.r44_selec.value+'&funcao_js=parent.js_mostrasel', 
-                           'Pesquisa', 
+
+     if (document.form1.r44_selec.value != '') {
+       js_OpenJanelaIframe('CurrentWindow.corpo',
+                           'db_iframe_selecao',
+                           'func_selecao.php?pesquisa_chave='+document.form1.r44_selec.value+'&funcao_js=parent.js_mostrasel',
+                           'Pesquisa',
                            false
                           );
      } else {
@@ -712,20 +712,20 @@ function js_pesquisasel(mostra) {
  }
 
 function js_mostrasel(chave,erro) {
-  
-  document.form1.r44_descr.value = chave; 
+
+  document.form1.r44_descr.value = chave;
   if (erro == true) {
-     
-    document.form1.r44_selec.focus(); 
-    document.form1.r44_selec.value = ''; 
+
+    document.form1.r44_selec.focus();
+    document.form1.r44_selec.value = '';
   }
 }
- 
+
 function js_mostrasel1(chave1,chave2) {
-  
+
   document.form1.r44_selec.value = chave1;
   document.form1.r44_descr.value = chave2;
   db_iframe_selecao.hide();
 }
- 
+
 </script>

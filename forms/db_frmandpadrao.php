@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: protocolo
@@ -54,7 +54,7 @@ if(isset($opcao) && $opcao == "excluir"){
          }
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('p53_codigo',10,$Ip53_codigo,true,'text',$db_opcao," onchange='js_pesquisap53_codigo(false);'");
 db_input('p53_codigo',40,$Ip53_codigo,true,'hidden',$db_opcao,"",'p53_codigo_old');
@@ -74,7 +74,7 @@ if(!isset($p53_codigo)){
        db_ancora(@$Lp53_coddepto,"js_pesquisap53_coddepto(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('p53_coddepto',10,$Ip53_coddepto,true,'text',$db_opcao," onchange='js_pesquisap53_coddepto(false);'");
 db_input('p53_coddepto',40,$Ip53_coddepto,true,'hidden',$db_opcao,"",'p53_coddepto_old');
@@ -95,7 +95,7 @@ db_input('descrdepto',60,$Idescrdepto,true,'text',3,'')
     <td nowrap title="<?=@$Tp53_dias?>">
        <?=@$Lp53_dias?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('p53_dias',10,$Ip53_dias,true,'text',$db_opcao,"")
 ?>
@@ -105,10 +105,10 @@ db_input('p53_dias',10,$Ip53_dias,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tp53_ordem?>">
        <?=@$Lp53_ordem?>
     </td>
-    <td> 
+    <td>
 <?
 if(isset($p53_codigo) && $p53_codigo != "" && $db_opcao == 1){
-  $result = $clandpadrao->sql_record($clandpadrao->sql_query($p53_codigo,"","max(p53_ordem) + 1 as p53_ordem")); 
+  $result = $clandpadrao->sql_record($clandpadrao->sql_query($p53_codigo,"","max(p53_ordem) + 1 as p53_ordem"));
   if($clandpadrao->numrows > 0){
     db_fieldsmemory($result,0);
     $p53_ordem = ($p53_ordem == ""?1:$p53_ordem);
@@ -140,14 +140,14 @@ db_input('p53_ordem',10,$Ip53_ordem,true,'text',$db_opcao,"")
     $cliframe_alterar_excluir->fundocabec ="#aacccc";
     $cliframe_alterar_excluir->fundocorpo ="#ccddcc";
     $cliframe_alterar_excluir->iframe_height ="170";
-    $cliframe_alterar_excluir->iframe_alterar_excluir($db_opcao);    
+    $cliframe_alterar_excluir->iframe_alterar_excluir($db_opcao);
    ?>
    </td>
- </tr>  
+ </tr>
   </table>
   </center>
   <input type='hidden' name='grupo' value='<?=$grupo?>'>
-  <?php 
+  <?php
   	if (isset($aba)) {
   		echo "<input type='hidden' name='aba' value='true'>";
   	}
@@ -156,21 +156,21 @@ db_input('p53_ordem',10,$Ip53_ordem,true,'text',$db_opcao,"")
 <script>
 function js_pesquisap53_codigo(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_pctipoproc','func_tipoproc.php?grupo='+document.form1.grupo.value+'&funcao_js=parent.js_mostratipoproc1|0|1','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_pctipoproc','func_tipoproc.php?grupo='+document.form1.grupo.value+'&funcao_js=parent.js_mostratipoproc1|0|1','Pesquisa',true);
 //    db_iframe.jan.location.href = 'func_tipoproc.php?funcao_js=parent.js_mostratipoproc1|0|1';
 //    db_iframe.mostraMsg();
 //    db_iframe.show();
 //    db_iframe.focus();
   }else{
 //    db_iframe.jan.location.href = 'func_tipoproc.php?pesquisa_chave='+document.form1.p53_codigo.value+'&funcao_js=parent.js_mostratipoproc';
-    js_OpenJanelaIframe('top.corpo','db_iframe_pctipoproc','func_tipoproc.php?grupo='+document.form1.grupo.value+'&pesquisa_chave='+document.form1.p53_codigo.value+'&funcao_js=parent.js_mostratipoproc','Pesquisa',false);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_pctipoproc','func_tipoproc.php?grupo='+document.form1.grupo.value+'&pesquisa_chave='+document.form1.p53_codigo.value+'&funcao_js=parent.js_mostratipoproc','Pesquisa',false);
   }
 }
 function js_mostratipoproc(chave,erro){
-  document.form1.p51_descr.value = chave; 
-  if(erro==true){ 
-    document.form1.p53_codigo.focus(); 
-    document.form1.p53_codigo.value = ''; 
+  document.form1.p51_descr.value = chave;
+  if(erro==true){
+    document.form1.p53_codigo.focus();
+    document.form1.p53_codigo.value = '';
   }else{
     location.href = '<?=basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"])?>'+"?p53_codigo="+document.form1.p53_codigo.value+"&p51_descr="+chave;
   }
@@ -190,14 +190,14 @@ function js_pesquisap53_coddepto(mostra){
 //    db_iframe.focus();
   }else{
 //  db_iframe.jan.location.href = 'func_db_depart.php?pesquisa_chave='+document.form1.p53_coddepto.value+'&funcao_js=parent.js_mostradb_depart';
-      js_OpenJanelaIframe('top.corpo','db_iframe_db_depart','func_db_depart_transferencias.php?pesquisa_chave='+document.form1.p53_coddepto.value+'&funcao_js=parent.js_mostradb_depart','Pesquisa',false);
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_depart','func_db_depart_transferencias.php?pesquisa_chave='+document.form1.p53_coddepto.value+'&funcao_js=parent.js_mostradb_depart','Pesquisa',false);
   }
 }
 function js_mostradb_depart(chave,erro){
-  document.form1.descrdepto.value = chave; 
-  if(erro==true){ 
-    document.form1.p53_coddepto.focus(); 
-    document.form1.p53_coddepto.value = ''; 
+  document.form1.descrdepto.value = chave;
+  if(erro==true){
+    document.form1.p53_coddepto.focus();
+    document.form1.p53_coddepto.value = '';
   }
 }
 function js_mostradb_depart1(chave1,chave2){
@@ -206,7 +206,7 @@ function js_mostradb_depart1(chave1,chave2){
   db_iframe_db_depart.hide();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_andpadrao','func_andpadrao.php?funcao_js=parent.js_preenchepesquisa|0|1','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_andpadrao','func_andpadrao.php?funcao_js=parent.js_preenchepesquisa|0|1','Pesquisa',true);
 //  db_iframe.jan.location.href = 'func_andpadrao.php?funcao_js=parent.js_preenchepesquisa|0|1';
 //  db_iframe.mostraMsg();
 //  db_iframe.show();

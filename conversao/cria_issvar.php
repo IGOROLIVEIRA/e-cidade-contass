@@ -2,7 +2,7 @@
     $str_arquivo = $_SERVER['PHP_SELF'];
     set_time_limit(0);
 
-    require("../libs/db_stdlib.php");
+    require(__DIR__ . "/../libs/db_stdlib.php");
 
     echo "Conectando...\n";
     

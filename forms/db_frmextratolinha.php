@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: caixa
@@ -45,17 +45,17 @@ if (isset($db_opcaoal)) {
   $db_opcao = 3;
   $db_botao=true;
 } else {
-	  
+
   $db_opcao = 1;
   $db_botao=true;
-  
+
   if(isset($novo) || isset($alterar) || isset($excluir) || (isset($incluir) && $sqlerro==false ) ){
     $k86_bancohistmov = "";
     $k86_contabancaria = "";
     $k86_data         = "";
 	  $k86_data_ano     = "";
 	  $k86_data_mes     = "";
-	  $k86_data_dia     = ""; 
+	  $k86_data_dia     = "";
     $k86_valor        = "";
     $k86_tipo         = "";
     $k86_historico    = "";
@@ -66,10 +66,10 @@ if (isset($db_opcaoal)) {
 	  $db83_descricao   = "";
 	  $k86_observacao   = "";
   }
-  
+
 }
 
-//caso a opção seja alteração, não permite alterar o valor deste campo 
+//caso a opção seja alteração, não permite alterar o valor deste campo
 $ativo = $db_opcao;
 ?>
 <form name="form1" method="post" action="">
@@ -78,7 +78,7 @@ $ativo = $db_opcao;
   <tr>
     <td >
     </td>
-    <td> 
+    <td>
       <?
       db_input('k86_sequencial',10,$Ik86_sequencial,true,'hidden',3,"")
       ?>
@@ -90,7 +90,7 @@ $ativo = $db_opcao;
       db_ancora(@$Lk86_extrato,"js_pesquisak86_extrato(true);",3);
       ?>
     </td>
-    <td> 
+    <td>
       <?
       db_input('k86_extrato',10,$Ik86_extrato,true,'text',3," onchange='js_pesquisak86_extrato(false);'")
       ?>
@@ -105,7 +105,7 @@ $ativo = $db_opcao;
        db_ancora(@$Lk86_bancohistmov,"js_pesquisak86_bancohistmov(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('k86_bancohistmov',10,$Ik86_bancohistmov,true,'text',$db_opcao," onchange='js_pesquisak86_bancohistmov(false);'")
 ?>
@@ -120,7 +120,7 @@ db_input('k66_descricao',50,$Ik66_descricao,true,'text',3,'')
        db_ancora(@$Lk86_contabancaria,"js_pesquisak86_contabancaria(true);",$db_opcao);
        ?>
     </td>
-    <td nowrap> 
+    <td nowrap>
 <?
 db_input('k86_contabancaria',10,$Ik86_contabancaria,true,'text',$ativo," onchange='js_pesquisak86_contabancaria(false);'")
 ?>
@@ -133,7 +133,7 @@ db_input('db83_descricao',50,$Idb83_descricao,true,'text',3,'')
     <td nowrap title="<?=@$Tk86_data?>">
        <?=@$Lk86_data?>
     </td>
-    <td> 
+    <td>
 <?
 db_inputdata('k86_data',@$k86_data_dia,@$k86_data_mes,@$k86_data_ano,true,'text',$db_opcao,"")
 ?>
@@ -145,7 +145,7 @@ db_inputdata('k86_data',@$k86_data_dia,@$k86_data_mes,@$k86_data_ano,true,'text'
 		</td>
 		<td>
 		<?
-		  $arraytipo = array('D'=>'Débito','C'=>'Crédito'); 
+		  $arraytipo = array('D'=>'Débito','C'=>'Crédito');
       db_select('k86_tipo',$arraytipo,true,$ativo);
 		?>
 		</td>
@@ -155,7 +155,7 @@ db_inputdata('k86_data',@$k86_data_dia,@$k86_data_mes,@$k86_data_ano,true,'text'
     <td nowrap title="<?=@$Tk86_valor?>">
        <?=@$Lk86_valor?>
     </td>
-    <td> 
+    <td>
     <?
       db_input('k86_valor',10,$Ik86_valor,true,'text',$db_opcao,"", "", "", "", 15);
     ?>
@@ -165,7 +165,7 @@ db_inputdata('k86_data',@$k86_data_dia,@$k86_data_mes,@$k86_data_ano,true,'text'
     <td nowrap title="<?=@$Tk86_historico?>">
        <?=@$Lk86_historico?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('k86_historico',64,$Ik86_historico,true,'text',$db_opcao,"")
 ?>
@@ -175,7 +175,7 @@ db_input('k86_historico',64,$Ik86_historico,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tk86_documento?>">
        <?=@$Lk86_documento?>
     </td>
-    <td> 
+    <td>
       <?
       db_input('k86_documento',64,$Ik86_documento,true,'text',$db_opcao,"")
       ?>
@@ -187,14 +187,14 @@ db_input('k86_historico',64,$Ik86_historico,true,'text',$db_opcao,"")
     <td nowrap>
       <strong>Recalcula Saldo do Extrato: </strong>
     </td>
-    <td> 
+    <td>
 <?
  $x = array("t"=>"SIM","f"=>"NÃO");
  db_select("recalcula",$x, true, 1);
 ?>
     </td>
-  </tr>  
-<? } ?>  
+  </tr>
+<? } ?>
 
   <tr>
     <td nowrap title="<?=@$Tk86_observacao?>" colspan="2">
@@ -220,7 +220,7 @@ db_input('k86_historico',64,$Ik86_historico,true,'text',$db_opcao,"")
   </table>
  <table>
   <tr>
-    <td valign="top"  align="center">  
+    <td valign="top"  align="center">
     <?
 	 $chavepri= array("k86_sequencial"=>@$k86_sequencial);
 	 $cliframe_alterar_excluir->chavepri      = $chavepri;
@@ -248,20 +248,20 @@ function js_cancelar(){
 }
 function js_pesquisak86_bancohistmov(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_extratolinha','db_iframe_bancoshistmov','func_bancoshistmov.php?funcao_js=parent.js_mostrabancoshistmov1|k66_sequencial|k66_descricao','Pesquisa',true,'0');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_extratolinha','db_iframe_bancoshistmov','func_bancoshistmov.php?funcao_js=parent.js_mostrabancoshistmov1|k66_sequencial|k66_descricao','Pesquisa',true,'0');
   }else{
-     if(document.form1.k86_bancohistmov.value != ''){ 
-        js_OpenJanelaIframe('top.corpo.iframe_extratolinha','db_iframe_bancoshistmov','func_bancoshistmov.php?pesquisa_chave='+document.form1.k86_bancohistmov.value+'&funcao_js=parent.js_mostrabancoshistmov','Pesquisa',false);
+     if(document.form1.k86_bancohistmov.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_extratolinha','db_iframe_bancoshistmov','func_bancoshistmov.php?pesquisa_chave='+document.form1.k86_bancohistmov.value+'&funcao_js=parent.js_mostrabancoshistmov','Pesquisa',false);
      }else{
-       document.form1.k66_descricao.value = ''; 
+       document.form1.k66_descricao.value = '';
      }
   }
 }
 function js_mostrabancoshistmov(chave,erro){
-  document.form1.k66_descricao.value = chave; 
-  if(erro==true){ 
-    document.form1.k86_bancohistmov.focus(); 
-    document.form1.k86_bancohistmov.value = ''; 
+  document.form1.k66_descricao.value = chave;
+  if(erro==true){
+    document.form1.k86_bancohistmov.focus();
+    document.form1.k86_bancohistmov.value = '';
   }
 }
 function js_mostrabancoshistmov1(chave1,chave2){
@@ -271,20 +271,20 @@ function js_mostrabancoshistmov1(chave1,chave2){
 }
 function js_pesquisak86_extrato(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_extratolinha','db_iframe_extrato','func_extrato.php?funcao_js=parent.js_mostraextrato1|k85_sequencial|k85_nomearq','Pesquisa',true,'0');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_extratolinha','db_iframe_extrato','func_extrato.php?funcao_js=parent.js_mostraextrato1|k85_sequencial|k85_nomearq','Pesquisa',true,'0');
   }else{
-     if(document.form1.k86_extrato.value != ''){ 
-        js_OpenJanelaIframe('top.corpo.iframe_extratolinha','db_iframe_extrato','func_extrato.php?pesquisa_chave='+document.form1.k86_extrato.value+'&funcao_js=parent.js_mostraextrato','Pesquisa',false);
+     if(document.form1.k86_extrato.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_extratolinha','db_iframe_extrato','func_extrato.php?pesquisa_chave='+document.form1.k86_extrato.value+'&funcao_js=parent.js_mostraextrato','Pesquisa',false);
      }else{
-       document.form1.k85_nomearq.value = ''; 
+       document.form1.k85_nomearq.value = '';
      }
   }
 }
 function js_mostraextrato(chave,erro){
-  document.form1.k85_nomearq.value = chave; 
-  if(erro==true){ 
-    document.form1.k86_extrato.focus(); 
-    document.form1.k86_extrato.value = ''; 
+  document.form1.k85_nomearq.value = chave;
+  if(erro==true){
+    document.form1.k86_extrato.focus();
+    document.form1.k86_extrato.value = '';
   }
 }
 function js_mostraextrato1(chave1,chave2){
@@ -294,21 +294,21 @@ function js_mostraextrato1(chave1,chave2){
 }
 function js_pesquisak86_contabancaria(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_extratolinha','db_iframe_contabancaria','func_contabancaria.php?funcao_js=parent.js_mostracontabancaria1|db83_sequencial|db83_descricao|db83_tipoconta','Pesquisa',true,'0');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_extratolinha','db_iframe_contabancaria','func_contabancaria.php?funcao_js=parent.js_mostracontabancaria1|db83_sequencial|db83_descricao|db83_tipoconta','Pesquisa',true,'0');
   }else{
-     if(document.form1.k86_contabancaria.value != ''){ 
-        js_OpenJanelaIframe('top.corpo.iframe_extratolinha','db_iframe_contabancaria','func_contabancaria.php?tp=1&pesquisa_chave='+document.form1.k86_contabancaria.value+'&funcao_js=parent.js_mostracontabancaria','Pesquisa',false);     
+     if(document.form1.k86_contabancaria.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_extratolinha','db_iframe_contabancaria','func_contabancaria.php?tp=1&pesquisa_chave='+document.form1.k86_contabancaria.value+'&funcao_js=parent.js_mostracontabancaria','Pesquisa',false);
      }else{
-       document.form1.db83_descricao.value = ''; 
+       document.form1.db83_descricao.value = '';
      }
   }
 }
 function js_mostracontabancaria(erro,chave1, chave2, chave3, chave4, chave5, chave6){
-  document.form1.db83_descricao.value = chave1; 
+  document.form1.db83_descricao.value = chave1;
   if(erro==true){
-    document.form1.k86_contabancaria.focus(); 
-    document.form1.k86_contabancaria.value = ''; 
-  } 
+    document.form1.k86_contabancaria.focus();
+    document.form1.k86_contabancaria.value = '';
+  }
 }
 function js_mostracontabancaria1(chave1,chave2,chave3){
   document.form1.k86_contabancaria.value = chave1;

@@ -125,9 +125,9 @@ function js_pesquisatr08_idveiculo(mostra){
 }
 function js_mostratipo_veiculos(chave,erro){
   document.form1.tr05_descr.value = chave;
-  if(erro==true){ 
-    document.form1.tr08_idveiculo.focus(); 
-    document.form1.tr08_idveiculo.value = ''; 
+  if(erro==true){
+    document.form1.tr08_idveiculo.focus();
+    document.form1.tr08_idveiculo.value = '';
   }
 }
 function js_mostratipo_veiculos1(chave1,chave2){
@@ -143,10 +143,10 @@ function js_pesquisatr08_municipio(mostra){
   }
 }
 function js_mostradb_cepmunic(chave,erro){
-  document.form1.db10_munic.value = chave; 
-  if(erro==true){ 
-    document.form1.tr08_municipio.focus(); 
-    document.form1.tr08_municipio.value = ''; 
+  document.form1.db10_munic.value = chave;
+  if(erro==true){
+    document.form1.tr08_municipio.focus();
+    document.form1.tr08_municipio.value = '';
   }
 }
 function js_mostradb_cepmunic1(chave1,chave2){
@@ -162,10 +162,10 @@ function js_pesquisatr08_idacidente(mostra){
   }
 }
 function js_mostraacidentes(chave,erro){
-  document.form1.tr07_id.value = chave; 
-  if(erro==true){ 
-    document.form1.tr08_idacidente.focus(); 
-    document.form1.tr08_idacidente.value = ''; 
+  document.form1.tr07_id.value = chave;
+  if(erro==true){
+    document.form1.tr08_idacidente.focus();
+    document.form1.tr08_idacidente.value = '';
   }
 }
 function js_mostraacidentes1(chave1,chave2){
@@ -181,10 +181,10 @@ function js_pesquisatr08_idhabilitacao(mostra){
   }
 }
 function js_mostratipo_habilitacao(chave,erro){
-  document.form1.tr09_tipo.value = chave; 
+  document.form1.tr09_tipo.value = chave;
   if(erro==true){
-    document.form1.tr08_idhabilitacao.focus(); 
-    document.form1.tr08_idhabilitacao.value = ''; 
+    document.form1.tr08_idhabilitacao.focus();
+    document.form1.tr08_idhabilitacao.value = '';
   }
 }
 function js_mostratipo_habilitacao1(chave1,chave2){
@@ -193,7 +193,7 @@ function js_mostratipo_habilitacao1(chave1,chave2){
   db_iframe_tipo_habilitacao.hide();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('','db_iframe_veiculos_env','func_veiculos_env.php?funcao_js=top.js_preenchepesquisa|tr08_id','Pesquisa',true);
+  js_OpenJanelaIframe('','db_iframe_veiculos_env','func_veiculos_env.php?funcao_js=CurrentWindow.js_preenchepesquisa|tr08_id','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_veiculos_env.hide();

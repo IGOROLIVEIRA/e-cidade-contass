@@ -194,13 +194,13 @@ if (!isset($selecionado) && trim(@$selecionado) == "") {
     function js_novo() {
         var licitacao = itens_lote.document.form1.licitacao.value;
 
-        js_OpenJanelaIframe('top.corpo.iframe_liclicitemlote', 'db_iframe_lotenovo', 'lic1_liclicitemlotenovo.php?licitacao=' + licitacao, 'Novo Lote', true, "0");
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_liclicitemlote', 'db_iframe_lotenovo', 'lic1_liclicitemlotenovo.php?licitacao=' + licitacao, 'Novo Lote', true, "0");
     }
 
     function js_excluir() {
         var licitacao = itens_lote.document.form1.licitacao.value;
 
-        js_OpenJanelaIframe('top.corpo.iframe_liclicitemlote', 'db_iframe_loteexcluir', 'lic1_liclicitemlote003.php?licitacao=' + licitacao, 'Excluir Lote', true, "0");
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_liclicitemlote', 'db_iframe_loteexcluir', 'lic1_liclicitemlote003.php?licitacao=' + licitacao, 'Excluir Lote', true, "0");
     }
 </script>
 <?

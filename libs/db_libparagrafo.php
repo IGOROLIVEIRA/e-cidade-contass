@@ -26,7 +26,8 @@
  */
 
 
-class libparagrafo {
+class libparagrafo
+{
 
   const TIPO_TEXT_PURO = 1;
   const TIPO_TABELA_SIMPLES = 2;
@@ -37,44 +38,43 @@ class libparagrafo {
   var $aParametros    = array();
 
   //function libparagrafo( $oParag, $aParametros ) {
-  function libparagrafo( $oParag ) {
+  function __construct($oParag)
+  {
 
     $this->oParag      = $oParag;
-//    $this->aParametros = $aParametros;
+    //    $this->aParametros = $aParametros;
 
   }
 
-  function getObjParagrafo () {
+  function getObjParagrafo()
+  {
 
     $oParagrafo = null;
 
-    switch ( (int)$this->oParag->db02_tipo ) {
+    switch ((int)$this->oParag->db02_tipo) {
 
       case 1:
-        if ( !class_exists('libparagrafoText') ) {
+        if (!class_exists('libparagrafoText')) {
           require_once("libs/db_libparagrafoText.php");
         }
-        $oParagrafo = new libparagrafoText( $this->oParag );
+        $oParagrafo = new libparagrafoText($this->oParag);
         break;
 
       case 2:
-        if ( !class_exists('libParagrafoTabela') ) {
+        if (!class_exists('libParagrafoTabela')) {
           require_once("libs/db_libParagrafoTabela.php");
         }
-        $oParagrafo = new libParagrafoTabela( $this->oParag, $this->aParametros );
+        $oParagrafo = new libParagrafoTabela($this->oParag, $this->aParametros);
         break;
 
       case 3:
-        if ( !class_exists('libParagrafoCodPhp') ) {
+        if (!class_exists('libParagrafoCodPhp')) {
           require_once("libs/db_libparagrafoCodPhp.php");
         }
-        $oParagrafo = new libParagrafoCodPhp( $this->oParag, $this->aParametros );
+        $oParagrafo = new libParagrafoCodPhp($this->oParag, $this->aParametros);
         break;
-
     }
 
     return $oParagrafo;
-
   }
-
 }

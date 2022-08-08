@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -69,21 +69,21 @@ $tem_dados=false;
 
 if((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Incluir"){
 	$dataini=$ini;
-        $datafim=$fim; 
+        $datafim=$fim;
         $sql = db_receitasaldo(11,1,2,true,'',$anousu,$dataini,$datafim,true);
-	
-        $sql1 = "select o70_codrec,                  
-	   	        sum(saldo_inicial)              as DL_saldo_inicial, 
+
+        $sql1 = "select o70_codrec,
+	   	        sum(saldo_inicial)              as DL_saldo_inicial,
 	 	        sum(saldo_anterior)             as DL_saldo_anterior,
 		        sum(saldo_arrecadado)           as DL_saldo_arrecadado,
 		        sum(saldo_a_arrecadar)          as DL_saldo_a_arrecadar,
 		        sum(saldo_arrecadado_acumulado) as DL_saldo_arrecadado_acumulado
                  from ( $sql ) as x
-		 where o70_codrec >0		 
+		 where o70_codrec >0
 	         ";
         if ($o70_codrec !=""){
 	   $sql1 .= " and o70_codrec = $o70_codrec ";
-	}     		          
+	}
         $sql1 .="group by o70_codrec ";
 
 }
@@ -104,7 +104,7 @@ function js_emite(opcao,origem){
      perfin = document.form1.DBtxt22_ano.value+'-'+document.form1.DBtxt22_mes.value+'-'+document.form1.DBtxt22_dia.value;;
 
      document.form1.ini.value= perini;
-     document.form1.fim.value= perfin; 
+     document.form1.fim.value= perfin;
   }else if (opcao == 2){
      document.form1.opcao.value=2;
      if(document.form1.mesfin.value == 0){
@@ -146,7 +146,7 @@ function js_emite(opcao,origem){
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-  <tr> 
+  <tr>
     <td width="360" height="25">&nbsp;</td>
     <td width="263">&nbsp;</td>
     <td width="25">&nbsp;</td>
@@ -154,8 +154,8 @@ function js_emite(opcao,origem){
   </tr>
 </table>
 <table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
     <form name="form1" method="post" action="">
           <input type=hidden name="db_opcao" value="Incluir">
@@ -176,13 +176,13 @@ function js_emite(opcao,origem){
    	     <td><? db_selorcbalanco(true,false); ?> </td>
            </tr>
            </table>
-       <? 
+       <?
 
 	if (isset($sql1)) {
 	   $js_funcao="";
-	   
+
 	   db_lovrot($sql1,18,"()","","$js_funcao");
-	}  
+	}
 	?>
    </form>
    </center>
@@ -199,14 +199,14 @@ function js_emite(opcao,origem){
 ?>
 <script>
 function js_pesquisa(){
-    js_OpenJanelaIframe('top.corpo','db_iframe_conlancamrec','func_conlancamrec.php?funcao_js=parent.js_preenchepesquisa|o70_codrec|o57_descr|o57_fonte','Pesquisa',true);
-  
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_conlancamrec','func_conlancamrec.php?funcao_js=parent.js_preenchepesquisa|o70_codrec|o57_descr|o57_fonte','Pesquisa',true);
+
 }
 function js_preenchepesquisa(chave,chave2,chave3){
     db_iframe_conlancamrec.hide();
     document.form1.o70_codrec.value=chave;
     document.form1.o57_descr.value=chave2;
     document.form1.o57_fonte.value=chave3;
- 
+
 }
 </script>

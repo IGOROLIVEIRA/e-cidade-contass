@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: rh
@@ -70,7 +70,7 @@ if(!isset($opcao_dtterm)){
         <td nowrap title="<?=@$Th16_regist?>">
           <?php db_ancora(@$Lh16_regist,"js_pesquisah16_regist(true);",$db_opcao); ?>
         </td>
-        <td colspan="3"> 
+        <td colspan="3">
           <?php
             db_input('h16_regist',8,$Ih16_regist,true,'text',$db_opcao," onchange='js_pesquisah16_regist(false);'");
             db_input('z01_nome',40,$Iz01_nome,true,'text',3,'');
@@ -82,7 +82,7 @@ if(!isset($opcao_dtterm)){
         <td nowrap title="<?=@$Th16_assent?>">
           <?php  db_ancora(@$Lh16_assent,"js_pesquisah12_assent(true);",$db_opcao); ?>
         </td>
-        <td colspan="3"> 
+        <td colspan="3">
           <?php
             db_input('h12_codigo',6,"",true,'hidden',$db_opcao,"");
             db_input('h16_assent',6,"",true,'hidden',$db_opcao,"");
@@ -105,7 +105,7 @@ if(!isset($opcao_dtterm)){
 
             $result_tipoasse = $cltipoasse->sql_record($cltipoasse->sql_query_file(null,"trim(h12_assent),h12_descr"));
 
-            db_selectrecord("h12_assent",$result_tipoasse,true,$db_opcao,"rel='ignore-css'","",""," -(Selecione)","js_pesquisah12_assent(false);"); 
+            db_selectrecord("h12_assent",$result_tipoasse,true,$db_opcao,"rel='ignore-css'","",""," -(Selecione)","js_pesquisah12_assent(false);");
             // db_input('h12_assent',6,"",true,'hidden',3,"");
 
             if ($db_opcao == 1 || $db_opcao == 11){
@@ -142,13 +142,13 @@ if(!isset($opcao_dtterm)){
         <td nowrap title="<?=@$Th16_dtconc?>">
           <?=@$Lh16_dtconc?>
         </td>
-        <td> 
+        <td>
           <?php db_inputdata('h16_dtconc',@$h16_dtconc_dia,@$h16_dtconc_mes,@$h16_dtconc_ano,true,'text',$db_opcao,"onchange='js_somar_dias(document.form1.h16_quant.value, 0)'","","","parent.js_somar_dias(parent.document.form1.h16_quant.value, 0)") ?>
         </td>
         <td nowrap title="Somar dias" width="70px">
           <b>Quantidade:</b>
         </td>
-        <td> 
+        <td>
           <?php db_input('h16_quant',12,$Ih16_quant,true,'text',$opcao_dtterm,"onchange='js_somar_dias(this.value, 1);'","quantidade") ?>
         </td>
       </tr>
@@ -157,7 +157,7 @@ if(!isset($opcao_dtterm)){
         <td nowrap title="<?=@$Th16_dtterm?>">
           <?=@$Lh16_dtterm?>
         </td>
-        <td width="120px"> 
+        <td width="120px">
           <?php db_inputdata('h16_dtterm',@$h16_dtterm_dia,@$h16_dtterm_mes,@$h16_dtterm_ano,true,'text',$opcao_dtterm,"onchange='js_somar_dias(0, 3)'","","","parent.js_somar_dias(0, 3)") ?>
         </td>
       </tr>
@@ -175,7 +175,7 @@ if(!isset($opcao_dtterm)){
           <td colspan="3">
             <table width="100%" cellspacing="0" cellpadding="0">
               <tr>
-                <td> 
+                <td>
                   <?
                   db_input('valor_ano',4,1,true,'text',1,"");
                   ?>
@@ -183,7 +183,7 @@ if(!isset($opcao_dtterm)){
                 <td nowrap title="Mês">
                   <b>Meses:</b>
                 </td>
-                <td> 
+                <td>
                   <?
                   db_input('valor_mes',4,1,true,'text',1,"");
                   ?>
@@ -191,7 +191,7 @@ if(!isset($opcao_dtterm)){
                 <td nowrap title="Dia">
                   <b>Dias:</b>
                 </td>
-                <td> 
+                <td>
                   <?
                   db_input('valor_dia',4,1,true,'text',1,"");
                   ?>
@@ -206,7 +206,7 @@ if(!isset($opcao_dtterm)){
         <td nowrap title="<?=@$Th16_quant?>">
           <?=@$Lh16_quant?>
         </td>
-        <td> 
+        <td>
           <?php db_input('h16_quant',8,$Ih16_quant,true,'text',($opcao_dtterm == 3 ? 3 : $opcao_quant),"") ?>
         </td>
       </tr>
@@ -215,13 +215,13 @@ if(!isset($opcao_dtterm)){
         <td nowrap title="<?=@$Th16_nrport?>">
           <?=@$Lh16_nrport?>
         </td>
-        <td> 
+        <td>
           <?php db_input('h16_nrport',8,$Ih16_nrport,true,'text',$db_opcao,"") ?>
         </td>
         <td nowrap title="<?=@$Th16_atofic?>">
           <?=@$Lh16_atofic?>
         </td>
-        <td> 
+        <td>
           <?php db_input('h16_atofic',12,$Ih16_atofic,true,'text',$db_opcao,"") ?>
         </td>
       </tr>
@@ -230,13 +230,13 @@ if(!isset($opcao_dtterm)){
         <td nowrap title="<?=@$Th16_anoato?>">
           <?=@$Lh16_anoato?>
         </td>
-        <td colspan='3'> 
+        <td colspan='3'>
           <?php db_input('h16_anoato',8,$Ih16_anoato,true,'text',$db_opcao,"") ?>
         </td>
-      </tr>  
+      </tr>
 
       <tr>
-        <td colspan="4" title="<?=@$Th16_histor?>"> 
+        <td colspan="4" title="<?=@$Th16_histor?>">
           <fieldset>
             <legend><?php echo $Lh16_histor; ?></legend>
             <?php db_textarea('h16_histor',5,47,$Ih16_histor,true,'text',$db_opcao,"") ?>
@@ -251,7 +251,7 @@ if(!isset($opcao_dtterm)){
   <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
 </form>
 <div style="width: 475px" id="campos_adicionais"></div>
-      
+
 <script>
 
   var sUrlRPC   = 'rec1_assenta.RPC.php';
@@ -303,7 +303,7 @@ if(!isset($opcao_dtterm)){
         oRetorno = JSON.parse( oAjax.responseText );
 
         if (oRetorno.iStatus == "2") {
-          alert( oRetorno.sMensagem.urlDecode() );        
+          alert( oRetorno.sMensagem.urlDecode() );
           return false;
         }
 
@@ -344,13 +344,13 @@ if(!isset($opcao_dtterm)){
   }
 
   function js_somar_dias(valor, opcao){
-    
+
     diai = new Number(document.form1.h16_dtconc_dia.value);
     mesi = new Number(document.form1.h16_dtconc_mes.value);
     anoi = new Number(document.form1.h16_dtconc_ano.value);
 
     diaf = new Number(document.form1.h16_dtterm_dia.value);
-    diaf++; 
+    diaf++;
     mesf = new Number(document.form1.h16_dtterm_mes.value);
     anof = new Number(document.form1.h16_dtterm_ano.value);
 
@@ -378,7 +378,7 @@ if(!isset($opcao_dtterm)){
       document.form1.quantidade.value = datad.toFixed();
 
       if (datad.toFixed() <= 0){
-        alert('A data final não pode ser menor que a data inicial');      
+        alert('A data final não pode ser menor que a data inicial');
         document.form1.h16_dtterm_dia.value = '';
         document.form1.h16_dtterm_mes.value = '';
         document.form1.h16_dtterm_ano.value = '';
@@ -412,9 +412,9 @@ if(!isset($opcao_dtterm)){
     if (document.form1.h16_dtterm.value == '') {
       document.form1.quantidade.value = "0";
       document.form1.h16_quant.value = "0";
-          
+
     }
-    
+
     quant_dias = new Number(document.form1.quantidade.value);
     if(quant_dias == 0){
       document.form1.h16_dtterm_dia.value = '';
@@ -425,23 +425,23 @@ if(!isset($opcao_dtterm)){
   }
 
   function js_pesquisah16_regist(mostra){
-    
+
     if(mostra==true){
-      js_OpenJanelaIframe('top.corpo','db_iframe_rhpessoal','func_rhpessoal.php?funcao_js=parent.js_mostrarhpessoal1|rh01_regist|z01_nome','Pesquisa',true);
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhpessoal','func_rhpessoal.php?funcao_js=parent.js_mostrarhpessoal1|rh01_regist|z01_nome','Pesquisa',true);
     }else{
-      if(document.form1.h16_regist.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_rhpessoal','func_rhpessoal.php?pesquisa_chave='+document.form1.h16_regist.value+'&funcao_js=parent.js_mostrarhpessoal','Pesquisa',false);
+      if(document.form1.h16_regist.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhpessoal','func_rhpessoal.php?pesquisa_chave='+document.form1.h16_regist.value+'&funcao_js=parent.js_mostrarhpessoal','Pesquisa',false);
       }else{
-        document.form1.z01_nome.value = ''; 
+        document.form1.z01_nome.value = '';
       }
     }
   }
 
   function js_mostrarhpessoal(chave,erro){
-    document.form1.z01_nome.value = chave; 
-    if(erro==true){ 
-      document.form1.h16_regist.focus(); 
-      document.form1.h16_regist.value = ''; 
+    document.form1.z01_nome.value = chave;
+    if(erro==true){
+      document.form1.h16_regist.focus();
+      document.form1.h16_regist.value = '';
     }
 
     js_limpaPeriodoAquisitivo();
@@ -458,16 +458,16 @@ if(!isset($opcao_dtterm)){
   function js_pesquisah12_assent(lMostra){
 
     if (lMostra == true) {
-      js_OpenJanelaIframe( 'top.corpo',
+      js_OpenJanelaIframe( 'CurrentWindow.corpo',
                            'db_iframe_tipoasse',
                            'func_tipoasse.php?funcao_js=parent.js_mostratipoasse1|h12_codigo|h12_assent|h12_descr|h12_natureza|h12_vinculaperiodoaquisitivo|',
                            'Pesquisa', true );
     } else {
 
-      if (document.form1.h12_assent.value != '') { 
-         js_OpenJanelaIframe( 'top.corpo',
+      if (document.form1.h12_assent.value != '') {
+         js_OpenJanelaIframe( 'CurrentWindow.corpo',
                               'db_iframe_tipoasse',
-                              'func_tipoasse.php?chave_assent=' + document.form1.h12_assent.value 
+                              'func_tipoasse.php?chave_assent=' + document.form1.h12_assent.value
                               + '&funcao_js=parent.js_mostratipoasse', 'Pesquisa', false );
       } else {
         document.form1.h12_assent.value = '';
@@ -485,10 +485,10 @@ if(!isset($opcao_dtterm)){
     document.form1.h12_assent.value = lExclusao ? chave : chave3;
     document.form1.h12_assent.value = chave;
 
-    if (erro == true) { 
+    if (erro == true) {
       document.form1.h12_codigo.value = '';
-      document.form1.h12_assent.value = ''; 
-      document.form1.h12_assent.focus(); 
+      document.form1.h12_assent.value = '';
+      document.form1.h12_assent.focus();
     } else {
       document.form1.h12_codigo.value = chave3;
       document.form1.h16_assent.value = chave3;
@@ -513,7 +513,7 @@ if(!isset($opcao_dtterm)){
     document.form1.h12_natureza_novo_tipo.value = chave4;
 
     var sel1 = document.form1.elements["h12_assent"];
-    var sel2 = document.form1.elements["h12_assentdescr"];     
+    var sel2 = document.form1.elements["h12_assentdescr"];
 
     for(var i = 0;i < sel1.options.length;i++) {
 
@@ -551,25 +551,25 @@ if(!isset($opcao_dtterm)){
     } else {
       var oTipoAssentamento = TipoAssentamentoFactory.createFromTipoAssentamento($F('h12_codigo'));
     }
-    
+
     if(oTipoAssentamento != undefined && oTipoAssentamento != 'undefined') {
       oTipoAssentamento.setDestino($('conteudoCamposAdicionais'));
       oTipoAssentamento.show();
     }
-    
+
     return;
   }
 
 
   function js_pesquisa(){
     <?php if ($meiodia == true) : ?>
-      js_OpenJanelaIframe( 'top.corpo',
+      js_OpenJanelaIframe( 'CurrentWindow.corpo',
                            'db_iframe_assmeio',
                            'func_assmeio.php?funcao_js=parent.js_preenchepesquisa'
                            +'|h22_codigo<?php echo ($db_opcao == 33 || $db_opcao == 3? "" : "&bloqueia_assenta=true"); ?>'
                            'Pesquisa', true);
     <?php else: ?>
-      js_OpenJanelaIframe( 'top.corpo',
+      js_OpenJanelaIframe( 'CurrentWindow.corpo',
                            'db_iframe_assenta',
                            'func_assenta.php?funcao_js=parent.js_preenchepesquisa|h16_codigo'
                            + '<?php echo ($db_opcao == 2 || $db_opcao == 22 ? "&bloqueia_reajuste=true" : ""); ?>',
@@ -589,7 +589,7 @@ if(!isset($opcao_dtterm)){
     }
     ?>
   }
-  
+
   /**
    * Abre a func de pesquisa e busca o período aquisitivo
    *
@@ -604,7 +604,7 @@ if(!isset($opcao_dtterm)){
     }
 
     if (lMostra) {
-      js_OpenJanelaIframe( 'top.corpo',
+      js_OpenJanelaIframe( 'CurrentWindow.corpo',
                            'db_iframe_rhferias',
                            'func_rhferias.php?rh109_regist=' + iRegist
                            + '&funcao_js=parent.js_mostraPeriodoAquisitivo'
@@ -613,13 +613,13 @@ if(!isset($opcao_dtterm)){
     } else {
 
       if ($F('iPeriodoAquisitivo') != '') {
-        js_OpenJanelaIframe( 'top.corpo', 
-                             'db_iframe_rhferias', 
+        js_OpenJanelaIframe( 'CurrentWindow.corpo',
+                             'db_iframe_rhferias',
                              'func_rhferias.php?pesquisa_chave=' + $F('iPeriodoAquisitivo')
-                             + '&funcao_js=parent.js_mostraPeriodoAquisitivo1', 
+                             + '&funcao_js=parent.js_mostraPeriodoAquisitivo1',
                              'Pesquisa Período Aquisitivo', false );
       } else {
-        document.form1.z01_nome.value = ''; 
+        document.form1.z01_nome.value = '';
       }
     }
   }
@@ -689,7 +689,7 @@ if(!isset($opcao_dtterm)){
 
     js_mostraPeriodoAquisitivo(iSequencial, dtInicio, dtFim);
   }
-  
+
   /**
    * Verifica se deve exibir os campos do periodo aquisitivo e carregar os dados do mesmo
    *
@@ -699,7 +699,7 @@ if(!isset($opcao_dtterm)){
 
     $('h12_vinculaperiodoaquisitivo').value = 'f';
     js_limpaPeriodoAquisitivo();
-    
+
     $$('.vinculoperiodoaquisitivo').each(function(oElemento) {
       oElemento.hide();
     });
@@ -769,21 +769,21 @@ if(!isset($opcao_dtterm)){
 
 require_once("scripts/classes/DBViewCadastroAtributoDinamico.js");
 require_once("scripts/classes/DBViewLancamentoAtributoDinamico.js");
-require_once("scripts/datagrid.widget.js"); 
-require_once("scripts/widgets/dbcomboBox.widget.js");     
-require_once("scripts/widgets/dbmessageBoard.widget.js"); 
-require_once("scripts/widgets/dbtextField.widget.js");    
+require_once("scripts/datagrid.widget.js");
+require_once("scripts/widgets/dbcomboBox.widget.js");
+require_once("scripts/widgets/dbmessageBoard.widget.js");
+require_once("scripts/widgets/dbtextField.widget.js");
 require_once("scripts/widgets/dbtextFieldData.widget.js");
-require_once("scripts/widgets/windowAux.widget.js");      
+require_once("scripts/widgets/windowAux.widget.js");
 
 function renderizarFormulario() {
 
   require_once("scripts/AjaxRequest.js");
-  
+
   var oAjaxRequest = new AjaxRequest(
-    'rec1_assentamentoatributosdinamicos.RPC.php', 
+    'rec1_assentamentoatributosdinamicos.RPC.php',
     {
-      sAcao               : 'getDados', 
+      sAcao               : 'getDados',
       iCodigoAssentamento : $F('h16_codigo'),
       sTipoAssentamento   : $F('h12_assent') //Na verdade é h12_assent
     },
@@ -812,10 +812,10 @@ js_verificacampos = function() {
     oAtributoDinamico.save();
     return false;
 
-  } 
+  }
 
     return true;
- 
+
 }
 
 function js_retornoAtributos( oAjaxResponse ) {
@@ -833,7 +833,7 @@ function js_retornoAtributos( oAjaxResponse ) {
 
   if ( oAjaxResponse.iCodigoGrupo ) {
     oAtributoDinamico.loadAttribute(oAjaxResponse.iCodigoGrupo);
-  } else { 
+  } else {
     oAtributoDinamico.newAttribute(oAjaxResponse.iCodigoFormulario);
   }
   oAtributoDinamico.showForm();
@@ -847,9 +847,9 @@ function salvar(iCodigo) {
 
 if ( $F('h80_db_cadattdinamicovalorgrupo') ) {
   oAtributoDinamico = new DBViewLancamentoAtributoDinamico();
-  oAtributoDinamico.setAlignForm('left'); 
+  oAtributoDinamico.setAlignForm('left');
   oAtributoDinamico.setParentNode($('campos_adicionais'));
   oAtributoDinamico.loadAttribute($F('h80_db_cadattdinamicovalorgrupo'));
 }
 </script>
-    
+

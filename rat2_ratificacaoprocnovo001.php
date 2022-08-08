@@ -38,6 +38,7 @@ $clrotulo->label("l20_codigo");
 ?>
 
 <html>
+
 <head>
     <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
@@ -45,81 +46,85 @@ $clrotulo->label("l20_codigo");
     <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
 
     <script>
-        function js_emite(){
-            jan = window.open('rat2_ratificacaoprocnovo002.php?l20_codigo='+document.form1.l20_codigo.value,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
-            jan.moveTo(0,0);
-            document.form1.l20_codigo.value='';
+        function js_emite() {
+            jan = window.open('rat2_ratificacaoprocnovo002.php?l20_codigo=' + document.form1.l20_codigo.value, '', 'width=' + (screen.availWidth - 5) + ',height=' + (screen.availHeight - 40) + ',scrollbars=1,location=0 ');
+            jan.moveTo(0, 0);
+            document.form1.l20_codigo.value = '';
 
         }
     </script>
     <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
+
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" bgcolor="#cccccc">
-<table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-    <tr>
-        <td width="360" height="18">&nbsp;</td>
-        <td width="263">&nbsp;</td>
-        <td width="25">&nbsp;</td>
-        <td width="140">&nbsp;</td>
-    </tr>
-</table>
+    <table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
+        <tr>
+            <td width="360" height="18">&nbsp;</td>
+            <td width="263">&nbsp;</td>
+            <td width="25">&nbsp;</td>
+            <td width="140">&nbsp;</td>
+        </tr>
+    </table>
 
-<table  align="center">
-    <form name="form1" method="post" action="">
-        <tr>
-            <td >&nbsp;</td>
-            <td >&nbsp;</td>
-        </tr>
-        <tr>
-            <td  align="left" nowrap title="<?=$Tl20_codigo?>">
-                <b>
-                    <?db_ancora('Licitação',"js_pesquisa_liclicita(true);",1);?>&nbsp;:
-                </b>
-            </td>
+    <table align="center">
+        <form name="form1" method="post" action="">
+            <tr>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td title="<?= $Tl20_codigo ?>">
+                    <b>
+                        <? db_ancora('Licitação:', "js_pesquisa_liclicita(true);", 1); ?>
+                    </b>
+                </td>
 
-            <td align="left" nowrap>
-                <? db_input("l20_codigo",6,$Il20_codigo,true,"text",3,"onchange='js_pesquisa_liclicita(false);'");
-                ?></td>
-        </tr>
-        <tr>
-            <td >&nbsp;</td>
-            <td >&nbsp;</td>
-        </tr>
-        <tr>
-            <td colspan="2" align = "center">
-                <input  name="emite2" id="emite2" type="button" value="Processar" onclick="js_emite();" >
-            </td>
-        </tr>
+                <td>
+                    <? db_input("l20_codigo", 6, $Il20_codigo, true, "text", 3, "onchange='js_pesquisa_liclicita(false);'");
+                    ?>
+                </td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center">
+                    <input name="emite2" id="emite2" type="button" value="Processar" onclick="js_emite();">
+                </td>
+            </tr>
 
-    </form>
-</table>
-<?
-db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
-?>
+        </form>
+    </table>
+    <?
+    db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit"));
+    ?>
 </body>
+
 </html>
 
 <script>
-
-    function js_pesquisa_liclicita(mostra){
-        if(mostra==true){
-            js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_liclicita.php?situacao=10&listacred=false&funcao_js=parent.js_mostraliclicita1|l20_codigo','Pesquisa',true);
-        }else{
-            if(document.form1.l20_codigo.value != ''){
-                js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_liclicita.php?situacao=10&listacred=false&pesquisa_chave='+document.form1.l20_codigo.value+'&funcao_js=parent.js_mostraliclicita','Pesquisa',false);
-            }else{
+    function js_pesquisa_liclicita(mostra) {
+        if (mostra == true) {
+            js_OpenJanelaIframe('top.corpo', 'db_iframe_liclicita', 'func_liclicita.php?situacao=10&listacred=false&funcao_js=parent.js_mostraliclicita1|l20_codigo', 'Pesquisa', true);
+        } else {
+            if (document.form1.l20_codigo.value != '') {
+                js_OpenJanelaIframe('top.corpo', 'db_iframe_liclicita', 'func_liclicita.php?situacao=10&listacred=false&pesquisa_chave=' + document.form1.l20_codigo.value + '&funcao_js=parent.js_mostraliclicita', 'Pesquisa', false);
+            } else {
                 document.form1.l20_codigo.value = '';
             }
         }
     }
-    function js_mostraliclicita(chave,erro){
+
+    function js_mostraliclicita(chave, erro) {
         document.form1.l20_codigo.value = chave;
-        if(erro==true){
+        if (erro == true) {
             document.form1.l20_codigo.value = '';
             document.form1.l20_codigo.focus();
         }
     }
-    function js_mostraliclicita1(chave1){
+
+    function js_mostraliclicita1(chave1) {
         document.form1.l20_codigo.value = chave1;
         db_iframe_liclicita.hide();
         js_emite();

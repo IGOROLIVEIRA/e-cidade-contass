@@ -147,7 +147,7 @@ if ( isset($j39_idcons) && $j39_idcons=="nova"  &&  empty($incluir ) ) {
     $lSqlErro=true;
   }
 
-  $matriz= split("X",$caracteristica);
+  $matriz= explode("X",$caracteristica);
 
   for($i=0;$i<sizeof($matriz);$i++ ) {
 
@@ -315,7 +315,7 @@ if ( isset($j39_idcons) && $j39_idcons=="nova"  &&  empty($incluir ) ) {
     }
 
 
-    $matriz= split("X",$caracteristica);
+    $matriz= explode("X",$caracteristica);
 
     for ($i = 0; $i < sizeof($matriz); $i++ ) {
 

@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 $clprotprocesso->rotulo->label("p58_codproc");
@@ -75,10 +75,10 @@ $clouvidoriaatendimento->rotulo->label("ov01_tipoprocesso");
 	      <?
 	        db_inputdata('p67_dtarq','','','',true,'text',3);
 	      ?>
-	    </td> 
+	    </td>
 	  </tr>
 		<tr align="center">
-		   <td colspan="3">  
+		   <td colspan="3">
 		     <fieldset>
 		       <legend>
 		         <b>Observação</b>
@@ -97,7 +97,7 @@ $clouvidoriaatendimento->rotulo->label("ov01_tipoprocesso");
   </tr>
   <tr>
     <td>
-      <input id="processar" name="processar" type="button" value="Desarquivar" 
+      <input id="processar" name="processar" type="button" value="Desarquivar"
              onclick="return js_desarquivarDados();" disabled>
     </td>
     <td>
@@ -108,13 +108,13 @@ $clouvidoriaatendimento->rotulo->label("ov01_tipoprocesso");
 </form>
 <script>
 function js_pesquisaProcessoArquivado() {
-  
+
   var sCampos = '|p67_codproc|p58_requer|ov01_tipoprocesso|p51_descr|p67_dtarq|p58_obs';
   var sParam  = 'funcao_js=parent.js_mostraProcessoArquivado1'+sCampos;
   var sUrl    = 'func_ouvidoriaprocessoarquivado.php?'+sParam;
-  js_OpenJanelaIframe('top.corpo','db_iframe_processoarquivado',sUrl,'Pesquisa',true); 
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_processoarquivado',sUrl,'Pesquisa',true);
 }
-  
+
 function js_mostraProcessoArquivado1(iCodProc,sDescricao,iTipoProc,sTipoProcDescr,dtArq,sObservacao) {
 
   $('p58_codproc').value       = iCodProc;
@@ -122,7 +122,7 @@ function js_mostraProcessoArquivado1(iCodProc,sDescricao,iTipoProc,sTipoProcDesc
   $('ov01_tipoprocesso').value = iTipoProc;
   $('p51_descr').value         = sTipoProcDescr;
   $('p67_dtarq').value         = js_formatar(dtArq,"d");
-  $('p58_obs').value           = sObservacao; 
+  $('p58_obs').value           = sObservacao;
   $('processar').disabled      = false;
   db_iframe_processoarquivado.hide();
 }
@@ -131,33 +131,33 @@ function js_mostraProcessoArquivado1(iCodProc,sDescricao,iTipoProc,sTipoProcDesc
  * Desarquiva processos de ouvidoria por departamento
  */
 function js_desarquivarDados(){
-   
+
   var iCodProc       = $('p58_codproc').value;
   var sDescricao     = $('p58_requer').value;
   var iTipoProc      = $('ov01_tipoprocesso').value;
   var sTipoProcDescr = $('p51_descr').value;
   var dtArq          = $('p67_dtarq').value;
-  var sObservacao    = $('p58_obs').value; 
+  var sObservacao    = $('p58_obs').value;
 
   if (iCodProc == '') {
 
     alert('Nenhuma Processo Informado!');
-    return false;  
+    return false;
   }
 
   js_divCarregando('Aguarde Processando...','msgBoxProcessar');
-   
+
   var oParam           = new Object();
       oParam.exec      = 'Desarquivar';
       oParam.processo  = iCodProc;
-    
+
   var sUrl    = 'ouv4_desarqprocesso.RPC.php';
   var oAjax   = new Ajax.Request( sUrl, {
-                                          method: 'post', 
-                                          parameters: 'json='+js_objectToJson(oParam), 
+                                          method: 'post',
+                                          parameters: 'json='+js_objectToJson(oParam),
                                           onComplete: js_retornoProcessarDados
                                         }
-                                ); 
+                                );
 }
 
 /**
@@ -166,11 +166,11 @@ function js_desarquivarDados(){
 function js_retornoProcessarDados(oAjax) {
 
   js_removeObj("msgBoxProcessar");
- 
+
   var oRetorno = eval("("+oAjax.responseText+")");
-  
+
   if (oRetorno.status == 2) {
-  
+
     alert(oRetorno.message.urlDecode());
   } else {
     alert("Processo desarquivado com sucesso.");
@@ -181,9 +181,9 @@ function js_retornoProcessarDados(oAjax) {
   $('ov01_tipoprocesso').value = '';
   $('p51_descr').value         = '';
   $('p67_dtarq').value         = '';
-  $('p58_obs').value           = ''; 
+  $('p58_obs').value           = '';
   $('processar').disabled      = true;
-  
+
   js_pesquisaProcessoArquivado();
 
 }

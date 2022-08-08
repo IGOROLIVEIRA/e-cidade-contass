@@ -1,6 +1,6 @@
 <?php
-include ("../jpgraph.php");
-include ("../jpgraph_bar.php");
+include (__DIR__ . "/../jpgraph.php");
+include (__DIR__ . "/../jpgraph_bar.php");
 
 $datay=array(2,3,5,8,12,6,3);
 $datax=array("Jan","Feb","Mar","Apr","May","Jun","Jul");

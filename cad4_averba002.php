@@ -58,7 +58,7 @@ if(isset($incluir)){
   db_inicio_transacao();
   $j55_codave="";
   $data = date("Y-m-d",db_getsession("DB_datausu"));
-  $dat = split("-",$data);
+  $dat = explode("-",$data);
   $claverba->j55_data=$data;
   $claverba->j55_data_dia=$dat[0];
   $claverba->j55_data_mes=$dat[1];

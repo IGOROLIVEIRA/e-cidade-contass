@@ -12,7 +12,7 @@ $clrotulo->label("nomeinst");
     <td nowrap title="<?=@$Tk05_sequencial?>">
        <b>Código :</b>
     </td>
-    <td> 
+    <td>
 	<?
 	db_input('k05_sequencial',5,$Ik05_sequencial,true,'text',$opcaoseq,"")
 	?>
@@ -24,7 +24,7 @@ $clrotulo->label("nomeinst");
        db_ancora(@$Lk05_codigo,"js_pesquisak05_codigo(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('k05_codigo',5,$Ik05_codigo,true,'text',$db_opcao," onchange='js_pesquisak05_codigo(false);'")
 ?>
@@ -39,7 +39,7 @@ db_input('nomeinst',50,$Inomeinst,true,'text',3,'')
        db_ancora(@$Lk05_tipo,"js_pesquisak05_tipo(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('k05_tipo',5,$Ik05_tipo,true,'text',$db_opcao," onchange='js_pesquisak05_tipo(false);'")
 ?>
@@ -52,7 +52,7 @@ db_input('k00_descr',50,$Ik00_descr,true,'text',3,'')
     <td nowrap title="<?=@$Tk05_modcarne?>">
        <?=@$Lk05_modcarne?>
     </td>
-    <td> 
+    <td>
 <?
 $x = array('1'=>'Carne febraban 1','30'=>'Carne febraban 2');
 db_select('k05_modcarne',$x,true,$db_opcao,"");
@@ -68,22 +68,22 @@ db_select('k05_modcarne',$x,true,$db_opcao,"");
 <script>
 function js_pesquisak05_tipo(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_arretipo','func_arretipo.php?funcao_js=parent.js_mostraarretipo1|k00_tipo|k00_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_arretipo','func_arretipo.php?funcao_js=parent.js_mostraarretipo1|k00_tipo|k00_descr','Pesquisa',true);
   }else{
-     if(document.form1.k05_tipo.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_arretipo','func_arretipo.php?pesquisa_chave='+document.form1.k05_tipo.value+'&funcao_js=parent.js_mostraarretipo','Pesquisa',false);
+     if(document.form1.k05_tipo.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_arretipo','func_arretipo.php?pesquisa_chave='+document.form1.k05_tipo.value+'&funcao_js=parent.js_mostraarretipo','Pesquisa',false);
      }else{
-       document.form1.k00_descr.value = ''; 
+       document.form1.k00_descr.value = '';
      }
   }
 }
 function js_mostraarretipo(chave,erro){
-  document.form1.k00_descr.value = chave; 
-  if(erro==true){ 
-    document.form1.k05_tipo.focus(); 
-    document.form1.k05_tipo.value = ''; 
+  document.form1.k00_descr.value = chave;
+  if(erro==true){
+    document.form1.k05_tipo.focus();
+    document.form1.k05_tipo.value = '';
   }
-  
+
 }
 function js_mostraarretipo1(chave1,chave2){
   document.form1.k05_tipo.value = chave1;
@@ -93,20 +93,20 @@ function js_mostraarretipo1(chave1,chave2){
 }
 function js_pesquisak05_codigo(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_db_config','func_db_config.php?funcao_js=parent.js_mostradb_config1|codigo|nomeinst','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_config','func_db_config.php?funcao_js=parent.js_mostradb_config1|codigo|nomeinst','Pesquisa',true);
   }else{
-     if(document.form1.k05_codigo.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_db_config','func_db_config.php?pesquisa_chave='+document.form1.k05_codigo.value+'&funcao_js=parent.js_mostradb_config','Pesquisa',false);
+     if(document.form1.k05_codigo.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_config','func_db_config.php?pesquisa_chave='+document.form1.k05_codigo.value+'&funcao_js=parent.js_mostradb_config','Pesquisa',false);
      }else{
-       document.form1.nomeinst.value = ''; 
+       document.form1.nomeinst.value = '';
      }
   }
 }
 function js_mostradb_config(chave,erro){
-  document.form1.nomeinst.value = chave; 
-  if(erro==true){ 
-    document.form1.k05_codigo.focus(); 
-    document.form1.k05_codigo.value = ''; 
+  document.form1.nomeinst.value = chave;
+  if(erro==true){
+    document.form1.k05_codigo.focus();
+    document.form1.k05_codigo.value = '';
   }
 }
 function js_mostradb_config1(chave1,chave2){
@@ -115,7 +115,7 @@ function js_mostradb_config1(chave1,chave2){
   db_iframe_db_config.hide();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_modcarne','func_modcarne.php?funcao_js=parent.js_preenchepesquisa|k05_sequencial','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_modcarne','func_modcarne.php?funcao_js=parent.js_preenchepesquisa|k05_sequencial','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_modcarne.hide();

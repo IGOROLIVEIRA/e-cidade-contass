@@ -235,7 +235,7 @@ function js_emitir(codordem){
 }
 function js_pesquisa(iNumEmp) {
   if (iNumEmp == '') {
-    js_OpenJanelaIframe('top.corpo', 'db_iframe_empempenho', 'func_empempenho.php?funcao_js=parent.js_preenchepesquisa|e60_numemp', 'Pesquisa', true);
+    js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_empempenho', 'func_empempenho.php?funcao_js=parent.js_preenchepesquisa|e60_numemp', 'Pesquisa', true);
   } else {
     js_consultaEmpenho(iNumEmp,<?=$operacao?>);
   }
@@ -597,10 +597,10 @@ function js_decodeUrl(sTexto){
 }
 function js_pesquisae49_numcgm(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_cgm','func_nome.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cgm','func_nome.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome','Pesquisa',true);
   }else{
      if(document.form1.e49_numcgm.value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_cgm','func_nome.php?pesquisa_chave='+document.form1.e49_numcgm.value+'&funcao_js=parent.js_mostracgm','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cgm','func_nome.php?pesquisa_chave='+document.form1.e49_numcgm.value+'&funcao_js=parent.js_mostracgm','Pesquisa',false);
      }else{
        document.form1.z01_credor.value = '';
      }
@@ -628,7 +628,7 @@ function removerObj(id) {
 }
 
 function js_consultaNota(iCodNota) {
-  js_OpenJanelaIframe('top.corpo', 'db_iframe_nota', 'emp2_consultanotas002.php?e69_codnota='+iCodNota, 'Pesquisa Dados da Nota', true);
+  js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_nota', 'emp2_consultanotas002.php?e69_codnota='+iCodNota, 'Pesquisa Dados da Nota', true);
 }
 
 function js_emitir(codordem){
@@ -643,7 +643,7 @@ function js_lancarRetencao(iCodNota, iCodOrd, nValor){
    var lSession = <?=$operacao==2?"false":"true"?>;
    var iNumCgm  = $F('e49_numcgm');
    $('e49_numcgm').disabled = true;
-   js_OpenJanelaIframe('top.corpo', 'db_iframe_retencao',
+   js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_retencao',
                        'emp4_lancaretencoes.php?iNumNota='+iCodNota+'&iNumEmp='+iNumEmp+'&iCodOrd='+iCodOrd+
                        '&iNumCgm='+iNumCgm+
                        "&lSession="+lSession+"&nValorBase="+js_strToFloat(nValor)+"&iCodMov=&callback=true",

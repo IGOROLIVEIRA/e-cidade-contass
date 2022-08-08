@@ -29,8 +29,8 @@
  * Classe de modelo para usuários do sistema
  * @package configuracao
  * @author Rafael Nery <rafael.nery@dbseller.com.br>
- * @version $Revision: 1.24 $
- * @revision $Author: dbiuri $
+ * @version $Revision: 1.28 $
+ * @revision $Author: dbvitor $
  */
 class UsuarioSistema {
 
@@ -117,6 +117,12 @@ class UsuarioSistema {
   protected $oCgm = null;
 
   /**
+   * Define se o CGM vinculado ao usuário
+   * preencheu os dados para o e-Social
+   */
+  protected $lPreencheuEsocial = false;
+
+  /**
    * Construtor da Classe
    */
   public function __construct( $iIdUsuario = null, $sLoginUsuario = null) {
@@ -146,7 +152,7 @@ class UsuarioSistema {
       $this->ativo         ($oUsuario->usuarioativo );
       $this->usuarioExterno($oUsuario->usuext       );
       $this->administrador ($oUsuario->administrador);
-      $this->setDataToken  ($oUsuario->datatoken    );
+      $this->setDataToken  (isset($oUsuario->datatoken) ? $oUsuario->datatoken : '');
     }
 
   }
@@ -344,7 +350,6 @@ class UsuarioSistema {
     $oDaoUsuarioSistema->administrador = $this->isAdministrador();
     $oDaoUsuarioSistema->datatoken     = $this->getDataToken();
 
-
     if ($this->getIdUsuario() == "") {
       $oDaoUsuarioSistema->incluir(null);
     } else {
@@ -396,7 +401,7 @@ class UsuarioSistema {
    */
   public function getPreferenciasUsuario() {
 
-    require_once('model/configuracao/PreferenciaUsuario.model.php');
+    require_once(modification('model/configuracao/PreferenciaUsuario.model.php'));
     $oPreferenciaUsuario = new PreferenciaUsuario($this);
     return $oPreferenciaUsuario;
   }
@@ -540,7 +545,7 @@ class UsuarioSistema {
    */
   public function enviarAtivacaoSenha() {
 
-    require_once("libs/smtp.class.php");
+    require_once(modification("libs/smtp.class.php"));
 
     $oSmtp          = new Smtp();
     $oDaoUsuaCgm    = db_utils::getDao("db_usuacgm");
@@ -599,6 +604,44 @@ class UsuarioSistema {
     }
     $this->oCgm = CgmFactory::getInstanceByCgm(db_utils::fieldsMemory($rsDadosCgm, 0)->cgmlogin);
     return $this->oCgm;
+  }
+
+  /**
+   * Retorna se o CGM vinculado ao usuário
+   * preencheu o cadastro do e-Social
+   */
+  public function isAtualizadoEsocial() {
+
+    $oCgm = $this->getCGM();
+
+    if($oCgm instanceof CgmFisico) {
+
+      if($oCgm->preencheuEsocial()) {
+        $this->lPreencheuEsocial = true;
+      }
+    }
+    
+    if ( $this->lPreencheuEsocial ) {
+      return true;
+    }
+    
+    return false;
+  }
+  
+  public function   isAtualizado() {
+  
+    if ( empty($this->sEmail) ) {
+      return false;
+    }
+
+    /*
+     * Valida email
+     */ 
+    $hostNamePattern = '(?:[_\p{L}0-9][-_\p{L}0-9]*\.)*(?:[\p{L}0-9][-\p{L}0-9]{0,62})\.(?:(?:[a-z]{2}\.)?[a-z]{2,})';
+    $regex = '/^[\p{L}0-9!#$%&\'*+\/=?^_`{|}~-]+(?:\.[\p{L}0-9!#$%&\'*+\/=?^_`{|}~-]+)*@' . $hostNamePattern . '$/ui';
+    $return = (bool) preg_match($regex, $this->sEmail);
+
+    return $return;
   }
 
 }

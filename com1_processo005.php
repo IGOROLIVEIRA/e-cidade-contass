@@ -133,10 +133,10 @@ if (isset($retorno)) {
     <script>
         function js_db_libera(){
            parent.document.formaba.fornec.disabled = false;
-           top.corpo.iframe_fornec.location.href='com1_fornec001.php?solic=false&pc21_codorc=$retorno&p80_codproc=$pc80_codproc';
+           CurrentWindow.corpo.iframe_fornec.location.href='com1_fornec001.php?solic=false&pc21_codorc=$retorno&p80_codproc=$pc80_codproc';
 
            parent.document.formaba.item.disabled = false;
-           top.corpo.iframe_item.location.href = 'com1_itensproc001.php?pc22_codorc=" . @$pc20_codorc
+           CurrentWindow.corpo.iframe_item.location.href = 'com1_itensproc001.php?pc22_codorc=" . @$pc20_codorc
                                                                       . "&pc80_codproc=" . @$pc80_codproc
                                                                       . "&db_opcaoal=" . @$db_opcaoal
                                                                       . "&db_chama=" . @$db_chama
@@ -148,13 +148,13 @@ if (isset($retorno)) {
     </script>  ";
 
     if ($lAutoInsert) {
-      echo "<script>top.corpo.mo_camada('item');</script>";
+      echo "<script>CurrentWindow.corpo.mo_camada('item');</script>";
     }
 
   } catch (Exception $e) {
 
     db_msgbox($e->getMessage());
-    echo "<script>top.corpo.iframe_orcam.location.href = 'com1_selsolicproc001.php?pc22_codorc=$retorno&op=alterar';</script>";
+    echo "<script>CurrentWindow.corpo.iframe_orcam.location.href = 'com1_selsolicproc001.php?pc22_codorc=$retorno&op=alterar';</script>";
   }
 }
 
@@ -169,20 +169,20 @@ if ($db_open == true) {
     db_fieldsmemory($result_solic,0);
 
     echo "<script>
-              top.corpo.iframe_orcam.location.href = 'com1_processo005.php?retorno=$chavepesquisa&pc80_codproc=$pc81_codproc';
+              CurrentWindow.corpo.iframe_orcam.location.href = 'com1_processo005.php?retorno=$chavepesquisa&pc80_codproc=$pc81_codproc';
           </script>
             ";
   }else{
     $result_pcorcamitem = $clpcorcam->sql_record($clpcorcam->sql_query_solproc(null,"pc20_codorc","","pc20_codorc=$chavepesquisa and pc22_codorc is null"));
     if($clpcorcam->numrows!=0){
     echo "<script>
-            top.corpo.iframe_orcam.location.href = 'com1_selsolicproc001.php?pc22_codorc=$chavepesquisa&op=alterar';
+            CurrentWindow.corpo.iframe_orcam.location.href = 'com1_selsolicproc001.php?pc22_codorc=$chavepesquisa&op=alterar';
 	  </script>
 	  ";
     }else{
     echo "<script>
             alert('Usuário: \\n\\nOrçamento inexistente ou foi gerada autorização de empenho para este processo de compras.\\n\\nAdministrador:');
-            top.corpo.iframe_orcam.location.href = 'com1_processo005.php';
+            CurrentWindow.corpo.iframe_orcam.location.href = 'com1_processo005.php';
           </script>";
     }
   }

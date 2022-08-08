@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -567,11 +567,11 @@ function js_pesquisa_r70_estrut_ini(mostra) {
   var sUrl2           = 'func_rhlotaestrut.php?pesquisa_chave='+r70_estrut_ini+'&tipobusca=1'+sFuncao;
 
   if (lMostra == true) {
-    js_OpenJanelaIframe('top.corpo','db_iframe_rhlotaestrut',sUrl1,'Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhlotaestrut',sUrl1,'Pesquisa',true);
   } else {
 
      if (r70_estrut_ini != '') {
-        js_OpenJanelaIframe('top.corpo','db_iframe_rhlotaestrut',sUrl2,'Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhlotaestrut',sUrl2,'Pesquisa',false);
      } else {
        $('r70_estrut_ini').value = '';
      }
@@ -603,11 +603,11 @@ function js_pesquisa_r70_estrut_fim(mostra) {
   var sUrl2           = 'func_rhlotaestrut.php?pesquisa_chave='+r70_estrut_fim+'&tipobusca=1'+sFuncao;
 
   if (lMostra == true) {
-    js_OpenJanelaIframe('top.corpo','db_iframe_rhlotaestrut',sUrl1,'Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhlotaestrut',sUrl1,'Pesquisa',true);
   } else {
 
      if (r70_estrut_fim != '') {
-       js_OpenJanelaIframe('top.corpo','db_iframe_rhlotaestrut',sUrl2,'Pesquisa',false);
+       js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhlotaestrut',sUrl2,'Pesquisa',false);
      } else {
        $('r70_estrut_fim').value = '';
      }
@@ -639,11 +639,11 @@ function js_pesquisa_rh01_regist_ini(mostra) {
   var sUrl2           = 'func_rhpessoal.php?pesquisa_chave='+rh01_regist_ini+'&tipobusca=1'+sFuncao;
 
   if (lMostra == true) {
-    js_OpenJanelaIframe('top.corpo','db_iframe_rhpessoal',sUrl1,'Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhpessoal',sUrl1,'Pesquisa',true);
   } else {
 
      if (rh01_regist_ini != '') {
-        js_OpenJanelaIframe('top.corpo','db_iframe_rhpessoal',sUrl2,'Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhpessoal',sUrl2,'Pesquisa',false);
      } else {
        $('rh01_regist_ini').value = '';
      }
@@ -675,11 +675,11 @@ function js_pesquisa_rh01_regist_fim(mostra) {
   var sUrl2           = 'func_rhpessoal.php?pesquisa_chave='+rh01_regist_fim+'&tipobusca=1'+sFuncao;
 
   if (lMostra == true) {
-    js_OpenJanelaIframe('top.corpo','db_iframe_rhpessoal',sUrl1,'Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhpessoal',sUrl1,'Pesquisa',true);
   } else {
 
      if (rh01_regist_fim != '') {
-       js_OpenJanelaIframe('top.corpo','db_iframe_rhpessoal',sUrl2,'Pesquisa',false);
+       js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhpessoal',sUrl2,'Pesquisa',false);
      } else {
        $('rh01_regist_fim').value = '';
      }
@@ -711,11 +711,11 @@ function js_pesquisa_z01_numcgm_ini(mostra) {
   var sUrl2           = 'func_nome.php?pesquisa_chave='+z01_numcgm_ini+'&tipobusca=1'+sFuncao;
 
   if (lMostra == true) {
-    js_OpenJanelaIframe('top.corpo','db_iframe_nome',sUrl1,'Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_nome',sUrl1,'Pesquisa',true);
   } else {
 
      if (z01_numcgm_ini != '') {
-        js_OpenJanelaIframe('top.corpo','db_iframe_nome',sUrl2,'Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_nome',sUrl2,'Pesquisa',false);
      } else {
        $('z01_numcgm_ini').value = '';
      }
@@ -747,11 +747,11 @@ function js_pesquisa_z01_numcgm_fim(mostra) {
   var sUrl2           = 'func_nome.php?pesquisa_chave='+z01_numcgm_fim+'&tipobusca=1'+sFuncao;
 
   if (lMostra == true) {
-    js_OpenJanelaIframe('top.corpo','db_iframe_nome',sUrl1,'Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_nome',sUrl1,'Pesquisa',true);
   } else {
 
      if (z01_numcgm_fim != '') {
-       js_OpenJanelaIframe('top.corpo','db_iframe_nome',sUrl2,'Pesquisa',false);
+       js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_nome',sUrl2,'Pesquisa',false);
      } else {
        $('z01_numcgm_fim').value = '';
      }

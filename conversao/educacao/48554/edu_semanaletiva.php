@@ -1,6 +1,6 @@
 <?
 set_time_limit(0);
-include("../../../libs/db_conn.php");
+include(__DIR__ . "/../../../libs/db_conn.php");
 
 //$DB_SERVIDOR = "10.1.1.11";
 //$DB_BASE     = "bage";

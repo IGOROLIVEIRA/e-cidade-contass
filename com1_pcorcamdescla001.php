@@ -39,7 +39,7 @@ $clpcorcamdescla = new cl_pcorcamdescla;
 $db_opcao = 1;
 $db_botao = true;
 
-$vetor = split(",",$orcamitem);
+$vetor = explode(",",$orcamitem);
 $item  = $vetor[sizeof($vetor)-1];
 
 $result_descla = $clpcorcamdescla->sql_record($clpcorcamdescla->sql_query_file(null,null,"*",null,"pc32_orcamitem = $item and pc32_orcamforne = $pc32_orcamforne"));

@@ -30,7 +30,7 @@ if(isset($e60_numemp) && $e60_numemp != ''){
      db_fieldsmemory($res_empenho,0);
    }
 } else if (isset($e60_codemp) && $e60_codemp !=''){
-	      $arr = split("/",$e60_codemp);
+	      $arr = explode("/",$e60_codemp);
 	      if(count($arr) == 2  && isset($arr[1]) && $arr[1] != '' ){
 		$dbwhere_ano = " and e60_anousu = ".$arr[1];
     $anousu = $arr[1];
@@ -264,7 +264,7 @@ for ($i = 0;$i < pg_numrows($result);$i++){
 
    
    $Sresumo = $pdf1->resumo;
-   $vresumo = split("\n",$Sresumo);
+   $vresumo = explode("\n",$Sresumo);
 
    if (count($vresumo) > 1){
      $Sresumo   = "";

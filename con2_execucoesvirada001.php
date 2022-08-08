@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -47,7 +47,7 @@ $clrotulo->label("nome");
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <form name="form1" method="post" action="">
   <table align="center" style="padding-top:23px">
-    <tr> 
+    <tr>
       <td>
         <fieldset>
          <legend align="center">
@@ -55,12 +55,12 @@ $clrotulo->label("nome");
          </legend>
           <table>
 			      <tr>
-					    <td align="right" > 
+					    <td align="right" >
 					      <b> Período:</b>
-					    </td>  
+					    </td>
 					    <td>
 					     <?
-					       db_inputdata('dtini',@$dia,@$mes,@$ano,true,'text',1,"");                 
+					       db_inputdata('dtini',@$dia,@$mes,@$ano,true,'text',1,"");
 					       echo " a ";
 					       db_inputdata('dtfim',@$dia,@$mes,@$ano,true,'text',1,"");
 					     ?>
@@ -72,7 +72,7 @@ $clrotulo->label("nome");
 					       db_ancora("<b>Usuário:</b>","js_pesquisaUsuario(true);",1);
 					       ?>
 					    </td>
-					    <td> 
+					    <td>
 								<?
 								db_input('id_usuario',7,$Iid_usuario,true,'text',1," onchange='js_pesquisaUsuario(false);'");
 								db_input('nome',40,$Inome,true,'text',3,'');
@@ -81,7 +81,7 @@ $clrotulo->label("nome");
 					  </tr>
 					  <tr>
 					    <td nowrap title="Situacão" align="right"><b>Situação:</b></td>
-					    <td> 
+					    <td>
 					      <?
 					        $situacao = 0;
 					        $aSituacao = array("0"=>"Todos","1"=>"Processado","2"=>"Cancelado");
@@ -89,8 +89,8 @@ $clrotulo->label("nome");
 					      ?>
 					    <td>
 					  </tr>
-          </table>  
-        </fieldset>   
+          </table>
+        </fieldset>
       </td>
     </tr>
     <tr>
@@ -121,7 +121,7 @@ function js_imprimir(){
   if((dtini_dia != '') && (dtini_mes != '') && (dtini_ano != '')){
       sQuery   += "&dtini="+dtini_ano+"-"+dtini_mes+"-"+dtini_dia;
   }
-	  
+
   if((dtfim_dia != '') && (dtfim_mes != '') && (dtfim_ano != '')){
       sQuery   += "&dtfim="+dtfim_ano+"-"+dtfim_mes+"-"+dtfim_dia;
   }
@@ -130,14 +130,14 @@ function js_imprimir(){
     alert('Data Incorreta. Verifique!');
     return false;
   }
-  
+
   if(usuario != ''){
       sQuery   += '&usuario='+usuario;
   }
 
   var sUrl = 'con4_execucoesviradadeano003.php?'+sQuery;
   var jan  = window.open(sUrl,'',sParam);
-    
+
 }
 
 function js_pesquisaUsuario(mostra) {
@@ -145,12 +145,12 @@ function js_pesquisaUsuario(mostra) {
   var usuario = obj.id_usuario.value;
   var sUrl1   = 'func_db_usuarios.php?funcao_js=parent.js_mostrausu1|id_usuario|nome';
   var sUrl2   = 'func_db_usuarios.php?pesquisa_chave='+usuario+'&funcao_js=parent.js_mostrausu';
-  
+
   if (mostra==true) {
-    js_OpenJanelaIframe('top.corpo','db_iframe_db_usuario',sUrl1,'Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_usuario',sUrl1,'Pesquisa',true);
   } else {
     if (usuario != "") {
-      js_OpenJanelaIframe('top.corpo','db_iframe_db_usuario',sUrl2,'Pesquisa',false);
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_usuario',sUrl2,'Pesquisa',false);
     } else {
       obj.nome.value = '';
     }

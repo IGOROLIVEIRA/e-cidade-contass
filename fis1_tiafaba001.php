@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -53,14 +53,14 @@ $sqlerro = false;
 $tipobotao = "Incluir";                 //tipo do botao
 echo "<script> passa = 's'; </script>"; //variavel js para a func saber se passa para proxima ab ou naun
 $tipoancgeral = "1";                    // TIpo geral das ancoras
-$tipoanctiaf = "3";                     //tipo da ancora do tiaf 
+$tipoanctiaf = "3";                     //tipo da ancora do tiaf
 $db_opcao = "1";                        //opcao geral dos campos
 
 /////////////// ROTINA DE INCLUS?O NO BANCO //////////////
- 
+
 if (isset($incluir)){
 	db_inicio_transacao();
-	$prazo = $y96_prazo_ano.$y96_prazo_mes.$y96_prazo_dia; 
+	$prazo = $y96_prazo_ano.$y96_prazo_mes.$y96_prazo_dia;
 	$data  = $y90_data_ano.$y90_data_mes.$y90_data_dia;
 	if (isset($prazo) && $prazo <= $data){
 		db_msgbox("A data do prazo n?o pode ser menor que data do TIAF !");
@@ -71,7 +71,7 @@ if (isset($incluir)){
 	$cltiaf->incluir($cltiaf->y90_codtiaf);
 	$cltiafprazo->y96_prazo = $y96_prazo_ano."-".$y96_prazo_mes."-".$y96_prazo_dia;
 	$cltiafprazo->y96_codtiaf = $cltiaf->y90_codtiaf;
-	$cltiafprazo->incluir($cltiafprazo->y96_codigo);		
+	$cltiafprazo->incluir($cltiafprazo->y96_codigo);
 	if (isset($z01_numcgm)){
 		$cltiafcgm->y95_numcgm = $z01_numcgm;
 		$cltiafcgm->y95_codtiaf = $cltiaf->y90_codtiaf;
@@ -88,7 +88,7 @@ if (isset($incluir)){
         $erro_msg= $cltiaf->erro_msg;
     }
 	db_fim_transacao($sqlerro);
-} 
+}
 
 ////////////////////////////////////////////////////////////////
 ?>
@@ -103,14 +103,14 @@ if (isset($incluir)){
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#CCCCCC">
- 
+
 </table>
 <table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
+  <tr>
     <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
 	    <?
 	    	include("forms/db_frmtiaf001.php");
-	    ?> 
+	    ?>
 	</td>
   </tr>
 </table>
@@ -119,7 +119,7 @@ if (isset($incluir)){
 <script>
 
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_tiaf','func_tiaf.php?funcao_js=parent.js_preenchepesquisa|y90_codtiaf','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_tiaf','func_tiaf.php?funcao_js=parent.js_preenchepesquisa|y90_codtiaf','Pesquisa',true);
 }
 
 function js_preenchepesquisa(chave){

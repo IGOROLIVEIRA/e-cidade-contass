@@ -324,7 +324,7 @@ if(isset($this->lancobs) && $this->impobslanc == 't'){
   $this->objpdf->Cell(12,3,"",0,0,"L",0);
   
   
-  $aObs    = split("\n",$obs);
+  $aObs    = explode("\n",$obs);
   $iTotaln = count($aObs);
   $sObs = "";
 

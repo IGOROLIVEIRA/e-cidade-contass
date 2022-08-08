@@ -631,7 +631,7 @@ class cl_transfescolafora {
     $sSql = 'select ';
     if ($sCampos != '*') {
 
-      $sCamposSql = split('#', $sCampos);
+      $sCamposSql = explode('#', $sCampos);
       $sVirgula   = '';
       for ($iCont = 0; $iCont < sizeof($sCamposSql); $iCont++){
 
@@ -663,7 +663,7 @@ class cl_transfescolafora {
     if ($sOrdem != null) {
 
       $sSql      .= ' order by ';
-      $sCamposSql = split('#', $sOrdem);
+      $sCamposSql = explode('#', $sOrdem);
       $sVirgula   = '';
       for ($iCont = 0; $iCont < sizeof($sCamposSql); $iCont++) {
 
@@ -682,7 +682,7 @@ class cl_transfescolafora {
     $sSql = 'select ';
     if ($sCampos != '*') {
 
-      $sCamposSql = split('#', $sCampos);
+      $sCamposSql = explode('#', $sCampos);
       $sVirgula   = '';
       for ($iCont = 0; $iCont < sizeof($sCamposSql); $iCont++){
 
@@ -719,7 +719,7 @@ class cl_transfescolafora {
       if ($sOrdem != null) {
 
         $sSql      .= ' order by ';
-        $sCamposSql = split('#', $sOrdem);
+        $sCamposSql = explode('#', $sOrdem);
         $sVirgula   = '';
         for ($iCont = 0; $iCont < sizeof($sCamposSql); $iCont++) {
 
@@ -738,7 +738,7 @@ class cl_transfescolafora {
     $sSql = 'select ';
     if ($sCampos != '*') {
 
-      $sCamposSql = split('#', $sCampos);
+      $sCamposSql = explode('#', $sCampos);
       $sVirgula   = '';
       for ($iCont = 0; $iCont < sizeof($sCamposSql); $iCont++){
 
@@ -769,7 +769,7 @@ class cl_transfescolafora {
     if ($sOrdem != null) {
 
       $sSql      .= ' order by ';
-      $sCamposSql = split('#', $sOrdem);
+      $sCamposSql = explode('#', $sOrdem);
       $sVirgula   = '';
       for ($iCont = 0; $iCont < sizeof($sCamposSql); $iCont++) {
 

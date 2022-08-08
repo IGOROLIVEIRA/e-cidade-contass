@@ -518,6 +518,12 @@ switch ($oParam->exec) {
          */
         foreach ($aChecks as $iInd => $aVal) {
 
+          $aRecibos[$oRegraEmissao->k48_sequencial] = [];
+          $aCompara[$oRegraEmissao->k48_sequencial] = [];
+          $aNumparCompara[$oRegraEmissao->k48_sequencial] = [];
+          $aNumpreCompara[$oRegraEmissao->k48_sequencial] = [];
+          $aNumpres_emissao[$oRegraEmissao->k48_sequencial] = [];
+
           if ( ($aVal["Numpar"] >= $oRegraEmissao->k48_parcini) && ($aVal["Numpar"] <= $oRegraEmissao->k48_parcfim) ) {
 
             $aRecibos[$oRegraEmissao->k48_sequencial][]         =  "(k00_numpre in({$aVal['Numpre']}) and k00_numpar = {$aVal['Numpar']})";
@@ -1243,7 +1249,7 @@ function retornaDebitosSelecionados($oFormulario,$iTipoAgrupamento = null) {
 
         if ( stripos(" ".$sChave, "CHECK") ) {
 
-          $aNumpre             = split("N", $sValor);
+          $aNumpre             = explode("N", $sValor);
           foreach ($aNumpre as $iIndiceNumpre => $sNumpres) {
 
             if ($sNumpres == "") {
@@ -1252,9 +1258,9 @@ function retornaDebitosSelecionados($oFormulario,$iTipoAgrupamento = null) {
             if($sNumpres != "") {
               $iTotalSelecionados++;
             }
-            $aParcela               = split("P", $sNumpres);
+            $aParcela               = explode("P", $sNumpres);
             $iNumpre                = $aParcela[0];
-            $aSliceParcela          = split("R", $aParcela[1]);
+            $aSliceParcela          = explode("R", $aParcela[1]);
             $iNumpar                = (int)$aSliceParcela[0];
             $iReceita               = (int)$aSliceParcela[1];
 

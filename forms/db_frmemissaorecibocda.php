@@ -288,7 +288,7 @@ function js_pesquisa_certid_ini(mostra) {
 
   var certid = $F('v13_certidini');
   if( mostra == true ) {
-    js_OpenJanelaIframe( 'top.corpo',
+    js_OpenJanelaIframe( 'CurrentWindow.corpo',
                          'db_iframe',
                          'func_certid.php?funcao_js=parent.js_mostracertid_ini1|0',
                          'Pesquisa',
@@ -297,7 +297,7 @@ function js_pesquisa_certid_ini(mostra) {
 
     if ($F('v13_certidini') != '') {
 
-      js_OpenJanelaIframe( 'top.corpo',
+      js_OpenJanelaIframe( 'CurrentWindow.corpo',
                            'db_iframe',
                            'func_certid.php?pesquisa_chave=' + $F('v13_certidini') + '&funcao_js=parent.js_mostracertid_ini',
                            'Pesquisa',
@@ -329,7 +329,7 @@ function js_pesquisa_certid_fim(mostra) {
 
   if( mostra == true ) {
 
-    js_OpenJanelaIframe( 'top.corpo',
+    js_OpenJanelaIframe( 'CurrentWindow.corpo',
                          'db_iframe',
                          'func_certid.php?funcao_js=parent.js_mostracertid_fim1|v13_certid',
                          'Pesquisa',
@@ -338,7 +338,7 @@ function js_pesquisa_certid_fim(mostra) {
 
     if ($F('v13_certidfim') != '') {
 
-      js_OpenJanelaIframe( 'top.corpo',
+      js_OpenJanelaIframe( 'CurrentWindow.corpo',
                            'db_iframe',
                            'func_certid.php?pesquisa_chave=' + $F('v13_certidfim') + '&funcao_js=parent.js_mostracertidfim',
                            'Pesquisa',
@@ -369,13 +369,13 @@ function js_pesquisaCartorio(mostra) {
   if (mostra == true) {
 
     var sUrl = 'func_cartorio.php?v82_extrajudicial=true&funcao_js=parent.js_mostraCartorio1|v82_sequencial|v82_descricao';
-    js_OpenJanelaIframe('top.corpo', 'db_iframe_cartorio', sUrl, 'Pesquisa', true);
+    js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_cartorio', sUrl, 'Pesquisa', true);
   } else {
 
     if ($('v82_sequencial').value != '') {
 
       var sUrl = 'func_cartorio.php?v82_extrajudicial=true&pesquisa_chave='+document.formEmissaoReciboCDA.v82_sequencial.value+'&funcao_js=parent.js_mostraCartorio';
-      js_OpenJanelaIframe('top.corpo', 'db_iframe_cartorio', sUrl, 'Pesquisa', false);
+      js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_cartorio', sUrl, 'Pesquisa', false);
     } else {
       $('v82_descricao').value = '';
     }

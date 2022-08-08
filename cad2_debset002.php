@@ -73,7 +73,7 @@ if($ordem == "s") {
 }
 
 if(isset($setor) && $setor != ""){
-  $arr_setor = split(",",$setor);
+  $arr_setor = explode(",",$setor);
   $vir = "";
   $set = "";
   for($i=0;$i<count($arr_setor);$i++){
@@ -84,7 +84,7 @@ if(isset($setor) && $setor != ""){
   $and = " and ";
 }
 if(isset($quadra) && $quadra != ""){
-  $arr_quadra = split(",",$quadra);
+  $arr_quadra = explode(",",$quadra);
   $vir = "";
   $qua = "";
   for($i=0;$i<count($arr_quadra);$i++){
@@ -393,7 +393,7 @@ foreach ($arr_tipo as $key => $value) {
 		$troca = 0;
 		$p = 0;
   }
-	$arr_dados = split("-",$key);
+	$arr_dados = explode("-",$key);
   $pdf->cell(40,$alt,$arr_dados[0],0,0,"C",$p);
   $pdf->cell(70,$alt,$arr_dados[1],0,0,"L",$p);
   $pdf->cell(60,$alt,db_formatar($value,'f')     ,0,1,"R",$p);

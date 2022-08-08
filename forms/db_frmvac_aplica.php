@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: Vacinas
@@ -52,7 +52,7 @@ $clrotulo->label("s115_c_cartaosus");
     <td nowrap title="<?=@$Tvc16_i_cgs?>">
       <?db_ancora(@$Lvc16_i_cgs,"js_pesquisavc16_i_cgs(true);",$db_opcao);?>
     </td>
-    <td> 
+    <td>
       <?
       db_input('vc16_i_cgs',10,$Ivc16_i_cgs,true,'text',$db_opcao,
                " onchange='js_pesquisavc16_i_cgs(false);'");
@@ -101,7 +101,7 @@ function js_imprimir() {
     return false;
 
   }
- 
+
   sChave = 'iCgs='+$F('vc16_i_cgs');
   oJan   = window.open('vac2_ficha002.php?'+sChave, '', 'width='+(screen.availWidth - 5)+',height='+
                      (screen.availHeight - 40)+',scrollbars=1,location=0 ');
@@ -110,12 +110,12 @@ function js_imprimir() {
 }
 
 function js_getCgsCns() {
-  
+
   if ($F('s115_c_cartaosus') == '') {
     return false;
   }
   if ($F('s115_c_cartaosus').length != 15 || isNaN($F('s115_c_cartaosus'))) {
-    
+
     alert('Número de CNS inválido para busca.');
     $('s115_c_cartaosus').value = '';
     return false;
@@ -144,20 +144,20 @@ function js_retornogetCgsCns(oRetorno) {
   $('vc16_i_cgs').value = oRetorno.z01_i_cgsund;
   $('z01_v_nome').value = oRetorno.z01_v_nome.urlDecode();
   js_pesquisavc16_i_cgs(false);
- 
+
 }
 
 function js_ajax(oParam, jsRetorno) {
 
 	var objAjax = new Ajax.Request(
-                         sUrl, 
+                         sUrl,
                          {
                           method: 'post',
                           asynchronous: false,
                           parameters: 'json='+Object.toJSON(oParam),
-                          onComplete: 
+                          onComplete:
                                      function(objAjax) {
-                          				   
+
                                        var evlJS = jsRetorno+'(objAjax);';
                                        return eval(evlJS);
 
@@ -172,7 +172,7 @@ function js_proximaAba() {
   if (document.form1.vc16_i_cgs.value != '') {
 
     parent.document.formaba.a2.disabled = false;
-    top.corpo.iframe_a2.location.href   = 'vac4_vac_aplica005.php?iCgs='+document.form1.vc16_i_cgs.value+
+    CurrentWindow.corpo.iframe_a2.location.href   = 'vac4_vac_aplica005.php?iCgs='+document.form1.vc16_i_cgs.value+
                                           '&z01_v_nome='+document.form1.z01_v_nome.value+
                                           '&idade='+document.form1.iIdade.value;
     parent.mo_camada('a2');
@@ -203,7 +203,7 @@ function js_pesquisavc16_i_cgs(mostra) {
     } else {
 
     	document.form1.vc16_i_cgs.value = '';
-      document.form1.z01_v_nome.value = ''; 
+      document.form1.z01_v_nome.value = '';
       document.form1.iIdade.value     = '';
       document.form1.z01_d_nasc.value = '';
       document.form1.z01_v_sexo.value = '';
@@ -230,7 +230,7 @@ function js_mostra_cgs(chave1, chave2, sexo, nasc, mae) {
   document.form1.z01_d_nasc.value = js_formataData(nasc);
   document.form1.z01_v_sexo.value = sexo;
   document.form1.z01_v_mae.value  = mae;
-  
+
   db_iframe_cgs_und.hide();
 
   if (chave1 != '') {
@@ -248,7 +248,7 @@ function js_mostra_cgs(chave1, chave2, sexo, nasc, mae) {
 function js_retornoIdade(oRetorno) {
 
   oRetorno = eval("("+oRetorno.responseText+")");
- 
+
   if (oRetorno.iStatus == 1) {
     $('iIdade').value = oRetorno.iAnos+' anos, '+oRetorno.iMeses+' meses e '+oRetorno.iDias+' dias.';
   } else {
@@ -266,7 +266,7 @@ function js_retornoIdade(oRetorno) {
 }
 
 function js_formataData(dData) {
-  
+
   if (dData == undefined || dData.length != 10) {
     return dData;
   }

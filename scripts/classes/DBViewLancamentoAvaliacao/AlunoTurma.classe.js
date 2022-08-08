@@ -4,7 +4,7 @@ require_once("scripts/classes/DBViewLancamentoAvaliacao/DBViewLancamentoAvaliaca
  * Monta um select-multiple com os alunos da turma
  * @dependency Utiliza DBViewLancamentoAvaliacao.classe.js
  * @autor Fábio Esteves <fabio.esteves@dbseller.com.br>
- * @version $Revision: 1.9 $
+ * @version $Revision: 1.10 $
  *
  * @param {integer} iTurma código da turma
  * @param {integer} iEtapa código da etapa
@@ -36,6 +36,12 @@ DBViewAvaliacao.AlunoTurma = function (iTurma, iEtapa, lMultiple) {
    * @type {boolean}
    */
   this.lSomenteAlunosOrigemForaRede = false;
+  
+  /**
+   * Define se devem ser carregados somente alunos com data de matrícula maior que o primeiro período do calendário
+   * @type {boolean}
+   */
+  this.lMatriculaMaiorPrimeiroPeriodoCalendario = false;
 
   /**
    * RPC para as requisições
@@ -127,13 +133,14 @@ DBViewAvaliacao.AlunoTurma.prototype.onChangeCallBack = function (fFunction, sSc
  */
 DBViewAvaliacao.AlunoTurma.prototype.buscaAlunos = function () {
 
-  var oSelf                                    = this;
-  var oParametros                              = new Object();
-      oParametros.exec                         = 'pesquisaAlunosTurma';
-      oParametros.iTurma                       = this.iTurma;
-      oParametros.iEtapa                       = this.iEtapa;
-      oParametros.lTrazerAlunosEncerrados      = this.lTrazerAlunosEncerrados;
-      oParametros.lSomenteAlunosOrigemForaRede = this.lSomenteAlunosOrigemForaRede;
+  var oSelf                                               = this;
+  var oParametros                                         = new Object();
+      oParametros.exec                                    = 'pesquisaAlunosTurma';
+      oParametros.iTurma                                  = this.iTurma;
+      oParametros.iEtapa                                  = this.iEtapa;
+      oParametros.lTrazerAlunosEncerrados                 = this.lTrazerAlunosEncerrados;
+      oParametros.lSomenteAlunosOrigemForaRede            = this.lSomenteAlunosOrigemForaRede;
+      oParametros.lMatriculaMaiorPrimeiroPeriodoCalendario = this.lMatriculaMaiorPrimeiroPeriodoCalendario;
 
   var oDadosRequisicao            = new Object();
       oDadosRequisicao.method     = 'post';
@@ -240,4 +247,8 @@ DBViewAvaliacao.AlunoTurma.prototype.getElementosSelecionados = function() {
  */
 DBViewAvaliacao.AlunoTurma.prototype.somenteAlunosOrigemForaRede = function( lSomenteAlunosOrigemForaRede ) {
   this.lSomenteAlunosOrigemForaRede = lSomenteAlunosOrigemForaRede;
+};
+
+DBViewAvaliacao.AlunoTurma.prototype.matriculaMaiorPrimeiroPeriodoCalendario = function( lMatriculaMaiorPrimeiroPeriodoCalendario ) {
+  this.lMatriculaMaiorPrimeiroPeriodoCalendario = lMatriculaMaiorPrimeiroPeriodoCalendario;
 };

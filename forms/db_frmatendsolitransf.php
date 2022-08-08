@@ -130,7 +130,7 @@ iTipoControle = <?=$iTipoControleCustos;?>;
 function js_pesquisa() {
 
   sFiltro = "sFiltro=almox";
-  js_OpenJanelaIframe('top.corpo','db_iframe_atendsolitransf','func_atendsolitransf.php?'+sFiltro+'&funcao_js=parent.js_preenchepesquisa|m97_sequencial','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_atendsolitransf','func_atendsolitransf.php?'+sFiltro+'&funcao_js=parent.js_preenchepesquisa|m97_sequencial','Pesquisa',true);
 
 }
 
@@ -397,7 +397,7 @@ function js_mostraLotes(iItem) {
   sField        = $('atendido'+iItem).id;
   sUrl          = 'mat4_mostraitemlotes.php?iCodMater='+iCodItem+'&iCodDepto='+iCodEstoque;
   sUrl         += '&nValor='+nValor+'&nValorSolicitado='+nValorSolItem+'&updateField='+sField;
-  js_OpenJanelaIframe('top.corpo','db_iframe_lotes',sUrl,'Lotes ',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_lotes',sUrl,'Lotes ',true);
 
 }
 

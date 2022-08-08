@@ -154,7 +154,7 @@ class ordemCompra {
 
   function getDados() {
 
-    $sSQLOrdem  = "select * ";
+    $sSQLOrdem  = "select matordem.*,z01_numcgm,z01_nome,coddepto,descrdepto,matordemanu.*";
     $sSQLOrdem .= "  from matordem  ";
     $sSQLOrdem .= "      inner join cgm         on  cgm.z01_numcgm          = matordem.m51_numcgm";
     $sSQLOrdem .= "      inner join db_depart   on db_depart.coddepto       = matordem.m51_depto";
@@ -169,7 +169,7 @@ class ordemCompra {
       return false;
 
     } else {
-      $this->dadosOrdem = db_utils::fieldsMemory($rsOrdemCompra, 0, false, false, $this->getEncode());
+      $this->dadosOrdem = db_utils::fieldsMemory($rsOrdemCompra, 0);
       $this->verificarEmpenho();
       $this->dadosOrdem->isRestoPagar = $this->isRestoPagar;
       return true;
@@ -1208,7 +1208,7 @@ class ordemCompra {
     return $iIndiceNovo+1;
   }
 
-  function confirmaEntrada($iNumNota, $dtDataNota, $dtDataRecebe, $nValorNota, $aItens, $oInfoNota = null, $sObservacao, $sNumeroProcesso=null,$sNotaFiscalEletronica=null,$sChaveAcesso=null,$sNumeroSerie=null,$confEntrada=TRUE) {
+  function confirmaEntrada($iNumNota, $dtDataNota, $dtDataRecebe, $nValorNota, $aItens, $oInfoNota = null, $sObservacao, $sNumeroProcesso=null,$sNotaFiscalEletronica=null,$sChaveAcesso=null,$sNumeroSerie=null,$confEntrada=TRUE, $iCgmEmitente=0) {
 
     //Devemos estar dentro de uma transação.
     if (!db_utils::inTransaction()) {
@@ -1433,6 +1433,7 @@ class ordemCompra {
           $oDaoEmpNota->e69_notafiscaleletronica = $sNotaFiscalEletronica;
           $oDaoEmpNota->e69_chaveacesso          = $sChaveAcesso;
           $oDaoEmpNota->e69_nfserie              = $sNumeroSerie;
+          $oDaoEmpNota->e69_cgmemitente          = $iCgmEmitente;
           $oDaoEmpNota->incluir(null);
           if ($oDaoEmpNota->erro_status == 0 ) {
 

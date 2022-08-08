@@ -389,10 +389,10 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsessio
 // Ocorrência 2505
   function js_pesquisa_notafiscal ( mostra ) {
     if (mostra == true) {
-      js_OpenJanelaIframe('top.corpo', 'db_iframe_db_empnota', 'func_empnota.php?funcao_js=parent.js_mostra_notafiscal|e69_codnota|e69_numero|z01_nome&bens=true&nome_cgm=true', 'Pesquisa', true);
+      js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_db_empnota', 'func_empnota.php?funcao_js=parent.js_mostra_notafiscal|e69_codnota|e69_numero|z01_nome&bens=true&nome_cgm=true', 'Pesquisa', true);
     } else {
       if (document.form1.e69_numero.value != '') {
-          js_OpenJanelaIframe('top.corpo', 'db_iframe_db_empnota', 'func_empnota.php?pesquisa_chave=' + document.form1.e69_codnota.value + '&funcao_js=parent.js_mostra_notafiscal&bens=true&nome_cgm=true', 'Pesquisa', false);
+          js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_db_empnota', 'func_empnota.php?pesquisa_chave=' + document.form1.e69_codnota.value + '&funcao_js=parent.js_mostra_notafiscal&bens=true&nome_cgm=true', 'Pesquisa', false);
       } else {
         document.form1.e69_codnota.value = '';
         document.form1.z01_nome.value = '';
@@ -413,10 +413,10 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsessio
 
   function js_pesquisat53_empen(mostra) {
     if (mostra == true) {
-      js_OpenJanelaIframe('top.corpo', 'db_iframe_empempenho', 'func_empempenho.php?funcao_js=parent.js_mostraempempenho1|e60_numemp|z01_nome', 'Pesquisa', true);
+      js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_empempenho', 'func_empempenho.php?funcao_js=parent.js_mostraempempenho1|e60_numemp|z01_nome', 'Pesquisa', true);
     } else {
       if (document.form1.t53_empen.value != '') {
-        js_OpenJanelaIframe('top.corpo', 'db_iframe_empempenho', 'func_empenhogeral.php?pesquisa_chave=' + document.form1.t53_empen.value + '&funcao_js=parent.js_mostraempempenho', 'Pesquisa', false);
+        js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_empempenho', 'func_empenhogeral.php?pesquisa_chave=' + document.form1.t53_empen.value + '&funcao_js=parent.js_mostraempempenho', 'Pesquisa', false);
       } else {
         document.form1.z01_nome_empenho.value = '';
       }
@@ -655,10 +655,10 @@ function js_BuscaDadosArquivodepartamentos(chave) {
 
     function js_pesquisat04_sequencial(mostra) {
         if (mostra == true) {
-            js_OpenJanelaIframe('top.corpo', 'db_iframe_benscadcedente', 'func_benscadcedente.php?funcao_js=parent.js_mostraconvenio1|t04_sequencial|z01_nome', 'Pesquisa', true);
+            js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_benscadcedente', 'func_benscadcedente.php?funcao_js=parent.js_mostraconvenio1|t04_sequencial|z01_nome', 'Pesquisa', true);
         } else {
             if (document.form1.t04_sequencial.value != '') {
-                js_OpenJanelaIframe('top.corpo', 'db_iframe_benscadcedente', 'func_benscadcedente.php?pesquisa_chave=' + document.form1.t04_sequencial.value + '&funcao_js=parent.js_mostraconvenio', 'Pesquisa', false);
+                js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_benscadcedente', 'func_benscadcedente.php?pesquisa_chave=' + document.form1.t04_sequencial.value + '&funcao_js=parent.js_mostraconvenio', 'Pesquisa', false);
             } else {
                 document.form1.z01_nome_convenio.value = '';
             }
@@ -682,10 +682,10 @@ function js_BuscaDadosArquivodepartamentos(chave) {
     }
     function js_pesquisa_depart(mostra) {
         if (mostra == true) {
-            js_OpenJanelaIframe('top.corpo', 'db_iframe_db_depart', 'func_db_depart.php?funcao_js=parent.js_mostradepart1|coddepto|descrdepto', 'Pesquisa', true);
+            js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_db_depart', 'func_db_depart.php?funcao_js=parent.js_mostradepart1|coddepto|descrdepto', 'Pesquisa', true);
         } else {
             if (document.form1.coddepto.value != '') {
-                js_OpenJanelaIframe('top.corpo', 'db_iframe_db_depart', 'func_db_depart.php?pesquisa_chave=' + document.form1.coddepto.value + '&funcao_js=parent.js_mostradepart', 'Pesquisa', false);
+                js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_db_depart', 'func_db_depart.php?pesquisa_chave=' + document.form1.coddepto.value + '&funcao_js=parent.js_mostradepart', 'Pesquisa', false);
             } else {
                 document.form1.descrdepto.value = '';
                 document.form1.submit();

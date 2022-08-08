@@ -70,7 +70,7 @@ if(isset($j34_setor) && (trim($j34_setor)!="") ){
   $result = $cldb_itbi->sql_record($sql);
   if($cldb_itbi->numrows == 1){
     db_fieldsmemory($result,0);
-    $funcao = split("\\|",$funcao_js);
+    $funcao = explode("\\|",$funcao_js);
     echo "<script>".$funcao[0]."('$j01_matric');</script>";
     echo "<script>parent.db_iframe_consultaitbi.hide();</script>";
     exit;

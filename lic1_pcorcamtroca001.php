@@ -215,7 +215,7 @@ if (isset($confirmar) && trim($confirmar) != "") {
 
     if(!$sqlerro) {
 
-		$vitens = split(":", $itens);
+		$vitens = explode(":", $itens);
 		$vpcorcamjulg = array(array());
 		$linha = 0;
 
@@ -224,7 +224,7 @@ if (isset($confirmar) && trim($confirmar) != "") {
 		for ($i = 0; $i < count($vitens); $i++) {
 
 			$str = $vitens[$i];
-			$vetor = split(",", $str);
+			$vetor = explode(",", $str);
 
 			/**
 			 * verificamos saldo modalidade para cada item da licitacao

@@ -155,8 +155,8 @@ if(($db_opcao==22||$db_opcao==33) && $msg_erro==""){
     echo "<script>js_pesquisa();</script>";
     echo "<script>parent.document.formaba.bensfotos.disabled = false;</script>";
 
-//    echo "<script>top.corpo.iframe_bensfotos.location.href=`pat1_cadgeralfotos001.php?cod_lote={$F('cod_lote')}`</script>";
-//    echo "<script>top.corpo.iframe_bensfotos.location.href='pat1_cadgeralfotos001.php?t52_codbem=${$F("t52_bem")}&cod_lote=${$F('cod_lote')}`</script>";
+//    echo "<script>CurrentWindow.corpo.iframe_bensfotos.location.href=`pat1_cadgeralfotos001.php?cod_lote={$F('cod_lote')}`</script>";
+//    echo "<script>CurrentWindow.corpo.iframe_bensfotos.location.href='pat1_cadgeralfotos001.php?t52_codbem=${$F("t52_bem")}&cod_lote=${$F('cod_lote')}`</script>";
 
  }
 ?>

@@ -25,23 +25,23 @@
  *                                licenca/licenca_pt.txt
  */
 
-require_once("libs/db_stdlib.php");
-require_once("libs/db_utils.php");
-require_once("libs/db_conecta.php");
-require_once("libs/db_sessoes.php");
-require_once("libs/db_usuariosonline.php");
-require_once("dbforms/db_funcoes.php");
-require_once("libs/db_libdicionario.php");
-require_once("libs/db_app.utils.php");
-require_once("classes/db_placaixa_classe.php");
-require_once("classes/db_placaixarec_classe.php");
-require_once("dbforms/db_classesgenericas.php");
-require_once("classes/db_contabancaria_classe.php");
+require_once(modification("libs/db_stdlib.php"));
+require_once(modification("libs/db_utils.php"));
+require_once(modification("libs/db_conecta.php"));
+require_once(modification("libs/db_sessoes.php"));
+require_once(modification("libs/db_usuariosonline.php"));
+require_once(modification("dbforms/db_funcoes.php"));
+require_once(modification("libs/db_libdicionario.php"));
+require_once(modification("libs/db_app.utils.php"));
+require_once(modification("classes/db_placaixa_classe.php"));
+require_once(modification("classes/db_placaixarec_classe.php"));
+require_once(modification("dbforms/db_classesgenericas.php"));
+require_once(modification("classes/db_contabancaria_classe.php"));
 
 $clplacaixa    = new cl_placaixa;
-$clplacaixarec = new cl_placaixarec; 
+$clplacaixarec = new cl_placaixarec;
 $clrotulo      = new rotulocampo;
-$ano = db_getsession("DB_anousu"); //ano 
+$ano = db_getsession("DB_anousu"); //ano
 
 $clcontabancaria = new cl_contabancaria;
 $clcontabancaria->rotulo->label();
@@ -53,7 +53,7 @@ $clplacaixarec->rotulo->label();
 $clrotulo->label("k80_data");
 $clrotulo->label("k13_descr");
 $clrotulo->label("k02_descr");
-$clrotulo->label("k02_drecei");  
+$clrotulo->label("k02_drecei");
 $clrotulo->label("c61_codigo");
 $clrotulo->label("o15_codigo");
 $clrotulo->label("z01_numcgm");
@@ -309,12 +309,12 @@ if ($oInstit->db21_usasisagua == "t") {
               <tr id="datacontrato" style="display: none;">
                 <td nowrap title="<?= @$Tdb83_dataassinaturacop ?>"><? echo $Ldb83_dataassinaturacop ?></td>
                 <td colspan='3'>
-                  <? 
+                  <?
                     db_input('op01_dataassinaturacop', 75, $rsOrctiporec, true, $db_opcao);
                   ?>
                 </td>
               </tr>
-              
+
             <?php } ?>
             <!-- Regularização de Repasse -->
             <tr id="regrepasse" style="display: none;">
@@ -359,7 +359,7 @@ if ($oInstit->db21_usasisagua == "t") {
                 db_select("k81_emparlamentar", $aOpcoes, true, 1, "class='input-menor'");
                 ?>
               </td>
-            </tr> 
+            </tr>
 
             <tr id="notificacao-conv" style="display:none;">
               <td colspan='4' style="text-align: left; background-color: #fcf8e3; border: 1px solid #fcc888; padding: 10px">
@@ -413,7 +413,7 @@ if ($oInstit->db21_usasisagua == "t") {
           </table>
         </fieldset>
         <br>
-                  
+
         <input type='button' value='Salvar Item' id='incluir' onclick='js_addReceita();' />
         <input type='button' value='Pesquisar' id='btnPesquisar' onclick='js_pesquisaPlanilha(false);' />
         <input type='button' value='Importar' id='importar' onclick='js_pesquisaPlanilha(true);' />
@@ -433,23 +433,23 @@ if ($oInstit->db21_usasisagua == "t") {
   db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit"));
   ?>
 </body>
- 
+
 </html>
 
 <script>
-  
+
   const CAMINHO_MENSAGEM = 'financeiro.caixa.cai1_planilhalancamento001.';
   sRPC = 'cai4_planilhaarrecadacao.RPC.php';
- 
- 
-  
+
+
+
   if ($('anoUsu').value >= 2020) {
     document.getElementById("k81_emparlamentar").options[3].selected = true;
     let lEmendaParlamentarObrigatoria = false;
-  } 
+  }
 
   function js_pesquisak81_convenio(mostra) {
-   
+
     if (mostra == true) {
       js_OpenJanelaIframe('', 'db_iframe_convconvenios', 'func_convconvenios.php?funcao_js=parent.js_mostrak81_convenio1|c206_sequencial|c206_objetoconvenio', 'Pesquisa', true);
     } else {
@@ -458,7 +458,7 @@ if ($oInstit->db21_usasisagua == "t") {
       } else {
         document.form1.c206_objetoconvenio.value = '';
       }
-    } 
+    }
   }
 
   function js_mostrak81_convenio(chave, erro) {
@@ -669,7 +669,7 @@ if ($oInstit->db21_usasisagua == "t") {
    *   CONTA
    */
   function js_pesquisaConta(lMostra) {
-  
+
     var sFuncao = 'funcao_js=parent.js_mostraSaltes|k13_conta|k13_descr|c61_codigo|db83_conta|db83_codigoopcredito|db83_tipoconta';
     var sPesquisa = 'func_saltesrecurso.php?recurso=0&' + sFuncao + '&data_limite=<?= date("Y-m-d", db_getsession("DB_datausu")) ?>'
 
@@ -710,7 +710,7 @@ if ($oInstit->db21_usasisagua == "t") {
     );
   }
 
-  function js_retornoSaltesOP(oAjax) { 
+  function js_retornoSaltesOP(oAjax) {
     oSaltesOP = eval("(" + oAjax.responseText + ")");
     if(oSaltesOP.op01_sequencial){
         $('op01_numerocontratoopc').value = oSaltesOP.op01_numerocontratoopc;
@@ -720,7 +720,7 @@ if ($oInstit->db21_usasisagua == "t") {
       $('op01_numerocontratoopc').value = '';
       $('op01_dataassinaturacop').value = '';
     }
-     
+
     js_mostrarNotificacaoOP(oSaltesOP);
   }
 
@@ -728,15 +728,15 @@ if ($oInstit->db21_usasisagua == "t") {
     oSaltesConvenio = eval("(" + oAjax.responseText + ")");
     $('c206_objetoconvenio').value = oSaltesConvenio.c206_objetoconvenio.urlDecode();
     $('k81_convenio').value = oSaltesConvenio.c206_sequencial;
-    
-   
+
+
     js_mostrarNotificacaoConvenio(oSaltesConvenio);
   }
 
   function js_preencheSaltes(iCodigoConta, sDescricao, iCodigoRecurso, idb83_codigoopcredito,db83_tipoconta, lErro) {
-   
+
     $tipocontabancaria = db83_tipoconta
-    
+
     $('k81_conta').value = iCodigoConta;
     $('k13_descr').value = sDescricao;
     $('c61_codigo').value = iCodigoRecurso;
@@ -748,23 +748,23 @@ if ($oInstit->db21_usasisagua == "t") {
           if($tipocontabancaria == 2 || $tipocontabancaria == 3){
           $('k81_conta').value = "";
           $('k13_descr').value = "";
-          $('c61_codigo').value = "";  
+          $('c61_codigo').value = "";
           alert("Não é permitida a arrecadação de receitas que não sejam de Juros e Correções Monetárias em contas bancárias do tipo Aplicação ou Poupança.");
           return;
         }
       }
-    }    
     }
-   
-    
+    }
+
+
     var recursoreceita = iCodigoRecurso;
-    
+
     if ($('anoUsu').value >= 2022) {
         if (iCodigoConta != '' & idb83_codigoopcredito != '') {
           js_getSaltesOP(idb83_codigoopcredito);
-        } 
+        }
     }
-    
+
     iCodRecursoConta = $F('c61_codigo').substr(-3);
 
     if ($('estrutural').value.substr(0, 3) == '211') {
@@ -811,9 +811,9 @@ if ($oInstit->db21_usasisagua == "t") {
         $('c206_objetoconvenio').value = '';
       }
     }
-    
+
     if ($('anoUsu').value >= 2022) {
-        
+
         if (recursoreceita == 174 || recursoreceita == 179 || recursoreceita == 190 || recursoreceita == 191) {
           document.getElementById('numerocontrato').style.display = "";
           document.getElementById('datacontrato').style.display = "";
@@ -821,7 +821,7 @@ if ($oInstit->db21_usasisagua == "t") {
             alert('É obrigatório informar o número do contrato da operação de crédito para as receitas de fontes 174,179,190 e 191');
             $('k81_conta').focus();
             $('op01_numerocontratoopc').value = '';
-            $('op01_dataassinaturacop').value = '';            
+            $('op01_dataassinaturacop').value = '';
             return false;
           }
         }
@@ -830,37 +830,37 @@ if ($oInstit->db21_usasisagua == "t") {
           document.getElementById('datacontrato').style.display = "none";
         }
     }
-    
+
     js_mostrarNotificacaoConta();
   }
 
   function js_mostraSaltes(iCodigoConta, sDescricao, iCodigoRecurso, idb_conta, idb83_codigoopcredito,db83_tipoconta) {
-    
-    $tipocontabancaria = 0; 
+
+    $tipocontabancaria = 0;
 
     $('k81_conta').value = iCodigoConta;
     $('k13_descr').value = sDescricao;
     $('c61_codigo').value = iCodigoRecurso;
-        
+
     if ($('anoUsu').value >= 2022){
       $tipocontabancaria = db83_tipoconta
-     
+
      if(typeof $receitaTipo !== "undefined"){
       if($receitaTipo.substr(0, 5) != 41321){
           if($tipocontabancaria == 2 || $tipocontabancaria == 3){
           $('k81_conta').value = "";
           $('k13_descr').value = "";
-          $('c61_codigo').value = "";   
+          $('c61_codigo').value = "";
           alert("Não é permitida a arrecadação de receitas que não sejam de Juros e Correções Monetárias em contas bancárias do tipo Aplicação ou Poupança.");
-          return;  
+          return;
         }
       }
-      }          
+      }
     }
-    
-    
+
+
     var recursoreceita = iCodigoRecurso;
-    
+
     if ($('anoUsu').value >= 2022) {
       if (idb83_codigoopcredito != '' & iCodigoConta != '') {
         js_getSaltesOP(idb83_codigoopcredito);
@@ -868,8 +868,8 @@ if ($oInstit->db21_usasisagua == "t") {
         $('op01_numerocontratoopc').value = '';
         $('op01_dataassinaturacop').value = '';
       }
-    
-     
+
+
       if (recursoreceita == 174 || recursoreceita == 179 || recursoreceita == 190 || recursoreceita == 191) {
         document.getElementById('numerocontrato').style.display = "";
         document.getElementById('datacontrato').style.display = "";
@@ -965,13 +965,13 @@ if ($oInstit->db21_usasisagua == "t") {
   }
 
   function js_mostratabrec(iReceita, sReceita, chave3, chave4, erro, chave5, chave6) {
-        
+
     $receitaTipo =  chave4;
     if($('anoUsu').value >= 2022){
       if(chave4.substr(0, 1) != 4){
         $('k81_receita').value = '';
           alert('Selecione apenas receita do grupo orçamentária');
-          
+
           return;
       }
     }
@@ -983,8 +983,8 @@ if ($oInstit->db21_usasisagua == "t") {
 
     if ($('anoUsu').value >= 2020) {
       if($('k81_conta').value){
-            
-            if($receitaTipo.substr(0, 5) != 41321){ 
+
+            if($receitaTipo.substr(0, 5) != 41321){
               if($tipocontabancaria == 2 || $tipocontabancaria == 3){
                 $('k81_receita').value = "";
                 $('k02_drecei').value = "";
@@ -996,11 +996,11 @@ if ($oInstit->db21_usasisagua == "t") {
               }
             }
           }
-    }  
+    }
 
-   
 
-    
+
+
     if($('anoUsu').value >= 2022 & !$('k81_conta').value){
       $('op01_numerocontratoopc').value = '';
       $('op01_dataassinaturacop').value = '';
@@ -1054,14 +1054,14 @@ if ($oInstit->db21_usasisagua == "t") {
     }
 
     if($('anoUsu').value >= 2022){
-      
+
     function js_mostratabrec1(iReceita, sReceita, chave3, chave4, chave5, chave6) {
-    $receitaTipo =  chave4; 
+    $receitaTipo =  chave4;
     if(chave4.substr(0, 1) != 4){
         alert('Selecione apenas receita do grupo orçamentária');
         return;
     }
-    
+
     $('k81_receita').value = iReceita;
     $('k02_drecei').value = sReceita;
     $('recurso').value = chave3;
@@ -1069,8 +1069,8 @@ if ($oInstit->db21_usasisagua == "t") {
     $('k02_tipo').value = chave5;
 
     if($('k81_conta').value){
-            
-      if($receitaTipo.substr(0, 5) != 41321){ 
+
+      if($receitaTipo.substr(0, 5) != 41321){
         if($tipocontabancaria == 2 || $tipocontabancaria == 3){
           $('k81_receita').value = "";
           $('k02_drecei').value = "";
@@ -1079,7 +1079,7 @@ if ($oInstit->db21_usasisagua == "t") {
           $('k02_tipo').value = "";
         //   $('k81_conta').value = "";
         //   $('k13_descr').value = "";
-        //   $('c61_codigo').value = ""; 
+        //   $('c61_codigo').value = "";
           alert("Não é permitida a arrecadação de receitas que não sejam de Juros e Correções Monetárias em contas bancárias do tipo Aplicação ou Poupança.");
         return;
         }
@@ -1125,7 +1125,7 @@ if ($oInstit->db21_usasisagua == "t") {
         document.getElementById('datacontrato').style.display = "none";
     }
 
-   
+
 
     db_iframe_tabrec.hide();
     js_verificaReceita();
@@ -1143,7 +1143,7 @@ if ($oInstit->db21_usasisagua == "t") {
       $('recurso').value = chave3;
       $('estrutural').value = chave4;
       $('k02_tipo').value = chave5;
-     
+
       if ($('anoUsu').value >= 2022) {
         if ($('estrutural').value.substr(0, 7) == '4121004' || $('estrutural').value.substr(0, 7) == '4721004' || $('estrutural').value.substr(0, 5) == '41215' || $('estrutural').value.substr(0, 5) == '47215') {
           if ($('bAtualiza').value == 0) {
@@ -1171,7 +1171,7 @@ if ($oInstit->db21_usasisagua == "t") {
             }
           }
 
-          
+
 
           db_iframe_tabrec.hide();
           js_verificaReceita();
@@ -1181,7 +1181,7 @@ if ($oInstit->db21_usasisagua == "t") {
           js_mostrarNotificacaoOP();
 
         }
-       
+
 }
 
   /**
@@ -1348,7 +1348,7 @@ if ($oInstit->db21_usasisagua == "t") {
     if ($('anoUsu').value >= 2022) {
       var recursoreceita = $('recurso').value;
       if ($F('op01_dataassinaturacop') == '' || $F('op01_numerocontratoopc') == '') {
-        if (recursoreceita == 174 || recursoreceita == 179 || recursoreceita == 190 || recursoreceita == 191) {        
+        if (recursoreceita == 174 || recursoreceita == 179 || recursoreceita == 190 || recursoreceita == 191) {
           alert('É obrigatório informar o número do contrato da operação de crédito para as receitas de fontes 174,179,190 e 191');
           $('k81_conta').focus();
           return false;
@@ -1418,7 +1418,7 @@ if ($oInstit->db21_usasisagua == "t") {
           }
         }
       }
-      
+
       if (lEmendaParlamentarObrigatoria && $('k81_emparlamentar').value == '') {
         alert("É obrigatório informar o campo: Referente a Emenda Parlamentar.");
         return false;
@@ -1649,14 +1649,14 @@ if ($oInstit->db21_usasisagua == "t") {
 
     //Dados Adicionais
     if (js_isReceitaFundeb()) {
-     
+
       if($('recurso').value =='118'){
            oReceita.k81_valor = js_arredondamentoFundeb($F('k81_valor'), 118);
       }
       if($('recurso').value =='166'){
           oReceita.k81_valor = js_arredondamentoFundeb($F('k81_valor'), 166);
       }
-      
+
     } else {
       oReceita.k81_valor = $F('k81_valor');
     }
@@ -1757,10 +1757,10 @@ if ($oInstit->db21_usasisagua == "t") {
       //Dados Adicionais
       if (js_isReceitaFundeb()) {
         if($('recurso').value =='118'){
-           oReceita.k81_valor = js_arredondamentoFundeb($F('k81_valor'), 119); 
+           oReceita.k81_valor = js_arredondamentoFundeb($F('k81_valor'), 119);
         }
-        if($('recurso').value =='166'){      
-            oReceita.k81_valor = js_arredondamentoFundeb($F('k81_valor'), 167); 
+        if($('recurso').value =='166'){
+            oReceita.k81_valor = js_arredondamentoFundeb($F('k81_valor'), 167);
         }
       } else {
         oReceita.k81_valor = (new Number($F('k81_valor')) * 0.20) * (-1);
@@ -1850,7 +1850,7 @@ if ($oInstit->db21_usasisagua == "t") {
   }
 
   function js_salvarPlanilha() {
-   
+
     if (lMenuAlteracao && !$F('k80_codpla')) {
       alert("Selecione uma planilha para alteração.");
       return false;
@@ -2090,21 +2090,21 @@ if ($oInstit->db21_usasisagua == "t") {
    *
    * @returns {Boolean}
    */
-  if($('anoUsu').value >= 2022){          
-       
+  if($('anoUsu').value >= 2022){
+
     function js_mostrarNotificacaoConta() {
 
       var iContaReceita = $('recurso').value;
       var iConta = $('c61_codigo').value;
       var icontaAux = 0;
-      
-      document.getElementById("incluir").disabled = false; 
+
+      document.getElementById("incluir").disabled = false;
 
       if(iConta.length == 4)
            icontaAux = iConta.substr(1,3);
-        else  
+        else
            icontaAux  = iConta;
-             
+
       if((iContaReceita == 160 && icontaAux== 186) || (iContaReceita == 160 && iConta == 186) || (iContaReceita == 170 && iConta == 100) || (iContaReceita == 119 && iConta == 118) || (iContaReceita == 166 && iConta == 118) || (iContaReceita == 167 && iConta == 118) ||
       (iContaReceita == 166 && iConta == 119) || (iContaReceita == 167 && iConta == 119) || (iContaReceita == 118 && iConta == 119) || (iContaReceita == 101 && iConta == 100) || (iContaReceita == 102 && iConta == 100) ||
       (iContaReceita == 154 && iConta == 159) || (iContaReceita == 154 && iConta == 153) ||(iContaReceita == 161 && iConta == 100) ||(iContaReceita == 160 && iConta == 186) ||
@@ -2113,9 +2113,9 @@ if ($oInstit->db21_usasisagua == "t") {
       (iContaReceita == 154 && icontaAux== 159) || (iContaReceita == 154 && icontaAux== 153) ||(iContaReceita == 161 && icontaAux== 100) ||(iContaReceita == 160 && icontaAux== 186)){
         $('notificacao').setStyle({
               display: 'none'
-            });  
+            });
       }else if(iContaReceita == 105 && iConta == 103 || (iContaReceita == 105 && icontaAux== 103)){
-        
+
         var sMensagem = _M(CAMINHO_MENSAGEM + 'contas_diferentes', {
             ContaReceita: iContaReceita,
             Conta: iConta
@@ -2126,20 +2126,20 @@ if ($oInstit->db21_usasisagua == "t") {
 
           $('notificacao').setStyle({
             display: 'table-row'
-          });        
+          });
           return true;
-      }else{      
+      }else{
       if (!empty(iContaReceita) && !empty(iConta)) {
-       
+
         var sTipoReceita = $('k02_tipo').value;
-      
+
         if(iConta.length == 4)
            icontaAux = iConta.substr(1,3);
-        else  
+        else
            icontaAux  = iConta;
-               
+
         if ((sTipoReceita == 'O') && (icontaAux !== iContaReceita)) {
-          
+
           var sMensagem = _M(CAMINHO_MENSAGEM + 'contas_diferentes', {
             ContaReceita: iContaReceita,
             Conta: iConta
@@ -2152,7 +2152,7 @@ if ($oInstit->db21_usasisagua == "t") {
             display: 'table-row'
           });
           document.getElementById("incluir").disabled = true;
-          
+
           return true;
         }
       }
@@ -2165,13 +2165,13 @@ if ($oInstit->db21_usasisagua == "t") {
     }
   }
   }
-  else{  
+  else{
     function js_mostrarNotificacaoConta() {
 
     var iContaReceita = $('recurso').value;
     var iConta = $('c61_codigo').value;
     var icontaAux = 0;
-      
+
 
     if (!empty(iContaReceita) && !empty(iConta)) {
 
@@ -2179,16 +2179,16 @@ if ($oInstit->db21_usasisagua == "t") {
 
         if(iConta.length == 4)
            icontaAux = iConta.substr(1,3);
-        else  
+        else
            icontaAux  = iConta;
-      
+
            $('notificacao').setStyle({
               display: 'none'
-            });    
+            });
 
       if ((sTipoReceita == 'O') && (icontaAux !== iContaReceita)) {
-       
-         
+
+
 
         var sMensagem = _M(CAMINHO_MENSAGEM + 'contas_diferentes', {
           ContaReceita: iContaReceita,
@@ -2405,7 +2405,7 @@ if ($oInstit->db21_usasisagua == "t") {
       );
 
     } else {
-     
+
       lEmendaParlamentarObrigatoria = (
         (sReceita == '417189911' && sRecurso == '100') ||
         (sReceita == '417189911' && sRecurso == '164') ||
@@ -2481,7 +2481,7 @@ if ($oInstit->db21_usasisagua == "t") {
 
   }
 
-  function js_verificaRegularizaRepasse() { 
+  function js_verificaRegularizaRepasse() {
 
     if ($('anoUsu').value >= 2022) {
       aEstruts = ['4172150', '4172151', '4175150','4171550'];
@@ -2551,36 +2551,36 @@ if ($oInstit->db21_usasisagua == "t") {
 
     let sEstrutural = $('estrutural').value.substr(0, 9);
     let sRecurso = $('recurso').value;
-    let iAno = $('anoUsu').value; 
+    let iAno = $('anoUsu').value;
 
-    if ($('anoUsu').value>2021){     
-      if(sRecurso == '118'){ 
+    if ($('anoUsu').value>2021){
+      if(sRecurso == '118'){
           return (iAno > 2021 && sRecurso == '118' && (sEstrutural == '417515001' || sEstrutural == '417180911')) ? true : false;
       }
-      if(sRecurso == '166'){ 
+      if(sRecurso == '166'){
           return (iAno > 2021 && sRecurso == '166' && (sEstrutural == '417155001' )) ? true : false;
       }
     }else{
-      if(sRecurso == '118'){ 
+      if(sRecurso == '118'){
           return (iAno >= 2021 && sRecurso == '118' && (sEstrutural == '417580111' || sEstrutural == '417180911')) ? true : false;
       }
-      if(sRecurso == '166'){ 
+      if(sRecurso == '166'){
          return (iAno >= 2021 && sRecurso == '166' && (sEstrutural == '417580111' || sEstrutural == '417180911')) ? true : false;
-      }  
+      }
     }
-  } 
+  }
 
   /**
-   * Em arrecadações do fundeb, a receita é desdobrada em duas fontes: 
+   * Em arrecadações do fundeb, a receita é desdobrada em duas fontes:
    * 70% para fonte 118 e 30% para fonte 119.
-   * Em algumas situações a função js_round arredonda os valores causando diferença de 0.01 no valor total da arrecadação. 
+   * Em algumas situações a função js_round arredonda os valores causando diferença de 0.01 no valor total da arrecadação.
    * Essa função verifica se há divergência no valor final, e, caso exista,
    * a diferença é atribuída para fonte 118.
    */
   function js_arredondamentoFundeb(fValor, iTipo) {
 
     if($('recurso').value == '118'){
-    
+
           let fTotal = js_round((new Number(fValor)), 2);
           let fVl118 = js_round((new Number(fValor) * 0.70), 2);
           let fVl119 = js_round((new Number(fValor) * 0.30), 2);
@@ -2590,24 +2590,24 @@ if ($oInstit->db21_usasisagua == "t") {
           if (fDif > 0) {
             fVl118 += fDif;
             fVl119 = js_round((fTotal - fVl118), 2);
-          } else { 
+          } else {
             fVl118 += fDif;
             fVl119 += fDif;
             fVl118 = js_round((fTotal - fVl119), 2);
-          }  
+          }
           return iTipo == 118 ? fVl118 : fVl119;
     }
-    if($('recurso').value == '166'){ 
-       
-          let fTotal = js_round((new Number(fValor)), 2); 
+    if($('recurso').value == '166'){
+
+          let fTotal = js_round((new Number(fValor)), 2);
           let fVl166 = js_round((new Number(fValor) * 0.70), 2);
           let fVl167 = js_round((new Number(fValor) * 0.30), 2);
-        
+
           let fDif = js_round((fTotal - (fVl166 + fVl167)), 2);
-      
+
             if (fDif > 0) {
                 fVl166 += fDif;
-                fVl167 = js_round((fTotal - fVl166), 2);    
+                fVl167 = js_round((fTotal - fVl166), 2);
             } else {
               fVl166 += fDif;
               fVl167 += fDif;
@@ -2616,5 +2616,5 @@ if ($oInstit->db21_usasisagua == "t") {
           return iTipo == 166 ? fVl166 : fVl167;
     }
   }
- 
-</script> 
+
+</script>

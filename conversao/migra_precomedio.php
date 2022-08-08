@@ -1,7 +1,7 @@
 <?php
-//require_once("../libs/db_conn.php");
-require_once("../libs/db_utils.php");
-require_once("../libs/db_stdlib.php");
+//require_once(__DIR__ . "/../libs/db_conn.php");
+require_once(__DIR__ . "/../libs/db_utils.php");
+require_once(__DIR__ . "/../libs/db_stdlib.php");
 
 $DB_SERVIDOR = 'fin07';
 $DB_BASE     = 't68561_canela_patrimonial_v2_3_2';

@@ -761,13 +761,13 @@ class obrasDadosComplementares
     if ($incluir) {
 
       $sSqlCodigo = $oDaoObrasCodigo->sql_query('', 'db151_liclicita', '', 'db151_codigoobra = ' . $this->getCodigoObra() . ' and db151_liclicita not in (' . $this->getLicita() . ')');
-      $rsCodigo = $oDaoObrasCodigo->sql_record($sSqlCodigo);
+      $rsCodigoObra = $oDaoObrasCodigo->sql_record($sSqlCodigo);
 
-      if (pg_num_rows($rsCodigo) > 0) {
+      if (pg_num_rows($rsCodigoObra) > 0) {
 
-        for ($i = 0; $i < pg_numrows($rsCodigo); $i++) {
+        for ($i = 0; $i < pg_numrows($rsCodigoObra); $i++) {
 
-          $iLicitacao = db_utils::fieldsMemory($rsCodigo, $i)->db151_liclicita;
+          $iLicitacao = db_utils::fieldsMemory($rsCodigoObra, $i)->db151_liclicita;
 
           $sSqlSituacaoLicitaold = $oDaoLiclicitasituacao->sql_query('', 'distinct l20_licsituacao', '', 'l20_codigo = ' . $iLicitacao);
           $rsSituacaoLicitaold = $oDaoLiclicitasituacao->sql_record($sSqlSituacaoLicitaold);
@@ -780,12 +780,14 @@ class obrasDadosComplementares
         }
       }
 
+      /*
+       * quando já houver endereco cadastrado e mesmo código de obra, não deve executar o comando de inclusão na tabela obrascodigos
+       */
 
-      if (!$oDaoObrasCodigo->numrows) {
+      if (!pg_num_rows($rsCodigo) > 0) {
         $oDaoObrasCodigo->db151_codigoobra = $this->getCodigoObra();
         $oDaoObrasCodigo->db151_liclicita = $this->getLicita();
-        $oDaoObrasCodigo->incluir();
-
+        $oDaoObrasCodigo->incluir($this->getCodigoObra());
         if ($oDaoObrasCodigo->erro_status == '0') {
           throw new Exception($oDaoObrasCodigo->erro_msg);
         }
@@ -977,7 +979,7 @@ class obrasDadosComplementares
         }
         $oDaoObras->alterar('', $sWhere);
       } else {
-        $oDaoObras->incluir();
+        $oDaoObras->incluir("");
       }
 
       if ($oDaoObras->erro_status == '0') {

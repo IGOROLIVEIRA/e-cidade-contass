@@ -14,19 +14,19 @@ $clquestaoaudit = new cl_questaoaudit;
 $db_botao = false;
 $db_opcao = 33;
 
-if (isset($excluir)) {  
-	
+if (isset($excluir)) {
+
 	$sqlerro = false;
-  
+
   	$clprocessoaudit  = new cl_processoaudit;
   	$sSqlProcAudit    = $clprocessoaudit->sql_query(null, "*", null, "ci03_codtipoquest = {$ci01_codtipo}");
   	$clprocessoaudit->sql_record($sSqlProcAudit);
 
   	if ($clprocessoaudit->numrows > 0) {
-		
+
 		$erro_msg 	= "Não é possível excluir questões de auditoria que estão vinculadas a processos de auditoria!";
 		$sqlerro 	= true;
-		
+
 	}
 
 	if (!$sqlerro) {
@@ -35,27 +35,27 @@ if (isset($excluir)) {
   		$db_opcao = 3;
 
   		$clquestaoaudit->excluir(null, "ci02_codtipo = {$ci01_codtipo} AND ci02_instit = ".db_getsession('DB_instit'));
-		  
+
 		if ( $clquestaoaudit->erro_status == 0 ){
     		$sqlerro = true;
     		$cltipoquestaoaudit->erro_status = 0;
   		}
-		  
-		$erro_msg = $clquestaoaudit->erro_msg; 
-  
+
+		$erro_msg = $clquestaoaudit->erro_msg;
+
   		if (!$sqlerro) {
-			
+
 			$cltipoquestaoaudit->excluir($ci01_codtipo);
 
     		if ( $cltipoquestaoaudit->erro_status == 0 ) {
       			$sqlerro = true;
 			}
-			
-    		$erro_msg = $cltipoquestaoaudit->erro_msg; 
+
+    		$erro_msg = $cltipoquestaoaudit->erro_msg;
   		}
-  
+
 		db_fim_transacao($sqlerro);
-	  
+
 	} else {
 		$cltipoquestaoaudit->erro_status = 0;
 	}
@@ -63,14 +63,14 @@ if (isset($excluir)) {
 } else if (isset($chavepesquisa)) {
 
 	$db_opcao = 3;
-   	$result = $cltipoquestaoaudit->sql_record($cltipoquestaoaudit->sql_query($chavepesquisa)); 
+   	$result = $cltipoquestaoaudit->sql_record($cltipoquestaoaudit->sql_query($chavepesquisa));
    	db_fieldsmemory($result,0);
    	$db_botao = true;
 
    	$sSql = $clquestaoaudit->sql_query_file(null, "*", null, "ci02_codtipo = {$ci01_codtipo} AND ci02_instit = ".db_getsession('DB_instit'));
    	$clquestaoaudit->sql_record($sSql);
 	$iNumQuestoesTipo = $clquestaoaudit->numrows;
-		   
+
 }
 ?>
 <html>
@@ -86,8 +86,8 @@ if (isset($excluir)) {
   <tr>
     <td>&nbsp;</td>
   </tr>
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
 	<?
 	include("forms/db_frmtipoquestaoaudit.php");
@@ -115,7 +115,7 @@ if(isset($chavepesquisa)){
     <script>
         function js_db_libera(){
           parent.document.formaba.questaoauditquestoes.disabled=false;
-          top.corpo.iframe_questaoauditquestoes.location.href='cin1_questaoaudit004.php?db_opcaoal=33&ci01_codtipo=".@$ci01_codtipo."';
+          CurrentWindow.corpo.iframe_questaoauditquestoes.location.href='cin1_questaoaudit004.php?db_opcaoal=33&ci01_codtipo=".@$ci01_codtipo."';
       ";
           if(isset($liberaaba)){
             echo "  parent.mo_camada('questaoauditquestoes');";

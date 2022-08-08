@@ -81,9 +81,9 @@ if (isset ($incluir) && $incluir == true) {
 
 		}
 	}
-	$arr_dados = split("#", $chaves);
+	$arr_dados = explode("#", $chaves);
 	for ($i = 0; $i < count($arr_dados); $i ++) {
-		$info = split("-", $arr_dados[$i]);
+		$info = explode("-", $arr_dados[$i]);
 		$numpre = $info[0];
 		$numpar = $info[1];
 		$tipo = $info[2];

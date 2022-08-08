@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require ("libs/db_stdlib.php");
@@ -47,7 +47,7 @@ function js_emite(){
 	var dtFim = document.form1.dtFim.value;
 	var oSocial = document.form1.oSocial.value;
 	var gFornecimento = document.form1.gFornecimento.value;
-	
+
 	if((codigo == "")&&(dtFim =="")&&(dtInicio=="")){
 		alert('Você deve preencher campo código ou período');
 		return false;
@@ -56,7 +56,7 @@ function js_emite(){
 		dtF = dtFim.split('/');
 		dtInicio = dtIni[2]+'-'+dtIni[1]+'-'+dtIni[0];
 		dtFim = dtF[2]+'-'+dtF[1]+'-'+dtF[0];
-		var vldData = js_diferenca_datas(dtInicio,dtFim,3);		
+		var vldData = js_diferenca_datas(dtInicio,dtFim,3);
 		if (vldData == true ){
 			alert('A data inicial deve ser menor ou igual a data final');
 			document.form1.dtInicio.value = "";
@@ -65,7 +65,7 @@ function js_emite(){
 		}
 		//valida a data e madna no formato do banco
 	}
-		
+
   jan = window.open('com2_certforne002.php?codigo='+codigo+'&dtInicio='+dtInicio+'&dtFim='+dtFim+'&oSocial='+oSocial+'&gForn='+gFornecimento,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
   jan.moveTo(0,0);
   document.form1.dtInicio.value = "";
@@ -74,7 +74,7 @@ function js_emite(){
   document.form1.oSocial.value = 0 ;
   document.form1.gFornecimento.value = 0 ;
 }
-</script>  
+</script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" bgcolor="#cccccc">
@@ -101,13 +101,13 @@ function js_emite(){
          <td>
            <?
            db_input('pc74_codigo', 4, $Ipc74_codigo, true, 'text', 1, " onchange='js_pesquisapc74_codigo(false);'");
-           
+
            ?>
          </td>
       </tr>
       <tr>
       	<td align="right">Período:</td>
-      	<td><? db_inputdata('dtInicio','','','',true,'text',1); ?>	à 
+      	<td><? db_inputdata('dtInicio','','','',true,'text',1); ?>	à
       			<? db_inputdata('dtFim','','','',true,'text',1); ?>
       	</td>
       </tr>
@@ -116,7 +116,7 @@ function js_emite(){
         <td >
         	<?
         	$db_matriz = array("0"=>'Sim',"1"=>"Não");
-         	db_select('oSocial',$db_matriz,TRUE,1); 
+         	db_select('oSocial',$db_matriz,TRUE,1);
          	?>
         </td>
       </tr>
@@ -125,7 +125,7 @@ function js_emite(){
         <td >
         	<?
         	$db_matriz = array("0"=>'Sim',"1"=>"Não");
-         	db_select('gFornecimento',$db_matriz,TRUE,1); 
+         	db_select('gFornecimento',$db_matriz,TRUE,1);
          	?>
         </td>
       </tr>
@@ -138,7 +138,7 @@ function js_emite(){
         <td >&nbsp;</td>
       </tr>
       <tr>
-        <td colspan="2" align = "center"> 
+        <td colspan="2" align = "center">
           <input  name="emite2" id="emite2" type="button" value="Processar" onclick="js_emite();" >
         </td>
       </tr>
@@ -153,18 +153,18 @@ function js_emite(){
 <script>
 function js_pesquisapc74_codigo(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_pcfornecertif','func_pcfornecertifalt.php?funcao_js=parent.js_mostracgm1|pc74_codigo','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_pcfornecertif','func_pcfornecertifalt.php?funcao_js=parent.js_mostracgm1|pc74_codigo','Pesquisa',true);
   }else{
-     if(document.form1.pc74_codigo.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_pcfornecertif','func_pcfornecertifalt.php?pesquisa_chave='+document.form1.pc74_codigo.value+'&funcao_js=parent.js_mostracgm','Pesquisa',false);
+     if(document.form1.pc74_codigo.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_pcfornecertif','func_pcfornecertifalt.php?pesquisa_chave='+document.form1.pc74_codigo.value+'&funcao_js=parent.js_mostracgm','Pesquisa',false);
      }else{
      }
   }
 }
 function js_mostracgm(chave,erro){
-  if(erro==true){ 
-    document.form1.pc74_codigo.focus(); 
-    document.form1.pc74_codigo.value = ''; 
+  if(erro==true){
+    document.form1.pc74_codigo.focus();
+    document.form1.pc74_codigo.value = '';
   }
 }
 function js_mostracgm1(chave1,chave2){

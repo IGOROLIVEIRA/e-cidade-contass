@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -45,10 +45,10 @@ $clprocjur = new cl_procjur();
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 <table height="100%" border="0"  align="center" cellspacing="0" bgcolor="#CCCCCC">
-  <tr> 
-    <td align="center" valign="top"> 
-      <?    
-     
+  <tr>
+    <td align="center" valign="top">
+      <?
+
         $sCampos  = " distinct		 										  ";
         $sCampos .= " v62_sequencial,										  ";
         $sCampos .= " v62_descricao,  										  ";
@@ -57,11 +57,11 @@ $clprocjur = new cl_procjur();
         $sCampos .= " case 		  											  ";
         $sCampos .= "   when v62_situacao = 1 then 'Ativo' else 'Finalizado'  ";
         $sCampos .= " end as v62_situacao	  								  ";
-        
+
         $sSqlProcesso = $clprocjur->sql_query_susp(null,$sCampos,"v62_sequencial"," ar18_sequencial = {$oGet->suspensao}");
- 		
+
         $funcao_js = "js_consultaDetalhes|v62_sequencial";
-        
+
         db_lovrot($sSqlProcesso,50,"()","",$funcao_js,"");
 
       ?>
@@ -72,6 +72,6 @@ $clprocjur = new cl_procjur();
 </html>
 <script>
   function js_consultaDetalhes(iCodProcesso){
-    js_OpenJanelaIframe('top.corpo',"db_iframe_procjur",'arr3_consultadadosprocjur001.php?procjur='+iCodProcesso,'Detalhes da Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo',"db_iframe_procjur",'arr3_consultadadosprocjur001.php?procjur='+iCodProcesso,'Detalhes da Pesquisa',true);
   }
 </script>

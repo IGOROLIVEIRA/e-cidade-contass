@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: educação
@@ -251,12 +251,12 @@ $clrotulo->label("nome");
       </tr>
     </table>
   </fieldset>
-  <input name="<?=( $db_opcao == 1 ? "incluir" : ( $db_opcao == 2 || $db_opcao == 22 ? "alterar" : "excluir" ) )?>" 
-         type="submit" 
-         id="db_opcao" 
-         value="<?=( $db_opcao == 1 ? "Incluir" : ( $db_opcao == 2 || $db_opcao == 22 ? "Alterar" : "Excluir" ) )?>" 
-         <?=( $db_botao == false ? "disabled" : "" )?> 
-         <?=( $db_opcao == 1 ? "onclick='return js_submit();'" : "" )?>  
+  <input name="<?=( $db_opcao == 1 ? "incluir" : ( $db_opcao == 2 || $db_opcao == 22 ? "alterar" : "excluir" ) )?>"
+         type="submit"
+         id="db_opcao"
+         value="<?=( $db_opcao == 1 ? "Incluir" : ( $db_opcao == 2 || $db_opcao == 22 ? "Alterar" : "Excluir" ) )?>"
+         <?=( $db_botao == false ? "disabled" : "" )?>
+         <?=( $db_opcao == 1 ? "onclick='return js_submit();'" : "" )?>
          <?=isset( $incluir ) || isset( $excluir ) ? "style='visibility:hidden;'" : ""?>>
   <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
 </form>
@@ -272,7 +272,7 @@ var oLabelProgressao           = document.createElement( "label" );
 $('mensagemProgressao').appendChild( oLabelProgressao );
 
 function js_pesquisaed34_i_serie( mostra ) {
-  
+
   if ( document.form1.ed102_i_base.value == "" ) {
     alert( _M( sCaminhoMensagens + 'informe_base' ) );
   } else {
@@ -285,9 +285,9 @@ function js_pesquisaed34_i_serie( mostra ) {
     if ( $('etapasProgressao').value != "" ) {
       sSerie += ", " + $('etapasProgressao').value;
     }
-    
+
     js_OpenJanelaIframe(
-                         'top.corpo',
+                         'CurrentWindow.corpo',
                          'db_iframe_serieatest',
                          'func_serieatest.php?curso1='+document.form1.codigocurso.value
                                            +'&curso2='+document.form1.codcursodest.value
@@ -301,19 +301,19 @@ function js_pesquisaed34_i_serie( mostra ) {
 }
 
 function js_mostraserie1( chave1, chave2 ) {
-  
+
   document.form1.ed102_i_serie.value = chave1;
   document.form1.ed11_c_descr.value  = chave2;
   db_iframe_serieatest.hide();
 }
 
 function js_pesquisaed102_i_base( mostra ) {
-  
+
   if ( document.form1.ed102_i_aluno.value == "" ) {
-    
+
     alert( _M( sCaminhoMensagens + 'informe_aluno' ) );
     js_OpenJanelaIframe(
-                         'top.corpo',
+                         'CurrentWindow.corpo',
                          'db_iframe_aluno',
                          'func_alunoatest.php?funcao_js=parent.js_mostraaluno1|ed47_i_codigo|ed47_v_nome|dl_codigoescola'
                                                                             +'|dl_escola|dl_codigocurso|dl_curso'
@@ -322,11 +322,11 @@ function js_pesquisaed102_i_base( mostra ) {
                          true
                        );
   } else {
-    
+
     if ( mostra == true ) {
 
       js_OpenJanelaIframe(
-                           'top.corpo',
+                           'CurrentWindow.corpo',
                            'db_iframe_base',
                            'func_baseatest.php?serie='+document.form1.codigoserie.value
                                             +'&curso='+document.form1.codigocurso.value
@@ -335,11 +335,11 @@ function js_pesquisaed102_i_base( mostra ) {
                            true
                          );
     } else {
-      
+
       if ( document.form1.ed102_i_base.value != '' ) {
 
         js_OpenJanelaIframe(
-                             'top.corpo',
+                             'CurrentWindow.corpo',
                              'db_iframe_base',
                              'func_baseatest.php?serie='+document.form1.codigoserie.value
                                               +'&curso='+document.form1.codigocurso.value
@@ -356,13 +356,13 @@ function js_pesquisaed102_i_base( mostra ) {
 }
 
 function js_mostrabase( chave1, chave2, chave3, erro ) {
-  
+
   document.form1.ed31_c_descr.value  = chave1;
   document.form1.codcursodest.value  = chave2;
   document.form1.nomecursodest.value = chave3;
-  
+
   if ( erro == true ) {
-    
+
     document.form1.ed102_i_base.focus();
     document.form1.ed102_i_base.value  = '';
     document.form1.ed102_i_serie.value = '';
@@ -373,7 +373,7 @@ function js_mostrabase( chave1, chave2, chave3, erro ) {
 }
 
 function js_mostrabase1( chave1, chave2, chave3, chave4 ) {
-  
+
   document.form1.ed102_i_base.value  = chave1;
   document.form1.ed31_c_descr.value  = chave2;
   document.form1.codcursodest.value  = chave3;
@@ -384,12 +384,12 @@ function js_mostrabase1( chave1, chave2, chave3, chave4 ) {
 }
 
 function js_pesquisaed102_i_calendario( mostra ) {
-  
+
   if ( document.form1.ed102_i_aluno.value == "" ) {
-    
+
     alert( _M( sCaminhoMensagens + 'informe_aluno_calendario' ) );
     js_OpenJanelaIframe(
-                         'top.corpo',
+                         'CurrentWindow.corpo',
                          'db_iframe_aluno',
                          'func_alunoatest.php?funcao_js=parent.js_mostraaluno1|ed47_i_codigo|ed47_v_nome|dl_codigoescola'
                                                                             +'|dl_escola|dl_codigocurso|dl_curso'
@@ -398,11 +398,11 @@ function js_pesquisaed102_i_calendario( mostra ) {
                          true
                        );
   } else {
-    
+
     if ( mostra == true ) {
 
       js_OpenJanelaIframe(
-                           'top.corpo',
+                           'CurrentWindow.corpo',
                            'db_iframe_calendario',
                            'func_calendarioatest.php?anocal='+document.form1.ed102_i_aluno.value
                                                   +'&funcao_js=parent.js_mostracalendario1|ed52_i_codigo|ed52_c_descr'
@@ -415,29 +415,29 @@ function js_pesquisaed102_i_calendario( mostra ) {
 }
 
 function js_mostracalendario1( chave1, chave2, chave3, chave4, chave5 ) {
-  
+
   situacaoaluno = document.form1.situacao.value.replace(/^\s+|\s+$/g,'');
-  
-  if (    Number( document.form1.anocal.value ) != Number( chave3 ) 
-       && situacaoaluno != "APROVADO" 
-       && situacaoaluno != "APROVADO PARCIAL" 
-       && situacaoaluno != "REPETENTE" 
-       && situacaoaluno != "EVADIDO" 
+
+  if (    Number( document.form1.anocal.value ) != Number( chave3 )
+       && situacaoaluno != "APROVADO"
+       && situacaoaluno != "APROVADO PARCIAL"
+       && situacaoaluno != "REPETENTE"
+       && situacaoaluno != "EVADIDO"
        && situacaoaluno != "CANCELADO" ) {
 
     var oMensagem             = new Object();
         oMensagem.iAno        = document.form1.anocal.value;
         oMensagem.iCalendario = chave3;
-        
+
     alert( _M( sCaminhoMensagens + 'aluno_pertence_calendario_diferente', oMensagem ) );
-    
+
     document.form1.ed52_c_descr.value       = '';
     document.form1.ed52_d_inicio.value      = '';
     document.form1.ed52_d_fim.value         = '';
     document.form1.ed102_i_calendario.value = '';
     document.form1.ed102_i_calendario.focus();
   } else {
-    
+
     document.form1.ed102_i_calendario.value = chave1;
     document.form1.ed52_c_descr.value       = chave2;
     document.form1.ed52_d_inicio.value      = chave4.substr(8,2) + "/" + chave4.substr(5,2) + "/" + chave4.substr(0,4);
@@ -447,12 +447,12 @@ function js_mostracalendario1( chave1, chave2, chave3, chave4, chave5 ) {
 }
 
 function js_pesquisaed102_i_turno( mostra ) {
-  
+
   if ( document.form1.ed102_i_aluno.value == "" ) {
-    
+
     alert( _M( sCaminhoMensagens + 'informe_aluno_turno' ) );
     js_OpenJanelaIframe(
-                         'top.corpo',
+                         'CurrentWindow.corpo',
                          'db_iframe_aluno',
                          'func_alunoatest.php?funcao_js=parent.js_mostraaluno1|ed47_i_codigo|ed47_v_nome|dl_codigoescola'
                                                                             +'|dl_escola|dl_codigocurso|dl_curso'
@@ -461,10 +461,10 @@ function js_pesquisaed102_i_turno( mostra ) {
                          true
                        );
   } else if( document.form1.ed102_i_base.value == "" ) {
-    
+
     alert( _M( sCaminhoMensagens + 'informe_base_curricular_turno' ) );
     js_OpenJanelaIframe(
-                         'top.corpo',
+                         'CurrentWindow.corpo',
                          'db_iframe_base',
                          'func_baseatest.php?serie='+document.form1.codigoserie.value
                                           +'&curso='+document.form1.codigocurso.value
@@ -473,11 +473,11 @@ function js_pesquisaed102_i_turno( mostra ) {
                          true
                        );
   } else {
-    
+
     if ( mostra == true ) {
-      
+
       js_OpenJanelaIframe(
-                           'top.corpo',
+                           'CurrentWindow.corpo',
                            'db_iframe_turno',
                            'func_turnoturma.php?curso='+document.form1.codcursodest.value
                                              +'&funcao_js=parent.js_mostraturno1|ed15_i_codigo|ed15_c_nome',
@@ -485,11 +485,11 @@ function js_pesquisaed102_i_turno( mostra ) {
                            true
                          );
     } else {
-      
+
       if ( document.form1.ed102_i_turno.value != '' ) {
-        
+
         js_OpenJanelaIframe(
-                             'top.corpo',
+                             'CurrentWindow.corpo',
                              'db_iframe_turno',
                              'func_turnoturma.php?curso='+document.form1.codigocurso.value
                                                +'&pesquisa_chave='+document.form1.ed102_i_turno.value
@@ -505,29 +505,29 @@ function js_pesquisaed102_i_turno( mostra ) {
 }
 
 function js_mostraturno( chave, erro ) {
-  
+
   document.form1.ed15_c_nome.value = chave;
-  
+
   if ( erro == true ) {
-    
+
     document.form1.ed102_i_turno.focus();
     document.form1.ed102_i_turno.value = '';
   }
 }
 
 function js_mostraturno1( chave1, chave2 ) {
-  
+
   document.form1.ed102_i_turno.value = chave1;
   document.form1.ed15_c_nome.value   = chave2;
   db_iframe_turno.hide();
 }
 
 function js_pesquisaed102_i_aluno( mostra ) {
-  
+
   if ( mostra == true ) {
 
     js_OpenJanelaIframe(
-                         'top.corpo',
+                         'CurrentWindow.corpo',
                          'db_iframe_aluno',
                          'func_alunoatest.php?funcao_js=parent.js_mostraaluno1|ed47_i_codigo|ed47_v_nome|dl_codigoescola'
                                                                             +'|dl_escola|dl_codigocurso|dl_curso'
@@ -540,7 +540,7 @@ function js_pesquisaed102_i_aluno( mostra ) {
 }
 
 function js_mostraaluno1( chave1, chave2, chave3, chave4, chave5, chave6, chave7, chave8, chave9, chave10, chave11 ) {
-  
+
   document.form1.ed102_i_aluno.value      = chave1;
   document.form1.ed47_v_nome.value        = chave2;
   document.form1.codigoescola.value       = chave3;
@@ -571,7 +571,7 @@ function js_mostraaluno1( chave1, chave2, chave3, chave4, chave5, chave6, chave7
 function js_pesquisa() {
 
   js_OpenJanelaIframe(
-                       'top.corpo',
+                       'CurrentWindow.corpo',
                        'db_iframe_atestvaga',
                        'func_atestvaga.php?funcao_js=parent.js_preenchepesquisa|ed102_i_codigo',
                        'Pesquisa',
@@ -580,7 +580,7 @@ function js_pesquisa() {
 }
 
 function js_preenchepesquisa( chave ) {
-  
+
   db_iframe_atestvaga.hide();
   <?
   if ( $db_opcao != 1 ) {
@@ -590,27 +590,27 @@ function js_preenchepesquisa( chave ) {
 }
 
 function js_submit(){
-  
+
   if ( document.form1.ed102_d_data.value == "" ) {
-    
+
     alert( _M( sCaminhoMensagens + 'informe_data_atestado' ) );
-    
+
     document.form1.ed102_d_data.focus();
     document.form1.ed102_d_data.style.backgroundColor = '#99A9AE';
     return false;
   } else {
-    
+
     datamat   = document.form1.datamatricula.value;
     dataatest = document.form1.ed102_d_data_ano.value + "-" + document.form1.ed102_d_data_mes.value + "-"+document.form1.ed102_d_data_dia.value;
-    
+
     if ( document.form1.ed52_d_inicio.value != "" ) {
-      
+
       dataini = document.form1.ed52_d_inicio.value.substr(6,4) + "-" + document.form1.ed52_d_inicio.value.substr(3,2) + "-"+document.form1.ed52_d_inicio.value.substr(0,2);
       datafim = document.form1.ed52_d_fim.value.substr(6,4) + "-" + document.form1.ed52_d_fim.value.substr(3,2) + "-"+document.form1.ed52_d_fim.value.substr(0,2);
       check   = js_validata(dataatest,dataini,datafim);
-      
+
       if ( check == false ) {
-        
+
         data_ini = dataini.substr(8,2) + "/" + dataini.substr(5,2) + "/" + dataini.substr(0,4);
         data_fim = datafim.substr(8,2) + "/" + datafim.substr(5,2) + "/" + datafim.substr(0,4);
 
@@ -618,29 +618,29 @@ function js_submit(){
             oMensagem.iDataInicial = data_ini;
             oMensagem.iDataFinal   = data_fim;
         alert( _M( sCaminhoMensagens + 'data_atestado_fora_periodo', oMensagem ) );
-        
+
         document.form1.ed102_d_data.focus();
         document.form1.ed102_d_data.style.backgroundColor = '#99A9AE';
         return false;
       }
     }
-    
+
     if ( datamat != "" ) {
-      
+
       datamat   = datamat.substr(6,4) + '' + datamat.substr(3,2) + '' + datamat.substr(0,2);
       dataatest = dataatest.substr(0,4) + '' + dataatest.substr(5,2) + '' + dataatest.substr(8,2);
-      
+
       if ( parseInt( datamat ) > parseInt( dataatest ) ) {
-        
+
         alert( _M( sCaminhoMensagens + 'data_atestado_menor_data_matricula' ) );
-        
+
         document.form1.ed102_d_data.focus();
         document.form1.ed102_d_data.style.backgroundColor = '#99A9AE';
         return false;
       }
     }
   }
-  
+
   document.form1.db_opcao.style.visibility = "hidden";
   return true;
 }
@@ -682,7 +682,7 @@ function retornoVerificaExistenciaProgressao( oResponse ) {
     oRetorno.aProgressoes.each(function( oProgressao, iSeq ) {
 
       aEtapas.push( oProgressao.iEtapa );
-      
+
       sMensagem += ' &nbsp;&nbsp; Etapa: ' + oProgressao.sEtapa.urlDecode();
       sMensagem += ' - Disciplina: ' + oProgressao.sDisciplina.urlDecode();
       sMensagem += ' - Ensino: ' + oProgressao.sEnsino.urlDecode();

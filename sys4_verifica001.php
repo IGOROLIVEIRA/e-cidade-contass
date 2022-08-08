@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -33,7 +33,7 @@ include("libs/db_usuariosonline.php");
 $rstab = pg_exec("select d.codmod,d.nomemod,m.codarq,a.nomearq,a.tipotabela
                   from   db_sysarquivo a
                          inner join db_sysarqmod m on a.codarq = m.codarq
-                         inner join db_sysmodulo d on d.codmod = m.codmod 
+                         inner join db_sysmodulo d on d.codmod = m.codmod
 			 where ativo is true
 	          order by nomemod,nomearq");
 
@@ -64,12 +64,12 @@ function mo_camada(camada){
 }
 function valida_arquivo(){
     if (document.form1.arquivo.value == ""){
-       alert('Selecione um arquivo!'); 
+       alert('Selecione um arquivo!');
        return false;
     }else{
 
-       js_OpenJanelaIframe('top.corpo','db_iframe_modulo','sys4_verifica002.php?qual_arquivo='+document.form1.arquivo.value+'&tipodif='+document.form1.tipodif.value,'Verifica Estrutura',true);
-      
+       js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_modulo','sys4_verifica002.php?qual_arquivo='+document.form1.arquivo.value+'&tipodif='+document.form1.tipodif.value,'Verifica Estrutura',true);
+
        return true
     }
 }
@@ -77,7 +77,7 @@ function valida_modulo(tipo){
 
     if (tipo == 1) {
       if (document.form1.modulos.value == "") {
-	 alert('Selecione um módulo!'); 
+	 alert('Selecione um módulo!');
 	 return false;
       }
     } else {
@@ -86,7 +86,7 @@ function valida_modulo(tipo){
       }
     }
 
-    js_OpenJanelaIframe('top.corpo','db_iframe_modulo','sys4_verifica002.php?qual_modulo='+document.form1.modulos.value+'&tipodif='+document.form1.tipodif.checked+'&tipo='+tipo,'Verifica Estrutura',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_modulo','sys4_verifica002.php?qual_modulo='+document.form1.modulos.value+'&tipodif='+document.form1.tipodif.checked+'&tipo='+tipo,'Verifica Estrutura',true);
     return true;
 }
 function js_marca(obj){
@@ -101,7 +101,7 @@ function js_marca(obj){
   document.getElementById('arqproc').value = obj.name;
 
 }
-	
+
 </script>
 <style type="text/css">
 .tabela {border:1px solid black; top:25px; left:150}
@@ -127,17 +127,17 @@ function js_marca(obj){
 
   <tr>
      <td height=25>&nbsp;</td>
-  </tr>		
+  </tr>
 </table>
 <form method="post" name="form1" >
   <table border="2" cellspacing="0" cellpadding="0" bgcolor="#cccccc" style='border:1px solid black'>
-  <tr> 
+  <tr>
      <td colspan=4 align='center' style='border-bottom:1px solid black'><font size='4'><b>Módulos</b></font></td>
   </tr>
   <tr>
   <td colspan=2>
- <? 
-   $rsmod = pg_exec("select m.codmod,m.nomemod 
+ <?
+   $rsmod = pg_exec("select m.codmod,m.nomemod
      	                from   db_sysmodulo m
 	               	       inner join db_sysarqmod s on s.codmod = m.codmod
 			       where ativo is true
@@ -145,7 +145,7 @@ function js_marca(obj){
    	                order by nomemod");
       echo  "<select  name='modulos' size='20' onchange=\"mo_camada(document.form1.modulos.value);\">";
      for ($i = 0;$i < pg_numrows($rsmod); $i++) {
-          echo "<option value='".trim(pg_result($rsmod,$i,"codmod"))."'>".trim(pg_result($rsmod,$i,"nomemod"))."</option>\n";  
+          echo "<option value='".trim(pg_result($rsmod,$i,"codmod"))."'>".trim(pg_result($rsmod,$i,"nomemod"))."</option>\n";
       }
  ?>
   </select></td></tr>
@@ -156,10 +156,10 @@ function js_marca(obj){
   //define quantos checkboxes iram ficar por linha da tabela.
    $quebratab = 1;
    while ($j < pg_numrows($rstab)){
-      db_fieldsmemory($rstab,$j); 
+      db_fieldsmemory($rstab,$j);
       if ($modulo == $nomemod){
 	if ($quebratab == 4){
-            $quebratab = 1;	
+            $quebratab = 1;
             echo "</tr><tr>";
         }else{
             $quebratab++;
@@ -177,7 +177,7 @@ function js_marca(obj){
 	       <td align='center' bgcolor='blue' style='border-bottom:1px solid black'><font size='2' color='white'><b>Parâmetro</b></font></td>
 	       <td align='center' bgcolor='red' style='border-bottom:1px solid black'><font size='2' color='white'><b>Dependência</b></font></td>
 	       </tr>";
-	 
+
          echo "<tr>\n<td width=135 ><input type='checkbox' name='$nomearq' id='id_$nomearq' value='".$codarq."' onclick=\"js_marca(this)\"><font color='".($tipotabela=='2'?'red':($tipotabela=='0'?'green':'blue'))."'><label for='id_$nomearq'><b>".$nomearq."</b></label></font></td>\n";
      }
    $modulo = $nomemod;
@@ -185,10 +185,10 @@ function js_marca(obj){
    }
     echo "</tr>";
 echo "</table>";
-   echo "</div>";     
-        
+   echo "</div>";
 
-  ?>      
+
+  ?>
   <tr>
      <td colspan=2 align='center'>
      <input type="button"   name="b_modulo"       value="Processar módulo"  class="input" onclick="valida_modulo(1)"><br>
@@ -201,12 +201,12 @@ echo "</table>";
   </tr>
   </table>
 
-  
+
 </td>
 <td>
 <?
   db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
 ?>
-  </form> 
+  </form>
 </body>
 </html>

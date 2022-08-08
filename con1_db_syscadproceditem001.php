@@ -50,7 +50,7 @@ $cldb_syscadproceditem->id_item = $id_item;
 if(isset($incluir) || isset($alterar)){
   if($sqlerro==false){
     db_inicio_transacao();
-    $itens = split("-",$itens);
+    $itens = explode("-",$itens);
 		if( count($itens) > 0 ){
 		  for($i=0;$i<count($itens);$i++){
 			  if($itens[$i]==null)

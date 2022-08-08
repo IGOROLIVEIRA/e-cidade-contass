@@ -114,11 +114,11 @@ function js_AbreJanelaRelatorio(iTipoRelatorio) {
 function js_pesquisaob04_codobra(mostra) {
 
   if(mostra == true){
-    js_OpenJanelaIframe('top.corpo', 'db_iframe_obrasalvara', 'func_obrasalvara.php?funcao_js=parent.js_mostratermoalvara1|ob04_codobra|ob01_nomeobra', 'Pesquisa', true);
+    js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_obrasalvara', 'func_obrasalvara.php?funcao_js=parent.js_mostratermoalvara1|ob04_codobra|ob01_nomeobra', 'Pesquisa', true);
   }else{
 
     if(document.form1.ob04_codobra.value != '') {
-      js_OpenJanelaIframe('top.corpo', 'db_iframe_obrasalvara', 'func_obrasalvara.php?pesquisa_chave=' + document.form1.ob04_codobra.value + '&funcao_js=parent.js_mostratermoalvara', 'Pesquisa', false);
+      js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_obrasalvara', 'func_obrasalvara.php?pesquisa_chave=' + document.form1.ob04_codobra.value + '&funcao_js=parent.js_mostratermoalvara', 'Pesquisa', false);
     }
   }
 }

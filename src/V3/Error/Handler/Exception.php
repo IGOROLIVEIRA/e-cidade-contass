@@ -8,17 +8,21 @@ use \ECidade\V3\Error\Entity;
 use \ECidade\V3\Extension\Registry;
 use \ECidade\V3\Error\Renderer;
 
-class Exception implements HandlerInterface {
+class Exception implements HandlerInterface
+{
 
-  public static function register() {
+  public static function register()
+  {
     return set_exception_handler(array(__CLASS__, 'handle'));
   }
 
-  public static function handle(PHPException $exception) {
+  public static function handle($exception)
+  {
 
     $entity = EntityFactory::createFromException($exception);
 
-    $message = sprintf("Uncaught exception '%s' with message '%s' in %s on line %d",
+    $message = sprintf(
+      "Uncaught exception '%s' with message '%s' in %s on line %d",
       get_class($exception),
       $entity->getMessage(),
       $entity->getFile(),
@@ -33,5 +37,4 @@ class Exception implements HandlerInterface {
 
     return $entity;
   }
-
 }

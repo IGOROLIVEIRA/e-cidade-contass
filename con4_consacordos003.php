@@ -386,8 +386,8 @@ db_app::import("configuracao.DBDepartamento");
             }
             if ($clAcordo->getTipoOrigem() ==  "5" || $clAcordo->getTipoOrigem() ==  "8" || $clAcordo->getTipoOrigem() ==  "9") {
                 $oTabDetalhes->add(
-                    "Licitação Realizada por outros Órgãos",
-                    "Licitação Realizada por outros Órgãos",
+                    "Licitação Realizada por outros órgãos",
+                    "Licitação Realizada por outros órgãos",
                     "con4_consacordosdetalhes001.php?ac16_sequencial={$oGet->ac16_sequencial}&exec=licrealizadaoutrosorgaos"
                 );
             }
@@ -404,7 +404,7 @@ db_app::import("configuracao.DBDepartamento");
                 "con4_consacordosdetalhes001.php?ac16_sequencial={$oGet->ac16_sequencial}&exec=rescisoes"
             );
 
-            //    $oTabDetalhes->add("paralisacoes", "Paralisações",
+            //    $oTabDetalhes->add("paralisacoes", "Paralisaï¿½ï¿½es",
             //      "con4_consacordosdetalhes001.php?ac16_sequencial={$oGet->ac16_sequencial}&exec=paralisacoes");
 
             $oTabDetalhes->add(
@@ -467,7 +467,7 @@ db_app::import("configuracao.DBDepartamento");
         var iWidthGrid = 790;
         var iWheigthGrid = 330;
 
-        oWindowGridDetalhesAditamento = new windowAux('wndGridDetalhesAditamento', 'Ítens do Aditamento ',
+        oWindowGridDetalhesAditamento = new windowAux('wndGridDetalhesAditamento', 'itens do Aditamento ',
             iWidthGrid, iWheigthGrid);
 
         sContentGridAditamento = "<div  id='ctnMessageBoardRua' style='text-align:center;padding:2px;width:99%;'>";
@@ -494,7 +494,7 @@ db_app::import("configuracao.DBDepartamento");
 
         oGrvDetalhesAditamento.setCellAlign(new Array('right', 'left', 'right', 'right', 'right', 'right'));
 
-        oGrvDetalhesAditamento.setHeader(new Array('Código', 'Descrição', 'Quantidade', 'Unidade', 'Valor Unitário',
+        oGrvDetalhesAditamento.setHeader(new Array('Código', 'Desccrição', 'Quantidade', 'Unidade', 'Valor Unitário',
             'Valor Total'));
         oGrvDetalhesAditamento.setHeight(230);
 
@@ -535,19 +535,19 @@ db_app::import("configuracao.DBDepartamento");
     }
 
     function js_consultaEmpenho(iNumeroEmpenho) {
-        js_OpenJanelaIframe('top.corpo', 'db_iframe_empempenho001', 'func_empempenho001.php?e60_numemp=' + iNumeroEmpenho, 'Pesquisa Empenho', true);
+        js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_empempenho001', 'func_empempenho001.php?e60_numemp=' + iNumeroEmpenho, 'Pesquisa Empenho', true);
     }
 
     function js_consultaLicitacao(iCodigoLicitacao) {
-        js_OpenJanelaIframe('top.corpo', 'db_iframe_infolic', 'lic3_licitacao002.php?l20_codigo=' + iCodigoLicitacao, 'Pesquisa Licitação', true);
+        js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_infolic', 'lic3_licitacao002.php?l20_codigo=' + iCodigoLicitacao, 'Pesquisa Licitaï¿½ï¿½o', true);
     }
 
     function js_consultaLicitacaooutroorgao(iCodigoLicitacao) {
-        js_OpenJanelaIframe('top.corpo', 'db_iframe_infolic', 'lic3_licitacao002.php?l20_codigo=' + iCodigoLicitacao, 'Pesquisa Licitação', true);
+        js_OpenJanelaIframe('top.corpo', 'db_iframe_infolic', 'lic3_licitacao002.php?l20_codigo=' + iCodigoLicitacao, 'Pesquisa Licitaï¿½ï¿½o', true);
     }
 
     function js_consultaProcessoCompras(iCodigoProcesso) {
-        js_OpenJanelaIframe('top.corpo', 'db_iframe_pesquisa_processo', 'com3_pesquisaprocessocompras003.php?pc80_codproc=' + iCodigoProcesso, 'Pesquisa Processo de Compras', true);
+        js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_pesquisa_processo', 'com3_pesquisaprocessocompras003.php?pc80_codproc=' + iCodigoProcesso, 'Pesquisa Processo de Compras', true);
     }
 
     function js_consultaAditamento(iCodAcordo, iCodAditamento, iCodAditamentoAnterior) {

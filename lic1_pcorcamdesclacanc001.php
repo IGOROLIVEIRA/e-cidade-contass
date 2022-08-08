@@ -44,7 +44,7 @@ if (isset($coditens) && trim($coditens) != ""){
 
      db_inicio_transacao();
 
-     $vetor_itens = split(",",$coditens);
+     $vetor_itens = explode(",",$coditens);
      for($i = 0; $i < count($vetor_itens); $i++){
           $clpcorcamdescla->excluir($vetor_itens[$i]);  
 

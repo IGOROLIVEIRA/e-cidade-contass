@@ -110,8 +110,8 @@
    $head5="QUEBRA POR CGM/PROCESSO/ANDAMENTOS";
  }  
  
-  list($a1,$m1,$d1) = split("-",$data1);
-  list($a2,$m2,$d2) = split("-",$data2);
+  list($a1,$m1,$d1) = explode("-",$data1);
+  list($a2,$m2,$d2) = explode("-",$data2);
  $head7 = "Periodo:  $d1/$m1/$a1   à   $d2/$m2/$a2 "; 
  $pdf->open();
  $pdf->addpage('P');

@@ -1,28 +1,28 @@
 <?PHP
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: contabilidade
@@ -256,7 +256,7 @@ db_input("c78_chave", 10, "", true, 'text', $db_opcao, "");
       </td>
       <td>
         <?php
-        
+
         db_input('iDocumento', 10, $Ic69_debito, true, 'text', $db_opcao, "onchange='js_pesquisaDocumento(false)'");
         db_input('sDocumento', 50, null, true, 'text', 3, "js_pesquisaDocumento(false)");
 		?>
@@ -551,10 +551,10 @@ if (!isset($consulta)) {
 
  function js_pesquisac69_codhist(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_conhist','func_conhist.php?funcao_js=parent.js_mostraconhist1|c50_codhist|c50_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_conhist','func_conhist.php?funcao_js=parent.js_mostraconhist1|c50_codhist|c50_descr','Pesquisa',true);
   }else{
      if(document.form1.c69_codhist.value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_conhist','func_conhist.php?pesquisa_chave='+document.form1.c69_codhist.value+'&funcao_js=parent.js_mostraconhist','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_conhist','func_conhist.php?pesquisa_chave='+document.form1.c69_codhist.value+'&funcao_js=parent.js_mostraconhist','Pesquisa',false);
      }else{
        document.form1.c50_descr.value = '';
      }
@@ -576,10 +576,10 @@ function js_mostraconhist1(chave1,chave2) {
 // conta debito
 function js_pesquisac69_debito(mostra){
   if(mostra==true){
-     js_OpenJanelaIframe('top.corpo','db_iframe_conplanoexeDebito','func_conplanoexelanc.php?lContaCorrente=true&dataret='+document.form1.c70_data_ano.value+'-'+document.form1.c70_data_mes.value+'-'+document.form1.c70_data_dia.value+'&funcao_js=parent.js_mostra_debito|c62_reduz|c60_descr','Pesquisa',true);
+     js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_conplanoexeDebito','func_conplanoexelanc.php?lContaCorrente=true&dataret='+document.form1.c70_data_ano.value+'-'+document.form1.c70_data_mes.value+'-'+document.form1.c70_data_dia.value+'&funcao_js=parent.js_mostra_debito|c62_reduz|c60_descr','Pesquisa',true);
   }else{
      if(document.form1.c69_debito.value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_conplanoexeDebito','func_conplanoexelanc.php?lContaCorrente=true&dataret='+document.form1.c70_data_ano.value+'-'+document.form1.c70_data_mes.value+'-'+document.form1.c70_data_dia.value+'&pesquisa_chave='+document.form1.c69_debito.value+'&funcao_js=parent.js_mostra_debito2','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_conplanoexeDebito','func_conplanoexelanc.php?lContaCorrente=true&dataret='+document.form1.c70_data_ano.value+'-'+document.form1.c70_data_mes.value+'-'+document.form1.c70_data_dia.value+'&pesquisa_chave='+document.form1.c69_debito.value+'&funcao_js=parent.js_mostra_debito2','Pesquisa',false);
      }else{
        document.form1.c69_debito.value = '';
      }
@@ -606,10 +606,10 @@ function js_mostra_debito2(chave1,erro,chave2,chave3){
 // inicio credito
 function js_pesquisac69_credito(mostra){
   if(mostra==true){
-     js_OpenJanelaIframe('top.corpo','db_iframe_conplanoexe','func_conplanoexelanc.php?lContaCorrente=true&dataret='+document.form1.c70_data_ano.value+'-'+document.form1.c70_data_mes.value+'-'+document.form1.c70_data_dia.value+'&funcao_js=parent.js_mostra_credito|c62_reduz|c60_descr','Pesquisa',true);
+     js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_conplanoexe','func_conplanoexelanc.php?lContaCorrente=true&dataret='+document.form1.c70_data_ano.value+'-'+document.form1.c70_data_mes.value+'-'+document.form1.c70_data_dia.value+'&funcao_js=parent.js_mostra_credito|c62_reduz|c60_descr','Pesquisa',true);
   }else{
      if(document.form1.c69_credito.value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_conplanoexe','func_conplanoexelanc.php?lContaCorrente=true&dataret='+document.form1.c70_data_ano.value+'-'+document.form1.c70_data_mes.value+'-'+document.form1.c70_data_dia.value+'&pesquisa_chave='+document.form1.c69_credito.value+'&funcao_js=parent.js_mostra_credito2','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_conplanoexe','func_conplanoexelanc.php?lContaCorrente=true&dataret='+document.form1.c70_data_ano.value+'-'+document.form1.c70_data_mes.value+'-'+document.form1.c70_data_dia.value+'&pesquisa_chave='+document.form1.c69_credito.value+'&funcao_js=parent.js_mostra_credito2','Pesquisa',false);
      }else{
        document.form1.c69_credito.value = '';
      }
@@ -634,7 +634,7 @@ function js_mostra_credito2(chave1,erro,chave2,chave3){
 // fim credito
 
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_conlancamval','func_conlancamval.php?funcao_js=parent.js_preenchepesquisa|c69_sequen','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_conlancamval','func_conlancamval.php?funcao_js=parent.js_preenchepesquisa|c69_sequen','Pesquisa',true);
 }
 
 function js_preenchepesquisa(chave){

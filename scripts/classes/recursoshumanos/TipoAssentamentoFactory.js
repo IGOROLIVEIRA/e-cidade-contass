@@ -17,14 +17,28 @@
   TipoAssentamentoFactory.create = function (sTipoAssentamento, oParametrosAdicionais) {
 
     var oInstance;
-    switch(sTipoAssentamento) {
 
+    switch(sTipoAssentamento.toLowerCase().trim()) {
+
+      case 'substituição':
       case 'substituicao':
+
         require_once("scripts/classes/recursoshumanos/TipoAssentamentoSubstituicao.js");
         oInstance = new TipoAssentamentoSubstituicao();
-        
         if (oParametrosAdicionais &&  oParametrosAdicionais.matricula_servidor_substituido ) {
           oInstance.setServidorSubstituido(oParametrosAdicionais.matricula_servidor_substituido,  oParametrosAdicionais.nome_servidor_substituido);
+        }
+        break;
+
+      case 'rra':
+        require_once("scripts/classes/recursoshumanos/TipoAssentamentoRRA.js");
+        oInstance = new TipoAssentamentoRRA();
+
+        if (oParametrosAdicionais) {
+          oInstance.setValorTotalDevido (oParametrosAdicionais.valor_total_devido);
+          oInstance.setNumeroDeMeses    (oParametrosAdicionais.numero_meses);
+          oInstance.setEncargosJudiciais(oParametrosAdicionais.encargos_judiciais);
+          oInstance.setCaminhoFormulario();
         }
         break;
 
@@ -52,8 +66,8 @@
         throw 'Erro ao buscar os dados';
       }
 
-      var oAssentamento = oResponse.oAssentamento;
-      oRetorno      = TipoAssentamentoFactory.create( oAssentamento.natureza, oAssentamento );
+      var oAssentamento = JSON.parse(oResponse.oAssentamento);
+      oRetorno          = TipoAssentamentoFactory.create( oAssentamento.natureza, oAssentamento );
     });
 
     oAjax.setMessage("Buscando dados do assentamento...");
@@ -73,7 +87,7 @@
         throw 'Erro ao buscar os dados';
       }
 
-      oRetorno      = TipoAssentamentoFactory.create(oResponse.natureza);
+      oRetorno      = TipoAssentamentoFactory.create(oResponse.natureza.urlDecode());
     });
 
     oAjax.setMessage("Buscando dados do assentamento...");

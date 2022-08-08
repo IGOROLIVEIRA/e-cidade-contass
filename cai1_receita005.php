@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -234,12 +234,12 @@ if((isset($chavepesquisa) || $encontroureceita == true) || (isset($alterar) && $
             parent.document.formaba.tabrec.disabled=false;
 						parent.document.formaba.tabrecregrasjm.disabled=false;
 						parent.document.formaba.tabrecdepto.disabled=false;
-            top.corpo.iframe_tabrecregrasjm.location.href='cai1_receitaregrasjm001.php?k04_receit=".@$k02_codigo."';
-						top.corpo.iframe_tabrecdepto.location.href='cai1_tabrec_depto001.php?db_opcao=$opcao&k98_receit=".@$k02_codigo."&k02_descr=".@$k02_descr."';
+            CurrentWindow.corpo.iframe_tabrecregrasjm.location.href='cai1_receitaregrasjm001.php?k04_receit=".@$k02_codigo."';
+						CurrentWindow.corpo.iframe_tabrecdepto.location.href='cai1_tabrec_depto001.php?db_opcao=$opcao&k98_receit=".@$k02_codigo."&k02_descr=".@$k02_descr."';
        ";
 						if ($k02_tipo == "E") {
 
-						  echo "top.corpo.iframe_tabplansaldo.location.href='cai4_tabplansaldos001.php?k111_tabplan=".@$k02_codigo."';\n
+						  echo "CurrentWindow.corpo.iframe_tabplansaldo.location.href='cai4_tabplansaldos001.php?k111_tabplan=".@$k02_codigo."';\n
 						  parent.document.formaba.tabplansaldo.disabled=false;\n";
 						}
   if(isset($liberaaba) || isset($alterar)){

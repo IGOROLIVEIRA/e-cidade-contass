@@ -39,7 +39,7 @@ if (is_dir($dir)) {
 		while ((($file = readdir($dh)) !== false) && ($numero!=30)){
 			$tipo = filetype($dir . $file);
 			if($tipo=='file'){
-				$arr = split("_", $file);
+				$arr = explode("_", $file);
 				$count = count($arr);
 				//pega somente db_* _classe.php
 				if($arr[0]=="db" and $arr[$count-1]=="classe.php" and $count >= 3){
@@ -56,7 +56,7 @@ if (is_dir($dir)) {
 						$funcao = strstr($linha, 'function');
 						if($funcao!=""){
 							//echo "$funcao <br>";
-							$arrfunc = split(" ", $funcao);
+							$arrfunc = explode(" ", $funcao);
 							// se não for incluir, alterar, excluir,sql_query,sql_query_file
 							if(($arrfunc[1]!="incluir")and($arrfunc[1]!="alterar")and($arrfunc[1]!="excluir")and($arrfunc[1]!="sql_query")and($arrfunc[1]!="sql_query_file")){
 								//echo "$funcao <br>";
@@ -89,7 +89,7 @@ if (is_dir($dir)) {
 												
 												
 												// para o metodo tenho que tirar o "(" das funções xxx(
-												$metodo = split("\(", $arrfunc[1]);
+												$metodo = explode("\(", $arrfunc[1]);
 												//print_r($metodo);
 												
 												// para ver se ja tem cadastrado no banco

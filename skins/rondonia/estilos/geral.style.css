@@ -171,7 +171,7 @@ div.menu a.menuItem {
   display: block;
   padding: 3px 1em;
   text-decoration: none;
-  white-space: nowrap;  
+  white-space: nowrap;
   font-size: 8pt;
 
 }
@@ -200,7 +200,7 @@ div.menu div.menuItemSep {
   background:#006E98;
   background: -webkit-gradient(linear, left top, left bottom, from(#008CBF), to(#006E98));
   background: -moz-linear-gradient(top, #008CBF, #006E98);
-filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#008CBF', endColorstr='#006E98'); 
+filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#008CBF', endColorstr='#006E98');
 }
 #main h5 a {
   color: #fff;
@@ -313,7 +313,7 @@ legend span {
   text-align:right;
 }
 input[type="text"] {
-  border:1px solid #ddd;
+  border:1px solid #EEFAF5;
   background:#fafafa;
   border-radius:0.2em;
   -moz-border-radius:0.2em;
@@ -322,7 +322,7 @@ input[type="text"] {
   float:left;*/
 }
 input:hover {
-  border-color:#ddd;
+  border-color:#EEFAF5;
   background:#f6f6f6;
 }
 input:focus {
@@ -330,7 +330,7 @@ input:focus {
   background:#f6f6f6;
 }
 fieldset {
-  border:1px solid #ddd;
+  border:1px solid #EEFAF5;
   padding:0 0.5em 0.5em;
 }
 .date input {
@@ -407,12 +407,12 @@ input[type=checkbox], input[type=radio] { visibility: hidden; width:0; height:0;
 input[type=checkbox] + label, input[type=radio] + label { padding-left:18px; }
 input[type=checkbox] + label{ background: url(../gfx/check_radio.png) 0 0 no-repeat; }
 input[type=checkbox]:focus + label{ background-position: 0 -16px; }
-input[type=checkbox] + label:hover{ background-position: 0 -32px; } 
+input[type=checkbox] + label:hover{ background-position: 0 -32px; }
 input[type=checkbox]:checked + label{ background-position: 0 -48px; }
 
 input[type=radio] + label{ background: url(../gfx/check_radio.png) 0 -64px no-repeat; }
 input[type=radio]:focus + label{ background-position: 0 -80px; }
-input[type=radio] + label:hover{ background-position: 0 -96px; } 
+input[type=radio] + label:hover{ background-position: 0 -96px; }
 input[type=radio]:checked + label{ background-position: 0 -112px; }
 */
 fieldset {
@@ -444,15 +444,15 @@ button, input[type="reset"], input[type="submit"], input[type="button"] {
   -ms-background-clip:padding-box;
   -o-background-clip:padding-box;
   background-clip:padding-box;
-  background:#ddd url('../images/button.png') repeat-x;
-  background-image:-webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #dddddd));
-  background-image:-webkit-linear-gradient(#ffffff, #dddddd);
-  background-image:-moz-linear-gradient(#ffffff, #dddddd);
-  background-image:-o-linear-gradient(#ffffff, #dddddd);
-  background-image:-ms-linear-gradient(#ffffff, #dddddd);
-  background-image:linear-gradient(#ffffff, #dddddd);
+  background:#EEFAF5 url('../images/button.png') repeat-x;
+  background-image:-webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(100%, #EEFAF5));
+  background-image:-webkit-linear-gradient(#ffffff, #EEFAF5);
+  background-image:-moz-linear-gradient(#ffffff, #EEFAF5);
+  background-image:-o-linear-gradient(#ffffff, #EEFAF5);
+  background-image:-ms-linear-gradient(#ffffff, #EEFAF5);
+  background-image:linear-gradient(#ffffff, #EEFAF5);
   border:1px solid;
-  border-color:#ddd #bbb #999;
+  border-color:#EEFAF5 #bbb #999;
   cursor:pointer;
   color:#333;
   font:bold 12px/1.3 "Helvetica Neue", Arial, "Liberation Sans", FreeSans, sans-serif;
@@ -476,17 +476,17 @@ button:hover, input[type="reset"]:hover, input[type="submit"]:hover, input[type=
   background-image:linear-gradient(#ffffff, #eeeeee 1px, #cccccc)
 }
 button:active, input[type="reset"]:active, input[type="submit"]:active, input[type="button"]:active {
-  background-image:-webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(1px, #dddddd), color-stop(100%, #eeeeee));
-  background-image:-webkit-linear-gradient(#ffffff, #dddddd 1px, #eeeeee);
-  background-image:-moz-linear-gradient(#ffffff, #dddddd 1px, #eeeeee);
-  background-image:-o-linear-gradient(#ffffff, #dddddd 1px, #eeeeee);
-  background-image:-ms-linear-gradient(#ffffff, #dddddd 1px, #eeeeee);
-  background-image:linear-gradient(#ffffff, #dddddd 1px, #eeeeee);
+  background-image:-webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ffffff), color-stop(1px, #EEFAF5), color-stop(100%, #eeeeee));
+  background-image:-webkit-linear-gradient(#ffffff, #EEFAF5 1px, #eeeeee);
+  background-image:-moz-linear-gradient(#ffffff, #EEFAF5 1px, #eeeeee);
+  background-image:-o-linear-gradient(#ffffff, #EEFAF5 1px, #eeeeee);
+  background-image:-ms-linear-gradient(#ffffff, #EEFAF5 1px, #eeeeee);
+  background-image:linear-gradient(#ffffff, #EEFAF5 1px, #eeeeee);
   -webkit-box-shadow:inset rgba(0, 0, 0, 0.25) 0 1px 2px 0;
   -moz-box-shadow:inset rgba(0, 0, 0, 0.25) 0 1px 2px 0;
   -o-box-shadow:inset rgba(0, 0, 0, 0.25) 0 1px 2px 0;
   box-shadow:inset rgba(0, 0, 0, 0.25) 0 1px 2px 0;
-  border-color:#999 #bbb #ddd
+  border-color:#999 #bbb #EEFAF5
 }
 button::-moz-focus-inner, input[type="reset"]::-moz-focus-inner, input[type="submit"]::-moz-focus-inner, input[type="button"]::-moz-focus-inner {
 border:0;
@@ -597,9 +597,9 @@ border:0;
 padding:0
 }
 .ie6_button, * html button {
-  background:#ddd url('../images/button.png?') repeat-x;
+  background:#EEFAF5 url('../images/button.png?') repeat-x;
   border:1px solid;
-  border-color:#ddd #bbb #999;
+  border-color:#EEFAF5 #bbb #999;
   cursor:pointer;
   color:#333;
   font:bold 12px/1.2 Arial, sans-serif;

@@ -387,7 +387,7 @@ function js_pesquisaTransferencia() {
       sUrl += '|ed104_i_escolaorigem|dl_sequencia_matricula';
   var sLabelJanela = 'Pesquisa de alunos transferidos para fora da rede';
 
-  js_OpenJanelaIframe('top.corpo', 'db_iframe_transfescolafora', sUrl, sLabelJanela, true);
+  js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_transfescolafora', sUrl, sLabelJanela, true);
 }
 
 
@@ -469,7 +469,7 @@ function js_pesquisaTurma(iTurma) {
   sUrl += "|ed52_i_ano|ed52_c_descr|ed52_i_codigo|ed52_d_inicio|ed52_d_fim";
   // sUrl += "|ed11_i_codigo|ed11_i_sequencia|ed11_c_descr";
 
-  js_OpenJanelaIframe('top.corpo', 'db_iframe_turma', sUrl, 'Pesquisa de Turmas', true);
+  js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_turma', sUrl, 'Pesquisa de Turmas', true);
 }
 
 /**

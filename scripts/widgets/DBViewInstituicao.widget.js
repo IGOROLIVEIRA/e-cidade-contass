@@ -1,15 +1,18 @@
+require_once("scripts/widgets/datagrid/plugins/DBHint.plugin.js");
 require_once("scripts/widgets/datagrid/plugins/DBSelecionaLinha.plugin.js");
 /**
  * View que permite a seleção de instituição de acordo com o usuário
- * @param sNomeInstancia - Nome da Instancia
- * @param oContainerDestino - Objeto que será adicionado o componente
+ *
+ * @param {String} sNomeInstancia           Nome da Instancia
+ * @param {HTMLElement} oContainerDestino  Objeto que será adicionado o componente
  * @constructor
  *
- * Exemplo:
+ * @example
  * var oViewInstituicao = new DBViewInstituicao('oViewInstituicao', $('ctnDestino'));
  * oViewInstituicao.setLegenda("Legenda do Fieldset"); (opcional)
  * oViewInstituicao.apresentarNomeAbreviado(true); (opcional)
  * oViewInstituicao.show();
+ *
  */
 DBViewInstituicao = function(sNomeInstancia, oContainerDestino) {
 
@@ -22,6 +25,7 @@ DBViewInstituicao = function(sNomeInstancia, oContainerDestino) {
   this.iHeight           = 200;
   this.lNomeAbreviado    = false;
   this.iTotalInstituicao = 0;
+  this.aCallBackClickLinha=[];
 
   this.show = function () {
 
@@ -150,13 +154,14 @@ DBViewInstituicao.prototype.preencherGrid = function () {
     aLinha[1]  = oInstituicao.iCodigo + " - ";
     aLinha[1] += self.lNomeAbreviado === true ? oInstituicao.sNomeAbreviado.urlDecode() : oInstituicao.sNomeCompleto.urlDecode();
     self.oGridInstituicao.addRow(aLinha, false, false, lMarcarCheckBox);
+    sObjetoInstituicao = JSON.stringify(oInstituicao);
 
     /*
      * Adicionado evento quando clicado na célula 2
      */
     self.oGridInstituicao.aRows[iIndice].aCells[2].adicionarEvento(
-      "onclick",
-      self.oGridInstituicao.nameInstance+".selecionarLinha("+oInstituicao.iCodigo+", "+iIndice+")"
+      "onclick", 
+      self.sNomeInstancia+".clickLinha("+sObjetoInstituicao+", "+iIndice+")"
     );
 
     self.iTotalInstituicao++;
@@ -173,8 +178,26 @@ DBViewInstituicao.prototype.preencherGrid = function () {
   });
 };
 
+DBViewInstituicao.prototype.clickLinha = function (oItem, iIndice) {
+
+  this.oGridInstituicao.selecionarLinha(oItem.iCodigo, iIndice);
+  if(this.aCallBackClickLinha.length > 0) {
+    this.aCallBackClickLinha.each( function(callBackClick) {
+      callBackClick(iIndice, oItem.iCodigo, oItem);
+    });
+  }
+};
+
+DBViewInstituicao.prototype.addCallBackClickLinha = function (callBackClick) {
+
+  if(typeof callBackClick == 'function') {
+    this.aCallBackClickLinha.push(callBackClick);
+  }
+};
+
 /**
  * Retorna um array de objeto contendo o código e nome das instituições selecionadas
+ * 
  * @returns {Array}
  * @param {boolean} lSomenteCodigo - Indica se o retorno deve ser somente o código ou o objeto com codigo e nome
  */

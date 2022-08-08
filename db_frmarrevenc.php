@@ -10,7 +10,7 @@ $clarrevenc->rotulo->label();
     <input name="oid" type="hidden" value="<?=@$oid?>">
        <?=@$Lk00_numpre?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('k00_numpre',8,$Ik00_numpre,true,'text',$db_opcao,"")
 ?>
@@ -20,7 +20,7 @@ db_input('k00_numpre',8,$Ik00_numpre,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tk00_numpar?>">
        <?=@$Lk00_numpar?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('k00_numpar',4,$Ik00_numpar,true,'text',$db_opcao,"")
 ?>
@@ -30,7 +30,7 @@ db_input('k00_numpar',4,$Ik00_numpar,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tk00_dtini?>">
        <?=@$Lk00_dtini?>
     </td>
-    <td> 
+    <td>
 <?
 db_inputdata('k00_dtini',@$k00_dtini_dia,@$k00_dtini_mes,@$k00_dtini_ano,true,'text',$db_opcao,"")
 ?>
@@ -40,7 +40,7 @@ db_inputdata('k00_dtini',@$k00_dtini_dia,@$k00_dtini_mes,@$k00_dtini_ano,true,'t
     <td nowrap title="<?=@$Tk00_dtfim?>">
        <?=@$Lk00_dtfim?>
     </td>
-    <td> 
+    <td>
 <?
 db_inputdata('k00_dtfim',@$k00_dtfim_dia,@$k00_dtfim_mes,@$k00_dtfim_ano,true,'text',$db_opcao,"")
 ?>
@@ -50,7 +50,7 @@ db_inputdata('k00_dtfim',@$k00_dtfim_dia,@$k00_dtfim_mes,@$k00_dtfim_ano,true,'t
     <td nowrap title="<?=@$Tk00_obs?>">
        <?=@$Lk00_obs?>
     </td>
-    <td> 
+    <td>
 <?
 db_textarea('k00_obs',3,40,$Ik00_obs,true,'text',$db_opcao,"")
 ?>
@@ -63,7 +63,7 @@ db_textarea('k00_obs',3,40,$Ik00_obs,true,'text',$db_opcao,"")
 </form>
 <script>
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_arrevenc','func_arrevenc.php?funcao_js=parent.js_preenchepesquisa|0','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_arrevenc','func_arrevenc.php?funcao_js=parent.js_preenchepesquisa|0','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_arrevenc.hide();

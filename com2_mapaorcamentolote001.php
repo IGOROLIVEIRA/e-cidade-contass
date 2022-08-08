@@ -125,7 +125,7 @@ $oRotulo->label("pc20_codorc");
         $('processar').disabled = true;
       }
 
-      js_OpenJanelaIframe( 'top.corpo',
+      js_OpenJanelaIframe( 'CurrentWindow.corpo',
                            'db_iframe_pcorcam',
                            sUrl,
                            'Pesquisar Orçamento do Processo de Compras',

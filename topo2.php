@@ -41,7 +41,7 @@ $result = pg_exec("select uol_sol from db_usuariosonline
 $verf = "1";
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 if(($str = trim(pg_result($result,0,0))) != "") {// && $verf == "1"
-  $str = split("#",$str);
+  $str = explode("#",$str);
   $verf = "2";
   echo "<script>
           parent.document.getElementById('Hid_usuario').value = '".$str[0]."'

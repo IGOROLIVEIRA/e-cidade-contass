@@ -409,7 +409,7 @@ if ($oParam->e30_atestocontinterno != 't') {
     }
 
     function js_pesquisae54_autoriIni(){
-        js_OpenJanelaIframe('top.corpo.iframe_db_atestoautoemp', 'db_iframe_orcreservaaut', 'func_orcreservaautnota.php?funcao_js=parent.js_mostracodAutIni|e54_autori', 'Pesquisa', true, 0);
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_db_atestoautoemp', 'db_iframe_orcreservaaut', 'func_orcreservaautnota.php?funcao_js=parent.js_mostracodAutIni|e54_autori', 'Pesquisa', true, 0);
     }
 
     function js_mostracodAutIni(chave1,chave2){
@@ -418,7 +418,7 @@ if ($oParam->e30_atestocontinterno != 't') {
     }
 
     function js_pesquisae54_autoriFim(){
-        js_OpenJanelaIframe('top.corpo.iframe_db_atestoautoemp', 'db_iframe_orcreservaaut', 'func_orcreservaautnota.php?funcao_js=parent.js_mostracodAutFim|e54_autori', 'Pesquisa', true, 0);
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_db_atestoautoemp', 'db_iframe_orcreservaaut', 'func_orcreservaautnota.php?funcao_js=parent.js_mostracodAutFim|e54_autori', 'Pesquisa', true, 0);
     }
     function js_mostracodAutFim(chave1,chave2){
         $('e54_autori_fim').value = chave1;
@@ -431,10 +431,10 @@ if ($oParam->e30_atestocontinterno != 't') {
         var sUrl2       = 'func_nome.php?pesquisa_chave='+e54_numcgm+'&funcao_js=parent.js_mostrae54_numcgm';
 
         if(mostra == true){
-            js_OpenJanelaIframe('top.corpo.iframe_db_atestoautoemp','func_nome',sUrl1,'Pesquisa',true,0);
+            js_OpenJanelaIframe('CurrentWindow.corpo.iframe_db_atestoautoemp','func_nome',sUrl1,'Pesquisa',true,0);
         }else{
             if(e54_numcgm != ''){
-                js_OpenJanelaIframe('top.corpo.iframe_db_atestoautoemp','func_nome',sUrl2,'Pesquisa',false);
+                js_OpenJanelaIframe('CurrentWindow.corpo.iframe_db_atestoautoemp','func_nome',sUrl2,'Pesquisa',false);
             }else{
                 $('e54_numcgm').value = '';
                 $('z01_nome').value   = '';
@@ -457,7 +457,7 @@ if ($oParam->e30_atestocontinterno != 't') {
     }
 
     function js_mostraDadosAutorizacao(autChave) {
-        js_OpenJanelaIframe('top.corpo.iframe_db_atestoautoemp',
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_db_atestoautoemp',
             'db_iframe_empconsulta003',
             'emp1_empconsulta003.php?e54_autori='+autChave+'&bAtestoContInt=1',
             'Autorização de Empenho',

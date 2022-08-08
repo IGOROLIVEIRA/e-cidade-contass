@@ -113,17 +113,17 @@ if (isset ($valores) && isset ($incluir)) {
 	
 	
 
-	$dados = split("quant_", "$valores"); //  [empenho|sequencial| iNA|quantidade ]	
-	$valordoitem = split("valor_", "$val"); // [NA|empenho|sequencial|valor_digitado] 
+	$dados = explode("quant_", "$valores"); //  [empenho|sequencial| iNA|quantidade ]	
+	$valordoitem = explode("valor_", "$val"); // [NA|empenho|sequencial|valor_digitado] 
 
 	for ($i = 1; $i < sizeof($dados); $i ++) {
 		if ($sqlerro == false) {
-			$numero = split("_", $dados[$i]);
+			$numero = explode("_", $dados[$i]);
 			$numemp = $numero[0];
 			$sequen = $numero[1];
 			$quanti = $numero[3];
 
-			$vlsoitem = split("_", $valordoitem[$i]);
+			$vlsoitem = explode("_", $valordoitem[$i]);
 			$vl_soma_item = $vlsoitem[3];
 			$vl_soma_item = str_replace(",", ".", "$vl_soma_item");
 			//  $valor_total+=$vl_soma_item;
@@ -200,11 +200,11 @@ if (isset ($valores) && isset ($incluir)) {
 
 	for ($i = 1; $i < sizeof($dados); $i ++) {
 		if ($sqlerro == false) {
-			$numero = split("_", $dados[$i]);
+			$numero = explode("_", $dados[$i]);
 			$numemp = $numero[0];
 			$sequen = $numero[1];
 			$quanti = $numero[3];
-			$vlsoitem = split("_", $valordoitem[$i]);
+			$vlsoitem = explode("_", $valordoitem[$i]);
 			$vl_soma_item = $vlsoitem[3];
 			$vl_soma_item = str_replace(",", ".", "$vl_soma_item");
 

@@ -238,16 +238,16 @@ function js_validaFormulario(){
 
         alert('Campo N da Gaveta é de preenchimento obrigatório.');
         return false;
-      } 
+      }
 
   return true;
 }
 function js_pesquisacm26_i_sepultamento(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_sepultamentos','func_sepultamentos.php?funcao_js=parent.js_mostrasepultamentos1|cm01_i_codigo|cm01_i_codigo','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_sepultamentos','func_sepultamentos.php?funcao_js=parent.js_mostrasepultamentos1|cm01_i_codigo|cm01_i_codigo','Pesquisa',true);
   }else{
      if(document.form1.cm26_i_sepultamento.value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_sepultamentos','func_sepultamentos.php?pesquisa_chave='+document.form1.cm26_i_sepultamento.value+'&funcao_js=parent.js_mostrasepultamentos','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_sepultamentos','func_sepultamentos.php?pesquisa_chave='+document.form1.cm26_i_sepultamento.value+'&funcao_js=parent.js_mostrasepultamentos','Pesquisa',false);
      }else{
        document.form1.cm01_i_codigo.value = '';
      }
@@ -315,7 +315,7 @@ function js_mostraossoariojazigo1(chave1,chave2,chave3,chave4,chave5,chave6,chav
 
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_restosgavetas','func_restosgavetas.php?funcao_js=parent.js_preenchepesquisa|cm26_i_codigo','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_restosgavetas','func_restosgavetas.php?funcao_js=parent.js_preenchepesquisa|cm26_i_codigo','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_restosgavetas.hide();

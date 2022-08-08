@@ -10,7 +10,7 @@ $clmetasadotadas->rotulo->label();
     <input name="oid" type="hidden" value="<?=@$oid?>">
        <?=@$Lc224_sequencial?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('c224_sequencial',16,$Ic224_sequencial,true,'text',$db_opcao,"")
 ?>
@@ -20,7 +20,7 @@ db_input('c224_sequencial',16,$Ic224_sequencial,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tc224_medida?>">
        <?=@$Lc224_medida?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('c224_medida',8,$Ic224_medida,true,'text',$db_opcao,"")
 ?>
@@ -30,7 +30,7 @@ db_input('c224_medida',8,$Ic224_medida,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tc224_descricao?>">
        <?=@$Lc224_descricao?>
     </td>
-    <td> 
+    <td>
 <?
 db_textarea('c224_descricao',0,0,$Ic224_descricao,true,'text',$db_opcao,"")
 ?>
@@ -43,7 +43,7 @@ db_textarea('c224_descricao',0,0,$Ic224_descricao,true,'text',$db_opcao,"")
 </form>
 <script>
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_metasadotadas','func_metasadotadas.php?funcao_js=parent.js_preenchepesquisa|0','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_metasadotadas','func_metasadotadas.php?funcao_js=parent.js_preenchepesquisa|0','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_metasadotadas.hide();

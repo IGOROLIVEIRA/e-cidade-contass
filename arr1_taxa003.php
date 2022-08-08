@@ -94,7 +94,7 @@ if (isset($chavepesquisa)) {
   <script>
       function js_db_libera(){
          parent.document.formaba.favorecido.disabled = false;
-         top.corpo.iframe_favorecido.location.href='arr1_taxaFavorecido001.php?ar36_sequencial=".@$chavepesquisa."';
+         CurrentWindow.corpo.iframe_favorecido.location.href='arr1_taxaFavorecido001.php?ar36_sequencial=".@$chavepesquisa."';
      ";
          if(isset($liberaaba)){
            echo "  parent.mo_camada('favorecido');";

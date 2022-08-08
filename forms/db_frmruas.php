@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: cadastro
@@ -38,7 +38,7 @@ $clrotulo->label("j29_cep");
     <td nowrap title="<?=@$Tj14_codigo?>">
        <?=@$Lj14_codigo?>
     </td>
-    <td> 
+    <td>
 		<?
 			db_input('db_teste',7,'db_teste',true,'hidden',"","")
 		?>
@@ -49,15 +49,15 @@ $clrotulo->label("j29_cep");
 			}
 			db_input('clicou',7,'',true,'hidden',"","");
 		?>
-		
-   		 
+
+
     </td>
   </tr>
   <tr>
     <td nowrap title="<?=@$Tj14_nome?>">
        <?=@$Lj14_nome?>
     </td>
-    <td> 
+    <td>
 		<?
 			db_input('j14_nome',40,$Ij14_nome,true,'text',$db_opcao,"")
 		?>
@@ -67,12 +67,12 @@ $clrotulo->label("j29_cep");
     <td nowrap title="<?=@$Tj14_tipo?>">
        <?=@$Lj14_tipo?>
     </td>
-    <td> 
+    <td>
 	<?
 
     $rsConsultaRuasTp = $clruastipo->sql_record($clruastipo->sql_query_file(null,"j88_codigo,j88_descricao"));
-    db_selectrecord("j14_tipo",$rsConsultaRuasTp,$Ij14_tipo,$db_opcao,"");    
-	
+    db_selectrecord("j14_tipo",$rsConsultaRuasTp,$Ij14_tipo,$db_opcao,"");
+
 	?>
     </td>
   </tr>
@@ -80,7 +80,7 @@ $clrotulo->label("j29_cep");
     <td nowrap title="<?=@$Tj14_rural?>">
        <?=@$Lj14_rural?>
     </td>
-    <td> 
+    <td>
 		<?
 			$x = array("f"=>"NAO","t"=>"SIM");
 			db_select('j14_rural',$x,true,$db_opcao,"");
@@ -140,9 +140,9 @@ $clrotulo->label("j29_cep");
   </center>
 <input name="db_opcao" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> >
 
-<? if(($db_opcao == 3) or ($db_opcao == 33)){  
+<? if(($db_opcao == 3) or ($db_opcao == 33)){
      echo '<input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa1();" >';
- }else{ 
+ }else{
      echo ' <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >';
  } ?>
 </form>
@@ -157,12 +157,12 @@ function js_preenchepesquisa(chave){
     echo " location.href = '".basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"])."?chavepesquisa='+chave;";
   }
   ?>
-   
+
 }
 
 function js_pesquisa1(){
-    js_OpenJanelaIframe('top.corpo','db_iframe_ruas','func_ruas.php?rural=1&funcao_js=parent.js_preenchepesquisa1|j14_codigo','Pesquisa',true);
-    
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_ruas','func_ruas.php?rural=1&funcao_js=parent.js_preenchepesquisa1|j14_codigo','Pesquisa',true);
+
 }
 function js_preenchepesquisa1(chave){
     db_iframe_ruas.hide();

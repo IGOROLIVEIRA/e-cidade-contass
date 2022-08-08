@@ -28,7 +28,7 @@
 /**
  * Dependencias
  */
-require_once 'model/configuracao/Instituicao.model.php';
+require_once modification("model/configuracao/Instituicao.model.php");
 
 /**
  * Classe repository para classes Instituicao
@@ -58,7 +58,7 @@ class InstituicaoRepository {
 
   /**
    * Retorno uma instancia de Instituicao pelo Codigo
-   * @param integer $iCodigo Codigo do Instituicao
+   * @param integer $iCodigoInstituicao Codigo do Instituicao
    * @return Instituicao
    */
   public static function getInstituicaoByCodigo($iCodigoInstituicao) {
@@ -144,8 +144,10 @@ class InstituicaoRepository {
 
   /**
    * Retorna as instituições para o tipo passado
-   * @param  array $aTipos
-   * @return Instituicao[]
+   * @param $aTipos
+   *
+   * @return array
+   * @throws Exception
    */
   public static function getInstituicoesPorTipo($aTipos) {
 
@@ -156,15 +158,60 @@ class InstituicaoRepository {
     $cldb_config = new cl_db_config();
 
     $rsInstituicao = $cldb_config->sql_record( $cldb_config->sql_query_file(null, "codigo", null, "db21_tipoinstit in (" . implode(',', $aTipos) . ")") );
-    $aListaInstit  = array();
+    $aListaInstituicoes  = array();
 
     if ( $cldb_config->numrows > 0 ) {
 
       for ($iInd = 0; $iInd < $cldb_config->numrows; $iInd++) {
-        $aListaInstit[] = self::getInstituicaoByCodigo( db_utils::fieldsMemory($rsInstituicao, 0)->codigo );
+        $aListaInstituicoes[] = self::getInstituicaoByCodigo( db_utils::fieldsMemory($rsInstituicao, 0)->codigo );
       }
     }
+    return $aListaInstituicoes;
+  }
 
-    return $aListaInstit;
+  /**
+   * @return Instituicao[]
+   * @throws Exception
+   */
+  public static function getInstituicoes() {
+
+    $oDaoInstituicao      = new cl_db_config();
+    $sSqlBuscaInstituicao = $oDaoInstituicao->sql_query_file(null, "codigo");
+    $rsBuscaInstituicao   = $oDaoInstituicao->sql_record($sSqlBuscaInstituicao);
+    if (!$rsBuscaInstituicao || $oDaoInstituicao->erro_status == "0") {
+      throw new Exception('Ocorreu um erro ao consultar as instituções cadastradas.');
+    }
+    for ($iRowInstituicao = 0; $iRowInstituicao < $oDaoInstituicao->numrows; $iRowInstituicao++) {
+      self::getInstituicaoByCodigo(db_utils::fieldsMemory($rsBuscaInstituicao, $iRowInstituicao)->codigo);
+    }
+    return self::getInstance()->aInstituicao;
+  }
+
+  /**
+   * Retorna os tipos de instituicao
+   * @param array $aCodigosTipos
+   * @return array
+   * @throws \DBExeption
+   */
+  public static function getTiposIntituicao($aCodigosTipos = null) {
+
+    $oDaoTipoInstituicao = new cl_db_tipoinstit;
+
+    $sWhereTipoInstituicao = "1=1";
+    if(is_array($aCodigosTipos) && count($aCodigosTipos) > 0) {
+      $sWhereTipoInstituicao = "db21_codtipo IN (". implode(', ', $aCodigosTipos) .")";
+    }
+
+    $rsTipoInstituicao = db_query($sSqlTipoInstituicao = $oDaoTipoInstituicao->sql_query_file(null, "*", null, $sWhereTipoInstituicao));
+    if(!$rsTipoInstituicao) {
+      throw new \DBException("Ocorreu um erro ao consultar os tipos de Instituicao.\nContate o suporte.");
+    }
+
+    $aTiposInstituicoes = array();
+    $aTiposInstituicoes = \db_utils::makeCollectionFromRecord($rsTipoInstituicao, function ($oRetorno) {
+      return $oRetorno;
+    });
+
+    return $aTiposInstituicoes;
   }
 }

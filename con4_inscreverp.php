@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -62,9 +62,9 @@ $dtLanc = implode('-', array_reverse(explode("/", $get->dtlanc)));
 $sSqlTotalEmpenhos = $oDaoEncerramento->sqlQueryEmpenhosNaoliquidados(
                                                                       db_getsession("DB_instit"),
                                                                       db_getsession("DB_anousu"),
-                                                                      $dtLanc 
+                                                                      $dtLanc
                                                                      );
-$rsTotalEmpenhos = db_query("select coalesce(count(*),0)  as total from ($sSqlTotalEmpenhos) as x"); 
+$rsTotalEmpenhos = db_query("select coalesce(count(*),0)  as total from ($sSqlTotalEmpenhos) as x");
 $iTotal          = db_utils::fieldsMemory($rsTotalEmpenhos, 0)->total;
 if ($iTotal > 0 ){
 
@@ -73,13 +73,13 @@ if ($iTotal > 0 ){
                                                                         db_getsession("DB_anousu"),
                                                                         $dtLanc,
                                                                         null,
-                                                                        " and c75_numemp is not null " 
+                                                                        " and c75_numemp is not null "
                                                                      );
-  $rsTotalEmpenhosInscritos = db_query("select coalesce(count(*),0)  as totalinscritos from ($sSqlTotalEmpenhosInscritos) as x"); 
+  $rsTotalEmpenhosInscritos = db_query("select coalesce(count(*),0)  as totalinscritos from ($sSqlTotalEmpenhosInscritos) as x");
   $iTotalInscritos          = db_utils::fieldsMemory($rsTotalEmpenhosInscritos, 0)->totalinscritos;
-  
+
   if ($iTotal != $iTotalInscritos && $iTotalInscritos > 0) {
-    
+
     $sMensagens  = "Ainda há RP não processados a serem inscritos.\\nEmita o relatório para saber quais os recursos que estão por inscrever.";
     $lErro       = true;
   }
@@ -97,9 +97,9 @@ if ($iTotal > 0 ){
 .cab  {font-weight:bold;text-align:center;
        padding:2px;
 			 border-bottom:1px outset black;
-			 border-left:1px outset black;           
-       background-color:#EEEFF2;          
-	
+			 border-left:1px outset black;
+       background-color:#EEEFF2;
+
 	}
 .linhagrid{ border:collapse;
             border-right:1px inset black;
@@ -154,7 +154,7 @@ Inscrição de Restos a Pagar Não Processados
 	<input type='checkbox' style='display:none' id='mtodos' onclick='js_marca()'>
 	<a onclick='js_marca()' style='cursor:pointer'>M</a></b></td>
 	<td class="cab" colspan="2">&nbsp;</td>
-</tr>	
+</tr>
 <tbody  id='dados' style='height:320;width:95%;overflow:scroll;border:2px inset black;overflow-x:hidden;background-color:white'>
 </form>
 </tbody>
@@ -168,21 +168,21 @@ Inscrição de Restos a Pagar Não Processados
 	<td class='cab' id='totalgeral'     style='text-align:right;background-color:#FFF'><b><?=$nTotalGeral?></b></td>
 	<td class='cab' colspan='2'style='text-align:right'>&nbsp;</td>
 	<td class='cab' colspan='2'style='text-a lign:right'>&nbsp;</td>
-</tr>	
+</tr>
 </tfoot>
 </table>
 </fieldset>
-<input type='button' id='inscrever' value='Inscrição' disabled name='inscrever' onclick="js_inscreverRPS()"> 
-<input type='button' id='relatorio' value='Relatório' name='relatorio' onclick="js_relatorio()"> 
+<input type='button' id='inscrever' value='Inscrição' disabled name='inscrever' onclick="js_inscreverRPS()">
+<input type='button' id='relatorio' value='Relatório' name='relatorio' onclick="js_relatorio()">
 </body>
 <script>
 function js_mostraEmpenho(chave){
 
-  arq = 'func_empempenho001.php?e60_numemp='+chave 
-  js_OpenJanelaIframe('top.corpo','db_iframe_saldos',arq,'Pesquisa',true);
+  arq = 'func_empempenho001.php?e60_numemp='+chave
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_saldos',arq,'Pesquisa',true);
 }
 function js_marca(){
-  
+
 	 obj = document.getElementById('mtodos');
 	 if (obj.checked){
 		 obj.checked = false;
@@ -205,19 +205,19 @@ function js_marca(){
 function mostraFiltros(instit){
 
   url ='func_selorcdotacao_aba.php?instit='+instit+'&db_selinstit='+instit+'&desdobramento=true'
-  js_OpenJanelaIframe('top.corpo','db_iframe_filtro',url,'Filtros',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_filtro',url,'Filtros',true);
   $('pesquisar').disabled=false;
 }
 
 function js_pesquisa(){
-  
-  $('filtros').value = top.corpo.db_iframe_filtro.jan.js_atualiza_variavel_retorno();
-  js_consultaEmpenho(); 
+
+  $('filtros').value = CurrentWindow.corpo.db_iframe_filtro.jan.js_atualiza_variavel_retorno();
+  js_consultaEmpenho();
 
 }
 
 function js_consultaEmpenho(){
-   
+
    js_divCarregando("Aguarde, efetuando pesquisa","msgBox");
    strJson = '{"method":"consultarRPAjax","pars":"'+$F('filtros')+'","datalanc":"'+parent.$F('datalanc')+'"}';
    $('dados').innerHTML    = '';
@@ -225,10 +225,10 @@ function js_consultaEmpenho(){
    $('inscrever').disabled = true;
    url     = 'con4_inscreverp002.php';
    oAjax   = new Ajax.Request(
-                            url, 
+                            url,
                               {
-                               method: 'post', 
-                               parameters: 'json='+strJson, 
+                               method: 'post',
+                               parameters: 'json='+strJson,
                                onComplete: js_saida
                               }
                              );
@@ -243,7 +243,7 @@ function js_saida(oAjax){
     $('dados').innerHTML   = '';
     if (obj.numrows > 0){
       for (i = 0; i < obj.data.length;i++){
-        
+
          cor = i % 2 == 0?'#FFFFFF':'#FFF';
          saida += "<tr class='normal' style='height:1em' id='trchk"+obj.data[i].e60_numemp+"'>";
          credor = obj.data[i].z01_nome.replace(/\+/g," ");
@@ -272,9 +272,9 @@ function js_saida(oAjax){
     $('inscrever').disabled = false;
 }
 function js_marcaLinha(obj){
- 
+
   if (obj.checked){
-    
+
     $('tr'+obj.id).className='marcado';
   }else{
 
@@ -285,13 +285,13 @@ function js_marcaLinha(obj){
 }
 //Funcao para Inscrever RP's;
 function js_inscreverRPS(){
-   
+
    itens = js_getElementbyClass(form1,'chkimp');
    if (itens.length > 1000) {
-      
+
      alert('Procedimento Cancelado. selecione alguns Filtros para pesquisa');
      return false;
-     
+
    }
    empenhos = '';
    sV = '';
@@ -304,7 +304,7 @@ function js_inscreverRPS(){
         valor     = $('vlrliq'+itens[i].value).innerHTML;
         valor     = valor.replace(/ /g,"");
         valor2    = valor.replace(regex,"");
-        valor2    = valor2.replace(",","."); 
+        valor2    = valor2.replace(",",".");
         empenhos += sV+'{"empenho":"'+itens[i].value+'","valorLiquidar":"'+valor2+'"}';
         sV = ",";
       }
@@ -315,10 +315,10 @@ function js_inscreverRPS(){
      strJson = '{"method":"inscreverRPAjax","datalanc":"'+parent.$F('datalanc')+'","pars":['+empenhos+']}';
      url     = 'con4_inscreverp002.php';
      oAjax   = new Ajax.Request(
-                            url, 
+                            url,
                               {
-                               method: 'post', 
-                               parameters: 'json='+strJson, 
+                               method: 'post',
+                               parameters: 'json='+strJson,
                                onComplete: js_saidaInscricao
                               }
                              );
@@ -331,7 +331,7 @@ function js_inscreverRPS(){
    }
 }
 function js_saidaInscricao(oAjax){
- 
+
     js_removeObj("msgRPS");
     $('pesquisar').disabled = false;
     $('inscrever').disabled = false;
@@ -350,7 +350,7 @@ function js_saidaInscricao(oAjax){
 }
 function js_relatorio(){
 
-    window.open('con2_relrpinscritos001.php','','location=0');   
+    window.open('con2_relrpinscritos001.php','','location=0');
 
 
 }
@@ -358,6 +358,6 @@ function js_relatorio(){
 </script>
 <?
   if ($lErro) {
-    db_msgbox("$sMensagens"); 
+    db_msgbox("$sMensagens");
   }
 ?>

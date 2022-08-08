@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -65,7 +65,7 @@ if(isset($pc80_codproc) && trim($pc80_codproc)!=""){
 }
 if(isset($excluir)){
   $sqlerro=false;
-  db_inicio_transacao();  
+  db_inicio_transacao();
   $result_orcamitem = $clpcprocitem->sql_record($clpcprocitem->sql_query_orcam(null,"distinct pc22_codorc as pc20_codorc","pc22_codorc","pc81_codproc=$pc80_codproc"));
   $numrows_orcamitem = $clpcprocitem->numrows;
   for($i=0;$i<$numrows_orcamitem;$i++){
@@ -121,7 +121,7 @@ if(isset($excluir)){
     }
   }
   /**
-   * exclui ligacao do processo de compras com a autorizacao de empenho 
+   * exclui ligacao do processo de compras com a autorizacao de empenho
    */
   $sWhereEmpautitem  = "e73_pcprocitem in (";
   $sWhereEmpautitem .= "                   select distinct pc81_codprocitem ";
@@ -131,16 +131,16 @@ if(isset($excluir)){
   $clempautitempcprocitem->excluir(null, $sWhereEmpautitem);
   $clpcprocitem->excluir(null,"pc81_codproc=".$pc80_codproc);
   if($clpcprocitem->erro_status==0){
-    $erro_msg   = $clpcprocitem->erro_msg; 
+    $erro_msg   = $clpcprocitem->erro_msg;
     $sqlerro=true;
-  } 
+  }
   if($sqlerro==false){
     $clpcproc->excluir($pc80_codproc);
-    $erro_msg   = $clpcproc->erro_msg; 
+    $erro_msg   = $clpcproc->erro_msg;
     if($clpcproc->erro_status==0){
       $sqlerro=true;
-    } 
-  }  
+    }
+  }
   db_fim_transacao($sqlerro);
 }
 ?>
@@ -181,7 +181,7 @@ if(isset($excluir)){
     };
   }else{
     db_msgbox("Processo de Compras excluído com sucesso");
-    echo "<script>top.corpo.location.href='com1_pcproc003.php'</script>";
+    echo "<script>CurrentWindow.corpo.location.href='com1_pcproc003.php'</script>";
   }
 }
 if($db_opcao==33){

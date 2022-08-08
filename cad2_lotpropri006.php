@@ -41,7 +41,7 @@ parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
 
 //if(isset($j37_quadra) && $j37_quadra != ""){
-//  $quadra = split(",",$j37_quadra);
+//  $quadra = explode(",",$j37_quadra);
 //  $vir = "";
 //  $qua = "";
 //  for($i=0;$i<count($quadra);$i++){
@@ -51,7 +51,7 @@ db_postmemory($HTTP_POST_VARS);
 //} else {
 //	
 //	$j37_quadra = db_getsession('quadra',false);
-//  $quadra = split(",",$j37_quadra);
+//  $quadra = explode(",",$j37_quadra);
 //  $vir = "";
 //  $qua = "";
 //  for($i=0;$i<count($quadra);$i++){
@@ -61,7 +61,7 @@ db_postmemory($HTTP_POST_VARS);
 //}
 //
 //if(isset($j34_setor) && $j34_setor != ""){
-//  $setor = split(",",$j34_setor);
+//  $setor = explode(",",$j34_setor);
 //  $vir = "";
 //  $set = "";
 //  
@@ -74,7 +74,7 @@ db_postmemory($HTTP_POST_VARS);
 //	
 //	
 //  $qua = db_getsession('setor',false);
-//  $setor     = split(",",$j34_setor);
+//  $setor     = explode(",",$j34_setor);
 //  $vir       = "";
 //  $set       = "";
 //  
@@ -91,7 +91,7 @@ if(isset($_SESSION["quadra"]) && isset($_SESSION["setor"])){
   $set = db_getsession('setor');
 
 
-  $quadra = split(",",$qua);
+  $quadra = explode(",",$qua);
   $vir = "";
   $qua = "";
   for($i=0;$i<count($quadra);$i++){

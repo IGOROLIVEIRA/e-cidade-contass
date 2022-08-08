@@ -110,14 +110,14 @@ if ($op == "alterar") {
 
   function js_pesquisapc80_codproc(mostra){
     if(mostra==true){
-      js_OpenJanelaIframe('top.corpo.iframe_orcam',
+      js_OpenJanelaIframe('CurrentWindow.corpo.iframe_orcam',
                           'db_iframe_pcproc',
                           'func_pcproc.php?orclic=true&situacao=2&lBloqueiaVinculadosOrcamento=true&funcao_js=parent.js_mostrapcproc1|pc80_codproc',
                           'Pesquisa',
                           true,
                           '0');
     }else{
-      js_OpenJanelaIframe('top.corpo.iframe_orcam',
+      js_OpenJanelaIframe('CurrentWindow.corpo.iframe_orcam',
                           'db_iframe_pcproc',
                           'func_pcproc.php?orclic=true&situacao=2&lBloqueiaVinculadosOrcamento=true&funcao_js=parent.js_mostrapcproc1|pc80_codproc',
                           'Pesquisa',false,'0');

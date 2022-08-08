@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 $clrotulo = new rotulocampo;
@@ -37,7 +37,7 @@ $clrotulo->label("l20_descrinterporrecurso");
 		  <tr>
 		    <td>&nbsp;</td>
 		  </tr>
-      <tr> 
+      <tr>
         <td>
 	        <? if ( $lListaModelos ) { ?>
             <fieldset>
@@ -53,7 +53,7 @@ $clrotulo->label("l20_descrinterporrecurso");
 	                  <?
 	                    db_selectrecord('documentotemplateata', $rsModelos, true, $db_opcao);
 	                  ?>
-	                </td>               
+	                </td>
 	              </tr>
 	            </table>
             </fieldset>
@@ -101,10 +101,10 @@ $clrotulo->label("l20_descrinterporrecurso");
               </fieldset>
 		    </td>
 		  </tr>
-  
+
 		</table>
 		<br>
-		
+
 	<table>
 <?//
 //$x = array("2"=>"Nao","1"=>"Sim",);
@@ -113,7 +113,7 @@ $clrotulo->label("l20_descrinterporrecurso");
 <!--    </td>-->
 <!--  </tr>-->
   </table>
-  
+
 <!--  <fieldset style="width: 60%">-->
 <!--  <legend align="left">-->
 <!--  <b>Descrição do Recurso</b>-->
@@ -142,7 +142,7 @@ $clrotulo->label("l20_descrinterporrecurso");
 <!--  -->
 <!--  </table>-->
 <!--  </fieldset>-->
-		
+
 		<br>
 		<table border="0">
 		  <tr>
@@ -151,8 +151,8 @@ $clrotulo->label("l20_descrinterporrecurso");
 		             <?=($db_opcao==3?"disabled":"")?> <?=($disable_confirmar==true?"disabled":"")?> >
 		    </td>
 		    <td nowrap>
-		      <input name="voltar" type="button" value="Voltar" 
-		             onClick="top.corpo.document.location.href = 'lic1_orcamlancval001.php?pc20_codorc=<?=$pc20_codorc?>&lic=true&l20_codigo=<?=$l20_codigo?>';">
+		      <input name="voltar" type="button" value="Voltar"
+		             onClick="CurrentWindow.corpo.document.location.href = 'lic1_orcamlancval001.php?pc20_codorc=<?=$pc20_codorc?>&lic=true&l20_codigo=<?=$l20_codigo?>';">
 		    </td>
 		  </tr>
 		</table>
@@ -167,7 +167,7 @@ $clrotulo->label("l20_descrinterporrecurso");
 
      document.form1.submit();
   }
-  
+
   // function js_interporrecurso() {
   //   if(document.form1.l20_interporrecurso.value == 1) {
   //   	document.form1.l20_descrinterporrecurso.style.backgroundColor = "";

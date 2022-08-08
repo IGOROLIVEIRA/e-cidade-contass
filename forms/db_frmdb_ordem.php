@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: configuracoes
@@ -42,13 +42,13 @@ if(empty($dataordem_dia)){
 ?>
 <script>
 function js_excluir_anexo(codimg){
-  document.form1.codimg.value=codimg;   
+  document.form1.codimg.value=codimg;
   obj=document.createElement('input');
   obj.setAttribute('name','excluir_anexo');
   obj.setAttribute('type','hidden');
   obj.setAttribute('value',codimg);
   document.form1.appendChild(obj);
-  
+
   document.form1.submit();
 }
 function js_troca(valor){
@@ -69,7 +69,7 @@ function js_troca(valor){
     <td nowrap title="<?=@$Tcodordem?>">
        <?=@$Lcodordem?>
     </td>
-    <td> 
+    <td>
 <?
 if(empty($alertado)){
   $alertado='false';
@@ -87,7 +87,7 @@ db_input('codordem',8,$Icodordem,true,'text',3);
     <td nowrap title="<?=@$Tid_usuario?>">
        <?=@$Lnome?>
     </td>
-    <td> 
+    <td>
 <?
 if(empty($id_usuario)){
   $id_usuario = db_getsession("DB_id_usuario");
@@ -100,7 +100,7 @@ db_input('nome',40,$Inome,true,'text',3);
     </td>
   </tr>
   <tr>
-    <td> 
+    <td>
 <?
   $usuario_fixo = 999999;
   db_input('usureceb',10,$usuario_fixo,true,'hidden',$db_opcao,"");
@@ -113,7 +113,7 @@ db_input('nome',40,$Inome,true,'text',3);
     <td nowrap title="<?=@$Tcoddepto?>">
        <?=@$Lcoddepto?>
     </td>
-    <td> 
+    <td>
 <?
   $result=$cldb_depart->sql_record(
      $cldb_depart->sql_query_file(null,"coddepto,descrdepto"));
@@ -130,7 +130,7 @@ db_input('nome',40,$Inome,true,'text',3);
           <?
            $result=$clclientes->sql_record("select 0 as at01_codcli, 'DBSELLER' union " . $clclientes->sql_query_file(null,"at01_codcli, at01_nomecli","at01_codcli"));
            db_selectrecord("codcli",$result,true,$db_opcao);
-          ?>   
+          ?>
         </td>
 
 
@@ -138,16 +138,16 @@ db_input('nome',40,$Inome,true,'text',3);
 
 
 
-  
+
   <tr>
     <td nowrap title="<?=@$Tdataordem?>"><?=@$Ldataordem?></td>
-    <td> 
+    <td>
      <? db_inputdata('dataordem',@$dataordem_dia,@$dataordem_mes,@$dataordem_ano,true,'text',$db_opcao,"") ?>
      <?=@$Ldataprev?>
      <? db_inputdata('dataprev',@$dataprev_dia,@$dataprev_mes,@$dataprev_ano,true,'text',$db_opcao,"") ?>
     </td>
   </tr>
-  <tr> 
+  <tr>
     <td valign='top'><b>Módulos</b> </td>
     <td valign='top'>
     <table border= 0 >
@@ -164,11 +164,11 @@ db_input('nome',40,$Inome,true,'text',3);
           <?
            $result=$cldb_ordemorigem->sql_record($cldb_ordemorigem->sql_query_file(null,"*","or11_codigo"));
            db_selectrecord("codorigem",$result,true,$db_opcao);
-          ?>   
+          ?>
         </td>
 
 
-	
+
      </tr>
 
 
@@ -180,20 +180,20 @@ db_input('nome',40,$Inome,true,'text',3);
            $result=$clclientes->sql_record("select 1, 'urgente' union select 2, 'normal' union select 3, 'sem urgencia'");
 	   $prioridade = 2;
            db_selectrecord("prioridade",$result,true,$db_opcao);
-          ?>   
+          ?>
         </td>
-     
+
      </table>
-     </td>    
+     </td>
      <td>
-     
-<?    
+
+<?
   $result=$cldb_modulos->sql_record($cldb_modulos->sql_query_file(null,"id_item,nome_modulo","nome_modulo"));
   if(isset($result_modulo)){
     db_selectmultiple("id_item",$result,"12",$db_opcao,"","","",$result_modulo);
   }else{
     db_selectmultiple("id_item",$result,"12",$db_opcao);
-  }  
+  }
 ?>
        </td>
        <td valign='top'>
@@ -201,25 +201,25 @@ db_input('nome',40,$Inome,true,'text',3);
 	   <input name="desmarcar" type="button" id="desmarcar" value=" - " onClick="js_desmarcar()"><small><b>Desmarcar todos</b></small>
         </td>
 	</tr>
-       </table>	
+       </table>
     </td>
   </tr>
-</table>   
+</table>
 
-<table border='0' cellspacing="0" cellpadding="0">   
+<table border='0' cellspacing="0" cellpadding="0">
 <!--
 <tr>
     <td nowrap title="Anexos de arquivos">
       <b>Permitir anexos:</b>
-    </td>  
+    </td>
     <td>
   <?
   $xy = array("nao"=>"NÂO","sim"=>"SIM");
   db_select('tipo',$xy,true,$db_opcao,"onchange='js_troca(this.value);'");
   ?>
-    </td> 
-  </tr>  
--->  
+    </td>
+  </tr>
+-->
 <?
 if(isset($libera_anexos) && $libera_anexos=="sim" || isset($libera_anexos02) && $tipo=="sim" || isset($excluir_anexo) ){
   /*
@@ -227,19 +227,19 @@ if(isset($libera_anexos) && $libera_anexos=="sim" || isset($libera_anexos02) && 
  <tr>
   <td colspan='2' align='right'>
   <input name="libera_anexos02" type="hidden" value="">
-<table border='1' width='100%' cellspacing="0" cellpadding="0">   
-  <tr> 
-    <td colspan="2"  valign="top" nowrap  > 
-    
-     <iframe src="con6_andamentoanexar.php?db_opcao=<?=$db_opcao?>" align="middle"  scrolling="no" hspace="0" name="iframe" width="100%" height="34" frameborder="0" marginwidth="0" marginheight="0"> 
-      </iframe> 
+<table border='1' width='100%' cellspacing="0" cellpadding="0">
+  <tr>
+    <td colspan="2"  valign="top" nowrap  >
+
+     <iframe src="con6_andamentoanexar.php?db_opcao=<?=$db_opcao?>" align="middle"  scrolling="no" hspace="0" name="iframe" width="100%" height="34" frameborder="0" marginwidth="0" marginheight="0">
+      </iframe>
     </td>
   </tr>
   <tr>
     <td align="left" valign='top' width='12%' nowrap><strong>Arquivos anexados:</strong></td>
     <td align="left" valign="top" nowrap  >
 	<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">
-	  <tr> 
+	  <tr>
 	    <td align="left" valign="top">
 	      <table cellspacing="0" cellpadding="0">
 	        <tr>
@@ -247,13 +247,13 @@ if(isset($libera_anexos) && $libera_anexos=="sim" || isset($libera_anexos02) && 
 <?
     $result='';
     db_selectmultiple("arquivos",$result,"3",$db_opcao);
-?>    
-		  </td>  
+?>
+		  </td>
 		  <td valign='top'>
 		    <input name="removerAnexado" type="button" id="removerAnexado" value="Remover" onClick="javascript:removeItemAnexado()">
-		  </td> 
-		</tr>  
-	       </table>  	
+		  </td>
+		</tr>
+	       </table>
 	    </td>
 	    <td valign='top'>
 	    <?
@@ -268,7 +268,7 @@ if(isset($libera_anexos) && $libera_anexos=="sim" || isset($libera_anexos02) && 
 		  <td valign='top'>
 		    <b>Anexos:</b>
 		  </td>
-		  
+
 		  <td>
 		  <?
 		    for($i=0; $i<$numrows_anexo; $i++){
@@ -278,7 +278,7 @@ if(isset($libera_anexos) && $libera_anexos=="sim" || isset($libera_anexos02) && 
 		      }else{
    		         echo "$descrimg<a href='#' disabled  onclick=\"return false;\">Excluir</a><br>";
 	              }
-		    } 
+		    }
 		  ?>
 		  </td>
 		</tr>
@@ -293,7 +293,7 @@ if(isset($libera_anexos) && $libera_anexos=="sim" || isset($libera_anexos02) && 
   </tr>
  </table>
    </td>
- </tr>  
+ </tr>
 <?
 */
 }
@@ -311,9 +311,9 @@ if(isset($libera_anexos) && $libera_anexos=="sim" || isset($libera_anexos02) && 
          db_input('data_dia',10,0,true,'hidden',3);
          db_input('data_mes',10,0,true,'hidden',3);
          db_input('data_ano',10,0,true,'hidden',3);
-    ?>	 
+    ?>
       <input type='button' name='importar ' onclick="js_pesquisaor10_codatend(true);" value='Importar atendimento' <?=($db_botao==false?"disabled":"")?>>
-      <input type='button' name='limpar' onclick="js_cancelar();" value='Cancelar importação com atendimento' <?=($db_botao==false?"disabled":"")?>> 
+      <input type='button' name='limpar' onclick="js_cancelar();" value='Cancelar importação com atendimento' <?=($db_botao==false?"disabled":"")?>>
     </td>
   </tr>
   <tr>
@@ -323,13 +323,13 @@ if(isset($libera_anexos) && $libera_anexos=="sim" || isset($libera_anexos02) && 
 
        ?>
     </td>
-    <td colspan='1'> 
+    <td colspan='1'>
 <?
 db_textarea('descricao',10,100,$Idescricao,true,'text',$db_opcao,"")
 ?>
     </td>
   </tr>
-    
+
   <tr>
     <td colspan='2' align='center'>
 	<input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?>  onclick="return js_sel();">
@@ -351,7 +351,7 @@ function js_sel(){
 	vir='-';
   }
   js_trocacordeselect();
-  document.form1.descrimg.value=descr; 
+  document.form1.descrimg.value=descr;
 }
 function js_cancelar(){
   document.form1.or10_codatend.value='';
@@ -359,7 +359,7 @@ function js_cancelar(){
   document.form1.data_dia.value='';
   document.form1.data_mes.value='';
   document.form1.data_ano.value='';
-}  
+}
 function js_desmarcar() {
   var F = document.form1.elements['id_item[]'];
   if(F.selectedIndex != -1) {
@@ -378,7 +378,7 @@ function js_marcar() {
   js_trocacordeselect();
 }
 function js_pesquisaor10_codatend(mostra){
-    js_OpenJanelaIframe('top.corpo','db_iframe_atenditem','func_atenditemordem.php?funcao_js=parent.js_mostraatenditem1|at05_seq|at05_codatend|at05_solicitado|at05_data','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_atenditem','func_atenditemordem.php?funcao_js=parent.js_mostraatenditem1|at05_seq|at05_codatend|at05_solicitado|at05_data','Pesquisa',true);
 }
 function js_mostraatenditem1(chave1,chave2,chave3,chave4){
   document.form1.or10_seq.value = chave1;
@@ -393,7 +393,7 @@ function js_mostraatenditem1(chave1,chave2,chave3,chave4){
   db_iframe_atenditem.hide();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_db_ordem','func_db_ordem.php?funcao_js=parent.js_preenchepesquisa|codordem','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_ordem','func_db_ordem.php?funcao_js=parent.js_preenchepesquisa|codordem','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_db_ordem.hide();

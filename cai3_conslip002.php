@@ -156,7 +156,7 @@ $sql = "         select slip.k17_codigo,
 </html>
 <script>
 function teste(slip){
-    js_OpenJanelaIframe('top.corpo','db_iframe_slip2','cai3_conslip003.php?slip='+slip,'Slip nº '+slip,true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_slip2','cai3_conslip003.php?slip='+slip,'Slip nº '+slip,true);
 
 }
 </script>

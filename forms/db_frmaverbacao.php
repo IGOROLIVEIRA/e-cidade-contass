@@ -410,10 +410,10 @@ function js_mostraprotprocesso1(iCodigoProcesso, sNumeroProcesso, sNome) {
 
 function js_pesquisaj75_matric(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_iptubase','func_iptubase.php?funcao_js=parent.js_mostraiptubase1|j01_matric|j01_numcgm','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_iptubase','func_iptubase.php?funcao_js=parent.js_mostraiptubase1|j01_matric|j01_numcgm','Pesquisa',true);
   }else{
      if(document.form1.j75_matric.value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_iptubase','func_iptubase.php?pesquisa_chave='+document.form1.j75_matric.value+'&funcao_js=parent.js_mostraiptubase','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_iptubase','func_iptubase.php?pesquisa_chave='+document.form1.j75_matric.value+'&funcao_js=parent.js_mostraiptubase','Pesquisa',false);
      }else{
        document.form1.j01_numcgm.value = '';
      }

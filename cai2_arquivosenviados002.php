@@ -53,7 +53,7 @@ $dbwhere = " e80_instit = " . db_getsession("DB_instit") . " and e92_processa = 
 $valorin = "";
 if(trim($selecionadas) != ""){
   $virgula = "";
-  $arr_selecionadas = split(",",$selecionadas);
+  $arr_selecionadas = explode(",",$selecionadas);
   for($i=0; $i<count($arr_selecionadas); $i++){
     $valorin .= $virgula.$arr_selecionadas[$i];
     $virgula = ",";

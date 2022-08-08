@@ -124,11 +124,11 @@ for ($tiporel = 0; $tiporel <= 1; $tiporel++) {
   ///////////////////////
   
   $head2 = "RELATORIO DE SUPLEMENTAÇÔES POR RECURSO";
-  $perini= split("-",$dt_ini);
-  $perfim= split("-",$dt_fim);
+  $perini= explode("-",$dt_ini);
+  $perfim= explode("-",$dt_fim);
   
   $head3 = "PERIODO : $perini[2]/$perini[1]/$perini[0]  à  $perfim[2]/$perfim[1]$perfim[0]";
-  $xinstit = split("-",$db_selinstit);
+  $xinstit = explode("-",$db_selinstit);
   $resultinst = pg_exec("select codigo,nomeinst from db_config where codigo in (".str_replace('-',', ',$db_selinstit).") ");
   $descr_inst = '';
   $xvirg = '';
@@ -254,8 +254,8 @@ if ($auxiliar->numrows ==0){
 ///////////////////////
 
 $head4 = "RELATORIO DE SUPLEMENTAÇÔES POR TIPO";
-$perini= split("-",$dt_ini);
-$perfim= split("-",$dt_fim);
+$perini= explode("-",$dt_ini);
+$perfim= explode("-",$dt_fim);
 
 $head5 = "PERIODO : $perini[2]/$perini[1]/$perini[0]  à  $perfim[2]/$perfim[1]$perfim[0]";
 

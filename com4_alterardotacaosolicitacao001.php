@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -42,7 +42,7 @@ $oRotuloLabel->label("pc10_data");
   <head>
     <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-    <meta http-equiv="Expires" CONTENT="0"> 
+    <meta http-equiv="Expires" CONTENT="0">
     <?
       db_app::load("scripts.js, strings.js, prototype.js, datagrid.widget.js");
       db_app::load("widgets/dbmessageBoard.widget.js, widgets/windowAux.widget.js, datagrid.widget.js");
@@ -51,16 +51,16 @@ $oRotuloLabel->label("pc10_data");
     ?>
   </head>
   <body style="background-color: #cccccc; margin-top: 25px">
-      
-    <center> 
+
+    <center>
       <div style="display: table;" id='pesquisa-solicitacoes'>
-        <fieldset> 
+        <fieldset>
           <legend><b>Filtros para Pesquisa</legend>
             <table>
               <tr>
                 <td>
                   <?
-                   db_ancora("<b>Licitação:</b>", "js_pesquisaLicitacao(true)", 1);  
+                   db_ancora("<b>Licitação:</b>", "js_pesquisaLicitacao(true)", 1);
                   ?>
                 </td>
                 <td colspan="4">
@@ -124,10 +124,10 @@ $oRotuloLabel->label("pc10_data");
 <script>
 var sUrl = "com4_alteradotacaosolicitacao.RPC.php";
 function js_pesquisaLicitacao(lMostra) {
-   
+
    if (lMostra) {
-     
-     js_OpenJanelaIframe('top.corpo',
+
+     js_OpenJanelaIframe('CurrentWindow.corpo',
                          'db_iframe_licitacao',
                          'func_liclicita.php?funcao_js=parent.js_mostraLicitacao|l20_codigo',
                          'Pesquisa',
@@ -138,7 +138,7 @@ function js_pesquisaLicitacao(lMostra) {
 
 function js_mostraLicitacao(codigo) {
 
-   $("l20_codigo").value = codigo;  
+   $("l20_codigo").value = codigo;
    db_iframe_licitacao.hide();
 }
 
@@ -147,26 +147,26 @@ function js_pesquisaSolicitacao(lMostra, sParam) {
   var sNomeFuncao;
   var qry = "&nada=true";
   if (lMostra == true) {
-  
+
     sNomeFuncao = 'js_mostraSolicitacaoInicial1';
     if (sParam == 'fim') {
       sNomeFuncao = 'js_mostraSolicitacaoFim1';
     }
-    js_OpenJanelaIframe('top.corpo',
+    js_OpenJanelaIframe('CurrentWindow.corpo',
                         'db_iframe_solicita',
                         'func_solicita.php?funcao_js=parent.'+sNomeFuncao+'|pc10_numero'+qry,
                         'Pesquisa',
                         true
                        );
   } else {
-  
+
     sNomeFuncao = 'js_mostraSolicitacaoInicial';
     if (sParam == 'fim') {
       sNomeFuncao = 'js_mostraSolicitacaoFim';
     }
     if(document.form1.pc10_numero.value!="") {
-    
-      js_OpenJanelaIframe('top.corpo',
+
+      js_OpenJanelaIframe('CurrentWindow.corpo',
                           'db_iframe_solicita',
                           'func_solicita.php?funcao_js=parent.'+sNomeFuncao+
                           '&pesquisa_chave='+$("pc10_numeroInicial").value+qry,
@@ -213,26 +213,26 @@ function validarDados() {
   var iDataSolicitacaoFinal     = $F('pc10_datafinal');
 
   if (iNumeroSolicitacaoInicial == "" && iNumeroSolicitacaoFinal != "") {
-    
+
     alert("Para escolher um intervalo final de solicitações, antes déve escolher o intervalo inicial.");
     $('pc10_numeroFinal').value = "";
-    return false;    
-  } 
+    return false;
+  }
 
   if (iNumeroSolicitacaoInicial != "" && iNumeroSolicitacaoFinal != "") {
-    
+
     if (iNumeroSolicitacaoInicial > iNumeroSolicitacaoFinal) {
-    
+
       if (confirm("O intervalo inicial da solicitação esta maior que o intervalo final.\n Deseja inverter?")) {
-        
+
         var iAux                  = iNumeroSolicitacaoFinal;
         iNumeroSolicitacaoFinal   = iNumeroSolicitacaoInicial;
         iNumeroSolicitacaoInicial = iAux;
-        
+
         $('pc10_numeroInicial').value = iNumeroSolicitacaoInicial;
         $('pc10_numeroFinal').value   = iNumeroSolicitacaoFinal;
       } else {
-      
+
         $('pc10_numeroInicial').value = "";
         $('pc10_numeroFinal').value = "";
       }
@@ -240,7 +240,7 @@ function validarDados() {
   }
   if (iDataSolicitacaoInicial != "") {
     if (js_comparadata(iDataSolicitacaoInicial, iDataSolicitacaoFinal, '>')) {
-    
+
       alert('Data Inicial esta maior que a data final.');
       return false;
     }
@@ -257,14 +257,14 @@ function validarDados() {
       sContent += "<div>";
   oWindowSolicitacoes.setContent(sContent);
   var sMensagem  = 'Clique duplo na solicitação para visualizar as seus itens e dotações.';
-      sMensagem += "<br>&nbsp;<strong>  * </strong> Solicitação possui um ou mais itens sem dotação."; 
-  oMessageBoard = new DBMessageBoard('msgBoardSolicitacao', 
+      sMensagem += "<br>&nbsp;<strong>  * </strong> Solicitação possui um ou mais itens sem dotação.";
+  oMessageBoard = new DBMessageBoard('msgBoardSolicitacao',
                                      'Solicitações Retornadas',
                                      sMensagem,
                                      oWindowSolicitacoes.getContentContainer()
-                                     );    
+                                     );
   oWindowSolicitacoes.show();
-  
+
   oGridSolicitacoes              = new DBGrid('Solicitacoes');
   oGridSolicitacoes.nameInstance = 'oGridSolicitacoes';
   oGridSolicitacoes.setCellWidth(new Array( '25px',
@@ -272,65 +272,65 @@ function validarDados() {
                                             '50px',
                                             '150px'
                                            ));
-  
+
   oGridSolicitacoes.setCellAlign(new Array( 'right'  ,
                                             'center'  ,
                                             'left',
-                                            'left'  
+                                            'left'
                                            ));
-  
+
   oGridSolicitacoes.setHeader(new Array( 'Solicitação',
                                          'Data de Emissão',
                                          'Dotações',
                                          'Resumo'
                                         ));
-                                       
+
   oGridSolicitacoes.setHeight(250);
   oGridSolicitacoes.show($('ctnGridSolicitacoes'));
   js_pesquisarSolicitacoes();
 }
 
 function js_pesquisarSolicitacoes () {
-      
+
   var iNumeroSolicitacaoInicial = $F('pc10_numeroInicial');
   var iNumeroSolicitacaoFinal   = $F('pc10_numeroFinal');
   var dtDataSolicitacaoInicial  = $F('pc10_datainicial');
-  var dtDataSolicitacaoFinal    = $F('pc10_datafinal');   
+  var dtDataSolicitacaoFinal    = $F('pc10_datafinal');
   var iLicitacao                = $F("l20_codigo");
-  
+
   var msgDiv                   = "Carregando Lista de Solicitações. \n Aguarde ...";
   js_divCarregando(msgDiv,'msgBox');
-  
+
   var oParam     = new Object();
   oParam.exec    = 'pesquisarSolicitacoes';
-  
+
   oParam.filtros                           = new Object();
-  oParam.filtros.iNumeroSolicitacaoInicial = iNumeroSolicitacaoInicial; 
-  oParam.filtros.iNumeroSolicitacaoFinal   = iNumeroSolicitacaoFinal; 
-  oParam.filtros.dtDataSolicitacaoInicial  = dtDataSolicitacaoInicial; 
+  oParam.filtros.iNumeroSolicitacaoInicial = iNumeroSolicitacaoInicial;
+  oParam.filtros.iNumeroSolicitacaoFinal   = iNumeroSolicitacaoFinal;
+  oParam.filtros.dtDataSolicitacaoInicial  = dtDataSolicitacaoInicial;
   oParam.filtros.dtDataSolicitacaoFinal    = dtDataSolicitacaoFinal;
   oParam.filtros.iLicitacao                = iLicitacao;
-  
-  var  aAjax = new Ajax.Request(sUrl, 
+
+  var  aAjax = new Ajax.Request(sUrl,
                            {method:'post',
                             parameters: 'json='+Object.toJSON(oParam),
                             onComplete: js_retornoPesquisaSolicitacoes
                            });
-                   
+
 }
 
 function js_retornoPesquisaSolicitacoes(oAjax) {
 
   js_removeObj('msgBox');
   var oRetorno      = eval("("+oAjax.responseText+")");
-  
+
   if (oRetorno.aSolicitacoes.length == 0) {
     alert("Não existem solicitações para os filtros.");
     return false;
   }
 
   oGridSolicitacoes.clearAll(true);
-  oRetorno.aSolicitacoes.each( function (oDado, iInd) {       
+  oRetorno.aSolicitacoes.each( function (oDado, iInd) {
 
       var sDotacao     = oDado.dotacoes;
       var sSolicitacao = oDado.solicitacao + "&nbsp;";
@@ -343,14 +343,14 @@ function js_retornoPesquisaSolicitacoes(oAjax) {
 
         sSolicitacao = "<strong>*</strong> " + oDado.solicitacao + "&nbsp;";
       }
-      
+
       if (sDotacao == null || sDotacao == '') {
 
         sDotacao = "<label><strong>Selecione Dotação</strong></label>";
       }
-    
-      aRow     = new Array();  
-                                                                  
+
+      aRow     = new Array();
+
       aRow[0]  = sSolicitacao;
       aRow[1]  = oDado.dtEmis;
       aRow[2]  = "&nbsp;" + sDotacao;
@@ -358,8 +358,8 @@ function js_retornoPesquisaSolicitacoes(oAjax) {
       oGridSolicitacoes.addRow(aRow);
       oGridSolicitacoes.aRows[iInd].sEvents += "ondblclick='js_montaWindowDetalhes("+oDado.solicitacao+")'";
    });
-          
-  oGridSolicitacoes.renderRows();  
+
+  oGridSolicitacoes.renderRows();
 }
 
 function js_montaWindowDetalhes(iCodigoSolicitacao) {
@@ -367,6 +367,6 @@ function js_montaWindowDetalhes(iCodigoSolicitacao) {
   oViewSolicitacaoDotacao = new DBViewSolicitacaoDotacao(iCodigoSolicitacao, "oViewSolicitacaoDotacao");
   oViewSolicitacaoDotacao.getDotacoes();
   oViewSolicitacaoDotacao.onBeforeSave(js_pesquisarSolicitacoes);
-  
+
 }
 </script>

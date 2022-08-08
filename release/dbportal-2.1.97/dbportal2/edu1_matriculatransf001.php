@@ -306,7 +306,7 @@ if(isset($chavepesquisa)){
  function js_pesquisaturmadest(mostra){
   document.getElementById("iframe_trocaturma").style.visibility = "hidden";
   if(mostra==true){
-   js_OpenJanelaIframe('top.corpo','db_iframe_turma','func_turmatransfrede.php?aluno='+document.form1.ed47_v_nome.value+'&serie='+document.form1.codseriedest.value+'&calendario='+document.form1.codcaldest.value+'&funcao_js=parent.js_mostraturma1|ed57_i_codigo|ed57_c_descr','Pesquisa de Turma de Destino',true);
+   js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_turma','func_turmatransfrede.php?aluno='+document.form1.ed47_v_nome.value+'&serie='+document.form1.codseriedest.value+'&calendario='+document.form1.codcaldest.value+'&funcao_js=parent.js_mostraturma1|ed57_i_codigo|ed57_c_descr','Pesquisa de Turma de Destino',true);
   }
  }
  function js_mostraturma1(chave1,chave2){
@@ -317,7 +317,7 @@ if(isset($chavepesquisa)){
   document.getElementById("iframe_trocaturma").style.visibility = "visible";
  }
  function js_pesquisatransf(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_transfescolarede','func_transfescolarede.php?funcao_js=parent.js_preenchepesquisa|ed103_i_codigo','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_transfescolarede','func_transfescolarede.php?funcao_js=parent.js_preenchepesquisa|ed103_i_codigo','Pesquisa',true);
  }
  function js_preenchepesquisa(chave){
   db_iframe_transfescolarede.hide();

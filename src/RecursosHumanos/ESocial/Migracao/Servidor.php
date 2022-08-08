@@ -55,7 +55,7 @@ class Servidor extends Migracao implements MigracaoInterface
         $rs = \db_query($sql);
 
         if (!$rs) {
-            throw new \Exception("Erro ao buscar os preenchimentos dos formulários dos servidores. $sql");
+            throw new \Exception("Erro ao buscar os preenchimentos dos formulários dos servidores.");
         }
 
         return \db_utils::getCollectionByRecord($rs);

@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 ?>
 <link href="skins/estilos.php?file=style.css" rel="stylesheet" type="text/css">
@@ -35,13 +35,13 @@
   }
 
   function js_criaDIV() {
-    var camada = top.topo.document.createElement("DIV");
+    var camada = CurrentWindow.topo.document.createElement("DIV");
     camada.setAttribute("id","info");
-    camada.setAttribute("align","center");  
+    camada.setAttribute("align","center");
     camada.style.backgroundColor = "#F9F9F9";
     camada.style.layerBackgroundColor = "#F9F9F9";
     camada.style.position = "absolute";
-    
+
     camada.style.display = 'table';
     camada.style.padding = '2px 10px';
 
@@ -72,18 +72,18 @@
                        + '  </tr>'
                        + '</table>'
                        + '<span class="baixo"></span>';
-    top.topo.document.body.appendChild(camada);
+    CurrentWindow.topo.document.body.appendChild(camada);
 
-    var arrow = top.topo.document.createElement("DIV");
+    var arrow = CurrentWindow.topo.document.createElement("DIV");
     arrow.setAttribute("id","arrow");
-    arrow.setAttribute("class","arrow");  
+    arrow.setAttribute("class","arrow");
     arrow.innerHTML = '&nbsp;';
-    top.topo.document.body.appendChild(arrow);
+    CurrentWindow.topo.document.body.appendChild(arrow);
   }
   function js_remDIV() {
-    if(top.topo.document.getElementById("info")){
-      top.topo.document.body.removeChild(top.topo.document.getElementById("info"));
-      top.topo.document.body.removeChild(top.topo.document.getElementById("arrow"));
+    if(CurrentWindow.topo.document.getElementById("info")){
+      CurrentWindow.topo.document.body.removeChild(CurrentWindow.topo.document.getElementById("info"));
+      CurrentWindow.topo.document.body.removeChild(CurrentWindow.topo.document.getElementById("arrow"));
     }
   }
 </script>
@@ -110,7 +110,7 @@
       <header>
           <div id="bTopo">
               <span id="infoConfig">&nbsp;</span>
-              | 
+              |
               <a href="#" onClick="if(!confirm('Quer realmente sair do sistema?')){ return false ; }else{ parent.window.close(); }" target="_top" class="button small blueStrong">Sair</a>
           </div>
           <div id="logo">
@@ -138,7 +138,7 @@
   <input type="hidden" id="Hhora">
 
   <div align="center" id="sol" style="position:absolute; left:450px; top:11px; width:180px; height:45px; z-index:1; background-color: #00FFFF; border: 1px none #000000; visibility: hidden;">
-    <br><a href='' id="msg_sol" class="arial" onclick="js_abrir();return false">  
+    <br><a href='' id="msg_sol" class="arial" onclick="js_abrir();return false">
     Solicita conversa
     </a>
   </div>

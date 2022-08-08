@@ -643,12 +643,12 @@ if(isset($chavepesquisa)){
   <script>
   function js_db_libera(){
     parent.document.formaba.solicitem.disabled=false;
-    top.corpo.iframe_solicitem.location.href='com1_solicitem001.php?pc11_numero=".@$pc10_numero."&selecao=3';
+    CurrentWindow.corpo.iframe_solicitem.location.href='com1_solicitem001.php?pc11_numero=".@$pc10_numero."&selecao=3';
     ";
     if($pc30_sugforn=='t'){
       echo "
       parent.document.formaba.sugforn.disabled=false;
-      top.corpo.iframe_sugforn.location.href='com1_sugforn001.php?pc40_solic=".@$pc10_numero."&db_opcaoal=3';
+      CurrentWindow.corpo.iframe_sugforn.location.href='com1_sugforn001.php?pc40_solic=".@$pc10_numero."&db_opcaoal=3';
       ";
     }
     if(isset($liberaaba)){

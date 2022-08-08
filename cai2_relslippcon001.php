@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -61,7 +61,7 @@ function js_emite(){
 		     'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
    jan.moveTo(0,0);
 }
-</script>  
+</script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" bgcolor="#cccccc">
@@ -86,7 +86,7 @@ function js_emite(){
         db_ancora('Codigo da Conta:',"js_pesquisac60_codcon(true);",1);
         ?></b>
        </td>
-       <td> 
+       <td>
         <?
         db_input('c60_codcon',5,$Ic60_codcon,true,'text',1," onchange='js_pesquisac60_codcon(false);'")
           ?>
@@ -96,12 +96,12 @@ function js_emite(){
          </td>
          </tr>
 	 <tr>
-	 
+
         <td align="left" nowrap title="Contas Todas/Debito/Credito" >
         <strong>Contas:&nbsp;&nbsp;</strong>
         </td>
 	<td>
-	  <? 
+	  <?
 	  $tipo_ordem1 = array("c"=>"Todas","b"=>"Debito","a"=>"Credito");
 	  db_select("contas1",$tipo_ordem1,true,2); ?>
         </td>
@@ -110,51 +110,51 @@ function js_emite(){
         <strong>Tipo de data:&nbsp;&nbsp;</strong>
         </td>
 	<td>
-	  <? 
+	  <?
 	  $tipo_data = array("a"=>"Autenticacao","b"=>"Lancamento");
 	  db_select("tipodata",$tipo_data,true,2); ?>
         </td>
 
-	 
-	
+
+
 	 </tr>
          <tr>
         <td align="left" nowrap title="Totalizador Nenhum/Debito/Credito" >
         <strong>Totalizador:&nbsp;&nbsp;</strong>
         </td>
 	<td>
-	  <? 
+	  <?
 	  $totalizador = array("n"=>"Nenhum","d"=>"Debito","c"=>"Credito");
 	  db_select("totalizador",$totalizador,true,2); ?>
         </td>
-         
+
 	 <?
 		$dtd = date("d",db_getsession("DB_datausu"));
 		$dtm = date("m",db_getsession("DB_datausu"));
 		$dta = date("Y",db_getsession("DB_datausu"));
-         ?>		
+         ?>
 	 <td><b>De:</b><?db_inputdata("data","$dtd","$dtm","$dta","true","text",2)      ?>      </td>
 	 <td><b>Ate:</b>  <?db_inputdata("data1","$dtd","$dtm","$dta","true","text",2)      ?> </td>
-	 
+
 	 </tr>
 	<tr>
         <td align="left" nowrap title="Ordem" >
         <strong>Ordem:&nbsp;&nbsp;</strong>
         </td>
 	<td>
-	  <? 
+	  <?
 	  $ordem = array("1"=>"Autenticacao","2"=>"Slip");
 	  db_select("ordem",$ordem,true,2); ?>
         </td>
-	
+
         <td  align="left" nowrap title="Ordem" >
         <strong>Lista Movimento do Caixa:&nbsp;&nbsp;</strong>
         </td>
 	<td align="left">
-	  <? 
+	  <?
 	  $xy = array("n"=>"Não","s"=>"Sim");
 	  db_select("movim",$xy,true,2); ?>
-        </td>	 
+        </td>
       </tr>
       <tr>
         <td ><strong>Recurso</strong></td>
@@ -167,7 +167,7 @@ function js_emite(){
 	</td>
       </tr>
       <tr>
-        <td colspan="2" align = "center"> 
+        <td colspan="2" align = "center">
           <input  name="emite2" id="emite2" type="button" value="Emitir Relatório" onclick="js_emite();" >
         </td>
       </tr>
@@ -185,20 +185,20 @@ function js_emite(){
 <?/*--------------------------------------------------*/?>
 function js_pesquisac60_codcon(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_conplano','func_conplano.php?funcao_js=parent.js_mostraconplano1|c60_codcon|c60_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_conplano','func_conplano.php?funcao_js=parent.js_mostraconplano1|c60_codcon|c60_descr','Pesquisa',true);
   }else{
-     if(document.form1.c60_codcon.value != ''){ 
-       js_OpenJanelaIframe('top.corpo','db_iframe_conplano','func_conplano.php?pesquisa_chave='+document.form1.c60_codcon.value+'&funcao_js=parent.js_mostraconplano','Pesquisa',false);
+     if(document.form1.c60_codcon.value != ''){
+       js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_conplano','func_conplano.php?pesquisa_chave='+document.form1.c60_codcon.value+'&funcao_js=parent.js_mostraconplano','Pesquisa',false);
      }else{
-       document.form1.c60_descr.value = ''; 
+       document.form1.c60_descr.value = '';
      }
   }
 }
 function js_mostraconplano(chave,erro){
-  document.form1.c60_descr.value = chave; 
-  if(erro==true){ 
-    document.form1.c60_codcon.focus(); 
-    document.form1.c60_codcon = ''; 
+  document.form1.c60_descr.value = chave;
+  if(erro==true){
+    document.form1.c60_codcon.focus();
+    document.form1.c60_codcon = '';
   }
 }
 function js_mostraconplano1(chave1,chave2){

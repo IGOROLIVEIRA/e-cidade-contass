@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: saude
@@ -38,7 +38,7 @@ $clrotulo->label("sd04_i_codigo");
     <td nowrap title="<?=@$Tsd27_i_codigo?>">
        <?=@$Lsd27_i_codigo?>
     </td>
-    <td> 
+    <td>
 <?
 $x = array(''=>'');
 db_select('sd27_i_codigo',$x,true,$db_opcao,"");
@@ -51,7 +51,7 @@ db_select('sd27_i_codigo',$x,true,$db_opcao,"");
        db_ancora(@$Lsd27_i_rhcbo,"js_pesquisasd27_i_rhcbo(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 $x = array(''=>'');
 db_select('sd27_i_rhcbo',$x,true,$db_opcao," onchange='js_pesquisasd27_i_rhcbo(false);'");
@@ -64,7 +64,7 @@ db_select('sd27_i_rhcbo',$x,true,$db_opcao," onchange='js_pesquisasd27_i_rhcbo(f
        db_ancora(@$Lsd27_i_undmed,"js_pesquisasd27_i_undmed(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 $x = array(''=>'');
 db_select('sd27_i_undmed',$x,true,$db_opcao," onchange='js_pesquisasd27_i_undmed(false);'");
@@ -75,7 +75,7 @@ db_select('sd27_i_undmed',$x,true,$db_opcao," onchange='js_pesquisasd27_i_undmed
     <td nowrap title="<?=@$Tsd27_b_principal?>">
        <?=@$Lsd27_b_principal?>
     </td>
-    <td> 
+    <td>
 <?
 $x = array(''=>'');
 db_select('sd27_b_principal',$x,true,$db_opcao,"");
@@ -90,20 +90,20 @@ db_select('sd27_b_principal',$x,true,$db_opcao,"");
 <script>
 function js_pesquisasd27_i_rhcbo(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_rhcbo','func_rhcbo.php?funcao_js=parent.js_mostrarhcbo1|rh70_sequencial|rh70_sequencial','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhcbo','func_rhcbo.php?funcao_js=parent.js_mostrarhcbo1|rh70_sequencial|rh70_sequencial','Pesquisa',true);
   }else{
-     if(document.form1.sd27_i_rhcbo.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_rhcbo','func_rhcbo.php?pesquisa_chave='+document.form1.sd27_i_rhcbo.value+'&funcao_js=parent.js_mostrarhcbo','Pesquisa',false);
+     if(document.form1.sd27_i_rhcbo.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhcbo','func_rhcbo.php?pesquisa_chave='+document.form1.sd27_i_rhcbo.value+'&funcao_js=parent.js_mostrarhcbo','Pesquisa',false);
      }else{
-       document.form1.rh70_sequencial.value = ''; 
+       document.form1.rh70_sequencial.value = '';
      }
   }
 }
 function js_mostrarhcbo(chave,erro){
-  document.form1.rh70_sequencial.value = chave; 
-  if(erro==true){ 
-    document.form1.sd27_i_rhcbo.focus(); 
-    document.form1.sd27_i_rhcbo.value = ''; 
+  document.form1.rh70_sequencial.value = chave;
+  if(erro==true){
+    document.form1.sd27_i_rhcbo.focus();
+    document.form1.sd27_i_rhcbo.value = '';
   }
 }
 function js_mostrarhcbo1(chave1,chave2){
@@ -113,20 +113,20 @@ function js_mostrarhcbo1(chave1,chave2){
 }
 function js_pesquisasd27_i_undmed(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_unidademedicos','func_unidademedicos.php?funcao_js=parent.js_mostraunidademedicos1|sd04_i_codigo|sd04_i_codigo','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_unidademedicos','func_unidademedicos.php?funcao_js=parent.js_mostraunidademedicos1|sd04_i_codigo|sd04_i_codigo','Pesquisa',true);
   }else{
-     if(document.form1.sd27_i_undmed.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_unidademedicos','func_unidademedicos.php?pesquisa_chave='+document.form1.sd27_i_undmed.value+'&funcao_js=parent.js_mostraunidademedicos','Pesquisa',false);
+     if(document.form1.sd27_i_undmed.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_unidademedicos','func_unidademedicos.php?pesquisa_chave='+document.form1.sd27_i_undmed.value+'&funcao_js=parent.js_mostraunidademedicos','Pesquisa',false);
      }else{
-       document.form1.sd04_i_codigo.value = ''; 
+       document.form1.sd04_i_codigo.value = '';
      }
   }
 }
 function js_mostraunidademedicos(chave,erro){
-  document.form1.sd04_i_codigo.value = chave; 
-  if(erro==true){ 
-    document.form1.sd27_i_undmed.focus(); 
-    document.form1.sd27_i_undmed.value = ''; 
+  document.form1.sd04_i_codigo.value = chave;
+  if(erro==true){
+    document.form1.sd27_i_undmed.focus();
+    document.form1.sd27_i_undmed.value = '';
   }
 }
 function js_mostraunidademedicos1(chave1,chave2){
@@ -135,7 +135,7 @@ function js_mostraunidademedicos1(chave1,chave2){
   db_iframe_unidademedicos.hide();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_especmedico','func_especmedico.php?funcao_js=parent.js_preenchepesquisa|sd27_i_codigo','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_especmedico','func_especmedico.php?funcao_js=parent.js_preenchepesquisa|sd27_i_codigo','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_especmedico.hide();

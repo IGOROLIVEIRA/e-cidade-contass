@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 
@@ -53,7 +53,7 @@ db_inputdata('c70_data', @ $c70_data_dia, @ $c70_data_mes, @ $c70_data_ano, true
 	<input name="pesquisa" value="Pesquisa" type="submit">
       </td>
     </tr>
-  <? 
+  <?
  if (isset ($pesquisa)) {
 
 	$data = $c70_data_ano."-".$c70_data_mes."-".$c70_data_dia;
@@ -80,7 +80,7 @@ db_inputdata('c70_data', @ $c70_data_dia, @ $c70_data_mes, @ $c70_data_ano, true
 
 			echo "<script>
 				      function js_mostra(tipo){
-			                js_OpenJanelaIframe('top.corpo','db_iframeboletim','forms/db_frmboletim002.php?tipo='+tipo+'&data=$data&boletim=$k11_numbol','Saldoa',true);
+			                js_OpenJanelaIframe('CurrentWindow.corpo','db_iframeboletim','forms/db_frmboletim002.php?tipo='+tipo+'&data=$data&boletim=$k11_numbol','Saldoa',true);
 				      }
 				      </script>";
 			echo "<br>";
@@ -127,7 +127,7 @@ db_inputdata('c70_data', @ $c70_data_dia, @ $c70_data_mes, @ $c70_data_ano, true
 
 			//echo "<tr>";
 			//echo "<td align=\"center\" colspan=\"2\">";
-			//echo '<iframe name="iframe_receita" frameborder="0" leftmargin="0" topmargin="0" 
+			//echo '<iframe name="iframe_receita" frameborder="0" leftmargin="0" topmargin="0"
 			//    src="forms/db_frmboletim002.php?data='.$data.'&boletim='.$k11_numbol.'" height="300" width="770"></iframe>';
 			//echo "</td>";
 			//echo "</tr>";
@@ -135,7 +135,7 @@ db_inputdata('c70_data', @ $c70_data_dia, @ $c70_data_mes, @ $c70_data_ano, true
 	}
 ?>
       <tr>
-      <td align="center" colspan="2"> 
+      <td align="center" colspan="2">
      <input name="data" value="<?=$data?>" type="hidden">
 	 <input name="processar" value="Estornar Boletim" type="submit" >
       </td>

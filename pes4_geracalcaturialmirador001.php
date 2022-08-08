@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -49,7 +49,7 @@ $clrotulo->label('r44_descr');
 <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
 <script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
 
-</script>  
+</script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <body bgcolor=#CCCCCC leftmargin="0"  topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" bgcolor="#cccccc">
@@ -62,14 +62,14 @@ $clrotulo->label('r44_descr');
   </tr>
 </table>
  <center>
- 
+
  <table style="margin-top:15px">
  <tr><td>
   <fieldset><legend><B>Cálculo Atuarial - Mirador</b></legend>
 
   <table  align="center">
     <form name="form1" method="post" action="pes4_geracalcaturialmirador002.php">
-      
+
       <tr >
         <td align="left" nowrap title="Digite o Ano / Mes de competncia">
         <b>Ano / Mês :</b>
@@ -86,19 +86,19 @@ $clrotulo->label('r44_descr');
           ?>
         </td>
       </tr>
-      
-      <tr> 
+
+      <tr>
         <td align="left" nowrap title="Seleção:" >
 	        <b>Tipo de Arquivo</b>
         </td>
         <td>
           <?
-          $aTipoArquivo = array(""=>"Selecione...", "A"=>"Ativos", "I"=>"Inativos", "P"=>"Pensionistas");          
+          $aTipoArquivo = array(""=>"Selecione...", "A"=>"Ativos", "I"=>"Inativos", "P"=>"Pensionistas");
           db_select("tipo_arquivo", $aTipoArquivo, true, 1, "");
           ?>
         </td>
       </tr>
-      
+
       <tr>
         <td align="left">
           <b>Data da Mudança do Regime:<b>
@@ -109,13 +109,13 @@ $clrotulo->label('r44_descr');
 			  ?>
         </td>
       </tr>
-      
+
       <tr>
         <td align="left">
         <?
           db_ancora("<b>Seleção de Professores:</b>","js_pesquisaprof(true)",1);
         ?>
-        </td>        
+        </td>
         <td align="left">
 			  <?
 			    db_input('r44_selec',4,$Ir44_selec,true,'text',2,'onchange="js_pesquisaprof(false)"');
@@ -127,7 +127,7 @@ $clrotulo->label('r44_descr');
     </fieldset>
     </td></tr>
     </table>
-    
+
     <table>
       <tr>
         <td>
@@ -156,13 +156,13 @@ $clrotulo->label('r44_descr');
         ?>
         </td>
       </tr>
-    </table>  
-        
-    
-    
+    </table>
+
+
+
     <table>
       <tr>
-        <td colspan="2" align = "center"> 
+        <td colspan="2" align = "center">
           <input  name="gera" id="gera" type="submit" value="Processar" onclick="return js_validapars()" >
  <!-- onclick="return js_validapars()"        <input name="verificar" type="submit" value="Download" > -->
         </td>
@@ -182,20 +182,20 @@ $clrotulo->label('r44_descr');
 
 function js_pesquisaprof(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_selecao','func_selecao.php?funcao_js=parent.js_mostraprof1|r44_selec|r44_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_selecao','func_selecao.php?funcao_js=parent.js_mostraprof1|r44_selec|r44_descr','Pesquisa',true);
   }else{
-     if(document.form1.r44_selec.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_selecao','func_selecao.php?pesquisa_chave='+document.form1.r44_selec.value+'&funcao_js=parent.js_mostraprof','Pesquisa',false);
+     if(document.form1.r44_selec.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_selecao','func_selecao.php?pesquisa_chave='+document.form1.r44_selec.value+'&funcao_js=parent.js_mostraprof','Pesquisa',false);
      }else{
        document.form1.r44_descr.value = '';
      }
   }
 }
 function js_mostraprof(chave,erro){
-  document.form1.r44_descr.value = chave; 
-  if(erro==true){ 
-    document.form1.r44_selec.focus(); 
-    document.form1.r44_selec.value = ''; 
+  document.form1.r44_descr.value = chave;
+  if(erro==true){
+    document.form1.r44_selec.focus();
+    document.form1.r44_selec.value = '';
   }
 }
 function js_mostraprof1(chave1,chave2){
@@ -211,22 +211,22 @@ function js_validapars (){
    tipo_arquivo = $F('tipo_arquivo');
 
    if (ano == '' ||  mes == '' || tipo_arquivo == ''){
-     
+
      alert('Verifique os Parametros!\n parametros obrigatórios nulos.');
 	   return false;
-	      
+
    }else{
-      
+
      if (tipo_arquivo == 'A') {
        if ($F('data_mudanca')=='') {
          alert("Ao selecionar o Tipo de Arquivo 'Ativos', você deve selecionar uma Data da Mudança do Regime");
-         return false;        
+         return false;
        }
      }
-     
+
      for (var i=0; i< $('rubricas').options.length; i++)
        $('rubricas').options[i].selected = true;
-      
+
      return true;
    }
 }

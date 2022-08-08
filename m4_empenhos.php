@@ -125,7 +125,7 @@ if (db_getsession("DB_login") == 'dbseller') {
 
       if (mostra == true) {
 
-        js_OpenJanelaIframe('top.corpo',
+        js_OpenJanelaIframe('CurrentWindow.corpo',
           'db_iframe_empempenho',
           'func_empempenho_manut.php?funcao_js=parent.js_mostraempenho1|e60_codemp|e60_anousu|e60_numemp',
           'Pesquisa',

@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
   require_once("libs/db_stdlib.php");
@@ -32,15 +32,15 @@
   require_once("libs/db_usuariosonline.php");
   require_once("dbforms/db_funcoes.php");
   require_once("classes/db_rhgeracaofolha_classe.php");
-  
-  $oRhGeracaoFolha = new cl_rhgeracaofolha(); 
+
+  $oRhGeracaoFolha = new cl_rhgeracaofolha();
   $oRotulo = new rotulocampo();
   $oRotulo->label('rh102_sequencial');
   $oRotulo->label('rh102_descricao');
   $oRotulo->label('rh102_anousu');
   $oRotulo->label('rh102_mesusu');
   $oRotulo->label('rh103_tipofolha');
-  
+
   $oPost = db_utils::postMemory($HTTP_POST_VARS);
 
   if ( isset($oPost->btnInativar) ) {
@@ -58,7 +58,7 @@
       $lSqlErro = true;
       $sMsgErro = $oRhGeracaoFolha->erro_msg;
     }
-    
+
     db_fim_transacao($lSqlErro);
   }
 ?>
@@ -127,11 +127,11 @@
     <p align="center">
       <input type="submit" name="btnInativar" id="btnInativar" value="Inativar" />
       &nbsp;&nbsp;
-      <input type="button" name="btnPesquisar" id="btnPesquisar" value="Pesquisar" onclick="js_pesquisar();" />    
+      <input type="button" name="btnPesquisar" id="btnPesquisar" value="Pesquisar" onclick="js_pesquisar();" />
     </p>
   </center>
 </form>
-<? 
+<?
  db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
 ?>
 </body>
@@ -142,7 +142,7 @@
   (function(){
 
     /**
-     * Chama a função js_pesquisar para abrir 
+     * Chama a função js_pesquisar para abrir
      * a lookup de pesquisa.
      */
     js_pesquisar();
@@ -152,30 +152,30 @@
    *  Abre Pesquisa
    */
   function js_pesquisar() {
-    js_OpenJanelaIframe('top.corpo','db_iframe_rhgeracaofolha','func_rhgeracaofolha.php?ativas=true&funcao_js=parent.js_preenchePesquisa|rh102_sequencial|rh102_descricao|rh102_mesusu|rh102_anousu|rh103_tipofolha','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhgeracaofolha','func_rhgeracaofolha.php?ativas=true&funcao_js=parent.js_preenchePesquisa|rh102_sequencial|rh102_descricao|rh102_mesusu|rh102_anousu|rh103_tipofolha','Pesquisa',true);
   }
-  
+
   /**
    * Efetua o processamento
    */
   function js_inativar() {
-    
+
     if ( $('rh102_sequencial').value == "" || $('rh102_descricao').value == "" || $('rh102_mesusu').value == "" || $('rh102_anousu').value == "" || $('rh103_tipofolha').value == "") {
-    
+
       alert("Por favor, preencha o formulário corretamente.");
       return false;
     } else {
       if ( !confirm("Confirma a operação?") ) {
         return false;
-      }      
+      }
     }
-  }  
-  
+  }
+
   /**
    * Esta função preenche os dados do formulário com os dados buscados na lookup
    */
   function js_preenchePesquisa(iSequencial, sDescricao, iMesUso, iAnoUso, rh103_tipofolha) {
-  
+
     $('rh102_sequencial').value = iSequencial;
     $('rh102_descricao').value  = sDescricao;
     $('rh102_mesusu').value     = iMesUso;
@@ -184,8 +184,8 @@
     $('btnInativar').enable();
     db_iframe_rhgeracaofolha.hide();
   }
-  
-  
+
+
   /**
    *   Inicia a rotina com os valores zerados. Apenas por segurança!
    */

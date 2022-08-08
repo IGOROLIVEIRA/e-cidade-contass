@@ -133,7 +133,6 @@ $rsSql = db_query($sSql);
 
 $mPDF  = new Relatorio('', 'A4-L'); //RELATORIO LANDSCAPE, PARA PORTRAIT, DEIXE SOMENTE A4
 
-
 $head1 = "PLANILHA DE PRESTAÇÃO DE CONTAS";
 
 if (pg_num_rows($rsSql) == 0) {
@@ -259,6 +258,7 @@ if (pg_num_rows($rsSql) == 0) {
                         "$sWhere "
                     ));
                     db_fieldsmemory($result_itens);
+
                     $result_itens = db_utils::getColectionByRecord($result_itens);
 
                     $nota = "";

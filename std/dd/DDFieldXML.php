@@ -1,15 +1,15 @@
 <?php
 
-class DDFieldFkXML {
+class DDFieldXML {
   
   private $oFieldFkXml = null;
 
   public function __construct(DOMNode $oDomNode){
-    $this->oFieldFkXml = $oDomNode;
+    $this->oFieldXml = $oDomNode;
   }
 
   public function __get($sName){
-    return $this->oFieldFkXml->getAttribute($sName);          
+    return $this->oFieldXml->getAttribute($sName);          
   }
   
 }

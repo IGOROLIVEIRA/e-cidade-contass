@@ -9,7 +9,7 @@ $cldespesarateioconsorcio->rotulo->label();
     <td nowrap title="<?=@$Tc217_sequencial?>">
        <?=@$Lc217_sequencial?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('c217_sequencial',11,$Ic217_sequencial,true,'text',$db_opcao,"")
 ?>
@@ -19,7 +19,7 @@ db_input('c217_sequencial',11,$Ic217_sequencial,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tc217_enteconsorciado?>">
        <?=@$Lc217_enteconsorciado?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('c217_enteconsorciado',11,$Ic217_enteconsorciado,true,'text',$db_opcao,"")
 ?>
@@ -29,7 +29,7 @@ db_input('c217_enteconsorciado',11,$Ic217_enteconsorciado,true,'text',$db_opcao,
     <td nowrap title="<?=@$Tc217_funcao?>">
        <?=@$Lc217_funcao?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('c217_funcao',11,$Ic217_funcao,true,'text',$db_opcao,"")
 ?>
@@ -39,7 +39,7 @@ db_input('c217_funcao',11,$Ic217_funcao,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tc217_subfuncao?>">
        <?=@$Lc217_subfuncao?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('c217_subfuncao',11,$Ic217_subfuncao,true,'text',$db_opcao,"")
 ?>
@@ -49,7 +49,7 @@ db_input('c217_subfuncao',11,$Ic217_subfuncao,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tc217_natureza?>">
        <?=@$Lc217_natureza?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('c217_natureza',6,$Ic217_natureza,true,'text',$db_opcao,"")
 ?>
@@ -59,7 +59,7 @@ db_input('c217_natureza',6,$Ic217_natureza,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tc217_subelemento?>">
        <?=@$Lc217_subelemento?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('c217_subelemento',2,$Ic217_subelemento,true,'text',$db_opcao,"")
 ?>
@@ -69,7 +69,7 @@ db_input('c217_subelemento',2,$Ic217_subelemento,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tc217_fonte?>">
        <?=@$Lc217_fonte?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('c217_fonte',11,$Ic217_fonte,true,'text',$db_opcao,"")
 ?>
@@ -79,7 +79,7 @@ db_input('c217_fonte',11,$Ic217_fonte,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tc217_mes?>">
        <?=@$Lc217_mes?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('c217_mes',2,$Ic217_mes,true,'text',$db_opcao,"")
 ?>
@@ -89,7 +89,7 @@ db_input('c217_mes',2,$Ic217_mes,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tc217_anousu?>">
        <?=@$Lc217_anousu?>
     </td>
-    <td> 
+    <td>
 <?
 $c217_anousu = db_getsession('DB_anousu');
 db_input('c217_anousu',4,$Ic217_anousu,true,'text',3,"")
@@ -100,7 +100,7 @@ db_input('c217_anousu',4,$Ic217_anousu,true,'text',3,"")
     <td nowrap title="<?=@$Tc217_valorempenhado?>">
        <?=@$Lc217_valorempenhado?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('c217_valorempenhado',11,$Ic217_valorempenhado,true,'text',$db_opcao,"")
 ?>
@@ -110,7 +110,7 @@ db_input('c217_valorempenhado',11,$Ic217_valorempenhado,true,'text',$db_opcao,""
     <td nowrap title="<?=@$Tc217_valorempenhadoanulado?>">
        <?=@$Lc217_valorempenhadoanulado?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('c217_valorempenhadoanulado',11,$Ic217_valorempenhadoanulado,true,'text',$db_opcao,"")
 ?>
@@ -120,7 +120,7 @@ db_input('c217_valorempenhadoanulado',11,$Ic217_valorempenhadoanulado,true,'text
     <td nowrap title="<?=@$Tc217_valorliquidado?>">
        <?=@$Lc217_valorliquidado?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('c217_valorliquidado',11,$Ic217_valorliquidado,true,'text',$db_opcao,"")
 ?>
@@ -130,7 +130,7 @@ db_input('c217_valorliquidado',11,$Ic217_valorliquidado,true,'text',$db_opcao,""
     <td nowrap title="<?=@$Tc217_valorliquidadoanulado?>">
        <?=@$Lc217_valorliquidadoanulado?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('c217_valorliquidadoanulado',11,$Ic217_valorliquidadoanulado,true,'text',$db_opcao,"")
 ?>
@@ -140,7 +140,7 @@ db_input('c217_valorliquidadoanulado',11,$Ic217_valorliquidadoanulado,true,'text
     <td nowrap title="<?=@$Tc217_valorpago?>">
        <?=@$Lc217_valorpago?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('c217_valorpago',11,$Ic217_valorpago,true,'text',$db_opcao,"")
 ?>
@@ -150,7 +150,7 @@ db_input('c217_valorpago',11,$Ic217_valorpago,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tc217_valorpagoanulado?>">
        <?=@$Lc217_valorpagoanulado?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('c217_valorpagoanulado',11,$Ic217_valorpagoanulado,true,'text',$db_opcao,"")
 ?>
@@ -160,7 +160,7 @@ db_input('c217_valorpagoanulado',11,$Ic217_valorpagoanulado,true,'text',$db_opca
     <td nowrap title="<?=@$Tc217_percentualrateio?>">
        <?=@$Lc217_percentualrateio?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('c217_percentualrateio',11,$Ic217_percentualrateio,true,'text',$db_opcao,"")
 ?>
@@ -173,7 +173,7 @@ db_input('c217_percentualrateio',11,$Ic217_percentualrateio,true,'text',$db_opca
 </form>
 <script>
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_despesarateioconsorcio','func_despesarateioconsorcio.php?funcao_js=parent.js_preenchepesquisa|c217_sequencial','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_despesarateioconsorcio','func_despesarateioconsorcio.php?funcao_js=parent.js_preenchepesquisa|c217_sequencial','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_despesarateioconsorcio.hide();

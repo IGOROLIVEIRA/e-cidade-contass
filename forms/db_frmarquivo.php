@@ -11,7 +11,7 @@ $clrotulo->label("z01_nome");
     <td nowrap title="<?=@$Tbi12_codigo?>">
        <?=@$Lbi12_codigo?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('bi12_codigo',8,$Ibi12_codigo,true,'text',3,"")
 ?>
@@ -23,7 +23,7 @@ db_input('bi12_codigo',8,$Ibi12_codigo,true,'text',3,"")
        db_ancora(@$Lbi12_numcgm,"js_pesquisabi12_numcgm(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('bi12_numcgm',8,$Ibi12_numcgm,true,'text',$db_opcao," onchange='js_pesquisabi12_numcgm(false);'")
 ?>
@@ -36,7 +36,7 @@ db_input('z01_nome',40,$Iz01_nome,true,'text',3,'')
     <td nowrap title="<?=@$Tbi12_nome?>">
        <?=@$Lbi12_nome?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('bi12_nome',100,$Ibi12_nome,true,'text',$db_opcao,"")
 ?>
@@ -46,7 +46,7 @@ db_input('bi12_nome',100,$Ibi12_nome,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tbi12_resumo?>">
        <?=@$Lbi12_resumo?>
     </td>
-    <td> 
+    <td>
 <?
 db_textarea('bi12_resumo',15,90,$Ibi12_resumo,true,'text',$db_opcao,"")
 ?>
@@ -56,7 +56,7 @@ db_textarea('bi12_resumo',15,90,$Ibi12_resumo,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tbi12_arquivo?>">
        <?=@$Lbi12_arquivo?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('bi12_arquivo',80,$Ibi12_arquivo,true,'file',$db_opcao,"")
 ?>
@@ -70,20 +70,20 @@ db_input('bi12_arquivo',80,$Ibi12_arquivo,true,'file',$db_opcao,"")
 <script>
 function js_pesquisabi12_numcgm(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_cgm','func_cgm.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cgm','func_cgm.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome','Pesquisa',true);
   }else{
-     if(document.form1.bi12_numcgm.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_cgm','func_cgm.php?pesquisa_chave='+document.form1.bi12_numcgm.value+'&funcao_js=parent.js_mostracgm','Pesquisa',false);
+     if(document.form1.bi12_numcgm.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cgm','func_cgm.php?pesquisa_chave='+document.form1.bi12_numcgm.value+'&funcao_js=parent.js_mostracgm','Pesquisa',false);
      }else{
-       document.form1.z01_nome.value = ''; 
+       document.form1.z01_nome.value = '';
      }
   }
 }
 function js_mostracgm(chave,erro){
-  document.form1.z01_nome.value = chave; 
-  if(erro==true){ 
-    document.form1.bi12_numcgm.focus(); 
-    document.form1.bi12_numcgm.value = ''; 
+  document.form1.z01_nome.value = chave;
+  if(erro==true){
+    document.form1.bi12_numcgm.focus();
+    document.form1.bi12_numcgm.value = '';
   }
 }
 function js_mostracgm1(chave1,chave2){
@@ -92,7 +92,7 @@ function js_mostracgm1(chave1,chave2){
   db_iframe_cgm.hide();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_arquivo','func_arquivo.php?funcao_js=parent.js_preenchepesquisa|bi12_codigo','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_arquivo','func_arquivo.php?funcao_js=parent.js_preenchepesquisa|bi12_codigo','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_arquivo.hide();

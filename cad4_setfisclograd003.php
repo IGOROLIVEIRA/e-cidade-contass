@@ -50,11 +50,11 @@ $clrotulo->label("j90_codigo");
 $db_opcao=1;
 $db_botao=true;		
 if (isset($Incluir)){
-	$arr_dados = split("#",$dados);
+	$arr_dados = explode("#",$dados);
 	$sqlerro=false;
 	db_inicio_transacao();
 	for($w=0;$w<count($arr_dados);$w++){
-		$arr_info  = split("_",$arr_dados[$w]);
+		$arr_info  = explode("_",$arr_dados[$w]);
 		$face      = $arr_info[0];
 		$setor     = $arr_info[1];
 		$var_zona  = "zonas_$face";

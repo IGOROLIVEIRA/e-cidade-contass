@@ -1041,10 +1041,10 @@ function js_emitirReceita() {
 /*
 function js_pesquisas158_i_profissional(mostra) {
   if (mostra==true) {
-    js_OpenJanelaIframe('top.corpo','db_iframe_medicos','func_medicos.php?funcao_js=parent.js_mostramedicos1|z01_nome|z01_nome','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_medicos','func_medicos.php?funcao_js=parent.js_mostramedicos1|z01_nome|z01_nome','Pesquisa',true);
   } else {
      if (document.form1.s158_i_profissional.value != '') {
-        js_OpenJanelaIframe('top.corpo','db_iframe_medicos','func_medicos.php?pesquisa_chave='+document.form1.s158_i_profissional.value+'&funcao_js=parent.js_mostramedicos','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_medicos','func_medicos.php?pesquisa_chave='+document.form1.s158_i_profissional.value+'&funcao_js=parent.js_mostramedicos','Pesquisa',false);
      } else {
        document.form1.z01_nome.value = '';
      }

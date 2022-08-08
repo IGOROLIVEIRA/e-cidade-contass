@@ -366,7 +366,7 @@ if ( $tiporel == 1 or $tiporel == 11 ) {
       db_fieldsmemory($resultender,0);
       
       //	echo("matric: $matric<br>\n");exit;
-      $endereco = split("#",$fc_iptuender);
+      $endereco = explode("#",$fc_iptuender);
       
       if (sizeof($endereco) < 7) {
         $z01_ender    = "";
@@ -937,7 +937,7 @@ if ( $tiporel == 1 or $tiporel == 11 ) {
           exit;
         }
         
-        $codigo_barra = split(",",$fc_febraban);
+        $codigo_barra = explode(",",$fc_febraban);
         $codigobarras = $codigo_barra[0];
         $linhadigitavel = $codigo_barra[1];
         
@@ -1745,11 +1745,11 @@ if ( $tiporel == 1 or $tiporel == 11 ) {
         
         $pdf->AddPage();
         
-        $opcoesverso = split("\n",$db02_texto);
+        $opcoesverso = explode("\n",$db02_texto);
         
         for ($xxx=0; $xxx < sizeof($opcoesverso); $xxx++) {
           
-          $dadosopcoes = split("=", $opcoesverso[$xxx]);
+          $dadosopcoes = explode("=", $opcoesverso[$xxx]);
           
           if ($dadosopcoes[0] == "parte1") {
             
@@ -1848,9 +1848,9 @@ if ( $tiporel == 1 or $tiporel == 11 ) {
             $pdf->SetLeftMargin($S);
             
             for ($contamsg = 0; $contamsg < sizeof($opcoesverso); $contamsg++) {
-              $msgparte2 = split("=", $opcoesverso[$contamsg]);
+              $msgparte2 = explode("=", $opcoesverso[$contamsg]);
               if ($msgparte2[0] == "msgparte2") {
-                $parte2 = split("\|", $msgparte2[1]);
+                $parte2 = explode("\|", $msgparte2[1]);
                 for ($contaparte2 = 0; $contaparte2 < sizeof($parte2 ); $contaparte2++) {
                   $pdf->cell(190,5,$parte2[$contaparte2],0,1,"C",0);
                 }
@@ -1995,7 +1995,7 @@ if ( $tiporel == 1 or $tiporel == 11 ) {
             //$pdf->cell($db02_inicia+0,4+$db02_espaca,$texto,0,1,"L",0);
             $pdf->MultiCell(0,4+$db02_espaca,$texto,"0","L",0,$db02_inicia+0);
           } else {
-            $imprimir= split("#\n",$texto);
+            $imprimir= explode("#\n",$texto);
             //			for ($linhaimp=0; $linhaimp<sizeof($imprimir); $linhaimp++) {
               //				echo "x: $linhaimp - "  . $imprimir[$linhaimp] . "<br>";
             //			}

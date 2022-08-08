@@ -63,7 +63,7 @@ $clrotulo->label("c60_descr");
 $clrotulo->label("c53_descr");
 $clrotulo->label("c53_coddoc");
 
-$xinstit = split("-",$db_selinstit);
+$xinstit = explode("-",$db_selinstit);
 $resultinst = pg_exec("select codigo,nomeinst from db_config where codigo in (".str_replace('-',', ',$db_selinstit).") ");
 $descr_inst = '';
 $xvirg = '';

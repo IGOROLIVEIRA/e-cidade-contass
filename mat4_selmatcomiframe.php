@@ -54,7 +54,7 @@ if (isset ($atualizar)&&$atualizar!="") {
 	for ($i = 0; $i < $ta; $i ++) {
 		$chave = key($vt);
 		if (substr($chave, 0, 5) == "CHECK") {
-			$dados = split("_", $chave);
+			$dados = explode("_", $chave);
 			
 			$cltransmater->m63_codpcmater = $dados[1];
 			$cltransmater->m63_codmatmater = $m60_codmater;

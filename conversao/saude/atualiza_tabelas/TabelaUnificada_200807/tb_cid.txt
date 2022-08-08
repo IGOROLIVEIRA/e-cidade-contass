@@ -1502,8 +1502,8 @@ D470Tumores de comportamento incerto ou desconhecido de mastócitos e células his
 D471Doença mieloproliferativa crônica                                                                   0I
 D472Gamopatia monoclonal                                                                                0I
 D473Trombocitemia essencial (hemorrágica)                                                               0I
-D477Outras neoplasias especif. de comport. incerto ou desc. dos tecidos linf., hematop. e relacionados  0I
-D479Neoplasia de comportamento incerto ou desconh. dos tec. linf., hematop. e correlatos,ñ especificada 0I
+D477Outras neoplasias especif. de comport. incerto ou desc. dos tecidos linf., hemaCurrentWindow. e relacionados  0I
+D479Neoplasia de comportamento incerto ou desconh. dos tec. linf., hemaCurrentWindow. e correlatos,ñ especificada 0I
 D480Neoplasia de comportamento incerto ou desconhecido dos ossos e cartilagens articulares              0I
 D481Neoplasia de comportamento incerto ou desconhecido do tecido conjuntivo e outros tecidos moles      0I
 D482Neoplasia de comportamento incerto ou desconhecido dos nervos perif. e do sistema nervoso periférico0I
@@ -5904,7 +5904,7 @@ O986Doenças causadas por protozoários complicando a gravidez, o parto e o puerpé
 O988Outras doenças infecciosas e parasitárias maternas complicando a gravidez, o parto e o puerpério    0F
 O989Doenças infecciosas e parasitárias maternas, não especif., complic. a gravidez, parto e puerpério   0F
 O990Anemia complicando a gravidez, o parto e o puerpério                                                0F
-O991Outras doenças do sangue e dos órgãos hematop. e alguns transt. que comprometem o sist. imunológico 0F
+O991Outras doenças do sangue e dos órgãos hemaCurrentWindow. e alguns transt. que comprometem o sist. imunológico 0F
 O992Doenças endócrinas, nutricionais e metabólicas complicando a gravidez, o parto e o puerpério        0F
 O993Transtornos mentais e doenças do sistema nervoso complicando a gravidez, o parto e o puerpério      0F
 O994Doenças do aparelho circulatório complicando a gravidez, o parto e o puerpério                      0F
@@ -8389,7 +8389,7 @@ T843Complicação mecânica de outros dispositivos, implantes e enxertos ósseos    
 T844Complicação mecânica de outros dispositivos, implantes e enxertos ortopédicos internos              0I
 T845Infecção e reação inflamatória devidas à prótese articular interna                                  0I
 T846Infecção e reação inflamatória devidas a dispositivo de fixação interna [qualquer local]            0I
-T847Infecção e reação inflamatória devida a out. disposit. protét., implantes e enxertos ortop. internos0I
+T847Infecção e reação inflamatória devida a out. disposit. protét., implantes e enxertos orCurrentWindow. internos0I
 T848Outras complicações de dispositivos protéticos, implantes e enxertos ortopédicos internos           0I
 T849Complicação não especificada de dispositivo protético, implante e enxerto ortopédicos internos      0I
 T850Complicação mecânica de shunt ventricular (comunicação) intracraniano                               0I
@@ -10352,16 +10352,16 @@ X236Contato c/abelhas, vespas e vespões - áreas industriais e em construção     
 X237Contato c/abelhas, vespas e vespões - fazenda                                                       0I
 X238Contato c/abelhas, vespas e vespões - outros locais especificados                                   0I
 X239Contato c/abelhas, vespas e vespões - local não especificado                                        0I
-X240Contato c/centop. e miriápodes venen. (tropicais) - residência                                      0I
-X241Contato c/centop. e miriápodes venen. (tropicais) - habitação coletiva                              0I
-X242Contato c/centop. e miriápodes venen. (tropicais) - escolas, out. instit. e áreas de admin. pública 0I
-X243Contato c/centop. e miriápodes venen. (tropicais) - área para a prática de esportes e atletismo     0I
-X244Contato c/centop. e miriápodes venen. (tropicais) - rua e estrada                                   0I
-X245Contato c/centop. e miriápodes venen. (tropicais) - áreas de comércio e de serviços                 0I
-X246Contato c/centop. e miriápodes venen. (tropicais) - áreas industriais e em construção               0I
-X247Contato c/centop. e miriápodes venen. (tropicais) - fazenda                                         0I
-X248Contato c/centop. e miriápodes venen. (tropicais) - outros locais especificados                     0I
-X249Contato c/centop. e miriápodes venen. (tropicais) - local não especificado                          0I
+X240Contato c/cenCurrentWindow. e miriápodes venen. (tropicais) - residência                                      0I
+X241Contato c/cenCurrentWindow. e miriápodes venen. (tropicais) - habitação coletiva                              0I
+X242Contato c/cenCurrentWindow. e miriápodes venen. (tropicais) - escolas, out. instit. e áreas de admin. pública 0I
+X243Contato c/cenCurrentWindow. e miriápodes venen. (tropicais) - área para a prática de esportes e atletismo     0I
+X244Contato c/cenCurrentWindow. e miriápodes venen. (tropicais) - rua e estrada                                   0I
+X245Contato c/cenCurrentWindow. e miriápodes venen. (tropicais) - áreas de comércio e de serviços                 0I
+X246Contato c/cenCurrentWindow. e miriápodes venen. (tropicais) - áreas industriais e em construção               0I
+X247Contato c/cenCurrentWindow. e miriápodes venen. (tropicais) - fazenda                                         0I
+X248Contato c/cenCurrentWindow. e miriápodes venen. (tropicais) - outros locais especificados                     0I
+X249Contato c/cenCurrentWindow. e miriápodes venen. (tropicais) - local não especificado                          0I
 X250Contato c/outros artrópodes venenosos especificados - residência                                    0I
 X251Contato c/outros artrópodes venenosos especificados - habitação coletiva                            0I
 X252Contato c/outros artrópodes venenosos especificados - escolas, out. instit. e áreas de adm. pública 0I

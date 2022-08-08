@@ -679,7 +679,7 @@ switch($oParam->exec) {
           
           $sDataNasc = "";
           if (!empty($oDadosEnvol->z01_nasc)) {
-            $aDataNasc    = split("-",$oDadosEnvol->z01_nasc);
+            $aDataNasc    = explode("-",$oDadosEnvol->z01_nasc);
             $sDataNasc    = $aDataNasc[2].$aDataNasc[1].$aDataNasc[0];
           }
                     

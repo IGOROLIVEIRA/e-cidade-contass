@@ -126,10 +126,10 @@ $cltipodereceitarateio = new cl_tipodereceitarateio();
 
 function js_pesquisac216_receita(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_receita','func_orcfontes.php?funcao_js=parent.js_mostrareceita1|o57_codfon|o57_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_receita','func_orcfontes.php?funcao_js=parent.js_mostrareceita1|o57_codfon|o57_descr','Pesquisa',true);
   }else{
      if(document.form2.c216_receita.value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_receita','func_orcfontes.php?pesquisa_chave='+document.form2.c216_receita.value+'&funcao_js=parent.js_mostrareceita&lPesquisaCodigo=true','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_receita','func_orcfontes.php?pesquisa_chave='+document.form2.c216_receita.value+'&funcao_js=parent.js_mostrareceita&lPesquisaCodigo=true','Pesquisa',false);
      }else{
        document.form2.o57_descr.value = '';
      }
@@ -150,7 +150,7 @@ function js_mostrareceita1(chave1,chave2){
 
 
 function pesquisarEnteConsorciadoReceita(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_entesconsorciadosreceitas','func_entesconsorciadosreceitas.php?funcao_js=parent.preencheEnteConsorciadoReceita|c216_sequencial','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_entesconsorciadosreceitas','func_entesconsorciadosreceitas.php?funcao_js=parent.preencheEnteConsorciadoReceita|c216_sequencial','Pesquisa',true);
 }
 function preencheEnteConsorciadoReceita(chave){
   db_iframe_entesconsorciadosreceitas.hide();

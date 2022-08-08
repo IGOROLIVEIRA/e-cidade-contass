@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -52,7 +52,7 @@ $oPost = db_utils::postMemory($_POST);
 
 /**
  * Data final
- */	 
+ */
 $diaDataInicial = null;
 $mesDataInicial = null;
 $anoDataInicial = null;
@@ -73,7 +73,7 @@ if ( isset($oPost->datainicial) && $oPost->datainicial <> null ) {
 
 /**
  * Data final
- */	 
+ */
 $diaDataFinal   = null;
 $mesDataFinal   = null;
 $anoDataFinal   = null;
@@ -130,7 +130,7 @@ if(isset($v13_certid) && $v13_certid!="" && $veinclu==false){
 		<title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 		<meta http-equiv="Expires" CONTENT="0">
-		<?php  
+		<?php
 			db_app::load("estilos.css");
 			db_app::load("scripts.js, strings.js, prototype.js");
 		?>
@@ -158,7 +158,7 @@ if(isset($v13_certid) && $v13_certid!="" && $veinclu==false){
   			<td nowrap title="<?=@$Tv50_inicial?>">
   				<?=$Lv50_inicial?>
   			</td>
-  			<td> 
+  			<td>
   				<?
   					db_input('v50_inicial',10,$Iv50_inicial,true,'text',1);
   				?>
@@ -170,7 +170,7 @@ if(isset($v13_certid) && $v13_certid!="" && $veinclu==false){
   					db_ancora(@$Lv70_codforo,"js_pesquisaCodigoForo(true);",1);
   				?>
   			</td>
-  			<td> 
+  			<td>
   				<?php
   					db_input('v70_codforo',64,$Iv70_codforo,true,'text',1," onchange='js_pesquisaCodigoForo(false);'");
   				?>
@@ -180,7 +180,7 @@ if(isset($v13_certid) && $v13_certid!="" && $veinclu==false){
   			<td nowrap title="<?=@$Tv58_numcgm?>">
   				<?php db_ancora(@$Lv58_numcgm," js_pesquisaCgm(true); ",1); ?>
   			</td>
-  			<td> 
+  			<td>
   				<?php
   					db_input('v58_numcgm', 10, $Iv58_numcgm, true, 'text', 4, " onchange='js_pesquisaCgm(false);'");
   					db_input('z01_nome', 50, $Iz01_nome, true, 'text', 3, '', 'inicialnomes_z01_nome');
@@ -193,7 +193,7 @@ if(isset($v13_certid) && $v13_certid!="" && $veinclu==false){
   					db_ancora(@$Lv56_codsit,"js_pesquisaSituacao(true);","1");
   				?>
   			</td>
-  			<td> 
+  			<td>
   				<?php
   					db_input('v56_codsit',10,$Iv56_codsit,true,'text',"1","onchange='js_pesquisaSituacao(false);'");
   					db_input('v52_descr',50,$Iv52_descr,true,'text',3,'');
@@ -206,7 +206,7 @@ if(isset($v13_certid) && $v13_certid!="" && $veinclu==false){
   					db_ancora(@$Lv50_advog,"js_pesquisaAdvogado(true);",$db_opcao);
   				?>
   			</td>
-  			<td> 
+  			<td>
   				<?php
   					db_input('v50_advog',10,$Iv50_advog,true,'text',$db_opcao,"onchange='js_pesquisaAdvogado(false);'");
   					db_input('z01_nome',50,$Iz01_nome,true,'text',3,'');
@@ -219,8 +219,8 @@ if(isset($v13_certid) && $v13_certid!="" && $veinclu==false){
   					db_ancora(@$Lv54_codlocal,"js_pesquisaLocalizacao(true);",$db_opcao);
   				?>
   			</td>
-  			<td> 
-  				<?php 
+  			<td>
+  				<?php
   					db_input('v54_codlocal',10,$Iv54_codlocal,true,'text',$db_opcao,"onchange='js_pesquisaLocalizacao(false);'");
   					db_input('v54_descr',50,$Iv54_descr,true,'text',3,'');
   				?>
@@ -241,7 +241,7 @@ if(isset($v13_certid) && $v13_certid!="" && $veinclu==false){
   		</tr>
   		<tr>
   			<td nowrap title="Tipo">Tipo</td>
-  			<td> 
+  			<td>
   				<?php
   					$aTipo = array(""=>"TODOS", "1" => "ATIVA", "2" => "ANULADA");
   					db_select('v50_situacao',$aTipo, true, $db_opcao);
@@ -252,7 +252,7 @@ if(isset($v13_certid) && $v13_certid!="" && $veinclu==false){
   			<td nowrap title="<?=@$Tv50_data?>">
   				<?=@$Lv50_data?>
   			</td>
-  			<td> 
+  			<td>
   				<?php
   					db_inputdata('datainicial', $diaDataInicial, $mesDataInicial, $anoDataInicial, true, 'text', $db_opcao,"");
   				?>
@@ -262,8 +262,8 @@ if(isset($v13_certid) && $v13_certid!="" && $veinclu==false){
   				?>
   			</td>
   		</tr>
-  	</table>	
-  </fieldset>	
+  	</table>
+  </fieldset>
   <input name="pesquisar" type="submit" id="pesquisar" value="Pesquisar" >
 </form>
 
@@ -274,12 +274,12 @@ if(isset($v13_certid) && $v13_certid!="" && $veinclu==false){
  * -----------------------------------------------------------------------------------------------------
  * FUNÇÕES DE PESQUISA PROCESSO FORO
  * --------------
- */	 
+ */
 
 /**
  * Pesquisa processo foro
- * 
- * @param boolean $mostra 
+ *
+ * @param boolean $mostra
  * @return boolean
  */
 function js_pesquisaCodigoForo(lMostra) {
@@ -303,26 +303,26 @@ function js_pesquisaCodigoForo(lMostra) {
  * Codigo do processo do foro
  * Retorno da loockup de pesquisa quando origem for o ANCORA
  */
-function js_pesquisaCodigoForoAncora(iCodforo, iInicial) {  
+function js_pesquisaCodigoForoAncora(iCodforo, iInicial) {
 
   $('v70_codforo').value = iCodforo;
   $('v50_inicial').value = iInicial;
 
-  db_iframe_processoforo.hide();   
+  db_iframe_processoforo.hide();
 }
 
 /**
  * --------------
  * FUNÇÕES DE PESQUISA PROCESSO FORO
  * -----------------------------------------------------------------------------------------------------
- */	 
+ */
 
 
 /**
  * -----------------------------------------------------------------------------------------------------
  * FUNÇÕES DE PESQUISA SITUACAO
  * ----------
- */	 
+ */
 
 /**
  * Pesquisa situacao
@@ -336,14 +336,14 @@ function js_pesquisaSituacao(lMostra) {
 
 	/**
 	 * Pesquisa pelo ancora
-	 */	 
+	 */
   if (lMostra == true ) {
 		sArquivoPesquisa += 'parent.js_mostraSituacaoAncora|0|1';
 	}
 
 	/**
 	 * Pesquisa pelo input
-	 */	 
+	 */
 	if ( lMostra == false && $F('v56_codsit') != null ) {
 		sArquivoPesquisa += 'parent.js_mostraSituacaoInput&pesquisa_chave=' + $F('v56_codsit');
 	}
@@ -356,8 +356,8 @@ function js_pesquisaSituacao(lMostra) {
 function js_mostraSituacaoAncora(iCodigo, sDescricao) {
 
 	db_iframe_situacao.hide();
-	$('v56_codsit').value = iCodigo; 
-	$('v52_descr').value  = sDescricao; 
+	$('v56_codsit').value = iCodigo;
+	$('v52_descr').value  = sDescricao;
 }
 
 function js_mostraSituacaoInput(sDescricao, lErro) {
@@ -373,18 +373,18 @@ function js_mostraSituacaoInput(sDescricao, lErro) {
  * --------------
  * FUNÇÕES DE PESQUISA SITUACAO
  * -----------------------------------------------------------------------------------------------------
- */	 
+ */
 
 
 
 /**
  * -----------------------------------------------------------------------------------------------------
- * FUNÇÕES PARA PESQUISAR OS ADVOGADOS 
+ * FUNÇÕES PARA PESQUISAR OS ADVOGADOS
  * -----------
- */	 
+ */
 
 /**
- * Pesquisa advogado 
+ * Pesquisa advogado
  */
 function js_pesquisaAdvogado(lMostra) {
 
@@ -395,14 +395,14 @@ function js_pesquisaAdvogado(lMostra) {
 
 	/**
 	 * Pesquisa pelo ancora
-	 */	 
+	 */
   if (lMostra == true ) {
 		sArquivoPesquisa += 'parent.js_mostraAdvogadoAncora|0|z01_nome';
 	}
 
 	/**
 	 * Pesquisa pelo input se o campo v50_advog não estiver vazio
-	 */	 
+	 */
 	if ( lMostra == false && $F('v50_advog') != null ) {
 		sArquivoPesquisa += 'parent.js_mostraAdvogadoInput&pesquisa_chave=' + $F('v50_advog');
 	}
@@ -418,12 +418,12 @@ function js_pesquisaAdvogado(lMostra) {
 function js_mostraAdvogadoInput(sDescricao, lErro) {
 
 	if ( lErro == true ) {
-	
-    $('v50_advog').focus(); 
-    $('v50_advog').value = ''; 
+
+    $('v50_advog').focus();
+    $('v50_advog').value = '';
 	}
 
-  $('z01_nome').value = sDescricao; 
+  $('z01_nome').value = sDescricao;
 }
 
 /**
@@ -439,19 +439,19 @@ function js_mostraAdvogadoAncora(iCodigo, sDescricao) {
 
 /**
  * ------------------
- * FUNÇÕES PARA PESQUISAR OS ADVOGADOS 
+ * FUNÇÕES PARA PESQUISAR OS ADVOGADOS
  * -----------------------------------------------------------------------------------------------------
- */	 
+ */
 
 /**
  * -----------------------------------------------------------------------------------------------------
  * FUNÇÕES PARA PESQUISAR A LOCALIZAÇÃO
  * -----------
- */	 
+ */
 
 /**
- * Pesquisa localização 
- */	 
+ * Pesquisa localização
+ */
 function js_pesquisaLocalizacao(lMostra) {
 
 	sArquivoPesquisa = 'func_localiza.php?funcao_js=';
@@ -461,14 +461,14 @@ function js_pesquisaLocalizacao(lMostra) {
 
 	/**
 	 * Pesquisa pelo ancora
-	 */	 
+	 */
   if ( lMostra == true ) {
 		sArquivoPesquisa += 'parent.js_mostraLocalizacaoAncora|0|1';
 	}
 
 	/**
 	 * Pesquisa pelo input se o campo v54_codlocal não estiver vazio
-	 */	 
+	 */
 	if ( lMostra == false && $F('v54_codlocal') != null ) {
 		sArquivoPesquisa += 'parent.js_mostraLocalizacaoInput&pesquisa_chave=' + $F('v54_codlocal');
 	}
@@ -481,15 +481,15 @@ function js_pesquisaLocalizacao(lMostra) {
 function js_mostraLocalizacaoInput(sDescricao, lErro) {
 
 	if ( lErro == true ) {
-	
-    $('v54_codlocal').focus(); 
-    $('v54_codlocal').value = ''; 
+
+    $('v54_codlocal').focus();
+    $('v54_codlocal').value = '';
 	}
 
-  $('v54_descr').value = sDescricao; 
+  $('v54_descr').value = sDescricao;
 }
 
-function js_mostraLocalizacaoAncora(iCodigo, sDescricao) { 
+function js_mostraLocalizacaoAncora(iCodigo, sDescricao) {
 
   $('v54_codlocal').value = iCodigo;
   $('v54_descr').value    = sDescricao;
@@ -501,18 +501,18 @@ function js_mostraLocalizacaoAncora(iCodigo, sDescricao) {
  * -----------
  * FUNÇÕES PARA PESQUISAR A LOCALIZAÇÃO
  * -----------------------------------------------------------------------------------------------------
- */	 
+ */
 
 
 /**
  * -----------------------------------------------------------------------------------------------------
  * FUNÇÕES PARA PESQUISAR VARA
  * -----------
- */	 
+ */
 
 /**
- * Pesquisa localização 
- */	 
+ * Pesquisa localização
+ */
 function js_pesquisaVara(lMostra) {
 
 	sArquivoPesquisa = 'func_vara.php?funcao_js=';
@@ -522,14 +522,14 @@ function js_pesquisaVara(lMostra) {
 
 	/**
 	 * Pesquisa pelo ancora
-	 */	 
+	 */
   if ( lMostra == true ) {
 		sArquivoPesquisa += 'parent.js_mostraVaraAncora|0|1';
 	}
 
 	/**
 	 * Pesquisa pelo input se o campo v53_codvara não estiver vazio
-	 */	 
+	 */
 	if ( lMostra == false && $F('v53_codvara') != null ) {
 		sArquivoPesquisa += 'parent.js_mostraVaraInput&pesquisa_chave=' + $F('v53_codvara');
 	}
@@ -542,15 +542,15 @@ function js_pesquisaVara(lMostra) {
 function js_mostraVaraInput(sDescricao, lErro) {
 
 	if ( lErro == true ) {
-	
-    $('v53_codvara').focus(); 
-    $('v53_codvara').value = ''; 
+
+    $('v53_codvara').focus();
+    $('v53_codvara').value = '';
 	}
 
-  $('v53_descr').value = sDescricao; 
+  $('v53_descr').value = sDescricao;
 }
 
-function js_mostraVaraAncora(iCodigo, sDescricao) { 
+function js_mostraVaraAncora(iCodigo, sDescricao) {
 
   $('v53_codvara').value = iCodigo;
   $('v53_descr').value    = sDescricao;
@@ -562,13 +562,13 @@ function js_mostraVaraAncora(iCodigo, sDescricao) {
  * -----------
  * FUNÇÕES PARA PESQUISAR VARA
  * -----------------------------------------------------------------------------------------------------
- */	 
+ */
 
 /**
  * Limpa formulário
- * - Não usado o reset do html pq este retorna para o valor inicial(value) do campo, 
+ * - Não usado o reset do html pq este retorna para o valor inicial(value) do campo,
  *   que apos o primeiro submit muda, não limpando campo
- */	 
+ */
 function js_limpar() {
 
 	var oInputs = $('formInicial').getInputs();
@@ -593,12 +593,12 @@ function js_limpar() {
 
 /**
  * @todo procurar as funcoes abaixo que não sao usadas e remover
- */	 
+ */
 
 
 /**
  * @todo - verificar
- */	 
+ */
 function js_testacodforo(){
 
 	// ---------------
@@ -608,7 +608,7 @@ function js_testacodforo(){
 
 	if (document.form1.v50_inicial.value==""){
 		if (document.form1.v70_codforo.value!=""){
-			js_openjanelaiframe('top.corpo','db_iframe_processoforo','func_processoforo.php?chave_v70_codforo='+document.form1.v70_codforo.value+'&funcao_js=parent.js_mostracodforo|v70_codforo|v71_inicial','pesquisa',true);
+			js_openjanelaiframe('CurrentWindow.corpo','db_iframe_processoforo','func_processoforo.php?chave_v70_codforo='+document.form1.v70_codforo.value+'&funcao_js=parent.js_mostracodforo|v70_codforo|v71_inicial','pesquisa',true);
 			return false;
 		}
 	}else{
@@ -625,12 +625,12 @@ var msg= parent.bstatus.document.getElementById('st').innerHTML ;
 
 
 /**
- * Abre lookup de pesquisa 
- * 
- */         
+ * Abre lookup de pesquisa
+ *
+ */
 function js_pesquisa() {
 
-	
+
 	var sIframe        = 'db_iframe_emiteinicial';
   var sPrograma      = js_pesquisav50_inicial(true, 'PESQUISA');
 	$('form1').method  = 'post';
@@ -654,9 +654,9 @@ function js_pesquisav50_inicial(lMostrarJanela, sTipoRetorno){
 function js_mostrainicial(chave,erro){
   if(erro==true){
     alert(_M('tributario.juridico.jur3_emiteinicial002.inicial_invalida'));
-    document.form1.v50_inicial.focus(); 
-    document.form1.v50_inicial.value=""; 
-  }  
+    document.form1.v50_inicial.focus();
+    document.form1.v50_inicial.value="";
+  }
     document.form1.v50_inicial.value = chave;
     db_iframe_inicial.hide();
 }
@@ -675,10 +675,10 @@ function js_mostrainicial1(chave1){
     }
   }
   function js_mostrasituacao(chave,erro){
-    document.form1.v52_descr.value = chave; 
-    if(erro==true){ 
-      document.form1.v56_codsit.focus(); 
-      document.form1.v56_codsit.value = ''; 
+    document.form1.v52_descr.value = chave;
+    if(erro==true){
+      document.form1.v56_codsit.focus();
+      document.form1.v56_codsit.value = '';
     }
   }
   function js_mostrasituacao1(chave1,chave2){
@@ -697,10 +697,10 @@ function js_pesquisav54_codlocal(mostra){
   }
 }
 function js_mostralocaliza(chave,erro){
-  document.form1.v54_descr.value = chave; 
-  if(erro==true){ 
-    document.form1.v54_descr.focus(); 
-    document.form1.v54_descr.value = ''; 
+  document.form1.v54_descr.value = chave;
+  if(erro==true){
+    document.form1.v54_descr.focus();
+    document.form1.v54_descr.value = '';
   }
 }
 function js_mostralocaliza1(chave1,chave2){
@@ -719,10 +719,10 @@ function js_pesquisav50_advog(mostra){
   }
 }
 function js_mostraAdvogado(erro,chave){
-  document.form1.z01_nome.value = chave; 
-  if(erro==true){ 
-    document.form1.v50_advog.focus(); 
-    document.form1.v50_advog.value = ''; 
+  document.form1.z01_nome.value = chave;
+  if(erro==true){
+    document.form1.v50_advog.focus();
+    document.form1.v50_advog.value = '';
   }
 }
 function js_mostraAdvogado1(chave1,chave2){
@@ -733,24 +733,24 @@ function js_mostraAdvogado1(chave1,chave2){
 //----------------------------------------------------------------------------------------------------------------------------------------------
 function js_pesquisav70_codforo(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_processoforo','func_processoforo.php?funcao_js=parent.js_mostracodforo|v70_codforo|v71_inicial','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_processoforo','func_processoforo.php?funcao_js=parent.js_mostracodforo|v70_codforo|v71_inicial','Pesquisa',true);
   }else{
     if(document.form1.v70_codforo.value!=""){
-      js_OpenJanelaIframe('top.corpo','db_iframe_processoforo','func_processoforo.php?chave_v70_codforo='+document.form1.v70_codforo.value+'&funcao_js=parent.js_mostracodforo1|v70_codforo','Pesquisa',false);
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_processoforo','func_processoforo.php?chave_v70_codforo='+document.form1.v70_codforo.value+'&funcao_js=parent.js_mostracodforo1|v70_codforo','Pesquisa',false);
     }
   }
 }
-function js_mostracodforo(chave,chave1){  
+function js_mostracodforo(chave,chave1){
   document.form1.v70_codforo.value = chave;
   document.form1.v50_inicial.value = chave1;
-  db_iframe_processoforo.hide();   
+  db_iframe_processoforo.hide();
 }
 function js_mostracodforo1(chave,erro,chave1){
-  document.form1.v70_codforo.value = chave; 
-  if(erro==true){ 
-    
+  document.form1.v70_codforo.value = chave;
+  if(erro==true){
+
   }else{
-  	//document.form1.v50_inicial.value = chave1;    
+  	//document.form1.v50_inicial.value = chave1;
   }
 }
 
@@ -758,20 +758,20 @@ function js_pesquisaCgm(mostra) {
 
   var cgm = document.form1.v58_numcgm.value;
   if (mostra == true) {
-  
+
     var sUrl = 'func_nome.php?funcao_js=parent.js_mostracgm|0|1';
     js_OpenJanelaIframe('', 'db_iframe_numcgm', sUrl, 'Pesquisa', true);
   } else {
-  
+
     if (cgm != "") {
-    
+
       var sUrl = 'func_nome.php?pesquisa_chave='+cgm+'&funcao_js=parent.js_mostracgm1';
       js_OpenJanelaIframe('', 'db_iframe_numcgm', sUrl, 'Pesquisa', false);
     } else {
-    
+
       document.form1.v58_numcgm.value = '';
       document.form1.inicialnomes_z01_nome.value         = '';
-    }  
+    }
   }
 }
 
@@ -784,20 +784,20 @@ function js_mostracgm(chave1, chave2) {
 
 function js_mostracgm1(erro,chave) {
 
-  document.form1.inicialnomes_z01_nome.value = chave; 
-  if (erro == true) { 
-  
-    document.form1.v58_numcgm.focus(); 
+  document.form1.inicialnomes_z01_nome.value = chave;
+  if (erro == true) {
+
+    document.form1.v58_numcgm.focus();
     document.form1.v58_numcgm.value = '';
   }
 }
 //----------------------------------------------------------------------------------------------------------------------------------------------
 /**
- * Abre tela de consulta dos dados da incial 
+ * Abre tela de consulta dos dados da incial
  */
 
 function js_abrirConsulta(iCodigoIncial) {
-	
+
 	js_OpenJanelaIframe('','db_consulta_inicial_iframe',  'func_inicialmovcert.php?v50_inicial=' + iCodigoIncial + '&funcao_js=parent.js_oculta','Consulta Inicial: '+iCodigoIncial,true );
 }
 
@@ -816,7 +816,7 @@ function js_fecharConsulta() {
   $func_iframe->mostrar();
   if(isset($invalido)){
     db_msgbox(_M('tributario.juridico.jur3_emiteinicial002.nao_existe'));
-    
+
   }
 ?>
 </body>

@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: Compras
@@ -43,14 +43,14 @@ if(isset($opcaoal)){
 }else if(isset($opcao) && $opcao=="excluir"){
     $db_opcao = 3;
     $db_botao=true;
-}else{  
+}else{
     $db_opcao = 1;
     $db_botao=true;
     if(isset($novo) || isset($alterar) ||   isset($excluir) || (isset($incluir) && $sqlerro==false ) ){
      $pc34_pctipocertif = "";
      $pc34_coddepto = "";
    }
-} 
+}
 
 if(isset($pc34_pctipocertif) && $pc34_pctipocertif!="") {
 	$oPctipocertif  = new cl_pctipocertif();
@@ -68,15 +68,15 @@ if(isset($pc34_pctipocertif) && $pc34_pctipocertif!="") {
 <fieldset>
 <legend><b>Departamentos</b></legend>
 
-<table border="0">     
+<table border="0">
 <?
 db_input('pc34_sequencial',10,$Ipc34_sequencial,true,'hidden',3,"")
-?>   
+?>
   <tr>
     <td nowrap title="<?=@$Tpc34_pctipocertif?>">
        <?=$Lpc34_pctipocertif?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('pc34_pctipocertif',10,$Ipc34_pctipocertif,true,'text',3,"")
 ?>
@@ -91,7 +91,7 @@ db_input('pc70_descr',40,$Ipc70_descr,true,'text',3,'')
        db_ancora(@$Lpc34_coddepto,"js_pesquisapc34_coddepto(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('pc34_coddepto',10,$Ipc34_coddepto,true,'text',$db_opcao," onchange='js_pesquisapc34_coddepto(false);'")
 ?>
@@ -101,13 +101,13 @@ db_input('descrdepto',40,$Idescrdepto,true,'text',3,'')
     </td>
   </tr>
  </table>
- 
+
  </fieldset>
- 
+
  </td></tr>
  </table>
- 
- 
+
+
  <table>
   <tr>
     <td colspan="2" align="center">
@@ -118,12 +118,12 @@ db_input('descrdepto',40,$Idescrdepto,true,'text',3,'')
   </table>
  <table>
   <tr>
-    <td valign="top"  align="center">  
+    <td valign="top"  align="center">
     <?
 	 $chavepri= array("pc34_sequencial"=>@$pc34_sequencial);
 	 $cliframe_alterar_excluir->chavepri= $chavepri;
 	 $sSqlIframe = $clpctipocertifdepartamento->sql_query(null, "*", "", "pc34_pctipocertif = {$pc34_pctipocertif}");
-	 $cliframe_alterar_excluir->sql     = $sSqlIframe; 
+	 $cliframe_alterar_excluir->sql     = $sSqlIframe;
 	 $cliframe_alterar_excluir->campos  = "descrdepto";
 	 $cliframe_alterar_excluir->legenda = "ITENS LANÇADOS";
 	 $cliframe_alterar_excluir->iframe_height = "160";
@@ -146,20 +146,20 @@ function js_cancelar(){
 }
 function js_pesquisapc34_coddepto(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_pctipocertifdepartamento','db_iframe_db_depart','func_db_depart.php?funcao_js=parent.js_mostradb_depart1|coddepto|descrdepto','Pesquisa',true,'0','1');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_pctipocertifdepartamento','db_iframe_db_depart','func_db_depart.php?funcao_js=parent.js_mostradb_depart1|coddepto|descrdepto','Pesquisa',true,'0','1');
   }else{
-     if(document.form1.pc34_coddepto.value != ''){ 
-        js_OpenJanelaIframe('top.corpo.iframe_pctipocertifdepartamento','db_iframe_db_depart','func_db_depart.php?pesquisa_chave='+document.form1.pc34_coddepto.value+'&funcao_js=parent.js_mostradb_depart','Pesquisa',false);
+     if(document.form1.pc34_coddepto.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_pctipocertifdepartamento','db_iframe_db_depart','func_db_depart.php?pesquisa_chave='+document.form1.pc34_coddepto.value+'&funcao_js=parent.js_mostradb_depart','Pesquisa',false);
      }else{
-       document.form1.descrdepto.value = ''; 
+       document.form1.descrdepto.value = '';
      }
   }
 }
 function js_mostradb_depart(chave,erro){
-  document.form1.descrdepto.value = chave; 
-  if(erro==true){ 
-    document.form1.pc34_coddepto.focus(); 
-    document.form1.pc34_coddepto.value = ''; 
+  document.form1.descrdepto.value = chave;
+  if(erro==true){
+    document.form1.pc34_coddepto.focus();
+    document.form1.pc34_coddepto.value = '';
   }
 }
 function js_mostradb_depart1(chave1,chave2){

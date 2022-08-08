@@ -166,7 +166,7 @@ for ($x=0; $x<$numrows01; $x++) {
 
     $dtoper = date("Y-m-d",db_getsession("DB_datausu"));
 
-    $aData = split("-", $y63_dtvenc);
+    $aData = explode("-", $y63_dtvenc);
     $dDtOperData = $aData[0] . "-" . $aData[1] . "-01";
 
     $result = db_query("select round(fc_corre(".($y60_espontaneo=='t'?$y32_receitexp:$y32_receit).",'".$y63_dtvenc."',".$y63_saldo.",'".$dtoper."',".db_getsession("DB_anousu").",'$y63_dtvenc'),2) as correcao");

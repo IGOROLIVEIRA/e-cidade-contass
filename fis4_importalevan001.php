@@ -495,9 +495,9 @@ if ( isset($importar) ) {
 function js_pesquisaTipo(lMostra) {
 
   if (lMostra) {
-    js_OpenJanelaIframe("top.corpo","db_iframe_arretipo_nova","func_arretipo_nova.php?k03_tipo=3,10,11&funcao_js=parent.js_preencheTipo|k00_tipo|k00_descr","Pesquisa",true);
+    js_OpenJanelaIframe("CurrentWindow.corpo","db_iframe_arretipo_nova","func_arretipo_nova.php?k03_tipo=3,10,11&funcao_js=parent.js_preencheTipo|k00_tipo|k00_descr","Pesquisa",true);
   } else {
-    js_OpenJanelaIframe("top.corpo","db_iframe_arretipo_nova","func_arretipo_nova.php?k03_tipo=3,10,11&funcao_js=parent.js_preencheTipo1&pesquisa_chave="+document.form1.k00_tipo.value,"Pesquisa",false);
+    js_OpenJanelaIframe("CurrentWindow.corpo","db_iframe_arretipo_nova","func_arretipo_nova.php?k03_tipo=3,10,11&funcao_js=parent.js_preencheTipo1&pesquisa_chave="+document.form1.k00_tipo.value,"Pesquisa",false);
   }
  }
 
@@ -533,12 +533,12 @@ function js_Exportar(){
 function js_lev(mostra){
 
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe','func_levanta02.php?funcao_js=parent.js_mostralev1|y60_codlev|DBtxtnome_origem','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe','func_levanta02.php?funcao_js=parent.js_mostralev1|y60_codlev|DBtxtnome_origem','Pesquisa',true);
   }else{
 
     lev = document.form1.y60_codlev.value;
     if(lev != ''){
-      js_OpenJanelaIframe('top.corpo','db_iframe','func_levanta02.php?pesquisa_chave='+lev+'&funcao_js=parent.js_mostralev','Pesquisa',false);
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe','func_levanta02.php?pesquisa_chave='+lev+'&funcao_js=parent.js_mostralev','Pesquisa',false);
     }else{
       document.form1.z01_nome.value='';
     }
@@ -574,7 +574,7 @@ function js_mostralev1(chave1,chave2){
 
 function js_verificaVinculoLevantamentoAuto (y60_codlev) {
   if (y60_codlev != "") {
-    js_OpenJanelaIframe('top.corpo','db_iframe','func_autolevanta.php?y117_levanta='+y60_codlev+'&lovrot=false&funcao_js=parent.js_mostraTipoDebito','Pesquisa',false);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe','func_autolevanta.php?y117_levanta='+y60_codlev+'&lovrot=false&funcao_js=parent.js_mostraTipoDebito','Pesquisa',false);
   }
 }
 

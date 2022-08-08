@@ -135,7 +135,7 @@ if($ponto == "fx" || $ponto == "fs" || $ponto == "fe" || $ponto == "fr"){
 <table border="6" width="100%">
   <?
   if(isset($registro) && trim($registro)!=""){
-  	$arr_rubricas = split(",",$rubricas_selecionadas_enviar);
+  	$arr_rubricas = explode(",",$rubricas_selecionadas_enviar);
   	db_input('r90_lotac', 10, $Ir90_lotac, true, 'hidden', 3, '');
     db_input('DBtxt23', 4, $IDBtxt23, true, 'hidden', 3, "", 'r90_anousu');
     db_input('DBtxt25', 2, $IDBtxt25, true, 'hidden', 3, "", 'r90_mesusu');
@@ -362,7 +362,7 @@ if($ponto == "fx" || $ponto == "fs" || $ponto == "fe" || $ponto == "fr"){
 
       	$mostrar_box_checked = "";
       	if(isset($repassar_rubricas) && trim($repassar_rubricas)!=""){
-      	  $arr_repassar_rubricas = split(",",$repassar_rubricas);
+      	  $arr_repassar_rubricas = explode(",",$repassar_rubricas);
       	  if(in_array("chk_".$rh27_rubric,$arr_repassar_rubricas)){
       	  	$mostrar_box_checked = " checked ";
       	  }

@@ -15,13 +15,13 @@ if(isset($db_opcaoal)){
 }else if(isset($opcao) && $opcao=="excluir"){
     $db_opcao = 3;
     $db_botao=true;
-}else{  
+}else{
     $db_opcao = 1;
     $db_botao=true;
     if(isset($novo) || isset($alterar) ||   isset($excluir) || (isset($incluir) && $sqlerro==false ) ){
      $x40_codcondominio = "";
    }
-} 
+}
 ?>
 <form name="form1" method="post" action="">
 <center>
@@ -32,7 +32,7 @@ if(isset($db_opcaoal)){
        db_ancora(@$Lx40_codcondominio,"js_pesquisax40_codcondominio(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('x40_codcondominio',8,$Ix40_codcondominio,true,'text',$db_opcao," onchange='js_pesquisax40_codcondominio(false);'")
 ?>
@@ -47,7 +47,7 @@ db_input('x31_matric',10,$Ix31_matric,true,'text',3,'')
        db_ancora(@$Lx40_matric,"js_pesquisax40_matric(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('x40_matric',10,$Ix40_matric,true,'text',$db_opcao," onchange='js_pesquisax40_matric(false);'")
 ?>
@@ -65,7 +65,7 @@ db_input('x01_numcgm',10,$Ix01_numcgm,true,'text',3,'')
   </table>
  <table>
   <tr>
-    <td valign="top"  align="center">  
+    <td valign="top"  align="center">
     <?
 	 $chavepri= array("x40_matric"=>@$x40_matric,"x40_codcondominio"=>@$x40_codcondominio);
 	 $cliframe_alterar_excluir->chavepri=$chavepri;
@@ -92,20 +92,20 @@ function js_cancelar(){
 }
 function js_pesquisax40_matric(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_aguacondominiomat','db_iframe_aguabase','func_aguabase.php?funcao_js=parent.js_mostraaguabase1|x01_matric|x01_numcgm','Pesquisa',true,'0','1','775','390');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_aguacondominiomat','db_iframe_aguabase','func_aguabase.php?funcao_js=parent.js_mostraaguabase1|x01_matric|x01_numcgm','Pesquisa',true,'0','1','775','390');
   }else{
-     if(document.form1.x40_matric.value != ''){ 
-        js_OpenJanelaIframe('top.corpo.iframe_aguacondominiomat','db_iframe_aguabase','func_aguabase.php?pesquisa_chave='+document.form1.x40_matric.value+'&funcao_js=parent.js_mostraaguabase','Pesquisa',false);
+     if(document.form1.x40_matric.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_aguacondominiomat','db_iframe_aguabase','func_aguabase.php?pesquisa_chave='+document.form1.x40_matric.value+'&funcao_js=parent.js_mostraaguabase','Pesquisa',false);
      }else{
-       document.form1.x01_numcgm.value = ''; 
+       document.form1.x01_numcgm.value = '';
      }
   }
 }
 function js_mostraaguabase(chave,erro){
-  document.form1.x01_numcgm.value = chave; 
-  if(erro==true){ 
-    document.form1.x40_matric.focus(); 
-    document.form1.x40_matric.value = ''; 
+  document.form1.x01_numcgm.value = chave;
+  if(erro==true){
+    document.form1.x40_matric.focus();
+    document.form1.x40_matric.value = '';
   }
 }
 function js_mostraaguabase1(chave1,chave2){
@@ -115,20 +115,20 @@ function js_mostraaguabase1(chave1,chave2){
 }
 function js_pesquisax40_codcondominio(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_aguacondominiomat','db_iframe_aguacondominio','func_aguacondominio.php?funcao_js=parent.js_mostraaguacondominio1|x31_codcondominio|x31_matric','Pesquisa',true,'0','1','775','390');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_aguacondominiomat','db_iframe_aguacondominio','func_aguacondominio.php?funcao_js=parent.js_mostraaguacondominio1|x31_codcondominio|x31_matric','Pesquisa',true,'0','1','775','390');
   }else{
-     if(document.form1.x40_codcondominio.value != ''){ 
-        js_OpenJanelaIframe('top.corpo.iframe_aguacondominiomat','db_iframe_aguacondominio','func_aguacondominio.php?pesquisa_chave='+document.form1.x40_codcondominio.value+'&funcao_js=parent.js_mostraaguacondominio','Pesquisa',false);
+     if(document.form1.x40_codcondominio.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_aguacondominiomat','db_iframe_aguacondominio','func_aguacondominio.php?pesquisa_chave='+document.form1.x40_codcondominio.value+'&funcao_js=parent.js_mostraaguacondominio','Pesquisa',false);
      }else{
-       document.form1.x31_matric.value = ''; 
+       document.form1.x31_matric.value = '';
      }
   }
 }
 function js_mostraaguacondominio(chave,erro){
-  document.form1.x31_matric.value = chave; 
-  if(erro==true){ 
-    document.form1.x40_codcondominio.focus(); 
-    document.form1.x40_codcondominio.value = ''; 
+  document.form1.x31_matric.value = chave;
+  if(erro==true){
+    document.form1.x40_codcondominio.focus();
+    document.form1.x40_codcondominio.value = '';
   }
 }
 function js_mostraaguacondominio1(chave1,chave2){

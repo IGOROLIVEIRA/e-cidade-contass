@@ -35,7 +35,7 @@ db_postmemory($HTTP_SERVER_VARS);
 $head1 = "BALANCETE DA DESPESA";
 $head3 = "EXERCÍCIO: ".db_getsession("DB_anousu");
 $head5 = "PERÍODO: ".db_formatar($dataini,'d')." A ".db_formatar($datafin,'d');
-$xinstit = split("-",$db_selinstit);
+$xinstit = explode("-",$db_selinstit);
 $resultinst = pg_exec("select codigo,nomeinst,nomeinstabrev from db_config where codigo in (".str_replace('-',', ',$db_selinstit).") ");
 $descr_inst = '';
 $xvirg = '';

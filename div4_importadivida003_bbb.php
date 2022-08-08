@@ -26,8 +26,8 @@ if(isset($cod_k02_codigo) && trim($cod_k02_codigo)!="" && isset($cod_v03_codigo)
   die($clarrecad->sql_query_file(null,"k00_numcgm, k00_dtoper, k00_receit, k00_hist, k00_dtvenc, k00_numpre, k00_numpar, k00_numtot, k00_numdig, k00_tipo, k00_tipojm, sum(k00_valor) as k00_valor","k00_numpre, k00_receit  limit 10"," k00_tipo = $chave_origem group by k00_numcgm, k00_dtoper, k00_receit, k00_hist, k00_dtvenc, k00_numpre, k00_numpar, k00_numtot, k00_numdig, k00_tipo, k00_tipojm"));
   $result_pesq_divida = $clarrecad->sql_record($clarrecad->sql_query_file(null,"k00_numcgm, k00_dtoper, k00_receit, k00_hist, k00_dtvenc, k00_numpre, k00_numpar, k00_numtot, k00_numdig, k00_tipo, k00_tipojm, sum(k00_valor) as k00_valor","k00_numpre, k00_receit  limit 10"," k00_tipo = $chave_origem group by k00_numcgm, k00_dtoper, k00_receit, k00_hist, k00_dtvenc, k00_numpre, k00_numpar, k00_numtot, k00_numdig, k00_tipo, k00_tipojm"));
   $numrows = $clarrecad->numrows;
-  $codigo_k02 = split(",",$cod_k02_codigo);
-  $codigo_v03 = split(",",$cod_v03_codigo);
+  $codigo_k02 = explode(",",$cod_k02_codigo);
+  $codigo_v03 = explode(",",$cod_v03_codigo);
   $sqlerro=false;
   db_inicio_transacao();
   $numpre_par_rec = "";  

@@ -58,13 +58,13 @@ if (isset($confirmar)) {
   //////////////////////////////////////////////////////////////////////////////////////////////////
   
   //Quebrando string dos itens
-  $aMedicamentos = split('quant_',  $valores);
-  $aMotivos      = split('motivo_', $motivos);
+  $aMedicamentos = explode('quant_',  $valores);
+  $aMotivos      = explode('motivo_', $motivos);
 
   for ($iCont = 1; $iCont < count($aMedicamentos); $iCont++) {
     
-    $aInfo                     = split('_', $aMedicamentos[$iCont]);
-    $sMotiv                    = split('_', $aMotivos[$iCont]);
+    $aInfo                     = explode('_', $aMedicamentos[$iCont]);
+    $sMotiv                    = explode('_', $aMotivos[$iCont]);
     $iAtendrequiitem           = $aInfo[0];
     $iCodRetiradaItens[$iCont] = $aInfo[5];
     $iQuant[$iCont]            = $aInfo[6];

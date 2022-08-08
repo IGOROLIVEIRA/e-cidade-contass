@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: configuracoes
@@ -35,7 +35,7 @@ $clrotulo->label("nome");
  	   $db_action="con1_db_sysregrasacesso005.php";
       }else if($db_opcao==3||$db_opcao==33){
  	   $db_action="con1_db_sysregrasacesso006.php";
-      }  
+      }
 ?>
 <form name="form1" method="post" action="<?=$db_action?>">
 <center>
@@ -44,7 +44,7 @@ $clrotulo->label("nome");
     <td nowrap title="<?=@$Tdb46_idacesso?>">
        <?=@$Ldb46_idacesso?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('db46_idacesso',6,$Idb46_idacesso,true,'text',3,"")
 ?>
@@ -54,7 +54,7 @@ db_input('db46_idacesso',6,$Idb46_idacesso,true,'text',3,"")
     <td nowrap title="<?=@$Tdb46_dtinicio?>">
        <?=@$Ldb46_dtinicio?>
     </td>
-    <td> 
+    <td>
 <?
 db_inputdata('db46_dtinicio',@$db46_dtinicio_dia,@$db46_dtinicio_mes,@$db46_dtinicio_ano,true,'text',$db_opcao,"")
 ?>
@@ -64,7 +64,7 @@ db_inputdata('db46_dtinicio',@$db46_dtinicio_dia,@$db46_dtinicio_mes,@$db46_dtin
     <td nowrap title="<?=@$Tdb46_horaini?>">
        <?=@$Ldb46_horaini?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('db46_horaini',5,$Idb46_horaini,true,'text',$db_opcao," onchange='js_verifica_hora_local(this.value,this.name)'")
 ?>
@@ -74,7 +74,7 @@ db_input('db46_horaini',5,$Idb46_horaini,true,'text',$db_opcao," onchange='js_ve
     <td nowrap title="<?=@$Tdb46_datafinal?>">
        <?=@$Ldb46_datafinal?>
     </td>
-    <td> 
+    <td>
 <?
 db_inputdata('db46_datafinal',@$db46_datafinal_dia,@$db46_datafinal_mes,@$db46_datafinal_ano,true,'text',$db_opcao,"")
 ?>
@@ -84,7 +84,7 @@ db_inputdata('db46_datafinal',@$db46_datafinal_dia,@$db46_datafinal_mes,@$db46_d
     <td nowrap title="<?=@$Tdb46_horafinal?>">
        <?=@$Ldb46_horafinal?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('db46_horafinal',5,$Idb46_horafinal,true,'text',$db_opcao," onchange='js_verifica_hora_local(this.value,this.name)'")
 ?>
@@ -96,7 +96,7 @@ db_input('db46_horafinal',5,$Idb46_horafinal,true,'text',$db_opcao," onchange='j
        db_ancora(@$Ldb46_id_usuario,"js_pesquisadb46_id_usuario(true);",3);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 $db46_id_usuario = db_getsession('DB_id_usuario');
 db_input('db46_id_usuario',10,$Idb46_id_usuario,true,'text',3," onchange='js_pesquisadb46_id_usuario(false);'")
@@ -112,7 +112,7 @@ db_input('nome',40,$Inome,true,'text',3,'')
     <td nowrap title="<?=@$Tdb46_datacadastd?>">
        <?=@$Ldb46_datacadastd?>
     </td>
-    <td> 
+    <td>
 <?
 $db46_datacadastd_dia = date('d',db_getsession('DB_datausu'));
 $db46_datacadastd_mes = date('m',db_getsession('DB_datausu'));
@@ -125,7 +125,7 @@ db_inputdata('db46_datacadastd',@$db46_datacadastd_dia,@$db46_datacadastd_mes,@$
     <td nowrap title="<?=@$Tdb46_observ?>">
        <?=@$Ldb46_observ?>
     </td>
-    <td> 
+    <td>
 <?
 db_textarea('db46_observ',5,90,$Idb46_observ,true,'text',$db_opcao,"")
 ?>
@@ -139,20 +139,20 @@ db_textarea('db46_observ',5,90,$Idb46_observ,true,'text',$db_opcao,"")
 <script>
 function js_pesquisadb46_id_usuario(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_db_sysregrasacesso','db_iframe_db_usuarios','func_db_usuarios.php?funcao_js=parent.js_mostradb_usuarios1|id_usuario|nome','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_db_sysregrasacesso','db_iframe_db_usuarios','func_db_usuarios.php?funcao_js=parent.js_mostradb_usuarios1|id_usuario|nome','Pesquisa',true);
   }else{
-     if(document.form1.db46_id_usuario.value != ''){ 
-        js_OpenJanelaIframe('top.corpo.iframe_db_sysregrasacesso','db_iframe_db_usuarios','func_db_usuarios.php?pesquisa_chave='+document.form1.db46_id_usuario.value+'&funcao_js=parent.js_mostradb_usuarios','Pesquisa',false);
+     if(document.form1.db46_id_usuario.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_db_sysregrasacesso','db_iframe_db_usuarios','func_db_usuarios.php?pesquisa_chave='+document.form1.db46_id_usuario.value+'&funcao_js=parent.js_mostradb_usuarios','Pesquisa',false);
      }else{
-       document.form1.nome.value = ''; 
+       document.form1.nome.value = '';
      }
   }
 }
 function js_mostradb_usuarios(chave,erro){
-  document.form1.nome.value = chave; 
-  if(erro==true){ 
-    document.form1.db46_id_usuario.focus(); 
-    document.form1.db46_id_usuario.value = ''; 
+  document.form1.nome.value = chave;
+  if(erro==true){
+    document.form1.db46_id_usuario.focus();
+    document.form1.db46_id_usuario.value = '';
   }
 }
 function js_mostradb_usuarios1(chave1,chave2){
@@ -161,7 +161,7 @@ function js_mostradb_usuarios1(chave1,chave2){
   db_iframe_db_usuarios.hide();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo.iframe_db_sysregrasacesso','db_iframe_db_sysregrasacesso','func_db_sysregrasacesso.php?funcao_js=parent.js_preenchepesquisa|db46_idacesso','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo.iframe_db_sysregrasacesso','db_iframe_db_sysregrasacesso','func_db_sysregrasacesso.php?funcao_js=parent.js_preenchepesquisa|db46_idacesso','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_db_sysregrasacesso.hide();
@@ -175,11 +175,11 @@ function js_verifica_hora_local(valor,campo){
   erro= 0;
   ms  = "";
   hs  = "";
-  
+
   tam = "";
   pos = "";
   tam = valor.length;
-  pos = valor.indexOf(":");  
+  pos = valor.indexOf(":");
   if(pos!=-1){
     if(pos==0 || pos>2){
       erro++;
@@ -222,13 +222,13 @@ function js_verifica_hora_local(valor,campo){
       }
       hora = hs;
       minu = ms;
-    }    
+    }
   }
 
   if(erro>0){
     alert("Informe uma hora válida.");
   }
-  if(valor!=""){    
+  if(valor!=""){
     eval("document.form1."+campo+".focus();");
     eval("document.form1."+campo+".value='"+hora+":"+minu+"';");
   }

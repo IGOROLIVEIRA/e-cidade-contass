@@ -1,54 +1,54 @@
 <?
 /*
- *     E-cidade Software Público para Gestão Municipal                
- *  Copyright (C) 2014  DBseller Serviços de Informática             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa é software livre; você pode redistribuí-lo e/ou     
- *  modificá-lo sob os termos da Licença Pública Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versão 2 da      
- *  Licença como (a seu critério) qualquer versão mais nova.          
- *                                                                    
- *  Este programa e distribuído na expectativa de ser útil, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implícita de              
- *  COMERCIALIZAÇÃO ou de ADEQUAÇÃO A QUALQUER PROPÓSITO EM           
- *  PARTICULAR. Consulte a Licença Pública Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Você deve ter recebido uma cópia da Licença Pública Geral GNU     
- *  junto com este programa; se não, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Cópia da licença no diretório licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Público para Gestão Municipal
+ *  Copyright (C) 2014  DBseller Serviços de Informática
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa é software livre; você pode redistribuí-lo e/ou
+ *  modificá-lo sob os termos da Licença Pública Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versão 2 da
+ *  Licença como (a seu critério) qualquer versão mais nova.
+ *
+ *  Este programa e distribuído na expectativa de ser útil, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implícita de
+ *  COMERCIALIZAÇÃO ou de ADEQUAÇÃO A QUALQUER PROPÓSITO EM
+ *  PARTICULAR. Consulte a Licença Pública Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Você deve ter recebido uma cópia da Licença Pública Geral GNU
+ *  junto com este programa; se não, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Cópia da licença no diretório licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once ("libs/db_stdlibwebseller.php");
@@ -284,11 +284,11 @@ function fillSelectFromArray2(selectCtrl, itemArray, goodPrompt, badPrompt, defa
         $rsCalendario = db_query( $sql );
 
         while ( $row = pg_fetch_array( $rsCalendario ) ) {
-                  	
+
          $cod_cal  = $row["ed52_i_codigo"];
          $desc_cal = $row["ed52_c_descr"];
          ?>
-         
+
          <option value="<?=$cod_cal?>" <?=$cod_cal==@$calendario?"selected":""?>><?=$desc_cal;?></option>
          <?
         }
@@ -297,8 +297,8 @@ function fillSelectFromArray2(selectCtrl, itemArray, goodPrompt, badPrompt, defa
       </td>
       <td align="left">
        <b>Selecione o Curso:</b><br>
-       <select name="grupo" 
-               onChange="fillSelectFromArray(this.form.subgrupo, ((this.selectedIndex == -1) ? null : team[this.selectedIndex-1]));" 
+       <select name="grupo"
+               onChange="fillSelectFromArray(this.form.subgrupo, ((this.selectedIndex == -1) ? null : team[this.selectedIndex-1]));"
                style="font-size:9px;width:250px;height:18px;">
         <option></option>
         <?
@@ -308,7 +308,7 @@ function fillSelectFromArray2(selectCtrl, itemArray, goodPrompt, badPrompt, defa
         $sql       .= "        inner join cursoescola on ed71_i_curso = ed29_i_codigo ";
         $sql       .= "  WHERE ed71_i_escola   = {$escola} ";
         $sql       .= "    AND ed71_c_situacao = 'S' ";
-        $sql       .= "  ORDER BY ed29_c_descr ASC ";     
+        $sql       .= "  ORDER BY ed29_c_descr ASC ";
         $sql_result = db_query( $sql );
 
         while( $row = pg_fetch_array( $sql_result ) ) {
@@ -330,8 +330,8 @@ function fillSelectFromArray2(selectCtrl, itemArray, goodPrompt, badPrompt, defa
        </select>
       </td>
       <td valign='bottom'>
-       <input type="button" name="procurar" value="Procurar" 
-              onclick="js_procurar(document.form1.calenda.value,document.form1.grupo.value,document.form1.subgrupo.value)" 
+       <input type="button" name="procurar" value="Procurar"
+              onclick="js_procurar(document.form1.calenda.value,document.form1.grupo.value,document.form1.subgrupo.value)"
               disabled>
       </td>
      </tr>
@@ -367,7 +367,7 @@ function fillSelectFromArray2(selectCtrl, itemArray, goodPrompt, badPrompt, defa
        } else {
        	$ed52_i_calendant ="";
        }
-       
+
        if ( $serieescolhida != 0 ) {
 
          $where  = " AND alunopossib.ed79_i_serie = {$serieescolhida}";
@@ -569,7 +569,7 @@ function js_procurar( calendario, curso, turma ) {
 }
 
 function js_imprimir( calendario, grupo, subgrupo ) {
-	
+
   jan = window.open("edu2_listacandidatos002.php?calendario="+document.form1.calenda.value
                                               +"&curso="+document.form1.grupo.value
                                               +"&serieescolhida="+document.form1.subgrupo.value
@@ -581,9 +581,9 @@ function js_imprimir( calendario, grupo, subgrupo ) {
 }
 
 function js_matriculas( turma, descrturma, calendario ) {
-	
+
   js_OpenJanelaIframe(
-                       'top.corpo',
+                       'CurrentWindow.corpo',
                        'db_iframe_matriculas',
                        'edu3_alunomatriculado002.php?turma='+turma,
                        'Alunos Matriculados na Turma '+descrturma,

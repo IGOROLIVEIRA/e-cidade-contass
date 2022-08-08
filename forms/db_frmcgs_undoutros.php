@@ -381,7 +381,7 @@ function js_pesquisasd35_i_familiamicroarea( mostra ) {
     if( document.form1.sd35_i_familia.value != '' ) {
 
       js_OpenJanelaIframe(
-                           'top.corpo',
+                           'CurrentWindow.corpo',
                            'db_iframe_familia',
                            'func_familia.php?pesquisa_chave=' + document.form1.z01_i_familiamicroarea.value
                                           +'&funcao_js=parent.js_mostrafamiliamicroarea',

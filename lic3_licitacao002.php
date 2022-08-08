@@ -36,6 +36,9 @@ require_once("dbforms/verticalTab.widget.php");
 
 $oDaoLicitacao = new cl_liclicita;
 $oDaoRotulo    = new rotulocampo;
+$clliclicitaedital = new cl_liclicitaedital;
+$clliclicitaata = new cl_liclicitaata;
+$clliclicitaminuta = new cl_liclicitaminuta;
 $oDaoLicitacao->rotulo->label();
 $oDaoRotulo->label("nome");
 $oDaoRotulo->label("l03_descr");
@@ -340,25 +343,39 @@ if (!empty($oProcessoProtocolo)) {
         'Situações da Licitação',
         "lic3_infolic003.php?tipo=m&{$sGetUrl}"
     );
-
-    $oVerticalTab->add(
-        'dadosEditais',
-        'Editais',
-        "lic3_infolicanexo002.php?{$sGetUrl}"
-    );
-
-    $oVerticalTab->add(
-        'dadosAtas',
-        'Atas',
-        "lic3_infolicata002.php?{$sGetUrl}"
-    );
-
-    $oVerticalTab->add(
-        'dadosMinutas',
-        'Minutas',
-        "lic3_infolicminuta002.php?{$sGetUrl}"
-    );
-
+    $sWhereAnexos = "l27_liclicita = {$oGet->l20_codigo}";
+    $sSqlAnexos   = $clliclicitaedital->sql_query_file(null,"*",null,$sWhereAnexos);
+    $rsAnexos     = $clliclicitaedital->sql_record($sSqlAnexos);
+    $iLinhasEdital = $clliclicitaedital->numrows;
+    if($iLinhasEdital>0){
+        $oVerticalTab->add(
+            'dadosEditais',
+            'Editais',
+            "lic3_infolicanexo002.php?{$sGetUrl}"
+        );
+    }
+    $sWhereAnexos = "l39_liclicita = {$oGet->l20_codigo}";
+    $sSqlAnexos   = $clliclicitaata->sql_query_file(null,"*",null,$sWhereAnexos);
+    $rsAnexos     = $clliclicitaata->sql_record($sSqlAnexos);
+    $iLinhasAta = $clliclicitaata->numrows;
+    if ( $iLinhasAta > 0 ){
+        $oVerticalTab->add(
+            'dadosAtas',
+            'Atas',
+            "lic3_infolicata002.php?{$sGetUrl}"
+        );
+    }
+    $sWhereAnexos = "l43_liclicita = {$oGet->l20_codigo}";
+    $sSqlAnexos   = $clliclicitaminuta->sql_query_file(null,"*",null,$sWhereAnexos);
+    $rsAnexos     = $clliclicitaminuta->sql_record($sSqlAnexos);
+    $iLinhasAnexo = $clliclicitaminuta->numrows;
+    if ( $iLinhasAnexo > 0 ){
+        $oVerticalTab->add(
+            'dadosMinutas',
+            'Minutas',
+            "lic3_infolicminuta002.php?{$sGetUrl}"
+        );
+    }
     $oVerticalTab->add(
         'dadosAcordo',
         'Acordos',
@@ -394,13 +411,20 @@ if (!empty($oProcessoProtocolo)) {
         'Fornecedores Habilitados',
         "lic3_fornhabilitados.php?{$sGetUrl}"
     );
-
-    $oVerticalTab->add(
-        'dadosDispensaInexigibilidade',
-        'Dispensa/Inexigibilidade',
-        "lic3_infolic004.php?{$sGetUrl}"
-    );
-
+    if($tipoTribunal==100 || $tipoTribunal==101 || $tipoTribunal==102 || $tipoTribunal==103){
+        $oVerticalTab->add(
+            'dadosDispensaInexigibilidade',
+            'Dispensa/Inexigibilidade',
+            "lic3_infolic004.php?{$sGetUrl}"
+        );
+    }
+    if($oLicitatacao->l20_naturezaobjeto==1 || $oLicitatacao->l20_naturezaobjeto==7){
+        $oVerticalTab->add(
+            'dadosEdital',
+            'Edital',
+            "lic3_infolicedital002.php?{$sGetUrl}"
+        );
+    }
     $oVerticalTab->show();
     ?>
 
@@ -410,6 +434,6 @@ if (!empty($oProcessoProtocolo)) {
     function consultaProcesso(sProtProcesso) {
 
         var sUrlProcesso = "pro3_consultaprocesso002.php?numero=" + sProtProcesso; //42096/2013" ;// "lic3_licitacao002.php?l20_codigo="+iCodigoLicitacao
-        js_OpenJanelaIframe('top.corpo', 'db_iframe_processo', sUrlProcesso, 'Consulta de Processo', true);
+        js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_processo', sUrlProcesso, 'Consulta de Processo', true);
     }
 </script>

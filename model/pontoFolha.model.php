@@ -845,6 +845,7 @@ class pontoFolha {
 //      		}
 //          $aListaRubricas[] = $oRetornoRubrica;		
 
+      		$oRubrica->rh27_descr = utf8_encode($oRubrica->rh27_descr);
       		$aListaRubricas[] = $oRubrica;
       		
       	}
@@ -1027,7 +1028,7 @@ class pontoFolha {
 	      		throw new Exception("Repasse abortado, Data de Admissão não informada!");
 	      	}
 	      	
-	      	list($iAnoAdm,$iMesAdm,$iDiaAdm) = split("-",$dtDataAdmissao);
+	      	list($iAnoAdm,$iMesAdm,$iDiaAdm) = explode("-",$dtDataAdmissao);
 	      	--$iDiaAdm;
 	      	
 	        if( $iMesAdm == db_mesfolha() && $iAnoAdm == db_anofolha() ){

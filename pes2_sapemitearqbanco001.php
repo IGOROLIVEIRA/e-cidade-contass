@@ -103,13 +103,13 @@ function js_emite(){
     qry += '&layout='+document.form1.layout.value;
   }
 
-  js_OpenJanelaIframe('top.corpo','db_iframe_geraarqbanco','pes2_sapemitearqbanco002.php?'+qry,'Gerando Arquivo',false);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_geraarqbanco','pes2_sapemitearqbanco002.php?'+qry,'Gerando Arquivo',false);
 }
 
 function js_detectaarquivo(arquivo,pdf){
 
   js_controlarodape(false);
-  top.corpo.db_iframe_geraarqbanco.hide();
+  CurrentWindow.corpo.db_iframe_geraarqbanco.hide();
   listagem  = arquivo+"#Download arquivo TXT (pagamento eletrônico)|";
   listagem += pdf+"#Download relatório";
   js_montarlista(listagem,"form1");
@@ -118,7 +118,7 @@ function js_detectaarquivo(arquivo,pdf){
 function js_erro(msg){
 
   js_controlarodape(false);
-  top.corpo.db_iframe_geraarqbanco.hide();
+  CurrentWindow.corpo.db_iframe_geraarqbanco.hide();
   alert(msg);
 }
 
@@ -333,11 +333,11 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
 function js_pesquisarh41_codigo(mostra){
 
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_rhcontasrec','func_rhcontasrec.php?funcao_js=parent.js_mostrarhcontasrec1|rh41_codigo|o15_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhcontasrec','func_rhcontasrec.php?funcao_js=parent.js_mostrarhcontasrec1|rh41_codigo|o15_descr','Pesquisa',true);
   }else{
 
     if(document.form1.rh41_codigo.value != ''){
-      js_OpenJanelaIframe('top.corpo','db_iframe_rhcontasrec','func_rhcontasrec.php?pesquisa_chave='+document.form1.rh41_codigo.value+'&funcao_js=parent.js_mostrarhcontasrec','Pesquisa',false);
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhcontasrec','func_rhcontasrec.php?pesquisa_chave='+document.form1.rh41_codigo.value+'&funcao_js=parent.js_mostrarhcontasrec','Pesquisa',false);
     }else{
       document.form1.o15_descr.value = '';
     }
@@ -366,11 +366,11 @@ function js_mostrarhcontasrec1(chave1,chave2){
 function js_pesquisa(mostra){
 
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_rharqbanco','func_rharqbanco.php?funcao_js=parent.js_mostra1|rh34_codarq|rh34_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rharqbanco','func_rharqbanco.php?funcao_js=parent.js_mostra1|rh34_codarq|rh34_descr','Pesquisa',true);
   }else{
 
     if(document.form1.rh34_codarq.value != ''){
-      js_OpenJanelaIframe('top.corpo','db_iframe_rharqbanco','func_rharqbanco.php?pesquisa_chave='+document.form1.rh34_codarq.value+'&funcao_js=parent.js_mostra','Pesquisa',false);
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rharqbanco','func_rharqbanco.php?pesquisa_chave='+document.form1.rh34_codarq.value+'&funcao_js=parent.js_mostra','Pesquisa',false);
     }else{
 
       document.form1.rh34_codarq.value = '';
@@ -403,11 +403,11 @@ function js_mostra1(chave1,chave2){
 function js_pesquisarh34_codban(mostra){
 
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_db_bancos','func_db_bancos.php?funcao_js=parent.js_mostradb_bancos1|db90_codban|db90_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_bancos','func_db_bancos.php?funcao_js=parent.js_mostradb_bancos1|db90_codban|db90_descr','Pesquisa',true);
   }else{
 
     if(document.form1.rh34_codban.value != ''){
-      js_OpenJanelaIframe('top.corpo','db_iframe_db_bancos','func_db_bancos.php?pesquisa_chave='+document.form1.rh34_codban.value+'&funcao_js=parent.js_mostradb_bancos','Pesquisa',false);
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_bancos','func_db_bancos.php?pesquisa_chave='+document.form1.rh34_codban.value+'&funcao_js=parent.js_mostradb_bancos','Pesquisa',false);
     }else{
       document.form1.db90_descr.value = '';
     }

@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -149,7 +149,7 @@ function MostraPac(){
  }
 }
 function js_pesquisa_bairro(){
-   js_OpenJanelaIframe('top.corpo','db_iframe_cids','func_bairro.php?funcao_js=parent.js_mostrabairro|j13_codi|j13_descr','Pesquisa',true);
+   js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cids','func_bairro.php?funcao_js=parent.js_mostrabairro|j13_codi|j13_descr','Pesquisa',true);
 }
 function js_mostrabairro(chave1,chave2){
    document.form1.bairro.value = chave2;
@@ -180,10 +180,10 @@ function js_mostraunidades1(chave1,chave2){
 }
 function js_pesquisa_cids(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_sau_cid','func_sau_cid2.php?funcao_js=parent.js_mostracids1|sd70_c_cid|sd70_c_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_sau_cid','func_sau_cid2.php?funcao_js=parent.js_mostracids1|sd70_c_cid|sd70_c_descr','Pesquisa',true);
   }else{
      if(document.form1.cids.value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_sau_cid','func_sau_cid2.php?pesquisa_chave='+document.form1.cids.value+'&funcao_js=parent.js_mostracids','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_sau_cid','func_sau_cid2.php?pesquisa_chave='+document.form1.cids.value+'&funcao_js=parent.js_mostracids','Pesquisa',false);
      }else{
        document.form1.descr.value = '';
      }

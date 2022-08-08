@@ -8,21 +8,21 @@ class Evento
 {
 
     /**
-     * Código do Evento do eSocial
+     * Cï¿½digo do Evento do eSocial
      *
      * @var integer
      */
     private $tipoEvento;
 
     /**
-     * Código do empregador
+     * Cï¿½digo do empregador
      *
      * @var integer
      */
     private $empregador;
 
     /**
-     * Código do responsavel pelo evento
+     * Cï¿½digo do responsavel pelo evento
      * @var mixed
      */
     private $responsavelPreenchimento;
@@ -49,7 +49,7 @@ class Evento
     private $tpAmb;
 
     /**
-     * Início Validade das informações
+     * Inï¿½cio Validade das informaï¿½ï¿½es
      *
      * @var string
      */
@@ -78,7 +78,7 @@ class Evento
     {
         /**
          * @todo pesquisar exite na fila um evento do tipo: $tipoEvento para o : $responsavelPreenchimento
-         * @todo Não existido, cria uma agenda e inclui na tabela
+         * @todo Nï¿½o existido, cria uma agenda e inclui na tabela
          * @todo se houver e os $dados forem iguais ( usar md5 ), desconsidera
          * @todo se houver e os $dados forem diferentes ( usar md5 ), altera / inclui novo registro e reagenda
          *
@@ -100,9 +100,10 @@ class Evento
     }
 
     public function adicionarFila()
-    {
+    {   
+        $tipoEvento = str_replace('Individual', '', $this->tipoEvento);
         $where = array(
-            "rh213_evento = {$this->tipoEvento}",
+            "rh213_evento = {$tipoEvento}",
             "rh213_empregador = {$this->empregador}",
             "rh213_responsavelpreenchimento = '{$this->responsavelPreenchimento}'",
         );
@@ -113,14 +114,13 @@ class Evento
         $rs    = db_query($sql);
 
         if (!$rs) {
-            throw new \Exception("Erro ao buscar registros do evento para verificação.");
+            throw new \Exception("Erro ao buscar registros do evento para verificaï¿½ï¿½o.");
         }
 
         if (pg_num_rows($rs) > 0 && $this->modo === 'INC') {
             $md5Evento = \db_utils::fieldsMemory($rs, 0)->rh213_md5;
-            $evtSituaccao = \db_utils::fieldsMemory($rs, 0)->rh213_situacao;
-            if ($md5Evento == $this->md5 && $evtSituaccao == \cl_esocialenvio::SITUACAO_ENVIADO) {
-                throw new \Exception("Já existe um envio do evento S-{$this->tipoEvento} com as mesmas informações.");
+            if ($md5Evento == $this->md5) {
+                throw new \Exception("Jï¿½ existe um envio do evento S-{$this->tipoEvento} com as mesmas informaï¿½ï¿½es.");
             }
         }
         $this->adicionarEvento();
@@ -135,9 +135,9 @@ class Evento
     private function adicionarEvento()
     {
         $dados                                          = $this->montarDadosAPI();
-
+        $tipoEvento = str_replace('Individual', '', $this->tipoEvento);
         $daoFilaEsocial                                 = new \cl_esocialenvio();
-        $daoFilaEsocial->rh213_evento                   = $this->tipoEvento;
+        $daoFilaEsocial->rh213_evento                   = $tipoEvento;
         $daoFilaEsocial->rh213_empregador               = $this->empregador;
         $daoFilaEsocial->rh213_responsavelpreenchimento = $this->responsavelPreenchimento;
         $daoFilaEsocial->rh213_ambienteenvio            = $this->tpAmb;
@@ -146,13 +146,14 @@ class Evento
         $daoFilaEsocial->rh213_md5      = $this->md5;
         $daoFilaEsocial->rh213_situacao = \cl_esocialenvio::SITUACAO_NAO_ENVIADO;
         $daoFilaEsocial->rh213_dataprocessamento = date('Y-m-d h:i:s');
-
         if (is_object($dados) || count($dados) > 0) {
             $daoFilaEsocial->incluir(null);
             if ($daoFilaEsocial->erro_status == 0) {
-                throw new \Exception("Não foi possível adicionar na fila. \n {$daoFilaEsocial->erro_msg}");
+                throw new \Exception("Nï¿½o foi possï¿½vel adicionar na fila. \n {$daoFilaEsocial->erro_msg}");
             }
         }
+
+        $this->adicionarTarefa($daoFilaEsocial->rh213_sequencial);
     }
 
     /**
@@ -188,7 +189,7 @@ class Evento
         $evento->setModo($this->modo);
         $evento->setDtAlteracao($this->dt_alteracao);
         if (!is_object($evento)) {
-            throw new \Exception("Objeto S{$this->tipoEvento} não encontrado.");
+            throw new \Exception("Objeto S{$this->tipoEvento} nï¿½o encontrado.");
         }
         return $evento->montarDados();
     }

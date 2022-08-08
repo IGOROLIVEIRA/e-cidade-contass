@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: TFD
@@ -38,7 +38,7 @@ $clrotulo->label("tf04_c_descr");
     <td nowrap title="<?=@$Ttf06_i_codigo?>">
       <?=@$Ltf06_i_codigo?>
     </td>
-    <td> 
+    <td>
       <?
       db_input('tf06_i_codigo',10,$Itf06_i_codigo,true,'text',3,"")
       ?>
@@ -50,7 +50,7 @@ $clrotulo->label("tf04_c_descr");
       db_ancora(@$Ltf06_i_tipotratamento,"js_pesquisatf06_i_tipotratamento(true);",3);
       ?>
     </td>
-    <td> 
+    <td>
       <?
       db_input('tf06_i_tipotratamento',10,'',true,'text',3,'');
       db_input('tf04_c_descr',50,'',true,'text',3,'');
@@ -63,7 +63,7 @@ $clrotulo->label("tf04_c_descr");
       db_ancora(@$Ltf06_i_documento,"js_pesquisatf06_i_documento(true);",$db_opcao);
       ?>
     </td>
-    <td> 
+    <td>
       <?
       db_input('tf06_i_documento',10,$Itf06_i_documento,true,'text',$db_opcao," onchange='js_pesquisatf06_i_documento(false);'");
       db_input('tf07_c_descr',50,$Itf07_c_descr,true,'text',3,'');
@@ -93,24 +93,24 @@ $clrotulo->label("tf04_c_descr");
 		  <td valign="top"><br>
         <?
 				$aChavepri = array ('tf06_i_codigo' => @$tf06_i_codigo,
-                            'tf06_i_documento' => @$tf06_i_documento, 
-                            'tf06_i_tipotratamento' => @$tf06_i_tipotratamento, 
-                            'tf06_i_obrigatorio' => @$tf06_i_obrigatorio, 
+                            'tf06_i_documento' => @$tf06_i_documento,
+                            'tf06_i_tipotratamento' => @$tf06_i_tipotratamento,
+                            'tf06_i_obrigatorio' => @$tf06_i_obrigatorio,
                             'tf07_c_descr' => @$tf07_c_descr);
 				$oIframeAE->chavepri = $aChavepri;
 
-        $sCampos = 
+        $sCampos =
         " tf06_i_codigo,
           tf06_i_documento,
           tf06_i_tipotratamento,
           tf07_c_descr,
           case when tf06_i_obrigatorio = 1
-            then 
+            then
               'SIM'
-            else 
+            else
               'NÃO'
           end as tf06_i_obrigatorio ";
-        
+
 				$oIframeAE->sql = $cltfd_tipotratamentodoc->sql_query(null, $sCampos, ' tf06_i_codigo ',
                                                               " tf06_i_tipotratamento = $tf06_i_tipotratamento ");
 				$oIframeAE->campos = 'tf06_i_codigo, tf06_i_documento, tf07_c_descr, tf06_i_obrigatorio';
@@ -137,11 +137,11 @@ function js_novo() {
 
   parent.document.formaba.a2.disabled = true;
   parent.document.formaba.a3.disabled = true;
-  top.corpo.iframe_a1.location.href   = 'tfd1_tfd_tipotratamento001.php';
+  CurrentWindow.corpo.iframe_a1.location.href   = 'tfd1_tfd_tipotratamento001.php';
   parent.mo_camada('a1');
 
 }
- 
+
 
 function js_cancelar() {
 
@@ -166,17 +166,17 @@ function js_pesquisatf06_i_documento(mostra) {
                             '&chave_validade=true','Pesquisa',false);
 
      } else {
-       document.form1.tf07_c_descr.value = ''; 
+       document.form1.tf07_c_descr.value = '';
      }
 
   }
 
 }
 function js_mostratfd_documento(chave,erro){
-  document.form1.tf07_c_descr.value = chave; 
-  if(erro==true){ 
-    document.form1.tf06_i_documento.focus(); 
-    document.form1.tf06_i_documento.value = ''; 
+  document.form1.tf07_c_descr.value = chave;
+  if(erro==true){
+    document.form1.tf06_i_documento.focus();
+    document.form1.tf06_i_documento.value = '';
   }
 }
 function js_mostratfd_documento1(chave1,chave2){
@@ -189,18 +189,18 @@ function js_pesquisatf06_i_tipotratamento(mostra){
   if(mostra==true){
     js_OpenJanelaIframe('','db_iframe_tfd_tipotratamento','func_tfd_tipotratamento.php?funcao_js=parent.js_mostratfd_tipotratamento1|tf04_i_codigo|tf04_i_codigo','Pesquisa',true);
   }else{
-     if(document.form1.tf06_i_tipotratamento.value != ''){ 
+     if(document.form1.tf06_i_tipotratamento.value != ''){
         js_OpenJanelaIframe('','db_iframe_tfd_tipotratamento','func_tfd_tipotratamento.php?pesquisa_chave='+document.form1.tf06_i_tipotratamento.value+'&funcao_js=parent.js_mostratfd_tipotratamento','Pesquisa',false);
      }else{
-       document.form1.tf04_i_codigo.value = ''; 
+       document.form1.tf04_i_codigo.value = '';
      }
   }
 }
 function js_mostratfd_tipotratamento(chave,erro){
-  document.form1.tf04_i_codigo.value = chave; 
-  if(erro==true){ 
-    document.form1.tf06_i_tipotratamento.focus(); 
-    document.form1.tf06_i_tipotratamento.value = ''; 
+  document.form1.tf04_i_codigo.value = chave;
+  if(erro==true){
+    document.form1.tf06_i_tipotratamento.focus();
+    document.form1.tf06_i_tipotratamento.value = '';
   }
 }
 function js_mostratfd_tipotratamento1(chave1,chave2){

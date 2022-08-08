@@ -3,7 +3,7 @@
  * para ajuda ao usuário
  *
  * @author Iuri Guntchnigg iuri@dbseller.com.br
- * @version  $Revision: 1.8 $
+ * @version  $Revision: 1.9 $
  */
 
 const MSG_INFO    =  1;
@@ -24,7 +24,7 @@ const MSG_ERROR   =  3;
  */
 function DBMessageBoard (sId, sTitle, sHelp, oElementToAppend, cType) {
 
-  if (sId == null) {
+  if (!sId) {
     sId = "messageBoard"+Math.random();
   }
   this.id = sId;
@@ -32,19 +32,11 @@ function DBMessageBoard (sId, sTitle, sHelp, oElementToAppend, cType) {
   this.divContent    = document.createElement("DIV");
   this.divContent.id = this.id;
   this.divContent.className = "DBMessageBoard";
-  with (this.divContent.style) {
-
-     borderBottom    = "2px groove white";
-     padding         = "2px";
-     backgroundColor = "white";
-     height          = "50px";
-     textAlign       = "left";
-     overflow        = 'hidden';
-  }
-  if (sTitle == null) {
+  
+  if (!sTitle) {
     sTitle = "";
   }
-  if (sHelp == null) {
+  if (!sHelp) {
     sHelp = "";
   }
 
@@ -53,17 +45,15 @@ function DBMessageBoard (sId, sTitle, sHelp, oElementToAppend, cType) {
   var oRow       = document.createElement("TR");
   var oCellTitle = document.createElement("TD");
   oCellTitle.id  = this.id+'_title';
-  with (oCellTitle.style) {
-    fontWeight = "bold";
-  }
+  oCellTitle.style.fontWeight = "bold";
 
-  oCellTitle.innerHTML = sTitle
+  oCellTitle.innerHTML = sTitle;
   oRow.appendChild(oCellTitle);
   var oCellImg     = document.createElement("TD");
   oCellImg.style.textAlign = "right";
   oCellImg.rowSpan = 2;
 
-  if  ( cType != null) {
+  if  (!!cType) {
 
     var oImgHelp    = document.createElement("IMG");
     oImgHelp.border = 0;
@@ -75,25 +65,22 @@ function DBMessageBoard (sId, sTitle, sHelp, oElementToAppend, cType) {
       oImgHelp.src = 'imagens/error.png';
     }
     oCellImg.appendChild(oImgHelp);
-
   }
 
   oRow.appendChild(oCellImg);
   this.tableInfo.appendChild(oRow);
   var oRowHelp  = document.createElement("TR");
   var oCellHelp       = document.createElement("TD");
-  oCellHelp.innerHTML = sHelp
+  oCellHelp.innerHTML = sHelp;
   oCellHelp.id  = this.id+'_help';
-  with (oCellHelp.style) {
-     textIndent= "15px";
-  }
+  oCellHelp.style.textIndent= "15px";
 
   oRowHelp.appendChild(oCellHelp);
   this.divContent.appendChild(this.tableInfo);
   this.tableInfo.appendChild(oRowHelp);
 
-	if (oElementToAppend ==  null) {
-	  document.body.insertBefore(this.divContent,document.body.elements[0]);
+	if (!oElementToAppend) {
+	  document.body.insertBefore(this.divContent, document.body.elements[0]);
 	} else {
 	  oElementToAppend.insertBefore(this.divContent, oElementToAppend.childNodes[0]);
 	}
@@ -105,7 +92,7 @@ function DBMessageBoard (sId, sTitle, sHelp, oElementToAppend, cType) {
    */
   this.setTitle = function (sTitle) {
     $(this.id+'_title').innerHTML = sTitle;
-  }
+  };
 
   /**
    * Define a mensagem de ajuda do messageBoard
@@ -114,7 +101,7 @@ function DBMessageBoard (sId, sTitle, sHelp, oElementToAppend, cType) {
    */
   this.setHelp = function (sHelp) {
     $(this.id+'_help').innerHTML = sHelp;
-  }
+  };
 
   /**
    * Mostra o MessageBoard
@@ -122,7 +109,7 @@ function DBMessageBoard (sId, sTitle, sHelp, oElementToAppend, cType) {
    */
   this.show = function (oElement) {
     $(this.id).style.display="";
-  }
+  };
 
   /**
    * Esconde o MessaBoard
@@ -130,5 +117,5 @@ function DBMessageBoard (sId, sTitle, sHelp, oElementToAppend, cType) {
    */
   this.hide = function () {
     $(this.id).style.display="none";
-  }
+  };
 }

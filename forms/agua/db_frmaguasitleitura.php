@@ -9,7 +9,7 @@ $claguasitleitura->rotulo->label();
     <td nowrap title="<?=@$Tx17_codigo?>">
        <?=@$Lx17_codigo?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('x17_codigo',5,$Ix17_codigo,true,'text',$db_opcao,"")
 ?>
@@ -19,7 +19,7 @@ db_input('x17_codigo',5,$Ix17_codigo,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tx17_descr?>">
        <?=@$Lx17_descr?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('x17_descr',40,$Ix17_descr,true,'text',$db_opcao,"")
 ?>
@@ -29,7 +29,7 @@ db_input('x17_descr',40,$Ix17_descr,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tx17_regra?>">
        <?=@$Lx17_regra?>
     </td>
-    <td> 
+    <td>
 <?
 $x = array('0'=>'Normal','1'=>'Sem Leitura','2'=>'Cancelamento');
 db_select('x17_regra',$x,true,$db_opcao,"");
@@ -43,7 +43,7 @@ db_select('x17_regra',$x,true,$db_opcao,"");
 </form>
 <script>
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_aguasitleitura','func_aguasitleitura.php?funcao_js=parent.js_preenchepesquisa|x17_codigo','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_aguasitleitura','func_aguasitleitura.php?funcao_js=parent.js_preenchepesquisa|x17_codigo','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_aguasitleitura.hide();

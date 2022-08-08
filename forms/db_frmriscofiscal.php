@@ -9,7 +9,7 @@ $clrotulo->label("o119_versao");
  	   $db_action="sic1_riscofiscal005.php";
       }else if($db_opcao==3||$db_opcao==33){
  	   $db_action="sic1_riscofiscal006.php";
-      } 
+      }
 
 $si53_instituicao= db_getsession("DB_instit");
 ?>
@@ -22,7 +22,7 @@ $si53_instituicao= db_getsession("DB_instit");
     <td nowrap title="<?=@$Tsi53_sequencial?>">
        <?=@$Lsi53_sequencial?>
     </td>
-    <td> 
+    <td>
 	<?
 	db_input('si53_sequencial',8,$Isi53_sequencial,true,'text',3,"")
 	?>
@@ -32,34 +32,34 @@ $si53_instituicao= db_getsession("DB_instit");
     <td nowrap title="<?=@$Tsi53_exercicio?>">
        <?=@$Lsi53_exercicio?>
     </td>
-    <td> 
+    <td>
 		<?
 		db_input('si53_exercicio',8,$Isi53_exercicio,true,'text',$db_opcao,"")
 		?>
     </td>
   </tr>
-  
-  
+
+
    </tr>
   <tr>
     <td nowrap title="<?=@$Tsi53_instituicao?>">
        <b>Instituição:</b>
     </td>
-    <td> 
+    <td>
 		<?
 		db_input('si53_instituicao',8,$Isi53_instituicao,true,'text',3,"")
 		?>
     </td>
   </tr>
-  
-  
+
+
   <tr>
     <td nowrap title="<?=@$Tsi53_codigoppa?>">
        <?
        db_ancora(@$Lsi53_codigoppa,"js_pesquisasi53_codigoppa(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 		<?
 			db_input('si53_codigoppa',8,$Isi53_codigoppa,true,'text',3," onchange='js_pesquisasi53_codigoppa(false);'")
 		?>
@@ -72,7 +72,7 @@ $si53_instituicao= db_getsession("DB_instit");
     <td nowrap title="<?=@$Tsi53_codriscofiscal?>">
        <?=@$Lsi53_codriscofiscal?>
     </td>
-    <td> 
+    <td>
 	<?
 	//db_input('si53_codriscofiscal',8,$Isi53_codriscofiscal,true,'text',$db_opcao,"")
 	$asi53_codriscofiscal = array("1"=>"1- Demandas Judiciais","2"=>"2- Dívidas em Processo de Reconhecimento",
@@ -86,7 +86,7 @@ $si53_instituicao= db_getsession("DB_instit");
     <td nowrap title="<?=@$Tsi53_dscriscofiscal?>">
        <?=@$Lsi53_dscriscofiscal?>
     </td>
-    <td> 
+    <td>
 		<?
     db_textarea("si53_dscriscofiscal",7,40, "", true, "text", $db_opcao, "", "", "",500);
 		?>
@@ -97,7 +97,7 @@ $si53_instituicao= db_getsession("DB_instit");
     <td nowrap title="<?=@$Tsi53_valorisco?>">
        <?=@$Lsi53_valorisco?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('si53_valorisco',15,$Isi53_valorisco,true,'text',$db_opcao,"")
 ?>
@@ -112,20 +112,20 @@ db_input('si53_valorisco',15,$Isi53_valorisco,true,'text',$db_opcao,"")
 
 function js_pesquisasi53_codigoppa(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_riscofiscal','db_iframe_ppaversao','func_ppaversao.php?funcao_js=parent.js_mostrappaversao1|o119_sequencial|o01_descricao','Pesquisa',true,'0','1');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_riscofiscal','db_iframe_ppaversao','func_ppaversao.php?funcao_js=parent.js_mostrappaversao1|o119_sequencial|o01_descricao','Pesquisa',true,'0','1');
   }else{
-     if(document.form1.si53_codigoppa.value != ''){ 
-        js_OpenJanelaIframe('top.corpo.iframe_riscofiscal','db_iframe_ppaversao','func_ppaversao.php?pesquisa_chave='+document.form1.si53_codigoppa.value+'&funcao_js=parent.js_mostrappaversao','Pesquisa',false,'0','1');
+     if(document.form1.si53_codigoppa.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_riscofiscal','db_iframe_ppaversao','func_ppaversao.php?pesquisa_chave='+document.form1.si53_codigoppa.value+'&funcao_js=parent.js_mostrappaversao','Pesquisa',false,'0','1');
      }else{
-       document.form1.o119_versao.value = ''; 
+       document.form1.o119_versao.value = '';
      }
   }
 }
 function js_mostrappaversao(chave,erro){
-  document.form1.o119_versao.value = chave; 
-  if(erro==true){ 
-    document.form1.si53_codigoppa.focus(); 
-    document.form1.si53_codigoppa.value = ''; 
+  document.form1.o119_versao.value = chave;
+  if(erro==true){
+    document.form1.si53_codigoppa.focus();
+    document.form1.si53_codigoppa.value = '';
   }
 }
 function js_mostrappaversao1(chave1,chave2){
@@ -134,7 +134,7 @@ function js_mostrappaversao1(chave1,chave2){
   db_iframe_ppaversao.hide();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo.iframe_riscofiscal','db_iframe_riscofiscal','func_riscofiscal.php?funcao_js=parent.js_preenchepesquisa|si53_sequencial','Pesquisa',true,'0','1');
+  js_OpenJanelaIframe('CurrentWindow.corpo.iframe_riscofiscal','db_iframe_riscofiscal','func_riscofiscal.php?funcao_js=parent.js_preenchepesquisa|si53_sequencial','Pesquisa',true,'0','1');
 }
 function js_preenchepesquisa(chave){
   db_iframe_riscofiscal.hide();
@@ -146,12 +146,12 @@ function js_preenchepesquisa(chave){
 }
 
 function js_submit() {
-  
+
     if ( document.form1.si53_codriscofiscal.value == 10 && document.form1.si53_dscriscofiscal.value == '' ) {
 
         alert('Informe a Descrição do Risco');
         event.preventDefault();
 
-    }  
+    }
 }
 </script>

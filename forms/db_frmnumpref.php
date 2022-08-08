@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: caixa
@@ -56,7 +56,7 @@ if( !DBNumber::isInteger( trim($k03_diasvalidadecertidao) ) ){
           <b>Financeiro</b>
         </legend>
     		<table border="0" width="100%">
-    		
+
     			<tr>
     				<td title="<?=@$Tk03_anousu?>" width="35%">
     				  <?=@$Lk03_anousu?>
@@ -65,13 +65,13 @@ if( !DBNumber::isInteger( trim($k03_diasvalidadecertidao) ) ){
     				  <?
         				$k03_anousu = db_getsession('DB_anousu');
         				db_input('k03_anousu',15,$Ik03_anousu,true,'text',3,"");
-        					
+
         				db_input('k03_instit',10,$Ik03_instit,true,'hidden',$db_opcao);
         				db_input('k03_numpre',10,$Ik03_numpre,true,'hidden',$db_opcao);
     				  ?>
             </td>
-    			</tr> 
-    			
+    			</tr>
+
     			<tr>
     				<td title="<?=@$Tk03_defope?>" width="35%">
     				  <?=@$Lk03_defope?>
@@ -144,7 +144,7 @@ if( !DBNumber::isInteger( trim($k03_diasvalidadecertidao) ) ){
     				    db_input('k03_reciboprot',15,$Ik03_reciboprot,true,'text',$db_opcao,"");
     				  ?>
             </td>
-          </tr>  
+          </tr>
    				<tr>
    					<td>
               <b>
@@ -166,7 +166,7 @@ if( !DBNumber::isInteger( trim($k03_diasvalidadecertidao) ) ){
             </td>
             <td colspan='4'>
               <?
-              
+
                 if (isset($k03_pgtoparcial) ) {
                   if ($k03_pgtoparcial == 't') {
                     $k03_pgtoparcial = "true";
@@ -174,10 +174,10 @@ if( !DBNumber::isInteger( trim($k03_diasvalidadecertidao) ) ){
                     $k03_pgtoparcial = "false";
                   }
                 }
-                
+
                 $aPgtoParcial = array('true' =>'SIM',
                                       'false'=>'NÃO' );
-                
+
                 db_select("k03_pgtoparcial",$aPgtoParcial,true,$db_opcao,"style='width:115px'");
               ?>
             </td>
@@ -213,13 +213,13 @@ if( !DBNumber::isInteger( trim($k03_diasvalidadecertidao) ) ){
               ?>
             </td>
           </tr>
-        </table>  
+        </table>
  		  </fieldset>
     </td>
  	</tr>
 
-		<!-- final financeiro --> 
-    
+		<!-- final financeiro -->
+
     <!-- tributario -->
 
 	<tr>
@@ -279,7 +279,7 @@ if( !DBNumber::isInteger( trim($k03_diasvalidadecertidao) ) ){
     					?>
             </td>
           </tr>
-          <tr>  
+          <tr>
   					<td title="<?=@$Tk03_respcgm?>" >
   					  <?
       					db_ancora(@$Lk03_respcgm, "js_pesquisak03_respcgm(true);", $db_opcao);
@@ -352,7 +352,7 @@ if( !DBNumber::isInteger( trim($k03_diasvalidadecertidao) ) ){
     				  ?>
             </td>
 					 </tr>
-					 
+
           <tr>
   				  <td  title="<?=@$Tk03_tipocertidao?>" >
               <?=@$Lk03_tipocertidao?>
@@ -374,7 +374,7 @@ if( !DBNumber::isInteger( trim($k03_diasvalidadecertidao) ) ){
     					  db_select('k03_reccert',$x,true,$db_opcao,"style='width:125px'");
     					?>
             </td>
-  				</tr>                    
+  				</tr>
           <tr>
             <td title="<?=@$Tk03_tipocodcert?>" >
   					  <?=@$Lk03_tipocodcert?>
@@ -387,11 +387,11 @@ if( !DBNumber::isInteger( trim($k03_diasvalidadecertidao) ) ){
                 						'3'=>'Sequencial por Tipo de Certidão Geral',
                 						'4'=>'Sequencial por Tipo de Certidão por Instituição',
                 						'5'=>'Código do Processo de Protocolo e Exercício' );
-      
+
       					db_select('k03_tipocodcert',$x,true,$db_opcao,"style='width:350px'");
     				  ?>
             </td>
-          </tr>  
+          </tr>
   				<tr>
   					<td title="<?=@$Tk03_regracnd?>">
   					  <?=@$Lk03_regracnd?>
@@ -405,22 +405,22 @@ if( !DBNumber::isInteger( trim($k03_diasvalidadecertidao) ) ){
     					?>
             </td>
   				</tr>
-  				
+
   				<tr>
   				  <td>
   				    <?php
-  				      db_ancora($Lk03_receitapadraocredito, 'js_pesquisaReceita(true)', $db_opcao) 
+  				      db_ancora($Lk03_receitapadraocredito, 'js_pesquisaReceita(true)', $db_opcao)
   				    ?>
   				  </td>
   				  <td colspan="3">
-  				    <?php 
+  				    <?php
   				      db_input('k03_receitapadraocredito', 15, $Ik03_receitapadraocredito, true, 'text', $db_opcao, "onchange='js_pesquisaReceita(false)'");
   				      db_input('k02_drecei', 48, $Ik02_drecei, true, 'text', 3);
   				    ?>
   				  </td>
   				</tr>
-  				
-          
+
+
   			</table>
 			</fieldset>
 	  </td>
@@ -429,13 +429,13 @@ if( !DBNumber::isInteger( trim($k03_diasvalidadecertidao) ) ){
 
 <!-- final tributario -->
 <!-- Inicio mensagens-->
-      <fieldset id="field_mensagem" name="field_mensagem">  
+      <fieldset id="field_mensagem" name="field_mensagem">
         <legend>Mensagens</legend>
-        <table>  
+        <table>
           <tr>
             <td title="<?=@$Tk03_msg?>" colspan="4" align="center">
               <fieldset>
-              <legend><?=@$Lk03_msg?></legend> 
+              <legend><?=@$Lk03_msg?></legend>
               <?
                 db_textarea('k03_msg',0,100,$Ik03_msg,true,'text',$db_opcao,"");
               ?>
@@ -473,7 +473,7 @@ if( !DBNumber::isInteger( trim($k03_diasvalidadecertidao) ) ){
             </td>
           </tr>
         </table>
-      </fieldset>  
+      </fieldset>
 <!-- Fim mensagens-->
 
 
@@ -490,9 +490,9 @@ oMensagem = new DBToogle("field_mensagem", false);
 var MENSAGENS = 'tributario.arrecadacao.db_frmnumpref.';
 
 function validaCampo() {
-  
+
   if($F('k03_defope').trim() == "") {
-  
+
     alert(_M( MENSAGENS + "campo_nao_informado", {sCampo : "Operação"}));
     $('k03_defope').focus();
     return false;
@@ -525,7 +525,7 @@ function validaCampo() {
     $('k03_recmul').focus();
     return false;
   }
-  
+
   if($F('k03_codage').trim() == "") {
 
     alert(_M( MENSAGENS + "campo_nao_informado", {sCampo : "Agência"}));
@@ -539,57 +539,57 @@ function validaCampo() {
     $('k03_reciboprot').focus();
     return false;
   }
-  
+
   if($F('k03_toleranciapgtoparc').trim() == "") {
-   
+
     alert(_M( MENSAGENS + "campo_nao_informado", {sCampo : "Valor Tolerância Diferença Pagamento"}));
     $('k03_toleranciapgtoparc').focus();
     return false;
   }
 
   if($F('k03_toleranciacredito').trim() == "") {
-   
+
     alert(_M( MENSAGENS + "campo_nao_informado", {sCampo : "Tolerância para Crédito"}));
     $('k03_toleranciacredito').focus();
     return false;
   }
-  
+
   if($F('k03_diasjust').trim() == "") {
-   
+
     alert(_M( MENSAGENS + "campo_nao_informado", {sCampo : "Dias Justif."}));
     $('k03_diasjust').focus();
     return false;
   }
 
   if($F('k03_taxagrupo').trim() == "") {
-   
+
     alert(_M( MENSAGENS + "campo_nao_informado", {sCampo : "Código do grupo de taxas"}));
     $('k03_taxagrupo').focus();
     return false;
   }
 
   if($F('k03_diasvalidadecertidao').trim() == "") {
-   
+
     alert(_M( MENSAGENS + "campo_nao_informado", {sCampo : "Dias para vencimentos das Certidões"}));
     $('k03_diasvalidadecertidao').focus();
     return false;
   }
 
   if($F('k03_diasreemissaocertidao').trim() == "") {
-   
+
     alert(_M( MENSAGENS + "campo_nao_informado", {sCampo : "Dias para reemissão das Certidões"}));
     $('k03_diasreemissaocertidao').focus();
     return false;
-  }  
+  }
 }
 var chave_k03_tipo = 14;
 
 function js_pesquisak03_respcargo(mostra) {
 	if(mostra==true) {
-		js_OpenJanelaIframe('top.corpo','db_iframe_respcargo','func_rhfuncao.php?funcao_js=parent.js_mostrarespcargo1|rh37_funcao|rh37_descr','Pesquisa',true);
+		js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_respcargo','func_rhfuncao.php?funcao_js=parent.js_mostrarespcargo1|rh37_funcao|rh37_descr','Pesquisa',true);
 	}else {
 		if(document.form1.k03_respcargo.value != ''){
-			js_OpenJanelaIframe('top.corpo','db_iframe_respcargo','func_rhfuncao.php?pesquisa_chave='+document.form1.k03_respcargo.value+'&funcao_js=parent.js_mostrarespcargo2','Pesquisa',false);
+			js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_respcargo','func_rhfuncao.php?pesquisa_chave='+document.form1.k03_respcargo.value+'&funcao_js=parent.js_mostrarespcargo2','Pesquisa',false);
 		} else {
 		  document.form1.rh37_descr.value = '';
 		}
@@ -601,7 +601,7 @@ function js_mostrarespcargo1(chave1, chave2) {
 	document.form1.k03_respcargo.value = chave1;
 	document.form1.rh37_descr.value = chave2;
 	db_iframe_respcargo.hide();
-	
+
 }
 
 function js_mostrarespcargo2(chave1, erro) {
@@ -611,15 +611,15 @@ function js_mostrarespcargo2(chave1, erro) {
 		document.form1.k03_respccargo.focus();
 		document.form1.k03_respccargo.value = '';
 	}
-	
+
 }
 
 function js_pesquisak03_respcgm(mostra) {
   if(mostra==true) {
-	  js_OpenJanelaIframe('top.corpo','db_iframe_respcgm','func_cgm.php?funcao_js=parent.js_mostranomecgm1|z01_numcgm|z01_nome','Pesquisa',true);
+	  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_respcgm','func_cgm.php?funcao_js=parent.js_mostranomecgm1|z01_numcgm|z01_nome','Pesquisa',true);
 	}else {
 		if(document.form1.k03_respcgm.value != ''){
-		 js_OpenJanelaIframe('top.corpo','db_iframe_respcgm','func_cgm.php?pesquisa_chave='+document.form1.k03_respcgm.value+'&funcao_js=parent.js_mostranomecgm2','Pesquisa',false);
+		 js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_respcgm','func_cgm.php?pesquisa_chave='+document.form1.k03_respcgm.value+'&funcao_js=parent.js_mostranomecgm2','Pesquisa',false);
 		} else {
 		  document.form1.z01_nome.value = "";
 		}
@@ -643,20 +643,20 @@ function js_mostranomecgm2(erro, chave1) {
 
 function js_pesquisak03_taxagrupo(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_taxagrupo','func_taxagrupo.php?funcao_js=parent.js_mostrataxagrupo1|k06_taxagrupo|k06_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_taxagrupo','func_taxagrupo.php?funcao_js=parent.js_mostrataxagrupo1|k06_taxagrupo|k06_descr','Pesquisa',true);
   }else{
-     if(document.form1.k03_taxagrupo.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_taxagrupo','func_taxagrupo.php?pesquisa_chave='+document.form1.k03_taxagrupo.value+'&funcao_js=parent.js_mostrataxagrupo','Pesquisa',false);
+     if(document.form1.k03_taxagrupo.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_taxagrupo','func_taxagrupo.php?pesquisa_chave='+document.form1.k03_taxagrupo.value+'&funcao_js=parent.js_mostrataxagrupo','Pesquisa',false);
      }else{
-       document.form1.k06_descr.value = ''; 
+       document.form1.k06_descr.value = '';
      }
   }
 }
 function js_mostrataxagrupo(chave,erro){
-  document.form1.k06_descr.value = chave; 
-  if(erro==true){ 
-    document.form1.k03_taxagrupo.focus(); 
-    document.form1.k03_taxagrupo.value = ''; 
+  document.form1.k06_descr.value = chave;
+  if(erro==true){
+    document.form1.k03_taxagrupo.focus();
+    document.form1.k03_taxagrupo.value = '';
   }
 }
 function js_mostrataxagrupo1(chave1,chave2){
@@ -666,20 +666,20 @@ function js_mostrataxagrupo1(chave1,chave2){
 }
 function js_pesquisak03_instit(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_db_config','func_db_config.php?funcao_js=parent.js_mostradb_config1|codigo|nomeinst','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_config','func_db_config.php?funcao_js=parent.js_mostradb_config1|codigo|nomeinst','Pesquisa',true);
   }else{
-     if(document.form1.k03_instit.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_db_config','func_db_config.php?pesquisa_chave='+document.form1.k03_instit.value+'&funcao_js=parent.js_mostradb_config','Pesquisa',false);
+     if(document.form1.k03_instit.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_config','func_db_config.php?pesquisa_chave='+document.form1.k03_instit.value+'&funcao_js=parent.js_mostradb_config','Pesquisa',false);
      }else{
-       document.form1.nomeinst.value = ''; 
+       document.form1.nomeinst.value = '';
      }
   }
 }
 function js_mostradb_config(chave,erro){
-  document.form1.nomeinst.value = chave; 
-  if(erro==true){ 
-    document.form1.k03_instit.focus(); 
-    document.form1.k03_instit.value = ''; 
+  document.form1.nomeinst.value = chave;
+  if(erro==true){
+    document.form1.k03_instit.focus();
+    document.form1.k03_instit.value = '';
   }
 }
 function js_mostradb_config1(chave1,chave2){
@@ -688,7 +688,7 @@ function js_mostradb_config1(chave1,chave2){
   db_iframe_db_config.hide();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_numpref','func_numpref.php?funcao_js=parent.js_preenchepesquisa|k03_anousu|k03_instit','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_numpref','func_numpref.php?funcao_js=parent.js_preenchepesquisa|k03_anousu|k03_instit','Pesquisa',true);
 }
 function js_preenchepesquisa(chave,chave1){
   db_iframe_numpref.hide();
@@ -700,29 +700,29 @@ function js_preenchepesquisa(chave,chave1){
 }
 function js_consultareciboretencao(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo',
+    js_OpenJanelaIframe('CurrentWindow.corpo',
                         'db_iframe_reciboprotretencao',
                         'func_reciboprotretencao.php?k03_tipo='+chave_k03_tipo+'&funcao_js=parent.js_mostrareciboretencao1|k00_tipo|k00_descr',
                         'Pesquisa',true);
   }else{
-     if(document.form1.k03_reciboprotretencao.value != ''){ 
-        js_OpenJanelaIframe('top.corpo',
+     if(document.form1.k03_reciboprotretencao.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo',
                             'db_iframe_reciboprotretencao',
                             'func_reciboprotretencao.php?k03_tipo='+chave_k03_tipo+'&pesquisa_chave='+document.form1.k03_reciboprotretencao.value+'&funcao_js=parent.js_mostrareciboretencao',
                             'Pesquisa',false);
      }else{
        document.form1.k03_reciboprotretencao.value = '';
-       document.form1.k00_descr.value = '';  
+       document.form1.k00_descr.value = '';
      }
   }
 }
 function js_mostrareciboretencao(chave,erro){
   document.form1.k00_descr.value = chave;
   db_iframe_reciboprotretencao.hide();
-  if(erro==true){ 
-    document.form1.k00_descr.focus(); 
-    document.form1.k03_reciboprotretencao.value = ''; 
-  } 
+  if(erro==true){
+    document.form1.k00_descr.focus();
+    document.form1.k03_reciboprotretencao.value = '';
+  }
 }
 function js_mostrareciboretencao1(chave1,chave2){
   document.form1.k03_reciboprotretencao.value = chave1;
@@ -733,11 +733,11 @@ function js_mostrareciboretencao1(chave1,chave2){
 function js_pesquisaReceita(lMostra) {
 
   if (lMostra) {
-    js_OpenJanelaIframe('top.corpo', 'db_iframe_receita', 'func_tabrec.php?funcao_js=parent.js_mostraReceita|k02_codigo|k02_drecei', 'Pesquisa', true);
+    js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_receita', 'func_tabrec.php?funcao_js=parent.js_mostraReceita|k02_codigo|k02_drecei', 'Pesquisa', true);
   } else {
-    js_OpenJanelaIframe('top.corpo', 'db_iframe_receita', 'func_tabrec.php?funcao_js=parent.js_mostraReceitaHide&pesquisa_chave='+document.getElementById('k03_receitapadraocredito').value, 'Pesquisa', false);
+    js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_receita', 'func_tabrec.php?funcao_js=parent.js_mostraReceitaHide&pesquisa_chave='+document.getElementById('k03_receitapadraocredito').value, 'Pesquisa', false);
   }
-  
+
 }
 
 function js_mostraReceita(iCodigoReceita, sDescricao) {
@@ -745,16 +745,16 @@ function js_mostraReceita(iCodigoReceita, sDescricao) {
   document.getElementById('k03_receitapadraocredito').value = iCodigoReceita;
   document.getElementById('k02_drecei').value                = sDescricao;
   db_iframe_receita.hide();
-  
+
 }
 
 function js_mostraReceitaHide(sDescricao, lErro) {
 
   if (lErro) {
     document.getElementById('k03_receitapadraocredito').value = '';
-  } 
+  }
 
-  document.getElementById('k02_drecei').value = sDescricao;    
-  
+  document.getElementById('k02_drecei').value = sDescricao;
+
 }
 </script>

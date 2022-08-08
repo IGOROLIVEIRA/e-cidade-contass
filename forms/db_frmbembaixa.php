@@ -56,7 +56,7 @@ $oDataAtual = new DBDate(date("d/m/Y", db_getsession('DB_datausu')));
           ?>
         </td>
       </tr>
-      
+
       <tr>
         <td>
           <?
@@ -70,7 +70,7 @@ $oDataAtual = new DBDate(date("d/m/Y", db_getsession('DB_datausu')));
           ?>
         </td>
       </tr>
-      
+
       <tr>
         <td title="<?=@$Tt55_motivo?>">
           <?
@@ -442,24 +442,24 @@ $oDataAtual = new DBDate(date("d/m/Y", db_getsession('DB_datausu')));
  */
 function js_pesquisa_cgm(mostra){
 	  if(mostra==true){
-	    js_OpenJanelaIframe('top.corpo','db_iframe_cgm','func_cgm.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome','Pesquisa',true);
+	    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cgm','func_cgm.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome','Pesquisa',true);
 	  }else{
-	     if($('t55_destino').value != ''){ 
-	        js_OpenJanelaIframe('top.corpo','db_iframe_cgm','func_cgm.php?pesquisa_chave='+$('t55_destino').value+'&funcao_js=parent.js_mostracgm','Pesquisa',false);
+	     if($('t55_destino').value != ''){
+	        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cgm','func_cgm.php?pesquisa_chave='+$('t55_destino').value+'&funcao_js=parent.js_mostracgm','Pesquisa',false);
 	     }else{
-	    	 $('z01_nome').value = ''; 
+	    	 $('z01_nome').value = '';
 	     }
 	  }
 	}
 	function js_mostracgm(erro,chave){
-		$('z01_nome').value = chave; 
-	  if(erro==true){ 
-		  $('t55_destino').value = ''; 
-		  $('t55_destino').focus(); 
+		$('z01_nome').value = chave;
+	  if(erro==true){
+		  $('t55_destino').value = '';
+		  $('t55_destino').focus();
 	  }
 	}
 	function js_mostracgm1(chave1,chave2){
-		$('t55_destino').value = chave1;  
+		$('t55_destino').value = chave1;
 		$('z01_nome').value = chave2;
 	   db_iframe_cgm.hide();
 	}

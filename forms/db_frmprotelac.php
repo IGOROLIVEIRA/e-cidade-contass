@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: recursos humanos
@@ -44,7 +44,7 @@ $arr_operador = Array("+"=>"+", "-"=>"-", "*"=>"*", "/"=>"/");
       db_ancora(@$Lh19_assent,"js_pesquisah19_assent(true);",$db_opcao);
       ?>
     </td>
-    <td> 
+    <td>
       <?
       db_input('h19_assent',6,$Ih19_assent,true,'hidden',3,"")
       ?>
@@ -60,7 +60,7 @@ $arr_operador = Array("+"=>"+", "-"=>"-", "*"=>"*", "/"=>"/");
     <td nowrap title="<?=@$Th19_tipo?>" align="right">
       <?=@$Lh19_tipo?>
     </td>
-    <td> 
+    <td>
       <?
       $x = Array("G"=>"Gratificação", "A"=>"Avanço", "F"=>"Férias");
       db_select('h19_tipo',$x,true,$db_opcao,"");
@@ -93,17 +93,17 @@ $arr_operador = Array("+"=>"+", "-"=>"-", "*"=>"*", "/"=>"/");
                   <td nowrap title="<?=@$$Tcampodia?>">
                     <?=@$$Lcampodia?>
                   </td>
-                  <td> 
+                  <td>
                     <?
                     db_input($Ncampodia,3,$$Icampodia,true,'text',$db_opcao,"")
                     ?>
                   </td>
-                  <td> 
+                  <td>
                     <?
                     db_select($Ncampoop,$arr_operador,true,$db_opcao,"");
                     ?>
                   </td>
-                  <td> 
+                  <td>
                     <?
                     db_input($Ncampoper,5,$$Icampoper,true,'text',$db_opcao,"")
                     ?>
@@ -124,7 +124,7 @@ $arr_operador = Array("+"=>"+", "-"=>"-", "*"=>"*", "/"=>"/");
     <td nowrap title="<?=@$Th19_tpcalc?>">
        <?=@$Lh19_tpcalc?>
     </td>
-    <td> 
+    <td>
     -->
 <?
 db_input('h19_tpcalc',1,$Ih19_tpcalc,true,'hidden',$db_opcao,"")
@@ -154,21 +154,21 @@ function js_verificacampos(){
 }
 function js_pesquisah19_assent(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_tipoasse','func_tipoasse.php?chave_codigo=true&funcao_js=parent.js_mostratipoasse1|h12_codigo|h12_assent|h12_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_tipoasse','func_tipoasse.php?chave_codigo=true&funcao_js=parent.js_mostratipoasse1|h12_codigo|h12_assent|h12_descr','Pesquisa',true);
   }else{
-    if(document.form1.h12_assent.value != ''){ 
-       js_OpenJanelaIframe('top.corpo','db_iframe_tipoasse','func_tipoasse.php?chave_assent='+document.form1.h12_assent.value+'&funcao_js=parent.js_mostratipoasse','Pesquisa',false);
+    if(document.form1.h12_assent.value != ''){
+       js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_tipoasse','func_tipoasse.php?chave_assent='+document.form1.h12_assent.value+'&funcao_js=parent.js_mostratipoasse','Pesquisa',false);
     }else{
-      document.form1.h12_descr.value = ''; 
+      document.form1.h12_descr.value = '';
       document.form1.h19_assent.value = '';
     }
   }
 }
 function js_mostratipoasse(chave,chave2,erro){
-  document.form1.h12_descr.value = chave2; 
-  if(erro==true){ 
-    document.form1.h12_assent.focus(); 
-    document.form1.h12_assent.value = ''; 
+  document.form1.h12_descr.value = chave2;
+  if(erro==true){
+    document.form1.h12_assent.focus();
+    document.form1.h12_assent.value = '';
     document.form1.h19_assent.value = '';
   }else{
     document.form1.h19_assent.value = chave;
@@ -181,7 +181,7 @@ function js_mostratipoasse1(chave1,chave2,chave3){
   db_iframe_tipoasse.hide();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_protelac','func_protelac.php?funcao_js=parent.js_preenchepesquisa|h19_codigo','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_protelac','func_protelac.php?funcao_js=parent.js_preenchepesquisa|h19_codigo','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_protelac.hide();

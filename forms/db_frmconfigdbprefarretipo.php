@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: prefeitura
@@ -43,7 +43,7 @@ if(isset($db_opcaoal)){
 }else if(isset($opcao) && $opcao=="excluir"){
     $db_opcao = 3;
     $db_botao=true;
-}else{  
+}else{
     $db_opcao = 1;
     $db_botao=true;
     if(isset($novo) || isset($alterar) ||   isset($excluir) || $db_opcao == 1 || (isset($incluir) && $sqlerro==false ) ){
@@ -57,7 +57,7 @@ if(isset($db_opcaoal)){
 			$w17_dtfim_mes		=	"";
 			$w17_dtfim_ano		=	"";
    }
-} 
+}
 ?>
 <form name="form1" method="post" action="">
 <center>
@@ -66,13 +66,13 @@ if(isset($db_opcaoal)){
 	<td>
 		<fieldset>
 			<legend><b>Configuração DBPref Débitos Emissão Recibos</b></legend>
-		
+
 		<table border="0" align="center">
 		  <tr>
 		    <td nowrap title="<?=@$Tw17_sequencial?>">
 		       <?=@$Lw17_sequencial?>
 		    </td>
-		    <td> 
+		    <td>
 					<?
 					db_input('w17_sequencial',10,$Iw17_sequencial,true,'text',3,"")
 					?>
@@ -84,7 +84,7 @@ if(isset($db_opcaoal)){
 		       db_ancora(@$Lw17_arretipo,"js_pesquisaw17_arretipo(true);",$db_opcao);
 		       ?>
 		    </td>
-		    <td> 
+		    <td>
 					<?
 					db_input('w17_arretipo',10,$Iw17_arretipo,true,'text',$db_opcao," onchange='js_pesquisaw17_arretipo(false);'")
 					?>
@@ -100,7 +100,7 @@ if(isset($db_opcaoal)){
 		       //db_ancora(@$Lw17_instit,"js_pesquisaw17_instit(true);",$db_opcao);
 		       ?>
 		    </td>
-		    <td> 
+		    <td>
 					<?
 					$w17_instit = db_getsession('DB_instit');
 					db_input('w17_instit',10,$Iw17_instit,true,'text',3," onchange='js_pesquisaw17_instit(false);'")
@@ -114,7 +114,7 @@ if(isset($db_opcaoal)){
 		    <td nowrap title="<?=@$Tw17_dtini?>">
 		       <?=@$Lw17_dtini?>
 		    </td>
-		    <td> 
+		    <td>
 					<?
 					db_inputdata('w17_dtini',@$w17_dtini_dia,@$w17_dtini_mes,@$w17_dtini_ano,true,'text',$db_opcao,"")
 					?>
@@ -124,7 +124,7 @@ if(isset($db_opcaoal)){
 		    <td nowrap title="<?=@$Tw17_dtfim?>">
 		       <?=@$Lw17_dtfim?>
 		    </td>
-		    <td> 
+		    <td>
 					<?
 					db_inputdata('w17_dtfim',@$w17_dtfim_dia,@$w17_dtfim_mes,@$w17_dtfim_ano,true,'text',$db_opcao,"")
 					?>
@@ -143,9 +143,9 @@ if(isset($db_opcaoal)){
 	</table>
 	<table>
   	  <tr>
-	    <td valign="top"  align="center">  
+	    <td valign="top"  align="center">
 	      <?
-	                    
+
 		 	$chavepri= array("w17_sequencial"=>@$w17_sequencial);
 		 	$cliframe_alterar_excluir->chavepri=$chavepri;
 		 	$cliframe_alterar_excluir->sql     = $clconfigdbprefarretipo->sql_query(null,'*',"w17_sequencial", "w17_instit=".$w17_instit);
@@ -158,26 +158,26 @@ if(isset($db_opcaoal)){
 	      ?>
     	</td>
    	  </tr>
- 	</table>	
+ 	</table>
   </center>
 </form>
 <script>
 function js_pesquisaw17_arretipo(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_arretipo','func_arretipo.php?funcao_js=parent.js_mostraarretipo1|k00_tipo|k00_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_arretipo','func_arretipo.php?funcao_js=parent.js_mostraarretipo1|k00_tipo|k00_descr','Pesquisa',true);
   }else{
-     if(document.form1.w17_arretipo.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_arretipo','func_arretipo.php?pesquisa_chave='+document.form1.w17_arretipo.value+'&funcao_js=parent.js_mostraarretipo','Pesquisa',false);
+     if(document.form1.w17_arretipo.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_arretipo','func_arretipo.php?pesquisa_chave='+document.form1.w17_arretipo.value+'&funcao_js=parent.js_mostraarretipo','Pesquisa',false);
      }else{
-       document.form1.k00_descr.value = ''; 
+       document.form1.k00_descr.value = '';
      }
   }
 }
 function js_mostraarretipo(chave,erro){
-  document.form1.k00_descr.value = chave; 
-  if(erro==true){ 
-    document.form1.w17_arretipo.focus(); 
-    document.form1.w17_arretipo.value = ''; 
+  document.form1.k00_descr.value = chave;
+  if(erro==true){
+    document.form1.w17_arretipo.focus();
+    document.form1.w17_arretipo.value = '';
   }
 }
 function js_mostraarretipo1(chave1,chave2){
@@ -187,20 +187,20 @@ function js_mostraarretipo1(chave1,chave2){
 }
 function js_pesquisaw17_instit(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_db_config','func_db_config.php?funcao_js=parent.js_mostradb_config1|codigo|nomeinst','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_config','func_db_config.php?funcao_js=parent.js_mostradb_config1|codigo|nomeinst','Pesquisa',true);
   }else{
-     if(document.form1.w17_instit.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_db_config','func_db_config.php?pesquisa_chave='+document.form1.w17_instit.value+'&funcao_js=parent.js_mostradb_config','Pesquisa',false);
+     if(document.form1.w17_instit.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_config','func_db_config.php?pesquisa_chave='+document.form1.w17_instit.value+'&funcao_js=parent.js_mostradb_config','Pesquisa',false);
      }else{
-       document.form1.nomeinst.value = ''; 
+       document.form1.nomeinst.value = '';
      }
   }
 }
 function js_mostradb_config(chave,erro){
-  document.form1.nomeinst.value = chave; 
-  if(erro==true){ 
-    document.form1.w17_instit.focus(); 
-    document.form1.w17_instit.value = ''; 
+  document.form1.nomeinst.value = chave;
+  if(erro==true){
+    document.form1.w17_instit.focus();
+    document.form1.w17_instit.value = '';
   }
 }
 function js_mostradb_config1(chave1,chave2){
@@ -209,7 +209,7 @@ function js_mostradb_config1(chave1,chave2){
   db_iframe_db_config.hide();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_configdbprefarretipo','func_configdbprefarretipo.php?funcao_js=parent.js_preenchepesquisa|w17_sequencial','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_configdbprefarretipo','func_configdbprefarretipo.php?funcao_js=parent.js_preenchepesquisa|w17_sequencial','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_configdbprefarretipo.hide();

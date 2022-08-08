@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: contabilidade
@@ -36,7 +36,7 @@ $clconarquivospad->rotulo->label();
     <td nowrap title="<?=@$Tc54_codarq?>">
        <?=@$Lc54_codarq?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('c54_codarq',10,$Ic54_codarq,true,'text',3,"")
 ?>
@@ -46,7 +46,7 @@ db_input('c54_codarq',10,$Ic54_codarq,true,'text',3,"")
     <td nowrap title="<?=@$Tc54_nomearq?>">
        <?=@$Lc54_nomearq?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('c54_nomearq',20,$Ic54_nomearq,true,'text',$db_opcao,"")
 ?>
@@ -56,7 +56,7 @@ db_input('c54_nomearq',20,$Ic54_nomearq,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tc54_arquivo?>">
        <?=@$Lc54_arquivo?>
     </td>
-    <td> 
+    <td>
 <?
 db_textarea('c54_arquivo',15,100,$Ic54_arquivo,true,'text',$db_opcao,"")
 ?>
@@ -66,10 +66,10 @@ db_textarea('c54_arquivo',15,100,$Ic54_arquivo,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tc54_codtrib?>">
        <?=@$Lc54_codtrib?>
     </td>
-    <td> 
+    <td>
 <?
 if (!isset($c54_codtrib) || $c54_codtrib==""){
-	$c54_codtrib = db_getsession("DB_instit");	
+	$c54_codtrib = db_getsession("DB_instit");
 }
 db_input('c54_codtrib',4,$Ic54_codtrib,true,'text',$db_opcao,"")
 ?>
@@ -82,7 +82,7 @@ db_input('c54_codtrib',4,$Ic54_codtrib,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tc54_anousu?>">
        <?=@$Lc54_anousu?>
     </td>
-    <td> 
+    <td>
 <?
 $c54_anousu = (db_getsession('DB_anousu')-1);
 db_input('c54_anousu',4,$Ic54_anousu,true,'text',3,"")
@@ -90,7 +90,7 @@ db_input('c54_anousu',4,$Ic54_anousu,true,'text',3,"")
     </td>
   </tr>
   </table>
-</fieldset>  
+</fieldset>
 </center>
 
 <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> >
@@ -98,7 +98,7 @@ db_input('c54_anousu',4,$Ic54_anousu,true,'text',3,"")
 </form>
 <script>
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_conarquivospad','func_conarquivospad.php?funcao_js=parent.js_preenchepesquisa|c54_codarq','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_conarquivospad','func_conarquivospad.php?funcao_js=parent.js_preenchepesquisa|c54_codarq','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_conarquivospad.hide();

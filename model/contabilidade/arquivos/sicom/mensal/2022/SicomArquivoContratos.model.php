@@ -13,9 +13,7 @@ require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2022/GerarCONT
 require_once("model/Acordo.model.php");
 require_once("model/AcordoPosicao.model.php");
 require_once("model/AcordoRescisao.model.php");
-
 //echo '<pre>';ini_set("display_errors", 1);
-
 /**
  * Contratos Sicom Acompanhamento Mensal
  * @author marcelo
@@ -468,10 +466,9 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                 LEFT JOIN cflicita c2 ON l2.l20_codtipocom = c2.l03_codigo
                 LEFT JOIN pctipocompra p2 ON p2.pc50_codcom = c2.l03_codcom
                 INNER JOIN acordogrupo ON ac02_sequencial = ac16_acordogrupo
-                WHERE ac16_dataassinatura <= '{$this->sDataFinal}'
-                AND ac16_dataassinatura >= '{$this->sDataInicial}'
+                WHERE ac16_datareferencia <= '{$this->sDataFinal}'
+                AND ac16_datareferencia >= '{$this->sDataInicial}'
                 AND ac16_instit = " . db_getsession("DB_instit");
-
         $rsResult10 = db_query($sSql);
 
         db_inicio_transacao();
@@ -1152,17 +1149,19 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                 ac26_vigenciaalterada,
                 ac26_data,
                 ac02_acordonatureza,
-                manutac_codunidsubanterior
+                manutac_codunidsubanterior,
+                ac35_datareferencia
         FROM acordoposicaoaditamento
         INNER JOIN acordoposicao ON ac26_sequencial = ac35_acordoposicao
         INNER JOIN acordo ON ac26_acordo = ac16_sequencial
         INNER JOIN acordogrupo ON ac16_acordogrupo = ac02_sequencial
         LEFT JOIN manutencaoacordo ON manutac_acordo = ac16_sequencial
-        WHERE ac35_dataassinaturatermoaditivo BETWEEN '{$this->sDataInicial}' AND '{$this->sDataFinal}'
+        WHERE ac35_datareferencia BETWEEN '{$this->sDataInicial}' AND '{$this->sDataFinal}'
           AND ac16_instit = " . db_getsession("DB_instit") . " ORDER BY ac26_sequencial ";
 
         $rsResult20 = db_query($sSql);
-        //echo $sSql; db_criatabela($rsResult20);
+        //echo $sSql;
+        //db_criatabela($rsResult20);
         $oDadosAgrupados20 = array();
         for ($iCont20 = 0; $iCont20 < pg_num_rows($rsResult20); $iCont20++) {
 
@@ -1183,26 +1182,27 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             }
 
             $sSql = "select  (CASE
-           WHEN o41_subunidade != 0
-               OR NOT NULL THEN lpad((CASE WHEN o40_codtri = '0'
-                   OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
-                       OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)||lpad(o41_subunidade::integer,3,0)
-           ELSE lpad((CASE WHEN o40_codtri = '0'
-               OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
-                   OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)
-           END) as codunidadesub
-           from db_departorg join orcunidade on db01_orgao = o41_orgao and db01_unidade = o41_unidade
-               and db01_anousu = o41_anousu
-               JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
-               where db01_anousu = " . db_getsession("DB_anousu") . " and db01_coddepto = " . $oDados20->ac16_deptoresponsavel;
+                    WHEN o41_subunidade != 0
+                        OR NOT NULL THEN lpad((CASE WHEN o40_codtri = '0'
+                        OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
+                        OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)||lpad(o41_subunidade::integer,3,0)
+                    ELSE lpad((CASE WHEN o40_codtri = '0'
+                        OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
+                        OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)
+                    END) as codunidadesub
+                    from db_departorg join orcunidade on db01_orgao = o41_orgao and db01_unidade = o41_unidade
+                        and db01_anousu = o41_anousu
+                    JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
+                    where db01_anousu = " . db_getsession("DB_anousu") . " and db01_coddepto = " . $oDados20->ac16_deptoresponsavel;
             $result = db_query($sSql);
 
             $sCodUnidade = db_utils::fieldsMemory($result, 0)->codunidadesub;
+
             /*
             * ESSE IF FOI CRIADO PARA SEPARAR OS TIPOS 11 e 14 DOS OUTROS TIPOS
             */
             if (!in_array($oAcordoPosicao->getTipo(), array(11, 14))) {
-
+                //var_dump($oAcordoPosicao->getTipo());
                 $clcontratos20->si87_tiporegistro = 20;
                 $clcontratos20->si87_codaditivo = $oDados20->ac26_sequencial;
                 $clcontratos20->si87_codorgao = $sCodorgao;
@@ -1234,8 +1234,8 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                  */
                 foreach ($oAcordoPosicao->getItens() as $oAcordoItem) {
                     if ($oAcordoItem->getQuantiAditada() != 0 || $oAcordoItem->getValorAditado() != 0) {
-                        $iTotalPosicaoAnterior += $oAcordoItem->getValorTotalPosicaoAnterior($oDados20->ac26_numero);
-                        $iTotalPosicaoAditivo += $oAcordoItem->getValorAditado();
+                        $iTotalPosicaoAnterior += $oAcordoItem->getValorTotalPosicaoAnteriors($oDados20->ac26_numero);
+                        $iTotalPosicaoAditivo += $oAcordoItem->getValorTotal();
 
                         $sqlServico = "select pc01_servico, ac20_servicoquantidade
                             from acordoitem
@@ -1246,7 +1246,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                         $rsMatServicoR21  = db_query($sqlServico);
                         $matServico = db_utils::fieldsMemory($rsMatServicoR21, 0);
                         if ($matServico->pc01_servico == "t" && $matServico->ac20_servicoquantidade == "f") {
-                            $valortotaladitado += abs($oAcordoItem->getValorTotalPosicaoAnterior($oDados20->ac26_numero) - $oAcordoItem->getValorTotal());
+                            $valortotaladitado += $oAcordoItem->getValorAditado();
                         } else {
                             //CALCULO O VALOR DO PRIMEIRO REGISTRO 20 
                             //2 = reequilibrio 5 = reajuste
@@ -1256,10 +1256,12 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                             } else {
                                 $iQuantidadeAditada = abs($oAcordoItem->getQuantidade() - $oAcordoItem->getQuantidadePosicaoAnterior($oDados20->ac26_numero));
                             }
-                            $valortotaladitado = abs($iTotalPosicaoAnterior - $iTotalPosicaoAditivo);
+                            $valortotaladitado += abs($oAcordoItem->getValorAditado());
                         }
+                        //$iTotalPosicaoAditivo += $oAcordoItem->getValorTotal();
                     }
                 }
+                //var_dump($iTotalPosicaoAnterior);
 
                 /*
                 *tipo de alteracao contrato registro 20
@@ -1275,6 +1277,13 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                 } else {
                     $tipoalteracao = 3;
                 }
+                //tipos 9 e 10 tem tratamento diferente
+                if ($oAcordoPosicao->getTipo() == 9) {
+                    $tipoalteracao = 1;
+                } else if ($oAcordoPosicao->getTipo() == 10) {
+                    $tipoalteracao = 2;
+                }
+
                 $clcontratos20->si87_tipoalteracaovalor = $tipoalteracao;
                 $clcontratos20->si87_valoraditivo = ($tipoalteracao == 3 ? 0 : abs($valortotaladitado));
                 $clcontratos20->si87_datapublicacao = $oDados20->ac35_datapublicacao;
@@ -1344,7 +1353,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                             $rsMatServicoR21  = db_query($sqlServico);
                             $matServico = db_utils::fieldsMemory($rsMatServicoR21, 0);
                             if ($matServico->pc01_servico == "t" && $matServico->ac20_servicoquantidade == "f") {
-                                $clcontratos21->si88_valorunitarioitem = abs($oAcordoItem->getValorTotal() - $oAcordoItem->getValorTotalPosicaoAnterior($oDados20->ac26_numero));
+                                $clcontratos21->si88_valorunitarioitem = abs($oAcordoItem->getValorAditado());
                             } else {
                                 $clcontratos21->si88_valorunitarioitem = abs($oAcordoItem->getValorUnitario());
                             }
@@ -1362,11 +1371,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                             if ($matServico->pc01_servico == "t" && $matServico->ac20_servicoquantidade == "f") {
                                 $clcontratos21->si88_quantacrescdecresc = 1;
                             } else {
-                                if ($oAcordoPosicao->getTipo() == 2 || $oAcordoPosicao->getTipo() == 5) {
-                                    $clcontratos21->si88_quantacrescdecresc = abs($oAcordoItem->getQuantiAditada());
-                                } else {
-                                    $clcontratos21->si88_quantacrescdecresc = abs($oAcordoItem->getQuantidade() - $oAcordoItem->getQuantidadePosicaoAnterior($oDados20->ac26_numero));
-                                }
+                                $clcontratos21->si88_quantacrescdecresc = abs($oAcordoItem->getQuantiAditada());
                             }
 
                             $clcontratos21->si88_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
@@ -1403,165 +1408,665 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             /*
             *SOMENTE DOS TIPOS 11 e 14 
             */ else {
-                $valorAcrescimo = 0;
-                $valorDecrescimo = 0;
+                //var_dump($oAcordoPosicao->getTipo());
+                $clcontratos20->si87_tiporegistro = 20;
+                $clcontratos20->si87_codaditivo = $oDados20->ac26_sequencial;
+                $clcontratos20->si87_codorgao = $sCodorgao;
+                if (empty($oDados20->manutac_codunidsubanterior)) {
+                    $clcontratos20->si87_codunidadesub = $sCodUnidade;
+                } else {
+                    $clcontratos20->si87_codunidadesub = $oDados20->manutac_codunidsubanterior;
+                }
+                $clcontratos20->si87_nrocontrato = $oDados20->ac16_numero;
+                $clcontratos20->si87_dtassinaturacontoriginal = $oDados20->ac16_dataassinatura;
+                $clcontratos20->si87_nroseqtermoaditivo = $oDados20->ac26_numeroaditamento;
+                $clcontratos20->si87_dtassinaturatermoaditivo = $oDados20->ac35_dataassinaturatermoaditivo;
+                $clcontratos20->si87_tipotermoaditivo = $this->getTipoTermoAditivo($oAcordoPosicao);
+                $clcontratos20->si87_dscalteracao = substr($this->removeCaracteres($oDados20->ac35_descricaoalteracao), 0, 250);
+                $oDataTermino = new DBDate($oAcordoPosicao->getVigenciaFinal()); //317
+                if (in_array($oAcordoPosicao->getTipo(), array(6, 13))) {
+                    $clcontratos20->si87_novadatatermino = $oDataTermino->getDate();
+                } else {
+                    $clcontratos20->si87_novadatatermino = "";
+                }
+                $iTotalPosicaoAnterior = 0;
+                $iTotalPosicaoAditivo = 0;
+                $iQuantidadeAditada = 0;
+                $valortotaladitado = 0;
+                $iValorAditado = 0;
+                //ini_set('display_errors','on');
+                /**
+                 * AQUI IREI CALCULAR O VALOR ADITADO DO REGISTRO 20
+                 */
                 foreach ($oAcordoPosicao->getItens() as $oAcordoItem) {
+                    if ($oAcordoItem->getQuantiAditada() != 0 || $oAcordoItem->getValorAditado() != 0) {
+                        $iTotalPosicaoAnterior += $oAcordoItem->getValorTotalPosicaoAnteriors($oDados20->ac26_numero);
+                        $iTotalPosicaoAditivo += $oAcordoItem->getValorTotal();
 
-                    $sSql = "SELECT si43_coditem FROM
-                    (select si43_coditem,si43_dscitem  from item102014 union select si43_coditem,si43_dscitem from item102015 union select si43_coditem,si43_dscitem from item102016 union select si43_coditem,si43_dscitem from item102017 union select si43_coditem,si43_dscitem from item102021 union select si43_coditem,si43_dscitem from item102022) as y
-                    WHERE si43_coditem = " . $oAcordoItem->getCodigo() . $oAcordoItem->getUnidade();
-                    $result = db_query($sSql);
-                    $iCodItem = db_utils::fieldsMemory($result, 0)->si43_coditem;
-
-                    if ($iCodItem == "") {
-                        $iUnidade = $oAcordoItem->getUnidade() == "" ? 1 : $oAcordoItem->getUnidade();
-                        $iCodItem = $oAcordoItem->getMaterial()->getCodigo() . $iUnidade;
-                    }
-                    $iCodPcmater = $oAcordoItem->getMaterial()->getMaterial();
-
-                    /** 
-                     * busca itens obra;
-                     */
-                    $sqlItemobra = "select * from licitemobra where obr06_pcmater = $iCodPcmater";
-                    $rsItems = db_query($sqlItemobra);
-                    $oDadosItensObra = db_utils::fieldsMemory($rsItems, 0);
-
-                    //somente itens que sofream alteraçoes
-                    if ($oAcordoItem->getQuantiAditada() != 0 && $oAcordoItem->getValorAditado() != 0) {
-                        //verifica se e servico controlado por valor
                         $sqlServico = "select pc01_servico, ac20_servicoquantidade
-                        from acordoitem
-                        inner join pcmater on pc01_codmater = ac20_pcmater
-                        inner join acordoposicao on ac26_sequencial = ac20_acordoposicao
-                        where ac20_pcmater = {$oAcordoItem->getMaterial()->getCodigo()}
-                        and ac26_sequencial = {$oDados20->ac26_sequencial}";
+                            from acordoitem
+                            inner join pcmater on pc01_codmater = ac20_pcmater
+                            inner join acordoposicao on ac26_sequencial = ac20_acordoposicao
+                            where ac20_pcmater = {$oAcordoItem->getMaterial()->getCodigo()}
+                            and ac26_sequencial = {$oDados20->ac26_sequencial}";
                         $rsMatServicoR21  = db_query($sqlServico);
                         $matServico = db_utils::fieldsMemory($rsMatServicoR21, 0);
-
-                        $iQuantidadeItem = $oAcordoItem->getQuantidade();
-                        $iQuantidadeItemAnterior = $oAcordoItem->getQuantidadePosicaoAnterior($oDados20->ac26_numero);
-                        $iValorTotalItem = $oAcordoItem->getValorTotal();
-                        $iValorTotalItemAnterior = $oAcordoItem->getValorTotalPosicaoAnterior($oDados20->ac26_numero);
-
                         if ($matServico->pc01_servico == "t" && $matServico->ac20_servicoquantidade == "f") {
-                            $iQuantidadeItem = 1;
-                            if ($iValorTotalItem > $iValorTotalItemAnterior) {
-                                $tipoalteracao = 1;
-                            } else {
-                                $tipoalteracao = 2;
-                            }
-
-                            if ($iValorTotalItem == $iValorTotalItemAnterior) {
-                                $iValorUnitarioAditadoItem = $iValorTotalItem;
-                                $tipoalteracao = 1;
-                            } else {
-                                $iValorUnitarioAditadoItem = ($iValorTotalItem - $iValorTotalItemAnterior);
-                                $tipoalteracao = 1;
-                            }
+                            $valortotaladitado += $oAcordoItem->getValorAditado();
                         } else {
-                            if ($iQuantidadeItem != $iQuantidadeItemAnterior) {
-                                if ($iQuantidadeItem > $iQuantidadeItemAnterior) {
-                                    $tipoalteracao = 1;
-                                } else {
-                                    $tipoalteracao = 2;
-                                }
+                            //CALCULO O VALOR DO PRIMEIRO REGISTRO 20 
+                            //2 = reequilibrio 5 = reajuste
+                            if ($oAcordoPosicao->getTipo() == 2 || $oAcordoPosicao->getTipo() == 5) {
+                                $iQuantidadeAditada = $oAcordoItem->getQuantidade();
+                                $iValorAditado += $oAcordoItem->getValorTotalPosicaoAnterior($oDados20->ac26_sequencial) - $oAcordoItem->getValorTotal();
                             } else {
-                                if ($iValorTotalItem > $iValorTotalItemAnterior) {
-                                    $tipoalteracao = 1;
-                                } else {
-                                    $tipoalteracao = 2;
-                                }
+                                $iQuantidadeAditada = $oAcordoItem->getQuantidade() - $oAcordoItem->getQuantidadePosicaoAnterior($oDados20->ac26_numero);
                             }
-                            if ($oAcordoItem->getQuantidade() != $oAcordoItem->getQuantidadePosicaoAnterior($oDados20->ac26_numero)) {
-                                $iQuantidadeItem = abs($oAcordoItem->getQuantidade() - $oAcordoItem->getQuantidadePosicaoAnterior($oDados20->ac26_numero));
-                            } else {
-                                $iQuantidadeItem = $oAcordoItem->getQuantidade();
-                            }
-                            $iValorUnitarioAditadoItem = $oAcordoItem->getValorUnitario();
+                            $valortotaladitado += $oAcordoItem->getValorAditado();
                         }
+                        //$iTotalPosicaoAditivo += $oAcordoItem->getValorTotal();
+                    }
+                }
+                //var_dump($iTotalPosicaoAnterior);
 
-                        $sHash = $oDados20->ac26_sequencial . $oAcordoItem->getCodigo() . $tipoalteracao;
-                        if ($tipoalteracao == 1) {
-                            $valorAcrescimo += $iQuantidadeItem * $iValorUnitarioAditadoItem;
-                        } else {
-                            $valorDecrescimo += $iQuantidadeItem * $iValorUnitarioAditadoItem;
-                        }
+                /*
+                *tipo de alteracao contrato registro 20
+                * 1 - acrecimo
+                * 2 - decrescimo
+                * 3 - nao houve alteracao no valor
+                */
 
-                        if (!isset($oDadosAgrupados21[$sHash])) {
-                            $oDados21 = new stdClass();
-                            $oDados21->codigoitem = $oAcordoItem->getCodigo();
-                            $oDados21->posicao = $oDados20->ac26_sequencial;
-                            $oDados21->pcmater = $oAcordoItem->getMaterial()->getMaterial();
-                            $oDados21->numeroaditamento = $oDados20->ac26_numeroaditamento;
-                            $oDados21->quantidade = $iQuantidadeItem;
-                            $oDados21->valorunitarioaditado = $iValorUnitarioAditadoItem;
-                            $oDados21->valoraditamento = $tipoalteracao == 1 ? $valorAcrescimo : $valorDecrescimo;
-                            $oDados21->si87_codaditivo = $oDados20->ac26_sequencial;
-                            $oDados21->sCodorgao = $sCodorgao;
-                            $oDados21->sCodUnidade = $sCodUnidade;
-                            $oDados21->manutac_codunidsubanterior = $oDados20->manutac_codunidsubanterior;
-                            $oDados21->ac16_numero = $oDados20->ac16_numero;
-                            $oDados21->ac16_dataassinatura = $oDados20->ac16_dataassinatura;
-                            $oDados21->ac26_numeroaditamento = $oDados20->ac26_numeroaditamento;
-                            $oDados21->ac35_dataassinaturatermoaditivo = $oDados20->ac35_dataassinaturatermoaditivo;
-                            $oDados21->si87_tipotermoaditivo = $this->getTipoTermoAditivo($oAcordoPosicao);
-                            $oDados21->si87_dscalteracao = substr($this->removeCaracteres($oDados20->ac35_descricaoalteracao), 0, 250);
+                if ($valortotaladitado > 0) {
+                    $tipoalteracao = 1;
+                } elseif ($valortotaladitado < 0) {
+                    $tipoalteracao = 2;
+                } else {
+                    $tipoalteracao = 3;
+                }
 
-                            $oDataTermino = new DBDate($oAcordoPosicao->getVigenciaFinal());
 
-                            if ($oAcordoPosicao->getTipo() == 14) {
-                                $oDados21->si87_novadatatermino = ($oAcordoPosicao->getVigenciaAlterada() == 's') ? $oDataTermino->getDate() : "";
-                            } else {
-                                $oDados21->si87_novadatatermino = $oDataTermino->getDate();
+                $clcontratos20->si87_tipoalteracaovalor = $tipoalteracao;
+                $clcontratos20->si87_valoraditivo = ($tipoalteracao == 3 ? 0 : abs($valortotaladitado));
+                $clcontratos20->si87_datapublicacao = $oDados20->ac35_datapublicacao;
+                $clcontratos20->si87_veiculodivulgacao = $this->removeCaracteres($oDados20->ac35_veiculodivulgacao);
+                $clcontratos20->si87_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+                $clcontratos20->si87_instit = db_getsession("DB_instit");
+                $clcontratos20->incluir(null);
+
+                if ($clcontratos20->erro_status == 0) {
+                    throw new Exception($clcontratos20->erro_msg);
+                }
+
+                /*
+                * Registro 21
+                * Detalhamento dos Itens Aditados
+                */
+
+                if (in_array($oAcordoPosicao->getTipo(), array(11))) {
+                    $iTotalPosicaoAnterior = 0;
+                    $iTotalPosicaoAditivo = 0;
+                    $iQuantidadeAditada = 0;
+                    $valortotaladitado = 0;
+                    foreach ($oAcordoPosicao->getItens() as $oAcordoItem) {
+                        if ($oAcordoItem->getQuantiAditada() != 0 || $oAcordoItem->getValorAditado() != 0) {
+                            $iTotalPosicaoAnterior += $oAcordoItem->getValorTotalPosicaoAnterior($oDados20->ac26_numero);
+                            $iTotalPosicaoAditivo += $oAcordoItem->getValorTotal();
+
+                            $sSql = "SELECT si43_coditem FROM
+                                    (select si43_coditem,si43_dscitem  from item102014 union select si43_coditem,si43_dscitem from item102015 union select si43_coditem,si43_dscitem from item102016 union select si43_coditem,si43_dscitem from item102017 union select si43_coditem,si43_dscitem from item102021 union select si43_coditem,si43_dscitem from item102022) as y
+                                    WHERE si43_coditem = " . $oAcordoItem->getCodigo() . $oAcordoItem->getUnidade();
+                            $result = db_query($sSql);
+                            $iCodItem = db_utils::fieldsMemory($result, 0)->si43_coditem;
+
+                            if ($iCodItem == "") {
+                                $iUnidade = $oAcordoItem->getUnidade() == "" ? 1 : $oAcordoItem->getUnidade();
+                                $iCodItem = $oAcordoItem->getMaterial()->getCodigo() . $iUnidade;
                             }
-                            $oDados21->tipoalteracao = $tipoalteracao;
-                            $oDados21->ac35_datapublicacao = $oDados20->ac35_datapublicacao;
-                            $oDados21->ac35_veiculodivulgacao = $this->removeCaracteres($oDados20->ac35_veiculodivulgacao);
+                            $iCodPcmater = $oAcordoItem->getMaterial()->getMaterial();
+
+                            /** 
+                             * busca itens obra;
+                             */
+                            $sqlItemobra = "select * from licitemobra where obr06_pcmater = $iCodPcmater";
+                            $rsItems = db_query($sqlItemobra);
+                            $oDadosItensObra = db_utils::fieldsMemory($rsItems, 0);
+
+                            $clcontratos21->si88_tiporegistro = 21;
+                            $clcontratos21->si88_reg20 = $clcontratos20->si87_sequencial;
+                            $clcontratos21->si88_codaditivo = $clcontratos20->si87_codaditivo;
                             if ($oDados20->ac02_acordonatureza == "1") {
                                 if ($oDadosItensObra->obr06_tabela == "3" || $oDadosItensObra->obr06_tabela == "4") {
-                                    $oDados21->si88_coditem = $iCodItem;
+                                    $clcontratos21->si88_coditem = $iCodItem;
                                 } else {
-                                    $oDados21->si88_coditem = null;
+                                    $clcontratos21->si88_coditem = null;
                                 }
                             } else {
-                                $oDados21->si88_coditem = $iCodItem;
+                                $clcontratos21->si88_coditem = $iCodItem;
                             }
-                            $oDados21->ac02_acordonatureza = $oDados20->ac02_acordonatureza;
-                            if ($oDados20->ac02_acordonatureza == "1" || $oDados20->ac02_acordonatureza == "7") {
-                                $oDados21->si88_tipomaterial = $oDadosItensObra->obr06_tabela;
+                            $sqlServico = "
+                            select pc01_servico, ac20_servicoquantidade
+                                from acordoitem
+                                inner join pcmater on pc01_codmater = ac20_pcmater
+                                inner join acordoposicao on ac26_sequencial = ac20_acordoposicao
+                                    where ac20_pcmater = {$oAcordoItem->getMaterial()->getCodigo()}
+                                    and ac26_sequencial = {$oDados20->ac26_sequencial}
+                            ";
+                            $rsMatServicoR21  = db_query($sqlServico);
+                            $matServico = db_utils::fieldsMemory($rsMatServicoR21, 0);
+                            if ($matServico->pc01_servico == "t" && $matServico->ac20_servicoquantidade == "f") {
+                                $clcontratos21->si88_valorunitarioitem = abs($oAcordoItem->getValorAditado());
                             } else {
-                                $oDados21->si88_tipomaterial = "";
+                                $clcontratos21->si88_valorunitarioitem = abs($oAcordoItem->getValorUnitario());
+                            }
+                            $valortotaladitado = $oAcordoItem->getValorAditado();
+                            if ($valortotaladitado > 0) {
+                                $iTipoAlteraoItem = 1;
+                            } elseif ($valortotaladitado < 0) {
+                                $iTipoAlteraoItem = 2;
+                            } else {
+                                $iTipoAlteraoItem = 3;
+                            }
+
+                            $clcontratos21->si88_tipoalteracaoitem = $iTipoAlteraoItem;
+
+                            //QUANTIDADE ADITADA
+                            if ($matServico->pc01_servico == "t" && $matServico->ac20_servicoquantidade == "f") {
+                                $clcontratos21->si88_quantacrescdecresc = 1;
+                            } else {
+                                $clcontratos21->si88_quantacrescdecresc = abs($oAcordoItem->getQuantiAditada());
+                            }
+
+                            $clcontratos21->si88_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+                            $clcontratos21->si88_instit = db_getsession("DB_instit");
+                            if ($oDados20->ac02_acordonatureza == "1" || $oDados20->ac02_acordonatureza == "7") {
+                                $clcontratos21->si88_tipomaterial = $oDadosItensObra->obr06_tabela;
+                            } else {
+                                $clcontratos21->si88_tipomaterial = "";
                             }
                             if ($oDadosItensObra->obr06_tabela == "1") {
-                                $oDados21->si88_coditemsinapi = $oDadosItensObra->obr06_codigotabela;
-                                $oDados21->si88_coditemsimcro = null;
-                                $oDados21->si88_descoutrosmateriais = null;
+                                $clcontratos21->si88_coditemsinapi = $oDadosItensObra->obr06_codigotabela;
+                                $clcontratos21->si88_coditemsimcro = null;
+                                $clcontratos21->si88_descoutrosmateriais = null;
                             } elseif ($oDadosItensObra->obr06_tabela == "2") {
-                                $oDados21->si88_coditemsimcro = $oDadosItensObra->obr06_codigotabela;
-                                $oDados21->si88_coditemsinapi = null;
-                                $oDados21->si88_descoutrosmateriais = null;
+                                $clcontratos21->si88_coditemsimcro = $oDadosItensObra->obr06_codigotabela;
+                                $clcontratos21->si88_coditemsinapi = null;
+                                $clcontratos21->si88_descoutrosmateriais = null;
                             } elseif ($oDadosItensObra->obr06_tabela == "3") {
-                                $oDados21->si88_coditemsinapi = null;
-                                $oDados21->si88_coditemsimcro = null;
-                                $oDados21->si88_descoutrosmateriais = $oDadosItensObra->obr06_descricaotabela;
+                                $clcontratos21->si88_coditemsinapi = null;
+                                $clcontratos21->si88_coditemsimcro = null;
+                                $clcontratos21->si88_descoutrosmateriais = $oDadosItensObra->obr06_descricaotabela;
                             }
-                            $oDados21->si88_descoutrosmateriais = $oDadosItensObra->obr06_descricaotabela;
-                            $oDados21->si88_itemplanilha = $oDadosItensObra->obr06_pcmater;
-                            $oDadosAgrupados21[$sHash] = $oDados21;
-                        }
-                    } //fim quantidade aditada
+                            $clcontratos21->si88_itemplanilha = $oDadosItensObra->obr06_pcmater;
+                            $clcontratos21->incluir(null);
 
-                    if ($tipoalteracao == 1) {
-                        if ($valorAcrescimo > 0) {
-                            $oDadosAgrupados21[$sHash]->valoraditamento = $valorAcrescimo;
-                        }
-                    } else {
-                        if ($valorAcrescimo > 0) {
-                            $oDadosAgrupados21[$sHash]->valoraditamento = $valorDecrescimo;
+                            if ($clcontratos21->erro_status == 0) {
+                                throw new Exception($clcontratos21->erro_msg);
+                            }
                         }
                     }
-                } //fim itens
-                $oDadosAgrupados20[$oDados20->ac26_sequencial] = $oDadosAgrupados21;
+                } else {
+                    $iTotalPosicaoAnterior = 0;
+                    $iTotalPosicaoAditivo = 0;
+                    $iQuantidadeAditada = 0;
+                    $valortotaladitado = 0;
+                    foreach ($oAcordoPosicao->getItens() as $oAcordoItem) {
+                        if ($oAcordoItem->getQuantiAditada() != 0) {
+
+                            $valortotaladitado = $oAcordoItem->getValorUnitario() - $oAcordoItem->getValorTotalPosicaoAnteriors($oDados20->ac26_numero);
+                            if ($valortotaladitado != 0) {
+                                $iTotalPosicaoAnterior += $oAcordoItem->getValorTotalPosicaoAnterior($oDados20->ac26_numero);
+                                $iTotalPosicaoAditivo += $oAcordoItem->getValorTotal();
+
+                                $sSql = "SELECT si43_coditem FROM
+                                        (select si43_coditem,si43_dscitem  from item102014 union select si43_coditem,si43_dscitem from item102015 union select si43_coditem,si43_dscitem from item102016 union select si43_coditem,si43_dscitem from item102017 union select si43_coditem,si43_dscitem from item102021 union select si43_coditem,si43_dscitem from item102022) as y
+                                        WHERE si43_coditem = " . $oAcordoItem->getCodigo() . $oAcordoItem->getUnidade();
+                                $result = db_query($sSql);
+                                $iCodItem = db_utils::fieldsMemory($result, 0)->si43_coditem;
+
+                                if ($iCodItem == "") {
+                                    $iUnidade = $oAcordoItem->getUnidade() == "" ? 1 : $oAcordoItem->getUnidade();
+                                    $iCodItem = $oAcordoItem->getMaterial()->getCodigo() . $iUnidade;
+                                }
+                                $iCodPcmater = $oAcordoItem->getMaterial()->getMaterial();
+
+                                /** 
+                                 * busca itens obra;
+                                 */
+                                $sqlItemobra = "select * from licitemobra where obr06_pcmater = $iCodPcmater";
+                                $rsItems = db_query($sqlItemobra);
+                                $oDadosItensObra = db_utils::fieldsMemory($rsItems, 0);
+
+                                $clcontratos21->si88_tiporegistro = 21;
+                                $clcontratos21->si88_reg20 = $clcontratos20->si87_sequencial;
+                                $clcontratos21->si88_codaditivo = $clcontratos20->si87_codaditivo;
+                                if ($oDados20->ac02_acordonatureza == "1") {
+                                    if ($oDadosItensObra->obr06_tabela == "3" || $oDadosItensObra->obr06_tabela == "4") {
+                                        $clcontratos21->si88_coditem = $iCodItem;
+                                    } else {
+                                        $clcontratos21->si88_coditem = null;
+                                    }
+                                } else {
+                                    $clcontratos21->si88_coditem = $iCodItem;
+                                }
+                                $sqlServico = "
+                                select pc01_servico, ac20_servicoquantidade
+                                    from acordoitem
+                                    inner join pcmater on pc01_codmater = ac20_pcmater
+                                    inner join acordoposicao on ac26_sequencial = ac20_acordoposicao
+                                        where ac20_pcmater = {$oAcordoItem->getMaterial()->getCodigo()}
+                                        and ac26_sequencial = {$oDados20->ac26_sequencial}
+                                ";
+                                $rsMatServicoR21  = db_query($sqlServico);
+                                $matServico = db_utils::fieldsMemory($rsMatServicoR21, 0);
+                                if ($matServico->pc01_servico == "t" && $matServico->ac20_servicoquantidade == "f") {
+                                    $clcontratos21->si88_valorunitarioitem = abs($oAcordoItem->getValorAditado());
+                                } else {
+                                    $clcontratos21->si88_valorunitarioitem = abs($oAcordoItem->getValorUnitario());
+                                }
+
+                                $iTipoAlteraoItem = 1;
+                                $clcontratos21->si88_tipoalteracaoitem = $iTipoAlteraoItem;
+
+                                //QUANTIDADE ADITADA
+                                if ($matServico->pc01_servico == "t" && $matServico->ac20_servicoquantidade == "f") {
+                                    $clcontratos21->si88_quantacrescdecresc = 1;
+                                } else {
+                                    $clcontratos21->si88_quantacrescdecresc = abs(abs($oAcordoItem->getQuantiAditada()) - abs($oAcordoItem->getQuantidadePosicaoAnterior($oDados20->ac26_numero)));
+                                }
+
+                                $clcontratos21->si88_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+                                $clcontratos21->si88_instit = db_getsession("DB_instit");
+                                if ($oDados20->ac02_acordonatureza == "1" || $oDados20->ac02_acordonatureza == "7") {
+                                    $clcontratos21->si88_tipomaterial = $oDadosItensObra->obr06_tabela;
+                                } else {
+                                    $clcontratos21->si88_tipomaterial = "";
+                                }
+                                if ($oDadosItensObra->obr06_tabela == "1") {
+                                    $clcontratos21->si88_coditemsinapi = $oDadosItensObra->obr06_codigotabela;
+                                    $clcontratos21->si88_coditemsimcro = null;
+                                    $clcontratos21->si88_descoutrosmateriais = null;
+                                } elseif ($oDadosItensObra->obr06_tabela == "2") {
+                                    $clcontratos21->si88_coditemsimcro = $oDadosItensObra->obr06_codigotabela;
+                                    $clcontratos21->si88_coditemsinapi = null;
+                                    $clcontratos21->si88_descoutrosmateriais = null;
+                                } elseif ($oDadosItensObra->obr06_tabela == "3") {
+                                    $clcontratos21->si88_coditemsinapi = null;
+                                    $clcontratos21->si88_coditemsimcro = null;
+                                    $clcontratos21->si88_descoutrosmateriais = $oDadosItensObra->obr06_descricaotabela;
+                                }
+                                $clcontratos21->si88_itemplanilha = $oDadosItensObra->obr06_pcmater;
+                                $clcontratos21->incluir(null);
+
+                                if ($clcontratos21->erro_status == 0) {
+                                    throw new Exception($clcontratos21->erro_msg);
+                                }
+                            } else {
+                                $iTotalPosicaoAnterior += $oAcordoItem->getValorTotalPosicaoAnterior($oDados20->ac26_numero);
+                                $iTotalPosicaoAditivo += $oAcordoItem->getValorTotal();
+
+                                $sSql = "SELECT si43_coditem FROM
+                                        (select si43_coditem,si43_dscitem  from item102014 union select si43_coditem,si43_dscitem from item102015 union select si43_coditem,si43_dscitem from item102016 union select si43_coditem,si43_dscitem from item102017 union select si43_coditem,si43_dscitem from item102021 union select si43_coditem,si43_dscitem from item102022) as y
+                                        WHERE si43_coditem = " . $oAcordoItem->getCodigo() . $oAcordoItem->getUnidade();
+                                $result = db_query($sSql);
+                                $iCodItem = db_utils::fieldsMemory($result, 0)->si43_coditem;
+
+                                if ($iCodItem == "") {
+                                    $iUnidade = $oAcordoItem->getUnidade() == "" ? 1 : $oAcordoItem->getUnidade();
+                                    $iCodItem = $oAcordoItem->getMaterial()->getCodigo() . $iUnidade;
+                                }
+                                $iCodPcmater = $oAcordoItem->getMaterial()->getMaterial();
+
+                                /** 
+                                 * busca itens obra;
+                                 */
+                                $sqlItemobra = "select * from licitemobra where obr06_pcmater = $iCodPcmater";
+                                $rsItems = db_query($sqlItemobra);
+                                $oDadosItensObra = db_utils::fieldsMemory($rsItems, 0);
+
+                                $clcontratos21->si88_tiporegistro = 21;
+                                $clcontratos21->si88_reg20 = $clcontratos20->si87_sequencial;
+                                $clcontratos21->si88_codaditivo = $clcontratos20->si87_codaditivo;
+                                if ($oDados20->ac02_acordonatureza == "1") {
+                                    if ($oDadosItensObra->obr06_tabela == "3" || $oDadosItensObra->obr06_tabela == "4") {
+                                        $clcontratos21->si88_coditem = $iCodItem;
+                                    } else {
+                                        $clcontratos21->si88_coditem = null;
+                                    }
+                                } else {
+                                    $clcontratos21->si88_coditem = $iCodItem;
+                                }
+                                $sqlServico = "
+                                select pc01_servico, ac20_servicoquantidade
+                                    from acordoitem
+                                    inner join pcmater on pc01_codmater = ac20_pcmater
+                                    inner join acordoposicao on ac26_sequencial = ac20_acordoposicao
+                                        where ac20_pcmater = {$oAcordoItem->getMaterial()->getCodigo()}
+                                        and ac26_sequencial = {$oDados20->ac26_sequencial}
+                                ";
+                                $rsMatServicoR21  = db_query($sqlServico);
+                                $matServico = db_utils::fieldsMemory($rsMatServicoR21, 0);
+                                if ($matServico->pc01_servico == "t" && $matServico->ac20_servicoquantidade == "f") {
+                                    $clcontratos21->si88_valorunitarioitem = abs($oAcordoItem->getValorAditado());
+                                } else {
+                                    $clcontratos21->si88_valorunitarioitem = abs($oAcordoItem->getValorUnitario());
+                                }
+                                $valortotaladitado = $oAcordoItem->getValorAditado();
+
+                                $iTipoAlteraoItem = 1;
+
+
+                                $clcontratos21->si88_tipoalteracaoitem = $iTipoAlteraoItem;
+
+                                //QUANTIDADE ADITADA
+                                if ($matServico->pc01_servico == "t" && $matServico->ac20_servicoquantidade == "f") {
+                                    $clcontratos21->si88_quantacrescdecresc = 1;
+                                } else {
+                                    $clcontratos21->si88_quantacrescdecresc = $oAcordoItem->getQuantidade();
+                                }
+
+                                $clcontratos21->si88_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+                                $clcontratos21->si88_instit = db_getsession("DB_instit");
+                                if ($oDados20->ac02_acordonatureza == "1" || $oDados20->ac02_acordonatureza == "7") {
+                                    $clcontratos21->si88_tipomaterial = $oDadosItensObra->obr06_tabela;
+                                } else {
+                                    $clcontratos21->si88_tipomaterial = "";
+                                }
+                                if ($oDadosItensObra->obr06_tabela == "1") {
+                                    $clcontratos21->si88_coditemsinapi = $oDadosItensObra->obr06_codigotabela;
+                                    $clcontratos21->si88_coditemsimcro = null;
+                                    $clcontratos21->si88_descoutrosmateriais = null;
+                                } elseif ($oDadosItensObra->obr06_tabela == "2") {
+                                    $clcontratos21->si88_coditemsimcro = $oDadosItensObra->obr06_codigotabela;
+                                    $clcontratos21->si88_coditemsinapi = null;
+                                    $clcontratos21->si88_descoutrosmateriais = null;
+                                } elseif ($oDadosItensObra->obr06_tabela == "3") {
+                                    $clcontratos21->si88_coditemsinapi = null;
+                                    $clcontratos21->si88_coditemsimcro = null;
+                                    $clcontratos21->si88_descoutrosmateriais = $oDadosItensObra->obr06_descricaotabela;
+                                }
+                                $clcontratos21->si88_itemplanilha = $oDadosItensObra->obr06_pcmater;
+                                $clcontratos21->incluir(null);
+
+                                if ($clcontratos21->erro_status == 0) {
+                                    throw new Exception($clcontratos21->erro_msg);
+                                }
+                            }
+
+
+                            $iTotalPosicaoAnterior += $oAcordoItem->getValorTotalPosicaoAnterior($oDados20->ac26_numero);
+                            $iTotalPosicaoAditivo += $oAcordoItem->getValorTotal();
+
+                            $sSql = "SELECT si43_coditem FROM
+                                    (select si43_coditem,si43_dscitem  from item102014 union select si43_coditem,si43_dscitem from item102015 union select si43_coditem,si43_dscitem from item102016 union select si43_coditem,si43_dscitem from item102017 union select si43_coditem,si43_dscitem from item102021 union select si43_coditem,si43_dscitem from item102022) as y
+                                    WHERE si43_coditem = " . $oAcordoItem->getCodigo() . $oAcordoItem->getUnidade();
+                            $result = db_query($sSql);
+                            $iCodItem = db_utils::fieldsMemory($result, 0)->si43_coditem;
+
+                            if ($iCodItem == "") {
+                                $iUnidade = $oAcordoItem->getUnidade() == "" ? 1 : $oAcordoItem->getUnidade();
+                                $iCodItem = $oAcordoItem->getMaterial()->getCodigo() . $iUnidade;
+                            }
+                            $iCodPcmater = $oAcordoItem->getMaterial()->getMaterial();
+
+                            /** 
+                             * busca itens obra;
+                             */
+                            $sqlItemobra = "select * from licitemobra where obr06_pcmater = $iCodPcmater";
+                            $rsItems = db_query($sqlItemobra);
+                            $oDadosItensObra = db_utils::fieldsMemory($rsItems, 0);
+
+                            $clcontratos21->si88_tiporegistro = 21;
+                            $clcontratos21->si88_reg20 = $clcontratos20->si87_sequencial;
+                            $clcontratos21->si88_codaditivo = $clcontratos20->si87_codaditivo;
+                            if ($oDados20->ac02_acordonatureza == "1") {
+                                if ($oDadosItensObra->obr06_tabela == "3" || $oDadosItensObra->obr06_tabela == "4") {
+                                    $clcontratos21->si88_coditem = $iCodItem;
+                                } else {
+                                    $clcontratos21->si88_coditem = null;
+                                }
+                            } else {
+                                $clcontratos21->si88_coditem = $iCodItem;
+                            }
+                            $sqlServico = "
+                            select pc01_servico, ac20_servicoquantidade
+                                from acordoitem
+                                inner join pcmater on pc01_codmater = ac20_pcmater
+                                inner join acordoposicao on ac26_sequencial = ac20_acordoposicao
+                                    where ac20_pcmater = {$oAcordoItem->getMaterial()->getCodigo()}
+                                    and ac26_sequencial = {$oDados20->ac26_sequencial}
+                            ";
+                            $rsMatServicoR21  = db_query($sqlServico);
+                            $matServico = db_utils::fieldsMemory($rsMatServicoR21, 0);
+                            if ($matServico->pc01_servico == "t" && $matServico->ac20_servicoquantidade == "f") {
+                                $clcontratos21->si88_valorunitarioitem = abs($oAcordoItem->getValorAditado());
+                            } else {
+                                $clcontratos21->si88_valorunitarioitem = abs($oAcordoItem->getValorTotalPosicaoAnteriors($oDados20->ac26_numero));
+                            }
+                            $valortotaladitado = $oAcordoItem->getValorAditado();
+
+                            $iTipoAlteraoItem = 2;
+
+
+                            $clcontratos21->si88_tipoalteracaoitem = $iTipoAlteraoItem;
+
+                            //QUANTIDADE ADITADA
+                            if ($matServico->pc01_servico == "t" && $matServico->ac20_servicoquantidade == "f") {
+                                $clcontratos21->si88_quantacrescdecresc = 1;
+                            } else {
+                                $clcontratos21->si88_quantacrescdecresc = abs($oAcordoItem->getQuantidadePosicaoAnterior($oDados20->ac26_numero));
+                            }
+
+                            $clcontratos21->si88_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+                            $clcontratos21->si88_instit = db_getsession("DB_instit");
+                            if ($oDados20->ac02_acordonatureza == "1" || $oDados20->ac02_acordonatureza == "7") {
+                                $clcontratos21->si88_tipomaterial = $oDadosItensObra->obr06_tabela;
+                            } else {
+                                $clcontratos21->si88_tipomaterial = "";
+                            }
+                            if ($oDadosItensObra->obr06_tabela == "1") {
+                                $clcontratos21->si88_coditemsinapi = $oDadosItensObra->obr06_codigotabela;
+                                $clcontratos21->si88_coditemsimcro = null;
+                                $clcontratos21->si88_descoutrosmateriais = null;
+                            } elseif ($oDadosItensObra->obr06_tabela == "2") {
+                                $clcontratos21->si88_coditemsimcro = $oDadosItensObra->obr06_codigotabela;
+                                $clcontratos21->si88_coditemsinapi = null;
+                                $clcontratos21->si88_descoutrosmateriais = null;
+                            } elseif ($oDadosItensObra->obr06_tabela == "3") {
+                                $clcontratos21->si88_coditemsinapi = null;
+                                $clcontratos21->si88_coditemsimcro = null;
+                                $clcontratos21->si88_descoutrosmateriais = $oDadosItensObra->obr06_descricaotabela;
+                            }
+                            $clcontratos21->si88_itemplanilha = $oDadosItensObra->obr06_pcmater;
+                            $clcontratos21->incluir(null);
+
+                            if ($clcontratos21->erro_status == 0) {
+                                throw new Exception($clcontratos21->erro_msg);
+                            }
+                        } else {
+                            $valortotaladitado = $oAcordoItem->getValorUnitario() - $oAcordoItem->getValorTotalPosicaoAnteriors($oDados20->ac26_numero);
+                            if ($valortotaladitado != 0) {
+
+                                $iTotalPosicaoAnterior += $oAcordoItem->getValorTotalPosicaoAnterior($oDados20->ac26_numero);
+                                $iTotalPosicaoAditivo += $oAcordoItem->getValorTotal();
+
+                                $sSql = "SELECT si43_coditem FROM
+                                        (select si43_coditem,si43_dscitem  from item102014 union select si43_coditem,si43_dscitem from item102015 union select si43_coditem,si43_dscitem from item102016 union select si43_coditem,si43_dscitem from item102017 union select si43_coditem,si43_dscitem from item102021 union select si43_coditem,si43_dscitem from item102022) as y
+                                        WHERE si43_coditem = " . $oAcordoItem->getCodigo() . $oAcordoItem->getUnidade();
+                                $result = db_query($sSql);
+                                $iCodItem = db_utils::fieldsMemory($result, 0)->si43_coditem;
+
+                                if ($iCodItem == "") {
+                                    $iUnidade = $oAcordoItem->getUnidade() == "" ? 1 : $oAcordoItem->getUnidade();
+                                    $iCodItem = $oAcordoItem->getMaterial()->getCodigo() . $iUnidade;
+                                }
+                                $iCodPcmater = $oAcordoItem->getMaterial()->getMaterial();
+
+                                /** 
+                                 * busca itens obra;
+                                 */
+                                $sqlItemobra = "select * from licitemobra where obr06_pcmater = $iCodPcmater";
+                                $rsItems = db_query($sqlItemobra);
+                                $oDadosItensObra = db_utils::fieldsMemory($rsItems, 0);
+
+                                $clcontratos21->si88_tiporegistro = 21;
+                                $clcontratos21->si88_reg20 = $clcontratos20->si87_sequencial;
+                                $clcontratos21->si88_codaditivo = $clcontratos20->si87_codaditivo;
+                                if ($oDados20->ac02_acordonatureza == "1") {
+                                    if ($oDadosItensObra->obr06_tabela == "3" || $oDadosItensObra->obr06_tabela == "4") {
+                                        $clcontratos21->si88_coditem = $iCodItem;
+                                    } else {
+                                        $clcontratos21->si88_coditem = null;
+                                    }
+                                } else {
+                                    $clcontratos21->si88_coditem = $iCodItem;
+                                }
+                                $sqlServico = "
+                                select pc01_servico, ac20_servicoquantidade
+                                    from acordoitem
+                                    inner join pcmater on pc01_codmater = ac20_pcmater
+                                    inner join acordoposicao on ac26_sequencial = ac20_acordoposicao
+                                        where ac20_pcmater = {$oAcordoItem->getMaterial()->getCodigo()}
+                                        and ac26_sequencial = {$oDados20->ac26_sequencial}
+                                ";
+                                $rsMatServicoR21  = db_query($sqlServico);
+                                $matServico = db_utils::fieldsMemory($rsMatServicoR21, 0);
+                                if ($matServico->pc01_servico == "t" && $matServico->ac20_servicoquantidade == "f") {
+                                    $clcontratos21->si88_valorunitarioitem = abs($oAcordoItem->getValorAditado());
+                                } else {
+                                    $clcontratos21->si88_valorunitarioitem = abs($oAcordoItem->getValorUnitario());
+                                }
+                                $valortotaladitado = $oAcordoItem->getValorAditado();
+
+                                $iTipoAlteraoItem = 1;
+
+
+                                $clcontratos21->si88_tipoalteracaoitem = $iTipoAlteraoItem;
+
+                                //QUANTIDADE ADITADA
+                                if ($matServico->pc01_servico == "t" && $matServico->ac20_servicoquantidade == "f") {
+                                    $clcontratos21->si88_quantacrescdecresc = 1;
+                                } else {
+                                    $clcontratos21->si88_quantacrescdecresc = $oAcordoItem->getQuantidade();
+                                }
+
+                                $clcontratos21->si88_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+                                $clcontratos21->si88_instit = db_getsession("DB_instit");
+                                if ($oDados20->ac02_acordonatureza == "1" || $oDados20->ac02_acordonatureza == "7") {
+                                    $clcontratos21->si88_tipomaterial = $oDadosItensObra->obr06_tabela;
+                                } else {
+                                    $clcontratos21->si88_tipomaterial = "";
+                                }
+                                if ($oDadosItensObra->obr06_tabela == "1") {
+                                    $clcontratos21->si88_coditemsinapi = $oDadosItensObra->obr06_codigotabela;
+                                    $clcontratos21->si88_coditemsimcro = null;
+                                    $clcontratos21->si88_descoutrosmateriais = null;
+                                } elseif ($oDadosItensObra->obr06_tabela == "2") {
+                                    $clcontratos21->si88_coditemsimcro = $oDadosItensObra->obr06_codigotabela;
+                                    $clcontratos21->si88_coditemsinapi = null;
+                                    $clcontratos21->si88_descoutrosmateriais = null;
+                                } elseif ($oDadosItensObra->obr06_tabela == "3") {
+                                    $clcontratos21->si88_coditemsinapi = null;
+                                    $clcontratos21->si88_coditemsimcro = null;
+                                    $clcontratos21->si88_descoutrosmateriais = $oDadosItensObra->obr06_descricaotabela;
+                                }
+                                $clcontratos21->si88_itemplanilha = $oDadosItensObra->obr06_pcmater;
+                                $clcontratos21->incluir(null);
+
+                                if ($clcontratos21->erro_status == 0) {
+                                    throw new Exception($clcontratos21->erro_msg);
+                                }
+
+
+                                $iTotalPosicaoAnterior += $oAcordoItem->getValorTotalPosicaoAnterior($oDados20->ac26_numero);
+                                $iTotalPosicaoAditivo += $oAcordoItem->getValorTotal();
+
+                                $sSql = "SELECT si43_coditem FROM
+                                        (select si43_coditem,si43_dscitem  from item102014 union select si43_coditem,si43_dscitem from item102015 union select si43_coditem,si43_dscitem from item102016 union select si43_coditem,si43_dscitem from item102017 union select si43_coditem,si43_dscitem from item102021 union select si43_coditem,si43_dscitem from item102022) as y
+                                        WHERE si43_coditem = " . $oAcordoItem->getCodigo() . $oAcordoItem->getUnidade();
+                                $result = db_query($sSql);
+                                $iCodItem = db_utils::fieldsMemory($result, 0)->si43_coditem;
+
+                                if ($iCodItem == "") {
+                                    $iUnidade = $oAcordoItem->getUnidade() == "" ? 1 : $oAcordoItem->getUnidade();
+                                    $iCodItem = $oAcordoItem->getMaterial()->getCodigo() . $iUnidade;
+                                }
+                                $iCodPcmater = $oAcordoItem->getMaterial()->getMaterial();
+
+                                /** 
+                                 * busca itens obra;
+                                 */
+                                $sqlItemobra = "select * from licitemobra where obr06_pcmater = $iCodPcmater";
+                                $rsItems = db_query($sqlItemobra);
+                                $oDadosItensObra = db_utils::fieldsMemory($rsItems, 0);
+
+                                $clcontratos21->si88_tiporegistro = 21;
+                                $clcontratos21->si88_reg20 = $clcontratos20->si87_sequencial;
+                                $clcontratos21->si88_codaditivo = $clcontratos20->si87_codaditivo;
+                                if ($oDados20->ac02_acordonatureza == "1") {
+                                    if ($oDadosItensObra->obr06_tabela == "3" || $oDadosItensObra->obr06_tabela == "4") {
+                                        $clcontratos21->si88_coditem = $iCodItem;
+                                    } else {
+                                        $clcontratos21->si88_coditem = null;
+                                    }
+                                } else {
+                                    $clcontratos21->si88_coditem = $iCodItem;
+                                }
+                                $sqlServico = "
+                                select pc01_servico, ac20_servicoquantidade
+                                    from acordoitem
+                                    inner join pcmater on pc01_codmater = ac20_pcmater
+                                    inner join acordoposicao on ac26_sequencial = ac20_acordoposicao
+                                        where ac20_pcmater = {$oAcordoItem->getMaterial()->getCodigo()}
+                                        and ac26_sequencial = {$oDados20->ac26_sequencial}
+                                ";
+                                $rsMatServicoR21  = db_query($sqlServico);
+                                $matServico = db_utils::fieldsMemory($rsMatServicoR21, 0);
+                                if ($matServico->pc01_servico == "t" && $matServico->ac20_servicoquantidade == "f") {
+                                    $clcontratos21->si88_valorunitarioitem = abs($oAcordoItem->getValorAditado());
+                                } else {
+                                    $clcontratos21->si88_valorunitarioitem = abs($oAcordoItem->getValorTotalPosicaoAnteriors($oDados20->ac26_numero));
+                                }
+
+                                $iTipoAlteraoItem = 2;
+                                $clcontratos21->si88_tipoalteracaoitem = $iTipoAlteraoItem;
+
+                                //QUANTIDADE ADITADA
+                                if ($matServico->pc01_servico == "t" && $matServico->ac20_servicoquantidade == "f") {
+                                    $clcontratos21->si88_quantacrescdecresc = 1;
+                                } else {
+                                    $clcontratos21->si88_quantacrescdecresc = abs(abs($oAcordoItem->getQuantiAditada()) - abs($oAcordoItem->getQuantidadePosicaoAnterior($oDados20->ac26_numero)));
+                                }
+
+                                $clcontratos21->si88_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+                                $clcontratos21->si88_instit = db_getsession("DB_instit");
+                                if ($oDados20->ac02_acordonatureza == "1" || $oDados20->ac02_acordonatureza == "7") {
+                                    $clcontratos21->si88_tipomaterial = $oDadosItensObra->obr06_tabela;
+                                } else {
+                                    $clcontratos21->si88_tipomaterial = "";
+                                }
+                                if ($oDadosItensObra->obr06_tabela == "1") {
+                                    $clcontratos21->si88_coditemsinapi = $oDadosItensObra->obr06_codigotabela;
+                                    $clcontratos21->si88_coditemsimcro = null;
+                                    $clcontratos21->si88_descoutrosmateriais = null;
+                                } elseif ($oDadosItensObra->obr06_tabela == "2") {
+                                    $clcontratos21->si88_coditemsimcro = $oDadosItensObra->obr06_codigotabela;
+                                    $clcontratos21->si88_coditemsinapi = null;
+                                    $clcontratos21->si88_descoutrosmateriais = null;
+                                } elseif ($oDadosItensObra->obr06_tabela == "3") {
+                                    $clcontratos21->si88_coditemsinapi = null;
+                                    $clcontratos21->si88_coditemsimcro = null;
+                                    $clcontratos21->si88_descoutrosmateriais = $oDadosItensObra->obr06_descricaotabela;
+                                }
+                                $clcontratos21->si88_itemplanilha = $oDadosItensObra->obr06_pcmater;
+                                $clcontratos21->incluir(null);
+
+                                if ($clcontratos21->erro_status == 0) {
+                                    throw new Exception($clcontratos21->erro_msg);
+                                }
+                            }
+                        }
+                    }
+                }
             } //fim tipo 14 e 15
         } //fim for
 
@@ -1650,15 +2155,15 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
        si03_numcontratoanosanteriores,
        si03_acordo,
        si03_acordoposicao,
+       si03_datareferencia,
        manutac_codunidsubanterior
         FROM apostilamento
         INNER JOIN acordo ON si03_acordo=ac16_sequencial
         LEFT JOIN manutencaoacordo ON manutac_acordo = ac16_sequencial
-        WHERE si03_dataapostila <='{$this->sDataFinal}'
-        AND si03_dataapostila >= '{$this->sDataInicial}'
+        WHERE si03_datareferencia <='{$this->sDataFinal}'
+        AND si03_datareferencia >= '{$this->sDataInicial}'
         AND si03_instit = " . db_getsession("DB_instit");
         $rsResult30 = db_query($sSql);
-
         for ($iCont30 = 0; $iCont30 < pg_num_rows($rsResult30); $iCont30++) {
 
             $oDados30 = db_utils::fieldsMemory($rsResult30, $iCont30);
@@ -1716,7 +2221,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
         $sSql = "SELECT *
           FROM acordo
           WHERE ac16_acordosituacao = 2
-            AND ac16_datarescisao BETWEEN '{$this->sDataInicial}' AND '{$this->sDataFinal}'
+            AND ac16_datareferenciarescisao BETWEEN '{$this->sDataInicial}' AND '{$this->sDataFinal}'
             AND ac16_instit = " . db_getsession("DB_instit");
 
         $rsResult40 = db_query($sSql);

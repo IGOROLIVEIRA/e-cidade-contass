@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -59,13 +59,13 @@ function js_abre(){
    }else{
      jan = window.open('emp2_anulemp002.php?'+query,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
      jan.moveTo(0,0);
-   }  
+   }
 }
 </script>
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" >
 <table width="790" height='18'  border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-  <tr> 
+  <tr>
     <td width="360">&nbsp;</td>
     <td width="263">&nbsp;</td>
     <td width="25">&nbsp;</td>
@@ -73,25 +73,25 @@ function js_abre(){
   </tr>
 </table>
 <table valign="top" marginwidth="0" width="790" border="0" cellspacing="0" cellpadding="0">
- <tr> 
-  <td height="430" align="center" valign="top" bgcolor="#CCCCCC"> 
+ <tr>
+  <td height="430" align="center" valign="top" bgcolor="#CCCCCC">
     <form name='form1'>
-    <table>    
-          <tr> 
+    <table>
+          <tr>
             <td  align="right" nowrap title="<?=$Te60_numemp?>">
                  <? db_ancora(@$Le60_codemp,"js_pesquisae60_codemp(true);",$db_opcao);  ?>
             </td>
-	    
-            <td  nowrap> 
-             
+
+            <td  nowrap>
+
 	      <input name="e60_codemp" title='<?=$Te60_codemp?>' size="8" type='text'  onKeyPress="return js_mascara(event);" >
             </td>
-          </tr> 
+          </tr>
       <tr>
 	<td nowrap align="right"  title="<?=@$Te60_numemp?>">
 	   <? db_ancora(@$Le60_numemp,"js_pesquisae60_numemp(true);",1); ?>
 	</td>
-	<td> 
+	<td>
 	   <? db_input('e60_numemp',8,$Ie60_numemp,true,'text',$db_opcao," onchange='js_pesquisae60_numemp(false);'")  ?>
 	</td>
       </tr>
@@ -99,21 +99,21 @@ function js_abre(){
 	<td nowrap title="<?=@$Te94_codanu?>">
 	   <? db_ancora("<b>Código anulação:</b>","js_pesquisa(true);",1); ?>
 	</td>
-	<td> 
+	<td>
 	   <? db_input('e94_codanu',8,$Ie94_codanu,true,'text',$db_opcao," onchange='js_pesquisa(false);'")  ?>
 	</td>
       </tr>
      <tr>
        <td colspan='2' align='center'>
-         <input name='pesquisar' type='button' value='Consultar' onclick='js_abre();'>      
+         <input name='pesquisar' type='button' value='Consultar' onclick='js_abre();'>
        </td>
      </tr>
-    </table>    
+    </table>
     </form>
   </td>
  </tr>
 </table>
-    <? 
+    <?
       db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
     ?>
 </body>
@@ -121,19 +121,19 @@ function js_abre(){
 <script>
 function js_pesquisa(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_empanulado','func_empanulado.php?funcao_js=parent.js_mostra1|e94_codanu','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_empanulado','func_empanulado.php?funcao_js=parent.js_mostra1|e94_codanu','Pesquisa',true);
   }else{
-     if(document.form1.e94_codanu.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_empanulado','func_empanulado.php?pesquisa_chave='+document.form1.e94_codanu.value+'&funcao_js=parent.js_mostra','Pesquisa',false);
+     if(document.form1.e94_codanu.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_empanulado','func_empanulado.php?pesquisa_chave='+document.form1.e94_codanu.value+'&funcao_js=parent.js_mostra','Pesquisa',false);
      }else{
-       document.form1.e94_codanu.value = ''; 
+       document.form1.e94_codanu.value = '';
      }
   }
 }
 function js_mostra(chave,erro){
-  if(erro==true){ 
-    document.form1.e94_codanu.focus(); 
-    document.form1.e94_codanu.value = ''; 
+  if(erro==true){
+    document.form1.e94_codanu.focus();
+    document.form1.e94_codanu.value = '';
   }
 }
 function js_mostra1(chave1,x){
@@ -142,19 +142,19 @@ function js_mostra1(chave1,x){
 }
 function js_pesquisae60_numemp(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_empempenho','func_empempenho.php?funcao_js=parent.js_mostraempempenho1|e60_numemp','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_empempenho','func_empempenho.php?funcao_js=parent.js_mostraempempenho1|e60_numemp','Pesquisa',true);
   }else{
-     if(document.form1.e60_numemp.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_empempenho','func_empempenho.php?pesquisa_chave='+document.form1.e60_numemp.value+'&funcao_js=parent.js_mostraempempenho','Pesquisa',false);
+     if(document.form1.e60_numemp.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_empempenho','func_empempenho.php?pesquisa_chave='+document.form1.e60_numemp.value+'&funcao_js=parent.js_mostraempempenho','Pesquisa',false);
      }else{
-       document.form1.e60_numemp.value = ''; 
+       document.form1.e60_numemp.value = '';
      }
   }
 }
 function js_mostraempempenho(chave,erro){
-  if(erro==true){ 
-    document.form1.e60_numemp.focus(); 
-    document.form1.e60_numemp.value = ''; 
+  if(erro==true){
+    document.form1.e60_numemp.focus();
+    document.form1.e60_numemp.value = '';
   }
 }
 function js_mostraempempenho1(chave1,x){
@@ -163,9 +163,9 @@ function js_mostraempempenho1(chave1,x){
 }
 function js_pesquisae60_codemp(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_empempenho02','func_empempenho.php?funcao_js=parent.js_mostraempempenho2|e60_codemp','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_empempenho02','func_empempenho.php?funcao_js=parent.js_mostraempempenho2|e60_codemp','Pesquisa',true);
   }else{
-   // js_OpenJanelaIframe('top.corpo','db_iframe_empempenho02','func_empempenho.php?pesquisa_chave='+document.form1.e60_numemp.value+'&funcao_js=parent.js_mostraempempenho','Pesquisa',false);
+   // js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_empempenho02','func_empempenho.php?pesquisa_chave='+document.form1.e60_numemp.value+'&funcao_js=parent.js_mostraempempenho','Pesquisa',false);
   }
 }
 function js_mostraempempenho2(chave1){
@@ -176,9 +176,9 @@ function js_mostraempempenho2(chave1){
 
 function js_pesquisae60_numemp(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_empempenho','func_empempenho.php?funcao_js=parent.js_mostraempempenho1|e60_numemp','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_empempenho','func_empempenho.php?funcao_js=parent.js_mostraempempenho1|e60_numemp','Pesquisa',true);
   }else{
-    js_OpenJanelaIframe('top.corpo','db_iframe_empempenho','func_empempenho.php?pesquisa_chave='+document.form1.e60_numemp.value+'&funcao_js=parent.js_mostraempempenho','Pesquisa',false);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_empempenho','func_empempenho.php?pesquisa_chave='+document.form1.e60_numemp.value+'&funcao_js=parent.js_mostraempempenho','Pesquisa',false);
   }
 }
 </script>

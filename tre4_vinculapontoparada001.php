@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -82,7 +82,7 @@ require_once("dbforms/db_funcoes.php");
 var sUrlRpc = 'tre4_linhastransporte.RPC.php';
 
 /**
- * Elemento ancora para as linhas 
+ * Elemento ancora para as linhas
  */
 var oLinkLinha                  = document.createElement('a');
     oLinkLinha.innerHTML        = 'Linha:';
@@ -126,7 +126,7 @@ var oCboTipoItinerario             = document.createElement('select');
 $('ctnTipoItinerario').appendChild(oCboTipoItinerario);
 
 $('oCboTipoItinerario').observe("change", function(event) {
-  
+
   js_buscaLogradouros();
   js_limpaLogradouros();
   js_limpaPontosParada();
@@ -181,14 +181,14 @@ function js_pesquisaLinhas(lMostra) {
     if (!empty(oInputCodigoLinha.value)) {
       sUrl += '&pesquisa_chave='+oInputCodigoLinha.value;
     } else {
-      
+
       oInputDescricaoLinha.value = '';
       js_limpaLogradouros();
       js_limpaPontosParada();
       oGridVinculosPontoParada.clearAll(true);
     }
   }
-  js_OpenJanelaIframe('top.corpo', 'db_iframe_linhatransporte', sUrl, 'Pesquisa Linhas de Transporte', lMostra);
+  js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_linhatransporte', sUrl, 'Pesquisa Linhas de Transporte', lMostra);
 
 }
 
@@ -233,7 +233,7 @@ function js_buscaLogradouros() {
     oCboPontosParada.add(new Option('Não há pontos de parada cadastrados para o logradouro selecionado.', ''));
     return false;
   }
-  
+
   var oParametro              = new Object();
       oParametro.sExecucao    = 'getLogradouros';
       oParametro.iCodigoLinha = oInputCodigoLinha.value;
@@ -259,7 +259,7 @@ function js_retornoBuscaLogradouros(oResponse) {
   js_limpaLogradouros();
 
   if (oRetorno.aLogradouros.length == 0) {
-    
+
     oCboLogradouroItinerario.add(new Option('Não há logradouros vinculados ao itinerário.', ''));
     js_limpaPontosParada();
     oCboPontosParada.add(new Option('Não há pontos de parada cadastrados para o logradouro selecionado.', ''));
@@ -283,7 +283,7 @@ function js_buscaParadas() {
     oCboPontosParada.add(new Option('Não há pontos de parada cadastrados para o logradouro selecionado.', ''));
     return false;
   }
-    
+
   var oParametro                       = new Object();
       oParametro.sExecucao             = 'getPontoParadaPorLogradouro';
       oParametro.iItinerarioLogradouro = oCboLogradouroItinerario.value;
@@ -355,7 +355,7 @@ function js_retornoBuscaParadasItinerario(oResponse) {
           aLinha[2] = oPontoParada.sBairro.urlDecode();
           aLinha[3] = oPontoParada.sPontoParada.urlDecode();
           aLinha[4] = oPontoParada.sItinerario.urlDecode();
-          aLinha[5] = '<input id="pontoParada_"'+oPontoParada.iCodigo+ 
+          aLinha[5] = '<input id="pontoParada_"'+oPontoParada.iCodigo+
                               ' type="button" '+
                               ' value="E" '+
                               ' onClick="js_removerPontoParada('+oPontoParada.iCodigo+');" />';

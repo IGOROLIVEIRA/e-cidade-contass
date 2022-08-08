@@ -38,7 +38,7 @@ $ativs      = "";
 $atividades = "";
 $where      = "";
 if(isset($chaves) && $chaves != ""){
-  $at = split("#",$chaves);
+  $at = explode("#",$chaves);
   $or = "";
   for($i=0;$i<sizeof($at);$i++){
     $ativs .= $or." q03_ativ = ".$at[$i]." ";

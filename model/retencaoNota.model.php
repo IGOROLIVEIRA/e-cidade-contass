@@ -758,6 +758,7 @@ class retencaoNota
 
         }
 
+
         require_once("model/Dotacao.model.php");
         require_once('classes/ordemPagamento.model.php');
         $oNotaLiquidacao = new ordemPagamento($this->iNotaLiquidacao);
@@ -857,6 +858,7 @@ class retencaoNota
           $oReciboDebito->setGrupoAutenticacao($this->getGrupoAutenticacao());
           $oReciboDebito->setHistorico(str_replace("'", "", $sHistoricoRecibo));
           $oReciboDebito->emiteRecibo();
+
           $oReciboDebito->autenticarRecibo($this->getDataBase(), $oNotaLiquidacao->oDadosOrdem->e60_concarpeculiar);
 
           $nValorRecibo = $oReciboDebito->getTotalRecibo();
@@ -1448,10 +1450,10 @@ class retencaoNota
     }
 
     $sSelectCodOrd  =
-     " SELECT e50_codord FROM empnota 
-       LEFT JOIN pagordemnota ON e69_codnota = e71_codnota 
-       LEFT JOIN pagordem ON e71_codord = e50_codord 
-       WHERE e69_codnota = {$this->iCodNota} 
+     " SELECT e50_codord FROM empnota
+       LEFT JOIN pagordemnota ON e69_codnota = e71_codnota
+       LEFT JOIN pagordem ON e71_codord = e50_codord
+       WHERE e69_codnota = {$this->iCodNota}
        AND e71_anulado = FALSE LIMIT 1 ";
 
     $this->iCodOrd = db_utils::fieldsMemory(db_query($sSelectCodOrd), 0)->e50_codord;

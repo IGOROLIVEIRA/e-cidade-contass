@@ -25,11 +25,6 @@
  *                                licenca/licenca_pt.txt 
  */
 
-parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
-if(!isset($abas)){
-  echo "<script>location.href='pro1_obras005.php?db_opcao=3'</script>";
-  exit;
-}
 require_once ("libs/db_stdlib.php");
 require_once ("libs/db_conecta.php");
 require_once ("libs/db_sessoes.php");
@@ -50,6 +45,12 @@ require_once ("classes/db_obrastec_classe.php");
 require_once ("classes/db_obrastecnicos_classe.php");
 require_once ("classes/db_obrasprotprocesso_classe.php");
 require_once ("classes/db_obrasiptubase_classe.php");
+
+parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
+if(!isset($abas)){
+  echo "<script>location.href='pro1_obras005.php?db_opcao=3'</script>";
+  exit;
+}
 
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);

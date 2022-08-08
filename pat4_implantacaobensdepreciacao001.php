@@ -1,30 +1,30 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
- 
+
 require_once ("dbforms/db_funcoes.php");
 require_once ("dbforms/db_classesgenericas.php");
 require_once ("libs/db_stdlib.php");
@@ -56,9 +56,9 @@ require_once ("libs/db_utils.php");
     			<tr>
     			  <td><?php db_ancora('<b>Classificação: </b>', ' js_pesquisaClassificacaoInicial(true); ', 1); ?></td>
     			  <td>
-    			    <?php 
+    			    <?php
     			      db_input('t64_codcla_ini', 5, "", true, 'text', 1, ' onchange="js_pesquisaClassificacaoInicial(false);" ');
-    			      db_input('t64_descr_ini', 20, "", true, 'text', 3); 
+    			      db_input('t64_descr_ini', 20, "", true, 'text', 3);
     			    ?>
     			  </td>
     			  <td><?php db_ancora('<b>Até: </b>', ' js_pesquisaClassificacaoFinal(true); ', 1); ?></td>
@@ -73,7 +73,7 @@ require_once ("libs/db_utils.php");
     	</fieldset>
     	<input type="button" value="Pesquisar" onclick="js_envia();">
 </form>
-  <? 
+  <?
     db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
   ?>
 </body>
@@ -91,18 +91,18 @@ var iClassificacaoFinal = "";
 function js_pesquisaClassificacaoInicial(mostra) {
 
 	if (mostra === true) {
-		js_OpenJanelaIframe('top.corpo', 
-				                'db_iframe_classificacao', 
-				                'func_clabens.php?funcao_js=parent.js_mostraClassificacaoInicial|t64_codcla|t64_descr', 
-				                'Pesquisa Classificação', 
+		js_OpenJanelaIframe('CurrentWindow.corpo',
+				                'db_iframe_classificacao',
+				                'func_clabens.php?funcao_js=parent.js_mostraClassificacaoInicial|t64_codcla|t64_descr',
+				                'Pesquisa Classificação',
 				                true);
 	} else {
-		
+
 		var sValorCampo = $F('t64_codcla_ini');
-		js_OpenJanelaIframe('top.corpo', 
-                        'db_iframe_classificacao', 
-                        'func_clabens.php?pesquisa_chave='+sValorCampo+'&funcao_js=parent.js_mostraClassificacaoInicial', 
-                        'Pesquisa Classificação', 
+		js_OpenJanelaIframe('CurrentWindow.corpo',
+                        'db_iframe_classificacao',
+                        'func_clabens.php?pesquisa_chave='+sValorCampo+'&funcao_js=parent.js_mostraClassificacaoInicial',
+                        'Pesquisa Classificação',
                         false);
 	}
 }
@@ -122,9 +122,9 @@ function js_mostraClassificacaoInicial() {
 		$('t64_descr_ini').value  = arguments[0];
 	}	else {
 
-		$('t64_codcla_ini').value = arguments[0]; 
+		$('t64_codcla_ini').value = arguments[0];
 	  $('t64_descr_ini').value  = arguments[1];
-	}  
+	}
 	db_iframe_classificacao.hide();
 }
 
@@ -134,18 +134,18 @@ function js_mostraClassificacaoInicial() {
 function js_pesquisaClassificacaoFinal(mostra) {
 
 	if (mostra === true) {
-		js_OpenJanelaIframe('top.corpo', 
-				                'db_iframe_classificacao', 
-				                'func_clabens.php?funcao_js=parent.js_mostraClassificacaoFinal|t64_codcla|t64_descr', 
-				                'Pesquisa Classificação', 
+		js_OpenJanelaIframe('CurrentWindow.corpo',
+				                'db_iframe_classificacao',
+				                'func_clabens.php?funcao_js=parent.js_mostraClassificacaoFinal|t64_codcla|t64_descr',
+				                'Pesquisa Classificação',
 				                true);
 	} else {
-		
+
 		var sValorCampo = $F('t64_codcla_fin');
-		js_OpenJanelaIframe('top.corpo', 
-                        'db_iframe_classificacao', 
-                        'func_clabens.php?pesquisa_chave='+sValorCampo+'&funcao_js=parent.js_mostraClassificacaoFinal', 
-                        'Pesquisa Classificação', 
+		js_OpenJanelaIframe('CurrentWindow.corpo',
+                        'db_iframe_classificacao',
+                        'func_clabens.php?pesquisa_chave='+sValorCampo+'&funcao_js=parent.js_mostraClassificacaoFinal',
+                        'Pesquisa Classificação',
                         false);
 	}
 }
@@ -165,9 +165,9 @@ function js_mostraClassificacaoFinal() {
 		$('t64_descr_fin').value  = arguments[0];
 	}	else {
 
-		$('t64_codcla_fin').value = arguments[0]; 
+		$('t64_codcla_fin').value = arguments[0];
 	  $('t64_descr_fin').value  = arguments[1];
-	}  
+	}
 	db_iframe_classificacao.hide();
 }
 
@@ -175,8 +175,8 @@ function js_mostraClassificacaoFinal() {
  * Função que exibe a windowAux para ser inserido o tipo de deprecação e a vida útil
  */
 function js_envia() {
-  
-  
+
+
 	var iCodClaInicial    = $F('t64_codcla_ini');
 	iClassificacaoInicial = $F('t64_codcla_ini');
 	var iCodClaFinal      = $F('t64_codcla_fin');
@@ -198,14 +198,14 @@ function js_envia() {
 		return false;
 	}
 
-	
+
 	var larguraJanela     = screen.availWidth - 200;
 	var alturaJanela      = screen.availHeight - 200;
 	windowClassificacoes  = new windowAux('windowClassificacoes',
 			                                  'Classificações Filtradas',
 			                                  larguraJanela, alturaJanela);
 
-	var sConteudowinAux  = '<div> ';                                                                         
+	var sConteudowinAux  = '<div> ';
 	    sConteudowinAux += '  <fieldset style="margin-top:5px; width:97%;">                                           ';
 	    sConteudowinAux += '    <legend><b>Dados da Depreciação</b></legend>                                          ';
 	    sConteudowinAux += '    <table>                                                                               ';
@@ -218,7 +218,7 @@ function js_envia() {
 	    sConteudowinAux += '        <td id="inputdescricaotipodepreciacao"></td>                                      ';
 	    sConteudowinAux += '        <td nowrap="nowrap">                                                              ';
 	    sConteudowinAux += '          <b>Vida Útil:</b>                                                               ';
- 	    sConteudowinAux += '        </td> '; 
+ 	    sConteudowinAux += '        </td> ';
 	    sConteudowinAux += '        <td id="inputvidautil"></td>                                                      ';
       sConteudowinAux += '      </tr>';
       sConteudowinAux += '      <tr>';
@@ -227,27 +227,27 @@ function js_envia() {
       sConteudowinAux += '             onclick="js_pesquisaTipoAquisicao(true);"><b>Tipo de Aquisição:</b></a>      ';
       sConteudowinAux += '        </td>                                                                             ';
       sConteudowinAux += '        <td id="inputcodigotipoaquisicao"></td>                             ';
-      sConteudowinAux += '        <td id="inputdescricaotipoaquisicao"></td> ';   
+      sConteudowinAux += '        <td id="inputdescricaotipoaquisicao"></td> ';
       sConteudowinAux += '        <td><b>Percentual p/ calculo do valor residual:</b></td> ';
-      sConteudowinAux += '        <td id="inputpercentualResidual"></td> ';                   
+      sConteudowinAux += '        <td id="inputpercentualResidual"></td> ';
 	    sConteudowinAux += '      </tr>                                                                               ';
 	    sConteudowinAux += '    </table>                                                                              ';
 	    sConteudowinAux += '  </fieldset>                                                                             ';
 	    sConteudowinAux += '  <fieldset style="margin-top:5px; margin-bottom:5px; width:97%;">                        ';
 	    sConteudowinAux += '    <legend><b>Classificação/Bens</b></legend>                                            ';
 	    sConteudowinAux += '    <div id="gridContainer"></div>                                                        ';
-	    sConteudowinAux += '  </fieldset>                                                                             ';     
-	    sConteudowinAux += '  <center>                                                                                ';                                                                     
+	    sConteudowinAux += '  </fieldset>                                                                             ';
+	    sConteudowinAux += '  <center>                                                                                ';
 	    sConteudowinAux += '  <input type="button" value="Processar" onclick="js_processaTipoDepreciacao();">         ';
 	    sConteudowinAux += '  <input type="button" value="Cancelar" onclick="js_cancelaProcessamentoClassificacao();">';
 	    sConteudowinAux += '</center></div>                                                                           ';
   windowClassificacoes.setContent(sConteudowinAux);
-  
+
   /*var sTextoMessageBoard  = 'Informe o tipo de depreciação e a vida útil dos bens. A informação será replicada para ';
       sTextoMessageBoard += 'as classificações/Bens listados abaixo.';*/
 
   var sTextoMessageBoard = _M('patrimonial.patrimonio.pat4_implantacaobensdepreciacao001.informe_depreciacao_e_vida_util');
-      
+
   messageBoard = new DBMessageBoard('msgboard1',
 		                                'Manutenção de Tipos de Depreciação.',
 		                                sTextoMessageBoard,
@@ -285,7 +285,7 @@ function js_envia() {
   dbGrid.aHeaders[3].lDisplayed = false;
   dbGrid.aHeaders[7].lDisplayed = false;
   dbGrid.show($('gridContainer'));
- 
+
   oTxtCodTipoDepreciacao = new DBTextField('oTxtCodTipoDepreciacao', 'oTxtCodTipoDepreciacao', '', 4);
   oTxtCodTipoDepreciacao.addEvent("onChange", ";js_pesquisaTipoDepreciacao(false);");
   oTxtCodTipoDepreciacao.show($('inputcodigotipodepreciacao'));
@@ -304,7 +304,7 @@ function js_envia() {
   oTxtPercentualResidual.addEvent("onKeyPress", 'return js_mask(event, "0-9|.")');
   oTxtPercentualResidual.show($('inputpercentualResidual'));
   oTxtPercentualResidual.setReadOnly(false);
-   
+
   oTxtCodTipoAquisicao = new DBTextField('oTxtCodTipoAquisicao', 'oTxtCodTipoAquisicao', '', 4);
 	oTxtCodTipoAquisicao.addEvent("onChange", ';js_pesquisaTipoAquisicao(false);');
   oTxtCodTipoAquisicao.show($('inputcodigotipoaquisicao'));
@@ -312,7 +312,7 @@ function js_envia() {
 
 	oTxtDescrTipoAquisicao = new DBTextField('oTxtDescrTipoAquisicao', 'oTxtDescrTipoAquisicao', '', 20);
 	oTxtDescrTipoAquisicao.show($('inputdescricaotipoaquisicao'));
-	oTxtDescrTipoAquisicao.setReadOnly(true);  
+	oTxtDescrTipoAquisicao.setReadOnly(true);
 
   windowClassificacoes.setShutDownFunction(function() {
     js_cancelaProcessamentoClassificacao();
@@ -325,15 +325,15 @@ function js_envia() {
 function js_pesquisaTipoDepreciacao(mostra) {
 
 	if (mostra === true) {
-		js_OpenJanelaIframe('top.corpo', 
-                        'db_iframe_tipodepreciacao', 
-                        'func_benstipodepreciacao.php?limita=true&funcao_js=parent.js_mostraTipoDepreciacao|t46_sequencial|t46_descricao', 
-                        'Pesquisa Tipo Depreciacao', 
+		js_OpenJanelaIframe('CurrentWindow.corpo',
+                        'db_iframe_tipodepreciacao',
+                        'func_benstipodepreciacao.php?limita=true&funcao_js=parent.js_mostraTipoDepreciacao|t46_sequencial|t46_descricao',
+                        'Pesquisa Tipo Depreciacao',
                         true);
 	} else {
 
 		var sValorCampo = $F('oTxtCodTipoDepreciacao');
-		js_OpenJanelaIframe('top.corpo',
+		js_OpenJanelaIframe('CurrentWindow.corpo',
 				                'db_iframe_tipodepreciacao',
 				                'func_benstipodepreciacao.php?limita=true&pesquisa_chave='+sValorCampo+
 				                '&funcao_js=parent.js_mostraTipoDepreciacao',
@@ -350,20 +350,20 @@ function js_mostraTipoDepreciacao() {
 		$('oTxtCodTipoDepreciacao').value = '';
 		$('oTxtDescrTipoDepreciacao').value = arguments[0];
 	} else if (arguments[1] === false) {
-		
+
 		$('oTxtDescrTipoDepreciacao').value = arguments[0];
 	} else {
 
 		$('oTxtCodTipoDepreciacao').value = arguments[0];
 		$('oTxtDescrTipoDepreciacao').value = arguments[1];
 	}
-	db_iframe_tipodepreciacao.hide();	
+	db_iframe_tipodepreciacao.hide();
 }
 
 function js_pesquisaTipoAquisicao(mostra) {
-  
+
   if (mostra === true) {
-    js_OpenJanelaIframe('top.corpo',
+    js_OpenJanelaIframe('CurrentWindow.corpo',
         								'db_iframe_tipoaquisicao',
         								'func_benstipoaquisicao.php?funcao_js=parent.js_mostraTipoAquisicao|t45_sequencial|t45_descricao',
         								'Pesquisa Tipo Aquisição',
@@ -371,7 +371,7 @@ function js_pesquisaTipoAquisicao(mostra) {
   } else {
 
     var sValorCampo = $F('oTxtCodTipoAquisicao');
-    js_OpenJanelaIframe('top.corpo',
+    js_OpenJanelaIframe('CurrentWindow.corpo',
 												'db_iframe_tipoaquisicao',
 												'func_benstipoaquisicao.php?funcao_js=parent.js_mostraTipoAquisicao&pesquisa_chave='+sValorCampo,
 												'Pesquisa Tipo Aquisição',
@@ -387,7 +387,7 @@ function js_mostraTipoAquisicao(oAjax) {
 		$('oTxtCodTipoAquisicao').value = '';
 		$('oTxtDescrTipoAquisicao').value = arguments[0];
 	} else if (arguments[1] === false) {
-		
+
 		$('oTxtDescrTipoAquisicao').value = arguments[0];
 	} else {
 
@@ -403,7 +403,7 @@ function js_mostraClassificacaoBensNaGrid() {
 			oParam.exec = 'getBensClassificacao';
 			oParam.t64_codcla_ini = $F('t64_codcla_ini');
 			oParam.t64_codcla_fin = $F('t64_codcla_fin');
-  
+
   js_divCarregando(_M('patrimonial.patrimonio.pat4_implantacaobensdepreciacao001.pesquisando_bens'), 'msgBox');
 	var oAjax = new Ajax.Request(sUrl,
 			                         {method: 'post',
@@ -415,7 +415,7 @@ function js_mostraClassificacaoBensNaGrid() {
 }
 
 function js_populaGrid(oAjax) {
-	
+
 	js_removeObj('msgBox');
 	var oRetorno = eval('('+oAjax.responseText+')');
 	dbGrid.clearAll(true);
@@ -448,7 +448,7 @@ function js_populaGrid(oAjax) {
 
 		    dbGrid.aRows[iLinha].sStyle = 'background-color:#eeeee2;';
 		    dbGrid.aRows[iLinha].aCells.each(function (oCell, iIndice) {
-			    
+
           oCell.sStyle +=';border-right: 1px solid #eeeee2;';
           oCell.sStyle += 'text-align:left;font-weight:bold;';
 			  });
@@ -483,11 +483,11 @@ function js_populaGrid(oAjax) {
 							aRowItem[5]  = oItem.t44_vidautil;
 
 					if (oItem.t46_sequencial != "") {
-						
+
 					  sDescricao 								 = oItem.t46_sequencial+' - '+oItem.t46_descricao.urlDecode();
 						iSequencialTipoDepreciacao = oItem.t46_sequencial;
 					}
-					
+
 					aRowItem[6]  	 = sDescricao;
 					aRowItem[7]  	 = iSequencialTipoDepreciacao;
 					dbGrid.addRow(aRowItem);
@@ -559,9 +559,9 @@ function js_processaTipoDepreciacao() {
   			sConteudowinAux += '    <legend><b>Conflitos</b></legend>                           ';
   			sConteudowinAux += '    <div id="gridConflitosContainer"></div>                     ';
   			sConteudowinAux += '  </fieldset>                                                   ';
-  			sConteudowinAux += '  <input type="button" name="btnProcessar" id="btnProcessar"    '; 
+  			sConteudowinAux += '  <input type="button" name="btnProcessar" id="btnProcessar"    ';
     		sConteudowinAux += '         value="Processar" onclick="js_configuraConflitos();">  ';
-  			sConteudowinAux += '  <input type="button" name="btnCancelar" id="btnCancelar"      '; 
+  			sConteudowinAux += '  <input type="button" name="btnCancelar" id="btnCancelar"      ';
     		sConteudowinAux += '         value="Cancelar" onclick="js_fechaWindowConflitos();"> ';
   			sConteudowinAux += '</div>                                                          ';
 		oWindowConflitos.setContent(sConteudowinAux);
@@ -571,7 +571,7 @@ function js_processaTipoDepreciacao() {
         sTextoMessageBoard += 'informada. Marque as que deseja alterar o tipo de depreciação.';*/
 
     var sTextoMessageBoard = _M('patrimonial.patrimonio.pat4_implantacaobensdepreciacao001.bens_em_conflito');
-        
+
 		oMsgBoardConflito = new DBMessageBoard('oMsgBoardConflito',
     	                                    'Conflitos encontrados no processamento',
     	                                    sTextoMessageBoard,
@@ -582,7 +582,7 @@ function js_processaTipoDepreciacao() {
     });
     oWindowConflitos.show(40, 50);
     oMsgBoardConflito.show();
-    
+
     oGridConflitos                = new DBGrid('gridConflitosContainer');
     oGridConflitos.nameInstance   = 'oGridConflitos';
     oGridConflitos.hasTotalizador = false;
@@ -630,7 +630,7 @@ function js_processaTipoDepreciacao() {
     });
     oGridConflitos.renderRows();
   } else {
-    
+
     if (!confirm(_M('patrimonial.patrimonio.pat4_implantacaobensdepreciacao001.deseja_implementar_depreciacao'))) {
 			return false;
     }
@@ -662,7 +662,7 @@ function js_processarImplementacao() {
     alert(_M('patrimonial.patrimonio.pat4_implantacaobensdepreciacao001.sem_itens'));
     return false;
   }
-  
+
   var iItensPorGrupo = 500;
   var aGruposBens    = new Array();
   var iNumeroGrupo   = 0;
@@ -674,26 +674,26 @@ function js_processarImplementacao() {
   aItensProcessar.each(function(oBemImplementar, iIdLinha) {
 
     if (oBemImplementar.aCells[3].getValue().trim() != "") {
-      
+
   		var oBem  = new Object();
   		oBem.iBem = oBemImplementar.aCells[3].getValue();
   		aBensImplementar.push(oBem);
   		iTotalItens++;
   		if (iTotalItens ==  iItensPorGrupo) {
-  		  
+
   		  aGruposBens.push(aBensImplementar);
-  		  aBensImplementar = new Array();  
+  		  aBensImplementar = new Array();
   		  iTotalItens = 0;
   		}
     }
-    
-     
-     
-    
+
+
+
+
   });
-  
+
   /**
-   * Caso ainda restou algum que nao tem o total de itens de um grupo, 
+   * Caso ainda restou algum que nao tem o total de itens de um grupo,
    *criamos um grupo com esse restante de itens
    */
   if (iTotalItens > 0 && iTotalItens < iItensPorGrupo) {
@@ -704,7 +704,7 @@ function js_processarImplementacao() {
 
     js_processarImplementacaoPorGrupo(aGruposBens[iGrupo], iGrupo+1, iTotalGrupos);
     if (sMessageError != "") {
-      
+
       alert(sMessageError);
       break;
      }
@@ -715,20 +715,20 @@ function js_processarImplementacao() {
   alert(_M('patrimonial.patrimonio.pat4_implantacaobensdepreciacao001.bens_implementados'));
   js_cancelaProcessamentoClassificacao();
 }
-   
+
 function js_retornoProcessamentoImplementacaoGrupo(oAjax) {
-  
+
   js_removeObj('msgBox');
   sMessageError = '';
   var oRetorno = eval('('+oAjax.responseText+')');
   if (oRetorno.status == 1) {
-    
+
     $('t64_codcla_ini').value = '';
     $('t64_descr_ini').value  = '';
     $('t64_codcla_fin').value = '';
     $('t64_descr_fin').value  = '';
   } else {
-   
+
     sMessageError = oRetorno.message.urlDecode();
     return false;
   }
@@ -747,7 +747,7 @@ function js_processarImplementacaoPorGrupo(aItensGrupo, iGrupo, iTotalGrupo) {
   oParam.iTipoAquisicao           = $F('oTxtCodTipoAquisicao');
   oParam.nPercentualValorResidual = oTxtPercentualResidual.getValue();
   oParam.aItens                   = aItensGrupo;
-  
+
   var oAjax = new Ajax.Request(sUrl,
                                {method: 'post',
                                asynchronous:false,
@@ -784,7 +784,7 @@ function js_retornoValidaCalculos(oAjax) {
 
   var oRetorno = eval("("+oAjax.responseText+")");
   if (oRetorno.status == 2) {
-    
+
     $('frmImplantacaoDepreciacao').disable();
     alert(oRetorno.message.urlDecode());
   }

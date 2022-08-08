@@ -48,7 +48,7 @@ if(isset($processar)){
   reset($HTTP_POST_VARS);
   for($i=0;$i<count($HTTP_POST_VARS);$i++){
     if(substr(key($HTTP_POST_VARS),0,9) == "importar_"){
-      $codcon = split("_",key($HTTP_POST_VARS));
+      $codcon = explode("_",key($HTTP_POST_VARS));
       $codcon = $codcon[1];
       $reduz  = $HTTP_POST_VARS[key($HTTP_POST_VARS)];
       $sql = "insert into conplano 

@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 
@@ -32,7 +32,7 @@
 //
 //    Descrição: Consulta Notas liberadas por inscrição
 //    Criado por: Francis Jeziorowski
-//    Data de Criação: 27/07/2005  
+//    Data de Criação: 27/07/2005
 //    Última Modificação: 27/07/2005
 //    Modificado por:
 //
@@ -73,7 +73,7 @@ $db_opcao=1;
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" bgcolor="#CCCCCC">
 <form name="form1" method="post" action="">
 <table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-  <tr> 
+  <tr>
     <td width="360" height="18">&nbsp;</td>
     <td width="263">&nbsp;</td>
     <td width="25">&nbsp;</td>
@@ -85,24 +85,24 @@ $db_opcao=1;
 <br><br><strong>Relatório de Notas Fiscais Liberadas</strong>
 <br><br><br><br>
 
- <tr> 
+ <tr>
      <td height="25" title="<?=$Tq02_inscr?>">
          <?
            db_ancora($Lq02_inscr,'js_pesquisaq02_inscr(true);',4)
          ?>
        </td>
-     <td> 
+     <td>
        <?
          db_input('q02_inscr',8,$Iy08_inscr,true,'text',$db_opcao,"");
        ?>
     </td>
   </tr>
-   
+
   <tr>
     <td nowrap title="<?=@$Ty08_dtlanc?>">
        <?=@$Ly08_dtlanc?>
     </td>
-   <td> 
+   <td>
    <?
        db_inputdata('',@$dia,@$mes,@$ano,true,'text',$db_opcao,"")
    ?>
@@ -111,9 +111,9 @@ $db_opcao=1;
        db_inputdata('a',@$diaa,@$mesa,@$anoa,true,'text',$db_opcao,"")
     ?>
     </td>
-  </tr>  
+  </tr>
 
- 
+
   </table><br>
 <input name="consultar" type="button" value="Relatório" onClick="js_consultaNotasLiberadas();js_limpacampos();" >
   </center>
@@ -132,10 +132,10 @@ function js_consultaNotasLiberadas(){
 
 function js_pesquisaq02_inscr(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_q02_inscr','func_issbase.php?funcao_js=parent.js_mostraq02_inscr1|q02_inscr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_q02_inscr','func_issbase.php?funcao_js=parent.js_mostraq02_inscr1|q02_inscr','Pesquisa',true);
   }else{
      if(document.form1.q02_inscr.value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_q02_inscr','func_issbase.php?pesquisa_chave='+document.form1.q02_inscr.value+'&funcao_js=parent.js_mostraq02_inscr','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_q02_inscr','func_issbase.php?pesquisa_chave='+document.form1.q02_inscr.value+'&funcao_js=parent.js_mostraq02_inscr','Pesquisa',false);
      }else{
        document.form1.q02_inscr.value = '';
      }
@@ -158,12 +158,12 @@ function js_mostraq02_inscr1(chave1){
 }
 
 function js_limpacampos(){
-    document.form1._dia.value = ''; 
-    document.form1._mes.value = ''; 
-    document.form1._ano.value = ''; 
-    document.form1.a_dia.value = ''; 
-    document.form1.a_mes.value = ''; 
-    document.form1.a_ano.value = ''; 
+    document.form1._dia.value = '';
+    document.form1._mes.value = '';
+    document.form1._ano.value = '';
+    document.form1.a_dia.value = '';
+    document.form1.a_mes.value = '';
+    document.form1.a_ano.value = '';
 }
 
 </script>

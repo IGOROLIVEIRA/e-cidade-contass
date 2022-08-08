@@ -25,24 +25,24 @@
  *                                licenca/licenca_pt.txt
  */
 
-require_once("libs/db_stdlib.php");
-require_once("libs/db_utils.php");
-require_once("libs/db_conecta.php");
-require_once("libs/db_app.utils.php");
-require_once("libs/db_sessoes.php");
-require_once("libs/db_usuariosonline.php");
-require_once("dbforms/db_funcoes.php");
-require_once("libs/db_liborcamento.php");
-require_once("classes/db_conrelinfo_classe.php");
-require_once("classes/db_conrelvalor_classe.php");
-require_once("classes/db_orcparamrel_classe.php");
-require_once("classes/db_orcparamseq_classe.php");
-require_once("classes/db_orcparamelemento_classe.php");
-require_once("classes/db_orcparamrecurso_classe.php");
-require_once("classes/db_orcparamsubfunc_classe.php");
-require_once("classes/db_orcparamnivel_classe.php");
-require_once("classes/db_orcparamfunc_classe.php");
-require_once("model/linhaRelatorioContabil.model.php");
+require_once(modification("libs/db_stdlib.php"));
+require_once(modification("libs/db_utils.php"));
+require_once(modification("libs/db_conecta.php"));
+require_once(modification("libs/db_app.utils.php"));
+require_once(modification("libs/db_sessoes.php"));
+require_once(modification("libs/db_usuariosonline.php"));
+require_once(modification("dbforms/db_funcoes.php"));
+require_once(modification("libs/db_liborcamento.php"));
+require_once(modification("classes/db_conrelinfo_classe.php"));
+require_once(modification("classes/db_conrelvalor_classe.php"));
+require_once(modification("classes/db_orcparamrel_classe.php"));
+require_once(modification("classes/db_orcparamseq_classe.php"));
+require_once(modification("classes/db_orcparamelemento_classe.php"));
+require_once(modification("classes/db_orcparamrecurso_classe.php"));
+require_once(modification("classes/db_orcparamsubfunc_classe.php"));
+require_once(modification("classes/db_orcparamnivel_classe.php"));
+require_once(modification("classes/db_orcparamfunc_classe.php"));
+require_once(modification("model/linhaRelatorioContabil.model.php"));
 
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 db_postmemory($HTTP_POST_VARS);
@@ -146,7 +146,7 @@ function atualiza_nivel_exclusao($rel, $linha, $valor) {
   return $msg;
 }
 
-require_once("dbforms/Sajax.php");  // inclusão da biblioteda ajax
+require_once(modification("dbforms/Sajax.php"));  // inclusão da biblioteda ajax
 sajax_init();// Inicializar o sajax
 $sajax_debug_mode = 0;// para Debugar o sajax = 0 desligado 1 = ligado
 sajax_export("atualiza_nivel");// função exportada !
@@ -384,7 +384,7 @@ function mensagem(retorno){
 function js_editar_colunas(iCodRel, iLinha){
 
 	  iAnoPesquisa = <?=db_getsession("DB_anousu")?>;
-    var iPeriodo = top.corpo.iframe_relatorio.document.getElementById('o116_periodo').value;
+    var iPeriodo = CurrentWindow.corpo.iframe_relatorio.document.getElementById('o116_periodo').value;
     if (iPeriodo == '0') {
 
       alert('Para Configurar os valores das colunas, escolha um periodo');
@@ -554,16 +554,16 @@ function js_editar_colunas(iCodRel, iLinha){
   oWindowFiltroPadrao.show(0, iCenter);
  }
 
- var oCboPeriodo = top.corpo.iframe_relatorio.document.getElementById('o116_periodo');
+ var oCboPeriodo = CurrentWindow.corpo.iframe_relatorio.document.getElementById('o116_periodo');
  if (oCboPeriodo) {
    oCboPeriodo.onchange = js_recarregaTela;
  }
 
  function js_recarregaTela() {
 
-   var oCboPeriodo = top.corpo.iframe_relatorio.document.getElementById('o116_periodo');
+   var oCboPeriodo = CurrentWindow.corpo.iframe_relatorio.document.getElementById('o116_periodo');
    var sUrl = 'con4_parametrosrelatorioslegais001.php?c83_codrel=<?=$iCodigoRelatorio?>&iCodigoPeriodo='+oCboPeriodo.value;
-   top.corpo.iframe_parametro.location.href = sUrl;
+   CurrentWindow.corpo.iframe_parametro.location.href = sUrl;
  }
  if (iPeriodo != oCboPeriodo.value ) {
    js_recarregaTela();

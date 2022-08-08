@@ -45,7 +45,7 @@ $dt_fin= $dt[1]; // data final do período
 
 $orcparamrel = new cl_orcparamrel;
 
-$xinstit = split("-",$db_selinstit);
+$xinstit = explode("-",$db_selinstit);
 $resultinst = pg_exec("select codigo,nomeinst from db_config where codigo in (".str_replace('-',', ',$db_selinstit).") ");
 $descr_inst = '';
 $xvirg = '';

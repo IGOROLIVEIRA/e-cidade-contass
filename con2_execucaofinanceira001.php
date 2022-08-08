@@ -171,7 +171,7 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
                 $('z01_nome').value = '';
             }
         }
-        js_OpenJanelaIframe('top.corpo', 'db_iframe_acordofornecedor', sFuncaoPesquisa, 'Pesquisar Fornecedor',lMostra);
+        js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_acordofornecedor', sFuncaoPesquisa, 'Pesquisar Fornecedor',lMostra);
     }
     function js_completaFornecedor(codigo,nome) {
         $('pc60_numcgm').value = codigo;
@@ -240,10 +240,10 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
 
     function js_pesquisa_depart(mostra) {
         if (mostra == true) {
-            js_OpenJanelaIframe('top.corpo', 'db_iframe_db_depart', 'func_db_depart.php?funcao_js=parent.js_mostradepart1|coddepto|descrdepto', 'Pesquisa', true);
+            js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_db_depart', 'func_db_depart.php?funcao_js=parent.js_mostradepart1|coddepto|descrdepto', 'Pesquisa', true);
         } else {
             if (document.form1.coddeptoinc.value != '') {
-                js_OpenJanelaIframe('top.corpo', 'db_iframe_db_depart', 'func_db_depart.php?pesquisa_chave=' + document.form1.coddeptoinc.value + '&funcao_js=parent.js_mostradepart', 'Pesquisa', false);
+                js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_db_depart', 'func_db_depart.php?pesquisa_chave=' + document.form1.coddeptoinc.value + '&funcao_js=parent.js_mostradepart', 'Pesquisa', false);
             } else {
                 document.form1.descrdeptoinc.value = '';
             }
@@ -264,7 +264,7 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
 
     function js_pesquisa_departamento(mostra){
         if (mostra==true) {
-            js_OpenJanelaIframe('top.corpo','db_iframe_departamento','func_departamento.php?funcao_js=parent.js_mostradepartamento1|coddepto|descrdepto','Pesquisa',true);
+            js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_departamento','func_departamento.php?funcao_js=parent.js_mostradepartamento1|coddepto|descrdepto','Pesquisa',true);
         } else {
             if (document.form1.coddeptoresp.value != '') {
                 js_OpenJanelaIframe('','db_iframe_departamento','func_departamento.php?pesquisa_chave='+document.form1.coddeptoresp.value+'&funcao_js=parent.js_mostradepartamento','Pesquisa',false);

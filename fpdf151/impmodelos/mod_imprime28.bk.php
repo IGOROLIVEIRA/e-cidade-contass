@@ -196,7 +196,7 @@ exit;
 	$this->objpdf->setfont('Times', '', 4);
 	$this->objpdf->Rect(5, 5, 200, 60, 'd');
 	//  echo 'sandro'.$j40_refant;exit;		  
-	$dadosma = split("\.", trim($j40_refant));
+	$dadosma = explode("\.", trim($j40_refant));
 
 	$this->objpdf->Text(166, 9, 'INSCRIÇÃO');
 	$this->objpdf->Text(144, 16, 'ZONA');

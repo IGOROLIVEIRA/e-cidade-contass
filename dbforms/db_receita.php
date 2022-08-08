@@ -25,9 +25,9 @@
  *                                licenca/licenca_pt.txt 
  */
 
-require("../libs/db_stdlib.php");
-require("../libs/db_conecta.php");
-include("../libs/db_sessoes.php");
+require(__DIR__ . "/../libs/db_stdlib.php");
+require(__DIR__ . "/../libs/db_conecta.php");
+include(__DIR__ . "/../libs/db_sessoes.php");
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 
 if(!isset($arg))

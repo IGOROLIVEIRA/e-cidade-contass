@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -45,83 +45,83 @@ $clrhemissaochequeitem->rotulo->label();
 $db_opcao = 1;
 
 if ( isset($oPost->cancelar) ) {
-	
+
 	$lSqlErro = false;
-	
+
 	db_inicio_transacao();
-	
+
 	$sWhere = "";
   $sAnd   = "";
-  
+
 	if ( $oPost->tipoFiltro == "s") {
 	  $sWhere .= " r18_sequencial in ({$oPost->lista})";
 	} else {
-		
+
 		if ( isset($oPost->chequeitemini) && trim($oPost->chequeitemini) != "" ) {
 			$sWhere .= " r18_sequencial >= {$oPost->chequeitemini}";
 			$sAnd    = " and ";
  		}
-		
+
 		if ( isset($oPost->chequeitemfin) && trim($oPost->chequeitemfin) != "" ) {
 			$sWhere .= " {$sAnd} r18_sequencial <= {$oPost->chequeitemfin}";
 		}
-		
+
 	}
-  
+
   $sSqlCheque        = $clrhemissaochequeitem->sql_query_file(null,"distinct r18_emissaocheque",null,$sWhere);
   $rsConsultaCheques = $clrhemissaochequeitem->sql_record($sSqlCheque);
-  $iLinhasCheques    = $clrhemissaochequeitem->numrows;	
-	
+  $iLinhasCheques    = $clrhemissaochequeitem->numrows;
+
 	if ( $iLinhasCheques > 0 ) {
-		
+
 	  for( $iInd=0; $iInd < $iLinhasCheques; $iInd++ ){
-      
+
       $oCheques = db_utils::fieldsMemory($rsConsultaCheques,$iInd);
-      $aLotes[] = $oCheques->r18_emissaocheque; 
-      
-    }		
-		
-		
+      $aLotes[] = $oCheques->r18_emissaocheque;
+
+    }
+
+
 		$clrhemissaochequeitem->excluir(null,$sWhere);
-		
+
 		if ( $clrhemissaochequeitem->erro_status == 0 ) {
 			$lSqlErro = true;
 		}
-	
+
 		$sMsgErro = $clrhemissaochequeitem->erro_msg;
-		
-		
+
+
 		if ( !$lSqlErro ) {
 
-      $sWhereLote  = "     r15_sequencial in (".implode(",",$aLotes).") "; 
+      $sWhereLote  = "     r15_sequencial in (".implode(",",$aLotes).") ";
       $sWhereLote .= " and r18_sequencial is null                       ";
-      
+
       $sSqlLote        = $clrhemissaocheque->sql_query_item(null,"distinct r15_sequencial",null,$sWhereLote);
       $rsConsultaLotes = $clrhemissaocheque->sql_record($sSqlLote);
-      $iLinhasLote     = $clrhemissaocheque->numrows;			
-			
+      $iLinhasLote     = $clrhemissaocheque->numrows;
+
       for ( $iInd=0; $iInd < $iLinhasLote; $iInd++ ) {
-        
+
         $oLote = db_utils::fieldsMemory($rsConsultaLotes,$iInd);
-        
+
         $clrhemissaocheque->excluir($oLote->r15_sequencial);
-        
+
         if ( $clrhemissaocheque->erro_status == 0 ) {
           $lSqlErro = true;
         }
-      
+
         $sMsgErro = $clrhemissaocheque->erro_msg;
-      }	
+      }
 		}
-		
+
 	} else {
 		$lSqlErro = true;
 		$sMsgErro = "Nenhum registro encontrado!";
 	}
-	
+
 	db_fim_transacao($lSqlErro);
-	
-} 
+
+}
 
 ?>
 <html>
@@ -162,21 +162,21 @@ if ( isset($oPost->cancelar) ) {
               </td>
               <td>
                 <?
-                
+
                   $aTipoFiltro = array( "s"=>"Selecionado",
-                                        "i"=>"Intervalo" ); 
-                  
+                                        "i"=>"Intervalo" );
+
                   db_select("tipoFiltro",$aTipoFiltro,true,1,"onChange='document.form1.submit();'");
-                ?>  
+                ?>
               </td>
             </tr>
             <?
                if (isset($oPost->tipoFiltro) && $oPost->tipoFiltro == "i") {
-               	
+
 	               echo "<tr>";
 	               echo "  <td> ";
 	               db_ancora("<b>Inicial:</b>","js_pesquisaGeracaoIni(true);",1,"");
-	               echo "  </td>";               	
+	               echo "  </td>";
 	               echo "  <td> ";
 	               db_input("chequeitemini",10,true,$Ir18_sequencial,"text","");
 	               echo "  </td>";
@@ -184,16 +184,16 @@ if ( isset($oPost->cancelar) ) {
 	               echo "<tr>";
 	               echo "  <td> ";
 	               db_ancora("<b>Final:</b>","js_pesquisaGeracaoFin(true);",1,"");
-	               echo "  </td>";                 
+	               echo "  </td>";
 	               echo "  <td> ";
 	               db_input("chequeitemfin",10,true,$Ir18_sequencial,"text","");
-	               echo "  </td>";               	
+	               echo "  </td>";
 	               echo "</tr>";
-	               
+
                } else {
-               	
+
                	 $clauxiliar = new cl_arquivo_auxiliar;
-               	 
+
 								 $clauxiliar->cabecalho      = "<strong>Cheques Gerados</strong>";
 								 $clauxiliar->codigo         = "r18_sequencial";
 								 $clauxiliar->descr          = "z01_nome";
@@ -210,21 +210,21 @@ if ( isset($oPost->cancelar) ) {
 								 $clauxiliar->linhas         = 10;
 								 $clauxiliar->vwhidth        = 400;
 								 $clauxiliar->funcao_gera_formulario();
-                  
-								 db_input("lista",50,"",true,"hidden"); 
+
+								 db_input("lista",50,"",true,"hidden");
               }
-               
+
             ?>
 				  </table>
 			  </fieldset>
 		  </td>
 	  </tr>
 	  <tr>
-	    <td align="center"> 
+	    <td align="center">
 	      <input name="cancelar"  type="submit" value="Processar" onClick="return js_cancelar();" >
 	    </td>
 	  </tr>
-	</table> 	  
+	</table>
 </form>
 <?
 db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
@@ -236,7 +236,7 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
 function js_cancelar(){
 
   var doc = document.form1;
-  
+
   if ( doc.tipoFiltro.value == "s") {
 	  if(doc.chequesSel){
 	    if(doc.chequesSel.length > 0){
@@ -252,28 +252,28 @@ function js_cancelar(){
       return false;
     }
   }
-}  
-  
+}
+
 function js_pesquisaGeracaoIni(mostra){
   if (mostra==true) {
-    js_OpenJanelaIframe('top.corpo','db_iframe_geracao','func_rhemissaochequeitem.php?funcao_js=parent.js_mostraGeracaoIni|r18_sequencial','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_geracao','func_rhemissaochequeitem.php?funcao_js=parent.js_mostraGeracaoIni|r18_sequencial','Pesquisa',true);
   }
 }
 
 function js_mostraGeracaoIni(chave1){
-  document.form1.chequeitemini.value = chave1; 
+  document.form1.chequeitemini.value = chave1;
   db_iframe_geracao.hide();
 }
 
 
 function js_pesquisaGeracaoFin(mostra){
   if (mostra==true) {
-    js_OpenJanelaIframe('top.corpo','db_iframe_geracao','func_rhemissaochequeitem.php?funcao_js=parent.js_mostraGeracaoFin|r18_sequencial','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_geracao','func_rhemissaochequeitem.php?funcao_js=parent.js_mostraGeracaoFin|r18_sequencial','Pesquisa',true);
   }
 }
 
 function js_mostraGeracaoFin(chave1){
-  document.form1.chequeitemfin.value = chave1; 
+  document.form1.chequeitemfin.value = chave1;
   db_iframe_geracao.hide();
 }
 
@@ -281,15 +281,15 @@ function js_mostraGeracaoFin(chave1){
 </script>
 
 <?
-   
+
    if ( isset($oPost->cancelar) ) {
 
    	 db_msgbox($sMsgErro);
-   	 
+
    	 if ( !$lSqlErro ) {
    	 	  echo "<script>document.location.href='pes4_cancgeracaocheques001.php'</script>";
    	 }
-   	
+
    }
-   
+
 ?>

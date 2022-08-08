@@ -1,30 +1,30 @@
 <?PHP
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
- 
+
 require_once("libs/db_stdlib.php");
 require_once("libs/db_conecta.php");
 require_once("libs/db_sessoes.php");
@@ -35,7 +35,7 @@ require_once("dbforms/db_funcoes.php");
 require_once("libs/db_app.utils.php");
 db_postmemory($HTTP_POST_VARS);
 db_postmemory($HTTP_GET_VARS);
- 
+
 $clinventario        = new cl_inventario;
 $clinventarioanulado = new cl_inventarioanulado;
 $clrotulo            = new rotulocampo;
@@ -79,7 +79,7 @@ $db_opcao = 3;
          db_ancora(@$Lt75_sequencial,"js_pesquisa();", 1);
        ?>
     </td>
-    <td> 
+    <td>
       <?php
         db_input('t75_sequencial',10,$It75_sequencial,true,'text', 3,"")
       ?>
@@ -89,14 +89,14 @@ $db_opcao = 3;
     <td nowrap title="<?php echo $Tt75_dataabertura ?>">
        <?php echo $Lt75_dataabertura ?>
     </td>
-    <td> 
+    <td>
       <?php
         db_inputdata('t75_dataabertura',
                       @$t75_dataabertura_dia,
                       @$t75_dataabertura_mes,
                       @$t75_dataabertura_ano,
                       true,
-                      'text', 
+                      'text',
                       3,
                       "");
       ?>
@@ -106,7 +106,7 @@ $db_opcao = 3;
     <td nowrap title="<?php echo $Tt75_periodoinicial?>">
        <?php echo $Lt75_periodoinicial?>
     </td>
-    <td> 
+    <td>
       <?php
         db_inputdata('t75_periodoinicial',@$t75_periodoinicial_dia,@$t75_periodoinicial_mes,@$t75_periodoinicial_ano,true,'text',$db_opcao,"")
       ?>
@@ -116,7 +116,7 @@ $db_opcao = 3;
     <td nowrap title="<?php echo @$Tt75_periodofinal?>">
        <?php echo @$Lt75_periodofinal?>
     </td>
-    <td> 
+    <td>
       <?php
         db_inputdata('t75_periodofinal',@$t75_periodofinal_dia,@$t75_periodofinal_mes,@$t75_periodofinal_ano,true,'text',$db_opcao,"")
       ?>
@@ -126,7 +126,7 @@ $db_opcao = 3;
     <td nowrap title="<?php echo @$Tt75_exercicio?>">
        <?php echo @$Lt75_exercicio?>
     </td>
-    <td> 
+    <td>
       <?
         db_input('t75_exercicio',10,$It75_exercicio,true,'text', 3,"")
       ?>
@@ -138,7 +138,7 @@ $db_opcao = 3;
          db_ancora(@$Lt75_processo,"js_pesquisat75_processo(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
       <?
         db_input('t75_processo',10,$It75_processo,true,'hidden',$db_opcao," onchange='js_pesquisat75_processo(false);'");
         db_input('p58_codproc',10,$Ip58_codproc,true,'text',3,'');
@@ -151,7 +151,7 @@ $db_opcao = 3;
          db_ancora(@$Lt75_acordocomissao,"js_pesquisat75_acordocomissao(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
       <?
         db_input('t75_acordocomissao',10,$It75_acordocomissao,true,'text',$db_opcao," onchange='js_pesquisat75_acordocomissao(false);'");
         db_input('ac08_descricao',39,$Iac08_descricao,true,'text',3,'');
@@ -165,9 +165,9 @@ $db_opcao = 3;
       <?php
         db_textarea('t75_observacao',2,70,$It75_observacao,true,'text',$db_opcao,"")
       ?>
-    </fieldset> 
+    </fieldset>
     </td>
-  </tr> 
+  </tr>
 </table>
 <div id='ctnGridBens'>
 </div>
@@ -183,7 +183,7 @@ $db_opcao = 3;
 
 js_pesquisa();
 js_gridBens();
-var sUrlRPC      = 'pat4_inventario.RPC.php';  
+var sUrlRPC      = 'pat4_inventario.RPC.php';
 var oParametros  = new Object();
 
 
@@ -193,7 +193,7 @@ function js_processar() {
 
   var iInventario     = $F('t75_sequencial');
   var msgDiv          = _M('patrimonial.patrimonio.pat4_inventarioprocessamento001.processando_inventario');
-  
+
   oParametros.exec        = 'processarReavaliacao';
   oParametros.iInventario = iInventario;
 
@@ -202,38 +202,38 @@ function js_processar() {
     alert(_M('patrimonial.patrimonio.pat4_inventarioprocessamento001.selecione_inventario'));
     return false;
   }
-  
-      
+
+
   if (!confirm(_M('patrimonial.patrimonio.pat4_inventarioprocessamento001.deseja_efetuar_processamento'))) {
     return false;
     }
-  
+
 
   js_divCarregando(msgDiv,'msgBox');
-  
+
   var oAjaxLista  = new Ajax.Request(sUrlRPC,
                                             {method: "post",
                                              parameters:'json='+Object.toJSON(oParametros),
                                              onComplete: js_retornoProcessar
-                                            }); 
+                                            });
 
-  
+
 }
 function js_retornoProcessar(oAjax) {
 
   js_removeObj('msgBox');
   var oRetorno = eval("("+oAjax.responseText+")");
-  
+
   alert(oRetorno.sMessage.urlDecode());
 
   if (oRetorno.iStatus == "1") {
-    
+
     js_pesquisa();
     js_gridBens();
     document.form1.reset();
   }
 
-}  
+}
 
 
 
@@ -243,7 +243,7 @@ function js_exibirBens() {
   var iInventario = $F('t75_sequencial');
 
   var msgDiv                  = _M('patrimonial.patrimonio.pat4_inventarioprocessamento001.buscando_inventario');
-  oParametros.exec            = 'getBensVinculados';  
+  oParametros.exec            = 'getBensVinculados';
   oParametros.iInventario     = iInventario;
 
   if (iInventario == '') {
@@ -252,15 +252,15 @@ function js_exibirBens() {
     return false;
   }
 
-  
+
   js_divCarregando(msgDiv,'msgBox');
-   
+
    var oAjaxLista  = new Ajax.Request(sUrlRPC,
                                              {method: "post",
                                               parameters:'json='+Object.toJSON(oParametros),
                                               onComplete: js_retornoExibirBens
-                                             }); 
-  
+                                             });
+
 }
 function js_retornoExibirBens(oAjax) {
 
@@ -271,25 +271,25 @@ function js_retornoExibirBens(oAjax) {
   if (oRetorno.iStatus == 1) {
 
     oGridBens.clearAll(true);
-    
-    oRetorno.aDados.each( 
-        function (oDado, iInd) {       
 
-                aRow     = new Array();  
+    oRetorno.aDados.each(
+        function (oDado, iInd) {
+
+                aRow     = new Array();
                 aRow[0]  = oDado.t52_bem;
                 aRow[1]  = oDado.t52_descr.urlDecode();
-                aRow[2]  = oDado.t41_placa.urlDecode(); 
+                aRow[2]  = oDado.t41_placa.urlDecode();
                 oGridBens.addRow(aRow);
            });
     oGridBens.renderRows();
   } else {
 
     alert(oRetorno.sMessage.urlDecode());
-  }   
-  
+  }
 
 
-}  
+
+}
 
 /////////////////////////////////////////////////////////////////////////
 
@@ -308,13 +308,13 @@ function js_gridBens() {
                                     '400px',
                                     '100px'
                                   ));
-  
+
   oGridBens.setCellAlign(new Array( 'left'  ,
                                     'left'  ,
                                     'left'
                                   ));
-  
-  
+
+
   oGridBens.setHeader(new Array( 'Código',
                                  'Descrição',
                                  'Placa'
@@ -323,7 +323,7 @@ function js_gridBens() {
   oGridBens.setHeight(300);
   oGridBens.show($('ctnGridBens'));
   oGridBens.clearAll(true);
-  
+
 }
 
 
@@ -334,25 +334,25 @@ function js_pesquisa(){
       sQuery += "funcao_js=parent.js_preenchepesquisa";
       sQuery += "|t75_sequencial"    ;
       sQuery += "|t75_dataabertura"  ;
-      sQuery += "|t75_periodoinicial";  
+      sQuery += "|t75_periodoinicial";
       sQuery += "|t75_periodofinal"  ;
       sQuery += "|t75_processo"      ;
       sQuery += "|t75_exercicio"     ;
       sQuery += "|t75_acordocomissao";
       sQuery += "|ac08_descricao"    ;
       sQuery += "|t75_observacao"    ;
-      
-  js_OpenJanelaIframe('top.corpo',
+
+  js_OpenJanelaIframe('CurrentWindow.corpo',
                       'db_iframe_inventario',
                       sQuery,
                       'Pesquisa',
                       true);
 }
-function js_preenchepesquisa(iSequencial, 
-    dDataAbertura, 
-    dPeriodoInicial, 
-    dPeriodoFinal, 
-    iProcesso, 
+function js_preenchepesquisa(iSequencial,
+    dDataAbertura,
+    dPeriodoInicial,
+    dPeriodoFinal,
+    iProcesso,
     iExercicio,
     iComissao,
     sComissao,

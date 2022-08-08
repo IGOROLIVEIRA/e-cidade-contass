@@ -399,7 +399,7 @@ $clrotulo = new rotulocampo;
                     echo "
                         </td>
                     </tr>";
-                    echo "  
+                    echo "
                     <tr>
                         <td align='center' colspan='2'>
                             <iframe name='elementos' id='elementos'  marginwidth='0' marginheight='0' frameborder='0' src='lic1_orcamlancval0011.php?pc20_codorc=$pc20_codorc&db_opcao=$db_opcao".$qry."&lic=".@$lic."' width='1200' height='300'>
@@ -441,7 +441,7 @@ $clrotulo = new rotulocampo;
                     </tr>";
                     }
                     }else{
-                        echo "  
+                        echo "
                                 <tr>
                                     <td align='center' colspan='2'>
                                       <br><br>
@@ -454,7 +454,7 @@ $clrotulo = new rotulocampo;
                         $clliclicitem = new cl_liclicitem;
                         $result_itens = $clliclicitem->sql_record($clliclicitem->sql_query_file(null, "l21_codigo", null, "l21_codliclicita=$l20_codigo and l21_situacao=0"));
                         if ($clliclicitem->numrows==0){
-                            echo " 
+                            echo "
                                 <tr>
 		                            <td align='center' colspan='2'>
                                         <br><br>
@@ -466,7 +466,7 @@ $clrotulo = new rotulocampo;
 //                            echo "<script>alert('Licitação sem fornecedores cadastrados');</script>";
                             echo "<script>document.location.href=\"lic1_fornec001.php?chavepesquisa={$l20_codigo}\"</script>";
                         }
-                        echo " 
+                        echo "
                             <tr>
                                 <td align='center' colspan='2'>
                                     <input name='voltar' type='button' id='voltar' value='Voltar'  onclick='document.location.href=\"lic1_lancavallic001.php\"'>
@@ -538,9 +538,9 @@ $clrotulo = new rotulocampo;
                 var vlrplanilha = oItem.valorunitario;
                 var vlrtotalitem = oItem.quantidade * oItem.valorunitario;
 
-                eval("top.corpo.document.getElementById('elementos').contentDocument.form1."+vlrunitem+".value = '"+ vlrplanilha.toFixed(4) +"'");
-                eval("top.corpo.document.getElementById('elementos').contentDocument.form1."+obsitem+".value = '"+ oItem.marca +"'");
-                eval("top.corpo.document.getElementById('elementos').contentDocument.form1."+vlritem+".value = '"+ vlrtotalitem.toFixed(2) +"'");
+                eval("CurrentWindow.corpo.document.getElementById('elementos').contentDocument.form1."+vlrunitem+".value = '"+ vlrplanilha.toFixed(4) +"'");
+                eval("CurrentWindow.corpo.document.getElementById('elementos').contentDocument.form1."+obsitem+".value = '"+ oItem.marca +"'");
+                eval("CurrentWindow.corpo.document.getElementById('elementos').contentDocument.form1."+vlritem+".value = '"+ vlrtotalitem.toFixed(2) +"'");
             })
             //setando importado para orçamento;
             importado.value = 2;

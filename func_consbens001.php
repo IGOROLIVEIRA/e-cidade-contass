@@ -124,7 +124,7 @@ if((isset($t52_bem) && trim($t52_bem)!="")||(isset($t52_ident) && trim($t52_iden
 $result_estrutural = $clcfpatri->sql_record($clcfpatri->sql_query(null,"db77_estrut"));
 if($clcfpatri->numrows>0){
   db_fieldsmemory($result_estrutural,0);
-  $arr_estrut = split("\.","$db77_estrut");
+  $arr_estrut = explode("\.","$db77_estrut");
   $arr_detonaestrut = array();
   $var = array();
   $val = array();

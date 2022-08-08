@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: configuracoes
@@ -42,7 +42,7 @@ if(isset($db_opcaoal)){
 }else if(isset($opcao) && $opcao=="excluir"){
     $db_opcao = 3;
     $db_botao=true;
-}else{  
+}else{
     $db_opcao = 1;
     $db_botao=true;
     if(isset($novo) || isset($alterar) ||   isset($excluir) || (isset($incluir) && $sqlerro==false ) ){
@@ -52,7 +52,7 @@ if(isset($db_opcaoal)){
      $db32_obsdb = "";
      $db32_data = "";
    }
-} 
+}
 ?>
 <form name="form1" method="post" action="">
 <center>
@@ -64,7 +64,7 @@ db_input('db32_codusu',6,$Idb32_codusu,true,'hidden',3,"")
     <td nowrap title="<?=@$Tdb30_codversao?>">
        <?=@$Ldb30_codversao?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('db30_codversao',6,$Idb30_codversao,true,'text',3)
 ?>/
@@ -79,7 +79,7 @@ db_input('db30_codrelease',6,$Idb30_codrelease,true,'text',3,'')
        db_ancora(@$Ldb32_id_item,"js_pesquisadb32_id_item(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('db32_id_item',5,$Idb32_id_item,true,'text',$db_opcao," onchange='js_pesquisadb32_id_item(false);'")
 ?>
@@ -93,7 +93,7 @@ db_input('descricao',40,$Idescricao,true,'text',3,'')
     <td nowrap title="<?=@$Tdb32_obsdb?>">
        <?=@$Ldb32_obsdb?>
     </td>
-    <td> 
+    <td>
 <?
 db_textarea('db32_obsdb',5,70,$Idb32_obsdb,true,'text',$db_opcao,"")
 ?>
@@ -103,7 +103,7 @@ db_textarea('db32_obsdb',5,70,$Idb32_obsdb,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tdb32_obs?>">
        <?=@$Ldb32_obs?>
     </td>
-    <td> 
+    <td>
 <?
 db_textarea('db32_obs',5,70,$Idb32_obs,true,'text',$db_opcao,"")
 ?>
@@ -113,7 +113,7 @@ db_textarea('db32_obs',5,70,$Idb32_obs,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tdb32_data?>">
        <?=@$Ldb32_data?>
     </td>
-    <td> 
+    <td>
 <?
 if(!isset($db32_data_dia)){
    $db32_data_dia     = date('d',db_getsession("DB_datausu") );
@@ -134,7 +134,7 @@ db_inputdata('db32_data',@$db32_data_dia,@$db32_data_mes,@$db32_data_ano,true,'t
   </table>
  <table>
   <tr>
-    <td valign="top"  align="center">  
+    <td valign="top"  align="center">
     <?
 //echo $cldb_versaousu->sql_query(null,"*","","db32_codver=$db30_codver");
 	 $chavepri= array("db32_codusu"=>@$db32_codusu);
@@ -163,20 +163,20 @@ function js_cancelar(){
 }
 function js_pesquisadb32_codver(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_db_versaousu','db_iframe_db_versao','func_db_versao.php?funcao_js=parent.js_mostradb_versao1|db30_codver|db30_codversao','Pesquisa',true,'0','1','775','390');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_db_versaousu','db_iframe_db_versao','func_db_versao.php?funcao_js=parent.js_mostradb_versao1|db30_codver|db30_codversao','Pesquisa',true,'0','1','775','390');
   }else{
-     if(document.form1.db32_codver.value != ''){ 
-        js_OpenJanelaIframe('top.corpo.iframe_db_versaousu','db_iframe_db_versao','func_db_versao.php?pesquisa_chave='+document.form1.db32_codver.value+'&funcao_js=parent.js_mostradb_versao','Pesquisa',false);
+     if(document.form1.db32_codver.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_db_versaousu','db_iframe_db_versao','func_db_versao.php?pesquisa_chave='+document.form1.db32_codver.value+'&funcao_js=parent.js_mostradb_versao','Pesquisa',false);
      }else{
-       document.form1.db30_codversao.value = ''; 
+       document.form1.db30_codversao.value = '';
      }
   }
 }
 function js_mostradb_versao(chave,erro){
-  document.form1.db30_codversao.value = chave; 
-  if(erro==true){ 
-    document.form1.db32_codver.focus(); 
-    document.form1.db32_codver.value = ''; 
+  document.form1.db30_codversao.value = chave;
+  if(erro==true){
+    document.form1.db32_codver.focus();
+    document.form1.db32_codver.value = '';
   }
 }
 function js_mostradb_versao1(chave1,chave2){
@@ -187,26 +187,26 @@ function js_mostradb_versao1(chave1,chave2){
 
 function js_pesquisaitemcad(item,modulo){
    document.form1.db32_id_item.value = item;
-   js_OpenJanelaIframe('top.corpo.iframe_db_versaousu','db_iframe_db_itensmenu','func_db_itensmenu.php?pesquisa_chave='+item+'&funcao_js=parent.js_mostradb_itensmenu1','Pesquisa',false);
+   js_OpenJanelaIframe('CurrentWindow.corpo.iframe_db_versaousu','db_iframe_db_itensmenu','func_db_itensmenu.php?pesquisa_chave='+item+'&funcao_js=parent.js_mostradb_itensmenu1','Pesquisa',false);
 }
 
 function js_pesquisadb32_id_item(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_db_versaousu','db_iframe_db_itensmenu','con1_caditens002.php','Pesquisa',true,'0','1','775','390');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_db_versaousu','db_iframe_db_itensmenu','con1_caditens002.php','Pesquisa',true,'0','1','775','390');
   }else{
-     if(document.form1.db32_id_item.value != ''){ 
-        js_OpenJanelaIframe('top.corpo.iframe_db_versaousu','db_iframe_db_itensmenu','con1_cadites002.php','Pesquisa',false);
+     if(document.form1.db32_id_item.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_db_versaousu','db_iframe_db_itensmenu','con1_cadites002.php','Pesquisa',false);
      }else{
-       document.form1.descricao.value = ''; 
+       document.form1.descricao.value = '';
      }
   }
 }
 
 function js_mostradb_itensmenu(chave,erro){
-  document.form1.descricao.value = chave; 
-  if(erro==true){ 
-    document.form1.db32_id_item.focus(); 
-    document.form1.db32_id_item.value = ''; 
+  document.form1.descricao.value = chave;
+  if(erro==true){
+    document.form1.db32_id_item.focus();
+    document.form1.db32_id_item.value = '';
   }
 }
 function js_mostradb_itensmenu1(chave1,chave2){

@@ -397,7 +397,7 @@ if( iOpcao != 1 ){
 }
 
 function js_pesquisaCondicionante() {
-  js_OpenJanelaIframe('top.corpo','db_iframe_condicionante','func_condicionante.php?funcao_js=parent.js_preenchepesquisaCondicionante|am10_sequencial','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_condicionante','func_condicionante.php?funcao_js=parent.js_preenchepesquisaCondicionante|am10_sequencial','Pesquisa',true);
 }
 
 function js_preenchepesquisaCondicionante(chave) {

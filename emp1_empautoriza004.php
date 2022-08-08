@@ -25,29 +25,29 @@
  *                                licenca/licenca_pt.txt
  */
 
-require_once("libs/db_stdlib.php");
-require_once("libs/db_conecta.php");
-require_once("libs/db_sessoes.php");
-require_once("libs/db_usuariosonline.php");
-require_once("libs/db_utils.php");
-require_once("libs/db_app.utils.php");
-require_once("dbforms/db_funcoes.php");
-require_once("classes/db_empautpresta_classe.php");
-require_once("classes/db_empprestatip_classe.php");
-require_once("classes/db_empautoriza_classe.php");
-require_once("classes/db_empauthist_classe.php");
-require_once("classes/db_empautitem_classe.php");
-require_once("classes/db_empautidot_classe.php");
-require_once("classes/db_emphist_classe.php");
-require_once("classes/db_emptipo_classe.php");
-require_once("classes/db_cflicita_classe.php");
-require_once("classes/db_pctipocompra_classe.php");
-require_once("classes/db_empparametro_classe.php");
-require_once("classes/db_pcparam_classe.php");
-require_once("classes/db_concarpeculiar_classe.php");
-require_once("model/CgmFactory.model.php");
-require_once("model/fornecedor.model.php");
-require_once("classes/db_empautorizaprocesso_classe.php");
+require_once(modification("libs/db_stdlib.php"));
+require_once(modification("libs/db_conecta.php"));
+require_once(modification("libs/db_sessoes.php"));
+require_once(modification("libs/db_usuariosonline.php"));
+require_once(modification("libs/db_utils.php"));
+require_once(modification("libs/db_app.utils.php"));
+require_once(modification("dbforms/db_funcoes.php"));
+require_once(modification("classes/db_empautpresta_classe.php"));
+require_once(modification("classes/db_empprestatip_classe.php"));
+require_once(modification("classes/db_empautoriza_classe.php"));
+require_once(modification("classes/db_empauthist_classe.php"));
+require_once(modification("classes/db_empautitem_classe.php"));
+require_once(modification("classes/db_empautidot_classe.php"));
+require_once(modification("classes/db_emphist_classe.php"));
+require_once(modification("classes/db_emptipo_classe.php"));
+require_once(modification("classes/db_cflicita_classe.php"));
+require_once(modification("classes/db_pctipocompra_classe.php"));
+require_once(modification("classes/db_empparametro_classe.php"));
+require_once(modification("classes/db_pcparam_classe.php"));
+require_once(modification("classes/db_concarpeculiar_classe.php"));
+require_once(modification("model/CgmFactory.model.php"));
+require_once(modification("model/fornecedor.model.php"));
+require_once(modification("classes/db_empautorizaprocesso_classe.php"));
 
 db_postmemory($HTTP_POST_VARS);
 
@@ -146,17 +146,17 @@ if (isset($incluir)) {
 
   }
     if ($sqlerro==false) {
-        
+
         $result_cgmzerado = db_query("SELECT z01_cgccpf FROM cgm WHERE z01_numcgm = {$e54_numcgm}");
         db_fieldsmemory($result_cgmzerado, 0)->z01_cgccpf;
 
         if (strlen($z01_cgccpf) != 14 && strlen($z01_cgccpf) != 11) {
-            
+
             $sqlerro = true;
             $erro_msg = "ERRO!\nNúmero do CPF/CNPJ cadastrado está incorreto.\nCorrija o CGM do fornecedor e tente novamente!";
         }
         if ($z01_cgccpf == '00000000000000' || $z01_cgccpf == '00000000000') {
-            
+
             $sqlerro = true;
             $erro_msg = "ERRO!\nNúmero do CPF/CNPJ cadastrado está zerado.\nCorrija o CGM do fornecedor e tente novamente!";
         }
@@ -287,14 +287,14 @@ if (isset($incluir)) {
 
       $result_cgmzerado = db_query("SELECT z01_cgccpf FROM cgm WHERE z01_numcgm = {$e54_numcgm}");
       db_fieldsmemory($result_cgmzerado, 0)->z01_cgccpf;
-  
+
       if (strlen($z01_cgccpf) != 14 && strlen($z01_cgccpf) != 11) {
-          
+
           $sqlerro = true;
           $erro_msg = "ERRO!\nNúmero do CPF/CNPJ cadastrado está incorreto.\nCorrija o CGM do fornecedor e tente novamente!";
       }
       if ($z01_cgccpf == '00000000000000' || $z01_cgccpf == '00000000000') {
-          
+
           $sqlerro = true;
           $erro_msg = "ERRO!\nNúmero do CPF/CNPJ cadastrado está zerado.\nCorrija o CGM do fornecedor e tente novamente!";
       }

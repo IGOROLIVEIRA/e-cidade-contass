@@ -82,7 +82,7 @@ if(isset($incluir)){
   $ultimo = pg_result($result,0,0);
   ?>
   <script>
-   top.corpo.iframe_a1.location.href='edu1_alunodados002.php?chavepesquisa=<?=$ultimo?>';
+   CurrentWindow.corpo.iframe_a1.location.href='edu1_alunodados002.php?chavepesquisa=<?=$ultimo?>';
   </script>
   <?
  }

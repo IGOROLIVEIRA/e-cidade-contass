@@ -65,14 +65,14 @@
   };
 
   DBViewFormulario.makeFromObject = function(object, tipo) {
-
+  
     var formulario = new DBViewFormulario();
     formulario.set("codigo", object.codigo);     
     formulario.set("tipo", object.tipo);
     formulario.set("id", object.id);
     formulario.set("ativo", object.ativo);
     formulario.set("observacao", object.observacao);
-
+    
     if (tipo != null) {      
       formulario.setElementoRespostasObjetivas(tipo);
     }    

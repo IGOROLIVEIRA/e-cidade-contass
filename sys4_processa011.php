@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -40,14 +40,14 @@ if(isset($modulo_testa)){
   $rstab = pg_exec("select d.nomemod,m.codarq,a.nomearq,a.tipotabela,a.naolibclass,a.naolibform,a.naolibfunc,a.naolibprog
                   from   db_sysarquivo a
                          inner join db_sysarqmod m on a.codarq = m.codarq
-                         inner join db_sysmodulo d on d.codmod = m.codmod 
+                         inner join db_sysmodulo d on d.codmod = m.codmod
 	          where d.codmod = $modulo_testa
 	          order by nomemod,nomearq");
-  
+
 }else if(isset($tabela)){
   $vazio = 2;
   $rstab = pg_exec("select *
-                  from   db_sysarquivo 
+                  from   db_sysarquivo
 	          where codarq = $tabela
 	          ");
 }else{
@@ -65,7 +65,7 @@ if(isset($modulo_testa)){
 <script>
 function valida_submit(){
     if (document.form1.nome_arq == ""){
-       alert('O nome do arquivo deve ser informado!!!'); 
+       alert('O nome do arquivo deve ser informado!!!');
        return false;
     }else{
        return true
@@ -88,7 +88,7 @@ function js_tranca(obj){
     document.form1.g_prog.disabled=false;
   }
 }
-	
+
 </script>
 <style type="text/css">
 .tabela {border:1px solid black; top:25px; left:150}
@@ -114,7 +114,7 @@ function js_tranca(obj){
 <table  width='100%' cellspacing="2" cellpadding="0" bgcolor="#cccccc" >
  <?
  if($vazio==1){
- 
+
    // cria as layers com o conteúdo das tabelas
    $j = 0;
    $modulo = "";
@@ -138,7 +138,7 @@ function js_tranca(obj){
 
       if ($modulo == $nomemod){
     	  if ($quebratab == 4){
-            $quebratab = 1;	
+            $quebratab = 1;
             echo "</tr><tr>";
         }else{
             $quebratab++;
@@ -146,7 +146,7 @@ function js_tranca(obj){
         echo "<td width=180>";
         echo "  <div onClick=\"js_marca('$codarq')\" name='".$nomearq."' style='background-color:".$sCorDiv."'>
                   ".$nomearq."
-                </div> 
+                </div>
               </td>\n";
       }else{
          $quebratab=1;
@@ -162,7 +162,7 @@ function js_tranca(obj){
                  <td width=180 >";
 				 echo "    <div onClick=\"js_marca('$codarq')\" name='".$nomearq."' style='background-color:".$sCorDiv."'>
                      ".$nomearq."
-                   </div> 
+                   </div>
                  </td> \n";
 
      }
@@ -172,7 +172,7 @@ function js_tranca(obj){
    echo "</tr>";
    echo "</table>";
   }else if($vazio==2){
-    db_fieldsmemory($rstab,0); 
+    db_fieldsmemory($rstab,0);
     ?>
       <tr>
         <td align='center' colspan="3" class='tdblack'>
@@ -205,7 +205,7 @@ function js_tranca(obj){
           <?
 	        if($naolibclass=='f')
 	          echo "<input id='g_classes' name='g_classes' type='checkbox' checked>";
-        	?> 
+        	?>
         </td>
         <td>Gera Classes PHP ...</td>
         <td height="40">
@@ -215,7 +215,7 @@ function js_tranca(obj){
 	        }else{
 	          echo "<strong>Sem acesso a geração de classe para esta tabela.</strong><br>";
 	        }
-      	  ?> 
+      	  ?>
         </td>
       </tr>
       <tr>
@@ -224,7 +224,7 @@ function js_tranca(obj){
 	        if($naolibfunc=='f'){
 	          echo " <input id='g_funcao' name='g_funcao' type='checkbox' checked>";
           }
-     	    ?> 
+     	    ?>
         </td>
         <td>Gera Função Pesquisa ...</td>
         <td height="40">
@@ -234,7 +234,7 @@ function js_tranca(obj){
 	        }else{
 	          echo "<strong>Sem acesso a geração de função para esta tabela.</strong><br>";
 	        }
-	        ?> 
+	        ?>
         </td>
       </tr>
       <tr>
@@ -243,7 +243,7 @@ function js_tranca(obj){
 	       if($naolibform=='f'){
 	         echo "<input id='g_form' name='g_form' type='checkbox' checked>";
          }
-	       ?> 
+	       ?>
         </td>
         <td>Gera Formulário Manutenção ...</td>
         <td height="40">
@@ -253,7 +253,7 @@ function js_tranca(obj){
 			    }else{
 		  	    echo "<strong>Sem acesso a geração de formulário para esta tabela.</strong><br>";
 		  	  }
-		  	  ?> 
+		  	  ?>
         </td>
       </tr>
       <tr>
@@ -272,7 +272,7 @@ function js_tranca(obj){
 	        }else{
 	          echo "<strong>Sem acesso a geração de programas para esta tabela.</strong><br>";
 	        }
-	        ?> 
+	        ?>
         </td>
       </tr>
       <tr>
@@ -281,13 +281,13 @@ function js_tranca(obj){
 	        <input id='caditem' name='caditem' type='hidden' value='' >
 	        <input id='cadmodulo' name='cadmodulo' type='hidden' value='' >
         </td>
-        <td>Gerando Itens Menu ...	 
-   	      <input name="Seleciona" onClick="js_pesquisa();" accesskey="s" type="button" id="seleciona" value="Seleciona">    
+        <td>Gerando Itens Menu ...
+   	      <input name="Seleciona" onClick="js_pesquisa();" accesskey="s" type="button" id="seleciona" value="Seleciona">
         </td>
         <td>
 	        <iframe id='processa007' src='' height='20' class='cl_iframe'></iframe>
         </td>
-      </tr>      
+      </tr>
    <?
    $result01 = $cldb_sysarqarq->sql_record($cldb_sysarqarq->sql_query_filho($tabela,null,"db_sysarqarq.codarq,nomearq"));
 	 if($cldb_sysarqarq->numrows>0){
@@ -299,7 +299,7 @@ function js_tranca(obj){
       <td nowrap valign='top'>
         <table cellspacing='0' cellpadding='0'>
 	        <tr>
-            <td align='left' valign='top'>Gera aba ...</td>  
+            <td align='left' valign='top'>Gera aba ...</td>
             <td>
    	          <fieldset>
                 <legend>
@@ -320,7 +320,7 @@ function js_tranca(obj){
         }else{
 	        echo "<strong>Sem acesso a geração de aba para esta tabela.</strong><br>";
 	      }
-	      ?> 
+	      ?>
       </td>
     </tr>
  <?}?>
@@ -331,9 +331,9 @@ function js_tranca(obj){
       </td>
    <?
   }
-  ?>      
+  ?>
   </table>
-</form>  
+</form>
 </body>
 </html>
 
@@ -344,9 +344,9 @@ if($vazio!=0){
 ?>
 
 function processa_rotina(){
-  
+
   document.getElementById('processa002').src = '';
-	 
+
   <?
   if($naolibclass=='f')
     echo "document.getElementById('processa003').src = '';";
@@ -357,11 +357,11 @@ function processa_rotina(){
   if($naolibprog=='f')
     echo "document.getElementById('processa006').src = '';";
   ?>
-  
+
 
   <?
-  if($cldb_sysarqarq->numrows>0){ 
-  ?>  
+  if($cldb_sysarqarq->numrows>0){
+  ?>
 
   if(document.getElementById('g_aba').checked==true){
     filhos = document.form1.tabela_filho;
@@ -371,19 +371,19 @@ function processa_rotina(){
       if(filhos[i].selected==true){
         codfilhos += sep+filhos[i].value;
          sep='XX';
-      }   
+      }
     }
     if(codfilhos==''){
       alert("Selecione uma tabela como filha, para poder gerar aba! ");
       return false;
     }else{
       document.getElementById('processa008').src = 'sys4_processa008.php?codarq='+document.form1.arquivo.value+'&codfilhos='+codfilhos;
-    }    
-  } 
+    }
+  }
 <?
   }
 ?>
-  
+
   document.getElementById('processa007').src = '';
 
   if(document.getElementById('g_estrut').checked==true){
@@ -406,11 +406,11 @@ function processa_rotina(){
   ?>
   if(document.getElementById('g_item').checked==true)
     document.getElementById('processa007').src = 'sys4_processa007.php?codarq='+document.form1.arquivo.value+'&itemmenu='+document.getElementById('caditem').value+'&modulomenu='+document.getElementById('cadmodulo').value;
-     
+
 }
 
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe','con1_caditens002.php','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe','con1_caditens002.php','Pesquisa',true);
 }
 
 

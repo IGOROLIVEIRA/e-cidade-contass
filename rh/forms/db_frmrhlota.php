@@ -11,11 +11,11 @@ $clrotulo->label("o41_descr");
 
 /*
      $mascara    = "0.0.0.0.0.00.00.00.00.00";
-//echo $r70_estrut = "6.2.3.4.1.09.00.00.00.00"; 
+//echo $r70_estrut = "6.2.3.4.1.09.00.00.00.00";
 //echo $r70_estrut = "1.9.9.5.6.02.01.00.20.00"; //
 echo $r70_estrut = "1.1.2.2.1.90.10.00.00.00";  //mae analitica
 echo "<br>";
-$cldb_estrut->db_estrut_inclusao($r70_estrut,$mascara,"conplano","c60_estrut","c60_analitica");      
+$cldb_estrut->db_estrut_inclusao($r70_estrut,$mascara,"conplano","c60_estrut","c60_analitica");
 db_msgbox($cldb_estrut->erro_msg);
 die();
 */
@@ -38,13 +38,13 @@ if($db_opcao==1){
     <td nowrap title="<?=@$Tr70_codigo?>">
        <?=@$Lr70_codigo?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('r70_codigo',4,$Ir70_codigo,true,'text',3)
 ?>
     </td>
   </tr>
-<?  
+<?
    //rotina que na alteração mantém a estrutura original
      if(isset($estrutura_altera) ||   isset($chavepesquisa)&&isset($r70_estrut)){
 	if(empty($estrutura_altera)){
@@ -55,13 +55,13 @@ db_input('r70_codigo',4,$Ir70_codigo,true,'text',3)
    //fianl
 
    if(isset($db_atualizar) && (empty($estrutura_altera) || (isset($estrutura_altera) && str_replace(".","",$r70_estrut) != $estrutura_altera) )){
-//      $cldb_estrut->db_estrut_inclusao($r70_estrut,$mascara,"rhlota","r70_estrut","r70_analitica");      
+//      $cldb_estrut->db_estrut_inclusao($r70_estrut,$mascara,"rhlota","r70_estrut","r70_analitica");
 //      if($cldb_estrut->erro_status==0){
 ///         $err_estrutural = $cldb_estrut->erro_msg;
 //      }else{
 //	$focar=true;
 //      }
-      
+
    }
    $anofolha = db_anofolha();
    $mesfolha = db_mesfolha();
@@ -72,7 +72,7 @@ db_input('r70_codigo',4,$Ir70_codigo,true,'text',3)
       echo 'Não existem registros na tabela cfpess para o ano '.$anofolha.' e mês '.$mesfolha.' ...';
       exit;
    }
-   
+
 // $cldb_estrut->funcao_onchange  = "js_pesquisao70_codfon(false);";
    $cldb_estrut->autocompletar = true;
    $cldb_estrut->mascara = true;
@@ -88,12 +88,12 @@ db_input('r70_codigo',4,$Ir70_codigo,true,'text',3)
    $cldb_estrut->db_mascara("$r11_codestrut");
 ?>
 
-  
+
   <tr>
     <td nowrap title="<?=@$Tr70_descr?>">
        <?=@$Lr70_descr?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('r70_descr',50,$Ir70_descr,true,'text',$db_opcao,"")
 ?>
@@ -103,14 +103,14 @@ db_input('r70_descr',50,$Ir70_descr,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tr70_analitica?>">
        <?=@$Lr70_analitica?>
     </td>
-    <td> 
+    <td>
 <?
 $x = array("f"=>"NAO","t"=>"SIM");
 db_select('r70_analitica',$x,true,$db_opcao,"onchange='js_troca();'");
 ?>
     </td>
   </tr>
-</table>  
+</table>
 </fieldset>
 </td>
 <tr>
@@ -128,7 +128,7 @@ db_select('r70_analitica',$x,true,$db_opcao,"onchange='js_troca();'");
 db_ancora(@$Lo40_orgao,"js_pesquisaorgunid(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 if(isset($o40_orgao) && trim($o40_orgao)!=""){
   $result_orgao = $clorcorgao->sql_record($clorcorgao->sql_query_file(db_getsession("DB_anousu"),$o40_orgao,"o40_descr"));
@@ -147,7 +147,7 @@ db_input('o40_descr',40,$Io40_descr,true,'text',3,"");
 db_ancora(@$Lo41_unidade,"js_pesquisaorgunid(true);",$db_opcao);
     ?>
     </td>
-    <td> 
+    <td>
 <?
 if(isset($o41_unidade) && trim($o41_unidade)!=""){
   $result_unidade = $clorcunidade->sql_record($clorcunidade->sql_query_file(db_getsession("DB_anousu"),$o40_orgao,$o41_unidade,"o41_descr"));
@@ -162,11 +162,11 @@ db_input('o41_descr',40,$Io41_descr,true,'text',3,"");
   </tr>
   </table>
    </center>
-   </fieldset> 
+   </fieldset>
   </td>
 </tr>
 <?
-   } 
+   }
 ?>
   <tr>
     <td colspan="2" align='center'>
@@ -180,9 +180,9 @@ db_input('o41_descr',40,$Io41_descr,true,'text',3,"");
 <script>
 function js_pesquisaorgunid(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_rhlota','db_iframe_orcunidade','func_orcunidade.php?funcao_js=top.corpo.iframe_rhlota.js_mostraorgunid1|o40_orgao|o41_unidade','Pesquisa',true,'0','1','790','405');
-  }else{                                  
-    js_OpenJanelaIframe('top.corpo.iframe_rhlota','db_iframe_orcunidade','func_orcunidade.php?funcao_js=top.corpo.iframe_rhlota.js_mostraorgunid1|o40_orgao|o41_unidade','Pesquisa',false,'0','1','790','405');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_rhlota','db_iframe_orcunidade','func_orcunidade.php?funcao_js=CurrentWindow.corpo.iframe_rhlota.js_mostraorgunid1|o40_orgao|o41_unidade','Pesquisa',true,'0','1','790','405');
+  }else{
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_rhlota','db_iframe_orcunidade','func_orcunidade.php?funcao_js=CurrentWindow.corpo.iframe_rhlota.js_mostraorgunid1|o40_orgao|o41_unidade','Pesquisa',false,'0','1','790','405');
   }
 }
 function js_mostraorgunid1(chave1,chave2){
@@ -195,7 +195,7 @@ function js_troca(){
   document.form1.submit();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo.iframe_rhlota','db_iframe_rhlota','func_rhlota.php?funcao_js=parent.js_preenchepesquisa|r70_codigo','Pesquisa',true,0,0,780,390);
+  js_OpenJanelaIframe('CurrentWindow.corpo.iframe_rhlota','db_iframe_rhlota','func_rhlota.php?funcao_js=parent.js_preenchepesquisa|r70_codigo','Pesquisa',true,0,0,780,390);
 }
 function js_preenchepesquisa(chave){
   db_iframe_rhlota.hide();
@@ -216,7 +216,7 @@ if(isset($focar)){
       echo "<script>
 	       document.form1.r70_descr.focus();
 	    </script>";
-}	    
+}
 if(isset($err_estrutural)){
   db_msgbox($err_estrutural);
       echo "<script> document.form1.r70_estrut.style.backgroundColor='#99A9AE';</script>";

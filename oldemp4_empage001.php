@@ -33,10 +33,10 @@ if(isset($e80_data_ano)){
 }
 
 if(isset($atualizar)){
-  
+
   db_inicio_transacao();
   $sqlerro=false;
- 
+
   //--------------------------
   //rotina que exclui os todos os movimentos da agenda
 
@@ -44,16 +44,16 @@ if(isset($atualizar)){
     $result03  = $clempagemov->sql_record($clempagemov->sql_query_ord(null,"e81_codmov","","e81_codage=$e80_codage and e82_codord in ($tords) and e86_codmov is null "));
   }else{
     $result03  = $clempagemov->sql_record($clempagemov->sql_query_slip(null,"e81_codmov","","e81_codage=$e80_codage and e89_codigo in ($tords) and e86_codmov is null "));
-  }  
+  }
   $numrows03 = $clempagemov->numrows;
   if($numrows03 > 0){
-    
+
     //------------------
     //rotina de exlusao
     if($sqlerro==false){
        for($i=0; $i<$numrows03; $i++){
 	  db_fieldsmemory($result03,$i);
-	  
+
 	  //---------------------------
           //rotina que excluir do empagepag
 	    if($sqlerro==false){
@@ -64,9 +64,9 @@ if(isset($atualizar)){
 		$erro_msg = $clempagepag->erro_msg;
 		if($clempagepag->erro_status==0){
 		       $sqlerro = true;
-		}    
-              }		
-	    }  
+		}
+              }
+	    }
 	  //---------------------------
 
 	  if($dados == "ordem"){
@@ -80,9 +80,9 @@ if(isset($atualizar)){
 		  $erro_msg = $clempord->erro_msg;
 		  if($clempord->erro_status==0){
 			 $sqlerro = true;
-		  }    
-		}  		
-	      }  
+		  }
+		}
+	      }
 	    //---------------------------
 	  }else{
 	    //---------------------------
@@ -95,9 +95,9 @@ if(isset($atualizar)){
 		  $erro_msg = $clempageslip->erro_msg;
 		  if($clempageslip->erro_status==0){
 			 $sqlerro = true;
-		  }    
-		}  		
-	      }  
+		  }
+		}
+	      }
 	    //---------------------------
 
 	  }
@@ -120,9 +120,9 @@ if(isset($atualizar)){
 		$erro_msg = $clempagemov->erro_msg;
 		if($clempagemov->erro_status==0){
 		       $sqlerro = true;
-		}    
+		}
               }
-	    }  
+	    }
           //-----------------------------
        }
     }
@@ -136,7 +136,7 @@ if(isset($atualizar)){
   if($sqlerro==false && $ords !=''){
     $arr =  split("XX",$ords);
     for($i=0; $i<count($arr); $i++ ){
-       $dad = split("-",$arr[$i]);  
+       $dad = split("-",$arr[$i]);
        $ord = $dad[0];
        $emp = $dad[1];
        $val = $dad[2];
@@ -154,8 +154,8 @@ if(isset($atualizar)){
 	       $sqlerro = true;
 	 }else{
 	   $mov = $clempagemov->e81_codmov;
-	 }     
-       }  
+	 }
+       }
        //-----------------------------------
        //-----------------------------------
        //inclui contas dos fornecedores tabela empagemovconta
@@ -173,7 +173,7 @@ if(isset($atualizar)){
          }
        }
        //-----------------------------------
-       
+
        if($dados == "ordem"){
 	   //-----------------------------------
 	   //inclui na tabela empord
@@ -184,7 +184,7 @@ if(isset($atualizar)){
 	     $erro_msg = $clempord->erro_msg;
 	     if($clempord->erro_status==0){
 		   $sqlerro = true;
-	     }     
+	     }
 	   }
 	   //-----------------------------------
        }else{
@@ -197,11 +197,11 @@ if(isset($atualizar)){
 	     $erro_msg = $clempageslip->erro_msg;
 	     if($clempageslip->erro_status==0){
 		   $sqlerro = true;
-	     }     
+	     }
 	   }
 	   //-----------------------------------
-       } 
-       
+       }
+
        //-----------------------------------
        //inclui na tabela empagepag
        if($sqlerro==false && $tip != '0'){
@@ -211,11 +211,11 @@ if(isset($atualizar)){
 	 $erro_msg = $clempagepag->erro_msg;
 	 if($clempagepag->erro_status==0){
 	       $sqlerro = true;
-	 }     
+	 }
        }
        //-----------------------------------
-       
-    }	 
+
+    }
   }
 /*
 echo $erro_msg;
@@ -225,7 +225,7 @@ if($sqlerro==false){
   die('nops');
 }
 die();
-*/  
+*/
   db_fim_transacao($sqlerro);
 }
 
@@ -247,14 +247,14 @@ if(isset($data)){
 if( isset($nova) ){
   db_inicio_transacao();
     $sqlerro=false;
-    
+
     $clempage->e80_data = $data;
     $clempage->incluir(null);
     if($clempage->erro_status==0){
          $sqlerro = true;
     }else{
       $e80_codage = $clempage->e80_codage;
-    }	 
+    }
   db_fim_transacao($sqlerro);
 }
 
@@ -269,7 +269,7 @@ if( isset($nova) ){
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="if(document.form1.e50_codord)document.form1.e50_codord.focus();" >
   <table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-    <tr> 
+    <tr>
       <td width="360" height="18">&nbsp;</td>
       <td width="263">&nbsp;</td>
       <td width="25">&nbsp;</td>
@@ -277,32 +277,32 @@ if( isset($nova) ){
     </tr>
   </table>
 <table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
    <?
    $clrotulo = new rotulocampo;
    $clrotulo->label("e80_data");
-   
-//sempre que ja existir agenda entra nesta opcao  
- if(isset($e80_codage) && empty($pesquisar)){  
+
+//sempre que ja existir agenda entra nesta opcao
+ if(isset($e80_codage) && empty($pesquisar)){
 	include("forms/db_frmempage.php");
 
-//pela primeira vez que entrar neste arquivo, entra nesta opcao para digitar a data da agenda 
+//pela primeira vez que entrar neste arquivo, entra nesta opcao para digitar a data da agenda
 //entra nesta opcao para escolher uma das agendas ou então selecionar uma jah existente
    }else{?>
     <center>
       <table>
         <tr>
 	  <td>
-       <fieldset><legend><b>Manutenção de agenda</b></legend> 
+       <fieldset><legend><b>Manutenção de agenda</b></legend>
         <form name="form1" method="post" action="">
 	      <br>
          <table>
 	   <tr>
 	      <td nowrap title="<?=@$Te80_data?>" align='right'>
 	      <?=$Le80_data?>
-	      </td>	
-	      <td>	
+	      </td>
+	      <td>
 	       <?
 		 db_inputdata('e80_data',@$e80_data_dia,@$e80_data_mes,@$e80_data_ano,true,'text',1);
 	       ?>
@@ -319,41 +319,41 @@ if( isset($nova) ){
 	       db_fieldsmemory($result01,$i);
 	       $arr[$e80_codage] = $e80_codage;
 	     }
-	  }  
+	  }
 ?>
              <td class='bordas'><small>
 <?
-          //variavel setada apenas quando o usuario pesquisar na func 
+          //variavel setada apenas quando o usuario pesquisar na func
           if(isset($pri_codage)){
 	    $e80_codage = $pri_codage;
-	  } 
+	  }
 
           if($numrows01==0){
-	    echo "Nenhuma encontrado";  
-	  }else{  
+	    echo "Nenhuma encontrado";
+	  }else{
 	       db_select("e80_codage",$arr,true,1);
 	  }
-?>	   
-	       
+?>
+
 	     </small></td>
             </tr>
             <tr>
               <td colspan="2" align="center">
 	      <br>
 	      	<input name="alterar" type="submit" value="Atualizar selecionada" <?=($numrows01==0?"disabled":"")?> >
-	 	<input name="nova" type="submit" value="Incluir nova"> 
-	      </td>	
+	 	<input name="nova" type="submit" value="Incluir nova">
+	      </td>
             </tr>
 
 	 </table>
-       </form>	 
+       </form>
        </fieldset>
        </td>
-     </tr>  
-   </table>  
+     </tr>
+   </table>
     </center>
-<?   	
-   }  
+<?
+   }
 ?>
     </td>
   </tr>
@@ -366,17 +366,17 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
 <script>
 
 function js_empage(){
-    js_OpenJanelaIframe('top.corpo','db_iframe_empage','func_empage.php?funcao_js=parent.js_mostra|e80_codage|e80_data','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_empage','func_empage.php?funcao_js=parent.js_mostra|e80_codage|e80_data','Pesquisa',true);
 }
 function js_mostra(codage,data){
   arr = data.split('-');
-  
+
   obj = document.form1;
 
   obj.e80_data_ano.value = arr[0];
   obj.e80_data_mes.value = arr[1];
   obj.e80_data_dia.value = arr[2];
- 
+
             obj=document.createElement('input');
             obj.setAttribute('name','pri_codage');
             obj.setAttribute('type','hidden');
@@ -384,9 +384,9 @@ function js_mostra(codage,data){
             document.form1.appendChild(obj);
 
   document.form1.pesquisar.click();
- 
+
   db_iframe_empage.hide();
-  
+
 }
 </script>
 

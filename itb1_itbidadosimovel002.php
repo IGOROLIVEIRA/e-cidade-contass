@@ -255,7 +255,7 @@ if(isset($oPost->alterar)){
 
 	     foreach ( $aListaCaracImovel as $aChave){
 
-	       $aListaDadosCaracImovel = split("X",$aChave);
+	       $aListaDadosCaracImovel = explode("X",$aChave);
 	       if ($aListaDadosCaracImovel[0]=="") {
            continue;
          }
@@ -294,7 +294,7 @@ if(isset($oPost->alterar)){
 
 	     foreach ( $aListaCaracUtil as $aChave){
 
-	       $aListaDadosCaracUtil = split("X",$aChave);
+	       $aListaDadosCaracUtil = explode("X",$aChave);
 	       if ($aListaDadosCaracUtil[0]=="") {
            continue;
          }
@@ -359,7 +359,7 @@ if(isset($oPost->alterar)){
 
     foreach ( $aListaFormaPag as $aChave){
 
-  	  $aListaValorFormaPag = split("X",$aChave);
+  	  $aListaValorFormaPag = explode("X",$aChave);
 
   	  // $aListaValorFormaPag[0]  -- Código da Forma de Pagamento da Transação
   	  // $aListaValorFormaPag[1]  -- Valor  da Forma de Pagamento da Transação

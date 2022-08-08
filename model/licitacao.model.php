@@ -841,7 +841,7 @@ class licitacao
     }
     //FIM OC8339
 
-    static function getItensPorFornecedorCredenciamento($iFornecedor, $iLicitacao, $anousu)
+    static function getItensPorFornecedorCredenciamento($iFornecedor, $iLicitacao, $anousu = null)
     {
 
         $oDaoLiclicitem  = db_utils::getDao("liclicitem");

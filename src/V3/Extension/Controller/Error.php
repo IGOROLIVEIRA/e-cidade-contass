@@ -12,7 +12,7 @@ class Error extends Controller {
 
   public function index(Entity $entity) {
 
-    $debug = $this->request->session()->get('DB_DEBUG', false);
+    $debug = $this->request->session()->get('DB_DEBUG', true);
     $message = $entity->getMessage();
     $htmlMessage = str_replace("\n", '<br />', $message);    
 

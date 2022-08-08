@@ -65,7 +65,7 @@ function js_imprime(tipo){
   dia = obj.data_dia.value;
   mes = obj.data_mes.value;
   ano = obj.data_ano.value;
-  js_OpenJanelaIframe('top.corpo','db_iframe_imprime','cai4_remissbob003.php?tipo='+tipo+'&dia='+dia+'&mes='+mes+'&ano='+ano,'Impressão',true,150,200,300,200);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_imprime','cai4_remissbob003.php?tipo='+tipo+'&dia='+dia+'&mes='+mes+'&ano='+ano,'Impressão',true,150,200,300,200);
 }
 </script>
 <link href="estilos.css" rel="stylesheet" type="text/css">

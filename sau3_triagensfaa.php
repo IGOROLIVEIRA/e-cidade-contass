@@ -129,7 +129,7 @@ function js_consultaTriagem ( iTriagem ) {
   sUrl  = 'sau4_triagemconsulta001.php';
   sUrl += '?iProntuario=' + oGet.iProntuario + '&iCgs=' + oGet.iCgs + '&iTriagem='+iTriagem;
 
-  js_OpenJanelaIframe( 'top.corpo', 'db_iframe_triagemavulsa', sUrl, 'Triagem', true, 20, iLeft, 750, 800 );
+  js_OpenJanelaIframe( 'CurrentWindow.corpo', 'db_iframe_triagemavulsa', sUrl, 'Triagem', true, 20, iLeft, 750, 800 );
 }
 
 </script>

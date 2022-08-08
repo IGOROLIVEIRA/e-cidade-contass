@@ -587,7 +587,7 @@ if ( $cliptubase->erro_status != '0' ) {
     ?>
     <script>
 
-    js_OpenJanelaIframe('top.corpo','db_iframe_funcnome','cad3_conscadastro_002_detalhes.php?solicitacao=Calculo&parametro=<?=$HTTP_POST_VARS['j01_matric']?>','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_funcnome','cad3_conscadastro_002_detalhes.php?solicitacao=Calculo&parametro=<?=$HTTP_POST_VARS['j01_matric']?>','Pesquisa',true);
     </script>
     <?php
   } else if(isset($demonstrativo)){

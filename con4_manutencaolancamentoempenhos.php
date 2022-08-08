@@ -116,7 +116,7 @@ if (db_getsession("DB_id_usuario") != 1 && ($sContass[1] != 'contass') && db_get
 
       if (mostra == true) {
 
-        js_OpenJanelaIframe('top.corpo',
+        js_OpenJanelaIframe('CurrentWindow.corpo',
           'db_iframe_empempenho',
           'func_empempenho.php?funcao_js=parent.js_mostraempenho1|e60_codemp|e60_anousu|e60_numemp',
           'Pesquisa',

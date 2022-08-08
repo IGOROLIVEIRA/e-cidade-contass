@@ -35,7 +35,7 @@ if (! session_id()) {
 */
 require_once ("lib/dbportal.constants.php");
 require_once ("lib/db_conecta.php");
-require_once ("../../model/configuracao/TraceLog.model.php");
+require_once (__DIR__ . "/../../model/configuracao/TraceLog.model.php");
 require_once (DB_LIBS . "std/label/rotulo.php");
 require_once (DB_LIBS . "std/label/RotuloDB.php");
 require_once (DB_LIBS . "libs/db_stdlib.php");

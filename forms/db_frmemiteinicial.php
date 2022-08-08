@@ -264,7 +264,7 @@ function js_mostravara1(chave1,chave2){
 
 function js_novaCert(){
  var sUrl = 'func_certidaltcdas.php?v50_inicial='+document.form1.v50_inicial.value+'&funcao_js=parent.js_mostracert|0';
- js_OpenJanelaIframe('top.corpo','db_iframe',sUrl,'Pesquisa',true);
+ js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe',sUrl,'Pesquisa',true);
 }
 
 function js_mostracert(iCodCert){

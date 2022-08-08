@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -53,7 +53,7 @@ $db_opcao = 1;
   <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
     <center>
     <table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-    <tr> 
+    <tr>
       <td width="360" height="18">&nbsp;</td>
       <td width="263">&nbsp;</td>
       <td width="25">&nbsp;</td>
@@ -71,7 +71,7 @@ $db_opcao = 1;
               <td nowrap title="<?=@$Te50_codord?>" align='right'>
                 <? db_ancora("<b>Nota de Liquidação:</b>","js_pesquisae50_codord(true);",$db_opcao);  ?>
              </td>
-             <td> 
+             <td>
                <?
                db_input('e50_codord',8,$Ie50_codord,true,'text',$db_opcao," onchange='js_pesquisae50_codord(false);'");
                db_input('e50_numemp',8,$Ie50_codord,true,'hidden',3);
@@ -80,8 +80,8 @@ $db_opcao = 1;
              </td>
             </tr>
           </table>
-        </fieldset>  
-        </tr> 
+        </fieldset>
+        </tr>
         <tr>
           <td colspan='2' align='center'>
           <input name="entrar_codord" type="button" id="pesquisar" value="Entrar" onclick='js_lancarRetencao()'>
@@ -108,39 +108,39 @@ function js_entra(){
       document.form1.appendChild(obj);
       document.form1.submit();
   }else{
-    
+
     alert("Selecione uma nota de liquidação!");
     return false;
-    
+
   }
 }
 function js_pesquisae50_codord(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo',
+    js_OpenJanelaIframe('CurrentWindow.corpo',
                         'db_iframe_pagordem',
                         'func_notaliquidacao.php?funcao_js=parent.js_mostrapagordem1|e50_codord|e60_numemp|e69_codnota',
                         'Pesquisa',
                         true);
   }else{
-    js_OpenJanelaIframe('top.corpo','db_iframe_pagordem','func_notaliquidacao.php?pesquisa_chave='+document.form1.e50_codord.value+'&funcao_js=parent.js_mostrapagordem','Pesquisa', false);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_pagordem','func_notaliquidacao.php?pesquisa_chave='+document.form1.e50_codord.value+'&funcao_js=parent.js_mostrapagordem','Pesquisa', false);
   }
 }
 function js_mostrapagordem(chave,erro, iCodNota){
 
-  if(erro==true) { 
- 
-    document.form1.e50_codord.focus(); 
+  if(erro==true) {
+
+    document.form1.e50_codord.focus();
     document.form1.e50_codord.value = '';
-     
+
   } else {
-    
+
     document.form1.e50_numemp.value  = chave;
     document.form1.e69_codnota.value = iCodNota;
-    
+
   }
 }
 function js_mostrapagordem1(chave1, chave2, chave3){
-  
+
   document.form1.e50_codord.value = chave1;
   document.form1.e50_numemp.value = chave2;
   document.form1.e69_codnota.value = chave3;
@@ -148,20 +148,20 @@ function js_mostrapagordem1(chave1, chave2, chave3){
 }
 
 function js_lancarRetencao(){
-  
+
    if ($F('e50_codord') == '') {
-    
+
      alert('Informe o número da nota!');
      return false;
-     
+
    }
    var iNumEmp  = $F('e50_numemp');
    var iCodOrd  = $F('e50_codord');
    var iCodNota = $F('e69_codnota');
    var lSession = "true";
-   js_OpenJanelaIframe('top.corpo', 'db_iframe_retencao',
+   js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_retencao',
                        'emp4_lancaretencoes.php?iNumNota='+iCodNota+'&iNumEmp='+iNumEmp+'&iCodOrd='+iCodOrd+"&lSession=false",
                        'Lancar Retenções', true);
-     
-} 
+
+}
 </script>

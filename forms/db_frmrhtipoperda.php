@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: recursoshumanos
@@ -33,7 +33,7 @@ $clrhtipoperda->rotulo->label();
  	      $db_action="rec1_rhtipoperda005.php";
       }else if ($db_opcao ==3 || $db_opcao == 33) {
  	      $db_action="rec1_rhtipoperda006.php";
-      }  
+      }
 ?>
 <form name="form1" method="post" action="<?=$db_action?>">
 <center>
@@ -48,7 +48,7 @@ $clrhtipoperda->rotulo->label();
     <td nowrap title="<?=@$Th70_sequencial?>">
        <?=@$Lh70_sequencial?>
     </td>
-    <td> 
+    <td>
 			<?
 			  db_input('h70_sequencial',10,$Ih70_sequencial,true,'text',3,"")
 			?>
@@ -58,7 +58,7 @@ $clrhtipoperda->rotulo->label();
     <td nowrap title="<?=@$Th70_descricao?>">
        <?=@$Lh70_descricao?>
     </td>
-    <td> 
+    <td>
 			<?
 			  db_input('h70_descricao',60,$Ih70_descricao,true,'text',$db_opcao,"")
 			?>
@@ -68,7 +68,7 @@ $clrhtipoperda->rotulo->label();
     <td nowrap title="<?=@$Th70_dias?>">
        <?=@$Lh70_dias?>
     </td>
-    <td> 
+    <td>
 			<?
 			   db_input('h70_dias',10,$Ih70_dias,true,'text',$db_opcao,"")
 			?>
@@ -83,7 +83,7 @@ $clrhtipoperda->rotulo->label();
 </form>
 <script>
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo.iframe_rhtipoperda','db_iframe_rhtipoperda','func_rhtipoperda.php?funcao_js=parent.js_preenchepesquisa|h70_sequencial','Pesquisa',true );
+  js_OpenJanelaIframe('CurrentWindow.corpo.iframe_rhtipoperda','db_iframe_rhtipoperda','func_rhtipoperda.php?funcao_js=parent.js_preenchepesquisa|h70_sequencial','Pesquisa',true );
 }
 function js_preenchepesquisa(chave){
   db_iframe_rhtipoperda.hide();

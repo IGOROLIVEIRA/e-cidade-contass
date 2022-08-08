@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -65,7 +65,7 @@ function js_emite(){
   var lista_veic = "";
   var virgula    = "";
 
-  if ((obj.ve70_dataini.value == "" && obj.ve70_datafin.value != "") || 
+  if ((obj.ve70_dataini.value == "" && obj.ve70_datafin.value != "") ||
       (obj.ve70_dataini.value != "" && obj.ve70_datafin.value == "")){
     alert("Periodo inválido. Verifique");
     obj.ve70_dataini.focus();
@@ -105,20 +105,20 @@ function js_emite(){
 
 function js_pesquisave01_veiccadtipo(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_veiccadtipo','func_veiccadtipo.php?funcao_js=parent.js_mostraveiccadtipo1|ve20_codigo|ve20_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_veiccadtipo','func_veiccadtipo.php?funcao_js=parent.js_mostraveiccadtipo1|ve20_codigo|ve20_descr','Pesquisa',true);
   }else{
      if(document.form1.ve01_veiccadtipo.value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_veiccadtipo','func_veiccadtipo.php?pesquisa_chave='+document.form1.ve01_veiccadtipo.value+'&funcao_js=parent.js_mostraveiccadtipo','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_veiccadtipo','func_veiccadtipo.php?pesquisa_chave='+document.form1.ve01_veiccadtipo.value+'&funcao_js=parent.js_mostraveiccadtipo','Pesquisa',false);
      }else{
-       document.form1.ve20_descr.value = ''; 
+       document.form1.ve20_descr.value = '';
      }
   }
 }
 function js_mostraveiccadtipo(chave,erro){
-  document.form1.ve20_descr.value = chave; 
-  if(erro==true){ 
-    document.form1.ve01_veiccadtipo.focus(); 
-    document.form1.ve01_veiccadtipo.value = ''; 
+  document.form1.ve20_descr.value = chave;
+  if(erro==true){
+    document.form1.ve01_veiccadtipo.focus();
+    document.form1.ve01_veiccadtipo.value = '';
   }
 }
 function js_mostraveiccadtipo1(chave1,chave2){
@@ -128,20 +128,20 @@ function js_mostraveiccadtipo1(chave1,chave2){
 }
 function js_pesquisave01_veiccadmarca(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_veiccadmarca','func_veiccadmarca.php?funcao_js=parent.js_mostraveiccadmarca1|ve21_codigo|ve21_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_veiccadmarca','func_veiccadmarca.php?funcao_js=parent.js_mostraveiccadmarca1|ve21_codigo|ve21_descr','Pesquisa',true);
   }else{
-     if(document.form1.ve01_veiccadmarca.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_veiccadmarca','func_veiccadmarca.php?pesquisa_chave='+document.form1.ve01_veiccadmarca.value+'&funcao_js=parent.js_mostraveiccadmarca','Pesquisa',false);
+     if(document.form1.ve01_veiccadmarca.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_veiccadmarca','func_veiccadmarca.php?pesquisa_chave='+document.form1.ve01_veiccadmarca.value+'&funcao_js=parent.js_mostraveiccadmarca','Pesquisa',false);
      }else{
-       document.form1.ve21_descr.value = ''; 
+       document.form1.ve21_descr.value = '';
      }
   }
 }
 function js_mostraveiccadmarca(chave,erro){
-  document.form1.ve21_descr.value = chave; 
-  if(erro==true){ 
-    document.form1.ve01_veiccadmarca.focus(); 
-    document.form1.ve01_veiccadmarca.value = ''; 
+  document.form1.ve21_descr.value = chave;
+  if(erro==true){
+    document.form1.ve01_veiccadmarca.focus();
+    document.form1.ve01_veiccadmarca.value = '';
   }
 }
 function js_mostraveiccadmarca1(chave1,chave2){
@@ -151,20 +151,20 @@ function js_mostraveiccadmarca1(chave1,chave2){
 }
 function js_pesquisave01_veiccadmodelo(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_veiccadmodelo','func_veiccadmodelo.php?funcao_js=parent.js_mostraveiccadmodelo1|ve22_codigo|ve22_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_veiccadmodelo','func_veiccadmodelo.php?funcao_js=parent.js_mostraveiccadmodelo1|ve22_codigo|ve22_descr','Pesquisa',true);
   }else{
-     if(document.form1.ve01_veiccadmodelo.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_veiccadmodelo','func_veiccadmodelo.php?pesquisa_chave='+document.form1.ve01_veiccadmodelo.value+'&funcao_js=parent.js_mostraveiccadmodelo','Pesquisa',false);
+     if(document.form1.ve01_veiccadmodelo.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_veiccadmodelo','func_veiccadmodelo.php?pesquisa_chave='+document.form1.ve01_veiccadmodelo.value+'&funcao_js=parent.js_mostraveiccadmodelo','Pesquisa',false);
      }else{
-       document.form1.ve22_descr.value = ''; 
+       document.form1.ve22_descr.value = '';
      }
   }
 }
 function js_mostraveiccadmodelo(chave,erro){
-  document.form1.ve22_descr.value = chave; 
-  if(erro==true){ 
-    document.form1.ve01_veiccadmodelo.focus(); 
-    document.form1.ve01_veiccadmodelo.value = ''; 
+  document.form1.ve22_descr.value = chave;
+  if(erro==true){
+    document.form1.ve01_veiccadmodelo.focus();
+    document.form1.ve01_veiccadmodelo.value = '';
   }
 }
 function js_mostraveiccadmodelo1(chave1,chave2){
@@ -174,20 +174,20 @@ function js_mostraveiccadmodelo1(chave1,chave2){
 }
 function js_pesquisave06_veiccadcomb(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_veiccadcomb','func_veiccadcomb.php?funcao_js=parent.js_mostraveiccadcomb1|ve26_codigo|ve26_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_veiccadcomb','func_veiccadcomb.php?funcao_js=parent.js_mostraveiccadcomb1|ve26_codigo|ve26_descr','Pesquisa',true);
   }else{
-     if(document.form1.ve06_veiccadcomb.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_veiccadcomb','func_veiccadcomb.php?pesquisa_chave='+document.form1.ve06_veiccadcomb.value+'&funcao_js=parent.js_mostraveiccadcomb','Pesquisa',false);
+     if(document.form1.ve06_veiccadcomb.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_veiccadcomb','func_veiccadcomb.php?pesquisa_chave='+document.form1.ve06_veiccadcomb.value+'&funcao_js=parent.js_mostraveiccadcomb','Pesquisa',false);
      }else{
-       document.form1.ve26_descr.value = ''; 
+       document.form1.ve26_descr.value = '';
      }
   }
 }
 function js_mostraveiccadcomb(chave,erro){
-  document.form1.ve26_descr.value = chave; 
-  if(erro==true){ 
-    document.form1.ve06_veiccadcomb.focus(); 
-    document.form1.ve06_veiccadcomb.value = ''; 
+  document.form1.ve26_descr.value = chave;
+  if(erro==true){
+    document.form1.ve06_veiccadcomb.focus();
+    document.form1.ve06_veiccadcomb.value = '';
   }
 }
 function js_mostraveiccadcomb1(chave1,chave2){
@@ -197,7 +197,7 @@ function js_mostraveiccadcomb1(chave1,chave2){
 }
 
 
-</script>  
+</script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <style>
@@ -220,11 +220,11 @@ function js_mostraveiccadcomb1(chave1,chave2){
   <table  align="center" border="0">
     <form name="form1" method="post" action="">
       <tr>
-         <td colspan="2">&nbsp;</td> 
+         <td colspan="2">&nbsp;</td>
       </tr>
       <tr>
          <td nowrap align="right" title="Periodo"><b>Periodo:</b></td>
-         <td> 
+         <td>
          <?
             db_inputdata("ve70_dataini",@$ve70_dataini_dia,@$ve70_dataini_mes,@$ve70_dataini_ano,true,"text",4)
          ?>
@@ -236,7 +236,7 @@ function js_mostraveiccadcomb1(chave1,chave2){
       <tr>
       	<td align="right"><b>Central:</b></td>
       	<td>
-      		<?php 
+      		<?php
       			$rsQueryCentral = pg_query($clveiccadcentral->sql_query(null," ve36_sequencial as id,descrdepto as depto",null,""));
       			$aValores = array();
       			$aValores['0'] = "Todos";
@@ -246,7 +246,7 @@ function js_mostraveiccadcomb1(chave1,chave2){
       				}
       			}
       			db_select("idCentral",$aValores,true,4);
-      			//db_selectrecord('idCentral',$rsQueryCentral,true,1,"","","","","",1);	
+      			//db_selectrecord('idCentral',$rsQueryCentral,true,1,"","","","","",1);
       		?>
       	</td>
       </tr>
@@ -272,11 +272,11 @@ function js_mostraveiccadcomb1(chave1,chave2){
                  $aux->funcao_gera_formulario();
         	?>
        </td>
-      </tr>  
+      </tr>
       <tr>
          <td nowrap align="right" title="<?=@$Tve01_veiccadtipo?>"><? db_ancora(@$Lve01_veiccadtipo,"js_pesquisave01_veiccadtipo(true);",4) ?></td>
          <td>
-         <? 
+         <?
             db_input("ve01_veiccadtipo",10,@$Ive01_veiccadtipo,true,"text",4,"onChange='js_pesquisave01_veiccadtipo(false);'");
          ?>
          <?
@@ -303,7 +303,7 @@ function js_mostraveiccadcomb1(chave1,chave2){
       <tr>
          <td nowrap align="right" title="<?=@$Tve06_veiccadcomb?>"><? db_ancora(@$Lve06_veiccadcomb,"js_pesquisave06_veiccadcomb(true);",4) ?></td>
          <td>
-         <? 
+         <?
             db_input("ve06_veiccadcomb",10,@$Ive06_veiccadcomb,true,"text",4,"onChange='js_pesquisave06_veiccadcomb(false);'");
          ?>
          <?
@@ -330,7 +330,7 @@ function js_mostraveiccadcomb1(chave1,chave2){
             </td>
         </tr>
       <tr>
-        <td height="50" colspan="2" align = "center"> 
+        <td height="50" colspan="2" align = "center">
           <input  name="emite2" id="emite2" type="button" value="Processar" onclick="js_emite();">
         </td>
       </tr>
@@ -360,10 +360,10 @@ function js_mostraveiculos1(chave,chave1,chave2){
 }
 function js_pesquisave71_veiccadposto(mostra) {
     if (mostra == true) {
-        js_OpenJanelaIframe('top.corpo', 'db_iframe_veiccadposto', 'func_veiccadpostoalt.php?funcao_js=parent.js_mostraposto1|ve29_codigo|z01_nome|descrdepto', 'Pesquisa', true);
+        js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_veiccadposto', 'func_veiccadpostoalt.php?funcao_js=parent.js_mostraposto1|ve29_codigo|z01_nome|descrdepto', 'Pesquisa', true);
     } else {
         if (document.form1.ve71_veiccadposto.value != '') {
-            js_OpenJanelaIframe('top.corpo', 'db_iframe_veiccadposto', 'func_veiccadpostoalt.php?pesquisa_chave=' + document.form1.ve71_veiccadposto.value + '&funcao_js=parent.js_mostraposto', 'Pesquisa', false);
+            js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_veiccadposto', 'func_veiccadpostoalt.php?pesquisa_chave=' + document.form1.ve71_veiccadposto.value + '&funcao_js=parent.js_mostraposto', 'Pesquisa', false);
         } else {
             document.form1.posto.value = '';
         }

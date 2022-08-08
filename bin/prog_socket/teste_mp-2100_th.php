@@ -25,12 +25,12 @@
  *                                licenca/licenca_pt.txt 
  */
 
-require("../../libs/db_stdlib.php");
-require("../../libs/db_conecta.php");
-include("../../libs/db_sessoes.php");
-include("../../libs/db_usuariosonline.php");
-include("../../libs/db_utils.php");
-include("../../dbforms/db_funcoes.php");
+require(__DIR__ . "/../../libs/db_stdlib.php");
+require(__DIR__ . "/../../libs/db_conecta.php");
+include(__DIR__ . "/../../libs/db_sessoes.php");
+include(__DIR__ . "/../../libs/db_usuariosonline.php");
+include(__DIR__ . "/../../libs/db_utils.php");
+include(__DIR__ . "/../../dbforms/db_funcoes.php");
 
 // require_once '../../model/impressao.bematechMP2100TH.php';
 

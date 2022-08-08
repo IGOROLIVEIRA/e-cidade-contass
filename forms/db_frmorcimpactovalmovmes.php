@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: orcamento
@@ -45,10 +45,10 @@ if(isset($db_opcaoal)){
 }else if(isset($opcao) && $opcao=="excluir"){
     $db_opcao = 3;
     $db_botao=true;
-}else{  
+}else{
     $db_opcao = 1;
     $db_botao=true;
-} 
+}
 $result = $clorcimpactomov->sql_record($clorcimpactomov->sql_query_compl($o65_codimpmov,"o63_codperiodo,o96_anoini,o96_anofim"));
 db_fieldsmemory($result,0);
 
@@ -56,30 +56,30 @@ db_fieldsmemory($result,0);
 if(isset($o64_proces)){
 
   //----------------------------------------------------------------------------------------------------------------
-  $result99  = $clorcimpactovalmovmes->sql_record($clorcimpactovalmovmes->sql_query(null,null,"o64_exercicio,o65_mes,o65_valor","","o64_proces=$o64_proces")); 
+  $result99  = $clorcimpactovalmovmes->sql_record($clorcimpactovalmovmes->sql_query(null,null,"o64_exercicio,o65_mes,o65_valor","","o64_proces=$o64_proces"));
   $numrows99 = $clorcimpactovalmovmes->numrows;
-  if($numrows99 >0){ 
+  if($numrows99 >0){
     for($i=0; $i<$numrows99; $i++){
       db_fieldsmemory($result99,$i);
       $x  = "o91_valor_".$o64_exercicio."_".$o65_mes;
       $$x  = number_format($o65_valor,"2",".","");
-      
+
     }
   }
   //-----------------------------
-  
+
   $result = $clorcimpactovalmov->sql_record($clorcimpactovalmov->sql_query_file(null,"o64_codseqimpmov,o64_exercicio,o64_valor","","o64_proces=$o64_proces"));
   $numrows= $clorcimpactovalmov->numrows;
   for($i=0; $i<$numrows; $i++){
     db_fieldsmemory($result,$i);
     $x  = "o64_codseqimpmov_$o64_exercicio";
     $$x  = $o64_codseqimpmov;
-    
+
     $x  = "total_$o64_exercicio";
     $$x  = number_format($o64_valor,"2",".","");
   }
-  
-} 
+
+}
 
 
 
@@ -91,7 +91,7 @@ function js_verificar(){
 }
 
 function js_calcula(){
-<?  
+<?
   echo "arr_ano = new Array(";
   $sep = '';
   for($i=$o96_anoini; $i<= $o96_anofim; $i++){
@@ -105,7 +105,7 @@ function js_calcula(){
      for(a=1; a<13; a++){
         val = new Number(eval("document.form1.o64_valor_"+arr_ano[i]+"_"+a+".value"));
         soma =  val + new Number(soma);
-     } 
+     }
      eval("document.form1.somatot_"+arr_ano[i]+".value="+soma.toFixed(2));
      resto = new Number(eval("new Number(document.form1.total_"+arr_ano[i]+".value) - new Number(document.form1.somatot_"+arr_ano[i]+".value)"));
      eval("document.form1.resto_"+arr_ano[i]+".value= "+resto.toFixed(2));
@@ -114,7 +114,7 @@ function js_calcula(){
 
 
 function js_divide(){
-<?  
+<?
   echo "arr_ano = new Array(";
   $sep = '';
   for($i=$o96_anoini; $i<= $o96_anofim; $i++){
@@ -129,7 +129,7 @@ function js_divide(){
      valparc = new Number(valor/12);
      for(a=1; a<13; a++){
        var t =valparc.toFixed(2);
-       tot = new Number(t) + new Number(tot); 
+       tot = new Number(t) + new Number(tot);
        tot =  tot.toFixed(2);
        if(a==12){
 	 if(valor>tot){
@@ -138,10 +138,10 @@ function js_divide(){
 	 }else{
 	   resto = tot-valor;
    	   valparc = new Number(valparc+resto);
-	 } 
+	 }
        }
        eval("document.form1.o64_valor_"+arr_ano[i]+"_"+a+".value="+valparc.toFixed(2));
-     } 
+     }
    }
 }
 
@@ -149,9 +149,9 @@ function js_verif(ano,mes){
     tot = new Number();
    for(a=1; a<13; a++){
      tot = new Number(eval("document.form1.o64_valor_"+ano+"_"+a+".value")) + new Number(tot);
-   }   
+   }
    total  =  new Number(eval("document.form1.total_"+ano+".value"));
-   
+
    if(tot>total){
      alert("Valor inválido!");
      eval("document.form1.o64_valor_"+ano+"_"+mes+".value='0.00'");
@@ -181,12 +181,12 @@ db_input('o64_proces',8,$Io64_proces,true,'hidden',3);
     </td>
 <?
     $arr_mes = array("1"=>"JAN","2"=>"FEV","3"=>"MAR","4"=>"ABR","5"=>"MAI","6"=>"JUN","7"=>"JUL","8"=>"AGO","9"=>"SET","10"=>"OUT","11"=>"NOV","12"=>"DEZ");
-    for($t=1; $t<count($arr_mes)+1; $t++){   
+    for($t=1; $t<count($arr_mes)+1; $t++){
       echo "<td nowrap align='center'><b>";
       echo  $arr_mes[$t];
       echo"</b></td>";
     }
-?>    
+?>
     <td nowrap title="">
       <b>Soma</b>
     </td>
@@ -199,27 +199,27 @@ db_input('o64_proces',8,$Io64_proces,true,'hidden',3);
   </tr>
 <?
 for($i=$o96_anoini; $i<= $o96_anofim; $i++){
-    
+
      $x = "o64_valor_$i";
      $$x  = "";
-      
+
      $x = "o56_elemento_$i";
      $$x = "";
-     
+
      $x = "o64_quantmed_$i";
      $$x = "";
-     
+
      $x = "o93_codigo_$i";
      $$x = "";
 
-      
+
    if(isset($o64_proces) && $o64_proces!='' && empty($novo) && empty($incluir) && empty($alterar)){
     $result = $clorcimpactovalmov->sql_record($clorcimpactovalmov->sql_query_file(null,"*","","o64_proces=$o64_proces and o64_exercicio=$i"));
     $numrows = $clorcimpactovalmov->numrows;
-     if($numrows>0){ 
+     if($numrows>0){
        db_fieldsmemory($result,0);
-   
-	  
+
+
        $x = "o64_valor_$i";
        $$x = $o64_valor;
      }
@@ -237,14 +237,14 @@ for($i=$o96_anoini; $i<= $o96_anofim; $i++){
       <?db_input("o64_exercicio_$i",4,$Io64_exercicio,true,'text',3);?>
     </td>
 <?
-    $total = "total_$i";  
-    $tot=0; 
+    $total = "total_$i";
+    $tot=0;
     $valparc = number_format($$total/12,"2",".","");
     $somatot = 0;
-    for($t=1; $t<count($arr_mes)+1; $t++){   
+    for($t=1; $t<count($arr_mes)+1; $t++){
       echo "<td nowrap>";
 
-          
+
 	$tot += $valparc;
 
 	if($t==12 && $tot != $$total){
@@ -252,27 +252,27 @@ for($i=$o96_anoini; $i<= $o96_anofim; $i++){
 	      $valparc = $valparc - number_format($tot-$$total,"2",".","");
 	   }else{
 	      $valparc +=  number_format($$total-$tot,"2",".","");
-	   } 
+	   }
 	}
-         
+
         $valmes = "o64_valor_".$i."_$t";
-	
+
 	if(empty($numrows99) || $numrows99 == 0 ){
           $$valmes = $valparc;
         }else{
 	  $somatot += $$valmes;
-	}  	 
-    
+	}
 
-	
+
+
         db_input("$valmes",5,$Io65_valor,true,'text',$db_opcao,"onchange=\"js_verif('$i','$t');\"");
       echo"</td>";
     }
 
-      $soma  = "somatot_$i";  
+      $soma  = "somatot_$i";
       $$soma = number_format($somatot,"2",".","");
-      
-      $resto  = "resto_$i";  
+
+      $resto  = "resto_$i";
       $$resto = number_format($$total - $somatot,"2",".","");
 ?>
 
@@ -312,14 +312,14 @@ for($i=$o96_anoini; $i<= $o96_anofim; $i++){
       echo "function js_quant(){\n";
         for($c=$o96_anoini+1; $c<= $o96_anofim; $c++){
           echo "document.form1.o64_quantmed_$c.value = document.form1.o64_quantmed_$i.value;\n";
-        }  
-      echo "}";  
-      
+        }
+      echo "}";
+
       echo "function js_valor(){\n";
         for($c=$o96_anoini+1; $c<= $o96_anofim; $c++){
           echo "document.form1.o64_valor_$c.value = document.form1.o64_valor_$i.value;\n";
-        }  
-      echo "}";  
+        }
+      echo "}";
   }
   //final
 ?>
@@ -329,7 +329,7 @@ for($i=$o96_anoini; $i<= $o96_anofim; $i++){
 //elemento
 function js_elemento_<?=$i?>(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_orcimpactovalmov','db_iframe_orcelemento','func_orcelemento_orcs.php?funcao_js=parent.js_mostraorcelemento1_<?=$i?>|o56_elemento|o56_descr','Pesquisa',true,'0','1','775','390');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_orcimpactovalmov','db_iframe_orcelemento','func_orcelemento_orcs.php?funcao_js=parent.js_mostraorcelemento1_<?=$i?>|o56_elemento|o56_descr','Pesquisa',true,'0','1','775','390');
   }else{
     elemento = document.form1.o56_elemento_<?=$i?>.value;
     if(elemento != ''){
@@ -337,25 +337,25 @@ function js_elemento_<?=$i?>(mostra){
 	elemento = elemento+"0";
       }
        document.form1.o56_elemento_<?=$i?>.value=elemento;
-      js_OpenJanelaIframe('top.corpo.iframe_orcimpactovalmov','db_iframe_orcelemento','func_orcelemento_orcs.php?pesquisa_chave='+document.form1.o56_elemento_<?=$i?>.value+'&funcao_js=parent.js_mostraorcelemento_<?=$i?>','Pesquisa',false);
-    }      
+      js_OpenJanelaIframe('CurrentWindow.corpo.iframe_orcimpactovalmov','db_iframe_orcelemento','func_orcelemento_orcs.php?pesquisa_chave='+document.form1.o56_elemento_<?=$i?>.value+'&funcao_js=parent.js_mostraorcelemento_<?=$i?>','Pesquisa',false);
+    }
   }
 }
 function js_mostraorcelemento_<?=$i?>(chave,erro){
-//  document.form1.o56_descr.value = chave; 
-  if(erro==true){ 
-    document.form1.o56_elemento_<?=$i?>.focus(); 
-    document.form1.o56_elemento_<?=$i?>.value = ''; 
+//  document.form1.o56_descr.value = chave;
+  if(erro==true){
+    document.form1.o56_elemento_<?=$i?>.focus();
+    document.form1.o56_elemento_<?=$i?>.value = '';
     return false;
   }
   <?
   if($i == $o96_anoini){
      for($c=$o96_anoini+1; $c<= $o96_anofim; $c++){
         echo "document.form1.o56_elemento_$c.value = document.form1.o56_elemento_$i.value;";
-     }  
+     }
   }
   ?>
-  
+
 }
 
 
@@ -365,7 +365,7 @@ function js_mostraorcelemento1_<?=$i?>(chave1,chave2){
   if($i == $o96_anoini){
      for($c=$o96_anoini+1; $c<= $o96_anofim; $c++){
         echo "document.form1.o56_elemento_$c.value = chave1;";
-     }  
+     }
   }
   ?>
   db_iframe_orcelemento.hide();
@@ -373,25 +373,25 @@ function js_mostraorcelemento1_<?=$i?>(chave1,chave2){
 //recurso
 function js_codigo_<?=$i?>(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_orcimpactovalmov','db_iframe_orctiporec','func_orctiporec.php?funcao_js=parent.js_mostraorctiporec1_<?=$i?>|o15_codigo|o15_descr','Pesquisa',true,'0','1','775','390');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_orcimpactovalmov','db_iframe_orctiporec','func_orctiporec.php?funcao_js=parent.js_mostraorctiporec1_<?=$i?>|o15_codigo|o15_descr','Pesquisa',true,'0','1','775','390');
   }else{
     if( document.form1.o93_codigo_<?=$i?>.value != ''){
-      js_OpenJanelaIframe('top.corpo.iframe_orcimpactovalmov','db_iframe_orctiporec','func_orctiporec.php?pesquisa_chave='+document.form1.o93_codigo_<?=$i?>.value+'&funcao_js=parent.js_mostraorctiporec_<?=$i?>','Pesquisa',false);
-     }       
+      js_OpenJanelaIframe('CurrentWindow.corpo.iframe_orcimpactovalmov','db_iframe_orctiporec','func_orctiporec.php?pesquisa_chave='+document.form1.o93_codigo_<?=$i?>.value+'&funcao_js=parent.js_mostraorctiporec_<?=$i?>','Pesquisa',false);
+     }
   }
 }
 function js_mostraorctiporec_<?=$i?>(chave,erro){
-//  document.form1.o15_descr.value = chave; 
-  if(erro==true){ 
-    document.form1.o93_codigo_<?=$i?>.focus(); 
-    document.form1.o93_codigo_<?=$i?>.value = ''; 
+//  document.form1.o15_descr.value = chave;
+  if(erro==true){
+    document.form1.o93_codigo_<?=$i?>.focus();
+    document.form1.o93_codigo_<?=$i?>.value = '';
     return false;
   }
   <?
   if($i == $o96_anoini){
      for($c=$o96_anoini+1; $c<= $o96_anofim; $c++){
         echo "document.form1.o93_codigo_$c.value = document.form1.o93_codigo_$i.value ;";
-     }  
+     }
   }
   ?>
 }
@@ -402,7 +402,7 @@ function js_mostraorctiporec1_<?=$i?>(chave1,chave2){
   if($i == $o96_anoini){
      for($c=$o96_anoini+1; $c<= $o96_anofim; $c++){
         echo "document.form1.o93_codigo_$c.value = document.form1.o93_codigo_$i.value ;";
-     }  
+     }
   }
   ?>
   db_iframe_orctiporec.hide();
@@ -415,6 +415,6 @@ function js_mostraorctiporec1_<?=$i?>(chave1,chave2){
 
  if(isset($numrows99) && $numrows99 == 0 ){
    echo "document.form1.atualizar.click();";
- } 
+ }
 ?>
 </script>

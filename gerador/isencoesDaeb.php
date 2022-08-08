@@ -1,5 +1,5 @@
 <?
-include("../libs/db_conn.php");
+include(__DIR__ . "/../libs/db_conn.php");
 
 if(count($argv)!= 4) {
   echo "Faltam parametros\n";

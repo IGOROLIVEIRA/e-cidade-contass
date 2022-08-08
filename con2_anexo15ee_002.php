@@ -35,7 +35,7 @@ include("libs/db_liborcamento.php");
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 //db_postmemory($HTTP_SERVER_VARS,2);exit;
 
-$xinstit = split("-",$db_selinstit);
+$xinstit = explode("-",$db_selinstit);
 $resultinst = pg_exec("select codigo,nomeinst from db_config where codigo in (".str_replace('-',', ',$db_selinstit).") ");
 $descr_inst = '';
 $xvirg = '';

@@ -92,7 +92,7 @@ if($db_opcao==1){
 </form>
 <script>
     function js_pesquisa(){
-        js_OpenJanelaIframe('top.corpo.iframe_projecaoatuarial10','db_iframe_projecaoatuarial10','func_projecaoatuarial10.php?funcao_js=parent.js_preenchepesquisa|si168_sequencial','Pesquisa',true,'0','1','775','390');
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_projecaoatuarial10','db_iframe_projecaoatuarial10','func_projecaoatuarial10.php?funcao_js=parent.js_preenchepesquisa|si168_sequencial','Pesquisa',true,'0','1','775','390');
     }
     function js_preenchepesquisa(chave){
         db_iframe_projecaoatuarial10.hide();

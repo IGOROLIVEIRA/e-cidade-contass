@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Público para Gestão Municipal                
- *  Copyright (C) 2014  DBseller Serviços de Informática             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa é software livre; você pode redistribuí-lo e/ou     
- *  modificá-lo sob os termos da Licença Pública Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versão 2 da      
- *  Licença como (a seu critério) qualquer versão mais nova.          
- *                                                                    
- *  Este programa e distribuído na expectativa de ser útil, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implícita de              
- *  COMERCIALIZAÇÃO ou de ADEQUAÇÃO A QUALQUER PROPÓSITO EM           
- *  PARTICULAR. Consulte a Licença Pública Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Você deve ter recebido uma cópia da Licença Pública Geral GNU     
- *  junto com este programa; se não, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Cópia da licença no diretório licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Público para Gestão Municipal
+ *  Copyright (C) 2014  DBseller Serviços de Informática
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa é software livre; você pode redistribuí-lo e/ou
+ *  modificá-lo sob os termos da Licença Pública Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versão 2 da
+ *  Licença como (a seu critério) qualquer versão mais nova.
+ *
+ *  Este programa e distribuído na expectativa de ser útil, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implícita de
+ *  COMERCIALIZAÇÃO ou de ADEQUAÇÃO A QUALQUER PROPÓSITO EM
+ *  PARTICULAR. Consulte a Licença Pública Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Você deve ter recebido uma cópia da Licença Pública Geral GNU
+ *  junto com este programa; se não, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Cópia da licença no diretório licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 $oGet = db_utils::postMemory($_GET);
@@ -38,11 +38,11 @@ $oGet = db_utils::postMemory($_GET);
             $opcaoA = 3;
             $sMsg      = "** Não será permitida alteração de data quando a nota já foi liquidada e/ou paga a NF **";
          }
-       }  
+       }
        if ($lDisabled2){
          $opcaoA = 3;
-         $opcaoB = 3;           
-       }          
+         $opcaoB = 3;
+       }
 ?>
 <form name="form1" method="post" action="">
 <center>
@@ -56,7 +56,7 @@ $oGet = db_utils::postMemory($_GET);
            <td nowrap title="<?=@$Tm51_codordem?>">
              <b> <?db_ancora("Ordem de Compra:","js_consultaordemcompra(\$F('m51_codordem'));",1);?></b>
            </td>
-           <td> 
+           <td>
            <?
              db_input('m51_codordem',10,'',true,'text');
            ?>
@@ -64,17 +64,17 @@ $oGet = db_utils::postMemory($_GET);
            <td nowrap title="<?=$Te69_numero?>">
             <b>Nota:</b>
            </td>
-           <td> 
+           <td>
           <?
            db_input('e69_numero',15,'',true,'text',$opcaoB);
           ?>
-          </td>           
+          </td>
            </tr>
            <tr>
            <td nowrap title="Fornecedor">
             <?=@$Lm51_numcgm?>
           </td>
-          <td> 
+          <td>
           <?
            db_input('m51_numcgm',10,$Im51_numcgm,true,'text');
            db_input('z01_nome',30,$Iz01_nome,true,'text');
@@ -83,27 +83,27 @@ $oGet = db_utils::postMemory($_GET);
            <td nowrap title="<?=$Te69_dtnota?>">
             <?=$Le69_dtnota?>
            </td>
-           <td> 
-          <?                   
+           <td>
+          <?
           if (!isset($e69_dtnota_dia)) {
             $e69_dtnota_dia = null;
-          }          
+          }
           if (!isset($e69_dtnota_mes)) {
             $e69_dtnota_mes = null;
-          }           
+          }
           if (!isset($e69_dtnota_ano)) {
             $e69_dtnota_ano = null;
-          }           
+          }
            db_inputdata('e69_dtnota',$e69_dtnota_dia,$e69_dtnota_mes,$e69_dtnota_ano,true,'text',$opcaoA);
           ?>
-          </td>            
-         </tr> 
+          </td>
+         </tr>
          <tr>
           </td>
            <td nowrap title="<?=@$Tdescrdepto?>">
             <?=@$Lm51_depto?>
           </td>
-          <td> 
+          <td>
           <?
            db_input('m51_depto',10,$Im51_depto,true,'text');
            db_input('descrdepto',30,$Idescrdepto,true,'text');
@@ -112,27 +112,27 @@ $oGet = db_utils::postMemory($_GET);
            <td nowrap title="<?=$Te69_dtrecebe?>">
             <?=$Le69_dtrecebe?>
            </td>
-           <td> 
-          <?          
+           <td>
+          <?
           if (!isset($e69_dtrecebe_dia)) {
           	$e69_dtrecebe_dia = null;
           }
           if (!isset($e69_dtrecebe_mes)) {
             $e69_dtrecebe_mes = null;
-          }          
+          }
           if (!isset($e69_dtrecebe_ano)) {
             $e69_dtrecebe_ano = null;
-          }          
+          }
            db_inputdata('e69_dtrecebe',$e69_dtrecebe_dia,$e69_dtrecebe_mes,$e69_dtrecebe_ano,true,'text',$opcaoA);
           ?>
-          </td>           
+          </td>
         </tr>
          <tr>
           </td>
            <td nowrap title="<?=@$Tm51_valortotal?>">
             <?=$Lm51_valortotal?>
           </td>
-          <td> 
+          <td>
           <?
            db_input('m51_valortotal',10,$Im51_valortotal,true,'text');
           ?>
@@ -140,15 +140,15 @@ $oGet = db_utils::postMemory($_GET);
            <td nowrap title="<?=$Te70_valor;?>">
             <?=$Le70_valor;?>
           </td>
-          <td> 
+          <td>
           <?
            db_input('e70_valor',10,$Ie70_valor,true,'text');
           ?>
-          </td>          
+          </td>
         </tr>
         <?
         if ($iControlaPit == 1) {
-            
+
           ?>
           <tr id='controlepit' style='display: <?=$iControlaPit==1?"":"none"?>'>
             <td><b>Tipo da Entrada: </b></td>
@@ -156,23 +156,23 @@ $oGet = db_utils::postMemory($_GET);
             <?
             $oDaoDocumentoFiscais = db_utils::getDao("tipodocumentosfiscal");
             $rsDocs = $oDaoDocumentoFiscais->sql_record($oDaoDocumentoFiscais->sql_query(null, "*", "e12_sequencial"));
-            $aItens[0] = "selecione"; 
+            $aItens[0] = "selecione";
             for($i = 0; $i < $oDaoDocumentoFiscais->numrows; $i ++) {
-              
+
               $oItens = db_utils::fieldsMemory($rsDocs, $i);
               $aItens [$oItens->e12_sequencial] = $oItens->e12_descricao;
-            
+
             }
             db_select('e69_tipodocumentosfiscal', $aItens, true, $db_opcao  );
             ?>
-            <a href='#' onclick='js_abreNotaExtra()' style='display: none' 
+            <a href='#' onclick='js_abreNotaExtra()' style='display: none'
                id='dadosnotacomplementar'>Outros Dados</a>
            </td>
-          </tr>  
+          </tr>
           <?
           }
           ?>
-          
+
           <tr>
             <td nowrap ><b>Nota Fiscal Eletronica: </b>
             </td>
@@ -198,7 +198,7 @@ $oGet = db_utils::postMemory($_GET);
             db_input('e69_chaveacesso', 40, 0, true, 'text', 1, "onchange='js_verificaChaveAcesso(this.value);'","","","",44);
             ?>
             </td>
-          
+
             <td nowrap><b>Número de série: </b>
             </td>
             <td>
@@ -212,27 +212,27 @@ $oGet = db_utils::postMemory($_GET);
 
           </tr>
 
-          
+
           <tr>
              <td nowrap title="<?=@$Te11_cfop?>">
                <?
                db_ancora("<b>CPOF</b>","js_pesquisae11_cfop(true);",$db_opcao);
                ?>
              </td>
-             <td nowrap colspan='3' > 
+             <td nowrap colspan='3' >
               <?
               db_input('e11_cfop',10,$Ie11_cfop,true,'text',3," onchange='js_pesquisae11_cfop(false);'");
               db_input('e10_cfop',10,$Ie10_cfop,true,'text', $db_opcao," onchange='js_pesquisae11_cfop(false);'");
               db_input('e10_descricao',40,$Ie10_descricao,true,'text',3,'')
                ?>
              </td>
-           </tr> 
+           </tr>
            <tr>
              <td  nowrap>
                 <b>Série:</b>
              </td>
              <td  nowrap>
-             <? 
+             <?
              db_input('e11_seriefiscal',10,$Ie11_seriefiscal,true,'text',$db_opcao,'');
              ?>
              </td>
@@ -242,27 +242,27 @@ $oGet = db_utils::postMemory($_GET);
                 <b>Inscrição Subst.Fiscal:</b>
              </td>
              <td  nowrap>
-             <? 
+             <?
              db_input('e11_inscricaosubstitutofiscal',10,$Ie11_inscricaosubstitutofiscal,true,'text',$db_opcao,'');
              ?>
              </td>
-           </tr>  
+           </tr>
            <tr>
              <td  nowrap>
                 <b>Base Calculo ICMS:</b>
              </td>
              <td  nowrap>
-             <? 
+             <?
              db_input('e11_basecalculoicms',10,@$Ie11_basecalculoicms,true,'text',$db_opcao,'');
              ?>
              </td>
-           </tr> 
+           </tr>
            <tr>
              <td  nowrap>
                 <b>Valor ICMS:</b>
              </td>
              <td  nowrap>
-             <? 
+             <?
              db_input('e11_valoricms',10,$Ie11_valoricms,true,'text',$db_opcao,'');
              ?>
              </td>
@@ -272,35 +272,35 @@ $oGet = db_utils::postMemory($_GET);
                 <b>Base Calculo ICMS Substituto:</b>
              </td>
              <td  nowrap>
-             <? 
+             <?
              db_input('e11_basecalculosubstitutotrib',10,@$Ie11_basecalculosubstitutotrib,true,'text',$db_opcao,'');
              ?>
              </td>
-           </tr> 
+           </tr>
            <tr>
              <td  nowrap>
                 <b>Valor ICMS Substituto:</b>
              </td>
              <td  nowrap>
-             <? 
+             <?
              db_input('e11_valoricmssubstitutotrib',10,$Ie11_valoricmssubstitutotrib,true,'text',$db_opcao,'');
              ?>
              </td>
-           </tr>        
+           </tr>
       </table>
 </div>
 
 </fieldset>
-      
-      
+
+
   <div style="margin-top: 10px;">
-  
+
      <input name="alterar"    id='alterar' type="submit" value="Atualizar" onclick='return validar_campos();'>
      <input name="pesquisar"               type="button" value="Pesquisar" onclick="js_pesquisa_empnota(true)">
      <? db_input('e69_codnota',10,$Ie69_codnota,true,'hidden'); ?>
-  
+
   </div>
-  
+
   </center>
   </form>
   <table border="0" width="55%">
@@ -311,13 +311,13 @@ $oGet = db_utils::postMemory($_GET);
  <script>
 function js_consultaordemcompra(codordem){
   if(codordem != ""){
-      js_OpenJanelaIframe('top.corpo','db_iframe_ordemcompra002','com3_ordemdecompra002.php?m51_codordem='+codordem,'Consulta Ordem de Compra',true);  
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_ordemcompra002','com3_ordemdecompra002.php?m51_codordem='+codordem,'Consulta Ordem de Compra',true);
   }
 }
 
 function js_pesquisa_empnota(){
  js_reset();
- js_OpenJanelaIframe('top.corpo','db_iframe_empnota',
+ js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_empnota',
                      'func_empnota.php?funcao_js=parent.js_mostraempnota1|e69_codnota&lNaoTrazerAnuladas=1&lm72_codordem=1',
                      'Pesquisa',true);
 }
@@ -325,7 +325,7 @@ function js_pesquisa_empnota(){
 function js_mostraempnota1(chave1){
    location.href='mat1_altDadosNotaFiscal001.php?chavepesquisa='+chave1;
 }
-  
+
 
 function js_reset(){
 
@@ -343,26 +343,26 @@ function js_reset(){
 }
 
 function js_alterar_ordemcompra(){
-  location.href = "mat1_altDadosNotaFiscal001.php"; 
+  location.href = "mat1_altDadosNotaFiscal001.php";
 }
 
 function validar_campos() {
 
  if ($F('e69_tipodocumentosfiscal') == "") {
-   
+
    alert('Informe o Tipo da nota');
    return false;
-   
+
  }
- 
+
  if ($F('e69_tipodocumentosfiscal') == 50 && $F('e11_cfop') == "") {
-   
+
    alert('Informe a CFOP!');
    return false;
-   
- } 
+
+ }
  if($('e69_numero').value == ""){
-   alert('Campo nota não informado!'); 
+   alert('Campo nota não informado!');
    return false;
  } else if ($('e69_dtnota').value == ""){
    alert('Campo data nota não informado!');
@@ -383,7 +383,7 @@ function validar_campos() {
  }
 
  if ($lDesabled){
-    echo "$('alterar').disabled = true;";  
+    echo "$('alterar').disabled = true;";
  }
 ?>
 function js_abreNotaExtra() {
@@ -396,28 +396,28 @@ function js_abreNotaExtra() {
 }
 function js_pesquisae11_cfop(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo',
-                        'db_iframe_cfop', 
+    js_OpenJanelaIframe('CurrentWindow.corpo',
+                        'db_iframe_cfop',
                         'func_cfop.php?funcao_js=parent.js_mostracfop1|e10_sequencial|e10_descricao|e10_cfop',
                         'Pesquisa CFOP',true);
   }else{
-     if($('e10_cfop').value != ''){ 
-        js_OpenJanelaIframe('top.corpo',
+     if($('e10_cfop').value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo',
                             'db_iframe_cfop',
                             'func_cfop.php?pesquisa_chave='+$('e10_cfop').value+'&funcao_js=parent.js_mostracfop',
                             'Pesquisa CFOP',false);
      }else{
-       $('e10_descricao').value = ''; 
+       $('e10_descricao').value = '';
      }
   }
 }
 function js_mostracfop(chave,chave2, erro){
 
-  $('e10_descricao').value = chave; 
-  $('e11_cfop').value      = chave2; 
-  if(erro==true){ 
-    $('e10_cfop').focus(); 
-    $('e10_cfop').value = ''; 
+  $('e10_descricao').value = chave;
+  $('e11_cfop').value      = chave2;
+  if(erro==true){
+    $('e10_cfop').focus();
+    $('e10_cfop').value = '';
   }
 }
 function js_mostracfop1(chave1,chave2, chave3){
@@ -426,14 +426,14 @@ function js_mostracfop1(chave1,chave2, chave3){
   $('e10_descricao').value = chave2;
   $('e10_cfop').value = chave3;
   db_iframe_cfop.hide();
-  
+
 }
 
 // Função para liberar o campo e69_chaveacesso caso seja Nota Fiscal Eletrônica
 // Acrescentado por causa do sicom
 function js_tipoChave(iTipoNfe) {
 
-  // codições para a chave de acesso 
+  // codições para a chave de acesso
   if (iTipoNfe == 1 || iTipoNfe == 2 || iTipoNfe == 4) {
     $('e69_chaveacesso').readOnly           = false;
     $('e69_chaveacesso').style.background   = "#FFFFFF";
@@ -443,7 +443,7 @@ function js_tipoChave(iTipoNfe) {
     $('e69_chaveacesso').style.background  = "#DEB887";
   }
 
-  // codições para a Nf serie 
+  // codições para a Nf serie
   if (iTipoNfe == 2 || iTipoNfe == 3) {
     $('e69_nfserie').readOnly           = false;
     $('e69_nfserie').style.background   = "#FFFFFF";
@@ -469,23 +469,23 @@ function js_verificaChaveAcesso(iChaveAcesso) {
     return true;
   };
   var aChave = iChaveAcesso.split("");
-  var multiplicadores = [2, 3, 4, 5, 6, 7, 8, 9];  
+  var multiplicadores = [2, 3, 4, 5, 6, 7, 8, 9];
   var soma_ponderada = 0;
-  var i = 42;  
-  while (i >= 0) {    
-    for (m = 0; m < multiplicadores.length && i >= 0; m++) {      
-      soma_ponderada += aChave[i] * multiplicadores[m];     
-      i--;    
-    }  
+  var i = 42;
+  while (i >= 0) {
+    for (m = 0; m < multiplicadores.length && i >= 0; m++) {
+      soma_ponderada += aChave[i] * multiplicadores[m];
+      i--;
+    }
   }
-   
-  var resto = soma_ponderada % 11;  
+
+  var resto = soma_ponderada % 11;
   if ( (aChave[43] == (11 - resto)) || ((resto == 0 || resto == 1) && (aChave[43] == 0)) ) {
     return true;
-  } else {    
+  } else {
     alert("Chave de Acesso inválida");
     $('e69_chaveacesso').value = '';
-    return false;  
+    return false;
   }
 
 }

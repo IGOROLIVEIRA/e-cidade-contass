@@ -218,7 +218,7 @@ $oRotulo->label("ed52_c_descr");
   function js_pesquisaMatricula() {
 
     js_OpenJanelaIframe(
-                        'top.corpo',
+                        'CurrentWindow.corpo',
                         'db_iframe_matricula',
                         'func_matriculatransf.php?funcao_js=parent.js_mostraMatricula|ed60_i_codigo'
                                                                                    +'|ed47_v_nome'
@@ -259,7 +259,7 @@ $oRotulo->label("ed52_c_descr");
     if ($F('ed60_i_turma') != '' && $F('ed11_i_codigo') != '') {
 
       js_OpenJanelaIframe(
-                          'top.corpo',
+                          'CurrentWindow.corpo',
                           'db_iframe_turma',
                           'func_turmatransf.php?turmasprogressao=f'
                                              +'&apenasensinodaturma=1'

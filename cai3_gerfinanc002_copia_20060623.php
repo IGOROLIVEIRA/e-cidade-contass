@@ -63,7 +63,7 @@ if(isset($HTTP_POST_VARS["ver_matric"]) && !isset($HTTP_POST_VARS["calculavalor"
       $tam = sizeof($valores);
       pg_exec("BEGIN");
       for($i = 0;$i < $tam;$i++) {
-	$mat = split("P",$numpres[$i]);
+	$mat = explode("P",$numpres[$i]);
 	$numpre = $mat[0];	  
 	$numpar = $mat[1];
 	$valores[$i] = $valores[$i] + 0;

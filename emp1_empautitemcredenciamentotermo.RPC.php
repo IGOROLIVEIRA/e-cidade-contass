@@ -122,7 +122,7 @@ switch ($_POST["action"]) {
                 $itemRows[] = "<input type='checkbox' id='checkbox_{$oDados->pc01_codmater}' name='checkbox_{$oDados->pc01_codmater}'>";
                 $itemRows[] = $oDados->pc11_seq;
                 $itemRows[] = $oDados->pc01_codmater;
-                $itemRows[] = $oDados->pc01_descrmater;
+                $itemRows[] = utf8_encode($oDados->pc01_descrmater);
                 $itemRows[] = $selectunid;
                 $itemRows[] = "<input type='text' id='qtddisponivel_{$oDados->pc01_codmater}' value='{$qtd_disponivel}' readonly style='background-color: #DEB887; width: 80px' />";
                 $itemRows[] = "<input type='text' id='vlr_{$oDados->pc01_codmater}' value='{$oDados->pc23_vlrun}' readonly style='background-color: #DEB887; width: 80px' />";

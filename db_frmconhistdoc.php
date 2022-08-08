@@ -9,7 +9,7 @@ $clconhistdoc->rotulo->label();
     <td nowrap title="<?=@$Tc53_coddoc?>">
        <?=@$Lc53_coddoc?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('c53_coddoc',4,$Ic53_coddoc,true,'text',$db_opcao,"")
 ?>
@@ -19,7 +19,7 @@ db_input('c53_coddoc',4,$Ic53_coddoc,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tc53_descr?>">
        <?=@$Lc53_descr?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('c53_descr',50,$Ic53_descr,true,'text',$db_opcao,"")
 ?>
@@ -29,7 +29,7 @@ db_input('c53_descr',50,$Ic53_descr,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tc53_tipo?>">
        <?=@$Lc53_tipo?>
     </td>
-    <td> 
+    <td>
 <?
 $x = array('10'=>'Empenho','11'=>'Anulação de Empenho','20'=>'Liquidação','21'=>'Anulação de Liquidação','30'=>'Pagamento Empenho','31'=>'Estorno Pagamento ','40'=>'Suplementação','41'=>'Estorno Suplementação','50'=>'Transposição','51'=>'Estorno Transporsição','60'=>'Redução','61'=>'Estorno Redução','100'=>'Arrecadação Receita','101'=>'Estorno Receita','70'=>'Redução Transposição','71'=>'Estorno Redução Transp.');
 db_select('c53_tipo',$x,true,$db_opcao,"");
@@ -43,7 +43,7 @@ db_select('c53_tipo',$x,true,$db_opcao,"");
 </form>
 <script>
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_conhistdoc','func_conhistdoc.php?funcao_js=parent.js_preenchepesquisa|c53_coddoc','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_conhistdoc','func_conhistdoc.php?funcao_js=parent.js_preenchepesquisa|c53_coddoc','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_conhistdoc.hide();

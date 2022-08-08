@@ -2,27 +2,27 @@
 /*
  *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2014  DBSeller Servicos de Informatica
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: Ambulatorial
@@ -216,14 +216,14 @@ $oRotulo->label("s103_obrigarcns");
 <script>
 
 function js_lancar() {
-	
+
   var obj     = document.form1;
   var Tam     = obj.unidadecentral.length;
   var codigos = '';
   var sep     = '';
 
   for(var x = 0; x < Tam; x++) {
-	  
+
     codigos += sep + obj.unidadecentral.options[x].value;
     sep      = ',';
   }
@@ -237,10 +237,10 @@ function js_incluir() {
   var F   = document.form1;
 
   for(var x = 0; x< Tam; x++) {
-	  
+
     if (F.unidades.options[x].selected == true) {
-        
-      F.elements['unidadecentral'].options[F.elements['unidadecentral'].options.length] = 
+
+      F.elements['unidadecentral'].options[F.elements['unidadecentral'].options.length] =
                          new Option(F.unidades.options[x].text, F.unidades.options[x].value);
       F.unidades.options[x] = null;
       Tam--;
@@ -251,7 +251,7 @@ function js_incluir() {
   if (document.form1.unidades.length > 0) {
     document.form1.unidades.options[0].selected = true;
   } else {
-	  
+
     document.form1.incluirum.disabled    = true;
     document.form1.incluirtodos.disabled = true;
   }
@@ -266,9 +266,9 @@ function js_incluirtodos() {
   var F   = document.form1;
 
   for(var i = 0; i < Tam; i++) {
-	  
-    F.elements['unidadecentral'].options[F.elements['unidadecentral'].options.length] = 
-                       new Option(F.unidades.options[0].text,F.unidades.options[0].value); 
+
+    F.elements['unidadecentral'].options[F.elements['unidadecentral'].options.length] =
+                       new Option(F.unidades.options[0].text,F.unidades.options[0].value);
     F.unidades.options[0] = null;
   }
 
@@ -284,10 +284,10 @@ function js_excluir() {
   var Tam = F.length;
 
   for (var x = 0; x < Tam; x++) {
-	  
+
     if (F.options[x].selected == true) {
-        
-      document.form1.unidades.options[document.form1.unidades.length] = 
+
+      document.form1.unidades.options[document.form1.unidades.length] =
                         new Option(F.options[x].text,F.options[x].value);
       F.options[x] = null;
       Tam--;
@@ -298,7 +298,7 @@ function js_excluir() {
   if (document.form1.unidadecentral.length > 0) {
     document.form1.unidadecentral.options[0].selected = true;
   } else {
-	  
+
     document.form1.excluirum.disabled    = true;
     document.form1.excluirtodos.disabled = true;
     document.form1.incluirtodos.disabled = false;
@@ -308,19 +308,19 @@ function js_excluir() {
 }
 
 function js_excluirtodos() {
-	
+
   var Tam = document.form1.unidadecentral.length;
   var F   = document.getElementById("unidadecentral");
 
   for(var i = 0; i < Tam; i++) {
 
-    document.form1.unidades.options[document.form1.unidades.length] = 
+    document.form1.unidades.options[document.form1.unidades.length] =
                        new Option(F.options[0].text,F.options[0].value);
     F.options[0] = null;
   }
 
   if (F.length == 0) {
-	  
+
     document.form1.excluirum.disabled    = true;
     document.form1.excluirtodos.disabled = true;
     document.form1.incluirtodos.disabled = false;
@@ -330,11 +330,11 @@ function js_excluirtodos() {
 }
 
 function js_desabinc() {
-	
+
   for (var i = 0; i < document.form1.unidades.length; i++) {
-	  
+
     if (document.form1.unidades.length > 0 && document.form1.unidades.options[i].selected) {
-        
+
       if (document.form1.unidadecentral.length  > 0) {
         document.form1.unidadecentral.options[0].selected = false;
       }
@@ -349,9 +349,9 @@ function js_desabinc() {
 function js_desabexc(){
 
   for (var i = 0; i < document.form1.unidadecentral.length; i++) {
-	  
+
     if (document.form1.unidadecentral.length > 0 && document.form1.unidadecentral.options[i].selected) {
-        
+
       if(document.form1.unidades.length > 0) {
         document.form1.unidades.options[0].selected = false;
       }
@@ -365,7 +365,7 @@ function js_desabexc(){
 
 function js_pesquisa() {
   js_OpenJanelaIframe(
-                       'top.corpo.iframe_a1',
+                       'CurrentWindow.corpo.iframe_a1',
                        'db_iframe_sau_config',
                        'func_sau_config.php?funcao_js=parent.js_preenchepesquisa|0',
                        'Pesquisa',
@@ -387,7 +387,7 @@ function js_pesquisas103_i_modalidade( mostra ) {
 
   if (mostra == true) {
     js_OpenJanelaIframe(
-                         'top.corpo.iframe_a1',
+                         'CurrentWindow.corpo.iframe_a1',
                          'db_iframe_sau_modalidade',
                          'func_sau_modalidade.php?funcao_js=parent.js_mostrasau_modalidade1|sd82_i_codigo'
                                                                                          +'|sd82_c_modalidade'
@@ -406,7 +406,7 @@ function js_mostrasau_modalidade1( sd82_i_codigo, sd82_c_modalidade, sd82_c_nome
   document.form1.sd82_c_modalidade.value = sd82_c_modalidade;
   document.form1.sd82_c_nome.value       = sd82_c_nome;
   document.form1.sd82_i_anocomp          = sd82_i_anocomp;
-  document.form1.sd82_i_mescomp          = sd82_i_mescomp; 
+  document.form1.sd82_i_mescomp          = sd82_i_mescomp;
   document.form1.sData.value             = sd82_i_mescomp + '/' + sd82_i_anocomp;
   db_iframe_sau_modalidade.hide();
 }

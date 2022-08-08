@@ -164,7 +164,7 @@ function js_carregaOPauxiliar() {
 
     var iAlturaViewPort   = document.body.scrollHeight-30;
     var iLArguraViewPort  = document.body.scrollWidth-12;
-    js_OpenJanelaIframe('top.corpo','db_iframe_op',
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_op',
                         'emp4_empageordem002.php?e42_sequencial='+$F('e43_ordempagamento'),
                         'Manutenção OP Auxiliar',
                         true,

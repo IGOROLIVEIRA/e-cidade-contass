@@ -7,26 +7,26 @@
     $sWhere = "o70_codigo in ('122', '123', '124', '142', '163') and o70_anousu = ".$iAnousu." and o70_instit = ".db_getsession("DB_instit")." and o70_valor > 0 group by 1, 2, 3, 4, 5";
 
     if ($iAnousu >= 2020) {
-        
+
         $sCampos    = "o57_fonte, o57_descr, o70_codigo, o70_valor, o70_codrec, fc_receitasaldo({$iAnousu},o70_codrec,3,'{$iAnousu}-01-01','{$iAnousu}-12-31') ";
         $sSqlFontes = $clorcfontes->sql_query_fonte_receita($sCampos, null, $sWhere);
 
-        $sSql = "SELECT 
-                    o57_fonte, 
-                    o57_descr, 
-                    o70_codigo, 
-                    o70_valor, 
-                    o70_codrec, 
-                    cast(coalesce(nullif(substr(fc_receitasaldo,55,12),''),'0') as float8) as saldo_arrecadado 
+        $sSql = "SELECT
+                    o57_fonte,
+                    o57_descr,
+                    o70_codigo,
+                    o70_valor,
+                    o70_codrec,
+                    cast(coalesce(nullif(substr(fc_receitasaldo,55,12),''),'0') as float8) as saldo_arrecadado
                 FROM ($sSqlFontes) AS X";
 
     } else {
-        
-        $sCampos = 'o57_fonte, o57_descr, o70_codigo, o70_valor, o70_codrec, COALESCE(SUM(c229_vlprevisto),0) c229_vlprevisto';       
+
+        $sCampos = 'o57_fonte, o57_descr, o70_codigo, o70_valor, o70_codrec, COALESCE(SUM(c229_vlprevisto),0) c229_vlprevisto';
         $sSql = $clorcfontes->sql_query_fonte_previsao_receita($sCampos, null, $sWhere);
 
     }
-    
+
     $result = db_query($sSql);
 
     ?>
@@ -109,9 +109,9 @@
     function js_associacaoConvenioPrevisaoReceita(iCodRec, sReceita, fValorPrev, index, iFonte, iAnousu){
 
         if (iAnousu >= 2020) {
-            js_OpenJanelaIframe('top.corpo','db_iframe_conconvprevrec','func_previsaoreceitaarrecad.php?c229_fonte='+iCodRec+'&sReceita='+sReceita+'&fValorPrevAno='+fValorPrev+'&index='+index+'&iFonte='+iFonte,'Associação de Convênio à Previsão da Receita',true);
+            js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_conconvprevrec','func_previsaoreceitaarrecad.php?c229_fonte='+iCodRec+'&sReceita='+sReceita+'&fValorPrevAno='+fValorPrev+'&index='+index+'&iFonte='+iFonte,'Associação de Convênio à Previsão da Receita',true);
         } else {
-            js_OpenJanelaIframe('top.corpo','db_iframe_conconvprevrec','func_previsaoreceita.php?c229_fonte='+iCodRec+'&sReceita='+sReceita+'&fValorPrev='+fValorPrev+'&index='+index+'&iFonte='+iFonte,'Associação de Convênio à Previsão da Receita',true);
+            js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_conconvprevrec','func_previsaoreceita.php?c229_fonte='+iCodRec+'&sReceita='+sReceita+'&fValorPrev='+fValorPrev+'&index='+index+'&iFonte='+iFonte,'Associação de Convênio à Previsão da Receita',true);
         }
 
     }

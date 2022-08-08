@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: patrimonio
@@ -37,18 +37,18 @@ $clbensmodeloetiquetapadrao->rotulo->label();
 		    <td title="<?=@$Tt71_sequencial?>">
 		      <?=@$Lt71_sequencial?>
 		    </td>
-		    <td> 
+		    <td>
 					<?
 					  db_input('t71_sequencial',8,$It71_sequencial,true,'text',3,"")
 					?>
 		    </td>
 		  </tr>
-		  <tr> 
+		  <tr>
         <td title="modelo etiqueta">Modelo Etiqueta:</td>
         <td>
           <?
-            db_input("t72_sequencial",8,$It72_sequencial,true,"text",3,"onchange='js_pesquisa_modelo(false);'"); 
-            db_input("t72_descr",40,$It72_descr,true,"text",3);  
+            db_input("t72_sequencial",8,$It72_sequencial,true,"text",3,"onchange='js_pesquisa_modelo(false);'");
+            db_input("t72_descr",40,$It72_descr,true,"text",3);
           ?>
         </td>
        </tr>
@@ -56,7 +56,7 @@ $clbensmodeloetiquetapadrao->rotulo->label();
 		    <td title="<?=@$Tt71_descr?>">
 		       <?=@$Lt71_descr?>
 		    </td>
-		    <td> 
+		    <td>
 					<?
 					  db_input('t71_descr',51,$It71_descr,true,'text',$db_opcao,"")
 					?>
@@ -74,7 +74,7 @@ $clbensmodeloetiquetapadrao->rotulo->label();
   </fieldset>
   <input onclick="return js_incluir();"
   name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> >
-  <? 
+  <?
     if($db_opcao > 1){
     ?>
       <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
@@ -94,7 +94,7 @@ $clbensmodeloetiquetapadrao->rotulo->label();
 </form>
 <script>
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_bensmodeloetiqueta',
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_bensmodeloetiqueta',
                       'func_bensmodeloetiqueta.php?funcao_js=parent.js_preenchepesquisa|t71_sequencial',
                       'Pesquisa',true);
 }
@@ -108,25 +108,25 @@ function js_preenchepesquisa(chave){
 }
 function js_pesquisa_modelo(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_bensmodeloetiquetapadrao',
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_bensmodeloetiquetapadrao',
                         'func_bensmodeloetiquetapadrao.php?funcao_js=parent.js_mostramodelo1|t72_sequencial|t72_descr',
                         'Pesquisa',true);
   }else{
-     if(document.form1.t72_sequencial.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_bensmodeloetiquetapadrao',
+     if(document.form1.t72_sequencial.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_bensmodeloetiquetapadrao',
                             'func_bensmodeloetiquetapadrao.php?'+
                             +'pesquisa_chave='+document.form1.t72_sequencial.value+'&funcao_js=parent.js_mostramodelo',
                             'Pesquisa',false);
      }else{
-       document.form1.t72_sequencial.value = ''; 
+       document.form1.t72_sequencial.value = '';
      }
   }
 }
 function js_mostramodelo(chave,erro){
-  document.form1.t72_descr.value = chave; 
-  if(erro==true){ 
-    document.form1.t72_sequencial.focus(); 
-    document.form1.t72_sequencial.value = ''; 
+  document.form1.t72_descr.value = chave;
+  if(erro==true){
+    document.form1.t72_sequencial.focus();
+    document.form1.t72_sequencial.value = '';
   }
 }
 function js_mostramodelo1(chave1,chave2){
@@ -152,7 +152,7 @@ function js_incluir(){
     }
     js_salvaEdita();
     return false;
-  }  
+  }
 }
 </script>
 <script>

@@ -358,7 +358,7 @@ function js_mostraAcordo1(chave1,chave2){
     }
 
     js_OpenJanelaIframe(
-      'top.corpo',
+      'CurrentWindow.corpo',
       'func_nome',
       sUrlOpenContratado,
       'Pesquisa CGM',

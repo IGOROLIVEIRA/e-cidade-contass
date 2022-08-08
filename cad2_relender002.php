@@ -50,7 +50,7 @@ if ($listacgm != "") {
 }
 if ($listaset != "") {
 	$vir = "";
-	$dados_list = split(",",$listaset);
+	$dados_list = explode(",",$listaset);
 	$listaset = "";
 	for($w=0;$w<count($dados_list);$w++){
 		$listaset .= $vir."'".$dados_list[$w]."'";

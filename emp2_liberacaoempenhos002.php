@@ -47,12 +47,12 @@ $sAnd          = "";
 if (isset($oGet->dtliberacaoini) && isset($oGet->dtliberacaofim)) {
       
   if (!empty($oGet->dtliberacaoini)) {
-    $dtDataIni = split("/", $oGet->dtliberacaoini);
+    $dtDataIni = explode("/", $oGet->dtliberacaoini);
     $dtDataIni = $dtDataIni[2]."-".$dtDataIni[1]."-".$dtDataIni[0];
   }
 
   if (!empty($oGet->dtliberacaofim)) {
-    $dtDataFim = split("/", $oGet->dtliberacaofim);
+    $dtDataFim = explode("/", $oGet->dtliberacaofim);
     $dtDataFim = $dtDataFim[2]."-".$dtDataFim[1]."-".$dtDataFim[0];
   }
        

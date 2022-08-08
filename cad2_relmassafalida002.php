@@ -169,8 +169,8 @@ if(isset($chaves_caract) && $chaves_caract != ""){
 $pdf->MultiCell(280,05,"CARACTERÍSTICAS NÃO LISTADAS ->  ".@$cod,1,"L");
 if(isset($setores) && $setores != ""){
   if(isset($setor) && $setor != ""){
-    $chaves = split(",",$setores);
-    $chaves1 = split(",",$quadra);
+    $chaves = explode(",",$setores);
+    $chaves1 = explode(",",$quadra);
     $and = "";
     $setores = "";
     for($i=0;$i<sizeof($chaves);$i++){

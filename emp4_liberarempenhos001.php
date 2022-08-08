@@ -1,32 +1,32 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 /**
- * 
+ *
  * @author I
  * @revision $Author: dbandrio.costa $
  * @version $Revision: 1.6 $
@@ -98,12 +98,12 @@ if ($oParam->e30_liberaempenho != 't') {
 					        <td nowrap title="<?=@$Te60_codemp?>" align="left">
 					         <? db_ancora(@$Le60_codemp,"js_pesquisae60_codempIni();",$dbopcao); ?>
 					        </td>
-					        <td> 
+					        <td>
 					         <? db_input('e60_codemp',10,$Ie60_codemp,$bOpcao,
 					                     'text',$dbopcao,"","e60_codemp_ini");  ?>
 					          <strong>
 					            <? db_ancora('até',"js_pesquisae60_codempFim();",$dbopcao); ?>
-					          </strong>   
+					          </strong>
 					         <? db_input('e60_codemp',10,$Ie60_codemp,$bOpcao,
 					                     'text',$dbopcao,"","e60_codemp_fim");  ?>
 					        </td>
@@ -114,15 +114,15 @@ if ($oParam->e30_liberaempenho != 't') {
 					          </td>
 					          <td  align="left" nowrap>
 					            <? db_input('z01_numcgm',10,@$Iz01_numcgm,$bOpcao,'text',
-					                        $dbopcao," onchange='js_pesquisa_z01_numcgm(false);'","" ); 
-					                        
+					                        $dbopcao," onchange='js_pesquisa_z01_numcgm(false);'","" );
+
 					               db_input('z01_nome',40,@$Iz01_nome,$bOpcao,'text',3,"","" );  ?>
 					          </td>
 					      </tr>
 					      <tr>
 					          <td nowrap align="left"><b>Data Emissão:</b></td>
 					          <td  align="left" nowrap>
-					           <?      
+					           <?
 					             db_inputdata('dtemissaoini',@$dia,@$mes,@$ano,$bOpcao,'text',$dbopcao,"");
 					             echo " <b>até:</b> ";
 					             db_inputdata('dtemissaofim',@$dia2,@$mes2,@$ano2,$bOpcao,'text',$dbopcao,"");
@@ -136,7 +136,7 @@ if ($oParam->e30_liberaempenho != 't') {
      <tr>
        <td align="center">
          <input  name="pesquisar" id="pesquisar" type="button" value="Pesquisar" onclick="js_pesquisaEmpenho();" <?=$sDisable;?>>
-         <input  name="limpar" id="limpar" type="button" value="Limpar" onclick="js_limparcampos();" <?=$sDisable;?>>       
+         <input  name="limpar" id="limpar" type="button" value="Limpar" onclick="js_limparcampos();" <?=$sDisable;?>>
        </td>
      </tr>
    </table>
@@ -159,7 +159,7 @@ if ($oParam->e30_liberaempenho != 't') {
             text-align: left;
             padding:3px;
             background-color: #FFFFCC;
-            display:none;z-index: 100000' 
+            display:none;z-index: 100000'
             id='ajudaItem'>
 
 </div>
@@ -179,7 +179,7 @@ function js_limparcampos(){
 }
 
 /*
- * Pesquisa os Empenhos para liberação 
+ * Pesquisa os Empenhos para liberação
 */
 
 function js_pesquisaEmpenho() {
@@ -189,10 +189,10 @@ function js_pesquisaEmpenho() {
    var codEmpIni  = $F('e60_codemp_ini');
    var codEmpFim  = $F('e60_codemp_fim');
    var numCgm     = $F('z01_numcgm');
-   
+
    $('pesquisar').disabled = true;
    $('limpar').disabled    = true;
-   
+
    js_divCarregando("Aguarde.. Pesquisando ","msgbox");
    var oParam        = new Object();
    oParam.exec       = "pesquisaEmpempenho";
@@ -201,25 +201,25 @@ function js_pesquisaEmpenho() {
    oParam.numcgm     = numCgm;
    oParam.dtemissini = dtEmissini;
    oParam.dtemissfim = dtEmissfim;
-   
+
    // consulta ajax retorna objeto json
-   
+
    var oAjax        = new Ajax.Request(
-                                      "emp4_liberarempenhos.RPC.php", 
+                                      "emp4_liberarempenhos.RPC.php",
                                        {
-                                         method    : 'post', 
-                                         parameters: 'json='+js_objectToJson(oParam), 
+                                         method    : 'post',
+                                         parameters: 'json='+js_objectToJson(oParam),
                                          onComplete: js_retornoPesquisa
                                         }
                                       );
 }
 
 /*
- * Preocessa o retono da pesquisa de empenhos para liberacao 
+ * Preocessa o retono da pesquisa de empenhos para liberacao
 */
 
 function js_retornoPesquisa(oAjax) {
-  
+
   js_removeObj("msgbox");
   var oRetorno = eval("("+oAjax.responseText+")");
 
@@ -237,8 +237,8 @@ function js_openPesquisaEmpenhos(aEmpenhos,iRetornoEmpenhos) {
 
   /**
    * Adiciona a grid na janela
-   */ 
-   
+   */
+
   oGridEmpenho              = new DBGrid('gridEmpenho');
   oGridEmpenho.nameInstance = "oGridEmpenho";
   oGridEmpenho.setHeight((document.body.scrollHeight/2)-50);
@@ -248,7 +248,7 @@ function js_openPesquisaEmpenhos(aEmpenhos,iRetornoEmpenhos) {
   oGridEmpenho.setCellWidth(new Array("7%","10%","7%",'10%',"7%","15%","16%","10%","14%"));
   oGridEmpenho.setCellAlign(new Array("center", "center", "right", "right", "right", "center", "left","center","left"));
   //oGridEmpenho.aHeaders[9].lDisplayed = false;
-  
+
   windowEmpenhosLiberados = new windowAux('windowEmpenhosLiberados','Empenhos', document.body.getWidth() /1.3);
   windowEmpenhosLiberados.allowCloseWithEsc(false);
   var sContent  = "<div style='width:100%;'><fieldset>";
@@ -268,7 +268,7 @@ function js_openPesquisaEmpenhos(aEmpenhos,iRetornoEmpenhos) {
   windowEmpenhosLiberados.setContent(sContent);
   oGridEmpenho.show($('ctnGridEmpenhosLiberados'));
   windowEmpenhosLiberados.show();
-  
+
 
   $('windowwindowEmpenhosLiberados_btnclose').onclick= function () {
 
@@ -276,16 +276,16 @@ function js_openPesquisaEmpenhos(aEmpenhos,iRetornoEmpenhos) {
     $('pesquisar').disabled = false;
     $('limpar').disabled    = false;
   }
-  
+
   oGridEmpenho.clearAll(true);
-  
+
   if (iRetornoEmpenhos == 0) {
     oGridEmpenho.setStatus('Não foram encontrados Registros');
   } else {
 	  for (var i = 0; i < aEmpenhos.length; i++) {
-	
+
 	    with(aEmpenhos[i]) {
-	    
+
 	      var aLinha        = new Array();
 	          aLinha[0]     = e60_numemp;
 	          aLinha[1]     = "<a href='#' onclick='javascript: js_mostraDadosEmpenho("+e60_numemp+");'>"+e60_codemp+"/"+e60_anousu+"</a>";
@@ -296,18 +296,18 @@ function js_openPesquisaEmpenhos(aEmpenhos,iRetornoEmpenhos) {
 	          aLinha[6]     = z01_nome.urlDecode().substring(0,30);
 	          aLinha[7]     = js_formatar(e60_emiss,'f');
 	          aLinha[8]     = origem.urlDecode().substring(0,40);
-	           
+
 	          var lMarca    = false;
 	          var lBloquear = false;
 	          if (e22_sequencial != "") {
 	            lMarca = true;
 	          }
-	            
+
 	          if (temordemdecompra == 't') {
-	            
+
 	            lBloquear = true;
 	            lMarca    = true;
-	            
+
 	          }
 	          oGridEmpenho.addRow(aLinha, false, lBloquear, lMarca);
 	          oGridEmpenho.aRows[i].aCells[7].sEvents += "onMouseOver='js_setAjuda(\""+z01_nome.urlDecode()+"\",true)'";
@@ -330,39 +330,39 @@ function js_openPesquisaEmpenhos(aEmpenhos,iRetornoEmpenhos) {
 }
 
 /*
- * Libera empenhos 
+ * Libera empenhos
 */
 
 function js_liberarempenho() {
 
    var aItens     = oGridEmpenho.aRows;
-   
+
    if (!confirm('Está rotina irá Liberar os empenhos marcados e Bloquear os empenhos desmarcados contidos na lista . Deseja Continuar?')){
      return false;
    }
-   
+
    js_divCarregando("Aguarde.. Processando ","msgbox");
    $('pesquisar').disabled         = true;
    $('limpar').disabled            = true;
    $('btnLiberarEmpenho').disabled = true;
-   
+
    var oParam        = new Object();
    oParam.exec       = "processaEmpenhoLiberados";
    oParam.aEmpenhos  = new Array();
-   
+
    for (var i = 0; i < aItens.length; i++) {
-       
+
      var oEmpenho          = new Object();
          oEmpenho.iNumemp  = aItens[i].aCells[1].getValue();
          oEmpenho.lLiberar = aItens[i].isSelected;
          oParam.aEmpenhos.push(oEmpenho);
-       
+
    }
    var oAjax        = new Ajax.Request(
-                                      "emp4_liberarempenhos.RPC.php", 
+                                      "emp4_liberarempenhos.RPC.php",
                                        {
-                                         method    : 'post', 
-                                         parameters: 'json='+js_objectToJson(oParam), 
+                                         method    : 'post',
+                                         parameters: 'json='+js_objectToJson(oParam),
                                          onComplete: js_retornoLiberarEmpenho
                                         }
                                       );
@@ -373,13 +373,13 @@ function js_liberarempenho() {
 */
 
 function js_retornoLiberarEmpenho(oAjax) {
-  
+
   js_removeObj("msgbox");
   $('btnLiberarEmpenho').disabled  = false;
   var oRetorno = eval("("+oAjax.responseText+")");
 
   if (oRetorno.status == 1) {
-  
+
     alert('Processo efetuado com sucesso.');
     windowEmpenhosLiberados.destroy();
     js_pesquisaEmpenho();
@@ -395,19 +395,19 @@ function js_retornoLiberarEmpenho(oAjax) {
 function js_setAjuda(sTexto,lShow) {
 
   if (lShow) {
-   
-    var el =  $('gridgridEmpenho'); 
+
+    var el =  $('gridgridEmpenho');
     var x  = 0;
     var y  = el.offsetHeight;
 
     //Walk up the DOM and add up all of the offset positions.
     while (el.offsetParent && el.tagName.toUpperCase() != 'BODY')
     {
-     // if (el.className != "windowAux12") { 
-      
+     // if (el.className != "windowAux12") {
+
         x += el.offsetLeft;
         y += el.offsetTop;
-        
+
      // }
       el = el.offsetParent;
     }
@@ -417,7 +417,7 @@ function js_setAjuda(sTexto,lShow) {
    $('ajudaItem').style.display = '';
    $('ajudaItem').style.top     = y+"px";
    $('ajudaItem').style.left    = x+"px";
-   
+
   } else {
    $('ajudaItem').style.display = 'none';
   }
@@ -426,8 +426,8 @@ function js_setAjuda(sTexto,lShow) {
 function js_pesquisae60_codempIni(){
  var e60_codemp_ini = $('e60_codemp_ini').value;
  var sUrl1          = 'func_empempenho.php?libperm=T&funcao_js=parent.js_mostracodempIni|e60_codemp|e60_anousu';
-  
- js_OpenJanelaIframe('top.corpo','db_iframe_empempenho',sUrl1,'Pesquisa',true);
+
+ js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_empempenho',sUrl1,'Pesquisa',true);
 }
 function js_mostracodempIni(chave1,chave2){
      $('e60_codemp_ini').value = chave1+'/'+chave2;
@@ -438,7 +438,7 @@ function js_pesquisae60_codempFim(){
  var e60_codemp_fim = $('e60_codemp_fim').value;
  var sUrl1          = 'func_empempenho.php?libperm=T&funcao_js=parent.js_mostracodempFim|e60_codemp|e60_anousu';
 
- js_OpenJanelaIframe('top.corpo','db_iframe_empempenho',sUrl1,'Pesquisa',true);
+ js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_empempenho',sUrl1,'Pesquisa',true);
 
 }
 function js_mostracodempFim(chave1,chave2){
@@ -450,24 +450,24 @@ function js_pesquisa_z01_numcgm(mostra){
  var z01_numcgm  = $('z01_numcgm').value;
  var sUrl1       = 'func_nome.php?funcao_js=parent.js_mostraz01_numcgm1|z01_numcgm|z01_nome';
  var sUrl2       = 'func_nome.php?pesquisa_chave='+z01_numcgm+'&funcao_js=parent.js_mostraz01_numcgm';
-  
+
   if(mostra == true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_cgm',sUrl1,'Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cgm',sUrl1,'Pesquisa',true);
   }else{
-     if(z01_numcgm != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_cgm',sUrl2,'Pesquisa',false);
+     if(z01_numcgm != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cgm',sUrl2,'Pesquisa',false);
      }else{
-       $('z01_numcgm').value = ''; 
+       $('z01_numcgm').value = '';
        $('z01_nome').value   = '';
      }
   }
 }
 function js_mostraz01_numcgm(erro,chave){
-  if(erro == true){ 
-    $('z01_numcgm').focus(); 
+  if(erro == true){
+    $('z01_numcgm').focus();
     $('z01_numcgm').value = '';
     $('z01_nome').value   = '';
-    alert(chave); 
+    alert(chave);
   } else {
     $('z01_nome').value   = chave;
   }
@@ -478,8 +478,8 @@ function js_mostraz01_numcgm1(chave1,chave2){
      db_iframe_cgm.hide();
 }
 
-function js_mostraDadosEmpenho(empChave) {	
- 
+function js_mostraDadosEmpenho(empChave) {
+
 	 js_JanelaAutomatica('empempenho',empChave);
 	 $('Jandb_janelaReceita').style.zIndex = '10000';
 }

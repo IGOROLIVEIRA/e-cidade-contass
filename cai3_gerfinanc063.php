@@ -53,7 +53,7 @@ echo "<script>document.getElementById('temdesconto').innerHTML = \"$temdesconto\
 
 echo "<tr bgcolor='#6699cc'> <pre>";
 $linha = -1;
-$tipo1 = split("-",$tiposparc);
+$tipo1 = explode("-",$tiposparc);
 
 //print_r($tipo1);
 //echo "<br><br>";
@@ -62,7 +62,7 @@ $ultmaxparc = null;
 $ultparc    = null;
 
 for ($contatipo1 = 0; $contatipo1 < sizeof($tipo1); $contatipo1++) {
-  $tipo2 = split("=",$tipo1[$contatipo1]);
+  $tipo2 = explode("=",$tipo1[$contatipo1]);
 
   $tipoparc = $tipo2[0];
   $maxparc  = $tipo2[1];
@@ -92,7 +92,7 @@ for ($contatipo1 = 0; $contatipo1 < sizeof($tipo1); $contatipo1++) {
 			continue;
 		}
 
-		$valores = split("-", $registros[$x]);
+		$valores = explode("-", $registros[$x]);
 	  $valdesconto	= 0;
 
 		$k03_tipo					= $valores[0];

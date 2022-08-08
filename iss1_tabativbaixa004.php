@@ -276,7 +276,7 @@ if ($sqlerro==false){
       $virgu="";
       for($q=0; $q<sizeof($matriz01); $q++ ){
 
-        $matriz = split("-",$matriz01[$q]);
+        $matriz = explode("-",$matriz01[$q]);
         $seqs  .= $virgu.$matriz[1];
         $virgu  = ",";
       }

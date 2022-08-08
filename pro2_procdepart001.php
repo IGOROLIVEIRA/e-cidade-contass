@@ -52,7 +52,7 @@ $ano  = db_getsession("DB_anousu");
 $dia2 = "31";
 $mes2 = "12";
 $ano2 = db_getsession("DB_anousu");
-list($mes,$dia) = split("-",date("m-d"));
+list($mes,$dia) = explode("-",date("m-d"));
 
 $matriz = array("1" => "Processos iniciados no departamento",
                 "2" => "Processos que estao no departamento(Ultimo andamento)",

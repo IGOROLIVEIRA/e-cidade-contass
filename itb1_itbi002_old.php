@@ -59,8 +59,8 @@ if((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Alterar
     $clitbirural->it18_guia = $it01_guia;
     $clitbirural->alterar($it01_guia);
     if(isset($codigo) && isset($valor) && $codigo != "" && $valor != ""){
-      $cod = split(",",$codigo);
-      $val = split(",",$valor);
+      $cod = explode(",",$codigo);
+      $val = explode(",",$valor);
       for($i=0;$i<sizeof($cod);$i++){
         $clitbiruralcaract->it19_guia = $clitbi->it01_guia;
         $clitbiruralcaract->it19_codigo = $cod[$i];

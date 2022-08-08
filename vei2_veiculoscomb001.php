@@ -61,7 +61,7 @@ if ($db_opcao != 1) {
 }
 
 if (isset($confirmar) && trim($confirmar)!=""){
-  $vet_combustiveis = split(",",$ve06_veiccadcomb);
+  $vet_combustiveis = explode(",",$ve06_veiccadcomb);
   $vetor            = array(array("ve06_veiccadcomb","ve06_veiculos","ve06_padrao"));
   $cont_vetor       = 0;
   for($x = 0; $x < count($vet_combustiveis); $x++){

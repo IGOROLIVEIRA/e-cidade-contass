@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 set_time_limit(0);
@@ -58,7 +58,7 @@ db_app::load("grid.style.css");
 db_app::load("estilos.css");
 db_app::load("classes/dbViewAvaliacoes.classe.js");
 db_app::load("widgets/windowAux.widget.js");
-db_app::load("widgets/dbmessageBoard.widget.js");  
+db_app::load("widgets/dbmessageBoard.widget.js");
 db_app::load("dbcomboBox.widget.js");
 
 $clrotulo->label('DBtxt10');
@@ -80,11 +80,11 @@ $instit = db_getsession("DB_instit");
 
   .fieldInterno{
     margin-top: 10px;
-    
+
   }
   .botoes{
     margin-top : 10px;
-     
+
   }
   .link_botao {
     cursor: pointer;
@@ -103,7 +103,7 @@ $instit = db_getsession("DB_instit");
   <form name="func_remessaprocessados" id='func_remessaprocessados' method="post">
     <fieldset style="margin-top: 50px;width: 700px;">
       <legend><b>Filtros</b></legend>
-      
+
 
       <fieldset class="fieldinterno">
         <legend><b>Arquivo de Remessa </b></legend>
@@ -140,7 +140,7 @@ $instit = db_getsession("DB_instit");
 		              db_input("k60_descr",  40, $Ik60_descr,  true, "text", 3, "");
 		            ?>
 		          </td>
-		        </tr>            
+		        </tr>
             <tr>
               <td align="right" >
                 <b>Data do Arquivo :</b>
@@ -148,7 +148,7 @@ $instit = db_getsession("DB_instit");
               <td align="left">
                <? db_inputdata("v83_dtgeracao",@$v83_dtgeracao_dia,@$v83_dtgeracao_mes,@$v83_dtgeracao_ano,true,'text',1);?>
               </td>
-            </tr>        
+            </tr>
           </table>
       </fieldset>
 
@@ -181,7 +181,7 @@ $instit = db_getsession("DB_instit");
               <td align="left">
                <? db_inputdata("processamento", null, null, null, true, 'text', 1); ?>
               </td>
-            </tr>                     
+            </tr>
           </table>
       </fieldset>
       <div id='botoes' class="botoes">
@@ -189,12 +189,12 @@ $instit = db_getsession("DB_instit");
         <input type="button" id="limpar"    value="Limpar"    onclick="js_limpar();"/>
         <input type="button" id="fechar"    value="Fechar"    onclick="js_fechar();" >
       </div>
-      
+
       <div id='ctnRemessaProcessados' style='margin-top: 10px;'>
       </div>
-      
-      
-    </fieldset> 
+
+
+    </fieldset>
   </form>
 </center>
 </body>
@@ -203,34 +203,34 @@ $instit = db_getsession("DB_instit");
 <script>
 var sUrlRPC = "jur4_certidarqremessa.RPC.php";
 
-function preencheProcessados(iSequencial, 
-                             sNomeRemessa, 
-                             sDataRemessa, 
-                             sNomeRetorno, 
-                             sDataRetorno, 
-                             iIniCda, 
-                             iFimCda, 
-                             iIniInicial, 
+function preencheProcessados(iSequencial,
+                             sNomeRemessa,
+                             sDataRemessa,
+                             sNomeRetorno,
+                             sDataRetorno,
+                             iIniCda,
+                             iFimCda,
+                             iIniInicial,
                              iFimInicial  ){
 
  parent.$('v83_nomearq').value   = sNomeRemessa;
  parent.$('v83_dtgeracao').value = sDataRemessa;
- 
- // dados Retorno                   
+
+ // dados Retorno
  parent.$('v84_nomearq').value    = sNomeRetorno;
  parent.$('v84_dtarquivo').value  = sDataRetorno;
  parent.$('v84_sequencial').value = iSequencial;
- 
- // dados CDA                     
+
+ // dados CDA
  parent.$('iCdaIni').value       = iIniCda;
  parent.$('iCdaFim').value       = iFimCda;
- 
- //dados Inicial                  
+
+ //dados Inicial
  parent.$('iInicialIni').value   = iIniInicial;
- parent.$('iInicialFim').value   = iFimInicial; 
-  
-  
- top.corpo.db_iframe_remessaprocessados.hide();
+ parent.$('iInicialFim').value   = iFimInicial;
+
+
+ CurrentWindow.corpo.db_iframe_remessaprocessados.hide();
  parent.js_habilitaButons();
 }
 
@@ -258,7 +258,7 @@ function js_gridProcessados() {
   oGridProcessados.setHeight(300);
   oGridProcessados.show($('ctnRemessaProcessados'));
   oGridProcessados.clearAll(true);
-  
+
 }
 
 
@@ -271,55 +271,55 @@ function js_pesquisaprocessado() {
   var sNomeRetorno               = $F('v84_nomearq');
   var sDataRetorno               = $F('retorno');
   var sDataProcessamento         = $F('processamento');
-  
+
   var oParametros                = new Object();
   var msgDiv                     = _M('tributario.juridico.func_remessaprocessados.pesquisando_registros');
-  oParametros.exec               = 'processados';  
-  oParametros.iCodRemessa        = iCodRemessa; 
-  oParametros.iCodLista          = iCodLista;     
+  oParametros.exec               = 'processados';
+  oParametros.iCodRemessa        = iCodRemessa;
+  oParametros.iCodLista          = iCodLista;
   oParametros.sNomeRemessa       = sNomeRemessa;
   oParametros.sDataRemessa       = sDataRemessa;
-  oParametros.sNomeRetorno       = sNomeRetorno; 
-  oParametros.sDataRetorno       = sDataRetorno;     
+  oParametros.sNomeRetorno       = sNomeRetorno;
+  oParametros.sDataRetorno       = sDataRetorno;
   oParametros.sDataProcessamento = sDataProcessamento;
-  
+
   js_divCarregando(msgDiv,'msgBox');
-   
+
    var oAjaxLista  = new Ajax.Request(sUrlRPC,
                                              {method: "post",
                                               parameters:'json='+Object.toJSON(oParametros),
                                               onComplete: js_retornoProcessados
-                                             });   
+                                             });
 }
 
 function js_retornoProcessados(oAjax){
     js_removeObj('msgBox');
     var oRetorno = eval("("+oAjax.responseText+")");
-    
+
       if ( oRetorno.dados.length == 0 ) {
-      
+
         alert(_M('tributario.juridico.func_remessaprocessados.nenhum_arquivo_encontrado'));
         return false;
-      } 
-      oGridProcessados.clearAll(true); 
-      oRetorno.dados.each( 
-                    function (oDado, iInd) {       
+      }
+      oGridProcessados.clearAll(true);
+      oRetorno.dados.each(
+                    function (oDado, iInd) {
 
-  // dados remessa                          
+  // dados remessa
   var sNomeRemessa  = oDado.v83_nomearq.urlDecode();
   var sDataRemessa  = oDado.v83_dtgeracao;
- // dados Retorno    
-  var iSequencial   = oDado.v84_sequencial;               
+ // dados Retorno
+  var iSequencial   = oDado.v84_sequencial;
   var sNomeRetorno  = oDado.v84_nomearq.urlDecode();
   var sDataRetorno  = oDado.v84_dtarquivo;
- // dados CDA                     
+ // dados CDA
   var iIniCda       = oDado.iCdaInicial;
   var iFimCda       = oDado.iCdaFinal;
- //dados Inicial                  
+ //dados Inicial
   var iIniInicial   = oDado.iInicialIni;
-  var iFimInicial   = oDado.iInicialFim; 
+  var iFimInicial   = oDado.iInicialFim;
 
-                        var aRow    = new Array();  
+                        var aRow    = new Array();
                             aRow[0] = iSequencial;
                             aRow[1] = "<span class='link_botao' onclick='preencheProcessados("+iSequencial+",\""
                                                                                               + sNomeRemessa +"\",\""
@@ -329,12 +329,12 @@ function js_retornoProcessados(oAjax){
                                                                                               + iIniCda +"\",\""
                                                                                               + iFimCda +"\",\""
                                                                                               + iIniInicial +"\",\""
-                                                                                              + iFimInicial +"\");' >"+sNomeRemessa+"</span>";                           
+                                                                                              + iFimInicial +"\");' >"+sNomeRemessa+"</span>";
                             aRow[2] = oDado.v83_dtgeracao;
                             oGridProcessados.addRow(aRow);
                        });
-      oGridProcessados.renderRows(); 
-}    
+      oGridProcessados.renderRows();
+}
 
 function js_pesquisalista(mostra){
   if(mostra==true){
@@ -364,15 +364,15 @@ function js_mostralista1(chave1,chave2){
 function js_limpar(){
 
   var aText = $('func_remessaprocessados').getInputs('text');
-    aText.each(function (oText, id) {  
+    aText.each(function (oText, id) {
        oText.value = '';
-    });  
-    oGridProcessados.clearAll(true); 
+    });
+    oGridProcessados.clearAll(true);
 }
 
 function js_fechar() {
 
-  top.corpo.db_iframe_remessaprocessados.hide();
+  CurrentWindow.corpo.db_iframe_remessaprocessados.hide();
 
 }
 

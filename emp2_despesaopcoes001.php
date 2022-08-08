@@ -41,7 +41,7 @@ db_postmemory($HTTP_SERVER_VARS);
 
 if (isset($instit) && $instit!=""){
   // recebeu instituição
-  $array_instit = split(',',$instit);
+  $array_instit = explode(',',$instit);
 } else {
   $array_instit[0]= db_getsession("DB_instit");
   $instit= db_getsession("DB_instit");

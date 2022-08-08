@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -46,7 +46,7 @@ $clrotulo->label("e81_codmov");
 <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" >
-  <?php 
+  <?php
     db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
   ?>
 <center>
@@ -56,13 +56,13 @@ $clrotulo->label("e81_codmov");
 			<tr>
 				<td><?php db_ancora("<b>Nota de Liquidação</b>","js_pesquisaOrdem(true);",1) ?></td>
 				<td style="font-weight: bold;">
-					<? db_input('e50_codord', 23, $Ie50_codord, 
+					<? db_input('e50_codord', 23, $Ie50_codord,
 					            true, 'text', $db_opcao, " onchange='js_pesquisaOrdem(false);' ") ?>
 				</td>
 			</tr>
 			<tr>
 			  <td><?php db_ancora($Le81_codmov, 'js_pesquisaMovimento(true);', 1) ?></td>
-			  <td><?php db_input('e81_codmov', 23, $Ie81_codmov, true, 
+			  <td><?php db_input('e81_codmov', 23, $Ie81_codmov, true,
 													 'text', $db_opcao, " onchange='js_pesquisaMovimento(false);' ") ?></td>
 			</tr>
 			<tr>
@@ -83,21 +83,21 @@ $clrotulo->label("e81_codmov");
 <script type="text/javascript">
 
 function js_pesquisaOrdem(mostra) {
-  
+
   if(mostra) {
-    js_OpenJanelaIframe('top.corpo','db_iframe_pagordem',
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_pagordem',
                         'func_pagordem.php?funcao_js=parent.js_mostrapagordem1|e50_codord',
                         'Pesquisa',true);
   }else{
-    js_OpenJanelaIframe('top.corpo','db_iframe_pagordem',
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_pagordem',
                         'func_pagordem.php?pesquisa_chave='+$('e50_codord').value+'&funcao_js=parent.js_mostrapagordem',
                         'Pesquisa',false);
   }
 }
 function js_mostrapagordem(chave,erro) {
-  if(erro==true){ 
-    $('e50_codord').focus(); 
-    $('e50_codord').value = ''; 
+  if(erro==true){
+    $('e50_codord').focus();
+    $('e50_codord').value = '';
   }
 }
 function js_mostrapagordem1(chave1){
@@ -109,31 +109,31 @@ function js_mostrapagordem1(chave1){
 function js_pesquisaMovimento(mostra) {
 
   if (mostra) {
-  
+
     if ($F('e50_codord') === '') {
-      js_OpenJanelaIframe('top.corpo','db_iframe_movs',
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_movs',
                           'func_empagemovordem.php?funcao_js=parent.js_mostramov1|e81_codmov','Pesquisa',true);
     } else {
-      js_OpenJanelaIframe('top.corpo','db_iframe_movs',
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_movs',
                           'func_empagemovordem.php?e50_codord='+$F('e50_codord')+'&funcao_js=parent.js_mostramov1|e81_codmov',
                           'Pesquisa',true);
     }
   }else{
     if ($F('e50_codord') === '') {
-      js_OpenJanelaIframe('top.corpo','db_iframe_movs',
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_movs',
                           'func_empagemovordem.php?pesquisa_chave='+$('e81_codmov').value+'&funcao_js=parent.js_mostramov',
                           'Pesquisa',false);
     } else {
-      js_OpenJanelaIframe('top.corpo','db_iframe_movs',
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_movs',
                           'func_empagemovordem.php?e50_codord='+$F('e50_codord')+'&pesquisa_chave='+$('e81_codmov').value+'&funcao_js=parent.js_mostramov',
                           'Pesquisa',false);
     }
   }
 }
 function js_mostramov(chave,erro){
-  if(erro==true){ 
-    $('e81_codmov').focus(); 
-    $('e81_codmov').value = ''; 
+  if(erro==true){
+    $('e81_codmov').focus();
+    $('e81_codmov').value = '';
   }
 }
 function js_mostramov1(chave1){
@@ -155,7 +155,7 @@ function js_emiteOrdem() {
 
   var sUrl  = 'emp2_emitenotaliqpormovimento002.php?e50_codord='+$F('e50_codord');
       sUrl += '&e81_codmov='+$F('e81_codmov')+'&sObservacao='+$F('observacoes');
-  jan = window.open(sUrl, 
+  jan = window.open(sUrl,
                     '', 'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
   jan.moveTo(0,0);
 }

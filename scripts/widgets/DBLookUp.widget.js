@@ -1,17 +1,18 @@
-
 /**
- * Classe responsavel por instanciar os comportamentos padrão para Ancora informada como parametro
- * @param Object oAncora         Ancora para lookUp
- * @param Object oInputID        Input com a informação do ID
- * @param Object oInputDescricao Input com a informação da Descrição
- * @param Object oParametros     Parametros opcionais
+ * DBLookUp Classe responsavel por instanciar os comportamentos padrï¿½o para Ancora informada como parametro
+ *
+ *  @param oAncora          {HTMLAnchorElement} Ancora para lookUp
+ *  @param oInputID         {HTMLInputElement}  Input com a informaï¿½ï¿½o do ID
+ *  @param oInputDescricao  {HTMLInputElement}  Input com a informaï¿½ï¿½o da Descriï¿½ï¿½o
+ *  @param oParametros      {Object}            Parametros opcionais
+ *
+ *  @constructor
  */
 DBLookUp = function (oAncora, oInputID, oInputDescricao, oParametros) {
 
   /**
-   * Define valor padrão
+   * Define valor padrï¿½o
    */
-
   oParametros = oParametros || {};
 
   this.iReferencia     = DBLookUp.repository.addInstance(this);
@@ -80,9 +81,51 @@ DBLookUp = function (oAncora, oInputID, oInputDescricao, oParametros) {
     };
 };
 
+  var lHabilitado = true;
+
+  this.habilitar = function() {
+
+    if (lHabilitado) {
+      return true;
+    }
+
+    this.oInputID.classList.remove("readonly");
+    this.oInputID.readOnly = false;
+
+    if ( !(this.oAncora instanceof HTMLInputElement) ){
+
+      this.oAncora.href = "javascript:;";
+      this.oAncora.classList.add("DBAncora");
+    }
+    this.oAncora.onclick   = this.eventFunctions.click.bind(this);
+    this.oInputID.onchange = this.eventFunctions.change.bind(this);
+
+    lHabilitado = true;
+  };
+
+  this.desabilitar = function() {
+
+    if (!lHabilitado) {
+      return true;
+    }
+
+    this.oInputID.readOnly = true;
+    this.oInputID.onchange = null;
+    this.oAncora.classList.remove("DBAncora");
+
+    if ( !(this.oAncora instanceof HTMLInputElement) ){
+
+      this.oInputID.classList.add("readonly");
+      this.oAncora.removeAttribute("href");
+    }
+    this.oAncora.onclick = null;
+
+    lHabilitado = false;
+  };
+};
 
 /**
- * Função __init para alterar os elementos necessários
+ * Funï¿½ï¿½o __init para alterar os elementos necessï¿½rios
  * para o comportamento da LookUp
  */
 DBLookUp.prototype.__init = function() {
@@ -90,32 +133,54 @@ DBLookUp.prototype.__init = function() {
   /**
    * Modifica a ancora
    */
-   this.oAncora.className         += "DBAncora bold";
-   this.oAncora.href               = "javascript:void(0)";
+  if ( !(this.oAncora instanceof HTMLInputElement) ){
 
-   /**
-    * Modifica os Inputs
-    */
-   this.oInputID.className        += "field-size2";
-   this.oInputID.oInstancia        = this;
-   this.oInputDescricao.className += "field-size8";
-   this.oInputDescricao.className += " readOnly";
-   this.oInputDescricao.readOnly   = true;
-   this.oInputDescricao.oInstancia = this;
+    this.oAncora.className         += "DBAncora bold";
+    this.oAncora.href               = "javascript:void(0)";
+  }
+  /**
+   * Modifica os Inputs
+   */
+  var sClassID = this.oInputID.classList.toString();
+  if ( sClassID.match(/field-size/) == null ) {
+   this.oInputID.className        += " field-size2";
+  }
+  this.oInputID.oInstancia = this;
 
-   this.oAncora .addEventListener('click', this.eventFunctions.click.bind(this));
-   this.oInputID.onchange = this.eventFunctions.change.bind(this);
+  var sClassDescricao = this.oInputDescricao.classList.toString();
+  if ( sClassDescricao.match(/field-size/) == null ) { // validado se jï¿½ foi adicionado alguma classe
+    this.oInputDescricao.className += " field-size8";
+  }
+
+  this.oInputDescricao.className += " readonly";
+  this.oInputDescricao.readOnly   = true;
+  this.oInputDescricao.oInstancia = this;
+
+  this.oAncora.onclick = this.eventFunctions.click.bind(this);
+  this.oInputID.onchange = this.eventFunctions.change.bind(this);
 };
 
 /**
- * Realiza o tratamento dos eventos
- * Click e Change
+ * Realiza o tratamento dos eventos Click e Change
  */
 DBLookUp.prototype.eventFunctions = {
 
+  /**
+   *  Abre a janela para pesquisa
+   *
+   *  @param  {String} click Onde serï¿½ aberta a janela
+   *  @return {void}
+   */
   click: function(click){
     this.abrirJanela(true);
   },
+
+  /**
+   *  Callbackda digitaï¿½ï¿½o
+   *
+   *  @param  {String} change
+   *  @return {void}
+   */
   change: function(change){
 
     if ( this.oInputID.value == "" ) {
@@ -128,24 +193,25 @@ DBLookUp.prototype.eventFunctions = {
 };
 
 /**
- * Monta a QueryString para quando é
+ * Monta a QueryString para quando ï¿½
  * feito o click na ancora
+ *
  * @return String QueryString
  */
 DBLookUp.prototype.getQueryStringClick = function() {
 
   var sQuery  = "";
-      sQuery += this.oParametros.sArquivo;
-      sQuery += "?";
+  sQuery += this.oParametros.sArquivo;
+  sQuery += "?";
 
-      if ( this.oParametros.aParametrosAdicionais.length > 0 ){
-        sQuery += this.oParametros.aParametrosAdicionais.join("&");
-        sQuery += "&";
-      }
+  if ( this.oParametros.aParametrosAdicionais.length > 0 ){
+    sQuery += this.oParametros.aParametrosAdicionais.join("&");
+    sQuery += "&";
+  }
 
-      sQuery += "funcao_js=parent.DBLookUp.repository.getInstance("+this.iReferencia+").callBackClick";
-      sQuery += "|" + (this.oInputID.lang        || this.oInputID.getAttribute('data')        || this.oInputID.id        || this.oInputID.name);
-      sQuery += "|" + (this.oInputDescricao.lang || this.oInputDescricao.getAttribute('data') || this.oInputDescricao.id || this.oInputDescricao.name);
+  sQuery += "funcao_js=parent.CurrentWindow.DBLookUp.repository.getInstance("+this.iReferencia+").callBackClick";
+  sQuery += "|" + (this.oInputID.lang        || this.oInputID.getAttribute('data')        || this.oInputID.id        || this.oInputID.name);
+  sQuery += "|" + (this.oInputDescricao.lang || this.oInputDescricao.getAttribute('data') || this.oInputDescricao.id || this.oInputDescricao.name);
 
   var sCampos = this.oParametros.aCamposAdicionais.join("|");
 
@@ -159,7 +225,7 @@ DBLookUp.prototype.getQueryStringClick = function() {
 }
 
 /**
- * Monta a QueryString para quando é executado
+ * Monta a QueryString para quando ï¿½ executado
  * o Change no objeto oInputID
  * @return String QueryString
  */
@@ -176,7 +242,7 @@ DBLookUp.prototype.getQueryStringChange = function() {
         sQuery += "&";
       }
 
-      sQuery += "funcao_js=parent.DBLookUp.repository.getInstance("+this.iReferencia+").callBackChange";
+      sQuery += "funcao_js=parent.CurrentWindow.DBLookUp.repository.getInstance("+this.iReferencia+").callBackChange";
 
   sQuery += this.oParametros.sQueryString;
 
@@ -185,8 +251,9 @@ DBLookUp.prototype.getQueryStringChange = function() {
 
 /**
  * Trata o retorno do click na Ancora
- * @param  integer iCodigo
- * @param  string sDescricao
+ *
+ * @param iCodigo {Integer}
+ * @param sDescricao {String}
  */
 DBLookUp.prototype.callBackClick = function(iCodigo, sDescricao, sCodigo, sDescr) {
 
@@ -194,16 +261,19 @@ DBLookUp.prototype.callBackClick = function(iCodigo, sDescricao, sCodigo, sDescr
   this.oInputDescricao.value = sDescricao || sDescr;
   var oObjetoLookUp          = eval(this.oParametros.sObjetoLookUp);
   oObjetoLookUp.hide();
+  this.oCallback.onClick(arguments);
 
-  this.oCallback.onClick();
+  if (this.oParametros.fCallBack) {
+    this.oParametros.fCallBack.apply(this.oParametros, arguments);
+  }
   return;
 }
 
 /**
  * Trata o retorno do change no objeto oInputID.
- * Percorre todos os arguments recebido pela função, pois não temos um padrão
- * de retorno dos dados, verificando qual deles é responsavel por informar
- * a ocorrencia de erro e qual realmente é a string que deverá ser a descrição.
+ * Percorre todos os arguments recebido pela funï¿½ï¿½o, pois nï¿½o temos um padrï¿½o
+ * de retorno dos dados, verificando qual deles ï¿½ responsavel por informar
+ * a ocorrencia de erro e qual realmente ï¿½ a string que deverï¿½ ser a descriï¿½ï¿½o.
  */
 DBLookUp.prototype.callBackChange  = function() {
 
@@ -227,26 +297,42 @@ DBLookUp.prototype.callBackChange  = function() {
     this.oInputID.value        = '';
   }
 
-  this.oCallback.onChange(lErro);
+  if (this.oParametros.oBotaoParaDesabilitar != '') {
+    this.oParametros.oBotaoParaDesabilitar.disabled = false;
+  }
+
+  this.oCallback.onChange(lErro, arguments);
+
+  if (this.oParametros.fCallBack) {
+    this.oParametros.fCallBack.apply(this.oParametros, arguments);
+  }
 
   return;
 };
 
 /**
- * Função responsável pela abertura da janela de pesquisa.
- * @param  boolean lAbre
+ * Funï¿½ï¿½o responsï¿½vel pela abertura da janela de pesquisa.
+ * @param lAbre {Boolean}
  */
 DBLookUp.prototype.abrirJanela = function(lAbre){
 
   var sQueryString = '';
 
+  if (typeof lAbre == 'undefined') {
+    lAbre = true;
+  }
+
   if ( !this.oParametros.sArquivo ) {
-    throw "Arquivo não pode ser vazio.";
+    throw "Arquivo nï¿½o pode ser vazio.";
   };
 
   if (lAbre) {
     sQueryString = this.getQueryStringClick();
   } else {
+
+    if (this.oParametros.oBotaoParaDesabilitar != '') {
+      this.oParametros.oBotaoParaDesabilitar.disabled = true;
+    }
     sQueryString = this.getQueryStringChange();
   };
 
@@ -266,11 +352,15 @@ DBLookUp.prototype.abrirJanela = function(lAbre){
     oJanela.setPosY("0");
     oJanela.focus();
   }
+
+  if ( this.oParametros.zIndex != null ) {
+    $('Jan' + this.oParametros.sObjetoLookUp).style.zIndex = this.oParametros.zIndex;
+  }
+
 };
 
-
 /**
- * Seta o arquivo responsável pela pesquisa
+ * Seta o arquivo responsï¿½vel pela pesquisa
  * @param String sArquivo
  */
 DBLookUp.prototype.setArquivo = function(sArquivo){
@@ -278,18 +368,18 @@ DBLookUp.prototype.setArquivo = function(sArquivo){
 };
 
 /**
- * Seta o nome do Label que será utilizado como
- * titulo da janela de pesquisa
- * @param String sLabel
+ * Seta o nome do Label que serï¿½ utilizado como titulo da janela de pesquisa
+ *
+ * @param sLabel {String}
  */
 DBLookUp.prototype.setLabel = function(sLabel){
   this.oParametros.sLabel = sLabel;
 };
 
 /**
- * Seta a query string que deverá ser utilizada
- * na função de pesquisa.
- * @param String sQueryString
+ * Seta a query string que deverï¿½ ser utilizada na funï¿½ï¿½o de pesquisa.
+ *
+ * @param sQueryString {String}
  */
 DBLookUp.prototype.setQueryString = function(sQueryString){
   this.oParametros.sQueryString = sQueryString;
@@ -297,15 +387,16 @@ DBLookUp.prototype.setQueryString = function(sQueryString){
 
 /**
  * Seta o Destino da LookUp
- * @param String sDestinoLookUp
+ *
+ * @param sDestinoLookUp {String}
  */
 DBLookUp.prototype.setDestinoLookUp = function(sDestinoLookUp){
   this.oParametros.sDestinoLookUp = sDestinoLookUp;
 };
 
 /**
- * Seta o nome do objeto que será utilizado na tela de pesquisa.
- * @param String sObjetoLookUp
+ * Seta o nome do objeto que serï¿½ utilizado na tela de pesquisa.
+ * @param sObjetoLookUp {String}
  */
 DBLookUp.prototype.setObjetoLookUp = function(sObjetoLookUp){
   this.oParametros.sObjetoLookUp = sObjetoLookUp;
@@ -313,22 +404,29 @@ DBLookUp.prototype.setObjetoLookUp = function(sObjetoLookUp){
 
 /**
  * Seta os campos adicionais
- * @param array aCamposAdicionais
+ *
+ * @param CamposAdicionais {Array}
  */
 DBLookUp.prototype.setCamposAdicionais = function(aCamposAdicionais){
   this.oParametros.aCamposAdicionais = aCamposAdicionais;
 };
 
-
-
+DBLookUp.prototype.setParametrosAdicionais = function (aParametrosAdicionais) {
+  this.oParametros.aParametrosAdicionais = aParametrosAdicionais;
+}
 /**
- * Seta função de callBack.
- * @param string sEvento tipo do evendo (onChange ou onClick)
- * @param string fFuncao
+ * Seta funï¿½ï¿½o de callBack.
+ *
+ * @param sEvento {String} tipo do evendo (onChange ou onClick)
+ * @param fFuncao {String}
  */
 DBLookUp.prototype.setCallBack = function(sEvento, fFuncao){
   this.oCallback[sEvento] = fFuncao;
 }
+
+window.DBLookup        = CurrentWindow.DBLookUp || DBLookUp;
+window.Lookup          = CurrentWindow.DBLookUp || DBLookUp;
+CurrentWindow.DBLookUp = CurrentWindow.DBLookUp || DBLookUp;
 
 DBLookUp.repository = DBLookUp.repository || {};
 DBLookUp.repository = {
@@ -339,9 +437,6 @@ DBLookUp.repository = {
 
   "addInstance" : function( oDBLookUp ) {
 
-    if ( !( oDBLookUp instanceof DBLookUp ) ) {
-      throw('Objeto Inválido');
-    }
     var iNumeroInstancia = DBLookUp.repository.iCounter++;
     DBLookUp.repository.oInstances['DBLookUp'+ iNumeroInstancia] = oDBLookUp;
     return iNumeroInstancia;

@@ -31,7 +31,7 @@ abstract class RotuloBasica {
     }
 
     /// variavel para colocar como label de campo
-    ${"L".$oCampo->name} = "<strong>".${"L".$oCampo->name}."</strong>";
+    ${"L".$oCampo->name} = "<strong>".${"L".$oCampo->name}.":</strong>";
 
     /// variavel para controle de campos nulos
     if (${"N".$oCampo->name} == "t"){

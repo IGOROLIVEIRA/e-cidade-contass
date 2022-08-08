@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: Laboratório
@@ -45,12 +45,12 @@ $clrotulo->label ( "la08_c_descr" );
          <td nowrap title="<?=@$Tla35_i_codigo?>">
        <?=@$Lla35_i_codigo?>
     </td>
-    <td> 
+    <td>
 <?
 db_input ( 'la35_i_codigo', 10, $Ila35_i_codigo, true, 'text', 3, "" )?>
     </td>
   </tr>
-  
+
    <tr>
     <td nowrap title="<?=@$Tla09_i_setor?>">
        <b>Laboratorio:</b>
@@ -69,7 +69,7 @@ db_input ( 'la02_i_codigo', 10, @$Ila09_i_labsetor, true, 'text', 3, "" )?>
 							db_ancora ('<b>Exame:</b>', "js_pesquisala35_i_setorexame(true);", $db_opcao );
 							?>
     </td>
-    <td> 
+    <td>
 <?
 db_input ( 'la08_i_codigo', 10, $Ila35_i_setorexame, true, 'text', $db_opcao, " onchange='js_pesquisala35_i_setorexame(false);'" );
 db_input ( 'la35_i_setorexame', 10,'', true, 'hidden', $db_opcao,'');
@@ -88,18 +88,18 @@ db_input ( 'la08_c_descr', 50, $Ila08_c_descr, true, 'text', 3, '' );
 							<tr>
 								<td nowrap title="<?=@$Tla35_i_diasemana?>"><?=@$Lla35_i_diasemana?></td>
 								<td>
-                 <input type="checkbox" name="chk_seg" value="2" <?=$db_opcao != 1 ? 'disabled ' : ''?><?=@$la35_i_diasemana == 2 ? 'checked' : ''?>>Seg 
-                 <input type="checkbox" name="chk_ter" value="3" <?=$db_opcao != 1 ? 'disabled ' : ''?><?=@$la35_i_diasemana == 3 ? 'checked' : ''?>>Ter 
+                 <input type="checkbox" name="chk_seg" value="2" <?=$db_opcao != 1 ? 'disabled ' : ''?><?=@$la35_i_diasemana == 2 ? 'checked' : ''?>>Seg
+                 <input type="checkbox" name="chk_ter" value="3" <?=$db_opcao != 1 ? 'disabled ' : ''?><?=@$la35_i_diasemana == 3 ? 'checked' : ''?>>Ter
 								 <input type="checkbox" name="chk_qua" value="4" <?=$db_opcao != 1 ? 'disabled ' : ''?><?=@$la35_i_diasemana == 4 ? 'checked' : ''?>>Qua<br>
-								 <input type="checkbox" name="chk_qui" value="5" <?=$db_opcao != 1 ? 'disabled ' : ''?><?=@$la35_i_diasemana == 5 ? 'checked' : ''?>>Qui 
-								 <input type="checkbox" name="chk_sex" value="6" <?=$db_opcao != 1 ? 'disabled ' : ''?><?=@$la35_i_diasemana == 6 ? 'checked' : ''?>>Sex 
-								 <input type="checkbox" name="chk_sab" value="7" <?=$db_opcao != 1 ? 'disabled ' : ''?><?=@$la35_i_diasemana == 7 ? 'checked' : ''?>>Sáb 
+								 <input type="checkbox" name="chk_qui" value="5" <?=$db_opcao != 1 ? 'disabled ' : ''?><?=@$la35_i_diasemana == 5 ? 'checked' : ''?>>Qui
+								 <input type="checkbox" name="chk_sex" value="6" <?=$db_opcao != 1 ? 'disabled ' : ''?><?=@$la35_i_diasemana == 6 ? 'checked' : ''?>>Sex
+								 <input type="checkbox" name="chk_sab" value="7" <?=$db_opcao != 1 ? 'disabled ' : ''?><?=@$la35_i_diasemana == 7 ? 'checked' : ''?>>Sáb
 								 <input type="checkbox" name="chk_dom" value="1" <?=$db_opcao != 1 ? 'disabled ' : ''?><?=@$la35_i_diasemana == 1 ? 'checked' : ''?>>Dom
 								</td>
 							</tr>
 							<tr>
 								<td nowrap title=""><b>Periodicidade</b></td>
-								<td><input type="radio" name="rad_periodo" value="1" onClick="js_semanames();" checked <?=$db_opcao != 1 ? 'disabled ' : ''?>>Semanal 
+								<td><input type="radio" name="rad_periodo" value="1" onClick="js_semanames();" checked <?=$db_opcao != 1 ? 'disabled ' : ''?>>Semanal
                 <input type="radio" name="rad_periodo" value="2" onClick="js_semanames();" <?=$db_opcao != 1 ? 'disabled ' : ''?>>Quinzenal
 								<br>
 								<input type="radio" name="rad_periodo" value="3" onClick="js_semanames();" <?=$db_opcao != 1 ? 'disabled ' : ''?>>Mensal <select id="semanames" name="semanames" disabled>
@@ -122,7 +122,7 @@ db_input ( 'la08_c_descr', 50, $Ila08_c_descr, true, 'text', 3, '' );
 										<td>
                       <?
                       if(isset($la35_d_valinicio)) {
-                        
+
                         $aDataTmp = explode('/', $la35_d_valinicio);
                         if(count($aDataTmp) == 3) {
 
@@ -143,7 +143,7 @@ db_input ( 'la08_c_descr', 50, $Ila08_c_descr, true, 'text', 3, '' );
 										<td>
                       <?
                       if(isset($la35_d_valfim)) {
-                        
+
                         $aDataTmp = explode('/', $la35_d_valfim);
                         if(count($aDataTmp) == 3) {
 
@@ -170,7 +170,7 @@ db_input ( 'la08_c_descr', 50, $Ila08_c_descr, true, 'text', 3, '' );
 										<td>
                                           <?
 											db_input ( 'la35_c_horaini', 5, $Ila35_c_horaini, true, 'text', $db_opcao, "onKeyUp=\"mascara_hora(this.value,'la35_c_horaini', event)\"  " );
-										   ?>                                                            
+										   ?>
                                          </td>
 									</tr>
 									<tr>
@@ -178,7 +178,7 @@ db_input ( 'la08_c_descr', 50, $Ila08_c_descr, true, 'text', 3, '' );
 										<td>
                                           <?
 											db_input ( 'la35_c_horafim', 5, $Ila35_c_horafim, true, 'text', $db_opcao, "OnKeyUp=\"mascara_hora(this.value,'la35_c_horafim',event)\" " );
-									      ?>                                                            
+									      ?>
                                         </td>
 									</tr>
 								</table>
@@ -204,15 +204,15 @@ db_input ( 'la08_c_descr', 50, $Ila08_c_descr, true, 'text', 3, '' );
 				<td valign="top"><br>
                 <?
 				  $chavepri = array ('la08_i_codigo' => @$la08_i_codigo,
-                             'la08_c_descr' => @$la08_c_descr, 
-                             "la35_i_codigo" => @$la35_i_codigo, 
-                             "la02_i_codigo" => @$la02_i_codigo, 
-                             "la02_c_descr" => @$la02_c_descr, 
-                             "la35_i_setorexame" => @$la35_i_setorexame, 
-                             "ed32_c_descr" => @$ed32_c_descr, 
-                             "la35_c_horaini" => @$la35_c_horaini, 
-                             "la35_c_horafim" => @$la35_c_horafim, 
-                             "la35_d_valinicio" => @$la35_d_valinicio, 
+                             'la08_c_descr' => @$la08_c_descr,
+                             "la35_i_codigo" => @$la35_i_codigo,
+                             "la02_i_codigo" => @$la02_i_codigo,
+                             "la02_c_descr" => @$la02_c_descr,
+                             "la35_i_setorexame" => @$la35_i_setorexame,
+                             "ed32_c_descr" => @$ed32_c_descr,
+                             "la35_c_horaini" => @$la35_c_horaini,
+                             "la35_c_horafim" => @$la35_c_horafim,
+                             "la35_d_valinicio" => @$la35_d_valinicio,
                              "la35_d_valfim" => @$la35_d_valfim,
                              "la35_i_diasemana" => @$la35_i_diasemana
                             );
@@ -235,7 +235,7 @@ db_input ( 'la08_c_descr', 50, $Ila08_c_descr, true, 'text', 3, '' );
                </td>
 			</tr>
 		</table>
-		
+
 		</fieldset>
 		</td>
 	</tr>
@@ -246,21 +246,21 @@ function js_pesquisala35_i_setorexame(mostra){
   if(mostra==true){
     js_OpenJanelaIframe('','db_iframe_lab_setorexame','func_lab_setorexame.php?la02_i_codigo=<?=$la02_i_codigo?>&funcao_js=parent.js_mostralab_setorexame1|la08_i_codigo|la08_c_descr|la09_i_codigo','Pesquisa',true);
   }else{
-     if(document.form1.la08_i_codigo.value != ''){ 
+     if(document.form1.la08_i_codigo.value != ''){
         js_OpenJanelaIframe('','db_iframe_lab_setorexame','func_lab_setorexame.php?la02_i_codigo=<?=$la02_i_codigo?>&pesquisa_chave='+document.form1.la08_i_codigo.value+'&funcao_js=parent.js_mostralab_setorexame','Pesquisa',false);
      }else{
-       document.form1.la08_c_descr.value = ''; 
-       document.form1.la35_i_setorexame.value = ''; 
+       document.form1.la08_c_descr.value = '';
+       document.form1.la35_i_setorexame.value = '';
      }
   }
 }
 function js_mostralab_setorexame(chave,erro,chave2){
-  document.form1.la08_c_descr.value = chave; 
-  document.form1.la35_i_setorexame.value = chave2; 
-  if(erro==true){ 
-    document.form1.la35_i_setorexame.focus(); 
-    document.form1.la35_i_setorexame.value = ''; 
-    document.form1.la08_i_codigo.value = ''; 
+  document.form1.la08_c_descr.value = chave;
+  document.form1.la35_i_setorexame.value = chave2;
+  if(erro==true){
+    document.form1.la35_i_setorexame.focus();
+    document.form1.la35_i_setorexame.value = '';
+    document.form1.la08_i_codigo.value = '';
   }
 }
 function js_mostralab_setorexame1(chave1,chave2,chave3){
@@ -270,7 +270,7 @@ function js_mostralab_setorexame1(chave1,chave2,chave3){
   db_iframe_lab_setorexame.hide();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_lab_horario','func_lab_horario.php?funcao_js=parent.js_preenchepesquisa|la35_i_codigo','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_lab_horario','func_lab_horario.php?funcao_js=parent.js_preenchepesquisa|la35_i_codigo','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_lab_horario.hide();
@@ -283,7 +283,7 @@ function js_preenchepesquisa(chave){
 function js_valida(){
       cfm=false;
       F=document.form1;
-      
+
       if(document.form1.la35_i_setorexame.value == '' || document.form1.la08_i_codigo.value == '') {
 
         alert('Preencha o exame.');
@@ -313,7 +313,7 @@ function js_valida(){
         return false;
       }
 
-    
+
       if(!js_validahora()) {
         return false;
       }
@@ -330,23 +330,23 @@ function js_semanames(){
          document.form1.semanames.disabled=false;
      }else{
          document.form1.semanames.disabled=true;
-     }  
+     }
 }
 
 function js_validahora() {
 
   if(document.form1.la35_c_horaini.value == '' || document.form1.la35_c_horafim.value == '') {
-      
+
     alert('Preencha os horarios!');
     return false;
-   
+
   }
-	
+
   if(document.form1.la35_c_horaini.value.length != 5 || document.form1.la35_c_horafim.value.length != 5) {
-      
+
     alert('Preencha corretamente os horarios!');
     return false;
-   
+
   }
 
   hr_ini  = (document.form1.la35_c_horaini.value.substring(0,2));
@@ -355,7 +355,7 @@ function js_validahora() {
 	mi_fim  = (document.form1.la35_c_horafim.value.substring(3,5));
 
   if(isNaN(hr_ini) || isNaN(mi_ini) ||  isNaN(hr_fim) || isNaN(mi_fim)) {
-        
+
     alert('Preencha corretamente os horarios!');
     return false;
 
@@ -365,7 +365,7 @@ function js_validahora() {
 	hora_fim  = parseInt(hr_fim, 10) * 60 + parseInt(mi_fim, 10);
 
   if(hora_ini > hora_fim) {
-      
+
     alert('A hora final deve ser maior que a inicial.');
     return false;
 
@@ -393,19 +393,19 @@ function js_validadata() {
     dFim = new Date(aFim[2], aFim[1], aFim[0]);
 
   	if(dFim < dIni) {
-		
+
       alert("Data final nao pode ser menor que a data inicial.");
 			document.form1.la35_d_valfim.value = '';
       return false;
 
-		}	
+		}
 
     return true;
 
   }
 
   return true;
-				
+
 }
 
 

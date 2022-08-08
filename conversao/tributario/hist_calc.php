@@ -1,6 +1,6 @@
 <?php
 
- include("../../libs/db_conn.php");
+ include(__DIR__ . "/../../libs/db_conn.php");
  if (!($conn = @pg_connect("host=$DB_SERVIDOR dbname=$DB_BASE port=$DB_PORTA user=$DB_USUARIO password=$DB_SENHA"))) {
   echo "Erro ao conectar com a base de dados";
   exit;

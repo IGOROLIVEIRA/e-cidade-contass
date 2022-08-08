@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once ("libs/db_stdlib.php");
@@ -57,11 +57,11 @@ var oUrl                   = js_urlToObject();
 var url                    = 'soc3_consultafamilia.RPC.php';
 
 var oGridFamiliares          = new DBGrid('gridComposicaoFamiliar');
-oGridFamiliares.nameInstance = "oGridFamiliares"; 
+oGridFamiliares.nameInstance = "oGridFamiliares";
 aHeaders                     = new Array("NIS",
                                          "Nome",
                                          "Grau de Parentesco",
-                                         "CodigoCidadao" 
+                                         "CodigoCidadao"
                                         );
 oGridFamiliares.setCellWidth(new Array('20%', '60%', '20%'));
 oGridFamiliares.setCellAlign(new Array('center', 'left', 'left'));
@@ -73,7 +73,7 @@ oGridFamiliares.clearAll(true);
 
 js_carregaDados();
 
-function js_carregaDados() { 
+function js_carregaDados() {
 
   var oObject         = new Object();
   oObject.exec        = "buscaComposicaoFamiliar";
@@ -81,7 +81,7 @@ function js_carregaDados() {
   js_divCarregando('Buscando ...','msgBox');
   var objAjax   = new Ajax.Request (url,{
                                          method:'post',
-                                         parameters:'json='+Object.toJSON(oObject), 
+                                         parameters:'json='+Object.toJSON(oObject),
                                          onComplete:js_retornoCarregaDados
                                         }
                                    );
@@ -89,7 +89,7 @@ function js_carregaDados() {
 
 function js_retornoCarregaDados(oJson) {
 
-  js_removeObj("msgBox");  
+  js_removeObj("msgBox");
   var oRetorno = eval("("+oJson.responseText+")");
 
   if (oRetorno.status == 2) {
@@ -105,7 +105,7 @@ function js_retornoCarregaDados(oJson) {
       aLinha[2]   = oDado.sGrauParentesco.urlDecode();
       aLinha[3]   = oDado.iCodigoCidadao;
       oGridFamiliares.addRow(aLinha);
-      
+
     });
   }
   oGridFamiliares.renderRows();
@@ -116,9 +116,9 @@ function js_retornoCarregaDados(oJson) {
  */
 function js_consultarCidadao(iCodigoCidadao){
 
-    
+
   var sUrlPesquisa = 'soc3_consultacidadao003.php?codigoCidadao=' + iCodigoCidadao;
-  js_OpenJanelaIframe('top.corpo',
+  js_OpenJanelaIframe('CurrentWindow.corpo',
                       'db_iframe_consulta_cidadao',
                       sUrlPesquisa,
                       'Consulta Cidadão',

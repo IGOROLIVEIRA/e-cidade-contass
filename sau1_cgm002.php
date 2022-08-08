@@ -136,7 +136,7 @@
 	   alert('CNPJ/CPF já existe no cadastro do CGM \\n CGM número: $z01_numcgm \\n Nome: $z01_nome');
 	 </script>";
          if(isset($testanome)){
-	   $camp = split("\|",$valores);
+	   $camp = explode("\|",$valores);
 	   $vals = "";
 	   $vir = "";
 	   for($f=1;$f<count($camp);$f++){
@@ -210,7 +210,7 @@
        }
      }
      if(isset($testanome)){
-       $camp = split("\|",@$valores);
+       $camp = explode("\|",@$valores);
        $vals = "";
        $vir = "";
        for($f=1;$f<count($camp);$f++){

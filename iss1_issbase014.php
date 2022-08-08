@@ -425,12 +425,12 @@ if(isset($incluir)){
     parent.document.formaba.socios.disabled=false;
     parent.document.formaba.calculo.disabled=false;
     parent.document.formaba.caracteristicas.disabled=false;
-    top.corpo.iframe_observacao.location.href='iss1_issbase017.php?z01_nome=$z01_nome&q02_inscr=$clissbase->q02_inscr&Z01_numcgm=$q02_numcgm&opcao=1';
-    top.corpo.iframe_atividades.location.href='iss1_tabativ004.php?z01_nome=$z01_nome&q07_inscr=$clissbase->q02_inscr';
-    top.corpo.iframe_socios.location.href='iss1_socios004.php?q95_cgmpri=$q02_numcgm&z01_nome=$z01_nome';
-    top.corpo.iframe_calculo.location.href='iss1_isscalc004.php?q07_inscr=$clissbase->q02_inscr&z01_nome=$z01_nome';
-    top.corpo.iframe_documentos.location.href='iss1_isscalc004.php?q123_inscr=$clissbase->q02_inscr&z01_nome=$z01_nome';
-    top.corpo.iframe_caracteristicas.location.href=\"iss4_issbasecaracteristicas001.php?q123_inscr=$clissbase->q02_inscr&z01_nome=$z01_nome\";\n
+    CurrentWindow.corpo.iframe_observacao.location.href='iss1_issbase017.php?z01_nome=$z01_nome&q02_inscr=$clissbase->q02_inscr&Z01_numcgm=$q02_numcgm&opcao=1';
+    CurrentWindow.corpo.iframe_atividades.location.href='iss1_tabativ004.php?z01_nome=$z01_nome&q07_inscr=$clissbase->q02_inscr';
+    CurrentWindow.corpo.iframe_socios.location.href='iss1_socios004.php?q95_cgmpri=$q02_numcgm&z01_nome=$z01_nome';
+    CurrentWindow.corpo.iframe_calculo.location.href='iss1_isscalc004.php?q07_inscr=$clissbase->q02_inscr&z01_nome=$z01_nome';
+    CurrentWindow.corpo.iframe_documentos.location.href='iss1_isscalc004.php?q123_inscr=$clissbase->q02_inscr&z01_nome=$z01_nome';
+    CurrentWindow.corpo.iframe_caracteristicas.location.href=\"iss4_issbasecaracteristicas001.php?q123_inscr=$clissbase->q02_inscr&z01_nome=$z01_nome\";\n
     parent.mo_camada('observacao');
   </script>";
   db_redireciona("iss1_issbase015.php?nomenu=nops&chavepesquisa=$clissbase->q02_inscr");

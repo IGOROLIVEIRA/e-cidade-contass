@@ -53,7 +53,7 @@ $iDiasPrazo     = db_utils::fieldsMemory($rsEmpParam, 0)->e30_prazoentordcompra;
             db_app::load("estilos.css, grid.style.css");
         ?>
     </head>
-    
+
     <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
         <table align="center" width="30%">
             <tr>
@@ -69,7 +69,7 @@ $iDiasPrazo     = db_utils::fieldsMemory($rsEmpParam, 0)->e30_prazoentordcompra;
                             <legend>
                                 <b>Ordens de compra pendentes de entrada</b>
                             </legend>
-                            
+
                             <table align="left" border="0" class="table-campos">
                                 <tr>
                                     <td  align="left" nowrap title="<?=$Tz01_numcgm?>">
@@ -150,42 +150,42 @@ $iDiasPrazo     = db_utils::fieldsMemory($rsEmpParam, 0)->e30_prazoentordcompra;
 <script>
 
     function js_pesquisa_cgm(mostra) {
-        
+
         if (mostra==true) {
-            js_OpenJanelaIframe('top.corpo','db_iframe_cgm','func_cgm_empenho.php?funcao_js=parent.js_mostracgm1|e60_numcgm|z01_nome','Pesquisa',true);
+            js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cgm','func_cgm_empenho.php?funcao_js=parent.js_mostracgm1|e60_numcgm|z01_nome','Pesquisa',true);
         } else {
             if (document.form1.m51_numcgm.value != '') {
-                js_OpenJanelaIframe('top.corpo','db_iframe_cgm','func_cgm_empenho.php?pesquisa_chave='+document.form1.m51_numcgm.value+'&funcao_js=parent.js_mostracgm','Pesquisa',false);
+                js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cgm','func_cgm_empenho.php?pesquisa_chave='+document.form1.m51_numcgm.value+'&funcao_js=parent.js_mostracgm','Pesquisa',false);
             } else {
                 document.form1.z01_nome.value = '';
             }
         }
-        
+
     }
-        
+
     function js_mostracgm(chave,erro) {
 
         document.form1.z01_nome.value = chave;
-        
+
         if (erro == true) {
             document.form1.z01_nome.value = '';
             document.form1.m51_numcgm.focus();
         }
-    
+
     }
-    
+
     function js_mostracgm1(chave1,chave2) {
-        
+
         document.form1.m51_numcgm.value = chave1;
         document.form1.z01_nome.value = chave2;
         db_iframe_cgm.hide();
-        
+
     }
 
     function js_pesquisa_departamento(mostra) {
-        
+
         if (mostra==true) {
-            js_OpenJanelaIframe('top.corpo','db_iframe_departamento','func_departamento.php?funcao_js=parent.js_mostradepart|coddepto|descrdepto','Pesquisa',true);
+            js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_departamento','func_departamento.php?funcao_js=parent.js_mostradepart|coddepto|descrdepto','Pesquisa',true);
         } else {
             if (document.form1.coddepto.value != '') {
                 js_OpenJanelaIframe('','db_iframe_departamento','func_departamento.php?pesquisa_chave='+document.form1.coddepto.value+'&funcao_js=parent.js_mostradepart1','Pesquisa',false);
@@ -197,11 +197,11 @@ $iDiasPrazo     = db_utils::fieldsMemory($rsEmpParam, 0)->e30_prazoentordcompra;
     }
 
     function js_mostradepart1(chave1, erro) {
-    
+
         document.form1.descrdepto.value = chave1;
-        
+
         if (erro==true) {
-            
+
             document.form1.coddepto.focus();
             document.form1.coddepto.value = '';
             return;
@@ -211,12 +211,12 @@ $iDiasPrazo     = db_utils::fieldsMemory($rsEmpParam, 0)->e30_prazoentordcompra;
     }
 
     function js_mostradepart(chave1,chave2) {
-  
+
         document.form1.coddepto.value = chave1;
         document.form1.descrdepto.value = chave2;
-        db_iframe_departamento.hide();  
+        db_iframe_departamento.hide();
     }
-    
+
     function js_emite() {
 
         var lFiltro         = $("lFiltro").value;

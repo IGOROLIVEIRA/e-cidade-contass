@@ -1,8 +1,8 @@
 <?php
 // Gantt example to create CSIM
 
-include ("../jpgraph.php");
-include ("../jpgraph_gantt.php");
+include (__DIR__ . "/../jpgraph.php");
+include (__DIR__ . "/../jpgraph_gantt.php");
 
 $bar1 = new GanttBar(0,"Activity 1","2001-12-21","2002-01-20");
 $bar1->SetCSIMTarget('#','Go back 1');

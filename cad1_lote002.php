@@ -241,10 +241,10 @@ if($replote==true){
 		
 //================= INCLUI NA TESTADA E NA TESTADA NUMERO ==================================================================================================================================
  
-	    $matriztesta= split("X",$cartestada);
+	    $matriztesta= explode("X",$cartestada);
     	for($i=0;$i<sizeof($matriztesta);$i++){
       		$dados=$matriztesta[$i];
-      		$matrizdados= split("-",$dados);
+      		$matrizdados= explode("-",$dados);
 		    $j37_face=$matrizdados[0];
       		$j14_codigo=$matrizdados[1];
       		$j36_testad=$matrizdados[2];
@@ -315,7 +315,7 @@ if($replote==true){
 //============================ INCLUI NA CARLOTE E NA LOTEDIST ==============================================================================================================================================================
 	   	$j34_idbql=$cllote->j34_idbql;
     	$clcarlote->j35_idbql=$j34_idbql;
-    	$matriz= split("X",$caracteristica);
+    	$matriz= explode("X",$caracteristica);
     	for($i=1;$i<sizeof($matriz);$i++){
      		$j35_caract = $matriz[$i];
      		if($j35_caract!=""){

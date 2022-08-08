@@ -203,7 +203,7 @@ db_selectrecord("rh16_ctps_uf",$result_uf,true,$db_opcao,"","","","0-Nenhum...")
 			$rh16_emissao_val_dia = '';
 
 			if( isset($rh16_emissao) && $rh16_emissao != ""){
-				list( $rh16_emissao_val_ano, $rh16_emissao_val_mes, $rh16_emissao_val_dia ) = split( "[-]", $rh16_emissao );
+				list( $rh16_emissao_val_ano, $rh16_emissao_val_mes, $rh16_emissao_val_dia ) = explode( "-", $rh16_emissao );
 			}
 			db_inputdata('rh16_emissao',$rh16_emissao_val_dia,$rh16_emissao_val_mes,$rh16_emissao_val_ano,true,'text',$db_opcao,"")
 			?>
@@ -271,7 +271,7 @@ db_selectrecord("rh16_ctps_uf",$result_uf,true,$db_opcao,"","","","0-Nenhum...")
       </td>
 
       <td nowrap title="<?= @$Trh16_cnh_exp?>">
-        <?=utf8_decode(@$Lrh16_cnh_exp)?>
+        <?=@$Lrh16_cnh_exp?>
       </td>
       <td colspan='3'>
         <?
@@ -322,10 +322,10 @@ enviaDados.addEventListener('click', () => {
 function js_pesquisarh16_regist(mostra) {
 
   if (mostra == true) {
-    js_OpenJanelaIframe('top.corpo.iframe_rhpesdoc','db_iframe_rhpessoal','func_rhpessoal.php?funcao_js=parent.js_mostrarhpessoal1|rh01_regist|rh01_numcgm','Pesquisa',true,'0');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_rhpesdoc','db_iframe_rhpessoal','func_rhpessoal.php?funcao_js=parent.js_mostrarhpessoal1|rh01_regist|rh01_numcgm','Pesquisa',true,'0');
   } else {
      if (document.form1.rh16_regist.value != '') {
-        js_OpenJanelaIframe('top.corpo.iframe_rhpesdoc','db_iframe_rhpessoal','func_rhpessoal.php?pesquisa_chave='+document.form1.rh16_regist.value+'&funcao_js=parent.js_mostrarhpessoal','Pesquisa',false,'0');
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_rhpesdoc','db_iframe_rhpessoal','func_rhpessoal.php?pesquisa_chave='+document.form1.rh16_regist.value+'&funcao_js=parent.js_mostrarhpessoal','Pesquisa',false,'0');
      } else {
        document.form1.rh01_numcgm.value = '';
      }
@@ -352,11 +352,11 @@ function js_mostrarhpessoal1(chave1, chave2) {
 function js_pesquisarh16_ctps_uf(mostra) {
 
   if (mostra == true) {
-    js_OpenJanelaIframe('top.corpo.iframe_rhpesdoc','db_iframe_db_uf','func_db_uf.php?funcao_js=parent.js_mostradb_uf1|db12_codigo|db12_uf','Pesquisa',true,'0');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_rhpesdoc','db_iframe_db_uf','func_db_uf.php?funcao_js=parent.js_mostradb_uf1|db12_codigo|db12_uf','Pesquisa',true,'0');
   } else {
 
      if (document.form1.rh16_ctps_uf.value != '') {
-        js_OpenJanelaIframe('top.corpo.iframe_rhpesdoc','db_iframe_db_uf','func_db_uf.php?pesquisa_chave='+document.form1.rh16_ctps_uf.value+'&funcao_js=parent.js_mostradb_uf','Pesquisa',false,'0');
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_rhpesdoc','db_iframe_db_uf','func_db_uf.php?pesquisa_chave='+document.form1.rh16_ctps_uf.value+'&funcao_js=parent.js_mostradb_uf','Pesquisa',false,'0');
      } else {
        document.form1.db12_uf.value = '';
      }

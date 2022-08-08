@@ -1,7 +1,7 @@
 <?php
 // $Id: fixscale_radarex1.php,v 1.1 2006/03/20 11:56:44 dbrogerio Exp $
-include ("../jpgraph.php");
-include ("../jpgraph_radar.php");
+include (__DIR__ . "/../jpgraph.php");
+include (__DIR__ . "/../jpgraph_radar.php");
 	
 $graph = new RadarGraph(300,300,'auto');
 $graph->SetScale("lin",0,50);

@@ -25,14 +25,14 @@
  *                                licenca/licenca_pt.txt 
  */
 
-require("../libs/db_stdlib.php");
-require("../libs/db_conecta.php");
+require(__DIR__ . "/../libs/db_stdlib.php");
+require(__DIR__ . "/../libs/db_conecta.php");
 $clrotulo = new rotulocampo;
 parse_str(base64_decode($HTTP_SERVER_VARS['QUERY_STRING']));
 $sql=base64_decode($sql);
 $campos=base64_decode($campos);
 $msg_vazio=base64_decode($msg_vazio);
-$quais_chaves = split("#",$quais_chaves);
+$quais_chaves = explode("#",$quais_chaves);
 ?>
 <html>
 <head>

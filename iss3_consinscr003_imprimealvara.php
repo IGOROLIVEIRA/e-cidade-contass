@@ -182,6 +182,9 @@ if (isset($q60_modalvara) && $q60_modalvara == "3") {
   $resul = $cldb_config->sql_record($cldb_config->sql_query(db_getsession("DB_instit"), "nomeinst as prefeitura, munic"));
   db_fieldsmemory($resul, 0); //pega o dados da prefa
   $munic = strtoupper($munic);
+
+  $oUsuario = new UsuarioSistema(db_getsession('DB_id_usuario'));
+  $nome_usuario = $oUsuario->getNome();
   //global $db02_texto;
   //	                             die($cltabativ->sql_queryinf("$oGet->inscricao","","*","","(q07_databx < '".date("Y-m-d", db_getsession("DB_datausu"))."' or  q07_databx is null) and tabativ.q07_inscr = $oGet->inscricao "));
   $result = $cltabativ->sql_record($cltabativ->sql_queryinf($oGet->inscricao, "", "*", "", "q88_inscr is not null and (q07_databx < '" . date("Y-m-d", db_getsession("DB_datausu")) . "' or  q07_databx is null) and tabativ.q07_inscr = $oGet->inscricao "));
@@ -416,8 +419,7 @@ for($i = 0; $i < $iTotalLinhas; $i ++) {
 
 }
 
-$oUsuario = new UsuarioSistema(db_getsession('DB_id_usuario'));
-$pdf1->nome_usuario = $oUsuario->getNome();
+$pdf1->nome_usuario = $nome_usuario;
 
 $pdf1->imprime();
 $pdf1->objpdf->Output();

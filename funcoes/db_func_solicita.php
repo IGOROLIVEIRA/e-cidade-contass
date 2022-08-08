@@ -25,5 +25,7 @@
  *                                licenca/licenca_pt.txt 
  */
 
-$campos = "solicita.pc10_numero,solicita.pc10_data,solicita.pc10_resumo,solicita.pc10_depto,descrdepto,solicita.pc10_log,solicita.pc10_instit,solicita.pc10_correto,solicita.pc10_login,nome,pc81_codproc";
-?>
+$campos = "solicita.pc10_numero,solicita.pc10_data,solicita.pc10_resumo,solicita.pc10_depto,descrdepto,solicita.pc10_log,solicita.pc10_instit, CASE
+WHEN solicita.pc10_correto = false THEN 'Não'
+WHEN solicita.pc10_correto = true THEN 'Sim'
+END AS pc10_correto, solicita.pc10_login,nome,pc81_codproc";

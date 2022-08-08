@@ -195,7 +195,7 @@ if(isset($chavepesquisa)){
   }
   ?>
   function js_pesquisa() {
-    js_OpenJanelaIframe('top.corpo.iframe_veicmanut', 'db_iframe_veicmanut', 'func_veicmanut.php?funcao_js=parent.js_preenchepesquisa|ve62_codigo', 'Pesquisa', true, '0');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_veicmanut', 'db_iframe_veicmanut', 'func_veicmanut.php?funcao_js=parent.js_preenchepesquisa|ve62_codigo', 'Pesquisa', true, '0');
   }
 
   function js_preenchepesquisa(chave) {

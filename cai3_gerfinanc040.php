@@ -253,9 +253,9 @@ $numrows= pg_numrows($result);
 </html>
 <script>
   function js_certter(certid){
-      js_OpenJanelaIframe('top.corpo','db_iframe2','cai3_gerfinanc042.php?certid='+certid+'&tipo=<?=$tipo?>','Pesquisa',true);
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe2','cai3_gerfinanc042.php?certid='+certid+'&tipo=<?=$tipo?>','Pesquisa',true);
   }
   function js_certdiv(certid){
-      js_OpenJanelaIframe('top.corpo','db_iframe2','cai3_gerfinanc041.php?certid='+certid+'&tipo=<?=$tipo?>','Pesquisa',true);
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe2','cai3_gerfinanc041.php?certid='+certid+'&tipo=<?=$tipo?>','Pesquisa',true);
   }
 </script>

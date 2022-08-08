@@ -39,7 +39,7 @@ if ($clorcparametro->numrows >0){
   // parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
   // se usa subelemento ...
   // $o50_subelem='t';
-  $arr = split("XX",$codele);
+  $arr = explode("XX",$codele);
   if  (isset($o50_subelem) && ($o50_subelem=="t")){
       $result = $clpcsubgrupo->sql_record($clpcsubgrupo->sql_query_orcelement(null,"o56_codele, o56_descr, o56_elemento ","o56_elemento","pc04_codsubgrupo = $codsubgrupo"));
       $numrows = $clpcsubgrupo->numrows;

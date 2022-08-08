@@ -34,7 +34,6 @@ use ECidade\RecursosHumanos\ESocial\Model\Configuracao;
  * Class Formulario
  * @package ECidade\Configuracao\Formulario\Repository
  */
-
 class Formulario
 {
     /**
@@ -66,18 +65,13 @@ class Formulario
      */
     public static function getById($codigo)
     {
-
         if (!empty(self::getInstance()->formularios[$codigo])) {
             return self::getInstance()->formularios[$codigo];
         }
 
         $oDaoAvaliacao = new \cl_avaliacao();
-
         $sSqlAvaliacao = $oDaoAvaliacao->sql_query_file((int)$codigo);
-
-
         $rsAvaliacao   = db_query($sSqlAvaliacao);
-
         if (!$rsAvaliacao) {
             throw new \BusinessException("Erro ao pesquisar avaliações por Tipo");
         }
@@ -86,7 +80,6 @@ class Formulario
         }
 
         self::getInstance()->formularios[$codigo] = self::getInstance()->make(\db_utils::fieldsMemory($rsAvaliacao, 0));
-
         return self::getInstance()->formularios[$codigo];
     }
 
@@ -122,9 +115,7 @@ class Formulario
     public static function getByVersaoAtual()
     {
         //Busca os formulários da versão configurada
-
         $formulariosVersao = Configuracao::getFormulariosVersaoAtual();
-
         $formularios = array();
         foreach ($formulariosVersao as $formulario) {
             $formularios[] = self::getById($formulario->formulario);
@@ -138,7 +129,6 @@ class Formulario
      */
     public function make($dados)
     {
-
         $oFormulario = new FormularioModel();
         $oFormulario->setCodigo($dados->db101_sequencial);
         $oFormulario->setTipo($dados->db101_avaliacaotipo);
@@ -146,7 +136,6 @@ class Formulario
         $oFormulario->setAtivo($dados->db101_ativo == 't');
         $oFormulario->setIdentificador($dados->db101_identificador);
         $oFormulario->setCarga($dados->db101_cargadados);
-
         return $oFormulario;
     }
 }

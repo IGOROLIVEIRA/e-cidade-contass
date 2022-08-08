@@ -27,7 +27,7 @@ elseif(isset($incluir)){
   if($clconctbsaldo->numrows > 0){
     db_msgbox('Esse lancançamento já existe!');
   }else{
-    $clconctbsaldo->incluir();
+    $clconctbsaldo->incluir($ces02_sequencial);
     if ($clconctbsaldo->erro_msg != "0"){
       $ces02_fonte = $ces02_valor = $o15_descr = '';
     } elseif ($clconctbsaldo->erro_msg == "0"){
@@ -40,7 +40,7 @@ elseif(isset($alterar)){
   db_inicio_transacao();
   $db_opcao = 2;
   $clconctbsaldo->sql_record($clconctbsaldo->sql_query('','*','',
-    "ces02_reduz = $ces02_reduz and ces02_fonte = $ces02_fonte and ces02_valor = $ces02_valor and ces02_anousu = " .db_getsession('DB_anousu')));
+    "ces02_sequencial != $ces02_sequencial and ces02_reduz = $ces02_reduz and ces02_fonte = $ces02_fonte and ces02_valor = $ces02_valor and ces02_anousu = " .db_getsession('DB_anousu')));
   if($clconctbsaldo->numrows > 0){
     db_msgbox("Esse lancançamento já existe!\nVerifique os dados informados.");
   }else {

@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once ("libs/db_stdlib.php");
@@ -47,16 +47,16 @@ $clrotulo->label("l03_descr");
   <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
   <script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
   <script>
-  
+
   function js_emite() {
-   
+
     query = 'l20_codigo='+document.form1.l20_codigo.value;
     jan   = window.open('lic2_julgamentolicitacao002.php?'+query,'',
                         'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
-    jan.moveTo(0,0);  
+    jan.moveTo(0,0);
   }
 
-</script>  
+</script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" bgcolor="#cccccc">
@@ -65,7 +65,7 @@ $clrotulo->label("l03_descr");
   <fieldset style="margin-top: 25px; width: 200px;">
     <legend style="font-weight: bold;">Julgamento da Licitação</legend>
     <table  align="center">
-      <tr> 
+      <tr>
          <td  align="right" nowrap title="<?=$Tl20_codigo?>">
           <b>
           <?
@@ -91,37 +91,37 @@ $clrotulo->label("l03_descr");
 </html>
 <script type="text/javascript">
   function js_pesquisa_liclicita(mostra) {
-    
+
     if (mostra) {
-      
-      js_OpenJanelaIframe('top.corpo','db_iframe_liclicita',
+
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_liclicita',
                           'func_liclicita.php?funcao_js=parent.js_mostraliclicita1|l20_codigo',
                           'Pesquisa',true);
     } else {
-      
-       if (document.form1.l20_codigo.value != '') { 
-          js_OpenJanelaIframe('top.corpo','db_iframe_liclicita',
+
+       if (document.form1.l20_codigo.value != '') {
+          js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_liclicita',
                               'func_liclicita.php?pesquisa_chave='+$F('l20_codigo')+'&funcao_js=parent.js_mostraliclicita',
                               'Pesquisa',false);
        }else{
-         document.form1.l20_codigo.value = ''; 
+         document.form1.l20_codigo.value = '';
        }
     }
   }
-  
+
   function js_mostraliclicita(chave,erro) {
-    
-    document.form1.l20_codigo.value = chave; 
+
+    document.form1.l20_codigo.value = chave;
     if (erro) {
-       
-      document.form1.l20_codigo.value = ''; 
-      document.form1.l20_codigo.focus(); 
+
+      document.form1.l20_codigo.value = '';
+      document.form1.l20_codigo.focus();
     }
   }
-  
+
   function js_mostraliclicita1(chave1) {
-    
-     document.form1.l20_codigo.value = chave1;  
+
+     document.form1.l20_codigo.value = chave1;
      db_iframe_liclicita.hide();
   }
 </script>

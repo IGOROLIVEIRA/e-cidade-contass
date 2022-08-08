@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: ambulatorial
@@ -42,9 +42,9 @@ $oRotulo->label('descrdepto');
         db_ancora(@$Ls157_i_unidade, 'js_pesquisas157_i_unidade(true);', $db_opcao);
         ?>
       </td>
-      <td nowrap> 
+      <td nowrap>
         <?
-        db_input('s157_i_unidade', 10, $Is157_i_unidade, true, 'text', $db_opcao, 
+        db_input('s157_i_unidade', 10, $Is157_i_unidade, true, 'text', $db_opcao,
                  'onchange="js_pesquisas157_i_unidade(false);"'
                 );
         db_input('descrdepto', 50, $Idescrdepto, true, 'text', 3, '');
@@ -57,7 +57,7 @@ $oRotulo->label('descrdepto');
         db_ancora(@$Ls157_i_procedimento, 'js_pesquisas157_i_procedimento(true);', $db_opcao);
         ?>
       </td>
-      <td nowrap> 
+      <td nowrap>
         <?
         db_input('sd63_c_procedimento', 10, $Isd63_c_procedimento, true, 'text', $db_opcao,
                  ' onchange="js_pesquisas157_i_procedimento(false);"'
@@ -101,17 +101,17 @@ function js_ajax(oParam, jsRetorno, sUrl, lAsync) {
   if (lAsync == undefined) {
     lAsync = true;
   }
-  
-  var oAjax = new Ajax.Request(sUrl, 
+
+  var oAjax = new Ajax.Request(sUrl,
                                {
-                                 method: 'post', 
+                                 method: 'post',
                                  asynchronous: lAsync,
                                  parameters: 'json='+Object.toJSON(oParam),
                                  onComplete: function(oAjax) {
-                                    
+
                                                var evlJS    = jsRetorno+'(oAjax);';
                                                return mRetornoAjax = eval(evlJS);
-                                               
+
                                            }
                               }
                              );
@@ -135,7 +135,7 @@ function js_validaEnvio() {
     return false;
 
   }
-  
+
   return true;
 
 }
@@ -155,7 +155,7 @@ function js_incluirProcedimento() {
 
 }
 function js_retornoIncluirProcedimento(oRetorno) {
-  
+
   oRetorno = eval("("+oRetorno.responseText+")");
   alert(oRetorno.sMessage.urlDecode().replace(/\\n/g, "\n"));
   if (oRetorno.iStatus != 1) {
@@ -195,7 +195,7 @@ function js_excluirProcedimento(iCodigo, sProced) {
 
 }
 function js_retornoExcluirProcedimento(oRetorno) {
-  
+
   oRetorno = eval("("+oRetorno.responseText+")");
   alert(oRetorno.sMessage.urlDecode().replace(/\\n/g, "\n"));
   if (oRetorno.iStatus != 1) {
@@ -238,7 +238,7 @@ function js_criaDataGrid() {
   aAligns[1]  = 'left';
   aAligns[2]  = 'left';
   aAligns[3]  = 'center';
-  
+
   oDBGrid.setCellAlign(aAligns);
   oDBGrid.show($('grid_procedimentos'));
   oDBGrid.clearAll(true);
@@ -258,7 +258,7 @@ function js_getProcedimentosAgendaUnidade() {
 }
 
 function js_retornoGetProcedimentosAgendaUnidade(oRetorno) {
-  
+
   oRetorno = eval("("+oRetorno.responseText+")");
 
   if (oRetorno.iStatus != 1) {
@@ -304,16 +304,16 @@ function js_pesquisas157_i_unidade(mostra) {
 
   if (mostra == true) {
 
-    js_OpenJanelaIframe('top.corpo', 'db_iframe_unidades', 'func_unidades.php?'+
+    js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_unidades', 'func_unidades.php?'+
                         'funcao_js=parent.js_mostraunidade1|sd02_i_codigo|descrdepto',
                         'Pesquisa', true
                        );
 
   } else {
 
-    if (document.form1.s157_i_unidade.value != '') { 
+    if (document.form1.s157_i_unidade.value != '') {
 
-      js_OpenJanelaIframe('top.corpo', 'db_iframe_unidades', 'func_unidades.php?pesquisa_chave='+
+      js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_unidades', 'func_unidades.php?pesquisa_chave='+
                           document.form1.s157_i_unidade.value+
                           '&funcao_js=parent.js_mostraunidade', 'Pesquisa', false
                          );
@@ -331,8 +331,8 @@ function js_pesquisas157_i_unidade(mostra) {
 }
 function js_mostraunidade(chave, erro) {
 
-  document.form1.descrdepto.value = chave; 
-  if (erro == true) { 
+  document.form1.descrdepto.value = chave;
+  if (erro == true) {
 
     document.form1.s157_i_unidade.focus();
     document.form1.s157_i_unidade.value = '';
@@ -356,16 +356,16 @@ function js_pesquisas157_i_procedimento(mostra) {
 
   if (mostra == true) {
 
-    js_OpenJanelaIframe('top.corpo', 'db_iframe_sau_procedimento', 'func_sau_procedimento.php?'+
+    js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_sau_procedimento', 'func_sau_procedimento.php?'+
                         'funcao_js=parent.js_mostrasau_procedimento1|sd63_i_codigo|sd63_c_nome|sd63_c_procedimento',
                         'Pesquisa', true
                        );
 
   } else {
 
-    if (document.form1.sd63_c_procedimento.value != '') { 
+    if (document.form1.sd63_c_procedimento.value != '') {
 
-       js_OpenJanelaIframe('top.corpo', 'db_iframe_sau_procedimento', 'func_sau_procedimento.php?pesquisa_chave='+
+       js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_sau_procedimento', 'func_sau_procedimento.php?pesquisa_chave='+
                            document.form1.sd63_c_procedimento.value+
                            '&funcao_js=parent.js_mostrasau_procedimento', 'Pesquisa', false
                           );
@@ -381,10 +381,10 @@ function js_pesquisas157_i_procedimento(mostra) {
 
 }
 function js_mostrasau_procedimento(chave, erro, chave2) {
-  
-  document.form1.sd63_c_nome.value         = chave; 
-  document.form1.s157_i_procedimento.value = chave2; 
-  if (erro == true) { 
+
+  document.form1.sd63_c_nome.value         = chave;
+  document.form1.s157_i_procedimento.value = chave2;
+  if (erro == true) {
 
     document.form1.s157_i_procedimento.focus();
     document.form1.s157_i_procedimento.value = '';

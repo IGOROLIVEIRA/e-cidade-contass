@@ -31,7 +31,7 @@ try {
      null,null,null,"distinct o40_orgao,o40_descr,o41_unidade","o40_descr",$sWhere));
     db_fieldsmemory($result,0);
   }
-  
+
   /**
    * Transacao necessaria por causa das tabelas criadas pela funcao db_dotacaosaldo
    */
@@ -45,7 +45,7 @@ try {
     "345" => "5-Inversão Financeira",
     "346" => "6-Amortização da Dívida");
   $aDespesa = array();
-  for ($iCont=0; $iCont < pg_num_rows($rsTabela); $iCont++) { 
+  for ($iCont=0; $iCont < pg_num_rows($rsTabela); $iCont++) {
     $oDados = db_utils::fieldsMemory($rsTabela, $iCont);
     $sNivel = substr($oDados->o58_elemento,0,3);
     if (!isset($aTipoDespesa[$sNivel])) {
@@ -59,7 +59,7 @@ try {
       $aDespesa[$sNivel]->nTotalOrcado += $oDados->dot_ini;
     }
   }
-  db_fim_transacao(true);
+
 
   /**
    * Verifica se existe cronograma para este orgao e unidade
@@ -68,7 +68,7 @@ try {
 
   if (isset($salvar)) {
 
-    db_inicio_transacao();
+
     if ($verificaResult) {
       $clcronogramamesdesembolso->removeCronograma($instit, $anousu, $o40_orgao, $o41_unidade);
       if ($clcronogramamesdesembolso->erro_status=="0") {
@@ -107,7 +107,6 @@ try {
       }
 
     }
-    db_fim_transacao();
 
   } else if ($verificaResult) {
 
@@ -120,7 +119,7 @@ try {
     }
 
   }
-
+  db_fim_transacao(true);
 } catch (Exception $oErro) {
 
   db_fim_transacao(true);

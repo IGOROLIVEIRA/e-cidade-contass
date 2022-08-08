@@ -58,6 +58,14 @@ class cl_conciliacaobancaria
                     $this->k171_dataconciliacao = $this->k171_dataconciliacao_ano."-".$this->k171_dataconciliacao_mes."-".$this->k171_dataconciliacao_dia;
                 }
             }
+            if ($this->k171_datafechamento == "") {
+                $this->k171_datafechamento_dia = ($this->k171_datafechamento_dia == ""?@$GLOBALS["HTTP_POST_VARS"]["k171_datafechamento_dia"]:$this->k171_datafechamentodia);
+                $this->k171_datafechamento_mes = ($this->k171_datafechamento_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["k171_datafechamento_mes"]:$this->k171_datafechamento_mes);
+                $this->k171_datafechamento_ano = ($this->k171_datafechamento_ano == ""?@$GLOBALS["HTTP_POST_VARS"]["k171_datafechamento_ano"]:$this->k171_datafechamento_ano);
+                if ($this->k171_datafechamento_dia != "") {
+                    $this->k171_datafechamento = $this->k171_datafechamento_ano."-".$this->k171_datafechamento_mes."-".$this->k171_datafechamento_dia;
+                }
+            }
         } else {
             $this->k171_conta = ($this->k171_conta == ""?@$GLOBALS["HTTP_POST_VARS"]["k171_conta"]:$this->k171_conta);
         }
@@ -105,7 +113,7 @@ class cl_conciliacaobancaria
             return false;
         }
 
-        $sql = "insert into conciliacaobancaria (k171_conta, k171_saldo, k171_data, k171_dataconciliacao) values ($this->k171_conta, $this->k171_saldo, " . ($this->k171_data == "null" || $this->k171_data == "" ? "null" : "'" . $this->k171_data . "'") . ", " . ($this->k171_dataconciliacao == "null" || $this->k171_dataconciliacao == "" ? "null" : "'" . $this->k171_dataconciliacao . "'") . ")";
+        $sql = "insert into conciliacaobancaria (k171_conta, k171_saldo, k171_data, k171_dataconciliacao, k171_datafechamento) values ($this->k171_conta, $this->k171_saldo, " . ($this->k171_data == "null" || $this->k171_data == "" ? "null" : "'" . $this->k171_data . "'") . ", " . ($this->k171_dataconciliacao == "null" || $this->k171_dataconciliacao == "" ? "null" : "'" . $this->k171_dataconciliacao . "'") . ", " . ($this->k171_datafechamento == "null" || $this->k171_datafechamento == "" ? "null" : "'" . $this->k171_datafechamento . "'") . ")";
         $result = db_query($sql);
         if ($result == false) {
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
@@ -235,6 +243,15 @@ class cl_conciliacaobancaria
                 }
             }
         }
+
+        if (trim($this->k171_datafechamento) != "" || isset($GLOBALS["HTTP_POST_VARS"]["k171_datafechamento_dia"]) && ($GLOBALS["HTTP_POST_VARS"]["k171_datafechamento_dia"] != "")) {
+            $sql .= $virgula." k171_datafechamento = '$this->k171_datafechamento' ";
+            $virgula = ",";
+        } else {
+            $sql .= $virgula . " k171_datafechamento = null ";
+            $virgula = ",";
+        }
+
         $sql .= " where ";
         if ($this->k171_conta != null) {
             $sql .= " k171_conta = $this->k171_conta ";

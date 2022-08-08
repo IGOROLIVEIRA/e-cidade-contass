@@ -194,7 +194,7 @@ try {
         }
 
       } else {
-        echo "<script> top.corpo.location.href = 'com1_pcorcamtroca001.php?sol=$sol&pc20_codorc=$orcamento'; </script>";
+        echo "<script> CurrentWindow.corpo.location.href = 'com1_pcorcamtroca001.php?sol=$sol&pc20_codorc=$orcamento'; </script>";
       }
     }
   ?>

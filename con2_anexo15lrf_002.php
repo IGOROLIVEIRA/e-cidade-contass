@@ -40,7 +40,7 @@ $classinatura = new cl_assinatura;
 
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 
-$xinstit = split("-",$db_selinstit);
+$xinstit = explode("-",$db_selinstit);
 $resultinst = pg_exec("select codigo,nomeinst,nomeinstabrev from db_config where codigo in (".str_replace('-',', ',$db_selinstit).") ");
 //db_criatabela($resultinst);exit;
 

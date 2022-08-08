@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -48,21 +48,21 @@ db_postmemory($HTTP_POST_VARS);
   db_app::load("estilos.css");
   db_app::load("classes/dbViewAvaliacoes.classe.js");
   db_app::load("widgets/windowAux.widget.js");
-  db_app::load("widgets/dbmessageBoard.widget.js");  
-  db_app::load("dbcomboBox.widget.js");   
+  db_app::load("widgets/dbmessageBoard.widget.js");
+  db_app::load("dbcomboBox.widget.js");
 ?>
 <style>
 
  .field {
    border : 0px;
-   border-top: 2px groove white; 
+   border-top: 2px groove white;
  }
-  
+
  fieldset.field table tr td:FIRST-CHILD {
    width: 150px;
  	 white-space: nowrap;
  }
-   
+
  .link_botao {
    color: blue;
    cursor: pointer;
@@ -83,71 +83,71 @@ db_postmemory($HTTP_POST_VARS);
     <table id='content' border="0">
       <tr>
         <td>
-          <b> 
-            <? db_ancora('Material :',"js_pesquisaMaterial(true);",1); ?> 
+          <b>
+            <? db_ancora('Material :',"js_pesquisaMaterial(true);",1); ?>
           </b>
         </td>
         <td>
           <?
              db_input('m60_codmater',6,false,'','text',3," onchange='js_pesquisaMaterial(false);'");
              db_input('m60_descr',45,'text',3,'');
-         ?>             
-        </td>        
+         ?>
+        </td>
       </tr>
-    
+
       <tr>
         <td>
           <b> Data do Reajuste : </b>
         </td>
         <td>
            <? db_inputdata('m85_data','','','',true,'text',1,""); ?>
-        </td>        
+        </td>
       </tr>
-      
+
       <tr>
         <td>
            <b> Preço Médio Atual :</b>
         </td>
         <td>
            <? db_input('precomedioatual',15,'text',3,''); ?>
-        </td>        
+        </td>
       </tr>
-    
+
       <tr>
         <td>
            <b> Novo Preço Médio : </b>
         </td>
         <td>
           <?  db_input('m85_precomedio',15,false,'','text',3,"onKeyUp='return js_verValor(this.id);'"); ?>
-        </td>        
-      </tr>      
-  
-      
+        </td>
+      </tr>
+
+
       <tr>
         <td colspan="2">
-        
-          <fieldset style="width: 500px;"> 
-          <legend><strong>Motivo</strong></legend> 
+
+          <fieldset style="width: 500px;">
+          <legend><strong>Motivo</strong></legend>
             <table cellpadding="3" border="0">
               <tr>
                 <td>
                   <textarea rows="5" cols="70" name="obs_precomedio" id='obs_precomedio'></textarea>
                 </td>
-              </tr>            
+              </tr>
             </table>
-          </fieldset>  
-          
+          </fieldset>
+
         </td>
       </tr>
-        
+
     </table>
-  </fieldset> 
+  </fieldset>
   <input type="button" id='processar' value='Processar' onclick="js_ajustaPrecoMedio();" style="margin-top: 10px;">
-</form>   
+</form>
 
 
 
-</center>   
+</center>
 <?
   db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
 ?>
@@ -155,65 +155,65 @@ db_postmemory($HTTP_POST_VARS);
 </html>
 <script>
 
-  var sUrlRPC     = 'mat4_ajusteprecomedio.RPC.php';  
-  var oParametros = new Object();  
-  
+  var sUrlRPC     = 'mat4_ajusteprecomedio.RPC.php';
+  var oParametros = new Object();
+
 //***********   Função que processara o novo valor ********************
 
 function js_ajustaPrecoMedio() {
 
-  var sDtAjuste        = $F('m85_data'); 
+  var sDtAjuste        = $F('m85_data');
   var nValorPrecoMedio = $F('m85_precomedio');
   var sMotivo          = $F('obs_precomedio');
   var iCodMaterial     = $F('m60_codmater');
   var msgDiv           = "Processando novo valor \n Aguarde ...";
 
   if (iCodMaterial == null || iCodMaterial == '') {
-  
+
     alert('Selecione um material para alteração !');
     return false;
-  }     
+  }
   if (sDtAjuste == null || sDtAjuste == '') {
-  
+
     alert('Selecione uma data !');
     return false;
   }
   if (nValorPrecoMedio == null || nValorPrecoMedio == '') {
-  
+
     alert('Digite o novo preço médio !');
     return false;
-  }  
+  }
   if (sMotivo == null || sMotivo == '') {
-  
+
     alert('Digite o motivo da alteração !');
     return false;
-  } 
+  }
 
-  
-    
-  oParametros.exec             = 'Ajusta';  
+
+
+  oParametros.exec             = 'Ajusta';
   oParametros.sDtAjuste        = sDtAjuste;
   oParametros.nValorPrecoMedio = nValorPrecoMedio;
   oParametros.sMotivo          = sMotivo;
   oParametros.iCodMaterial     = iCodMaterial;
-  
+
   js_divCarregando(msgDiv,'msgBox');
-   
+
    var oAjaxLista  = new Ajax.Request(sUrlRPC,
                                              {method: "post",
                                               parameters:'json='+Object.toJSON(oParametros),
                                               onComplete: js_retornoAjustaPrecoMedio
-                                             });   
+                                             });
 
-} 
+}
 
 function js_retornoAjustaPrecoMedio(oAjax) {
-    
+
     js_removeObj('msgBox');
     var oRetorno = eval("("+oAjax.responseText+")");
-    
+
     if (oRetorno.status == 1) {
-      
+
       alert(oRetorno.message.urlDecode());
       $('m60_codmater').value    = '';
       $('m60_descr').value       = '';
@@ -221,42 +221,42 @@ function js_retornoAjustaPrecoMedio(oAjax) {
       $('precomedioatual').value = '';
       $('m85_precomedio').value  = '';
       $('obs_precomedio').value  = '';
-       
+
     } else {
-      
+
       alert(oRetorno.message.urlDecode());
       return false;
     }
-}  
-  
+}
+
 //***********   funcao para atualizar o preço medio atual *************
-  
+
 function js_getPrecoMedioAtual(iCodMaterial) {
 
   if (iCodMaterial == '' || iCodMaterial == null) {
-    
+
     $('precomedioatual').value = '';
     return false;
-  } 
-  oParametros.exec         = 'PrecoAtual';  
-  oParametros.iCodMaterial = iCodMaterial;   
-  
+  }
+  oParametros.exec         = 'PrecoAtual';
+  oParametros.iCodMaterial = iCodMaterial;
+
   var oAjaxLista  = new Ajax.Request(sUrlRPC,
                                              {method: "post",
                                               parameters:'json='+Object.toJSON(oParametros),
                                               onComplete: js_retornoPrecoAtual
-                                             });  
+                                             });
 }
 
 function js_retornoPrecoAtual(oAjax) {
-    
+
     var oRetorno = eval("("+oAjax.responseText+")");
-    
+
     if (oRetorno.status == 1) {
-      
+
       if ( oRetorno.dados.length == 0 ) {
         return false;
-      } 
+      }
       $("precomedioatual").value = oRetorno.dados;
     }
 }
@@ -265,25 +265,25 @@ function js_retornoPrecoAtual(oAjax) {
 function js_pesquisaMaterial(mostra){
 
   if (mostra == true) {
-    js_OpenJanelaIframe('top.corpo','db_iframe_material','func_matmater.php?funcao_js=parent.js_mostraMaterial1|m60_codmater|m60_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_material','func_matmater.php?funcao_js=parent.js_mostraMaterial1|m60_codmater|m60_descr','Pesquisa',true);
   } else {
-  
+
      if(document.form1.m60_codmater.value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_material','func_matmater.php?pesquisa_chave='+document.form1.m60_codmater.value+'&funcao_js=parent.js_mostraMaterial','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_material','func_matmater.php?pesquisa_chave='+document.form1.m60_codmater.value+'&funcao_js=parent.js_mostraMaterial','Pesquisa',false);
      }else{
-       document.form1.m60_codmater.value = ''; 
+       document.form1.m60_codmater.value = '';
      }
   }
 }
 function js_mostraMaterial(chave,erro,chave2){
 
 
-  document.form1.m60_codmater.value = chave2; 
+  document.form1.m60_codmater.value = chave2;
   document.form1.m60_descr.value = chave;
   if (erro == true) {
-   
-    document.form1.m60_codmater.focus(); 
-    document.form1.m60_codmater.value = ''; 
+
+    document.form1.m60_codmater.focus();
+    document.form1.m60_codmater.value = '';
   }
   js_getPrecoMedioAtual(chave2);
 }
@@ -298,7 +298,7 @@ function js_mostraMaterial1(chave1,chave2){
 function js_verValor(id) {
 
   var elem = document.getElementById(id);
-  
+
   if (isNaN(elem.value)) {
       alert('Apenas Numeros ou \".\"!');
       elem.value="";

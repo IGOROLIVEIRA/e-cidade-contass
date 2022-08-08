@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -145,23 +145,23 @@ if ($clempparametro->numrows > 0) {
 													$sqltran = "select distinct x.p62_codtran,                   
       x.pc11_numero,
 x.pc11_codigo,
-                            x.p62_dttran, 
-                            x.p62_hora, 
-                			x.descrdepto, 
+                            x.p62_dttran,
+                            x.p62_hora,
+                			x.descrdepto,
 							x.login
-			from ( select distinct p62_codtran, 
-                          p62_dttran, 
-                          p63_codproc,                          
-                          descrdepto, 
-                          p62_hora, 
+			from ( select distinct p62_codtran,
+                          p62_dttran,
+                          p63_codproc,
+                          descrdepto,
+                          p62_hora,
                           login,
                           pc11_numero,
 							pc11_codigo,
                           pc81_codproc,
                           e55_autori,
-							e54_anulad 
+							e54_anulad
 		           from proctransferproc
-                         
+
                         inner join solicitemprot on pc49_protprocesso = proctransferproc.p63_codproc
                         inner join solicitem on pc49_solicitem = pc11_codigo
                         inner join proctransfer on p63_codtran = p62_codtran
@@ -195,23 +195,23 @@ x.pc11_codigo,
 											$sqltran = "select distinct x.p62_codtran,                   
       x.pc11_numero,
 x.pc11_codigo,
-                            x.p62_dttran, 
-                            x.p62_hora, 
-                			x.descrdepto, 
+                            x.p62_dttran,
+                            x.p62_hora,
+                			x.descrdepto,
 							x.login
-			from ( select distinct p62_codtran, 
-                          p62_dttran, 
-                          p63_codproc,                          
-                          descrdepto, 
-                          p62_hora, 
+			from ( select distinct p62_codtran,
+                          p62_dttran,
+                          p63_codproc,
+                          descrdepto,
+                          p62_hora,
                           login,
                           pc11_numero,
 							pc11_codigo,
                           pc81_codproc,
                           e55_autori,
-							e54_anulad 
+							e54_anulad
 		           from proctransferproc
-                         
+
                         inner join solicitemprot on pc49_protprocesso = proctransferproc.p63_codproc
                         inner join solicitem on pc49_solicitem = pc11_codigo
                         inner join proctransfer on p63_codtran = p62_codtran

@@ -139,7 +139,7 @@ $somador_IX_bim      = 0;
 
 $db_selinstit_sem_rpps = "";
 
-$xinstit    = split("-",$db_selinstit);
+$xinstit    = explode("-",$db_selinstit);
 $resultinst = pg_exec("select codigo,munic,db21_tipoinstit from db_config where codigo in (".str_replace('-',', ',$db_selinstit).")");
 $descr_inst = '';
 $xvirgi     = '';
@@ -165,8 +165,8 @@ if (!isset($arqinclude)){
   $head5  = "ORÇAMENTOS FISCAL E DA SEGURIDADE SOCIAL";
 
   $dados  = data_periodo($anousu,$periodo);
-  $perini = split("-",$dados[0]);
-  $perfin = split("-",$dados[1]);
+  $perini = explode("-",$dados[0]);
+  $perfin = explode("-",$dados[1]);
 
   $txtper = strtoupper($dados["periodo"]);
   $mesini = strtoupper(db_mes($perini[1]));
@@ -210,11 +210,11 @@ if (!isset($arqinclude)){ // se este arquivo no esta incluido por outro
   $pdf->cell(120,($alt),"SALDO",'TB',1,"C",0);      // br
   $pdf->setX(80);
   $pdf->cell(40,$alt,"Em 31/Dez/".($anousu_ant-1)." (a)",'1',0,"C",0);
-  $dt = split("-",$dt_fin_ant);
+  $dt = explode("-",$dt_fin_ant);
   $dt = $dt[2]."/".db_mes($dt[1])."/".$dt[0];
   $pdf->cell(40,$alt,"Em $dt (b)",'1',0,"C",0);
   
-  $dt = split("-",$dt_fin);
+  $dt = explode("-",$dt_fin);
   $dt = $dt[2]."/".db_mes($dt[1])."/".$dt[0];
   $pdf->cell(40,$alt,"Em $dt (c)",'TB',0,"C",0);
   $pdf->Ln();
@@ -574,11 +574,11 @@ if (!isset($arqinclude)){
   $pdf->cell(120,($alt),"SALDO",'TB',1,"C",0);      // br
   $pdf->setX(80);
   $pdf->cell(40,$alt,"Em 31/Dez/".($anousu_ant-1)." (a)",'1',0,"C",0);
-  $dt = split("-",$dt_fin_ant);
+  $dt = explode("-",$dt_fin_ant);
   $dt = $dt[2]."/".db_mes($dt[1])."/".$dt[0];
   $pdf->cell(40,$alt,"Em $dt (b)",'1',0,"C",0);
   
-  $dt = split("-",$dt_fin);
+  $dt = explode("-",$dt_fin);
   $dt = $dt[2]."/".db_mes($dt[1])."/".$dt[0];
   $pdf->cell(40,$alt,"Em $dt (c)",'TB',0,"C",0);
   $pdf->Ln();

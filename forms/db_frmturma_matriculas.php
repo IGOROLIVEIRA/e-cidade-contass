@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: educação
@@ -40,7 +40,7 @@ $clrotulo->label("ed09_c_situacao");
        db_ancora(@$Led36_i_turma,"js_pesquisaed36_i_turma(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('ed36_i_turma',5,$Ied36_i_turma,true,'text',$db_opcao," onchange='js_pesquisaed36_i_turma(false);'")
 ?>
@@ -55,7 +55,7 @@ db_input('ed05_c_nome',40,$Ied05_c_nome,true,'text',3,'')
        db_ancora(@$Led36_i_matricula,"js_pesquisaed36_i_matricula(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('ed36_i_matricula',5,$Ied36_i_matricula,true,'text',$db_opcao," onchange='js_pesquisaed36_i_matricula(false);'")
 ?>
@@ -72,20 +72,20 @@ db_input('ed09_c_situacao',20,$Ied09_c_situacao,true,'text',3,'')
 <script>
 function js_pesquisaed36_i_turma(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_turmas','func_turmas.php?funcao_js=parent.js_mostraturmas1|ed05_i_codigo|ed05_c_nome','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_turmas','func_turmas.php?funcao_js=parent.js_mostraturmas1|ed05_i_codigo|ed05_c_nome','Pesquisa',true);
   }else{
-     if(document.form1.ed36_i_turma.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_turmas','func_turmas.php?pesquisa_chave='+document.form1.ed36_i_turma.value+'&funcao_js=parent.js_mostraturmas','Pesquisa',false);
+     if(document.form1.ed36_i_turma.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_turmas','func_turmas.php?pesquisa_chave='+document.form1.ed36_i_turma.value+'&funcao_js=parent.js_mostraturmas','Pesquisa',false);
      }else{
-       document.form1.ed05_c_nome.value = ''; 
+       document.form1.ed05_c_nome.value = '';
      }
   }
 }
 function js_mostraturmas(chave,erro){
-  document.form1.ed05_c_nome.value = chave; 
-  if(erro==true){ 
-    document.form1.ed36_i_turma.focus(); 
-    document.form1.ed36_i_turma.value = ''; 
+  document.form1.ed05_c_nome.value = chave;
+  if(erro==true){
+    document.form1.ed36_i_turma.focus();
+    document.form1.ed36_i_turma.value = '';
   }
 }
 function js_mostraturmas1(chave1,chave2){
@@ -95,20 +95,20 @@ function js_mostraturmas1(chave1,chave2){
 }
 function js_pesquisaed36_i_matricula(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_matriculas','func_matriculas.php?funcao_js=parent.js_mostramatriculas1|ed09_i_codigo|ed09_c_situacao','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_matriculas','func_matriculas.php?funcao_js=parent.js_mostramatriculas1|ed09_i_codigo|ed09_c_situacao','Pesquisa',true);
   }else{
-     if(document.form1.ed36_i_matricula.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_matriculas','func_matriculas.php?pesquisa_chave='+document.form1.ed36_i_matricula.value+'&funcao_js=parent.js_mostramatriculas','Pesquisa',false);
+     if(document.form1.ed36_i_matricula.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_matriculas','func_matriculas.php?pesquisa_chave='+document.form1.ed36_i_matricula.value+'&funcao_js=parent.js_mostramatriculas','Pesquisa',false);
      }else{
-       document.form1.ed09_c_situacao.value = ''; 
+       document.form1.ed09_c_situacao.value = '';
      }
   }
 }
 function js_mostramatriculas(chave,erro){
-  document.form1.ed09_c_situacao.value = chave; 
-  if(erro==true){ 
-    document.form1.ed36_i_matricula.focus(); 
-    document.form1.ed36_i_matricula.value = ''; 
+  document.form1.ed09_c_situacao.value = chave;
+  if(erro==true){
+    document.form1.ed36_i_matricula.focus();
+    document.form1.ed36_i_matricula.value = '';
   }
 }
 function js_mostramatriculas1(chave1,chave2){
@@ -117,7 +117,7 @@ function js_mostramatriculas1(chave1,chave2){
   db_iframe_matriculas.hide();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_turma_matriculas','func_turma_matriculas.php?funcao_js=parent.js_preenchepesquisa|ed36_i_turma|ed36_i_matricula','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_turma_matriculas','func_turma_matriculas.php?funcao_js=parent.js_preenchepesquisa|ed36_i_turma|ed36_i_matricula','Pesquisa',true);
 }
 function js_preenchepesquisa(chave,chave1){
   db_iframe_turma_matriculas.hide();

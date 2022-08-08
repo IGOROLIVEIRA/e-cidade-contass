@@ -51,8 +51,8 @@ if(isset($chavepesquisa)) {
 
        parent.document.formaba.a2.disabled = false;
        parent.document.formaba.a3.disabled = false;
-       top.corpo.iframe_a2.location.href='tfd1_tfd_tipotratamentoproced001.php?tf05_i_tipotratamento=<?=@$chavepesquisa?>&tf04_c_descr=<?=@$tf04_c_descr?>';
-       top.corpo.iframe_a3.location.href='tfd1_tfd_tipotratamentodoc001.php?tf06_i_tipotratamento=<?=@$chavepesquisa?>&tf04_c_descr=<?=@$tf04_c_descr?>';
+       CurrentWindow.corpo.iframe_a2.location.href='tfd1_tfd_tipotratamentoproced001.php?tf05_i_tipotratamento=<?=@$chavepesquisa?>&tf04_c_descr=<?=@$tf04_c_descr?>';
+       CurrentWindow.corpo.iframe_a3.location.href='tfd1_tfd_tipotratamentodoc001.php?tf06_i_tipotratamento=<?=@$chavepesquisa?>&tf04_c_descr=<?=@$tf04_c_descr?>';
 
      </script>
 <?

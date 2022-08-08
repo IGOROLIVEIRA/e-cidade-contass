@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 
@@ -57,7 +57,7 @@ if(isset($c53_coddoc)){
 if(empty($c46_seqtrans) && isset($outro) && $outro==true){
 echo "
   <tr>
-    <td colspan='2' align='center'> 
+    <td colspan='2' align='center'>
       <b>Não existe lançamento para este histórico!</b>
     </td>
   </tr>";
@@ -69,26 +69,26 @@ echo "
     <td nowrap title="<?=@$Tc53_coddoc?>">
        <?=$Lc53_coddoc ?>
     </td>
-    <td> 
+    <td>
        <? db_input('c53_coddoc',4,$Ic53_coddoc,true,'text',3);?>
        <? db_input('c53_descr',40,$Ic53_descr,true,'text',3,'')       ?>
     </td>
   </tr>
   <tr>
     <td nowrap title="<?=@$Tc46_seqtrans?>"><?=@$Lc46_seqtrans?> </td>
-    <td> 
+    <td>
     <? db_input('c46_seqtrans',6,$Ic46_seqtrans,true,'text',3,""); ?>
     </td>
   </tr>
   <tr>
     <td nowrap title="<?=@$Tc46_seqtranslan?>"><?=@$Lc46_seqtranslan?></td>
-    <td> 
+    <td>
      <? db_input('c46_seqtranslan',8,$Ic46_seqtranslan,true,'text',3,"") ?>
     </td>
   </tr>
   <tr>
     <td nowrap title="<?=@$Tc46_codhist?>"><? db_ancora(@$Lc46_codhist,"js_pesquisac46_codhist(true);",$db_opcao); ?> </td>
-    <td> 
+    <td>
        <? db_input('c46_codhist',4,$Ic46_codhist,true,'text',$db_opcao," onchange='js_pesquisac46_codhist(false);'")   ?>
        <? db_input('c50_descr',40,$Ic50_descr,true,'text',3,'')    ?>
     </td>
@@ -117,35 +117,35 @@ echo "
 	    if ($clconhistdoc->numrows>0)
 	       db_fieldsmemory($rr,0);
           }
-        ?> 
+        ?>
        <? db_input('c46_eventodescr',40,'',true,'text',3) ?>
 
     </td>
   </tr>
- 
 
 
-  
+
+
   </table>
   </center>
 <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> >
   <input name="seleciona" type="button"  value="Selecionar  histórico" onclick="js_pesquisahist();" >
   <?if($db_opcao==2) {?>
      <input name="novo" type="button"  value="Novo lançamento" onclick="js_novo();"  >
-  <?}?>     
+  <?}?>
   <?if(isset($c46_seqtrans) && $c46_seqtrans!=""){?>
      <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar  documentos" onclick="js_pesquisa();" <?=(isset($c46_seqtrans) && $c46_seqtrans!=""?"":"disabled")?> >
-  <?}?>     
-  
+  <?}?>
+
 </form>
 <script>
 function js_novo(){
   <?if(isset($c53_coddoc)){?>
   location.href = "con1_contranslan004.php?c53_coddoc=<?=$c53_coddoc?>";
   <?}?>
-} 
+}
 function js_pesquisahist(){
-  js_OpenJanelaIframe('top.corpo.iframe_contranslan','db_iframe_conhist','func_conhistdoc.php?funcao_js=parent.js_preenchepesquisahist|c53_coddoc|c53_descr','Pesquisa',true,'0');
+  js_OpenJanelaIframe('CurrentWindow.corpo.iframe_contranslan','db_iframe_conhist','func_conhistdoc.php?funcao_js=parent.js_preenchepesquisahist|c53_coddoc|c53_descr','Pesquisa',true,'0');
 }
 function js_preenchepesquisahist(coddoc,descr){
       document.form1.c53_coddoc.value = coddoc;
@@ -157,27 +157,27 @@ function js_preenchepesquisahist(coddoc,descr){
 	      obj.setAttribute('type','hidden');
       	      obj.setAttribute('value','true');
 	      document.form1.appendChild(obj);
-  <?}?>    
+  <?}?>
       document.form1.submit();
       db_iframe_conhist.hide();
 }
 
 function js_pesquisac46_seqtrans(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_contranslan','db_iframe_contrans','func_contrans.php?funcao_js=parent.js_mostracontrans1|c45_seqtrans|c45_coddoc','Pesquisa',true,'0');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_contranslan','db_iframe_contrans','func_contrans.php?funcao_js=parent.js_mostracontrans1|c45_seqtrans|c45_coddoc','Pesquisa',true,'0');
   }else{
-     if(document.form1.c46_seqtrans.value != ''){ 
-        js_OpenJanelaIframe('top.corpo.iframe_contranslan','db_iframe_contrans','func_contrans.php?pesquisa_chave='+document.form1.c46_seqtrans.value+'&funcao_js=parent.js_mostracontrans','Pesquisa',false,'0');
+     if(document.form1.c46_seqtrans.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_contranslan','db_iframe_contrans','func_contrans.php?pesquisa_chave='+document.form1.c46_seqtrans.value+'&funcao_js=parent.js_mostracontrans','Pesquisa',false,'0');
      }else{
-       document.form1.c45_coddoc.value = ''; 
+       document.form1.c45_coddoc.value = '';
      }
   }
 }
 function js_mostracontrans(chave,erro){
-  document.form1.c45_coddoc.value = chave; 
-  if(erro==true){ 
-    document.form1.c46_seqtrans.focus(); 
-    document.form1.c46_seqtrans.value = ''; 
+  document.form1.c45_coddoc.value = chave;
+  if(erro==true){
+    document.form1.c46_seqtrans.focus();
+    document.form1.c46_seqtrans.value = '';
   }
 }
 function js_mostracontrans1(chave1,chave2){
@@ -189,20 +189,20 @@ function js_mostracontrans1(chave1,chave2){
 
 function js_pesquisac46_codhist(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_contranslan','db_iframe_conhist','func_conhist.php?funcao_js=parent.js_mostraconhist1|c50_codhist|c50_descr','Pesquisa',true,'0');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_contranslan','db_iframe_conhist','func_conhist.php?funcao_js=parent.js_mostraconhist1|c50_codhist|c50_descr','Pesquisa',true,'0');
   }else{
-     if(document.form1.c46_codhist.value != ''){ 
-        js_OpenJanelaIframe('top.corpo.iframe_contranslan','db_iframe_conhist','func_conhist.php?pesquisa_chave='+document.form1.c46_codhist.value+'&funcao_js=parent.js_mostraconhist','Pesquisa',false,'0');
+     if(document.form1.c46_codhist.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_contranslan','db_iframe_conhist','func_conhist.php?pesquisa_chave='+document.form1.c46_codhist.value+'&funcao_js=parent.js_mostraconhist','Pesquisa',false,'0');
      }else{
-       document.form1.c50_descr.value = ''; 
+       document.form1.c50_descr.value = '';
      }
   }
 }
 function js_mostraconhist(chave,erro){
-  document.form1.c50_descr.value = chave; 
-  if(erro==true){ 
-    document.form1.c46_codhist.focus(); 
-    document.form1.c46_codhist.value = ''; 
+  document.form1.c50_descr.value = chave;
+  if(erro==true){
+    document.form1.c46_codhist.focus();
+    document.form1.c46_codhist.value = '';
   }
 }
 function js_mostraconhist1(chave1,chave2){
@@ -211,17 +211,17 @@ function js_mostraconhist1(chave1,chave2){
   db_iframe_conhist.hide();
 }
 function js_pesquisac46_evento(mostra){
-  js_OpenJanelaIframe('top.corpo.iframe_contranslan','db_iframe_conhistdoc','func_conhistdoc.php?funcao_js=parent.js_mostraevento|c53_coddoc|c53_descr','Pesquisa',true,'0');
-} 
+  js_OpenJanelaIframe('CurrentWindow.corpo.iframe_contranslan','db_iframe_conhistdoc','func_conhistdoc.php?funcao_js=parent.js_mostraevento|c53_coddoc|c53_descr','Pesquisa',true,'0');
+}
 function js_mostraevento(chave1,chave2){
    document.form1.c46_evento.value=chave1;
    document.form1.c46_eventodescr.value=chave2;
    db_iframe_conhistdoc.hide();
-}  
+}
 function js_pesquisa(){
- <?if(isset($c46_seqtrans)){?> 
-    js_OpenJanelaIframe('top.corpo.iframe_contranslan','db_iframe_contranslan','func_contranslan.php?chave_c46_seqtrans=<?=$c46_seqtrans?>&funcao_js=parent.js_preenchepesquisa|c46_seqtranslan','Pesquisa',true,'0');
- <?}?>  
+ <?if(isset($c46_seqtrans)){?>
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_contranslan','db_iframe_contranslan','func_contranslan.php?chave_c46_seqtrans=<?=$c46_seqtrans?>&funcao_js=parent.js_preenchepesquisa|c46_seqtranslan','Pesquisa',true,'0');
+ <?}?>
 }
 function js_preenchepesquisa(chave){
   db_iframe_contranslan.hide();

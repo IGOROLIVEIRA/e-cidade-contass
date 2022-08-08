@@ -1,8 +1,8 @@
 <?php
 // $Id: piebkgex1.php,v 1.1 2006/03/20 11:56:44 dbrogerio Exp $
-include ("../jpgraph.php");
-include ("../jpgraph_pie.php");
-include ("../jpgraph_pie3d.php");
+include (__DIR__ . "/../jpgraph.php");
+include (__DIR__ . "/../jpgraph_pie.php");
+include (__DIR__ . "/../jpgraph_pie3d.php");
 
 // Some data
 $data = array(

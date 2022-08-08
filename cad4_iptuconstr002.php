@@ -98,7 +98,7 @@ if(isset($j39_idcons)&&$j39_idcons=="nova"){
    }      
    
    $cliptuconstr->incluir($j39_matric,$j39_idcons);
-   $matriz= split("X",$caracteristica);
+   $matriz= explode("X",$caracteristica);
    for($i=0;$i<sizeof($matriz);$i++){
      $j48_caract = $matriz[$i];
      if($j48_caract!=""){
@@ -118,7 +118,7 @@ if(isset($j39_idcons)&&$j39_idcons=="nova"){
   $clcarconstr->j48_idcons=$j39_idcons;
   $clcarconstr->excluir();
   $cliptuconstr->alterar($j39_matric,$j39_idcons);
-  $matriz= split("X",$caracteristica);
+  $matriz= explode("X",$caracteristica);
   for($i=0;$i<sizeof($matriz);$i++){
     $j48_caract = $matriz[$i];
     if($j48_caract!=""){

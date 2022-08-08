@@ -187,7 +187,7 @@ $cloperacoesdecreditolrf->rotulo->label();
    parent.mo_camada('publicacaoeperiodicidaderreo');
  }
  function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_dadoscomplementareslrf','func_dadoscomplementareslrf.php?funcao_js=parent.js_preenchepesquisa|si170_sequencial','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_dadoscomplementareslrf','func_dadoscomplementareslrf.php?funcao_js=parent.js_preenchepesquisa|si170_sequencial','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_dadoscomplementareslrf.hide();

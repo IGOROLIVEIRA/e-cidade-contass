@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -58,7 +58,7 @@ $db_botao = true;
 if(isset($incluir)){
  db_inicio_transacao();
   //Faz a troca
-  
+
   if( $tipoant == "sepulta" ){
       $clsepulta->excluir( $codigoant );
   }elseif( $tipoant == "ossoariogeral" ){
@@ -82,7 +82,7 @@ if(isset($incluir)){
       $clrestosgavetas->excluir($codigoant);
 
   }
- 
+
   if($local == 1){
         //sepulta
         //verifica se há cadastros de sepultamentos para a sepultura;
@@ -97,13 +97,13 @@ if(isset($incluir)){
 					  $cllotecemit->cm23_c_situacao = 'O';
 					  $cllotecemit->alterar( $cm23_i_codigo );
 					  $clsepulta->incluir(null);
-				
+
 				         ?>
 					 }
 					</script>
 			<?
 			}else{
-       
+
          $cllotecemit->cm23_i_codigo = $cm23_i_codigo;
          $cllotecemit->cm23_c_situacao = 'O';
          $cllotecemit->alterar( $cm23_i_codigo );
@@ -114,7 +114,7 @@ if(isset($incluir)){
         //ossoario geral
         $clossoario->cm06_d_entrada = date("Y-m-d",db_getsession("DB_datausu"));
         $clossoario->incluir(null);
-   
+
   }elseif($local == 3){
 
         //ossoario particular / restos
@@ -122,7 +122,7 @@ if(isset($incluir)){
         $cllotecemit->cm23_i_codigo = $cm23_i_codigo;
         $cllotecemit->cm23_c_situacao = 'O';
         $cllotecemit->alterar( $cm23_i_codigo );
-   
+
   }elseif($local == 4){
         //jazigo
 
@@ -132,7 +132,7 @@ if(isset($incluir)){
 
         $clrestosgavetas->cm26_i_codigo = "null";
         $clrestosgavetas->incluir(null);
-        
+
         //Gavetas
         $clgavetas->cm27_i_restogaveta = $clrestosgavetas->cm26_i_codigo;
         $clgavetas->incluir(null);
@@ -166,16 +166,16 @@ if(isset($incluir)){
   <tr>
     <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
-    
+
     <form name="form1" method="post">
-    
+
      <table>
-      
+
        <input name="tipoant" type="hidden">
        <input name="codigoant" type="hidden">
        <input name="lotecemit" type="hidden" value="<?=@$lotecemit?>">
-       
-       
+
+
        <?db_input('sepultamento',10,@$sepultamento,true,'hidden',3)?>
        <?//db_input('nome',40,$nome,true,'text',3)?>
       <tr>
@@ -192,14 +192,14 @@ if(isset($incluir)){
 																	 "  " => '------------------',
 																	 "5" => 'Retirada'
 );
-	          db_select("local",$arrayValores,true,2,"onchange='submit()'"); 
+	          db_select("local",$arrayValores,true,2,"onchange='submit()'");
          	?>
        </td>
       </tr>
-      
+
       <script>
-           document.form1.tipoant.value = top.corpo.iframe_a3.document.form1.tipoant.value;
-           document.form1.codigoant.value = top.corpo.iframe_a3.document.form1.codigo.value;
+           document.form1.tipoant.value = CurrentWindow.corpo.iframe_a3.document.form1.tipoant.value;
+           document.form1.codigoant.value = CurrentWindow.corpo.iframe_a3.document.form1.codigo.value;
       </script>
 
      </table>
@@ -259,15 +259,15 @@ if(isset($incluir)){
   db_msgbox($clretiradas->erro_msg);
   if($clretiradas->erro_status != "0"){ $OK = 1; }
  }
- 
 
- 
+
+
  //se não deu erro, volta à página inicial do cadastro
  if($OK == 1){
   echo "<script>";
   echo " parent.document.formaba.a2.disabled=true; ";
   echo " parent.document.formaba.a3.disabled=true; ";
-  echo " top.corpo.iframe_a1.location.href='cem3_sepultamentos001.php';";
+  echo " CurrentWindow.corpo.iframe_a1.location.href='cem3_sepultamentos001.php';";
   echo " parent.mo_camada('a1'); ";
   echo "</script>";
  }

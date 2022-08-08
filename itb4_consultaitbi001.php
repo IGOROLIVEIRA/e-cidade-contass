@@ -45,14 +45,14 @@ $clitbinumpre  = new cl_itbinumpre();
 $clitbiavalia  = new cl_itbiavalia();
 $clitbinome	   = new cl_itbinome();
 
-$rsConsultaITBI = $clitbi->sql_record($clitbi->sql_query_dados($oGet->it01_guia)); 
+$rsConsultaITBI = $clitbi->sql_record($clitbi->sql_query_dados($oGet->it01_guia));
 
   if ( $clitbi->numrows > 0 ) {
 
-    $oDadosITBI = db_utils::fieldsMemory($rsConsultaITBI,0);    
+    $oDadosITBI = db_utils::fieldsMemory($rsConsultaITBI,0);
   } else {
 
-    db_msgbox("ITBI não encontrada!");  
+    db_msgbox("ITBI não encontrada!");
     echo " <script> parent.db_iframe_consulta.hide(); </script>";
     exit;
   }
@@ -62,66 +62,66 @@ $rsConsultaITBI = $clitbi->sql_record($clitbi->sql_query_dados($oGet->it01_guia)
     $sTipo = "Urbano";
   } else {
 
-    $sTipo = "Rural"; 	
+    $sTipo = "Rural";
   }
- 
+
   if ( $oDadosITBI->it01_origem == 1) {
 
     $sOrigem = "DBPortal";
   } else {
 
-    $sOrigem = "DBPref"; 	
+    $sOrigem = "DBPref";
   }
 
   $rsConsultaPag = $clitbiavalia->sql_record($clitbiavalia->sql_query_pag($oGet->it01_guia,"it24_valor,it14_valorpaga"));
   $iNumRowsPag   = $clitbiavalia->numrows;
- 
+
   if ( $iNumRowsPag > 0 ) {
-  	
+
   	 $nValorTotal = 0;
-  	 
+
  	  for ( $iInd=0; $iInd < $iNumRowsPag; $iInd++ ) {
- 	 	
+
  	    $oDadosPag     = db_utils::fieldsMemory($rsConsultaPag,$iInd);
  	    $nValorTotal  += $oDadosPag->it24_valor;
  	    $nValorApagar  = $oDadosPag->it14_valorpaga;
  	  }
- 	 
+
   } else {
 
   	$nValorApagar  = null;
    	$nValorTotal   = null;
   }
- 
+
   $sWhere   = " 	   it03_guia = {$oGet->it01_guia} ";
-  $sWhere  .= " and it03_princ is true 			  "; 
-  $rsConsultaNome = $clitbinome->sql_record($clitbinome->sql_query(null,"*",null,$sWhere));  
+  $sWhere  .= " and it03_princ is true 			  ";
+  $rsConsultaNome = $clitbinome->sql_record($clitbinome->sql_query(null,"*",null,$sWhere));
   $iNumRowsNome   = $clitbinome->numrows;
-  
+
   $sNomeTransmitente = "";
   $sNomeAdquirente   = "";
- 
+
   for ( $iInd=0; $iInd < $iNumRowsNome; $iInd++  ) {
- 	
+
     $oDadosNome = db_utils::fieldsMemory($rsConsultaNome,$iInd);
- 	
+
     if ( $oDadosNome->it03_tipo == "T" && $oDadosNome->it03_princ == "t") {
- 	    
+
       $iCgmTransmitente  = $oDadosNome->it21_numcgm;
    	  $sNomeTransmitente = $oDadosNome->it03_nome;
     } else if ( $oDadosNome->it03_tipo == "C" && $oDadosNome->it03_princ == "t") {
-   	
+
       $iCgmAdquirente    = $oDadosNome->it21_numcgm;
    	  $sNomeAdquirente   = $oDadosNome->it03_nome;
-    } 	
+    }
   }
- 
+
   $rsConsultaCancela = $clitbicancela->sql_record($clitbicancela->sql_query_file($oGet->it01_guia));
   if ( $clitbicancela->numrows > 0 ) {
 
  	  $lCancelada = true;
   } else {
- 	
+
     $lCancelada = false;
   }
 ?>
@@ -153,20 +153,20 @@ $rsConsultaITBI = $clitbi->sql_record($clitbi->sql_query_dados($oGet->it01_guia)
           color:black;
           text-align:center;
           padding:3px;
-        }  
+        }
   </style>
   <script>
   function js_marca(obj){
-  
+
     lista = document.getElementsByTagName("A");
     for (i=0; i < lista.length; i++){
-  
+
       if ( lista[i].className == 'selecionados' && lista[i].className != '') {
-  
+
         lista[i].className = 'dados';
       }
     }
-  
+
     obj.className = 'selecionados';
   }
   </script>
@@ -181,7 +181,7 @@ $rsConsultaITBI = $clitbi->sql_record($clitbi->sql_query_dados($oGet->it01_guia)
 	      	  <tr>
 	      	    <td><strong>Tipo :</strong>  				  	                            </td>
 	      	    <td colspan="3" class='texto'><?=$sTipo?> 					    </td>
-	      	  </tr>    
+	      	  </tr>
 	      	  <tr>
 	      	    <td><strong>Tipo de Transação :</strong></td>
 	      	    <td 			class='texto'><?=$oDadosITBI->it01_tipotransacao?> 	</td>
@@ -191,16 +191,16 @@ $rsConsultaITBI = $clitbi->sql_record($clitbi->sql_query_dados($oGet->it01_guia)
 	      	  <tr>
 	      	    <td><strong>Valor Total da Guia :</strong>			</td>
 	      	    <td  class='texto'><?=db_formatar($nValorTotal,"f")?> 	    </td>
-	      	  <td><strong>Valor Total a Pagar :</strong>		    </td>        
+	      	  <td><strong>Valor Total a Pagar :</strong>		    </td>
 	      	    <td  class='texto'><?=db_formatar($nValorApagar,"f")?>      	</td>
 	      	  </tr>
 	      	  <?php } else { ?>
             <tr>
               <td><strong>Valor Total da Guia :</strong></td>
               <td  class='texto'></td>
-              <td><strong>Valor Total a Pagar :</strong></td>        
+              <td><strong>Valor Total a Pagar :</strong></td>
               <td  class='texto'></td>
-            </tr>		      
+            </tr>
 	      	  <?php } ?>
 	      	  <tr>
 	      	    <td>
@@ -211,7 +211,7 @@ $rsConsultaITBI = $clitbi->sql_record($clitbi->sql_query_dados($oGet->it01_guia)
 		          <td class='texto' colspan="3">
 		            <?php echo @$iCgmTransmitente?>&nbsp;-&nbsp;<?php echo $sNomeTransmitente?>
 		          </td>
-		        </tr>            
+		        </tr>
 		        <tr>
 		          <td>
                 <?php
@@ -219,8 +219,8 @@ $rsConsultaITBI = $clitbi->sql_record($clitbi->sql_query_dados($oGet->it01_guia)
                 ?>
               </td>
 		          <td class='texto' colspan="3">
-		            <?=@$iCgmAdquirente?>&nbsp;-&nbsp;<?=$sNomeAdquirente?> 
-		          </td>        
+		            <?=@$iCgmAdquirente?>&nbsp;-&nbsp;<?=$sNomeAdquirente?>
+		          </td>
 		        </tr>
 		        <tr>
 		          <td><strong>Email de Contato :</strong>  				  	            </td>
@@ -233,21 +233,21 @@ $rsConsultaITBI = $clitbi->sql_record($clitbi->sql_query_dados($oGet->it01_guia)
 		        <tr>
 		          <td><strong>Data de Inclusão :</strong>			</td>
 		          <td  class='texto'><?=db_formatar($oDadosITBI->it01_data,"d")?> </td>
-			        <td><strong>Hora de Inclusão :</strong>		    					    </td>        
+			        <td><strong>Hora de Inclusão :</strong>		    					    </td>
 		          <td  class='texto'><?=$oDadosITBI->it01_hora?>  		    	</td>
-		        </tr>            
+		        </tr>
 		        <tr>
 		          <td><strong>Origem :</strong>			</td>
 		          <td  class='texto'><?=$sOrigem?> </td>
-			        <td><strong>Departamento :</strong>		    						    </td>        
+			        <td><strong>Departamento :</strong>		    						    </td>
 		          <td  class='texto'><?=$oDadosITBI->descrdepto?>  		    	</td>
-		        </tr>      
+		        </tr>
 		        <tr>
 	      	    <td><strong>Usuário :</strong>	  		 </td>
 	      	    <td  class='texto'><?=$oDadosITBI->nome?></td>
-	      		  <td><strong>Tipo Usuário :</strong>		    						        </td>        
+	      		  <td><strong>Tipo Usuário :</strong>		    						        </td>
 	      	    <td  class='texto'><?=($oDadosITBI->usuext==1?"Externo":"Interno")?></td>
-	      	  </tr>      
+	      	  </tr>
 	      	</table>
 	      </fieldset>
 		  </td>
@@ -259,38 +259,38 @@ $rsConsultaITBI = $clitbi->sql_record($clitbi->sql_query_dados($oGet->it01_guia)
 	        <table width='100%'>
 	          <tr>
 	            <td width='20%' valign='top' height='100%' rowspan='2'>
-	      	      <?php if ( $sTipo == "Urbano") { ?>		         
+	      	      <?php if ( $sTipo == "Urbano") { ?>
 	                     <a class='selecionados'	onclick='js_marca(this);this.blur()' href='itb4_consultadadosimovel001.php?guia=<?=$oGet->it01_guia;?>'      target='dados'><strong> Dados do Imóvel  </strong></a>
 	      	      <?php } else { ?>
-	                     <a class='selecionados'	onclick='js_marca(this);this.blur()' href='itb4_consultadadosimovelrural001.php?guia=<?=$oGet->it01_guia;?>' target='dados'><strong> Dados da Terra  </strong></a>					  
+	                     <a class='selecionados'	onclick='js_marca(this);this.blur()' href='itb4_consultadadosimovelrural001.php?guia=<?=$oGet->it01_guia;?>' target='dados'><strong> Dados da Terra  </strong></a>
 	      	      <?php } ?>
 	              <a class='dados'	onclick='js_marca(this);this.blur()' href='itb4_situacaoitbi001.php?guia=<?=$oGet->it01_guia;?>'                     target='dados'><strong> Situação  	  	  </strong></a>
 	              <a class='dados'	onclick='js_marca(this);this.blur()' href='itb4_consultavaloresitbi001.php?guia=<?=$oGet->it01_guia;?>'              target='dados'><strong> Valores Informados / Avaliados	  	  </strong></a>
 	              <a class='dados'	onclick='js_marca(this);this.blur()' href='itb4_consultaformaspgtoitbi001.php?guia=<?=$oGet->it01_guia;?>'           target='dados'><strong> Formas de Pagamento Informado </strong></a>
 	              <a class='dados' onclick='js_marca(this);this.blur()' href='itb4_consultaformaspgtoavaliaitbi001.php?guia=<?=$oGet->it01_guia;?>'     target='dados'><strong> Formas de Pagamento Avaliação </strong></a>
-        	      <a class='dados' onclick='js_marca(this);this.blur()' href='itb4_consultatransmitenteitbi001.php?guia=<?=$oGet->it01_guia;?>'         target='dados'><strong> Transmitentes  </strong></a>		           
+        	      <a class='dados' onclick='js_marca(this);this.blur()' href='itb4_consultatransmitenteitbi001.php?guia=<?=$oGet->it01_guia;?>'         target='dados'><strong> Transmitentes  </strong></a>
         	      <a class='dados' onclick='js_marca(this);this.blur()' href='itb4_consultaadquirenteitbi001.php?guia=<?=$oGet->it01_guia;?>'           target='dados'><strong> Adquirentes   </strong></a>
         		    <a class='dados' onclick='js_marca(this);this.blur()' href='itb4_consultadadosbenfeitoriasl001.php?guia=<?=$oGet->it01_guia;?>'       target='dados'><strong> Benfeitorias  </strong></a>
         		    <a class='dados' onclick='js_marca(this);this.blur()' href='itb4_consultadadosalteracoes001.php?guia=<?=$oGet->it01_guia;?>'          target='dados'><strong> Alterações Realizadas </strong></a>
 	      	      <?php if ( $sTipo == "Rural") { ?>
-        		      <a class='dados' onclick='js_marca(this);this.blur()' href='itb4_consultacaracruralutil001.php?guia=<?=$oGet->it01_guia;?>'           target='dados'><strong> Utilização da Terra  </strong></a>					
+        		      <a class='dados' onclick='js_marca(this);this.blur()' href='itb4_consultacaracruralutil001.php?guia=<?=$oGet->it01_guia;?>'           target='dados'><strong> Utilização da Terra  </strong></a>
         		      <a class='dados' onclick='js_marca(this);this.blur()' href='itb4_consultacaracruraldist001.php?guia=<?=$oGet->it01_guia;?>'           target='dados'><strong> Distribuição da Terra  </strong></a>
-	      	      <?php } ?>		
+	      	      <?php } ?>
                   <a class='dados' onclick='js_marca(this);this.blur()' href='itb4_consultaguiaemitidas001.php?guia=<?=$oGet->it01_guia;?>'             target='dados'><strong> Guias Emitidas  </strong></a>
                   <a class='dados' onclick='js_marca(this);this.blur()' href='itb4_consultacancelamento001.php?guia=<?=$oGet->it01_guia;?>'          target='dados'><strong> Cancelamento </strong></a>
 	            </td>
 	            <td valign='top' height='100%' style='border:1px inset white'>
-	      	      <?php if ( $sTipo == "Urbano") { ?>		         
+	      	      <?php if ( $sTipo == "Urbano") { ?>
 	                <iframe height='300' name='dados' frameborder='0' width='100%' src='itb4_consultadadosimovel001.php?guia=<?=$oGet->it01_guia;?>' style='background-color:#CCCCCC'></iframe>
 	      	      <?php } else { ?>
-	      	        <iframe height='300' name='dados' frameborder='0' width='100%' src='itb4_consultadadosimovelrural001.php?guia=<?=$oGet->it01_guia;?>' style='background-color:#CCCCCC'></iframe>					
-	      	      <?php } ?>		  		         
+	      	        <iframe height='300' name='dados' frameborder='0' width='100%' src='itb4_consultadadosimovelrural001.php?guia=<?=$oGet->it01_guia;?>' style='background-color:#CCCCCC'></iframe>
+	      	      <?php } ?>
 	            </td>
             </tr>
 	        </table>
 	      </fieldset>
       </td>
-    </tr>	  
+    </tr>
   </table>
 
   <center>
@@ -302,6 +302,6 @@ $rsConsultaITBI = $clitbi->sql_record($clitbi->sql_query_dados($oGet->it01_guia)
 
   function js_buscaCgm(iCgm) {
 
-     js_OpenJanelaIframe('top.corpo','db_iframe_nome','prot3_conscgm002.php?fechar=db_iframe_nome&numcgm='+iCgm,'Pesquisa',true);
+     js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_nome','prot3_conscgm002.php?fechar=db_iframe_nome&numcgm='+iCgm,'Pesquisa',true);
   }
-</script> 
+</script>

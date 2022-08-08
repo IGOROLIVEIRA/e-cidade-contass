@@ -50,7 +50,7 @@ include_once("classes/db_conrelvalor_classe.php");
 $clconrelinfo  = new cl_conrelinfo;
 $clconrelvalor = new cl_conrelvalor;
 
-$xinstit = split("-",$db_selinstit);
+$xinstit = explode("-",$db_selinstit);
 $resultinst = pg_exec("select codigo,nomeinst,nomeinstabrev from db_config where codigo in (".str_replace('-',', ',$db_selinstit).") ");
 $descr_inst = '';
 $xvirg = '';
@@ -117,7 +117,7 @@ $dt_ini   = $dt[0];  // data inicial do periodo
 $dt_fim   = $dt[1];  // data final do período
 
 // se o ano atual é bissexto deve subtrair 366 somente se a data for superior a 28/02/200X
-$dt = split('-',$dt_fim);  // mktime -- (mes,dia,ano)
+$dt = explode('-',$dt_fim);  // mktime -- (mes,dia,ano)
 //$dt_ini_ant = date('Y-m-d',mktime(0,0,0,$dt[1],$dt[2]-364,$dt[0]));
 $dt_ini_ant = date('Y-m-d',mktime(0,0,0,$dt[1]-11,"01",$dt[0]));
 $dt_fim_ant = $anousu_ant.'-12-31';

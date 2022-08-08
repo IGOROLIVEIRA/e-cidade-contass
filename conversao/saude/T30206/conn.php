@@ -1,8 +1,8 @@
   <?php
 // Esse é o padrão para conexao
-require("../../../libs/db_conn.php");
-require("../../../libs/db_stdlib.php");
-require("../../../libs/db_utils.php");
+require(__DIR__ . "/../../../libs/db_conn.php");
+require(__DIR__ . "/../../../libs/db_stdlib.php");
+require(__DIR__ . "/../../../libs/db_utils.php");
 // Fazendo dessa forma teremos a conexao padronizacao e sem necessidade de alteracoes externas
 //$DB_SERVIDOR="172.30.6.1";
 //$DB_BASE="capivari_v2";

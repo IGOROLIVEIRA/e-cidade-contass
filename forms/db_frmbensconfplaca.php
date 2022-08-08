@@ -9,7 +9,7 @@ $clbensconfplaca->rotulo->label();
     <td nowrap title="<?=@$Tt40_codigo?>">
        <?=@$Lt40_codigo?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('t40_codigo',5,$It40_codigo,true,'text',3,"")
 ?>
@@ -19,7 +19,7 @@ db_input('t40_codigo',5,$It40_codigo,true,'text',3,"")
     <td nowrap title="<?=@$Tt40_descr?>">
        <?=@$Lt40_descr?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('t40_descr',40,$It40_descr,true,'text',$db_opcao,"")
 ?>
@@ -32,7 +32,7 @@ db_input('t40_descr',40,$It40_descr,true,'text',$db_opcao,"")
 </form>
 <script>
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_bensconfplaca','func_bensconfplaca.php?funcao_js=parent.js_preenchepesquisa|t40_codigo','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_bensconfplaca','func_bensconfplaca.php?funcao_js=parent.js_preenchepesquisa|t40_codigo','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_bensconfplaca.hide();

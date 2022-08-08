@@ -172,13 +172,14 @@ function js_tipoTributacao(oElemento) {
 }
 
 function js_pesquisa() {
-	js_OpenJanelaIframe('top.corpo', 'db_iframe_issgruposervico', 'func_issgruposervico.php?funcao_js=parent.js_preenchePesquisa|q126_sequencial|db121_descricao|db121_estrutural', 'Pesquisa', true);
+	js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_issgruposervico', 'func_issgruposervico.php?funcao_js=parent.js_preenchePesquisa|q126_sequencial|db121_descricao|db121_estrutural', 'Pesquisa', true);
 }
 
 function js_preenchePesquisa(iCodigoGrupoServico, sDescricao, sEstrutural) {
   $('sDescricaoGrupoServico').value = sDescricao;
   js_divCarregando('Buscando dados do grupo de serviço', 'msgBox');
-  db_iframe_issgruposervico.hide();
+  db_iframe_issgruposervico.hide(true);
   location.href = 'iss1_issconfiguracaogruposervico002.php?iCodigoGrupoServico=' + iCodigoGrupoServico;
+  js_removeObj('msgBox');
 }
 </script>

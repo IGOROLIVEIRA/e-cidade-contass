@@ -107,10 +107,10 @@ function js_emite(){
 <script>
 function js_pesquisapc74_codigo(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_pcfornecertif','func_pcfornecertifalt.php?funcao_js=parent.js_mostracgm1|pc74_codigo','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_pcfornecertif','func_pcfornecertifalt.php?funcao_js=parent.js_mostracgm1|pc74_codigo','Pesquisa',true);
   }else{
      if(document.form1.pc74_codigo.value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_pcfornecertif','func_pcfornecertifalt.php?pesquisa_chave='+document.form1.pc74_codigo.value+'&funcao_js=parent.js_mostracgm','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_pcfornecertif','func_pcfornecertifalt.php?pesquisa_chave='+document.form1.pc74_codigo.value+'&funcao_js=parent.js_mostracgm','Pesquisa',false);
      }else{
      }
   }

@@ -10,7 +10,7 @@ $lVerificar = true;
  */
 $lConn      = true;
 if ($lConn) {
-  require_once("../../libs/db_conn.php");	
+  require_once(__DIR__ . "/../../libs/db_conn.php");	
 } else {
 	
   $DB_USUARIO         = "postgres";
@@ -20,8 +20,8 @@ if ($lConn) {
   $DB_PORTA           = "5432";
 }
 
-require_once("../../libs/db_utils.php");
-require_once("../../libs/db_libconsole.php");
+require_once(__DIR__ . "/../../libs/db_utils.php");
+require_once(__DIR__ . "/../../libs/db_libconsole.php");
 
 echo "inicio da migracao: ".date("d/m/Y - h:i:s", time())."\n";
 echo "Conectando...\n";

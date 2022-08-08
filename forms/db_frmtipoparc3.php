@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: dividaativa
@@ -37,7 +37,7 @@ $clrotulo->label("i01_descr");
     <td nowrap title="<?=@$Ttipoparc?>">
        <?=@$Ltipoparc?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('tipoparc',4,$Itipoparc,true,'text',3,"")
 ?>
@@ -47,7 +47,7 @@ db_input('tipoparc',4,$Itipoparc,true,'text',3,"")
     <td nowrap title="<?=@$Tdescr?>">
        <?=@$Ldescr?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('descr',40,$Idescr,true,'text',$db_opcao,"")
 ?>
@@ -57,7 +57,7 @@ db_input('descr',40,$Idescr,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tdtini?>">
        <?=@$Ldtini?>
     </td>
-    <td> 
+    <td>
 <?
 db_inputdata('dtini',@$dtini_dia,@$dtini_mes,@$dtini_ano,true,'text',$db_opcao,"")
 ?>
@@ -67,7 +67,7 @@ db_inputdata('dtini',@$dtini_dia,@$dtini_mes,@$dtini_ano,true,'text',$db_opcao,"
     <td nowrap title="<?=@$Tdtfim?>">
        <?=@$Ldtfim?>
     </td>
-    <td> 
+    <td>
 <?
 db_inputdata('dtfim',@$dtfim_dia,@$dtfim_mes,@$dtfim_ano,true,'text',$db_opcao,"")
 ?>
@@ -77,7 +77,7 @@ db_inputdata('dtfim',@$dtfim_dia,@$dtfim_mes,@$dtfim_ano,true,'text',$db_opcao,"
     <td nowrap title="<?=@$Tmaxparc?>">
        <?=@$Lmaxparc?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('maxparc',4,$Imaxparc,true,'text',$db_opcao,"")
 ?>
@@ -87,7 +87,7 @@ db_input('maxparc',4,$Imaxparc,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tvlrmin?>">
        <?=@$Lvlrmin?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('vlrmin',15,$Ivlrmin,true,'text',$db_opcao,"")
 ?>
@@ -97,7 +97,7 @@ db_input('vlrmin',15,$Ivlrmin,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tdtvlr?>">
        <?=@$Ldtvlr?>
     </td>
-    <td> 
+    <td>
 <?
 db_inputdata('dtvlr',@$dtvlr_dia,@$dtvlr_mes,@$dtvlr_ano,true,'text',$db_opcao,"")
 ?>
@@ -109,7 +109,7 @@ db_inputdata('dtvlr',@$dtvlr_dia,@$dtvlr_mes,@$dtvlr_ano,true,'text',$db_opcao,"
        db_ancora(@$Linflat,"js_pesquisainflat(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('inflat',5,$Iinflat,true,'text',$db_opcao," onchange='js_pesquisainflat(false);'")
 ?>
@@ -122,7 +122,7 @@ db_input('i01_descr',40,$Ii01_descr,true,'text',3,'')
     <td nowrap title="<?=@$Tdescmul?>">
        <?=@$Ldescmul?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('descmul',15,$Idescmul,true,'text',$db_opcao,"")
 ?>
@@ -132,7 +132,7 @@ db_input('descmul',15,$Idescmul,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tdescjur?>">
        <?=@$Ldescjur?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('descjur',15,$Idescjur,true,'text',$db_opcao,"")
 ?>
@@ -146,20 +146,20 @@ db_input('descjur',15,$Idescjur,true,'text',$db_opcao,"")
 <script>
 function js_pesquisainflat(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_inflan','func_inflan.php?funcao_js=parent.js_mostrainflan1|i01_codigo|i01_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_inflan','func_inflan.php?funcao_js=parent.js_mostrainflan1|i01_codigo|i01_descr','Pesquisa',true);
   }else{
-     if(document.form1.inflat.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_inflan','func_inflan.php?pesquisa_chave='+document.form1.inflat.value+'&funcao_js=parent.js_mostrainflan','Pesquisa',false);
+     if(document.form1.inflat.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_inflan','func_inflan.php?pesquisa_chave='+document.form1.inflat.value+'&funcao_js=parent.js_mostrainflan','Pesquisa',false);
      }else{
-       document.form1.i01_descr.value = ''; 
+       document.form1.i01_descr.value = '';
      }
   }
 }
 function js_mostrainflan(chave,erro){
-  document.form1.i01_descr.value = chave; 
-  if(erro==true){ 
-    document.form1.inflat.focus(); 
-    document.form1.inflat.value = ''; 
+  document.form1.i01_descr.value = chave;
+  if(erro==true){
+    document.form1.inflat.focus();
+    document.form1.inflat.value = '';
   }
 }
 function js_mostrainflan1(chave1,chave2){
@@ -168,7 +168,7 @@ function js_mostrainflan1(chave1,chave2){
   db_iframe_inflan.hide();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_tipoparc','func_tipoparc.php?funcao_js=parent.js_preenchepesquisa|tipoparc','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_tipoparc','func_tipoparc.php?funcao_js=parent.js_preenchepesquisa|tipoparc','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_tipoparc.hide();

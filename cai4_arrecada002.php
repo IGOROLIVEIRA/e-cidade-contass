@@ -544,7 +544,7 @@ if (isset($HTTP_POST_VARS ["codrec"]) || isset($codrec)) {
           $vlrdesconto = 0;
           $dtvenc = '';
           $vlrimp = $vlrcor + $vlrjuros + $vlrmulta - $vlrdesconto;
-          
+
           if (substr($fc_calcula, 0, 1) == '4') {
 
             if (! empty($vlrhist)) {
@@ -589,7 +589,7 @@ if (isset($HTTP_POST_VARS ["codrec"]) || isset($codrec)) {
 
         /** Extensao : Inicio [autenticacao_taxa_expediente] */
         /** Extensao : Fim [autenticacao_taxa_expediente] */
-        
+
         ?>
           <script>
             var estorno_codrec = 0;
@@ -736,7 +736,7 @@ function js_autenticar(lMostra) {
       document.form1.submit();
 
     } else {
-      parent.js_OpenJanelaIframe("top.corpo",'db_autent_iframe','cai4_arrecada003.php?reduz='+document.form1.reduz.value+'&system=linux','Autenticação',lMostra);
+      parent.js_OpenJanelaIframe("CurrentWindow.corpo",'db_autent_iframe','cai4_arrecada003.php?reduz='+document.form1.reduz.value+'&system=linux','Autenticação',lMostra);
     }
 
   }

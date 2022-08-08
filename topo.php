@@ -103,8 +103,8 @@ if (db_getsession('DB_login') === "dbseller" && db_getsession("DB_id_usuario") =
 
   function js_montarJanelaMensagens() {
 
-    var iWidthParent  = top.corpo.document.body.clientWidth;
-    var iHeightParent = top.corpo.document.body.clientHeight;
+    var iWidthParent  = CurrentWindow.corpo.document.body.clientWidth;
+    var iHeightParent = CurrentWindow.corpo.document.body.clientHeight;
 
     var iWidthJanela  = 900;
     var iHeightJanela = 900;
@@ -121,14 +121,14 @@ if (db_getsession('DB_login') === "dbseller" && db_getsession("DB_id_usuario") =
     var iMarginTop  = 25;
     iHeightJanela  -= iMarginTop;
 
-    var sNomeIframePai       = 'top.corpo';
+    var sNomeIframePai       = 'CurrentWindow.corpo';
     var sNomeIframeMensagens = 'db_iframe_mensagens_sistema';
     var sNomeArquivo         = 'con4_mensagens002.php';
     var sTituloJanela        = 'Mensagens';
 
     js_OpenJanelaIframe(sNomeIframePai, sNomeIframeMensagens, sNomeArquivo, sTituloJanela, true,
                         iMarginTop, iMarginLeft, iWidthJanela, iHeightJanela);
-    top.corpo.document.getElementById('Jandb_iframe_mensagens_sistema').style.zIndex = '999999';
+    CurrentWindow.corpo.document.getElementById('Jandb_iframe_mensagens_sistema').style.zIndex = '999999';
     return false;
   }
 

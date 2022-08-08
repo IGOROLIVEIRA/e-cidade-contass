@@ -1,32 +1,32 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 /**
- * 
+ *
  * @author I
  * @revision $Author: dbevandro $
  * @version $Revision: 1.3 $
@@ -137,8 +137,8 @@ td {
      </tr>
      <tr>
        <td align="center">
-         <input name="pesquisar" id="pesquisar" type="button" value="Pesquisar" 
-                onclick="return js_consultaNumpreNumbanco();">     
+         <input name="pesquisar" id="pesquisar" type="button" value="Pesquisar"
+                onclick="return js_consultaNumpreNumbanco();">
        </td>
      </tr>
      <tr>
@@ -147,7 +147,7 @@ td {
      <tr>
        <td>
          <fieldset id="fielsetGrid" class="display-none">
-           <div id='cntGridNumpreNumbanco'></div>  
+           <div id='cntGridNumpreNumbanco'></div>
          </fieldset>
        </td>
      </tr>
@@ -169,28 +169,28 @@ function js_montaGridNumpreNumBanco(sTipoPesquisa) {
   oGridNumpreNumbanco.nameInstance = "oGridNumpreNumbanco";
   oGridNumpreNumbanco.allowSelectColumns(true);
   if (sTipoPesquisa == 'Numpre') {
-    
+
     oGridNumpreNumbanco.setCellWidth(new Array("8%", "20%", "20%", "20%", "20%", "50%", "20%", "20%",
-                                               "20%", "20%", "10%", "20%", "20%", 
-                                               "20%", "20%", "20%","20%"));                    
+                                               "20%", "20%", "10%", "20%", "20%",
+                                               "20%", "20%", "20%","20%"));
     oGridNumpreNumbanco.setCellAlign(new Array("center", "center", "center", "center", "center", "left", "center", "center",
-                                               "left", "right", "center", "center", "center", 
-                                               "left", "center", "left","center"));                                        
-    oGridNumpreNumbanco.setHeader(new Array("MI", "Numnov", "Numbco", "Numpre", "Parcela", "Receita", "Cgm", "Dt. Operação", "Histórico", 
-                                            "Valor", "Vencimento", "Total Parcelas", "Digito", "Tipo Débito", 
+                                               "left", "right", "center", "center", "center",
+                                               "left", "center", "left","center"));
+    oGridNumpreNumbanco.setHeader(new Array("MI", "Numnov", "Numbco", "Numpre", "Parcela", "Receita", "Cgm", "Dt. Operação", "Histórico",
+                                            "Valor", "Vencimento", "Total Parcelas", "Digito", "Tipo Débito",
                                             "Movimentação"));
-                                            
+
     oGridNumpreNumbanco.aHeaders[6].lDisplayed  = false;
     oGridNumpreNumbanco.aHeaders[9].lDisplayed  = false;
     oGridNumpreNumbanco.aHeaders[10].lDisplayed = false;
   } else if (sTipoPesquisa == 'Numbanco') {
-  
-    oGridNumpreNumbanco.setCellWidth(new Array("8%", "10%", "10%", "10%", "10%", 
+
+    oGridNumpreNumbanco.setCellWidth(new Array("8%", "10%", "10%", "10%", "10%",
                                                "20%", "20%", "20%", "20%","20%"));
-  
-    oGridNumpreNumbanco.setCellAlign(new Array("center", "center", "center", "center", "center", 
-                                               "center", "center", "center", "left"));                                        
-    oGridNumpreNumbanco.setHeader(new Array("MI", "Numnov", "Numpre", "Parcela", "Código Banco", "Código Agência", 
+
+    oGridNumpreNumbanco.setCellAlign(new Array("center", "center", "center", "center", "center",
+                                               "center", "center", "center", "left"));
+    oGridNumpreNumbanco.setHeader(new Array("MI", "Numnov", "Numpre", "Parcela", "Código Banco", "Código Agência",
                                             "Número Banco", "Número Banco Anterior"));
   }
   oGridNumpreNumbanco.show($('cntGridNumpreNumbanco'));
@@ -198,67 +198,67 @@ function js_montaGridNumpreNumBanco(sTipoPesquisa) {
 
 /*
  * Pesquisa Numpre/NumBanco
- */ 
+ */
 function js_consultaNumpreNumbanco() {
-  
+
   var iNumpre   = $F('k00_numpre');
   var iNumpar   = $F('k00_numpar');
   var iNumbanco = $F('k00_numbco');
-  
+
   if (!iNumpre && !iNumbanco) {
-  
+
     var sMsg  = 'Usuário: \n\n';
         sMsg += ' Informe um Numpre ou Numbanco Válido!';
     alert(sMsg);
     return false;
   }
-   
+
   js_divCarregando('Pesquisando aguarde...','msgBoxPesquisa');
-   
+
   var oParam       = new Object();
   oParam.exec      = "pesquisaNumpreNumbanco";
   oParam.numpre    = iNumpre.trim();
   oParam.numpar    = iNumpar.trim();
   oParam.numbanco  = iNumbanco.trim();
-    
+
   var oAjax        = new Ajax.Request( sUrl, {
-                                               method: 'post', 
-                                               parameters: 'json='+js_objectToJson(oParam), 
+                                               method: 'post',
+                                               parameters: 'json='+js_objectToJson(oParam),
                                                onComplete: js_retornoPesquisa
                                              }
-                                     );    
+                                     );
 }
 
 /*
  * Preenche Grid Numpre/NumBanco
- */ 
+ */
 function js_retornoPesquisa(oAjax) {
 
   js_removeObj("msgBoxPesquisa");
-  
+
   $("fielsetGrid").className = 'display-on';
-  
-  var oRetorno        = eval("("+oAjax.responseText+")");   
+
+  var oRetorno        = eval("("+oAjax.responseText+")");
   var aNumpreNumbanco = oRetorno.aNumpreNumbanco;
   var iNumrows        = aNumpreNumbanco.length;
   var sTipoPesquisa   = oRetorno.TipoPesquisa.trim();
 
   if (oRetorno.erro == 1) {
-  
+
     $("fielsetGrid").className = 'display-none';
     return false;
   }
-  
+
   js_montaGridNumpreNumBanco(sTipoPesquisa);
-     
+
   oGridNumpreNumbanco.clearAll(true);
-  
+
   if (sTipoPesquisa == 'Numpre') {
 
 	  aNumpreNumbanco.each(function (oNumpreNumbanco, id) {
-	     
+
 	    var aLinha = new Array();
-	    
+
       aLinha[0] = "<a href='#' onclick='js_pesquisaMi("+oNumpreNumbanco.numpre
                                                        +","
                                                        +oNumpreNumbanco.numpar
@@ -279,16 +279,16 @@ function js_retornoPesquisa(oAjax) {
 	    aLinha[12] = oNumpreNumbanco.digitp;
 	    aLinha[13] = oNumpreNumbanco.codtipo+'-'+oNumpreNumbanco.descrtipo.urlDecode();
 	    aLinha[14] = oNumpreNumbanco.movimentacao.urlDecode();
-	        
+
 	    oGridNumpreNumbanco.addRow(aLinha, false, false, false);
 	  });
 
   } else if (sTipoPesquisa == 'Numbanco') {
-  
+
     aNumpreNumbanco.each(function (oNumpreNumbanco, id) {
-       
+
       var aLinha = new Array();
-      
+
       aLinha[0] = "<a href='#' onclick='js_pesquisaMi("+oNumpreNumbanco.numpre
                                                        +","
                                                        +oNumpreNumbanco.numpar
@@ -302,24 +302,24 @@ function js_retornoPesquisa(oAjax) {
       aLinha[5] = oNumpreNumbanco.codagencia;
       aLinha[6] = oNumpreNumbanco.numbanco;
       aLinha[7] = oNumpreNumbanco.numbancoant;
-          
+
       oGridNumpreNumbanco.addRow(aLinha, false, false, false);
     });
   }
-  
+
   if (iNumrows == 0) {
     oGridNumpreNumbanco.setStatus('Nenhum registro encontrado.');
   }
-  
+
   oGridNumpreNumbanco.renderRows();
-     
+
 }
 
 /*
  * Limpa campos numpar, numpre e numbanco
  */
 function js_limpacampos(lCampo) {
-  
+
   if (lCampo == true) {
 
     $('k00_numpre').value = '';
@@ -330,11 +330,11 @@ function js_limpacampos(lCampo) {
 }
 
 /*
- * Lockup de pesquisa 
+ * Lockup de pesquisa
  */
 function js_pesquisaMi(iNumpre,iNumpar,iReceita) {
 
-  js_OpenJanelaIframe('top.corpo','db_iframe_consultanumprenumbanco',
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_consultanumprenumbanco',
                       'func_consultanumprenumbanco.php?numpre='+iNumpre+'&numpar='+iNumpar+'&receita='+iReceita,
                       'Pesquisa',true);
 }

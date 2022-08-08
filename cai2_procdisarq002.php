@@ -45,7 +45,7 @@ $sql="select x33_dtvenc as datavenc from aguaconfvenc where x33_exerc = ".db_get
 $result = pg_query($sql);
 db_fieldsmemory($result, 0);
 
-$data = split("-",$datavenc);
+$data = explode("-",$datavenc);
 $dia = $data[2];
 $historico = base64_decode($historico);
 //echo " codret = $codret <br> data  = $datavenc <br> dia = $dia";

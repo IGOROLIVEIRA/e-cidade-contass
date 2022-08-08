@@ -84,7 +84,7 @@
       frameListaSocios.show();
       frameListaSocios.focus();
     } else if (F.fantasia.value.length > 0) {
-      js_OpenJanelaIframe('top.corpo', 'frameListaFantasia', 'func_nomefantasia.php?funcao_js=parent.mostraTodasInscricoes_PesquisaFantasia|0&nomeDigitadoParaPesquisa=' + F.fantasia.value, 'Pesquisa', true, 23);
+      js_OpenJanelaIframe('CurrentWindow.corpo', 'frameListaFantasia', 'func_nomefantasia.php?funcao_js=parent.mostraTodasInscricoes_PesquisaFantasia|0&nomeDigitadoParaPesquisa=' + F.fantasia.value, 'Pesquisa', true, 23);
 
       /*  frameListaFantasia.jan.location.href = 'func_nomefantasia.php?funcao_js=parent.mostraTodasInscricoes_PesquisaFantasia|0&nomeDigitadoParaPesquisa='+F.fantasia.value;
        alert(F.fantasia.value);
@@ -92,11 +92,11 @@
        frameListaFantasia.show();
        frameListaFantasia.focus();*/
     } else if (F.matriculaImovel.value.length > 0) {
-      js_OpenJanelaIframe('top.corpo', 'frameListaMatriculaImovel', 'iss3_consinscr002.php?pesquisaMatriculaImovel=' + F.matriculaImovel.value, 'Lista Matricula', true, 23);
+      js_OpenJanelaIframe('CurrentWindow.corpo', 'frameListaMatriculaImovel', 'iss3_consinscr002.php?pesquisaMatriculaImovel=' + F.matriculaImovel.value, 'Lista Matricula', true, 23);
 
     } else if ((F.setor.value.length > 0) || (F.quadra.value.length > 0) || (F.lote.value.length > 0)) {
 
-      js_OpenJanelaIframe('top.corpo', 'frameListaSetQuaLot', 'func_iptubase.php?'
+      js_OpenJanelaIframe('CurrentWindow.corpo', 'frameListaSetQuaLot', 'func_iptubase.php?'
           + 'funcao_js=parent.mostraTodasInscricoes_PesquisaSetQuaLot'
           + '&j34_setor=' + F.setor.value
           + '&j34_quadra=' + F.quadra.value

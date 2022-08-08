@@ -27,7 +27,7 @@ $clrotulo->label('k50_notifica');
 $clnumpref = new cl_numpref;
 $resnumpref = $clnumpref->sql_record($clnumpref->sql_query_file(db_getsession("DB_anousu"),"k03_certissvar"));
 if($resnumpref==false || $clnumpref->numrows==0){
-  db_msgbox("Tabela de parâmetro (numpref) não configurada! Verifique com administrador");	
+  db_msgbox("Tabela de parâmetro (numpref) não configurada! Verifique com administrador");
 }else{
   db_fieldsmemory($resnumpref,0);
 }
@@ -43,7 +43,7 @@ if(pg_num_rows($res)>0) {
   } else {
 	$j18_nomefunc = "func_iptubase.php";
   }
-	
+
 } else {
   $j18_usasisagua = false;
   $j18_nomefunc = "func_iptubase.php";
@@ -91,7 +91,7 @@ a.links2:hover {
 	text-decoration: underline;
 }
 .nome {
-  color:black;  
+  color:black;
 }
 a.nome:hover {
   color:blue;
@@ -114,7 +114,7 @@ function js_MudaLink(nome) {
     TIPO = document.getElementById(nome).innerText;
 	document.getElementById('processando').style.top = 113;
   }
-//  if(nome.indexOf("tiposemdeb") != -1) 
+//  if(nome.indexOf("tiposemdeb") != -1)
 //    document.getElementById('outrasopcoes').disabled = true;
 //  else
 //    document.getElementById('outrasopcoes').disabled = false;
@@ -128,17 +128,17 @@ function js_MudaLink(nome) {
 	}
   }
   document.getElementById(nome).style.backgroundColor = '#E8EE6F';
- 
+
   if(nome.indexOf("tiposemdeb") != -1) {
     document.getElementById('relatorio').disabled = true;
     document.getElementById('enviar').disabled = true;
-    document.getElementById('btmarca').disabled = true;    
+    document.getElementById('btmarca').disabled = true;
   } else {
-  
+
   //  document.getElementById('relatorio').disabled = false;
 //    document.getElementById('enviar').disabled = false;
-   document.getElementById('btmarca').disabled = false;  
-	
+   document.getElementById('btmarca').disabled = false;
+
   }
 
   document.getElementById('valor1').innerHTML = "0.00";
@@ -147,7 +147,7 @@ function js_MudaLink(nome) {
   document.getElementById('multa1').innerHTML = "0.00";
   document.getElementById('desconto1').innerHTML = "0.00";
   document.getElementById('total1').innerHTML = "0.00";
-  
+
   document.getElementById('valor2').innerHTML = "0.00";
   document.getElementById('valorcorr2').innerHTML = "0.00";
   document.getElementById('juros2').innerHTML = "0.00";
@@ -161,7 +161,7 @@ function js_MudaLink(nome) {
   document.getElementById('multa3').innerHTML = "0.00";
   document.getElementById('desconto3').innerHTML = "0.00";
   document.getElementById('total3').innerHTML = "0.00";
-  
+
 }
 
 function js_relatorio() {
@@ -184,18 +184,18 @@ function js_emiterecibo() {
 	    aux += 'N' + F[i].value;
 	  }
       }
-	
+
 	if(F["ver_matric"].value != "" && F["ver_inscr"].value != "") {
 	  alert("Erro(50): função retornou matricula e inscrição preenchidos.");
 	  return false;
 	} else if(F["ver_matric"].value != "") {
-	  var vm = "&vermatric=" + F["ver_matric"].value; 
+	  var vm = "&vermatric=" + F["ver_matric"].value;
 	} else if(F["ver_inscr"].value != "") {
 	  var vm = "&verinscr=" + F["ver_inscr"].value;
 	} else if(F["ver_numcgm"].value != "") {
 	  var vm = "&vernumcgm=" + F["ver_numcgm"].value;
 	}
-	
+
 	var tipo = debitos.tipo;
 	*/
 //    jan = window.open('cai3_gerfinanc003.php?tipo='+tipo+'&numpres=' + aux + vm,'_blank','width=790,height=530,scrollbars=1,location=0');
@@ -206,7 +206,7 @@ function js_emiterecibo() {
       elem.parentNode.removeChild(elem);
  }else{
       var tab = debitos.document.getElementById('tabdebitos');
-      for(i = 1;i < tab.rows.length;i++) {	
+      for(i = 1;i < tab.rows.length;i++) {
 //      var num = new Number(tab.rows[i].cells[10].innerText);
         var num = new Number(tab.rows[i].cells[10].childNodes[1].nodeValue);
 	    num = Math.abs(num);
@@ -216,9 +216,9 @@ function js_emiterecibo() {
  	    }
 */
     }
-		
+
     var cor = "";
-    for(i = 1;i < tab.rows.length;i++) {  
+    for(i = 1;i < tab.rows.length;i++) {
       cor = (cor=="#E4F471")?"#EFE029":"#E4F471";
       tab.rows[i].bgColor = cor;
       if(tab.rows[i].cells[16].childNodes[0].attributes["type"].nodeValue == "submit") {
@@ -228,14 +228,14 @@ function js_emiterecibo() {
 	  if(tab.rows[i].cells[16].childNodes[0].attributes["type"].nodeValue == "hidden") {
   	    var inp = debitos.document.createElement("INPUT");
 	    inp.setAttribute("type","checkbox");
-	    inp.setAttribute("name",tab.rows[i].cells[16].childNodes[0].attributes["name"].nodeValue); 
+	    inp.setAttribute("name",tab.rows[i].cells[16].childNodes[0].attributes["name"].nodeValue);
 	    inp.setAttribute("id",tab.rows[i].cells[16].childNodes[0].attributes["id"].nodeValue);
-	    inp.setAttribute("value",tab.rows[i].cells[16].childNodes[0].attributes["value"].nodeValue);		
+	    inp.setAttribute("value",tab.rows[i].cells[16].childNodes[0].attributes["value"].nodeValue);
         if(navigator.appName == "Netscape")
           inp.addEventListener("click",debitos.js_soma,false);
 		else
-		  inp.onclick = debitos.js_soma;				  
-	    tab.rows[i].cells[16].appendChild(inp);		  
+		  inp.onclick = debitos.js_soma;
+	    tab.rows[i].cells[16].appendChild(inp);
         var elem = debitos.document.getElementById(tab.rows[i].cells[16].childNodes[0].attributes["id"].nodeValue);
 	    elem.parentNode.removeChild(elem);
 	  }
@@ -245,29 +245,29 @@ function js_emiterecibo() {
   }
 }
 function limpaparcela(qual) {
-  debitos.document.getElementById(qual).checked=false;  
-  debitos.document.getElementById(qual).style.visibility='hidden';  
+  debitos.document.getElementById(qual).checked=false;
+  debitos.document.getElementById(qual).style.visibility='hidden';
   document.getElementById("enviar").disabled = true;
 }
 function js_emitecarne(qualcarne) {
-  var chi = debitos.document.createElement("INPUT"); 
-  chi.setAttribute("type","hidden");    
+  var chi = debitos.document.createElement("INPUT");
+  chi.setAttribute("type","hidden");
   chi.setAttribute("name","geracarne");
-  chi.setAttribute("id","geracarne"); 
+  chi.setAttribute("id","geracarne");
   if(qualcarne==true){
-     chi.setAttribute("value","banco"); 
+     chi.setAttribute("value","banco");
   }else{
-     chi.setAttribute("value","prefeitura");  
+     chi.setAttribute("value","prefeitura");
   }
-  debitos.document.getElementById('form1').appendChild(chi);  
- 
+  debitos.document.getElementById('form1').appendChild(chi);
+
   if(document.getElementById('emisscarne')){
-    var emiscarneiframe = debitos.document.createElement("INPUT"); 
-    emiscarneiframe.setAttribute("type","hidden");    
+    var emiscarneiframe = debitos.document.createElement("INPUT");
+    emiscarneiframe.setAttribute("type","hidden");
     emiscarneiframe.setAttribute("name","emiscarneiframe");
-    emiscarneiframe.setAttribute("id","emiscarneiframe"); 
-    emiscarneiframe.setAttribute("value",document.getElementById('emisscarne').value); 
-    debitos.document.getElementById('form1').appendChild(emiscarneiframe); 
+    emiscarneiframe.setAttribute("id","emiscarneiframe");
+    emiscarneiframe.setAttribute("value",document.getElementById('emisscarne').value);
+    debitos.document.getElementById('form1').appendChild(emiscarneiframe);
   }
   js_emiterecibo();
 }
@@ -294,14 +294,14 @@ function js_outrasopcoes(chave){
 }
 
 function js_emitenotificacao(){
-  var chi = debitos.document.createElement("INPUT"); 
-  chi.setAttribute("type","hidden");    
+  var chi = debitos.document.createElement("INPUT");
+  chi.setAttribute("type","hidden");
   chi.setAttribute("name","notificacao_tipo");
-  chi.setAttribute("id","notificacao_tipo"); 
-  debitos.document.getElementById('form1').appendChild(chi);  
-  debitos.document.getElementById('form1').action='cai3_gerfinanc060.php';  
-  debitos.document.getElementById('form1').target='';  
-  debitos.document.getElementById('form1').submit();  
+  chi.setAttribute("id","notificacao_tipo");
+  debitos.document.getElementById('form1').appendChild(chi);
+  debitos.document.getElementById('form1').action='cai3_gerfinanc060.php';
+  debitos.document.getElementById('form1').target='';
+  debitos.document.getElementById('form1').submit();
 }
 function js_label(liga,str){
   if(liga=='true'){
@@ -327,7 +327,7 @@ function js_label(liga,str){
 </Table>
 </div>
 
-	  <table border="1" id="tab_label"  class="cabec" style="position:absolute; z-index:1; background-color:#cccccc; top:350; left:30; visibility: hidden;">      
+	  <table border="1" id="tab_label"  class="cabec" style="position:absolute; z-index:1; background-color:#cccccc; top:350; left:30; visibility: hidden;">
 	    <tr>
 	      <td>
 	        <font color="darkblue">
@@ -335,9 +335,9 @@ function js_label(liga,str){
 	        </font>
 	      </td>
 	   </tr>
-	  </table> 
+	  </table>
 <table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-  <tr> 
+  <tr>
     <td width="360">&nbsp;</td>
     <td width="263">&nbsp;</td>
     <td width="25">&nbsp;</td>
@@ -346,25 +346,25 @@ function js_label(liga,str){
 </table>
 <table  align="center" width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td height="430" align="left" valign="top" bgcolor="#CCCCCC">
   <center>
-    <?	
+    <?
 	$mensagem_semdebitos = false;
 	$com_debitos = true;
-	
+
 	//----------Tipo de Filtro usado para consulta e Cod. do mesmo. -----------
-	
+
 	$tipo_filtro="";
 	$cod_filtro="";
-	
+
 	////////////////////////////////////////////////
-	
-	
+
+
 	if(isset($HTTP_POST_VARS["pesquisar"]) || isset($matricula) || isset($inscricao)) {
 	//aqui é pra se clicar no link da matricula em cai3_gerfinanc002.php
 	  if(isset($inscricao) && !empty($inscricao))
    	    $HTTP_POST_VARS["q02_inscr"] = $inscricao;
           if(isset($matricula) && !empty($matricula))
 	    $HTTP_POST_VARS["j01_matric"] = $matricula;
-	
+
 
 
 	  if(!empty($HTTP_POST_VARS["k50_notifica"])) {
@@ -372,7 +372,7 @@ function js_label(liga,str){
         if(pg_numrows($resultnotifica) == 0) {
 		  db_erro("Erro(175) não foi encontrada notificação ".$HTTP_POST_VARS["k50_notifica"]);
 		  db_redireciona();
-		  exit;		
+		  exit;
 		}
 	        db_fieldsmemory($resultnotifica,0);
 		$HTTP_POST_VARS["z01_numcgm"] = $k57_numcgm;
@@ -381,18 +381,18 @@ function js_label(liga,str){
 
 
 
-	
+
 	  if(!empty($HTTP_POST_VARS["z01_numcgm"])) {
-	
-	
+
+
 	  		//----------Tipo de Filtro usado para consulta e Cod. do mesmo-----------
-	
+
 	       $tipo_filtro="CGM";
-	       $cod_filtro=$HTTP_POST_VARS["z01_numcgm"];	  
-	  
+	       $cod_filtro=$HTTP_POST_VARS["z01_numcgm"];
+
 	       ////////////////////////////////////////////////
-	
-          
+
+
              ///////// VERIFICA SE O NUMCGM POSSUI INSCRICOES
 	     $clsqlinscricoes = new cl_issbase;
 	     $sqlinscr = $clsqlinscricoes->sqlinscricoes_nome($HTTP_POST_VARS["z01_numcgm"]);
@@ -415,20 +415,20 @@ function js_label(liga,str){
 	      if(!($result = debitos_tipos_numcgm($HTTP_POST_VARS["z01_numcgm"]))) {
             //db_msgbox('Sem débitos a pagar');
 			$mensagem_semdebitos = true;
-			$result = $resultaux;		
+			$result = $resultaux;
 			unset($resultaux);
 		  }
-		  $arg = "numcgm=".$HTTP_POST_VARS["z01_numcgm"];		  
+		  $arg = "numcgm=".$HTTP_POST_VARS["z01_numcgm"];
 	    }
 	  } else if(!empty($HTTP_POST_VARS["z01_numcgm"])) {
-	
+
 	     	//----------Tipo de Filtro usado para consulta e Cod. do mesmo-----------
-	
+
 	       $tipo_filtro="CGM";
-	       $cod_filtro=$HTTP_POST_VARS["z01_numcgm"];	  
-	  
+	       $cod_filtro=$HTTP_POST_VARS["z01_numcgm"];
+
 	       ////////////////////////////////////////////////
-	
+
  	    $result = pg_exec("select z01_numcgm as k00_numcgm, z01_nome from cgm where z01_numcgm = ".$HTTP_POST_VARS["db_numcgm"]);
 		if(pg_numrows($result) == 0) {
 		  db_msgbox("Numcgm inexistente");
@@ -445,17 +445,17 @@ function js_label(liga,str){
 		  }
 		  $arg = "numcgm=".$HTTP_POST_VARS["db_numcgm"];
 		}
-		
+
 	  } else if(!empty($HTTP_POST_VARS["j01_matric"])) {
 		//----------Tipo de Filtro usado para consulta e Cod. do mesmo-----------
-		
+
 	       $tipo_filtro="MATRICULA";
-	       $cod_filtro=$HTTP_POST_VARS["j01_matric"];	  
-	  
+	       $cod_filtro=$HTTP_POST_VARS["j01_matric"];
+
 	     ////////////////////////////////////////////////
-	
-  	    $result = pg_exec("select j01_matric,j01_numcgm as k00_numcgm 
-		               from iptubase 
+
+  	    $result = pg_exec("select j01_matric,j01_numcgm as k00_numcgm
+		               from iptubase
 		               where j01_matric = ".$HTTP_POST_VARS["j01_matric"]);
 	    if(pg_numrows($result) == 0) {
 	        db_msgbox("Matrícula inexistente");
@@ -480,7 +480,7 @@ function js_label(liga,str){
 	    }else{
 	       $proprietario = false;
 	    }
-	    
+
 	    ///////// VERIFICAD SE A MATRÍCULA POSSUI PROMITENTES
 	    $resultpromi = pg_exec("select * from promitente
 	                            where j41_matric = ".$HTTP_POST_VARS["j01_matric"]);
@@ -494,17 +494,17 @@ function js_label(liga,str){
 
 	    $resultprinc = pg_exec("select z01_cgmpri as z01_numcgm, z01_nome from proprietario_nome
 	                            where j01_matric = ".$HTTP_POST_VARS["j01_matric"]);
-	    db_fieldsmemory($resultprinc,0); 
-	   
+	    db_fieldsmemory($resultprinc,0);
+
 	  } else if(!empty($HTTP_POST_VARS["q02_inscr"])) {
-	   
+
 	    //----------Tipo de Filtro usado para consulta e Cod. do mesmo-----------
-	
+
 	    $tipo_filtro="INSCRICAO";
-	    $cod_filtro=$HTTP_POST_VARS["q02_inscr"];	  
-	  
+	    $cod_filtro=$HTTP_POST_VARS["q02_inscr"];
+
 	    ////////////////////////////////////////////////
-	
+
   	    $result = pg_exec("select q02_inscr, z01_numcgm, z01_nome from issbase inner join cgm on z01_numcgm = q02_numcgm where q02_inscr = ".$HTTP_POST_VARS["q02_inscr"]);
 	    if(pg_numrows($result) == 0) {
 	       db_msgbox("Inscrição inexistente");
@@ -540,7 +540,7 @@ function js_label(liga,str){
 		    if ($registroavulso != (pg_numrows($result) - 1)) {
 		      $msg .= ", <br>";
 		    }
-		    
+
 		  }
 //                  db_msgbox('Recibo avulso relativo aos numpres: ' . $msg . '!');
 //		  db_redireciona();
@@ -553,7 +553,7 @@ function js_label(liga,str){
 	       db_fieldsmemory($result,0);
        	       $result = debitos_tipos_numpre($HTTP_POST_VARS["k00_numpre"]) ;
                if($result == false){
-		   $sql = "select a.k00_numcgm 
+		   $sql = "select a.k00_numcgm
 		           from arrecant a
 				        left outer join arrepaga p on a.k00_numpre = p.k00_numpre and a.k00_numpar = p.k00_numpar
 				   where a.k00_numpre = ".$HTTP_POST_VARS["k00_numpre"]." limit 1";
@@ -569,7 +569,7 @@ function js_label(liga,str){
 		}
 
 		if( $result == false ) {
- 
+
 		  $mensagem_semdebitos = true;
 
                   db_msgbox('Sem débitos a pagar ou não localizado!');
@@ -588,22 +588,22 @@ function js_label(liga,str){
                     db_msgbox('Sem débitos a pagar');
 		    $mensagem_semdebitos = true;
 		    db_redireciona();
-		    exit;		
+		    exit;
 		  }
 	        $k00_numpre = pg_result($Rec,0,"v07_numpre");
 		$resultaux = 1;
 	        $arg = "numpre=".pg_result($Rec,0,0);
-		$Parcelamento = $HTTP_POST_VARS["v07_parcel"];		
+		$Parcelamento = $HTTP_POST_VARS["v07_parcel"];
 		pg_freeresult($Rec);
-		
+
 	        $resultcgm = "select k00_numcgm as z01_numcgm, z01_nome from arrenumcgm inner join cgm on z01_numcgm = k00_numcgm where k00_numpre = $k00_numpre limit 1";
 	        $resultcgm = pg_exec($resultcgm);
 	        db_fieldsmemory($resultcgm,0);
 
 	  }
-	  $dados = pg_exec("select z01_ender,z01_munic,z01_uf,z01_cgccpf,z01_ident,z01_numero,z01_compl 
+	  $dados = pg_exec("select z01_ender,z01_munic,z01_uf,z01_cgccpf,z01_ident,z01_numero,z01_compl
 	                    from cgm where z01_numcgm = $z01_numcgm");
-	  db_fieldsmemory($dados,0);	  
+	  db_fieldsmemory($dados,0);
 
           ////////////////    VERIFICA SE O NUMCGM POSSUI MATRÍCULA CADASTRADAS
           $clsqlamatriculas = new cl_iptubase;
@@ -614,7 +614,7 @@ function js_label(liga,str){
 	  }else{
 	     $outrasmatriculas = false;
 	  }
-	  
+
           ////////////////      VERIFICA SE O NUMCGM POSSUI SOCIOS
           $clsqlinscricoes = new cl_issbase;
           $sqlsocios = $clsqlinscricoes->sqlinscricoes_socios(0,$z01_numcgm,"cgmsocio.z01_nome");
@@ -625,19 +625,19 @@ function js_label(liga,str){
 	  }else{
 	      $socios = false;
 	  }
-          ///////////////////////////////////////////////////////////////////	    
-	  
+          ///////////////////////////////////////////////////////////////////
+
 	?>
         <table width="100%" border="1" cellspacing="0" cellpadding="0">
-          <tr> 
+          <tr>
             <td colspan="2"> <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                <tr> 
+                <tr>
                   <td width="50%"> <table border="0" cellspacing="0" cellpadding="0">
-                      <tr> 
+                      <tr>
                         <td nowrap title="Clique Aqui para ver os dados cadastrais." class="tabcols"><strong style=\"color:blue\><a href='' onclick='js_mostracgm();return false;'>CGM:&nbsp;</a></strong></td>
-                        <td class="tabcols" nowrap title="Clique Aqui para ver os dados cadastrais."> 
-                          <input class="btcols" type="text" name="z01_numcgm" value="<?=@$z01_numcgm?>" size="5" readonly> 
-                          &nbsp;&nbsp;&nbsp; 
+                        <td class="tabcols" nowrap title="Clique Aqui para ver os dados cadastrais.">
+                          <input class="btcols" type="text" name="z01_numcgm" value="<?=@$z01_numcgm?>" size="5" readonly>
+                          &nbsp;&nbsp;&nbsp;
                           <?
 					  parse_str($arg);
 					  if(isset($matric))
@@ -653,25 +653,25 @@ function js_label(liga,str){
 					  ?>
                         </td>
                       </tr>
-                      <tr> 
+                      <tr>
                         <td nowrap class="tabcols"><strong>Nome:</strong></td>
-                        <td nowrap><input class="btcols" type="text" name="z01_nome" value="<?=@$z01_nome?>" size="60" readonly> 
+                        <td nowrap><input class="btcols" type="text" name="z01_nome" value="<?=@$z01_nome?>" size="60" readonly>
                           &nbsp;</td>
                       </tr>
-                      <tr> 
+                      <tr>
                         <td nowrap class="tabcols"><strong>Endereço:</strong></td>
-                        <td nowrap><input class="btcols" type="text" name="z01_ender" value="<?=@$z01_ender.($z01_numero!=""?", ":"").$z01_numero.($z01_compl!=""?"/":"").$z01_compl?>" size="60" readonly> 
+                        <td nowrap><input class="btcols" type="text" name="z01_ender" value="<?=@$z01_ender.($z01_numero!=""?", ":"").$z01_numero.($z01_compl!=""?"/":"").$z01_compl?>" size="60" readonly>
                         </td>
                       </tr>
-                      <tr> 
+                      <tr>
                         <td nowrap class="tabcols"><strong>Município:</strong></td>
-                        <td><input class="btcols" type="text" name="z01_munic" value="<?=@$z01_munic?>" size="20" readonly> 
-                          <strong class="tabcols">UF:</strong> <input class="btcols" type="text" name="z01_uf" value="<?=@$z01_uf?>" size="2" maxlength="2" readonly=""> 
+                        <td><input class="btcols" type="text" name="z01_munic" value="<?=@$z01_munic?>" size="20" readonly>
+                          <strong class="tabcols">UF:</strong> <input class="btcols" type="text" name="z01_uf" value="<?=@$z01_uf?>" size="2" maxlength="2" readonly="">
                           &nbsp;</td>
                       </tr>
                       <form name="formatu" action="cai3_gerfinanc001.php" method="post">
-                        <tr> 
-                          <td height="21" colspan="2" nowrap class="tabcols"> 
+                        <tr>
+                          <td height="21" colspan="2" nowrap class="tabcols">
                             <?
 						if(isset($HTTP_POST_VARS["j01_matric"]) && !empty($HTTP_POST_VARS["j01_matric"]))
                            echo "<input type=\"hidden\" name=\"j01_matric\"  value=\"".$HTTP_POST_VARS["j01_matric"]."\">";
@@ -684,17 +684,17 @@ function js_label(liga,str){
 						if(isset($HTTP_POST_VARS["k00_numpre"]) && !empty($HTTP_POST_VARS["k00_numpre"]))
                            echo "<input type=\"hidden\" name=\"k00_numpre\"  value=\"".$HTTP_POST_VARS["k00_numpre"]."\">";
 						?>
-                            &nbsp; 
-                            <input name="retornar" type="button" id="retornar" value="Nova Pesquisa" title="Inicio da Consulta" onclick="location.href='cai3_gerfinanc001.php'"> 
-                            &nbsp;&nbsp; <input name="pesquisar" type="submit" id="pesquisar"  title="Atualiza a Consulta" value="Atualizar">	
-                            &nbsp;&nbsp; <input name="voltar" type="button" id="voltar" value="<<" title="Retorna" onclick="debitos.history.back()"> 
-                            &nbsp;&nbsp; <input name="avanca" type="button" id="avanca" value=">>" title="Avança" onclick="debitos.history.forward()"> 
+                            &nbsp;
+                            <input name="retornar" type="button" id="retornar" value="Nova Pesquisa" title="Inicio da Consulta" onclick="location.href='cai3_gerfinanc001.php'">
+                            &nbsp;&nbsp; <input name="pesquisar" type="submit" id="pesquisar"  title="Atualiza a Consulta" value="Atualizar">
+                            &nbsp;&nbsp; <input name="voltar" type="button" id="voltar" value="<<" title="Retorna" onclick="debitos.history.back()">
+                            &nbsp;&nbsp; <input name="avanca" type="button" id="avanca" value=">>" title="Avança" onclick="debitos.history.forward()">
 
-		  
+
 		  <?
 
 
-		  
+
 		  //este select é pra ver se o cgm esta no ruas e tb tem CPF/CNPJ para deixar preenchido o responsavel pelo parcelamento
 		  $re_cgm = pg_query("select * from cgm c left join db_cgmruas r on r.z01_numcgm = c.z01_numcgm where c.z01_numcgm = $z01_numcgm and trim(c.z01_cgccpf) <> ''");
 		  if(pg_numrows($re_cgm) > 0){
@@ -702,14 +702,14 @@ function js_label(liga,str){
 		    $resp_parc = $z01_nome;
 		  }
 		  ?>
-		  
+
 		  <input name="id_resp_parc"  id="id_resp_parc" type="hidden" value="<?=@$id_resp_parc?>">
 <!-- este dois inputs guardam o responsável pelo parcelamento para q qdo ele escolha outra divida para parcelar ele traga automaticamento o ultimo nome que foi preenchido -->
 		  <input name="resp_parc"  id="resp_parc" type="hidden" value="<?=@$resp_parc?>">
                           </td>
                       </form>
                     </table></td>
-                  <td width="47%" valign="top"> 
+                  <td width="47%" valign="top">
                     <?
 
 
@@ -721,7 +721,7 @@ function js_label(liga,str){
 
 
 
-         if($tipo_pesq[0] != "numpre" ) { // inicio do tipo de certidao 
+         if($tipo_pesq[0] != "numpre" ) { // inicio do tipo de certidao
 
 			  $sql_c = "select k00_dtvenc ";
 
@@ -736,7 +736,7 @@ function js_label(liga,str){
 			  }else{
 			     $sql_c = $sql_c . " from arrenumcgm ";
 			  }
-			  
+
 			  $sql_c .= " inner join arrecad 	on arrecad.k00_numpre = arrenumcgm.k00_numpre";
 			  $sql_c .= " inner join arretipo 	on arretipo.k00_tipo = arrecad.k00_tipo";
 			  $sql_c .= " inner join cadtipo  	on arretipo.k03_tipo = cadtipo.k03_tipo";
@@ -776,7 +776,7 @@ function js_label(liga,str){
 			  }else{
 			     $sql_c = $sql_c . " from arrenumcgm ";
 			  }
-			  
+
 			  $sql_c .= "	inner join arrecad 	on arrecad.k00_numpre = arrenumcgm.k00_numpre";
 			  $sql_c .= "	inner join arretipo 	on arretipo.k00_tipo = arrecad.k00_tipo";
 			  $sql_c .= "	inner join cadtipo  	on arretipo.k03_tipo = cadtipo.k03_tipo";
@@ -794,7 +794,7 @@ function js_label(liga,str){
 			  }else{
 			     $sql_c = $sql_c . " where arrecad.k00_numpre = ".$tipo_pesq[1];
 			  }
-	               
+
 //			  $sql_c = $sql_c . " and k00_dtvenc < '".date("Y-m-d",db_getsession("DB_datausu"))."'";
 			  $sql_c = $sql_c . ($k03_certissvar=='t'?" and k00_valor <> 0 ":"");
 			  $sql_c = $sql_c . " and case when k28_numpre is not null then case when k27_data + k27_dias > '" . date("Y-m-d",db_getsession("DB_datausu")) . "' then false else true end else true end";
@@ -819,7 +819,7 @@ function js_label(liga,str){
 
 			   echo "<script>
 			   function js_envia(chave){
-			     debitos.location.href=chave+document.form1.k00_dtoper_ano.value+'-'+document.form1.k00_dtoper_mes.value+'-'+document.form1.k00_dtoper_dia.value;		        
+			     debitos.location.href=chave+document.form1.k00_dtoper_ano.value+'-'+document.form1.k00_dtoper_mes.value+'-'+document.form1.k00_dtoper_dia.value;
 			   }
 			   </script>
 				  ";
@@ -831,14 +831,14 @@ function js_label(liga,str){
 			$result_k03_tipo = pg_exec($sql_k03_tipo);
 			db_fieldsmemory($result_k03_tipo,0);
 
-			
-//+document.form1.k00_dtoper_ano.value+'-'+document.form1.k00_dtoper_mes.value+'-'+document.form1.k00_dtoper_dia.value)		        
+
+//+document.form1.k00_dtoper_ano.value+'-'+document.form1.k00_dtoper_mes.value+'-'+document.form1.k00_dtoper_dia.value)
              if(pg_result($result,$i,"k00_tipo")=='34'){
-			   $nome_arquivo='cai3_gerfinanc050.php';  
+			   $nome_arquivo='cai3_gerfinanc050.php';
 			 }else if(pg_result($result,$i,"k00_tipo")=='19'){
-			   $nome_arquivo='cai3_gerfinanc040.php';  
+			   $nome_arquivo='cai3_gerfinanc040.php';
 			 }else{
-			   $nome_arquivo='cai3_gerfinanc002.php';  
+			   $nome_arquivo='cai3_gerfinanc002.php';
 			 }
 			 if (!isset($certidao)) {
 			   $certidao="";
@@ -857,17 +857,17 @@ function js_label(liga,str){
 			}
 
 
-			
+
 		    // notificao fiscal
 			echo "</td><td style=\"font-size:11px\" valign=\"top\">\n";
- 			
-			
-			
+
+
+
 			/* eu "DENIS" comentei essas linhas para naum dar pau na consulta, pq eu estou fazendo
 			o módulo fiscal ainda, qdo estiver pronto a gente tira daqui e arruma*/
 			if (isset($tipo_filtro)&&$tipo_filtro!=""&&isset($cod_filtro)&&$cod_filtro!=""){
 			$where_lev="";
-			$where="";			
+			$where="";
 			if ($tipo_filtro=="CGM"){
 	             $where = "fiscalcgm.y36_numcgm = $cod_filtro";
             }else if ($tipo_filtro=="MATRICULA"){
@@ -875,7 +875,7 @@ function js_label(liga,str){
             }else if ($tipo_filtro=="INSCRICAO"){
 	             $where = "fiscalinscr.y34_inscr = $cod_filtro";
             }
-            $sql=$clfiscal->sql_query_cons(null,"fiscal.*",null,$where);			
+            $sql=$clfiscal->sql_query_cons(null,"fiscal.*",null,$where);
 	        $dados = pg_exec($sql);
             if(pg_numrows($dados)>0){
 		      echo "
@@ -890,11 +890,11 @@ function js_label(liga,str){
 	         if ($tipo_filtro=="CGM"){
 	             $where_lev = "and levcgm.y93_numcgm = $cod_filtro";
               }else if ($tipo_filtro=="MATRICULA"){
-	                $where_lev = "and 1=2";	
+	                $where_lev = "and 1=2";
                }else if ($tipo_filtro=="INSCRICAO"){
 	                $where_lev = "and levinscr.y62_inscr = $cod_filtro";
               }
-              $sql_lev=$cllevanta->sql_query_inf(null,"levanta.*",null," y60_importado is false ".$where_lev);	
+              $sql_lev=$cllevanta->sql_query_inf(null,"levanta.*",null," y60_importado is false ".$where_lev);
 	          $dados_lev = pg_exec($sql_lev);
               if(pg_numrows($dados_lev)>0){
 		        echo "
@@ -902,14 +902,14 @@ function js_label(liga,str){
 				  <tr>
 				    <td valign=\"top\" class=\"links2\" id=\"tiposemdeb2\">
 				      <a class=\"links2\"  id=\"tiposemdeb2\"  href=\"cai4_gerfinanc006.php?cod=$cod_filtro&tipo=$tipo_filtro\" target=\"debitos\">LEVANTAMENTO FISCAL</a>
-					</td> 
+					</td>
 				  </tr>
 				 </table>\n";
 
 		      }
-			
+
 			}
-                        if($tipo_pesq[0] != "numpre" ) { // inicio do tipo de certidao 
+                        if($tipo_pesq[0] != "numpre" ) { // inicio do tipo de certidao
 
 	                  if($certidao=="positiva") {
 			echo "
@@ -930,7 +930,7 @@ function js_label(liga,str){
 					<a class=\"links2\" onClick=\"js_MudaLink('tiposemdeb4')\" id=\"tiposemdeb4\"  href=\"cai3_gerfinanc006.php?".base64_encode("tipo_cert=0&".$arg)."\" target=\"debitos\">CERTIDÃO REGULAR</a>
 		      </td>
 				    </tr>
-				  </table>\n";					  
+				  </table>\n";
 			    }else{
 			  echo "
 			   <table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
@@ -939,7 +939,7 @@ function js_label(liga,str){
 					<a class=\"links2\" onClick=\"js_MudaLink('tiposemdeb5')\" id=\"tiposemdeb5\"  href=\"cai3_gerfinanc006.php?".base64_encode("tipo_cert=2&".$arg)."\" target=\"debitos\">CERTIDÃO NEGATIVA</a>
 		      </td>
 				    </tr>
-				  </table>\n";					  
+				  </table>\n";
 			}
 			  }
 
@@ -995,18 +995,18 @@ function js_label(liga,str){
 				    </tr>
 				  </table>\n";
 			   }
-			   
+
                         // pesquisa pagamentos
                         } // fim do tipo de certidao
-                        
-                        
-                        
-	       
-	        /////////////////////////////////////////////////////////////////////////////////////////////////////                        
-            //--------------------Link Situação Fiscal - Por /* Rogerio Baum */---------------------------------           
-               
+
+
+
+
+	        /////////////////////////////////////////////////////////////////////////////////////////////////////
+            //--------------------Link Situação Fiscal - Por /* Rogerio Baum */---------------------------------
+
               echo "<input name='tipo_filtro' type='hidden' value='$tipo_filtro'>";
-              echo "<input name='cod_filtro' type='hidden' value='$cod_filtro'>";          
+              echo "<input name='cod_filtro' type='hidden' value='$cod_filtro'>";
               echo "
 				<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">
 				  <tr>
@@ -1014,18 +1014,18 @@ function js_label(liga,str){
 							<a class=\"links2\" onClick=\"js_situacao_fiscal($cod_filtro,'$tipo_filtro');\" id=\"sit_fiscal\" href=#>SITUAÇÃO FISCAL</a>
 				     </td>
 				  </tr>
-				</table>\n";		  
-          
-            //---------------------------------------------------------------------------------------------------
-	        /////////////////////////////////////////////////////////////////////////////////////////////////////   
-	   
-	  
-	  
-	  
-	  
-	  
+				</table>\n";
 
-                        $sql = " select arrepaga.k00_numpre 
+            //---------------------------------------------------------------------------------------------------
+	        /////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+                        $sql = " select arrepaga.k00_numpre
 			        from arrepaga ";
 			if($tipo_pesq[0] == "numcgm"){
                           $sql = $sql . " inner join arrenumcgm on arrepaga.k00_numpre = arrenumcgm.k00_numpre
@@ -1055,25 +1055,25 @@ function js_label(liga,str){
 
                                                 // pesquisa descontos efetuados
                         $sql = " select p.k00_numpre
-                                from arrecant 
+                                from arrecant
                                     left outer join arrepaga p on p.k00_numpre = arrecant.k00_numpre and p.k00_numpar = arrecant.k00_numpar ";
                         if($tipo_pesq[0] == "numcgm"){
                          $sql = "  select p.k00_numpre
-                                   from arrenumcgm 
+                                   from arrenumcgm
                                         inner join arrecant on arrecant.k00_numpre = arrenumcgm.k00_numpre
-                                        left outer join arrepaga p on p.k00_numpre = arrecant.k00_numpre and p.k00_numpar = arrecant.k00_numpar 
+                                        left outer join arrepaga p on p.k00_numpre = arrecant.k00_numpre and p.k00_numpar = arrecant.k00_numpar
 			           where arrenumcgm.k00_numcgm = ".$tipo_pesq[1];
                         }else if($tipo_pesq[0] == "matric"){
                           $sql = " select p.k00_numpre
-                                   from arrematric 
+                                   from arrematric
                                         inner join arrecant on arrecant.k00_numpre = arrematric.k00_numpre
-                                        left outer join arrepaga p on p.k00_numpre = arrecant.k00_numpre and p.k00_numpar = arrecant.k00_numpar 
+                                        left outer join arrepaga p on p.k00_numpre = arrecant.k00_numpre and p.k00_numpar = arrecant.k00_numpar
                                     where k00_matric = ".$tipo_pesq[1];
                         }else if($tipo_pesq[0] == "inscr"){
                           $sql = " select p.k00_numpre
-                                   from arreinscr 
+                                   from arreinscr
                                         inner join arrecant on arrecant.k00_numpre = arreinscr.k00_numpre
-                                        left outer join arrepaga p on p.k00_numpre = arrecant.k00_numpre and p.k00_numpar = arrecant.k00_numpar 
+                                        left outer join arrepaga p on p.k00_numpre = arrecant.k00_numpre and p.k00_numpar = arrecant.k00_numpar
                                    where k00_inscr = ".$tipo_pesq[1];
                         }else{
                            $sql = $sql . " where arrecant.k00_numpre = ".$tipo_pesq[1];
@@ -1090,7 +1090,7 @@ $dados = pg_exec($sql);
 		   	              <a class=\"links2\" onClick=\"js_MudaLink('tipodesconto7')\" id=\"tipodesconto7\"  href=\"cai3_gerfinanc016.php?".base64_encode("tipo_cert=1&".$arg)."\" target=\"debitos\">CANCEL. EFETUADOS</a>
                                     </td>
 				  </tr>
-				 </table>\n";					  
+				 </table>\n";
 			}
 		    echo "</td>\n</tr>\n</table>\n";
 
@@ -1102,31 +1102,31 @@ $dados = pg_exec($sql);
 			              <a class=\"links\" href=\"\" onClick=\"js_MudaLink('tiposemdebitototal');js_envia('cai3_gerfinanc010.php?".$arg."&db_datausu=');return false;\" id=\"tiposemdebitototal\"  target=\"debitos\">TOTAL DE DÉBITOS</a>
                       </td>
 				  </tr>
-				 </table>\n";					  
+				 </table>\n";
             }
 		  ?>
                   </td>
                 </tr>
-			      <td height="2"></form> 
+			      <td height="2"></form>
 </table>
               </td>
           </tr>
-          <tr> 
-            <td width="100%" colspan="2" align="center" valign="middle"> 
+          <tr>
+            <td width="100%" colspan="2" align="center" valign="middle">
 	       <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                <tr> 
+                <tr>
                   <td>
                     <?
                     db_input("tipo_filtro",20,'',true,"hidden",3);
                     db_input("cod_filtro",40,'',true,"hidden",3);
-                    ?> 
+                    ?>
                     <!--iframe height="205" width="755" name="debitos" src="cai3_gerfinanc002.php?matricula=<?=@$matricula?>&inscricao=<?=$inscricao?>&tipo2=<?=@$tipo2?>"></iframe-->
-                    <iframe id="debitos" height="235" width="100%" name="debitos" src="cai3_gerfinanc007.php?<?=$arg?>"></iframe> 
+                    <iframe id="debitos" height="235" width="100%" name="debitos" src="cai3_gerfinanc007.php?<?=$arg?>"></iframe>
                   </td>
                 </tr>
-                <tr> 
+                <tr>
                   <td align="right"> <table border="1" bordercolor="#000000" cellspacing="0" cellpadding="0" width="100%">
-                      <tr bgcolor="#666666"> 
+                      <tr bgcolor="#666666">
                         <th style="font-size:11px">Valor</th>
                         <th style="font-size:11px">Valor Corr.</th>
                         <th style="font-size:11px">Juros</th>
@@ -1134,7 +1134,7 @@ $dados = pg_exec($sql);
                         <th style="font-size:11px">Desconto</th>
                         <th style="font-size:11px">Total</th>
                       </tr>
-                      <tr> 
+                      <tr>
                         <td class="tabcols1"><font id="valor1">0.00</font><img src="imagens/alinha.gif" border="0" width="5"></td>
                         <td class="tabcols1"><font id="valorcorr1">0.00</font><img src="imagens/alinha.gif" border="0" width="5"></td>
                         <td class="tabcols1"><font id="juros1">0.00</font><img src="imagens/alinha.gif" border="0" width="5"></td>
@@ -1142,7 +1142,7 @@ $dados = pg_exec($sql);
                         <td class="tabcols1"><font id="desconto1">0.00</font><img src="imagens/alinha.gif" border="0" width="5"></td>
                         <td class="tabcols1"><font id="total1">0.00</font><img src="imagens/alinha.gif" border="0" width="5"></td>
                       </tr>
-                      <tr> 
+                      <tr>
                         <td class="tabcols1"><font id="valor2">0.00</font><img src="imagens/alinha.gif" border="0" width="5"></td>
                         <td class="tabcols1"><font id="valorcorr2">0.00</font><img src="imagens/alinha.gif" border="0" width="5"></td>
                         <td class="tabcols1"><font id="juros2">0.00</font><img src="imagens/alinha.gif" border="0" width="5"></td>
@@ -1150,7 +1150,7 @@ $dados = pg_exec($sql);
                         <td class="tabcols1"><font id="desconto2">0.00</font><img src="imagens/alinha.gif" border="0" width="5"></td>
                         <td class="tabcols1"><font id="total2">0.00</font><img src="imagens/alinha.gif" border="0" width="5"></td>
                       </tr>
-                      <tr> 
+                      <tr>
                         <td class="tabcols1"><font id="valor3">0.00</font><img src="imagens/alinha.gif" border="0" width="5"></td>
                         <td class="tabcols1"><font id="valorcorr3">0.00</font><img src="imagens/alinha.gif" border="0" width="5"></td>
                         <td class="tabcols1"><font id="juros3">0.00</font><img src="imagens/alinha.gif" border="0" width="5"></td>
@@ -1162,18 +1162,18 @@ $dados = pg_exec($sql);
                 </tr>
               </table></td>
           </tr>
-          <tr> 
-            <td height="24"> 
-              <input type="button" name="btmarca" id="btmarca" value="Marcar" onClick="debitos.js_marca()"> 
-              <input type="button" name="enviar" id="enviar" value="Recibo" onClick="return js_emiterecibo()" disabled> 
-              <input type="button" name="relatorio" id="relatorio" value="Relatorio" onClick="js_relatorio()" disabled> 
+          <tr>
+            <td height="24">
+              <input type="button" name="btmarca" id="btmarca" value="Marcar" onClick="debitos.js_marca()">
+              <input type="button" name="enviar" id="enviar" value="Recibo" onClick="return js_emiterecibo()" disabled>
+              <input type="button" name="relatorio" id="relatorio" value="Relatorio" onClick="js_relatorio()" disabled>
               <input type="button" id="btcarne" name="btcarne" onClick="js_emitecarne(true)" value="Carne Banco" disabled>
-              <input type="button" id="btcarnep" name="btcarnep" onClick="js_emitecarne(false)" value="Carne Pref." disabled> 
-              <input type="button" name="btparc" id="btparc" value="Parcelamento" onClick="js_parc()" disabled> 
-              <input type="button" name="btcda" id="btcda" value="CDA" onClick="js_certidao()" disabled> 
-              <input type="button" name="btcancela" id="btcancela" value="Cancela Débito" onClick="js_cancela()" disabled> 
-              <input type="button" name="btjust" id="btjust" value="Justifica" onClick="js_justifica()" disabled> 
-              <input type="button" id="btnotifica" name="btnotifica" onClick="js_emitenotificacao(false)" value="Notificação" disabled style='visibility:hidden'> 
+              <input type="button" id="btcarnep" name="btcarnep" onClick="js_emitecarne(false)" value="Carne Pref." disabled>
+              <input type="button" name="btparc" id="btparc" value="Parcelamento" onClick="js_parc()" disabled>
+              <input type="button" name="btcda" id="btcda" value="CDA" onClick="js_certidao()" disabled>
+              <input type="button" name="btcancela" id="btcancela" value="Cancela Débito" onClick="js_cancela()" disabled>
+              <input type="button" name="btjust" id="btjust" value="Justifica" onClick="js_justifica()" disabled>
+              <input type="button" id="btnotifica" name="btnotifica" onClick="js_emitenotificacao(false)" value="Notificação" disabled style='visibility:hidden'>
             </td>
 		  </tr>
 		  <tr>
@@ -1190,7 +1190,7 @@ $dados = pg_exec($sql);
 	    <script>
 
 		function js_mostradiv(liga,evt,vlr){
-		  evt= (evt)?evt:(window.event)?window.event:""; 
+		  evt= (evt)?evt:(window.event)?window.event:"";
 		  if(liga){
 		     document.getElementById('vlr').innerHTML=vlr;
 		     document.getElementById('divlabel').style.left=0;
@@ -1198,9 +1198,9 @@ $dados = pg_exec($sql);
 		     document.getElementById('divlabel').style.visibility='visible';
 		  }else{
 		    document.getElementById('divlabel').style.visibility='hidden';
-		  }  
+		  }
 		}
-	    
+
 	    function js_parc(){
 	      numpre = "";
 	      deb = debitos.document.form1
@@ -1253,8 +1253,8 @@ $dados = pg_exec($sql);
 	    }
 	    </script>
 			<form name="form1" method="post">
-            <td align="right" nowrap title="Data para cálculo dos acréscimos no sistema"> <strong>Data 
-              Pagamento:</strong> 
+            <td align="right" nowrap title="Data para cálculo dos acréscimos no sistema"> <strong>Data
+              Pagamento:</strong>
               <?
 			//
 			$k00_dtoper = date('Y-m-d',db_getsession("DB_datausu"));
@@ -1272,38 +1272,38 @@ $dados = pg_exec($sql);
 	    <input name="japarcelou" id="japarcelou" type="hidden" value="0">
 	    <input name="numpresaparcelar" id="numpresaparcelar" type="hidden" value="">
 	    <input name="numparaparcelar" id="numparaparcelar" type="hidden" value="">
-	    
+
             </td>
 
 		<div id="divlabel" style="position: absolute; visibility: hidden;">
 		  <table cellpadding="2">
 		    <tr nowrap>
 		      <td align="center" nowrap>
-		        <span color="#9966cc" id="vlr"></span><br> 
+		        <span color="#9966cc" id="vlr"></span><br>
 		      </td>
 		    </tr>
-		  </table>  
-		</div>  
-	    
+		  </table>
+		</div>
+
 			</form>
           </tr>
         </table>
     <?
 
 
-    
+
 	} else {
 	?>
     <form name="form1" method="post">
-<br><br>	
+<br><br>
           <table  border="0" cellspacing="0" cellpadding="0">
-            <tr> 
-              <td height="25" title="<?=$Tz01_nome?>"> 
+            <tr>
+              <td height="25" title="<?=$Tz01_nome?>">
                 <?
 				db_ancora($Lz01_nome,'js_mostranomes(true);',4)
 				?>
               </td>
-              <td height="25"> 
+              <td height="25">
                 <?
 				db_input("z01_numcgm",6,$Iz01_numcgm,true,'text',4," onchange='js_mostranomes(false);'")
 				?>
@@ -1312,13 +1312,13 @@ $dados = pg_exec($sql);
 				?>
               </td>
             </tr>
-            <tr> 
-              <td height="25" title="<?=$Tj01_matric?>"> 
+            <tr>
+              <td height="25" title="<?=$Tj01_matric?>">
                 <?
 				db_ancora($Lj01_matric,"js_mostramatricula(true,'$j18_nomefunc');",2)
 				?>
               </td>
-              <td height="25"> 
+              <td height="25">
                 <?
 				db_input("j01_matric",8,$Ij01_matric,true,'text',4)
 				?>
@@ -1326,13 +1326,13 @@ $dados = pg_exec($sql);
             </tr>
 
 			<?if($j18_usasisagua==false){?>
-            <tr> 
-              <td height="25" title="<?=$Tq02_inscr?>"> 
+            <tr>
+              <td height="25" title="<?=$Tq02_inscr?>">
                 <?
 				db_ancora($Lq02_inscr,'js_mostrainscricao(true);',4)
 				?>
               </td>
-              <td height="25"> 
+              <td height="25">
                 <?
 				db_input("q02_inscr",8,$Iq02_inscr,true,'text',4)
 				?>
@@ -1342,30 +1342,30 @@ $dados = pg_exec($sql);
 		    echo "<input type=\"hidden\" name=\"q02_inscr\"  value=\"\">";
 			}?>
 
-            <tr> 
-              <td height="25" title="<?=$Tk00_numpre?>"> 
+            <tr>
+              <td height="25" title="<?=$Tk00_numpre?>">
                 <?
 				db_ancora($Lk00_numpre,'js_mostranumpre(true);',3)
 				?>
               </td>
-              <td height="25"> 
+              <td height="25">
                 <?
 				db_input("k00_numpre",8,$Ik00_numpre,true,'text',4)
 				?>
               </td>
             </tr>
-            <tr> 
-              <td height="25" title="<?=$Tv07_parcel?>"> 
+            <tr>
+              <td height="25" title="<?=$Tv07_parcel?>">
                 <?
 				db_ancora($Lv07_parcel,'js_mostraparcel(true);',3)
 				?>
               </td>
-              <td height="25"> 
+              <td height="25">
                 <?
 				db_input("v07_parcel",8,$Iv07_parcel,true,'text',4)
 				?>
               </td>
-	      
+
             </tr>
 
 
@@ -1384,8 +1384,8 @@ $dados = pg_exec($sql);
 
 
 
-	    
-            <tr> 
+
+            <tr>
               <td height="25">&nbsp;</td>
               <td height="25"><input onClick="if((this.form.v07_parcel.value=='' && this.form.z01_numcgm.value=='' && this.form.j01_matric.value=='' && this.form.q02_inscr.value=='' && this.form.k00_numpre.value=='' && this.form.k50_notifica.value=='' )) { alert('Informe numcgm, matricula, inscrição, parcelamento ou numpre!');return false; }"  type="submit" value="Pesquisar" name="pesquisar"></td>
             </tr>
@@ -1394,12 +1394,12 @@ $dados = pg_exec($sql);
     <?
 	}
 
-	
+
 	?>
   </center>
 </td></tr>
 </table>
-<? 
+<?
  db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
 ?>
 </body>
@@ -1407,27 +1407,27 @@ $dados = pg_exec($sql);
 <script>
 // mostra os dados do cgm do contribuinte
 function js_mostracgm(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_nome','prot3_conscgm002.php?fechar=func_nome&numcgm=<?=@$z01_numcgm?>','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_nome','prot3_conscgm002.php?fechar=func_nome&numcgm=<?=@$z01_numcgm?>','Pesquisa',true);
 }
 
 
 // esta funcao é utilizada quando clicar na matricula após pesquisar
 // a mesma
 function js_mostrabic_matricula(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_bicmatric','cad3_conscadastro_002.php?cod_matricula=<?=@$matric?>','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_bicmatric','cad3_conscadastro_002.php?cod_matricula=<?=@$matric?>','Pesquisa',true);
 }
 // esta funcao é utilizada quando clicar na inscricao após pesquisar
 // a mesma
 function js_mostrabic_inscricao(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_bicinscr','iss3_consinscr003.php?numeroDaInscricao=<?=@$inscr?>','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_bicinscr','iss3_consinscr003.php?numeroDaInscricao=<?=@$inscr?>','Pesquisa',true);
 }
 
 
 function js_mostranomes(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_nomes','func_nome.php?funcao_js=parent.js_preenche|0|1','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_nomes','func_nome.php?funcao_js=parent.js_preenche|0|1','Pesquisa',true);
   }else{
-    js_OpenJanelaIframe('top.corpo','db_iframe_nomes','func_nome.php?pesquisa_chave='+document.form1.z01_numcgm.value+'&funcao_js=parent.js_preenche1','Pesquisa',false);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_nomes','func_nome.php?pesquisa_chave='+document.form1.z01_numcgm.value+'&funcao_js=parent.js_preenche1','Pesquisa',false);
   }
 }
  function js_preenche(chave,chave1){
@@ -1446,9 +1446,9 @@ function js_mostranomes(mostra){
 
 function js_mostramatricula(mostra, nome_func){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_matric',nome_func+'?funcao_js=parent.js_preenchematricula|0|1','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_matric',nome_func+'?funcao_js=parent.js_preenchematricula|0|1','Pesquisa',true);
   }else{
-    js_OpenJanelaIframe('top.corpo','db_iframe_matric',nome_func+'?pesquisa_chave='+document.form1.j01_matric.value+'&funcao_js=parent.js_preenchematricula','Pesquisa',false);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_matric',nome_func+'?pesquisa_chave='+document.form1.j01_matric.value+'&funcao_js=parent.js_preenchematricula','Pesquisa',false);
   }
 }
  function js_preenchematricula(chave,chave1){
@@ -1458,9 +1458,9 @@ function js_mostramatricula(mostra, nome_func){
  }
 function js_mostrainscricao(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_mostrainscr','func_issbase.php?funcao_js=parent.js_preencheinscricao|0|1','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_mostrainscr','func_issbase.php?funcao_js=parent.js_preencheinscricao|0|1','Pesquisa',true);
   }else{
-    js_OpenJanelaIframe('top.corpo','db_iframe_mostrainscr','func_issbase.php?pesquisa_chave='+document.form1.q02_inscr.value+'&funcao_js=parent.js_preencheinscricao','Pesquisa',false);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_mostrainscr','func_issbase.php?pesquisa_chave='+document.form1.q02_inscr.value+'&funcao_js=parent.js_preencheinscricao','Pesquisa',false);
   }
 }
  function js_preencheinscricao(chave,chave1){
@@ -1468,7 +1468,7 @@ function js_mostrainscricao(mostra){
    document.form1.z01_nome.value = chave1;
    db_iframe_mostrainscr.hide();
  }
- 
+
   if(document.form1.z01_numcgm)
     document.form1.z01_numcgm.focus();
 	<?
@@ -1476,18 +1476,18 @@ function js_mostrainscricao(mostra){
 	  echo "alert('Sem débitos a Pagar')";
 	}
 	?>
-	
+
 //document.getElementById('outrasopcoes').disabled = true;
 
 
 function js_mostradetalhes(chave){
-  js_OpenJanelaIframe('top.corpo','db_iframe_mostrainscr',chave,'Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_mostrainscr',chave,'Pesquisa',true);
 }
 
 //-------------func Situação Fiscal - Por /*Rogerio Baum*/ -----------------------
 
 function js_situacao_fiscal(cod,tipo){
-	js_OpenJanelaIframe('top.corpo','db_iframe_sitfiscal','cai3_consitfiscal002.php?cod='+cod+'&tipo='+tipo,'Situação Fiscal',true);
+	js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_sitfiscal','cai3_consitfiscal002.php?cod='+cod+'&tipo='+tipo,'Situação Fiscal',true);
 }
 
 //--------------------------------------------------------

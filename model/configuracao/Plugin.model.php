@@ -42,6 +42,8 @@ class Plugin{
 
   private $lSituacao;
 
+  private $sVersao;
+
   const MENSAGEM = 'configuracao.configuracao.plugin.';
 
   /**
@@ -114,6 +116,19 @@ class Plugin{
     return $this->lSituacao;
   }
 
+  public function getVersao() {
+
+    if ( empty($this->sVersao) ) {
+      $this->carregaDadosManifest();
+    }
+
+    return $this->sVersao;
+  }
+
+  public function setVersao($sVersao) {
+    $this->sVersao = $sVersao;
+  }
+
   /**
    * Salva o plugin na tabela db_plugin
    * @return boolean
@@ -176,5 +191,21 @@ class Plugin{
 
     return true;
   }
+
+  public function carregaDadosManifest() {
+
+    $sNome = $this->getNome();
+
+    if ( empty($sNome) ) {
+      return;
+    }
+
+    $oPluginService = new PluginService();
+    // @todo remover este caminho fixo daqui, rever classe do PluginService
+    $oManifest = $oPluginService->loadManifest("plugins/{$sNome}/Manifest.xml");
+
+    $this->sVersao = $oManifest->plugin['plugin-version'];
+
+  }
+
 }
-?>

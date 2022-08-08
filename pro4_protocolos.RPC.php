@@ -1171,7 +1171,7 @@ function pesquisaIntervaloEmpenhos($emp_inicial, $dtinicio, $emp_final, $dtfim){
   }
 
   if($dtinicio)
-    $dataInicial = split('-', $dtinicio);
+    $dataInicial = explode('-', $dtinicio);
   $oEmpenhos = new cl_empempenho;
   $where = '';
 

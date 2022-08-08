@@ -52,7 +52,7 @@ DBViewSlipRecebimento = function(sNomeInstancia, iTipoTransferencia, oDivDestino
       me.sPesquisaContaDebito  = "Saltes";
     break;
   }
- 
+
   /**
    * Código Slip
    */
@@ -108,7 +108,7 @@ DBViewSlipRecebimento = function(sNomeInstancia, iTipoTransferencia, oDivDestino
   /**
    * Histórico
    */
-  
+
   me.oTxtHistoricoInputCodigo                = new DBTextField('oTxtHistoricoInputCodigo', me.sNomeInstancia+'.oTxtHistoricoInputCodigo', '', 8);
   me.oTxtHistoricoInputCodigo.addEvent('onChange', ";"+me.sNomeInstancia+".pesquisaHistorico(false);");
   me.oTxtHistoricoInputDescricao             = new DBTextField('oTxtHistoricoInputDescricao', me.sNomeInstancia+'.oTxtHistoricoInputDescricao', '', 56);
@@ -355,14 +355,14 @@ DBViewSlipRecebimento = function(sNomeInstancia, iTipoTransferencia, oDivDestino
         me.iLinhaExercicioDevolucao = 7;
         if (me.iAno >= 2022)
             me.iLinhaExercicioDevolucao = 8;
-    
+
          var oRowExercicioCompetenciaDevolucao = oTabela.insertRow(me.iLinhaExercicioDevolucao);
          var oCelloRowExercicioCompetenciaDevolucaoLabel = oRowExercicioCompetenciaDevolucao.insertCell(0);
          oCelloRowExercicioCompetenciaDevolucaoLabel.innerHTML = "<strong>Exercício da Competência da Devolução:</strong>";
-     
+
          var oCellExercicioCompetenciaDevolucaoInput = oRowExercicioCompetenciaDevolucao.insertCell(1);
          oCellExercicioCompetenciaDevolucaoInput.colSpan = "2";
-     
+
          me.oTxtExercicioCompetenciaDevolucaoInput.show(oCellExercicioCompetenciaDevolucaoInput);
          oTabela.rows[me.iLinhaExercicioDevolucao].hidden = true;
 
@@ -489,7 +489,7 @@ DBViewSlipRecebimento = function(sNomeInstancia, iTipoTransferencia, oDivDestino
                 alert("Exercício da Competência da Devolução não informada.");
                 return false;
             }
-            
+
             if (me.oTxtExercicioCompetenciaDevolucaoInput.getValue().length != 4) {
                 alert("Exercício da Competência da Devolução incorreta.");
                 return false;
@@ -556,6 +556,9 @@ DBViewSlipRecebimento = function(sNomeInstancia, iTipoTransferencia, oDivDestino
       }
 
       me.clearAllFields();
+      me.oDivContainerCampos.style.display = 'none';
+      me.oDivGeralGrid.style.display       = '';
+      me.pesquisaTranferenciaRecebimento();
     } else {
       alert(oRetorno.message.urlDecode());
     }
@@ -900,13 +903,15 @@ DBViewSlipRecebimento = function(sNomeInstancia, iTipoTransferencia, oDivDestino
     var sObjetoTxtConta = "me.oTxtConta" + sFunctionCompleta + "Codigo";
     var oTxtConta       = eval(sObjetoTxtConta);
 
-    var sUrlSaltes = "func_saltesreduz.php?pesquisa_chave="+oTxtConta.getValue()+"&funcao_js=parent."+me.sNomeInstancia+".preenche"+sFunctionCompleta;
+    var sUrlSaltes = "func_saltesreduz.php?ver_datalimite=1&pesquisa_chave="+oTxtConta.getValue()+"&funcao_js=parent."+me.sNomeInstancia+".preenche"+sFunctionCompleta;
     if (lMostra) {
-      sUrlSaltes = "func_saltesreduz.php?funcao_js=parent."+me.sNomeInstancia+".completa"+sFunctionCompleta+"|k13_reduz|k13_descr";
+      sUrlSaltes = "func_saltesreduz.php?ver_datalimite=1&funcao_js=parent."+me.sNomeInstancia+".completa"+sFunctionCompleta+"|k13_reduz|k13_descr";
     }
 
     js_OpenJanelaIframe("", 'db_iframe_'+sIframe, sUrlSaltes, "Pesquisa Contas", lMostra);
   };
+
+  /* [Extensão] - Filtro da Despesa - parte 2 */
 
   me.pesquisaContaEventoContabil = function(lMostra, lCredito) {
 
@@ -999,8 +1004,8 @@ DBViewSlipRecebimento = function(sNomeInstancia, iTipoTransferencia, oDivDestino
   /**
    * Lookup de pesquisa do Fonte
    */
-  
-   
+
+
     me.pesquisaFonte = function (lMostra) {
         var sUrlHistorico = "func_orctiporec.php?pesquisa_chave="+me.oTxtFonteInputCodigo.getValue()+"&funcao_js=parent."+me.sNomeInstancia+".preencheFonte";
 
@@ -1153,7 +1158,7 @@ DBViewSlipRecebimento = function(sNomeInstancia, iTipoTransferencia, oDivDestino
   };
 
     me.mostrarExercicioDevolucao = function() {
-        if (me.iAno < 2022) 
+        if (me.iAno < 2022)
             return false;
 
         var oTabela = document.getElementById("table_oDBViewSlipRecebimento");

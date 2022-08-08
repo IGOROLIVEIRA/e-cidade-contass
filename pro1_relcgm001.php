@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -33,7 +33,7 @@ include("dbforms/db_funcoes.php");
 include("dbforms/db_classesgenericas.php");
 include("classes/db_cgm_classe.php");
 $clcgm = new cl_cgm;
-$aux = new cl_arquivo_auxiliar; 
+$aux = new cl_arquivo_auxiliar;
 $clcgm->rotulo->label();
 $clrotulo = new rotulocampo;
 $clrotulo->label("cp05_codlocalidades");
@@ -59,12 +59,12 @@ function js_relatorio(){
   z01_nome_inicial 	= document.getElementById('z01_nome_inicial').value;
   z01_numcgm_inicial= document.getElementById('z01_numcgm_inicial').value;
   z01_numcgm_final  = document.getElementById('z01_numcgm_final').value;
-  
+
   queryString  ='listacidades='+listacidades+'&ordenacao='+ordenacao+'&z01_nome_final='+z01_nome_final;
   queryString +='&z01_nome_inicial='+z01_nome_inicial;
   queryString +='&z01_numcgm_final='+z01_numcgm_final;
-  queryString +='&z01_numcgm_inicial='+z01_numcgm_inicial; 
-  //alert(queryString); 
+  queryString +='&z01_numcgm_inicial='+z01_numcgm_inicial;
+  //alert(queryString);
 	jan = window.open('pro1_relcgm002.php?'+queryString,'','scrollbars=1,location=0 ');
  	jan.moveTo(0,0);
 
@@ -82,7 +82,7 @@ function js_relatorio(){
 //{
 //  if(document.form1.z01_numcgm.value!="")
 //  {
-//    js_OpenJanelaIframe('top.corpo','func_nome','pro1_002.php?numcgm='+document.form1.z01_numcgm.value,'Pesquisa',true);
+//    js_OpenJanelaIframe('CurrentWindow.corpo','func_nome','pro1_002.php?numcgm='+document.form1.z01_numcgm.value,'Pesquisa',true);
 //    //alert('NUMCGM:'+document.form1.z01_numcgm.value+' - '+document.form1.z01_nome.value)
 //  }
 //  else
@@ -91,19 +91,19 @@ function js_relatorio(){
 //  }
 //}
 
-//Função que pesquisa caso seja TRUE a pesquisa foi feita atraves da ancora caso seja FALSE a pesquisa foi digitada um numero de CGM 
+//Função que pesquisa caso seja TRUE a pesquisa foi feita atraves da ancora caso seja FALSE a pesquisa foi digitada um numero de CGM
 function js_pesquisaz01_numcgmini(mostra)
 {
-	
+
   if(mostra==true)
   {
-    js_OpenJanelaIframe('top.corpo','func_nome','func_nome.php?funcao_js=parent.js_mostranumcgm1ini|z01_numcgm|z01_nome','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','func_nome','func_nome.php?funcao_js=parent.js_mostranumcgm1ini|z01_numcgm|z01_nome','Pesquisa',true);
   }
   else
   {
      if(document.form1.z01_numcgm_inicial.value != '')
      {
-        js_OpenJanelaIframe('top.corpo','func_nome','func_nome.php?pesquisa_chave='+document.form1.z01_numcgm_inicial.value+'&funcao_js=parent.js_mostranumcgmini','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','func_nome','func_nome.php?pesquisa_chave='+document.form1.z01_numcgm_inicial.value+'&funcao_js=parent.js_mostranumcgmini','Pesquisa',false);
      }
      else
      {
@@ -119,9 +119,9 @@ function js_mostranumcgmini(erro,chave)
 {
   document.form1.z01_nomecgm_inicial.value = chave;
   if(erro==true)
-  { 
-    document.form1.z01_numcgm_inicial.value = ''; 
-    document.form1.z01_numcgm_inicial.focus(); 
+  {
+    document.form1.z01_numcgm_inicial.value = '';
+    document.form1.z01_numcgm_inicial.focus();
   }
 }
 
@@ -131,24 +131,24 @@ function js_mostranumcgm1ini(chave1,chave2)
 {
 	  document.form1.z01_numcgm_inicial.value = chave1;
 	  document.form1.z01_nomecgm_inicial.value   = chave2;
- 
+
   func_nome.hide();
 }
 
 //---------------------------------------------------------------------------------------------------------------------------
-//Função que pesquisa caso seja TRUE a pesquisa foi feita atraves da ancora caso seja FALSE a pesquisa foi digitada um numero de CGM 
+//Função que pesquisa caso seja TRUE a pesquisa foi feita atraves da ancora caso seja FALSE a pesquisa foi digitada um numero de CGM
 function js_pesquisaz01_numcgmfim(mostra)
 {
-	
+
   if(mostra==true)
   {
-    js_OpenJanelaIframe('top.corpo','func_nome','func_nome.php?funcao_js=parent.js_mostranumcgm1fim|z01_numcgm|z01_nome','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','func_nome','func_nome.php?funcao_js=parent.js_mostranumcgm1fim|z01_numcgm|z01_nome','Pesquisa',true);
   }
   else
   {
      if(document.form1.z01_numcgm_final.value != '')
      {
-        js_OpenJanelaIframe('top.corpo','func_nome','func_nome.php?pesquisa_chave='+document.form1.z01_numcgm_final.value+'&funcao_js=parent.js_mostranumcgmfim','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','func_nome','func_nome.php?pesquisa_chave='+document.form1.z01_numcgm_final.value+'&funcao_js=parent.js_mostranumcgmfim','Pesquisa',false);
      }
      else
      {
@@ -164,9 +164,9 @@ function js_mostranumcgmfim(erro,chave)
 {
   document.form1.z01_nomecgm_final.value = chave;
   if(erro==true)
-  { 
-    document.form1.z01_numcgm_final.value = ''; 
-    document.form1.z01_numcgm_final.focus(); 
+  {
+    document.form1.z01_numcgm_final.value = '';
+    document.form1.z01_numcgm_final.focus();
   }
 }
 
@@ -176,7 +176,7 @@ function js_mostranumcgm1fim(chave1,chave2)
 {
 	  document.form1.z01_numcgm_final.value = chave1;
 	  document.form1.z01_nomecgm_final.value   = chave2;
- 
+
   func_nome.hide();
 }
 
@@ -186,7 +186,7 @@ function js_mostranumcgm1fim(chave1,chave2)
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 <table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-  <tr> 
+  <tr>
     <td width="360">&nbsp;</td>
     <td width="263">&nbsp;</td>
     <td width="25">&nbsp;</td>
@@ -203,36 +203,36 @@ function js_mostranumcgm1fim(chave1,chave2)
 				<fieldset>
 					<legend><b>Filtrar por:</b></legend>
 					<table >
-					<tr> 
-				    <td  align="right" nowrap title="<?=$Tz01_numcgm?>"> 
-				      <? 
+					<tr>
+				    <td  align="right" nowrap title="<?=$Tz01_numcgm?>">
+				      <?
 				         //Clicando na ancora para buscar o cgm atraves do formulario de pesquisa.
 				         db_ancora("<b>CGM Inicial</b>","js_pesquisaz01_numcgmini(true);",1);
 				      ?>
-				    </td> 
+				    </td>
 				    <td align="left" nowrap>
 				      <?
 				         //Digitando um numero de cgm para buscar
-							 db_input("z01_numcgm_inicial",10,$Iz01_numcgm,true,"text",1,"onchange='js_pesquisaz01_numcgmini(false);'"); 
+							 db_input("z01_numcgm_inicial",10,$Iz01_numcgm,true,"text",1,"onchange='js_pesquisaz01_numcgmini(false);'");
 							 db_input("z01_nomecgm_inicial",45,$Iz01_nome,true,"text",3);
 				      ?>
 				    </td>
 				  </tr>
-					<tr> 
-				    <td  align="right" nowrap title="<?=$Tz01_numcgm?>"> 
-				      <? 
+					<tr>
+				    <td  align="right" nowrap title="<?=$Tz01_numcgm?>">
+				      <?
 				         //Clicando na ancora para buscar o cgm atraves do formulario de pesquisa.
 				         db_ancora("<b>CGM Final</b>","js_pesquisaz01_numcgmfim(true);",1);
 				      ?>
-				    </td> 
+				    </td>
 				    <td align="left" nowrap>
 				      <?
 				         //Digitando um numero de cgm para buscar
-							 db_input("z01_numcgm_final",10,$Iz01_numcgm,true,"text",1,"onchange='js_pesquisaz01_numcgmfim(false);'"); 
+							 db_input("z01_numcgm_final",10,$Iz01_numcgm,true,"text",1,"onchange='js_pesquisaz01_numcgmfim(false);'");
 							 db_input("z01_nomecgm_final",45,$Iz01_nome,true,"text",3);
 				      ?>
 				    </td>
-				  </tr>	
+				  </tr>
 						<tr>
 							<td align="right" width="100"><b>Nome Inicial</b></td>
 							<td><input type="text" name="z01_nome_inicial" id="z01_nome_inicial" size="59"></td>
@@ -253,7 +253,7 @@ function js_mostranumcgm1fim(chave1,chave2)
 							</td>
 						</tr>
 						<tr>
-							
+
 							<td colspan="2">
 							<?
                 $aux->cabecalho = "<strong>Cidades</strong>";

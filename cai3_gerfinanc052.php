@@ -223,14 +223,14 @@ $oGet  = db_utils::postMemory($_GET);
   function js_consultaOrigemCredito(iAbatimento) {
 
     var sUrl = 'func_compensacao.php?iAbatimento='+iAbatimento;
-    js_OpenJanelaIframe('top.corpo','db_iframe_compensacao',sUrl,'Origem da Compensação',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_compensacao',sUrl,'Origem da Compensação',true);
 
   }
 
   function js_consultaDesconto(iAbatimento) {
 
     var sUrl = 'func_compensacaodesconto.php?iAbatimento='+iAbatimento;
-    js_OpenJanelaIframe('top.corpo','db_iframe_desconto',sUrl,'Origem do Desconto',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_desconto',sUrl,'Origem do Desconto',true);
   }
 
 

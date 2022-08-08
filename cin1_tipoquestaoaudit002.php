@@ -12,16 +12,16 @@ $db_opcao = 22;
 $db_botao = false;
 
 if( isset($alterar) ){
-	  
+
 	db_inicio_transacao();
   	$db_opcao = 2;
   	$cltipoquestaoaudit->alterar($ci01_codtipo);
 	  db_fim_transacao();
-	  
+
 } else if(isset($chavepesquisa)) {
-   
+
 	$db_opcao = 2;
-   	$result = $cltipoquestaoaudit->sql_record($cltipoquestaoaudit->sql_query($chavepesquisa)); 
+   	$result = $cltipoquestaoaudit->sql_record($cltipoquestaoaudit->sql_query($chavepesquisa));
    	db_fieldsmemory($result,0);
    	$db_botao = true;
 
@@ -43,8 +43,8 @@ if( isset($alterar) ){
   <tr>
     <td>&nbsp;</td>
   </tr>
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
 	<?
 	include("forms/db_frmtipoquestaoaudit.php");
@@ -57,19 +57,19 @@ if( isset($alterar) ){
 </html>
 <?
 if (isset($alterar)) {
-	  
+
 	if($cltipoquestaoaudit->erro_status=="0"){
-	
+
 		$cltipoquestaoaudit->erro(true,false);
     	$db_botao=true;
     	echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
-		
+
 		if ($cltipoquestaoaudit->erro_campo!="") {
-		  
+
 			echo "<script> document.form1.".$cltipoquestaoaudit->erro_campo.".style.backgroundColor='#99A9AE';</script>";
       		echo "<script> document.form1.".$cltipoquestaoaudit->erro_campo.".focus();</script>";
 		}
-		
+
 	} else {
 		db_msgbox($cltipoquestaoaudit->erro_msg);
 	}
@@ -81,12 +81,12 @@ if ($db_opcao == 22) {
 }
 
 if (isset($chavepesquisa)) {
-  
+
 	echo "
 		<script>
 			function js_db_libera(){
 			parent.document.formaba.questaoauditquestoes.disabled=false;
-			top.corpo.iframe_questaoauditquestoes.location.href='cin1_questaoaudit004.php?ci01_codtipo=".@$ci01_codtipo."';
+			CurrentWindow.corpo.iframe_questaoauditquestoes.location.href='cin1_questaoaudit004.php?ci01_codtipo=".@$ci01_codtipo."';
 		";
 			if(isset($liberaaba)){
 				echo "  parent.mo_camada('questaoauditquestoes');";

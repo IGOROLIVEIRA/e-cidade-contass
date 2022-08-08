@@ -36,7 +36,7 @@ DB_login=dbseller&DB_id_usuario=1&DB_porta=3055&DB_instit=1&DB_modulo=576
 parse_str(base64_decode($HTTP_SERVER_VARS['QUERY_STRING']));
 
 if(isset($exclenc)) {
-  $ex = split("#",$exclenc);
+  $ex = explode("#",$exclenc);
   pg_exec("delete from encaminhamento where codate = ".$ex[0]." and codpaciente = '".str_pad($ex[1],6," ",STR_PAD_LEFT)."' and codespec = ".$ex[2]) or die("Erro(14) excluindo encaminhamentos");
 }
 

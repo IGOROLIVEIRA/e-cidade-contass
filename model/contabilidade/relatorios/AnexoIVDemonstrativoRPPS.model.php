@@ -114,7 +114,7 @@ class AnexoIVDemonstrativoRPPS extends RelatoriosLegaisBase {
     $this->oPdf->ln(10);
 
     $oAssinatura = new cl_assinatura();
-    assinaturas($this->oPdf, &$oAssinatura,'LRF');
+    assinaturas($this->oPdf, $oAssinatura,'LRF');
     $this->oPdf->setAutoNewLineMulticell(true);
     $this->oPdf->showPDF("RREO_Anexo_IV_DemonstrativoRPPS_" . time());
   }

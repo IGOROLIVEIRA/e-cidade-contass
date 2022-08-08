@@ -567,7 +567,7 @@ if ($emite_balorc_rec==1){
                 @pg_query("drop table work_pl_estrutmae");     
                 @pg_query("rollback"); 
                 // se o ano atual  bissexto deve subtrair 366 somente se a data for superior a 28/02/200X
-                $dt = split('-',$dt_fin);  // mktime -- (mes,dia,ano)
+                $dt = explode('-',$dt_fin);  // mktime -- (mes,dia,ano)
                 $dt_ini_ant = date('Y-m-d',mktime(0,0,0,$dt[1],$dt[2]+1,$anousu_ant));
                 $dt_fin_ant = $anousu_ant.'-12-31';  
                 
@@ -1180,7 +1180,7 @@ if ($emite_balorc_rec==1){
                 $perc_apurado = ($total_despesa/$total_rcl) * 100;
               }
               //////////////////////////////// Impresso do PDF /////////////////////////////////
-              $xinstit = split("-",$db_selinstit);
+              $xinstit = explode("-",$db_selinstit);
               $resultinst = pg_exec("select codigo,nomeinst,nomeinstabrev from db_config where codigo in (".str_replace('-',', ',$db_selinstit).") ");
               $descr_inst = '';
               $xvirg = '';
@@ -1206,9 +1206,9 @@ if ($emite_balorc_rec==1){
               $head2 = $descr_inst;
               $head3 = "DEMONSTRATIVO SIMPLIFICADO DO RELATÓRIO RESUMIDO DA EXECUÇÃO ORÇAMENTÁRIA";
               $head4 = "ORÇAMENTOS FISCAL E DA SEGURIDADE SOCIAL";
-              $mes   = split("-",$dt_ini); 
+              $mes   = explode("-",$dt_ini); 
               $txt   = strtoupper(db_mes($mes[1]));
-              $dt    = split("-",$dt_fin);
+              $dt    = explode("-",$dt_fin);
               $txt  .= "  ".strtoupper(db_mes($dt[1]))." $anousu ";;
               $head5 = "$txt";
               

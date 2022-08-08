@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 //MODULO: material
 require("libs/db_stdlib.php");
@@ -63,7 +63,7 @@ if (isset($codigo)&&$codigo!=""){
 <link href="estilos.css" rel="stylesheet" type="text/css">
 <script>
 function js_matrequi(codigo){
-  js_OpenJanelaIframe('top.corpo','db_iframe_requi','mat3_consultarequi001.php?codigo='+codigo,'Consulta Requisição',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_requi','mat3_consultarequi001.php?codigo='+codigo,'Consulta Requisição',true);
 }
 </script>
 <style>
@@ -86,26 +86,26 @@ function js_matrequi(codigo){
 }
 </style>
 </head>
-<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0"> 
+<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 <table  border="0" cellspacing="0" cellpadding="0" width='100%'>
-<tr> 
-<td  align="center" valign="top" > 
+<tr>
+<td  align="center" valign="top" >
   <form name="form1" method="post" action="">
   <center>
   <table border="0">
     <tr>
     <td nowrap title="<?=@$Tm42_codigo?>">
-      <b>Código: </b> 
+      <b>Código: </b>
       <?//=@$Lm40_codigo?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('m42_codigo',10,$Im42_codigo,true,'text',3,"");
 
 ?>
      <b>
 	     <?db_ancora('Requisição:',"js_matrequi($m40_codigo);",1);?>:
-     </b> 
+     </b>
 <?
 db_input('m40_codigo',10,$Im40_codigo,true,'text',3,"")
 ?>
@@ -118,7 +118,7 @@ db_input('m40_codigo',10,$Im40_codigo,true,'text',3,"")
        db_ancora(@$Lm42_depto,"",3);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('m42_depto',10,$Im42_depto,true,'text',3,"")
 ?>
@@ -133,7 +133,7 @@ db_input('descrdepto',40,$Idescrdepto,true,'text',3,'')
        db_ancora(@$Lm42_login,"",3);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('m42_login',10,$Im42_login,true,'text',3,"")
 ?>

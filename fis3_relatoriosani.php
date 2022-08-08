@@ -83,11 +83,11 @@ if($clsaniatividade->numrows > 0){
    */
   $pdf->Cell(120,6,$RLy80_area.': '.@$y80_area,1,1,"J",1);
 
-  $aObs    = split("\n",@$y80_obs);
+  $aObs    = explode("\n",@$y80_obs);
   $iTotaObsln = count($aObs);
   $sObs = "";
   
-  $aTexto    = split("\n",@$y80_texto);
+  $aTexto    = explode("\n",@$y80_texto);
   $iTotaTextoln = count($aTexto);
   $sTexto = "";  
   

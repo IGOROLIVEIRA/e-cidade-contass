@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once ("libs/db_stdlib.php");
@@ -71,11 +71,11 @@ $result = db_query($sql);;
 $linhas = pg_num_rows($result);
 
 if($linhas != 0) {
-  
+
   db_fieldsmemory($result, 0);
   $sSqlBibParametros = $clbib_parametros->sql_query("", "bi26_leitorbarra", "", " bi26_biblioteca = $bi17_codigo");
   $result1           = $clbib_parametros->sql_record($sSqlBibParametros);
-  
+
   if ($clbib_parametros->numrows > 0) {
     db_fieldsmemory($result1,0);
   } else {
@@ -112,7 +112,7 @@ if (isset($acumula)) {
   $clemprestimo->bi18_carteira  = $leitor;
   $clemprestimo->bi18_usuario   = db_getsession("DB_id_usuario");
   $clemprestimo->incluir(null);
-  
+
   //grava emprestimoacervo
   $array_emprestimo = explode("|",$acumula);
   for ($i = 0; $i < count($array_emprestimo); $i++) {
@@ -122,14 +122,14 @@ if (isset($acumula)) {
     $clemprestimoacervo->bi19_emprestimo = $bi19_emprestimo;
     $clemprestimoacervo->bi19_exemplar   = $array_emprestimo[$i];
     $clemprestimoacervo->incluir(null);
-    
+
     if (isset($reserva) && $reserva != "") {
 
       $sSqlReserva = "update reserva set bi14_retirada = '".date("Y-m-d")."',bi14_situacao = 'R' where bi14_codigo = $reserva";
       $clreserva->sql_record($sSqlReserva);
     }
   }
-  
+
   if ($clemprestimoacervo->erro_status == "0") {
     $clemprestimoacervo->erro(true,false);
   } else {
@@ -155,12 +155,12 @@ if (isset($leitor)&&$leitor != "") {
                                              where devolucaoacervo.bi21_codigo = emprestimoacervo.bi19_codigo
                                            )";
   $resultX = $cldevolucaoacervo->sql_record($sSqlDevolucaoAcervo);
-  
+
   $sCamposCarteira = "bi16_leitor as codleitor, bi16_validade, bi07_qtdlivros";
   $sWhereCarteira  = " bi16_codigo = $leitor AND bi07_biblioteca = $bi17_codigo";
   $sSqlCarteira    = $clcarteira->sql_query("", $sCamposCarteira, "bi16_validade desc", $sWhereCarteira);
   $resultY         = $clcarteira->sql_record($sSqlCarteira);
-  
+
   if ($clcarteira->numrows == 0) {
 
     ?>
@@ -213,7 +213,7 @@ if (isset($leitor)&&$leitor != "") {
               $contador   = 0;
               $lista      = !isset( $lista ) ? '' : $lista;
               $qtd_lista  = explode("|",$lista);
-              
+
               for($x = 0; $x < count($qtd_lista); $x++) {
 
                 if( empty( $qtd_lista[$x] ) ) {
@@ -222,7 +222,7 @@ if (isset($leitor)&&$leitor != "") {
 
                 $result = $clexemplar->sql_record($clexemplar->sql_query("", "*", "", " bi23_codigo = $qtd_lista[$x]"));
                 db_fieldsmemory($result, 0);
-                
+
                 if ($cor == $cor1) {
                   $cor = $cor2;
                 } else {
@@ -239,11 +239,11 @@ if (isset($leitor)&&$leitor != "") {
                     <?=$bi06_titulo?>
                   </td>
                   <td width="10%">
-                    <input type="button" 
-                           name="excluiritem" 
-                           id="excluiritem" 
+                    <input type="button"
+                           name="excluiritem"
+                           id="excluiritem"
                            value="Excluir"
-                           onclick="js_excluiritem(<?=$bi23_codigo?>,<?=count($qtd_lista)?>)" 
+                           onclick="js_excluiritem(<?=$bi23_codigo?>,<?=count($qtd_lista)?>)"
                            <?=count($qtd_lista)==1?"style='visibility:hidden'":""?>>
                   </td>
                 </tr>
@@ -261,11 +261,11 @@ if (isset($leitor)&&$leitor != "") {
                   <input name="nome_leitor" type="hidden" id="nome_leitor" value="<?=@$nome_leitor?>">
                   <input name="lista" type="hidden" id="lista" value="<?=$lista?>">
                   <input name="qtd_lista" type="hidden" id="qtd_lista" value="<?=$contador?>">
-                  <input name="confirmar" 
-                         type="button" 
-                         id="confirmar" 
-                         value="Confirmar" 
-                         onclick="js_confirma('<?=$permitido?>',<?=$cldevolucaoacervo->numrows?>)" 
+                  <input name="confirmar"
+                         type="button"
+                         id="confirmar"
+                         value="Confirmar"
+                         onclick="js_confirma('<?=$permitido?>',<?=$cldevolucaoacervo->numrows?>)"
                          <?if($cldevolucaoacervo->numrows>=$permitido){echo 'disabled';}?>>
                   <input name="cancelar" type="button" id="cancelar" value="Cancelar" onclick="location='bib1_emprestimo001.php'">
                   <input type="checkbox" name="emite" value="true"> Emitir Comprovante
@@ -307,7 +307,7 @@ if (isset($leitor)&&$leitor != "") {
               } else {
                 $cor = $cor1;
               }
-              
+
               //cor da situacao
               if (str_replace("-", "", $bi18_devolucao) - date("Ymd") < 0) {
 
@@ -355,12 +355,12 @@ if (isset($leitor)&&$leitor != "") {
                    <?db_ancora(@$Lbi18_carteira, "js_pesquisabi18_carteira(true);", $db_opcao);?>
                  </td>
                  <td>
-                   <?db_input('bi18_carteira', 
-                              10, 
-                              $Ibi18_carteira, 
-                              true, 
-                              'text', 
-                              $db_opcao, 
+                   <?db_input('bi18_carteira',
+                              10,
+                              $Ibi18_carteira,
+                              true,
+                              'text',
+                              $db_opcao,
                               " onchange='js_pesquisabi18_carteira(false);' onKeyPress='tab(event,12)'")?>
                    <?db_input('ov02_nome', 50, @$ov02_nome, true, 'text', 3, " ")?>
                  </td>
@@ -381,12 +381,12 @@ if (isset($leitor)&&$leitor != "") {
                  </td>
                  <td>
                    <?db_inputdata('bi18_retirada',
-                                  @$bi18_retirada_dia, 
-                                  @$bi18_retirada_mes, 
-                                  @$bi18_retirada_ano, 
-                                  true, 
-                                  'text', 
-                                  3, 
+                                  @$bi18_retirada_dia,
+                                  @$bi18_retirada_mes,
+                                  @$bi18_retirada_ano,
+                                  true,
+                                  'text',
+                                  3,
                                   "")?>
                  </td>
                </tr>
@@ -395,13 +395,13 @@ if (isset($leitor)&&$leitor != "") {
                    <?=@$Lbi18_devolucao?>
                  </td>
                  <td>
-                   <?db_inputdata('bi18_devolucao', 
-                                  @$bi18_devolucao_dia, 
-                                  @$bi18_devolucao_mes, 
-                                  @$bi18_devolucao_ano, 
-                                  true, 
-                                  'text', 
-                                  1, 
+                   <?db_inputdata('bi18_devolucao',
+                                  @$bi18_devolucao_dia,
+                                  @$bi18_devolucao_mes,
+                                  @$bi18_devolucao_ano,
+                                  true,
+                                  'text',
+                                  1,
                                   " onchange=\"js_diasemana();\"","",""," parent.js_diasemana();")?>
                    <?db_input('diasemana', 10, "", true, 'text', 3, "")?>
                  </td>
@@ -419,7 +419,7 @@ if (isset($leitor)&&$leitor != "") {
        <td colspan="2" align="center">
          <b><a href="#" onclick="js_abrepopup()">Pesquisar por assunto<a></b><br>
          <?if ($bi26_leitorbarra == "S") {?>
-             
+
              <br>
              <b>Pesquisar por Código de Barras:</b>
              <input type="text" name="bi23_codbarras"  id='bi23_codbarras' value="" size="20">
@@ -443,8 +443,8 @@ if (isset($leitor)&&$leitor != "") {
          $aux->top            = 0;
          $aux->linhas         = 7;
          $aux->vwidth         = 400;
-         $aux->nome_botao     = 'db_lanca_emprestimo';    
-         $aux->funcao_gera_formulario();      
+         $aux->nome_botao     = 'db_lanca_emprestimo';
+         $aux->funcao_gera_formulario();
          ?>
        </td>
      </tr>
@@ -468,17 +468,17 @@ var oGet = js_urlToObject();
 
 
 function js_pesquisabi18_carteira(mostra) {
-  
+
   if (mostra == true) {
-    js_OpenJanelaIframe('top.corpo',
+    js_OpenJanelaIframe('CurrentWindow.corpo',
                         'db_iframe_leitor',
                         'func_leitorproc.php?funcao_js=parent.js_mostraleitor1|bi16_codigo|ov02_nome|bi07_tempo|bi07_qtdlivros',
                         'Pesquisa',
                         true);
   } else {
-    
+
     if (document.form1.bi18_carteira.value != '') {
-      js_OpenJanelaIframe('top.corpo',
+      js_OpenJanelaIframe('CurrentWindow.corpo',
                           'db_iframe_leitor',
                           'func_leitorproc.php?pesquisa_chave2='+document.form1.bi18_carteira.value
                                             +'&funcao_js=parent.js_mostraleitor',
@@ -491,7 +491,7 @@ function js_pesquisabi18_carteira(mostra) {
 }
 
 function js_abrepopup() {
-  js_OpenJanelaIframe('top.corpo',
+  js_OpenJanelaIframe('CurrentWindow.corpo',
                       'db_iframe_acervo2',
                       'bib3_assunto001.php?pop&funcao_js=parent.js_mostratitulopop',
                       'Pesquisa',
@@ -499,7 +499,7 @@ function js_abrepopup() {
 }
 
 function js_mostratitulopop(chave, chave1) {
-  
+
   document.form1.bi23_codigo.value = chave;
   document.form1.bi06_titulo.value = chave1;
   db_iframe_acervo2.hide();
@@ -509,13 +509,13 @@ function js_mostratitulopop(chave, chave1) {
 }
 
 function js_mostraleitor(chave1, chave2, chave3, erro) {
-  
+
   document.form1.ov02_nome.value = chave1;
   document.form1.tempo.value     = chave2;
   document.form1.qtd.value       = chave3;
 
   if (erro == true) {
-    
+
     document.form1.bi18_carteira.value = '';
     document.form1.bi18_carteira.focus();
     document.form1.bi18_devolucao.value            = '';
@@ -528,7 +528,7 @@ function js_mostraleitor(chave1, chave2, chave3, erro) {
 }
 
 function js_mostraleitor1(chave1, chave2, chave3, chave4) {
-  
+
   document.form1.bi18_carteira.value  = chave1;
   document.form1.ov02_nome.value      = chave2;
   document.form1.tempo.value          = chave3;
@@ -538,52 +538,52 @@ function js_mostraleitor1(chave1, chave2, chave3, chave4) {
 }
 
 function somadata(dias) {
-  
+
   var dia = "<?=date('d')?>";
   var mes = "<?=date('m')?>";
   var ano = "<?=date('Y')?>";
   var i   = dias;
-  
+
   for (i = 0; i < dias; i++) {
-    
+
     if (mes == "01" || mes == "03" || mes == "05" || mes == "07" || mes == "08" || mes == "10" || mes == "12") {
-      
+
       if (mes == "12" && dia == "31") {
-        
+
         mes = "01";
         ano++;
         dia = "00";
       }
-      
+
       if (dia == "31" && mes != "12") {
-        
+
         mes++;
         dia = "00";
       }
     }
-    
+
     if (mes == "04" || mes == "06" || mes == "09" || mes == "11") {
-      
+
       if (dia == "30") {
-        
+
         dia =  "00";
         mes++;
       }
     }
-    
+
     if (mes == "02") {
-      
+
       if (ano % 4 == 0) {
-        
+
         if (dia == "29") {
-          
+
           dia = "00";
           mes++;
         }
       } else {
-        
+
         if (dia == "28") {
-          
+
           dia = "00";
           mes++;
         }
@@ -591,7 +591,7 @@ function somadata(dias) {
     }
     dia++;
   }
-  
+
   if (dia == 1) {dia = "01";}
   if (dia == 2) {dia = "02";}
   if (dia == 3) {dia = "03";}
@@ -610,25 +610,25 @@ function somadata(dias) {
   if (mes == 7) {mes = "07";}
   if (mes == 8) {mes = "08";}
   if (mes == 9) {mes = "09";}
-  
+
   document.form1.bi18_devolucao.disabled         = false;
   document.form1.bi18_devolucao.style.background = "#FFFFFF";
   iframe_verificadata.location                   = "bib1_emprestimo002.php?ano="+ano+"&mes="+mes+"&dia="+dia;
 }
 
 function js_emite() {
-  
+
   var qtd = 0;
-  
+
   for (i = 0; i < document.form1.length; i++) {
-    
+
     if (document.form1.elements[i].name == "emprestimo[]") {
-      
+
       vir   = "";
       lista = "";
-      
+
       for (x = 0; x < document.form1.elements[i].length; x++) {
-        
+
         qtd                                            = qtd+1;
         document.form1.elements[i].options[x].selected = true;
         lista += vir+document.form1.emprestimo.options[x].value;
@@ -636,40 +636,40 @@ function js_emite() {
       }
     }
   }
-  
+
   leitor     = document.form1.bi18_carteira;
   nomeleitor = document.form1.ov02_nome;
   devolucao  = document.form1.bi18_devolucao_ano.value
           +'-'+document.form1.bi18_devolucao_mes.value
           +'-'+document.form1.bi18_devolucao_dia.value;
-  
+
   if (leitor.value == "") {
-    
+
     alert("Preencha o campo Leitor corretamente!")
     leitor.style.backgroundColor = "#99A9AE";
     leitor.focus();
     return false;
   }
-  
+
   //-- ve se tem lista
   if (qtd == 0) {
-    
+
     alert('Lista de Empréstimo não pode ser vazia ! ');
     document.form1.bi23_codigo.style.backgroundColor = "#99A9AE";
     document.form1.bi23_codigo.focus();
     return false;
   }
-  
+
   if (qtd > document.form1.qtd.value) {
-    
+
     alert('Limite de empréstimos para este leitor é de '+document.form1.qtd.value+' unidade(s)!');
     document.form1.bi23_codigo.style.backgroundColor = "#99A9AE";
     document.form1.bi23_codigo.focus();
     return false;
   }
-  
+
   if (devolucao == "--") {
-    
+
     alert("Preencha o campo Devolução corretamente!")
     document.form1.bi18_devolucao_dia.focus();
     return false;
@@ -681,17 +681,17 @@ function js_emite() {
 }
 
 function tab(event, form) {
-  
+
   e = event;
   k = e.keyCode;
-  
+
   if (k == 13) {
     document.form1[form].focus()
   }
 }
 
 function js_confirma(permitido, jaemprestado) {
-  
+
   var reserva     = document.form1.reserva.value;
   var leitor      = document.form1.leitor.value;
   var nome_leitor = document.form1.nome_leitor.value;
@@ -700,33 +700,33 @@ function js_confirma(permitido, jaemprestado) {
   var acumula     = '';
   var qtd         = 0;
   var sep         = '';
-  
+
   if (qtd_lista == 1) {
-    
+
     acumula = document.form1.emprestimo.value;
     qtd++;
   } else {
-    
+
     for (i = 0; i < qtd_lista; i++) {
-      
+
       acumula += sep+document.form1.emprestimo[i].value;
       sep = "|";
       qtd ++;
     }
   }
-  
+
   if (document.form1.emite.checked == true) {
     emite = true;
   } else {
     emite = false;
   }
-  
+
   if ((qtd + jaemprestado) > permitido) {
-    
+
     restante = permitido - jaemprestado;
     alert("Leitor já possui "+jaemprestado+" empréstimo(s), podendo efetuar somente mais "+restante+".");
   } else {
-    
+
     document.form1.confirmar.disabled = true;
     location = 'bib1_emprestimo001.php?leitor='+leitor
                                     +'&dev='+dev
@@ -738,24 +738,24 @@ function js_confirma(permitido, jaemprestado) {
 }
 
 function js_excluiritem(codigo, linhas) {
-  
+
   if (linhas == 1) {
     location = "bib1_emprestimo001.php";
   } else {
-    
+
     clista    = document.form1.lista.value.split("|");
     novalista = "";
     sep       = "";
-    
+
     for (i = 0; i < linhas; i++) {
-      
+
       if (clista[i] != codigo) {
-        
+
         novalista += sep+clista[i];
         sep = "|";
       }
     }
-    
+
     var reserva     = document.form1.reserva.value;
     var leitor      = document.form1.leitor.value;
     var nomeleitor  = document.form1.nome_leitor.value;
@@ -769,9 +769,9 @@ function js_excluiritem(codigo, linhas) {
 }
 
 function js_diasemana() {
-  
+
   if (document.form1.bi18_devolucao_ano.value != "") {
-    
+
     d1 = document.form1.bi18_devolucao_dia.value;
     m1 = document.form1.bi18_devolucao_mes.value;
     a1 = document.form1.bi18_devolucao_ano.value;
@@ -779,12 +779,12 @@ function js_diasemana() {
     if (d1 == "" || m1 == "" || a1 == "") {
       alert("Preencha todos os campos da data!");
     } else {
-      
+
       dev = parseInt(a1+m1+d1);
       ret = parseInt(document.form1.bi18_retirada_ano.value+document.form1.bi18_retirada_mes.value+document.form1.bi18_retirada_dia.value);
-      
+
       if (dev < ret) {
-        
+
         alert("Data de Devolução deve ser maior ou igual a Data de Retirada!");
         document.form1.diasemana.value          = "";
         document.form1.bi18_devolucao.value     = "";
@@ -801,7 +801,7 @@ function js_diasemana() {
 }
 
 function js_codbarras() {
-  
+
   if (document.form1.bi23_codbarras.value != "") {
     iframe_verificadata.location = "bib1_emprestimo003.php?bi23_codbarras="+document.form1.bi23_codbarras.value;
   }

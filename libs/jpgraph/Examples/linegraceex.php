@@ -1,6 +1,6 @@
 <?php
-include ("../jpgraph.php");
-include ("../jpgraph_line.php");
+include (__DIR__ . "/../jpgraph.php");
+include (__DIR__ . "/../jpgraph_line.php");
 
 $datay = array(0.2980,0.3039,0.3020,0.3027,0.3015);
 

@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: Laborat�rio
@@ -49,7 +49,7 @@ db_input('la25_i_codigo',10,$Ila25_i_codigo,true,'text',3,"")
     <td nowrap title="<?=@$Tla25_c_estrutural?>">
        <?=@$Lla25_c_estrutural?>
     </td>
-    <td> 
+    <td>
 <?
   if(!isset($la25_c_estrutural)){
     $la25_c_estrutural=$la49_c_estrutural;
@@ -64,13 +64,13 @@ db_input('la25_i_codigo',10,$Ila25_i_codigo,true,'text',3,"")
       $sProximo=$cllab_atributo->numrows+1;
     }
     $iTam = strlen($aVet[0]);
-    $aVet[0] = str_pad($sProximo, $iTam, "0", STR_PAD_LEFT); 
+    $aVet[0] = str_pad($sProximo, $iTam, "0", STR_PAD_LEFT);
     $la25_c_estrutural=implode(".",$aVet);
 
   }
   db_input('la25_c_estrutural',10,$Ila25_c_estrutural,true,'text',3,"");
   echo"$Lla25_i_nivel";
-  if(!isset($la25_i_nivel)){$la25_i_nivel="1";} 
+  if(!isset($la25_i_nivel)){$la25_i_nivel="1";}
     db_input('la25_i_nivel',1,$Ila25_i_nivel,true,'text',3,"");
 ?>
     </td>
@@ -97,7 +97,7 @@ db_input('la25_i_nivel_pai',1,$Ila25_i_nivel,true,'text',3,"");
     <td nowrap title="<?=@$Tla25_c_descr?>">
        <?=@$Lla25_c_descr?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('la25_c_descr',50,$Ila25_c_descr,true,'text',$db_opcao,"")
 ?>
@@ -107,7 +107,7 @@ db_input('la25_c_descr',50,$Ila25_c_descr,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tla25_c_tipo?>">
        <?=@$Lla25_c_tipo?>
     </td>
-    <td> 
+    <td>
 <?
 $aTipos= Array("1"=>"Sintetico","2"=>"Analitico");
 db_select("la25_c_tipo",$aTipos,true,$db_opcao2,"");
@@ -116,10 +116,10 @@ db_select("la25_c_tipo",$aTipos,true,$db_opcao2,"");
   </tr>
   </table>
 </center>
-<input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" 
-       type="submit" 
-       id="db_opcao" 
-       value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" 
+<input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>"
+       type="submit"
+       id="db_opcao"
+       value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>"
        <?=($db_botao==false?"disabled":"")?>
        onclick="return js_valida()" >
 <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
@@ -147,25 +147,25 @@ function js_pesquisala26_i_exameatributopai(mostra){
   if(mostra==true){
     js_OpenJanelaIframe('','db_iframe_lab_atributo','func_lab_atributo.php?sintetico=1&funcao_js=parent.js_mostralab_atributo1|la25_i_codigo|la25_c_descr|la25_c_estrutural|la25_i_nivel|filhos','Pesquisa',true);
   }else{
-     if(document.form1.la26_i_exameatributopai.value != ''){ 
+     if(document.form1.la26_i_exameatributopai.value != ''){
         js_OpenJanelaIframe('','db_iframe_lab_atributo','func_lab_atributo.php?sintetico=1&pesquisa_chave='+document.form1.la26_i_exameatributopai.value+'&funcao_js=parent.js_mostralab_atributo','Pesquisa',false);
      }else{
        F.la25_c_descr_pai.value = '';
        F.la25_c_estrutural_pai.value = '';
-       F.la25_i_nivel_pai.value = ''; 
+       F.la25_i_nivel_pai.value = '';
      }
   }
 }
 function js_mostralab_atributo(chave1,erro,chave2,chave3,filhos){
   F.la25_c_descr_pai.value = chave1;
-  if(erro==true){ 
-    document.form1.la26_i_exameatributopai.focus(); 
-    document.form1.la26_i_exameatributopai.value = ''; 
+  if(erro==true){
+    document.form1.la26_i_exameatributopai.focus();
+    document.form1.la26_i_exameatributopai.value = '';
   }else{
     F.la25_c_estrutural_pai.value = chave2;
     F.la25_i_nivel_pai.value = chave3;
     F.la25_c_estrutural.value=js_proximoestrutural(chave2,chave3,filhos);
-    F.la25_i_nivel=chave3+1; 
+    F.la25_i_nivel=chave3+1;
   }
 }
 function js_mostralab_atributo1(chave1,chave2,chave3,chave4,filhos){
@@ -201,7 +201,7 @@ function js_proximoestrutural(pai,nivel,filhos){
 
 
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_lab_atributo','func_lab_atributo.php?funcao_js=parent.js_preenchepesquisa|la25_i_codigo','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_lab_atributo','func_lab_atributo.php?funcao_js=parent.js_preenchepesquisa|la25_i_codigo','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_lab_atributo.hide();

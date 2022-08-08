@@ -1,32 +1,32 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 /**
- * 
+ *
  * @author I
  * @revision $Author: dbiuri $
  * @version $Revision: 1.9 $
@@ -89,7 +89,7 @@ db_app::load("estilos.css");
 </style>
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onload="js_init()">
-<center> 
+<center>
 <form method="post" name='form1'>
   <table width="850px">
    <tr>
@@ -101,10 +101,10 @@ db_app::load("estilos.css");
     <td nowrap title="<?=@$To08_elemento?>">
        <?
        db_ancora(@$Lo08_elemento,"js_pesquisao08_elemento(true);",$db_opcao, "","o08_elementoancora");
-       
+
        ?>
     </td>
-    <td> 
+    <td>
      <?
      db_input('o08_elemento',10,$Io08_elemento,true,'text',$db_opcao," onchange='js_pesquisao08_elemento(false,this);'");
      db_input('o56_elemento',13,$Io56_elemento,true,'text',$db_opcao," onchange='js_pesquisao08_elemento(false,this);'");
@@ -115,11 +115,11 @@ db_app::load("estilos.css");
   </tr>
   <tr>
     <td nowrap title="<?=@$To08_recurso?>">
-     <? 
+     <?
        db_ancora(@$Lo08_recurso,"js_pesquisac62_codrec(true);",$db_opcao, "", "o08_recursoancora");
-     ?>  
+     ?>
     </td>
-    <td> 
+    <td>
     <?
     db_input('o08_recurso',10,$Io08_recurso,true,'text',$db_opcao,"onchange='js_pesquisac62_codrec(false);'");
     db_input('o15_descr',56,$Io08_recurso,true,'text',3,"");
@@ -132,7 +132,7 @@ db_app::load("estilos.css");
        db_ancora(@$Lo08_localizadorgastos,"js_pesquisao08_localizadorgastos(true);",$db_opcao,"","o08_gastosancora");
        ?>
     </td>
-    <td> 
+    <td>
    <?
    $o08_localizadorgastos = 3;
    db_input('o08_localizadorgastos',10,$Io08_localizadorgastos,true,'text',$db_opcao," onchange='js_pesquisao08_localizadorgastos(false);'");  
@@ -155,23 +155,23 @@ db_app::load("estilos.css");
       </td>
     </tr>
     <tr>
-      <td> 
+      <td>
         <b>Ano:</b>
       </td>
       <td>
        <?
         db_input('o05_anoreferencia',10,3, true,'text',1,"onchange='js_validaAno(this);'");
-       ?> 
+       ?>
       </td>
     </tr>
     <tr>
-      <td> 
+      <td>
         <b>Valor:</b>
       </td>
       <td>
        <?
         db_input('o05_valor',10,$Io05_valor, true,'text',1,"");
-       ?> 
+       ?>
       </td>
     </tr>
     <tr>
@@ -190,9 +190,9 @@ db_app::load("estilos.css");
       <td colspan="5">
         <fieldset>
           <legend><b>Elementos/Recursos</b></legend>
-          <div id='gridItensPPA'> 
+          <div id='gridItensPPA'>
           </div>
-        </fieldset>      
+        </fieldset>
    </td>
   </table>
 </form>
@@ -265,25 +265,25 @@ function js_mostraorcelemento1(chave1,chave2,chave3){
   db_iframe_orcelemento.hide();
 }
 function js_pesquisao08_localizadorgastos(mostra){
-  
+
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_ppadotacaoele',
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_ppadotacaoele',
                         'db_iframe_ppasubtitulolocalizadorgasto',
                         'func_ppasubtitulolocalizadorgasto.php?funcao_js=parent.js_mostrappasubtitulolocalizadorgasto1|o11_sequencial|o11_descricao',
                         'Pesquisa',true);
   }else{
-     if(document.form1.o08_localizadorgastos.value != ''){ 
-        js_OpenJanelaIframe('top.corpo.iframe_ppadotacaoele','db_iframe_ppasubtitulolocalizadorgasto','func_ppasubtitulolocalizadorgasto.php?pesquisa_chave='+document.form1.o08_localizadorgastos.value+'&funcao_js=parent.js_mostrappasubtitulolocalizadorgasto','Pesquisa',false);
+     if(document.form1.o08_localizadorgastos.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_ppadotacaoele','db_iframe_ppasubtitulolocalizadorgasto','func_ppasubtitulolocalizadorgasto.php?pesquisa_chave='+document.form1.o08_localizadorgastos.value+'&funcao_js=parent.js_mostrappasubtitulolocalizadorgasto','Pesquisa',false);
      }else{
-       document.form1.o11_descricao.value = ''; 
+       document.form1.o11_descricao.value = '';
      }
   }
 }
 function js_mostrappasubtitulolocalizadorgasto(chave,erro){
-  document.form1.o11_descricao.value = chave; 
-  if(erro==true){ 
-    document.form1.o08_localizadorgastos.focus(); 
-    document.form1.o08_localizadorgastos.value = ''; 
+  document.form1.o11_descricao.value = chave;
+  if(erro==true){
+    document.form1.o08_localizadorgastos.focus();
+    document.form1.o08_localizadorgastos.value = '';
   }
 }
 function js_mostrappasubtitulolocalizadorgasto1(chave1,chave2){
@@ -294,27 +294,27 @@ function js_mostrappasubtitulolocalizadorgasto1(chave1,chave2){
 
 function js_pesquisac62_codrec(mostra){
    if(mostra==true){
-       js_OpenJanelaIframe('top.corpo.iframe_ppadotacaoele',
+       js_OpenJanelaIframe('CurrentWindow.corpo.iframe_ppadotacaoele',
                            'db_iframe_orctiporec',
                            'func_orctiporec.php?funcao_js=parent.js_mostraorctiporec1|o15_codigo|o15_descr',
                            'Recursos',true);
    }else{
-       if(document.form1.o08_recurso.value != ''){ 
-           js_OpenJanelaIframe('top.corpo.iframe_ppadotacaoele',
+       if(document.form1.o08_recurso.value != ''){
+           js_OpenJanelaIframe('CurrentWindow.corpo.iframe_ppadotacaoele',
                                'db_iframe_orctiporec','func_orctiporec.php?pesquisa_chave='
                                 +document.form1.o08_recurso.value+'&funcao_js=parent.js_mostraorctiporec',
                                 'Pesquisa',false);
        }else{
-           document.form1.o15_descr.value = ''; 
+           document.form1.o15_descr.value = '';
        }
    }
 }
 function js_mostraorctiporec(chave,erro){
-   document.form1.o15_descr.value = chave; 
-   if(erro==true){ 
-      document.form1.o08_recurso.focus(); 
-      document.form1.o08_recurso.value = ''; 
-   } 
+   document.form1.o15_descr.value = chave;
+   if(erro==true){
+      document.form1.o08_recurso.focus();
+      document.form1.o08_recurso.value = '';
+   }
 }
 
 function js_mostraorctiporec1(chave1,chave2){
@@ -324,38 +324,38 @@ function js_mostraorctiporec1(chave1,chave2){
 }
 
 function js_pesquisao08_concarpeculiar(mostra){
-  
+
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_ppadotacaoele',
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_ppadotacaoele',
                         'db_iframe_concarpeculiar',
                         'func_concarpeculiar.php?funcao_js=parent.js_mostraconcarpeculiar1|c58_sequencial|c58_descr',
                         'Pesquisa',true,0,0);
   }else{
-     if(document.form1.o08_concarpeculiar.value != ''){ 
-        js_OpenJanelaIframe('top.corpo.iframe_ppadotacaoele','db_iframe_concarpeculiar','func_concarpeculiar.php?pesquisa_chave='+document.form1.o08_concarpeculiar.value.trim()+'&funcao_js=parent.js_mostraconcarpeculiar','Pesquisa',false);
+     if(document.form1.o08_concarpeculiar.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_ppadotacaoele','db_iframe_concarpeculiar','func_concarpeculiar.php?pesquisa_chave='+document.form1.o08_concarpeculiar.value.trim()+'&funcao_js=parent.js_mostraconcarpeculiar','Pesquisa',false);
      }else{
-       $("o08_concarpeculiar").setValue(''); 
+       $("o08_concarpeculiar").setValue('');
      }
   }
 }
 
 function js_mostraconcarpeculiar(chave,erro){
-  $("c58_descr").value = chave; 
-  if(erro==true){ 
-    $("o08_concarpeculiar").focus(); 
-    $("o08_concarpeculiar").setValue(''); 
+  $("c58_descr").value = chave;
+  if(erro==true){
+    $("o08_concarpeculiar").focus();
+    $("o08_concarpeculiar").setValue('');
   }
 }
 
 function js_mostraconcarpeculiar1(chave1,chave2){
-  $("o08_concarpeculiar").setValue(chave1); 
-  $("c58_descr").setValue(chave2); 
+  $("o08_concarpeculiar").setValue(chave1);
+  $("c58_descr").setValue(chave2);
   db_iframe_concarpeculiar.hide();
 }
 
 
 function js_init() {
-  
+
   iCodigoItem = null;
   oGridPPA = new DBGrid('oGridPPA');
   oGridPPA.nameInstance = 'oGridPPA';
@@ -365,7 +365,7 @@ function js_init() {
   oGridPPA.setCellAlign(new Array("right","left","center","center","center","center","center","center"));
   oGridPPA.setHeader(new Array(
                               "Código",
-                              "Elemento", 
+                              "Elemento",
                               "Recurso",
                               "Localizador",
                               "CP/CA",
@@ -374,7 +374,7 @@ function js_init() {
                               "Ação"
                                 ));
  oGridPPA.show(document.getElementById('gridItensPPA'));
-}      
+}
 
 function addValoresGrid(aValores, db_opcao = null) {
   js_limparCampos();
@@ -384,7 +384,7 @@ function addValoresGrid(aValores, db_opcao = null) {
     $('btnsalvar').disabled = true; 
   }
   aValores.each(function(oElemento,id) {
-  
+
      aLinha = new Array();
      aLinha[0]  = oElemento.o05_sequencial;   
      aLinha[1]  = oElemento.o56_elemento+' - '+oElemento.o56_descr.urlDecode();   
@@ -404,16 +404,16 @@ function addValoresGrid(aValores, db_opcao = null) {
      } else {
        oGridPPA.aRows[id].setClassName('dotacaonormal');
      }
-     
+
   });
   oGridPPA.renderRows();
-                             
+
 }
 
 function js_editarValor(key) {
 
   setReadOnly(false);
-  
+
   $('o05_anoreferencia').style.backgroundColor   = "#DEB887";
   $('o05_anoreferencia').readOnly                = true;
   oGridPPA.aRows[key].isSelected = true;
@@ -428,53 +428,53 @@ function js_editarValor(key) {
   var oRequest = new Ajax.Request(
                                  'orc4_ppadotacaoalteracaoRPC.php',
                                   {
-                                   method    : 'post', 
-                                   parameters: 'json='+Object.toJSON(oParam), 
-                                   onComplete: js_retornoEditaValor 
+                                   method    : 'post',
+                                   parameters: 'json='+Object.toJSON(oParam),
+                                   onComplete: js_retornoEditaValor
                                   }
                                 );
-                                           
+
 }
 function js_retornoEditaValor(oRequest) {
-  
+
   js_removeObj('msgbox');
   var oRetorno = eval("("+oRequest.responseText+")");
   if (oRetorno.status == 1) {
-    
+
     /**
      * Colcamos o objeto com os dados do item no escopo global
      */
     oObjetoSelecionado =  oRetorno.itens;
     if (oRetorno.itens.o19_coddot != "") {
-    
+
        setReadOnly(true);
-    } 
+    }
     var a = $$('input[type=text],select');
     a.each(function(input,id) {
-       
+
        var valor   = eval("oRetorno.itens."+input.id);
        if (valor    != null ) {
          input.value = valor.urlDecode();
-         
+
        }
-       
+
      });
      $('btnsalvar').disabled   = false;
      $('btnexcluir').disabled = false;
-     
+
   }
 }
 
 function setReadOnly(lReadOnly) {
 
   if (lReadOnly) {
-  
+
     $('o08_elemento').style.backgroundColor          = "#DEB887";
     $('o08_elemento').readOnly                       = true;
     $('o08_elementoancora').onclick                  ='return false';
      
   } else {
-  
+
     $('o08_elemento').style.backgroundColor          = "#FFFFFF";
     $('o08_elemento').readOnly                       = false;
     $('o08_elementoancora').onclick                  = function (){js_pesquisao08_elemento(true)};
@@ -488,9 +488,9 @@ function setReadOnly(lReadOnly) {
 function js_save() {
 
   var oParam                   = new Object();
-  
+
   if ($F('o08_concarpeculiar') == "") {
-  
+
      alert("Você deve selecionar uma C.Peculiar/Cod. de Aplicação antes de incluir o registro.");
      return false;
   }
@@ -502,11 +502,11 @@ function js_save() {
     oParam.exec                  = "salvarElemento";
     oParam.o05_sequencial        = iCodigoItem;
     oParam.o08_sequencial        = oObjetoSelecionado.o08_sequencial;
-    oParam.o08_elemento          = $F('o08_elemento');    
-    oParam.o08_recurso           = $F('o08_recurso');    
-    oParam.o08_localizadorgastos = $F('o08_localizadorgastos');    
-    oParam.o08_concarpeculiar    = $F('o08_concarpeculiar');    
-    oParam.o19_coddot            = oObjetoSelecionado.o19_coddot;    
+    oParam.o08_elemento          = $F('o08_elemento');
+    oParam.o08_recurso           = $F('o08_recurso');
+    oParam.o08_localizadorgastos = $F('o08_localizadorgastos');
+    oParam.o08_concarpeculiar    = $F('o08_concarpeculiar');
+    oParam.o19_coddot            = oObjetoSelecionado.o19_coddot;
     oParam.o05_valor             = $F('o05_valor');
     oParam.o05_anoreferencia     = $F('o05_anoreferencia');
     oParam.atualiza_anos_seguintes = atualiza_anos_seguintes;
@@ -514,83 +514,83 @@ function js_save() {
     var oRequest = new Ajax.Request(
                                  'orc4_ppadotacaoalteracaoRPC.php',
                                   {
-                                   method    : 'post', 
-                                   parameters: 'json='+Object.toJSON(oParam), 
-                                   onComplete: js_retornoSave 
+                                   method    : 'post',
+                                   parameters: 'json='+Object.toJSON(oParam),
+                                   onComplete: js_retornoSave
                                   }
                                 );
-    
+
   } else {
-    
+
     var sMsgInclusao  = "Será incluído as projeções ate o último ano do ppa, conforme as configuracoes ";
         sMsgInclusao += "do cenário macroeconômico configurado para o Elemento.\n";
-       
+
     $('btnsalvar').disabled               = true;
     oParam.exec                           = 'incluirAcao';
     oParam.ultimoano                      = iAnoFim;
-    oParam.o08_ppaversao                  = top.corpo.iframe_ppadotacao.$F('o05_ppaversao');
+    oParam.o08_ppaversao                  = CurrentWindow.corpo.iframe_ppadotacao.$F('o05_ppaversao');
     oParam.oDotacao                       = new Object();
-    oParam.oDotacao.iAno                  = $F('o05_anoreferencia');    
-    oParam.oDotacao.o08_orgao             = top.corpo.iframe_ppadotacao.$F('o08_orgao');    
-    oParam.oDotacao.o08_unidade           = top.corpo.iframe_ppadotacao.$F('o08_unidade');    
-    oParam.oDotacao.o08_funcao            = top.corpo.iframe_ppadotacao.$F('o08_funcao')    
-    oParam.oDotacao.o08_subfuncao         = top.corpo.iframe_ppadotacao.$F('o08_subfuncao');    
-    oParam.oDotacao.o08_programa          = top.corpo.iframe_ppadotacao.$F('o08_programa');
-    oParam.oDotacao.o08_concarpeculiar    = $F('o08_concarpeculiar');       
-    oParam.oDotacao.o08_projativ          = top.corpo.iframe_ppadotacao.$F('o08_projativ');    
-    oParam.oDotacao.o08_elemento          = $F('o08_elemento');    
-    oParam.oDotacao.o08_recurso           = $F('o08_recurso');    
-    oParam.oDotacao.nValor                = $F('o05_valor');    
+    oParam.oDotacao.iAno                  = $F('o05_anoreferencia');
+    oParam.oDotacao.o08_orgao             = CurrentWindow.corpo.iframe_ppadotacao.$F('o08_orgao');
+    oParam.oDotacao.o08_unidade           = CurrentWindow.corpo.iframe_ppadotacao.$F('o08_unidade');
+    oParam.oDotacao.o08_funcao            = CurrentWindow.corpo.iframe_ppadotacao.$F('o08_funcao')
+    oParam.oDotacao.o08_subfuncao         = CurrentWindow.corpo.iframe_ppadotacao.$F('o08_subfuncao');
+    oParam.oDotacao.o08_programa          = CurrentWindow.corpo.iframe_ppadotacao.$F('o08_programa');
+    oParam.oDotacao.o08_concarpeculiar    = $F('o08_concarpeculiar');
+    oParam.oDotacao.o08_projativ          = CurrentWindow.corpo.iframe_ppadotacao.$F('o08_projativ');
+    oParam.oDotacao.o08_elemento          = $F('o08_elemento');
+    oParam.oDotacao.o08_recurso           = $F('o08_recurso');
+    oParam.oDotacao.nValor                = $F('o05_valor');
     oParam.oDotacao.o08_localizadorgastos = $F('o08_localizadorgastos');
     sMsgInclusao += "Confirma Inclusão?";
     if (!confirm(sMsgInclusao)) {
       return false;
     }
-    
+
     js_divCarregando('Aguarde, Salvando Dotação','msgbox');
     var oRequest = new Ajax.Request(
                                  'orc4_ppadotacaoalteracaoRPC.php',
                                   {
-                                   method    : 'post', 
-                                   parameters: 'json='+Object.toJSON(oParam), 
+                                   method    : 'post',
+                                   parameters: 'json='+Object.toJSON(oParam),
                                    onComplete: js_retornoInclusao
                                   }
-                                ); 
+                                );
   }
-  
-  
+
+
 }
 function js_retornoInclusao(oResponse) {
-  
+
   js_removeObj('msgbox');
   var oRetorno = eval("("+oResponse.responseText+")");
   if (oRetorno.status == 1) {
-  
-    var iFuncao    = top.corpo.iframe_ppadotacao.$F('o08_funcao');
-    var iSubFuncao = top.corpo.iframe_ppadotacao.$F('o08_subfuncao');  
-    var iUnidade   = top.corpo.iframe_ppadotacao.$F('o08_unidade');  
-    var iOrgao     = top.corpo.iframe_ppadotacao.$F('o08_orgao');  
-    var iPrograma  = top.corpo.iframe_ppadotacao.$F('o08_programa');  
-    var iProjAtiv  = top.corpo.iframe_ppadotacao.$F('o08_projativ');  
-    var iPpaVersao = top.corpo.iframe_ppadotacao.$F('o05_ppaversao');
-    
-    top.corpo.iframe_ppadotacao.js_preenchepesquisa(iOrgao, 
+
+    var iFuncao    = CurrentWindow.corpo.iframe_ppadotacao.$F('o08_funcao');
+    var iSubFuncao = CurrentWindow.corpo.iframe_ppadotacao.$F('o08_subfuncao');
+    var iUnidade   = CurrentWindow.corpo.iframe_ppadotacao.$F('o08_unidade');
+    var iOrgao     = CurrentWindow.corpo.iframe_ppadotacao.$F('o08_orgao');
+    var iPrograma  = CurrentWindow.corpo.iframe_ppadotacao.$F('o08_programa');
+    var iProjAtiv  = CurrentWindow.corpo.iframe_ppadotacao.$F('o08_projativ');
+    var iPpaVersao = CurrentWindow.corpo.iframe_ppadotacao.$F('o05_ppaversao');
+
+    CurrentWindow.corpo.iframe_ppadotacao.js_preenchepesquisa(iOrgao,
                                                     iUnidade,
                                                     iFuncao,
                                                     iSubFuncao,
                                                     iPrograma,
                                                     iProjAtiv,
                                                     iPpaVersao
-                                                    ); 
+                                                    );
     $('btncancelar').click();
   } else {
     alert(oRetorno.message.urlDecode());
   }
   $('btnsalvar').disabled   = false;
-  
+
 }
 function js_retornoSave(oRequest) {
-  
+
   js_removeObj('msgbox');
   var oRetorno = eval("("+oRequest.responseText+")");
   if (oRetorno.status == 1) {
@@ -610,68 +610,68 @@ function js_retornoSave(oRequest) {
 }
 
 function js_limparCampos() {
-  
+
    $('btncancelar').click();
 }
 
 
 function js_excluir() {
 
-var sMsg = "Confirma a exclusão da dotação Selecionada?"; 
+var sMsg = "Confirma a exclusão da dotação Selecionada?";
 if (!confirm(sMsg)) {
   return false;
 }
 if (iCodigoItem) {
-  
+
     var oParam                   = new Object();
     oParam.exec                  = "excluirElemento";
     oParam.o05_sequencial        = iCodigoItem;
     oParam.o08_sequencial        = oObjetoSelecionado.o08_sequencial;
-    oParam.o08_elemento          = $F('o08_elemento');    
-    oParam.o08_recurso           = $F('o08_recurso');    
-    oParam.o08_localizadorgastos = $F('o08_localizadorgastos');    
-    oParam.o19_coddot            = oObjetoSelecionado.o19_coddot;    
+    oParam.o08_elemento          = $F('o08_elemento');
+    oParam.o08_recurso           = $F('o08_recurso');
+    oParam.o08_localizadorgastos = $F('o08_localizadorgastos');
+    oParam.o19_coddot            = oObjetoSelecionado.o19_coddot;
     oParam.o05_valor             = $F('o05_valor');
     js_divCarregando('Aguarde, excluindo dotação','msgbox');
     var oRequest = new Ajax.Request(
                                  'orc4_ppadotacaoalteracaoRPC.php',
                                   {
-                                   method    : 'post', 
-                                   parameters: 'json='+Object.toJSON(oParam), 
-                                   onComplete: js_retornoExcluir 
+                                   method    : 'post',
+                                   parameters: 'json='+Object.toJSON(oParam),
+                                   onComplete: js_retornoExcluir
                                   }
                                 );
-    
+
   }
-  
+
 }
 function js_retornoExcluir(oRequest) {
-  
+
   js_removeObj('msgbox');
   var oRetorno = eval("("+oRequest.responseText+")");
   if (oRetorno.status == 1) {
-  
-    js_limparCampos(); 
-    var iFuncao    = top.corpo.iframe_ppadotacao.$F('o08_funcao');
-    var iSubFuncao = top.corpo.iframe_ppadotacao.$F('o08_subfuncao');  
-    var iUnidade   = top.corpo.iframe_ppadotacao.$F('o08_unidade');  
-    var iOrgao     = top.corpo.iframe_ppadotacao.$F('o08_orgao');  
-    var iPrograma  = top.corpo.iframe_ppadotacao.$F('o08_programa');  
-    var iProjAtiv  = top.corpo.iframe_ppadotacao.$F('o08_projativ');  
-    var iPpaVersao  = top.corpo.iframe_ppadotacao.$F('o05_ppaversao');
-    top.corpo.iframe_ppadotacao.js_preenchepesquisa(iOrgao, 
+
+    js_limparCampos();
+    var iFuncao    = CurrentWindow.corpo.iframe_ppadotacao.$F('o08_funcao');
+    var iSubFuncao = CurrentWindow.corpo.iframe_ppadotacao.$F('o08_subfuncao');
+    var iUnidade   = CurrentWindow.corpo.iframe_ppadotacao.$F('o08_unidade');
+    var iOrgao     = CurrentWindow.corpo.iframe_ppadotacao.$F('o08_orgao');
+    var iPrograma  = CurrentWindow.corpo.iframe_ppadotacao.$F('o08_programa');
+    var iProjAtiv  = CurrentWindow.corpo.iframe_ppadotacao.$F('o08_projativ');
+    var iPpaVersao  = CurrentWindow.corpo.iframe_ppadotacao.$F('o05_ppaversao');
+    CurrentWindow.corpo.iframe_ppadotacao.js_preenchepesquisa(iOrgao,
                                                     iUnidade,
                                                     iFuncao,
                                                     iSubFuncao,
                                                     iPrograma,
                                                     iProjAtiv,
                                                     iPpaVersao
-                                                    );  
+                                                    );
   }
   iCodigoItem = null;
-}  
+}
 function js_validaAno(input) {
-   
+
    if (input.value < iAnoIni) {
      input.value = iAnoIni;
    }
@@ -686,16 +686,16 @@ $('o05_anoreferencia').onfocus = function(event) {
   }
 }
 $('o05_anoreferencia').onkeydown = function(event) {
-  
+
   if (!this.readOnly) {
-   
+
     if (event.which == 40) {
-    
+
      this.value = new Number(this.value)+1;
      js_validaAno(this);
      event.preventDefault();
     } else if(event.which == 38) {
-      
+
       this.value -= 1;
       js_validaAno(this);
       event.preventDefault();
@@ -704,7 +704,7 @@ $('o05_anoreferencia').onkeydown = function(event) {
 }
 
 $('btncancelar').onclick = function() {
-  
+
   iCodigoItem = null;
   var a = $$('input[type=text],select');
   a.each(function(input,id) {
@@ -712,7 +712,7 @@ $('btncancelar').onclick = function() {
   });
   setReadOnly(false);
   $('o05_anoreferencia').style.backgroundColor     = "#FFFFFF";
-  $('o05_anoreferencia').readOnly                  = false;  
+  $('o05_anoreferencia').readOnly                  = false;
   $('btnexcluir').disabled = true;
   $('o08_concarpeculiar').value = '000';
   $('o08_localizadorgastos').value = '3';

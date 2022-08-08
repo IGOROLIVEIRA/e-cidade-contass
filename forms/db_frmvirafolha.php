@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 $clrotulo = new rotulocampo;
@@ -74,7 +74,7 @@ $clrotulo->label('DBtxt23');
     </td>
   </tr>
   <tr>
-    <td colspan="2" align = "center"> 
+    <td colspan="2" align = "center">
       <input name="<?=($db_opcao == 1?'false':'true')?>" id="processar" type="button" value="<?=($db_opcao == 1?'Processar':'Desprocessar')?>" onclick="js_verificaProcessar();" >
     </td>
   </tr>
@@ -152,13 +152,13 @@ function js_processar(){
   if(document.getElementById("processar").name == "false"){
     if(confirm("Confirma fechamento do mês "+x.dataii_mes.value+"/"+x.dataii_ano.value+" ?")){
   	  js_mostrardiv(true,"Verificando dados para virada");
-      js_OpenJanelaIframe('top.corpo','db_iframe_virafolha','dbforms/db_virafolha.php'+qry,'Virada da folha',false);
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_virafolha','dbforms/db_virafolha.php'+qry,'Virada da folha',false);
     }
   }else{
     qry+= "&desprocess="+document.getElementById("processar").name;
     if(confirm("Confirma cancelamento do mês "+x.dataii_mes.value+"/"+x.dataii_ano.value+" ?")){
   	  js_mostrardiv(true,"Verificando dados para cancelamento");
-      js_OpenJanelaIframe('top.corpo','db_iframe_virafolha','dbforms/db_virafolha.php'+qry,'Virada da folha',false);
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_virafolha','dbforms/db_virafolha.php'+qry,'Virada da folha',false);
     }
   }
 

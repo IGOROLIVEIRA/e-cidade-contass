@@ -88,28 +88,7 @@
                     p58_obs                                                                    as observacoes_processo,
                     cgm.z01_cgccpf                                                             as cpf_cnpj_cgm,
                     cgm.z01_telef                                                              as telefone_cgm,
-                    cgm.z01_bairro                                                             as bairro_cgm,
-                    protprocesso.p58_numeracao                                                 as numeracao,
-                    (select descrdepto from protprocesso 
-			inner join db_depart on p58_coddepto=coddepto
-							where p58_codproc = $codigo_processo) as descr_dep_inicial,
-		    (select array_to_string(array(select documento_processo
-                                                      From (select p56_descr as documento_processo
-                                                             from procprocessodoc
-                                                                  inner join procdoc on p56_coddoc = p81_coddoc
-                                                            where p81_codproc = protprocesso.p58_codproc
-                                                            limit 5
-                                                          ) as x
-                                                    union all
-                                                    select case when
-                                                                  (select count(p56_descr)
-                                                                          from procprocessodoc
-                                                                          inner join procdoc on p56_coddoc = p81_coddoc
-                                                                    where p81_codproc = protprocesso.p58_codproc
-                                                                   ) > 5
-                                                                then 'Outros Documentos'
-                                                           end as documento_processo),'\n') as documento_processo
-                              ) as documento_processo</Select>
+                    cgm.z01_bairro                                                             as bairro_cgm</Select>
             <From>protprocesso 
                   inner join cgm        on cgm.z01_numcgm      = protprocesso.p58_numcgm
                   inner join tipoproc   on tipoproc.p51_codigo = protprocesso.p58_codigo</From>
@@ -512,16 +491,16 @@
                         <Select>documento_processo</Select>
                         <From>(select documento_processo
                                  From (select p56_descr as documento_processo
-                                        from procprocessodoc
-                                             inner join procdoc on p56_coddoc = p81_coddoc
+                                        from procprocessodoc 
+                                             inner join procdoc on p56_coddoc = p81_coddoc 
                                        where p81_codproc = $codigo_processo
                                        limit 5
                                      ) as x
                                union all
                                select case when
                                              (select count(p56_descr)
-                                                     from procprocessodoc
-                                                     inner join procdoc on p56_coddoc = p81_coddoc
+                                                     from procprocessodoc 
+                                                     inner join procdoc on p56_coddoc = p81_coddoc 
                                                where p81_codproc = $codigo_processo
                                               ) > 5 
                                            then 'Outros Documentos'

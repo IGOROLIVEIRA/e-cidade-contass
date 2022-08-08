@@ -11,7 +11,7 @@ $clrotulo->label("o40_descr");
 $z01_nomeordliquidacao = '';
 $z01_nomeordpagamento = '';
 */
-//echo $z01_nomeorddespesa."<br>".$z01_nome;exit; 
+//echo $z01_nomeorddespesa."<br>".$z01_nome;exit;
 
 $db_opcaoinstit = $db_opcao;
 
@@ -27,7 +27,7 @@ $db_opcaoinstit = $db_opcao;
     <td nowrap >
      <?=$Lo41_anousu?>
     </td>
-    <td> 
+    <td>
 <?
   if (!isset($o41_anousu)) {
     $o41_anousu = db_getsession('DB_anousu');
@@ -42,7 +42,7 @@ $db_opcaoinstit = $db_opcao;
        db_ancora(@$Lo41_orgao,"js_pesquisao41_orgao(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('o41_orgao',5,$Io41_orgao,true,'text',$db_opcao," onchange='js_pesquisao41_orgao(false);'")
 ?>
@@ -56,7 +56,7 @@ db_input('o40_descr',50,$Io40_descr,true,'text',3,'');
     <td nowrap title="<?=@$To41_unidade?>">
        <?=@$Lo41_unidade?>
     </td>
-    <td> 
+    <td>
     <?
       db_input('o41_unidade',5,$Io41_unidade,true,'text',$db_opcao,"")
     ?>
@@ -67,9 +67,9 @@ db_input('o40_descr',50,$Io40_descr,true,'text',3,'');
     <td nowrap title="Instituição ">
 		  <b>Instituição:</b>
     </td>
-    <td> 
+    <td>
     <?
-		 // busca a instituicao da prefeitura 
+		 // busca a instituicao da prefeitura
 		 $rsI = pg_query(" select codigo as iprefeitura from db_config where prefeitura is true ");
 		 db_fieldsmemory($rsI,0);
 
@@ -89,8 +89,8 @@ db_input('o40_descr',50,$Io40_descr,true,'text',3,'');
 	     $o41_instit = $o41_institant;
 		 }else if ((int)$iprefeitura == (int)db_getsession('DB_instit') ) { // se nao existe e a instituicao e prefeitura
   		 $o41_instit = $iprefeitura;
-		 }else{                                            // se nao existe para o registro, nao esta logado na prefeitura, desabilida e deixa selecionado a instituicao atual 
-  		 $o41_instit = db_getsession('DB_instit'); 
+		 }else{                                            // se nao existe para o registro, nao esta logado na prefeitura, desabilida e deixa selecionado a instituicao atual
+  		 $o41_instit = db_getsession('DB_instit');
 			 $db_opcaoinstit = 3;
 		 }
 
@@ -103,7 +103,7 @@ db_input('o40_descr',50,$Io40_descr,true,'text',3,'');
     <td nowrap title="<?=@$To41_codtri?>">
        <?=@$Lo41_codtri?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('o41_codtri',5,$Io41_codtri,true,'text',$db_opcao,"")
 ?>
@@ -113,7 +113,7 @@ db_input('o41_codtri',5,$Io41_codtri,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$To41_descr?>">
        <?=@$Lo41_descr?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('o41_descr',50,$Io41_descr,true,'text',$db_opcao,"")
 ?>
@@ -123,7 +123,7 @@ db_input('o41_descr',50,$Io41_descr,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$To41_indent?>">
        <?=@$Lo41_indent?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('o41_indent',15,$Io41_indent,true,'text',$db_opcao,"")
 ?>
@@ -133,7 +133,7 @@ db_input('o41_indent',15,$Io41_indent,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$To41_cnpj?>">
        <?=@$Lo41_cnpj?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('o41_cnpj',15,$Io41_cnpj,true,'text',$db_opcao,"")
 ?>
@@ -143,7 +143,7 @@ db_input('o41_cnpj',15,$Io41_cnpj,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$To41_ident?>">
        <?=@$Lo41_ident?>
     </td>
-    <td> 
+    <td>
 <?
 $x = array('01'=>'Prefeitura Municipal','02'=>'Câmara Municipal','03'=>'Secretaria da Educação','04'=>'Secretaria da Saúde','05'=>'RPPS (Exceto Autarquia)','06'=>'Autarquia (Exceto RPPS)','07'=>'Autarquia (RPPS)','08'=>'Fundação','09'=>'Empresa Estatal Dependente','10'=>'Empresa Estatal não Dependente','11'=>'Consórcio','12'=>'Outras',
 '901'=>'MG - FUNDEB','902'=>'MG - FMS - Fundo Municipal de Saúde','903'=>'MG - FMAS - Fundo Municipal de Assistência Social','904'=>'MG - FMCA - Fundo Municipal da Criança e do Adolescente','999'=>'MG - Outros Fundos');
@@ -151,7 +151,7 @@ db_select('o41_ident',$x,true,$db_opcao,"");
 ?>
     </td>
   </tr>
-  
+
   <tr>
     <td nowrap title="<?=@$To41_orddespesa?>">
        <?
@@ -197,18 +197,18 @@ db_input('z01_nomeordpagamento',40,$Iz01_nome,true,'text',3,'')
        ?>
     </td>
   </tr>
-  
+
   <tr>
     <td nowrap title="<?=@$To41_subunidade?>">
        <?=@$Lo41_subunidade?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('o41_subunidade',11,$Io41_subunidade,true,'text',$db_opcao,"")
 ?>
     </td>
   </tr>
-  
+
   </table>
     </fieldset>
   </td>
@@ -221,20 +221,20 @@ db_input('o41_subunidade',11,$Io41_subunidade,true,'text',$db_opcao,"")
 <script>
 function js_pesquisao41_anousu(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_orcorgao','func_orcorgao.php?funcao_js=parent.js_mostraorcorgao1|o40_anousu|o40_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_orcorgao','func_orcorgao.php?funcao_js=parent.js_mostraorcorgao1|o40_anousu|o40_descr','Pesquisa',true);
   }else{
-     if(document.form1.o41_anousu.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_orcorgao','func_orcorgao.php?pesquisa_chave='+document.form1.o41_anousu.value+'&funcao_js=parent.js_mostraorcorgao','Pesquisa',false);
+     if(document.form1.o41_anousu.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_orcorgao','func_orcorgao.php?pesquisa_chave='+document.form1.o41_anousu.value+'&funcao_js=parent.js_mostraorcorgao','Pesquisa',false);
      }else{
-       document.form1.o40_descr.value = ''; 
+       document.form1.o40_descr.value = '';
      }
   }
 }
 function js_mostraorcorgao(chave,erro){
-  document.form1.o40_descr.value = chave; 
-  if(erro==true){ 
-    document.form1.o41_anousu.focus(); 
-    document.form1.o41_anousu.value = ''; 
+  document.form1.o40_descr.value = chave;
+  if(erro==true){
+    document.form1.o41_anousu.focus();
+    document.form1.o41_anousu.value = '';
   }
 }
 function js_mostraorcorgao1(chave1,chave2){
@@ -244,20 +244,20 @@ function js_mostraorcorgao1(chave1,chave2){
 }
 function js_pesquisao41_anousu(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_orcorgao','func_orcorgao.php?funcao_js=parent.js_mostraorcorgao1|o40_orgao|o40_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_orcorgao','func_orcorgao.php?funcao_js=parent.js_mostraorcorgao1|o40_orgao|o40_descr','Pesquisa',true);
   }else{
-     if(document.form1.o41_anousu.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_orcorgao','func_orcorgao.php?pesquisa_chave='+document.form1.o41_anousu.value+'&funcao_js=parent.js_mostraorcorgao','Pesquisa',false);
+     if(document.form1.o41_anousu.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_orcorgao','func_orcorgao.php?pesquisa_chave='+document.form1.o41_anousu.value+'&funcao_js=parent.js_mostraorcorgao','Pesquisa',false);
      }else{
-       document.form1.o40_descr.value = ''; 
+       document.form1.o40_descr.value = '';
      }
   }
 }
 function js_mostraorcorgao(chave,erro){
-  document.form1.o40_descr.value = chave; 
-  if(erro==true){ 
-    document.form1.o41_anousu.focus(); 
-    document.form1.o41_anousu.value = ''; 
+  document.form1.o40_descr.value = chave;
+  if(erro==true){
+    document.form1.o41_anousu.focus();
+    document.form1.o41_anousu.value = '';
   }
 }
 function js_mostraorcorgao1(chave1,chave2){
@@ -267,20 +267,20 @@ function js_mostraorcorgao1(chave1,chave2){
 }
 function js_pesquisao41_orgao(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_orcorgao','func_orcorgao.php?funcao_js=parent.js_mostraorcorgao1|o40_anousu|o40_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_orcorgao','func_orcorgao.php?funcao_js=parent.js_mostraorcorgao1|o40_anousu|o40_descr','Pesquisa',true);
   }else{
-     if(document.form1.o41_orgao.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_orcorgao','func_orcorgao.php?pesquisa_chave='+document.form1.o41_orgao.value+'&funcao_js=parent.js_mostraorcorgao','Pesquisa',false);
+     if(document.form1.o41_orgao.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_orcorgao','func_orcorgao.php?pesquisa_chave='+document.form1.o41_orgao.value+'&funcao_js=parent.js_mostraorcorgao','Pesquisa',false);
      }else{
-       document.form1.o40_descr.value = ''; 
+       document.form1.o40_descr.value = '';
      }
   }
 }
 function js_mostraorcorgao(chave,erro){
-  document.form1.o40_descr.value = chave; 
-  if(erro==true){ 
-    document.form1.o41_orgao.focus(); 
-    document.form1.o41_orgao.value = ''; 
+  document.form1.o40_descr.value = chave;
+  if(erro==true){
+    document.form1.o41_orgao.focus();
+    document.form1.o41_orgao.value = '';
   }
 }
 function js_mostraorcorgao1(chave1,chave2){
@@ -290,20 +290,20 @@ function js_mostraorcorgao1(chave1,chave2){
 }
 function js_pesquisao41_orgao(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_orcorgao','func_orcorgao.php?funcao_js=parent.js_mostraorcorgao1|o40_orgao|o40_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_orcorgao','func_orcorgao.php?funcao_js=parent.js_mostraorcorgao1|o40_orgao|o40_descr','Pesquisa',true);
   }else{
-     if(document.form1.o41_orgao.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_orcorgao','func_orcorgao.php?pesquisa_chave='+document.form1.o41_orgao.value+'&funcao_js=parent.js_mostraorcorgao','Pesquisa',false);
+     if(document.form1.o41_orgao.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_orcorgao','func_orcorgao.php?pesquisa_chave='+document.form1.o41_orgao.value+'&funcao_js=parent.js_mostraorcorgao','Pesquisa',false);
      }else{
-       document.form1.o40_descr.value = ''; 
+       document.form1.o40_descr.value = '';
      }
   }
 }
 function js_mostraorcorgao(chave,erro){
-  document.form1.o40_descr.value = chave; 
-  if(erro==true){ 
-    document.form1.o41_orgao.focus(); 
-    document.form1.o41_orgao.value = ''; 
+  document.form1.o40_descr.value = chave;
+  if(erro==true){
+    document.form1.o41_orgao.focus();
+    document.form1.o41_orgao.value = '';
   }
 }
 function js_mostraorcorgao1(chave1,chave2){
@@ -312,7 +312,7 @@ function js_mostraorcorgao1(chave1,chave2){
   db_iframe_orcorgao.hide();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_orcunidade','func_orcunidade.php?funcao_js=parent.js_preenchepesquisa|o41_anousu|o41_orgao|o41_unidade','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_orcunidade','func_orcunidade.php?funcao_js=parent.js_preenchepesquisa|o41_anousu|o41_orgao|o41_unidade','Pesquisa',true);
 }
 function js_preenchepesquisa(chave,chave1,chave2){
   db_iframe_orcunidade.hide();
@@ -325,20 +325,20 @@ function js_preenchepesquisa(chave,chave1,chave2){
 
 function js_pesquisao41_orddespesa(mostra){
 	  if(mostra==true){
-	    js_OpenJanelaIframe('top.corpo','db_iframe_cgm_orddespesa','func_cgm.php?funcao_js=parent.js_mostracgmorddespesa1|z01_numcgm|z01_nome','Pesquisa',true);
+	    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cgm_orddespesa','func_cgm.php?funcao_js=parent.js_mostracgmorddespesa1|z01_numcgm|z01_nome','Pesquisa',true);
 	  }else{
-	     if(document.form1.o41_orddespesa.value != ''){ 
-	        js_OpenJanelaIframe('top.corpo','db_iframe_cgm_orddespesa','func_cgm.php?pesquisa_chave='+document.form1.o41_orddespesa.value+'&funcao_js=parent.js_mostracgmorddespesa','Pesquisa',false);
+	     if(document.form1.o41_orddespesa.value != ''){
+	        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cgm_orddespesa','func_cgm.php?pesquisa_chave='+document.form1.o41_orddespesa.value+'&funcao_js=parent.js_mostracgmorddespesa','Pesquisa',false);
 	     }else{
-	       document.form1.z01_nomeorddespesa.value = ''; 
+	       document.form1.z01_nomeorddespesa.value = '';
 	     }
 	  }
 	}
 	function js_mostracgmorddespesa(erro,chave){
-	  document.form1.z01_nomeorddespesa.value = chave; 
-	  if(erro==true){ 
-	    document.form1.o41_orddespesa.focus(); 
-	    document.form1.o41_orddespesa.value = ''; 
+	  document.form1.z01_nomeorddespesa.value = chave;
+	  if(erro==true){
+	    document.form1.o41_orddespesa.focus();
+	    document.form1.o41_orddespesa.value = '';
 	  }
 	}
 	function js_mostracgmorddespesa1(chave1,chave2){
@@ -349,20 +349,20 @@ function js_pesquisao41_orddespesa(mostra){
 
 	function js_pesquisao41_ordliquidacao(mostra){
 		  if(mostra==true){
-		    js_OpenJanelaIframe('top.corpo','db_iframe_cgm_ordliquidacao','func_cgm.php?funcao_js=parent.js_mostracgmordliquidacao1|z01_numcgm|z01_nome','Pesquisa',true);
+		    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cgm_ordliquidacao','func_cgm.php?funcao_js=parent.js_mostracgmordliquidacao1|z01_numcgm|z01_nome','Pesquisa',true);
 		  }else{
-		     if(document.form1.o41_ordliquidacao.value != ''){ 
-		        js_OpenJanelaIframe('top.corpo','db_iframe_cgm_ordliquidacao','func_cgm.php?pesquisa_chave='+document.form1.o41_ordliquidacao.value+'&funcao_js=parent.js_mostracgmordliquidacao','Pesquisa',false);
+		     if(document.form1.o41_ordliquidacao.value != ''){
+		        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cgm_ordliquidacao','func_cgm.php?pesquisa_chave='+document.form1.o41_ordliquidacao.value+'&funcao_js=parent.js_mostracgmordliquidacao','Pesquisa',false);
 		     }else{
-		       document.form1.z01_nomeordliquidacao.value = ''; 
+		       document.form1.z01_nomeordliquidacao.value = '';
 		     }
 		  }
 		}
 		function js_mostracgmordliquidacao(erro,chave){
-		  document.form1.z01_nomeordliquidacao.value = chave; 
-		  if(erro==true){ 
-		    document.form1.o41_ordliquidacao.focus(); 
-		    document.form1.o41_ordliquidacao.value = ''; 
+		  document.form1.z01_nomeordliquidacao.value = chave;
+		  if(erro==true){
+		    document.form1.o41_ordliquidacao.focus();
+		    document.form1.o41_ordliquidacao.value = '';
 		  }
 		}
 		function js_mostracgmordliquidacao1(chave1,chave2){
@@ -373,20 +373,20 @@ function js_pesquisao41_orddespesa(mostra){
 
 		function js_pesquisao41_ordpagamento(mostra){
 			  if(mostra==true){
-			    js_OpenJanelaIframe('top.corpo','db_iframe_cgm_ordpagamento','func_cgm.php?funcao_js=parent.js_mostracgmordpagamento1|z01_numcgm|z01_nome','Pesquisa',true);
+			    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cgm_ordpagamento','func_cgm.php?funcao_js=parent.js_mostracgmordpagamento1|z01_numcgm|z01_nome','Pesquisa',true);
 			  }else{
-			     if(document.form1.o41_ordpagamento.value != ''){ 
-			        js_OpenJanelaIframe('top.corpo','db_iframe_cgm_ordpagamento','func_cgm.php?pesquisa_chave='+document.form1.o41_ordpagamento.value+'&funcao_js=parent.js_mostracgmordpagamento','Pesquisa',false);
+			     if(document.form1.o41_ordpagamento.value != ''){
+			        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cgm_ordpagamento','func_cgm.php?pesquisa_chave='+document.form1.o41_ordpagamento.value+'&funcao_js=parent.js_mostracgmordpagamento','Pesquisa',false);
 			     }else{
-			       document.form1.z01_nomeordpagamento.value = ''; 
+			       document.form1.z01_nomeordpagamento.value = '';
 			     }
 			  }
 			}
 			function js_mostracgmordpagamento(erro,chave){
-			  document.form1.z01_nomeordpagamento.value = chave; 
-			  if(erro==true){ 
-			    document.form1.o41_ordpagamento.focus(); 
-			    document.form1.o41_ordpagamento.value = ''; 
+			  document.form1.z01_nomeordpagamento.value = chave;
+			  if(erro==true){
+			    document.form1.o41_ordpagamento.focus();
+			    document.form1.o41_ordpagamento.value = '';
 			  }
 			}
 			function js_mostracgmordpagamento1(chave1,chave2){

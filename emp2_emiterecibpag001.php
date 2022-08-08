@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -100,7 +100,7 @@ db_app::load("scripts.js,
                 <tr>
                     <td nowrap title="Nº Recibo"><b>Nº Recibo:</b></td>
                     <td>
-                        <? db_input('e81_codmov',13,$Ie81_codmov,true,'text',$db_opcao)  ?> 
+                        <? db_input('e81_codmov',13,$Ie81_codmov,true,'text',$db_opcao)  ?>
                     </td>
                 </tr>
                 <tr>
@@ -113,12 +113,12 @@ db_app::load("scripts.js,
                             db_inputdata('dtfim',@$dia,@$mes,@$ano,true,'text',1,"");
                         ?>
                     </td>
-                </tr>     
-                <tr>     
+                </tr>
+                <tr>
                     <td colspan="2">
                         <div id='ctnLancadorCredor'></div>
-                    <td>     
-                </tr>     
+                    <td>
+                </tr>
             </table>
             </fieldset>
             </form>
@@ -149,21 +149,21 @@ var oLancadorCredor = new DBLancador('LancadorCredor');
     oLancadorCredor.show($("ctnLancadorCredor"));
 
 function getCredores(){
-    
+
     var aCredores  = [];
     var aSelecionados = oLancadorCredor.getRegistros();
-  
+
     aSelecionados.each( function( oDados, iIndice){
         aCredores.push( oDados.sCodigo );
     });
-    
+
     return aCredores;
 
 }
-    
+
 
 function js_abre(){
-  
+
     var obj             = document.form1;
     var e50_codord      = obj.e50_codord.value;
     var e60_codemp      = obj.e60_codemp.value;
@@ -188,7 +188,7 @@ function js_abre(){
     if(e81_codmov != ''){
         query += "&e81_codmov="+e81_codmov;
     }
-    
+
     if(dtini != ''){
 
         if((dtini_dia != '') && (dtini_mes != '') && (dtini_ano != '')){
@@ -216,7 +216,7 @@ function js_abre(){
     if(query == '' && aCredores.length < 1){
         alert("Informe algum empenho, ordem de pagamento ou nº do recibo!");
     } else {
-        
+
         var sUrl = 'emp2_emiterecibpag002.php?aCredor=' + aCredores + query;
         jan = window.open(sUrl,
                        '',
@@ -225,22 +225,22 @@ function js_abre(){
 
     }
 
-}    
-    
+}
+
 function js_pesquisae60_codemp(mostra){
-  
+
     var obj         = document.form1;
     var e60_codemp  = obj.e60_codemp.value;
     var sUrl1       = 'func_empempenho.php?funcao_js=parent.js_mostracodemp1|e60_codemp|e60_anousu';
 
     if(mostra==true){
-        js_OpenJanelaIframe('top.corpo','db_iframe_empempenho',sUrl1,'Pesquisa',true);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_empempenho',sUrl1,'Pesquisa',true);
     }
 
 }
 
 function js_mostracodemp1(chave1,chave2){
-    
+
     var obj = document.form1;
     obj.e60_codemp.value = chave1 + "/" + chave2;
     db_iframe_empempenho.hide();
@@ -248,13 +248,13 @@ function js_mostracodemp1(chave1,chave2){
 }
 
 function js_pesquisae60_numemp(mostra){
-  
+
     if(mostra==true){
-        js_OpenJanelaIframe('top.corpo','db_iframe_empempenho','func_empempenho.php?funcao_js=parent.js_mostranumemp1|e60_numemp','Pesquisa',true);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_empempenho','func_empempenho.php?funcao_js=parent.js_mostranumemp1|e60_numemp','Pesquisa',true);
     } else {
-     
+
         if(document.form1.e60_numemp.value != ''){
-            js_OpenJanelaIframe('top.corpo','db_iframe_empempenho','func_empempenho.php?pesquisa_chave='+document.form1.e60_numemp.value+'&funcao_js=parent.js_mostranumemp','Pesquisa',false);
+            js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_empempenho','func_empempenho.php?pesquisa_chave='+document.form1.e60_numemp.value+'&funcao_js=parent.js_mostranumemp','Pesquisa',false);
         }else{
             document.form1.e60_numemp.value = '';
         }
@@ -263,9 +263,9 @@ function js_pesquisae60_numemp(mostra){
 }
 
 function js_mostranumemp(chave,erro){
-    
+
     if(erro==true){
-        
+
         document.form1.e50_codemp.focus();
         document.form1.e50_codemp.value = '';
     }
@@ -273,20 +273,20 @@ function js_mostranumemp(chave,erro){
 }
 
 function js_mostranumemp1(chave1,x){
-  
+
     document.form1.e60_numemp.value = chave1;
     db_iframe_empempenho.hide();
 
 }
 
 function js_pesquisae50_codord(mostra){
-  
+
     if(mostra==true){
-        js_OpenJanelaIframe('top.corpo','db_iframe_pagordem','func_pagordem.php?funcao_js=parent.js_mostracodordem1|e50_codord','Pesquisa',true);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_pagordem','func_pagordem.php?funcao_js=parent.js_mostracodordem1|e50_codord','Pesquisa',true);
     } else {
-        
+
         if(document.form1.e50_codord.value != ''){
-            js_OpenJanelaIframe('top.corpo','db_iframe_pagordem','func_pagordem.php?pesquisa_chave='+document.form1.e50_codord.value+'&funcao_js=parent.js_mostracodordem','Pesquisa',false);     
+            js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_pagordem','func_pagordem.php?pesquisa_chave='+document.form1.e50_codord.value+'&funcao_js=parent.js_mostracodordem','Pesquisa',false);
         } else {
             document.form1.e50_codord.value = '';
         }
@@ -295,9 +295,9 @@ function js_pesquisae50_codord(mostra){
 }
 
 function js_mostracodordem(chave,erro){
-  
+
     if(erro==true){
-        
+
         document.form1.e50_codord.focus();
         document.form1.e50_codord.value = '';
 
@@ -306,7 +306,7 @@ function js_mostracodordem(chave,erro){
 }
 
 function js_mostracodordem1(chave1,x){
-  
+
     document.form1.e50_codord.value = chave1;
     db_iframe_pagordem.hide();
 

@@ -3,7 +3,7 @@
   * Programa para atualização das tabelas Auxilizares do Censo.
   * Atualizacao da tabela censoorgemissrg
   */
- include ("../../../libs/db_conn.php");
+ include (__DIR__ . "/../../../libs/db_conn.php");
  
  /**
   * Dados de Conexao
@@ -17,8 +17,8 @@
  $DB_SENHA    = $aDadosConexao["password"];
 */
  $conn = pg_connect("host=$DB_SERVIDOR dbname=$DB_BASE port=$DB_PORTA user=$DB_USUARIO password=$DB_SENHA") or die ("Erro na conexão com o banco de dados");
- require_once("../../../libs/db_utils.php");
- require_once("../../../libs/db_stdlibwebseller.php");
+ require_once(__DIR__ . "/../../../libs/db_utils.php");
+ require_once(__DIR__ . "/../../../libs/db_stdlibwebseller.php");
 
  pg_query("select fc_startsession()");
  $sSqlRecursoHumano  = "select ed20_i_codigo, ";  

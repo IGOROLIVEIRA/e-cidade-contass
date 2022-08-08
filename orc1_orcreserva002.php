@@ -167,8 +167,8 @@ if((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Alterar
   }else{
     if(isset($momenulibera)){
       db_msgbox($clorcreserva->erro_msg);
-      echo "<script>top.corpo.db_iframe_orcreservaalt.hide();</script>";
-      echo "<script>top.corpo.db_iframe_dotac.jan.document.form1.submit();</script>";
+      echo "<script>CurrentWindow.corpo.db_iframe_orcreservaalt.hide();</script>";
+      echo "<script>CurrentWindow.corpo.db_iframe_dotac.jan.document.form1.submit();</script>";
       exit;
     }
     $clorcreserva->erro(true,true);

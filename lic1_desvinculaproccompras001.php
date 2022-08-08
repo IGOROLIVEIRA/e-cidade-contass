@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -45,7 +45,7 @@ require_once("dbforms/db_funcoes.php");
                    dbmessageBoard.widget.js, datagrid.widget.js");
       db_app::load("estilos.css,grid.style.css");
     ?>
-    
+
   </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" style="margin-top: 25px;">
 
@@ -57,15 +57,15 @@ require_once("dbforms/db_funcoes.php");
 				<tr>
 					<td>
 						<b>
-  						<?php 
+  						<?php
   						  db_ancora("Licitação:", "js_selecionaLicitacao(true)", 1);
   						?>
 						</b>
 					</td>
 					<td>
-						<?php 
+						<?php
 						  db_input("iLicitacao", 10, '', 1, 'text', 3);
-						?>						
+						?>
 					</td>
 				</tr>
 			</table>
@@ -86,7 +86,7 @@ require_once("dbforms/db_funcoes.php");
 
 		var iLicitacao = $F("iLicitacao");
 		if (iLicitacao == "") {
-			
+
 			alert("Selecione uma licitação.");
 			return false;
 		}
@@ -122,7 +122,7 @@ require_once("dbforms/db_funcoes.php");
 		$('btnConfirmar').observe('click', function () {
 			js_excluiProcessoCompra(iLicitacao);
 	  });
-	  
+
 	  $('btnFechar').observe('click', function() {
 	    oWinProcCompras.destroy();
 	  });
@@ -131,7 +131,7 @@ require_once("dbforms/db_funcoes.php");
 		 * MsgBoard com um help da windowAux
 		 */
     var sHelpMsgBoardProcCompras = "Processos de compras da licitação";
-    var oMessageBoardItens = new DBMessageBoard("msgBoardCompras_"+iLicitacao, 
+    var oMessageBoardItens = new DBMessageBoard("msgBoardCompras_"+iLicitacao,
                                                 "Licitação "+iLicitacao,
                                                 sHelpMsgBoardProcCompras,
                                                 oWinProcCompras.getContentContainer()
@@ -153,9 +153,9 @@ require_once("dbforms/db_funcoes.php");
 		oGridProcCompras.setStatus(' *Duplo clique sob o processo de compras visualizar os itens.');
 		js_getProcessos(iLicitacao);
 }
-  
-  function js_getProcessos(iLicitacao) { 
- 
+
+  function js_getProcessos(iLicitacao) {
+
 
     oGridProcCompras.clearAll(true);
 		var oParam 				= new Object();
@@ -176,7 +176,7 @@ require_once("dbforms/db_funcoes.php");
     var oRetorno = eval("("+oAjax.responseText+")");
 
     if (oRetorno.status == 2) {
-        
+
       alert(oRetorno.message.urlDecode());
       return false;
     }
@@ -192,7 +192,7 @@ require_once("dbforms/db_funcoes.php");
 	    	var iProcessoCompras = oProcesso.pc80_codproc;
   		  var aLinha    = new Array();
 	          aLinha[0] = iProcessoCompras;
-	          aLinha[1] = js_formatar(oProcesso.pc80_data, "d");                 
+	          aLinha[1] = js_formatar(oProcesso.pc80_data, "d");
 		        aLinha[2] = oProcesso.iTotalItens;
 		        oGridProcCompras.addRow(aLinha);
 		        oGridProcCompras.aRows[iIdLinha].sEvents = "onDblClick='js_mostrarItens("+iProcessoCompras+", "+oRetorno.iLicitacao+");'";
@@ -230,7 +230,7 @@ require_once("dbforms/db_funcoes.php");
 		 * MsgBoard com um help da windowAux
 		 */
     var sHelpMsgBoardProcCompras = "Itens do Processo de Compras "+iProcessoCompras;
-    var oMessageBoardItensPC     = new DBMessageBoard("msgBoardCompras_"+iProcessoCompras, 
+    var oMessageBoardItensPC     = new DBMessageBoard("msgBoardCompras_"+iProcessoCompras,
                                                       "Processo de Compras "+iProcessoCompras,
                                                       sHelpMsgBoardProcCompras,
                                                       oWinItensProcCompras.getContentContainer()
@@ -273,7 +273,7 @@ require_once("dbforms/db_funcoes.php");
 			alert("Selecione um processo.");
 			return false;
 		}
-		
+
 		var oParam 				= new Object();
 		oParam.exec 			= "excluiProcessoCompras";
 		oParam.aProcessos = aProcessos;
@@ -286,10 +286,10 @@ require_once("dbforms/db_funcoes.php");
            										   onComplete: js_concluiExclusao
           											});
 	}
-	
+
 
 	function js_concluiExclusao(oAjax) {
-	
+
 		 js_removeObj("msgBox");
 	   var oRetorno = eval("("+oAjax.responseText+")");
 		 alert(oRetorno.message.urlDecode());
@@ -298,7 +298,7 @@ require_once("dbforms/db_funcoes.php");
 	   }
 	}
 
-	
+
 	function js_preencheGridItens(oAjax) {
 
     js_removeObj("msgBox1");
@@ -334,11 +334,11 @@ require_once("dbforms/db_funcoes.php");
 		var sLocation   = "";
 		var lOpenIframe = ""
 		if (lMostra) {
-			
+
 			sLocation   = "func_liclicita.php?tipo=1&funcao_js=parent.js_preencheLicitacao|l20_codigo";
 			lOpenIframe = true;
 		}
-		js_OpenJanelaIframe('top.corpo', 'db_iframe_liclicita', sLocation, 'Pesquisa', lOpenIframe);
+		js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_liclicita', sLocation, 'Pesquisa', lOpenIframe);
 	}
 
 	function js_preencheLicitacao(iCodLicita) {

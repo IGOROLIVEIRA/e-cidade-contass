@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -81,46 +81,46 @@ $clrotulo->label("e96_codigo");
 $clrotulo->label("pc63_conta");
 
 $dbwhere = " (round(e53_valor,2)-round(e53_vlranu,2)-round(e53_vlrpag,2)) > 0 and corempagemov.k12_codmov is null and e60_instit = " . db_getsession("DB_instit") . " and e80_instit = " . db_getsession("DB_instit");
-$sJoin   = ""; 
+$sJoin   = "";
 if (isset($oGet->lOk)) {
-  
+
   //Filtros para ordem de pagamento
   if ($oGet->iOrdemIni != '' && $oGet->iOrdemFim == "") {
     $dbwhere .= " and e50_codord = {$oGet->iOrdemIni}";
   } else if ($oGet->iOrdemIni != '' && $oGet->iOrdemFim != "") {
     $dbwhere .= " and e50_codord between  {$oGet->iOrdemIni} and {$oGet->iOrdemFim}";
   }
-  
+
   if ($oGet->dtDataIni != "" && $oGet->dtDataFim == "") {
     $dbwhere .= " and e50_data = '".implode("-",array_reverse(explode("/",$oGet->dtDataIni)))."'";
   } else if ($oGet->dtDataIni != "" && $oGet->dtDataFim != "") {
-    
+
     $dtDataIni = implode("-",array_reverse(explode("/",$oGet->dtDataIni)));
     $dtDataFim = implode("-",array_reverse(explode("/",$oGet->dtDataFim)));
     $dbwhere .= " and e50_data between '{$dtDataIni}' and '{$dtDataFim}'";
-     
+
   }
-  
+
   //Filtro para Empenho
   if ($oGet->iCodEmp!= '') {
-    
+
     if (strpos($oGet->iCodEmp,"/")) {
-      
+
       $aEmpenho = explode("/",$oGet->iCodEmp);
       $dbwhere .= " and e60_codemp = '{$aEmpenho[0]}' and e60_anousu={$aEmpenho[1]}";
-      
+
     } else {
       $dbwhere .= " and e60_codemp = '{$oGet->iCodEmp}' and e60_anousu=".db_getsession("DB_anousu");
     }
-    
+
   }
-  
+
   //filtro para filtrar por credor
   if ($oGet->iNumCgm != '') {
     $dbwhere .= " and (e60_numcgm = {$oGet->iNumCgm} or e49_numcgm = {$oGet->iNumCgm})";
   }
   if ($oGet->iCodBanco != 0 ) {
-    
+
     $sJoin   .= " inner join empagepag     on e81_codmov  = e85_codmov ";
     $sJoin   .= " inner join empagetipo    on e85_codtipo = e83_codtipo ";
     $sJoin   .= " inner join conplanoreduz on c61_reduz   = e83_conta ";
@@ -128,7 +128,7 @@ if (isset($oGet->lOk)) {
     $sJoin   .= " inner join conplanoconta on c61_codcon  = c63_codcon ";
     $sJoin   .= "                         and c61_anousu  = c63_anousu";
     $dbwhere .= " and c63_banco = '{$oGet->iCodBanco}'";
-    
+
   }
 }
 if (isset($oGet->sRecursos)) {
@@ -140,7 +140,7 @@ $iNumRows = 0;
 $sql_pagordem = $clpagordem->sql_query_empagemovforma(
          null,
          "
-		 distinct empagemov.e81_codage as e80_codage, 
+		 distinct empagemov.e81_codage as e80_codage,
 		          empagemov.e81_codmov,
 		          case when trim(a.z01_numcgm) is not null then a.z01_numcgm else cgm.z01_numcgm end as z01_numcgm,
 		          case when trim(a.z01_nome)   is not null then a.z01_nome   else cgm.z01_nome   end as z01_nome,
@@ -163,8 +163,8 @@ $sql_pagordem = $clpagordem->sql_query_empagemovforma(
          ",
          "
          $dbwhere
-         group by e60_numemp, 
-                  e60_codemp, 
+         group by e60_numemp,
+                  e60_codemp,
                   e50_codord,
                   e50_data,
                   cgm.z01_numcgm,
@@ -181,10 +181,10 @@ $sql_pagordem = $clpagordem->sql_query_empagemovforma(
                   empagemov.e81_codmov
          ",$sJoin);
 if (isset($oGet->lOk)) {
-  
-  $result_pagordemconta = $clpagordem->sql_record($sql_pagordem); 
+
+  $result_pagordemconta = $clpagordem->sql_record($sql_pagordem);
   $numrows_pagordemconta= $clpagordem->numrows;
- 
+
 }
 
 //db_criatabela($result_pagordemconta);
@@ -261,19 +261,19 @@ function js_confere(campo){
 
   if(erro==false){
 	eval("document.form1."+campo.name+".value = vlrgen.toFixed(2);");
-  }else{  
+  }else{
 	if(erro_msg != ''){
 	  //alert(erro_msg);
 	}
     eval("document.form1."+campo.name+".focus()");
     eval("document.form1."+campo.name+".value = vlrlimite.toFixed(2);");
     return false;
-  }  
+  }
 }
 
 function js_colocaval(campo){
   if(campo.checked==true){
-    valor = new Number(eval('document.form1.disponivel_'+campo.value+'.value')); 
+    valor = new Number(eval('document.form1.disponivel_'+campo.value+'.value'));
     v = valor.toFixed(2);
     eval('document.form1.valor_'+campo.value+'.value='+v);
   }else{
@@ -298,7 +298,7 @@ function js_padrao(val){
   }
 }
 function js_verificacampo(nomecampo,valforma){
-  arr_nome = nomecampo.split("_");  
+  arr_nome = nomecampo.split("_");
   numordem = arr_nome[1];
   valorcam = eval("document.form1."+nomecampo+".value");
   if(valforma=="2" && valorcam=="3"){
@@ -316,7 +316,7 @@ function js_conta(cgm,opcao,nomecampo){
       }
     }
     if(erro == 0){
-      js_OpenJanelaIframe('top.corpo','db_iframe_pcfornecon','com1_pcfornecon001.php?novo=true&reload=true&z01_numcgm='+cgm,'Pesquisa',true);
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_pcfornecon','com1_pcfornecon001.php?novo=true&reload=true&z01_numcgm='+cgm,'Pesquisa',true);
     }else{
       alert("Atualize os movimentos selecionados antes de cadastrar nova conta.");
     }
@@ -326,8 +326,8 @@ function js_conta(cgm,opcao,nomecampo){
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="100%" height="100" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td align="left" valign="top" bgcolor="#CCCCCC">
       <form name="form1" method="post" action="">
       <center>
       <table  cellspacing="0" background="white" width="100%" style="border:2px inset white;background-color: white">
@@ -376,7 +376,7 @@ function js_conta(cgm,opcao,nomecampo){
 	    for($i=0;$i<$clempageforma->numrows;$i++){
 	      db_fieldsmemory($result_forma,$i);
 	      $arr_forma[$e96_codigo] = $e96_descr;
-	    } 
+	    }
          $index = 0;
 	    for($i=0;$i<$numrows_pagordemconta;$i++){
 	      db_fieldsmemory($result_pagordemconta,$i);
@@ -424,8 +424,8 @@ function js_conta(cgm,opcao,nomecampo){
            }else{
              //verifica se eh para trazer apenas os selecionados
              $e81_valor = '0.00';
-             
-             
+
+
           }
 
          //coloca o valor com campo
@@ -451,10 +451,10 @@ function js_conta(cgm,opcao,nomecampo){
 
             $total = $e53_valor - $e53_vlrpag - $e53_vlranu;
             if ($total==$tot_valor_desta){ // Quando op for parcial, jáexiste um pgto confirmado
-                 $disponivel = $tot_valor_desta;    
+                 $disponivel = $tot_valor_desta;
             }else {
                  $disponivel = $total - $tot_valor + $tot_valor_desta;
-            }     
+            }
 
             /*
             echo "<BR><BR>
@@ -470,7 +470,7 @@ function js_conta(cgm,opcao,nomecampo){
 
 //            die("ord: $e50_codord - disp: $disponivel\n");
 
-           //echo $disponivel."<br><br>"; 
+           //echo $disponivel."<br><br>";
            //echo $total." => ".$tot_valor." => ".$tot_valor_desta."<br><br>";
 
            if( ($disponivel == 0 || $disponivel < 0)){
@@ -501,7 +501,7 @@ function js_conta(cgm,opcao,nomecampo){
 																											) as x order by tipo_conta, e83_conta"
 																											);
 
-							
+
               $numrows05 = $clempagetipo->numrows;
           }
           $arr = Array();
@@ -565,7 +565,7 @@ function js_conta(cgm,opcao,nomecampo){
              $index++;
            }
          }
-         
+
          if(isset($e81_codmov)){
            $result_movconta = $clempagemovconta->sql_record($clempagemovconta->sql_query_file($e81_codmov,"e98_contabanco as con_$e50_codord"));
            $numrows_movconta = $clempagemovconta->numrows;
@@ -585,7 +585,7 @@ function js_conta(cgm,opcao,nomecampo){
              $contapad = "con_$e50_codord";
              $$contapad = 0;
            }
-         }             
+         }
                 ?>
 
 
@@ -683,7 +683,7 @@ function js_conta(cgm,opcao,nomecampo){
         <?
         $iNumRows++;
 	    }
-	     echo "<script>parent.document.getElementById('totalregistros').innerHTML = {$iNumRows};</script>"; 
+	     echo "<script>parent.document.getElementById('totalregistros').innerHTML = {$iNumRows};</script>";
 	    ?>
       </table>
       </center>

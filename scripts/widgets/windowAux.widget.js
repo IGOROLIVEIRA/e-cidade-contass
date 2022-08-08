@@ -1,24 +1,21 @@
-/**
- * @fileoverview Define classe para Criar janelas internas
- *
- * @version  $Revision: 1.26 $
- */
 require_once('estilos/windowAux.css');
 require_once('scripts/widgets/DBMask.widget.js');
 
 /**
  * Cria uma janela interna , podendo criar aplicacoes MDI
  *
- * @class windowAux
+ * @version  $Revision: 1.30 $
  * @constructor
  * @author  Iuri Guntchnigg - <iuri@dbseller.com.br>
  *
- * @example Uma Janela de 400x500
+ * @example
+ * // Uma Janela de 400x500
  * var windowTeste = new windowAux('windowTeste', 'Testando Janela', 400, 500);
  *     windowTeste.setContent("<b>Ola Mundo</b>");
  *     windowTeste.show(10,10)
  *
- * @example Uma Janela com HTML node como conteudo
+ * @example
+ * //Uma Janela com HTML node como conteudo
  * var oConteudo           = document.createElement('b');
  *     oConteudo.innerHTML = "Olá Mundo";
  * var windowTeste         = new windowAux('windowTeste', 'Testando Janela', 300, 300);
@@ -30,17 +27,13 @@ require_once('scripts/widgets/DBMask.widget.js');
  * @param {String}  sTitle titulo da Janela
  * @param {int} iWidth largura em pixeis da janela
  * @param {int} iHeight  largura em pixeis da janela
- *
  */
 windowAux = function (iIdWindow, sTitle, iWidth, iHeight) {
 
-  if (iIdWindow == null) {
+  if (!iIdWindow) {
     iIdWindow = "window" + getElementsByClass('windowAux12').length + 1;
   }
 
-  /**
-   *@default window#id
-   */
   var idWindow            = iIdWindow;
   this.idWindow           = iIdWindow;
   var me                  = this;
@@ -51,7 +44,7 @@ windowAux = function (iIdWindow, sTitle, iWidth, iHeight) {
   var allowCloseWithEsc   = true;
   this.parent             = null;
   this.zIndex             = 500;
-  this.aChilds            = new Array();
+  this.aChilds            = [];
 
   isdrag = false;
 
@@ -63,11 +56,11 @@ windowAux = function (iIdWindow, sTitle, iWidth, iHeight) {
   this.divWindow  = document.createElement("DIV");
   this.oDBMask    = null;
 
-  if (this.iWidth == 0 || this.iWidth == null) {
+  if (!this.iWidth) {
      this.iWidth = document.width-12;
   }
 
-  if (this.iHeight == 0 || iHeight == null) {
+  if (!this.iHeight) {
      this.iHeight  = document.body.scrollHeight-50;
   }
 
@@ -95,14 +88,12 @@ windowAux = function (iIdWindow, sTitle, iWidth, iHeight) {
   this.divTitleWindow.id        = idWindow+"TitleBar";
   this.divTitleWindow.className = "windowAuxTitle";
   this.divTitleWindow.setAttribute('divParent',idWindow);
-  with (this.divTitleWindow.style) {
 
-    padding         = "0px";
-    textAlign       = "right";
-    borderBottom    = "2px outset white";
-    backgroundColor = "#2C7AFE";
-    color           = "white";
-  }
+  this.divTitleWindow.style.padding         = "0px";
+  this.divTitleWindow.style.textAlign       = "right";
+  this.divTitleWindow.style.borderBottom    = "2px outset white";
+  this.divTitleWindow.style.backgroundColor = "#2C7AFE";
+  this.divTitleWindow.style.color           = "white";
 
   this.divTitleWindow.innerHTML  ="<span class='dragme' style='width:90%;text-align:left;padding:1px; -moz-user-select:none;cursor:default;float:left;font-weight:bold' id='"+idWindow+"_title'>"+this.sWindowTitle+"</span>";
   this.oImagem = document.createElement("img");
@@ -135,10 +126,10 @@ windowAux = function (iIdWindow, sTitle, iWidth, iHeight) {
    */
   this.show = function (top, left, lModal) {
 
-    if (top == null) {
+    if (!top) {
       top = 25;
     }
-    if (left == null) {
+    if (!left) {
       left = ((screen.availWidth-this.iWidth)/2)
     }
 
@@ -156,7 +147,7 @@ windowAux = function (iIdWindow, sTitle, iWidth, iHeight) {
 
   /**
    * esconde a janela
-   * @return void
+   * @return {void}
    */
   this.hide = function () {
     this.divWindow.style.display='none';
@@ -195,7 +186,8 @@ windowAux = function (iIdWindow, sTitle, iWidth, iHeight) {
 
   /**
    * Define se Permite Fazer Drag'Drop da Janela
-   * @param {bool} lDrag Permite a janela ser arrastada
+   *
+   * @param {Boolean} lDrag Permite a janela ser arrastada
    */
   this.allowDrag = function (lDrag) {
 
@@ -226,7 +218,7 @@ windowAux = function (iIdWindow, sTitle, iWidth, iHeight) {
 
   /**
    * Define o Titulo da Janela
-   * @Param {string} sTitle titulo da janela
+   * @param {string} sTitle titulo da janela
    */
   this.setTitle = function (sTitle) {
 
@@ -238,7 +230,7 @@ windowAux = function (iIdWindow, sTitle, iWidth, iHeight) {
 
   /**
    * Destroi a janela
-   * @void
+   * @returns {void}
    */
   this.destroy = function () {
 
@@ -286,11 +278,11 @@ windowAux = function (iIdWindow, sTitle, iWidth, iHeight) {
       if (iTop  < 0 || iTop < iMaxTop) {
         iTop = iMaxTop;
       }
-      if ((iLeft < iMaxLeft) && iMaxLeft != null) {
+      if ((iLeft < iMaxLeft) && !!iMaxLeft) {
        iLeft = iMaxLeft;
       }
 
-      if ((iLeft > iMaxRight) && iMaxRight != null) {
+      if ((iLeft > iMaxRight) && !!iMaxRight) {
        iLeft = iMaxRight;
       }
       oDivDragDrop.style.left = iLeft;
@@ -388,7 +380,7 @@ windowAux = function (iIdWindow, sTitle, iWidth, iHeight) {
 
 	/**
 	 * Adiciona um Elemento a Janela
-	 *@private
+	 * @private
 	 */
 	this.add = function (oElement) {
 
@@ -433,7 +425,7 @@ windowAux = function (iIdWindow, sTitle, iWidth, iHeight) {
 
   /**
    * Seta o zIndex para a windowAux
-   * @param iIndex
+   * @param {integer} iIndex
    */
   self.setIndex = function(iIndex) {
     this.zIndex = iIndex;
@@ -453,8 +445,8 @@ windowAux = function (iIdWindow, sTitle, iWidth, iHeight) {
    */
 	this.getMaxBottom = function() {
 
-	  if (this.parent != null) {
-      this.iMaxBottom  = this.parent.getHeight()-(this.getHeight()+10)
+	  if (!!this.parent) {
+      this.iMaxBottom  = this.parent.getHeight()-(this.getHeight()+10);
     }
 	  return this.iMaxBottom;
 	};
@@ -465,7 +457,7 @@ windowAux = function (iIdWindow, sTitle, iWidth, iHeight) {
    */
 	this.getMaxTop = function() {
 
-    if (this.parent != null) {
+    if (!!this.parent) {
       this.iMaxTop  = this.parent.iMaxTop+25;
     }
     return this.iMaxTop;
@@ -477,7 +469,7 @@ windowAux = function (iIdWindow, sTitle, iWidth, iHeight) {
    */
   this.getMaxtop = function() {
 
-    if (this.parent != null) {
+    if (!!this.parent) {
       this.iMaxBottom  = this.parent.getHeight()-(this.getHeight()+10);
     }
     return this.iMaxBottom;
@@ -489,7 +481,7 @@ windowAux = function (iIdWindow, sTitle, iWidth, iHeight) {
    */
   this.getMaxLeft = function() {
 
-     if (this.parent != null) {
+     if (!!this.parent) {
        this.iMaxLeft = parseInt($(this.parent.idWindow).style.left+0,10) + 10;
      }
      return this.iMaxLeft;
@@ -501,7 +493,7 @@ windowAux = function (iIdWindow, sTitle, iWidth, iHeight) {
    */
   this.getMaxRight = function () {
 
-    if (this.parent != null) {
+    if (!!this.parent) {
       this.iMaxRight = parseInt($(this.parent.idWindow).style.width+0,10)- (this.iWidth+10);
     }
     return this.iMaxRight;
@@ -509,7 +501,7 @@ windowAux = function (iIdWindow, sTitle, iWidth, iHeight) {
 
 	/**
 	 * Retorna a Altura da Janela
-	 *@return integer
+	 *@return {integer}
 	 */
 	this.getHeight = function () {
 	  return this.iHeight;
@@ -517,7 +509,7 @@ windowAux = function (iIdWindow, sTitle, iWidth, iHeight) {
 
 	/**
 	 * Retorna a Largura da Janela
-	 * @return integer
+	 * @return {integer}
 	 */
 	this.getWidth = function () {
 	  return this.iWidth;
@@ -528,6 +520,7 @@ windowAux = function (iIdWindow, sTitle, iWidth, iHeight) {
 
   /**
    * Adiciona um event listener a window
+   *
    * @param {string} sEvent Evento que sera 'escutado' sendo o nome do evento sem as letras 'on'
    * @param {Object} oCallBack  funcao que sera executada ao disparar o evento
    * @example
@@ -541,7 +534,7 @@ windowAux = function (iIdWindow, sTitle, iWidth, iHeight) {
 
   me.getContentContainer = function() {
     return me.divContent;
-  }
+  };
 };
 
 windowAux.prototype.getElement = function() {

@@ -1,6 +1,6 @@
 <?php
-include ("../jpgraph.php");
-include ("../jpgraph_canvas.php");
+include (__DIR__ . "/../jpgraph.php");
+include (__DIR__ . "/../jpgraph_canvas.php");
 
 // Create the graph. 
 $graph = new CanvasGraph(350,200,"auto");	

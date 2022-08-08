@@ -61,7 +61,7 @@ class EventoS2400 extends EventoBase
 
             $oDadosAPI->evtCdBenPrRP->endereco->brasil->tplograd = $oDados->brasil->tpLograd;
             $oDadosAPI->evtCdBenPrRP->endereco->brasil->dsclograd = $oDados->brasil->dscLograd;
-            $oDadosAPI->evtCdBenPrRP->endereco->brasil->nrlograd = $oDados->brasil->nrLograd;
+            $oDadosAPI->evtCdBenPrRP->endereco->brasil->nrlograd = $oDados->brasil->nrLograd ?: 0;
             $oDadosAPI->evtCdBenPrRP->endereco->brasil->bairro = $oDados->brasil->bairro;
             $oDadosAPI->evtCdBenPrRP->endereco->brasil->cep = $oDados->brasil->cep;
             $oDadosAPI->evtCdBenPrRP->endereco->brasil->codMunic = $oDados->brasil->codMunic;

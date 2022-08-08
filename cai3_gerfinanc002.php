@@ -107,9 +107,9 @@ if(isset($HTTP_POST_VARS["ver_matric"]) && !isset($HTTP_POST_VARS["calculavalor"
       $tam = sizeof($valores);
       db_query("BEGIN");
       for($i = 0;$i < $tam;$i++) {
-        $mat = split("P",$numpres[$i]);
+        $mat = explode("P",$numpres[$i]);
         $numpre = $mat[0];
-        $numpar = split("R", $mat[1]);
+        $numpar = explode("R", $mat[1]);
         $numpar = $numpar[0];
         $valores[$i] = $valores[$i] + 0;
 

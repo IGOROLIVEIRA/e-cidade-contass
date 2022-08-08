@@ -127,17 +127,17 @@ if ($oInstit->db21_usasisagua == "t") {
 
 </style>
 
-<? 
+<?
 
 if (isset($arquivo) && (isset($k81_conta) && $k81_conta != '')) {
 
   if (move_uploaded_file($_FILES['arquivo']['tmp_name'], "tmp/".$_FILES['arquivo']['name'])) {
-  	
+
   	$aReceita = array();
   	$aEstrutNaoEncontrato = array();
   	$oArquivo = fopen("tmp/".$_FILES['arquivo']['name'], "r");
-  	while (!feof($oArquivo)) {	
-  	
+  	while (!feof($oArquivo)) {
+
   		$sLinhaArquivo = fgets($oArquivo);
   		if (strlen($sLinhaArquivo) < 51) {
   			continue;
@@ -150,7 +150,7 @@ if (isset($arquivo) && (isset($k81_conta) && $k81_conta != '')) {
   			continue;
   		}
   		$oDadosRec = db_utils::fieldsMemory($result, 0);
-  		
+
   	  $oReceita = new stdClass();
       //Receita
       $oReceita->iReceitaPlanilha = "";//$F('codigo_receitaplanilha');
@@ -187,12 +187,12 @@ if (isset($arquivo) && (isset($k81_conta) && $k81_conta != '')) {
       $oReceita->recurso          = $oDadosRec->recurso;//$F('recurso');
       $oReceita->k81_operbanco    = substr($sLinhaArquivo, 9, 3);//$F('k81_operbanco');
       $aReceita[] = $oReceita;
-    
+
     }
   	fclose($oArquivo);
-  	
+
   	echo "<script> alert('Os seguintes estruturais (".implode(",", $aEstruNaoEncontrato).") não foram encontrados');</script>";
-  	
+
     $jsReceita = $oJson->encode($aReceita);
     echo "<script> jsReceita = ". $jsReceita . ";</script>";
 
@@ -222,7 +222,7 @@ if (isset($arquivo) && (isset($k81_conta) && $k81_conta != '')) {
 <legend><b>Receita</b></legend>
   <table border="0" width="100%">
 
-    
+
     <!-- Código Conta -->
     <tr>
       <td class='tamanho-primeira-col' nowrap title="<?=@$Tk81_conta?>">
@@ -243,12 +243,12 @@ if (isset($arquivo) && (isset($k81_conta) && $k81_conta != '')) {
      <td>
      <b>Arquivo:</b>
      </td>
-     <td> 
+     <td>
      <?
      db_input('arquivo', 50, '', true, 'file', 1);
      ?>
      </td>
-    </tr> 
+    </tr>
 
   </table>
 </fieldset>
@@ -278,18 +278,18 @@ function js_gridReceitas() {
 	   oGridReceitas = new DBGrid('ctnReceitas');
 	   oGridReceitas.nameInstance = 'oGridReceitas';
 	   //oGridReceitas.setCheckbox(0);
-	   oGridReceitas.setCellWidth(new Array( 
+	   oGridReceitas.setCellWidth(new Array(
 	                                         '45%',
 	                                         '45%',
 	                                         '10%'));
 
-	   oGridReceitas.setCellAlign(new Array( 
+	   oGridReceitas.setCellAlign(new Array(
 	                                         'left',
 	                                         'left',
 	                                         'right'));
 
 
-	   oGridReceitas.setHeader(new Array( 
+	   oGridReceitas.setHeader(new Array(
 	                                      'Dados da Conta',
 	                                      'Conta Tesouraria',
 	                                      'Valor'));
@@ -307,14 +307,14 @@ function js_gridReceitas() {
  * Função para Adicionar uma Receita na Grid
  */
 function js_addReceita () {
-	
+
   for (var i = 0; i < jsReceita.length; i++) {
 
 	  var oReceita = jsReceita[i];
     oReceita.iIndice               = "a"+iIndiceReceitas;
     aReceitas["a"+iIndiceReceitas] = oReceita;
     iIndiceReceitas++;
-  }  
+  }
 
   js_renderizarGrid();
   $('k81_conta').value  = '';
@@ -369,7 +369,7 @@ function js_pesquisaConta(lMostra) {
      sPesquisa = 'func_saltesrecurso.php?pesquisa_chave='+$('k81_conta').value+'&'+sFuncao+'&data_limite=<?=date("Y-m-d",db_getsession("DB_datausu"))?>'
    }
  }
- js_OpenJanelaIframe('top.corpo','db_iframe_saltes',sPesquisa+'&data_limite=<?=date("Y-m-d",db_getsession("DB_datausu"))?>','Pesquisa',lMostra);
+ js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_saltes',sPesquisa+'&data_limite=<?=date("Y-m-d",db_getsession("DB_datausu"))?>','Pesquisa',lMostra);
 }
 
 
@@ -496,9 +496,9 @@ function js_novaReceita(){
 	   iIndiceReceitas = 0;
 	   iAlteracao      = null;
 }
-	 
+
 js_gridReceitas();
-<?php 
+<?php
 if (isset($arquivo)) {
 	echo "js_addReceita();";
 }

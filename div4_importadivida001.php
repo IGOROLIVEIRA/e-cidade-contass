@@ -318,7 +318,7 @@ function js_abre(){
             oProcesso.sTitular         = sTitular;
             oProcesso.dDataProcesso    = dDataProcesso;
 
-        js_OpenJanelaIframe('top.corpo','db_iframe','div4_importadivida002.php?oProcesso='+Object.toJSON(oProcesso)+'&k00_tipo_or='+document.form1.tipor.value+'&k00_tipo_des='+document.form1.tipdes.value+'&tipoparc='+document.form1.parc.value+'&uni='+uni+'&datavenc='+data,'Pesquisa',true);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe','div4_importadivida002.php?oProcesso='+Object.toJSON(oProcesso)+'&k00_tipo_or='+document.form1.tipor.value+'&k00_tipo_des='+document.form1.tipdes.value+'&tipoparc='+document.form1.parc.value+'&uni='+uni+'&datavenc='+data,'Pesquisa',true);
       }
     }
   }

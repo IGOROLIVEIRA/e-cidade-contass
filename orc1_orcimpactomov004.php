@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -87,7 +87,7 @@ if(isset($incluir) || isset($alterar) || isset($atualizar)){
   $result=$clorcimpactoperiodo->sql_record($clorcimpactoperiodo->sql_query_file($o63_codperiodo,"o96_anoini"));
   db_fieldsmemory($result,0);
 
-  $dbwhere  = " o63_codperiodo  =  $o63_codperiodo and o63_anoexe = $o96_anoini and o63_orgao = $o63_orgao "; 
+  $dbwhere  = " o63_codperiodo  =  $o63_codperiodo and o63_anoexe = $o96_anoini and o63_orgao = $o63_orgao ";
   $dbwhere .= " and o63_unidade = $o63_unidade     and o63_funcao = $o63_funcao and o63_subfuncao=$o63_subfuncao ";
   $dbwhere .= " and o63_programa= $o63_programa    and o63_acao   = $o63_acao";
 }
@@ -95,26 +95,26 @@ if(isset($incluir) || isset($alterar) || isset($atualizar)){
 if(isset($incluir) || isset($atualizar)){
   $sqlerro=false;
   db_inicio_transacao();
-  
+
   if(isset($incluir)){
       $clorcimpactomov->sql_record($clorcimpactomov->sql_query_file(null,"o63_codimpmov","",$dbwhere));
       if($clorcimpactomov->numrows>0){
 	$sqlerro  = true;
-	$erro_msg = "Já existe..."; 
+	$erro_msg = "Já existe...";
 	$jaexiste=true;
-      } 
+      }
   }
-  
+
   if($sqlerro == false){
     $clorcimpactomov->o63_anoexe = $o96_anoini;
     $clorcimpactomov->incluir(null);
-    $erro_msg = $clorcimpactomov->erro_msg; 
+    $erro_msg = $clorcimpactomov->erro_msg;
     if($clorcimpactomov->erro_status==0){
       $sqlerro=true;
     }else{
       $o63_codimpmov = $clorcimpactomov->o63_codimpmov;
-    } 
-  }  
+    }
+  }
 
   //---------------------------------------------------------------------------
   //Quando for incluir um novo
@@ -124,43 +124,43 @@ if(isset($incluir) || isset($atualizar)){
       }else{
 	$pai = $o86_codimpmovpai;
       }
-      
+
       $clorcimpactomovpai->o86_codmovpai = $pai;
       $clorcimpactomovpai->o86_codmovfilho = $o63_codimpmov;
       $clorcimpactomovpai->incluir($pai,$o63_codimpmov);
-      $erro_msg = $clorcimpactomovpai->erro_msg; 
+      $erro_msg = $clorcimpactomovpai->erro_msg;
       if($clorcimpactomovpai->erro_status==0){
 	$sqlerro=true;
-      } 
-    }  
-  //---------------------------------------------------------------------------  
+      }
+    }
+  //---------------------------------------------------------------------------
   //---------------------------------------------------------------------------
   //Quando for incluir um, a partir de uma previsão
     if(isset($atualizar)  && isset($o90_codimp)  && $sqlerro == false){
       $clorcimpactomovimp->o68_codimpmov = $o63_codimpmov;
       $clorcimpactomovimp->o68_codimp    = $o90_codimp;
       $clorcimpactomovimp->incluir($o63_codimpmov,$o90_codimp);
-      $erro_msg = $clorcimpactomovimp->erro_msg; 
+      $erro_msg = $clorcimpactomovimp->erro_msg;
       if($clorcimpactomovimp->erro_status==0){
 	$sqlerro=true;
-      } 
-    }  
-  //---------------------------------------------------------------------------  
+      }
+    }
+  //---------------------------------------------------------------------------
   db_fim_transacao($sqlerro);
   if($sqlerro == false){
      $liberaaba = true;
      $db_opcao = 2;
   }else{
-    unset($o63_codimpmov); 
+    unset($o63_codimpmov);
     if(isset($atualizar)){///significa que eh de previsão
       $db_opcao=22;
-    }else{  
+    }else{
       $db_opcao = 1;
-    }  
+    }
   }
   if(isset($incluir)){
     $tipo = "I";
-  }  
+  }
   $db_botao = true;
 }else if(isset($alterar)){
   $sqlerro=false;
@@ -168,16 +168,16 @@ if(isset($incluir) || isset($atualizar)){
   $clorcimpactomov->sql_record($clorcimpactomov->sql_query_file(null,"o63_codimpmov","",$dbwhere));
   if($clorcimpactomov->numrows>1){
     $sqlerro  = true;
-    $erro_msg = "Já existe..."; 
+    $erro_msg = "Já existe...";
     $jaexiste=true;
-  } 
+  }
   if($sqlerro == false){
     $clorcimpactomov->alterar($o63_codimpmov);
     if($clorcimpactomov->erro_status==0){
       $sqlerro=true;
-    } 
-    $erro_msg = $clorcimpactomov->erro_msg; 
-  }  
+    }
+    $erro_msg = $clorcimpactomov->erro_msg;
+  }
   db_fim_transacao($sqlerro);
    $db_opcao = 2;
    $db_botao = true;
@@ -192,16 +192,16 @@ if(isset($chavepesquisa)|| (isset($chave_nova) && $chave_nova != '')){
    }else{
      $db_opcao = 2;
      $db_botao = true;
-   }   
+   }
 
    if($tipo == "I"){
-      $result = $clorcimpactomov->sql_record($clorcimpactomov->sql_query_compl($chavepesquisa)); 
+      $result = $clorcimpactomov->sql_record($clorcimpactomov->sql_query_compl($chavepesquisa));
       db_fieldsmemory($result,0);
       $o86_codimpmovpai= $o63_codimpmov;
       unset($o63_codimpmov);
    }else if($tipo == "P"){
-     
-      $result = $clorcimpacto->sql_record($clorcimpacto->sql_query_compl($chavepesquisa)); 
+
+      $result = $clorcimpacto->sql_record($clorcimpacto->sql_query_compl($chavepesquisa));
       db_fieldsmemory($result,0);
       $o90_codimp = $o90_codimp;
       $o63_orgao = $o90_orgao;
@@ -217,20 +217,20 @@ if(isset($chavepesquisa)|| (isset($chave_nova) && $chave_nova != '')){
    }
 
    if(empty($chave_nova)){
-        $db_opcao = 22; 
+        $db_opcao = 22;
         //$db_botao = false;
-   }	
-   
+   }
+
    if(isset($chave_nova)){
         unset($o63_codimpmov);
-   }  
+   }
 }else if(empty($incluir) && empty($alterar) && empty($atualizar)){
   if(isset($o63_codimpmov) && $o63_codimpmov !=''){
     $db_opcao = 2;
   }else{
     $db_opcao = 1;
-  }  
-}  
+  }
+}
 ?>
 <html>
 <head>
@@ -242,8 +242,8 @@ if(isset($chavepesquisa)|| (isset($chave_nova) && $chave_nova != '')){
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="300" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="300" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
 	<?
 	include("forms/db_frmorcimpactomov.php");
@@ -261,11 +261,11 @@ if(isset($incluir) || isset($alterar) || isset($atualizar)){
 }
 }
 if(isset($atualizar) || isset($incluir) || (isset($chavepesquisa) && empty($chave_nova) && $tipo == "I" )){
-     
+
  echo "
   <script>
          parent.document.formaba.orcimpactovalmov.disabled=false;";
-	
+
 	$tipo= '';
 	if(isset($o86_codimpmovpai) && $o86_codimpmovpai != ''  && empty($chave_nova)){
 	    $tipo= "&tipo=I";
@@ -273,7 +273,7 @@ if(isset($atualizar) || isset($incluir) || (isset($chavepesquisa) && empty($chav
 	    $tipo ="&tipo=P";
 	}
 
- echo "  top.corpo.iframe_orcimpactovalmov.location.href='orc1_orcimpactovalmov001.php?o64_codimpmov=".@$o63_codimpmov."$tipo';";
+ echo "  CurrentWindow.corpo.iframe_orcimpactovalmov.location.href='orc1_orcimpactovalmov001.php?o64_codimpmov=".@$o63_codimpmov."$tipo';";
          if(isset($liberaaba)){
            echo "  parent.mo_camada('orcimpactovalmov');";
          }

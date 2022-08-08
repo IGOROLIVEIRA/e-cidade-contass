@@ -59,7 +59,7 @@ function js_abre(opcao){
       return false
     else
       js_OpenJanelaIframe('','db_iframe_orgao','func_selorcdotacao.php?nivel='+document.form1.nivel.value+'&db_selinstit='+document.form1.db_selinstit.value,'pesquisa',true);
- }else if(top.corpo.db_iframe_orgao != undefined){
+ }else if(CurrentWindow.corpo.db_iframe_orgao != undefined){
 //   alert('entrou');
 
    if(document.form1.nivel.value == document.form1.vernivel.value){

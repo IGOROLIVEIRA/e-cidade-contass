@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -48,24 +48,24 @@ $cldb_documentotemplatepadrao = new cl_db_documentotemplatepadrao();
 	aLinha = new Array();
 </script>
 </head>
-<?php 
+<?php
 //$db81_instit = db_getsession('DB_instit');
 $resArquivos = $cldb_documentotemplatepadrao->sql_record($cldb_documentotemplatepadrao->sql_query(null,'db81_descricao,db81_nomearquivo',null));
 $iNumRows = $cldb_documentotemplatepadrao->numrows;
 if ($iNumRows > 0) {
   echo "<script type=\"text/javascript\">\n";
 	for($i=0; $i < $iNumRows; $i++){
-    
+
 		$oArquivo = db_utils::fieldsMemory($resArquivos,$i);
 		$sArquivo = basename($oArquivo->db81_nomearquivo);
-		
+
 		echo "  aLinha[{$i}] = new Array('{$sArquivo}',\n";
 		echo "           				         '{$oArquivo->db81_descricao}',\n";
 		echo " \"<input type='button' value='download' onclick='js_openDownload(\\\"$oArquivo->db81_nomearquivo\\\");'>\")\n";
 	}
   echo "</script>\n";
 }
-?>    
+?>
 <body bgcolor="#CCCCCC" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="js_frmArquivos(aLinha);">
 <form name='form1'>
 	<table width="790" style="padding-top:25px;" align="center">
@@ -87,7 +87,7 @@ if ($iNumRows > 0) {
 <script type="text/javascript">
 	function js_openDownload(arquivo){
 		location.href = arquivo;
-		//js_OpenJanelaIframe('top.corpo','db_iframe_db_arquivolistar',arquivo,'Pesquisa',true);
+		//js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_arquivolistar',arquivo,'Pesquisa',true);
 	}
 	function js_frmArquivos(aDados){
 		oDBGridArquivos = new DBGrid('exporta');
@@ -97,7 +97,7 @@ if ($iNumRows > 0) {
 		oDBGridArquivos.setHeight(330);
 		oDBGridArquivos.aAligns = new Array('left','left','center');
 		oDBGridArquivos.show($('frmArquivos'));
-		
+
 		oDBGridArquivos.clearAll(true);
 		for(i=0;i < aDados.length; i++){
 			oDBGridArquivos.addRow(aDados[i]);

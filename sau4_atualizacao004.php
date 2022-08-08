@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 include_once ("fpdf151/pdf.php");
@@ -130,15 +130,15 @@ db_app::load ( "estilos.css" );
 			</tr>
 			<tr>
 				<td>
-					<input name="remover" 
-						type="button" 
+					<input name="remover"
+						type="button"
 						id="processar"
 						onclick="js_remover()"
 						value="Remover">
 				</td>
 			</tr>
 		</table>
-		
+
 		</form>
 		</center>
 		</td>
@@ -156,12 +156,12 @@ db_app::load ( "estilos.css" );
 	/**
 	 * Ajax$F('s100_i_anocomp')
 	 */
-	function js_ajax( objParam, strCarregando, jsRetorno ){ 
-	
+	function js_ajax( objParam, strCarregando, jsRetorno ){
+
 	var objAjax = new Ajax.Request(
-	                         strURL, 
+	                         strURL,
 	                         {
-	                          method    : 'post', 
+	                          method    : 'post',
 	                          parameters: 'json='+Object.toJSON(objParam),
 	                          onCreate  : function(){
 	                          				js_divCarregando( strCarregando, 'msgbox');
@@ -173,7 +173,7 @@ db_app::load ( "estilos.css" );
 	                          			}
 	                         }
 	                        );
-	
+
 	}
 
 	function js_pesquisas100_i_mescomp(mostra){
@@ -182,7 +182,7 @@ db_app::load ( "estilos.css" );
 		strParam += '?funcao_js=parent.js_mostrasau_atualiza1|s100_i_codigo|login|s100_d_data|s100_c_hora|s100_i_mescomp|s100_i_anocomp';
 		strParam += '&campos=sau_atualiza.*, login';
         if(mostra==true){
-           js_OpenJanelaIframe('top.corpo','db_iframe_sau_atualiza',strParam,'Pesquisa',true);
+           js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_sau_atualiza',strParam,'Pesquisa',true);
         }
     }
     function js_mostrasau_atualiza1(s100_i_codigo,login,s100_d_data,s100_c_hora,s100_i_mescomp,s100_i_anocomp){
@@ -207,8 +207,8 @@ db_app::load ( "estilos.css" );
 			objParam.s100_i_codigo  = $F('s100_i_codigo');
 			objParam.s100_i_mescomp = $F('s100_i_mescomp');
 			objParam.s100_i_anocomp = $F('s100_i_anocomp');
-	  		
-			js_ajax( objParam, 'Aguarde, Pesquisando....', 'js_retornoRemover' );			
+
+			js_ajax( objParam, 'Aguarde, Pesquisando....', 'js_retornoRemover' );
 		}
 	}
 	/**
@@ -216,11 +216,11 @@ db_app::load ( "estilos.css" );
 	 */
 	function js_retornoRemover( objAjax ){
 		var objRetorno = eval("("+objAjax.responseText+")");
-	
-		if (objRetorno.status == 1) {		  
+
+		if (objRetorno.status == 1) {
 		}
 		alert(objRetorno.message.urlDecode());
-	
-	} 
-	
+
+	}
+
 </script>

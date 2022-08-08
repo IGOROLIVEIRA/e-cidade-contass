@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -68,7 +68,7 @@ db_postmemory($HTTP_POST_VARS);
   <table  align="center">
     <form name="form1" method="post" action="" onsubmit="return js_verifica();">
 <table border="0" align="center">
-  <tr> 
+  <tr>
     <td >&nbsp;</td>
   </tr>
   <tr>
@@ -92,7 +92,7 @@ db_postmemory($HTTP_POST_VARS);
            db_ancora(@$Lrh67_rhtipovale,"js_pesquisarh67_rhtipovale(true);",2);
            ?>
         </td>
-        <td> 
+        <td>
         <?
           db_input('rh67_rhtipovale',4,$Irh67_rhtipovale,true,'text',2," onchange='js_pesquisarh67_rhtipovale(false);'")
         ?>
@@ -108,7 +108,7 @@ db_postmemory($HTTP_POST_VARS);
            ?>
            </b>
         </td>
-        <td> 
+        <td>
         <?
           db_input('r07_codigo',4,@$r07_codigo,true,'text',2," onchange='js_pesquisapesdiver(false);'");
           db_input('r07_descr',40,@$Ir07_descr,true,'text',3,'');
@@ -171,7 +171,7 @@ db_postmemory($HTTP_POST_VARS);
   </td>
   </tr>
       <tr>
-        <td colspan="2" align = "center"> 
+        <td colspan="2" align = "center">
           <input  name="gera" id="gera" type="button" value="Processar" onclick="js_emite();"  >
         </td>
       </tr>
@@ -196,7 +196,7 @@ function js_recarregar(iTipo){
   if (iTipo == 2) {
     var display = 'none';
   } else {
-    var display = 'none';    
+    var display = 'none';
     document.form1.r07_codigo.value = '';
     document.form1.r07_descr.value = '';
   }
@@ -224,13 +224,13 @@ function carregaDadosSelect(resposta){
   js_removeObj('processando');
 
 	document.form1.rh67_rhtipovale.disabled = false;
-	js_limpaSelect(document.form1.grupo);  
+	js_limpaSelect(document.form1.grupo);
 	js_addSelectFromStr(resposta.responseText,document.form1.grupo);
 
 }
 
 function js_limpaSelect(obj){
-  obj.length  = 0;	
+  obj.length  = 0;
 }
 
 function js_addSelectFromStr(str,obj){
@@ -242,7 +242,7 @@ function js_addSelectFromStr(str,obj){
       obj.options[i].value = colunas[0];
       obj.options[i].text  = colunas[1];
 		}
-  }	
+  }
 }
 
 
@@ -250,29 +250,29 @@ function js_addSelectFromStr(str,obj){
 
 function js_pesquisarh67_rhtipovale(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_rhtipovale','func_rhtipovale.php?funcao_js=parent.js_mostrarhtipovale1|rh68_sequencial|rh68_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhtipovale','func_rhtipovale.php?funcao_js=parent.js_mostrarhtipovale1|rh68_sequencial|rh68_descr','Pesquisa',true);
   }else{
-     if(document.form1.rh67_rhtipovale.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_rhtipovale','func_rhtipovale.php?pesquisa_chave='+document.form1.rh67_rhtipovale.value+'&funcao_js=parent.js_mostrarhtipovale','Pesquisa',false);
+     if(document.form1.rh67_rhtipovale.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhtipovale','func_rhtipovale.php?pesquisa_chave='+document.form1.rh67_rhtipovale.value+'&funcao_js=parent.js_mostrarhtipovale','Pesquisa',false);
      }else{
-       document.form1.rh68_descr.value = ''; 
+       document.form1.rh68_descr.value = '';
      }
   }
   ////document.form1.submit();
 }
 function js_mostrarhtipovale(chave,erro){
-  document.form1.rh68_descr.value = chave; 
-  if(erro==true){ 
-    document.form1.rh67_rhtipovale.focus(); 
-    document.form1.rh67_rhtipovale.value = ''; 
+  document.form1.rh68_descr.value = chave;
+  if(erro==true){
+    document.form1.rh67_rhtipovale.focus();
+    document.form1.rh67_rhtipovale.value = '';
   }else{
-    js_recarregar(document.form1.rh67_rhtipovale.value);    
+    js_recarregar(document.form1.rh67_rhtipovale.value);
   }
 }
 function js_mostrarhtipovale1(chave1,chave2){
   document.form1.rh67_rhtipovale.value = chave1;
   document.form1.rh68_descr.value = chave2;
-  js_recarregar(chave1);    
+  js_recarregar(chave1);
   db_iframe_rhtipovale.hide();
 }
 
@@ -280,20 +280,20 @@ function js_mostrarhtipovale1(chave1,chave2){
 
 function js_pesquisapesdiver(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_pesdiver','func_pesdiver.php?funcao_js=parent.js_mostrapesdiver1|r07_codigo|r07_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_pesdiver','func_pesdiver.php?funcao_js=parent.js_mostrapesdiver1|r07_codigo|r07_descr','Pesquisa',true);
   }else{
-     if(document.form1.r07_codigo.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_pesdiver','func_pesdiver.php?pesquisa_chave='+document.form1.r07_codigo.value+'&funcao_js=parent.js_mostrapesdiver','Pesquisa',false);
+     if(document.form1.r07_codigo.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_pesdiver','func_pesdiver.php?pesquisa_chave='+document.form1.r07_codigo.value+'&funcao_js=parent.js_mostrapesdiver','Pesquisa',false);
      }else{
-       document.form1.r07_descr.value = ''; 
+       document.form1.r07_descr.value = '';
      }
   }
 }
 function js_mostrapesdiver(chave,erro){
-  document.form1.r07_descr.value = chave; 
-  if(erro==true){ 
-    document.form1.r07_codigo.focus(); 
-    document.form1.r07_codigo.value = ''; 
+  document.form1.r07_descr.value = chave;
+  if(erro==true){
+    document.form1.r07_codigo.focus();
+    document.form1.r07_codigo.value = '';
   }
 }
 function js_mostrapesdiver1(chave1,chave2){
@@ -311,7 +311,7 @@ function js_emite(){
   qry+= "&rh67_rhtipovale="+document.form1.rh67_rhtipovale.value;
   qry+= "&tipo="+document.form1.tipo.value;
   qry+= "&grupo="+document.form1.grupo.value;
-  
+
   jan = window.open('pes2_rhteutri002.php'+qry,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
   jan.moveTo(0,0);
 

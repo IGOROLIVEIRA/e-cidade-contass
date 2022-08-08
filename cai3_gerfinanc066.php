@@ -82,16 +82,16 @@ if (isset($inicial) && $inicial == true) {
           
         if ($oPost->marcarvencidas == 'true' && $oPost->marcartodas == 'false') {
 
-          $mat = split("N", $v);
+          $mat = explode("N", $v);
           for ($iInd = 0; $iInd < count($mat); $iInd++) {
                 
             if ($mat[$iInd] == "") {
               continue;   
             }
                 
-            $numpre = split("P", $mat[$iInd]);
-            $numpar = split("P", strstr($mat[$iInd], "P"));
-            $numpar = split("R",$numpar[1]);
+            $numpre = explode("P", $mat[$iInd]);
+            $numpar = explode("P", strstr($mat[$iInd], "P"));
+            $numpar = explode("R",$numpar[1]);
             $receit = @$numpar[1];
             $numpar = $numpar[0];
             $numpre = $numpre[0];
@@ -160,16 +160,16 @@ if (isset($inicial) && $inicial == true) {
         if ($oPost->marcarvencidas == 'true' && $oPost->marcartodas == 'false') {
 
           $numpres = $vt[key($vt)];
-          $mat     = split("N", $numpres);
+          $mat     = explode("N", $numpres);
           for ($iInd = 0; $iInd < count($mat); $iInd++) {
                 
             if ($mat[$iInd] == "") {
               continue;   
             }
                 
-            $numpre = split("P", $mat[$iInd]);
-            $numpar = split("P", strstr($mat[$iInd], "P"));
-            $numpar = split("R",$numpar[1]);
+            $numpre = explode("P", $mat[$iInd]);
+            $numpar = explode("P", strstr($mat[$iInd], "P"));
+            $numpar = explode("R",$numpar[1]);
             $receit = @$numpar[1];
             $numpar = $numpar[0];
             $numpre = $numpre[0];
@@ -194,12 +194,12 @@ if (isset($inicial) && $inicial == true) {
             
          $numpres = $vt[key($vt)];
          if ($numpres == "") continue;
-         $mat     = split("N", $numpres);
+         $mat     = explode("N", $numpres);
          for ($j = 0; $j < count($mat); $j++) {
            if ($mat[$j] == "") continue;
-           $numpre = split("P", $mat[$j]);
-           $numpar = split("P", strstr($mat[$j], "P"));
-           $numpar = split("R",$numpar[1]);
+           $numpre = explode("P", $mat[$j]);
+           $numpar = explode("P", strstr($mat[$j], "P"));
+           $numpar = explode("R",$numpar[1]);
            $numpar = $numpar[0];
            if (!isset ($inicial)) {
             // $numpar = $numpar[1];
@@ -214,12 +214,12 @@ if (isset($inicial) && $inicial == true) {
           
 		     $numpres = $vt[key($vt)];
 		     if ($numpres == "") continue;
-		     $mat     = split("N", $numpres);
+		     $mat     = explode("N", $numpres);
 		     for ($j = 0; $j < count($mat); $j++) {
 		       if ($mat[$j] == "") continue;
-		       $numpre = split("P", $mat[$j]);
-		       $numpar = split("P", strstr($mat[$j], "P"));
-		       $numpar = split("R",$numpar[1]);
+		       $numpre = explode("P", $mat[$j]);
+		       $numpar = explode("P", strstr($mat[$j], "P"));
+		       $numpar = explode("R",$numpar[1]);
 		       $numpar = $numpar[0];
 		       if (!isset ($inicial)) {
 		        // $numpar = $numpar[1];
@@ -249,8 +249,8 @@ if(isset($submit)){
  }
  $erro_msg = $clarrejust->erro_msg;
  
-  $mat = split(",", $numpre);
-  $mat1 = split(",", $numpar);
+  $mat = explode(",", $numpre);
+  $mat1 = explode(",", $numpar);
 
   for ($i = 0; $i < count($mat); $i ++) {
    $numpre = $mat[$i];

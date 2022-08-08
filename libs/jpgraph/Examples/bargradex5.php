@@ -1,9 +1,9 @@
 <?php
 // Example for use of JpGraph, 
 // ljp, 01/03/01 19:44
-include ("../jpgraph.php");
-include ("../jpgraph_bar.php");
-include ("../jpgraph_line.php");
+include (__DIR__ . "/../jpgraph.php");
+include (__DIR__ . "/../jpgraph_bar.php");
+include (__DIR__ . "/../jpgraph_line.php");
 
 // We need some data
 $datay=array(0.3031,0.3044,0.3049,0.3040,0.3024,0.3047);

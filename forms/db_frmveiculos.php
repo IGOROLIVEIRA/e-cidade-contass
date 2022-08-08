@@ -703,14 +703,14 @@ db_select('ve01_ativo', $x, true, $db_opcao, "");
     function js_hideElements(valor) {
         let aClasses = document.getElementsByClassName('tr__hidden');
 
-        if ([1, 2, 4, 99].includes(Number(valor))) {
+        if ([1, 2, 4, 5, 99].includes(Number(valor))) {
             document.getElementsByClassName('tr__numcgm')[0].style.display = 'none';
         } else {
             document.getElementsByClassName('tr__numcgm')[0].style.display = '';
         }
 
         for (let count = 0; count < aClasses.length; count++) {
-            if ([1, 2, 99].includes(Number(valor))) {
+            if ([1, 2, 5, 99].includes(Number(valor))) {
                 aClasses[count].style.display = 'none';
             } else {
                 aClasses[count].style.display = '';
@@ -732,7 +732,7 @@ db_select('ve01_ativo', $x, true, $db_opcao, "");
             $query .= "&ve06_veiculos=" . $ve01_codigo;
         }
         ?>
-        js_OpenJanelaIframe('top.corpo.iframe_veiculos', 'db_iframe_veiculoscomb', 'vei2_veiculoscomb001.php?<?= $query ?>', 'Combustíveis', true);
+        js_OpenJanelaIframe('(window.CurrentWindow || parent.CurrentWindow).corpo.iframe_veiculos', 'db_iframe_veiculoscomb', 'vei2_veiculoscomb001.php?<?= $query ?>', 'Combustóveis', true);
     }
 
     function js_pesquisave01_veiccadmodelo(mostra) {

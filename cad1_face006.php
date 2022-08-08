@@ -135,7 +135,7 @@ if(isset($excluir)){
   <script>
       function js_db_libera(){
          parent.document.formaba.facevalor.disabled=false;
-         top.corpo.iframe_facevalor.location.href='cad1_facevalor001.php?db_opcaoal=33&j81_codigo=".@$j37_face."';
+         CurrentWindow.corpo.iframe_facevalor.location.href='cad1_facevalor001.php?db_opcaoal=33&j81_codigo=".@$j37_face."';
      ";
 		  if(isset($liberaaba)){
 		    echo "  parent.mo_camada('facevalor');";

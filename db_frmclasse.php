@@ -9,7 +9,7 @@ $clclasse->rotulo->label();
     <td nowrap title="<?=@$Tq12_classe?>">
        <?=@$Lq12_classe?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('q12_classe',4,$Iq12_classe,true,'text',3)
 ?>
@@ -19,7 +19,7 @@ db_input('q12_classe',4,$Iq12_classe,true,'text',3)
     <td nowrap title="<?=@$Tq12_descr?>">
        <?=@$Lq12_descr?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('q12_descr',40,$Iq12_descr,true,'text',$db_opcao,"")
 ?>
@@ -32,7 +32,7 @@ db_input('q12_descr',40,$Iq12_descr,true,'text',$db_opcao,"")
 </form>
 <script>
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_classe','func_classe.php?funcao_js=parent.js_preenchepesquisa|q12_classe','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_classe','func_classe.php?funcao_js=parent.js_preenchepesquisa|q12_classe','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_classe.hide();

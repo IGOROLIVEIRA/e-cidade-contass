@@ -73,7 +73,7 @@ if((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Incluir
 
   if ($sqlerro == false) {
     $d02_contri = $cleditalrua->d02_contri;
-    $matriz= split("XX",$dados);
+    $matriz= explode("XX",$dados);
     $tam=sizeof($matriz);
     //
     // For inserindo os servicos
@@ -82,7 +82,7 @@ if((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Incluir
 
       if($matriz[$i]!=""){
 
-	$dad = split("-",$matriz[$i]);
+	$dad = explode("-",$matriz[$i]);
 
 	$cleditalserv->d04_contri  = $d02_contri;
 	$cleditalserv->d04_tipos   = $dad[0];

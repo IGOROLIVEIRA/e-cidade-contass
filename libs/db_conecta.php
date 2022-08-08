@@ -26,13 +26,6 @@
  */
 
 $sPath = 'libs/';
-if( file_exists("{$sPath}db_autoload.php") ){
-  require_once("{$sPath}db_autoload.php");
-}else{
-
-  $sPath = '';
-  require_once("{$sPath}db_autoload.php");
-}
 
 if (!isset($_SESSION)) {
   session_start();
@@ -45,7 +38,7 @@ if (!session_is_registered("DB_login") || !session_is_registered("DB_id_usuario"
   exit;
 }
 
-require_once("{$sPath}db_conn.php");
+require_once(modification("{$sPath}db_conn.php"));
 
 if( session_is_registered("DB_servidor") &&
     session_is_registered("DB_base")     &&
@@ -140,7 +133,7 @@ if (isset($_SESSION["DB_instit"])) {
       	 * ano inicial será 2013 caso o arquivo nao exista
       	 * no arquivo config/pcasp.txt.dist  sera renomeado para pcasp.txt e adicionado o ano desejado
       	 */
-      	$iAnoPcasp = 2010;
+      	$iAnoPcasp = 2013;
       	if ( file_exists("config/pcasp.txt") ) {
 
       		$aArquivo  = file("config/pcasp.txt");
@@ -158,14 +151,16 @@ if (isset($_SESSION["DB_instit"])) {
     }
   }
 
-  define("USE_PCASP", $lUsarPcasp);
+  if ( ! defined('USE_PCASP') ) {
+    define("USE_PCASP", $lUsarPcasp);
+  }
   $_SESSION["DB_use_pcasp"] = USE_PCASP ? 't' : 'f';
 }
 
 /**
  * Salva sessao php, variavel $_SESSION, na base de dados
  */
-require_once("{$sPath}db_libsession.php");
+require_once(modification("{$sPath}db_libsession.php"));
 
 db_savesession($conn, $_SESSION);
 
@@ -192,10 +187,7 @@ if (isset($conn)) {
 
 if (db_getsession("DB_id_usuario") != 1 && db_getsession("DB_administrador") != 1){
 
-  $result1 = pg_exec($conn, "select db21_ativo from db_config
-    join db_userinst on db_config.codigo = db_userinst.id_instit
-    join db_usuarios on db_usuarios.id_usuario=db_userinst.id_usuario 
-    where db_usuarios.id_usuario=".db_getsession("DB_id_usuario"))
+  $result1 = pg_exec($conn, "select db21_ativo from db_config where prefeitura = true")
              or die("Erro ao verificar se sistema está liberado! Contate suporte!");
 
   $ativo   = pg_result($result1,0,0);
@@ -208,7 +200,7 @@ if (db_getsession("DB_id_usuario") != 1 && db_getsession("DB_administrador") != 
   }
 }
 
-require_once("{$sPath}db_acessa.php");
+require_once(modification("{$sPath}db_acessa.php"));
 
 if (!defined("DB_VERSION")) {
   define("DB_VERSION", $db_fonte_codrelease);
@@ -229,30 +221,36 @@ define('UTILIZAR_NOVO_CADASTRO_FERIAS', true);
  * da aplicação e o item de menu que está sendo acessado entá na lista de itens bloqueados, caso true, redireciona para
  * o corpo.php
  */
-$aItensMenu = array(1576);
+$aItensMenu = array(1576, 10336);
 
-$sSqlStatActivity = "select application_name
-                       from pg_stat_activity
-                      where application_name ilike 'ecidade_%'
-                        and query not ilike '%application_name%'
-                        and pid <> {$iPidConexao}
-                        and datname = '{$DB_BASE}'";
-$rsStatActivity = db_query($sSqlStatActivity);
-if ($rsStatActivity) {
+if ( isset($_SESSION["DB_itemmenu_acessado"])
+     && in_array($_SESSION["DB_itemmenu_acessado"],$aItensMenu)
+   ) {
 
-  for ($iIndice = 0; $iIndice < pg_num_rows($rsStatActivity); $iIndice++) {
+  $sSqlStatActivity = "select application_name
+                         from pg_stat_activity
+                        where application_name ilike 'ecidade_%'
+                          and query not ilike '%application_name%'
+                          and pid <> {$iPidConexao}
+                          and datname = '{$DB_BASE}'";
+  $rsStatActivity = db_query($sSqlStatActivity);
 
-  	$aDadosApplication = explode('_',pg_result($rsStatActivity, $iIndice, 'application_name'));
-  	$iItemMenu = $aDadosApplication[2];
-  	if ( isset($_SESSION["DB_itemmenu_acessado"])
-  			 && in_array($iItemMenu,$aItensMenu)
-  			 && in_array($_SESSION["DB_itemmenu_acessado"],$aItensMenu) ) {
+  if ($rsStatActivity) {
 
-  		$sMsg  = "A Emissão Geral de IPTU já está em execução em outro acesso.\n";
-  		$sMsg .= "Você está sendo redirecionado para tela de seleção de módulos.";
-  		db_msgbox($sMsg);
-  		db_redireciona('corpo.php');
-  	}
+    for ($iIndice = 0; $iIndice < pg_num_rows($rsStatActivity); $iIndice++) {
+
+    	$aDadosApplication = explode('_',pg_result($rsStatActivity, $iIndice, 'application_name'));
+    	$iItemMenu = $aDadosApplication[2];
+
+    	if ( in_array($iItemMenu,$aItensMenu) ) {
+
+    		$sMsg  = "A Emissão Geral de IPTU já está em execução em outro acesso.\n";
+    		$sMsg .= "Você está sendo redirecionado para tela de seleção de módulos.";
+    		db_msgbox($sMsg);
+    		db_redireciona('corpo.php');
+    	}
+
+    }
 
   }
 

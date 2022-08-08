@@ -159,10 +159,10 @@ if ( isset($alterar) ) {
   ?>
     parent.document.formaba.a2.disabled    = false;
     parent.document.formaba.a2.style.color = "black";
-    top.corpo.iframe_a2.location.href      = 'sau1_cgs_undoutros002.php?chavepesquisa=<?=$z01_i_cgsund?>&db_value=Alterar';
+    CurrentWindow.corpo.iframe_a2.location.href      = 'sau1_cgs_undoutros002.php?chavepesquisa=<?=$z01_i_cgsund?>&db_value=Alterar';
     parent.document.formaba.a3.disabled    = false;
     parent.document.formaba.a3.style.color = "black";
-    top.corpo.iframe_a3.location.href      = 'sau1_cgs_doc002.php?chavepesquisa=<?=$z01_i_cgsund?>&db_value=Alterar';
+    CurrentWindow.corpo.iframe_a3.location.href      = 'sau1_cgs_doc002.php?chavepesquisa=<?=$z01_i_cgsund?>&db_value=Alterar';
   <?php
   }
   ?>
@@ -211,7 +211,7 @@ if ( isset($alterar) ) {
     <script>
       parent.document.formaba.a2.disabled    = false;
       parent.document.formaba.a2.style.color = "black";
-      top.corpo.iframe_a2.location.href      = 'sau1_cgs_undoutros002.php?chavepesquisa=<?=$z01_i_cgsund?>&db_value=Alterar';
+      CurrentWindow.corpo.iframe_a2.location.href      = 'sau1_cgs_undoutros002.php?chavepesquisa=<?=$z01_i_cgsund?>&db_value=Alterar';
       parent.mo_camada('a2');
     </script>
     <?

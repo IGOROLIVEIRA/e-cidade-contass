@@ -141,12 +141,12 @@ $('cboUnidades').size        = 10;
 $('cboUnidades').multiple    = true;
 function js_pesquisa_cgm(mostra){
   if (mostra==true){
-      js_OpenJanelaIframe('top.corpo','db_iframe_pcforne',
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_pcforne',
                           'func_nome.php?funcao_js=parent.js_mostra_cgm1|z01_numcgm|z01_nome','Pesquisa',true);
   }else{
 
     if (txtNumCgm.getValue() != "") {
-    js_OpenJanelaIframe('top.corpo','db_iframe_pcforne',
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_pcforne',
                         'func_nome?pesquisa_chave='+
                         $F('txtNumCgm')+'&funcao_js=parent.js_mostra_cgm','Pesquisa CGM',false);
     } else {

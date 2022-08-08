@@ -149,8 +149,8 @@ if(isset($alterar)){
      echo "
            <script>
               function js_xz(){
-                 top.corpo.iframe_levvalor.document.form1.y60_contato.value='$y60_contato';\n
-                 top.corpo.iframe_levusu.document.form1.y60_contato.value='$y60_contato';\n
+                 CurrentWindow.corpo.iframe_levvalor.document.form1.y60_contato.value='$y60_contato';\n
+                 CurrentWindow.corpo.iframe_levusu.document.form1.y60_contato.value='$y60_contato';\n
 	      }
 	      js_xz();
       </script>
@@ -168,8 +168,8 @@ if(isset($alterar)){
               function js_xy(){
                 parent.document.formaba.levvalor.disabled=false;\n
                 parent.document.formaba.levusu.disabled=false;\n
-		top.corpo.iframe_levvalor.location.href='fis1_levvalor001.php?".$query."y60_contato=$y60_contato&y63_codlev=$y60_codlev';\n
-		top.corpo.iframe_levusu.location.href='fis1_levusu001.php?".$query."y60_contato=$y60_contato&y61_codlev=$y60_codlev';\n";
+		CurrentWindow.corpo.iframe_levvalor.location.href='fis1_levvalor001.php?".$query."y60_contato=$y60_contato&y63_codlev=$y60_codlev';\n
+		CurrentWindow.corpo.iframe_levusu.location.href='fis1_levusu001.php?".$query."y60_contato=$y60_contato&y61_codlev=$y60_codlev';\n";
 		if(empty($alterando) && empty($excluindo)){
                      echo "parent.mo_camada('levvalor');";
 	        }

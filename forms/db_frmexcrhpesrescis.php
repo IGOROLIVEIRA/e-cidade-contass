@@ -193,7 +193,7 @@ $clrotulo->label("rh173_codigo");
 function js_faltas(){
   qry = 'opcao=dadosrescis';
   qry+= '&seqpes='+document.form1.rh02_seqpes.value;
-  js_OpenJanelaIframe('top.corpo','db_iframe_faltas','func_scriptsdb.php?'+qry,'Pesquisa',false);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_faltas','func_scriptsdb.php?'+qry,'Pesquisa',false);
 }
 function js_verificadados(){
   x = document.form1;

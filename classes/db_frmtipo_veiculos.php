@@ -9,7 +9,7 @@ $cltipo_veiculos->rotulo->label();
     <td nowrap title="<?=@$Ttr05_id?>">
        <?=@$Ltr05_id?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('tr05_id',5,$Itr05_id,true,'text',$db_opcao,"")
 ?>
@@ -19,7 +19,7 @@ db_input('tr05_id',5,$Itr05_id,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Ttr05_descr?>">
        <?=@$Ltr05_descr?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('tr05_descr',35,$Itr05_descr,true,'text',$db_opcao,"")
 ?>
@@ -32,7 +32,7 @@ db_input('tr05_descr',35,$Itr05_descr,true,'text',$db_opcao,"")
 </form>
 <script>
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_tipo_veiculos','func_tipo_veiculos.php?funcao_js=parent.js_preenchepesquisa|tr05_id','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_tipo_veiculos','func_tipo_veiculos.php?funcao_js=parent.js_preenchepesquisa|tr05_id','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_tipo_veiculos.hide();

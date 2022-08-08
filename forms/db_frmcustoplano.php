@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: custos
@@ -51,9 +51,9 @@ $clrotulo->label("cc01_estrutural");
          <?
 
 		   $sWhere  = "cc09_anousu = ".db_getsession("DB_anousu");
-		   $sWhere .= " and "; 
+		   $sWhere .= " and ";
 		   $sWhere .= "cc09_instit = ".db_getsession("DB_instit");
-	   
+
 		   $rsConsultaParam = $clparcustos->sql_record($clparcustos->sql_query(null, "cc09_mascaracustoplano", null, $sWhere));
 
 		   if ($clparcustos->numrows > 0) {
@@ -75,12 +75,12 @@ $clrotulo->label("cc01_estrutural");
 		   * MENUS: Procedimentos > Manutenção de parâmetros
            */
      	   } elseif ($clparcustos->numrows == 0) {
-     	   	
+
      	   	db_msgbox("Parâmetros de custos não configurados. Verifique!");
             $db_botao = false;
-            
+
      	   }
-     	   
+
 		 ?>
         </td>
      </tr>
@@ -92,40 +92,40 @@ $clrotulo->label("cc01_estrutural");
          <?
 
         if ( ($db_opcao == 22 or $db_opcao == 2) && ( isset($db_opcao) ) && isset($cc01_sequencial) ) {
-        	
+
 	    /*
 	    * verifica se a conta é analitica, se for sintética o array recebe a ordem do select padrão,
-		* se não for analítica o array recebe o valor de false e bloqueia a aba conforme o tipo de seleção 
+		* se não for analítica o array recebe o valor de false e bloqueia a aba conforme o tipo de seleção
 		* (analítica ou sitética)
         */
    	    $clcustoplanoanalitica->sql_record($clcustoplanoanalitica->sql_query_file(null, "cc04_sequencial", null ,"cc04_custoplano = {$cc01_sequencial}"));
-   	    
+
    	      // se maior que zero indica que é analítica
 	      if ($clcustoplanoanalitica->numrows > 0) {
-     
+
 		    $aAnalitica = array("s"=>"Sim","n"=>"Não");
    	        echo "<script> js_db_libera(true); </script> \n";
 
-   	      // se não conta não é analítica   
+   	      // se não conta não é analítica
           } else {
 
             $aAnalitica = array("n"=>"Não","s"=>"Sim");
 		    echo "<script> js_db_libera(false); </script> \n";
-		   
-          } 
-         
-	      // carrega opções conforme array   
+
+          }
+
+	      // carrega opções conforme array
  		  db_select("analitico", $aAnalitica,"true",$db_opcao,"onchange='js_esconder_campos();'");
 
- 	   // se a conta estiver sendo incluída exibe valores padrões   
-	   } else {	 	
-	   	
+ 	   // se a conta estiver sendo incluída exibe valores padrões
+	   } else {
+
 		  $aAnalitica = array("s"=>"Sim","n"=>"Não");
 		  db_select("analitico", $aAnalitica,"true",$db_opcao,"onchange='js_esconder_campos();'");
 		  echo "<script> js_db_libera(false); </script> \n";
-		  
+
 	   }
-	   
+
 		 ?>
        </td>
      </tr>
@@ -135,12 +135,12 @@ $clrotulo->label("cc01_estrutural");
        </td>
        <td>
           <?
-            // retorna data da sessao formatada   
+            // retorna data da sessao formatada
 	 		$dateSession      = date("Y-m-d",db_getsession('DB_datausu'));
 	 		$sSqlDepartamento = $cldb_depart->sql_query_file(null,"coddepto, descrdepto", null, "limite <= '$dateSession' or limite is null");
 			$rsDepart         = $cldb_depart->sql_record($sSqlDepartamento);
-			
-			
+
+
 			db_selectrecord("coddepto", $rsDepart, true, $db_opcao);
 	      ?>
        </td>
@@ -151,7 +151,7 @@ $clrotulo->label("cc01_estrutural");
        </td>
        <td>
           <?
-              
+
               /*
                * verifica se existe alguma descrição de conta associada a tabela custoplanotipoconta
                * e esconde o campo "ident. da conta" quando a conta for sintética, ou seja, só exibe
@@ -159,11 +159,11 @@ $clrotulo->label("cc01_estrutural");
                */
 
               $rsConsultaCustoTipo = $clcustotipoconta->sql_record($clcustotipoconta->sql_query_file(null, "cc02_sequencial, cc02_descricao"));
-              
+
               if( ( ($db_opcao == 1 or $db_opcao == 11) or ($db_opcao == 2 or $db_opcao == 22) or ($db_opcao == 3 or $db_opcao == 33) ) and ($clcustotipoconta->numrows > 0) ) {
 
-              	if (isset($cc01_sequencial) && $clcustoplanoanalitica->numrows > 0) {              	
-              	
+              	if (isset($cc01_sequencial) && $clcustoplanoanalitica->numrows > 0) {
+
               	  // retorna o campo cc02_sequencial
               	  $sSql  = " select custoplanotipoconta.cc03_custotipoconta                                                                          ";
               	  $sSql .= "   from custoplanotipoconta                                                                                              ";
@@ -177,15 +177,15 @@ $clrotulo->label("cc01_estrutural");
               	}
 
               	db_selectrecord("cc02_sequencial", $rsConsultaCustoTipo, true, $db_opcao);
-              
+
               } else {
-              	
+
                 db_msgbox("É necessário inserir uma identificação para a conta antes de continuar!");
                 $aOpcao = array("valorNulo"=>"");
 		        db_select("ident", $aOpcao, "true", $db_opcao, "onchange='js_esconder_depart();'");
               	$db_botao = false;
               }
-       		    
+
        		   ?>
        </td>
      </tr>
@@ -216,7 +216,7 @@ $clrotulo->label("cc01_estrutural");
         <?=($db_botao==false?"disabled":"")?>
         ><input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();">
         <?
-        if ($db_opcao != 1) { 
+        if ($db_opcao != 1) {
           echo '<input name="novo" type="button" id="novo" value="novo" onclick="parent.location.href=\'cus1_planocustoaba001.php\'">';
         }
         ?>
@@ -226,21 +226,21 @@ $clrotulo->label("cc01_estrutural");
 
         function js_pesquisacc01_instit(mostra){
           if(mostra==true){
-            js_OpenJanelaIframe('top.corpo','db_iframe_db_config','func_db_config.php?funcao_js=parent.js_mostradb_config1|codigo|nomeinst','Pesquisa',true);
+            js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_config','func_db_config.php?funcao_js=parent.js_mostradb_config1|codigo|nomeinst','Pesquisa',true);
           }else{
-             if(document.form1.cc01_instit.value != ''){ 
-                js_OpenJanelaIframe('top.corpo','db_iframe_db_config','func_db_config.php?pesquisa_chave='+document.form1.cc01_instit.value+'&funcao_js=parent.js_mostradb_config','Pesquisa',false);
+             if(document.form1.cc01_instit.value != ''){
+                js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_config','func_db_config.php?pesquisa_chave='+document.form1.cc01_instit.value+'&funcao_js=parent.js_mostradb_config','Pesquisa',false);
              }else{
-               document.form1.nomeinst.value = ''; 
+               document.form1.nomeinst.value = '';
              }
           }
         }
 
         function js_mostradb_config(chave,erro){
-          document.form1.nomeinst.value = chave; 
-          if(erro==true){ 
-            document.form1.cc01_instit.focus(); 
-            document.form1.cc01_instit.value = ''; 
+          document.form1.nomeinst.value = chave;
+          if(erro==true){
+            document.form1.cc01_instit.focus();
+            document.form1.cc01_instit.value = '';
           }
         }
 
@@ -262,25 +262,25 @@ $clrotulo->label("cc01_estrutural");
           }
           ?>
         }
-   
+
 		function js_esconder_campos() {
-			
+
   		  if (document.form1.analitico.value == "s"){
    		    document.getElementById("depart").style.display = "";
-            document.getElementById("ident").style.display  = "";   	   	  
+            document.getElementById("ident").style.display  = "";
   	   	  } else {
   	   	    document.getElementById("ident").style.display  = "none";
    		    document.getElementById("depart").style.display = "none";
             document.form1.coddepto.value = "";
 	      }
 		}
-		
+
 		function js_aba() {
 		  if (document.form1.analitico.value == "s") {
 		    parent.document.formaba.custoanaliticabens.disabled=false;
 		  } else {
-		    parent.document.formaba.custoanaliticabens.disabled=true;	
+		    parent.document.formaba.custoanaliticabens.disabled=true;
 		  }
-		}	
-		
+		}
+
 </script>

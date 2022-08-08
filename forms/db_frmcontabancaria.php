@@ -32,19 +32,9 @@ $cloperacaodecredito->rotulo->label();
 $clrotulo = new rotulocampo;
 
 $clrotulo->label("db89_codagencia");
-$clrotulo->label("op01_numerocontratoopc");
-$ano = db_getsession("DB_anousu"); //ano 
-if(isset($db83_codigoopcredito)){ 
-	if($db83_codigoopcredito>0){
-		$query = "select * from db_operacaodecredito where op01_sequencial = $db83_codigoopcredito";
-		$resultado = db_query($query);
-		$resultado = db_utils::fieldsMemory($resultado, 0);
-		$op01_numerocontratoopc=$resultado->op01_numerocontratoopc;
-		$op01_dataassinaturacop=$resultado->op01_dataassinaturacop;
-	}else{
-		$db83_codigoopcredito = '';
-	}
-}
+$ano = db_getsession("DB_anousu"); //ano
+
+
 ?>
 <script>
 	function js_functionVerificaIdentificador() {
@@ -53,7 +43,7 @@ if(isset($db83_codigoopcredito)){
 
 		if (iIdentificador.length < 11) {
 
-			alert("Campo identificador(CNPJ) invlido.");
+			alert("Campo identificador(CNPJ) inv�lido.");
 			return false;
 		}
 
@@ -64,7 +54,7 @@ if(isset($db83_codigoopcredito)){
 	<center>
 		<fieldset>
 			<legend>
-				<b>Cadastro de Conta Bancria</b>
+				<b>Cadastro de Conta Banc�ria</b>
 			</legend>
 			<table border="0">
 				<tr>
@@ -132,7 +122,7 @@ if(isset($db83_codigoopcredito)){
 						<?
 						db_input('db83_codigoopcredito', 10, 0, true, '', 1, " onchange='js_pesquisaop01_db_operacaodecredito(false);'");
 						db_input('op01_numerocontratoopc', 38, $Iop01_numerocontratoopc, true, 'text', 3);
-						
+
 						$data = explode("-", $op01_dataassinaturacop);
 						$op01_dataassinaturacop_dia = $data[2];
 						$op01_dataassinaturacop_mes = $data[1];
@@ -160,7 +150,7 @@ if(isset($db83_codigoopcredito)){
 					</td>
 					<td>
 						<?php
-						$aContaPlano = array('t' => 'Sim', 'f' => 'No');
+						$aContaPlano = array('t' => 'Sim', 'f' => 'N�o');
 						db_select('db83_contaplano', $aContaPlano, true, $db_opcao, "style='width: 150px;'");
 						?>
 					</td>
@@ -171,18 +161,18 @@ if(isset($db83_codigoopcredito)){
 							?>">
 	      <? //=@$Ldb83_convenio
 			?>
-	    </td> 
+	    </td>
 	    <td>
 				<?
-				//$aConvenio = array('2' => 'No','1' => 'Sim');
+				//$aConvenio = array('2' => 'N�o','1' => 'Sim');
 				//db_select('db83_convenio', $aConvenio, true, $db_opcao,"");
 				?>
 	    </td>
 	  </tr>
     -->
 				<tr>
-					<td nowrap title="Cdigo c206_sequencial">
-						<? db_ancora("Convnio", "js_pesquisadb83_numconvenio(true);", $db_opcao); ?>
+					<td nowrap title="C�digo c206_sequencial">
+						<? db_ancora("Conv�nio", "js_pesquisadb83_numconvenio(true);", $db_opcao); ?>
 					</td>
 					<td>
 						<?
@@ -212,53 +202,53 @@ if(isset($db83_codigoopcredito)){
 						<?
 						if (db_getsession("DB_anousu") < 2018) {
 							$aTipoAplicacao = array(
-								'00' => 'NO INFORMADO',
-								'01' => 'Ttulos do Tesouro Nacional - SELIC - Art. 7, I, "a"',
-								'02' => 'FI 100% ttulos TN - Art. 7, I, "b"',
-								'03' => 'Operaes Compromissadas - Art. 7, II',
-								'04' => 'FI Renda Fixa / Referenciado RF - Art. 7, III',
-								'05' => 'FI de renda fixa - Art. 7, IV',
-								'06' => 'Poupana - Art. 7, V',
-								'07' => 'FI em direitos creditrios - aberto - Art. 7, VI',
-								'08' => 'FI em direitos creditrios - fechado - Art. 7, VII, "a"',
-								'09' => 'FI renda fixa "Crdito Privado" - - Art. 7, VII, "b"',
-								'10' => 'FI Previdencirio em Aes - Art. 8, I, "b"',
-								'11' => 'FI de ndice referenciado em Aes - - Art. 8, II',
-								'12' => 'FI em Aes - - Art. 8, III', '13' => 'FI Multimercado aberto - - Art. 8, IV', '14' => 'FI em participaes fechado - Art. 8 V',
-								'15' => 'FI Imobilirio - cotas negociadas em bolsa - - Art. 8, VI'
+								'00' => 'N�O INFORMADO',
+								'01' => 'T�tulos do Tesouro Nacional - SELIC - Art. 7�, I, "a"',
+								'02' => 'FI 100% t�tulos TN - Art. 7�, I, "b"',
+								'03' => 'Opera��es Compromissadas - Art. 7�, II',
+								'04' => 'FI Renda Fixa / Referenciado RF - Art. 7�, III',
+								'05' => 'FI de renda fixa - Art. 7�, IV',
+								'06' => 'Poupan�a - Art. 7�, V',
+								'07' => 'FI em direitos credit�rios - aberto - Art. 7�, VI',
+								'08' => 'FI em direitos credit�rios - fechado - Art. 7�, VII, "a"',
+								'09' => 'FI renda fixa "Cr�dito Privado" - - Art. 7�, VII, "b"',
+								'10' => 'FI Previdenci�rio em A��es - Art. 8�, I, "b"',
+								'11' => 'FI de �ndice referenciado em A��es - - Art. 8�, II',
+								'12' => 'FI em A��es - - Art. 8�, III', '13' => 'FI Multimercado aberto - - Art. 8�, IV', '14' => 'FI em participa��es fechado - Art. 8� V',
+								'15' => 'FI Imobili�rio - cotas negociadas em bolsa - - Art. 8�, VI'
 							);
 							db_select('db83_tipoaplicacao', $aTipoAplicacao, true, $db_opcao, "");
 						} else {
 							$aTipoAplicacao = array(
-								'00' => 'NO INFORMADO',
-								'16' => 'Ttulos Pblicos de emisso do Tesouro Nacional (SELIC) - Art. 7, I, a',
-								'17' => 'Fundos referenciados 100% Ttulos Pblicos - Art.7, I, b',
-								'18' => 'Fundos de ndices carteira 100% Ttulos Pblicos -Art. 7, I, c',
-								'19' => 'Operaes Compromissadas - Art. 7, II',
-								'20' => 'Fundos Referenciados em indicadores RF - Art. 7,III, a',
-								'21' => 'Fundos de ndices (ETF) em indicadores Ttulos Pblicos - Art. 7, III, b',
-								'22' => 'Fundos de Renda Fixa em geral - Art. 7, IV, a',
-								'23' => 'Fundos de ndices (ETF) - quaisquer indicadores - Art. 7, IV, b',
-								'24' => 'Letra Imobiliria Garantida (LIG) - Art. 7, V, b',
-								'25' => 'Certificado de Depsito Bancrio (CDB) - Art. 7, VI, a',
-								'26' => 'Poupana - Art. 7, VI, b',
-								'27' => 'FIDCs - Cota Snior - Art. 7, VII, a',
-								'28' => 'Fundos de Renda Fixa - Crdito Privado - Art. 7,VII, b',
-								'29' => 'Fundos de Debntures de Infraestrutura - Art. 7,VII, c',
-								'30' => 'Fundo de Aes (ndices c/ no mnimo 50 aes)-Art. 8, I, a',
-								'31' => 'ETF (ndices c/ no mnimo 50 aes) - Art. 8, I, b',
-								'32' => 'Fundo de Aes em geral (com at 20% de ativos) - Art. 8, II, a',
-								'33' => 'ETF (ndices em geral) - Art. 8, II, b',
-								'34' => 'Fundos Multimercado (com at 20% ativos exterior)- Art. 8, III',
-								'35' => 'Fundos de Investimento em Participaes - FIP - Art. 8, IV, a',
-								'36' => "Fundo de Investimento Imobilirio - FII - Art. 8, IV, b",
-								'37' => "Fundos de Investimento classificados como \"Aes - Mercado de Acesso\" - Art. 8, IV, \"c\"",
-								'38' => "Fundos de Investimento classificados como \"Renda Fixa - Dvida Externa\" - Art. 9-A, I",
-								'39' => "Fundos de Investimento - Sufixo Investimento no Exterior - Art. 9-A, II",
-								'40' => "Fundos de Aes BDR Nvel 1 - Art. 9-A, III",
-								'60' => "Aplicaes financeiras da taxa de administrao do RPPS",
-								'61' => "Ttulos e valores em enquadramento",
-								'62' => "Ttulos e valores no sujeitos ao enquadramento"
+								'00' => 'N�O INFORMADO',
+								'16' => 'T�tulos P�blicos de emiss�o do Tesouro Nacional (SELIC) - Art. 7�, I, a',
+								'17' => 'Fundos referenciados 100% T�tulos P�blicos - Art.7�, I, b',
+								'18' => 'Fundos de �ndices carteira 100% T�tulos P�blicos -Art. 7�, I, c',
+								'19' => 'Opera��es Compromissadas - Art. 7�, II',
+								'20' => 'Fundos Referenciados em indicadores RF - Art. 7�,III, a',
+								'21' => 'Fundos de �ndices (ETF) em indicadores T�tulos P�blicos - Art. 7�, III, b',
+								'22' => 'Fundos de Renda Fixa em geral - Art. 7�, IV, a',
+								'23' => 'Fundos de �ndices (ETF) - quaisquer indicadores - Art. 7�, IV, b',
+								'24' => 'Letra Imobili�ria Garantida (LIG) - Art. 7�, V, b',
+								'25' => 'Certificado de Dep�sito Banc�rio (CDB) - Art. 7�, VI, a',
+								'26' => 'Poupan�a - Art. 7�, VI, b',
+								'27' => 'FIDCs - Cota S�nior - Art. 7�, VII, a',
+								'28' => 'Fundos de Renda Fixa - Cr�dito Privado - Art. 7�,VII, b',
+								'29' => 'Fundos de Deb�ntures de Infraestrutura - Art. 7�,VII, c',
+								'30' => 'Fundo de A��es (�ndices c/ no m�nimo 50 a��es)-Art. 8�, I, a',
+								'31' => 'ETF (�ndices c/ no m�nimo 50 a��es) - Art. 8�, I, b',
+								'32' => 'Fundo de A��es em geral (com at� 20% de ativos) - Art. 8�, II, a',
+								'33' => 'ETF (�ndices em geral) - Art. 8�, II, b',
+								'34' => 'Fundos Multimercado (com at� 20% ativos exterior)- Art. 8�, III',
+								'35' => 'Fundos de Investimento em Participa��es - FIP - Art. 8�, IV, a',
+								'36' => "Fundo de Investimento Imobili�rio - FII - Art. 8�, IV, b",
+								'37' => "Fundos de Investimento classificados como \"A��es - Mercado de Acesso\" - Art. 8�, IV, \"c\"",
+								'38' => "Fundos de Investimento classificados como \"Renda Fixa - D�vida Externa\" - Art. 9�-A, I",
+								'39' => "Fundos de Investimento - Sufixo Investimento no Exterior - Art. 9�-A, II",
+								'40' => "Fundos de A��es BDR N�vel 1 - Art. 9�-A, III",
+								'60' => "Aplica��es financeiras da taxa de administra��o do RPPS",
+								'61' => "T�tulos e valores em enquadramento",
+								'62' => "T�tulos e valores n�o sujeitos ao enquadramento"
 							);
 							db_select('db83_tipoaplicacao', $aTipoAplicacao, true, $db_opcao, "");
 						}
@@ -268,7 +258,7 @@ if(isset($db83_codigoopcredito)){
 
 				<tr>
 					<td nowrap title="db83_nroseqaplicacao?>">
-						<b>Nmero sequencial da aplicao</b>
+						<b>N�mero sequencial da aplica��o</b>
 					</td>
 					<td>
 						<?
@@ -304,12 +294,14 @@ if(isset($db83_codigoopcredito)){
 				document.form1.op01_numerocontratoopc.value = '';
 				document.form1.op01_dataassinaturacop.value = '';
 			}
-		}	
+		}
 	}
 	function js_mostrabancoagencia(chave, chave1, erro) {
+
 		document.form1.db89_codagencia.value = chave;
 		document.form1.db89_digito.value = chave1;
 		document.form1.db83_bancoagencia.value = '';
+
 	}
 	function js_mostrabancoagencia1(chave1, chave2, chave3) {
 		document.form1.db83_bancoagencia.value = chave1;
@@ -324,7 +316,7 @@ if(isset($db83_codigoopcredito)){
 		document.form1.op01_dataassinaturacop.value = data[2] + "-" + data[1] + "-" + data[0];
 		db_iframe_db_operacaodecredito.hide();
 	}
-	
+
 	function js_mostraoperacaodecredito(chave,chave1,erro) {
 		document.form1.op01_numerocontratoopc.value = chave;
 		var data = chave1.split("-", 3);

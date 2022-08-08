@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: educação
@@ -35,7 +35,7 @@ $cltransflocal->rotulo->label();
     <td nowrap title="<?=@$Ted131_i_codigo?>">
        <?=@$Led131_i_codigo?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('ed131_i_codigo',20,$Ied131_i_codigo,true,'text',$db_opcao,"")
 ?>
@@ -45,7 +45,7 @@ db_input('ed131_i_codigo',20,$Ied131_i_codigo,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Ted131_i_escola?>">
        <?=@$Led131_i_escola?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('ed131_i_escola',20,$Ied131_i_escola,true,'text',$db_opcao,"")
 ?>
@@ -55,7 +55,7 @@ db_input('ed131_i_escola',20,$Ied131_i_escola,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Ted131_i_alunocurso?>">
        <?=@$Led131_i_alunocurso?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('ed131_i_alunocurso',20,$Ied131_i_alunocurso,true,'text',$db_opcao,"")
 ?>
@@ -65,7 +65,7 @@ db_input('ed131_i_alunocurso',20,$Ied131_i_alunocurso,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Ted131_i_curso?>">
        <?=@$Led131_i_curso?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('ed131_i_curso',20,$Ied131_i_curso,true,'text',$db_opcao,"")
 ?>
@@ -75,7 +75,7 @@ db_input('ed131_i_curso',20,$Ied131_i_curso,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Ted131_i_transfrede?>">
        <?=@$Led131_i_transfrede?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('ed131_i_transfrede',20,$Ied131_i_transfrede,true,'text',$db_opcao,"")
 ?>
@@ -85,7 +85,7 @@ db_input('ed131_i_transfrede',20,$Ied131_i_transfrede,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Ted131_c_situacao?>">
        <?=@$Led131_c_situacao?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('ed131_c_situacao',1,$Ied131_c_situacao,true,'text',$db_opcao,"")
 ?>
@@ -98,7 +98,7 @@ db_input('ed131_c_situacao',1,$Ied131_c_situacao,true,'text',$db_opcao,"")
 </form>
 <script>
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_transflocal','func_transflocal.php?funcao_js=parent.js_preenchepesquisa|ed131_i_codigo','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_transflocal','func_transflocal.php?funcao_js=parent.js_preenchepesquisa|ed131_i_codigo','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_transflocal.hide();

@@ -48,7 +48,7 @@ parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 
 $anousu = db_getsession("DB_anousu");
 
-$xinstit = split("-", $db_selinstit);
+$xinstit = explode("-", $db_selinstit);
 $resultinst = pg_exec("select codigo,nomeinst from db_config where codigo in (".str_replace('-', ', ', $db_selinstit).") ");
 $descr_inst = '';
 $xvirg = '';

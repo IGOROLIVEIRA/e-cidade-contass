@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -84,27 +84,27 @@ if(isset($canc)){
     if($clempagedadosret->numrows>0){
       db_fieldsmemory($result_dadosret,0);
       echo "
-      <tr> 
+      <tr>
 	<td align='left' nowrap title='$Te75_codret'>
       ";
 	  db_ancora(@$Le75_codret,"",3);
-      echo "      
+      echo "
 	</td>
 	<td align='left' nowrap>
       ";
-	  db_input("e75_codret",8,$Ie75_codret,true,"text",3); 
-      echo "      
+	  db_input("e75_codret",8,$Ie75_codret,true,"text",3);
+      echo "
 	</td>
       </tr>
       ";
     }
   }
   ?>
-  <tr> 
+  <tr>
     <td  align="left" nowrap title="<?=$Te87_codgera?>"> <? db_ancora(@$Le87_codgera,"js_pesquisa_gera(true);",1);?>  </td>
     <td align="left" nowrap>
   <?
-   db_input("e87_codgera",8,$Ie87_codgera,true,"text",4,"onchange='js_pesquisa_gera(false);'"); 
+   db_input("e87_codgera",8,$Ie87_codgera,true,"text",4,"onchange='js_pesquisa_gera(false);'");
    db_input("e87_descgera",40,$Ie87_descgera,true,"text",3);
   ?>
     </td>
@@ -113,7 +113,7 @@ if(isset($canc)){
   $db_passapar = "true";
   if(isset($e87_codgera)){
     echo "
-    <tr> 
+    <tr>
       <td  align='left' nowrap title='Conta pagadora'>
     ";
     db_ancora("<strong>Conta pagadora:</strong>","",3);
@@ -124,18 +124,18 @@ if(isset($canc)){
     if($clempagetipo->numrows == 0){
       $db_passapar = "false";
     }
-    
+
     db_selectrecord("e83_codtipo",$result_empagetipo,true,1,"","","","0");
     echo "
       </td>
     </tr>
     ";
   }
-  ?>  
+  ?>
   <tr>
     <td colspan="2" align="center"><br>
       <input name="act" type="button" <?=("onclick='js_geraact($db_passapar);'")?>  value="Mostrar retorno">
-      <input name="pes" type="button" onclick='js_OpenJanelaIframe("top.corpo","db_iframe_empagegera","func_empagegera.php?funcao_js=parent.js_mostragera1|e87_codgera|e87_descgera","Pesquisa",true);'  value="Pesquisar arquivos">
+      <input name="pes" type="button" onclick='js_OpenJanelaIframe("CurrentWindow.corpo","db_iframe_empagegera","func_empagegera.php?funcao_js=parent.js_mostragera1|e87_codgera|e87_descgera","Pesquisa",true);'  value="Pesquisar arquivos">
     </td>
   </tr>
 </table>
@@ -163,21 +163,21 @@ function js_pesquisa_gera(mostra){
     document.form1.e75_codret.value = "";
   }
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_empagegera','func_empagegera.php?funcao_js=parent.js_mostragera1|e87_codgera|e87_descgera','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_empagegera','func_empagegera.php?funcao_js=parent.js_mostragera1|e87_codgera|e87_descgera','Pesquisa',true);
   }else{
-     if(document.form1.e87_codgera.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_empagegera','func_empagegera.php?pesquisa_chave='+document.form1.e87_codgera.value+'&funcao_js=parent.js_mostragera','Pesquisa',false);
+     if(document.form1.e87_codgera.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_empagegera','func_empagegera.php?pesquisa_chave='+document.form1.e87_codgera.value+'&funcao_js=parent.js_mostragera','Pesquisa',false);
      }else{
-       document.form1.e87_descgera.value = ''; 
+       document.form1.e87_descgera.value = '';
      }
   }
 }
 function js_mostragera(chave,erro){
-  if(erro==true){ 
-    document.form1.e87_codgera.focus(); 
-    document.form1.e87_codgera.value = ''; 
+  if(erro==true){
+    document.form1.e87_codgera.focus();
+    document.form1.e87_codgera.value = '';
   }
-  document.form1.e87_descgera.value = chave; 
+  document.form1.e87_descgera.value = chave;
   document.form1.submit();
 }
 function js_mostragera1(chave1,chave2){

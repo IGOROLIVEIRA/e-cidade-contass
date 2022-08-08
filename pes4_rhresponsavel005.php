@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -45,11 +45,11 @@ $db_botao        = false;
 $lSqlErro        = false;
 
 if (isset($oPost->alterar)) {
-  
+
   db_inicio_transacao();
-  
+
   if (!$lSqlErro) {
-    
+
   	$clrhresponsavel->rh107_sequencial = $oPost->rh107_sequencial;
     $clrhresponsavel->rh107_numcgm     = $oPost->rh107_numcgm;
     $clrhresponsavel->rh107_nome       = $oPost->rh107_nome;
@@ -59,22 +59,22 @@ if (isset($oPost->alterar)) {
       $lSqlErro = true;
     }
   }
-  
+
   db_fim_transacao($lSqlErro);
-  
+
   $db_opcao = 2;
   $db_botao = true;
 } else if (isset($oGet->chavepesquisa)) {
-  
+
   $db_opcao             = 2;
   $db_botao             = true;
-  
+
   $sWhereRhResponsavel  = "rhresponsavel.rh107_sequencial = {$oGet->chavepesquisa}";
   $sCamposRhResponsavel = "rh107_sequencial,rh107_numcgm,rh107_nome,z01_numcgm,z01_nome";
   $sSqlRhResponsavel    = $clrhresponsavel->sql_query(null, $sCamposRhResponsavel, null, $sWhereRhResponsavel);
   $rsSqlRhResponsavel   = $clrhresponsavel->sql_record($sSqlRhResponsavel);
   if ($clrhresponsavel->numrows > 0) {
-  	
+
   	$oRhResponsavel   = db_utils::fieldsMemory($rsSqlRhResponsavel, 0);
   	$rh107_sequencial = $oRhResponsavel->rh107_sequencial;
   	$rh107_numcgm     = $oRhResponsavel->rh107_numcgm;
@@ -102,8 +102,8 @@ if (isset($oPost->alterar)) {
   <tr>
     <td>&nbsp;</td>
   </tr>
-  <tr> 
-    <td valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td valign="top" bgcolor="#CCCCCC">
     <center>
       <?
         include("forms/db_frmrhresponsavel.php");
@@ -115,12 +115,12 @@ if (isset($oPost->alterar)) {
 </body>
 <?
 if (isset($oPost->alterar)) {
-  
+
   db_msgbox($sMsgUsuario);
   if ($lSqlErro) {
-    
+
     if ($clrhresponsavel->erro_campo != "") {
-      
+
       echo "<script> document.form1.".$clrhresponsavel->erro_campo.".style.backgroundColor='#99A9AE';</script>";
       echo "<script> document.form1.".$clrhresponsavel->erro_campo.".focus();</script>";
     }
@@ -128,17 +128,17 @@ if (isset($oPost->alterar)) {
 }
 
 if (isset($oGet->chavepesquisa)) {
-	
+
   echo "<script>";
   echo "function js_db_libera() {";
   echo "   parent.document.formaba.rhresponsavel.disabled       = false;";
   echo "   parent.document.formaba.rhresponsavelregist.disabled = false;";
-  echo "   top.corpo.iframe_rhresponsavelregist.location.href   = 'pes4_rhresponsavelregist001.php?rh107_sequencial={$rh107_sequencial}';";
+  echo "   CurrentWindow.corpo.iframe_rhresponsavelregist.location.href   = 'pes4_rhresponsavelregist001.php?rh107_sequencial={$rh107_sequencial}';";
 
   if (isset($oGet->liberaaba)) {
     echo "  parent.mo_camada('rhresponsavelregist');";
   }
-  
+
   echo"}\n";
   echo "js_db_libera();";
   echo "</script>\n";

@@ -639,8 +639,9 @@ if($oRegraEmissao->isCobranca()){
 
 if ($lLiberado) {
   // Nao gera código de barras quando não estiver liberada
-  try {
-     $oConvenio = new convenio($oRegraEmissao->getConvenio(), $numpre, 1, (float)$valorpagamento, $vlrbar, $datavencimento, 6);
+  try {    
+     $vencItbi = (strtotime($oDado->k00_dtvenc) > strtotime($datavencimento)) ? $oDado->k00_dtvenc : $datavencimento;
+     $oConvenio = new convenio($oRegraEmissao->getConvenio(), $numpre, 1, (float)$valorpagamento, $vlrbar, $vencItbi, 6); 
   } catch (Exception $eExeption){
      db_redireciona("db_erros.php?fechar=true&db_erro={$eExeption->getMessage()}");
      exit;
@@ -660,8 +661,8 @@ if ($lLiberado) {
   /// Fim código barras
 }
 
-$areaterrenomat = split('\.',$areatran);
-$areaedificadamat = split('\.',@$areatotal);
+$areaterrenomat = explode('\.',$areatran);
+$areaedificadamat = explode('\.',@$areatotal);
 
 $result = $clitbiruralcaract->sql_record($clitbiruralcaract->sql_query($itbi,"","*","j31_codigo"));
 $linhasitbiruralcaract = $clitbiruralcaract->numrows;

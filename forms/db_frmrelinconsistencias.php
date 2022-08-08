@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: issqn
@@ -33,7 +33,7 @@ $clrotulo->label("k15_codbco");
 $clrotulo->label("k15_codage");
 $clrotulo->label("q49_tipo");
 ?>
-  <form name='form1' enctype="multipart/form-data" method='post'> 
+  <form name='form1' enctype="multipart/form-data" method='post'>
   <center>
   <table>
   <tr><td>
@@ -46,30 +46,30 @@ $clrotulo->label("q49_tipo");
            ?>
            </b>
          </td>
-         <td> 
+         <td>
          <?
             db_input('q17_sequencial',10,$Iq17_sequencial,true,'text',1,"onchange=js_pesquisaq17_sequencial(false)");
-            
+
             db_input('q17_nomearq',60,$Iq17_nomearq,true,'text',3,'');
          ?>
           </td>
           </tr>
           <tr>
            <td nowrap title="<?=@$Tq49_tipo?>"><b>
-          <b>Tipo:</b> 
+          <b>Tipo:</b>
            </b>
          </td>
-         <td> 
+         <td>
          <?
            $array = array(1 => "Inconsistências",2 => "Avisos",3 => "Inconsistências e Avisos");
             db_select("q49_tipo",$array,true,1);
-            
+
          ?>
           </td>
           </tr>
-          </table>   
+          </table>
      </fieldset>
-   </td></tr>  
+   </td></tr>
 </table>
  </form>
   <div id='message'></div>
@@ -80,9 +80,9 @@ $clrotulo->label("q49_tipo");
 <script>
 function js_pesquisaq17_sequencial(mostra){
   if (mostra==true){
-     js_OpenJanelaIframe('top.corpo','db_iframe_issarqsimples','func_issarqsimples.php?semproc=1&funcao_js=parent.js_mostraissarqsimples1|q17_sequencial|q17_nomearq','Arquivos de Retorno',true);
+     js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_issarqsimples','func_issarqsimples.php?semproc=1&funcao_js=parent.js_mostraissarqsimples1|q17_sequencial|q17_nomearq','Arquivos de Retorno',true);
   }else{
-     js_OpenJanelaIframe('top.corpo','db_iframe_issarqsimples','func_issarqsimples.php?semproc=1&pesquisa_chave='+document.form1.q17_sequencial.value+'&funcao_js=parent.js_mostraissarqsimples','Arquivos de Retorno',false);
+     js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_issarqsimples','func_issarqsimples.php?semproc=1&pesquisa_chave='+document.form1.q17_sequencial.value+'&funcao_js=parent.js_mostraissarqsimples','Arquivos de Retorno',false);
   }
 }
 
@@ -105,7 +105,7 @@ function js_mostraissarqsimples(chave,erro){
 }
 
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_issarqsimples','func_issarqsimples.php?funcao_js=parent.js_mostraissarqsimples1|q17_sequencial|q17_nomearq','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_issarqsimples','func_issarqsimples.php?funcao_js=parent.js_mostraissarqsimples1|q17_sequencial|q17_nomearq','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_issarqsimples.hide();

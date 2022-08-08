@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -41,7 +41,7 @@ $oGet  = db_utils::postMemory($_GET);
 <title>Documento sem t&iacute;tulo</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <?php
- 
+
  db_app::load('scripts.js');
  db_app::load('prototype.js');
  db_app::load('estilos.css');
@@ -51,28 +51,28 @@ $oGet  = db_utils::postMemory($_GET);
 <body bgcolor=#CCCCCC bgcolor="#CCCCCC" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="parent.document.getElementById('processando').style.visibility = 'hidden'">
 <center>
 <?php
-  
-  
+
+
   if ( isset($oGet->numcgm) ) {
-    
+
     $sInnerCredito = "inner join arrenumcgm on arrenumcgm.k00_numpre = abatimentorecibo.k127_numprerecibo ";
     $sWhereCredito = "and arrenumcgm.k00_numcgm = ".$oGet->numcgm;
   } else if ( isset($oGet->matric) ) {
-    
+
     $sInnerCredito = "inner join arrematric on arrematric.k00_numpre = abatimentorecibo.k127_numprerecibo ";
     $sWhereCredito = "and arrematric.k00_matric = ".$oGet->matric;
   } else if ( isset($oGet->inscr) ) {
-    
+
     $sInnerCredito = "inner join arreinscr on arreinscr.k00_numpre = abatimentorecibo.k127_numprerecibo ";
     $sWhereCredito = "and arreinscr.k00_inscr = ".$oGet->inscr;
   } else {
-    
+
     $sInnerCredito = "";
     $sWhereCredito = "and abatimentorecibo.k127_numprerecibo = ".$oGet->numpre;
   }
-  
+
   $dDataSistema = date('Y-m-d', db_getsession('DB_datausu'));
-                                                                                                                                                                        
+
   $sSqlCreditosDisponiveis  = " select k125_sequencial,                                                                                                                           \n";
   $sSqlCreditosDisponiveis .= "        recibo.k00_numpre,                                                                                                                         \n";
   $sSqlCreditosDisponiveis .= "        recibo.k00_receit,                                                                                                                         \n";
@@ -86,7 +86,7 @@ $oGet  = db_utils::postMemory($_GET);
   $sSqlCreditosDisponiveis .= "                                     from abatimentoregracompensacao                                                                               \n";
   $sSqlCreditosDisponiveis .= "                                    inner join regracompensacao on k155_sequencial = k156_regracompensacao                                         \n";
   $sSqlCreditosDisponiveis .= "                                   where k156_abatimento = abatimento.k125_sequencial)::integer||' days')::interval) >= '{$dDataSistema}'          \n";
-  $sSqlCreditosDisponiveis .= "           and k125_valordisponivel > 0                                                                                                            \n"; 
+  $sSqlCreditosDisponiveis .= "           and k125_valordisponivel > 0                                                                                                            \n";
   $sSqlCreditosDisponiveis .= "          then 'ATIVO'::varchar                                                                                                                    \n";
   $sSqlCreditosDisponiveis .= "                                                                                                                                                   \n";
   $sSqlCreditosDisponiveis .= "          else 'INATIVO'::varchar                                                                                                                  \n";
@@ -107,12 +107,12 @@ $oGet  = db_utils::postMemory($_GET);
 
   $rsCreditosDisponiveis    = db_query($sSqlCreditosDisponiveis);
   $iLinhasCreditos          = pg_num_rows($rsCreditosDisponiveis);
-  
+
   if ( $iLinhasCreditos > 0 ) {
 
     ?>
     <table border="1" cellspacing="0" cellpadding="3">
-      <tr bgcolor="#FFCC66"> 
+      <tr bgcolor="#FFCC66">
         <th nowrap>MI                  </th>
         <th nowrap>Status              </th>
         <th nowrap>Código              </th>
@@ -126,24 +126,24 @@ $oGet  = db_utils::postMemory($_GET);
         <th nowrap>Valor Disponível    </th>
       </tr>
     <?php
-    
+
     $sCor1   = "#EFE029";
     $sCor2   = "#E4F471";
     $sCorRow = $sCor1;
-    
+
     for ( $iInd=0; $iInd < $iLinhasCreditos; $iInd++ ) {
-      
+
       $oCredito = db_utils::fieldsMemory($rsCreditosDisponiveis,$iInd);
-      
+
       if ($sCorRow == $sCor1) {
         $sCorRow = $sCor2;
-      } else { 
+      } else {
         $sCorRow = $sCor1;
       }
-      
+
     ?>
-      
-      <tr bgcolor="<?php echo $sCorRow; ?>"> 
+
+      <tr bgcolor="<?php echo $sCorRow; ?>">
         <td align="center" nowrap >
           <?php
              db_ancora('MI',"js_consultaOrigemCredito({$oCredito->k125_sequencial})",1,'');
@@ -163,7 +163,7 @@ $oGet  = db_utils::postMemory($_GET);
     <?php
     }
   }
-  
+
   ?>
 </table>
 </center>
@@ -171,9 +171,9 @@ $oGet  = db_utils::postMemory($_GET);
 </html>
 <script>
   function js_consultaOrigemCredito(iAbatimento) {
-    
+
     var sUrl = 'func_origemabatimento.php?iAbatimento='+iAbatimento;
-    js_OpenJanelaIframe('top.corpo','db_iframe_abatimento',sUrl,'Origem Crédito',true);
-    
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_abatimento',sUrl,'Origem Crédito',true);
+
   }
 </script>

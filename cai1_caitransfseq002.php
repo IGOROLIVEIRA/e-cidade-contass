@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -56,12 +56,12 @@ if(isset($incluir)){
 <style type='TEXT/CSS'>
 .btn {
   height:20px;
-}  
+}
 </style>
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-  <tr> 
+  <tr>
     <td width="360" height="18">&nbsp;</td>
     <td width="263">&nbsp;</td>
     <td width="25">&nbsp;</td>
@@ -70,24 +70,24 @@ if(isset($incluir)){
 </table>
 <form name=form1 action="">
 <table height="100%" width="100%" border="1" cellspacing="0" cellpadding="0">
- <tr> 
-   <td height="10%" align="left" valign="top" bgcolor="#CCCCCC">   
+ <tr>
+   <td height="10%" align="left" valign="top" bgcolor="#CCCCCC">
    <table width=100%  height=100% border=1>
      <tr>
        <td colspan=6 align=left><h3>Controle de Transferências/Registro da Obrigação </h3></td>
-     </tr>         
-     
-     <tr> 
+     </tr>
+
+     <tr>
         <td><?=$Lk94_data ?></td>
         <td><? db_inputdata('k94_data',@$k94_data_dia,@$k94_data_mes,@$k94_data_ano,true,'text',$db_opcao);?></td>
         <td><input class=btn type=submit name='pesquisar' value='Pesquisar' ></td>
 	<td> &nbsp; </td>
-     </tr>  
-   </table> 
+     </tr>
+   </table>
    </form>
    </td>
  </tr>
- <tr> 
+ <tr>
  <td height="90%" valign=top>
    <?
     $tipo='';
@@ -97,11 +97,11 @@ if(isset($incluir)){
        $tipo='efetuada';
     } elseif (isset($liberada)){
        $tipo='liberada';
-    }  
+    }
    ?>
    <iframe name=iframe_transf src="cai1_caitransfaut_iframe.php?consulta=<?=$tipo?>" width="100%" height="400" border=2 ></iframe>
  </td>
-</tr> 
+</tr>
 </table>
 
 
@@ -112,7 +112,7 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
 </body>
 <script>
 function js_lanca_transf(){
-   js_OpenJanelaIframe('top.corpo','db_iframe_transfseq','cai1_caitransfseq004.php','Pesquisa',true,'30');
+   js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_transfseq','cai1_caitransfseq004.php','Pesquisa',true,'30');
 
 }
 

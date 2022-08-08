@@ -1,6 +1,6 @@
 <?php
-include_once ("../jpgraph.php");
-include_once ("../jpgraph_bar.php");
+include_once (__DIR__ . "/../jpgraph.php");
+include_once (__DIR__ . "/../jpgraph_bar.php");
 
 $data1y=array(12,8,19,3,10,5);
 $data2y=array(8,2,12,7,14,4);

@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -54,36 +54,36 @@ if(isset($alterar)){
   db_inicio_transacao();
 	$clprocfiscal->y100_coddepto = db_getsession("DB_coddepto");
   $clprocfiscal->alterar($y100_sequencial);
-	$erro_msg = $clprocfiscal->erro_msg; 
+	$erro_msg = $clprocfiscal->erro_msg;
 	if($clprocfiscal->erro_status==0){
     $sqlerro=true;
-  } 
-	
+  }
+
 	// excluir todos par adepois incluir
   $clprocfiscalinscr->excluir(null," y103_procfiscal = $y100_sequencial ");
 	if($clprocfiscalinscr ->erro_status==0){
     $sqlerro=true;
-	  $erro_msg = $clprocfiscalinscr->erro_msg; 
-  } 
-	
+	  $erro_msg = $clprocfiscalinscr->erro_msg;
+  }
+
 	$clprocfiscalmatric->excluir(null," y102_procfiscal = $y100_sequencial ");
 	if($clprocfiscalmatric->erro_status==0){
     $sqlerro=true;
-	  $erro_msg = $clprocfiscalmatric->erro_msg; 
-  } 
-	
+	  $erro_msg = $clprocfiscalmatric->erro_msg;
+  }
+
 	$clprocfiscalsani->excluir(null," y104_procfiscal = $y100_sequencial ");
 	if($clprocfiscalsani->erro_status==0){
     $sqlerro=true;
-	  $erro_msg = $clprocfiscalsani->erro_msg; 
+	  $erro_msg = $clprocfiscalsani->erro_msg;
   }
-	 
+
 	$clprocfiscalcgm->excluir(null," y101_procfiscal = $y100_sequencial ");
 	if($clprocfiscalcgm->erro_status==0){
     $sqlerro=true;
-	  $erro_msg = $clprocfiscalcgm->erro_msg; 
+	  $erro_msg = $clprocfiscalcgm->erro_msg;
   }
-	
+
 	// se tiver inscricao
 	if(isset($q02_inscr) and $q02_inscr!=""){
 		$clprocfiscalinscr->y103_inscr = $q02_inscr;
@@ -91,10 +91,10 @@ if(isset($alterar)){
 		$clprocfiscalinscr->incluir(null);
 		if($clprocfiscalinscr ->erro_status==0){
       $sqlerro=true;
-		  $erro_msg = $clprocfiscalinscr->erro_msg; 
-    } 
+		  $erro_msg = $clprocfiscalinscr->erro_msg;
+    }
 	}
-	
+
 	// se tiver matricula
 	if(isset($j01_matric) and $j01_matric!=""){
 		$clprocfiscalmatric->y102_matric     = $j01_matric;
@@ -102,8 +102,8 @@ if(isset($alterar)){
 		$clprocfiscalmatric->incluir($y100_sequencial);
 		if($clprocfiscalmatric ->erro_status==0){
       $sqlerro=true;
-		  $erro_msg = $clprocfiscalmatric->erro_msg; 
-    } 
+		  $erro_msg = $clprocfiscalmatric->erro_msg;
+    }
 	}
 	// se tiver sanitario
 	if(isset($y80_codsani) and $y80_codsani!=""){
@@ -112,8 +112,8 @@ if(isset($alterar)){
 		$clprocfiscalsani->incluir(null);
 		if($clprocfiscalsani ->erro_status==0){
       $sqlerro=true;
-		  $erro_msg = $clprocfiscalsani->erro_msg; 
-    } 
+		  $erro_msg = $clprocfiscalsani->erro_msg;
+    }
 	}
 	// cgm
   if($z01_numcgm==""){
@@ -125,10 +125,10 @@ if(isset($alterar)){
 	  $clprocfiscalcgm->incluir(null);
 		if($clprocfiscalcgm ->erro_status==0){
       $sqlerro=true;
-		  $erro_msg = $clprocfiscalcgm->erro_msg; 
-    } 
+		  $erro_msg = $clprocfiscalcgm->erro_msg;
+    }
 	}
-	
+
 	// processo protocolo
 	if($p58_codproc==""){
   	$sqlerro=true;
@@ -142,26 +142,26 @@ if(isset($alterar)){
 		$clprocfiscalprot->alterar($y105_sequencial);
 		if($clprocfiscalprot ->erro_status==0){
 	    $sqlerro=true;
-		  $erro_msg = $clprocfiscalprot->erro_msg; 
-	  } 
+		  $erro_msg = $clprocfiscalprot->erro_msg;
+	  }
 	}
-	
-	
+
+
   db_fim_transacao($sqlerro);
    $db_opcao = 2;
    $db_botao = true;
 }else if(isset($chavepesquisa)){
    $db_opcao = 2;
    $db_botao = true;
-   //$result = $clprocfiscal->sql_record($clprocfiscal->sql_query($chavepesquisa)); 
+   //$result = $clprocfiscal->sql_record($clprocfiscal->sql_query($chavepesquisa));
 	 $sql ="
 				  select procfiscal.*,y103_inscr as q02_inscr,y102_matric as j01_matric,
 					       y105_protprocesso as p58_codproc,y104_codsani,
 					       y33_descricao,cgm.z01_nome,cgm.z01_numcgm,c.z01_nome as z01_nome1,
 					       descrdepto
 					from procfiscal
-					inner join db_depart         on db_depart.coddepto               = procfiscal.y100_coddepto 
-					inner join procfiscalcadtipo on procfiscalcadtipo.y33_sequencial = procfiscal.y100_procfiscalcadtipo 
+					inner join db_depart         on db_depart.coddepto               = procfiscal.y100_coddepto
+					inner join procfiscalcadtipo on procfiscalcadtipo.y33_sequencial = procfiscal.y100_procfiscalcadtipo
 					inner join procfiscalcgm     on y101_procfiscal                  = procfiscal.y100_sequencial
 					inner join cgm               on cgm.z01_numcgm                   = y101_numcgm
 					inner join procfiscalprot    on procfiscalprot.y105_procfiscal   = procfiscal.y100_sequencial
@@ -172,8 +172,8 @@ if(isset($alterar)){
 					left  join procfiscalsani    on y104_procfiscal                  = procfiscal.y100_sequencial
 					where procfiscal.y100_sequencial = $chavepesquisa";
 	 $result = pg_query($sql);
-	 
-	 
+
+
    db_fieldsmemory($result,0);
 }
 ?>
@@ -187,8 +187,8 @@ if(isset($alterar)){
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
 	<?
 	include("forms/db_frmprocfiscal.php");
@@ -216,7 +216,7 @@ if(isset($chavepesquisa)){
   <script>
       function js_db_libera(){
          parent.document.formaba.procfiscalfiscais.disabled=false;
-         top.corpo.iframe_procfiscalfiscais.location.href='fis1_procfiscalfiscais001.php?y106_procfiscal=".@$y100_sequencial."';
+         CurrentWindow.corpo.iframe_procfiscalfiscais.location.href='fis1_procfiscalfiscais001.php?y106_procfiscal=".@$y100_sequencial."';
      ";
          if(isset($liberaaba)){
            echo "  parent.mo_camada('procfiscalfiscais');";

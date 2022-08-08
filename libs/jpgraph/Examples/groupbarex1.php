@@ -1,7 +1,7 @@
 <?php
 // $Id: groupbarex1.php,v 1.1 2006/03/20 11:56:44 dbrogerio Exp $
-include ("../jpgraph.php");
-include ("../jpgraph_bar.php");
+include (__DIR__ . "/../jpgraph.php");
+include (__DIR__ . "/../jpgraph_bar.php");
 
 $datay1=array(35,160,0,0,0,0);
 $datay2=array(35,190,190,190,190,190);

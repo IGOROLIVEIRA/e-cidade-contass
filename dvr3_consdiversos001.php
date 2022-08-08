@@ -119,14 +119,14 @@ $clrotulo->label("dv09_procdiver");
                 </td>
             </tr>
             <tr>
-                <td nowrap title="À partir de qual data">
+                <td nowrap title="ï¿½ partir de qual data">
                     Data inicial
                 </td>
                 <td>
                     <?php
                     db_inputdata('dataini', "", "", "", true, 'text', 1)
                     ?>
-                    <b>até</b>
+                    <b>atï¿½</b>
                     <?php
                     db_inputdata('datafim', "", "", "", true, 'text', 1)
                     ?>

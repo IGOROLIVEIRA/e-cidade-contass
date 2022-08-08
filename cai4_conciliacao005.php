@@ -18,27 +18,27 @@ if(isset($alterar)){
   db_inicio_transacao();
   $db_opcao = 2;
   $abre_pesquisa=false;
-  
+
   if($tipopendencia=="true"){
-  			$cltipopendencia->alterar($k202_sequencial); 
+  			$cltipopendencia->alterar($k202_sequencial);
   }else{
-	 	 	$clconciliacao->alterar($k199_sequencial);		
+	 	 	$clconciliacao->alterar($k199_sequencial);
 	   }
-  
+
   if ($clconciliacao->erro_status == '0') {
-	 
+
   	}
   	else if($tipopendencia!="true"){
-		  echo "<script>top.corpo.iframe_db_insertconciliacao.location.href='cai4_carregaconciliacaomanu007.php?k199_codconta=+{$clconciliacao->k199_codconta}+&db83_descricao=+{$db83_descricao}+&k199_periodoini=+{$k199_periodoini}+&k199_periodofinal=+{$k199_periodofinal}+&k199_saldofinalextrato=+{$clconciliacao->k199_saldofinalextrato}+&k199_sequencial=+{$clconciliacao->k199_sequencial}+&alterou=true';</script>";
+		  echo "<script>CurrentWindow.corpo.iframe_db_insertconciliacao.location.href='cai4_carregaconciliacaomanu007.php?k199_codconta=+{$clconciliacao->k199_codconta}+&db83_descricao=+{$db83_descricao}+&k199_periodoini=+{$k199_periodoini}+&k199_periodofinal=+{$k199_periodofinal}+&k199_saldofinalextrato=+{$clconciliacao->k199_saldofinalextrato}+&k199_sequencial=+{$clconciliacao->k199_sequencial}+&alterou=true';</script>";
   		 db_fim_transacao();
-  	} //testefalsevamosfalse 
+  	} //testefalsevamosfalse
 }else if(isset($chavepesquisa)){
    $db_opcao = 2;
    $abre_pesquisa=false;
       if($tipopendencia=="true"){ echo $k202_data;
-	   $result = $cltipopendencia->sql_record($cltipopendencia->sql_query($chavepesquisa));   
+	   $result = $cltipopendencia->sql_record($cltipopendencia->sql_query($chavepesquisa));
 	  }else{
-	  	$result = $clconciliacao->sql_record($clconciliacao->sql_query($chavepesquisa)); 
+	  	$result = $clconciliacao->sql_record($clconciliacao->sql_query($chavepesquisa));
 	  }
    db_fieldsmemory($result,0);
    $db_botao = true;
@@ -53,7 +53,7 @@ if(isset($alterar)){
 <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
- 
+
     <center>
 	<?
 	include("forms/db_frmconciliacao.php");
@@ -74,7 +74,7 @@ if(isset($alterar)){
     if($clconciliacao->erro_campo!="" ||  $cltipopendencia->erro_campo!=""){
       echo "<script> document.form1.".$clconciliacao->erro_campo.".style.backgroundColor='#99A9AE';</script>";
       echo "<script> document.form1.".$clconciliacao->erro_campo.".focus();</script>";
-      
+
       echo "<script> document.form1.".$cltipopendencia->erro_campo.".style.backgroundColor='#99A9AE';</script>";
       echo "<script> document.form1.".$cltipopendencia->erro_campo.".focus();</script>";
     }

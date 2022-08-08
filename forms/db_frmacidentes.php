@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: Trânsito
@@ -40,7 +40,7 @@ $clrotulo->label("tr01_descr");
  	   $db_action="tra1_acidentes005.php";
       }else if($db_opcao==3||$db_opcao==33){
  	   $db_action="tra1_acidentes006.php";
-      }  
+      }
 ?>
 
 <form name="form1" method="post" action="">
@@ -50,7 +50,7 @@ $clrotulo->label("tr01_descr");
     <td nowrap title="<?=@$Ttr07_id?>">
        <?=@$Ltr07_id?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('tr07_id',5,$Itr07_id,true,'text',3,"")
 ?>
@@ -62,7 +62,7 @@ db_input('tr07_id',5,$Itr07_id,true,'text',3,"")
        db_ancora(@$Ltr07_tipoacid,"js_pesquisatr07_tipoacid(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('tr07_tipoacid',5,$Itr07_tipoacid,true,'text',$db_opcao," onchange='js_pesquisatr07_tipoacid(false);'")
 ?>
@@ -92,7 +92,7 @@ db_input('tr03_descr',35,$Itr03_descr,true,'text',3,'')
        db_ancora(@$Ltr07_idtempo,"js_pesquisatr07_idtempo(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('tr07_idtempo',5,$Itr07_idtempo,true,'text',$db_opcao," onchange='js_pesquisatr07_idtempo(false);'")
 ?>
@@ -127,7 +127,7 @@ db_inputdata('tr07_data',@$tr07_data_dia,@$tr07_data_mes,@$tr07_data_ano,true,'t
        db_ancora(@$Ltr07_local1,"js_pesquisatr07_local1(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('tr07_local1',5,$Itr07_local1,true,'text',$db_opcao," onchange='js_pesquisatr07_local1(false);'")
 ?>
@@ -141,7 +141,7 @@ db_input('j14_nome',40,$Ij14_nome,true,'text',3,'')
     <td nowrap title="<?=@$Ttr07_local2?>">
        <a id="func2"><?=@$Ltr07_local2?></a>
     </td>
-    <td> 
+    <td>
 <input name="tr07_local2" size="5" type='text' id='tr07_local2'
        onKeyUp="js_ValidaCampos(this,1,'Local do Acidente','f','f',event);"
        onKeyDown="return js_controla_tecla_enter(this,event);" value="<?=@$tr07_local2;?>">
@@ -187,9 +187,9 @@ db_input('j13_descr',40,$Ij13_descr,true,'text',3,'')
 <script>
 function js_pesquisatr07_tipoacid(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_acidente','db_iframe_tipo_acidentes','func_tipo_acidentes.php?funcao_js=parent.js_mostratipo_acidentes1|tr01_id|tr01_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_acidente','db_iframe_tipo_acidentes','func_tipo_acidentes.php?funcao_js=parent.js_mostratipo_acidentes1|tr01_id|tr01_descr','Pesquisa',true);
   }else{
-    js_OpenJanelaIframe('top.corpo.iframe_acidente','db_iframe_tipo_acidentes','func_tipo_acidentes.php?pesquisa_chave='+document.form1.tr07_tipoacid.value+'&funcao_js=parent.js_mostratipo_acidentes','Pesquisa',false);
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_acidente','db_iframe_tipo_acidentes','func_tipo_acidentes.php?pesquisa_chave='+document.form1.tr07_tipoacid.value+'&funcao_js=parent.js_mostratipo_acidentes','Pesquisa',false);
   }
 }
 function js_mostratipo_acidentes(chave,erro){
@@ -206,16 +206,16 @@ function js_mostratipo_acidentes1(chave1,chave2){
 }
 function js_pesquisatr07_idtempo(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_acidente','db_iframe_tipo_tempo','func_tipo_tempo.php?funcao_js=parent.js_mostratipo_tempo1|tr04_id|tr04_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_acidente','db_iframe_tipo_tempo','func_tipo_tempo.php?funcao_js=parent.js_mostratipo_tempo1|tr04_id|tr04_descr','Pesquisa',true);
   }else{
-    js_OpenJanelaIframe('top.corpo.iframe_acidente','db_iframe_tipo_tempo','func_tipo_tempo.php?pesquisa_chave='+document.form1.tr07_idtempo.value+'&funcao_js=parent.js_mostratipo_tempo','Pesquisa',false);
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_acidente','db_iframe_tipo_tempo','func_tipo_tempo.php?pesquisa_chave='+document.form1.tr07_idtempo.value+'&funcao_js=parent.js_mostratipo_tempo','Pesquisa',false);
   }
 }
 function js_mostratipo_tempo(chave,erro){
-  document.form1.tr04_descr.value = chave; 
-  if(erro==true){ 
-    document.form1.tr07_idtempo.focus(); 
-    document.form1.tr07_idtempo.value = ''; 
+  document.form1.tr04_descr.value = chave;
+  if(erro==true){
+    document.form1.tr07_idtempo.focus();
+    document.form1.tr07_idtempo.value = '';
   }
 }
 function js_mostratipo_tempo1(chave1,chave2){
@@ -225,9 +225,9 @@ function js_mostratipo_tempo1(chave1,chave2){
 }
 function js_pesquisatr07_idpista(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_acidente','db_iframe_tipo_pista','func_tipo_pista.php?funcao_js=parent.js_mostratipo_pista1|tr03_id|tr03_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_acidente','db_iframe_tipo_pista','func_tipo_pista.php?funcao_js=parent.js_mostratipo_pista1|tr03_id|tr03_descr','Pesquisa',true);
   }else{
-    js_OpenJanelaIframe('top.corpo.iframe_acidente','db_iframe_tipo_pista','func_tipo_pista.php?pesquisa_chave='+document.form1.tr07_idpista.value+'&funcao_js=parent.js_mostratipo_pista','Pesquisa',false);
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_acidente','db_iframe_tipo_pista','func_tipo_pista.php?pesquisa_chave='+document.form1.tr07_idpista.value+'&funcao_js=parent.js_mostratipo_pista','Pesquisa',false);
   }
 }
 function js_mostratipo_pista(chave,erro){
@@ -244,21 +244,21 @@ function js_mostratipo_pista1(chave1,chave2){
 }
 function js_pesquisatr07_local1(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_acidente','db_iframe_ruas','func_ruas.php?funcao_js=parent.js_mostraruas1|j14_codigo|j14_nome&rural=1','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_acidente','db_iframe_ruas','func_ruas.php?funcao_js=parent.js_mostraruas1|j14_codigo|j14_nome&rural=1','Pesquisa',true);
   }else{
-    js_OpenJanelaIframe('top.corpo.iframe_acidente','db_iframe_ruas','func_ruas.php?pesquisa_chave='+document.form1.tr07_local1.value+'&funcao_js=parent.js_mostraruas&rural=1','Pesquisa',false);
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_acidente','db_iframe_ruas','func_ruas.php?pesquisa_chave='+document.form1.tr07_local1.value+'&funcao_js=parent.js_mostraruas&rural=1','Pesquisa',false);
   }
 }
 function js_pesquisatr07_local2(mostra){
   if(mostra==false){
-  js_OpenJanelaIframe('top.corpo.iframe_acidente','db_iframe_ruas','func_ruas.php?pesquisa_chave='+document.form1.tr07locdescr.value+'&funcao_js=parent.js_mostraruas&rural=1','Pesquisa',false);
+  js_OpenJanelaIframe('CurrentWindow.corpo.iframe_acidente','db_iframe_ruas','func_ruas.php?pesquisa_chave='+document.form1.tr07locdescr.value+'&funcao_js=parent.js_mostraruas&rural=1','Pesquisa',false);
 
   }else{
-    js_OpenJanelaIframe('top.corpo.iframe_acidente','db_iframe_ruas','func_ruas.php?funcao_js=parent.js_mostraruas3|j14_codigo|j14_nome&rural=1','Pesquisa',true)
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_acidente','db_iframe_ruas','func_ruas.php?funcao_js=parent.js_mostraruas3|j14_codigo|j14_nome&rural=1','Pesquisa',true)
   }
 }
 function js_pesquisatr07_local45(){
-   js_OpenJanelaIframe('top.corpo.iframe_acidente','db_iframe_ruas','func_ruas.php?pesquisa_chave='+document.form1.tr07_local2.value+'&funcao_js=parent.js_mostraruas2&rural=1','Pesquisa',false);
+   js_OpenJanelaIframe('CurrentWindow.corpo.iframe_acidente','db_iframe_ruas','func_ruas.php?pesquisa_chave='+document.form1.tr07_local2.value+'&funcao_js=parent.js_mostraruas2&rural=1','Pesquisa',false);
 }
 function js_mostraruas(chave,erro){
   document.form1.j14_nome.value = chave;
@@ -286,16 +286,16 @@ function js_mostraruas3(chave1,chave2){
 }
 function js_pesquisatr07_idcausa(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_acidente','db_iframe_causas','func_causas.php?funcao_js=parent.js_mostracausas1|tr02_id|tr02_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_acidente','db_iframe_causas','func_causas.php?funcao_js=parent.js_mostracausas1|tr02_id|tr02_descr','Pesquisa',true);
   }else{
-    js_OpenJanelaIframe('top.corpo.iframe_acidente','db_iframe_causas','func_causas.php?pesquisa_chave='+document.form1.tr07_idcausa.value+'&funcao_js=parent.js_mostracausas','Pesquisa',false);
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_acidente','db_iframe_causas','func_causas.php?pesquisa_chave='+document.form1.tr07_idcausa.value+'&funcao_js=parent.js_mostracausas','Pesquisa',false);
   }
 }
 function js_mostracausas(chave,erro){
-  document.form1.tr02_descr.value = chave; 
-  if(erro==true){ 
-    document.form1.tr07_idcausa.focus(); 
-    document.form1.tr07_idcausa.value = ''; 
+  document.form1.tr02_descr.value = chave;
+  if(erro==true){
+    document.form1.tr07_idcausa.focus();
+    document.form1.tr07_idcausa.value = '';
   }
 }
 function js_mostracausas1(chave1,chave2){
@@ -305,16 +305,16 @@ function js_mostracausas1(chave1,chave2){
 }
 function js_pesquisatr07_idbairro(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_acidente','db_iframe_bairro','func_bairro.php?funcao_js=parent.js_mostrabairro1|j13_codi|j13_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_acidente','db_iframe_bairro','func_bairro.php?funcao_js=parent.js_mostrabairro1|j13_codi|j13_descr','Pesquisa',true);
   }else{
-    js_OpenJanelaIframe('top.corpo.iframe_acidente','db_iframe_bairro','func_bairro.php?pesquisa_chave='+document.form1.tr07_idbairro.value+'&funcao_js=parent.js_mostrabairro','Pesquisa',false);
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_acidente','db_iframe_bairro','func_bairro.php?pesquisa_chave='+document.form1.tr07_idbairro.value+'&funcao_js=parent.js_mostrabairro','Pesquisa',false);
   }
 }
 function js_mostrabairro(chave,erro){
-  document.form1.j13_descr.value = chave; 
-  if(erro==true){ 
-    document.form1.tr07_idbairro.focus(); 
-    document.form1.tr07_idbairro.value = ''; 
+  document.form1.j13_descr.value = chave;
+  if(erro==true){
+    document.form1.tr07_idbairro.focus();
+    document.form1.tr07_idbairro.value = '';
   }
 }
 function js_mostrabairro1(chave1,chave2){
@@ -323,7 +323,7 @@ function js_mostrabairro1(chave1,chave2){
   db_iframe_bairro.hide();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo.iframe_acidente','db_iframe_acidentes','func_acidentes.php?funcao_js=parent.js_preenchepesquisa|tr07_id','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo.iframe_acidente','db_iframe_acidentes','func_acidentes.php?funcao_js=parent.js_preenchepesquisa|tr07_id','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_acidentes.hide();

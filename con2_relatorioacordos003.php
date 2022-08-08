@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -71,7 +71,7 @@ $sDepartamento = $oDepartamento->getNomeDepartamento();
 
 $oDaoAcordoClassificacao = new cl_acordoclassificacao();
 $sSqlClassificacoes = $oDaoAcordoClassificacao->sql_query_file();
-$rsClassificacoes = $oDaoAcordoClassificacao->sql_record($sSqlClassificacoes); 
+$rsClassificacoes = $oDaoAcordoClassificacao->sql_record($sSqlClassificacoes);
 $aClassificacoes = array();
 
 if ($oDaoAcordoClassificacao->numrows > 0) {
@@ -90,7 +90,7 @@ if ($oDaoAcordoClassificacao->numrows > 0) {
 <style>
  .fora {background-color: #d1f07c;}
   #ac46_sequencial{
-    width: 100%; 
+    width: 100%;
  }
 </style>
 </head>
@@ -116,7 +116,7 @@ if ($oDaoAcordoClassificacao->numrows > 0) {
               <td nowrap title="<?php echo $Tac16_sequencial; ?>" width="130">
                  <?php db_ancora($Lac16_sequencial,"js_acordo(true);",1); ?>
               </td>
-              <td colspan="3">  
+              <td colspan="3">
                 <?php
                   db_input('ac16_sequencial', 10, $Iac16_sequencial, true, 'text', 1, "onchange='js_acordo(false);'");
                   db_input('ac16_resumoobjeto', 40, $Iac16_resumoobjeto, true, 'text', 3);
@@ -125,18 +125,18 @@ if ($oDaoAcordoClassificacao->numrows > 0) {
             </tr>
             <tr>
               <td nowrap title="" width="130">
-                 <?php 
+                 <?php
                   db_ancora("<b>Comissão:</b>","js_pesquisaAcordoComissao(true);",1);
                  ?>
               </td>
-              <td colspan="3">  
+              <td colspan="3">
                 <?php
                   db_input('ac08_sequencial', 10, $Iac08_sequencial, true, 'text', 1, "onchange='js_pesquisaAcordoComissao(false);'");
                   db_input('ac08_descricao', 40, $Iac08_descricao, true, 'text', 3);
                 ?>
               </td>
-            </tr>      
-            
+            </tr>
+
 		        <tr>
 		          <td nowrap title="<?=@$Tac50_descricao?>">
 		            <?php
@@ -151,7 +151,7 @@ if ($oDaoAcordoClassificacao->numrows > 0) {
 		            ?>
 		          </td>
 		        </tr>
-            
+
 		        <tr>
 		          <td nowrap title="<?php echo $Tac46_sequencial; ?>">
                 <strong>Classificação:</strong>
@@ -160,7 +160,7 @@ if ($oDaoAcordoClassificacao->numrows > 0) {
 		            <?php db_select('ac46_sequencial', $aClassificacoes, true, 1); ?>
 		          </td>
 		        </tr>
-                  
+
             <tr>
               <td align="left" title="<?php echo @$Tac16_datainicio?>">
                 <?=@$Lac16_datainicio?>
@@ -185,7 +185,7 @@ if ($oDaoAcordoClassificacao->numrows > 0) {
               <td nowrap title="" width="130">
                  <b>Situação:</b>
               </td>
-              <td colspan="3">  
+              <td colspan="3">
                 <?php
                   $aSituacao    = array();
                   $aSituacao[0] = "Todas";
@@ -193,22 +193,22 @@ if ($oDaoAcordoClassificacao->numrows > 0) {
                   $sSql  = $oDaoAcordoSituacao->sql_query_file(null, "ac17_sequencial,ac17_descricao", null, '');
                   $rsSql = $oDaoAcordoSituacao->sql_record($sSql);
                   if ($rsSql !== false) {
-                                  
+
                     for ($iInd = 0; $iInd < $oDaoAcordoSituacao->numrows; $iInd++) {
-                    
+
                       $chave             = db_utils::fieldsMemory($rsSql,$iInd)->ac17_sequencial;
-                      $aSituacao[$chave] = db_utils::fieldsMemory($rsSql,$iInd)->ac17_descricao; 
+                      $aSituacao[$chave] = db_utils::fieldsMemory($rsSql,$iInd)->ac17_descricao;
                     }
                   }
-                  db_select('ac16_acordosituacao', $aSituacao, true, 1, "style='width: 100%;'");              
+                  db_select('ac16_acordosituacao', $aSituacao, true, 1, "style='width: 100%;'");
                 ?>
               </td>
-            </tr> 
+            </tr>
             <tr>
               <td nowrap title="" width="130">
                  <b>Origem:</b>
               </td>
-              <td colspan="3">  
+              <td colspan="3">
                 <?php
                   $aOrigem    = array();
                   $aOrigem[0] = "Todas";
@@ -216,22 +216,22 @@ if ($oDaoAcordoClassificacao->numrows > 0) {
                   $sSql  = $oDaoAcordoOrigem->sql_query_file(null, "ac28_sequencial,ac28_descricao", null, '');
                   $rsSql = $oDaoAcordoOrigem->sql_record($sSql);
                   if ($rsSql !== false) {
-                                  
+
                     for ($iInd = 0; $iInd < $oDaoAcordoOrigem->numrows; $iInd++) {
-                    
+
                       $chave           = db_utils::fieldsMemory($rsSql,$iInd)->ac28_sequencial;
-                      $aOrigem[$chave] = db_utils::fieldsMemory($rsSql,$iInd)->ac28_descricao; 
+                      $aOrigem[$chave] = db_utils::fieldsMemory($rsSql,$iInd)->ac28_descricao;
                     }
                   }
-                  db_select('ac16_origem', $aOrigem, true, 1, "style='width: 100%;'");              
+                  db_select('ac16_origem', $aOrigem, true, 1, "style='width: 100%;'");
                 ?>
               </td>
-            </tr> 
+            </tr>
             <tr>
               <td nowrap title="" width="130">
                  <b>Tipo de Acordo:</b>
               </td>
-              <td colspan="3">  
+              <td colspan="3">
                 <?PHP
                   $aTipoAcordo    = array();
                   $aTipoAcordo[0] = "Todos";
@@ -239,14 +239,14 @@ if ($oDaoAcordoClassificacao->numrows > 0) {
                   $sSql  = $oDaoAcordoTipo->sql_query_file(null, "ac04_sequencial,ac04_descricao", null, '');
                   $rsSql = $oDaoAcordoTipo->sql_record($sSql);
                   if ($rsSql !== false) {
-                                  
+
                     for ($iInd = 0; $iInd < $oDaoAcordoTipo->numrows; $iInd++) {
-                    
+
                       $chave               = db_utils::fieldsMemory($rsSql,$iInd)->ac04_sequencial;
-                      $aTipoAcordo[$chave] = db_utils::fieldsMemory($rsSql,$iInd)->ac04_descricao; 
+                      $aTipoAcordo[$chave] = db_utils::fieldsMemory($rsSql,$iInd)->ac04_descricao;
                     }
                   }
-                  db_select('acordotipo', $aTipoAcordo, true, 1, "style='width: 100%;'");              
+                  db_select('acordotipo', $aTipoAcordo, true, 1, "style='width: 100%;'");
                 ?>
               </td>
             </tr>
@@ -254,58 +254,58 @@ if ($oDaoAcordoClassificacao->numrows > 0) {
               <td nowrap title="" width="100">
                  <b>Listar Itens:</b>
               </td>
-              <td colspan="3">  
+              <td colspan="3">
                 <?php
                   $aListarItens = array('N'=>'Não',
                                         'S'=>'Sim');
-                  db_select('listaitens', $aListarItens, true, 1, "style='width: 100%;'");              
+                  db_select('listaitens', $aListarItens, true, 1, "style='width: 100%;'");
                 ?>
               </td>
-            </tr>    
+            </tr>
             <tr>
               <td nowrap title="" width="100">
                  <b>Listar Movimentação:</b>
               </td>
-              <td colspan="3">  
+              <td colspan="3">
                 <?php
                   $aListarMovimentacao = array('N'=>'Não',
                                                'S'=>'Sim');
-                  db_select('listamovimentacao', $aListarMovimentacao, true, 1, "style='width: 100%;'");              
+                  db_select('listamovimentacao', $aListarMovimentacao, true, 1, "style='width: 100%;'");
                 ?>
               </td>
-            </tr> 
+            </tr>
             <tr>
               <td nowrap title="" width="100">
                  <b>Listar Empenho:</b>
               </td>
-              <td colspan="3">  
+              <td colspan="3">
                 <?php
                   $aListarEmpenho = array('N'=>'Não',
                                           'S'=>'Sim');
-                  db_select('listaautorizacao', $aListarEmpenho, true, 1, "style='width: 100%;'");              
+                  db_select('listaautorizacao', $aListarEmpenho, true, 1, "style='width: 100%;'");
                 ?>
               </td>
-            </tr> 
+            </tr>
             <tr>
               <td nowrap title="" width="100">
                  <b>Ordem:</b>
               </td>
-              <td colspan="3">  
+              <td colspan="3">
                 <?
                   $aOrdem = array(1=>'Data da Criação',
                                   2=>'Contratado',
                                   3=>'Número do Contrato',
                                   4=>'Vigência');
-                  db_select('ordem', $aOrdem, true, 1, "style='width: 100%;'");              
+                  db_select('ordem', $aOrdem, true, 1, "style='width: 100%;'");
                 ?>
               </td>
-            </tr> 
-            
+            </tr>
+
           </table>
-          
+
           <input type='hidden' id='sListaDepto' name='sListaDepto' />
 					<div id='ctnLancador'></div>
-					      
+
           </fieldset>
         </td>
       </tr>
@@ -326,9 +326,9 @@ function js_listaDepartamentos() {
 	var oLista  = oLancadorDepartamentos.getRegistros();
   var sLista  = '';
   var sSepara = '';
-  
-	oLista.each( 
-              function (oDado, iInd) {       
+
+	oLista.each(
+              function (oDado, iInd) {
 
                 sLista +=  sSepara + oDado.sCodigo;
                 sSepara = ", ";
@@ -336,8 +336,8 @@ function js_listaDepartamentos() {
 $('sListaDepto').value = sLista;
 }
 
-                
-                
+
+
 function js_criaLancador(){
 
 	oLancadorDepartamentos = new DBLancador("oLancadorDepartamentos");
@@ -348,19 +348,19 @@ function js_criaLancador(){
 
 	$('txtCodigooLancadorDepartamentos').value = <?php echo $iDepartamento?>;
 	$('txtDescricaooLancadorDepartamentos').value = '<?php echo $sDepartamento?>';
-	
+
 	oLancadorDepartamentos.lancarRegistro();
 
 	$('txtCodigooLancadorDepartamentos').value = "";
 	$('txtDescricaooLancadorDepartamentos').value = '';
-	
+
 }
 
 function js_pesquisaac50_descricao(mostra) {
 
 	  if (mostra == true) {
 
-	    js_OpenJanelaIframe('top.corpo.iframe_acordo',
+	    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_acordo',
 	                        'db_iframe_acordocategoria',
 	                        'func_acordocategoria.php?funcao_js=parent.js_mostraacordocategoria1|'+
 	                        'ac50_sequencial|ac50_descricao',
@@ -371,7 +371,7 @@ function js_pesquisaac50_descricao(mostra) {
 
 	    if ($('ac50_sequencial').value != '') {
 
-	      js_OpenJanelaIframe('top.corpo.iframe_acordo',
+	      js_OpenJanelaIframe('CurrentWindow.corpo.iframe_acordo',
 	                          'db_iframe_acordocategoria',
 	                          'func_acordocategoria.php?pesquisa_chave='+$F('ac50_sequencial')+
 	                          '&funcao_js=parent.js_mostraacordocategoria',
@@ -403,21 +403,21 @@ function js_pesquisaac50_descricao(mostra) {
 
 
 
-                
+
 function js_acordo(mostra){
-	
+
   if (mostra == true){
     js_OpenJanelaIframe('','db_iframe_acordo',
                         'func_acordo.php?lDepartamento=1&funcao_js=parent.js_mostraAcordo1|ac16_sequencial|ac16_resumoobjeto',
                         'Pesquisa',true,0);
   }else{
-     if($F('ac16_sequencial').trim() != ''){ 
+     if($F('ac16_sequencial').trim() != ''){
         js_OpenJanelaIframe('','db_iframe_depart',
                             'func_acordo.php?lDepartamento=1&pesquisa_chave='+$F('ac16_sequencial')+'&funcao_js=parent.js_mostraAcordo'+
                             '&descricao=true',
                             'Pesquisa',false,0);
      }else{
-       $('ac16_resumoobjeto').value = ''; 
+       $('ac16_resumoobjeto').value = '';
      }
   }
 }
@@ -425,19 +425,19 @@ function js_acordo(mostra){
 function js_pesquisaAcordoComissao(mostra) {
 
   if (mostra == true) {
-  
-    js_OpenJanelaIframe('top.corpo.iframe_acordo', 
-                        'db_iframe_comissao', 
+
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_acordo',
+                        'db_iframe_comissao',
                         'func_acordocomissao.php?funcao_js=parent.js_mostracomissao1|'+
                         'ac08_sequencial|ac08_descricao',
                         'Pesquisar Comissões de Vistoria',
                         true,
                         '0');
   } else {
-  
-    if ($('ac08_sequencial').value != '') { 
-    
-      js_OpenJanelaIframe('top.corpo.iframe_acordo',
+
+    if ($('ac08_sequencial').value != '') {
+
+      js_OpenJanelaIframe('CurrentWindow.corpo.iframe_acordo',
                           'db_iframe_comissao',
                           'func_acordocomissao.php?pesquisa_chave='+$F('ac08_sequencial')+
                           '&funcao_js=parent.js_mostracomissao',
@@ -445,7 +445,7 @@ function js_pesquisaAcordoComissao(mostra) {
                           false,
                           '0');
      } else {
-       $('ac08_descricao').value = ''; 
+       $('ac08_descricao').value = '';
      }
   }
 }
@@ -454,9 +454,9 @@ function js_mostracomissao(chave, erro) {
 
   $('ac08_descricao').value = chave;
   if (erro ) {
-   
-    $('ac08_sequencial').focus(); 
-    $('ac08_sequencial').value = ''; 
+
+    $('ac08_sequencial').focus();
+    $('ac08_sequencial').value = '';
   }
 }
 
@@ -465,17 +465,17 @@ function js_mostracomissao1(chave1, chave2) {
   $('ac08_sequencial').value = chave1;
   $('ac08_descricao').value      = chave2;
   $('ac08_sequencial').focus();
-  
+
   db_iframe_comissao.hide();
 }
 
 function js_mostraAcordo(chave,erro){
-  
-  $('ac16_resumoobjeto').value = erro 
-  if(erro==true){ 
-  
-    $('ac16_sequencial').focus(); 
-    $('ac16_sequencial').value = ''; 
+
+  $('ac16_resumoobjeto').value = erro
+  if(erro==true){
+
+    $('ac16_sequencial').focus();
+    $('ac16_sequencial').value = '';
   }
 }
 
@@ -486,7 +486,7 @@ function js_mostraAcordo1(chave1,chave2){
 }
 
 function js_gerarRelatorio(){
-  
+
   $('situacaodescricao').value = $('ac16_acordosituacao').options[$('ac16_acordosituacao').selectedIndex].innerHTML;
   $('origemdescricao').value   = $('ac16_origem').options[$('ac16_origem').selectedIndex].innerHTML;
   $('tipodescricao').value     = $('acordotipo').options[$('acordotipo').selectedIndex].innerHTML;
@@ -494,16 +494,16 @@ function js_gerarRelatorio(){
 
 
   js_listaDepartamentos();
-  
+
   var dataInicio = $F('ac16_datainicio');
-  var dataFim    = $F('ac16_datafim');  
+  var dataFim    = $F('ac16_datafim');
   if (dataInicio != '' && dataFim != '') {
 	  if( !js_comparadata(dataInicio, dataFim, '<=') ) {
 	    alert("A Data de Início deve ser maior ou igual a Data de Fim!");
 	    return false;
 	  }
   }
- 
+
   var sVirgula            = '';
   var listaacordonatureza = '';
   for(i=0; i < parent.iframe_vinculoacordo.$('listaacordonatureza').length; i++) {
@@ -519,19 +519,19 @@ function js_gerarRelatorio(){
     listaacordogrupo += sVirgula + parent.iframe_grupoacordo.$('listaacordogrupo').options[i].value;
     sVirgula          = ",";
   }
-  
+
   $('listaacordogrupo').value = listaacordogrupo;
-  
+
   var sVirgula        = '';
   var listacontratado = '';
   for(i=0; i < parent.iframe_contratado.$('listacontratado').length; i++) {
     listacontratado += sVirgula + parent.iframe_contratado.$('listacontratado').options[i].value;
     sVirgula         = ",";
   }
-  
+
   $('listacontratado').value = listacontratado;
 
-  jan = window.open('', 'relatorioacordo', 
+  jan = window.open('', 'relatorioacordo',
                     'width='+(screen.availWidth-5)+', height='+(screen.availHeight-40)+', scrollbars=1, location=0');
   jan.moveTo(0,0);
   return true;

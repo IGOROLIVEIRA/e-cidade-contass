@@ -218,7 +218,7 @@ $cllicobrasmedicao->rotulo->label();
   }
 
   function js_pesquisa(){
-    js_OpenJanelaIframe('top.corpo','db_iframe_licobrasmedicao','func_licobrasmedicao.php?funcao_js=parent.js_preenchepesquisa|0','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_licobrasmedicao','func_licobrasmedicao.php?funcao_js=parent.js_preenchepesquisa|0','Pesquisa',true);
   }
   function js_preenchepesquisa(chave){
     db_iframe_licobrasmedicao.hide();
@@ -249,7 +249,7 @@ $cllicobrasmedicao->rotulo->label();
   function js_pesquisa_obra(mostra){
     if(mostra==true){
 
-      js_OpenJanelaIframe('top.corpo',
+      js_OpenJanelaIframe('CurrentWindow.corpo',
         'db_iframe_licobrasituacao',
         'func_licobras.php?pesquisa=true&funcao_js=parent.js_preencheObra|obr01_sequencial|l20_edital|l20_numero|l03_descr|obr01_numeroobra',
         'Pesquisa Obras',true);
@@ -257,7 +257,7 @@ $cllicobrasmedicao->rotulo->label();
 
       if(document.form1.obr03_seqobra.value != ''){
 
-        js_OpenJanelaIframe('top.corpo',
+        js_OpenJanelaIframe('CurrentWindow.corpo',
           'db_iframe_licobrasituacao',
           'func_licobras.php?pesquisa=true&pesquisa_chave='+
           document.form1.obr03_seqobra.value+'&funcao_js=parent.js_preencheObra2',

@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -59,10 +59,10 @@ if (isset ($atualizar) && $atualizar == "atualizar") {
 	$erro = false;
 	$msg = "";
 	$clorcparamelemento->o44_instit = $instit;
-	
-    $clorcparamelemento->sql_record("select * from orcparamelemento 
-                                         where o44_codparrel=$c83_codrel and 
-				               o44_sequencia=$c69_codseq and 
+
+    $clorcparamelemento->sql_record("select * from orcparamelemento
+                                         where o44_codparrel=$c83_codrel and
+				               o44_sequencia=$c69_codseq and
 					       o44_instit=$instit and
 					       o44_anousu=$anousu and
 					       (o44_exclusao ='f' or o44_exclusao is null) ");
@@ -72,10 +72,10 @@ if (isset ($atualizar) && $atualizar == "atualizar") {
 		      null,
 		      null,
 		      null,
-		      null, 
+		      null,
           null,
-		      "o44_codparrel=$c83_codrel and 
-		       o44_sequencia=$c69_codseq and 
+		      "o44_codparrel=$c83_codrel and
+		       o44_sequencia=$c69_codseq and
 		       o44_anousu   =$anousu     and
 		       o44_instit=$instit and (o44_exclusao ='f' or o44_exclusao is null)");
 		if ($clorcparamelemento->erro_status == 0) {
@@ -91,7 +91,7 @@ if (isset ($atualizar) && $atualizar == "atualizar") {
 		if ($matriz[$i] != "") {
 			//db_msgbox($matriz[$i]);
       $result  = $clorcparamelemento->sql_record($clorcparamelemento->sql_query_file($anousu,$c83_codrel,$c69_codseq,$matriz[$i],$instit));
-      $numrows = $clorcparamelemento->numrows; 
+      $numrows = $clorcparamelemento->numrows;
       if ($numrows == 0){
            $clorcparamelemento->o44_exclusao="false";
        		 $clorcparamelemento->incluir($anousu,$c83_codrel,$c69_codseq,$matriz[$i],$instit);
@@ -109,7 +109,7 @@ if (isset ($atualizar) && $atualizar == "atualizar") {
 
 	echo "<script>
          js_voltar();
-	       parent.js_refresh(); 
+	       parent.js_refresh();
 	      </script>";
 
 }
@@ -119,30 +119,30 @@ if (isset ($atualizar) && $atualizar == "atualizar") {
 function espaco($estrutural=""){
     $espaco ="";
     if(substr($estrutural,1,14)     == '00000000000000'){
-       $espaco="";    
-    }elseif(substr($estrutural,2,13)== '0000000000000'){  
-       $espaco="&nbsp;&nbsp;";    
-    }elseif(substr($estrutural,3,12)== '000000000000'){   
-       $espaco="&nbsp;&nbsp;&nbsp;&nbsp;";    
-    }elseif(substr($estrutural,4,11) == '00000000000'){	
-       $espaco="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";    
-    }elseif(substr($estrutural,5,10) == '0000000000'){  
-       $espaco="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";    
-    }elseif(substr($estrutural,7,8)  == '00000000'){   
-       $espaco="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";   
-    }elseif(substr($estrutural,9,6)  == '000000'){   
-       $espaco="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";   
-    }elseif(substr($estrutural,11,4) == '0000'){ 	
-       $espaco="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";    
+       $espaco="";
+    }elseif(substr($estrutural,2,13)== '0000000000000'){
+       $espaco="&nbsp;&nbsp;";
+    }elseif(substr($estrutural,3,12)== '000000000000'){
+       $espaco="&nbsp;&nbsp;&nbsp;&nbsp;";
+    }elseif(substr($estrutural,4,11) == '00000000000'){
+       $espaco="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+    }elseif(substr($estrutural,5,10) == '0000000000'){
+       $espaco="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+    }elseif(substr($estrutural,7,8)  == '00000000'){
+       $espaco="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+    }elseif(substr($estrutural,9,6)  == '000000'){
+       $espaco="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+    }elseif(substr($estrutural,11,4) == '0000'){
+       $espaco="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
     }elseif(substr($estrutural,12,3) == '000'){
-       $espaco="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";    
-    }elseif(substr($estrutural,13,2) == '00'){ 
-       $espaco="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"; 
-    }elseif(substr($estrutural,14,1) == '0'){ 
-       $espaco="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"; 
+       $espaco="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+    }elseif(substr($estrutural,13,2) == '00'){
+       $espaco="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+    }elseif(substr($estrutural,14,1) == '0'){
+       $espaco="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
     }
 
-    
+
     return $espaco;
 }
 
@@ -158,10 +158,10 @@ function espaco($estrutural=""){
 <script>
 
 function js_filtrarContas(){
-  document.form1.submit();  
+  document.form1.submit();
 }
 function js_filtrarEstrut(){
-  if (document.form1.ini_estrut.value != "" && 
+  if (document.form1.ini_estrut.value != "" &&
       document.form1.fim_estrut.value != ""){
        document.form1.submit();
        document.form1.ini_estrut.value = "";
@@ -176,32 +176,32 @@ function js_recarregar(grupo1,grupo2){
   document.form1.grupo1.value = grupo1;
   document.form1.grupo2.value = grupo2;
 
-  document.form1.submit();  
+  document.form1.submit();
 }
 
 function js_emite(){
   c69_codseq ="<?=$o69_codparamrel?>";
   obj = document.form1;
-  
+
   jantes = window.open('con2_imprimeseqelemento002.php?c69_codseq='+c69_codseq,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
   jantes.moveTo(0,0);
 }
 
 function js_getChaves(){
-   // usada no botão submit para capturar as chaves do iframe 
+   // usada no botão submit para capturar as chaves do iframe
    // usar um campo hidden no form com o nome chaves
    lista                = "";
    sep                  = "";
-   virgula              = "";  
-   obj                  = plano.document.form1;   
+   virgula              = "";
+   obj                  = plano.document.form1;
    lista_con_analiticas = new String(document.form1.lista_contas_analiticas.value);
    lista_con_sinteticas = new String(document.form1.lista_contas_sinteticas.value);
    erro = false;
    tem_analitica = false;
    tem_sintetica = false;
-   
+
    for(i=0;i < obj.length;i++){
-     if (obj[i].type == 'checkbox'){         
+     if (obj[i].type == 'checkbox'){
       if (obj[i].checked == true){
         var selecionado = new String(obj[i].value);
 	    lista = lista + sep + selecionado;
@@ -220,8 +220,8 @@ function js_getChaves(){
              }
 
              if (tem_analitica == true && tem_sintetica == true){
-                  alert("Sua seleção não será gravada porque causará diferenças no relatório.\n"+ 
-                        "Você não deve selecionar contas analíticas e sintéticas ao mesmo tempo.\n"+ 
+                  alert("Sua seleção não será gravada porque causará diferenças no relatório.\n"+
+                        "Você não deve selecionar contas analíticas e sintéticas ao mesmo tempo.\n"+
                         "Revise sua seleção.\n");
                   lista = "";
                   erro  = true;
@@ -229,36 +229,36 @@ function js_getChaves(){
              }
         }
 	  }
-     } 
+     }
    }
 
    if (erro == false){
-        var lista_selecionados = new String(document.form1.lista_selecionados.value);     
-		  
+        var lista_selecionados = new String(document.form1.lista_selecionados.value);
+
         if (lista_selecionados.length > 0){
              lista_selecionados = lista;
         }
-		
-        document.form1.lista.value         = lista;   
+
+        document.form1.lista.value         = lista;
 
         var op = document.createElement("input");
         op.setAttribute("type","hidden");
         op.setAttribute("name","atualizar");
         op.setAttribute("value","atualizar");
-        document.form1.appendChild(op);       
-   
-        document.form1.submit();   
-   }        
-}  
+        document.form1.appendChild(op);
+
+        document.form1.submit();
+   }
+}
 
 function js_desmarcarTodos(){
-   obj = plano.document.form1;   
+   obj = plano.document.form1;
    for(i=0;i < obj.length;i++){
-     if (obj[i].type == 'checkbox'){         
+     if (obj[i].type == 'checkbox'){
           obj[i].checked = false;
-     } 
+     }
    }
-}  
+}
 </script>
 </head>
 
@@ -274,22 +274,22 @@ function js_desmarcarTodos(){
 <table border="0">
  <tr>
   <td>
-   <fieldset> 
+   <fieldset>
 <table border="0" align="center">
  <tr>
    <td colspan="2" align="center">
      <?
-     
-     $s = "select o69_descr 
-              from orcparamseq 
+
+     $s = "select o69_descr
+              from orcparamseq
 	      where o69_codparamrel = $o69_codparamrel
-	             and o69_codseq = $o69_codseq 
+	             and o69_codseq = $o69_codseq
               ";
 	$r = pg_exec($s);
 	if (pg_numrows($r)>0){
             db_fieldsmemory($r,0);
-	    echo  "<b>$o69_descr</b>";	
-	}  
+	    echo  "<b>$o69_descr</b>";
+	}
      ?>
    </td>
  </tr>
@@ -321,11 +321,11 @@ function js_desmarcarTodos(){
  <tr>
  <td colspan="2" nowrap align="center">
  <table border="0">
- <tr> 
+ <tr>
    <td colspan="2" valign="middle" align="left" nowrap>
 
-   <? 
-      if (isset($grupo) && $grupo !='' && $grupo !='0') {   
+   <?
+      if (isset($grupo) && $grupo !='' && $grupo !='0') {
            $grupo1 = $grupo;
            if ($grupo1 == 5){
                 $grupo2 = 6;
@@ -343,20 +343,20 @@ function js_desmarcarTodos(){
 	                break;
          case 3:  echo " <input id=desp type=button value=DESP onclick=\"js_recarregar(3,0);\" >";
                   break;
-         case 4:  
+         case 4:
          case 9:
                   echo " <input id=rec type=button value=REC onclick=\"js_recarregar(4,9);\" >";
 	                break;
          default: echo "<input id=outros type=button value=OUTROS onclick=\"js_recarregar(5,6);\" >";
-      }	 
-   } else {  ?>    
+      }
+   } else {  ?>
       <input id="ativo"   type="button" value="ATIVO"   onClick="js_recarregar(1,0);">
       <input id="passivo" type="button" value="PASSIVO" onClick="js_recarregar(2,0);">
       <input id="rec"     type="button" value="RECEITA" onClick="js_recarregar(4,9);">
       <input id="desp"    type="button" value="DESPESA" onClick="js_recarregar(3,0);">
       <input id="outros"  type="button" value="OUTROS"  onClick="js_recarregar(5,6);">
-   <? 
-    } 
+   <?
+    }
 
     db_input("grupo1",1,"",true,"hidden",3);
     db_input("grupo2",1,"",true,"hidden",3);
@@ -375,20 +375,20 @@ function js_desmarcarTodos(){
 <?
   if (!isset($o69_codparamrel) || $o69_codparamrel ==""){
          $o69_codparamrel=0;
-         $o69_codseq=0;  	 
-  }        
+         $o69_codseq=0;
+  }
 
   if ($grupo == 3 || $grupo == 0){
        $sql_contas  = "select distinct c60_codcon, c61_reduz
                        from conplano
                             inner join consistema      on c52_codsis = conplano.c60_codsis
-                            left  join conplanoreduz   on c61_codcon = c60_codcon and 
+                            left  join conplanoreduz   on c61_codcon = c60_codcon and
                                                           c61_anousu = c60_anousu and
                          				                          c61_instit = $instit
                             left join orcparamelemento on o44_codparrel = $o69_codparamrel  and
                                                           o44_sequencia = $o69_codseq and
                                                           o44_anousu    = c60_anousu  and
-      	                                                  o44_instit    = $instit     and	
+      	                                                  o44_instit    = $instit     and
 					                                                o44_codele    = conplano.c60_codcon and
                                                           (o44_exclusao  is false or o44_exclusao is null)
                             where c60_anousu = $anousu";
@@ -418,23 +418,23 @@ function js_desmarcarTodos(){
   db_input("lista_selecionados",     500,0,true,"hidden",3);
 
   $sql = "select distinct c60_codcon,c60_estrut,c52_descrred,c60_descr,o44_codele,c61_codigo, c61_codigo as recurso,c61_reduz,c61_instit
-          from conplano 
+          from conplano
                inner join consistema      on c52_codsis = conplano.c60_codsis
-               left  join conplanoreduz   on c61_codcon = c60_codcon and 
+               left  join conplanoreduz   on c61_codcon = c60_codcon and
                                              c61_anousu = c60_anousu and
                                              c61_instit = $instit
                left join orcparamelemento on o44_codparrel = $o69_codparamrel  and
 	                                           o44_sequencia = $o69_codseq and
 	                                           o44_anousu    = c60_anousu  and
-	                                           o44_instit    = $instit     and	
+	                                           o44_instit    = $instit     and
 					                                   o44_codele    = conplano.c60_codcon and
                                             (o44_exclusao  is false or o44_exclusao is null)
           where c60_anousu = $anousu";
 
-  if (isset($grupo2) && trim(@$grupo2) != "" && @$grupo2 > 0){	
-       $sql .=" and (c60_estrut like '$grupo1%' or c60_estrut like '$grupo2%') ";      
-  } else if (isset($grupo1) && trim(@$grupo1) != ""){	
-       $sql .=" and c60_estrut like '$grupo1%' ";      
+  if (isset($grupo2) && trim(@$grupo2) != "" && @$grupo2 > 0){
+       $sql .=" and (c60_estrut like '$grupo1%' or c60_estrut like '$grupo2%') ";
+  } else if (isset($grupo1) && trim(@$grupo1) != ""){
+       $sql .=" and c60_estrut like '$grupo1%' ";
   }
 
   if (isset($ini_estrut) && trim(@$ini_estrut)!=""){
@@ -463,7 +463,7 @@ function js_desmarcarTodos(){
        $lista_reduz   = "";
        $virgula       = "";
 
-       $sql_reduz     = "select distinct c61_codcon from conplanoreduz where c61_anousu = $anousu and 
+       $sql_reduz     = "select distinct c61_codcon from conplanoreduz where c61_anousu = $anousu and
                                                                              c61_instit in ($lista_instit)";
        $res_reduz     = @pg_query($sql_reduz);
        $numrows_reduz = @pg_numrows($res_reduz);
@@ -479,19 +479,19 @@ function js_desmarcarTodos(){
        if ($filtrar_contas == "A"){
             $sql .= " and c61_reduz is not null ";
        }
-       
+
        if ($filtrar_contas == "S"){
             $sql .= " and c60_codcon not in ($lista_reduz) ";
        }
   }
 
   $sql_marca  = $sql." and o44_codele = conplano.c60_codcon ";
-  $sql       .= " order by c60_estrut ";           					  
-  $sql_marca .= " order by c60_estrut "; 
+  $sql       .= " order by c60_estrut ";
+  $sql_marca .= " order by c60_estrut ";
 
   //echo $sql;
 ?>
-  <table border="0" align="center"> 
+  <table border="0" align="center">
     <tr>
       <td colspan="2">
       <?
@@ -513,7 +513,7 @@ function js_desmarcarTodos(){
     </tr>
   </table>
   </table>
-  </div>  
+  </div>
 </form>
 </center>
 </body>
@@ -529,7 +529,7 @@ function js_selecao(){
        if (obj[i].type == "checkbox"){
             if (obj[i].checked == true){
                  var str         = new String(obj[i].value);
-                 var str_procura = new String(lista_selecionados.value); 
+                 var str_procura = new String(lista_selecionados.value);
 
                  if (str_procura.indexOf(str)==-1){
                       if (lista_selecionados.value!=""){
@@ -546,20 +546,20 @@ function js_selecao(){
 
 function js_pesquisao69_codparamrel(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_orcparamrel','func_orcparamrel.php?funcao_js=parent.js_mostraorcparamrel1|o42_codparrel|o42_descrrel','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_orcparamrel','func_orcparamrel.php?funcao_js=parent.js_mostraorcparamrel1|o42_codparrel|o42_descrrel','Pesquisa',true);
   }else{
-     if(document.form1.o69_codparamrel.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_orcparamrel','func_orcparamrel.php?pesquisa_chave='+document.form1.o69_codparamrel.value+'&funcao_js=parent.js_mostraorcparamrel','Pesquisa',false);
+     if(document.form1.o69_codparamrel.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_orcparamrel','func_orcparamrel.php?pesquisa_chave='+document.form1.o69_codparamrel.value+'&funcao_js=parent.js_mostraorcparamrel','Pesquisa',false);
      }else{
-       document.form1.o42_descrrel.value = ''; 
+       document.form1.o42_descrrel.value = '';
      }
   }
 }
 function js_mostraorcparamrel(chave,erro){
-  document.form1.o42_descrrel.value = chave; 
-  if(erro==true){ 
-    document.form1.o69_codparamrel.focus(); 
-    document.form1.o69_codparamrel.value = ''; 
+  document.form1.o42_descrrel.value = chave;
+  if(erro==true){
+    document.form1.o69_codparamrel.focus();
+    document.form1.o69_codparamrel.value = '';
   }
 }
 function js_mostraorcparamrel1(chave1,chave2){

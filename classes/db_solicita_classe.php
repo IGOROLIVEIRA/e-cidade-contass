@@ -540,7 +540,7 @@ class cl_solicita {
    function sql_query ( $pc10_numero=null,$campos="*",$ordem=null,$dbwhere="",$joinDotac=false){
      $sql = "select ";
      if($campos != "*" ){
-       $campos_sql = split("#",$campos);
+       $campos_sql = explode("#",$campos);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -579,7 +579,7 @@ class cl_solicita {
      $sql .= $sql2;
      if($ordem != null ){
        $sql .= " order by ";
-       $campos_sql = split("#",$ordem);
+       $campos_sql = explode("#",$ordem);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -592,7 +592,7 @@ class cl_solicita {
 function sql_query_estregistro ( $pc10_numero=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
-       $campos_sql = split("#",$campos);
+       $campos_sql = explode("#",$campos);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -623,7 +623,7 @@ function sql_query_estregistro ( $pc10_numero=null,$campos="*",$ordem=null,$dbwh
      $sql .= $sql2;
      if($ordem != null ){
        $sql .= " order by ";
-       $campos_sql = split("#",$ordem);
+       $campos_sql = explode("#",$ordem);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -715,7 +715,7 @@ function sql_query_estregistro ( $pc10_numero=null,$campos="*",$ordem=null,$dbwh
    function sql_query_file ( $pc10_numero=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
-       $campos_sql = split("#",$campos);
+       $campos_sql = explode("#",$campos);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -736,7 +736,7 @@ function sql_query_estregistro ( $pc10_numero=null,$campos="*",$ordem=null,$dbwh
      $sql .= $sql2;
      if($ordem != null ){
        $sql .= " order by ";
-       $campos_sql = split("#",$ordem);
+       $campos_sql = explode("#",$ordem);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -748,7 +748,7 @@ function sql_query_estregistro ( $pc10_numero=null,$campos="*",$ordem=null,$dbwh
    function sql_query_func ($pc10_numero=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
-       $campos_sql = split("#",$campos);
+       $campos_sql = explode("#",$campos);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -781,7 +781,7 @@ function sql_query_estregistro ( $pc10_numero=null,$campos="*",$ordem=null,$dbwh
      $sql .= $sql2;
      if($ordem != null ){
        $sql .= " order by ";
-       $campos_sql = split("#",$ordem);
+       $campos_sql = explode("#",$ordem);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -793,7 +793,7 @@ function sql_query_estregistro ( $pc10_numero=null,$campos="*",$ordem=null,$dbwh
    function sql_query_numero_solicita ( $pc10_numero=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
   if($campos != "*" ){
-     $campos_sql = split("#",$campos);
+     $campos_sql = explode("#",$campos);
      $virgula = "";
  for($i=0;$i<sizeof($campos_sql);$i++){
      $sql .= $virgula.$campos_sql[$i];
@@ -817,7 +817,7 @@ function sql_query_estregistro ( $pc10_numero=null,$campos="*",$ordem=null,$dbwh
      $sql .= $sql2;
   if($ordem != null ){
      $sql .= " order by ";
-     $campos_sql = split("#",$ordem);
+     $campos_sql = explode("#",$ordem);
      $virgula = "";
   for($i=0;$i<sizeof($campos_sql);$i++){
      $sql .= $virgula.$campos_sql[$i];
@@ -829,7 +829,7 @@ function sql_query_estregistro ( $pc10_numero=null,$campos="*",$ordem=null,$dbwh
    function sql_query_prot ( $pc10_numero=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
-       $campos_sql = split("#",$campos);
+       $campos_sql = explode("#",$campos);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -865,7 +865,7 @@ function sql_query_estregistro ( $pc10_numero=null,$campos="*",$ordem=null,$dbwh
      $sql .= $sql2;
      if($ordem != null ){
        $sql .= " order by ";
-       $campos_sql = split("#",$ordem);
+       $campos_sql = explode("#",$ordem);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -877,7 +877,7 @@ function sql_query_estregistro ( $pc10_numero=null,$campos="*",$ordem=null,$dbwh
    function sql_query_rel ( $pc10_numero=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
-       $campos_sql = split("#",$campos);
+       $campos_sql = explode("#",$campos);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -913,7 +913,7 @@ function sql_query_estregistro ( $pc10_numero=null,$campos="*",$ordem=null,$dbwh
      $sql .= $sql2;
      if($ordem != null ){
        $sql .= " order by ";
-       $campos_sql = split("#",$ordem);
+       $campos_sql = explode("#",$ordem);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -925,7 +925,7 @@ function sql_query_estregistro ( $pc10_numero=null,$campos="*",$ordem=null,$dbwh
    function sql_query_reserv ( $pc10_numero=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
-       $campos_sql = split("#",$campos);
+       $campos_sql = explode("#",$campos);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -960,7 +960,7 @@ function sql_query_estregistro ( $pc10_numero=null,$campos="*",$ordem=null,$dbwh
      $sql .= $sql2;
      if($ordem != null ){
        $sql .= " order by ";
-       $campos_sql = split("#",$ordem);
+       $campos_sql = explode("#",$ordem);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -972,7 +972,7 @@ function sql_query_estregistro ( $pc10_numero=null,$campos="*",$ordem=null,$dbwh
    function sql_query_solicita ( $pc10_numero=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
-       $campos_sql = split("#",$campos);
+       $campos_sql = explode("#",$campos);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -1001,7 +1001,7 @@ function sql_query_estregistro ( $pc10_numero=null,$campos="*",$ordem=null,$dbwh
      $sql .= $sql2;
      if($ordem != null ){
        $sql .= " order by ";
-       $campos_sql = split("#",$ordem);
+       $campos_sql = explode("#",$ordem);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -1013,7 +1013,7 @@ function sql_query_estregistro ( $pc10_numero=null,$campos="*",$ordem=null,$dbwh
    function sql_query_tipo ( $pc10_numero=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
-       $campos_sql = split("#",$campos);
+       $campos_sql = explode("#",$campos);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -1039,7 +1039,7 @@ function sql_query_estregistro ( $pc10_numero=null,$campos="*",$ordem=null,$dbwh
      $sql .= $sql2;
      if($ordem != null ){
        $sql .= " order by ";
-       $campos_sql = split("#",$ordem);
+       $campos_sql = explode("#",$ordem);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -1053,7 +1053,7 @@ function sql_query_estregistro ( $pc10_numero=null,$campos="*",$ordem=null,$dbwh
    function sql_query_solprot( $pc10_numero=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
-       $campos_sql = split("#",$campos);
+       $campos_sql = explode("#",$campos);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -1087,7 +1087,7 @@ function sql_query_estregistro ( $pc10_numero=null,$campos="*",$ordem=null,$dbwh
      $sql .= $sql2;
      if($ordem != null ){
        $sql .= " order by ";
-       $campos_sql = split("#",$ordem);
+       $campos_sql = explode("#",$ordem);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -1101,7 +1101,7 @@ function sql_query_estregistro ( $pc10_numero=null,$campos="*",$ordem=null,$dbwh
 
     $sql = "select ";
      if($campos != "*" ){
-       $campos_sql = split("#",$campos);
+       $campos_sql = explode("#",$campos);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -1127,7 +1127,7 @@ function sql_query_estregistro ( $pc10_numero=null,$campos="*",$ordem=null,$dbwh
      $sql .= $sql2;
      if($ordem != null ){
        $sql .= " order by ";
-       $campos_sql = split("#",$ordem);
+       $campos_sql = explode("#",$ordem);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -1140,7 +1140,7 @@ function sql_query_estregistro ( $pc10_numero=null,$campos="*",$ordem=null,$dbwh
   function sql_query_solicitaanulada ( $pc10_numero=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
-       $campos_sql = split("#",$campos);
+       $campos_sql = explode("#",$campos);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -1173,7 +1173,7 @@ function sql_query_estregistro ( $pc10_numero=null,$campos="*",$ordem=null,$dbwh
      $sql .= $sql2;
      if($ordem != null ){
        $sql .= " order by ";
-       $campos_sql = split("#",$ordem);
+       $campos_sql = explode("#",$ordem);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -1186,7 +1186,7 @@ function sql_query_estregistro ( $pc10_numero=null,$campos="*",$ordem=null,$dbwh
   function sql_query_compilacao ( $pc10_numero=null,$campos="*",$ordem=null,$dbwhere="", $lVerificaVinculos = false){
      $sql = "select ";
      if($campos != "*" ){
-       $campos_sql = split("#",$campos);
+       $campos_sql = explode("#",$campos);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -1228,7 +1228,7 @@ function sql_query_estregistro ( $pc10_numero=null,$campos="*",$ordem=null,$dbwh
      $sql .= $sql2;
      if($ordem != null ){
        $sql .= " order by ";
-       $campos_sql = split("#",$ordem);
+       $campos_sql = explode("#",$ordem);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -1243,7 +1243,7 @@ function sql_query_estregistro ( $pc10_numero=null,$campos="*",$ordem=null,$dbwh
 
     $sql = "select ";
     if($campos != "*" ){
-      $campos_sql = split("#",$campos);
+      $campos_sql = explode("#",$campos);
       $virgula = "";
       for($i=0;$i<sizeof($campos_sql);$i++){
         $sql .= $virgula.$campos_sql[$i];
@@ -1290,7 +1290,7 @@ function sql_query_estregistro ( $pc10_numero=null,$campos="*",$ordem=null,$dbwh
     $sql .= $sql2;
     if($ordem != null ){
       $sql .= " order by ";
-      $campos_sql = split("#",$ordem);
+      $campos_sql = explode("#",$ordem);
       $virgula = "";
       for($i=0;$i<sizeof($campos_sql);$i++){
         $sql .= $virgula.$campos_sql[$i];
@@ -1303,7 +1303,7 @@ function sql_query_estregistro ( $pc10_numero=null,$campos="*",$ordem=null,$dbwh
 function sql_query_licitacao_dotacao ( $pc10_numero=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
-       $campos_sql = split("#",$campos);
+       $campos_sql = explode("#",$campos);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -1334,7 +1334,7 @@ function sql_query_licitacao_dotacao ( $pc10_numero=null,$campos="*",$ordem=null
      $sql .= $sql2;
      if($ordem != null ){
        $sql .= " order by ";
-       $campos_sql = split("#",$ordem);
+       $campos_sql = explode("#",$ordem);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -1375,7 +1375,7 @@ function sql_query_licitacao_dotacao ( $pc10_numero=null,$campos="*",$ordem=null
   function sql_query_consulta ( $pc10_numero=null,$campos="*",$ordem=null,$dbwhere=""){
     $sql = "select ";
     if($campos != "*" ){
-      $campos_sql = split("#",$campos);
+      $campos_sql = explode("#",$campos);
       $virgula = "";
       for($i=0;$i<sizeof($campos_sql);$i++){
         $sql .= $virgula.$campos_sql[$i];
@@ -1410,7 +1410,7 @@ function sql_query_licitacao_dotacao ( $pc10_numero=null,$campos="*",$ordem=null
       $sql .= $sql2;
       if($ordem != null ){
       $sql .= " order by ";
-         $campos_sql = split("#",$ordem);
+         $campos_sql = explode("#",$ordem);
       $virgula = "";
       for($i=0;$i<sizeof($campos_sql);$i++){
       $sql .= $virgula.$campos_sql[$i];
@@ -1423,7 +1423,7 @@ function sql_query_licitacao_dotacao ( $pc10_numero=null,$campos="*",$ordem=null
     function sql_query_liberadas ( $pc10_numero=null,$campos="*",$ordem=null,$dbwhere=""){
       $sql = "select ";
       if($campos != "*" ){
-        $campos_sql = split("#",$campos);
+        $campos_sql = explode("#",$campos);
         $virgula = "";
         for($i=0;$i<sizeof($campos_sql);$i++){
           $sql .= $virgula.$campos_sql[$i];
@@ -1446,7 +1446,7 @@ function sql_query_licitacao_dotacao ( $pc10_numero=null,$campos="*",$ordem=null
       $sql .= $sql2;
       if($ordem != null ){
         $sql .= " order by ";
-        $campos_sql = split("#",$ordem);
+        $campos_sql = explode("#",$ordem);
         $virgula = "";
         for($i=0;$i<sizeof($campos_sql);$i++){
           $sql .= $virgula.$campos_sql[$i];
@@ -1459,7 +1459,7 @@ function sql_query_licitacao_dotacao ( $pc10_numero=null,$campos="*",$ordem=null
     function sql_query_tipocompra ($pc10_numero=null,$campos="*",$ordem=null,$dbwhere=""){
     	$sql = "select ";
     	if($campos != "*" ){
-    		$campos_sql = split("#",$campos);
+    		$campos_sql = explode("#",$campos);
     		$virgula = "";
     		for($i=0;$i<sizeof($campos_sql);$i++){
     			$sql .= $virgula.$campos_sql[$i];
@@ -1482,7 +1482,7 @@ function sql_query_licitacao_dotacao ( $pc10_numero=null,$campos="*",$ordem=null
     	$sql .= $sql2;
     	if($ordem != null ){
     		$sql .= " order by ";
-    		$campos_sql = split("#",$ordem);
+    		$campos_sql = explode("#",$ordem);
     		$virgula = "";
     		for($i=0;$i<sizeof($campos_sql);$i++){
     			$sql .= $virgula.$campos_sql[$i];

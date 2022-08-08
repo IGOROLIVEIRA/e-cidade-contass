@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -54,26 +54,26 @@ function js_relatorio() {
   datafim="";
   if(id!="" && im !="" && ia!=""){
     dataini = ia+"X"+im+"X"+id;
-  }  
+  }
   if(fd!="" && fm !="" && fa!=""){
      datafim = fa+"X"+fm+"X"+fd;
-  } 
+  }
   if((dataini=="" && datafim=="") && (id!="" || im !="" || ia!="" || fd!="" && fm !="" && fa!="")){
      alert('Verifique as datas fornecidas!');
-     
-  }else{ 
+
+  }else{
        ordem=document.form1.ordem.value;
        jan = window.open('con2_rellistas002.php?ordem='+ordem+'&dataini='+dataini+'&datafim='+datafim,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
        jan.moveTo(0,0);
        return true;
-  }  
+  }
 }
 </script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="if(document.form1) document.form1.elements[0].focus()" >
 <table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-  <tr> 
+  <tr>
     <td width="360">&nbsp;</td>
     <td width="263">&nbsp;</td>
     <td width="25">&nbsp;</td>
@@ -81,7 +81,7 @@ function js_relatorio() {
   </tr>
 </table>
 <table width="790" height="100%" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
+  <tr>
     <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
 	  <br>
 	<center>
@@ -107,7 +107,7 @@ db_inputdata('datafim',"","","",true,'text',$db_opcao,"")
 	    <b>Ordenar por</b>
 	  </td>
 	  <td>
-<? 
+<?
 $result=array("d40_data"=>"DATA","j14_nome"=>"LOGRADOURO","d40_codigo"=>"LISTAS");
 db_select("ordem",$result,true,$db_opcao);
 ?>
@@ -125,7 +125,7 @@ db_select("ordem",$result,true,$db_opcao);
 	</td>
   </tr>
 </table>
-    <? 
+    <?
       db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
     ?>
 </body>
@@ -133,19 +133,19 @@ db_select("ordem",$result,true,$db_opcao);
 <script>
 function js_contri(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe','func_projmelhorias.php?funcao_js=parent.js_mostracontri1|d40_codigo|j14_nome','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe','func_projmelhorias.php?funcao_js=parent.js_mostracontri1|d40_codigo|j14_nome','Pesquisa',true);
   }else{
-    js_OpenJanelaIframe('top.corpo','db_iframe','func_projmelhorias.php?pesquisa_chave='+document.form1.d40_codigo.value+'&funcao_js=parent.js_mostracontri','Pesquisa',false);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe','func_projmelhorias.php?pesquisa_chave='+document.form1.d40_codigo.value+'&funcao_js=parent.js_mostracontri','Pesquisa',false);
   }
 }
 function js_mostracontri(chave,erro){
-  if(erro==true){ 
-    document.form1.d40_codigo.focus(); 
-    document.form1.d40_codigo.value=""; 
-    document.form1.j14_nome.value=""; 
+  if(erro==true){
+    document.form1.d40_codigo.focus();
+    document.form1.d40_codigo.value="";
+    document.form1.j14_nome.value="";
   }else{
       document.form1.j14_nome.value = chave;
-  }  
+  }
 }
 function js_mostracontri1(chave1,chave2){
   document.form1.d40_codigo.value = chave1;

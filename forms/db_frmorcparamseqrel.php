@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 $clorcparamseq->rotulo->label();
@@ -46,62 +46,62 @@ if (!isset($c69_codseq) || $c69_codseq=="" ){
 function js_emite(){
   c69_codseq ="<?=$o69_codparamrel?>";
   obj = document.form1;
-  
+
   jantes = window.open('con2_imprimeseqelemento002.php?c69_codseq='+c69_codseq,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
   //jantes = window.open('emp1_empconsulta004.php?dt1='+dt1+ '&dt2='+dt2+ '&o58_coddot='+o58_coddot+  '&e60_codemp='+e60_codemp+'&e60_numemp='+e60_numemp+'&e53_codord='+e53_codord+'&pc01_codmater='+pc01_codmater+'&z01_numcgm='+z01_numcgm,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
   jantes.moveTo(0,0);
 }
 
 function js_getChaves(){
-   // usada no botão submit para capturar as chaves do iframe 
+   // usada no botão submit para capturar as chaves do iframe
    // usar um campo hidden no form com o nome chaves
    lista = '';
    sep='';
-   obj = document.form1;   
+   obj = document.form1;
    for(i=0;i < obj.length;i++){
-     if (obj[i].type == 'checkbox'){         
+     if (obj[i].type == 'checkbox'){
         if (obj[i].checked == true){
 	      lista = lista+ sep + obj[i].value;
 	      sep ='#';
-	    } 	  
-     } 
+	    }
+     }
    }
-   obj.lista.value = lista;   
+   obj.lista.value = lista;
     var op= document.createElement("input");
         op.setAttribute("type","hidden");
 	op.setAttribute("name","atualizar");
   	op.setAttribute("value","atualizar");
-   document.form1.appendChild(op);       
+   document.form1.appendChild(op);
    obj.submit();
-}  
+}
 function js_desmarcarTodos(){
-   obj = document.form1;   
+   obj = document.form1;
    for(i=0;i < obj.length;i++){
-     if (obj[i].type == 'checkbox'){         
+     if (obj[i].type == 'checkbox'){
           obj[i].checked = false;
-     } 
+     }
    }
-}  
+}
 
 function js_select(tipo){
   if(tipo=='ativo')
-    document.getElementById('div_ativo').style.visibility = document.getElementById('div_ativo').style.visibility='visible'; 
+    document.getElementById('div_ativo').style.visibility = document.getElementById('div_ativo').style.visibility='visible';
   else
-    document.getElementById('div_ativo').style.visibility = document.getElementById('div_ativo').style.visibility='hidden'; 
+    document.getElementById('div_ativo').style.visibility = document.getElementById('div_ativo').style.visibility='hidden';
   if(tipo=='passivo')
-    document.getElementById('div_passivo').style.visibility = document.getElementById('div_passivo').style.visibility='visible'; 
+    document.getElementById('div_passivo').style.visibility = document.getElementById('div_passivo').style.visibility='visible';
   else
     document.getElementById('div_passivo').style.visibility = document.getElementById('div_passivo').style.visibility='hidden';
   if(tipo=='rec')
-    document.getElementById('div_rec').style.visibility = document.getElementById('div_rec').style.visibility='visible'; 
+    document.getElementById('div_rec').style.visibility = document.getElementById('div_rec').style.visibility='visible';
   else
     document.getElementById('div_rec').style.visibility = document.getElementById('div_rec').style.visibility='hidden';
   if(tipo=='desp')
-    document.getElementById('div_desp').style.visibility = document.getElementById('div_desp').style.visibility='visible'; 
+    document.getElementById('div_desp').style.visibility = document.getElementById('div_desp').style.visibility='visible';
   else
     document.getElementById('div_desp').style.visibility = document.getElementById('div_desp').style.visibility='hidden';
   if(tipo=='outros')
-    document.getElementById('div_outros').style.visibility = document.getElementById('div_outros').style.visibility='visible'; 
+    document.getElementById('div_outros').style.visibility = document.getElementById('div_outros').style.visibility='visible';
   else
     document.getElementById('div_outros').style.visibility = document.getElementById('div_outros').style.visibility='hidden';
 
@@ -118,7 +118,7 @@ function js_select(tipo){
    </td>
  </tr>
  <table border="1"  align="center" cellspacing="1" bgcolor="#CCCCCC">
- <tr> 
+ <tr>
     <td colspan="3" valign="middle">
       <input id="ativo" type="button" value="ATIVO" onclick="js_select('ativo');return false" >
       <input id="passivo" type="button" value="PASSIVO" onclick="js_select('passivo');return false" >
@@ -133,23 +133,23 @@ function js_select(tipo){
 <?
   if (!isset($o69_codparamrel) || $o69_codparamrel ==""){
          $o69_codparamrel=0;
-         $o69_codseq=0;  	 
-  }        
+         $o69_codseq=0;
+  }
   $sql="select distinct c60_codcon,c60_estrut,c52_descrred,c60_descr,o44_codele,c61_codigo as recurso,c61_reduz
-        from conplano 
+        from conplano
            inner join consistema on c52_codsis = conplano.c60_codsis
-           left outer join conplanoreduz on c61_codcon = c60_codcon and 
-                                            c61_anousu = c60_anousu and 
+           left outer join conplanoreduz on c61_codcon = c60_codcon and
+                                            c61_anousu = c60_anousu and
 	                                    c61_instit = ".db_getsession("DB_instit")."
            left outer join orcparamelemento on o44_codparrel = $o69_codparamrel  and
 	                                       o44_sequencia = $o69_codseq and
 	                                       o44_anousu =".db_getsession("DB_anousu")." and
-	                                       o44_instit =".db_getsession("DB_instit")." and	
-					       o44_codele = conplano.c60_codcon 
+	                                       o44_instit =".db_getsession("DB_instit")." and
+					       o44_codele = conplano.c60_codcon
 
         where c60_anousu = ".db_getsession("DB_anousu")."
         order by c60_estrut
-       ";           					                      
+       ";
   $result=$clorcparamelemento->sql_record($sql);
   $numrows = $clorcparamelemento->numrows;
   $a_codcon = $p_codcon = $r_codcon = $d_codcon = $o_codcon  = array();
@@ -165,7 +165,7 @@ function js_select(tipo){
   $r = 0;
   $o = 0;
   for($i = 0;$i < $numrows;$i++) {
-     db_fieldsmemory($result,$i); 
+     db_fieldsmemory($result,$i);
      if (substr($c60_estrut,0,1) =='1' ){
        $a_codcon  [$a] = $c60_codcon;
        $a_estrut  [$a] = $c60_estrut;
@@ -201,7 +201,7 @@ function js_select(tipo){
        $r_codele  [$r] = $o44_codele; // elemento da tabela orcparamelemento
        $r_recurso [$r] = $recurso;
        $r_reduz   [$r] = $c61_reduz;
-       $r++;       
+       $r++;
      } else {
        $o_codcon  [$o] = $c60_codcon;
        $o_estrut  [$o] = $c60_estrut;
@@ -211,133 +211,133 @@ function js_select(tipo){
        $o_recurso [$o] = $recurso;
        $o_reduz   [$o] = $c61_reduz;
        $o++;
-     }      
+     }
   }
 ?>
 <!-- inicia divs -->
   <div id='div_ativo' style='position:absolute; visibility:hidden;' >
-  <table border=1 cellspacing=0 width="100%" bgcolor="#CCCCCC" align="center"> 
+  <table border=1 cellspacing=0 width="100%" bgcolor="#CCCCCC" align="center">
 
-  <?// se alteração     
+  <?// se alteração
      echo "<tr><th>&nbsp;</th><th>Estrutural</th><th>Sistema</th><th>Reduz</th><th>Recurso</th><th>descr<th></tr>";
      for($i = 0;$i < sizeof($a_codcon);$i++) {
          echo "<tr>";
          echo "<td><input type=\"checkbox\" name=\"chaves\" value=\"$a_codcon[$i]\" ";
          if ($a_codele[$i]!="")
-              echo "checked";             	
-         echo "></td>";	      	    
+              echo "checked";
+         echo "></td>";
          echo "<td>".espaco($a_estrut[$i])."$a_estrut[$i]</td>";
-	 echo "<td>$a_descred[$i]</td>";              
+	 echo "<td>$a_descred[$i]</td>";
 	 echo "<td>$a_reduz[$i]</td>";
-	 echo "<td>$a_recurso[$i]</td>";  
+	 echo "<td>$a_recurso[$i]</td>";
          echo "<td>$a_descr[$i] </td>";
-         echo "</tr> ";            
+         echo "</tr> ";
      }
-  ?>   
+  ?>
   </table>
-  </div> 
+  </div>
   <div id='div_passivo' style='position:absolute; visibility:hidden' >
   <table border=1 cellspacing=0 width="100%" bgcolor="#CCCCCC">
-   <?// se alteração     
+   <?// se alteração
      echo "<tr><th>&nbsp;</th><th>Estrutural</th><th>Sistema</th><th>Reduz</th><th>Recurso</th><th>descr<th></tr>";
      for($i = 0;$i < sizeof($p_codcon);$i++) {
          echo "<tr>";
          echo "<td><input type=\"checkbox\" name=\"chaves\" value=\"$p_codcon[$i]\" ";
          if ($p_codele[$i]!="")
-              echo "checked";             	
-         echo "></td>";	      	    
+              echo "checked";
+         echo "></td>";
          echo "<td>".espaco($p_estrut[$i])."$p_estrut[$i]</td>";
-	 echo "<td>$p_descred[$i]</td>";              
+	 echo "<td>$p_descred[$i]</td>";
 	 echo "<td>$p_reduz[$i]</td>";
-	 echo "<td>$p_recurso[$i]</td>";  
+	 echo "<td>$p_recurso[$i]</td>";
          echo "<td>$p_descr[$i] </td>";
-         echo "</tr> ";            
+         echo "</tr> ";
      }
-  ?>   
- 
+  ?>
+
   </table>
   </div>
   <div id='div_rec' style='position:absolute; visibility:hidden' >
-  <table border=1 cellspacing=0 width="100%" bgcolor="#CCCCCC"> 
-   <?// se alteração     
+  <table border=1 cellspacing=0 width="100%" bgcolor="#CCCCCC">
+   <?// se alteração
      echo "<tr><th>&nbsp;</th><th>Estrutural</th><th>Sistema</th><th>Reduz</th><th>Recurso</th><th>descr<th></tr>";
      for($i = 0;$i < sizeof($r_codcon);$i++) {
          echo "<tr>";
          echo "<td><input type=\"checkbox\" name=\"chaves\" value=\"$r_codcon[$i]\" ";
          if ($r_codele[$i]!="")
-              echo "checked";             	
-         echo "></td>";	      	    
+              echo "checked";
+         echo "></td>";
          echo "<td>".espaco($r_estrut[$i])."$r_estrut[$i]</td>";
-	 echo "<td>$r_descred[$i]</td>";              
+	 echo "<td>$r_descred[$i]</td>";
 	 echo "<td>$r_reduz[$i]</td>";
-	 echo "<td>$r_recurso[$i]</td>";  
+	 echo "<td>$r_recurso[$i]</td>";
          echo "<td>$r_descr[$i] </td>";
-         echo "</tr> ";            
+         echo "</tr> ";
      }
-  ?>   
+  ?>
 
   </table>
   </div>
   <div id='div_desp' style='position:absolute; visibility:hidden' >
-  <table border=1 cellspacing=0 width="100%" bgcolor="#CCCCCC"> 
+  <table border=1 cellspacing=0 width="100%" bgcolor="#CCCCCC">
   <?
-   // se alteração     
+   // se alteração
      echo "<tr><th>&nbsp;</th><th>Estrutural</th><th>Sistema</th><th>Reduz</th><th>Recurso</th><th>descr<th></tr>";
      for($i = 0;$i < sizeof($d_codcon);$i++) {
          echo "<tr>";
          echo "<td><input type=\"checkbox\" name=\"chaves\" value=\"$d_codcon[$i]\" ";
          if ($d_codele[$i]!="")
-              echo "checked";             	
-         echo "></td>";	      	    
+              echo "checked";
+         echo "></td>";
          echo "<td>".espaco($d_estrut[$i])."$d_estrut[$i]</td>";
-	 echo "<td>$d_descred[$i]</td>";              
+	 echo "<td>$d_descred[$i]</td>";
 	 echo "<td>$d_reduz[$i]</td>";
-	 echo "<td>$d_recurso[$i]</td>";  
+	 echo "<td>$d_recurso[$i]</td>";
          echo "<td>$d_descr[$i] </td>";
-         echo "</tr> ";            
+         echo "</tr> ";
      }
-  ?>   
+  ?>
 
   </table>
   </div>
   <div id='div_outros' style='position:absolute; visibility:hidden' >
-  <table border=1 cellspacing=0 width="100%" bgcolor="#CCCCCC"> 
-   <?// se alteração     
+  <table border=1 cellspacing=0 width="100%" bgcolor="#CCCCCC">
+   <?// se alteração
      echo "<tr><th>&nbsp;</th><th>Estrutural</th><th>Sistema</th><th>Reduz</th><th>Recurso</th><th>descr<th></tr>";
      for($i = 0;$i < sizeof($o_codcon);$i++) {
          echo "<tr>";
          echo "<td><input type=\"checkbox\" name=\"chaves\" value=\"$o_codcon[$i]\" ";
          if ($o_codele[$i]!="")
-              echo "checked";             	
-         echo "></td>";	      	    
+              echo "checked";
+         echo "></td>";
          echo "<td>".espaco($o_estrut[$i])."$o_estrut[$i]</td>";
-	 echo "<td>$o_descred[$i]</td>";              
+	 echo "<td>$o_descred[$i]</td>";
 	 echo "<td>$o_reduz[$i]</td>";
-	 echo "<td>$o_recurso[$i]</td>";  
+	 echo "<td>$o_recurso[$i]</td>";
          echo "<td>$o_descr[$i] </td>";
-         echo "</tr> ";            
+         echo "</tr> ";
      }
-  ?>   
+  ?>
   </table>
-  </div>  
+  </div>
   </center>
 <script>
 function js_pesquisao69_codparamrel(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_orcparamrel','func_orcparamrel.php?funcao_js=parent.js_mostraorcparamrel1|o42_codparrel|o42_descrrel','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_orcparamrel','func_orcparamrel.php?funcao_js=parent.js_mostraorcparamrel1|o42_codparrel|o42_descrrel','Pesquisa',true);
   }else{
-     if(document.form1.o69_codparamrel.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_orcparamrel','func_orcparamrel.php?pesquisa_chave='+document.form1.o69_codparamrel.value+'&funcao_js=parent.js_mostraorcparamrel','Pesquisa',false);
+     if(document.form1.o69_codparamrel.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_orcparamrel','func_orcparamrel.php?pesquisa_chave='+document.form1.o69_codparamrel.value+'&funcao_js=parent.js_mostraorcparamrel','Pesquisa',false);
      }else{
-       document.form1.o42_descrrel.value = ''; 
+       document.form1.o42_descrrel.value = '';
      }
   }
 }
 function js_mostraorcparamrel(chave,erro){
-  document.form1.o42_descrrel.value = chave; 
-  if(erro==true){ 
-    document.form1.o69_codparamrel.focus(); 
-    document.form1.o69_codparamrel.value = ''; 
+  document.form1.o42_descrrel.value = chave;
+  if(erro==true){
+    document.form1.o69_codparamrel.focus();
+    document.form1.o69_codparamrel.value = '';
   }
 }
 function js_mostraorcparamrel1(chave1,chave2){

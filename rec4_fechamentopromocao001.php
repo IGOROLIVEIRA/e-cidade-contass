@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -68,7 +68,7 @@ fieldset.form {
 			<legend>
 				<strong>Fechamento de Interstício:</strong>
 			</legend>
-			
+
 			<table align="center" width="540">
 				<tr>
           <td nowrap title="<?=@$Th72_regist?>">
@@ -76,7 +76,7 @@ fieldset.form {
             db_ancora("<b>Matrícula:</b>","js_pesquisa(true);",1);
           ?>
           </td>
-          <td> 
+          <td>
           <?
             db_input('h72_regist',10,$Ih72_regist,true,'text',1," onchange='js_pesquisa(false);'");
             db_input('z01_nome',50,$Iz01_nome,true,'text',3,'');
@@ -86,9 +86,9 @@ fieldset.form {
 			</table>
 
 		</fieldset>
-		
-		<input type="button" name="btnProcessar" id="btProcessar" value="Processar" onclick="js_processar()" /> 
-	
+
+		<input type="button" name="btnProcessar" id="btProcessar" value="Processar" onclick="js_processar()" />
+
 	</form>
 </center>
 
@@ -98,17 +98,17 @@ fieldset.form {
 
 <script>
 function js_pesquisa(lMostra){
-  
+
   if(lMostra == true) {
 
-    js_OpenJanelaIframe('top.corpo',
+    js_OpenJanelaIframe('CurrentWindow.corpo',
                         'db_iframe_rhpromocao',
                         'func_rhpromocao.php?funcao_js=parent.js_preenchepesquisa1|h72_regist|z01_nome&lAtivo=1',
                         'Pesquisa',
                         true);
   } else {
 
-    js_OpenJanelaIframe('top.corpo',
+    js_OpenJanelaIframe('CurrentWindow.corpo',
                         'db_iframe_rhpromocao',
                         'func_rhpromocao.php?pesquisa_chave='+document.form1.h72_regist.value+'&funcao_js=parent.js_preenchepesquisa&lAtivo=1',
                         'Pesquisa',
@@ -120,7 +120,7 @@ function js_preenchepesquisa1(chave1, chave2) {
 
   document.form1.h72_regist.value = chave1;
   document.form1.z01_nome.value   = chave2;
-  db_iframe_rhpromocao.hide();  
+  db_iframe_rhpromocao.hide();
 }
 
 function js_preenchepesquisa(chave, erro) {
@@ -129,25 +129,25 @@ function js_preenchepesquisa(chave, erro) {
     document.form1.h72_regist.value = "";
     document.form1.z01_nome.value   = chave;
   } else {
-  
-    document.form1.z01_nome.value   = chave;  
+
+    document.form1.z01_nome.value   = chave;
   }
-  
+
 }
 
 
 function js_processar() {
 
   var iMatricula = $F('h72_regist');
-  
+
   if(iMatricula == '') {
     alert('Selecione a Metrícula do Servidor');
-    return false;     
+    return false;
   } else {
-  
+
     location.href = 'rec4_fechamentopromocao002.php?iCodigoMatricula=' + iMatricula;
   }
-  
+
 }
 </script>
 

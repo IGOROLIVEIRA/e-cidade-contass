@@ -452,7 +452,7 @@ class cl_pcorcamforne {
    function sql_query ( $pc21_orcamforne=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
-       $campos_sql = split("#",$campos);
+       $campos_sql = explode("#",$campos);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -475,7 +475,7 @@ class cl_pcorcamforne {
      $sql .= $sql2;
      if($ordem != null ){
        $sql .= " order by ";
-       $campos_sql = split("#",$ordem);
+       $campos_sql = explode("#",$ordem);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -487,7 +487,7 @@ class cl_pcorcamforne {
 	function sql_query_credenciados ( $pc21_orcamforne=null,$campos="*",$ordem=null,$dbwhere=""){
 		$sql = "select ";
 		if($campos != "*" ){
-			$campos_sql = split("#",$campos);
+			$campos_sql = explode("#",$campos);
 			$virgula = "";
 			for($i=0;$i<sizeof($campos_sql);$i++){
 				$sql .= $virgula.$campos_sql[$i];
@@ -511,7 +511,7 @@ class cl_pcorcamforne {
 		$sql .= $sql2;
 		if($ordem != null ){
 			$sql .= " order by ";
-			$campos_sql = split("#",$ordem);
+			$campos_sql = explode("#",$ordem);
 			$virgula = "";
 			for($i=0;$i<sizeof($campos_sql);$i++){
 				$sql .= $virgula.$campos_sql[$i];
@@ -523,7 +523,7 @@ class cl_pcorcamforne {
    function sql_query_file ( $pc21_orcamforne=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
-       $campos_sql = split("#",$campos);
+       $campos_sql = explode("#",$campos);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -544,7 +544,7 @@ class cl_pcorcamforne {
      $sql .= $sql2;
      if($ordem != null ){
        $sql .= " order by ";
-       $campos_sql = split("#",$ordem);
+       $campos_sql = explode("#",$ordem);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -556,7 +556,7 @@ class cl_pcorcamforne {
 	function sql_query_forne_julg ( $pc21_orcamforne=null,$campos="*",$ordem=null,$dbwhere=""){
 		$sql = "select ";
 		if($campos != "*" ){
-			$campos_sql = split("#",$campos);
+			$campos_sql = explode("#",$campos);
 			$virgula = "";
 			for($i=0;$i<sizeof($campos_sql);$i++){
 				$sql .= $virgula.$campos_sql[$i];
@@ -583,7 +583,7 @@ class cl_pcorcamforne {
 		$sql .= $sql2;
 		if($ordem != null ){
 			$sql .= " order by ";
-			$campos_sql = split("#",$ordem);
+			$campos_sql = explode("#",$ordem);
 			$virgula = "";
 			for($i=0;$i<sizeof($campos_sql);$i++){
 				$sql .= $virgula.$campos_sql[$i];
@@ -595,7 +595,7 @@ class cl_pcorcamforne {
    function sql_query_fornec ( $pc21_orcamforne=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
-       $campos_sql = split("#",$campos);
+       $campos_sql = explode("#",$campos);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -625,7 +625,7 @@ class cl_pcorcamforne {
      $sql .= $sql2;
      if($ordem != null ){
        $sql .= " order by ";
-       $campos_sql = split("#",$ordem);
+       $campos_sql = explode("#",$ordem);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -637,7 +637,7 @@ class cl_pcorcamforne {
    function sql_query_orcitem ( $pc21_orcamforne=null,$campos="*",$ordem=null,$dbwhere=""){
     $sql = "select ";
     if($campos != "*" ){
-      $campos_sql = split("#",$campos);
+      $campos_sql = explode("#",$campos);
       $virgula = "";
       for($i=0;$i<sizeof($campos_sql);$i++){
         $sql .= $virgula.$campos_sql[$i];
@@ -660,7 +660,7 @@ class cl_pcorcamforne {
     $sql .= $sql2;
     if($ordem != null ){
       $sql .= " order by ";
-      $campos_sql = split("#",$ordem);
+      $campos_sql = explode("#",$ordem);
       $virgula = "";
       for($i=0;$i<sizeof($campos_sql);$i++){
         $sql .= $virgula.$campos_sql[$i];
@@ -672,7 +672,7 @@ class cl_pcorcamforne {
    function sql_query_solsugforne ( $pc21_orcamforne=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
-       $campos_sql = split("#",$campos);
+       $campos_sql = explode("#",$campos);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -698,7 +698,7 @@ class cl_pcorcamforne {
      $sql .= $sql2;
      if($ordem != null ){
        $sql .= " order by ";
-       $campos_sql = split("#",$ordem);
+       $campos_sql = explode("#",$ordem);
        $virgula = "";
        }
      return $sql;
@@ -717,7 +717,7 @@ class cl_pcorcamforne {
 
     $sql = "select ";
     if($campos != "*" ){
-      $campos_sql = split("#",$campos);
+      $campos_sql = explode("#",$campos);
       $virgula = "";
       for($i=0;$i<sizeof($campos_sql);$i++){
         $sql .= $virgula.$campos_sql[$i];
@@ -742,7 +742,7 @@ class cl_pcorcamforne {
     $sql .= $sql2;
     if($ordem != null ){
       $sql .= " order by ";
-      $campos_sql = split("#",$ordem);
+      $campos_sql = explode("#",$ordem);
       $virgula = "";
       for($i=0;$i<sizeof($campos_sql);$i++){
         $sql .= $virgula.$campos_sql[$i];

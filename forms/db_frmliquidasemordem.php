@@ -117,10 +117,24 @@ if (USE_PCASP) {
                 <td colspan=2><? db_input('z01_nome', 64, $Iz01_nome, true, 'text', 3, '');?></td>
               </tr>
               <tr>
-                <td><?=db_ancora('<b>Credor:</b>',"js_pesquisae49_numcgm(true)",1)?></td>
-                <td><? db_input('e49_numcgm', 13, $Ie60_numcgm, true, 'text', 1,"onchange='js_pesquisae49_numcgm(false)'"); ?> </td>
+                <!-- Oc17910 -->
+                <td>
+                    <div class='cgm_emitente'><?php db_ancora("<strong><u>CGM Emitente:&nbsp;</u></strong>", "js_pesquisaz01_numcgm(true);", 1); ?></div>
+                    <div class="credor"><?=db_ancora('<b>Credor:</b>',"js_pesquisae49_numcgm(true)",1)?></div>
+                </td>
+                <td>
+                    <div class='cgm_emitente'>
+                        <?php db_input('z01_numcgm', 13, "", true, 'text', 1, " onchange='js_pesquisaz01_numcgm(false);'", "", "", ""); ?>
+                    </div>
+                    <div class="credor">
+                        <? db_input('e49_numcgm', 13, $Ie60_numcgm, true, 'text', 1,"onchange='js_pesquisae49_numcgm(false)'"); ?> 
+                    </div>
+                </td>
                 <!-- <td></td> -->
-                <td colspan=2><? db_input('z01_credor', 64, $Iz01_nome, true, 'text', 3, '');?></td>
+                <td colspan=2>
+                    <div class="cgm_emitente"><? db_input('descricao_emitente', 64, "", true, 'text', 3, 'style="background-color: rgb(222, 184, 135); width: 100%;"');?> </div>    
+                    <div class="credor"><? db_input('z01_credor', 64, $Iz01_nome, true, 'text', 3, '');?> </div>
+                </td>
               </tr>
               <tr>
                 <td><?db_ancora("<b>Conta Pagadora:</b>","js_pesquisa_contapagadora(true);",1);?></td>
@@ -135,6 +149,18 @@ if (USE_PCASP) {
                     ?>
                 <? db_input("e83_descr",64,"",true,"text",3); ?></td>
               </tr>
+                <tr>
+                    <!-- Oc17910 -->
+                    <td><b>NF Matriz/Filial: </b></td>
+                    <td colspan="3">
+                        <select name="nf_matriz_filial" id="nf_matriz_filial" style='width:100%'>
+                            <option value='s'>Sim</option>
+                            <option value='n' selected>Não</option>
+                        </select>
+                    </td>
+                    <!-- end Oc1790 -->
+                </tr>
+              <tr>
               <td nowrap ><b>Nota Fiscal Eletronica: </b></td>
                 <td colspan='2'>
                 
@@ -486,13 +512,13 @@ if (USE_PCASP) {
 
   function js_pesquisae11_cfop(mostra){
     if(mostra==true){
-      js_OpenJanelaIframe('top.corpo',
+      js_OpenJanelaIframe('CurrentWindow.corpo',
         'db_iframe_cfop',
         'func_cfop.php?funcao_js=parent.js_mostracfop1|e10_sequencial|e10_descricao|e10_cfop',
         'Pesquisa CFOP',true);
     }else{
       if($('e10_cfop').value != ''){
-        js_OpenJanelaIframe('top.corpo',
+        js_OpenJanelaIframe('CurrentWindow.corpo',
           'db_iframe_cfop',
           'func_cfop.php?pesquisa_chave='+$('e10_cfop').value+'&funcao_js=parent.js_mostracfop',
           'Pesquisa CFOP',false);
@@ -1014,6 +1040,7 @@ if (USE_PCASP) {
       oParam.e69_nfserie = $F('e69_nfserie');
       oParam.valorTotal = valorTotal;
       oParam.iEmpenho   = $F('e60_numemp');
+      oParam.iCgmEmitente = $F('z01_numcgm');
       oParam.notas      = aNotas;
      
       if(encodeURIComponent(tagString($F("informacaoop"))) != '' || encodeURIComponent(tagString($F("informacaoop"))) != null){
@@ -1209,11 +1236,11 @@ if (USE_PCASP) {
   }
   function js_pesquisae49_numcgm(mostra){
     if(mostra==true){
-      js_OpenJanelaIframe('top.corpo','db_iframe_cgm','func_nome.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome',
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cgm','func_nome.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome',
         'Consulta CGM',true);
     }else{
       if(document.form1.e49_numcgm.value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_cgm',
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cgm',
           'func_nome.php?pesquisa_chave='+document.form1.e49_numcgm.value
           +'&funcao_js=parent.js_mostracgm','Pesquisa',false);
       }else{
@@ -1259,7 +1286,7 @@ if (USE_PCASP) {
     var iCodMov  = $F('e81_codmov');
     var iCodNota = $F('e69_codnota');
     var iNumEmp  = $F('e60_numemp');
-    js_OpenJanelaIframe('top.corpo', 'db_iframe_retencao',
+    js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_retencao',
       'emp4_lancaretencoes.php?iNumNota='+iCodNota+
       '&iNumEmp='+iNumEmp+'&iCodOrd='+iCodOrd+"&lSession="+lSession
       +'&iCodMov='+iCodMov+'&callback=true',
@@ -1419,12 +1446,17 @@ if (USE_PCASP) {
 
   }
 
-  function verificaChave() {
+  function verificaChave(matriz) {
 
     if ($('e69_notafiscaleletronica').value != 2 && $('e69_notafiscaleletronica').value != 3) {
+        if (matriz == true) {
+            var cgm_emitente =  $('e60_numcgm').value;
+        } else {
+            var cgm_emitente =  $('z01_numcgm').value;
+        }
       var params = {
         exec: 'validachave',
-        cgm: $('e60_numcgm').value,
+        cgm: cgm_emitente,
         chave: $('e69_chaveacesso').value,
         data: $('e69_dtnota').value,
         tipo: $('e69_notafiscaleletronica').value,
@@ -1465,7 +1497,12 @@ if (USE_PCASP) {
 
     var resto = soma_ponderada % 11;//
     if ( (aChave[43] == (11 - resto)) || ((resto == 0 || resto == 1) && (aChave[43] == 0)) ) {
-      return verificaChave();
+        var matriz = true;
+        var nf_matriz_filial = document.getElementById('nf_matriz_filial');
+        if (nf_matriz_filial.options[nf_matriz_filial.selectedIndex].value == 's') {
+            matriz = false;
+        }
+        return verificaChave(matriz);
     } else {
       alert("Chave de Acesso inválida");
       $('e69_chaveacesso').value = '';
@@ -1511,5 +1548,79 @@ if (USE_PCASP) {
         $('e83_descr').value    = chave3;
         db_iframe_empagetipo.hide();
 
+    }
+
+    // Oc17910
+    var nf_matriz_filial = document.getElementById('nf_matriz_filial');
+    mostrar_cgm_emitente("n");
+
+    nf_matriz_filial.addEventListener('change', function() {
+        var selected_option_value = nf_matriz_filial.options[nf_matriz_filial.selectedIndex].value;
+        mostrar_cgm_emitente(selected_option_value);
+    });
+
+    function mostrar_cgm_emitente(condicao) {
+        var cgm_emitente = document.getElementsByClassName('cgm_emitente');
+        var credor = document.getElementsByClassName('credor');
+
+        if (condicao == "s") {
+            cgm_emitente[0].hidden = false;
+            cgm_emitente[1].hidden = false;
+            cgm_emitente[2].hidden = false;
+            credor[0].hidden = true;
+            credor[1].hidden = true;
+            credor[2].hidden = true;
+            return;
+        }
+        cgm_emitente[0].hidden = true;
+        cgm_emitente[1].hidden = true;
+        cgm_emitente[2].hidden = true;
+        credor[0].hidden = false;
+        credor[1].hidden = false;
+        credor[2].hidden = false;
+        return;
+    }
+
+    function js_pesquisaz01_numcgm(mostra){
+        if(mostra==true){
+            js_OpenJanelaIframe('',
+                'func_nome',
+                'func_nome.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome',
+                'Pesquisar CGM',
+                true,
+                22,
+                0,
+                document.body.getWidth() - 12,
+                document.body.scrollHeight - 30);
+        }else{
+            if(document.form1.z01_numcgm.value != ''){
+
+                js_OpenJanelaIframe('',
+                    'func_nome',
+                    'func_nome.php?pesquisa_chave='+document.form1.z01_numcgm.value+
+                    '&funcao_js=parent.js_mostracgm',
+                    'Pesquisar CGM',
+                    false,
+                    22,
+                    0,
+                    document.width-12,
+                    document.body.scrollHeight-30);
+            }else{
+                document.form1.descricao_emitente.value = '';
+            }
+        }
+    }
+    function js_mostracgm(erro,chave){
+        document.form1.descricao_emitente.value = chave;
+        if(erro==true){
+            document.form1.z01_numcgm.focus();
+            document.form1.z01_numcgm.value = '';
+        }
+    }
+
+    function js_mostracgm1(chave1,chave2){
+        document.form1.z01_numcgm.value = chave1;
+        document.form1.descricao_emitente.value = chave2;
+        func_nome.hide();
     }
 </script>

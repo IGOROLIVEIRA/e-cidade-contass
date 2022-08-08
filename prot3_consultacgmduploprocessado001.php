@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once ("libs/db_stdlib.php");
@@ -91,13 +91,13 @@ td {
                   <?
                   db_input("z10_numcgm", 10, $Iz10_numcgm, true, "text", 1, "onchange='js_pesquisaz10_numcgm(false);'");
                   db_input("z01_nome", 45, $Iz01_nome, TRUE, "text", 3);
-                  ?>  
+                  ?>
                 </td>
 
 
 				<td align="left" nowrap>
                  <?
-                
+
                 ?>
                 </td>
 			</tr>
@@ -105,7 +105,7 @@ td {
 				<td nowrap align="left"><b>
                     <?
                     db_ancora($LDBtxt_cgmerrado, "js_pesquisaz11_numcgm(true);", 1);
-                    ?>   
+                    ?>
                   </b></td>
 				<td align="left" nowrap>
                  <?
@@ -123,8 +123,8 @@ td {
               db_inputdata('dtfimvlrg', @$dia2, @$mes2, @$ano2, true, 'text', 1, "");
               ?>
               </td>
-			
-			
+
+
 			<tr>
 				<td colspan="2">
 				<table align="center" border="0">
@@ -164,14 +164,14 @@ td {
 			</tr>
 			<tr>
 				<td colspan="2" align="center">
-				<input name="pequisar" id="pesquisar" type="button" value="Pesquisar" onclick="js_pesquisar();"> 
+				<input name="pequisar" id="pesquisar" type="button" value="Pesquisar" onclick="js_pesquisar();">
 				<input name="limpar" id="limpar" type="button" value="Limpar" onclick="js_limpar();">
 				</td>
 			</tr>
-		
+
 		</table>
 		</form>
-		
+
 		</td>
 	</tr>
 </table>
@@ -184,10 +184,10 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsessio
 
 function js_pesquisaz10_numcgm(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','func_cgmcorreto','func_cgmcorretoconsulta.php?funcao_js=parent.js_mostranumcgmcorreto|z10_numcgm|z01_nome','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','func_cgmcorreto','func_cgmcorretoconsulta.php?funcao_js=parent.js_mostranumcgmcorreto|z10_numcgm|z01_nome','Pesquisa',true);
   }else{
      if(document.form1.z10_numcgm.value != ''){
-        js_OpenJanelaIframe('top.corpo','func_cgmcorreto','func_cgmcorretoconsulta.php?pesquisa_chave='+document.form1.z10_numcgm.value+'&funcao_js=parent.js_mostranumcgmcorretoerro','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','func_cgmcorreto','func_cgmcorretoconsulta.php?pesquisa_chave='+document.form1.z10_numcgm.value+'&funcao_js=parent.js_mostranumcgmcorretoerro','Pesquisa',false);
       }
      else{
        document.form1.z01_nome.value = "";
@@ -196,12 +196,12 @@ function js_pesquisaz10_numcgm(mostra){
 }
 
 function js_pesquisaz11_numcgm(mostra){
- 
+
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','func_cgmerrado','func_cgmerradoconsulta.php?funcao_js=parent.js_mostranumcgmerrado|z11_numcgm|z01_nome','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','func_cgmerrado','func_cgmerradoconsulta.php?funcao_js=parent.js_mostranumcgmerrado|z11_numcgm|z01_nome','Pesquisa',true);
   }else{
      if(document.form1.z11_numcgm.value != ''){
-        js_OpenJanelaIframe('top.corpo','func_cgmerrado','func_cgmerradoconsulta.php?pesquisa_chave='+document.form1.z11_numcgm.value+'&funcao_js=parent.js_mostranumcgmerradoerro','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','func_cgmerrado','func_cgmerradoconsulta.php?pesquisa_chave='+document.form1.z11_numcgm.value+'&funcao_js=parent.js_mostranumcgmerradoerro','Pesquisa',false);
       }
      else{
        document.form1.z11_nome.value = "";
@@ -215,33 +215,33 @@ function js_pesquisar(){
 			  var iUsuarios = $('db_usuario').options.length;
 			  var sUsuarios = '';
 			  for (i = 0; i < iUsuarios; i++) {
-			  
+
 			    sUsuarios = sUsuarios+vrg+$('db_usuario').options[i].value;
 			    vrg =',';
-			  
+
 			  }
-			  
-			      js_OpenJanelaIframe('top.corpo', 
+
+			      js_OpenJanelaIframe('CurrentWindow.corpo',
 			                          'func_cgmduplofiltroconsulta',
 			                          'func_cgmduplofiltroconsulta.php?cgmcorreto='+document.form1.z10_numcgm.value+
 			                                                         '&cgmerrado='+document.form1.z11_numcgm.value+
 			                                                         '&dtinivlrg='+document.form1.dtinivlrg.value+
 			                                                         '&dtfimvlrg='+document.form1.dtfimvlrg.value+
-			                                                         '&iUsuarios='+sUsuarios+       
+			                                                         '&iUsuarios='+sUsuarios+
 			                           '&funcao_js=parent.js_mostracgmduplo|dl_cgmcorreto|dl_nomecorreto|z10_data|z10_hora|usuario|z10_codigo',
 			                           'Pesquisa',true);
-			                        
+
 			}
-      
+
 //Função que retorna a pesquisa para o formulario com os dois campos NUMCGM e NOME.
 //Caso a função js_pesquisaz10_numcgm tenha sido FALSE.
 //Se a função não encontrar um NUMCGM digitado retorna um erro para o formulario.
 function js_mostranumcgmcorretoerro(chave,erro){
   document.form1.z01_nome.value = chave;
   if(erro==true)
-  { 
-    document.form1.z10_numcgm.value = ''; 
-    document.form1.z10_numcgm.focus(); 
+  {
+    document.form1.z10_numcgm.value = '';
+    document.form1.z10_numcgm.focus();
   }
 }
 
@@ -251,9 +251,9 @@ function js_mostranumcgmcorretoerro(chave,erro){
 function js_mostranumcgmerradoerro(chave,erro){
   document.form1.z11_nome.value = chave;
   if(erro==true)
-  { 
-    document.form1.z11_numcgm.value = ''; 
-    document.form1.z11_numcgm.focus(); 
+  {
+    document.form1.z11_numcgm.value = '';
+    document.form1.z11_numcgm.focus();
   }
 }
 
@@ -273,10 +273,10 @@ function js_mostranumcgmerrado(chave1,chave2){
   func_cgmerrado.hide();
 }
 
-//funcao que envia por get os paramentros de pequisa para o iframe 
+//funcao que envia por get os paramentros de pequisa para o iframe
 function js_mostracgmduplo(chave1, chave2, chave3, chave4, chave5, chave6){
-  
-   js_OpenJanelaIframe('top.corpo','func_cgmduploconsulta','func_cgmduploconsulta.php?z10_numcgm='+chave1+
+
+   js_OpenJanelaIframe('CurrentWindow.corpo','func_cgmduploconsulta','func_cgmduploconsulta.php?z10_numcgm='+chave1+
                                                                                       '&z01_nome='+chave2+
                                                                                       '&z10_data='+chave3+
                                                                                       '&z10_hora='+chave4+
@@ -288,7 +288,7 @@ function js_mostracgmduplo(chave1, chave2, chave3, chave4, chave5, chave6){
 function js_limpar(){
   $(form1).reset();
   $('db_usuario').options.length=0;
-  
+
 }
 
 </script>

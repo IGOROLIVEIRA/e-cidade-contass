@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlibwebseller.php");
@@ -45,9 +45,9 @@ $db_opcao           = 1;
 $db_opcao1          = 1;
 $db_botao           = true;
 if (isset($incluir)) {
-  
+
   if(strlen($ed52_i_ano)<4) {
-    
+
     ?><script>alert("Ano deve ser preenchido com 4 dígitos!");</script><?
     $erro_ano = true;
   } else {
@@ -93,11 +93,11 @@ if(@$erro_ano==true){
  echo "<script> document.form1.ed52_i_ano.focus();</script>";
 }
 if (isset($incluir)) {
-  
+
  if (@$erro_ano==false) {
-   
+
   if ($clcalendario->erro_status=="0") {
-    
+
    $clcalendario->erro(true,false);
    $db_botao=true;
    echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
@@ -178,7 +178,7 @@ if (isset($incluir)) {
              VALUES($ed54_i_codigo,$ultimo,'$array_dados[0]','$diasemana','$array_dados[1]','$array_dados[2]',1)";
     $query1 = db_query($sql1);
    }
-   
+
    /**
     * So vincula o calendario para a escola se estiver logado no modulo escola
     */
@@ -193,7 +193,7 @@ if (isset($incluir)) {
    }
    ?>
    <script>
-    top.corpo.iframe_a1.location.href='edu1_calendario002.php?chavepesquisa=<?=$ultimo?>';
+    CurrentWindow.corpo.iframe_a1.location.href='edu1_calendario002.php?chavepesquisa=<?=$ultimo?>';
    </script>
    <?
   };

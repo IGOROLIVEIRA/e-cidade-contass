@@ -13,7 +13,7 @@ $clrotulo->label("z01_nome");
        db_ancora(@$Lsd03_i_codigo,"js_pesquisasd03_i_codigo(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('sd03_i_codigo',10,$Isd03_i_codigo,true,'text',$db_opcao," onchange='js_pesquisasd03_i_codigo(false);'")
 ?>
@@ -26,7 +26,7 @@ db_input('z01_nome',40,$Iz01_nome,true,'text',3,'')
     <td nowrap title="<?=@$Tsd03_i_crm?>">
        <?=@$Lsd03_i_crm?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('sd03_i_crm',10,$Isd03_i_crm,true,'text',$db_opcao,"")
 ?>
@@ -36,7 +36,7 @@ db_input('sd03_i_crm',10,$Isd03_i_crm,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tsd03_d_ausencia1?>">
        <?=@$Lsd03_d_ausencia1?>
     </td>
-    <td> 
+    <td>
 <?
 db_inputdata('sd03_d_ausencia1',@$sd03_d_ausencia1_dia,@$sd03_d_ausencia1_mes,@$sd03_d_ausencia1_ano,true,'text',$db_opcao,"")
 ?>
@@ -46,7 +46,7 @@ db_inputdata('sd03_d_ausencia1',@$sd03_d_ausencia1_dia,@$sd03_d_ausencia1_mes,@$
     <td nowrap title="<?=@$Tsd03_d_ausencia2?>">
        <?=@$Lsd03_d_ausencia2?>
     </td>
-    <td> 
+    <td>
 <?
 db_inputdata('sd03_d_ausencia2',@$sd03_d_ausencia2_dia,@$sd03_d_ausencia2_mes,@$sd03_d_ausencia2_ano,true,'text',$db_opcao,"")
 ?>
@@ -56,7 +56,7 @@ db_inputdata('sd03_d_ausencia2',@$sd03_d_ausencia2_dia,@$sd03_d_ausencia2_mes,@$
     <td nowrap title="<?=@$Tsd03_i_numerodias?>">
        <?=@$Lsd03_i_numerodias?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('sd03_i_numerodias',10,$Isd03_i_numerodias,true,'text',$db_opcao,"")
 ?>
@@ -70,20 +70,20 @@ db_input('sd03_i_numerodias',10,$Isd03_i_numerodias,true,'text',$db_opcao,"")
 <script>
 function js_pesquisasd03_i_codigo(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_cgm','func_cgm.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cgm','func_cgm.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome','Pesquisa',true);
   }else{
-     if(document.form1.sd03_i_codigo.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_cgm','func_cgm.php?pesquisa_chave='+document.form1.sd03_i_codigo.value+'&funcao_js=parent.js_mostracgm','Pesquisa',false);
+     if(document.form1.sd03_i_codigo.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cgm','func_cgm.php?pesquisa_chave='+document.form1.sd03_i_codigo.value+'&funcao_js=parent.js_mostracgm','Pesquisa',false);
      }else{
-       document.form1.z01_nome.value = ''; 
+       document.form1.z01_nome.value = '';
      }
   }
 }
 function js_mostracgm(chave,erro){
-  document.form1.z01_nome.value = chave; 
-  if(erro==true){ 
-    document.form1.sd03_i_codigo.focus(); 
-    document.form1.sd03_i_codigo.value = ''; 
+  document.form1.z01_nome.value = chave;
+  if(erro==true){
+    document.form1.sd03_i_codigo.focus();
+    document.form1.sd03_i_codigo.value = '';
   }
 }
 function js_mostracgm1(chave1,chave2){
@@ -92,7 +92,7 @@ function js_mostracgm1(chave1,chave2){
   db_iframe_cgm.hide();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_medicos','func_medicos.php?funcao_js=parent.js_preenchepesquisa|sd03_i_codigo','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_medicos','func_medicos.php?funcao_js=parent.js_preenchepesquisa|sd03_i_codigo','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_medicos.hide();

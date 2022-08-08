@@ -98,6 +98,15 @@ final class DBRegistry {
   }
 
   /**
+   * Verifica se a chave existe no registry
+   * @param $sIdentifier
+   * @return bool
+   */
+  public static function has($sIdentifier) {
+    return isset(self::getInstance()->aitens[$sIdentifier]);
+  }
+
+  /**
    * Retorna o total de itens salvos no repository
    * @return number total de itens no repositorio
    */

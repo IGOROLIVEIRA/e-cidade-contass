@@ -8,7 +8,7 @@
     float: right;  width: 20px;"></div>
 <div id="fechar" onclick="fechar()" style="background:url('imagens/jan_mini_on.gif'); height: 20px;
     float: right;  width: 20px;"></div>
-    
+
 </div><!-- topo -->
 <div id="campos" style="margin-bottom: 7px;">
 <table>
@@ -18,7 +18,7 @@
 </tr>
 <tr>
 <td><strong>Código do Aditivo:</strong></td>
-<td> 	
+<td>
  <input type="text" name="codAdi" id="codAdi" >
 </td>
 </tr>
@@ -52,7 +52,7 @@
   </tr>
   <tr>
   <td><strong>Data Assinatura Contrato:</strong></td>
-  <td><input type="text" name=dataAssinaturaContOriginal id="dataAssinaturaContOriginal" onfocus="js_validaEntrada(this);" onkeyup="return js_mascaraData(this,event)" 
+  <td><input type="text" name=dataAssinaturaContOriginal id="dataAssinaturaContOriginal" onfocus="js_validaEntrada(this);" onkeyup="return js_mascaraData(this,event)"
   autocomplete="off" onblur="js_validaDbData(this);" maxlength="10">
   <input id="dataAssinaturaContOriginal_dia" type="hidden" maxlength="2" size="2" value="" title="" >
   <input id="dataAssinaturaContOriginal_mes" type="hidden" maxlength="2" size="2" value="" title="" >
@@ -64,7 +64,7 @@
       objData.value = dia+"/"+mes+'/'+ano;
     }
   </script>
-  
+
   </td>
   </tr>
   <tr>
@@ -83,7 +83,7 @@
   <tr>
 	<td><strong>Descrição Alteração:<strong></td>
 	<td><span id="left"></span>
-	<textarea type="text" name="dscAlteracao" id="dscAlteracao" value="" cols="30" rows="7" 
+	<textarea type="text" name="dscAlteracao" id="dscAlteracao" value="" cols="30" rows="7"
 	onKeyDown="textCounter(this.form1.descricaoArtigo,this.form.remLen,250)" onKeyUp="textCounter(this.form1.descricaoArtigo,this.form.remLen,250)">
 	</textarea></td>
   </tr>
@@ -93,7 +93,7 @@
   </tr>
   <tr>
   <td><strong>Data Assina. Aditivo:</strong></td>
-  <td><input type="text" name="dataAssinaturaTermoAditivo" id="dataAssinaturaTermoAditivo" onfocus="js_validaEntrada(this);" onkeyup="return js_mascaraData(this,event)" 
+  <td><input type="text" name="dataAssinaturaTermoAditivo" id="dataAssinaturaTermoAditivo" onfocus="js_validaEntrada(this);" onkeyup="return js_mascaraData(this,event)"
   autocomplete="off" onblur="js_validaDbData(this);" maxlength="10">
   <input id="dataAssinaturaTermoAditivo_dia" type="hidden" maxlength="2" size="2" value="" title="" >
   <input id="dataAssinaturaTermoAditivo_mes" type="hidden" maxlength="2" size="2" value="" title="" >
@@ -109,7 +109,7 @@
   </tr>
   <tr>
   <td><strong>Nova data Final:</strong></td>
-  <td><input type="text" name="novaDataTermino" id="novaDataTermino" onfocus="js_validaEntrada(this);" onkeyup="return js_mascaraData(this,event)" 
+  <td><input type="text" name="novaDataTermino" id="novaDataTermino" onfocus="js_validaEntrada(this);" onkeyup="return js_mascaraData(this,event)"
   autocomplete="off" onblur="js_validaDbData(this);" maxlength="10">
   <input id="novaDataTermino_dia" type="hidden" maxlength="2" size="2" value="" title="" >
   <input id="novaDataTermino_mes" type="hidden" maxlength="2" size="2" value="" title="" >
@@ -133,7 +133,7 @@
   </tr>
   <tr>
   <td><strong>Data da Publicação do Termo Aditivo:</strong></td>
-  <td><input type="text" name="dataPublicacao" id="dataPublicacao" onfocus="js_validaEntrada(this);" onkeyup="return js_mascaraData(this,event)" 
+  <td><input type="text" name="dataPublicacao" id="dataPublicacao" onfocus="js_validaEntrada(this);" onkeyup="return js_mascaraData(this,event)"
   autocomplete="off" onblur="js_validaDbData(this);" maxlength="10">
   <input id="dataPublicacao_dia" type="hidden" maxlength="2" size="2" value="" title="" >
   <input id="dataPublicacao_mes" type="hidden" maxlength="2" size="2" value="" title="" >
@@ -168,22 +168,22 @@
 
 
 function limpar_codigo(param1, param2, param3) {
-	 
-	top.corpo.iframe_db_aditens.location.href='con4_sicomitensaditivados.php?codigoAd='+param1+'&nroContrato='+param2+'&anoContrato='+param3;
+
+	CurrentWindow.corpo.iframe_db_aditens.location.href='con4_sicomitensaditivados.php?codigoAd='+param1+'&nroContrato='+param2+'&anoContrato='+param3;
 	if (param1 == '') {
 	  parent.document.formaba.db_aditens.disabled=true;
 	}
-	
+
 }
 
 /**
  * limitar caracteres de textarea
  */
 function textCounter(field, countfield, maxlimit) {
-	
+
 	if (field.value.length > maxlimit){
 		field.value = field.value.substring(0, maxlimit);
-	}else{ 
+	}else{
 		countfield.value = maxlimit - field.value.length;
 	}
 }
@@ -199,7 +199,7 @@ function pesquisar() {
 		onComplete:cria_tabela
 		  }
 	  );
-	
+
 }
 
 /**
@@ -217,15 +217,15 @@ function pesquisar_codigo() {
 		onComplete:cria_tabela
 		  }
 	  );
-	
+
 }
 
 /**
- * 
+ *
  */
 function pegar_valor(param1, param2, param3, param4, param5, param6, param7, param8, param9, param10,
 		 param11, param12, param13, param14){
-	
+
 	$('codigo').value = param1;
 	$('codAditivo').value = param2;
 	$('nroContrato').value = param3;
@@ -244,26 +244,26 @@ function pegar_valor(param1, param2, param3, param4, param5, param6, param7, par
 
   if ($('codAditivo').value != "" && $('nroContrato').value != "") {
 
-	  top.corpo.iframe_db_aditens.location.href='con4_sicomitensaditivados.php?codigoAd='+param2+'&nroContrato='+param3+'&anoContrato='+param4;
+	  CurrentWindow.corpo.iframe_db_aditens.location.href='con4_sicomitensaditivados.php?codigoAd='+param2+'&nroContrato='+param3+'&anoContrato='+param4;
     parent.document.formaba.db_aditens.disabled=false;
 
   } else {
 
-	  top.corpo.iframe_db_aditens.location.href='con4_sicomitensaditivados.php?codigoAd='+param2+'&nroContrato='+param3+'&anoContrato='+param4;
+	  CurrentWindow.corpo.iframe_db_aditens.location.href='con4_sicomitensaditivados.php?codigoAd='+param2+'&nroContrato='+param3+'&anoContrato='+param4;
 	  parent.document.formaba.db_aditens.disabled=true;
-	  
+
 	}
 
-    var campo = document.getElementById('TabDbLov'); 
-	  document.getElementById('lista').removeChild(campo); 
+    var campo = document.getElementById('TabDbLov');
+	  document.getElementById('lista').removeChild(campo);
 }
 
 function fechar() {
-	
-	var campo = document.getElementById('TabDbLov'); 
-	document.getElementById('lista').removeChild(campo); 
+
+	var campo = document.getElementById('TabDbLov');
+	document.getElementById('lista').removeChild(campo);
 	document.getElementById('lista').style.visibility = "hidden";
-	
+
 }
 
 function cria_tabela(json) {
@@ -286,56 +286,56 @@ function cria_tabela(json) {
 	tabela += "Tipo Termo Aditivo";
 	tabela += "</td></tr>";
 	try {
-		
+
 		for (var i = 0; i < jsonObj.length; i++) {
-			
+
 			if(i % 2 != 0){
 					color = "#97b5e6";
 			}else{
 				color = "#e796a4";
 			}
 			tabela += "<tr>";
-			
+
 			tabela += "<td id=\"I00\" bgcolor=\""+color+"\" nowrap=\"\" style=\"text-decoration: none; color: rgb(0, 0, 0);\">";
 			tabela += "<a onclick=\"pegar_valor("+jsonObj[i].codigo+",'"+jsonObj[i].codAditivo+"','"+jsonObj[i].nroContrato+"','"+jsonObj[i].AnoContrato+"','"
 			+jsonObj[i].dataAssinaturaContOriginal+"','"+jsonObj[i].tipoTermoAditivo+"','"+jsonObj[i].dscAlteracao+"','"+jsonObj[i].nroSeqTermoAditivo+"','"
 			+jsonObj[i].dataAssinaturaTermoAditivo+"','"+jsonObj[i].novaDataTermino+"','"+jsonObj[i].valorAditivo+"','"+jsonObj[i].valorAtualizadoContrato+"','"
 			+jsonObj[i].dataPublicacao+"','"+jsonObj[i].veiculoDivulgacao+"')\">"+jsonObj[i].codigo+"</a>";
-	
+
 			tabela += "</td><td id=\"I00\" bgcolor=\""+color+"\" nowrap=\"\" style=\"text-decoration: none; color: rgb(0, 0, 0);\">";
 			tabela += "<a onclick=\"pegar_valor("+jsonObj[i].codigo+",'"+jsonObj[i].codAditivo+"','"+jsonObj[i].nroContrato+"','"+jsonObj[i].AnoContrato+"','"
 			+jsonObj[i].dataAssinaturaContOriginal+"','"+jsonObj[i].tipoTermoAditivo+"','"+jsonObj[i].dscAlteracao+"','"+jsonObj[i].nroSeqTermoAditivo+"','"
 			+jsonObj[i].dataAssinaturaTermoAditivo+"','"+jsonObj[i].novaDataTermino+"','"+jsonObj[i].valorAditivo+"','"+jsonObj[i].valorAtualizadoContrato+"','"
 			+jsonObj[i].dataPublicacao+"','"+jsonObj[i].veiculoDivulgacao+"')\">"+jsonObj[i].codAditivo+"</a>";
-	
+
 			tabela += "</td><td id=\"I00\" bgcolor=\""+color+"\" nowrap=\"\" style=\"text-decoration: none; color: rgb(0, 0, 0);\">";
 			tabela += "<a onclick=\"pegar_valor("+jsonObj[i].codigo+",'"+jsonObj[i].codAditivo+"','"+jsonObj[i].nroContrato+"','"+jsonObj[i].AnoContrato+"','"
 			+jsonObj[i].dataAssinaturaContOriginal+"','"+jsonObj[i].tipoTermoAditivo+"','"+jsonObj[i].dscAlteracao+"','"+jsonObj[i].nroSeqTermoAditivo+"','"
 			+jsonObj[i].dataAssinaturaTermoAditivo+"','"+jsonObj[i].novaDataTermino+"','"+jsonObj[i].valorAditivo+"','"+jsonObj[i].valorAtualizadoContrato+"','"
 			+jsonObj[i].dataPublicacao+"','"+jsonObj[i].veiculoDivulgacao+"')\">"+jsonObj[i].nroContrato+"</a>";
-	
+
 			tabela += "</td><td id=\"I00\" bgcolor=\""+color+"\" nowrap=\"\" style=\"text-decoration: none; color: rgb(0, 0, 0);\">";
 			tabela += "<a onclick=\"pegar_valor("+jsonObj[i].codigo+",'"+jsonObj[i].codAditivo+"','"+jsonObj[i].nroContrato+"','"+jsonObj[i].AnoContrato+"','"
 			+jsonObj[i].dataAssinaturaContOriginal+"','"+jsonObj[i].tipoTermoAditivo+"','"+jsonObj[i].dscAlteracao+"','"+jsonObj[i].nroSeqTermoAditivo+"','"
 			+jsonObj[i].dataAssinaturaTermoAditivo+"','"+jsonObj[i].novaDataTermino+"','"+jsonObj[i].valorAditivo+"','"+jsonObj[i].valorAtualizadoContrato+"','"
 			+jsonObj[i].dataPublicacao+"','"+jsonObj[i].veiculoDivulgacao+"')\">"+jsonObj[i].AnoContrato+"</a>";
-	
+
 			tabela += "</td><td id=\"I00\" bgcolor=\""+color+"\" nowrap=\"\" style=\"text-decoration: none; color: rgb(0, 0, 0);\">";
 			tabela += "<a onclick=\"pegar_valor("+jsonObj[i].codigo+",'"+jsonObj[i].codAditivo+"','"+jsonObj[i].nroContrato+"','"+jsonObj[i].AnoContrato+"','"
 			+jsonObj[i].dataAssinaturaContOriginal+"','"+jsonObj[i].tipoTermoAditivo+"','"+jsonObj[i].dscAlteracao+"','"+jsonObj[i].nroSeqTermoAditivo+"','"
 			+jsonObj[i].dataAssinaturaTermoAditivo+"','"+jsonObj[i].novaDataTermino+"','"+jsonObj[i].valorAditivo+"','"+jsonObj[i].valorAtualizadoContrato+"','"
 			+jsonObj[i].dataPublicacao+"','"+jsonObj[i].veiculoDivulgacao+"')\">"+jsonObj[i].dataAssinaturaContOriginal+"</a>";
-	
+
 			tabela += "</td><td id=\"I00\" bgcolor=\""+color+"\" nowrap=\"\" style=\"text-decoration: none; color: rgb(0, 0, 0);\">";
 			tabela += "<a onclick=\"pegar_valor("+jsonObj[i].codigo+",'"+jsonObj[i].codAditivo+"','"+jsonObj[i].nroContrato+"','"+jsonObj[i].AnoContrato+"','"
 			+jsonObj[i].dataAssinaturaContOriginal+"','"+jsonObj[i].tipoTermoAditivo+"','"+jsonObj[i].dscAlteracao+"','"+jsonObj[i].nroSeqTermoAditivo+"','"
 			+jsonObj[i].dataAssinaturaTermoAditivo+"','"+jsonObj[i].novaDataTermino+"','"+jsonObj[i].valorAditivo+"','"+jsonObj[i].valorAtualizadoContrato+"','"
 			+jsonObj[i].dataPublicacao+"','"+jsonObj[i].veiculoDivulgacao+"')\">"+(jsonObj[i].tipoTermoAditivo == 1 ? "Prorrogação de Prazo" :
-		  jsonObj[i].tipoTermoAditivo == 2 ? "Acréscimo de valor" : jsonObj[i].tipoTermoAditivo == 3 ? "Decréscimo de valor" : 
+		  jsonObj[i].tipoTermoAditivo == 2 ? "Acréscimo de valor" : jsonObj[i].tipoTermoAditivo == 3 ? "Decréscimo de valor" :
 			jsonObj[i].tipoTermoAditivo == 4 ? "Reajuste" : jsonObj[i].tipoTermoAditivo == 5 ? "Recomposição" : "Outros")+"</a>";
-					
+
 			tabela += "</td></tr>";
-			
+
 		}
 
 	}catch (e) {
@@ -344,11 +344,11 @@ function cria_tabela(json) {
 	var conteudo = document.getElementById('lista');
 	conteudo.innerHTML += tabela;
 	conteudo.style.visibility = "visible";
-		
+
 }
 
 function passar_valores(cod) {
-	
+
 	var oAjax = new Ajax.Request("con4_pesquisarxmladitivoscontratos.php",
 			{
 		method:"post",
@@ -360,18 +360,18 @@ function passar_valores(cod) {
 				jsonObj[i].dataAssinaturaContOriginal,jsonObj[i].tipoTermoAditivo,jsonObj[i].dscAlteracao,jsonObj[i].nroSeqTermoAditivo,
 				jsonObj[i].dataAssinaturaTermoAditivo,jsonObj[i].novaDataTermino,jsonObj[i].valorAditivo,jsonObj[i].valorAtualizadoContrato,
 				jsonObj[i].dataPublicacao,jsonObj[i].veiculoDivulgacao);
-		} 		
+		}
 		  }
 	  );
-	
-} 
+
+}
 </script>
 
 <?
 if (isset($iUltimoCodigo)) {
-	echo "<script>	
+	echo "<script>
 		passar_valores(".$iUltimoCodigo.");
 	</script>";
-} 
+}
 
 ?>

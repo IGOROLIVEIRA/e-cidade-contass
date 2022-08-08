@@ -25,21 +25,21 @@
  *                                licenca/licenca_pt.txt
  */
 
-require("libs/db_stdlib.php");
-require("libs/db_conecta.php");
-include("libs/db_sessoes.php");
-include("libs/db_usuariosonline.php");
-include("dbforms/db_funcoes.php");
+require(modification("libs/db_stdlib.php"));
+require(modification("libs/db_conecta.php"));
+include(modification("libs/db_sessoes.php"));
+include(modification("libs/db_usuariosonline.php"));
+include(modification("dbforms/db_funcoes.php"));
 
-include("libs/db_liborcamento.php");
-include("classes/db_orcdotacao_classe.php");
-include("classes/db_pagordem_classe.php");
-include("classes/db_empempenho_classe.php");
-include("classes/db_empelemento_classe.php");
-include("classes/db_pagordemele_classe.php");
-include("classes/db_empnota_classe.php");
-include("classes/db_empnotaele_classe.php");
-include ("classes/db_empempenhonl_classe.php");
+include(modification("libs/db_liborcamento.php"));
+include(modification("classes/db_orcdotacao_classe.php"));
+include(modification("classes/db_pagordem_classe.php"));
+include(modification("classes/db_empempenho_classe.php"));
+include(modification("classes/db_empelemento_classe.php"));
+include(modification("classes/db_pagordemele_classe.php"));
+include(modification("classes/db_empnota_classe.php"));
+include(modification("classes/db_empnotaele_classe.php"));
+include(modification("classes/db_empempenhonl_classe.php"));
 
 $clempnota     = new cl_empnota;
 $clempnotaele  = new cl_empnotaele;
@@ -50,16 +50,16 @@ $clempelemento = new cl_empelemento;
 $clorcdotacao  = new cl_orcdotacao;
 $oDaoEmpenhoNl = new cl_empempenhonl;
 
-include("classes/db_conlancam_classe.php");
-include("classes/db_conlancamele_classe.php");
-include("classes/db_conlancamlr_classe.php");
-include("classes/db_conlancamcgm_classe.php");
-include("classes/db_conlancamemp_classe.php");
-include("classes/db_conlancamval_classe.php");
-include("classes/db_conlancamdot_classe.php");
-include("classes/db_conlancamdoc_classe.php");
-include("classes/db_conlancamnota_classe.php");
-include("classes/db_conplanoreduz_classe.php");
+include(modification("classes/db_conlancam_classe.php"));
+include(modification("classes/db_conlancamele_classe.php"));
+include(modification("classes/db_conlancamlr_classe.php"));
+include(modification("classes/db_conlancamcgm_classe.php"));
+include(modification("classes/db_conlancamemp_classe.php"));
+include(modification("classes/db_conlancamval_classe.php"));
+include(modification("classes/db_conlancamdot_classe.php"));
+include(modification("classes/db_conlancamdoc_classe.php"));
+include(modification("classes/db_conlancamnota_classe.php"));
+include(modification("classes/db_conplanoreduz_classe.php"));
 
 $clconplanoreduz  = new cl_conplanoreduz;
 $clconlancam	  = new cl_conlancam;
@@ -73,7 +73,7 @@ $clconlancamdoc	  = new cl_conlancamdoc;
 $clconlancamnota  = new cl_conlancamnota;
 
 
-include("libs/db_libcontabilidade.php");
+include(modification("libs/db_libcontabilidade.php"));
 $cltranslan       = new cl_translan;
 
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
@@ -147,11 +147,11 @@ if(isset($confirmar)){
     $arr_codeleval = array();
 
     //$arr_dados é um array com todos os elementos
-    $arr_dados = split("#",$dados);
+    $arr_dados = explode("#",$dados);
 
     $tam = count($arr_dados);
     for($i=0; $i<$tam; $i++){
-       $arr_ele = split("-",$arr_dados[$i]);
+       $arr_ele = explode("-",$arr_dados[$i]);
        $elemento = $arr_ele[0];
        $valor    = $arr_ele[1];
 
@@ -189,7 +189,7 @@ if(isset($confirmar)){
 
   //rotina pega as notas marcadas para atualizar os valores liquidados da notas
    if($sqlerro==false && isset($chaves) && $chaves!=''){
-      $arr_notas = split("#",$chaves);
+      $arr_notas = explode("#",$chaves);
       $tam = count($arr_notas);
       for($i=0; $i<$tam; $i++){
 	  $nota = $arr_notas[$i];
@@ -287,7 +287,7 @@ if(isset($confirmar)){
 	      /*conlancamnota*/
 
 	      if($sqlerro==false && isset($chaves) && $chaves!=''){
-                 $arr_notas = split("#",$chaves);
+                 $arr_notas = explode("#",$chaves);
                  $tam = count($arr_notas);
                  for($inota=0; $inota<$tam; $inota++){
                    $clconlancamnota->c66_codnota = $arr_notas[$inota];
@@ -521,7 +521,7 @@ if(isset($e60_numemp)){
     <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
 	<?
-	include("forms/db_frmempliquidaestorna.php");
+	include(modification("forms/db_frmempliquidaestorna.php"));
 	?>
     </center>
 	</td>

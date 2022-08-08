@@ -25,12 +25,12 @@ function js_emite(){
     query = 'l20_codigo='+document.form1.l20_codigo.value;
     query += '&l03_codigo='+document.form1.l03_codigo.value+'&l03_descr='+document.form1.l03_descr.value;
     query += '&status='+document.form1.status.value+'&exercicio='+document.form1.exercicio.value;
-  
+
     let sFornecedores = '';
 
     if(document.form1.lQuebraFornecedor.value == 't' && document.form1.fornecedor.options.length){
         vrg    = '';
-    
+
         for (let count = 0; count < document.form1.fornecedor.options.length; count++) {
             sFornecedores += vrg + document.form1.fornecedor.options[count].value;
             vrg =',';
@@ -40,10 +40,10 @@ function js_emite(){
     query += '&cgms='+sFornecedores;
 
     jan = window.open('lic2_rolllicita002.php?'+query,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
-    jan.moveTo(0,0);	
+    jan.moveTo(0,0);
 }
 
-</script>  
+</script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 
@@ -81,7 +81,7 @@ function js_emite(){
          <td >&nbsp;</td>
       </tr>
 
-      <tr> 
+      <tr>
          <td  align="left" nowrap title="<?=$Tl20_codigo?>">
           <b>
           <?
@@ -97,7 +97,7 @@ function js_emite(){
          </td>
       </tr>
 
-      <tr> 
+      <tr>
          <td  align="left" nowrap title="<?=$Tl03_codigo?>">
           <b>
           <?
@@ -105,7 +105,7 @@ function js_emite(){
           ?>
           </b>
          </td>
-         <td  align="left" nowrap> 
+         <td  align="left" nowrap>
           <?
             db_input("l03_codigo",8,$Il03_codigo,true,"text",1,"onchange='js_pesquisal03_codigo(false);'");
             db_input("l03_descr",40,$Il03_descr,true,"text",3);
@@ -184,7 +184,7 @@ function js_emite(){
         <td >&nbsp;</td>
       </tr>
       <tr>
-        <td colspan="2" align = "center"> 
+        <td colspan="2" align = "center">
           <input  name="emite2" id="emite2" type="button" value="Gerar Relatório" onclick="js_emite();" >
         </td>
       </tr>
@@ -209,7 +209,7 @@ if(document.getElementById('lQuebraFornecedor').value = 'f'){
 function js_pesquisal20_numero(mostra){
   if(mostra==true){
     if (document.form1.l03_codigo.value != ""){
-         js_OpenJanelaIframe('top.corpo','db_iframe_licnumeracao','func_liclicita.php?chave_l03_codigo='+document.form1.l03_codigo.value+'&funcao_js=parent.js_mostralicnumeracao1|l20_numero','Pesquisa',true);
+         js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_licnumeracao','func_liclicita.php?chave_l03_codigo='+document.form1.l03_codigo.value+'&funcao_js=parent.js_mostralicnumeracao1|l20_numero','Pesquisa',true);
     } else {
          alert("Selecione uma modalidade!");
 	 document.form1.l03_codigo.focus();
@@ -218,50 +218,50 @@ function js_pesquisal20_numero(mostra){
   }
 }
 function js_mostralicnumeracao1(chave1){
-   document.form1.l20_numero.value = chave1;  
+   document.form1.l20_numero.value = chave1;
    db_iframe_licnumeracao.hide();
 }
 function js_pesquisa_liclicita(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_liclicita.php?lContratos=1&situacao=10&funcao_js=parent.js_mostraliclicita1|l20_codigo|l20_objeto','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_liclicita','func_liclicita.php?lContratos=1&situacao=10&funcao_js=parent.js_mostraliclicita1|l20_codigo|l20_objeto','Pesquisa',true);
   }else{
-     if(document.form1.l20_codigo.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_liclicita.php?lContratos=1&situacao=10&pesquisa_chave='+document.form1.l20_codigo.value+'&funcao_js=parent.js_mostraliclicita','Pesquisa',false);
+     if(document.form1.l20_codigo.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_liclicita','func_liclicita.php?lContratos=1&situacao=10&pesquisa_chave='+document.form1.l20_codigo.value+'&funcao_js=parent.js_mostraliclicita','Pesquisa',false);
      }else{
-       document.form1.l20_codigo.value = ''; 
-       document.form1.l20_objeto.value = ''; 
+       document.form1.l20_codigo.value = '';
+       document.form1.l20_objeto.value = '';
      }
   }
 }
 function js_mostraliclicita(chave,erro){
-  document.form1.l20_objeto.value = chave; 
-  if(erro==true){ 
-    document.form1.l20_codigo.value = ''; 
-    document.form1.l20_objeto.value = ''; 
-    document.form1.l20_codigo.focus(); 
+  document.form1.l20_objeto.value = chave;
+  if(erro==true){
+    document.form1.l20_codigo.value = '';
+    document.form1.l20_objeto.value = '';
+    document.form1.l20_codigo.focus();
   }
 }
 function js_mostraliclicita1(chave1, chave2){
-   document.form1.l20_codigo.value = chave1;  
-   document.form1.l20_objeto.value = chave2;  
+   document.form1.l20_codigo.value = chave1;
+   document.form1.l20_objeto.value = chave2;
    db_iframe_liclicita.hide();
 }
 function js_pesquisal03_codigo(mostra){
   if(mostra==true){
     js_OpenJanelaIframe('','db_iframe_cflicita','func_cflicita.php?funcao_js=parent.js_mostracflicita1|l03_codigo|l03_descr','Pesquisa',true);
   }else{
-     if(document.form1.l03_codigo.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_cflicita','func_cflicita.php?pesquisa_chave='+document.form1.l03_codigo.value+'&funcao_js=parent.js_mostracflicita','Pesquisa',false);
+     if(document.form1.l03_codigo.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cflicita','func_cflicita.php?pesquisa_chave='+document.form1.l03_codigo.value+'&funcao_js=parent.js_mostracflicita','Pesquisa',false);
      }else{
-       document.form1.l03_descr.value = ''; 
+       document.form1.l03_descr.value = '';
      }
   }
 }
 function js_mostracflicita(chave,erro){
-  document.form1.l03_descr.value = chave; 
-  if(erro==true){ 
-    document.form1.l03_codigo.focus(); 
-    document.form1.l03_codigo.value = ''; 
+  document.form1.l03_descr.value = chave;
+  if(erro==true){
+    document.form1.l03_codigo.focus();
+    document.form1.l03_codigo.value = '';
   }
 }
 function js_mostracflicita1(chave1,chave2){
@@ -272,7 +272,7 @@ function js_mostracflicita1(chave1,chave2){
 
 function js_pesquisa_fornelicitacao(mostra){
     if (mostra) {
-        js_OpenJanelaIframe('top.corpo','db_iframe_fornelicitacao','func_fornelicitacao.php?&funcao_js=parent.js_mostrafornelicitacao|z01_numcgm|z01_nome','Pesquisa',true);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_fornelicitacao','func_fornelicitacao.php?&funcao_js=parent.js_mostrafornelicitacao|z01_numcgm|z01_nome','Pesquisa',true);
     } else {
         if (document.form1.z01_numcgm.value != '') {
             js_OpenJanelaIframe('','db_iframe_fornelicitacao','func_fornelicitacao.php?pesquisa_chave='+document.form1.z01_numcgm.value+'&funcao_js=parent.js_mostrafornelicitacao1','Pesquisa',false);

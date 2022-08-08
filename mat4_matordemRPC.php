@@ -24,7 +24,6 @@
  *  Copia da licenca no diretorio licenca/licenca_en.txt
  *                                licenca/licenca_pt.txt //
  */
-
 require_once("libs/db_stdlib.php");
 require_once("libs/db_utils.php");
 require_once("std/db_stdClass.php");
@@ -558,7 +557,7 @@ if ($method == "getDados") {
   $_SESSION["matordem{$objJson->m51_codordem}"][$objJson->iCodLanc][$objJson->iIndice]->checked = "";
 } else if ($method == "confirmarEntrada") {
   try {
-    
+
     db_inicio_transacao();
 
     $aDadosConsumoImediato = array(
@@ -617,7 +616,8 @@ if ($method == "getDados") {
       $objJson->sNotaFiscalEletronica,
       $objJson->sChaveAcesso,
       $objJson->sNumeroSerie,
-      FALSE
+      FALSE,
+      $objJson->iCgmEmitente
     );
     //echo '<pre>'; ini_set("display_errors",true);
     //consumoImediato
@@ -693,7 +693,11 @@ if ($method == "getDados") {
       $nfKey   = substr($objJson->sChaveAcesso, 25, 9);
 
       $oDaoCgm   = db_utils::getDao("cgm");
-      $sSqlCgm   = $oDaoCgm->sql_query_file($objJson->m51_numcgm);
+        // Condicao da OC17910
+        if ($objJson->iCgmEmitente > 0)
+            $sSqlCgm   = $oDaoCgm->sql_query_file($objJson->iCgmEmitente);
+        else 
+            $sSqlCgm   = $oDaoCgm->sql_query_file($objJson->m51_numcgm);
       $rsCgm     = $oDaoCgm->sql_record($sSqlCgm);
       $oDadosCgm = db_utils::fieldsMemory($rsCgm, 0);
 

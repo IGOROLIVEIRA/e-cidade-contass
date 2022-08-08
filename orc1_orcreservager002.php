@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -36,7 +36,7 @@ include("dbforms/db_funcoes.php");
 
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
-$erro = false;	
+$erro = false;
 
 $clorcreserprev = new cl_orcreserprev;
 $clorcprevdesp = new cl_orcprevdesp;
@@ -50,21 +50,20 @@ if(isset($atualiza)){
 
   for($i=0;$i<count($HTTP_POST_VARS);$i++){
   	if(substr(key($HTTP_POST_VARS),0,9) == 'atividade' ){
-      $mat = split("\_",key($HTTP_POST_VARS));
+      $mat = split("_",key($HTTP_POST_VARS));
       $clorcreserprev->excluir(db_getsession("DB_anousu"),$mat[1],$mat[2]);
   	}
   	if(substr(key($HTTP_POST_VARS),0,8) == 'previsao' ){
-      $mat = split("\_",key($HTTP_POST_VARS));
+      $mat = split("_",key($HTTP_POST_VARS));
       $clorcprevdesp->excluir(db_getsession("DB_anousu"),$mat[1],$mat[2]);
   	}
     next($HTTP_POST_VARS);
   }
   reset($HTTP_POST_VARS);
-  
+
   for($i=0;$i<count($HTTP_POST_VARS);$i++){
   	if(substr(key($HTTP_POST_VARS),0,9) == 'atividade' ){
-
-      $mat = split("\_",key($HTTP_POST_VARS));
+      $mat = split("_", key($HTTP_POST_VARS));
       $clorcreserprev->o33_anousu   = db_getsession("DB_anousu");
       $clorcreserprev->o33_projativ = $mat[1];
       $clorcreserprev->o33_codigo   = $mat[2];
@@ -72,18 +71,18 @@ if(isset($atualiza)){
       $clorcreserprev->o33_perc     = "0".$HTTP_POST_VARS[key($HTTP_POST_VARS)];
       $clorcreserprev->o33_valor    = "0";
 
-      
+
       $result = $clorcreserprev->incluir(db_getsession("DB_anousu"),$mat[1],$mat[2],$mat[3]);
       if($result == false || $clorcreserprev->erro_status == "0"){
         $erro = true;
         $msg_erro = $clorcreserprev->erro_msg;
         break;
       }
-      
+
   	}
   	if(substr(key($HTTP_POST_VARS),0,8) == 'previsao' ){
 
-      $mat = split("\_",key($HTTP_POST_VARS));
+      $mat = split("_",key($HTTP_POST_VARS));
       $clorcprevdesp->o35_anousu   = db_getsession("DB_anousu");
       $clorcprevdesp->o35_projativ = $mat[1];
       $clorcprevdesp->o35_codigo   = $mat[2];
@@ -91,7 +90,7 @@ if(isset($atualiza)){
       $clorcprevdesp->o35_perc     = "0".$HTTP_POST_VARS[key($HTTP_POST_VARS)];
       $clorcprevdesp->o35_valor    = "0";
 
-      
+
       $result = $clorcprevdesp->incluir(db_getsession("DB_anousu"),$mat[1],$mat[2],$mat[3]);
       if($result == false || $clorcprevdesp->erro_status == "0"){
         $erro = true;
@@ -101,7 +100,7 @@ if(isset($atualiza)){
 
   	}
     next($HTTP_POST_VARS);
-  }	
+  }
 
   db_fim_transacao($erro);
 
@@ -122,7 +121,7 @@ if($erro == false){
       and o58_instit = ".db_getsession("DB_instit");
 
   if($atividade>0){
-     $sql .= " and o58_projativ = $atividade ";  
+     $sql .= " and o58_projativ = $atividade ";
   }
   $sql .= " group by o58_projativ,o58_codigo,o55_descr,o15_descr";
 
@@ -132,7 +131,7 @@ if($erro == false){
   //db_criatabela($result);
   if($clorcreservager->numrows==0){
     $msg_erro = "Orçamento não cadastrado.";
-    $erro = true;	
+    $erro = true;
   }
 }
 
@@ -274,5 +273,5 @@ if($erro==true)
 if(isset($atualiza))
   if($erro==false)
     db_msgbox("Processo concluído.");
-  
+
 ?>

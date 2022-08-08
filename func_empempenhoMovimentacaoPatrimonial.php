@@ -133,7 +133,7 @@ $rotulo->label("z01_cgccpf");
         }else if( isset($chave_e60_codemp) && (trim($chave_e60_codemp) != "" ) ){
 
 
-          $arr = split("/",$chave_e60_codemp);
+          $arr = explode("/",$chave_e60_codemp);
           
           if(count($arr) == 2  && isset($arr[1]) && $arr[1] != '' ){
 

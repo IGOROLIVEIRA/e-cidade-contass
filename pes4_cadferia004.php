@@ -288,7 +288,7 @@ if((isset($r30_regist) && !isset($semdireito)) || isset($enviar_selecao) || (iss
   } else if ( isset($campomatriculas) && trim($campomatriculas) != "" ) {
   	
     $retorno = 'true';
-    $arr_matriculas = split(",", $campomatriculas);
+    $arr_matriculas = explode(",", $campomatriculas);
     $r30_regist = array_shift($arr_matriculas);
     $campomatriculas = implode(",", $arr_matriculas);
   }

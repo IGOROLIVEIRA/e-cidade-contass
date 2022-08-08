@@ -94,13 +94,13 @@ if (isset($processa) && $processa == 't') {
   $numrowstipo = pg_numrows($rsTipovist);
   if ($numrowstipo == 0) {
     db_msgbox("Verifique o cadastro e configure corretamente o tipo de vistoria selecionado");
-    echo "<script>top.corpo.location.href='fis4_vistgeral001.php'</script>";
+    echo "<script>CurrentWindow.corpo.location.href='fis4_vistgeral001.php'</script>";
     exit;
   } else {
     db_fieldsmemory($rsTipovist, 0);
     if ($y77_diasgeral == 0 || $y77_mesgeral == 0) {
       db_msgbox("Configure corretamente o dia e o mes de vencimento do tipo de vistoria selecionado");
-      echo "<script>top.corpo.location.href='fis4_vistgeral001.php'</script>";
+      echo "<script>CurrentWindow.corpo.location.href='fis4_vistgeral001.php'</script>";
       exit;
     }
   }
@@ -421,7 +421,7 @@ if (isset($processa) && $processa == 't') {
     </script>";
   }
 
-  echo "<script>top.corpo.location.href='fis4_vistgeral001.php'</script>";
+  echo "<script>CurrentWindow.corpo.location.href='fis4_vistgeral001.php'</script>";
 
 }
 ?>

@@ -26,7 +26,7 @@ function js_executaIframe(val) {
   <tr>
     <td nowrap title="<?=@$Tpc01_codmater?>"> <?=@$Lpc01_codmater?> </td>
     <td> <? //db_input('pc01_codmater',6,$Ipc01_codmater,true,'text',$db_opcao,"readonly")
-           // carlos  
+           // carlos
            db_input('pc01_codmater',6,$Ipc01_codmater,true,'text',3,"")
     ?>
     </td>
@@ -47,40 +47,40 @@ function js_executaIframe(val) {
         <?
 	  //com query_file na classe
 	  /*
-	  if (!isset($pc013_codgrupo)){ 
+	  if (!isset($pc013_codgrupo)){
              if(isset($pc01_codsubgrupo) &&  ($db_opcao == 2 || $db_opcao == 3)){
                  global $pc03_codgrupo;
                  // echo "<script>alert('".$clpcsubgrupo->sql_query($pc01_codsubgrupo,"pc04_codgrupo as pc01_codgrupo")."'</script>";
                  $result = $clpcsubgrupo->sql_record($clpcsubgrupo->sql_query($pc01_codsubgrupo,"pc04_codgrupo as pc03_codgrupo"));
-                 if ($clpcsubgrupo->numrows > 0 ){  
+                 if ($clpcsubgrupo->numrows > 0 ){
 	            db_fieldsmemory($result,0);
-	         }  
+	         }
               }
-	  }	    
+	  }
           $result = $clpcgrupo->sql_record($clpcgrupo->sql_query(null,"pc03_codgrupo,pc03_descrgrupo","pc03_descrgrupo"));
           @db_selectrecord("pc03_codgrupo",$result,true,$db_opcao,"","","","0","js_troca(this.value);");
   */
          if (!isset($pc01_codgrupo)){
-	    if (!isset($pc03_codgrupo)){ 
+	    if (!isset($pc03_codgrupo)){
                 if(isset($pc01_codsubgrupo) &&  ($db_opcao == 2 || $db_opcao == 3)){
                    global $pc01_codgrupo;
                    $result = $clpcsubgrupo->sql_record($clpcsubgrupo->sql_query($pc01_codsubgrupo,"pc04_codgrupo as pc01_codgrupo"));
-                   if ($clpcsubgrupo->numrows > 0 ){  
+                   if ($clpcsubgrupo->numrows > 0 ){
 	             db_fieldsmemory($result,0);
-	           }  
+	           }
                 }
-	    }	    
+	    }
 	  }
           $result = $clpcgrupo->sql_record($clpcgrupo->sql_query(null,"pc03_codgrupo,pc03_descrgrupo","pc03_descrgrupo"));
           @db_selectrecord("pc01_codgrupo",$result,true,$db_opcao,"","","","0","js_troca(this.value);");
-        ?>  
-    <?=$Lpc01_ativo?> 
+        ?>
+    <?=$Lpc01_ativo?>
     <?
     $arr_truefalse = array('f'=>'Não','t'=>'Sim');
     db_select("pc01_ativo",$arr_truefalse,true,$db_opcao);
     ?>
     </td>
-  </tr> 
+  </tr>
    <? if(isset($pc01_codgrupo) || $db_opcao != 1) { ?>
      <tr>
        <td> <?=$Lpc04_codsubgrupo?> </td>
@@ -93,14 +93,14 @@ function js_executaIframe(val) {
            if ($clpcsubgrupo->numrows > 0 ){
              db_fieldsmemory($result,0);
 	       $vaiIframe = "src='com1_pcmater0011.php?db_opcao=$db_opcao&codigomater=$pc01_codmater&codsubgrupo=$pc04_codsubgrupo&codele=".@$coluna."&db_opcao=$db_opcao'";
-	   }  
-           @db_selectrecord("pc01_codsubgrupo",$result,true,$db_opcao,"","","","","js_executaIframe(this.value)"); 
+	   }
+           @db_selectrecord("pc01_codsubgrupo",$result,true,$db_opcao,"","","","","js_executaIframe(this.value)");
 
- 
-	   
-        ?>  
+
+
+        ?>
       </td>
-      </tr> 
+      </tr>
    <? }    ?>
 
    <tr>
@@ -124,15 +124,15 @@ function js_executaIframe(val) {
   function js_coloca(codele){
 	obj = pcmater0011.document.form1;
 	var coluna='';
-	var sep=''; 
+	var sep='';
 
 	for(i=0; i<obj.length; i++){
-	  nome = obj[i].name.substr(0,10);  
+	  nome = obj[i].name.substr(0,10);
 	  if(nome=="o56_codele" && obj[i].checked==true){
 	    coluna += sep+obj[i].value;
 	    sep= "XX";
 	  }
-	} 
+	}
 	document.form1.codeles.value = coluna;
 	return true;
 	//return coluna ;
@@ -140,20 +140,20 @@ function js_executaIframe(val) {
 
 function js_pesquisapc01_codsubgrupo(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_pcsubgrupo','func_pcsubgrupo.php?funcao_js=parent.js_mostrapcsubgrupo1|pc04_codsubgrupo|pc04_descrsubgrupo','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_pcsubgrupo','func_pcsubgrupo.php?funcao_js=parent.js_mostrapcsubgrupo1|pc04_codsubgrupo|pc04_descrsubgrupo','Pesquisa',true);
   }else{
-     if(document.form1.pc01_codsubgrupo.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_pcsubgrupo','func_pcsubgrupo.php?pesquisa_chave='+document.form1.pc01_codsubgrupo.value+'&funcao_js=parent.js_mostrapcsubgrupo','Pesquisa',false);
+     if(document.form1.pc01_codsubgrupo.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_pcsubgrupo','func_pcsubgrupo.php?pesquisa_chave='+document.form1.pc01_codsubgrupo.value+'&funcao_js=parent.js_mostrapcsubgrupo','Pesquisa',false);
      }else{
-       document.form1.pc04_descrsubgrupo.value = ''; 
+       document.form1.pc04_descrsubgrupo.value = '';
      }
   }
 }
 function js_mostrapcsubgrupo(chave,erro){
-  document.form1.pc04_descrsubgrupo.value = chave; 
-  if(erro==true){ 
-    document.form1.pc01_codsubgrupo.focus(); 
-    document.form1.pc01_codsubgrupo.value = ''; 
+  document.form1.pc04_descrsubgrupo.value = chave;
+  if(erro==true){
+    document.form1.pc01_codsubgrupo.focus();
+    document.form1.pc01_codsubgrupo.value = '';
   }
 }
 function js_mostrapcsubgrupo1(chave1,chave2){
@@ -162,7 +162,7 @@ function js_mostrapcsubgrupo1(chave1,chave2){
   db_iframe_pcsubgrupo.hide();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_pcmater','func_pcmater.php?funcao_js=parent.js_preenchepesquisa|pc01_codmater&vertudo=true','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_pcmater','func_pcmater.php?funcao_js=parent.js_preenchepesquisa|pc01_codmater&vertudo=true','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_pcmater.hide();

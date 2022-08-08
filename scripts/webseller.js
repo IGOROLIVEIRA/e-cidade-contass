@@ -713,12 +713,13 @@ function rand(min, max) {
 }
 
 
-function show_calendarsaude(obj,shutdown_function,especmed) {
-// #01#//show_calendar
-// #10#//Funcão para mostrar o calendário do sistema
-// #20#// shutdown_function: função ao ser executada no final da execução do
-// calendário
-// #15#//show_calendar()
+function show_calendarsaude(obj, shutdown_function, especmed, iUpsSolicitante, iUpsPrestadora) {
+
+  // #01#//show_calendar
+  // #10#//Funcão para mostrar o calendário do sistema
+  // #20#// shutdown_function: função ao ser executada no final da execução do
+  // calendário
+  // #15#//show_calendar()
 
   if(PosMouseY >= 270) {
     PosMouseY = 270;
@@ -726,9 +727,24 @@ function show_calendarsaude(obj,shutdown_function,especmed) {
   
   if(PosMouseX >= 600) {
     PosMouseX = 600;
-  }  
+  }
 
-  js_OpenJanelaIframe('','iframe_data_'+obj,'func_calendariosaude2.php?nome_objeto_data='+obj+'&shutdown_function='+shutdown_function+'&sd27_i_codigo='+especmed+'&fechar=true','Calendário',true,PosMouseY,PosMouseX,600,270);
+  js_OpenJanelaIframe(
+    '',
+    'iframe_data_'+obj,
+    'func_calendariosaude2.php?nome_objeto_data='+obj
+                            +'&shutdown_function='+shutdown_function
+                            +'&sd27_i_codigo='+especmed
+                            +'&upssolicitante='+iUpsSolicitante
+                            +'&upsprestadora='+iUpsPrestadora
+                            +'&fechar=true',
+    'Calendário',
+    true,
+    PosMouseY,
+    PosMouseX,
+    600,
+    270
+  );
 
 }
 

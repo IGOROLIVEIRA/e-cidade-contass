@@ -42,6 +42,7 @@ class GerarEXT extends GerarAM
     $rsEXT32 = db_query($sSql5);
     
     
+    $aCodEXTCadastroNoMes = array();
     if (pg_num_rows($rsEXT10) == 0 && pg_num_rows($rsEXT20) == 0) {
       
       $aCSV['tiporegistro'] = '99';
@@ -57,6 +58,8 @@ class GerarEXT extends GerarAM
       for ($iCont = 0; $iCont < pg_num_rows($rsEXT10); $iCont++) {
         
         $aEXT10 = pg_fetch_array($rsEXT10, $iCont);
+        
+        $aCodEXTCadastroNoMes[] = $aEXT10['si124_codext'];
         
         $aCSVEXT10['si124_tiporegistro']    = $this->padLeftZero($aEXT10['si124_tiporegistro'], 2);
         $aCSVEXT10['si124_codext']          = substr($aEXT10['si124_codext'], 0, 15);
@@ -84,8 +87,8 @@ class GerarEXT extends GerarAM
         $bFonteEncerrada    = in_array($aEXT20['si165_codfontrecursos'], $aFontes);
         $bCorrecaoFonte     = ($bFonteEncerrada && $aEXT20['si165_mes'] == '01' && db_getsession("DB_anousu") == 2022);
 
-        
-        if (($aEXT20["si165_vlsaldoanteriorfonte"] + $aEXT20["si165_totaldebitos"] + $aEXT20["si165_totalcreditos"]) == 0)
+        // Condição incluida para permitir que o registro 20 referente a registro 10 no mês aparece mesmo que zerado. OC17723
+        if (($aEXT20["si165_vlsaldoanteriorfonte"] + $aEXT20["si165_totaldebitos"] + $aEXT20["si165_totalcreditos"]) == 0 AND !in_array($aEXT20['si165_codext'], $aCodEXTCadastroNoMes))
             continue;
 
         $aCSVEXT20['si165_tiporegistro']          = $this->padLeftZero($aEXT20['si165_tiporegistro'], 2);

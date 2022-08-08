@@ -76,37 +76,37 @@ class cl_rhrubricas
     var $rh27_tetoremun = 0;
     // cria propriedade com as variaveis do arquivo
     var $campos = "
-                 rh27_rubric = char(4) = Código da Rubrica
-                 rh27_descr = varchar(50) = Descrição do Código
+                 rh27_rubric = char(4) = Cï¿½digo da Rubrica
+                 rh27_descr = varchar(50) = Descriï¿½ï¿½o do Cï¿½digo
                  rh27_pd = int4 = Tipo Rubrica
                  rh27_quant = float8 = Qtda ou Valor para Inicializar
-                 rh27_cond2 = varchar(120) = Condição da Fórmula 2
-                 rh27_cond3 = varchar(120) = Condição da Fórmula 3
-                 rh27_form = varchar(120) = Fórmula
-                 rh27_form2 = varchar(120) = Fórmula 2
-                 rh27_form3 = varchar(120) = Fórmula  3
-                 rh27_formq = varchar(120) = Fórmula Quantidade
-                 rh27_calc1 = int4 = Média p/ Férias
-                 rh27_calc2 = int4 = Média p/ 13º  Salário
-                 rh27_calc3 = bool = Código Rescisão
-                 rh27_tipo = int4 = Tipo de Inicialização
+                 rh27_cond2 = varchar(120) = Condiï¿½ï¿½o da Fï¿½rmula 2
+                 rh27_cond3 = varchar(120) = Condiï¿½ï¿½o da Fï¿½rmula 3
+                 rh27_form = varchar(120) = Fï¿½rmula
+                 rh27_form2 = varchar(120) = Fï¿½rmula 2
+                 rh27_form3 = varchar(120) = Fï¿½rmula  3
+                 rh27_formq = varchar(120) = Fï¿½rmula Quantidade
+                 rh27_calc1 = int4 = Mï¿½dia p/ Fï¿½rias
+                 rh27_calc2 = int4 = Mï¿½dia p/ 13ï¿½  Salï¿½rio
+                 rh27_calc3 = bool = Cï¿½digo Rescisï¿½o
+                 rh27_tipo = int4 = Tipo de Inicializaï¿½ï¿½o
                  rh27_limdat = bool = Usa Data Limite
-                 rh27_presta = bool = Calcula Prestações
+                 rh27_presta = bool = Calcula Prestaï¿½ï¿½es
                  rh27_calcp = bool = Proporcionaliza no Afastamento
-                 rh27_propq = bool = Proporcionaliza nas Médias
-                 rh27_propi = bool = Proporção para Inativos
-                 rh27_obs = varchar(120) = Observação
+                 rh27_propq = bool = Proporcionaliza nas Mï¿½dias
+                 rh27_propi = bool = Proporï¿½ï¿½o para Inativos
+                 rh27_obs = varchar(120) = Observaï¿½ï¿½o
                  rh27_instit = int4 = codigo da instituicao
                  rh27_ativo = bool = Ativo
                  rh27_complementarautomatica = bool = Auto. Complementar
-                 rh27_valorpadrao = float8 = Valor Padrão
-                 rh27_quantidadepadrao = float8 = Quantidade Padrão
-                 rh27_rhfundamentacaolegal = int4 = Código Fundamentação Legal
-                 rh27_codincidprev = char(2) = Cod. incidência tributária previdência social
-                 rh27_codincidirrf = char(2) = Cod. incidência tributária irrf
-                 rh27_codincidfgts = char(2) = Cod. incidência para o fgts
-                 rh27_codincidregime = char(2) = Cod. incidência Regime Próprio RPPS/regime militar
-                 rh27_tetoremun = Boolean = Teto remuneratório (art. 37, XI, da CF/1988)
+                 rh27_valorpadrao = float8 = Valor Padrï¿½o
+                 rh27_quantidadepadrao = float8 = Quantidade Padrï¿½o
+                 rh27_rhfundamentacaolegal = int4 = Cï¿½digo Fundamentaï¿½ï¿½o Legal
+                 rh27_codincidprev = char(2) = Cod. incidï¿½ncia tributï¿½ria previdï¿½ncia social
+                 rh27_codincidirrf = char(2) = Cod. incidï¿½ncia tributï¿½ria irrf
+                 rh27_codincidfgts = char(2) = Cod. incidï¿½ncia para o fgts
+                 rh27_codincidregime = char(2) = Cod. incidï¿½ncia Regime Prï¿½prio RPPS/regime militar
+                 rh27_tetoremun = Boolean = Teto remuneratï¿½rio (art. 37, XI, da CF/1988)
                  ";
     //funcao construtor da classe
     function cl_rhrubricas()
@@ -170,127 +170,127 @@ class cl_rhrubricas
     {
         $this->atualizacampos();
         if ($this->rh27_descr == null) {
-            $this->erro_sql = " Campo Descrição do Código não informado.";
+            $this->erro_sql = " Campo Descriï¿½ï¿½o do Cï¿½digo nï¿½o informado.";
             $this->erro_campo = "rh27_descr";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
         if ($this->rh27_pd == null) {
-            $this->erro_sql = " Campo Tipo Rubrica não informado.";
+            $this->erro_sql = " Campo Tipo Rubrica nï¿½o informado.";
             $this->erro_campo = "rh27_pd";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
         if ($this->rh27_quant == null) {
-            $this->erro_sql = " Campo Qtda ou Valor para Inicializar não informado.";
+            $this->erro_sql = " Campo Qtda ou Valor para Inicializar nï¿½o informado.";
             $this->erro_campo = "rh27_quant";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
         if ($this->rh27_calc1 == null) {
-            $this->erro_sql = " Campo Média p/ Férias não informado.";
+            $this->erro_sql = " Campo Mï¿½dia p/ Fï¿½rias nï¿½o informado.";
             $this->erro_campo = "rh27_calc1";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
         if ($this->rh27_calc2 == null) {
-            $this->erro_sql = " Campo Média p/ 13º  Salário não informado.";
+            $this->erro_sql = " Campo Mï¿½dia p/ 13ï¿½  Salï¿½rio nï¿½o informado.";
             $this->erro_campo = "rh27_calc2";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
         if ($this->rh27_calc3 == null) {
-            $this->erro_sql = " Campo Código Rescisão não informado.";
+            $this->erro_sql = " Campo Cï¿½digo Rescisï¿½o nï¿½o informado.";
             $this->erro_campo = "rh27_calc3";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
         if ($this->rh27_tipo == null) {
-            $this->erro_sql = " Campo Tipo de Inicialização não informado.";
+            $this->erro_sql = " Campo Tipo de Inicializaï¿½ï¿½o nï¿½o informado.";
             $this->erro_campo = "rh27_tipo";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
         if ($this->rh27_limdat == null) {
-            $this->erro_sql = " Campo Usa Data Limite não informado.";
+            $this->erro_sql = " Campo Usa Data Limite nï¿½o informado.";
             $this->erro_campo = "rh27_limdat";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
         if ($this->rh27_presta == null) {
-            $this->erro_sql = " Campo Calcula Prestações não informado.";
+            $this->erro_sql = " Campo Calcula Prestaï¿½ï¿½es nï¿½o informado.";
             $this->erro_campo = "rh27_presta";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
         if ($this->rh27_calcp == null) {
-            $this->erro_sql = " Campo Proporcionaliza no Afastamento não informado.";
+            $this->erro_sql = " Campo Proporcionaliza no Afastamento nï¿½o informado.";
             $this->erro_campo = "rh27_calcp";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
         if ($this->rh27_propq == null) {
-            $this->erro_sql = " Campo Proporcionaliza nas Médias não informado.";
+            $this->erro_sql = " Campo Proporcionaliza nas Mï¿½dias nï¿½o informado.";
             $this->erro_campo = "rh27_propq";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
         if ($this->rh27_propi == null) {
-            $this->erro_sql = " Campo Proporção para Inativos não informado.";
+            $this->erro_sql = " Campo Proporï¿½ï¿½o para Inativos nï¿½o informado.";
             $this->erro_campo = "rh27_propi";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
         if ($this->rh27_ativo == null) {
-            $this->erro_sql = " Campo Ativo não informado.";
+            $this->erro_sql = " Campo Ativo nï¿½o informado.";
             $this->erro_campo = "rh27_ativo";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
         if ($this->rh27_complementarautomatica == null) {
-            $this->erro_sql = " Campo Auto. Complementar não informado.";
+            $this->erro_sql = " Campo Auto. Complementar nï¿½o informado.";
             $this->erro_campo = "rh27_complementarautomatica";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
@@ -302,7 +302,7 @@ class cl_rhrubricas
             $this->rh27_quantidadepadrao = "0";
         }
         /**
-         * Se a fundamentação for vázia o campo é preenchido com null.
+         * Se a fundamentaï¿½ï¿½o for vï¿½zia o campo ï¿½ preenchido com null.
          */
         if (trim($this->rh27_rhfundamentacaolegal) == null || isset($GLOBALS["HTTP_POST_VARS"]["rh27_rhfundamentacaolegal"])) {
             $this->rh27_rhfundamentacaolegal = "null";
@@ -311,7 +311,7 @@ class cl_rhrubricas
         if (($this->rh27_codincidprev == null) || ($this->rh27_codincidprev == "")) {
             $this->erro_sql = " Campo rh27_codincidprev nao declarado.";
             $this->erro_banco = "Chave Primaria zerada.";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
@@ -319,7 +319,7 @@ class cl_rhrubricas
         if (($this->rh27_codincidirrf == null) || ($this->rh27_codincidirrf == "")) {
             $this->erro_sql = " Campo rh27_codincidirrf nao declarado.";
             $this->erro_banco = "Chave Primaria zerada.";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
@@ -327,7 +327,7 @@ class cl_rhrubricas
         if (($this->rh27_codincidfgts == null) || ($this->rh27_codincidfgts == "")) {
             $this->erro_sql = " Campo rh27_codincidfgts nao declarado.";
             $this->erro_banco = "Chave Primaria zerada.";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
@@ -335,7 +335,7 @@ class cl_rhrubricas
         if (($this->rh27_codincidregime == null) || ($this->rh27_codincidregime == "")) {
             $this->erro_sql = " Campo rh27_codincidregime nao declarado.";
             $this->erro_banco = "Chave Primaria zerada.";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
@@ -344,7 +344,7 @@ class cl_rhrubricas
         if (($this->rh27_tetoremun == null) || ($this->rh27_tetoremun == "")) {
             $this->erro_sql = " Campo rh27_tetoremun nao declarado.";
             $this->erro_banco = "Chave Primaria zerada.";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
@@ -355,7 +355,7 @@ class cl_rhrubricas
         if (($this->rh27_rubric == null) || ($this->rh27_rubric == "")) {
             $this->erro_sql = " Campo rh27_rubric nao declarado.";
             $this->erro_banco = "Chave Primaria zerada.";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
@@ -363,7 +363,7 @@ class cl_rhrubricas
         if (($this->rh27_instit == null) || ($this->rh27_instit == "")) {
             $this->erro_sql = " Campo rh27_instit nao declarado.";
             $this->erro_banco = "Chave Primaria zerada.";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
@@ -438,13 +438,13 @@ class cl_rhrubricas
         if ($result == false) {
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
             if (strpos(strtolower($this->erro_banco), "duplicate key") != 0) {
-                $this->erro_sql   = "Tabela de rubricas ($this->rh27_rubric." - ".$this->rh27_instit) nao Incluído. Inclusao Abortada.";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_banco = "Tabela de rubricas já Cadastrado";
+                $this->erro_sql   = "Tabela de rubricas ($this->rh27_rubric." - ".$this->rh27_instit) nao Incluï¿½do. Inclusao Abortada.";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_banco = "Tabela de rubricas jï¿½ Cadastrado";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             } else {
-                $this->erro_sql   = "Tabela de rubricas ($this->rh27_rubric." - ".$this->rh27_instit) nao Incluído. Inclusao Abortada.";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_sql   = "Tabela de rubricas ($this->rh27_rubric." - ".$this->rh27_instit) nao Incluï¿½do. Inclusao Abortada.";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             }
             $this->erro_status = "0";
@@ -454,7 +454,7 @@ class cl_rhrubricas
         $this->erro_banco = "";
         $this->erro_sql = "Inclusao efetuada com Sucesso\\n";
         $this->erro_sql .= "Valores : " . $this->rh27_rubric . "-" . $this->rh27_instit;
-        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "1";
         $this->numrows_incluir = pg_affected_rows($result);
@@ -510,10 +510,10 @@ class cl_rhrubricas
             $sql  .= $virgula . " rh27_rubric = '$this->rh27_rubric' ";
             $virgula = ",";
             if (trim($this->rh27_rubric) == null) {
-                $this->erro_sql = " Campo Código da Rubrica não informado.";
+                $this->erro_sql = " Campo Cï¿½digo da Rubrica nï¿½o informado.";
                 $this->erro_campo = "rh27_rubric";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -523,10 +523,10 @@ class cl_rhrubricas
             $sql  .= $virgula . " rh27_descr = '$this->rh27_descr' ";
             $virgula = ",";
             if (trim($this->rh27_descr) == null) {
-                $this->erro_sql = " Campo Descrição do Código não informado.";
+                $this->erro_sql = " Campo Descriï¿½ï¿½o do Cï¿½digo nï¿½o informado.";
                 $this->erro_campo = "rh27_descr";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -536,10 +536,10 @@ class cl_rhrubricas
             $sql  .= $virgula . " rh27_pd = $this->rh27_pd ";
             $virgula = ",";
             if (trim($this->rh27_pd) == null) {
-                $this->erro_sql = " Campo Tipo Rubrica não informado.";
+                $this->erro_sql = " Campo Tipo Rubrica nï¿½o informado.";
                 $this->erro_campo = "rh27_pd";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -549,10 +549,10 @@ class cl_rhrubricas
             $sql  .= $virgula . " rh27_quant = $this->rh27_quant ";
             $virgula = ",";
             if (trim($this->rh27_quant) == null) {
-                $this->erro_sql = " Campo Qtda ou Valor para Inicializar não informado.";
+                $this->erro_sql = " Campo Qtda ou Valor para Inicializar nï¿½o informado.";
                 $this->erro_campo = "rh27_quant";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -586,10 +586,10 @@ class cl_rhrubricas
             $sql  .= $virgula . " rh27_calc1 = $this->rh27_calc1 ";
             $virgula = ",";
             if (trim($this->rh27_calc1) == null) {
-                $this->erro_sql = " Campo Média p/ Férias não informado.";
+                $this->erro_sql = " Campo Mï¿½dia p/ Fï¿½rias nï¿½o informado.";
                 $this->erro_campo = "rh27_calc1";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -599,10 +599,10 @@ class cl_rhrubricas
             $sql  .= $virgula . " rh27_calc2 = $this->rh27_calc2 ";
             $virgula = ",";
             if (trim($this->rh27_calc2) == null) {
-                $this->erro_sql = " Campo Média p/ 13º  Salário não informado.";
+                $this->erro_sql = " Campo Mï¿½dia p/ 13ï¿½  Salï¿½rio nï¿½o informado.";
                 $this->erro_campo = "rh27_calc2";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -612,10 +612,10 @@ class cl_rhrubricas
             $sql  .= $virgula . " rh27_calc3 = '$this->rh27_calc3' ";
             $virgula = ",";
             if (trim($this->rh27_calc3) == null) {
-                $this->erro_sql = " Campo Código Rescisão não informado.";
+                $this->erro_sql = " Campo Cï¿½digo Rescisï¿½o nï¿½o informado.";
                 $this->erro_campo = "rh27_calc3";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -625,10 +625,10 @@ class cl_rhrubricas
             $sql  .= $virgula . " rh27_tipo = $this->rh27_tipo ";
             $virgula = ",";
             if (trim($this->rh27_tipo) == null) {
-                $this->erro_sql = " Campo Tipo de Inicialização não informado.";
+                $this->erro_sql = " Campo Tipo de Inicializaï¿½ï¿½o nï¿½o informado.";
                 $this->erro_campo = "rh27_tipo";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -638,10 +638,10 @@ class cl_rhrubricas
             $sql  .= $virgula . " rh27_limdat = '$this->rh27_limdat' ";
             $virgula = ",";
             if (trim($this->rh27_limdat) == null) {
-                $this->erro_sql = " Campo Usa Data Limite não informado.";
+                $this->erro_sql = " Campo Usa Data Limite nï¿½o informado.";
                 $this->erro_campo = "rh27_limdat";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -651,10 +651,10 @@ class cl_rhrubricas
             $sql  .= $virgula . " rh27_presta = '$this->rh27_presta' ";
             $virgula = ",";
             if (trim($this->rh27_presta) == null) {
-                $this->erro_sql = " Campo Calcula Prestações não informado.";
+                $this->erro_sql = " Campo Calcula Prestaï¿½ï¿½es nï¿½o informado.";
                 $this->erro_campo = "rh27_presta";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -664,10 +664,10 @@ class cl_rhrubricas
             $sql  .= $virgula . " rh27_calcp = '$this->rh27_calcp' ";
             $virgula = ",";
             if (trim($this->rh27_calcp) == null) {
-                $this->erro_sql = " Campo Proporcionaliza no Afastamento não informado.";
+                $this->erro_sql = " Campo Proporcionaliza no Afastamento nï¿½o informado.";
                 $this->erro_campo = "rh27_calcp";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -677,10 +677,10 @@ class cl_rhrubricas
             $sql  .= $virgula . " rh27_propq = '$this->rh27_propq' ";
             $virgula = ",";
             if (trim($this->rh27_propq) == null) {
-                $this->erro_sql = " Campo Proporcionaliza nas Médias não informado.";
+                $this->erro_sql = " Campo Proporcionaliza nas Mï¿½dias nï¿½o informado.";
                 $this->erro_campo = "rh27_propq";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -690,10 +690,10 @@ class cl_rhrubricas
             $sql  .= $virgula . " rh27_propi = '$this->rh27_propi' ";
             $virgula = ",";
             if (trim($this->rh27_propi) == null) {
-                $this->erro_sql = " Campo Proporção para Inativos não informado.";
+                $this->erro_sql = " Campo Proporï¿½ï¿½o para Inativos nï¿½o informado.";
                 $this->erro_campo = "rh27_propi";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -707,10 +707,10 @@ class cl_rhrubricas
             $sql  .= $virgula . " rh27_instit = $this->rh27_instit ";
             $virgula = ",";
             if (trim($this->rh27_instit) == null) {
-                $this->erro_sql = " Campo codigo da instituicao não informado.";
+                $this->erro_sql = " Campo codigo da instituicao nï¿½o informado.";
                 $this->erro_campo = "rh27_instit";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -720,10 +720,10 @@ class cl_rhrubricas
             $sql  .= $virgula . " rh27_ativo = '$this->rh27_ativo' ";
             $virgula = ",";
             if (trim($this->rh27_ativo) == null) {
-                $this->erro_sql = " Campo Ativo não informado.";
+                $this->erro_sql = " Campo Ativo nï¿½o informado.";
                 $this->erro_campo = "rh27_ativo";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -733,10 +733,10 @@ class cl_rhrubricas
             $sql  .= $virgula . " rh27_complementarautomatica = '$this->rh27_complementarautomatica' ";
             $virgula = ",";
             if (trim($this->rh27_complementarautomatica) == null) {
-                $this->erro_sql = " Campo Auto. Complementar não informado.";
+                $this->erro_sql = " Campo Auto. Complementar nï¿½o informado.";
                 $this->erro_campo = "rh27_complementarautomatica";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -757,7 +757,7 @@ class cl_rhrubricas
             $virgula = ",";
         }
         /**
-         * Se a fundamentação for vázia o campo é preenchido com null.
+         * Se a fundamentaï¿½ï¿½o for vï¿½zia o campo ï¿½ preenchido com null.
          */
         if (trim($this->rh27_rhfundamentacaolegal) == "" || isset($GLOBALS["HTTP_POST_VARS"]["rh27_rhfundamentacaolegal"])) {
             $this->rh27_rhfundamentacaolegal = "null";
@@ -766,10 +766,10 @@ class cl_rhrubricas
 
         if (trim($this->rh27_codincidprev) != "" || isset($GLOBALS["HTTP_POST_VARS"]["rh27_codincidprev"])) {
             if (trim($this->rh27_codincidprev) == "" && isset($GLOBALS["HTTP_POST_VARS"]["rh27_codincidprev"])) {
-                $this->erro_sql = " Cod. incidência tributária previdência social.";
+                $this->erro_sql = " Cod. incidï¿½ncia tributï¿½ria previdï¿½ncia social.";
                 $this->erro_campo = "rh27_codincidprev";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -779,10 +779,10 @@ class cl_rhrubricas
         }
         if (trim($this->rh27_codincidirrf) != "" || isset($GLOBALS["HTTP_POST_VARS"]["rh27_codincidirrf"])) {
             if (trim($this->rh27_codincidirrf) == "" && isset($GLOBALS["HTTP_POST_VARS"]["rh27_codincidirrf"])) {
-                $this->erro_sql = " Cod. incidência tributária irrf.";
+                $this->erro_sql = " Cod. incidï¿½ncia tributï¿½ria irrf.";
                 $this->erro_campo = "rh27_codincidirrf";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -792,10 +792,10 @@ class cl_rhrubricas
         }
         if (trim($this->rh27_codincidfgts) != "" || isset($GLOBALS["HTTP_POST_VARS"]["rh27_codincidfgts"])) {
             if (trim($this->rh27_codincidfgts) == "" && isset($GLOBALS["HTTP_POST_VARS"]["rh27_codincidfgts"])) {
-                $this->erro_sql = " Cod. incidência para o fgts.";
+                $this->erro_sql = " Cod. incidï¿½ncia para o fgts.";
                 $this->erro_campo = "rh27_codincidfgts";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -805,10 +805,10 @@ class cl_rhrubricas
         }
         if (trim($this->rh27_codincidregime) != "" || isset($GLOBALS["HTTP_POST_VARS"]["rh27_codincidregime"])) {
             if (trim($this->rh27_codincidregime) == "" && isset($GLOBALS["HTTP_POST_VARS"]["rh27_codincidregime"])) {
-                $this->erro_sql = " Cod. incidência Regime Próprio RPPS/regime militar.";
+                $this->erro_sql = " Cod. incidï¿½ncia Regime Prï¿½prio RPPS/regime militar.";
                 $this->erro_campo = "rh27_codincidregime";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -905,7 +905,7 @@ class cl_rhrubricas
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
             $this->erro_sql   = "Tabela de rubricas nao Alterado. Alteracao Abortada.\\n";
             $this->erro_sql .= "Valores : " . $this->rh27_rubric . "-" . $this->rh27_instit;
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             $this->numrows_alterar = 0;
@@ -915,16 +915,16 @@ class cl_rhrubricas
                 $this->erro_banco = "";
                 $this->erro_sql = "Tabela de rubricas nao foi Alterado. Alteracao Executada.\\n";
                 $this->erro_sql .= "Valores : " . $this->rh27_rubric . "-" . $this->rh27_instit;
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "1";
                 $this->numrows_alterar = 0;
                 return true;
             } else {
                 $this->erro_banco = "";
-                $this->erro_sql = "Alteração efetuada com Sucesso\\n";
+                $this->erro_sql = "Alteraï¿½ï¿½o efetuada com Sucesso\\n";
                 $this->erro_sql .= "Valores : " . $this->rh27_rubric . "-" . $this->rh27_instit;
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "1";
                 $this->numrows_alterar = pg_affected_rows($result);
@@ -1006,9 +1006,9 @@ class cl_rhrubricas
         $result = db_query($sql . $sql2);
         if ($result == false) {
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
-            $this->erro_sql   = "Tabela de rubricas nao Excluído. Exclusão Abortada.\\n";
+            $this->erro_sql   = "Tabela de rubricas nao Excluï¿½do. Exclusï¿½o Abortada.\\n";
             $this->erro_sql .= "Valores : " . $rh27_rubric . "-" . $rh27_instit;
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             $this->numrows_excluir = 0;
@@ -1016,18 +1016,18 @@ class cl_rhrubricas
         } else {
             if (pg_affected_rows($result) == 0) {
                 $this->erro_banco = "";
-                $this->erro_sql = "Tabela de rubricas nao Encontrado. Exclusão não Efetuada.\\n";
+                $this->erro_sql = "Tabela de rubricas nao Encontrado. Exclusï¿½o nï¿½o Efetuada.\\n";
                 $this->erro_sql .= "Valores : " . $rh27_rubric . "-" . $rh27_instit;
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "1";
                 $this->numrows_excluir = 0;
                 return true;
             } else {
                 $this->erro_banco = "";
-                $this->erro_sql = "Exclusão efetuada com Sucesso\\n";
+                $this->erro_sql = "Exclusï¿½o efetuada com Sucesso\\n";
                 $this->erro_sql .= "Valores : " . $rh27_rubric . "-" . $rh27_instit;
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "1";
                 $this->numrows_excluir = pg_affected_rows($result);
@@ -1043,7 +1043,7 @@ class cl_rhrubricas
             $this->numrows    = 0;
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
             $this->erro_sql   = "Erro ao selecionar os registros.";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
@@ -1052,7 +1052,7 @@ class cl_rhrubricas
         if ($this->numrows == 0) {
             $this->erro_banco = "";
             $this->erro_sql   = "Record Vazio na Tabela:rhrubricas";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;

@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -49,7 +49,7 @@ if(isset($emite2)){
   db_fim_transacao($sqlerro);
 }else if(isset($rh34_codarq)){
   $result = $clrharqbanco->sql_record($clrharqbanco->sql_query($rh34_codarq));
-  if($clrharqbanco->numrows > 0){ 
+  if($clrharqbanco->numrows > 0){
     db_fieldsmemory($result,0);
     $rh34_sequencial += 1;
   }
@@ -88,12 +88,12 @@ function js_emite(){
   qry += '&tiparq='+document.form1.tiparq.value;
   qry += '&qfolha='+document.form1.qfolha.value;
   qry += '&rh104_rhgeracaofolha='+document.form1.rh104_rhgeracaofolha.value;
-  js_OpenJanelaIframe('top.corpo','db_iframe_geraarqbanco','pes2_bb240cnabgeracao002.php?'+qry,'Gerando Arquivo',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_geraarqbanco','pes2_bb240cnabgeracao002.php?'+qry,'Gerando Arquivo',true);
 }
 
 function js_detectaarquivo(arquivo,pdf){
   js_controlarodape(false);
-  top.corpo.db_iframe_geraarqbanco.hide();
+  CurrentWindow.corpo.db_iframe_geraarqbanco.hide();
   listagem = arquivo+"#Download arquivo TXT (pagamento eletrônico)|";
   listagem+= pdf+"#Download relatório";
   js_montarlista(listagem,"form1");
@@ -101,7 +101,7 @@ function js_detectaarquivo(arquivo,pdf){
 
 function js_erro(msg){
   js_controlarodape(false);
-  top.corpo.db_iframe_geraarqbanco.hide();
+  CurrentWindow.corpo.db_iframe_geraarqbanco.hide();
   alert(msg);
 }
 function js_fechaiframe(){
@@ -115,7 +115,7 @@ function js_controlarodape(mostra){
     parent.bstatus.document.getElementById('st').innerHTML = document.form1.rodape.value;
   }
 }
-</script>  
+</script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" bgcolor="#cccccc">
@@ -159,7 +159,7 @@ function js_controlarodape(mostra){
       ?>
     </td>
   </tr>
-  <tr> 
+  <tr>
     <td align="left" nowrap title="<?=@$Trh34_codarq?>">
        <?
        db_ancora(@$Lrh104_rhgeracaofolha,"js_pesquisarh104_rhgeracaofolha(true);",1);
@@ -172,7 +172,7 @@ function js_controlarodape(mostra){
         ?>
     </td>
   </tr>
-  <tr> 
+  <tr>
     <td align="left" nowrap title="<?=@$Trh34_codarq?>">
       <?db_ancora(@$Lrh34_codarq,"js_pesquisa(true);",1);?>
     </td>
@@ -188,7 +188,7 @@ function js_controlarodape(mostra){
       db_ancora(@$Lrh34_codban,"js_pesquisarh34_codban(true);",1);
       ?>
     </td>
-    <td colspan="3"> 
+    <td colspan="3">
       <?
       db_input('rh34_codban',6,$Irh34_codban,true,'text',1," onchange='js_pesquisarh34_codban(false);'")
       ?>
@@ -201,7 +201,7 @@ function js_controlarodape(mostra){
     <td nowrap title="<?=@$Trh34_agencia?>">
       <?=@$Lrh34_agencia?>
     </td>
-    <td> 
+    <td>
       <?
       db_input('rh34_agencia',5,$Irh34_agencia,true,'text',1,"")
       ?>
@@ -209,7 +209,7 @@ function js_controlarodape(mostra){
     <td nowrap title="<?=@$Trh34_dvagencia?>" align="right">
       <?=@$Lrh34_dvagencia?>
     </td>
-    <td> 
+    <td>
       <?
       db_input('rh34_dvagencia',2,$Irh34_dvagencia,true,'text',1,"")
       ?>
@@ -219,7 +219,7 @@ function js_controlarodape(mostra){
     <td nowrap title="<?=@$Trh34_conta?>">
       <?=@$Lrh34_conta?>
     </td>
-    <td> 
+    <td>
       <?
       db_input('rh34_conta',15,$Irh34_conta,true,'text',1,"")
       ?>
@@ -227,7 +227,7 @@ function js_controlarodape(mostra){
     <td nowrap title="<?=@$Trh34_dvconta?>" align="right">
       <?=@$Lrh34_dvconta?>
     </td>
-    <td> 
+    <td>
       <?
       db_input('rh34_dvconta',2,$Irh34_dvconta,true,'text',1,"")
       ?>
@@ -237,7 +237,7 @@ function js_controlarodape(mostra){
     <td nowrap title="<?=@$Trh34_convenio?>">
       <?=@$Lrh34_convenio?>
     </td>
-    <td> 
+    <td>
       <?
       db_input('rh34_convenio',15,$Irh34_convenio,true,'text',1,"")
       ?>
@@ -245,7 +245,7 @@ function js_controlarodape(mostra){
     <td nowrap title="<?=@$Trh34_sequencial?>">
       <?=@$Lrh34_sequencial?>
     </td>
-    <td> 
+    <td>
       <?
       db_input('rh34_sequencial',15,$Irh34_sequencial,true,'text',1,"")
       ?>
@@ -286,7 +286,7 @@ function js_controlarodape(mostra){
     <td>&nbsp;</td>
   </tr>
   <tr>
-    <td colspan="2" align = "center"> 
+    <td colspan="2" align = "center">
       <input name="emite2" id="emite2" type="submit" value="Processar" onclick="return js_valores();" >
     </td>
   </tr>
@@ -307,10 +307,10 @@ function js_habilita(valor){
 }
 function js_pesquisa(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_rharqbanco','func_rharqbanco.php?funcao_js=parent.js_mostra1|rh34_codarq|rh34_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rharqbanco','func_rharqbanco.php?funcao_js=parent.js_mostra1|rh34_codarq|rh34_descr','Pesquisa',true);
   }else{
     if(document.form1.rh34_codarq.value != ''){
-      js_OpenJanelaIframe('top.corpo','db_iframe_rharqbanco','func_rharqbanco.php?pesquisa_chave='+document.form1.rh34_codarq.value+'&funcao_js=parent.js_mostra','Pesquisa',false);
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rharqbanco','func_rharqbanco.php?pesquisa_chave='+document.form1.rh34_codarq.value+'&funcao_js=parent.js_mostra','Pesquisa',false);
     }else{
       document.form1.rh34_codarq.value = '';
       document.form1.rh34_descr.value = '';
@@ -335,10 +335,10 @@ function js_mostra1(chave1,chave2){
 }
 function js_pesquisarh34_codban(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_db_bancos','func_db_bancos.php?funcao_js=parent.js_mostradb_bancos1|db90_codban|db90_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_bancos','func_db_bancos.php?funcao_js=parent.js_mostradb_bancos1|db90_codban|db90_descr','Pesquisa',true);
   }else{
     if(document.form1.rh34_codban.value != ''){
-      js_OpenJanelaIframe('top.corpo','db_iframe_db_bancos','func_db_bancos.php?pesquisa_chave='+document.form1.rh34_codban.value+'&funcao_js=parent.js_mostradb_bancos','Pesquisa',true);
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_bancos','func_db_bancos.php?pesquisa_chave='+document.form1.rh34_codban.value+'&funcao_js=parent.js_mostradb_bancos','Pesquisa',true);
     }else{
       document.form1.db90_descr.value = '';
     }
@@ -358,20 +358,20 @@ function js_mostradb_bancos1(chave1,chave2){
 }
 function js_pesquisarh104_rhgeracaofolha(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_rhgeracaofolha','func_rhgeracaofolha.php?rh102_ativo=true&funcao_js=parent.js_mostrarhgeracaofolha1|rh102_sequencial|rh102_descricao','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhgeracaofolha','func_rhgeracaofolha.php?rh102_ativo=true&funcao_js=parent.js_mostrarhgeracaofolha1|rh102_sequencial|rh102_descricao','Pesquisa',true);
   }else{
-     if(document.form1.rh104_rhgeracaofolha.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_rhgeracaofolha','func_rhgeracaofolha.php?rh102_ativo=true&pesquisa_chave='+document.form1.rh104_rhgeracaofolha.value+'&funcao_js=parent.js_mostrarhgeracaofolha','Pesquisa',false);
+     if(document.form1.rh104_rhgeracaofolha.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhgeracaofolha','func_rhgeracaofolha.php?rh102_ativo=true&pesquisa_chave='+document.form1.rh104_rhgeracaofolha.value+'&funcao_js=parent.js_mostrarhgeracaofolha','Pesquisa',false);
      }else{
-       document.form1.rh102_descricao.value = ''; 
+       document.form1.rh102_descricao.value = '';
      }
   }
 }
 function js_mostrarhgeracaofolha(chave,erro){
-  document.form1.rh102_descricao.value = chave; 
-  if(erro==true){ 
-    document.form1.rh104_rhgeracaofolha.focus(); 
-    document.form1.rh104_rhgeracaofolha.value = ''; 
+  document.form1.rh102_descricao.value = chave;
+  if(erro==true){
+    document.form1.rh104_rhgeracaofolha.focus();
+    document.form1.rh104_rhgeracaofolha.value = '';
   }
 }
 function js_mostrarhgeracaofolha1(chave1,chave2){

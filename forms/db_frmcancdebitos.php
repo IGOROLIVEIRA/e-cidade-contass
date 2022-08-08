@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: caixa
@@ -94,7 +94,7 @@ $clrotulo->label("nome");
 				</td>
 			</tr>
 			<? } ?>
-			
+
 		</table>
 		</fieldset>
 		</td>
@@ -105,9 +105,9 @@ $clrotulo->label("nome");
 	<tr>
 		<td><?
 		if(isset($chavepesquisa) && $chavepesquisa != ""){
-		  
+
 		  $sql = $clcancdebitos->sql_pendentes("k21_sequencia,k21_numpre,k21_numpar,sum(k00_valor) as k00_valor,k21_receit,(select k00_numcgm from arrenumcgm where k00_numpre = k21_numpre limit 1) as k00_numcgm, (select k00_matric from arrematric where k00_numpre = k21_numpre limit 1) as k00_matric, (select k00_inscr from arreinscr where k00_numpre = k21_numpre limit 1) as k00_inscr","k21_numpre,k21_numpar"," k20_codigo = $chavepesquisa  and k20_instit = ".db_getsession("DB_instit")."GROUP BY k21_sequencia,k21_numpre,k21_numpar,k21_receit");
-		  
+
 		  $result = pg_query($sql);
 		  $linhas = pg_num_rows($result);
 		  if($linhas>0){
@@ -130,24 +130,24 @@ $clrotulo->label("nome");
 				    for($t=0;$t<$linhasTipo;$t++){
 				    	db_fieldsmemory($resulttipo, $t);
 						$tipo[$k73_sequencial] = $k73_descricao;
-					
-				    }	
+
+				    }
 				  }
-				  db_select("tipoDebito",$tipo,true,1,"onChange='js_mostraRenuncia(document.form1.tipoDebito.value);'");			
-			
+				  db_select("tipoDebito",$tipo,true,1,"onChange='js_mostraRenuncia(document.form1.tipoDebito.value);'");
+
 				?>
 				</td>
 			</tr>
 			<tr  id="renuncia" style="display:none">
 				<td><b><? db_ancora("Caracteristica peculiar:","js_pesquisac58_sequencial(true);",$db_opcao); ?></b></td>
-				<td><? 
+				<td><?
 				  db_input("c58_sequencial",10,$Ic58_sequencial,true,"text",$db_opcao,"onChange='js_pesquisac58_sequencial(false);'");
                   db_input("c58_descr",49,0,true,"text",3);
 				    ?>
 				</td>
 			</tr>
-			
-			
+
+
 			</table>
 			<br>
 		    <table width='550px' class=tab>
@@ -184,11 +184,11 @@ $clrotulo->label("nome");
                    </table></fieldset";
 
 		  }
-		  
+
 		}
 		?></td>
 	</tr>
-		
+
 </table>
 <input name="processa" type="submit" id="db_opcao" value="Processar"
 <?=($db_botao==false?"disabled":"")?>> <input name="pesquisar"
@@ -198,34 +198,34 @@ $clrotulo->label("nome");
 </center>
 <script>
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_cancdebitos','func_cancdebitos.php?funcao_js=parent.js_preenchepesquisa|k20_codigo','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cancdebitos','func_cancdebitos.php?funcao_js=parent.js_preenchepesquisa|k20_codigo','Pesquisa',true);
 }
 
 function js_mostraRenuncia(id){
-	
+
 	if(id==2){
-		document.getElementById("renuncia").style.display='';	
+		document.getElementById("renuncia").style.display='';
 	}else{
 		document.getElementById("renuncia").style.display='none';
 	}
-	
+
 }
 function js_pesquisac58_sequencial(mostra){
   if(mostra==true){
     js_OpenJanelaIframe('','db_iframe_concarpeculiar','func_concarpeculiar.php?funcao_js=parent.js_mostraconcarpeculiar1|c58_sequencial|c58_descr&filtro=receita','Pesquisa',true,'0','1');
   }else{
-     if(document.form1.c58_sequencial.value != ''){ 
+     if(document.form1.c58_sequencial.value != ''){
         js_OpenJanelaIframe('','db_iframe_concarpeculiar','func_concarpeculiar.php?pesquisa_chave='+document.form1.c58_sequencial.value+'&funcao_js=parent.js_mostraconcarpeculiar&filtro=receita','Pesquisa',false);
      }else{
-       document.form1.c58_descr.value = ''; 
+       document.form1.c58_descr.value = '';
      }
   }
 }
 function js_mostraconcarpeculiar(chave,erro){
-  document.form1.c58_descr.value = chave; 
-  if(erro==true){ 
-    document.form1.c58_sequencial.focus(); 
-    document.form1.c58_sequencial.value = ''; 
+  document.form1.c58_descr.value = chave;
+  if(erro==true){
+    document.form1.c58_sequencial.focus();
+    document.form1.c58_sequencial.value = '';
   }
 }
 function js_mostraconcarpeculiar1(chave1,chave2){
@@ -235,7 +235,7 @@ function js_mostraconcarpeculiar1(chave1,chave2){
 }
 <?
 if(isset($tipoDebito) and $tipoDebito==2){
-  echo "js_mostraRenuncia(2);";	
+  echo "js_mostraRenuncia(2);";
 }
 ?>
 

@@ -43,6 +43,7 @@ DBViewFormularioEducacao.ListaPeriodoAvaliacao = function() {
    */
   this.oElemento             = document.createElement( 'select' );
   this.oElemento.style.width = '100%';
+  this.oElemento.id          = 'cboPeriodoAvaliacao';
   this.oElemento.add( new Option( 'Selecione um período', '' ) );
 
   this.lSomenteCargaHoraria = false;

@@ -280,7 +280,7 @@ for($x=$lim1;$x < $lim2;$x++) {
     $resultender = db_query($sqlender);
     db_fieldsmemory($resultender,0);
 
-    $endereco = split("#",$fc_iptuender);
+    $endereco = explode("#",$fc_iptuender);
 
     $z01_ender    = @$endereco[0];
     $z01_numero   = @$endereco[1];

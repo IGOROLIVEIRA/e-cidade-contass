@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: itbi
@@ -39,7 +39,7 @@ $clrotulo->label("it01_guia");
        db_ancora(@$Lit18_guia,"js_pesquisait18_guia(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('it18_guia',10,$Iit18_guia,true,'text',$db_opcao," onchange='js_pesquisait18_guia(false);'")
 ?>
@@ -52,7 +52,7 @@ db_input('it01_guia',10,$Iit01_guia,true,'text',3,'')
     <td nowrap title="<?=@$Tit18_area?>">
        <?=@$Lit18_area?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('it18_area',20,$Iit18_area,true,'text',$db_opcao,"")
 ?>
@@ -62,7 +62,7 @@ db_input('it18_area',20,$Iit18_area,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tit18_areatrans?>">
        <?=@$Lit18_areatrans?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('it18_areatrans',20,$Iit18_areatrans,true,'text',$db_opcao,"")
 ?>
@@ -72,7 +72,7 @@ db_input('it18_areatrans',20,$Iit18_areatrans,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tit18_frente?>">
        <?=@$Lit18_frente?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('it18_frente',20,$Iit18_frente,true,'text',$db_opcao,"")
 ?>
@@ -82,7 +82,7 @@ db_input('it18_frente',20,$Iit18_frente,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tit18_fundos?>">
        <?=@$Lit18_fundos?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('it18_fundos',20,$Iit18_fundos,true,'text',$db_opcao,"")
 ?>
@@ -92,7 +92,7 @@ db_input('it18_fundos',20,$Iit18_fundos,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tit18_prof?>">
        <?=@$Lit18_prof?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('it18_prof',20,$Iit18_prof,true,'text',$db_opcao,"")
 ?>
@@ -106,20 +106,20 @@ db_input('it18_prof',20,$Iit18_prof,true,'text',$db_opcao,"")
 <script>
 function js_pesquisait18_guia(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_itbi','func_itbi.php?funcao_js=parent.js_mostraitbi1|it01_guia|it01_guia','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_itbi','func_itbi.php?funcao_js=parent.js_mostraitbi1|it01_guia|it01_guia','Pesquisa',true);
   }else{
-     if(document.form1.it18_guia.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_itbi','func_itbi.php?pesquisa_chave='+document.form1.it18_guia.value+'&funcao_js=parent.js_mostraitbi','Pesquisa',false);
+     if(document.form1.it18_guia.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_itbi','func_itbi.php?pesquisa_chave='+document.form1.it18_guia.value+'&funcao_js=parent.js_mostraitbi','Pesquisa',false);
      }else{
-       document.form1.it01_guia.value = ''; 
+       document.form1.it01_guia.value = '';
      }
   }
 }
 function js_mostraitbi(chave,erro){
-  document.form1.it01_guia.value = chave; 
-  if(erro==true){ 
-    document.form1.it18_guia.focus(); 
-    document.form1.it18_guia.value = ''; 
+  document.form1.it01_guia.value = chave;
+  if(erro==true){
+    document.form1.it18_guia.focus();
+    document.form1.it18_guia.value = '';
   }
 }
 function js_mostraitbi1(chave1,chave2){
@@ -128,7 +128,7 @@ function js_mostraitbi1(chave1,chave2){
   db_iframe_itbi.hide();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_itbirural','func_itbirural.php?funcao_js=parent.js_preenchepesquisa|it18_guia','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_itbirural','func_itbirural.php?funcao_js=parent.js_preenchepesquisa|it18_guia','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_itbirural.hide();

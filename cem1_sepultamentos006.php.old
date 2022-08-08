@@ -41,8 +41,8 @@ if(isset($alterar)){
 </head>
 <body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
      <?
      include("forms/db_frmsepultamentos1.php");
@@ -67,7 +67,7 @@ if(isset($alterar)){
   db_msgbox($clsepultamentos->erro_msg);
   echo "<script>";
   echo " parent.document.formaba.a2.disabled=true; ";
-  echo " top.corpo.iframe_a1.location.href='cem1_sepultamentos005.php';";
+  echo " CurrentWindow.corpo.iframe_a1.location.href='cem1_sepultamentos005.php';";
   echo " parent.mo_camada('a1'); ";
   echo "</script>";
   }

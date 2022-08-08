@@ -73,18 +73,18 @@ if ($cldb_config->numrows > 0) {
 		echo "instituição : $instit  ...<br>";
 		echo "Período : ".db_formatar($data_ini, "d")." à ".db_formatar($data_fim, "d")."<br>";
 		echo "Arquivos     : </font>";
-		$matriz = split('\.', $lista);
+		$matriz = explode('\.', $lista);
 		flush();
 
 		if (count($matriz) > 1) {
 			// monta header
 			$res = pg_exec("select nomeinst,cgc from db_config where codigo=".db_getsession("DB_instit"));
 			db_fieldsmemory($res, 0);
-			$ini = split("-", $data_ini);
+			$ini = explode("-", $data_ini);
 			$ini = "$ini[2]$ini[1]$ini[0]";
-			$fim = split("-", $data_fim);
+			$fim = explode("-", $data_fim);
 			$fim = "$fim[2]$fim[1]$fim[0]";
-			$dt = split("-", $data_pro);
+			$dt = explode("-", $data_pro);
 			$dt = "$dt[2]$dt[1]$dt[0]";
 			$header = formatar($cgc, 14, 'n').$ini.$fim.$dt.formatar($nomeinst, 80, 'c');
 

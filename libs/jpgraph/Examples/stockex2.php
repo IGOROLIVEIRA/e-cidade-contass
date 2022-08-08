@@ -1,7 +1,7 @@
 <?php
 // $Id: stockex2.php,v 1.1 2006/03/20 11:56:44 dbrogerio Exp $
-include ("../jpgraph.php");
-include ("../jpgraph_stock.php");
+include (__DIR__ . "/../jpgraph.php");
+include (__DIR__ . "/../jpgraph_stock.php");
 
 
 $datay = array(

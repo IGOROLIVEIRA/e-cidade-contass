@@ -150,7 +150,7 @@ if (isset($chavepesquisa)) {
         function js_db_libera(){
            parent.document.formaba.avaliacaogrupopergunta.disabled=false;
            parent.document.formaba.avaliacaopergunta.disabled=true;
-           top.corpo.iframe_avaliacaogrupopergunta.location.href='hab1_avaliacaogrupopergunta001.php?db102_avaliacao=".$db101_sequencial."';
+           CurrentWindow.corpo.iframe_avaliacaogrupopergunta.location.href='hab1_avaliacaogrupopergunta001.php?db102_avaliacao=".$db101_sequencial."';
     ";
     } else {
 
@@ -160,8 +160,8 @@ if (isset($chavepesquisa)) {
            parent.document.formaba.avaliacaogrupopergunta.disabled=false;
            parent.document.formaba.avaliacaopergunta.disabled=true;
            parent.document.formaba.carga.disabled=false;
-           top.corpo.iframe_avaliacaogrupopergunta.location.href='hab1_avaliacaogrupopergunta001.php?db102_avaliacao=".@$db101_sequencial."';
-           top.corpo.iframe_carga.location.href='hab1_carga001.php?db101_sequencial=".$db101_sequencial."';
+           CurrentWindow.corpo.iframe_avaliacaogrupopergunta.location.href='hab1_avaliacaogrupopergunta001.php?db102_avaliacao=".@$db101_sequencial."';
+           CurrentWindow.corpo.iframe_carga.location.href='hab1_carga001.php?db101_sequencial=".$db101_sequencial."';
     ";
     }
 

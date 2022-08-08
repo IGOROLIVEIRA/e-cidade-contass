@@ -107,7 +107,7 @@ if(isset($incluir)){
   $claluno->erro(true,false);
   ?>
   <script>
-   top.corpo.iframe_a1.location.href='edu1_aluno002.php?chavepesquisa=<?=$ed47_i_codigo?>';
+   CurrentWindow.corpo.iframe_a1.location.href='edu1_aluno002.php?chavepesquisa=<?=$ed47_i_codigo?>';
   </script>
   <?
  };

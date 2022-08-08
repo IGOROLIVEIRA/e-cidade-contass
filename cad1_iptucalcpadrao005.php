@@ -122,7 +122,7 @@ if (isset($alterar)) {
       echo "<script>
             var retorno = confirm('Ja existem dados cadastrados para esta matricula e ano, deseja substitui-los.');
             if(retorno){
-              js_OpenJanelaIframe('top.corpo','db_iframe_inclui','cad1_iptucalcpadraoimporta.php?matric=$j10_matric&exec=$exec&perc=$perc&excluir=true','Pesquisa',false);
+              js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_inclui','cad1_iptucalcpadraoimporta.php?matric=$j10_matric&exec=$exec&perc=$perc&excluir=true','Pesquisa',false);
             }
             </script>
             ";
@@ -130,7 +130,7 @@ if (isset($alterar)) {
     }else{
 
       echo "<script>
-              js_OpenJanelaIframe('top.corpo','db_iframe_inclui','cad1_iptucalcpadraoimporta.php?matric=$j10_matric&exec=$exec&perc=$perc&excluir=false','Pesquisa',false);
+              js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_inclui','cad1_iptucalcpadraoimporta.php?matric=$j10_matric&exec=$exec&perc=$perc&excluir=false','Pesquisa',false);
             </script>";
     }
 
@@ -183,9 +183,9 @@ if(isset($chavepesquisa)){
   <script>
       function js_db_libera(){
          parent.document.formaba.iptucalcpadraoconstr.disabled=false;
-         top.corpo.iframe_iptucalcpadraoconstr.location.href='cad1_iptucalcpadraoconstr001.php?j11_iptucalcpadrao='+document.form1.chavepesquisa.value+'&j11_matric=$j10_matric&forma=$forma&exec=$exec';
+         CurrentWindow.corpo.iframe_iptucalcpadraoconstr.location.href='cad1_iptucalcpadraoconstr001.php?j11_iptucalcpadrao='+document.form1.chavepesquisa.value+'&j11_matric=$j10_matric&forma=$forma&exec=$exec';
          parent.document.formaba.iptutaxamatric.disabled=false;
-         top.corpo.iframe_iptutaxamatric.location.href='cad1_iptutaxamatric001.php?j09_matric=$j10_matric&forma=$forma&exec=$exec';
+         CurrentWindow.corpo.iframe_iptutaxamatric.location.href='cad1_iptutaxamatric001.php?j09_matric=$j10_matric&forma=$forma&exec=$exec';
      ";
          if(isset($liberaaba)){
            if(($forma==2) or (isset($alt))){

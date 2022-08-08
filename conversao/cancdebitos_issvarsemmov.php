@@ -2,8 +2,8 @@
     $str_arquivo = $_SERVER['PHP_SELF'];
     set_time_limit(0);
 
-    require("../libs/db_stdlib.php");
-   // require ("../libs/db_conn.php");
+    require(__DIR__ . "/../libs/db_stdlib.php");
+   // require (__DIR__ . "/../libs/db_conn.php");
        
     $DB_USUARIO = "postgres";
     $DB_SERVIDOR = "192.168.0.2";

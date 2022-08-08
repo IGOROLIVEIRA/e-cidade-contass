@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Público para Gestão Municipal                
- *  Copyright (C) 2014  DBseller Serviços de Informática             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa é software livre; você pode redistribuí-lo e/ou     
- *  modificá-lo sob os termos da Licença Pública Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versão 2 da      
- *  Licença como (a seu critério) qualquer versão mais nova.          
- *                                                                    
- *  Este programa e distribuído na expectativa de ser útil, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implícita de              
- *  COMERCIALIZAÇÃO ou de ADEQUAÇÃO A QUALQUER PROPÓSITO EM           
- *  PARTICULAR. Consulte a Licença Pública Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Você deve ter recebido uma cópia da Licença Pública Geral GNU     
- *  junto com este programa; se não, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Cópia da licença no diretório licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Público para Gestão Municipal
+ *  Copyright (C) 2014  DBseller Serviços de Informática
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa é software livre; você pode redistribuí-lo e/ou
+ *  modificá-lo sob os termos da Licença Pública Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versão 2 da
+ *  Licença como (a seu critério) qualquer versão mais nova.
+ *
+ *  Este programa e distribuído na expectativa de ser útil, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implícita de
+ *  COMERCIALIZAÇÃO ou de ADEQUAÇÃO A QUALQUER PROPÓSITO EM
+ *  PARTICULAR. Consulte a Licença Pública Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Você deve ter recebido uma cópia da Licença Pública Geral GNU
+ *  junto com este programa; se não, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Cópia da licença no diretório licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -360,14 +360,14 @@ function js_pesquisaHistorico(mostra) {
   if (mostra) {
 
     sUrl += 'funcao_js=parent.js_mostraconhist1|c50_codhist|c50_descr';
-    js_OpenJanelaIframe('top.corpo', 'db_iframe_conhist', sUrl, 'Pesquisa', true);
+    js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_conhist', sUrl, 'Pesquisa', true);
   } else {
 
     if ($F('historico') != '') {
 
       sUrl += 'pesquisa_chave='+$F('historico');
       sUrl += '&funcao_js=parent.js_mostraconhist';
-      js_OpenJanelaIframe('top.corpo', 'db_iframe_conhist', sUrl, 'Pesquisa', false);
+      js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_conhist', sUrl, 'Pesquisa', false);
     }else{
       $('descricaoHistorico').value = '';
     }
@@ -503,7 +503,7 @@ function js_calculaValorTotal(oField) {
   var nQuantidade    = js_strToFloat($F('quantidade'));
   var nValorUnitario = js_strToFloat($F('valor-unitario'));
   $('valor-total').value = js_formatar(new Number(new Number(nQuantidade).toFixed(2) * new Number(nValorUnitario)).toFixed(2), 'f');
-  
+
 }
 
 /**
@@ -597,7 +597,7 @@ function js_preencheGrid() {
  * Troca o ponto por virgula
  */
 function js_formata(oInput) {
-  
+
   if (oInput.value.indexOf(',') > 0) {
     return true;
   }

@@ -135,7 +135,7 @@ db_fieldsmemory($config,0);
       $des4 = trim(@pg_result($CAR,($i+3),"descricao"));
 	  $are4 = trim(@pg_result($CAR,($i+3),"area"));
     }
-$matriz= split('\.',$j40_refant);
+$matriz= explode('\.',$j40_refant);
 
 $pdf = new scpdf();
 $pdf->Open();
@@ -281,7 +281,7 @@ $pdf->SetFillColor(235);
    $pdf->SetFont('Arial','',8);
    $pdf->cell(33,$altura,db_formatar($areareal+0,'f',' ',' ',' ',5).'m2',1,0,"R",0);
 
-   $areaterrenomat = split('\.',$areaterreno);
+   $areaterrenomat = explode('\.',$areaterreno);
 
    $pdf->cell(33,$altura,(count($areaterrenomat)==1?db_formatar($areaterreno,'f',' ',' ',' ',5).'m2':(strlen($areaterrenomat[1])>2?$areaterreno:db_formatar($areaterreno,'f',' ',' ',' ',5).'m2')),1,1,"R",0);
 
@@ -290,7 +290,7 @@ $pdf->SetFillColor(235);
    $pdf->cell(22,$altura,'Prédio',1,0,"L",1);
    $pdf->SetFont('Arial','',8);
 
-   $areaedificadamat = split('\.',$areaedificada);
+   $areaedificadamat = explode('\.',$areaedificada);
 
    $pdf->cell(33,$altura,($areaedificada == 0?'':(count($areaedificadamat)==1?db_formatar($areaedificada,'f',' ',' ',' ',5).'m2':(strlen($areaedificadamat[1])>2?db_formatar($areaedificada,'f',' ',' ',' ',5).'m2':db_formatar($areaedificada,'f',' ',' ',' ',5).'m2'))),1,0,"R",0);
 

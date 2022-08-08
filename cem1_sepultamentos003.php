@@ -250,7 +250,7 @@
       echo " parent.document.formaba.a4.disabled=false;";
       echo " parent.document.formaba.a2.disabled=true; ";
       echo " parent.document.formaba.a3.disabled=true; ";
-      echo " top.corpo.iframe_a1.location.href='cem1_sepultamentos001.php';";
+      echo " CurrentWindow.corpo.iframe_a1.location.href='cem1_sepultamentos001.php';";
       echo " parent.mo_camada('a4'); ";
       echo "</script>";
 

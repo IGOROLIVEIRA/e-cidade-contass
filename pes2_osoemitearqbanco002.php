@@ -106,14 +106,14 @@ if($clrharqbanco->numrows>0){
     $descricaobanco = $db90_descr;
  
     if(isset($datageracao) && $datageracao!=""){
-      $datag = split('-',$datageracao);
+      $datag = explode('-',$datageracao);
       $datag_dia=$datag[2];
       $datag_mes=$datag[1];
       $datag_ano=$datag[0];
     }
  
     if(isset($datadeposito) && $datadeposito!=""){
-      $datad = split('-',$datadeposito);
+      $datad = explode('-',$datadeposito);
       $datad_dia = $datad[2];
       $datad_mes = $datad[1];
       $datad_ano = $datad[0];
@@ -206,13 +206,13 @@ if($clrharqbanco->numrows>0){
     $horageracao = date("H").date("i").date("s");
  
     if(isset($datageracao) && $datageracao!=""){
-      $datag = split('-',$datageracao);
+      $datag = explode('-',$datageracao);
       $datag_dia = $datag[2];
       $datag_mes = $datag[1];
       $datag_ano = $datag[0];
     }
     if(isset($datadeposito) && $datadeposito!=""){
-      $datad = split('-',$datadeposito);
+      $datad = explode('-',$datadeposito);
       $datad_dia = $datad[2];
       $datad_mes = $datad[1];
       $datad_ano = $datad[0];

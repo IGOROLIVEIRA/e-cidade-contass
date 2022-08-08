@@ -152,7 +152,7 @@ $tpProcessos = db_utils::getCollectionByRecord(db_query($sSQL));
     <tr>
         <td align="center" valign="top">
             <?php
-            $where = " p111_sequencial NOT IN (select p112_nfaberturaprocesso from nfprevisaopagamento where p112_nfaberturaprocesso is not null) 
+            $where = " p111_sequencial NOT IN (select p112_nfaberturaprocesso from nfprevisaopagamento where p112_nfaberturaprocesso is not null)
       AND p111_sequencial NOT IN (select p113_nfaberturaprocesso from nfpagamentorealizado where p113_nfaberturaprocesso is not null)
       AND p58_instit = " . db_getsession("DB_instit");
             $campos = "p111_sequencial,p111_dataenvio,p58_codproc,cast(p58_numero||'/'||p58_ano as varchar) as p58_numero,z01_numcgm as DB_p58_numcgm,z01_nome,p58_dtproc,p51_descr,p58_obs,p58_requer as DB_p58_requer";
@@ -336,8 +336,8 @@ $tpProcessos = db_utils::getCollectionByRecord(db_query($sSQL));
                 fornecedores = [];
                 windowDadosFornecedor.destroy();
                 if (tipoNotificacao != 0) {
-                    top.corpo.iframe_aberturaprocesso.location.href    = 'pro1_aba2nfaberturaprocesso004.php';
-                    top.corpo.iframe_previsaodepagamento.location.href = 'pro1_aba3nfprevisaodepagamento004.php';
+                    CurrentWindow.corpo.iframe_aberturaprocesso.location.href    = 'pro1_aba2nfaberturaprocesso004.php';
+                    CurrentWindow.corpo.iframe_previsaodepagamento.location.href = 'pro1_aba3nfprevisaodepagamento004.php';
                     parent.mo_camada('previsaodepagamento');
                 }
 

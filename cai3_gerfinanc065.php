@@ -78,7 +78,7 @@ if ((isset ($ver_matric) or isset ($ver_inscr) or isset ($ver_numcgm)) && !isset
       if (db_indexOf(key($vt), "CHECK") > 0) {
       	
         $numpres = $vt[key($vt)];
-        $mat = split("N", $numpres);
+        $mat = explode("N", $numpres);
         if (isset($oPost->marcarvencidas) && isset($oPost->marcartodas)) {
         	
         	if ($oPost->marcarvencidas == 'true' && $oPost->marcartodas == 'false') {
@@ -89,9 +89,9 @@ if ((isset ($ver_matric) or isset ($ver_inscr) or isset ($ver_numcgm)) && !isset
 			          continue;   
 			        }
 			          
-	            $numpre = split("P", $mat[$iInd]);
-	            $numpar = split("P", strstr($mat[$iInd], "P"));
-	            $numpar = split("R",$numpar[1]);
+	            $numpre = explode("P", $mat[$iInd]);
+	            $numpar = explode("P", strstr($mat[$iInd], "P"));
+	            $numpar = explode("R",$numpar[1]);
 	            $receit = @$numpar[1];
 	            $numpar = $numpar[0];
 	            $numpre = $numpre[0];
@@ -119,9 +119,9 @@ if ((isset ($ver_matric) or isset ($ver_inscr) or isset ($ver_numcgm)) && !isset
 	            
 	            if ($mat[$j] == "") continue;
 	            
-	            $numpre = split("P", $mat[$j]);
-	            $numpar = split("P", strstr($mat[$j], "P"));
-	            $numpar = split("R",$numpar[1]);
+	            $numpre = explode("P", $mat[$j]);
+	            $numpar = explode("P", strstr($mat[$j], "P"));
+	            $numpar = explode("R",$numpar[1]);
 	            $receit = @$numpar[1];
 	            $numpar = $numpar[0];
 	            $numpre = $numpre[0];
@@ -139,9 +139,9 @@ if ((isset ($ver_matric) or isset ($ver_inscr) or isset ($ver_numcgm)) && !isset
 	        	
 	          if ($mat[$j] == "") continue;
 	          
-	          $numpre = split("P", $mat[$j]);
-	          $numpar = split("P", strstr($mat[$j], "P"));
-	          $numpar = split("R",$numpar[1]);
+	          $numpre = explode("P", $mat[$j]);
+	          $numpar = explode("P", strstr($mat[$j], "P"));
+	          $numpar = explode("R",$numpar[1]);
 	          $receit = @$numpar[1];
 	          $numpar = $numpar[0];
 	          $numpre = $numpre[0];
@@ -200,16 +200,16 @@ if ((isset ($ver_matric) or isset ($ver_inscr) or isset ($ver_numcgm)) && !isset
           
           if ($oPost->marcarvencidas == 'true' && $oPost->marcartodas == 'false') {
             
-          	$mat = split("N", $v50_inicial);
+          	$mat = explode("N", $v50_inicial);
             for ($iInd = 0; $iInd < count($mat); $iInd++) {
                 
               if ($mat[$iInd] == "") {
                 continue;   
               }
                 
-              $numpre = split("P", $mat[$iInd]);
-              $numpar = split("P", strstr($mat[$iInd], "P"));
-              $numpar = split("R",$numpar[1]);
+              $numpre = explode("P", $mat[$iInd]);
+              $numpar = explode("P", strstr($mat[$iInd], "P"));
+              $numpar = explode("R",$numpar[1]);
               $receit = @$numpar[1];
               $numpar = $numpar[0];
               $numpre = $numpre[0];
@@ -339,9 +339,9 @@ if (isset ($envia) && (@$k20_codigo == 0 || @$k20_codigo == "")) {
   }
     
   if ($sqlerro == false) {
-    $mat = split(",", $numpre);
-    $mat1 = split(",", $numpar);
-    $mat2 = split(",", $receit);
+    $mat = explode(",", $numpre);
+    $mat1 = explode(",", $numpar);
+    $mat2 = explode(",", $receit);
     for ($i = 0; $i < count($mat); $i ++) {
       $numpre = $mat[$i];
       $numpar = $mat1[$i];
@@ -500,9 +500,9 @@ if (isset ($envia) && (@$k20_codigo == 0 || @$k20_codigo == "")) {
     }
   }
 		
-  $mat = split(",", $numpre);
-  $mat1 = split(",", $numpar);
-  $mat2 = split(",", $receit);
+  $mat = explode(",", $numpre);
+  $mat1 = explode(",", $numpar);
+  $mat2 = explode(",", $receit);
 	
   for ($i = 0; $i < count($mat); $i ++) {
     $numpre = $mat[$i];
@@ -594,7 +594,8 @@ if (isset ($envia) && (@$k20_codigo == 0 || @$k20_codigo == "")) {
 </head>
 <body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0"
 	onLoad="parent.document.getElementById('processando').style.visibility = 'hidden'; if(document.form1.tipoDebito.value == 2){ document.getElementById('renuncia').style.display = '' };">
-<form name="form1" method="POST"><?echo "<input type='hidden' name='tipo_filtro' value=''>\n";
+<form name="form1" method="POST"><?
+echo "<input type='hidden' name='tipo_filtro' value=''>\n";
 echo "<input type='hidden' name='cod_filtro' value=''>\n";
 echo "<input type='hidden' name='numpre' value='".@$numpre1."'>\n";
 echo "<input type='hidden' name='numpar' value='".@$numpar1."'>\n";

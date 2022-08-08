@@ -44,15 +44,15 @@ if (isset($e60codemp) && $e60_codemp){
 
 /*
 if((isset($e60_numcgm) && $e60_numcgm!='')||(isset($e60_numemp) && $e60_numemp!='' )||(isset($e60codemp) && $e60_codemp)){
-  
-   //rotina que traz os dados do empenho
-     $result = $clempempenho->sql_record($clempempenho->sql_query_empnome(null,"*","","$where $where1 $where2")); 
-     db_fieldsmemory($result,0,true);
-   //fim  
 
- 
-   
-} 
+   //rotina que traz os dados do empenho
+     $result = $clempempenho->sql_record($clempempenho->sql_query_empnome(null,"*","","$where $where1 $where2"));
+     db_fieldsmemory($result,0,true);
+   //fim
+
+
+
+}
 */
 
   ?>
@@ -100,19 +100,19 @@ if((isset($e60_numcgm) && $e60_numcgm!='')||(isset($e60_numemp) && $e60_numemp!=
 	  <td></td>
 	  <td></td>
         </tr>
-        <tr> 
+        <tr>
 	<td align='right'><b>Obs:</b></td>
           <td colspan='3' align='left'>
-	 <? 
+	 <?
 	 db_textarea("m51_obs","","110",$Im51_obs,true,'text',1);
-	 
+
 	 ?>
 	  </td>
-        
-	</tr>  
-        <tr> 
+
+	</tr>
+        <tr>
           <td colspan='4' align='center'></td>
-        </tr>  
+        </tr>
         <tr>
           <td colspan='4' align='center'>
               <input name="incluir" type="submit"  value="Incluir">
@@ -139,7 +139,7 @@ if((isset($e60_numcgm) && $e60_numcgm!='')||(isset($e60_numemp) && $e60_numemp!=
      <td align='center' valign='top' colspan='1'>
      <?
      if($pesqemp=='true'){
-     ?>  
+     ?>
       <table>
         <tr>
          <td>
@@ -149,7 +149,7 @@ if((isset($e60_numcgm) && $e60_numcgm!='')||(isset($e60_numemp) && $e60_numemp!=
       </table>
      <?
      }
-     ?>  
+     ?>
     </td>
   </tr>
  </table>
@@ -164,14 +164,14 @@ db_input("val",100,0,true,"hidden",3);
 
   function js_coddepto(mostra){
     if(mostra==true){
-      js_OpenJanelaIframe('top.corpo','db_iframe_db_depart','func_db_depart.php?funcao_js=parent.js_mostracoddepto1|coddepto|descrdepto','Pesquisa',true);
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_depart','func_db_depart.php?funcao_js=parent.js_mostracoddepto1|coddepto|descrdepto','Pesquisa',true);
     }else{
       coddepto = document.form1.coddepto.value;
       if(coddepto!=""){
-        js_OpenJanelaIframe('top.corpo','db_iframe_db_depart','func_db_depart.php?pesquisa_chave='+coddepto+'&funcao_js=parent.js_mostracoddepto','Pesquisa',false);
-      }else{ 	
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_depart','func_db_depart.php?pesquisa_chave='+coddepto+'&funcao_js=parent.js_mostracoddepto','Pesquisa',false);
+      }else{
 	document.form1.descrdepto.value='';
-      } 	
+      }
     }
   }
   function js_mostracoddepto1(chave1,chave2){
@@ -180,10 +180,10 @@ db_input("val",100,0,true,"hidden",3);
     db_iframe_db_depart.hide();
   }
   function js_mostracoddepto(chave,erro){
-    document.form1.descrdepto.value = chave; 
-    if(erro==true){ 
-      document.form1.coddepto.focus(); 
-      document.form1.coddepto.value = ''; 
+    document.form1.descrdepto.value = chave;
+    if(erro==true){
+      document.form1.coddepto.focus();
+      document.form1.coddepto.value = '';
     }
   }
   function js_buscavalores(){
@@ -197,7 +197,7 @@ db_input("val",100,0,true,"hidden",3);
 	 var objvalor=new Number(obj.elements[i].value);
 	 if (objvalor!=0){
 	   valor+=obj.elements[i].name+"_"+obj.elements[i].value;
-	 } 
+	 }
        }else{
 	 continue;
        }
@@ -206,7 +206,7 @@ db_input("val",100,0,true,"hidden",3);
        objvaloritem=new Number(obj.elements[i].value);
        if (objvaloritem!=0){
 	 valoritem+=obj.elements[i].name+"_"+obj.elements[i].value;
-       } 
+       }
      }
    }
    document.form1.valores.value=valor;

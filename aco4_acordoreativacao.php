@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -60,38 +60,38 @@ $oRotuloCampo->label("ac10_obs");
   <div class="container">
 
     <fieldset>
-    
+
       <legend><strong id="descricaoRotina">Reativar Acordo Paralisado</strong></legend>
-      
+
       <table align="center" border="0">
 
         <tr>
           <td title="<?php echo $Tac16_sequencial; ?>">
-            <?php 
+            <?php
               if ($dbopcao == 1 ) {
                 db_ancora($Lac16_sequencial, "js_pesquisaParalisacao(true);", 1);
               } else {
                 db_ancora($Lac16_sequencial, "js_pesquisaac16_sequencial(true);", 1);
-              }              
+              }
             ?>
           </td>
           <td>
             <?php
               //db_input('ac16_sequencial', 10, $Iac16_sequencial,true,'text', 1," onchange='js_pesquisaac16_sequencial(false);'");
               //db_input('ac16_sequencial', 10, $Iac16_sequencial,true,'text', 1," onchange='js_pesquisaac16_sequencial(false);'");
-              
+
               if ($dbopcao == 1 ) {
                 db_input('ac16_sequencial',10,$Iac16_sequencial,true,'text', 1," onchange='js_pesquisaParalisacao(false);'");
               } else {
                 db_input('ac16_sequencial',10,$Iac16_sequencial,true,'text', 1," onchange='js_pesquisaac16_sequencial(false);' ");
-              }              
-              
-              
+              }
+
+
               db_input('ac16_resumoobjeto', 40, $Iac16_resumoobjeto,true,'text',3);
             ?>
           </td>
         </tr>
-        
+
         <tr>
           <td><strong>Data Paralisação:</strong></td>
           <td>
@@ -113,7 +113,7 @@ $oRotuloCampo->label("ac10_obs");
               <?php db_textarea('ac10_obs', 3, 64, $Iac10_obs, true, 'text', 1, ""); ?>
             </fieldset>
           </td>
-        </tr> 
+        </tr>
 
         <tr>
           <td colspan="2">
@@ -122,15 +122,15 @@ $oRotuloCampo->label("ac10_obs");
               <div id="ctnPeriodos"></div>
             </fieldset>
           </td>
-        </tr> 
+        </tr>
 
       </table>
-      
+
     </fieldset>
-          
+
     <input type="button" value="Processar" disabled id="processar" onClick="return js_processar();" />
     <!-- <input type="button" value="Pesquisar Acordos" id="pesquisar" onClick="return js_pesquisar();" />-->
-    
+
     <input type="button" value="Consultar Acordo" id="pesquisar" onClick="return js_verAcordo();" />
 
   </div>
@@ -153,7 +153,7 @@ oGridPeriodos.setHeader(['codigo', 'Período', 'Descrição', 'Data inicial', 'Data
 oGridPeriodos.setHeight(100);
 oGridPeriodos.aHeaders[0].lDisplayed = false;
 oGridPeriodos.show($('ctnPeriodos'));
-oGridPeriodos.clearAll(true); 
+oGridPeriodos.clearAll(true);
 
 
 switch ( DB_OPCAO ) {
@@ -169,8 +169,8 @@ switch ( DB_OPCAO ) {
     $('tituloPeriodos').innerHTML  = 'Períodos Reativados';
     $('processar').value           = 'Cancelar Reativação';
     js_pesquisaac16_sequencial(true);
-  break;  
-  
+  break;
+
 }
 
 /**
@@ -179,29 +179,29 @@ switch ( DB_OPCAO ) {
 function js_pesquisaac16_sequencial(lMostrar) {
 
   var sTituloJanela = 'Pesquisar Acordos Homologados';
-  
+
   if (lMostrar == true) {
-    
+
     var sUrl = 'func_acordo.php?funcao_js=parent.js_mostraacordo1|ac16_sequencial|ac16_resumoobjeto&iTipoFiltro=4';
-    js_OpenJanelaIframe('top.corpo', 
-                        'db_iframe_acordo', 
+    js_OpenJanelaIframe('CurrentWindow.corpo',
+                        'db_iframe_acordo',
                         sUrl,
                         sTituloJanela,
                         true);
   } else {
-  
-    if ($('ac16_sequencial').value != '') { 
-    
+
+    if ($('ac16_sequencial').value != '') {
+
       var sUrl = 'func_acordo.php?descricao=true&pesquisa_chave='+$('ac16_sequencial').value+
                  '&funcao_js=parent.js_mostraacordo&iTipoFiltro=4';
-                 
-      js_OpenJanelaIframe('top.corpo',
+
+      js_OpenJanelaIframe('CurrentWindow.corpo',
                           'db_iframe_acordo',
                           sUrl,
                           sTituloJanela,
                           false);
      } else {
-       $('ac16_sequencial').value = ''; 
+       $('ac16_sequencial').value = '';
      };
   };
 }
@@ -210,16 +210,16 @@ function js_pesquisaac16_sequencial(lMostrar) {
  * Retorno da pesquisa acordos
  */
 function js_mostraacordo(chave1,chave2,erro) {
- 
+
   if (erro == true) {
-   
-    $('ac16_sequencial')  .value = ''; 
+
+    $('ac16_sequencial')  .value = '';
     $('ac47_datainicio')  .value = '';
     $('ac47_datafim')     .value = '';
     $('ac16_resumoobjeto').value = chave1;
-    $('ac16_sequencial')  .focus(); 
+    $('ac16_sequencial')  .focus();
   } else {
-  
+
     $('ac16_sequencial').value   = chave1;
     $('ac16_resumoobjeto').value = chave2;
     js_buscarDadosParalisacao();
@@ -244,29 +244,29 @@ function js_mostraacordo1(chave1,chave2) {
 function js_pesquisaParalisacao(lMostrar) {
 
   var sTituloJanela = 'Pesquisar Acordos Paralisados';
-  
+
   if (lMostrar == true) {
-    
+
     var sUrl = 'func_acordo.php?funcao_js=parent.js_mostraParalisacao1|ac16_sequencial|ac16_resumoobjeto&iTipoFiltro=5';
-    js_OpenJanelaIframe('top.corpo', 
-                        'db_iframe_acordoParalisado', 
+    js_OpenJanelaIframe('CurrentWindow.corpo',
+                        'db_iframe_acordoParalisado',
                         sUrl,
                         sTituloJanela,
                         true);
   } else {
-    
-    if ($('ac16_sequencial').value != '') { 
-      
+
+    if ($('ac16_sequencial').value != '') {
+
       var sUrl = 'func_acordo.php?descricao=true&pesquisa_chave='+$('ac16_sequencial').value+
                  '&funcao_js=parent.js_mostraParalisacao&iTipoFiltro=5';
-                 
-      js_OpenJanelaIframe('top.corpo',
+
+      js_OpenJanelaIframe('CurrentWindow.corpo',
                           'db_iframe_acordoParalisado',
                           sUrl,
                           sTituloJanela,
                           false);
      } else {
-       $('ac16_sequencial').value = ''; 
+       $('ac16_sequencial').value = '';
      };
 
   };
@@ -276,12 +276,12 @@ function js_pesquisaParalisacao(lMostrar) {
  * Retorno da pesquisa acordos
  */
 function js_mostraParalisacao(chave1,chave2,erro) {
- 
+
   if (erro == true) {
-    
-    $('ac16_sequencial').value   = ''; 
+
+    $('ac16_sequencial').value   = '';
     $('ac16_resumoobjeto').value = chave1;
-    $('ac16_sequencial').focus(); 
+    $('ac16_sequencial').focus();
     $('ac47_datainicio') . value = '';
     $('ac10_obs')        . value = '';
   } else {
@@ -323,10 +323,10 @@ function js_buscarDadosParalisacao() {
     }
 
     $('ac47_datainicio').value = oRetorno.oDados.dtInicial;
-    $('ac47_datafim').value = oRetorno.oDados.dtTermino; 
+    $('ac47_datafim').value = oRetorno.oDados.dtTermino;
     js_buscarPeriodos();
   }
-} 
+}
 
 function js_verAcordo() {
 
@@ -336,7 +336,7 @@ function js_verAcordo() {
     return alert(_M(MENSSAGENS + 'acordo_nao_selecionado'));
   }
 
-  js_OpenJanelaIframe('top.corpo', 'db_iframe_consultaacordo', 'con4_consacordos003.php?ac16_sequencial=' + iAcordo, 'Consulta Dados Acordo', true);
+  js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_consultaacordo', 'con4_consacordos003.php?ac16_sequencial=' + iAcordo, 'Consulta Dados Acordo', true);
 }
 
 
@@ -354,7 +354,7 @@ function js_buscarPeriodos() {
   if ( empty(dtInicial) || empty(dtTermino) ) {
     return false;
   }
-  
+
   /**
    * Valida se data de retorno e maior que a de inicio da paralisacao
    * retorn 'i' quando datas são iguais
@@ -387,8 +387,8 @@ function js_buscarPeriodos() {
 
     if (oRetorno.status > 1) {
       return alert(sMensagem + '\nOu sem reativação a cancelar. ');
-    } 
-    
+    }
+
     oRetorno.aPeriodos.each(function(oPeriodo, iIndice) {
 
       var aColunas = [];
@@ -436,11 +436,11 @@ function js_processar() {
   oParametros.exec        = DB_OPCAO == 1 ? "reativarAcordo" : "cancelarReativacao";
   oParametros.iAcordo     = iAcordo;
   oParametros.dtRetorno   = js_formatar($("ac47_datafim").value, 'd');
-  oParametros.sObservacao = sObservacao; 
+  oParametros.sObservacao = sObservacao;
   oParametros.aPeriodos   = aCodigoPeriodos;
 
   js_divCarregando(_M(MENSSAGENS + (DB_OPCAO == 1 ? 'reativando_acordo' : 'cancelando_reativacao')), 'msgBox');
-  
+
   var oRequisicao = {method: 'post', parameters: 'json=' + js_objectToJson(oParametros), onComplete: retorno};
   var oAjax       = new Ajax.Request(RPC, oRequisicao);
 

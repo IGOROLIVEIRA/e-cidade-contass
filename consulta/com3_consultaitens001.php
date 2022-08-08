@@ -57,7 +57,7 @@ db_postmemory($HTTP_POST_VARS);
 <?
   if(isset($solicitacao)){
     if($solicitacao=="1"){
-      $result_itensdotac = $clsolicitem->sql_record(      
+      $result_itensdotac = $clsolicitem->sql_record(
       $clsolicitem->sql_query_rel(null,"pc11_codigo,
                                         pc11_seq,
                                         pc11_quant,
@@ -118,12 +118,12 @@ db_postmemory($HTTP_POST_VARS);
 	      $m61_descr .= " ($pc17_quant UNIDADES)";
 	    }
 	    echo "  <tr>\n";
-	    echo "    <td colspan='1' width='25%' align='right' bgcolor='#CCCCCC'>Referência:</td>\n";       
+	    echo "    <td colspan='1' width='25%' align='right' bgcolor='#CCCCCC'>Referência:</td>\n";
 	    echo "    <td colspan='3' width='75%' align='left'  bgcolor='#FFFFFF'><font color='#333333'><strong>$m61_descr</strong></font></td>\n";
 	    echo "  </tr>\n";
 	  }else if($pc05_servico=='t'){
 	    echo "  <tr>\n";
-	    echo "    <td colspan='1' width='25%' align='right' bgcolor='#CCCCCC'>Referência:</td>\n";       
+	    echo "    <td colspan='1' width='25%' align='right' bgcolor='#CCCCCC'>Referência:</td>\n";
 	    echo "    <td colspan='3' width='75%' align='left'  bgcolor='#FFFFFF'><font color='#333333'><strong>SERVIÇO</strong></font></td>\n";
 	    echo "  </tr>\n";
 	  }
@@ -157,7 +157,7 @@ db_postmemory($HTTP_POST_VARS);
 	  echo "  <tr>\n";
 	  echo "    <td colspan='4' width='75%' align='center'  bgcolor='#CCCCCC'>";db_ancora("Clique aqui para ver dotações do item $pc11_codigo","js_verdotac($pc11_codigo,$pc01_codmater,$numero)",1);echo"</td>\n";
 	  echo "  </tr>\n";
-        } 
+        }
         if(($i+1)!=$numrows_itensdotac){
 	  echo "  <tr>\n";
 	  echo "    <td colspan='4' width='75%' align='left'  bgcolor='#CCCCCC'>&nbsp;</td>\n";
@@ -241,7 +241,7 @@ db_postmemory($HTTP_POST_VARS);
 	      if(trim($pc17_codigo)!=""){
 		echo "  <tr>\n";
 		echo "    <td colspan='4' width='100%' align='left' bgcolor='#DEB887'>
-		            Referência: 
+		            Referência:
 		            <font color='#333333'>
 			      <strong>
 			        $m61_descr";
@@ -255,7 +255,7 @@ db_postmemory($HTTP_POST_VARS);
 		echo "  </tr>\n";
 	      }else if(isset($pc05_servico)){
 		echo "  <tr>\n";
-		echo "    <td colspan='1' width='25%' align='right' bgcolor='#CCCCCC'>Referência:</td>\n";       
+		echo "    <td colspan='1' width='25%' align='right' bgcolor='#CCCCCC'>Referência:</td>\n";
 		echo "    <td colspan='3' width='75%' align='left'  bgcolor='#FFFFFF'><font color='#333333'><strong>SERVIÇO</strong></font></td>\n";
 		echo "  </tr>\n";
 	      }
@@ -339,7 +339,7 @@ db_postmemory($HTTP_POST_VARS);
 	    echo "    <td colspan='1' width='25%' align='right' bgcolor='#CCCCCC'>Autorização:</td>\n";
 	    if(trim($e54_autori)!="" && trim($e54_anulad)==""){
 	      echo "    <td colspan='1' width='25%' align='left'  bgcolor='#DEB887'><font color='#333333'><strong>$e54_autori</strong></font></td>\n";
-	    }else{                                                          
+	    }else{
 	      echo "    <td colspan='1' width='25%' align='left'  bgcolor='#DEB887'><font color='#333333'><strong>Não gerada</strong></font></td>\n";
 	    }
 	    echo "  </tr>\n";
@@ -352,7 +352,7 @@ db_postmemory($HTTP_POST_VARS);
 	    echo "  <tr>\n";
 	    echo "    <td colspan='1' width='15%' align='left' bgcolor='#CCCCCC'>Sub-elemento:</td>";
 	    echo "    <td colspan='3' width='85%' align='left'  bgcolor='#FFFFFF'>
-			<font color='#333333'><strong>".db_formatar($o56_elemento,"elemento")." - 		      
+			<font color='#333333'><strong>".db_formatar($o56_elemento,"elemento")." -
 			<font color='#333333'><strong>$o56_descr</strong></font>
 		      </td>\n";
 	    echo "  </tr>\n";
@@ -373,7 +373,7 @@ db_postmemory($HTTP_POST_VARS);
 	      echo "  </tr>\n";
 	    }else if(isset($pc05_servico)){
 	      echo "  <tr>\n";
-	      echo "    <td colspan='1' width='25%' align='right' bgcolor='#CCCCCC'>Referência:</td>\n";       
+	      echo "    <td colspan='1' width='25%' align='right' bgcolor='#CCCCCC'>Referência:</td>\n";
 	      echo "    <td colspan='3' width='75%' align='left'  bgcolor='#FFFFFF'><font color='#333333'><strong>SERVIÇO</strong></font></td>\n";
 	      echo "  </tr>\n";
 	    }
@@ -415,7 +415,7 @@ db_postmemory($HTTP_POST_VARS);
 		echo "    <td colspan='2' width='50%' align='center' bgcolor='#DEB887'><strong>Autorizações</strong></td>\n";
 		echo "    <td colspan='2' width='50%' align='center' bgcolor='#DEB887'><strong>Empenhadas</strong></td>\n";
 		echo "  </tr>\n";
-	      }	      
+	      }
 	      if(!in_array($e54_autori."_".$e60_numemp,$arr_aut)){
 		$arr_aut[$e54_autori."_".$e60_numemp] = $e54_autori."_".$e60_numemp;
 		echo "  <tr>\n";
@@ -453,19 +453,19 @@ db_postmemory($HTTP_POST_VARS);
 </form>
 </center>
 <script>
-function js_verdotac(codigo,mater,numero){  
+function js_verdotac(codigo,mater,numero){
   qry  = "";
   qry += "pc13_codigo="+codigo;
   qry += "&pc16_codmater="+mater;
   qry += "&numero="+numero;
   qry += "&consulta=consulta";
-  js_OpenJanelaIframe('top.corpo','db_iframe_dotac','com1_seldotac001.php?'+qry,'Dotações do item '+codigo,true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_dotac','com1_seldotac001.php?'+qry,'Dotações do item '+codigo,true);
 }
 function js_pesquisaaut(autorizacao){
   js_JanelaAutomatica('empautoriza',autorizacao);
 }
 function js_pesquisaemp(empenho){
-  js_OpenJanelaIframe('top.corpo','iframeautoriza','func_empempenho001.php?e60_numemp='+empenho,'Empenho '+empenho,true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','iframeautoriza','func_empempenho001.php?e60_numemp='+empenho,'Empenho '+empenho,true);
 }
 </script>
 </body>

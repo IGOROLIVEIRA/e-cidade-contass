@@ -329,11 +329,11 @@ if (isset ($incluir)) {
 		$vir = "";
 		if ($sqlerro == false && isset ($pc22_codorc) && trim($pc22_codorc) != "") {
 			
-			$arr_recebe = split(",", $valores);
+			$arr_recebe = explode(",", $valores);
 			
 			for ($i = 0; $i < sizeof($arr_recebe); $i ++) {
 				
-				$splitARR        = split("_", $arr_recebe[$i]);
+				$splitARR        = explode("_", $arr_recebe[$i]);
 				$contadorARR     = $splitARR[1];
 				$pc11_codigo     = $splitARR[2];
 				$pc13_coddot     = $splitARR[3];
@@ -529,7 +529,7 @@ if (isset ($incluir)) {
 				}
 			}
 			
-			$arr_comitens = split(",", $aSeqDotacoes[$i +1]);
+			$arr_comitens = explode(",", $aSeqDotacoes[$i +1]);
 			if ($sqlerro == true) {
 				$arr_comitens = Array ();
 			}

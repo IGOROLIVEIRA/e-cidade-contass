@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -93,11 +93,11 @@ if ( isset($excluir) ) {
     if($clrhlotacalend->erro_status==0){
       $sqlerro=true;
     }
-  } 
+  }
 
 	/**
    * Exclui da tabela rhlotavincativ
-   */  
+   */
   if ( !$sqlerro ) {
 
     $oDaoRhlotavincAtiv->excluir("(select rh25_codlotavinc from rhlotavinc where rh25_codigo = {$r70_codigo} limit 1)");
@@ -111,7 +111,7 @@ if ( isset($excluir) ) {
 
   /**
    * Exclui da tabela rhlotavincele
-   */  
+   */
   if ( !$sqlerro ) {
 
     $oDaoRhlotavincEle->excluir("(select rh25_codlotavinc from rhlotavinc where rh25_codigo = {$r70_codigo} limit 1)");
@@ -125,7 +125,7 @@ if ( isset($excluir) ) {
 
   /**
    * Exclui da tabela rhlotavinc
-   */  
+   */
   if ( !$sqlerro ) {
 
     $oDaoRhlotavinc->excluir(null, "rh25_codigo = {$r70_codigo}");
@@ -139,7 +139,7 @@ if ( isset($excluir) ) {
 
 	/**
 	 * Excluir da tabela rhlota
-	 */	 
+	 */
 	if ( $sqlerro == false ) {
 
     $clrhlota->r70_codigo = $r70_codigo;
@@ -157,7 +157,7 @@ if ( isset($excluir) ) {
   db_fim_transacao($sqlerro);
 }else if(isset($chavepesquisa)){
    $db_opcao = 3;
-   $result = $clrhlota->sql_record($clrhlota->sql_query($chavepesquisa)); 
+   $result = $clrhlota->sql_record($clrhlota->sql_query($chavepesquisa));
    db_fieldsmemory($result,0);
 
    if($r70_analitica=="t"){
@@ -166,7 +166,7 @@ if ( isset($excluir) ) {
        db_fieldsmemory($result_rhlotaexe,0);
      }
    }
-   $result = $clrhlotacalend->sql_record($clrhlotacalend->sql_query($r70_codigo,"rh64_calend, rh53_descr")); 
+   $result = $clrhlotacalend->sql_record($clrhlotacalend->sql_query($r70_codigo,"rh64_calend, rh53_descr"));
    if($clrhlotacalend->numrows>0){
       db_fieldsmemory($result,0);
    }
@@ -183,8 +183,8 @@ if ( isset($excluir) ) {
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
 	<?
 	include("forms/db_frmrhlota.php");
@@ -224,7 +224,7 @@ if ( isset($chavepesquisa) ) {
   echo "
         <script>
           parent.document.formaba.rhlotavinc.disabled = false;
-	      top.corpo.iframe_rhlotavinc.location.href = 'pes1_rhlotavinc001.php?chavepesquisa=$r70_codigo&db_opcaoal=false';
+	      CurrentWindow.corpo.iframe_rhlotavinc.location.href = 'pes1_rhlotavinc001.php?chavepesquisa=$r70_codigo&db_opcaoal=false';
 	    </script>
        ";
 }

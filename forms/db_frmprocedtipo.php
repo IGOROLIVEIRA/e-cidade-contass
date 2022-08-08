@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: divida
@@ -39,7 +39,7 @@ $clrotulo->label("v29_descricao");
     <td nowrap title="<?=@$Tv28_sequencial?>">
        <?=@$Lv28_sequencial?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('v28_sequencial',10,$Iv28_sequencial,true,'text',3,"")
 ?>
@@ -49,7 +49,7 @@ db_input('v28_sequencial',10,$Iv28_sequencial,true,'text',3,"")
     <td nowrap title="<?=@$Tv28_descricao?>">
        <?=@$Lv28_descricao?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('v28_descricao',50,$Iv28_descricao,true,'text',$db_opcao,"")
 ?>
@@ -59,7 +59,7 @@ db_input('v28_descricao',50,$Iv28_descricao,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tv28_grupo?>">
        <?=@$Lv28_grupo?>
     </td>
-    <td> 
+    <td>
        <?
        include("classes/db_procedtipogrupo_classe.php");
        $clprocedtipogrupo = new cl_procedtipogrupo;
@@ -77,20 +77,20 @@ db_input('v28_descricao',50,$Iv28_descricao,true,'text',$db_opcao,"")
 <script>
 function js_pesquisav28_grupo(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_procedtipogrupo','func_procedtipogrupo.php?funcao_js=parent.js_mostraprocedtipogrupo1|v29_sequencial|v29_descricao','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_procedtipogrupo','func_procedtipogrupo.php?funcao_js=parent.js_mostraprocedtipogrupo1|v29_sequencial|v29_descricao','Pesquisa',true);
   }else{
-     if(document.form1.v28_grupo.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_procedtipogrupo','func_procedtipogrupo.php?pesquisa_chave='+document.form1.v28_grupo.value+'&funcao_js=parent.js_mostraprocedtipogrupo','Pesquisa',false);
+     if(document.form1.v28_grupo.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_procedtipogrupo','func_procedtipogrupo.php?pesquisa_chave='+document.form1.v28_grupo.value+'&funcao_js=parent.js_mostraprocedtipogrupo','Pesquisa',false);
      }else{
-       document.form1.v29_descricao.value = ''; 
+       document.form1.v29_descricao.value = '';
      }
   }
 }
 function js_mostraprocedtipogrupo(chave,erro){
-  document.form1.v29_descricao.value = chave; 
-  if(erro==true){ 
-    document.form1.v28_grupo.focus(); 
-    document.form1.v28_grupo.value = ''; 
+  document.form1.v29_descricao.value = chave;
+  if(erro==true){
+    document.form1.v28_grupo.focus();
+    document.form1.v28_grupo.value = '';
   }
 }
 function js_mostraprocedtipogrupo1(chave1,chave2){
@@ -99,7 +99,7 @@ function js_mostraprocedtipogrupo1(chave1,chave2){
   db_iframe_procedtipogrupo.hide();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_procedtipo','func_procedtipo.php?funcao_js=parent.js_preenchepesquisa|v28_sequencial','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_procedtipo','func_procedtipo.php?funcao_js=parent.js_preenchepesquisa|v28_sequencial','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_procedtipo.hide();

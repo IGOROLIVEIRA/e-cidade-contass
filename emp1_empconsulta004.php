@@ -47,8 +47,8 @@ $data1 = 0;
 $data2 = 0;
 @ $data1 = "$dt1_ano-$dt1_mes-$dt1_dia";
 @ $data2 = "$dt2_ano-$dt2_mes-$dt2_dia"; 
-$dta1 = split("-",$data1);
-$dta2 = split("-",$data2);
+$dta1 = explode("-",$data1);
+$dta2 = explode("-",$data2);
 $head5 =  "De  : $dta1[2]/$dta1[1]/$dta1[0] ";  
 $head5 =  "Ate : $dta2[2]/$dta2[1]/$dta2[0] ";
 if (strlen($data1) < 3) {
@@ -68,7 +68,7 @@ if (isset ($e60_numemp) and ($e60_numemp != "")) {
 	$where_sql .= " e60_numemp = $e60_numemp and ";  
 }
 if (isset($e60_codemp) and $e60_codemp != "" ) { 	  
-	  $arr = split("/",$e60_codemp);
+	  $arr = explode("/",$e60_codemp);
 	  if(count($arr) == 2  && isset($arr[1]) && $arr[1] != '' ){
 	  	$where_sql .= " e60_codemp =  '".$arr[0]."' and e60_anousu = ".$arr[1]." and ";
 	  }else{
@@ -101,7 +101,7 @@ if (isset($pc01_codmater) and $pc01_codmater !=""){
 }
 
 if (isset ($o50_estrutdespesa) && ($o50_estrutdespesa != "")) {
-	$matriz = split('\.', $o50_estrutdespesa);
+	$matriz = explode('\.', $o50_estrutdespesa);
 	for ($i = 0; $i < count($matriz); $i ++) {
 		switch ($i) {
 			case 0 : //orgao

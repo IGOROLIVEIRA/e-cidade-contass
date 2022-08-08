@@ -149,7 +149,7 @@ oGridLancamentos.setHeader(new Array("Lançamento", "Data", "Documento","Valor"))
  * lokup para lancamentos contabeis
  */
 function js_pesquisaLancamento(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_conlancamlan','func_conlancamlan.php?funcao_js=parent.js_preencheLancamento|c70_codlan','Pesquisa Lançamentos',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_conlancamlan','func_conlancamlan.php?funcao_js=parent.js_preencheLancamento|c70_codlan','Pesquisa Lançamentos',true);
 }
 function js_preencheLancamento(chave){
 

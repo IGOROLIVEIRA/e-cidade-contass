@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 //MODULO: atendimento
 include ("classes/db_tipoatend_classe.php");
@@ -70,7 +70,7 @@ db_input("codatend",10,"",true,"hidden",3);
 </tr>
 <tr>
 <td colspan=4 align=center>
- 
+
   <select name="usuorigem[]" multiple size="7">
 <?
 $rs_atend = $clatendimento->sql_record($clatendimento->sql_query_inc(null,"at10_usuario","at02_codatend desc","at02_codatend = $codatend"));
@@ -110,7 +110,7 @@ for ($z = 0; $z < $numlinha; $z ++) {
     <td nowrap align=center title="<?=@$Tat02_solicitado?>" valign=top>
        <?=@$Lat02_solicitado?>
     </td>
-    <td align=center> 
+    <td align=center>
 <?
 db_textarea('at05_solicitado', 10, 50, $Iat05_solicitado, true, 'text', $db_opcao, "")
 ?>
@@ -118,7 +118,7 @@ db_textarea('at05_solicitado', 10, 50, $Iat05_solicitado, true, 'text', $db_opca
     <td nowrap align=center title="<?=@$Tat05_feito?>" valign=top>
        <?=@$Lat05_feito?>
     </td>
-    <td align=center> 
+    <td align=center>
 <?
 db_textarea('at05_feito', 10, 50, $Iat05_feito, true, 'text', $db_opcao, "")
 ?>
@@ -128,25 +128,25 @@ db_textarea('at05_feito', 10, 50, $Iat05_feito, true, 'text', $db_opcao, "")
     <td nowrap title="<?=@$Tat05_perc?>">
        <?=@$Lat05_perc?>
     </td>
-    <td> 
+    <td>
 <?
 //db_input('at05_perc',10,$Iat05_perc,true,'text',$db_opcao,"")
   $matriz = array("0"=>"0%",
-                  "10"=>"10%", 
+                  "10"=>"10%",
                   "20"=>"20%",
                   "30"=>"30%",
                   "40"=>"40%",
-                  "50"=>"50%", 
+                  "50"=>"50%",
                   "60"=>"60%",
                   "70"=>"70%",
                   "80"=>"80%",
                   "90"=>"90%",
-                  "100"=>"100%");             
-  db_select("at05_perc", $matriz,true,$db_opcao); 
+                  "100"=>"100%");
+  db_select("at05_perc", $matriz,true,$db_opcao);
 ?>
     </td>
   </tr>
-  
+
   <tr align=center>
   <td align=center>
   <b>Modulo: Verificado</b></td>
@@ -161,7 +161,7 @@ echo ($sqlmod);
 for ($a = 0; $a < $numlinha; $a ++) {
 	$modulo_iditem = pg_result($result_modulo, $a, "id_item");
 	$modulo_nome = pg_result($result_modulo, $a, "nome_modulo");
-	
+
 	if(isset($at08_modulo)&&$at08_modulo!="") {
 		if($modulo_iditem == $at08_modulo) {
 			$selected = "SELECTED";
@@ -173,19 +173,19 @@ for ($a = 0; $a < $numlinha; $a ++) {
 	else {
 		$selected = "";
 	}
-	
+
 	echo "<option value=$modulo_iditem $selected>$modulo_nome</option>";
 }
 ?>
          </select>
-         </td>  
+         </td>
     </tr>
 
 
 
   <tr>
     <td nowrap title="<?=@$Tat41_proced?>"><b>Procedimento:</b></td>
-    <td> 
+    <td>
 <?
 if (isset($at41_proced) and $at41_proced == 0) {
 	unset($at41_proced);
@@ -199,12 +199,12 @@ db_selectrecord('at41_proced',($cldb_proced->sql_record($cldb_proced->sql_query(
 
 
 
-		
+
     <tr align=center >
     <td align=center nowrap title="<?=@$Tat05_data?>">
        <?=@$Lat05_data?>
     </td>
-    <td align=center> 
+    <td align=center>
 <?
 if ($db_opcao == 1) {
 //	$at05_data_dia = date("d", db_getsession("DB_datausu"));
@@ -215,7 +215,7 @@ db_inputdata('at05_data', @ $at05_data_dia, @ $at05_data_mes, @ $at05_data_ano, 
 ?>
     </td>
   </tr>
-  
+
   <tr align=center >
     <td align=center nowrap colspan=2>
   <input name="<?=$opcao?>" type="submit"  value="<?=($opcao=="incluir"?"Incluir":"Alterar")?>"<?=($db_botao==false?"disabled":"")?> >
@@ -228,8 +228,8 @@ db_inputdata('at05_data', @ $at05_data_dia, @ $at05_data_mes, @ $at05_data_ano, 
 </form>
 <script>
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_atend','func_atendimentoinc.php?opcao=<?=$opcao?>&funcao_js=parent.js_preenchepesquisa|at02_codatend','Pesquisa',true);
-  document.form1.opcao.value=<?=$opcao?>;	
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_atend','func_atendimentoinc.php?opcao=<?=$opcao?>&funcao_js=parent.js_preenchepesquisa|at02_codatend','Pesquisa',true);
+  document.form1.opcao.value=<?=$opcao?>;
 }
 function js_preenchepesquisa(chave){
   <?

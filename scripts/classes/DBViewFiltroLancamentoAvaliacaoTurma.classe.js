@@ -408,7 +408,7 @@ DBViewFiltroLancamentoAvaliacaoTurma.prototype.retornoDadosDaTurma = function(oA
 
     oDisciplina.aPeriodos.each(function(oPeriodo, iPeriodo) {
 
-      var sId                   = oDisciplina.sAbrev.urlDecode() + iPeriodo;
+      var sId                   = oDisciplina.iCodigo + oDisciplina.sAbrev.urlDecode() + iPeriodo;
       var oDadosPeriodo         = new Object();
       oDadosPeriodo.id          = sId;
       oDadosPeriodo.iDisciplina = oDisciplina.iCodigo;
@@ -424,7 +424,7 @@ DBViewFiltroLancamentoAvaliacaoTurma.prototype.retornoDadosDaTurma = function(oA
 
     oSelf.oGridAulasDadas.addRow(aLinha);
   });
-  
+
   this.oGridAulasDadas.renderRows();
 
   this.setaFuncaoCelula( aIdDadosEventosDisciplina );

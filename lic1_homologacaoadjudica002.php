@@ -20,6 +20,7 @@ $db_opcao = "2";
 
 ?>
 <html>
+
 <head>
     <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
@@ -33,35 +34,37 @@ $db_opcao = "2";
     db_app::load("estilos.css, grid.style.css");
     ?>
 </head>
-<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
-<center>
-    <fieldset style="margin-top: 30px;">
-        <legend>Homologação</legend>
-        <?
-        include("forms/db_frmhomologacaoadjudica.php");
-        ?>
-    </fieldset>
-</center>
-<?
-db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
-?>
+
+<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1">
+    <center>
+        <fieldset style="margin-top: 30px;">
+            <legend>Homologação</legend>
+            <?
+            include("forms/db_frmhomologacaoadjudica.php");
+            ?>
+        </fieldset>
+    </center>
+    <?
+    db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit"));
+    ?>
 </body>
+
 </html>
 <script>
-    js_tabulacaoforms("form1","l202_licitacao",true,1,"l202_licitacao",true);
+    js_tabulacaoforms("form1", "l202_licitacao", true, 1, "l202_licitacao", true);
 </script>
 <?
-if(isset($incluir)){
-    if($clhomologacaoadjudica->erro_status=="0"){
-        $clhomologacaoadjudica->erro(true,false);
-        $db_botao=true;
+if (isset($incluir)) {
+    if ($clhomologacaoadjudica->erro_status == "0") {
+        $clhomologacaoadjudica->erro(true, false);
+        $db_botao = true;
         echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
-        if($clhomologacaoadjudica->erro_campo!=""){
-            echo "<script> document.form1.".$clhomologacaoadjudica->erro_campo.".style.backgroundColor='#99A9AE';</script>";
-            echo "<script> document.form1.".$clhomologacaoadjudica->erro_campo.".focus();</script>";
+        if ($clhomologacaoadjudica->erro_campo != "") {
+            echo "<script> document.form1." . $clhomologacaoadjudica->erro_campo . ".style.backgroundColor='#99A9AE';</script>";
+            echo "<script> document.form1." . $clhomologacaoadjudica->erro_campo . ".focus();</script>";
         }
-    }else{
-        $clhomologacaoadjudica->erro(true,true);
+    } else {
+        $clhomologacaoadjudica->erro(true, true);
     }
 }
 ?>

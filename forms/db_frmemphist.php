@@ -35,10 +35,10 @@ $clemphist->rotulo->label();
     <td nowrap title="<?=@$Te40_codhist?>">
        <?=@$Le40_codhist?>
     </td>
-    <td> 
+    <td>
 <?
 if($db_opcao==1||$db_opcao==11) {
-    $resultado = $clemphist->sql_record($clemphist->sql_query_file(null,"e40_codhist","e40_codhist desc",""));    
+    $resultado = $clemphist->sql_record($clemphist->sql_query_file(null,"e40_codhist","e40_codhist desc",""));
     if($clemphist->numrows > 0) {
         db_fieldsmemory($resultado,0);
 	$e40_codhist++;
@@ -76,7 +76,7 @@ db_input('e40_descr',60,$Ie40_descr,true,'text',$db_opcao,"")
 </form>
 <script>
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_emphist','func_emphist.php?funcao_js=parent.js_preenchepesquisa|e40_codhist','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_emphist','func_emphist.php?funcao_js=parent.js_preenchepesquisa|e40_codhist','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_emphist.hide();

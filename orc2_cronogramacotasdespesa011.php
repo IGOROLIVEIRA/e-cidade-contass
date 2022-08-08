@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -73,7 +73,7 @@ $db_opcao = 1;
                 db_ancora("<b>Perspectiva</b>","js_pesquisao125_cronogramaperspectiva(true);",$db_opcao);
                 ?>
               </td>
-              <td nowrap> 
+              <td nowrap>
                 <?
                 db_input('o124_sequencial',10,$Io124_sequencial,true,'text',$db_opcao,
                          " onchange='js_pesquisao125_cronogramaperspectiva(false);'")
@@ -87,7 +87,7 @@ $db_opcao = 1;
             <tr>
               <td>
                 <b>Nível:</b>
-              </td> 
+              </td>
               <td>
                 <?
                  $aNiveis = array(
@@ -102,9 +102,9 @@ $db_opcao = 1;
                                   9 => "Orgao /Unidade /Recurso / Anexo",
                                  );
                   db_select("nivel", $aNiveis,true,1);
-                  ?>          
+                  ?>
                 </td>
-              </tr>     
+              </tr>
              <tr>
                 <td align="center" colspan="2">
                 <fieldset style="width: 500px;"><legend><b>Opções</b></legend>
@@ -112,7 +112,7 @@ $db_opcao = 1;
                 		<tr>
                 			<td><b>Periodicidade:</b></td>
                 			<td>
-                			<? 
+                			<?
                 				$x = array('1'=>'Mensal','2'=>'Bimestral');
                 				db_select('iPeriodoImpr',$x,1,1);
                 			?>
@@ -120,16 +120,16 @@ $db_opcao = 1;
                 		</tr>
                 		<tr>
                 			<td>&nbsp;</td>
-                			<td><? 
+                			<td><?
                 			     db_selinstit('',300,100);
                 			     db_input('filtra_despesa', 10,'',true, 'hidden', 3);
                 			    ?></td>
                 		</tr>
                 	</table>
                 </fieldset>
-                  
+
                 </td>
-              </tr>	            
+              </tr>
 	  			  </table>
 	  			</fieldset>
 				</td>
@@ -151,33 +151,33 @@ function js_pesquisao125_cronogramaperspectiva(mostra) {
     js_OpenJanelaIframe('',
                         'db_iframe_cronogramaperspectiva',
                         'func_cronogramaperspectiva.php?funcao_js='+
-                        'top.corpo.iframe_g1.js_mostracronogramaperspectiva1|o124_sequencial|o124_descricao|o124_ano',
+                        'CurrentWindow.corpo.iframe_g1.js_mostracronogramaperspectiva1|o124_sequencial|o124_descricao|o124_ano',
                         'Perspectivas do Cronograma',true);
   }else{
-     if(document.form1.o124_sequencial.value != ''){ 
+     if(document.form1.o124_sequencial.value != ''){
         js_OpenJanelaIframe('',
                             'db_iframe_cronogramaperspectiva',
                             'func_cronogramaperspectiva.php?pesquisa_chave='+
                             document.form1.o124_sequencial.value+
-                            '&funcao_js=top.corpo.iframe_g1.js_mostracronogramaperspectiva',
+                            '&funcao_js=CurrentWindow.corpo.iframe_g1.js_mostracronogramaperspectiva',
                             'Perspectivas do Cronograma',
                             false);
      } else {
-     
+
        document.form1.o124_descricao.value = '';
        document.form1.ano.value             = ''
-        
+
      }
   }
 }
 
 function js_mostracronogramaperspectiva(chave,erro, ano){
-  document.form1.o124_descricao.value = chave; 
-  if(erro==true) { 
-    
-    document.form1.o124_sequencial.focus(); 
+  document.form1.o124_descricao.value = chave;
+  if(erro==true) {
+
+    document.form1.o124_sequencial.focus();
     document.form1.o124_sequencial.value = '';
-      
+
   }
 }
 
@@ -201,13 +201,13 @@ function js_emite() {
       return;
 
     }
-    variavel++; 
+    variavel++;
     var sQuery  = "?iPerspectiva="+$F('o124_sequencial');
     document.form1.filtra_despesa.value = parent.iframe_filtros.js_atualiza_variavel_retorno();
     jan = window.open('','safo' + variavel,'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
     document.form1.target = 'safo' + variavel;
     document.form1.action = "orc2_cronogramacotasdespesa002.php";
     document.form1.submit();
-      
-}  
+
+}
 </script>

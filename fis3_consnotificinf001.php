@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -47,25 +47,25 @@ db_postmemory($HTTP_POST_VARS);
 function js_consulta(){
    if (document.form1.y30_codnoti.value==""){
    	  if (document.form1.y30_numbloco.value!=""){
-   	  	js_OpenJanelaIframe('top.corpo','db_iframe_notif','func_fiscalalt.php?chave_y30_numbloco='+document.form1.y30_numbloco.value+'&funcao_js=parent.js_consulta2|y30_codnoti','Pesquisa',true);
+   	  	js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_notif','func_fiscalalt.php?chave_y30_numbloco='+document.form1.y30_numbloco.value+'&funcao_js=parent.js_consulta2|y30_codnoti','Pesquisa',true);
    	  }else{
      	alert('Informe uma Notificação!!Campo vazio!!');
      	document.form1.y30_codnoti.focus();
    	  }
    }else{
-     js_OpenJanelaIframe('top.corpo','db_iframe','fis3_consnotificinf002.php?codfiscal='+document.form1.y30_codnoti.value,'Consulta Notificação',true);
+     js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe','fis3_consnotificinf002.php?codfiscal='+document.form1.y30_codnoti.value,'Consulta Notificação',true);
    }
 }
 function js_consulta2(y30_codnoti){
 	db_iframe_notif.hide();
-	js_OpenJanelaIframe('top.corpo','db_iframe','fis3_consnotificinf002.php?codfiscal='+y30_codnoti,'Consulta Notificação',true);
+	js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe','fis3_consnotificinf002.php?codfiscal='+y30_codnoti,'Consulta Notificação',true);
 }
 </script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0"  >
 <table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-  <tr> 
+  <tr>
     <td width="360" height="18">&nbsp;</td>
     <td width="263">&nbsp;</td>
     <td width="25">&nbsp;</td>
@@ -73,18 +73,18 @@ function js_consulta2(y30_codnoti){
   </tr>
 </table>
 <table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
       <center>
       <form name="form1" method="post" action="">
       <table border="0">
-	<tr>   
+	<tr>
 	  <br><br>
 	  <td title="<?=@$Ty30_codnoti?>" >
 	  <?
 	   db_ancora(@$Ly30_codnoti,' js_notif(true); ',1);
 	  ?>
-	  </td>    
+	  </td>
 	  <td title="<?=@$Ty30_codnoti?>" colspan="4">
 	  <?
 	   db_input('y30_codnoti',5,@$Iy30_codnoti,true,'text',1,"onchange='js_notif(false)'");
@@ -96,7 +96,7 @@ function js_consulta2(y30_codnoti){
 	<td title="<?=@$Ty30_numbloco?>" >
 	  <?=@$Ly30_numbloco?>
 	  </td>
-	
+
 	<td title="<?=@$Ty30_numbloco?>" colspan="4">
 	  <?
 	   db_input('y30_numbloco',10,0,true,'text',1);
@@ -121,13 +121,13 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
 function js_notif(mostra){
   var notif=document.form1.y30_codnoti.value;
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_notif','func_fiscalalt.php?funcao_js=parent.js_mostranotif|y30_codnoti|z01_nome','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_notif','func_fiscalalt.php?funcao_js=parent.js_mostranotif|y30_codnoti|z01_nome','Pesquisa',true);
   }else{
     if(notif!=""){
-      js_OpenJanelaIframe('top.corpo','db_iframe_notif','func_fiscalalt.php?pesquisa_chave='+notif+'&funcao_js=parent.js_mostranotif1','Pesquisa',false);
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_notif','func_fiscalalt.php?pesquisa_chave='+notif+'&funcao_js=parent.js_mostranotif1','Pesquisa',false);
     }else{
       document.form1.z01_nome.value="";
-      document.form1.submit();  
+      document.form1.submit();
     }
   }
 }
@@ -135,13 +135,13 @@ function js_mostranotif(chave1,chave2){
   document.form1.y30_codnoti.value = chave1;
   document.form1.z01_nome.value = chave2;
   db_iframe_notif.hide();
-  document.form1.submit(); 
+  document.form1.submit();
 }
 function js_mostranotif1(chave,erro){
-  document.form1.z01_nome.value = chave; 
-  if(erro==true){ 
-    document.form1.y30_codnoti.focus(); 
-    document.form1.y30_codnoti.value = ''; 
+  document.form1.z01_nome.value = chave;
+  if(erro==true){
+    document.form1.y30_codnoti.focus();
+    document.form1.y30_codnoti.value = '';
   }else{
     document.form1.submit();
   }

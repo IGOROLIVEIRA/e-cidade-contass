@@ -29,7 +29,7 @@ parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 $fornecedores = "";
 $vir = "";
 if(isset($forne) && $forne != "branco"){
-  $arr_forne = split("forn_",$forne);
+  $arr_forne = explode("forn_",$forne);
   for($i=1;$i<sizeof($arr_forne);$i++){
     $fornecedores .= $vir.$arr_forne[$i];
     $vir = ",";

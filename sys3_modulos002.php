@@ -156,7 +156,7 @@ for($i = 0;$i < pg_numrows($result);$i++){
                $virgula = ', '; 
                $prinome = $nomeind;
            }
-           $matrizind = split('#',$xnome);
+           $matrizind = explode('#',$xnome);
            $pdf->multicell(0,4,'Índices do arquivo : ',0,"L",$preenc);
 
            for( $xind = 0 ;$xind < sizeof($matrizind); $xind++ ){

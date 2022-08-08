@@ -32,221 +32,238 @@
  * @author Luiz Marcelo Schmitt
  * @version 1.0
  */
-class DBDepartamento {
+class DBDepartamento
+{
 
-	/**
-	 * Código do departamento.
-	 *
-	 * @var integer $iCodigoDepartamento
-	 */
-  protected $iCodigoDepartamento;
+    /**
+     * Código do departamento.
+     *
+     * @var integer $iCodigoDepartamento
+     */
+    protected $iCodigoDepartamento;
 
-  /**
-   * Nome do departamento.
-   *
-   * @var string $sNomeDepartamento
-   */
-  protected $sNomeDepartamento;
+    /**
+     * Nome do departamento.
+     *
+     * @var string $sNomeDepartamento
+     */
+    protected $sNomeDepartamento;
 
-  /**
-   * Instituição
-   * @var Instituicao
-   */
-  protected $oInstituicao;
+    /**
+     * Instituição
+     * @var Instituicao
+     */
+    protected $oInstituicao;
 
-  /**
-   * Código sequencial da instituição
-   * @var integer
-   */
-  protected $iCodigoInstituicao;
+    /**
+     * Código sequencial da instituição
+     * @var integer
+     */
+    protected $iCodigoInstituicao;
 
-  /**
-   * Telefone do departamento
-   * @var string
-   */
-  protected $sTelefone;
+    /**
+     * Telefone do departamento
+     * @var string
+     */
+    protected $sTelefone;
 
-  /**
-   * Fax do departamento
-   * @var string
-   */
-  protected $sFax;
+    /**
+     * Fax do departamento
+     * @var string
+     */
+    protected $sFax;
 
-  /**
-   * Ramal do departamento
-   * @var string
-   */
-  protected $sRamal;
+    /**
+     * Ramal do departamento
+     * @var string
+     */
+    protected $sRamal;
 
-  /**
-   * E-mail do departamento
-   * @var string
-   */
-  protected $sEmailDepartamento;
+    /**
+     * E-mail do departamento
+     * @var string
+     */
+    protected $sEmailDepartamento;
 
-  /**
-   * Método construtor da classe.
-   *
-   * @param integer $iCodigoDepartamento
-   * @throws Exception
-   */
-  public function __construct($iCodigoDepartamento = null) {
+    /**
+     * Método construtor da classe.
+     *
+     * @param integer $iCodigoDepartamento
+     * @throws Exception
+     */
+    public function __construct($iCodigoDepartamento = null)
+    {
+        if (is_null($iCodigoDepartamento)) {
+            return;
+        }
 
-    if (is_null($iCodigoDepartamento)) {
-      return;
+        $oDaoDepartamento = db_utils::getDao("db_depart");
+        $sSqlDadosDepartamento = $oDaoDepartamento->sql_query_file($iCodigoDepartamento);
+        $rsDadosDepartamento = $oDaoDepartamento->sql_record($sSqlDadosDepartamento);
+
+        if ($oDaoDepartamento->erro_status == '0') {
+            throw new Exception("Não foi possível localizar o departamento pelo código: $iCodigoDepartamento");
+        }
+
+        $oDadosDepartamento = db_utils::fieldsMemory($rsDadosDepartamento, 0);
+        $this->iCodigoDepartamento = $oDadosDepartamento->coddepto;
+        $this->sNomeDepartamento = $oDadosDepartamento->descrdepto;
+        $this->iCodigoInstituicao = $oDadosDepartamento->instit;
+        $this->sTelefone = $oDadosDepartamento->fonedepto;
+        $this->sRamal = $oDadosDepartamento->ramaldepto;
+        $this->sFax = $oDadosDepartamento->faxdepto;
+        $this->sEmailDepartamento = $oDadosDepartamento->emaildepto;
+        unset($oDadosDepartamento);
     }
 
-    $oDaoDepartamento      = db_utils::getDao("db_depart");
-    $sSqlDadosDepartamento = $oDaoDepartamento->sql_query_file($iCodigoDepartamento);
-    $rsDadosDepartamento   = $oDaoDepartamento->sql_record($sSqlDadosDepartamento);
+    /**
+     * metodo criado para retornar as divisoes de um departamento
+     * @return array objeto DBDivisaoDepartamento
+     */
+    public function getDivisoes()
+    {
+        $oDaoDepartDiv = db_utils::getDao("departdiv");
+        $sWhere = "t30_ativo = true and t30_depto= {$this->getCodigo()}";
+        $sSql = $oDaoDepartDiv->sql_query_file(null, "t30_codigo", 't30_descr', $sWhere);
+        $rsDivisao = $oDaoDepartDiv->sql_record($sSql);
+        $aDivisoes = array();
 
-    if ($oDaoDepartamento->erro_status == '0') {
-      throw new Exception("Não foi possível localizar o departamento pelo código: $iCodigoDepartamento");
+        if ($oDaoDepartDiv->numrows == 0) {
+            throw new Exception("Não foram encontrada divisões para o departamento " . $this->getCodigo() . " - " . $this->getNomeDepartamento());
+        }
+        for ($iDivisao = 0; $iDivisao < $oDaoDepartDiv->numrows; $iDivisao++) {
+            $oDadosDivisao = db_utils::fieldsMemory($rsDivisao, $iDivisao);
+            $aDivisoes[] = new DBDivisaoDepartamento($oDadosDivisao->t30_codigo);
+        }
+        return $aDivisoes;
     }
 
-    $oDadosDepartamento        = db_utils::fieldsMemory($rsDadosDepartamento, 0);
-    $this->iCodigoDepartamento = $oDadosDepartamento->coddepto;
-    $this->sNomeDepartamento   = $oDadosDepartamento->descrdepto;
-    $this->iCodigoInstituicao  = $oDadosDepartamento->instit;
-    $this->sTelefone           = $oDadosDepartamento->fonedepto;
-    $this->sRamal              = $oDadosDepartamento->ramaldepto;
-    $this->sFax                = $oDadosDepartamento->faxdepto;
-    $this->sEmailDepartamento  = $oDadosDepartamento->emaildepto;
-    unset($oDadosDepartamento);
-  }
-
-  /**
-   * metodo criado para retornar as divisoes de um departamento
-   * @return array objeto DBDivisaoDepartamento
-   */
-  public function getDivisoes(){
-
-    $oDaoDepartDiv = db_utils::getDao("departdiv");
-    $sWhere        = "t30_ativo = true and t30_depto= {$this->getCodigo()}";
-    $sSql          = $oDaoDepartDiv->sql_query_file(null, "t30_codigo", 't30_descr', $sWhere);
-    $rsDivisao     = $oDaoDepartDiv->sql_record($sSql);
-    $aDivisoes     = array();
-
-    if ($oDaoDepartDiv->numrows == 0 ) {
-      throw new Exception("Não foram encontrada divisões para o departamento ". $this->getCodigo() . " - " . $this->getNomeDepartamento());
-    }
-    for ($iDivisao = 0; $iDivisao < $oDaoDepartDiv->numrows; $iDivisao++) {
-
-      $oDadosDivisao = db_utils::fieldsMemory($rsDivisao, $iDivisao);
-      $aDivisoes[] = new DBDivisaoDepartamento($oDadosDivisao->t30_codigo);
-    }
-    return $aDivisoes;
-  }
-
-  /**
-   * @return string
-   */
-  public function getRamal() {
-    return $this->sRamal;
-  }
-
-  /**
-   * @return string
-   */
-  public function getFax() {
-    return $this->sFax;
-  }
-
-  /**
-   * Retorna o nome do departamento.
-   * @return $this->sNomeDepartamento
-   */
-  public function getNomeDepartamento() {
-    return $this->sNomeDepartamento;
-  }
-
-  /**
-   * Retorna o codigo
-   * @return integer
-   */
-  public function getCodigo() {
-    return $this->iCodigoDepartamento;
-  }
-
-  /**
-   * Retorna a instituição do departamento
-   * @return Instituicao
-   */
-  public function getInstituicao() {
-
-    if (!empty($this->iCodigoInstituicao)) {
-      $this->oInstituicao = InstituicaoRepository::getInstituicaoByCodigo($this->iCodigoInstituicao);
-    }
-    return $this->oInstituicao;
-  }
-
-  /**
-   * Busca os dados referentes ao endereço do departamento e os retorna como um stdClass
-   * @return stdClass
-   */
-  public function getEndereco() {
-
-    $oEndereco               = new stdClass();
-    $oEndereco->iNumero      = null;
-    $oEndereco->sRua         = '';
-    $oEndereco->sComplemento = '';
-    $oEndereco->sBairro      = '';
-
-    if ( empty($this->iCodigoDepartamento) ) {
-      return $oEndereco;
+    /**
+     * @return string
+     */
+    public function getRamal()
+    {
+        return $this->sRamal;
     }
 
-    $oDaoDepartEnder    = new cl_db_departender();
-    $sCamposDepartEnder = "j14_nome as rua, numero, compl, j13_descr as bairro";
-    $sSqlDepartEnder    = $oDaoDepartEnder->sql_query( $this->iCodigoDepartamento, $sCamposDepartEnder, null, null );
-    $rsDepartEnder      = db_query( $sSqlDepartEnder );
-
-    if ( !$rsDepartEnder  ) {
-      throw new Exception("Não foi possível buscar o endereço do Departamento.");
+    /**
+     * @return string
+     */
+    public function getFax()
+    {
+        return $this->sFax;
     }
 
-    if ( pg_num_rows( $rsDepartEnder ) > 0 ) {
-
-      $oDados = db_utils::fieldsMemory( $rsDepartEnder, 0);
-
-      $oEndereco->iNumero      = $oDados->numero;
-      $oEndereco->sRua         = $oDados->rua;
-      $oEndereco->sComplemento = $oDados->compl;
-      $oEndereco->sBairro      = $oDados->bairro;
+    /**
+     * Retorna o nome do departamento.
+     * @return $this->sNomeDepartamento
+     */
+    public function getNomeDepartamento()
+    {
+        return $this->sNomeDepartamento;
     }
 
-    return $oEndereco;
-  }
+    /**
+     * Retorna o codigo
+     * @return integer
+     */
+    public function getCodigo()
+    {
+        return $this->iCodigoDepartamento;
+    }
 
-  /**
-   * Retorna o telefone do departamento
-   * @return string
-   */
-  public function getTelefone() {
-    return $this->sTelefone;
-  }
+    /**
+     * Retorna a instituição do departamento
+     * @return Instituicao
+     */
+    public function getInstituicao()
+    {
+        if (!empty($this->iCodigoInstituicao)) {
+            $this->oInstituicao = InstituicaoRepository::getInstituicaoByCodigo($this->iCodigoInstituicao);
+        }
+        return $this->oInstituicao;
+    }
 
-  /**
-   * Define o telefone do departamento
-   * @param string $sTelefone
-   */
-  public function setTelefone( $sTelefone ) {
-    $this->sTelefone = $sTelefone;
-  }
+    /**
+     * Busca os dados referentes ao endereço do departamento e os retorna como um stdClass
+     * @return stdClass
+     */
+    public function getEndereco()
+    {
+        $oEndereco = new stdClass();
+        $oEndereco->iNumero = null;
+        $oEndereco->sRua = '';
+        $oEndereco->sComplemento = '';
+        $oEndereco->sBairro = '';
 
-  /**
-   * Retorna o e-mail do departamento
-   * @return string
-   */
-  public function getEmailDepartamento() {
-    return $this->sEmailDepartamento;
-  }
+        if (empty($this->iCodigoDepartamento)) {
+            return $oEndereco;
+        }
 
-  /**
-   * Define o e-mail do departamento
-   * @param string $sEmailDepartamento
-   */
-  public function setEmailDepartamento( $sEmailDepartamento ) {
-    $this->sEmailDepartamento = $sEmailDepartamento;
-  }
+        $oDaoDepartEnder = new cl_db_departender();
+        $sCamposDepartEnder = "j14_nome as rua, numero, compl, j13_descr as bairro";
+        $sSqlDepartEnder = $oDaoDepartEnder->sql_query($this->iCodigoDepartamento, $sCamposDepartEnder, null, null);
+        $rsDepartEnder = db_query($sSqlDepartEnder);
+
+        if (!$rsDepartEnder) {
+            throw new Exception("Não foi possível buscar o endereço do Departamento.");
+        }
+
+        if (pg_num_rows($rsDepartEnder) > 0) {
+            $oDados = db_utils::fieldsMemory($rsDepartEnder, 0);
+
+            $oEndereco->iNumero = $oDados->numero;
+            $oEndereco->sRua = $oDados->rua;
+            $oEndereco->sComplemento = $oDados->compl;
+            $oEndereco->sBairro = $oDados->bairro;
+        }
+
+        return $oEndereco;
+    }
+
+    /**
+     * Retorna o telefone do departamento
+     * @return string
+     */
+    public function getTelefone()
+    {
+        return $this->sTelefone;
+    }
+
+    /**
+     * Define o telefone do departamento
+     * @param string $sTelefone
+     */
+    public function setTelefone($sTelefone)
+    {
+        $this->sTelefone = $sTelefone;
+    }
+
+    /**
+     * Retorna o e-mail do departamento
+     * @return string
+     */
+    public function getEmailDepartamento()
+    {
+        return $this->sEmailDepartamento;
+    }
+
+    /**
+     * Define o e-mail do departamento
+     * @param string $sEmailDepartamento
+     */
+    public function setEmailDepartamento($sEmailDepartamento)
+    {
+        $this->sEmailDepartamento = $sEmailDepartamento;
+    }
+
+    public function setCodigoDepartamento($iCodigoDepartamento)
+    {
+        $this->iCodigoDepartamento = $iCodigoDepartamento;
+    }
+
+    public function setNomeDepartamento($sNomeDepartamento)
+    {
+        $this->sNomeDepartamento = $sNomeDepartamento;
+    }
 }

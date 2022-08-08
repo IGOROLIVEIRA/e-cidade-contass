@@ -143,13 +143,13 @@ if ($db_opcao == 1) {
          }
        }, 5);
      }
-     
+
     function js_verificaCampos(iOpcao) {
-      
+
       var lSubmit     = true;
       var aDataInicio = new Array();
       var aDataFinal  = new Array();
-      
+
       if($F('rh137_datainicio_dia') == "" || $F('rh137_datainicio_mes') == "" || $F('rh137_datainicio_ano') == "" && $F('rh137_datainicio') != "") {
 
         aDataInicio = $F('rh137_datainicio').split('/');
@@ -165,22 +165,22 @@ if ($db_opcao == 1) {
         $('rh137_datafim_mes').value = aDataFim[1];
         $('rh137_datafim_ano').value = aDataFim[2];
       }
-      
+
       /**
        *  Na exclusão da fundamentação legal, precisa verificar se
        *  ela está vinculada com alguma rubrica.
        */
       if (iOpcao != 1 && iOpcao != 2 && iOpcao != 22) {
-        
+
         var iCodigoFundamentacao = parseInt($('rh137_sequencial').value);
         lSubmit                  = js_verificarVinculo(iCodigoFundamentacao);
       }
-      
+
       return lSubmit;
     }
-    
+
     function js_pesquisa() {
-      js_OpenJanelaIframe( 'top.corpo',
+      js_OpenJanelaIframe( 'CurrentWindow.corpo',
                            'db_iframe_rhfundamentacaolegal',
                            'func_rhfundamentacaolegal.php?funcao_js=parent.js_preenchepesquisa|rh137_sequencial|rh137_numero|rh137_descricao',
                            'Pesquisa', true);
@@ -195,37 +195,37 @@ if ($db_opcao == 1) {
         }
       ?>
     }
-    
+
     /**
      * Verifica se a fundamentação legal possui algum vínculo com as rubricas.
-     * 
+     *
      * @param {Integer} iCodigoFundamentacao
      * @returns {Boolean}
      */
     function js_verificarVinculo(iCodigoFundamentacao) {
-      
+
       var sUrlRpc = "pes1_rhfundamentacaolegal.RPC.php";
-      
+
       var oParam                  = {};
       oParam.exec                 = "verificarVinculoRubrica";
       oParam.iCodigoFundamentacao = iCodigoFundamentacao;
-        
+
       var oAjaxRequest = new AjaxRequest(sUrlRpc, oParam, js_callbackVerificarVinculo);
       oAjaxRequest.execute();
-      
+
       return false;
     }
-    
+
     /**
      * Tratamento do callback da função js_verificarVinculo()
-     * 
+     *
      * @param {Object} oRetorno
      * @param {Boolean} lErro
      */
     function js_callbackVerificarVinculo(oRetorno, lErro) {
-      
+
       var sMensagem = oRetorno.message.urlDecode();
-      
+
       if (!lErro) {
         if(oRetorno.lRubricas) {
           if(confirm(sMensagem)) {
@@ -236,7 +236,7 @@ if ($db_opcao == 1) {
         document.form1.submit();
         return false;
       }
-      
+
       alert(sMensagem);
       return false;
     }

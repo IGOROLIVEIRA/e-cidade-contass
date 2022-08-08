@@ -1,7 +1,7 @@
 <?php 
-include ("../jpgraph.php"); 
-include ("../jpgraph_line.php"); 
-include ("../jpgraph_bar.php"); 
+include (__DIR__ . "/../jpgraph.php"); 
+include (__DIR__ . "/../jpgraph_line.php"); 
+include (__DIR__ . "/../jpgraph_bar.php"); 
 
 $ydata = array(2,3,4,5,6,7,8,9,10,11); 
 $ydata2 = array(1,2,3,4,5,6,7,8,9,10); 

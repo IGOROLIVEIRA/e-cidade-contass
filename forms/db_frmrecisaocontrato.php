@@ -9,7 +9,7 @@ $clrecisaocontrato->rotulo->label();
     <td nowrap title="<?=@$Tsi01_codigo?>">
        <?=@$Lsi01_codigo?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('si01_codigo',10,$Isi01_codigo,true,'text',$db_opcao,"")
 ?>
@@ -19,7 +19,7 @@ db_input('si01_codigo',10,$Isi01_codigo,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tsi01_numcontrato?>">
        <?=@$Lsi01_numcontrato?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('si01_numcontrato',20,$Isi01_numcontrato,true,'text',$db_opcao,"")
 ?>
@@ -29,7 +29,7 @@ db_input('si01_numcontrato',20,$Isi01_numcontrato,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tsi01_dataassinatura?>">
        <?=@$Lsi01_dataassinatura?>
     </td>
-    <td> 
+    <td>
 <?
 db_inputdata('si01_dataassinatura',@$si01_dataassinatura_dia,@$si01_dataassinatura_mes,@$si01_dataassinatura_ano,true,'text',$db_opcao,"")
 ?>
@@ -39,7 +39,7 @@ db_inputdata('si01_dataassinatura',@$si01_dataassinatura_dia,@$si01_dataassinatu
     <td nowrap title="<?=@$Tsi01_datarecisao?>">
        <?=@$Lsi01_datarecisao?>
     </td>
-    <td> 
+    <td>
 <?
 db_inputdata('si01_datarecisao',@$si01_datarecisao_dia,@$si01_datarecisao_mes,@$si01_datarecisao_ano,true,'text',$db_opcao,"")
 ?>
@@ -49,7 +49,7 @@ db_inputdata('si01_datarecisao',@$si01_datarecisao_dia,@$si01_datarecisao_mes,@$
     <td nowrap title="<?=@$Tsi01_valorcancelado?>">
        <?=@$Lsi01_valorcancelado?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('si01_valorcancelado',10,$Isi01_valorcancelado,true,'text',$db_opcao,"")
 ?>
@@ -59,7 +59,7 @@ db_input('si01_valorcancelado',10,$Isi01_valorcancelado,true,'text',$db_opcao,""
     <td nowrap title="<?=@$Tsi01_ano?>">
        <?=@$Lsi01_ano?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('si01_ano',10,$Isi01_ano,true,'text',$db_opcao,"")
 ?>
@@ -72,7 +72,7 @@ db_input('si01_ano',10,$Isi01_ano,true,'text',$db_opcao,"")
 </form>
 <script>
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_recisaocontrato','func_recisaocontrato.php?funcao_js=parent.js_preenchepesquisa|si01_codigo','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_recisaocontrato','func_recisaocontrato.php?funcao_js=parent.js_preenchepesquisa|si01_codigo','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_recisaocontrato.hide();

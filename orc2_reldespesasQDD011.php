@@ -224,7 +224,7 @@ if ($o50_subelem == 'f') {
   $dataini = $anousu."-".$dataini;
   $datafin = $anousu."-".$datafin;
 
-  $dt = split('-',$dataini);
+  $dt = explode('-',$dataini);
   $data_ini_dia   = $dt[2];
   $data_ini_mes = $dt[1];
   $data_ini_ano  = $dt[0];

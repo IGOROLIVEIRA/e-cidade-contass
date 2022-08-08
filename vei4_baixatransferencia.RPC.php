@@ -15,7 +15,6 @@ require_once("libs/db_utils.php");
 require_once("libs/db_usuariosonline.php");
 require_once("dbforms/db_funcoes.php");
 require_once("libs/JSON.php");
-require_once("std/DBDate.php");
 
 db_postmemory($_POST);
 
@@ -79,7 +78,7 @@ switch ($oParam->exec){
             $oTransferencia->ve80_coddeptodestino  = $oRetorno->departamento_destino;
             $oTransferencia->incluir(null);
 
-            if ($oTransferencia->erro_status != 1) {
+            if ($oTransferencia->erro_status == "0") {
                 throw new Exception($oTransferencia->erro_msg);
             }
 
@@ -149,11 +148,11 @@ switch ($oParam->exec){
                 $oBaixa->ve04_veiccadtipobaixa = 7;
                 $oBaixa->incluir(null);
 
-                if ($oVeicTransf->erro_status != 1) {
+                if ($oVeicTransf->erro_status == "0") {
                     throw new Exception($oVeicTransf->erro_msg);
                 }
 
-                if ($oBaixa->erro_status != 1) {
+                if ($oBaixa->erro_status == "0") {
                     throw new Exception($oBaixa->erro_msg);
                 }
 
@@ -166,8 +165,8 @@ switch ($oParam->exec){
                 $rsveiculo = $clveiculos->sql_record($clveiculos->sql_query_veiculo($veiculo));
                 $aVeiculo = db_utils::fieldsMemory($rsveiculo,0);
 
-                $rsultimamedida = $clveiculos->sql_record($clveiculos->sql_query_ultimamedida($veiculo));
-                $aUltimamedida = db_utils::fieldsMemory($rsultimamedida,0);
+                //$rsultimamedida = $clveiculos->sql_record($clveiculos->sql_query_ultimamedida($veiculo));
+                //$aUltimamedida = db_utils::fieldsMemory($rsultimamedida,0);
 
                 $dtsession = date($data, db_getsession("DB_datausu"));
 
@@ -184,7 +183,7 @@ switch ($oParam->exec){
                 $clveiculos->ve01_placanum              = $aVeiculo->ve01_placanum;
                 $clveiculos->ve01_certif                = $aVeiculo->ve01_certif;
                 $clveiculos->ve01_quantpotencia         = $aVeiculo->ve01_quantpotencia;
-                $clveiculos->ve01_medidaini             = $aUltimamedida->ultimamedida;
+                $clveiculos->ve01_medidaini             = $aVeiculo->ve01_medidaini;
                 $clveiculos->ve01_quantcapacidad        = $aVeiculo->ve01_quantcapacidad;
                 $clveiculos->ve01_veiccadtipocapacidade = $aVeiculo->ve01_veiccadtipocapacidade;
                 $clveiculos->ve01_dtaquis               = $dtsession;
@@ -208,7 +207,7 @@ switch ($oParam->exec){
 
                 $clveiculos->incluir(null, $iTipoVeiculo);
 
-                if ($clveiculos->erro_status != 1) {
+                if ($clveiculos->erro_status == "0") {
                     throw new Exception($clveiculos->erro_msg);
                 }
 

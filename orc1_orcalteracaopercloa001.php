@@ -20,7 +20,7 @@ if(isset($incluir)){
     if($clorcalteracaopercloa->erro_status==0){
       $sqlerro=true;
     } else {
-    	echo "<script>top.corpo.iframe_orcprojetolei.form1.suplementacao.disabled = false</script>";
+    	echo "<script>CurrentWindow.corpo.iframe_orcprojetolei.form1.suplementacao.disabled = false</script>";
     }
     db_fim_transacao($sqlerro);
   }
@@ -61,8 +61,8 @@ if(isset($incluir)){
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
 	<?
 	include("forms/db_frmorcalteracaopercloa.php");

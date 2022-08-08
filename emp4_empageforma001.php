@@ -214,7 +214,7 @@ if(isset($atualizar)){
       }
 
       /*
-       * Incluimos a nota de liquidação na ordem de pagamento
+       * Incluimos a nota de liquida??o na ordem de pagamento
        */
       if (!$sqlerro) {
 

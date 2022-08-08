@@ -142,13 +142,13 @@ $clrotulo->label("z01_nome");
 
 function js_consultaordem(codordem){
    if (codordem != ''){
-      js_OpenJanelaIframe('top.corpo','db_iframe_ordemcompra002','com3_ordemdecompra002.php?m51_codordem='+codordem,'Consulta Ordem de Compra',true);
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_ordemcompra002','com3_ordemdecompra002.php?m51_codordem='+codordem,'Consulta Ordem de Compra',true);
    }
 }
 function js_pesquisa_empnota(mostra){
    js_reset();
    if(mostra==true){
-     js_OpenJanelaIframe('top.corpo','db_iframe_empnota','func_empnotaord.php?funcao_js=parent.js_mostraempnota1|e69_codnota|m72_codordem','Pesquisa',true);
+     js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_empnota','func_empnotaord.php?funcao_js=parent.js_mostraempnota1|e69_codnota|m72_codordem','Pesquisa',true);
    }
  //js_mostraempnota1(38480 , 30);
 

@@ -99,7 +99,7 @@ var oLancador = new DBLancador('Lancador');
     oLancador.setLabelValidacao('Grupo');
     oLancador.setParametrosPesquisa('func_materialestoquegrupo.php', ['m65_sequencial','dl_descrição_do_grupo'], 'lGruposAtivos=true&iTipoConta=2');
     oLancador.show($('divLancadorGrupo'));
-    
+
 oButtonSalvar.observe('click', function () {
 
   var oParam            = {};
@@ -134,7 +134,7 @@ function js_pesquisaTipoGrupo(lMostra) {
   if (lMostra) {
     sUrlTipoGrupo = "func_materialtipogrupo.php?funcao_js=parent.js_completaTipoGrupo|m03_sequencial|m03_descricao";
   }
-  js_OpenJanelaIframe('top.corpo', 'db_iframe_materialtipogrupo', sUrlTipoGrupo, 'Pesquisa Tipo Grupo', lMostra);
+  js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_materialtipogrupo', sUrlTipoGrupo, 'Pesquisa Tipo Grupo', lMostra);
 }
 
 function js_completaTipoGrupo(iCodigoTipoGrupo, sDescricaoTipoGrupo) {

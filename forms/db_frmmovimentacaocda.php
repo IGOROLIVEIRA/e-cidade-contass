@@ -270,7 +270,7 @@ function js_pesquisa_certid_ini(mostra) {
   var certid = $F('v13_certidini');
   if( mostra == true ) {
 
-    js_OpenJanelaIframe( 'top.corpo',
+    js_OpenJanelaIframe( 'CurrentWindow.corpo',
                          'db_iframe' ,
                          'func_certid.php?funcao_js=parent.js_mostracertid_ini1|0' ,
                          'Pesquisa' ,
@@ -279,7 +279,7 @@ function js_pesquisa_certid_ini(mostra) {
 
     if ( $F('v13_certidini') != '' ) {
 
-      js_OpenJanelaIframe( 'top.corpo',
+      js_OpenJanelaIframe( 'CurrentWindow.corpo',
                            'db_iframe',
                            'func_certid.php?pesquisa_chave=' + $F('v13_certidini') + '&funcao_js=parent.js_mostracertid_ini',
                            'Pesquisa',
@@ -312,7 +312,7 @@ function js_pesquisa_certid_fim(mostra) {
 
   if( mostra == true ) {
 
-    js_OpenJanelaIframe( 'top.corpo',
+    js_OpenJanelaIframe( 'CurrentWindow.corpo',
                          'db_iframe',
                          'func_certid.php?funcao_js=parent.js_mostracertid_fim1|v13_certid',
                          'Pesquisa',
@@ -321,7 +321,7 @@ function js_pesquisa_certid_fim(mostra) {
 
     if ($F('v13_certidfim') != '') {
 
-      js_OpenJanelaIframe( 'top.corpo',
+      js_OpenJanelaIframe( 'CurrentWindow.corpo',
                            'db_iframe',
                            'func_certid.php?pesquisa_chave=' + $F('v13_certidfim') + '&funcao_js=parent.js_mostracertidfim',
                            'Pesquisa',

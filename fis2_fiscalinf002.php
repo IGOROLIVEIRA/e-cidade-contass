@@ -56,7 +56,7 @@ if ($clfiscal->numrows>0){
 $identificacao = (trim($z01_nomecomple) != ''?$z01_nomecomple:$z01_nome);
 $cpf           = $z01_cgccpf;
 $hora          = $y30_hora;
-$arr_data      = split("/",$y30_data);
+$arr_data      = explode("/",$y30_data);
 $dia           = $arr_data[0];
 $mes           = db_mes($arr_data[1]);
 $ano           = $arr_data[2];

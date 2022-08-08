@@ -3,7 +3,7 @@
 // Seta Nome do Script
 $sNomeScript = basename(__FILE__);
 
-require ("../../libs/db_conecta.php");
+require (__DIR__ . "/../../libs/db_conecta.php");
 
 db_log("\n ", $sArquivoLog, 0, true, true);
 db_log("Conectando", $sArquivoLog, 0, true, true);
@@ -100,5 +100,5 @@ if($var_erro == true){
 
 // Final do Script
 db_log("\n ", $sArquivoLog, 0, true, true);
-include("../../libs/db_final_script.php");
+include(__DIR__ . "/../../libs/db_final_script.php");
 ?>

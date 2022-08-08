@@ -21,7 +21,7 @@ $clrotulo->label('z01_nome');
 $clrotulo->label('z01_numcgm');
 $clrotulo->label('k00_histtxt');
 if(isset($calcular)){
-  
+
   if(isset($HTTP_POST_VARS['j01_matric'])){
 
     $sqlnextval = "select nextval('iptucalclog_j27_codigo_seq') as j27_codigo";
@@ -30,10 +30,10 @@ if(isset($calcular)){
       echo "<script>alert('Erro ao gerar sequencia!');</script>";
     } else {
       db_fieldsmemory($resultnextval,0);
-    
+
       $insert = "insert into iptucalclog values ($j27_codigo,$anousu,'".date('Y-m-d',db_getsession("DB_datausu"))."','".db_hora()."',".db_getsession('DB_id_usuario').",true,1)";
       $resultinsert = pg_exec($insert) or die($insert);
-      if ($resultinsert == false) { 
+      if ($resultinsert == false) {
         echo "<script>alert('Erro do gerar lancamento na tabela iptucalclog!');</script>";
       } else {
 				$result=pg_query("select distinct j18_anousu, j18_permvenc from cfiptu order by j18_anousu desc");
@@ -44,15 +44,15 @@ if(isset($calcular)){
 				if ($j18_permvenc == 0) {
 					$j18_permvenc = 1;
 				}
-				
-				if ($j18_permvenc == 1) {          
+
+				if ($j18_permvenc == 1) {
           // esta variavel e uma string no formato de um array plpgsql, nao altere seu conteudo se voce nao tem certeza do que esta fazendo
           $arraypl = "array['".(int)$parcelas."','".(int)$diavenc."','".(int)$mesini."']";
 				} elseif ($j18_permvenc == 2) {
           // esta variavel e uma string no formato de um array plpgsql, nao altere seu conteudo se voce nao tem certeza do que esta fazendo
           $arraypl = "array['".(int)$parcelaini."','".(int)$parcelafinal."']";
 				}
-	
+
      		$sql = "select fc_calculoiptu($j01_matric,$anousu,true,false,false,false,false,".$arraypl.")";
 
 				$result = db_query($sql) or die($sql);
@@ -65,16 +65,16 @@ if(isset($calcular)){
 					}else{
 						$cliptubase->erro_msg = "Cálculo Efetuado.";
 						$cliptubase->erro_status = '0';
-					}    
+					}
 					$insert = "insert into iptucalclogmat values ($j27_codigo,$j01_matric,$retorno,'".trim(substr($retorno_result,2))."')";
 					$resultinsert = pg_exec($insert) or die($insert);
 				}else{
 					$cliptubase->erro_msg = pg_last_error();
 					$cliptubase->erro_status = '0';
 				}
-				
+
 				if ((int) $percentualdesconto > 0) {
-					
+
 					$cliptunump = new cl_iptunump;
 					$result = $cliptunump->sql_record($cliptunump->sql_query_file($anousu,$j01_matric,'j20_matric#j20_numpre'));
 					if(!($result==false || $cliptunump->numrows == 0 )){
@@ -82,7 +82,7 @@ if(isset($calcular)){
 						for($i=0;$i<$cliptunump->numrows;$i++){
 							db_fieldsmemory($result,$i);
 							$sqlunica = pg_query("select k00_dtvenc,k00_percdes
-							from recibounica 
+							from recibounica
 							where k00_numpre = $j20_numpre and k00_dtvenc = '$anousu-$mesini-$diavenc'");
 							$erro = true;
 							$perc = 0;
@@ -101,11 +101,11 @@ if(isset($calcular)){
 									$descricao_erro = "Vencimento Incluído.";
 								}
 							}
-							
+
 							$histd  = "Data: ".date("Y-m-d",db_getsession("DB_datausu"));
 							$histd .= " Perc: ".$percentualdesconto." Usuário: ".db_getsession("DB_login");
 							$histd .= $k00_histtxt;
-							
+
 							$sqlresultunica = "insert into arrehist(k00_numpre,
 							k00_numpar,
 							k00_hist,
@@ -113,7 +113,7 @@ if(isset($calcular)){
 							k00_hora,
 							k00_id_usuario,
 							k00_histtxt,
-							k00_idhist) 
+							k00_idhist)
 							values ($j20_numpre,
 							0,
 							890,
@@ -125,17 +125,17 @@ if(isset($calcular)){
 							$resultunica = pg_query($sqlresultunica );
 							if($resultunica==false){
 								$descricao_erro = "Erro ao incluir no arquivo historicos";
-							} 
+							}
 						}
 						$sqlunica = pg_query("COMMIT");
 					}
-					
+
 				}
 
 			}
 
 	  }
-    
+
   }else{
     $cliptubase->erro_msg = 'Matricula não informada.';
     $cliptubase->erro_status = '0';
@@ -145,7 +145,7 @@ if(isset($calcular)){
 if(isset($demonstrativo)){
 
   if(isset($HTTP_POST_VARS['j01_matric'])){
-    
+
     $result=pg_query("select distinct j18_anousu, j18_permvenc from cfiptu order by j18_anousu desc");
     if(pg_numrows($result) > 0){
       db_fieldsmemory($result,0);
@@ -153,7 +153,7 @@ if(isset($demonstrativo)){
       $j18_permvenc = 0;
     }
 
-		if ($j18_permvenc == 1) {          
+		if ($j18_permvenc == 1) {
       // esta variavel e uma string no formato de um array plpgsql, nao altere seu conteudo se voce nao tem certeza do que esta fazendo
       $arraypl = "array['".(int)$parcelas."','".(int)$diavenc."','".(int)$mesini."']";
 		} elseif ($j18_permvenc == 2) {
@@ -162,8 +162,8 @@ if(isset($demonstrativo)){
 		}else{
       $arraypl = "array['".(int)$parcelas."','".(int)$diavenc."','".(int)$mesini."']";
     }
-	
-    $sql = "select fc_calculoiptu($j01_matric,$anousu,true,false,false,false,true,".$arraypl.")";    
+
+    $sql = "select fc_calculoiptu($j01_matric,$anousu,true,false,false,false,true,".$arraypl.")";
 
   	$result = pg_query($sql) or die($sql);
 
@@ -217,7 +217,7 @@ textarea {
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="document.form1.j01_matric.focus();" >
 <table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-<tr> 
+<tr>
 <td width="360" height="18">&nbsp;</td>
 <td width="263">&nbsp;</td>
 <td width="25">&nbsp;</td>
@@ -225,17 +225,17 @@ textarea {
 </tr>
 </table>
 <table width="100%" height="100%" border="0" cellspacing="0" cellpadding="0">
-<tr> 
+<tr>
 <td height="100%" align="center" valign="top" bgcolor="#CCCCCC">
 <form name="form1" action="" method="post" onSubmit="return js_verificacalculo();">
 <table width="387" border="0" cellpadding="0" cellspacing="0">
-<tr> 
-<td width="27" height="25" title="<?=$Tz01_nunmcgm?>"> 
+<tr>
+<td width="27" height="25" title="<?=$Tz01_nunmcgm?>">
 <?
 db_ancora('<strong>Matricula:</strong>','js_mostranomes(true);',4)
 ?>
 </td>
-<td width="360" height="25"> 
+<td width="360" height="25">
 <?
 db_input("j01_matric",8,$Ij01_matric,true,'text',4," onchange='js_mostranomes(false);' ")
 ?>
@@ -289,55 +289,55 @@ if(pg_num_rows($rsPar) > 0){
 
 if ($j18_permvenc == 1) {
   ?>
-  
-  <tr> 
-  <td width="27" height="25"> 
+
+  <tr>
+  <td width="27" height="25">
   <b>Dia para vencimento:</b>
   </td>
-  <td width="360" height="25"> 
+  <td width="360" height="25">
   <?
   db_input("diavenc",8,"",true,'text',4,"")
   ?>
   </td>
   </tr>
-  
-  
-  <tr> 
-  <td width="27" height="25"> 
+
+
+  <tr>
+  <td width="27" height="25">
   <b>Parcelas:</b>
   </td>
-  <td width="360" height="25"> 
+  <td width="360" height="25">
   <?
   db_input("parcelas",8,"",true,'text',4,"")
   ?>
   </td>
   </tr>
-  
-  
-  <tr> 
-  <td width="27" height="25"> 
+
+
+  <tr>
+  <td width="27" height="25">
   <b>Mes inicial:</b>
   </td>
-  <td width="360" height="25"> 
+  <td width="360" height="25">
   <?
   db_input("mesini",8,"",true,'text',4,"")
   ?>
   </td>
   </tr>
-  
-  
-  <tr> 
-  <td width="27" height="25"> 
+
+
+  <tr>
+  <td width="27" height="25">
   <b>Percentual desconto da parcela unica:</b>
   </td>
-  <td width="360" height="25"> 
+  <td width="360" height="25">
   <?
   db_input("percentualdesconto",8,"",true,'text',4,"")
   ?>
   </td>
   </tr>
-  
-  
+
+
   <tr>
   <td height="25"><b>Hist&oacute;rico:</b></td>
   <td height="25">
@@ -347,53 +347,53 @@ if ($j18_permvenc == 1) {
   ?>
   </td>
   </tr>
-  
-  
+
+
   <?
 } elseif ($j18_permvenc == 2) {
   ?>
-  
-  
-  
-  
-  
-  <tr> 
-  <td width="27" height="25"> 
+
+
+
+
+
+  <tr>
+  <td width="27" height="25">
   <b>Parcela inicial:</b>
   </td>
-  <td width="360" height="25"> 
+  <td width="360" height="25">
   <?
   db_input("parcelaini",8,"",true,'text',4,"")
   ?>
   </td>
   </tr>
-  
-  
-  <tr> 
-  <td width="27" height="25"> 
+
+
+  <tr>
+  <td width="27" height="25">
   <b>Parcela final:</b>
   </td>
-  <td width="360" height="25"> 
+  <td width="360" height="25">
   <?
   db_input("parcelafinal",8,"",true,'text',4,"")
   ?>
   </td>
   </tr>
-  
-  
-  
-  <tr> 
-  <td width="27" height="25"> 
+
+
+
+  <tr>
+  <td width="27" height="25">
   <b>Percentual desconto da parcela unica:</b>
   </td>
-  <td width="360" height="25"> 
+  <td width="360" height="25">
   <?
   db_input("percentualdesconto",8,"",true,'text',4,"")
   ?>
   </td>
   </tr>
-  
-  
+
+
   <tr>
   <td height="25"><b>Hist&oacute;rico:</b></td>
   <td height="25">
@@ -403,29 +403,29 @@ if ($j18_permvenc == 1) {
   ?>
   </td>
   </tr>
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
+
+
+
+
+
+
   <?
 }
 ?>
 
 
-<tr> 
+<tr>
 <td height="25">&nbsp;</td>
-<td height="25"> 
+<td height="25">
 <input name="calcular"  type="submit" id="calcular" value="Calcular" onClick="return js_verificaParametros();">
-<input name="demonstrativo"  type="submit" id="demonstrativo" value="Demonstrativo"> 
+<input name="demonstrativo"  type="submit" id="demonstrativo" value="Demonstrativo">
 <?
 if(isset($calcular)){
   ?>
@@ -455,17 +455,17 @@ if(isset($calcular)){
 </body>
 </html>
 
-<? 
+<?
 db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
 ?>
 <script>
 
 function js_verificaParametros(){
-  
+
   var oMesini   = document.form1.mesini;
   var oParcelas = document.form1.parcelas;
   var oDiaVenc  = document.form1.diavenc;
-  
+
   if (!oMesini && !oParcelas && !oDiaVenc) {
     return true;
   }
@@ -488,7 +488,7 @@ function js_mostranomes(mostra){
     func_nome.show();
     func_nome.focus();
   }else{
-    func_nome.jan.location.href = 'func_iptubase.php?pesquisa_chave='+document.form1.j01_matric.value+'&funcao_js=parent.js_preenche1';	
+    func_nome.jan.location.href = 'func_iptubase.php?pesquisa_chave='+document.form1.j01_matric.value+'&funcao_js=parent.js_preenche1';
   }
 }
 function js_preenche(chave,chave1){
@@ -521,7 +521,7 @@ $cliptubase->erro(true,false);
 if(isset($calcular)){
   ?>
   <script>
-  js_OpenJanelaIframe('top.corpo','db_iframe_funcnome','cad3_conscadastro_002_detalhes.php?solicitacao=Calculo&parametro=<?=$HTTP_POST_VARS['j01_matric']?>','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_funcnome','cad3_conscadastro_002_detalhes.php?solicitacao=Calculo&parametro=<?=$HTTP_POST_VARS['j01_matric']?>','Pesquisa',true);
   </script>
   <?
 }

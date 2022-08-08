@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require ("libs/db_stdlib.php");
@@ -67,11 +67,11 @@ $db_botao = true;
 <link href="estilos.css" rel="stylesheet" type="text/css">
 <script>
 function js_editar_estrut(codrel,seq){
-  js_OpenJanelaIframe('top.corpo.iframe_config','nome','con2_conrelconfig_estrut.php?c83_codrel='+codrel+'&sequen='+seq,'Editar',true,'0');
-}  
+  js_OpenJanelaIframe('CurrentWindow.corpo.iframe_config','nome','con2_conrelconfig_estrut.php?c83_codrel='+codrel+'&sequen='+seq,'Editar',true,'0');
+}
 function js_editar_recurso(codrel,seq){
-  js_OpenJanelaIframe('top.corpo.iframe_config','nome','con2_conrelconfig_recurso.php?c83_codrel='+codrel+'&sequen='+seq,'Editar',true,'0');
-}  
+  js_OpenJanelaIframe('CurrentWindow.corpo.iframe_config','nome','con2_conrelconfig_recurso.php?c83_codrel='+codrel+'&sequen='+seq,'Editar',true,'0');
+}
 
 </script>
 </head>
@@ -100,21 +100,21 @@ if ($clorcparamseq->numrows > 0) {
               <a href="#" onClick="js_editar_estrut('<?=$codrel?>','<?=$o69_codseq?>');">Editar</a>
 	      <? $res = $clorcparamelemento->sql_record($clorcparamelemento->sql_query_estrutural(db_getsession("DB_anousu"),$codrel,$o69_codseq,null,"o44_codele,c60_estrut","c60_estrut"));
 	         //if ($clorcparamelemento->numrows > 0)
-	 	   db_selectmultiple('parametros',$res,$clorcparamelemento->numrows+1,1);	      	
+	 	   db_selectmultiple('parametros',$res,$clorcparamelemento->numrows+1,1);
 	      ?>
-             </td>	   
+             </td>
 	   <td valign=top><input type=text name=nivel maxlength=2 size=2> <td/>
 	   <td valign=top>
 	   <? $res = $clorcparamsubfunc->sql_record($clorcparamsubfunc->sql_query(db_getsession("DB_anousu"),$codrel,$o69_codseq,null,"o44_codele,c60_estrut","c60_estrut"));
 	      //if ($clorcparamsubfunc->numrows > 0)
-		 db_selectmultiple('subfunc',$res,$clorcparamsubfunc->numrows+1,1);	      	
+		 db_selectmultiple('subfunc',$res,$clorcparamsubfunc->numrows+1,1);
 	   ?>
-           </td>   	   
+           </td>
 	   <td valign=top align=left>
-             <a href="#" onClick="js_editar_recurso('<?=$codrel?>','<?=$o69_codseq?>');">Editar</a> 
+             <a href="#" onClick="js_editar_recurso('<?=$codrel?>','<?=$o69_codseq?>');">Editar</a>
  	     <? $res = $clorcparamrecurso->sql_record($clorcparamrecurso->sql_query(db_getsession("DB_anousu"),$codrel,$o69_codseq,null,"o44_codrec,o15_descr"));
 	       //if ($clorcparamrecurso->numrows > 0)
-		 db_selectmultiple('recurso',$res,$clorcparamrecurso->numrows+1,1);	      	
+		 db_selectmultiple('recurso',$res,$clorcparamrecurso->numrows+1,1);
 	     ?>
 	   </td>
 	 </tr>

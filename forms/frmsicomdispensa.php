@@ -8,7 +8,7 @@
     float: right;  width: 20px;"></div>
 <div id="fechar" onclick="fechar()" style="background:url('imagens/jan_mini_on.gif'); height: 20px;
     float: right;  width: 20px;"></div>
-    
+
 </div><!-- topo -->
 <div id="campos" style="margin-bottom: 7px;">
 <table>
@@ -31,29 +31,29 @@
 <form name="form1" method="post" action="">
 <fieldset style="width: 540px; height: 262px;"><legend><b>Dispensa ou Inexigibilidade</b></legend>
   <table cellspacing="5px">
-  
+
   <tr>
   <td><strong>Código</strong></td>
   <td><input type="text" name="codigo" id="codigo" readonly="readonly" style="background-color: rgb(222, 184, 135);" >
   </td>
   </tr>
-  
-  <tr> 
+
+  <tr>
   <td  nowrap title="<?=$Tl20_codigo?>">
   <b>
   <?db_ancora('Licitação:',"js_pesquisa_liclicita(true);",1);?>
-  </b> 
-  </td> 
+  </b>
+  </td>
   <td>
-  <input name="nroProcessoLicitatorio" id="nroProcessoLicitatorio" onchange="js_pesquisa_liclicita(false);" 
+  <input name="nroProcessoLicitatorio" id="nroProcessoLicitatorio" onchange="js_pesquisa_liclicita(false);"
   readonly="readonly" style="background-color: rgb(222, 184, 135);"  />
-  </td>      
+  </td>
   </tr>
-  
+
   <tr>
   <td><strong>Data de abertura do processo administrativo:</strong></td>
-  <td><input type="text" name=dtAbertura id="dtAbertura" 
-  onfocus="js_validaEntrada(this);" onkeyup="return js_mascaraData(this,event)" 
+  <td><input type="text" name=dtAbertura id="dtAbertura"
+  onfocus="js_validaEntrada(this);" onkeyup="return js_mascaraData(this,event)"
   autocomplete="off" onblur="js_validaDbData(this);" maxlength="10">
   <input id="dtAbertura_dia" type="hidden" maxlength="2" size="2" value="" title="" >
   <input id="dtAbertura_mes" type="hidden" maxlength="2" size="2" value="" title="" >
@@ -67,22 +67,22 @@
   </script>
   </td>
   </tr>
-  
+
   <tr>
   <td><strong>Justificativa:</strong></td>
-  <td><textarea name="justificativa" id="justificativa" value="" cols="30" rows="3" 
+  <td><textarea name="justificativa" id="justificativa" value="" cols="30" rows="3"
 	onKeyDown="textCounter(this.form.formaFornecimento,this.form.remLen,250)" onKeyUp="textCounter(this.form.formaFornecimento,this.form.remLen,250)">
 	</textarea></td>
   </tr>
- 
+
   <tr>
   <td><strong>Razão da Escolha:</strong></td>
-  <td><textarea name="razao" id="razao" value="" cols="30" rows="3" 
+  <td><textarea name="razao" id="razao" value="" cols="30" rows="3"
 	onKeyDown="textCounter(this.form.formaFornecimento,this.form.remLen,250)" onKeyUp="textCounter(this.form.formaFornecimento,this.form.remLen,250)">
-	</textarea> 
+	</textarea>
   </td>
   </tr>
-  
+
   <tr>
 	<td align="right" colspan="2">
 	<input type="submit" value="Salvar" name="btnSalvar" />
@@ -101,8 +101,8 @@
  * passar o codigo do contrato para o form da dotacao
  */
 function limpa_codigo(cod) {
-	 
-	top.corpo.iframe_db_respdisp.location.href='con4_sicomdotacao.php?codigo='+cod;
+
+	CurrentWindow.corpo.iframe_db_respdisp.location.href='con4_sicomdotacao.php?codigo='+cod;
   parent.document.formaba.db_respdisp.disabled=true;
 
 }
@@ -111,14 +111,14 @@ function limpa_codigo(cod) {
  * limitar caracteres de textarea
  */
 function textCounter(field, countfield, maxlimit) {
-	
+
 	if (field.value.length > maxlimit){
 		field.value = field.value.substring(0, maxlimit);
-	}else{ 
+	}else{
 		countfield.value = maxlimit - field.value.length;
 	}
 	}
-	
+
 /**
 * Pesquisar dados da licitação
 */
@@ -126,22 +126,22 @@ function js_pesquisa_liclicita(mostra){
          if(mostra==true){
            js_OpenJanelaIframe('','db_iframe_liclicita','func_liclicita.php?funcao_js=parent.js_mostraliclicita1|l20_codigo','Pesquisa',true);
          }else{
-            if(document.form1.nroProcessoLicitatorio.value != ''){ 
+            if(document.form1.nroProcessoLicitatorio.value != ''){
                js_OpenJanelaIframe('','db_iframe_liclicita','func_liclicita.php?pesquisa_chave='+document.form1.nroProcessoLicitatorio.value+'&funcao_js=parent.js_mostraliclicita','Pesquisa',false);
             }else{
-              document.form1.nroProcessoLicitatorio.value = ''; 
+              document.form1.nroProcessoLicitatorio.value = '';
             }
          }
        }
        function js_mostraliclicita(chave,erro){
-         document.form1.nroProcessoLicitatorio.value = chave; 
-         if(erro==true){ 
-           document.form1.nroProcessoLicitatorio.value = ''; 
-           document.form1.nroProcessoLicitatorio.focus(); 
+         document.form1.nroProcessoLicitatorio.value = chave;
+         if(erro==true){
+           document.form1.nroProcessoLicitatorio.value = '';
+           document.form1.nroProcessoLicitatorio.focus();
          }
        }
        function js_mostraliclicita1(chave1){
-          document.form1.nroProcessoLicitatorio.value = chave1;  
+          document.form1.nroProcessoLicitatorio.value = chave1;
           db_iframe_liclicita.hide();
        }
 
@@ -150,7 +150,7 @@ function js_pesquisa_liclicita(mostra){
   */
  function pesquisar(){
  	$.post('con4_pesquisarxmldispensa.php', function(data){
- 		
+
  		var jsonObj = eval(data);
  		cria_tabela(jsonObj);
  		$('#lista').css("visibility", "visible");
@@ -165,38 +165,38 @@ function js_pesquisa_liclicita(mostra){
 
   	var campo = document.getElementById('TabDbLov');
   	document.getElementById('lista').removeChild(campo);
-  	
+
   	var cod1 = $('#codigoDisp').val();
   	var cod2 = $('#nroLicitatorio').val();
-  	
+
   	$.post('con4_pesquisarxmldispensa.php', {codigo1: cod1, codigo2: cod2}, function(data){
   		var jsonObj = eval(data);
   		cria_tabela(jsonObj);
   		$('#lista').css("visibility", "visible");
-  		} 
+  		}
   	);
   }
 
   function fechar(){
-		var campo = document.getElementById('TabDbLov'); 
-		document.getElementById('lista').removeChild(campo); 
+		var campo = document.getElementById('TabDbLov');
+		document.getElementById('lista').removeChild(campo);
 		$('#lista').css("visibility","hidden");
   }
 
   function pegar_valor(param1, param2, param3, param4, param5){
-      	
+
 	  	$('#codigo').val(param1);
 	  	$('#nroProcessoLicitatorio').val(param2);
 	  	$('#dtAbertura').val(param3);
-	  	$('#justificativa').val(param4); 
-	  	$('#razao').val(param5);	  	
+	  	$('#justificativa').val(param4);
+	  	$('#razao').val(param5);
 
-		  top.corpo.iframe_db_respdisp.location.href='con4_sicomrespdispensa.php?codigo='+param1;
+		  CurrentWindow.corpo.iframe_db_respdisp.location.href='con4_sicomrespdispensa.php?codigo='+param1;
 		  parent.document.formaba.db_respdisp.disabled=false;
-	  	
+
 	  	$('#lista').css("visibility","hidden");
 	  	var campo = document.getElementById('TabDbLov');
-	  	document.getElementById('lista').removeChild(campo); 
+	  	document.getElementById('lista').removeChild(campo);
 	  }
 
   function cria_tabela(jsonObj){
@@ -241,7 +241,7 @@ function js_pesquisa_liclicita(mostra){
 			tabela += "<td id=\"I00\" bgcolor=\""+color+"\" nowrap=\"\" style=\"text-decoration: none; color: rgb(0, 0, 0);\">";
 			tabela += "<a onclick=\"pegar_valor("+jsonObj[i].codigo+",'"+jsonObj[i].nroProcessoLicitatorio+"','"
 			+jsonObj[i].dtAbertura+"','"+jsonObj[i].justificativa+"','"+jsonObj[i].razao+"')\">"+jsonObj[i].razao.substr(0,25)+"</a>";
-			
+
 			tabela += "</td></tr>";
 		}
 		tabela += "</table>";
@@ -249,25 +249,25 @@ function js_pesquisa_liclicita(mostra){
 		conteudo.innerHTML += tabela;
 	}
 
-  
+
 function passar_valores(cod) {
 
 					$.post('con4_pesquisarxmldispensa.php', {codigo1: cod}, function(data) {
 						var jsonObj = eval(data);
 						var i = 0;
 						pegar_valor(jsonObj[i].codigo,jsonObj[i].nroProcessoLicitatorio,jsonObj[i].dtAbertura,jsonObj[i].justificativa,jsonObj[i].razao);
-						
-						} 
+
+						}
 					);
-			} 
+			}
 
 </script>
 
 <?
 if (isset($iUltimoCodigo)) {
-	echo "<script>	
+	echo "<script>
 		passar_valores(".$iUltimoCodigo.");
 	</script>";
-} 
+}
 
 ?>

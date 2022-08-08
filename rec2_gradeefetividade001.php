@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -44,7 +44,7 @@ if(isset($rh01_regist) && trim($rh01_regist) != ""){
     $datai_dia = db_subdata($h16_dtconc,"d");
     $datai_mes = db_subdata($h16_dtconc,"m");
     $datai_ano = db_subdata($h16_dtconc,"A");
-    
+
     $dataf_dia = db_subdata($h16_dtconc,"d");
     $dataf_mes = db_subdata($h16_dtconc,"m");
     $dataf_ano = db_subdata($h16_dtconc,"A");
@@ -110,7 +110,7 @@ if(isset($rh01_regist) && trim($rh01_regist) != ""){
     </td>
   </tr>
   <tr>
-    <td colspan="2" align = "center"> 
+    <td colspan="2" align = "center">
       <input name="relatorio" id="relatorio" type="button" value="Relatório" onclick="js_emite();" >
     </td>
   </tr>
@@ -134,10 +134,10 @@ function js_emite(){
 }
 function js_pesquisarh01_regist(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_rhpessoal','func_rhpessoal.php?funcao_js=parent.js_mostrapessoal1|rh01_regist|z01_nome&instit=<?=(db_getsession("DB_instit"))?>','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhpessoal','func_rhpessoal.php?funcao_js=parent.js_mostrapessoal1|rh01_regist|z01_nome&instit=<?=(db_getsession("DB_instit"))?>','Pesquisa',true);
   }else{
-    if(document.form1.rh01_regist.value != ''){ 
-      js_OpenJanelaIframe('top.corpo','db_iframe_rhpessoal','func_rhpessoal.php?pesquisa_chave='+document.form1.rh01_regist.value+'&funcao_js=parent.js_mostrapessoal&instit=<?=(db_getsession("DB_instit"))?>','Pesquisa',false);
+    if(document.form1.rh01_regist.value != ''){
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhpessoal','func_rhpessoal.php?pesquisa_chave='+document.form1.rh01_regist.value+'&funcao_js=parent.js_mostrapessoal&instit=<?=(db_getsession("DB_instit"))?>','Pesquisa',false);
     }else{
       document.form1.z01_nome.value = '';
       document.form1.submit();
@@ -145,10 +145,10 @@ function js_pesquisarh01_regist(mostra){
   }
 }
 function js_mostrapessoal(chave,erro){
-  document.form1.z01_nome.value = chave; 
-  if(erro==true){ 
-    document.form1.rh01_regist.focus(); 
-    document.form1.rh01_regist.value = ''; 
+  document.form1.z01_nome.value = chave;
+  if(erro==true){
+    document.form1.rh01_regist.focus();
+    document.form1.rh01_regist.value = '';
   }else{
     document.form1.submit();
   }
@@ -197,7 +197,7 @@ FUNCTION RH551
 *****************************************************************************
 *
 *
-*  MODULO    : PESSOAL (RECURSOS HUMANOS) 
+*  MODULO    : PESSOAL (RECURSOS HUMANOS)
 *  PROGRAMA  : RH551
 *  DESCRICAO : Grade de efetividade
 *
@@ -221,7 +221,7 @@ PRIMEIRA_VEZ = .T.
       @ 08,02 SAY "Registro (grade) ...: [      - ]  ["+SPACE(38)+"]"
       @ 09,02 SAY "Processo ...........: [      ]"
       @ 10,02 SAY "Periodo Certidao ...: [  /  /    ] a [  /  /    ]"
-      @ 08,25 GET MATRIC PICT "999999" 
+      @ 08,25 GET MATRIC PICT "999999"
       READ
       IF EMPTY(MATRIC)
         @ 08,37 GET NOME PICT "@!S38"
@@ -251,12 +251,12 @@ PRIMEIRA_VEZ = .T.
                     EXIT
                  ENDIF
               ELSE
-                 EXIT 
+                 EXIT
               ENDIF
            ENDDO
            IF LASTKEY() = 27
               LOOP
-           ENDIF 
+           ENDIF
            NOME = TRANSACAO->Z01_NOME
         ENDIF
       ELSE
@@ -276,7 +276,7 @@ PRIMEIRA_VEZ = .T.
         ENDIF
         *
         NOME    = CGM->Z01_NOME
-        NUMCGM  = CGM->Z01_NUMCGM 
+        NUMCGM  = CGM->Z01_NUMCGM
         *
       ENDIF
       *
@@ -300,7 +300,7 @@ PRIMEIRA_VEZ = .T.
       READ
       IF CERTINIC != ASSENTA->H16_DTCONC
          TIPO_CERTD = .F.
-      ENDIF   
+      ENDIF
       @ 10,40 GET DATACERT VALID !EMPTY(DATACERT) .AND. DATACERT > CERTINIC
       READ
       ANO_FIM = VAL(SUBSTR(DTOC(DATACERT),-4))
@@ -312,6 +312,6 @@ PRIMEIRA_VEZ = .T.
       *
       IF BB_PERG2("Confirma emissao da grade (s/n)","S","N") = 2
          LOOP
-      ENDIF 
+      ENDIF
    *
    -->

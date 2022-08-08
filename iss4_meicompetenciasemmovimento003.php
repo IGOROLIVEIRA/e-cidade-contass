@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -51,7 +51,7 @@ $db_botao = true;
 <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta http-equiv="Expires" CONTENT="0">
-<?   
+<?
   db_app::load("scripts.js, strings.js, prototype.js, datagrid.widget.js");
   db_app::load("widgets/messageboard.widget.js, widgets/windowAux.widget.js");
   db_app::load("estilos.css, grid.style.css");
@@ -67,9 +67,9 @@ $db_botao = true;
   <tr>
     <td>&nbsp;</td>
   </tr>
-  <tr> 
-    <td valign="top" bgcolor="#CCCCCC"> 
-      <center>       
+  <tr>
+    <td valign="top" bgcolor="#CCCCCC">
+      <center>
         <form  name="form1" method="post" action="">
           <fieldset>
             <legend><b>Cancelamento de Competência sem Movimento</b></legend>
@@ -112,8 +112,8 @@ $db_botao = true;
             </tr>
             <tr>
               <td>
-                <input name="cancelar" type="button" id="cancelar" value="Cancelar" 
-                       onClick="return js_processarDados();" disabled> 
+                <input name="cancelar" type="button" id="cancelar" value="Cancelar"
+                       onClick="return js_processarDados();" disabled>
               </td>
               <td>
                 <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onClick="return js_pesquisar();">
@@ -136,11 +136,11 @@ $db_botao = true;
 function js_pesquisar() {
 
   $('cancelar').disabled  = true;
-  var sUrl                = 'func_meiimporta.php?cancelamentos=true'; 
+  var sUrl                = 'func_meiimporta.php?cancelamentos=true';
       sUrl               += '&funcao_js=parent.js_mostrarpesquisa|q104_mesusu|q104_anousu|q114_motivo';
-      
-  js_OpenJanelaIframe('top.corpo', 
-                      'db_iframe_competenciasemmovimentacao', 
+
+  js_OpenJanelaIframe('CurrentWindow.corpo',
+                      'db_iframe_competenciasemmovimentacao',
                       sUrl,
                       'Pesquisar Competência sem Movimentação',
                       true);
@@ -164,52 +164,52 @@ function js_mostrarpesquisa(chave1,chave2,chave3) {
 function js_processarDados() {
 
   var sUrl     = 'mei4_competenciasemmovimento.RPC.php';
-  var mesExpr  = new RegExp("[1-9]");    
+  var mesExpr  = new RegExp("[1-9]");
   var anoexpr  = new RegExp("[12][0-9][0-9][0-9]");
   var iMes     = $F('q104_mesusu');
   var iAno     = $F('q104_anousu');
-  
+
   if (iMes.match(mesExpr) == null ||  iMes > 12 || iMes == "00") {
-    
+
     alert("Mês inválido!");
     $('q104_mesusu').value  = "";
     $('q104_mesusu').focus();
     return false;
   }
-  
+
   if (iAno.match(anoexpr) == null) {
-  
+
     alert("Ano inválido!");
     $('q104_anousu').value  = "";
     $('q104_anousu').focus();
     return false;
   }
-  
+
   js_divCarregando('Aguarde cancelando competência sem movimento...','msgBoxCompetenciasemMovimento');
-   
+
   var oParam     = new Object();
   oParam.exec    = "cancelarCompetenciaSemMovimentacao";
   oParam.mes     = $F('q104_mesusu');
   oParam.ano     = $F('q104_anousu');
   oParam.motivo  = encodeURIComponent(tagString($F('q114_motivo')));
-    
+
   var oAjax   = new Ajax.Request( sUrl, {
-                                          method: 'post', 
-                                          parameters: 'json='+js_objectToJson(oParam), 
+                                          method: 'post',
+                                          parameters: 'json='+js_objectToJson(oParam),
                                           onComplete: js_retornoDadosCompetencia
                                         }
                                 );
 }
-  
+
 /**
  * Retorna os dados competencia sem movimento
  */
 function js_retornoDadosCompetencia(oAjax) {
-  
+
   js_removeObj("msgBoxCompetenciasemMovimento");
-  
+
   var oRetorno = eval("("+oAjax.responseText+")");
-     
+
   $('q104_mesusu').value  = "";
   $('q104_anousu').value  = "";
   $('q114_motivo').value  = "";
@@ -219,9 +219,9 @@ function js_retornoDadosCompetencia(oAjax) {
   } else {
     alert("Cancelamento efetuada com Sucesso.");
   }
-  
+
   js_pesquisar();
-  
+
 }
 </script>
 </html>

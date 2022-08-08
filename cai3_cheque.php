@@ -34,7 +34,7 @@ $oParam = db_utils::postMemory($HTTP_GET_VARS);
 $valor_formatado = str_replace(',', '.', str_replace('.', '', $oParam->valor));
 $valor = $oParam->valor;
 $texto2 = $oParam->valor2;
-$empenho = split('/', $oParam->empenho);
+$empenho = explode('/', $oParam->empenho);
 $numero_empenho = $empenho[0];
 $credor = utf8_decode($oParam->credor);
 

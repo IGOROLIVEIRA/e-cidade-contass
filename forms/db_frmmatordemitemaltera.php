@@ -1,44 +1,44 @@
 <?PHP
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
-require_once("../libs/db_stdlib.php");
-require_once("../libs/db_utils.php");
-require_once("../libs/db_conecta.php");
-include_once("../libs/db_sessoes.php");
-require_once("../std/label/rotulocampo.php");
-require_once("../std/label/RotuloCampoDB.php");
-require_once("../std/label/RotuloDB.php");
-require_once("../std/label/rotulo.php");
-include_once("../libs/db_usuariosonline.php");
-include_once("../classes/db_matordem_classe.php");
-include_once("../classes/db_matordemitem_classe.php");
-include_once("../classes/db_matestoqueitemoc_classe.php");
-include_once("../classes/db_empempitem_classe.php");
-include_once("../dbforms/db_funcoes.php");
+require_once(__DIR__ . "/../libs/db_stdlib.php");
+require_once(__DIR__ . "/../libs/db_utils.php");
+require_once(__DIR__ . "/../libs/db_conecta.php");
+include_once(__DIR__ . "/../libs/db_sessoes.php");
+require_once(__DIR__ . "/../std/label/rotulocampo.php");
+require_once(__DIR__ . "/../std/label/RotuloCampoDB.php");
+require_once(__DIR__ . "/../std/label/RotuloDB.php");
+require_once(__DIR__ . "/../std/label/rotulo.php");
+include_once(__DIR__ . "/../libs/db_usuariosonline.php");
+include_once(__DIR__ . "/../classes/db_matordem_classe.php");
+include_once(__DIR__ . "/../classes/db_matordemitem_classe.php");
+include_once(__DIR__ . "/../classes/db_matestoqueitemoc_classe.php");
+include_once(__DIR__ . "/../classes/db_empempitem_classe.php");
+include_once(__DIR__ . "/../dbforms/db_funcoes.php");
 
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
@@ -246,7 +246,7 @@ $clrotulo->label("e62_descr");
                                                     <td class='linhagrid' title='Inverte a marcação' align='center'>
                                                         <input type='checkbox' {$sChecked} {$disabled} id='chk{$e62_sequencial}' class='itensEmpenho'
                                                             name='itensOrdem[]' value='{$e62_sequencial}' onclick='js_marcaLinha(this, $i)'>
-                                                    </td>	    
+                                                    </td>
                                                     <td	class='linhagrid' align='center'>
                                                         <small>
                                                             <input id ='sequen_" . $i . "' class ='input__static' value='" . $e62_sequen . "' disabled></input>
@@ -261,7 +261,7 @@ $clrotulo->label("e62_descr");
 													    <small>
 													        <input id ='numemp_" . $i . "' class='input__static' value='" . $e62_numemp . "' disabled></input>
 													    </small>
-                                                    </td>		    
+                                                    </td>
 													<td	class='linhagrid' nowrap align='left' title='$pc01_descrmater'>
 													    <small>
 													        <input id ='coditem_" . $i . "' class ='input__static' value='" . $e62_item . "' disabled></input>
@@ -270,7 +270,7 @@ $clrotulo->label("e62_descr");
 													<td	class='linhagrid' align='center'>
 													    <small>$pc01_descrmater</small>
                                                     </td>
-                                                    
+
 													<td	class='linhagrid' nowrap align='left' title='$m61_abrev'>
 													    <small>" . (isset($m61_abrev) ? $m61_abrev : '-') . "</small>
                                                     </td>";

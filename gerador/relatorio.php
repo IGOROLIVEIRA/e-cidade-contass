@@ -1,6 +1,6 @@
 <?
-require("../libs/db_stdlib.php");
-require("../libs/db_conecta.php");
+require(__DIR__ . "/../libs/db_stdlib.php");
+require(__DIR__ . "/../libs/db_conecta.php");
 ?>
 <html>
 <head>

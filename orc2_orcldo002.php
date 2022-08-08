@@ -47,7 +47,7 @@ if (!isset ($lei)) {
 
 $ano1 = $ano;
 $ano = substr(str_replace('-', ',', $ano1), 1);
-$ano_arr = split(',', $ano);
+$ano_arr = explode(',', $ano);
 $anoini = $ano_arr[0];
 $anofim = $ano_arr[count($ano_arr) - 1];
 //print($anofim);exit;

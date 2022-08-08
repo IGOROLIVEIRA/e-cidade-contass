@@ -9,32 +9,24 @@ use \ECidade\V3\Extension\Registry;
 use \ECidade\V3\Extension\Front;
 use \ECidade\V3\Extension\Request as EcidadeRequest;
 
-//ini_set('display_errors', 'On');
-//error_reporting(E_ALL);
 
-require_once(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'libs/db_autoload.php');
-require_once(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'vendor/autoload.php');
-
-
+require_once(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'bootstrap.php');
 
 // @todo Revisar essa logica
 // Criamos um request fake para poder utilizar o recursos dos modifications.
 
 $_SERVER['REQUEST_URI'] = preg_replace('/(.*?)\/w\/\d+(.*)/', '$1$2', $_SERVER['REQUEST_URI']);
 
-//$front = new Front();
-//$ecidadeRequest = new EcidadeRequest($front->getPath());
-//Registry::set('app.request', $ecidadeRequest);
-//$front->createWindow();
-//
+$front = new Front();
+$ecidadeRequest = new EcidadeRequest($front->getPath());
+Registry::set('app.request', $ecidadeRequest);
+$front->createWindow();
+
 $app = new Application();
 
 $app['debug'] = true;
-//
+
 $app['class.loader'] = Registry::get('app.loader');
-//
-//// aplica o service provider do ServiceController
-$app->register(new ServiceControllerServiceProvider());
 
 require_once("libs/db_stdlib.php");
 require_once(dirname(__DIR__) . DIRECTORY_SEPARATOR . "libs/db_conecta.php");
@@ -55,7 +47,7 @@ require_once(dirname(__DIR__) . DIRECTORY_SEPARATOR . "libs/db_sessoes.php");
 //   * @see https://tools.ietf.org/html/rfc7235#section-3.1
 //   */
 //  if (empty($_SESSION) || empty($_SESSION['DB_login'])) {
-//    throw new AccessDeniedHttpException('Sessão inválida ou expirada. Tente logar novamente.');
+//    throw new AccessDeniedHttpException('Sessï¿½o invï¿½lida ou expirada. Tente logar novamente.');
 //  }
 
 global $conn;

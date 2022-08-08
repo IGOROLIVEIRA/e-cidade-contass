@@ -106,15 +106,15 @@ if ( !empty($pc22_codorc) ) {
 }
 function js_pesquisapc10_numero(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_orcam','db_iframe_solicita','func_solicitaorcam.php?funcao_js=parent.js_mostrapcorcamitem1|pc10_numero&orc=<?=(@$pc22_codorc)?>&departamento=<?=db_getsession("DB_coddepto")?>','Pesquisa',true,'0');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_orcam','db_iframe_solicita','func_solicitaorcam.php?funcao_js=parent.js_mostrapcorcamitem1|pc10_numero&orc=<?=(@$pc22_codorc)?>&departamento=<?=db_getsession("DB_coddepto")?>','Pesquisa',true,'0');
   }else{
-    js_OpenJanelaIframe('top.corpo.iframe_orcam','db_iframe_solicita','func_solicitaorcam.php?funcao_js=parent.js_mostrapcorcamitem1|pc10_numero&orc=<?=(@$pc22_codorc)?>&departamento=<?=db_getsession("DB_coddepto")?>','Pesquisa',false,'0');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_orcam','db_iframe_solicita','func_solicitaorcam.php?funcao_js=parent.js_mostrapcorcamitem1|pc10_numero&orc=<?=(@$pc22_codorc)?>&departamento=<?=db_getsession("DB_coddepto")?>','Pesquisa',false,'0');
   }
 }
 function js_mostrapcorcamitem1(chave1,chave2){
   document.form1.pc10_numero.value = chave1;
   db_iframe_solicita.hide();
-  top.corpo.iframe_orcam.location.href = 'com1_selsolic001.php?numerodesolicita='+chave1+'&op=<?=$op?>';
+  CurrentWindow.corpo.iframe_orcam.location.href = 'com1_selsolic001.php?numerodesolicita='+chave1+'&op=<?=$op?>';
 }
 <?
 if($clickaut == true){

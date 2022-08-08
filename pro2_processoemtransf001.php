@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -39,7 +39,7 @@ $clrotulo->label("descrdepto");
 
 $db_botao = true;
 $db_opcao = 1;
-?>  
+?>
 <html>
 <head>
 <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
@@ -62,7 +62,7 @@ function js_emite() {
   if (depto!='') {
     query+='&depto='+depto;
   }
-  
+
   jan = window.open('pro2_processoemtransf002.php?'+query ,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
   jan.moveTo(0,0);
 }
@@ -70,7 +70,7 @@ function js_emite() {
 
 </script>
 <table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-  <tr> 
+  <tr>
     <td width="360" height="18">&nbsp;</td>
     <td width="263">&nbsp;</td>
     <td width="25">&nbsp;</td>
@@ -79,17 +79,17 @@ function js_emite() {
 </table>
 <table width="790" border="0" cellspacing="0" cellpadding="0">
 <form name='form1'>
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
    	 <center>
-<table> 
+<table>
   <tr>
     <td nowrap title="<?=@$Tid_usuario?>">
        <?
        db_ancora(@$Lnome,"js_usu(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('id_usuario',7,$Iid_usuario,true,'text',$db_opcao," onchange='js_usu(false);'");
 db_input('nome',40,$Inome,true,'text',3,'');
@@ -102,7 +102,7 @@ db_input('nome',40,$Inome,true,'text',3,'');
        db_ancora(@$Lcoddepto,"js_coddepto(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('coddepto',7,$Icoddepto,true,'text',$db_opcao," onchange='js_coddepto(false);'");
 db_input('descrdepto',40,$Idescrdepto,true,'text',3,'');
@@ -112,7 +112,7 @@ db_input('descrdepto',40,$Idescrdepto,true,'text',3,'');
 
   <tr>
     <td nowrap title="Opções"><b>Opções:</b></td>
-    <td> 
+    <td>
       <?
         $listar = 1; // Por padrão Listar Ativos
         $x = array("1"=>"Usuário/Departamento que Receberá","2"=>"Usuário/Departamento que Enviou");
@@ -126,7 +126,7 @@ db_input('descrdepto',40,$Idescrdepto,true,'text',3,'');
      <input  name="emite2" id="emite2" type="button" value="Processar" onclick="js_emite();" >
     </td>
   </tr>
-</table>  
+</table>
     </center>
     </td>
   </tr>
@@ -135,11 +135,11 @@ db_input('descrdepto',40,$Idescrdepto,true,'text',3,'');
 <script>
 function js_usu(mostra) {
   if (mostra==true) {
-    js_OpenJanelaIframe('top.corpo','db_iframe_db_usuario','func_db_usuarios.php?funcao_js=parent.js_mostrausu1|id_usuario|nome','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_usuario','func_db_usuarios.php?funcao_js=parent.js_mostrausu1|id_usuario|nome','Pesquisa',true);
   } else {
     usu= document.form1.id_usuario.value;
     if (usu!="") {
-      js_OpenJanelaIframe('top.corpo','db_iframe_db_usuario','func_db_usuarios.php?pesquisa_chave='+usu+'&funcao_js=parent.js_mostrausu','Pesquisa',false);
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_usuario','func_db_usuarios.php?pesquisa_chave='+usu+'&funcao_js=parent.js_mostrausu','Pesquisa',false);
     } else {
       document.form1.nome.value='';
     }
@@ -162,11 +162,11 @@ function js_mostrausu(chave,erro) {
 
 function js_coddepto(mostra) {
   if (mostra==true) {
-    js_OpenJanelaIframe('top.corpo','db_iframe_db_depart','func_db_depart.php?funcao_js=parent.js_mostracoddepto1|coddepto|descrdepto','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_depart','func_db_depart.php?funcao_js=parent.js_mostracoddepto1|coddepto|descrdepto','Pesquisa',true);
   } else {
     coddepto = document.form1.coddepto.value;
     if (coddepto!="") {
-      js_OpenJanelaIframe('top.corpo','db_iframe_db_depart','func_db_depart.php?pesquisa_chave='+coddepto+'&funcao_js=parent.js_mostracoddepto','Pesquisa',false);
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_depart','func_db_depart.php?pesquisa_chave='+coddepto+'&funcao_js=parent.js_mostracoddepto','Pesquisa',false);
     } else {
       document.form1.descrdepto.value='';
     }

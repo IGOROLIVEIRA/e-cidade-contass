@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: Configuracoes
@@ -36,7 +36,7 @@ if (isset($db81_nomearquivo)) {
 }
 ?>
 <form name="form1" method="post" action="">
-<table style="margin-top: 20px;"> 
+<table style="margin-top: 20px;">
 <tr>
 	<td>
 		<fieldset>
@@ -47,7 +47,7 @@ if (isset($db81_nomearquivo)) {
 			    <td nowrap title="<?=@$Tdb81_sequencial?>">
 			       <?=@$Ldb81_sequencial?>
 			    </td>
-			    <td> 
+			    <td>
 					<?
 					db_input('db81_sequencial',10,$Idb81_sequencial,true,'text',3,"")
 					?>
@@ -59,7 +59,7 @@ if (isset($db81_nomearquivo)) {
 			       db_ancora(@$Ldb81_templatetipo,"js_pesquisadb81_templatetipo(true);",$db_opcao);
 			       ?>
 			    </td>
-			    <td> 
+			    <td>
 						<?
 						db_input('db81_templatetipo',10,$Idb81_templatetipo,true,'text',$db_opcao," onchange='js_pesquisadb81_templatetipo(false);'")
 						?>
@@ -68,14 +68,14 @@ if (isset($db81_nomearquivo)) {
 			       ?>
 			    </td>
 			  </tr>
-			  <?/* 
+			  <?/*
 			  <tr>
 			    <td nowrap title="<?=@$Tdb81_instit?>">
 			       <?
 			       db_ancora(@$Ldb81_instit,"js_pesquisadb81_instit(true);",$db_opcao);
 			       ?>
 			    </td>
-			    <td> 
+			    <td>
 						<?
 						db_input('db81_instit',10,$Idb81_instit,true,'text',$db_opcao," onchange='js_pesquisadb81_instit(false);'")
 						?>
@@ -89,7 +89,7 @@ if (isset($db81_nomearquivo)) {
 			    <td nowrap title="<?=@$Tdb81_descricao?>">
 			       <?=@$Ldb81_descricao?>
 			    </td>
-			    <td> 
+			    <td>
 						<?
 						db_input('db81_descricao',64,$Idb81_descricao,true,'text',$db_opcao,"")
 						?>
@@ -99,7 +99,7 @@ if (isset($db81_nomearquivo)) {
 			    <td nowrap title="<?=@$Tdb81_nomearquivo?>">
 			       <?=@$Ldb81_nomearquivo?>
 			    </td>
-			    <td> 
+			    <td>
 						<?
 						db_input('db81_nomearquivo',64,$Idb81_nomearquivo,true,'text',$db_opcao,"")
 						?>
@@ -126,20 +126,20 @@ function js_download(sUrlArquivo) {
 
 function js_pesquisadb81_templatetipo(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_db_documentotemplate','func_db_documentotemplatetipo.php?funcao_js=parent.js_mostradb_documentotemplate1|db80_sequencial|db80_descricao','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_documentotemplate','func_db_documentotemplatetipo.php?funcao_js=parent.js_mostradb_documentotemplate1|db80_sequencial|db80_descricao','Pesquisa',true);
   }else{
-     if(document.form1.db81_templatetipo.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_db_documentotemplate','func_db_documentotemplatetipo.php?pesquisa_chave='+document.form1.db81_templatetipo.value+'&funcao_js=parent.js_mostradb_documentotemplate','Pesquisa',false);
+     if(document.form1.db81_templatetipo.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_documentotemplate','func_db_documentotemplatetipo.php?pesquisa_chave='+document.form1.db81_templatetipo.value+'&funcao_js=parent.js_mostradb_documentotemplate','Pesquisa',false);
      }else{
-       document.form1.db82_descricao.value = ''; 
+       document.form1.db82_descricao.value = '';
      }
   }
 }
 function js_mostradb_documentotemplate(chave,erro){
-  document.form1.db82_descricao.value = chave; 
-  if(erro==true){ 
-    document.form1.db81_templatetipo.focus(); 
-    document.form1.db81_templatetipo.value = ''; 
+  document.form1.db82_descricao.value = chave;
+  if(erro==true){
+    document.form1.db81_templatetipo.focus();
+    document.form1.db81_templatetipo.value = '';
   }
 }
 function js_mostradb_documentotemplate1(chave1,chave2){
@@ -149,20 +149,20 @@ function js_mostradb_documentotemplate1(chave1,chave2){
 }
 function js_pesquisadb81_instit(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_db_config','func_db_config.php?funcao_js=parent.js_mostradb_config1|codigo|nomeinst','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_config','func_db_config.php?funcao_js=parent.js_mostradb_config1|codigo|nomeinst','Pesquisa',true);
   }else{
-     if(document.form1.db81_instit.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_db_config','func_db_config.php?pesquisa_chave='+document.form1.db81_instit.value+'&funcao_js=parent.js_mostradb_config','Pesquisa',false);
+     if(document.form1.db81_instit.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_config','func_db_config.php?pesquisa_chave='+document.form1.db81_instit.value+'&funcao_js=parent.js_mostradb_config','Pesquisa',false);
      }else{
-       document.form1.nomeinst.value = ''; 
+       document.form1.nomeinst.value = '';
      }
   }
 }
 function js_mostradb_config(chave,erro){
-  document.form1.nomeinst.value = chave; 
-  if(erro==true){ 
-    document.form1.db81_instit.focus(); 
-    document.form1.db81_instit.value = ''; 
+  document.form1.nomeinst.value = chave;
+  if(erro==true){
+    document.form1.db81_instit.focus();
+    document.form1.db81_instit.value = '';
   }
 }
 function js_mostradb_config1(chave1,chave2){
@@ -171,7 +171,7 @@ function js_mostradb_config1(chave1,chave2){
   db_iframe_db_config.hide();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_db_documentotemplatepadrao','func_db_documentotemplatepadrao.php?funcao_js=parent.js_preenchepesquisa|db81_sequencial','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_documentotemplatepadrao','func_db_documentotemplatepadrao.php?funcao_js=parent.js_preenchepesquisa|db81_sequencial','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_db_documentotemplatepadrao.hide();

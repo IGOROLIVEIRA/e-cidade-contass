@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -56,7 +56,7 @@ db_postmemory($HTTP_POST_VARS);
 function js_filtra(){
   document.form1.submit();
 }
-</script>  
+</script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" bgcolor="#cccccc">
@@ -145,7 +145,7 @@ function js_filtra(){
 	  <td>
 	  <?
 	  $arr=array("N"=>"Nenhum","M"=>"Matrícula","L"=>"Lotação","T"=>"Locais de trabalho");
-	  db_select("filtro",$arr,true,2,"onchange='js_filtra();'"); 
+	  db_select("filtro",$arr,true,2,"onchange='js_filtra();'");
 	  ?>
 	  </td>
 	</tr>
@@ -157,7 +157,7 @@ function js_filtra(){
 	  <td>
 	  <?
 	  $arr1=array("."=>"------------","I"=>"Intervalo","S"=>"Selecionados");
-	  db_select("filtrar",$arr1,true,2,"onchange='js_filtra();'"); 
+	  db_select("filtrar",$arr1,true,2,"onchange='js_filtra();'");
 	  ?>
 	  </td>
 	</tr>
@@ -194,9 +194,9 @@ function js_filtra(){
           <td>
             <strong><?=@$info?> de</strong>
           </td>
-          <td> 
+          <td>
             <? db_input('cod_ini',8,'',true,'text',1," onchange='js_copiacampo();'","")  ?>
-            <strong> à </strong> 
+            <strong> à </strong>
             <? db_input('cod_fim',8,'',true,'text',1,"","")  ?>
           </td>
         </tr>
@@ -233,18 +233,18 @@ function js_filtra(){
   }
   }
   ?>
-<!--     
+<!--
   <tr>
     <td><strong>Tipo de emissão:</strong>
     </td>
     <td>
     <?
     $arr1=array("1"=>"Laser","2"=>"Matricial");
-    db_select("tipoimpress",$arr1,true,2); 
+    db_select("tipoimpress",$arr1,true,2);
     ?>
     </td>
   </tr>
--->														       
+-->
   <tr>
     <td colspan="2" align="center">
       <fieldset>
@@ -254,7 +254,7 @@ function js_filtra(){
             <td nowrap align="right">
 	      <b>Linha 1:</b>
             </td>
-            <td> 
+            <td>
               <?
               db_input('mensagem1',105,0,true,'text',1,"")
               ?>
@@ -264,7 +264,7 @@ function js_filtra(){
             <td nowrap align="right">
 	      <b>Linha 2:</b>
             </td>
-            <td> 
+            <td>
               <?
               db_input('mensagem2',105,0,true,'text',1,"")
               ?>
@@ -274,7 +274,7 @@ function js_filtra(){
             <td nowrap align="right">
 	      <b>Linha 3:</b>
             </td>
-            <td> 
+            <td>
               <?
               db_input('mensagem3',105,0,true,'text',1,"")
               ?>
@@ -284,7 +284,7 @@ function js_filtra(){
             <td nowrap align="right">
 	      <b>Linha 4:</b>
             </td>
-            <td> 
+            <td>
               <?
               db_input('mensagem4',105,0,true,'text',1,"")
               ?>
@@ -294,7 +294,7 @@ function js_filtra(){
             <td nowrap align="right">
 	      <b>Linha 5:</b>
             </td>
-            <td> 
+            <td>
               <?
               db_input('mensagem5',105,0,true,'text',1,"")
               ?>
@@ -305,7 +305,7 @@ function js_filtra(){
     </td>
   </tr>
   <tr>
-    <td colspan="2" align="center"> 
+    <td colspan="2" align="center">
       <input name="emite2" id="emite2" type="submit" value="Processar" onclick="return js_selecionaselect();">
     </td>
   </tr>
@@ -366,19 +366,19 @@ function js_emite(){
   }
   if (document.form1.cod_ini){
     if (document.form1.cod_fim.value==""){
-      document.form1.cod_fim.value=document.form1.cod_ini.value;    
+      document.form1.cod_fim.value=document.form1.cod_ini.value;
     }
-    query='&codini='+document.form1.cod_ini.value+'&codfim='+document.form1.cod_fim.value;      
+    query='&codini='+document.form1.cod_ini.value+'&codfim='+document.form1.cod_fim.value;
   }
   if (dados!=""){
     query+='&dados='+dados;
   }
-  
+
   if(document.form1.r48_semest){
     query+= "&semest="+document.form1.r48_semest.value;
   }
   query+="&local="+document.form1.rh56_localtrab.value;
-  js_OpenJanelaIframe('top.corpo','db_iframe_geracontra',
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_geracontra',
   'pes2_alecontramatricial002.php?opcao='+document.form1.folha.value+
         '&ano='+document.form1.DBtxt23.value+'&mes='+document.form1.DBtxt25.value+
 	'&filtro='+document.form1.filtro.value+'&msg='+document.form1.mensagem1.value+query,'Gerando Arquivo',true);
@@ -541,10 +541,10 @@ if(isset($emite2)){
               			         round(#s#_valor,2) as valorrubrica,
               			         round(#s#_quant,2) as quantrubrica,
                                          ".$xtipo." as tipo ,
-                                         case when rh27_pd = 3 then 'B' 
-                                              else case when #s#_pd = 1 then 'P' 
-                                                   else 'D' 
-                                              end 
+                                         case when rh27_pd = 3 then 'B'
+                                              else case when #s#_pd = 1 then 'P'
+                                                   else 'D'
+                                              end
                                          end as provdesc
       	 			        ",
       	 			        "rh27_rubric",
@@ -579,34 +579,34 @@ if(isset($emite2)){
             $somadescontos += $valorrubrica;
             $somaprovdesc -= $valorrubrica;
           }
-       
+
           if($rh27_rubric > "R900" && $rh27_rubric < "R910"){
             $somaconprev+= $valorrubrica;
           }
-       
+
           if($rh27_rubric == "R991"){
             $somafgts+= $valorrubrica;
           }
-       
+
           if($rh27_rubric >= "R981" && $rh27_rubric < "R984"){
             $somabaseirrf+= $valorrubrica;
           }
-       
+
           if($rh27_rubric == "R984"){
             $somadependentesirfv+= $valorrubrica;
             $somadependentesirfq+= $quantrubrica;
           }
-       
+
           if($rh27_rubric >= "R913" && $rh27_rubric <= "R915"){
             $somafaixairrf += $quantrubrica;
           }
-       
+
           if($rh27_rubric >= "R985" && $rh27_rubric <= "R987"){
             $somabaseprevidencia += $valorrubrica;
           }
-       
+
           $somabaseliquida = $somabaseirrf - $somadependentesirfv - $somaconprev;
-       
+
           $antestotalproventos = trim(db_formatar($somaproventos,"f"));
           $antestotaldescontos = trim(db_formatar($somadescontos,"f"));
           $antestotalprovdesc  = trim(db_formatar($somaprovdesc,"f"));
@@ -640,7 +640,7 @@ if(isset($emite2)){
             }
             db_setaPropriedadesLayoutTxt(&$db_layouttxt,CABECALHOARQUIVO);
           }
-       
+
           if($provdesc != "B"){
             $linhas ++;
             db_setaPropriedadesLayoutTxt(&$db_layouttxt,REGISTROSARQUIVO);
@@ -655,7 +655,7 @@ if(isset($emite2)){
         $multiplic *= $db_layouttxt->_quantLinhasLay;
         $multiplic -= $linhas;
         $db_layouttxt->quebraLinha($multiplic);
-       
+
         db_setaPropriedadesLayoutTxt(&$db_layouttxt,RODAPEARQUIVO);
       }
 
@@ -681,7 +681,7 @@ if(isset($emite2)){
       $posicaocorrente ++;
       if($posicaocorrente == 45){
         $posicaocorrente = 1;
-        $contador ++; 
+        $contador ++;
         if($contador == $contapaginas){
           break;
         }

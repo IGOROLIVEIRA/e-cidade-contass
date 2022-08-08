@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: pessoal
@@ -35,7 +35,7 @@ $clrhregime->rotulo->label();
     <td nowrap title="<?=@$Trh30_codreg?>">
       <?=@$Lrh30_codreg?>
     </td>
-    <td> 
+    <td>
       <?db_input('rh30_codreg',2,$Irh30_codreg,true,'text',3,"")?>
     </td>
   </tr>
@@ -43,7 +43,7 @@ $clrhregime->rotulo->label();
     <td nowrap title="<?=@$Trh30_descr?>">
       <?=@$Lrh30_descr?>
     </td>
-    <td> 
+    <td>
       <?db_input('rh30_descr',40,$Irh30_descr,true,'text',$db_opcao,"")?>
     </td>
   </tr>
@@ -51,7 +51,7 @@ $clrhregime->rotulo->label();
     <td nowrap title="<?=@$Trh30_utilizacao?>">
       <?=@$Lrh30_utilizacao?>
     </td>
-    <td> 
+    <td>
       <?
       $arr_util = Array('3'=>'Educação');
       db_select("rh30_utilizacao",$arr_util,true,$db_opcao,"onChange=\"js_mudautilizacao(this.value)\"");
@@ -62,7 +62,7 @@ $clrhregime->rotulo->label();
     <td nowrap title="<?=@$Trh30_regime?>">
       <?=@$Lrh30_regime?>
     </td>
-    <td> 
+    <td>
       <?
       $result_regime = $clrhcadregime->sql_record($clrhcadregime->sql_query_file());
       db_selectrecord("rh30_regime", $result_regime, true, $db_opcao);
@@ -73,7 +73,7 @@ $clrhregime->rotulo->label();
     <td nowrap title="<?=@$Trh30_vinculo?>">
       <?=@$Lrh30_vinculo?>
     </td>
-    <td> 
+    <td>
       <?
       $arr_vinculo = Array('A'=>'Ativo','I'=>'Inativo','P'=>'Pensionista');
       db_select("rh30_vinculo",$arr_vinculo,true,$db_opcao);
@@ -84,7 +84,7 @@ $clrhregime->rotulo->label();
     <td nowrap title="Natureza">
       <b>Natureza : </b>
     </td>
-    <td> 
+    <td>
       <?
       $sSqlNatureza = "select rh71_sequencial,rh71_descricao from rhnaturezaregime";
       $rsNatureza   = db_query($sSqlNatureza);
@@ -130,7 +130,7 @@ $clrhregime->rotulo->label();
 </form>
 <script>
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_rhregime','func_rhregimesec.php?funcao_js=parent.js_preenchepesquisa|rh30_codreg','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhregime','func_rhregimesec.php?funcao_js=parent.js_preenchepesquisa|rh30_codreg','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
 

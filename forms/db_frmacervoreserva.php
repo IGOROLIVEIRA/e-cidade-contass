@@ -117,10 +117,10 @@ function js_pesquisabi20_acervo(mostra){
  }else{
   datareserva = document.form1.bi20_data_ano.value+"-"+document.form1.bi20_data_mes.value+"-"+document.form1.bi20_data_dia.value;
   if(mostra==true){
-   js_OpenJanelaIframe('top.corpo','db_iframe_acervo','func_exemplarreserva.php?datareserva='+datareserva+'&reserva=<?=$bi20_reserva?>&funcao_js=parent.acervoreserva.js_mostraacervo1|bi06_seq|bi06_titulo','Pesquisa',true);
+   js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_acervo','func_exemplarreserva.php?datareserva='+datareserva+'&reserva=<?=$bi20_reserva?>&funcao_js=parent.acervoreserva.js_mostraacervo1|bi06_seq|bi06_titulo','Pesquisa',true);
   }else{
    if(document.form1.bi20_acervo.value != ''){
-    js_OpenJanelaIframe('top.corpo','db_iframe_acervo','func_exemplarreserva.php?datareserva='+datareserva+'&reserva=<?=$bi20_reserva?>&pesquisa_chave3='+document.form1.bi20_acervo.value+'&funcao_js=parent.acervoreserva.js_mostraacervo','Pesquisa',false);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_acervo','func_exemplarreserva.php?datareserva='+datareserva+'&reserva=<?=$bi20_reserva?>&pesquisa_chave3='+document.form1.bi20_acervo.value+'&funcao_js=parent.acervoreserva.js_mostraacervo','Pesquisa',false);
    }else{
     document.form1.bi06_titulo.value = '';
    }

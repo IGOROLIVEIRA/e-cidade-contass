@@ -79,12 +79,12 @@ imagecopyresized($saida,$im,$xp,$yp,0,0,imagesx($im),imagesy($im),imagesx($im),i
 
 Header("Content-type: image/png");
 
-$str = split("##",base64_decode($argv[0]));
-$identificacao = split("&&",$str[0]);
-$dados = split("%%",$str[1]);
+$str = explode("##",base64_decode($argv[0]));
+$identificacao = explode("&&",$str[0]);
+$dados = explode("%%",$str[1]);
 $taxabancaria = $str[2];
 $numero = $str[3];
-$codigo_barras = split("&&",$str[4]);
+$codigo_barras = explode("&&",$str[4]);
 $dtvenc = $str[5];
 $numpre = $str[6];
 $valor = $str[7];
@@ -180,7 +180,7 @@ ImageString($img,2,577,265,$taxabancaria,$preto);
 //k02_receit k02_descr k02_drecei valor
 $c = 0;
 for($i = 0;$i < sizeof($dados);$i++) {
-  $aux = split("&&",$dados[$i]);
+  $aux = explode("&&",$dados[$i]);
   ImageString($img,2,35,280 + $c,$aux[0],$preto);
   ImageString($img,2,70,280 + $c,$aux[2],$preto);
   ImageString($img,2,380,280 + $c,$aux[1],$preto);  
@@ -195,7 +195,7 @@ for($i = 0;$i < sizeof($dados);$i++) {
 if(substr($parc,0,4) != "PARC") {
   ImageString($img,2,70,265,"Taxa Bancária",$preto);
   ImageString($img,2,580,265,$taxabancaria,$preto);  
-  $rec = split("&",$rec);
+  $rec = explode("&",$rec);
   $c=0;
   //ImageString($img,2,35,270,sizeof($rec),$preto);
   for($i = 0;$i < sizeof($rec);$i += 4) {

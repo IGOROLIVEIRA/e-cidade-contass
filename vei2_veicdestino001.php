@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -115,10 +115,10 @@ $clveiculos->rotulo->label("ve01_veiccadmodelo");
 
         function js_pesquisave01_veiccadmarca(mostra){
             if(mostra==true){
-                js_OpenJanelaIframe('top.corpo','db_iframe_veiccadmarca','func_veiccadmarca.php?funcao_js=parent.js_mostraveiccadmarca1|ve21_codigo|ve21_descr','Pesquisa',true);
+                js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_veiccadmarca','func_veiccadmarca.php?funcao_js=parent.js_mostraveiccadmarca1|ve21_codigo|ve21_descr','Pesquisa',true);
             }else{
                 if(document.form1.ve01_veiccadmarca.value != ''){
-                    js_OpenJanelaIframe('top.corpo','db_iframe_veiccadmarca','func_veiccadmarca.php?pesquisa_chave='+document.form1.ve01_veiccadmarca.value+'&funcao_js=parent.js_mostraveiccadmarca','Pesquisa',false);
+                    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_veiccadmarca','func_veiccadmarca.php?pesquisa_chave='+document.form1.ve01_veiccadmarca.value+'&funcao_js=parent.js_mostraveiccadmarca','Pesquisa',false);
                 }else{
                     document.form1.ve21_descr.value = '';
                 }
@@ -138,10 +138,10 @@ $clveiculos->rotulo->label("ve01_veiccadmodelo");
         }
         function js_pesquisave01_veiccadmodelo(mostra){
             if(mostra==true){
-                js_OpenJanelaIframe('top.corpo','db_iframe_veiccadmodelo','func_veiccadmodelo.php?funcao_js=parent.js_mostraveiccadmodelo1|ve22_codigo|ve22_descr','Pesquisa',true);
+                js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_veiccadmodelo','func_veiccadmodelo.php?funcao_js=parent.js_mostraveiccadmodelo1|ve22_codigo|ve22_descr','Pesquisa',true);
             }else{
                 if(document.form1.ve01_veiccadmodelo.value != ''){
-                    js_OpenJanelaIframe('top.corpo','db_iframe_veiccadmodelo','func_veiccadmodelo.php?pesquisa_chave='+document.form1.ve01_veiccadmodelo.value+'&funcao_js=parent.js_mostraveiccadmodelo','Pesquisa',false);
+                    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_veiccadmodelo','func_veiccadmodelo.php?pesquisa_chave='+document.form1.ve01_veiccadmodelo.value+'&funcao_js=parent.js_mostraveiccadmodelo','Pesquisa',false);
                 }else{
                     document.form1.ve22_descr.value = '';
                 }
@@ -267,10 +267,10 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
 
 function js_pesquisave75_sequencial ( mostra ) {
     if ( mostra == true ) {
-        js_OpenJanelaIframe('top.corpo','db_iframe_veiccaddestino','func_veiccaddestino.php?funcao_js=parent.js_mostradestino1|ve75_sequencial|ve75_destino','Pesquisa',true);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_veiccaddestino','func_veiccaddestino.php?funcao_js=parent.js_mostradestino1|ve75_sequencial|ve75_destino','Pesquisa',true);
     } else {
         if (document.form1.ve75_sequencial.value != '') {
-            js_OpenJanelaIframe('top.corpo','db_iframe_veiccaddestino','func_veiccaddestino.php?pesquisa_chave='+document.form1.ve75_sequencial.value+'&funcao_js=parent.js_mostradestino','Pesquisa',false);
+            js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_veiccaddestino','func_veiccaddestino.php?pesquisa_chave='+document.form1.ve75_sequencial.value+'&funcao_js=parent.js_mostradestino','Pesquisa',false);
         } else {
             document.form1.ve75_sequencial.value = '';
         }

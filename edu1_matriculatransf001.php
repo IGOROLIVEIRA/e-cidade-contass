@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -334,16 +334,16 @@ if(isset($chavepesquisa)){
 <script>
   var oTurmaTurno;
   var aNomeTurnoReferencia = {1:'Manhã', 2:'Tarde', 3:'Noite'};
-   
+
   js_tabulacaoforms("form1","ed103_i_codigo",true,1,"ed103_i_codigo",true);
- 
+
   function js_pesquisaturmadest(mostra) {
-    
+
     document.getElementById("iframe_trocaturma").style.visibility = "hidden";
-    
+
     if (mostra) {
-      
-      js_OpenJanelaIframe('top.corpo',
+
+      js_OpenJanelaIframe('CurrentWindow.corpo',
                           'db_iframe_turma',
                           'func_turmatransfrede.php?avalparcial='+document.form1.ed29_i_avalparcial.value+
                           '&codaluno='+document.form1.ed47_i_codigo.value+
@@ -357,9 +357,9 @@ if(isset($chavepesquisa)){
                          );
     }
   }
-  
+
   function js_mostraturma1(chave1,chave2,chave3,chave4) {
-    
+
     document.form1.codturmadest.value  = chave1;
     document.form1.nometurmadest.value = chave2;
     document.form1.ed52_d_inicio.value = chave3;
@@ -369,30 +369,30 @@ if(isset($chavepesquisa)){
     if ( oTurmaTurno instanceof DBViewFormularioEducacao.TurmaTurnoReferente) {
       oTurmaTurno.limpaLinhasCriadas();
     }
-    
+
     js_mostraTurnosTurma();
-    
+
     js_abreIframe();
   }
-  
+
   function js_pesquisatransf() {
-    js_OpenJanelaIframe('top.corpo','db_iframe_transfescolarede','func_transfescolarede.php?funcao_js=parent.js_preenchepesquisa|ed103_i_codigo','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_transfescolarede','func_transfescolarede.php?funcao_js=parent.js_preenchepesquisa|ed103_i_codigo','Pesquisa',true);
   }
-  
+
   function js_preenchepesquisa(chave) {
-    
+
     db_iframe_transfescolarede.hide();
     <?
      echo " location.href = '".basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"])."?chavepesquisa='+chave";
     ?>
   }
-  
+
   function js_destino(atestado) {
-    js_OpenJanelaIframe('top.corpo','db_iframe_atestvaga','edu1_atestvaga002.php?chavepesquisa='+atestado,'Alterar Calendário do Atestado de Vaga',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_atestvaga','edu1_atestvaga002.php?chavepesquisa='+atestado,'Alterar Calendário do Atestado de Vaga',true);
   }
 
   function js_mostraTurnosTurma() {
-    
+
     oTurmaTurno = new DBViewFormularioEducacao.TurmaTurnoReferente($('linhaTurno'), $F('codturmadest'));
     oTurmaTurno.show();
   }
@@ -400,35 +400,35 @@ if(isset($chavepesquisa)){
   function js_abreIframe() {
 
     var lValidacoesTurma = true;
-    
+
     lValidacoesTurma = js_validaTurma();
-    
+
     if (!lValidacoesTurma) {
       return false;
     }
-    
-    
+
+
     var sTurnoReferente     = js_validaTurnosSelecionados().join(',');
-    
+
     var sGet  = "ed103_i_codigo="   + $F('ed103_i_codigo');
         sGet += "&matricula="       + $F('ed103_i_matricula');
         sGet += "&turmaorigem="     + $F('codturmaorig');
         sGet += "&turmadestino="    + $F('codturmadest');
         sGet += "&sTurnoReferente=" + sTurnoReferente;
-        
+
     iframe_trocaturma.location.href = 'edu1_matriculatransf002.php?' + sGet;
     document.getElementById("iframe_trocaturma").style.visibility = "visible";
   }
-  
+
   /**
    * Busca os checkbox que estão selecionados e os adiciona a um array de turno referencia
    */
   function js_validaTurnosSelecionados() {
-    
+
     var aTurnoReferencia = new Array();
-    // Verifica quais referências estão selecionadas e adicionas elas ao array aTurnoReferencia 
+    // Verifica quais referências estão selecionadas e adicionas elas ao array aTurnoReferencia
     for (var i = 1; i < 4; i++) {
-      
+
       if ( $("check_turno"+i) && $("check_turno"+i).checked ) {
         aTurnoReferencia.push( $F("check_turno"+i) );
       }
@@ -441,9 +441,9 @@ if(isset($chavepesquisa)){
    * Verifica qual tipo de validação deve ser feita
    */
   function js_validaTurma() {
-    
+
     var lValidacoesTurma = false;
-    
+
     if (oTurmaTurno.lEnsinoInfantil && oTurmaTurno.lTurnoIntegral) {
       lValidacoesTurma = js_validaTurmaInfantilIntegral();
     } else {
@@ -462,21 +462,21 @@ if(isset($chavepesquisa)){
 
     aTurnoReferencia = js_validaTurnosSelecionados();
 
-    // Verifica se ao menos 1 checkbox esta selecionado 
+    // Verifica se ao menos 1 checkbox esta selecionado
     if (aTurnoReferencia.length == 0) {
 
       alert(_M('educacao.escola.db_frmalunocursomatr.selecione_turno'));
-      return false; 
+      return false;
     }
 
-    // Verifica se existe vagas disponíveis nos turnos referentes 
+    // Verifica se existe vagas disponíveis nos turnos referentes
     var lTemVagas = true;
     var sMsg      = "Turma não possui vaga no(s) turno(s):";
     for (var index = 0; index < aTurnoReferencia.length; index++) {
 
       var aVagasTurno = new Array();
       aVagasTurno     = oTurmaTurno.getVagasDisponiveis(aTurnoReferencia[index]);
-      
+
       if (aVagasTurno.length == 0) {
         lTemVagas = false;
         sMsg += "\n - " + aNomeTurnoReferencia[aTurnoReferencia[index]];
@@ -487,7 +487,7 @@ if(isset($chavepesquisa)){
       alert(sMsg);
     }
     return lTemVagas;
-      
+
   }
 
   /**
@@ -495,7 +495,7 @@ if(isset($chavepesquisa)){
    */
   function js_validaTurmaNormal() {
 
-    // Verifica se existe vagas disponíveis na turma 
+    // Verifica se existe vagas disponíveis na turma
     if( !oTurmaTurno.temVagasDisponiveis() ) {
       alert(_M('educacao.escola.db_frmalunocursomatr.turno_sem_vagas'));
       return false;

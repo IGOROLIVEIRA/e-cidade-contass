@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
+ *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2014  DBSeller Servicos de Informatica
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 $clcgs_cartaosus->rotulo->label();
 $clrotulo = new rotulocampo;
@@ -112,7 +112,7 @@ function js_pesquisas115_i_cgs( mostra ) {
 
   if( mostra == true ) {
     js_OpenJanelaIframe(
-                         'top.corpo',
+                         'CurrentWindow.corpo',
                          'db_iframe_cgs',
                          'func_cgs_und.php?funcao_js=parent.js_mostracgs1|z01_i_cgsund|z01_v_nome',
                          'Pesquisa',
@@ -122,7 +122,7 @@ function js_pesquisas115_i_cgs( mostra ) {
 
     if( document.form1.s115_i_cgs.value != '' ) {
       js_OpenJanelaIframe(
-                           'top.corpo',
+                           'CurrentWindow.corpo',
                            'db_iframe_cgs',
                            'func_cgs_und.php?pesquisa_chave='+document.form1.s115_i_cgs.value+'&funcao_js=parent.js_mostracgs',
                            'Pesquisa',
@@ -136,11 +136,11 @@ function js_pesquisas115_i_cgs( mostra ) {
 
 function js_mostracgs( chave, erro ) {
 
-  document.form1.z01_v_nome.value = chave; 
+  document.form1.z01_v_nome.value = chave;
   if( erro == true ) {
 
-    document.form1.s115_i_cgs.focus(); 
-    document.form1.s115_i_cgs.value = ''; 
+    document.form1.s115_i_cgs.focus();
+    document.form1.s115_i_cgs.value = '';
   }
 
   location.href = 'sau1_cgs_cartaosus001.php?s115_i_cgs='+document.form1.s115_i_cgs.value+'&z01_v_nome='+chave;
@@ -156,7 +156,7 @@ function js_mostracgs1( chave1, chave2 ) {
 
 function js_pesquisa() {
   js_OpenJanelaIframe(
-                       'top.corpo',
+                       'CurrentWindow.corpo',
                        'db_iframe_cgs_cartaosus',
                        'func_cgs_cartaosus.php?funcao_js=parent.js_preenchepesquisa|s115_i_codigo',
                        'Pesquisa',

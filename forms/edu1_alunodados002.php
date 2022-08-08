@@ -44,11 +44,11 @@ if(isset($alterar)){
   parent.document.formaba.a5.style.color = "black";
   parent.document.formaba.a6.disabled = false;
   parent.document.formaba.a6.style.color = "black";
-  top.corpo.iframe_a2.location.href='edu1_aluno002.php?chavepesquisa=<?=$ed47_i_codigo?>';
-  top.corpo.iframe_a3.location.href='edu1_alunocurso001.php?ed56_i_aluno=<?=$ed47_i_codigo?>&ed47_v_nome=<?=$ed47_v_nome?>';
-  top.corpo.iframe_a4.location.href='edu1_docaluno001.php?ed49_i_aluno=<?=$ed47_i_codigo?>&ed47_v_nome=<?=$ed47_v_nome?>';
-  top.corpo.iframe_a5.location.href='edu1_alunonecessidade001.php?ed214_i_aluno=<?=$ed47_i_codigo?>&ed47_v_nome=<?=$ed47_v_nome?>';
-  top.corpo.iframe_a6.location.href='edu1_historico000.php?ed61_i_aluno=<?=$ed47_i_codigo?>&ed47_v_nome=<?=$ed47_v_nome?>';
+  CurrentWindow.corpo.iframe_a2.location.href='edu1_aluno002.php?chavepesquisa=<?=$ed47_i_codigo?>';
+  CurrentWindow.corpo.iframe_a3.location.href='edu1_alunocurso001.php?ed56_i_aluno=<?=$ed47_i_codigo?>&ed47_v_nome=<?=$ed47_v_nome?>';
+  CurrentWindow.corpo.iframe_a4.location.href='edu1_docaluno001.php?ed49_i_aluno=<?=$ed47_i_codigo?>&ed47_v_nome=<?=$ed47_v_nome?>';
+  CurrentWindow.corpo.iframe_a5.location.href='edu1_alunonecessidade001.php?ed214_i_aluno=<?=$ed47_i_codigo?>&ed47_v_nome=<?=$ed47_v_nome?>';
+  CurrentWindow.corpo.iframe_a6.location.href='edu1_historico000.php?ed61_i_aluno=<?=$ed47_i_codigo?>&ed47_v_nome=<?=$ed47_v_nome?>';
  </script>
  <?
 }
@@ -88,7 +88,7 @@ if(isset($alterar)){
  }else{
   ?>
   <script>
-   top.corpo.iframe_a1.location.href='edu1_alunodados002.php?chavepesquisa=<?=$ed47_i_codigo?>';
+   CurrentWindow.corpo.iframe_a1.location.href='edu1_alunodados002.php?chavepesquisa=<?=$ed47_i_codigo?>';
   </script>
   <?
   $claluno->erro(true,false);

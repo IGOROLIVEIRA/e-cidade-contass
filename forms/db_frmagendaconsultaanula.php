@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: Ambulatorial
@@ -37,7 +37,7 @@ $oRotulo->label("sd23_d_consulta");
     <td nowrap title="<?=@$Ts114_i_codigo?>">
       <?=@$Ls114_i_codigo?>
     </td>
-    <td> 
+    <td>
       <?
       db_input('s114_i_codigo', 10, $Is114_i_codigo, true, 'text', 3, "");
       db_input('iIdJanela', 2, '', true, 'hidden', $db_opcao, "");
@@ -50,9 +50,9 @@ $oRotulo->label("sd23_d_consulta");
       db_ancora(@$Ls114_i_agendaconsulta, "js_pesquisas114_i_agendaconsulta(true);", 3);
       ?>
     </td>
-    <td> 
+    <td>
       <?
-      db_input('s114_i_agendaconsulta', 10, $Is114_i_agendaconsulta, true, 'text', 3, 
+      db_input('s114_i_agendaconsulta', 10, $Is114_i_agendaconsulta, true, 'text', 3,
                " onchange='js_pesquisas114_i_agendaconsulta(false);'"
               );
       ?>
@@ -62,9 +62,9 @@ $oRotulo->label("sd23_d_consulta");
     <td nowrap title="<?=@$Ts114_d_data?>">
       <?=@$Ls114_d_data?>
     </td>
-    <td> 
+    <td>
       <?
-      db_inputdata('s114_d_data', @$s114_d_data_dia, @$s114_d_data_mes, @$s114_d_data_ano, 
+      db_inputdata('s114_d_data', @$s114_d_data_dia, @$s114_d_data_mes, @$s114_d_data_ano,
                    true, 'text', 3, ""
                   );
       ?>
@@ -74,7 +74,7 @@ $oRotulo->label("sd23_d_consulta");
     <td nowrap>
       <b>Paciente</b>
     </td>
-    <td> 
+    <td>
       <?
       db_input('z01_nome', 50, '', true, 'text', 3, '');
       ?>
@@ -85,7 +85,7 @@ $oRotulo->label("sd23_d_consulta");
     <td nowrap title="<?=@$Ts114_v_motivo?>">
       <?=@$Ls114_v_motivo?>
     </td>
-    <td> 
+    <td>
       <?
       db_input('s114_v_motivo', 50, $Is114_v_motivo, true, 'text', $db_opcao, "");
       ?>
@@ -95,7 +95,7 @@ $oRotulo->label("sd23_d_consulta");
     <td nowrap title="<?=@$Ts114_i_situacao?>">
       <?=@$Ls114_i_situacao?>
     </td>
-    <td> 
+    <td>
       <?
       $aX = array('1'=>'Cancelado', '2'=>'Faltou', '3'=>'Outros');
       db_select('s114_i_situacao', $aX, true, $db_opcao, "");
@@ -104,12 +104,12 @@ $oRotulo->label("sd23_d_consulta");
   </tr>
 </table>
   <p>
-<input name="<?=($db_opcao == 1 ? "incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "alterar" : "excluir"))?>" 
-  type="submit" id="db_opcao" 
-  value="<?=($db_opcao == 1 ? "Incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "Alterar" : "Excluir"))?>" 
+<input name="<?=($db_opcao == 1 ? "incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "alterar" : "excluir"))?>"
+  type="submit" id="db_opcao"
+  value="<?=($db_opcao == 1 ? "Incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "Alterar" : "Excluir"))?>"
   <?=($db_botao == false ? "disabled" : "")?>>
-<? 
-if($db_opcao != 1) { 
+<?
+if($db_opcao != 1) {
 ?>
   <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();">
 <?
@@ -123,32 +123,32 @@ if($db_opcao != 1) {
 <script>
 
 function js_fechar() {
-  
+
   iIdJanela = document.getElementById('iIdJanela').value;
   if (iIdJanela == '') {
     parent.db_iframe_agendamento.hide();
   } else {
     eval('parent.db_iframe_agendamento'+iIdJanela+'.hide()');
   }
-  
+
 }
 
 function js_pesquisas114_i_agendaconsulta(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo', 'db_iframe_agendamentos', 'func_agendamentos.php?funcao_js=parent.js_mostraagendamentos1|sd23_i_codigo|sd23_d_consulta', 'Pesquisa', true);
+    js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_agendamentos', 'func_agendamentos.php?funcao_js=parent.js_mostraagendamentos1|sd23_i_codigo|sd23_d_consulta', 'Pesquisa', true);
   }else{
-     if(document.form1.s114_i_agendaconsulta.value != ''){ 
-        js_OpenJanelaIframe('top.corpo', 'db_iframe_agendamentos', 'func_agendamentos.php?pesquisa_chave='+document.form1.s114_i_agendaconsulta.value+'&funcao_js=parent.js_mostraagendamentos', 'Pesquisa', false);
+     if(document.form1.s114_i_agendaconsulta.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_agendamentos', 'func_agendamentos.php?pesquisa_chave='+document.form1.s114_i_agendaconsulta.value+'&funcao_js=parent.js_mostraagendamentos', 'Pesquisa', false);
      }else{
-       document.form1.sd23_d_consulta.value = ''; 
+       document.form1.sd23_d_consulta.value = '';
      }
   }
 }
 function js_mostraagendamentos(chave, erro){
-  document.form1.sd23_d_consulta.value = chave; 
-  if(erro==true){ 
-    document.form1.s114_i_agendaconsulta.focus(); 
-    document.form1.s114_i_agendaconsulta.value = ''; 
+  document.form1.sd23_d_consulta.value = chave;
+  if(erro==true){
+    document.form1.s114_i_agendaconsulta.focus();
+    document.form1.s114_i_agendaconsulta.value = '';
   }
 }
 function js_mostraagendamentos1(chave1, chave2){
@@ -157,7 +157,7 @@ function js_mostraagendamentos1(chave1, chave2){
   db_iframe_agendamentos.hide();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo', 'db_iframe_agendaconsultaanula', 'func_agendaconsultaanula.php?funcao_js=parent.js_preenchepesquisa|s114_i_codigo', 'Pesquisa', true);
+  js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_agendaconsultaanula', 'func_agendaconsultaanula.php?funcao_js=parent.js_preenchepesquisa|s114_i_codigo', 'Pesquisa', true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_agendaconsultaanula.hide();

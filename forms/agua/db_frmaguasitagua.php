@@ -9,7 +9,7 @@ $claguasitagua->rotulo->label();
     <td nowrap title="<?=@$Tx08_codsitagua?>">
        <?=@$Lx08_codsitagua?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('x08_codsitagua',4,$Ix08_codsitagua,true,'text',3,"")
 ?>
@@ -19,7 +19,7 @@ db_input('x08_codsitagua',4,$Ix08_codsitagua,true,'text',3,"")
     <td nowrap title="<?=@$Tx08_nomesituacao?>">
        <?=@$Lx08_nomesituacao?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('x08_nomesituacao',30,$Ix08_nomesituacao,true,'text',$db_opcao,"")
 ?>
@@ -32,7 +32,7 @@ db_input('x08_nomesituacao',30,$Ix08_nomesituacao,true,'text',$db_opcao,"")
 </form>
 <script>
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_aguasitagua','func_aguasitagua.php?funcao_js=parent.js_preenchepesquisa|x08_codsitagua','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_aguasitagua','func_aguasitagua.php?funcao_js=parent.js_preenchepesquisa|x08_codsitagua','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_aguasitagua.hide();

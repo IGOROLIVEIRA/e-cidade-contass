@@ -181,7 +181,7 @@ if ($clconrelinfo->numrows > 0) {
 
 $sSelInstit   = str_replace('-', ', ', $db_selinstit);
 $anousu       = db_getsession("DB_anousu");
-$xinstit      = split("-", $db_selinstit);
+$xinstit      = explode("-", $db_selinstit);
 
 $valor_outras_obrigacoes_ex_anterior           = $clconrelinfo->getValorVariavel(475, $sSelInstit,'1Q');
 $valor_obrigacoes_nao_integ_dcprev_ex_anterior = $clconrelinfo->getValorVariavel(476, $sSelInstit,'1Q');
@@ -217,8 +217,8 @@ if (strlen($dtini) > 5 && strlen($dtfin) > 5) {
 }
 
 $dt = data_periodo($anousu, $periodo);
-$dt_ini = split("-", $dt [0]);
-$dt_fin = split("-", $dt [1]);
+$dt_ini = explode("-", $dt [0]);
+$dt_fin = explode("-", $dt [1]);
 
 $period = strtoupper(db_mes("01")) . " A " . strtoupper(db_mes($dt_fin [1])) . " DE " . $anousu;
 
@@ -262,7 +262,7 @@ if ($usa_datas == true) {
 }
 
 if ($usa_datas == true) {
-  $dt = split('-', $dtfin); // mktime -- (mes,dia,ano)
+  $dt = explode('-', $dtfin); // mktime -- (mes,dia,ano)
   $dtini_ant = date('Y-m-d', mktime(0, 0, 0, $dt [1], $dt [2] - 364, $dt [0]));
 }
 

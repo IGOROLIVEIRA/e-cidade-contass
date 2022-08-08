@@ -66,7 +66,7 @@ parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 
       if ($clcgmcorreto->erro_status == '1') {
 
-        $sec = split("XX",$segundo);
+        $sec = explode("XX",$segundo);
         for ($i = 0; $i < sizeof($sec); $i++) {
 
           if ($sec[$i] == $principal) {

@@ -64,11 +64,11 @@ if(isset($incluir)){
         continue;
       }
       $poslinha = substr($poslinha,1,strlen($poslinha));
-      $arr_poslinha = split($separador,$poslinha);
+      $arr_poslinha = explode($separador,$poslinha);
       $datas = $arr_poslinha[0];
       $valor = $arr_poslinha[1];
 
-      $arr_datas = split("/",$datas);
+      $arr_datas = explode("/",$datas);
       $datas = $arr_datas[2]."-".$arr_datas[1]."-".$arr_datas[0];
       $valor = str_replace(",",".",$valor);
 

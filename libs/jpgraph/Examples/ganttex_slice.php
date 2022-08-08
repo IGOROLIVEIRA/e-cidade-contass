@@ -1,8 +1,8 @@
 <?php
 // $Id: ganttex_slice.php,v 1.1 2006/03/20 11:56:44 dbrogerio Exp $
 // Gantt example with sunday week start and only shows a partial graph
-include ("../jpgraph.php");
-include ("../jpgraph_gantt.php");
+include (__DIR__ . "/../jpgraph.php");
+include (__DIR__ . "/../jpgraph_gantt.php");
 
 // Setup Gantt graph
 $graph = new GanttGraph(0,0,'auto');

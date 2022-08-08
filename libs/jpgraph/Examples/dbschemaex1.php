@@ -10,7 +10,7 @@
 //              Copyright (C) 2001,2002 Johan Persson
 // Note:        The actual drawing of the tables are semi-automatically
 //              but you can easily adjust the individual tables position
-//              with the 'tblposadj' array. 
+//              with the 'tblposadj' array.
 //
 //========================================================================
 */
@@ -40,7 +40,7 @@ class Driver {
     var $iymax,$ixmax;
     var $iwidth,$iheight;
 
-    function Driver() {
+    function __construct() {
 
 	// Define Image size and coordinate grid space to work within
 	$this->iwidth = 600;
@@ -66,8 +66,8 @@ class Driver {
 
     function Run() {
 
-	$leftm=1.5;	// Left margin (for table schemes) 
-	$topm=5;	// Top margin (for table schemes) 
+	$leftm=1.5;	// Left margin (for table schemes)
+	$topm=5;	// Top margin (for table schemes)
 	$tblwidth=15;	// Individual table width
 	$tlo=1;		// Offset for top line
 
@@ -104,7 +104,7 @@ class Driver {
 	// Add a version and date
 	$tt->SetFillColor('yellow');
 	$tt->SetFont(FF_FONT1,FS_NORMAL,10);
-	$tt->Set("Generated: ".date("ymd H:i",time()),1,$this->iymax*0.96,15); 
+	$tt->Set("Generated: ".date("ymd H:i",time()),1,$this->iymax*0.96,15);
 	$tt->Stroke($this->img,$this->iscale);
 
 	$this->ig->Stroke();
@@ -113,6 +113,3 @@ class Driver {
 
 $driver = new Driver();
 $driver->Run();
-
-?>
-

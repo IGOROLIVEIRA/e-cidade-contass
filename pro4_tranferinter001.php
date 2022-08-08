@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -59,7 +59,7 @@ $clrotulo->label("nome");
 db_postmemory($HTTP_POST_VARS);
 
 if (isset($incluir)){
-  
+
   db_inicio_transacao();
   $sqlerro=false;
   $data= date("Y-m-d",db_getsession("DB_datausu"));
@@ -72,10 +72,10 @@ if (isset($incluir)){
   $erro_msg = $clproctransferint->erro_msg;
   if ($clproctransferint->erro_status==0){
     $sqlerro=true;
-  } 
-  
+  }
+
   $codigo = $clproctransferint->p88_codigo;
-  
+
   if ($sqlerro==false){
     $clproctransferintusu->p89_codtransferint=$codigo;
     $clproctransferintusu->p89_usuario=$p89_usuario ;
@@ -83,17 +83,17 @@ if (isset($incluir)){
     $erro_msg = $clproctransferintusu->erro_msg;
     if ($clproctransferintusu->erro_status==0){
       $sqlerro=true;
-    } 
+    }
   }
   if ($sqlerro==false){
-  
+
   $vt=$HTTP_POST_VARS;
   $ta=sizeof($vt);
   reset($vt);
   for($i=0; $i<$ta; $i++){
     $chave=key($vt);
     if(substr($chave,0,5)=="CHECK"){
-      $dados=split("_",$chave); 
+      $dados=split("_",$chave);
       $result1=$clprotprocesso->sql_record($clprotprocesso->sql_query_file($dados[1],"p58_codandam"));
       db_fieldsmemory($result1,0);
       $clproctransferintand->p87_codtransferint=$codigo;
@@ -102,7 +102,7 @@ if (isset($incluir)){
       $erro_msg = $clproctransferintand->erro_msg;
       if ($clproctransferintand->erro_status==0){
 	$sqlerro=true;
-      } 
+      }
     }
     $proximo=next($vt);
   }
@@ -117,27 +117,27 @@ if (isset($incluir)){
 <meta http-equiv="Expires" CONTENT="0">
 <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
 <script>
-function js_marca(obj){ 
+function js_marca(obj){
    var OBJ = document.form1;
    for(i=0;i<OBJ.length;i++){
      if(OBJ.elements[i].type == 'checkbox'){
-       OBJ.elements[i].checked = !(OBJ.elements[i].checked == true);            
+       OBJ.elements[i].checked = !(OBJ.elements[i].checked == true);
      }
    }
    return false;
 }
-</script>  
+</script>
 <style>
   .cabec {
   text-align: center;
   color: darkblue;
-  background-color:#aacccc;   
-  font-weight:bold;    
+  background-color:#aacccc;
+  font-weight:bold;
   border-color: darkblue;
   }
   .corpo {
   color: black;
-  background-color:#ccddcc;       
+  background-color:#ccddcc;
   }
 </style>
 <link href="estilos.css" rel="stylesheet" type="text/css">
@@ -150,7 +150,7 @@ function js_marca(obj){
     <td>
       <fieldset>
         <legend><b> Dados do Despacho interno</b></legend>
-        <table>  
+        <table>
   <tr>
     <td nowrap title="<?=@$Tp88_despacho?>"align='left' colspan=2>
        <?=@$Lp88_despacho?>
@@ -165,9 +165,9 @@ db_textarea('p88_despacho',0,80,$Ip88_despacho,true,'text',1,"")
   </td>
   <td>
   <?
-   $sqlusu = "select 
+   $sqlusu = "select
                      U.id_usuario,nome
-	      from db_usuarios U 
+	      from db_usuarios U
 	             inner join db_depusu D on U.id_usuario  = D.id_usuario
    	      where  D.coddepto = ".db_getsession("DB_coddepto")."
 	      order by nome ";
@@ -182,7 +182,7 @@ db_textarea('p88_despacho',0,80,$Ip88_despacho,true,'text',1,"")
    ?>
    </td>
   </tr>
-												
+
   <tr>
     <td nowrap title="<?=@$Tp88_publico?>" >
        <?=@$Lp88_publico?>
@@ -191,7 +191,7 @@ db_textarea('p88_despacho',0,80,$Ip88_despacho,true,'text',1,"")
 	       <?
                $x = array("t"=>"Sim","f"=>"Não");
                db_select('p88_publico',$x,true,1,"");
-	       
+
                ?>
     </td>
   </tr>
@@ -233,30 +233,30 @@ db_textarea('p88_despacho',0,80,$Ip88_despacho,true,'text',1,"")
 					  inner join cgm on p58_numcgm = z01_numcgm
 					  inner join procandam on p58_codandam = p61_codandam
 					  left join arqproc on arqproc.p68_codproc = protprocesso.p58_codproc
-				   where ( p61_coddepto = ".db_getsession("DB_coddepto").")  ) as x																	                   
+				   where ( p61_coddepto = ".db_getsession("DB_coddepto").")  ) as x
 				   where   x.p68_codproc is null order by p58_codproc desc ";
 	     $result = db_query($sql);
        $numrows = pg_numrows($result);
-       if ($numrows > 0) { 
+       if ($numrows > 0) {
        } else {
          echo "<br><br><b>Sem Processos!!</b>";
        }
        $usuario = db_getsession("DB_id_usuario");
-       
+
        for($i=0; $i<$numrows; $i++) {
-         
+
 	       if ($i==0){
            echo "<br><br>";
 	       }
          db_fieldsmemory($result,$i);
 	       $passou = true;
-         $sql_proc = "select  p63_codproc,p63_codtran 
-	                      from proctransferproc 
+         $sql_proc = "select  p63_codproc,p63_codtran
+	                      from proctransferproc
                        where p63_codproc = $p58_codproc";
-          
+
          $result_proc = pg_exec($sql_proc);
          if (pg_numrows ($result_proc) != 0) {
- 	         
+
            for ($yy=0;$yy<pg_numrows($result_proc);$yy++){
 
 	           db_fieldsmemory($result_proc,$yy);
@@ -267,23 +267,23 @@ db_textarea('p88_despacho',0,80,$Ip88_despacho,true,'text',1,"")
 	           }
 	         }
  	       }
-	       
+
  	       if ($passou==true){
-	         
+
  	         $result_andam = $clprocandamint->sql_record($clprocandamint->sql_query_file(null,"p78_sequencial","p78_data desc ,p78_hora desc limit 1 ","p78_codandam=$p61_codandam"));
-	         $numrows_andam = $clprocandamint->numrows; 
-	         
+	         $numrows_andam = $clprocandamint->numrows;
+
 	         if ($numrows_andam!=0){
 	           $result_trand = $clproctransferintand->sql_record($clproctransferintand->sql_query_file(null,"p87_codtransferint","p87_codtransferint desc limit 1","p87_codandam=$p61_codandam "));
              $numrows_trand = $clproctransferintand->numrows;
 	           if ($numrows_trand!=0){
 	             db_fieldsmemory($result_trand,0);
 	             $result_intand = $clprocandamintand->sql_record($clprocandamintand->sql_query_file(null,"*",null,"p86_codandam=$p61_codandam and p86_codtrans=$p87_codtransferint"));
-               $numrows_intand = $clprocandamintand->numrows; 
+               $numrows_intand = $clprocandamintand->numrows;
                if ($numrows_intand != 0 ){
                  db_fieldsmemory($result_andam,0);
                  $result_usu = $clprocandamint->sql_record($clprocandamint->sql_query_file(null,"*","p78_data desc,p78_hora desc limit 1 ","p78_codandam=$p61_codandam and p78_usuario=$usuario and p78_sequencial=$p78_sequencial"));
-                 $numrows_usu =   $clprocandamint->numrows; 
+                 $numrows_usu =   $clprocandamint->numrows;
                  if ($numrows_usu!=0){
               		 echo"
               		   <tr>
@@ -309,7 +309,7 @@ db_textarea('p88_despacho',0,80,$Ip88_despacho,true,'text',1,"")
               		   </tr>";
         	       }
           	   } else {
-		             $result_usudes = $clproctransferintusu->sql_record($clproctransferintusu->sql_query_usu(null,"*",null,"p89_codtransferint=$p87_codtransferint")); 
+		             $result_usudes = $clproctransferintusu->sql_record($clproctransferintusu->sql_query_usu(null,"*",null,"p89_codtransferint=$p87_codtransferint"));
 		             db_fieldsmemory($result_usudes,0);
             		 echo"
             		   <tr>
@@ -327,9 +327,9 @@ db_textarea('p88_despacho',0,80,$Ip88_despacho,true,'text',1,"")
 	   $result_trans=$clproctransferintand->sql_record($clproctransferintand->sql_query_file(null,"*",null,"p87_codandam=$p61_codandam"));
 	   $numrows_trans=$clproctransferintand->numrows;
 	   if ($numrows_trans!=0){
-	   
+
 	     db_fieldsmemory($result_trans,0);
-	     $result_usudes = $clproctransferintusu->sql_record($clproctransferintusu->sql_query_usu(null,"*",null,"p89_codtransferint=$p87_codtransferint")); 
+	     $result_usudes = $clproctransferintusu->sql_record($clproctransferintusu->sql_query_usu(null,"*",null,"p89_codtransferint=$p87_codtransferint"));
 	     db_fieldsmemory($result_usudes,0);
 	     echo"
 	       <tr>
@@ -355,14 +355,14 @@ db_textarea('p88_despacho',0,80,$Ip88_despacho,true,'text',1,"")
 		  <td  class='corpo'  align='center' title='$p58_numeracao'><label style=\"cursor: hand\"><small>$p58_numeracao</small></label></td>
 	       </tr>";
 	   }
-	   
+
 	   }
 	 }else{
 	   $result_trans=$clproctransferintand->sql_record($clproctransferintand->sql_query_file(null,"*",null,"p87_codandam=$p61_codandam"));
 	   $numrows_trans=$clproctransferintand->numrows;
 	   if ($numrows_trans!=0){
 	     db_fieldsmemory($result_trans,0);
-	     $result_usudes = $clproctransferintusu->sql_record($clproctransferintusu->sql_query_usu(null,"*",null,"p89_codtransferint=$p87_codtransferint")); 
+	     $result_usudes = $clproctransferintusu->sql_record($clproctransferintusu->sql_query_usu(null,"*",null,"p89_codtransferint=$p87_codtransferint"));
 	     db_fieldsmemory($result_usudes,0);
 	     echo"
 	       <tr>
@@ -391,8 +391,8 @@ db_textarea('p88_despacho',0,80,$Ip88_despacho,true,'text',1,"")
 	   }
          }
        } echo"
-	   </table>";	        
-       
+	   </table>";
+
 
   ?>
   </td>
@@ -406,18 +406,18 @@ function js_pesquisa_usuario(mostra){
   if(mostra==true){
     js_OpenJanelaIframe('','db_iframe_db_usuarios','func_db_usuarios.php?funcao_js=parent.js_mostradb_usuarios1|id_usuario|nome','Pesquisa',true);
   }else{
-     if(document.form1.p89_usuario.value != ''){ 
+     if(document.form1.p89_usuario.value != ''){
         js_OpenJanelaIframe('','db_iframe_db_usuarios','func_db_usuarios.php?pesquisa_chave='+document.form1.p89_usuario.value+'&funcao_js=parent.js_mostradb_usuarios','Pesquisa',false);
      }else{
-       document.form1.nome_dest.value = ''; 
+       document.form1.nome_dest.value = '';
      }
   }
 }
 function js_mostradb_usuarios(chave,erro){
-  document.form1.nome_dest.value = chave; 
-  if(erro==true){ 
-    document.form1.p89_usuario.focus(); 
-    document.form1.p89_usuario.value = ''; 
+  document.form1.nome_dest.value = chave;
+  if(erro==true){
+    document.form1.p89_usuario.focus();
+    document.form1.p89_usuario.value = '';
   }
 }
 function js_mostradb_usuarios1(chave1,chave2){
@@ -432,8 +432,8 @@ if (isset($incluir)){
     if($sqlerro==true){
       echo "<script> document.form1.".$clproctransferint->erro_campo.".style.backgroundColor='#99A9AE';</script>";
       echo "<script> document.form1.".$clproctransferint->erro_campo.".focus();</script>";
-    }else{ 
-      echo"<script>top.corpo.location.href='pro4_tranferinter001.php';</script>";
+    }else{
+      echo"<script>CurrentWindow.corpo.location.href='pro4_tranferinter001.php';</script>";
     }
 }
 ?>

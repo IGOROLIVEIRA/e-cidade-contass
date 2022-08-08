@@ -43,8 +43,8 @@ parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 $DB_DATACALC = mktime(0,0,0,substr($db_datausu,5,2),substr($db_datausu,8,2),substr($db_datausu,0,4));
 
 $sTiposDebitos            = $tipos;
-$aTipoDebitosSelecionados = split(",",$tipos);
-$aTipoDebitos             = split(",",$tipostodos);
+$aTipoDebitosSelecionados = explode(",",$tipos);
+$aTipoDebitos             = explode(",",$tipostodos);
 
 $sInfo  = "";
 $sInfo1 = "";

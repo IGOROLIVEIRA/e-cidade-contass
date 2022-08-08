@@ -43,105 +43,108 @@ $rotulo = new rotulocampo();
 $rotulo->label("z01_nome");
 $rotulo->label("z01_cgccpf");
 
+//ini_set("display_errors", "on");
+
 ?>
 <html>
 
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-  <link href="estilos.css" rel="stylesheet" type="text/css">
-  <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
-  <script>
-    function js_mascara(evt) {
-      var evt;
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <link href="estilos.css" rel="stylesheet" type="text/css">
+    <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+    <script>
+        function js_mascara(evt) {
+            var evt;
 
-      if (!evt) {
-        if (window.event) {
-          evt = window.event;
-        } else {
-          evt = ""
-        };
-      };
+            if (!evt) {
+                if (window.event) {
+                    evt = window.event;
+                } else {
+                    evt = ""
+                };
+            };
 
-      if ((evt.charCode > 46 && evt.charCode < 58) || evt.charCode == 0) {
-        return true;
-      } else {
-        return false;
-      }
-    }
-  </script>
+            if ((evt.charCode > 46 && evt.charCode < 58) || evt.charCode == 0) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    </script>
 </head>
 
 <body bgcolor="#CCCCCC" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onload="a=1">
-  <form name="form2" class="container" method="post" action="">
-    <fieldset>
-      <legend>Pesquisa de Empenhos</legend>
-      <table border="0" class="form-container">
+    <form name="form2" class="container" method="post" action="">
+        <fieldset>
+            <legend>Pesquisa de Empenhos</legend>
+            <table border="0" class="form-container">
+                <tr>
+                    <td>
+                        <label for="chave_e60_codemp">
+                            <?= $Le60_codemp; ?>
+                        </label>
+                    </td>
+                    <td>
+                        <?php db_input("e60_codemp", 14, $Ie60_codemp, true, "text", 4, "onKeyPress='return js_mascara(event);'", "chave_e60_codemp"); ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="chave_e60_numemp">
+                            <?= $Le60_numemp; ?>
+                        </label>
+                    </td>
+                    <td>
+                        <?php db_input("e60_numemp", 14, $Ie60_numemp, true, "text", 4, "", "chave_e60_numemp"); ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="chave_z01_nome">
+                            <?= $Lz01_nome; ?>
+                        </label>
+                    </td>
+                    <td>
+                        <?php db_input("z01_nome", 45, "", true, "text", 4, "", "chave_z01_nome"); ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="">
+                            <?= $Lz01_cgccpf; ?>
+                        </label>
+                    </td>
+                    <td>
+                        <?php db_input("z01_cgccpf", 14, "", true, "text", 4, "", "chave_z01_cgccpf"); ?>
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+        <table style="margin: 0 auto;">
+            <tr>
+                <td align="center">
+                    <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar">
+                    <input name="limpar" type="reset" id="limpar" value="Limpar">
+                    <input name="Fechar" type="button" id="fechar" value="Fechar" onClick="parent.db_iframe_empempenho.hide();">
+                </td>
+            </tr>
+        </table>
+    </form>
+    <table class="container">
         <tr>
-          <td>
-            <label for="chave_e60_codemp">
-              <?= $Le60_codemp; ?>
-            </label>
-          </td>
-          <td>
-            <?php db_input("e60_codemp", 14, $Ie60_codemp, true, "text", 4, "onKeyPress='return js_mascara(event);'", "chave_e60_codemp"); ?>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <label for="chave_e60_numemp">
-              <?= $Le60_numemp; ?>
-            </label>
-          </td>
-          <td>
-            <?php db_input("e60_numemp", 14, $Ie60_numemp, true, "text", 4, "", "chave_e60_numemp"); ?>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <label for="chave_z01_nome">
-              <?= $Lz01_nome; ?>
-            </label>
-          </td>
-          <td>
-            <?php db_input("z01_nome", 45, "", true, "text", 4, "", "chave_z01_nome"); ?>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <label for="">
-              <?= $Lz01_cgccpf; ?>
-            </label>
-          </td>
-          <td>
-            <?php db_input("z01_cgccpf", 14, "", true, "text", 4, "", "chave_z01_cgccpf"); ?>
-          </td>
-        </tr>
-      </table>
-    </fieldset>
-    <table style="margin: 0 auto;">
-      <tr>
-        <td align="center">
-          <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar">
-          <input name="limpar" type="reset" id="limpar" value="Limpar">
-          <input name="Fechar" type="button" id="fechar" value="Fechar" onClick="parent.db_iframe_empempenho.hide();">
-        </td>
-      </tr>
-    </table>
-  </form>
-  <table class="container">
-    <tr>
-      <td align="center" valign="top">
-        <?php
-        $campos = "e60_numemp, e60_codemp, z01_nome,si172_nrocontrato,
+            <td align="center" valign="top">
+                <?php
+                $campos = "e60_numemp, e60_codemp, z01_nome,si172_nrocontrato,
         si172_datafinalvigencia,
         si174_novadatatermino
         ";
 
-        $filtroempelemento = "";
-        if (!isset($pesquisa_chave)) {
-          $campos = "empempenho.e60_numemp,
+                $filtroempelemento = "";
+                if (!isset($pesquisa_chave)) {
+                    $campos = "empempenho.e60_numemp,
           empempenho.e60_codemp,
           empempenho.e60_anousu,
+          e61_autori,
           empempenho.e60_numcgm,
           case when ac16_numeroacordo is null then si172_nrocontrato::varchar else (ac16_numeroacordo || '/' || ac16_anousu)::varchar end as si172_nrocontrato,
           case when (select ac18_datafim from acordovigencia where ac18_acordoposicao in (select min(ac26_sequencial) from acordoposicao where ac26_acordo = acordo.ac16_sequencial) and ac18_ativo  = true) is null then si172_datafinalvigencia else (select ac18_datafim from acordovigencia where ac18_acordoposicao in (select min(ac26_sequencial) from acordoposicao where ac26_acordo = acordo.ac16_sequencial) and ac18_ativo  = true) end as si172_datafinalvigencia,
@@ -158,6 +161,11 @@ $rotulo->label("z01_cgccpf");
           ";
           $campos = " distinct " . $campos;
           $dbwhere = " e60_instit = " . db_getsession("DB_instit");
+
+          if ($inclusaoordemcompra == true) {
+
+            $dbwhere .= " and e60_vlremp >  (e60_vlranu + e60_vlrliq)";
+          }
 
           if (isset($pegaAnousu)) {
             $dbwhere .= " and e60_anousu = " . db_getsession("DB_anousu");
@@ -292,11 +300,48 @@ $rotulo->label("z01_cgccpf");
             }
 
 
-
             $sql = $clempempenho->sql_query(null, $campos, null, $whereRelCompra);
           }
 
+          if ($inclusaoordemcompra == true) {
 
+            $campos = "";
+
+            $campos = "empempenho.e60_numemp,
+            empempenho.e60_codemp,
+            empempenho.e60_anousu,
+            e61_autori,
+            empempenho.e60_numcgm,
+            case when ac16_numeroacordo is null then si172_nrocontrato::varchar else (ac16_numeroacordo || '/' || ac16_anousu)::varchar end as si172_nrocontrato,
+            case when (select ac18_datafim from acordovigencia where ac18_acordoposicao in (select min(ac26_sequencial) from acordoposicao where ac26_acordo = acordo.ac16_sequencial) and ac18_ativo  = true) is null then si172_datafinalvigencia else (select ac18_datafim from acordovigencia where ac18_acordoposicao in (select min(ac26_sequencial) from acordoposicao where ac26_acordo = acordo.ac16_sequencial) and ac18_ativo  = true) end as si172_datafinalvigencia,
+            case when ac16_datafim is null then si174_novadatatermino else ac16_datafim end as si174_novadatatermino,
+            empempenho.e60_emiss as DB_e60_emiss,
+            cgm.z01_nome,
+            cgm.z01_cgccpf,
+            empempenho.e60_coddot,
+            e60_vlremp,
+            e60_vlrliq,
+            e60_vlrpag,
+            e60_vlranu,
+            RPAD(SUBSTR(convconvenios.c206_objetoconvenio,0,47),50,'...') AS c206_objetoconvenio
+            ";
+            $campos = " distinct " . $campos;
+            $dbwhere = "";
+            $dbwhere = " WHERE (e60_vlremp - e60_vlranu) >
+            (SELECT case when sum(m52_valor)  is null then 0 else sum(m52_valor) end as totalemordemdecompra
+             FROM matordemitem
+             WHERE m52_numemp = e60_numemp) -
+            (SELECT case when sum(m36_vrlanu) is null then 0 else sum(m36_vrlanu) end AS totalemordemdecompraanulado
+             FROM matordemitem
+             INNER JOIN matordemitemanu ON m36_matordemitem = m52_codlanc
+             WHERE m52_numemp = e60_numemp)
+            and e60_vlremp > e60_vlranu ";
+            $dbwhere .= " and e60_instit = " . db_getsession("DB_instit") . " order by e60_numemp desc";
+
+
+
+            $sql = $clempempenho->sql_query_inclusaoempenho(null, $campos, null, $dbwhere);
+          }
           $result = $clempempenho->sql_record($sql);
         ?>
 
@@ -318,6 +363,8 @@ $rotulo->label("z01_cgccpf");
         } else {
 
           if ($pesquisa_chave != null && $pesquisa_chave != "") {
+
+
 
             if (isset($lPesquisaPorCodigoEmpenho)) {
 
@@ -414,7 +461,54 @@ $rotulo->label("z01_cgccpf");
               //               UNION
               //               SELECT e69_numemp FROM empnota)
               //               and empempenho.e60_numemp = $pesquisa_chave ";
+
+
+              //$where .= "empempenho.e60_numemp = $pesquisa_chave and e60_vlremp >  (e60_vlranu + e60_vlrliq)";
               $sSql = $clempempenho->sql_query($pesquisa_chave, "*", null, $where, $filtroempelemento);
+            }
+
+            if ($inclusaoordemcompra == true) {
+
+              if ($codemp == true) {
+                $dbwhere = " WHERE empempenho.e60_codemp = '$pesquisa_chave' ";
+              }
+
+              if ($numemp == true) {
+                $dbwhere = " WHERE empempenho.e60_numemp = $pesquisa_chave ";
+              }
+
+              $campos = "";
+
+              $campos = "empempenho.e60_numemp,
+              empempenho.e60_codemp,
+              empempenho.e60_anousu,
+              e61_autori,
+              empempenho.e60_numcgm,
+              case when ac16_numeroacordo is null then si172_nrocontrato::varchar else (ac16_numeroacordo || '/' || ac16_anousu)::varchar end as si172_nrocontrato,
+              case when (select ac18_datafim from acordovigencia where ac18_acordoposicao in (select min(ac26_sequencial) from acordoposicao where ac26_acordo = acordo.ac16_sequencial) and ac18_ativo  = true) is null then si172_datafinalvigencia else (select ac18_datafim from acordovigencia where ac18_acordoposicao in (select min(ac26_sequencial) from acordoposicao where ac26_acordo = acordo.ac16_sequencial) and ac18_ativo  = true) end as si172_datafinalvigencia,
+              case when ac16_datafim is null then si174_novadatatermino else ac16_datafim end as si174_novadatatermino,
+              empempenho.e60_emiss as DB_e60_emiss,
+              cgm.z01_nome,
+              cgm.z01_cgccpf,
+              empempenho.e60_coddot,
+              e60_vlremp,
+              e60_vlrliq,
+              e60_vlrpag,
+              e60_vlranu,
+              RPAD(SUBSTR(convconvenios.c206_objetoconvenio,0,47),50,'...') AS c206_objetoconvenio
+              ";
+              $campos = " distinct " . $campos;
+              $dbwhere .= " and (e60_vlremp - e60_vlranu) >
+              (SELECT case when sum(m52_valor)  is null then 0 else sum(m52_valor) end as totalemordemdecompra
+              FROM matordemitem
+              WHERE m52_numemp = e60_numemp) -
+             (SELECT case when sum(m36_vrlanu) is null then 0 else sum(m36_vrlanu) end AS totalemordemdecompraanulado
+              FROM matordemitem
+             INNER JOIN matordemitemanu ON m36_matordemitem = m52_codlanc
+             WHERE m52_numemp = e60_numemp)
+            and e60_vlremp > e60_vlranu ";
+              $dbwhere .= " and e60_instit = " . db_getsession("DB_instit") . " order by e60_numemp desc";
+              $sSql = $clempempenho->sql_query_inclusaoempenho(null, $campos, null, $dbwhere);
             }
 
             $result = $clempempenho->sql_record($sSql);

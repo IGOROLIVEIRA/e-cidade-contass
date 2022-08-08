@@ -1,28 +1,28 @@
 <?PHP
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once ("libs/db_stdlib.php");
@@ -47,14 +47,14 @@ $clrotulo->label("c50_descr");
 $clrotulo->label("k17_hist");
 
 $db_opcao = 1;
-db_app::load("scripts.js, 
-              strings.js, 
-              prototype.js, 
+db_app::load("scripts.js,
+              strings.js,
+              prototype.js,
               estilos.css,
-              datagrid.widget.js, 
-              grid.style.css, 
-              DBLancador.widget.js, 
-              DBAncora.widget.js, 
+              datagrid.widget.js,
+              grid.style.css,
+              DBLancador.widget.js,
+              DBAncora.widget.js,
               dbtextField.widget.js
          ");
 ?>
@@ -104,11 +104,11 @@ function js_emite(){
 <body style="margin-top: 30px; background-color: #CCCCCC;">
 <center>
   <form id="form1" name="form1">
-  
+
     <div style="width: 600px;">
-    
+
       <fieldset style="width: 100%;" >
-      
+
         <legend><strong>Dados do Slip</strong></legend>
         <table align='left'>
           <tr>
@@ -175,8 +175,8 @@ function js_emite(){
               ?>
             </td>
           </tr>
-          
-          
+
+
           <tr>
             <td align=left>
               <strong>Processo Administrativo:</strong>
@@ -184,29 +184,29 @@ function js_emite(){
             <td colspan="3">
               <?
                 db_input('k145_numeroprocesso',10, null ,true,'text', $db_opcao);
-              ?>            
+              ?>
             </td>
-          </tr>          
-          
-          
+          </tr>
+
+
         </table>
       </fieldset>
-      
-      
-      
+
+
+
         <div id="divLancadorCGM"> </div>
-        
-      
+
+
       <p align="center">
         <input  name="emite2" id="emite2" type="button" value="Consultar" onclick="js_emite();" >
       </p>
-      
-      
-      
-    
-    
+
+
+
+
+
     </div>
-    
+
   </form>
 </center>
 <?
@@ -232,11 +232,11 @@ oFieldsetLancador.style.width = "100%";
 //---slip 01
 function js_pesquisak17_codigo(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_slip','func_slip.php?funcao_js=parent.js_mostraslip1|k17_codigo','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_slip','func_slip.php?funcao_js=parent.js_mostraslip1|k17_codigo','Pesquisa',true);
   }else{
     slip01 = new Number(document.form1.k17_codigo.value);
     if(slip01 != ""){
-       js_OpenJanelaIframe('top.corpo','db_iframe_slip','func_slip.php?pesquisa_chave='+slip01+'&funcao_js=parent.js_mostraslip','Pesquisa',false);
+       js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_slip','func_slip.php?pesquisa_chave='+slip01+'&funcao_js=parent.js_mostraslip','Pesquisa',false);
     }else{
         document.form1.k17_codigo.value='';
     }
@@ -256,11 +256,11 @@ function js_mostraslip1(chave1,chave2){
 //---slip 02
 function js_pesquisak17_codigo02(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_slip','func_slip.php?funcao_js=parent.js_mostraslip12|k17_codigo','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_slip','func_slip.php?funcao_js=parent.js_mostraslip12|k17_codigo','Pesquisa',true);
   }else{
     slip01 = new Number(document.form1.k17_codigo02.value);
     if(slip01 != ""){
-       js_OpenJanelaIframe('top.corpo','db_iframe_slip','func_slip.php?pesquisa_chave='+slip01+'&funcao_js=parent.js_mostraslip2','Pesquisa',false);
+       js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_slip','func_slip.php?pesquisa_chave='+slip01+'&funcao_js=parent.js_mostraslip2','Pesquisa',false);
     }else{
         document.form1.k17_codigo02.value='';
     }
@@ -268,7 +268,7 @@ function js_pesquisak17_codigo02(mostra){
 }
 function js_consulta(pars){
 
-		js_OpenJanelaIframe('top.corpo','db_iframe_slip','cai3_conslip002.php?'+pars,'Pesquisa',true);
+		js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_slip','cai3_conslip002.php?'+pars,'Pesquisa',true);
 
 }
 function js_mostraslip2(chave,erro){
@@ -283,9 +283,9 @@ function js_mostraslip12(chave1,chave2){
 }
 function js_pesquisac50_codhist(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe','func_conhist.php?funcao_js=parent.js_mostrahist1|c50_codhist|c50_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe','func_conhist.php?funcao_js=parent.js_mostrahist1|c50_codhist|c50_descr','Pesquisa',true);
   }else{
-    js_OpenJanelaIframe('top.corpo','db_iframe','func_conhist.php?pesquisa_chave='+document.form1.k17_hist.value+'&funcao_js=parent.js_mostrahist','Pesquisa',false);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe','func_conhist.php?pesquisa_chave='+document.form1.k17_hist.value+'&funcao_js=parent.js_mostrahist','Pesquisa',false);
   }
 }
 function js_mostrahist(chave,erro){

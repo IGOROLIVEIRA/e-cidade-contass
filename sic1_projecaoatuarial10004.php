@@ -62,7 +62,7 @@ if(isset($incluir)){
         if($clprojecaoatuarial10->erro_campo!=""){
             echo "<script> document.form1.".$clprojecaoatuarial10->erro_campo.".style.backgroundColor='#99A9AE';</script>";
             echo "<script> document.form1.".$clprojecaoatuarial10->erro_campo.".focus();</script>";
-            echo "<script> top.corpo.iframe_projecaoatuarial20.location.href='sic1_projecaoatuarial10001.php'</script>";
+            echo "<script> CurrentWindow.corpo.iframe_projecaoatuarial20.location.href='sic1_projecaoatuarial10001.php'</script>";
         };
     }else{
         db_msgbox($erro_msg);
@@ -71,7 +71,7 @@ if(isset($incluir)){
             "<script>
             parent.document.formaba.projecaoatuarial20.disabled=false;
             parent.mo_camada('projecaoatuarial20');
-            top.corpo.iframe_projecaoatuarial20.location.href='sic1_projecaoatuarial20001.php?codigo=".$si168_sequencial."&tipoplano=".$si168_tipoplano."&exercicio=".$si168_exercicio."';
+            CurrentWindow.corpo.iframe_projecaoatuarial20.location.href='sic1_projecaoatuarial20001.php?codigo=".$si168_sequencial."&tipoplano=".$si168_tipoplano."&exercicio=".$si168_exercicio."';
             </script>";
     }
 }

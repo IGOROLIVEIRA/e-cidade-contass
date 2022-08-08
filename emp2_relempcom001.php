@@ -182,28 +182,28 @@ $clempempenho->rotulo->label();
 </table>
 <script>
 
-    top.corpo.iframe_g4.document.getElementById('fieldset_acordo').style.display = 'inline';
-    top.corpo.iframe_g4.document.getElementById('fieldset_tipocom').style.display = 'none';
-    top.corpo.iframe_g4.document.getElementById('fieldset_liclicita').style.display = 'none';
+    CurrentWindow.corpo.iframe_g4.document.getElementById('fieldset_acordo').style.display = 'inline';
+    CurrentWindow.corpo.iframe_g4.document.getElementById('fieldset_tipocom').style.display = 'none';
+    CurrentWindow.corpo.iframe_g4.document.getElementById('fieldset_liclicita').style.display = 'none';
 
-    top.corpo.iframe_g4.document.getElementById('filtrapor').onchange=function(){
-        switch (top.corpo.iframe_g4.document.getElementById('filtrapor').value) {
+    CurrentWindow.corpo.iframe_g4.document.getElementById('filtrapor').onchange=function(){
+        switch (CurrentWindow.corpo.iframe_g4.document.getElementById('filtrapor').value) {
           case 'lic' :
-            top.corpo.iframe_g4.document.getElementById('fieldset_tipocom').style.display = 'none';
-            top.corpo.iframe_g4.document.getElementById('fieldset_acordo').style.display = 'none';
-            top.corpo.iframe_g4.document.getElementById('fieldset_liclicita').style.display = 'inline';
+            CurrentWindow.corpo.iframe_g4.document.getElementById('fieldset_tipocom').style.display = 'none';
+            CurrentWindow.corpo.iframe_g4.document.getElementById('fieldset_acordo').style.display = 'none';
+            CurrentWindow.corpo.iframe_g4.document.getElementById('fieldset_liclicita').style.display = 'inline';
           break;
 
           case 'tipocom' :
-            top.corpo.iframe_g4.document.getElementById('fieldset_tipocom').style.display = 'inline';
-            top.corpo.iframe_g4.document.getElementById('fieldset_acordo').style.display = 'none';
-            top.corpo.iframe_g4.document.getElementById('fieldset_liclicita').style.display = 'none';
+            CurrentWindow.corpo.iframe_g4.document.getElementById('fieldset_tipocom').style.display = 'inline';
+            CurrentWindow.corpo.iframe_g4.document.getElementById('fieldset_acordo').style.display = 'none';
+            CurrentWindow.corpo.iframe_g4.document.getElementById('fieldset_liclicita').style.display = 'none';
           break;
 
           case 'acordo' :
-            top.corpo.iframe_g4.document.getElementById('fieldset_tipocom').style.display = 'none';
-            top.corpo.iframe_g4.document.getElementById('fieldset_acordo').style.display = 'inline';
-            top.corpo.iframe_g4.document.getElementById('fieldset_liclicita').style.display = 'none';
+            CurrentWindow.corpo.iframe_g4.document.getElementById('fieldset_tipocom').style.display = 'none';
+            CurrentWindow.corpo.iframe_g4.document.getElementById('fieldset_acordo').style.display = 'inline';
+            CurrentWindow.corpo.iframe_g4.document.getElementById('fieldset_liclicita').style.display = 'none';
           break;
         }
 

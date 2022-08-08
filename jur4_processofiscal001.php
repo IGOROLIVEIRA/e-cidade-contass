@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 set_time_limit(0);
@@ -67,11 +67,11 @@ db_app::load("strings.js");
 
   .fieldInterno{
     margin-top: 10px;
-    
+
   }
   .botoes{
     margin-top : 10px;
-     
+
   }
 
 </style>
@@ -91,7 +91,7 @@ db_app::load("strings.js");
   <form name="form1" method="post">
     <fieldset style="margin-top: 50px;width: 700px;">
       <legend><b>Relatório de Processos Fiscais</b></legend>
-      
+
       <fieldset class="fieldinterno">
         <legend><b>Arquivo de Remessa </b></legend>
 		      <table border="0" width="100%" >
@@ -113,10 +113,10 @@ db_app::load("strings.js");
 		          <td align="left">
 		           <? db_inputdata("v83_dtgeracao",@$v83_dtgeracao_dia,@$v83_dtgeracao_mes,@$v83_dtgeracao_ano,true,'text', 3);?>
 		          </td>
-		        </tr>        
+		        </tr>
 		      </table>
       </fieldset>
-      
+
 
       <fieldset class="fieldinterno">
         <legend><b>Arquivo de Retorno</b></legend>
@@ -140,7 +140,7 @@ db_app::load("strings.js");
               <td align="left">
                <? db_inputdata("v84_dtarquivo",@$v84_dtarquivo_dia,@$v84_dtarquivo_mes,@$v84_dtarquivo_ano,true,'text', 3);?>
               </td>
-            </tr>        
+            </tr>
           </table>
       </fieldset>
 
@@ -165,21 +165,21 @@ db_app::load("strings.js");
                 <?db_input("iInicialIni",  10, '', true, "text", 3, "");?> <b>à</b>
                 <?db_input("iInicialFim",  10, '', true, "text", 3, "");?>
               </td>
-            </tr>        
+            </tr>
           </table>
       </fieldset>
       <div id='botoes' class="botoes">
 	      <input type="button" id="processarRelatorio"  value="Processar" onclick="js_processaRelatorio();" />
 	      <input type="button" id="pesquisar"    value="Pesquisar" onclick="js_pesquisar();"/>
       </div>
-    </fieldset> 
-    
+    </fieldset>
+
   </form>
-  
-  
+
+
 </center>
 
-<? 
+<?
 db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit"));
 ?>
 </body>
@@ -189,7 +189,7 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsessio
 
 function js_processaRelatorio(){
 
-  var sNomeRemessa = $F('v83_nomearq'); 
+  var sNomeRemessa = $F('v83_nomearq');
   var sDataRemessa = $F('v83_dtgeracao');
   var sNomeRetorno = $F('v84_nomearq');
   var sDataRetorno = $F('v84_dtarquivo');
@@ -200,7 +200,7 @@ function js_processaRelatorio(){
   var iSeqRetorno  = $F('v84_sequencial');
   var sFonte      = "jur2_processofiscal002.php";
   if (sNomeRemessa == '' || sNomeRetorno == '') {
-  
+
     alert('Preencha os Dados para o Relatório.');
     js_pesquisar();
     return false;
@@ -215,16 +215,16 @@ function js_processaRelatorio(){
       sQuery += "&iInicialIni="  + iInicialIni;
       sQuery += "&iInicialFim="  + iInicialFim;
       sQuery += "&iSeqRetorno="  + iSeqRetorno;
-      
+
       jan = window.open(sFonte+sQuery,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
-      jan.moveTo(0,0);  
-  
+      jan.moveTo(0,0);
+
 }
 
 
 function js_pesquisar(){
 
-  js_OpenJanelaIframe('top.corpo','db_iframe_remessaprocessados','func_remessaprocessados.php?funcao_js=parent.js_mostraremessa1|iArqRemessa|v83_nomearq','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_remessaprocessados','func_remessaprocessados.php?funcao_js=parent.js_mostraremessa1|iArqRemessa|v83_nomearq','Pesquisa',true);
 
 
 }

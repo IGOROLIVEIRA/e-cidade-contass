@@ -102,7 +102,7 @@ if(isset($incluir)){
       $chave=key($vt);
       if(substr($chave,0,6)=="linha_"){
         $sqlerro=false;
-	$matri= split("#",$vt[$chave]);
+	$matri= explode("#",$vt[$chave]);
         $q05_histor.=$vir.$matri[0];
 	$vir=",";
       }
@@ -130,7 +130,7 @@ if(isset($incluir)){
       $chave=key($vt);
       if(substr($chave,0,6)=="linha_"){
         $sqlerro=false;
-	$matri= split("#",$vt[$chave]);
+	$matri= explode("#",$vt[$chave]);
         $result55 = $clissvarnotas->sql_record($clissvarnotas->sql_query_file($codigo,"","max(q06_seq) +1 as seq"));
         db_fieldsmemory($result55,0);
         $q06_seq = $seq == ""?"1":$seq;

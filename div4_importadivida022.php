@@ -296,7 +296,7 @@ function js_submit_form(){
 function js_mandadados(tipor,tipdes, oProcessos){
 
     //as variáveis de WHERE e INNER são passadas via sessão pois em alguns casos estavam ultrapassando o limite
-    js_OpenJanelaIframe('top.corpo','db_iframe','div4_importadivida033.php?k00_tipo_or='+tipor+'&k00_tipo_des='+tipdes,'Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe','div4_importadivida033.php?k00_tipo_or='+tipor+'&k00_tipo_des='+tipdes,'Pesquisa',true);
     jan.moveTo(0,0);
 }
 
@@ -363,10 +363,10 @@ if ( isset($tipor) && isset($tipdes) &&
   $numpar  = "";
   $receita = "";
   $or      = "and ( ";
-  $info    = split('#',$chaves);
+  $info    = explode('#',$chaves);
   for($w=0;$w<count($info);$w++){
 
-    $dados   = split('-',$info[$w]);
+    $dados   = explode('-',$info[$w]);
     $numpre  = $dados[0];
     $numpar  = $dados[1];
     $receita = $dados[2];

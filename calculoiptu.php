@@ -48,7 +48,7 @@ function db_fieldsmemory($recordset,$indice,$formatar="",$mostravar=false){
 		  break;
 		case "date":
           if($aux!=""){
-		    $data = split("-",$aux);
+		    $data = explode("-",$aux);
 		    $$matriz[$i] = $data[2]."/".$data[1]."/".$data[0];
 		  }else{
 		    $$matriz[$i] = "";
@@ -63,7 +63,7 @@ function db_fieldsmemory($recordset,$indice,$formatar="",$mostravar=false){
 	} else
   	  switch(pg_fieldtype($recordset,$i)) {
 		case "date":
-		  $datav = split("-",$aux);
+		  $datav = explode("-",$aux);
           $split_data = $matriz[$i]."_dia";
           global $$split_data;
           $$split_data =  @$datav[2];	

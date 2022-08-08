@@ -254,7 +254,7 @@ function js_pesquisao06_codrec(mostra){
     js_OpenJanelaIframe('top.corpo','db_iframe_orcfontes','func_orcfontes.php?funcao_js=parent.js_mostraorcfontes1|o57_codfon|o57_descr|o57_fonte|c61_codigo|o15_descr&lBuscaRecAnoSeguinte=true','Pesquisa',true);
   }else{
      if(document.form1.o06_codrec.value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_orcfontes',
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_orcfontes',
                             'func_orcfontes.php?lPesquisaCodigo=true&pesquisa_chave='+document.form1.o06_codrec.value+
                             '&funcao_js=parent.js_mostraorcfontes&lBuscaFonte=true&lBuscaRecAnoSeguinte=true','Pesquisa',false);
      }else{
@@ -345,7 +345,7 @@ function js_mostraorcfontes1(iCodFon, sDescr, sEstrut, iFonte, sDescrFonte){
   js_validaEstrutural();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_ppaestimativareceita','func_ppaestimativareceita.php?lEstimativa=true&funcao_js=parent.js_preenchepesquisa|o06_sequencial','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_ppaestimativareceita','func_ppaestimativareceita.php?lEstimativa=true&funcao_js=parent.js_preenchepesquisa|o06_sequencial','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_ppaestimativareceita.hide();
@@ -357,14 +357,14 @@ function js_preenchepesquisa(chave){
 }
 function js_pesquisao05_ppalei(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo',
+    js_OpenJanelaIframe('CurrentWindow.corpo',
                         'db_iframe_ppalei',
                         'func_ppalei.php?funcao_js=parent.js_mostrappalei1|o01_sequencial|o01_descricao&verificaano=1',
                         'Pesquisa de Versões para o PPA',
                         true);
   }else{
      if(document.form1.o05_ppalei.value != ''){
-        js_OpenJanelaIframe('top.corpo',
+        js_OpenJanelaIframe('CurrentWindow.corpo',
                             'db_iframe_ppalei',
                             'func_ppalei.php?pesquisa_chave='
                             +document.form1.o05_ppalei.value+'&funcao_js=parent.js_mostrappalei&verificaano=1',

@@ -24,7 +24,7 @@
  *                 licenca/licenca_pt.txt
  */
 
-const MENSAGENS_DBVIEWMOTIVOSALTA = 'saude.ambulatorial.DBViewMotivosAlta.';
+var MENSAGENS_DBVIEWMOTIVOSALTA = 'saude.ambulatorial.DBViewMotivosAlta.';
 
 DBViewMotivosAlta = function() {
 

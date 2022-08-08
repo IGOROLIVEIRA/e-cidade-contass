@@ -12,20 +12,12 @@ require_once("model/AcordoPosicao.model.php");
 require_once("model/MaterialCompras.model.php");
 require_once("model/CgmFactory.model.php");
 
-$oPost               = db_utils::postMemory($_POST);
-
 $clacordo            = new cl_acordo;
 $clacordoposicao     = new cl_acordoposicao;
 $clacordoitem        = new cl_acordoitem;
 
-if (isset($oPost->ac16_sequencial)) {
-    if (!empty($oPost->ac16_sequencial)) {
-        $sAcordo = $oPost->ac16_sequencial;
-    }
-}
-
 //consulta dos dados do acordo
-$sSql = db_query("select distinct ac16_sequencial, ac16_numero||'/'||ac16_anousu numcontrato,descrdepto,ac16_dataassinatura,z01_nome,ac16_valor,ac16_datainicio,ac16_datafim,ac16_objeto from acordo inner join db_depart on coddepto = ac16_coddepto inner join cgm on z01_numcgm = ac16_contratado inner join acordoposicao on ac26_acordo = ac16_sequencial and ac26_acordoposicaotipo = 1 where ac16_sequencial = " . $oPost->ac16_sequencial);
+$sSql = db_query("select distinct ac16_sequencial, ac16_numero||'/'||ac16_anousu numcontrato,descrdepto,ac16_dataassinatura,z01_nome,ac16_valor,ac16_datainicio,ac16_datafim,ac16_objeto from acordo inner join db_depart on coddepto = ac16_coddepto inner join cgm on z01_numcgm = ac16_contratado inner join acordoposicao on ac26_acordo = ac16_sequencial and ac26_acordoposicaotipo = 1 where ac16_sequencial = {$sequencial}");
 
 if (pg_numrows($sSql) == 0) {
     db_redireciona('db_erros.php?fechar=true&db_erro=Nenhum registro encontrado.');
@@ -87,7 +79,7 @@ $oPDF->MultiCell(220, $iAlt, $oDados->ac16_objeto, 0, "L", 0);
 $oPDF->cell(0, $iAlt, ' ', 0, 1, "C", 0);
 
 //consulta itens do contrato
-$sSqlItens = db_query("select ac20_ordem,ac20_pcmater,pc01_descrmater,m61_descr,ac20_quantidade,ac20_valorunitario,ac20_valortotal from acordoitem inner join  acordoposicao on ac26_sequencial = ac20_acordoposicao and ac26_acordoposicaotipo = 1 inner join acordo on ac16_sequencial = ac26_acordo inner join pcmater on pc01_codmater = ac20_pcmater inner join matunid ON m61_codmatunid = ac20_matunid where ac16_sequencial = " . $oPost->ac16_sequencial . " order by ac20_ordem");
+$sSqlItens = db_query("select ac20_ordem,ac20_pcmater,pc01_descrmater,m61_descr,ac20_quantidade,ac20_valorunitario,ac20_valortotal from acordoitem inner join  acordoposicao on ac26_sequencial = ac20_acordoposicao and ac26_acordoposicaotipo = 1 inner join acordo on ac16_sequencial = ac26_acordo inner join pcmater on pc01_codmater = ac20_pcmater inner join matunid ON m61_codmatunid = ac20_matunid where ac16_sequencial = " . $sequencial . " order by ac20_ordem");
 
 //Cabeçalho itens
 
@@ -110,7 +102,7 @@ for ($i = 0; $i < pg_numrows($sSqlItens); $i++) {
     $oPDF->cell(8, $iAlt, '', 0, 0, "C", 0);
     $oPDF->cell(10, $iAlt, $oDadosItens->ac20_ordem, 1, 0, "C", 2);
     $oPDF->cell(12, $iAlt, $oDadosItens->ac20_pcmater, 1, 0, "C", 2);
-    $oPDF->cell(180, $iAlt, $oDadosItens->pc01_descrmater, 1, 0, "C", 2);
+    $oPDF->cell(180, $iAlt, $oDadosItens->pc01_descrmater, 1, 0, "L", 2);
     $oPDF->cell(12, $iAlt, $oDadosItens->m61_descr, 1, 0, "C", 2);
     $oPDF->cell(14, $iAlt, $oDadosItens->ac20_quantidade, 1, 0, "C", 2);
     $oPDF->cell(18, $iAlt, 'R$ ' . db_formatar($oDadosItens->ac20_valorunitario, 'f'), 1, 0, "C", 2);

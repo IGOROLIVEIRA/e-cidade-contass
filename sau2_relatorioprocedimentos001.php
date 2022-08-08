@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -38,7 +38,7 @@ db_postmemory($HTTP_POST_VARS);
 <html>
   <head>
     <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">  
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
     <meta http-equiv="Expires" CONTENT="0">
     <?
     db_app::load("prototype.js, strings.js, webseller.js, scripts.js");
@@ -58,7 +58,7 @@ db_postmemory($HTTP_POST_VARS);
                   <tr>
                     <td align="left" colspan="3" style="padding-bottom: 2px;" nowrap>
                       <fieldset style="width: 620; margin-bottom: 8px;">
-                        <legend><b>Período Antendimento:</b></legend> 
+                        <legend><b>Período Antendimento:</b></legend>
                         &nbsp;
                         <b>Inicio:</b>
                         <?
@@ -123,9 +123,9 @@ db_postmemory($HTTP_POST_VARS);
                       db_ancora('<b>Procedimento:</b>', ' js_pesquisaProcedimento(true);', 1);
                       ?>
                     </td>
-                    <td nowrap> 
+                    <td nowrap>
                       <?
-                      db_input('sd63_c_procedimento', 10, '', true, 'text', 1, 
+                      db_input('sd63_c_procedimento', 10, '', true, 'text', 1,
                                " onchange='js_pesquisaProcedimento(false);'");
                       db_input('sd63_i_codigo', 10, '', true, 'hidden', 1, '');
                       db_input('sd63_c_nome', 58, '', true, 'text', 3, '');
@@ -133,10 +133,10 @@ db_postmemory($HTTP_POST_VARS);
                       &nbsp;
                       <input name="lancar_procedimento" type="button" id="lancar_procedimento" value="Incluir">
                     </td>
-                  </tr> 
+                  </tr>
                   <tr>
                     <td colspan="2">
-                      <select multiple size="4" name="select_procedimento[]" id="select_procedimento" 
+                      <select multiple size="4" name="select_procedimento[]" id="select_procedimento"
                               style="width: 100%;" onDblClick="js_excluir_item_procedimento();">
                     </td>
                   </tr>
@@ -167,7 +167,7 @@ db_postmemory($HTTP_POST_VARS);
                   </td>
                   <td nowrap>
                     <?
-                    db_input('iProfissional', 10, '', true, 'text', 1, 
+                    db_input('iProfissional', 10, '', true, 'text', 1,
                              'onchange="js_pesquisaProfissional(false);" '.
                              'onkeydown="return js_controla_tecla_enter(this, event);" '.
                              'onkeyup="js_ValidaCampos(this, 1, \'profissional\', \'t\', \'f\', event);" '.
@@ -181,7 +181,7 @@ db_postmemory($HTTP_POST_VARS);
                 </tr>
                 <tr>
                   <td colspan="2">
-                    <select multiple size="4" name="select_profissional[]" id="select_profissional" 
+                    <select multiple size="4" name="select_profissional[]" id="select_profissional"
                             style="width: 100%;" onDblClick="js_excluir_item_profissional();">
                     </select>
                   </td>
@@ -196,11 +196,11 @@ db_postmemory($HTTP_POST_VARS);
               <table  border="0"  align="center" width="100%">
                 <tr>
                   <td nowrap width="50%" valign="top" align="right">
-                    <select multiple id="unidadesEsq" name="unidadesEsq" style=" width: 100%;" size="5" 
+                    <select multiple id="unidadesEsq" name="unidadesEsq" style=" width: 100%;" size="5"
                             onDblClick="js_moveDireita();">
                   </td>
                   <td nowrap align="center">
-                    <input type="button" onclick="js_moveDireita();" value=">" 
+                    <input type="button" onclick="js_moveDireita();" value=">"
                            style="margin-bottom: 3; height: 20;">
                     <br>
                     <input type="button" onclick="js_selecionarTudo($('unidadesEsq')); js_moveDireita();" value=">>"
@@ -238,7 +238,7 @@ db_postmemory($HTTP_POST_VARS);
     </form>
   </center>
   <?
-  db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), 
+  db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"),
           db_getsession("DB_anousu"), db_getsession("DB_instit")
          );
   ?>
@@ -273,7 +273,7 @@ function js_visible(sLine, sFieldset) {
 
     cFieldset.style.display  = 'none';
 	cLine.style.display      = '';
-		 
+
   }
 
 }
@@ -284,7 +284,7 @@ function js_ajax(oParam, jsRetorno, sUrl) {
     sUrl = 'sau4_ambulatorial.RPC.php';
   }
   var objAjax = new Ajax.Request(
-                                 sUrl, 
+                                 sUrl,
                                  {
                                   method: 'post',
                                   asynchronous: false,
@@ -476,7 +476,7 @@ function js_getUnidadesMedicos() {
     sSep      = ', ';
 
   }
-  
+
   oParam.sMedicos = sMedicos;
 
   js_ajax(oParam, 'js_retornoGetUnidadesMedicos');
@@ -484,7 +484,7 @@ function js_getUnidadesMedicos() {
 }
 
 function js_retornoGetUnidadesMedicos(oRetorno) {
-  
+
   oRetorno = eval("("+oRetorno.responseText+")");
 
   if (oRetorno.iStatus != 1) {
@@ -521,7 +521,7 @@ function js_retornoGetUnidadesMedicos(oRetorno) {
 function js_selecionarTudo(oSel) {
 
   for (iCont = 0; iCont < oSel.length; iCont++) {
-    
+
     oSel.options[iCont].selected = true;
 
   }
@@ -540,7 +540,7 @@ function js_moveDireita() {
   for (iCont = 0; iCont < oEsq.length; iCont++) {
 
     if (oEsq.options[iCont].selected) {
-  
+
       oDir.options[oDir.length] = oEsq.options[iCont];
       iCont--;
 
@@ -575,9 +575,9 @@ function js_moveEsquerda() {
 
 }
 /* funções do select das unidades  ***/
-  
+
 function js_pesquisaProcedimento(mostra) {
-  
+
   if(mostra == true){
 
       js_OpenJanelaIframe('', 'db_iframe_sau_procedimento', 'func_sau_procedimento.php?funcao_js='+
@@ -586,7 +586,7 @@ function js_pesquisaProcedimento(mostra) {
                          );
 
   }else{
-    
+
     if ($F('sd63_c_procedimento') != '') {
 
       js_OpenJanelaIframe('', 'db_iframe_sau_procedimento', 'func_sau_procedimento.php?funcao_js='+
@@ -602,7 +602,7 @@ function js_pesquisaProcedimento(mostra) {
     }
 
   }
- 
+
 }
 function js_mostraProcedimento(sNome, lErro, iCodigo) {
 
@@ -625,7 +625,7 @@ function js_mostraProcedimento1(iCod, sNome, sEstrutural) {
   $('sd63_c_nome').value           = sNome;
   $('sd63_c_procedimento').value   = sEstrutural;
   $('lancar_procedimento').onclick = js_incluir_item_procedimento;
-  
+
   db_iframe_sau_procedimento.hide();
 
 }
@@ -638,22 +638,22 @@ function js_pesquisaProfissional(lMostra) {
 
   if (lMostra == true) {
 
-    js_OpenJanelaIframe('top.corpo', 'db_iframe_medicos', 'func_medicos.php?'+
-                        'funcao_js=parent.js_mostraProfissional1|sd03_i_codigo|z01_nome', 
+    js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_medicos', 'func_medicos.php?'+
+                        'funcao_js=parent.js_mostraProfissional1|sd03_i_codigo|z01_nome',
                         'Pesquisa', true
                        );
 
   } else {
 
-    if (document.form1.iProfissional.value != '') { 
+    if (document.form1.iProfissional.value != '') {
 
-      js_OpenJanelaIframe('top.corpo', 'db_iframe_medicos', 'func_medicos.php?pesquisa_chave='+
-                          document.form1.iProfissional.value+'&funcao_js=parent.js_mostraProfissional', 
+      js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_medicos', 'func_medicos.php?pesquisa_chave='+
+                          document.form1.iProfissional.value+'&funcao_js=parent.js_mostraProfissional',
                           'Pesquisa', false
                          );
 
     } else {
-      document.form1.z01_nome.value = ''; 
+      document.form1.z01_nome.value = '';
     }
 
   }
@@ -662,10 +662,10 @@ function js_pesquisaProfissional(lMostra) {
 
 function js_mostraProfissional(sChave, lErro) {
 
-  document.form1.z01_nome.value = sChave; 
+  document.form1.z01_nome.value = sChave;
   if (lErro == true) {
 
-    document.form1.iProfissional.focus(); 
+    document.form1.iProfissional.focus();
     document.form1.iProfissional.value = '';
 
   } else {
@@ -698,12 +698,12 @@ function js_validaEnvio() {
   dFim = new Date(aFim[2], aFim[1], aFim[0]);
 
   if (dFim < dIni) {
-        
+
     alert('Data final não pode ser menor que a data inicial.');
     document.form1.datafim.value = '';
     document.form1.datafim.focus();
     return false;
-  
+
   }
 
   if ($('unidadesDir').length == 0) {
@@ -713,12 +713,12 @@ function js_validaEnvio() {
 
   }
 
-  return true;            
+  return true;
 
 }
 
 function js_mandaDados() {
- 
+
   if (js_validaEnvio()) {
 
     var sVir              = '';

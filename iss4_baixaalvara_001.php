@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -49,7 +49,7 @@ $dbOpcao = 1;
 
 /**
  * BAIXA DE ALVARA
- * 
+ *
  * update issalvara para inativo
  * instert na movimentação de alvara
  * insert no motivo da baixa
@@ -100,19 +100,19 @@ try {
   db_app::load("grid.style.css");
   db_app::load("estilos.css");
   db_app::load("classes/dbViewAvaliacoes.classe.js");
-  db_app::load("widgets/windowAux.widget.js");  
+  db_app::load("widgets/windowAux.widget.js");
   db_app::load("dbcomboBox.widget.js");
-  db_app::load("DBViewAlvaraDocumentos.js");   
+  db_app::load("DBViewAlvaraDocumentos.js");
 ?>
 <style>
   .field {
     border : 0px;
-    border-top: 2px groove white; 
+    border-top: 2px groove white;
   }
  fieldset.field table tr td:FIRST-CHILD {
    width: 150px;
  	 white-space: nowrap;
-}  
+}
  .link_botao {
     color: blue;
     cursor: pointer;
@@ -129,19 +129,19 @@ try {
     <table class="form-container">
 
       <tr>
-        <td><b> 
+        <td><b>
 				  <?
 				    db_ancora("Inscrição : ", 'js_mostranomes(true);', $dbOpcao)
 				  ?></b>
         </td>
         <td>
 			   <!-- <input type="text" name="q123_inscr" id="q123_inscr" maxlength="8" size="8" onchange="js_mostranomes(false);" />-->
-			  
+
 			   <?
 			     db_input("q123_inscr", 8,true, true, 'text',$dbOpcao,"onchange='js_mostranomes(false);'" );
 			     db_input("z01_nome", 40,"", true, 'text', 3);
 			   ?>
-        </td>        
+        </td>
       </tr>
       <tr>
         <td><b>Alvará : </b>
@@ -150,7 +150,7 @@ try {
 			   <?
 			     db_input("q120_issalvara", 8,"", true, 'text', 3);
 			   ?>
-        </td>        
+        </td>
       </tr>
       <tr>
         <td><b>Data da Movimentação : </b>
@@ -159,49 +159,49 @@ try {
 			   <?
 			    echo date("d/m/Y",db_getsession("DB_datausu"));
 			   ?>
-        </td>        
-      </tr>  
+        </td>
+      </tr>
       <tr>
         <td nowrap>
           <b><? db_ancora("Processo : ","js_pesquisap58_codproc(true);",1); ?></b>
         </td>
-        <td> 
+        <td>
           <?
             db_input('p58_codproc',8,"",true,'text',1," onchange='js_pesquisap58_codproc(false);'");
             db_input('p58_requer',40,"",true,'text',3,'');
           ?>
         </td>
-      </tr> 
+      </tr>
       <tr>
         <td nowrap>
           <b>Motivo da Baixa</b>
         </td>
-        <td> 
+        <td>
           <?
             $aMotivos = array( "" => "Selecione",
                                "1" => "Pedido",
                                "2" => "Oficio"
-            
+
                               );
             db_select("motivo", $aMotivos ,true, 1);
           ?>
         </td>
-      </tr>            
+      </tr>
       <tr>
         <td colspan="2">
           <fieldset>
           <legend>Observação:</legend>
           <? db_textarea("q120_obs",5, 48,  "", true,null, 1); ?>
-        </td>        
-      </tr> 
+        </td>
+      </tr>
       <tr>
         <td colspan="2">
           <div id='ctnDocumento'> </div>
-        </td>        
-      </tr>       
+        </td>
+      </tr>
     </table>
     <input type='hidden' id='documentos' name='documentos'>
-    
+
 <?
 
 if (isset($oGet->q123_inscr)){
@@ -211,37 +211,37 @@ if (isset($oGet->q123_inscr)){
   $rsLiberado   = $clIssMovAlvara->sql_record($sSqlLiberado);
 
   //echo $sSqlLiberado;
-  
+
   if ($clIssMovAlvara->numrows > 0) {
-    
+
     $lLiberado = "disabled='disabled'";
-    
+
   }
-  
+
 }
 
-?>    
-    
-    
+?>
+
+
   </fieldset>
-    <table  align="center" width="100%" cellpadding="5" border="0">  
+    <table  align="center" width="100%" cellpadding="5" border="0">
       <tr>
          <td colspan="2" align="center">
-         
+
            <input type="submit" <? echo $lLiberado ?>  style="margin-left: 10px; margin-top: 10px;" name="liberar" id='liberar' value="Baixa de Alvará" onclick="jsMontaDocumentos();return verifica();" />
          </td>
-      </tr> 
-    </table>       
-</form>   
+      </tr>
+    </table>
+</form>
 
 <div id='ficha'>
 </div>
 
-</center>   
+</center>
 <?
  if (!isset($oGet->aba)){
    db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
- } 
+ }
 ?>
 </body>
 </html>
@@ -253,7 +253,7 @@ if (isset($oGet->q123_inscr)){
 function jsMontaDocumentos(){
 
    $('documentos').value = oDocumentos.getDocumentosSelecionados().toString();
-}   
+}
 
 
 
@@ -266,10 +266,10 @@ function js_pesquisap58_codproc(mostra){
   }
 }
 function js_mostraprotprocesso(chave,chave1,erro){
-  document.form1.p58_requer.value = chave1; 
-  if(erro==true){ 
-    document.form1.p58_codproc.focus(); 
-    document.form1.p58_codproc.value = ''; 
+  document.form1.p58_requer.value = chave1;
+  if(erro==true){
+    document.form1.p58_codproc.focus();
+    document.form1.p58_codproc.value = '';
   }
 }
 function js_mostraprotprocesso1(chave1,chave2){
@@ -284,21 +284,21 @@ function js_mostraprotprocesso1(chave1,chave2){
 function js_mostranomes(mostra){
 
   if(mostra == true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_nomes','func_issalvarabaixa.php?filtro=1&funcao_js=parent.js_preenche|0|1|2|3','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_nomes','func_issalvarabaixa.php?filtro=1&funcao_js=parent.js_preenche|0|1|2|3','Pesquisa',true);
   }else{
-    js_OpenJanelaIframe('top.corpo','db_iframe_nomes','func_issalvarabaixa.php?filtro=1&pesquisa_chave='+$F('q123_inscr')+'&funcao_js=parent.js_preenche1','Pesquisa',false);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_nomes','func_issalvarabaixa.php?filtro=1&pesquisa_chave='+$F('q123_inscr')+'&funcao_js=parent.js_preenche1','Pesquisa',false);
   }
 }
 
 function js_preenche(chave,chave1,chave2, chave3){
- 
+
   if (!chave) {
     return false;
   }
 
   document.form1.q123_inscr.value     = chave;
   document.form1.z01_nome.value       = chave1;
-  document.form1.q120_issalvara.value = chave3; 
+  document.form1.q120_issalvara.value = chave3;
   db_iframe_nomes.hide();
   oDocumentos.setCodigoAlvara(chave3);
   oDocumentos.carregaDados();
@@ -311,7 +311,7 @@ function js_preenche1(chave, lErro, chave2, chave3){
     document.form1.z01_nome.value       = chave;
     document.form1.q123_inscr.value     = "";
     document.form1.q120_issalvara.value = "";
-    oDocumentos.setCodigoAlvara();   
+    oDocumentos.setCodigoAlvara();
     oDocumentos.carregaDados();
     document.form1.q123_inscr.focus();
     return;
@@ -322,8 +322,8 @@ function js_preenche1(chave, lErro, chave2, chave3){
   }
 
   document.form1.z01_nome.value = chave2;
-  document.form1.q120_issalvara.value = chave3; 
-  oDocumentos.setCodigoAlvara(chave3);   
+  document.form1.q120_issalvara.value = chave3;
+  oDocumentos.setCodigoAlvara(chave3);
   oDocumentos.carregaDados();
 }
 
@@ -342,8 +342,8 @@ function verifica(){
   if (iMotivo == null || iMotivo == ""){
     alert("Selecione um Motivo");
     return false;
-  }	
-	
-} 
+  }
+
+}
 
 </script>

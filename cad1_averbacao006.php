@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -70,11 +70,11 @@ if(isset($excluir)){
   db_inicio_transacao();
   $result_tipo = $claverbacao->sql_record($claverbacao->sql_query_file($j75_codigo,"j75_tipo"));
   db_fieldsmemory($result_tipo,0);
-  if ($sqlerro==false){  	
+  if ($sqlerro==false){
   	if ($j93_averbagrupo==1){
   		$result_escr = $claverbaescritura->sql_record($claverbaescritura->sql_query(null,"*",null,"j94_averbacao =".$j75_codigo));
   		if ($claverbaescritura->numrows>0){
-  			db_fieldsmemory($result_escr,0);  	
+  			db_fieldsmemory($result_escr,0);
   			$claverbaescritura->excluir($j94_codigo);
   			if($claverbaescritura->erro_status==0){
     			$sqlerro=true;
@@ -82,24 +82,24 @@ if(isset($excluir)){
   			}
   		}
   	}
-  }   
-  if ($sqlerro==false){  	
-  	if ($j93_averbagrupo==2){  		
+  }
+  if ($sqlerro==false){
+  	if ($j93_averbagrupo==2){
   		$claverbaregimovel->excluir($j75_codigo);
   		if($claverbaregimovel->erro_status==0){
     		$sqlerro=true;
   			$erro_msg = $claverbaregimovel->erro_msg;
   		}
   	}
-  } 
-  if ($sqlerro==false){  	
+  }
+  if ($sqlerro==false){
   	 if ($j93_averbagrupo==4){
   	 	$claverbaformalpartilhacgm->j102_sequencial = $j102_sequencial;
 		$claverbaformalpartilhacgm->excluir("","j102_averbaformalpartilha = $j100_sequencial");
 		if($claverbaformalpartilhacgm->erro_status==0){
     	  $sqlerro=true;
   		  $erro_msg = $claverbaformalpartilhacgm->erro_msg;
-  	  	} 
+  	  	}
   		$claverbaformalpartilha->j100_sequencial = $j100_sequencial;
   		$claverbaformalpartilha->excluir($j100_sequencial);
   		if($claverbaformalpartilha->erro_status==0){
@@ -110,8 +110,8 @@ if(isset($excluir)){
   }
   if ($sqlerro==false){
   	if ($j93_averbagrupo==5){
-  		
-			
+
+
         $claverbadecisaojudicial->j101_sequencial = $j101_sequencial;
   		$claverbadecisaojudicial->excluir($j101_sequencial);
   		if($claverbadecisaojudicial->erro_status==0){
@@ -129,7 +129,7 @@ if(isset($excluir)){
     	$sqlerro=true;
   	  	$erro_msg = $claverbaguiaitbi->erro_msg;
   	  }
-			
+
   	  $claverbaguia->j104_sequencial = $j104_sequencial;
   	  $claverbaguia->excluir($j104_sequencial);
   	  if($claverbaguia->erro_status==0){
@@ -138,39 +138,39 @@ if(isset($excluir)){
   	  }
 	}
   }
-  
-  
+
+
   if ($sqlerro==false){
-  	$result_proc = $claverbaprocesso->sql_record($claverbaprocesso->sql_query_file($j75_codigo));  	
-  	if ($claverbaprocesso->numrows>0){  			
+  	$result_proc = $claverbaprocesso->sql_record($claverbaprocesso->sql_query_file($j75_codigo));
+  	if ($claverbaprocesso->numrows>0){
 	 	$claverbaprocesso->excluir($j75_codigo);
 		if ($claverbaprocesso->erro_status==0){
 	  		$sqlerro=true;
 	  		$erro_msg = $claverbaprocesso->erro_msg;
 	  	}
-  	}  	
+  	}
   }
-  
+
   $claverbacgm->excluir(null,"j76_averbacao =".$j75_codigo);
 
   if($claverbacgm->erro_status==0){
     $sqlerro=true;
-  } 
-  $erro_msg = $claverbacgm->erro_msg; 
+  }
+  $erro_msg = $claverbacgm->erro_msg;
 
   $claverbacao->excluir($j75_codigo);
   if($claverbacao->erro_status==0){
     $sqlerro=true;
-  } 
- 
-  $erro_msg = $claverbacao->erro_msg; 
+  }
+
+  $erro_msg = $claverbacao->erro_msg;
   db_fim_transacao($sqlerro);
    $db_opcao = 3;
    $db_botao = true;
 }else if(isset($chavepesquisa)){
    $db_opcao = 3;
    $db_botao = true;
-   $result = $claverbacao->sql_record($claverbacao->sql_query($chavepesquisa)); 
+   $result = $claverbacao->sql_record($claverbacao->sql_query($chavepesquisa));
    db_fieldsmemory($result,0);
 
    $result_proc = $claverbaprocesso->sql_record($claverbaprocesso->sql_query($j75_codigo,"j77_codproc,p58_numero, p58_ano, p58_requer"));
@@ -189,22 +189,22 @@ if(isset($excluir)){
    if ($claverbaescritura->numrows>0){
   		db_fieldsmemory($result_escr,0);
    }
-   
+
    	if($j93_averbagrupo == 6){
-	  $sqlguia = "select averbaguia.*,averbaguiaitbi.*,it03_nome 
-							  from averbaguia 
-							  left join averbaguiaitbi on j104_sequencial=j103_averbaguia  
-							  left join itbinome on j104_guia = it03_guia 
-							  where j104_averbacao = $chavepesquisa 
-								      and upper(it03_tipo) = 'C' 
+	  $sqlguia = "select averbaguia.*,averbaguiaitbi.*,it03_nome
+							  from averbaguia
+							  left join averbaguiaitbi on j104_sequencial=j103_averbaguia
+							  left join itbinome on j104_guia = it03_guia
+							  where j104_averbacao = $chavepesquisa
+								      and upper(it03_tipo) = 'C'
 											and it03_princ is true ";
-	 
+
 	  $resultguia = db_query($sqlguia);
 	  $linhasguia = pg_num_rows($resultguia);
 	  if($linhasguia>0){
 		db_fieldsmemory($resultguia,0);
 		$nome = $it03_nome;
-		$guia=1;		
+		$guia=1;
 	  }else{
 	  	//se não encotrar é pr é sem guia itbi
 			$sqlGuiaSemItbi = "select * from averbaguia where j104_averbacao = $chavepesquisa ";
@@ -218,18 +218,18 @@ if(isset($excluir)){
 	  }
 	}
 	if($j93_averbagrupo == 5){
-	  $sqlsentenca = "select * from averbadecisaojudicial  
+	  $sqlsentenca = "select * from averbadecisaojudicial
 	                  where j101_averbacao = $chavepesquisa";
 	  $resultsentenca = db_query($sqlsentenca);
 	  $linhassentenca = pg_num_rows($resultsentenca);
 	  if($linhassentenca>0){
 		db_fieldsmemory($resultsentenca,0);
-		
+
 	  }
 	}
 	if($j93_averbagrupo == 4){
-	  $sqlformal = "select * from averbaformalpartilha 
-	                left join averbaformalpartilhacgm on j102_averbaformalpartilha = j100_sequencial 
+	  $sqlformal = "select * from averbaformalpartilha
+	                left join averbaformalpartilhacgm on j102_averbaformalpartilha = j100_sequencial
 	                where j100_averbacao = $chavepesquisa";
 	  $resultformal = db_query($sqlformal);
 	  $linhasformal = pg_num_rows($resultformal);
@@ -238,7 +238,7 @@ if(isset($excluir)){
 		$z01_numcgm1 = $j102_numcgm;
 	  }
 	}
-	
+
    if ($j75_situacao==2){
    	$db_opcao = 3;
    	$db_botao = false;
@@ -255,8 +255,8 @@ if(isset($excluir)){
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
 	<?
 	include("forms/db_frmaverbacao.php");
@@ -292,8 +292,8 @@ if(isset($chavepesquisa)){
   <script>
       function js_db_libera(){
          parent.document.formaba.averbacgm.disabled=false;
-         top.corpo.iframe_averbacgm.location.href='cad1_averbacgm001.php?db_opcaoal=33&j76_averbacao=".@$j75_codigo."';
-		
+         CurrentWindow.corpo.iframe_averbacgm.location.href='cad1_averbacgm001.php?db_opcaoal=33&j76_averbacao=".@$j75_codigo."';
+
      ";
          if(isset($liberaaba)){
            echo "  parent.mo_camada('averbacgm');";

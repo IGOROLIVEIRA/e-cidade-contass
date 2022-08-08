@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -66,7 +66,7 @@ $db_opcao=1;
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" bgcolor="#CCCCCC">
 <form name="form1" method="post" action="">
 <table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-  <tr> 
+  <tr>
     <td width="360" height="18">&nbsp;</td>
     <td width="263">&nbsp;</td>
     <td width="25">&nbsp;</td>
@@ -81,7 +81,7 @@ $db_opcao=1;
        db_ancora(@$Ly76_codvist,"js_pesquisay76_codvist(true);",1);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('y76_codvist',10,$Iy76_codvist,true,'text',1," onchange='js_pesquisay76_codvist(false);'")
 ?>
@@ -90,39 +90,39 @@ db_input('y70_id_usuario',40,$Iy70_id_usuario,true,'text',3,'')
        ?>
     </td>
   </tr>
-     <tr>   
+     <tr>
       <td>
       <?
        db_ancora($Lz01_numcgm,' js_cgm(true); ',1);
       ?>
        </td>
-       <td> 
+       <td>
       <?
        db_input('z01_numcgm',5,$Iz01_numcgm,true,'text',1,"onchange='js_cgm(false)'");
        db_input('z01_nome',30,0,true,'text',3,"","z01_nomecgm");
       ?>
        </td>
      </tr>
-     <tr>   
+     <tr>
        <td>
       <?
        db_ancora($Lj01_matric,' js_matri(true); ',1);
       ?>
        </td>
-       <td> 
+       <td>
       <?
        db_input('j01_matric',5,$Ij01_matric,true,'text',1,"onchange='js_matri(false)'");
       db_input('z01_nome',30,0,true,'text',3,"","z01_nomematri");
       ?>
        </td>
      </tr>
-     <tr>   
+     <tr>
        <td>
       <?
        db_ancora($Lq02_inscr,' js_inscr(true); ',1);
       ?>
        </td>
-       <td> 
+       <td>
       <?
        db_input('q02_inscr',5,$Iq02_inscr,true,'text',1,"onchange='js_inscr(false)'");
        db_input('z01_nome',30,0,true,'text',3,"","z01_nomeinscr");
@@ -135,7 +135,7 @@ db_input('y70_id_usuario',40,$Iy70_id_usuario,true,'text',3,'')
          db_ancora(@$Ly80_codsani,"js_sanitario(true);",1);
          ?>
       </td>
-      <td> 
+      <td>
         <?
         db_input('y80_codsani',5,$Iy80_codsani,true,'text',1,"onchange='js_sanitario(false)'");
         db_input('z01_nome',30,0,true,'text',3,"","z01_nomesani");
@@ -146,7 +146,7 @@ db_input('y70_id_usuario',40,$Iy70_id_usuario,true,'text',3,'')
     <td nowrap title="<?=@$Ty70_data?>">
        <?=@$Ly70_data?>
     </td>
-    <td> 
+    <td>
 <?
 db_inputdata('',@$dia,@$mes,@$ano,true,'text',$db_opcao,"")
 ?>
@@ -162,7 +162,7 @@ db_inputdata('a',@$diaa,@$mesa,@$anoa,true,'text',$db_opcao,"")
        db_ancora(@$Ly70_tipovist,"js_pesquisay70_tipovist(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('y70_tipovist',10,$Iy70_tipovist,true,'text',$db_opcao," onchange='js_pesquisay70_tipovist(false);'");
 db_input('y77_descricao',40,$Iy77_descricao,true,'text',3,'');
@@ -173,7 +173,7 @@ db_input('y77_descricao',40,$Iy77_descricao,true,'text',3,'');
     <td nowrap title="<?=@$Ty70_numbloco?>">
        <?=$Ly70_numbloco?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('y70_numbloco',10,$Iy70_numbloco,true,'text',$db_opcao);
 ?>
@@ -190,20 +190,20 @@ db_input('y70_numbloco',10,$Iy70_numbloco,true,'text',$db_opcao);
 	     db_ancora(@$Ly10_codigo,"js_ruas1(true);",$db_opcao);
 	     ?>
 	  </td>
-	  <td> 
+	  <td>
       <?
       db_input('y10_codigo',10,$Iy10_codigo,true,'text',$db_opcao," onChange='js_ruas1(false)'");
       db_input('j14_nome',50,$Ij14_nome,true,'text',3,"");
       ?>
 	  </td>
 	</tr>
-	<tr> 
-	  <td nowrap title="<?=@$Ty10_codi?>"> 
+	<tr>
+	  <td nowrap title="<?=@$Ty10_codi?>">
 	    <?
 	    db_ancora(@$Ly10_codi,"js_bairro1(true);",$db_opcao);
 	    ?>
 	  </td>
-	  <td nowrap> 
+	  <td nowrap>
 	    <?
 	      db_input('y10_codi',10,$Iy10_codi,true,'text',$db_opcao," onChange='js_bairro1(false)'");
 	      db_input('j13_descr',50,$Ij13_descr,true,'text',3);
@@ -219,26 +219,26 @@ db_input('y70_numbloco',10,$Iy70_numbloco,true,'text',$db_opcao);
       <fieldset>
       <legend align="center"><strong>Endereço localizado</strong></legend>
       <table>
-	<tr> 
-	  <td nowrap title="<?=@$Ty11_codigo?>" width="100"> 
+	<tr>
+	  <td nowrap title="<?=@$Ty11_codigo?>" width="100">
 	     <?
 	     db_ancora(@$Ly11_codigo,"js_ruas(true);",$db_opcao);
 	     ?>
 	  </td>
-	  <td nowrap> 
+	  <td nowrap>
 	    <?
 	      db_input('y11_codigo',10,$Iy11_codigo,true,'text',$db_opcao," onChange='js_ruas(false)'");
 	      db_input('j14_nome',50,$Ij14_nome,true,'text',3,"","j14_nome_exec");
 	    ?>
 	  </td>
 	</tr>
-	<tr> 
-	  <td nowrap title="<?=@$Ty11_codi?>"> 
+	<tr>
+	  <td nowrap title="<?=@$Ty11_codi?>">
 	    <?
 	    db_ancora(@$Ly11_codi,"js_bairro(true);",$db_opcao);
 	    ?>
 	  </td>
-	  <td nowrap> 
+	  <td nowrap>
 	    <?
 	      db_input('y11_codi',10,$Iy11_codi,true,'text',$db_opcao," onChange='js_bairro(false)'");
 	      db_input('j13_descr',50,$Ij13_descr,true,'text',3,"","j13_descr_exec");
@@ -265,10 +265,10 @@ function js_pesquisay70_tipovist(mostra){
   }
 }
 function js_mostratipovistorias(chave,erro){
-  document.form1.y77_descricao.value = chave; 
-  if(erro==true){ 
-    document.form1.y70_tipovist.focus(); 
-    document.form1.y70_tipovist.value = ''; 
+  document.form1.y77_descricao.value = chave;
+  if(erro==true){
+    document.form1.y70_tipovist.focus();
+    document.form1.y70_tipovist.value = '';
   }
 }
 function js_mostratipovistorias1(chave1,chave2){
@@ -284,10 +284,10 @@ function js_pesquisay76_codvist(mostra){
   }
 }
 function js_mostravistorias(chave,erro){
-  document.form1.y70_id_usuario.value = chave; 
-  if(erro==true){ 
-    document.form1.y76_codvist.focus(); 
-    document.form1.y76_codvist.value = ''; 
+  document.form1.y70_id_usuario.value = chave;
+  if(erro==true){
+    document.form1.y76_codvist.focus();
+    document.form1.y76_codvist.value = '';
   }
 }
 function js_mostravistorias1(chave1,chave2){
@@ -317,21 +317,21 @@ function js_consultasani(){
   if(vazio == 1){
     alert('Preencha um dos campos para o relatório!');
   }else{
-    js_OpenJanelaIframe('top.corpo','db_iframe_consultavist','fis3_consultavist002.php?y70_codvist='+document.form1.y76_codvist.value+'&cgm='+document.form1.z01_numcgm.value+'&matricula='+document.form1.j01_matric.value+'&inscricao='+document.form1.q02_inscr.value+'&sanitario='+document.form1.y80_codsani.value+'&dataini='+document.form1._ano.value+'-'+document.form1._mes.value+'-'+document.form1._dia.value+'&datafim='+document.form1.a_ano.value+'-'+document.form1.a_mes.value+'-'+document.form1.a_dia.value+'&rua='+document.form1.y10_codigo.value+'&bairro='+document.form1.y10_codi.value+'&tipovist='+document.form1.y70_tipovist.value+'&numbloco='+document.form1.y70_numbloco.value+'&ruae='+document.form1.y11_codigo.value+'&bairroe='+document.form1.y11_codi.value,'Consulta',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_consultavist','fis3_consultavist002.php?y70_codvist='+document.form1.y76_codvist.value+'&cgm='+document.form1.z01_numcgm.value+'&matricula='+document.form1.j01_matric.value+'&inscricao='+document.form1.q02_inscr.value+'&sanitario='+document.form1.y80_codsani.value+'&dataini='+document.form1._ano.value+'-'+document.form1._mes.value+'-'+document.form1._dia.value+'&datafim='+document.form1.a_ano.value+'-'+document.form1.a_mes.value+'-'+document.form1.a_dia.value+'&rua='+document.form1.y10_codigo.value+'&bairro='+document.form1.y10_codi.value+'&tipovist='+document.form1.y70_tipovist.value+'&numbloco='+document.form1.y70_numbloco.value+'&ruae='+document.form1.y11_codigo.value+'&bairroe='+document.form1.y11_codi.value,'Consulta',true);
   }
 }
 function js_pesquisay80_numcgm(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_cgm','func_nome.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cgm','func_nome.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome','Pesquisa',true);
   }else{
-    js_OpenJanelaIframe('top.corpo','db_iframe_cgm','func_nome.php?pesquisa_chave='+document.form1.y80_numcgm.value+'&funcao_js=parent.js_mostracgm','Pesquisa',false);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cgm','func_nome.php?pesquisa_chave='+document.form1.y80_numcgm.value+'&funcao_js=parent.js_mostracgm','Pesquisa',false);
   }
 }
 function js_mostracgm(erro,chave){
-  document.form1.z01_nome.value = erro; 
-  if(chave==true){ 
-    document.form1.y80_numcgm.focus(); 
-    document.form1.y80_numcgm.value = ''; 
+  document.form1.z01_nome.value = erro;
+  if(chave==true){
+    document.form1.y80_numcgm.focus();
+    document.form1.y80_numcgm.value = '';
   }
 }
 function js_mostracgm1(chave1,chave2){
@@ -416,9 +416,9 @@ function js_preencheender(chave,chave1){
 }
 function js_preencheender1(chave,erro){
   document.form1.j14_nome.value = chave;
-  if(erro==true){ 
-    document.form1.y10_codigo.focus(); 
-    document.form1.y10_codigo.value = ''; 
+  if(erro==true){
+    document.form1.y10_codigo.focus();
+    document.form1.y10_codigo.value = '';
   }
 }
 function js_sanitario(mostra){
@@ -436,9 +436,9 @@ function js_preenchesanitario(chave,chave1){
 }
 function js_preenchesanitario1(chave,chave1,erro){
   document.form1.z01_nomesani.value = chave1;
-  if(erro==true){ 
-    document.form1.y80_codsani.focus(); 
-    document.form1.y80_codsani.value = ''; 
+  if(erro==true){
+    document.form1.y80_codsani.focus();
+    document.form1.y80_codsani.value = '';
   }
 }
 function js_matri(mostra){
@@ -455,10 +455,10 @@ function js_mostramatri(chave1,chave2){
   db_iframe_iptubase.hide();
 }
 function js_mostramatri1(chave,erro){
-  document.form1.z01_nomematri.value = chave; 
-  if(erro==true){ 
-    document.form1.j01_matric.focus(); 
-    document.form1.j01_matric.value = ''; 
+  document.form1.z01_nomematri.value = chave;
+  if(erro==true){
+    document.form1.j01_matric.focus();
+    document.form1.j01_matric.value = '';
   }
 }
 
@@ -477,10 +477,10 @@ function js_mostrainscr(chave1,chave2){
   db_iframe.hide();
 }
 function js_mostrainscr1(chave,erro){
-  document.form1.z01_nomeinscr.value = chave; 
-  if(erro==true){ 
-    document.form1.q02_inscr.focus(); 
-    document.form1.q02_inscr.value = ''; 
+  document.form1.z01_nomeinscr.value = chave;
+  if(erro==true){
+    document.form1.q02_inscr.focus();
+    document.form1.q02_inscr.value = '';
   }
 }
 
@@ -499,10 +499,10 @@ function js_mostracgm(chave1,chave2){
   db_iframe2.hide();
 }
 function js_mostracgm1(erro,chave){
-  document.form1.z01_nomecgm.value = chave; 
-  if(erro==true){ 
-    document.form1.z01_numcgm.focus(); 
-    document.form1.z01_numcgm.value = ''; 
+  document.form1.z01_nomecgm.value = chave;
+  if(erro==true){
+    document.form1.z01_numcgm.focus();
+    document.form1.z01_numcgm.value = '';
   }
 }
 </script>

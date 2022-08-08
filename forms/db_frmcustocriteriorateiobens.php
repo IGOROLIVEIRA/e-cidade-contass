@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: Custos
@@ -40,17 +40,17 @@ if(isset($db_opcaoal)){
 }else if(isset($opcao) && $opcao=="excluir"){
     $db_opcao = 3;
     $db_botao=true;
-}else{  
+}else{
     $db_opcao = 1;
     $db_botao=true;
     if(isset($novo) || isset($alterar) ||   isset($excluir) || (isset($incluir) && $sqlerro==false ) ){
-      
+
      $cc06_custoplanoanaliticabens = "";
      $cc06_sequencial = "";
      $cc06_ativo = "";
-     
+
    }
-} 
+}
 ?>
 <form name="form1" method="post" action="">
 <center>
@@ -64,7 +64,7 @@ if(isset($db_opcaoal)){
     <td nowrap title="<?=@$Tcc06_sequencial?>">
        <?=@$Lcc06_sequencial?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('cc06_sequencial',10,$Icc06_sequencial,true,'text',3,"")
 ?>
@@ -74,7 +74,7 @@ db_input('cc06_sequencial',10,$Icc06_sequencial,true,'text',3,"")
     <td nowrap title="<?=@$Tcc06_custoplanoanaliticabens?>">
        <?=@$Lcc06_custoplanoanaliticabens?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('cc06_custoplanoanaliticabens',10,$Icc06_custoplanoanaliticabens,true,'text',$db_opcao,"")
 ?>
@@ -86,7 +86,7 @@ db_input('cc06_custoplanoanaliticabens',10,$Icc06_custoplanoanaliticabens,true,'
        db_ancora(@$Lcc06_custocriteriorateio,"js_pesquisacc06_custocriteriorateio(true);",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('cc06_custocriteriorateio',10,$Icc06_custocriteriorateio,true,'text',$db_opcao," onchange='js_pesquisacc06_custocriteriorateio(false);'")
 ?>
@@ -99,7 +99,7 @@ db_input('cc08_instit',10,$Icc08_instit,true,'text',3,'')
     <td nowrap title="<?=@$Tcc06_ativo?>">
        <?=@$Lcc06_ativo?>
     </td>
-    <td> 
+    <td>
 <?
 $x = array("f"=>"NAO","t"=>"SIM");
 db_select('cc06_ativo',$x,true,$db_opcao,"");
@@ -118,7 +118,7 @@ db_select('cc06_ativo',$x,true,$db_opcao,"");
   </table>
  <table>
   <tr>
-    <td valign="top"  align="center">  
+    <td valign="top"  align="center">
     <?
 	 $chavepri= array("cc06_custocriteriorateio"=>@$cc06_custocriteriorateio);
 	 $cliframe_alterar_excluir->chavepri=$chavepri;
@@ -146,20 +146,20 @@ function js_cancelar(){
 }
 function js_pesquisacc06_custocriteriorateio(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_custocriteriorateiobens','db_iframe_custocriteriorateio','func_custocriteriorateio.php?funcao_js=parent.js_mostracustocriteriorateio1|cc08_sequencial|cc08_instit','Pesquisa',true,'0','1','775','390');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_custocriteriorateiobens','db_iframe_custocriteriorateio','func_custocriteriorateio.php?funcao_js=parent.js_mostracustocriteriorateio1|cc08_sequencial|cc08_instit','Pesquisa',true,'0','1','775','390');
   }else{
-     if(document.form1.cc06_custocriteriorateio.value != ''){ 
-        js_OpenJanelaIframe('top.corpo.iframe_custocriteriorateiobens','db_iframe_custocriteriorateio','func_custocriteriorateio.php?pesquisa_chave='+document.form1.cc06_custocriteriorateio.value+'&funcao_js=parent.js_mostracustocriteriorateio','Pesquisa',false);
+     if(document.form1.cc06_custocriteriorateio.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_custocriteriorateiobens','db_iframe_custocriteriorateio','func_custocriteriorateio.php?pesquisa_chave='+document.form1.cc06_custocriteriorateio.value+'&funcao_js=parent.js_mostracustocriteriorateio','Pesquisa',false);
      }else{
-       document.form1.cc08_instit.value = ''; 
+       document.form1.cc08_instit.value = '';
      }
   }
 }
 function js_mostracustocriteriorateio(chave,erro){
-  document.form1.cc08_instit.value = chave; 
-  if(erro==true){ 
-    document.form1.cc06_custocriteriorateio.focus(); 
-    document.form1.cc06_custocriteriorateio.value = ''; 
+  document.form1.cc08_instit.value = chave;
+  if(erro==true){
+    document.form1.cc06_custocriteriorateio.focus();
+    document.form1.cc06_custocriteriorateio.value = '';
   }
 }
 function js_mostracustocriteriorateio1(chave1,chave2){

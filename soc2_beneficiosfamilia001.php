@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -73,15 +73,15 @@ $sAnoCompetencia = "";
               <table>
                 <tr>
                   <td nowrap="nowrap">
-                    <?php 
+                    <?php
                       db_ancora($Las04_sequencial, "js_pesquisaCodigoFamiliar(true);", $db_opcao);
                     ?>
                   </td>
                   <td nowrap="nowrap" colspan="3">
                     <?php
                       db_input("as04_sequencial", 10, $Ias04_sequencial, true, 'hidden', 3);
-                      db_input("as15_codigofamiliarcadastrounico", 10, $Ias15_codigofamiliarcadastrounico, true, 'text', 
-                               $db_opcao, 
+                      db_input("as15_codigofamiliarcadastrounico", 10, $Ias15_codigofamiliarcadastrounico, true, 'text',
+                               $db_opcao,
                                "onchange='js_pesquisaCodigoFamiliar(false);'");
                       db_input("ov02_nome", 30, $Iov02_nome, true, 'text', 3);
                     ?>
@@ -98,24 +98,24 @@ $sAnoCompetencia = "";
                 <tr>
                   <td nowrap><b>Mês/Ano da Competência:</b></td>
                   <td nowrap>
-                    <?php 
+                    <?php
                       db_select('aMesCompetencia', $aMesCompetencia, true, $db_opcao, "");
                     ?>
                     <b>/</b>
                     <?php
-                      db_input("sAnoCompetencia", 10, $sAnoCompetencia, true, 'text', $db_opcao, '', '', '', '', 4); 
+                      db_input("sAnoCompetencia", 10, $sAnoCompetencia, true, 'text', $db_opcao, '', '', '', '', 4);
                     ?>
                   </td>
                 </tr>
               </table>
             </fieldset>
-            <fieldset class="fieldset-hr">  
+            <fieldset class="fieldset-hr">
               <legend><b>Visualização</b></legend>
               <table>
                 <tr>
                   <td nowrap="nowrap" colspan="4">
                     <?php db_input('quebra_pagina', 50, '', true, 'checkbox', $db_opcao);?>
-                    <label for='quebra_pagina' ><b>Quebra página por letra</b></label> 
+                    <label for='quebra_pagina' ><b>Quebra página por letra</b></label>
                   </td>
                 </tr>
               </table>
@@ -136,14 +136,14 @@ $('letra_fim').value      = "Z";
 $('aMesCompetencia').value = 1;
 
 $("btnProcessar").observe("click", function() {
-  
+
   var sLocation  = "soc2_beneficiosfamilia002.php?";
   sLocation += "sCodigoFamiliar="+$F('as15_codigofamiliarcadastrounico');
   sLocation += "&sLetraInicio="+$F('letra_inicio')+"&sLetraFinal="+$F('letra_fim');
   sLocation += "&iMes="+$F('aMesCompetencia')+"&sAno="+$F('sAnoCompetencia');
   sLocation += "&sQuebraPagina="+$('quebra_pagina').checked;
   jan = window.open(sLocation,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0');
-  jan.moveTo(0,0);  
+  jan.moveTo(0,0);
 });
 
 function js_pesquisaCodigoFamiliar(lMostra) {
@@ -151,23 +151,23 @@ function js_pesquisaCodigoFamiliar(lMostra) {
 	var sTipoRetorno = "relatorio";
   if (lMostra == true) {
 
-  	js_OpenJanelaIframe('top.corpo', 
-  	  	                'db_iframe_cidadaofamilia', 
+  	js_OpenJanelaIframe('CurrentWindow.corpo',
+  	  	                'db_iframe_cidadaofamilia',
   	  	                'func_cidadaofamilia.php?'+
-  	  	                'funcao_js=parent.js_mostracodigofamiliar1|as15_codigofamiliarcadastrounico|ov02_nome', 
-  	  	                'Pesquisar Código da Família', 
+  	  	                'funcao_js=parent.js_mostracodigofamiliar1|as15_codigofamiliarcadastrounico|ov02_nome',
+  	  	                'Pesquisar Código da Família',
   	  	                true
   	  	               );
   } else {
 
   	if (document.form1.as15_codigofamiliarcadastrounico.value != '') {
 
-    	js_OpenJanelaIframe('top.corpo', 
-                          'db_iframe_cidadaofamilia', 
+    	js_OpenJanelaIframe('CurrentWindow.corpo',
+                          'db_iframe_cidadaofamilia',
                           'func_cidadaofamilia.php?pesquisa_chave='+document.form1.as15_codigofamiliarcadastrounico.value+
                                                  '&sTipoRetorno='+sTipoRetorno+
-                                                 '&funcao_js=parent.js_mostracodigofamiliar', 
-                          'Pesquisar Código da Família', 
+                                                 '&funcao_js=parent.js_mostracodigofamiliar',
+                          'Pesquisar Código da Família',
                           false
                          );
   	} else {

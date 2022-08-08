@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 $oRotulo = new rotulocampo;
@@ -59,7 +59,7 @@ $oRotulo->label("tre01_sequencial");
       <tr id="trVeiculo">
         <td>
           <?php
-            db_ancora("<b>Veículo:</b>", "js_pesquisaVeiculos(true);", $iOpcao); 
+            db_ancora("<b>Veículo:</b>", "js_pesquisaVeiculos(true);", $iOpcao);
           ?>
         </td>
         <td>
@@ -76,7 +76,7 @@ $oRotulo->label("tre01_sequencial");
       <tr id="trEmpresa" style="display: none;">
         <td>
           <?php
-            db_ancora("<b>Empresa:</b>", "js_pesquisaCgm(true);", $iOpcao); 
+            db_ancora("<b>Empresa:</b>", "js_pesquisaCgm(true);", $iOpcao);
           ?>
         </td>
         <td>
@@ -99,7 +99,7 @@ $oRotulo->label("tre01_sequencial");
             $sSqlTipoTransporteMunicipal = $oDaoTipoTransporteMunicipal->sql_query_file();
             $rsTipoTransporteMunicipal   = $oDaoTipoTransporteMunicipal->sql_record($sSqlTipoTransporteMunicipal);
             $iTotalTransporteMunicipal   = $oDaoTipoTransporteMunicipal->numrows;
-            
+
             for ($iContador = 0; $iContador < $iTotalTransporteMunicipal; $iContador++) {
 
               $oDadosTransporteMunicipal = db_utils::fieldsMemory($rsTipoTransporteMunicipal, $iContador);
@@ -113,7 +113,7 @@ $oRotulo->label("tre01_sequencial");
         <td><?=$Ltre01_identificacao?></td>
         <td colspan="2">
           <?php
-            db_input("tre01_identificacao", 6, $Itre01_identificacao, true, 'text', $iOpcao); 
+            db_input("tre01_identificacao", 6, $Itre01_identificacao, true, 'text', $iOpcao);
           ?>
         </td>
       </tr>
@@ -121,7 +121,7 @@ $oRotulo->label("tre01_sequencial");
         <td><?=$Ltre01_numeropassageiros?></td>
         <td>
           <?php
-            db_input("tre01_numeropassageiros", 6, $Itre01_numeropassageiros, true, 'text', $iOpcao); 
+            db_input("tre01_numeropassageiros", 6, $Itre01_numeropassageiros, true, 'text', $iOpcao);
           ?>
         </td>
       </tr>
@@ -162,7 +162,7 @@ function js_validaRequisicao(iOpcao) {
         js_salvar();
       });
       break;
-      
+
     case 2:
 
       $('btnAcao').value    = 'Alterar';
@@ -196,7 +196,7 @@ function js_tipoVeiculo() {
   $('tre01_identificacao').value     = '';
   $('tre01_numeropassageiros').value = '';
   $('tre01_identificacao').disabled  = true;
-  
+
   if ($('veiculoPrefeitura').value == 0) {
 
     js_alteraTipoVeiculo(0);
@@ -212,15 +212,15 @@ function js_pesquisaVeiculos(lMostra) {
   var sUrl  = 'func_veiculos.php?funcao_js=parent.js_mostraVeiculo';
 
   if (lMostra) {
-    
+
     sUrl += '|ve01_codigo|ve22_descr|ve01_placa';
-    js_OpenJanelaIframe('top.corpo', 'db_iframe_veiculos', sUrl, 'Pesquisa Veículos', true);
+    js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_veiculos', sUrl, 'Pesquisa Veículos', true);
   } else {
 
     if ($('ve01_codigo').value != '') {
 
       sUrl += '&pesquisa_chave='+$('ve01_codigo').value;
-      js_OpenJanelaIframe('top.corpo', 'db_iframe_veiculos', sUrl, 'Pesquisa Veículos', false);
+      js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_veiculos', sUrl, 'Pesquisa Veículos', false);
     }
   }
 }
@@ -263,13 +263,13 @@ function js_pesquisaCgm(lMostra) {
   if (lMostra) {
 
     sUrl += '|z01_numcgm|z01_nome';
-    js_OpenJanelaIframe('top.corpo', 'func_nome', sUrl, 'Pesquisa Empresa', true);
+    js_OpenJanelaIframe('CurrentWindow.corpo', 'func_nome', sUrl, 'Pesquisa Empresa', true);
   } else {
 
     if ($('z01_numcgm').value != '') {
 
       sUrl += '&pesquisa_chave='+$('z01_numcgm').value;
-      js_OpenJanelaIframe('top.corpo', 'func_nome', sUrl, 'Pesquisa Empresa', false);
+      js_OpenJanelaIframe('CurrentWindow.corpo', 'func_nome', sUrl, 'Pesquisa Empresa', false);
     }
   }
 }
@@ -284,7 +284,7 @@ function js_mostraCgm() {
     $('z01_numcgm').value = arguments[0];
     $('z01_nome').value   = arguments[1];
   } else if (arguments[0] === true) {
-    
+
     $('z01_numcgm').value = '';
     $('z01_nome').value   = arguments[1];
   } else {
@@ -300,8 +300,8 @@ function js_pesquisaVeiculoTransporte() {
 
   var sUrl  = 'func_veiculotransportemunicipal.php?funcao_js=parent.js_mostraVeiculoTransporte';
       sUrl += '|tre01_sequencial&iLinha=1';
-    
-  js_OpenJanelaIframe('top.corpo', 'db_iframe_veiculotransportemunicipal', sUrl, 'Pesquisa Veículo Transporte', true);
+
+  js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_veiculotransportemunicipal', sUrl, 'Pesquisa Veículo Transporte', true);
 }
 
 /**
@@ -313,18 +313,18 @@ function js_mostraVeiculoTransporte() {
   if (iOpcao == 1) {
     return;
   }
-  
+
   if (!empty(arguments[0])) {
-    
+
     var oParametro                = new Object();
         oParametro.exec           = 'getDados';
         oParametro.iCodigoVeiculo = arguments[0];
-  
+
     var oDadosRequisicao            = new Object();
         oDadosRequisicao.method     = 'post';
         oDadosRequisicao.parameters = 'json='+Object.toJSON(oParametro);
         oDadosRequisicao.onComplete = js_dadosVeiculoTransporte;
-  
+
     js_divCarregando(_M('educacao.transporteescolar.db_frmveiculotransporte.buscando_dados_veiculo'), "msgBox");
     new Ajax.Request(sUrlRpc, oDadosRequisicao);
   }
@@ -339,14 +339,14 @@ function js_dadosVeiculoTransporte(oResponse) {
   var oRetorno = eval('('+oResponse.responseText+')');
 
   $('btnAcao').disabled = false;
-  
+
   $('tre01_sequencial').value        = oRetorno.dados.iCodigoVeiculo;
   $('tipoTransporteMunicipal').value = oRetorno.dados.iTipoTransporte;
   $('tre01_numeropassageiros').value = oRetorno.dados.iNumeroPassageiros;
   $('tre01_identificacao').value     = oRetorno.dados.sIdentificacao.urlDecode();
 
   if (!empty(oRetorno.dados.iVinculoVeiculo)) {
-    
+
     $('ve01_codigo').value       = oRetorno.dados.iVinculoVeiculo;
     $('ve22_descr').value        = oRetorno.dados.sMarcaVinculoTransporte.urlDecode();
     $('veiculoPrefeitura').value = 1;
@@ -393,7 +393,7 @@ function js_alteraTipoVeiculo(iOpcao) {
 function js_salvar() {
 
   if (js_verificaCampos()) {
-    
+
     var oParametro                    = new Object();
         oParametro.exec               = 'salvar';
         oParametro.iCodigoVeiculo     = $('tre01_sequencial').value;
@@ -402,12 +402,12 @@ function js_salvar() {
         oParametro.iTipoTransporte    = $('tipoTransporteMunicipal').value;
         oParametro.iVinculoVeiculo    = $('ve01_codigo').value;
         oParametro.iVinculoCgm        = $('z01_numcgm').value;
-  
+
     var oDadosRequisicao            = new Object();
         oDadosRequisicao.method     = 'post';
         oDadosRequisicao.parameters = 'json='+Object.toJSON(oParametro);
         oDadosRequisicao.onComplete = js_retornoSalvar;
-  
+
     js_divCarregando(_M('educacao.transporteescolar.db_frmveiculotransporte.salvando_veiculo'), "msgBox");
     new Ajax.Request(sUrlRpc, oDadosRequisicao);
   }
@@ -420,10 +420,10 @@ function js_retornoSalvar(oResponse) {
 
   js_removeObj("msgBox");
   var oRetorno = eval('('+oResponse.responseText+')');
-  
+
   alert(oRetorno.message.urlDecode());
   if (oRetorno.status == 1) {
-    
+
     js_limpaCampos();
     if (iOpcao == 2) {
       js_pesquisaVeiculoTransporte();
@@ -437,16 +437,16 @@ function js_retornoSalvar(oResponse) {
 function js_excluir() {
 
   if (confirm(_M('educacao.transporteescolar.db_frmveiculotransporte.confirmacao_exclusao'))) {
-    
+
     var oParametro                = new Object();
         oParametro.exec           = 'excluir';
         oParametro.iCodigoVeiculo = $('tre01_sequencial').value;
-  
+
     var oDadosRequisicao            = new Object();
         oDadosRequisicao.method     = 'post';
         oDadosRequisicao.parameters = 'json='+Object.toJSON(oParametro);
         oDadosRequisicao.onComplete = js_retornoExcluir;
-  
+
     js_divCarregando(_M('educacao.transporteescolar.db_frmveiculotransporte.excluindo_veiculo'), "msgBox");
     new Ajax.Request(sUrlRpc, oDadosRequisicao);
   }
@@ -462,7 +462,7 @@ function js_retornoExcluir(oResponse) {
 
   alert(oRetorno.message.urlDecode());
   if (oRetorno.status == 1) {
-    
+
     js_limpaCampos();
     js_pesquisaVeiculoTransporte();
   }

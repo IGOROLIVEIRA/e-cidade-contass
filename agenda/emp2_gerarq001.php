@@ -38,16 +38,16 @@ db_postmemory($HTTP_POST_VARS);
     <td ></td>
     <td ></td>
   </tr>
-  <tr> 
+  <tr>
     <td  align="left" nowrap title="<?=$Te87_codgera?>"> <? db_ancora(@$Le87_codgera,"js_pesquisa_gera(true);",1);?>  </td>
     <td align="left" nowrap>
   <?
-   db_input("e87_codgera",8,$Ie87_codgera,true,"text",4,"onchange='js_pesquisa_gera(false);'"); 
+   db_input("e87_codgera",8,$Ie87_codgera,true,"text",4,"onchange='js_pesquisa_gera(false);'");
    db_input("e87_descgera",40,$Ie87_descgera,true,"text",3);
   ?>
     </td>
   </tr>
-  <tr> 
+  <tr>
     <td  align="left" nowrap title="Conta pagadora"> <? db_ancora("<strong>Conta pagadora:</strong>","",3);?>  </td>
     <td align="left" nowrap>
   <?
@@ -65,7 +65,7 @@ db_postmemory($HTTP_POST_VARS);
   <tr>
     <td colspan="2" align="center"><br>
       <input name="rel" type="button" <?=("onclick='js_gerarel($db_passapar);'")?>  value="Gerar relatório">
-      <input name="pes" type="button" onclick='js_OpenJanelaIframe("top.corpo","db_iframe_empagegera","func_empagegera.php?funcao_js=parent.js_mostragera1|e87_codgera|e87_descgera","Pesquisa",true);'  value="Pesquisar arquivos">
+      <input name="pes" type="button" onclick='js_OpenJanelaIframe("CurrentWindow.corpo","db_iframe_empagegera","func_empagegera.php?funcao_js=parent.js_mostragera1|e87_codgera|e87_descgera","Pesquisa",true);'  value="Pesquisar arquivos">
     </td>
   </tr>
 </table>
@@ -84,30 +84,30 @@ function js_gerarel(x){
       }
     }
   }
-  
+
   if(document.form1.e87_codgera.value!="" || document.form1.e83_codtipo.value!=0){
     jan = window.open('emp2_gerarq002.php?e87_codgera='+document.form1.e87_codgera.value+'&e87_descgera='+document.form1.e87_descgera.value+'&e83_codtipo='+document.form1.e83_codtipo.value+'&e83_codtipodescr='+e83_codtipodescr,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
   }else{
     alert("Informe o código do arquivo ou selecione o tipo para gerar o relatório.");
   }
-  
+
 }
 function js_pesquisa_gera(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_empagegera','func_empagegera.php?funcao_js=parent.js_mostragera1|e87_codgera|e87_descgera','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_empagegera','func_empagegera.php?funcao_js=parent.js_mostragera1|e87_codgera|e87_descgera','Pesquisa',true);
   }else{
-     if(document.form1.e87_codgera.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_empagegera','func_empagegera.php?pesquisa_chave='+document.form1.e87_codgera.value+'&funcao_js=parent.js_mostragera','Pesquisa',false);
+     if(document.form1.e87_codgera.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_empagegera','func_empagegera.php?pesquisa_chave='+document.form1.e87_codgera.value+'&funcao_js=parent.js_mostragera','Pesquisa',false);
      }else{
-       document.form1.e87_descgera.value = ''; 
+       document.form1.e87_descgera.value = '';
      }
   }
 }
 function js_mostragera(chave,erro){
-  document.form1.e87_descgera.value = chave; 
-  if(erro==true){ 
-    document.form1.e87_codgera.focus(); 
-    document.form1.e87_codgera.value = ''; 
+  document.form1.e87_descgera.value = chave;
+  if(erro==true){
+    document.form1.e87_codgera.focus();
+    document.form1.e87_codgera.value = '';
   }
 }
 function js_mostragera1(chave1,chave2){

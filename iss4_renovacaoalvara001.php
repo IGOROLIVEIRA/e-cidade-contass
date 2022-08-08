@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -109,30 +109,30 @@ require_once("libs/db_app.utils.php");
           db_getsession("DB_instit")
          );
 ?>
-   
+
 </body>
 </html>
 
 <script language="JavaScript" type="text/javascript">
-  
+
   /* instância do objeto que monta a grid de documentos no formulário */
   var oDocumentos = new DBViewAlvaraDocumentos('oDocumentos', 'ctnDocumentos');
       oDocumentos.show();
-     
+
   function js_pesquisaAlvara(mostra, iChave) {
-    
+
     var sUrl = '';
-    
+
     if (iChave == "") {
       sUrl = 'func_issalvararenovacao.php?funcao_js=parent.js_mostraAlvara|q123_inscr|z01_nome|q123_sequencial';
     } else {
       sUrl = 'func_issalvararenovacao.php?pesquisa_chave='+iChave+'&funcao_js=parent.js_mostraAlvara2';
     }
-    js_OpenJanelaIframe('top.corpo' ,'db_iframe_alvara', sUrl, 'Pesquisa Alvarás',mostra);
+    js_OpenJanelaIframe('CurrentWindow.corpo' ,'db_iframe_alvara', sUrl, 'Pesquisa Alvarás',mostra);
   }
-                     
+
   function js_mostraAlvara(sAlvara, sDetalhe, iCodigoAlvara) {
- 
+
     $('q123_inscr').value     = sAlvara;
     $('z01_nome').value       = sDetalhe;
     $('q120_issalvara').value = iCodigoAlvara;
@@ -141,57 +141,57 @@ require_once("libs/db_app.utils.php");
     db_iframe_alvara.hide();
     $('btnSalvar').disabled   = false;
   }
-  
+
   function js_mostraAlvara2(iAlvara,lErro,iInscr, sNome) {
-  
+
     if (lErro == true) {
-    
+
       $('q123_inscr').value     = '';
       $('z01_nome').value       = iAlvara;
       $('q120_issalvara').value = '';
       $('btnSalvar').disabled   = true;
     } else {
-    
+
       $('q123_inscr').value = iInscr;
       $('z01_nome').value   = sNome;
       $('q120_issalvara').value = iAlvara;
       oDocumentos.setCodigoAlvara(iAlvara);
       oDocumentos.carregaDados();
-      
+
       $('btnSalvar').disabled   = false;
     }
   }
- 
+
   /* código referente ao protocolo */
 
   function js_pesquisaProtocolo(mostra, iChave) {
-  
+
     var sUrl = '';
-   
+
     if (iChave == "") {
       sUrl = 'func_protprocesso.php?funcao_js=parent.js_mostraProtocolo|p58_codproc|z01_nome';
     } else {
       sUrl = 'func_protprocesso.php?pesquisa_chave='+iChave+'&funcao_js=parent.js_mostraProtocolo';
     }
-    js_OpenJanelaIframe('top.corpo' ,'db_iframe_protocolo' ,sUrl, 'Pesquisa protocolo' ,mostra);
+    js_OpenJanelaIframe('CurrentWindow.corpo' ,'db_iframe_protocolo' ,sUrl, 'Pesquisa protocolo' ,mostra);
   }
- 
+
   function js_mostraProtocolo(sProtocolo, sDetalhe) {
-   
+
     $('p58_codproc').value      = sProtocolo;
     $('p58_nomeprocesso').value = sDetalhe;
     db_iframe_protocolo.hide();
   }
-  
+
   /* envio dos dados para o RPC */
- 
+
   $("btnSalvar").observe("click", function() {
-   
+
     if ($F('q123_inscr') == '') {
       return;
     }
     if ($('q120_validadealvara').value == '') {
-   
+
       alert ("A nova validade do alvará deve ser informada.");
       return false;
     }
@@ -208,7 +208,7 @@ require_once("libs/db_app.utils.php");
                                  {method: 'post',
                                   parameters: 'json='+Object.toJSON(oParam),
                                   onComplete: function(oAjax) {
-                                  
+
                                                 js_removeObj("msgBox");
                                                 var aRetorno = eval("("+oAjax.responseText+")");
                                                 alert(aRetorno.message.urlDecode());
@@ -218,15 +218,15 @@ require_once("libs/db_app.utils.php");
                                               }
                                  });
   });
- 
+
   /* limpeza dos campos */
- 
+
   $("btnLimpar").observe("click", function() {
     js_limparCampos();
   });
- 
+
   function js_limparCampos() {
-   
+
     $('q123_inscr').value          = '';
     $('z01_nome').value            = '';
     $('q120_validadealvara').value = '';

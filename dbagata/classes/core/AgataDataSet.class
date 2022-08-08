@@ -1,7 +1,7 @@
 <?php
 /*
  *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
+ *  Copyright (C) 2014  DBselller Servicos de Informatica             
  *                            www.dbseller.com.br                     
  *                         e-cidade@dbseller.com.br                   
  *                                                                    
@@ -50,10 +50,8 @@ class AgataDataSet
     /*******************************************************************************/
     function FetchNext()
     {
-        //var_dump($this->rownum);
         if ($row=$this->result->Fetch())
         {
-            //echo "fetch";
             $this->rownum ++;
             for ($col=1; $col<=$this->ColumnCount; $col++)
             {

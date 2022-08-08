@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -56,7 +56,7 @@ $clrotulo->label("ac10_obs");
 <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta http-equiv="Expires" CONTENT="0">
-<?   
+<?
   db_app::load("scripts.js, strings.js, prototype.js, datagrid.widget.js");
   db_app::load("widgets/messageboard.widget.js, widgets/windowAux.widget.js");
   db_app::load("estilos.css, grid.style.css");
@@ -74,8 +74,8 @@ fieldset table td:first-child {
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 <table border="0" align="center" cellspacing="0" cellpadding="0" style="padding-top:40px;">
-  <tr> 
-    <td valign="top" align="center"> 
+  <tr>
+    <td valign="top" align="center">
       <fieldset>
         <legend><b>Anulação do Acordo</b></legend>
         <table align="center" border="0">
@@ -101,8 +101,8 @@ fieldset table td:first-child {
             </td>
             <td align="left">
               <?
-                db_inputdata('ac10_datamovimento',@$ac10_datamovimento_dia, 
-                                                   @$ac10_datamovimento_mes, 
+                db_inputdata('ac10_datamovimento',@$ac10_datamovimento_dia,
+                                                   @$ac10_datamovimento_mes,
                                                    @$ac10_datamovimento_ano, true, 'text', $db_opcao, "");
               ?>
             </td>
@@ -119,7 +119,7 @@ fieldset table td:first-child {
                   ?>
               </fieldset>
             </td>
-          </tr> 
+          </tr>
         </table>
       </fieldset>
     </td>
@@ -149,27 +149,27 @@ var sUrl = 'con4_contratosmovimento.RPC.php';
 function js_pesquisaac16_sequencial(lMostrar) {
 
   if (lMostrar == true) {
-    
+
     var sUrl = 'func_acordo.php?funcao_js=parent.js_mostraacordo1|ac16_sequencial|ac16_resumoobjeto';
-    js_OpenJanelaIframe('top.corpo', 
-                        'db_iframe_acordo', 
+    js_OpenJanelaIframe('CurrentWindow.corpo',
+                        'db_iframe_acordo',
                         sUrl,
                         'Pesquisar Acordo',
                         true);
   } else {
-  
-    if ($('ac16_sequencial').value != '') { 
-    
+
+    if ($('ac16_sequencial').value != '') {
+
       var sUrl = 'func_acordo.php?descricao=true&pesquisa_chave='+$('ac16_sequencial').value+
                  '&funcao_js=parent.js_mostraacordo';
-                 
-      js_OpenJanelaIframe('top.corpo',
+
+      js_OpenJanelaIframe('CurrentWindow.corpo',
                           'db_iframe_acordo',
                           sUrl,
                           'Pesquisar Acordo',
                           false);
      } else {
-       $('ac16_sequencial').value = ''; 
+       $('ac16_sequencial').value = '';
      }
   }
 }
@@ -178,14 +178,14 @@ function js_pesquisaac16_sequencial(lMostrar) {
  * Retorno da pesquisa acordos
  */
 function js_mostraacordo(chave1,chave2,erro) {
- 
+
   if (erro == true) {
-   
-    $('ac16_sequencial').value   = ''; 
+
+    $('ac16_sequencial').value   = '';
     $('ac16_resumoobjeto').value = chave1;
-    $('ac16_sequencial').focus(); 
+    $('ac16_sequencial').focus();
   } else {
-  
+
     $('ac16_sequencial').value   = chave1;
     $('ac16_resumoobjeto').value = chave2;
   }
@@ -203,57 +203,57 @@ function js_mostraacordo1(chave1,chave2) {
 
 /**
  * Incluir anulação para o contrato
- */  
+ */
 function js_anulacaoContrato() {
 
   if ($('ac16_sequencial').value == '') {
-    
+
     alert('Acordo não informado!');
     return false;
   }
-  
+
   if ($('ac10_datamovimento').value == '') {
-    
+
     alert('Data não informada!');
     return false;
   }
-  
+
   js_divCarregando('Aguarde incluindo anulação...','msgBoxAnulacaoContrato');
-   
+
   var oParam            = new Object();
   oParam.exec           = "anularContrato";
   oParam.acordo         = $F('ac16_sequencial');
   oParam.dtmovimentacao = $F('ac10_datamovimento');
   oParam.observacao     = encodeURIComponent(tagString($F('ac10_obs')));
-    
+
   var oAjax   = new Ajax.Request( sUrl, {
-                                          method: 'post', 
-                                          parameters: 'json='+js_objectToJson(oParam), 
+                                          method: 'post',
+                                          parameters: 'json='+js_objectToJson(oParam),
                                           onComplete: js_retornoDadosAnulacao
                                         }
-                                );  
+                                );
 }
-  
+
 /**
  * Retorna os dados da inclusão
  */
 function js_retornoDadosAnulacao(oAjax) {
-  
+
   js_removeObj("msgBoxAnulacaoContrato");
-  
+
   var oRetorno = eval("("+oAjax.responseText+")");
-     
+
   $('ac16_sequencial').value    = "";
   $('ac16_resumoobjeto').value  = "";
   $('ac10_datamovimento').value = "";
   $('ac10_obs').value           = "";
 
   if (oRetorno.status == 2) {
-    
+
     alert(oRetorno.erro.urlDecode());
     return false;
   } else {
-  
+
     alert("Inclusão efetuada com Sucesso.");
     return true;
   }

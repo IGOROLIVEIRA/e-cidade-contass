@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -71,20 +71,20 @@ if(isset($excluir) || isset($retornoexcluival)){
       if($clpcorcamtroca->erro_status==0){
 	$sqlerro=true;
 	$erro_msg = $clpcorcamtroca->erro_msg;
-      }  
+      }
       if($sqlerro==false){
 	$clpcorcamjulg->excluir(null,null,"pc24_orcamitem in (select distinct pc22_orcamitem from pcorcamitem where pc22_codorc=".$pc20_codorc.") and pc24_orcamforne in (select pc21_orcamforne from pcorcamforne where pc21_codorc=".$pc20_codorc.")");
 	if($clpcorcamjulg->erro_status==0){
 	  $sqlerro=true;
 	  $erro_msg = $clpcorcamjulg->erro_msg;
-	}  
+	}
       }
       if($sqlerro==false){
 	$clpcorcamval->excluir(null,null,"pc23_orcamitem in (select distinct pc22_orcamitem from pcorcamitem where pc22_codorc=".$pc20_codorc.") and pc23_orcamforne in (select distinct pc21_orcamforne from pcorcamforne where pc21_codorc=".$pc20_codorc.")");
 	if($clpcorcamval->erro_status==0){
 	  $sqlerro=true;
 	  $erro_msg = $clpcorcamval->erro_msg;
-	}  
+	}
       }
     }
     if($sqlerro==false){
@@ -92,27 +92,27 @@ if(isset($excluir) || isset($retornoexcluival)){
       if($clpcorcamforne->erro_status==0){
 	$sqlerro=true;
 	$erro_msg = $clpcorcamforne->erro_msg;
-      }  
+      }
     }
     if($sqlerro==false){
       $clpcorcamitemsol->excluir(null,null,"pc29_orcamitem in(".$clpcorcamitem->sql_query_file(null,"pc22_orcamitem","","pc22_codorc=".$pc20_codorc).")");
       if($clpcorcamitemsol->erro_status==0){
 	$sqlerro=true;
 	$erro_msg = $clpcorcamitemsol->erro_msg;
-      }  
+      }
     }
     if($sqlerro==false){
       $clpcorcamitem->excluir(null,"pc22_codorc=".$pc20_codorc);
       if($clpcorcamitem->erro_status==0){
 	$sqlerro=true;
 	$erro_msg = $clpcorcamitem->erro_msg;
-      }  
+      }
     }
     if($sqlerro==false){
       $clpcorcam->excluir($pc20_codorc);
       if($clpcorcam->erro_status==0){
 	$sqlerro=true;
-      }  
+      }
       $erro_msg = $clpcorcam->erro_msg;
     }
     db_fim_transacao($sqlerro);
@@ -168,7 +168,7 @@ if(isset($excluir) || isset($retornoexcluival)){
       }
     </script>
     ";
-  } 
+  }
   if($sqlerro==true){
     db_msgbox(str_replace("\n","\\n",$erro_msg));
     if($clpcorcam->erro_campo!=""){
@@ -179,7 +179,7 @@ if(isset($excluir) || isset($retornoexcluival)){
     echo "
      <script>
        function js_db_tranca(){
-         top.corpo.iframe_orcam.location.href='com1_orcamento006.php';
+         CurrentWindow.corpo.iframe_orcam.location.href='com1_orcamento006.php';
        }\n
        js_db_tranca();
      </script>\n
@@ -191,7 +191,7 @@ if(isset($retorno)){
   <script>
       function js_db_libera(){
          parent.document.formaba.fornec.disabled=false;
-	 top.corpo.iframe_fornec.location.href='com1_fornec001.php?solic=true&db_opcaoal=33&pc21_codorc=$retorno';
+	 CurrentWindow.corpo.iframe_fornec.location.href='com1_fornec001.php?solic=true&db_opcaoal=33&pc21_codorc=$retorno';
       }\n
     js_db_libera();
   </script>\n
@@ -205,20 +205,20 @@ if($db_open==true){
   if($clpcorcamitemsol->numrows>0){
     db_fieldsmemory($result_itemsol,0);
     echo "<script>
-            top.corpo.iframe_orcam.location.href = 'com1_orcamento006.php?retorno=$chavepesquisa&pc10_numero=$pc11_numero';
+            CurrentWindow.corpo.iframe_orcam.location.href = 'com1_orcamento006.php?retorno=$chavepesquisa&pc10_numero=$pc11_numero';
           </script>
          ";
   }else{
     $result_pcorcamitem = $clpcorcam->sql_record($clpcorcam->sql_query_solproc(null,"pc20_codorc","","pc20_codorc=$chavepesquisa and pc22_codorc is null"));
     if($clpcorcam->numrows!=0){
     echo "<script>
-            top.corpo.iframe_orcam.location.href = 'com1_orcamento006.php?retorno=$chavepesquisa';
+            CurrentWindow.corpo.iframe_orcam.location.href = 'com1_orcamento006.php?retorno=$chavepesquisa';
           </script>
           ";
-    }else    
+    }else
     echo "<script>
             alert('Usuário:\\n\\nOrçamento inexistente ou solicitação incluída em processo de compras.\\n\\nAdministrador.');
-            top.corpo.iframe_orcam.location.href = 'com1_orcamento006.php';
+            CurrentWindow.corpo.iframe_orcam.location.href = 'com1_orcamento006.php';
 	  </script>
 	 ";
   }

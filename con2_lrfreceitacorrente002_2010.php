@@ -131,7 +131,7 @@ if ($dtini!=''&&$dtfin!='') {
   $dt_ini = $dtini;
   $dt_fin = $dtfin;
 
-  $dt     = split("-",$dt_ini);
+  $dt     = explode("-",$dt_ini);
   $mes    = $dt[1];
 
   // 1 Bimestre
@@ -149,9 +149,9 @@ if ($dtini!=''&&$dtfin!='') {
     $bimestre = 6;
   }
 
-  $dt = split('-',$dt_fin);
+  $dt = explode('-',$dt_fin);
   $dt_ini_ant = $anousu_ant.'-'.$dt[1].'-'.$dt[2];
-  $dt = split('-',$dt_fin);
+  $dt = explode('-',$dt_fin);
   $dt_fin_ant = $anousu_ant.'-'.$dt[1].'-'.$dt[2];
 
 }
@@ -185,8 +185,8 @@ if (!isset($arqinclude)){
   }
 
   if ($tipo_emissao!='datas'){
-    $dtd1   = split('-',$dt_ini);
-    $dtd2   = split('-',$dt_fin);
+    $dtd1   = explode('-',$dt_ini);
+    $dtd2   = explode('-',$dt_fin);
     $dt1    = "$dtd1[2]/$dtd1[1]/$dtd1[0]";
     $dt2    = "$dtd2[2]/$dtd2[1]/$dtd2[0]";
     $txt    = strtoupper(db_mes('01'));
@@ -197,13 +197,13 @@ if (!isset($arqinclude)){
     } else {
       $txt   .= "  / ".$anousu;
     }
-    $dt     = split("-",$dt_fin);
+    $dt     = explode("-",$dt_fin);
     $txt   .= " A ".strtoupper(db_mes($dt[1]));
     $txt   .= "  / ".$anousu;
 
   }else {
-    $dtd1  = split('-',$dt_ini);
-    $dtd2  = split('-',$dt_fin);
+    $dtd1  = explode('-',$dt_ini);
+    $dtd2  = explode('-',$dt_fin);
     $dt1   = "$dtd1[2]/$dtd1[1]/$dtd1[0]";
     $dt2   = "$dtd2[2]/$dtd2[1]/$dtd2[0]";
     $head5 = "EMISSÃO POR DATAS";

@@ -529,13 +529,14 @@ DBViewLancamentoAvaliacaoAluno = function(sInstancia, iMatriculaAluno, aMatricul
         }
 
         var sIdCampoNota    = oDisciplina.iCodigoRegencia+"_"+oPeriodo.iCodigoAvaliacao+"_nota";
-        var sFormaAvaliacao = oPeriodo.sFormaAvaliacao;
+        var iFormaAvaliacao = oDisciplina.iProcedimentoAvaliacao;
         if (oInstancia.lAvaliadoParecer) {
-          sFormaAvaliacao = 'PARECER';
+          iFormaAvaliacao = '68';
         }
-        switch (sFormaAvaliacao) {
 
-	        case 'NIVEL':
+        switch (iFormaAvaliacao) {
+
+	        case '67':
 
 	          mValorTipoAvaliacao  = new DBComboBox (sIdCampoNota, sIdCampoNota, new Array(), "100%");
 	          mValorTipoAvaliacao.addEvent("onChange", sFuncaoPreencheDisciplina);
@@ -557,7 +558,7 @@ DBViewLancamentoAvaliacaoAluno = function(sInstancia, iMatriculaAluno, aMatricul
 	          mValorTipoAvaliacao.setValue(nNota);
             break;
 
-	        case 'NOTA':
+	        case '66':
 
 	          sReadOnly = lReadOnly?' readonly ':'';
 	          if (lNotaBloqueada) {
@@ -571,7 +572,7 @@ DBViewLancamentoAvaliacaoAluno = function(sInstancia, iMatriculaAluno, aMatricul
 	          mValorTipoAvaliacao += " value='"+nNota+"' type='text' style='background-color:"+sCorBackGroundNota+";width:100%;height:100%; text-align:right' />";
 	          break;
 
-	        case 'PARECER':
+	        case '68':
 
 
 	          var sFuncaoParecer   = oInstancia.sInstancia+".abrirParecer("+oPeriodo.iCodigoAvaliacao;
@@ -1055,6 +1056,11 @@ DBViewLancamentoAvaliacaoAluno = function(sInstancia, iMatriculaAluno, aMatricul
 
 
     var oRetorno = eval('('+oResponse.responseText+')');
+    if (oRetorno.status == 2) {
+
+      alert(oRetorno.message.urlDecode())
+      return;
+    }
     if (oRetorno.status == 1) {
 
       var oPeriodoLancado                   = oInstancia.getValorAproveitamento(oRetorno.iCodigoPeriodo, oRetorno.iCodigoRegencia);

@@ -118,50 +118,50 @@ class cl_rhpessoalmov
 
     // cria propriedade com as variaveis do arquivo
     var $campos = "
-                 rh02_instit = int4 = Cod. Instituição
-                 rh02_seqpes = int4 = Sequência
-                 rh02_anousu = int4 = Ano do Exercício
-                 rh02_mesusu = int4 = Mês do Exercício
+                 rh02_instit = int4 = Cod. Instituiï¿½ï¿½o
+                 rh02_seqpes = int4 = Sequï¿½ncia
+                 rh02_anousu = int4 = Ano do Exercï¿½cio
+                 rh02_mesusu = int4 = Mï¿½s do Exercï¿½cio
                  rh02_regist = int4 = Registro
                  rh02_codreg = int4 = Regime
-                 rh02_tipsal = varchar(1) = Tipo de Salário
+                 rh02_tipsal = varchar(1) = Tipo de Salï¿½rio
                  rh02_folha = varchar(1) = Tipo de Folha
                  rh02_fpagto = int4 = Pagamento
-                 rh02_tbprev = int4 = Tab.  Previdência
+                 rh02_tbprev = int4 = Tab.  Previdï¿½ncia
                  rh02_hrsmen = int4 = Horas Mensais
                  rh02_hrssem = int4 = Horas Semanais
                  rh02_ocorre = varchar(2) = Agentes Nocivos
-                 rh02_equip = bool = Equiparação
+                 rh02_equip = bool = Equiparaï¿½ï¿½o
                  rh02_tpcont = int4 = Tipo de Contrato
-                 rh02_vincrais = int4 = Vínculo
-                 rh02_salari = float8 = Salário
-                 rh02_lota = int4 = Código da Lotação
+                 rh02_vincrais = int4 = Vï¿½nculo
+                 rh02_salari = float8 = Salï¿½rio
+                 rh02_lota = int4 = Cï¿½digo da Lotaï¿½ï¿½o
                  rh02_funcao = int4 = Cargo
-                 rh02_rhtipoapos = int4 = Tipo de Apos./Pensão
-                 rh02_validadepensao = date = Validade Pensão
-                 rh02_deficientefisico = bool = Deficiente Físico
-                 rh02_portadormolestia = bool = Portador de Moléstia
+                 rh02_rhtipoapos = int4 = Tipo de Apos./Pensï¿½o
+                 rh02_validadepensao = date = Validade Pensï¿½o
+                 rh02_deficientefisico = bool = Deficiente Fï¿½sico
+                 rh02_portadormolestia = bool = Portador de Molï¿½stia
                  rh02_datalaudomolestia = date = Data do Laudo
-                 rh02_tipodeficiencia = int4 = Código do tipo de deficiência
-                 rh02_abonopermanencia = bool = Abono Permanência
-                 rh02_diasgozoferias = int4 = Dias padrão a Gozar
+                 rh02_tipodeficiencia = int4 = Cï¿½digo do tipo de deficiï¿½ncia
+                 rh02_abonopermanencia = bool = Abono Permanï¿½ncia
+                 rh02_diasgozoferias = int4 = Dias padrï¿½o a Gozar
                  rh02_tipcatprof = int4 = Categoria Profissional SIOPE
                  rh02_cgminstituidor = int4 = CGM do Instituidor
                  rh02_dtobitoinstituidor = int4 = Data de Obito do Instituidor
                  rh02_tipoparentescoinst = int4 = Tipo de Parentesco
-                 rh02_desctipoparentescoinst = Text = Descrição do Tipo de Parentesco
-                 rh02_laudodeficiencia = oid = Laudo Médico
-                 rh02_laudoportadormolestia = oid = Laudo Médico
-                 rh02_segatuacao = oid = Segmento de Atuação
+                 rh02_desctipoparentescoinst = Text = Descriï¿½ï¿½o do Tipo de Parentesco
+                 rh02_laudodeficiencia = oid = Laudo Mï¿½dico
+                 rh02_laudoportadormolestia = oid = Laudo Mï¿½dico
+                 rh02_segatuacao = oid = Segmento de Atuaï¿½ï¿½o
                  rh02_reabreadap = bool = Trabalhador Reabilitado/Readaptado
-                 rh02_cotadeficiencia = bool = cota de pessoas com deficiência habilitadas ou de beneficiários reabilitados
-                 rh02_plansegreg = int4 = Plano de Segregação da Massa
-                 rh02_datainicio = date = Data início
+                 rh02_cotadeficiencia = bool = cota de pessoas com deficiï¿½ncia habilitadas ou de beneficiï¿½rios reabilitados
+                 rh02_plansegreg = int4 = Plano de Segregaï¿½ï¿½o da Massa
+                 rh02_datainicio = date = Data inï¿½cio
                  rh02_tipojornada = int4 = Tipo de Jornada
                  rh02_horarionoturno = bool = Horario noturno
                  rh02_cnpjcedente = varchar(100) = cnpj cedente
-                 rh02_mattraborgcedente = varchar(100) = Matricula do Trabalhador no órgão Cedente
-                 rh02_dataadmisorgcedente = date = Data admissão org Cedente
+                 rh02_mattraborgcedente = varchar(100) = Matricula do Trabalhador no ï¿½rgï¿½o Cedente
+                 rh02_dataadmisorgcedente = date = Data admissï¿½o org Cedente
                  rh02_jornadadetrabalho = int4 = Jornada de Trabalho
                  rh02_tipobeneficio = varchar(5) =  Tipo de Benefício
                  rh02_descratobeneficio = varchar(255) =  Descrição do ato que originou o Benefício
@@ -277,123 +277,123 @@ class cl_rhpessoalmov
             $this->rh02_seqpes = ($this->rh02_seqpes == "" ? @$GLOBALS["HTTP_POST_VARS"]["rh02_seqpes"] : $this->rh02_seqpes);
         }
     }
-    // funcao para Inclusão
+    // funcao para Inclusï¿½o
     function incluir($rh02_seqpes, $rh02_instit, $bValida = true)
     {
         $this->atualizacampos();
         if ($this->rh02_anousu == null) {
-            $this->erro_sql = " Campo Ano do Exercício não informado.";
+            $this->erro_sql = " Campo Ano do Exercï¿½cio nï¿½o informado.";
             $this->erro_campo = "rh02_anousu";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
         if ($this->rh02_mesusu == null) {
-            $this->erro_sql = " Campo Mês do Exercício não informado.";
+            $this->erro_sql = " Campo Mï¿½s do Exercï¿½cio nï¿½o informado.";
             $this->erro_campo = "rh02_mesusu";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
         if ($this->rh02_regist == null) {
-            $this->erro_sql = " Campo Registro não informado.";
+            $this->erro_sql = " Campo Registro nï¿½o informado.";
             $this->erro_campo = "rh02_regist";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
         if ($this->rh02_codreg == null) {
-            $this->erro_sql = " Campo Regime não informado.";
+            $this->erro_sql = " Campo Regime nï¿½o informado.";
             $this->erro_campo = "rh02_codreg";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
         if ($this->rh02_tipsal == null) {
-            $this->erro_sql = " Campo Tipo de Salário não informado.";
+            $this->erro_sql = " Campo Tipo de Salï¿½rio nï¿½o informado.";
             $this->erro_campo = "rh02_tipsal";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
         if ($this->rh02_folha == null) {
-            $this->erro_sql = " Campo Tipo de Folha não informado.";
+            $this->erro_sql = " Campo Tipo de Folha nï¿½o informado.";
             $this->erro_campo = "rh02_folha";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
         if ($this->rh02_fpagto == null) {
-            $this->erro_sql = " Campo Pagamento não informado.";
+            $this->erro_sql = " Campo Pagamento nï¿½o informado.";
             $this->erro_campo = "rh02_fpagto";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
         if ($this->rh02_tbprev == null) {
-            $this->erro_sql = " Campo Tab.  Previdência não informado.";
+            $this->erro_sql = " Campo Tab.  Previdï¿½ncia nï¿½o informado.";
             $this->erro_campo = "rh02_tbprev";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
         if ($this->rh02_hrsmen == null) {
-            $this->erro_sql = " Campo Horas Mensais não informado.";
+            $this->erro_sql = " Campo Horas Mensais nï¿½o informado.";
             $this->erro_campo = "rh02_hrsmen";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
         if ($this->rh02_hrssem == null) {
-            $this->erro_sql = " Campo Horas Semanais não informado.";
+            $this->erro_sql = " Campo Horas Semanais nï¿½o informado.";
             $this->erro_campo = "rh02_hrssem";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
         if ($this->rh02_equip == null) {
-            $this->erro_sql = " Campo Equiparação não informado.";
+            $this->erro_sql = " Campo Equiparaï¿½ï¿½o nï¿½o informado.";
             $this->erro_campo = "rh02_equip";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
         if ($this->rh02_tpcont == null) {
-            $this->erro_sql = " Campo Tipo de Contrato não informado.";
+            $this->erro_sql = " Campo Tipo de Contrato nï¿½o informado.";
             $this->erro_campo = "rh02_tpcont";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
         if ($this->rh02_vincrais == null) {
-            $this->erro_sql = " Campo Vínculo não informado.";
+            $this->erro_sql = " Campo Vï¿½nculo nï¿½o informado.";
             $this->erro_campo = "rh02_vincrais";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
@@ -402,19 +402,19 @@ class cl_rhpessoalmov
             $this->rh02_salari = "0";
         }
         if ($this->rh02_lota == null) {
-            $this->erro_sql = " Campo Código da Lotação não informado.";
+            $this->erro_sql = " Campo Cï¿½digo da Lotaï¿½ï¿½o nï¿½o informado.";
             $this->erro_campo = "rh02_lota";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
         if ($this->rh02_funcao == null) {
-            $this->erro_sql = " Campo Cargo não informado.";
+            $this->erro_sql = " Campo Cargo nï¿½o informado.";
             $this->erro_campo = "rh02_funcao";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
@@ -426,19 +426,19 @@ class cl_rhpessoalmov
             $this->rh02_validadepensao = "null";
         }
         if ($this->rh02_deficientefisico == null) {
-            $this->erro_sql = " Campo Deficiente Físico não informado.";
+            $this->erro_sql = " Campo Deficiente Fï¿½sico nï¿½o informado.";
             $this->erro_campo = "rh02_deficientefisico";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
         if ($this->rh02_portadormolestia == null) {
-            $this->erro_sql = " Campo Portador de Moléstia não informado.";
+            $this->erro_sql = " Campo Portador de Molï¿½stia nï¿½o informado.";
             $this->erro_campo = "rh02_portadormolestia";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
@@ -461,20 +461,20 @@ class cl_rhpessoalmov
         if ($this->rh02_segatuacao == null) {
             $this->rh02_segatuacao = "null";
             if ((trim($this->rh02_segatuacao) == null || trim($this->rh02_segatuacao) == "0") && $this->rh02_tipcatprof != "0" && $bValida === true) {
-                $this->erro_sql = " Campo Segmento de Atuação não informado.";
+                $this->erro_sql = " Campo Segmento de Atuaï¿½ï¿½o nï¿½o informado.";
                 $this->erro_campo = "rh02_segatuacao";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
             }
         }
         /*if($this->rh02_diasgozoferias == null ){
-          $this->erro_sql = " Campo Dias padrão a Gozar não informado.";
+          $this->erro_sql = " Campo Dias padrï¿½o a Gozar nï¿½o informado.";
           $this->erro_campo = "rh02_diasgozoferias";
           $this->erro_banco = "";
-          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+          $this->erro_msg   = "Usuï¿½rio: \\n\\n ".$this->erro_sql." \\n\\n";
           $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
           $this->erro_status = "0";
           return false;
@@ -551,10 +551,10 @@ class cl_rhpessoalmov
 
         if ($this->rh02_cnpjcedente == null) {
             if (in_array($GLOBALS["HTTP_POST_VARS"]["tipadm"], array(3, 4))) {
-                $this->erro_sql = " Campo CNPJ Cedente não informado.";
+                $this->erro_sql = " Campo CNPJ Cedente nï¿½o informado.";
                 $this->erro_campo = "rh02_cnpjcedente";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -564,10 +564,10 @@ class cl_rhpessoalmov
 
         if ($this->rh02_mattraborgcedente == null) {
             if (in_array($GLOBALS["HTTP_POST_VARS"]["tipadm"], array(3, 4))) {
-                $this->erro_sql = " Campo Matricula do Trabalhador no órgão Cedente não informado.";
+                $this->erro_sql = " Campo Matricula do Trabalhador no ï¿½rgï¿½o Cedente nï¿½o informado.";
                 $this->erro_campo = "rh02_mattraborgcedente";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -577,10 +577,10 @@ class cl_rhpessoalmov
 
         if ($this->rh02_dataadmisorgcedente == null) {
             if (in_array($GLOBALS["HTTP_POST_VARS"]["tipadm"], array(3, 4))) {
-                $this->erro_sql = " Campo Data de Admissão no órgão Cedente não informado.";
+                $this->erro_sql = " Campo Data de Admissï¿½o no ï¿½rgï¿½o Cedente nï¿½o informado.";
                 $this->erro_campo = "rh02_dataadmisorgcedente";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -588,12 +588,12 @@ class cl_rhpessoalmov
             $this->rh02_dataadmisorgcedente = "null";
         }
 
-        if (empty($this->rh02_jornadadetrabalho)) {
-            if ($GLOBALS["HTTP_POST_VARS"]["rh30_regime"] == 2) {
-                $this->erro_sql = " Campo Jornada de Trabalho não informado.";
+        if ($this->rh02_jornadadetrabalho == null) {
+            if (in_array($GLOBALS["HTTP_POST_VARS"]["tipadm"], array(3, 4))) {
+                $this->erro_sql = " Campo Jornada de Trabalho nï¿½o informado.";
                 $this->erro_campo = "rh02_jornadadetrabalho";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -606,7 +606,7 @@ class cl_rhpessoalmov
             if ($result == false) {
                 $this->erro_banco = str_replace("\n", "", @pg_last_error());
                 $this->erro_sql   = "Verifique o cadastro da sequencia: rhpessoalmov_rh02_seqpes_seq do campo: rh02_seqpes";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -615,9 +615,9 @@ class cl_rhpessoalmov
         } else {
             $result = db_query("select last_value from rhpessoalmov_rh02_seqpes_seq");
             if (($result != false) && (pg_result($result, 0, 0) < $rh02_seqpes)) {
-                $this->erro_sql = " Campo rh02_seqpes maior que último número da sequencia.";
-                $this->erro_banco = "Sequencia menor que este número.";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_sql = " Campo rh02_seqpes maior que ï¿½ltimo nï¿½mero da sequencia.";
+                $this->erro_banco = "Sequencia menor que este nï¿½mero.";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -628,7 +628,7 @@ class cl_rhpessoalmov
         if (($this->rh02_seqpes == null) || ($this->rh02_seqpes == "")) {
             $this->erro_sql = " Campo rh02_seqpes nao declarado.";
             $this->erro_banco = "Chave Primaria zerada.";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
@@ -636,16 +636,16 @@ class cl_rhpessoalmov
         if (($this->rh02_instit == null) || ($this->rh02_instit == "")) {
             $this->erro_sql = " Campo rh02_instit nao declarado.";
             $this->erro_banco = "Chave Primaria zerada.";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
         if ($this->rh02_tipoparentescoinst == 11 && empty($this->rh02_desctipoparentescoinst)) {
-            $this->erro_sql = " Campo Descrição Tipo do Parentesco não informado.";
+            $this->erro_sql = " Campo Descriï¿½ï¿½o Tipo do Parentesco nï¿½o informado.";
             $this->erro_campo = "rh02_portadormolestia";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
@@ -772,13 +772,13 @@ class cl_rhpessoalmov
         if ($result == false) {
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
             if (strpos(strtolower($this->erro_banco), "duplicate key") != 0) {
-                $this->erro_sql   = "Cadastro de pessoal ($this->rh02_seqpes." - ".$this->rh02_instit) não Incluído. Inclusão Abortada.";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_banco = "Cadastro de pessoal já Cadastrado";
+                $this->erro_sql   = "Cadastro de pessoal ($this->rh02_seqpes." - ".$this->rh02_instit) nï¿½o Incluï¿½do. Inclusï¿½o Abortada.";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_banco = "Cadastro de pessoal jï¿½ Cadastrado";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             } else {
-                $this->erro_sql   = "Cadastro de pessoal ($this->rh02_seqpes." - ".$this->rh02_instit) não Incluído. Inclusão Abortada.";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_sql   = "Cadastro de pessoal ($this->rh02_seqpes." - ".$this->rh02_instit) nï¿½o Incluï¿½do. Inclusï¿½o Abortada.";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             }
             $this->erro_status = "0";
@@ -786,9 +786,9 @@ class cl_rhpessoalmov
             return false;
         }
         $this->erro_banco = "";
-        $this->erro_sql = "Inclusão efetuada com Sucesso\\n";
+        $this->erro_sql = "Inclusï¿½o efetuada com Sucesso\\n";
         $this->erro_sql .= "Valores : " . $this->rh02_seqpes . "-" . $this->rh02_instit;
-        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "1";
         $this->numrows_incluir = pg_affected_rows($result);
@@ -845,10 +845,10 @@ class cl_rhpessoalmov
             $sql  .= $virgula . " rh02_instit = $this->rh02_instit ";
             $virgula = ",";
             if (trim($this->rh02_instit) == null) {
-                $this->erro_sql = " Campo Cod. Instituição não informado.";
+                $this->erro_sql = " Campo Cod. Instituiï¿½ï¿½o nï¿½o informado.";
                 $this->erro_campo = "rh02_instit";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -858,10 +858,10 @@ class cl_rhpessoalmov
             $sql  .= $virgula . " rh02_seqpes = $this->rh02_seqpes ";
             $virgula = ",";
             if (trim($this->rh02_seqpes) == null) {
-                $this->erro_sql = " Campo Sequência não informado.";
+                $this->erro_sql = " Campo Sequï¿½ncia nï¿½o informado.";
                 $this->erro_campo = "rh02_seqpes";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -871,10 +871,10 @@ class cl_rhpessoalmov
             $sql  .= $virgula . " rh02_anousu = $this->rh02_anousu ";
             $virgula = ",";
             if (trim($this->rh02_anousu) == null) {
-                $this->erro_sql = " Campo Ano do Exercício não informado.";
+                $this->erro_sql = " Campo Ano do Exercï¿½cio nï¿½o informado.";
                 $this->erro_campo = "rh02_anousu";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -884,10 +884,10 @@ class cl_rhpessoalmov
             $sql  .= $virgula . " rh02_mesusu = $this->rh02_mesusu ";
             $virgula = ",";
             if (trim($this->rh02_mesusu) == null) {
-                $this->erro_sql = " Campo Mês do Exercício não informado.";
+                $this->erro_sql = " Campo Mï¿½s do Exercï¿½cio nï¿½o informado.";
                 $this->erro_campo = "rh02_mesusu";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -897,10 +897,10 @@ class cl_rhpessoalmov
             $sql  .= $virgula . " rh02_regist = $this->rh02_regist ";
             $virgula = ",";
             if (trim($this->rh02_regist) == null) {
-                $this->erro_sql = " Campo Registro não informado.";
+                $this->erro_sql = " Campo Registro nï¿½o informado.";
                 $this->erro_campo = "rh02_regist";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -910,10 +910,10 @@ class cl_rhpessoalmov
             $sql  .= $virgula . " rh02_codreg = $this->rh02_codreg ";
             $virgula = ",";
             if (trim($this->rh02_codreg) == null) {
-                $this->erro_sql = " Campo Regime não informado.";
+                $this->erro_sql = " Campo Regime nï¿½o informado.";
                 $this->erro_campo = "rh02_codreg";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -923,10 +923,10 @@ class cl_rhpessoalmov
             $sql  .= $virgula . " rh02_tipsal = '$this->rh02_tipsal' ";
             $virgula = ",";
             if (trim($this->rh02_tipsal) == null) {
-                $this->erro_sql = " Campo Tipo de Salário não informado.";
+                $this->erro_sql = " Campo Tipo de Salï¿½rio nï¿½o informado.";
                 $this->erro_campo = "rh02_tipsal";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -936,10 +936,10 @@ class cl_rhpessoalmov
             $sql  .= $virgula . " rh02_folha = '$this->rh02_folha' ";
             $virgula = ",";
             if (trim($this->rh02_folha) == null) {
-                $this->erro_sql = " Campo Tipo de Folha não informado.";
+                $this->erro_sql = " Campo Tipo de Folha nï¿½o informado.";
                 $this->erro_campo = "rh02_folha";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -949,10 +949,10 @@ class cl_rhpessoalmov
             $sql  .= $virgula . " rh02_fpagto = $this->rh02_fpagto ";
             $virgula = ",";
             if (trim($this->rh02_fpagto) == null) {
-                $this->erro_sql = " Campo Pagamento não informado.";
+                $this->erro_sql = " Campo Pagamento nï¿½o informado.";
                 $this->erro_campo = "rh02_fpagto";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -962,10 +962,10 @@ class cl_rhpessoalmov
             $sql  .= $virgula . " rh02_tbprev = $this->rh02_tbprev ";
             $virgula = ",";
             if (trim($this->rh02_tbprev) == null) {
-                $this->erro_sql = " Campo Tab.  Previdência não informado.";
+                $this->erro_sql = " Campo Tab.  Previdï¿½ncia nï¿½o informado.";
                 $this->erro_campo = "rh02_tbprev";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -975,10 +975,10 @@ class cl_rhpessoalmov
             $sql  .= $virgula . " rh02_hrsmen = $this->rh02_hrsmen ";
             $virgula = ",";
             if (trim($this->rh02_hrsmen) == null) {
-                $this->erro_sql = " Campo Horas Mensais não informado.";
+                $this->erro_sql = " Campo Horas Mensais nï¿½o informado.";
                 $this->erro_campo = "rh02_hrsmen";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -988,10 +988,10 @@ class cl_rhpessoalmov
             $sql  .= $virgula . " rh02_hrssem = $this->rh02_hrssem ";
             $virgula = ",";
             if (trim($this->rh02_hrssem) == null) {
-                $this->erro_sql = " Campo Horas Semanais não informado.";
+                $this->erro_sql = " Campo Horas Semanais nï¿½o informado.";
                 $this->erro_campo = "rh02_hrssem";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -1005,10 +1005,10 @@ class cl_rhpessoalmov
             $sql  .= $virgula . " rh02_equip = '$this->rh02_equip' ";
             $virgula = ",";
             if (trim($this->rh02_equip) == null) {
-                $this->erro_sql = " Campo Equiparação não informado.";
+                $this->erro_sql = " Campo Equiparaï¿½ï¿½o nï¿½o informado.";
                 $this->erro_campo = "rh02_equip";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -1018,10 +1018,10 @@ class cl_rhpessoalmov
             $sql  .= $virgula . " rh02_tpcont = $this->rh02_tpcont ";
             $virgula = ",";
             if (trim($this->rh02_tpcont) == null) {
-                $this->erro_sql = " Campo Tipo de Contrato não informado.";
+                $this->erro_sql = " Campo Tipo de Contrato nï¿½o informado.";
                 $this->erro_campo = "rh02_tpcont";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -1031,10 +1031,10 @@ class cl_rhpessoalmov
             $sql  .= $virgula . " rh02_vincrais = $this->rh02_vincrais ";
             $virgula = ",";
             if (trim($this->rh02_vincrais) == null) {
-                $this->erro_sql = " Campo Vínculo não informado.";
+                $this->erro_sql = " Campo Vï¿½nculo nï¿½o informado.";
                 $this->erro_campo = "rh02_vincrais";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -1051,10 +1051,10 @@ class cl_rhpessoalmov
             $sql  .= $virgula . " rh02_lota = $this->rh02_lota ";
             $virgula = ",";
             if (trim($this->rh02_lota) == null) {
-                $this->erro_sql = " Campo Código da Lotação não informado.";
+                $this->erro_sql = " Campo Cï¿½digo da Lotaï¿½ï¿½o nï¿½o informado.";
                 $this->erro_campo = "rh02_lota";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -1064,10 +1064,10 @@ class cl_rhpessoalmov
             $sql  .= $virgula . " rh02_funcao = $this->rh02_funcao ";
             $virgula = ",";
             if (trim($this->rh02_funcao) == null) {
-                $this->erro_sql = " Campo Cargo não informado.";
+                $this->erro_sql = " Campo Cargo nï¿½o informado.";
                 $this->erro_campo = "rh02_funcao";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -1093,10 +1093,10 @@ class cl_rhpessoalmov
             $sql  .= $virgula . " rh02_deficientefisico = '$this->rh02_deficientefisico' ";
             $virgula = ",";
             if (trim($this->rh02_deficientefisico) == null) {
-                $this->erro_sql = " Campo Deficiente Físico não informado.";
+                $this->erro_sql = " Campo Deficiente Fï¿½sico nï¿½o informado.";
                 $this->erro_campo = "rh02_deficientefisico";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -1106,10 +1106,10 @@ class cl_rhpessoalmov
             $sql  .= $virgula . " rh02_portadormolestia = '$this->rh02_portadormolestia' ";
             $virgula = ",";
             if (trim($this->rh02_portadormolestia) == null) {
-                $this->erro_sql = " Campo Portador de Moléstia não informado.";
+                $this->erro_sql = " Campo Portador de Molï¿½stia nï¿½o informado.";
                 $this->erro_campo = "rh02_portadormolestia";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -1145,10 +1145,10 @@ class cl_rhpessoalmov
             $sql  .= $virgula . " rh02_diasgozoferias = $this->rh02_diasgozoferias ";
             $virgula = ",";
             if (trim($this->rh02_diasgozoferias) == null) {
-                $this->erro_sql = " Campo Dias padrão a Gozar não informado.";
+                $this->erro_sql = " Campo Dias padrï¿½o a Gozar nï¿½o informado.";
                 $this->erro_campo = "rh02_diasgozoferias";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -1207,10 +1207,10 @@ class cl_rhpessoalmov
                 $virgula = ",";
             }
             if ((trim($this->rh02_segatuacao) == null || trim($this->rh02_segatuacao) == "0") && $this->rh02_tipcatprof != "0" && $bValida === true) {
-                $this->erro_sql = " Campo Segmento de Atuação não informado.";
+                $this->erro_sql = " Campo Segmento de Atuaï¿½ï¿½o nï¿½o informado.";
                 $this->erro_campo = "rh02_segatuacao";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -1223,10 +1223,10 @@ class cl_rhpessoalmov
         }
         if (trim($this->rh02_desctipoparentescoinst) != "" || isset($GLOBALS["HTTP_POST_VARS"]["rh02_desctipoparentescoinst"])) {
             if ($this->rh02_tipoparentescoinst == 11 && empty($this->rh02_desctipoparentescoinst)) {
-                $this->erro_sql = " Campo Descrição Tipo do Parentesco não informado.";
+                $this->erro_sql = " Campo Descriï¿½ï¿½o Tipo do Parentesco nï¿½o informado.";
                 $this->erro_campo = "rh02_portadormolestia";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -1338,10 +1338,10 @@ class cl_rhpessoalmov
         }
         if (trim($this->rh02_cnpjcedente) != "" || isset($GLOBALS["HTTP_POST_VARS"]["rh02_cnpjcedente"])) {
             if (in_array($GLOBALS["HTTP_POST_VARS"]["tipadm"], array(3, 4)) && trim($this->rh02_cnpjcedente) == "" && isset($GLOBALS["HTTP_POST_VARS"]["rh02_cnpjcedente"])) {
-                $this->erro_sql = " Campo CNPJ Cedente não informado.";
+                $this->erro_sql = " Campo CNPJ Cedente nï¿½o informado.";
                 $this->erro_campo = "rh02_cnpjcedente";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -1354,10 +1354,10 @@ class cl_rhpessoalmov
 
         if (trim($this->rh02_mattraborgcedente) != "" || isset($GLOBALS["HTTP_POST_VARS"]["rh02_mattraborgcedente"])) {
             if (in_array($GLOBALS["HTTP_POST_VARS"]["tipadm"], array(3, 4)) && trim($this->rh02_mattraborgcedente) == "" && isset($GLOBALS["HTTP_POST_VARS"]["rh02_mattraborgcedente"])) {
-                $this->erro_sql = " Campo Matricula do Trabalhador no órgão Cedente não informado.";
+                $this->erro_sql = " Campo Matricula do Trabalhador no ï¿½rgï¿½o Cedente nï¿½o informado.";
                 $this->erro_campo = "rh02_mattraborgcedente";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -1373,10 +1373,10 @@ class cl_rhpessoalmov
             $virgula = ",";
         } else {
             if (in_array($GLOBALS["HTTP_POST_VARS"]["tipadm"], array(3, 4)) && trim($this->rh02_dataadmisorgcedente) == "" && isset($GLOBALS["HTTP_POST_VARS"]["rh02_dataadmisorgcedente"])) {
-                $this->erro_sql = " Campo Data de Admissão no órgão Cedente não informado.";
+                $this->erro_sql = " Campo Data de Admissï¿½o no ï¿½rgï¿½o Cedente nï¿½o informado.";
                 $this->erro_campo = "rh02_dataadmisorgcedente";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -1386,7 +1386,18 @@ class cl_rhpessoalmov
             }
         }
 
-        if (trim($this->rh02_jornadadetrabalho) != "" && isset($GLOBALS["HTTP_POST_VARS"]["rh02_jornadadetrabalho"])) {
+        if (trim($this->rh02_jornadadetrabalho) != "" || isset($GLOBALS["HTTP_POST_VARS"]["rh02_jornadadetrabalho"])) {
+            if (in_array($GLOBALS["HTTP_POST_VARS"]["tipadm"], array(3, 4)) && trim($this->rh02_jornadadetrabalho) == "" && isset($GLOBALS["HTTP_POST_VARS"]["rh02_jornadadetrabalho"])) {
+                $this->erro_sql = " Campo Jornada de Trabalho nï¿½o informado.";
+                $this->erro_campo = "rh02_jornadadetrabalho";
+                $this->erro_banco = "";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            } else if (trim($this->rh02_jornadadetrabalho) == "" && isset($GLOBALS["HTTP_POST_VARS"]["rh02_jornadadetrabalho"]) && !in_array($GLOBALS["HTTP_POST_VARS"]["tipadm"], array(3, 4))) {
+                $this->rh02_jornadadetrabalho = "null";
+            }
             $sql  .= $virgula . " rh02_jornadadetrabalho = $this->rh02_jornadadetrabalho ";
             $virgula = ",";
         } else if (empty($this->rh02_jornadadetrabalho) && isset($GLOBALS["HTTP_POST_VARS"]["rh02_jornadadetrabalho"]) && $GLOBALS["HTTP_POST_VARS"]["rh30_regime"] == 2) {
@@ -1504,9 +1515,9 @@ class cl_rhpessoalmov
 
         if (!$result) {
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
-            $this->erro_sql   = "Cadastro de pessoal não Alterado. Alteração Abortada.\\n";
+            $this->erro_sql   = "Cadastro de pessoal nï¿½o Alterado. Alteraï¿½ï¿½o Abortada.\\n";
             $this->erro_sql .= "Valores : " . $this->rh02_seqpes . "-" . $this->rh02_instit;
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             $this->numrows_alterar = 0;
@@ -1514,18 +1525,18 @@ class cl_rhpessoalmov
         } else {
             if (pg_affected_rows($result) == 0) {
                 $this->erro_banco = "";
-                $this->erro_sql = "Cadastro de pessoal não foi Alterado. Alteração Executada.\\n";
+                $this->erro_sql = "Cadastro de pessoal nï¿½o foi Alterado. Alteraï¿½ï¿½o Executada.\\n";
                 $this->erro_sql .= "Valores : " . $this->rh02_seqpes . "-" . $this->rh02_instit;
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "1";
                 $this->numrows_alterar = 0;
                 return true;
             } else {
                 $this->erro_banco = "";
-                $this->erro_sql = "Alteração efetuada com Sucesso\\n";
+                $this->erro_sql = "Alteraï¿½ï¿½o efetuada com Sucesso\\n";
                 $this->erro_sql .= "Valores : " . $this->rh02_seqpes . "-" . $this->rh02_instit;
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "1";
                 $this->numrows_alterar = pg_affected_rows($result);
@@ -1608,9 +1619,9 @@ class cl_rhpessoalmov
         $result = db_query($sql . $sql2);
         if ($result == false) {
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
-            $this->erro_sql   = "Cadastro de pessoal não Excluído. Exclusão Abortada.\\n";
+            $this->erro_sql   = "Cadastro de pessoal nï¿½o Excluï¿½do. Exclusï¿½o Abortada.\\n";
             $this->erro_sql .= "Valores : " . $rh02_seqpes . "-" . $rh02_instit;
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             $this->numrows_excluir = 0;
@@ -1618,18 +1629,18 @@ class cl_rhpessoalmov
         } else {
             if (pg_affected_rows($result) == 0) {
                 $this->erro_banco = "";
-                $this->erro_sql = "Cadastro de pessoal não Encontrado. Exclusão não Efetuada.\\n";
+                $this->erro_sql = "Cadastro de pessoal nï¿½o Encontrado. Exclusï¿½o nï¿½o Efetuada.\\n";
                 $this->erro_sql .= "Valores : " . $rh02_seqpes . "-" . $rh02_instit;
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "1";
                 $this->numrows_excluir = 0;
                 return true;
             } else {
                 $this->erro_banco = "";
-                $this->erro_sql = "Exclusão efetuada com Sucesso\\n";
+                $this->erro_sql = "Exclusï¿½o efetuada com Sucesso\\n";
                 $this->erro_sql .= "Valores : " . $rh02_seqpes . "-" . $rh02_instit;
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "1";
                 $this->numrows_excluir = pg_affected_rows($result);
@@ -1645,7 +1656,7 @@ class cl_rhpessoalmov
             $this->numrows    = 0;
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
             $this->erro_sql   = "Erro ao selecionar os registros.";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
@@ -1654,7 +1665,7 @@ class cl_rhpessoalmov
         if ($this->numrows == 0) {
             $this->erro_banco = "";
             $this->erro_sql   = "Record Vazio na Tabela:rhpessoalmov";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   = "Usuï¿½rio: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
@@ -1907,11 +1918,11 @@ class cl_rhpessoalmov
         if ($sQuebraRelatorio != 'geral') {
 
             if (!array_key_exists($sQuebraRelatorio, $aQuebra)) {
-                throw new ParameterException('Não existe tipo de Quebra Especificada.');
+                throw new ParameterException('Nï¿½o existe tipo de Quebra Especificada.');
             }
 
             if (!array_key_exists($sTipoFolha, $aTiposFolha)) {
-                throw new ParameterException('Não existe tipo de Folha Especificada.');
+                throw new ParameterException('Nï¿½o existe tipo de Folha Especificada.');
             }
 
             $sCampoAgrupador = $aQuebra[$sQuebraRelatorio];
@@ -2309,7 +2320,7 @@ class cl_rhpessoalmov
     }
 
     /**
-     * Busca servidores por cargo, lotação e Secretarias
+     * Busca servidores por cargo, lotaï¿½ï¿½o e Secretarias
      *
      * @param string  $sCampos
      * @param integer $sWhere
@@ -2401,11 +2412,11 @@ class cl_rhpessoalmov
 
     /**
      * Monta o SQL dos dados da planilha CSV do IAPEP
-     * @param string $sFiltroAdmissao - Indica qual o período vai buscar. Fixo < 20/12/2012 ou > 20/12/2012
+     * @param string $sFiltroAdmissao - Indica qual o perï¿½odo vai buscar. Fixo < 20/12/2012 ou > 20/12/2012
      * @param integer $iAnoCompetencia - Ano da competencia
      * @param integer $iMesCompetencia - Mes da competencia
      * @param integer $iInstit - Instituicao da sessao
-     * @param boolean $lIsPlanilha13 - Indicador se é planilha de salário ou de salario 13
+     * @param boolean $lIsPlanilha13 - Indicador se ï¿½ planilha de salï¿½rio ou de salario 13
      * @param string $sOrder - Ordem dos registros
      * @param float $fContribuicaoPatronalServidor - Percentual multiplicador do IAPEP - Fixo 24%
      * @return string - SQL a ser executado
@@ -2417,16 +2428,16 @@ class cl_rhpessoalmov
         /**
          * Valida tipo de planilha gerfsal ou gerfs13
          *
-         * Planilha Salário    -> gerfsal
+         * Planilha Salï¿½rio    -> gerfsal
          *                        rubrica R985
          *                        prefixo r14
          *
-         * Planilha Salário 13 -> gerfs13
+         * Planilha Salï¿½rio 13 -> gerfs13
          *                        rubrica R986
          *                        prefixo r35
          *
          */
-        // Lógica antiga $sRubricaCalculo           = " 'R981', 'R975' ";
+        // Lï¿½gica antiga $sRubricaCalculo           = " 'R981', 'R975' ";
         $sRubricaCalculo          = " 'R985', 'R975' ";
         $sTabelaCalculo           = $sTabela; //'gerfsal';
         $sPrefixoTabelaCalculo    = $sSigla; //'r14';
@@ -2436,12 +2447,12 @@ class cl_rhpessoalmov
         }
 
         /**
-         * Valida filtros de admissão, sendo eles
+         * Valida filtros de admissï¿½o, sendo eles
          *
          * admitido ate  20/12/2012 -> rh01_admiss <= '2012-12-20'
-         * admitido após 21/12/2012 -> rh01_admiss >= '2012-12-21'
+         * admitido apï¿½s 21/12/2012 -> rh01_admiss >= '2012-12-21'
          *
-         * Padrão -> após 21/12/2012
+         * Padrï¿½o -> apï¿½s 21/12/2012
          */
         $sSqlSubQueryAdmissao  = " ( select rh01_admiss                                                                              \n";
         $sSqlSubQueryAdmissao .= "      from rhpessoal x                                                                             \n";
@@ -2454,7 +2465,7 @@ class cl_rhpessoalmov
         }
 
         /**
-         * Define clausulas From e Where padrão dos calculos
+         * Define clausulas From e Where padrï¿½o dos calculos
          */
         $sFromWhereCalculo  = "             from $sTabelaCalculo                                                                    \n";
         $sFromWhereCalculo .= "            where {$sPrefixoTabelaCalculo}_regist = rh02_regist                                      \n";
@@ -2464,8 +2475,8 @@ class cl_rhpessoalmov
         /**
          * Where especifico para PIAUI
          */
-        $sSqlEspecificoMPPI  = "      and rh02_funcao <> 70            --Especifico código cargo estagiario / PIAUI                 \n";
-        $sSqlEspecificoMPPI .= "      and rh02_tbprev NOT IN (0 , 1)   --Não buscar tabelas do INSS e nao informados / PIAUI        \n";
+        $sSqlEspecificoMPPI  = "      and rh02_funcao <> 70            --Especifico cï¿½digo cargo estagiario / PIAUI                 \n";
+        $sSqlEspecificoMPPI .= "      and rh02_tbprev NOT IN (0 , 1)   --Nï¿½o buscar tabelas do INSS e nao informados / PIAUI        \n";
 
         $sSql  = "   select '$sTabelaCalculo',                                                                                      \n";
         $sSql .= "          rh02_regist,                                                                                            \n";
@@ -2525,7 +2536,7 @@ class cl_rhpessoalmov
         $sSql .= "          rh02_seqpes                                                                                             \n";
 
         /**
-         * Ordenação padrão por nome do servidor
+         * Ordenaï¿½ï¿½o padrï¿½o por nome do servidor
          */
         if (!empty($sOrder)) {
             $sSql .= " order by {$sOrder}                                                                                              \n";
@@ -2534,8 +2545,8 @@ class cl_rhpessoalmov
     }
 
     /**
-     * Monta o SQL do relatório dos totalizadores das planilhas geradas no metódo de cima.
-     * @param string $sFiltroAdmissao - Indica qual o período vai buscar. Fixo < 20/12/2012 ou > 20/12/2012
+     * Monta o SQL do relatï¿½rio dos totalizadores das planilhas geradas no metï¿½do de cima.
+     * @param string $sFiltroAdmissao - Indica qual o perï¿½odo vai buscar. Fixo < 20/12/2012 ou > 20/12/2012
      * @param integer $iAnoCompetencia - Ano da competencia
      * @param integer $iMesCompetencia - Mes da competencia
      * @param integer $iInstit - Intituicao da sessao
@@ -2550,12 +2561,12 @@ class cl_rhpessoalmov
 
 
         /**
-         * Valida filtros de admissão, sendo eles
+         * Valida filtros de admissï¿½o, sendo eles
          *
          * admitido ate  20/12/2012 -> rh01_admiss <= '2012-12-20'
-         * admitido após 21/12/2012 -> rh01_admiss >= '2012-12-21'
+         * admitido apï¿½s 21/12/2012 -> rh01_admiss >= '2012-12-21'
          *
-         * Padrão -> após 21/12/2012
+         * Padrï¿½o -> apï¿½s 21/12/2012
          */
         $sSqlSubQueryAdmissao  = " ( select rh01_admiss                                                                              \n";
         $sSqlSubQueryAdmissao .= "      from rhpessoal x                                                                             \n";
@@ -2573,8 +2584,8 @@ class cl_rhpessoalmov
         /**
          * Where especifico para PIAUI
          */
-        $sSqlEspecificoMPPI  = "      and rh02_funcao <> 70            --Especifico código cargo estagiario / PIAUI                                                                           \n";
-        $sSqlEspecificoMPPI .= "      and rh02_tbprev NOT IN (0 , 1)   --Não buscar tabelas do INSS e nao informados / PIAUI                                                                  \n";
+        $sSqlEspecificoMPPI  = "      and rh02_funcao <> 70            --Especifico cï¿½digo cargo estagiario / PIAUI                                                                           \n";
+        $sSqlEspecificoMPPI .= "      and rh02_tbprev NOT IN (0 , 1)   --Nï¿½o buscar tabelas do INSS e nao informados / PIAUI                                                                  \n";
 
         $sSql   = "select round ( sum ( remuneracao_bruta                    ), 2 )                                                    as TotalFolhaBruta,                                    \n";
         $sSql  .= "       round ( sum ( contribuicao_previdenciaria          ), 2 )                                                    as TotalContribuicaoPrevidenciaria,                    \n";
@@ -2753,11 +2764,11 @@ class cl_rhpessoalmov
     }
 
     /**
-     * Retorna as Variáveis para cálculo conforme o servidor
+     * Retorna as Variï¿½veis para cï¿½lculo conforme o servidor
      * @param  Integer $iMatricula  Matricula do Servidor
-     * @param  Integer $iAno        Ano competência
-     * @param  Integer $iMes        Mês competência
-     * @param  Integer $Instituicao Instiotuição
+     * @param  Integer $iAno        Ano competï¿½ncia
+     * @param  Integer $iMes        Mï¿½s competï¿½ncia
+     * @param  Integer $Instituicao Instiotuiï¿½ï¿½o
      * @return String               Sql
      */
     function sql_getVariaveisCalculo($iMatricula, $iAno, $iMes, $iInstituicao)
@@ -3027,17 +3038,17 @@ class cl_rhpessoalmov
 
         $sSql .= "where ";
         $sSql .= " case";
-        $sSql .= "     when gerfres.r20_regist IS NOT NULL and r20_anousu = $iAno and  r20_mesusu = $iMes ";/* Caso tenha cálculo */
+        $sSql .= "     when gerfres.r20_regist IS NOT NULL and r20_anousu = $iAno and  r20_mesusu = $iMes ";/* Caso tenha cï¿½lculo */
         $sSql .= "       then (rhpessoalmov.rh02_anousu = $iAno and rhpessoalmov.rh02_mesusu = $iMes)";
-        $sSql .= "     else (extract(year from rhpesrescisao.rh05_recis) = $iAno and extract(month from rhpesrescisao.rh05_recis) = $iMes)"; /* Caso não tenha calculo*/
+        $sSql .= "     else (extract(year from rhpesrescisao.rh05_recis) = $iAno and extract(month from rhpesrescisao.rh05_recis) = $iMes)"; /* Caso nï¿½o tenha calculo*/
         $sSql .= " end";
 
         $sSql .= "    and rhpessoalmov.rh02_instit                     = $iInstit                                                                                     \n";
         $sSql .= "    and rhpesrescisao.rh05_seqpes is not null                                                                                                       \n";
         $sSql .= "    and case                                                                                                                                        \n";
-        $sSql .= "          when gerfres.r20_regist is null                                       /* Caso não tenha cálculo                              */           \n";
-        $sSql .= "          then (afasta.r45_regist is not null and rhcadregime.rh52_regime <> 2) /* Valida se tem afastamento e se o servidor não é CLT */           \n";
-        $sSql .= "          else true                                                             /* no caso de haver cálculo retorna semrpre            */           \n";
+        $sSql .= "          when gerfres.r20_regist is null                                       /* Caso nï¿½o tenha cï¿½lculo                              */           \n";
+        $sSql .= "          then (afasta.r45_regist is not null and rhcadregime.rh52_regime <> 2) /* Valida se tem afastamento e se o servidor nï¿½o ï¿½ CLT */           \n";
+        $sSql .= "          else true                                                             /* no caso de haver cï¿½lculo retorna semrpre            */           \n";
         $sSql .= "        end                                                                                                                                         \n";
         $sSql .= "                                  $sWhere                                                                                                           \n";
         $sSql .= "  order by rh01_regist                                                                                                                              \n";
@@ -3046,9 +3057,9 @@ class cl_rhpessoalmov
     }
 
     /**
-     * Retorna todas as matriculas com duplo vinculo ativas na competência informada como parâmetro
-     * @param  integer $iAnoUsu Ano competência
-     * @param  integer $iMesUsu Mês competência
+     * Retorna todas as matriculas com duplo vinculo ativas na competï¿½ncia informada como parï¿½metro
+     * @param  integer $iAnoUsu Ano competï¿½ncia
+     * @param  integer $iMesUsu Mï¿½s competï¿½ncia
      * @return string SQL
      */
     public function sql_duplo_vinculo($iAnoUsu, $iMesUsu)
@@ -3071,11 +3082,11 @@ class cl_rhpessoalmov
     }
 
     /**
-     * Retorna os duplos vínculos ativos, para a matricula informada como parâmetro.
+     * Retorna os duplos vï¿½nculos ativos, para a matricula informada como parï¿½metro.
      *
      * @param  integer $iMatricula Matricula do servidor
-     * @param  integer $iAnoUsu    Ano da competência
-     * @param  integer $iMesUsu    Mês da competência
+     * @param  integer $iAnoUsu    Ano da competï¿½ncia
+     * @param  integer $iMesUsu    Mï¿½s da competï¿½ncia
      * @return string SQL
      */
     public function sql_duplo_vinculo_matricula($iMatricula, $iAnoUsu, $iMesUsu, $iInstit = null)
@@ -3107,7 +3118,7 @@ class cl_rhpessoalmov
 
     /**
      * Valida se a matricula passada
-     * por parâmetro está rescindida.
+     * por parï¿½metro estï¿½ rescindida.
      *
      * @param  Integer $iMatricula
      * @return Boolean

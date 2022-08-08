@@ -1,6 +1,6 @@
 <?
 set_time_limit(0);
-//include("../../../libs/db_conn.php");
+//include(__DIR__ . "/../../../libs/db_conn.php");
 $DB_SERVIDOR = "localhost";
 $DB_BASE     = "cmmirabela";
 $DB_USUARIO  = "dbportal";

@@ -187,7 +187,7 @@ if (isset($incluir)) {
 <?
 if (isset($alterar) || isset($excluir) || isset($incluir)) {
     db_msgbox($erro_msg);
-    echo " <script> top.corpo.iframe_encerra.location.reload(); </script> ";
+    echo " <script> CurrentWindow.corpo.iframe_encerra.location.reload(); </script> ";
     if ($clempprestaitem->erro_campo != "") {
         echo "<script> document.form1.".$clempprestaitem->erro_campo.".style.backgroundColor='#99A9AE';</script>";
         echo "<script> document.form1.".$clempprestaitem->erro_campo.".focus();</script>";

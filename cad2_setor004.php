@@ -39,7 +39,7 @@ $clrotulo->label("z01_nome");
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
 if(isset($j34_setor) && $j34_setor != ""){
-  $setor = split(",",$j34_setor);
+  $setor = explode(",",$j34_setor);
   $vir = "";
   $set = "";
 	$set2 = "";

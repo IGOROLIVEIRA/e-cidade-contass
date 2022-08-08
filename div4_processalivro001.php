@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -53,23 +53,23 @@ db_postmemory($HTTP_POST_VARS);
 function termo(qual,total){
   document.getElementById('termometro').innerHTML='processando registro... '+qual+' de '+total;
 }
-function js_mostralivro(){	
-  js_OpenJanelaIframe('top.corpo','db_iframe_mostralivro','div4_mostralivro.php','Livros',true);
+function js_mostralivro(){
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_mostralivro','div4_mostralivro.php','Livros',true);
 }
 function js_trocalivro(valor){
   if (valor=='nao'){
     document.form1.v01_livro.value = document.form1.v01_livroaux.value;
-    document.form1.v01_folha.value = document.form1.v01_folhaaux.value; 
+    document.form1.v01_folha.value = document.form1.v01_folhaaux.value;
   }else if (valor=='sim'){
     document.form1.v01_livroaux.value = document.form1.v01_livro.value;
-    document.form1.v01_livro.value = "";		 
+    document.form1.v01_livro.value = "";
     document.form1.v01_folhaaux.value = document.form1.v01_folha.value;
-    document.form1.v01_folha.value = "";		 
+    document.form1.v01_folha.value = "";
   }
   document.form1.submit();
 }
 function  js_pesquisalivro(mostra){
-  js_OpenJanelaIframe('top.corpo','db_iframe_mostralivro','div4_mostralivro.php?exerc='+document.form1.v01_exerc.value+'&funcao_js=parent.js_preenchelivro|v01_livro|v01_folha','Livros',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_mostralivro','div4_mostralivro.php?exerc='+document.form1.v01_exerc.value+'&funcao_js=parent.js_preenchelivro|v01_livro|v01_folha','Livros',true);
 }
 function js_preenchelivro(livro,folha){
   document.form1.v01_livro.value = livro;
@@ -82,7 +82,7 @@ function js_preenchelivro(livro,folha){
 
 <form class="container" name="form1" action="div4_processalivro001.php" method="post" target="" onSubmit="js_marca()">
   <fieldset>
-    <legend>Processamento do Livro - Livro da Dívida</legend>	
+    <legend>Processamento do Livro - Livro da Dívida</legend>
 	<?
 	  if(!isset($processar)) {
 	?>
@@ -104,7 +104,7 @@ function js_preenchelivro(livro,folha){
 		  $result     = $cldivida->sql_record($sSqlDivida);
 		  $numrows    = $cldivida->numrows;
 		  $matriz     = array();
-		  
+
 		  if (isset($v01_exerc)){
 		    $exerc_sel = $v01_exerc;
 		  }
@@ -113,12 +113,12 @@ function js_preenchelivro(livro,folha){
 		    db_fieldsmemory($result,$i);
 		    $matriz[$v01_exerc] = $v01_exerc;
 		  }
-		  
+
 		  if (isset($exerc_sel)) {
-		    //echo "<script>document.form1.v01_exerc.value=$exerc_sel;</script>";         	 
+		    //echo "<script>document.form1.v01_exerc.value=$exerc_sel;</script>";
 		    $v01_exerc=$exerc_sel;
 		  }
-		  
+
 		  arsort($matriz);
 		  db_select("v01_exerc",$matriz,true,1);
 		?>
@@ -134,7 +134,7 @@ function js_preenchelivro(livro,folha){
 	//  $v01_dtoper_dia =  date("d",db_getsession("DB_datausu"));
 	//  $v01_dtoper_mes =  date("m",db_getsession("DB_datausu"));
 	//  $v01_dtoper_ano =  date("Y",db_getsession("DB_datausu"));
-	//}	
+	//}
 	//db_inputdata('v01_dtoper',@$v01_dtoper_dia,@$v01_dtoper_mes,@$v01_dtoper_ano,true,'text',$db_opcao,"")
 	?>
 	<tr>
@@ -168,7 +168,7 @@ function js_preenchelivro(livro,folha){
 	</tr>
 	<tr>
 	  <td>
-		<?	   
+		<?
 		  if (isset($complementar)&&$complementar=="sim"){
 		    $opc = 1;
 		  }else{
@@ -179,10 +179,10 @@ function js_preenchelivro(livro,folha){
 	  </td>
 	  <td>
 		<?
-		  if(empty($processar)&&(!isset($complementar)||isset($complementar)&&$complementar!="sim")){	   
+		  if(empty($processar)&&(!isset($complementar)||isset($complementar)&&$complementar!="sim")){
 		    $result=$cldivida->sql_record($cldivida->sql_query_file(null,"max(v01_livro)+1 as v01_livro",""," v01_folha <> 0"));
-		    db_fieldsmemory($result,0);        
-		  } 	
+		    db_fieldsmemory($result,0);
+		  }
 		  db_input('v01_livro',8,$Iv01_livro,true,'text',3);
 		  db_input('v01_livroaux',8,$Iv01_livro,true,'hidden',1);
 		?>
@@ -210,7 +210,7 @@ function js_preenchelivro(livro,folha){
 		  $aux->sql_exec  = "";
 		  $aux->func_arquivo = "func_proced.php";
 		  $aux->nomeiframe = "ifr_procedencia";
-		  $aux->localjan = "top.corpo";
+		  $aux->localjan = "CurrentWindow.corpo";
 		  $aux->onclick = "";
 		  $aux->db_opcao = 2;
 		  $aux->tipo = 2;
@@ -240,11 +240,11 @@ if(isset($processar)){
 <!-- <input name="termometro" style='background: transparent' id="termometro" type="text" value="" size=50> -->
 </td>
 </tr>
-</table> 
+</table>
 
 </form>
 
-<? 
+<?
 db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
 ?>
 </body>
@@ -263,10 +263,10 @@ if(isset($processar)){
   $sqlerro=false;
   $dbwhere="v01_exerc=$v01_exerc and v01_livro=0 and v01_instit = ".db_getsession('DB_instit') ;
 
- //Verifica se já existe uma divida com o livro informado 
+ //Verifica se já existe uma divida com o livro informado
   $cldivida->sql_record($cldivida->sql_query(null,"v01_coddiv",null," v01_livro = $v01_livro limit 1"));
   if($cldivida->numrows > 0 && $complementar == 'nao'){
-   db_msgbox('Aviso:\nLivro já existente!\nUtilize a opção complementar "Sim"');	
+   db_msgbox('Aviso:\nLivro já existente!\nUtilize a opção complementar "Sim"');
    $sqlerro=true;
    db_redireciona("div4_processalivro001.php");
   }
@@ -298,12 +298,12 @@ if(isset($processar)){
     $data = " $and v01_dtinclusao >= '$dtini' and v01_dtinclusao <= '$dtfim' ";
   }
 
-  // Apaga indice da tabela Divida pelo Nro do Livro 
+  // Apaga indice da tabela Divida pelo Nro do Livro
   // para melhorar a performance da rotina
   $resdropindex = @db_query("DROP IF EXISTS INDEX divida_livro_in;");
 
   $result     = $cldivida->sql_record($cldivida->sql_query_file(null,"v01_coddiv","","$dbwhere $data"));
-  $count_div  = pg_result(db_query("select count(*) as count_div from divida where v01_livro=".$v01_livro." and v01_folha=".$v01_folha." and  v01_instit = ".db_getsession('DB_instit')),0,0); 
+  $count_div  = pg_result(db_query("select count(*) as count_div from divida where v01_livro=".$v01_livro." and v01_folha=".$v01_folha." and  v01_instit = ".db_getsession('DB_instit')),0,0);
   $numrows=$cldivida->numrows;
   if ($numrows != 0) {
     db_inicio_transacao();
@@ -337,7 +337,7 @@ if(isset($processar)){
     $erromsg="Sem lançamentos a processar!";
   }
 
-  // Recria indice da tabela Divida pelo Nro do Livro 
+  // Recria indice da tabela Divida pelo Nro do Livro
   // para melhorar a performance da rotina
   $rescreateindex   = @db_query("CREATE INDEX divida_livro_in ON divida(v01_livro);");
   $resanalyzedivida = @db_query("ANALYZE divida;");

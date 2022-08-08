@@ -1,28 +1,28 @@
 <?php
 /**
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBseller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBseller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: pessoal
@@ -72,7 +72,7 @@ if(isset($r30_regist)) {
   $nDiasServidor   = $nDiasServidor === '' || $nDiasServidor < 30 ? 30 : $nDiasServidor;
   $nDiasGozoFerias = $nDiasServidor;
 }
-  
+
 ?>
 
 <form name="form1" id='form1' method="post" action="pes4_cadferia004.php">
@@ -99,7 +99,7 @@ if(isset($r30_regist)) {
             </td>
             <td>
                <?
-               if ((isset($enviar_selecao) && $enviar_selecao != "") || 
+               if ((isset($enviar_selecao) && $enviar_selecao != "") ||
                     isset($campomatriculas) && $campomatriculas != "") {
                  $r30_tipoapuracaomedia     = @$_POST["r30_tipoapuracaomedia"]!=""?$_POST["r30_tipoapuracaomedia"]:$_GET["r30_tipoapuracaomedia"];
                  $r30_periodolivrefinal_ano = @$_POST["r30_periodolivrefinal_ano"]!=""?@$_POST["r30_periodolivrefinal_ano"]:@$_GET["r30_periodolivrefinal_ano"];
@@ -161,10 +161,10 @@ if(isset($r30_regist)) {
       </td>
       <td colspan="3">
         <?
-        db_inputdata('r30_periodolivreinicial', 
-                     @$r30_periodolivreinicial_dia, 
-                     @$r30_periodolivreinicial_mes, 
-                     @$r30_periodolivreinicial_ano, 
+        db_inputdata('r30_periodolivreinicial',
+                     @$r30_periodolivreinicial_dia,
+                     @$r30_periodolivreinicial_mes,
+                     @$r30_periodolivreinicial_ano,
                      true, 'text', ($dbopcao?3:1)==1?$db_opcao:3,
                      "onchange='js_calcFim();'",
                      "", "", "js_calcFim();"
@@ -173,10 +173,10 @@ if(isset($r30_regist)) {
         &nbsp;&nbsp;<b>a</b>&nbsp;&nbsp;
         <?
         db_inputdata('r30_periodolivrefinal',
-                     @$r30_periodolivrefinal_dia, 
-                     @$r30_periodolivrefinal_mes, 
-                     @$r30_periodolivrefinal_ano, 
-                     true, 'text', ($dbopcao?3:1)==1?$db_opcao:3, 
+                     @$r30_periodolivrefinal_dia,
+                     @$r30_periodolivrefinal_mes,
+                     @$r30_periodolivrefinal_ano,
+                     true, 'text', ($dbopcao?3:1)==1?$db_opcao:3,
                      "onchange='js_calcIni();'",
                      "", "", "js_calcIni();"
                     );
@@ -188,7 +188,7 @@ if(isset($r30_regist)) {
         db_ancora(@$Lr30_faltas, "", 3);
         ?>
       </td>
-      <td> 
+      <td>
         <?
         db_input('r30_faltas', 7, $Ir30_faltas, true, 'text', ($dbopcao?3:1)==1?$db_opcao:3,"onchange=\"js_faltas('vfalta','','','',this.value,document.form1.navos.value!=''?document.form1.navos.value:0);\"");
         ?>
@@ -198,7 +198,7 @@ if(isset($r30_regist)) {
         db_ancora(@$Lr30_ndias, "", 3);
         ?>
       </td>
-      <td> 
+      <td>
         <?
         if(!isset($r30_ndias) || (isset($r30_ndias) && trim($r30_ndias) == "")){
 
@@ -252,7 +252,7 @@ if(isset($r30_regist)) {
         db_ancora(@$Lr30_abono, "", 3);
         ?>
       </td>
-      <td> 
+      <td>
         <?
         db_input('r30_abono', 7, $Ir30_abono, true, 'text', 3);
         ?>
@@ -262,7 +262,7 @@ if(isset($r30_regist)) {
         db_ancora("<b>Pago em:</b>", "", 3);
         ?>
       </td>
-      <td> 
+      <td>
         <?
         db_input('r30_proc1', 7, $Ir30_proc1, true, 'text', 3);
         ?>
@@ -274,7 +274,7 @@ if(isset($r30_regist)) {
         db_ancora("<b>Dias a gozar:</b>", "", 3);
         ?>
       </td>
-      <td> 
+      <td>
         <?
         db_input('nsaldo', 7, $Ir30_ndias, true, 'text', $db_opcao);
         ?>
@@ -284,7 +284,7 @@ if(isset($r30_regist)) {
         db_ancora("<b>Dias a abonar:</b>", "", 3);
         ?>
       </td>
-      <td> 
+      <td>
         <?
         db_input('nabono', 7, $Ir30_ndias, true, 'text', 3);
         db_input('navos', 7, $Ir30_ndias, true, 'hidden', 3);
@@ -409,7 +409,7 @@ if(isset($r30_regist)) {
               db_ancora("<b>Saldo:</b>", "", 3);
               ?>
             </td>
-            <td> 
+            <td>
               <?
               if(!isset($saldo)){
                 $saldo = "10";
@@ -497,7 +497,7 @@ if(isset($r30_regist)) {
               db_ancora("<b>Pagar férias: </b>", "", 3);
               ?>
             </td>
-            <td> 
+            <td>
               <?
               if(!isset($ponto)){
                 $ponto = "S";
@@ -522,7 +522,7 @@ if(isset($r30_regist)) {
               db_ancora("<b>Pagar somente 1/3 férias:</b>", "", 3);
               ?>
             </td>
-            <td> 
+            <td>
               <?
               if(!isset($paga_13)){
                 $paga_13 = "f";
@@ -532,21 +532,21 @@ if(isset($r30_regist)) {
               ?>
             </td>
           </tr>
-          
+
           <tr>
             <td >
               &nbsp;
             </td>
-            <td> 
+            <td>
               &nbsp;
             </td>
           </tr>
-          
+
           <tr>
             <td nowrap title="Observações" align="right">
               <b>Direito a Férias:</b>
             </td>
-            <td> 
+            <td>
               <?php db_select("direitoferias", array(1=>'SIM', 2=>'NÃO'), true, $db_opcao, 'onchange="js_direitoferias();"'); ?>
             </td>
           </tr>
@@ -555,13 +555,13 @@ if(isset($r30_regist)) {
             <td nowrap title="Observações" align="right">
               <b>Observações:</b>
             </td>
-            <td> 
+            <td>
               <?
                 db_textarea("r30_obs",5, 45,  "", true,null, $db_opcao)
               ?>
             </td>
-          </tr>          
-          
+          </tr>
+
         </table>
       </fieldset>
     </td>
@@ -577,7 +577,7 @@ if (!isset($retorno)) {
   echo " <input name=\"voltar\" type=\"button\" id=\"voltar\" value=\"Voltar\" onclick=\"location.href = 'pes4_cadferia001.php';\"> ";
 } else {
   echo " <input name=\"voltar\" type=\"button\" id=\"voltar\" value=\"Nova seleção\" onclick=\"location.href = 'pes4_cadferialote001.php';\"> ";
- 
+
   if (isset($campomatriculas) && trim($campomatriculas) != "") {
     echo " <input name=\"proximo\" type=\"submit\" id=\"proximo\" value=\"Próximo\"> ";
     echo " <input name=\"btnJanelaFerias\" type=\"button\" id=\"btnJanelaFerias\" value=\"Ver Férias Cadastradas\" onclick=\"js_showFeriasCasdastradasNoLote()\"> ";
@@ -626,7 +626,7 @@ js_preenchePeriodoEspecifico();
 function js_verificadados(debug){
 
   if ($F("ponto") == "C" && $F("db_complementar") == "1") {
-    
+
     var oFolhaComplementar = new DBViewFormularioFolha.ValidarFolhaPagamento();
     var lFolhaComplementar = oFolhaComplementar.verificarFolhaPagamentoAberta(oFolhaComplementar.TIPO_FOLHA_COMPLEMENTAR, null, null);
 
@@ -639,7 +639,7 @@ function js_verificadados(debug){
 
 
   document.form1.db_opcao.disabled=true;
-  
+
   x = document.form1;
 <?
 if(isset($dbopcao) && $dbopcao == true){
@@ -653,7 +653,7 @@ if(isset($dbopcao) && $dbopcao == true){
     per2f = new Date(x.r30_per2f_ano.value,(x.r30_per2f_mes.value - 1),somadias);
     diaci = new Date(<?=db_anofolha()?>,(<?=db_mesfolha()?> - 1),1);
     diacf = new Date(<?=db_anofolha()?>,(<?=db_mesfolha()?> - 1),<?=db_dias_mes(db_anofolha(),db_mesfolha())?> + 180);
-    
+
     if(per2i >= diaci && per2f <= diacf && per2f > per2i){
     }else{
       x.r30_per2i_dia.select();
@@ -667,15 +667,15 @@ if(isset($dbopcao) && $dbopcao == true){
 
 ?>
   if ($('r30_tipoapuracaomedia')) {
-    
+
     if ($F('r30_tipoapuracaomedia') == '2') {
-    
+
       if ($F('r30_periodolivreinicial') == "" || $F('r30_periodolivrefinal') == "") {
-      
+
         alert('Periodo Específico está informado incorretamente.\nDeverá ser informado periodo inicial e o final');
         return false;
-      } 
-    }  
+      }
+    }
   }
   erro = 0;
   if(document.form1.anopagto){
@@ -709,7 +709,7 @@ if(isset($dbopcao) && $dbopcao == true){
           obj.setAttribute('value','semdireito');
           document.form1.appendChild(obj);
         }
-        
+
         document.form1.action = 'pes4_cadferia004.php';
         document.form1.submit();
       }
@@ -718,19 +718,19 @@ if(isset($dbopcao) && $dbopcao == true){
   }
 
   if(erro == 0){
-  
+
     if(typeof(document.form1.r30_per1i) != 'undefined' && document.form1.r30_per1i_dia && $F('direitoferias') == 1){
-    
+
       if (document.form1.mtipo.value != 13 && (document.form1.r30_per1i_dia.value == "" || document.form1.r30_per1i_mes.value == "" || document.form1.r30_per1i_ano.value == "") ) {
-          
+
         alert("Informe o período de gozo inicial.");
         document.form1.db_opcao.disabled=false;
         document.form1.r30_per1i.select();
         document.form1.r30_per1i.focus();
         erro ++;
-        
+
       } else if(document.form1.mtipo.value != 13 && document.form1.r30_per1i_dia && $F('direitoferias') == 1) {
-          
+
         if(document.form1.r30_per1i_dia.value == "" || document.form1.r30_per1i_mes.value == "" || document.form1.r30_per1i_ano.value == ""){
           alert("Informe o período de gozo final.");
           document.form1.db_opcao.disabled=false;
@@ -738,11 +738,11 @@ if(isset($dbopcao) && $dbopcao == true){
           document.form1.r30_per1i.focus();
           erro ++;
         }
-        
+
       }
-      
+
     }
-    
+
     if(document.form1.r30_per2i_dia && $F('direitoferias') == 1){
       if(document.form1.r30_per2i_dia.value == "" || document.form1.r30_per2i_mes.value == "" || document.form1.r30_per2i_ano.value == ""){
         alert("Informe o período de gozo inicial.");
@@ -760,7 +760,7 @@ if(isset($dbopcao) && $dbopcao == true){
         }
       }
     }
-    
+
     if ( document.form1.r30_perai.value == "" || document.form1.r30_peraf.value == "" ) {
       alert('Informe o período aquisitivo!');
       document.form1.db_opcao.disabled=false;
@@ -770,10 +770,10 @@ if(isset($dbopcao) && $dbopcao == true){
 
    /*
     * Verificamos se o periodo de gozo de ferias é o mesmo periodo de dias selecionado na opção Forma de pgto:
-    *  
+    *
     */
     if (typeof(document.form1.r30_per1i) != 'undefined' && erro == 0 && $F('direitoferias') == 1) {
-    
+
      /*
        01=>01 - 30 dias ferias
        02=>02 - 20 dias ferias
@@ -784,9 +784,9 @@ if(isset($dbopcao) && $dbopcao == true){
        07=>07 - 10 dias ferias + 20 dias abono
        08=>08 - 30 dias abono
        12=>12 - Dias Livre
-     */    
+     */
      iPerIni  = document.form1.r30_per1i_ano.value+'/'+document.form1.r30_per1i_mes.value+'/'+document.form1.r30_per1i_dia.value;
-     iPerFim  = document.form1.r30_per1f_ano.value+'/'+document.form1.r30_per1f_mes.value+'/'+document.form1.r30_per1f_dia.value; 
+     iPerFim  = document.form1.r30_per1f_ano.value+'/'+document.form1.r30_per1f_mes.value+'/'+document.form1.r30_per1f_dia.value;
      iPerDias = js_diferenca_datas(iPerIni,iPerFim, 'd');
       if (document.form1.mtipo.value == "01" && iPerDias != 30 ) {
         erro++;
@@ -812,7 +812,7 @@ if(isset($dbopcao) && $dbopcao == true){
        document.form1.db_opcao.disabled=false;
        document.form1.r30_per1i.focus();
       }
-      
+
     }
 
     if(erro == 0){
@@ -830,7 +830,7 @@ if(isset($dbopcao) && $dbopcao == true){
       }else{
         perai = x.r30_perai_ano.value+'-'+x.r30_perai_mes.value+'-'+x.r30_perai_dia.value;
         peraf = x.r30_peraf_ano.value+'-'+x.r30_peraf_mes.value+'-'+x.r30_peraf_dia.value;
-    
+
         js_faltas("perafast",perai,peraf,'','','',debug);
       }
     }
@@ -862,13 +862,13 @@ function js_faltas(opcao,perai,peraf,antes,nfalt,navos,debug){
   if ( debug == true) {
     qry+= '&debug=true';
   }
-  	  
+
   if ($('r30_tipoapuracaomedia') && $('r30_tipoapuracaomedia') == '2') {
-  
+
      qry+= '&tipomedia=2'
      qry+= '&periodolivreini='+$('r30_periodolivreinicial');
      qry+= '&periodolivrefinal='+$('r30_periodolivrefinal');
-  }  
+  }
   if(opcao == "vmtipo"){
     mtipo = document.form1.mtipo.options[document.form1.mtipo.selectedIndex].value;
     ndias = document.form1.r30_ndias.value;
@@ -879,7 +879,7 @@ function js_faltas(opcao,perai,peraf,antes,nfalt,navos,debug){
     qry+= '&fim='+document.form1.r30_per1f_ano.value+'-'+document.form1.r30_per1f_mes.value+'-'+document.form1.r30_per1f_dia.value;
   }
 
-  js_OpenJanelaIframe('top.corpo','db_iframe_faltas','func_scriptsdb.php?'+qry,'Pesquisa', false);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_faltas','func_scriptsdb.php?'+qry,'Pesquisa', false);
 
 }
 
@@ -890,23 +890,23 @@ $('gozar_old').value = $F('r30_ndias');
 function js_direitoferias() {
 
   var lDireito = document.getElementById('direitoferias').value;
-  var sConfirm = "Confirma Lançamento sem direito ?"; 
-   
+  var sConfirm = "Confirma Lançamento sem direito ?";
+
      obj = document.createElement('input');
      obj.setAttribute('name','semdireito');
      obj.setAttribute('id','semdireito');
      obj.setAttribute('type','text');
      obj.setAttribute('value','semdireito');
-  
+
   if (lDireito == 2) {
 
-     $('r30_ndias').value      = '0'; 
+     $('r30_ndias').value      = '0';
      $('nsaldo').value         = '0';
      $("mtipo").options.length = 0;
      $("mtipo").options[0]     = new Option("12 - 0 dias férias","12");
-     
-			if (confirm(sConfirm)) { 
-			
+
+			if (confirm(sConfirm)) {
+
 			  qry = 'opcao=vfalta';
 			  qry+= '&perai=';
 			  qry+= '&peraf=';
@@ -919,11 +919,11 @@ function js_direitoferias() {
 			  qry+= '&tipomedia=1';
 			  qry+= '&iVfal=0';
         qry+= '&nDiasGozoFerias=' +document.form1.nDiasGozoFerias.value;
-        js_OpenJanelaIframe('top.corpo','db_iframe_faltas','func_scriptsdb.php?'+qry,'Pesquisa', false);
-        		
-			}     
-  } 
-  
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_faltas','func_scriptsdb.php?'+qry,'Pesquisa', false);
+
+			}
+  }
+
   if (lDireito == 1){
     $('r30_ndias').value            = $F('gozar_old');
     $('nsaldo').value               = $F('gozar_old');
@@ -935,14 +935,14 @@ function js_direitoferias() {
     document.form1.mtipo.options[5] = new Option("06 - 15 dias ferias + 15 dias abono","06");
     document.form1.mtipo.options[6] = new Option("07 - 10 dias ferias + 20 dias abono","07");
     document.form1.mtipo.options[7] = new Option("08 - 30 dias abono","08");
-    document.form1.mtipo.options[8] = new Option("12 - Dias Livre","12");  
+    document.form1.mtipo.options[8] = new Option("12 - Dias Livre","12");
 
-   
+
     if ( $F('r30_ndias') > 30 ) {
       $('mtipo').value = 12;
     }
   }
-		         
+
 }
 
 function js_verificaaquiini(){
@@ -1012,7 +1012,7 @@ function js_verificaaquiini(){
   }
 }
 function js_verificaaquifim(){
-  
+
   x = document.form1;
 
   diai = new Number(x.r30_perai_dia.value);
@@ -1080,7 +1080,7 @@ function js_verificaaquifim(){
       navos = 0;
       if(anof.valueOf() == anoi.valueOf()){
         navos = mesf - mesi;
-      }else{ 
+      }else{
         navos = (12 - mesi ) + mesf;
       }
       if((diaf - diai) > 14){
@@ -1100,11 +1100,11 @@ function js_verificadataini(campo){
   evalmesi = eval("x.r30_per"+campo+"i_mes");
   evalanoi = eval("x.r30_per"+campo+"i_ano");
   evaldatacompletai = eval("x.r30_per"+campo+"i");
-  
+
   evaldiaf = eval("x.r30_per"+campo+"f_dia");
   evalmesf = eval("x.r30_per"+campo+"f_mes");
   evalanof = eval("x.r30_per"+campo+"f_ano");
-  
+
   evaldatacompletaf = eval("x.r30_per"+campo+"f");
 
   if(evaldiai.value!= "" && evalmesi.value != "" && evalanoi.value != ""){
@@ -1122,12 +1122,12 @@ function js_verificadataini(campo){
 
 
     per2i = new Date(evalanoi.value,qualmess,evaldiai.value,1,0,0);
-    
+
     per2f = new Date(evalanoi.value,qualmess,somadias,1,0,0);
-    
+
     diaci = new Date(<?=db_anofolha()?>,(<?=db_mesfolha()?> - 1),1);
     diacf = new Date(<?=db_anofolha()?>,(<?=db_mesfolha()?> - 1),(<?=db_dias_mes(db_anofolha(),db_mesfolha())?> + 180));
-  
+
     if(per2i >= diaci && per2f <= diacf){
       if(per2i > per2f){
         per2f = per2i;
@@ -1150,7 +1150,7 @@ function js_verificadataini(campo){
       evaldiai.value = '';
       evalmesi.value = '';
       evalanoi.value = '';
-  
+
       evaldiai.focus();
     }
   }else{
@@ -1158,12 +1158,12 @@ function js_verificadataini(campo){
     evalmesf.value = '';
     evalanof.value = '';
   }
-  if (evaldiai.value != '') {  
+  if (evaldiai.value != '') {
     evaldatacompletai.value = evaldiai.value+'/'+evalmesi.value+'/'+evalanoi.value;
 	}
 
-  if (evaldiaf.value != '') {  
-    evaldatacompletaf.value = evaldiaf.value+'/'+evalmesf.value+'/'+evalanof.value; 
+  if (evaldiaf.value != '') {
+    evaldatacompletaf.value = evaldiaf.value+'/'+evalmesf.value+'/'+evalanof.value;
   }
 
 }
@@ -1184,7 +1184,7 @@ function js_verificadatafim(campo){
     if(evaldiaf.value != "" && evalmesf.value != "" && evalanof.value != ""){
       qualmesi = new Number(evalmesi.value);
       qualmesi-= new Number(1);
-  
+
       qualmesf = new Number(evalmesf.value);
       qualmesf-= new Number(1);
 
@@ -1193,7 +1193,7 @@ function js_verificadatafim(campo){
 
       qualmess = new Number(<?=db_mesfolha()?>);
       qualmess-= new Number(1);
-  
+
       qualdias = new Number(<?=db_dias_mes(db_anofolha(),db_mesfolha())?>);
       qualdias+= new Number(180);
 
@@ -1444,9 +1444,9 @@ function js_habilitaperiodoper1(opcao){
 	  document.getElementById("r30_per1i").style.backgroundColor = "";
 
 	  document.getElementById("r30_per1f").disabled = false;
-	  document.getElementById("r30_per1f").style.backgroundColor = "";	  
+	  document.getElementById("r30_per1f").style.backgroundColor = "";
 
-	  
+
     document.form1.dtjs_r30_per1i.disabled = false;
     document.form1.dtjs_r30_per1f.disabled = false;
     document.form1.r30_per1i_dia.readOnly              = false;
@@ -1469,8 +1469,8 @@ function js_habilitaperiodoper1(opcao){
 	  document.getElementById("r30_per1i").style.backgroundColor = "#DEB887";
 
 	  document.getElementById("r30_per1f").disabled = true;
-	  document.getElementById("r30_per1f").style.backgroundColor = "#DEB887";	  
-	  
+	  document.getElementById("r30_per1f").style.backgroundColor = "#DEB887";
+
     document.form1.dtjs_r30_per1i.disabled = true;
     document.form1.dtjs_r30_per1f.disabled = true;
     document.form1.r30_per1i_dia.readOnly              = true;
@@ -1530,7 +1530,7 @@ function js_montaselect(ndias, menor30){
  if ( $F('r30_ndias') > 30 ) {
    $('mtipo').value = 12;
  }
-  
+
  js_validamtipo();
 }
 
@@ -1556,11 +1556,11 @@ function js_validamtipo() {
   }
 
   document.form1.r30_obs.value = '';
-  
+
   if (valntipo >= 1 && valntipo <= 4 || valntipo == 13 || valntipo == 12) {
-	  
+
     if ( document.form1.mtipo.length > 3 && (valntipo != 13  && valntipo != 15) ) {
-        
+
       document.form1.nabono.value = 0;
       <?
         if (isset($dbopcao) && $dbopcao == false) {
@@ -1569,33 +1569,33 @@ function js_validamtipo() {
         }
       ?>
     } else {
-        
+
       document.form1.nsaldo.value = 0;
       document.form1.nabono.value = 0;
       if (valmtipo == 1 || valntipo == 12) {
-      
+
         document.form1.nsaldo.value = document.form1.r30_ndias.value;
         js_habilitaperiodoper1(0);
       } else {
 
         if (valntipo == 13) {
-          document.form1.r30_obs.value = 'ABONO EM PECÚNIA DOS DIAS DE FÉRIAS';   
+          document.form1.r30_obs.value = 'ABONO EM PECÚNIA DOS DIAS DE FÉRIAS';
         } else {
         	document.form1.r30_obs.value = '';
-        }            
-        
+        }
+
         document.form1.nabono.value = document.form1.r30_ndias.value;
         js_habilitaperiodoper1(1);
-        
+
       }
-      
+
       js_verificadataini(1);
-      
+
     }
-    
+
   } else if (valmtipo == "05") {
 
-	  
+
     if(valorndt == 30){
       document.form1.nsaldo.value = (valorndt - 10);
       document.form1.nabono.value = 10;
@@ -1609,35 +1609,35 @@ function js_validamtipo() {
     }
     js_habilitaperiodoper1(0);
     js_verificadataini(1);
-    
+
   } else if (valmtipo == "06") {
 
     document.form1.nsaldo.value = (valorndt - 15);
     document.form1.nabono.value = 15;
     js_habilitaperiodoper1(0);
     js_verificadataini(1);
-    
+
   } else if (valmtipo == "07") {
 
     document.form1.nsaldo.value = (valorndt - 20);
     document.form1.nabono.value = 20;
     js_habilitaperiodoper1(0);
     js_verificadataini(1);
-    
+
   } else if (valmtipo == "08") {
 
     document.form1.nsaldo.value = 0;
     document.form1.nabono.value = valorndt;
     js_habilitaperiodoper1(0);
     js_verificadataini(1);
-   
+
   } else if (valmtipo == "14") {
-	  
+
     if(valorndt == 30){
       document.form1.nsaldo.value = (valorndt - 10);
       document.form1.nabono.value = 10;
     }else{
-      
+
       var iFerias = Math.ceil(valorndt / 3 * 2);
       var iAbono  = Math.floor(valorndt / 3);
 
@@ -1646,7 +1646,7 @@ function js_validamtipo() {
     }
     js_habilitaperiodoper1(0);
     js_verificadataini(1);
-    
+
   } else if (valmtipo == "15") {
 
       document.form1.nsaldo.value = valorndt;
@@ -1654,14 +1654,14 @@ function js_validamtipo() {
       js_habilitaperiodoper1(0);
       js_verificadataini(1);
   }
-  
+
 }
 
 <?
 if (isset($dbopcao) && $dbopcao == true && !isset($mtipo)) {
-  
+
   echo "js_habilitaperiodo(2);";
- 
+
 } else if(isset($dbopcao) && $dbopcao == false) {
 
   echo "js_verificaaquiini();";
@@ -1671,28 +1671,28 @@ if (isset($dbopcao) && $dbopcao == true && !isset($mtipo)) {
   if($nDiasGozoFerias > 30) {
     echo "js_faltas('vfalta','','','',document.form1.r30_faltas.value?document.form1.r30_faltas.value:0, document.form1.navos.value ? document.form1.navos.value:12);";
   }
-  
+
 }
 ?>
 document.form1.db_opcao.disabled=false;
 
 function js_showCamposMedia() {
-   
+
    switch ($F('r30_tipoapuracaomedia')) {
-   
+
      case '1':
-       
+
        $('linhadatasespecificas').style.display = 'none';
        $('r30_periodolivrefinal').value         = '';
        $('r30_periodolivreinicial').value       = '';
        break;
-     
+
      case '2':
-     
+
        $('linhadatasespecificas').style.display='';
        break;
    }
-    
+
 }
 js_showCamposMedia();
 
@@ -1702,10 +1702,10 @@ function js_showFeriasCasdastradasNoLote() {
   var oParam  = new Object();
   oParam.exec =  'getFeriasCadastradas'
   var oAjax = new Ajax.Request(
-                        'pes4_feriaslote.RPC.php', 
+                        'pes4_feriaslote.RPC.php',
                          {
-                          method    : 'post', 
-                          parameters: 'json='+Object.toJSON(oParam), 
+                          method    : 'post',
+                          parameters: 'json='+Object.toJSON(oParam),
                           onComplete: js_retornogetFerias
                           }
                         );
@@ -1714,29 +1714,29 @@ function js_showFeriasCasdastradasNoLote() {
 function js_retornogetFerias(oAjax) {
 
   js_removeObj('msgBox');
-  var oRetorno  = eval("("+oAjax.responseText+")"); 
+  var oRetorno  = eval("("+oAjax.responseText+")");
   var iWidth    = document.width/2;
   var iHeight   = document.scrollHeight/1.3;
   oWindowFerias = new windowAux('wndFerias', 'Férias já Lançadas no Lote', iWidth, iHeight);
   oWindowFerias.setShutDownFunction (function(){
-    oWindowFerias.destroy();  
+    oWindowFerias.destroy();
   });
-  
+
   var sContent = "<div><fieldset id='ctnGrid'></fieldset></div>";
   oWindowFerias.setContent(sContent);
-  oMessageBoard  = new DBMessageBoard('msgboard1', 
+  oMessageBoard  = new DBMessageBoard('msgboard1',
                                       'Férias Cadastradas',
                                       'Férias cadastradas por lote para o período '
-                                       +oRetorno.iMesUsu+'/'+oRetorno.iAnoUsu, 
+                                       +oRetorno.iMesUsu+'/'+oRetorno.iAnoUsu,
                                       $('windowwndFerias_content'));
-                                      
+
   oGridFerias  = new DBGrid('gridFerias');
   oGridFerias.nameInstance = 'oGridFerias';
   oGridFerias.setHeader(new Array("Matricula", "Nome", "Dias", "Início", "Término"));
   oGridFerias.show($('ctnGrid'));
   oGridFerias.clearAll(true);
   oRetorno.itens.each(function(oLinha, id) {
-     
+
      var aLinha = new Array();
      aLinha[0]  = oLinha.rh93_regist;
      aLinha[1]  = oLinha.z01_nome.urlDecode();
@@ -1744,92 +1744,92 @@ function js_retornogetFerias(oAjax) {
      aLinha[3]  = js_formatar(oLinha.r30_per1i,'d');
      aLinha[4]  = js_formatar(oLinha.r30_per1f,'d');
      oGridFerias.addRow(aLinha);
-   
+
   });
   oWindowFerias.show();
-  oGridFerias.renderRows();                                       
-  
+  oGridFerias.renderRows();
+
 }
 //calcula a data final
 function js_calcFim(){
- 
+
  var datafinal = eval("x.r30_periodolivrefinal");
-  
- 
+
+
   x = document.form1;
 
   evaldiai = eval("x.r30_periodolivreinicial_dia");
   evalmesi = eval("x.r30_periodolivreinicial_mes");
   evalanoi = eval("x.r30_periodolivreinicial_ano");
   evaldatacompletai = eval("x.r30_periodolivreinicial");
-  
+
    if(evaldiai.value!= "" && evalmesi.value != "" && evalanoi.value != ""){
-    
-    //retorna true ou false se o ano é bissesto a para total de dias 
+
+    //retorna true ou false se o ano é bissesto a para total de dias
       nsaldo = new Number(364);//364 para fechar o calculo de ferias
-   
+
       somadias = new Number(evaldiai.value);
       somadias += new Number(nsaldo);
-      
+
       var anoAtual = evalanoi;
       var anoNext = new Number(evalanoi.value);
 
-      
+
       //se ano atual for bissesto diminui  mais um dia para fechar o calculo de ferias
-      if (checkleapyear(anoAtual.value)  ) { 
+      if (checkleapyear(anoAtual.value)  ) {
         somadias += new Number(1);
         //se data for maior que 29/02 em ano bissesto diminui mais um dia para fechar calculo
         if( evalmesi.value > 02 ){
           somadias -= new Number(1);
         }
       }
-      
+
       //calcula proximo ano
       anoNext += new Number(1);
-   
+
       //se ano posterior for bissesto e mes mair que 02 soma  mais um dia para fechar o calculo de ferias
-      if(checkleapyear(anoNext) && (evalmesi.value > 2 ) ) { 
+      if(checkleapyear(anoNext) && (evalmesi.value > 2 ) ) {
         somadias += new Number(1);
       }
-    
+
       qualmess = new Number(evalmesi.value);
       qualmess -= new Number(1);
-    
+
       datafim = new Date(evalanoi.value,qualmess,somadias,1,0,0);
-    
+
       evaldiaf.value = datafim.getDate()<10?"0"+datafim.getDate():datafim.getDate();
       evalmesf.value = (datafim.getMonth() + 1)<10?"0"+(datafim.getMonth() + 1):(datafim.getMonth() + 1);
-      evalanof.value = datafim.getFullYear();    
+      evalanof.value = datafim.getFullYear();
 
       if (evaldiaf.value != '') {
-        datafinal.value = evaldiaf.value+'/'+evalmesf.value+'/'+evalanof.value; 
+        datafinal.value = evaldiaf.value+'/'+evalmesf.value+'/'+evalanof.value;
       }
-      
+
       $('r30_periodolivrefinal').value = datafinal.value;
-      
-    }    
+
+    }
 }
 //calcula a data inicial
 function js_calcIni(){
-  
+
   var datainicial = eval("x.r30_periodolivreinicial");
-  
+
   x = document.form1;
 
   evaldiaf = eval("x.r30_periodolivrefinal_dia");
   evalmesf = eval("x.r30_periodolivrefinal_mes");
   evalanof = eval("x.r30_periodolivrefinal_ano");
   evaldatacompletaf = eval("x.r30_periodolivrefinal");
-  
+
    if(evaldiaf.value!= "" && evalmesf.value != "" && evalanof.value != ""){
-    
+
       nsaldo = new Number(365);
-    
+
       subtraidias  = new Number(evaldiaf.value);
       subtraidias -= new Number(nsaldo);
       subtraidias += new Number(1);
-    
-    
+
+
       //se o ano  anterior for bissesto diminui mais um dia para subtraidias para fechar calculo
       if (checkleapyear(evalanof.value - 1)){
       subtraidias -= new Number(1);
@@ -1837,34 +1837,34 @@ function js_calcIni(){
           subtraidias += new Number(1);
         }
       }
-      
+
       //se ano atual bissesto e mes maior que 02 diminui um dia para fechar calculo
       if (checkleapyear(evalanof.value) ){
            if ( evalmesf.value > 02 ){
           subtraidias -= new Number(1);
           }
         }
-      
-     
+
+
       qualmess  = new Number(evalmesf.value);
       qualmess -= new Number(1);
 
-    
+
       dataini = new Date(evalanof.value, qualmess, subtraidias);
-    
+
       evaldiai.value = dataini.getDate()<10?"0"+dataini.getDate():dataini.getDate();
       evalmesi.value = (dataini.getMonth() + 1)<10?"0"+(dataini.getMonth() + 1):(dataini.getMonth() + 1);
       evalanoi.value = dataini.getFullYear();
-    
 
-      if (evaldiai.value != '') {  
-        datainicial.value = evaldiai.value+'/'+evalmesi.value+'/'+evalanoi.value; 
+
+      if (evaldiai.value != '') {
+        datainicial.value = evaldiai.value+'/'+evalmesi.value+'/'+evalanoi.value;
       }
-  
-      $('r30_periodolivreinicial').value = datainicial.value; 
-      
-    }    
-  
+
+      $('r30_periodolivreinicial').value = datainicial.value;
+
+    }
+
 }
 
 $('r30_ndias').observe("change", function() {

@@ -12,7 +12,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use League\Fractal;
 use League\Fractal\Serializer\JsonApiSerializer;
 
-
 class Formulario extends GenericController implements ResourceInterface {
 
     const FILTRO_INSTITUICAO = 'instituicao';

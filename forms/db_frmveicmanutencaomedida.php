@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: veiculos
@@ -41,7 +41,7 @@ $ve66_usuario = db_getsession("DB_id_usuario");
     <td nowrap title="<?=@$Tve66_sequencial?>">
       <?=@$Lve66_sequencial?>
     </td>
-    <td> 
+    <td>
       <?
       db_input('ve66_sequencial',10,$Ive66_sequencial,true,'text',3,"")
       ?>
@@ -53,7 +53,7 @@ $ve66_usuario = db_getsession("DB_id_usuario");
       db_ancora(@$Lve66_veiculo,"js_pesquisave66_veiculo(true);",$db_opcao);
       ?>
     </td>
-    <td> 
+    <td>
       <?
       db_input('ve66_veiculo',10,$Ive66_veiculo,true,'text',$db_opcao," onchange='js_pesquisave66_veiculo(false);'")
       ?>
@@ -66,7 +66,7 @@ $ve66_usuario = db_getsession("DB_id_usuario");
     <td nowrap title="<?=@$Tve66_medidaanterior?>">
       <?=@$Lve66_medidaanterior?>
     </td>
-    <td> 
+    <td>
       <?
       db_input('ve66_medidaanterior',10,$Ive66_medidaanterior,true,'text', 3);
       ?>
@@ -76,7 +76,7 @@ $ve66_usuario = db_getsession("DB_id_usuario");
     <td nowrap title="<?=@$Tve66_data?>">
       <?=@$Lve66_data?>
     </td>
-    <td> 
+    <td>
       <?
       $ve66_data_dia = date("d", db_getsession("DB_datausu"));
       $ve66_data_mes = date("m", db_getsession("DB_datausu"));
@@ -89,13 +89,13 @@ $ve66_usuario = db_getsession("DB_id_usuario");
     <td nowrap title="<?=@$Tve66_hora?>">
       <?=@$Lve66_hora?>
     </td>
-    <td> 
+    <td>
       <?
       db_input('ve66_hora',10,$Ive66_hora,true,'text',3,"")
       ?>
     </td>
   </tr>
-  
+
   <?
   db_input('ve66_usuario',10,$Ive66_usuario,true,'hidden',$db_opcao," onchange='js_pesquisave66_usuario(false);'");
   ?>
@@ -103,7 +103,7 @@ $ve66_usuario = db_getsession("DB_id_usuario");
   <tr>
     <td colspan="2">
       <fieldset>
-        <legend><strong><?=@$Lve66_motivo?></strong></legend> 
+        <legend><strong><?=@$Lve66_motivo?></strong></legend>
           <?
           db_textarea('ve66_motivo',10,60,$Ive66_motivo,true,'text',$db_opcao,"")
           ?>
@@ -114,7 +114,7 @@ $ve66_usuario = db_getsession("DB_id_usuario");
     <td nowrap title="<?=@$Tve66_ativo?>">
       <?=@$Lve66_ativo?>
     </td>
-    <td> 
+    <td>
       <?
       $x = array("t"=>"SIM","f"=>"NAO");
       db_select('ve66_ativo',$x,true,$db_opcao,"");
@@ -134,24 +134,24 @@ $("ve66_hora").value = "<?=date("H:i")?>";
 
 function js_pesquisave66_veiculo(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_veiculos','func_veiculos.php?funcao_js=parent.js_mostraveiculos1|ve01_codigo|ve01_placa','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_veiculos','func_veiculos.php?funcao_js=parent.js_mostraveiculos1|ve01_codigo|ve01_placa','Pesquisa',true);
   }else{
-     if(document.form1.ve66_veiculo.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_veiculos','func_veiculos.php?pesquisa_chave='+document.form1.ve66_veiculo.value+'&funcao_js=parent.js_mostraveiculos','Pesquisa',false);
+     if(document.form1.ve66_veiculo.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_veiculos','func_veiculos.php?pesquisa_chave='+document.form1.ve66_veiculo.value+'&funcao_js=parent.js_mostraveiculos','Pesquisa',false);
      }else{
-       document.form1.ve01_codigo.value = ''; 
+       document.form1.ve01_codigo.value = '';
      }
   }
 }
 function js_mostraveiculos(lErro, iCodigo, sPlaca, sDescr){
 
-  document.form1.ve01_codigo.value = iCodigo; 
-  if(lErro==true){ 
-    document.form1.ve66_veiculo.focus(); 
-    document.form1.ve66_veiculo.value = ''; 
+  document.form1.ve01_codigo.value = iCodigo;
+  if(lErro==true){
+    document.form1.ve66_veiculo.focus();
+    document.form1.ve66_veiculo.value = '';
   } else {
 
-	  document.form1.ve01_codigo.value = sPlaca; 
+	  document.form1.ve01_codigo.value = sPlaca;
     js_pesquisa_medida();
   }
 }
@@ -164,20 +164,20 @@ function js_mostraveiculos1(chave1,chave2){
 }
 function js_pesquisave66_usuario(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_db_usuarios','func_db_usuarios.php?funcao_js=parent.js_mostradb_usuarios1|id_usuario|nome','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_usuarios','func_db_usuarios.php?funcao_js=parent.js_mostradb_usuarios1|id_usuario|nome','Pesquisa',true);
   }else{
-     if(document.form1.ve66_usuario.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_db_usuarios','func_db_usuarios.php?pesquisa_chave='+document.form1.ve66_usuario.value+'&funcao_js=parent.js_mostradb_usuarios','Pesquisa',false);
+     if(document.form1.ve66_usuario.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_usuarios','func_db_usuarios.php?pesquisa_chave='+document.form1.ve66_usuario.value+'&funcao_js=parent.js_mostradb_usuarios','Pesquisa',false);
      }else{
-       document.form1.nome.value = ''; 
+       document.form1.nome.value = '';
      }
   }
 }
 function js_mostradb_usuarios(chave,erro){
-  document.form1.nome.value = chave; 
-  if(erro==true){ 
-    document.form1.ve66_usuario.focus(); 
-    document.form1.ve66_usuario.value = ''; 
+  document.form1.nome.value = chave;
+  if(erro==true){
+    document.form1.ve66_usuario.focus();
+    document.form1.ve66_usuario.value = '';
   }
 }
 function js_mostradb_usuarios1(chave1,chave2){
@@ -186,7 +186,7 @@ function js_mostradb_usuarios1(chave1,chave2){
   db_iframe_db_usuarios.hide();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_veicmanutencaomedida','func_veicmanutencaomedida.php?funcao_js=parent.js_preenchepesquisa|ve66_sequencial','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_veicmanutencaomedida','func_veicmanutencaomedida.php?funcao_js=parent.js_preenchepesquisa|ve66_sequencial','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_veicmanutencaomedida.hide();
@@ -197,11 +197,11 @@ function js_preenchepesquisa(chave){
   ?>
 }
 function js_pesquisa_medida() {
-  var databanco = document.form1.ve66_data_ano.value + '-' + 
+  var databanco = document.form1.ve66_data_ano.value + '-' +
                   document.form1.ve66_data_mes.value + '-' +
                   document.form1.ve66_data_dia.value;
   var retirada  = '';
-  js_OpenJanelaIframe('top.corpo', 'db_iframe_ultimamedida',
+  js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_ultimamedida',
     'func_veiculos_medida.php?metodo=ultimamedida&veiculo='+document.form1.ve66_veiculo.value+
                                                 '&data='+databanco+
                                                 '&hora='+document.form1.ve66_hora.value+
@@ -212,7 +212,7 @@ function js_pesquisa_medida() {
 }
 
 function js_mostraultimamedida(ultimamedida,outro) {
-  document.form1.ve66_medidaanterior.value = ultimamedida; 
+  document.form1.ve66_medidaanterior.value = ultimamedida;
   return true;
 }
 </script>

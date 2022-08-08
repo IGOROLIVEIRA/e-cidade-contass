@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: recursos humanos
@@ -35,7 +35,7 @@ $clleis->rotulo->label();
     <td nowrap title="<?=@$Th08_numero?>">
        <?=@$Lh08_numero?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('h08_numero',6,$Ih08_numero,true,'text',$db_opcao,"");
 db_input('h08_codlei',6,$Ih08_codlei,true,'hidden',3,"");
@@ -58,7 +58,7 @@ db_select('h08_tipo',$x,true,$db_opcao,"");
     <td nowrap title="<?=@$Th08_dtlanc?>">
        <?=@$Lh08_dtlanc?>
     </td>
-    <td nowrap> 
+    <td nowrap>
 <?
 if((!isset($h08_dtlanc) || (isset($h08_dtlanc) && trim($h08_dtlanc) == "")) && (!isset($h08_dtlanc_dia) || (isset($h08_dtlanc_dia) && trim($h08_dtlanc_dia) == ""))){
   $h08_dtlanc_dia = date("d",db_getsession("DB_datausu"));
@@ -73,7 +73,7 @@ db_inputdata('h08_dtlanc',@$h08_dtlanc_dia,@$h08_dtlanc_mes,@$h08_dtlanc_ano,tru
     <td nowrap title="<?=@$Th08_dtini?>">
        <?=@$Lh08_dtini?>
     </td>
-    <td nowrap> 
+    <td nowrap>
 <?
 db_inputdata('h08_dtini',@$h08_dtini_dia,@$h08_dtini_mes,@$h08_dtini_ano,true,'text',$db_opcao,"")
 ?>
@@ -83,7 +83,7 @@ db_inputdata('h08_dtini',@$h08_dtini_dia,@$h08_dtini_mes,@$h08_dtini_ano,true,'t
     <td nowrap title="<?=@$Th08_dtfim?>">
        <?=@$Lh08_dtfim?>
     </td>
-    <td nowrap> 
+    <td nowrap>
 <?
 db_inputdata('h08_dtfim',@$h08_dtfim_dia,@$h08_dtfim_mes,@$h08_dtfim_ano,true,'text',$db_opcao,"")
 ?>
@@ -208,7 +208,7 @@ function js_atualixaIframe(stringatu){
   }
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_leis','func_leis.php?funcao_js=parent.js_preenchepesquisa|h08_codlei','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_leis','func_leis.php?funcao_js=parent.js_preenchepesquisa|h08_codlei','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_leis.hide();

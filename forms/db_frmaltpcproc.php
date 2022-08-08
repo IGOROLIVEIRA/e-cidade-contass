@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 include("classes/db_liclicitem_classe.php");
@@ -49,7 +49,7 @@ if($clpcproc->numrows>0){
     <td nowrap title="<?=@$Tpc80_codproc?>">
        <?=@$Lpc80_codproc?>
     </td>
-    <td> 
+    <td>
     <?
     db_input('pc80_codproc',8,$Ipc80_codproc,true,'text',3)
     ?>
@@ -57,7 +57,7 @@ if($clpcproc->numrows>0){
     <td nowrap title="<?=@$Tpc80_data?>">
        <?=@$Lpc80_data?>
     </td>
-    <td colspan="3"> 
+    <td colspan="3">
     <?
     db_inputdata('pc80_data',date("d"),date("m"),date("Y"),true,'text',3);
     ?>
@@ -78,7 +78,7 @@ if($clpcproc->numrows>0){
     <td nowrap title="<?=@$descrdepto?>">
        <?=@$Ldescrdepto?>
     </td>
-    <td colspan="3"> 
+    <td colspan="3">
     <?
     db_input('coddepto',8,$Idescrdepto,true,'text',3);
     db_input('descrdepto',46,$Idescrdepto,true,'text',3);
@@ -89,7 +89,7 @@ if($clpcproc->numrows>0){
     <td nowrap title="<?=@$Tpc80_resumo?>">
        <?=@$Lpc80_resumo?>
     </td>
-    <td colspan="3"> 
+    <td colspan="3">
     <?
     @$pc80_resumo = stripslashes($pc80_resumo);
     db_textarea('pc80_resumo',4,54,$Ipc80_resumo,true,'text',1)
@@ -118,7 +118,7 @@ if ($clliclicitem->numrows>0){
 </form>
 <script>
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_pcproc','func_excautitem.php?exc=ok&funcao_js=parent.js_preenchepesquisa|pc80_codproc','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_pcproc','func_excautitem.php?exc=ok&funcao_js=parent.js_preenchepesquisa|pc80_codproc','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_pcproc.hide();

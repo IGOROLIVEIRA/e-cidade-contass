@@ -256,7 +256,7 @@ $erro = false;
 		    if ($j40_refant == "") {
 		      $j40_refant = "....";
 		    }
-		    $sqlsub = split('\.',$j40_refant);
+		    $sqlsub = explode('\.',$j40_refant);
 		    fputs($clabre_arquivo->arquivo,str_pad($sqlsub[3],4));
 
 		    $z01_nome     = str_replace(chr(128),"C",$z01_nome);

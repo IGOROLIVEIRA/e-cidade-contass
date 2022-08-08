@@ -99,7 +99,7 @@ if(isset($verifica)){
 			while ((($file = readdir($dh)) !== false) ){
 				$tipo = filetype($dir . $file);
 				if($tipo=='file'){
-					$arr = split("_", $file);
+					$arr = explode("_", $file);
 					$count = count($arr);
 					//pega somente db_* _classe.php
 					if($arr[0]=="db" and $arr[$count-1]=="classe.php" and $count >= 3 ){
@@ -116,7 +116,7 @@ if(isset($verifica)){
 							$funcao = strstr($linha, 'function');
 							if($funcao!=""){
 								//echo "$funcao <br>";
-								$arrfunc = split(" ", $funcao);
+								$arrfunc = explode(" ", $funcao);
 								if(isset($arrfunc[1])){
 								// se não for incluir, alterar, excluir,sql_query,sql_query_file
 								if(    ($arrfunc[1]!="incluir")
@@ -171,7 +171,7 @@ if(isset($verifica)){
 															$met =$arrfunc[1];
 															
 														}else{
-															$metodo = split("\(", $arrfunc[1]);
+															$metodo = explode("\(", $arrfunc[1]);
 															$met = $metodo[0];
 															
 														}

@@ -45,7 +45,7 @@ $clrotulo->label("o40_descr");
             if (db_getsession("DB_modulo") != 952) {
               $x = array('1' => 'Gestor', '2' => 'Contador', '3' => 'Controle Interno', '4' => 'Ordenador de Despesa por Delegação', '5' => 'Tesoureiro', '6' => 'Responsável Pelo Orçamento Municipal');
             } else {
-              $x = array('7' => 'Responsável pelo envio');
+              $x = array('7' => 'Responsï¿½vel pelo envio');
             }
             db_select("si166_tiporesponsavel", $x, true, $db_opcao, "onchange='mostrar_campos()'");
             //db_input('si166_tiporesponsavel',11,$Isi166_tiporesponsavel,true,'text',$db_opcao,"")
@@ -123,10 +123,10 @@ $clrotulo->label("o40_descr");
 <script>
   function js_pesquisasi166_numcgm(mostra) {
     if (mostra == true) {
-      js_OpenJanelaIframe('top.corpo', 'db_iframe_cgm', 'func_cgm.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome', 'Pesquisa', true);
+      js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_cgm', 'func_cgm.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome', 'Pesquisa', true);
     } else {
       if (document.form1.si166_numcgm.value != '') {
-        js_OpenJanelaIframe('top.corpo', 'db_iframe_cgm', 'func_cgm.php?pesquisa_chave=' + document.form1.si166_numcgm.value + '&funcao_js=parent.js_mostracgm', 'Pesquisa', false);
+        js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_cgm', 'func_cgm.php?pesquisa_chave=' + document.form1.si166_numcgm.value + '&funcao_js=parent.js_mostracgm', 'Pesquisa', false);
       } else {
         document.form1.z01_nome.value = '';
       }
@@ -148,7 +148,7 @@ $clrotulo->label("o40_descr");
   }
 
   function js_pesquisa() {
-    js_OpenJanelaIframe('top.corpo', 'db_iframe_identificacaoresponsaveis', 'func_identificacaoresponsaveis.php?funcao_js=parent.js_preenchepesquisa|si166_sequencial', 'Pesquisa', true);
+    js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_identificacaoresponsaveis', 'func_identificacaoresponsaveis.php?funcao_js=parent.js_preenchepesquisa|si166_sequencial', 'Pesquisa', true);
   }
 
   function js_preenchepesquisa(chave) {

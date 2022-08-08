@@ -101,14 +101,14 @@ $clrotulo->label('ci03_objaudit');
 function js_pesquisaProcessoAuditoria(lMostra) {
 
     if (lMostra) {
-        js_OpenJanelaIframe('top.corpo','db_iframe_processoaudit','func_processoaudit.php?funcao_js=parent.js_mostraProcessoAuditoria1|ci03_codproc|ci03_objaudit|ci03_numproc|ci03_anoproc','Pesquisa',true);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_processoaudit','func_processoaudit.php?funcao_js=parent.js_mostraProcessoAuditoria1|ci03_codproc|ci03_objaudit|ci03_numproc|ci03_anoproc','Pesquisa',true);
     } else {
-        js_OpenJanelaIframe('top.corpo','db_iframe_processoaudit','func_processoaudit.php?pesquisa_chave='+document.form1.ci03_codproc.value+'&objetivo=true&funcao_js=parent.js_mostraProcessoAuditoria','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_processoaudit','func_processoaudit.php?pesquisa_chave='+document.form1.ci03_codproc.value+'&objetivo=true&funcao_js=parent.js_mostraProcessoAuditoria','Pesquisa',false);
     }
 }
 
 function js_mostraProcessoAuditoria(chave, chave1, chave2, erro) {
-    
+
     document.form1.ci03_objaudit.value = chave;
     document.getElementById('ci03_numproc').setAttribute('value', chave1);
     document.getElementById('ci03_anoproc').setAttribute('value', chave2);
@@ -116,11 +116,11 @@ function js_mostraProcessoAuditoria(chave, chave1, chave2, erro) {
         document.form1.ci03_codproc.focus();
         document.form1.ci03_objaudit = '';
     }
-    
+
 }
 
 function js_mostraProcessoAuditoria1(chave1, chave2, chave3, chave4) {
-    
+
     document.form1.ci03_codproc.value = chave1;
     document.form1.ci03_objaudit.value = chave2;
     document.getElementById('ci03_numproc').setAttribute('value', chave3);
@@ -133,7 +133,7 @@ function js_processa() {
 
     const sUrl  = 'cin4_lancamverifaudit001.php';
     var sParams = '';
-    
+
     if (document.form1.ci03_codproc.value == null || document.form1.ci03_codproc.value == "") {
         alert("Informe o Processo de Auditoria");
         return;

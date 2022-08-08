@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -44,10 +44,10 @@ $clrotulo->label("");
   <link href="estilos.css" rel="stylesheet" type="text/css">
   <script>
   function js_devolucao(codigo){
-    js_OpenJanelaIframe('top.corpo','db_iframe_devolucao','mat3_consultadevolucao001.php?codigo='+codigo,'Consulta Devolução',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_devolucao','mat3_consultadevolucao001.php?codigo='+codigo,'Consulta Devolução',true);
   }
   function js_atendrequi(codigo){
-    js_OpenJanelaIframe('top.corpo','db_iframe_atendrequi','mat3_consultaatendrequi001.php?codigo='+codigo,'Consulta Atendimento da Requisição',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_atendrequi','mat3_consultaatendrequi001.php?codigo='+codigo,'Consulta Atendimento da Requisição',true);
   }
   </script>
   <style>
@@ -70,12 +70,12 @@ $clrotulo->label("");
   }
   </style>
   </head>
-  <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0"> 
+  <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
   <table  border="0" cellspacing="0" cellpadding="0" width='100%'>
-  <tr> 
-  <td  align="center" valign="top" > 
- 
-  <table border='0'>  
+  <tr>
+  <td  align="center" valign="top" >
+
+  <table border='0'>
     <tr>
       <td colspan=6 align=center>
       <br>
@@ -95,7 +95,7 @@ $clrotulo->label("");
 		  nome,
 		  m45_obs,
 		  m42_codigo
-	  from matestoqueitem 
+	  from matestoqueitem
 		inner join matestoqueinimei on m82_matestoqueitem = m71_codlanc
 		inner join matestoqueini a on a.m80_codigo = m82_matestoqueini
 		inner join matestoquetransf on m83_matestoqueini = a.m80_codigo
@@ -110,7 +110,7 @@ $clrotulo->label("");
   }
     $repassa = array('dblov'=>'0');
   db_lovrot(@$sql,15,"()","","","","NoMe",$repassa);
-  
+
   /*$result=pg_exec($sql);
   $numrows = pg_numrows($result);
   if($numrows>0){
@@ -127,11 +127,11 @@ $clrotulo->label("");
   for($i=0; $i<$numrows; $i++){
     db_fieldsmemory($result,$i);
      echo "
-           <tr>	    
+           <tr>
 	     <td class='bordas_corp' align='center'><small>";
 	     db_ancora($m45_codigo,"js_devolucao($m45_codigo);",1);
      echo "  </small></td>
-	     <td class='bordas_corp' align='center'><small>".db_formatar($m45_data,'d')."</small></td>		    
+	     <td class='bordas_corp' align='center'><small>".db_formatar($m45_data,'d')."</small></td>
 	     <td class='bordas_corp' align='center'><small>$m45_hora</small></td>
 	     <td class='bordas_corp' align='center'><small>$m45_depto-$descrdepto</small></td>
 	     <td class='bordas_corp' align='center'><small>$nome</small></td>
@@ -143,9 +143,9 @@ $clrotulo->label("");
 	   ";
   }*/
 
-?>     
+?>
 </table>
- 
+
 </td>
 </tr>
 </table>

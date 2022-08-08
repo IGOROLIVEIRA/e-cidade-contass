@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 $clpontofx->rotulo->label();
@@ -36,19 +36,19 @@ $clrotulo->label("DBtxt23");
 $clrotulo->label("DBtxt25");
 
 if (DBPessoal::verificarUtilizacaoEstruturaSuplementar()) {
-  
+
   try {
-    
+
     switch ($ponto) {
-      
+
       case "fa":
         FolhaPagamentoAdiantamento::verificaLiberacaoDBPref();
         break;
-      
+
       case "fr":
         FolhaPagamentoRescisao::verificaLiberacaoDBPref();
         break;
-      
+
       case "f13":
         FolhaPagamento13o::verificaLiberacaoDBPref();
         break;
@@ -70,9 +70,9 @@ if($ponto == "fx"){
   $dponto = " Ponto Complementar por Código";
   try{
     if (DBPessoal::verificarUtilizacaoEstruturaSuplementar()) {
-      
+
       if ( FolhaPagamentoComplementar::hasFolhaAberta( new DBCompetencia(DBPessoal::getAnoFolha(), DBPessoal::getMesFolha()) ) ) {
-        
+
         $oFolhaPagamentoComplementar = FolhaPagamentoComplementar::getFolhaAberta();
         $rh141_codigo                = $oFolhaPagamentoComplementar->getNumero();
         $rh141_descricao             = $oFolhaPagamentoComplementar->getDescricao();
@@ -102,15 +102,15 @@ if($ponto == "fx"){
   <legend><?= $dponto ?></legend>
   <?php
   if ($ponto == "com" && DBPessoal::verificarUtilizacaoEstruturaSuplementar()) {
-    
+
     echo '<fieldset id="toogle">';
-    echo "  <legend>Dados da Folha Complementar</legend>";      
+    echo "  <legend>Dados da Folha Complementar</legend>";
     $sDBOpcaoAnterior            = $db_opcao;
     $db_opcao                    = 3;
     include("forms/db_frmrhfolhapagamento.php");
     $db_opcao                    = $sDBOpcaoAnterior;
     echo "</fieldset>";
-    
+
   }
   ?>
   <fieldset>
@@ -118,7 +118,7 @@ if($ponto == "fx"){
     <table>
       <tr>
         <td title="Digite o Ano / Mes de competência">
-          <strong>Competência:</strong> 
+          <strong>Competência:</strong>
         </td>
         <td>
           <?php
@@ -135,13 +135,13 @@ if($ponto == "fx"){
           db_input('admissa_matricula', 40, 0, true, 'hidden', 3, '');
           db_input('repassar_rubricas', 40, 0, true, 'hidden', 3, '');
           db_input('opcoes_rubricas', 40, 0, true, 'hidden', 3, '');
-      
+
           $qry = "rubricas_selecionadas_enviar=".$rubricas_selecionadas_enviar;
           $qry.= "&ponto=".$ponto;
           if(isset($repassar_rubricas)){
             $qry.= "&repassar_rubricas=".$repassar_rubricas;
           }
-  
+
           if(isset($r90_regist) && trim($r90_regist)!=""){
             $qry .= "&registro=".$r90_regist;
           }
@@ -162,10 +162,10 @@ if($ponto == "fx"){
         </td>
       </tr>
     </table>
-  </fieldset>  
+  </fieldset>
 </fieldset>
 <?php
-if($db_opcao != 3){  
+if($db_opcao != 3){
 ?>
   <input type="button" name="enviar" value="Enviar dados" onclick="js_receber_dados_inclui();" onBlur="document.form1.voltar.focus();" onfocus="document.getElementById('caixa_de_texto').innerHTML = '';">
   <input type="button" name="voltar" value="Selecionar rubricas" onClick="location.href='pes1_pontoRfx001.php?ponto=<?=$ponto?>'"  onBlur="rubricas_dados_enviar.js_setar_foco_campo();" onfocus="document.getElementById('caixa_de_texto').innerHTML = '';">
@@ -175,7 +175,7 @@ if($db_opcao != 3){
 </form>
 <br />
 <div style="width:90%; height:100%; margin-right:auto; margin-left:auto;">
-  <iframe name="rubricas_dados_enviar" id="rubricas_dados_enviar" marginwidth="0" marginheight="0" frameborder="0" src="pes1_pontoRfx0011_iframe.php?<?=$qry?>" width="98%" height="95%"></iframe>   
+  <iframe name="rubricas_dados_enviar" id="rubricas_dados_enviar" marginwidth="0" marginheight="0" frameborder="0" src="pes1_pontoRfx0011_iframe.php?<?=$qry?>" width="98%" height="95%"></iframe>
 </div>
 
 <div id="caixa_de_texto"></div>
@@ -194,7 +194,7 @@ function js_testarRegraPonto() {
   lTestarRegraPonto = true;
 
   js_divCarregando('Processando...', 'msgBox');
-   
+
   var oParametros  = new Object();
 
   oParametros.sExecucao  = 'testarRegistroPonto';
@@ -203,14 +203,14 @@ function js_testarRegraPonto() {
   oParametros.aRubricas  = $('rubricas_selecionadas_enviar').value.split(',');
 
 	var oAjax = new Ajax.Request(
-		'pes1_rhrubricas.RPC.php', 
+		'pes1_rhrubricas.RPC.php',
 		{
       asynchronous: false,
 			method     : 'post',
 			parameters : 'json=' + Object.toJSON(oParametros),
       onComplete : js_retornoTestarRegraPonto
     }
-	);   
+	);
 
   return lTestarRegraPonto;
 }
@@ -223,7 +223,7 @@ function js_retornoTestarRegraPonto(oAjax) {
 	var sMensagem = oRetorno.sMensagem.urlDecode().replace(/\\n/g, "\n");
 
   /**
-   * Erro no RPC 
+   * Erro no RPC
    */
   if ( oRetorno.iStatus > 1 ) {
 
@@ -243,7 +243,7 @@ function js_retornoTestarRegraPonto(oAjax) {
     lConfirmarAviso = confirm( oRetorno.sMensagensAviso.urlDecode().replace(/\n/g, "\n") );
 
     /**
-     * Clicou em cancelar 
+     * Clicou em cancelar
      * - Nao submita form
      */
     if ( !lConfirmarAviso ) {
@@ -262,19 +262,19 @@ function js_receber_dados_inclui() {
   }
 
   /**
-   * Valida campos 
+   * Valida campos
    */
   recebe = rubricas_dados_enviar.js_enviar_dados_inclui();
 
   if ( recebe ) {
 
     /**
-     * Valida regras do ponto 
+     * Valida regras do ponto
      */
     lTestarRegistroPonto = js_testarRegraPonto();
 
     /**
-     * Regra do ponto é um bloqueio ou usuario clicou em cancelar do aviso 
+     * Regra do ponto é um bloqueio ou usuario clicou em cancelar do aviso
      */
     if ( !lTestarRegistroPonto ) {
       return false;
@@ -294,21 +294,21 @@ function js_receber_dados_inclui() {
 function js_pesquisar90_regist(mostra){
   document.getElementById('caixa_de_texto').innerHTML = "";
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_rhpessoal','func_rhpessoal.php?testarescisao=<?=($ponto == "fs" ? "raf" : "ra")?>&funcao_js=parent.js_mostrapessoal1|rh01_regist|z01_nome&instit=<?=(db_getsession("DB_instit"))?>&chave_r01_mesusu='+document.form1.r90_mesusu.value+'&chave_r01_anousu'+document.form1.r90_anousu.value,'Pesquisa Matrícula',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhpessoal','func_rhpessoal.php?testarescisao=<?=($ponto == "fs" ? "raf" : "ra")?>&funcao_js=parent.js_mostrapessoal1|rh01_regist|z01_nome&instit=<?=(db_getsession("DB_instit"))?>&chave_r01_mesusu='+document.form1.r90_mesusu.value+'&chave_r01_anousu'+document.form1.r90_anousu.value,'Pesquisa Matrícula',true);
   }else{
-     if(document.form1.r90_regist.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_rhpessoal','func_rhpessoal.php?testarescisao=<?=($ponto == "fs" ? "raf" : "ra")?>&pesquisa_chave='+document.form1.r90_regist.value+'&funcao_js=parent.js_mostrapessoal&instit=<?=(db_getsession("DB_instit"))?>','Pesquisa Matrícula',false);
+     if(document.form1.r90_regist.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhpessoal','func_rhpessoal.php?testarescisao=<?=($ponto == "fs" ? "raf" : "ra")?>&pesquisa_chave='+document.form1.r90_regist.value+'&funcao_js=parent.js_mostrapessoal&instit=<?=(db_getsession("DB_instit"))?>','Pesquisa Matrícula',false);
      }else{
        document.form1.z01_nome.value = '';
-       rubricas_dados_enviar.location.href = "pes1_pontoRfx0011_iframe.php?rubricas_selecionadas_enviar=<?=$rubricas_selecionadas_enviar?>&ponto=<?=$ponto?>&repassar_rubricas="+document.form1.repassar_rubricas.value; 
+       rubricas_dados_enviar.location.href = "pes1_pontoRfx0011_iframe.php?rubricas_selecionadas_enviar=<?=$rubricas_selecionadas_enviar?>&ponto=<?=$ponto?>&repassar_rubricas="+document.form1.repassar_rubricas.value;
      }
   }
 }
 function js_mostrapessoal(chave,erro){
-  document.form1.z01_nome.value = chave; 
-  if(erro==true){ 
-    document.form1.r90_regist.focus(); 
-    document.form1.r90_regist.value = ''; 
+  document.form1.z01_nome.value = chave;
+  if(erro==true){
+    document.form1.r90_regist.focus();
+    document.form1.r90_regist.value = '';
   }else{
   	rubricas_dados_enviar.location.href = "pes1_pontoRfx0011_iframe.php?rubricas_selecionadas_enviar=<?=$rubricas_selecionadas_enviar?>&ponto=<?=$ponto?>&registro="+document.form1.r90_regist.value+"&repassar_rubricas="+document.form1.repassar_rubricas.value;
   }

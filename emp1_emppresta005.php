@@ -189,7 +189,7 @@ if(isset($chavepesquisa)){
   <script>
       function js_db_libera(){
          parent.document.formaba.empprestaitem.disabled=false;
-         top.corpo.iframe_empprestaitem.location.href='emp1_empprestaitem001.php?e60_codemp=$e60_codemp&e46_numemp=".@$e45_numemp."&e45_sequencial={$e45_sequencial}'";
+         CurrentWindow.corpo.iframe_empprestaitem.location.href='emp1_empprestaitem001.php?e60_codemp=$e60_codemp&e46_numemp=".@$e45_numemp."&e45_sequencial={$e45_sequencial}'";
 
  if (db_permissaomenu(db_getsession("DB_anousu"),db_getsession("DB_modulo"),9484) == "false"){
       echo "
@@ -199,7 +199,7 @@ if(isset($chavepesquisa)){
 	 parent.document.formaba.encerra.disabled=false;";
  }
 
- echo "top.corpo.iframe_encerra.location.href='emp1_empprestaencerra.php?e60_codemp=$e60_codemp&e60_numemp=".@$e45_numemp."&e45_sequencial={$e45_sequencial}'";
+ echo "CurrentWindow.corpo.iframe_encerra.location.href='emp1_empprestaencerra.php?e60_codemp=$e60_codemp&e60_numemp=".@$e45_numemp."&e45_sequencial={$e45_sequencial}'";
          if(isset($liberaaba)){
            echo "  parent.mo_camada('empprestaitem');";
          }

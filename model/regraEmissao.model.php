@@ -246,7 +246,7 @@ class regraEmissao {
   	     $this->oSpdf = new scpdf();
   	  }
   	  $this->oSpdf->Open();
-  	  $this->oObjPdf = new db_impcarne(&$this->oSpdf,$iCadModCarne);
+  	  $this->oObjPdf = new db_impcarne($this->oSpdf,$iCadModCarne);
 
     } else {
 
@@ -255,7 +255,7 @@ class regraEmissao {
         $this->oPdfUnico->open();
         $this->lOpenUnico = true;
       }
-      $this->oObjPdf = new db_impcarne(&$this->oPdfUnico, $iCadModCarne);
+      $this->oObjPdf = new db_impcarne($this->oPdfUnico, $iCadModCarne);
     }
 
   }

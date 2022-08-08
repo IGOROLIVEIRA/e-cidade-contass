@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: saude
@@ -31,8 +31,8 @@ $clcgm->rotulo->label();
 $clrotulo = new rotulocampo;
 $clrotulo->label("z01_nome");
 if($db_opcao == 2){
-    echo "<input type='button' value='Emitir Ficha Matricial' onclick='top.corpo.iframe_a3.";if($tp==1){ echo "emite_ficha($numero,1)'>";}else{ echo "emite_ficha1($numero,1)'>";}
-    echo "<input type='button' value='Emitir Ficha Outra' onclick='top.corpo.iframe_a3.";if($tp==1){ echo "emite_ficha($numero,2)'>";}else{ echo "emite_ficha1($numero,2)'>";}
+    echo "<input type='button' value='Emitir Ficha Matricial' onclick='CurrentWindow.corpo.iframe_a3.";if($tp==1){ echo "emite_ficha($numero,1)'>";}else{ echo "emite_ficha1($numero,1)'>";}
+    echo "<input type='button' value='Emitir Ficha Outra' onclick='CurrentWindow.corpo.iframe_a3.";if($tp==1){ echo "emite_ficha($numero,2)'>";}else{ echo "emite_ficha1($numero,2)'>";}
 }
 ?>
 <form name="form1" method="post" action="">
@@ -45,7 +45,7 @@ if($db_opcao == 2){
     <td nowrap title="<?=@$Tsd01_c_siasus?>">
        <?=@$Lsd01_c_siasus?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('sd01_c_siasus',18,$Isd01_c_siasus,true,'text',$db_opcao,"")
 ?>
@@ -79,7 +79,7 @@ db_input('sd01_c_siasus',18,$Isd01_c_siasus,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tsd01_c_parentesco?>">
        <?=@$Lsd01_c_parentesco?>
     </td>
-    <td> 
+    <td>
 <?
 $x = array('TITULAR'=>'TITULAR','ESPOSO(A)'=>'ESPOSO(A)','COMPANHEIRO(A)'=>'COMPANHEIRO(A)','FILHO(A)'=>'FILHO(A)','PAI'=>'PAI','MÃE'=>'MÃE','SOGRO(A)'=>'SOGRO(A)','FILHO(A) ADOTIVO(A)'=>'FILHO(A) ADOTIVO(A)','OUTROS'=>'OUTROS');
 db_select('sd01_c_parentesco',$x,true,$db_opcao,"");
@@ -90,7 +90,7 @@ db_select('sd01_c_parentesco',$x,true,$db_opcao,"");
     <td nowrap title="<?=@$Tsd01_c_sangue?>">
        <?=@$Lsd01_c_sangue?>
     </td>
-    <td> 
+    <td>
 <?
 $x = array('A+'=>'A+','A-'=>'A-','O+'=>'O+','O-'=>'O-','AB'=>'AB');
 db_select('sd01_c_sangue',$x,true,$db_opcao,"");
@@ -101,7 +101,7 @@ db_select('sd01_c_sangue',$x,true,$db_opcao,"");
     <td nowrap title="<?=@$Tsd01_i_familia?>">
        <?=@$Lsd01_i_familia?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('sd01_i_familia',8,$Isd01_i_familia,true,'text',$db_opcao,"")
 ?>
@@ -111,7 +111,7 @@ db_input('sd01_i_familia',8,$Isd01_i_familia,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$Tsd01_c_alfabetizado?>">
        <?=@$Lsd01_c_alfabetizado?>
     </td>
-    <td> 
+    <td>
 <?
 $x = array('t'=>'SIM','f'=>'NÃO');
 db_select('sd01_c_alfabetizado',$x,true,$db_opcao,"");
@@ -122,7 +122,7 @@ db_select('sd01_c_alfabetizado',$x,true,$db_opcao,"");
     <td nowrap title="<?=@$Tsd01_c_escola?>">
        <?=@$Lsd01_c_escola?>
     </td>
-    <td> 
+    <td>
 <?
 $x = array('t'=>'SIM','f'=>'NÃO');
 db_select('sd01_c_escola',$x,true,$db_opcao,"");
@@ -135,7 +135,7 @@ db_select('sd01_c_escola',$x,true,$db_opcao,"");
 </form>
 <script>
 function js_pesquisarua(){
- js_OpenJanelaIframe('top.corpo.iframe_a4','db_iframe_rua','func_ruas.php?funcao_js=parent.js_mostrarua|j14_codigo|j14_nome','Pesquisa',true);
+ js_OpenJanelaIframe('CurrentWindow.corpo.iframe_a4','db_iframe_rua','func_ruas.php?funcao_js=parent.js_mostrarua|j14_codigo|j14_nome','Pesquisa',true);
 }
 
 function js_mostrarua(chave1,chave2){
@@ -146,7 +146,7 @@ function js_mostrarua(chave1,chave2){
 
 /*function js_cep(rua){
  alert(rua);
- js_OpenJanelaIframe('top.corpo.iframe_a4','db_iframe_cep','func_cep.php?db11_logradouro='+rua+'&funcao_js=parent.js_preenchecep|cep','Pesquisa',true);
+ js_OpenJanelaIframe('CurrentWindow.corpo.iframe_a4','db_iframe_cep','func_cep.php?db11_logradouro='+rua+'&funcao_js=parent.js_preenchecep|cep','Pesquisa',true);
 } */
 
 function js_preenchecep(chave){
@@ -155,7 +155,7 @@ function js_preenchecep(chave){
 }
 
 function js_pesquisabairro(){
-    js_OpenJanelaIframe('top.corpo.iframe_a4','db_iframe_bairro','func_bairro.php?funcao_js=parent.js_mostrabairro|j13_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_a4','db_iframe_bairro','func_bairro.php?funcao_js=parent.js_mostrabairro|j13_descr','Pesquisa',true);
 }
 
 function js_mostrabairro(chave1){

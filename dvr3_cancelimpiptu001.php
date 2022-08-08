@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once ("libs/db_stdlib.php");
@@ -153,50 +153,50 @@ db_app::load('estilos.css, grid.style.css');
 function js_validaCampos(){
 
   var lValidacao = false;
-  var aText = $('form1').getInputs('text');   
-  aText.each(function (oText, id) {  
+  var aText = $('form1').getInputs('text');
+  aText.each(function (oText, id) {
     if ($(oText).value != '') {
       lValidacao = true;
       throw $break;
     }
-  });  
+  });
   if ( lValidacao == false ) {
     alert(_M("tributario.diversos.dvr3_cancelimpiptu001.informe_campo"));
-  }   
-  return lValidacao;  
-}   
+  }
+  return lValidacao;
+}
 
 function js_cgm(mostra){
   var cgm=document.form1.z01_numcgm.value;
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe2','func_nome.php?funcao_js=parent.js_mostracgm|0|1','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe2','func_nome.php?funcao_js=parent.js_mostracgm|0|1','Pesquisa',true);
   }else{
-    js_OpenJanelaIframe('top.corpo','db_iframe2','func_nome.php?pesquisa_chave=' + cgm 
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe2','func_nome.php?pesquisa_chave=' + cgm
                                                                   + '&funcao_js=parent.js_mostracgm1','Pesquisa',false);
   }
 }
 function js_mostracgm(chave1,chave2){
   jsLimpa(document.form1.z01_numcgm.value, document.form1.z01_numcgm.id);
   $('z01_numcgm').value = chave1;
-  $('z01_nomecgm').value = chave2;    
+  $('z01_nomecgm').value = chave2;
   db_iframe2.hide();
 }
 function js_mostracgm1(erro,chave){
-  document.form1.z01_nomecgm.value = chave; 
-  if(erro==true){ 
-    document.form1.z01_numcgm.focus(); 
-    document.form1.z01_numcgm.value = ''; 
+  document.form1.z01_nomecgm.value = chave;
+  if(erro==true){
+    document.form1.z01_numcgm.focus();
+    document.form1.z01_numcgm.value = '';
   }
 }
 function js_matri(mostra){
   var matri=document.form1.j01_matric.value;
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe3','func_iptubase.php?funcao_js=parent.js_mostramatri|j01_matric|z01_nome','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe3','func_iptubase.php?funcao_js=parent.js_mostramatri|j01_matric|z01_nome','Pesquisa',true);
   }else{
     if (matri != "") {
-	    js_OpenJanelaIframe('top.corpo','db_iframe3','func_iptubase.php?pesquisa_chave='+matri+
+	    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe3','func_iptubase.php?pesquisa_chave='+matri+
 	                                                                  '&funcao_js=parent.js_mostramatri1','Pesquisa',false);
-    }                                                                 
+    }
   }
 }
 function js_mostramatri(chave1,chave2){
@@ -206,18 +206,18 @@ function js_mostramatri(chave1,chave2){
   db_iframe3.hide();
 }
 function js_mostramatri1(chave,erro){
-  document.form1.z01_nomematri.value = chave; 
-  if(erro==true){ 
-    document.form1.j01_matric.focus(); 
-    document.form1.j01_matric.value = ''; 
+  document.form1.z01_nomematri.value = chave;
+  if(erro==true){
+    document.form1.j01_matric.focus();
+    document.form1.j01_matric.value = '';
   }
 }
 
 function jsLimpa(iValorCampo, iIdCampo) {
-  var aText = $('form1').getInputs('text');   
-  aText.each(function (oText, id) {  
+  var aText = $('form1').getInputs('text');
+  aText.each(function (oText, id) {
     $(oText).value = '';
-  });  
+  });
   $(iIdCampo).value = iValorCampo
 }
 
@@ -236,13 +236,13 @@ function js_cancelarImportacao() {
 	  alert(_M("tributario.diversos.dvr3_cancelimpiptu001.nenhum_debito_para_cancelamento"));
 	  return false;
   }
-  
+
   aDebitosSelecionados.each(
     function ( aRow ) {
     	aNumpresSelecionados.push( aRow[0] );
     }
   );
-  
+
   if (lErro) {
 	  alert(sMsgErro);
 	  return false;
@@ -260,18 +260,18 @@ function js_cancelarImportacao() {
   oParam.aCodigosImportacao   = aNumpresSelecionados;
 
 	var oAjax = new Ajax.Request(sUrlRPC,
-            									{ 
+            									{
 															 method    : 'POST',
-       												 parameters: 'json='+Object.toJSON(oParam), 
+       												 parameters: 'json='+Object.toJSON(oParam),
        												 onComplete: js_retornoProcessamento
       												});
-	
+
 }
 
 function js_retornoProcessamento(oAjax) {
 
 	var oGet = js_urlToObject();
-	
+
 	js_removeObj('msgbox');
 
 	var oRetorno  = eval("("+oAjax.responseText+")");
@@ -283,43 +283,43 @@ function js_retornoProcessamento(oAjax) {
 		alert(_M("tributario.diversos.dvr3_cancelimpiptu001.sucesso_cancelamento_debitos"));
 
 		window.location = 'dvr3_cancelimpiptu001.php?sTipo=' + oGet.sTipo;
-		 
+
 	} else {
 
 		alert(oRetorno.message);
-		
+
 	}
 }
 
 function js_init_table() {
-	
+
 	oGridDebitos              = new DBGrid('oGridDebitos');
   oGridDebitos.nameInstance = 'oGridDebitos';
   oGridDebitos.setHeight(150);
   oGridDebitos.setCheckbox(0);
-  oGridDebitos.setCellAlign(new Array('center', 
-		  																'center', 
-		  																'center', 
-		  																'center'  , 
-		  																'left'  , 
+  oGridDebitos.setCellAlign(new Array('center',
+		  																'center',
+		  																'center',
+		  																'center'  ,
+		  																'left'  ,
 		  																'left'  ));
-	
-  oGridDebitos.setCellWidth(new Array('15%', 
-		   																'10%', 
-		   																'5%' , 
-		   																'20%', 
-		   																'20%', 
+
+  oGridDebitos.setCellWidth(new Array('15%',
+		   																'10%',
+		   																'5%' ,
+		   																'20%',
+		   																'20%',
 		   																'30%'));
-		
-  oGridDebitos.setHeader   (new Array('Código Importação', 
-		  															  'Data'             , 
-		  															  'Hora'             , 
+
+  oGridDebitos.setHeader   (new Array('Código Importação',
+		  															  'Data'             ,
+		  															  'Hora'             ,
 		  															  'Tipo Débito'      ,
-		  															  'Receitas'         , 
+		  															  'Receitas'         ,
 		  															  'Observação'       ));
-	  
+
   oGridDebitos.show($('oGridDebitos'));
-  
+
 }
 
 function js_pesquisaDebitos() {
@@ -329,26 +329,26 @@ function js_pesquisaDebitos() {
   }
 
   var oParam            = new Object();
-  
+
   oParam.iChavePesquisa = 0;
   oParam.iTipoPesquisa  = 0;
-  
+
   if( $F('j01_matric') ){
-  
+
     oParam.iChavePesquisa     = $F('j01_matric');
     oParam.iTipoPesquisa      = 2;
-    
+
   } else if( $F('z01_numcgm') ){
-  
+
     oParam.iChavePesquisa     = $F('z01_numcgm');
     oParam.iTipoPesquisa      = 3;
-    
+
   } else if( $F('k00_numpre') ){
-  
+
     oParam.iChavePesquisa     = $F('k00_numpre');
     oParam.iTipoPesquisa      = 4;
-    
-  }   
+
+  }
 
   oParam.sExec      = 'getDebitosImportados';
 
@@ -356,13 +356,13 @@ function js_pesquisaDebitos() {
 	js_divCarregando(_M("tributario.diversos.dvr3_cancelimpiptu001.pesquisando_debitos"), 'msgbox');
 
 	var oAjax = new Ajax.Request(sUrlRPC, {method: 'POST',
-                 												 parameters: 'json='+Object.toJSON(oParam), 
+                 												 parameters: 'json='+Object.toJSON(oParam),
                  												 onComplete: js_retornaDebitos} );
-	
+
 }
 
 function js_retornaDebitos(oAjax) {
-	
+
 	js_removeObj('msgbox');
 
 	var oRetorno  = eval("("+oAjax.responseText+")");
@@ -374,21 +374,21 @@ function js_retornaDebitos(oAjax) {
 		$('grid').style.display = '';
 
 		for (var i = 0; i < oRetorno.aDebitos.length; i++) {
-		
+
 			with (oRetorno.aDebitos[i]) {
 
 			  aLinha     = new Array();
 			  aLinha[0]	 = dv11_sequencial;
-			  aLinha[1]  = js_formatar(dv11_data,'d'); 				
-			  aLinha[2]  = dv11_hora.urlDecode();                                                                        
-			  aLinha[3]  = k00_tipo + ' - ' + k00_descr.urlDecode();                                                             
-			  aLinha[4]  = receitas.urlDecode().replace(/,/g, '<BR>');		
-			  aLinha[5]  = dv11_obs.urlDecode();		
+			  aLinha[1]  = js_formatar(dv11_data,'d');
+			  aLinha[2]  = dv11_hora.urlDecode();
+			  aLinha[3]  = k00_tipo + ' - ' + k00_descr.urlDecode();
+			  aLinha[4]  = receitas.urlDecode().replace(/,/g, '<BR>');
+			  aLinha[5]  = dv11_obs.urlDecode();
 			}
 			oGridDebitos.addRow(aLinha);
-			
+
 		}
-		
+
 		oGridDebitos.renderRows();
 
 	} else {

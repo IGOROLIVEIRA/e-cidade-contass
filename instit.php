@@ -44,62 +44,62 @@ if (session_is_registered("DB_uol_hora")) {
   db_query("update db_usuariosonline
                set uol_arquivo = '',
                    uol_modulo = 'Selecionando Instituição',
-                   uol_inativo = ".time()."
-             where uol_id = ".db_getsession("DB_id_usuario")."
-               and uol_ip = '".(isset($_SERVER["HTTP_X_FORWARDED_FOR"])?$_SERVER["HTTP_X_FORWARDED_FOR"]:$HTTP_SERVER_VARS['REMOTE_ADDR'])."'
-               and uol_hora = ".db_getsession("DB_uol_hora")) or die("Erro(26) atualizando db_usuariosonline");
+                   uol_inativo = " . time() . "
+             where uol_id = " . db_getsession("DB_id_usuario") . "
+               and uol_ip = '" . (isset($_SERVER["HTTP_X_FORWARDED_FOR"]) ? $_SERVER["HTTP_X_FORWARDED_FOR"] : $HTTP_SERVER_VARS['REMOTE_ADDR']) . "'
+               and uol_hora = " . db_getsession("DB_uol_hora")) or die("Erro(26) atualizando db_usuariosonline");
 
-  
-  $sSqlInstit =  "select c.codigo, 
-  		                  c.nomeinst, 
+
+  $sSqlInstit =  "select c.codigo,
+  		                  c.nomeinst,
   		                  c.figura, db21_tipoinstit
                    from db_config c
              join db_userinst on c.codigo = db_userinst.id_instit
             join db_usuarios on db_usuarios.id_usuario=db_userinst.id_usuario
-                  where (c.db21_ativo = 1 or administrador = 1)  
+                  where (c.db21_ativo = 1 or administrador = 1)
   		              and (c.db21_datalimite is null or  c.db21_datalimite > '$sDataSistema')
   		              and db_usuarios.id_usuario =  $iUsuarioLogado
-               order by c.prefeitura desc, c.codigo" ;
-   
-  
+               order by c.prefeitura desc, c.codigo";
+
+
   /*if(db_getsession("DB_id_usuario") == "1") {
-  	
-  	$sSqlInstit = "   select codigo, 
-  	                         nomeinst, 
-  	                         figura, 
-  	                         db21_tipoinstit 
+
+  	$sSqlInstit = "   select codigo,
+  	                         nomeinst,
+  	                         figura,
+  	                         db21_tipoinstit
   	                    from db_config
   	                    join db_userinst on db_config.codigo = db_userinst.id_instit
                         join db_usuarios on db_usuarios.id_usuario=db_userinst.id_usuario
-  	                   where (c.db21_ativo = 1 or administrador = 1)  
-  	                     and (db21_datalimite is null or db21_datalimite <  '$sDataSistema') 
+  	                   where (c.db21_ativo = 1 or administrador = 1)
+  	                     and (db21_datalimite is null or db21_datalimite <  '$sDataSistema')
   	                order by prefeitura desc, codigo";
-  	
-  } */ 	
-  	
-  $rsInstituicoes = db_query( $sSqlInstit);
+
+  } */
+
+  $rsInstituicoes = db_query($sSqlInstit);
 }
 ?>
 <html>
-  <?php
+<?php
 
-    $oDBReleaseNote = new DBReleaseNote(db_getsession('DB_id_usuario'), "nota_geral_01");
-    $tem_atualizacoes = $oDBReleaseNote->check();
+//$oDBReleaseNote = new DBReleaseNote(db_getsession('DB_id_usuario'), "nota_geral_01");
+//$tem_atualizacoes = $oDBReleaseNote->check();
 
-    $oSkin = new SkinService();
-    include( $oSkin->getPathFile("instit.php") );
+$oSkin = new SkinService();
+include($oSkin->getPathFile("instit.php"));
 
-    if ($tem_atualizacoes) {
+if ($tem_atualizacoes) {
 
-      $sScriptChangelog  = "<script src=\"scripts/classes/configuracao/DBViewReleaseNote.classe.js\" type=\"text/javascript\"></script>\n";
-      $sScriptChangelog .= "<script type=\"text/javascript\">\n";
-      $sScriptChangelog .= " var oDBReleaseNote = new DBViewReleaseNote(null, true); \n";
-      $sScriptChangelog .= " oDBReleaseNote.show();                                  \n";
-      $sScriptChangelog .= "</script>";
+  $sScriptChangelog  = "<script src=\"scripts/classes/configuracao/DBViewReleaseNote.classe.js\" type=\"text/javascript\"></script>\n";
+  $sScriptChangelog .= "<script type=\"text/javascript\">\n";
+  $sScriptChangelog .= " var oDBReleaseNote = new DBViewReleaseNote(null, true); \n";
+  $sScriptChangelog .= " oDBReleaseNote.show();                                  \n";
+  $sScriptChangelog .= "</script>";
 
-      echo $sScriptChangelog;
+  echo $sScriptChangelog;
+}
 
-    }
+?>
 
-  ?>
 </html>

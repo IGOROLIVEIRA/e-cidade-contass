@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -38,33 +38,33 @@ parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
 
 $clorcsuplem = new cl_orcsuplem;
-$clorcsuplemval = new cl_orcsuplemval;  // usada para exlusao de itens 
+$clorcsuplemval = new cl_orcsuplemval;  // usada para exlusao de itens
 
 $db_botao = false;
 $db_opcao = 33;
 if((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Excluir"){
     $db_opcao = 3;
-     // exclui registros filhos 
+     // exclui registros filhos
        $codsup = $o46_codsup;
        $clorcsuplemval->sql_record($clorcsuplemval->sql_query_file($codsup));
        if($clorcsuplemval->numrows > 0 ){
 	  $clorcsuplemval->o47_codsup = $codsup;
-          $clorcsuplemval->excluir($codsup); 
+          $clorcsuplemval->excluir($codsup);
 	  $clorcsuplemval->erro(true,false);
            if($clorcsuplemval->erro_status==0){
-                $sqlerro=true; 
-		}	 
+                $sqlerro=true;
+		}
          }
   db_inicio_transacao();
-  // exclui o pai 
-  $clorcsuplem->excluir($o46_codsup);   
+  // exclui o pai
+  $clorcsuplem->excluir($o46_codsup);
   db_fim_transacao();
 
   $db_botao= false;  // chave pesquisa vazia
-  
+
 }else if(isset($chavepesquisa)){
    $db_opcao = 3;
-   $result = $clorcsuplem->sql_record($clorcsuplem->sql_query($chavepesquisa)); 
+   $result = $clorcsuplem->sql_record($clorcsuplem->sql_query($chavepesquisa));
    db_fieldsmemory($result,0);
    $db_botao = true;
    // aki tem alguma coisa na chavepesquisa...
@@ -72,9 +72,9 @@ if((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Excluir
        <script>
            function js_xy(){
                parent.document.formaba.orcsuplemval.disabled=false;\n
-               top.corpo.iframe_orcsuplemval.location.href='orc1_orcsuplemval001.php?o47_codsup=$o46_codsup&db_opcao=33';\n
+               CurrentWindow.corpo.iframe_orcsuplemval.location.href='orc1_orcsuplemval001.php?o47_codsup=$o46_codsup&db_opcao=33';\n
               // parent.mo_camada('orcsuplemval');
-		
+
               }
               js_xy();
         </script>
@@ -94,7 +94,7 @@ if((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Excluir
 
 <!---
 <table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-  <tr> 
+  <tr>
     <td width="360" height="18">&nbsp;</td>
     <td width="263">&nbsp;</td>
     <td width="25">&nbsp;</td>
@@ -104,8 +104,8 @@ if((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Excluir
 --->
 
 <table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
 	<?
 	include("forms/db_frmorcsuplem.php");
@@ -123,7 +123,7 @@ if((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Excluir
 <?
 if((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Excluir"){
   if($clorcsuplem->erro_status=="0"){
-    $clorcsuplem->erro(true,false); // 
+    $clorcsuplem->erro(true,false); //
   }else{
     $clorcsuplem->erro(true,false);  // true-true = reload na pagina
     echo "

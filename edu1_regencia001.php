@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Público para Gestão Municipal                
- *  Copyright (C) 2014  DBseller Serviços de Informática             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa é software livre; você pode redistribuí-lo e/ou     
- *  modificá-lo sob os termos da Licença Pública Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versão 2 da      
- *  Licença como (a seu critério) qualquer versão mais nova.          
- *                                                                    
- *  Este programa e distribuído na expectativa de ser útil, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implícita de              
- *  COMERCIALIZAÇÃO ou de ADEQUAÇÃO A QUALQUER PROPÓSITO EM           
- *  PARTICULAR. Consulte a Licença Pública Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Você deve ter recebido uma cópia da Licença Pública Geral GNU     
- *  junto com este programa; se não, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Cópia da licença no diretório licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Público para Gestão Municipal
+ *  Copyright (C) 2014  DBseller Serviços de Informática
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa é software livre; você pode redistribuí-lo e/ou
+ *  modificá-lo sob os termos da Licença Pública Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versão 2 da
+ *  Licença como (a seu critério) qualquer versão mais nova.
+ *
+ *  Este programa e distribuído na expectativa de ser útil, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implícita de
+ *  COMERCIALIZAÇÃO ou de ADEQUAÇÃO A QUALQUER PROPÓSITO EM
+ *  PARTICULAR. Consulte a Licença Pública Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Você deve ter recebido uma cópia da Licença Pública Geral GNU
+ *  junto com este programa; se não, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Cópia da licença no diretório licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlibwebseller.php");
@@ -124,11 +124,11 @@ if (isset($incluir)) {
     $clregencia->ed59_d_dataatualiz     = $hoje;
     $clregencia->ed59_i_ordenacao       = ($max+1);
     $clregencia->ed59_lancarhistorico   = 'true';
-    
+
     if ($ed59_c_condicao == 'OP') {
       $clregencia->ed59_lancarhistorico = $ed59_lancarhistorico == 't'? 'true':'false';
-    } 
-    
+    }
+
     $clregencia->incluir($ed59_i_codigo);
     db_fim_transacao();
 
@@ -141,7 +141,7 @@ if (isset($alterar)) {
 
   $db_opcao = 2;
   db_inicio_transacao();
-  
+
   $clregencia->ed59_lancarhistorico   = 'true';
   if ($ed59_c_condicao == 'OP') {
     $clregencia->ed59_lancarhistorico = $ed59_lancarhistorico == 't'? 'true':'false';
@@ -224,7 +224,7 @@ if (isset($excluir)) {
             $sMensagemErro .= "Erro Técnico : {$clparecerresult->erro_msg}";
             throw new BusinessException($sMensagemErro);
           }
-          
+
           /**
            * Exclui as recuperações do aluno
            */
@@ -232,22 +232,22 @@ if (isset($excluir)) {
           $sWhereResultado  = " ed73_i_diario = {$coddiario} ";
           $sSqlResultado    = $cldiarioresultado->sql_query_file(null, $sCamposResultado, null, $sWhereResultado);
           $rsResultado      = $cldiarioresultado->sql_record( $sSqlResultado );
-          
+
           if ( $cldiarioresultado->numrows > 0 ) {
-          	
+
             $sDiarioResultado      = db_utils::fieldsMemory($rsResultado, 0)->diarioresultado;
             $sWhereRecuperacao     = " ed116_diarioresultado in ($sDiarioResultado) ";
             $oDaoDiarioRecuperacao = new cl_diarioresultadorecuperacao();
             $oDaoDiarioRecuperacao->excluir( null, $sWhereRecuperacao );
-            
+
             if ( $oDaoDiarioRecuperacao->erro_status == 0 ) {
-            
+
               $sMensagemErro  = "Erro ao excluir dados da recuperação do aluno.\\n";
               $sMensagemErro .= "Erro Técnico : {$oDaoDiarioRecuperacao->erro_msg}";
               throw new BusinessException();
             }
           }
-          
+
           $cldiarioresultado->excluir(""," ed73_i_diario = $coddiario");
           if ($cldiarioresultado->erro_status == 0) {
 
@@ -273,20 +273,20 @@ if (isset($excluir)) {
             $sMensagemErro = "Erro ao excluir abonos vinculados a Regência.\\n Erro Técnico{$clabonofalta->erro_msg}";
             throw new BusinessException($sMensagemErro);
           }
-          
+
           $sCamposAvaliacao = " array_to_string( array_accum(ed72_i_codigo), ',') as diarioavaliacao ";
           $sWhereAvaliacao  = " ed72_i_diario = {$coddiario} ";
           $sSqlDiarioAvaliacao = $cldiarioavaliacao->sql_query_file(null, $sCamposAvaliacao, null, $sWhereAvaliacao);
           $rsDiarioAvaliacao   = $cldiarioavaliacao->sql_record($sSqlDiarioAvaliacao);
-          
+
           if ($cldiarioavaliacao->numrows > 0) {
-          	
+
             $sDiarioAvaliacao   = db_utils::fieldsMemory($rsDiarioAvaliacao, 0)->diarioavaliacao;
             $oDaoTransfAprov    = new cl_transfaprov();
             $sWhereExcluiTransf = "ed251_i_diarioorigem in ({$sDiarioAvaliacao}) or ed251_i_diariodestino in ({$sDiarioAvaliacao}) ";
             $oDaoTransfAprov->excluir(null, $sWhereExcluiTransf);
             if ( $oDaoTransfAprov->erro_status == 0 ) {
-            
+
               $sMensagemErro  = "Erro ao excluir dados da transferencia do aluno.\\n";
               $sMensagemErro .= "Erro Técnico : {$oDaoTransfAprov->erro_msg}";
               throw new BusinessException();
@@ -308,7 +308,7 @@ if (isset($excluir)) {
             $sMensagemErro .= "Erro Técnico : {$claprovconselho->erro_msg}";
             throw new BusinessException();
           }
-          
+
 
           $cldiario->excluir(""," ed95_i_codigo = $coddiario");
           if ($cldiario->erro_status == 0) {
@@ -622,7 +622,7 @@ if (isset($atualizar)) {
 
          var sEtapa = "<?=$oGet->ed11_c_descr?>";
          var sTurma = "<?=$oGet->ed57_c_descr?>";
-         top.corpo.iframe_a3.location.href = 'edu1_regenciahorario001.php?ed59_i_turma='+<?=$oGet->ed59_i_turma?>
+         CurrentWindow.corpo.iframe_a3.location.href = 'edu1_regenciahorario001.php?ed59_i_turma='+<?=$oGet->ed59_i_turma?>
                                                                         +'&ed57_c_descr='+sTurma
                                                                         +'&ed57_i_turno='+<?=$ed57_i_turno?>
                                                                         +'&ed59_i_serie='+<?=$oGet->ed59_i_serie?>
@@ -720,7 +720,7 @@ if (isset($excluir)) {
   } else {
    ?>
    <script>
-     top.corpo.iframe_a3.location.href="edu1_regenciahorario001.php?ed59_i_turma=<?=$oGet->ed59_i_turma?>"+
+     CurrentWindow.corpo.iframe_a3.location.href="edu1_regenciahorario001.php?ed59_i_turma=<?=$oGet->ed59_i_turma?>"+
                                        "&ed59_i_serie=<?=$oGet->ed59_i_serie?>&ed57_c_descr=<?=$oGet->ed57_c_descr?>"+
                                        "&ed57_i_turno=<?=$ed57_i_turno?>&ed11_c_descr=<?=$oGet->ed11_c_descr?>";
    </script>

@@ -77,7 +77,7 @@ function js_search_in_array(arr,valor){
 
 function js_verifica_objeto(nome){
   if(!document.getElementById(nome)){
-    alert('Sem permissão de acesso.'); 
+    alert('Sem permissão de acesso.');
     return false;
   }else{
     return true;
@@ -102,7 +102,7 @@ function checkleapyear(datea){
         return false;
       }
     }
-  } 
+  }
   return false;
 }
 
@@ -115,7 +115,7 @@ function buttonHelp(pagina,item,modulo){
 //#20#//modulo  : Número do ítem do módulo que esta sendo executado
 //#99#//Esta função chama o help do sistema e se o usuãrio esta em um programa que possua help,
 //#99#//o sistema abre a pãgina do help e seleciona o menu da pãgina
-  js_OpenJanelaIframe('top.corpo','db_janelaHelp_OnLine','con1_help001.php?pagina='+pagina+'&item='+item+'&modulo='+modulo,'Help On Line do Sistema');
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_janelaHelp_OnLine','con1_help001.php?pagina='+pagina+'&item='+item+'&modulo='+modulo,'Help On Line do Sistema');
 }
 
 function js_retornadata(dia,mes,ano){
@@ -124,7 +124,7 @@ function js_retornadata(dia,mes,ano){
 //#15#//js_retornadata(dia,mes,ano);
 //#20#//dia     : Dia
 //#20#//mes     : Mes
-//#20#//ano     : Ano 
+//#20#//ano     : Ano
   x = new Date(ano,mes,dia);
   m = x.getMonth();
   if(m!=mes){
@@ -133,7 +133,7 @@ function js_retornadata(dia,mes,ano){
       x = new Date(ano,mes,dia);
       m = x.getMonth();
     }
-  }  
+  }
   return  x;
 }
 // variavel com os nomes dos campos a serem testados no botao incluir/alterar/excluir e outros
@@ -186,14 +186,14 @@ function js_controla_tecla_enter(obj,evt){
 //#20#//obj : Objeto que esta com a função
 //#20#//evt : Este parâmetro não deverá ser passado, pois é automático do javascript
 //#30#//Retorna false quando a tecla presionada é igual a 13
-  
+
   var evt = (evt) ? evt : (window.event) ? window.event : "";
 
   if(evt.keyCode==13){
 
     return false;
 
-  } 
+  }
 
 
 }
@@ -209,10 +209,10 @@ function js_LimpaCampo(sValor,iBase){
         for (i=0;i<tam;i++)
                 if (!isNaN(parseInt(sValor.substr(i,1),iBase)))
                         saida = saida + String(sValor.substr(i,1));
-        return (saida);                
+        return (saida);
 }
 function js_TestaNI(cNI,iTipo){
-        var NI; 
+        var NI;
         NI = js_LimpaCampo(cNI.value,10);
         switch (iTipo) {
                 case 1:
@@ -251,8 +251,8 @@ function js_TestaNI(cNI,iTipo){
                 default:
                         return(false);
                 }
-        return (true);        
-        }  
+        return (true);
+        }
 7/////////////////////////////////////////////////////////////////
 
 function js_verificaCGCCPF(obcgc){
@@ -319,7 +319,7 @@ controlaMenuModulos = 1;
 function someFrame(evt) {
 
   evt = (evt) ? evt : (window.event) ? window.event : "";
-  if(!document.getElementById('menuSomeTela')) {    
+  if(!document.getElementById('menuSomeTela')) {
     var menu = new Object();
         if(controlaMenuModulos) {
       menu.innerHTML = "Tela";
@@ -330,25 +330,25 @@ function someFrame(evt) {
         }
   } else
     var menu = document.getElementById('menuSomeTela');
-  
+
   if(evt.keyCode == 113 || someFrame.arguments[1] == 1) {
     if(menu.innerHTML == "Tela") {
-      top.frames.document.getElementById("quadroprincipal").rows = "0,*,19";
+      CurrentWindow.frames.document.getElementById("quadroprincipal").rows = "0,*,19";
           menu.innerHTML = "Abre";
         } else {
-      top.frames.document.getElementById("quadroprincipal").rows = "60,*,19";
+      CurrentWindow.frames.document.getElementById("quadroprincipal").rows = "60,*,19";
           menu.innerHTML = "Tela";
-        }          
-  }  
+        }
+  }
   if(evt.keyCode >= 112 && evt.keyCode <= 123)
     return false;
 }
 /*
-if(top.corpo==null){
+if(CurrentWindow.corpo==null){
   location.href='index.php';
 }else{
-  if(top.corpo.document)
-    top.corpo.document.onkeyup = function(event) { someFrame(event); };
+  if(CurrentWindow.corpo.document)
+    CurrentWindow.corpo.document.onkeyup = function(event) { someFrame(event); };
 }
 */
 
@@ -376,7 +376,7 @@ function GetCookie (name) {
     if (document.cookie.substring(i, j) == arg)
       return getCookieVal (j);
         i = document.cookie.indexOf(" ", i) + 1;
-    if (i == 0) break; 
+    if (i == 0) break;
   }
 return null;
 }
@@ -400,7 +400,7 @@ function DeleteCookie (name,path,domain) {
     var offsetX = 0
     var offsetY = 0
     var Zindex = 5;
-    
+
     function js_dragIt(obj,evt) {
       evt = (evt) ? evt : (window.event) ? window.event : "";
       if (engaged) {
@@ -414,8 +414,8 @@ function DeleteCookie (name,path,domain) {
         return false;
       }
     }
-    function js_engage(obj,evt) {        
-      evt = (evt) ? evt : (window.event) ? window.event : "SEM EVENTO";          
+    function js_engage(obj,evt) {
+      evt = (evt) ? evt : (window.event) ? window.event : "SEM EVENTO";
 
           if(JANS.isModal == 1)
             return false;
@@ -424,25 +424,25 @@ function DeleteCookie (name,path,domain) {
 
       engaged = true;
       obj.style.zIndex = Zindex++;
-          
-            empilhaJanelas(obj.id.substr(3));          
+
+            empilhaJanelas(obj.id.substr(3));
             for(var i = 0;i < JANS.length - 1;i++) {
                   JANS[i].guardaCorFundoTitulo = JANS[i].corFundoTitulo;
           JANS[i].setCorFundoTitulo("#A6A6A6");
           }
           JANS[obj.id.substr(3)].setCorFundoTitulo("#2C7AFE");
- 
+
       if (evt.pageX) {
         offsetX = evt.pageX - obj.offsetLeft;
-        offsetY = evt.pageY - obj.offsetTop;                
+        offsetY = evt.pageY - obj.offsetTop;
       } else {
         offsetX = evt.offsetX - document.body.scrollLeft;
         offsetY = evt.offsetY - document.body.scrollTop;
         if (navigator.userAgent.indexOf("Win") == -1) {
           offsetX += document.body.scrollLeft;
           offsetY += document.body.scrollTop;
-        }                
-      }         
+        }
+      }
       return false;
     }
     function js_release(obj,evt) {
@@ -457,12 +457,12 @@ function empilhaJanelas(nomeJan) {
           break;
         }
   for(i = indice;i < JANS.length - 1;i++)
-    JANS[i] = JANS[i+1];  
+    JANS[i] = JANS[i+1];
   JANS[i] = aux
   if(typeof(pos)!='undefined' && pos<20){
     pos = 20;
   };
-}        
+}
         function js_MaximizarJan(img,cod) {
           if(JANS.isModal == 1)
             return false;
@@ -476,8 +476,8 @@ function empilhaJanelas(nomeJan) {
 //        document.getElementById('ff').innerHTML += i + ' <==> ' + cod.firstChild.firstChild.childNodes[1].firstChild.childNodes[0][i] +  '<br>';
           }
         }
-        
-        function js_MinimizarJan(img,JanElA) {          
+
+        function js_MinimizarJan(img,JanElA) {
           var janela = eval(JanElA);
           if(JANS.isModal == 1)
             return false;
@@ -493,7 +493,7 @@ function empilhaJanelas(nomeJan) {
                     JANS[i] = JANS[i - 1];
                   }
                   JANS[0] = aux;
-                  JANS[JANS.length-1].setCorFundoTitulo("#2C7AFE");  
+                  JANS[JANS.length-1].setCorFundoTitulo("#2C7AFE");
                   /*
                   aux = "";
                   for(var i = 0;i < JANS.length;i++)
@@ -504,7 +504,7 @@ function empilhaJanelas(nomeJan) {
                 str = new String(img.src);
                 if(str.indexOf("_2_") == -1) {
           JanPosX = (typeof(JanPosX)=="undefined" || JanPosX=="")?1:JanPosX;
-          JanPosY = (typeof(JanPosY)=="undefined" || JanPosY=="")?400:JanPosY;                
+          JanPosY = (typeof(JanPosY)=="undefined" || JanPosY=="")?400:JanPosY;
                     if(JanPosX >= 600) {
                     JanPosX = 1;
                     JanPosY = JanPosY - 27;
@@ -519,12 +519,12 @@ function empilhaJanelas(nomeJan) {
             JanPosX += (janela.titulo.length * 5) + 52;
                   }
           janela.setAltura(1);
-              janela.setLargura(1);                  
+              janela.setLargura(1);
                     janela.setPosX(janela.px);
                   janela.setPosY(janela.py);
                   img.src = 'imagens/jan_mini_2_on.gif';
                 } else {
-                  img.src = 'imagens/jan_mini_on.gif';                
+                  img.src = 'imagens/jan_mini_on.gif';
                   janela.setAltura(janela.Hi);
               janela.setLargura(janela.Wi);
                   janela.setPosX(janela.Pl);
@@ -541,8 +541,8 @@ function empilhaJanelas(nomeJan) {
               JANS[JANS.length-2].guardaCorFundoTitulo = JANS[JANS.length-2].corFundoTitulo;
           JANS[JANS.length-2].setCorFundoTitulo("#A6A6A6");
                   JANS[JANS.length-1] = aux;
-                  JANS[JANS.length-1].setCorFundoTitulo("#2C7AFE");  
-                  /*                                                      
+                  JANS[JANS.length-1].setCorFundoTitulo("#2C7AFE");
+                  /*
                   aux = "";
                   for(var i = 0;i < JANS.length;i++)
                     aux += " MA "+JANS[i].nomeJanela;
@@ -551,7 +551,7 @@ function empilhaJanelas(nomeJan) {
                 }
           }
         }
-        
+
         function js_FecharJan(img,JanElA) {
           var str = new String(img.src);
           if(str.indexOf("on") == -1)
@@ -570,7 +570,7 @@ function empilhaJanelas(nomeJan) {
                 return true;
           }
         }
-        
+
 function criaJanela(nomeJan,arquivo,cabecalho,visivel,topo,esquerda,altura,largura) {
 
   var camada = document.createElement("DIV");
@@ -579,7 +579,7 @@ function criaJanela(nomeJan,arquivo,cabecalho,visivel,topo,esquerda,altura,largu
   var quadro = document.createElement("IFRAME");
   var img1 = document.createElement("IMG");
   var img2 = document.createElement("IMG");
-  var img3 = document.createElement("IMG");    
+  var img3 = document.createElement("IMG");
 
   img3.setAttribute("src","imagens/jan_fechar_on.gif");
   img3.setAttribute("title","Fechar");
@@ -598,18 +598,18 @@ function criaJanela(nomeJan,arquivo,cabecalho,visivel,topo,esquerda,altura,largu
   img1.setAttribute("border","0");
   img1.style.cursor = "hand";
   img1.onclick = function() { js_MinimizarJan(this,nomeJan); };
-  
+
   camada.setAttribute("id","Jan" + nomeJan);
   tabela1.setAttribute("cellSpacing",0);
   tabela1.setAttribute("cellPadding",2);
   tabela1.setAttribute("border",0);
   tabela1.setAttribute("width","100%");
   tabela1.setAttribute("height","100%");
-  
+
   tabela1.style.borderColor = "#f0f0f0 #606060 #404040 #d0d0d0";
   tabela1.style.borderStyle = "solid";
   tabela1.style.borderWidth = "2px";
-  
+
   tabela2.setAttribute("cellSpacing",0);
   tabela2.setAttribute("cellPadding",0);
   tabela2.setAttribute("border",0);
@@ -622,16 +622,16 @@ function criaJanela(nomeJan,arquivo,cabecalho,visivel,topo,esquerda,altura,largu
   quadro.setAttribute("name","IF" + nomeJan);
   quadro.setAttribute("scrolling","auto");
   //quadro.setAttribute("src",arquivo);
-  
+
   var tab1Linha1 = tabela1.insertRow(0);
   var tab1Linha2 = tabela1.insertRow(1);
   var tab2Linha1 = tabela2.insertRow(0);
-  
+
   var tab1Coluna1 = tab1Linha1.insertCell(0);
   var tab1Coluna2 = tab1Linha2.insertCell(0);
   var tab2Coluna1 = tab2Linha1.insertCell(0);
   var tab2Coluna2 = tab2Linha1.insertCell(1);
- 
+
   tab2Linha1.setAttribute("id","CF" + nomeJan);
   tab2Linha1.style.backgroundColor = '#2C7AFE';
   tab1Linha1.style.backgroundColor = '#c0c0c0';
@@ -653,9 +653,9 @@ function criaJanela(nomeJan,arquivo,cabecalho,visivel,topo,esquerda,altura,largu
   tab2Coluna2.setAttribute("width","20%");
   tab2Coluna2.setAttribute("align","right");
   tab2Coluna2.setAttribute("valign","middle");
-  
+
   tab1Coluna2.setAttribute("width","100%");
-  tab1Coluna2.setAttribute("height","100%");  
+  tab1Coluna2.setAttribute("height","100%");
   camada.style.backgroundColor = "#c0c0c0";
   camada.style.layerBackgroundColor = "#c0c0c0";
   camada.style.border = "0px outset #666666";
@@ -668,13 +668,13 @@ function criaJanela(nomeJan,arquivo,cabecalho,visivel,topo,esquerda,altura,largu
   camada.style.height = largura;
   tab2Coluna2.appendChild(img1);
   tab2Coluna2.appendChild(img2);
-  tab2Coluna2.appendChild(img3);        
+  tab2Coluna2.appendChild(img3);
   tab1Coluna1.appendChild(tabela2);
   tab1Coluna2.appendChild(quadro);
   camada.appendChild(tabela1);
   document.body.appendChild(camada);
-  
-  
+
+
   eval(nomeJan + " = new janela(document.getElementById('Jan" + nomeJan + "'),document.getElementById('CF" + nomeJan + "'),IF" + nomeJan + ")");
   document.getElementById('IF' + nomeJan).src = arquivo;
 
@@ -692,16 +692,16 @@ function criaJanela(nomeJan,arquivo,cabecalho,visivel,topo,esquerda,altura,largu
           netscape = navigator.appName == "Netscape"?1:0;
 
           if(typeof(JANS)=="undefined") {
-            JANS = new Array();        
-                JANS.isModal = 0;                  
-          }        else {          
+            JANS = new Array();
+                JANS.isModal = 0;
+          }        else {
               for(var i = 0;i < JANS.length;i++) {
                   JANS[i].guardaCorFundoTitulo = JANS[i].corFundoTitulo;
           JANS[i].setCorFundoTitulo("#A6A6A6");
                 }
-          }          
+          }
           JANS[this.nomeJanela] = this;
-          JANS.push(this);      
+          JANS.push(this);
 
           function setTarget() {
             var args = setTarget.arguments;
@@ -709,14 +709,14 @@ function criaJanela(nomeJan,arquivo,cabecalho,visivel,topo,esquerda,altura,largu
             document.forms[F].target = Iframe.name;
           }
           this.setTarget = setTarget;
-          
+
       function setTitulo(t) {
         cFt.firstChild.innerHTML = '&nbsp;' + t;
                 this.titulo = new String('&nbsp;' + t);
           }
           this.setTitulo = setTitulo;
           this.titulo = new String(cFt.firstChild.innerHTML);
-          
+
           function setCorFundoTitulo(cor) {
             cFt.style.backgroundColor = cor;
                 this.corFundoTitulo = cor;
@@ -730,7 +730,7 @@ function criaJanela(nomeJan,arquivo,cabecalho,visivel,topo,esquerda,altura,largu
           }
           this.setCorTitulo = setCorTitulo;
           this.corTitulo = cFt.firstChild.style.color;
-          
+
           function setFonteTitulo(f) {
         cFt.firstChild.style.fontFamily = f;
                 this.fonteTitulo = f;
@@ -744,7 +744,7 @@ function criaJanela(nomeJan,arquivo,cabecalho,visivel,topo,esquerda,altura,largu
           }
           this.setTamTitulo = setTamTitulo;
           this.tamTitulo = cFt.firstChild.style.fontSize;
-          
+
           function setPosX(pos) {
             janP.style.left = pos;
               this.posX = pos;
@@ -762,13 +762,13 @@ function criaJanela(nomeJan,arquivo,cabecalho,visivel,topo,esquerda,altura,largu
           this.posY = janP.style.top;
           function setLargura(l) {
             janP.style.width = l;
-        //Iframe.frameElement.style.width = l;                           
+        //Iframe.frameElement.style.width = l;
                 this.largura = l;
           }
-          this.setLargura = setLargura;          
+          this.setLargura = setLargura;
           this.largura = janP.style.width;
           function setAltura(a) {
-            janP.style.height = a;         
+            janP.style.height = a;
         //Iframe.frameElement.style.height = a;
                 this.altura = a;
           }
@@ -786,16 +786,16 @@ function criaJanela(nomeJan,arquivo,cabecalho,visivel,topo,esquerda,altura,largu
           JANS[JANS.length-2].setCorFundoTitulo("#A6A6A6");
             janP.style.visibility = 'visible';
           }
-          this.show = show;          
+          this.show = show;
           function hide() {
             var aux = JANS[JANS.length-1];
             for(var i = JANS.length-1;i > 0;i--)
-          JANS[i] = JANS[i - 1];                
+          JANS[i] = JANS[i - 1];
             JANS[0] = aux;
-        JANS[JANS.length-1].setCorFundoTitulo("#2C7AFE");                                            
-            janP.style.visibility = 'hidden';                        
+        JANS[JANS.length-1].setCorFundoTitulo("#2C7AFE");
+            janP.style.visibility = 'hidden';
           }
-          this.hide = hide;                    
+          this.hide = hide;
           /******/
           function procuraNo(obj,nome) {
             nome = nome.toUpperCase();
@@ -804,21 +804,21 @@ function criaJanela(nomeJan,arquivo,cabecalho,visivel,topo,esquerda,altura,largu
           for(var i = 0;i < obj.childNodes.length;i++) {
             if(obj.childNodes[i].nodeName == nome) {
               //alert(obj.childNodes[i].nodeName + ' ' + i + ' = ' + nome);
-              try {        
+              try {
                     ObjRet = obj.childNodes[i];
               } catch(e) {
               }
             return true;
-            }                        
+            }
             procuraNo(obj.childNodes[i],nome);
           }
         }
           }
           /******/
-          function limpaTela() {            
+          function limpaTela() {
         procuraNo(Iframe.document,"body");
             corpo = ObjRet;//vem da funcao procuraNo
-        var documento = corpo.childNodes;                
+        var documento = corpo.childNodes;
         do {
           for(var i = 0;i < documento.length;i++) {
             corpo.removeChild(documento[i]);
@@ -826,23 +826,23 @@ function criaJanela(nomeJan,arquivo,cabecalho,visivel,topo,esquerda,altura,largu
         } while(documento.length != 0);
           }
           this.limpaTela = limpaTela;
-          
+
           function mostraMsg() {
         var args = mostraMsg.arguments;
         var msg = (typeof(args[0])=="undefined" || args[0]=="")?"Processando...":args[0];
                 var cor = (typeof(args[1])=="undefined" || args[1]=="")?"white":args[1];
-                var Larg = (typeof(args[2])=="undefined" || args[2]=="")?this.moldura.style.width:args[2];                
-                var Alt = (typeof(args[3])=="undefined" || args[3]=="")?this.moldura.style.height:args[3];                
-                var PosX = (typeof(args[4])=="undefined" || args[4]=="")?"0":args[4];                
+                var Larg = (typeof(args[2])=="undefined" || args[2]=="")?this.moldura.style.width:args[2];
+                var Alt = (typeof(args[3])=="undefined" || args[3]=="")?this.moldura.style.height:args[3];
+                var PosX = (typeof(args[4])=="undefined" || args[4]=="")?"0":args[4];
                 var PosY = (typeof(args[5])=="undefined" || args[5]=="")?"0":args[5];
-                
+
               if(elem = document.getElementById("mensagem") )
               elem.parentNode.removeChild(elem);
             var camada = Iframe.document.createElement("DIV");
             camada.setAttribute("id","mensagem");
-                                    
+
                 procuraNo(Iframe.document,"body");
-            try {        
+            try {
               ObjRet.appendChild(camada);
           var elem = Iframe.document.getElementById("mensagem");
                 elem.innerHTML = "<table border='0' cellpadding='0' cellspacing='0'><tr><td width='" + Larg + "' height='" + Alt + "' align='center' valign='middle'><strong>" + msg + "</strong></td></tr></table>";
@@ -851,7 +851,7 @@ function criaJanela(nomeJan,arquivo,cabecalho,visivel,topo,esquerda,altura,largu
               elem.style.position = "absolute";
               elem.style.left = "0px";
               elem.style.top = "0px";
-              elem.style.zIndex = "100";                
+              elem.style.zIndex = "100";
               elem.style.visibility = 'visible';
               elem.style.width = Larg;
               elem.style.height = Alt;
@@ -860,10 +860,10 @@ function criaJanela(nomeJan,arquivo,cabecalho,visivel,topo,esquerda,altura,largu
           }
           this.mostraMsg = mostraMsg;
           function setJanBotoes(str) {
-            var s = new String(str);           
+            var s = new String(str);
             var img1 = cFt.childNodes[1].childNodes[0];
             var img2 = cFt.childNodes[1].childNodes[1];
-            var img3 = cFt.childNodes[1].childNodes[2];                  
+            var img3 = cFt.childNodes[1].childNodes[2];
 
             kp = 0x4;
             m = kp & s;
@@ -873,11 +873,11 @@ function criaJanela(nomeJan,arquivo,cabecalho,visivel,topo,esquerda,altura,largu
             m = kp & s;
             kp >>= 1;
             img2.src = m?"imagens/jan_max_on.gif":"imagens/jan_max_off.gif";
-            img2.style.cursor = m?"hand":"";                
+            img2.style.cursor = m?"hand":"";
             m = kp & s;
             kp >>= 1;
             img3.src = m?"imagens/jan_fechar_on.gif":"imagens/jan_fechar_off.gif";
-            img3.style.cursor = m?"hand":"";                
+            img3.style.cursor = m?"hand":"";
           }
           this.setJanBotoes = setJanBotoes;
             function setModal() {
@@ -900,7 +900,7 @@ function criaJanela(nomeJan,arquivo,cabecalho,visivel,topo,esquerda,altura,largu
                 */
           }
           this.setNoModal = setNoModal;
-        }//fim da classe janela                
+        }//fim da classe janela
 
 
 
@@ -916,26 +916,26 @@ function js_ValidaCamposText(obj,tipo) {
     var expr = new RegExp("[^0-9\.]+");
     if(obj.value.match(expr)) {
           alert("Este campo deve ser preenchido somente com números decimais!");
-          obj.select();        
+          obj.select();
         }
   } else if(tipo == 1) {
     var expr = new RegExp("[^0-9]+");
     if(obj.value.match(expr)) {
           alert("Este campo deve ser preenchido somente com números!");
-          obj.select();        
+          obj.select();
         }
   } else if(tipo == 2) {
     var expr = new RegExp("%[^A-Za-zà-úÁ-ÚüÜ]+");
     if(obj.value.match(expr)) {
           alert("Este campo deve ser preenchido somente com Letras!");
-          obj.select();        
-        }  
+          obj.select();
+        }
   } else if(tipo == 3) {
     var expr = new RegExp("[^A-Za-z0-9à-úÁ-ÚüÜ \.,;:@&%-\_]+");
         if(obj.value.match(expr)) {
           alert("Este campo deve ser preenchido somente com Letras, números, espaço, virgula, ponto-e-virgula, hífen,2 pontos,arroba,sublinhado!");
-          obj.select();        
-        }  
+          obj.select();
+        }
   }
 }
 
@@ -1045,10 +1045,10 @@ function js_ValidaCampos(obj, tipo, nome, aceitanulo, maiusculo, evt) {
           obj.value = '0' + obj.value;
         }
       }*/
-      
+
     }
     var expr = new RegExp("[^0-9\.,-]+");
-    
+
     if (obj.value.match(expr)) {
       alert(nome+" deve ser preenchido somente com números decimais!");
       obj.value = '';
@@ -1077,7 +1077,7 @@ function js_ValidaCampos(obj, tipo, nome, aceitanulo, maiusculo, evt) {
     if (strValor == '' || strValor == null){
       return false;
     }
-    // 01/01/2007 
+    // 01/01/2007
     var Dia = strValor.substr(0,2);
     var Mes = strValor.substr(3,2);
     var Ano = strValor.substr(6,4);
@@ -1085,14 +1085,14 @@ function js_ValidaCampos(obj, tipo, nome, aceitanulo, maiusculo, evt) {
 //    alert('validadbdata - '+Dia+' / '+Mes+' / '+Ano);
 
     var data = new Date(Ano,(Mes-1),Dia);
-    
+
     if (checkleapyear(Ano)) {
       var fev = 29;
     }else{
       var fev = 28;
-    } 
-    
-    //                  01  02 03 04 05 06 07 08 09 10 11 12 
+    }
+
+    //                  01  02 03 04 05 06 07 08 09 10 11 12
     var dia = new Array(31,fev,31,30,31,30,31,31,30,31,30,31);
     //  var diaexpr = new RegExp("[0-"+(mes==1?2:3)+"][0-9]");
     var diaexpr = new RegExp("[0-3][0-9]");
@@ -1104,14 +1104,14 @@ function js_ValidaCampos(obj, tipo, nome, aceitanulo, maiusculo, evt) {
       return false;
     }
 
-    var mesexpr = new RegExp("[01][0-9]");    
+    var mesexpr = new RegExp("[01][0-9]");
     if(Mes.match(mesexpr) == null ||  Mes > 12 || Mes == "00") {
       alert("Mes inválido");
       obj.value = '';
 //      obj.focus();
       obj.select();
       return false;
-    } 
+    }
 
     var anoexpr = new RegExp("[12][0-9][0-9][0-9]");
     if(Ano.match(anoexpr) == null) {
@@ -1119,8 +1119,8 @@ function js_ValidaCampos(obj, tipo, nome, aceitanulo, maiusculo, evt) {
       obj.value = '';
       obj.select();
       return false;
-    } 
-    
+    }
+
     return true;
 
   }
@@ -1133,23 +1133,23 @@ function js_mascaraData(campo, event) {
     var tecla            = event.keyCode;
     var valor            = campo.value;
     var exprLiterais     = new RegExp("[^0-9]+");
-    
+
      //constante array com o codigo das teclas a serem ignoradas
      teclasNaoFormatadas = new Array(8,13,35,36,37,38,39,40,45,46);
 
     valor  = valor.replace(".", ""); // tira ponto "."
     valor  = valor.replace("-", ""); // tira traco "-"
-    valor  = valor.replace("/", ""); // 
-    valor  = valor.replace("/", ""); 
-    valor  = valor.replace("/", ""); 
-    
+    valor  = valor.replace("/", ""); //
+    valor  = valor.replace("/", "");
+    valor  = valor.replace("/", "");
+
     if(tecla == 8 || tecla == 46 ){
       var tmpstr = js_colocaBarras(campo,valor,true);
       return true;
      }
     if (!js_search_in_array(teclasNaoFormatadas,tecla)){
        //tira os caracteres literais
-       
+
       for (i=0; i < valor.length; i++) {
         if (!valor.substr(i,1).match(exprLiterais)){
            strAux += valor.substr(i,1);
@@ -1158,23 +1158,23 @@ function js_mascaraData(campo, event) {
         }
       }
       campo.value = js_colocaBarras(campo,strAux,false);
-      return true;  
+      return true;
     }
   }
 
   /*--------------------------------------------------------------------------------------*/
 
   function js_colocaBarras(obj,strValor,apagando){
-  
+
     var strRetorno      = '';
-    var strNumDigitados = strValor.length; 
+    var strNumDigitados = strValor.length;
     var strRetorno      = '';
     var aValorAnt       =  new String(obj.value).split('/');
 
     if ( aValorAnt.length > 1 ) {
       if ( aValorAnt.length == 3 ) {
         if ( aValorAnt[0].length < 2 || aValorAnt[1].length < 2 || aValorAnt[2].length < 4 ) {
-          return obj.value; 
+          return obj.value;
         }
       } else {
         if ( aValorAnt[1].length == 1 ) {
@@ -1192,7 +1192,7 @@ function js_mascaraData(campo, event) {
         var diaatual   = new Number(strValor.substr(0,2));
         var mesatual   = new Number(strValor.substr(2,2));
         mesatual--;
-        //                  01  02 03 04 05 06 07 08 09 10 11 12 
+        //                  01  02 03 04 05 06 07 08 09 10 11 12
         var dia = new Array(31,fev,31,30,31,30,31,31,30,31,30,31);
         if(diaatual > dia[mesatual]) {
           strRetorno = dia[mesatual]+'/'+strValor.substr(2,2)+'/'+strValor.substr(4,strNumDigitados-1);
@@ -1203,7 +1203,7 @@ function js_mascaraData(campo, event) {
         js_setDiaMesAno(obj,strValor.substr(0,2),strValor.substr(2,2),strValor.substr(4,strNumDigitados-1));
 
       }else if(strNumDigitados == 8){
-        
+
         var diaatual = new Number(strValor.substr(0,2));
         var mesatual = new Number(strValor.substr(2,2));
         mesatual--;
@@ -1211,7 +1211,7 @@ function js_mascaraData(campo, event) {
           var fev = 29;
         }else{
           var fev = 28;
-        }  
+        }
 
         var dia = new Array(31,fev,31,30,31,30,31,31,30,31,30,31);
         var ano = new Array(31,fev,31,30,31,30,31,31,30,31,30,31);
@@ -1247,36 +1247,36 @@ function js_mascaraData(campo, event) {
     var diaatual   = new Number(Dia);
     var mesatual   = new Number(Mes);
     mesatual++;
-    //                  01  02 03 04 05 06 07 08 09 10 11 12 
+    //                  01  02 03 04 05 06 07 08 09 10 11 12
     var dia = new Array(31,fev,31,30,31,30,31,31,30,31,30,31);
     if(diaatual > dia[mesatual]) {
       strRetorno = dia[mesatual];
     }
-    return strRetorno;  
-  } 
+    return strRetorno;
+  }
 
   function js_bloqueiaSelecionar(obj){
     obj.selectionStart = null;
     obj.selectionEnd   = null;
     return false;
   }
-  
+
   function js_validaEntrada(obj){
   }
 
   function js_setDiaMesAno(obj,dia,mes,ano){
-    // alimenta os hiddens para manter a compatibilidade 
+    // alimenta os hiddens para manter a compatibilidade
     document.getElementById(obj.name+'_dia').value = dia;
     document.getElementById(obj.name+'_mes').value = mes;
     document.getElementById(obj.name+'_ano').value = ano;
   }
-  
+
 /********************************************************************************************************/
 
 /**
  * Funcao para contar numero de ocorrencias de um caracter numa string
  * @param string sString    String a ser pesquisada
- * @param string cCharacter Caracter a ser pesquisado na String 
+ * @param string cCharacter Caracter a ser pesquisado na String
  *
  * @return integer Quantidade de Ocorrencias
  */
@@ -1298,7 +1298,7 @@ function js_countOccurs(sString, cCharacter) {
  * @param string sIndex  Nome do Indice
  * @param string xValue  Valor a ser adicionado
  *
- * @return void 
+ * @return void
  */
 function js_putInputValue(sIndex, xValue) {
   aInputValues[sIndex] = xValue;
@@ -1328,8 +1328,8 @@ function js_VerDaTa(nome,Dia,Mes,Ano) {
 //#20#//Ano    : Objeto ano para testar a data
   var data = new Date(Ano,Mes,Dia);
   var F = document.form1;
-  var str = new String(F.elements[nome].value);  
-  if(nome.indexOf("dia") != -1) {                       
+  var str = new String(F.elements[nome].value);
+  if(nome.indexOf("dia") != -1) {
     var expr = new RegExp("[0-"+(data.getMonth()==1?2:3)+"][0-9]");
     var dia = new Array(31,28,31,30,31,30,31,31,30,31,30,31);
     if(str.match(expr) == null || str > dia[data.getMonth()] || str == "00") {
@@ -1339,7 +1339,7 @@ function js_VerDaTa(nome,Dia,Mes,Ano) {
     } else
       return true;
   } else if(nome.indexOf("mes") != -1) {
-    var expr = new RegExp("[01][0-9]");          
+    var expr = new RegExp("[01][0-9]");
     if(str.match(expr) == null || str > 12 || str == 00) {
       alert("Mes inválido");
       F.elements[nome].select();
@@ -1359,19 +1359,19 @@ function js_VerDaTa(nome,Dia,Mes,Ano) {
 }
 ContrlDigitos = 0;
 function js_getIndex(F,nome) {
-  for(var i = 0;i < F.elements.length;i++)                  
+  for(var i = 0;i < F.elements.length;i++)
     if(F.elements[i].name == nome) {
       var index = i;
       break;
-    }                    
+    }
   return index;
 }
 function js_Passa(nome,Dia,Mes,Ano,evt) {
   var evt = (evt) ? evt : (window.event) ? window.event : "";
   var F = document.form1;
   var index = -1;
-  if(evt.keyCode == 37) {  
-    index = js_getIndex(F,nome) - 1;        
+  if(evt.keyCode == 37) {
+    index = js_getIndex(F,nome) - 1;
 
   } else if(evt.keyCode == 39) {
     index = js_getIndex(F,nome) + 1;
@@ -1381,7 +1381,7 @@ function js_Passa(nome,Dia,Mes,Ano,evt) {
   }
 
   if(index != -1) {
-    try {        
+    try {
       F.elements[index].select();
     } catch(e) {
       F.elements[index].focus();
@@ -1451,14 +1451,14 @@ function js_lista_blur() {
     document.form1.elements['db_' + args[2]].value = '';
         document.form1.elements['db_' + args[8]].value = '';
         return false;
-  }  
+  }
   var X = (typeof(args[3])=="undefined" || args[3]=="")?100:args[3];
   var Y = (typeof(args[4])=="undefined" || args[4]=="")?100:args[4];
   var W = (typeof(args[5])=="undefined" || args[5]=="")?400:args[5];
   var E = (typeof(args[6])=="undefined" || args[6]=="")?420:args[6];
   var L = (typeof(args[9])=="undefined")?"":args[9];
   jan = window.open(args[0] + '?arg=' + document.form1.elements['db_' + args[2]].value + '&campo=' + args[2] +'&argaux=' + document.form1.elements['db_' + args[8]].value + '&campoaux=' + args[8] + '&lista=' + L ,'','width='+W+',height='+E+',location=0,scrollbars=1,resizable=1');
-  jan.moveTo(X,Y); 
+  jan.moveTo(X,Y);
 }
 
 ///Pega o indice do campo e passa o foco pro campo seguinte
@@ -1470,15 +1470,15 @@ function js_Ipassacampo() {
 }
 function js_passacampo(evt) {
   evt = (evt) ? evt : (window.event) ? window.event : "";
-  if(evt.keyCode == 13) {  
-    var campo = (evt.srcElement)?evt.srcElement.name:evt.target.name;        
+  if(evt.keyCode == 13) {
+    var campo = (evt.srcElement)?evt.srcElement.name:evt.target.name;
     for(var i = 0;i < document.forms[0].elements.length;i++) {
           if(document.forms[0].elements[i].name == campo) {
             var indice = i + 1;
                 break;
           }
         }
-        document.forms[0].elements[indice].focus();    
+        document.forms[0].elements[indice].focus();
   }
 }
 //window.onload=js_Ipassacampo;
@@ -1490,7 +1490,7 @@ function js_msg_status(msg) {
 //#10#//Funcão para alterar a descrição da barra de status
 //#15#//js_msg_status(msg);
 //#20#//msg   : Mensagem para a barra de status
-  parent.bstatus.document.getElementById('st').innerHTML = '&nbsp;&nbsp;' + msg;    
+  parent.bstatus.document.getElementById('st').innerHTML = '&nbsp;&nbsp;' + msg;
 }
 //Limpa a barra de status.
 function js_lmp_status() {
@@ -1506,7 +1506,7 @@ function js_msg_status_data(msg) {
 //#10#//Funcão para alterar a data da barra de status
 //#15#//js_msg_status_data(msg);
 //#20#//msg   : Mensagem para a  data da barra de status
-  parent.bstatus.document.getElementById('dthr').innerHTML = '&nbsp;&nbsp;' + msg;    
+  parent.bstatus.document.getElementById('dthr').innerHTML = '&nbsp;&nbsp;' + msg;
 }
 //Limpa a barra de status.
 function js_lmp_status_data() {
@@ -1533,7 +1533,7 @@ function js_pesquisa(arg,obj,evt) {
   var F = obj;
   if(tecla == 38 || tecla == 40)
     F.focus();
-  else {    
+  else {
     var tamvet = F.length;
     var tamarg = arg.length;
     for(var i = 0;i < tamvet;i++) {
@@ -1589,7 +1589,7 @@ function js_CalculaDV(sCampo, iPeso){
         var iSoma1 = 0;
         var iSoma2=0;
         var iDV1, iDV2;
-                
+
         iTamCampo = sCampo.length;
 
         for (iPosicao=1; iPosicao<=iTamCampo; iPosicao++){
@@ -1611,7 +1611,7 @@ function js_CalculaDV(sCampo, iPeso){
 
         Ret = "0" + Ret;
         Ret = Ret.substr(Ret.length - 2,Ret.length);
-                
+
         return(Ret);
 }
 */
@@ -1636,13 +1636,13 @@ isIE = (navigator.appName.indexOf("Microsoft") != -1) ? true : false;
 Calendar.Months = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
 "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
 
-//dias finais de cada mes 
+//dias finais de cada mes
 Calendar.DOMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 // anos bissestos
 Calendar.lDOMonth = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
 function Calendar(p_item, p_WinCal, p_month, p_year, p_format) {
- 
+
         if ((p_month == null) && (p_year == null))        return;
 
         if (p_WinCal == null)
@@ -1801,7 +1801,7 @@ Calendar.prototype.show = function() {
         this.wwrite("<A HREF=\"" +
                 "javascript:parent.Build(" +
                 "'" + this.gReturnItem + "', '" + this.gMonth + "', '" + (parseInt(this.gYear)-1) + "', '" + this.gFormat + "'" +
-                ");" +  
+                ");" +
                 "\"> &lt;&lt; ");
         this.wwrite("<FONT FACE='" + fontface + "' size=1><B>" + this.gYear);
         this.wwrite("<A HREF=\"" +
@@ -1827,8 +1827,8 @@ Calendar.prototype.show = function() {
         vCode = this.getMonthlyCalendarCode();
         this.wwrite(vCode);
 
-        this.wwrite("</font>");        
-        
+        this.wwrite("</font>");
+
         this.wwrite("</body></html>");
 
         this.gWinCal.document.close();
@@ -1928,21 +1928,21 @@ Calendar.prototype.cal_header = function() {
 
         vCode = vCode + "<TR><CENTER>";
 
-    vCode = vCode + 
+    vCode = vCode +
                     "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<FONT SIZE='1' FACE='" + fontface + "'>" +
                                 "<A HREF='#' " +
-                                        "onClick=\"parent.document." + 
-                                        this.gReturnItem + 
-                                        "_dia.value='';parent.document." + 
-                                        this.gReturnItem + 
-                                        "_mes.value='';parent.document." + 
+                                        "onClick=\"parent.document." +
+                                        this.gReturnItem +
+                                        "_dia.value='';parent.document." +
+                                        this.gReturnItem +
+                                        "_mes.value='';parent.document." +
                                         this.gReturnItem +
                                         "_ano.value='';parent.DataJavaScript.hide();return false\">" +'Zera Data' +
                                 "</A>" +
                                 "</FONT>";
 
         vCode = vCode + "</CENTER></TR>";
-        
+
         vCode = vCode + "<TR>";
         vCode = vCode + "<TD WIDTH='14%'><FONT SIZE='1' FACE='" + fontface + "' COLOR='" + this.gHeaderColor + "'><B>D</B></FONT></TD>";
         vCode = vCode + "<TD WIDTH='14%'><FONT SIZE='1' FACE='" + fontface + "' COLOR='" + this.gHeaderColor + "'><B>S</B></FONT></TD>";
@@ -2023,7 +2023,7 @@ Calendar.prototype.cal_data = function() {
                         "><FONT SIZE='1' FACE='" + fontface + "' COLOR='gray'>" + m + "</FONT></TD>";
         }
 
-     
+
         return vCode;
 }
 
@@ -2065,7 +2065,7 @@ Calendar.prototype.format_data = function(p_day,qual) {
         }else if(qual == 'm'){
           return vMonth        ;
         }else if(qual == 'y'){
-          return vY4;        
+          return vY4;
         }else{
         switch (this.gFormat) {
                 case "MM\/DD\/YYYY" :
@@ -2150,21 +2150,21 @@ function js_JanelaAutomatica(qjanela,qchave){
 //#01#//js_JanelaAutomatica
 //#10#//Funcão para gerar uma janela de iframe automática, quando o usuário executa uma consulta pela função *db_lovrot*
 //#15#//js_JanelaAutomatica(qjanela,qchave);
-//#20#//qjanela : Nome da janela a ser criada 
+//#20#//qjanela : Nome da janela a ser criada
 //#20#//          cgm       prot3_conscgm002.php
 //#20#//          iptubase  cad3_conscadastro_002.ph
 //#20#//          issbase   iss3_consinscr003.php
 //#20#//qchave  : Chave de acesso para passar ao programa para ele executar a função e mostrar os dados
 //#99#//Esta função deve ser utilizada na propriedade onload do objeto body do formulário
-  
+
   if(qjanela=='cgm'){
-    js_OpenJanelaIframe('top.corpo','db_janelaCgm','prot3_conscgm002.php?fechar=top.corpo.db_janelaCgm&numcgm='+qchave,'Dados Cadastrais');
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_janelaCgm','prot3_conscgm002.php?fechar=CurrentWindow.corpo.db_janelaCgm&numcgm='+qchave,'Dados Cadastrais');
   }
   if(qjanela=='iptubase'){
-    js_OpenJanelaIframe('top.corpo','db_janelaIptubase','cad3_conscadastro_002.php?fechar=top.corpo.db_janelaIptubase&cod_matricula='+qchave,'Dados Cadastrais do Imóvel');
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_janelaIptubase','cad3_conscadastro_002.php?fechar=CurrentWindow.corpo.db_janelaIptubase&cod_matricula='+qchave,'Dados Cadastrais do Imóvel');
   }
   if(qjanela=='issbase'){
-    js_OpenJanelaIframe('top.corpo','db_janelaIssbase','iss3_consinscr003.php?fechar=top.corpo.db_janelaIssbase&numeroDaInscricao='+qchave,'Dados Cadastrais do Issqn');
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_janelaIssbase','iss3_consinscr003.php?fechar=CurrentWindow.corpo.db_janelaIssbase&numeroDaInscricao='+qchave,'Dados Cadastrais do Issqn');
   }
 
 }
@@ -2172,8 +2172,8 @@ function js_OpenJanelaIframe(aondeJanela,nomeJanela,arquivoJanela,tituloJanela,m
 //#01#//js_OpenJanelaIframe
 //#10#//Funcão para gerar uma janela de iframe automática
 //#15#//js_OpenJanelaIframe(aondeJanela,nomeJanela,arquivoJanela,tituloJanela,mostraJanela,topoJanela,leftJanela,widthJanela,heigthJanela);
-//#20#//aondeJanela   : Objeto (local) onde será gerada a janela, normalmente "top.corpo" 
-//#20#//nomeJanela    : Nome do Objeto gerado, objeto que será utilizado para manipulação da janela e dados da janela 
+//#20#//aondeJanela   : Objeto (local) onde será gerada a janela, normalmente "CurrentWindow.corpo"
+//#20#//nomeJanela    : Nome do Objeto gerado, objeto que será utilizado para manipulação da janela e dados da janela
 //#20#//arquivoJanela : Nome do arquivo com os parâmetros necessários para apresentar no iframe
 //#20#//tituloJanela  : Título que será mostrado na janela
 //#20#//mostraJanela  : True se janela será apresentada ou false se não for mostrada
@@ -2187,17 +2187,17 @@ function js_OpenJanelaIframe(aondeJanela,nomeJanela,arquivoJanela,tituloJanela,m
 //#99#//leftJanela   = 1    - posição em relação ao lado esquerdo do formulário
 //#99#//widthJanela  = 780  - Largura da janela
 //#99#//heigthJanela = 430  - Altera da janela
-//#99#//Exemplo:  
-//#99#//js_OpenJanelaIframe('top.corpo','db_janelaCgm','prot3_conscgm002.php?fechar=top.corpo.db_janelaCgm&numcgm='+qchave,'Dados Cadastrais');
+//#99#//Exemplo:
+//#99#//js_OpenJanelaIframe('CurrentWindow.corpo','db_janelaCgm','prot3_conscgm002.php?fechar=CurrentWindow.corpo.db_janelaCgm&numcgm='+qchave,'Dados Cadastrais');
 //#99#//
 //#99#//Para manipular dados de retorno de uma janela, deverá ser criada função para receber os dados no formulário onde
-//#99#//a janela será criada e criado uma variável junto com o parâmetro arquivoJanela indicando qual a função a ser 
+//#99#//a janela será criada e criado uma variável junto com o parâmetro arquivoJanela indicando qual a função a ser
 //#99#//executada, colocando os devidos parâmetros que forem necessários
 //#99#//
 //#99#//No formulário onde a janela vai ser criada:
 //#99#// <script>
-//#99#// js_OpenJanelaIframe('top.corpo','db_janelaCgm','[programa].php?js_funcao=parent.js_MINHA_FUNCAO&fechar=top.corpo.db_janelaCgm&numcgm='+qchave,'Dados Cadastrais');
-//#99#// function js_MINHA_FUNCAO (codigo) { // Note que foi passado para o programa uma variável js_funcao que será executada dentro do iframe 
+//#99#// js_OpenJanelaIframe('CurrentWindow.corpo','db_janelaCgm','[programa].php?js_funcao=parent.js_MINHA_FUNCAO&fechar=CurrentWindow.corpo.db_janelaCgm&numcgm='+qchave,'Dados Cadastrais');
+//#99#// function js_MINHA_FUNCAO (codigo) { // Note que foi passado para o programa uma variável js_funcao que será executada dentro do iframe
 //#99#//   alert(codigo);
 //#99#// }
 //#99#// </script>
@@ -2236,28 +2236,28 @@ if(mostraJanela==undefined)
   if(heigthJanela==undefined)
      heigthJanela = screen.availHeight-150;
     //    heigthJanela = '430';
- 
+
   if(eval((aondeJanela!=""?aondeJanela+".":"document.")+nomeJanela)){
- 
+
     var executa = (aondeJanela!=""?aondeJanela+".":"")+nomeJanela+".jan.location.href = '"+arquivoJanela+"'";
     executa = eval(executa);
- 
+
   }else{
-      
+
     var executa = (aondeJanela!=""?aondeJanela+".":"")+"criaJanela('"+nomeJanela+"','"+arquivoJanela+"','"+tituloJanela+"',"+mostraJanela+","+topoJanela+","+leftJanela+","+widthJanela+","+heigthJanela+")";
 
 
     executa = eval(executa);
-  
+
   }
   if(mostraJanela==true){
-	
+
     var executa = (aondeJanela!=""?aondeJanela+".":"")+nomeJanela+".mostraMsg(0,'white',"+widthJanela+","+heigthJanela+",0,0);";
     executa += (aondeJanela!=""?aondeJanela+".":"")+nomeJanela+".show();";
     executa += (aondeJanela!=""?aondeJanela+".":"")+nomeJanela+".focus();";
-    
+
     executa = eval(executa);
-  
+
   }
 
 }
@@ -2270,7 +2270,7 @@ function pegaPosMouse(evt) {
     PosMouseY = evt.layerY;
   } else {
     PosMouseX = event.x;
-    PosMouseY = event.y;          
+    PosMouseY = event.y;
   }
 }
 
@@ -2285,7 +2285,7 @@ function show_calendar() {
           PosMouseX = 600;
         DataJavaScript.setPosX(PosMouseX + 20);
         DataJavaScript.setPosY(PosMouseY - 30);
-        
+
     DataJavaScript.show();
         p_item = arguments[0];
         if (arguments[1] == null)
@@ -2349,7 +2349,7 @@ function js_hideshowselect(v) {
     for(var i = 0;i < document.forms.length;i++) {
       var tam = document.forms[i].elements.length;
       for(var j = 0;j < tam;j++) {
-              try {        
+              try {
           var str = new String(document.forms[i].elements[j].type);
         } catch(e) {
           var str = "";
@@ -2367,7 +2367,7 @@ function js_hideshowselect(v) {
     for(var i = 0;i < qf;i++) {
       var tam = F[i].elements.length;
       for(var j = 0;j < tam;j++) {
-              try {        
+              try {
           var str = new String(F[i].elements[j].type);
         } catch(e) {
           var str = "";
@@ -2727,7 +2727,7 @@ function menuInit(menu) {
         arrowEl = spanList[j];
     }
     if (textEl != null && arrowEl != null)
-      textEl.style.paddingRight = (itemWidth 
+      textEl.style.paddingRight = (itemWidth
         - (textEl.offsetWidth + arrowEl.offsetWidth)) + "px";
   }
 
@@ -2795,7 +2795,7 @@ function removeClassName(el, name) {
   for (i = 0; i < curList.length; i++)
     if (curList[i] != name)
       newList.push(curList[i]);
-  el.className = newList.join(" ");  
+  el.className = newList.join(" ");
 }
 
 function getPageOffsetLeft(el) {
@@ -2830,7 +2830,7 @@ function testa_cookie(){
 //#01#//testa_cookie
 //#10#//Funcão para testar se o browse esta habilitado para receber cookie, caso não esteja, mostra help
 //#15#//testa_cookie();
- 
+
   var resposta;
   // Esta funcao testa se os cookies sao aceitos
   // Tenta escrever um cookie.
@@ -2918,17 +2918,17 @@ function js_VerDaTa(nome,Dia,Mes,Ano) {
 //#20#//Ano    : Objeto ano para testar a data
   var data        = new Date(Ano,Mes,Dia);
   var F           = document.form1;
-  var str         = new String(F.elements[nome].value);  
+  var str         = new String(F.elements[nome].value);
   var strPartTipo = nome.substr((nome.length-4),4);
-   
-  if(strPartTipo == "_dia") { 
+
+  if(strPartTipo == "_dia") {
     var mes = data.getMonth();
     mes += 1;
     var expr = new RegExp("[0-"+(mes==1?2:3)+"][0-9]");
-    //                  01 02 03 04 05 06 07 08 09 10 11 12 
+    //                  01 02 03 04 05 06 07 08 09 10 11 12
     var dia = new Array(31,28,31,30,31,30,31,31,30,31,30,31);
- //   alert(dia); 
- //   alert(mes); 
+ //   alert(dia);
+ //   alert(mes);
     if(str.match(expr) == null || str > 31 || str == "00") {
       alert("Dia Inválido!");
       F.elements[nome].select();
@@ -2937,13 +2937,13 @@ function js_VerDaTa(nome,Dia,Mes,Ano) {
     } else
       return true;
   } else if(strPartTipo == "_mes") {
-    var expr = new RegExp("[01][0-9]");	  
+    var expr = new RegExp("[01][0-9]");
     if(str.match(expr) == null || str > 12 || str == 00) {
       alert("Mes inválido");
       F.elements[nome].select();
       F.elements[nome].value = '';
       return false;
-    } else 
+    } else
       return true;
   } else if(strPartTipo == "_ano")  {
     var expr = new RegExp("[12][0-9][0-9][0-9]");
@@ -2968,7 +2968,7 @@ function show_calendar(obj,shutdown_function) {
 	  PosMouseY = 270;
 	if(PosMouseX >= 600)
 	  PosMouseX = 600;
-	
+
   js_OpenJanelaIframe('','iframe_data_'+obj,'func_calendario.php?nome_objeto_data='+obj+'&shutdown_function='+shutdown_function,'Calendário',true,PosMouseY,PosMouseX,200,220);
 
 }
@@ -2980,12 +2980,12 @@ function pegaPosMouse(evt) {
     PosMouseY = evt.layerY;
   } else {
     PosMouseX = event.x;
-    PosMouseY = event.y;	  
+    PosMouseY = event.y;
   }
 }
 
 function js_divCarregando(mensagem,id){
-   
+
    var expReg = /\\n\\n/gm;
    mensagem = mensagem.replace(expReg,'<br>');
 
@@ -2995,15 +2995,15 @@ function js_divCarregando(mensagem,id){
    camada.style.position        = "absolute";
    // mensagem no meio da tela
    camada.style.left       = ((screen.availWidth-300)/2)+'px';
-   camada.style.top        = ((screen.availHeight-450)/2)+'px'; 
+   camada.style.top        = ((screen.availHeight-450)/2)+'px';
    camada.style.zIndex     = "1000";
    camada.style.visibility = 'visible';
    camada.style.width      = "200px";
    camada.style.height     = "60px";
-   camada.style.fontFamily = 'Verdana, Arial, Helvetica, sans-serif'; 
-   camada.style.fontSize   = '15px'; 
-   camada.style.border     = '1px solid'; 
-//   camada.style.solid      = '#000000'; 
+   camada.style.fontFamily = 'Verdana, Arial, Helvetica, sans-serif';
+   camada.style.fontSize   = '15px';
+   camada.style.border     = '1px solid';
+//   camada.style.solid      = '#000000';
 
 // style = "font-size: 5px; solid #000000; visibility:visible">
 
@@ -3018,7 +3018,7 @@ function js_divCarregando(mensagem,id){
                      +'    </tr> '
                      +' </table> ';
   document.body.appendChild(camada);
-}  
+}
 
 function js_removeObj(idObj){
   obj = document.getElementById(idObj);

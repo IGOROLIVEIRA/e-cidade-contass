@@ -47,7 +47,7 @@ if (@$k11_local == "") {
   $result = db_query($sql) or die($sql);
   if (pg_numrows($result) > 0) {
     db_fieldsmemory($result,0);
-    $palavras = split(" ",$nomeinst);
+    $palavras = explode(" ",$nomeinst);
     $conta=0;
     for ($i=0; $i < sizeof($palavras); $i++) {
       if ($palavras[$i] == "DE") {

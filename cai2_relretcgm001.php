@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -53,7 +53,7 @@ db_postmemory($HTTP_POST_VARS);
 <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
 <script>
 function js_verifica(){
-  var codcgm = new Number(document.form1.z01_numcgm.value);	
+  var codcgm = new Number(document.form1.z01_numcgm.value);
   var anoi   = new Number(document.form1.data_inicial_ano.value);
   var anof   = new Number(document.form1.data_final_ano.value);
 
@@ -61,7 +61,7 @@ function js_verifica(){
 //  	alert("Informe o numero de cgm!");
 //  	return false;
 //  }
-  	
+
   if(anoi.valueOf() > anof.valueOf()){
     alert('Intervalo de data invalido. Verifique !');
     return false;
@@ -70,11 +70,11 @@ function js_verifica(){
     alert('Intervalo de data invalido. Verifique!');
     return false;
   }
-  
+
   js_emite();
 }
 function js_emite(){
-  var k02_codigo = "";	
+  var k02_codigo = "";
   for(i=0;i<document.form1.length;i++){
     if(document.form1.elements[i].name == "lista[]"){
       for(x=0;x< document.form1.elements[i].length;x++){
@@ -84,11 +84,11 @@ function js_emite(){
     }
   }
 
-  k02_codigo = k02_codigo.substr(0,k02_codigo.length-1); 		
+  k02_codigo = k02_codigo.substr(0,k02_codigo.length-1);
   jan = window.open('cai2_relretcgm002.php?z01_numcgm='+document.form1.z01_numcgm.value+'&k02_codigo='+k02_codigo+'&data_inicial='+document.form1.data_inicial_ano.value+'-'+document.form1.data_inicial_mes.value+'-'+document.form1.data_inicial_dia.value+'&data_final='+document.form1.data_final_ano.value+'-'+document.form1.data_final_mes.value+'-'+document.form1.data_final_dia.value,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
   jan.moveTo(0,0);
 }
-</script>  
+</script>
 
 <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
@@ -144,7 +144,7 @@ function js_emite(){
                   $receitas->linhas = 5;
                   $receitas->vwhidth = 400;
                   $receitas->funcao_gera_formulario();
-              ?>    
+              ?>
           </td>
        </tr>
     <tr>
@@ -157,32 +157,32 @@ function js_emite(){
 		<td align="center"><input type="submit" value="Imprime">&nbsp;&nbsp;<input type="reset" value="Limpar"></td>
 	</tr>
 	</form>
-</table>	
+</table>
 <?
   db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
 ?>
 <script>
 function js_pesquisa_cgm(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_cgm','func_nome.php?funcao_js=parent.js_mostra_cgm1|z01_numcgm|z01_nome','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cgm','func_nome.php?funcao_js=parent.js_mostra_cgm1|z01_numcgm|z01_nome','Pesquisa',true);
   }else{
-     if(document.form1.z01_numcgm.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_cgm','func_nome.php?pesquisa_chave='+document.form1.z01_numcgm.value+'&funcao_js=parent.js_mostra_cgm','Pesquisa',false);
+     if(document.form1.z01_numcgm.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cgm','func_nome.php?pesquisa_chave='+document.form1.z01_numcgm.value+'&funcao_js=parent.js_mostra_cgm','Pesquisa',false);
      }else{
        document.form1.z01_numcgm.value = '';
-       document.form1.z01_nome.value   = ''; 
+       document.form1.z01_nome.value   = '';
      }
   }
 }
 function js_mostra_cgm(erro,chave){
-  document.form1.z01_nome.value = chave; 
-  if(erro==true){ 
-    document.form1.z01_nome.value = ''; 
-    document.form1.z01_nome.focus(); 
+  document.form1.z01_nome.value = chave;
+  if(erro==true){
+    document.form1.z01_nome.value = '';
+    document.form1.z01_nome.focus();
   }
 }
 function js_mostra_cgm1(chave1,chave2){
-   document.form1.z01_numcgm.value = chave1;  
+   document.form1.z01_numcgm.value = chave1;
    document.form1.z01_nome.value   = chave2;
    db_iframe_cgm.hide();
 }

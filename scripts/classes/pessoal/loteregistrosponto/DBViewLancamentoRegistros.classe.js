@@ -24,6 +24,8 @@ var DBViewLancamentoRegistros = function(iCodigoLote, sDescricaoLote, iAnoCompet
   this.oMessageBoard      = {}; //new DBMessageBoard();
   this.oLookupRubrica     = {}; //new DBLookUp();
   this.oLookupServidor    = {}; //new DBLookUp();'
+
+  this.MENSAGENS_VALIDA_LIMITE_RUBRICA = "recursoshumanos.pessoal.pes4_valida_limite_rubrica.";
 };
 
 DBViewLancamentoRegistros.prototype.persistirRegistro = function (event, lExecutou) {
@@ -70,6 +72,31 @@ DBViewLancamentoRegistros.prototype.persistirRegistro = function (event, lExecut
   if ( (!iQuantidade || !nValor) || (iQuantidade == 0 && nValor == 0) ) {
     alert("Campos quantidade e valor devem ser preenchidos.");
     return;
+  }
+
+  /**
+   * Verifica se deve bloquear ou alertar o lançamento
+   * caso o valor/quantidade da rubrica seja maior que
+   * o limite configurado
+   */
+  if($F("rh27_tipobloqueio").toLowerCase() != 'n') { 
+
+    var lLimiteExcedido = false;
+
+    if(parseFloat($F("rh27_valorlimite")) > 0 && parseFloat(nValor) > parseFloat($F("rh27_valorlimite"))) {
+      alert(_M( this.MENSAGENS_VALIDA_LIMITE_RUBRICA + "limite_valor_excedido", { 'valor' : $F("rh27_valorlimite") }));
+      lLimiteExcedido = true;
+    }
+    
+    if(parseFloat($F("rh27_quantidadelimite")) > 0 && parseFloat(iQuantidade) > parseFloat($F("rh27_quantidadelimite"))) {
+      alert(_M( this.MENSAGENS_VALIDA_LIMITE_RUBRICA + "limite_quantidade_excedido", { 'quantidade' : $F("rh27_quantidadelimite") }));
+      lLimiteExcedido = true;
+    }
+
+    //Bloqueia o lançamento
+    if($F("rh27_tipobloqueio").toLowerCase() == 'b' && lLimiteExcedido) { 
+      return;
+    }
   }
 
   this.oRequisicaoAjax.setParameters({ 
@@ -220,7 +247,7 @@ DBViewLancamentoRegistros.prototype.loadLookups = function() {
   this.oLookupRubrica = new DBLookUp($("procurarRubrica"), $("rh27_rubric"), $("rh27_descr"), {
     "sArquivo"             : "func_rhrubricas.php",
     'sObjetoLookUp'        : 'db_iframe_rhrubricas',
-    "aCamposAdicionais"    : ["rh27_obs", "rh27_limdat", "rh27_presta"],
+    "aCamposAdicionais"    : ["rh27_obs", "rh27_limdat", "rh27_presta", "rh27_valorlimite", "rh27_quantidadelimite", "rh27_tipobloqueio"],
     'aParametrosAdicionais': ['campos_adicionais=true', 'fixas=false']
   });
 
@@ -262,10 +289,15 @@ DBViewLancamentoRegistros.prototype.loadLookups = function() {
       $('notificacao').style.display         = 'block';
       $('notificacao').children[0].innerHTML = oRetornoLookUp.rh27_obs.toLowerCase();
     }
+
+    $('rh27_valorlimite').setValue(oRetornoLookUp.rh27_valorlimite);
+    $('rh27_quantidadelimite').setValue(oRetornoLookUp.rh27_quantidadelimite);
+    $('rh27_tipobloqueio').setValue(oRetornoLookUp.rh27_tipobloqueio);
   };
+
   var fCallBackClickAnterior        = this.oLookupRubrica.callBackClick.bind(this.oLookupRubrica);
 
-  this.oLookupRubrica.callBackClick = function(iCodigo, sDescricao, sObservacao, lCompetencia, lCalcularPrestacao){
+  this.oLookupRubrica.callBackClick = function(iCodigo, sDescricao, sObservacao, lCompetencia, lCalcularPrestacao, nValorlimite, nQuantidadelimite, sTipobloqueio){
     
     $('rh27_limdat').setValue("");
     $('rh27_limdat').removeClassName('readOnly');
@@ -286,13 +318,16 @@ DBViewLancamentoRegistros.prototype.loadLookups = function() {
       $('notificacao').children[0].innerHTML = sObservacao.toLowerCase();
     }
 
+    $('rh27_valorlimite').setValue(nValorlimite);
+    $('rh27_quantidadelimite').setValue(nQuantidadelimite);
+    $('rh27_tipobloqueio').setValue(sTipobloqueio);
+
     fCallBackClickAnterior(iCodigo, sDescricao);
   };
   
   $('rh27_limdat').addEventListener('change', function (){
     oSelf.addEventQuantidadeMeses();
   });
-  
 };
 
 DBViewLancamentoRegistros.prototype.loadData = function() {
@@ -556,9 +591,23 @@ DBViewLancamentoRegistros.prototype.alterarRegistros = function() {
 
   this.oRequisicaoAjax.setCallBack( function(oResponse, lErro) {
 
-    alert(oResponse.message.urlDecode());
+    /**
+     * Se não houve erro e há mensagens de AVISO
+     * que excedeu o limite de valor/quantidade
+     */
+    if (!lErro && oResponse.messagemValidacaoLimites.urlDecode() != '') {
+      alert(oResponse.messagemValidacaoLimites.urlDecode());
+    }
+
+    if(oResponse.message.urlDecode() != '') {
+      alert(oResponse.message.urlDecode());
+    }
 
     if (lErro){
+
+      if (oResponse.messagemValidacaoLimites.urlDecode() != '') {
+        alert(oResponse.messagemValidacaoLimites.urlDecode());
+      }
       return false;
     }
     

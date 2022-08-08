@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 
@@ -43,7 +43,7 @@ $clacordocomissao->rotulo->label();
  	   $db_action="aco1_acordocomissao005.php";
       }else if($db_opcao==3||$db_opcao==33){
  	   $db_action="aco1_acordocomissao006.php";
-      }  
+      }
 ?>
 
 <form class="container" name="form1" method="post" action="<?=$db_action?>">
@@ -54,7 +54,7 @@ $clacordocomissao->rotulo->label();
         <td nowrap title="<?=@$Tac08_sequencial?>">
           <?=@$Lac08_sequencial?>
         </td>
-        <td> 
+        <td>
           <?
             db_input('ac08_sequencial',10,$Iac08_sequencial,true,'text',3,"")
           ?>
@@ -64,7 +64,7 @@ $clacordocomissao->rotulo->label();
         <td nowrap title="<?=@$Tac08_descricao?>">
           <?=@$Lac08_descricao?>
         </td>
-        <td> 
+        <td>
           <?
             db_input('ac08_descricao',44,$Iac08_descricao,true,'text',$db_opcao,"")
           ?>
@@ -74,7 +74,7 @@ $clacordocomissao->rotulo->label();
         <td nowrap title="<?=@$Tac08_datainicial?>">
           <?=@$Lac08_datainicial?>
         </td>
-        <td> 
+        <td>
           <?
             db_inputdata('ac08_datainicial',@$ac08_datainicial_dia,@$ac08_datainicial_mes,@$ac08_datainicial_ano,true,'text',$db_opcao,"")
           ?>
@@ -84,7 +84,7 @@ $clacordocomissao->rotulo->label();
         <td nowrap title="<?=@$Tac08_datafim?>">
           <?=@$Lac08_datafim?>
         </td>
-        <td> 
+        <td>
           <?
             db_inputdata('ac08_datafim',@$ac08_datafim_dia,@$ac08_datafim_mes,@$ac08_datafim_ano,true,'text',$db_opcao,"")
           ?>
@@ -109,7 +109,7 @@ $clacordocomissao->rotulo->label();
 
 
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo.iframe_acordocomissao','db_iframe_acordocomissao','func_acordocomissao.php?funcao_js=parent.js_preenchepesquisa|ac08_sequencial','Pesquisa',true,'0','1');
+  js_OpenJanelaIframe('CurrentWindow.corpo.iframe_acordocomissao','db_iframe_acordocomissao','func_acordocomissao.php?funcao_js=parent.js_preenchepesquisa|ac08_sequencial','Pesquisa',true,'0','1');
 }
 
 function js_preenchepesquisa(chave){

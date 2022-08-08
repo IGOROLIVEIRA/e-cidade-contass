@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: pessoal
@@ -43,7 +43,7 @@ if(!isset($r24_mesusu) || (isset($r24_mesusu) && trim($r24_mesusu) == "")){
     <td nowrap title="<?=@$Tr24_regime?>">
       <?=@$Lr24_regime?>
     </td>
-    <td colspan="2"> 
+    <td colspan="2">
       <?
       $r24_progr = "  ";
       $r24_ano = "0";
@@ -63,7 +63,7 @@ if(!isset($r24_mesusu) || (isset($r24_mesusu) && trim($r24_mesusu) == "")){
       db_ancora($Lr24_padrao,"js_pesquisar24_padrao(true)",($db_opcao == 1?1:3));
       ?>
     </td>
-    <td colspan="2"> 
+    <td colspan="2">
       <?
       db_input('r24_padrao',10,$Ir24_padrao,true,'text',($db_opcao == 1?1:3),"onchange='js_pesquisar24_padrao(false);'");
       db_input('r02_descr',30,$Ir02_descr,true,'text',3,"");
@@ -74,7 +74,7 @@ if(!isset($r24_mesusu) || (isset($r24_mesusu) && trim($r24_mesusu) == "")){
     <td nowrap title="<?=@$Tr24_descr?>">
       <?=@$Lr24_descr?>
     </td>
-    <td colspan="2"> 
+    <td colspan="2">
       <?
       db_input('r24_descr',43,$Ir24_descr,true,'text',$db_opcao,"")
       ?>
@@ -84,7 +84,7 @@ if(!isset($r24_mesusu) || (isset($r24_mesusu) && trim($r24_mesusu) == "")){
     <td nowrap title="<?=@$Tr24_meses?>">
       <?=@$Lr24_meses?>
     </td>
-    <td> 
+    <td>
       <?
       db_input('r24_meses',10,$Ir24_meses,true,'text',$db_opcao,"onchange='js_calculaano(this.value);'");
       ?>
@@ -96,7 +96,7 @@ if(!isset($r24_mesusu) || (isset($r24_mesusu) && trim($r24_mesusu) == "")){
     <td nowrap title="<?=@$Tr24_perc?>">
       <?=@$Lr24_perc?>
     </td>
-    <td colspan="2"> 
+    <td colspan="2">
       <?
       db_input('r24_perc',10,$Ir24_perc,true,'text',$db_opcao,"")
       ?>
@@ -106,7 +106,7 @@ if(!isset($r24_mesusu) || (isset($r24_mesusu) && trim($r24_mesusu) == "")){
     <td nowrap title="<?=@$Tr24_valor?>">
       <?=@$Lr24_valor?>
     </td>
-    <td colspan="2"> 
+    <td colspan="2">
       <?
       db_input('r24_valor',10,$Ir24_valor,true,'text',$db_opcao,"")
       ?>
@@ -141,10 +141,10 @@ function js_testarcampos(){
 }
 function js_pesquisar24_padrao(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_padroes','func_padroes.php?funcao_js=parent.js_mostrapadrao1|r02_codigo|r02_descr&regime='+document.form1.r24_regime.value+'&chave_r02_anousu='+document.form1.r24_anousu.value+'&chave_r02_mesusu='+document.form1.r24_mesusu.value,'Pesquisa',true,'20');
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_padroes','func_padroes.php?funcao_js=parent.js_mostrapadrao1|r02_codigo|r02_descr&regime='+document.form1.r24_regime.value+'&chave_r02_anousu='+document.form1.r24_anousu.value+'&chave_r02_mesusu='+document.form1.r24_mesusu.value,'Pesquisa',true,'20');
   }else{
-    if(document.form1.r24_padrao.value != ''){ 
-      js_OpenJanelaIframe('top.corpo','db_iframe_padroes','func_padroes.php?pesquisa_chave='+document.form1.r24_padrao.value+'&funcao_js=parent.js_mostrapadrao&regime='+document.form1.r24_regime.value+'&chave_r02_anousu='+document.form1.r24_anousu.value+'&chave_r02_mesusu='+document.form1.r24_mesusu.value,'Pesquisa',false,'0');
+    if(document.form1.r24_padrao.value != ''){
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_padroes','func_padroes.php?pesquisa_chave='+document.form1.r24_padrao.value+'&funcao_js=parent.js_mostrapadrao&regime='+document.form1.r24_regime.value+'&chave_r02_anousu='+document.form1.r24_anousu.value+'&chave_r02_mesusu='+document.form1.r24_mesusu.value,'Pesquisa',false,'0');
     }else{
       document.form1.r24_padrao.value = '';
       document.form1.r02_descr.value  = '';
@@ -152,10 +152,10 @@ function js_pesquisar24_padrao(mostra){
   }
 }
 function js_mostrapadrao(chave,erro){
-  document.form1.r02_descr.value = chave; 
-  if(erro==true){ 
-    document.form1.r24_padrao.focus(); 
-    document.form1.r24_padrao.value = ''; 
+  document.form1.r02_descr.value = chave;
+  if(erro==true){
+    document.form1.r24_padrao.focus();
+    document.form1.r24_padrao.value = '';
   }else{
     if(document.form1.r24_descr.value == ""){
       document.form1.r24_descr.value = chave;
@@ -189,7 +189,7 @@ function js_calculaano(ano){
   }
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_progress','func_progress.php?funcao_js=parent.js_preenchepesquisa|r24_anousu|r24_mesusu|r24_regime|r24_padrao|r24_meses','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_progress','func_progress.php?funcao_js=parent.js_preenchepesquisa|r24_anousu|r24_mesusu|r24_regime|r24_padrao|r24_meses','Pesquisa',true);
 }
 function js_preenchepesquisa(chave,chave1,chave2,chave3,chave4){
   db_iframe_progress.hide();

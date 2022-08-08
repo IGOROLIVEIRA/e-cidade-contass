@@ -121,11 +121,11 @@ db_postmemory($_GET);
 <script>
 function js_pesquisac215_cgm (mostra) {
   if (mostra==true) {
-    js_OpenJanelaIframe('top.corpo','db_iframe_entesconsorciados','func_entesconsorciados.php?funcao_js=parent.js_mostra|c215_cgm|z01_nome|c215_sequencial','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_entesconsorciados','func_entesconsorciados.php?funcao_js=parent.js_mostra|c215_cgm|z01_nome|c215_sequencial','Pesquisa',true);
   } else {
     codent =  document.form1.c215_cgm.value;
     if (codent != '') {
-      js_OpenJanelaIframe('top.corpo','db_iframe_entesconsorciados','func_entesconsorciados.php?codente='+codent+'&funcao_js=parent.js_mostra02','Pesquisa',false);
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_entesconsorciados','func_entesconsorciados.php?codente='+codent+'&funcao_js=parent.js_mostra02','Pesquisa',false);
     } else {
       document.form1.z01_nome.value = '';
     }

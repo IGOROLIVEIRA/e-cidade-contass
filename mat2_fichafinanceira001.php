@@ -56,13 +56,13 @@ $clrotulo->label("m60_descr");
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta http-equiv="Expires" CONTENT="0">
 <?
-  db_app::load("scripts.js, 
-                strings.js, 
-                prototype.js, 
+  db_app::load("scripts.js,
+                strings.js,
+                prototype.js,
                 datagrid.widget.js,
                 widgets/DBLancador.widget.js,
                 widgets/DBToogle.widget.js,
-                estilos.css, 
+                estilos.css,
                 grid.style.css
                ");
 ?>
@@ -90,27 +90,27 @@ fieldset table td:first-child {
         <legend><strong>Ficha Financeira</strong></legend>
 
 	      <table align="left" border="0">
-	      
+
 	        <tr>
 	          <td nowrap="nowrap" width="95px">
 	            <strong>Data Inicial:</strong>
 	          </td>
-	          
+
 	          <td nowrap="nowrap" align="left">
 	            <?php db_inputdata('dtInicial','','','',true,'text',1,"");?>
 	          </td>
 	        </tr>
-	      
+
 	        <tr>
 	          <td nowrap="nowrap">
 	            <strong>Data Final:</strong>
 	          </td>
-	          
+
 	          <td nowrap="nowrap" align="left">
 	            <?php db_inputdata('dtFinal','','','',true,'text',1,"");?>
 	          </td>
 	        </tr>
-	        
+
       <tr>
         <td>
           <?php
@@ -118,20 +118,20 @@ fieldset table td:first-child {
           ?>
         </td>
         <td>
-          <?php 
+          <?php
             db_input('m60_codmater', 10, $Im60_codmater, true, 'text', 1, "onchange='js_pesquisaMaterial(false);'");
             db_input('m60_descr', 40, $Im60_descr, true, 'text', 3);
           ?>
         </td>
-      </tr>  	      
+      </tr>
 
-		      
+
 		  <tr>
 		    <td colspan="2">
 		      <div id='ctnAlmoxarifado'></div>
 		    </td>
 		  </tr>
-		      
+
 	      </table>
 
       </fieldset>
@@ -166,7 +166,7 @@ var oLancadorAlmoxarifado = new DBLancador('LancadorAlmoxarifado');
 function getAlmoxarifados(){
 
   var aAlmoxarifado = [];
-  
+
   oLancadorAlmoxarifado.getRegistros().each( function( oDados, iIndice){
 
     aAlmoxarifado.push( oDados.sCodigo );
@@ -189,9 +189,9 @@ function js_emite() {
     return false;
   }
 */
-  
+
   if (iMaterial == '') {
-    
+
     alert(_M(CAMINHO_MENSAGENS + "material_nulo" ));
     return false;
   }
@@ -200,7 +200,7 @@ function js_emite() {
       sQuery += "&dtFinal="       + dtFinal;
       sQuery += "&iMaterial="     + iMaterial;
       sQuery += "&aAlmoxarifado=" + aAlmoxarifado;
-      
+
 	    jan = window.open(sFonte+sQuery,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
 	    jan.moveTo(0,0);
 }
@@ -215,10 +215,10 @@ function js_pesquisaMaterial(lMostra) {
   if (lMostra) {
     sUrlOpen = "func_matmater.php?funcao_js=parent.js_preencheMaterial|m60_codmater|m60_descr";
   }
-  js_OpenJanelaIframe('top.corpo', 'db_iframe_matmater', sUrlOpen, 'Pesquisa Material', lMostra);
+  js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_matmater', sUrlOpen, 'Pesquisa Material', lMostra);
 }
 function js_completaMaterial(sDescricao, lErro) {
-  
+
   $("m60_descr").setValue(sDescricao);
   if (lErro) {
     $("m60_codmater").setValue('');

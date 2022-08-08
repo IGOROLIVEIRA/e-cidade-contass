@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 set_time_limit(0);
@@ -54,7 +54,7 @@ $objGet  = db_utils::postmemory($_GET);
 <script>
 
 function js_mostraParcelamento(parcelamento){
-  js_OpenJanelaIframe('top.corpo','db_iframe_consultaparc'+parcelamento,'div3_consultaParcelamento.php?parcelamento='+parcelamento,'Consulta Pacelamentos anulados',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_consultaparc'+parcelamento,'div3_consultaParcelamento.php?parcelamento='+parcelamento,'Consulta Pacelamentos anulados',true);
 }
 
 </script>
@@ -71,7 +71,7 @@ function js_mostraParcelamento(parcelamento){
 function MM_reloadPage(init) {  //reloads the window if Nav4 resized
   if (init==true) with (navigator) {
     if ((appName=="Netscape")&&(parseInt(appVersion)==4)) {
-      document.MM_pgW=innerWidth; document.MM_pgH=innerHeight; onresize=MM_reloadPage; 
+      document.MM_pgW=innerWidth; document.MM_pgH=innerHeight; onresize=MM_reloadPage;
     }
   } else if (innerWidth!=document.MM_pgW || innerHeight!=document.MM_pgH) location.reload();
 }
@@ -96,7 +96,7 @@ MM_reloadPage(true);
     }else if ($opcao=="parcel"){
       $where = "and termoanu.v09_parcel = $codopcao";
     }
-    
+
     $campos     = " distinct v07_parcel, ";
     $campos    .= "          v07_numpre, ";
     $campos    .= "          v07_dtlanc, ";
@@ -112,14 +112,14 @@ MM_reloadPage(true);
     $campos    .= "          v09_data, ";
     $campos    .= "          v09_hora, ";
     $campos    .= "          v09_motivo ";
-    
+
     //                               echo($cltermoanu->sqlQueryTermoOrigem (null,$campos,null,"termo.v07_instit = ".db_getsession('DB_instit')." ".$where));
     $rsTermoAnu = $cltermoanu->sql_record($cltermoanu->sqlQueryTermoOrigem (null,$campos,null,"termo.v07_instit = ".db_getsession('DB_instit')." ".$where));
 
     if ($cltermoanu->numrows == 0) {
       db_msgbox("Não existem parcelamentos para a origem selecionada.");
-      exit;      
-    } 
+      exit;
+    }
 
     //
     // Cabecalho
@@ -162,7 +162,7 @@ MM_reloadPage(true);
       echo "    <td align='center' style='font-size:12px' nowrap bgcolor='$cor'> ".db_formatar($objParcelamentos->v09_data,'d')."   </td> ";
       echo "    <td align='center' style='font-size:12px' nowrap bgcolor='$cor'> ".$objParcelamentos->v09_hora."                    </td> ";
       echo "    <td align='left'   style='font-size:12px' nowrap bgcolor='$cor'> ".$objParcelamentos->v09_motivo."     </td> ";
-      echo "  </tr> ";  
+      echo "  </tr> ";
 
    }
 

@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: orcamento
@@ -35,7 +35,7 @@ $clorcppalei->rotulo->label();
     <td nowrap title="<?=@$To21_codleippa?>">
        <?=@$Lo21_codleippa?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('o21_codleippa',10,$Io21_codleippa,true,'text',3,"")
 ?>
@@ -45,7 +45,7 @@ db_input('o21_codleippa',10,$Io21_codleippa,true,'text',3,"")
     <td nowrap title="<?=@$To21_anoini?>">
        <?=@$Lo21_anoini?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('o21_anoini',4,$Io21_anoini,true,'text',$db_opcao,"")
 ?>
@@ -55,7 +55,7 @@ db_input('o21_anoini',4,$Io21_anoini,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$To21_anofim?>">
        <?=@$Lo21_anofim?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('o21_anofim',4,$Io21_anofim,true,'text',$db_opcao,"")
 ?>
@@ -65,7 +65,7 @@ db_input('o21_anofim',4,$Io21_anofim,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$To21_descr?>">
        <?=@$Lo21_descr?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('o21_descr',40,$Io21_descr,true,'text',$db_opcao,"")
 ?>
@@ -75,7 +75,7 @@ db_input('o21_descr',40,$Io21_descr,true,'text',$db_opcao,"")
     <td nowrap title="<?=@$To21_numero?>">
        <?=@$Lo21_numero?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('o21_numero',10,$Io21_numero,true,'text',$db_opcao,"")
 ?>
@@ -88,7 +88,7 @@ db_input('o21_numero',10,$Io21_numero,true,'text',$db_opcao,"")
 </form>
 <script>
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_orcppalei','func_orcppalei.php?funcao_js=parent.js_preenchepesquisa|o21_codleippa','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_orcppalei','func_orcppalei.php?funcao_js=parent.js_preenchepesquisa|o21_codleippa','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_orcppalei.hide();

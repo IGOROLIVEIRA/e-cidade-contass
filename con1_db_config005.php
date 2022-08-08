@@ -100,9 +100,9 @@ if(isset($alterar)){
 		  }
   	}
   }
-  
+
   if (!$lErro) {
-  		
+
 		  $result = db_query($clinfocomplementaresinstit->sql_query(null,"si09_sequencial",null,"si09_instit = {$codigo}"));
       $clinfocomplementaresinstit->si09_instit = $codigo;
       $clinfocomplementaresinstit->si09_instsiconfi = $si09_instsiconfi;
@@ -112,13 +112,13 @@ if(isset($alterar)){
   		} else {
         $clinfocomplementaresinstit->incluir(null);
   		}
-		  
+
 		  if ($clinfocomplementaresinstit->erro_status == "0") {
 		    $lErro = true;
 		    $sMsg = $clinfocomplementaresinstit->erro_msg;
 		  }
   }
-  
+
   db_fim_transacao($lErro);
 
 } else if(isset($chavepesquisa)) {
@@ -131,8 +131,8 @@ if(isset($alterar)){
 
    $result = db_query($clinfocomplementaresinstit->sql_query(null,"infocomplementaresinstit.*,cgmgestor.z01_nome as nomegestor,cgmassessoria.z01_nome as nomeassessoriacontabil",null,"si09_instit = {$codigo}"));
    db_fieldsmemory($result, 0);
-   
-   
+
+
 }
 ?>
 <html>
@@ -186,7 +186,7 @@ if (isset($chavepesquisa)) {
       function js_db_libera(){
          parent.document.formaba.instituicao.disabled=false;
          parent.document.formaba.imagens.disabled=false;
-         top.corpo.iframe_imagens.location.href='con1_db_imagens001.php?codigo={$chavepesquisa}';
+         CurrentWindow.corpo.iframe_imagens.location.href='con1_db_imagens001.php?codigo={$chavepesquisa}';
      ";
 
   if (isset($liberaaba)) {

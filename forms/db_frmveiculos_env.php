@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: Trânsito
@@ -43,7 +43,7 @@ if(isset($db_opcaoal)){
 }else if(isset($opcao) && $opcao=="excluir"){
     $db_opcao = 3;
     $db_botao=true;
-}else{  
+}else{
     $db_opcao = 1;
     $db_botao=true;
     if(isset($novo) || isset($_self) && $_self!=""){
@@ -75,7 +75,7 @@ db_input('tr08_idacidente',5,$Itr08_idacidente,true,'text',3,"")
 ?>
     </td>
   </tr>
-  
+
   <tr>
     <td nowrap title="<?=@$Ttr08_idveiculo?>">
        <?
@@ -172,7 +172,7 @@ db_select('tr08_sexo',$x,true,$db_opcao,"");
   <table>
   <tr>
     <td valign="top"  align="center">
-       <? 
+       <?
          $chavepri= array("tr08_id"=>@$tr08_id);
          $cliframe_alterar_excluir->chavepri=$chavepri;
          $cliframe_alterar_excluir->sql     = $clveiculos_env->sql_query(null,"*","tr08_id","tr08_idacidente = $tr08_idacidente");
@@ -181,12 +181,12 @@ db_select('tr08_sexo',$x,true,$db_opcao,"");
          $cliframe_alterar_excluir->iframe_height ="200";
          $cliframe_alterar_excluir->iframe_width ="750";
          $cliframe_alterar_excluir->iframe_alterar_excluir($db_opcao);
-       ?>   
+       ?>
     </td>
    </tr>
  </table>
 </form>
-</center>   
+</center>
 <!-- <iframe src="tra4_listaveiculos.php?acidente=<?=db_getsession("id_acidente");?>" height="40%" width="80%"></iframe> -->
 
 <script>
@@ -209,9 +209,9 @@ function js_pesquisatr08_idveiculo(mostra){
 }
 function js_mostratipo_veiculos(chave,erro){
   document.form1.tr05_descr.value = chave;
-  if(erro==true){ 
-    document.form1.tr08_idveiculo.focus(); 
-    document.form1.tr08_idveiculo.value = ''; 
+  if(erro==true){
+    document.form1.tr08_idveiculo.focus();
+    document.form1.tr08_idveiculo.value = '';
   }
 }
 function js_mostratipo_veiculos1(chave1,chave2){
@@ -227,10 +227,10 @@ function js_pesquisatr08_municipio(mostra){
   }
 }
 function js_mostradb_cepmunic(chave,erro){
-  document.form1.db10_munic.value = chave; 
-  if(erro==true){ 
-    document.form1.tr08_municipio.focus(); 
-    document.form1.tr08_municipio.value = ''; 
+  document.form1.db10_munic.value = chave;
+  if(erro==true){
+    document.form1.tr08_municipio.focus();
+    document.form1.tr08_municipio.value = '';
   }
 }
 function js_mostradb_cepmunic1(chave1,chave2){
@@ -246,10 +246,10 @@ function js_pesquisatr08_idacidente(mostra){
   }
 }
 function js_mostraacidentes(chave,erro){
-  document.form1.tr07_id.value = chave; 
-  if(erro==true){ 
-    document.form1.tr08_idacidente.focus(); 
-    document.form1.tr08_idacidente.value = ''; 
+  document.form1.tr07_id.value = chave;
+  if(erro==true){
+    document.form1.tr08_idacidente.focus();
+    document.form1.tr08_idacidente.value = '';
   }
 }
 function js_mostraacidentes1(chave1,chave2){
@@ -265,10 +265,10 @@ function js_pesquisatr08_idhabilitacao(mostra){
   }
 }
 function js_mostratipo_habilitacao(chave,erro){
-  document.form1.tr09_tipo.value = chave; 
+  document.form1.tr09_tipo.value = chave;
   if(erro==true){
-    document.form1.tr08_idhabilitacao.focus(); 
-    document.form1.tr08_idhabilitacao.value = ''; 
+    document.form1.tr08_idhabilitacao.focus();
+    document.form1.tr08_idhabilitacao.value = '';
   }
 }
 function js_mostratipo_habilitacao1(chave1,chave2){
@@ -277,7 +277,7 @@ function js_mostratipo_habilitacao1(chave1,chave2){
   db_iframe_tipo_habilitacao.hide();
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('','db_iframe_veiculos_env','func_veiculos_env.php?funcao_js=top.js_preenchepesquisa|tr08_id','Pesquisa',true);
+  js_OpenJanelaIframe('','db_iframe_veiculos_env','func_veiculos_env.php?funcao_js=CurrentWindow.js_preenchepesquisa|tr08_id','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_veiculos_env.hide();

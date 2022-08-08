@@ -64,7 +64,7 @@ $textodt = $dt['texto'];
 // calcula periodo do exercicio anterior para fechar os 12 meses
 $anousu_ant  = db_getsession("DB_anousu")-1;
 // se o ano atual é bissexto deve subtrair 366 somente se a data for superior a 28/02/200X
-$dt = split('-',$dt_fin);  // mktime -- (mes,dia,ano)
+$dt = explode('-',$dt_fin);  // mktime -- (mes,dia,ano)
 //$dt_ini_ant = date('Y-m-d',mktime(0,0,0,$dt[1],$dt[2]-365,$dt[0]));
 
 $dt_ini_ant = $anousu_ant."-01-01";
@@ -72,7 +72,7 @@ $dt_fin_ant = $anousu_ant."-12-31";
 
 ////////////////////////////////////////////////////////////////////
 
-$xinstit = split("-",$db_selinstit);
+$xinstit = explode("-",$db_selinstit);
 $resultinst = pg_exec("select munic,nomeinst,nomeinstabrev,db21_tipoinstit from db_config where codigo in (".str_replace('-',', ',$db_selinstit).") ");
 $descr_inst = '';
 $xvirg = '';
@@ -150,8 +150,8 @@ if ($temcamara == true && $temprefa == false && $temadmind == false){
   $head5 = "ORCAMENTOS FISCAL E DA SEGURIDADE SOCIAL";
 }
 
-$dt1 = split('-',$dt_ini);
-$dt2 = split('-',$dt_fin); 
+$dt1 = explode('-',$dt_ini);
+$dt2 = explode('-',$dt_fin); 
 if ($tipo_emissao=='periodo'){
   $textodt = strtoupper(db_mes($dt1[1]))." A ".strtoupper(db_mes($dt2[1]))." DE ";
   
@@ -244,7 +244,7 @@ $m_despesa[7]["exercicio"]     = 0;
 $sele_work = 'o58_instit in ('.$instituicao.')   ';
 $result_despesa = db_dotacaosaldo(8,2,3,true,$sele_work,$anousu,$dt_ini,$dt_fin);
 
-$dt3 = split("-",$dt_fin);
+$dt3 = explode("-",$dt_fin);
 if ($dt3[1] == "12"){
   $dt3[1] = 11;
 }
@@ -342,7 +342,7 @@ $result_bal = db_planocontassaldo_completo($anousu,$dt_ini,$dt_fin, false,$sele_
 
 // calculo do periodo anterior ao exercicio
 @pg_exec("drop table work_pl");
-$dt3 = split("-",$dt_fin);
+$dt3 = explode("-",$dt_fin);
 
 if ($dt3[1] == "12"){
   $dt3[1] = 11;

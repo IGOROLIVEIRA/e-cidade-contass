@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -72,8 +72,8 @@ $oRotuloCampos->label("as15_codigofamiliarcadastrounico");
                   db_input("as15_codigofamiliarcadastrounico", 10, $Ias15_codigofamiliarcadastrounico, true,
                   		"text", 1, "onchange='js_pesquisaCidadaoFamilia(false);'");
                   db_input("ov02_nome", 40, $Iov02_nome, true, "text", 3);
-                  
-                 
+
+
                   ?>
                 </td>
               </tr>
@@ -109,23 +109,23 @@ function js_pesquisaCidadaoFamilia(lMostra) {
 
   if (lMostra == true) {
 
-  	js_OpenJanelaIframe('top.corpo', 
-  	  	                'db_iframe_cidadaofamilia', 
+  	js_OpenJanelaIframe('CurrentWindow.corpo',
+  	  	                'db_iframe_cidadaofamilia',
   	  	                'func_cidadaofamilia.php?'+
-  	  	                'funcao_js=parent.js_mostracidadaofamilia1|as04_sequencial|ov02_nome|as15_codigofamiliarcadastrounico', 
-  	  	                'Pesquisar Código da Família', 
+  	  	                'funcao_js=parent.js_mostracidadaofamilia1|as04_sequencial|ov02_nome|as15_codigofamiliarcadastrounico',
+  	  	                'Pesquisar Código da Família',
   	  	                true
   	  	               );
   } else {
 
   	if ($F('as15_codigofamiliarcadastrounico') != '') {
 
-    	js_OpenJanelaIframe('top.corpo', 
-                          'db_iframe_cidadaofamilia', 
+    	js_OpenJanelaIframe('CurrentWindow.corpo',
+                          'db_iframe_cidadaofamilia',
                           'func_cidadaofamilia.php?pesquisa_chave='+$F('as15_codigofamiliarcadastrounico')+
                                                  '&funcao_js=parent.js_mostracidadaofamilia'+
-                                                 '&sTipoRetorno=relatorio', 
-                          'Pesquisar Código da Família', 
+                                                 '&sTipoRetorno=relatorio',
+                          'Pesquisar Código da Família',
                           false
                          );
   	} else {
@@ -138,7 +138,7 @@ function js_mostracidadaofamilia(iCodigoFamilia, erro, sNome, iSequencial) {
 
    $('as04_sequencial').value = iSequencial;
    $('ov02_nome').value       = sNome;
-   
+
    if (erro == true) {
 
    	$('as04_sequencial').value                     = '';
@@ -199,7 +199,7 @@ function js_limparDados() {
 	$('ov02_nome').value                        = '';
 	$('as02_dataatualizacao').value             = '';
 	$('as15_codigofamiliarcadastrounico').value = '';
-	
+
 }
 
 /*

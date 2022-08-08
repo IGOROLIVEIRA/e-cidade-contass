@@ -374,7 +374,7 @@ class cl_conplano {
     return true;
   }
   // funcao para alteracao
-  function alterar ($c60_codcon=null,$c60_anousu=null,$subtipo,$iTipoConta) {
+  function alterar ($c60_codcon=null,$c60_anousu=null,$subtipo=null,$iTipoConta=null) {
     $this->atualizacampos();
     $sql = " update conplano set ";
     $virgula = "";
@@ -801,7 +801,7 @@ class cl_conplano {
   function sql_query ( $c60_codcon=null,$c60_anousu=null,$campos="*",$ordem=null,$dbwhere=""){
     $sql = "select ";
     if($campos != "*" ){
-      $campos_sql = split("#",$campos);
+      $campos_sql = explode("#",$campos);
       $virgula = "";
       for($i=0;$i<sizeof($campos_sql);$i++){
         $sql .= $virgula.$campos_sql[$i];
@@ -834,7 +834,7 @@ class cl_conplano {
     $sql .= $sql2;
     if($ordem != null ){
       $sql .= " order by ";
-      $campos_sql = split("#",$ordem);
+      $campos_sql = explode("#",$ordem);
       $virgula = "";
       for($i=0;$i<sizeof($campos_sql);$i++){
         $sql .= $virgula.$campos_sql[$i];
@@ -847,7 +847,7 @@ class cl_conplano {
   function sql_query_file ( $c60_codcon=null,$c60_anousu=null,$campos="*",$ordem=null,$dbwhere=""){
     $sql = "select ";
     if($campos != "*" ){
-      $campos_sql = split("#",$campos);
+      $campos_sql = explode("#",$campos);
       $virgula = "";
       for($i=0;$i<sizeof($campos_sql);$i++){
         $sql .= $virgula.$campos_sql[$i];
@@ -876,7 +876,7 @@ class cl_conplano {
     $sql .= $sql2;
     if($ordem != null ){
       $sql .= " order by ";
-      $campos_sql = split("#",$ordem);
+      $campos_sql = explode("#",$ordem);
       $virgula = "";
       for($i=0;$i<sizeof($campos_sql);$i++){
         $sql .= $virgula.$campos_sql[$i];
@@ -943,7 +943,7 @@ class cl_conplano {
     function sql_query_geral ( $c60_codcon=null,$c60_anousu=null,$campos="*",$ordem=null,$dbwhere=""){
       $sql = "select ";
       if($campos != "*" ){
-        $campos_sql = split("#",$campos);
+        $campos_sql = explode("#",$campos);
         $virgula = "";
         for($i=0;$i<sizeof($campos_sql);$i++){
           $sql .= $virgula.$campos_sql[$i];
@@ -978,7 +978,7 @@ class cl_conplano {
       $sql .= $sql2;
       if($ordem != null ){
         $sql .= " order by ";
-        $campos_sql = split("#",$ordem);
+        $campos_sql = explode("#",$ordem);
         $virgula = "";
         for($i=0;$i<sizeof($campos_sql);$i++){
           $sql .= $virgula.$campos_sql[$i];
@@ -990,7 +990,7 @@ class cl_conplano {
     function sql_vs_planocontas ( $c60_codcon=null,$campos="*",$ordem=null,$dbwhere=""){
       $sql = "select ";
       if($campos != "*" ){
-        $campos_sql = split("#",$campos);
+        $campos_sql = explode("#",$campos);
         $virgula = "";
         for($i=0;$i<sizeof($campos_sql);$i++){
           $sql .= $virgula.$campos_sql[$i];
@@ -1012,7 +1012,7 @@ class cl_conplano {
       $sql .= $sql2;
       if($ordem != null ){
         $sql .= " order by ";
-        $campos_sql = split("#",$ordem);
+        $campos_sql = explode("#",$ordem);
         $virgula = "";
         for($i=0;$i<sizeof($campos_sql);$i++){
           $sql .= $virgula.$campos_sql[$i];
@@ -1074,7 +1074,7 @@ class cl_conplano {
   function sql_query_ele( $c60_codcon=null,$campos="*",$ordem=null,$dbwhere=""){
     $sql = "select ";
     if($campos != "*" ){
-      $campos_sql = split("#",$campos);
+      $campos_sql = explode("#",$campos);
       $virgula = "";
       for($i=0;$i<sizeof($campos_sql);$i++){
         $sql .= $virgula.$campos_sql[$i];
@@ -1105,7 +1105,7 @@ class cl_conplano {
     $sql .= $sql2;
     if($ordem != null ){
       $sql .= " order by ";
-      $campos_sql = split("#",$ordem);
+      $campos_sql = explode("#",$ordem);
       $virgula = "";
       for($i=0;$i<sizeof($campos_sql);$i++){
         $sql .= $virgula.$campos_sql[$i];
@@ -1117,7 +1117,7 @@ class cl_conplano {
   function sql_query_reduz ( $c60_codcon=null,$campos="*",$ordem=null,$dbwhere=""){
     $sql = "select ";
     if($campos != "*" ){
-      $campos_sql = split("#",$campos);
+      $campos_sql = explode("#",$campos);
       $virgula = "";
       for($i=0;$i<sizeof($campos_sql);$i++){
         $sql .= $virgula.$campos_sql[$i];
@@ -1147,7 +1147,7 @@ class cl_conplano {
     $sql .= $sql2;
     if($ordem != null ){
       $sql .= " order by ";
-      $campos_sql = split("#",$ordem);
+      $campos_sql = explode("#",$ordem);
       $virgula = "";
       for($i=0;$i<sizeof($campos_sql);$i++){
         $sql .= $virgula.$campos_sql[$i];
@@ -1159,7 +1159,7 @@ class cl_conplano {
   function sql_query_tudo ( $c60_codcon=null,$campos="*",$ordem=null,$dbwhere=""){
     $sql = "select ";
     if($campos != "*" ){
-      $campos_sql = split("#",$campos);
+      $campos_sql = explode("#",$campos);
       $virgula = "";
       for($i=0;$i<sizeof($campos_sql);$i++){
         $sql .= $virgula.$campos_sql[$i];
@@ -1190,7 +1190,7 @@ class cl_conplano {
     $sql .= $sql2;
     if($ordem != null ){
       $sql .= " order by ";
-      $campos_sql = split("#",$ordem);
+      $campos_sql = explode("#",$ordem);
       $virgula = "";
       for($i=0;$i<sizeof($campos_sql);$i++){
         $sql .= $virgula.$campos_sql[$i];
@@ -1202,7 +1202,7 @@ class cl_conplano {
   function sql_query2 ( $c60_codcon=null,$c60_anousu=null,$campos="*",$ordem=null,$dbwhere=""){
     $sql = "select ";
     if($campos != "*" ){
-      $campos_sql = split("#",$campos);
+      $campos_sql = explode("#",$campos);
       $virgula = "";
       for($i=0;$i<sizeof($campos_sql);$i++){
         $sql .= $virgula.$campos_sql[$i];
@@ -1234,7 +1234,7 @@ class cl_conplano {
     $sql .= $sql2;
     if($ordem != null ){
       $sql .= " order by ";
-      $campos_sql = split("#",$ordem);
+      $campos_sql = explode("#",$ordem);
       $virgula = "";
       for($i=0;$i<sizeof($campos_sql);$i++){
         $sql .= $virgula.$campos_sql[$i];
@@ -1254,7 +1254,7 @@ class cl_conplano {
   function sql_query_planocontas ( $c60_anousu=null, $campos="*",$ordem=null,$dbwhere="") {
     $sql = "select ";
     if($campos != "*" ){
-      $campos_sql = split("#",$campos);
+      $campos_sql = explode("#",$campos);
       $virgula = "";
       for($i=0;$i<sizeof($campos_sql);$i++){
         $sql .= $virgula.$campos_sql[$i];
@@ -1285,7 +1285,7 @@ class cl_conplano {
     $sql .= $sql2;
     if($ordem != null ){
       $sql .= " order by ";
-      $campos_sql = split("#",$ordem);
+      $campos_sql = explode("#",$ordem);
       $virgula = "";
       for($i=0;$i<sizeof($campos_sql);$i++){
         $sql .= $virgula.$campos_sql[$i];
@@ -1302,7 +1302,7 @@ class cl_conplano {
   function sql_query_dados_plano ( $c60_anousu=null, $campos="*",$ordem=null,$dbwhere="") {
     $sql = "select ";
     if($campos != "*" ){
-      $campos_sql = split("#",$campos);
+      $campos_sql = explode("#",$campos);
       $virgula = "";
       for($i=0;$i<sizeof($campos_sql);$i++){
         $sql .= $virgula.$campos_sql[$i];
@@ -1332,7 +1332,7 @@ class cl_conplano {
     $sql .= $sql2;
     if($ordem != null ){
       $sql .= " order by ";
-      $campos_sql = split("#",$ordem);
+      $campos_sql = explode("#",$ordem);
       $virgula = "";
       for($i=0;$i<sizeof($campos_sql);$i++){
         $sql .= $virgula.$campos_sql[$i];
@@ -1345,7 +1345,7 @@ class cl_conplano {
   function sql_query_pcasp_orcamento_analitico ( $c60_anousu=null, $campos="*",$ordem=null,$dbwhere="") {
     $sql = "select ";
     if($campos != "*" ){
-      $campos_sql = split("#",$campos);
+      $campos_sql = explode("#",$campos);
       $virgula = "";
       for($i=0;$i<sizeof($campos_sql);$i++){
         $sql .= $virgula.$campos_sql[$i];
@@ -1378,7 +1378,7 @@ class cl_conplano {
     $sql .= $sql2;
     if($ordem != null ){
       $sql .= " order by ";
-      $campos_sql = split("#",$ordem);
+      $campos_sql = explode("#",$ordem);
       $virgula = "";
       for($i=0;$i<sizeof($campos_sql);$i++){
         $sql .= $virgula.$campos_sql[$i];
@@ -1392,7 +1392,7 @@ class cl_conplano {
   function sql_query_dados_banco ( $c60_codcon=null,$c60_anousu=null,$campos="*",$ordem=null,$dbwhere=""){
     $sql = "select ";
     if($campos != "*" ){
-      $campos_sql = split("#",$campos);
+      $campos_sql = explode("#",$campos);
       $virgula = "";
       for($i=0;$i<sizeof($campos_sql);$i++){
         $sql .= $virgula.$campos_sql[$i];
@@ -1428,7 +1428,7 @@ class cl_conplano {
     $sql .= $sql2;
     if($ordem != null ){
       $sql .= " order by ";
-      $campos_sql = split("#",$ordem);
+      $campos_sql = explode("#",$ordem);
       $virgula = "";
       for($i=0;$i<sizeof($campos_sql);$i++){
         $sql .= $virgula.$campos_sql[$i];

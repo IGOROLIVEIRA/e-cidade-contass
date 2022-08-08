@@ -61,9 +61,9 @@ $result = pg_exec("select uol_chat from db_usuariosonline
                    where uol_id = ".db_getsession("DB_id_usuario")."
   	               and uol_ip = '".(isset($_SERVER["HTTP_X_FORWARDED_FOR"])?$_SERVER["HTTP_X_FORWARDED_FOR"]:$HTTP_SERVER_VARS['REMOTE_ADDR'])."' 
 		           and uol_hora = ".db_getsession("DB_uol_hora")."");
-$linhas = split("\n",pg_result($result,0,0));
+$linhas = explode("\n",pg_result($result,0,0));
 $numLinhas = sizeof($linhas);
-$aux = split("#",$linhas[1]);
+$aux = explode("#",$linhas[1]);
 $verHora1 = $aux[1];
 */
 //while(1) {
@@ -71,11 +71,11 @@ $verHora1 = $aux[1];
                      where uol_id = ".db_getsession("DB_id_usuario")."	  	             
 		             and uol_hora = ".db_getsession("DB_uol_hora")."");					 
 //and uol_ip = '".(isset($_SERVER["HTTP_X_FORWARDED_FOR"])?$_SERVER["HTTP_X_FORWARDED_FOR"]:$HTTP_SERVER_VARS['REMOTE_ADDR'])."' 					 
-  $linhas = split("\n",pg_result($result,0,0));
+  $linhas = explode("\n",pg_result($result,0,0));
   $numLinhas = sizeof($linhas);
   //for($i = ($numLinhas <= 10?1:($numLinhas - 10));$i < $numLinhas;$i++) {
   for($i = 1;$i < $numLinhas;$i++) {
-    $aux = split("#",$linhas[$i]);
+    $aux = explode("#",$linhas[$i]);
   //  $verHora2 = $aux[1];
  //   if($verHora2 > $verHora1) {
 //	  $verHora1 = $verHora2;

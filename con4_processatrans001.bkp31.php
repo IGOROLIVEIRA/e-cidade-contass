@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -191,7 +191,7 @@ if (isset ($processar)) {
 
     if ($numrows == 0) {
       throw new Exception('Nenhum lançamento encontrado.');
-    } 
+    }
 
 		for ($i = 0; $i < $numrows; $i ++) {
 
@@ -311,7 +311,7 @@ if (isset ($processar)) {
 
               if ($oDaoContaCorrenteDetalheConLancamVal->erro_status == "0") {
                 throw new Exception(
-                  "Erro ao excluir contacorrente.\n" . 
+                  "Erro ao excluir contacorrente.\n" .
                   "Erro banco: " . $oDaoContaCorrenteDetalheConLancamVal->erro_msg
                 );
               }
@@ -335,7 +335,7 @@ if (isset ($processar)) {
             @$clconlancamval->excluir($c69_sequen);
 
             if ($clconlancamval->erro_status == "0") {
-              
+
               $erro_msg  = "Você está tentando reprocessar lançamentos em um período encerrado. Caso seja fundamental\n";
               $erro_msg .= "o reprocessamento desta forma, solicite ao responsável pela Contabilidade o desbloqueio da\n";
               $erro_msg .= "data de encerramento.\n" . "Erro banco: " . $clconlancamval->erro_msg;
@@ -435,12 +435,12 @@ if (isset ($processar)) {
             break;
 
           case 33 : //liquida RP
-          case 39 : 
+          case 39 :
             $cltranslan->db_trans_liquida_resto($e60_codcom, $e64_codele, $e60_anousu, $e60_numemp, $c53_coddoc);
             break;
 
           case 34 : //estorna liquidação   RP
-          case 40 : 
+          case 40 :
             $cltranslan->db_trans_estorna_liquida_resto($e60_codcom, $e64_codele, $e60_anousu, $e60_numemp, $c53_coddoc);
             break;
 
@@ -601,7 +601,7 @@ if (isset ($processar)) {
                   'Conta da Receita não cadastrada. (' . db_getsession("DB_anousu") .
                   ', ' . $codrec . ') na conplanoreduz.'
                 );
-              } 
+              }
 
             } else {
 
@@ -618,9 +618,9 @@ if (isset ($processar)) {
                   'Conta da Receita não cadastrada. (' . db_getsession("DB_anousu") .
                   ', ' . $codrec . ') na conplanoreduz.'
                 );
-              } 
+              }
 
-            } 
+            }
 
             db_fieldsmemory($resultrec, 0);
             $sSql = "select c60_estrut
@@ -660,7 +660,7 @@ if (isset ($processar)) {
               if ($oDaoConPlanoOrcamentoAnalitica->numrows == 0) {
 
                 throw new Exception(
-                  'Conta da Receita não cadastrada. (' . db_getsession("DB_anousu") . 
+                  'Conta da Receita não cadastrada. (' . db_getsession("DB_anousu") .
                   ', ' . $codrec . ') na conplanoreduz.'
                 );
               }
@@ -674,7 +674,7 @@ if (isset ($processar)) {
               if ($clconplanoreduz->numrows == 0) {
 
                 throw new Exception(
-                  'Conta da Receita não cadastrada. (' . db_getsession("DB_anousu") . 
+                  'Conta da Receita não cadastrada. (' . db_getsession("DB_anousu") .
                   ',' . $codrec . ') no conplanoreduz.'
                 );
               }
@@ -723,7 +723,7 @@ if (isset ($processar)) {
             break;
 
           default :
-            throw new Exception("Documento não processado por está rotina."); 
+            throw new Exception("Documento não processado por está rotina.");
 
         }
 
@@ -732,7 +732,7 @@ if (isset ($processar)) {
         $arr_histori    = $cltranslan->arr_histori;
         $arr_seqtranslr = $cltranslan->arr_seqtranslr;
 
-        /** 
+        /**
          * Verifica se os array com os lançamentos não estão vazios
          */
         if (count($arr_debito) == 0) {
@@ -740,11 +740,11 @@ if (isset ($processar)) {
         }
 
         if (count($arr_credito) == 0) {
-          throw new Exception('Conta crédito não cadastrada na transação.'); 
+          throw new Exception('Conta crédito não cadastrada na transação.');
         }
 
         if (count($arr_histori) == 0) {
-          throw new Exception('Histórico do lançamento nao encontrado.'); 
+          throw new Exception('Histórico do lançamento nao encontrado.');
         }
 
         //final=========================================================
@@ -836,13 +836,13 @@ if (isset ($processar)) {
 	}
 
   /**
-   * Existe log do processamento, salva em arquivo 
+   * Existe log do processamento, salva em arquivo
    */
   if (!empty($sLogReprocessamento)) {
 
     $sArquivoLog = 'tmp/reprocessamento_despesas_receitas_' . date('Y-m-d_H:i:s') . '.log';
     file_put_contents($sArquivoLog, $sLogReprocessamento);
-  } 
+  }
 
 	$_SESSION["DB_desativar_account"] = false;
 	unset($_SESSION["DB_desativar_account"]);
@@ -993,7 +993,7 @@ $clrotulo->label("c70_codlan");
     require_once('scripts/widgets/DBDownload.widget.js');
     var oDownload = new DBDownload();
     oDownload.addFile('<?php echo $sArquivoLog; ?>', 'Log reprocessamento');
-    oDownload.show(); 
+    oDownload.show();
   }());
 <?php endif; ?>
 
@@ -1100,10 +1100,10 @@ function js_mostraconhistdoc1(chave1,chave2) {
   */
 function js_pesquisae60_numemp(mostra) {
   if(mostra == true) {
-    js_OpenJanelaIframe('top.corpo','db_iframe_empempenho','func_empempenho.php?funcao_js=parent.js_mostraempempenho1|e60_numemp','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_empempenho','func_empempenho.php?funcao_js=parent.js_mostraempempenho1|e60_numemp','Pesquisa',true);
   } else {
      if(document.form1.e60_numemp.value != '') {
-        js_OpenJanelaIframe('top.corpo','db_iframe_empempenho','func_empempenho.php?pesquisa_chave='+document.form1.e60_numemp.value+'&funcao_js=parent.js_mostraempempenho','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_empempenho','func_empempenho.php?pesquisa_chave='+document.form1.e60_numemp.value+'&funcao_js=parent.js_mostraempempenho','Pesquisa',false);
      } else {
        document.form1.e60_numemp.value = '';
      }

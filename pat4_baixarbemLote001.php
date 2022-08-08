@@ -201,7 +201,7 @@ $('btnFiltrar').observe('click', function(){
 function consultaBem(  iCodigoBem  ){
 
   var uRlOpen = 'pat1_consbens002.php?t52_ident=&t52_bem=' + iCodigoBem;
-  js_OpenJanelaIframe('top.corpo','db_iframe_consultaBem',uRlOpen ,'Consulta de Bem',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_consultaBem',uRlOpen ,'Consulta de Bem',true);
 }
 
 
@@ -211,7 +211,7 @@ function getBensSelecionados(){
   var aListaBens     = [];
 
   aListaCheckbox.each( function ( aRow,  iLinha) {
-    
+
     var iCodigoBem =  aRow[1];
     aListaBens.push(iCodigoBem);
   });
@@ -294,7 +294,7 @@ function js_buscaDadosBem(){
   var iCodigoClassificacaoFinal    = $F("t64_classFinal");
   var iPlacaInicial                = $F("placaini");
   var iPlacaFinal                  = $F("placafim");
-  var iPlacaBem                    = $F("oTxtPlacaBem"); 
+  var iPlacaBem                    = $F("oTxtPlacaBem");
 
   var oParametros                             = new Object();
       oParametros.exec                        = 'getBens';
@@ -307,7 +307,7 @@ function js_buscaDadosBem(){
       oParametros.iPlacaInicial               = iPlacaInicial;
       oParametros.iPlacaFinal                 = iPlacaFinal  ;
       oParametros.iPlacaBem                   = iPlacaBem;
-      
+
 
   var msgDiv = _M( URL_MENSAGEM + "buscarBens");
 
@@ -366,7 +366,7 @@ function js_retornoBuscaBem(oAjax){
           aBem[iIndiceBem]    = oBem;
           iIndiceBem++;
 	      }
-        
+
     });
   }
 
@@ -379,7 +379,7 @@ function js_retornoBuscaBem(oAjax){
 		  if(oDados.iCodigoBem == oRetorno.aDadosRetorno[0].iCodigoBem) {
 			  iChecked = true;
 		  }
-	  } 
+	  }
 
 	  var aRow     = [];
       aRow[0]  = '<a href="#" onclick="consultaBem('+oDados.iCodigoBem+')" >' + oDados.iCodigoBem + '</a>';
@@ -389,7 +389,7 @@ function js_retornoBuscaBem(oAjax){
       aRow[4]  = "&nbsp;" + oDados.sDepartamento  ;
 
       oGridBens.addRow(aRow,null,null,iChecked);
-	  
+
   });
 
   oGridBens.renderRows();
@@ -442,10 +442,10 @@ function js_montaView() {
 	var alturaJanela  = screen.availHeight - 200;
 	var viewBens      = new windowAux('viewBens',
 			                               'Lista de Bens',
-			                               larguraJanela, 
+			                               larguraJanela,
 			                               alturaJanela
 			                              );
-	var sConteudowinAux  = '<div style="margin-left:10px;">                                                             ';                                                                         
+	var sConteudowinAux  = '<div style="margin-left:10px;">                                                             ';
       sConteudowinAux += '  <fieldset style="margin-top:5px; width:97%;">                                             ';
       sConteudowinAux += '    <legend><b>Dados da Baixa</b></legend>                                                  ';
       sConteudowinAux += '    <table style="width:100%" >                                                             ';
@@ -472,12 +472,12 @@ function js_montaView() {
 			sConteudowinAux += '          <a href="#" class="dbancora" style="text-decoration:underline;"                   ';
 			sConteudowinAux += '             onclick="js_pesquisa_cgm(true);"><strong>Destino:</strong></a>                ';
 	    sConteudowinAux += '        </td>                                                                               ';
-	    sConteudowinAux += '        <td>                                                                                '; 
+	    sConteudowinAux += '        <td>                                                                                ';
 	    sConteudowinAux += '          <span id="inputdestino"></span>                                              ';
 	    sConteudowinAux += '          <span id="inputnome"></span>                                           ';
 	    sConteudowinAux += '        </td>                                                                               ';
       sConteudowinAux += '      </tr>                                                                                 ';
-            
+
       sConteudowinAux += '      <tr>                                                                                  ';
       sConteudowinAux += '        <td colspan="2">                                                                    ';
       sConteudowinAux += '          <fieldset style="width:98%; margin-top:10px;">                                    ';
@@ -486,13 +486,13 @@ function js_montaView() {
       sConteudowinAux += '          </fieldset>                                                                       ';
       sConteudowinAux += '        </td>                                                                               ';
       sConteudowinAux += '      </tr>                                                                                 ';
-      
+
 	    sConteudowinAux += '      <tr>                                                                                  ';
 	    sConteudowinAux += '        <td nowrap="nowrap">                                                                ';
 			sConteudowinAux += '          <a href="#" class="dbancora" style="text-decoration:underline;"                   ';
 			sConteudowinAux += '             onclick="js_pesquisaPlacaBem(true);"><strong>Placa:</strong></a>                ';
 	    sConteudowinAux += '        </td>                                                                               ';
-	    sConteudowinAux += '        <td>                                                                                '; 
+	    sConteudowinAux += '        <td>                                                                                ';
 	    sConteudowinAux += '          <span id="inputplacabem"></span>                                              ';
 	    sConteudowinAux += '          <span id="inputdescricaobem"></span>                                           ';
 	    sConteudowinAux += '      <input type="button" id="adicionabem" onclick="js_adicionaBem();" value="Adicionar" />    ';
@@ -524,7 +524,7 @@ function js_montaView() {
       oTxtData = new DBTextFieldData('oTxtData','oTxtData', '<?php echo $dtAtual ?>');
       oTxtData.show($('inputData'));
       oTxtData.setReadOnly(true);
-      
+
       oTxtCodMotivo = new DBTextField('oTxtCodMotivo', 'oTxtCodMotivo', '', 10);
       oTxtCodMotivo.addEvent("onChange", ";js_pesquisaMotivo(false);");
       oTxtCodMotivo.show($('inputcodigomotivo'));
@@ -556,7 +556,7 @@ function js_montaView() {
 
       oTxtDescrBem = new DBTextField('oTxtNome', 'oTxtNome', '', 60);
       oTxtDescrBem.show($('inputnome'));
-      oTxtDescrBem.setReadOnly(true);      
+      oTxtDescrBem.setReadOnly(true);
 
       //    funcao para corrigir a exibição do window aux, apos fechar a primeira vez
       viewBens.setShutDownFunction(function () {
@@ -654,19 +654,19 @@ function js_mostramotivo1(chave1,chave2){
 
 //=================  PESQUISA BEM
 function js_pesquisaPlacaBem(mostra) {
-	  
+
 	  if (mostra == true) {
 
 	    var sUrlOpenPlaca = "func_bens.php?funcao_js=parent.js_preenchePlacaBem1|t52_ident|t52_descr";
-	    js_OpenJanelaIframe('top.corpo', 'db_iframe_placabem', sUrlOpenPlaca, 'Pesquisa', true);
+	    js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_placabem', sUrlOpenPlaca, 'Pesquisa', true);
 	  } else {
-	  
+
 	    var sUrlOpenPlaca = "func_bens.php?lRetornoPlaca=true&pesquisa_chave=" + $('oTxtPlacaBem').value+"&funcao_js=parent.js_preenchePlacaBem";
-	    js_OpenJanelaIframe('top.corpo', 'db_iframe_placabem', sUrlOpenPlaca, 'Pesquisa', false);
+	    js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_placabem', sUrlOpenPlaca, 'Pesquisa', false);
 	  }
 	}
 function js_preenchePlacaBem1(placa,descricao) {
-	  
+
 	  if (placa != '') {
 	    $('oTxtPlacaBem').value = placa;
 	    $('oTxtDescrBem').value = descricao;
@@ -692,7 +692,7 @@ function js_abreLookupClassificacaoFinal(lMostra) {
   if (lMostra == true) {
 
     var sUrlOpen = "func_clabens.php?funcao_js=parent.js_mostraclabensFinal1|t64_class|t64_descr&analitica=true";
-    js_OpenJanelaIframe('top.corpo', 'db_iframe_clabensFinal', sUrlOpen, 'Pesquisa Classificação', true);
+    js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_clabensFinal', sUrlOpen, 'Pesquisa Classificação', true);
 
   } else {
 
@@ -702,7 +702,7 @@ function js_abreLookupClassificacaoFinal(lMostra) {
        for(i = 0;i < $('t64_classFinal').value.length;i++){
          testa = testa.replace('.','');
        }
-       js_OpenJanelaIframe('top.corpo','db_iframe_clabensFinal','func_clabens.php?pesquisa_chave='+testa+'&funcao_js=parent.js_mostraclabensFinal&analitica=true','Pesquisa',false);
+       js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_clabensFinal','func_clabens.php?pesquisa_chave='+testa+'&funcao_js=parent.js_mostraclabensFinal&analitica=true','Pesquisa',false);
      }else{
        $('t64_descrFinal').value = '';
      }
@@ -731,7 +731,7 @@ function js_abreLookupClassificacaoInicial(lMostra) {
   if (lMostra == true) {
 
     var sUrlOpen = "func_clabens.php?funcao_js=parent.js_mostraclabensInicial1|t64_class|t64_descr&analitica=true";
-    js_OpenJanelaIframe('top.corpo', 'db_iframe_clabensInicial', sUrlOpen, 'Pesquisa Classificação', true);
+    js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_clabensInicial', sUrlOpen, 'Pesquisa Classificação', true);
   } else {
 
     testa = new String($("t64_classInicial").value);
@@ -740,7 +740,7 @@ function js_abreLookupClassificacaoInicial(lMostra) {
        for(i = 0;i < $('t64_classInicial').value.length;i++){
          testa = testa.replace('.','');
        }
-       js_OpenJanelaIframe('top.corpo','db_iframe_clabensInicial','func_clabens.php?pesquisa_chave='+testa+'&funcao_js=parent.js_mostraclabensInicial&analitica=true','Pesquisa',false);
+       js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_clabensInicial','func_clabens.php?pesquisa_chave='+testa+'&funcao_js=parent.js_mostraclabensInicial&analitica=true','Pesquisa',false);
      }else{
        $('t64_descrInicial').value = '';
      }
@@ -766,11 +766,11 @@ function js_mostraclabensInicial1(chave1,chave2){
 function js_pesquisa_depart(mostra){
 
   if (mostra == true) {
-    js_OpenJanelaIframe('top.corpo','db_iframe_depart','func_db_depart.php?funcao_js=parent.js_mostradepart1|coddepto|descrdepto','Pesquisa Departamentos',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_depart','func_db_depart.php?funcao_js=parent.js_mostradepart1|coddepto|descrdepto','Pesquisa Departamentos',true);
   } else {
 
      if ($F("t52_depart") != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_depart','func_db_depart.php?pesquisa_chave=' + $F("t52_depart") + '&funcao_js=parent.js_mostradepart','Pesquisa Departamentos',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_depart','func_db_depart.php?pesquisa_chave=' + $F("t52_depart") + '&funcao_js=parent.js_mostradepart','Pesquisa Departamentos',false);
      }else{
        $("descrdepto").value = '';
      }
@@ -804,10 +804,10 @@ function js_pesquisa_bemFinal(mostra){
   }
 
   if ( mostra == true) {
-    js_OpenJanelaIframe('top.corpo','db_iframe_bensFinal','func_bens.php?' + chaveDepto + 'funcao_js=parent.js_mostrabemFinal1|t52_bem|t52_descr','Pesquisa de Bens',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_bensFinal','func_bens.php?' + chaveDepto + 'funcao_js=parent.js_mostrabemFinal1|t52_bem|t52_descr','Pesquisa de Bens',true);
   }else{
      if( $('t52_bemFinal').value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_bensFinal','func_bens.php?pesquisa_chave=' + $('t52_bemFinal').value+'&funcao_js=parent.js_mostrabemFinal','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_bensFinal','func_bens.php?pesquisa_chave=' + $('t52_bemFinal').value+'&funcao_js=parent.js_mostrabemFinal','Pesquisa',false);
      }else{
        $('t52_descrFinal').value = '';
      }
@@ -837,10 +837,10 @@ function js_pesquisa_bemInicial(mostra){
     chaveDepto = 'chave_depto='+$F('t52_depart')+'&';
   }
   if ( mostra == true) {
-    js_OpenJanelaIframe('top.corpo','db_iframe_bensInicial','func_bens.php?' + chaveDepto + 'funcao_js=parent.js_mostrabemInicial1|t52_bem|t52_descr','Pesquisa de Bens',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_bensInicial','func_bens.php?' + chaveDepto + 'funcao_js=parent.js_mostrabemInicial1|t52_bem|t52_descr','Pesquisa de Bens',true);
   }else{
      if( $('t52_bemInicial').value != ''){
-        js_OpenJanelaIframe('top.corpo','db_iframe_bensInicial','func_bens.php?pesquisa_chave=' + $('t52_bemInicial').value+'&funcao_js=parent.js_mostrabemInicial','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_bensInicial','func_bens.php?pesquisa_chave=' + $('t52_bemInicial').value+'&funcao_js=parent.js_mostrabemInicial','Pesquisa',false);
      }else{
        $('t52_descrInicial').value = '';
      }
@@ -871,11 +871,11 @@ function js_pesquisaPlacaInicial(mostra) {
   if (mostra == true) {
 
     var sUrlOpenInicial = "func_bens.php?funcao_js=parent.js_preenchePlacaInicial|t52_ident";
-    js_OpenJanelaIframe('top.corpo', 'db_iframe_placaini', sUrlOpenInicial, 'Pesquisa', true);
+    js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_placaini', sUrlOpenInicial, 'Pesquisa', true);
   } else {
 
     var sUrlOpenInicial = "func_bens.php?funcao_js=parent.js_preenchePlacaInicial|t52_ident";
-    js_OpenJanelaIframe('top.corpo', 'db_iframe_placaini', sUrlOpenInicial, 'Pesquisa', false);
+    js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_placaini', sUrlOpenInicial, 'Pesquisa', false);
   }
 }
 
@@ -896,13 +896,13 @@ function js_pesquisaPlacaFinal(mostra) {
   if (mostra == true) {
 
     var sUrlOpenFinal = "func_bens.php?funcao_js=parent.js_mostraplacafim1|t52_ident";
-    js_OpenJanelaIframe('top.corpo', 'db_iframe_placafim', sUrlOpenFinal, 'Pesquisa', true);
+    js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_placafim', sUrlOpenFinal, 'Pesquisa', true);
   } else {
 
      if ($('placafim').value != '') {
 
        var sUrlOpenFinal = "func_bens.php?pesquisa_chave=" + $('placafim').value+"&lRetornoPlaca=true&funcao_js=parent.js_mostraplacafim";
-       js_OpenJanelaIframe('top.corpo', 'db_iframe_placafim', sUrlOpenFinal, 'Pesquisa', false);
+       js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_placafim', sUrlOpenFinal, 'Pesquisa', false);
      } else {
        $('placafim').value = '';
      }
@@ -956,24 +956,24 @@ function inArrayBem(codbem, abens) {
  */
 function js_pesquisa_cgm(mostra){
 	  if(mostra==true){
-	    js_OpenJanelaIframe('top.corpo','db_iframe_cgm','func_cgm.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome','Pesquisa',true);
+	    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cgm','func_cgm.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome','Pesquisa',true);
 	  }else{
-	     if($('oTxtDestino').value != ''){ 
-	        js_OpenJanelaIframe('top.corpo','db_iframe_cgm','func_cgm.php?pesquisa_chave='+$('oTxtDestino').value+'&funcao_js=parent.js_mostracgm','Pesquisa',false);
+	     if($('oTxtDestino').value != ''){
+	        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cgm','func_cgm.php?pesquisa_chave='+$('oTxtDestino').value+'&funcao_js=parent.js_mostracgm','Pesquisa',false);
 	     }else{
-	    	 $('oTxtNome').value = ''; 
+	    	 $('oTxtNome').value = '';
 	     }
 	  }
 	}
 	function js_mostracgm(erro,chave){
-		$('oTxtNome').value = chave; 
-	  if(erro==true){ 
-		  $('oTxtDestino').value = ''; 
-		  $('oTxtDestino').focus(); 
+		$('oTxtNome').value = chave;
+	  if(erro==true){
+		  $('oTxtDestino').value = '';
+		  $('oTxtDestino').focus();
 	  }
 	}
 	function js_mostracgm1(chave1,chave2){
-		$('oTxtDestino').value = chave1;  
+		$('oTxtDestino').value = chave1;
 		$('oTxtNome').value = chave2;
 	   db_iframe_cgm.hide();
 	}

@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: caixa
@@ -31,7 +31,7 @@ $clcancdebitosproc->rotulo->label();
 $clcancdebitosreg->rotulo->label();
 $clrotulo = new rotulocampo;
 $clrotulo->label("k23_obs");
-$clrotulo->label("nome"); 
+$clrotulo->label("nome");
 
 include("dbforms/db_classesgenericas.php");
 $cliframe_seleciona = new cl_iframe_seleciona;
@@ -51,7 +51,7 @@ $cliframe_seleciona = new cl_iframe_seleciona;
     <td nowrap title="<?=@$Tk20_codigo?>">
        <?=@$Lk20_codigo?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('k20_codigo',10,$Ik20_codigo,true,'text',3,"")
 ?>
@@ -61,7 +61,7 @@ db_input('k20_codigo',10,$Ik20_codigo,true,'text',3,"")
     <td nowrap title="<?=@$Tk20_hora?>">
        <?=@$Lk20_hora?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('k20_hora',5,$Ik20_hora,true,'text',3,"")
 ?>
@@ -71,7 +71,7 @@ db_input('k20_hora',5,$Ik20_hora,true,'text',3,"")
     <td nowrap title="<?=@$Tk20_data?>">
        <?=@$Lk20_data?>
     </td>
-    <td> 
+    <td>
 <? db_inputdata('k20_data',@$k20_data_dia,@$k20_data_mes,@$k20_data_ano,true,'text',3,"")?>
     </td>
   </tr>
@@ -79,9 +79,9 @@ db_input('k20_hora',5,$Ik20_hora,true,'text',3,"")
     <td nowrap title="<?=@$Tk20_usuario?>">
        <?=@$Lk20_usuario?>
     </td>
-    <td> 
-     <? 
-      db_input('k20_usuario',10,$Ik20_usuario,true,'text',3,""); 
+    <td>
+     <?
+      db_input('k20_usuario',10,$Ik20_usuario,true,'text',3,"");
       db_input('nome',40,$Inome,true,'text',3,"");
      ?>
     </td>
@@ -99,9 +99,9 @@ db_input('k20_hora',5,$Ik20_hora,true,'text',3,"")
 	</td>
   </tr>
   <? } ?>
-  
-  
-  
+
+
+
  </table>
 </fieldset>
 </td>
@@ -159,7 +159,7 @@ function js_submit(){
 		return true;
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_cancdebitos','func_canccancdeb.php?funcao_js=parent.js_preenchepesquisa|k20_codigo','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cancdebitos','func_canccancdeb.php?funcao_js=parent.js_preenchepesquisa|k20_codigo','Pesquisa',true);
 //document.form1.submit();
 }
 function js_preenchepesquisa(chave){

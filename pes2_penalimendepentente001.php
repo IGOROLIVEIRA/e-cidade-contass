@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 
@@ -34,7 +34,7 @@
   require_once ("dbforms/db_classesgenericas.php");
   require_once ("libs/db_app.utils.php");
   require_once ("libs/db_utils.php");
-  
+
   $clrotulo = new rotulocampo;
   $clrotulo->label('r44_selec');
   $clrotulo->label("z01_nome");
@@ -47,24 +47,24 @@
 <html>
   <head>
     <?php
-      
-      db_app::load("scripts.js, estilos.css"); 
+
+      db_app::load("scripts.js, estilos.css");
     ?>
   </head>
-  
+
   <body bgcolor="#CCCCCC">
     <form name="form1" method="post" action="" >
       <fieldset style="margin: 25px auto; margin-bottom: 5px; width: 500px;">
         <legend>
           <strong>Relatório de Pensão por Dependente</strong>
         </legend>
-        
+
         <table align="center">
           <tr>
              <td >&nbsp;</td>
              <td >&nbsp;</td>
           </tr>
-          <tr> 
+          <tr>
             <td align="right" nowrap title="Seleção:" >
               <?php
                 db_ancora($Lr44_selec,"js_pesquisasel(true)",1);
@@ -82,7 +82,7 @@
               <strong>Ano / Mês Inicial:</strong>
             </td>
             <td align="left">
-              
+
               <?php
                 db_input('anoInicial', 4, true, "text", 1, "", "", "", "", "", 4);
                 echo " / ";
@@ -108,7 +108,7 @@
             </td>
             <td align="left">
               <?php
-                
+
                 $xv = array("nome"      => "Nome",
                             "matricula" => "Matrícula");
                 db_select('ordem', $xv, true, 4, "");
@@ -121,7 +121,7 @@
             </td>
             <td align="left">
               <?php
-                
+
                 $xv = array("semquebra"  => "Sem Quebra",
                             "servidor"   => "Servidor",
                             "dependente" => "Dependente");
@@ -138,8 +138,8 @@
               <table style="width: 100%">
                 <tr>
                   <td align="right">
-                    <?php 
-                      
+                    <?php
+
                       $aux                                  = new cl_arquivo_auxiliar;
                       $aux->cabecalho                       = "<strong>MATRÍCULAS SELECIONADAS</strong>";
                       $aux->codigo                          = "rh01_regist";
@@ -162,16 +162,16 @@
                       $aux->linhas                          = 10;
                       $aux->vwidth                          = "360";
                       $aux->funcao_gera_formulario();
-                      
+
                     ?>
                   </td>
-                </tr> 
+                </tr>
               </table>
             </td>
           </tr>
         </table>
         <?php
-          
+
           db_menu(db_getsession("DB_id_usuario"),
                   db_getsession("DB_modulo"),
                   db_getsession("DB_anousu"),
@@ -186,14 +186,14 @@
 </html>
 
 <?php
-  
+
   if ( isset( $ordem ) ) {
-    
+
     echo "<script>
        js_emite();
        </script>";
   }
-  
+
   $func_iframe = new janela('db_iframe', '');
   $func_iframe->posX           = 1;
   $func_iframe->posY           = 20;
@@ -201,34 +201,34 @@
   $func_iframe->altura         = 430;
   $func_iframe->titulo         = 'Pesquisa';
   $func_iframe->iniciarVisivel = false;
-  
+
   $func_iframe->mostrar();
 
 ?>
 
 <script>
- 
+
   function js_verifica () {
-    
+
     var anoi = new Number(document.form1.datai_ano.value);
     var anof = new Number(document.form1.dataf_ano.value);
-    
+
     if ( anoi.valueOf() > anof.valueOf() ) {
-      
+
       alert('Intervalo de data invalido. Velirique !.');
       return false;
     }
-    
+
     return true;
   }
-  
-  
+
+
   function js_emite () {
 
 		sUrl  = 'pes2_penalimendependente002.php?iSelecao=' + document.form1.r44_selec.value + '&iMesInicial=' + document.form1.mesInicial.value;
 	  sUrl += '&iAnoInicial=' + document.form1.anoInicial.value + '&iMesFinal=' + document.form1.mesFinal.value + '&iAnoFinal=' + document.form1.anoFinal.value;
 	  sUrl += '&sOrdem=' + document.form1.ordem.value + '&sQuebra=' + document.form1.quebra.value + '&aMatriculas=' + js_campo_recebe_valores();
-	  
+
 	  oJanela = window.open(sUrl, '', 'width=' + (screen.availWidth - 5) + ',height=' + (screen.availHeight - 40) + ', scrollbars=1, location=0 ');
 
 	  oJanela.moveTo(0, 0);
@@ -236,128 +236,128 @@
 	  return true;
 
   }
-  
-  
+
+
   function js_insere_matri () {
-    
+
     var valor = document.getElementById('matriculas_selecionadas_text').value.trim();
-    
+
     if ( valor == '' ) {
-      
+
       if ( st ) {
-        
+
         clearTimeout(st);
       }
-        
+
       return false;
     }
-      
+
     var array = valor.split(",");
-    
+
     for ( var i = 0; i < array.length; i++ ) {
-      
+
       document.getElementById('rh01_regist').value = array[i];
       js_BuscaDadosArquivomatriculas_selecionadas(false);
-      
-      document.getElementById('matriculas_selecionadas_text').value = 
+
+      document.getElementById('matriculas_selecionadas_text').value =
         ( array.slice( i + 1, array.length ).implode(',') ).trim();
-      
+
       var st = setTimeout(js_insere_matri, 500);
-      
+
       break;
     }
-    
+
   }
-  
-  
+
+
   function js_pesquisasel ( mostra ){
-    
+
     if ( mostra == true ) {
-      
-      js_OpenJanelaIframe('top.corpo',
+
+      js_OpenJanelaIframe('CurrentWindow.corpo',
     	                    'db_iframe_selecao',
     	                    'func_selecao.php?funcao_js=parent.js_mostrasel1|r44_selec|r44_descr',
     	                    'Pesquisa',
     	                    true);
     } else {
-      
-      if ( document.form1.r44_selec.value != '' ) {
-        
-        js_OpenJanelaIframe('top.corpo',
-                            'db_iframe_selecao',
-                            'func_selecao.php?pesquisa_chave=' + document.form1.r44_selec.value + 
-                              '&funcao_js=parent.js_mostrasel',
-                            'Pesquisa',
-                            false);
-      } else {
-        
-        document.form1.r44_descr.value = '';
-      }
-    }
-  }
-  
-  
-  function js_mostrasel ( chave, erro ) {
-     
-    document.form1.r44_descr.value = chave;
 
-    if ( erro == true ) {
-      
-      document.form1.r44_selec.focus(); 
-      document.form1.r44_selec.value = '';
-    }
-  }
-  
-  
-  function js_mostrasel1 ( chave1, chave2 ) {
-     
-    document.form1.r44_selec.value = chave1;
-    document.form1.r44_descr.value = chave2;
-    db_iframe_selecao.hide();
-  }
-  
-  
-  function js_pesquisasel ( mostra ) {
-  
-    if ( mostra == true ) {
-      
-      js_OpenJanelaIframe('top.corpo',
-                          'db_iframe_selecao',
-                          'func_selecao.php?funcao_js=parent.js_mostrasel1|r44_selec|r44_descr',
-                          'Pesquisa',
-                          true);
-    } else {
-      
-      if (document.form1.r44_selec.value != '') {
-        
-        js_OpenJanelaIframe('top.corpo',
+      if ( document.form1.r44_selec.value != '' ) {
+
+        js_OpenJanelaIframe('CurrentWindow.corpo',
                             'db_iframe_selecao',
                             'func_selecao.php?pesquisa_chave=' + document.form1.r44_selec.value +
                               '&funcao_js=parent.js_mostrasel',
                             'Pesquisa',
                             false);
       } else {
-        
+
         document.form1.r44_descr.value = '';
       }
     }
   }
-    
-    
+
+
   function js_mostrasel ( chave, erro ) {
-     
+
     document.form1.r44_descr.value = chave;
-    
+
     if ( erro == true ) {
-      
-      document.form1.r44_selec.focus(); 
+
+      document.form1.r44_selec.focus();
       document.form1.r44_selec.value = '';
     }
   }
-  
-  
+
+
   function js_mostrasel1 ( chave1, chave2 ) {
-    
+
+    document.form1.r44_selec.value = chave1;
+    document.form1.r44_descr.value = chave2;
+    db_iframe_selecao.hide();
+  }
+
+
+  function js_pesquisasel ( mostra ) {
+
+    if ( mostra == true ) {
+
+      js_OpenJanelaIframe('CurrentWindow.corpo',
+                          'db_iframe_selecao',
+                          'func_selecao.php?funcao_js=parent.js_mostrasel1|r44_selec|r44_descr',
+                          'Pesquisa',
+                          true);
+    } else {
+
+      if (document.form1.r44_selec.value != '') {
+
+        js_OpenJanelaIframe('CurrentWindow.corpo',
+                            'db_iframe_selecao',
+                            'func_selecao.php?pesquisa_chave=' + document.form1.r44_selec.value +
+                              '&funcao_js=parent.js_mostrasel',
+                            'Pesquisa',
+                            false);
+      } else {
+
+        document.form1.r44_descr.value = '';
+      }
+    }
+  }
+
+
+  function js_mostrasel ( chave, erro ) {
+
+    document.form1.r44_descr.value = chave;
+
+    if ( erro == true ) {
+
+      document.form1.r44_selec.focus();
+      document.form1.r44_selec.value = '';
+    }
+  }
+
+
+  function js_mostrasel1 ( chave1, chave2 ) {
+
     document.form1.r44_selec.value = chave1;
     document.form1.r44_descr.value = chave2;
     db_iframe_selecao.hide();

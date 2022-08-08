@@ -85,6 +85,27 @@ $clrotulo->label("ac16_resumoobjeto");
                 </td>
             </tr>
 
+            <tr id="trdatareferencia" style="display: none;">
+                <td align="left" title="<?= @$Tsi03_datareferencia ?>">
+                    <b>Data de Referência:</b>
+                </td>
+
+                <td align="left">
+                    <?
+                    db_inputdata(
+                        'si03_datareferencia',
+                        @$si03_datareferencia_dia,
+                        @$si03_datareferencia_mes,
+                        @$si03_datareferencia_ano,
+                        true,
+                        'text',
+                        $db_opcao
+                    );
+                    ?>
+                </td>
+                <td>&nbsp;</td>
+            </tr>
+
 
             <tr>
                 <td nowrap nowrap title="<?= @$Tsi03_descrapostila ?>">
@@ -130,7 +151,7 @@ $clrotulo->label("ac16_resumoobjeto");
                 </td>
 
                 <!-- tag <td> a seguir ocultada pois apresenta inconsistencia
-                     no valor apresentado, a tag só ficará visivel novamente 
+                     no valor apresentado, a tag só ficará visivel novamente
                     caso cliente solicite o retorno  -->
 
                 <td colspan='2' style="display: none;">
@@ -207,6 +228,7 @@ $clrotulo->label("ac16_resumoobjeto");
 </table>
 <input type='button' disabled id='btnSalvar' value='Salvar' onclick="apostilar();">
 <script>
+    document.getElementById("si03_datareferencia").style.width = "80px"
     document.getElementById("si03_tipoalteracaoapostila").disabled = true;
     sUrlRpc = 'con4_contratoapostilamento.RPC.php';
     aItensPosicao = new Array();
@@ -227,6 +249,7 @@ $clrotulo->label("ac16_resumoobjeto");
     var opcao = document.form1.controle.value;
     var elemento = "";
     var elemento_dotacao = "";
+    var dotacaoIncluida = false;
 
     function pesquisadotacao() {
 
@@ -261,10 +284,10 @@ $clrotulo->label("ac16_resumoobjeto");
 
     function js_pesquisasi03_licitacao(mostra) {
         if (mostra == true) {
-            js_OpenJanelaIframe('top.corpo', 'db_iframe_liclicita', 'func_liclicita.php?funcao_js=parent.js_mostraliclicita1|l20_codigo|l20_edital|l20_anousu', 'Pesquisa', true);
+            js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_liclicita', 'func_liclicita.php?funcao_js=parent.js_mostraliclicita1|l20_codigo|l20_edital|l20_anousu', 'Pesquisa', true);
         } else {
             if (document.form1.si03_licitacao.value != '') {
-                js_OpenJanelaIframe('top.corpo', 'db_iframe_liclicita', 'func_liclicita.php?pesquisa_chave=' + document.form1.si03_licitacao.value + '&funcao_js=parent.js_mostraliclicita', 'Pesquisa', false);
+                js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_liclicita', 'func_liclicita.php?pesquisa_chave=' + document.form1.si03_licitacao.value + '&funcao_js=parent.js_mostraliclicita', 'Pesquisa', false);
             } else {
                 document.form1.l20_codigo.value = '';
             }
@@ -286,7 +309,7 @@ $clrotulo->label("ac16_resumoobjeto");
     }
 
     function js_pesquisa() {
-        js_OpenJanelaIframe('top.corpo', 'db_iframe_apostilamento', 'func_apostilamentonovo.php?funcao_js=parent.js_preenchepesquisa|si03_sequencial', 'Pesquisa', true);
+        js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_apostilamento', 'func_apostilamentonovo.php?funcao_js=parent.js_preenchepesquisa|si03_sequencial', 'Pesquisa', true);
     }
 
     function js_preenchepesquisa(chave) {
@@ -310,7 +333,7 @@ $clrotulo->label("ac16_resumoobjeto");
         if (lMostrar == true) {
 
             var sUrl = 'func_acordonovo.php?funcao_js=parent.js_mostraacordo1|ac16_sequencial|ac16_resumoobjeto|ac16_dataassinatura&iTipoFiltro=4';
-            js_OpenJanelaIframe('top.corpo',
+            js_OpenJanelaIframe('CurrentWindow.corpo',
                 'db_iframe_acordo',
                 sUrl,
                 'Pesquisar Acordo',
@@ -322,7 +345,7 @@ $clrotulo->label("ac16_resumoobjeto");
                 var sUrl = 'func_acordonovo.php?descricao=true&pesquisa_chave=' + $('ac16_sequencial').value +
                     '&funcao_js=parent.js_mostraacordo';
 
-                js_OpenJanelaIframe('top.corpo',
+                js_OpenJanelaIframe('CurrentWindow.corpo',
                     'db_iframe_acordo',
                     sUrl,
                     'Pesquisar Acordo',
@@ -415,6 +438,9 @@ $clrotulo->label("ac16_resumoobjeto");
             sizeLabelItens = sizeLabelItens + "px";
             document.getElementById('body-container-oGridItens').style.height = sizeLabelItens;
 
+        } else {
+            document.getElementById('body-container-oGridItens').style.height = "340px";
+
         }
 
 
@@ -505,6 +531,7 @@ $clrotulo->label("ac16_resumoobjeto");
             oDadosHint.sText = sTextEvent;
             aDadosHintGrid.push(oDadosHint);
 
+
             if (oItem.dotacoesoriginal == undefined) {
 
                 oItem.dotacoesoriginal = new Array();
@@ -530,7 +557,7 @@ $clrotulo->label("ac16_resumoobjeto");
             oDBHint.setText(oHint.sText);
             oDBHint.setShowEvents(aEventsIn);
             oDBHint.setHideEvents(aEventsOut);
-            oDBHint.setPosition('B', 'L');
+            //oDBHint.setPosition('B', 'L');
             oDBHint.setUseMouse(true);
             oDBHint.make($(oHint.idLinha), 2);
         });
@@ -603,16 +630,16 @@ $clrotulo->label("ac16_resumoobjeto");
         windowDotacaoItem = new windowAux('wndDotacoesItem', 'Dotações Item', 430, 380);
 
         var sContent = "<div class=\"subcontainer\">";
-        sContent += "<fieldset><legend>Adicionar Dotação</legend>";
+        sContent += "<fieldset><legend>Adicionar Dotações</legend>";
         sContent += "  <table>";
         sContent += "   <tr>";
         sContent += "     <td>";
         sContent += "     <a href='#' class='dbancora' style='text-decoration: underline;'";
-        sContent += "       onclick='pesquisao47_coddot(true);'><b>Dotação:</b></a>";
+        sContent += "       onclick='pesquisao47_coddot(true);'><b>Dotações:</b></a>";
         sContent += "     </td>";
         sContent += "     <td id='inputdotacao'></td>";
         sContent += "     <td>";
-        sContent += "      <b>Saldo Dotação:</b>";
+        sContent += "      <b>Saldo Dotações:</b>";
         sContent += "     </td>";
         sContent += "     <td id='inputsaldodotacao'></td>";
         sContent += "   </tr>";
@@ -664,8 +691,8 @@ $clrotulo->label("ac16_resumoobjeto");
         oMessageBoard.show();
         oGridDotacoes = new DBGrid('gridDotacoes');
         oGridDotacoes.nameInstance = 'oGridDotacoes';
-        oGridDotacoes.setCellWidth(['20% !important', '60% !important', '20% !important']);
-        oGridDotacoes.setHeader(["Dotação", "Valor", "&nbsp;"]);
+        oGridDotacoes.setCellWidth(['20%', '60%', '20%']);
+        oGridDotacoes.setHeader(["Dotações", "Valor", "&nbsp;"]);
         oGridDotacoes.setCellAlign(["center", "right", "Center"]);
         oGridDotacoes.setHeight(100);
         oGridDotacoes.hasTotalizador = true;
@@ -713,7 +740,7 @@ $clrotulo->label("ac16_resumoobjeto");
     }
 
     /**
-     * Atualiza a informação das dotações do item
+     * Atualiza a informaï¿½ï¿½o das dotações do item
      */
     function atualizarItemDotacao(iLinha, iDotacao, oValor) {
 
@@ -746,7 +773,7 @@ $clrotulo->label("ac16_resumoobjeto");
      */
     function removerDotacao(iLinha, iDotacao) {
 
-        if (confirm("Remover dotação do item?")) {
+        if (confirm("Remover dotações do item?")) {
 
             aItensPosicao[iLinha].dotacoes.splice(iDotacao, 1);
             preencheGridDotacoes(iLinha);
@@ -757,22 +784,12 @@ $clrotulo->label("ac16_resumoobjeto");
 
         if (oTxtDotacao.getValue() == "") {
 
-            alert("Campo dotação é de preenchimento obrigatório.");
+            alert("Campo dotações é de preenchimento obrigatário.");
             js_pesquisao47_coddot(true);
             return false;
         }
 
         var nValor = js_strToFloat(oTxtValorDotacao.getValue());
-
-        /**
-         * Removido validacao de inclusao de dotacao zerada conforme solicitado na OC 3855
-         */
-        /*if (nValor == 0) {
-
-            alert('Campo Valor é de preenchimento obrigatório.');
-            $('oTxtValorDotacao').focus();
-            return false;
-        }*/
 
         var oDotacao = {
             dotacao: oTxtDotacao.getValue(),
@@ -803,7 +820,7 @@ $clrotulo->label("ac16_resumoobjeto");
 
             if (oDotacaoItem.dotacao == oDotacao.dotacao) {
                 lInserir = false;
-                alert("Dotação já incluida para o item.");
+                alert("Dotações já incluida para o item.");
             }
         });
 
@@ -815,6 +832,7 @@ $clrotulo->label("ac16_resumoobjeto");
         oTxtDotacao.setValue("");
         oTxtSaldoDotacao.setValue("");
         oTxtValorDotacao.setValue("0,00");
+        dotacaoIncluida = true;
         preencheGridDotacoes(iLinha);
     }
 
@@ -844,12 +862,12 @@ $clrotulo->label("ac16_resumoobjeto");
     function mostraSaldo(chave) {
 
         var arq = 'func_saldoorcdotacao.php?o58_coddot=' + chave
-        js_OpenJanelaIframe('top.corpo', 'db_iframe_saldos', arq, 'Saldo da dotação', true);
+        js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_saldos', arq, 'Saldo da dotações', true);
         $('Jandb_iframe_saldos').style.zIndex = '1500000';
     }
 
     /**
-     * calcula os valores da dotação conforme o valor modificado pelo usuario
+     * calcula os valores da dotações conforme o valor modificado pelo usuario
      */
     function salvarInfoDotacoes(iLinha) {
 
@@ -1054,6 +1072,7 @@ $clrotulo->label("ac16_resumoobjeto");
 
         });
 
+        dotacaoIncluida = true;
         return alert('Dotação aplicada aos itens selecionados');
 
 
@@ -1065,22 +1084,26 @@ $clrotulo->label("ac16_resumoobjeto");
         var iSelecionados = [];
 
         /**
-         * @todo incluir aqui todas as validações de campos obrigatórios para o SICOM contratos
+         * @todo incluir aqui todas as validações de campos obrigatários para o SICOM contratos
          */
         if ($("si03_tipoapostila").value == "00") {
             return alert("Obrigatório informar o  tipo de Apostila.");
         }
 
         if ($("si03_numapostilamento").value == "") {
-            return alert("Obrigatório informar o  Numero Seq. Apostila.");
+            return alert("Obrigatário informar o  Numero Seq. Apostila.");
         }
 
         if ($("si03_dataapostila").value == "") {
-            return alert("Obrigatório informar a data da Apostila.");
+            return alert("Obrigatário informar a data da Apostila.");
         }
 
         if ($("si03_descrapostila").value == "") {
-            return alert("Obrigatório informar a descrição da Apostila.");
+            return alert("Obrigatário informar a descrição da Apostila.");
+        }
+
+        if ($("si03_datareferencia").value == "" && document.getElementById("trdatareferencia").style.display != 'none') {
+            return alert("Obrigatório informar a data de Referencia.");
         }
 
         oGridItens.getRows().forEach(function(oRow) {
@@ -1094,13 +1117,14 @@ $clrotulo->label("ac16_resumoobjeto");
         if (Object.keys(oSelecionados).length == 0) {
             return alert('Nenhum item selecionado para apostilar.');
         }
-
         var oApostila = new Object();
         oApostila.dataapostila = $("si03_dataapostila").value;
         oApostila.tipoapostila = $("si03_tipoapostila").value;
-        oApostila.descrapostila = encodeURIComponent(tagString($("si03_descrapostila").value));
+        oApostila.descrapostila = $("si03_descrapostila").value;
         oApostila.tipoalteracaoapostila = $("si03_tipoalteracaoapostila").value;
         oApostila.numapostilamento = $("si03_numapostilamento").value;
+        oApostila.datareferencia = $("si03_datareferencia").value;
+
 
         var oParam = {
             exec: "processarApostilamento",
@@ -1134,6 +1158,8 @@ $clrotulo->label("ac16_resumoobjeto");
             oItemAdicionar.valorapostilado = valorApostiladoReal;
             oItemAdicionar.dtexecucaoinicio = oItem.periodoini;
             oItemAdicionar.dtexecucaofim = oItem.periodofim;
+
+
 
             if (oSelecionados[iIndice] != undefined) {
                 oItemAdicionar.quantidade = js_strToFloat(oSelecionados[iIndice].aCells[5].getValue());
@@ -1180,6 +1206,12 @@ $clrotulo->label("ac16_resumoobjeto");
             oParam.aItens.push(oItemAdicionar);
         });
 
+        if (dotacaoIncluida == false && $("si03_tipoapostila").value == "03") {
+            return alert("Usuário: É necessário a inserção de dotação em no mínimo um item.");
+
+        }
+
+
         if (!lAditar) {
             return false;
         }
@@ -1187,7 +1219,11 @@ $clrotulo->label("ac16_resumoobjeto");
         new AjaxRequest(sUrlRpc, oParam, function(oRetorno, lErro) {
 
                 if (lErro) {
+                    if (oRetorno.datareferencia) {
+                        document.getElementById("trdatareferencia").style.display = 'contents';
+                    }
                     return alert(oRetorno.message.urlDecode());
+
                 }
 
                 alert("Apostilamento realizado com sucesso.");
@@ -1261,6 +1297,8 @@ $clrotulo->label("ac16_resumoobjeto");
         $("si03_descrapostila").value = "";
         $("si03_tipoalteracaoapostila").value = 1;
         $("si03_numapostilamento").value = "";
+        $("si03_datareferencia").value = "";
+        document.getElementById("trdatareferencia").style.display = 'none';
     }
     //js_changeTipoApostila();
     js_pesquisaac16_sequencial(true);

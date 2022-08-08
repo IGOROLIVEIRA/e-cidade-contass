@@ -104,7 +104,7 @@ if(isset($chavepesquisa)){
  }
  $result = $clbaserubricasesocial->sql_record("SELECT e991_rubricas FROM baserubricasesocial WHERE e991_rubricasesocial {$sWhere} AND e991_instit = ".db_getsession('DB_instit')."");
  $aBasesEsocialOutras = db_utils::getColectionByRecord($result);
- $JSONaBasesEsocialOutras = "";
+ $JSONaBasesEsocialOutras = [];
  foreach ($aBasesEsocialOutras as $b) {
    $JSONaBasesEsocialOutras[] = $b->e991_rubricas;
  }

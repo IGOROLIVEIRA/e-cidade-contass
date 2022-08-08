@@ -1,7 +1,7 @@
 <?php
 
-include("../jpgraph.php");
-include("../jpgraph_line.php");
+include(__DIR__ . "/../jpgraph.php");
+include(__DIR__ . "/../jpgraph_line.php");
 
 // create the graph
 $graph= new Graph(400,250,"auto");

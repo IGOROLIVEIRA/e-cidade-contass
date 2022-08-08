@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 
@@ -66,7 +66,7 @@ function js_pesquisa(){
 </head>
 <body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" bgcolor="#cccccc">
 <table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#CCCCCC">
-  <tr> 
+  <tr>
     <td width="360">&nbsp;</td>
     <td width="263">&nbsp;</td>
     <td width="25">&nbsp;</td>
@@ -75,7 +75,7 @@ function js_pesquisa(){
 </table>
 <form name="form1" method="post">
    <table align="center" border="0" cellspacing="0" cellpadding="0" >
-  <tr> 
+  <tr>
     <td >&nbsp;</td>
     <td >&nbsp;</td>
   </tr>
@@ -95,17 +95,17 @@ function js_pesquisa(){
           ?>
         </td>
       </tr>
-  <tr> 
+  <tr>
     <td >&nbsp;</td>
     <td >&nbsp;</td>
   </tr>
-     <tr> 
-       <td align="right" title="<?=$Tr01_regist?>"> 
+     <tr>
+       <td align="right" title="<?=$Tr01_regist?>">
             <?
     			db_ancora($Lr01_regist,'js_pesquisaregistro(true);',2)
     			?>&nbsp;&nbsp;&nbsp;
        </td >
-       <td align="left" > 
+       <td align="left" >
             <?
     			db_input("r01_regist",8,$Ir01_regist,true,'text',4,"onchange='js_pesquisaregistro(false);'")
     			?>
@@ -114,13 +114,13 @@ function js_pesquisa(){
     			?>
        </td>
      </tr>
-<!--     <tr> 
-       <td align="right" height="25" title="<?=$Tz01_nome?>"> 
+<!--     <tr>
+       <td align="right" height="25" title="<?=$Tz01_nome?>">
 //            <?
 //    			db_ancora($Lz01_nome,'js_mostranomes(true);',4)
 //    			?>&nbsp;&nbsp;&nbsp;
        </td>
-       <td  align="left" height="25"> 
+       <td  align="left" height="25">
 //            <?
   //  			db_input("z01_numcgm",6,$Iz01_numcgm,true,'text',4," onchange='js_mostranomes(false);'")
 //    			?>
@@ -129,23 +129,23 @@ function js_pesquisa(){
 //    			?>
        </td>
      </tr>-->
-  <tr> 
+  <tr>
     <td >&nbsp;</td>
     <td >&nbsp;</td>
   </tr>
-  <tr> 
+  <tr>
     <td >&nbsp;</td>
     <td >&nbsp;</td>
   </tr>
-     <tr> 
+     <tr>
        <td colspan="2" align="center">
        <input onclick="js_pesquisa();"  type="button" value="Imprimir" name="pesquisar">
-      &nbsp;&nbsp;&nbsp; 
+      &nbsp;&nbsp;&nbsp;
      </tr>
    </table>
  </form>
 
-<? 
+<?
  db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
 ?>
 </body>
@@ -154,12 +154,12 @@ function js_pesquisa(){
 
 function js_pesquisaregistro(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframepessoal','func_rhpessoal.php?funcao_js=parent.js_mostraregistro1|rh01_regist|z01_nome','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframepessoal','func_rhpessoal.php?funcao_js=parent.js_mostraregistro1|rh01_regist|z01_nome','Pesquisa',true);
   }else{
      if(document.form1.r01_regist.value != ''){
-       js_OpenJanelaIframe('top.corpo','db_iframepessoal','func_rhpessoal.php?pesquisa_chave='+document.form1.r01_regist.value+'&funcao_js=parent.js_mostraregistro','Pesquisa',false);
+       js_OpenJanelaIframe('CurrentWindow.corpo','db_iframepessoal','func_rhpessoal.php?pesquisa_chave='+document.form1.r01_regist.value+'&funcao_js=parent.js_mostraregistro','Pesquisa',false);
      }else{
-       document.form1.z01_nome.value = ''; 
+       document.form1.z01_nome.value = '';
      }
   }
 }

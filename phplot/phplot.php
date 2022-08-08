@@ -4952,7 +4952,7 @@ class PHPlot
             // Horizontal plot, or Vertical Plot with all Y > 0: Place X axis on the bottom.
             $this->x_axis_position = $this->plot_min_y;
         } elseif ($this->plot_max_y < 0) {
-            // Vertical plot with all Y < 0, so place the X axis at the top.
+            // Vertical plot with all Y < 0, so place the X axis at the CurrentWindow.
             $this->x_axis_position = $this->plot_max_y;
         } else {
             // Vertical plot range includes Y=0, so place X axis at 0.
@@ -5071,7 +5071,7 @@ class PHPlot
     function ytr($y_world)
     {
         if ($this->yscale_type == 'log') {
-            //minus because GD defines y = 0 at top. doh!
+            //minus because GD defines y = 0 at CurrentWindow. doh!
             $y_pixels =  $this->plot_origin_y - log10($y_world) * $this->yscale ;
         } else {
             $y_pixels =  $this->plot_origin_y - $y_world * $this->yscale ;
@@ -6836,7 +6836,7 @@ class PHPlot
 
         // $y_pos is the bottom of each color box. $yc is the vertical center of the color box or
         // the point shape (if drawn). The text is centered vertically on $yc.
-        // For normal order (top-down), $y_pos starts at the top. For reversed order, at the bottom.
+        // For normal order (top-down), $y_pos starts at the CurrentWindow. For reversed order, at the bottom.
         if ($this->legend_reverse_order) {
             $y_pos = $box_end_y - $v_margin;
             $delta_y = -$dot_height;
@@ -8158,7 +8158,7 @@ class PHPlot
         $prev_col = 0;
         for ($col = 1; $col < $n_columns; $col++) { // 1 extra for X axis artificial column
 
-            // Current data set forms the top. For each point after the first, add 2 points.
+            // Current data set forms the CurrentWindow. For each point after the first, add 2 points.
             $x_prev = $xd[0];
             $y_prev = $yd[0][$col];
             $pts = array($x_prev, $y_prev);  // Bottom left point

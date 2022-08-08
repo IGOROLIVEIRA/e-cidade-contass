@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Público para Gestão Municipal                
- *  Copyright (C) 2014  DBseller Serviços de Informática             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa é software livre; você pode redistribuí-lo e/ou     
- *  modificá-lo sob os termos da Licença Pública Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versão 2 da      
- *  Licença como (a seu critério) qualquer versão mais nova.          
- *                                                                    
- *  Este programa e distribuído na expectativa de ser útil, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implícita de              
- *  COMERCIALIZAÇÃO ou de ADEQUAÇÃO A QUALQUER PROPÓSITO EM           
- *  PARTICULAR. Consulte a Licença Pública Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Você deve ter recebido uma cópia da Licença Pública Geral GNU     
- *  junto com este programa; se não, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Cópia da licença no diretório licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Público para Gestão Municipal
+ *  Copyright (C) 2014  DBseller Serviços de Informática
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa é software livre; você pode redistribuí-lo e/ou
+ *  modificá-lo sob os termos da Licença Pública Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versão 2 da
+ *  Licença como (a seu critério) qualquer versão mais nova.
+ *
+ *  Este programa e distribuído na expectativa de ser útil, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implícita de
+ *  COMERCIALIZAÇÃO ou de ADEQUAÇÃO A QUALQUER PROPÓSITO EM
+ *  PARTICULAR. Consulte a Licença Pública Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Você deve ter recebido uma cópia da Licença Pública Geral GNU
+ *  junto com este programa; se não, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Cópia da licença no diretório licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: empenho
@@ -49,14 +49,14 @@ db_app::load("DBFormCache.js");
 
 <style>
 
-  #e57_codhistdescr, 
-  #e54_codtipodescr, 
+  #e57_codhistdescr,
+  #e54_codtipodescr,
   #e54_codcomdescr {
     width: 400px;
   }
-  #e57_codhist, 
-  #e54_codtipo, 
-  #e54_tipol, 
+  #e57_codhist,
+  #e54_codtipo,
+  #e54_tipol,
   #e54_codcom {
     width: 50px;
   }
@@ -76,7 +76,7 @@ db_app::load("DBFormCache.js");
     <td nowrap title="<?=@$Te54_autori?>">
        <?=@$Le54_autori?>
     </td>
-    <td> 
+    <td>
       <?
        db_input('e54_autori',10,$Ie54_autori,true,'text',3);
        db_input('o58_codele',10,$Ie54_autori,true,'hidden',3);
@@ -87,9 +87,9 @@ db_app::load("DBFormCache.js");
     <td nowrap title="<?=@$Te54_numcgm?>">
     <?
        db_ancora(@$Lz01_nome,"js_pesquisae54_numcgm(true);",isset($emprocesso)&&$emprocesso==true?"3":$db_opcao);
-     ?>        
+     ?>
     </td>
-    <td nowrap="nowrap"> 
+    <td nowrap="nowrap">
       <?
         db_input('e54_numcgm',10,$Ie54_numcgm,true,'text',isset($emprocesso)&&$emprocesso==true?"3":$db_opcao," onchange='js_pesquisae54_numcgm(false);'");
         db_input('z01_nome',48,$Iz01_nome,true,'text',3,'');
@@ -100,14 +100,14 @@ db_app::load("DBFormCache.js");
     <td nowrap title="<?=@$Te54_codcom?>">
        <strong>Tipo de Compra:</strong>
     </td>
-    <td> 
+    <td>
       <?php
-      
+
         if(isset($e54_codcom) && $e54_codcom==''){
           $pc50_descr='';
         }
         if (empty($e54_codcom)) {
-          
+
           $somadata = $clpcparam->sql_record($clpcparam->sql_query_file(db_getsession("DB_instit"),"pc30_tipcom as e54_codcom"));
           if ($clpcparam->numrows>0) {
             db_fieldsmemory($somadata,0);
@@ -115,7 +115,7 @@ db_app::load("DBFormCache.js");
             $e54_codcom = 5;
           }
         }
-        
+
        /*
         * alterado para liberar o campo tipo de compra para alteracao
         */
@@ -128,10 +128,10 @@ db_app::load("DBFormCache.js");
     <td nowrap title="<?=@$Te54_tipol?>">
       <strong>Tipo de Licitação:</strong>
     </td>
-    <td> 
+    <td>
       <?
         if (isset($tipocompra) || isset($e54_codcom)) {
-          
+
           if (isset($e54_codcom) && empty($tipocompra)) {
             $tipocompra=$e54_codcom;
           }
@@ -143,19 +143,19 @@ db_app::load("DBFormCache.js");
             db_selectrecord("e54_tipol",$result,true,isset($emprocesso)&&$emprocesso==true?"1":"1","","","");
             $dop = $db_opcao;
           } else {
-            
+
             $e54_tipol  = '';
             $e54_numerl = '';
             $dop        = '3';
             db_input('e54_tipol',8,$Ie54_tipol,true,'text',3);
-          }  
-        } else {   
-          
+          }
+        } else {
+
           $dop        = '3';
           $e54_tipol  = '';
           $e54_numerl = '';
           db_input('e54_tipol',8,$Ie54_tipol,true,'text',3);
-        }  
+        }
       ?>
       <strong>Número da Licitação:</strong>
       <? db_input('e54_numerl', 7,$Ie54_numerl,true,'text',isset($emprocesso)&&$emprocesso==true?"1":$dop); ?>
@@ -165,7 +165,7 @@ db_app::load("DBFormCache.js");
     <td nowrap title="<?=@$Te54_codtipo?>">
        <strong>Tipo de Empenho:</strong>
     </td>
-    <td> 
+    <td>
       <?
            /*
             * alterado para liberar o campo tipo de empenho para alteracao
@@ -179,19 +179,19 @@ db_app::load("DBFormCache.js");
     <td nowrap title="<?=@$Te57_codhist?>">
        <?=$Le57_codhist?>
     </td>
-    <td> 
+    <td>
       <?
          // caso empparametro.e30_autimportahist=='t' busca o historico da ultima autorização
          $par =  $clempparametro->sql_record($clempparametro->sql_query_file(db_getsession("DB_anousu")));
          if ($clempparametro->numrows>0 && $db_opcao == 1) {
-           
+
            db_fieldsmemory($par,0);
            if ($e30_autimportahist == 't') {
-             
-              $hist = $clempauthist->sql_record("select e57_codhist 
-                                                   from empauthist 
+
+              $hist = $clempauthist->sql_record("select e57_codhist
+                                                   from empauthist
                                              inner join empautoriza on e54_autori=e57_autori
-                                                  where e54_login=".db_getsession("DB_id_usuario")."    
+                                                  where e54_login=".db_getsession("DB_id_usuario")."
                                                order by e57_autori desc limit 1");
              if ($clempauthist->numrows>0) {
                db_fieldsmemory($hist,0);
@@ -207,17 +207,17 @@ db_app::load("DBFormCache.js");
     <td nowrap title="<?=@$Te44_tipo?>">
        <?=$Le44_tipo?>
     </td>
-    <td> 
+    <td>
       <?
         $result  = $clempprestatip->sql_record($clempprestatip->sql_query_file(null,"e44_tipo as tipo,e44_descr,e44_obriga","e44_obriga "));
         $numrows = $clempprestatip->numrows;
         $arr     = array();
         for ($i = 0; $i < $numrows; $i++) {
-          
-          db_fieldsmemory($result,$i);  
+
+          db_fieldsmemory($result,$i);
           if($e44_obriga == 0 && empty($e44_tipo)) {
             $e44_tipo = $tipo;
-          }  
+          }
           $arr[$tipo] = $e44_descr;
         }
         db_select("e44_tipo", $arr, true, 1);
@@ -228,7 +228,7 @@ db_app::load("DBFormCache.js");
     <td nowrap title="<?=@$Te54_destin?>">
        <?=@$Le54_destin?>
     </td>
-    <td> 
+    <td>
       <?
            /*
             * alterado para liberar o campo destino para alteracao
@@ -237,13 +237,13 @@ db_app::load("DBFormCache.js");
       ?>
     </td>
   </tr>
-  
+
   <tr title="Número do processo administrativo (PA). Máximo 15 caractéres.">
     <td nowrap="nowrap">
       <strong>Processo Administrativo (PA):</strong>
     </td>
     <td colspan="3">
-    <?php 
+    <?php
       db_input('e150_numeroprocesso', 61, $Ie150_numeroprocesso, true, 'text', $db_opcao);
     ?>
     </td>
@@ -286,16 +286,16 @@ db_app::load("DBFormCache.js");
 
 <div style="margin-top: 10px;">
 
-  <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" 
-         type="submit" id="db_opcao" 
-         value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" 
+  <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>"
+         type="submit" id="db_opcao"
+         value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>"
          <?=($chavepesquisa==false?"disabled":"")?> onclick="return js_salvaCache();" >
   <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
 
-  
+
   <?if($db_opcao==2){?>
   <input name="novo" type="button" id="novo" value="Nova autorização" onclick="js_nova();" >
-  
+
   <?
   $permissao_lancar = db_permissaomenu(db_getsession("DB_anousu"),398,3489);
   if ($permissao_lancar == "true") {
@@ -308,7 +308,7 @@ db_app::load("DBFormCache.js");
   if ($db_opcao == 1 ){ ?>
   <input name="importar" type="button" id="importar" value="Importar autorização" onclick="js_importar();" >
   <?}?>
-  
+
 </div>
 
 <?if(isset($emprocesso) && $emprocesso == true){?>
@@ -339,25 +339,25 @@ function js_salvaCache(){
 
 function js_pesquisae54_concarpeculiar(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_empautoriza','db_iframe_concarpeculiar',
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_empautoriza','db_iframe_concarpeculiar',
                         'func_concarpeculiar.php?funcao_js=parent.js_mostraconcarpeculiar1|'+
                         'c58_sequencial|c58_descr','Pesquisa',true,'0','1');
   }else{
-     if(document.form1.e54_concarpeculiar.value != ''){ 
-        js_OpenJanelaIframe('top.corpo.iframe_empautoriza', 
-                            'db_iframe_concarpeculiar', 
+     if(document.form1.e54_concarpeculiar.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_empautoriza',
+                            'db_iframe_concarpeculiar',
                             'func_concarpeculiar.php?pesquisa_chave='+document.form1.e54_concarpeculiar.value+
                             '&funcao_js=parent.js_mostraconcarpeculiar','Pesquisa',false);
      }else{
-       document.form1.c58_descr.value = ''; 
+       document.form1.c58_descr.value = '';
      }
   }
 }
 function js_mostraconcarpeculiar(chave,erro){
-  document.form1.c58_descr.value = chave; 
-  if(erro==true){ 
-    document.form1.e54_concarpeculiar.focus(); 
-    document.form1.e54_concarpeculiar.value = ''; 
+  document.form1.c58_descr.value = chave;
+  if(erro==true){
+    document.form1.e54_concarpeculiar.focus();
+    document.form1.e54_concarpeculiar.value = '';
   }
 }
 function js_mostraconcarpeculiar1(chave1,chave2){
@@ -374,10 +374,10 @@ function js_nova(){
 }
 // lançar empenho
 function js_lanc_empenho(){
-  
+
   autori = document.form1.e54_autori.value;
   var iElemento = $F("o58_codele");
-  
+
   parent.location.href="<?=$sUrlEmpenho?>?iElemento="+iElemento+"&chavepesquisa="+autori+"&lanc_emp=true";
 }
 
@@ -397,22 +397,22 @@ function js_reload(valor){
 }
 function js_pesquisae54_numcgm(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_empautoriza','db_iframe_cgm','func_nome.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome','Pesquisa',true,'0','1');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_empautoriza','db_iframe_cgm','func_nome.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome','Pesquisa',true,'0','1');
   }else{
-     if(document.form1.e54_numcgm.value != ''){ 
-        js_OpenJanelaIframe('top.corpo.iframe_empautoriza','db_iframe_cgm','func_nome.php?pesquisa_chave='+document.form1.e54_numcgm.value+'&funcao_js=parent.js_mostracgm','Pesquisa',false);
+     if(document.form1.e54_numcgm.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_empautoriza','db_iframe_cgm','func_nome.php?pesquisa_chave='+document.form1.e54_numcgm.value+'&funcao_js=parent.js_mostracgm','Pesquisa',false);
      }else{
-       document.form1.z01_nome.value = ''; 
+       document.form1.z01_nome.value = '';
      }
   }
 }
 
 function js_mostracgm(erro,chave){
 
-  document.form1.z01_nome.value = chave; 
-  if(erro==true){ 
-    document.form1.e54_numcgm.focus(); 
-    document.form1.e54_numcgm.value = ''; 
+  document.form1.z01_nome.value = chave;
+  if(erro==true){
+    document.form1.e54_numcgm.focus();
+    document.form1.e54_numcgm.value = '';
   } else {
     js_debitosemaberto();
   }
@@ -423,26 +423,26 @@ function js_mostracgm1(chave1,chave2){
   document.form1.e54_numcgm.value = chave1;
   document.form1.z01_nome.value = chave2;
   db_iframe_cgm.hide();
-  
+
   js_debitosemaberto();
 }
 
 function js_pesquisae54_login(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_db_usuarios','func_db_usuarios.php?funcao_js=parent.js_mostradb_usuarios1|id_usuario|nome','Pesquisa',true,'0','1');
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_usuarios','func_db_usuarios.php?funcao_js=parent.js_mostradb_usuarios1|id_usuario|nome','Pesquisa',true,'0','1');
   }else{
-     if(document.form1.e54_login.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_db_usuarios','func_db_usuarios.php?pesquisa_chave='+document.form1.e54_login.value+'&funcao_js=parent.js_mostradb_usuarios','Pesquisa',false);
+     if(document.form1.e54_login.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_usuarios','func_db_usuarios.php?pesquisa_chave='+document.form1.e54_login.value+'&funcao_js=parent.js_mostradb_usuarios','Pesquisa',false);
      }else{
-       document.form1.nome.value = ''; 
+       document.form1.nome.value = '';
      }
   }
 }
 function js_mostradb_usuarios(chave,erro){
-  document.form1.nome.value = chave; 
-  if(erro==true){ 
-    document.form1.e54_login.focus(); 
-    document.form1.e54_login.value = ''; 
+  document.form1.nome.value = chave;
+  if(erro==true){
+    document.form1.e54_login.focus();
+    document.form1.e54_login.value = '';
   }
 }
 function js_mostradb_usuarios1(chave1,chave2){
@@ -452,7 +452,7 @@ function js_mostradb_usuarios1(chave1,chave2){
 }
 
 function js_importar(){
-  js_OpenJanelaIframe('top.corpo.iframe_empautoriza','db_iframe_empautoriza','func_empautoriza.php?funcao_js=parent.js_importar02|e54_autori','Pesquisa',true,'0','1');
+  js_OpenJanelaIframe('CurrentWindow.corpo.iframe_empautoriza','db_iframe_empautoriza','func_empautoriza.php?funcao_js=parent.js_importar02|e54_autori','Pesquisa',true,'0','1');
 }
 function js_importar02(chave){
   db_iframe_empautoriza.hide();
@@ -460,15 +460,15 @@ function js_importar02(chave){
      <?
       echo " location.href = '".basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"])."?autori_importa='+chave";
      ?>
-  }   
+  }
 }
 function js_pesquisa(){
 <?
-  
+
   $iframe="selempautorizaexcluir";
-  
-?>    
-  js_OpenJanelaIframe('top.corpo.iframe_empautoriza','db_iframe_<?=$iframe?>','func_<?=$iframe?>.php?funcao_js=parent.js_preenchepesquisa|e54_autori','Pesquisa',true,'0','1');
+
+?>
+  js_OpenJanelaIframe('CurrentWindow.corpo.iframe_empautoriza','db_iframe_<?=$iframe?>','func_<?=$iframe?>.php?funcao_js=parent.js_preenchepesquisa|e54_autori','Pesquisa',true,'0','1');
 }
 function js_preenchepesquisa(chave){
   db_iframe_<?=$iframe?>.hide();
@@ -486,37 +486,37 @@ function js_debitosemaberto() {
 
   var sUrlRPC = 'com4_notificafornecedor.RPC.php';
   var iCgm    = $('e54_numcgm').value;
-  
+
   if ($('pesquisar')) {
     $('pesquisar').disabled = true;
   }
-  
+
   if ($('novo')) {
     $('novo').disabled = true;
   }
-  
+
   if ($('lancemp')) {
     $('lancemp').disabled = true;
   }
-  
+
   if ($('importar')) {
     $('importar').disabled = true;
   }
-  
+
   $('db_opcao').disabled   = true;
-    
+
   js_divCarregando('Aguarde, verificando débitos em aberto...',"msgBoxDebitosEmAberto");
-    
+
   var oParam        = new Object();
   oParam.sExecucao  = 'debitosEmAberto';
   oParam.iNumCgm    = iCgm;
   oParam.sLiberacao = "A";
-    
+
   var oAjax        = new Ajax.Request (sUrlRPC,
                                        {
-                                          method: 'post',  
+                                          method: 'post',
                                           parameters:'json='+Object.toJSON(oParam),
-                                          onComplete: js_retornodebitosemaberto  
+                                          onComplete: js_retornodebitosemaberto
                                        });
 }
 
@@ -526,90 +526,90 @@ function js_debitosemaberto() {
 function js_retornodebitosemaberto(oAjax) {
 
   js_removeObj("msgBoxDebitosEmAberto");
-                     
+
   var oRetorno                = eval("("+oAjax.responseText+")");
   var iNumCgm                 = new Number(oRetorno.iNumCgm);
   var iParamFornecDeb         = new Number(oRetorno.iParamFornecDeb);
   var iDebitosEmAberto        = new Number(oRetorno.iDebitosEmAberto);
   var lParamGerarNotifDebitos = oRetorno.lParamGerarNotifDebitos;
-  
+
   if (iParamFornecDeb == 1) {
-  
+
     if ($('pesquisar')) {
       $('pesquisar').disabled = false;
     }
-      
+
     if ($('novo')) {
       $('novo').disabled = false;
     }
-      
+
     if ($('lancemp')) {
       $('lancemp').disabled = false;
     }
-      
+
     if ($('importar')) {
       $('importar').disabled = false;
     }
-  
+
     $('db_opcao').disabled   = false;
   } else if (iParamFornecDeb == 2) {
-                              
+
     if (iDebitosEmAberto > 0) {
-    
+
       var sMensagem  = 'O fornecedor '+ iNumCgm +' possui débitos em aberto.';
           sMensagem += '\n Deseja Notifica-lo?';
-      if (confirm(sMensagem)) {                                            
+      if (confirm(sMensagem)) {
         js_NotificacaoDebitos(iNumCgm, iParamFornecDeb, oRetorno.aFormaNotificacao, lParamGerarNotifDebitos, true);
       } else {
         js_NotificacaoDebitos(iNumCgm, iParamFornecDeb, oRetorno.aFormaNotificacao, lParamGerarNotifDebitos, false);
       }
     } else {
-    
+
       if ($('pesquisar')) {
         $('pesquisar').disabled = false;
       }
-        
+
       if ($('novo')) {
         $('novo').disabled = false;
       }
-        
+
       if ($('lancemp')) {
         $('lancemp').disabled = false;
       }
-        
+
       if ($('importar')) {
         $('importar').disabled = false;
       }
-    
+
       $('db_opcao').disabled = false;
     }
   } else if (iParamFornecDeb == 3) {
-                                  
+
     if (iDebitosEmAberto > 0) {
 
       alert('O fornecedor '+ iNumCgm +' possui débitos em aberto.');
-      
+
       js_NotificacaoDebitos(iNumCgm, iParamFornecDeb, oRetorno.aFormaNotificacao, lParamGerarNotifDebitos, true);
-      
+
     } else {
       if ($('pesquisar')) {
         $('pesquisar').disabled = false;
       }
-          
+
       if ($('novo')) {
         $('novo').disabled = false;
       }
-          
+
       if ($('lancemp')) {
         $('lancemp').disabled = false;
       }
-          
+
       if ($('importar')) {
         $('importar').disabled = false;
       }
-      
-      $('db_opcao').disabled = false;        
-    }    
+
+      $('db_opcao').disabled = false;
+    }
   }
 }
 
@@ -625,7 +625,7 @@ function js_NotificacaoDebitos(iNumCgm, iParamFornecDeb, aFormaNotificacao, lGer
     oNotificarDebitos.setCodigoOrigem(iCodigoOrigem);
     oNotificarDebitos.setGerarNotificacaoDebito(lGerarNotificacaoDebito);
     if (lMostrarJanela) {
-    
+
       oNotificarDebitos.setFormaNotificacao(aFormaNotificacao, true);
       if (aFormaNotificacao.length > 0) {
         oNotificarDebitos.show();
@@ -633,41 +633,41 @@ function js_NotificacaoDebitos(iNumCgm, iParamFornecDeb, aFormaNotificacao, lGer
         oNotificarDebitos.setFormaNotificacao(aFormaNotificacao, false);
       }
     } else {
-    
+
       oNotificarDebitos.setGerarNotificacaoDebito(false);
       oNotificarDebitos.setFormaNotificacao(0, false);
     }
-    
+
     /**
      * Retorno do processo de notificação de debitos
      */
     oNotificarDebitos.setCallBack(function (oRetorno) {
-    
+
       if (oRetorno.lFormaNotifEmail) {
         alert(oRetorno.sMessage.urlDecode());
       }
-    
+
       if (oRetorno.lFormaNotifCarta) {
         js_emitircartanotificacao(oRetorno.iCodigoNotificaBloqueioFornecedor);
       }
-    
+
       if ($('pesquisar')) {
         $('pesquisar').disabled = false;
       }
-      
+
       if ($('novo')) {
         $('novo').disabled = false;
       }
-      
+
       if ($('lancemp')) {
         $('lancemp').disabled = false;
       }
-      
+
       if ($('importar')) {
         $('importar').disabled = false;
       }
-      
-      $('db_opcao').disabled = false;  
+
+      $('db_opcao').disabled = false;
       if (iParamFornecDeb == 3) {
         $('e54_numcgm').value = '';
         $('z01_nome').value    = '';

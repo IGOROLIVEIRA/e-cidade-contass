@@ -765,7 +765,7 @@ function js_pesquisaRecHumano(lMostra) {
 
   if (lMostra) {
 
-    js_OpenJanelaIframe('top.corpo',
+    js_OpenJanelaIframe('CurrentWindow.corpo',
                         'db_iframe_rechumano',
                         'func_rechumanoescolanovo.php?funcao_js=parent.js_mostraRecHumano|ed20_i_codigo|z01_nome|z01_numcgm',
                         'Pesquisa Recurso Humano',
@@ -773,7 +773,7 @@ function js_pesquisaRecHumano(lMostra) {
                        );
   } else if ($F('ed20_i_codigo') != '') {
 
-    js_OpenJanelaIframe('top.corpo',
+    js_OpenJanelaIframe('CurrentWindow.corpo',
                         'db_iframe_rechumano',
                         'func_rechumanoescolanovo.php?funcao_js=parent.js_mostraRecHumano1&pesquisa_chave='+$F('ed20_i_codigo'),
                         'Pesquisa Recurso Humano',

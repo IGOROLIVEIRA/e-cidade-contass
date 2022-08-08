@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: empenho
@@ -58,9 +58,9 @@ if (isset($m51_codordem) && $m51_codordem != '') {
 				    z01_munic,
 				    z01_email,
 				    z01_cep
-                from matordem 
-	            inner join cgm          on z01_numcgm   = m51_numcgm 
-		        inner join db_depart    on coddepto     = m51_depto 
+                from matordem
+	            inner join cgm          on z01_numcgm   = m51_numcgm
+		        inner join db_depart    on coddepto     = m51_depto
 			    left join matordemitem on m52_codordem = m51_codordem
                 where m51_codordem = $m51_codordem ";
 
@@ -246,7 +246,7 @@ if (isset($m51_codordem) && $m51_codordem != '') {
                                 </td>
                                 <td colspan='3' align='left'>
                                     <?
-                                    db_textarea("m51_obs", "", "90", $Im51_obs, true, 'text', 3);
+                                    db_textarea("m51_obs", "", "90", $Im51_obs, true, 'text', 3,"onkeyup = 'return js_validaCaracteres(this.value, m51_obs.id)';");
                                     ?>
                                 </td>
 
@@ -365,7 +365,7 @@ if (isset($m51_codordem) && $m51_codordem != '') {
                         <td colspan='3' align='left'>
                             <?
                                     $obs = $m51_obs;
-                                    db_textarea("m51_obs", "", "90", $Im51_obs, true, 'text', 1);
+                                    db_textarea("m51_obs", "", "90", $Im51_obs, true, 'text', 1,"onkeyup = 'return js_validaCaracteres(this.value, m51_obs.id)';");
                             ?>
                         </td>
                     <?
@@ -419,7 +419,7 @@ if (isset($m51_codordem) && $m51_codordem != '') {
         js_OpenJanelaIframe('', 'db_iframe_altcgm', 'prot1_cadcgm002.php?chavepesquisa=' + cgm + '&testanome=true&autoc=true', 'Altera Cgm', true);
     }
 
-    function js_buscavalores() {
+    function js_buscavalores() {  
         obj = itens.document.form1;
 
         let aItens = [];
@@ -475,17 +475,17 @@ if (isset($m51_codordem) && $m51_codordem != '') {
 
         let oParam = new Object();
         let body = document.form1;
-
+        let obs = body.m51_obs.value.toUpperCase();
         oParam.m51_prazoent = body.m51_prazoent.value;
         oParam.m51_codordem = body.m51_codordem.value;
         oParam.coddepto = body.coddepto.value;
         oParam.coddeptodescr = body.coddeptodescr.value;
-        oParam.obs = body.m51_obs.value;
+        oParam.obs = encodeURIComponent(obs.replace('\'',''));
+        oParam.obs = obs.replace('%0A','\n');
         oParam.m51_data = body.m51_data.value;
         oParam.m51_deptoorigem = body.m51_deptoorigem.value;
         oParam.itens = aItens;
         oParam.altera = true;
-
         let oAjax = new Ajax.Request('emp1_ordemcompraaltera002.php', {
             method: 'post',
             parameters: 'json=' + Object.toJSON(oParam),
@@ -515,11 +515,11 @@ if (isset($m51_codordem) && $m51_codordem != '') {
 
     function js_coddepto(mostra) {
         if (mostra == true) {
-            js_OpenJanelaIframe('top.corpo', 'db_iframe_db_depart', 'func_db_depart.php?funcao_js=parent.js_mostracoddepto1|coddepto|descrdepto', 'Pesquisa', true);
+            js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_db_depart', 'func_db_depart.php?funcao_js=parent.js_mostracoddepto1|coddepto|descrdepto', 'Pesquisa', true);
         } else {
             coddepto = document.form1.coddepto.value;
             if (coddepto != "") {
-                js_OpenJanelaIframe('top.corpo', 'db_iframe_db_depart', 'func_db_depart.php?pesquisa_chave=' + coddepto + '&funcao_js=parent.js_mostracoddepto', 'Pesquisa', false);
+                js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_db_depart', 'func_db_depart.php?pesquisa_chave=' + coddepto + '&funcao_js=parent.js_mostracoddepto', 'Pesquisa', false);
             } else {
                 document.form1.descrdepto.value = '';
             }
@@ -539,6 +539,55 @@ if (isset($m51_codordem) && $m51_codordem != '') {
             document.form1.coddepto.value = '';
         }
     }
+
+
+    function js_validaCaracteres(texto, campo) {
+    let temporario = '';
+    temporario = texto;
+    
+    /*Caracteres não permitidos na descrição e complemento material*/
+    let charBuscados = [";", "'", "\"", "\\", "*", ":"];
+    let novoTexto = temporario;
+    let erro = '';
+
+    charBuscados.map(caractere => {
+      if (texto.includes(caractere)) {
+        erro = true;
+      }
+    })
+
+
+    if (window.event) {
+      /* Lança o erro quando a tecla Enter é pressionada. */
+      if (window.event.keyCode == 13) {
+        erro = true;
+        novoTexto = texto.replace(/(\r\n|\r)/g, '');
+      }
+    }
+
+    /* Remove os caracteres contidos no array charBuscados */
+    novoTexto = novoTexto.match(/[^;\*\\\:\"\']/gm);
+
+    for (let cont = 0; cont < novoTexto.length; cont++) {
+
+      /* Remove aspas duplas e simples pelo código, pelo fato de virem de fontes diferentes*/
+
+      if (novoTexto[cont].charCodeAt(0) == 8221 || novoTexto[cont].charCodeAt(0) == 8220 || novoTexto[cont].charCodeAt(0) == 8216) {
+        novoTexto[cont] = '';
+        erro = true;
+      }
+    }
+
+    // if(erro){
+    //   alert('Caractere não permitido para inclusão!');
+    // }
+
+    novoTexto = novoTexto.join('');
+
+      //alert(novoTexto);
+      document.form1.m51_obs.value = novoTexto;
+     
+  }
 </script>
 </body>
 

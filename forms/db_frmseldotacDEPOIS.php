@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //include("dbforms/db_classesgenericas.php");
@@ -45,7 +45,7 @@ db_fieldsmemory($result_servico,0);
 
 $result_valorquant = $clsolicitem->sql_record($clsolicitem->sql_query_file($pc13_codigo,"pc11_vlrun,pc11_quant"));
 if($clsolicitem->numrows>0){
-  db_fieldsmemory($result_valorquant,0);  
+  db_fieldsmemory($result_valorquant,0);
 }
 $result_dotacvlqnt = $clpcdotac->sql_record($clpcdotac->sql_query_file($pc13_codigo,null,null,"sum(pc13_quant) as pc13_quantmax,sum(pc13_valor) as pc13_valormax"));
 if($clpcdotac->numrows>0){
@@ -89,7 +89,7 @@ if($pc13_quantmax==0 || ($pc13_valormax==0 && $pc11_vlrun>0)){
    if(isset($pc13_codele) && trim($pc13_codele)!=""){
      $o56_elemento = $pc13_codele;
    }
-   
+
 ?>
 <center>
 <table height="20" border="0">
@@ -166,7 +166,7 @@ if($pc13_quantmax==0 || ($pc13_valormax==0 && $pc11_vlrun>0)){
     </td>
     <td nowrap>
       <?
-      db_input('pc13_valor',10,$Ipc13_valor,true,'text',3,"onchange='js_calcvalor(this.value,this.name);");      
+      db_input('pc13_valor',10,$Ipc13_valor,true,'text',3,"onchange='js_calcvalor(this.value,this.name);");
       ?>
       <?
       if($db_opcao!=1){
@@ -186,7 +186,7 @@ if($pc13_quantmax==0 || ($pc13_valormax==0 && $pc11_vlrun>0)){
   $result_gerareserva = $clpcparam->sql_record($clpcparam->sql_query_file(db_getsession("DB_instit"),"pc30_gerareserva"));
   db_fieldsmemory($result_gerareserva,0);
   if($pc30_gerareserva=='t'){
-  ?>  
+  ?>
   <tr>
     <td nowrap><strong>Saldo da dotação: </strong></td>
     <td nowrap>
@@ -208,7 +208,7 @@ if($pc13_quantmax==0 || ($pc13_valormax==0 && $pc11_vlrun>0)){
        <?
        if($db_opcao!=1 && isset($pc13_coddot) && isset($pc13_codigo)){
 	 $result_pesq_pcdotac = $clorcreservasol->sql_record($clorcreservasol->sql_query_orcreserva(null,null,"o82_codres","","o82_solicitem=$pc13_codigo and o80_coddot=$pc13_coddot and o80_anousu=$pc13_anousu"));
-	 if($clorcreservasol->numrows>0){	   
+	 if($clorcreservasol->numrows>0){
 	   echo "<strong>Saldo reservado</strong>";
 	 }else{
 	   echo "<strong>Saldo não reservado</strong>";
@@ -220,7 +220,7 @@ if($pc13_quantmax==0 || ($pc13_valormax==0 && $pc11_vlrun>0)){
   <?
   }
   ?>
-  
+
 </table>
 <center>
 <table width="100%" height="20" border="0">
@@ -273,10 +273,10 @@ function js_pesquisapc13_coddot(mostra){
   qry+= '&retornadepart=true';
   if(mostra==true){
     qry+= '&funcao_js=parent.js_mostraorcdotacao1|o58_coddot';
-    js_OpenJanelaIframe('top.corpo','db_iframe_orcdotacao','func_permorcdotacao.php?'+qry,'Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_orcdotacao','func_permorcdotacao.php?'+qry,'Pesquisa',true);
   }else{
-    qry+= '&pesquisa_chave='+document.form1.pc13_coddot; 
-    js_OpenJanelaIframe('top.corpo','db_iframe_orcdotacao','func_permorcdotacao.php?'+qry+'&funcao_js=parent.js_mostraorcdotacao','Pesquisa',false);
+    qry+= '&pesquisa_chave='+document.form1.pc13_coddot;
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_orcdotacao','func_permorcdotacao.php?'+qry+'&funcao_js=parent.js_mostraorcdotacao','Pesquisa',false);
   }
 }
 function js_mostraorcdotacao1(chave1,chave2){
@@ -292,7 +292,7 @@ function js_mostraorcdotacao(chave1){
 }
 function js_pesquisapc13_depto(){
   if(document.form1.pc13_depto.value != ''){
-     js_OpenJanelaIframe('top.corpo','db_iframe_depart','func_db_depart.php?pesquisa_chave='+document.form1.pc13_depto.value+'&funcao_js=parent.lanc_dotac.js_mostradb_depart','Pesquisa',false,'0','1','790','405');
+     js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_depart','func_db_depart.php?pesquisa_chave='+document.form1.pc13_depto.value+'&funcao_js=parent.lanc_dotac.js_mostradb_depart','Pesquisa',false,'0','1','790','405');
   }else{
     document.form1.descrdepto.value = '';
   }

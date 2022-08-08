@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once ("libs/db_stdlib.php");
@@ -52,7 +52,7 @@ $clrotulo->label("la54_i_codigo");
 $clrotulo->label("la54_i_compmes");
 $clrotulo->label("la54_i_compano");
 
-$sSql      = $oDaodbconfig->sql_query_file(db_getsession("DB_instit") ,"nomeinst as snomedepart,cgc as cnpj"); 
+$sSql      = $oDaodbconfig->sql_query_file(db_getsession("DB_instit") ,"nomeinst as snomedepart,cgc as cnpj");
 $resConfig = $oDaodbconfig->sql_record($sSql);
 db_fieldsmemory ($resConfig, 0);
 
@@ -100,7 +100,7 @@ if ($oSauConfig != false) {
                         $arr_tipo = array ("02" => "Individual", "01" => "Consolidado");
                         db_select('sTipo', $arr_tipo, true, 4);
                       ?>
-                    </td>  
+                    </td>
                   </tr>
                   <tr>
                     <td colspan="2">
@@ -113,11 +113,11 @@ if ($oSauConfig != false) {
                                 db_ancora("<b>Competencia:</b>", "js_pesquisala54_i_codigo(true);", $db_opcao);
                               ?>
                             </td>
-                            <td colspan="3"> 
+                            <td colspan="3">
                               <?
                                 db_input('linhas', 5, @$Ilinhas, true, 'hidden', $db_opcao, "");
                                 db_input('la54_i_codigo', 2, @$Ila53_i_codigo, true, 'hidden', 3, "");
-                                db_input('la54_i_compmes', 2, @$Ila54_i_compmes, true, 'text', 3, 
+                                db_input('la54_i_compmes', 2, @$Ila54_i_compmes, true, 'text', 3,
                                           'oncange="js_trocaext(this.value)"');
                                 db_input('la54_i_compano', 4, @$Ila54_i_compano, true, 'text', 3, "");
                               ?>
@@ -127,8 +127,8 @@ if ($oSauConfig != false) {
                             <td nowrap title="<?=@$Tla54_d_dataini?>">
                               <b>Período de Fechamento :</b>
                             </td>
-                            <td> 
-                          <? 
+                            <td>
+                          <?
                           db_inputdata('la54_d_ini', @$la54_d_ini_dia, @$la54_d_ini_mes, @$la54_d_ini_ano, true, 'text',
                                        3
                                       );
@@ -168,7 +168,7 @@ if ($oSauConfig != false) {
                         ?>
                       </fieldset>
                     </td>
-                  </tr>  
+                  </tr>
                   <tr>
                     <td colspan="3">
                       <fieldset>
@@ -221,12 +221,12 @@ if ($oSauConfig != false) {
                          </tr>
                          <tr>
                            <td><b>Orgão:</b></td>
-                           <td> 
+                           <td>
                              <input name="orgao" id="orgMunicipal" type="radio" value="1" checked >Municipal
                              <br>
                              <input name="orgao" id="orgEstadual" type="radio" value="2">Estadual
                            </td>
-                         </tr>  
+                         </tr>
                        </table>
                      </fieldset>
                    </td>
@@ -241,7 +241,7 @@ if ($oSauConfig != false) {
                              <td>
                                PA
                                <?
-                                 db_input('sNomeArquivo', 8, @$sNomeArquivo, true, 'text', $db_opcao, "", "", "", "", 
+                                 db_input('sNomeArquivo', 8, @$sNomeArquivo, true, 'text', $db_opcao, "", "", "", "",
                                           8
                                          );
                                ?>
@@ -254,8 +254,8 @@ if ($oSauConfig != false) {
                    </tr>
                  </table>
                </fieldset>
-               <input name="gerararquivo" type="submit" id="arquivo" <?=$desabilita?> value="Gerar Arquivo" 
-                      onclick="return js_listLaboratorios()"> 
+               <input name="gerararquivo" type="submit" id="arquivo" <?=$desabilita?> value="Gerar Arquivo"
+                      onclick="return js_listLaboratorios()">
                <input name="recibo" type="submit" id="recibo" value="Gerar Recibo" disabled onclick='js_recibo();'>
              </form>
            </center>
@@ -276,7 +276,7 @@ if ($oSauConfig != false) {
                 db_getsession ("DB_id_usuario"),
                 db_getsession ("DB_modulo"),
                 db_getsession ("DB_anousu"),
-                db_getsession ("DB_instit") 
+                db_getsession ("DB_instit")
                );
      ?>
   </body>
@@ -285,12 +285,12 @@ if ($oSauConfig != false) {
 <?
   if (isset($la54_i_compmes)) {
     echo "document.getElementById('nomeExtencao').innerHTML = js_nomeMes($la54_i_compmes,1);";
-  } else { 
+  } else {
     echo "document.getElementById('nomeExtencao').innerHTML = js_nomeMes(".date("m",db_getsession("DB_datausu")).",1);";
   }
   if (isset($orgao) && $orgao == 2) {
-    echo "$('orgEstadual').checked = true;";  
-  } else { 
+    echo "$('orgEstadual').checked = true;";
+  } else {
     echo "$('orgMunicipal').checked = true;";
   }
 ?>
@@ -312,7 +312,7 @@ if ($oSauConfig != false) {
 
   function js_pesquisala54_i_codigo(mostra) {
 
-      js_OpenJanelaIframe('top.corpo','db_iframe_lab_fechamento',
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_lab_fechamento',
                           'func_lab_fechamento.php?'
                           +'funcao_js=parent.js_mostralab_fechamento1|la54_i_compmes|la54_i_compano|la54_i_codigo|'
                           +'la54_d_ini|la54_d_fim|la54_i_financiamento|sd65_c_nome','Pesquisa',true);
@@ -346,7 +346,7 @@ function js_mostralab_fechamento1(chave1, chave2, chave3, ini, fim, iFinanciamen
 }
 function js_pesquisa() {
 
-  js_OpenJanelaIframe('top.corpo',
+  js_OpenJanelaIframe('CurrentWindow.corpo',
                       'db_iframe_sau_fechapront',
                       'func_sau_fechapront.php?funcao_js=parent.js_preenchepesquisa|sd98_i_codigo',
                       'Pesquisa',true);
@@ -388,11 +388,11 @@ function js_nomeMes(iNumero, iTipo) {
     case 7 : aNome[0] = 'julho';
              aNome[1] = 'JUL';
              break;
-             
+
     case 8 : aNome[0] = 'agosto';
              aNome[1] = 'AGO';
              break;
-             
+
     case 9 : aNome[0] = 'setembro';
              aNome[1] = 'SET';
              break;
@@ -411,7 +411,7 @@ function js_nomeMes(iNumero, iTipo) {
   default:
     return '';
   }
-  return aNome[iTipo]; 
+  return aNome[iTipo];
 }
 </script>
 <?
@@ -438,7 +438,7 @@ function js_nomeMes(iNumero, iTipo) {
     $sErro                 = "Erro ao selecionar registros. <p>Comunique o adminstrador. <br> $sSql;";
     $rsProducao            = pg_query($sSql) or die($sErro);
     $iLinhasProducao       = pg_num_rows($rsProducao);
-    
+
     if ($iLinhasProducao == 0) {
       $iBpa = -1;
     } else {
@@ -453,7 +453,7 @@ function js_nomeMes(iNumero, iTipo) {
 
       /* Parte Generica */
       $oCabecalho  = db_utils::fieldsmemory($rsCabecalho, 0);
-      $cbc_smt_vrf = $oCabecalho->cbc_smt_vrf;  
+      $cbc_smt_vrf = $oCabecalho->cbc_smt_vrf;
       $iBpa        = geraArquivoBPA($oDados, $rsCabecalho, $rsProducao, true, $pont);
 
     }
@@ -466,7 +466,7 @@ function js_nomeMes(iNumero, iTipo) {
       $cllab_bpamagnetico->la55_d_data       = $dHoje;
       $cllab_bpamagnetico->la55_c_hora       = date("H:i");
       $cllab_bpamagnetico->la55_t_arquivo    = $pont;
-      $oidgrava                              = db_geraArquivoOidfarmacia($pont, "", 1, $conn); 
+      $oidgrava                              = db_geraArquivoOidfarmacia($pont, "", 1, $conn);
       $cllab_bpamagnetico->la55_o_arquivo    = $oidgrava;
       $cllab_bpamagnetico->incluir ("");
       db_fim_transacao ();
@@ -479,14 +479,14 @@ function js_nomeMes(iNumero, iTipo) {
           <script>
             document.form1.recibo.disabled= false;
             function js_recibo() {
-                
+
               oF=document.form1;
               jan = window.open('sau2_recibobpa001.php?iLab=1&linhas=<?=$iLinhasProducao?>&sd97_i_compmes='+
                                 oF.la54_i_compmes.value +'&iBpa=<?=$iBpa?>'+
-                                '&sNomeorg='+ $('snomedepart').value + '&sSigla='+ $('sSigla').value + 
+                                '&sNomeorg='+ $('snomedepart').value + '&sSigla='+ $('sSigla').value +
                                 '&iOrgao=' + <?=$orgao?> + '&sNomearq='+ $('sNomeArquivo').value +
-                                '&iCnpj=' + $('cnpj').value + '&sDestino=' + $('sDestino').value + 
-                                '&iCntrl=<?=$cbc_smt_vrf?>' + 
+                                '&iCnpj=' + $('cnpj').value + '&sDestino=' + $('sDestino').value +
+                                '&iCntrl=<?=$cbc_smt_vrf?>' +
                                 '&sd97_i_compano='+oF.la54_i_compano.value,
                                 '',
                                 'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+
@@ -512,10 +512,10 @@ function js_nomeMes(iNumero, iTipo) {
 
 /**
  * Função para descobrir o laboratorio que o usuario esta logado
- * @return inteiro Codigo do laboratorio logado 
+ * @return inteiro Codigo do laboratorio logado
  */
 function laboratorioLogado() {
-  
+
   require_once('libs/db_utils.php');
   $iUsuario        = db_getsession('DB_id_usuario');
   $iDepto          = db_getsession('DB_coddepto');
@@ -535,7 +535,7 @@ function laboratorioLogado() {
   }
   $oLab = db_utils::getColectionByRecord($rResult);
   return $oLab[0]->la02_i_codigo;
-  
+
 }
 
 ?>

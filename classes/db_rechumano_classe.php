@@ -249,14 +249,8 @@ class cl_rechumano {
      if($this->ed20_i_codigoinep == null ){ 
        $this->ed20_i_codigoinep = "null";
      }
-     if($this->ed20_i_pais == null ){ 
-       $this->erro_sql = " Campo País nao Informado.";
-       $this->erro_campo = "ed20_i_pais";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->ed20_i_pais == null || $this->ed20_i_pais == " "){ 
+      $this->ed20_i_pais = 10;
      }
      if($this->ed20_i_tiposervidor == null ){ 
        $this->erro_sql = " Campo Servidor da Prefeitura nao Informado.";
@@ -387,7 +381,7 @@ class cl_rechumano {
                                ,$this->ed20_i_censocartorio 
                                ,$this->ed20_i_zonaresidencia
                       )";
-     $result = db_query($sql); 
+     $result = db_query($sql);
      if($result==false){ 
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){
@@ -921,7 +915,7 @@ class cl_rechumano {
    function sql_query ( $ed20_i_codigo=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
-       $campos_sql = split("#",$campos);
+       $campos_sql = explode("#",$campos);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -977,7 +971,7 @@ class cl_rechumano {
      $sql .= $sql2;
      if($ordem != null ){
        $sql .= " order by ";
-       $campos_sql = split("#",$ordem);
+       $campos_sql = explode("#",$ordem);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -992,7 +986,7 @@ class cl_rechumano {
    function sql_query_file ( $ed20_i_codigo=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
-       $campos_sql = split("#",$campos);
+       $campos_sql = explode("#",$campos);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -1013,7 +1007,7 @@ class cl_rechumano {
      $sql .= $sql2;
      if($ordem != null ){
        $sql .= " order by ";
-       $campos_sql = split("#",$ordem);
+       $campos_sql = explode("#",$ordem);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -1025,7 +1019,7 @@ class cl_rechumano {
   function sql_query_escola ( $ed20_i_codigo=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
-       $campos_sql = split("#",$campos);
+       $campos_sql = explode("#",$campos);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -1090,7 +1084,7 @@ class cl_rechumano {
      $sql .= $sql2;
      if($ordem != null ){
        $sql .= " order by ";
-       $campos_sql = split("#",$ordem);
+       $campos_sql = explode("#",$ordem);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -1102,7 +1096,7 @@ class cl_rechumano {
 function sql_query_censo ( $ed20_i_codigo=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
-       $campos_sql = split("#",$campos);
+       $campos_sql = explode("#",$campos);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -1167,7 +1161,7 @@ function sql_query_censo ( $ed20_i_codigo=null,$campos="*",$ordem=null,$dbwhere=
      $sql .= $sql2;
      if($ordem != null ){
        $sql .= " order by ";
-       $campos_sql = split("#",$ordem);
+       $campos_sql = explode("#",$ordem);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -1182,7 +1176,7 @@ function sql_query_censo ( $ed20_i_codigo=null,$campos="*",$ordem=null,$dbwhere=
     $sSql = 'select ';
     if ($sCampos != '*') {
 
-      $sCamposSql = split('#', $sCampos);
+      $sCamposSql = explode('#', $sCampos);
       $sVirgula   = '';
       for ($iCont = 0; $iCont < sizeof($sCamposSql); $iCont++){
 
@@ -1240,7 +1234,7 @@ function sql_query_censo ( $ed20_i_codigo=null,$campos="*",$ordem=null,$dbwhere=
     if ($sOrdem != null) {
 
       $sSql      .= ' order by ';
-      $sCamposSql = split('#', $sOrdem);
+      $sCamposSql = explode('#', $sOrdem);
       $sVirgula   = '';
       for ($iCont = 0; $iCont < sizeof($sCamposSql); $iCont++) {
 
@@ -1259,7 +1253,7 @@ function sql_query_censo ( $ed20_i_codigo=null,$campos="*",$ordem=null,$dbwhere=
     $sSql = 'select ';
     if ($sCampos != '*') {
 
-      $sCamposSql = split('#', $sCampos);
+      $sCamposSql = explode('#', $sCampos);
       $sVirgula   = '';
       for ($iCont = 0; $iCont < sizeof($sCamposSql); $iCont++){
 
@@ -1295,7 +1289,7 @@ function sql_query_censo ( $ed20_i_codigo=null,$campos="*",$ordem=null,$dbwhere=
     if ($sOrdem != null) {
 
       $sSql      .= ' order by ';
-      $sCamposSql = split('#', $sOrdem);
+      $sCamposSql = explode('#', $sOrdem);
       $sVirgula   = '';
       for ($iCont = 0; $iCont < sizeof($sCamposSql); $iCont++) {
 
@@ -1313,7 +1307,7 @@ function sql_query_censo ( $ed20_i_codigo=null,$campos="*",$ordem=null,$dbwhere=
    function sql_query_atolegal ( $ed20_i_codigo=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
-       $campos_sql = split("#",$campos);
+       $campos_sql = explode("#",$campos);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -1370,7 +1364,7 @@ function sql_query_censo ( $ed20_i_codigo=null,$campos="*",$ordem=null,$dbwhere=
      $sql .= $sql2;
      if($ordem != null ){
        $sql .= " order by ";
-       $campos_sql = split("#",$ordem);
+       $campos_sql = explode("#",$ordem);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -1386,7 +1380,7 @@ function sql_query_censo ( $ed20_i_codigo=null,$campos="*",$ordem=null,$dbwhere=
     $sSql = 'select ';
     if ($sCampos != '*') {
 
-      $sCamposSql = split('#', $sCampos);
+      $sCamposSql = explode('#', $sCampos);
       $sVirgula   = '';
       for ($iCont = 0; $iCont < sizeof($sCamposSql); $iCont++){
 
@@ -1431,7 +1425,7 @@ function sql_query_censo ( $ed20_i_codigo=null,$campos="*",$ordem=null,$dbwhere=
     if ($sOrdem != null) {
 
       $sSql      .= ' order by ';
-      $sCamposSql = split('#', $sOrdem);
+      $sCamposSql = explode('#', $sOrdem);
       $sVirgula   = '';
       for ($iCont = 0; $iCont < sizeof($sCamposSql); $iCont++) {
 
@@ -1454,7 +1448,7 @@ function sql_query_censo ( $ed20_i_codigo=null,$campos="*",$ordem=null,$dbwhere=
     $sSql = 'select ';
     if ($sCampos != '*') {
 
-      $sCamposSql = split('#', $sCampos);
+      $sCamposSql = explode('#', $sCampos);
       $sVirgula   = '';
       for ($iCont = 0; $iCont < sizeof($sCamposSql); $iCont++){
 
@@ -1519,7 +1513,7 @@ function sql_query_censo ( $ed20_i_codigo=null,$campos="*",$ordem=null,$dbwhere=
     if ($sOrdem != null) {
 
       $sSql      .= ' order by ';
-      $sCamposSql = split('#', $sOrdem);
+      $sCamposSql = explode('#', $sOrdem);
       $sVirgula   = '';
       for ($iCont = 0; $iCont < sizeof($sCamposSql); $iCont++) {
 
@@ -1538,7 +1532,7 @@ function sql_query_censo ( $ed20_i_codigo=null,$campos="*",$ordem=null,$dbwhere=
  	  $sql = "select ";
  		if ($campos != "*") {
  			 
-	 		$campos_sql = split("#",$campos);
+	 		$campos_sql = explode("#",$campos);
 	 		$virgula    = "";
 	 		for ($i = 0; $i < sizeof($campos_sql); $i++) {
 	 			
@@ -1571,7 +1565,7 @@ function sql_query_censo ( $ed20_i_codigo=null,$campos="*",$ordem=null,$dbwhere=
  	  if($ordem != null) {
  	  	
  	  	$sql       .= " order by ";
- 	  	$campos_sql = split("#",$ordem);
+ 	  	$campos_sql = explode("#",$ordem);
  	  	$virgula    = "";
  	  	for ($i = 0; $i < sizeof($campos_sql); $i++) {
  	  		
@@ -1650,7 +1644,7 @@ function sql_query_censo ( $ed20_i_codigo=null,$campos="*",$ordem=null,$dbwhere=
 
     if( $campos != "*" ) {
 
-      $campos_sql = split("#",$campos);
+      $campos_sql = explode("#",$campos);
       $virgula    = "";
 
       for( $i = 0; $i < sizeof( $campos_sql ); $i++ ) {
@@ -1689,7 +1683,7 @@ function sql_query_censo ( $ed20_i_codigo=null,$campos="*",$ordem=null,$dbwhere=
     if( $ordem != null ) {
 
       $sql       .= " order by ";
-      $campos_sql = split("#",$ordem);
+      $campos_sql = explode("#",$ordem);
       $virgula    = "";
 
       for( $i = 0; $i < sizeof( $campos_sql ); $i++ ) {

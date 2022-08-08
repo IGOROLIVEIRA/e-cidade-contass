@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: Farmacia
@@ -63,7 +63,7 @@ if (isset($lBuscaCgs)) {
               db_ancora(@$Lfa50_i_cgsund, "js_pesquisafa50_i_cgsund(true);", $iOpcaoCgs);
               ?>
             </td>
-            <td nowrap> 
+            <td nowrap>
               <?
               db_input('fa50_i_cgsund', 10, $Ifa50_i_cgsund, true, 'text', $iOpcaoCgs,
                        'onChange="js_pesquisafa50_i_cgsund(false);"');
@@ -80,10 +80,10 @@ if (isset($lBuscaCgs)) {
 
               // Tipo de registro (cadastro ou acompanhamento)
               db_input('fa50_i_tipo', 10, $Ifa50_i_codigo, true, 'hidden', 3, '');
-              
+
               // Modulo que foi executado a rotina
-              // 1 = Modulo Farmacia 
-              // 2 = Modulo Hiperdia 
+              // 1 = Modulo Farmacia
+              // 2 = Modulo Hiperdia
               db_input('iModulo', 10, $Ifa50_i_cgsund, true, 'hidden', 3, '');
               ?>
             </td>
@@ -95,14 +95,14 @@ if (isset($lBuscaCgs)) {
             <td nowrap>
               <?
               if (!isset($s152_d_dataconsulta)) {
-                
+
                 $aDataAtual = explode('/', date('d/m/Y', db_getsession('DB_datausu')));
                 $s152_d_dataconsulta_dia = $aDataAtual[0];
                 $s152_d_dataconsulta_mes = $aDataAtual[1];
                 $s152_d_dataconsulta_ano = $aDataAtual[2];
-          
+
               }
-              db_inputdata('s152_d_dataconsulta', @$s152_d_dataconsulta_dia, @$s152_d_dataconsulta_mes, 
+              db_inputdata('s152_d_dataconsulta', @$s152_d_dataconsulta_dia, @$s152_d_dataconsulta_mes,
                            @$s152_d_dataconsulta_ano, true, 'text', $db_opcao, ""
                           );
               ?>
@@ -130,7 +130,7 @@ if (isset($lBuscaCgs)) {
             <td nowrap title="<?=@$Ts152_i_pressaosistolica?>">
                <?=@$Ls152_i_pressaosistolica?>
             </td>
-            <td> 
+            <td>
               <?
               db_input('s152_i_pressaosistolica', 3, $Is152_i_pressaosistolica, true, 'text', $db_opcao, "");
               ?>
@@ -140,7 +140,7 @@ if (isset($lBuscaCgs)) {
             <td nowrap title="<?=@$Ts152_i_pressaodiastolica?>">
               <?=@$Ls152_i_pressaodiastolica?>
             </td>
-            <td> 
+            <td>
               <?
               db_input('s152_i_pressaodiastolica', 3, $Is152_i_pressaodiastolica, true, 'text', $db_opcao, "");
               ?>
@@ -207,7 +207,7 @@ if (isset($lBuscaCgs)) {
         <table>
           <tr>
             <td colspan="2">
-              <input type="checkbox" id="ckNaoMedicamentoso" name="ckNaoMedicamentoso" value="true" 
+              <input type="checkbox" id="ckNaoMedicamentoso" name="ckNaoMedicamentoso" value="true"
                 onclick="js_naoMedicamentoso();">
               Não Medicamentoso
             </td>
@@ -291,7 +291,7 @@ if (isset($lBuscaCgs)) {
             <td nowrap title="<?=@$Ts152_i_cintura?>">
               <?=@$Ls152_i_cintura?>
             </td>
-            <td> 
+            <td>
               <?
               db_input('s152_i_cintura', 3, $Is152_i_cintura, true, 'text', $db_opcao, "");
               ?>
@@ -299,7 +299,7 @@ if (isset($lBuscaCgs)) {
             <td nowrap title="<?=@$Ts152_n_temperatura?>">
               <?=@$Ls152_n_temperatura?>
             </td>
-            <td> 
+            <td>
               <?
               db_input('s152_n_temperatura', 3, $Is152_n_temperatura, true, 'text', $db_opcao, "");
               ?>
@@ -309,7 +309,7 @@ if (isset($lBuscaCgs)) {
             <td nowrap title="<?=@$Ts152_n_peso?>">
               <?=@$Ls152_n_peso?>
             </td>
-            <td> 
+            <td>
               <?
               db_input('s152_n_peso', 3, $Is152_n_peso, true, 'text', $db_opcao, 'onchange="js_imc();"');
               ?>
@@ -317,7 +317,7 @@ if (isset($lBuscaCgs)) {
             <td nowrap title="<?=@$Ts152_i_altura?>">
               <?=@$Ls152_i_altura?>
             </td>
-            <td> 
+            <td>
               <?
               db_input('s152_i_altura', 3, $Is152_i_altura, true, 'text', $db_opcao, 'onchange="js_imc();"');
               ?>
@@ -380,9 +380,9 @@ if (isset($lBuscaCgs)) {
             <td nowrap title="<?=@$Ts152_i_glicemia?>">
               <?=@$Ls152_i_glicemia?>
             </td>
-            <td> 
+            <td>
               <?
-              db_input('s152_i_glicemia', 3, $Is152_i_glicemia, true, 'text', $db_opcao, 
+              db_input('s152_i_glicemia', 3, $Is152_i_glicemia, true, 'text', $db_opcao,
                        ' onkeypress="js_glicemia();" onkeyup="js_glicemia();" '
                       );
               ?>
@@ -410,9 +410,9 @@ if (isset($lBuscaCgs)) {
               db_ancora(@$Lsd03_i_codigo, "js_pesquisaprofissional(true);", $db_opcao);
               ?>
             </td>
-            <td nowrap> 
+            <td nowrap>
               <?
-              db_input('sd03_i_codigo', 10, $Isd03_i_codigo, true, 'text', $db_opcao, 
+              db_input('sd03_i_codigo', 10, $Isd03_i_codigo, true, 'text', $db_opcao,
                        " onchange='js_pesquisaprofissional(false);'"
                       );
               db_input('z01_nome', 50, '', true, 'text', 3, '');
@@ -425,9 +425,9 @@ if (isset($lBuscaCgs)) {
               db_ancora(@$Lsd04_i_unidade, "js_pesquisaunidade(true);", $db_opcao);
               ?>
             </td>
-            <td nowrap> 
+            <td nowrap>
               <?
-              db_input('sd04_i_unidade', 10, $Isd04_i_unidade, true, 'text', $db_opcao, 
+              db_input('sd04_i_unidade', 10, $Isd04_i_unidade, true, 'text', $db_opcao,
                        " onchange='js_pesquisaunidade(false);'"
                       );
               db_input('sd04_i_codigo', 10, $Isd04_i_codigo, true, 'hidden', $db_opcao, '');
@@ -441,20 +441,20 @@ if (isset($lBuscaCgs)) {
               db_ancora(@$Ls152_i_cbosprofissional, '', 3);
               ?>
             </td>
-            <td nowrap> 
+            <td nowrap>
               <?
               $sSql = $oDaoFarCbos->sql_query_file();
               $rs   = $oDaoFarCbos->sql_record($sSql);
               $aX   = array();
               if ($oDaoFarCbos->numrows > 0) {
-               
+
                 for ($iCont = 0; $iCont < $oDaoFarCbos->numrows; $iCont++) {
-          
+
                   $oDados                     = db_utils::fieldsmemory($rs, $iCont);
                   $aX[$oDados->fa53_i_codigo] = $oDados->fa53_c_descr;
-          
+
                 }
-          
+
               }
               db_select('fa53_i_codigo', $aX, true, $db_opcao);
               ?>
@@ -467,12 +467,12 @@ if (isset($lBuscaCgs)) {
 </table>
 </center>
 
-<input name="<?=($db_opcao == 1 ? 'incluir' : ($db_opcao == 2 || $db_opcao == 22 ? 'alterar' : 'excluir'))?>" 
+<input name="<?=($db_opcao == 1 ? 'incluir' : ($db_opcao == 2 || $db_opcao == 22 ? 'alterar' : 'excluir'))?>"
   type="submit" id="db_opcao" <?=isset($lDesabilita) ? 'disabled' : ''?>
   onclick="<?=$db_opcao != 3 ? 'return js_validaEnvio();' : "return confirm('Deseja excluir este registro?');"?>"
-  value="<?=($db_opcao == 1 ? 'Incluir' : ($db_opcao == 2 || $db_opcao == 22 ? 'Alterar': 'Excluir'))?>" 
+  value="<?=($db_opcao == 1 ? 'Incluir' : ($db_opcao == 2 || $db_opcao == 22 ? 'Alterar': 'Excluir'))?>"
   <?=($db_botao == false ? 'disabled' : '')?>>
-<input name="limpar" type="button" id="limpar" value="Limpar" onclick="js_limpar();" 
+<input name="limpar" type="button" id="limpar" value="Limpar" onclick="js_limpar();"
   <?=isset($lDesabilita) ? 'disabled' : ''?>>
 <input name="fatorrisco" id="fatorrisco" type="button" value="Fatores de Risco" onclick="js_fatoresRisco();">
 <? if ($iModulo == 1) { ?>
@@ -513,9 +513,9 @@ if (isset($opcao)) {
 
 function js_init() {
 
-  if ('<?=isset($s152_i_glicemia) ? $s152_i_glicemia : '' ?>' != '0' 
+  if ('<?=isset($s152_i_glicemia) ? $s152_i_glicemia : '' ?>' != '0'
       && '<?=isset($s152_i_glicemia) ? $s152_i_glicemia : '' ?>' != '') {
-    
+
     if ('<?=isset($opcao) ? $opcao : '' ?>' == 'alterar') {
 
       $('tipo1').disabled = false;
@@ -542,7 +542,7 @@ function js_ajax(oParam, jsRetorno, sUrl) {
   if (sUrl == undefined) {
     sUrl = 'sau4_ambulatorial.RPC.php';
   }
-  var objAjax = new Ajax.Request(sUrl, 
+  var objAjax = new Ajax.Request(sUrl,
                                  {
                                   method: 'post',
                                   asynchronous: false,
@@ -559,7 +559,7 @@ function js_ajax(oParam, jsRetorno, sUrl) {
 }
 
 function js_validaEnvio() {
- 
+
   var iNumSelect = parseInt($F('numMedSelect'), 10);
   var iNumCk     = parseInt($F('numCk'), 10);
   var oSel       = $('aMedicamentos');
@@ -610,7 +610,7 @@ function js_validaEnvio() {
 
   if ($F('s152_i_pressaodiastolica') >= 90) {
 
-    if (!$('statusHipertensao').checked || !$('statusHipertensao').disabled) { 
+    if (!$('statusHipertensao').checked || !$('statusHipertensao').disabled) {
 
       alert('Pressão arterial diastólica maior ou igual a 90. '+
             'O fator de risco Hipertensão deve ser informado para este paciente.'
@@ -705,15 +705,15 @@ function js_validaEnvio() {
 
   var iCodComplic;
   for (var iCont = 0; iCont < iNumCk; iCont++) {
-    
+
     if ($('ckComplic'+iCont).checked) {
 
       iCodComplic = $F('ckComplic'+iCont).split(' ## ')[1];
-      /* se a complicação marcada for Pé diabético ou Amputação por diabetes, 
+      /* se a complicação marcada for Pé diabético ou Amputação por diabetes,
          o paciente deve possuir o fator de risco diabetes */
       if (iCodComplic == 2004 || iCodComplic == 2005) {
 
-        if (!$('statusDiabetes').checked || !$('statusDiabetes').disabled) { 
+        if (!$('statusDiabetes').checked || !$('statusDiabetes').disabled) {
 
           alert('Para marcar as complicacões Pé Diabético ou Amputação por Diabetes, '+
                 'o paciente deve possuir o fator de risco Diabetes tipo 1 ou Diabetes tipo 2.');
@@ -729,35 +729,35 @@ function js_validaEnvio() {
 
   var sCodMedHip;
   if (!$('ckNaoMedicamentoso').checked) {
-    
+
     for (var iCont = 0; iCont < iNumSelect; iCont++) {
-    
+
       sCodMedHip = $F('medHidden'+iCont).split(' ## ')[1];
       if ($F('selMed'+iCont) != 0) { // o medicamento foi selecionado
 
-        /* Se o medicamento  marcado for Hidroclorotiazida, propanolol ou catopril, 
+        /* Se o medicamento  marcado for Hidroclorotiazida, propanolol ou catopril,
            o paciente deve possuir o fator de risco Hipertensão */
         if (sCodMedHip == '01' || sCodMedHip == '02' || sCodMedHip == '03') {
-        
-          if (!$('statusHipertensao').checked || !$('statusHipertensao').disabled) { 
-        
+
+          if (!$('statusHipertensao').checked || !$('statusHipertensao').disabled) {
+
             alert('Para marcar os medicamentos Hidroclorotiazida, Propanolol ou Catopril, '+
                   'o paciente deve possuir o fator de risco Hipertensão Arterial.');
             return false;
-        
+
           }
-        
+
         } else {
 
-        /* O medicamento  marcado foi Glibenclamida ou Metformina, 
+        /* O medicamento  marcado foi Glibenclamida ou Metformina,
            então, o paciente deve possuir o fator de risco Diabetes */
 
-          if (!$('statusDiabetes').checked || !$('statusDiabetes').disabled) { 
-   
+          if (!$('statusDiabetes').checked || !$('statusDiabetes').disabled) {
+
             alert('Para marcar os medicamentos Glibenclamida ou Metformina, '+
                   'o paciente deve possuir o fator de risco Diabetes tipo 1 ou Diabetes tipo 2.');
             return false;
-   
+
           }
 
         }
@@ -767,7 +767,7 @@ function js_validaEnvio() {
         oSel.options[oSel.length - 1].selected = true;
 
       }
-    
+
     }
     if ($F('quantInsulina') != '') {
 
@@ -780,12 +780,12 @@ function js_validaEnvio() {
 
         } else {
 
-          if (!$('statusDiabetes').checked || !$('statusDiabetes').disabled) { 
-   
+          if (!$('statusDiabetes').checked || !$('statusDiabetes').disabled) {
+
             alert('Para marcar o medicamento Insulina, '+
                   'o paciente deve possuir o fator de risco Diabetes tipo 1 ou Diabetes tipo 2.');
             return false;
-   
+
           }
 
           sValor                                 = $F('medInsulina')+' ## '+$F('quantInsulina');
@@ -806,7 +806,7 @@ function js_validaEnvio() {
     }
 
   }
- 
+
   // Habilito os checkbox para que eles sejam enviados, caso estejam marcados
   $('statusDiabetes').disabled    = false;
   $('statusHipertensao').disabled = false;
@@ -825,9 +825,9 @@ function js_verificaHipertensaoDiabetes() {
 
 }
 function js_retornoVerificaHipertensaoDiabetes(oRetorno) {
-  
+
   oRetorno = eval("("+oRetorno.responseText+")");
-  
+
   if (oRetorno.lHipertensao == 'true') {
 
     $('statusHipertensao').checked  = true;
@@ -867,15 +867,15 @@ function js_esvaziaSelect(oSel) {
 }
 
 function js_naoMedicamentoso() {
-  
+
   var iNumSelect = parseInt($F('numMedSelect'), 10);
   if ($('ckNaoMedicamentoso').checked) {
-    
+
     for (var iCont = 0; iCont < iNumSelect; iCont++) {
-    
+
       $('selMed'+iCont).selectedIndex = 0;
       $('selMed'+iCont).onchange      = function () { js_desabilitaSelect(this, 0);};
-    
+
     }
     $('quantInsulina').value                 = '';
     $('quantInsulina').disabled              = true;
@@ -886,9 +886,9 @@ function js_naoMedicamentoso() {
   } else {
 
     for (var iCont = 0; iCont < iNumSelect; iCont++) {
-    
+
       $('selMed'+iCont).onchange = '';
-    
+
     }
     $('quantInsulina').disabled              = false;
     $('quantInsulina').style.backgroundColor = '';
@@ -909,7 +909,7 @@ function js_pesquisaprofissional(mostra) {
 
   } else {
 
-    if (document.form1.sd03_i_codigo.value != '') { 
+    if (document.form1.sd03_i_codigo.value != '') {
 
        js_OpenJanelaIframe('', 'db_iframe_medicos', 'func_medicos.php?prof_ativo=1&pesquisa_chave='+
                            document.form1.sd03_i_codigo.value+
@@ -930,9 +930,9 @@ function js_pesquisaprofissional(mostra) {
 function js_mostraprofissional(chave, erro) {
 
   document.form1.z01_nome.value = chave;
-  if (erro == true) { 
+  if (erro == true) {
 
-    document.form1.sd03_i_codigo.focus(); 
+    document.form1.sd03_i_codigo.focus();
     document.form1.sd03_i_codigo.value = '';
 
   }
@@ -969,7 +969,7 @@ function js_pesquisaunidade(mostra) {
 
   } else {
 
-    if (document.form1.sd04_i_unidade.value != '') { 
+    if (document.form1.sd04_i_unidade.value != '') {
 
        js_OpenJanelaIframe('', 'db_iframe_unidademedicos', 'func_unidademedicos.php?chave_sd04_i_unidade='+
                            document.form1.sd04_i_unidade.value+'&chave_sd04_i_medico='+$F('sd03_i_codigo')+
@@ -1019,7 +1019,7 @@ function js_glicemia() {
     $('tipo2').checked  = false;
 
   }
-  
+
 }
 
 /**** Bloco de funções do grid início */
@@ -1058,7 +1058,7 @@ function js_criaDataGrid() {
   aAligns[8]  = 'center';
   aAligns[9]  = 'center';
   aAligns[10] = 'center';
-  
+
   oDBGrid.setCellAlign(aAligns);
   oDBGrid.show($('grid_acompanhamento'));
   oDBGrid.clearAll(true);
@@ -1068,7 +1068,7 @@ function js_criaDataGrid() {
 }
 
 function js_formataData(dData) {
-  
+
   if(dData == undefined || dData.length != 10) {
     return dData;
   }
@@ -1103,9 +1103,9 @@ function js_retornoGetAcompanhamentos(oRetorno) {
   } else {
 
     for (var iCont = 0; iCont < oRetorno.aAcompanhamentos.length; iCont++) {
-        
+
       var aLinha = new Array();
-  
+
       aLinha[0]  = oRetorno.aAcompanhamentos[iCont].fa50_i_codigo;
       aLinha[1]  = oRetorno.aAcompanhamentos[iCont].s152_i_pressaosistolica;
       aLinha[2]  = oRetorno.aAcompanhamentos[iCont].s152_i_pressaodiastolica;
@@ -1118,17 +1118,17 @@ function js_retornoGetAcompanhamentos(oRetorno) {
       aLinha[9]  = js_formataData(oRetorno.aAcompanhamentos[iCont].s152_d_dataconsulta.urlDecode());
       // somente o registro mais recente pode ser alterado / excluído
       if (oRetorno.aAcompanhamentos[iCont].lEditar == 'true') {
-  
+
         aLinha[10]  = '<span onclick="js_altExc('+oRetorno.aAcompanhamentos[iCont].fa50_i_codigo+', \'alterar\');"';
         aLinha[10] += '  class="estiloLinkAltExc"><b>A</b></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
         aLinha[10] += '<span onclick="js_altExc('+oRetorno.aAcompanhamentos[iCont].fa50_i_codigo+', \'excluir\');"';
         aLinha[10] += ' class="estiloLinkAltExc"><b>E</b></span>';
-  
+
       } else {
-  
+
         aLinha[10]  = '<span><b>A</b></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
         aLinha[10] += '<span><b>E</b></span>';
-  
+
       }
 
       oDBGridAcompanhamento.addRow(aLinha);
@@ -1165,7 +1165,7 @@ function js_fatoresRisco() {
   if ($F('fa50_i_cgsund') != '') {
 
     sChave = 'chavepesquisacgs='+$F('fa50_i_cgsund');
-    js_OpenJanelaIframe('', 'db_iframe_fatoresderisco', 'sau4_consultamedica006.php?'+sChave, 
+    js_OpenJanelaIframe('', 'db_iframe_fatoresderisco', 'sau4_consultamedica006.php?'+sChave,
                         'Fotores de Risco', true
                        );
 
@@ -1182,7 +1182,7 @@ function js_getMedicamentosCadAcomp() {
     var oParam       = new Object();
 	  oParam.exec      = 'getMedicamentosCadAcomp';
 	  oParam.iCadAcomp = $F('fa50_i_codigo');
-    
+
     js_ajax(oParam, 'js_retornoGetMedicamentosCadAcomp');
 
   }
@@ -1205,19 +1205,19 @@ function js_retornoGetMedicamentosCadAcomp(oRetorno) {
 
         $('quantInsulina').value = oRetorno.aMedicamentos[iCont].fa49_n_quantidade.split('.')[0];
         continue;
-        
+
       }
 
       // verifico se é alguns dos medicamentos que a quantidade está nos selects
       for (var iCont2 = 0; iCont2 < iNumSelect; iCont2++) {
-        
+
         // Verifico se o codigo do medicamento que veio da requisição é o mesmo do elemento que estou verificando
         if ($F('medHidden'+iCont2).split(' ## ')[0] == oRetorno.aMedicamentos[iCont].fa49_i_medicamento) {
 
           // procuro nos valores do select, o valor que veio da requisição
           var oSel = $('selMed'+iCont2);
           for (var iCont3 = 0; iCont3 < oSel.length; iCont3++) {
-            
+
             if (oSel.options[iCont3].value == oRetorno.aMedicamentos[iCont].fa49_n_quantidade) {
 
               oSel.selectedIndex = iCont3;
@@ -1241,8 +1241,8 @@ function js_retornoGetMedicamentosCadAcomp(oRetorno) {
 function js_imc() {
 
   if ($F('s152_n_peso') != '' && $F('s152_i_altura') != '' && $F('s152_i_altura') != '0') {
-    
-    var nImc       = parseFloat($F('s152_n_peso')) / 
+
+    var nImc       = parseFloat($F('s152_n_peso')) /
                     ((parseFloat($F('s152_i_altura')) * parseFloat($F('s152_i_altura'))) / 10000);
 
     $('imc').value = nImc.toString().substr(0, 5);
@@ -1256,7 +1256,7 @@ function js_imc() {
     } else {
       $('descrimc').value = 'MUITO ACIMA DO PESO';
     }
-    
+
   }
 
 }
@@ -1311,7 +1311,7 @@ function js_pesquisafa50_i_cgsund (mostra) {
   sQuery = 'func_cgs_und.php?funcao_js=parent.js_mostracgs|z01_i_cgsund|z01_v_nome';
   if (mostra == true) {
 
-    js_OpenJanelaIframe('top.corpo',
+    js_OpenJanelaIframe('CurrentWindow.corpo',
                         'db_iframe_cgs_und',
                         sQuery,
                         'Pesquisa',
@@ -1323,7 +1323,7 @@ function js_pesquisafa50_i_cgsund (mostra) {
 
         sQuery += '&chave_z01_i_cgsund='+$F('fa50_i_cgsund');
         sQuery += '&nao_mostra=true';
-        js_OpenJanelaIframe('top.corpo',
+        js_OpenJanelaIframe('CurrentWindow.corpo',
                             'db_iframe_cgs_und',
                             sQuery,
                             'Pesquisa',

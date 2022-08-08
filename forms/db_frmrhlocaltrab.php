@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 
@@ -39,7 +39,7 @@ $clrotulo->label("cc08_descricao");
     <td nowrap title="<?=@$Trh55_codigo?>">
       <?=@$Lrh55_codigo?>
     </td>
-    <td> 
+    <td>
       <?
       db_input('rh55_codigo',5,$Irh55_codigo,true,'text',3,"")
       ?>
@@ -71,7 +71,7 @@ $clrotulo->label("cc08_descricao");
     <td nowrap title="<?=@$Trh55_descr?>">
       <?=@$Lrh55_descr?>
     </td>
-    <td> 
+    <td>
       <?
       db_input('rh55_descr',40,$Irh55_descr,true,'text',$db_opcao,"")
       ?>
@@ -80,10 +80,10 @@ $clrotulo->label("cc08_descricao");
   <tr>
     <td nowrap title="<?=@$Trh86_criteriorateio?>">
        <?
-       db_ancora(@$Lrh86_criteriorateio,"js_adicionaCentroCusto('');",$db_opcao); 
+       db_ancora(@$Lrh86_criteriorateio,"js_adicionaCentroCusto('');",$db_opcao);
        ?>
     </td>
-    <td> 
+    <td>
       <?
       db_input('rh86_criteriorateio',10,$Irh86_criteriorateio,true,'text',$db_opcao," onchange='js_adicionaCentroCusto(this.value);'");
       db_input('cc08_descricao',30,$Icc08_descricao,true,'text',3,'')
@@ -94,7 +94,7 @@ $clrotulo->label("cc08_descricao");
     <td nowrap title="Inep">
       <strong>Inep: </strong>
     </td>
-    <td> 
+    <td>
       <?
       db_input('rh55_inep',40,$Irh55_inep,true,'text',$db_opcao,"","","","",8)
       ?>
@@ -107,12 +107,12 @@ $clrotulo->label("cc08_descricao");
 </form>
 <script>
 function js_adicionaCentroCusto(iValor) {
- 
+
   var iOrigem  = 3;
   var sUrl     = 'iOrigem=&iNumEmp=&iCodigoDaLinha=0';
   var lMostrar = true;
   if (iValor != "") {
-  
+
      sUrl += "&iCodigoCriterio="+iValor;
      var lMostrar = false;
   }
@@ -126,19 +126,19 @@ function js_adicionaCentroCusto(iValor) {
                       (document.body.scrollWidth-10),
                       (document.body.scrollHeight-100)
                      );
-  
-   
+
+
 }
 
 function js_completaCustos(iCodigo, iCriterio, iDescr) {
-  
+
   $('rh86_criteriorateio').value = iCriterio;
   $('cc08_descricao').value  = iDescr;
   db_iframe_centroCusto.hide();
 
 }
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_rhlocaltrab','func_rhlocaltrab.php?funcao_js=parent.js_preenchepesquisa|rh55_codigo','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhlocaltrab','func_rhlocaltrab.php?funcao_js=parent.js_preenchepesquisa|rh55_codigo','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_rhlocaltrab.hide();
@@ -152,23 +152,23 @@ function js_preenchepesquisa(chave){
 function js_validaCadastro() {
 
   var iValidaCentroCusto= <?=$iTipoControleCustos?>;
-  
+
   if (iValidaCentroCusto == 1 && $F('rh86_criteriorateio') == '') {
-    
+
     if (!confirm('Centro de Custo não informado.\nDeseja Continuar?')) {
       return false;
     }
-    
+
   } else if (iValidaCentroCusto == 2 && $F('rh86_criteriorateio') == '') {
      if (!confirm('Centro de Custo não informado.')) {
        return false;
     }
   }
-  
+
 }
 <?
   if ($db_opcao == 1 || $db_opcao == 2) {
-    echo "\$('db_opcao').onclick = js_validaCadastro;\n";    
+    echo "\$('db_opcao').onclick = js_validaCadastro;\n";
   }
 ?>
 </script>

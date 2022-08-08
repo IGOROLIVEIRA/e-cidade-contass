@@ -1,7 +1,7 @@
 <?php
 // Example of a stock chart
-include ("../jpgraph.php");
-include ("../jpgraph_stock.php");
+include (__DIR__ . "/../jpgraph.php");
+include (__DIR__ . "/../jpgraph_stock.php");
 
 // Data must be in the format : open,close,min,max
 $datay = array(

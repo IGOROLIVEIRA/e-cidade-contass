@@ -180,10 +180,10 @@ db_inputdata('cm07_d_vencimento',@$cm07_d_vencimento_dia,@$cm07_d_vencimento_mes
 <script>
 function js_pesquisacm01_i_funeraria(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_a2','db_iframe_funerarias','func_funerarias.php?funcao_js=parent.js_mostrafunerarias1|cm17_i_funeraria|z01_nome','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_a2','db_iframe_funerarias','func_funerarias.php?funcao_js=parent.js_mostrafunerarias1|cm17_i_funeraria|z01_nome','Pesquisa',true);
   }else{
      if(document.form1.cm01_i_funeraria.value != ''){
-        js_OpenJanelaIframe('top.corpo.iframe_a2','db_iframe_funerarias','func_funerarias.php?pesquisa_chave='+document.form1.cm01_i_funeraria.value+'&funcao_js=parent.js_mostrafunerarias','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_a2','db_iframe_funerarias','func_funerarias.php?pesquisa_chave='+document.form1.cm01_i_funeraria.value+'&funcao_js=parent.js_mostrafunerarias','Pesquisa',false);
      }else{
        document.form1.nome_funeraria.value = '';
      }
@@ -203,10 +203,10 @@ function js_mostrafunerarias1(chave1,chave2){
 }
 function js_pesquisacm01_i_hospital(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_a2','db_iframe_hospitais','func_hospitais.php?funcao_js=parent.js_mostrahospitais1|cm18_i_hospital|z01_nome','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_a2','db_iframe_hospitais','func_hospitais.php?funcao_js=parent.js_mostrahospitais1|cm18_i_hospital|z01_nome','Pesquisa',true);
   }else{
      if(document.form1.cm01_i_hospital.value != ''){
-        js_OpenJanelaIframe('top.corpo.iframe_a2','db_iframe_hospitais','func_hospitais.php?pesquisa_chave='+document.form1.cm01_i_hospital.value+'&funcao_js=parent.js_mostrahospitais','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_a2','db_iframe_hospitais','func_hospitais.php?pesquisa_chave='+document.form1.cm01_i_hospital.value+'&funcao_js=parent.js_mostrahospitais','Pesquisa',false);
      }else{
        document.form1.nome_hospital.value = '';
      }
@@ -227,10 +227,10 @@ function js_mostrahospitais1(chave1,chave2){
 
 function js_pesquisacm01_i_medico(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_a2','db_iframe_medicos','func_legista.php?funcao_js=parent.js_mostramedicos1|cm32_i_codigo|z01_nome','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_a2','db_iframe_medicos','func_legista.php?funcao_js=parent.js_mostramedicos1|cm32_i_codigo|z01_nome','Pesquisa',true);
   }else{
      if(document.form1.cm01_i_medico.value != ''){
-        js_OpenJanelaIframe('top.corpo.iframe_a2','db_iframe_medicos','func_legista.php?pesquisa_chave='+document.form1.cm01_i_medico.value+'&funcao_js=parent.js_mostramedicos','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_a2','db_iframe_medicos','func_legista.php?pesquisa_chave='+document.form1.cm01_i_medico.value+'&funcao_js=parent.js_mostramedicos','Pesquisa',false);
      }else{
        document.form1.cm32_nome.value = '';
      }
@@ -250,10 +250,10 @@ function js_mostramedicos1(chave1,chave2){
 }
 function js_pesquisacm01_i_causa(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_a2','db_iframe_causa','func_causa.php?funcao_js=parent.js_mostracausa1|cm04_i_codigo|cm04_c_descr','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_a2','db_iframe_causa','func_causa.php?funcao_js=parent.js_mostracausa1|cm04_i_codigo|cm04_c_descr','Pesquisa',true);
   }else{
      if(document.form1.cm01_i_causa.value != ''){
-        js_OpenJanelaIframe('top.corpo.iframe_a2','db_iframe_causa','func_causa.php?pesquisa_chave='+document.form1.cm01_i_causa.value+'&funcao_js=parent.js_mostracausa','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_a2','db_iframe_causa','func_causa.php?pesquisa_chave='+document.form1.cm01_i_causa.value+'&funcao_js=parent.js_mostracausa','Pesquisa',false);
      }else{
        document.form1.cm04_c_descr.value = '';
      }
@@ -274,10 +274,10 @@ function js_mostracausa1(chave1,chave2){
 
 function js_pesquisacm01_i_declarante(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_a2','db_iframe_cgm','func_cgm.php?funcao_js=parent.js_mostradeclarante1|z01_numcgm|z01_nome','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_a2','db_iframe_cgm','func_cgm.php?funcao_js=parent.js_mostradeclarante1|z01_numcgm|z01_nome','Pesquisa',true);
   }else{
      if(document.form1.cm01_i_declarante.value != ''){
-        js_OpenJanelaIframe('top.corpo.iframe_a2','db_iframe_cgm','func_cgm.php?pesquisa_chave='+document.form1.cm01_i_declarante.value+'&funcao_js=parent.js_mostradeclarante','Pesquisa',false);
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_a2','db_iframe_cgm','func_cgm.php?pesquisa_chave='+document.form1.cm01_i_declarante.value+'&funcao_js=parent.js_mostradeclarante','Pesquisa',false);
      }else{
        document.form1.z01_nome.value = '';
      }
@@ -306,7 +306,7 @@ function js_mostradeclarante1(chave1,chave2){
 }
 
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo.iframe_a2','db_iframe_sepultamentos','func_sepultamentos.php?funcao_js=parent.js_preenchepesquisa|cm01_i_codigo','Pesquisa',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo.iframe_a2','db_iframe_sepultamentos','func_sepultamentos.php?funcao_js=parent.js_preenchepesquisa|cm01_i_codigo','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_sepultamentos.hide();

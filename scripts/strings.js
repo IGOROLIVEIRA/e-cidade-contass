@@ -1,4 +1,4 @@
-/*
+/**
  * Funções para formatacao e controle de strings
  * @package string.js
  */
@@ -17,7 +17,6 @@ function js_formatar(sString, sType, iPrecisao){
 
   sType = new String(sType);
   sString = new String(sString);
-  //alert(iPrecisao);
   switch (sType.toLowerCase()) {
 
     /*
@@ -30,10 +29,10 @@ function js_formatar(sString, sType, iPrecisao){
       }
       var nValor         = new Number(sString);
       var nValorOriginal = nValor;
+
       if (isNaN(nValor)) {
         return sString;
-      }
-      else {
+      } else {
 
         iPow   = (Math.pow(10,iPrecisao));
         nValor = nValor.toFixed(iPrecisao);
@@ -41,23 +40,38 @@ function js_formatar(sString, sType, iPrecisao){
         nValor = nValor.toFixed(iPrecisao);
         sValor = nValor.toString();
         var iPontoDecimal = sValor.length - iPrecisao;
-        if (iPontoDecimal > 0) {
 
+        if (iPontoDecimal > 0) {
           sValor = sValor.substring(0, iPontoDecimal) + "," + sValor.substring(iPontoDecimal, sValor.length);
         } else if (nValor == 0) {
-          sValor = "0," + "0".repeat(iPrecisao);
+          sValor = "0," + strRepeat("0", iPrecisao);
         } else if(nValor < 10 || (sString.substring(0,3) == "0.0" && iPrecisao > 2)) {
-
           sValor = "0,0" + sValor.substring(iPontoDecimal, sValor.length);
         } else {
           sValor = "0," + sValor.substring(iPontoDecimal, sValor.length);
         }
+
+          /**
+           * Fix evitar que o sinal de - esteja em lugar errado com numeros negativos
+           */
+        if (nValor < 0) {
+            sValor = "-"+sValor.replace("-", "");
+        }
+
         var sReg = /(-?\d+)(\d{3})/;
         aValores = sValor.split(',');
-        while (sReg.test(aValores[0])) {
 
+        while (sReg.test(aValores[0])) {
           aValores[0] = aValores[0].replace(sReg, "$1.$2");
         }
+
+        /**
+         * Quando valor é por exemplo: -0.60, o retorno formatado era -,60. Com este if ele retornará -0,60.
+         */
+        if (aValores[0] == "-") {
+          aValores[0] = "-0";
+        }
+
         return aValores[0]+","+aValores[1];
       }
       break;
@@ -115,16 +129,16 @@ function js_formatar(sString, sType, iPrecisao){
 
           if (iTam > 3 && iTam < 7)
             sCpfCnpj = vr.substr(0, 3) + '.' +
-            vr.substr(3, iTam);
+              vr.substr(3, iTam);
           if (iTam >= 7 && iTam <10)
             sCpfCnpj = vr.substr(0,3) + '.' +
-            vr.substr(3,3) + '.' +
-            vr.substr(6,iTam-6);
+              vr.substr(3,3) + '.' +
+              vr.substr(6,iTam-6);
           if (iTam >= 10 && iTam < 12)
             sCpfCnpj = vr.substr(0,3) + '.' +
-            vr.substr(3,3) + '.' +
-            vr.substr(6,3) + '-' +
-            vr.substr(9,iTam-9);
+              vr.substr(3,3) + '.' +
+              vr.substr(6,3) + '-' +
+              vr.substr(9,iTam-9);
 
         } else if (tamString > 11){
           var vr = new String(sCpfCnpj);
@@ -135,10 +149,10 @@ function js_formatar(sString, sType, iPrecisao){
 
           var iTam = vr.length;
           sCpfCnpj = vr.substr(0,2) + '.' +
-          vr.substr(2,3) + '.' +
-          vr.substr(5,3) + '/' +
-          vr.substr(8,4)+ '-' +
-          vr.substr(12,iTam-12);
+            vr.substr(2,3) + '.' +
+            vr.substr(5,3) + '/' +
+            vr.substr(8,4)+ '-' +
+            vr.substr(12,iTam-12);
 
         }
       }
@@ -157,12 +171,12 @@ function js_stripTags(sString) {
   var sRegExp  = /&[^&]*;/g;
   return        sString.replace(sRegExp,'');
 }
- /*
-  * Converte uma String para Float;
-  * @param string sString string a ser convertida
-  * @author Iuri Guntchnigg
-  * @return float
-  */
+/*
+ * Converte uma String para Float;
+ * @param string sString string a ser convertida
+ * @author Iuri Guntchnigg
+ * @return float
+ */
 function  js_strToFloat(sString){
 
   sRegExp = /\./g;
@@ -226,12 +240,12 @@ String.prototype.countOccurs = function(chr) {
 String.prototype.extenso = function(c){
   var ex = [
     ["zero", "um", "dois", "três", "quatro", "cinco", "seis", "sete", "oito", "nove", "dez", "onze", "doze", "treze",
-     "quatorze", "quinze", "dezesseis", "dezessete", "dezoito", "dezenove"],
+      "quatorze", "quinze", "dezesseis", "dezessete", "dezoito", "dezenove"],
     ["dez", "vinte", "trinta", "quarenta", "cinqüenta", "sessenta", "setenta", "oitenta", "noventa"],
     ["cem", "cento", "duzentos", "trezentos", "quatrocentos", "quinhentos", "seiscentos", "setecentos", "oitocentos", "novecentos"],
     ["mil", "milhão", "bilhão", "trilhão", "quadrilhão", "quintilhão", "sextilhão", "setilhão", "octilhão", "nonilhão",
-     "decilhão", "undecilhão", "dodecilhão", "tredecilhão", "quatrodecilhão", "quindecilhão", "sedecilhão",
-     "septendecilhão", "octencilhão", "nonencilhão"]
+      "decilhão", "undecilhão", "dodecilhão", "tredecilhão", "quatrodecilhão", "quindecilhão", "sedecilhão",
+      "septendecilhão", "octencilhão", "nonencilhão"]
   ];
   var a, n, v, i, n = this.replace(c ? /[^,\d]/g : /\D/g, "").split(","), e = " e ", $ = "real", d = "centavo", sl;
   for(var f = n.length - 1, l, j = -1, r = [], s = [], t = ""; ++j <= f; s = []){
@@ -242,7 +256,7 @@ String.prototype.extenso = function(c){
       i % 100 < 20 && (t += ex[0][i % 100]) ||
       i % 100 + 1 && (t += ex[1][(i % 100 / 10 >> 0) - 1] + (i % 10 ? e + ex[0][i % 10] : ""));
       s.push((i < 100 ? t : !(i % 100) ? ex[2][i == 100 ? 0 : i / 100 >> 0] : (ex[2][i / 100 >> 0] + e + t)) +
-      ((t = l - a - 2) > -1 ? " " + (i > 1 && t > 0 ? ex[3][t].replace("ão", "ões") : ex[3][t]) : ""));
+        ((t = l - a - 2) > -1 ? " " + (i > 1 && t > 0 ? ex[3][t].replace("ão", "ões") : ex[3][t]) : ""));
     }
     a = ((sl = s.length) > 1 ? (a = s.pop(), s.join(" ") + e + a) : s.join("") || ((!j && (n[j + 1] * 1 > 0) || r.length) ? "" : ex[0][0]));
     a && r.push(a + (c ? (" " + (v.join("") * 1 > 1 ? j ? d + "s" : (/0{6,}$/.test(n[0]) ? "de " : "") + $.replace("l", "is") : j ? d : $)) : ""));
@@ -295,23 +309,23 @@ function tagString(sString) {
 
   if (sString!=null) {
     var sStringNova     = sString.replace(/\"/g, "<aspa>");
-        sStringNova     = sStringNova.replace(/@/g, "<arroba>");
-		sStringNova     = sStringNova.replace(/\n/g,"<quebralinha>");
-		sStringNova     = sStringNova.replace(/\'/g,"<aspasimples>");
-		sStringNova     = sStringNova.replace(/\"/g,"<aspa>");
-		sStringNova     = sStringNova.replace(/\?/g,"<interrogacao>");
-		sStringNova     = sStringNova.replace(/%/g,"<percentual>");
-		sStringNova     = sStringNova.replace(/\(/g,"<abreparenteses>");
-		sStringNova     = sStringNova.replace(/\)/g,"<fechaparenteses>");
-		sStringNova     = sStringNova.replace(/\{/g,"<abrechaves>");
-		sStringNova     = sStringNova.replace(/\}/g,"<fechachaves>");
-		sStringNova     = sStringNova.replace(/\[/g,"<abrecolcheltes>");
-		sStringNova     = sStringNova.replace(/\]/g,"<fechacolchetes>");
-		sStringNova     = sStringNova.replace(/\+/g,"<mais>");
-		sStringNova     = sStringNova.replace(/\#/g,"<sustenido>");
-		sStringNova     = sStringNova.replace(/\&/g,"<ecomercial>");
-		sStringNova     = sStringNova.replace(/\t/g,"<tab>");
-		sStringNova     = sStringNova.replace(/\//g,"<barra>");
+    sStringNova     = sStringNova.replace(/@/g, "<arroba>");
+    sStringNova     = sStringNova.replace(/\n/g,"<quebralinha>");
+    sStringNova     = sStringNova.replace(/\'/g,"<aspasimples>");
+    sStringNova     = sStringNova.replace(/\"/g,"<aspa>");
+    sStringNova     = sStringNova.replace(/\?/g,"<interrogacao>");
+    sStringNova     = sStringNova.replace(/%/g,"<percentual>");
+    sStringNova     = sStringNova.replace(/\(/g,"<abreparenteses>");
+    sStringNova     = sStringNova.replace(/\)/g,"<fechaparenteses>");
+    sStringNova     = sStringNova.replace(/\{/g,"<abrechaves>");
+    sStringNova     = sStringNova.replace(/\}/g,"<fechachaves>");
+    sStringNova     = sStringNova.replace(/\[/g,"<abrecolcheltes>");
+    sStringNova     = sStringNova.replace(/\]/g,"<fechacolchetes>");
+    sStringNova     = sStringNova.replace(/\+/g,"<mais>");
+    sStringNova     = sStringNova.replace(/\#/g,"<sustenido>");
+    sStringNova     = sStringNova.replace(/\&/g,"<ecomercial>");
+    sStringNova     = sStringNova.replace(/\t/g,"<tab>");
+    sStringNova     = sStringNova.replace(/\//g,"<barra>");
     /**
      * trocar os hifens automaticos do word; openoffice:
      */
@@ -331,23 +345,23 @@ function tagString(sString) {
 function undoTagString(sString) {
   if (sString!=null) {
     var sStringNova     = sString.replace(/<aspa>/g, '"');
-        sStringNova     = sStringNova.replace(/<arroba>/g, "@");
-        sStringNova     = sStringNova.replace(/<quebralinha>/g,"\n");
-        sStringNova     = sStringNova.replace(/<aspasimples>/g,"'");
-        sStringNova     = sStringNova.replace(/<interrogacao>/g,"?");
-        sStringNova     = sStringNova.replace(/<percentual>/g,"%");
-        sStringNova     = sStringNova.replace(/<abreparenteses>/g,"(");
-        sStringNova     = sStringNova.replace(/<fechaparenteses>/g,")");
-        sStringNova     = sStringNova.replace(/<abrechaves>/g,"{");
-        sStringNova     = sStringNova.replace(/<fechachaves>/g,"}");
-        sStringNova     = sStringNova.replace(/<abrecolcheltes>/g,"[");
-        sStringNova     = sStringNova.replace(/<fechacolchetes>/g,"]");
-        sStringNova     = sStringNova.replace(/<mais>/g,"+");
-        sStringNova     = sStringNova.replace(/<sustenido>/g,"#");
-        sStringNova     = sStringNova.replace(/<ecomercial>/g,"&");
-        sStringNova     = sStringNova.replace(/<tab>/g,"\t");
-        sStringNova     = sStringNova.replace(/<barra>/g,"/");
-        sStringNova     = sStringNova.replace(/<hifengrande>/g,"-");
+    sStringNova     = sStringNova.replace(/<arroba>/g, "@");
+    sStringNova     = sStringNova.replace(/<quebralinha>/g,"\n");
+    sStringNova     = sStringNova.replace(/<aspasimples>/g,"'");
+    sStringNova     = sStringNova.replace(/<interrogacao>/g,"?");
+    sStringNova     = sStringNova.replace(/<percentual>/g,"%");
+    sStringNova     = sStringNova.replace(/<abreparenteses>/g,"(");
+    sStringNova     = sStringNova.replace(/<fechaparenteses>/g,")");
+    sStringNova     = sStringNova.replace(/<abrechaves>/g,"{");
+    sStringNova     = sStringNova.replace(/<fechachaves>/g,"}");
+    sStringNova     = sStringNova.replace(/<abrecolcheltes>/g,"[");
+    sStringNova     = sStringNova.replace(/<fechacolchetes>/g,"]");
+    sStringNova     = sStringNova.replace(/<mais>/g,"+");
+    sStringNova     = sStringNova.replace(/<sustenido>/g,"#");
+    sStringNova     = sStringNova.replace(/<ecomercial>/g,"&");
+    sStringNova     = sStringNova.replace(/<tab>/g,"\t");
+    sStringNova     = sStringNova.replace(/<barra>/g,"/");
+    sStringNova     = sStringNova.replace(/<hifengrande>/g,"-");
 
     return sStringNova;
   } else {
@@ -392,7 +406,6 @@ function js_urlToObject(sUrl) {
 
   return oUrlObject;
 }
-
 
 function js_strLeftPad(sString, iTotalCaracteres, sCaracteres) {
 
@@ -448,11 +461,11 @@ String.prototype.reverse = function () {
 String.prototype.urlEncode = function() {
 
   return encodeURIComponent(this).replace(/!/g  , '%21').
-                                  replace(/'/g  , '%27').
-                                  replace(/\(/g , '%28').
-                                  replace(/\)/g , '%29').
-                                  replace(/\*/g , '%2A').
-                                  replace(/%20/g, '+');
+  replace(/'/g  , '%27').
+  replace(/\(/g , '%28').
+  replace(/\)/g , '%29').
+  replace(/\*/g , '%2A').
+  replace(/%20/g, '+');
 
 };
 
@@ -520,10 +533,10 @@ function sprintf () {
     // Note: casts negative numbers to positive ones
     var number = value >>> 0;
     prefix = prefix && number && {
-      '2': '0b',
-      '8': '0',
-      '16': '0x'
-    }[base] || '';
+        '2': '0b',
+        '8': '0',
+        '16': '0x'
+      }[base] || '';
     value = prefix + pad(number.toString(base), precision || 0, '0', false);
     return justify(value, prefix, leftJustify, minWidth, zeroPad);
   };
@@ -557,24 +570,24 @@ function sprintf () {
     var flagsl = flags.length;
     for (var j = 0; flags && j < flagsl; j++) {
       switch (flags.charAt(j)) {
-      case ' ':
-        positivePrefix = ' ';
-        break;
-      case '+':
-        positivePrefix = '+';
-        break;
-      case '-':
-        leftJustify = true;
-        break;
-      case "'":
-        customPadChar = flags.charAt(j + 1);
-        break;
-      case '0':
-        zeroPad = true;
-        break;
-      case '#':
-        prefixBaseX = true;
-        break;
+        case ' ':
+          positivePrefix = ' ';
+          break;
+        case '+':
+          positivePrefix = '+';
+          break;
+        case '-':
+          leftJustify = true;
+          break;
+        case "'":
+          customPadChar = flags.charAt(j + 1);
+          break;
+        case '0':
+          zeroPad = true;
+          break;
+        case '#':
+          prefixBaseX = true;
+          break;
       }
     }
 
@@ -614,41 +627,41 @@ function sprintf () {
     value = valueIndex ? a[valueIndex.slice(0, -1)] : a[i++];
 
     switch (type) {
-    case 's':
-      return formatString(String(value), leftJustify, minWidth, precision, zeroPad, customPadChar);
-    case 'c':
-      return formatString(String.fromCharCode(+value), leftJustify, minWidth, precision, zeroPad);
-    case 'b':
-      return formatBaseX(value, 2, prefixBaseX, leftJustify, minWidth, precision, zeroPad);
-    case 'o':
-      return formatBaseX(value, 8, prefixBaseX, leftJustify, minWidth, precision, zeroPad);
-    case 'x':
-      return formatBaseX(value, 16, prefixBaseX, leftJustify, minWidth, precision, zeroPad);
-    case 'X':
-      return formatBaseX(value, 16, prefixBaseX, leftJustify, minWidth, precision, zeroPad).toUpperCase();
-    case 'u':
-      return formatBaseX(value, 10, prefixBaseX, leftJustify, minWidth, precision, zeroPad);
-    case 'i':
-    case 'd':
-      number = +value || 0;
-      number = Math.round(number - number % 1); // Plain Math.round doesn't just truncate
-      prefix = number < 0 ? '-' : positivePrefix;
-      value = prefix + pad(String(Math.abs(number)), precision, '0', false);
-      return justify(value, prefix, leftJustify, minWidth, zeroPad);
-    case 'e':
-    case 'E':
-    case 'f': // Should handle locales (as per setlocale)
-    case 'F':
-    case 'g':
-    case 'G':
-      number = +value;
-      prefix = number < 0 ? '-' : positivePrefix;
-      method = ['toExponential', 'toFixed', 'toPrecision']['efg'.indexOf(type.toLowerCase())];
-      textTransform = ['toString', 'toUpperCase']['eEfFgG'.indexOf(type) % 2];
-      value = prefix + Math.abs(number)[method](precision);
-      return justify(value, prefix, leftJustify, minWidth, zeroPad)[textTransform]();
-    default:
-      return substring;
+      case 's':
+        return formatString(String(value), leftJustify, minWidth, precision, zeroPad, customPadChar);
+      case 'c':
+        return formatString(String.fromCharCode(+value), leftJustify, minWidth, precision, zeroPad);
+      case 'b':
+        return formatBaseX(value, 2, prefixBaseX, leftJustify, minWidth, precision, zeroPad);
+      case 'o':
+        return formatBaseX(value, 8, prefixBaseX, leftJustify, minWidth, precision, zeroPad);
+      case 'x':
+        return formatBaseX(value, 16, prefixBaseX, leftJustify, minWidth, precision, zeroPad);
+      case 'X':
+        return formatBaseX(value, 16, prefixBaseX, leftJustify, minWidth, precision, zeroPad).toUpperCase();
+      case 'u':
+        return formatBaseX(value, 10, prefixBaseX, leftJustify, minWidth, precision, zeroPad);
+      case 'i':
+      case 'd':
+        number = +value || 0;
+        number = Math.round(number - number % 1); // Plain Math.round doesn't just truncate
+        prefix = number < 0 ? '-' : positivePrefix;
+        value = prefix + pad(String(Math.abs(number)), precision, '0', false);
+        return justify(value, prefix, leftJustify, minWidth, zeroPad);
+      case 'e':
+      case 'E':
+      case 'f': // Should handle locales (as per setlocale)
+      case 'F':
+      case 'g':
+      case 'G':
+        number = +value;
+        prefix = number < 0 ? '-' : positivePrefix;
+        method = ['toExponential', 'toFixed', 'toPrecision']['efg'.indexOf(type.toLowerCase())];
+        textTransform = ['toString', 'toUpperCase']['eEfFgG'.indexOf(type) % 2];
+        value = prefix + Math.abs(number)[method](precision);
+        return justify(value, prefix, leftJustify, minWidth, zeroPad)[textTransform]();
+      default:
+        return substring;
     }
   };
 
@@ -685,7 +698,7 @@ function js_removerAspas(field) {
 String.prototype.removeAcento = function() {
 
   return this.replace(/[áàâã]/g,'a').replace(/[éèê]/g,'e').replace(/[íî]/g,'i').replace(/[óòôõ]/g,'o').replace(/[úùû]/g,'u').
-              replace(/[ÁÀÂÃ]/g,'A').replace(/[ÉÈÊ]/g,'E').replace(/[ÍÎ]/g,'I').replace(/[ÓÒÔÕ]/g,'O').replace(/[ÚÙÛ]/g,'U');
+  replace(/[ÁÀÂÃ]/g,'A').replace(/[ÉÈÊ]/g,'E').replace(/[ÍÎ]/g,'I').replace(/[ÓÒÔÕ]/g,'O').replace(/[ÚÙÛ]/g,'U');
 };
 
 /**
@@ -719,12 +732,12 @@ String.prototype.somenteNumeros = function() {
  */
 String.prototype.lpad = function(padString, length) {
 
-    var str = this;
+  var str = this;
 
-    while (str.length < length)
-      str = padString + str;
+  while (str.length < length)
+    str = padString + str;
 
-    return str;
+  return str;
 }
 
 /**
@@ -742,12 +755,61 @@ String.prototype.getNumber = function() {
   }
 
   if (this.match(/^(\d*\.)*\d+\,\d*$/)) {
-    return new Number(this.replace('.', '').replace(',', '.'));
+    return new Number(this.replace(/\./g, '').replace(',', '.'));
   }
 
   if (this.match(/^(\d*\,)*\d+\.\d*$/)) {
-    return new Number(this.replace(',', ''));
+    return new Number(this.replace(/\,/g, ''));
+  }
+
+  if (this.match(/^\d*$/)) {
+    return new Number(this);
   }
 
   return NaN;
+}
+
+/**
+ * Retorna o numero de casas decimais
+ * @return {integer}
+ */
+String.prototype.getDecimalsLength = function() {
+
+  if (this.match(/\,\d+$/)) {
+    return this.match(/\,\d+$/)[0].length - 1;
+  }
+
+  if (this.match(/\.\d+$/)) {
+    return this.match(/\.\d+$/)[0].length - 1;
+  }
+
+  return 0;
+}
+
+/**
+ * Retorna uma data a partir de uma string
+ * @return {Date}|{null}
+ */
+String.prototype.getDate = function() {
+
+  if (this.match(/^\d{4}\-\d{1,2}\-\d{1,2}$/)) {
+    var aDate = this.split('-');
+  } else if (this.match(/^\d{1,2}\/\d{1,2}\/\d{4}$/)) {
+    var aDate = this.split('/').reverse();
+  } else {
+    return null;
+  }
+
+  return new Date(aDate[0], +aDate[1]-1, aDate[2]);
+}
+
+/**
+ * Formata uma data para o padrão brasileiro
+ * @return {String} "dd/mm/YYYY"
+ */
+Date.prototype.getDateBR = function() {
+
+  return [(new String(this.getDate())).lpad('0', 2),
+    (new String(this.getMonth()+1)).lpad('0', 2),
+    this.getFullYear()].join("/");
 }

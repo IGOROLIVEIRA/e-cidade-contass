@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -41,7 +41,7 @@ $clrotulo->label("z01_nome");
 
 
 $mesinicial = db_mesfolha();
-$anoinicial = db_anofolha();              
+$anoinicial = db_anofolha();
 $anofinal   = db_anofolha();
 $mesfinal   = db_mesfolha();
 
@@ -63,8 +63,8 @@ $Smesfinal   = "O mês final";
   db_app::load("datagrid.widget.js");
   db_app::load("strings.js");
   db_app::load("grid.style.css");
-  db_app::load("estilos.css"); 
-  db_app::load("DBDownload.widget.js"); 
+  db_app::load("estilos.css");
+  db_app::load("DBDownload.widget.js");
 ?>
 
 </head>
@@ -138,14 +138,14 @@ $Smesfinal   = "O mês final";
               </label>
             </td>
             <td>
-              <?php 
+              <?php
                 $SNumeroAto = "Número do Ato";
-                db_input('NumeroAto',6, 1,true,'text',4,''); 
+                db_input('NumeroAto',6, 1,true,'text',4,'');
               ?>
               /
-              <?php 
+              <?php
                 $SAnoAto = "Ano do Ato";
-                db_input('AnoAto',4, 1,true,'text',4, null, null, null, null, 4); 
+                db_input('AnoAto',4, 1,true,'text',4, null, null, null, null, 4);
                ?>
             </td>
           </tr>
@@ -166,7 +166,7 @@ $Smesfinal   = "O mês final";
               </label>
             </td>
             <td>
-              <?php 
+              <?php
 
               $aAtosLegais = array(
                                      "2"  => "Decreto",
@@ -188,7 +188,7 @@ $Smesfinal   = "O mês final";
               db_select('TipoAto', $aAtosLegais, true, 4, "rel=\"ignore-css\""); ?>
             </td>
           </tr>
-          
+
           <tr>
             <td>
               <label>
@@ -210,7 +210,7 @@ $Smesfinal   = "O mês final";
         </td>
       </tr>
     </table>
-    
+
   </form>
 
   <?php db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit")); ?>
@@ -233,13 +233,13 @@ $Smesfinal   = "O mês final";
     oGridSiprev.setCheckbox(0);
     oGridSiprev.setCellWidth(new Array('50px',
                                        '403px'));
-    
+
     oGridSiprev.setCellAlign(new Array('center',
                                        'left'));
-    
+
     oGridSiprev.setHeader(new Array('Código',
                                     'Arquivo'));
-                                         
+
     //oGridSiprev.aHeaders[0].lDisplayed = false;
     oGridSiprev.setHeight(120);
     oGridSiprev.hasTotalizador = true;
@@ -247,7 +247,7 @@ $Smesfinal   = "O mês final";
     oGridSiprev.clearAll(true);
 
     /**
-     * Quando for selecionado o Arquivo 'Órgão' o fieldset 
+     * Quando for selecionado o Arquivo 'Órgão' o fieldset
      * Unidade Gestora é apresentado para o usário.
      */
     oGridSiprev.selectSingle = function(oCheckbox,sRow,oRow){
@@ -259,7 +259,7 @@ $Smesfinal   = "O mês final";
       }
 
       if ( oCheckbox.checked ) {
-        
+
         $('containerUnidadeGestora').style.display = '';
         return true;
       }
@@ -277,59 +277,59 @@ $Smesfinal   = "O mês final";
 
       return false;
     }
-    
+
     //inicia o preenchimento com o retorno dos registros
-    lista_rharquivossiprev(); 
+    lista_rharquivossiprev();
   }
 
   /*
    * funcao para montar os registros iniciais da grid
    *
-   */ 
+   */
   function lista_rharquivossiprev() {
 
      var oParametros      = new Object();
-     oParametros.exec     = 'Lista';  
-     oParametros.sTodos   = ('*');   
-   
+     oParametros.exec     = 'Lista';
+     oParametros.sTodos   = ('*');
+
      var msgDiv    = "Aguarde ...";
      js_divCarregando(msgDiv,'msgBox');
-    
+
      var oAjaxLista  = new Ajax.Request(sUrlRPC,
                                                {method: "post",
                                                 parameters:'json='+Object.toJSON(oParametros),
                                                 onComplete: js_retornoCompletaSiprev
                                                });
-                                              
+
   }
 
   /*
    * funcao para montar a grid com os registros da tabela rharquivossiprev
    *
-   */ 
+   */
   function js_retornoCompletaSiprev(oAjax) {
-      
+
       js_removeObj('msgBox');
       var oRetorno = eval("("+oAjax.responseText+")");
 
       if (oRetorno.status == 1) {
-        
+
         oGridSiprev.clearAll(true);
 
         if ( oRetorno.dados.length == 0 ) {
-        
+
           alert('Nenhum registro encontrado!');
           return false;
-        } 
-        oRetorno.dados.each(function (oDado, iInd) {       
+        }
+        oRetorno.dados.each(function (oDado, iInd) {
 
-          aRow = new Array();                                                              
+          aRow = new Array();
           aRow[0]  = oDado.rh94_sequencial;
           aRow[1]  = oDado.rh94_descricao.urlDecode();
           oGridSiprev.addRow(aRow);
         });
-        oGridSiprev.renderRows(); 
-      } 
+        oGridSiprev.renderRows();
+      }
   }
 
    /*
@@ -350,13 +350,13 @@ $Smesfinal   = "O mês final";
 
      var aListaCheckbox = oGridSiprev.getSelection();
      var aListaArquivos = new Array();
-     
+
      aListaCheckbox.each( function ( aRow ) {
           aListaArquivos.push(aRow[0]);
      });
 
      /**
-      * Valida os dados da unidade gestora, todos os dados 
+      * Valida os dados da unidade gestora, todos os dados
       * são obrigatórios caso seja selecionado a Instituição.
       */
      if (iUnidadeGestora != '') {
@@ -403,11 +403,11 @@ $Smesfinal   = "O mês final";
      oParametros.iMesfinal      = iMesFim;
      oParametros.iAnofinal      = iAnoFim;
      oParametros.iUnidadeGestora= iUnidadeGestora;
-     oParametros.iTipoAto       = iTipoAto;       
-     oParametros.iNumeroAto     = iNumeroAto;     
-     oParametros.iAnoAto        = iAnoAto;     
-     oParametros.dDataAto       = dDataAto;       
-     oParametros.cRepresentante = cRepresentante;       
+     oParametros.iTipoAto       = iTipoAto;
+     oParametros.iNumeroAto     = iNumeroAto;
+     oParametros.iAnoAto        = iAnoAto;
+     oParametros.dDataAto       = dDataAto;
+     oParametros.cRepresentante = cRepresentante;
 
      /*
       * Valida os dados antes da postagem
@@ -415,32 +415,32 @@ $Smesfinal   = "O mês final";
       * se a data inicial é menor que a data final
       * se no minimo um arquivo foi selecionado
       * então a postagem para processamento será realizada.
-     */   
+     */
      if ( iMesIni == 0 || iMesIni > 12 || iMesIni == '' || iMesIni == null) {
 
        alert('Mês Inicial Inválido');
        $('mesinicial').value = '';
        $('mesinicial').focus();
      } else if (iAnoIni == null || iAnoIni == '' || iAnoIni < 1900) {
-     
+
        alert('Ano Inicial Inválido');
        $('anoinicial').value = '';
        $('anoinicial').focus();
      } else if (iMesFim == null || iMesFim == '' || iMesFim > 12 || iMesFim == 0) {
-     
+
        alert('Mês Final Inválido');
        $('mesfinal').value = '';
-       $('mesfinal').focus();     
+       $('mesfinal').focus();
      } else if (iAnoFim == null || iAnoFim == '' || iAnoFim < 1900) {
-     
+
        alert('Ano Final Inválido');
        $('anofinal').value = '';
-       $('anofinal').focus();     
+       $('anofinal').focus();
      } else if (iAnoIni > iAnoFim) {
-      
+
        alert('Ano Inicial Maior que Ano Final');
        $('anoinicial').value = '';
-       $('anoinicial').focus();       
+       $('anoinicial').focus();
      } else if (iMesIni > iMesFim) {
 
        alert('Mês Inicial Maior que Mês Final');
@@ -453,12 +453,12 @@ $Smesfinal   = "O mês final";
 
   	   var msgDiv    = "Aguarde ...";
   	   js_divCarregando(msgDiv,'msgBox');
-  	   
+
   	   var oAjaxArquivos  = new Ajax.Request(sUrlRPC,{ method: "post",
   	                                                   parameters:'json='+Object.toJSON(oParametros),
   	                                                   onComplete: retorno_siprev
   	                                                 });
-    }  
+    }
   }
 
   /*
@@ -478,16 +478,16 @@ $Smesfinal   = "O mês final";
       oDBDownload.addFile(sArquivo, sLabel);
 
       if (oRetorno.status == 1) {
-        
+
         if ( oRetorno.dados.length == 0 ) {
-        
+
           js_removeObj('msgBox');
           alert('Nenhum registro encontrado!');
           return false;
         } else {
 
           /**
-           * Verifica se precisa gerar o arquivo de consistências, 
+           * Verifica se precisa gerar o arquivo de consistências,
            * se precisar executa o Ajax para geração do mesmo
            */
           if (oRetorno.arquivosErroServidor == 1 || oRetorno.arquivosErroDependente == 2) {
@@ -507,7 +507,7 @@ $Smesfinal   = "O mês final";
           }
         }
 
-        
+
       } else {
 
         alert(oRetorno.message.urlDecode());
@@ -518,26 +518,26 @@ $Smesfinal   = "O mês final";
   }
 
   function js_pesquisacodigo (mostra){
-    
+
     if (mostra==true) {
-      js_OpenJanelaIframe('top.corpo','db_iframe_db_config','func_db_config.php?funcao_js=parent.js_mostrarhpessoal1|codigo|nomeinst','Pesquisa Instituição',true);
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_config','func_db_config.php?funcao_js=parent.js_mostrarhpessoal1|codigo|nomeinst','Pesquisa Instituição',true);
     } else {
 
-      if (document.form1.codigo.value != '') { 
-        js_OpenJanelaIframe('top.corpo','db_iframe_db_config','func_db_config.php?pesquisa_chave='+document.form1.codigo.value+'&funcao_js=parent.js_mostrarhpessoal','Pesquisa Instituição',false);
+      if (document.form1.codigo.value != '') {
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_config','func_db_config.php?pesquisa_chave='+document.form1.codigo.value+'&funcao_js=parent.js_mostrarhpessoal','Pesquisa Instituição',false);
       } else {
-        document.form1.nomeinst.value = ''; 
+        document.form1.nomeinst.value = '';
       }
     }
   }
 
   function js_mostrarhpessoal (chave,erro) {
 
-    document.form1.nomeinst.value = chave; 
-    if (erro==true) { 
+    document.form1.nomeinst.value = chave;
+    if (erro==true) {
 
-      document.form1.codigo.focus(); 
-      document.form1.codigo.value = ''; 
+      document.form1.codigo.focus();
+      document.form1.codigo.value = '';
     }
   }
 
@@ -549,24 +549,24 @@ $Smesfinal   = "O mês final";
   }
 
   function js_pesquisacgm (mostra) {
-    
+
     if (mostra==true) {
-      js_OpenJanelaIframe('top.corpo','func_nome','func_cgm.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome','Pesquisa Representante Legal',true);
+      js_OpenJanelaIframe('CurrentWindow.corpo','func_nome','func_cgm.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome','Pesquisa Representante Legal',true);
     } else {
 
-      if (document.form1.z01_numcgm.value != '') { 
-        js_OpenJanelaIframe('top.corpo','func_nome','func_cgm.php?pesquisa_chave='+document.form1.z01_numcgm.value+'&funcao_js=parent.js_mostracgm','Pesquisa Representante Legal',false);
-      } else {  
-        document.form1.z01_nome.value = ''; 
+      if (document.form1.z01_numcgm.value != '') {
+        js_OpenJanelaIframe('CurrentWindow.corpo','func_nome','func_cgm.php?pesquisa_chave='+document.form1.z01_numcgm.value+'&funcao_js=parent.js_mostracgm','Pesquisa Representante Legal',false);
+      } else {
+        document.form1.z01_nome.value = '';
       }
     }
   }
   function js_mostracgm (erro, chave) {
 
-    document.form1.z01_nome.value = chave; 
-    if (erro==true) {  
-      document.form1.z01_numcgm.focus(); 
-      document.form1.z01_numcgm.value = ''; 
+    document.form1.z01_nome.value = chave;
+    if (erro==true) {
+      document.form1.z01_numcgm.focus();
+      document.form1.z01_numcgm.value = '';
     }
   }
 

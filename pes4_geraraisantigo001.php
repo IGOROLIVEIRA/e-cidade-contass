@@ -129,12 +129,12 @@ db_postmemory($HTTP_POST_VARS);
         qry += '&retificacao=' + document.form1.retificacao.value;
         qry += '&dataretificacao=' + document.form1.dataretificacao.value;
 
-       js_OpenJanelaIframe('top.corpo','db_iframe_gerarais','pes4_geraraisantigo002.php?'+qry,'Gerando Arquivo',true);
+       js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_gerarais','pes4_geraraisantigo002.php?'+qry,'Gerando Arquivo',true);
       }
 
       function js_erro(msg){
 
-        top.corpo.db_iframe_gerarais.hide();
+        CurrentWindow.corpo.db_iframe_gerarais.hide();
         alert(msg);
       }
 
@@ -155,7 +155,7 @@ db_postmemory($HTTP_POST_VARS);
 
       function js_detectaarquivo(arquivo,pdf){
 
-        top.corpo.db_iframe_gerarais.hide();
+        CurrentWindow.corpo.db_iframe_gerarais.hide();
         listagem = arquivo+"#Download Arquivo TXT |";
         listagem+= pdf+"#Download Relatório";
         js_montarlista(listagem,"form1");

@@ -57,7 +57,7 @@ $db_opcao=1;
 $dadosini="";
 if(isset($iniciais)){
   
-  $matriz = split("x",$iniciais);
+  $matriz = explode("x",$iniciais);
   for($s=0; $s < sizeof($matriz); $s++){
     $inicial=$matriz[$s];
     if($inicial!=""){

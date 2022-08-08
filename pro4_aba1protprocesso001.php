@@ -129,7 +129,7 @@ if (isset($oPost->btnincluir) && $oPost->btnincluir == 1) {
 
      if (isset($oPost->docs) && $oPost->docs != "") {
        if ($lSqlErro == false) {
-          $chaves = split("#",$oPost->docs);
+          $chaves = explode("#",$oPost->docs);
           $chave  = count($chaves);
           for($x = 0; $x < $chave-1; $x++){
              $clprocprocessodoc->p81_codproc = $p58_codproc;
@@ -146,7 +146,7 @@ if (isset($oPost->btnincluir) && $oPost->btnincluir == 1) {
 
      if (isset($oPost->ndocs) && $oPost->ndocs != "") {
        if ($lSqlErro == false) {
-         $chaves = split("#",$oPost->ndocs);
+         $chaves = explode("#",$oPost->ndocs);
          $chave  = count($chaves);
 
          for( $i = 0; $i < $chave-1; $i++){

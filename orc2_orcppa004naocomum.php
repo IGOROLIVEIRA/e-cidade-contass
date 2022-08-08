@@ -311,7 +311,7 @@ $pdf->cell(40,$alt,"Próprios",1,0,"C",0);
 $pdf->cell(40,$alt,"Outros",1,0,"C",0);
 $pdf->cell(40,$alt,"Total",1,1,"C",0);
 
-$setano = split("-",$intanos);
+$setano = explode("-",$intanos);
 $anoseti = $setano[0];
 $anosetf = $setano[1];
 $tot_livre = 0;

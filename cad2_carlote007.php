@@ -39,7 +39,7 @@ $cllote->rotulo->label();
 $clrotulo = new rotulocampo;
 $clrotulo->label("z01_nome");
 if(isset($j37_quadra) && $j37_quadra != ""){
-  $quadra = split(",",$j37_quadra);
+  $quadra = explode(",",$j37_quadra);
   $vir = "";
   $qua = "";
   for($i=0;$i<count($quadra);$i++){
@@ -48,7 +48,7 @@ if(isset($j37_quadra) && $j37_quadra != ""){
   }
 }
 if(isset($j37_setor) && $j37_setor != ""){
-  $setor = split(",",$j37_setor);
+  $setor = explode(",",$j37_setor);
   $vir = "";
   $qua1 = "";
   $setor_old = "";

@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -56,13 +56,13 @@ $sLabelMsg = "Anexo II - Demonstrativo Função/Subfunção";
 variavel = 1;
 
 function js_buscaEdicaoLrf(iAnousu,sFontePadrao){
-  
+
   var url       = 'con4_lrfbuscaedicaoRPC.php';
   var parametro = 'ianousu='+iAnousu+'&sfontepadrao='+sFontePadrao ;
   var objAjax   = new Ajax.Request (url, { method:'post',
-                                           parameters:parametro, 
+                                           parameters:parametro,
                                            onComplete:js_setNomeArquivo}
-                                    );  
+                                    );
 }
 
 function js_setNomeArquivo(oResposta){
@@ -82,13 +82,13 @@ function js_abre(opcao){
   if ($anousu <= 2007) {
 ?>
  if (document.form1.vernivel.value != '' && document.form1.vernivel.value != document.form1.nivel.value){
-    if(confirm('Você já escolheu anteriormente dados do nível '+document.form1.vernivel.value+' , deseja altera-los?')==false) 
+    if(confirm('Você já escolheu anteriormente dados do nível '+document.form1.vernivel.value+' , deseja altera-los?')==false)
       return false
     else
       js_OpenJanelaIframe('','db_iframe_orgao','func_selorcdotacao.php?&nivel='+document.form1.nivel.value+'&db_selinstit='+document.form1.db_selinstit.value,'pesquisa',true);
- }else if(top.corpo.db_iframe_orgao != undefined){
+ }else if(CurrentWindow.corpo.db_iframe_orgao != undefined){
 //   alert('entrou');
-   
+
    if(document.form1.nivel.value == document.form1.vernivel.value){
      db_iframe_orgao.show();
    }else{
@@ -140,7 +140,7 @@ function js_emite(opcao,origem){
      }else{
        mesinicial = document.form1.mesini.value;
      }
-    
+
      perini = <?=$anousu?>+'-'+mesinicial+'-01';
      perfin = <?=$anousu?>+'-'+mesfinal+'-01';
   }else{
@@ -149,7 +149,7 @@ function js_emite(opcao,origem){
   }
 <?
   }
-	
+
   if ($anousu <= 2007){
 ?>
   valor_nivel = new Number(document.form1.orgaos.value);
@@ -197,7 +197,7 @@ function js_limpa(){
    }
 ?>
 }
-</script>  
+</script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
 <link href="estilos/grid.style.css" rel="stylesheet" type="text/css">
 </head>
@@ -211,7 +211,7 @@ function js_limpa(){
     <td colspan=3  class='table_header'>
      <?=$sLabelMsg?>
     </td>
-   </tr>  
+   </tr>
    <tr>
     <td>
       <fieldset>
@@ -275,40 +275,40 @@ function js_limpa(){
         <td>
           <?php
           $aPeriodo = array("Mensal"=>"Mensal","Bimestral"=>"Bimestral");
-           db_select("periodo",$aPeriodo,true,4); 
-          ?> 
+           db_select("periodo",$aPeriodo,true,4);
+          ?>
         </td>
       </tr>
-      
-      
+
+
       <tr id="tr_mensal">
         <td>
          <b>Mensal:</b>
         </td>
         <td>
           <?php
-          
+
           $oDaoPeriodo    = db_utils::getDao("periodo");
           $sSqlPeriodo    = $oDaoPeriodo->sql_query( null,"*","o114_sequencial","o114_qdtporano = 1 and o114_ordem > 10");
           $rsPeriodo      = $oDaoPeriodo->sql_record($sSqlPeriodo);
           $aResultadoPeriodo  = db_utils::getCollectionByRecord($rsPeriodo);
           $aPeriodo = array();
-          
+
           foreach ($aResultadoPeriodo as $oPeriodo) {
-            
+
             $aPeriodo[$oPeriodo->o114_sequencial] = $oPeriodo->o114_descricao;
           }
-          
-          db_select("mes",$aPeriodo,true,1); 
-          ?> 
+
+          db_select("mes",$aPeriodo,true,1);
+          ?>
         </td>
       </tr>
-      
+
       <tr id="tr_bimestral" style = "display:none">
-        <td> 
+        <td>
           <b>Bimestral:</b>
         </td>
-        
+
         <td>
         <?
           if ($anousu < 2010) {
@@ -316,14 +316,14 @@ function js_limpa(){
                        "4B"=>"Quarto"  ,"5B"=>"Quinto" ,"6B"=>"Sexto");
             db_select("bimestre",$x,true,1);
           } else {
-            
+
              $oRelatorio = new relatorioContabil(96, false);
              $aPeriodos = $oRelatorio->getPeriodos();
              $aListaPeriodos = array();
              foreach ($aPeriodos as $oPeriodo) {
                $aListaPeriodos[$oPeriodo->o114_sequencial] = $oPeriodo->o114_descricao;
              }
-             db_select("bimestre", $aListaPeriodos, true, 1); 
+             db_select("bimestre", $aListaPeriodos, true, 1);
           }
         ?>
        </td>
@@ -331,7 +331,7 @@ function js_limpa(){
 <?
   }
 
-  if ($anousu <= 2007) {  
+  if ($anousu <= 2007) {
 ?>
        <input  name="orgaos" id="orgaos" type="hidden" value="" >
 <?
@@ -341,7 +341,7 @@ function js_limpa(){
 <?
   }
 ?>
-       <input  name="vernivel" id="vernivel" type="hidden" value="" >    
+       <input  name="vernivel" id="vernivel" type="hidden" value="" >
        </table>
       </fieldset>
       <?
@@ -355,7 +355,7 @@ function js_limpa(){
        <td>
         <input type="submit" value="Imprimir" onClick="js_emite();">
        </td>
-      </tr>     
+      </tr>
      </table>
      <?
        }

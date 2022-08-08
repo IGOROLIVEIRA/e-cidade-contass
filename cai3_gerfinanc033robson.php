@@ -82,7 +82,7 @@ if ($k03_tipo == 1 && $impmodelo <> 1 && $impmodelo <> 30) {
     next($vt);
   }
 
-  $numpres = split("N", $numpres);
+  $numpres = explode("N", $numpres);
 
   $unica = false;
   if (sizeof($numpres) < 2) {
@@ -96,7 +96,7 @@ if ($k03_tipo == 1 && $impmodelo <> 1 && $impmodelo <> 30) {
 
   //  pg_exec("BEGIN");
   for ($volta = 1; $volta < sizeof($numpres); $volta ++) {
-    $codigos = split("P", $numpres[$volta]);
+    $codigos = explode("P", $numpres[$volta]);
   }
 
   $resultunica = pg_exec("select j23_anousu from iptucalc inner join iptunump on j20_anousu = j23_anousu and j20_matric = j23_matric where j20_numpre = $codigos[0]");
@@ -301,7 +301,7 @@ $msgvencida = "\n Parcela vencida, valor calculado com juros e multa até a data 
     next($vt);
   }
   $sounica = $numpres;
-  $numpres = split("N", $numpres);
+  $numpres = explode("N", $numpres);
 
   $unica = 2;
   if (sizeof($numpres) < 2) {
@@ -832,9 +832,9 @@ $xender = $nomepri.', '.$j39_numero.'  '.$j39_compl;
     $intnumrows = pg_numrows($result);
     db_fieldsmemory($result, 0);
 
-    $valores = split("P", $numpres[$volta]);
+    $valores = explode("P", $numpres[$volta]);
     $k00_numpre = $valores[0];
-    $k00_numpar = split("R", $valores[1]);
+    $k00_numpar = explode("R", $valores[1]);
 		$k00_numpar = $k00_numpar[0];
     $k03_anousu = $H_ANOUSU;
 //    echo $k00_numpre.'  '.$k00_numpar.'  '.$H_DATAUSU.'  '.$H_ANOUSU;exit;
@@ -1191,7 +1191,7 @@ $xender = $nomepri.', '.$j39_numero.'  '.$j39_compl;
     }
     $pdf1->descr5 = $k00_numpar.' / '.$k00_numtot;
     
-    $tmpdta    = split("/",$k00_dtvenc);
+    $tmpdta    = explode("/",$k00_dtvenc);
     $tmpdtvenc = $tmpdta[2]."-".$tmpdta[1]."-".$tmpdta[0];
     if($db_datausu > $tmpdtvenc){
         $pdf1->dtparapag    = db_formatar($db_datausu,'d');

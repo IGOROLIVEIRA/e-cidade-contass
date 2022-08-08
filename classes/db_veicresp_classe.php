@@ -359,7 +359,7 @@ class cl_veicresp {
    function sql_query ( $ve02_codigo=null,$campos="*",$ordem=null,$dbwhere=""){ 
      $sql = "select ";
      if($campos != "*" ){
-       $campos_sql = split("#",$campos);
+       $campos_sql = explode("#",$campos);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -369,7 +369,7 @@ class cl_veicresp {
        $sql .= $campos;
      }
      $sql .= " from veicresp ";
-     $sql .= "      inner join cgm            on cgm.z01_numcgm       = veicresp.ve02_numcgm";
+     /*$sql .= "      inner join cgm            on cgm.z01_numcgm       = veicresp.ve02_numcgm";
      $sql .= "      inner join veiculos       on veiculos.ve01_codigo = veicresp.ve02_veiculo";
      $sql .= "      inner join ceplocalidades on ceplocalidades.cp05_codlocalidades = veiculos.ve01_ceplocalidades";
      $sql .= "      inner join veiccadtipo    on veiccadtipo.ve20_codigo   = veiculos.ve01_veiccadtipo";
@@ -382,7 +382,7 @@ class cl_veicresp {
      $sql .= "      inner join veiccadcategcnh on veiccadcategcnh.ve30_codigo = veiculos.ve01_veiccadcategcnh";
      $sql .= "      inner join veiccadproced   on veiccadproced.ve25_codigo   = veiculos.ve01_veiccadproced";
      $sql .= "      inner join veiccadpotencia on veiccadpotencia.ve31_codigo = veiculos.ve01_veiccadpotencia";
-     $sql .= "      inner join veiccadcateg    on veiccadcateg.ve32_codigo    = veiculos.ve01_veiccadcateg";
+     $sql .= "      inner join veiccadcateg    on veiccadcateg.ve32_codigo    = veiculos.ve01_veiccadcateg";*/
      $sql2 = "";
      if($dbwhere==""){
        if($ve02_codigo!=null ){
@@ -394,7 +394,7 @@ class cl_veicresp {
      $sql .= $sql2;
      if($ordem != null ){
        $sql .= " order by ";
-       $campos_sql = split("#",$ordem);
+       $campos_sql = explode("#",$ordem);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -406,7 +406,7 @@ class cl_veicresp {
    function sql_query_file ( $ve02_codigo=null,$campos="*",$ordem=null,$dbwhere=""){ 
      $sql = "select ";
      if($campos != "*" ){
-       $campos_sql = split("#",$campos);
+       $campos_sql = explode("#",$campos);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -427,7 +427,7 @@ class cl_veicresp {
      $sql .= $sql2;
      if($ordem != null ){
        $sql .= " order by ";
-       $campos_sql = split("#",$ordem);
+       $campos_sql = explode("#",$ordem);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];

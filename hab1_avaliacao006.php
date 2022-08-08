@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -46,38 +46,38 @@ $clavaliacaogrupopergunta = new cl_avaliacaogrupopergunta;
 $db_opcao = 33;
 $db_botao = false;
 if (isset($excluir)) {
-	
+
   $sqlerro = false;
   db_inicio_transacao();
-  
+
   $clavaliacaopergunta->db103_sequencial = $db101_sequencial;
   $clavaliacaopergunta->excluir($db101_sequencial);
   if ($clavaliacaopergunta->erro_status == 0) {
     $sqlerro = true;
   }
-   
-  $erro_msg                                   = $clavaliacaopergunta->erro_msg; 
+
+  $erro_msg                                   = $clavaliacaopergunta->erro_msg;
   $clavaliacaogrupopergunta->db102_sequencial = $db101_sequencial;
   $clavaliacaogrupopergunta->excluir($db101_sequencial);
   if ($clavaliacaogrupopergunta->erro_status == 0) {
     $sqlerro = true;
   }
-   
-  $erro_msg = $clavaliacaogrupopergunta->erro_msg; 
+
+  $erro_msg = $clavaliacaogrupopergunta->erro_msg;
   $clavaliacao->excluir($db101_sequencial);
   if ($clavaliacao->erro_status == 0) {
     $sqlerro = true;
   }
-   
-  $erro_msg = $clavaliacao->erro_msg; 
+
+  $erro_msg = $clavaliacao->erro_msg;
   db_fim_transacao($sqlerro);
   $db_opcao = 3;
   $db_botao = true;
 } else if (isset($chavepesquisa)) {
-	
+
   $db_opcao = 3;
   $db_botao = true;
-  $result   = $clavaliacao->sql_record($clavaliacao->sql_query($chavepesquisa)); 
+  $result   = $clavaliacao->sql_record($clavaliacao->sql_query($chavepesquisa));
   db_fieldsmemory($result,0);
 }
 ?>
@@ -105,8 +105,8 @@ fieldset table td:first-child {
   <tr>
     <td>&nbsp;</td>
   </tr>
-  <tr> 
-    <td valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td valign="top" bgcolor="#CCCCCC">
     <center>
       <?
         include("forms/db_frmavaliacao.php");
@@ -119,17 +119,17 @@ fieldset table td:first-child {
 </html>
 <?
 if (isset($excluir)) {
-	
+
   if ($sqlerro == true) {
-  	
+
     db_msgbox($erro_msg);
     if ($clavaliacao->erro_campo != "") {
-    	
+
       echo "<script> document.form1.".$clavaliacao->erro_campo.".style.backgroundColor='#99A9AE';</script>";
       echo "<script> document.form1.".$clavaliacao->erro_campo.".focus();</script>";
     }
   } else {
-  	
+
    db_msgbox($erro_msg);
 	 echo "
 	  <script>
@@ -143,18 +143,18 @@ if (isset($excluir)) {
 }
 
 if (isset($chavepesquisa)) {
-	
+
   echo "
   <script>
       function js_db_libera(){
          parent.document.formaba.avaliacaogrupopergunta.disabled=false;
-         top.corpo.iframe_avaliacaogrupopergunta.location.href='hab1_avaliacaogrupopergunta001.php?db_opcaoal=33&db102_avaliacao=".@$db101_sequencial."';
+         CurrentWindow.corpo.iframe_avaliacaogrupopergunta.location.href='hab1_avaliacaogrupopergunta001.php?db_opcaoal=33&db102_avaliacao=".@$db101_sequencial."';
      ";
-  
+
   if (isset($liberaaba)) {
     echo "  parent.mo_camada('avaliacaopergunta');";
   }
-  
+
   echo"}\n
     js_db_libera();
   </script>\n

@@ -53,53 +53,54 @@ $clrotulo->label("ac10_datamovimento");
 $clrotulo->label("ac10_obs");
 
 // funcao do sql
-function sql_query_file ( $c99_anousu=null,$c99_instit=null,$campos="*",$ordem=null,$dbwhere=""){
-    $sql = "select ";
-    if($campos != "*" ){
-        $campos_sql = split("#",$campos);
-        $virgula = "";
-        for($i=0;$i<sizeof($campos_sql);$i++){
-            $sql .= $virgula.$campos_sql[$i];
-            $virgula = ",";
-        }
-    }else{
-        $sql .= $campos;
+function sql_query_file($c99_anousu = null, $c99_instit = null, $campos = "*", $ordem = null, $dbwhere = "")
+{
+  $sql = "select ";
+  if ($campos != "*") {
+    $campos_sql = split("#", $campos);
+    $virgula = "";
+    for ($i = 0; $i < sizeof($campos_sql); $i++) {
+      $sql .= $virgula . $campos_sql[$i];
+      $virgula = ",";
     }
-    $sql .= " from condataconf ";
-    $sql2 = "";
-    if($dbwhere==""){
-        if($c99_anousu!=null ){
-            $sql2 .= " where condataconf.c99_anousu = $c99_anousu ";
-        }
-        if($c99_instit!=null ){
-            if($sql2!=""){
-                $sql2 .= " and ";
-            }else{
-                $sql2 .= " where ";
-            }
-            $sql2 .= " condataconf.c99_instit = $c99_instit ";
-        }
-    }else if($dbwhere != ""){
-        $sql2 = " where $dbwhere";
+  } else {
+    $sql .= $campos;
+  }
+  $sql .= " from condataconf ";
+  $sql2 = "";
+  if ($dbwhere == "") {
+    if ($c99_anousu != null) {
+      $sql2 .= " where condataconf.c99_anousu = $c99_anousu ";
     }
-    $sql .= $sql2;
-    if($ordem != null ){
-        $sql .= " order by ";
-        $campos_sql = split("#",$ordem);
-        $virgula = "";
-        for($i=0;$i<sizeof($campos_sql);$i++){
-            $sql .= $virgula.$campos_sql[$i];
-            $virgula = ",";
-        }
+    if ($c99_instit != null) {
+      if ($sql2 != "") {
+        $sql2 .= " and ";
+      } else {
+        $sql2 .= " where ";
+      }
+      $sql2 .= " condataconf.c99_instit = $c99_instit ";
     }
-    return $sql;
+  } else if ($dbwhere != "") {
+    $sql2 = " where $dbwhere";
+  }
+  $sql .= $sql2;
+  if ($ordem != null) {
+    $sql .= " order by ";
+    $campos_sql = split("#", $ordem);
+    $virgula = "";
+    for ($i = 0; $i < sizeof($campos_sql); $i++) {
+      $sql .= $virgula . $campos_sql[$i];
+      $virgula = ",";
+    }
+  }
+  return $sql;
 }
 
 $anousu = db_getsession('DB_anousu');
 
 $sSQL = "select to_char(c99_datapat,'YYYY') c99_datapat
           from condataconf
-            where c99_instit = ".db_getsession('DB_instit')."
+            where c99_instit = " . db_getsession('DB_instit') . "
               order by c99_anousu desc limit 1";
 
 $rsResult       = db_query($sSQL);
@@ -107,9 +108,9 @@ $maxC99_datapat = db_utils::fieldsMemory($rsResult, 0)->c99_datapat;
 
 $sNSQL = "";
 if ($anousu > $maxC99_datapat) {
-  $sNSQL = sql_query_file($maxC99_datapat,db_getsession('DB_instit'),'c99_datapat');
+  $sNSQL = sql_query_file($maxC99_datapat, db_getsession('DB_instit'), 'c99_datapat');
 } else {
-    $sNSQL = sql_query_file(db_getsession('DB_anousu'),db_getsession('DB_instit'),'c99_datapat');
+  $sNSQL = sql_query_file(db_getsession('DB_anousu'), db_getsession('DB_instit'), 'c99_datapat');
 }
 
 $result = db_query($sNSQL);
@@ -117,244 +118,309 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
 
 ?>
 <html>
+
 <head>
-<title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta http-equiv="Expires" CONTENT="0">
-<?
+  <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Expires" CONTENT="0">
+  <?
   db_app::load("scripts.js, strings.js, prototype.js, datagrid.widget.js");
   db_app::load("widgets/messageboard.widget.js, widgets/windowAux.widget.js");
   db_app::load("estilos.css, grid.style.css");
-?>
-<style>
-td {
-  white-space: nowrap;
-}
+  ?>
+  <style>
+    td {
+      white-space: nowrap;
+    }
 
-fieldset table td:first-child {
-  width: 80px;
-  white-space: nowrap;
-}
-</style>
+    fieldset table td:first-child {
+      width: 80px;
+      white-space: nowrap;
+    }
+  </style>
 </head>
+
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
-<?='<input id="c99_datapat_hidden" type="hidden" value="'.$c99_datapat.'">'?>
-<table border="0" align="center" cellspacing="0" cellpadding="0" style="padding-top:40px;">
-  <tr>
-    <td valign="top" align="center">
-      <fieldset>
-        <legend><b>Rescisão do Acordo</b></legend>
-        <table align="center" border="0">
-          <tr>
-            <td title="<?=@$Tac16_sequencial?>" align="left">
-              <?php db_ancora($Lac16_sequencial, "js_pesquisaac16_sequencial(true);",$db_opcao); ?>
-            </td>
-            <td align="left">
-              <?
-                db_input('ac16_sequencial',10,$Iac16_sequencial,true,'text',
-                         $db_opcao," onchange='js_pesquisaac16_sequencial(false);'");
-              ?>
-            </td>
-            <td align="left">
-              <?
-                db_input('ac16_resumoobjeto',40,$Iac16_resumoobjeto,true,'text',3);
-              ?>
-            </td>
-          </tr>
-          <tr>
-            <td title="<?=@$Tac10_datamovimento?>" align="left">
-              <b>Data:</b>
-            </td>
-            <td align="left">
-              <?
-                db_inputdata('ac10_datamovimento',@$ac10_datamovimento_dia,
-                                                   @$ac10_datamovimento_mes,
-                                                   @$ac10_datamovimento_ano, true, 'text', $db_opcao, "");
-              ?>
-            </td>
-            <td>&nbsp;</td>
-          </tr>
+  <?= '<input id="c99_datapat_hidden" type="hidden" value="' . $c99_datapat . '">' ?>
+  <table border="0" align="center" cellspacing="0" cellpadding="0" style="padding-top:40px;">
+    <tr>
+      <td valign="top" align="center">
+        <fieldset>
+          <legend><b>Rescisão do Acordo</b></legend>
+          <table align="center" border="0">
+            <tr>
+              <td title="<?= @$Tac16_sequencial ?>" align="left">
+                <?php db_ancora($Lac16_sequencial, "js_pesquisaac16_sequencial(true);", $db_opcao); ?>
+              </td>
+              <td align="left">
+                <?
+                db_input(
+                  'ac16_sequencial',
+                  10,
+                  $Iac16_sequencial,
+                  true,
+                  'text',
+                  $db_opcao,
+                  " onchange='js_pesquisaac16_sequencial(false);'"
+                );
+                ?>
+              </td>
+              <td align="left">
+                <?
+                db_input('ac16_resumoobjeto', 40, $Iac16_resumoobjeto, true, 'text', 3);
+                ?>
+              </td>
+            </tr>
+            <tr>
+              <td title="<?= @$Tac10_datamovimento ?>" align="left">
+                <b>Data:</b>
+              </td>
+              <td align="left">
+                <?
+                db_inputdata(
+                  'ac10_datamovimento',
+                  @$ac10_datamovimento_dia,
+                  @$ac10_datamovimento_mes,
+                  @$ac10_datamovimento_ano,
+                  true,
+                  'text',
+                  $db_opcao,
+                  ""
+                );
+                ?>
+              </td>
+              <td>&nbsp;</td>
+            </tr>
 
-          <tr>
-            <td title="<?=@$Tac16_sequencial?>" align="left">
-              <b>Valor Rescindido R$:</b>
-            </td>
-            <td align="left" colspan="2">
-              <?php db_input('ac16_valorrescisao', 10, $Iac16_valorrescisao, true, 'text', $db_opcao); ?>
-            </td>
-          </tr>
+            <tr id="trdatareferencia" style="display: none;">
+              <td title="<?= @$Tac10_datareferencia ?>" align="left">
+                <b>Data de Referência:</b>
+              </td>
+              <td align="left">
+                <?
+                db_inputdata(
+                  'ac10_datareferencia',
+                  @$ac10_datareferencia_dia,
+                  @$ac10_datareferencia_mes,
+                  @$ac10_datareferencia_ano,
+                  true,
+                  'text',
+                  $db_opcao,
+                  ""
+                );
+                ?>
+              </td>
+              <td>&nbsp;</td>
+            </tr>
 
-          <tr>
-            <td colspan="3">
-              <fieldset>
-                <legend>
-                  <b>Observação</b>
-                </legend>
+            <tr>
+              <td title="<?= @$Tac16_sequencial ?>" align="left">
+                <b>Valor Rescindido R$:</b>
+              </td>
+              <td align="left" colspan="2">
+                <?php db_input('ac16_valorrescisao', 10, $Iac16_valorrescisao, true, 'text', $db_opcao); ?>
+              </td>
+            </tr>
+
+            <tr>
+              <td colspan="3">
+                <fieldset>
+                  <legend>
+                    <b>Observação</b>
+                  </legend>
                   <?
-                    db_textarea('ac10_obs',5,66,$Iac10_obs,true,'text',$db_opcao,"");
+                  db_textarea('ac10_obs', 5, 66, $Iac10_obs, true, 'text', $db_opcao, "");
                   ?>
-              </fieldset>
-            </td>
-          </tr>
-        </table>
-      </fieldset>
-    </td>
-  </tr>
-  <tr>
-    <td>&nbsp;</td>
-  </tr>
-  <tr>
-    <td align="center">
-      <input id="incluir" name="incluir" type="button" value="Incluir" onclick="return js_recisaoContrato();">
-    </td>
-  </tr>
-</table>
-<?
-  db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
-?>
+                </fieldset>
+              </td>
+            </tr>
+          </table>
+        </fieldset>
+      </td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <td align="center">
+        <input id="incluir" name="incluir" type="button" value="Incluir" onclick="return js_recisaoContrato();">
+      </td>
+    </tr>
+  </table>
+  <?
+  db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit"));
+  ?>
 </body>
 <script>
-$('ac16_sequencial').style.width   = "100%";
-$('ac16_resumoobjeto').style.width = "100%";
+  $('ac16_sequencial').style.width = "100%";
+  $('ac16_resumoobjeto').style.width = "100%";
 
-var sUrl = 'con4_contratosmovimento.RPC.php';
+  var sUrl = 'con4_contratosmovimento.RPC.php';
 
-/**
- * Pesquisa acordos
- */
-function js_pesquisaac16_sequencial(lMostrar) {
+  /**
+   * Pesquisa acordos
+   */
+  function js_pesquisaac16_sequencial(lMostrar) {
 
-  if (lMostrar == true) {
+    if (lMostrar == true) {
 
-    var sUrl = 'func_acordo.php?funcao_js=parent.js_mostraacordo1|ac16_sequencial|ac16_resumoobjeto&iTipoFiltro=4';
-    js_OpenJanelaIframe('top.corpo',
-                        'db_iframe_acordo',
-                        sUrl,
-                        'Pesquisar Acordo',
-                        true);
-  } else {
-
-    if ($('ac16_sequencial').value != '') {
-
-      var sUrl = 'func_acordo.php?descricao=true&pesquisa_chave='+$('ac16_sequencial').value+
-                 '&funcao_js=parent.js_mostraacordo&iTipoFiltro=4';
-
+      var sUrl = 'func_acordo.php?funcao_js=parent.js_mostraacordo1|ac16_sequencial|ac16_resumoobjeto&iTipoFiltro=4';
       js_OpenJanelaIframe('top.corpo',
-                          'db_iframe_acordo',
-                          sUrl,
-                          'Pesquisar Acordo',
-                          false);
-     } else {
-       $('ac16_sequencial').value = '';
-     }
+        'db_iframe_acordo',
+        sUrl,
+        'Pesquisar Acordo',
+        true);
+    } else {
+
+      if ($('ac16_sequencial').value != '') {
+
+        var sUrl = 'func_acordo.php?descricao=true&pesquisa_chave=' + $('ac16_sequencial').value +
+          '&funcao_js=parent.js_mostraacordo&iTipoFiltro=4';
+
+        js_OpenJanelaIframe('top.corpo',
+          'db_iframe_acordo',
+          sUrl,
+          'Pesquisar Acordo',
+          false);
+      } else {
+        $('ac16_sequencial').value = '';
+      }
+    }
   }
-}
 
-/**
- * Retorno da pesquisa acordos
- */
-function js_mostraacordo(chave1,chave2,erro) {
+  /**
+   * Retorno da pesquisa acordos
+   */
+  function js_mostraacordo(chave1, chave2, erro) {
 
-  if (erro == true) {
+    if (erro == true) {
 
-    $('ac16_sequencial').value   = '';
-    $('ac16_resumoobjeto').value = chave1;
-    $('ac16_sequencial').focus();
-  } else {
+      $('ac16_sequencial').value = '';
+      $('ac16_resumoobjeto').value = chave1;
+      $('ac16_sequencial').focus();
+    } else {
 
-    $('ac16_sequencial').value   = chave1;
+      $('ac16_sequencial').value = chave1;
+      $('ac16_resumoobjeto').value = chave2;
+    }
+  }
+
+  /**
+   * Retorno da pesquisa acordos
+   */
+  function js_mostraacordo1(chave1, chave2) {
+
+    $('ac16_sequencial').value = chave1;
     $('ac16_resumoobjeto').value = chave2;
-  }
-}
-
-/**
- * Retorno da pesquisa acordos
- */
-function js_mostraacordo1(chave1,chave2) {
-
-  $('ac16_sequencial').value    = chave1;
-  $('ac16_resumoobjeto').value  = chave2;
-  db_iframe_acordo.hide();
-}
-
-/**
- * Incluir assinatura para o contrato
- */
-function js_recisaoContrato() {
-
-  if ($('ac16_sequencial').value == '') {
-
-    alert('Acordo não informado!');
-    return false;
+    db_iframe_acordo.hide();
   }
 
-  if ($('ac10_datamovimento').value == '') {
+  /**
+   * Incluir assinatura para o contrato
+   */
+  function js_recisaoContrato() {
 
-    alert('Data não informada!');
-    return false;
-  }
+    if ($('ac16_sequencial').value == '') {
 
+      alert('Acordo não informado!');
+      return false;
+    }
+
+    if ($('ac10_datamovimento').value == '') {
+
+      alert('Data não informada!');
+      return false;
+    }
+
+    if ($('ac10_datareferencia').value == '' && document.getElementById("trdatareferencia").style.display == 'contents') {
+
+      alert('Data de Referencia não informada!');
+      return false;
+    }
 
     /**
      * Verificar Encerramento Periodo Patrimonial
      */
-        //    DATA INSERIDA
+    //    DATA INSERIDA
     var partesData = $('ac10_datamovimento').value.split("/");
-    var data = new Date(partesData[2], partesData[1]-1, partesData[0]);
+    var data = new Date(partesData[2], partesData[1] - 1, partesData[0]);
     var dataInserida = data;
 
     //    DATA DO SISTEMA
     var partesData = $("c99_datapat_hidden").value.split("-");
-    var data = new Date(partesData[0], partesData[1]-1, partesData[2]);
+    var data = new Date(partesData[0], partesData[1] - 1, partesData[2]);
     var dataPatrimonial = data;
 
-    if(dataInserida <= dataPatrimonial){
-        alert("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
-        return;
+    //    DATA DE REFERÊNCIA
+    var partesData = $('ac10_datareferencia').value.split("/");
+    var dataReferencia = new Date(partesData[2], partesData[1] - 1, partesData[0]);
+
+
+    if (dataInserida <= dataPatrimonial && $('ac10_datareferencia').value == '') {
+      document.getElementById("trdatareferencia").style.display = 'contents';
+      alert("O período já foi encerrado para envio do SICOM. Preencha o campo Data de Referência com uma data no mês subsequente.");
+      return;
     }
 
-  js_divCarregando('Aguarde incluindo recisão...','msgBoxRecisaoContrato');
+    if ($F('ac10_datareferencia').value != "") {
 
-  var oParam            = new Object();
-  oParam.exec           = "rescindirContrato";
-  oParam.acordo         = $F('ac16_sequencial');
-  oParam.dtmovimentacao = $F('ac10_datamovimento');
-  oParam.valorrescisao  = $F('ac16_valorrescisao');
-  oParam.observacao     = encodeURIComponent(tagString($F('ac10_obs')));
+      if (dataReferencia.getMonth() == dataPatrimonial.getMonth() && dataReferencia.getFullYear() == dataPatrimonial.getFullYear()) {
+        alert("Usuário: A data de referência deverá ser no mês posterior ao mês da data inserida.");
+        return;
+      }
 
-  var oAjax   = new Ajax.Request( sUrl, {
-                                          method: 'post',
-                                          parameters: 'json='+js_objectToJson(oParam),
-                                          onComplete: js_retornoDadosRecisao
-                                        }
-                                );
-}
+      if (dataReferencia <= dataPatrimonial) {
+        alert("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
+        return;
+      }
 
-/**
- * Retorna os dados da inclusão
- */
-function js_retornoDadosRecisao(oAjax) {
+    }
 
-  js_removeObj("msgBoxRecisaoContrato");
 
-  var oRetorno = eval("("+oAjax.responseText+")");
+    js_divCarregando('Aguarde incluindo recisão...', 'msgBoxRecisaoContrato');
 
-  $('ac16_sequencial').value    = "";
-  $('ac16_resumoobjeto').value  = "";
-  $('ac10_datamovimento').value = "";
-  $('ac16_valorrescisao').value = "";
-  $('ac10_obs').value           = "";
+    var oParam = new Object();
+    oParam.exec = "rescindirContrato";
+    oParam.acordo = $F('ac16_sequencial');
+    oParam.dtmovimentacao = $F('ac10_datamovimento');
+    oParam.valorrescisao = $F('ac16_valorrescisao');
+    oParam.observacao = encodeURIComponent(tagString($F('ac10_obs')));
+    oParam.datareferencia = $F('ac10_datareferencia');
 
-  if (oRetorno.status == 2) {
-
-    alert(oRetorno.erro.urlDecode());
-    return false;
-  } else {
-
-    alert("Inclusão efetuada com Sucesso.");
-    return true;
+    var oAjax = new Ajax.Request(sUrl, {
+      method: 'post',
+      parameters: 'json=' + js_objectToJson(oParam),
+      onComplete: js_retornoDadosRecisao
+    });
   }
-}
 
+  /**
+   * Retorna os dados da inclusão
+   */
+  function js_retornoDadosRecisao(oAjax) {
+
+    js_removeObj("msgBoxRecisaoContrato");
+
+    var oRetorno = eval("(" + oAjax.responseText + ")");
+
+    $('ac16_sequencial').value = "";
+    $('ac16_resumoobjeto').value = "";
+    $('ac10_datamovimento').value = "";
+    $('ac10_datareferencia').value = "";
+    $('ac16_valorrescisao').value = "";
+    $('ac10_obs').value = "";
+    document.getElementById("trdatareferencia").style.display = 'none'
+
+    if (oRetorno.status == 2) {
+
+      alert(oRetorno.erro.urlDecode());
+      return false;
+    } else {
+
+      alert("Inclusão efetuada com Sucesso.");
+      return true;
+    }
+  }
 </script>
+
 </html>

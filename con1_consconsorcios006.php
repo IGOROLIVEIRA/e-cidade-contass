@@ -10,12 +10,12 @@ include("classes/db_consexecucaoorc_classe.php");
 include("classes/db_consdispcaixaano_classe.php");
 include("classes/db_consretiradaexclusao_classe.php");
 $clconsconsorcios = new cl_consconsorcios;
- 
+
 $clconsvalorestransf = new cl_consvalorestransf;
 $clconsexecucaoorc = new cl_consexecucaoorc;
 $clconsdispcaixaano = new cl_consdispcaixaano;
 $clconsretiradaexclusao = new cl_consretiradaexclusao;
- 
+
 db_postmemory($HTTP_POST_VARS);
    $db_opcao = 33;
 $db_botao = false;
@@ -27,33 +27,33 @@ if(isset($excluir)){
 
   if($clconsvalorestransf->erro_status==0){
     $sqlerro=true;
-  } 
-  $erro_msg = $clconsvalorestransf->erro_msg; 
+  }
+  $erro_msg = $clconsvalorestransf->erro_msg;
   $clconsexecucaoorc->c202_consconsorcios=$c200_sequencial;
   $clconsexecucaoorc->excluir();
 
   if($clconsexecucaoorc->erro_status==0){
     $sqlerro=true;
-  } 
-  $erro_msg = $clconsexecucaoorc->erro_msg; 
+  }
+  $erro_msg = $clconsexecucaoorc->erro_msg;
   $clconsdispcaixaano->c203_consconsorcios=$c200_sequencial;
   $clconsdispcaixaano->excluir();
 
   if($clconsdispcaixaano->erro_status==0){
     $sqlerro=true;
-  } 
-  $erro_msg = $clconsdispcaixaano->erro_msg; 
+  }
+  $erro_msg = $clconsdispcaixaano->erro_msg;
   $clconsretiradaexclusao->c204_consconsorcios=$c200_sequencial;
   $clconsretiradaexclusao->excluir();
 
   if($clconsretiradaexclusao->erro_status==0){
     $sqlerro=true;
-  } 
-  $erro_msg = $clconsretiradaexclusao->erro_msg; 
+  }
+  $erro_msg = $clconsretiradaexclusao->erro_msg;
   $clconsconsorcios->excluir($c200_sequencial);
   if($clconsconsorcios->erro_status==0){
     $sqlerro=true;
-  } 
+  }
   */
   $clconsconsorcios->excluir($c200_sequencial);
   $erro_msg = $clconsconsorcios->erro_msg;
@@ -65,15 +65,15 @@ if(isset($excluir)){
     } else {
     	$erro_msg = $clconsconsorcios->erro_msg;
     }
-  } 
-   
+  }
+
   db_fim_transacao($sqlerro);
    $db_opcao = 3;
    $db_botao = true;
 }else if(isset($chavepesquisa)){
    $db_opcao = 3;
    $db_botao = true;
-   $result = $clconsconsorcios->sql_record($clconsconsorcios->sql_query($chavepesquisa)); 
+   $result = $clconsconsorcios->sql_record($clconsconsorcios->sql_query($chavepesquisa));
    db_fieldsmemory($result,0);
 }
 ?>
@@ -87,8 +87,8 @@ if(isset($excluir)){
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
 	<?
 	include("forms/db_frmconsconsorcios.php");
@@ -124,15 +124,15 @@ if(isset($chavepesquisa)){
   <script>
       function js_db_libera(){
          parent.document.formaba.consvalorestransf.disabled=false;
-         top.corpo.iframe_consvalorestransf.location.href='con1_consvalorestransf001.php?db_opcaoal=33&c201_consconsorcios=".@$c200_sequencial."';
+         CurrentWindow.corpo.iframe_consvalorestransf.location.href='con1_consvalorestransf001.php?db_opcaoal=33&c201_consconsorcios=".@$c200_sequencial."';
          parent.document.formaba.consexecucaoorc.disabled=false;
-         top.corpo.iframe_consexecucaoorc.location.href='con1_consexecucaoorc001.php?db_opcaoal=33&c202_consconsorcios=".@$c200_sequencial."';
+         CurrentWindow.corpo.iframe_consexecucaoorc.location.href='con1_consexecucaoorc001.php?db_opcaoal=33&c202_consconsorcios=".@$c200_sequencial."';
          parent.document.formaba.consdispcaixaano.disabled=false;
-         top.corpo.iframe_consdispcaixaano.location.href='con1_consdispcaixaano001.php?db_opcaoal=33&c203_consconsorcios=".@$c200_sequencial."';
+         CurrentWindow.corpo.iframe_consdispcaixaano.location.href='con1_consdispcaixaano001.php?db_opcaoal=33&c203_consconsorcios=".@$c200_sequencial."';
          parent.document.formaba.consretiradaexclusao.disabled=false;
-         top.corpo.iframe_consretiradaexclusao.location.href='con1_consretiradaexclusao001.php?db_opcaoal=33&c204_consconsorcios=".@$c200_sequencial."';
+         CurrentWindow.corpo.iframe_consretiradaexclusao.location.href='con1_consretiradaexclusao001.php?db_opcaoal=33&c204_consconsorcios=".@$c200_sequencial."';
          parent.document.formaba.consmesreferencia.disabled=false;
-         top.corpo.iframe_consmesreferencia.location.href='con1_consmesreferencia001.php?db_opcao=3&c202_consconsorcios=".@$c200_sequencial."';
+         CurrentWindow.corpo.iframe_consmesreferencia.location.href='con1_consmesreferencia001.php?db_opcao=3&c202_consconsorcios=".@$c200_sequencial."';
      ";
          if(isset($liberaaba)){
            echo "  parent.mo_camada('consvalorestransf');";

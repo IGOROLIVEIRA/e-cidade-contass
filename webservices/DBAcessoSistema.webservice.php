@@ -25,11 +25,11 @@
  *                                licenca/licenca_pt.txt 
  */
 
-require_once("../model/configuracao/UsuarioSistema.model.php");
-require_once("../libs/exceptions/DBException.php");
-require_once("../libs/db_conn.php");
-require_once("../libs/db_autoload.php");
-require_once ("../libs/db_stdlib.php");
+require_once(__DIR__ . "/../model/configuracao/UsuarioSistema.model.php");
+require_once(__DIR__ . "/../libs/exceptions/DBException.php");
+require_once(__DIR__ . "/../libs/db_conn.php");
+require_once(__DIR__ . "/../libs/db_autoload.php");
+require_once (__DIR__ . "/../libs/db_stdlib.php");
 $rsConectaBase   = pg_connect("host=$DB_SERVIDOR dbname=$DB_BASE port=$DB_PORTA user=$DB_USUARIO password=$DB_SENHA");
 $rsStartSession  = db_query("select fc_startsession()");
 

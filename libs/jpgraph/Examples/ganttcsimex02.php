@@ -1,8 +1,8 @@
 <?php
 // Gantt example to create CSIM using CreateSimple()
 
-include ("../jpgraph.php");
-include ("../jpgraph_gantt.php");
+include (__DIR__ . "/../jpgraph.php");
+include (__DIR__ . "/../jpgraph_gantt.php");
 
 $data = array(
   array(0,ACTYPE_GROUP,    "Phase 1",        "2001-10-26","2001-11-23",'',

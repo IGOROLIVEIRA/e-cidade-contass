@@ -104,7 +104,7 @@ if (isset($codtab) && $codigo_tab <= 2) {
                 <td align="center">
                     <fieldset>
                         <legend>
-                            <strong>Previdência e IRRF</strong>
+                            <strong>Previdï¿½ncia e IRRF</strong>
                         </legend>
                         <table width="100%">
                             <?
@@ -214,7 +214,7 @@ if (isset($codtab) && $codigo_tab <= 2) {
                                     </td>
                                     <td>
                                         <?
-                                        $arrNovoCalculo = array("f" => "Não", "t" => "Sim");
+                                        $arrNovoCalculo = array("f" => "Nï¿½o", "t" => "Sim");
                                         db_select("r33_novocalculo", $arrNovoCalculo, true, $db_opcao);
                                         ?>
                                     </td>
@@ -236,7 +236,7 @@ if (isset($codtab) && $codigo_tab <= 2) {
             <tr>
                 <td>
                     <fieldset>
-                        <!--<legend><b>Configuração</b></legend>-->
+                        <!--<legend><b>Configuraï¿½ï¿½o</b></legend>-->
                         <table width="100%">
                             <tr>
                                 <td nowrap title="<?= $Tr33_rubmat ?>">
@@ -414,7 +414,7 @@ if (isset($codtab) && $codigo_tab <= 2) {
                     $cliframe_alterar_excluir->opcoes   = 1;
                     $cliframe_alterar_excluir->sql      = $sql_iframe;
                     $cliframe_alterar_excluir->campos   = "r33_inic,r33_fim,r33_perc,r33_deduzi,r33_novocalculo";
-                    $cliframe_alterar_excluir->legenda  = "FAIXAS LANÇADAS";
+                    $cliframe_alterar_excluir->legenda  = "FAIXAS LANï¿½ADAS";
                     $cliframe_alterar_excluir->alignlegenda  = "left";
                     $cliframe_alterar_excluir->iframe_height = "200";
                     $cliframe_alterar_excluir->iframe_width  = "100%";
@@ -608,7 +608,7 @@ if (isset($codtab) && $codigo_tab <= 2) {
                 }
                 return true;
             } else {
-                alert("A faixa de valor inicial deve ser superior à\n faixa de valor final. Verifique.");
+                alert("A faixa de valor inicial deve ser superior ï¿½\n faixa de valor final. Verifique.");
             }
         }
 
@@ -640,7 +640,7 @@ if (isset($codtab) && $codigo_tab <= 2) {
           ini" . $i . " = new Number(" . $ini . ");\n
           fim" . $i . " = new Number(" . $fim . ");\n
 	  if(valor >= ini" . $i . " && valor <= fim" . $i . "){\n
-	    alert('Alguma faixa cadastrada já abrange este valor. Verifique.');\n
+	    alert('Alguma faixa cadastrada jï¿½ abrange este valor. Verifique.');\n
 	    eval('document.form1.'+campo+'.value = \"\";');
 	    eval('document.form1.'+campo+'.focus();');
 	    erro++;

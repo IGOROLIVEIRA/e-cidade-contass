@@ -52,7 +52,7 @@ class cl_historicoitem {
 
    // cria propriedade com as variaveis do arquivo
    var $campos = "
-                 pc96_codigomaterial = int8 = Código do Material 
+                 pc96_codigomaterial = int8 = Código do Material
                  pc96_usuario = int8 = Código do Usuário
                  pc96_dataalteracao = date = Data da Alteração
                  pc96_dataservidor = data = Data do Servidor
@@ -89,7 +89,7 @@ class cl_historicoitem {
      }
    }
    // funcao para inclusao
-   function incluir ($pc96_codigomaterial){
+   function incluir ($pc96_codigomaterial=null){
       $this->atualizacampos();
      if($this->pc96_usuario == null ){
        $this->erro_sql = " Campo Código do Usuário não Informado.";
@@ -183,7 +183,7 @@ class cl_historicoitem {
                                 ,'$this->pc96_dataservidor'
                                 ,to_timestamp($this->pc96_horaalteracao)
                                 ,'$this->pc96_descricaoanterior'
-                               
+
                       )";
      $result = db_query($sql);
      if($result==false){
@@ -514,4 +514,3 @@ class cl_historicoitem {
   }
 
 }
-?>

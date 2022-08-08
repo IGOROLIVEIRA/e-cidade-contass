@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -108,12 +108,12 @@ $sHoraAtual = date('H:i');
             ?>
           </td>
         </tr>
-          
+
         <tr>
           <td colspan="2">
             <fieldset>
               <legend><b>Motivo</b></legend>
-              
+
               <?
                 db_textarea("sMotivo", 5, 50, '', true, 'text', 1);
               ?>
@@ -122,11 +122,11 @@ $sHoraAtual = date('H:i');
         </tr>
       </table>
     </fieldset>
-    
+
     <br>
     <input type="button" name="btnSalvar" id="btnSalvar" value="Salvar">&nbsp;
     <input type="button" name="btnPesquisar" id="btnPesquisar" value="Pesquisar">
-    
+
   </form>
 </center>
 <?
@@ -140,42 +140,42 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
   $("iUsuario").value = <?=$iUsuario;?>;
 
   function js_pesquisar(lMostra) {
-    
+
     if (lMostra) {
-      js_OpenJanelaIframe('top.corpo','db_iframe_veiculos','func_veicmanutencaomedida.php?funcao_js=parent.js_preencheManutencao|ve66_sequencial|ve01_placa|ve66_veiculo','Pesquisa',true);
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_veiculos','func_veicmanutencaomedida.php?funcao_js=parent.js_preencheManutencao|ve66_sequencial|ve01_placa|ve66_veiculo','Pesquisa',true);
     } else {
-      
+
       if ($("iManutencao").value != "") {
-        js_OpenJanelaIframe('top.corpo','db_iframe_veiculos',
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_veiculos',
                             'func_veicmanutencaomedida.php?pesquisa_chave='+$F("iManutencao")+'&funcao_js=parent.js_completaManutencao',
                             'Pesquisa',false);
       }
     }
-  
+
   }
-  
+
   function js_preencheManutencao(iSequencial, sPlaca, iVeiculo) {
-  
+
     $("iManutencao").value   = iSequencial;
     $("sPlacaVeiculo").value = sPlaca;
     $("iVeiculo").value      = iVeiculo;
     db_iframe_veiculos.hide();
   }
-  
+
   function js_completaManutencao(sPlaca, iCodVeiculo, lErro) {
 
     if (!lErro) {
-    
+
       $("sPlacaVeiculo").value = sPlaca;
       $("iVeiculo").value      = iCodVeiculo;
     } else {
-      
+
       $("iManutencao").value   = "";
       $("sPlacaVeiculo").value = sPlaca;
     }
-  
+
   }
-  
+
   $("btnPesquisar").observe("click", function() {
     js_pesquisar(true);
   });
@@ -190,11 +190,11 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
     }
 
     if ($("sMotivo").value == "") {
-      
+
       alert("Campo motivo obrigatório!");
       return false;
     }
-    
+
     var oParam         = new Object();
     oParam.exec        = "salvarDadosManutencao";
     oParam.iManutencao = $("iManutencao").value;
@@ -202,14 +202,14 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
     oParam.sHora       = $("sHora").value;
     oParam.sData       = $("sData").value;
     oParam.iVeiculo    = $("iVeiculo").value;
-    
+
     js_divCarregando("Aguarde, processando...", "msgBox");
-    
+
     var oAjax     = new Ajax.Request("vei4_manutencaomedida.RPC.php",
                                       {method: 'post',
-                                       parameters: 'json='+Object.toJSON(oParam), 
+                                       parameters: 'json='+Object.toJSON(oParam),
                                        onComplete: function(oAjax) {
-                                         
+
                                          js_removeObj("msgBox");
                                          var aRetorno = eval("("+oAjax.responseText+")");
                                          alert(aRetorno.message.urlDecode());
@@ -220,7 +220,7 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
 
 
   function js_limpaCampos() {
-  
+
     $("iUsuario").value      = "";
     $("iVeiculo").value      = "";
     $("sMotivo").value       = "";

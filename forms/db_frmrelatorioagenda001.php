@@ -236,7 +236,7 @@ function js_emitirfaaTXT (oRetorno) {
   iWidth  = screen.availWidth-35;
   sChave = 'sSessionNome='+oRetorno.sSessionNome;
 
-  js_OpenJanelaIframe ('top.corpo', 'db_iframe_visualizador', 'sau2_fichaatend002.php?'+sChave,
+  js_OpenJanelaIframe ('CurrentWindow.corpo', 'db_iframe_visualizador', 'sau2_fichaatend002.php?'+sChave,
                        'Visualisador', true, iTop, iLeft, iWidth, iHeight
                       );
 }

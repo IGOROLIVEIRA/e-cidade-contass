@@ -25,9 +25,10 @@
  *                                licenca/licenca_pt.txt
  */
 
+
 function db_sel_pessal($tabela, $cmp_ = null, $where = null)
 {
-  global $$tabela;
+  global ${$tabela};
 
   $campos = array();
 
@@ -266,16 +267,8 @@ function db_verifica_dias_trabalhados($regist, $ano, $mes, $dias_trab = false)
   return $retorno;
 }
 
-function db_alerta_dados_func($opcao, $regist, $ano, $mes, $ponto = null)
+function db_alerta_dados_func($opcao, $regist, $ano, $mes)
 {
-  require_once('pes4_gerafolha.RPC.php');
-  $rpc = new RPCgerafolha();
-  $quantidadeDeComplementaresDoServidor = json_decode($rpc->quantidadeDeComplementaresDoServidor($regist, $ano, $mes));
-
-  if ($quantidadeDeComplementaresDoServidor > 0 && $ponto == 'com') {
-    db_msgbox('Já existe complementar para este servidor no mês atual.');
-  }
-
   $retorno = db_verifica_dias_trabalhados($regist, $ano, $mes);
   $msgRetorno = "";
   $emFerias   = "";
@@ -287,7 +280,7 @@ function db_alerta_dados_func($opcao, $regist, $ano, $mes, $ponto = null)
       $emFerias = "\\n* Férias cadastradas.";
     }
     if (isset($dias_afasta) && $dias_afasta > 0 && strpos($opcao, "a") !== false) {
-      $emAfasta = "\\n* Afastamento cadastrado.\n\nVERIFIQUE SE O SERVIDOR TEM DIREITO A FÉRIAS E CONFIRA OS VALORES APÓS OS CÁLCULOS.";
+      $emAfasta = "\\n* Afastamento cadastrado.";
     }
     if (isset($data_recis) && $data_recis != "" && strpos($opcao, "r") !== false) {
       $emRescis = "\\n* Rescisão.";
@@ -349,9 +342,9 @@ function db_retorno_variaveis($ano, $mes, $registro)
       for ($index = 0; $index < $num_cols; $index++) {
         $nam_campo = pg_fieldname($resultvar, $index);
         $unam_campo = strtoupper(pg_fieldname($resultvar, $index));
-        global $$nam_campo, $$unam_campo;
-        $$nam_campo = pg_result($resultvar, 0, $nam_campo);
-        $$unam_campo = pg_result($resultvar, 0, $nam_campo);
+        global ${$nam_campo}, ${$unam_campo};
+        ${$nam_campo} = pg_result($resultvar, 0, $nam_campo);
+        ${$unam_campo} = pg_result($resultvar, 0, $nam_campo);
       }
     }
   }
@@ -381,9 +374,9 @@ function db_sel_cfpess($anofolha = null, $mesfolha = null, $campos = " * ")
     $num_rows = pg_numrows($record_cfpess);
     for ($index = 0; $index < $num_cols; $index++) {
       $nam_campo = pg_fieldname($record_cfpess, $index);
-      global $$nam_campo;
+      global ${$nam_campo};
       //      echo "<BR> nam_campo --> $nam_campo";
-      $$nam_campo = @pg_result($record_cfpess, 0, $nam_campo);
+      ${$nam_campo} = @pg_result($record_cfpess, 0, $nam_campo);
     }
     return $num_rows;
   }
@@ -670,17 +663,31 @@ function db_selectmax($matriz = null, $query = null, $tabela = "", $campos = " *
       $query .= " order by $order";
     }
   }
+  global ${$matriz};
+  $aChavesCachear = array('rubr_', 'basesr', 'bases');
+  $sNomeChave = $matriz;
+  $indice = md5($sNomeChave . "#" . str_replace(" ", "_", $query));
+  if (in_array($sNomeChave, $aChavesCachear)) {
 
+    $chave = DBRegistry::get($indice);
+    if (DBRegistry::has($indice)) {
+      ${$matriz} = $chave;
+      return true;
+    }
+  }
   $result = @db_query($query);
   //db_criatabela($result);
-  global $$matriz;
+  global ${$matriz};
   if ($result != false && pg_numrows($result) > 0) {
 
     // echo $matriz."[0]["";
+    $dados   = pg_fetch_all($result);
+    ${$matriz} = $dados;
+    if (in_array($sNomeChave, $aChavesCachear)) {
+      DBRegistry::add($indice, $dados);
+    }
 
-    $$matriz = pg_fetch_all($result);
-
-    //print_r($$matriz);
+    //print_r(${$matriz});
 
     return true;
   } else {
@@ -688,7 +695,7 @@ function db_selectmax($matriz = null, $query = null, $tabela = "", $campos = " *
       echo "Erro no query:  $query ";
       exit;
     } else {
-      $$matriz = null;
+      ${$matriz} = null;
       return false;
     }
   }
@@ -994,11 +1001,11 @@ function situacao_funcionario($registro = null, $datafim = null)
        *
        * Ex.: 45 dias de afastamento considera com afastamento apenas 15 dias
        */
-      /* if($afasta[0]["r45_situac"] == Afastamento::AFASTADO_DOENCA_MAIS_30_DIAS) {
+      if ($afasta[0]["r45_situac"] == Afastamento::AFASTADO_DOENCA_MAIS_30_DIAS) {
 
         $sDataAfastamento        = new DBDate($afasta[0]["r45_dtafas"]);
         $afasta[0]["r45_dtafas"] = $sDataAfastamento->adiantarPeriodo(30, 'd')->getDate();
-      }*/
+      }
 
       // Caso acha afastamento e data de retorno for maior ou igual da de afastamento ou retornou
 
@@ -1083,15 +1090,15 @@ function situacao_funcionario($registro = null, $datafim = null)
 
         //echo "<BR> Rescisao efetuada no ano e mes da folha";
 
-        $dias_pagamento_sf = (db_day($pessoal[$Ipessoal]["r01_recis"]) > 30 ? 30 : db_day($pessoal[$Ipessoal]["r01_recis"]));
+        $dias_pagamento_sf = db_day($pessoal[$Ipessoal]["r01_recis"]);
       } elseif ((db_year($pessoal[$Ipessoal]["r01_recis"]) < db_val(db_substr($subpes, 1, 4)))
         || (db_year($pessoal[$Ipessoal]["r01_recis"]) == db_val(db_substr($subpes, 1, 4))
           && db_month($pessoal[$Ipessoal]["r01_recis"]) < db_val(db_substr($subpes, -2)))
       ) {
-          //echo "<BR> Rescisao efetuada antes do ano e mes da folha --> ".$pessoal[$Ipessoal]["r01_recis"];
+        //echo "<BR> Rescisao efetuada antes do ano e mes da folha --> ".$pessoal[$Ipessoal]["r01_recis"];
 
-          $dias_pagamento_sf = 0;
-        }
+        $dias_pagamento_sf = 0;
+      }
     }
   }
   //  echo "<br>  dias_pagamento_sf --> $dias_pagamento_sf ";
@@ -1721,28 +1728,40 @@ function salario_base($pessoal, $Ipessoal, $cfuncao = "")
     $condicaoaux  = " and r02_regime = " . db_sqlformat($pessoal[$Ipessoal]["r01_regime"]);
     $condicaoaux .= " and r02_codigo = " . db_sqlformat($pessoal[$Ipessoal]["r01_padrao"]);
     global $padroes;
-    if (db_selectmax("padroes", "select * from padroes " . bb_condicaosubpes("r02_") . $condicaoaux)) {
+    $sChavePadrao = 'chavepadrao#' . $pessoal[$Ipessoal]["r01_regime"] . "#" . $pessoal[$Ipessoal]["r01_padrao"];
+    $padroes      = DBRegistry::get($sChavePadrao);
+    if (empty($padroes)) {
+
+      $lPadrao = db_selectmax("padroes", "select * from padroes " . bb_condicaosubpes("r02_") . $condicaoaux);
+      DBRegistry::add($sChavePadrao, array());
+      if ($lPadrao) {
+        DBRegistry::add($sChavePadrao, $padroes);
+      }
+    }
+    if (!empty($padroes)) {
+
       if (strtolower($padroes[0]["r02_tipo"]) == "h") {
         $valor_padrao = bb_round($padroes[0]["r02_valor"] * $F008, 2);
       } else {
         $valor_padrao = $padroes[0]["r02_valor"];
       }
       if (!db_empty($pessoal[$Ipessoal]["r01_hrssem"]) && $padroes[0]["r02_hrssem"] > 0) {
+
         $F007 = $valor_padrao / $padroes[0]["r02_hrssem"] * $pessoal[$Ipessoal]["r01_hrssem"];
         $F010 = $valor_padrao / $padroes[0]["r02_hrssem"] * $pessoal[$Ipessoal]["r01_hrssem"];
-        //echo "<BR> 2 F010 --> $F010";
       } else {
         $F007 = $valor_padrao;
         $F010 = $valor_padrao;
-        //echo "<BR> 3 F010 --> $F010";
       }
       $diversominimo = $padroes[0]["r02_minimo"];
     } else {
+
       $F007 = 0;
       $F010 = 0;
     }
   }
   if (strtolower($pessoal[$Ipessoal]["r01_progr"]) == "s"  && db_empty($pessoal[$Ipessoal]["r01_salari"])) {
+
     $condicaoaux  = " and r24_regime = " . db_sqlformat($pessoal[$Ipessoal]["r01_regime"]);
     $condicaoaux .= " and r24_padrao = " . db_sqlformat($pessoal[$Ipessoal]["r01_padrao"]);
     $condicaoaux .= " order by r24_meses ";
@@ -2004,14 +2023,14 @@ function retornaCompetenciasByPeriodo(DBDate $oDataInicial, DBDate $oDataFinal)
   /**
    * Competencia inicial
    */
-  $iMesInicio = (int)$oDataInicial->getMes();
-  $iAnoInicio = (int)$oDataInicial->getAno();
+  $iMesInicio = (int) $oDataInicial->getMes();
+  $iAnoInicio = (int) $oDataInicial->getAno();
 
   /**
    * Competencia final
    */
-  $iMesFim = (int)$oDataFinal->getMes();
-  $iAnoFim = (int)$oDataFinal->getAno();
+  $iMesFim = (int) $oDataFinal->getMes();
+  $iAnoFim = (int) $oDataFinal->getAno();
 
   /**
    * Valida datas, data inicial nao pode ser maior que final

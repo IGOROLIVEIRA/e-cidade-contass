@@ -343,9 +343,9 @@ if (isset($confirmar) || isset($cancelar)) {
     if (isset($confirmar)) {
       echo "
            <script>
-    top.corpo.iframe_empautitem.location.href='emp1_empautitemtaxatabela001.php?db_opcaoal=3&e55_autori=$e56_autori';\n
+    CurrentWindow.corpo.iframe_empautitem.location.href='emp1_empautitemtaxatabela001.php?db_opcaoal=3&e55_autori=$e56_autori';\n
     parent.document.formaba.empautret.disabled=false;
-                top.corpo.iframe_empautret.setValorNota($e54_valor);
+                CurrentWindow.corpo.iframe_empautret.setValorNota($e54_valor);
      </script>
           ";
     } else {
@@ -357,9 +357,9 @@ if (isset($confirmar) || isset($cancelar)) {
           document.form1.atudo.value='';
           document.form1.e54_valor.value='';
           document.form1.atudo.value='';
-    top.corpo.iframe_empautitem.location.href='emp1_empautitemtaxatabela001.php?e55_autori=$e56_autori';\n
+    CurrentWindow.corpo.iframe_empautitem.location.href='emp1_empautitemtaxatabela001.php?e55_autori=$e56_autori';\n
     parent.document.formaba.empautret.disabled=true;
-                top.corpo.iframe_empautret.setValorNota($e54_valor);
+                CurrentWindow.corpo.iframe_empautret.setValorNota($e54_valor);
      </script>
           ";
     }
@@ -369,7 +369,7 @@ if (isset($confirmar) || isset($cancelar)) {
 } else {
 
   if (isset($e54_valor)) {
-    echo "<script>top.corpo.iframe_empautret.setValorNota($e54_valor);</script>";
+    echo "<script>CurrentWindow.corpo.iframe_empautret.setValorNota($e54_valor);</script>";
   }
 }
 if (!isset($o47_coddot) || (isset($o47_coddot) && trim($o47_coddot) == "")) {

@@ -26,8 +26,8 @@
  *                                licenca/licenca_pt.txt
  */
 
-require_once("classes/db_db_logsacessa_classe.php" );
-require_once("libs/db_stdlib.php" );
+require_once(modification("classes/db_db_logsacessa_classe.php" ));
+require_once(modification("libs/db_stdlib.php" ));
 
 /**
  * ConsultaDados
@@ -83,12 +83,42 @@ class ConsultaDados {
    */
   public function consultar( $sMetodo, $aParametrosEntrada , $aResultado ) {
 
-    global $conn;
+    try {
 
-    $this->rsConn             = $conn;
-    $this->aParametrosEntrada = $aParametrosEntrada;
-    $this->aResultado         = $aResultado;
-    return $this->getResultadoSQL( $sMetodo );
+      global $conn;
+
+      $this->rsConn             = $conn;
+      $this->aParametrosEntrada = $aParametrosEntrada;
+      $this->aResultado         = $aResultado;
+
+      return $this->getResultadoSQL( $sMetodo );
+
+    } catch ( DBException $oErro ) {
+
+      $oDaoDBLogsAcessa            = new cl_db_logsacessa();
+      $oDaoDBLogsAcessa->ip        = $_SERVER['REMOTE_ADDR'];
+      $oDaoDBLogsAcessa->data      = date("Y-m-d");
+      $oDaoDBLogsAcessa->hora      = date("H:i");
+      $oDaoDBLogsAcessa->obs       = pg_escape_string($oErro->getMessage());
+      $oDaoDBLogsAcessa->arquivo   = $sMetodo;
+      $oDaoDBLogsAcessa->id_usuario= 1;
+      $oDaoDBLogsAcessa->id_modulo = $_SESSION['DB_modulo'];
+      $oDaoDBLogsAcessa->id_item   = isset($_SESSION['DB_itemmenu_acessado']) ? $_SESSION['DB_itemmenu_acessado'] : 9605;
+      $oDaoDBLogsAcessa->coddepto  = 1;
+      $oDaoDBLogsAcessa->instit    = $oErro->getCode();
+      $oDaoDBLogsAcessa->incluir(null);
+      $_SESSION = $oDaoDBLogsAcessa->codsequen;
+
+      if ( $oDaoDBLogsAcessa->erro_status == "0" ) {
+        throw new SoapFault("e-Cidade","Erro ao processar registros de Log.\n" . utf8_encode($oDaoDBLogsAcessa->erro_msg));
+      }
+
+      throw new SoapFault("e-Cidade", "Erro ao Buscar os Dados do WebService. Contate Suporte. " . pg_last_error());
+    } catch ( SoapFault $oErro ) {
+      throw new Exception( $oErro->faultstring );
+    } catch ( Exception $oErro ) {
+      throw $oErro;
+    }
   }
 
   /**
@@ -116,7 +146,7 @@ class ConsultaDados {
     $sCaminhoMetodo = DBFileExplorer::getCaminhoArquivo(ConsultaDados::PATH_REQUISICOES, $sMetodo.'.xml');
 
     if ( !$sCaminhoMetodo ) {
-      throw new SoapFault("e-Cidade", "Metodo {$sMetodo} nao Encontrado. Contate Suporte.");
+      throw new SoapFault("e-Cidade", "Metodo nao Encontrado. Contate Suporte.");
     }
 
     $sSQL                = ConsultaDados::carregarXMLPesquisa( $sCaminhoMetodo );
@@ -149,36 +179,24 @@ class ConsultaDados {
     }
 
     $rsSQL = pg_get_result( $this->rsConn );
+    $sErro = pg_last_error();
 
-    if ( !$rsSQL ) {
-      throw new SoapFault("e-Cidade", "Erro ao Buscar os Dados do WebService. Contate Suporte. " . pg_last_error());
-    }
-    $sLog                        = "--------------------------------------------------------------------\n";
-    $sLog                       .= "CHAMADA PARA O MÉTODO: \n{$sMetodo}                                 \n";
-    $sLog                       .= "--------------------------------------------------------------------\n";
-    $sLog                       .= "FILTROS PARA CONSULTA:\n".print_r($this->aParametrosEntrada, 1)."   \n";
-    $sLog                       .= "--------------------------------------------------------------------\n";
-    $sLog                       .= "CAMPOS INFORMADOS PARA RETORNO:\n ". print_r($this->aResultado, 1)."\n";
-    $sLog                       .= "--------------------------------------------------------------------\n";
-    $sLog                       .= "QUERY EXECUTADA:\n". $sSQL;
-    $sLog                       .= "--------------------------------------------------------------------\n";
-    $sLog                       .= "TEMPO DE EXECUCAO: \n".$iTempoExecucaoQuery . "seg\n";
+    if ( !empty($sErro) ) {
 
-    $oDaoDBLogsAcessa            = new cl_db_logsacessa();
-    $oDaoDBLogsAcessa->ip        = $_SERVER['REMOTE_ADDR'];
-    $oDaoDBLogsAcessa->data      = date("Y-m-d");
-    $oDaoDBLogsAcessa->hora      = date("H:i");
-    $oDaoDBLogsAcessa->obs       = pg_escape_string($sLog);
-    $oDaoDBLogsAcessa->arquivo   = "1";
-    $oDaoDBLogsAcessa->id_usuario= 1;
-    $oDaoDBLogsAcessa->id_modulo = 1;
-    $oDaoDBLogsAcessa->id_item   = isset($_SESSION['DB_itemmenu_acessado']) ? $_SESSION['DB_itemmenu_acessado'] : 9605;
-    $oDaoDBLogsAcessa->coddepto  = 1;
-    $oDaoDBLogsAcessa->instit    = $oDados->codigo;
-    $oDaoDBLogsAcessa->incluir(null);
+      $sLog                        = "--------------------------------------------------------------------\n";
+      $sLog                       .= "CHAMADA PARA O MÉTODO: \n{$sMetodo}                                 \n";
+      $sLog                       .= "--------------------------------------------------------------------\n";
+      $sLog                       .= "FILTROS PARA CONSULTA:\n".print_r($this->aParametrosEntrada, 1)."   \n";
+      $sLog                       .= "--------------------------------------------------------------------\n";
+      $sLog                       .= "CAMPOS INFORMADOS PARA RETORNO:\n ". print_r($this->aResultado, 1)."\n";
+      $sLog                       .= "--------------------------------------------------------------------\n";
+      $sLog                       .= "QUERY EXECUTADA:\n". $sSQL;
+      $sLog                       .= "--------------------------------------------------------------------\n";
+      $sLog                       .= "ERRO OCORRIDO:\n". pg_last_error() . "\n";
+      $sLog                       .= "--------------------------------------------------------------------\n";
+      $sLog                       .= "TEMPO DE EXECUCAO: \n".$iTempoExecucaoQuery . "seg\n";
 
-    if ( $oDaoDBLogsAcessa->erro_status == "0" ) {
-      throw new SoapFault("e-Cidade","Erro ao processar registros de Log.\n" . utf8_encode($oDaoDBLogsAcessa->erro_msg));
+      throw new DBException($sLog, $oDados->codigo);
     }
 
     $iMemoriaLimite = preg_replace('/[a-zA-Z]/',"",ini_get("memory_limit")) * 1024 * 1024;
@@ -251,7 +269,7 @@ class ConsultaDados {
       foreach ( $aLabelsInformados as $sLabelInformado ) {
 
         if ( !array_key_exists($sLabelInformado, $aCamposXML ) ) {
-          throw new Exception("O Campo {$sLabelInformado} nao foi encontrado na Lista de campos permitidos para o arquivo: {$sCaminhoXML}");
+          throw new Exception("O Campo $sLabelInformado nao foi encontrado na Lista de campos permitidos");
         }
 
         $aCampos[$sLabelInformado] = $aCamposXML[$sLabelInformado];

@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -52,8 +52,8 @@ $oGet  = db_utils::postMemory($_GET);
   <tr>
     <td>&nbsp;</td>
   </tr>
-  <tr> 
-    <td valign="top"> 
+  <tr>
+    <td valign="top">
      <fieldset>
        <legend>
          <b>Matriculas Selecionadas</b>
@@ -79,9 +79,9 @@ $oGet  = db_utils::postMemory($_GET);
  * Monta grid com as matriculas.
  **/
 function js_montaGrid() {
-        
+
   /**
-   * Instância a DBGrid. 
+   * Instância a DBGrid.
    **/
   oDBGridMatriculas = new DBGrid("listaMatriculas");
   oDBGridMatriculas.nameInstance = "oDBGridMatriculas";
@@ -92,16 +92,16 @@ function js_montaGrid() {
   oDBGridMatriculas.show($('boxDataGrid'));
   js_buscaMatriculas();
 }
-   
+
 /**
  * Busca dados das matriculas.
  **/
 function js_buscaMatriculas() {
-  
-  top.corpo.iframe_gerasefip.$('matriculasselecionadas').value = '';
-  
+
+  CurrentWindow.corpo.iframe_gerasefip.$('matriculasselecionadas').value = '';
+
   js_divCarregando('Aguarde buscando matriculas...', 'msgBox');
-  
+
   var oParam                = new Object();
   oParam.exec               = 'getMatriculas';
   oParam.anousu             = parent.iframe_gerasefip.$('anousu').value;
@@ -115,44 +115,44 @@ function js_buscaMatriculas() {
                                                }
                                               );
 }
-  
+
 /**
  * Preenche os dados no datagrid.
  **/
 function js_preencherGrid(oAjax) {
-  
+
   js_removeObj("msgBox");
-    
-  var aRetorno       = eval("("+oAjax.responseText+")");     
+
+  var aRetorno       = eval("("+oAjax.responseText+")");
   var aListaMatriculas = aRetorno.aListaMatriculas;
-     
+
   if (aRetorno.status == 2) {
-    
+
     alert(aRetorno.message.urlDecode());
     return false;
   } else {
-    
+
     oDBGridMatriculas.clearAll(true);
-     
+
     if (aListaMatriculas.length > 0) {
-        
+
       oDBGridMatriculas.clearAll(true);
       aListaMatriculas.each(function (oDadoRetorno, iInd) {
-          
+
         aLinha    = new Array();
         aLinha[0] = oDadoRetorno.rh01_regist;
         aLinha[1] = oDadoRetorno.z01_nome.urlDecode();
-  
-        oDBGridMatriculas.addRow(aLinha); 
+
+        oDBGridMatriculas.addRow(aLinha);
       });
-          
+
       oDBGridMatriculas.renderRows();
     }
-    
+
     return true;
   }
 }
-  
+
 /**
  * Retorna as matriculas selecionadas
  **/
@@ -161,18 +161,18 @@ function js_retornaMatriculasSelecionados() {
   var aMatriculasSelecionados = oDBGridMatriculas.getSelection();
   var aSelecionados           = new Array();
   if (aMatriculasSelecionados.length > 0) {
-              
+
     aMatriculasSelecionados.each(function (aDadoRetorno, iInd) {
       aSelecionados[iInd] = aDadoRetorno[0];
     });
   }
-  
+
   return aSelecionados.implode(',');
 }
 
 function js_confirmar() {
 
-  top.corpo.iframe_gerasefip.$('matriculasselecionadas').value = js_retornaMatriculasSelecionados();
+  CurrentWindow.corpo.iframe_gerasefip.$('matriculasselecionadas').value = js_retornaMatriculasSelecionados();
   parent.mo_camada('gerasefip');
 }
 </script>

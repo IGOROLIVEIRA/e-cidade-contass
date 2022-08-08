@@ -43,9 +43,9 @@
       if (this.aParameters.length) {
 
         var aItens = this.aParameters.map(function(oParam) {
-            return oParam.name;
-          }),
-          iIndex = aItens.indexOf(sName);
+                return oParam.name;
+              }),
+            iIndex = aItens.indexOf(sName);
 
         if (iIndex != -1) {
           this.aParameters[iIndex].value = sValue;
@@ -54,9 +54,9 @@
       }
 
       this.aParameters.push({
-        name : sName,
-        value : sValue
-      });
+          name : sName,
+          value : sValue
+        });
 
       return this;
     },
@@ -114,8 +114,8 @@
       if (this.sMethod == "get") {
 
         var sParameters = this.aParameters.map(function(oParam) {
-          return oParam.name + "=" + encodeURIComponent(oParam.value)
-        }).join("&");
+            return oParam.name + "=" + encodeURIComponent(oParam.value)
+          }).join("&");
 
         sURL = this.sURL + (sParameters != '' ? '?' : '') + sParameters;
       }
@@ -124,10 +124,10 @@
        * Abre a Window
        */
       var oWindow = window.open(
-        sURL,
-        this.sWindowName,
-        'width=' + (screen.availWidth-5) + ',height=' + (screen.availHeight-40) + ',scrollbars=1,location=0'
-      );
+          sURL,
+          this.sWindowName,
+          'width=' + (screen.availWidth-5) + ',height=' + (screen.availHeight-40) + ',scrollbars=1,location=0'
+        );
       oWindow.moveTo(0,0);
 
       /**

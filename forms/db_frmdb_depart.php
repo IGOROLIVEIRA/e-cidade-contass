@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: configuracoes
@@ -34,7 +34,7 @@ $clrotulo->label("o41_unidade");
 ?>
 <script>
   function js_troca(){
-  
+
       obj = document.createElement('input');
       obj.setAttribute('name', 'troca');
       obj.setAttribute('type', 'hidden');
@@ -50,9 +50,9 @@ $clrotulo->label("o41_unidade");
     $pg="con1_db_depart002.php";
   }else if($db_opcao==3 || $db_opcao==33){
     $pg="con1_db_depart003.php";
-  }  
-	  
-	  
+  }
+
+
 ?>
 <form name="form1" method="post" action="<?=$pg?>">
   <center>
@@ -124,8 +124,8 @@ db_input('descrdepto',40,$Idescrdepto,true,'text',$db_opcao,"")
           if ($codigo == db_getsession("DB_instit")){
              $iInstit = null;
           }else{
-             $iInstit = db_getsession("DB_instit"); 
-          } 
+             $iInstit = db_getsession("DB_instit");
+          }
           $result = $cldb_config->sql_record($cldb_config->sql_query_file($iInstit,"codigo,nomeinst","codigo"));
           db_selectrecord("instit",$result,true,$db_opcao,'','','','',"js_getOrgaos(this.value);");
           ?>
@@ -144,7 +144,7 @@ db_input('descrdepto',40,$Idescrdepto,true,'text',$db_opcao,"")
                                              null,null,null,"distinct o40_orgao,o40_descr","o40_descr",$sWhere));
           if (@pg_numrows($result) == 0) {
             echo "<strong>Sistema não localizou nenhum orgão com unidades vinculadas na instituição selecionada!</strong>";
-          } else { 
+          } else {
             db_selectrecord("o40_orgao",@$result,true,$db_opcao,'','','','',"js_getUnidades(this.value);");
           }
           ?>
@@ -166,13 +166,13 @@ db_input('descrdepto',40,$Idescrdepto,true,'text',$db_opcao,"")
                                                                               "o41_unidade,o41_descr","o41_descr",
                                                                               "o41_anousu = " . db_getsession("DB_anousu") . " and o41_orgao=$o40_orgao"));
             db_selectrecord("o41_unidade",@$result,true,$db_opcao);
-          }  
+          }
         ?>
         </td>
       </tr>
       <?
       if ($db_opcao != 1){
-        
+
         echo " <tr> ";
         echo "   <td nowrap title='{$Tlimite}'>";
         echo  $Llimite;
@@ -235,7 +235,7 @@ db_input('descrdepto',40,$Idescrdepto,true,'text',$db_opcao,"")
     </table>
   </center>
 <input name="db_opcao" type="submit" id="db_opcao"value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?>>
-	
+
   <?
    if ($db_opcao==2||$db_opcao==22){
   ?>
@@ -254,7 +254,7 @@ db_input('descrdepto',40,$Idescrdepto,true,'text',$db_opcao,"")
          parent.iframe_g1.location.href='con1_db_depart001.php';
     }
     function js_pesquisa(){
-      js_OpenJanelaIframe('top.corpo.iframe_g1','db_iframe_db_depart','func_db_depart.php?funcao_js=parent.js_preenchepesquisa|coddepto','Pesquisa',true);
+      js_OpenJanelaIframe('CurrentWindow.corpo.iframe_g1','db_iframe_db_depart','func_db_depart.php?funcao_js=parent.js_preenchepesquisa|coddepto','Pesquisa',true);
     }
     function js_preenchepesquisa(chave){
       <?
@@ -263,7 +263,7 @@ db_input('descrdepto',40,$Idescrdepto,true,'text',$db_opcao,"")
         if($db_opcao==2||$db_opcao==22){
         ?>
          parent.iframe_g2.location.href='con1_db_departender002.php?chavepesquisa='+chave+'&coddepto='+chave;
-        <?}else{?> 
+        <?}else{?>
          parent.iframe_g2.location.href='con1_db_departender003.php?chavepesquisa='+chave+'&coddepto='+chave;
          <?}?>
         db_iframe_db_depart.hide();
@@ -272,87 +272,87 @@ db_input('descrdepto',40,$Idescrdepto,true,'text',$db_opcao,"")
       ?>
     }
     function js_pesquisaalt(){
-      js_OpenJanelaIframe('top.corpo.iframe_g1','db_iframe_db_depart','func_db_departalt.php?funcao_js=parent.js_preenchepesquisa|coddepto','Pesquisa',true,1,0);
+      js_OpenJanelaIframe('CurrentWindow.corpo.iframe_g1','db_iframe_db_depart','func_db_departalt.php?funcao_js=parent.js_preenchepesquisa|coddepto','Pesquisa',true,1,0);
     }
     /*
      * Funcao para pegar os orgaos de determinada instituicao;
      */
     function js_getOrgaos(iInstit){
-      
+
      strJson = '{"method":"getOrgaos","iInstit":"'+iInstit+'"}';
      sUrl    = 'con4_db_departRPC.php';
      oAjax   = new Ajax.Request(
-                              sUrl, 
+                              sUrl,
                                 {
-                                 method: 'post', 
-                                 parameters: 'json='+strJson, 
+                                 method: 'post',
+                                 parameters: 'json='+strJson,
                                  onComplete: js_retornoOrgaos
                                 }
                                );
     }
-    
+
     function js_getUnidades(iOrgao){
-      
+
       strJson = '{"method":"getUnidades","iOrgao":"'+iOrgao+'"}';
       sUrl    = 'con4_db_departRPC.php';
       oAjax   = new Ajax.Request(
-                              sUrl, 
+                              sUrl,
                                 {
-                                 method: 'post', 
-                                 parameters: 'json='+strJson, 
+                                 method: 'post',
+                                 parameters: 'json='+strJson,
                                  onComplete: js_retornoUnidades
                                 }
                                );
     }
-    
+
     function js_retornoOrgaos(oAjax){
-      
+
       oOrgaos = eval("("+oAjax.responseText+")");
       $('o40_orgao').options.length        = 0;
       $('o40_orgaodescr').options.length   = 0;
       $('o41_unidade').options.length      = 0;
       $('o41_unidadedescr').options.length = 0;
       if (oOrgaos.length > 0){
-        
+
         $('o41_unidadedescr').disabled = false;
         $('o41_unidade').disabled      = false;
         js_getUnidades(oOrgaos[0].o40_orgao);
         for (iInd = 0; iInd < oOrgaos.length; iInd++){
-         
+
           oOptionId    = new Option(oOrgaos[iInd].o40_orgao, oOrgaos[iInd].o40_orgao);
           $('o40_orgao').add(oOptionId,null);
           oOptionDescr = new Option(js_urldecode(oOrgaos[iInd].o40_descr), oOrgaos[iInd].o40_orgao);
           $('o40_orgaodescr').add(oOptionDescr,null);
        }
      }
-      
+
     }
-    
+
     function js_retornoUnidades(oAjax){
-      
+
       oUnidades = eval("("+oAjax.responseText+")");
       $('o41_unidade').options.length      = 0;
       $('o41_unidadedescr').options.length = 0;
       $('o41_unidadedescr').disabled = false;
       $('o41_unidade').disabled      = false;
       for (iInd = 0; iInd < oUnidades.length; iInd++){
-         
+
         oOptionId    = new Option(oUnidades[iInd].o41_unidade, oUnidades[iInd].o41_unidade);
         $('o41_unidade').add(oOptionId,null);
         oOptionDescr = new Option(js_urldecode(oUnidades[iInd].o41_descr), oUnidades[iInd].o41_unidade);
         $('o41_unidadedescr').add(oOptionDescr,null);
       }
-      
+
     }
-    
+
     function js_urldecode(sString){
-      
+
       sString = sString.replace(/\+/g," ");
       sString = unescape(sString);
-      return sString;  
-      
+      return sString;
+
     }
-    
+
     $('instit').style.width           = '60px';
     $('institdescr').style.width      = '430px';
     $('o40_orgao').style.width        = '60px';
@@ -364,30 +364,30 @@ db_input('descrdepto',40,$Idescrdepto,true,'text',$db_opcao,"")
     	  if(mostra==true){
     	    js_OpenJanelaIframe('','db_iframe_cgm','func_nome.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome','Pesquisa',true);
     	  }else{
-    	     if(document.form1.numcgm.value != ''){ 
+    	     if(document.form1.numcgm.value != ''){
     	        js_OpenJanelaIframe('','db_iframe_cgm','func_nome.php?pesquisa_chave='+document.form1.numcgm.value+'&funcao_js=parent.js_mostracgm','Pesquisa',false);
     	     }else{
-    	       document.form1.z01_nome.value = ''; 
+    	       document.form1.z01_nome.value = '';
     	     }
     	  }
     	}
     	function js_mostracgm(erro,chave){
-    	  document.form1.z01_nome.value = chave; 
-    	  if(erro==true){ 
-    	    document.form1.numcgm.focus(); 
-    	    document.form1.numcgm.value = ''; 
+    	  document.form1.z01_nome.value = chave;
+    	  if(erro==true){
+    	    document.form1.numcgm.focus();
+    	    document.form1.numcgm.value = '';
     	  }
     	}
     	function js_mostracgm1(chave1,chave2){
     	  document.form1.numcgm.value = chave1;
     	  document.form1.z01_nome.value = chave2;
     	  db_iframe_cgm.hide();
-    	}   
-    
+    	}
+
 </script>
 <?php
   if ($db_opcao == 1){
-   
+
     echo "<script>\n";
     //echo "\$('o41_unidadedescr').disabled = true;\n";
     //echo "\$('o41_unidade').disabled = true;\n";

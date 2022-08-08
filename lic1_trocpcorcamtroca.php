@@ -695,7 +695,7 @@ ORDER BY $ordem";
 </form>
 <script>
     function js_troca(lote,orcamento,orcamforne){
-        top.corpo.document.location.href = 'lic1_trocpcorcamtroca001.php?lote='+lote
+        CurrentWindow.corpo.document.location.href = 'lic1_trocpcorcamtroca001.php?lote='+lote
             +'&orcamento='+orcamento
             +'&orcamforne='+orcamforne
             +'&l20_codigo=<?=$l21_codliclicita?>';

@@ -204,7 +204,7 @@ if(isset($excluir)){
   <script>
    parent.document.formaba.a2.disabled = false;
    parent.document.formaba.a2.style.color = "black";
-   top.corpo.iframe_a2.location.href='edu1_alunoturma001.php?ed60_i_turma=<?=$ed57_i_codigo?>&ed57_c_descr=<?=$ed57_c_descr?>&ed52_c_descr=<?=$ed52_c_descr?>';
+   CurrentWindow.corpo.iframe_a2.location.href='edu1_alunoturma001.php?ed60_i_turma=<?=$ed57_i_codigo?>&ed57_c_descr=<?=$ed57_c_descr?>&ed52_c_descr=<?=$ed52_c_descr?>';
   </script>
  <?
 }
@@ -242,7 +242,7 @@ if(isset($excluir)){
   <script>
    parent.document.formaba.a2.disabled = false;
    parent.document.formaba.a2.style.color = "black";
-   top.corpo.iframe_a2.location.href='edu1_alunoturma001.php?ed60_i_turma=<?=$ed60_i_turma?>&ed57_c_descr=<?=$ed57_c_descr?>&ed52_c_descr=<?=$ed52_c_descr?>';
+   CurrentWindow.corpo.iframe_a2.location.href='edu1_alunoturma001.php?ed60_i_turma=<?=$ed60_i_turma?>&ed57_c_descr=<?=$ed57_c_descr?>&ed52_c_descr=<?=$ed52_c_descr?>';
   </script>
   <?
   $clmatricula->erro(true,true);

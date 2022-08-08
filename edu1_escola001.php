@@ -124,7 +124,7 @@ if(isset($incluir)){
   <script>
    parent.document.formaba.a2.disabled = false;
    parent.document.formaba.a2.style.color = "black";
-   top.corpo.iframe_a2.location.href='edu1_cursobase001.php?escola=<?=$ed18_i_codigo?>&ed18_c_nome=<?=$ed18_c_nome?>';
+   CurrentWindow.corpo.iframe_a2.location.href='edu1_cursobase001.php?escola=<?=$ed18_i_codigo?>&ed18_c_nome=<?=$ed18_c_nome?>';
   </script>
   <?
  }else{
@@ -180,7 +180,7 @@ if(isset($incluir)){
   <script>
    parent.document.formaba.a2.disabled = false;
    parent.document.formaba.a2.style.color = "black";
-   top.corpo.iframe_a2.location.href='edu1_cursobase001.php?escola=<?=$ed18_i_codigo?>&ed18_c_nome=<?=$ed18_c_nome?>';
+   CurrentWindow.corpo.iframe_a2.location.href='edu1_cursobase001.php?escola=<?=$ed18_i_codigo?>&ed18_c_nome=<?=$ed18_c_nome?>';
   </script>
   <?
   $clescola->erro(true,true);

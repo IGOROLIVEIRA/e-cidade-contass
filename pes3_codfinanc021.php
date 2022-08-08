@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 set_time_limit(0);
@@ -40,7 +40,7 @@ if ($sigla == "") {
 	die();
 }
 
-$sSql = "select distinct 
+$sSql = "select distinct
                 rh01_regist      as r01_regist,
                 z01_nome,
                 {$oGet->sigla}_valor as valor,
@@ -55,11 +55,11 @@ $sSql = "select distinct
                                       and rhpessoalmov.rh02_regist  = {$oGet->arquivo}.{$oGet->sigla}_regist
                                       and rhpessoalmov.rh02_instit  = ".db_getsession("DB_instit")."
                inner join rhpessoal    on rhpessoal.rh01_regist     = rhpessoalmov.rh02_regist
-               inner join rhlota       on rhlota.r70_codigo         = rhpessoalmov.rh02_lota  
-										                  and rhlota.r70_instit         = rhpessoalmov.rh02_instit   
+               inner join rhlota       on rhlota.r70_codigo         = rhpessoalmov.rh02_lota
+										                  and rhlota.r70_instit         = rhpessoalmov.rh02_instit
                inner join cgm          on cgm.z01_numcgm            = rhpessoal.rh01_numcgm
-         where {$oGet->sigla}_rubric = '{$oGet->rubrica}' 
-           and {$oGet->sigla}_anousu = {$oGet->ano} 
+         where {$oGet->sigla}_rubric = '{$oGet->rubrica}'
+           and {$oGet->sigla}_anousu = {$oGet->ano}
            and {$oGet->sigla}_mesusu = {$oGet->mes}
 					 and {$oGet->sigla}_instit = ".db_getsession("DB_instit")."
           order by z01_nome";
@@ -104,22 +104,22 @@ th {
         <th nowrap>Valor</th>
       </tr>
        <?
-   
-   
+
+
    	$sCor = "#DDDDDD";
    	$totalvalor = 0;
    	$totalquant = 0;
    	$totalregis = 0;
    	for ($iInd = 0; $iInd < pg_numrows($rsDadosPonto); $iInd ++) {
-   		
+
    		$oDados = db_utils::fieldsMemory($rsDadosPonto, $iInd, true);
-   		
+
    		if ($sCor=="#DDDDDD") {
    			$sCor = "#FFFFFF";
    		} else if ($sCor=="#FFFFFF") {
    			$sCor = "#DDDDDD";
    		}
-   		
+
    		$totalvalor += $oDados->valor;
    		$totalquant += $oDados->quant;
    		$totalregis ++;
@@ -165,7 +165,7 @@ th {
    }
   ?>
    </table>
-   
+
    <table>
      <tr>
        <td colspan="6" >&nbsp;&nbsp;</td>
@@ -176,7 +176,7 @@ th {
 </body>
 <script>
 function js_consultaregistro(registro,rubrica){
-  js_OpenJanelaIframe('top.corpo','func_nome','pes3_conspessoal002.php?regist='+registro,'Visualização das matriculas cadastradas',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','func_nome','pes3_conspessoal002.php?regist='+registro,'Visualização das matriculas cadastradas',true);
 }
 </script>
 </html>

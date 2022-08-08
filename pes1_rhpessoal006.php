@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -80,7 +80,7 @@ if(isset($excluir)){
   $erro_msg = $clrhpesdoc->erro_msg;
   if($clrhpesdoc->erro_status==0){
     $sqlerro=true;
-  } 
+  }
 
   $result_pessoalmov = $clrhpessoalmov->sql_record($clrhpessoalmov->sql_query_file(null,null,"distinct rh02_seqpes as seqpes","","rh02_regist=".$rh01_regist." and rh02_instit = ".db_getsession("DB_instit")));
   for($i=0; $i<$clrhpessoalmov->numrows; $i++){
@@ -104,7 +104,7 @@ if(isset($excluir)){
       }
     }
 
-    if($sqlerro==false){ 
+    if($sqlerro==false){
       $clrhpesrescisao->excluir($seqpes);
       if($clrhpesrescisao->erro_status==0){
         $erro_msg = $clrhpesrescisao->erro_msg;
@@ -119,7 +119,7 @@ if(isset($excluir)){
     $erro_msg = $clrhpessoalmov->erro_msg;
     if($clrhpessoalmov->erro_status==0){
       $sqlerro=true;
-    } 
+    }
   }
 
   if($sqlerro == false){
@@ -135,7 +135,7 @@ if(isset($excluir)){
     $erro_msg = $clrhferias->erro_msg;
     if($clrhferias->erro_status==0){
       $sqlerro=true;
-    } 
+    }
   }
 
   if($sqlerro == false) {
@@ -143,7 +143,7 @@ if(isset($excluir)){
     $erro_msg = $clrhpessoal->erro_msg;
     if($clrhpessoal->erro_status==0){
       $sqlerro=true;
-    } 
+    }
   }
 
   if($sqlerro == false && $hasContratoEmergencial == "t") {
@@ -153,14 +153,14 @@ if(isset($excluir)){
     $erro_msg = $clrhcontratoemergencialrenovacao->erro_msg;
     if ($clrhcontratoemergencialrenovacao->erro_status == 0) {
       $sqlerro=true;
-    } 
+    }
 
     $clrhcontratoemergencial->excluir(null, "rh163_matricula = {$rh01_regist}");
 
     $erro_msg = $clrhcontratoemergencial->erro_msg;
     if ($clrhcontratoemergencial->erro_status == 0) {
       $sqlerro=true;
-    }     
+    }
   }
 
   db_fim_transacao($sqlerro);
@@ -203,8 +203,8 @@ if(isset($excluir)){
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="document.getElementById('db_opcao').focus();" >
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
 	<?
 	include("forms/db_frmrhpessoal.php");
@@ -239,16 +239,16 @@ if(isset($chavepesquisa)){
  echo "
   <script>
       function js_db_libera(){
-      
+
          parent.document.formaba.rhpesdoc.disabled=false;
-         top.corpo.iframe_rhpesdoc.location.href='pes1_rhpesdoc001.php?db_opcaoal=33&rh16_regist=".@$rh01_regist."';
-         
+         CurrentWindow.corpo.iframe_rhpesdoc.location.href='pes1_rhpesdoc001.php?db_opcaoal=33&rh16_regist=".@$rh01_regist."';
+
          parent.document.formaba.rhpessoalmov.disabled=false;
-         top.corpo.iframe_rhpessoalmov.location.href='pes1_rhpessoalmov001.php?db_opcaoal=33&rh02_regist=".@$rh01_regist."';
-         
+         CurrentWindow.corpo.iframe_rhpessoalmov.location.href='pes1_rhpessoalmov001.php?db_opcaoal=33&rh02_regist=".@$rh01_regist."';
+
          parent.document.formaba.rhsuspensaopag.disabled=false;
-         top.corpo.iframe_rhsuspensaopag.location.href='pes1_rhsuspensaopag001.php?iMatricula=".@$rh01_regist."&db_opcao={$db_opcao}';
-         
+         CurrentWindow.corpo.iframe_rhsuspensaopag.location.href='pes1_rhsuspensaopag001.php?iMatricula=".@$rh01_regist."&db_opcao={$db_opcao}';
+
      ";
          if(isset($liberaaba)){
            echo "  parent.mo_camada('rhpesdoc');";

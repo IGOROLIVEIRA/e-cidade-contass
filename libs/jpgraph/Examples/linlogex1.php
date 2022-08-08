@@ -1,8 +1,8 @@
 <?php
 
-include ("../jpgraph.php");
-include ("../jpgraph_log.php");
-include ("../jpgraph_error.php");
+include (__DIR__ . "/../jpgraph.php");
+include (__DIR__ . "/../jpgraph_log.php");
+include (__DIR__ . "/../jpgraph_error.php");
 
 $xdata = array( 2.0,  2.5,  3.0,  4.0,  5.0,  6.0,  8.0, 10.0,
                12.0, 15.0, 20.0, 25.0, 30.0, 40.0, 50.0, 60.0,

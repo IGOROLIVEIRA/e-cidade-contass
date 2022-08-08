@@ -22,9 +22,9 @@ class cl_itenshomologacao {
     var $l203_item = 0;
     // cria propriedade com as variaveis do arquivo
     var $campos = "
-                 l203_sequencial = int4 = Sequencial 
-                 l203_homologaadjudicacao = int4 = Homologa adjudicacão 
-                 l203_item = int4 = Item 
+                 l203_sequencial = int4 = Sequencial
+                 l203_homologaadjudicacao = int4 = Homologa adjudicacão
+                 l203_item = int4 = Item
                  l203_fornecedor int8 = Fornecedor
                  ";
     //funcao construtor da classe
@@ -113,16 +113,16 @@ class cl_itenshomologacao {
         }
 
         $sql = "insert into itenshomologacao(
-                                       l203_sequencial 
-                                      ,l203_homologaadjudicacao 
+                                       l203_sequencial
+                                      ,l203_homologaadjudicacao
                                       ,l203_item
-                                      ,l203_fornecedor 
+                                      ,l203_fornecedor
                        )
                 values (
-                                $this->l203_sequencial 
-                               ,$this->l203_homologaadjudicacao 
+                                $this->l203_sequencial
+                               ,$this->l203_homologaadjudicacao
                                ,$this->l203_item
-                               ,$this->l203_fornecedor 
+                               ,$this->l203_fornecedor
                       )";
 
         $result = db_query($sql);
@@ -458,4 +458,3 @@ class cl_itenshomologacao {
     }
 
 }
-?>

@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 include ("dbforms/db_classesgenericas.php");
@@ -41,9 +41,9 @@ if (isset ($opcao) && $opcao == "incluir") {
 	    $result_depto=$clpcandpadraodepto->sql_record($clpcandpadraodepto->sql_query($pc45_codigo));
 	    if ($clpcandpadraodepto->numrows>0){
 	    	db_fieldsmemory($result_depto,0);
-	    }	   
+	    }
 	}
-	  
+
 		$db_opcao = 2;
 }else if (isset ($opcao) && $opcao == "excluir") {
 	if (isset($pc45_codigo)&&$pc45_codigo!=""){
@@ -52,7 +52,7 @@ if (isset ($opcao) && $opcao == "incluir") {
 	    $result_depto=$clpcandpadraodepto->sql_record($clpcandpadraodepto->sql_query($pc45_codigo));
 	    if ($clpcandpadraodepto->numrows>0){
 	    	db_fieldsmemory($result_depto,0);
-	    }	   
+	    }
 	}
 			$db_opcao = 3;
 }
@@ -64,19 +64,19 @@ if (isset ($opcao) && $opcao == "incluir") {
     <td nowrap title="<?=@$Tpc45_codigo?>">
        <?=@$Lpc45_codigo?>
     </td>
-    <td> 
+    <td>
 <?
 
 
 		db_input('pc45_codigo', 5, $Ipc45_codigo, true, 'text', 3, "");
-?>      
+?>
     </td>
   </tr>
   <tr>
     <td nowrap title="<?=@$Tpc45_pctipoandam?>">
        <?=@$Lpc45_pctipoandam?>
     </td>
-    <td> 
+    <td>
 <?
 
 
@@ -85,7 +85,7 @@ if (isset ($opcao) && $opcao == "incluir") {
 			echo "<script>document.form1.pc45_pctipoandam.selected=$pc45_pctipoandam</script>";
 		}
 		db_selectrecord('pc45_pctipoandam', $result_pctipoandam, true, $db_opcao);
-?>      
+?>
     </td>
   </tr>
   <tr>
@@ -96,7 +96,7 @@ if (isset ($opcao) && $opcao == "incluir") {
 		db_ancora(@ $Lpc46_depart, "js_pesquisapc46_depart(true);", $db_opcao);
 ?>
     </td>
-    <td> 
+    <td>
     <?
 
 
@@ -114,7 +114,7 @@ if (isset ($opcao) && $opcao == "incluir") {
     <td nowrap title="<?=@$Tpc45_dias?>">
        <?=@$Lpc45_dias?>
     </td>
-    <td> 
+    <td>
 <?
 
  db_input('pc45_dias', 5, $Ipc45_dias, true, 'text', $db_opcao, "")
@@ -125,7 +125,7 @@ if (isset ($opcao) && $opcao == "incluir") {
     <td nowrap title="<?=@$Tpc45_ordem?>">
        <?=@$Lpc45_ordem?>
     </td>
-    <td> 
+    <td>
 <?
 
  db_input('pc45_ordem', 5, $Ipc45_ordem, true, 'text', $db_opcao, "")
@@ -136,7 +136,7 @@ if (isset ($opcao) && $opcao == "incluir") {
     <td nowrap title="<?=@$Tpc45_instit?>">
        <?=@$Lpc45_instit?>
     </td>
-    <td> 
+    <td>
 <?
  $result_instit=$cldb_config->sql_record($cldb_config->sql_query_file(db_getsession("DB_instit")));
  db_fieldsmemory($result_instit,0);
@@ -146,7 +146,7 @@ if (isset ($opcao) && $opcao == "incluir") {
 ?>
     </td>
   </tr>
-  
+
   <tr>
     <td align="center" colspan="2">
       <input name="dbopcao" type="submit" id="dbopcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> >
@@ -170,21 +170,21 @@ if (isset ($opcao) && $opcao == "incluir") {
 		$cliframe_alterar_excluir->iframe_alterar_excluir($db_opcao);
 ?>
    </td>
- </tr>  
+ </tr>
   </table>
   </center>
 </form>
 <script>
 function js_pesquisapc46_depart(mostra){
     if(mostra==true){
-      js_OpenJanelaIframe('top.corpo','db_iframe_db_depart','func_db_depart.php?funcao_js=parent.js_mostrapc46_depart1|coddepto|descrdepto','Pesquisa',true);
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_depart','func_db_depart.php?funcao_js=parent.js_mostrapc46_depart1|coddepto|descrdepto','Pesquisa',true);
     }else{
       pc46_depart = document.form1.pc46_depart.value;
       if(pc46_depart!=""){
-        js_OpenJanelaIframe('top.corpo','db_iframe_db_depart','func_db_depart.php?pesquisa_chave='+pc46_depart+'&funcao_js=parent.js_mostrapc46_depart','Pesquisa',false);
-      }else{ 	
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_db_depart','func_db_depart.php?pesquisa_chave='+pc46_depart+'&funcao_js=parent.js_mostrapc46_depart','Pesquisa',false);
+      }else{
 	document.form1.descrdepto.value='';
-      } 	
+      }
     }
   }
   function js_mostrapc46_depart1(chave1,chave2){
@@ -193,10 +193,10 @@ function js_pesquisapc46_depart(mostra){
     db_iframe_db_depart.hide();
   }
   function js_mostrapc46_depart(chave,erro){
-    document.form1.descrdepto.value = chave; 
-    if(erro==true){ 
-      document.form1.pc46_depart.focus(); 
-      document.form1.pc46_depart.value = ''; 
+    document.form1.descrdepto.value = chave;
+    if(erro==true){
+      document.form1.pc46_depart.focus();
+      document.form1.pc46_depart.value = '';
   }
 }
 </script>

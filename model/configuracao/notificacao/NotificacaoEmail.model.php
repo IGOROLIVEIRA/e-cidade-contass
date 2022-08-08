@@ -1,7 +1,7 @@
 <?php
 /*
  *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica             
  *                            www.dbseller.com.br                     
  *                         e-cidade@dbseller.com.br                   
  *                                                                    
@@ -28,7 +28,7 @@
 /**
  * Classe para envio de notificacoes por email
  * @author Iuri Guntchnigg <iuri@dbseller.com.br>
- * @version $Revision: 1.5 $ 
+ * @version $Revision: 1.8 $ 
  * @package configuracao 
  */
 require_once ('model/configuracao/notificacao/INotificacao.interface.php');

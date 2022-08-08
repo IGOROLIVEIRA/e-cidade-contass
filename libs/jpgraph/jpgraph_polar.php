@@ -4,13 +4,13 @@
 // Description:	Polar plot extension for JpGraph
 // Created: 	2003-02-02
 // Author:	Johan Persson (johanp@aditus.nu)
-// Ver:		$Id: jpgraph_polar.php,v 1.1 2006/03/20 11:56:44 dbrogerio Exp $
+// Ver:		$Id: jpgraph_polar.php,v 1.2 2015/09/02 16:37:54 dbjeferson.belmiro Exp $
 //
 // License:	This code is released under QPL
 // Copyright (C) 2003 Johan Persson
 //========================================================================
 */
-require_once "jpgraph_log.php";
+require_once "libs/jpgraph/jpgraph_log.php";
 
 
 DEFINE('POLAR_360',1);

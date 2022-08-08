@@ -2,7 +2,7 @@
  * @fileoverview Define campo do tipo input text para datas
  *
  * @author Robson Inacio robson@dbseller.com.br
- * @version  $Revision: 1.13 $
+ * @version  $Revision: 1.14 $
  */
 
 /**
@@ -116,8 +116,8 @@ DBTextFieldData = function (sName,sNameInstance, sValue, sJsClick) {
 
     if( typeof(event) != "object" ) {
 
-      this.PosMouseX = evt.layerX+30;
-      this.PosMouseY = evt.layerY;
+      this.PosMouseX = evt.clientX+5;
+      this.PosMouseY = evt.clientY;
 
     } else {
 
@@ -198,6 +198,7 @@ DBTextFieldData = function (sName,sNameInstance, sValue, sJsClick) {
 	if(this.PosMouseX >= document.body.scrollWidth-270){
       this.PosMouseX = document.body.scrollWidth-270;
     }
+
 	var sQueryString         = 'dbTxtFieldDataCalendar.php?';
 	    sQueryString        += '&nome_objeto_data='+sName;
 	    sQueryString        += '&nome_instancia='+this.sIndexInstance;

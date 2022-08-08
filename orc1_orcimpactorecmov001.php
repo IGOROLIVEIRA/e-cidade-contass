@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -64,7 +64,7 @@ if(isset($incluir)){
   $vt=$HTTP_POST_VARS;
   $ta=sizeof($vt);
   reset($vt);
-  
+
   $priproces = true;
   for($i=0; $i<$ta; $i++){
     $chave=key($vt);
@@ -78,7 +78,7 @@ if(isset($incluir)){
       $sequen= $vt["o69_sequen_$ano"];
       $perc   = $vt["o69_perc_$ano"];
 
-       
+
      //------PEGA O CÓDIGO DA FONTE PELO ESTRUTURAL-------------------------------------------------
       $result = $clorcfontes->sql_record($clorcfontes->sql_query_file(null,null,"o57_codfon",'',"o57_fonte = '$fonte' and o57_anousu = ".db_getsession("DB_anousu")));
       if($clorcfontes->numrows==0){
@@ -89,12 +89,12 @@ if(isset($incluir)){
 	db_fieldsmemory($result,0);
       }
      //---------------------------------------------------------------------------------------------
-       
+
       //-------PROCESSO DE INLCUÃO-----------------------------------------------------------------------
 	if(empty($proces)){
 	  $proces = '0';
 	}
-	if($sqlerro == false){ 
+	if($sqlerro == false){
 	  $clorcimpactorecmov->o69_proces    = $proces;
 	  $clorcimpactorecmov->o69_codperiodo = $o69_codperiodo;
 	  $clorcimpactorecmov->o69_exercicio = $ano;
@@ -105,19 +105,19 @@ if(isset($incluir)){
           $clorcimpactorecmov->o69_perc      = $perc;
           $clorcimpactorecmov->o69_codimpger = $o63_codimpger;
 	  $clorcimpactorecmov->incluir(null);
-	} 	
+	}
 	$erro_msg = $clorcimpactorecmov->erro_msg;
 	if($clorcimpactorecmov->erro_status==0){
 	     $sqlerro=true;
 	     break;
 	}else{
 	   $seq  = $clorcimpactorecmov->o69_sequen;
-	}  	
-     //------------------------------------------------------------------------------------------   
-   
+	}
+     //------------------------------------------------------------------------------------------
+
      //alterar-----------------------------------------------------
 
-     
+
      ///parei aki.... 09/05/2005
 	if($sqlerro == false && $priproces == true){
 	    $priproces = false;
@@ -129,10 +129,10 @@ if(isset($incluir)){
 	    if($clorcimpactorecmov->erro_status==0){
 	       $sqlerro=true;
 	       break;
-	    }   
+	    }
 	}
-     //---------------------------------------------------------------- 
-    }  
+     //----------------------------------------------------------------
+    }
     next($vt);
   }
   if($sqlerro == false){
@@ -151,7 +151,7 @@ if(isset($incluir)){
   $vt=$HTTP_POST_VARS;
   $ta=sizeof($vt);
   reset($vt);
-  
+
   $priproces = true;
   for($i=0; $i<$ta; $i++){
     $chave=key($vt);
@@ -177,10 +177,10 @@ if(isset($incluir)){
 	  db_fieldsmemory($result,0);
 	}
        //---------------------------------------------------------------------------------------------
-	 
-	
+
+
 	//-------PROCESSO DE ALTERAÇÃO---------------------------------------------------------------------
-	  if($sqlerro == false){ 
+	  if($sqlerro == false){
 	    $clorcimpactorecmov->o69_proces    = $o69_proces;
 	    $clorcimpactorecmov->o69_codperiodo= $o69_codperiodo;
 	    $clorcimpactorecmov->o69_exercicio = $ano;
@@ -195,16 +195,16 @@ if(isset($incluir)){
 	    }else{
 	      $clorcimpactorecmov->o69_sequen  = $sequen;
    	      $clorcimpactorecmov->alterar($sequen);
-	    }  
-	  } 	
+	    }
+	  }
 	  $erro_msg = $clorcimpactorecmov->erro_msg;
 	  if($clorcimpactorecmov->erro_status==0){
 	       $sqlerro=true;
 	       break;
-	  }  	
-       }	  
-       //------------------------------------------------------------------------------------------   
-    }  
+	  }
+       }
+       //------------------------------------------------------------------------------------------
+    }
     next($vt);
   }
   if($sqlerro == false){
@@ -220,10 +220,10 @@ if(isset($incluir)){
   $erro_msg = $clorcimpactorecmov->erro_msg;
   if($clorcimpactorecmov->erro_status==0){
        $sqlerro=true;
-  }  	
+  }
   unset($o69_proces);
  db_fim_transacao($sqlerro);
-} 
+}
 ?>
 <html>
 <head>
@@ -235,8 +235,8 @@ if(isset($incluir)){
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
 <?
 	include("forms/db_frmorcimpactorecmov.php");
@@ -254,20 +254,20 @@ if(isset($incluir) || isset($alterar) || isset($excluir)){
       if(isset($incluir)){
 	echo "
 	   parent.document.formaba.orcimpactorecmov02.disabled=false;
-	   top.corpo.iframe_orcimpactorecmov02.location.href='orc1_orcimpactorecmov002.php?o69_codperiodo=".@$o69_codperiodo."';
-	";	 
-      }else{	
+	   CurrentWindow.corpo.iframe_orcimpactorecmov02.location.href='orc1_orcimpactorecmov002.php?o69_codperiodo=".@$o69_codperiodo."';
+	";
+      }else{
 	/*
 	echo "<script>";
 	echo "
 	     parent.document.formaba.orcimpactorecmovmes.disabled=true;
-	    ";	 
+	    ";
 	echo "</script>";
 	*/
-      }  	
+      }
     }
 
-    
+
     if($clpagordemrec->erro_campo!=""){
         echo "<script> document.form1.".$clorcimpactomovval->erro_campo.".style.backgroundColor='#99A9AE';</script>";
         echo "<script> document.form1.".$clorcimpactomovval->erro_campo.".focus();</script>";
@@ -277,9 +277,9 @@ if(isset($o69_codperiodo) && empty($opcao) ){
   echo "<script>";
   echo "
        parent.document.formaba.orcimpactorecmov02.disabled=false;
-       top.corpo.iframe_orcimpactorecmov02.location.href='orc1_orcimpactorecmov002.php?o69_codperiodo=".@$o69_codperiodo."';
-       
-      ";	 
+       CurrentWindow.corpo.iframe_orcimpactorecmov02.location.href='orc1_orcimpactorecmov002.php?o69_codperiodo=".@$o69_codperiodo."';
+
+      ";
   echo "</script>";
 }
 if(isset($opcao)){
@@ -287,8 +287,8 @@ if(isset($opcao)){
   echo "<script>";
   echo "
        parent.document.formaba.orcimpactorecmovmes.disabled=false;
-       top.corpo.iframe_orcimpactorecmovmes.location.href='orc1_orcimpactorecmovmes001.php?o69_proces=".@$o69_proces."';
-      ";	 
+       CurrentWindow.corpo.iframe_orcimpactorecmovmes.location.href='orc1_orcimpactorecmovmes001.php?o69_proces=".@$o69_proces."';
+      ";
       if(isset($tavaincluindo)){
         echo "parent.mo_camada('orcimpactorecmovmes');";
       }

@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -51,15 +51,15 @@ db_postmemory($HTTP_POST_VARS);
 <script>
 function js_reemite() {
   if ( document.form1.t96_codtran.value == "" ) {
-	  
+
     document.form1.t96_codtran.style.backgroundColor='#99A9AE';
     document.form1.t96_codtran.focus();
     alert(_M('patrimonial.patrimonio.pat2_relbenstransf001.informe_codigo'));
-    
+
   }else{
-	  
+
     jan = window.open('pat2_relbenstransf002.php?texto_info=true&t96_codtran='+document.form1.t96_codtran.value,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
-    document.form1.t96_codtran.style.backgroundColor='';	
+    document.form1.t96_codtran.style.backgroundColor='';
     jan.moveTo(0,0);
   }
 }
@@ -99,20 +99,20 @@ function js_reemite() {
 <script>
 function js_pesquisat96_codtran(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_benstransf','func_benstransf001.php?funcao_js=parent.js_mostrabenstransf1|t93_codtran|nome&rel=true','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_benstransf','func_benstransf001.php?funcao_js=parent.js_mostrabenstransf1|t93_codtran|nome&rel=true','Pesquisa',true);
   }else{
-    if(document.form1.t96_codtran.value != ''){ 
-      js_OpenJanelaIframe('top.corpo','db_iframe_benstransf','func_benstransf001.php?pesquisa_chave='+document.form1.t96_codtran.value+'&funcao_js=parent.js_mostrabenstransf&rel=true','Pesquisa',false);
+    if(document.form1.t96_codtran.value != ''){
+      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_benstransf','func_benstransf001.php?pesquisa_chave='+document.form1.t96_codtran.value+'&funcao_js=parent.js_mostrabenstransf&rel=true','Pesquisa',false);
     }else{
-      document.form1.nome_transf.value = ''; 
+      document.form1.nome_transf.value = '';
     }
   }
 }
 function js_mostrabenstransf(chave,erro){
-  document.form1.nome_transf.value = chave; 
+  document.form1.nome_transf.value = chave;
   if(erro==true){
-    document.form1.t96_codtran.value = ''; 
-    document.form1.t96_codtran.focus(); 
+    document.form1.t96_codtran.value = '';
+    document.form1.t96_codtran.focus();
   }
 }
 function js_mostrabenstransf1(chave1,chave2){

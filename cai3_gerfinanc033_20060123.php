@@ -81,7 +81,7 @@ if($k03_tipo == 1 and $impmodelo <> 1){
     next($vt);
   }
 
-  $numpres = split("N",$numpres);
+  $numpres = explode("N",$numpres);
 
   $unica = false;
   if(sizeof($numpres)<2){
@@ -95,7 +95,7 @@ if($k03_tipo == 1 and $impmodelo <> 1){
 
 //  pg_exec("BEGIN");
   for($volta = 1;$volta < sizeof($numpres);$volta++) {
-    $codigos = split("P",$numpres[$volta]);  
+    $codigos = explode("P",$numpres[$volta]);  
   }
 
   $resultunica = pg_exec("select j23_anousu from iptucalc inner join iptunump on j20_anousu = j23_anousu and j20_matric = j23_matric where j20_numpre = $codigos[0]");
@@ -264,7 +264,7 @@ for($i = 0;$i < $tam;$i++) {
   next($vt);
 }
 $sounica = $numpres;
-$numpres = split("N",$numpres);
+$numpres = explode("N",$numpres);
 
 $unica = 2;
 if(sizeof($numpres)<2){
@@ -581,7 +581,7 @@ for($volta = 1;$volta < sizeof($numpres);$volta++) {
   $result = pg_exec("select fc_numbco($k00_codbco,'$k00_codage')");
   db_fieldsmemory($result,0);
  
-  $valores = split("P",$numpres[$volta]);
+  $valores = explode("P",$numpres[$volta]);
   $k00_numpre = $valores[0];
   $k00_numpar = $valores[1];  
   $k03_anousu = $H_ANOUSU;

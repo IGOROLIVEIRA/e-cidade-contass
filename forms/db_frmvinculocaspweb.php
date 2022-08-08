@@ -39,7 +39,7 @@ $c232_anousu = isset($chavepesquisa2) ? $chavepesquisa2 : $c232_anousu;
 </form>
 <script>
     function js_pesquisa(){
-        js_OpenJanelaIframe('top.corpo','db_iframe_vinculopcaspmsc','func_vinculocaspweb.php?funcao_js=parent.js_preenchepesquisa|c232_estrutecidade|c232_estrutcaspweb|c232_anousu','Pesquisa',true);
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_vinculopcaspmsc','func_vinculocaspweb.php?funcao_js=parent.js_preenchepesquisa|c232_estrutecidade|c232_estrutcaspweb|c232_anousu','Pesquisa',true);
     }
     function js_preenchepesquisa(chave,chave1,chave2){
         db_iframe_vinculopcaspmsc.hide();

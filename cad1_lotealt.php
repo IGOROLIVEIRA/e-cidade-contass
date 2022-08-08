@@ -162,9 +162,9 @@ if ($replote == true) {
        /*============ TESTADAS INTERNAS ============== */
 
        /* */
-				$matriztesinter = split("X", $testadainter);
+				$matriztesinter = explode("X", $testadainter);
 				foreach ($matriztesinter as $valor) {
-					$dadosTestadaInterna = split("-", $valor);
+					$dadosTestadaInterna = explode("-", $valor);
 
 					$idbqlInterLote   = $dadosTestadaInterna[0];
 					$j39_idbql        = $cllote->j34_idbql;

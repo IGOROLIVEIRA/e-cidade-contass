@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: atendimento
@@ -40,7 +40,7 @@ if(isset($db_opcaoal)){
 }else if(isset($opcao) && $opcao=="excluir"){
     $db_opcao = 3;
     $db_botao=true;
-}else{  
+}else{
     $db_opcao = 1;
     $db_botao=true;
     if(isset($novo) || isset($alterar) ||   isset($excluir) || (isset($incluir) && $sqlerro==false ) ){
@@ -48,7 +48,7 @@ if(isset($db_opcaoal)){
      $at25_obs = "";
      //$at25_anexo = "";
    }
-} 
+}
 ?>
 <form name="form1" method="post" action="" enctype="multipart/form-data">
 <center>
@@ -56,13 +56,13 @@ if(isset($db_opcaoal)){
    <tr>
 	 <td colspan = "2" align="center" > <b> <br>INCLUIR ANEXOS<br></b>
 	 </td>
-	   
+
   </tr>
   <tr>
     <td nowrap title="<?//=@$Tat25_sequencial?>">
        <?//=@$Lat25_sequencial?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('at25_sequencial',10,$Iat25_sequencial,true,'hidden',3,"")
 ?>
@@ -74,7 +74,7 @@ db_input('at25_sequencial',10,$Iat25_sequencial,true,'hidden',3,"")
        db_ancora(@$Lat25_tarefa,"js_pesquisaat25_tarefa(true);",3);
        ?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('at25_tarefa',10,$Iat25_tarefa,true,'text',3," onchange='js_pesquisaat25_tarefa(false);'")
 ?>
@@ -87,7 +87,7 @@ db_input('at25_tarefa',10,$Iat25_tarefa,true,'text',3," onchange='js_pesquisaat2
     <td nowrap title="<?=@$Tat25_anexo?>">
        <?=@$Lat25_anexo?>
     </td>
-    <td> 
+    <td>
 <?
 
    	  db_input("anexoarq",30,0,true,"file",1);
@@ -98,14 +98,14 @@ db_input('at25_tarefa',10,$Iat25_tarefa,true,'text',3," onchange='js_pesquisaat2
     <td nowrap title="<?=@$Tat25_obs?>">
        <?=@$Lat25_obs?>
     </td>
-    <td> 
+    <td>
 <?
 
    	  db_textarea("at25_obs",0,50,$Iat25_obs,true,"text",1);
 ?>
     </td>
   </tr>
-  
+
   <tr>
     <td colspan="2" align="center">
  <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?>  >
@@ -115,7 +115,7 @@ db_input('at25_tarefa',10,$Iat25_tarefa,true,'text',3," onchange='js_pesquisaat2
   </table>
  <table>
   <tr>
-    <td valign="top"  align="center">  
+    <td valign="top"  align="center">
     <?
 	 $chavepri= array("at25_sequencial"=>@$at25_sequencial);
 	 $cliframe_alterar_excluir->chavepri=$chavepri;
@@ -152,20 +152,20 @@ function js_cancelar(){
 }
 function js_pesquisaat25_tarefa(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_tarefaanexos','db_iframe_tarefa','func_tarefa.php?funcao_js=parent.js_mostratarefa1|at40_sequencial|at40_descr','Pesquisa',true,'0','1','775','390');
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_tarefaanexos','db_iframe_tarefa','func_tarefa.php?funcao_js=parent.js_mostratarefa1|at40_sequencial|at40_descr','Pesquisa',true,'0','1','775','390');
   }else{
-     if(document.form1.at25_tarefa.value != ''){ 
-        js_OpenJanelaIframe('top.corpo.iframe_tarefaanexos','db_iframe_tarefa','func_tarefa.php?pesquisa_chave='+document.form1.at25_tarefa.value+'&funcao_js=parent.js_mostratarefa','Pesquisa',false);
+     if(document.form1.at25_tarefa.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_tarefaanexos','db_iframe_tarefa','func_tarefa.php?pesquisa_chave='+document.form1.at25_tarefa.value+'&funcao_js=parent.js_mostratarefa','Pesquisa',false);
      }else{
-       document.form1.at40_descr.value = ''; 
+       document.form1.at40_descr.value = '';
      }
   }
 }
 function js_mostratarefa(chave,erro){
-  document.form1.at40_descr.value = chave; 
-  if(erro==true){ 
-    document.form1.at25_tarefa.focus(); 
-    document.form1.at25_tarefa.value = ''; 
+  document.form1.at40_descr.value = chave;
+  if(erro==true){
+    document.form1.at25_tarefa.focus();
+    document.form1.at25_tarefa.value = '';
   }
 }
 function js_mostratarefa1(chave1,chave2){

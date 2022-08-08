@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 ?>
 <script>
@@ -59,20 +59,20 @@ function js_trocaid(valor){
     <td nowrap title="<?=@$Tj41_matric?>">
       <?=@$Lj41_matric?>
     </td>
-    <td> 
+    <td>
 <?
 db_input('j41_matric',10,$Ij41_matric,true,'text',3,"");
 db_input("z01_nome",78,$Ij01_numcgm,true,"text",3,"","z01_nomematri");
 ?>
         </td>
       </tr>
-      <tr> 
+      <tr>
         <td nowrap title="<?=@$Tj41_numcgm?>">
 <?
 db_ancora($Lj41_numcgm,' js_cgm(true); ',$db_opcao==2?"3":"1");
 ?>
         </td>
-        <td> 
+        <td>
 <?
 db_input('j41_numcgm',10,$Ij41_numcgm,true,'text',$db_opcao==2?"3":"1","onchange='js_cgm(false)'");
 db_input('z01_nome',78,$Iz01_nome,true,'text',3,"");
@@ -83,7 +83,7 @@ db_input('z01_nome',78,$Iz01_nome,true,'text',3,"");
         <td nowrap title="<?=@$Tj41_promitipo?>">
           <?=@$Lj41_promitipo?>
         </td>
-        <td> 
+        <td>
 <?
 
 $x = array("C"=>"Com contrato","S"=>"Sem contrato");
@@ -95,12 +95,12 @@ db_select('j41_promitipo',$x,true,$db_opcao,"");
        <td nowrap title="<?=@$Tj41_tipopro?>">
          <?=@$Lj41_tipopro?>
        </td>
-       <td> 
+       <td>
         <?
         if ($outros == true) {
           $xs = array("f"=>"Secundário","t"=>"Principal");
         }else{
-          $xs = array("t"=>"Principal","f"=>"Secundário");	
+          $xs = array("t"=>"Principal","f"=>"Secundário");
         }
         db_select('j41_tipopro',$xs,true,$db_op,"");
         ?>
@@ -119,7 +119,7 @@ db_select('j41_promitipo',$x,true,$db_opcao,"");
             if($j41_numcgm!=$numcgm || isset($incluir) || isset($alterar) || isset($excluir)){
               if($j41_tipopro == 't'){
                 $z01_nome .= " *";
-        }		
+        }
         echo "<option  value='".$j41_numcgm."'>$z01_nome</option>";
         }
         $cgmpromi.=$xx.$j41_numcgm;
@@ -127,18 +127,18 @@ db_select('j41_promitipo',$x,true,$db_opcao,"");
         }
         if(!isset($recol)){
           echo "</select>";
-          echo "<script>";  
-          echo "  function js_prime(){"; 
+          echo "<script>";
+          echo "  function js_prime(){";
           echo "    document.form1.j41_tipopro.options[0].selected=true;";
-          echo "  }";	
+          echo "  }";
           echo "  js_prime();";
           echo "</script>";
-        }  
         }
-      ?> 
+        }
+      ?>
       </TD></TR>
       <tr><td><input name="cgmpromi" type="hidden" value="<?=@$cgmpromi?>"> </td></tr>
-  </table>  
+  </table>
 
 </fieldset>
 
@@ -152,9 +152,9 @@ db_select('j41_promitipo',$x,true,$db_opcao,"");
 <script>
 function js_cgm(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo.iframe_promitente','func_nome','func_nome.php?funcao_js=parent.js_mostra1|0|1&testanome=true','Pesquisa',true,0);
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_promitente','func_nome','func_nome.php?funcao_js=parent.js_mostra1|0|1&testanome=true','Pesquisa',true,0);
   }else{
-    js_OpenJanelaIframe('top.corpo.iframe_promitente','func_nome','func_nome.php?pesquisa_chave='+document.form1.j41_numcgm.value+'&funcao_js=parent.js_mostra','Pesquisa',false,0);
+    js_OpenJanelaIframe('CurrentWindow.corpo.iframe_promitente','func_nome','func_nome.php?pesquisa_chave='+document.form1.j41_numcgm.value+'&funcao_js=parent.js_mostra','Pesquisa',false,0);
   }
 }
 function js_mostra1(chave1,chave2){

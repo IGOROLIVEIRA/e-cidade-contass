@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -31,7 +31,7 @@ include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
 include("classes/db_orcprojeto_classe.php");
 include("dbforms/db_funcoes.php");
-include("dbforms/db_classesgenericas.php");            // iframe 
+include("dbforms/db_classesgenericas.php");            // iframe
 include("classes/db_orcsuplem_classe.php");
 $cliframe_alterar_excluir = new cl_iframe_alterar_excluir; // iframe
 
@@ -56,17 +56,17 @@ $clrotulo->label("o39_codlei");
 <script>
  function js_suplem(chave){
   // alert(chave);
-    js_OpenJanelaIframe('top.corpo','db_iframe_','orc1_orcsuplem009.php?chavepesquisa='+chave,'Pesquisa',true);
- }  
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_','orc1_orcsuplem009.php?chavepesquisa='+chave,'Pesquisa',true);
+ }
  function js_cadsuplem(){
-    js_OpenJanelaIframe('top.corpo','db_iframe_funcsuplem','orc1_orcsuplem001.php','Pesquisa',true);
- }  
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_funcsuplem','orc1_orcsuplem001.php','Pesquisa',true);
+ }
 </script>
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <form name="form1" method="post" action="">
     <center>
     <table border="0">
@@ -81,20 +81,20 @@ $clrotulo->label("o39_codlei");
     <tr>
      <td><input type=button value="Cadastrar" onclick="js_cadsuplem()"> </td>
      <td> 123  </td>
-    
+
     </tr>
     </table>
     </center>
    </form>
    <center>
-   <?  // include("forms/db_frmorcprojeto.php"); 
+   <?  // include("forms/db_frmorcprojeto.php");
        // lista todas as suplementações do projeto
        $sql = $clorcsuplem->sql_query_file(null,"*",null,"o46_codlei=$o39_codproj");
        $res = $clorcsuplem->sql_record($sql);
        $funcao_js="js_suplem|o46_codsup";
        db_lovrot($sql,15,"()","",$funcao_js);
 
-   ?> 
+   ?>
    <center>
   </td>
   </tr>
@@ -119,8 +119,8 @@ if(isset($incluir)){
        echo "<script>
  	       // libera segunda aba
                parent.document.formaba.suplem.disabled=false;\n
-               top.corpo.iframe_suplem.location.href='orc1_orcprojeto0012.php?o39_codproj=$o39_codproj';\n
-               parent.mo_camada('suplem');    //envia direto para outra aba     
+               CurrentWindow.corpo.iframe_suplem.location.href='orc1_orcprojeto0012.php?o39_codproj=$o39_codproj';\n
+               parent.mo_camada('suplem');    //envia direto para outra aba
            </script>";
 
   };

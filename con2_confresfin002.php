@@ -68,7 +68,7 @@ if (pg_num_rows($rsSqlParametro) > 0) {
 }
 
 
-$xinstit = split("-", $db_selinstit);
+$xinstit = explode("-", $db_selinstit);
 $resultinst = db_query("select codigo,nomeinst from db_config where codigo in (".str_replace('-', ', ', $db_selinstit).") ");
 $descr_inst = '';
 $xvirg = '';
@@ -482,7 +482,7 @@ if ($recurso == 0) {
 $head2 = "RESULTADOS FINANCEIROS POR RECURSO";
 $head3 = "RECURSO : ".$recurso." : ".$o15_descr;
 $head5 = "INSTITUIÇÕES : ".$descr_inst;
-$dt = split('-', $data_limite);
+$dt = explode('-', $data_limite);
 $head7 = 'DATA LIMITE :'."$dt[2]/$dt[1]/$dt[0]";
 
 $pdf = new PDF();

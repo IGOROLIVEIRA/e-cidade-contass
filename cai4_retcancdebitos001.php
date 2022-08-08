@@ -57,7 +57,7 @@ $db_opcao = 33;
 $db_botao = false;
 
 if (isset($processa) && isset($chaves)) {
-  $regs = split("#", $chaves);
+  $regs = explode("#", $chaves);
 //  echo "<br><br><br>";print_r($regs);exit;
   $erro_msg = '';
   $sqlerro  = false; 

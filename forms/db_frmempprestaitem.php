@@ -118,7 +118,7 @@ if (isset($tranca)) {
                 <tr>
                     <td nowrap title="<?= @$Te46_codmater ?>">
                         <?
-                        db_ancora(@$Le46_codmater, "js_pesquisa(true);", $db_opcao);
+                        db_ancora("Cód. Item", "js_pesquisa(true);", $db_opcao);
                         ?>
                     </td>
                     <td>
@@ -189,7 +189,7 @@ if (isset($tranca)) {
                 </tr>
                 <tr>
                     <td nowrap title="<?= @$Te46_obs ?>">
-                        <?= @$Le46_obs ?>
+                        <strong>Observação</strong>
                     </td>
                     <td>
                         <?
@@ -238,7 +238,7 @@ if (isset($tranca)) {
                     $cliframe_alterar_excluir->chavepri = $chavepri;
                     $cliframe_alterar_excluir->sql = $clempprestaitem->sql_query_file(null, "*", "", "e46_emppresta=$oGet->e45_sequencial {$sWhere}");
                     $cliframe_alterar_excluir->campos = "e46_codigo,e46_nome,e46_nota,e46_codmater,e46_quantidade,e46_valor,e46_desconto,e46_cnpj,e46_cpf";
-                    $cliframe_alterar_excluir->legenda = "ITENS LAN\C7ADOS";
+                    $cliframe_alterar_excluir->legenda = "ITENS LANÇADOS";
                     $cliframe_alterar_excluir->iframe_height = "160";
                     $cliframe_alterar_excluir->iframe_width = "700";
                     $cliframe_alterar_excluir->iframe_alterar_excluir($db_opcao);
@@ -330,7 +330,7 @@ if (isset($tranca)) {
     }
 
     // Pega o c\F3digo da movimentacao do campo na primeira aba
-    document.form1.e45_codmov.value = top.corpo.iframe_emppresta.document.form1.e45_codmov.value;
+    document.form1.e45_codmov.value = CurrentWindow.corpo.iframe_emppresta.document.form1.e45_codmov.value;
 
     /**
      * Mascaras

@@ -365,11 +365,11 @@ $cldadoscomplementareslrf->rotulo->label();
         <?php endif; ?>
 
         <?php if(db_getsession("DB_anousu") > 2018):?>
-        let todasmedidas = top.corpo.iframe_dadoscomplementares.document.form1.metasadotadas;
+        let todasmedidas = CurrentWindow.corpo.iframe_dadoscomplementares.document.form1.metasadotadas;
         let medidas = Array.from(todasmedidas.options);
         let valida = true;
 
-        if(top.corpo.iframe_dadoscomplementares.document.form1.c218_metarrecada.value == "2" && (top.corpo.iframe_dadoscomplementares.document.form1.c218_mesusu.value % 2) == 0 && medidas == ""){
+        if(CurrentWindow.corpo.iframe_dadoscomplementares.document.form1.c218_metarrecada.value == "2" && (CurrentWindow.corpo.iframe_dadoscomplementares.document.form1.c218_mesusu.value % 2) == 0 && medidas == ""){
             alert('Dados Complementares LRF - Nenhuma Medida Selecionada.');
             return false;
         }
@@ -385,38 +385,38 @@ $cldadoscomplementareslrf->rotulo->label();
             return;
         }
         <?php endif;?>
-        top.corpo.dadoscomplementares.c218_sequencial = document.form1.c218_sequencial.value;
-        top.corpo.dadoscomplementares.c218_mesusu = document.form1.c218_mesusu.value;
-        top.corpo.dadoscomplementares.c218_passivosreconhecidos = document.form1.c218_passivosreconhecidos.value;
-        top.corpo.dadoscomplementares.c218_vlsaldoatualconcgarantiainterna = document.form1.c218_vlsaldoatualconcgarantiainterna.value;
-        top.corpo.dadoscomplementares.c218_vlsaldoatualconcgarantia = document.form1.c218_vlsaldoatualconcgarantia.value;
-        top.corpo.dadoscomplementares.c218_vlsaldoatualcontragarantiainterna = document.form1.c218_vlsaldoatualcontragarantiainterna.value;
-        top.corpo.dadoscomplementares.c218_vlsaldoatualcontragarantiaexterna = document.form1.c218_vlsaldoatualcontragarantiaexterna.value;
-        top.corpo.dadoscomplementares.c218_medidascorretivas = document.form1.c218_medidascorretivas.value;
-        top.corpo.dadoscomplementares.c218_recalieninvpermanente = document.form1.c218_recalieninvpermanente.value;
-        top.corpo.dadoscomplementares.c218_vldotatualizadaincentcontrib = document.form1.c218_vldotatualizadaincentcontrib.value;
-        top.corpo.dadoscomplementares.c218_vlempenhadoicentcontrib = document.form1.c218_vlempenhadoicentcontrib.value;
-        top.corpo.dadoscomplementares.c218_vldotatualizadaincentinstfinanc = document.form1.c218_vldotatualizadaincentinstfinanc.value;
-        top.corpo.dadoscomplementares.c218_vlempenhadoincentinstfinanc = document.form1.c218_vlempenhadoincentinstfinanc.value;
-        top.corpo.dadoscomplementares.c218_vlliqincentcontrib = document.form1.c218_vlliqincentcontrib.value;
-        top.corpo.dadoscomplementares.c218_vlliqincentinstfinanc = document.form1.c218_vlliqincentinstfinanc.value;
-        top.corpo.dadoscomplementares.c218_vlirpnpincentcontrib = document.form1.c218_vlirpnpincentcontrib.value;
-        top.corpo.dadoscomplementares.c218_vlirpnpincentinstfinanc = document.form1.c218_vlirpnpincentinstfinanc.value;
-        top.corpo.dadoscomplementares.c218_vlrecursosnaoaplicados = document.form1.c218_vlrecursosnaoaplicados.value;
-        top.corpo.dadoscomplementares.c218_vlapropiacaodepositosjudiciais = document.form1.c218_vlapropiacaodepositosjudiciais.value;
-        top.corpo.dadoscomplementares.c218_vloutrosajustes = document.form1.c218_vloutrosajustes.value;
-        top.corpo.dadoscomplementares.c218_metarrecada = document.form1.c218_metarrecada.value;
-        top.corpo.dadoscomplementares.c218_dscmedidasadotadas = document.form1.c218_dscmedidasadotadas.value;
+        CurrentWindow.corpo.dadoscomplementares.c218_sequencial = document.form1.c218_sequencial.value;
+        CurrentWindow.corpo.dadoscomplementares.c218_mesusu = document.form1.c218_mesusu.value;
+        CurrentWindow.corpo.dadoscomplementares.c218_passivosreconhecidos = document.form1.c218_passivosreconhecidos.value;
+        CurrentWindow.corpo.dadoscomplementares.c218_vlsaldoatualconcgarantiainterna = document.form1.c218_vlsaldoatualconcgarantiainterna.value;
+        CurrentWindow.corpo.dadoscomplementares.c218_vlsaldoatualconcgarantia = document.form1.c218_vlsaldoatualconcgarantia.value;
+        CurrentWindow.corpo.dadoscomplementares.c218_vlsaldoatualcontragarantiainterna = document.form1.c218_vlsaldoatualcontragarantiainterna.value;
+        CurrentWindow.corpo.dadoscomplementares.c218_vlsaldoatualcontragarantiaexterna = document.form1.c218_vlsaldoatualcontragarantiaexterna.value;
+        CurrentWindow.corpo.dadoscomplementares.c218_medidascorretivas = document.form1.c218_medidascorretivas.value;
+        CurrentWindow.corpo.dadoscomplementares.c218_recalieninvpermanente = document.form1.c218_recalieninvpermanente.value;
+        CurrentWindow.corpo.dadoscomplementares.c218_vldotatualizadaincentcontrib = document.form1.c218_vldotatualizadaincentcontrib.value;
+        CurrentWindow.corpo.dadoscomplementares.c218_vlempenhadoicentcontrib = document.form1.c218_vlempenhadoicentcontrib.value;
+        CurrentWindow.corpo.dadoscomplementares.c218_vldotatualizadaincentinstfinanc = document.form1.c218_vldotatualizadaincentinstfinanc.value;
+        CurrentWindow.corpo.dadoscomplementares.c218_vlempenhadoincentinstfinanc = document.form1.c218_vlempenhadoincentinstfinanc.value;
+        CurrentWindow.corpo.dadoscomplementares.c218_vlliqincentcontrib = document.form1.c218_vlliqincentcontrib.value;
+        CurrentWindow.corpo.dadoscomplementares.c218_vlliqincentinstfinanc = document.form1.c218_vlliqincentinstfinanc.value;
+        CurrentWindow.corpo.dadoscomplementares.c218_vlirpnpincentcontrib = document.form1.c218_vlirpnpincentcontrib.value;
+        CurrentWindow.corpo.dadoscomplementares.c218_vlirpnpincentinstfinanc = document.form1.c218_vlirpnpincentinstfinanc.value;
+        CurrentWindow.corpo.dadoscomplementares.c218_vlrecursosnaoaplicados = document.form1.c218_vlrecursosnaoaplicados.value;
+        CurrentWindow.corpo.dadoscomplementares.c218_vlapropiacaodepositosjudiciais = document.form1.c218_vlapropiacaodepositosjudiciais.value;
+        CurrentWindow.corpo.dadoscomplementares.c218_vloutrosajustes = document.form1.c218_vloutrosajustes.value;
+        CurrentWindow.corpo.dadoscomplementares.c218_metarrecada = document.form1.c218_metarrecada.value;
+        CurrentWindow.corpo.dadoscomplementares.c218_dscmedidasadotadas = document.form1.c218_dscmedidasadotadas.value;
 
-        top.corpo.dadoscomplementares.c218_vldotinicialincentivocontrib = document.form1.c218_vldotinicialincentivocontrib.value;
-        top.corpo.dadoscomplementares.c218_vldotincentconcedinstfinanc = document.form1.c218_vldotincentconcedinstfinanc.value;
-        top.corpo.dadoscomplementares.c218_vlajustesrelativosrpps = document.form1.c218_vlajustesrelativosrpps.value;
+        CurrentWindow.corpo.dadoscomplementares.c218_vldotinicialincentivocontrib = document.form1.c218_vldotinicialincentivocontrib.value;
+        CurrentWindow.corpo.dadoscomplementares.c218_vldotincentconcedinstfinanc = document.form1.c218_vldotincentconcedinstfinanc.value;
+        CurrentWindow.corpo.dadoscomplementares.c218_vlajustesrelativosrpps = document.form1.c218_vlajustesrelativosrpps.value;
 
 
         <?php if($tipoInstint == 1): ?>
         parent.mo_camada('publicacaoeperiodicidadergf');
         <?php else: ?>
-        if(top.corpo.dadoscomplementares.c218_mesusu == 12){
+        if(CurrentWindow.corpo.dadoscomplementares.c218_mesusu == 12){
             parent.mo_camada('operacoesdecredito');
         }else{
             parent.mo_camada('publicacaoeperiodicidaderreo');
@@ -460,7 +460,7 @@ $cldadoscomplementareslrf->rotulo->label();
                     document.form1.c218_vlsaldoatualcontragarantiaexterna.value = oRetorno.c218_vlsaldoatualcontragarantiaexterna;
                     document.form1.c218_medidascorretivas.value = oRetorno.c218_medidascorretivas;
                     if(oRetorno.c218_medidascorretivas == ""){
-                        top.corpo.iframe_dadoscomplementares.document.form1.medidasCorretivas.value = 2;
+                        CurrentWindow.corpo.iframe_dadoscomplementares.document.form1.medidasCorretivas.value = 2;
                     }
                     document.form1.c218_recalieninvpermanente.value = oRetorno.c218_recalieninvpermanente;
                     document.form1.c218_vldotatualizadaincentcontrib.value = oRetorno.c218_vldotatualizadaincentcontrib;
@@ -560,42 +560,42 @@ $cldadoscomplementareslrf->rotulo->label();
                     // DISABILITAÇÃO DOS CAMPOS SELECT QUANDO A OPCAO É EXCLUSAO
                     document.form1.c218_metarrecada.disabled = false;
 
-                    top.corpo.iframe_operacoesdecredito.document.form1.c219_contopcredito.disabled = true;
-                    top.corpo.iframe_operacoesdecredito.document.form1.c219_contopcredito.style.background = "#DEB887";
+                    CurrentWindow.corpo.iframe_operacoesdecredito.document.form1.c219_contopcredito.disabled = true;
+                    CurrentWindow.corpo.iframe_operacoesdecredito.document.form1.c219_contopcredito.style.background = "#DEB887";
 
-                    top.corpo.iframe_operacoesdecredito.document.form1.c219_realizopcredito.disabled = true;
-                    top.corpo.iframe_operacoesdecredito.document.form1.c219_realizopcredito.style.background = "#DEB887";
+                    CurrentWindow.corpo.iframe_operacoesdecredito.document.form1.c219_realizopcredito.disabled = true;
+                    CurrentWindow.corpo.iframe_operacoesdecredito.document.form1.c219_realizopcredito.style.background = "#DEB887";
 
-                    top.corpo.iframe_operacoesdecredito.document.form1.c219_tiporealizopcreditocapta.disabled = true;
-                    top.corpo.iframe_operacoesdecredito.document.form1.c219_tiporealizopcreditocapta.style.background = "#DEB887";
+                    CurrentWindow.corpo.iframe_operacoesdecredito.document.form1.c219_tiporealizopcreditocapta.disabled = true;
+                    CurrentWindow.corpo.iframe_operacoesdecredito.document.form1.c219_tiporealizopcreditocapta.style.background = "#DEB887";
 
-                    top.corpo.iframe_operacoesdecredito.document.form1.c219_tiporealizopcreditoreceb.disabled = true;
-                    top.corpo.iframe_operacoesdecredito.document.form1.c219_tiporealizopcreditoreceb.style.background = "#DEB887";
+                    CurrentWindow.corpo.iframe_operacoesdecredito.document.form1.c219_tiporealizopcreditoreceb.disabled = true;
+                    CurrentWindow.corpo.iframe_operacoesdecredito.document.form1.c219_tiporealizopcreditoreceb.style.background = "#DEB887";
 
-                    top.corpo.iframe_operacoesdecredito.document.form1.c219_tiporealizopcreditoassundir.disabled = true;
-                    top.corpo.iframe_operacoesdecredito.document.form1.c219_tiporealizopcreditoassundir.style.background = "#DEB887";
+                    CurrentWindow.corpo.iframe_operacoesdecredito.document.form1.c219_tiporealizopcreditoassundir.disabled = true;
+                    CurrentWindow.corpo.iframe_operacoesdecredito.document.form1.c219_tiporealizopcreditoassundir.style.background = "#DEB887";
 
-                    top.corpo.iframe_operacoesdecredito.document.form1.c219_tiporealizopcreditoassunobg.disabled = true;
-                    top.corpo.iframe_operacoesdecredito.document.form1.c219_tiporealizopcreditoassunobg.style.background = "#DEB887";
+                    CurrentWindow.corpo.iframe_operacoesdecredito.document.form1.c219_tiporealizopcreditoassunobg.disabled = true;
+                    CurrentWindow.corpo.iframe_operacoesdecredito.document.form1.c219_tiporealizopcreditoassunobg.style.background = "#DEB887";
 
-                    top.corpo.iframe_publicacaoeperiodicidaderreo.document.form1.c220_publiclrf.disabled = true;
-                    top.corpo.iframe_publicacaoeperiodicidaderreo.document.form1.c220_publiclrf.style.background = "#DEB887";
+                    CurrentWindow.corpo.iframe_publicacaoeperiodicidaderreo.document.form1.c220_publiclrf.disabled = true;
+                    CurrentWindow.corpo.iframe_publicacaoeperiodicidaderreo.document.form1.c220_publiclrf.style.background = "#DEB887";
 
-                    top.corpo.iframe_publicacaoeperiodicidaderreo.document.form1.c220_tpbimestre.disabled = true;
-                    top.corpo.iframe_publicacaoeperiodicidaderreo.document.form1.c220_tpbimestre.style.background = "#DEB887";
+                    CurrentWindow.corpo.iframe_publicacaoeperiodicidaderreo.document.form1.c220_tpbimestre.disabled = true;
+                    CurrentWindow.corpo.iframe_publicacaoeperiodicidaderreo.document.form1.c220_tpbimestre.style.background = "#DEB887";
 
-                    top.corpo.iframe_publicacaoeperiodicidadergf.document.form1.c221_publicrgf.disabled = true;
-                    top.corpo.iframe_publicacaoeperiodicidadergf.document.form1.c221_publicrgf.style.background = "#DEB887";
+                    CurrentWindow.corpo.iframe_publicacaoeperiodicidadergf.document.form1.c221_publicrgf.disabled = true;
+                    CurrentWindow.corpo.iframe_publicacaoeperiodicidadergf.document.form1.c221_publicrgf.style.background = "#DEB887";
 
-                    top.corpo.iframe_publicacaoeperiodicidadergf.document.form1.c221_tpperiodo.disabled = true;
-                    top.corpo.iframe_publicacaoeperiodicidadergf.document.form1.c221_tpperiodo.style.background = "#DEB887";
+                    CurrentWindow.corpo.iframe_publicacaoeperiodicidadergf.document.form1.c221_tpperiodo.disabled = true;
+                    CurrentWindow.corpo.iframe_publicacaoeperiodicidadergf.document.form1.c221_tpperiodo.style.background = "#DEB887";
 
                     <?php endif; ?>
                     <?php if($tipoInstint == 2): ?>
                     if(document.form1.c218_mesusu.value == 12){
-                        top.corpo.formaba[1].setAttribute("onclick", "mo_camada('operacoesdecredito')");
+                        CurrentWindow.corpo.formaba[1].setAttribute("onclick", "mo_camada('operacoesdecredito')");
                     }else{
-                        top.corpo.formaba[1].setAttribute("onclick", "");
+                        CurrentWindow.corpo.formaba[1].setAttribute("onclick", "");
                     }
                     if((document.form1.c218_mesusu.value % 2) == 0){
                         document.getElementById("metaArrecadada").style.display = "";
@@ -665,9 +665,9 @@ $cldadoscomplementareslrf->rotulo->label();
             });
         <?php if($tipoInstint == 2): ?>
         if(document.form1.c218_mesusu.value == 12){
-            top.corpo.formaba[1].setAttribute("onclick", "mo_camada('operacoesdecredito')");
+            CurrentWindow.corpo.formaba[1].setAttribute("onclick", "mo_camada('operacoesdecredito')");
         }else{
-            top.corpo.formaba[1].setAttribute("onclick", "");
+            CurrentWindow.corpo.formaba[1].setAttribute("onclick", "");
         }
         <?php endif; ?>
 

@@ -96,7 +96,7 @@ $claguacorte->rotulo->label("x40_dtinc");
         if(isset($chave_x40_codcorte) && (trim($chave_x40_codcorte)!="") ){
 	         $sql = $claguacorte->sql_query($chave_x40_codcorte,$campos,"x40_codcorte desc");
         }else if(isset($chave_x40_dtinc) && (trim($chave_x40_dtinc)!="") ){
-           list($x40_dtinc_dia, $x40_dtinc_mes, $x40_dtinc_ano) = split("/", $chave_x40_dtinc);
+           list($x40_dtinc_dia, $x40_dtinc_mes, $x40_dtinc_ano) = explode("/", $chave_x40_dtinc);
            $dtinc = "$x40_dtinc_ano-$x40_dtinc_mes-$x40_dtinc_dia";
 	         $sql = $claguacorte->sql_query("",$campos,"x40_dtinc, x40_codcorte desc"," x40_dtinc = '$dtinc' ");
         }else{

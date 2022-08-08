@@ -412,7 +412,7 @@ function js_disabdata(valor){
 }
 function js_pesquisarh05_causa(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_rescisao','func_rescisaoaviso.php?testarescisao=raf&funcao_js=parent.js_mostrarescisao1|r59_causa|r59_descr|r59_caub|r59_descr1|r59_aviso|r59_menos1&chave_r59_anousu=<?=$rh02_anousu?>&chave_r59_mesusu=<?=$rh02_mesusu?>&regime='+document.form1.rh02_codreg.value,'Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rescisao','func_rescisaoaviso.php?testarescisao=raf&funcao_js=parent.js_mostrarescisao1|r59_causa|r59_descr|r59_caub|r59_descr1|r59_aviso|r59_menos1&chave_r59_anousu=<?=$rh02_anousu?>&chave_r59_mesusu=<?=$rh02_mesusu?>&regime='+document.form1.rh02_codreg.value,'Pesquisa',true);
   }else{
     if(document.form1.rh05_causa.value != ''){
       js_OpenJanelaIframe('top.corpo','db_iframe_rescisao','func_rescisaoaviso.php?testarescisao=raf&pesquisa_chave='+document.form1.rh05_causa.value+'&funcao_js=parent.js_mostrarescisao&ano=<?=$rh02_anousu?>&mes=<?=$rh02_mesusu?>&regime='+document.form1.rh02_codreg.value,'Pesquisa',false);
@@ -468,7 +468,7 @@ function js_mostrarescisao1(chave1,chave2,chave3,chave4,chave5,chave6){
 }
 function js_pesquisarh01_regist(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_rhpessoal','func_rhpessoaladmiss.php?testarescisao=raf&funcao_js=parent.js_mostrarhpessoal1|rh01_regist|z01_nome|rh01_admiss|rh02_seqpes|r30_proc1|r30_proc2|r30_per1f|r30_per2f|rh02_codreg|rh14_matipe|rh14_dtvinc|rh30_regime&instit=<?=db_getsession("DB_instit")?>','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_rhpessoal','func_rhpessoaladmiss.php?testarescisao=raf&funcao_js=parent.js_mostrarhpessoal1|rh01_regist|z01_nome|rh01_admiss|rh02_seqpes|r30_proc1|r30_proc2|r30_per1f|r30_per2f|rh02_codreg|rh14_matipe|rh14_dtvinc|rh30_regime&instit=<?=db_getsession("DB_instit")?>','Pesquisa',true);
   }else{
      if(document.form1.rh01_regist.value != ''){
         js_OpenJanelaIframe('top.corpo','db_iframe_rhpessoal','func_rhpessoaladmiss.php?testarescisao=raf&pesquisa_chave='+document.form1.rh01_regist.value+'&funcao_js=parent.js_mostrarhpessoal&instit=<?=db_getsession("DB_instit")?>','Pesquisa',false);

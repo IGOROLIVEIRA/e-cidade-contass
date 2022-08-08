@@ -43,7 +43,7 @@ $orcparamrel = new cl_orcparamrel;
 $classinatura = new cl_assinatura;
 $clempresto   = new cl_empresto;
 
-$xinstit = split("-",$db_selinstit);
+$xinstit = explode("-",$db_selinstit);
 $resultinst = pg_exec("select codigo,nomeinst,nomeinstabrev from db_config where codigo in (".str_replace('-',', ',$db_selinstit).") ");
 $descr_inst = '';
 $xvirg = '';
@@ -166,10 +166,8 @@ $pdf->cell(30,$alt,db_formatar( abs($saldoFinal),'f')." ".$sSinalFinal,"TB",1,"R
 
 $pdf->Ln(15);
 
-assinaturas(&$pdf,&$classinatura,'BG');
+assinaturas($pdf,$classinatura,'BG');
 
 
 
 $pdf->Output();
-
-?>

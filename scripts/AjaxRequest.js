@@ -132,22 +132,26 @@ AjaxRequest.create = function(sPathFile, oParameters, fnCallback) {
  * Executa uma requisição ajax
  */
 AjaxRequest.prototype.execute = function() {
-
+    console.log('here');
     js_divCarregando(this.sMessage, 'msgBox' + (++this.id));
-
+    console.log('here2');
     var oRequest = {
         method : 'post',
         asynchronous : this.lAsynchronous,
         onComplete : function(oAjax) {
-
+            console.log('veio aqki');
             js_removeObj('msgBox' + this.id);
+            console.log('veio aqki2');
+            console.log('ajax',oAjax );
+            console.log('sem json parse',oAjax.responseText);
+            console.log('json parse',JSON.parse(oAjax.responseText));
             var oReturn = JSON.parse(oAjax.responseText);
-
+            console.log('veio aqki3');
             if (oReturn.erro == undefined) {
                 oReturn.erro = true;
                 console.log("Variável para controle de erro não localizada. Crie uma variavel no RPC chamada 'erro'.");
             }
-
+            console.log('here3');
             this.fnCallback(oReturn, oReturn.erro);
         }.bind(this)
     };

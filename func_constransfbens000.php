@@ -29,16 +29,16 @@ db_postmemory($HTTP_POST_VARS);
   <fieldset>
     <legend>Consulta de Transferência de Bens:</legend>
     <table class="form-container">
-    
-      <tr> 
+
+      <tr>
         <td title="<?=$Tt93_codtran?>"> <? db_ancora(@$Lt93_codtran,"js_pesquisa_benstransf(true);",1);?>  </td>
         <td>
           <?
-             db_input("t93_codtran",8,$It93_codtran,true,"text",4,"onchange='js_pesquisa_benstransf(false);'"); 
+             db_input("t93_codtran",8,$It93_codtran,true,"text",4,"onchange='js_pesquisa_benstransf(false);'");
           ?>
         </td>
       </tr>
-      
+
     </table>
   </fieldset>
   <input name="pesquisa" type="button" onclick='js_abre(this.name);'  value="Pesquisa">
@@ -48,12 +48,12 @@ db_postmemory($HTTP_POST_VARS);
 
 function js_abre(botao){
 
-  if(document.form1.t93_codtran == ''){    
+  if(document.form1.t93_codtran == ''){
     alert("Selecione uma Transferência");
   } else {
-    
-    js_OpenJanelaIframe('top.corpo','db_iframe_func_constransfbens001','pat1_constransfbens002.php?t93_codtran='+document.form1.t93_codtran.value,'Pesquisa',true);
-      
+
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_func_constransfbens001','pat1_constransfbens002.php?t93_codtran='+document.form1.t93_codtran.value,'Pesquisa',true);
+
     jan.moveTo(0,0);
     document.form1.t93_codtran.style.backgroundColor='';
   }
@@ -62,17 +62,17 @@ function js_abre(botao){
 //--------------------------------
 function js_pesquisa_benstransf(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_benstransf','func_benstransf.php?funcao_js=parent.js_mostrabemtransf1|t93_codtran','Pesquisa',true);
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_benstransf','func_benstransf.php?funcao_js=parent.js_mostrabemtransf1|t93_codtran','Pesquisa',true);
   }else{
-     if(document.form1.t93_codtran.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_benstransf','func_benstransf?pesquisa_chave='+document.form1.t93_codtran.value+'&funcao_js=parent.js_mostrabemtransf','Pesquisa',false);
+     if(document.form1.t93_codtran.value != ''){
+        js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_benstransf','func_benstransf?pesquisa_chave='+document.form1.t93_codtran.value+'&funcao_js=parent.js_mostrabemtransf','Pesquisa',false);
      }
   }
 }
 function js_mostrabemtransf(chave,erro){
-  if(erro==true){ 
-    document.form1.t93_codtran.focus(); 
-    document.form1.t93_codtran.value = ''; 
+  if(erro==true){
+    document.form1.t93_codtran.focus();
+    document.form1.t93_codtran.value = '';
   }
 }
 function js_mostrabemtransf1(chave1){
