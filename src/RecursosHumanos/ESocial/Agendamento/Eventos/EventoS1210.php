@@ -105,9 +105,9 @@ class EventoS1210 extends EventoBase
             }
 
             $rsValores = db_query($sql);
-            echo $sql;
-            db_criatabela($rsValores);
-            exit;
+            // echo $sql;
+            // db_criatabela($rsValores);
+            // exit;
             for ($iCont = 0; $iCont < pg_num_rows($rsValores); $iCont++) {
                 $oResult = \db_utils::fieldsMemory($rsValores, $iCont);
                 $oFormatado = new \stdClass();
