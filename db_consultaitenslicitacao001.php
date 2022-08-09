@@ -126,8 +126,8 @@ require_once("model/licitacao/SituacaoLicitacao.model.php");
 
       if (oItem.iAutorizacao == undefined) {
         oItem.iAutorizacao = "";
+        oItem.sDescricaoMaterial = decodeURI(oItem.sDescricaoMaterial);
       }
-      oItem.sDescricaoMaterial = decodeURI(oItem.sDescricaoMaterial);
       var aLinha = [oItem.iCodigo,
         oItem.iAutorizacao,
         oItem.iQuantidade,
