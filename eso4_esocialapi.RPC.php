@@ -260,7 +260,6 @@ try {
             db_inicio_transacao();
 
             $iCgm = $oParam->empregador;
-
             foreach ($oParam->arquivos as $arquivo) {
                 $dadosESocial->setReponsavelPeloPreenchimento($iCgm);
                 if (!in_array(Tipo::getTipoFormulario($arquivo), array(37, 40, 12, 13, 15))) {

@@ -145,8 +145,7 @@ class EventoS2200 extends EventoBase
                 //$oDadosAPI->evtAdmissao->vinculo->infoEstatutario = $oDados->infoEstatutario;
                 $oDadosAPI->evtAdmissao->vinculo->infoEstatutario->tpProv       = $oDados->tpprov;
                 $oDadosAPI->evtAdmissao->vinculo->infoEstatutario->dtExercicio  = $oDados->dtexercicio;
-
-                if (!empty($oDados->tpplanrp)) {
+                if ($oDados->tpplanrp != 1) {
                     $oDadosAPI->evtAdmissao->vinculo->infoEstatutario->tpPlanRP     = $oDados->tpplanrp;
                 }
                 if ($oDados->indtetorgps == 'N') {
@@ -184,7 +183,7 @@ class EventoS2200 extends EventoBase
 
 
             if (!empty($oDados->vrsalfx) && !empty($oDados->undsalfixo)) {
-                $oDadosAPI->evtAdmissao->vinculo->infoContrato->remuneracao->vrSalFx = $oDados->vrsalfx;
+                $oDadosAPI->evtAdmissao->vinculo->infoContrato->remuneracao->vrSalFx = number_format($oDados->vrsalfx, 2, ".", "");
                 $oDadosAPI->evtAdmissao->vinculo->infoContrato->remuneracao->undSalFixo = $oDados->undsalfixo;
                 $oDadosAPI->evtAdmissao->vinculo->infoContrato->remuneracao->dscSalVar = empty($oDados->dscsalvar) ? null : $oDados->dscsalvar;
             } else {
@@ -211,9 +210,6 @@ class EventoS2200 extends EventoBase
             }
 
             //$oDadosAPI->evtAdmissao->vinculo->infoContrato->localTrabDom = empty($oDados->localtrabdom) ? null : $oDados->localtrabdom;
-
-
-
 
             $aDadosAPI[] = $oDadosAPI;
             $iSequencial++;

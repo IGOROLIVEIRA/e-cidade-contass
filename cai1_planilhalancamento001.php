@@ -2479,6 +2479,11 @@ if ($oInstit->db21_usasisagua == "t") {
       document.getElementById("k81_emparlamentar").options[3].selected = true;
     }
 
+    // verificar se a receita for de rendimentos (iniciadas em "41321%") e deixa como padrao informação de emenda sempre 3 - não se aplica,.
+    if(sReceita.substr(0,5) == '41321'){
+      document.getElementById("k81_emparlamentar").options[3].selected = true;
+    }
+    
   }
 
   function js_verificaRegularizaRepasse() { 

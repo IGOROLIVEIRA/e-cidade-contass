@@ -514,6 +514,7 @@ class Preenchimentos
                 case when (h13_categoria = 301 or h13_categoria = 302 or h13_categoria = 303 or h13_categoria = 306 or h13_categoria = 309) then rh01_admiss
                 end as dtExercicio,
                 case when r33_tiporegime = '2' then 0
+                else 1
                 end as tpPlanRP,
                 case when r33_tiporegime = '2' then 'N'
                 end as indTetoRGPS,
@@ -1068,7 +1069,7 @@ where
                 cadferia.r30_per1i AS dtiniafast,
                 '15' AS codmotafast,
                 '' AS infomesmomtv,
-                NULL AS dttermafast,
+                cadferia.r30_per1f AS dttermafast,
                 cadferia.r30_per1i AS dtiniafastferias,
                 cadferia.r30_perai AS dtinicio,
                 CASE

@@ -1272,10 +1272,19 @@ foreach ($parag as $chave ) {
         db_fieldsmemory($resultdesc,0);
         
         $honorarios = 0;
-        $oInstit = new Instituicao(db_getsession('DB_instit'));                    
-        if($oInstit->getCodigoCliente() == Instituicao::COD_CLI_PMPIRAPORA){
-          $rechonorarios = 718;
+        /*$oInstit = new Instituicao(db_getsession('DB_instit'));
+        
+        if($oInstit->getCodigoCliente() == Instituicao::COD_CLI_PMPIRAPORA || $oInstit->getCodigoCliente() == Instituicao::COD_CLI_BURITIZEIRO){
+          $rechonorarios = $oInstit->getCodigoCliente() == Instituicao::COD_CLI_PMPIRAPORA ? 718 : 330;
           $honorarios = "select sum(k00_valor) as honorarios from arrecad where k00_receit = ".$rechonorarios." and k00_numpre = ".$v07_numpre ;
+          $resulthonorarios = db_query($honorarios);
+          db_fieldsmemory($resulthonorarios,0);
+        }*/
+
+        db_sel_instit(null, "db21_honorarioadvocaticio");
+        
+        if($db21_honorarioadvocaticio > 0){
+          $honorarios = "select sum(k00_valor) as honorarios from arrecad where k00_receit = ".$db21_honorarioadvocaticio." and k00_numpre = ".$v07_numpre ;
           $resulthonorarios = db_query($honorarios);
           db_fieldsmemory($resulthonorarios,0);
         }
