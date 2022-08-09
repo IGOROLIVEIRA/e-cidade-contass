@@ -262,7 +262,7 @@ try {
             $iCgm = $oParam->empregador;
             foreach ($oParam->arquivos as $arquivo) {
                 $dadosESocial->setReponsavelPeloPreenchimento($iCgm);
-                if (!in_array(Tipo::getTipoFormulario($arquivo), array(37, 40, 12, 13,))) {
+                if (!in_array(Tipo::getTipoFormulario($arquivo), array(37, 40, 12, 13, 15))) {
                     $dadosDoPreenchimento = $dadosESocial->getPorTipo(Tipo::getTipoFormulario($arquivo), $oParam->matricula);
                     $formatter = FormatterFactory::get($arquivo);
                     $dadosTabela = $formatter->formatar($dadosDoPreenchimento);
