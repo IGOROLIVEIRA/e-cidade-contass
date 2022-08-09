@@ -236,11 +236,11 @@ if ($clempautitem->numrows == 0) {
   $permissao_lancar = db_permissaomenu(db_getsession("DB_anousu"), 398, 3489);
   if ($permissao_lancar == "true") {
   ?>
-    <input name="lancemp" type="button" id="lancemp" value="Lançar Empenho" onclick="top.corpo.iframe_empautoriza.js_lanc_empenho();" <?= ($db_botao == false || $db_botao_c == false ? "disabled" : "") ?>>
+    <input name="lancemp" type="button" id="lancemp" value="Lançar Empenho" onclick="CurrentWindow.corpo.iframe_empautoriza.js_lanc_empenho();" <?= ($db_botao == false || $db_botao_c == false ? "disabled" : "") ?>>
   <?
   }
   ?>
-  <input name="relatorio" type="button" id="db_opcao" value="Relatório de autorização" onclick="top.corpo.iframe_empautoriza.js_relatorio();" <?= ($db_botao == false || $db_botao_c == false ? "disabled" : "") ?>>
+  <input name="relatorio" type="button" id="db_opcao" value="Relatório de autorização" onclick="CurrentWindow.corpo.iframe_empautoriza.js_relatorio();" <?= ($db_botao == false || $db_botao_c == false ? "disabled" : "") ?>>
 </form>
 <?
 if (isset($nops)) {
