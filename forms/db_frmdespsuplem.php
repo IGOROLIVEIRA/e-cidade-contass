@@ -60,14 +60,15 @@ $cliframe_seleciona = new cl_iframe_seleciona;
        $sql = " select o46_codsup,
                                o48_descr,
 		                       sum(case when o47_valor > 0  then o47_valor else 0 end)  as suplementado,
-		                       sum(case when o47_valor < 0  then o47_valor else 0 end) as reduzido	   
+		                       sum(case when o47_valor < 0  then o47_valor else 0 end) as reduzido,	
+                           sum(case when o47_valor > 0  then o47_coddot end)  as o47_coddot   
                      from orcsuplem
 		                     inner join orcsuplemtipo on o48_tiposup = o46_tiposup
 		                     inner join orcsuplemval  on o47_codsup=o46_codsup   
 		                     inner join orcsuplemlan on o49_codsup = o46_codsup
 		             where o46_codlei = $o39_codproj  and o49_codsup is not null
 		             group by o46_codlei,o46_codsup,o48_descr
-		             order by o46_codlei    
+		             order by o46_codsup,o46_codlei    
   	      ";
   	     // se este projeto é retificador, todas as suplementações devem ser desprocessadas  
   	    $sql_retificador= "select *
@@ -79,19 +80,20 @@ $cliframe_seleciona = new cl_iframe_seleciona;
               $sql_marca = "  select o46_codsup,
 					                               o48_descr,
 							                       sum(case when o47_valor > 0  then o47_valor else 0 end)  as suplementado,
-							                       sum(case when o47_valor < 0  then o47_valor else 0 end) as reduzido	   
+							                       sum(case when o47_valor < 0  then o47_valor else 0 end) as reduzido,
+                                     sum(case when o47_valor > 0  then o47_coddot end)  as o47_coddot	   
 					                     from orcsuplem
 							                     inner join orcsuplemtipo on o48_tiposup = o46_tiposup
 							                     inner join orcsuplemval  on o47_codsup=o46_codsup   
 							                     inner join orcsuplemlan on o49_codsup = o46_codsup
 							             where o46_codlei = $o39_codproj  and o49_codsup is not null
 							             group by o46_codlei,o46_codsup,o48_descr
-							             order by o46_codlei    
+							             order by o46_codsup,o46_codlei    
 					  	            ";
   	    } else {
   	     	  $sql_marca="";
   	    }	        	      
-        $cliframe_seleciona->campos  = "o46_codsup,o48_descr,reduzido,suplementado";
+        $cliframe_seleciona->campos  = "o46_codsup,o48_descr,o47_coddot,suplementado,reduzido";
         $cliframe_seleciona->legenda="Suplementações Processadas";
         $cliframe_seleciona->sql=$sql;	   
         $cliframe_seleciona->sql_marca=$sql_marca;
