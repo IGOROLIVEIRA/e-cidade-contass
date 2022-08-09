@@ -438,7 +438,7 @@ if (isset($oGet->quebrapordepartamento) && $oGet->quebrapordepartamento == "S") 
           }
 
           $oPdf->setfont('arial', 'b', 7);
-          $lImprime = getDadosSintetico($oPdf, $oMovimentos, $oTotalEstoqueSintetico, $oGet, true, 0, true);
+          $lImprime = getDadosSintetico($oPdf, $oMovimentos, $oTotalEstoqueSintetico, $oGet, true, 0, true,0,0);
 
           if ($lImprime) {
             foreach ($oMovimentos->aMovimentacoesDepartamento as $oItens) {
@@ -469,7 +469,7 @@ if (isset($oGet->quebrapordepartamento) && $oGet->quebrapordepartamento == "S") 
             $iPreenche = 1;
           }
 
-					$lImprime = getDadosSintetico($oPdf, $oMovimentos, $oGet, false, $iPreenche);
+					$lImprime = getDadosSintetico($oPdf, $oMovimentos, $oGet, false, $iPreenche,false,0,0);
 					if ($iContador) {
 						$iContador++;
 					}
@@ -532,7 +532,7 @@ if (isset($oGet->quebrapordepartamento) && $oGet->quebrapordepartamento == "S") 
 
 				$oPdf->setfont('arial', 'b', 7);
 
-				$lImprime = getDadosSintetico($oPdf, $oMovimentos, $oGet, true, 0, true,20);
+				$lImprime = getDadosSintetico($oPdf, $oMovimentos, $oGet, true, 0, true,20,0);
 
 				if ($lImprime) {
 					foreach ($oMovimentos->aMovimentacoesEstoque as $oItens) {
@@ -933,5 +933,3 @@ function getTotalGeralSintetico($oPdf, $aItens) {
   $oPdf->cell(40 - $iLarguraLinha,  4, number_format($oTotal->vlrEstoque, 2), 1, 1, "C", 0);
 
 }
-
-?>
