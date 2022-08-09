@@ -101,7 +101,7 @@ input{
       <tr>
         <td width="20%"></td>
         <td align="left" nowrap title="<?=$Tk17_codigo?>">
-           <? db_ancora(@$Lk17_codigo,"js_pesquisak17_codigo(true, k17_codigo_ini);");  ?>
+           <? db_ancora(@$Lk17_codigo,"js_pesquisak17_codigo(true, k17_codigo_ini);",1);  ?>
         </td>
         <td align="left" nowrap>
           <?
@@ -109,7 +109,7 @@ input{
           ?>
         </td>
         <td class="ancora">
-          <? db_ancora("à","js_pesquisak17_codigo(true, k17_codigo_fim);");  ?>
+          <? db_ancora("à","js_pesquisak17_codigo(true, k17_codigo_fim);",1);  ?>
         </td>
         <td>
           <?
