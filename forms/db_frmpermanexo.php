@@ -116,6 +116,31 @@ $clpermanexo->rotulo->label();
 
 </form>
 <script>
+  marcarTodosPerfis = false;
+
+  function marcarTodos() {
+    qntdperfis = document.getElementsByClassName("marca_itens").length;
+    perfis = document.getElementsByClassName("marca_itens");
+
+    if (marcarTodosPerfis == false) {
+      for (let i = 0; i < qntdperfis; i++) {
+        perfis[i].checked = true;
+      }
+
+      marcarTodosPerfis = true;
+    } else {
+      for (let i = 0; i < qntdperfis; i++) {
+        perfis[i].checked = false;
+      }
+
+      marcarTodosPerfis = false;
+    }
+
+
+
+
+  }
+
   function js_pesquisa() {
     js_OpenJanelaIframe('top.corpo', 'db_iframe_permanexo', 'func_permanexo.php?funcao_js=parent.js_preenchepesquisa|0', 'Pesquisa', true);
   }

@@ -437,7 +437,7 @@ class ProcessoDocumento
      * Erro ao alterar documento
      */
     if ($oDaoProtprocessodocumento->erro_status == "0") {
-      throw new Exception(_M(URL_MENSAGEM_PROCESSO_DOCUMENTO . 'erro_alterar_documento'));
+      throw new Exception($oDaoProtprocessodocumento->erro_msg);
     }
     return _M(URL_MENSAGEM_PROCESSO_DOCUMENTO . 'documento_alterado'); //true;
   }

@@ -311,9 +311,13 @@ $oRotulo->label("z01_nome");
 
                 sHTMLBotoes += '<input type="button" style="width:50%;" value="Alterar Acesso" onClick="js_alterarNivelAcessoDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + nivelacesso + '\' );" />  ';
                 sHTMLBotoes += '<input type="button" style="width:48%;" value="Alterar" onClick="js_alterarDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + nivelacesso + '\' );" />  ';
+                anexosSigilosos.push(iIndice);
+
               } else if (instituicao == oDocumento.iDepart && adm != 1 && !oDocumento.permissao) {
 
                 sHTMLBotoes += '<input type="button" style="width:100%;" value="Alterar" onClick="js_alterarDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + nivelacesso + '\' );" />  ';
+                anexosSigilosos.push(iIndice);
+
 
               } else if (instituicao == oDocumento.iDepart && adm != 1 && oDocumento.permissao) {
 
@@ -558,7 +562,6 @@ $oRotulo->label("z01_nome");
    * @return boolean
    */
   const js_downloadAnexos = () => {
-    console.log(permissaoDocumentos);
 
     js_divCarregando('Aguarde... Organizando documentos para o download', 'msgbox')
     const iCodigoProcesso = $('p58_codproc').value
@@ -633,13 +636,15 @@ $oRotulo->label("z01_nome");
     descricaoDocumento = sDescricaoDocumento;
     var select = document.querySelector('#p01_nivelacesso');
     for (var i = 0; i < select.options.length; i++) {
-      if (select.options[i].text === nivelAcesso) {
+      if (select.options[i].value == nivelAcesso) {
         select.selectedIndex = i;
         break;
       }
     }
 
     $('p01_descricao').disabled = true;
+    //$('p01_nivelacesso').disabled = false;
+
 
     /**
      * Altera acao do botao salvar
@@ -727,12 +732,13 @@ $oRotulo->label("z01_nome");
     $('p01_descricao').value = sDescricaoDocumento.urlDecode();
     var select = document.querySelector('#p01_nivelacesso');
     for (var i = 0; i < select.options.length; i++) {
-      if (select.options[i].text === nivelAcesso) {
+      if (select.options[i].value == nivelAcesso) {
         select.selectedIndex = i;
         break;
       }
     }
 
+    $('p01_descricao').disabled = false;
     $('p01_nivelacesso').disabled = true;
 
 
