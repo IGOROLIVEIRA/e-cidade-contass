@@ -216,6 +216,11 @@ $mesfolha = DBPessoal::getMesFolha();
 
     function js_processar() {
 
+        let result = confirm('Aten??o: Confirmar envio das informa??es do m?s ' + parent.bstatus.document.getElementById('dtatual').innerHTML.substr(3, 7) + ' para o eSocial?');
+        if (!result) {
+            return false;
+        }
+
         if ($F('anofolha').length < 4 || parseInt($("mesfolha").value) < 1 || parseInt($("mesfolha").value) > 12) {
 
             alert("Início Validade inválido.");
