@@ -57,8 +57,8 @@ if (isset($envia) or @$mostra == 1) {
 } else {
   $entra=false;
 }
-if(!session_is_registered("DB_tipodebitoparcel")){
-  session_register("DB_tipodebitoparcel");
+if(!$_SESSION['DB_tipodebitoparcel']){
+  $_SESSION['DB_tipodebitoparcel'];
   db_putsession("DB_tipodebitoparcel",$tipo_debito);
 }else{
 
@@ -214,8 +214,8 @@ if((isset($ver_matric) or isset($ver_inscr) or (isset($ver_numcgm))) and (!isset
   $numpar1 = $numpar;
 }
 
-if(!session_is_registered("conteudoparc")) {
-  session_register("conteudoparc");
+if(!$_SESSION['conteudoparc']) {
+  $_SESSION['conteudoparc'];
   db_putsession("conteudoparc",$conteudoaparcelar);
 } else {
   db_putsession("conteudoparc",db_getsession("conteudoparc").$conteudoaparcelar);
@@ -288,7 +288,7 @@ if (($k03_tipo == 5 || $k03_tipo == 6 || $k03_tipo == 13 || $k03_tipo == 16 || $
 	if(trim($k40_dtreparc) != ""){
 		$dDataatual   = date("Ymd",db_getsession("DB_datausu"));
 
-		$dDataLimite  = ereg_replace("-","",$k40_dtreparc);
+		$dDataLimite  = preg_replace("-","",$k40_dtreparc);
 		if ($dDataatual > $dDataLimite && $k03_tipo != 5) {
 
 			$lValidaReparcelamento 		= true;
@@ -515,8 +515,8 @@ if((isset($inicial) && $inicial != "") and ( $entra == false)) {
   $numpar = $numpar1;
 }
 
-if(!session_is_registered("conteudoparc")) {
-  session_register("conteudoparc");
+if(!$_SESSION['conteudoparc']) {
+  $_SESSION['conteudoparc'];
 //	db_msgbox('1 - '.$conteudoaparcelar);
   db_putsession("conteudoparc",$conteudoaparcelar);
 } else {
