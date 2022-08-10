@@ -574,7 +574,7 @@ if ( $result == false || pg_num_rows($result) == 0 ) {
               fputs($clabre_arquivo->arquivo,db_formatar($q01_valor,'f',' ',18));
 
               fputs($clabre_arquivo->arquivo,str_pad($q02_numcgm,10));
-              fputs($clabre_arquivo->arquivo,str_pad($z01_nome,40));
+              fputs($clabre_arquivo->arquivo,substr(str_pad($z01_nome,40), 0, 40));
               fputs($clabre_arquivo->arquivo,substr(str_pad($z01_nomefanta,50), 0, 50));
               fputs($clabre_arquivo->arquivo,str_pad($z01_cgccpf,20));
               fputs($clabre_arquivo->arquivo,str_pad($z01_incest,20));
