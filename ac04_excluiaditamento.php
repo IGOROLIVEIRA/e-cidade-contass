@@ -338,6 +338,7 @@ $clrotulo->label("ac16_resumoobjeto");
        oTxtCodigoAcordo.setValue('');
      }
   }
+}
 
   /**
    * Retorno da pesquisa acordos
