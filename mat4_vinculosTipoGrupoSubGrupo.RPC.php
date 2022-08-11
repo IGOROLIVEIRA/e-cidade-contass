@@ -207,7 +207,7 @@ switch ($oParam->exec) {
       $sProximaEstrutural = str_pad($iSequencia, $iTotalCasa, "0", STR_PAD_LEFT);
       $sEstruturalFinal   = "{$sEstruturalFinal}.{$sProximaEstrutural}";
 
-      atualizarEstruturaisArvoreDestino(&$sEstruturalFinal, &$iCodigoOrigem, &$iNivelDestino,&$iNivelOrigem, &$iMaxNivel,&$aMascara);
+      atualizarEstruturaisArvoreDestino($sEstruturalFinal, $iCodigoOrigem, $iNivelDestino, $iNivelOrigem, $iMaxNivel, $aMascara);
 
       db_query(" begin; ".$sqlUpdadeDbEstruturaValorPai."; commit ;");
 
