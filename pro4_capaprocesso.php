@@ -55,51 +55,50 @@ $iAnoUsuFinal   = db_getsession("DB_anousu");
 
 if (isset($oGet->numeroProcessoInicial) && !empty($oGet->numeroProcessoInicial)) {
 
-	$aProcessoInicial        = explode("/", $oGet->numeroProcessoInicial);
-	$aProcessoFinal          = explode("/", $oGet->numeroProcessoFinal);
-	$iNumeroProcessoInicical = $aProcessoInicial[0];
-	$iNumeroProcessoFinal    = $aProcessoFinal[0];
+  $aProcessoInicial        = explode("/", $oGet->numeroProcessoInicial);
+  $aProcessoFinal          = explode("/", $oGet->numeroProcessoFinal);
+  $iNumeroProcessoInicical = $aProcessoInicial[0];
+  $iNumeroProcessoFinal    = $aProcessoFinal[0];
 
-	if ($oGet->numeroProcessoInicial != '' ) {
+  if ($oGet->numeroProcessoInicial != '') {
 
-		if (count($aProcessoInicial) > 1) {
-			$iAnoUsuInicial = $aProcessoInicial[1];
-		}
-	}
+    if (count($aProcessoInicial) > 1) {
+      $iAnoUsuInicial = $aProcessoInicial[1];
+    }
+  }
 
-	if ($oGet->numeroProcessoFinal != '') {
+  if ($oGet->numeroProcessoFinal != '') {
 
-		if (count($aProcessoFinal) > 1) {
-			$iAnoUsuFinal = $aProcessoFinal[1];
-		}
-	}
+    if (count($aProcessoFinal) > 1) {
+      $iAnoUsuFinal = $aProcessoFinal[1];
+    }
+  }
 
-	if (empty($iNumeroProcessoFinal) || $iNumeroProcessoFinal == '') {
-		$iNumeroProcessoFinal = $iNumeroProcessoInicical;
-	}
+  if (empty($iNumeroProcessoFinal) || $iNumeroProcessoFinal == '') {
+    $iNumeroProcessoFinal = $iNumeroProcessoInicical;
+  }
 }
 
-if (isset($oGet->codproc)  && !empty($oGet->codproc) ) {
+if (isset($oGet->codproc)  && !empty($oGet->codproc)) {
 
-	/*
+  /*
 	 * aqui é parte de impresao quando se inclui um processo
 	 * como é um só, definimos inicial e final o mesmo, para fazer o between na query
 	 */
+  /*
+  $oProcesso = new ProcessoProtocolo($oGet->codproc);
+  $iNumeroProcessoInicical = $oProcesso->getNumeroProcesso();
+  $iAnoUsuInicial          = $oProcesso->getAnoProcesso();
 
-	$oProcesso = new ProcessoProtocolo($oGet->codproc);
-	$iNumeroProcessoInicical = $oProcesso->getNumeroProcesso();
-	$iAnoUsuInicial          = $oProcesso->getAnoProcesso();
-
-	$iAnoUsuFinal            = $iAnoUsuInicial;
-	$iNumeroProcessoFinal    = $iNumeroProcessoInicical;
-
+  $iAnoUsuFinal            = $iAnoUsuInicial;
+  $iNumeroProcessoFinal    = $iNumeroProcessoInicical;
+  */
 }
 
 
-$sWhere = " where p58_numero between '{$iNumeroProcessoInicical}' and '{$iNumeroProcessoFinal}' ";
-$sWhere .= " and p58_ano between {$iAnoUsuInicial} and {$iAnoUsuFinal} ";
+$sWhere = " where p58_codproc = $oGet->codproc";
 
-$sWhere  .= " and p58_instit = ".db_getsession("DB_instit") ;
+$sWhere  .= " and p58_instit = " . db_getsession("DB_instit");
 
 $clprotparam    = new cl_protparam;
 $clprocvar      = new cl_procvar;
@@ -110,13 +109,13 @@ $iCodigoDepartamento = db_getsession('DB_coddepto');
 
 
 $sCamposParam = "p90_modelcapaproc, p90_db_documentotemplate, db82_templatetipo";
-$sSqlParam    = $clprotparam->sql_query_documentos(null,$sCamposParam,null," p90_instit =  {$iCodigoInstituicao} ");
+$sSqlParam    = $clprotparam->sql_query_documentos(null, $sCamposParam, null, " p90_instit =  {$iCodigoInstituicao} ");
 $rsParm       = $clprotparam->sql_record($sSqlParam);
 $oProtParam   = db_utils::fieldsMemory($rsParm, 0);
 
 $oDaoProtPocesso = db_utils::getDao('protprocesso');
 
-    $sql = " select	p58_codproc,
+$sql = " select	p58_codproc,
   	                p58_numero,
   	                p58_ano,
          	  		  	p58_numcgm,
@@ -136,6 +135,8 @@ $oDaoProtPocesso = db_utils::getDao('protprocesso');
               {$sWhere}		  
               order by p58_codproc";
 
+
+
 /**
  * Verifica se o parâmetro não esta setado como Documento Template
  */
@@ -154,34 +155,34 @@ if ($oProtParam->p90_modelcapaproc != 3) {
 
   $pdf = new pdf1capaprocesso();
   $pdf->Open();
-  $result_param = $clprotparam->sql_record($clprotparam->sql_query_file(null,"*",null,"p90_instit = ".db_getsession("DB_instit")));
-  if ($clprotparam->numrows>0){
-    db_fieldsmemory($result_param,0);
+  $result_param = $clprotparam->sql_record($clprotparam->sql_query_file(null, "*", null, "p90_instit = " . db_getsession("DB_instit")));
+  if ($clprotparam->numrows > 0) {
+    db_fieldsmemory($result_param, 0);
   }
-  if (isset($p90_modelcapaproc)&&$p90_modelcapaproc==0){
+  if (isset($p90_modelcapaproc) && $p90_modelcapaproc == 0) {
     $modelo = 40;
-  }else if (isset($p90_modelcapaproc)&&$p90_modelcapaproc==1){
+  } else if (isset($p90_modelcapaproc) && $p90_modelcapaproc == 1) {
     $modelo = 41;
-  }else if (isset($p90_modelcapaproc)&&$p90_modelcapaproc==2){
+  } else if (isset($p90_modelcapaproc) && $p90_modelcapaproc == 2) {
     $modelo = '42_novo';
-  }else{
+  } else {
     $modelo = 40;
   }
   $pdf1 = new db_impcarne($pdf, "$modelo");
-  $pdf1->telefinstit = pg_result(db_query("select telef from db_config where codigo = ".db_getsession("DB_instit")),0,0);
-  $pdf1->enderfinstit = pg_result(db_query("select ender||' - '||bairro||' nº '||numero from db_config where codigo = ".db_getsession("DB_instit")),0,0);
-  $pdf1->emailfinstit = pg_result(db_query("select email from db_config where codigo = ".db_getsession("DB_instit")),0,0);
-  $pdf1->cgcinstit = pg_result(db_query("select cgc from db_config where codigo = ".db_getsession("DB_instit")),0,0);
+  $pdf1->telefinstit = pg_result(db_query("select telef from db_config where codigo = " . db_getsession("DB_instit")), 0, 0);
+  $pdf1->enderfinstit = pg_result(db_query("select ender||' - '||bairro||' nº '||numero from db_config where codigo = " . db_getsession("DB_instit")), 0, 0);
+  $pdf1->emailfinstit = pg_result(db_query("select email from db_config where codigo = " . db_getsession("DB_instit")), 0, 0);
+  $pdf1->cgcinstit = pg_result(db_query("select cgc from db_config where codigo = " . db_getsession("DB_instit")), 0, 0);
 
-  for($w=0;$w<$numrows;$w++){
-    db_fieldsmemory($result,$w);
+  for ($w = 0; $w < $numrows; $w++) {
+    db_fieldsmemory($result, $w);
 
     $dtprocinfo = explode("/", $dtproc);
-    $pdf1->anoproc 	   = $dtprocinfo[2];
+    $pdf1->anoproc      = $dtprocinfo[2];
     $pdf1->p58_codproc = $p58_codproc;
     $pdf1->p58_numero  = $p58_numero;
     $pdf1->p58_ano     = $p58_ano;
-    $pdf1->dtproc 	   = $dtproc;
+    $pdf1->dtproc      = $dtproc;
     $pdf1->p58_numcgm  = $p58_numcgm;
     $pdf1->z01_nome    = $z01_nome;
     $pdf1->z01_cgccpf  = $z01_cgccpf;
@@ -195,16 +196,18 @@ if ($oProtParam->p90_modelcapaproc != 3) {
     $pdf1->z01_munic   = $z01_munic;
     $pdf1->p58_codigo  = $p58_codigo;
     $pdf1->p58_dtproc  = $p58_dtproc;
-    $pdf1->nome	   = $nome;
-    $pdf1->p58_obs	   = $p58_obs;
+    $pdf1->nome     = $nome;
+    $pdf1->p58_obs     = $p58_obs;
     $pdf1->p58_numeracao = $p58_numeracao;
 
-    if (isset($p90_imprimevar) and $p90_imprimevar == "t"){
-      $pdf1->result_vars = $clprocvar->sql_record($clprocvar->sql_query_varconteudo($p58_codproc,
-      null,
-  											                                                                     "distinct rotulo,
+    if (isset($p90_imprimevar) and $p90_imprimevar == "t") {
+      $pdf1->result_vars = $clprocvar->sql_record($clprocvar->sql_query_varconteudo(
+        $p58_codproc,
+        null,
+        "distinct rotulo,
   											                                                                     p55_conteudo,p55_codcam",
-  	                                                                                         "p55_codcam"));
+        "p55_codcam"
+      ));
     } else {
       $pdf1->result_vars = "";
     }
@@ -212,11 +215,10 @@ if ($oProtParam->p90_modelcapaproc != 3) {
     $pdf1->imprime();
   }
   $pdf1->objpdf->Output();
-
 } else {
 
-  ini_set("error_reporting","E_ALL & ~NOTICE");
-  $sDescrDoc        = date("YmdHis").db_getsession("DB_id_usuario");
+  ini_set("error_reporting", "E_ALL & ~NOTICE");
+  $sDescrDoc        = date("YmdHis") . db_getsession("DB_id_usuario");
   $sNomeRelatorio   = "tmp/geraCapaProtocolo{$sDescrDoc}.pdf";
   $sCaminhoSalvoSxw = "tmp/capa_protocolo_{$sDescrDoc}.sxw";
 
@@ -228,20 +230,20 @@ if ($oProtParam->p90_modelcapaproc != 3) {
   $rsCodProc = $oDaoProtPocesso->sql_record($sql);
   if ($oDaoProtPocesso->numrows > 0) {
 
-  	$iCodProcInicial = db_utils::fieldsMemory($rsCodProc, 0)->p58_codproc;
-  	$iCodProcFinal   = db_utils::fieldsMemory($rsCodProc, $oDaoProtPocesso->numrows - 1)->p58_codproc;
+    $iCodProcInicial = db_utils::fieldsMemory($rsCodProc, 0)->p58_codproc;
+    $iCodProcFinal   = db_utils::fieldsMemory($rsCodProc, $oDaoProtPocesso->numrows - 1)->p58_codproc;
   }
 
   // Caminho onde esta o .agt
   $sAgt = "protocolo/capa_processo.agt";
 
-   // Parâmetros Utilizado no .agt
+  // Parâmetros Utilizado no .agt
   $aParam                      = array();
   $aParam['$codigo_processo']  = $iCodProcInicial;
 
   // Se for imprimir mais de uma capa
   if (isset($iCodProcFinal) && !empty($iCodProcFinal)) {
-    $aParam['$codigo_processo_fim'] = $iCodProcFinal  ;
+    $aParam['$codigo_processo_fim'] = $iCodProcFinal;
   } else {
     $aParam['$codigo_processo_fim'] = $iCodProcInicial;
   }
@@ -249,15 +251,12 @@ if ($oProtParam->p90_modelcapaproc != 3) {
   $aParam['$codigo_instituicao']  = $iCodigoInstituicao;
   $aParam['$codigo_departamento'] = $iCodigoDepartamento;
 
-  db_stdClass::oo2pdf($oProtParam->db82_templatetipo,
-                      $oProtParam->p90_db_documentotemplate,
-                      $sAgt,
-                      $aParam,
-                      $sCaminhoSalvoSxw,
-                      $sNomeRelatorio);
-
+  db_stdClass::oo2pdf(
+    $oProtParam->db82_templatetipo,
+    $oProtParam->p90_db_documentotemplate,
+    $sAgt,
+    $aParam,
+    $sCaminhoSalvoSxw,
+    $sNomeRelatorio
+  );
 }
-
-
-
-?>

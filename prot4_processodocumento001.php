@@ -228,6 +228,8 @@ $oRotulo->label("z01_nome");
   oGridDocumentos.setHeader(new Array("Código", "Descrição", "Departamento", "Ação"));
   oGridDocumentos.allowSelectColumns(true);
   oGridDocumentos.show($('ctnDbGridDocumentos'));
+  var anexosSigilosos = new Array();
+
 
   /**
    * Buscar documentos do processo
@@ -238,7 +240,7 @@ $oRotulo->label("z01_nome");
     var instituicao = <?php print_r($iInstit) ?>;
     var adm = <?php print_r($adm) ?>;
     var iCodigoProcesso = $('p58_codproc').value;
-
+    anexosSigilosos = new Array();
 
     if (empty(iCodigoProcesso)) {
       return false;
@@ -276,7 +278,6 @@ $oRotulo->label("z01_nome");
           oGridDocumentos.clearAll(true);
           var iDocumentos = oRetorno.aDocumentosVinculados.length;
 
-          var anexosSigilosos = new Array();
 
           for (var iIndice = 0; iIndice < iDocumentos; iIndice++) {
 
@@ -308,19 +309,16 @@ $oRotulo->label("z01_nome");
                 sHTMLBotoes += '<input type="button" value="Download" onClick="js_downloadDocumento(' + oDocumento.iCodigoDocumento + ');" />  ';
 
               } else if (instituicao == oDocumento.iDepart && adm == 1 && !oDocumento.permissao) {
-
                 sHTMLBotoes += '<input type="button" style="width:50%;" value="Alterar Acesso" onClick="js_alterarNivelAcessoDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + nivelacesso + '\' );" />  ';
-                sHTMLBotoes += '<input type="button" style="width:48%;" value="Alterar" onClick="js_alterarDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + nivelacesso + '\' );" />  ';
+                //sHTMLBotoes += '<input type="button" style="width:48%;" value="Alterar" onClick="js_alterarDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + nivelacesso + '\' );" />  ';
                 anexosSigilosos.push(iIndice);
 
               } else if (instituicao == oDocumento.iDepart && adm != 1 && !oDocumento.permissao) {
-
-                sHTMLBotoes += '<input type="button" style="width:100%;" value="Alterar" onClick="js_alterarDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + nivelacesso + '\' );" />  ';
+                //sHTMLBotoes += '<input type="button" style="width:100%;" value="Alterar" onClick="js_alterarDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + nivelacesso + '\' );" />  ';
                 anexosSigilosos.push(iIndice);
 
 
               } else if (instituicao == oDocumento.iDepart && adm != 1 && oDocumento.permissao) {
-
                 sHTMLBotoes += '<input type="button"  value="Alterar" onClick="js_alterarDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + nivelacesso + '\' );" />  ';
                 sHTMLBotoes += '<input type="button" value="Download" onClick="js_downloadDocumento(' + oDocumento.iCodigoDocumento + ');" />  ';
               }
@@ -382,6 +380,16 @@ $oRotulo->label("z01_nome");
     var iSelecionados = documentosSelecionados.length;
     var iCodigoProcesso = $('p58_codproc').value;
     var aDocumentos = [];
+
+    for (var iIndice = 0; iIndice < iSelecionados; iIndice++) {
+
+      if (anexosSigilosos.includes(documentosSelecionados[iIndice].getRowNumber()) == true) {
+        alert("Usuário sem permissão para excluir documento selecionado.");
+        return false;
+      }
+
+    }
+
 
     if (iSelecionados == 0) {
 
@@ -643,7 +651,7 @@ $oRotulo->label("z01_nome");
     }
 
     $('p01_descricao').disabled = true;
-    //$('p01_nivelacesso').disabled = false;
+    $('p01_nivelacesso').disabled = false;
 
 
     /**
@@ -1004,6 +1012,7 @@ $oRotulo->label("z01_nome");
           $('uploadfile').value = '';
           $('uploadfile').disabled = false;
           $('p01_descricao').value = '';
+          document.querySelector('#p01_nivelacesso').selectedIndex = 0;
 
           alert(sMensagem);
           js_buscarDocumentos();
