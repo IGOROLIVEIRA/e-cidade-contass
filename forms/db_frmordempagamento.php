@@ -68,6 +68,11 @@
 
     }
 
+    // Converter data para o padrão dd/mm/YYYY
+    function converterData(dataInformada) {
+        let data = new Date(dataInformada.replaceAll("-", "/"));
+        return ("0" + data.getDate()).substr(-2) + "/" + ("0" + (data.getMonth() + 1)).substr(-2) + "/" + data.getFullYear();
+    }
     
     function js_mostraordem(e50_codord, e50_obs, e50_compdesp, elemento, e50_data) {
         
@@ -76,8 +81,7 @@
         $('e50_data').value     = e50_data;
         
         if (e50_compdesp != '') {
-            data = new Date(e50_compdesp);
-            e50_compdesp = ((data.getDate()+1) + "/" + ("0" + (data.getMonth() + 1)).substr(-2) + "/" + data.getFullYear());            
+            e50_compdesp = converterData(e50_compdesp);     
         }
 
         aMatrizEntrada = ['3319092', '3319192', '3319592', '3319692'];

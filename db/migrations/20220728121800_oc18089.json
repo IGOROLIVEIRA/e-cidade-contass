@@ -1,0 +1,1516 @@
+{
+    "Inserir": [
+        {
+            "Estrutual": "416115000000000",
+            "Descricao": "Servicos de Administracao Previdenciaria",
+            "PCASP": null,
+            "Tipo_Conta": "Sintetica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Servicos de Administracao Previdenciaria",
+            "Fonte": null,
+            "Grupo": null
+        },
+        {
+            "Estrutual": "416115010000000",
+            "Descricao": "Taxa de Administracao do RPPS",
+            "PCASP": null,
+            "Tipo_Conta": "Sintetica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Taxa de Administracao do RPPS",
+            "Fonte": null,
+            "Grupo": null
+        },
+        {
+            "Estrutual": "416115011000000",
+            "Descricao": "Taxa de Administracao do RPPS - Principal",
+            "PCASP": null,
+            "Tipo_Conta": "Sintetica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Taxa de Administracao do RPPS - Principal",
+            "Fonte": null,
+            "Grupo": null
+        },
+        {
+            "Estrutual": "416115011010000",
+            "Descricao": "Taxa de Administracao do RPPS - Principal",
+            "PCASP": "433119800",
+            "Tipo_Conta": "Analitica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Taxa de Administracao do RPPS - Principal",
+            "Fonte": 18020000,
+            "Grupo": 16
+        },
+        {
+            "Estrutual": "416115090000000",
+            "Descricao": "Outros Servicos de Administracao Previdenciaria",
+            "PCASP": null,
+            "Tipo_Conta": "Sintetica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Outros Servicos de Administracao Previdenciaria",
+            "Fonte": null,
+            "Grupo": null
+        },
+        {
+            "Estrutual": "416115091000000",
+            "Descricao": "Outros Servicos de Administracao Previd -Principal",
+            "PCASP": null,
+            "Tipo_Conta": "Sintetica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Outros Servicos de Administracao Previdenciaria - Principal",
+            "Fonte": null,
+            "Grupo": null
+        },
+        {
+            "Estrutual": "416115091010000",
+            "Descricao": "Outros Servicos de Administracao Previd -Principal",
+            "PCASP": "433119800",
+            "Tipo_Conta": "Analitica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Outros Servicos de Administracao Previdenciaria - Principal",
+            "Fonte": 18000000,
+            "Grupo": 16
+        },
+        {
+            "Estrutual": "416115091020000",
+            "Descricao": "Outros Servicos de Administracao Previd -Principal",
+            "PCASP": "433119800",
+            "Tipo_Conta": "Analitica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Outros Servicos de Administracao Previdenciaria - Principal",
+            "Fonte": 18010000,
+            "Grupo": 16
+        },
+        {
+            "Estrutual": "416995000000000",
+            "Descricao": "Receita de Servicos Sujeitos a Regulacao",
+            "PCASP": null,
+            "Tipo_Conta": "Sintetica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Receita de Servicos Sujeitos a Regulacao",
+            "Fonte": null,
+            "Grupo": null
+        },
+        {
+            "Estrutual": "416995010000000",
+            "Descricao": "Servicos de Saneam Basico - Abastecimento de Agua",
+            "PCASP": null,
+            "Tipo_Conta": "Sintetica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Servicos de Saneamento Basico - Abastecimento de Agua",
+            "Fonte": null,
+            "Grupo": null
+        },
+        {
+            "Estrutual": "416995011000000",
+            "Descricao": "Servicos de Saneam Basico - Abastecimento de Agua",
+            "PCASP": null,
+            "Tipo_Conta": "Sintetica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Servicos de Saneamento Basico - Abastecimento de Agua - Principal",
+            "Fonte": null,
+            "Grupo": null
+        },
+        {
+            "Estrutual": "416995011010000",
+            "Descricao": "Servicos de Saneam Basico - Abastecimento de Agua",
+            "PCASP": "433114500",
+            "Tipo_Conta": "Analitica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Servicos de Saneamento Basico - Abastecimento de Agua - Principal",
+            "Fonte": 17530000,
+            "Grupo": 16
+        },
+        {
+            "Estrutual": "416995020000000",
+            "Descricao": "Servicos de Saneam Basico - Esgotamento Sanitario",
+            "PCASP": null,
+            "Tipo_Conta": "Sintetica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Servicos de Saneamento Basico - Esgotamento Sanitario",
+            "Fonte": null,
+            "Grupo": null
+        },
+        {
+            "Estrutual": "416995021000000",
+            "Descricao": "Servicos de Saneam Basico - Esgotamento Sanitario",
+            "PCASP": null,
+            "Tipo_Conta": "Sintetica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Servicos de Saneamento Basico - Esgotamento Sanitario - Principal",
+            "Fonte": null,
+            "Grupo": null
+        },
+        {
+            "Estrutual": "416995021010000",
+            "Descricao": "Servicos de Saneam Basico - Esgotamento Sanitario",
+            "PCASP": "433114500",
+            "Tipo_Conta": "Analitica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Servicos de Saneamento Basico - Esgotamento Sanitario - Principal",
+            "Fonte": 17530000,
+            "Grupo": 16
+        },
+        {
+            "Estrutual": "416995030000000",
+            "Descricao": "Servicos de Saneam Basico - Limpeza Urb e Residuos",
+            "PCASP": null,
+            "Tipo_Conta": "Sintetica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Servicos de Saneamento Basico - Limpeza Urbana e Manejo de Residuos Solidos",
+            "Fonte": null,
+            "Grupo": null
+        },
+        {
+            "Estrutual": "416995031000000",
+            "Descricao": "Servicos de Saneam Basico - Limpeza Urb e Residuos",
+            "PCASP": null,
+            "Tipo_Conta": "Sintetica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Servicos de Saneamento Basico - Limpeza Urbana e Manejo de Residuos Solidos - Principal",
+            "Fonte": null,
+            "Grupo": null
+        },
+        {
+            "Estrutual": "416995031010000",
+            "Descricao": "Servicos de Saneam Basico - Limpeza Urb e Residuos",
+            "PCASP": "433119900",
+            "Tipo_Conta": "Analitica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Servicos de Saneamento Basico - Limpeza Urbana e Manejo de Residuos Solidos - Principal",
+            "Fonte": 17530000,
+            "Grupo": 16
+        },
+        {
+            "Estrutual": "416995040000000",
+            "Descricao": "Servicos Saneam Basico - Drenagem e Manejo Aguas",
+            "PCASP": null,
+            "Tipo_Conta": "Sintetica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Servicos de Saneamento Basico - Drenagem e Manejo das Aguas Pluviais Urbanas",
+            "Fonte": null,
+            "Grupo": null
+        },
+        {
+            "Estrutual": "416995041000000",
+            "Descricao": "Servicos Saneam Basico - Drenagem e Manejo Aguas",
+            "PCASP": null,
+            "Tipo_Conta": "Sintetica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Servicos de Saneamento Basico - Drenagem e Manejo das Aguas Pluviais Urbanas - Principal",
+            "Fonte": null,
+            "Grupo": null
+        },
+        {
+            "Estrutual": "416995041010000",
+            "Descricao": "Servicos Saneam Basico - Drenagem e Manejo Aguas",
+            "PCASP": "433114500",
+            "Tipo_Conta": "Analitica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Servicos de Saneamento Basico - Drenagem e Manejo das Aguas Pluviais Urbanas - Principal",
+            "Fonte": 17530000,
+            "Grupo": 16
+        },
+        {
+            "Estrutual": "416995090000000",
+            "Descricao": "Outros Servicos Sujeitos a Regulacao",
+            "PCASP": null,
+            "Tipo_Conta": "Sintetica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Outros Servicos Sujeitos a Regulacao",
+            "Fonte": null,
+            "Grupo": null
+        },
+        {
+            "Estrutual": "416995091000000",
+            "Descricao": "Outros Servicos Sujeitos a Regulacao - Principal",
+            "PCASP": null,
+            "Tipo_Conta": "Sintetica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Outros Servicos Sujeitos a Regulacao - Principal",
+            "Fonte": null,
+            "Grupo": null
+        },
+        {
+            "Estrutual": "416995091010000",
+            "Descricao": "Outros Servicos Sujeitos a Regulacao - Principal",
+            "PCASP": "433119900",
+            "Tipo_Conta": "Analitica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Outros Servicos Sujeitos a Regulacao - Principal",
+            "Fonte": 17530000,
+            "Grupo": 16
+        },
+        {
+            "Estrutual": "417125300000000",
+            "Descricao": "Cota-parte bonus assinat contrato partilha de prod",
+            "PCASP": null,
+            "Tipo_Conta": "Sintetica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Cota-parte do bonus de assinatura de contrato de partilha de producao",
+            "Fonte": null,
+            "Grupo": null
+        },
+        {
+            "Estrutual": "417125301000000",
+            "Descricao": "Cota-parte bonus assinat contrato partilha de prod",
+            "PCASP": null,
+            "Tipo_Conta": "Sintetica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Cota-parte do bonus de assinatura de contrato de partilha de producao - Principal",
+            "Fonte": null,
+            "Grupo": null
+        },
+        {
+            "Estrutual": "417125301010000",
+            "Descricao": "Cota-parte bonus assinat contrato partilha de prod",
+            "PCASP": "452130600",
+            "Tipo_Conta": "Analitica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Cota-parte do bonus de assinatura de contrato de partilha de producao - Principal",
+            "Fonte": 17040000,
+            "Grupo": 16
+        },
+        {
+            "Estrutual": "417155100000000",
+            "Descricao": "Transfer de Complement da Uniao ao Fundeb - VAAF ",
+            "PCASP": null,
+            "Tipo_Conta": "Sintetica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Transferencias de Recursos de Complementacao da Uniao ao Fundeb - VAAF ",
+            "Fonte": null,
+            "Grupo": null
+        },
+        {
+            "Estrutual": "417155101000000",
+            "Descricao": "Transfer de Complement da Uniao ao Fundeb - VAAF ",
+            "PCASP": null,
+            "Tipo_Conta": "Sintetica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Transferencias de Recursos de Complementacao da Uniao ao Fundeb - VAAF - Principal",
+            "Fonte": null,
+            "Grupo": null
+        },
+        {
+            "Estrutual": "417155101010000",
+            "Descricao": "Transfer de Complement da Uniao ao Fundeb - VAAF ",
+            "PCASP": "452230000",
+            "Tipo_Conta": "Analitica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Transferencias de Recursos de Complementacao da Uniao ao Fundeb - VAAF - Principal",
+            "Fonte": 15410000,
+            "Grupo": 16
+        },
+        {
+            "Estrutual": "417155200000000",
+            "Descricao": "Transfer de Complement da Uniao ao Fundeb - VAAR ",
+            "PCASP": null,
+            "Tipo_Conta": "Sintetica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Transferencias de Recursos de Complementacao da Uniao ao Fundeb - VAAR ",
+            "Fonte": null,
+            "Grupo": null
+        },
+        {
+            "Estrutual": "417155201000000",
+            "Descricao": "Transfer de Complement da Uniao ao Fundeb - VAAR ",
+            "PCASP": null,
+            "Tipo_Conta": "Sintetica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Transferencias de Recursos de Complementacao da Uniao ao Fundeb - VAAR - Principal",
+            "Fonte": null,
+            "Grupo": null
+        },
+        {
+            "Estrutual": "417155201010000",
+            "Descricao": "Transfer de Complement da Uniao ao Fundeb - VAAR ",
+            "PCASP": "452230000",
+            "Tipo_Conta": "Analitica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Transferencias de Recursos de Complementacao da Uniao ao Fundeb - VAAR - Principal",
+            "Fonte": 15430000,
+            "Grupo": 16
+        },
+        {
+            "Estrutual": "417195900000000",
+            "Descricao": "Transfer do Fundo de Amparo ao Trabalhador - FAT",
+            "PCASP": null,
+            "Tipo_Conta": "Sintetica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Transferencia de Recursos do Fundo de Amparo ao Trabalhador - FAT",
+            "Fonte": null,
+            "Grupo": null
+        },
+        {
+            "Estrutual": "417195901000000",
+            "Descricao": "Transfer do Fundo de Amparo ao Trabalhador - FAT",
+            "PCASP": null,
+            "Tipo_Conta": "Sintetica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Transferencia de Recursos do Fundo de Amparo ao Trabalhador - FAT - Principal",
+            "Fonte": null,
+            "Grupo": null
+        },
+        {
+            "Estrutual": "417195901010000",
+            "Descricao": "Transfer do Fundo de Amparo ao Trabalhador - FAT",
+            "PCASP": "452339900",
+            "Tipo_Conta": "Analitica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Transferencia de Recursos do Fundo de Amparo ao Trabalhador - FAT - Principal",
+            "Fonte": 17140000,
+            "Grupo": 16
+        },
+        {
+            "Estrutual": "419210400000000",
+            "Descricao": "Indenizacao pela Assistencia Medico-Hospitalar",
+            "PCASP": null,
+            "Tipo_Conta": "Sintetica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Indenizacao pela Assistencia Medico-Hospitalar",
+            "Fonte": null,
+            "Grupo": null
+        },
+        {
+            "Estrutual": "419210401000000",
+            "Descricao": "Indenizacao pela Assistencia Medico-Hospitalar",
+            "PCASP": null,
+            "Tipo_Conta": "Sintetica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Indenizacao pela Assistencia Medico-Hospitalar - Principal",
+            "Fonte": null,
+            "Grupo": null
+        },
+        {
+            "Estrutual": "419210401010000",
+            "Descricao": "Indenizacao pela Assistencia Medico-Hospitalar",
+            "PCASP": "499610100",
+            "Tipo_Conta": "Analitica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Indenizacao pela Assistencia Medico-Hospitalar - Principal",
+            "Fonte": 15010000,
+            "Grupo": 16
+        },
+        {
+            "Estrutual": "419221400000000",
+            "Descricao": "Restituicao de Recursos Transferidos",
+            "PCASP": null,
+            "Tipo_Conta": "Sintetica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Restituicao de Recursos Transferidos",
+            "Fonte": null,
+            "Grupo": null
+        },
+        {
+            "Estrutual": "419221410000000",
+            "Descricao": "Restituicao de Recursos Primarios Transferidos",
+            "PCASP": null,
+            "Tipo_Conta": "Sintetica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Restituicao de Recursos Primarios Transferidos",
+            "Fonte": null,
+            "Grupo": null
+        },
+        {
+            "Estrutual": "419221411000000",
+            "Descricao": "Restituicao de Recursos Primarios Transferidos",
+            "PCASP": null,
+            "Tipo_Conta": "Sintetica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Restituicao de Recursos Primarios Transferidos - Principal",
+            "Fonte": null,
+            "Grupo": null
+        },
+        {
+            "Estrutual": "419221411010000",
+            "Descricao": "Restituicao de Recursos Primarios Transferidos",
+            "PCASP": "499610200",
+            "Tipo_Conta": "Analitica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Restituicao de Recursos Primarios Transferidos - Principal",
+            "Fonte": 15000000,
+            "Grupo": 16
+        },
+        {
+            "Estrutual": "419221420000000",
+            "Descricao": "Restituicao de Recursos Financeiros Transferidos",
+            "PCASP": null,
+            "Tipo_Conta": "Sintetica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Restituicao de Recursos Financeiros Transferidos",
+            "Fonte": null,
+            "Grupo": null
+        },
+        {
+            "Estrutual": "419221421000000",
+            "Descricao": "Restituicao de Recursos Financeiros Transferidos",
+            "PCASP": null,
+            "Tipo_Conta": "Sintetica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Restituicao de Recursos Financeiros Transferidos - Principal",
+            "Fonte": null,
+            "Grupo": null
+        },
+        {
+            "Estrutual": "419221421010000",
+            "Descricao": "Restituicao de Recursos Financeiros Transferidos",
+            "PCASP": "499610200",
+            "Tipo_Conta": "Analitica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Restituicao de Recursos Financeiros Transferidos - Principal",
+            "Fonte": 15000000,
+            "Grupo": 16
+        },
+        {
+            "Estrutual": "419991800000000",
+            "Descricao": "Demais Cred Decor Revisao de Contratos Concessao",
+            "PCASP": null,
+            "Tipo_Conta": "Sintetica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Demais Creditos Decorrentes da Revisao de Contratos de Concessao",
+            "Fonte": null,
+            "Grupo": null
+        },
+        {
+            "Estrutual": "419991801000000",
+            "Descricao": "Demais Cred Decor Revisao de Contratos Concessao",
+            "PCASP": null,
+            "Tipo_Conta": "Sintetica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Demais Creditos Decorrentes da Revisao de Contratos de Concessao - Principal",
+            "Fonte": null,
+            "Grupo": null
+        },
+        {
+            "Estrutual": "419991801010000",
+            "Descricao": "Demais Cred Decor Revisao de Contratos Concessao",
+            "PCASP": "499910000",
+            "Tipo_Conta": "Analitica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Demais Creditos Decorrentes da Revisao de Contratos de Concessao - Principal",
+            "Fonte": 15010000,
+            "Grupo": 16
+        },
+        {
+            "Estrutual": "419991900000000",
+            "Descricao": "Receitas de Subvencoes",
+            "PCASP": null,
+            "Tipo_Conta": "Sintetica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Receitas de Subvencoes",
+            "Fonte": null,
+            "Grupo": null
+        },
+        {
+            "Estrutual": "419991901000000",
+            "Descricao": "Receitas de Subvencoes - Principal ",
+            "PCASP": null,
+            "Tipo_Conta": "Sintetica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Receitas de Subvencoes - Principal ",
+            "Fonte": null,
+            "Grupo": null
+        },
+        {
+            "Estrutual": "419991901010000",
+            "Descricao": "Receitas de Subvencoes - Principal ",
+            "PCASP": "495110000",
+            "Tipo_Conta": "Analitica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Receitas de Subvencoes - Principal ",
+            "Fonte": 15010000,
+            "Grupo": 16
+        },
+        {
+            "Estrutual": "419999910000000",
+            "Descricao": "Outras Receitas Administradas pela RFB",
+            "PCASP": null,
+            "Tipo_Conta": "Sintetica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Outras Receitas Administradas pela RFB",
+            "Fonte": null,
+            "Grupo": null
+        },
+        {
+            "Estrutual": "419999911000000",
+            "Descricao": "Outras Receitas Administradas pela RFB - Principal",
+            "PCASP": null,
+            "Tipo_Conta": "Sintetica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Outras Receitas Administradas pela RFB - Principal",
+            "Fonte": null,
+            "Grupo": null
+        },
+        {
+            "Estrutual": "419999911010000",
+            "Descricao": "Outras Receitas Administradas pela RFB - Principal",
+            "PCASP": "499910000",
+            "Tipo_Conta": "Analitica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Outras Receitas Administradas pela RFB - Principal",
+            "Fonte": 15010000,
+            "Grupo": 16
+        },
+        {
+            "Estrutual": "424195300000000",
+            "Descricao": "Transfer do Fundo Penitenciario Nacional - Funpen",
+            "PCASP": null,
+            "Tipo_Conta": "Sintetica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Transferencias de Recursos do Fundo Penitenciario Nacional - Funpen",
+            "Fonte": null,
+            "Grupo": null
+        },
+        {
+            "Estrutual": "424195301000000",
+            "Descricao": "Transfer do Fundo Penitenciario Nacional - Funpen",
+            "PCASP": null,
+            "Tipo_Conta": "Sintetica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Transferencias de Recursos do Fundo Penitenciario Nacional - Funpen - Principal",
+            "Fonte": null,
+            "Grupo": null
+        },
+        {
+            "Estrutual": "424195301010000",
+            "Descricao": "Transfer do Fundo Penitenciario Nacional - Funpen",
+            "PCASP": "452339900",
+            "Tipo_Conta": "Analitica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Transferencias de Recursos do Fundo Penitenciario Nacional - Funpen - Principal",
+            "Fonte": 17120000,
+            "Grupo": 16
+        },
+        {
+            "Estrutual": "424195400000000",
+            "Descricao": "Transfer do Fundo Nac de Seguranca Publica - FNSP ",
+            "PCASP": null,
+            "Tipo_Conta": "Sintetica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Transferencias de Recursos do Fundo Nacional de Seguranca Publica - FNSP ",
+            "Fonte": null,
+            "Grupo": null
+        },
+        {
+            "Estrutual": "424195420000000",
+            "Descricao": "Transfer do Fundo Nac de Seguranca Publica - FNSP ",
+            "PCASP": null,
+            "Tipo_Conta": "Sintetica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Transferencias de Recursos do Fundo Nacional de Seguranca Publica - FNSP - Acordadas",
+            "Fonte": null,
+            "Grupo": null
+        },
+        {
+            "Estrutual": "424195421000000",
+            "Descricao": "Transfer do Fundo Nac de Seguranca Publica - FNSP ",
+            "PCASP": null,
+            "Tipo_Conta": "Sintetica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Transferencias de Recursos do Fundo Nacional de Seguranca Publica - FNSP - Acordadas - Principal ",
+            "Fonte": null,
+            "Grupo": null
+        },
+        {
+            "Estrutual": "424195421010000",
+            "Descricao": "Transfer do Fundo Nac de Seguranca Publica - FNSP ",
+            "PCASP": "452339900",
+            "Tipo_Conta": "Analitica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Transferencias de Recursos do Fundo Nacional de Seguranca Publica - FNSP - Acordadas - Principal ",
+            "Fonte": 17130070,
+            "Grupo": 16
+        },
+        {
+            "Estrutual": "424195900000000",
+            "Descricao": "Transfer do Fundo de Amparo ao Trabalhador - FAT",
+            "PCASP": null,
+            "Tipo_Conta": "Sintetica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Transferencia de Recursos do Fundo de Amparo ao Trabalhador - FAT",
+            "Fonte": null,
+            "Grupo": null
+        },
+        {
+            "Estrutual": "424195901000000",
+            "Descricao": "Transfer do Fundo de Amparo ao Trabalhador - FAT",
+            "PCASP": null,
+            "Tipo_Conta": "Sintetica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Transferencia de Recursos do Fundo de Amparo ao Trabalhador - FAT - Principal",
+            "Fonte": null,
+            "Grupo": null
+        },
+        {
+            "Estrutual": "424195901010000",
+            "Descricao": "Transfer do Fundo de Amparo ao Trabalhador - FAT",
+            "PCASP": "452339900",
+            "Tipo_Conta": "Analitica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Transferencia de Recursos do Fundo de Amparo ao Trabalhador - FAT - Principal",
+            "Fonte": 17140000,
+            "Grupo": 16
+        },
+        {
+            "Estrutual": "476115000000000",
+            "Descricao": "Servicos de Administracao Previdenciaria",
+            "PCASP": null,
+            "Tipo_Conta": "Sintetica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Servicos de Administracao Previdenciaria",
+            "Fonte": null,
+            "Grupo": null
+        },
+        {
+            "Estrutual": "476115010000000",
+            "Descricao": "Taxa de Administracao do RPPS",
+            "PCASP": null,
+            "Tipo_Conta": "Sintetica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Taxa de Administracao do RPPS",
+            "Fonte": null,
+            "Grupo": null
+        },
+        {
+            "Estrutual": "476115011000000",
+            "Descricao": "Taxa de Administracao do RPPS - Principal",
+            "PCASP": null,
+            "Tipo_Conta": "Sintetica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Taxa de Administracao do RPPS - Principal",
+            "Fonte": null,
+            "Grupo": null
+        },
+        {
+            "Estrutual": "476115011010000",
+            "Descricao": "Taxa de Administracao do RPPS - Principal",
+            "PCASP": "433129800",
+            "Tipo_Conta": "Analitica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Taxa de Administracao do RPPS - Principal",
+            "Fonte": 18020000,
+            "Grupo": 16
+        },
+        {
+            "Estrutual": "476115090000000",
+            "Descricao": "Outros Servicos de Administracao Previdenciaria",
+            "PCASP": null,
+            "Tipo_Conta": "Sintetica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Outros Servicos de Administracao Previdenciaria",
+            "Fonte": null,
+            "Grupo": null
+        },
+        {
+            "Estrutual": "476115091000000",
+            "Descricao": "Outros Servicos de Administracao Previd -Principal",
+            "PCASP": null,
+            "Tipo_Conta": "Sintetica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Outros Servicos de Administracao Previdenciaria - Principal",
+            "Fonte": null,
+            "Grupo": null
+        },
+        {
+            "Estrutual": "476115091010000",
+            "Descricao": "Outros Servicos de Administracao Previd -Principal",
+            "PCASP": "433129800",
+            "Tipo_Conta": "Analitica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Outros Servicos de Administracao Previdenciaria - Principal",
+            "Fonte": 18000000,
+            "Grupo": 16
+        },
+        {
+            "Estrutual": "476115091020000",
+            "Descricao": "Outros Servicos de Administracao Previd -Principal",
+            "PCASP": "433129800",
+            "Tipo_Conta": "Analitica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Outros Servicos de Administracao Previdenciaria - Principal",
+            "Fonte": 18010000,
+            "Grupo": 16
+        },
+        {
+            "Estrutual": "416995000000000",
+            "Descricao": "Receita de Servicos Sujeitos a Regulacao",
+            "PCASP": null,
+            "Tipo_Conta": "Sintetica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Receita de Servicos Sujeitos a Regulacao",
+            "Fonte": null,
+            "Grupo": null
+        },
+        {
+            "Estrutual": "416995010000000",
+            "Descricao": "Servicos de Saneam Basico - Abastecimento de Agua",
+            "PCASP": null,
+            "Tipo_Conta": "Sintetica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Servicos de Saneamento Basico - Abastecimento de Agua",
+            "Fonte": null,
+            "Grupo": null
+        },
+        {
+            "Estrutual": "416995011000000",
+            "Descricao": "Servicos de Saneam Basico - Abastecimento de Agua",
+            "PCASP": null,
+            "Tipo_Conta": "Sintetica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Servicos de Saneamento Basico - Abastecimento de Agua - Principal",
+            "Fonte": null,
+            "Grupo": null
+        },
+        {
+            "Estrutual": "416995011010000",
+            "Descricao": "Servicos de Saneam Basico - Abastecimento de Agua",
+            "PCASP": "433124500",
+            "Tipo_Conta": "Analitica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Servicos de Saneamento Basico - Abastecimento de Agua - Principal",
+            "Fonte": 17530000,
+            "Grupo": 16
+        },
+        {
+            "Estrutual": "416995020000000",
+            "Descricao": "Servicos de Saneam Basico - Esgotamento Sanitario",
+            "PCASP": null,
+            "Tipo_Conta": "Sintetica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Servicos de Saneamento Basico - Esgotamento Sanitario",
+            "Fonte": null,
+            "Grupo": null
+        },
+        {
+            "Estrutual": "416995021000000",
+            "Descricao": "Servicos de Saneam Basico - Esgotamento Sanitario",
+            "PCASP": null,
+            "Tipo_Conta": "Sintetica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Servicos de Saneamento Basico - Esgotamento Sanitario - Principal",
+            "Fonte": null,
+            "Grupo": null
+        },
+        {
+            "Estrutual": "416995021010000",
+            "Descricao": "Servicos de Saneam Basico - Esgotamento Sanitario",
+            "PCASP": "433124500",
+            "Tipo_Conta": "Analitica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Servicos de Saneamento Basico - Esgotamento Sanitario - Principal",
+            "Fonte": 17530000,
+            "Grupo": 16
+        },
+        {
+            "Estrutual": "416995030000000",
+            "Descricao": "Servicos de Saneam Basico - Limpeza Urb e Residuos",
+            "PCASP": null,
+            "Tipo_Conta": "Sintetica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Servicos de Saneamento Basico - Limpeza Urbana e Manejo de Residuos Solidos",
+            "Fonte": null,
+            "Grupo": null
+        },
+        {
+            "Estrutual": "416995031000000",
+            "Descricao": "Servicos de Saneam Basico - Limpeza Urb e Residuos",
+            "PCASP": null,
+            "Tipo_Conta": "Sintetica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Servicos de Saneamento Basico - Limpeza Urbana e Manejo de Residuos Solidos - Principal",
+            "Fonte": null,
+            "Grupo": null
+        },
+        {
+            "Estrutual": "416995031010000",
+            "Descricao": "Servicos de Saneam Basico - Limpeza Urb e Residuos",
+            "PCASP": "433129900",
+            "Tipo_Conta": "Analitica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Servicos de Saneamento Basico - Limpeza Urbana e Manejo de Residuos Solidos - Principal",
+            "Fonte": 17530000,
+            "Grupo": 16
+        },
+        {
+            "Estrutual": "416995040000000",
+            "Descricao": "Servicos Saneam Basico - Drenagem e Manejo Aguas",
+            "PCASP": null,
+            "Tipo_Conta": "Sintetica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Servicos de Saneamento Basico - Drenagem e Manejo das Aguas Pluviais Urbanas",
+            "Fonte": null,
+            "Grupo": null
+        },
+        {
+            "Estrutual": "416995041000000",
+            "Descricao": "Servicos Saneam Basico - Drenagem e Manejo Aguas",
+            "PCASP": null,
+            "Tipo_Conta": "Sintetica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Servicos de Saneamento Basico - Drenagem e Manejo das Aguas Pluviais Urbanas - Principal",
+            "Fonte": null,
+            "Grupo": null
+        },
+        {
+            "Estrutual": "416995041010000",
+            "Descricao": "Servicos Saneam Basico - Drenagem e Manejo Aguas",
+            "PCASP": "433124500",
+            "Tipo_Conta": "Analitica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Servicos de Saneamento Basico - Drenagem e Manejo das Aguas Pluviais Urbanas - Principal",
+            "Fonte": 17530000,
+            "Grupo": 16
+        },
+        {
+            "Estrutual": "416995090000000",
+            "Descricao": "Outros Servicos Sujeitos a Regulacao",
+            "PCASP": null,
+            "Tipo_Conta": "Sintetica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Outros Servicos Sujeitos a Regulacao",
+            "Fonte": null,
+            "Grupo": null
+        },
+        {
+            "Estrutual": "416995091000000",
+            "Descricao": "Outros Servicos Sujeitos a Regulacao - Principal",
+            "PCASP": null,
+            "Tipo_Conta": "Sintetica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Outros Servicos Sujeitos a Regulacao - Principal",
+            "Fonte": null,
+            "Grupo": null
+        },
+        {
+            "Estrutual": "416995091010000",
+            "Descricao": "Outros Servicos Sujeitos a Regulacao - Principal",
+            "PCASP": "433129900",
+            "Tipo_Conta": "Analitica",
+            "Natureza_Saldo": "Credor",
+            "Finalidade": "Outros Servicos Sujeitos a Regulacao - Principal",
+            "Fonte": 17530000,
+            "Grupo": 16
+        }
+    ],
+    "Alterar_Descricao": [
+        {
+            "Estrutual": "417115120000000",
+            "Descricao_Antiga": "COTA-PARTE DO FPM - 1% COTA ENTREGUE EM DEZEMBRO",
+            "Nova_Descricao": "Cota-Parte do FPM - Cotas Extraordinarias",
+            "Nova_Finalidade": "Cota-Parte do Fundo de Participacao dos Municipios - Cotas Extraordinarias"
+        },
+        {
+            "Estrutual": "417115121000000",
+            "Descricao_Antiga": "COTA-PARTE DO FPM - 1% COTA ENTREGUE EM DEZEMBRO",
+            "Nova_Descricao": "Cota-Parte do FPM - Cotas Extraordinarias",
+            "Nova_Finalidade": "Cota-Parte do Fundo de Participacao dos Municipios - Cotas Extraordinarias - Principal"
+        },
+        {
+            "Estrutual": "417115121010000",
+            "Descricao_Antiga": "COTA-PARTE DO FPM - 1% COTA ENTREGUE EM DEZEMBRO",
+            "Nova_Descricao": "Cota-Parte do FPM - Cotas Extraordinarias",
+            "Nova_Finalidade": "Cota-Parte do Fundo de Participacao dos Municipios - Cotas Extraordinarias - Principal"
+        },
+        {
+            "Estrutual": "417115121020000",
+            "Descricao_Antiga": "COTA-PARTE DO FPM - 1% COTA ENTREGUE EM DEZEMBRO",
+            "Nova_Descricao": "Cota-Parte do FPM - Cotas Extraordinarias",
+            "Nova_Finalidade": "Cota-Parte do Fundo de Participacao dos Municipios - Cotas Extraordinarias - Principal"
+        },
+        {
+            "Estrutual": "419220900000000",
+            "Descricao_Antiga": "Restituicao de Recursos de Fomento",
+            "Nova_Descricao": "Restituicao Recursos de Fomento e Subvencoes Finan",
+            "Nova_Finalidade": "Restituicao de Recursos de Fomento e de Subvencoes Financeiras"
+        },
+        {
+            "Estrutual": "419220901000000",
+            "Descricao_Antiga": "RESTITUICAO DE RECURSOS DE FOMENTO - PRINCIPAL",
+            "Nova_Descricao": "Restituicao Recursos de Fomento e Subvencoes Finan",
+            "Nova_Finalidade": "Restituicao de Recursos de Fomento e de Subvencoes Financeiras - Principal"
+        },
+        {
+            "Estrutual": "419220901010000",
+            "Descricao_Antiga": "RESTITUICAO DE RECURSOS DE FOMENTO - PRINCIPAL",
+            "Nova_Descricao": "Restituicao Recursos de Fomento e Subvencoes Finan",
+            "Nova_Finalidade": "Restituicao de Recursos de Fomento e de Subvencoes Financeiras - Principal"
+        },
+        {
+            "Estrutual": "419990300000000",
+            "Descricao_Antiga": "COMPENSACOES FINAN ENTRE O REGIME GERAL E OS RPPS",
+            "Nova_Descricao": "Compensacoes Financeiras entre Regimes de Previd",
+            "Nova_Finalidade": "Compensacoes Financeiras entre os Regimes de Previdencia"
+        },
+        {
+            "Estrutual": "419990301000000",
+            "Descricao_Antiga": "COMPENSACOES FINAN ENTRE O REGIME GERAL E OS RPPS",
+            "Nova_Descricao": "Compensacoes Financeiras entre Regimes de Previd",
+            "Nova_Finalidade": "Compensacoes Financeiras entre os Regimes de Previdencia - Principal"
+        },
+        {
+            "Estrutual": "419990301010000",
+            "Descricao_Antiga": "COMPENSACOES FINAN ENTRE O REGIME GERAL E OS RPPS",
+            "Nova_Descricao": "Compensacoes Financeiras entre Regimes de Previd",
+            "Nova_Finalidade": "Compensacoes Financeiras entre os Regimes de Previdencia - Principal"
+        },
+        {
+            "Estrutual": "419990301020000",
+            "Descricao_Antiga": "COMPENSACOES FINAN ENTRE O REGIME GERAL E OS RPPS",
+            "Nova_Descricao": "Compensacoes Financeiras entre Regimes de Previd",
+            "Nova_Finalidade": "Compensacoes Financeiras entre os Regimes de Previdencia - Principal"
+        },
+        {
+            "Estrutual": "419990301030000",
+            "Descricao_Antiga": "COMPENSACOES FINAN ENTRE O REGIME GERAL E OS RPPS",
+            "Nova_Descricao": "Compensacoes Financeiras entre Regimes de Previd",
+            "Nova_Finalidade": "Compensacoes Financeiras entre os Regimes de Previdencia - Principal"
+        }
+    ],
+    "Desativar": [
+        {
+            "Estrutual": "417115130000000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "417115131000000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "417115131010000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "417115131020000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "417195100000000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "417195101000000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "417195101010000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "417195101020000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "417195101030000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "417195200000000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "417195201000000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "417195201010000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "417295000000000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "417295001000000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "417295001010000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "417395000000000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "417395001000000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "417395001010000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "419310200000000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "419310210000000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "419310211000000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "419310211010000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "419310211010000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "419310220000000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "419310221000000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "419310221010000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "419310221010000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "424195000000000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "424195001000000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "424195001010000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "424295000000000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "424295001000000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "424295001010000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "424395000000000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "424395001000000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "424395001010000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "412150111020000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "412150121020000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "412150131010000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "412150141020000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "412150151010000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "412150161020000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "412150211020000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "412150221020000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "412155011020000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "412155021020000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "412155031020000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "412155041020000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "412155111020000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "412155121020000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "412155131020000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "412180112010000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "412180113010000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "412180114010000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "412180122010000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "412180123010000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "412180124010000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "412180132010000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "412180133010000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "412180134010000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "412180142010000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "412180143010000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "412180144010000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "412180152010000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "412180153010000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "412180154010000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "412180162010000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "412180163010000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "412180164010000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "412180212010000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "412180213010000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "412180214010000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "412180222010000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "412180223010000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "412180224010000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "412180232010000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "412180233010000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "412180234010000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "412180242010000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "412180243010000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "412180244010000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "412180252010000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "412180253010000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "412180254010000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "412180262010000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "412180263010000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "412180264010000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "412180312010000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "412180313010000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "412180314010000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "412180322010000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "412180323010000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "412180324010000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "412180332010000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "412180333010000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "412180334010000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "412180342010000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "412180343010000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "412180344010000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "472150211020000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "472150212020000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "472150213020000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "472150214020000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "472150221020000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "472150222020000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "472150223020000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "472150224020000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "472155011020000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "472155012020000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "472155013020000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "472155014020000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "472155021020000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "472155022020000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "472155023020000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "472155024020000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "472155031020000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "472155032020000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "472155033020000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "472155034020000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "472155041020000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "472155042020000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "472155043020000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "472155044020000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "472155111020000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "472155112020000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "472155113020000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "472155114020000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "472155121020000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "472155122020000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "472155123020000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "472155124020000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "472155131020000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "472155132020000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "472155133020000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        },
+        {
+            "Estrutual": "472155134020000",
+            "Nova_Descricao": "DESATIVADA 2023"
+        }
+    ],
+    "Altera_Estrut_Consorcios": [
+        {
+            "De": "41739500101%",
+            "Para": "41739990101%"
+        }
+    ]
+}

@@ -56,6 +56,8 @@ db_postmemory($HTTP_POST_VARS);
 $debug = false;
 
 $anousu = db_getsession("DB_anousu");
+$aFontesNovas = array('100' => 15000000,'101' => 15000001,'102' => 15000002,'103' => 18000000,'104' => 18010000,'105' => 18020000,'106' => 15760010,'107' => 15440000,'108' => 17080000,'112' => 16590020,'113' => 15990030,'116' => 17500000,'117' => 17510000,'118' => 15400007,'119' => 15400003,'120' => 15760000,'121' => 16220000,'122' => 15700000,'123' => 16310000,'124' => 17000000,'129' => 16600000,'130' => 18990040,'131' => 17590050,'132' => 16040000,'142' => 16650000,'143' => 15510000,'144' => 15520000,'145' => 15530000,'146' => 15690000,'147' => 15500000,'153' => 16010000,'154' => 16590000,'155' => 16210000,'156' => 16610000,'157' => 17520000,'158' => 18990060,'159' => 16000000,'160' => 17040000,'161' => 17070000,'162' => 17490120,'163' => 17130070,'164' => 17060000,'165' => 18990000,'166' => 15420007,'167' => 15420003,'168' => 17100100,'169' => 17100000,'170' => 15010000,'171' => 15710000,'172' => 15720000,'173' => 15750000,'174' => 15740000,'175' => 15730000,'176' => 16320000,'177' => 16330000,'178' => 16360000,'179' => 16340000,'180' => 16350000,'181' => 17010000,'182' => 17020000,'183' => 17030000,'184' => 17090000,'185' => 17530000,'186' => 17040000,'187' => 17050000,'188' => 15000080,'189' => 15000090,'190' => 17540000,'191' => 17540000,'192' => 17550000,'193' => 18990130);
+
 
 
 $dt_ini = $anousu.'-01-01';
@@ -229,7 +231,7 @@ if (isset ($processa_dotacao) && ($processa_dotacao == 'Processar')) {
     $resAtual= $clorcdotacao->sql_record($clorcdotacao->sql_query(null,null,"*",null," orcdotacao.o58_anousu = $anousu and o58_instit =  $instit "));
     $rowsAtual = $clorcdotacao->numrows;
     // seleciona todas as dotações do exercicio anterior
-    $res= $clorcdotacao->sql_record($clorcdotacao->sql_query(null,null,"*",null," orcdotacao.o58_anousu = $anousu_ant and o58_instit =  $instit "));
+    $res= $clorcdotacao->sql_record($clorcdotacao->sql_query(null,null,"*",null," o58_codigo < 200 and orcdotacao.o58_anousu = $anousu_ant and o58_instit =  $instit "));
     //db_criatabela($res);
     $rows = $clorcdotacao->numrows;
 
@@ -241,7 +243,7 @@ if (isset ($processa_dotacao) && ($processa_dotacao == 'Processar')) {
     }else {
         for ($x = 0; $x < $rows; $x++) {
             db_fieldsmemory($res, $x);
-            $dot = db_dotacaosaldo(8, 2, 3, true, "o58_instit = " . $instit . " and o58_coddot=$o58_coddot", $anousu_ant, $anousu_ant . '-01-01', $datafinal);
+            $dot = db_dotacaosaldo(8, 2, 3, true, "o58_instit = " . $instit . " and o58_coddot =$o58_coddot", $anousu_ant, $anousu_ant . '-01-01', $datafinal);
 
             if (pg_numrows($dot) > 0) {
                 db_fieldsmemory($dot, 0);
@@ -256,13 +258,46 @@ if (isset ($processa_dotacao) && ($processa_dotacao == 'Processar')) {
                 if (isset($percent) && $percent == 'on' && ($percentual > 0) && $dotacao != 'zerada') {
                     // quando não for dotação zerada, e tiver percentual
                     if ($valor > 0) {
-                        $adicional = round(($valor * $percentual) / 100, 2);
+                        $adicional = round(($valor * $percentual) / 100, 0);
                         $valor = $valor + $adicional;
                     }
                 }
-                if($valor == 0){
-                    $valor = '0.00';
+                $valor = round($valor, 0);
+                if($valor <= 1000){
+                    $valor = '1000.00';
                 }
+                $whereExits  = " o58_anousu =".$anousu;
+                $whereExits .= " and o58_orgao =".$o58_orgao;
+                $whereExits .= " and o58_unidade =".$o58_unidade;
+                $whereExits .= " and o58_funcao =".$o58_funcao;
+                $whereExits .= " and o58_subfuncao =".$o58_subfuncao;
+                $whereExits .= " and o58_programa =".$o58_programa;
+                $whereExits .= " and o58_projativ =".$o58_projativ;
+                $whereExits .= " and o58_codele =".$o58_codele;
+
+                if($anousu == 2023){
+                    $whereExits .= " and o58_codigo = ".$aFontesNovas[$o58_codigo];
+                }
+
+                if($anousu != 2023){
+                    $whereExits .= " and o58_codigo = ".$o58_codigo;
+                }
+
+                $resDotacaoExits = $clorcdotacao->sql_record($clorcdotacao->sql_query(null, null, "*", null, $whereExits));
+                $o58_coddotExits = db_utils::fieldsMemory($resDotacaoExits, 0)->o58_coddot;
+                $o58_valorExits  = db_utils::fieldsMemory($resDotacaoExits, 0)->o58_valor;
+
+                if($o58_coddotExits){
+                    $clorcdotacao->o58_valor = $valor + $o58_valorExits;
+                    $clorcdotacao->alterar($anousu, $o58_coddotExits);
+                    if ($clorcdotacao->erro_status == '0') {
+                        db_msgbox($clorcdotacao->erro_msg);
+                        $erro = true;
+                        break;
+                    }
+                    continue;
+                }
+
                 // insere nas tabelas
                 $clorcdotacao->o58_anousu = $anousu;
                 $clorcdotacao->o58_coddot = $o58_coddot;
@@ -274,11 +309,15 @@ if (isset ($processa_dotacao) && ($processa_dotacao == 'Processar')) {
                 $clorcdotacao->o58_projativ = $o58_projativ;
                 $clorcdotacao->o58_codele = $o58_codele;
                 $clorcdotacao->o58_codigo = $o58_codigo;
+                if($anousu == 2023){
+                    $clorcdotacao->o58_codigo = $aFontesNovas[$o58_codigo];
+                }
                 $clorcdotacao->o58_valor = $valor;
                 $clorcdotacao->o58_instit = $o58_instit;
                 $clorcdotacao->o58_localizadorgastos = $o58_localizadorgastos;
                 $clorcdotacao->o58_datacriacao = $o58_datacriacao;
                 $clorcdotacao->o58_concarpeculiar = $o58_concarpeculiar;
+
                 $clorcdotacao->incluir($anousu, $o58_coddot);
                 if ($clorcdotacao->erro_status == '0') {
                     db_msgbox($clorcdotacao->erro_msg);

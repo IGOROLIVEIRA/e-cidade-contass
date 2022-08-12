@@ -2107,10 +2107,10 @@ if ($oInstit->db21_usasisagua == "t") {
 
       if((iContaReceita == 160 && icontaAux== 186) || (iContaReceita == 160 && iConta == 186) || (iContaReceita == 170 && iConta == 100) || (iContaReceita == 119 && iConta == 118) || (iContaReceita == 166 && iConta == 118) || (iContaReceita == 167 && iConta == 118) ||
       (iContaReceita == 166 && iConta == 119) || (iContaReceita == 167 && iConta == 119) || (iContaReceita == 118 && iConta == 119) || (iContaReceita == 101 && iConta == 100) || (iContaReceita == 102 && iConta == 100) ||
-      (iContaReceita == 154 && iConta == 159) || (iContaReceita == 154 && iConta == 153) ||(iContaReceita == 161 && iConta == 100) ||(iContaReceita == 160 && iConta == 186) ||
+      (iContaReceita == 154 && iConta == 159) || (iContaReceita == 132 && iConta == 159) || (iContaReceita == 154 && iConta == 153) ||(iContaReceita == 161 && iConta == 100) ||(iContaReceita == 160 && iConta == 186) ||
       (iContaReceita == 170 && icontaAux== 100) || (iContaReceita == 119 && icontaAux== 118) || (iContaReceita == 166 && icontaAux== 118) || (iContaReceita == 167 && icontaAux== 118) ||
       (iContaReceita == 166 && icontaAux== 119) || (iContaReceita == 167 && icontaAux== 119) || (iContaReceita == 118 && icontaAux== 119) || (iContaReceita == 101 && icontaAux== 100) || (iContaReceita == 102 && icontaAux== 100) ||
-      (iContaReceita == 154 && icontaAux== 159) || (iContaReceita == 154 && icontaAux== 153) ||(iContaReceita == 161 && icontaAux== 100) ||(iContaReceita == 160 && icontaAux== 186)){
+      (iContaReceita == 154 && icontaAux== 159) || (iContaReceita == 132 && icontaAux== 159) ||(iContaReceita == 154 && icontaAux== 153) ||(iContaReceita == 161 && icontaAux== 100) ||(iContaReceita == 160 && icontaAux== 186)){
         $('notificacao').setStyle({
               display: 'none'
             });
@@ -2479,6 +2479,11 @@ if ($oInstit->db21_usasisagua == "t") {
       document.getElementById("k81_emparlamentar").options[3].selected = true;
     }
 
+    // verificar se a receita for de rendimentos (iniciadas em "41321%") e deixa como padrao informação de emenda sempre 3 - não se aplica,.
+    if(sReceita.substr(0,5) == '41321'){
+      document.getElementById("k81_emparlamentar").options[3].selected = true;
+    }
+    
   }
 
   function js_verificaRegularizaRepasse() {

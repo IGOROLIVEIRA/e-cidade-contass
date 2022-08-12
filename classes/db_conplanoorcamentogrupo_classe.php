@@ -423,7 +423,6 @@ class cl_conplanoorcamentogrupo {
      if($result==false){
        $this->numrows    = 0;
        $this->erro_banco = str_replace("\n","",@pg_last_error());
-       $this->erro_sql   = "Erro ao selecionar os registros.";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
@@ -515,6 +514,37 @@ class cl_conplanoorcamentogrupo {
        }
      }
      return $sql;
+  }
+
+  /**
+   *
+   * Busca as Contas do Plano Orçamentário que não possuem registros de Grupos no ano de destino
+   * @param integer $iAnoAtual
+   * @param integer $iAnoDestino
+   * @param integer $iIntinst
+   * @return string
+   */
+  public function sql_aberturaExercicio($iAnoAtual, $iAnoDestino, $iIntinst)
+  {
+      $sSQl = "SELECT conplanoorcamentogrupo.*,
+                      tb1.c60_codcon AS c60_codcon2022,
+                      tb1.c60_estrut AS c60_estrut2022,
+                      tb2.c60_codcon AS c60_codcon2023,
+                      tb2.c60_estrut AS c60_estrut2023,
+                      proximoexercicio.c21_instit
+               FROM conplanoorcamentogrupo ";
+    
+      $sSQl .= " INNER JOIN conplanoorcamento tb1 ON (conplanoorcamentogrupo.c21_codcon, conplanoorcamentogrupo.c21_anousu) = (tb1.c60_codcon, tb1.c60_anousu) ";
+      $sSQl .= " LEFT JOIN conplanoorcamento tb2 ON (tb2.c60_estrut, tb2.c60_anousu) = (tb1.c60_estrut, {$iAnoDestino}) ";
+    
+      $sSQl .= " LEFT JOIN conplanoorcamentogrupo proximoexercicio ON (proximoexercicio.c21_codcon, proximoexercicio.c21_instit) = (conplanoorcamentogrupo.c21_codcon, conplanoorcamentogrupo.c21_instit) ";
+      $sSQl .= " AND proximoexercicio.c21_anousu = {$iAnoDestino} ";
+      $sSQl .= " WHERE conplanoorcamentogrupo.c21_anousu = {$iAnoAtual} ";
+      $sSQl .= "   AND conplanoorcamentogrupo.c21_instit = {$iIntinst} ";
+      $sSQl .= "   AND proximoexercicio.c21_anousu IS NULL ";
+      $sSQl .= "   AND substr(tb1.c60_estrut,1,1) IN ('3', '4') ";
+    
+      return $sSQl;
   }
 }
 ?>

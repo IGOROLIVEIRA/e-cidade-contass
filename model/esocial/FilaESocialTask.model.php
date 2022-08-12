@@ -127,7 +127,7 @@ class FilaESocialTask extends Task implements iTarefa
             /**
              * Esperar alguns segundos pois em muitos casos, o lote ainda não havia sido processado
              */
-            //sleep(15);
+            sleep(5);
             $exportar = new ESocial(Registry::get('app.config'), "consulta.php");
             $exportar->setDados($dados);
             $retorno = $exportar->request();

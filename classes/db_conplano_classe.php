@@ -952,7 +952,7 @@ class cl_conplano {
       }else{
         $sql .= $campos;
       }
-      $sql .= ",c60_tipolancamento,c60_subtipolancamento, c60_desdobramneto";
+      $sql .= ",c60_tipolancamento,c60_subtipolancamento, c60_desdobramneto,c60_nregobrig";
       $sql .= " from conplano ";
       $sql .= "      inner join conclass  on  conclass.c51_codcla = conplano.c60_codcla";
       $sql .= "      inner join consistema  on  consistema.c52_codsis = conplano.c60_codsis";
