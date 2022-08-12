@@ -108,7 +108,8 @@ switch ($oParam->exec) {
     }
 
     $sDescricao = base64_decode($oParam->sDescricao);
-    $sCorpo = base64_decode($oParam->sCorpo);
+    $sCorpo = base64_decode(urlencode($oParam->sCorpo));
+    $sCorpo = str_replace("√‹", "", $sCorpo);
     $corpo = db_geratexto($sCorpo);
 
     $header = <<<HEADER
