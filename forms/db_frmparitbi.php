@@ -31,6 +31,7 @@ $clrotulo = new rotulocampo;
 $clrotulo->label("j32_descr");
 $clrotulo->label('z01_numcgm');
 $clrotulo->label('z01_nome');
+require_once 'model/itbi/Paritbi.model.php';
 ?>
 <fieldset>
   <legend>
@@ -115,6 +116,16 @@ $clrotulo->label('z01_nome');
               $aTransfAutomatica = array("t"=>"Sim",
                   "f"=>"Não");
               db_select('it24_transfautomatica',$aTransfAutomatica,true,1," style='width: 210px;'");
+              ?>
+            </td>
+          </tr>
+          <tr>
+            <td nowrap align="left" title="<?=@$Tit24_devedor?>"><?=@$Lit24_devedor?></td>
+            <td width="96%" align="left">
+                <?php
+              $aOptions = array(\Model\Itbi\Paritbi::DEVEDOR_PRINCIPAL_ADQUIRENTE=>"Adquirente",
+                  \Model\Itbi\Paritbi::DEVEDOR_PRINCIPAL_TRANSMITENTE=>"Transmitente");
+              db_select('it24_devedor',$aOptions,true,1," style='width: 210px;'");
               ?>
             </td>
           </tr>
