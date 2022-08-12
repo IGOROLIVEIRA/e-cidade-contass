@@ -283,7 +283,7 @@ class Itbi
         }
 
         $clarrecad = db_utils::getDao('arrecad');
-        $clarrecad->k00_numcgm = $this->getCgmArrecad();
+        $clarrecad->k00_numcgm = $this->getCgmDevedor();
         $clarrecad->k00_dtoper = date('Y-m-d',db_getsession('DB_datausu'));
         $clarrecad->k00_receit = $this->parItbi->getReceita();
         $clarrecad->k00_hist   = Paritbi::HISTCALC_DEFAULT;
@@ -307,47 +307,80 @@ class Itbi
      * @return int
      * @throws Exception
      */
-    public function getCgmArrecad()
+    public function getCgmDevedor()
     {
-        $cgmDevedor = "";
+        $cgmDevedor = null;
+        if ($this->parItbi->getDevedorPrincipal() === Paritbi::DEVEDOR_PRINCIPAL_ADQUIRENTE) {
+            $cgmDevedor = $this->getCgmDevedorAdquirente();
+        }
+
+        if ($this->parItbi->getDevedorPrincipal() === Paritbi::DEVEDOR_PRINCIPAL_TRANSMITENTE) {
+            $cgmDevedor = $this->getCgmDevedorTransmitente();
+        }
+
+        if(empty($cgmDevedor) === true) {
+            $cgmDevedor = $this->getCgmDevedorProprietarioImovel();
+        }
+
+        return empty($cgmDevedor) === false ? $cgmDevedor : $this->parItbi->Parreciboitbi->it17_numcgm;
+    }
+
+    /**
+     * @return int | null
+     */
+    public function getCgmDevedorAdquirente()
+    {
         $compradorPrincipal = $this->getCompradorPrincipal();
         $demaisCompradores = $this->getDemaisCompradores();
-        $transmitentePrincipal = $this->getTransmitentePrincipal();
-        $demaisTransmitentes = $this->getDemaisTransmitentes();
 
         if(empty($compradorPrincipal) === false) {
-            $cgmDevedor = $compradorPrincipal->getCgm();
+            return $compradorPrincipal->getCgm();
         }
 
         foreach ($demaisCompradores as $comprador) {
             $cgm = $comprador->getCgm();
             if(empty($cgm) !== false){
-                $cgmDevedor = $cgm;
-                break;
+                return $cgm;
             }
         }
+        return null;
+    }
+
+    /**
+     * @return int | null
+     */
+    public function getCgmDevedorTransmitente()
+    {
+        $transmitentePrincipal = $this->getTransmitentePrincipal();
+        $demaisTransmitentes = $this->getDemaisTransmitentes();
 
         if(empty($transmitentePrincipal) === false) {
-            $cgmDevedor = $transmitentePrincipal->getCgm();
+            return $transmitentePrincipal->getCgm();
         }
 
 
         foreach ($demaisTransmitentes as $transmitente) {
             $cgm = $transmitente->getCgm();
             if(empty($cgm) !== false){
-                $cgmDevedor = $cgm;
-                break;
+                return $cgm;
             }
         }
+        return null;
+    }
 
+    /**
+     * @return int | null
+     */
+    public function getCgmDevedorProprietarioImovel()
+    {
         $imovel = $this->getMatric();
 
-        if(empty($imovel) === false) {
-            $imovel = new Imovel($this->getMatric());
-            $cgmDevedor = $imovel->getProprietarioPrincipal()->getCodigo();
+        if(empty($imovel) === true) {
+            return null;
         }
 
-        return empty($cgmDevedor) === false ? $cgmDevedor : $this->parItbi->Parreciboitbi->it17_numcgm;
+        $imovel = new Imovel($this->getMatric());
+        return $imovel->getProprietarioPrincipal()->getCodigo();
     }
 
     /**
