@@ -104,7 +104,7 @@ class InscricaoDividaAtivaItbiService
         $exercicioDivida = new DateTime($LegacyItbiModel->it01_data);
 
         $this->LegacyDividaRepository->v01_coddiv = null;
-        $this->LegacyDividaRepository->v01_numcgm = $LegacyItbiModel->getCgmArrecad();
+        $this->LegacyDividaRepository->v01_numcgm = $LegacyItbiModel->getCgmDevedor();
         $this->LegacyDividaRepository->v01_dtinsc = $dataDia->format('Y-m-d');
         $this->LegacyDividaRepository->v01_exerc  = $exercicioDivida->format('Y');
         $this->LegacyDividaRepository->v01_numpre = $this->LegacyNumprefRepository->sql_numpre();
@@ -141,7 +141,7 @@ class InscricaoDividaAtivaItbiService
     {
         $this->LegacyArrecadRepository->k00_numpre = $numpre;
         $this->LegacyArrecadRepository->k00_numpar = 1;
-        $this->LegacyArrecadRepository->k00_numcgm = $LegacyItbiModel->getCgmArrecad();
+        $this->LegacyArrecadRepository->k00_numcgm = $LegacyItbiModel->getCgmDevedor();
         $this->LegacyArrecadRepository->k00_dtoper = $date->format('Y-m-d');
         $this->LegacyArrecadRepository->k00_receit = $LegacyItbiModel->parItbi->getReceita();
         $this->LegacyArrecadRepository->k00_hist   = $LegacyItbiModel->parItbi->ProcedenciaDivida->getHistoricoCalculo();
