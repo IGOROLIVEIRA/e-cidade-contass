@@ -57,6 +57,7 @@ class cl_paritbi {
    var $it24_cgmobrigatorio = 'f';
    var $it24_transfautomatica = 'f';
    var $it24_proced = 0;
+   var $it24_devedor = 0;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  it24_anousu = int4 = Ano
@@ -74,6 +75,7 @@ class cl_paritbi {
                  it24_cgmobrigatorio = bool = CGM Obrigatório Transmitente/Adquirente
                  it24_transfautomatica = bool = Tranferencia automatica do imovel
                  it24_proced = int4 = Código da Procedência da D.A
+                 it24_devedor = int4 = Devedor Principal
                  ";
    //funcao construtor da classe
    function cl_paritbi() {
@@ -108,6 +110,7 @@ class cl_paritbi {
        $this->it24_cgmobrigatorio = ($this->it24_cgmobrigatorio == "f"?@$GLOBALS["HTTP_POST_VARS"]["it24_cgmobrigatorio"]:$this->it24_cgmobrigatorio);
        $this->it24_transfautomatica = ($this->it24_transfautomatica == "f"?@$GLOBALS["HTTP_POST_VARS"]["it24_transfautomatica"]:$this->it24_transfautomatica);
        $this->it24_proced = ($this->it24_proced == "f"?@$GLOBALS["HTTP_POST_VARS"]["it24_proced"]:$this->it24_proced);
+       $this->it24_devedor = ($this->it24_devedor == "f"?@$GLOBALS["HTTP_POST_VARS"]["it24_devedor"]:$this->it24_devedor);
      }else{
        $this->it24_anousu = ($this->it24_anousu == ""?@$GLOBALS["HTTP_POST_VARS"]["it24_anousu"]:$this->it24_anousu);
      }
@@ -267,6 +270,7 @@ class cl_paritbi {
                                       ,it24_cgmobrigatorio
                                       ,it24_transfautomatica
                                       {empty($this->it24_proced) === false ? ',it24_proced' : ''}
+                                      ,it24_devedor
                        )
                 values (
                                 $this->it24_anousu
@@ -284,6 +288,7 @@ class cl_paritbi {
                                ,'$this->it24_cgmobrigatorio'
                                ,'$this->it24_transfautomatica'
                                {empty($this->it24_proced) === false ? ',$this->it24_transfautomatica' : ''}
+                               ,{$this->it24_devedor}
                       )";
      $result = db_query($sql);
      if($result==false){
@@ -335,6 +340,7 @@ class cl_paritbi {
          $resac = db_query("insert into db_acount values($acount,2362,20656,'','".AddSlashes(pg_result($resaco,0,'it24_cgmobrigatorio'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,2362,20656,'','".AddSlashes(pg_result($resaco,0,'it24_transfautomatica'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,2362,20656,'','".AddSlashes(pg_result($resaco,0,'it24_proced'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,2362,20656,'','".AddSlashes(pg_result($resaco,0,'it24_devedor'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        }
      }
      return true;
@@ -479,6 +485,11 @@ class cl_paritbi {
        $sql  .= $virgula." it24_proced = '$this->it24_proced' ";
        $virgula = ",";
      }
+
+     if(trim($this->it24_devedor)!="" || isset($GLOBALS["HTTP_POST_VARS"]["it24_devedor"])){
+       $sql  .= $virgula." it24_devedor = '$this->it24_devedor' ";
+       $virgula = ",";
+     }
      if(trim($this->it24_taxabancaria)!="" || isset($GLOBALS["HTTP_POST_VARS"]["it24_taxabancaria"])){
        $sql  .= $virgula." it24_taxabancaria = $this->it24_taxabancaria ";
        $virgula = ",";
@@ -575,6 +586,8 @@ class cl_paritbi {
              $resac = db_query("insert into db_acount values($acount,2362,20656,'".AddSlashes(pg_result($resaco,$conresaco,'it24_transfautomatica'))."','$this->it24_transfautomatica',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
              if(isset($GLOBALS["HTTP_POST_VARS"]["it24_proced"]) || $this->it24_proced != "")
                  $resac = db_query("insert into db_acount values($acount,2362,20656,'".AddSlashes(pg_result($resaco,$conresaco,'it24_proced'))."','$this->it24_proced',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+             if(isset($GLOBALS["HTTP_POST_VARS"]["it24_devedor"]) || $this->it24_devedor != "")
+                 $resac = db_query("insert into db_acount values($acount,2362,20656,'".AddSlashes(pg_result($resaco,$conresaco,'it24_devedor'))."','$this->it24_devedor',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          }
        }
      }

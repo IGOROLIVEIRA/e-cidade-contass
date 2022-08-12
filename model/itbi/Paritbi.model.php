@@ -16,6 +16,9 @@ class Paritbi {
     const TIPO_DEBITO_DEFAULT = 29;
     const GRUPO_DEBITO_DEFAULT = 8;
 
+    const DEVEDOR_PRINCIPAL_ADQUIRENTE = 1;
+    const DEVEDOR_PRINCIPAL_TRANSMITENTE = 2;
+
     private $it24_anousu;
     private $it24_grupoespbenfurbana;
     private $it24_grupotipobenfurbana;
@@ -31,6 +34,7 @@ class Paritbi {
     private $it24_cgmobrigatorio;
     private $it24_transfautomatica;
     private $it24_proced;
+    private $it24_devedor;
 
     /**
      * @var cl_parreciboitbi $Parreciboitbi
@@ -64,6 +68,7 @@ class Paritbi {
             $this->it24_cgmobrigatorio = $oDaoParItbi->it24_cgmobrigatorio;
             $this->it24_transfautomatica = $oDaoParItbi->it24_transfautomatica;
             $this->it24_proced = $oDaoParItbi->it24_proced;
+            $this->it24_devedor = $oDaoParItbi->it24_devedor;
 
             $this->Parreciboitbi = db_utils::getDao('parreciboitbi');
             $this->Parreciboitbi = current(db_utils::getCollectionByRecord($this->Parreciboitbi->sql_record($this->Parreciboitbi->sql_query(null, "*"))));
@@ -331,6 +336,11 @@ class Paritbi {
     public function getProced()
     {
         return $this->it24_proced;
+    }
+
+    public function getDevedorPrincipal()
+    {
+        return $this->it24_devedor;
     }
 
 }

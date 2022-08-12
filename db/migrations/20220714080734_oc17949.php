@@ -8,6 +8,9 @@ class Oc17949 extends AbstractMigration
     {
         $this->createMenuInscricaoDA();
         $this->createParametroProced();
+        $this->createParametroDevedorPrincipal();
+        $this->addFieldDevedorPrincipal();
+        $this->obrigaCgmParaITBI();
         $this->createTableItbiDivida();
     }
 
@@ -32,6 +35,35 @@ class Oc17949 extends AbstractMigration
             -- Vínculo tabelas com campos
             INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES (2362, (select codcam from db_syscampo where nomecam = 'it24_proced'), 15, 0);
             COMMIT;
+SQL;
+        $this->execute($sql);
+    }
+
+    private function createParametroDevedorPrincipal()
+    {
+        $sql = <<<'SQL'
+            BEGIN;
+            ALTER TABLE paritbi ADD COLUMN it24_devedor int8;
+            INSERT INTO db_syscampo (codcam, nomecam, conteudo, descricao, valorinicial, rotulo, tamanho, nulo, maiusculo, autocompl, aceitatipo, tipoobj, rotulorel) VALUES ((select max(codcam)+1 from db_syscampo), 'it24_devedor', 'int4', 'Devedor Principal', 'FALSE' , 'Devedor Principal', 1, false, false, false, 5, 'text', 'Devedor Principal');
+            INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES (2362, (select codcam from db_syscampo where nomecam = 'it24_devedor'), 16, 0);
+            COMMIT;
+SQL;
+        $this->execute($sql);
+    }
+
+    private function addFieldDevedorPrincipal()
+    {
+        $sql = 'ALTER TABLE "itbi"."paritbi" ADD COLUMN "it24_devedor" int4 DEFAULT 1;';
+        $this->execute($sql);
+    }
+
+    private function obrigaCgmParaITBI()
+    {
+        $sql = <<<'SQL'
+                BEGIN;
+                    ALTER TABLE "itbi"."paritbi" ALTER COLUMN "it24_cgmobrigatorio" SET DEFAULT TRUE;
+                    update itbi.paritbi set it24_cgmobrigatorio = true;
+                COMMIT;
 SQL;
         $this->execute($sql);
     }

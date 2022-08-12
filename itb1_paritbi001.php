@@ -59,6 +59,7 @@ if (isset($oPost->incluir)) {
   $clparitbi->it24_cgmobrigatorio = $oPost->it24_cgmobrigatorio;
   $clparitbi->it24_transfautomatica = $oPost->it24_transfautomatica;
   $clparitbi->it24_proced = $oPost->it24_proced;
+  $clparitbi->it24_devedor = $oPost->it24_devedor;
   $clparitbi->incluir($oPost->it24_anousu);
 
   if ( $clparitbi->erro_status == 0 ) {
@@ -99,6 +100,8 @@ if (isset($oPost->incluir)) {
   $clparitbi->it24_grupopadraoconstrutivobenurbana = $oPost->it24_grupopadraoconstrutivobenurbana;
   $clparitbi->it24_cgmobrigatorio = $oPost->it24_cgmobrigatorio;
   $clparitbi->it24_transfautomatica = $oPost->it24_transfautomatica;
+  $clparitbi->it24_proced = $oPost->it24_proced;
+  $clparitbi->it24_devedor = $oPost->it24_devedor;
   $clparitbi->alterar($oPost->it24_anousu);
 
   if ( $clparitbi->erro_status == 0 ) {
