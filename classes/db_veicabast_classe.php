@@ -1331,6 +1331,7 @@ if($dbwhere==""){
                                                                               from veicabast t
                                                                        where t.ve70_codigo < veicabast.ve70_codigo
                                                                              and t.ve70_veiculos = veicabast.ve70_veiculos
+                                                                             and t.ve70_medida < veicabast.ve70_medida
                                                                              limit 1)
                                                  ), ve60_medidasaida ), ve70_medida ) as ve60_medidasaida,
                             (select ve61_medidadevol

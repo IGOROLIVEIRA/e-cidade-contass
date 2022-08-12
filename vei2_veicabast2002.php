@@ -271,6 +271,8 @@ for ($iContDep = 0; $iContDep < pg_num_rows($rSqlDepartamentos); $iContDep++) {
                 $nTotalCombustivel = 0;
                 $nTotalValorAbastecido = 0;
                 $nTotalConsumoMedio = 0;
+                $contralakminicial = 0;
+                $contralakmfinal = 0;
                 for ($iContMov = 0; $iContMov < pg_num_rows($rSqlMov); $iContMov++) {
                     db_fieldsmemory($rSqlMov, $iContMov);
 
@@ -279,7 +281,13 @@ for ($iContDep = 0; $iContDep < pg_num_rows($rSqlDepartamentos); $iContDep++) {
                     $pdf->cell(19+$moreWidth, $alt, db_formatar($ve70_data, "d"), 1, 0, "C", 1);
                     $pdf->cell(20, $alt, $ve70_hora, 1, 0, "C", 1);
                     $pdf->cell(25+$moreWidth, $alt, $ve26_descr, 1, 0, "C", 1);
-                    $pdf->cell(23+$moreWidth, $alt, $medida_retirada, 1, 0, "C", 1);
+                    if($medida_retirada == $contralakminicial || $medida_retirada < $contralakmfinal){
+                        $pdf->cell(23+$moreWidth, $alt, $contralakmfinal, 1, 0, "C", 1);
+                        $medida_rodada = $medida_devolucao - $contralakmfinal;
+                    }else{
+                        $pdf->cell(23+$moreWidth, $alt, $medida_retirada, 1, 0, "C", 1);
+                    }
+                    
                     $pdf->cell(23+$moreWidth, $alt, $medida_devolucao, 1, 0, "C", 1);
                     $pdf->cell(30, $alt, $medida_rodada, 1, 0, "C", 1);
                     if($exibir_cupom){
@@ -292,6 +300,9 @@ for ($iContDep = 0; $iContDep < pg_num_rows($rSqlDepartamentos); $iContDep++) {
                     $nTotalCombustivel += $ve70_litros;
                     $nTotalValorAbastecido += $ve70_valor;
                     $nTotalConsumoMedio += ($medida_rodada / $ve70_litros);
+                    $contralakminicial = $medida_retirada;
+                    $contralakmfinal = $medida_devolucao;
+
                 }
 
                 $pdf->setfont('arial', 'b', 10);
