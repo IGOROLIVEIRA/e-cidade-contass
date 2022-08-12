@@ -216,9 +216,6 @@ if( $oGet->ordem == 'n' ) {
   $sOrdem       = " itbi.it01_guia ";
 }
 
-//echo $sOrdem;
-//die();
-
 if ( isset($sWhere) && !empty($sWhere) ) {
 	$sWhere = " where {$sWhere}";
 }
@@ -294,7 +291,6 @@ $sSql .= "                    left  join iptubase          on it06_matric       
 $sSql .= "                    left  join lote              on j34_idbql                   = j01_idbql                 ";
 $sSql .= "		                left  join cgm               on z01_numcgm                  = it21_numcgm 			  ";
 $sSql .= "		                left  join itbinumpre        on itbinumpre.it15_guia	      = itbi.it01_guia		  ";
-//$sSql .= "                                                  and itbinumpre.it15_ultimaguia is true                 ";
 $sSql .= "		                left  join recibo            on recibo.k00_numpre  	        = it15_numpre 			  ";
 $sSql .= "		                left  join arrepaga	         on arrepaga.k00_numpre         = itbinumpre.it15_numpre		";
 $sSql .= "		                left  join itbi_divida	         on itbi_divida.it36_guia      = itbi.it01_guia 	  ";
@@ -486,8 +482,6 @@ if ( $oGet->modoimp == 'sint' ) {
   $aDadosItbi    = array();
 
 	foreach ($aRetorno as $i => $oRetorno) {
-
-   // $oRetorno = db_utils::fieldsMemory($rsSql,$i);
 
     $oDadosItbi = new stdClass();
     $oDadosItbi->iGuia             = $oRetorno->it01_guia;
