@@ -159,7 +159,11 @@ if ( $oGet->situacao == "2" ) {
   $sHeaderSituacao = "SITUAÇÃO : CANCELADO";
   $sWhere         .= " {$sAnd} it16_guia is not null";
   $sAnd            = " and ";
-} else {
+} else if ($oGet->situacao == "5") {
+    $sHeaderSituacao = "SITUAÇÃO : INSCRITO EM D.A";
+    $sWhere         .= " {$sAnd} it36_guia is not null";
+    $sAnd            = " and ";
+}else {
   $sHeaderSituacao = "SITUAÇÃO : TODOS";
 }
 
@@ -261,7 +265,7 @@ $sSql .= "                    coalesce(itbiavalia.it14_valoravalconstr,0) as it1
 $sSql .= "                    coalesce(itbiavalia.it14_valoravalter   ,0) as it14_valoravalter,                       ";
 $sSql .= "                    coalesce(itbiavalia.it14_valoraval      ,0) as it14_valoraval,                          ";
 $sSql .= "                    itbinome.it03_tipo,                                                                     ";
-$sSql .= "		                it16_guia, 																		      ";
+$sSql .= "		                it16_guia,it36_guia, 															      ";
 $sSql .= "                    case when arrepaga.k00_numpre is not null                                               ";
 $sSql .= "                      then 'PAGO'                                                                           ";
 $sSql .= "                        else                                                                        		  ";
@@ -293,6 +297,7 @@ $sSql .= "		                left  join itbinumpre        on itbinumpre.it15_guia
 //$sSql .= "                                                  and itbinumpre.it15_ultimaguia is true                 ";
 $sSql .= "		                left  join recibo            on recibo.k00_numpre  	        = it15_numpre 			  ";
 $sSql .= "		                left  join arrepaga	         on arrepaga.k00_numpre         = itbinumpre.it15_numpre		";
+$sSql .= "		                left  join itbi_divida	         on itbi_divida.it36_guia      = itbi.it01_guia 	  ";
 $sSql .= "          {$sWhere}                                                                                         ";
 $sSql .= "           order by {$sOrdem} ,recibo.k00_numpre                                                            ";
 $sSql .= "                    {$oGet->modo}                                                                           ";
@@ -412,15 +417,17 @@ if ( $oGet->modoimp == 'sint' ) {
 	  $pdf->cell(15,$iAlt,$oRetorno->cgm                                                                      ,0,0,"C",1);
 	  $pdf->cell(20,$iAlt,db_formatar("$oRetorno->k00_valor",'f')                                             ,0,0,"R",1);
 
-	  if (isset($oRetorno->it16_guia) and $oRetorno->it16_guia != "") {
-	    $sTipo = "Cancelado";
-	  } else if (isset($oRetorno->arrepaga)&& trim($oRetorno->arrepaga) != "") {
-	    $sTipo = "Pago";
-	  } else if ( $oRetorno->itbiliberada == "Sim" ) {
-	    $sTipo = "Aberto";
-	  } else {
-	    $sTipo = "";
-	  }
+        if (empty($oRetorno->it36_guia) === false) {
+            $sTipo = "Divida Ativa";
+        } else if (isset($oRetorno->arrepaga) && trim($oRetorno->arrepaga) != "") {
+            $sTipo = "Pago";
+        } else if (isset($oRetorno->it16_guia) and $oRetorno->it16_guia != "") {
+            $sTipo = "Cancelado";
+        } else if ($oRetorno->itbiliberada == "Sim") {
+            $sTipo = "Aberto";
+        } else {
+            $sTipo = "";
+        }
 
 	  $pdf->cell(20,$iAlt,$sTipo                                                                              ,0,0,"C",1);
 
@@ -489,12 +496,14 @@ if ( $oGet->modoimp == 'sint' ) {
     $oDadosItbi->nValor            = $oRetorno->k00_valor;
     $oDadosItbi->nValor            = $oRetorno->k00_valor;
 
-    if (isset($oRetorno->it16_guia) and $oRetorno->it16_guia != "") {
-      $oDadosItbi->sSituacao       = "Cancelado";
+    if (empty($oRetorno->it36_guia) === false) {
+      $oDadosItbi->sSituacao       = "Divida Ativa";
     } else if (isset($oRetorno->arrepaga)&& trim($oRetorno->arrepaga) != "") {
       $oDadosItbi->sSituacao       = "Pago";
     } else if ( $oRetorno->itbiliberada == "Sim" ) {
       $oDadosItbi->sSituacao       = "Aberto";
+    } else if (isset($oRetorno->it16_guia) and $oRetorno->it16_guia != "") {
+      $oDadosItbi->sSituacao       = "Cancelado";
     } else {
       $oDadosItbi->sSituacao       = "";
     }

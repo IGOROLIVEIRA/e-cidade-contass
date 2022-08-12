@@ -210,7 +210,8 @@ $clrotulo->label("j34_lote");
                                             $aSituacao = array('1' => 'Todos',
                                                 '2' => 'Aberto',
                                                 '3' => 'Pago',
-                                                '4' => 'Cancelado');
+                                                '4' => 'Cancelado',
+                                                '5' => 'Inscrito D.A');
                                             db_select('situacao', $aSituacao, true, 2, " style='width:275px;'");
                                             ?>
                                         </td>
