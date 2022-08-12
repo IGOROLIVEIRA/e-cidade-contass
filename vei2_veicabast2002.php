@@ -172,7 +172,7 @@ if($exibir_cupom){
     $sCampos .= ', ve71_nota';
 }
 
-$sSqlBuscaAbastecimentos = $clveicabast->sql_query_abast_novo(null, $sCampos,"ve70_dtabast,ve70_codigo", $dbwhere, $iCoddepto);
+$sSqlBuscaAbastecimentos = $clveicabast->sql_query_abast_novo(null, $sCampos,"ve70_dtabast,ve70_hora,ve70_codigo", $dbwhere, $iCoddepto);
 $result = db_query(" drop table if exists w_relabastecimentoveiculos; create table w_relabastecimentoveiculos as {$sSqlBuscaAbastecimentos} ") or die(pg_last_error());
 
                     if (pg_num_rows(db_query("select * from w_relabastecimentoveiculos")) == 0) {
@@ -281,7 +281,7 @@ for ($iContDep = 0; $iContDep < pg_num_rows($rSqlDepartamentos); $iContDep++) {
                     $pdf->cell(19+$moreWidth, $alt, db_formatar($ve70_data, "d"), 1, 0, "C", 1);
                     $pdf->cell(20, $alt, $ve70_hora, 1, 0, "C", 1);
                     $pdf->cell(25+$moreWidth, $alt, $ve26_descr, 1, 0, "C", 1);
-                    if($medida_retirada == $contralakminicial || $medida_retirada < $contralakmfinal){
+                    if(($medida_retirada == $contralakminicial || $medida_retirada < $contralakmfinal) && $contralakmfinal != 0){
                         $pdf->cell(23+$moreWidth, $alt, $contralakmfinal, 1, 0, "C", 1);
                         $medida_rodada = $medida_devolucao - $contralakmfinal;
                     }else{
