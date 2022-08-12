@@ -694,11 +694,11 @@ if ($x->consultarDataDoSistema == true) {
         if (oRetorno.iOrigemContrato == 2) {
             verificaLicitacao = true;
             $('e54_codcom').value = oRetorno.pc50_codcom;
-            $('e54_codcomdescr').value = oRetorno.pc50_codcom;
+            //$('e54_codcomdescr').value = oRetorno.pc50_codcom;
             tipoLic = oRetorno.l03_tipo;
             $('e54_numerl').value = oRetorno.iEdital + '/' + oRetorno.iAnoLicitacao;
             $('e54_nummodalidade').value = oRetorno.iNumModalidade;
-            $('e54_adesaoregpreco').value = oRetorno.iSequencial;
+            //$('e54_adesaoregpreco').value = oRetorno.iSequencial;
             $('iSequenciaCaracteristica').value = '000';
             $('sDescricaoCaracteristica').value = 'NÃO SE APLICA';
             js_buscarTipoLicitacao(oRetorno.pc50_codcom);
@@ -707,31 +707,31 @@ if ($x->consultarDataDoSistema == true) {
         } else if (oRetorno.iOrigemContrato == 3 && oRetorno.iCodigoLicitacao == '') {
             verificaLicitacao = false;
             $('e54_codcom').value = '';
-            $('e54_codcomdescr').value = '';
+            //$('e54_codcomdescr').value = '';
             $('e54_numerl').value = '';
             $('e54_nummodalidade').value = '';
-            $('e54_adesaoregpreco').value = '';
+            //$('e54_adesaoregpreco').value = '';
             $('e54_tipol').value = '';
             js_habilitaCamposLicitacao();
         } else if (oRetorno.iOrigemContrato == 3 && oRetorno.iCodigoLicitacao != '') {
 
             verificaLicitacao = true;
             $('e54_codcom').value = oRetorno.pc50_codcom;
-            $('e54_codcomdescr').value = oRetorno.pc50_codcom;
+            //$('e54_codcomdescr').value = oRetorno.pc50_codcom;
             tipoLic = oRetorno.l03_tipo;
             $('e54_numerl').value = oRetorno.iEdital + '/' + oRetorno.iAnoLicitacao;
             $('e54_nummodalidade').value = oRetorno.iNumModalidade;
-            $('e54_adesaoregpreco').value = '';
+            //$('e54_adesaoregpreco').value = '';
             $('iSequenciaCaracteristica').value = '000';
             $('sDescricaoCaracteristica').value = 'NÃO SE APLICA'
             js_buscarTipoLicitacao(oRetorno.pc50_codcom);
             js_desabilitaCamposLicitacao();
         } else if (oRetorno.iOrigemContrato == 6) {
             $('e54_codcom').value = '';
-            $('e54_codcomdescr').value = '';
+            //$('e54_codcomdescr').value = '';
             $('e54_numerl').value = '';
             $('e54_nummodalidade').value = '';
-            $('e54_adesaoregpreco').value = '';
+            //$('e54_adesaoregpreco').value = '';
             $('e54_tipol').value = '';
             js_habilitaCamposLicitacao();
         }
@@ -1565,13 +1565,13 @@ if ($x->consultarDataDoSistema == true) {
         $('e54_resumo').value = oRetorno.sResumoAcordo.urlDecode();
         $('e54_numerl').value = oRetorno.iProcesso;
         $('e54_codcom').value = oRetorno.sTipo;
-        $('e54_codcomdescr').value = oRetorno.sTipo;
+        //$('e54_codcomdescr').value = oRetorno.sTipo;
         $('e54_nummodalidade').value = oRetorno.iNumModalidade;
-        if (oRetorno.sTipoorigem == 4) {
+        /*if (oRetorno.sTipoorigem == 4) {
             $('e54_adesaoregpreco').value = oRetorno.iSequencial;
         } else {
             $('e54_adesaoregpreco').value = null;
-        }
+        }*/
         $('iSequenciaCaracteristica').value = '000';
         $('sDescricaoCaracteristica').value = 'NÃO SE APLICA';
 
