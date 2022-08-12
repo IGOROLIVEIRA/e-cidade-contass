@@ -226,7 +226,7 @@ class cl_orcdotacao {
        return false;
      }
      if($this->o58_datacriacao == null ){
-       $this->o58_datacriacao = "null";
+       $this->o58_datacriacao = null;
      }
      if($this->o58_concarpeculiar == null ){
        $this->erro_sql = " Campo C.Peculiar/ C. Aplicação nao Informado.";

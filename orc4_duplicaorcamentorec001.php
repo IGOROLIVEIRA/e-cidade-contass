@@ -36,15 +36,17 @@ require_once(modification("libs/db_liborcamento.php"));
 require_once(modification("dbforms/db_funcoes.php"));
 require_once(modification("dbforms/db_classesgenericas.php"));
 
-require_once(modification("classes/db_orcfontes_classe.php"));
-require_once(modification("classes/db_orcfontesdes_classe.php"));
-require_once(modification("classes/db_orcreceita_classe.php"));
+include ("classes/db_orcfontes_classe.php");
+include ("classes/db_conplanoorcamentoanalitica_classe.php");
+include ("classes/db_orcfontesdes_classe.php");
+include ("classes/db_orcreceita_classe.php");
 
 $cliframe_seleciona = new cl_iframe_seleciona;
 
 $clorcfontes = new cl_orcfontes;
 $clorcfontesdes = new cl_orcfontesdes;
 $clorcreceita = new cl_orcreceita;
+$clconplanoorcamentoanalitica = new cl_conplanoorcamentoanalitica;
 
 db_postmemory($HTTP_POST_VARS);
 $debug = false;
@@ -52,6 +54,7 @@ $debug = false;
 $anousu = db_getsession("DB_anousu");
 $dt_ini = $anousu.'-01-01';
 $dt_fin = $anousu.'-12-31';
+$aFontesNovas = array('100' => 15000000,'101' => 15000001,'102' => 15000002,'103' => 18000000,'104' => 18010000,'105' => 18020000,'106' => 15760010,'107' => 15440000,'108' => 17080000,'112' => 16590020,'113' => 15990030,'116' => 17500000,'117' => 17510000,'118' => 15400007,'119' => 15400003,'120' => 15760000,'121' => 16220000,'122' => 15700000,'123' => 16310000,'124' => 17000000,'129' => 16600000,'130' => 18990040,'131' => 17590050,'132' => 16040000,'142' => 16650000,'143' => 15510000,'144' => 15520000,'145' => 15530000,'146' => 15690000,'147' => 15500000,'153' => 16010000,'154' => 16590000,'155' => 16210000,'156' => 16610000,'157' => 17520000,'158' => 18990060,'159' => 16000000,'160' => 17040000,'161' => 17070000,'162' => 17490120,'163' => 17130070,'164' => 17060000,'165' => 18990000,'166' => 15420007,'167' => 15420003,'168' => 17100100,'169' => 17100000,'170' => 15010000,'171' => 15710000,'172' => 15720000,'173' => 15750000,'174' => 15740000,'175' => 15730000,'176' => 16320000,'177' => 16330000,'178' => 16360000,'179' => 16340000,'180' => 16350000,'181' => 17010000,'182' => 17020000,'183' => 17030000,'184' => 17090000,'185' => 17530000,'186' => 17040000,'187' => 17050000,'188' => 15000080,'189' => 15000090,'190' => 17540000,'191' => 17540000,'192' => 17550000,'193' => 18990130);
 
 $anousu_ant = (db_getsession("DB_anousu") - 1);
 $dt_ini_ant = $anousu_ant.'-01-01';
@@ -117,30 +120,41 @@ if (isset ($processa_fontesdes) && ($processa_fontesdes == 'Processar')) {
 		db_fim_transacao($erro);
 	} //
 } //
-// programa
+//
 if (isset ($processa_receitas) && ($processa_receitas == 'Processar')) {
-	$chaves = explode('#', $chaves);
+    $instit = db_getsession("DB_instit");
+	$chaves = split('#', $chaves);
 	if (count($chaves) > 0) {
 		db_inicio_transacao();
+        $aEstruturalReceitasNaoIncluidas =  array();
 		for ($i = 0; $i < count($chaves); $i ++) {
 			if ($chaves[$i] == "")
 				continue;
-			$res = $clorcreceita->sql_record($clorcreceita->sql_query_file($anousu_ant, $chaves[$i], "*",null,""));
-
+            $res = $clorcreceita->sql_record($clorcreceita->sql_query_plano(null, null, "*",null," o70_anousu=$anousu_ant and o70_codrec={$chaves[$i]} and o70_instit=$instit"));
 			if (($clorcreceita->numrows) > 0) {
 
 				db_fieldsmemory($res, 0);
+
 				$clorcreceita->o70_anousu         = $anousu;
 				$clorcreceita->o70_codrec         = $o70_codrec;
 				$clorcreceita->o70_codfon         = $o70_codfon;
 				$clorcreceita->o70_codigo         = $o70_codigo;
+                if($anousu == 2023){
+                    $resEstrutNovo = $clorcfontes->sql_record($clorcfontes->sql_query_file(null, null, "*", null, " o57_anousu = ".$anousu." and o57_fonte= '".$o57_fonte."'"));
+                    $clorcreceita->o70_codfon         = db_utils::fieldsMemory($resEstrutNovo, 0)->o57_codfon;
+				    $clorcreceita->o70_codigo         = $aFontesNovas[$o70_codigo];
+                }
 				$clorcreceita->o70_valor          = $o70_valor;
 				$clorcreceita->o70_reclan         = "$o70_reclan";
 
 				$clorcreceita->o70_instit         = $o70_instit;
                 $clorcreceita->o70_concarpeculiar = $o70_concarpeculiar;
-
-				$clorcreceita->incluir($anousu, $o70_codrec);
+                if($clorcreceita->o70_codfon) {
+                    $clorcreceita->incluir($anousu, $o70_codrec);
+                }
+                if(!$clorcreceita->o70_codfon){
+                    $aEstruturalReceitasNaoIncluidas[] = $o57_fonte;
+                }
 				if ($clorcreceita->erro_status == '0') {
 					db_msgbox("Reduzido: ".$clorcreceita->o70_codrec." -> ".$clorcreceita->erro_msg);
 					$erro = true;
@@ -151,7 +165,12 @@ if (isset ($processa_receitas) && ($processa_receitas == 'Processar')) {
 		db_fim_transacao($erro);
 	} //
     if ($clorcreceita->erro_status != '0' && $erro != true) {
-        db_msgbox("Importação concluída com sucesso!");
+        if(!empty($aEstruturalReceitasNaoIncluidas)){
+            db_msgbox("Importação concluída com sucesso! Mas as receitas ".implode(",", $aEstruturalReceitasNaoIncluidas)." não foram incluídas por não existir estrutural no ano de {$anousu}!");
+        }
+        if(empty($aEstruturalReceitasNaoIncluidas)){
+            db_msgbox("Importação concluída com sucesso!");
+        }
         $erro = false;
     }
 } //
@@ -303,12 +322,12 @@ if (isset ($processa_receitas) && $processa_receitas == "Selecionar") {
 	$sql = "select o70_codrec,o57_fonte,o70_valor,o70_instit
 	            from orcreceita
 					 inner join orcfontes on o57_anousu=o70_anousu and o70_codfon=o57_codfon
-		        where o70_anousu=". (db_getsession("DB_anousu") - 1)."
+		        where o70_anousu=". (db_getsession("DB_anousu") - 1). " and o70_instit = ".db_getsession("DB_instit")."
 		        EXCEPT
 		        select  o70_codrec,o57_fonte,o70_valor,o70_instit
 		        from orcreceita
 					inner join orcfontes on o57_anousu=o70_anousu and o70_codfon=o57_codfon
-		        where o70_anousu=".db_getsession("DB_anousu")."
+		        where o70_anousu=".db_getsession("DB_anousu")." and o70_instit = ".db_getsession("DB_instit")."
 		        order by o57_fonte
 	          ";
 	$sql_marca = "";

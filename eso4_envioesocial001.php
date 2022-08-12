@@ -83,9 +83,9 @@ $mesfolha = DBPessoal::getMesFolha();
                                                 </select>
                                             </td>
                                         </tr>
-                                        <tr id="dtalteracao" style="display:none">
-                                            <td align="left"><label>Data Alteração:</label>
-                                                <?
+                                        <tr>
+                                            <td align="left" id="dtalteracao" style="display:none" style="width: 25%;"><label>Data Alteração:</label>
+                                                <?php
                                                 db_inputdata(
                                                     'dt_alteracao',
                                                     '',
@@ -97,6 +97,34 @@ $mesfolha = DBPessoal::getMesFolha();
                                                     ""
                                                 );
                                                 ?>
+                                            </td>
+                                            <td align="left" id="indapuracao_col" style="display:none"><label>Apuração:</label>
+                                                <select name="indapuracao" id="indapuracao" style="width: 25%;">
+                                                    <option value="1">Mensal</option>
+                                                    <option value="2">Anual</option>
+                                                </select>
+                                            </td>
+                                            <td align="right" id="tppgto_col" style="display:none"><label>Tipo de Pagamento:</label>
+                                                <select name="tppgto" id="tppgto" style="width: 50%;">
+                                                    <option value="1">Pagamento de remuneração, conforme apurado em
+                                                        ideDmDev do S-1200
+                                                    </option>
+                                                    <option value="2">Pagamento de verbas rescisórias conforme apurado
+                                                        em ideDmDev do S-2299
+                                                    </option>
+                                                    <option value="3">Pagamento de verbas rescisórias conforme apurado
+                                                        em ideDmDev do S-2399
+                                                    </option>
+                                                    <option value="4">Pagamento de remuneração conforme apurado em
+                                                        ideDmDev do S-1202
+                                                    </option>
+                                                    <option value="4">Pagamento de remuneração conforme apurado em
+                                                        ideDmDev do S-1202
+                                                    </option>
+                                                    <option value="5">Pagamento de benefícios previdenciários, conforme
+                                                        apurado em ideDmDev do S-1207
+                                                    </option>
+                                                </select>
                                             </td>
                                         </tr>
                                     </table>
@@ -152,7 +180,7 @@ $mesfolha = DBPessoal::getMesFolha();
 </body>
 
 </html>
-<? db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit")); ?>
+<?php db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit")); ?>
 <script type="text/javascript">
     var arrEvts = ['EvtIniciaisTabelas', 'EvtNaoPeriodicos', 'EvtPeriodicos'];
     var empregador = Object();
@@ -187,6 +215,11 @@ $mesfolha = DBPessoal::getMesFolha();
     }
 
     function js_processar() {
+
+        let result = confirm('Aten??o: Confirmar envio das informa??es do m?s ' + parent.bstatus.document.getElementById('dtatual').innerHTML.substr(3, 7) + ' para o eSocial?');
+        if (!result) {
+            return false;
+        }
 
         if ($F('anofolha').length < 4 || parseInt($("mesfolha").value) < 1 || parseInt($("mesfolha").value) > 12) {
 
@@ -231,6 +264,7 @@ $mesfolha = DBPessoal::getMesFolha();
         oParam.tpAmb = $("tpAmb").value;
         oParam.modo = $("modo").value;
         oParam.dtalteracao = $("dt_alteracao").value;
+        oParam.indapuracao = $("indapuracao").value;
         var oAjax = new Ajax.Request("eso4_esocialapi.RPC.php", {
             method: 'post',
             parameters: 'json=' + Object.toJSON(oParam),
@@ -282,6 +316,22 @@ $mesfolha = DBPessoal::getMesFolha();
     function js_consultar() {
 
         js_OpenJanelaIframe('top.corpo', 'iframe_consulta_envio', 'func_consultaenvioesocial.php', 'Pesquisa', true);
+    }
+
+    function js_1200_alt() {
+        if (document.getElementById('indapuracao_col').style.display == 'none') {
+            document.getElementById('indapuracao_col').style.display = 'inline';
+            return true;
+        }
+        document.getElementById('indapuracao_col').style.display = 'none';
+    }
+
+    function js_1210_alt() {
+        if (document.getElementById('tppgto_col').style.display == 'none') {
+            document.getElementById('tppgto_col').style.display = 'inline';
+            return true;
+        }
+        document.getElementById('tppgto_col').style.display = 'none';
     }
 
     function js_dataalt() {

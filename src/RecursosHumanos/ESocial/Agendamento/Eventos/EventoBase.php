@@ -27,7 +27,7 @@ abstract class EventoBase
      *
      * @param \stdClass $dados
      */
-    function __construct($dados)
+    public function __construct($dados)
     {
         $this->dados = $dados;
     }
@@ -49,6 +49,16 @@ abstract class EventoBase
     public function setDtAlteracao($dt_alteracao)
     {
         $this->dt_alteracao = $dt_alteracao;
+    }
+
+    public function setIndApuracao($indapuracao)
+    {
+        $this->indapuracao = $indapuracao;
+    }
+
+    public function setTppgto($tppgto)
+    {
+        $this->tppgto = $tppgto;
     }
 
     /**

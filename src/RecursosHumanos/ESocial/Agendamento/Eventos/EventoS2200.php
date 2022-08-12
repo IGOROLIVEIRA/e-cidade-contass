@@ -112,6 +112,7 @@ class EventoS2200 extends EventoBase
             $oDadosAPI->evtAdmissao->vinculo->tpRegTrab = $oDados->tpregtrab;
             $oDadosAPI->evtAdmissao->vinculo->tpRegPrev = $oDados->tpregprev;
             $oDadosAPI->evtAdmissao->vinculo->nrRecInfPrelim = $oDados->nrrecinfprelim;
+
             $oDadosAPI->evtAdmissao->vinculo->cadIni = $oDados->cadini;
 
             if (!empty($oDados->dtadm)) {
@@ -125,7 +126,7 @@ class EventoS2200 extends EventoBase
                 $oDadosAPI->evtAdmissao->vinculo->infoCeletista->cnpjSindCategProf = $oDados->cnpjsindcategprof;
 
                 $oDadosAPI->evtAdmissao->vinculo->infoCeletista->opcFGTS = $oDados->opcfgts;
-                $oDadosAPI->evtAdmissao->vinculo->infoCeletista->dtOpcFGTS = empty($oDados->dtopcfgts) ? null : $oDados->dtopcfgts;
+                //$oDadosAPI->evtAdmissao->vinculo->infoCeletista->dtOpcFGTS = empty($oDados->dtopcfgts) ? null : $oDados->dtopcfgts;
                 if (!empty($oDados->trabtemporario)) {
                     $oDadosAPI->evtAdmissao->vinculo->infoCeletista->trabTemporario = $oDados->trabtemporario;
                     $oDadosAPI->evtAdmissao->vinculo->infoCeletista->trabTemporario->ideTomadorServ = $oDados->idetomadorserv;
@@ -133,12 +134,18 @@ class EventoS2200 extends EventoBase
                     $oDadosAPI->evtAdmissao->vinculo->infoCeletista->trabTemporario->ideTrabSubstituido = $oDados->idetrabsubstituido;
                 }
                 $oDadosAPI->evtAdmissao->vinculo->infoCeletista->aprend = empty($oDados->aprend) ? null : $oDados->aprend;
+
+
+                $oDadosAPI->evtAdmissao->vinculo->infoContrato->horContratual->qtdHrsSem = empty($oDados->qtdhrssem) ? null : $oDados->qtdhrssem;
+                $oDadosAPI->evtAdmissao->vinculo->infoContrato->horContratual->tpJornada = empty($oDados->tpjornada) ? null : $oDados->tpjornada;
+                $oDadosAPI->evtAdmissao->vinculo->infoContrato->horContratual->tmpParc = 0;
+                $oDadosAPI->evtAdmissao->vinculo->infoContrato->horContratual->horNoturno = empty($oDados->hornoturno) ? null : $oDados->hornoturno;
+                $oDadosAPI->evtAdmissao->vinculo->infoContrato->horContratual->dscJorn    = empty($oDados->dscjorn) ? null : $oDados->dscjorn;
             } else {
                 //$oDadosAPI->evtAdmissao->vinculo->infoEstatutario = $oDados->infoEstatutario;
                 $oDadosAPI->evtAdmissao->vinculo->infoEstatutario->tpProv       = $oDados->tpprov;
                 $oDadosAPI->evtAdmissao->vinculo->infoEstatutario->dtExercicio  = $oDados->dtexercicio;
-
-                if (!empty($oDados->tpplanrp)) {
+                if ($oDados->tpplanrp != 1) {
                     $oDadosAPI->evtAdmissao->vinculo->infoEstatutario->tpPlanRP     = $oDados->tpplanrp;
                 }
                 if ($oDados->indtetorgps == 'N') {
@@ -176,7 +183,7 @@ class EventoS2200 extends EventoBase
 
 
             if (!empty($oDados->vrsalfx) && !empty($oDados->undsalfixo)) {
-                $oDadosAPI->evtAdmissao->vinculo->infoContrato->remuneracao->vrSalFx = $oDados->vrsalfx;
+                $oDadosAPI->evtAdmissao->vinculo->infoContrato->remuneracao->vrSalFx = number_format($oDados->vrsalfx, 2, ".", "");
                 $oDadosAPI->evtAdmissao->vinculo->infoContrato->remuneracao->undSalFixo = $oDados->undsalfixo;
                 $oDadosAPI->evtAdmissao->vinculo->infoContrato->remuneracao->dscSalVar = empty($oDados->dscsalvar) ? null : $oDados->dscsalvar;
             } else {
@@ -203,14 +210,6 @@ class EventoS2200 extends EventoBase
             }
 
             //$oDadosAPI->evtAdmissao->vinculo->infoContrato->localTrabDom = empty($oDados->localtrabdom) ? null : $oDados->localtrabdom;
-
-            if (empty($oDados->horcontratual)) {
-                $oDadosAPI->evtAdmissao->vinculo->infoContrato->horContratual = $oDados->horcontratual;
-            //$oDadosAPI->evtAdmissao->vinculo->infoContrato->horContratual->horario = $this->buscarHorarios($oDados->matricula);
-            } else {
-                $oDadosAPI->evtAdmissao->vinculo->infoContrato->horContratual = null;
-            }
-
 
             $aDadosAPI[] = $oDadosAPI;
             $iSequencial++;

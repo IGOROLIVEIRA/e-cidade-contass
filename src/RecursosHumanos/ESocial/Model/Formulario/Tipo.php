@@ -24,6 +24,9 @@ class Tipo
     const AMBIENTE = 9;
     const PROCESSOSAJ = 10;
     const PORTUARIO = 11;
+    const REMUNERACAO_TRABALHADOR = 12;
+    const REMUNERACAO_SERVIDOR = 13;
+    const PAGAMENTOS_RENDIMENTOS = 15;
     const REGISTRO_PRELIMINAR = 24;
     const CADASTRAMENTO_INICIAL = 37;
     const ESTABELECIMENTOS = 26;

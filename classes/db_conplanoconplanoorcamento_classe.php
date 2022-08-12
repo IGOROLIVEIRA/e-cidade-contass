@@ -546,5 +546,28 @@ class cl_conplanoconplanoorcamento {
         }
         return $sql;
     }
+
+    public function sql_vinculoAberturaExercicio($iAnousuOrigem, $iAnousuDestino)
+    {
+        $sSqlVinculo = "SELECT cp1.c60_codcon AS cod_pcasp2022,
+                               cp1.c60_estrut AS estrut_pcasp2022,
+                               cp2.c60_codcon AS cod_pcasp2023,
+                               cp2.c60_estrut AS estrut_pcasp2023,
+                               tb1.c60_codcon AS cod_orcam2022,
+                               tb1.c60_estrut AS estrut_orcam2022,
+                               tb2.c60_codcon AS cod_orcam2023,
+                               tb2.c60_estrut AS estrut_orcam2023
+                        FROM conplanoconplanoorcamento ";
+
+        $sSqlVinculo .= " INNER JOIN conplano cp1 ON (cp1.c60_codcon, cp1.c60_anousu) = (c72_conplano, c72_anousu) ";
+        $sSqlVinculo .= " LEFT JOIN conplano cp2 ON (cp2.c60_estrut, cp2.c60_anousu) = (cp1.c60_estrut, {$iAnousuDestino}) ";
+
+        $sSqlVinculo .= " INNER JOIN conplanoorcamento tb1 ON (c72_conplanoorcamento, c72_anousu) = (tb1.c60_codcon, tb1.c60_anousu) ";
+        $sSqlVinculo .= " LEFT JOIN conplanoorcamento tb2 ON (tb2.c60_estrut, tb2.c60_anousu) = (tb1.c60_estrut, {$iAnousuDestino}) ";
+
+        $sSqlVinculo .= " WHERE c72_anousu = {$iAnousuOrigem} ";
+
+        return $sSqlVinculo;
+    }
 }
 ?>

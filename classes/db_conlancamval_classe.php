@@ -538,7 +538,8 @@ class cl_conlancamval {
        return false;
      }
      $this->numrows = pg_numrows($result);
-      if($this->numrows==0){
+     $this->c69_sequen = pg_result($result,0,0);
+     if($this->numrows==0 && $this->c69_sequen){
         $this->erro_banco = "";
         $this->erro_sql   = "Record Vazio na Tabela:conlancamval";
         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";

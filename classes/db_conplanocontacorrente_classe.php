@@ -500,5 +500,23 @@ class cl_conplanocontacorrente {
      }
      return $sql;
   }
+
+  public function sql_conplanoccAberturaExercicio($iAnousuOrigem, $iAnousuDestino, $iInstit)
+  {
+      $sSql = " SELECT DISTINCT ON (c61_codcon, c61_instit)
+                       NEXTVAL('conplanocontacorrente_c18_sequencial_seq') AS c18_sequencial,
+                       c18_codcon,
+                       {$iAnousuDestino} c18_anousu,
+                       c18_contacorrente
+                FROM conplanocontacorrente
+                JOIN conplanoreduz ON (c61_codcon, c61_anousu, c61_instit) = (c18_codcon, c18_anousu, {$iInstit})
+                WHERE c18_anousu = {$iAnousuOrigem}
+                  AND c18_codcon NOT IN
+                        (SELECT c18_codcon FROM conplanocontacorrente WHERE c18_anousu = {$iAnousuDestino})
+                  AND c18_codcon IN
+                        (SELECT c60_codcon FROM conplano WHERE c60_anousu = {$iAnousuDestino})";
+
+      return $sSql;
+  }
 }
 ?>
