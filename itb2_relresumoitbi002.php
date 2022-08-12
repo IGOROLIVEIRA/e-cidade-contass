@@ -421,7 +421,7 @@ if ( $oGet->modoimp == 'sint' ) {
             $sTipo = "Divida Ativa";
         } else if (isset($oRetorno->arrepaga) && trim($oRetorno->arrepaga) != "") {
             $sTipo = "Pago";
-        } else if (isset($oRetorno->it16_guia) and $oRetorno->it16_guia != "") {
+        } else if (isset($oRetorno->it16_guia) && $oRetorno->it16_guia != "") {
             $sTipo = "Cancelado";
         } else if ($oRetorno->itbiliberada == "Sim") {
             $sTipo = "Aberto";
@@ -502,7 +502,7 @@ if ( $oGet->modoimp == 'sint' ) {
       $oDadosItbi->sSituacao       = "Pago";
     } else if ( $oRetorno->itbiliberada == "Sim" ) {
       $oDadosItbi->sSituacao       = "Aberto";
-    } else if (isset($oRetorno->it16_guia) and $oRetorno->it16_guia != "") {
+    } else if (isset($oRetorno->it16_guia) && $oRetorno->it16_guia != "") {
       $oDadosItbi->sSituacao       = "Cancelado";
     } else {
       $oDadosItbi->sSituacao       = "";
