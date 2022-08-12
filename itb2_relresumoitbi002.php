@@ -535,7 +535,7 @@ if ( $oGet->modoimp == 'sint' ) {
     imprimeCabecalho($pdf,$iAlt,$lImprime);
 		$lImprime = false;
 
-    if ($iPreencher == true) {
+    if ($iPreencher) {
       $iPreencher = false;
     	$iCorFundo = 1;
     } else {
