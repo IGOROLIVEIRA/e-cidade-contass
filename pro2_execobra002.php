@@ -26,7 +26,7 @@
  */
 
 require_once("libs/db_sql.php");
-require_once("fpdf151/pdf1.php");
+require_once("fpdf151/pdf4.php");
 require_once("classes/db_obrasalvara_classe.php");
 require_once("classes/db_obrasender_classe.php");
 require_once("classes/db_obraslote_classe.php");
@@ -61,18 +61,25 @@ $preenc  = 0;
 $TPagina = 57;
 $xnumpre = '';
 
+$sCampos  = "cgm.z01_numcgm,                        ";
+$sCampos .= "cgm.z01_nome,                          ";
+$sCampos .= "cgm.z01_cgccpf,                        ";
+$sCampos .= "cgm.z01_ender,                         ";
+$sCampos .= "cgm.z01_numero,                        ";
+$sCampos .= "cgm.z01_compl,                         ";
+$sCampos .= "cgm.z01_bairro,                        ";
+$sCampos .= "cgm.z01_munic,                         ";
+$sCampos .= "cgm.z01_uf,                            ";
+$sCampos .= "cgm.z01_cep,                           ";
+$sCampos .= "p58_codigo,                            ";
+$sCampos .= "obrasalvara.*,                         ";
+$sCampos .= "obrasiptubase.ob24_iptubase,           ";
+$sCampos .= "(setorloc.j05_codigoproprio||'-'||     ";
+$sCampos .= "setorloc.j05_descr) as setorloc,       ";
+$sCampos .= "(loteloc.j06_quadraloc) as quadraloc,  ";
+$sCampos .= "(loteloc.j06_lote) as loteloc,		      ";
+$sCampos .= "obrasconstr.ob08_codconstr             ";
 
-$sCampos  = "cgm.z01_nome,                     ";
-$sCampos .= "cgm.z01_cgccpf,                   ";
-$sCampos .= "p58_codigo,          ";
-$sCampos .= "obrasalvara.ob04_data,            ";
-$sCampos .= "obrasalvara.ob04_dtvalidade,      ";
-$sCampos .= "obrasalvara.ob04_obsprocesso,     ";
-$sCampos .= "obrasiptubase.ob24_iptubase,      ";
-$sCampos .= "setorloc.j05_codigoproprio||'-'|| ";
-$sCampos .= "setorloc.j05_descr        ||'/'|| ";
-$sCampos .= "loteloc.j06_quadraloc     ||'/'|| ";
-$sCampos .= "loteloc.j06_lote as pql					 ";
 $clobrasalvara->sql_query_cartaAlvara($sCampos, $codigo);
 $rsObrasAlvara = $clobrasalvara->sql_record($clobrasalvara->sql_query_cartaAlvara($sCampos, $codigo));
 
@@ -87,12 +94,13 @@ if($clobrasalvara->numrows == 0){
 
 db_fieldsmemory($rsObrasAlvara,0,true);
 
-$result_obrasender=$clobrasender->sql_record($clobrasender->sql_query(null,"ob07_numero,j13_descr,j14_nome","",
-" ob07_codobra=$codigo"));
+//Local da Obra
+$result_obrasender=$clobrasender->sql_record($clobrasender->sql_query(null,"*",""," ob07_codobra=$codigo"));
 if($clobrasender->numrows>0){
   db_fieldsmemory($result_obrasender,0);
 }
 
+//Lote da Obra
 $result_obraslote=$clobraslote->sql_record($clobraslote->sql_query($codigo,"j34_lote as lote,j34_quadra as quadra,j34_setor as setor"));
 if($clobraslote->numrows>0){
   db_fieldsmemory($result_obraslote,0);
@@ -103,6 +111,7 @@ if($clobraslote->numrows>0){
   }
 }
 
+//Técnicos da Obra
 $rsObrasTecnicos = $clobrastecnicos->sql_record($clobrastecnicos->sql_query_file(null,"ob20_obrastec",null,"ob20_codobra = $codigo"));
 
 if($clobrastecnicos->numrows>0){
@@ -115,23 +124,35 @@ if($clobrastecnicos->numrows>0){
   }
 }
 
+//Dados da Construção
+$dados_obrasconstr=$clobrasconstr->sql_record($clobrasconstr->sql_query_file($ob08_codobra=$codigo));
+if($clobrasconstr->numrows>0){
+  db_fieldsmemory($dados_obrasconstr,0);
+}
+
+//Area Total Construida
 $result_obrasconstr=$clobrasconstr->sql_record($clobrasconstr->sql_query_file(null,"sum(ob08_area) as areatotal","",
 " ob08_codobra=$codigo"));
 if($clobrasconstr->numrows>0){
   db_fieldsmemory($result_obrasconstr,0);
 }
 
-$sql = "select j34_distrito,j34_setor,j34_quadra,j34_lote,j01_unidade from iptubase 
-inner join lote on j01_idbql = j34_idbql
-where j01_matric = ".@$ob24_iptubase;
+//Existe cadastro na IptuBase?
+if ($ob24_iptubase != null){
+  $sql = "SELECT j34_distrito,j34_setor,j34_quadra,j34_lote,j01_unidade 
+          FROM iptubase 
+          INNER JOIN lote ON j01_idbql = j34_idbql
+          WHERE j01_matric = ".$ob24_iptubase;
+}
 
-$matriculaLote    = db_query($sql) or die($sql);
-$numMatriculaLote = pg_numrows($matriculaLote);
+//Dados das Características da Obra
+$dados_caractericas=$clobrasconstr->sql_record($clobrasconstr->sql_query_caracteristicasConstrucao($codigo));
+if($clobrasconstr->numrows>0){
+  db_fieldsmemory($dados_caractericas,0);
+}
 
 if($numMatriculaLote > 0){
-
-  db_fieldsmemory($matriculaLote,0);
-  
+  db_fieldsmemory($matriculaLote,0);  
 }
 
 $dia = date("d");
@@ -140,8 +161,7 @@ $ano = date("Y");
 $mes_extenso = array("01"=>"janeiro","02"=>"fevereiro","03"=>"março","04"=>"abril","05"=>"maio","06"=>"junho","07"=>"julho","08"=>"agosto","09"=>"setembro","10"=>"outubro","11"=>"novembro","12"=>"dezembro");
 $data="Guaíba, ".$dia." de ".$mes_extenso[$mes]." de ".$ano.".";
 
-$head1 = 'Departamento de Cadastro Imobiliário';
-$pdf = new PDF1(); // abre a classe
+$pdf = new PDF4(); // abre a classe
 $pdf->Open(); // abre o relatorio
 $pdf->AliasNbPages(); // gera alias para as paginas
 $pdf->AddPage(); // adiciona uma pagina
@@ -167,16 +187,35 @@ for( $xx = 0;$xx < pg_numrows($resulttexto);$xx ++ ){
   $text  = $descrtexto;
   $$text = db_geratexto($conteudotexto);
 }
+
 ////////relatorio
-$pdf->SetFont('Arial','B',15);
-$pdf->MultiCell(0,4,utf8_decode($alvara_tit),0,"C",0,0);
-$pdf->Ln(15);
+//$pdf->MultiCell(0,4,$alvara_tit,0,"C",0,0);
+$pdf->SetFont('Arial','',10);
+$pdf->SetXY(10, 20);
+$pdf->Cell(0, 6,'Departamento de Cadastro Imobiliário',0,1,"C",0);
+$pdf->SetFont('Arial','B',10);
+$pdf->Cell(0, 6,'ALVARÁ DE LICENÇA PARA CONSTRUÇÃO',0,1,"C",0);
+$pdf->SetFont('Arial','B',10);
+$pdf->Cell(0,6,"ALVARÁ N°: $ob04_alvara",0,1,"C",0);
+$pdf->SetFont('Arial','',9);
+//$pdf->Cell(0,6,"Validade: 0 Dias/Meses/Anos",0,1,"C",0);
+$pdf->Cell(0,6,"Válido de "."$ob04_data á $ob04_dtvalidade",0,1,"C",0);
+$pdf->Cell(0,6,"Data de Expedição: $ob04_dataexpedicao",0,1,"C",0);
+$pdf->Ln(1);
 $alt=4;
 
+$pdf->SetFont('Arial','B',10);
+$pdf->Cell(0, 6,'Dados do Proprietário',1,1,"C",1);
+
 $pdf->SetFont('Arial','B',8);
-$pdf->Cell(35,$alt,"Nome do proprietário: ","LT",0,"L",0);
+$pdf->Cell(35,$alt,"CGM: ","LT",0,"L",0);
 $pdf->SetFont('Arial','',8);
-$pdf->Cell(0,$alt,@$z01_nome,"TR",1,"L",0);
+$pdf->Cell(0,$alt,$z01_numcgm,"TR",1,"L",0);
+
+$pdf->SetFont('Arial','B',8);
+$pdf->Cell(35,$alt,"Nome do proprietário: ","L",0,"L",0);
+$pdf->SetFont('Arial','',8);
+$pdf->Cell(0,$alt,$z01_nome,"R",1,"L",0);
 
 $pdf->SetFont('Arial','B',8);
 $pdf->Cell(35,$alt,"CPF/CNPJ: ","L",0,"L",0);
@@ -184,118 +223,215 @@ $pdf->SetFont('Arial','',8);
 if(strlen(trim($z01_cgccpf))==11){
   $z01_cgccpf=db_formatar($z01_cgccpf,"cpf");
 }else if(strlen(trim($z01_cgccpf))==14){
-  $z01_cgccpf=db_formatar($z01_cgccpf,"cgc");
+  $z01_cgccpf=db_formatar($z01_cgccpf,"cnpj");
 }
-$pdf->Cell(0,$alt,@$z01_cgccpf,"R",1,"L",0);
+$pdf->Cell(0,$alt,$z01_cgccpf,"R",1,"L",0);
 
 $pdf->SetFont('Arial','B',8);
 $pdf->Cell(35,$alt,"Endereço: ","L",0,"L",0);
 $pdf->SetFont('Arial','',8);
-$vir="";
-if(isset($j14_nome) && isset($ob07_numero)){
-  $vir=", ";
-}
-$pdf->Cell(0,$alt,@$j14_nome.$vir.@$ob07_numero,"R",1,"L",0);
+$pdf->Cell(70,$alt,$z01_ender,0,0,"L",0);
+$pdf->SetFont('Arial','B',8);
+$pdf->Cell(22,$alt,"Número: ",0,0,"L",0);
+$pdf->SetFont('Arial','',8);
+$pdf->Cell(63,$alt,$z01_numero,"R",1,"L",0);
 
 $pdf->SetFont('Arial','B',8);
 $pdf->Cell(35,$alt,"Bairro: ","L",0,"L",0);
 $pdf->SetFont('Arial','',8);
-$pdf->Cell(0,$alt,@$j13_descr,"R",1,"L",0);
+$pdf->Cell(70,$alt,$z01_bairro,0,0,"L",0);
+$pdf->SetFont('Arial','B',8);
+$pdf->Cell(22,$alt,"Complemento: ",0,0,"L",0);
+$pdf->SetFont('Arial','',8);
+$pdf->Cell(63,$alt,$z01_compl,"R",1,"L",0);
 
 $pdf->SetFont('Arial','B',8);
-$pdf->Cell(35,$alt,"Local da obra: ","L",0,"L",0);
+$pdf->Cell(35,$alt,"Município: ","LB",0,"L",0);
 $pdf->SetFont('Arial','',8);
-$pdf->Cell(0,$alt,"o mesmo","R",1,"L",0);
+$pdf->Cell(70,$alt,$z01_munic,"B",0,"L",0);
+$pdf->SetFont('Arial','B',8);
+
+$pdf->Cell(22,$alt,"Estado: ","B",0,"L",0);
+$pdf->SetFont('Arial','',8);
+$pdf->Cell(20,$alt,$z01_uf,"B",0,"L",0);
+$pdf->SetFont('Arial','B',8);
+
+$pdf->Cell(10,$alt,"Cep: ","B",0,"L",0);
+$pdf->SetFont('Arial','',8);
+$pdf->Cell(0,$alt,db_formatar($z01_cep,'cep'),"RB",1,"L",0);
+
+$pdf->ln();
+
+$pdf->SetFont('Arial','B',10);
+$pdf->Cell(0, 6,'Dados da Obra',1,1,"C",1);
+
+$pdf->SetFont('Arial','B',8);
+$pdf->Cell(40,$alt,"Engenheiro responsável: ","LT",0,"L",0);
+$pdf->SetFont('Arial','',8);
+$pdf->Cell(110,$alt,$eng,"T",0,"L",0);
+
+$pdf->SetFont('Arial','B',8);
+$pdf->Cell(10,$alt,"CREA: ","T",0,"L",0);
+$pdf->SetFont('Arial','',8);
+$pdf->Cell(0,$alt,$ob15_crea,"RT",1,"L",0);
+
+$pdf->SetFont('Arial','B',8);
+$pdf->Cell(40,$alt,"Código da Obra: ","L",0,"L",0);
+$pdf->SetFont('Arial','',8);
+$pdf->Cell(0,$alt,$ob04_codobra,"R",1,"L",0);
+
+$pdf->SetFont('Arial','B',8);
+$pdf->Cell(40,$alt,"Sequencial do Alvará: ","L",0,"L",0);
+$pdf->SetFont('Arial','',8);
+$pdf->Cell(0,$alt,$ob04_alvara,"R",1,"L",0);
+
+$pdf->SetFont('Arial','B',8);
+$pdf->Cell(40,$alt,"Área Total da Construção: ","L",0,"L",0);
+$pdf->SetFont('Arial','',8);
+$pdf->Cell(0,$alt,$areatotal,"R",1,"L",0);
+
+$pdf->SetFont('Arial','B',8);
+$pdf->Cell(40,$alt,"Área Total Atual Construída: ","L",0,"L",0);
+$pdf->SetFont('Arial','',8);
+$pdf->Cell(0,$alt,$ob07_areaatual,"R",1,"L",0);
+
+// $pdf->SetFont('Arial','B',8);
+// $pdf->Cell(40,$alt,"Validade: ","L",0,"L",0);
+// $pdf->SetFont('Arial','',8);
+// $pdf->Cell(0,$alt,"Dias/Mês/Anos","R",1,"L",0);
+
+$pdf->SetFont('Arial','B',8);
+$pdf->Cell(40,$alt,"Válido de ","L",0,"L",0);
+$pdf->SetFont('Arial','',8);
+$pdf->Cell(0,$alt,"$ob04_data á $ob04_dtvalidade","R",1,"L",0);
+
+$pdf->SetFont('Arial','B',8);
+$pdf->Cell(40,$alt,"Unidade: ","L",0,"L",0);
+$pdf->SetFont('Arial','',8);
+$pdf->Cell(0,$alt,$ob07_unidades,"R",1,"L",0);
+
+$pdf->SetFont('Arial','B',8);
+$pdf->Cell(40,$alt,"Pavimentos: ","L",0,"L",0);
+$pdf->SetFont('Arial','',8);
+$pdf->Cell(0,$alt,$ob07_pavimentos,"R",1,"L",0);
+
+$pdf->SetFont('Arial','B',8);
+$pdf->Cell(40,$alt,"Protocolo: ","L",0,"L",0);
+$pdf->SetFont('Arial','',8);
+$pdf->Cell(0,$alt,$ob04_processo,"R",1,"L",0);
+
+$pdf->SetFont('Arial','B',8);
+$pdf->Cell(40,$alt,"Data do Protocolo: ","L",0,"L",0);
+$pdf->SetFont('Arial','',8);
+$pdf->Cell(0,$alt,$ob04_dtprocesso,"R",1,"L",0);
+
+$pdf->SetFont('Arial','B',8);
+$pdf->Cell(40,$alt,"Data da Aprovação: ","L",0,"L",0);
+$pdf->SetFont('Arial','',8);
+$pdf->Cell(0,$alt,$ob04_dataexpedicao,"R",1,"L",0);
 
 if($db21_usadistritounidade == 't'){
   $pdf->SetFont('Arial','B',8);
   $pdf->Cell(15,$alt,"Distrito: ","L",0,"L",0);
   $pdf->SetFont('Arial','',8);
-  $pdf->Cell(20,$alt,@$j34_distrito,0,0,"L",0);
+  $pdf->Cell(20,$alt,$j34_distrito,0,0,"L",0);
   $pdf->SetFont('Arial','B',8);
   $pdf->Cell(15,$alt,"Setor: ",0,0,"L",0);
   $pdf->SetFont('Arial','',8);
-  $pdf->Cell(20,$alt,@$j34_setor,0,0,"L",0);
+  $pdf->Cell(20,$alt,$j34_setor,0,0,"L",0);
   $pdf->SetFont('Arial','B',8);
   $pdf->Cell(15,$alt,"Quadra: ",0,0,"L",0);
   $pdf->SetFont('Arial','',8);
-  $pdf->Cell(20,$alt,@$j34_quadra,0,0,"L",0);
+  $pdf->Cell(20,$alt,$j34_quadra,0,0,"L",0);
   $pdf->SetFont('Arial','B',8);
-  $pdf->Cell(15,$alt,"Lote: ",0,0,"L",0);
+  $pdf->Cell(10,$alt,"Lote: ",0,0,"L",0);
   $pdf->SetFont('Arial','',8);
-  $pdf->Cell(20,$alt,@$j34_lote,0,0,"L",0);
+  $pdf->Cell(20,$alt,$j34_lote,0,0,"L",0);
   $pdf->SetFont('Arial','B',8);
   $pdf->Cell(15,$alt,"Unidade: ",0,0,"L",0);
   $pdf->SetFont('Arial','',8);
-  $pdf->Cell(0,$alt,@$j01_unidade,"R",1,"L",0);
+  $pdf->Cell(0,$alt,$j01_unidade,"R",1,"R",0);
 }else{
   $pdf->SetFont('Arial','B',8);
   $pdf->Cell(15,$alt,"Setor: ","L",0,"L",0);
   $pdf->SetFont('Arial','',8);
-  $pdf->Cell(20,$alt,@$setor,0,0,"L",0);
+  $pdf->Cell(20,$alt,$setor,0,0,"L",0);
   $pdf->SetFont('Arial','B',8);
   $pdf->Cell(15,$alt,"Quadra: ",0,0,"L",0);
   $pdf->SetFont('Arial','',8);
-  $pdf->Cell(20,$alt,@$quadra,0,0,"L",0);
+  $pdf->Cell(20,$alt,$quadra,0,0,"L",0);
   $pdf->SetFont('Arial','B',8);
-  $pdf->Cell(15,$alt,"Lote: ",0,0,"L",0);
+  $pdf->Cell(10,$alt,"Lote: ",0,0,"L",0);
   $pdf->SetFont('Arial','',8);
-  $pdf->Cell(20,$alt,@$lote,"R",1,"L",0);
+  $pdf->Cell(20,$alt,$lote,"R",1,"R",0);
 }
 
+$pdf->SetFont('Arial','B',10);
+$pdf->Cell(0,$alt,"Localização","LR",1,"C",1);
 $pdf->SetFont('Arial','B',8);
-$pdf->Cell(35,$alt,"Validade: ","L",0,"L",0);
+$pdf->Cell(15,$alt,"Planta: ","LB",0,"L",0);
 $pdf->SetFont('Arial','',8);
-$pdf->Cell(0,$alt,"$ob04_data á $ob04_dtvalidade","R",1,"L",0);
-
+$pdf->Cell(55,$alt,$setorloc,"B",0,"L",0);
 $pdf->SetFont('Arial','B',8);
-$pdf->Cell(35,$alt,"P/Q/L: ","L",0,"L",0);
+$pdf->Cell(15,$alt,"Quadra: ","B",0,"L",0);
 $pdf->SetFont('Arial','',8);
-$pdf->Cell(0,$alt,$pql,"R",1,"L",0);
-
+$pdf->Cell(20,$alt,$quadraloc,"B",0,"L",0);
 $pdf->SetFont('Arial','B',8);
-$pdf->Cell(35,$alt,"Processo: ","L",0,"L",0);
+$pdf->Cell(10,$alt,"Lote: ","B",0,"L",0);
 $pdf->SetFont('Arial','',8);
-$pdf->Cell(0,$alt,$p58_codigo,"R",1,"L",0);
+$pdf->Cell(0,$alt,$loteloc,"RB",1,"L",0);
 
+$pdf->Ln();
+
+$pdf->SetFont('Arial','B',10);
+$pdf->Cell(0, 6,'Local da Obra',1,1,"C",1);
 $pdf->SetFont('Arial','B',8);
-$pdf->Cell(35,$alt,"Matrícula: ","L",0,"L",0);
+$pdf->Cell(35,$alt,"Endereço: ","L",0,"L",0);
 $pdf->SetFont('Arial','',8);
-$pdf->Cell(0,$alt,@$ob24_iptubase,"R",1,"L",0);
-
+$pdf->Cell(70,$alt,"$j88_sigla $j14_nome",0,0,"L",0);
 $pdf->SetFont('Arial','B',8);
-$pdf->Cell(35,$alt,"Observações: ","LB",0,"L",0);
+$pdf->Cell(22,$alt,"Número: ",0,0,"L",0);
 $pdf->SetFont('Arial','',8);
-$pdf->Cell(0,$alt,$ob04_obsprocesso,"RB",1,"L",0);
-
-
-$pdf->Ln(4);
-
-$pdf->SetFont('Arial','B',8);
-$pdf->Cell(35,$alt,"Engenheiro responsável: ","TL",0,"L",0);
-$pdf->SetFont('Arial','',8);
-$pdf->Cell(0,$alt,@$eng,"TR",1,"L",0);
+$pdf->Cell(63,$alt,$ob07_numero,"R",1,"L",0);
 
 $pdf->SetFont('Arial','B',8);
-$pdf->Cell(35,$alt,"CREA n°: ","LB",0,"L",0);
+$pdf->Cell(35,$alt,"Bairro: ","LB",0,"L",0);
 $pdf->SetFont('Arial','',8);
-$pdf->Cell(0,$alt,@$ob15_crea,"BR",1,"L",0);
+$pdf->Cell(70,$alt,$j13_descr,"B",0,"L",0);
+$pdf->SetFont('Arial','B',8);
+$pdf->Cell(22,$alt,"Complemento: ","B",0,"L",0);
+$pdf->SetFont('Arial','',8);
+$pdf->Cell(63,$alt,$ob07_compl,"RB",1,"L",0);
 
-$pdf->Ln(4);
+$pdf->Ln();
 
-$pdf->MultiCell(0,5,$alvara_p1,1,"J",0,0);
+$pdf->SetFont('Arial','B',10);
+$pdf->Cell(0, 6,'Características da Obra',1,1,"C",1);
+$pdf->SetFont('Arial','B',8);
+$pdf->Cell(35,$alt,"Ocupação: ","L",0,"L",0);
+$pdf->SetFont('Arial','',8);
+$pdf->Cell(0,$alt,$ocupacao,"R",1,"L",0);
+$pdf->SetFont('Arial','B',8);
+$pdf->Cell(35,$alt,"Tipo de Construção: ","L",0,"L",0);
+$pdf->SetFont('Arial','',8);
+$pdf->Cell(0,$alt,$construcao,"R",1,"L",0);
+$pdf->SetFont('Arial','B',8);
+$pdf->Cell(35,$alt,"Tipo de Lançamento: ","LB",0,"L",0);
+$pdf->SetFont('Arial','',8);
+$pdf->Cell(0,$alt,$tipo_lancamento,"RB",1,"L",0);
 
-$pdf->sety(200);
+$pdf->Ln();
+
+$pdf->SetFont('Arial','B',10);
+$pdf->Cell(0,6,"Observações: ",1,1,"C",1);
+$pdf->SetFont('Arial','',8);
+$pdf->MultiCell(0,$alt,$ob04_obsprocesso,"LRB",1,"L",0);
+
+$pdf->sety(264);
 $pdf->SetFont('Arial','',11);
-$pdf->Cell(95,5,"________________________________________",0,0,"C",0);
-$pdf->Cell(95,5,"________________________________________",0,1,"C",0);
-$pdf->Ln(2);
-$pdf->Cell(95,5,$ass_alvara1,0,0,"C",0);
-$pdf->MultiCell(95,5,$ass_alvara2,0,"C",0,0);
-
-$pdf->sety(260);
-$pdf->SetFont('Arial','B',12);
-$pdf->MultiCell(0,5,$alvara_rpe,1,"C",0,0);
+$pdf->Cell(0,6,"________________________________________",0,1,"C",0);
+$pdf->SetFont('Arial','',10);
+$pdf->Cell(0,6,'Funcionário Responsável',0,1,"C",0);
 
 $pdf->Output();
 ?>

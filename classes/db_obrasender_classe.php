@@ -566,6 +566,7 @@ class cl_obrasender {
      $sql .= " from obrasender ";
      $sql .= "      inner join bairro  on  bairro.j13_codi = obrasender.ob07_bairro";
      $sql .= "      left outer  join ruas  on  ruas.j14_codigo = obrasender.ob07_lograd";
+     $sql .= "      left outer  join ruastipo  on  ruastipo.j88_codigo = ruas.j14_tipo";
      $sql .= "      inner join obrasconstr  on  obrasconstr.ob08_codconstr = obrasender.ob07_codconstr";
      $sql .= "      inner join caracter  on  caracter.j31_codigo = obrasconstr.ob08_ocupacao";
      $sql .= "      inner join obras  as a on   a.ob01_codobra = obrasconstr.ob08_codobra";
@@ -636,11 +637,12 @@ class cl_obrasender {
        $sql .= $campos;
      }
      $sql .= " from obrasender ";
-     $sql .= "      inner join bairro  			on bairro.j13_codi 		 = obrasender.ob07_bairro";
-     $sql .= "      left outer  join ruas   on ruas.j14_codigo 		 = obrasender.ob07_lograd";
-     $sql .= "      inner join obrasconstr  on obrasconstr.ob08_codconstr = obrasender.ob07_codconstr";
-     $sql .= "      inner join caracter  	  on caracter.j31_codigo = obrasconstr.ob08_tipoconstr";
-     $sql .= "      inner join obras  as a  on a.ob01_codobra 		 = obrasconstr.ob08_codobra";
+     $sql .= "      inner join bairro  			  on bairro.j13_codi 		        = obrasender.ob07_bairro      ";
+     $sql .= "      left outer  join ruas     on ruas.j14_codigo 		        = obrasender.ob07_lograd      ";
+     $sql .= "      left outer  join ruastipo on ruastipo.j88_codigo        = ruas.j14_tipo               ";
+     $sql .= "      inner join obrasconstr    on obrasconstr.ob08_codconstr = obrasender.ob07_codconstr   ";
+     $sql .= "      inner join caracter  	    on caracter.j31_codigo        = obrasconstr.ob08_tipoconstr ";
+     $sql .= "      inner join obras  as a    on a.ob01_codobra 		        = obrasconstr.ob08_codobra    ";
      $sql2 = "";
      if($dbwhere==""){
        if($ob07_codconstr!=null ){
