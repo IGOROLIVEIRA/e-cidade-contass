@@ -1,5 +1,5 @@
 libs/db_conn.php
-vendor
+vendor/*
 tmp/*
 !tmp/.tmp
 manuais
@@ -39,3 +39,4 @@ extension/modification/data/cache/user/*
 extension/modification/data/file/file-type-modification.data
 extension/data/extension/Desktop.data
 extension/data/config.data
+extension/modification/data/modification/dbportal-v3-desktop.data
