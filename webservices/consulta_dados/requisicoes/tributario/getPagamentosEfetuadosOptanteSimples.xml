@@ -20,7 +20,6 @@
                                                  and issvar.q05_numpar = arrepaga.k00_numpar"   />
     <join tipo="inner" tabela="issarqsimplesregissvar" condicao="q68_issvar = issvar.q05_codigo"   />
     <join tipo="inner" tabela="issarqsimplesreg"       condicao="q68_issarqsimplesreg = q23_sequencial"   />
-    <join tipo="inner" tabela="arreinscr"       condicao="arrecant.k00_numpre = arreinscr.k00_numpre"   />
   </juncoes>
   <filtros>
     <filtro label="inscricao_municipal"  condicao=" k00_inscr= '$inscricao_municipal'" obrigatorio="true" />
