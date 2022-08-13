@@ -57,6 +57,12 @@ if (isset($alterar)) {
     }
 
     db_fim_transacao($lErro);
+
+} else if (isset($chavepesquisa)) {
+    $db_opcao = 2;
+    $result = $clagentearrecadador->sql_record($clagentearrecadador->sql_query($chavepesquisa));
+    db_fieldsmemory($result, 0);
+    $db_botao = true;
 }
 ?>
 <html>
@@ -80,7 +86,7 @@ if (isset($alterar)) {
         <tr>
             <td valign="top">
                 <?
-                include("forms/db_frmempagetipo.php");
+                include("forms/db_frmagentearrecadador.php");
                 ?>
             </td>
         </tr>

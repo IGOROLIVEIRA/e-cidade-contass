@@ -38,7 +38,8 @@ require_once("model/caixa/PlanilhaArrecadacaoImportacaoReceitaFactory.model.php"
 
 db_postmemory($HTTP_POST_VARS);
 define('MENSAGENS', 'financeiro.caixa.cai1_planilhalancamento001.');
-define('DEBUG', true);
+define('DEBUG', false);
+
 /*
 if (DEBUG) {
     ini_set('display_errors',1);
@@ -46,6 +47,7 @@ if (DEBUG) {
     error_reporting(E_ALL);
 }
 */
+
 montarDebug("Debug Ativo");
 
 if (isset($processar)) {
@@ -89,16 +91,12 @@ if (isset($processar)) {
             $sObservacao       = "";
             $sOperacaoBancaria = "";
             $iOrigem           = 1; // 1 - CGM
-            $dtArrecadacao     = date('Y-m-d', db_getsession('DB_datausu'));
             $iEmParlamentar    = 3;
 
             $oReceitaPlanilha = new ReceitaPlanilha();
             $oReceitaPlanilha->setCaracteristicaPeculiar(new CaracteristicaPeculiar("000"));
             $oReceitaPlanilha->setCGM(CgmFactory::getInstanceByCgm($iNumeroCgm));
-            // Número ficticio, será substituido pelo cadastro de Agente Arrecadador
-            $oContaTesouraria = new contaTesouraria(4915);
-            $oContaTesouraria->validaContaPorDataMovimento($dtArrecadacao);
-            $oReceitaPlanilha->setContaTesouraria($oContaTesouraria);
+            $oReceitaPlanilha->setContaTesouraria($oReceita->oContaTesouraria);
             $oReceitaPlanilha->setDataRecebimento(new DBDate($oReceita->dDataCredito));
             $oReceitaPlanilha->setInscricao($iInscricao);
             $oReceitaPlanilha->setMatricula($iMatricula);
@@ -147,7 +145,7 @@ function montarDebug($oDebug)
 
 <body class="body-default" onLoad="a=1">
     <?php
-    include("forms/db_planilhaimportacaoreceita001.php");
+    include("forms/db_frmplanilhaimportacaoreceita001.php");
     db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit"));
     ?>
 </body>

@@ -21,13 +21,16 @@ class Oc18200 extends AbstractMigration
         INSERT INTO db_itensmenu VALUES ((select max(id_item) + 1 from db_itensmenu), 'Exclusão', 'Exclusão', 'con1_agentearrecadador003.php', 1, 1, 'Exclusão', 't');
         INSERT INTO db_menu VALUES((select id_item from db_itensmenu WHERE descricao = 'Agentes Arrecadadores'), (select max(id_item) from db_itensmenu), 3, 39);
         
+        CREATE SEQUENCE agentearrecadador_k174_sequencial_seq;
         -- TABELAS E ESTRUTURA
         -- Módulo: caixa
         CREATE TABLE agentearrecadador(
-            k174_sequencial	int8 NOT NULL,
+            k174_sequencial int4 NOT NULL DEFAULT nextval('agentearrecadador_k174_sequencial_seq'::regclass),
             k174_codigobanco int4 NOT NULL default 0,
             k174_descricao text NOT NULL,
-            k174_idcontabancaria int8 NOT NULL default 0);
+            k174_idcontabancaria int8 NOT NULL default 0,
+            k174_instit int8 NOT NULL,
+            CONSTRAINT uc_codigobanco UNIQUE (k174_codigobanco, k174_instit));
         ";
 
         $this->execute($sql);
@@ -51,6 +54,7 @@ class Oc18200 extends AbstractMigration
         DELETE FROM db_itensmenu WHERE descricao = 'Agentes Arrecadadores';
 
         --DROP TABLE:
+        DROP SEQUENCE IF EXISTS agentearrecadador_k174_sequencial_seq CASCADE;
         DROP TABLE IF EXISTS agentearrecadador CASCADE;
         ";
 

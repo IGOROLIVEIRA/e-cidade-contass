@@ -1,4 +1,4 @@
-<?php
+<?
 /*
  *     E-cidade Software Publico para Gestao Municipal                
  *  Copyright (C) 2009  DBselller Servicos de Informatica             
@@ -25,13 +25,5 @@
  *                                licenca/licenca_pt.txt 
  */
 
-interface iPlanilhaArrecadacaoImportacaoReceitaLayout {
-    public function __construct($sLinha);
-    public function preencherLinha($sLinha);
-    public function recuperarLinha();
-    public function preencherReceita();
-    public function preencherAgenteArrecadador();
-    public function montarCodigoContabil($sLinha);
-    public function montarData($sLinha);
-    public function montarValor($sLinha);
-}
+$campos = "agentearrecadador.k174_sequencial, agentearrecadador.k174_codigobanco, agentearrecadador.k174_descricao, agentearrecadador.k174_idcontabancaria";
+?>

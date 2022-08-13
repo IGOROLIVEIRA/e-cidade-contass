@@ -45,7 +45,33 @@ class PlanilhaArrecadacaoImportacaoReceitaLayout2 implements iPlanilhaArrecadaca
         $this->oReceita->dDataCredito     = $this->montarData(substr($sLinha, 7, 8));
         $this->oReceita->nValor           = $this->montarValor(substr($sLinha, 21, 13));
         $this->oReceita->sCodContabil     = $this->montarCodigoContabil(str_replace(".", "", substr($sLinha, 35, 17)));
-        $this->preenherReceita();
+        $this->preencherReceita();
+        $this->preencherAgenteArrecadador();
+    }
+
+    /**
+     * Verifica os cadastros de agente arrecadadores vinculados para busca da conta bancária
+     *
+     * @return void
+     */
+    public function preencherAgenteArrecadador()
+    {
+        $clagentearrecadador = new cl_agentearrecadador();
+        $sqlAgenteArrecadador = $clagentearrecadador->sql_query("", 
+            "agentearrecadador.k174_idcontabancaria", 
+            "agentearrecadador.k174_idcontabancaria", 
+            "agentearrecadador.k174_codigobanco = {$this->oReceita->iCodBanco} AND agentearrecadador.k174_instit = " . db_getsession('DB_instit'));
+        $rsAgenteArrecadador = $clagentearrecadador->sql_record($sqlAgenteArrecadador);
+
+        if ($clagentearrecadador->numrows == 0) {
+            throw new Exception("Não encontrado agente arrecadador para o código do banco {$this->oReceita->iCodBanco} ");
+        }
+
+        while ($oAgenteArrecadador = pg_fetch_object($rsAgenteArrecadador)) {
+            $oContaTesouraria = new contaTesouraria($oAgenteArrecadador->k174_idcontabancaria);
+            $oContaTesouraria->validaContaPorDataMovimento(date('Y-m-d', db_getsession('DB_datausu')));
+            $this->oReceita->oContaTesouraria = $oContaTesouraria;
+        }
     }
 
     public function recuperarLinha()
@@ -53,7 +79,7 @@ class PlanilhaArrecadacaoImportacaoReceitaLayout2 implements iPlanilhaArrecadaca
         return $this->oReceita;
     }
 
-    public function preenherReceita()
+    public function preencherReceita()
     {
         $cltabrec = new cl_tabrec;
         $sqlTabrec = $cltabrec->sql_query_inst("", "*", "k02_estorc", " k02_estorc like '{$this->oReceita->sCodContabil}%' ");

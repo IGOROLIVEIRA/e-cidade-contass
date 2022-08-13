@@ -83,7 +83,7 @@ if (isset($excluir)) {
         <tr>
             <td valign="top">
                 <?
-                include("forms/db_frmempagetipo.php");
+                include("forms/db_frmagentearrecadador.php");
                 ?>
             </td>
         </tr>

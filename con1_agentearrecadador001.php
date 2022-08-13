@@ -34,15 +34,17 @@ include("classes/db_agentearrecadador_classe.php");
 include("dbforms/db_funcoes.php");
 
 db_postmemory($HTTP_POST_VARS);
-
+/*
+ini_set('display_errors',1);
+ini_set('display_startup_erros',1);
+error_reporting(E_ALL);
+*/
 $clagentearrecadador = new cl_agentearrecadador;
 
 $db_opcao = 1;
 $db_botao = true;
-$iAnoUsu  = db_getsession('DB_anousu');
 
 if (isset($incluir)) {
-
     $lerro    = false;
     $erro_msg = "";
 
@@ -51,6 +53,7 @@ if (isset($incluir)) {
     $clagentearrecadador->k174_codigobanco = $k174_codigobanco;
     $clagentearrecadador->k174_descricao = $k174_descricao;
     $clagentearrecadador->k174_idcontabancaria = $k174_idcontabancaria;
+    $clagentearrecadador->k174_instit = db_getsession("DB_instit");
     $clagentearrecadador->incluir();
 
     $erro_msg = $clagentearrecadador->erro_msg;
@@ -84,7 +87,7 @@ if (isset($incluir)) {
         <tr>
             <td valign="top">
                 <?
-                include("forms/db_frmempagetipo.php");
+                include("forms/db_frmagentearrecadador.php");
                 ?>
             </td>
         </tr>
@@ -99,9 +102,9 @@ if (isset($incluir)) {
 
 if (isset($incluir)) {
     if (!$lerro) {
+        echo "<script> document.form1.reset(); </script>";
         db_msgbox($erro_msg);
     } else {
-
         $db_botao = true;
         db_msgbox($erro_msg);
         echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
