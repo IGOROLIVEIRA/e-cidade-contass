@@ -31,8 +31,11 @@ e-cidade.sublime-workspace
 e-cidade.sublime-project
 sftp-config.json
 extension/modification/log/dbportal-v3-desktop
-extension/log/application.log
-.gitignore
-extension/log/error.log
-extension/log/error.log
-composer.lock
+extension/log/*
+webservices/.requisicao.webservice.php.swp
+integracao_externa/portal_transparencia/libs/db_config.ini
+extension/modification/data/file/sync/user/*
+extension/modification/data/cache/user/*
+extension/modification/data/file/file-type-modification.data
+extension/data/extension/Desktop.data
+extension/data/config.data
