@@ -24,10 +24,11 @@
  *  Copia da licenca no diretorio licenca/licenca_en.txt
  *                                licenca/licenca_pt.txt
  */
+require_once "interfaces/iPlanilhaArrecadacaoImportacaoReceitaLayout.interface.php";
 
-class PlanilhaArrecadacaoImportacaoReceitaLayout2
+class PlanilhaArrecadacaoImportacaoReceitaLayout2 implements iPlanilhaArrecadacaoImportacaoReceitaLayout
 {
-    private $oLinha;
+    private $oReceita;
 
     public function __construct($sLinha)
     {
@@ -36,46 +37,36 @@ class PlanilhaArrecadacaoImportacaoReceitaLayout2
 
     public function preencherLinha($sLinha)
     {
-        $oReceita = new stdClass();
-        $oReceita->iCodBanco        = substr($sLinha, 0, 3);
-        $oReceita->sDescricaoBanco  = ""; // Buscar de Agentes Arrecadadores
-        $oReceita->iContaBancaria   = 0; // Buscar de Agentes Arrecadadores
-        $oReceita->sCodAgencia      = substr($sLinha, 3, 4);
-        $oReceita->dDataCredito     = $this->montarData(substr($sLinha, 7, 8));
-        $oReceita->nValor           = $this->montarValor(substr($sLinha, 21, 13));
-        $oReceita->sCodContabil     = $this->montarCodigoContabil(str_replace(".", "", substr($sLinha, 35, 17)));
-        $oDadosReceita              = $this->buscarReceita($oReceita->sCodContabil);
-        $oReceita->iRecurso         = $oDadosReceita->iRecurso;
-        $oReceita->iReceita         = $oDadosReceita->iReceita;
-        $this->oLinha = $oReceita;
+        $this->oReceita = new stdClass();
+        $this->oReceita->iCodBanco        = substr($sLinha, 0, 3);
+        $this->oReceita->sDescricaoBanco  = ""; // Buscar de Agentes Arrecadadores
+        $this->oReceita->iContaBancaria   = 0; // Buscar de Agentes Arrecadadores
+        $this->oReceita->sCodAgencia      = substr($sLinha, 3, 4);
+        $this->oReceita->dDataCredito     = $this->montarData(substr($sLinha, 7, 8));
+        $this->oReceita->nValor           = $this->montarValor(substr($sLinha, 21, 13));
+        $this->oReceita->sCodContabil     = $this->montarCodigoContabil(str_replace(".", "", substr($sLinha, 35, 17)));
+        $this->preenherReceita();
     }
 
     public function recuperarLinha()
     {
-        return $this->oLinha;
+        return $this->oReceita;
     }
 
-    public function buscarReceita($sCodContabil)
+    public function preenherReceita()
     {
-        $oDadosReceita = new stdClass();
-        $oDadosReceita->iReceita = 0;
-        $oDadosReceita->iRecurso = 0;
-
         $cltabrec = new cl_tabrec;
-        $sqlTabrec = $cltabrec->sql_query_inst("", "*", "k02_estorc", " k02_estorc like '{$sCodContabil}%' ");
+        $sqlTabrec = $cltabrec->sql_query_inst("", "*", "k02_estorc", " k02_estorc like '{$this->oReceita->sCodContabil}%' ");
         $rsTabrec = $cltabrec->sql_record($sqlTabrec);
 
         if ($cltabrec->numrows == 0) {
-            throw new Exception("Não encontrado receita para conta contábil {$sCodContabil} ");
+            throw new Exception("Não encontrado receita para conta contábil {$this->oReceita->sCodContabil} ");
         }
 
         while ($oTabRec = pg_fetch_object($rsTabrec)) {
-            $oDadosReceita->iReceita = $oTabRec->k02_codigo;
-            $oDadosReceita->iRecurso = $oTabRec->recurso;
-            montarDebug("Código da Receita: {$oTabRec->k02_codigo} Fonte de Recurso: {$oTabRec->recurso}");
+            $this->oReceita->iReceita = $oTabRec->k02_codigo;
+            $this->oReceita->iRecurso = $oTabRec->recurso;
         }
-
-        return $oDadosReceita;
     }
 
     public function montarDebug($oDebug)

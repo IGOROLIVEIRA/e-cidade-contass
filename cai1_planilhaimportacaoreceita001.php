@@ -39,7 +39,13 @@ require_once("model/caixa/PlanilhaArrecadacaoImportacaoReceitaFactory.model.php"
 db_postmemory($HTTP_POST_VARS);
 define('MENSAGENS', 'financeiro.caixa.cai1_planilhalancamento001.');
 define('DEBUG', true);
-
+/*
+if (DEBUG) {
+    ini_set('display_errors',1);
+    ini_set('display_startup_erros',1);
+    error_reporting(E_ALL);
+}
+*/
 montarDebug("Debug Ativo");
 
 if (isset($processar)) {

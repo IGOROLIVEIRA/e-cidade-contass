@@ -57,8 +57,6 @@
 </form>
 
 <script type="text/javascript">
-    var sRPC = "cai4_planilhaarrecadacaoimportacaoreceita.RPC.php";
-
     // Função de verificação dos campos preenchidos
     function js_verificar() {
         if ($F("layout") == 0) {

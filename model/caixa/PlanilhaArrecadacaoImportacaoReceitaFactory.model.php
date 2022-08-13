@@ -33,17 +33,14 @@ require_once('model/caixa/PlanilhaArrecadacaoImportacaoReceitaLayout2.model.php'
  */
 abstract class PlanilhaArrecadacaoImportacaoReceitaFactory
 {
-
-    function __construct()
+    public static function preencherLayout($iLayout, $sLinha)
     {
-    }
+        $sClassName = "PlanilhaArrecadacaoImportacaoReceitaLayout{$iLayout}";
 
-    public static function preencherLayout($layout, $sLinha)
-    {
-        if ($layout == 2) {
-            $oImportacao = new PlanilhaArrecadacaoImportacaoReceitaLayout2($sLinha);
-            return $oImportacao->recuperarLinha();
-        }
-        return;
+        if (!class_exists($sClassName)) 
+            throw new BusinessException("Layout selecionado é inválido");
+        
+        $oImportacao = new $sClassName($sLinha);
+        return $oImportacao->recuperarLinha();
     }
 }
