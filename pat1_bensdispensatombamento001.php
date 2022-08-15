@@ -413,7 +413,7 @@ if (!empty($oGet->lEstorno) && $oGet->lEstorno == 'true') {
         sEstorno = "false";
       }
 
-      js_divCarregando('Processando...', 'msgBox');
+      
       document.location.href = 'pat1_bensdispensatombamento001.php?lEstorno=' + lEstorno;
     }
 

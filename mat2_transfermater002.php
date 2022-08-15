@@ -99,8 +99,8 @@ $campos .= "    transfere.m80_obs,               ";
 $campos .= "    nome,                            ";
 $campos .= "    a.descrdepto as deptodest,       ";
 $campos .= "    a.coddepto as deptodestcod,      ";
-$campos .= "    (SELECT m91_codigo FROM db_almox WHERE m91_depto = a.coddepto) AS almox_dest, ";
-$campos .= "    (SELECT m91_codigo FROM db_almox WHERE m91_depto = b.coddepto) AS almox_said, ";
+$campos .= "    (SELECT descrdepto FROM db_depart WHERE coddepto = a.coddepto) AS almox_dest, ";
+$campos .= "    (SELECT descrdepto FROM db_depart WHERE coddepto = b.coddepto) AS almox_said, ";
 $campos .= "    (SELECT SUM(m82_quant) FROM matestoqueinimei 
                   WHERE m82_matestoqueini = transfere.m80_codigo ) AS total_quantidade_transferida";
 

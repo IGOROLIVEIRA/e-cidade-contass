@@ -1133,8 +1133,6 @@ $integracao = ParametroIntegracaoPatrimonial::possuiIntegracaoPatrimonio($oDataA
       $('db_opcao').value = 'Alterar';
       this.importar.style.display = 'none';
       $("novo").style.display = "";
-      js_liberarAbas();
-
       if (oRetorno.clabens == 2) {
         parent.mo_camada('bensimoveis');
 
@@ -1142,6 +1140,9 @@ $integracao = ParametroIntegracaoPatrimonial::possuiIntegracaoPatrimonio($oDataA
         parent.mo_camada('bensmater');
 
       }
+      js_liberarAbas();
+
+      
 
     }
   }
@@ -1293,9 +1294,9 @@ $integracao = ParametroIntegracaoPatrimonial::possuiIntegracaoPatrimonio($oDataA
     parent.document.formaba.bensimoveis.disabled = false;
     parent.document.formaba.bensmater.disabled = false;
     parent.document.formaba.bensfotos.disabled = false;
-    top.corpo.iframe_bensimoveis.location.href = 'pat1_bensimoveis001.php?db_opcaoal=22&t54_codbem=' + iCodigoBem;
-    top.corpo.iframe_bensmater.location.href = 'pat1_bensmater001.php?db_opcaoal=22&t53_codbem=' + iCodigoBem;
-    top.corpo.iframe_bensfotos.location.href = 'pat1_cadgeralfotos001.php?db_opcaoal=22&t52_codbem=' + iCodigoBem;
+    CurrentWindow.corpo.iframe_bensimoveis.location.href = 'pat1_bensimoveis001.php?db_opcaoal=22&t54_codbem=' + iCodigoBem;
+    CurrentWindow.corpo.iframe_bensmater.location.href = 'pat1_bensmater001.php?db_opcaoal=22&t53_codbem=' + iCodigoBem;
+    CurrentWindow.corpo.iframe_bensfotos.location.href = 'pat1_cadgeralfotos001.php?db_opcaoal=22&t52_codbem=' + iCodigoBem;
   }
 
   function js_controlaDadosFinanceiros(lBloquear) {
