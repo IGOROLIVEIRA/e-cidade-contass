@@ -20,6 +20,9 @@ updatedb/scripts*
 libs/..cache/
 *.yml
 integracao_externa/portal_transparencia/log/
+integracao_externa/portal_transparencia/con4_portaltransparencia001_pmmontalvania.php
+integracao_externa/portal_transparencia/db/sql_especifico/*
+integracao_externa/portal_transparencia/db/sql_especifico*
 *.IMPT
 imagens/obras/*
 !imagens/obras/obras.txt
@@ -37,6 +40,5 @@ integracao_externa/portal_transparencia/libs/db_config.ini
 extension/modification/data/file/sync/user/*
 extension/modification/data/cache/user/*
 extension/modification/data/file/file-type-modification.data
-extension/data/extension/Desktop.data
 extension/data/config.data
 extension/modification/data/modification/dbportal-v3-desktop.data
