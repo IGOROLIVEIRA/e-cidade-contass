@@ -26,7 +26,6 @@
  *                                licenca/licenca_pt.txt 
  */
 
-require_once("libs/db_stdlib.php" );
 db_app::import('exceptions.*');
 
 /**
