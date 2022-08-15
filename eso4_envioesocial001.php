@@ -216,7 +216,8 @@ $mesfolha = DBPessoal::getMesFolha();
 
     function js_processar() {
 
-        let result = confirm('Aten??o: Confirmar envio das informa??es do m?s ' + parent.bstatus.document.getElementById('dtatual').innerHTML.substr(3, 7) + ' para o eSocial?');
+        let result = confirm('Atenção: Confirmar envio das informações do mês ' + parent.bstatus.document.getElementById('dtatual').innerHTML.substr(3, 7) + ' para o eSocial?');
+
         if (!result) {
             return false;
         }
