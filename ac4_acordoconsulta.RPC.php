@@ -135,7 +135,7 @@ switch ($oParam->exec) {
       $oStdDados     = $oLicitacao->getDados();
       $oStdLicitacao = new stdClass();
       $oStdLicitacao->iCodigoLicitacao     = $oStdDados->l20_codigo;
-      $oStdLicitacao->sObjetoLicitacao     = $oStdDados->l20_objeto;
+      $oStdLicitacao->sObjetoLicitacao     = utf8_encode($oStdDados->l20_objeto);
       $oStdLicitacao->sLocalLicitacao      = $oStdDados->l20_local;
       $oStdLicitacao->dtCriacaoLicitacao   = $oStdDados->l20_datacria;
       $oStdLicitacao->iModalidadeLicitacao = $oStdDados->l20_codtipocom;

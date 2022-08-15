@@ -128,7 +128,7 @@ $oGet = db_utils::postMemory($_GET);
                                     var aRow = new Array();
 
                                     aRow[0] = "<b><a href='#' onclick='parent.js_consultaLicitacao(" + oDado.iCodigoLicitacao + ")' title='Consultar Licitacao'>" + oDado.iCodigoLicitacao + "</a></b>";
-                                    aRow[1] = decodeURIComponent(oDado.sObjetoLicitacao.replace(/\+/g, ""));
+                                    aRow[1] = oDado.sObjetoLicitacao.replace(/\+/g, "");
                                     aRow[2] = decodeURIComponent(oDado.sLocalLicitacao.replace(/\+/g, ""));
                                     aRow[3] = js_formatar(oDado.dtCriacaoLicitacao, "d");
                                     aRow[4] = oDado.iModalidadeLicitacao + " - " + decodeURIComponent(oDado.sModalidadeLicitacao.replace(/\+/g, ""));
