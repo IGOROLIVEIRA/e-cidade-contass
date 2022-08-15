@@ -27,7 +27,7 @@
 
 include("libs/db_utils.php");
 require("libs/db_stdlib.php");
-require("std/db_stdClass.php");
+//require("std/db_stdClass.php");
 require("libs/db_conecta.php");
 include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
