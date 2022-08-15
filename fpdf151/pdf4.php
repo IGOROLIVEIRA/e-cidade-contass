@@ -96,15 +96,16 @@ db_fieldsmemory($result,0);
 $S = $this->lMargin;
 $this->SetLeftMargin(10);
 $Letra = 'Times';
-$this->Image('imagens/files/'.$logo,95,8,24);
+$this->Image('imagens/files/'.$logo,20,5,20);
 // RAQUEL COLOCOU 35 (ERA 28) POR CAUSA DA CERTIDAO DE HABITE-SE - o tamanho do brasÃo era grande
-$this->Ln(35);
-$this->SetFont($Letra,'',9);
+//$this->Ln(35);
+$this->SetFont($Letra,'',12);
 $this->MultiCell(0,4,$db12_extenso,0,"C",0);
+$this->Ln(2);
+$this->SetFont($Letra,'B',14);
 $this->MultiCell(0,3,$nomeinst    ,0,"C",0);
 $this->SetFont($Letra,'B',12);
 $this->MultiCell(0,5,@$GLOBALS["head1"],0,"C",0);
-$this->Ln(5);
 $this->SetLeftMargin($S);
 }
 

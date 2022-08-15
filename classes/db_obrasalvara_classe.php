@@ -569,10 +569,11 @@ class cl_obrasalvara {
        $sql .= $campos;
      }
      $sql .= " from obrasalvara ";
-     $sql .= "      inner join obras  on  obras.ob01_codobra = obrasalvara.ob04_codobra";
-     $sql .= "      inner join obrastiporesp  on  obrastiporesp.ob02_cod = obras.ob01_tiporesp";
-     $sql .= "      inner join obrasresp     on obrasresp.ob10_codobra = obras.ob01_codobra       ";
-     $sql .= "      inner join cgm           on cgm.z01_numcgm         = obrasresp.ob10_numcgm    ";
+     $sql .= "      inner join obras          on obras.ob01_codobra         = obrasalvara.ob04_codobra";
+     $sql .= "      inner join obrastiporesp  on obrastiporesp.ob02_cod     = obras.ob01_tiporesp     ";
+     $sql .= "      inner join obrasresp      on obrasresp.ob10_codobra     = obras.ob01_codobra      ";
+     $sql .= "      left  join obrasconstr    on obrasconstr.ob08_codconstr = obras.ob01_codobra      ";
+     $sql .= "      inner join cgm            on cgm.z01_numcgm             = obrasresp.ob10_numcgm   ";
       
      $sql2 = "";
      if($dbwhere==""){
@@ -846,6 +847,7 @@ class cl_obrasalvara {
     $sSql.= "        left  join ruas                   on ruas.j14_codigo              = obrasender.ob07_lograd      \n";
     $sSql.= "        inner join obrastiporesp          on obrastiporesp.ob02_cod       = obras.ob01_tiporesp         \n";
     $sSql.= "        inner join obrasresp              on obrasresp.ob10_codobra       = obras.ob01_codobra          \n";
+    $sSql.= "        left  join obrasconstr            on obrasconstr.ob08_codconstr   = obras.ob01_codobra          \n";
     $sSql.= "        inner join obrastecnicos          on obrastecnicos.ob20_codobra   = obras.ob01_codobra          \n";
     $sSql.= "        inner join obrastec               on obrastec.ob15_sequencial     = obrastecnicos.ob20_obrastec \n";
     $sSql.= "        inner join cgm as cgm_responsavel on cgm_responsavel.z01_numcgm   = obrasresp.ob10_numcgm       \n";
@@ -865,7 +867,8 @@ class cl_obrasalvara {
   	$sSql .= " inner join obras         	        on obras.ob01_codobra          		          = obrasalvara.ob04_codobra                  ";
   	$sSql .= " inner join obrastiporesp 	        on obrastiporesp.ob02_cod      		          = obras.ob01_tiporesp                       ";
   	$sSql .= " inner join obrasresp               on obrasresp.ob10_codobra      		          = obras.ob01_codobra                        ";
-  	$sSql .= " inner join cgm           	        on cgm.z01_numcgm              	            = obrasresp.ob10_numcgm                     ";
+  	$sSql .= " left  join obrasconstr             on obrasconstr.ob08_codconstr               = obras.ob01_codobra                        ";
+    $sSql .= " inner join cgm           	        on cgm.z01_numcgm              	            = obrasresp.ob10_numcgm                     ";
   	$sSql .= " left  join obrasiptubase 	        on obrasiptubase.ob24_obras    		          = obras.ob01_codobra                        ";
   	$sSql .= " left  join iptubase 	              on iptubase.j01_matric       		            = obrasiptubase.ob24_iptubase               ";
   	$sSql .= " left  join obrasalvaraprotprocesso on obrasalvaraprotprocesso.ob26_obrasalvara = obras.ob01_codobra                        ";

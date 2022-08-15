@@ -156,7 +156,7 @@ class AcordoPosicao
     /**
      * itens da posição.
      *
-     * @var AcordoItem collection
+     * @var array AcordoItem collection
      */
     protected $aItens = array();
 
@@ -252,7 +252,7 @@ class AcordoPosicao
      * retorna o numero do aditamento
      *
      * @access public
-     * @return void
+     * @return string
      */
     public function getNumeroAditamento()
     {
@@ -278,7 +278,7 @@ class AcordoPosicao
      * retorna o numero do apostilamento
      *
      * @access public
-     * @return void
+     * @return string
      */
     public function getNumeroApostilamento()
     {
@@ -546,7 +546,7 @@ class AcordoPosicao
     }
 
     /**
-     * @return unknown
+     * @return string
      */
     public function getVigenciaInicial()
     {
@@ -1448,8 +1448,8 @@ class AcordoPosicao
      * Método que busca o sequencial da tabela acordoposicaoperiodo de acordo com os parâmetros passados. Caso não
      * exista período para a data informada, retorna FALSE
      *
-     * @param  date $dtDataInicial Ex: DD/MM/AAAA
-     * @param  date $dtDataFinal Ex: DD/MM/AAAA
+     * @param  string $dtDataInicial Ex: DD/MM/AAAA
+     * @param  string $dtDataFinal Ex: DD/MM/AAAA
      * @return mixed
      */
     public function getCodigoPosicaoPeriodo($dtDataInicial, $dtDataFinal)
@@ -1676,11 +1676,11 @@ class AcordoPosicao
     {
 
         if (!db_utils::inTransaction()) {
-            throw new DBException(_M(AcordoPosicao::CAMINHO_MENSAGEM . "sem_transacao_ativa"));
+            throw new DBException(_M(AcordoPosicao::CAMINHO_MENSAGENS . "sem_transacao_ativa"));
         }
 
         if ($this->getCodigo() == null) {
-            throw new BusinessException(_M(AcordoPosicao::CAMINHO_MENSAGEM . "sequencial_nao_existente"));
+            throw new BusinessException(_M(AcordoPosicao::CAMINHO_MENSAGENS . "sequencial_nao_existente"));
         }
 
         $oDaoAcordoVigencia   = new cl_acordovigencia();
@@ -1774,7 +1774,7 @@ class AcordoPosicao
      * Vincula o apostilamento na posicao
      *
      * @param integer $0Apostila
-     * @param Date $dDtAssAcordo
+     * @param string $dDtAssAcordo
      */
     function salvarApostilamento($oApostila, $dDtAssAcordo)
     {

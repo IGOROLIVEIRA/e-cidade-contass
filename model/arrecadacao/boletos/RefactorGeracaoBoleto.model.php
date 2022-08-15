@@ -426,12 +426,13 @@ class RefactorGeracaoBoleto {
           $oRecibo = new recibo(2, null, 1);
         }
 
-        $aRecibos[$oRegraEmissao->k48_sequencial] = "";
+        $aRecibos[$oRegraEmissao->k48_sequencial] = [];
 
         /**
          * Cria array com os debitos selecionados para serem comparados posteriormente
          */
         foreach ($aChecks as $iInd => $aVal) {
+
 
           if ( ($aVal["Numpar"] >= $oRegraEmissao->k48_parcini) && ($aVal["Numpar"] <= $oRegraEmissao->k48_parcfim) ) {
 
@@ -441,7 +442,7 @@ class RefactorGeracaoBoleto {
             $aNumparCompara[$oRegraEmissao->k48_sequencial][]   = $aVal['Numpar'];
             $aNumpreCompara[$oRegraEmissao->k48_sequencial][]   = $aVal['Numpre'];
             $aNumpres_emissao[$oRegraEmissao->k48_sequencial][] = array($aVal['Numpre'], $aVal['Numpar']);
-
+//throw new Exception("444");
           }
         }
 
@@ -675,7 +676,7 @@ class RefactorGeracaoBoleto {
               $oRecibo->setDataRecibo($dtOperacao);
 
               $oRecibo->setDataVencimentoRecibo($dVencimento);
-              $oRecibo->setExercicioRecibo(substr($dVencimento, 0, 4) );
+              $oRecibo->setExercicioRecibo(substr($dVencimento, 0, 4) ); 
               $oRecibo->emiteRecibo();
 
               $k03_numnov           = $oRecibo->getNumpreRecibo();
