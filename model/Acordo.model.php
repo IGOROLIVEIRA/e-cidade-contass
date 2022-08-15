@@ -3542,7 +3542,7 @@ class Acordo
 
         if ($this->possuiLancamentoContabil()) {
             throw new BusinessException("O acordo {$this->getCodigo()} possui lan�amento cont�bil vinculado. Procedimento abortado.");
-        }
+        }*/
 
         $oDataInicial = new DBDate($this->getDataInicial());
         $oDataFinal   = new DBDate($this->getDataFinal());

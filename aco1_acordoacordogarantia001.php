@@ -29,7 +29,7 @@ require("libs/db_stdlib.php");
 require("libs/db_conecta.php");
 require("libs/db_utils.php");
 //require("libs/db_app.utils.php");
-require("std/db_stdClass.php");
+//require("std/db_stdClass.php");
 include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
 include("classes/db_acordoacordogarantia_classe.php");
