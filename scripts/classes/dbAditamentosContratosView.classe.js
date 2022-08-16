@@ -1923,8 +1923,8 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             oDBHint.setShowEvents(aEventsIn);
             oDBHint.setHideEvents(aEventsOut);
             oDBHint.setPosition('B', 'L');
-            oDBHint.setUseMouse(true);
-            oDBHint.make($(oHint.idLinha), 3);
+            //oDBHint.setUseMouse(true);
+            oDBHint.make($("oGridItensrow"+id+"cell2"), 3);
         });
     }
 

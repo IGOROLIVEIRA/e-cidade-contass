@@ -1,28 +1,28 @@
 <?
-/* 
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+/*
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 include("libs/db_utils.php");
@@ -106,7 +106,7 @@ if (!isset($filtroquery)) {
   if (!isset($retornadepart)) {
     $retornadepart = null;
   }
-  // desmentando abaixo descobrimos se a classe 
+  // desmentando abaixo descobrimos se a classe
   // esta retornando as permissões
   if ($clpermusuario_dotacao->sql != "") {
     if (isset($chave_o58_coddot) && $chave_o58_coddot != "") {
@@ -126,7 +126,7 @@ if (!isset($filtroquery)) {
           }
         }
         if ($passar) {
-          $executa = split("\|", $executar);
+          $executa = split("|", $executar);
           // variável retornadepart usada na solicitação de compras para retornar departamento quando o reduzido é digitado
           if ($retornadepart == null) {
             echo "<script>" . $executa[0] . "('$chave_o58_coddot');</script>";
@@ -172,7 +172,7 @@ if (!isset($filtroquery)) {
       } else {
 
         <?
-        $executa = split("\|", $funcao_js);
+        $executa = split("|", $funcao_js);
         echo $executa[0] . "(coddot,document.form1.departamento.value);";
         ?>
       }
