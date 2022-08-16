@@ -68,7 +68,7 @@ if(isset($atualizar)){
  if($o50_estrutdespesa==""){
        $tot='0';
  }else{
-   $matriz=split('\.',$o50_estrutdespesa);
+   $matriz=split('.',$o50_estrutdespesa);
    $tot=count($matriz);
  }
  for($i=0; $i<$tot; $i++){
