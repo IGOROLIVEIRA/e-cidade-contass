@@ -1432,10 +1432,9 @@ echo "
           parent.document.formaba.empempitem.disabled = false;\n
           parent.document.formaba.empempdot.disabled  = false;\n
           parent.document.formaba.empprazos.disabled  = false;\n
-         top.corpo.iframe_empempitem.location.href = 'emp1_empempitem001.php?db_opcaoal=3&e55_autori=$e54_autori';\n
-         top.corpo.iframe_empempdot.location.href  = 'emp1_empempdot001.php?e56_autori=$e54_autori';\n
-         top.corpo.iframe_empprazos.location.href  = 'emp1_empempenho007.php?chavepesquisa=$e54_autori';\n
-
+          CurrentWindow.corpo.iframe_empempitem.location.href = 'emp1_empempitem001.php?db_opcaoal=3&e55_autori=$e54_autori';\n
+          CurrentWindow.corpo.iframe_empempdot.location.href  = 'emp1_empempdot001.php?e56_autori=$e54_autori';\n
+          CurrentWindow.corpo.iframe_empprazos.location.href  = 'emp1_empempenho007.php?chavepesquisa=$e54_autori';\n
        </script>
    ";
 

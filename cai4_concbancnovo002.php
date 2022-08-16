@@ -830,7 +830,7 @@ function query_padrao_planilha($conta, $condicao) {
     $sql .= "    AND conc.k172_data = data ";
     $sql .= "    AND conc.k172_coddoc = cod_doc ";
     $sql .= "    AND conc.k172_codigo = codigo ";
-    $sql .= "    AND conc.k172_valor::text = valor_debito::text ";
+    $sql .= "    AND round(conc.k172_valor, 2) = round(valor_debito, 2) ";
 
     return $sql;
 }
@@ -891,7 +891,7 @@ function query_padrao_slip_debito() {
     $sql .= " LEFT JOIN conciliacaobancarialancamento conc ON conc.k172_conta = corlanc.k12_conta ";
     $sql .= "     AND  conc.k172_data = corrente.k12_data ";
     $sql .= "     AND  conc.k172_coddoc = conhistdoc.c53_tipo ";
-    $sql .= "     AND  conc.k172_valor = corrente.k12_valor ";
+    $sql .= "     AND round(conc.k172_valor, 2) = round(corrente.k12_valor, 2) ";
     $sql .= "     AND  conc.k172_codigo = concat_ws('', k12_codigo::text, ";
     $sql .= "         CASE ";
     $sql .= "             WHEN e91_cheque IS NULL ";
@@ -960,7 +960,7 @@ function query_padrao_slip_credito() {
       $sql .= " LEFT JOIN conciliacaobancarialancamento conc ON conc.k172_conta = corrente.k12_conta ";
       $sql .= "     AND  conc.k172_data = corrente.k12_data ";
       $sql .= "     AND  conc.k172_coddoc = conhistdoc.c53_tipo ";
-      $sql .= "     AND  conc.k172_valor = corrente.k12_valor ";
+      $sql .= "     AND round(conc.k172_valor, 2) = round(corrente.k12_valor, 2) ";
       $sql .= "     AND  conc.k172_codigo = concat_ws('', k12_codigo::text, ";
       $sql .= "         CASE ";
       $sql .= "             WHEN e91_cheque IS NULL ";

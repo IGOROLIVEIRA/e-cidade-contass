@@ -1196,7 +1196,7 @@ function query_padrao_rec($conta, $condicao)
                           AND conc.k172_data = data
                           AND conc.k172_coddoc = cod_doc
                           AND conc.k172_codigo = codigo
-                          AND conc.k172_valor::text = valor_debito::text
+                          AND round(conc.k172_valor, 2) = round(valor_debito, 2)
               WHERE ";
 }
 
@@ -1259,7 +1259,7 @@ function query_padrao_slip_debito()
   LEFT JOIN conciliacaobancarialancamento conc ON conc.k172_conta = corlanc.k12_conta
   AND conc.k172_data = corrente.k12_data
   AND conc.k172_coddoc = conhistdoc.c53_tipo
-  AND conc.k172_valor = corrente.k12_valor
+  AND round(conc.k172_valor, 2) = round(corrente.k12_valor, 2) 
   AND conc.k172_codigo = concat_ws('', k12_codigo::text, case
   when e91_cheque is null then e81_numdoc :: text
   else 'CHE ' || e91_cheque :: text
@@ -1328,7 +1328,7 @@ function query_padrao_slip_credito()
       LEFT JOIN conciliacaobancarialancamento conc ON conc.k172_conta = corrente.k12_conta
       AND conc.k172_data = corrente.k12_data
       AND conc.k172_coddoc = conhistdoc.c53_tipo
-      AND conc.k172_valor = corrente.k12_valor
+      AND round(conc.k172_valor, 2) = round(corrente.k12_valor, 2) 
       AND conc.k172_codigo = concat_ws('', k12_codigo::text, case
       when e91_cheque is null then e81_numdoc :: text
       else 'CHE ' || e91_cheque :: text
