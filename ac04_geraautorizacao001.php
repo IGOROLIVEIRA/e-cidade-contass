@@ -761,11 +761,10 @@ if ($x->consultarDataDoSistema == true) {
             var nQtdeAut = oItem.saldos.quantidadeautorizar.toFixed(4);
             var vTotal = oItem.valorunitario * oItem.quantidade;
             var vTotalAut = oItem.valorunitario * nQtdeAut;
-
+            
             //var nValorAut = js_formatar(js_roundDecimal(vTotal, 2), "f",2);
             // var nValorAut = js_formatar(js_roundDecimal(vTotalAut, 2), "f",2);
             var nValorAut = js_formatar(vTotalAut.toFixed(2), "f", 2);
-
             aLinha = new Array();
             aLinha[0] = oItem.codigomaterial;
             // Descrição
@@ -788,7 +787,7 @@ if ($x->consultarDataDoSistema == true) {
             if (oItem.servico && (oItem.lControlaQuantidade == "" || oItem.lControlaQuantidade == "f")) {
                 nQtdeAut = 1;
                 oItem.saldos.quantidadeautorizar = 1;
-                nValorAut = js_formatar(js_roundDecimal(oItem.saldos.valorautorizar, 2), 'f', 2);
+                nValorAut = js_formatar(js_roundDecimal(oItem.saldos.valorautorizar, 2), 'f', 2);   
             }
 
             aLinha[5] = eval("qtditem" + iSeq + " = new DBTextField('qtditem" + iSeq + "','qtditem" + iSeq + "','" + nQtdeAut + "')");
@@ -979,8 +978,8 @@ if ($x->consultarDataDoSistema == true) {
             return;
         }
 
-        // $("valoritem"+iSeq).value = js_formatar(js_roundDecimal(value, 2),'f',2);
-        $("valoritem" + iSeq).value = js_formatar(value.toFixed(2), 'f', 2);
+        $("valoritem" + iSeq).value = js_formatar(js_roundDecimal(value, 2),'f',2);
+        //$("valoritem" + iSeq).value = js_formatar(value.toFixed(2), 'f', 2);
         //oDotacao.valorexecutar = $("valoritem"+iSeq).value;
         js_somaItens();
     }
@@ -1009,7 +1008,7 @@ if ($x->consultarDataDoSistema == true) {
             aLinha.aCells[7].content.setValue(aLinha.aCells[5].getValue());
         } else {
 
-            var nValorTotal = new Number(aLinha.aCells[6].getValue() * aLinha.aCells[4].getValue().replace('.', '').replace(',', '.'));
+            var nValorTotal = new Number(aLinha.aCells[6].getValue() * aLinha.aCells[4].getValue().replace(/\./gi, '').replace(',', '.'));
             aLinha.aCells[7].content.setValue(js_formatar(nValorTotal.toFixed(2), "f", 2));
             //$("valoritem" + iLinha).value = js_formatar(new String(nValorTotal), "f",iCasasDecimais);
             $("valoritem" + iLinha).value = js_formatar(nValorTotal.toFixed(2), "f", 2);
@@ -1086,7 +1085,9 @@ if ($x->consultarDataDoSistema == true) {
 
             // debug
             aItensPosicao[iLinha].dotacoes.each(function(oDotacao, iDot) {
+                
                 var nValue = js_strToFloat(js_formatar(oGridDotacoes.aRows[iDot].aCells[3].getValue(), "f", 2));
+
                 console.log(nValue);
                 oDotacao.valorexecutar = nValue;
                 var nQuant = js_strToFloat(js_formatar(oGridDotacoes.aRows[iDot].aCells[2].getValue(), "f", 4));
@@ -1113,8 +1114,12 @@ if ($x->consultarDataDoSistema == true) {
             console.log(oDotacao);
             //nValorDotacao = js_formatar(oDotacao.valorexecutar, "f", iCasasDecimais);
             // Valor da dotação
-            // nValorDotacao = js_formatar(js_roundDecimal(oDotacao.valorexecutar, 2), "f",2);
-            nValorDotacao = js_formatar(oDotacao.valorexecutar.toFixed(2), "f", 2);
+            nQuantAutori = oDotacao.quantidade;
+            //nValorDotacao = js_formatar(oDotacao.valorexecutar.toFixed(2), "f", 2);
+
+            var nValorDotacao = aItensPosicao[iLinha].saldos.valorautorizar;
+
+            
 
 
             aLinha = new Array();
@@ -1138,8 +1143,9 @@ if ($x->consultarDataDoSistema == true) {
             }
             aLinha[2].addEvent("onKeyPress", "return js_mask(event,\"0-9|.|-\")");
             aLinha[2].addEvent("onKeyDown", "return js_verifica(this,event,true)");
-
-            aLinha[3] = eval("valordot" + iDot + " = new DBTextField('valordot" + iDot + "','valordot" + iDot + "','" + oDotacao.valorexecutar + "')");
+            
+                aLinha[3] = eval("valordot" + iDot + " = new DBTextField('valordot" + iDot + "','valordot" + iDot + "','" + js_formatar(js_roundDecimal(oDotacao.valorexecutar, 2), 'f', 2) + "')");
+            
             aLinha[3].addStyle("text-align", "right");
             aLinha[3].addStyle("height", "100%");
             aLinha[3].addStyle("width", "100px");
@@ -1177,7 +1183,7 @@ if ($x->consultarDataDoSistema == true) {
         var nValorTotalItem = js_strToFloat(oDadosItem.aCells[5].getValue());
         var nValorTotal = nValor;
         var nQuantAutorizar = Number(oDadosItem.aCells[6].getValue());
-        var nValorUnit = Number(oDadosItem.aCells[4].getValue().replace('.', '').replace(',', '.'));
+        var nValorUnit = Number(oDadosItem.aCells[4].getValue().replace(/\./gi, '').replace(',', '.'));
 
         aItensPosicao[iLinha].dotacoes.each(function(oDotacao, iDot) {
 
@@ -1185,6 +1191,9 @@ if ($x->consultarDataDoSistema == true) {
 
                 var nQuantDot = aItensPosicao[iLinha].dotacoes[iDot].quantidade;
                 aItensPosicao[iLinha].dotacoes[iDot].valorexecutar = js_round(nValorUnit * nQuantDot, 2);
+                if(aItensPosicao[iLinha].dotacoes.length == 1 && nQuantDot == 1){
+                    aItensPosicao[iLinha].dotacoes[iDot].valorexecutar = js_strToFloat(js_formatar(aItensPosicao[iLinha].saldos.valorautorizar, "f", 2));
+                }
                 return;
 
             }
@@ -1241,7 +1250,7 @@ if ($x->consultarDataDoSistema == true) {
             oGridDotacoes.aRows[iDot].aCells[2].content.setValue(nValorObjeto);
             Obj.value = nValorObjeto;
         } else {
-            oGridDotacoes.aRows[iDot].aCells[3].content.setValue((nQuant * Number(oDadosItem.aCells[4].getValue().replace('.', '').replace(',', '.'))).toFixed(2));
+            oGridDotacoes.aRows[iDot].aCells[3].content.setValue((nQuant * Number(oDadosItem.aCells[4].getValue().replace(/\./gi, '').replace(',', '.'))).toFixed(2));
             $("valordot" + iDot).value = js_formatar(Number(oGridDotacoes.aRows[iDot].aCells[3].getValue()).toFixed(2), "f", 2);
         }
     }
@@ -1489,7 +1498,7 @@ if ($x->consultarDataDoSistema == true) {
                 var oDadosItem = aItensPosicao[aCells[9].getValue()];
                 oItem.codigo = oDadosItem.codigo;
                 oItem.quantidade = aCells[6].getValue();
-                oItem.valor = aCells[7].getValue();
+                oItem.valor = js_strToFloat(aCells[7].getValue());
                 var nTotal = oItem.valor;
                 oItem.posicao = iPosicaoAtual;
                 /**

@@ -382,8 +382,8 @@ $oGet = db_utils::postMemory($_GET);
                             oDBHint.setShowEvents(aEventsIn);
                             oDBHint.setHideEvents(aEventsOut);
                             oDBHint.setPosition('B', 'L');
-                            oDBHint.setUseMouse(true);
-                            oDBHint.make($(oHint.idLinha), 3);
+                            oDBHint.make($("detalhesrow" + id + "cell3"), 3);
+
                         });
                     }
                 } else {
