@@ -44,6 +44,11 @@ $clitbicancela = new cl_itbicancela();
 $clitbinumpre  = new cl_itbinumpre();
 $clitbiavalia  = new cl_itbiavalia();
 $clitbinome	   = new cl_itbinome();
+$clitbidivida  = new cl_itbi_divida();
+$lCancelada = false;
+$lDividaAtiva = false;
+$labelCancelada = "<span style='color: red'>- CANCELADA</span>";
+$labelDividaAtiva = "<span style='color: #0b77b7'> (INSCRITO EM DIVIDA ATIVA)</span>";
 
 $rsConsultaITBI = $clitbi->sql_record($clitbi->sql_query_dados($oGet->it01_guia));
 
@@ -120,9 +125,11 @@ $rsConsultaITBI = $clitbi->sql_record($clitbi->sql_query_dados($oGet->it01_guia)
   if ( $clitbicancela->numrows > 0 ) {
 
  	  $lCancelada = true;
-  } else {
+  }
 
-    $lCancelada = false;
+  $rsConsultaItbiDivida = $clitbidivida->sql_record($clitbidivida->sql_query_file($oGet->it01_guia));
+  if ( $clitbidivida->numrows > 0 ) {
+      $lDividaAtiva = true;
   }
 ?>
 
@@ -176,7 +183,7 @@ $rsConsultaITBI = $clitbi->sql_record($clitbi->sql_query_dados($oGet->it01_guia)
     <tr>
       <td colspan='2'>
 	      <fieldset>
-	        <legend><strong>Dados da ITBI Guia - <?=$oGet->it01_guia?> <?=($lCancelada?"<font color='red'>- CANCELADA</font>":"")?></strong></legend>
+	        <legend><strong>Dados da ITBI Guia - <?=$oGet->it01_guia?> <?=($lCancelada ? $labelCancelada:"")?> <?=($lDividaAtiva ? $labelDividaAtiva:"")?></strong></legend>
 	        <table border='0'>
 	      	  <tr>
 	      	    <td><strong>Tipo :</strong>  				  	                            </td>
@@ -302,6 +309,6 @@ $rsConsultaITBI = $clitbi->sql_record($clitbi->sql_query_dados($oGet->it01_guia)
 
   function js_buscaCgm(iCgm) {
 
-     js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_nome','prot3_conscgm002.php?fechar=db_iframe_nome&numcgm='+iCgm,'Pesquisa',true);
+     js_OpenJanelaIframe('top.corpo','db_iframe_nome','prot3_conscgm002.php?fechar=db_iframe_nome&numcgm='+iCgm,'Pesquisa',true);
   }
 </script>
