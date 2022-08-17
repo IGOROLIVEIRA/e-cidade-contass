@@ -1498,7 +1498,7 @@ if ($x->consultarDataDoSistema == true) {
                 var oDadosItem = aItensPosicao[aCells[9].getValue()];
                 oItem.codigo = oDadosItem.codigo;
                 oItem.quantidade = aCells[6].getValue();
-                oItem.valor = js_strToFloat(aCells[7].getValue());
+                oItem.valor = aCells[7].getValue();
                 var nTotal = oItem.valor;
                 oItem.posicao = iPosicaoAtual;
                 /**

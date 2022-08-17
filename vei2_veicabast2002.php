@@ -172,7 +172,7 @@ if($exibir_cupom){
     $sCampos .= ', ve71_nota';
 }
 
-$sSqlBuscaAbastecimentos = $clveicabast->sql_query_abast_novo(null, $sCampos,"ve70_dtabast,ve70_codigo", $dbwhere, $iCoddepto);
+$sSqlBuscaAbastecimentos = $clveicabast->sql_query_abast_novo(null, $sCampos,"ve70_dtabast,ve70_hora,ve70_codigo", $dbwhere, $iCoddepto);
 $result = db_query(" drop table if exists w_relabastecimentoveiculos; create table w_relabastecimentoveiculos as {$sSqlBuscaAbastecimentos} ") or die(pg_last_error());
 
                     if (pg_num_rows(db_query("select * from w_relabastecimentoveiculos")) == 0) {
@@ -215,95 +215,103 @@ $pdf->setfont('arial', 'b', 10);
  */
 for ($iContDep = 0; $iContDep < pg_num_rows($rSqlDepartamentos); $iContDep++) {
     db_fieldsmemory($rSqlDepartamentos, $iContDep);
-    if($coddepto!="" && $coddepto!=null){
+
     $pdf->cell(0, $alt, "Secretaria: {$coddepto} - {$descrdepto}", 1, 1, "L", true);
 
     /**
      * Seleciono todos os veículso de cada departamento para agrupar por veículos
      */
-    
-  
-        $sSqlVeiculos = "select distinct ve01_codigo,ve01_placa from w_relabastecimentoveiculos where coddepto = {$coddepto}";
-        $rSqlveiculos = db_query($sSqlVeiculos) or die(pg_last_error());
-        for ($iContVeic = 0; $iContVeic < pg_num_rows($rSqlveiculos); $iContVeic++) {
-            db_fieldsmemory($rSqlveiculos, $iContVeic);
+    $sSqlVeiculos = "select distinct ve01_codigo,ve01_placa from w_relabastecimentoveiculos where coddepto = {$coddepto}";
+    $rSqlveiculos = db_query($sSqlVeiculos) or die(pg_last_error());
+    for ($iContVeic = 0; $iContVeic < pg_num_rows($rSqlveiculos); $iContVeic++) {
+        db_fieldsmemory($rSqlveiculos, $iContVeic);
+
+        /**
+         * Seleciono todas as origens de gasto do veiculo de cada iteração do loop
+         */
+        db_query("update w_relabastecimentoveiculos set ve70_origemgasto =3 where ve70_origemgasto is null");
+        $sSqlOrigem = "select distinct case when ve70_origemgasto=1 then 'ESTOQUE' when ve70_origemgasto=3 then 'NÃO INFORMADO' else 'CONSUMO IMEDIATO' end as origemgasto, ve70_origemgasto from w_relabastecimentoveiculos where ve01_codigo = {$ve01_codigo}";
+        $rSqlOrigem = db_query($sSqlOrigem) or die(pg_last_error());
+        for ($iContOrig = 0; $iContOrig < pg_num_rows($rSqlOrigem); $iContOrig++) {
+            db_fieldsmemory($rSqlOrigem, $iContOrig);
 
             /**
-             * Seleciono todas as origens de gasto do veiculo de cada iteração do loop
+             * Seleciono os postos do veiculo no loop
              */
-            db_query("update w_relabastecimentoveiculos set ve70_origemgasto =3 where ve70_origemgasto is null");
-            $sSqlOrigem = "select distinct case when ve70_origemgasto=1 then 'ESTOQUE' when ve70_origemgasto=3 then 'NÃO INFORMADO' else 'CONSUMO IMEDIATO' end as origemgasto, ve70_origemgasto from w_relabastecimentoveiculos where ve01_codigo = {$ve01_codigo}";
-            $rSqlOrigem = db_query($sSqlOrigem) or die(pg_last_error());
-            for ($iContOrig = 0; $iContOrig < pg_num_rows($rSqlOrigem); $iContOrig++) {
-                db_fieldsmemory($rSqlOrigem, $iContOrig);
+            $sSqlPostos = "select distinct cgmposto, posto from w_relabastecimentoveiculos where ve01_codigo = {$ve01_codigo} and ve70_origemgasto = {$ve70_origemgasto}";
+            $rSqlPostos = db_query($sSqlPostos) or die(pg_last_error());
+            for ($iContPosto = 0; $iContPosto < pg_num_rows($rSqlPostos); $iContPosto++) {
+                db_fieldsmemory($rSqlPostos, $iContPosto);
+
+                $moreWidth = !$exibir_cupom ? 3 : 0;
+
+                $pdf->cell(0, $alt, "Código do Veículo: {$ve01_codigo} Placa: {$ve01_placa} - Origem Gasto: {$origemgasto} - Posto: {$posto}", 1, 1, "L", true);
+                $pdf->cell(30, $alt, "Abastecimento", 1, 0, "C", 1);
+                $pdf->cell(19+$moreWidth, $alt, "Data", 1, 0, "C", 1);
+                $pdf->cell(20, $alt, "H. Saída", 1, 0, "C", 1);
+                $pdf->cell(25+$moreWidth, $alt, "Combustível", 1, 0, "C", 1);
+                $pdf->cell(23+$moreWidth, $alt, "Km Inicial", 1, 0, "C", 1);
+                $pdf->cell(23+$moreWidth, $alt, "Km Final", 1, 0, "C", 1);
+                $pdf->cell(30, $alt, "Km Percorrido", 1, 0, "C", 1);
+                if($exibir_cupom){
+                    $pdf->cell(18, $alt, "Cupom", 1, 0, "C", 1);
+                }
+                $pdf->cell(25+$moreWidth, $alt, "Qtde Comb.", 1, 0, "C", 1);
+                $pdf->cell(27+$moreWidth, $alt, "Valor Abastec.", 1, 0, "C", 1);
+                $pdf->cell(20, $alt, "Empenho", 1, 0, "C", 1);
+                $pdf->cell(24, $alt, "Cons. Médio", 1, 1, "C", 1);
 
                 /**
-                 * Seleciono os postos do veiculo no loop
+                 * Busca as movimentações de cada veiculo
                  */
-                $sSqlPostos = "select distinct cgmposto, posto from w_relabastecimentoveiculos where ve01_codigo = {$ve01_codigo} and ve70_origemgasto = {$ve70_origemgasto}";
-                $rSqlPostos = db_query($sSqlPostos) or die(pg_last_error());
-                for ($iContPosto = 0; $iContPosto < pg_num_rows($rSqlPostos); $iContPosto++) {
-                    db_fieldsmemory($rSqlPostos, $iContPosto);
 
-                    $moreWidth = !$exibir_cupom ? 3 : 0;
+                $sSqlMov = "select * from w_relabastecimentoveiculos where ve01_codigo = {$ve01_codigo} and coddepto = {$coddepto} and ve70_origemgasto = {$ve70_origemgasto} and cgmposto = {$cgmposto}";
+                $rSqlMov = db_query($sSqlMov);
+                $total = 0;
+                $nTotalCombustivel = 0;
+                $nTotalValorAbastecido = 0;
+                $nTotalConsumoMedio = 0;
+                $contralakminicial = 0;
+                $contralakmfinal = 0;
+                for ($iContMov = 0; $iContMov < pg_num_rows($rSqlMov); $iContMov++) {
+                    db_fieldsmemory($rSqlMov, $iContMov);
 
-                    $pdf->cell(0, $alt, "Código do Veículo: {$ve01_codigo} Placa: {$ve01_placa} - Origem Gasto: {$origemgasto} - Posto: {$posto}", 1, 1, "L", true);
-                    $pdf->cell(30, $alt, "Abastecimento", 1, 0, "C", 1);
-                    $pdf->cell(19+$moreWidth, $alt, "Data", 1, 0, "C", 1);
-                    $pdf->cell(20, $alt, "H. Saída", 1, 0, "C", 1);
-                    $pdf->cell(25+$moreWidth, $alt, "Combustível", 1, 0, "C", 1);
-                    $pdf->cell(23+$moreWidth, $alt, "Km Inicial", 1, 0, "C", 1);
-                    $pdf->cell(23+$moreWidth, $alt, "Km Final", 1, 0, "C", 1);
-                    $pdf->cell(30, $alt, "Km Percorrido", 1, 0, "C", 1);
-                    if($exibir_cupom){
-                        $pdf->cell(18, $alt, "Cupom", 1, 0, "C", 1);
-                    }
-                    $pdf->cell(25+$moreWidth, $alt, "Qtde Comb.", 1, 0, "C", 1);
-                    $pdf->cell(27+$moreWidth, $alt, "Valor Abastec.", 1, 0, "C", 1);
-                    $pdf->cell(20, $alt, "Empenho", 1, 0, "C", 1);
-                    $pdf->cell(24, $alt, "Cons. Médio", 1, 1, "C", 1);
-
-                    /**
-                     * Busca as movimentações de cada veiculo
-                     */
-
-                    $sSqlMov = "select * from w_relabastecimentoveiculos where ve01_codigo = {$ve01_codigo} and coddepto = {$coddepto} and ve70_origemgasto = {$ve70_origemgasto} and cgmposto = {$cgmposto}";
-                    $rSqlMov = db_query($sSqlMov);
-                    $total = 0;
-                    $nTotalCombustivel = 0;
-                    $nTotalValorAbastecido = 0;
-                    $nTotalConsumoMedio = 0;
-                    for ($iContMov = 0; $iContMov < pg_num_rows($rSqlMov); $iContMov++) {
-                        db_fieldsmemory($rSqlMov, $iContMov);
-
-                        $pdf->setfont('arial', '', 8);
-                        $pdf->cell(30, $alt, $ve70_codigo, 1, 0, "C", 1);
-                        $pdf->cell(19+$moreWidth, $alt, db_formatar($ve70_data, "d"), 1, 0, "C", 1);
-                        $pdf->cell(20, $alt, $ve70_hora, 1, 0, "C", 1);
-                        $pdf->cell(25+$moreWidth, $alt, $ve26_descr, 1, 0, "C", 1);
+                    $pdf->setfont('arial', '', 8);
+                    $pdf->cell(30, $alt, $ve70_codigo, 1, 0, "C", 1);
+                    $pdf->cell(19+$moreWidth, $alt, db_formatar($ve70_data, "d"), 1, 0, "C", 1);
+                    $pdf->cell(20, $alt, $ve70_hora, 1, 0, "C", 1);
+                    $pdf->cell(25+$moreWidth, $alt, $ve26_descr, 1, 0, "C", 1);
+                    if(($medida_retirada == $contralakminicial || $medida_retirada < $contralakmfinal) && $contralakmfinal != 0){
+                        $pdf->cell(23+$moreWidth, $alt, $contralakmfinal, 1, 0, "C", 1);
+                        $medida_rodada = $medida_devolucao - $contralakmfinal;
+                    }else{
                         $pdf->cell(23+$moreWidth, $alt, $medida_retirada, 1, 0, "C", 1);
-                        $pdf->cell(23+$moreWidth, $alt, $medida_devolucao, 1, 0, "C", 1);
-                        $pdf->cell(30, $alt, $medida_rodada, 1, 0, "C", 1);
-                        if($exibir_cupom){
-                            $pdf->cell(18, $alt, $ve71_nota, 1, 0, "C", 1);
-                        }
-                        $pdf->cell(25+$moreWidth, $alt, $ve70_litros . " L", 1, 0, "C", 1);
-                        $pdf->cell(27+$moreWidth, $alt, "R$ " . number_format($ve70_valor, 2, ',', '.'), 1, 0, "C", 1);
-                        $pdf->cell(20, $alt, $numemp, 1, 0, "C", 1);
-                        $pdf->cell(24, $alt, number_format(($medida_rodada / $ve70_litros), 2, ',', '') . " Km/L", 1, 1, "C", 1);
-                        $nTotalCombustivel += $ve70_litros;
-                        $nTotalValorAbastecido += $ve70_valor;
-                        $nTotalConsumoMedio += ($medida_rodada / $ve70_litros);
                     }
+                    
+                    $pdf->cell(23+$moreWidth, $alt, $medida_devolucao, 1, 0, "C", 1);
+                    $pdf->cell(30, $alt, $medida_rodada, 1, 0, "C", 1);
+                    if($exibir_cupom){
+                        $pdf->cell(18, $alt, $ve71_nota, 1, 0, "C", 1);
+                    }
+                    $pdf->cell(25+$moreWidth, $alt, $ve70_litros . " L", 1, 0, "C", 1);
+                    $pdf->cell(27+$moreWidth, $alt, "R$ " . number_format($ve70_valor, 2, ',', '.'), 1, 0, "C", 1);
+                    $pdf->cell(20, $alt, $numemp, 1, 0, "C", 1);
+                    $pdf->cell(24, $alt, number_format(($medida_rodada / $ve70_litros), 2, ',', '') . " Km/L", 1, 1, "C", 1);
+                    $nTotalCombustivel += $ve70_litros;
+                    $nTotalValorAbastecido += $ve70_valor;
+                    $nTotalConsumoMedio += ($medida_rodada / $ve70_litros);
+                    $contralakminicial = $medida_retirada;
+                    $contralakmfinal = $medida_devolucao;
 
-                    $pdf->setfont('arial', 'b', 10);
-                    $pdf->cell(180, $alt, "Totalizadores", 1, 0, "L", 0);
-                    $pdf->cell(30, $alt, "{$nTotalCombustivel} Litros", 1, 0, "C", 0);
-                    $pdf->cell(30, $alt, "R$ " . number_format($nTotalValorAbastecido, 2, ',', '.'), 1, 0, "C", 0);
-                    $pdf->cell(20, $alt, "Média:", "LTB", 0, "R", 0);
-                    $pdf->cell(24, $alt, number_format(($nTotalConsumoMedio / $iContMov), 2, ',', '') . " Km/L", "BRT", 1, "R", 0);
-                    $pdf->ln();
                 }
+
+                $pdf->setfont('arial', 'b', 10);
+                $pdf->cell(180, $alt, "Totalizadores", 1, 0, "L", 0);
+                $pdf->cell(30, $alt, "{$nTotalCombustivel} Litros", 1, 0, "C", 0);
+                $pdf->cell(30, $alt, "R$ " . number_format($nTotalValorAbastecido, 2, ',', '.'), 1, 0, "C", 0);
+                $pdf->cell(20, $alt, "Média:", "LTB", 0, "R", 0);
+                $pdf->cell(24, $alt, number_format(($nTotalConsumoMedio / $iContMov), 2, ',', '') . " Km/L", "BRT", 1, "R", 0);
+                $pdf->ln();
             }
         }
     }

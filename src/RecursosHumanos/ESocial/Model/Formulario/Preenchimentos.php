@@ -44,7 +44,7 @@ class Preenchimentos
 
         $group = " group by eso03_cgm";
         $campos = 'eso03_cgm as cgm, max(db107_sequencial) as preenchimento, ';
-        $campos .= '(select z01_cgccpf from cgm where z01_numcgm = eso03_cgm) as inscricao_empregador ';
+        $campos .= '(SELECT z01_cgccpf from cgm where z01_numcgm = eso03_cgm) as inscricao_empregador ';
         $dao = new \cl_avaliacaogruporespostacgm;
         $sql = $dao->sql_avaliacao_preenchida(null, $campos, null, $where . $group);
         $rs = \db_query($sql);
@@ -92,7 +92,7 @@ class Preenchimentos
     {
         $where = " db101_sequencial = {$codigoFormulario} ";
         $campos = 'distinct db107_sequencial as preenchimento, ';
-        $campos .= '(select db106_resposta';
+        $campos .= '(SELECT db106_resposta';
         $campos .= '   from avaliacaoresposta as ar ';
         $campos .= '   join avaliacaogrupoperguntaresposta as preenchimento on preenchimento.db108_avaliacaoresposta = ar.db106_sequencial ';
         $campos .= '   join avaliacaoperguntaopcao as apo on apo.db104_sequencial = ar.db106_avaliacaoperguntaopcao ';
@@ -135,7 +135,7 @@ class Preenchimentos
                 WHERE db108_avaliacaogruporesposta=db107_sequencial and db104_identificadorcampo = 'instituicao'),0) IN (" . db_getsession("DB_instit") . ",0)
                 AND db107_datalancamento::varchar || db107_hora = (SELECT db107_datalancamento::varchar || db107_hora FROM avaliacaogruporesposta ORDER BY db107_sequencial DESC LIMIT 1)";
         $campos = 'distinct db107_sequencial as preenchimento, ';
-        $campos .= '(select db106_resposta';
+        $campos .= '(SELECT db106_resposta';
         $campos .= '   from avaliacaoresposta as ar ';
         $campos .= '   join avaliacaogrupoperguntaresposta as preenchimento on preenchimento.db108_avaliacaoresposta = ar.db106_sequencial ';
         $campos .= '   join avaliacaoperguntaopcao as apo on apo.db104_sequencial = ar.db106_avaliacaoperguntaopcao ';
@@ -172,8 +172,8 @@ class Preenchimentos
     {
         $where = " db101_sequencial = {$codigoFormulario} ";
         $group = "";
-        $campos = "(select z01_numcgm from cgm where z01_numcgm = $this->responsavelPreenchimento) as cgm, max(db107_sequencial) as preenchimento, ";
-        $campos .= "(select z01_cgccpf from cgm where z01_numcgm = $this->responsavelPreenchimento) as inscricao_empregador ";
+        $campos = "(SELECT z01_numcgm from cgm where z01_numcgm = $this->responsavelPreenchimento) as cgm, max(db107_sequencial) as preenchimento, ";
+        $campos .= "(SELECT z01_cgccpf from cgm where z01_numcgm = $this->responsavelPreenchimento) as inscricao_empregador ";
         $dao = new \cl_avaliacaogruporespostalotacao;
         $sql = $dao->buscaAvaliacaoPreenchida(null, $campos, null, $where . $group);
         $rs = \db_query($sql);
@@ -294,7 +294,7 @@ class Preenchimentos
      */
     public function buscarPreenchimentoS2200($codigoFormulario, $matricula = null)
     {
-        $sql = "select distinct
+        $sql = "SELECT distinct
                 rh02_instit AS instituicao,
                 z01_cgccpf as cpfTrab,
                 z01_nome as nmTrab,
@@ -365,7 +365,7 @@ class Preenchimentos
                  when rh01_nacion = 64 then 728
                  end as paisNascto,
             105 as paisnac,
-            (select j88_sigla from cgm intcgm
+            (SELECT j88_sigla from cgm intcgm
             inner join patrimonio.cgmendereco as cgmendereco on (intcgm.z01_numcgm=cgmendereco.z07_numcgm)
             inner join configuracoes.endereco as endereco on (cgmendereco.z07_endereco = endereco.db76_sequencial)
             inner join cadenderlocal on cadenderlocal.db75_sequencial = db76_sequencial
@@ -383,7 +383,7 @@ class Preenchimentos
                 z01_numero  as nrLograd,
                 z01_compl as complemento,
                 z01_bairro as bairro,
-                rpad(z01_cep,8,'0') as cep,case when (select
+                rpad(z01_cep,8,'0') as cep,case when (SELECT
                 db125_codigosistema
             from
                 cadendermunicipio
@@ -399,7 +399,7 @@ class Preenchimentos
             where
                 to_ascii(db72_descricao) = trim(cgm.z01_munic)
             order by
-                db72_sequencial asc limit 1) is not null then (select
+                db72_sequencial asc limit 1) is not null then (SELECT
                 db125_codigosistema
             from
                 cadendermunicipio
@@ -417,7 +417,7 @@ class Preenchimentos
             order by
                 db72_sequencial asc limit 1)
                 else
-                ( select
+                ( SELECT
                 db125_codigosistema
             from
                 cadendermunicipio
@@ -431,8 +431,8 @@ class Preenchimentos
             inner join cadenderpaissistema on
                 cadenderpais.db70_sequencial = cadenderpaissistema.db135_db_cadenderpais
             where
-                to_ascii(db72_descricao) = ( select to_ascii(db72_descricao) from cadenderparam inner join cadenderpais on cadenderpais.db70_sequencial = cadenderparam.db99_cadenderpais inner join cadenderestado on cadenderestado.db71_sequencial = cadenderparam.db99_cadenderestado inner join cadendermunicipio on cadendermunicipio.db72_cadenderestado = cadenderestado.db71_sequencial inner join cadenderpais as p on p.db70_sequencial = cadenderestado.db71_cadenderpais inner join cadenderestado as a on a.db71_sequencial = cadendermunicipio.db72_cadenderestado INNER JOIN cadendermunicipiosistema ON cadendermunicipiosistema.db125_cadendermunicipio = cadendermunicipio.db72_sequencial where db125_db_sistemaexterno = 4 and db72_sequencial = ( SELECT db125_cadendermunicipio FROM cadendermunicipiosistema INNER JOIN cadenderparam ON db125_cadendermunicipio = db99_cadendermunicipio AND db125_db_sistemaexterno = 4 LIMIT 1) order by db72_descricao asc limit 1)
-                and cadenderestado.db71_descricao = (select cadenderestado.db71_descricao from cadenderparam inner join cadenderpais on cadenderpais.db70_sequencial = cadenderparam.db99_cadenderpais inner join cadenderestado on cadenderestado.db71_sequencial = cadenderparam.db99_cadenderestado inner join cadendermunicipio on cadendermunicipio.db72_cadenderestado = cadenderestado.db71_sequencial inner join cadenderpais as p on p.db70_sequencial = cadenderestado.db71_cadenderpais inner join cadenderestado as a on a.db71_sequencial = cadendermunicipio.db72_cadenderestado INNER JOIN cadendermunicipiosistema ON cadendermunicipiosistema.db125_cadendermunicipio = cadendermunicipio.db72_sequencial where db125_db_sistemaexterno = 4 and db72_sequencial = ( SELECT db125_cadendermunicipio FROM cadendermunicipiosistema INNER JOIN cadenderparam ON db125_cadendermunicipio = db99_cadendermunicipio AND db125_db_sistemaexterno = 4 LIMIT 1) limit 1)
+                to_ascii(db72_descricao) = ( SELECT to_ascii(db72_descricao) from cadenderparam inner join cadenderpais on cadenderpais.db70_sequencial = cadenderparam.db99_cadenderpais inner join cadenderestado on cadenderestado.db71_sequencial = cadenderparam.db99_cadenderestado inner join cadendermunicipio on cadendermunicipio.db72_cadenderestado = cadenderestado.db71_sequencial inner join cadenderpais as p on p.db70_sequencial = cadenderestado.db71_cadenderpais inner join cadenderestado as a on a.db71_sequencial = cadendermunicipio.db72_cadenderestado INNER JOIN cadendermunicipiosistema ON cadendermunicipiosistema.db125_cadendermunicipio = cadendermunicipio.db72_sequencial where db125_db_sistemaexterno = 4 and db72_sequencial = ( SELECT db125_cadendermunicipio FROM cadendermunicipiosistema INNER JOIN cadenderparam ON db125_cadendermunicipio = db99_cadendermunicipio AND db125_db_sistemaexterno = 4 LIMIT 1) order by db72_descricao asc limit 1)
+                and cadenderestado.db71_descricao = (SELECT cadenderestado.db71_descricao from cadenderparam inner join cadenderpais on cadenderpais.db70_sequencial = cadenderparam.db99_cadenderpais inner join cadenderestado on cadenderestado.db71_sequencial = cadenderparam.db99_cadenderestado inner join cadendermunicipio on cadendermunicipio.db72_cadenderestado = cadenderestado.db71_sequencial inner join cadenderpais as p on p.db70_sequencial = cadenderestado.db71_cadenderpais inner join cadenderestado as a on a.db71_sequencial = cadendermunicipio.db72_cadenderestado INNER JOIN cadendermunicipiosistema ON cadendermunicipiosistema.db125_cadendermunicipio = cadendermunicipio.db72_sequencial where db125_db_sistemaexterno = 4 and db72_sequencial = ( SELECT db125_cadendermunicipio FROM cadendermunicipiosistema INNER JOIN cadenderparam ON db125_cadendermunicipio = db99_cadendermunicipio AND db125_db_sistemaexterno = 4 LIMIT 1) limit 1)
             order by
                 db72_sequencial asc limit 1)
                 end as codMunic,
@@ -619,10 +619,10 @@ class Preenchimentos
                         left join ruas on ruas.j14_codigo = db_cgmruas.j14_codigo
                         left join ruastipo on j88_codigo = j14_tipo
                         left  outer join (
-                                        select distinct r33_codtab,r33_nome,r33_tiporegime
+                                        SELECT distinct r33_codtab,r33_nome,r33_tiporegime
                                                             from inssirf
-                                                            where     r33_anousu = (select r11_anousu from cfpess where r11_instit = fc_getsession('DB_instit')::int order by r11_anousu desc limit 1)
-                                                                    and r33_mesusu = (select r11_mesusu from cfpess where r11_instit = fc_getsession('DB_instit')::int order by r11_anousu desc, r11_mesusu desc limit 1)
+                                                            where     r33_anousu = (SELECT r11_anousu from cfpess where r11_instit = fc_getsession('DB_instit')::int order by r11_anousu desc limit 1)
+                                                                    and r33_mesusu = (SELECT r11_mesusu from cfpess where r11_instit = fc_getsession('DB_instit')::int order by r11_anousu desc, r11_mesusu desc limit 1)
                                                                     and r33_instit = fc_getsession('DB_instit')::int
                                                             ) as x on r33_codtab = rhpessoalmov.rh02_tbprev+2
                         left  join rescisao      on rescisao.r59_anousu       = rhpessoalmov.rh02_anousu
@@ -664,9 +664,207 @@ class Preenchimentos
      * @param integer $codigoFormulario
      * @return stdClass[]
      */
+    public function buscarPreenchimentoS2410($codigoFormulario, $matricula = null)
+    {
+        $sql = "SELECT cgm.z01_cgccpf AS cpfbenef,
+       rh01_matorgaobeneficio AS matricula,
+       rh01_cnpjrespmatricula AS cnpjorigem,
+       CASE
+           WHEN rh01_admiss < '2021-11-21' THEN 'S'
+           ELSE 'N'
+       END AS cadini,
+       1 AS indsitbenef,
+       rh01_regist AS nrbeneficio,
+       rh01_admiss AS dtinibeneficio,
+       CASE
+           WHEN rh02_tipobeneficio = '0801' THEN
+                  (SELECT db104_sequencial
+                   FROM avaliacaoperguntaopcao
+                   WHERE db104_identificador='tpbeneficio_0801')
+           WHEN rh02_tipobeneficio = '0101' THEN
+                  (SELECT db104_sequencial
+                   FROM avaliacaoperguntaopcao
+                   WHERE db104_identificador='tpbeneficio_0101')
+           WHEN rh02_tipobeneficio = '0102' THEN
+                  (SELECT db104_sequencial
+                   FROM avaliacaoperguntaopcao
+                   WHERE db104_identificador='tpbeneficio_0102')
+           WHEN rh02_tipobeneficio = '0103' THEN
+                  (SELECT db104_sequencial
+                   FROM avaliacaoperguntaopcao
+                   WHERE db104_identificador='tpbeneficio_0103')
+           WHEN rh02_tipobeneficio = '0104' THEN
+                  (SELECT db104_sequencial
+                   FROM avaliacaoperguntaopcao
+                   WHERE db104_identificador='tpbeneficio_0104')
+           WHEN rh02_tipobeneficio = '0105' THEN
+                  (SELECT db104_sequencial
+                   FROM avaliacaoperguntaopcao
+                   WHERE db104_identificador='tpbeneficio_0105')
+           WHEN rh02_tipobeneficio = '0106' THEN
+                  (SELECT db104_sequencial
+                   FROM avaliacaoperguntaopcao
+                   WHERE db104_identificador='tpbeneficio_0106')
+           WHEN rh02_tipobeneficio = '0107' THEN
+                  (SELECT db104_sequencial
+                   FROM avaliacaoperguntaopcao
+                   WHERE db104_identificador='tpbeneficio_0107')
+           WHEN rh02_tipobeneficio = '0108' THEN
+                  (SELECT db104_sequencial
+                   FROM avaliacaoperguntaopcao
+                   WHERE db104_identificador='tpbeneficio_0108')
+           WHEN rh02_tipobeneficio = '0201' THEN
+                  (SELECT db104_sequencial
+                   FROM avaliacaoperguntaopcao
+                   WHERE db104_identificador='tpbeneficio_0201')
+           WHEN rh02_tipobeneficio = '0202' THEN
+                  (SELECT db104_sequencial
+                   FROM avaliacaoperguntaopcao
+                   WHERE db104_identificador='tpbeneficio_0202')
+           WHEN rh02_tipobeneficio = '0203' THEN
+                  (SELECT db104_sequencial
+                   FROM avaliacaoperguntaopcao
+                   WHERE db104_identificador='tpbeneficio_0203')
+           WHEN rh02_tipobeneficio = '0301' THEN
+                  (SELECT db104_sequencial
+                   FROM avaliacaoperguntaopcao
+                   WHERE db104_identificador='tpbeneficio_0301')
+           WHEN rh02_tipobeneficio = '0302' THEN
+                  (SELECT db104_sequencial
+                   FROM avaliacaoperguntaopcao
+                   WHERE db104_identificador='tpbeneficio_0302')
+           WHEN rh02_tipobeneficio = '0303' THEN
+                  (SELECT db104_sequencial
+                   FROM avaliacaoperguntaopcao
+                   WHERE db104_identificador='tpbeneficio_0303')
+           WHEN rh02_tipobeneficio = '0304' THEN
+                  (SELECT db104_sequencial
+                   FROM avaliacaoperguntaopcao
+                   WHERE db104_identificador='tpbeneficio_0304')
+           WHEN rh02_tipobeneficio = '0601' THEN
+                  (SELECT db104_sequencial
+                   FROM avaliacaoperguntaopcao
+                   WHERE db104_identificador='tpbeneficio_0601')
+           WHEN rh02_tipobeneficio = '0602' THEN
+                  (SELECT db104_sequencial
+                   FROM avaliacaoperguntaopcao
+                   WHERE db104_identificador='tpbeneficio_0602')
+           WHEN rh02_tipobeneficio = '0603' THEN
+                  (SELECT db104_sequencial
+                   FROM avaliacaoperguntaopcao
+                   WHERE db104_identificador='tpbeneficio_0603')
+           WHEN rh02_tipobeneficio = '0802' THEN
+                  (SELECT db104_sequencial
+                   FROM avaliacaoperguntaopcao
+                   WHERE db104_identificador='tpbeneficio_0802')
+           WHEN rh02_tipobeneficio = '0803' THEN
+                  (SELECT db104_sequencial
+                   FROM avaliacaoperguntaopcao
+                   WHERE db104_identificador='tpbeneficio_0803')
+           WHEN rh02_tipobeneficio = '0804' THEN
+                  (SELECT db104_sequencial
+                   FROM avaliacaoperguntaopcao
+                   WHERE db104_identificador='tpbeneficio_0804')
+           WHEN rh02_tipobeneficio = '0805' THEN
+                  (SELECT db104_sequencial
+                   FROM avaliacaoperguntaopcao
+                   WHERE db104_identificador='tpbeneficio_0805')
+           WHEN rh02_tipobeneficio = '0806' THEN
+                  (SELECT db104_sequencial
+                   FROM avaliacaoperguntaopcao
+                   WHERE db104_identificador='tpbeneficio_0806')
+           WHEN rh02_tipobeneficio = '0807' THEN
+                  (SELECT db104_sequencial
+                   FROM avaliacaoperguntaopcao
+                   WHERE db104_identificador='tpbeneficio_0807')
+           WHEN rh02_tipobeneficio = '0808' THEN
+                  (SELECT db104_sequencial
+                   FROM avaliacaoperguntaopcao
+                   WHERE db104_identificador='tpbeneficio_0808')
+           WHEN rh02_tipobeneficio = '0809' THEN
+                  (SELECT db104_sequencial
+                   FROM avaliacaoperguntaopcao
+                   WHERE db104_identificador='tpbeneficio_0809')
+           WHEN rh02_tipobeneficio = '0810' THEN
+                  (SELECT db104_sequencial
+                   FROM avaliacaoperguntaopcao
+                   WHERE db104_identificador='tpbeneficio_0810')
+           WHEN rh02_tipobeneficio = '0811' THEN
+                  (SELECT db104_sequencial
+                   FROM avaliacaoperguntaopcao
+                   WHERE db104_identificador='tpbeneficio_0811')
+           WHEN rh02_tipobeneficio = '0812' THEN
+                  (SELECT db104_sequencial
+                   FROM avaliacaoperguntaopcao
+                   WHERE db104_identificador='tpbeneficio_0812')
+           WHEN rh02_tipobeneficio = '1001' THEN
+                  (SELECT db104_sequencial
+                   FROM avaliacaoperguntaopcao
+                   WHERE db104_identificador='tpbeneficio_1001')
+           WHEN rh02_tipobeneficio = '1009' THEN
+                  (SELECT db104_sequencial
+                   FROM avaliacaoperguntaopcao
+                   WHERE db104_identificador='tpbeneficio_1009')
+       END AS tpbeneficio,
+       CASE
+           WHEN rh02_plansegreg = 1 THEN 1
+           WHEN rh02_plansegreg = 2 THEN 2
+           WHEN rh02_plansegreg = 3 THEN 3
+           WHEN rh02_plansegreg = 0 THEN 0
+       END AS tpplanrp,
+       rh02_descratobeneficio AS dsc,
+       CASE
+           WHEN rh01_concedido = 't' THEN 'S'
+           ELSE 'N'
+       END AS inddecjud,
+       CASE
+           WHEN rh02_validadepensao IS NOT NULL THEN 2
+           ELSE 1
+       END AS tppenmorte,
+       instituidor.z01_cgccpf AS cpfinst,
+       rh02_dtobitoinstituidor AS dtinst
+FROM rhpessoal
+INNER JOIN cgm ON cgm.z01_numcgm = rhpessoal.rh01_numcgm
+LEFT JOIN rhpessoalmov ON rh02_anousu = fc_getsession('DB_anousu')::int
+AND rh02_mesusu = date_part('month', fc_getsession('DB_datausu')::date)
+AND rh02_regist = rh01_regist
+AND rh02_instit = fc_getsession('DB_instit')::int
+LEFT JOIN rhpesrescisao ON rh02_seqpes = rh05_seqpes
+LEFT JOIN rhregime ON rhregime.rh30_codreg = rhpessoalmov.rh02_codreg
+LEFT JOIN rescisao ON rescisao.r59_anousu = rhpessoalmov.rh02_anousu
+AND rescisao.r59_mesusu = rhpessoalmov.rh02_mesusu
+AND rescisao.r59_regime = rhregime.rh30_regime
+AND rescisao.r59_causa = rhpesrescisao.rh05_causa
+AND rescisao.r59_caub = rhpesrescisao.rh05_caub::char(2)
+LEFT JOIN cgm instituidor ON instituidor.z01_numcgm = rh02_cgminstituidor
+WHERE rh30_vinculo IN ('I',
+                       'P')
+  AND r59_anousu IS NULL
+  AND rh01_matorgaobeneficio IS NOT NULL";
+        if ($matricula != null) {
+            $sql .= "and rh01_regist in ($matricula) ";
+        }
+
+        $rs = \db_query($sql);
+
+        if (!$rs) {
+            throw new \Exception("Erro ao buscar os preenchimentos do S2410");
+        }
+
+
+        /**
+         * @todo busca os empregadores da instituição e adicona para cada rubriuca
+         */
+        return \db_utils::getCollectionByRecord($rs);
+    }
+
+    /**
+     * @param integer $codigoFormulario
+     * @return stdClass[]
+     */
     public function buscarPreenchimentoS1200($codigoFormulario, $matricula = null)
     {
-        $sql = "select
+        $sql = "SELECT
         distinct
         1 as tpInsc,
         cgc as nrInsc,
@@ -755,7 +953,7 @@ class Preenchimentos
     where h13_categoria in ('101', '106', '111', '301', '302', '303', '305', '306', '309', '312', '313', '902')
     and rh30_vinculo = 'A'
     and
-	exists (select
+	exists (SELECT
 	1
 from
 	gerfsal
@@ -786,7 +984,7 @@ where
      */
     public function buscarPreenchimentoS1202($codigoFormulario, $matricula = null)
     {
-        $sql = "select
+        $sql = "SELECT
         distinct
         1 as tpInsc,
         cgc as nrInsc,
@@ -873,7 +1071,7 @@ where
         and rescisao.r59_causa = rhpesrescisao.rh05_causa
         and rescisao.r59_caub = rhpesrescisao.rh05_caub::char(2)
     left  outer join (
-            select distinct r33_codtab,r33_nome,r33_tiporegime
+            SELECT distinct r33_codtab,r33_nome,r33_tiporegime
                                 from inssirf
                                 where     r33_anousu = fc_getsession('DB_anousu')::int
                                       and r33_mesusu = date_part('month',fc_getsession('DB_datausu')::date)
@@ -883,7 +1081,7 @@ where
     and rh30_vinculo = 'A'
     and r33_tiporegime = '2'
     and
-	exists (select
+	exists (SELECT
 	1
 from
 	gerfsal
@@ -914,7 +1112,7 @@ where
      */
     public function buscarPreenchimentoS1210($codigoFormulario, $matricula = null)
     {
-        $sql = "select
+        $sql = "SELECT
         distinct
         1 as tpInsc,
         cgc as nrInsc,
@@ -1001,7 +1199,7 @@ where
         and rescisao.r59_causa = rhpesrescisao.rh05_causa
         and rescisao.r59_caub = rhpesrescisao.rh05_caub::char(2)
     left  outer join (
-            select distinct r33_codtab,r33_nome,r33_tiporegime
+            SELECT distinct r33_codtab,r33_nome,r33_tiporegime
                                 from inssirf
                                 where     r33_anousu = fc_getsession('DB_anousu')::int
                                       and r33_mesusu = date_part('month',fc_getsession('DB_datausu')::date)
@@ -1011,7 +1209,7 @@ where
     and rh30_vinculo = 'A'
     and r33_tiporegime = '2'
     and
-	exists (select
+	exists (SELECT
 	1
 from
 	gerfsal
