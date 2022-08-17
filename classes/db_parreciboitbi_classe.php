@@ -248,7 +248,7 @@ class cl_parreciboitbi {
       }
      return $result;
    }
-   function sql_query ( $oid = null,$campos="parreciboitbi.oid,*",$ordem=null,$dbwhere=""){ 
+   function sql_query ( $oid = null,$campos="*",$ordem=null,$dbwhere=""){ 
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = explode("#",$campos);
@@ -265,11 +265,7 @@ class cl_parreciboitbi {
      $sql .= "      inner join tabrec  on  tabrec.k02_codigo = parreciboitbi.it17_codigo";
      $sql .= "      inner join tabrecjm  on  tabrecjm.k02_codjm = tabrec.k02_codjm";
      $sql2 = "";
-     if($dbwhere==""){
-       if( $oid != "" && $oid != null){
-          $sql2 = " where parreciboitbi.oid = '$oid'";
-       }
-     }else if($dbwhere != ""){
+     if($dbwhere != ""){
        $sql2 = " where $dbwhere";
      }
      $sql .= $sql2;
