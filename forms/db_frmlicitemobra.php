@@ -3,11 +3,13 @@
 $cllicitemobra->rotulo->label();
 ?>
 <style>
-    #obr06_descricaotabela{
+    #obr06_descricaotabela {
         width: 858px;
         height: 29px;
     }
-    #l20_objeto,#pc80_resumo{
+
+    #l20_objeto,
+    #pc80_resumo {
         width: 543px;
     }
 </style>
@@ -18,26 +20,26 @@ $cllicitemobra->rotulo->label();
             <tr>
                 <td>
                     <?
-                    db_ancora("Sequencial da Licitação:","js_pesquisa_liclicita(true)",$db_opcao);
+                    db_ancora("Sequencial da Licitação:", "js_pesquisa_liclicita(true)", $db_opcao);
                     ?>
                 </td>
                 <td>
                     <?
-                    db_input('l20_codigo',11,$Il20_codigo,true,'text',$db_opcao,"onchange=js_pesquisa_liclicita(false)");
-                    db_input('l20_objeto',40,$Il20_objeto,true,'text',3,"");
+                    db_input('l20_codigo', 11, $Il20_codigo, true, 'text', $db_opcao, "onchange=js_pesquisa_liclicita(false)");
+                    db_input('l20_objeto', 40, $Il20_objeto, true, 'text', 3, "");
                     ?>
                 </td>
             </tr>
             <tr>
                 <td>
                     <?
-                    db_ancora("Processo de Compras:","js_pesquisa_pcproc(true)",$db_opcao);
+                    db_ancora("Processo de Compras:", "js_pesquisa_pcproc(true)", $db_opcao);
                     ?>
                 </td>
                 <td>
                     <?
-                    db_input('pc80_codproc',11,$Ipc80_codproc,true,'text',$db_opcao,"onchange=js_pesquisa_pcproc(false)");
-                    db_input('pc80_resumo',40,$Ipc80_resumo,true,'text',3,"");
+                    db_input('pc80_codproc', 11, $Ipc80_codproc, true, 'text', $db_opcao, "onchange=js_pesquisa_pcproc(false)");
+                    db_input('pc80_resumo', 40, $Ipc80_resumo, true, 'text', 3, "");
                     ?>
                 </td>
             </tr>
@@ -49,63 +51,67 @@ $cllicitemobra->rotulo->label();
         </table>
 
         <table style="border-top: 2px solid #808080; margin-top: 5px;">
-            <tr><td></td></tr>
             <tr>
-                <td nowrap title="<?=@$Tobr06_tabela?>">
-                    <?=@$Lobr06_tabela?>
+                <td></td>
+            </tr>
+            <tr>
+                <td nowrap title="<?= @$Tobr06_tabela ?>">
+                    <?= @$Lobr06_tabela ?>
                 </td>
                 <td>
                     <?
-                    $aTab = array("0"=>"Selecione",
+                    $aTab = array(
+                        "0" => "Selecione",
                         "1" => "1 - Tabela SINAP",
                         "2" => "2 - Tabela SICRO",
                         "3" => "3 - Outras Tabelas Oficiais",
-                        "4" => "4 - Cadastro Próprio" );
-                    db_select('obr06_tabela',$aTab,true,$db_opcao," onchange='js_validatabela(this.value)'")
+                        "4" => "4 - Cadastro Próprio"
+                    );
+                    db_select('obr06_tabela', $aTab, true, $db_opcao, " onchange='js_validatabela(this.value)'")
                     ?>
                 </td>
-                <td nowrap title="<?=@$Tobr06_versaotabela?>">
-                    <?=@$Lobr06_versaotabela?>
+                <td nowrap title="<?= @$Tobr06_versaotabela ?>">
+                    <?= @$Lobr06_versaotabela ?>
                     <?
-                    db_input('obr06_versaotabela',15,$Iobr06_versaotabela,true,'text',$db_opcao,"")
+                    db_input('obr06_versaotabela', 15, $Iobr06_versaotabela, true, 'text', $db_opcao, "")
                     ?>
                 </td>
             </tr>
             <tr>
-                <td nowrap title="<?=@$Tobr06_descricaotabela?>">
-                    <?=@$Lobr06_descricaotabela?>
+                <td nowrap title="<?= @$Tobr06_descricaotabela ?>">
+                    <?= @$Lobr06_descricaotabela ?>
                 </td>
                 <td colspan="3">
                     <?
-                    db_textarea('obr06_descricaotabela',0,0,$Iobr06_descricaotabela,true,'text',$db_opcao,"","","",'250')
+                    db_textarea('obr06_descricaotabela', 0, 0, $Iobr06_descricaotabela, true, 'text', $db_opcao, "", "", "", '250')
                     ?>
                 </td>
             </tr>
             <tr>
-                <td nowrap title="<?=@$Tobr06_dtregistro?>">
-                    <?=@$Lobr06_dtregistro?>
+                <td nowrap title="<?= @$Tobr06_dtregistro ?>">
+                    <?= @$Lobr06_dtregistro ?>
                 </td>
                 <td>
                     <?
-                    db_inputdata('obr06_dtregistro',@$obr06_dtregistro_dia,@$obr06_dtregistro_mes,@$obr06_dtregistro_ano,true,'text',$db_opcao,"")
+                    db_inputdata('obr06_dtregistro', @$obr06_dtregistro_dia, @$obr06_dtregistro_mes, @$obr06_dtregistro_ano, true, 'text', $db_opcao, "")
                     ?>
                 </td>
-                <td nowrap title="<?=@$Tobr06_dtcadastro?>">
-                    <?=@$Lobr06_dtcadastro?>
+                <td nowrap title="<?= @$Tobr06_dtcadastro ?>">
+                    <?= @$Lobr06_dtcadastro ?>
 
                     <?
-                    if(!isset($obr06_dtcadastro)) {
-                        $obr06_dtcadastro_dia=date('d',db_getsession("DB_datausu"));
-                        $obr06_dtcadastro_mes=date('m',db_getsession("DB_datausu"));
-                        $obr06_dtcadastro_ano=date('Y',db_getsession("DB_datausu"));
+                    if (!isset($obr06_dtcadastro)) {
+                        $obr06_dtcadastro_dia = date('d', db_getsession("DB_datausu"));
+                        $obr06_dtcadastro_mes = date('m', db_getsession("DB_datausu"));
+                        $obr06_dtcadastro_ano = date('Y', db_getsession("DB_datausu"));
                     }
-                    db_inputdata('obr06_dtcadastro',@$obr06_dtcadastro_dia,@$obr06_dtcadastro_mes,@$obr06_dtcadastro_ano,true,'text',$db_opcao);
+                    db_inputdata('obr06_dtcadastro', @$obr06_dtcadastro_dia, @$obr06_dtcadastro_mes, @$obr06_dtcadastro_ano, true, 'text', $db_opcao);
                     ?>
                 </td>
                 <td>
-                    <?=@$Lobr06_codigotabela?>
+                    <?= @$Lobr06_codigotabela ?>
                     <?
-                    db_input('obr06_codigotabela',15,$Iobr06_codigotabela,true,'text',$db_opcao,"")
+                    db_input('obr06_codigotabela', 15, $Iobr06_codigotabela, true, 'text', $db_opcao, "")
                     ?>
                 </td>
             </tr>
@@ -132,22 +138,22 @@ $cllicitemobra->rotulo->label();
         </table>
         <?php
 
-        if(!empty($l20_codigo)) {
-            $sCampos  = " distinct pc01_codmater,pc01_descrmater,obr06_tabela,obr06_descricaotabela,obr06_dtregistro,obr06_dtcadastro,l21_ordem";
+        if (!empty($l20_codigo)) {
+            $sCampos  = " distinct pc01_codmater,pc01_descrmater,obr06_tabela,obr06_descricaotabela,obr06_dtregistro,obr06_dtcadastro,obr06_codigotabela,obr06_versaotabela,l21_ordem";
             $sOrdem   = "l21_ordem";
-            $sWhere   = "l21_codliclicita = {$l20_codigo} and pc01_obras = 't' and pc10_instit = ".db_getsession('DB_instit');
+            $sWhere   = "l21_codliclicita = {$l20_codigo} and pc01_obras = 't' and pc10_instit = " . db_getsession('DB_instit');
             $sSqlItemLicitacao = $cllicitemobra->sql_query_itens_obras_licitacao(null, $sCampos, $sOrdem, $sWhere);
             $sResultitens = $cllicitemobra->sql_record($sSqlItemLicitacao);
             $aItensObras = db_utils::getCollectionByRecord($sResultitens);
             $numrows = $cllicitemobra->numrows;
         }
 
-        if(!empty($pc80_codproc)){
-            $sCampos  = " distinct pc01_codmater,pc01_descrmater,obr06_tabela,obr06_descricaotabela,obr06_dtregistro,obr06_dtcadastro,pc11_seq";
+        if (!empty($pc80_codproc)) {
+            $sCampos  = " distinct pc01_codmater,pc01_descrmater,obr06_tabela,obr06_descricaotabela,obr06_dtregistro,obr06_dtcadastro,obr06_codigotabela,obr06_versaotabela,pc11_seq";
             $sOrdem   = "pc11_seq";
-            $sWhere   = "pc80_codproc = {$pc80_codproc} and pc01_obras = 't' and pc10_instit = ".db_getsession('DB_instit');
+            $sWhere   = "pc80_codproc = {$pc80_codproc} and pc01_obras = 't' and pc10_instit = " . db_getsession('DB_instit');
             $sSqlItemProcessodeCompras = $cllicitemobra->sql_query_itens_obras_processodecompras(null, $sCampos, $sOrdem, $sWhere);
-//            die($sSqlItemProcessodeCompras);
+            //            die($sSqlItemProcessodeCompras);
             $sResultitens = $cllicitemobra->sql_record($sSqlItemProcessodeCompras);
             $aItensObras = db_utils::getCollectionByRecord($sResultitens);
             $numrows = $cllicitemobra->numrows;
@@ -157,70 +163,72 @@ $cllicitemobra->rotulo->label();
         <div style="overflow:scroll;overflow:auto">
             <table>
                 <th class="table_header">
-                    <?php foreach ($aItensObras as $key => $aItem):
-                        if($aItem->obr06_tabela == ""){
-                            $iItem = $aItem->pc01_codmater."0";
-                        }else{
-                            $iItem = $aItem->pc01_codmater.$aItem->obr06_tabela;
+                    <?php foreach ($aItensObras as $key => $aItem) :
+                        if ($aItem->obr06_tabela == "") {
+                            $iItem = $aItem->pc01_codmater . "0";
+                        } else {
+                            $iItem = $aItem->pc01_codmater . $aItem->obr06_tabela;
                         }
 
-                        ?>
+                    ?>
                         <table class="DBgrid">
                             <th class="table_header" style="width: 30px">
-                                <input type="checkbox" class="marca_itens[<?= $iItem ?>]" name="aItonsMarcados" value="<?= $iItem ?>" id="<?= $iItem?>">
+                                <input type="checkbox" class="marca_itens[<?= $iItem ?>]" name="aItonsMarcados" value="<?= $iItem ?>" id="<?= $iItem ?>">
                             </th>
 
                             <td class="linhagrid" style="width: 85px">
                                 <?= $aItem->pc01_codmater ?>
-                                <input type="hidden" name="" value="<?= $aItem->pc01_codmater ?>" id="<?= $iItem?>">
+                                <input type="hidden" name="" value="<?= $aItem->pc01_codmater ?>" id="<?= $iItem ?>">
                             </td>
 
                             <td class="linhagrid" style="width: 310px">
                                 <?= $aItem->pc01_descrmater ?>
-                                <input type="hidden" name="" value="<?= $aItem->pc01_descrmater ?>" id="<?= $iItem?>">
+                                <input type="hidden" name="" value="<?= $aItem->pc01_descrmater ?>" id="<?= $iItem ?>">
                             </td>
 
                             <td class="linhagrid" style="width: 179px">
-                                <select name="tabela" id="<?= 'obr06_tabela_'.$iItem?>" onchange='js_validatabelaLinha(this.id)'>
+                                <select name="tabela" id="<?= 'obr06_tabela_' . $iItem ?>" onchange='js_validatabelaLinha(this.id)'>
                                     <option value="0">Selecione</option>
-                                    <option value="1">1 - Tabela SINAP</option>
-                                    <option value="2">2 - Tabela SICRO</option>
-                                    <option value="3">3 - Outras Tabelas Oficiais</option>
-                                    <option value="4">4 - Cadastro Próprio</option>
+                                    <option <?php echo $aItem->obr06_tabela == "1" ? "selected" : ""; ?> value="1">1 - Tabela SINAP</option>
+                                    <option <?php echo $aItem->obr06_tabela == "2" ? "selected" : ""; ?> value="2">2 - Tabela SICRO</option>
+                                    <option <?php echo $aItem->obr06_tabela == "3" ? "selected" : ""; ?> value="3">3 - Outras Tabelas Oficiais</option>
+                                    <option <?php echo $aItem->obr06_tabela == "4" ? "selected" : ""; ?> value="4">4 - Cadastro Próprio</option>
                                 </select>
                             </td>
 
                             <td class="linhagrid" style="width: 87px">
-                                <input style="width: 80px" type="text" name="" value="<?= $aItem->obr06_versaotabela ?>" id="<?= 'obr06_versaotabela_'.$iItem?>">
+                                <input style="width: 80px" type="text" name="" value="<?= $aItem->obr06_versaotabela ?>" id="<?= 'obr06_versaotabela_' . $iItem ?>">
                             </td>
 
                             <td class="linhagrid" style="width: 305px">
-                                <input type="text" name="" value="<?= $aItem->obr06_descricaotabela ?>" id="<?= 'obr06_descricaotabela_'.$iItem?>">
+                                <input type="text" name="" value="<?= $aItem->obr06_descricaotabela ?>" id="<?= 'obr06_descricaotabela_' . $iItem ?>">
                             </td>
 
                             <td class="linhagrid" style="width: 150px">
                                 <?
-                                $obr06_dtregistro = (implode("/",(array_reverse(explode("-",$aItem->obr06_dtregistro)))));
+                                $obr06_dtregistro = (implode("/", (array_reverse(explode("-", $aItem->obr06_dtregistro)))));
+                                $dataregistro = explode("/", $obr06_dtcadastro);
                                 ?>
                                 <?
-                                db_inputdata('obr06_dtregistro_'.$iItem ,null,null,null,true,'text',1,"")
+                                db_inputdata('obr06_dtregistro_' . $iItem, $dataregistro[0], $dataregistro[1], $dataregistro[2], true, 'text', 1, "")
                                 ?>
                             </td>
 
                             <td class="linhagrid" style="width: 150px">
                                 <?
-                                $obr06_dtcadastro = (implode("/",(array_reverse(explode("-",$aItem->obr06_dtcadastro)))));
+                                $obr06_dtcadastro = (implode("/", (array_reverse(explode("-", $aItem->obr06_dtcadastro)))));
+                                $datacadastro = explode("/", $obr06_dtcadastro);
                                 ?>
                                 <?php
-                                db_inputdata('obr06_dtcadastro_'.$iItem ,null,null,null,true,'text',1,"")
+                                db_inputdata('obr06_dtcadastro_' . $iItem, $datacadastro[0], $datacadastro[1], $datacadastro[2], true, 'text', 1, "")
                                 ?>
                             </td>
 
                             <td class="linhagrid" style="width: 87px">
-                                <input style="width: 80px" type="text" name="" value="<?= $aItem->obr06_codigotabela ?>" id="<?= 'obr06_codigotabela_'.$iItem?>">
+                                <input style="width: 80px" type="text" name="" value="<?= $aItem->obr06_codigotabela ?>" id="<?= 'obr06_codigotabela_' . $iItem ?>">
                             </td>
                             <td class="linhagrid" style="width: 87px">
-                                <input type="button" name="" value="Excluir" id="<?= $iItem?>" onclick="excluirLinha(<?=$iItem?>)">
+                                <input type="button" name="" value="Excluir" id="<?= $iItem ?>" onclick="excluirLinha(<?= $iItem ?>)">
                             </td>
                         </table>
                     <?php
@@ -231,7 +239,7 @@ $cllicitemobra->rotulo->label();
             </table>
         </div>
         <?
-        if($numrows <= 0){
+        if ($numrows <= 0) {
             echo "<div>Nenhum Item Encontrado !</div>";
         }
         ?>
@@ -244,26 +252,26 @@ $cllicitemobra->rotulo->label();
     </fieldset>
 </form>
 <script>
+    function js_dataFormat(strData, formato) {
 
-    function js_dataFormat(strData,formato){
-
-        if(formato=='b'){
+        if (formato == 'b') {
             aData = strData.split('/');
-            return  aData[2]+'-'+aData[1]+'-'+aData[0];
-        }else{
+            return aData[2] + '-' + aData[1] + '-' + aData[0];
+        } else {
             aData = strData.split('-');
-            return  aData[2]+'/'+aData[1]+'/'+aData[0];
+            return aData[2] + '/' + aData[1] + '/' + aData[0];
         }
     }
 
-    function js_pesquisa(){
-        js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_licitemobra.php?funcao_js=parent.js_preenchepesquisa|0','Pesquisa',true);
+    function js_pesquisa() {
+        js_OpenJanelaIframe('top.corpo', 'db_iframe_liclicita', 'func_licitemobra.php?funcao_js=parent.js_preenchepesquisa|0', 'Pesquisa', true);
     }
-    function js_preenchepesquisa(chave){
+
+    function js_preenchepesquisa(chave) {
         db_iframe_liclicita.hide();
         <?
-        if($db_opcao!=1){
-            echo " location.href = '".basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"])."?chavepesquisa='+chave";
+        if ($db_opcao != 1) {
+            echo " location.href = '" . basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]) . "?chavepesquisa='+chave";
         }
         ?>
     }
@@ -297,8 +305,7 @@ $cllicitemobra->rotulo->label();
     /**
      * funcao para preencher licitacao  da ancora
      */
-    function js_preencheLicitacao(codigo,objeto)
-    {
+    function js_preencheLicitacao(codigo, objeto) {
         document.form1.l20_codigo.value = codigo;
         document.form1.l20_objeto.value = objeto;
         document.form1.pc80_codproc.value = '';
@@ -306,20 +313,20 @@ $cllicitemobra->rotulo->label();
         db_iframe_liclicita.hide();
     }
 
-    function js_preencheLicitacao2(objeto,erro) {
+    function js_preencheLicitacao2(objeto, erro) {
         document.form1.l20_objeto.value = objeto;
         document.form1.pc80_codproc.value = '';
         document.form1.pc80_resumo.value = '';
 
-        if(erro==true){
+        if (erro == true) {
             alert("Nenhuma licitação encontrada.");
             document.form1.l20_objeto.value = "";
         }
     }
 
     function js_carregar() {
-        let db_opcao = <?=$db_opcao?>;
-        if(db_opcao != 1){
+        let db_opcao = <?= $db_opcao ?>;
+        if (db_opcao != 1) {
             js_pesquisa_codmater(false);
         }
     }
@@ -328,12 +335,12 @@ $cllicitemobra->rotulo->label();
     /**
      * funcao para retornar processo de compra
      */
-    function js_pesquisa_pcproc(mostra){
-        if(mostra==true){
-            js_OpenJanelaIframe('top.corpo','db_iframe_pcproc','func_pcproc.php?funcao_js=parent.js_mostrapcproc|pc80_codproc|pc80_resumo','Pesquisa',true);
-        }else{
-            if(document.form1.pc80_codproc.value != ''){
-                js_OpenJanelaIframe('top.corpo','db_iframe_pcproc','func_pcproc.php?pesquisa_chave='+document.form1.pc80_codproc.value+'&itemobras=true&funcao_js=parent.js_mostrapcproc1','Pesquisa',false);
+    function js_pesquisa_pcproc(mostra) {
+        if (mostra == true) {
+            js_OpenJanelaIframe('top.corpo', 'db_iframe_pcproc', 'func_pcproc.php?funcao_js=parent.js_mostrapcproc|pc80_codproc|pc80_resumo', 'Pesquisa', true);
+        } else {
+            if (document.form1.pc80_codproc.value != '') {
+                js_OpenJanelaIframe('top.corpo', 'db_iframe_pcproc', 'func_pcproc.php?pesquisa_chave=' + document.form1.pc80_codproc.value + '&itemobras=true&funcao_js=parent.js_mostrapcproc1', 'Pesquisa', false);
             }
         }
     }
@@ -341,18 +348,19 @@ $cllicitemobra->rotulo->label();
     /**
      * funcao para carregar processo de compra
      */
-    function js_mostrapcproc(chave,chave2){
+    function js_mostrapcproc(chave, chave2) {
         document.form1.pc80_codproc.value = chave;
         document.form1.pc80_resumo.value = chave2;
         db_iframe_pcproc.hide();
 
     }
-    function js_mostrapcproc1(chave1,chave2,erro){
+
+    function js_mostrapcproc1(chave1, chave2, erro) {
         document.form1.pc80_codproc.value = chave1;
         document.form1.pc80_resumo.value = chave2;
         document.form1.l20_codigo.value = '';
         document.form1.l20_objeto.value = '';
-        if(erro==true){
+        if (erro == true) {
             document.form1.pc80_codproc.focus();
             document.form1.pc80_codproc.value = '';
             document.form1.l20_codigo.value = '';
@@ -367,7 +375,7 @@ $cllicitemobra->rotulo->label();
     function aItens() {
         var itensNum = document.getElementsByName("aItonsMarcados");
 
-        return Array.prototype.map.call(itensNum, function (item) {
+        return Array.prototype.map.call(itensNum, function(item) {
             return item;
         });
     }
@@ -377,7 +385,7 @@ $cllicitemobra->rotulo->label();
      */
     function marcarTodos() {
 
-        aItens().forEach(function (item) {
+        aItens().forEach(function(item) {
 
             var check = item.classList.contains('marcado');
 
@@ -400,7 +408,7 @@ $cllicitemobra->rotulo->label();
                 l20_codigo: licitacao,
                 pc80_codproc: processodecompras
             }, preenchercampos);
-        } catch(e) {
+        } catch (e) {
             alert(e.toString());
         }
         return false;
@@ -409,8 +417,8 @@ $cllicitemobra->rotulo->label();
     function BuscarItensAjax(params, onComplete) {
         js_divCarregando('Aguarde Buscando Informações', 'div_aguarde');
         var request = new Ajax.Request('obr1_obras.RPC.php', {
-            method:'post',
-            parameters:'json=' + JSON.stringify(params),
+            method: 'post',
+            parameters: 'json=' + JSON.stringify(params),
             onComplete: function(oRetornoitems) {
                 js_removeObj('div_aguarde');
                 onComplete(oRetornoitems);
@@ -421,22 +429,22 @@ $cllicitemobra->rotulo->label();
     function preenchercampos(oRetornoitems) {
         var oRetornoitens = JSON.parse(oRetornoitems.responseText);
 
-        oRetornoitens.itens.forEach(function (item, x) {
+        oRetornoitens.itens.forEach(function(item, x) {
             let tabela = item.obr06_tabela;
 
-            if(tabela.empty() === true){
+            if (tabela.empty() === true) {
                 tabela = 0;
-            }else{
+            } else {
                 tabela = item.obr06_tabela;
             }
 
-            document.getElementById('obr06_tabela_'+item.pc01_codmater+tabela).value = tabela;
-            document.getElementById('obr06_versaotabela_'+item.pc01_codmater+tabela).value = item.obr06_versaotabela;
-            document.getElementById('obr06_descricaotabela_'+item.pc01_codmater+tabela).value = item.obr06_descricaotabela;
-            document.getElementById('obr06_codigotabela_'+item.pc01_codmater+tabela).value = item.obr06_codigotabela;
-            if(item.obr06_dtregistro != ""){
-               document.getElementById('obr06_dtregistro_'+item.pc01_codmater+tabela).value = js_dataFormat(item.obr06_dtregistro,'u');
-               document.getElementById('obr06_dtcadastro_'+item.pc01_codmater+tabela).value = js_dataFormat(item.obr06_dtcadastro,'u');
+            document.getElementById('obr06_tabela_' + item.pc01_codmater + tabela).value = tabela;
+            document.getElementById('obr06_versaotabela_' + item.pc01_codmater + tabela).value = item.obr06_versaotabela;
+            document.getElementById('obr06_descricaotabela_' + item.pc01_codmater + tabela).value = item.obr06_descricaotabela;
+            document.getElementById('obr06_codigotabela_' + item.pc01_codmater + tabela).value = item.obr06_codigotabela;
+            if (item.obr06_dtregistro != "") {
+                document.getElementById('obr06_dtregistro_' + item.pc01_codmater + tabela).value = js_dataFormat(item.obr06_dtregistro, 'u');
+                document.getElementById('obr06_dtcadastro_' + item.pc01_codmater + tabela).value = js_dataFormat(item.obr06_dtcadastro, 'u');
             }
         });
     }
@@ -447,22 +455,22 @@ $cllicitemobra->rotulo->label();
 
     function js_aplicar() {
 
-        let tabela          = document.getElementById('obr06_tabela').value;
-        let versaotabela    = document.getElementById('obr06_versaotabela').value;
+        let tabela = document.getElementById('obr06_tabela').value;
+        let versaotabela = document.getElementById('obr06_versaotabela').value;
         let descricaotabela = document.getElementById('obr06_descricaotabela').value;
-        let dtregistro      = document.getElementById('obr06_dtregistro').value;
-        let dtcadastro      = document.getElementById('obr06_dtcadastro').value;
-        let codigodatabela  = document.getElementById('obr06_codigotabela').value;
+        let dtregistro = document.getElementById('obr06_dtregistro').value;
+        let dtcadastro = document.getElementById('obr06_dtcadastro').value;
+        let codigodatabela = document.getElementById('obr06_codigotabela').value;
         // console.log(aItens());
-        aItens().forEach(function (item) {
+        aItens().forEach(function(item) {
             // console.log(item.id);
-            if(item.checked === true){
-                document.getElementById('obr06_tabela_'+item.id).value = tabela;
-                document.getElementById('obr06_versaotabela_'+item.id).value = versaotabela;
-                document.getElementById('obr06_descricaotabela_'+item.id).value = descricaotabela;
-                document.getElementById('obr06_dtregistro_'+item.id).value = dtregistro;
-                document.getElementById('obr06_dtcadastro_'+item.id).value = dtcadastro;
-                document.getElementById('obr06_codigotabela_'+item.id).value = codigodatabela;
+            if (item.checked === true) {
+                document.getElementById('obr06_tabela_' + item.id).value = tabela;
+                document.getElementById('obr06_versaotabela_' + item.id).value = versaotabela;
+                document.getElementById('obr06_descricaotabela_' + item.id).value = descricaotabela;
+                document.getElementById('obr06_dtregistro_' + item.id).value = dtregistro;
+                document.getElementById('obr06_dtcadastro_' + item.id).value = dtcadastro;
+                document.getElementById('obr06_codigotabela_' + item.id).value = codigodatabela;
             }
         })
 
@@ -473,7 +481,7 @@ $cllicitemobra->rotulo->label();
      */
 
     function getItensMarcados() {
-        return aItens().filter(function (item) {
+        return aItens().filter(function(item) {
             return item.checked;
         });
     }
@@ -493,17 +501,17 @@ $cllicitemobra->rotulo->label();
         var itensEnviar = [];
 
         try {
-            itens.forEach(function (item) {
+            itens.forEach(function(item) {
                 let coditem = item.id;
 
                 var novoItem = {
-                    obr06_pcmater:            coditem,
-                    obr06_tabela:             document.getElementById('obr06_tabela_'+coditem).value,
-                    obr06_descricaotabela:    document.getElementById('obr06_descricaotabela_'+coditem).value,
-                    obr06_codigotabela:       document.getElementById('obr06_codigotabela_'+coditem).value,
-                    obr06_versaotabela:       document.getElementById('obr06_versaotabela_'+coditem).value,
-                    obr06_dtregistro:         document.getElementById('obr06_dtregistro_'+coditem).value,
-                    obr06_dtcadastro:         document.getElementById('obr06_dtcadastro_'+coditem).value,
+                    obr06_pcmater: coditem,
+                    obr06_tabela: document.getElementById('obr06_tabela_' + coditem).value,
+                    obr06_descricaotabela: document.getElementById('obr06_descricaotabela_' + coditem).value,
+                    obr06_codigotabela: document.getElementById('obr06_codigotabela_' + coditem).value,
+                    obr06_versaotabela: document.getElementById('obr06_versaotabela_' + coditem).value,
+                    obr06_dtregistro: document.getElementById('obr06_dtregistro_' + coditem).value,
+                    obr06_dtcadastro: document.getElementById('obr06_dtcadastro_' + coditem).value,
                 };
                 itensEnviar.push(novoItem);
             });
@@ -511,50 +519,50 @@ $cllicitemobra->rotulo->label();
                 exec: 'SalvarItemObra',
                 itens: itensEnviar,
             }, retornoAjax);
-        } catch(e) {
+        } catch (e) {
             alert(e.toString());
         }
         return false;
     }
 
-     function salvarItemAjax(params, onComplete) {
-         js_divCarregando('Aguarde salvando', 'div_aguarde');
-         var request = new Ajax.Request('obr1_obras.RPC.php', {
-             method:'post',
-             parameters:'json=' + JSON.stringify(params),
-             onComplete: function(res) {
-                 js_removeObj('div_aguarde');
-                 onComplete(res);
-             }
-         });
-     }
+    function salvarItemAjax(params, onComplete) {
+        js_divCarregando('Aguarde salvando', 'div_aguarde');
+        var request = new Ajax.Request('obr1_obras.RPC.php', {
+            method: 'post',
+            parameters: 'json=' + JSON.stringify(params),
+            onComplete: function(res) {
+                js_removeObj('div_aguarde');
+                onComplete(res);
+            }
+        });
+    }
 
-     function retornoAjax(res) {
-         var response = JSON.parse(res.responseText);
-         if (response.status == 2) {
-             alert(response.message.urlDecode());
-         }else{
-             alert("Item salvo com sucesso!");
-         }
-     }
+    function retornoAjax(res) {
+        var response = JSON.parse(res.responseText);
+        if (response.status == 2) {
+            alert(response.message.urlDecode());
+        } else {
+            alert("Item salvo com sucesso!");
+        }
+    }
 
-    function js_validatabela(value){
+    function js_validatabela(value) {
 
-        if(value != 3){
+        if (value != 3) {
             document.getElementById('obr06_descricaotabela').style.backgroundColor = '#E6E4F1'
-        }else{
+        } else {
             document.getElementById('obr06_descricaotabela').style.backgroundColor = '#FFFFFF'
 
         }
     }
 
-    function js_validatabelaLinha(value){
+    function js_validatabelaLinha(value) {
         let campo = value.substring(13);
-        let tipotabela = document.getElementById('obr06_tabela_'+campo).value;
-        if(tipotabela != 3){
-            document.getElementById('obr06_descricaotabela_'+campo).style.backgroundColor = '#E6E4F1'
-        }else{
-            document.getElementById('obr06_descricaotabela_'+campo).style.backgroundColor = '#FFFFFF'
+        let tipotabela = document.getElementById('obr06_tabela_' + campo).value;
+        if (tipotabela != 3) {
+            document.getElementById('obr06_descricaotabela_' + campo).style.backgroundColor = '#E6E4F1'
+        } else {
+            document.getElementById('obr06_descricaotabela_' + campo).style.backgroundColor = '#FFFFFF'
 
         }
     }
@@ -563,7 +571,7 @@ $cllicitemobra->rotulo->label();
      * Excluir Itens
      */
 
-    function js_excluirItensObra(){
+    function js_excluirItensObra() {
         let itens = getItensMarcados();
 
         if (itens.length < 1) {
@@ -574,12 +582,12 @@ $cllicitemobra->rotulo->label();
         var itensEnviar = [];
 
         try {
-            itens.forEach(function (item) {
+            itens.forEach(function(item) {
                 let coditem = item.id;
 
                 var novoItem = {
-                    obr06_pcmater:            coditem,
-                    obr06_tabela:             document.getElementById('obr06_tabela_'+coditem).value,
+                    obr06_pcmater: coditem,
+                    obr06_tabela: document.getElementById('obr06_tabela_' + coditem).value,
                 };
                 itensEnviar.push(novoItem);
             });
@@ -587,7 +595,7 @@ $cllicitemobra->rotulo->label();
                 exec: 'ExcluirItemObra',
                 itens: itensEnviar,
             }, retornoexclusaoAjax);
-        } catch(e) {
+        } catch (e) {
             alert(e.toString());
         }
         return false;
@@ -596,8 +604,8 @@ $cllicitemobra->rotulo->label();
     function excluirItemAjax(params, onComplete) {
         js_divCarregando('Aguarde Excluindo', 'div_aguarde');
         var request = new Ajax.Request('obr1_obras.RPC.php', {
-            method:'post',
-            parameters:'json=' + JSON.stringify(params),
+            method: 'post',
+            parameters: 'json=' + JSON.stringify(params),
             onComplete: function(res) {
                 js_removeObj('div_aguarde');
                 onComplete(res);
@@ -609,14 +617,14 @@ $cllicitemobra->rotulo->label();
         var response = JSON.parse(res.responseText);
         if (response.status != 1) {
             alert(response.message);
-        }else{
-            response.itens.forEach(function (item, x) {
-                document.getElementById('obr06_tabela_'+item).value = 0;
-                document.getElementById('obr06_versaotabela_'+item).value = "";
-                document.getElementById('obr06_descricaotabela_'+item).value = "";
-                document.getElementById('obr06_dtcadastro_'+item).value = "";
-                document.getElementById('obr06_dtregistro_'+item).value = "";
-                document.getElementById('obr06_codigotabela_'+item).value = "";
+        } else {
+            response.itens.forEach(function(item, x) {
+                document.getElementById('obr06_tabela_' + item).value = 0;
+                document.getElementById('obr06_versaotabela_' + item).value = "";
+                document.getElementById('obr06_descricaotabela_' + item).value = "";
+                document.getElementById('obr06_dtcadastro_' + item).value = "";
+                document.getElementById('obr06_dtregistro_' + item).value = "";
+                document.getElementById('obr06_codigotabela_' + item).value = "";
             })
             alert("Item Excluido com sucesso!")
         }
@@ -627,15 +635,15 @@ $cllicitemobra->rotulo->label();
 
         try {
             var novoItem = {
-                obr06_pcmater:            codigo,
-                obr06_tabela:             document.getElementById('obr06_tabela_'+codigo).value,
+                obr06_pcmater: codigo,
+                obr06_tabela: document.getElementById('obr06_tabela_' + codigo).value,
             };
             itensEnviar.push(novoItem);
             excluirlinhaAjax({
                 exec: 'ExcluirItemObra',
                 itens: itensEnviar,
             }, retornoexclusaolinhaAjax);
-        } catch(e) {
+        } catch (e) {
             alert(e.toString());
         }
         return false;
@@ -644,8 +652,8 @@ $cllicitemobra->rotulo->label();
     function excluirlinhaAjax(params, onComplete) {
         js_divCarregando('Aguarde Excluindo', 'div_aguarde');
         var request = new Ajax.Request('obr1_obras.RPC.php', {
-            method:'post',
-            parameters:'json=' + JSON.stringify(params),
+            method: 'post',
+            parameters: 'json=' + JSON.stringify(params),
             onComplete: function(res) {
                 js_removeObj('div_aguarde');
                 onComplete(res);
@@ -657,17 +665,16 @@ $cllicitemobra->rotulo->label();
         var response = JSON.parse(res.responseText);
         if (response.status != 1) {
             alert(response.message);
-        }else{
-            response.itens.forEach(function (item, x) {
-                document.getElementById('obr06_tabela_'+item).value = 0;
-                document.getElementById('obr06_versaotabela_'+item).value = "";
-                document.getElementById('obr06_descricaotabela_'+item).value = "";
-                document.getElementById('obr06_dtcadastro_'+item).value = "";
-                document.getElementById('obr06_dtregistro_'+item).value = "";
-                document.getElementById('obr06_codigotabela_'+item).value = "";
+        } else {
+            response.itens.forEach(function(item, x) {
+                document.getElementById('obr06_tabela_' + item).value = 0;
+                document.getElementById('obr06_versaotabela_' + item).value = "";
+                document.getElementById('obr06_descricaotabela_' + item).value = "";
+                document.getElementById('obr06_dtcadastro_' + item).value = "";
+                document.getElementById('obr06_dtregistro_' + item).value = "";
+                document.getElementById('obr06_codigotabela_' + item).value = "";
             })
             alert("Item Excluido com sucesso!")
         }
     }
-
 </script>
