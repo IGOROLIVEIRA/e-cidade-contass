@@ -173,7 +173,9 @@ if(isset($o56_codele) and trim($o56_codele) != ''){
                  pcmater.pc01_complmater,o56_codele,o56_elemento,substr(o56_descr,1,40) as o56_descr,
                  pcsubgrupo.pc04_descrsubgrupo as DB_pc04_descrsubgrupo,
                  pcmater.pc01_servico,
-								 pcmater.pc01_veiculo";
+								 pcmater.pc01_veiculo,
+                 pcmater.pc01_instit,
+                 pcmater.pc01_codmaterant";
         $repassa = array(
           "chave_pc01_codmater"    => @$chave_pc01_codmater,
           "chave_pc01_descrmater"  => @$chave_pc01_descrmater,
