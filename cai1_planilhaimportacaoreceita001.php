@@ -34,24 +34,23 @@ require_once("libs/db_usuariosonline.php");
 require_once("dbforms/db_funcoes.php");
 require_once("model/caixa/PlanilhaArrecadacao.model.php");
 require_once("classes/db_tabrec_classe.php");
-require_once("model/caixa/PlanilhaArrecadacaoImportacaoReceitaFactory.model.php");
+require_once("model/caixa/PlanilhaArrecadacaoImportacaoReceita.model.php");
 
 db_postmemory($HTTP_POST_VARS);
 define('MENSAGENS', 'financeiro.caixa.cai1_planilhalancamento001.');
 define('DEBUG', false);
 
-/*
+
 if (DEBUG) {
     ini_set('display_errors',1);
     ini_set('display_startup_erros',1);
     error_reporting(E_ALL);
 }
-*/
+
 
 montarDebug("Debug Ativo");
 
 if (isset($processar)) {
-    db_inicio_transacao();
     try {
         // Recebendo o arquivo da planilha
         db_postmemory($_FILES["arquivo"]);
@@ -63,61 +62,13 @@ if (isset($processar)) {
         $arq_ext     = substr($name, -3);
 
         if ($arq_ext != "txt")
-            throw new BusinessException("Apenas arquivos de texto (.txt)");
+            throw new FileException("Apenas arquivos de texto (.txt)");
 
         montarDebug("Dados do arquivo: {$arq_ext} {$arq_name} {$arq_type} {$arq_tmpname} {$arq_size}");
 
-        $oPlanilhaArrecadacao = new PlanilhaArrecadacao();
-        $dtArrecadacao = date('Y-m-d', db_getsession('DB_datausu'));
-        $oPlanilhaArrecadacao->setDataCriacao($dtArrecadacao);
-        $oPlanilhaArrecadacao->setInstituicao(InstituicaoRepository::getInstituicaoByCodigo(db_getsession('DB_instit')));
-        $oPlanilhaArrecadacao->setProcessoAdministrativo($arq_name);
-
-        $oDaoDBConfig = db_utils::getDao("db_config");
-        $rsInstit = $oDaoDBConfig->sql_record($oDaoDBConfig->sql_query_file(db_getsession("DB_instit")));
-        $oInstit = db_utils::fieldsMemory($rsInstit, 0);
-
-        montarDebug($oInstit);
-
-        foreach ($arq_array as $iPosicao => $sLinha) {
-            $oReceita = PlanilhaArrecadacaoImportacaoReceitaFactory::preencherLayout($layout, $sLinha);
-
-            montarDebug($oReceita);
-
-            $iNumeroCgm        = $oInstit->numcgm;
-            $iInscricao        = "";
-            $iMatricula        = "";
-            $iConvenio         = "";
-            $sObservacao       = "";
-            $sOperacaoBancaria = "";
-            $iOrigem           = 1; // 1 - CGM
-            $iEmParlamentar    = 3;
-
-            $oReceitaPlanilha = new ReceitaPlanilha();
-            $oReceitaPlanilha->setCaracteristicaPeculiar(new CaracteristicaPeculiar("000"));
-            $oReceitaPlanilha->setCGM(CgmFactory::getInstanceByCgm($iNumeroCgm));
-            $oReceitaPlanilha->setContaTesouraria($oReceita->oContaTesouraria);
-            $oReceitaPlanilha->setDataRecebimento(new DBDate($oReceita->dDataCredito));
-            $oReceitaPlanilha->setInscricao($iInscricao);
-            $oReceitaPlanilha->setMatricula($iMatricula);
-            $oReceitaPlanilha->setObservacao(db_stdClass::normalizeStringJsonEscapeString($sObservacao));
-            $oReceitaPlanilha->setOperacaoBancaria($sOperacaoBancaria);
-            $oReceitaPlanilha->setOrigem($iOrigem);
-            $oReceitaPlanilha->setRecurso(new Recurso($oReceita->iRecurso));
-            $oReceitaPlanilha->setRegularizacaoRepasse("");
-            $oReceitaPlanilha->setRegExercicio("");
-            $oReceitaPlanilha->setEmendaParlamentar($iEmParlamentar);
-            $oReceitaPlanilha->setTipoReceita($oReceita->iReceita);
-            $oReceitaPlanilha->setValor($oReceita->nValor);
-            $oReceitaPlanilha->setConvenio("");
-            $oPlanilhaArrecadacao->adicionarReceitaPlanilha($oReceitaPlanilha);
-        }
-
-        $oPlanilhaArrecadacao->salvar();
-        db_msgbox("Planilha {$oPlanilhaArrecadacao->getCodigo()} inclusa com sucesso.\n\n");
-        db_fim_transacao(false);
+        $oPlanilhaArrecadacaoImportacaoReceita = new PlanilhaArrecadacaoImportacaoReceita($arq_name, $layout);
+        $oPlanilhaArrecadacaoImportacaoReceita->salvarPlanilhaReceita($arq_array);
     } catch (Exception $oException) {
-        db_fim_transacao(true);
         db_msgbox($oException->getMessage());
     }
 }

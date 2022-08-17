@@ -102,7 +102,7 @@ if (isset($incluir)) {
 
 if (isset($incluir)) {
     if (!$lerro) {
-        echo "<script> document.form1.reset(); </script>";
+        echo "<script>  </script>";
         db_msgbox($erro_msg);
     } else {
         $db_botao = true;
