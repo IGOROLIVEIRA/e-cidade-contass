@@ -68,6 +68,9 @@ class DadosESocial
             case '15':
                 return $this->buscaPreenchimentos($matricula);
                 break;
+            case '49':
+                return $this->buscaPreenchimentos($matricula);
+                break;
             default:
                 $preenchimentos = $this->buscaPreenchimentos($matricula);
 
@@ -135,6 +138,8 @@ class DadosESocial
                 return $preenchimento->buscarPreenchimentoS1210($formularioId, $matricula);
             case Tipo::AFASTAMENTO_TEMPORARIO:
                 return $preenchimento->buscarPreenchimentoS2230($formularioId, $matricula);
+            case Tipo::CADASTRO_BENEFICIO:
+                return $preenchimento->buscarPreenchimentoS2410($formularioId, $matricula);
             default:
                 throw new Exception('Tipo não encontrado.');
         }
