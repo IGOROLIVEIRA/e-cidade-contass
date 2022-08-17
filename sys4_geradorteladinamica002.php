@@ -53,6 +53,15 @@ if ($oGet->cgms != null) {
   }
 }
 
+
+if ($and == true) {
+  $where .= " and ac16_instit = " . db_getsession("DB_instit");
+} else {
+  $where .= " WHERE ac16_instit = " . db_getsession("DB_instit");
+  $and = true;
+}
+
+
 $sql_acordo = "SELECT acordo.ac16_sequencial AS SEQUENCIAL,
 CAST(acordo.ac16_numeroacordo AS NUMERIC) AS NUMERO,
 acordo.ac16_anousu AS ANO,
