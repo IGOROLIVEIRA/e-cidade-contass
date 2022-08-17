@@ -857,7 +857,7 @@ class cl_obrasalvara {
     if ( !empty($sOrderBy) ) {
       $sSql .=" order by {$sOrderBy}    ";
     }
-    return $sSql;  
+    return $sSql;
   }
   
   function sql_query_cartaAlvara($sCampos, $iCodigoObra) {

@@ -195,7 +195,7 @@ $pdf->AliasNbPages();          // gera alias para as paginas
 $pdf->AddPage();               // adiciona uma pagina
 $pdf->SetTextColor(0,0,0);
 $pdf->SetFillColor(220);
-/////// TEXTOS E ASSINATURAS
+////// TEXTOS E ASSINATURAS
 
 $sqlparag = "select *
                from db_documento

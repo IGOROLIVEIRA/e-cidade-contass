@@ -62,7 +62,7 @@ class pdf4 extends fpdf {
 
 
 //Page header
-  function Header() {
+function Header() {
 //$dados = @db_query("select nomeinst,ender,munic,uf,telef,email,url,logo from db_config where codigo = ".@$GLOBALS["DB_instit"]);
 //$url = @pg_result($dados,0,"url");
 //global $nomeinst;

@@ -145,7 +145,7 @@ if ($ob24_iptubase != null){
           WHERE j01_matric = ".$ob24_iptubase;
 }
 
-//Dados das Características da Obra
+//Dados das Características da Obra.
 $dados_caractericas=$clobrasconstr->sql_record($clobrasconstr->sql_query_caracteristicasConstrucao($codigo));
 if($clobrasconstr->numrows>0){
   db_fieldsmemory($dados_caractericas,0);

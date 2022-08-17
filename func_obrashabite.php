@@ -77,6 +77,7 @@ $clRotulo->label("ob06_lote");
 							?>
 						</td>
 					</tr>
+
 					<tr> 
 						<td nowrap title="<?=$Tob09_habite?>">
 							<?=$Lob09_habite?>
@@ -87,6 +88,7 @@ $clRotulo->label("ob06_lote");
 							?>
 						</td>
 					</tr>
+
 					<tr>
 						<td title="<?=@$Tj01_matric?>">
 							<?=$Lj01_matric?>
@@ -97,6 +99,7 @@ $clRotulo->label("ob06_lote");
 							?>
 						</td>
 					</tr>	
+					
 					<tr>
 						<td title="<?=@$Tob06_setor?>">
 							<strong>Setor/Quadra/Lote: </strong>
