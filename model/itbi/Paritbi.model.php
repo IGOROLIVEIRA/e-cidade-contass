@@ -338,9 +338,12 @@ class Paritbi {
         return $this->it24_proced;
     }
 
+    /**
+     * @return int
+     */
     public function getDevedorPrincipal()
     {
-        return $this->it24_devedor;
+        return (int) $this->it24_devedor;
     }
 
 }
