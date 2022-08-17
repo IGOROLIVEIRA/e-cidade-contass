@@ -1523,7 +1523,7 @@ if ($x->consultarDataDoSistema == true) {
                      caso deseje-se que seja exibida uma mensagem informativa de uma dotação específica em caso de valores não
                      correspondentes, segue abaixo um exemplo
                      alert(nTotal.valueOf() +" <===> "+ nValorDotacao.valueOf()); */
-                    alert('Valor da (s) dotação(ões)' + oItem.valor + ' - ' + nValorDotacao + ' diferente do valor do item.\nCorrija o valor das dotações.');
+                    alert('Valor da (s) dotação(ões)' + oItem.codigo + ' diferente do valor do item.\nCorrija o valor das dotações.');
                     js_removeObj('msgbox');
                     return false;
                 }
