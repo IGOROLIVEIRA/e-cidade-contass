@@ -24,29 +24,42 @@
  *  Copia da licenca no diretorio licenca/licenca_en.txt
  *                                licenca/licenca_pt.txt
  */
-require_once "interfaces/iPlanilhaArrecadacaoImportacaoReceitaLayout.interface.php";
-
-class PlanilhaArrecadacaoImportacaoReceitaLayout2 implements iPlanilhaArrecadacaoImportacaoReceitaLayout
+class PlanilhaArrecadacaoImportacaoReceitaOrcamentariaLayout2
 {
     private $oReceita;
 
     public function __construct($sLinha)
     {
+        $this->oReceita = new stdClass();
         $this->preencherLinha($sLinha);
     }
 
     public function preencherLinha($sLinha)
     {
-        $this->oReceita = new stdClass();
+        if (!$this->eReceita($sLinha))
+            return;
+
         $this->oReceita->iCodBanco        = substr($sLinha, 0, 3);
         $this->oReceita->sDescricaoBanco  = ""; // Buscar de Agentes Arrecadadores
         $this->oReceita->iContaBancaria   = 0; // Buscar de Agentes Arrecadadores
         $this->oReceita->sCodAgencia      = substr($sLinha, 3, 4);
         $this->oReceita->dDataCredito     = $this->montarData(substr($sLinha, 7, 8));
         $this->oReceita->nValor           = $this->montarValor(substr($sLinha, 21, 13));
-        $this->oReceita->sCodContabil     = $this->montarCodigoContabil(str_replace(".", "", substr($sLinha, 35, 17)));
+        $this->oReceita->sCodReceita      = str_replace(".", "", substr($sLinha, 35, 17));
         $this->preencherReceita();
         $this->preencherAgenteArrecadador();
+    }
+
+    /**
+     * Verifica se a linha é desse tipo de Receita
+     *
+     * @return bool
+     */
+    public function eReceita($sLinha)
+    {
+        if (in_array(substr($sLinha, 35, 1), array("1", "7", "9")))
+            return true;
+        return false;
     }
 
     /**
@@ -82,33 +95,17 @@ class PlanilhaArrecadacaoImportacaoReceitaLayout2 implements iPlanilhaArrecadaca
     public function preencherReceita()
     {
         $cltabrec = new cl_tabrec;
-        $sqlTabrec = $cltabrec->sql_query_inst("", "*", "k02_estorc", " k02_estorc like '{$this->oReceita->sCodContabil}%' ");
+        $sqlTabrec = $cltabrec->sql_query_inst("", "*", "k02_estorc", " k02_estorc like '4{$this->oReceita->sCodReceita}%' ");
         $rsTabrec = $cltabrec->sql_record($sqlTabrec);
 
         if ($cltabrec->numrows == 0) {
-            throw new Exception("Não encontrado receita para conta contábil {$this->oReceita->sCodContabil} ");
+            throw new BusinessException("Não encontrado receita para conta contábil {$this->oReceita->sCodReceita} ");
         }
 
         while ($oTabRec = pg_fetch_object($rsTabrec)) {
             $this->oReceita->iReceita = $oTabRec->k02_codigo;
             $this->oReceita->iRecurso = $oTabRec->recurso;
         }
-    }
-
-    public function montarDebug($oDebug)
-    {
-        if (DEBUG) {
-            var_dump($oDebug);
-            echo "<br><hr/>";
-        }
-        return;
-    }
-
-    public function montarCodigoContabil($sCodContabil)
-    {
-        if (in_array(substr($sCodContabil, 0, 1), array(1, 7, 9)))
-            return "4{$sCodContabil}";
-        return $sCodContabil;
     }
 
     /**

@@ -35,22 +35,11 @@ require_once("dbforms/db_funcoes.php");
 require_once("model/caixa/PlanilhaArrecadacao.model.php");
 require_once("classes/db_tabrec_classe.php");
 require_once("model/caixa/PlanilhaArrecadacaoImportacaoReceita.model.php");
-
 db_postmemory($HTTP_POST_VARS);
-define('MENSAGENS', 'financeiro.caixa.cai1_planilhalancamento001.');
-define('DEBUG', false);
 
-
-if (DEBUG) {
-    ini_set('display_errors',1);
-    ini_set('display_startup_erros',1);
-    error_reporting(E_ALL);
-}
-
-
-montarDebug("Debug Ativo");
 
 if (isset($processar)) {
+    db_inicio_transacao();
     try {
         // Recebendo o arquivo da planilha
         db_postmemory($_FILES["arquivo"]);
@@ -64,22 +53,16 @@ if (isset($processar)) {
         if ($arq_ext != "txt")
             throw new FileException("Apenas arquivos de texto (.txt)");
 
-        montarDebug("Dados do arquivo: {$arq_ext} {$arq_name} {$arq_type} {$arq_tmpname} {$arq_size}");
-
         $oPlanilhaArrecadacaoImportacaoReceita = new PlanilhaArrecadacaoImportacaoReceita($arq_name, $layout);
         $oPlanilhaArrecadacaoImportacaoReceita->salvarPlanilhaReceita($arq_array);
+        
+        db_fim_transacao(true);
+        db_msgbox("Planilha {$oPlanilhaArrecadacaoImportacaoReceita->iCodigoPlanilhaArrecadada} inclusa com sucesso.\n\n");
+        db_msgbox("Receitas ExtraOrçamentárias importadas com sucesso, foram gerados os Slips: \n " . implode(",", $oPlanilhaArrecadacaoImportacaoReceita->aCodigoSlip) . " \n\n");
     } catch (Exception $oException) {
+        db_fim_transacao(false);
         db_msgbox($oException->getMessage());
     }
-}
-
-function montarDebug($oDebug)
-{
-    if (DEBUG) {
-        var_dump($oDebug);
-        echo "<br><hr/>";
-    }
-    return;
 }
 ?>
 

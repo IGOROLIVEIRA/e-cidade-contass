@@ -35,6 +35,7 @@ class Oc18200 extends AbstractMigration
 
         -- Aumentando tamanho do campo para receber descricao do arquivo de importacao
         ALTER TABLE public.placaixaprocesso ALTER COLUMN k144_numeroprocesso SET DATA TYPE varchar(100);
+        ALTER TABLE slipprocesso ALTER COLUMN k145_numeroprocesso SET DATA TYPE varchar(100);
         ";
 
         $this->execute($sql);
@@ -60,9 +61,6 @@ class Oc18200 extends AbstractMigration
         --DROP TABLE:
         DROP SEQUENCE IF EXISTS agentearrecadador_k174_sequencial_seq CASCADE;
         DROP TABLE IF EXISTS agentearrecadador CASCADE;
-
-        -- Voltando tamanho padrão do campo
-        ALTER TABLE public.placaixaprocesso ALTER COLUMN k144_numeroprocesso SET DATA TYPE varchar(15);
         ";
 
         $this->execute($sql);

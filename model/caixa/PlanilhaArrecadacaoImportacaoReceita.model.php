@@ -24,7 +24,7 @@
  *  Copia da licenca no diretorio licenca/licenca_en.txt
  *                                licenca/licenca_pt.txt
  */
-require_once('model/caixa/PlanilhaArrecadacaoImportacaoReceitaLayout2.model.php');
+require_once('model/caixa/PlanilhaArrecadacaoImportacaoReceitaOrcamentariaLayout2.model.php');
 
 /**
  * Factory que retorna a instancia da classe Planilha de Arrecadacao Importacao Receita Layouts
@@ -36,7 +36,18 @@ class PlanilhaArrecadacaoImportacaoReceita
     private $sProcessoAdministrativo;
     private $iLayout;
     private $iNumeroCgm;
+    private $iInscricao = "";
+    private $iMatricula = "";
+    private $sObservacao = "";
+    private $sOperacaoBancaria = "";
+    private $iOrigem = 1; // 1 - CGM
+    private $iEmParlamentar = 3;
+    private $iConvenio = "";
+    private $iRegularizacaoRepasse = "";
+    private $iRegExercicio = "";
     private $oPlanilhaArrecadacao;
+    private $iCodigoSlip = null;
+    private $iCodigoTipoOperacao = 5;
 
     public function __construct($sProcessoAdministrativo, $iLayout)
     {
@@ -86,47 +97,80 @@ class PlanilhaArrecadacaoImportacaoReceita
      */
     public function salvarPlanilhaReceita($aArquivoImportar)
     {
-        try {
-            db_inicio_transacao();
-            foreach ($aArquivoImportar as $iPosicao => $sLinha) {
-                $oReceita = $this->preencherLayout($this->iLayout, $sLinha);
+        $this->importarPlanilhaArrecadacao($aArquivoImportar);
+        $this->salvarReceitas();
+    }
 
-                montarDebug($oReceita);
+    public function importarPlanilhaArrecadacao($aArquivoImportar)
+    {
+        foreach ($aArquivoImportar as $iPosicao => $sLinha) {
+            $oReceitaOrcamentaria = $this->preencherLayoutReceitaOrcamentaria($this->iLayout, $sLinha);
+            $oReceitaExtraOrcamentaria = $this->preencherLayoutReceitaExtraOrcamentaria($this->iLayout, $sLinha);
 
-                $iInscricao        = "";
-                $iMatricula        = "";
-                $sObservacao       = "";
-                $sOperacaoBancaria = "";
-                $iOrigem           = 1; // 1 - CGM
-                $iEmParlamentar    = 3;
+            if (property_exists($oReceitaOrcamentaria, "iRecurso"))
+                $this->adicionarPlanilhaReceitaOrcamentaria($oReceitaOrcamentaria);
 
-                $oReceitaPlanilha = new ReceitaPlanilha();
-                $oReceitaPlanilha->setCaracteristicaPeculiar(new CaracteristicaPeculiar("000"));
-                $oReceitaPlanilha->setCGM(CgmFactory::getInstanceByCgm($this->iNumeroCgm));
-                $oReceitaPlanilha->setContaTesouraria($oReceita->oContaTesouraria);
-                $oReceitaPlanilha->setDataRecebimento(new DBDate($oReceita->dDataCredito));
-                $oReceitaPlanilha->setInscricao($iInscricao);
-                $oReceitaPlanilha->setMatricula($iMatricula);
-                $oReceitaPlanilha->setObservacao(db_stdClass::normalizeStringJsonEscapeString($sObservacao));
-                $oReceitaPlanilha->setOperacaoBancaria($sOperacaoBancaria);
-                $oReceitaPlanilha->setOrigem($iOrigem);
-                $oReceitaPlanilha->setRecurso(new Recurso($oReceita->iRecurso));
-                $oReceitaPlanilha->setRegularizacaoRepasse("");
-                $oReceitaPlanilha->setRegExercicio("");
-                $oReceitaPlanilha->setEmendaParlamentar($iEmParlamentar);
-                $oReceitaPlanilha->setTipoReceita($oReceita->iReceita);
-                $oReceitaPlanilha->setValor($oReceita->nValor);
-                $oReceitaPlanilha->setConvenio("");
-                $this->oPlanilhaArrecadacao->adicionarReceitaPlanilha($oReceitaPlanilha);
-            }
-
-            $this->oPlanilhaArrecadacao->salvar();
-            db_msgbox("Planilha {$this->oPlanilhaArrecadacao->getCodigo()} inclusa com sucesso.\n\n");
-            db_fim_transacao(false);
-        } catch (Exception $oException) {
-            db_fim_transacao(true);
-            db_msgbox($oException->getMessage());
+            if (property_exists($oReceitaExtraOrcamentaria, "iRecurso"))
+                $this->adicionarReceitaExtraOrcamentaria($oReceitaExtraOrcamentaria);
         }
+    }
+
+    public function adicionarPlanilhaReceitaOrcamentaria($oReceitaOrcamentaria)
+    {
+        $oReceitaPlanilha = new ReceitaPlanilha();
+        $oReceitaPlanilha->setCaracteristicaPeculiar(new CaracteristicaPeculiar("000"));
+        $oReceitaPlanilha->setCGM(CgmFactory::getInstanceByCgm($this->iNumeroCgm));
+        $oReceitaPlanilha->setContaTesouraria($oReceitaOrcamentaria->oContaTesouraria);
+        $oReceitaPlanilha->setDataRecebimento(new DBDate($oReceitaOrcamentaria->dDataCredito));
+        $oReceitaPlanilha->setInscricao($this->iInscricao);
+        $oReceitaPlanilha->setMatricula($this->iMatricula);
+        $oReceitaPlanilha->setObservacao(db_stdClass::normalizeStringJsonEscapeString($this->sObservacao));
+        $oReceitaPlanilha->setOperacaoBancaria($this->sOperacaoBancaria);
+        $oReceitaPlanilha->setOrigem($this->iOrigem);
+        $oReceitaPlanilha->setRecurso(new Recurso($oReceitaOrcamentaria->iRecurso));
+        $oReceitaPlanilha->setRegularizacaoRepasse($this->iRegularizacaoRepasse);
+        $oReceitaPlanilha->setRegExercicio($this->iRegExercicio);
+        $oReceitaPlanilha->setEmendaParlamentar($this->iEmParlamentar);
+        $oReceitaPlanilha->setTipoReceita($oReceitaOrcamentaria->iReceita);
+        $oReceitaPlanilha->setValor($oReceitaOrcamentaria->nValor);
+        $oReceitaPlanilha->setConvenio($this->iConvenio);
+        $this->oPlanilhaArrecadacao->adicionarReceitaPlanilha($oReceitaPlanilha);
+    }
+
+    public function salvarReceitas()
+    {
+        $this->oPlanilhaArrecadacao->salvar();
+        $this->iCodigoPlanilhaArrecadada = $this->oPlanilhaArrecadacao->getCodigo();
+        foreach ($this->oTransferencias as $oTransferencia) {
+            $oTransferencia->salvar();
+            if ((int) $oTransferencia->getCodigoSlip() <= 0)
+                throw new BusinessException("Não foi possível salvar as receitas extra-orçamentárias");
+            $this->aCodigoSlip[] = $oTransferencia->getCodigoSlip();
+        }
+    }
+
+    public function adicionarReceitaExtraOrcamentaria($oReceitaExtraOrcamentaria)
+    {
+        $oTransferencia = TransferenciaFactory::getInstance($this->iCodigoTipoOperacao, $this->iCodigoSlip);
+        $oTransferencia->setContaDebito($oReceitaExtraOrcamentaria->oContaTesouraria->getCodigoConta());
+        $oTransferencia->setContaCredito($oReceitaExtraOrcamentaria->iContaCredito);
+        $oTransferencia->setFonteRecurso($oReceitaExtraOrcamentaria->iRecurso);
+        $oTransferencia->setValor($oReceitaExtraOrcamentaria->nValor);
+        $oTransferencia->adicionarRecurso($oReceitaExtraOrcamentaria->iRecurso, $oReceitaExtraOrcamentaria->nValor);
+        $oTransferencia->setHistorico(9100);
+        $oTransferencia->setObservacao(addslashes(db_stdClass::normalizeStringJsonEscapeString($this->sObservacao)));
+        $oTransferencia->setTipoPagamento(0);
+        $oTransferencia->setSituacao(1);
+        $oTransferencia->setCodigoCgm($this->iNumeroCgm);
+        $oTransferencia->setCaracteristicaPeculiarDebito("000");
+        $oTransferencia->setCaracteristicaPeculiarCredito("000");
+        $oTransferencia->setData(date("Y-m-d", db_getsession("DB_datausu")));
+        $oTransferencia->setProcessoAdministrativo(db_stdClass::normalizeStringJsonEscapeString($this->sProcessoAdministrativo));
+        $oTransferencia->setExercicioCompetenciaDevolucao("");
+        if ($oTransferencia instanceof TransferenciaFinanceira) {
+            $oTransferencia->setInstituicaoDestino("");
+        }
+        $this->oTransferencias[] = $oTransferencia;
     }
 
     /**
@@ -136,13 +180,24 @@ class PlanilhaArrecadacaoImportacaoReceita
      * @param string $sLinha
      * @return object
      */
-    public function preencherLayout($iLayout, $sLinha)
+    public function preencherLayoutReceitaOrcamentaria($iLayout, $sLinha)
     {
-        $sClassName = "PlanilhaArrecadacaoImportacaoReceitaLayout{$iLayout}";
+        $sClassName = "PlanilhaArrecadacaoImportacaoReceitaOrcamentariaLayout{$iLayout}";
 
-        if (!class_exists($sClassName)) 
+        if (!class_exists($sClassName))
             throw new BusinessException("Layout selecionado é inválido");
-        
+
+        $oImportacao = new $sClassName($sLinha);
+        return $oImportacao->recuperarLinha();
+    }
+
+    public function preencherLayoutReceitaExtraOrcamentaria($iLayout, $sLinha)
+    {
+        $sClassName = "PlanilhaArrecadacaoImportacaoReceitaExtraOrcamentariaLayout{$iLayout}";
+
+        if (!class_exists($sClassName))
+            throw new BusinessException("Layout de Receita Extra Orcamentaria selecionado é inválido");
+
         $oImportacao = new $sClassName($sLinha);
         return $oImportacao->recuperarLinha();
     }
