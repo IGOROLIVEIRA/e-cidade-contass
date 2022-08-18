@@ -114,16 +114,16 @@ function js_calculavalor(){
 }
 function js_verificavalor(vvalor){
   // TESTA SE EXISTE O IFRAME db_recibo (CASO A TELA DE RECIBO SEJA CHAMADA DO PROGRAMA DE EMISSAO DA CGF)
-  if(top.corpo.db_recibo){
-    top.corpo.db_recibo.jan.document.form1.k02_codigo.value = '<?=$k02_codigo?>';
-    top.corpo.db_recibo.jan.document.form1.k02_drecei.value='<?=$k02_drecei?>';
-    top.corpo.db_recibo.jan.document.form1.codsubrec.value='<?=$codsubrec?>';
-    top.corpo.db_recibo.jan.document.form1.k07_descr.value='<?=$k07_descr?>';
-    top.corpo.db_recibo.jan.document.form1.o15_codigo.value='<?=$o70_codigo?>';
-    top.corpo.db_recibo.jan.document.form1.o15_codigo.onchange();
-    top.corpo.db_recibo.jan.document.form1.valor.value = vvalor;
-    top.corpo.db_recibo.jan.document.form1.gravar.focus();
-  }else{
+  // if(top.corpo.db_recibo){
+  //   top.corpo.db_recibo.jan.document.form1.k02_codigo.value = '<?=$k02_codigo?>';
+  //   top.corpo.db_recibo.jan.document.form1.k02_drecei.value='<?=$k02_drecei?>';
+  //   top.corpo.db_recibo.jan.document.form1.codsubrec.value='<?=$codsubrec?>';
+  //   top.corpo.db_recibo.jan.document.form1.k07_descr.value='<?=$k07_descr?>';
+  //   top.corpo.db_recibo.jan.document.form1.o15_codigo.value='<?=$o70_codigo?>';
+  //   top.corpo.db_recibo.jan.document.form1.o15_codigo.onchange();
+  //   top.corpo.db_recibo.jan.document.form1.valor.value = vvalor;
+  //   top.corpo.db_recibo.jan.document.form1.gravar.focus();
+  // }else{
     parent.document.form1.k02_codigo.value = '<?=$k02_codigo?>';
     parent.document.form1.k02_drecei.value='<?=$k02_drecei?>';
     parent.document.form1.codsubrec.value='<?=$codsubrec?>';
@@ -134,7 +134,7 @@ function js_verificavalor(vvalor){
     parent.document.form1.o15_codigo.onchange();
     parent.document.form1.valor.value = vvalor;
     parent.document.form1.gravar.focus();
-  }
+  // }
   parent.func_iframe_taxas.hide();
   parent.js_buscaConCarPeculiar();
 }

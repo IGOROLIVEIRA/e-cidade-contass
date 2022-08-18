@@ -240,7 +240,7 @@ class cl_obrasender {
      }
      $this->erro_banco = "";
      $this->erro_sql = "Inclusao efetuada com Sucesso\\n";
-         $this->erro_sql .= "Valores : ".$this->ob07_codconstr;
+     $this->erro_sql .= "Valores : ".$this->ob07_codconstr;
      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
      $this->erro_status = "1";
