@@ -842,7 +842,7 @@ WHERE rh30_vinculo IN ('I',
   AND r59_anousu IS NULL
   AND rh01_matorgaobeneficio IS NOT NULL";
         if ($matricula != null) {
-            $sql .= "and rh01_regist in ($matricula) ";
+            $sql .= " and rh01_regist in ($matricula) ";
         }
 
         $rs = \db_query($sql);
