@@ -160,7 +160,7 @@ if ($clliclicita->numrows > 0) {
                                 if ($l20_leidalicitacao == 2) {
                                     echo "style='margin-left: -80px; display: none;'";
                                 } else {
-                                    echo "style='margin-left: 80px;'";
+                                    echo "style='margin-left: -80px;'";
                                 }
                             } ?>>Valor Estimado Sigiloso: </b></td>
                     <td>

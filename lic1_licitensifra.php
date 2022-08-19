@@ -252,6 +252,9 @@ $db_botao = true;
         if (oRetorno.status == 2) {
             js_removeObj('msgbox');
             alert('Inclusão abortada, processo de compra por lote!');
+        } else if (oRetorno.status == 3) {
+            alert('Erro ao lançar valor estimado sigiloso!');
+
         } else {
             //db_msgbox(@$erro_msg);
             db_msgbox("Operação Cancelada!!Contate Suporte!!");
