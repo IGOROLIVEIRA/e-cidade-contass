@@ -1606,19 +1606,18 @@ if (isset($resultaux)) {
     $result_k03_tipo = db_query($sql_k03_tipo);
     db_fieldsmemory($result_k03_tipo, 0);
 
-    $sqlTipoInicial = "select v04_tipoinicial, v04_tipocertidao from pardiv where v04_instit = " . db_getsession('DB_instit');
+    $sqlTipoInicial = "select v04_tipoinicial from pardiv where v04_instit = " . db_getsession('DB_instit');
     $rsTipoInicial = db_query($sqlTipoInicial);
     if (pg_num_rows($rsTipoInicial) > 0) {
       db_fieldsmemory($rsTipoInicial, 0);
     } else {
       db_msgbox("Configure o tipo de debito para certidao");
     }
+
+    $nome_arquivo = 'cai3_gerfinanc002.php';
+
     if (pg_result($result, $i, "k00_tipo") == $v04_tipoinicial) {
       $nome_arquivo = 'cai3_gerfinanc050.php';
-    } else if (pg_result($result, $i, "k00_tipo") == $v04_tipocertidao) {
-      $nome_arquivo = 'cai3_gerfinanc002';//'cai3_gerfinanc040.php';
-    } else {
-      $nome_arquivo = 'cai3_gerfinanc002.php';
     }
     if (! isset($certidao)) {
       $certidao = "";
