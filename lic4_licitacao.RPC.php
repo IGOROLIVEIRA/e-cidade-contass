@@ -1671,6 +1671,8 @@ switch ($oParam->exec) {
             $oRetorno->status = 2;
         } else {
             $oRetorno->status = 1;
+            db_query("UPDATE precoreferencia SET
+            si01_valorestimado = $oParam->valorsigiloso WHERE si01_processocompra = $oParam->codprocant");
         }
         $oRetorno->erro_msg = urlencode($erro_msg);
 

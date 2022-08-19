@@ -192,6 +192,7 @@ $db_botao = true;
         oParam.aItens = aItensFormatados;
         oParam.codprocant = document.form1.codprocant.value;
         oParam.tipojulg = document.form1.tipojulg.value;
+        oParam.valorsigiloso = parent.procs.document.form1.valorsigiloso.value;
         oParam.exec = 'insereItens';
 
         var oAjax = new Ajax.Request('lic4_licitacao.RPC.php', {

@@ -54,8 +54,7 @@ $clrotulo->label("descrdepto");
 $clrotulo->label("nome");
 $clrotulo->label("l20_codigo");
 $lRegistroPreco = false;
-$result = $clliclicita->sql_record($clliclicita->sql_query($licitacao, "l08_altera, l20_usaregistropreco,  l20_formacontroleregistropreco, l20_datacria , l20_dataaber, l20_criterioadjudicacao, l20_codtipocom"));
-
+$result = $clliclicita->sql_record($clliclicita->sql_query($licitacao, "l08_altera, l20_usaregistropreco,  l20_formacontroleregistropreco, l20_datacria , l20_dataaber, l20_criterioadjudicacao, l20_codtipocom, l20_leidalicitacao"));
 $oLicitacao = db_utils::fieldsMemory($result, 0);
 
 $criterio = $oLicitacao->l20_criterioadjudicacao;
@@ -151,6 +150,52 @@ if ($clliclicita->numrows > 0) {
                         }
                         ?>
                     </td>
+                    <td><b <?php if ($clliclicitem->numrows > 0) {
+                                if ($l20_leidalicitacao == 2) {
+                                    echo "style='margin-left: -240px; display: none;'";
+                                } else {
+                                    echo "style='margin-left: -240px;'";
+                                }
+                            } else {
+                                if ($l20_leidalicitacao == 2) {
+                                    echo "style='margin-left: -80px; display: none;'";
+                                } else {
+                                    echo "style='margin-left: 80px;'";
+                                }
+                            } ?>>Valor Estimado Sigiloso: </b></td>
+                    <td>
+                        <?
+                        if ($clliclicitem->numrows > 0) {
+
+                            if ($l20_leidalicitacao == 2) {
+                                echo "<select style='margin-left: -95px; display: none;' name='valorsigiloso' id='valorsigiloso'>";
+                                echo " <option value='false'>Não</option>\n";
+                                echo " <option value='true'>Sim</option>\n";
+                                echo " </select>";
+                            } else {
+                                echo "<select style='margin-left: -95px;' name='valorsigiloso' id='valorsigiloso'>";
+                                echo " <option value='false'>Não</option>\n";
+                                echo " <option value='true'>Sim</option>\n";
+                                echo " </select>";
+                            }
+                        } else {
+                            if ($l20_leidalicitacao == 2) {
+                                echo "<select style='margin-left: 0px; display: none;' name='valorsigiloso' id='valorsigiloso'>";
+                                echo " <option value='false'>Não</option>\n";
+                                echo " <option value='true'>Sim</option>\n";
+                                echo " </select>";
+                            } else {
+                                echo "<select style='margin-left: 0px;' name='valorsigiloso' id='valorsigiloso'>";
+                                echo " <option value='false'>Não</option>\n";
+                                echo " <option value='true'>Sim</option>\n";
+                                echo " </select>";
+                            }
+                        }
+
+
+                        ?>
+                    <td>
+
                 </tr>
                 <tr>
                     <td><b>Processo de Compra:</b></td>
