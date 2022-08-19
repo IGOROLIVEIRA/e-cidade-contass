@@ -779,24 +779,30 @@ class cl_bens {
       $sql .= $campos;
     }
     $sql .= " from bens ";
-    $sql .= "      inner join cgm        on  cgm.z01_numcgm = bens.t52_numcgm";
-    $sql .= "      inner join db_depart  on  db_depart.coddepto = bens.t52_depart";
-    $sql .= "      inner join clabens    on  clabens.t64_codcla = bens.t52_codcla";
+    $sql .= "      inner join cgm                on  cgm.z01_numcgm = bens.t52_numcgm";
+    $sql .= "      inner join db_depart          on  db_depart.coddepto = bens.t52_depart";
+    $sql .= "      inner join clabens            on  clabens.t64_codcla = bens.t52_codcla";
 
     $sql .= "      inner join clabensconplano    on  clabensconplano.t86_clabens = clabens.t64_codcla";
     $sql .= "                                    and clabensconplano.t86_anousu = ".db_getsession("DB_anousu");
     $sql .= "      inner join conplano           on  conplano.c60_codcon  = clabensconplano.t86_conplano";
     $sql .= "                                    and conplano.c60_anousu = ".db_getsession("DB_anousu");
 
-    $sql .= "      left  join bensdiv        on  bensdiv.t33_bem = bens.t52_bem";
-    $sql .= "      left  join departdiv      on  departdiv.t30_codigo = bensdiv.t33_divisao";
-    $sql .= "      left  join departdiv as b on  b.t30_depto  = db_depart.coddepto";
-    $sql .= "      left  join histbem        on  histbem.t56_codbem   = bens.t52_bem and histbem.t56_depart = bens.t52_depart";
-    $sql .= "      left  join situabens      on  situabens.t70_situac = histbem.t56_situac";
-    $sql .= "      inner join bensmarca      on  bensmarca.t65_sequencial = bens.t52_bensmarca";
-    $sql .= "      inner join bensmodelo     on  bensmodelo.t66_sequencial = bens.t52_bensmodelo";
-    $sql .= "      inner join bensmedida     on  bensmedida.t67_sequencial = bens.t52_bensmedida";
-    $sql .= "			inner join benscedente     on  t09_bem = bens.t52_bem";
+    $sql .= "      left  join bensdiv            on bensdiv.t33_bem = bens.t52_bem";
+    $sql .= "      left  join departdiv          on  departdiv.t30_codigo = bensdiv.t33_divisao";
+    $sql .= "                                   and t30_depto  = db_depart.coddepto";
+//    $sql .= "      left  join departdiv as b     on b.t30_depto  = db_depart.coddepto";
+    $sql .= "      left  join histbem            on histbem.t56_codbem   = bens.t52_bem and histbem.t56_depart = bens.t52_depart";
+    $sql .= "      left  join situabens          on situabens.t70_situac = histbem.t56_situac";
+    $sql .= "      inner join bensmarca          on  bensmarca.t65_sequencial = bens.t52_bensmarca";
+    $sql .= "      inner join bensmodelo         on  bensmodelo.t66_sequencial = bens.t52_bensmodelo";
+    $sql .= "      inner join bensmedida         on  bensmedida.t67_sequencial = bens.t52_bensmedida";
+
+    $sql .= "      left join bensmater          ON bens.t52_bem = bensmater.t53_codbem";
+    $sql .= "      left join matordem           ON bensmater.t53_ordem = matordem.m51_codordem";
+    $sql .= "      left join empnotaord         ON matordem.m51_codordem = empnotaord.m72_codordem";
+    $sql .= "      left join empnota            ON empnotaord.m72_codordem = empnota.e69_codnota";
+    $sql .= "			inner join benscedente      on  benscedente.t09_bem = bens.t52_bem";
     $sql2 = "";
     if($dbwhere==""){
       if($t52_bem!=null ){
@@ -832,30 +838,89 @@ class cl_bens {
       $sql .= $campos;
     }
     $sql .= " from bens ";
-    $sql .= "      inner join cgm  on  cgm.z01_numcgm = bens.t52_numcgm";
-    $sql .= "      inner join db_depart  on  db_depart.coddepto = bens.t52_depart";
-    $sql .= "      inner join clabens  on  clabens.t64_codcla = bens.t52_codcla";
+    $sql .= "      inner join cgm                on  cgm.z01_numcgm = bens.t52_numcgm";
+    $sql .= "      inner join db_depart          on  db_depart.coddepto = bens.t52_depart";
+    $sql .= "      inner join clabens            on  clabens.t64_codcla = bens.t52_codcla";
 
     $sql .= "      inner join clabensconplano    on  clabensconplano.t86_clabens = clabens.t64_codcla";
     $sql .= "                                    and clabensconplano.t86_anousu = ".db_getsession("DB_anousu");
     $sql .= "      inner join conplano           on  conplano.c60_codcon  = clabensconplano.t86_conplano";
     $sql .= "                                    and conplano.c60_anousu = ".db_getsession("DB_anousu");
 
-    $sql .= "      left  join bensdiv        on  bensdiv.t33_bem = bens.t52_bem";
-    $sql .= "      left  join departdiv      on  departdiv.t30_codigo = bensdiv.t33_divisao";
-    $sql .= "      left  join departdiv as b on  b.t30_depto  = db_depart.coddepto";
-    $sql .= "      left  join histbem        on  histbem.t56_codbem   = bens.t52_bem and histbem.t56_depart = bens.t52_depart";
-    $sql .= "      left  join situabens      on  situabens.t70_situac = histbem.t56_situac";
-    $sql .= "      inner join bensmarca      on  bensmarca.t65_sequencial = bens.t52_bensmarca";
-    $sql .= "      inner join bensmodelo     on  bensmodelo.t66_sequencial = bens.t52_bensmodelo";
-    $sql .= "      inner join bensmedida     on  bensmedida.t67_sequencial = bens.t52_bensmedida";
-    $sql .= "      inner join db_departorg   on  db_departorg.db01_coddepto = bens.t52_depart ";
-    $sql .= "			 inner join orcorgao       on  orcorgao.o40_orgao = db_departorg.db01_orgao ";
-    $sql .= "			                               and orcorgao.o40_anousu = db_departorg.db01_anousu ";
-    $sql .= "			 inner join orcunidade on orcunidade.o41_unidade = db_departorg.db01_unidade ";
-    $sql .= "			                               and orcunidade.o41_orgao = db_departorg.db01_orgao";
-    $sql .= "			                               and orcunidade.o41_anousu = db_departorg.db01_anousu";
-    $sql .= "			left join benscedente      on  t09_bem = bens.t52_bem";
+    $sql .= "      left  join bensdiv            on bensdiv.t33_bem = bens.t52_bem";
+    $sql .= "      left  join departdiv          on  departdiv.t30_codigo = bensdiv.t33_divisao";
+    $sql .= "                                   and t30_depto  = db_depart.coddepto";
+//    $sql .= "      left  join departdiv as b     on b.t30_depto  = db_depart.coddepto";
+    $sql .= "      left  join histbem            on histbem.t56_codbem   = bens.t52_bem and histbem.t56_depart = bens.t52_depart";
+    $sql .= "      left  join situabens          on situabens.t70_situac = histbem.t56_situac";
+    $sql .= "      inner join bensmarca          on  bensmarca.t65_sequencial = bens.t52_bensmarca";
+    $sql .= "      inner join bensmodelo         on  bensmodelo.t66_sequencial = bens.t52_bensmodelo";
+    $sql .= "      inner join bensmedida         on  bensmedida.t67_sequencial = bens.t52_bensmedida";
+
+    $sql .= "      left join bensmater          ON bens.t52_bem = bensmater.t53_codbem";
+    $sql .= "      left join matordem           ON bensmater.t53_ordem = matordem.m51_codordem";
+    $sql .= "      left join empnotaord         ON matordem.m51_codordem = empnotaord.m72_codordem";
+    $sql .= "      left join empnota            ON empnotaord.m72_codordem = empnota.e69_codnota";
+    $sql .= "			inner join benscedente      on  benscedente.t09_bem = bens.t52_bem";
+    $sql2 = "";
+    if($dbwhere==""){
+      if($t52_bem!=null ){
+        $sql2 .= " where bens.t52_bem = $t52_bem ";
+      }
+    }else if($dbwhere != ""){
+      $sql2 = " where $dbwhere";
+    }
+    $sql .= $sql2;
+    if($ordem != null ){
+      $sql .= " order by ";
+      $campos_sql = split("#",$ordem);
+      $virgula = "";
+      for($i=0;$i<sizeof($campos_sql);$i++){
+        $sql .= $virgula.$campos_sql[$i];
+        $virgula = ",";
+      }
+    }
+    return $sql;
+  }
+
+
+  function sql_query_n_convenio ( $t52_bem=null,$campos="*",$ordem=null,$dbwhere=""){
+    $sql = "select ";
+    if($campos != "*" ){
+      $campos_sql = split("#",$campos);
+      $virgula = "";
+      for($i=0;$i<sizeof($campos_sql);$i++){
+        $sql .= $virgula.$campos_sql[$i];
+        $virgula = ",";
+      }
+    }else{
+      $sql .= $campos;
+    }
+    $sql .= " from bens ";
+    $sql .= "      inner join cgm                on  cgm.z01_numcgm = bens.t52_numcgm";
+    $sql .= "      inner join db_depart          on  db_depart.coddepto = bens.t52_depart";
+    $sql .= "      inner join clabens            on  clabens.t64_codcla = bens.t52_codcla";
+
+    $sql .= "      inner join clabensconplano    on  clabensconplano.t86_clabens = clabens.t64_codcla";
+    $sql .= "                                    and clabensconplano.t86_anousu = ".db_getsession("DB_anousu");
+    $sql .= "      inner join conplano           on  conplano.c60_codcon  = clabensconplano.t86_conplano";
+    $sql .= "                                    and conplano.c60_anousu = ".db_getsession("DB_anousu");
+
+    $sql .= "      left  join bensdiv            on bensdiv.t33_bem = bens.t52_bem";
+    $sql .= "      left  join departdiv          on  departdiv.t30_codigo = bensdiv.t33_divisao";
+    $sql .= "                                   and t30_depto  = db_depart.coddepto";
+//    $sql .= "      left  join departdiv as b     on b.t30_depto  = db_depart.coddepto";
+    $sql .= "      left  join histbem            on histbem.t56_codbem   = bens.t52_bem and histbem.t56_depart = bens.t52_depart";
+    $sql .= "      left  join situabens          on situabens.t70_situac = histbem.t56_situac";
+    $sql .= "      inner join bensmarca          on  bensmarca.t65_sequencial = bens.t52_bensmarca";
+    $sql .= "      inner join bensmodelo         on  bensmodelo.t66_sequencial = bens.t52_bensmodelo";
+    $sql .= "      inner join bensmedida         on  bensmedida.t67_sequencial = bens.t52_bensmedida";
+
+    $sql .= "      left join bensmater          ON bens.t52_bem = bensmater.t53_codbem";
+    $sql .= "      left join matordem           ON bensmater.t53_ordem = matordem.m51_codordem";
+    $sql .= "      left join empnotaord         ON matordem.m51_codordem = empnotaord.m72_codordem";
+    $sql .= "      left join empnota            ON empnotaord.m72_codordem = empnota.e69_codnota";
+    $sql .= "			 full outer join benscedente      on  benscedente.t09_bem = bens.t52_bem";
     $sql2 = "";
     if($dbwhere==""){
       if($t52_bem!=null ){
