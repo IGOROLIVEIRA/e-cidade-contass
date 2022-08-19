@@ -25,5 +25,5 @@
  *                                licenca/licenca_pt.txt 
  */
 
-$campos = "distinct veiculos.ve01_codigo,veiculos.ve01_placa,upper(veicespecificacao.si05_descricao) as si05_descricao,veiccadmarca.ve21_descr,veiccadmodelo.ve22_descr,veiculos.ve01_dtaquis,veiccadcategcnh.ve30_descr,veiculos.ve01_anofab,veiculos.ve01_anomod";
+$campos = "veicespecificacao.si05_codigo,veicespecificacao.si05_descricao";
 ?>

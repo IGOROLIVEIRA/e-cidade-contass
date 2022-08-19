@@ -1152,12 +1152,12 @@ if($dbwhere==""){
               ve70_valor,
               ve01_codigo,
               ve01_placa,
-              ve01_veiccadtipo,
+              si04_especificacao,
               ve01_veiccadmarca,
               ve01_veiccadmodelo, 
               ve01_veictipoabast,
               ve06_veiccadcomb,
-              ve20_descr,
+              si05_descricao,
               ve21_descr, 
               ve22_descr, 
               ve01_anofab,
@@ -1189,11 +1189,11 @@ if($dbwhere==""){
               							ve70_valor,
                             ve01_codigo,
                             ve01_placa,
-                            ve01_veiccadtipo,
+                            si04_especificacao,
                             ve01_veiccadmarca,
                             ve01_veiccadmodelo, 
                             ve01_veictipoabast,
-                            ve20_descr,
+                            si05_descricao,
                             ve21_descr, 
                             ve22_descr, 
                             ve01_anofab,
@@ -1236,7 +1236,8 @@ if($dbwhere==""){
                           inner join veiculos          on ve01_codigo       = ve70_veiculos
                           inner join veiccadmarca      on ve21_codigo       = ve01_veiccadmarca
                           inner join veiccadmodelo     on ve22_codigo       = ve01_veiccadmodelo
-                          left join veiccadtipo       on ve20_codigo       = ve01_veiccadtipo
+                          inner join tipoveiculos      on si04_veiculos     = ve01_codigo
+                          inner join veicespecificacao on si05_codigo       = si04_especificacao
                           inner join veiculoscomb      on ve06_veiccadcomb  = ve70_veiculoscomb
                                                       and ve06_veiculos     = ve70_veiculos
                           inner join veiccadcomb       on ve06_veiccadcomb  = ve26_codigo
@@ -1292,11 +1293,11 @@ if($dbwhere==""){
               							ve70_valor,
                             ve01_codigo,
                             ve01_placa,
-                            ve01_veiccadtipo,
+                            si04_especificacao,
                             ve01_veiccadmarca,
                             ve01_veiccadmodelo,
                             ve01_veictipoabast,
-                            ve20_descr,
+                            si05_descricao,
                             ve21_descr,
                             ve22_descr,
                             ve01_anofab,
@@ -1347,7 +1348,8 @@ if($dbwhere==""){
                           inner join veiculos          on ve01_codigo       = ve70_veiculos
                           inner join veiccadmarca      on ve21_codigo       = ve01_veiccadmarca
                           inner join veiccadmodelo     on ve22_codigo       = ve01_veiccadmodelo
-                          inner join veiccadtipo       on ve20_codigo       = ve01_veiccadtipo or ve20_codigo = 1
+                          inner join tipoveiculos      on si04_veiculos     = ve01_codigo
+                          inner join veicespecificacao on si05_codigo       = si04_especificacao
                           left join veiculoscomb      on ve06_veiccadcomb  = ve70_veiculoscomb
                                                       and ve06_veiculos     = ve70_veiculos
                           left join veiccadcomb       on ve06_veiccadcomb  = ve26_codigo

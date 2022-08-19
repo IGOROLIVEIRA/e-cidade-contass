@@ -33,7 +33,7 @@ include("dbforms/db_funcoes.php");
 include("classes/db_veiculos_classe.php");
 include("classes/db_veiccadmodelo_classe.php");
 include("classes/db_veiccadmarca_classe.php");
-include("classes/db_veiccadtipo_classe.php");
+include("classes/db_veicespecificacao_classe.php");
 
 db_postmemory($HTTP_POST_VARS);
 
@@ -42,13 +42,13 @@ parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 $clveiculos      = new cl_veiculos;
 $clveiccadmodelo = new cl_veiccadmodelo;
 $clveiccadmarca  = new cl_veiccadmarca;
-$clveiccadtipo   = new cl_veiccadtipo;
+$clveicespecificacao   = new cl_veicespecificacao;
 
 $clveiculos->rotulo->label("ve01_codigo");
 $clveiculos->rotulo->label("ve01_placa");
 $clveiculos->rotulo->label("ve01_veiccadmodelo");
 $clveiculos->rotulo->label("ve01_veiccadmarca");
-$clveiculos->rotulo->label("ve01_veiccadtipo");
+$clveiculos->rotulo->label("si04_especificacao");
 ?>
 <html>
 <head>
@@ -129,20 +129,20 @@ $clveiculos->rotulo->label("ve01_veiccadtipo");
           </tr>
 
           <tr> 
-            <td width="4%" align="right" nowrap title="<?=$Tve01_veiccadtipo?>">
-              <?=$Lve01_veiccadtipo?>
+            <td width="4%" align="right" nowrap title="Especificação">
+              <b>Especificação: </b>
             </td>
             <td width="96%" align="left" nowrap> 
             <?
-               $result = $clveiccadtipo->sql_record($clveiccadtipo->sql_query_file());
+               $result = $clveicespecificacao->sql_record($clveicespecificacao->sql_query_file());
             ?>
-              <select name="chave_ve01_veiccadtipo" id="chave_ve01_veiccadtipo">
+              <select name="chave_si05_codigo" id="chave_si05_codigo">
                 <option value="-1">Nenhum</option>
             <?
-                for($i = 0; $i < $clveiccadtipo->numrows; $i++){
+                for($i = 0; $i < $clveicespecificacao->numrows; $i++){
                   db_fieldsmemory($result,$i);
             ?>
-                <option value="<?=$ve20_codigo?>"><? echo $ve20_codigo." - ".$ve20_descr; ?></option>
+                <option value="<?=$si05_codigo?>"><? echo $si05_codigo." - ".$si05_descricao; ?></option>
             <?
                 }
             ?>
@@ -201,20 +201,20 @@ $clveiculos->rotulo->label("ve01_veiccadtipo");
            $sql = $clveiculos->sql_query("",$campos,"veiccadmodelo.ve22_descr","ve01_veiccadmodelo = $chave_ve01_veiccadmodelo $sWhereInstituicao ");
         }else if (isset($chave_ve01_veiccadmarca) && trim($chave_ve01_veiccadmarca)!=""  && $chave_ve01_veiccadmarca > 0){
            $sql = $clveiculos->sql_query("",$campos,"veiccadmarca.ve21_descr","ve01_veiccadmarca = $chave_ve01_veiccadmarca $sWhereInstituicao ");
-        }else if (isset($chave_ve01_veiccadtipo) && trim($chave_ve01_veiccadtipo)!="" && $chave_ve01_veiccadtipo > 0){
-           $sql = $clveiculos->sql_query("",$campos,"veiccadtipo.ve20_descr","ve01_veiccadtipo = $chave_ve01_veiccadtipo $sWhereInstituicao ");
+        }else if (isset($chave_si05_codigo) && trim($chave_si05_codigo)!="" && $chave_si05_codigo > 0){
+           $sql = $clveiculos->sql_query("",$campos,"veicespecificacao.si05_descricao","si05_codigo = $chave_si05_codigo $sWhereInstituicao ");
         }else { 
            $sql = $clveiculos->sql_query("",$campos,"ve01_codigo","1=1 $sWhereInstituicao ");
         }
         $repassa = array();
         if(isset($chave_ve01_codigo)        || isset($chave_ve01_placa)        ||
            isset($chave_ve01_veiccadmodelo) || isset($chave_ve01_veiccadmarca) ||
-           isset($chave_ve01_veiccadtipo)){
+           isset($chave_si05_codigo)){
           $repassa = array("chave_ve01_codigo"=>$chave_ve01_codigo,
                            "chave_ve01_placa"=>$chave_ve01_placa,
                            "chave_ve01_veiccadmodelo"=>$chave_ve01_veiccadmodelo,
                            "chave_ve01_veiccadmarca"=>$chave_ve01_veiccadmarca,
-                           "chave_ve01_veiccadtipo"=>$chave_ve01_veiccadtipo);
+                           "chave_si05_codigo"=>$chave_si05_codigo);
         }
         
         db_lovrot($sql,15,"()","",$funcao_js,"","NoMe",$repassa);
