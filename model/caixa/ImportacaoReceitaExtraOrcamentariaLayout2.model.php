@@ -24,7 +24,7 @@
  *  Copia da licenca no diretorio licenca/licenca_en.txt
  *                                licenca/licenca_pt.txt
  */
-class PlanilhaArrecadacaoImportacaoReceitaExtraOrcamentariaLayout2
+class ImportacaoReceitaExtraOrcamentariaLayout2
 {
     private $oReceita;
 
@@ -36,7 +36,7 @@ class PlanilhaArrecadacaoImportacaoReceitaExtraOrcamentariaLayout2
 
     public function preencherLinha($sLinha)
     {
-        if (!$this->eReceita($sLinha))
+        if (!$this->eReceitaExtraOrcamentaria($sLinha))
             return;
 
         $this->oReceita->iCodBanco        = substr($sLinha, 0, 3);
@@ -73,7 +73,7 @@ class PlanilhaArrecadacaoImportacaoReceitaExtraOrcamentariaLayout2
      *
      * @return bool
      */
-    public function eReceita($sLinha)
+    public function eReceitaExtraOrcamentaria($sLinha)
     {
         if (in_array(substr($sLinha, 35, 1), array("2")))
             return true;

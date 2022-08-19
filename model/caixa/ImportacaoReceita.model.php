@@ -24,14 +24,13 @@
  *  Copia da licenca no diretorio licenca/licenca_en.txt
  *                                licenca/licenca_pt.txt
  */
-require_once('model/caixa/PlanilhaArrecadacaoImportacaoReceitaOrcamentariaLayout2.model.php');
 
 /**
- * Factory que retorna a instancia da classe Planilha de Arrecadacao Importacao Receita Layouts
+ * Classe responsavel por importar receita
  * @package caixa
  * @author widouglas
  */
-class PlanilhaArrecadacaoImportacaoReceita
+class ImportacaoReceita
 {
     private $sProcessoAdministrativo;
     private $iLayout;
@@ -48,7 +47,15 @@ class PlanilhaArrecadacaoImportacaoReceita
     private $oPlanilhaArrecadacao;
     private $iCodigoSlip = null;
     private $iCodigoTipoOperacao = 5;
+    public $iCodigoPlanilhaArrecadada = 0;
+    public $aCodigoSlip = array();
 
+    /**
+     * Construtor
+     *
+     * @param string $sProcessoAdministrativo
+     * @param int $iLayout
+     */
     public function __construct($sProcessoAdministrativo, $iLayout)
     {
         $this->preencherProcessoAdministrativo($sProcessoAdministrativo);
@@ -57,6 +64,12 @@ class PlanilhaArrecadacaoImportacaoReceita
         $this->preencherCGM();
     }
 
+    /**
+     * O campo de processo adminsitrativo deve receber o nome do arquivo
+     *
+     * @param string $sProcessoAdministrativo
+     * @return void
+     */
     public function preencherProcessoAdministrativo($sProcessoAdministrativo)
     {
         if (strlen($sProcessoAdministrativo) >= 99)
@@ -90,18 +103,25 @@ class PlanilhaArrecadacaoImportacaoReceita
     }
 
     /**
-     * Recebe o array e importa na planilha de receitas
+     * Recebe o array e importa na planilha de receitas e salva
      *
      * @param array $aArquivoImportar
      * @return void
      */
-    public function salvarPlanilhaReceita($aArquivoImportar)
+    public function salvar($aArquivoImportar)
     {
-        $this->importarPlanilhaArrecadacao($aArquivoImportar);
-        $this->salvarReceitas();
+        $this->importarReceitas($aArquivoImportar);
+        $this->salvarReceitaOrcamentaria();
+        $this->salvarReceitaExtraOrcamentaria();
     }
 
-    public function importarPlanilhaArrecadacao($aArquivoImportar)
+    /**
+     * Extrai os dados do array de importacao e adiciona nos metodos para salvar
+     *
+     * @param array $aArquivoImportar
+     * @return void
+     */
+    public function importarReceitas($aArquivoImportar)
     {
         foreach ($aArquivoImportar as $iPosicao => $sLinha) {
             $oReceitaOrcamentaria = $this->preencherLayoutReceitaOrcamentaria($this->iLayout, $sLinha);
@@ -115,6 +135,12 @@ class PlanilhaArrecadacaoImportacaoReceita
         }
     }
 
+    /**
+     * Adiciona as linhas de receita orcamentaria
+     *
+     * @param object $oReceitaOrcamentaria
+     * @return void
+     */
     public function adicionarPlanilhaReceitaOrcamentaria($oReceitaOrcamentaria)
     {
         $oReceitaPlanilha = new ReceitaPlanilha();
@@ -137,18 +163,12 @@ class PlanilhaArrecadacaoImportacaoReceita
         $this->oPlanilhaArrecadacao->adicionarReceitaPlanilha($oReceitaPlanilha);
     }
 
-    public function salvarReceitas()
-    {
-        $this->oPlanilhaArrecadacao->salvar();
-        $this->iCodigoPlanilhaArrecadada = $this->oPlanilhaArrecadacao->getCodigo();
-        foreach ($this->oTransferencias as $oTransferencia) {
-            $oTransferencia->salvar();
-            if ((int) $oTransferencia->getCodigoSlip() <= 0)
-                throw new BusinessException("Não foi possível salvar as receitas extra-orçamentárias");
-            $this->aCodigoSlip[] = $oTransferencia->getCodigoSlip();
-        }
-    }
-
+    /**
+     * Adiciona a receita orçamentaria no array para salvar
+     *
+     * @param object $oReceitaExtraOrcamentaria
+     * @return void
+     */
     public function adicionarReceitaExtraOrcamentaria($oReceitaExtraOrcamentaria)
     {
         $oTransferencia = TransferenciaFactory::getInstance($this->iCodigoTipoOperacao, $this->iCodigoSlip);
@@ -174,6 +194,34 @@ class PlanilhaArrecadacaoImportacaoReceita
     }
 
     /**
+     * Salva a Planilha de Receita
+     *
+     * @return void
+     */
+    public function salvarReceitaOrcamentaria()
+    {
+        if (count($this->oPlanilhaArrecadacao->getReceitasPlanilha()) > 0) {
+            $this->oPlanilhaArrecadacao->salvar();
+            $this->iCodigoPlanilhaArrecadada = $this->oPlanilhaArrecadacao->getCodigo();
+        }
+    }
+
+    /**
+     * Salva os dados da receita extra orçamentária
+     *
+     * @return void
+     */
+    public function salvarReceitaExtraOrcamentaria()
+    {
+        foreach ($this->oTransferencias as $oTransferencia) {
+            $oTransferencia->salvar();
+            if ((int) $oTransferencia->getCodigoSlip() <= 0)
+                throw new BusinessException("Não foi possível salvar as receitas extra-orçamentárias");
+            $this->aCodigoSlip[] = $oTransferencia->getCodigoSlip();
+        }
+    }
+
+    /**
      * Recebe a linha e passa na classe de preenchimento conforme o layout e devolve um objeto preenchido
      *
      * @param int $iLayout
@@ -182,7 +230,7 @@ class PlanilhaArrecadacaoImportacaoReceita
      */
     public function preencherLayoutReceitaOrcamentaria($iLayout, $sLinha)
     {
-        $sClassName = "PlanilhaArrecadacaoImportacaoReceitaOrcamentariaLayout{$iLayout}";
+        $sClassName = "ImportacaoReceitaOrcamentariaLayout{$iLayout}";
 
         if (!class_exists($sClassName))
             throw new BusinessException("Layout selecionado é inválido");
@@ -193,7 +241,7 @@ class PlanilhaArrecadacaoImportacaoReceita
 
     public function preencherLayoutReceitaExtraOrcamentaria($iLayout, $sLinha)
     {
-        $sClassName = "PlanilhaArrecadacaoImportacaoReceitaExtraOrcamentariaLayout{$iLayout}";
+        $sClassName = "ImportacaoReceitaExtraOrcamentariaLayout{$iLayout}";
 
         if (!class_exists($sClassName))
             throw new BusinessException("Layout de Receita Extra Orcamentaria selecionado é inválido");

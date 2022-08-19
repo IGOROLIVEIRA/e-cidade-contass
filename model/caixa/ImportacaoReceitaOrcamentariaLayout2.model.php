@@ -24,7 +24,7 @@
  *  Copia da licenca no diretorio licenca/licenca_en.txt
  *                                licenca/licenca_pt.txt
  */
-class PlanilhaArrecadacaoImportacaoReceitaOrcamentariaLayout2
+class ImportacaoReceitaOrcamentariaLayout2
 {
     private $oReceita;
 
