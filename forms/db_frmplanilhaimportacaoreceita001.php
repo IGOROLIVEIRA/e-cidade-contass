@@ -37,7 +37,7 @@
                     <?php
                     $aLayout = array(
                         0 => 'Selecione',
-                        2 => 'SAAE',
+                        2 => 'SAAE - Layout 2',
                     );
 
                     db_select("layout", $aLayout, true, $db_opcao, "");

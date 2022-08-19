@@ -46,7 +46,7 @@ class ImportacaoReceita
     private $iRegExercicio = "";
     private $oPlanilhaArrecadacao;
     private $iCodigoSlip = null;
-    private $iCodigoTipoOperacao = 5;
+    private $iCodigoTipoOperacao = 11;
     public $iCodigoPlanilhaArrecadada = 0;
     public $aCodigoSlip = array();
 
@@ -178,7 +178,7 @@ class ImportacaoReceita
         $oTransferencia->setValor($oReceitaExtraOrcamentaria->nValor);
         $oTransferencia->adicionarRecurso($oReceitaExtraOrcamentaria->iRecurso, $oReceitaExtraOrcamentaria->nValor);
         $oTransferencia->setHistorico(9100);
-        $oTransferencia->setObservacao(addslashes(db_stdClass::normalizeStringJsonEscapeString($this->sObservacao)));
+        $oTransferencia->setObservacao("Arrecadação de Receita Extraorçamentária - BDA");
         $oTransferencia->setTipoPagamento(0);
         $oTransferencia->setSituacao(1);
         $oTransferencia->setCodigoCgm($this->iNumeroCgm);
@@ -202,6 +202,8 @@ class ImportacaoReceita
     {
         if (count($this->oPlanilhaArrecadacao->getReceitasPlanilha()) > 0) {
             $this->oPlanilhaArrecadacao->salvar();
+            $this->oPlanilhaArrecadacao->getReceitasPlanilha();
+            $this->oPlanilhaArrecadacao->autenticar();
             $this->iCodigoPlanilhaArrecadada = $this->oPlanilhaArrecadacao->getCodigo();
         }
     }
@@ -217,6 +219,8 @@ class ImportacaoReceita
             $oTransferencia->salvar();
             if ((int) $oTransferencia->getCodigoSlip() <= 0)
                 throw new BusinessException("Não foi possível salvar as receitas extra-orçamentárias");
+            $oTransferencia->executaAutenticacao();
+            $oTransferencia->executarLancamentoContabil();
             $this->aCodigoSlip[] = $oTransferencia->getCodigoSlip();
         }
     }
