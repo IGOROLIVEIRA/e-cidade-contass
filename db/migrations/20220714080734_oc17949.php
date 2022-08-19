@@ -9,7 +9,6 @@ class Oc17949 extends AbstractMigration
         $this->createMenuInscricaoDA();
         $this->createParametroProced();
         $this->createParametroDevedorPrincipal();
-        $this->addFieldDevedorPrincipal();
         $this->obrigaCgmParaITBI();
         $this->createTableItbiDivida();
     }
@@ -48,12 +47,6 @@ SQL;
             INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES (2362, (select codcam from db_syscampo where nomecam = 'it24_devedor'), 16, 0);
             COMMIT;
 SQL;
-        $this->execute($sql);
-    }
-
-    private function addFieldDevedorPrincipal()
-    {
-        $sql = 'ALTER TABLE "itbi"."paritbi" ADD COLUMN "it24_devedor" int4 DEFAULT 1;';
         $this->execute($sql);
     }
 
