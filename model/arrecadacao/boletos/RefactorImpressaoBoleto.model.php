@@ -269,11 +269,7 @@ class RefactorImpressaoBoleto {
     $sessao         = $this->sessao;
     $reemite_recibo = $this->reemite_recibo;
 
-    if (isset($this->processarDescontoRecibo)) {
-      (bool)$processarDescontoRecibo = $this->processarDescontoRecibo;
-    } else {
-      (bool)$processarDescontoRecibo = true;
-    }
+    $processarDescontoRecibo = ($this->processarDescontoRecibo === false) ? $this->processarDescontoRecibo : true;
 
     if (isset($this->iParcIni, $this->iParcFim)) {
       $iParcelaIni = $this->iParcIni;

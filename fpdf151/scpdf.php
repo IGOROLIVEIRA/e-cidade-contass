@@ -1,4 +1,4 @@
-<?
+<?   
 set_time_limit(0);
 session_cache_limiter('none');
 
@@ -10,16 +10,16 @@ if ( session_id() == null )
 
 if(!defined('DB_BIBLIOT')){
 
-  require_once("libs/db_stdlib.php");
-  require_once("libs/db_conecta.php");
-  require_once("libs/db_sessoes.php");
-  require_once("libs/db_usuariosonline.php");
+  require_once(modification("libs/db_stdlib.php"));
+  require_once(modification("libs/db_conecta.php"));
+  require_once(modification("libs/db_sessoes.php"));
+  require_once(modification("libs/db_usuariosonline.php"));
 
   db_postmemory($HTTP_POST_VARS);
   db_postmemory($HTTP_SERVER_VARS);
 
   define('FPDF_FONTPATH','fpdf151/font/');
-  require_once('fpdf151/fpdf.php');
+  require_once(modification('fpdf151/fpdf.php'));
 }
 
 class scpdf extends fpdf {
