@@ -264,10 +264,11 @@ try {
                 $dadosESocial->setReponsavelPeloPreenchimento($iCgm);
                 if (!in_array(Tipo::getTipoFormulario($arquivo), array(37, 40, 12, 13, 15, 49))) {
                     $dadosDoPreenchimento = $dadosESocial->getPorTipo(Tipo::getTipoFormulario($arquivo), $oParam->matricula);
-                    $formatter = FormatterFactory::get($arquivo);
-                    $dadosTabela = $formatter->formatar($dadosDoPreenchimento);
-
-                    foreach (array_chunk($dadosTabela, 50) as $aTabela) {
+                    if (current($dadosDoPreenchimento) instanceof \ECidade\RecursosHumanos\ESocial\Model\Formulario\DadosPreenchimento) {
+                        $formatter = FormatterFactory::get($arquivo);
+                        $dadosDoPreenchimento = $formatter->formatar($dadosDoPreenchimento);
+                    }
+                    foreach (array_chunk($dadosDoPreenchimento, 50) as $aTabela) {
                         $eventoFila = new Evento($arquivo, $iCgm, $iCgm, $aTabela, $oParam->tpAmb, "{$oParam->iAnoValidade}-{$oParam->iMesValidade}", $oParam->modo, $oParam->dtalteracao);
                         $eventoFila->adicionarFila();
                     }
@@ -328,7 +329,7 @@ try {
             $response = system("php -q filaEsocial.php");
             ob_end_clean();
 
-            $oRetorno->sMessage = "Dados das Rúbricas agendados para envio.";
+            $oRetorno->sMessage = "Dados das R?bricas agendados para envio.";
 
             break;
     }
