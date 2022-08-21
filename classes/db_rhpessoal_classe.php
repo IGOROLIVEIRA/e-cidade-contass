@@ -819,15 +819,15 @@ class cl_rhpessoal
             if (trim($this->rh01_cnpjrespmatricula) != "" || isset($GLOBALS["HTTP_POST_VARS"]["rh01_cnpjrespmatricula"])) {
                 $sql  .= $virgula . " rh01_cnpjrespmatricula = '$this->rh01_cnpjrespmatricula' ";
                 $virgula = ",";
-                if (trim($this->rh01_cnpjrespmatricula) == null) {
-                    $this->erro_sql = " Campo Responsável Pela Matrícula não informado.";
-                    $this->erro_campo = "rh01_cnpjrespmatricula";
-                    $this->erro_banco = "";
-                    $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                    $this->erro_msg   .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                    $this->erro_status = "0";
-                    return false;
-                }
+                // if (trim($this->rh01_cnpjrespmatricula) == null) {
+                //     $this->erro_sql = " Campo Responsável Pela Matrícula não informado.";
+                //     $this->erro_campo = "rh01_cnpjrespmatricula";
+                //     $this->erro_banco = "";
+                //     $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                //     $this->erro_msg   .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                //     $this->erro_status = "0";
+                //     return false;
+                // }
             }
         }
         $sql .= " where ";
@@ -1830,41 +1830,41 @@ class cl_rhpessoal
         $sql .= "      left  join rhcontratoemergencial  on  rhcontratoemergencial.rh163_matricula = rhpessoal.rh01_regist";
 
         switch ($sQuery) {
-        // Parâmetro da manutenção de períodos aquisitivos
-        // Só traz períodos que podem ser alterados
-      case 1:
-        $sql .= " inner join rhferias on (rhferias.rh109_regist = rhpessoal.rh01_regist and rhferias.rh109_diasdireito > 0)";
-        break;
-        // Parâmentro da inclusão de período de gozo
-        // Só traz servidores que possuem periodo a gozar
-      case 2:
-        $sql .= " inner join rhferias on (rh109_regist = rh01_regist                                     ";
-        $sql .= " and (rh109_diasdireito - ( select coalesce(sum(rh110_dias + rh110_diasabono ),0)       ";
-        $sql .= "                                 from rhferiasperiodo                                   ";
-        $sql .= "                                where rh110_rhferias = rh109_sequencial)::integer) > 0) ";
-        break;
-        // Parâmetro da exclusão de período de gozo
-        // Só traz servidores que possuem periodos de gozo que podem ser excluidos
-      case 3:
-        require_once('model/pessoal/ferias/PeriodoGozoFerias.model.php');
-        $sql .= " inner join rhferias on (rh109_regist = rh01_regist  ";
-        $sql .= "        and exists(select 1 from rhferiasperiodo where rh110_rhferias = rh109_sequencial and rh110_situacao = " . PeriodoGozoFerias::SITUACAO_AGENDADO . ")";
-        $sql .= "        )";
-        break;
+                // Parâmetro da manutenção de períodos aquisitivos
+                // Só traz períodos que podem ser alterados
+            case 1:
+                $sql .= " inner join rhferias on (rhferias.rh109_regist = rhpessoal.rh01_regist and rhferias.rh109_diasdireito > 0)";
+                break;
+                // Parâmentro da inclusão de período de gozo
+                // Só traz servidores que possuem periodo a gozar
+            case 2:
+                $sql .= " inner join rhferias on (rh109_regist = rh01_regist                                     ";
+                $sql .= " and (rh109_diasdireito - ( select coalesce(sum(rh110_dias + rh110_diasabono ),0)       ";
+                $sql .= "                                 from rhferiasperiodo                                   ";
+                $sql .= "                                where rh110_rhferias = rh109_sequencial)::integer) > 0) ";
+                break;
+                // Parâmetro da exclusão de período de gozo
+                // Só traz servidores que possuem periodos de gozo que podem ser excluidos
+            case 3:
+                require_once('model/pessoal/ferias/PeriodoGozoFerias.model.php');
+                $sql .= " inner join rhferias on (rh109_regist = rh01_regist  ";
+                $sql .= "        and exists(select 1 from rhferiasperiodo where rh110_rhferias = rh109_sequencial and rh110_situacao = " . PeriodoGozoFerias::SITUACAO_AGENDADO . ")";
+                $sql .= "        )";
+                break;
 
-        /**
-         * Retorna somente os servidores que tem 1 ou mais periodos aquisitivos sem ferias cadastradas
-         */
-      case 4:
+                /**
+                 * Retorna somente os servidores que tem 1 ou mais periodos aquisitivos sem ferias cadastradas
+                 */
+            case 4:
 
-        $sql .= " inner join rhferias on (rh109_regist = rh01_regist                                       ";
-        $sql .= " and not exists ( select 1 from rhferiasperiodo where rh109_sequencial = rh110_rhferias )) ";
+                $sql .= " inner join rhferias on (rh109_regist = rh01_regist                                       ";
+                $sql .= " and not exists ( select 1 from rhferiasperiodo where rh109_sequencial = rh110_rhferias )) ";
 
-        break;
-      default:
-        // Por padrão, nada aqui
-        break;
-    }
+                break;
+            default:
+                // Por padrão, nada aqui
+                break;
+        }
 
         $sql2 = "";
         if ($dbwhere == "") {
