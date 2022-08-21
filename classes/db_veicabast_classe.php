@@ -1331,6 +1331,7 @@ if($dbwhere==""){
                                                                               from veicabast t
                                                                        where t.ve70_codigo < veicabast.ve70_codigo
                                                                              and t.ve70_veiculos = veicabast.ve70_veiculos
+                                                                             and t.ve70_medida < veicabast.ve70_medida
                                                                              limit 1)
                                                  ), ve60_medidasaida ), ve70_medida ) as ve60_medidasaida,
                             (select ve61_medidadevol
@@ -1346,7 +1347,7 @@ if($dbwhere==""){
                           inner join veiculos          on ve01_codigo       = ve70_veiculos
                           inner join veiccadmarca      on ve21_codigo       = ve01_veiccadmarca
                           inner join veiccadmodelo     on ve22_codigo       = ve01_veiccadmodelo
-                          inner join veiccadtipo       on ve20_codigo       = ve01_veiccadtipo
+                          inner join veiccadtipo       on ve20_codigo       = ve01_veiccadtipo or ve20_codigo = 1
                           left join veiculoscomb      on ve06_veiccadcomb  = ve70_veiculoscomb
                                                       and ve06_veiculos     = ve70_veiculos
                           left join veiccadcomb       on ve06_veiccadcomb  = ve26_codigo

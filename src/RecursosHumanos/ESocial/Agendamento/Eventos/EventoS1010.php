@@ -34,36 +34,39 @@ class EventoS1010 extends EventoBase
 
         foreach ($this->dados as $oDado) {
 
-            if (!isset($oDado->dadosRubrica->natRubr)) {
+            if (!isset($oDado->natrubr)) {
                 continue;
             }
             $oDadosAPI                            = new \stdClass;
             $oDadosAPI->evtTabRubrica             = new \stdClass;
             $oDadosAPI->evtTabRubrica->sequencial = $iSequencial;
-            $oDadosAPI->evtTabRubrica->codRubr    = $oDado->ideRubrica->codRubr;
-            $oDadosAPI->evtTabRubrica->ideTabRubr = $oDado->ideRubrica->ideTabRubr;
+            $oDadosAPI->evtTabRubrica->codRubr    = $oDado->codrubr;
+            $oDadosAPI->evtTabRubrica->ideTabRubr = 'TABRUB1';
             $oDadosAPI->evtTabRubrica->inivalid   = $this->iniValid;
             if (!empty($this->fimValid)) {
                 $oDadosAPI->evtTabRubrica->fimvalid = $this->fimValid;
             }
             $oDadosAPI->evtTabRubrica->modo         = $this->modo;
-            // var_dump($oDado);
-            // exit;
 
-            $oDadosAPI->evtTabRubrica->dadosRubrica = $oDado->dadosRubrica;
-
-            if (!empty($oDado->ideProcessoCP->nrProc)) {
-                $oDadosAPI->evtTabRubrica->ideProcessoCP = $oDado->ideProcessoCP;
+            $oDadosAPI->evtTabRubrica->dadosRubrica->dscrubr = $oDado->dscrubr;
+            $oDadosAPI->evtTabRubrica->dadosRubrica->natrubr = intval($oDado->natrubr);
+            $oDadosAPI->evtTabRubrica->dadosRubrica->tprubr = $oDado->tprubr;
+            if (!empty($oDado->codinccp)) {
+                $oDadosAPI->evtTabRubrica->dadosRubrica->codinccp = $oDado->codinccp;
             }
-            if (!empty($oDado->ideProcessoIRRF->nrProc)) {
-                $oDadosAPI->evtTabRubrica->ideProcessoIRRF = $oDado->ideProcessoIRRF;
+            if (!empty($oDado->codincirrf)) {
+                $oDadosAPI->evtTabRubrica->dadosRubrica->codincirrf = $oDado->codincirrf;
             }
-            if (!empty($oDado->ideProcessoFGTS->nrProc)) {
-                $oDadosAPI->evtTabRubrica->ideProcessoFGTS = $oDado->ideProcessoFGTS;
+            if (!empty($oDado->codincfgts)) {
+                $oDadosAPI->evtTabRubrica->dadosRubrica->codincfgts = $oDado->codincfgts;
             }
             if (!empty($oDado->ideProcessoSIND->nrProc)) {
-                $oDadosAPI->evtTabRubrica->ideProcessoSIND = $oDado->ideProcessoSIND;
+                $oDadosAPI->evtTabRubrica->dadosRubrica->codinccprp = $oDado->codinccprp;
             }
+            if (!empty($oDado->tetoremun)) {
+                $oDadosAPI->evtTabRubrica->dadosRubrica->tetoremun = $oDado->tetoremun;
+            }
+
             $aDadosAPI[] = $oDadosAPI;
             $iSequencial++;
         }
