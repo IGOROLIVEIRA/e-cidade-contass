@@ -128,7 +128,7 @@ db_postmemory($HTTP_POST_VARS);
 								 WHERE c71_coddoc IN
 									 (SELECT c53_coddoc FROM conhistdoc
 									  WHERE c53_tipo IN (30, 31, 11, 21, 414, 90, 92))
-								   AND c80_codlan NOT IN									
+								   AND c80_codlan NOT IN
 								   /* OC 2672 - Inserida condição para que não se apague os lançamentos dos descontos.*/
 									 (SELECT e33_conlancam FROM pagordemdescontolanc
 									  WHERE e33_pagordemdesconto IN (SELECT e34_sequencial FROM pagordemdesconto
@@ -338,8 +338,8 @@ db_postmemory($HTTP_POST_VARS);
 						DELETE FROM empagenotasordem where e43_empagemov in (select e82_codmov from w_mov);
 						DELETE FROM empagemovslips where k107_empagemov in (select e82_codmov from w_mov);
 						DELETE FROM empagemovconta where e98_codmov in (select e82_codmov from w_mov);
-				
-				
+
+
 						UPDATE empelemento
 						   SET e64_vlrpag = (select  round(sum(case when c71_coddoc in (select c53_coddoc
 																						  from conhistdoc
@@ -410,37 +410,38 @@ db_postmemory($HTTP_POST_VARS);
 						DELETE FROM empageconf where e86_codmov in (select e82_codmov from w_mov);
 						DELETE FROM empagemovforma  where e97_codmov in (select e82_codmov from w_mov);
 						DELETE FROM empagepag where e85_codmov in (select e82_codmov from w_mov);
+                        DELETE FROM empageslip where e89_codmov in (select e82_codmov from w_mov);
 						DELETE FROM empageconcarpeculiar where e79_empagemov in (select e82_codmov from w_mov);
                         DELETE FROM empagemovtipotransmissao where e25_empagemov in (select e82_codmov from w_mov);
 						DELETE FROM empagemov where e81_codmov	 in (select e82_codmov from w_mov);
 
 				";
-				//echo pg_last_error();exit;
-	    
+
+
 		    //echo $sqlExcluirOp;exit;
-	  	
-	  	    $sqlOpPaga = "select c71_data as datapag 
-	  	    				from conlancamdoc 
-	  	    				join conlancamord on c80_codlan = c71_codlan 
-	  	    				where c71_coddoc in (select c53_coddoc from conhistdoc where c53_tipo in (30)) 
+
+	  	    $sqlOpPaga = "select c71_data as datapag
+	  	    				from conlancamdoc
+	  	    				join conlancamord on c80_codlan = c71_codlan
+	  	    				where c71_coddoc in (select c53_coddoc from conhistdoc where c53_tipo in (30))
 	  	    				  and c80_codord = {$e50_codord} limit 1";
 	  	    $rsSqlOpPaga = db_query($sqlOpPaga);
-	  	    
+
 	  	    if(pg_num_rows($rsSqlOpPaga) > 0){
-		  	    
+
 	  	    	$DtPagamento  = db_utils::fieldsMemory($rsSqlOpPaga, 0)->datapag;
-	  	    	
-	  	    	$sqlMesFechado = "SELECT * FROM condataconf  where c99_anousu = ".db_getsession("DB_anousu")." and c99_data >= '{$DtPagamento}' and 
+
+	  	    	$sqlMesFechado = "SELECT * FROM condataconf  where c99_anousu = ".db_getsession("DB_anousu")." and c99_data >= '{$DtPagamento}' and
 	  	    	c99_instit = ".db_getsession("DB_instit");
-	  	    	
+
 	  	    	$rsSqlMesFechado = db_query($sqlMesFechado);
-	  	        
+
 		  	    if(pg_num_rows($rsSqlMesFechado) > 0){
-		        	
+
 			        echo "<script> alert('Autenticação não excluída EXISTE ENCERRAMENTO de periodo contabil para esta data!');</script>";
-			        
+
 			        db_redireciona('emp1_emppagamentoexcluirpagamento001.php');
-			        
+
 		  	    }else{
                     db_inicio_transacao();
 		  	    	$rsExluirPagOp = db_query($sqlExcluirOp);
@@ -613,7 +614,7 @@ db_postmemory($HTTP_POST_VARS);
                         }
                     }
                     db_fim_transacao($sqlerro);
-		  	    	
+
 					 if ($rsExluirPagOp == false) {
 					    echo "<script> alert('Houve um erro ao excluir o pagamento!');</script>";
 			            db_redireciona('emp1_emppagamentoexcluirpagamento001.php');
@@ -625,16 +626,16 @@ db_postmemory($HTTP_POST_VARS);
 			           db_redireciona('emp1_emppagamentoexcluirpagamento001.php');
 					 }
 		  	    }
-		        
+
 	  	    }else{
 	  	    	echo "<script> alert('Ordem de Pagamento ainda não autenticada!');</script>";
-		        
+
 		        db_redireciona('emp1_emppagamentoexcluirpagamento001.php');
 	  	    }
-	        
+
 	      } catch (Exception $erro) {
-	
+
 	        echo "<script> alert('Pagamento NÃO excluído!');</script>";
-	        
+
 	        db_redireciona('emp1_emppagamentoexcluirpagamento001.php');
 	      }
