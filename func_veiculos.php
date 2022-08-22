@@ -202,7 +202,7 @@ $clveiculos->rotulo->label("si04_especificacao");
         }else if (isset($chave_ve01_veiccadmarca) && trim($chave_ve01_veiccadmarca)!=""  && $chave_ve01_veiccadmarca > 0){
            $sql = $clveiculos->sql_query("",$campos,"veiccadmarca.ve21_descr","ve01_veiccadmarca = $chave_ve01_veiccadmarca $sWhereInstituicao ");
         }else if (isset($chave_si05_codigo) && trim($chave_si05_codigo)!="" && $chave_si05_codigo > 0){
-           $sql = $clveiculos->sql_query("",$campos,"veicespecificacao.si05_descricao","si05_codigo = $chave_si05_codigo $sWhereInstituicao ");
+           $sql = $clveiculos->sql_query("",$campos,"si05_descricao","si05_codigo = $chave_si05_codigo $sWhereInstituicao ");
         }else { 
            $sql = $clveiculos->sql_query("",$campos,"ve01_codigo","1=1 $sWhereInstituicao ");
         }
