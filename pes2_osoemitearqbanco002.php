@@ -689,6 +689,8 @@ if($sqlerro == false){
       $dvconta = substr($conta,-1);
       $codigooperacao = substr($conta,0,3);
       $conta = substr($conta, 3, $qtddigitosconta);
+      $brancos60 = "{$r38_regist} {$r38_nome}";
+      $nroagendacliente = $i+1;
       //////////////////////////////////////////////
       //////////////////////////////////////////////
 
