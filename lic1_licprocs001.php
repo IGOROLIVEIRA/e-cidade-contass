@@ -117,50 +117,18 @@ if ($clliclicita->numrows > 0) {
                         <input type="hidden" id="codTipoLicitacao" name="codTipoLicitacao" value="<? echo $codTipoLicitacao; ?>">
 
                     </td>
-                    <td><b>Processos de Compras:</b></td>
-                    <td>
-                        <?
 
-                        $result_liclicitem = $clliclicitem->sql_record($clliclicitem->sql_query(
-                            null,
-                            "distinct pc80_codproc",
-                            null,
-                            "l21_codliclicita = $licitacao"
-                        ));
-                        if ($clliclicitem->numrows > 0) {
-                            echo "<select name='codprocanu' id='codprocanu' onchange='js_liberaexclusao(this.value)' " . ($clliclicitem->numrows == 1 ? 'disabled' : '') . ">";
-                            for ($count = 0; $count < $clliclicitem->numrows; $count++) {
-                                db_fieldsmemory($result_liclicitem, $count);
-                                echo " <option value = $pc80_codproc " . (($clliclicitem->numrows == 1 || $clliclicitem->numrows && !$count) ? "selected" : "") . " >$pc80_codproc</option>\n";
-                                $ultimoProc = $pc80_codproc;
-                            }
-                            echo " </select>";
-
-                            echo "<script>";
-                            echo "parent.document.form1.excluir.disabled = false;";
-                            echo "parent.document.form1.codprocesso.value = document.getElementById('codprocanu').value;";
-                            echo "parent.document.form1.exportarcsv.disabled = false; ";
-                            echo "</script>";
-                        } else {
-                            echo "<script>";
-                            echo "parent.document.form1.exportarcsv.disabled = true; ";
-                            echo "</script>";
-
-                            echo "Nenhum Processo de Compra incluído.";
-                        }
-                        ?>
-                    </td>
                     <td><b <?php if ($clliclicitem->numrows > 0) {
                                 if ($l20_leidalicitacao == 2) {
-                                    echo "style='margin-left: -240px; display: none;'";
+                                    echo "style='margin-left: 0px; display: none;'";
                                 } else {
-                                    echo "style='margin-left: -240px;'";
+                                    echo "style='margin-left: 0px;'";
                                 }
                             } else {
                                 if ($l20_leidalicitacao == 2) {
-                                    echo "style='margin-left: -80px; display: none;'";
+                                    echo "style='margin-left: 0px; display: none;'";
                                 } else {
-                                    echo "style='margin-left: -80px;'";
+                                    echo "style='margin-left: 0px;'";
                                 }
                             } ?>>Valor Estimado Sigiloso: </b></td>
                     <td>
@@ -168,12 +136,12 @@ if ($clliclicita->numrows > 0) {
                         if ($clliclicitem->numrows > 0) {
 
                             if ($l20_leidalicitacao == 2) {
-                                echo "<select style='margin-left: -95px; display: none;' name='valorsigiloso' id='valorsigiloso'>";
+                                echo "<select style='margin-left: 0px; display: none;' name='valorsigiloso' id='valorsigiloso'>";
                                 echo " <option value='false'>Não</option>\n";
                                 echo " <option value='true'>Sim</option>\n";
                                 echo " </select>";
                             } else {
-                                echo "<select style='margin-left: -95px;' name='valorsigiloso' id='valorsigiloso'>";
+                                echo "<select style='margin-left: 0px;' name='valorsigiloso' id='valorsigiloso'>";
                                 echo " <option value='false'>Não</option>\n";
                                 echo " <option value='true'>Sim</option>\n";
                                 echo " </select>";
@@ -316,14 +284,41 @@ if ($clliclicita->numrows > 0) {
                         }
                     }
                     ?>
-                    <td align="right" nowrap title="<?= @$Tnome ?>">
-                        <strong>Usuário:</strong>
-                    </td>
-                    <td align="left" nowrap>
+
+                    <td><b>Processos de Compras:</b></td>
+                    <td>
                         <?
-                        db_input('nome', 41, $Inome, true, 'text', 3);
+
+                        $result_liclicitem = $clliclicitem->sql_record($clliclicitem->sql_query(
+                            null,
+                            "distinct pc80_codproc",
+                            null,
+                            "l21_codliclicita = $licitacao"
+                        ));
+                        if ($clliclicitem->numrows > 0) {
+                            echo "<select name='codprocanu' id='codprocanu' onchange='js_liberaexclusao(this.value)' " . ($clliclicitem->numrows == 1 ? 'disabled' : '') . ">";
+                            for ($count = 0; $count < $clliclicitem->numrows; $count++) {
+                                db_fieldsmemory($result_liclicitem, $count);
+                                echo " <option value = $pc80_codproc " . (($clliclicitem->numrows == 1 || $clliclicitem->numrows && !$count) ? "selected" : "") . " >$pc80_codproc</option>\n";
+                                $ultimoProc = $pc80_codproc;
+                            }
+                            echo " </select>";
+
+                            echo "<script>";
+                            echo "parent.document.form1.excluir.disabled = false;";
+                            echo "parent.document.form1.codprocesso.value = document.getElementById('codprocanu').value;";
+                            echo "parent.document.form1.exportarcsv.disabled = false; ";
+                            echo "</script>";
+                        } else {
+                            echo "<script>";
+                            echo "parent.document.form1.exportarcsv.disabled = true; ";
+                            echo "</script>";
+
+                            echo "Nenhum Processo de Compra incluído.";
+                        }
                         ?>
                     </td>
+
 
                 </tr>
                 <tr>
@@ -337,6 +332,7 @@ if ($clliclicita->numrows > 0) {
                         db_input('pc80_data_ano', 4, 0, true, 'text', 3);
                         ?>
                     </td>
+                    <!--
                     <td align="right" nowrap title="<?= @$Tdescrdepto ?>">
                         <strong>Departamento: </strong>
                     </td>
@@ -350,6 +346,16 @@ if ($clliclicita->numrows > 0) {
                         echo "parent.document.form1.codTipoLicitacao.value = document.getElementById('codTipoLicitacao').value;";
                         echo "</script>";
 
+                        ?>
+                    </td>
+                    -->
+
+                    <td align="right" nowrap title="<?= @$Tnome ?>">
+                        <strong>Usuário:</strong>
+                    </td>
+                    <td align="left" nowrap>
+                        <?
+                        db_input('nome', 41, $Inome, true, 'text', 3);
                         ?>
                     </td>
                 </tr>
