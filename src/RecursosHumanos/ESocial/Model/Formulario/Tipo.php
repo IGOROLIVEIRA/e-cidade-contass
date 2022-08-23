@@ -37,6 +37,7 @@ class Tipo
     const CD_BENEF_IN = 47;
     const AFASTAMENTO_TEMPORARIO = 40;
     const CADASTRO_BENEFICIO = 49;
+    const DESLIGAMENTO = 25;
 
 
     /**

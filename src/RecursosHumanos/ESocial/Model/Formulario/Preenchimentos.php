@@ -1177,4 +1177,19 @@ where
          */
         return \db_utils::getCollectionByRecord($rsAfasta);
     }
+
+    /**
+     * Buscar dados para preenchimento de um evento específico
+     * 
+     * @param integer $tipo - ECidade\RecursosHumanos\ESocial\Model\Formulario\Tipo 
+     * @param integer $matricula
+     * @return array 10:31
+     */
+    public function buscarPreenchimento($tipo, $matricula = null) {
+
+        $eventoCargaFactory = new EventoCargaFactory($tipo);
+        $eventoCarga = $eventoCargaFactory->getEvento();
+        $rsResult = $eventoCarga->execute($matricula);
+        return \db_utils::getCollectionByRecord($rsResult);
+    }
 }
