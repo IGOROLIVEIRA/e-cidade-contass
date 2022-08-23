@@ -484,7 +484,8 @@ function sql_query_veiculoscentral ( $ve36_sequencial=null,$campos="*",$ordem=nu
      $sql .= " inner join veiccentral   on veiccentral.ve40_veiccadcentral = veiccadcentral.ve36_sequencial ";
      $sql .= " inner join veiculos      on veiculos.ve01_codigo            = veiccentral.ve40_veiculos ";
      $sql .= " inner join veiccadmodelo on veiccadmodelo.ve22_codigo       = veiculos.ve01_veiccadmodelo";
-     $sql .= " inner join veiccadtipo   on veiccadtipo.ve20_codigo         = veiculos.ve01_veiccadtipo ";
+     $sql .= " inner join tipoveiculos  on tipoveiculos.si04_veiculos      = veiculos.ve01_codigo ";
+     $sql .= " inner join veicespecificacao on veicespecificacao.si05_codigo  = tipoveiculos.si04_especificacao ";
      $sql .= " inner join veiccadmarca  on veiccadmarca.ve21_codigo        = veiculos.ve01_veiccadmarca  ";
      $sql2 = "";
      if($dbwhere==""){

@@ -48,27 +48,12 @@ class DadosESocial
         //echo $tipo;
         //exit;
         switch ($tipo) {
-            case '40':
-                return $this->buscaPreenchimentos($matricula);
-                break;
-            case '37':
-                return $this->buscaPreenchimentos($matricula);
-                break;
-
-            case '12':
-                return $this->buscaPreenchimentos($matricula);
-                break;
-
-            case '2':
-                return $this->buscaPreenchimentos($matricula);
-                break;
-            case '13':
-                return $this->buscaPreenchimentos($matricula);
-                break;
-            case '15':
-                return $this->buscaPreenchimentos($matricula);
-                break;
-            case '49':
+            case Tipo::AFASTAMENTO_TEMPORARIO:
+            case Tipo::CADASTRAMENTO_INICIAL:
+            case Tipo::REMUNERACAO_TRABALHADOR:
+            case Tipo::RUBRICA:
+            case Tipo::REMUNERACAO_SERVIDOR:
+            case Tipo::DESLIGAMENTO:
                 return $this->buscaPreenchimentos($matricula);
                 break;
             default:
@@ -97,10 +82,6 @@ class DadosESocial
      */
     private function buscaPreenchimentos($matricula = null)
     {
-        //echo 'tst';
-        //echo $this->tipo;
-        //echo Tipo::AFASTAMENTO_TEMPORARIO;
-        //exit;
         $configuracao = new Configuracao();
         $formularioId = $configuracao->getFormulario($this->tipo);
         $preenchimento = new Preenchimentos();
@@ -140,6 +121,8 @@ class DadosESocial
                 return $preenchimento->buscarPreenchimentoS2230($formularioId, $matricula);
             case Tipo::CADASTRO_BENEFICIO:
                 return $preenchimento->buscarPreenchimentoS2410($formularioId, $matricula);
+            case Tipo::DESLIGAMENTO:
+                return $preenchimento->buscarPreenchimento($this->tipo, $matricula);
             default:
                 throw new Exception('Tipo não encontrado.');
         }

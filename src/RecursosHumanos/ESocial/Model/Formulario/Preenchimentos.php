@@ -669,6 +669,7 @@ class Preenchimentos
         $sql = "SELECT cgm.z01_cgccpf AS cpfbenef,
        rh01_matorgaobeneficio AS matricula,
        rh01_cnpjrespmatricula AS cnpjorigem,
+       cgc,
        CASE
            WHEN rh01_admiss < '2021-11-21' THEN 'S'
            ELSE 'N'
@@ -693,7 +694,9 @@ class Preenchimentos
            ELSE 1
        END AS tppenmorte,
        instituidor.z01_cgccpf AS cpfinst,
-       rh02_dtobitoinstituidor AS dtinst
+       rh02_dtobitoinstituidor AS dtinst,
+       rh30_vinculo,
+       rh02_rhtipoapos
 FROM rhpessoal
 INNER JOIN cgm ON cgm.z01_numcgm = rhpessoal.rh01_numcgm
 LEFT JOIN rhpessoalmov ON rh02_anousu = fc_getsession('DB_anousu')::int
@@ -708,10 +711,11 @@ AND rescisao.r59_regime = rhregime.rh30_regime
 AND rescisao.r59_causa = rhpesrescisao.rh05_causa
 AND rescisao.r59_caub = rhpesrescisao.rh05_caub::char(2)
 LEFT JOIN cgm instituidor ON instituidor.z01_numcgm = rh02_cgminstituidor
+inner join db_config on
+                            db_config.codigo = rhpessoal.rh01_instit
 WHERE rh30_vinculo IN ('I',
                        'P')
-  AND r59_anousu IS NULL
-  AND rh01_matorgaobeneficio IS NOT NULL";
+  AND r59_anousu IS NULL ";
         if ($matricula != null) {
             $sql .= " and rh01_regist in ($matricula) ";
         }
@@ -1172,5 +1176,20 @@ where
          * @todo busca os empregadores da instituição e adicona para cada rubrica
          */
         return \db_utils::getCollectionByRecord($rsAfasta);
+    }
+
+    /**
+     * Buscar dados para preenchimento de um evento específico
+     * 
+     * @param integer $tipo - ECidade\RecursosHumanos\ESocial\Model\Formulario\Tipo 
+     * @param integer $matricula
+     * @return array 10:31
+     */
+    public function buscarPreenchimento($tipo, $matricula = null) {
+
+        $eventoCargaFactory = new EventoCargaFactory($tipo);
+        $eventoCarga = $eventoCargaFactory->getEvento();
+        $rsResult = $eventoCarga->execute($matricula);
+        return \db_utils::getCollectionByRecord($rsResult);
     }
 }

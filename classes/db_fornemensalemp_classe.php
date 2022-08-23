@@ -183,28 +183,28 @@ class cl_fornemensalemp
         if (trim($this->fm101_datafim) != "" || isset($GLOBALS["HTTP_POST_VARS"]["fm101_datafim_dia"]) && ($GLOBALS["HTTP_POST_VARS"]["fm101_datafim_dia"] != "")) {
             $sql .= $virgula . " fm101_datafim = '$this->fm101_datafim' ";
             $virgula = ",";
-            if (trim($this->fm101_datafim) == null) {
-                $this->erro_sql = " Campo Data Final forn. mensais de empenhos não informado.";
-                $this->erro_campo = "fm101_datafim_dia";
-                $this->erro_banco = "";
-                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
-            }
+            // if (trim($this->fm101_datafim) == null) {
+            //     $this->erro_sql = " Campo Data Final forn. mensais de empenhos não informado.";
+            //     $this->erro_campo = "fm101_datafim_dia";
+            //     $this->erro_banco = "";
+            //     $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            //     $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            //     $this->erro_status = "0";
+            //     return false;
+            // }
         } else {
             if (isset($GLOBALS["HTTP_POST_VARS"]["fm101_datafim_dia"])) {
                 $sql .= $virgula . " fm101_datafim = null ";
                 $virgula = ",";
-                if (trim($this->fm101_datafim) == null) {
-                    $this->erro_sql = " Campo Data Final forn. mensais de empenhos não informado.";
-                    $this->erro_campo = "fm101_datafim_dia";
-                    $this->erro_banco = "";
-                    $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                    $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                    $this->erro_status = "0";
-                    return false;
-                }
+                // if (trim($this->fm101_datafim) == null) {
+                //     $this->erro_sql = " Campo Data Final forn. mensais de empenhos não informado.";
+                //     $this->erro_campo = "fm101_datafim_dia";
+                //     $this->erro_banco = "";
+                //     $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                //     $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                //     $this->erro_status = "0";
+                //     return false;
+                // }
             }
         }
         $sql .= " where " . $where;
@@ -340,6 +340,7 @@ class cl_fornemensalemp
                 $virgula = ",";
             }
         }
+        // echo $sql;exit;
         return $sql;
     }
 
@@ -381,7 +382,7 @@ class cl_fornemensalemp
         $sQueryNotas = "SELECT DISTINCT ";
 
         if ($campo == "" && $tipo == 1){
-            $sQueryNotas .= "fm101_numcgm,fm101_sequencial,z01_nome,sum(e70_vlrliq) as e70_vlrliq";
+            $sQueryNotas .= "fm101_numcgm,fm101_sequencial,z01_nome,sum(e70_valor) as e70_valor";
         }
         if ($campo == "" && $tipo == 2){
             $sQueryNotas .= "
@@ -416,10 +417,8 @@ class cl_fornemensalemp
                           LEFT JOIN pagordemele ON e53_codord = pagordemnota.e71_codord ";
         }                  
         if($tipo == 1 && !$sCredoresSelecionados){
-            $where.= " or (e60_numemp is null and fm101_datafim is null) or fm101_datafim is null  ";   
-        }
-        if($tipo == 2 && !$sCredoresSelecionados){
-            $where.= " or fm101_datafim is null ";   
+            $dataFinal = substr($where,44,10);
+            $where.= " or (e60_numemp is null and fm101_datafim is null) or ( e70_valor is null and fm101_datafim >= '$dataFinal') ";
         }
         if ($where) {
             $sQueryNotas .= $where;
@@ -435,18 +434,18 @@ class cl_fornemensalemp
             $sQueryNotas .= " GROUP BY 1,2,3,4,5,6,7 ";
             $sQueryNotas .= " order by z01_nome,fm101_numcgm,e60_numemp  "; 
         }
-       
+        // echo $sQueryNotas;exit;
         return $sQueryNotas;
     }
 
     function validaDatas($dataInicial, $dataFinal)
     {
         if (isset($dataInicial) && empty($dataFinal)){
-            $filtroData = " WHERE fm101_datafim >= '$dataInicial' ";
+            $filtroData = " WHERE e69_dtnota >= '$dataInicial' ";
         }elseif (isset($dataFinal) && empty($dataInicial)){
-            $filtroData = " WHERE fm101_datafim <= '$dataFinal' ";
+            $filtroData = " WHERE e69_dtnota <= '$dataFinal' ";
         }else {
-            $filtroData = " WHERE fm101_datafim BETWEEN '$dataInicial' AND '$dataFinal' ";
+            $filtroData = " WHERE e69_dtnota BETWEEN '$dataInicial' AND '$dataFinal' and (fm101_datafim is null or fm101_datafim >= '$dataInicial') ";
         }
 
         return $filtroData;

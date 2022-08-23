@@ -29,9 +29,11 @@ include("fpdf151/pdf.php");
 include("libs/db_sql.php");
 include("classes/db_veiculos_classe.php");
 include("classes/db_veiculoscomb_classe.php");
+include("classes/db_veicespecificacao_classe.php");
 
 $clveiculos     = new cl_veiculos;
 $clveiculoscomb = new cl_veiculoscomb;
+$clveicespecificacao = new cl_veicespecificacao;
 
 $clveiculos->rotulo->label();
 
@@ -44,7 +46,7 @@ parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 
 $where=" ve36_coddepto = " . db_getsession("DB_coddepto");
 if ($tipo!=""){
-	$where .= " and ve01_veiccadtipo = $tipo ";
+	$where .= " and si04_especificacao = $tipo ";
 }
 if ($comb!=""){
 	$where .= " and ve06_veiccadcomb = $comb ";
@@ -72,7 +74,7 @@ if (($dtaquis != "--") && ($dtaquis1 != "--")) {
 $head3 = "CADASTRO DE VEÍCULOS";
 $head4 = @$info;
 
-$campos = "distinct ve01_codigo,ve01_placa,ve20_descr,ve21_descr,ve22_descr,ve23_descr,ve25_descr,ve32_descr,
+$campos = "distinct ve01_codigo,ve01_placa,upper(si05_descricao) as si05_descricao,ve21_descr,ve22_descr,ve23_descr,ve25_descr,ve32_descr,
                     ve01_ranavam,ve01_chassi,ve01_certif,ve01_placanum,ve01_quantpotencia,ve31_descr,ve31_descrcompleta,
                     ve01_medidaini,ve01_quantcapacidad,ve24_descr,ve01_dtaquis,ve30_descr,ve01_anofab,ve01_anomod,cp05_localidades,
                     descrdepto,ve01_ativo,ve07_sigla";
@@ -113,7 +115,7 @@ for($x = 0; $x < $clveiculos->numrows;$x++){
       $pdf->cell(20,$alt,/*$RLve01_placanum*/"Placa em Nº",1,0,"C",1);      
       $pdf->cell(35,$alt,$RLve01_veiccadpotencia,1,0,"C",1);
       $pdf->cell(20,$alt,$RLve01_medidaini,1,0,"C",1);
-      $pdf->cell(35,$alt,/*$RLve01_veiccadtipocapacidade*/"Capacidade",1,0,"C",1);
+      $pdf->cell(35,$alt,/*$RLsi04_especificacaocapacidade*/"Capacidade",1,0,"C",1);
       $pdf->cell(20,$alt,/*$RLve01_dtaquis*/"Aquisição",1,0,"C",1);
       $pdf->cell(30,$alt,$RLve06_veiccadcomb,1,0,"C",1);
       $pdf->cell(20,$alt,/*$RLve01_veiccadcategcnh*/"CNH Exigida",1,0,"C",1);
@@ -127,7 +129,7 @@ for($x = 0; $x < $clveiculos->numrows;$x++){
    $pdf->setfont('arial','',6);
    $pdf->cell(10,$alt,$ve01_codigo,0,0,"C",$p);
    $pdf->cell(10,$alt,$ve01_placa,0,0,"C",$p);
-   $pdf->cell(30,$alt,$ve20_descr,0,0,"L",$p);
+   $pdf->cell(30,$alt,$si05_descricao,0,0,"L",$p);
    $pdf->cell(30,$alt,$ve21_descr,0,0,"L",$p);
    $pdf->cell(30,$alt,$ve22_descr,0,0,"L",$p);
    $pdf->cell(30,$alt,$ve23_descr,0,0,"L",$p);
