@@ -113,7 +113,7 @@ $header = " <header>
                         <i>{$oInstit->getTelefone()} - CNPJ: " . db_formatar($oInstit->getCNPJ(), "cnpj") . "</i><br/>
                         <i>{$oInstit->getSite()}</i>
                     </div>
-                    <div style=\"width:35%; float:right\" class=\"box\">
+                    <div style=\"width:40%; float:right\" class=\"box\">
                     <b>Relatório Faturamento dos Fornecedores Mensais</b><br/>  ";
 foreach ($aInstits as $iInstit) {
     $oInstituicao = new Instituicao($iInstit);
@@ -249,9 +249,10 @@ $aFornecedores = pg_fetch_all($resultFornecedores);
             <thead>
             <tr>
                 <th class="row-header freezebar-origin-ltr"></th>
-                <th id="0C0" style="width:500px;" class="column-headers-background"></th>
+                <th id="0C0" style="width:180px;" class="column-headers-background"></th>
                 <th id="0C1" style="width:180px;" class="column-headers-background"></th>
-                <th id="0C2" style="width:100px;" class="column-headers-background"></th>
+                <th id="0C2" style="width:180px;" class="column-headers-background"></th>
+                <th id="0C3" style="width:100px;" class="column-headers-background"></th>
             </tr>
             </thead>
             
@@ -333,8 +334,8 @@ HTML;
                             <td class="s1" dir="ltr"><center>$fornecedorMensal->fm101_empenho</center></td>
                             <td class="s3" dir="ltr"><center>$fornecedorMensal->fm101_numnota</center></td>
                             <td class="s3" dir="ltr"><center>$fornecedorMensal->fm101_data</center></td>
-                            <td class="s2" dir="ltr"><center>R$</center></td>
-                            <td class="s3" dir="ltr"><center>$fornecedorMensal->fm101_valor</center></td>                          
+                            <td class="s2" dir="ltr">R$</td>
+                            <td class="s3" dir="ltr">$fornecedorMensal->fm101_valor</td>                          
                             
                         </tr> </br>                    
 HTML;

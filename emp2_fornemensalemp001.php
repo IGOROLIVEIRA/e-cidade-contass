@@ -184,6 +184,14 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
             alert("A data inicial é maior que a data final. Verifique!");
             return false;
         }
+        if (sDataInicialBanco == '') {
+            alert("Informe a data inicial!");
+            return false;
+        }
+        if (sDataFinalBanco == '') {
+            alert("Informe a data final!");
+            return false;
+        }
 
         function OpenWithPost(dados, name){
 
