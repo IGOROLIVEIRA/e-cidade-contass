@@ -25,7 +25,7 @@
  *                                licenca/licenca_pt.txt
  */
 
-
+require_once("dbforms/db_funcoes.php");
 require_once("libs/db_stdlib.php");
 require_once("libs/db_conecta.php");
 require_once("libs/db_sessoes.php");

@@ -1,6 +1,6 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
+ *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2014  DBSeller Servicos de Informatica
  *                            www.dbseller.com.br
  *                         e-cidade@dbseller.com.br
@@ -24,7 +24,7 @@
  *  Copia da licenca no diretorio licenca/licenca_en.txt
  *                                licenca/licenca_pt.txt
  */
-
+require_once("dbforms/db_funcoes.php");
 require_once "libs/db_stdlib.php";
 require_once "libs/db_conecta.php";
 include_once "libs/db_sessoes.php";
@@ -100,10 +100,10 @@ $mPDF->setHTMLFooter(utf8_encode($footer), 'O', true);
 ob_start();
 
 ?>
-  
+
   <html>
   <head>
-    
+
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <style type="text/css">
       .ritz .waffle a { color : inherit; }
@@ -133,7 +133,7 @@ ob_start();
     </style>
   </head>
   <body>
-  
+
   <div class="ritz grid-container" dir="ltr">
     <table class="waffle" cellspacing="0" cellpadding="0">
       <thead>
@@ -332,7 +332,7 @@ ob_start();
       </tbody>
     </table>
   </div>
-  
+
   </body>
   </html>
 

@@ -27,7 +27,7 @@
 
 //ini_set('display_errors', 'On');
 //error_reporting(E_ALL);
-
+require_once("dbforms/db_funcoes.php");
 require_once "libs/db_stdlib.php";
 require_once "libs/db_conecta.php";
 include_once "libs/db_sessoes.php";

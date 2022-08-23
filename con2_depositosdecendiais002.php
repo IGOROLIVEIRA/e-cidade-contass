@@ -25,6 +25,7 @@
  *                                licenca/licenca_pt.txt
  */
 
+require_once("dbforms/db_funcoes.php");
 require_once "libs/db_stdlib.php";
 require_once "libs/db_conecta.php";
 include_once "libs/db_sessoes.php";
@@ -153,17 +154,17 @@ ob_start();
       $fIPI = 0;
       $fMJITR = 0;
       $fMJIPTU = 0;
-      $fMJTIBI = 0; 
+      $fMJTIBI = 0;
       $fMJISS = 0;
       $fMJDAIPTU = 0;
       $fMJDAIPTU_1 = 0;
-      $fMJDAITBI = 0; 
+      $fMJDAITBI = 0;
       $fMJDAITBI_1 = 0;
       $fMJDAISS = 0;
       $fMJDAISS_1 = 0;
 
       foreach ($aReceitas as $Receitas) {
-        
+
         if(db_getsession('DB_anousu')>2021){
           if(strstr($Receitas->o57_fonte, '411120111000000'))$fIPTR+=$Receitas->saldo_arrecadado;
           if(strstr($Receitas->o57_fonte, '411125001000000'))$fIPTU+=$Receitas->saldo_arrecadado;
@@ -1094,7 +1095,7 @@ ob_start();
               <td class="s13"><?=db_formatar(array_sum(array($fTotalFPMSaude,$fTotalITRSaude,$fTotalICMSSaude,$fTotalICMSESTSaude,$fTotalIPISaude,$fTotalIPVASaude,$fTotalTribMunSaude)),"f")?></td>
             </tr>
           </tbody>
-        </table> 
+        </table>
       </div>
       <?php elseif(db_getsession('DB_anousu')>=2022) : ?>
        <div class="wrapper">
@@ -1344,7 +1345,7 @@ ob_start();
                 echo db_formatar($fMJDAITBI, "f");
                 ?>
               </td>
-              <td class="s5"></td> 
+              <td class="s5"></td>
             </tr>
             <tr style='height:20px;'>
               <td class="s6 bdleft">11145113</td>
@@ -1373,9 +1374,9 @@ ob_start();
                 <?php
                 echo db_formatar($fMJDAITBI_1, "f");
                 ?>
-              </td> 
-              <td class="s5"></td> 
-            </tr> 
+              </td>
+              <td class="s5"></td>
+            </tr>
             <tr style='height:20px;'>
               <td class="s6 bdleft">11145114</td>
               <td class="s7">M.J Dív.Ativa ISSQN</td>
@@ -1398,25 +1399,25 @@ ob_start();
               <td class="s5 bdleft" colspan="4">&nbsp;</td>
             </tr>
             <tr style='height:20px;'>
-            
+
                <td class="s5 bdleft" colspan="4">&nbsp;</td>
-               
+
             </tr>
             <tr style='height:20px;'>
-             
+
               <td class="s5 bdbottom " colspan="4">&nbsp;</td>
             </tr>
             <tr style='height:20px;'>
               <td class="s5 bdtop" colspan="4">&nbsp;</td>
-              
+
             </tr>
             <tr style='height:20px;' >
-            
+
               <td class="s8 bdleft"></td>
-              <td class="s8"></td>             
+              <td class="s8"></td>
               <td class="s9">Educ.</td>
               <td class="s10">Saúde</td>
-              
+
             </tr>
 
             <tr style='height:20px; '>
@@ -1573,7 +1574,7 @@ ob_start();
             </tr>
           </tbody>
         </table>
-      </div>  
+      </div>
     <?php endif; ?>
     <?php
     db_query("drop table if exists work_receita");

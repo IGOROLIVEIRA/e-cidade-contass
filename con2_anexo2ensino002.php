@@ -25,15 +25,15 @@
  *                                licenca/licenca_pt.txt
  */
 
-
-require_once "libs/db_stdlib.php";
-require_once "libs/db_conecta.php";
-include_once "libs/db_sessoes.php";
-include_once "libs/db_usuariosonline.php";
-include("vendor/mpdf/mpdf/mpdf.php");
-include("libs/db_liborcamento.php");
-include("libs/db_libcontabilidade.php");
-include("libs/db_sql.php");
+require_once("dbforms/db_funcoes.php");
+require_once("libs/db_stdlib.php");
+require_once("libs/db_conecta.php");
+require_once("libs/db_sessoes.php");
+require_once("libs/db_usuariosonline.php");
+require_once("vendor/mpdf/mpdf/mpdf.php");
+require_once("libs/db_liborcamento.php");
+require_once("libs/db_libcontabilidade.php");
+require_once("libs/db_sql.php");
 require_once("classes/db_cgm_classe.php");
 require_once("classes/db_slip_classe.php");
 require_once("classes/db_infocomplementaresinstit_classe.php");

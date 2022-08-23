@@ -25,7 +25,7 @@
  *                                licenca/licenca_pt.txt
  */
 
-
+require_once("dbforms/db_funcoes.php");
 require_once "libs/db_stdlib.php";
 require_once "libs/db_conecta.php";
 include_once "libs/db_sessoes.php";
@@ -108,18 +108,18 @@ $fJMDAITBI = 0;
 
 $fMJMISS = 0;
 $fDAISS = 0;
-$fMJMDAISS = 0; 
-$fMISS = 0; 
-$fJMISS = 0;             
+$fMJMDAISS = 0;
+$fMISS = 0;
+$fJMISS = 0;
 $fMDAISS = 0;
-$fJMDAISS = 0; 
+$fJMDAISS = 0;
 
 $fFMISS = 0;
 $fFMMJMISS = 0;
 $fFMDAISS = 0;
-$fFMMJMDAISS = 0; 
-$fFMMISS = 0; 
-$fFMJMISS = 0;             
+$fFMMJMDAISS = 0;
+$fFMMISS = 0;
+$fFMJMISS = 0;
 $fFMMDAISS = 0;
 $fFMJMDAISS = 0;
 
@@ -137,7 +137,7 @@ if ($anousu >=2022){
     $aReceitasImpostosIPTU = array(
         array('(-) Deduções da Receita do IPTU', 'text', '49%11125001%',''),
     );
-    $aReceitasImpostosITBI = array( 
+    $aReceitasImpostosITBI = array(
         array('(-) Deduções da Receita do ITBI', 'text', '49%1112530%',''),
     );
     $aReceitasImpostosISS = array(
@@ -149,7 +149,7 @@ if ($anousu >=2022){
     $aReceitasImpostosITR = array(
         array('(-) Deduções da Receita do ITR ', 'text', '49%1112011%',''),
     );
-}    
+}
 if($anousu>=2022){
     foreach ($aReceitas as $Receitas) {
         //IPTU
@@ -170,22 +170,22 @@ if($anousu>=2022){
         if (strstr($Receitas->o57_fonte, '411125306000000')) $fJMITBI += $Receitas->saldo_arrecadado;
         if (strstr($Receitas->o57_fonte, '411125307000000')) $fMDAITBI += $Receitas->saldo_arrecadado;
         if (strstr($Receitas->o57_fonte, '411125308000000')) $fJMDAITBI += $Receitas->saldo_arrecadado;
-        //ISS 
+        //ISS
         if (strstr($Receitas->o57_fonte, '411145111000000')) $fISS += $Receitas->saldo_arrecadado;
         if (strstr($Receitas->o57_fonte, '411145112000000')) $fMJMISS += $Receitas->saldo_arrecadado;
         if (strstr($Receitas->o57_fonte, '411145113000000')) $fDAISS += $Receitas->saldo_arrecadado;
-        if (strstr($Receitas->o57_fonte, '411145114000000')) $fMJMDAISS += $Receitas->saldo_arrecadado; 
-        if (strstr($Receitas->o57_fonte, '411145115000000')) $fMISS += $Receitas->saldo_arrecadado; 
-        if (strstr($Receitas->o57_fonte, '411145116000000')) $fJMISS += $Receitas->saldo_arrecadado;             
+        if (strstr($Receitas->o57_fonte, '411145114000000')) $fMJMDAISS += $Receitas->saldo_arrecadado;
+        if (strstr($Receitas->o57_fonte, '411145115000000')) $fMISS += $Receitas->saldo_arrecadado;
+        if (strstr($Receitas->o57_fonte, '411145116000000')) $fJMISS += $Receitas->saldo_arrecadado;
         if (strstr($Receitas->o57_fonte, '411145117000000')) $fMDAISS += $Receitas->saldo_arrecadado;
-        if (strstr($Receitas->o57_fonte, '411145118000000')) $fJMDAISS += $Receitas->saldo_arrecadado; 
+        if (strstr($Receitas->o57_fonte, '411145118000000')) $fJMDAISS += $Receitas->saldo_arrecadado;
 
         if (strstr($Receitas->o57_fonte, '411145121000000')) $fFMISS += $Receitas->saldo_arrecadado;
         if (strstr($Receitas->o57_fonte, '411145122000000')) $fFMMJMISS += $Receitas->saldo_arrecadado;
         if (strstr($Receitas->o57_fonte, '411145123000000')) $fFMDAISS += $Receitas->saldo_arrecadado;
-        if (strstr($Receitas->o57_fonte, '411145124000000')) $fFMMJMDAISS += $Receitas->saldo_arrecadado; 
-        if (strstr($Receitas->o57_fonte, '411145125000000')) $fFMMISS += $Receitas->saldo_arrecadado; 
-        if (strstr($Receitas->o57_fonte, '411145126000000')) $fFMJMISS += $Receitas->saldo_arrecadado;             
+        if (strstr($Receitas->o57_fonte, '411145124000000')) $fFMMJMDAISS += $Receitas->saldo_arrecadado;
+        if (strstr($Receitas->o57_fonte, '411145125000000')) $fFMMISS += $Receitas->saldo_arrecadado;
+        if (strstr($Receitas->o57_fonte, '411145126000000')) $fFMJMISS += $Receitas->saldo_arrecadado;
         if (strstr($Receitas->o57_fonte, '411145127000000')) $fFMMDAISS += $Receitas->saldo_arrecadado;
         if (strstr($Receitas->o57_fonte, '411145128000000')) $fFMJMDAISS += $Receitas->saldo_arrecadado;
         // IRRF
@@ -210,10 +210,10 @@ if($anousu>=2022){
         if (strstr($Receitas->o57_fonte, '417195101000000')) $fPARTICMS += $Receitas->saldo_arrecadado;
         if (strstr($Receitas->o57_fonte, '417215001000000')) $fICMS += $Receitas->saldo_arrecadado;
         //IPVA
-        if (strstr($Receitas->o57_fonte, '417215101000000')) $fIPVA += $Receitas->saldo_arrecadado;    
+        if (strstr($Receitas->o57_fonte, '417215101000000')) $fIPVA += $Receitas->saldo_arrecadado;
         // IPI
-        if (strstr($Receitas->o57_fonte, '417215201000000')) $fIPI += $Receitas->saldo_arrecadado; 
-        
+        if (strstr($Receitas->o57_fonte, '417215201000000')) $fIPI += $Receitas->saldo_arrecadado;
+
     }
 }
 else{
@@ -244,7 +244,7 @@ else{
         if (strstr($Receitas->o57_fonte, '411180143000000')) $fRJDAITBI += $Receitas->saldo_arrecadado;
         if (strstr($Receitas->o57_fonte, '411180233000000')) $fRJDAISS += $Receitas->saldo_arrecadado;
     }
-}    
+}
 db_query("drop table if exists work_receita");
 criarWorkReceita($sWhereReceita, array($anousu), $dtini, $dtfim);
 
@@ -964,7 +964,7 @@ ob_start();
                             echo db_formatar($fJMDAIPTU, "f");
                             ?>
                         </td>
-                    </tr>                     
+                    </tr>
                    <?php
                 $nTotalReceitaImpostos = 0;
                 foreach ($aReceitasImpostosIPTU as $receita) {
@@ -990,9 +990,9 @@ ob_start();
                     echo "    </td>";
                     echo " </tr>";
                 }
-                ?>   
-                   
-                    
+                ?>
+
+
                     <tr style='height:20px;'>
                         <td class="s3 bdleft" colspan="8">&nbsp;</td>
                         <td class="s3" colspan="2"></td>
@@ -1108,7 +1108,7 @@ ob_start();
                     echo "    </td>";
                     echo " </tr>";
                 }
-                ?>   
+                ?>
                     <tr style='height:20px;'>
                         <td class="s3 bdleft" colspan="8">&nbsp;</td>
                         <td class="s3" colspan="2"></td>
@@ -1305,7 +1305,7 @@ ob_start();
                     echo "    </td>";
                     echo " </tr>";
                 }
-                ?>   
+                ?>
                     <tr style='height:20px;'>
                         <td class="s3 bdleft" colspan="8">&nbsp;</td>
                         <td class="s3" colspan="2"></td>
@@ -1360,7 +1360,7 @@ ob_start();
                     echo "    </td>";
                     echo " </tr>";
                 }
-                ?>   
+                ?>
                     <tr style='height:20px;'>
                         <td class="s3 bdleft" colspan="8">&nbsp;</td>
                         <td class="s3" colspan="2"></td>
@@ -1475,12 +1475,12 @@ ob_start();
                     echo "    </td>";
                     echo " </tr>";
                 }
-                ?>   
+                ?>
                      <tr style='height:20px;'>
                      <td class="s20 bdleft" colspan="8"><b>Subtotal</b></td>
                         <td class="s21" colspan="2"> <?php
                                                     $fSubTotalImposto = array_sum(array($fITR, $fMJMITR, $fDAITR, $fMJMDAITR, $fMITR, $fJMITR,$fMDAITR,$fJMDAITR,$fIRRF,$fIRRFO,$fISS, $fMJMISS, $fDAISS, $fMJMDAISS, $fMISS, $fJMISS,$fMDAISS,$fJMDAISS,$fFMISS,$fFMMJMISS,$fFMDAISS,$fFMMJMDAISS,$fFMMISS,$fFMJMISS,$fFMMDAISS,$fFMJMDAISS,$fITBI, $fMJMITBI, $fDAITBI, $fMJDAITBI, $fMITB, $fJMITBI,$fMDAITBI,$fJMDAITBI,$fIPTU, $fMJMIPTU, $fDAIPTU, $fMJMDAIPTU, $fMIPTU, $fJMIPTU,$fMDAIPTU,$fJMDAIPTU));
-                                                    echo db_formatar($fSubTotalImposto-(abs($totalIPTU)+abs($totalITBI)+abs($totalISS)+abs($totalIRRF)+abs($totalITR)), "f"); 
+                                                    echo db_formatar($fSubTotalImposto-(abs($totalIPTU)+abs($totalITBI)+abs($totalISS)+abs($totalIRRF)+abs($totalITR)), "f");
                                                     $fSubTotalImposto = $fSubTotalImposto-(abs($totalIPTU)+abs($totalITBI)+abs($totalISS)+abs($totalIRRF)+abs($totalITR));
                                                    ?></td>
                     </tr>
@@ -1573,7 +1573,7 @@ ob_start();
                         <td class="s3 bdleft" colspan="8">&nbsp;</td>
                         <td class="s3" colspan="2"></td>
                     </tr>
-    
+
                     <tr style='height:20px;'>
                         <td class="s6 bdleft bdbottom" colspan="8">&nbsp;</td>
                         <td class="s3 bdbottom" colspan="2"></td>
@@ -1617,7 +1617,7 @@ ob_start();
                         <td class="s21" colspan="2"><?= db_formatar(($fTotalAnexoII + $iRestosAPagar), "f") ?></td>
                     </tr>
                 </tbody>
-            <?php endif; ?>            
+            <?php endif; ?>
             <?php if (db_getsession('DB_anousu') < 2018) : ?>
                 <tbody>
                     <tr style='height:20px;'>
@@ -2056,7 +2056,7 @@ ob_start();
                     </tr>
 
                 </tbody>
-            <?php endif; ?>    
+            <?php endif; ?>
             <?php  if ((db_getsession('DB_anousu') >= 2018 ) and  (db_getsession('DB_anousu') <= 2021)) : ?>
                 <tbody>
                     <tr style='height:20px;'>

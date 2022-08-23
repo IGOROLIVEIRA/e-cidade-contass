@@ -25,14 +25,14 @@
  *                                licenca/licenca_pt.txt
  */
 
-require("libs/db_stdlib.php");
-require("libs/db_conecta.php");
-include("libs/db_sessoes.php");
-include("libs/db_usuariosonline.php");
-include("classes/db_orcsuplem_classe.php");
-include("dbforms/db_funcoes.php");
-include("dbforms/db_classesgenericas.php");
-include("classes/db_orcsuplemtipo_classe.php");
+require_once("libs/db_stdlib.php");
+require_once("libs/db_conecta.php");
+require_once("libs/db_sessoes.php");
+require_once("libs/db_usuariosonline.php");
+require_once("classes/db_orcsuplem_classe.php");
+require_once("dbforms/db_funcoes.php");
+require_once("dbforms/db_classesgenericas.php");
+require_once("classes/db_orcsuplemtipo_classe.php");
 
 $clcriaabas      = new cl_criaabas;
 $clcriaabas->scrolling="yes";
