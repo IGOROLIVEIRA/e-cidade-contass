@@ -90,7 +90,7 @@ class cl_acordoitemdotacao
     }
   }
   // funcao para inclusao
-  function incluir($ac22_sequencial)
+  function incluir($ac22_sequencial = null)
   {
     //throw new Exception($this->ac22_sequencial .$this->ac22_coddot .$this->ac22_anousu.$this->ac22_acordoitem . $ac22_sequencial);
     //$this->atualizacampos();

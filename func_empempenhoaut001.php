@@ -206,14 +206,16 @@ if (isset($bAtestoContInt) && $bAtestoContInt == 1) {
         <td   align="left" nowrap>
             <?  if (isset($e54_emiss) and ($e54_emiss != "")) {
                 list($e54_emiss_dia,$e54_emiss_mes,$e54_emiss_ano)= explode('[/.-]',$e54_emiss);
+                $datae54_emiss = $e54_emiss_dia+'/'+$e54_emiss_mes+'/'+$e54_emiss_ano;
             }
-            db_inputdata('e54_emiss',@$e54_emiss_dia,@$e54_emiss_mes,@$e54_emiss_ano,true,'text',3,"");
+            db_input('e54_emiss',8,$datae54_emiss,true,'text',3);
             ?> </td>
         <td   align="left" nowrap><?=$Le54_anulad?>
             <?  if (isset($e54_anulad) and ($e54_anulad != "")) {
                 list($e54_anulad_dia,$e54_anulad_mes,$e54_anulad_ano)= explode('[/.-]',$e54_anulad);
+                $datae54_anulad = $e54_anulad_dia+'/'+$e54_anulad_mes+'/'+$e54_anulad_ano;
             }
-            db_inputdata('e54_anulad',@$e54_anulad_dia,@$e54_anulad_mes,@$e54_anulad_ano,true,'text',3,"");
+            db_input('e54_anulad',$datae54_anulad,true,'text',3);
             ?> </td>
 
     </tr>
