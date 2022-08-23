@@ -52,7 +52,7 @@
 	           descrdepto      as central,
 	           ve01_codigo     as codigo_veiculo,
 	           ve01_placa      as placa,
-	           ve20_descr      as descr_tipo,
+	           upper(si05_descricao)  as descr_tipo,
 	           ve22_descr      as descr_modelo,
 	           ve21_descr      as descr_marca,
 	           ve01_anofab     as ano_fabricacao,

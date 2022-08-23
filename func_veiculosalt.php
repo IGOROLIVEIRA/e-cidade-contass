@@ -133,7 +133,7 @@ $oDaoVeicCadCentralDepart->rotulo->label("ve37_veiccadcentral");
           }
         }
 
-        $sCampos  = "distinct ve01_codigo,ve01_placa,ve20_descr,ve21_descr,ve22_descr,ve23_descr,ve01_chassi, ";
+        $sCampos  = "distinct ve01_codigo,ve01_placa,upper(si05_descricao) as si05_descricao,ve21_descr,ve22_descr,ve23_descr,ve01_chassi, ";
         $sCampos .= "ve01_certif,ve01_anofab,ve01_anomod, ve01_quantcapacidad,ve26_codigo ";
         if (!isset($pesquisa_chave)) {
 
