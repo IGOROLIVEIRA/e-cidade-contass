@@ -141,7 +141,9 @@ $clpcmater->rotulo->label("pc01_descrmater");
 		   pcmater.pc01_complmater,
 		   pcmater.pc01_codsubgrupo,
 		   pcsubgrupo.pc04_descrsubgrupo,
-		   pcmater.pc01_servico";
+		   pcmater.pc01_servico,
+       pcmater.pc01_instit,
+       pcmater.pc01_codmaterant";
 
       if($filtra_atuais == 'true'){
           $where_ativo = $where_ativo ? $where_ativo . " AND " : $where_ativo;

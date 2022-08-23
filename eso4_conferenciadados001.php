@@ -84,8 +84,7 @@ $mesfolha = DBPessoal::getMesFolha();
                         <strong>Matrículas</strong>
                     </td>
                     <td>
-                        <select multiple="multiple" name="matriculas" id="matriculas" style="width: 78%;"
-                        ondblclick="js_remover_matric(this);">
+                        <select multiple="multiple" name="matriculas" id="matriculas" style="width: 78%;" ondblclick="js_remover_matric(this);">
                         </select>
                     </td>
                 </tr>
@@ -122,10 +121,10 @@ $mesfolha = DBPessoal::getMesFolha();
                 <tr>
                     <td align="left"><label>Início de Validade:</label></td>
                     <td>
-                      <?php
-                      db_input('anofolha', 4, 1, true, 'text', 2, "class='field-size1'");
-                      db_input('mesfolha', 2, 1, true, 'text', 2, "class='field-size1'");
-                      ?>
+                        <?php
+                        db_input('anofolha', 4, 1, true, 'text', 2, "class='field-size1'");
+                        db_input('mesfolha', 2, 1, true, 'text', 2, "class='field-size1'");
+                        ?>
                     </td>
                 </tr>
                 <tr>
@@ -138,6 +137,7 @@ $mesfolha = DBPessoal::getMesFolha();
                             <option value="S2230">S-2230 - Afastamento Temporário</option>
                             <option value="S2306">S-2306 - Trabalhador Sem Vínculo de Emprego/Estatutário - Alteração Contratual</option>
                             <option value="S2400">S-2400 - Cadastro de Beneficiário - Entes Públicos - Início</option>
+                            <option value="S2410">S-2410 - Cadastro de Benefício - Entes Públicos - Início</option>
                         </select>
                     </td>
                 </tr>
@@ -158,8 +158,8 @@ $mesfolha = DBPessoal::getMesFolha();
 </html>
 
 <script>
-var arrEvts = ['EvtIniciaisTabelas', 'EvtNaoPeriodicos', 'EvtPeriodicos'];
-var empregador = Object();
+    var arrEvts = ['EvtIniciaisTabelas', 'EvtNaoPeriodicos', 'EvtPeriodicos'];
+    var empregador = Object();
     (function() {
 
         new AjaxRequest('eso4_esocialapi.RPC.php', {
@@ -214,7 +214,7 @@ var empregador = Object();
                 alert('Selecione um evento.');
                 return;
             }
-            
+
             let aArquivosSelecionados = new Array();
             aArquivosSelecionados.push($F('evento'));
 
@@ -253,6 +253,7 @@ var empregador = Object();
 
         js_OpenJanelaIframe('top.corpo', 'iframe_consulta_envio', 'func_consultaenvioesocial.php', 'Pesquisa', true);
     }
+
     function js_adicionar_matric() {
         var selectobject = document.getElementById("matriculas");
         for (var iCont = 0; iCont < selectobject.length; iCont++) {
@@ -264,7 +265,7 @@ var empregador = Object();
         var select = document.getElementById('matriculas');
         var opt = document.createElement('option');
         opt.value = $F('rh01_regist');
-        opt.innerHTML = $F('rh01_regist')+' - '+$F('z01_nome');
+        opt.innerHTML = $F('rh01_regist') + ' - ' + $F('z01_nome');
         select.appendChild(opt);
         js_limpar_matric();
     }

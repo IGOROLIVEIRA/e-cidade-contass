@@ -142,7 +142,7 @@ $clpcmater->rotulo->label("pc01_descrmater");
 	           pcmater.pc01_descrmater,
 		   pcmater.pc01_complmater,
 		   pcmater.pc01_codsubgrupo,
-		   pcsubgrupo.pc04_descrsubgrupo,pcmater.pc01_servico";
+		   pcsubgrupo.pc04_descrsubgrupo,pcmater.pc01_servico,pc01_instit,pc01_codmaterant";
 
         if(isset($chave_pc01_codmater) && (trim($chave_pc01_codmater)!="") ){
 	         $sql = $clpcmater->sql_query_desdobra(null,$campos,"pc01_codmater","pc01_codmater=$chave_pc01_codmater $where_ativo");

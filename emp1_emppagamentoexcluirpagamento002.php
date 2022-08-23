@@ -410,14 +410,12 @@ db_postmemory($HTTP_POST_VARS);
 						DELETE FROM empageconf where e86_codmov in (select e82_codmov from w_mov);
 						DELETE FROM empagemovforma  where e97_codmov in (select e82_codmov from w_mov);
 						DELETE FROM empagepag where e85_codmov in (select e82_codmov from w_mov);
+                        DELETE FROM empageslip where e89_codmov in (select e82_codmov from w_mov);
 						DELETE FROM empageconcarpeculiar where e79_empagemov in (select e82_codmov from w_mov);
                         DELETE FROM empagemovtipotransmissao where e25_empagemov in (select e82_codmov from w_mov);
 						DELETE FROM empagemov where e81_codmov	 in (select e82_codmov from w_mov);
 
 				";
-				//echo pg_last_error();exit;
-
-		    //echo $sqlExcluirOp;exit;
 
 	  	    $sqlOpPaga = "select c71_data as datapag
 	  	    				from conlancamdoc

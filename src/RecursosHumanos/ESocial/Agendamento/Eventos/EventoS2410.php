@@ -5,7 +5,7 @@ namespace ECidade\RecursosHumanos\ESocial\Agendamento\Eventos;
 use ECidade\RecursosHumanos\ESocial\Agendamento\Eventos\EventoBase;
 
 /**
- * Classe responsÃ¡vel por montar as informaÃ§Ãµes do evento S2410 Esocial
+ * Classe responsável por montar as informações do evento S2410 Esocial
  *
  * @package  ECidade\RecursosHumanos\ESocial\Agendamento\Eventos
  * @author   Marcelo Hernane
@@ -44,22 +44,35 @@ class EventoS2410 extends EventoBase
             $oDadosAPI->evtCdBenIn->nrRecibo            = null;
 
             $oDadosAPI->evtCdBenIn->cpfBenef            = $oDados->cpfbenef;
-            $oDadosAPI->evtCdBenIn->matricula           = $oDados->matricula;
-            $oDadosAPI->evtCdBenIn->cnpjOrigem          = $oDados->cnpjorigem;
+            if ($oDados->matricula != 0) {
+                $oDadosAPI->evtCdBenIn->matricula           = $oDados->matricula;
+            }
+            if (!empty($oDados->cnpjorigem)) {
+                $oDadosAPI->evtCdBenIn->cnpjOrigem          = $oDados->cnpjorigem;
+            }
             $oDadosAPI->evtCdBenIn->cadIni              = $oDados->cadini;
-            $oDadosAPI->evtCdBenIn->indSitBenef         = $oDados->indsitbenef;
+            if ($oDados->cadini == 'N') {
+                $oDadosAPI->evtCdBenIn->indSitBenef         = $oDados->indsitbenef;
+            }
             $oDadosAPI->evtCdBenIn->nrBeneficio         = $oDados->nrbeneficio;
+            $oDadosAPI->evtCdBenIn->dtIniBeneficio      = $oDados->dtinibeneficio;
             $oDadosAPI->evtCdBenIn->tpBeneficio         = $oDados->tpbeneficio;
             $oDadosAPI->evtCdBenIn->tpPlanRP            = $oDados->tpplanrp;
-            $oDadosAPI->evtCdBenIn->dsc                 = $oDados->dsc;
+            if (!empty($oDados->dsc))
+                $oDadosAPI->evtCdBenIn->dsc                 = $oDados->dsc;
+
             $oDadosAPI->evtCdBenIn->indDecJud           = $oDados->inddecjud;
-
-            $oDadosAPI->evtCdBenIn->infopenmorte->tpPenMorte  = $oDados->tppenmorte;
-            if (!empty($oDados->cpfinst))
-                $oDadosAPI->evtCdBenIn->infopenmorte->instpenmorte->cpfInst     = $oDados->cpfinst;
-            if (!empty($oDados->dtinst))
-                $oDadosAPI->evtCdBenIn->infopenmorte->instpenmorte->dtInst      = $oDados->dtinst;
-
+            if ($oDados->rh02_rhtipoapos != 7) {
+                if ($oDados->rh30_vinculo == 'P') {
+                    $oDadosAPI->evtCdBenIn->infopenmorte->tpPenMorte  = $oDados->tppenmorte;
+                }
+                if (!empty($oDados->cpfinst)) {
+                    $oDadosAPI->evtCdBenIn->infopenmorte->instpenmorte->cpfInst     = $oDados->cpfinst;
+                }
+                if (!empty($oDados->dtinst)) {
+                    $oDadosAPI->evtCdBenIn->infopenmorte->instpenmorte->dtInst      = $oDados->dtinst;
+                }
+            }
             $aDadosAPI[] = $oDadosAPI;
             $iSequencial++;
         }

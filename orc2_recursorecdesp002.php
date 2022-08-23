@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
+ *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2014  DBSeller Servicos de Informatica
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 
@@ -47,7 +47,7 @@ $descr_inst = '';
 $xvirg = '';
 for($xins = 0; $xins < pg_numrows($resultinst); $xins++){
   db_fieldsmemory($resultinst,$xins);
-  $descr_inst .= $xvirg.$nomeinstabrev ; 
+  $descr_inst .= $xvirg.$nomeinstabrev ;
   $xvirg = ', ';
 }
 $head2 = "TOTAL DO ORCAMENTO - RECEITA";
@@ -63,7 +63,7 @@ SELECT o70_codigo,
        sum(difer) AS difer
 FROM
 (select *,receita-despesa as difer from (
-SELECT RIGHT (o70_codigo::varchar, 3)::integer AS o70_codigo,
+SELECT RIGHT (o70_codigo::varchar, 8)::integer AS o70_codigo,
        o15_descr,
        sum(case when tipo = 0 then sum else 0 end ) as receita,
        sum(case when tipo = 1 then sum else 0 end ) as despesa
@@ -76,7 +76,7 @@ from (
   				   '".db_getsession("DB_anousu")."-01-01'),
 		   2,15)::float8
 		   )
-   from orcreceita 
+   from orcreceita
    where o70_anousu = ".db_getsession("DB_anousu")." and o70_instit in ($instit)
    group by o70_codigo,tipo
  union
@@ -89,12 +89,12 @@ from (
 				     '".db_getsession("DB_anousu")."-01-01')
 	             ,2,15)::float8)
    from orcdotacao
-   where o58_anousu = ".db_getsession("DB_anousu")." 
+   where o58_anousu = ".db_getsession("DB_anousu")."
    group by o58_codigo, tipo
 ) as x
    inner join orctiporec on o70_codigo = o15_codigo
 group by o70_codigo,o15_descr
-) as x  
+) as x
 order by o70_codigo) y
 GROUP BY 1, 2
 ORDER BY 1";
@@ -104,9 +104,9 @@ $result = db_query($sql);
 //db_criatabela($result);
 //exit;
 
-$pdf = new PDF(); 
-$pdf->Open(); 
-$pdf->AliasNbPages(); 
+$pdf = new PDF();
+$pdf->Open();
+$pdf->AliasNbPages();
 $total = 0;
 $pdf->setfillcolor(235);
 $pdf->setfont('arial','b',8);
@@ -127,7 +127,7 @@ for($i=0;$i<pg_numrows($result);$i++){
     $pdf->setfont('arial','b',7);
 
     $pdf->cell(20,$alt,"Recurso",0,0,"L",0);
-    $pdf->cell(80,$alt,"Descrição",0,0,"L",0);
+    $pdf->cell(90,$alt,"Descrição",0,0,"L",0);
     $pdf->cell(25,$alt,"Receita",0,0,"R",0);
     $pdf->cell(25,$alt,"Despesa",0,0,"R",0);
     $pdf->cell(25,$alt,"Diferença",0,1,"R",0);
@@ -136,7 +136,7 @@ for($i=0;$i<pg_numrows($result);$i++){
   }
 
   $pdf->cell(20,$alt,db_formatar($o70_codigo,"recurso"),0,0,"L",0);
-  $pdf->cell(80,$alt,$o15_descr,0,0,"L",0);
+  $pdf->cell(90,$alt,$o15_descr,0,0,"L",0);
   $pdf->cell(25,$alt,db_formatar($receita,'f'),0,0,"R",0);
   $pdf->cell(25,$alt,db_formatar($despesa,'f'),0,0,"R",0);
   $pdf->cell(25,$alt,db_formatar($difer,'f'),0,1,"R",0);
@@ -146,7 +146,7 @@ for($i=0;$i<pg_numrows($result);$i++){
 }
 $pdf->setfont('arial','b',7);
 $pdf->ln(3);
-$pdf->cell(100,$alt,'T O T A L',0,0,"L",0);
+$pdf->cell(110,$alt,'T O T A L',0,0,"L",0);
 $pdf->cell(25,$alt,db_formatar($total,'f'),0,0,"R",0);
 $pdf->cell(25,$alt,db_formatar($tota2,'f'),0,0,"R",0);
 $pdf->cell(25,$alt,db_formatar($tota3,'f'),0,1,"R",0);

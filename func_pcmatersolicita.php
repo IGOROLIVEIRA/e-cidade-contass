@@ -181,7 +181,9 @@ if (isset($o56_codele) and trim($o56_codele) != '') {
                   CASE
                   WHEN pcmater.pc01_veiculo = false THEN 'Não'
                   WHEN pcmater.pc01_veiculo = true THEN 'Sim'
-                  END AS pc01_veiculo";
+                  END AS pc01_veiculo,
+                  pcmater.pc01_instit,
+                  pcmater.pc01_codmaterant";
           $repassa = array(
             "chave_pc01_codmater"    => @$chave_pc01_codmater,
             "chave_pc01_descrmater"  => @$chave_pc01_descrmater,
