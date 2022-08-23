@@ -97,8 +97,8 @@ $oRotulo->label("z01_nome");
             </td>
             <td>
               <?php
-              db_input('p58_numero', 12, $Ip58_numero, true, 'text', $iOpcaoProcesso, " onChange='js_pesquisarProcesso(false);'");
-              db_input('z01_nome', 60, $Iz01_nome, true, 'text', 3, "");
+              db_input('l20_codigo', 12, $Ip58_numero, true, 'text', $iOpcaoProcesso, " onChange='js_pesquisarProcesso(false);'");
+              db_input('l20_objeto', 60, $Iz01_nome, true, 'text', 3, "");
               ?>
             </td>
           </tr>
@@ -156,7 +156,7 @@ $oRotulo->label("z01_nome");
   /**
    * Pesquisa processo do protocolo e depois os documentos anexados
    */
-  if (!empty($('p58_numero').value)) {
+  if (!empty($('l20_codigo').value)) {
     js_pesquisarProcesso(false);
   }
 
@@ -627,19 +627,19 @@ $oRotulo->label("z01_nome");
    */
   function js_pesquisarProcesso(lMostra) {
 
-    var sArquivo = 'func_protprocesso_protocolo.php?funcao_js=parent.';
+    var sArquivo = 'func_liclicita.php?situacao=0&lei=1&funcao_js=parent.';
 
     if (lMostra) {
-      sArquivo += 'js_mostraProcesso|p58_codproc|p58_numero|dl_nome_ou_razão_social';
+      sArquivo += 'js_mostraProcesso|l20_codigo|l20_objeto';
     } else {
 
-      var iNumeroProcesso = $('p58_numero').value;
+      var iNumeroProcesso = $('l20_codigo').value;
 
       if (empty(iNumeroProcesso)) {
         return false;
       }
 
-      sArquivo += 'js_mostraProcessoHidden&pesquisa_chave=' + iNumeroProcesso + '&sCampoRetorno=p58_codproc';
+      sArquivo += 'js_mostraProcessoHidden&pesquisa_chave=' + iNumeroProcesso + '&sCampoRetorno=l20_objeto';
     }
 
     js_OpenJanelaIframe('', 'db_iframe_proc', sArquivo, 'Pesquisa de Processos', lMostra);
@@ -652,11 +652,11 @@ $oRotulo->label("z01_nome");
    * @param  string sNome
    * @return void
    */
-  function js_mostraProcesso(iCodigoProcesso, iNumeroProcesso, sNome) {
+  function js_mostraProcesso(iCodigoProcesso, sNome) {
 
+    $('l20_codigo').value = iCodigoProcesso;
+    $('l20_objeto').value = sNome;
     $('p58_codproc').value = iCodigoProcesso;
-    $('p58_numero').value = iNumeroProcesso;
-    $('z01_nome').value = sNome;
     $('p01_descricao').value = '';
     $('uploadfile').disabled = false;
     db_iframe_proc.hide();
@@ -677,15 +677,15 @@ $oRotulo->label("z01_nome");
      */
     if (lErro) {
 
-      $('p58_numero').value = '';
+      $('l20_codigo').value = '';
       $('p58_codproc').value = '';
       $('p01_descricao').value = '';
       $('uploadfile').disabled = false;
       oGridDocumentos.clearAll(true);
     }
 
-    $('p58_codproc').value = iCodigoProcesso;
-    $('z01_nome').value = sNome;
+    $('p58_codproc').value = $('l20_codigo').value;
+    $('l20_objeto').value = iCodigoProcesso;
     js_buscarDocumentos();
   }
 
