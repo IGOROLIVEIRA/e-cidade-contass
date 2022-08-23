@@ -74,7 +74,7 @@ if (($dtaquis != "--") && ($dtaquis1 != "--")) {
 $head3 = "CADASTRO DE VEÍCULOS";
 $head4 = @$info;
 
-$campos = "distinct ve01_codigo,ve01_placa,si05_descricao,ve21_descr,ve22_descr,ve23_descr,ve25_descr,ve32_descr,
+$campos = "distinct ve01_codigo,ve01_placa,upper(si05_descricao) as si05_descricao,ve21_descr,ve22_descr,ve23_descr,ve25_descr,ve32_descr,
                     ve01_ranavam,ve01_chassi,ve01_certif,ve01_placanum,ve01_quantpotencia,ve31_descr,ve31_descrcompleta,
                     ve01_medidaini,ve01_quantcapacidad,ve24_descr,ve01_dtaquis,ve30_descr,ve01_anofab,ve01_anomod,cp05_localidades,
                     descrdepto,ve01_ativo,ve07_sigla";
