@@ -54,6 +54,9 @@ class DadosESocial
             case Tipo::RUBRICA:
             case Tipo::REMUNERACAO_SERVIDOR:
             case Tipo::DESLIGAMENTO:
+            case TIPO::CADASTRO_BENEFICIO:
+            case TIPO::ALTERACAODEDADOS:
+            case TIPO::ALTERACAO_CONTRATO:
                 return $this->buscaPreenchimentos($matricula);
                 break;
             default:
