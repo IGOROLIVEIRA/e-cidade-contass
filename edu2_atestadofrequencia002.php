@@ -30,7 +30,7 @@ require_once("libs/db_stdlibwebseller.php");
 require_once("libs/db_utils.php");
 require_once("libs/JSON.php");
 require_once("libs/db_libdocumento.php");
-require_once ("std/db_stdClass.php");
+require_once("std/db_stdClass.php");
 
 $oDaoPeriodoEscola = new cl_periodoescola;
 
@@ -76,12 +76,12 @@ if ($oTurma->temTurnoAdicional() != "") {
 
 $sCamposHorarioTurno = "min(ed17_h_inicio) as hora_inicio, max(ed17_h_fim) as hora_fim";
 $sWhereHorarioTurno  = "     ed17_i_escola = {$oTurma->getEscola()->getCodigo()}";
-$sWhereHorarioTurno .= " and ed17_i_turno in(".implode(',', $aTurno).")";
+$sWhereHorarioTurno .= " and ed17_i_turno in(" . implode(',', $aTurno) . ")";
 $sSqlHorarioTurno    = $oDaoPeriodoEscola->sql_query(null, $sCamposHorarioTurno, null, $sWhereHorarioTurno);
 $rsHorarioTurno      = $oDaoPeriodoEscola->sql_record($sSqlHorarioTurno);
 
 if ($oDaoPeriodoEscola->numrows == 0) {
-  db_redireciona("db_erros.php?fechar=true&db_erro="._M('educacao.escola.edu2_atestadofrequencia.horario_turma_nao_encontrado'));
+  db_redireciona("db_erros.php?fechar=true&db_erro=" . _M('educacao.escola.edu2_atestadofrequencia.horario_turma_nao_encontrado'));
 }
 $oDadosHorarioTurno = db_utils::fieldsMemory($rsHorarioTurno, 0);
 
@@ -96,7 +96,7 @@ if ($oParametros->lExibeGradeAluno) {
   $iLinhas             = $oDaoPeriodoEscola->numrows;
 
   if ($iLinhas == 0) {
-    db_redireciona("db_erros.php?fechar=true&db_erro="._M('educacao.escola.edu2_atestadofrequencia.grade_horario_nao_encontrada'));
+    db_redireciona("db_erros.php?fechar=true&db_erro=" . _M('educacao.escola.edu2_atestadofrequencia.grade_horario_nao_encontrada'));
   }
 
   for ($i = 0; $i < $iLinhas; $i++) {
@@ -128,16 +128,16 @@ foreach ($oParametros->aMatriculas as $oMat) {
 
   $oParagrafo                         = new libdocumento(5009);
   $oMatricula                         = new Matricula($oMat->iMatricula);
-  
-  try { 
- 
+
+  try {
+
     $oDataNascimento                    = new DBDate($oMatricula->getAluno()->getDataNascimento());
     $oParagrafo->dia_nascimento         = $oDataNascimento->getDia();
     $oParagrafo->mes_extenso_nascimento = DBDate::getMesExtenso((int)$oDataNascimento->getMes());
     $oParagrafo->mes_numeral_nascimento = $oDataNascimento->getMes();
     $oParagrafo->ano_nascimento         = $oDataNascimento->getAno();
-  } catch( Exception $oErro ) { 
-   
+  } catch (Exception $oErro) {
+
     $oParagrafo->dia_nascimento         = "";
     $oParagrafo->mes_extenso_nascimento = "";
     $oParagrafo->mes_numeral_nascimento = "";
@@ -152,14 +152,14 @@ foreach ($oParametros->aMatriculas as $oMat) {
     $aFiliacao[] = $oMatricula->getAluno()->getNomePai();
   }
 
-  $oParagrafo->naturalidade         = $oMatricula->getAluno()->getNaturalidade()->getNome(); 
-  $oParagrafo->estado_naturalidade  = ""; 
-  $oParagrafo->uf_naturalidade      = "";     
+  $oParagrafo->naturalidade         = $oMatricula->getAluno()->getNaturalidade()->getNome();
+  $oParagrafo->estado_naturalidade  = "";
+  $oParagrafo->uf_naturalidade      = "";
 
-  if ( !empty($oParagrafo->naturalidade) ) {
+  if (!empty($oParagrafo->naturalidade)) {
 
-    $oParagrafo->estado_naturalidade  = $oMatricula->getAluno()->getNaturalidade()->getUF()->getNomeEstado(); 
-    $oParagrafo->uf_naturalidade      = $oMatricula->getAluno()->getNaturalidade()->getUF()->getUF();             
+    $oParagrafo->estado_naturalidade  = $oMatricula->getAluno()->getNaturalidade()->getUF()->getNomeEstado();
+    $oParagrafo->uf_naturalidade      = $oMatricula->getAluno()->getNaturalidade()->getUF()->getUF();
   }
 
   $oParagrafo->aluno                  = $oMatricula->getAluno()->getNome();
@@ -176,11 +176,10 @@ foreach ($oParametros->aMatriculas as $oMat) {
   $oDadosAlunos->aParagrafo           = $oParagrafo->getDocParagrafos();
   $oDadosAlunos->sObservacaoMatricula = $oMatricula->getObservacao();
   $aDadosAlunos[]                     = $oDadosAlunos;
-
 }
 
 if (count($aParagrafos) == 0) {
-  db_redireciona("db_erros.php?fechar=true&db_erro="._M('educacao.escola.edu2_atestadofrequencia.matricula_nao_encontrada'));
+  db_redireciona("db_erros.php?fechar=true&db_erro=" . _M('educacao.escola.edu2_atestadofrequencia.matricula_nao_encontrada'));
 }
 
 $oPdf = new PDF();
@@ -188,7 +187,7 @@ $oPdf->AliasNbPages();
 $oPdf->setFillColor(220);
 $oPdf->Open();
 $oPdf->SetAutoPageBreak(false, 10);
-$head1 = "ATESTADO DE FREQUÊNCIA";
+$head1 = "DECLARAÇÃO DE FREQUÊNCIA";
 
 if (db_getsession("DB_modulo") != 1100747) {
 
@@ -199,7 +198,6 @@ if (db_getsession("DB_modulo") != 1100747) {
 
     $head3 = "Telefone: {$aTelefones[0]->iDDD} {$aTelefones[0]->iNumero}";
   }
-
 }
 
 $sObservacao  = $oParametros->sObservacao;
@@ -209,12 +207,12 @@ foreach ($aDadosAlunos as $oDadosAlunos) {
 
   $sTexto = $oDadosAlunos->aParagrafo[1]->oParag->db02_texto;
 
-  $oPdf->setfont('arial','b',10);
+  $oPdf->setfont('arial', 'b', 10);
   $oPdf->SetY($oPdf->getY() + 10);
   $oPdf->Cell(192, $oParametros->iAlturaLinha, "Atestado de Frequência", 0, 1, "C");
   $oPdf->Ln($oParametros->iAlturaLinha * 2);
 
-  $oPdf->setfont('arial','',9);
+  $oPdf->setfont('arial', '', 9);
   $oPdf->setXY(16, $oPdf->GetY());
   $oPdf->multicell(180, $oParametros->iAlturaLinha, $sTexto, 0, "J", 0, 0);
   $oPdf->Ln($oParametros->iAlturaLinha * 2);
@@ -224,12 +222,15 @@ foreach ($aDadosAlunos as $oDadosAlunos) {
   if (!empty($oDadosAlunos->sObservacaoMatricula)) {
     $oParametros->sObservacao = "{$oDadosAlunos->sObservacaoMatricula}\n{$sObservacao}";
   } else if (empty($sObservacao)) {
-    $oParametros->sObservacao = "..........................................................";
+    $oParametros->sObservacao = "";
   } else {
     $oParametros->sObservacao = $sObservacao;
   }
 
-  $oPdf->multicell(180, $oParametros->iAlturaLinha, "OBS.: {$oParametros->sObservacao}", 0, "J", 0, 0);
+  if ($oParametros->sObservacao != "") {
+    $oPdf->multicell(180, $oParametros->iAlturaLinha, "OBS.: {$oParametros->sObservacao}", 0, "J", 0, 0);
+  }
+
 
   $oPdf->Ln($oParametros->iAlturaLinha * 2);
   if ($oParametros->lExibeGradeAluno) {
@@ -237,26 +238,26 @@ foreach ($aDadosAlunos as $oDadosAlunos) {
     /**
      * Calculamos se a grade de de horário do aluno caberá na página atual.
      */
-    if (((count($aGradeHorario) * $oParametros->iAlturaLinha) + $oPdf->GetY() +10 ) > $oPdf->h - 20) {
-    	$oPdf->AddPage();
+    if (((count($aGradeHorario) * $oParametros->iAlturaLinha) + $oPdf->GetY() + 10) > $oPdf->h - 20) {
+      $oPdf->AddPage();
     }
 
     $oPdf->setX(85);
-    $oPdf->setfont('arial','b',9);
+    $oPdf->setfont('arial', 'b', 9);
     $oPdf->Cell(50, $oParametros->iAlturaLinha, "TURNO PRINCIPAL", 1, 1, "C", 1);
     $lImprimeTurno = true;
     foreach ($aGradeHorario as $oGradeHorario) {
 
       $sString = "{$oGradeHorario->iPeriodo}º - {$oGradeHorario->sHoraInicio} / {$oGradeHorario->sHoraFim}";
-      $oPdf->setfont('arial','',9);
+      $oPdf->setfont('arial', '', 9);
 
       if ($oGradeHorario->lPrincipal) {
 
         if ($lImprimeTurno) {
 
-            $oPdf->setX(85);
-            $oPdf->Cell(50, $oParametros->iAlturaLinha, $oGradeHorario->sTurno, 1, 1, "C", 1);
-            $lImprimeTurno = false;
+          $oPdf->setX(85);
+          $oPdf->Cell(50, $oParametros->iAlturaLinha, $oGradeHorario->sTurno, 1, 1, "C", 1);
+          $lImprimeTurno = false;
         }
         $oPdf->setX(85);
         $oPdf->Cell(50, $oParametros->iAlturaLinha, $sString, 1, 1, "C");
@@ -271,13 +272,13 @@ foreach ($aDadosAlunos as $oDadosAlunos) {
     if ($oTurma->temTurnoAdicional() != "") {
 
       $oPdf->setX(85);
-      $oPdf->setfont('arial','b',9);
+      $oPdf->setfont('arial', 'b', 9);
       $oPdf->Cell(50, $oParametros->iAlturaLinha, "TURNO ADICIONAL", 1, 1, "C", 1);
       $lImprimeTurno = true;
       foreach ($aGradeHorario as $oGradeHorario) {
 
         $sString = "{$oGradeHorario->iPeriodo}º - {$oGradeHorario->sHoraInicio} / {$oGradeHorario->sHoraFim}";
-        $oPdf->setfont('arial','',9);
+        $oPdf->setfont('arial', '', 9);
 
         if (!$oGradeHorario->lPrincipal) {
 
@@ -291,7 +292,6 @@ foreach ($aDadosAlunos as $oDadosAlunos) {
           $oPdf->Cell(50, $oParametros->iAlturaLinha, $sString, 1, 1, "C");
         }
       }
-
     }
   }
 
@@ -299,7 +299,7 @@ foreach ($aDadosAlunos as $oDadosAlunos) {
    * Calculo para verificar se os dados da assinatura caberão na pagina atual
    */
   if ($oPdf->GetY() + 40 > $oPdf->h - 15) {
-  	$oPdf->AddPage();
+    $oPdf->AddPage();
   }
 
   $oPdf->SetY($oPdf->h - 40);
@@ -309,16 +309,24 @@ foreach ($aDadosAlunos as $oDadosAlunos) {
   $DiaExtenso  = " {$sMunicipio}, " . $oDiaAtual->getDia() . " de " . DBDate::getMesExtenso((int)$oDiaAtual->getMes());
   $DiaExtenso .= "  de " . $oDiaAtual->getAno();
 
+
   $oPdf->Cell("192", $oParametros->iAlturaLinha, $DiaExtenso, 0, 1, "C");
   $oPdf->ln($oParametros->iAlturaLinha * 3);
+
+  $result = db_query("select * from db_usuarios where id_usuario = " . db_getsession("DB_id_usuario"));
+  $emissor = db_utils::fieldsMemory($result, 0)->nome;
+
+  $oPdf->Cell("192", $oParametros->iAlturaLinha, $emissor, 0, 1, "C");
+
   $oPdf->Line(50, $oPdf->GetY(), 152, $oPdf->GetY());
   $oPdf->ln($oParametros->iAlturaLinha);
+
+
 
   if ($oParametros->lTemDiretor) {
     $oPdf->Cell("192", $oParametros->iAlturaLinha, $oParametros->sDiretor, 0, 1, "C");
     $oPdf->Cell("192", $oParametros->iAlturaLinha, $oParametros->sCargo,   0, 1, "C");
   }
-
 }
 
 $oPdf->Output();
