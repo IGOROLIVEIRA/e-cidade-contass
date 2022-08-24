@@ -409,7 +409,8 @@ class cl_veiculoscomb {
      $sql .= "      inner join veiccadcentral on veiccadcentral.ve36_sequencial = veiccentral.ve40_veiccadcentral";
      $sql .= "      inner join db_depart      on db_depart.coddepto             = veiccadcentral.ve36_coddepto";
      $sql .= "      inner join ceplocalidades on ceplocalidades.cp05_codlocalidades = veiculos.ve01_ceplocalidades";
-     $sql .= "      left join veiccadtipo    on veiccadtipo.ve20_codigo = veiculos.ve01_veiccadtipo";
+     $sql .= "      left join tipoveiculos    on tipoveiculos.si04_veiculos = veiculos.ve01_codigo";
+     $sql .= "      inner join veicespecificacao on veicespecificacao.si05_codigo = tipoveiculos.si04_especificacao";
      $sql .= "      left  join veiccadmarca   on veiccadmarca.ve21_codigo = veiculos.ve01_veiccadmarca";
      $sql .= "      left join veiccadmodelo  on veiccadmodelo.ve22_codigo = veiculos.ve01_veiccadmodelo";
      $sql .= "      left  join veiccadcor     on veiccadcor.ve23_codigo = veiculos.ve01_veiccadcor";

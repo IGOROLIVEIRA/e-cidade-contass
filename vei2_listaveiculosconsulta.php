@@ -61,7 +61,7 @@ if (isset($oGet->iCentral) && trim($oGet->iCentral) != '') {
   $aWhere[] .= " ve40_veiccadcentral = {$oGet->iCentral}";
 }
 $sWhere        = implode(" and ", $aWhere);
-$slistaCampos  = "distinct ve01_codigo,ve01_placa,ve20_descr,ve21_descr,";
+$slistaCampos  = "distinct ve01_codigo,ve01_placa,upper(si05_descricao) as si05_descricao,ve21_descr,"; 
 $slistaCampos .= "ve22_descr,ve23_descr,ve01_chassi,ve01_certif,ve01_anofab,ve01_anomod";
 
 $funcao_js     = 'carregaVeiculo|ve01_codigo';

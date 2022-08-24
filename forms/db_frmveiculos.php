@@ -658,7 +658,7 @@ db_select('ve01_ativo', $x, true, $db_opcao, "");
             combo.options[1] = new Option("Veículo de passeio", "3");
             combo.options[2] = new Option("Utilitário (Camionete)", "4");
             combo.options[3] = new Option("Ônibus", "5");
-            combo.options[4] = new Option("Caminho", "6");
+            combo.options[4] = new Option("Caminhao", "6");
             combo.options[5] = new Option("Motocicleta", "7");
             combo.options[6] = new Option("Van", "8");
         }
@@ -682,7 +682,7 @@ db_select('ve01_ativo', $x, true, $db_opcao, "");
             combo.options[0] = new Option("Selecione", "0");
             combo.options[1] = new Option("Gerador", "18");
             combo.options[2] = new Option("Moto bomba", "19");
-            combo.options[3] = new Option("Roadeira", "20");
+            combo.options[3] = new Option("Roçadeira", "20");
             combo.options[4] = new Option("Motoserra", "21");
             combo.options[5] = new Option("Pulverizador", "22");
             combo.options[6] = new Option("Compactador de Mo", "23");

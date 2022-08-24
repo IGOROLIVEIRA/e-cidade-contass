@@ -35,19 +35,19 @@ include("classes/db_veiculos_classe.php");
 include("classes/db_veiccadcentral_classe.php");
 
 $clveiccadcentral = new cl_veiccadcentral();
-$clveiculos  			= new cl_veiculos;
-$aux         			= new cl_arquivo_auxiliar;
+$clveiculos       = new cl_veiculos;
+$aux         	  = new cl_arquivo_auxiliar;
 
-$clrotulo    			= new rotulocampo;
+$clrotulo    	  = new rotulocampo;
 
-$clrotulo->label("ve20_descr");
+$clrotulo->label("si05_descricao");
+$clrotulo->label("si04_especificacao");
 $clrotulo->label("ve21_descr");
 $clrotulo->label("ve22_descr");
 $clrotulo->label("ve26_descr");
 $clrotulo->label("ve06_veiccadcomb");
 
 $clveiculos->rotulo->label("ve01_placa");
-$clveiculos->rotulo->label("ve01_veiccadtipo");
 $clveiculos->rotulo->label("ve01_veiccadmarca");
 $clveiculos->rotulo->label("ve01_veiccadmodelo");
 ?>
@@ -91,7 +91,7 @@ $clveiculos->rotulo->label("ve01_veiccadmodelo");
             }
 
             query += "ve01_codigo="+lista_veic;
-            query += "&ve01_veiccadtipo="+obj.ve01_veiccadtipo.value;
+            query += "&si04_especificacao="+obj.si04_especificacao.value;
             query += "&ve01_veiccadmarca="+obj.ve01_veiccadmarca.value;
             query += "&ve01_veiccadmodelo="+obj.ve01_veiccadmodelo.value;
             query += "&ve06_veiccadcomb="+obj.ve06_veiccadcomb.value;
@@ -109,28 +109,28 @@ $clveiculos->rotulo->label("ve01_veiccadmodelo");
         }
 
 
-        function js_pesquisave01_veiccadtipo(mostra){
+        function js_pesquisasi04_especificacao(mostra){
             if(mostra==true){
-                js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_veiccadtipo','func_veiccadtipo.php?funcao_js=parent.js_mostraveiccadtipo1|ve20_codigo|ve20_descr','Pesquisa',true);
+                js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_veicespecificacao','func_veicespecificacao.php?funcao_js=parent.js_mostraveicespecificacao1|si05_codigo|si05_descricao','Pesquisa',true);
             }else{
-                if(document.form1.ve01_veiccadtipo.value != ''){
-                    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_veiccadtipo','func_veiccadtipo.php?pesquisa_chave='+document.form1.ve01_veiccadtipo.value+'&funcao_js=parent.js_mostraveiccadtipo','Pesquisa',false);
+                if(document.form1.si04_especificacao.value != ''){
+                    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_veicespecificacao','func_veicespecificacao.php?pesquisa_chave='+document.form1.si04_especificacao.value+'&funcao_js=parent.js_mostraveicespecificacao','Pesquisa',false);
                 }else{
-                    document.form1.ve20_descr.value = '';
+                    document.form1.si05_descricao.value = '';
                 }
             }
         }
-        function js_mostraveiccadtipo(chave,erro){
-            document.form1.ve20_descr.value = chave;
+        function js_mostraveicespecificacao(chave,erro){
+            document.form1.si05_descricao.value = chave;
             if(erro==true){
-                document.form1.ve01_veiccadtipo.focus();
-                document.form1.ve01_veiccadtipo.value = '';
+                document.form1.si04_especificacao.focus();
+                document.form1.si04_especificacao.value = '';
             }
         }
-        function js_mostraveiccadtipo1(chave1,chave2){
-            document.form1.ve01_veiccadtipo.value = chave1;
-            document.form1.ve20_descr.value = chave2;
-            db_iframe_veiccadtipo.hide();
+        function js_mostraveicespecificacao1(chave1,chave2){
+            document.form1.si04_especificacao.value = chave1;
+            document.form1.si05_descricao.value = chave2;
+            db_iframe_veicespecificacao.hide();
         }
         function js_pesquisave01_veiccadmarca(mostra){
             if(mostra==true){
@@ -272,13 +272,13 @@ $clveiculos->rotulo->label("ve01_veiccadmodelo");
             </td>
         </tr>
         <tr>
-            <td nowrap align="right" title="<?=@$Tve01_veiccadtipo?>"><? db_ancora(@$Lve01_veiccadtipo,"js_pesquisave01_veiccadtipo(true);",4) ?></td>
+            <td nowrap align="right" title="<?=@$Tsi04_especificacao?>"><? db_ancora(@$Lsi04_especificacao,"js_pesquisasi04_especificacao(true);",4) ?></td>
             <td>
                 <?
-                db_input("ve01_veiccadtipo",10,@$Ive01_veiccadtipo,true,"text",4,"onChange='js_pesquisave01_veiccadtipo(false);'");
+                db_input("si04_especificacao",10,@$Isi04_especificacao,true,"text",4,"onChange='js_pesquisasi04_especificacao(false);'");
                 ?>
                 <?
-                db_input("ve20_descr",40,"",true,"text",3);
+                db_input("si05_descricao",40,"",true,"text",3);
                 ?>
             </td>
         </tr>
@@ -319,7 +319,7 @@ $clveiculos->rotulo->label("ve01_veiccadmodelo");
             <td nowrap align="right" title="Quebrar página"><b>Quebrar página por:</b></td>
             <td>
                 <?
-                $x = array("0"=>"Nenhum","V"=>"Veiculo","T"=>"Tipo","M"=>"Marca","O"=>"Modelo","C"=>"Central de Veículo");
+                $x = array("0"=>"Nenhum","V"=>"Veiculo","E"=>"Especificacao","M"=>"Marca","O"=>"Modelo","C"=>"Central de Veículo");
                 db_select("quebrar_por",$x,true,4);
                 ?>
             </td>

@@ -1660,6 +1660,10 @@ switch ($oParam->exec) {
             }
         }
 
+        $result = db_query("UPDATE precoreferencia SET
+        si01_valorestimado = $oParam->valorsigiloso WHERE si01_processocompra = $oParam->codprocant");
+
+
         /**
          * Alterar o parametro passado na db_fim_transacao para receber o $sqlerro,
          * mas antes tem que verificar os preenchimentos das tabelas anteriores
@@ -1668,7 +1672,12 @@ switch ($oParam->exec) {
         db_fim_transacao($sqlerro);
 
         if ($sqlerro) {
-            $oRetorno->status = 2;
+            if ($result == false) {
+                $sqlerro = true;
+                $oRetorno->status = 3;
+            } else {
+                $oRetorno->status = 2;
+            }
         } else {
             $oRetorno->status = 1;
         }
