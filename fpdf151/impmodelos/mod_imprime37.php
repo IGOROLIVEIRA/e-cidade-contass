@@ -159,7 +159,14 @@ for ($iDados = 0; $iDados < pg_num_rows($this->dados); $iDados++) {
     // retorna a assinatura e o modelo de recibo conforme a configuração do cliente
     require_once("libs/db_utils.php");
     require_once("libs/db_libdocumento.php");
+
+    $sqlDoc = "select db60_coddoc from db_documentopadrao where db60_instit = ".db_getsession('DB_instit')." and db60_tipodoc = 1705";
+    $rsSqlDoc = db_query($sqlDoc);
+    $doc = db_utils::fieldsMemory($rsSqlDoc, 0);
+
     $oAssinaturas = new libdocumento(1705);
+    $oAssinaturas->iCodDoc = $doc->db60_coddoc;
+
     $aParagrafo = $oAssinaturas->getDocParagrafos();
 
     foreach ($aParagrafo as $oParag) {
