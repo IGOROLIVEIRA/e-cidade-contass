@@ -340,7 +340,7 @@ class RelatoriosLegaisBase {
    * @param  integer $iColuna - Coluna
    * @throws \Exception
    */
-  private function parseFormula(&$aLinhas, $iLinha, $iColuna) {
+  private function parseFormula($aLinhas, $iLinha, $iColuna) {
     try {
       $sFormula = $this->oRelatorioLegal->parseFormula('aLinhas', $aLinhas[$iLinha]->colunas[$iColuna]->o116_formula, $iColuna, $aLinhas);
     } catch (Exception $e) {

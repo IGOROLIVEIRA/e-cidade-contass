@@ -158,9 +158,9 @@ $aBimestres = array(
                 var sArquivo = document.getElementById('arquivo');
                 var sLink = "";
                 for (const [i, arquivo] of Object.entries(oRetorno.arquivos)) {
-                    sLink += "<br><a href='db_download.php?arquivo="+arquivo.nome+"'>"+arquivo.nome+"</a>";
+                    sLink += "<br><a target='_blank' href='db_download.php?arquivo="+arquivo.nome+"'>"+arquivo.nome+"</a>";
                 }
-                sLink += "<br><a href='db_download.php?arquivo="+oRetorno.caminhoZip+"'>"+oRetorno.nomeZip+"</a>";
+                sLink += "<br><a target='_blank' href='db_download.php?arquivo="+oRetorno.caminhoZip+"'>"+oRetorno.nomeZip+"</a>";
                 sArquivo.innerHTML = sLink;
                 sArquivo.style.display = "inline-block";
             } else {
