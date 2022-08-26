@@ -1585,7 +1585,7 @@ switch ($oParam->exec) {
                             $res_liclicitem = $clliclicitem->sql_record($clliclicitem->sql_query_file(null, "l21_codigo", null, "l21_codpcprocitem = " . $aItens[$x]->codprocitem));
 
                             $clliclicitemreservado = db_utils::getDao('liclicitem');
-                            $res_liclicitemreservado = $clliclicitem->sql_record($clliclicitem->sql_query_file(null, "l21_codigo", null, "l21_codpcprocitem = " . $codprocitemreservado));
+                            $res_liclicitemreservado = $clliclicitem->sql_record($clliclicitem->sql_query_file(null, "l21_codigo", null, "l21_codpcprocitem = " . $aItens[$x]->codprocitem));
                             //echo $clliclicitem->sql_query_file(null, "l21_codigo", null, "l21_codpcprocitem = " . $codprocitemreservado);
 
                             if ($clliclicitem->numrows > 0) {
