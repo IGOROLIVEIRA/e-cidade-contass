@@ -51,7 +51,7 @@ Registry::set('app.config', new AppConfig());
     ),
 
     /**
-     * ConfiguraÃ§Ã£o de proxy para o e-cidade
+     * Configuração de proxy para o e-cidade
      */
     'app.proxy' => array(
         'http'  => '172.16.212.254:3128', // e.g. 172.16.212.254:3128
@@ -156,11 +156,11 @@ try {
             $rs = db_query($sql);
 
             if (!$rs) {
-                throw new DBException("Ocorreu um erro ao consultar os CGM vinculados as lotaÃ§Ãµes.\nContate o suporte.");
+                throw new DBException("Ocorreu um erro ao consultar os CGM vinculados as lotações.\nContate o suporte.");
             }
 
             if (pg_num_rows($rs) == 0) {
-                throw new Exception("NÃ£o existe empregadores cadastrados na base.");
+                throw new Exception("Não existe empregadores cadastrados na base.");
             }
 
             $oRetorno->empregador = db_utils::fieldsMemory($rs, 0);
@@ -233,7 +233,7 @@ try {
                 $eventoFila->adicionarFila();
             }
 
-            $oRetorno->sMessage = "Dados das RÃºbricas agendados para envio.";
+            $oRetorno->sMessage = "Dados das Rúbricas agendados para envio.";
             break;
 
         case "agendarLotacaoTributaria":
@@ -250,7 +250,7 @@ try {
             $eventoFila->adicionarFila();
 
 
-            $oRetorno->sMessage = "Dados das LotaÃ§Ãµes TributÃ¡rias agendados para envio.";
+            $oRetorno->sMessage = "Dados das Lotações Tributárias agendados para envio.";
             break;
 
         case "transmitir":
@@ -262,18 +262,27 @@ try {
             $iCgm = $oParam->empregador;
             foreach ($oParam->arquivos as $arquivo) {
                 $dadosESocial->setReponsavelPeloPreenchimento($iCgm);
-                if (!in_array(Tipo::getTipoFormulario($arquivo), array(37, 40, 12, 13, 15, 49))) {
-                    $dadosDoPreenchimento = $dadosESocial->getPorTipo(Tipo::getTipoFormulario($arquivo), $oParam->matricula);
+                if (!in_array(Tipo::getTipoFormulario($arquivo), 
+                    array(
+                        Tipo::CADASTRAMENTO_INICIAL, 
+                        Tipo::AFASTAMENTO_TEMPORARIO, 
+                        Tipo::REMUNERACAO_TRABALHADOR, 
+                        Tipo::REMUNERACAO_SERVIDOR, 
+                        Tipo::PAGAMENTOS_RENDIMENTOS, 
+                        Tipo::CADASTRO_BENEFICIO, 
+                        Tipo::DESLIGAMENTO)
+                )) {
+                    $dadosDoPreenchimento = $dadosESocial->getPorTipo(Tipo::getTipoFormulario($arquivo), empty($oParam->matricula) ? null : $oParam->matricula);
                     if (current($dadosDoPreenchimento) instanceof \ECidade\RecursosHumanos\ESocial\Model\Formulario\DadosPreenchimento) {
                         $formatter = FormatterFactory::get($arquivo);
                         $dadosDoPreenchimento = $formatter->formatar($dadosDoPreenchimento);
                     }
                     foreach (array_chunk($dadosDoPreenchimento, 50) as $aTabela) {
-                        $eventoFila = new Evento($arquivo, $iCgm, $iCgm, $aTabela, $oParam->tpAmb, "{$oParam->iAnoValidade}-{$oParam->iMesValidade}", $oParam->modo, $oParam->dtalteracao);
+                        $eventoFila = new Evento($arquivo, $iCgm, $iCgm, $aTabela, $oParam->tpAmb, "{$oParam->iAnoValidade}-{$oParam->iMesValidade}", $oParam->modo, empty($oParam->dtalteracao) ? null : $oParam->dtalteracao);
                         $eventoFila->adicionarFila();
                     }
                 } else {
-                    $dadosTabela = $dadosESocial->getPorTipo(Tipo::getTipoFormulario($arquivo), $oParam->matricula);
+                    $dadosTabela = $dadosESocial->getPorTipo(Tipo::getTipoFormulario($arquivo), empty($oParam->matricula) ? null : $oParam->matricula);
                     //necessario para diferenciar envio individual do envio geral
                     if ($arquivo == "S2230") {
                         $arquivo = "S2230Individual";
