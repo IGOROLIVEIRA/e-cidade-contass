@@ -28,7 +28,7 @@
 	$this->objpdf->text(40,$xlin-8,$this->municpref);
 	$this->objpdf->text(40,$xlin-5,$this->telefpref);
 	$this->objpdf->text(40,$xlin-2,$this->emailpref);
-    $this->objpdf->text(40, $xlin + 1, db_formatar($this->cgcpref, 'cnpj') . $this->inscricaoestadualinstituicao);
+    $this->objpdf->text(40, $xlin + 1, db_formatar($this->cgcpref, 'cnpj'));
 
         /// retangulo dos dados da dotação
 	$this->objpdf->rect($xcol,$xlin+2,$xcol+100,50,2,'DF','1234');
