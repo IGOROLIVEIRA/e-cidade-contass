@@ -262,15 +262,18 @@ try {
             $iCgm = $oParam->empregador;
             foreach ($oParam->arquivos as $arquivo) {
                 $dadosESocial->setReponsavelPeloPreenchimento($iCgm);
-                if (!in_array(Tipo::getTipoFormulario($arquivo), 
+                if (!in_array(
+                    Tipo::getTipoFormulario($arquivo),
                     array(
-                        Tipo::CADASTRAMENTO_INICIAL, 
-                        Tipo::AFASTAMENTO_TEMPORARIO, 
-                        Tipo::REMUNERACAO_TRABALHADOR, 
-                        Tipo::REMUNERACAO_SERVIDOR, 
-                        Tipo::PAGAMENTOS_RENDIMENTOS, 
-                        Tipo::CADASTRO_BENEFICIO, 
-                        Tipo::DESLIGAMENTO)
+                        Tipo::CADASTRAMENTO_INICIAL,
+                        Tipo::AFASTAMENTO_TEMPORARIO,
+                        Tipo::REMUNERACAO_TRABALHADOR,
+                        Tipo::REMUNERACAO_SERVIDOR,
+                        Tipo::PAGAMENTOS_RENDIMENTOS,
+                        Tipo::CADASTRO_BENEFICIO,
+                        Tipo::DESLIGAMENTO,
+                        Tipo::CD_BENEF_IN,
+                    )
                 )) {
                     $dadosDoPreenchimento = $dadosESocial->getPorTipo(Tipo::getTipoFormulario($arquivo), empty($oParam->matricula) ? null : $oParam->matricula);
                     if (current($dadosDoPreenchimento) instanceof \ECidade\RecursosHumanos\ESocial\Model\Formulario\DadosPreenchimento) {
