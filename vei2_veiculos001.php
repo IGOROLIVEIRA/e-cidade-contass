@@ -30,14 +30,18 @@ require("libs/db_conecta.php");
 include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
 include("dbforms/db_funcoes.php");
+
 db_postmemory($HTTP_POST_VARS);
+
 $clrotulo = new rotulocampo;
-$clrotulo->label("ve01_veiccadtipo");
-$clrotulo->label("ve20_descr");
+
+$clrotulo->label("si04_especificacao");
+$clrotulo->label("si05_descricao");
 $clrotulo->label("ve06_veiccadcomb");
 $clrotulo->label("ve26_descr");
 $clrotulo->label("ve01_dtaquis");
 ?>
+
 <html>
 <head>
 <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
@@ -49,35 +53,35 @@ $clrotulo->label("ve01_dtaquis");
 function js_emite(){
   qry  = '';
   qry += '&busca='+document.form1.busca.value;
-  qry += '&tipo='+document.form1.ve01_veiccadtipo.value;
+  qry += '&tipo='+document.form1.si04_especificacao.value;
   qry += '&comb='+document.form1.ve06_veiccadcomb.value;	
   qry += '&dtaquis='+document.form1.ve01_dtaquis_ano.value+'-'+document.form1.ve01_dtaquis_mes.value+'-'+document.form1.ve01_dtaquis_dia.value;
   qry += '&dtaquis1='+document.form1.ve01_dtaquis1_ano.value+'-'+document.form1.ve01_dtaquis1_mes.value+'-'+document.form1.ve01_dtaquis1_dia.value;
   jan = window.open('vei2_veiculos002.php?'+qry,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
   jan.moveTo(0,0);
 }
-function js_pesquisave01_veiccadtipo(mostra){
+function js_pesquisasi04_especificacao(mostra){
   if(mostra==true){
-    js_OpenJanelaIframe('top.corpo','db_iframe_veiccadtipo','func_veiccadtipo.php?funcao_js=parent.js_mostraveiccadtipo1|ve20_codigo|ve20_descr','Pesquisa',true);
+    js_OpenJanelaIframe('top.corpo','db_iframe_veicespecificacao','func_veicespecificacao.php?funcao_js=parent.js_mostraveicespecificacao1|si05_codigo|si05_descricao','Pesquisa',true);
   }else{
-     if(document.form1.ve01_veiccadtipo.value != ''){ 
-        js_OpenJanelaIframe('top.corpo','db_iframe_veiccadtipo','func_veiccadtipo.php?pesquisa_chave='+document.form1.ve01_veiccadtipo.value+'&funcao_js=parent.js_mostraveiccadtipo','Pesquisa',false);
+     if(document.form1.si04_especificacao.value != ''){ 
+        js_OpenJanelaIframe('top.corpo','db_iframe_veicespecificacao','func_veicespecificacao.php?pesquisa_chave='+document.form1.si04_especificacao.value+'&funcao_js=parent.js_mostraveicespecificacao','Pesquisa',false);
      }else{
-       document.form1.ve20_descr.value = ''; 
+       document.form1.si05_descricao.value = ''; 
      }
   }
 }
-function js_mostraveiccadtipo(chave,erro){
-  document.form1.ve20_descr.value = chave; 
+function js_mostraveicespecificacao(chave,erro){
+  document.form1.si05_descricao.value = chave; 
   if(erro==true){ 
-    document.form1.ve01_veiccadtipo.focus(); 
-    document.form1.ve01_veiccadtipo.value = ''; 
+    document.form1.si04_especificacao.focus(); 
+    document.form1.si04_especificacao.value = ''; 
   }
 }
-function js_mostraveiccadtipo1(chave1,chave2){
-  document.form1.ve01_veiccadtipo.value = chave1;
-  document.form1.ve20_descr.value = chave2;
-  db_iframe_veiccadtipo.hide();
+function js_mostraveicespecificacao1(chave1,chave2){
+  document.form1.si04_especificacao.value = chave1;
+  document.form1.si05_descricao.value = chave2;
+  db_iframe_veicespecificacao.hide();
 }
 function js_pesquisave06_veiccadcomb(mostra){
   if(mostra==true){
@@ -122,17 +126,17 @@ function js_mostraveiccadcomb1(chave1,chave2){
          <td >&nbsp;</td>
       </tr>      
       <tr>
-    <td nowrap title="<?=@$Tve01_veiccadtipo?>">
+    <td nowrap title="<?=@$Tsi04_especificacao?>">
        <?
-       db_ancora(@$Lve01_veiccadtipo,"js_pesquisave01_veiccadtipo(true);",4);
+       db_ancora(@$Lsi04_especificacao,"js_pesquisasi04_especificacao(true);",4);
        ?>
     </td>
     <td> 
 <?
-db_input('ve01_veiccadtipo',10,$Ive01_veiccadtipo,true,'text',4," onchange='js_pesquisave01_veiccadtipo(false);'")
+db_input('si04_especificacao',10,$Isi04_especificacao,true,'text',4," onchange='js_pesquisasi04_especificacao(false);'")
 ?>
        <?
-db_input('ve20_descr',40,$Ive20_descr,true,'text',3,'')
+db_input('si05_descricao',40,$Isi05_descricao,true,'text',3,'')
        ?>
     </td>
   </tr>

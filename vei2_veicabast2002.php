@@ -92,12 +92,12 @@ if (isset($ve01_codigo) && trim($ve01_codigo) != "") {
     $dbwhere .= "ve01_codigo in (" . $ve01_codigo . ") ";
 }
 
-if (isset($ve01_veiccadtipo) && trim($ve01_veiccadtipo) != "") {
+if (isset($si04_especificacao) && trim($si04_especificacao) != "") {
 
     if ($dbwhere != "") {
         $dbwhere .= $and;
     }
-    $dbwhere .= "ve01_veiccadtipo=" . $ve01_veiccadtipo;
+    $dbwhere .= "si04_especificacao=" . $si04_especificacao;
 }
 
 if (isset($ve71_veiccadposto) && trim($ve71_veiccadposto) != "") {
