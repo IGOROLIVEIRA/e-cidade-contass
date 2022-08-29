@@ -38,7 +38,7 @@ $clrelatorios = new cl_relatorios;
       }
     }
     if (db_getsession("DB_modulo") == 1)
-      $sql = $clrelatorios->sql_query('', "relatorios.rel_sequencial,relatorios.rel_descricao,relatorios.rel_arquivo,relatorios.rel_corpo", 'rel_sequencial desc');
+      $sql = $clrelatorios->sql_query('', "relatorios.rel_sequencial,relatorios.rel_descricao,relatorios.rel_arquivo,relatorios.rel_corpo", 'rel_sequencial desc', "rel_instit = " . db_getsession("DB_instit"));
     else
       $sql = $clrelatorios->sql_query('', 'relatorios.rel_sequencial,relatorios.rel_descricao,relatorios.rel_arquivo,relatorios.rel_corpo', 'rel_sequencial desc', "db_modulos.id_item = " . db_getsession("DB_modulo"));
 
