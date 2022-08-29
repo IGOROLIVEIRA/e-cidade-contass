@@ -111,16 +111,22 @@ $clmatmater->rotulo->label("m60_descr");
              $campos = "matmater.*";
            }
         }
+        $where_instit = "and m60_instit = ".db_getsession('DB_instit');
+
         if(isset($chave_m60_codmater) && (trim($chave_m60_codmater)!="") ){
-	         $sql = $clmatmater->sql_query($chave_m60_codmater,$campos,"m60_codmater");
+	         $sql = $clmatmater->sql_query($chave_m60_codmater,$campos,"m60_codmater",$where_instit);
         }else if(isset($chave_m60_descr) && (trim($chave_m60_descr)!="") ){
            if($opcao == 't' || $opcao == 'f'){
              $where_ativo = "and ".$where_ativo;   
            }
-	         $sql = $clmatmater->sql_query("",$campos,"m60_descr"," m60_descr like '$chave_m60_descr%' $where_ativo ");
+	         $sql = $clmatmater->sql_query("",$campos,"m60_descr"," m60_descr like '$chave_m60_descr%' $where_ativo $where_instit");
         }else{
-           $sql = $clmatmater->sql_query("",$campos,"m60_codmater","$where_ativo");
+          if($opcao == 'i'){
+            $where_instit = "m60_instit = ".db_getsession('DB_instit');
+          }
+           $sql = $clmatmater->sql_query("",$campos,"m60_codmater","$where_ativo $where_instit");
         }
+        echo $sql;
         db_lovrot($sql,15,"()","",$funcao_js);
       }else{
         if($pesquisa_chave!=null && $pesquisa_chave!=""){

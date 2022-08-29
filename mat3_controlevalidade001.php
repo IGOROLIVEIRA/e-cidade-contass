@@ -77,7 +77,7 @@ function calcula_data($data, $dias= 0, $meses = 0, $ano = 0)
                 <td nowrap> 
                   <?
                   db_input('m60_codmater',10,"'C&oacute;digo do material'",true,'text',1," onchange='js_pesquisam60_codmater(false);'");
-                  db_input('m60_descr',55,'Descri&ccedil;&atilde; do material',true,'text',3,'');
+                  db_input('m60_descr',100,'Descri&ccedil;&atilde; do material',true,'text',3,'');
                   ?>
                   &nbsp;&nbsp;&nbsp;&nbsp;
                   <input type='button' value='Lan&ccedil;ar' name='lancar_material' id='lancar_material'>

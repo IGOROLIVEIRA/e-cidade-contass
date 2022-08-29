@@ -108,7 +108,7 @@ if (isset($m60_codmater) && trim($m60_codmater) != "" && ( USE_PCASP && db_getse
         <td colspan="3">
           <?
             db_input('coddepto', 10, $Icoddepto,true,'text',$tranca," onchange='js_pesquisacoddepto(false);'");
-            db_input('descrdepto', 40, $Idescrdepto,true,'text',3,'');
+            db_input('descrdepto', 100, $Idescrdepto,true,'text',3,'');
             db_input('m66_codcon', 10, $Im66_codcon,true,'hidden',3,'');
           ?>
         </td>
@@ -122,7 +122,7 @@ if (isset($m60_codmater) && trim($m60_codmater) != "" && ( USE_PCASP && db_getse
         <td colspan="3">
           <?
             db_input('m60_codmater',10,$Im60_codmater,true,'text',$tranca," onchange='js_pesquisam60_codmater(false);'");
-            db_input('m60_descr',40,$Im60_descr,true,'text',3,'');
+            db_input('m60_descr',100,$Im60_descr,true,'text',3,'');
           ?>
         </td>
       </tr>
