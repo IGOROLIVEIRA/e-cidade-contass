@@ -175,12 +175,47 @@ foreach ($oParametros->aMatriculas as $oMat) {
   $oDadosAlunos                       = new stdClass();
   $oDadosAlunos->aParagrafo           = $oParagrafo->getDocParagrafos();
   $oDadosAlunos->sObservacaoMatricula = $oMatricula->getObservacao();
+  $oDadosAlunos->aluno = $oMatricula->getAluno()->getNome();
+  $oDadosAlunos->naturalidade = $oMatricula->getAluno()->getNaturalidade()->getNome();
+  $oDadosAlunos->uf = $oMatricula->getAluno()->getNaturalidade()->getUF()->getUF();
+  $oDadosAlunos->filiacao = implode(' e ', $aFiliacao);
+  $oDadosAlunos->dia_nascimento = $oParagrafo->dia_nascimento;
+  $oDadosAlunos->mes_extenso_nascimento = $oParagrafo->mes_extenso_nascimento;
+  $oDadosAlunos->mes_numeral_nascimento = $oParagrafo->mes_numeral_nascimento;
+  $oDadosAlunos->ano_nascimento = $oParagrafo->ano_nascimento;
+  $oDadosAlunos->etapa =   $oParagrafo->etapa;
+  $oDadosAlunos->curso = $oParagrafo->curso;
+
   $aDadosAlunos[]                     = $oDadosAlunos;
 }
 
 if (count($aParagrafos) == 0) {
   db_redireciona("db_erros.php?fechar=true&db_erro=" . _M('educacao.escola.edu2_atestadofrequencia.matricula_nao_encontrada'));
 }
+
+$dados1 = db_query($conn, "select ed18_c_nome,
+                                   j14_nome,
+                                   ed18_i_numero,
+                                   j13_descr,
+                                   ed261_c_nome,
+                                   ed260_c_sigla,
+                                   ed18_c_email,
+                                   ed18_c_logo,
+                                   ed18_codigoreferencia
+                             from escola
+                              inner join bairro  on  bairro.j13_codi = escola.ed18_i_bairro
+                              inner join ruas  on  ruas.j14_codigo = escola.ed18_i_rua
+                              inner join db_depart  on  db_depart.coddepto = escola.ed18_i_codigo
+                              inner join censouf  on  censouf.ed260_i_codigo = escola.ed18_i_censouf
+                              inner join censomunic  on  censomunic.ed261_i_codigo = escola.ed18_i_censomunic
+                              left join ruascep on ruascep.j29_codigo = ruas.j14_codigo
+                              left join logradcep on logradcep.j65_lograd = ruas.j14_codigo
+                              left join ceplogradouros on ceplogradouros.cp06_codlogradouro = logradcep.j65_ceplog
+                              left join ceplocalidades on ceplocalidades.cp05_codlocalidades = ceplogradouros.cp06_codlocalidade
+                             where ed18_i_codigo = " . db_getsession("DB_coddepto"));
+
+$cidadeescola = trim(pg_result($dados1, 0, "ed261_c_nome"));
+$estadoescola = trim(pg_result($dados1, 0, "ed260_c_sigla"));
 
 $oPdf = new PDF();
 $oPdf->AliasNbPages();
@@ -206,13 +241,17 @@ foreach ($aDadosAlunos as $oDadosAlunos) {
   $oPdf->addpage("P");
 
   $sTexto = $oDadosAlunos->aParagrafo[1]->oParag->db02_texto;
+  $oDepartamento = new DBDepartamento(db_getsession("DB_coddepto"));
+  $iDepartamento = $oDepartamento->getCodigo();
+  $sDepartamento = $oDepartamento->getNomeDepartamento();
+  $sTexto = "A " . $oDepartamento->getNomeDepartamento() . ", declara, para fins de comprovação de frequência escolar, que o (a) aluno (a) $oDadosAlunos->aluno, natural de $oDadosAlunos->naturalidade $oDadosAlunos->uf, nascido (a) aos $oDadosAlunos->dia_nascimento dias de $oDadosAlunos->mes_extenso_nascimento do ano de $oDadosAlunos->ano_nascimento , filho (a) de: $oDadosAlunos->filiacao é o(a) aluno(a) deste estabelecimento de ensino e está matriculado(a) no $oDadosAlunos->etapa do $oDadosAlunos->curso.";
 
-  $oPdf->setfont('arial', 'b', 10);
+  $oPdf->setfont('arial', 'b', 12);
   $oPdf->SetY($oPdf->getY() + 10);
-  $oPdf->Cell(192, $oParametros->iAlturaLinha, "Atestado de Frequência", 0, 1, "C");
+  $oPdf->Cell(192, $oParametros->iAlturaLinha, "Declaração de Frequência", 0, 1, "C");
   $oPdf->Ln($oParametros->iAlturaLinha * 2);
 
-  $oPdf->setfont('arial', '', 9);
+  $oPdf->setfont('arial', '', 10);
   $oPdf->setXY(16, $oPdf->GetY());
   $oPdf->multicell(180, $oParametros->iAlturaLinha, $sTexto, 0, "J", 0, 0);
   $oPdf->Ln($oParametros->iAlturaLinha * 2);
@@ -233,11 +272,33 @@ foreach ($aDadosAlunos as $oDadosAlunos) {
 
 
   $oPdf->Ln($oParametros->iAlturaLinha * 2);
-  if ($oParametros->lExibeGradeAluno) {
+
+  $oPdf->Cell(192, $oParametros->iAlturaLinha, "Por ser verdade, firmo a presente declaração", 0, 1, "C");
+  $oPdf->Ln($oParametros->iAlturaLinha * 6);
+
+  $oDiaAtual  = new DBDate(date("Y-m-d"));
+  $sMunicipio = $oTurma->getEscola()->getDepartamento()->getInstituicao()->getMunicipio();
+
+  $DiaExtenso  = " {$sMunicipio}, " . $oDiaAtual->getDia() . " de " . DBDate::getMesExtenso((int)$oDiaAtual->getMes());
+  $DiaExtenso .= "  de " . $oDiaAtual->getAno();
+
+
+  $oPdf->Cell(192, $oParametros->iAlturaLinha, $DiaExtenso, 0, 1, "C");
+  //$oPdf->Cell(192, $oParametros->iAlturaLinha, "$cidadeescola/$estadoescola, ", 0, 1, "C");
+
+  $oPdf->Ln($oParametros->iAlturaLinha * 4);
+
+
+  $oPdf->Line(50, $oPdf->GetY(), 152, $oPdf->GetY());
+  $oPdf->Ln(1);
+  $oPdf->Cell("192", $oParametros->iAlturaLinha, $sDiretor, 0, 1, "C");
+
+  /* 
+  if ($oParametros->lExibeGradeAluno) { 
 
     /**
      * Calculamos se a grade de de horário do aluno caberá na página atual.
-     */
+     
     if (((count($aGradeHorario) * $oParametros->iAlturaLinha) + $oPdf->GetY() + 10) > $oPdf->h - 20) {
       $oPdf->AddPage();
     }
@@ -266,9 +327,9 @@ foreach ($aDadosAlunos as $oDadosAlunos) {
 
     $oPdf->Ln();
 
-    /**
+    /*
      * Verificamos se tem turno adicional
-     */
+     
     if ($oTurma->temTurnoAdicional() != "") {
 
       $oPdf->setX(85);
@@ -294,6 +355,7 @@ foreach ($aDadosAlunos as $oDadosAlunos) {
       }
     }
   }
+  */
 
   /**
    * Calculo para verificar se os dados da assinatura caberão na pagina atual
@@ -303,6 +365,7 @@ foreach ($aDadosAlunos as $oDadosAlunos) {
   }
 
   $oPdf->SetY($oPdf->h - 40);
+  /*
   $oDiaAtual  = new DBDate(date("Y-m-d"));
   $sMunicipio = $oTurma->getEscola()->getDepartamento()->getInstituicao()->getMunicipio();
 
@@ -311,6 +374,7 @@ foreach ($aDadosAlunos as $oDadosAlunos) {
 
 
   $oPdf->Cell("192", $oParametros->iAlturaLinha, $DiaExtenso, 0, 1, "C");
+  
   $oPdf->ln($oParametros->iAlturaLinha * 3);
 
   $result = db_query("select * from db_usuarios where id_usuario = " . db_getsession("DB_id_usuario"));
@@ -319,14 +383,16 @@ foreach ($aDadosAlunos as $oDadosAlunos) {
   $oPdf->Cell("192", $oParametros->iAlturaLinha, $emissor, 0, 1, "C");
 
   $oPdf->Line(50, $oPdf->GetY(), 152, $oPdf->GetY());
+  */
   $oPdf->ln($oParametros->iAlturaLinha);
 
 
-
+  /*
   if ($oParametros->lTemDiretor) {
     $oPdf->Cell("192", $oParametros->iAlturaLinha, $oParametros->sDiretor, 0, 1, "C");
     $oPdf->Cell("192", $oParametros->iAlturaLinha, $oParametros->sCargo,   0, 1, "C");
   }
+  */
 }
 
 $oPdf->Output();
