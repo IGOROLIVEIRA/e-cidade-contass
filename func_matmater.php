@@ -141,7 +141,7 @@ if( !isset($m38_visualizacaoitens) or !isset($m38_visualizacaomatestoque) ) {
              $campos = "matmater.*";
            }
         }
-        m60_instit
+        
         // visualizar apenas com movimentação na instituição que está sendo acessada
         if ( $m38_visualizacaoitens == 2) {
           $sWhereConfig .= "and ( instit = ". db_getsession("DB_instit") ." or instit is null ) ";
