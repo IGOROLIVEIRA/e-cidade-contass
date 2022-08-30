@@ -58,6 +58,7 @@ class DadosESocial
             case TIPO::ALTERACAODEDADOS:
             case TIPO::ALTERACAO_CONTRATO:
             case Tipo::CD_BENEF_IN:
+            case Tipo::BENEFICIOS_ENTESPUBLICOS:
                 return $this->buscaPreenchimentos($matricula);
                 break;
             default:
@@ -118,6 +119,8 @@ class DadosESocial
                 return $preenchimento->buscarPreenchimentoS1200($formularioId, $matricula);
             case Tipo::REMUNERACAO_SERVIDOR:
                 return $preenchimento->buscarPreenchimentoS1202($formularioId, $matricula);
+            case Tipo::BENEFICIOS_ENTESPUBLICOS:
+                return $preenchimento->buscarPreenchimentoS1207($formularioId, $matricula);
             case Tipo::PAGAMENTOS_RENDIMENTOS:
                 return $preenchimento->buscarPreenchimentoS1210($formularioId, $matricula);
             case Tipo::AFASTAMENTO_TEMPORARIO:
