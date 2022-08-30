@@ -199,6 +199,7 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
 
     $sqlitem    = $clemite_nota_emp->get_sql_item($sCondtipos, $e60_numemp);
     $resultitem = db_query($sqlitem);
+
     db_fieldsmemory($resultitem);
 
     $result_cgmalt=$clcgmalt->sql_record($clcgmalt->sql_query_file(null,"z05_numcgm as z01_numcgm,z05_nome as z01_nome,z05_telef as z01_telef,z05_ender as z01_ender,z05_numero as z01_numero,z05_munic as z01_munic,z05_cgccpf as z01_cgccpf,z05_cep as z01_cep"," abs(z05_data_alt - date '$e60_emiss') asc, z05_sequencia desc limit 1","z05_numcgm = $z01_numcgm and z05_data_alt > '$e60_emiss' "));
@@ -219,6 +220,7 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
     $sSqlFuncaoOrdenaPagamento = $clemite_nota_emp->get_sql_funcao_ordena_pagamento($cgmpaga,
                                                                                     date( 'Y',strtotime($e60_emiss)),
                                                                                     date('m',strtotime($e60_emiss)));
+
 
     $pdf1->cargoordenapagamento = db_utils::fieldsMemory(db_query($sSqlFuncaoOrdenaPagamento),0)->cargoordenapagamento;
 
@@ -358,6 +360,8 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
     $pdf1->valor            = "e62_vlrun";
     $pdf1->descricaoitem    = "pc01_descrmater";
     $pdf1->complmater       = "pc01_complmater";
+    $pdf1->sequenitem       = "e62_sequen";
+    $pdf1->m61_descr       = "m61_descr";
 
     $pdf1->orcado	        = $e60_vlrorc;
     $pdf1->saldo_ant        = $e60_salant;
@@ -394,6 +398,8 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
     $pdf1->marca            = 'e55_marca';
     $pdf1->acordo           = $oAcordo->ac16_numeroacordo;
     $pdf1->anoacordo        = $oAcordo->ac16_anousu;
+    $pdf1->seqacordo        = $oAcordo->ac16_sequencial;
+
 
     $sql  = "select c61_codcon
               from conplanoreduz
