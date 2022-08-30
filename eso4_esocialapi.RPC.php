@@ -273,6 +273,7 @@ try {
                         Tipo::CADASTRO_BENEFICIO,
                         Tipo::DESLIGAMENTO,
                         Tipo::CD_BENEF_IN,
+                        Tipo::BENEFICIOS_ENTESPUBLICOS,
                     )
                 )) {
                     $dadosDoPreenchimento = $dadosESocial->getPorTipo(Tipo::getTipoFormulario($arquivo), empty($oParam->matricula) ? null : $oParam->matricula);
