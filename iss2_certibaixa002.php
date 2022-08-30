@@ -118,7 +118,7 @@ $munic = strtoupper($munic);
 $oUsuario = new UsuarioSistema(db_getsession('DB_id_usuario'));
 $nome_usuario = $oUsuario->getNome();
 
-$result = $cltabativ->sql_record($cltabativ->sql_queryinf($inscr, "", "*", "", "q88_inscr is not null and (q07_databx < '" . date("Y-m-d", db_getsession("DB_datausu")) . "' or  q07_databx is null) and tabativ.q07_inscr = $inscr "));
+$result = $cltabativ->sql_record($cltabativ->sql_queryinf($inscr, "", "*", "", "(q07_databx <= '" . date("Y-m-d", db_getsession("DB_datausu")) . "' or  q07_databx is null) and tabativ.q07_inscr = $inscr "));
 $numrows = $cltabativ->numrows;
 if ($numrows > 0) {
   db_fieldsmemory($result, 0);
