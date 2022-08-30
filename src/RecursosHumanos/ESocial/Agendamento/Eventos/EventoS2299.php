@@ -38,26 +38,26 @@ class EventoS2299 extends EventoBase
         $iSequencial = 1;
         foreach ($this->dados as $oDados) {
             
-            $oDadosAPI                                 = new \stdClass;
-            $oDadosAPI->evtDeslig                      = new \stdClass;
+            $oDadosAPI                          = new \stdClass;
+            $oDadosAPI->evtDeslig               = new \stdClass;
             $oDadosAPI->evtDeslig->sequencial   = $iSequencial;
             $oDadosAPI->evtDeslig->indRetif     = 1;
-            $oDadosAPI->evtDeslig->nrRecibo     = null;
             $oDadosAPI->evtDeslig->cpfTrab      = $oDados->cpftrab;
             $oDadosAPI->evtDeslig->matricula    = $oDados->matricula;
             $oDadosAPI->evtDeslig->mtvdeslig    = $oDados->mtvdeslig;
             $oDadosAPI->evtDeslig->dtdeslig     = $oDados->dtdeslig;
-            $oDadosAPI->evtDeslig->dtavprv      = empty($oDados->dtavprv) ? NULL : $oDados->dtavprv;
+            if (!empty($oDados->dtavprv)) {
+                $oDadosAPI->evtDeslig->dtavprv = $oDados->dtavprv;
+            }
             $oDadosAPI->evtDeslig->indpagtoapi  = $oDados->indpagtoapi;
             $oDadosAPI->evtDeslig->dtprojfimapi = $this->getDtProjetadaAviso($oDados->dtdeslig, $oDados->dtadmiss);
-            $oDadosAPI->evtDeslig->pensalim     = $oDados->pensalim;
-            $oDadosAPI->evtDeslig->percaliment  = null;
-            $oDadosAPI->evtDeslig->vralim       = null;
-            $oDadosAPI->evtDeslig->nrproctrab   = null;
+            if ($oDados->rh30_regime == "2") {
+                $oDadosAPI->evtDeslig->pensalim = (string) $oDados->pensalim;
+            }
 
-            $oDtDeslig = new \DateTime($oVerbasSql->dtdeslig);
+            $oDtDeslig = new \DateTime($oDados->dtdeslig);
             $oDtAtual  = new \DateTime(db_getsession("DB_anousu")."-".date("m", db_getsession("DB_datausu"))."-".date("d", db_getsession("DB_datausu")));
-            if ($oVerbasSql->rh30_regime == "2" && $oDtDeslig >= $oDtAtual) {
+            if ($oDados->rh30_regime == "2" && $oDtDeslig >= $oDtAtual) {
                 $oDadosAPI->evtDeslig->verbasresc = $this->buscarVerbasResc($oDados->matricula);
             }
 
