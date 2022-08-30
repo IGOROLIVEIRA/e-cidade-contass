@@ -113,7 +113,7 @@ $oAgendaPagamento = new agendaPagamento();
 $item = 0; //se deve trazer as notas, ou os itens do empenho.
 $objEmpenho->setEmpenho($objJson->iEmpenho);
 $objEmpenho->setEncode(true);
-
+$paremetrosaldo = new cl_parametroscontratos;
 
 $dtDataSessao = db_getsession("DB_datausu");
 
@@ -521,8 +521,16 @@ switch ($objJson->method) {
     /**
     *ALTERAÇÃO DA ROTINA DE ANULAÇÃO DE EMPENHO
     *AJUSTE PARA SALDO VOLTAR PARA OS ITENS DA ULTIMA POSIÇÃO
+    */
 
-    else {
+    $paremetrosaldo->sql_query_file('','pc01_liberarsaldoposicao');
+    $resulparemetrosaldo  = db_utils::fieldsMemory($paremetrosaldo, 0);
+    
+    if($resulparemetrosaldo->pc01_liberarsaldoposicao == false) {
+      
+
+
+
       db_inicio_transacao();
       $aItens = $objJson->itensAnulados;
       for($iInd = 0; $iInd < count($aItens); $iInd++){
@@ -558,18 +566,6 @@ switch ($objJson->method) {
         }
 
         $Dotacao = db_utils::fieldsMemory($Dotacao);
-        $DaoacordoItemDotacao->ac22_sequencial = $Dotacao->ac22_sequencial;
-        $DaoacordoItemDotacao->ac22_valor = $Dotacao->ac22_valor + $aItens[$iInd]->vlrtot;
-        $DaoacordoItemDotacao->ac22_quantidade = $Dotacao->ac22_quantidade + $aItens[$iInd]->quantidade;
-        $DaoacordoItemDotacao->alterar($Dotacao->ac22_sequencial);
-        if($DaoacordoItemDotacao->erro_status == 0){
-
-          $nMensagem = urlencode($DaoacordoItemDotacao->erro_msg);
-          $iStatus = 2;
-          break;
-
-        }
-
 
         $DaoacordoItem = db_utils::getDao('acordoitem');
         $ItemUltimaPosicao = $DaoacordoItem->sql_record("
@@ -582,19 +578,117 @@ switch ($objJson->method) {
           FROM acordoposicao
           WHERE ac26_acordo = {$rsacordoMaterial->ac26_acordo})
           AND ac20_pcmater = {$rsacordoMaterial->ac20_pcmater} ");
-
-
         $ItemUltimaPosicao = db_utils::fieldsMemory($ItemUltimaPosicao);
-        $DaoacordoItem->ac20_sequencial = $ItemUltimaPosicao->ac20_sequencial;
-        $DaoacordoItem->ac20_quantidade = $ItemUltimaPosicao->ac20_quantidade + $aItens[$iInd]->quantidade;
-        $DaoacordoItem->ac20_valortotal = $ItemUltimaPosicao->ac20_valortotal + $aItens[$iInd]->vlrtot;
-        $DaoacordoItem->ac20_valorunitario = $ItemUltimaPosicao->ac20_valorunitario;
-        $DaoacordoItem->alterar($ItemUltimaPosicao->ac20_sequencial);
-        if($DaoacordoItem->erro_status == 0){
 
-          $nMensagem = urlencode($DaoacordoItem->erro_msg);
-          $iStatus = 2;
+        $empempaut = db_query("select e61_autori from empempaut where e61_numemp = {$aItens[$iInd]->e62_sequencial}");
+        if(pg_num_rows($empempaut) == 0){
           break;
+        }
+        $rsempempaut = db_utils::fieldsMemory($empempaut);
+        $empautitem = db_query("select e55_sequen from empautitem where e55_autori = {$empempaut->e61_autori} and e55_item = {$rsacordoMaterial->ac20_pcmater}");
+        if(pg_num_rows($empautitem) == 0){
+          break;
+        }
+        $rsempautitem = db_utils::fieldsMemory($empautitem);
+        $acordoitemexecutadoempautitem = db_query("select min(ac19_acordoitemexecutado) from acordoitemexecutadoempautitem  where ac19_autori = {$empempaut->e61_autori} and ac19_sequen = {$empautitem->e55_sequen}");
+        if(pg_num_rows($acordoitemexecutadoempautitem) == 0){
+          break;
+        }
+        $rsacordoitemexecutadoempautitem = db_utils::fieldsMemory($acordoitemexecutadoempautitem);
+        $acordoitemexecutado = db_query("select ac29_acordoitem from acordoitemexecutado where ac29_sequencial = {$acordoitemexecutadoempautitem->ac19_acordoitemexecutado}");
+        if(pg_num_rows($acordoitemexecutado) == 0){
+          break;
+        }
+        $rsacordoitemexecutado = db_utils::fieldsMemory($acordoitemexecutado);
+        $acordoitem = db_query("select ac20_acordoposicao from acordoitem where ac20_sequencial = {$acordoitemexecutado->ac29_acordoitem}");
+        if(pg_num_rows($acordoitem) == 0){
+          break;
+        }
+        $rsacordoitem = db_utils::fieldsMemory($acordoitem);
+
+        if($acordoitem->ac20_acordoposicao != $ItemUltimaPosicao->ac20_sequencial){
+
+          if($ItemUltimaPosicao->ac20_valorunitario != $aItens[$iInd]->vlruni){
+            
+
+            if (confirm('O valor unitário atual do contrato é '+$ItemUltimaPosicao->ac20_valorunitario+' e o valor unitário do item a ser anulado é '+$aItens[$iInd]->vlruni+'. Ao anular os itens do empenho, o valor unitário será o'+$ItemUltimaPosicao->ac20_valorunitario)){
+
+              $DaoacordoItemDotacao->ac22_sequencial = $Dotacao->ac22_sequencial;
+              $DaoacordoItemDotacao->ac22_valor = $Dotacao->ac22_valor + $aItens[$iInd]->vlrtot;
+              if($ItemUltimaPosicao->ac20_valorunitario/$ItemUltimaPosicao->ac20_valortotal == 1){
+                $DaoacordoItemDotacao->ac22_quantidade = $Dotacao->ac22_quantidade;
+              }else{
+                $DaoacordoItemDotacao->ac22_quantidade = $Dotacao->ac22_quantidade + $aItens[$iInd]->quantidade;
+              }
+              $DaoacordoItemDotacao->alterar($Dotacao->ac22_sequencial);
+              if($DaoacordoItemDotacao->erro_status == 0){
+
+                $nMensagem = urlencode($DaoacordoItemDotacao->erro_msg);
+                $iStatus = 2;
+                break;
+
+              }
+
+
+              $DaoacordoItem->ac20_sequencial = $ItemUltimaPosicao->ac20_sequencial;
+              
+              if($ItemUltimaPosicao->ac20_valorunitario/$ItemUltimaPosicao->ac20_valortotal == 1){
+                $DaoacordoItem->ac20_quantidade = $ItemUltimaPosicao->ac20_quantidade;
+                $DaoacordoItem->ac20_valortotal = $ItemUltimaPosicao->ac20_valortotal + $aItens[$iInd]->vlrtot;
+                $DaoacordoItem->ac20_valorunitario = $ItemUltimaPosicao->ac20_valortotal + $aItens[$iInd]->vlrtot;
+              }else{
+                $DaoacordoItem->ac20_quantidade = $ItemUltimaPosicao->ac20_quantidade + $aItens[$iInd]->quantidade;
+                $DaoacordoItem->ac20_valortotal = $ItemUltimaPosicao->ac20_valortotal + $aItens[$iInd]->vlrtot;
+                $DaoacordoItem->ac20_valorunitario = $ItemUltimaPosicao->ac20_valorunitario;
+              }
+              $DaoacordoItem->alterar($ItemUltimaPosicao->ac20_sequencial);
+              
+              if($DaoacordoItem->erro_status == 0){
+
+                $nMensagem = urlencode($DaoacordoItem->erro_msg);
+                $iStatus = 2;
+                break;
+              }
+            }
+          }else{
+              $DaoacordoItemDotacao->ac22_sequencial = $Dotacao->ac22_sequencial;
+              $DaoacordoItemDotacao->ac22_valor = $Dotacao->ac22_valor + $aItens[$iInd]->vlrtot;
+              if($ItemUltimaPosicao->ac20_valorunitario/$ItemUltimaPosicao->ac20_valortotal == 1){
+                $DaoacordoItemDotacao->ac22_quantidade = $Dotacao->ac22_quantidade;
+              }else{
+                $DaoacordoItemDotacao->ac22_quantidade = $Dotacao->ac22_quantidade + $aItens[$iInd]->quantidade;
+              }
+              $DaoacordoItemDotacao->alterar($Dotacao->ac22_sequencial);
+              if($DaoacordoItemDotacao->erro_status == 0){
+
+                $nMensagem = urlencode($DaoacordoItemDotacao->erro_msg);
+                $iStatus = 2;
+                break;
+
+              }
+
+
+              $DaoacordoItem->ac20_sequencial = $ItemUltimaPosicao->ac20_sequencial;
+              
+              if($ItemUltimaPosicao->ac20_valorunitario/$ItemUltimaPosicao->ac20_valortotal == 1){
+                $DaoacordoItem->ac20_quantidade = $ItemUltimaPosicao->ac20_quantidade;
+                $DaoacordoItem->ac20_valortotal = $ItemUltimaPosicao->ac20_valortotal + $aItens[$iInd]->vlrtot;
+                $DaoacordoItem->ac20_valorunitario = $ItemUltimaPosicao->ac20_valortotal + $aItens[$iInd]->vlrtot;
+              }else{
+                $DaoacordoItem->ac20_quantidade = $ItemUltimaPosicao->ac20_quantidade + $aItens[$iInd]->quantidade;
+                $DaoacordoItem->ac20_valortotal = $ItemUltimaPosicao->ac20_valortotal + $aItens[$iInd]->vlrtot;
+                $DaoacordoItem->ac20_valorunitario = $ItemUltimaPosicao->ac20_valorunitario;
+              }
+              $DaoacordoItem->alterar($ItemUltimaPosicao->ac20_sequencial);
+              
+              if($DaoacordoItem->erro_status == 0){
+
+                $nMensagem = urlencode($DaoacordoItem->erro_msg);
+                $iStatus = 2;
+                break;
+              }
+          }
+
         }
 
 
@@ -609,7 +703,7 @@ switch ($objJson->method) {
         $iStatus = 1;
       }
     }
-    */
+    
     echo $json->encode(array("mensagem" => $nMensagem, "status" => $iStatus));
 
     break;
