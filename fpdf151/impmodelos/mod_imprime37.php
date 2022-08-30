@@ -160,12 +160,24 @@ for ($iDados = 0; $iDados < pg_num_rows($this->dados); $iDados++) {
     require_once("libs/db_utils.php");
     require_once("libs/db_libdocumento.php");
 
-    $sqlDoc = "select db60_coddoc from db_documentopadrao where db60_instit = ".db_getsession('DB_instit')." and db60_tipodoc = 1705";
+    $sqlDocPadrao = "select db60_coddoc from db_documentopadrao where db60_instit = ".db_getsession('DB_instit')." and db60_tipodoc = 1705";
+    $rsSqlDocPadrao = db_query($sqlDocPadrao);
+    $docPadrao = db_utils::fieldsMemory($rsSqlDocPadrao, 0);
+
+    $coddoc = $docPadrao->db60_coddoc;
+
+    $sqlDoc  = "select * from db_documento ";
+    $sqlDoc .= "    inner join db_config on db_config.codigo = db_documento.db03_instit ";
+    $sqlDoc .= "    inner join db_tipodoc on db_tipodoc.db08_codigo = db_documento.db03_tipodoc ";
+    $sqlDoc .= " where db03_tipodoc = 1705 and db03_instit = ".db_getsession('DB_instit')." and db_documento.db03_instit = ".db_getsession('DB_instit');
     $rsSqlDoc = db_query($sqlDoc);
     $doc = db_utils::fieldsMemory($rsSqlDoc, 0);
 
-    $oAssinaturas = new libdocumento(1705);
-    $oAssinaturas->iCodDoc = $doc->db60_coddoc;
+    if(pg_numrows($rsSqlDoc) > 0){
+        $coddoc = $doc->db03_docum;
+    }
+
+    $oAssinaturas = new libdocumento(1705, $coddoc);
 
     $aParagrafo = $oAssinaturas->getDocParagrafos();
 
@@ -177,3 +189,4 @@ for ($iDados = 0; $iDados < pg_num_rows($this->dados); $iDados++) {
     }
 }
 ?>
+
