@@ -141,7 +141,7 @@ if( !isset($m38_visualizacaoitens) or !isset($m38_visualizacaomatestoque) ) {
              $campos = "matmater.*";
            }
         }
-
+        m60_instit
         // visualizar apenas com movimentação na instituição que está sendo acessada
         if ( $m38_visualizacaoitens == 2) {
           $sWhereConfig .= "and ( instit = ". db_getsession("DB_instit") ." or instit is null ) ";
@@ -167,6 +167,7 @@ if( !isset($m38_visualizacaoitens) or !isset($m38_visualizacaomatestoque) ) {
         } else {
            $sql = $clmatmater->sql_query_config("",$campos,"m60_codmater","m60_ativo is true {$sWhereConfig}");
         }
+        //echo $sql;
         db_lovrot($sql,15,"()","",$funcao_js);
       } else {
 
