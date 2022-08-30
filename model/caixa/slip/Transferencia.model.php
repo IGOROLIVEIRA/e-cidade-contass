@@ -290,7 +290,7 @@ abstract class Transferencia {
    * @throws Exception
    * @return boolean
    */
-  public function executaAutenticacao() {
+  public function executaAutenticacao($dtAutenticacao = null) {
 
     $iIp                = db_getsession("DB_ip");
     $oDaocfautent       = db_utils::getDao('cfautent');
@@ -311,7 +311,12 @@ abstract class Transferencia {
     $iCodigoTerminal    = db_utils::fieldsMemory($rsAutenticador, 0)->k11_id;
     $iCodigoSlip        = $this->getCodigoSlip();
     $iCodigoInstituicao = db_getsession("DB_instit");
-    $dtSessao           = date("Y-m-d", db_getsession("DB_datausu"));
+
+    // Correcao para OC18200
+    if (!$dtAutenticacao) 
+        $dtSessao = date("Y-m-d", db_getsession("DB_datausu"));
+    else 
+        $dtSessao = date("Y-m-d", strtotime($dtAutenticacao));
 
     $sSqlExecutaAutenticacao = "select fc_auttransf({$iCodigoSlip}, '{$dtSessao}', '{$iIp}', true, {$this->getCheque()}, {$iCodigoInstituicao}) as fc_autenticacao";
     $rsExecutaAutenticacao = db_query($sSqlExecutaAutenticacao);

@@ -30,6 +30,7 @@ class Oc18200 extends AbstractMigration
             k174_codigobanco int4 NOT NULL default 0,
             k174_descricao text NOT NULL,
             k174_idcontabancaria int8 NOT NULL default 0,
+            k174_numcgm int8 NOT NULL default 0,
             k174_instit int8 NOT NULL,
             CONSTRAINT uc_codigobanco UNIQUE (k174_codigobanco, k174_instit));
 

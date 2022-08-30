@@ -53,6 +53,7 @@ if (isset($incluir)) {
     $clagentearrecadador->k174_codigobanco = $k174_codigobanco;
     $clagentearrecadador->k174_descricao = $k174_descricao;
     $clagentearrecadador->k174_idcontabancaria = $k174_idcontabancaria;
+    $clagentearrecadador->k174_numcgm = $k174_numcgm;
     $clagentearrecadador->k174_instit = db_getsession("DB_instit");
     $clagentearrecadador->incluir();
 

@@ -50,6 +50,7 @@ if (isset($alterar)) {
     $clagentearrecadador->k174_codigobanco = $k174_codigobanco;
     $clagentearrecadador->k174_descricao = $k174_descricao;
     $clagentearrecadador->k174_idcontabancaria = $k174_idcontabancaria;
+    $clagentearrecadador->k174_numcgm = $k174_numcgm;
     $clagentearrecadador->alterar($k174_sequencial);
     $sMsgErro = $clagentearrecadador->erro_msg;
     if ($clagentearrecadador->erro_status == "0") {

@@ -66,6 +66,18 @@
                     ?>
                 </td>
             </tr>
+            <!-- CGM -->
+            <tr>
+                <td nowrap title="CGM">
+                    <? db_ancora("CGM", "js_pesquisaCgm(true);", $db_opcao); ?>
+                </td>
+                <td colspan='3'>
+                    <?
+                    db_input('k174_numcgm', 10, $Ik174_numcgm, true, 'text', 2, "onchange='js_pesquisaCgm(false);'");
+                    db_input('z01_nome', 50, $Iz01_nome, true, 'text', 3);
+                    ?>
+                </td>
+            </tr>
         </table>
     </fieldset>
     <br>
@@ -114,5 +126,35 @@
             echo " location.href = '" . basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]) . "?chavepesquisa='+chave";
         }
         ?>
+    }
+
+    /**
+     * Pesquisa CGM
+     */
+    function js_pesquisaCgm(lMostra) {
+
+        if (lMostra == true) {
+            js_OpenJanelaIframe('top.corpo', 'db_iframe_cgm', 'func_nome.php?funcao_js=parent.js_mostraCgm|z01_numcgm|z01_nome', 'Pesquisa', true);
+        } else {
+            js_OpenJanelaIframe('top.corpo', 'db_iframe_cgm', 'func_nome.php?pesquisa_chave=' + $('k174_numcgm').value + '&funcao_js=parent.js_preencheCgm', 'Pesquisa', false);
+        }
+    }
+
+    function js_mostraCgm(iCodigoCgm, sDescricao) {
+
+        $('k174_numcgm').value = iCodigoCgm;
+        $('z01_nome').value = sDescricao;
+        db_iframe_cgm.hide();
+    }
+
+    function js_preencheCgm(lErro, sDescricao) {
+
+        $('z01_nome').value = sDescricao;
+
+        if (lErro) {
+            $('k174_numcgm').focus();
+            $('k174_numcgm').value = '';
+            $('z01_nome').value = sDescricao;
+        }
     }
 </script>

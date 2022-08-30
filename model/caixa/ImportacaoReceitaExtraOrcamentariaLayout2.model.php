@@ -45,7 +45,7 @@ class ImportacaoReceitaExtraOrcamentariaLayout2
         $this->oReceita->sCodAgencia      = substr($sLinha, 3, 4);
         $this->oReceita->dDataCredito     = $this->montarData(substr($sLinha, 7, 8));
         $this->oReceita->nValor           = $this->montarValor(substr($sLinha, 21, 13));
-        $this->oReceita->sPcasp           = str_replace(".", "", substr($sLinha, 35, 16));
+        $this->oReceita->sPcasp           = trim(str_replace(".", "", substr($sLinha, 35, 16)));
         $this->oReceita->iRecurso         = substr(trim($sLinha), -3);
         $this->preencherContaCredito();
         $this->preencherAgenteArrecadador();
@@ -60,7 +60,7 @@ class ImportacaoReceitaExtraOrcamentariaLayout2
         $rsConPlanoReduz = $clconplanoreduz->sql_record($sqlConPlanoReduz);
 
         if ($clconplanoreduz->numrows == 0) {
-            throw new BusinessException("Não encontrado reduzido para conta contábil {$this->oReceita->sPcasp} ");
+            throw new BusinessException("Não encontrado reduzido para conta contábil {$this->oReceita->sPcasp}");
         }
 
         while ($oConPlanoReduz = pg_fetch_object($rsConPlanoReduz)) {
@@ -89,7 +89,7 @@ class ImportacaoReceitaExtraOrcamentariaLayout2
     {
         $clagentearrecadador = new cl_agentearrecadador();
         $sqlAgenteArrecadador = $clagentearrecadador->sql_query("", 
-            "agentearrecadador.k174_idcontabancaria", 
+            "agentearrecadador.k174_idcontabancaria, agentearrecadador.k174_numcgm", 
             "agentearrecadador.k174_idcontabancaria", 
             "agentearrecadador.k174_codigobanco = {$this->oReceita->iCodBanco} AND agentearrecadador.k174_instit = " . db_getsession('DB_instit'));
         $rsAgenteArrecadador = $clagentearrecadador->sql_record($sqlAgenteArrecadador);
@@ -102,6 +102,7 @@ class ImportacaoReceitaExtraOrcamentariaLayout2
             $oContaTesouraria = new contaTesouraria($oAgenteArrecadador->k174_idcontabancaria);
             $oContaTesouraria->validaContaPorDataMovimento(date('Y-m-d', db_getsession('DB_datausu')));
             $this->oReceita->oContaTesouraria = $oContaTesouraria;
+            $this->oReceita->iNumeroCgm = $oAgenteArrecadador->k174_numcgm;
         }
     }
 

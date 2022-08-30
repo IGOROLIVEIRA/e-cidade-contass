@@ -386,7 +386,10 @@ class slip {
     }
 
     $clslip                    =  db_utils::getDao("slip");
-    $clslip->k17_data          = date("Y-m-d",db_getsession("DB_datausu"));
+    if ($this->getData())
+        $clslip->k17_data          = date("Y-m-d", strtotime($this->getData()));
+    else 
+        $clslip->k17_data          = date("Y-m-d",db_getsession("DB_datausu"));
     $clslip->k17_debito        = $this->getContaDebito();
     $clslip->k17_credito       = "".$this->getContaCredito()."";
     $clslip->k17_valor         = "".$this->getValor()."";

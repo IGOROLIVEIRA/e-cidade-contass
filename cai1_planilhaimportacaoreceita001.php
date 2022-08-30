@@ -35,9 +35,8 @@ require_once("dbforms/db_funcoes.php");
 require_once("model/caixa/PlanilhaArrecadacao.model.php");
 require_once("classes/db_tabrec_classe.php");
 require_once("model/caixa/ImportacaoReceita.model.php");
-db_postmemory($HTTP_POST_VARS);
 
-
+error_reporting(E_ALL);
 if (isset($processar)) {
     // Inicia uma transação no banco para rollback em caso de erro
     db_inicio_transacao();
@@ -56,14 +55,13 @@ if (isset($processar)) {
         // Instancia a arrecadacao da receita por importação
         $oImportacaoReceita = new ImportacaoReceita($arq_name, $layout);
         $oImportacaoReceita->salvar($arq_array);
-
         // Commita as modificações no banco
         db_fim_transacao(false);
-        if ($oImportacaoReceita->iCodigoPlanilhaArrecadada > 0)
-            db_msgbox("Planilha {$oImportacaoReceita->iCodigoPlanilhaArrecadada} inclusa com sucesso.\n\n");
+        if (count($oImportacaoReceita->aCodigoPlanilhaArrecadada) > 0)
+            db_msgbox("Planilhas inclusas com sucesso. \n " . implode(", ", $oImportacaoReceita->aCodigoPlanilhaArrecadada) . " \n\n ");
         if (count($oImportacaoReceita->aCodigoSlip) > 0)
-            db_msgbox("Receitas ExtraOrçamentárias importadas com sucesso, foram gerados os Slips: \n " . implode(",", $oImportacaoReceita->aCodigoSlip) . " \n\n");
-        if ($oImportacaoReceita->iCodigoPlanilhaArrecadada == 0 AND count($oImportacaoReceita->aCodigoSlip) == 0)
+            db_msgbox("Receitas ExtraOrçamentárias importadas com sucesso, foram gerados os Slips: \n " . implode(", ", $oImportacaoReceita->aCodigoSlip) . " \n\n");
+        if (count($oImportacaoReceita->aCodigoPlanilhaArrecadada) == 0 and count($oImportacaoReceita->aCodigoSlip) == 0)
             db_msgbox("Nenhuma receita inclusa.\n\n");
     } catch (Exception $oException) {
         // Rollback em caso de erro
@@ -82,6 +80,7 @@ if (isset($processar)) {
     <?php
     db_app::load("scripts.js, strings.js, prototype.js, estilos.css");
     ?>
+    <script language="JavaScript" type="text/javascript" src="scripts/widgets/dbmessageBoard.widget.js"></script>
 </head>
 
 <body class="body-default" onLoad="a=1">

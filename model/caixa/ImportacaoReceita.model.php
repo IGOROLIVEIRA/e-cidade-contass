@@ -60,8 +60,6 @@ class ImportacaoReceita
     {
         $this->preencherProcessoAdministrativo($sProcessoAdministrativo);
         $this->iLayout = $iLayout;
-        $this->preencherPlanilhaArrecadacao();
-        $this->preencherCGM();
     }
 
     /**
@@ -75,31 +73,6 @@ class ImportacaoReceita
         if (strlen($sProcessoAdministrativo) >= 99)
             throw new BusinessException("Nome do arquivo não pode ter mais que 100 caracteres \n Nome Atual: {$sProcessoAdministrativo}");
         $this->sProcessoAdministrativo = $sProcessoAdministrativo;
-    }
-
-    /**
-     * Preencher a abertura da planilha de arrecadação
-     *
-     * @return void
-     */
-    public function preencherPlanilhaArrecadacao()
-    {
-        $this->oPlanilhaArrecadacao = new PlanilhaArrecadacao();
-        $this->oPlanilhaArrecadacao->setDataCriacao(date('Y-m-d', db_getsession('DB_datausu')));
-        $this->oPlanilhaArrecadacao->setInstituicao(InstituicaoRepository::getInstituicaoByCodigo(db_getsession('DB_instit')));
-        $this->oPlanilhaArrecadacao->setProcessoAdministrativo($this->sProcessoAdministrativo);
-    }
-
-    /**
-     * Buscar dados da institução da sessão
-     *
-     * @return void
-     */
-    public function preencherCGM()
-    {
-        $oDaoDBConfig = db_utils::getDao("db_config");
-        $rsInstit = $oDaoDBConfig->sql_record($oDaoDBConfig->sql_query_file(db_getsession("DB_instit")));
-        $this->iNumeroCgm = db_utils::fieldsMemory($rsInstit, 0)->numcgm;
     }
 
     /**
@@ -145,7 +118,7 @@ class ImportacaoReceita
     {
         $oReceitaPlanilha = new ReceitaPlanilha();
         $oReceitaPlanilha->setCaracteristicaPeculiar(new CaracteristicaPeculiar("000"));
-        $oReceitaPlanilha->setCGM(CgmFactory::getInstanceByCgm($this->iNumeroCgm));
+        $oReceitaPlanilha->setCGM(CgmFactory::getInstanceByCgm($oReceitaOrcamentaria->iNumeroCgm));
         $oReceitaPlanilha->setContaTesouraria($oReceitaOrcamentaria->oContaTesouraria);
         $oReceitaPlanilha->setDataRecebimento(new DBDate($oReceitaOrcamentaria->dDataCredito));
         $oReceitaPlanilha->setInscricao($this->iInscricao);
@@ -160,7 +133,7 @@ class ImportacaoReceita
         $oReceitaPlanilha->setTipoReceita($oReceitaOrcamentaria->iReceita);
         $oReceitaPlanilha->setValor($oReceitaOrcamentaria->nValor);
         $oReceitaPlanilha->setConvenio($this->iConvenio);
-        $this->oPlanilhaArrecadacao->adicionarReceitaPlanilha($oReceitaPlanilha);
+        $this->listaPlanilhas[$oReceitaOrcamentaria->iNumeroCgm][] = $oReceitaPlanilha;
     }
 
     /**
@@ -181,10 +154,10 @@ class ImportacaoReceita
         $oTransferencia->setObservacao("Arrecadação de Receita Extraorçamentária - BDA");
         $oTransferencia->setTipoPagamento(0);
         $oTransferencia->setSituacao(1);
-        $oTransferencia->setCodigoCgm($this->iNumeroCgm);
+        $oTransferencia->setCodigoCgm($oReceitaExtraOrcamentaria->iNumeroCgm);
         $oTransferencia->setCaracteristicaPeculiarDebito("000");
         $oTransferencia->setCaracteristicaPeculiarCredito("000");
-        $oTransferencia->setData(date("Y-m-d", db_getsession("DB_datausu")));
+        $oTransferencia->setData(date("Y-m-d", strtotime($oReceitaExtraOrcamentaria->dDataCredito)));
         $oTransferencia->setProcessoAdministrativo(db_stdClass::normalizeStringJsonEscapeString($this->sProcessoAdministrativo));
         $oTransferencia->setExercicioCompetenciaDevolucao("");
         if ($oTransferencia instanceof TransferenciaFinanceira) {
@@ -200,11 +173,20 @@ class ImportacaoReceita
      */
     public function salvarReceitaOrcamentaria()
     {
-        if (count($this->oPlanilhaArrecadacao->getReceitasPlanilha()) > 0) {
+        foreach ($this->listaPlanilhas as $cgm => $planilha) {
+            $this->oPlanilhaArrecadacao = new PlanilhaArrecadacao();
+            $this->oPlanilhaArrecadacao->setInstituicao(InstituicaoRepository::getInstituicaoByCodigo(db_getsession('DB_instit')));
+            $this->oPlanilhaArrecadacao->setProcessoAdministrativo($this->sProcessoAdministrativo);
+            foreach ($planilha as $oReceitaPlanilha) {
+                $dtAutenticacao = $oReceitaPlanilha->getDataRecebimento()->convertTo(DBDate::DATA_EN);
+                $this->oPlanilhaArrecadacao->setDataCriacao($oReceitaPlanilha->getDataRecebimento()->convertTo(DBDate::DATA_EN));
+                $this->oPlanilhaArrecadacao->adicionarReceitaPlanilha($oReceitaPlanilha);
+            }
             $this->oPlanilhaArrecadacao->salvar();
             $this->oPlanilhaArrecadacao->getReceitasPlanilha();
+            $this->oPlanilhaArrecadacao->setDataAutenticacao($dtAutenticacao);   
             $this->oPlanilhaArrecadacao->autenticar();
-            $this->iCodigoPlanilhaArrecadada = $this->oPlanilhaArrecadacao->getCodigo();
+            $this->aCodigoPlanilhaArrecadada[] = "CGM ({$cgm}) - Planilha: " . $this->oPlanilhaArrecadacao->getCodigo();
         }
     }
 
@@ -219,7 +201,7 @@ class ImportacaoReceita
             $oTransferencia->salvar();
             if ((int) $oTransferencia->getCodigoSlip() <= 0)
                 throw new BusinessException("Não foi possível salvar as receitas extra-orçamentárias");
-            $oTransferencia->executaAutenticacao();
+            $oTransferencia->executaAutenticacao($oTransferencia->getData());
             $oTransferencia->executarLancamentoContabil();
             $this->aCodigoSlip[] = $oTransferencia->getCodigoSlip();
         }

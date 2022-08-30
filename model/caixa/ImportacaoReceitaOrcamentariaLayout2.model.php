@@ -71,7 +71,7 @@ class ImportacaoReceitaOrcamentariaLayout2
     {
         $clagentearrecadador = new cl_agentearrecadador();
         $sqlAgenteArrecadador = $clagentearrecadador->sql_query("", 
-            "agentearrecadador.k174_idcontabancaria", 
+            "agentearrecadador.k174_idcontabancaria, agentearrecadador.k174_numcgm", 
             "agentearrecadador.k174_idcontabancaria", 
             "agentearrecadador.k174_codigobanco = {$this->oReceita->iCodBanco} AND agentearrecadador.k174_instit = " . db_getsession('DB_instit'));
         $rsAgenteArrecadador = $clagentearrecadador->sql_record($sqlAgenteArrecadador);
@@ -84,6 +84,7 @@ class ImportacaoReceitaOrcamentariaLayout2
             $oContaTesouraria = new contaTesouraria($oAgenteArrecadador->k174_idcontabancaria);
             $oContaTesouraria->validaContaPorDataMovimento(date('Y-m-d', db_getsession('DB_datausu')));
             $this->oReceita->oContaTesouraria = $oContaTesouraria;
+            $this->oReceita->iNumeroCgm = $oAgenteArrecadador->k174_numcgm;
         }
     }
 
@@ -99,7 +100,7 @@ class ImportacaoReceitaOrcamentariaLayout2
         $rsTabrec = $cltabrec->sql_record($sqlTabrec);
 
         if ($cltabrec->numrows == 0) {
-            throw new BusinessException("Não encontrado receita para conta contábil {$this->oReceita->sCodReceita} ");
+            throw new BusinessException("Não encontrado receita para conta contábil {$this->oReceita->sCodReceita}");
         }
 
         while ($oTabRec = pg_fetch_object($rsTabrec)) {

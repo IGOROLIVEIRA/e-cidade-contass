@@ -19,6 +19,7 @@ class cl_agentearrecadador
     var $k174_descricao = null;
     var $k174_idcontabancaria = 0;
     var $k174_instit = 0;
+    var $k174_numcgm = 0;
     // cria propriedade com as variaveis do arquivo 
     var $campos = "
                  k174_sequencial = int4 = Sequencial 
@@ -26,6 +27,7 @@ class cl_agentearrecadador
                  k174_descricao = text = Descrição do Banco 
                  k174_idcontabancaria = int8 = Conta Bancária 
                  k174_instit = int4 = Instituição
+                 k174_numcgm = int4 = Número de CGM
                  ";
     //funcao construtor da classe 
     function cl_agentearrecadador()
@@ -98,19 +100,29 @@ class cl_agentearrecadador
             return false;
         }
 
-
+        if ($this->k174_numcgm == null) {
+            $this->erro_sql = " Campo Número CGM nao Informado.";
+            $this->erro_campo = "k174_numcgm";
+            $this->erro_banco = "";
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_status = "0";
+            return false;
+        }
 
         $result = @pg_query("insert into agentearrecadador(
                                       k174_codigobanco 
                                       ,k174_descricao 
                                       ,k174_idcontabancaria 
                                       ,k174_instit
+                                      ,k174_numcgm
                        )
                 values (
                                $this->k174_codigobanco 
                                ,'$this->k174_descricao' 
                                ,$this->k174_idcontabancaria
                                ,$this->k174_instit
+                               ,$this->k174_numcgm
                       )");
         if ($result == false) {
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
@@ -207,6 +219,22 @@ class cl_agentearrecadador
             if (trim($this->k174_instit) == null) {
                 $this->erro_sql = " Campo Instituição nao Informado.";
                 $this->erro_campo = "k174_instit";
+                $this->erro_banco = "";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+        }
+        if (trim($this->k174_numcgm) != "" || isset($GLOBALS["HTTP_POST_VARS"]["k174_numcgm"])) {
+            if (trim($this->k174_numcgm) == "" && isset($GLOBALS["HTTP_POST_VARS"]["k174_numcgm"])) {
+                $this->k174_numcgm = "0";
+            }
+            $sql  .= $virgula . " k174_numcgm = $this->k174_numcgm ";
+            $virgula = ",";
+            if (trim($this->k174_numcgm) == null) {
+                $this->erro_sql = " Campo Número CGM nao Informado.";
+                $this->erro_campo = "k174_numcgm";
                 $this->erro_banco = "";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));

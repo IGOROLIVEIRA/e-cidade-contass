@@ -70,7 +70,8 @@
             $('arquivo').focus();
             return false;
         }
-
+        
+        js_divCarregando('Aguarde, processando arquivos','msgBox');
         return true;
     }
 </script>
