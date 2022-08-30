@@ -50,8 +50,7 @@ $r48_mesusu = db_mesfolha();
 if (isset($incluir)) {
 
     $result_semest  = $clgerfcom->sql_record($clgerfcom->sql_query_file($r48_anousu, $r48_mesusu, null, null, " r48_regist, r48_rubric", "", " r48_anousu = " . $r48_anousu . " and r48_mesusu = " . $r48_mesusu . " and r48_semest = 0 and r48_instit = " . db_getsession("DB_instit") . ""));
-    // db_criatabela($result_semest);
-    //exit;
+
     $numrows_result = $clgerfcom->numrows;
     db_inicio_transacao();
     for ($i = 0; $i < $numrows_result; $i++) {
@@ -69,10 +68,13 @@ if (isset($incluir)) {
     db_fim_transacao();
 } else {
     $semestatual = "0";
-    $result_semest = $clgerfcom->sql_record($clgerfcom->sql_query_file($r48_anousu, $r48_mesusu, null, null, " max(r48_semest) as semestatual","","r48_instit = ".db_getsession("DB_instit") ));
+    $result_semest = $clgerfcom->sql_record($clgerfcom->sql_query_file($r48_anousu, $r48_mesusu, null, null, " max(r48_semest) as semestatual", "", "r48_instit = " . db_getsession("DB_instit") . "and r48_mesusu = $r48_mesusu and r48_anousu = $r48_anousu"));
     if ($clgerfcom->numrows > 0) {
         db_fieldsmemory($result_semest, 0);
     }
+    if ($semestatual == null)
+        $semestatual = 0;
+
     $r48_semest = $semestatual  + 1;
 }
 ?>
