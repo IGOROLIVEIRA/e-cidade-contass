@@ -29,15 +29,16 @@ require("libs/db_stdlib.php");
 require("libs/db_conecta.php");
 include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
-include("classes/db_pcdoccertif_classe.php");
+include("classes/db_tipoanexo_classe.php");
 include("dbforms/db_funcoes.php");
 db_postmemory($HTTP_POST_VARS);
-$clpcdoccertif = new cl_pcdoccertif;
+$cltipoanexo = new cl_tipoanexo;
 $db_opcao = 1;
 $db_botao = true;
 if(isset($incluir)){
   db_inicio_transacao();
-  $clpcdoccertif->incluir($pc71_codigo);
+  $cltipoanexo->l213_descricao = $l213_descricao;
+  $cltipoanexo->incluir($l213_sequencial);
   db_fim_transacao();
 }
 ?>
@@ -58,9 +59,9 @@ if(isset($incluir)){
     <td width="140">&nbsp;</td>
   </tr>
 </table>
-<table width="790" border="0" cellspacing="0" cellpadding="0">
+<table border="0" cellspacing="0" cellpadding="0" align="center" style='margin-top:25px;'>
   <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+    <td height="430" align="center" valign="top" bgcolor="#CCCCCC"> 
     <center>
 	<?
 	include("forms/db_frmtipoanexo.php");
@@ -76,16 +77,16 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
 </html>
 <?
 if(isset($incluir)){
-  if($clpcdoccertif->erro_status=="0"){
-    $clpcdoccertif->erro(true,false);
+  if($cltipoanexo->erro_status=="0"){
+    $cltipoanexo->erro(true,false);
     $db_botao=true;
     echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
-    if($clpcdoccertif->erro_campo!=""){
-      echo "<script> document.form1.".$clpcdoccertif->erro_campo.".style.backgroundColor='#99A9AE';</script>";
-      echo "<script> document.form1.".$clpcdoccertif->erro_campo.".focus();</script>";
+    if($cltipoanexo->erro_campo!=""){
+      echo "<script> document.form1.".$cltipoanexo->erro_campo.".style.backgroundColor='#99A9AE';</script>";
+      echo "<script> document.form1.".$cltipoanexo->erro_campo.".focus();</script>";
     };
   }else{
-    $clpcdoccertif->erro(true,true);
+    $cltipoanexo->erro(true,true);
   };
 };
 ?>
