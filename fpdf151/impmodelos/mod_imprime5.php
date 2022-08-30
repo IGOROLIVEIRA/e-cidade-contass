@@ -530,7 +530,7 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
         $this->objpdf->text(145, $xlin, ' ' . substr($this->iPlanoPacto . "-" . $this->SdescrPacto, 0, 40));
     }
     $this->objpdf->Setfont('Arial', 'I', 5);
-    $this->objpdf->Image('imagens/files/' . $this->logo, 5, $xlin - 18, 20);
+    $this->objpdf->Image('imagens/files/' . $this->logo, 12, $xlin - 17, 15);
     $this->objpdf->Setfont('Arial', 'B', 9);
     $this->objpdf->text(40, $xlin - 15, $this->prefeitura);
     $this->objpdf->Setfont('Arial', '', 7);
@@ -546,7 +546,7 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
     $this->objpdf->text($xcol + 2, $xlin + 7,    'Processo');
     $this->objpdf->text($xcol + 2, $xlin + 10.5, 'Nº da Modalidade');
     if ($this->acordo) {
-        $this->objpdf->text($xcol + 70, $xlin + 10.5, 'Acordo');
+        $this->objpdf->text($xcol + 70, $xlin + 10.5, 'Contrato: ');
     }
     $this->objpdf->text($xcol + 2, $xlin + 14.5, 'Tipo de Compra');
     $this->objpdf->text($xcol + 2, $xlin + 18.5, 'Prazo de Entrega');
@@ -558,7 +558,7 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
     $this->objpdf->text($xcol + 35, $xlin + 7, ':  ' . $this->edital_licitacao);
     $this->objpdf->text($xcol + 35, $xlin + 10.5, ':  ' . $this->modalidade);
     if ($this->acordo) {
-        $this->objpdf->text($xcol + 80, $xlin + 10.5, ':  ' . $this->acordo . '/' . $this->anoacordo);
+        $this->objpdf->text($xcol + 82, $xlin + 10.5, ':  ' . $this->acordo . '/' . $this->anoacordo);
     }
     $this->objpdf->text($xcol + 35, $xlin + 14.5, ':  ' . $this->descr_tipocompra);
     $this->objpdf->text($xcol + 35, $xlin + 18.5, ':  ' . stripslashes($this->prazo_ent));
@@ -586,7 +586,7 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
     //    $this->objpdf->text($xcol + 108, $xlin + 34.5, "Característica Peculiar");
     //Quebrar o nome da unidade para 48 caracteres (3 parametro)
 
-    $this->objpdf->Setfont('Arial', '', 8);
+    $this->objpdf->Setfont('Arial', '', 7);
     $this->objpdf->text($xcol + 122, $xlin + 8, ' :  ' . $this->dotacao);
     $this->objpdf->text($xcol + 122, $xlin + 11.5, ' :  ' . db_formatar($this->orgao, 'orgao') . ' - ' . $this->descr_orgao);
     $this->objpdf->text($xcol + 122, $xlin + 14, ' :  ' . substr(db_formatar($this->orgao, 'orgao') . db_formatar($this->unidade, 'unidade') . ' - ' . $this->descr_unidade, 0, 46));
@@ -600,9 +600,9 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
     //    $this->objpdf->text($xcol + 138, $xlin + 34.5, ' :  ' . $this->cod_concarpeculiar . " - " . $this->descr_concarpeculiar);
 
     $this->objpdf->rect($xcol, $xlin + 36, $xcol + 198, 20, 2, 'DF', '1234');
-    $this->objpdf->Setfont('Arial', '', 6);
+    $this->objpdf->Setfont('Arial', '', 7);
     $this->objpdf->text($xcol + 2, $xlin + 38, 'Dados do Credor');
-    $this->objpdf->Setfont('Arial', 'B', 8);
+    $this->objpdf->Setfont('Arial', 'B', 7);
     $this->objpdf->text($xcol + 108, $xlin + 42, 'Cod.CGM');
     $this->objpdf->text($xcol + 155, $xlin + 42, (strlen($this->cnpj) == 11 ? 'CPF' : 'CNPJ'));
     $this->objpdf->text($xcol + 2, $xlin + 42, 'Nome');
@@ -615,17 +615,17 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
     $this->objpdf->text($xcol + 2, $xlin + 51, 'Contato');
     $this->objpdf->text($xcol + 108, $xlin + 51, 'Telefone');
     $this->objpdf->text($xcol + 155, $xlin + 51, 'FAX');
-    $this->objpdf->Setfont('Arial', '', 8);
+    $this->objpdf->Setfont('Arial', '', 7);
     $this->objpdf->text($xcol + 175, $xlin + 42, ':  ' . (strlen($this->cnpj) == 11 ? db_formatar($this->cnpj, 'cpf') : db_formatar($this->cnpj, 'cnpj')));
     $this->objpdf->text($xcol + 122, $xlin + 42, ':  ' . $this->numcgm);
-    $this->objpdf->text($xcol + 18, $xlin + 42, ':  ' . $this->nome);
-    $this->objpdf->text($xcol + 18, $xlin + 45, ':  ' . $this->ender);
+    $this->objpdf->text($xcol + 14, $xlin + 42, ':  ' . $this->nome);
+    $this->objpdf->text($xcol + 14, $xlin + 45, ':  ' . $this->ender);
     $this->objpdf->text($xcol + 122, $xlin + 45, ':  ' . $this->numero);
     $this->objpdf->text($xcol + 175, $xlin + 45, ':  ' . $this->compl);
-    $this->objpdf->text($xcol + 18, $xlin + 48, ':  ' . $this->munic . '-' . $this->ufFornecedor);
+    $this->objpdf->text($xcol + 14, $xlin + 48, ':  ' . $this->munic . '-' . $this->ufFornecedor);
     $this->objpdf->text($xcol + 122, $xlin + 48, ':  ' . $this->bairro);
     $this->objpdf->text($xcol + 175, $xlin + 48, ':  ' . $this->cep);
-    $this->objpdf->text($xcol + 18, $xlin + 51, ':  ' . $this->contato);
+    $this->objpdf->text($xcol + 14, $xlin + 51, ':  ' . $this->contato);
     $this->objpdf->text($xcol + 122, $xlin + 51, ':  ' . $this->telefone);
     $this->objpdf->text($xcol + 175, $xlin + 51, ':  ' . $this->fax);
 

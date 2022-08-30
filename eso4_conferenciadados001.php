@@ -138,6 +138,7 @@ $mesfolha = DBPessoal::getMesFolha();
                             <option value="S2306">S-2306 - Trabalhador Sem Vínculo de Emprego/Estatutário - Alteração Contratual</option>
                             <option value="S2400">S-2400 - Cadastro de Beneficiário - Entes Públicos - Início</option>
                             <option value="S2410">S-2410 - Cadastro de Benefício - Entes Públicos - Início</option>
+                            <option value="S2299">S-2299 - Desligamento</option>
                         </select>
                     </td>
                 </tr>
