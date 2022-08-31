@@ -2446,7 +2446,7 @@ class cl_formulario_rel_pes {
           if (DBPessoal::verificarUtilizacaoEstruturaSuplementar()) {
             $result_complementar = db_query("select distinct rh141_codigo as semestralidade from rhfolhapagamento where rh141_tipofolha = 3 and rh141_anousu = ".$$campoano." and rh141_mesusu = ".$$campomes." order by semestralidade");
           } else {
-            $result_complementar = db_query("select distinct r48_semest as semestralidade from gerfcom  where r48_anousu = ".$$campoano." and r48_mesusu = ".$$campomes);
+            $result_complementar = db_query("select distinct r48_semest as semestralidade from gerfcom  where r48_anousu = ".$$campoano." and r48_mesusu = ".$$campomes . " and r48_instit = ". db_getsession("DB_instit"));
           }
 
           if(pg_numrows($result_complementar) > 0){

@@ -159,7 +159,7 @@ class PlanilhaArrecadacao {
    * @param $sDataAutenticacao
    */
   public function setDataAutenticacao($sDataAutenticacao) {
-    $this->oDataAutenticacao = new DBDate($sDataAutenticacao);
+    $this->oDataAutenticacao = date("Y-m-d", strtotime($sDataAutenticacao));
   }
 
   /**

@@ -50,12 +50,8 @@ global $e54_nummodalidade;
 $this->objpdf->text(130, ($xlin + 6.5), 'PROCESSO LICITÓRIO:' . CHR(176));
 $this->objpdf->text(160, ($xlin + 6.5), $e54_numerl . " MODALIDADE: " . $e54_nummodalidade);
 $this->objpdf->text(130, ($xlin + $linpc - 2.25), 'TIPO DA COMPRA: ');
-$this->objpdf->text(165, ($xlin + $linpc - 2.25), db_formatar(pg_result(
-    $this->recorddositens,
-    0,
-    $this->sTipoCompra
-), 's', '0', 6, 'e'));
-
+$this->objpdf->Setfont('Arial', 'B', 7);
+$this->objpdf->text(153, 21.8, db_formatar(pg_result($this->recorddositens,0,$this->sTipoCompra), 's', '0', 6, 'e'));
 
 $this->objpdf->Setfont('Arial', 'B', 9);
 $this->objpdf->Image('imagens/files/' . $this->logo, 15, $xlin - 17, 12);
