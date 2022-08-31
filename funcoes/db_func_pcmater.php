@@ -25,5 +25,5 @@
  *                                licenca/licenca_pt.txt 
  */
 
-$campos = "pcmater.pc01_codmater,pcmater.pc01_descrmater,pcmater.pc01_complmater,pcmater.pc01_codsubgrupo,pcmater.pc01_servico";
+$campos = "pcmater.pc01_codmater,pcmater.pc01_descrmater,pcmater.pc01_complmater,pcmater.pc01_codsubgrupo,pcmater.pc01_servico,pc01_instit,pc01_codmaterant";
 ?>

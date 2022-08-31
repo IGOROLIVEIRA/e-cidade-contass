@@ -25,7 +25,6 @@
  *                                licenca/licenca_pt.txt
  */
 
-exit;
 //include("assinatura.php");
 //$classinatura = new cl_assinatura;
 

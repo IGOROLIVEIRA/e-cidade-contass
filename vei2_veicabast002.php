@@ -91,12 +91,12 @@ if (isset($ve01_codigo) && trim($ve01_codigo)!=""){
   $dbwhere .= "ve01_codigo in (".$ve01_codigo.") ";
 }
 
-if (isset($ve01_veiccadtipo) && trim($ve01_veiccadtipo) != ""){
+if (isset($si04_especificacao) && trim($si04_especificacao) != ""){
 
   if ($dbwhere != ""){
     $dbwhere .= $and;
   }
-  $dbwhere .= "ve01_veiccadtipo=".$ve01_veiccadtipo;
+  $dbwhere .= "si04_especificacao=".$si04_especificacao;
 }
 
 if (isset($ve01_veiccadmarca) && trim($ve01_veiccadmarca) != ""){
@@ -152,9 +152,9 @@ if (isset($quebrar_por) && trim($quebrar_por)!=""){
 
   }
 
-  if ($quebrar_por == "T"){   // Tipo
-    $cod_quebra = "ve01_veiccadtipo";
-    $quebrar = "Agrupado por Tipo de Veiculo";
+  if ($quebrar_por == "E"){   // Especificacao
+    $cod_quebra = "si04_especificacao";
+    $quebrar = "Agrupado por Espeficicacao de Veiculo";
   }
 
   if ($quebrar_por == "M"){   // Marca
@@ -212,7 +212,7 @@ $pdf->lMargin = 3;
 $pdf->SetFont('Arial','B',8);
 //quebra de página
 $cod_veiculo=0;
-$cod_veiccadtipo=0;
+$cod_tipoveiculos=0;
 $cod_veiccadmarca=0;
 $cod_veiccadmodelo=0;
 $cod_veiccadcentral=0;
@@ -287,25 +287,25 @@ for($x = 0; $x < $numrows; $x++){
 	    }
 
 		}
-		if(    array_key_exists($ve01_veiccadtipo,$aCombustiveisTipoVeiculos)
-		    && array_key_exists($ve20_descr,      $aCombustiveisTipoVeiculos[$ve01_veiccadtipo])
-		    && array_key_exists($ve26_descr,      $aCombustiveisTipoVeiculos[$ve01_veiccadtipo][$ve20_descr] ) ) {
-		    $aCombustiveisTipoVeiculos[$ve01_veiccadtipo][$ve20_descr][$ve26_descr]['total_combustivel'] 	+= $ve70_litros;
-		    $aCombustiveisTipoVeiculos[$ve01_veiccadtipo][$ve20_descr][$ve26_descr]['total_valor'] 				+= $ve70_valor;
-		    $aCombustiveisTipoVeiculos[$ve01_veiccadtipo][$ve20_descr][$ve26_descr]['total_kmrodados']   	+= $medida_rodada;
+		if(    array_key_exists($si04_especificacao,$aCombustiveisTipoVeiculos)
+		    && array_key_exists($si05_descricao,      $aCombustiveisTipoVeiculos[$si04_especificacao])
+		    && array_key_exists($ve26_descr,      $aCombustiveisTipoVeiculos[$si04_especificacao][$si05_descricao] ) ) {
+		    $aCombustiveisTipoVeiculos[$si04_especificacao][$si05_descricao][$ve26_descr]['total_combustivel'] 	+= $ve70_litros;
+		    $aCombustiveisTipoVeiculos[$si04_especificacao][$si05_descricao][$ve26_descr]['total_valor'] 				+= $ve70_valor;
+		    $aCombustiveisTipoVeiculos[$si04_especificacao][$si05_descricao][$ve26_descr]['total_kmrodados']   	+= $medida_rodada;
 	      if($ve70_litros > 0 ) {
-		      $aCombustiveisTipoVeiculos[$ve01_veiccadtipo][$ve20_descr][$ve26_descr]['total_consumo_med'] += ( $medida_rodada/$ve70_litros );
+		      $aCombustiveisTipoVeiculos[$si04_especificacao][$si05_descricao][$ve26_descr]['total_consumo_med'] += ( $medida_rodada/$ve70_litros );
 	      }else{
-	    		$aCombustiveisTipoVeiculos[$ve01_veiccadtipo][$ve20_descr][$ve26_descr]['total_consumo_med'] += 0;
+	    		$aCombustiveisTipoVeiculos[$si04_especificacao][$si05_descricao][$ve26_descr]['total_consumo_med'] += 0;
 	      }
 		}else{
-		    $aCombustiveisTipoVeiculos[$ve01_veiccadtipo][$ve20_descr][$ve26_descr]['total_combustivel'] = $ve70_litros;
-		    $aCombustiveisTipoVeiculos[$ve01_veiccadtipo][$ve20_descr][$ve26_descr]['total_valor'] = $ve70_valor;
-		    $aCombustiveisTipoVeiculos[$ve01_veiccadtipo][$ve20_descr][$ve26_descr]['total_kmrodados']   = $medida_rodada;
+		    $aCombustiveisTipoVeiculos[$si04_especificacao][$si05_descricao][$ve26_descr]['total_combustivel'] = $ve70_litros;
+		    $aCombustiveisTipoVeiculos[$si04_especificacao][$si05_descricao][$ve26_descr]['total_valor'] = $ve70_valor;
+		    $aCombustiveisTipoVeiculos[$si04_especificacao][$si05_descricao][$ve26_descr]['total_kmrodados']   = $medida_rodada;
 	      if($ve70_litros > 0 ) {
-		      $aCombustiveisTipoVeiculos[$ve01_veiccadtipo][$ve20_descr][$ve26_descr]['total_consumo_med'] = ( $medida_rodada/$ve70_litros );
+		      $aCombustiveisTipoVeiculos[$si04_especificacao][$si05_descricao][$ve26_descr]['total_consumo_med'] = ( $medida_rodada/$ve70_litros );
 	      }else{
-	    		$aCombustiveisTipoVeiculos[$ve01_veiccadtipo][$ve20_descr][$ve26_descr]['total_consumo_med'] = 0;
+	    		$aCombustiveisTipoVeiculos[$si04_especificacao][$si05_descricao][$ve26_descr]['total_consumo_med'] = 0;
 	    }
 		}
 	}
@@ -330,8 +330,8 @@ for($x = 0; $x < $numrows; $x++){
    //por tipo
 
    if ($quebrar_por == "T"){
-       if ($cod_veiccadtipo != $ve01_veiccadtipo){
-           if ($cod_veiccadtipo == "0"){
+       if ($cod_tipoveiculos != $si04_especificacao){
+           if ($cod_tipoveiculos == "0"){
                $quebrapagina=false;
           }else{
                $quebrapagina=true;
@@ -563,7 +563,7 @@ for($x = 0; $x < $numrows; $x++){
 
 	  	}
 		  $pdf->cell(55,$alt,substr($ve22_descr,0,30),0,0,"L",$p);
-		  $pdf->cell(55,$alt,substr($ve20_descr,0,30),0,1,"L",$p);
+		  $pdf->cell(55,$alt,substr($si05_descricao,0,30),0,1,"L",$p);
 
 
 		}
@@ -593,7 +593,7 @@ for($x = 0; $x < $numrows; $x++){
   $total_geral_consumo_medio+= $consumo_medio;
 
   $cod_veiculo       = $ve01_codigo;
-  $cod_veiccadtipo   = $ve01_veiccadtipo;
+  $cod_tipoveiculos   = $si04_especificacao;
   $cod_veiccadmarca  = $ve01_veiccadmarca;
   $cod_veiccadmodelo = $ve01_veiccadmodelo;
 

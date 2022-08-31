@@ -113,7 +113,7 @@ $header = " <header>
                         <i>{$oInstit->getTelefone()} - CNPJ: " . db_formatar($oInstit->getCNPJ(), "cnpj") . "</i><br/>
                         <i>{$oInstit->getSite()}</i>
                     </div>
-                    <div style=\"width:35%; float:right\" class=\"box\">
+                    <div style=\"width:40%; float:right\" class=\"box\">
                     <b>Relatório Faturamento dos Fornecedores Mensais</b><br/>  ";
 foreach ($aInstits as $iInstit) {
     $oInstituicao = new Instituicao($iInstit);
@@ -154,11 +154,11 @@ $dataFinal = str_replace("/","-",db_formatar($dtDataFinal, "d"));
 $whereDatas = $clFornecedores->validaDatas($dataInicial, $dataFinal);
 
 if (isset($whereDatas)) {
+    $resultFornecedoresTotais = $clFornecedores->sql_record($clFornecedores->sql_query(null, "fm101_sequencial,fm101_numcgm,z01_nome,fm101_datafim", "z01_nome", " fm101_datafim >= '$dataInicial' or fm101_datafim is null "));
     $resultFornecedores = $clFornecedores->sql_record($clFornecedores->sqlNotasFiscais(null, "", null, $whereDatas, $tipoImpressao, $sCredoresSelecionados));
 }
-
-
-$aFornecedores = pg_fetch_all($resultFornecedores);
+    $aFornecedoresTotais = pg_fetch_all($resultFornecedoresTotais);
+    $aFornecedores = pg_fetch_all($resultFornecedores);
 
 ?>
 
@@ -268,20 +268,29 @@ $aFornecedores = pg_fetch_all($resultFornecedores);
             $contador = 1;
             $control = 0;
                
-            for ($cont = 0; $cont < count($aFornecedores); $cont++) {
+            for ($cont = 0; $cont < count($aFornecedoresTotais); $cont++) {
 
                 $oFornecedores = db_utils::fieldsMemory($resultFornecedores, $cont);
-                $hash = $oFornecedores->z01_nome;
-               
-              
-                foreach ($aFornecedores as $fornecedor) {
+                $oFornecedoresTotais = db_utils::fieldsMemory($resultFornecedoresTotais, $cont);
+                $hash = $oFornecedoresTotais->z01_nome;
+                // $hash1 = $oFornecedoresTotais->z01_nome;
+                             
+                foreach ($oFornecedoresTotais as $fornecedor) {
                     
                     $fornecedorMensal = new stdClass();
-
-                    if (!isset($aFornecedores[$hash]) && $oFornecedores->fm101_numcgm) {
-                        $fornecedorMensal->fm101_numcgm = $oFornecedores->fm101_numcgm;
-                        $fornecedorMensal->fm101_fornecedor = $oFornecedores->z01_nome;
-                        $fornecedorMensal->fm101_valor = db_formatar($oFornecedores->e70_vlrliq, "f");
+                    // echo $oFornecedores->fm101_numcgm."-".$oFornecedoresTotais->fm101_numcgm."<br/>";
+                    if ((!isset($aFornecedores[$hash]) && $oFornecedoresTotais->fm101_numcgm)) {
+                        if($oFornecedores->fm101_numcgm == $oFornecedoresTotais->fm101_numcgm){
+                            // echo "aqeui";
+                            $fornecedorMensal->fm101_numcgm = $oFornecedores->fm101_numcgm;
+                            $fornecedorMensal->fm101_fornecedor = $oFornecedores->z01_nome;
+                            $fornecedorMensal->fm101_valor = db_formatar($oFornecedores->e70_valor, "f");
+                        }else{
+                            // echo "la";
+                            $fornecedorMensal->fm101_numcgm = $oFornecedoresTotais->fm101_numcgm;
+                            $fornecedorMensal->fm101_fornecedor = $oFornecedoresTotais->z01_nome;
+                            $fornecedorMensal->fm101_valor = db_formatar(0, "f");
+                        }
 
                         if ($cont >= 1) {
                             $or = "OR" . $cont;
@@ -337,7 +346,7 @@ HTML;
                 }
               
             }
-
+        //  exit;
             ?>
             </tbody>
         </table>

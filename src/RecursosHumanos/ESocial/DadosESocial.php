@@ -48,24 +48,17 @@ class DadosESocial
         //echo $tipo;
         //exit;
         switch ($tipo) {
-            case '40':
-                return $this->buscaPreenchimentos($matricula);
-                break;
-            case '37':
-                return $this->buscaPreenchimentos($matricula);
-                break;
-
-            case '12':
-                return $this->buscaPreenchimentos($matricula);
-                break;
-
-            case '2':
-                return $this->buscaPreenchimentos($matricula);
-                break;
-            case '13':
-                return $this->buscaPreenchimentos($matricula);
-                break;
-            case '15':
+            case Tipo::AFASTAMENTO_TEMPORARIO:
+            case Tipo::CADASTRAMENTO_INICIAL:
+            case Tipo::REMUNERACAO_TRABALHADOR:
+            case Tipo::RUBRICA:
+            case Tipo::REMUNERACAO_SERVIDOR:
+            case Tipo::DESLIGAMENTO:
+            case TIPO::CADASTRO_BENEFICIO:
+            case TIPO::ALTERACAODEDADOS:
+            case TIPO::ALTERACAO_CONTRATO:
+            case Tipo::CD_BENEF_IN:
+            case Tipo::BENEFICIOS_ENTESPUBLICOS:
                 return $this->buscaPreenchimentos($matricula);
                 break;
             default:
@@ -94,10 +87,6 @@ class DadosESocial
      */
     private function buscaPreenchimentos($matricula = null)
     {
-        //echo 'tst';
-        //echo $this->tipo;
-        //echo Tipo::AFASTAMENTO_TEMPORARIO;
-        //exit;
         $configuracao = new Configuracao();
         $formularioId = $configuracao->getFormulario($this->tipo);
         $preenchimento = new Preenchimentos();
@@ -123,7 +112,6 @@ class DadosESocial
             case Tipo::ALTERACAO_CONTRATO:
             case Tipo::TSV_INICIO:
             case Tipo::TSV_ALT_CONTR:
-            case Tipo::CD_BENEF_IN:
                 return $preenchimento->buscarUltimoPreenchimentoInstituicao($formularioId, $matricula);
             case Tipo::CADASTRAMENTO_INICIAL:
                 return $preenchimento->buscarPreenchimentoS2200($formularioId, $matricula);
@@ -131,10 +119,18 @@ class DadosESocial
                 return $preenchimento->buscarPreenchimentoS1200($formularioId, $matricula);
             case Tipo::REMUNERACAO_SERVIDOR:
                 return $preenchimento->buscarPreenchimentoS1202($formularioId, $matricula);
+            case Tipo::BENEFICIOS_ENTESPUBLICOS:
+                return $preenchimento->buscarPreenchimentoS1207($formularioId, $matricula);
             case Tipo::PAGAMENTOS_RENDIMENTOS:
                 return $preenchimento->buscarPreenchimentoS1210($formularioId, $matricula);
             case Tipo::AFASTAMENTO_TEMPORARIO:
                 return $preenchimento->buscarPreenchimentoS2230($formularioId, $matricula);
+            case Tipo::CD_BENEF_IN:
+                return $preenchimento->buscarPreenchimentoS2400($formularioId, $matricula);
+            case Tipo::CADASTRO_BENEFICIO:
+                return $preenchimento->buscarPreenchimentoS2410($formularioId, $matricula);
+            case Tipo::DESLIGAMENTO:
+                return $preenchimento->buscarPreenchimento($this->tipo, $matricula);
             default:
                 throw new Exception('Tipo não encontrado.');
         }

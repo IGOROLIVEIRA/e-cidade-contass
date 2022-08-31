@@ -26,6 +26,7 @@ class Tipo
     const PORTUARIO = 11;
     const REMUNERACAO_TRABALHADOR = 12;
     const REMUNERACAO_SERVIDOR = 13;
+    const BENEFICIOS_ENTESPUBLICOS = 14;
     const PAGAMENTOS_RENDIMENTOS = 15;
     const REGISTRO_PRELIMINAR = 24;
     const CADASTRAMENTO_INICIAL = 37;
@@ -36,6 +37,8 @@ class Tipo
     const TSV_ALT_CONTR = 45;
     const CD_BENEF_IN = 47;
     const AFASTAMENTO_TEMPORARIO = 40;
+    const CADASTRO_BENEFICIO = 49;
+    const DESLIGAMENTO = 25;
 
 
     /**
@@ -83,6 +86,7 @@ class Tipo
     const S2306 = 'S2306';
     const S2399 = 'S2399';
     const S2400 = 'S2400';
+    const S2410 = 'S2410';
     const S3000 = 'S3000';
     const S5001 = 'S5001';
     const S5002 = 'S5002';

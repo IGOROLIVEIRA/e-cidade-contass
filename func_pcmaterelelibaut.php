@@ -204,7 +204,7 @@ if ($taxatabela == "false") {
             if (file_exists("funcoes/db_func_pcmaterele.php") == true) {
               include("funcoes/db_func_pcmaterele.php");
             } else {
-              $campos = "pc01_codmater,pc01_descrmater,pc01_complmater,o56_elemento,o56_descr,pc07_codele,pc01_servico";
+              $campos = "pc01_codmater,pc01_descrmater,pc01_complmater,o56_elemento,o56_descr,pc07_codele,pc01_servico,pc01_instit,pc01_codmaterant";
             }
           }
           if (isset($criterioadjudicacao) && $criterioadjudicacao == true && isset($z01_numcgm)) {
