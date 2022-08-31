@@ -67,8 +67,12 @@ class AutenticacaoPlanilha {
     if (!$oPlanilha instanceof PlanilhaArrecadacao) {
       throw new ParameterException("Não é um objeto do tipo PlanilhaArrecadacao.");
     }
-    $this->oPlanilha      = $oPlanilha;
-    $this->dtAutenticacao = date("Y-m-d", db_getsession("DB_datausu"));
+    $this->oPlanilha = $oPlanilha;
+    if ($oPlanilha->getDataAutenticacao()) {
+        $this->dtAutenticacao = $oPlanilha->getDataAutenticacao();
+    } else { 
+        $this->dtAutenticacao = date("Y-m-d", db_getsession("DB_datausu"));
+    }
     $this->iCodigoUsuario = db_getsession("DB_id_usuario");
     $this->sIpTerminal    = db_getsession("DB_ip");
   }
@@ -93,6 +97,7 @@ class AutenticacaoPlanilha {
     }
 
   	$sRetornoAutenticacao = db_utils::fieldsMemory($rsAutenticacao, 0)->fc_autenticaplanilha;
+
   	if (substr($sRetornoAutenticacao, 0, 1) != '1') {
 
   		$sMsgErro  = "Erro ao Autenticar.\n";
@@ -104,14 +109,13 @@ class AutenticacaoPlanilha {
 
   	foreach ($aAutenticacoes as $iCodigoAutenticacao) {
 
-  	  $oDadosAutenticacao  = self::getDadosAutenticacao(null);
+  	  $oDadosAutenticacao  = self::getDadosAutenticacao($this->oPlanilha->getDataAutenticacao());
   	  $lReceita           = $this->executarLancamentoContabeis($iCodigoAutenticacao, false, $oDadosAutenticacao);
   	  $lReceitaExtra      = $this->executarLancamentosReceitaExtraOrcamentaria($iCodigoAutenticacao, false, $oDadosAutenticacao);
 
   	  if (!$lReceita && !$lReceitaExtra) {
   	    throw new BusinessException("Não encontradas receitas para serem arrecadadas");
-  	  }
-
+  	  }      
   	}
 
   	return true;
@@ -153,7 +157,7 @@ class AutenticacaoPlanilha {
 
     	foreach ($aAutenticacoes as $iCodigoAutenticacao) {
 
-    	  $oDadoAutenticacao  = self::getDadosAutenticacao(null);
+    	  $oDadoAutenticacao  = self::getDadosAutenticacao($this->oPlanilha->getDataAutenticacao());
     		$lReceita           = $this->executarLancamentoContabeis($iCodigoAutenticacao, true, $oDadoAutenticacao );
     		$lReceitaExtra      = $this->executarLancamentosReceitaExtraOrcamentaria($iCodigoAutenticacao, true, $oDadoAutenticacao );
 
