@@ -105,7 +105,7 @@ class ImportacaoReceitaOrcamentariaLayout2
 
         while ($oTabRec = pg_fetch_object($rsTabrec)) {
             $this->oReceita->iReceita = $oTabRec->k02_codigo;
-            $this->oReceita->iRecurso = $oTabRec->recurso;
+            $this->oReceita->iRecurso = $oTabRec->o70_codigo;
         }
     }
 
