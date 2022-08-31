@@ -288,6 +288,10 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
     $pdf1->resumo = "";
     $resumo_lic   = "";
 
+    $pdf1->edital_licitacao = $e60_numerol;
+    $pdf1->modalidade = $e54_nummodalidade;
+    $pdf1->descr_tipocompra = $pc50_descr;
+
     $result_licita = $clempautitem->sql_record($clempautitem->sql_query_lic(null, null, "distinct l20_edital, l20_numero, l20_anousu, l20_objeto,l03_descr", null, "e55_autori = $e54_autori "));
 
     if ($clempautitem->numrows > 0) {
