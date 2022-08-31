@@ -25,7 +25,6 @@
  *                                licenca/licenca_pt.txt
  */
 
-require_once("fpdf151/pdf3.php");
 require_once("libs/db_sql.php");
 require_once("dbforms/db_funcoes.php");
 require_once("classes/db_parissqn_classe.php");
@@ -230,7 +229,7 @@ $arr = array ();
 $arr02 = array ();
 $descr = "";
 
-$result = $cltabativ->sql_record($cltabativ->sql_queryinf($inscr, "", "*", "", " q88_inscr is null and (q07_databx < '" . date("Y-m-d", db_getsession("DB_datausu")) . "' or  q07_databx is null) and tabativ.q07_inscr = $inscr "));
+$result = $cltabativ->sql_record($cltabativ->sql_queryinf($inscr, "", "*", "", " (q07_databx <= '" . date("Y-m-d", db_getsession("DB_datausu")) . "' or  q07_databx is null) and tabativ.q07_inscr = $inscr "));
 $numrows = $cltabativ->numrows;
 
 if ($numrows != 0) {
