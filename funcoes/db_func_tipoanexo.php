@@ -25,5 +25,5 @@
  *                                licenca/licenca_pt.txt 
  */
 
-$campos = "tipoanexo.l213_sequencial,tipoanexo.pc71_descr,tipoanexo.l213_descricao";
+$campos = "l213_sequencial,l213_descricao";
 ?>

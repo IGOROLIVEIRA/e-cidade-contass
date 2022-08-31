@@ -35,6 +35,7 @@ require_once("dbforms/db_funcoes.php");
 
 $iOpcaoProcesso = 1;
 $lExibirMenus   = true;
+$cltipoanexo = new cl_tipoanexo;
 
 $oGet = db_utils::postMemory($_GET);
 
@@ -42,25 +43,11 @@ $oGet = db_utils::postMemory($_GET);
  * Codigo do precesso informado por GET
  * - Pesquisa numero e ano do processo
  */
-if (!empty($oGet->iCodigoProcesso)) {
 
-  $iOpcaoProcesso = 3;
-  $lExibirMenus   = false;
-
-  $oDaoProtprocesso = db_utils::getDao('protprocesso');
-  $sSqlNumeroProcesso = $oDaoProtprocesso->sql_query_file($oGet->iCodigoProcesso, 'p58_numero, p58_ano');
-  $rsNumeroProcesso = $oDaoProtprocesso->sql_record($sSqlNumeroProcesso);
-
-  if ($oDaoProtprocesso->numrows > 0) {
-
-    $oDaoProcesso = db_utils::fieldsMemory($rsNumeroProcesso, 0);
-    $p58_numero = $oDaoProcesso->p58_numero . '/' . $oDaoProcesso->p58_ano;
-  }
-}
 
 $oRotulo  = new rotulocampo;
-$oDaoProtprocessodocumento = db_utils::getDao('protprocessodocumento');
-$oDaoProtprocessodocumento->rotulo->label();
+$oDaoLicanexopncpdocumento = db_utils::getDao('licanexopncpdocumento');
+$oDaoLicanexopncpdocumento->rotulo->label();
 
 $oRotulo->label("p58_numero");
 $oRotulo->label("z01_nome");
@@ -113,17 +100,29 @@ $oRotulo->label("z01_nome");
           </tr>
 
           <tr>
-            <td nowrap title="<?php echo $Tp01_descricao; ?>">
-              <?php echo "Tipo:"; ?>
-            </td>
+          <td nowrap title="<?= @$Tl213_sequencial ?>">
+                                        <b>
+                                            <?
+                                            db_ancora("Tipo de Anexo :", "js_pesquisal20_codtipocom(true);", 3);
+                                            ?>
+                                        </b>
+                                    </td>
             <td>
             <?
-                                        $arr_tipo = array(
-                                            "0" => "Selecione",
-                                            "1" => "teste 01",
-                                            "2" => "teste 02"
-                                        );
-                                        db_select("tipo", $arr_tipo, true, $db_opcao, "onchange=''");
+                                        $result_tipo = $cltipoanexo->sql_record($cltipoanexo->sql_query());
+                                        if ($cltipoanexo->numrows == 0) {
+                                            db_msgbox("Nenhuma Tipo de anexo cadastrado!!");
+                                            $result_tipo = "";
+                                            $db_opcao = 3;
+                                            $db_botao = false;
+                                            db_input("l213_sequencial", 10, "", true, "text");
+                                            db_input("l213_sequencial", 40, "", true, "text");
+                                        } else {
+                                            db_selectrecord("l213_sequencial", @$result_tipo, true, $db_opcao, "js_mostraRegistroPreco()");
+                                            if (isset($l213_sequencial) && $l213_sequencial != "") {
+                                                echo "<script>document.form1.l213_sequencial.selected=$l213_sequencial;</script>";
+                                            }   
+                                        }
                                         ?>
             </td>
           </tr>
@@ -153,6 +152,8 @@ $oRotulo->label("z01_nome");
 
 </html>
 <script type="text/javascript">
+
+document.getElementById("l213_sequencial").style.display = "none";
   /**
    * Pesquisa processo do protocolo e depois os documentos anexados
    */
@@ -657,7 +658,6 @@ $oRotulo->label("z01_nome");
     $('l20_codigo').value = iCodigoProcesso;
     $('l20_objeto').value = sNome;
     $('p58_codproc').value = iCodigoProcesso;
-    $('p01_descricao').value = '';
     $('uploadfile').disabled = false;
     db_iframe_proc.hide();
     js_buscarDocumentos();

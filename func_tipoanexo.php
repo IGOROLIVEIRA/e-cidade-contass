@@ -35,7 +35,6 @@ db_postmemory($HTTP_POST_VARS);
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 $cltipoanexo = new cl_tipoanexo;
 $cltipoanexo->rotulo->label("l213_sequencial");
-$cltipoanexo->rotulo->label("l213_sequencial");
 ?>
 <html>
 <head>
@@ -59,16 +58,7 @@ $cltipoanexo->rotulo->label("l213_sequencial");
 		       ?>
             </td>
           </tr>
-          <tr> 
-            <td width="4%" align="right" nowrap title="<?=$Tl213_sequencial?>">
-              <?=$Ll213_sequencial?>
-            </td>
-            <td width="96%" align="left" nowrap> 
-              <?
-		       db_input("l213_sequencial",8,$Il213_sequencial,true,"text",4,"","chave_l213_sequencial");
-		       ?>
-            </td>
-          </tr>
+          
           <tr> 
             <td colspan="2" align="center"> 
               <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar"> 
@@ -79,7 +69,7 @@ $cltipoanexo->rotulo->label("l213_sequencial");
         </form>
         </table>
       </td>
-  </tr>
+  </tr> 
   <tr> 
     <td align="center" valign="top"> 
       <?
@@ -99,12 +89,12 @@ $cltipoanexo->rotulo->label("l213_sequencial");
            $sql = $cltipoanexo->sql_query("",$campos,"l213_sequencial","");
         }
         db_lovrot($sql,15,"()","",$funcao_js);
-      }else{
+      }else{ 
         if($pesquisa_chave!=null && $pesquisa_chave!=""){
           $result = $cltipoanexo->sql_record($cltipoanexo->sql_query($pesquisa_chave));
           if($cltipoanexo->numrows!=0){
             db_fieldsmemory($result,0);
-            echo "<script>".$funcao_js."('$pc71_descr',false);</script>";
+            echo "<script>".$funcao_js."('$l213_descricao',false);</script>";
           }else{
 	         echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
           }

@@ -165,19 +165,6 @@ class cl_tipoanexo {
       $this->atualizacampos();
      $sql = " update tipoanexo set ";
      $virgula = "";
-     if(trim($this->l213_sequencial)!="" || isset($GLOBALS["HTTP_POST_VARS"]["l213_sequencial"])){ 
-       $sql  .= $virgula." l213_sequencial = $this->l213_sequencial ";
-       $virgula = ",";
-       if(trim($this->l213_sequencial) == null ){ 
-         $this->erro_sql = " Campo Sequencial nao Informado.";
-         $this->erro_campo = "l213_sequencial";
-         $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-         $this->erro_status = "0";
-         return false;
-       }
-     }
      if(trim($this->l213_descricao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["l213_descricao"])){ 
        $sql  .= $virgula." l213_descricao = '$this->l213_descricao' ";
        $virgula = ",";
@@ -192,7 +179,7 @@ class cl_tipoanexo {
        }
      }
      $sql .= " where ";
-     if($l213_sequencial!=null){
+     if($this->l213_sequencial!=null){
        $sql .= " l213_sequencial = $this->l213_sequencial";
      }
      $resaco = $this->sql_record($this->sql_query_file($this->l213_sequencial));
@@ -261,11 +248,11 @@ class cl_tipoanexo {
                     where ";
      $sql2 = "";
      if($dbwhere==null || $dbwhere ==""){
-        if($l213_sequencial != ""){
+        if($this->l213_sequencial != ""){
           if($sql2!=""){
             $sql2 .= " and ";
           }
-          $sql2 .= " l213_sequencial = $l213_sequencial ";
+          $sql2 .= " l213_sequencial = $this->l213_sequencial ";
         }
      }else{
        $sql2 = $dbwhere;
@@ -274,7 +261,7 @@ class cl_tipoanexo {
      if($result==false){ 
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "Acordo Tipo nao Excluído. Exclusão Abortada.\\n";
-       $this->erro_sql .= "Valores : ".$l213_sequencial;
+       $this->erro_sql .= "Valores : ".$this->l213_sequencial;
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
@@ -284,7 +271,7 @@ class cl_tipoanexo {
        if(pg_affected_rows($result)==0){
          $this->erro_banco = "";
          $this->erro_sql = "Acordo Tipo nao Encontrado. Exclusão não Efetuada.\\n";
-         $this->erro_sql .= "Valores : ".$l213_sequencial;
+         $this->erro_sql .= "Valores : ".$this->l213_sequencial;
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "1";
@@ -293,7 +280,7 @@ class cl_tipoanexo {
        }else{
          $this->erro_banco = "";
          $this->erro_sql = "Exclusão efetuada com Sucesso\\n";
-         $this->erro_sql .= "Valores : ".$l213_sequencial;
+         $this->erro_sql .= "Valores : ".$this->l213_sequencial;
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "1";
