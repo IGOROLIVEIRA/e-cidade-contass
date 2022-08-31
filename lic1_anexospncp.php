@@ -46,7 +46,7 @@ $oGet = db_utils::postMemory($_GET);
 
 
 $oRotulo  = new rotulocampo;
-$oDaoLicanexopncpdocumento = db_utils::getDao('licanexopncpdocumento');
+$oDaolicanexopncpdocumento = db_utils::getDao('licanexopncpdocumento');
 $oDaoLicanexopncpdocumento->rotulo->label();
 
 $oRotulo->label("p58_numero");
@@ -79,7 +79,7 @@ $oRotulo->label("z01_nome");
         <table class="form-container">
 
           <tr>
-            <td nowrap title="<?php echo $Tp01_protprocesso; ?>">
+            <td nowrap title="<?php echo $Tl216_licanexospncp; ?>">
               <?php db_ancora("Licitação: ", "js_pesquisarProcesso(true);", $iOpcaoProcesso); ?>
             </td>
             <td>
@@ -91,8 +91,8 @@ $oRotulo->label("z01_nome");
           </tr>
 
           <tr>
-            <td nowrap title="<?php echo $Tp01_documento; ?>">
-              <?php echo $Lp01_documento; ?>
+            <td nowrap title="<?php echo $Tl216_documento; ?>">
+              <?php echo $Ll216_documento; ?>
             </td>
             <td>
               <?php db_input("uploadfile", 53, 0, true, "file", 1); ?>
