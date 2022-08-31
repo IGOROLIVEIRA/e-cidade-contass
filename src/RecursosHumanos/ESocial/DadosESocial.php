@@ -54,6 +54,11 @@ class DadosESocial
             case Tipo::RUBRICA:
             case Tipo::REMUNERACAO_SERVIDOR:
             case Tipo::DESLIGAMENTO:
+            case TIPO::CADASTRO_BENEFICIO:
+            case TIPO::ALTERACAODEDADOS:
+            case TIPO::ALTERACAO_CONTRATO:
+            case Tipo::CD_BENEF_IN:
+            case Tipo::BENEFICIOS_ENTESPUBLICOS:
                 return $this->buscaPreenchimentos($matricula);
                 break;
             default:
@@ -107,7 +112,6 @@ class DadosESocial
             case Tipo::ALTERACAO_CONTRATO:
             case Tipo::TSV_INICIO:
             case Tipo::TSV_ALT_CONTR:
-            case Tipo::CD_BENEF_IN:
                 return $preenchimento->buscarUltimoPreenchimentoInstituicao($formularioId, $matricula);
             case Tipo::CADASTRAMENTO_INICIAL:
                 return $preenchimento->buscarPreenchimentoS2200($formularioId, $matricula);
@@ -115,10 +119,14 @@ class DadosESocial
                 return $preenchimento->buscarPreenchimentoS1200($formularioId, $matricula);
             case Tipo::REMUNERACAO_SERVIDOR:
                 return $preenchimento->buscarPreenchimentoS1202($formularioId, $matricula);
+            case Tipo::BENEFICIOS_ENTESPUBLICOS:
+                return $preenchimento->buscarPreenchimentoS1207($formularioId, $matricula);
             case Tipo::PAGAMENTOS_RENDIMENTOS:
                 return $preenchimento->buscarPreenchimentoS1210($formularioId, $matricula);
             case Tipo::AFASTAMENTO_TEMPORARIO:
                 return $preenchimento->buscarPreenchimentoS2230($formularioId, $matricula);
+            case Tipo::CD_BENEF_IN:
+                return $preenchimento->buscarPreenchimentoS2400($formularioId, $matricula);
             case Tipo::CADASTRO_BENEFICIO:
                 return $preenchimento->buscarPreenchimentoS2410($formularioId, $matricula);
             case Tipo::DESLIGAMENTO:

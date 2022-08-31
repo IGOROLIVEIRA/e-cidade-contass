@@ -108,15 +108,15 @@ $sqlemp .= "       o15_descr,                                                   
 $sqlemp .= "       e61_autori,                                                                ";
 $sqlemp .= "       pc50_descr as l03_descr,                                                   ";
 /*OC4401*/
-$sqlemp .= "        e60_id_usuario, ";
-$sqlemp .= "        db_usuarios.nome, ";
+$sqlemp .= "        e60_id_usuario,                                                           ";
+$sqlemp .= "        db_usuarios.nome,                                                         ";
 /*FIM - OC4401*/
 $sqlemp .= "       fc_estruturaldotacao(o58_anousu,o58_coddot) as estrutural                  ";
 $sqlemp .= "  from empempenho                                                                 ";
 /*OC4401*/
-$sqlemp .= " LEFT JOIN db_usuarios ON db_usuarios.id_usuario = e60_id_usuario";
+$sqlemp .= " LEFT JOIN db_usuarios ON db_usuarios.id_usuario = e60_id_usuario                  ";
 /*FIM - OC4401*/
-$sqlemp .= "       left join pctipocompra	 on pc50_codcom = e60_codcom                       ";
+$sqlemp .= "       left join pctipocompra	 on pc50_codcom = e60_codcom                      ";
 $sqlemp .= "       left join orcdotacao    	 on o58_coddot       = e60_coddot                 ";
 $sqlemp .= "                                and o58_instit       = ".db_getsession("DB_instit");
 $sqlemp .= "	                            and o58_anousu       = e60_anousu                 ";
@@ -163,10 +163,14 @@ if (!$rsSqlPcFornecOnPad == false && $cldb_pcforneconpad->numrows > 0) {
   $oPcFornecOnPad->pc63_conta_dig   = '';
 }
 
-$res_dot = db_dotacaosaldo(8,2,2,true," o58_coddot = $o58_coddot and o58_anousu = $o58_anousu");
-if (pg_numrows($res_dot)>0){
-  db_fieldsmemory($res_dot,0);
+//rotina que pega o numero de vias
+$result02 = db_query("select * from empanulado $where1 ");
+//db_criatabela($result02);
+if($clempparametro->numrows>0){
+  db_fieldsmemory($result02, 0);
 }
+
+
 
 
 $pdf = new scpdf();
@@ -174,16 +178,19 @@ $pdf->Open();
 $pdf1 = new db_impcarne($pdf,'12');
 $pdf1->objpdf->SetTextColor(0,0,0);
 
-//rotina que pega o numero de vias
-$result02 = db_query("select * from empanulado $where1 ");
-if($clempparametro->numrows>0){
-  db_fieldsmemory($result02,0);
-}
+
 
 $pdf1->nvias= 1;
 $nValorTotalAnulado = 0;
 for($i = 0;$i < pg_numrows($result02);$i++){
    db_fieldsmemory($result02,$i);
+
+   $dataAnt = date('Y-m-d', strtotime('-1 days', strtotime($e94_data)));
+
+   $res_dot = db_dotacaosaldo(8,2,2,true," o58_coddot = $o58_coddot and o58_anousu = $o58_anousu", $o58_anousu , $o58_anousu."-01-01", $dataAnt);
+   if (pg_numrows($res_dot)>0){
+      db_fieldsmemory($res_dot,0);
+   }
 
    $sqlitens  = "select distinct *                                                                           ";
    $sqlitens .= "     from empanuladoele                                                                     ";
@@ -193,9 +200,9 @@ for($i = 0;$i < pg_numrows($result02);$i++){
    $sqlitens .= "                                          and empempitem.e62_numemp = empanulado.e94_numemp ";
    $sqlitens .= "                inner join empempenho      on e60_numemp            = e62_numemp            ";
    /*OC4401*/
-   $sqlitens .= "                LEFT JOIN db_usuarios ON db_usuarios.id_usuario = e94_id_usuario";
+   $sqlitens .= "                LEFT JOIN db_usuarios ON db_usuarios.id_usuario = e94_id_usuario            ";
    /*FIM - OC4401*/
-   $sqlitens .= "       		     inner join orcelemento     on o56_codele            = e62_codele            ";
+   $sqlitens .= "       		     inner join orcelemento     on o56_codele            = e62_codele        ";
    $sqlitens .= "       		      					   and o56_anousu            = e60_anousu            ";
    $sqlitens .= "                inner join pcmater         on pc01_codmater         = e62_item              ";
    $sqlitens .= " 	where e95_codanu = $e94_codanu ";
@@ -232,9 +239,9 @@ for($i = 0;$i < pg_numrows($result02);$i++){
    $pdf1->valoritem        = "e95_valor";
 // $pdf1->descricaoitem    = "pc01_descrmater";
 
-   $pdf1->orcado	         = $e60_vlrorc;
-   $pdf1->saldo_ant        = @$saldo_anterior;
-   $pdf1->saldo_atu        = $atual;
+   $pdf1->orcado	       = $e60_vlrorc;
+   $pdf1->saldo_ant        = $e94_saldoant;
+   $pdf1->saldo_atu        = $e94_saldoant + $e94_valor;
    $pdf1->empenhado        = $e60_vlremp;
    $pdf1->anulado          = $e94_valor;
    /*OC4401*/
@@ -266,6 +273,7 @@ for($i = 0;$i < pg_numrows($result02);$i++){
    $pdf1->texto		         = db_getsession("DB_login").'  -  '.date("d-m-Y",db_getsession("DB_datausu")).'    '.db_hora(db_getsession("DB_datausu"));
    $pdf1->cnpj             = $z01_cgccpf;
    $pdf1->cep              = $z01_cep;
+   $pdf1->cgcpref          = $cgc;
 
    /**
     * Dados Bancários
