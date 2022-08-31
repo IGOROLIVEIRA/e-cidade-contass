@@ -46,11 +46,11 @@ $oGet = db_utils::postMemory($_GET);
 
 
 $oRotulo  = new rotulocampo;
-$oDaolicanexopncpdocumento = db_utils::getDao('licanexopncpdocumento');
+$oDaoLicanexopncpdocumento = db_utils::getDao('licanexopncpdocumento');
 $oDaoLicanexopncpdocumento->rotulo->label();
 
-$oRotulo->label("p58_numero");
-$oRotulo->label("z01_nome");
+$oRotulo->label("l20_codigo");
+$oRotulo->label("l20_objeto");
 ?>
 <html>
 
@@ -73,19 +73,19 @@ $oRotulo->label("z01_nome");
 
 
         <?php db_input("namefile", 30, 0, true, "hidden", 1); ?>
-        <?php db_input("p01_sequencial", 30, 0, true, "hidden", 1); ?>
-        <?php db_input("p58_codproc", 30, 0, true, "hidden", 1); ?>
+        <?php db_input("l216_sequencial", 30, 0, true, "hidden", 1); ?>
+        <?php db_input("l215_sequencial", 30, 0, true, "hidden", 1); ?>
 
         <table class="form-container">
 
           <tr>
             <td nowrap title="<?php echo $Tl216_licanexospncp; ?>">
-              <?php db_ancora("Licitação: ", "js_pesquisarProcesso(true);", $iOpcaoProcesso); ?>
+              <?php db_ancora("Licitação: ", "js_pesquisarLicitacao(true);", $iOpcaoProcesso); ?>
             </td>
             <td>
               <?php
-              db_input('l20_codigo', 12, $Ip58_numero, true, 'text', $iOpcaoProcesso, " onChange='js_pesquisarProcesso(false);'");
-              db_input('l20_objeto', 60, $Iz01_nome, true, 'text', 3, "");
+              db_input('l20_codigo', 12, $Il20_codigo, true, 'text', $iOpcaoProcesso, " onChange='js_pesquisarLicitacao(false);'");
+              db_input('l20_objeto', 60, $Il20_objeto, true, 'text', 3, "");
               ?>
             </td>
           </tr>
@@ -158,16 +158,16 @@ document.getElementById("l213_sequencial").style.display = "none";
    * Pesquisa processo do protocolo e depois os documentos anexados
    */
   if (!empty($('l20_codigo').value)) {
-    js_pesquisarProcesso(false);
+    js_pesquisarLicitacao(false);
   }
 
   /**
    * Mensagens do programa
    * @type constant
    */
-  const MENSAGENS = 'patrimonial.protocolo.prot4_processodocumento001.';
+  const MENSAGENS = 'patrimonial.licitacao.lic1_anexospncp.';
 
-  var sUrlRpc = 'prot4_processodocumento.RPC.php';
+  var sUrlRpc = 'lic1_anexospncp.RPC.php';
 
   var oGridDocumentos = new DBGrid('gridDocumentos');
 
@@ -185,7 +185,7 @@ document.getElementById("l213_sequencial").style.display = "none";
    */
   function js_buscarDocumentos() {
 
-    var iCodigoProcesso = $('p58_codproc').value;
+    var iCodigoProcesso = $('l215_sequencial').value;
 
     if (empty(iCodigoProcesso)) {
       return false;
@@ -270,7 +270,7 @@ document.getElementById("l213_sequencial").style.display = "none";
 
     var documentosSelecionados = oGridDocumentos.getSelection("object");
     var iSelecionados = documentosSelecionados.length;
-    var iCodigoProcesso = $('p58_codproc').value;
+    var iCodigoProcesso = $('l215_sequencial').value;
     var aDocumentos = [];
 
     if (iSelecionados == 0) {
@@ -454,7 +454,7 @@ document.getElementById("l213_sequencial").style.display = "none";
   const js_downloadAnexos = () => {
 
     js_divCarregando('Aguarde... Organizando documentos para o download', 'msgbox')
-    const iCodigoProcesso = $('p58_codproc').value
+    const iCodigoProcesso = $('l215_sequencial').value
 
     if (empty(iCodigoProcesso)) {
       return false
@@ -512,7 +512,7 @@ document.getElementById("l213_sequencial").style.display = "none";
     $('namefile').value = '';
     $('uploadfile').value = '';
     $('uploadfile').disabled = true;
-    $('p01_descricao').value = sDescricaoDocumento.urlDecode();
+    $('l213_sequencial').value = sDescricaoDocumento.urlDecode();
 
     /**
      * Altera acao do botao salvar
@@ -520,8 +520,8 @@ document.getElementById("l213_sequencial").style.display = "none";
      */
     $('btnSalvar').onclick = function() {
 
-      var iCodigoProcesso = $('p58_codproc').value;
-      var sDescricaoDocumento = encodeURIComponent(tagString($('p01_descricao').value));
+      var iCodigoProcesso = $('l215_sequencial').value;
+      var sDescricaoDocumento = encodeURIComponent(tagString($('l213_sequencial').value));
       var oParametros = new Object();
 
       if (empty(iCodigoProcesso)) {
@@ -564,7 +564,7 @@ document.getElementById("l213_sequencial").style.display = "none";
             $('namefile').value = '';
             $('uploadfile').value = '';
             $('uploadfile').disabled = false;
-            $('p01_descricao').value = '';
+            $('l213_sequencial').value = '';
 
             alert(sMensagem);
             js_buscarDocumentos();
@@ -626,7 +626,7 @@ document.getElementById("l213_sequencial").style.display = "none";
    * @param boolean lMostra
    * @return boolean
    */
-  function js_pesquisarProcesso(lMostra) {
+  function js_pesquisarLicitacao(lMostra) {
 
     var sArquivo = 'func_liclicita.php?situacao=0&lei=1&funcao_js=parent.';
 
@@ -647,7 +647,7 @@ document.getElementById("l213_sequencial").style.display = "none";
   }
 
   /**
-   * Retorno da js_pesquisarProcesso apor clicar em um processo
+   * Retorno da js_pesquisarLicitacao apor clicar em um processo
    * @param  integer iCodigoProcesso
    * @param  integer iNumeroProcesso
    * @param  string sNome
@@ -657,14 +657,14 @@ document.getElementById("l213_sequencial").style.display = "none";
 
     $('l20_codigo').value = iCodigoProcesso;
     $('l20_objeto').value = sNome;
-    $('p58_codproc').value = iCodigoProcesso;
+    $('l215_sequencial').value = iCodigoProcesso;
     $('uploadfile').disabled = false;
     db_iframe_proc.hide();
     js_buscarDocumentos();
   }
 
   /**
-   * Retorno da pesquisa js_pesquisarProcesso apos mudar o campo p58_numero
+   * Retorno da pesquisa js_pesquisarLicitacao apos mudar o campo l20_codigo
    * @param  integer iCodigoProcesso
    * @param  string sNome
    * @param  boolean lErro
@@ -678,13 +678,13 @@ document.getElementById("l213_sequencial").style.display = "none";
     if (lErro) {
 
       $('l20_codigo').value = '';
-      $('p58_codproc').value = '';
-      $('p01_descricao').value = '';
+      $('l215_sequencial').value = '';
+      $('l213_sequencial').value = '';
       $('uploadfile').disabled = false;
       oGridDocumentos.clearAll(true);
     }
 
-    $('p58_codproc').value = $('l20_codigo').value;
+    $('l215_sequencial').value = $('l20_codigo').value;
     $('l20_objeto').value = iCodigoProcesso;
     js_buscarDocumentos();
   }
@@ -711,9 +711,9 @@ document.getElementById("l213_sequencial").style.display = "none";
 
   function js_salvar() {
 
-    var iCodigoProcesso = $('p58_codproc').value;
-    var iCodigoDocumento = $('p01_sequencial').value;
-    var sDescricaoDocumento = encodeURIComponent(tagString($('p01_descricao').value));
+    var iCodigoProcesso = $('l215_sequencial').value;
+    var iCodigoDocumento = $('l216_sequencial').value;
+    var sDescricaoDocumento = encodeURIComponent(tagString($('l213_sequencial').value));
     var sCaminhoArquivo = $('namefile').value;
 
     if (empty(iCodigoProcesso)) {
@@ -764,7 +764,7 @@ document.getElementById("l213_sequencial").style.display = "none";
           $('namefile').value = '';
           $('uploadfile').value = '';
           $('uploadfile').disabled = false;
-          $('p01_descricao').value = '';
+          $('l213_sequencial').value = '';
 
           alert(sMensagem);
           js_buscarDocumentos();
