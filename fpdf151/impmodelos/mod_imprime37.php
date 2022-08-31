@@ -180,6 +180,7 @@ for ($iDados = 0; $iDados < pg_num_rows($this->dados); $iDados++) {
     $oAssinaturas = new libdocumento(1705, $coddoc);
 
     $aParagrafo = $oAssinaturas->getDocParagrafos();
+    //var_dump($aParagrafo);exit;
 
     foreach ($aParagrafo as $oParag) {
       if ($oParag->oParag->db02_tipo == 3) {

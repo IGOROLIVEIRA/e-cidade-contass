@@ -2,14 +2,14 @@
 class libdocumento {
 
    public $iTipoDoc          = 0;
-   public $iCodDoc           = 0;       
+   public $iCodDoc           = 0;
    public $aParagrafos       = array();
    public $aParametros       = array();
    public $aCampos           = array();
    public $iInstit           = null;
    public $strDocHTML        = null;
-   public $oDbDocumentoDAO   = null; 
-   public $oDbDocParagDAO    = null; 
+   public $oDbDocumentoDAO   = null;
+   public $oDbDocParagDAO    = null;
    public $sCamposParagrafo  = "";
    public $sCamposDocumento  = "";
    public $sCamposDocParag   = "";
@@ -23,42 +23,42 @@ class libdocumento {
 
 	 /*
     * Método construtor
-    * 
+    *
 		* @param  db03_tipodoc  integer  Codigo do tipo do documento (tabela db_tipodoc);
-		* @param  db03_cododc   integer  Codigo do documento (tabela db_tipodoc); 
+		* @param  db03_cododc   integer  Codigo do documento (tabela db_tipodoc);
 	 */
-	 function libdocumento($db03_tipodoc=null, $db03_coddoc = null) { 
+	 function libdocumento($db03_tipodoc=null, $db03_coddoc = null) {
 
-      $this->iTipoDoc = $db03_tipodoc; 
-      $this->iCodDoc  = $db03_coddoc;       
+      $this->iTipoDoc = $db03_tipodoc;
+      $this->iCodDoc  = $db03_coddoc;
 			// verifica se foi definido a classe cl_db_documento
 			if (!class_exists("cl_db_documento")){
-        require_once("classes/db_db_documento_classe.php");    
+        require_once("classes/db_db_documento_classe.php");
 			}
 			// verifica se foi definido a classe cl_db_documentopadrao
 			if (!class_exists("cl_db_documentopadrao")){
-        require_once("classes/db_db_documentopadrao_classe.php");    
+        require_once("classes/db_db_documentopadrao_classe.php");
 			}
 			// verifica se foi definido a classe cl_db_docparag
 			if (!class_exists("cl_db_docparag")) {
-        require_once("classes/db_db_docparag_classe.php");    
-			}			
+        require_once("classes/db_db_docparag_classe.php");
+			}
       // verifica se foi definido a classe cl_db_docparagpadrao
 			if (!class_exists("cl_db_docparagpadrao")) {
-        require_once("classes/db_db_docparagpadrao_classe.php");    
-			}      
+        require_once("classes/db_db_docparagpadrao_classe.php");
+			}
 			// verifica se foi definido a classe libparagrafo
 			if (!class_exists("libparagrafo")) {
         require_once("libs/db_libparagrafo.php");
-			}			
-     
+			}
+
       $this->aCampos = array(
                               "db_documentopadrao" => "db60_coddoc      as db03_docum,
                                                        db60_descr       as db03_descr,
                                                        db60_tipodoc     as db03_tipodoc,
                                                        db60_instit      as db03_instit",
 
-                              "db_docparagpadrao"  => "db62_coddoc      as db04_docum,   
+                              "db_docparagpadrao"  => "db62_coddoc      as db04_docum,
                                                        db62_codparag    as db04_idparag,
                                                        db62_ordem       as db04_ordem,
                                                        db61_codparag    as db02_idparag,
@@ -67,8 +67,8 @@ class libdocumento {
                                                        db61_alinha      as db02_alinha,
                                                        db61_inicia      as db02_inicia,
                                                        db61_espaco      as db02_espaco,
-                                                       db61_altura      as db02_altura,     
-                                                       db61_largura     as db02_largura,    
+                                                       db61_altura      as db02_altura,
+                                                       db61_largura     as db02_largura,
                                                        db61_alinhamento as db02_alinhamento,
                                                        null             as db02_instit,
                                                        db61_tipo        as db02_tipo",
@@ -78,7 +78,7 @@ class libdocumento {
                                                  db03_tipodoc,
                                                  db03_instit",
 
-                              "db_docparag"  => "db04_docum,   
+                              "db_docparag"  => "db04_docum,
                                                  db04_idparag,
                                                  db04_ordem,
                                                  db02_idparag,
@@ -87,32 +87,32 @@ class libdocumento {
                                                  db02_alinha,
                                                  db02_inicia,
                                                  db02_espaca,
-                                                 db02_altura,     
-                                                 db02_largura,    
+                                                 db02_altura,
+                                                 db02_largura,
                                                  db02_alinhamento,
                                                  db02_instit,
-                                                 db02_tipo ", 
+                                                 db02_tipo ",
 
                               "tipodocpadrao" => "db60_tipodoc",
                               "tipodoc"       => "db03_tipodoc",
                               "coddocpadrao"  => "db60_coddoc",
                               "coddoc"        => "db03_docum",
                               "ordempadrao"   => "db04_ordem",
-                              "ordem"         => "db04_ordem", 
+                              "ordem"         => "db04_ordem",
                               "instit"        => "db02_instit",
-                              "institpadrao"  => "db60_instit" 
+                              "institpadrao"  => "db60_instit"
                             );
 
       //
-	  $this->cldb_documento = new cl_db_documento(); 
+	  $this->cldb_documento = new cl_db_documento();
       $this->cldb_documento->sql_record($this->cldb_documento->sql_query(null,"*",null,"db03_tipodoc = {$this->iTipoDoc} and db03_instit = ".db_getsession('DB_instit')));
       //
       //  Se encontrar documento especifico usa o especifico
       //
-      if ($this->cldb_documento->numrows > 0 || $this->iCodDoc <> 0) {
+      if ($this->cldb_documento->numrows > 0) {
 
-			  $this->oDbDocumentoDAO   = new cl_db_documento(); 
-			  $this->oDbDocParagDAO    = new cl_db_docparag(); 
+			  $this->oDbDocumentoDAO   = new cl_db_documento();
+			  $this->oDbDocParagDAO    = new cl_db_docparag();
         $this->sCamposDocumento  = $this->aCampos['db_documento'];
         $this->sCamposDocParag   = $this->aCampos['db_docparag'];
         $this->sNomeCampoTipodoc = $this->aCampos['tipodoc'];
@@ -122,15 +122,15 @@ class libdocumento {
 
       }else{
         //
-        //  Se nao encontrar documento especifico procura documento padrao  
+        //  Se nao encontrar documento especifico procura documento padrao
         //
 			  $this->cldb_documentopadrao = new cl_db_documentopadrao();
-        
+
         $this->cldb_documentopadrao->sql_record($this->cldb_documentopadrao->sql_query(null,"*",null,"db60_tipodoc = {$this->iTipoDoc} and db60_instit = ".db_getsession('DB_instit')));
         if ($this->cldb_documentopadrao->numrows > 0) {
 
-			    $this->oDbDocumentoDAO   = new cl_db_documentopadrao(); 
-  			  $this->oDbDocParagDAO    = new cl_db_docparagpadrao(); 
+			    $this->oDbDocumentoDAO   = new cl_db_documentopadrao();
+  			  $this->oDbDocParagDAO    = new cl_db_docparagpadrao();
           $this->sCamposDocumento  = $this->aCampos['db_documentopadrao'];
           $this->sCamposDocParag   = $this->aCampos['db_docparagpadrao'];
           $this->sNomeCampoTipodoc = $this->aCampos['tipodocpadrao'];
@@ -145,7 +145,7 @@ class libdocumento {
           throw new Exception("Não econtrado documento no cadastro de documentos padrão.");
           return false;
         }
-        
+
       }
 
    }
@@ -154,96 +154,96 @@ class libdocumento {
    }
 
    /*
-    *  funcao para pegar paragrafos e retornar uma colecao de objetos, 
-    *  onde o indice do array é a ordem do paragrafo. 
-    * 
-    */  
+    *  funcao para pegar paragrafos e retornar uma colecao de objetos,
+    *  onde o indice do array é a ordem do paragrafo.
+    *
+    */
    function getParagrafos(){
-              
+
        (string)$sWhere = null;
        if ($this->iCodDoc != null || trim($this->iCodDoc) != '') {
-         $sWhere = " and {$this->sNomeCampoCoddoc} = {$this->iCodDoc}";  
-       } 
+         $sWhere = " and {$this->sNomeCampoCoddoc} = {$this->iCodDoc}";
+       }
 
        if ( !$this->lDocumentoPadrao ) {
 
          if ($this->iInstit != null ) {
-           $sWhere .= " and {$this->sNomeCampoInstit} = {$this->iInstit}";           
+           $sWhere .= " and {$this->sNomeCampoInstit} = {$this->iInstit}";
          }else{
-           $sWhere .= " and {$this->sNomeCampoInstit} = ".db_getsession('DB_instit');            
+           $sWhere .= " and {$this->sNomeCampoInstit} = ".db_getsession('DB_instit');
          }
 
        }
-       
+
 
        $this->rsParag = $this->oDbDocParagDAO->sql_record($this->oDbDocParagDAO->sql_query(null,null,"{$this->sCamposDocParag}",
                                                           "{$this->sNomeCampoOrdem}"," {$this->sNomeCampoTipodoc} = {$this->iTipoDoc} {$sWhere}"));
        if ($this->oDbDocParagDAO->numrows > 0) {
-          
+
 					$iNumRows  = $this->oDbDocParagDAO->numrows;
-					for ($i = 0;$i < $iNumRows;$i++){ 
-          
-              $oParag = db_utils::fieldsMemory($this->rsParag,$i);          
+					for ($i = 0;$i < $iNumRows;$i++){
+
+              $oParag = db_utils::fieldsMemory($this->rsParag,$i);
               $this->aParagrafos[$oParag->{$this->sNomeCampoOrdem}] = $oParag;
-              
+
 					}
 			 }
 
 	 }
-   
-   /* 
-    * Metodo para retornar coleção de objetos do tipo paragrafo( de acordo com o cadastro de documentos ) 
-    *    
-    */  
-   
+
+   /*
+    * Metodo para retornar coleção de objetos do tipo paragrafo( de acordo com o cadastro de documentos )
+    *
+    */
+
    function getDocParagrafos(){
-              
+
        (string)$sWhere = null;
-       
+
        if ($this->iCodDoc != null || trim($this->iCodDoc) != ''){
-           $sWhere = " and {$this->sNomeCampoCoddoc} = {$this->iCodDoc}";  
-       }  
-       
+           $sWhere = " and {$this->sNomeCampoCoddoc} = {$this->iCodDoc}";
+       }
+
        if ( !$this->lDocumentoPadrao ) {
 
          if ($this->iInstit != null ) {
-           $sWhere .= " and {$this->sNomeCampoInstit} = {$this->iInstit}";           
+           $sWhere .= " and {$this->sNomeCampoInstit} = {$this->iInstit}";
          }else{
-           $sWhere .= " and {$this->sNomeCampoInstit} = ".db_getsession('DB_instit');            
+           $sWhere .= " and {$this->sNomeCampoInstit} = ".db_getsession('DB_instit');
          }
 
        }
-       
+
        $this->rsParag = $this->oDbDocParagDAO->sql_record($this->oDbDocParagDAO->sql_query(null,null,"{$this->sCamposDocParag}","{$this->sNomeCampoOrdem}",
                                                            " {$this->sNomeCampoTipodoc} = {$this->iTipoDoc} {$sWhere}"));
 			 if ($this->oDbDocParagDAO->numrows > 0){
-          
+
 					$iNumRows  = $this->oDbDocParagDAO->numrows;
 					for ($i = 0;$i < $iNumRows;$i++){
-                    
+
              $oParag = db_utils::fieldsMemory($this->rsParag,$i);
              //
-             // Faz substituições das variaveis no texto 
+             // Faz substituições das variaveis no texto
              //
              if ((int)$oParag->db02_tipo == 1 ) {
-               $oParag->db02_texto = $this->replaceText($oParag->db02_texto); 
+               $oParag->db02_texto = $this->replaceText($oParag->db02_texto);
              }
-             //$oParagFull = new libparagrafo( $oParag, $this->getParametros($this->db04_ordem) );             
-             $oParagFull = new libparagrafo( $oParag );             
-             $this->aParagrafos[$oParag->db04_ordem] = $oParagFull->getObjParagrafo(); 
+             //$oParagFull = new libparagrafo( $oParag, $this->getParametros($this->db04_ordem) );
+             $oParagFull = new libparagrafo( $oParag );
+             $this->aParagrafos[$oParag->db04_ordem] = $oParagFull->getObjParagrafo();
              unset( $oParagFull );
-              
+
 					}
-          
+
           return $this->aParagrafos;
-          
+
 			 }
-	 }   
-   
+	 }
+
    function setParametros($iOrdem, $aParam) {
-     
+
      $this->aParametros[$iOrdem] = $aParam;
-     
+
    }
 
 
@@ -252,10 +252,10 @@ class libdocumento {
 	 */
 
 	 function emiteDocHTML(){
-       
+
 			 $this->getParagrafos();
 			 for ($i = 0;$i < count($this->aParagrafos);$i++){
-				
+
 				 $obj = current($this->aParagrafos);
 			   $this->strDocHTML .=  $this->geraTexto($obj->db02_texto);
          next($this->aParagrafos);
@@ -265,12 +265,12 @@ class libdocumento {
 	 }
 
   /**
-	 	*  metodo para fazer fazer a substituicao das variaveis do paragrafo pelo conteudo. 
+	 	*  metodo para fazer fazer a substituicao das variaveis do paragrafo pelo conteudo.
     *  @param $texto texto do paragrafo;
     *  @DEPRECATED - usar o metodo replaceText
 	*/
 	 function geraTexto($texto){
-    
+
 		  $texto .= "#";
       $txt = split("#", $texto);
       $texto1 = '';
@@ -293,13 +293,13 @@ class libdocumento {
 			}
       return $texto1;
    }
-   
+
    function replaceText($texto){
-      
+
 		  $texto .= "#";
       $txt = split("#", $texto);
       $texto1 = '';
-      
+
       for ($x = 0; $x < sizeof($txt); $x ++) {
 
         if (substr($txt[$x], 0, 1) == "$") {
