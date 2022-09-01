@@ -33,7 +33,7 @@ require_once("libs/db_usuariosonline.php");
 require_once("libs/db_app.utils.php");
 require_once("dbforms/db_funcoes.php");
 
-$iOpcaoProcesso = 1;
+$iOpcaoLicitacao = 1;
 $lExibirMenus   = true;
 $cltipoanexo = new cl_tipoanexo;
 
@@ -41,7 +41,7 @@ $oGet = db_utils::postMemory($_GET);
 
 /**
  * Codigo do precesso informado por GET
- * - Pesquisa numero e ano do processo
+ * - Pesquisa numero e ano do Licitacao
  */
 
 
@@ -72,19 +72,17 @@ $oRotulo->label("l20_objeto");
       <form name="form" id="form" method="post" action="" enctype="multipart/form-data">
 
 
-        <?php db_input("namefile", 30, 0, true, "hidden", 1); ?>
-        <?php db_input("l216_sequencial", 30, 0, true, "hidden", 1); ?>
-        <?php db_input("l215_sequencial", 30, 0, true, "hidden", 1); ?>
+        
 
         <table class="form-container">
 
           <tr>
             <td nowrap title="<?php echo $Tl216_licanexospncp; ?>">
-              <?php db_ancora("Licitação: ", "js_pesquisarLicitacao(true);", $iOpcaoProcesso); ?>
+              <?php db_ancora("Licitação: ", "js_pesquisarLicitacao(true);", $iOpcaoLicitacao); ?>
             </td>
             <td>
               <?php
-              db_input('l20_codigo', 12, $Il20_codigo, true, 'text', $iOpcaoProcesso, " onChange='js_pesquisarLicitacao(false);'");
+              db_input('l20_codigo', 12, $Il20_codigo, true, 'text', $iOpcaoLicitacao, " onChange='js_pesquisarLicitacao(false);'");
               db_input('l20_objeto', 60, $Il20_objeto, true, 'text', 3, "");
               ?>
             </td>
@@ -155,7 +153,7 @@ $oRotulo->label("l20_objeto");
 
 document.getElementById("l213_sequencial").style.display = "none";
   /**
-   * Pesquisa processo do protocolo e depois os documentos anexados
+   * Pesquisa Licitacao do protocolo e depois os documentos anexados
    */
   if (!empty($('l20_codigo').value)) {
     js_pesquisarLicitacao(false);
@@ -180,448 +178,7 @@ document.getElementById("l213_sequencial").style.display = "none";
   oGridDocumentos.show($('ctnDbGridDocumentos'));
 
   /**
-   * Buscar documentos do processo
-   * @return boolean
-   */
-  function js_buscarDocumentos() {
-
-    var iCodigoProcesso = $('l215_sequencial').value;
-
-    if (empty(iCodigoProcesso)) {
-      return false;
-    }
-
-    js_divCarregando(_M(MENSAGENS + 'mensagem_buscando_documentos'), 'msgbox');
-
-    var oParametros = new Object();
-
-    oParametros.exec = 'carregarDocumentos';
-    oParametros.iCodigoProcesso = iCodigoProcesso;
-
-    var oAjax = new Ajax.Request(
-      sUrlRpc, {
-        parameters: 'json=' + Object.toJSON(oParametros),
-        method: 'post',
-        asynchronous: false,
-
-        /**
-         * Retorno do RPC
-         */
-        onComplete: function(oAjax) {
-
-          js_removeObj("msgbox");
-          var oRetorno = eval('(' + oAjax.responseText + ")");
-
-          var sMensagem = oRetorno.sMensagem.urlDecode();
-
-          if (oRetorno.iStatus > 1) {
-
-            alert(sMensagem);
-            return false;
-          }
-
-          oGridDocumentos.clearAll(true);
-          var iDocumentos = oRetorno.aDocumentosVinculados.length;
-
-          for (var iIndice = 0; iIndice < iDocumentos; iIndice++) {
-
-            var oDocumento = oRetorno.aDocumentosVinculados[iIndice];
-            var sDescricaoDocumento = oDocumento.sDescricaoDocumento;
-
-            if (oDocumento.iDepartUsuario == oDocumento.iDepart && oRetorno.andamento == 0) {
-
-              var sHTMLBotoes = '<input type="button" value="Alterar" onClick="js_alterarDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\');" />  ';
-              sHTMLBotoes += '<input type="button" value="Download" onClick="js_downloadDocumento(' + oDocumento.iCodigoDocumento + ');" />  ';
-
-              $bBloquea = false;
-
-            } else if (oDocumento.iDepartUsuario != oDocumento.iDepart && oRetorno.andamento > 0) {
-
-              var sHTMLBotoes = '<input type="button" value="Download" onClick="js_downloadDocumento(' + oDocumento.iCodigoDocumento + ');" />  ';
-
-              $bBloquea = false;
-
-            } else if (oDocumento.iDepartUsuario == oDocumento.iDepart && oRetorno.andamento > 0) {
-
-              var sHTMLBotoes = '<input type="button" value="Alterar" onClick="js_alterarDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\');" />  ';
-              sHTMLBotoes += '<input type="button" value="Download" onClick="js_downloadDocumento(' + oDocumento.iCodigoDocumento + ');" />  ';
-
-              $bBloquea = false;
-            }
-
-
-
-            var aLinha = [oDocumento.iCodigoDocumento, sDescricaoDocumento.urlDecode(), oDocumento.iDepart + ' - ' + oDocumento.sDepartamento, sHTMLBotoes];
-            oGridDocumentos.addRow(aLinha, false, $bBloquea);
-          }
-
-          oGridDocumentos.renderRows();
-        }
-      }
-    );
-
-  }
-
-  /**
-   * Exclui documentos selecionados
-   * @return boolean
-   */
-  function js_excluirSelecionados() {
-
-    var documentosSelecionados = oGridDocumentos.getSelection("object");
-    var iSelecionados = documentosSelecionados.length;
-    var iCodigoProcesso = $('l215_sequencial').value;
-    var aDocumentos = [];
-
-    if (iSelecionados == 0) {
-
-      alert(_M(MENSAGENS + 'erro_nenhum_documento_selecionado_exclusao'));
-      return false;
-    }
-
-    if (empty(iCodigoProcesso)) {
-
-      alert(_M(MENSAGENS + 'erro_processo_nao_informado'));
-      return false;
-    }
-
-    for (var iIndice = 0; iIndice < iSelecionados; iIndice++) {
-
-      var iDocumento = documentosSelecionados[iIndice].aCells[0].getValue();
-      aDocumentos.push(iDocumento);
-    }
-
-    js_divCarregando(_M(MENSAGENS + 'mensagem_excluindo_documentos'), 'msgbox');
-
-    var oParametros = new Object();
-
-    oParametros.exec = 'excluirDocumento';
-    oParametros.iCodigoProcesso = iCodigoProcesso;
-    oParametros.aDocumentosExclusao = aDocumentos;
-
-    var oAjax = new Ajax.Request(
-      sUrlRpc, {
-        parameters: 'json=' + Object.toJSON(oParametros),
-        method: 'post',
-        asynchronous: false,
-
-        /**
-         * Retorno do RPC
-         */
-        onComplete: function(oAjax) {
-
-          js_removeObj("msgbox");
-          var oRetorno = eval('(' + oAjax.responseText + ")");
-          var sMensagem = oRetorno.sMensagem.urlDecode();
-
-          if (oRetorno.iStatus > 1) {
-
-            alert(sMensagem);
-            return false;
-          }
-
-          alert(sMensagem);
-          js_buscarDocumentos();
-        }
-      });
-
-  }
-
-  const js_arquivos = oCodigoDocumento => {
-    var oRetorno
-
-    var oAjax2 = new Ajax.Request(
-      sUrlRpc, {
-        parameters: 'json=' + Object.toJSON(oCodigoDocumento),
-        method: 'post',
-        asynchronous: false,
-
-        /**
-         * Retorno do RPC
-         */
-        onComplete: oAjax2 => {
-          oRetorno = eval('(' + oAjax2.responseText + ")")
-          var sMensagem = oRetorno.sMensagem.urlDecode()
-
-          if (oRetorno.iStatus > 1) {
-
-            alert(sMensagem)
-            return false
-          }
-        }
-      })
-
-    return oRetorno;
-
-  }
-  const js_documentosDeUmProcesso = iCodigoProcesso => {
-
-
-    if (empty(iCodigoProcesso)) {
-      return false
-    }
-
-    const oParametros = new Object()
-
-    oParametros.exec = 'carregarDocumentos'
-    oParametros.iCodigoProcesso = iCodigoProcesso
-
-    const codigosDeDocumentos = []
-
-    const oAjax = new Ajax.Request(
-      sUrlRpc, {
-        parameters: 'json=' + Object.toJSON(oParametros),
-        method: 'post',
-        asynchronous: false,
-        onComplete: oAjax => {
-          const documentos = JSON.parse(oAjax.responseText).aDocumentosVinculados
-          documentos.map(documento => {
-            codigosDeDocumentos.push(documento.iCodigoDocumento)
-          })
-          const sMensagem = oRetorno.sMensagem.urlDecode()
-
-          if (oRetorno.iStatus > 1) {
-            alert(sMensagem)
-            return false
-          }
-        }
-      }
-    )
-    return codigosDeDocumentos
-
-  }
-
-  const js_ziparAnexos = (arquivos, callback) => {
-
-    var oParametros = new Object()
-    oParametros.exec = 'ziparAnexos'
-
-    arquivos.map(documento => {
-      novoTituloDeArquivo = documento.sCaminhoDownloadArquivo.replace('tmp/', '')
-      documento.sTituloArquivo = novoTituloDeArquivo
-    })
-
-    oParametros.arquivos = arquivos
-
-    let oRetorno = null
-    var oAjax = new Ajax.Request(
-      sUrlRpc, {
-        method: 'post',
-        parameters: `json=${JSON.stringify(oParametros)}`,
-        onComplete: oAjax => {
-
-          oRetorno = eval('(' + oAjax.responseText + ')')
-          var sMensagem = oRetorno.sMensagem.urlDecode()
-
-          if (oRetorno.iStatus > 1) {
-
-            alert(sMensagem)
-            return false
-          }
-
-          return callback(oRetorno.nomeDoZip)
-
-        }
-      })
-
-  }
-
-  const js_apagarZip = nomeDoZip => {
-    const oParametros = new Object()
-    oParametros.exec = 'apagarZip'
-    oParametros.nomeDoZip = nomeDoZip
-    const oAjax = new Ajax.Request(
-      sUrlRpc, {
-        method: 'post',
-        parameters: `json=${JSON.stringify(oParametros)}`,
-        onComplete: oAjax => {
-
-          oRetorno = eval('(' + oAjax.responseText + ')')
-          var sMensagem = oRetorno.sMensagem.urlDecode()
-
-          if (oRetorno.iStatus > 1) {
-
-            alert(sMensagem)
-            return false
-          }
-        }
-      })
-  }
-  /**
-   * Realiza o download de todos os anexos ou apenas selecionados
-   * @return boolean
-   */
-  const js_downloadAnexos = () => {
-
-    js_divCarregando('Aguarde... Organizando documentos para o download', 'msgbox')
-    const iCodigoProcesso = $('l215_sequencial').value
-
-    if (empty(iCodigoProcesso)) {
-      return false
-    }
-
-    const documentosSelecionados = oGridDocumentos.getSelection("object")
-    let codigosDosDocumentos = []
-
-    for (documento of documentosSelecionados) {
-      const codigoDoDocumento = documento.aCells[0].getValue()
-      codigosDosDocumentos.push(codigoDoDocumento)
-    }
-
-    if (codigosDosDocumentos.length == '1') {
-      js_downloadDocumento(codigosDosDocumentos[0])
-      js_removeObj("msgbox");
-      return false
-    }
-
-    let documentos = []
-    if (documentosSelecionados.length === 0) {
-      codigosDosDocumentos = js_documentosDeUmProcesso(iCodigoProcesso)
-    }
-
-    const urlDosArquivos = []
-
-    codigosDosDocumentos.map(codigoDoDocumento => {
-      const oCodigoDocumento = new Object()
-
-      oCodigoDocumento.exec = 'download'
-      oCodigoDocumento.iCodigoDocumento = codigoDoDocumento
-
-      urlDosArquivos.push(js_arquivos(oCodigoDocumento))
-    })
-
-    js_ziparAnexos(urlDosArquivos, nomeDoZip => {
-      js_removeObj("msgbox")
-      window.open(`db_download.php?arquivo=${nomeDoZip}`)
-
-      setTimeout(() => {
-        js_apagarZip(nomeDoZip)
-      }, 3000)
-    });
-
-  }
-
-  /**
-   * Altera descricao de um documento
-   * @param integer iCodigoDocumento
-   * @param string sDescricaoDocumento
-   * @return void
-   */
-  function js_alterarDocumento(iCodigoDocumento, sDescricaoDocumento) {
-
-    $('namefile').value = '';
-    $('uploadfile').value = '';
-    $('uploadfile').disabled = true;
-    $('l213_sequencial').value = sDescricaoDocumento.urlDecode();
-
-    /**
-     * Altera acao do botao salvar
-     * @return void
-     */
-    $('btnSalvar').onclick = function() {
-
-      var iCodigoProcesso = $('l215_sequencial').value;
-      var sDescricaoDocumento = encodeURIComponent(tagString($('l213_sequencial').value));
-      var oParametros = new Object();
-
-      if (empty(iCodigoProcesso)) {
-
-        alert(_M(MENSAGENS + 'erro_processo_nao_informado'));
-        return false;
-      }
-
-      if (empty(sDescricaoDocumento)) {
-
-        alert(_M(MENSAGENS + 'erro_descricao_nao_informada'));
-        return false;
-      }
-
-      js_divCarregando(_M(MENSAGENS + 'mensagem_salvando_documento'), 'msgbox');
-
-      oParametros.exec = 'salvarDocumento';
-      oParametros.iCodigoDocumento = iCodigoDocumento;
-      oParametros.iCodigoProcesso = iCodigoProcesso;
-      oParametros.sDescricaoDocumento = sDescricaoDocumento;
-
-      var oAjax = new Ajax.Request(
-        sUrlRpc, {
-          parameters: 'json=' + Object.toJSON(oParametros),
-          method: 'post',
-          asynchronous: false,
-          onComplete: function(oAjax) {
-
-            js_removeObj("msgbox");
-            var oRetorno = eval('(' + oAjax.responseText + ")");
-            var sMensagem = oRetorno.sMensagem.urlDecode();
-
-            if (oRetorno.iStatus > 1) {
-
-              alert(sMensagem);
-              return false;
-            }
-
-            $('btnSalvar').onclick = js_salvar;
-            $('namefile').value = '';
-            $('uploadfile').value = '';
-            $('uploadfile').disabled = false;
-            $('l213_sequencial').value = '';
-
-            alert(sMensagem);
-            js_buscarDocumentos();
-          }
-        });
-
-    }
-  }
-
-  /**
-   * Download de um documento
-   * - busca arquivo do banco e salva no tmp
-   * - exibe janela com link para download
-   * @param  integer iCodigoDocumento
-   * @return void
-   */
-  function js_downloadDocumento(iCodigoDocumento) {
-
-    js_divCarregando(_M(MENSAGENS + 'mensagem_carregando_documento'), 'msgbox');
-
-    var oParametros = new Object();
-
-    oParametros.exec = 'download';
-    oParametros.iCodigoDocumento = iCodigoDocumento;
-
-    var oAjax = new Ajax.Request(
-      sUrlRpc, {
-        parameters: 'json=' + Object.toJSON(oParametros),
-        method: 'post',
-        asynchronous: false,
-
-        /**
-         * Retorno do RPC
-         */
-        onComplete: function(oAjax) {
-
-          js_removeObj("msgbox");
-          var oRetorno = eval('(' + oAjax.responseText + ")");
-          var sMensagem = oRetorno.sMensagem.urlDecode();
-
-          if (oRetorno.iStatus > 1) {
-
-            alert(sMensagem);
-            return false;
-          }
-
-          var sCaminhoDownloadArquivo = oRetorno.sCaminhoDownloadArquivo.urlDecode();
-          var sTituloArquivo = oRetorno.sTituloArquivo.urlDecode();
-
-          window.open("db_download.php?arquivo=" + sCaminhoDownloadArquivo);
-        }
-      });
-
-  }
-
-  /**
-   * Pesquisar processo
+   * Pesquisar Licitacao
    *
    * @param boolean lMostra
    * @return boolean
@@ -631,62 +188,58 @@ document.getElementById("l213_sequencial").style.display = "none";
     var sArquivo = 'func_liclicita.php?situacao=0&lei=1&funcao_js=parent.';
 
     if (lMostra) {
-      sArquivo += 'js_mostraProcesso|l20_codigo|l20_objeto';
+      sArquivo += 'js_mostraLicitacao|l20_codigo|l20_objeto';
     } else {
 
-      var iNumeroProcesso = $('l20_codigo').value;
+      var iNumeroLicitacao = $('l20_codigo').value;
 
-      if (empty(iNumeroProcesso)) {
+      if (empty(iNumeroLicitacao)) {
         return false;
       }
 
-      sArquivo += 'js_mostraProcessoHidden&pesquisa_chave=' + iNumeroProcesso + '&sCampoRetorno=l20_objeto';
+      sArquivo += 'js_mostraLicitacaoHidden&pesquisa_chave=' + iNumeroLicitacao + '&sCampoRetorno=l20_objeto';
     }
 
-    js_OpenJanelaIframe('', 'db_iframe_proc', sArquivo, 'Pesquisa de Processos', lMostra);
+    js_OpenJanelaIframe('', 'db_iframe_proc', sArquivo, 'Pesquisa de Licitação', lMostra);
   }
 
   /**
-   * Retorno da js_pesquisarLicitacao apor clicar em um processo
-   * @param  integer iCodigoProcesso
-   * @param  integer iNumeroProcesso
-   * @param  string sNome
+   * Retorno da js_pesquisarLicitacao apor clicar em uma Licitacao
+   * @param  integer iCodigoLicitacao
+   * @param  integer iNumeroLicitacao
+   * @param  string descricao
    * @return void
    */
-  function js_mostraProcesso(iCodigoProcesso, sNome) {
+  function js_mostraLicitacao(iCodigoLicitacao, descricao) {
 
-    $('l20_codigo').value = iCodigoProcesso;
-    $('l20_objeto').value = sNome;
-    $('l215_sequencial').value = iCodigoProcesso;
+    $('l20_codigo').value = iCodigoLicitacao;
+    $('l20_objeto').value = descricao;
     $('uploadfile').disabled = false;
     db_iframe_proc.hide();
-    js_buscarDocumentos();
+    
   }
 
   /**
    * Retorno da pesquisa js_pesquisarLicitacao apos mudar o campo l20_codigo
-   * @param  integer iCodigoProcesso
-   * @param  string sNome
+   * @param  integer iCodigoLicitacao
+   * @param  string descricao
    * @param  boolean lErro
    * @return void
    */
-  function js_mostraProcessoHidden(iCodigoProcesso, sNome, lErro) {
+  function js_mostraLicitacaoHidden(iCodigoLicitacao, descricao, lErro) {
 
     /**
-     * Nao encontrou processo
+     * Nao encontrou Licitacao
      */
     if (lErro) {
 
       $('l20_codigo').value = '';
-      $('l215_sequencial').value = '';
-      $('l213_sequencial').value = '';
       $('uploadfile').disabled = false;
       oGridDocumentos.clearAll(true);
     }
 
-    $('l215_sequencial').value = $('l20_codigo').value;
-    $('l20_objeto').value = iCodigoProcesso;
-    js_buscarDocumentos();
+    $('l20_objeto').value = iCodigoLicitacao;
+   
   }
 
   /**
@@ -711,28 +264,15 @@ document.getElementById("l213_sequencial").style.display = "none";
 
   function js_salvar() {
 
-    var iCodigoProcesso = $('l215_sequencial').value;
-    var iCodigoDocumento = $('l216_sequencial').value;
-    var sDescricaoDocumento = encodeURIComponent(tagString($('l213_sequencial').value));
-    var sCaminhoArquivo = $('namefile').value;
+    var iCodigoLicitacao = $('l20_codigo').value;
+    var iCodigoDocumento = $('l213_sequencial').value;
 
-    if (empty(iCodigoProcesso)) {
+    if (empty(iCodigoLicitacao)) {
 
-      alert(_M(MENSAGENS + 'erro_processo_nao_informado'));
+      alert(_M(MENSAGENS + 'erro_Licitacao_nao_informado'));
       return false;
     }
 
-    if (empty(sDescricaoDocumento)) {
-
-      alert(_M(MENSAGENS + 'erro_descricao_nao_informada'));
-      return false;
-    }
-
-    if (empty(sCaminhoArquivo)) {
-
-      alert(_M(MENSAGENS + 'erro_documento_nao_informado'));
-      return false;
-    }
 
     js_divCarregando(_M(MENSAGENS + 'mensagem_salvando_documento'), 'msgbox');
 
@@ -740,9 +280,8 @@ document.getElementById("l213_sequencial").style.display = "none";
 
     oParametros.exec = 'salvarDocumento';
     oParametros.iCodigoDocumento = iCodigoDocumento;
-    oParametros.iCodigoProcesso = iCodigoProcesso;
-    oParametros.sDescricaoDocumento = sDescricaoDocumento;
-    oParametros.sCaminhoArquivo = sCaminhoArquivo;
+    oParametros.iCodigoLicitacao = iCodigoLicitacao;
+
 
     var oAjax = new Ajax.Request(
       sUrlRpc, {
@@ -764,11 +303,10 @@ document.getElementById("l213_sequencial").style.display = "none";
           $('namefile').value = '';
           $('uploadfile').value = '';
           $('uploadfile').disabled = false;
-          $('l213_sequencial').value = '';
+          $('p01_descricao').value = '';
 
           alert(sMensagem);
-          js_buscarDocumentos();
         }
       });
-  }
+} 
 </script>

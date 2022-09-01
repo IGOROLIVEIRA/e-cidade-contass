@@ -129,6 +129,12 @@ class LicitacaoDocumento {
       return false;
     }
 
+  
+
+
+
+
+
     $oDaoProtprocessodocumento = db_utils::getDao('protprocessodocumento');
     $sSqlDocumento = $oDaoProtprocessodocumento->sql_query_file($iCodigo);
     $rsDocumento   = $oDaoProtprocessodocumento->sql_record($sSqlDocumento);

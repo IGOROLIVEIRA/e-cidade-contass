@@ -34,7 +34,7 @@ require_once("libs/JSON.php");
 require_once("std/db_stdClass.php");
 require_once("dbforms/db_funcoes.php");
 
-define("URL_MENSAGEM_PROT4PROCESSODOCUMENTO", "patrimonial.protocolo.prot4_processodocumento.");
+define("URL_MENSAGEM_LIC1ANEXOSPNCP", "patrimonial.liciacao.lic1_anexospncp.");
 
 $oJson               = new services_json();
 $oParam              = $oJson->decode(str_replace("\\", "", $_POST["json"]));
@@ -50,111 +50,25 @@ try {
 
   switch ($oParam->exec) {
 
-    case "carregarDocumentos":
-
-      $oProcessoProtocolo    = new processoProtocolo($oParam->iCodigoProcesso);
-
-      $aDocumentosVinculados = $oProcessoProtocolo->getDocumentos();
-      $aDocumentosRetorno    = array();
-      foreach ($aDocumentosVinculados as $oProcessoDocumento) {
-
-        $oStdDocumento = new stdClass();
-        $oStdDocumento->iCodigoDocumento    = $oProcessoDocumento->getCodigo();
-        $oStdDocumento->sDescricaoDocumento = urlencode($oProcessoDocumento->getDescricao());
-        $oStdDocumento->iDepart             = $oProcessoDocumento->getDepart();
-        $oDepartamento = new DBDepartamento($oProcessoDocumento->getDepart());
-        $oStdDocumento->sDepartamento = urlencode($oDepartamento->getNomeDepartamento());
-
-        $oStdDocumento->iDepartUsuario      = db_getsession("DB_coddepto");
-
-        $aDocumentosRetorno[] = $oStdDocumento;
-      }
-      $oRetorno->aDocumentosVinculados = $aDocumentosRetorno;
-
-      $oRetorno->andamento = $oProcessoProtocolo->getHaTramiteInicial($oProcessoProtocolo->getNumeroProcesso(), $oProcessoProtocolo->getAnoProcesso());
-
-      break;
-
+    
     case "salvarDocumento":
 
-      $oProcessoDocumento = new LicitacaoDocumento($oParam->iCodigoDocumento);
-      $oProcessoDocumento->setDescricao(db_stdClass::normalizeStringJsonEscapeString($oParam->sDescricaoDocumento));
-      $oProcessoDocumento->setProcessoProtocolo($oProcessoProtocolo);
+      $oLicitacaoDocumento = new LicitacaoAnexo($oParam->iCodigoLicitacao);
+      
+
+      $oLicitacaoDocumento = new LicitacaoDocumento($oParam->iCodigoDocumento);
+      $oLicitacaoDocumento->setDescricao(db_stdClass::normalizeStringJsonEscapeString($oParam->sDescricaoDocumento));
+      $oLicitacaoDocumento->setProcessoProtocolo($oProcessoProtocolo);
 
       if (!empty($oParam->sCaminhoArquivo)) {
-        $oProcessoDocumento->setCaminhoArquivo($oParam->sCaminhoArquivo);
+        $oLicitacaoDocumento->setCaminhoArquivo($oParam->sCaminhoArquivo);
       }
 
-      $oRetorno->sMensagem = urlencode($oProcessoDocumento->salvar());
+      $oRetorno->sMensagem = urlencode($oLicitacaoDocumento->salvar());
 
       break;
 
-    case "excluirDocumento":
 
-			$aDocumentosNaoExcluidos = array();
-
-      foreach ($oParam->aDocumentosExclusao as $iCodigoDocumento) {
-
-				$oProcessoDocumento = new LicitacaoDocumento($iCodigoDocumento);
-
-				if ($oProcessoDocumento->getDepart() === db_getsession("DB_coddepto")) {
-					$oProcessoDocumento->excluir();
-					continue;
-				}
-				$aDocumentosNaoExcluidos[] = $oProcessoDocumento->getDescricao();
-
-			}
-
-			$sMensagemDeNaoExclusao = "Alguns documentos não foram excluídos pois não".
-			" pertencem ao departamento atual.\n\nDocumentos não excluídos:";
-			$sDocumentosNaoExcluidos = '';
-			foreach($aDocumentosNaoExcluidos as $sDocumentoNaoExcluido) {
-				$sDocumentosNaoExcluidos .= "\n- $sDocumentoNaoExcluido";
-			}		
-
-			if (count($aDocumentosNaoExcluidos) === 1) {
-				$sMensagemDeNaoExclusao = "Um documento não foi excluído pois não" .
-				" pertence ao departamento atual.\n\nDocumento não excluído:";
-			}
-
-			if (!empty($aDocumentosNaoExcluidos)) {
-				$oRetorno->sMensagem = urlencode($sMensagemDeNaoExclusao.$sDocumentosNaoExcluidos);
-			} else {
-				$oRetorno->sMensagem = urlencode('Exclusão realizada com sucesso!');
-			}
-
-      break;
-
-    case "download":
-
-      $oProcessoDocumento                = new LicitacaoDocumento($oParam->iCodigoDocumento);
-      $oRetorno->sCaminhoDownloadArquivo = $oProcessoDocumento->download();
-      $oRetorno->sTituloArquivo          = urlencode($oProcessoDocumento->getNomeDocumento());
-
-      break;
-
-    case "ziparAnexos":
-      $nomeDoZip = 'tmp/anexos-' . time() . '.zip';
-      $zip = new ZipArchive();
-      if ($zip->open($nomeDoZip, ZipArchive::CREATE) === true) {
-
-        foreach ($oParam->arquivos as $oArquivo) {
-          $zip->addFile($oArquivo->sCaminhoDownloadArquivo, $oArquivo->sTituloArquivo);
-        }
-
-        $zip->close();
-      }
-
-      $oRetorno->nomeDoZip = $nomeDoZip;
-      break;
-
-    case "apagarZip":
-      if (file_exists($oParam->nomeDoZip) && unlink($oParam->nomeDoZip)) {
-        $oRetorno->zipApagado = 1;
-      } else {
-        $oRetorno->zipApagado = 0;
-      }
-      break;
   }
 
   /**
