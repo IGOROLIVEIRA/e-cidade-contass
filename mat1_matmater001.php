@@ -58,6 +58,7 @@ if(isset($incluir)){
   $clmatmater->m60_codmatunid = $m60_codmatunid;
   $clmatmater->m60_quantent = $m60_quantent;
   $clmatmater->m60_codant = $m60_codant;
+  $clmatmater->m60_instit = db_getsession('DB_instit');
 
   $clmatmater->incluir($m60_codmater);
   $codigo=$clmatmater->m60_codmater;
