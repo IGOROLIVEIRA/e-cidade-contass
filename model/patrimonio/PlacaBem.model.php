@@ -353,7 +353,7 @@ class PlacaBem {
     }
 
     $lExiste = true;
-    $sWhere  =  " exists (select 1 from bens where t52_bem = t41_bem $sWHereInstituicao) and t41_placaseq = {$this->sPlacaSeq} ";
+    $sWhere  =  " exists (select 1 from bens where t52_bem = t41_bem $sWHereInstituicao) and t41_placaseq = {$this->sPlacaSeq} and t52_instit = " . db_getsession("DB_instit");
 
     if ($sPlaca != null) {
       $sWhere .= " and t41_placa = '{$sPlaca}'";
