@@ -11,6 +11,7 @@ class Oc18364 extends AbstractMigration
             begin;    
 
                 alter table matmater add column m60_instit int4;
+            commit;
 SQL;
         $this->execute($sql);
     }
