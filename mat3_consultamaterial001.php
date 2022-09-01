@@ -47,7 +47,7 @@ $oDaoMatMater->rotulo->label();
 <body style="background-color: #cccccc; margin-top: 30px;">
 <form id="form1">
 <div align="center">
-  <fieldset style="width: 550px;">
+  <fieldset style="width: 800px;">
     <legend><b>Consulta Material</b></legend>
     <table width="100%">
       <tr>
@@ -59,7 +59,7 @@ $oDaoMatMater->rotulo->label();
         <td>
           <?php 
             db_input('m60_codmater', 8, $Im60_codmater, true, 'text', 1, "onchange='js_pesquisaMaterial(false);'");
-            db_input('m60_descr', 45, $Im60_descr, true, 'text', 3);
+            db_input('m60_descr', 100, $Im60_descr, true, 'text', 3);
           ?>
         </td>
       </tr>
