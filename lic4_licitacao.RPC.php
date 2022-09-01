@@ -737,7 +737,7 @@ switch ($oParam->exec) {
             '',
             "l200_sequencial, l200_data,
 		(CASE
-			WHEN l200_tipoparecer = 1 THEN 'Técnico'
+			WHEN l200_tipoparecer = 1 THEN 'T\E9cnico'
 			WHEN l200_tipoparecer = 2 THEN 'Juridico - Edital'
 			WHEN l200_tipoparecer = 3 THEN 'Juridico - Julgamento'
 			ELSE 						   'Juridico - Outros'
@@ -969,12 +969,12 @@ switch ($oParam->exec) {
                                     } else {
                                         $seqsolicitem = 1;
                                     }
-                                    //Compilação
+                                    //Compila\E7\E3o
                                     $nova_qtd = floatval($oItem->pc11_quant) - floatval($aItens[$count]->qtdexclusiva);
                                     //Estimativa
                                     $nova_qtd_estimativa = floatval($oItemControle->itemdaestimativaqtd) - floatval($aItens[$count]->qtdexclusiva);
 
-                                    //compilação
+                                    //compila\E7\E3o
                                     $oDaoSolicitemReservado->pc11_numero = $oItem->pc11_numero;
                                     $oDaoSolicitemReservado->pc11_seq   = $seqsolicitem;
                                     $oDaoSolicitemReservado->pc11_quant = $aItens[$count]->qtdexclusiva;
@@ -1048,7 +1048,7 @@ switch ($oParam->exec) {
                                      */
 
                                     if ($oDaoSolicitemReservado->numrows_incluir) {
-                                        //compilação
+                                        //compila\E7\E3o
                                         $oItemAlterado = db_utils::getDao('solicitem');
                                         $oItemAlterado->pc11_quant = $nova_qtd;
                                         $oItemAlterado->pc11_codigo = $oItem->pc11_codigo;
@@ -1086,7 +1086,7 @@ switch ($oParam->exec) {
                                     }
 
                                     if ($l20_usaregistropreco == 't') {
-                                        //compilação
+                                        //compila\E7\E3o
                                         $oDaoSolicitemVinculo = db_utils::getDao('solicitemvinculo');
                                         $oDaoSolicitemVinculo->pc55_solicitempai   = $oDaoSolicitemEstimativa->pc11_codigo;
                                         $oDaoSolicitemVinculo->pc55_solicitemfilho = $oDaoSolicitemReservado->pc11_codigo;
@@ -1145,7 +1145,7 @@ switch ($oParam->exec) {
 
                                     if ($l20_usaregistropreco == 't') {
 
-                                        //Compilação
+                                        //Compila\E7\E3o
                                         $oDaoSolicitemRegPrecoAlterado = db_utils::getDao('solicitemregistropreco');
 
                                         $sWhereSolicitem = ' pc57_solicitem = ' . $oItem->pc11_codigo;
@@ -1244,9 +1244,9 @@ switch ($oParam->exec) {
                                     }
 
                                     $codprocitemreservado = $oDaopcprocitem->pc81_codprocitem;
-                                    //echo "Código Item Reservado: " . $codprocitemreservado;
+                                    //echo "C\F3digo Item Reservado: " . $codprocitemreservado;
                                     /**
-                                     * Busca o código do material e insere as informa??es na tabela solicitempcmater
+                                     * Busca o c\F3digo do material e insere as informa??es na tabela solicitempcmater
                                      */
 
                                     $sSqlMaterial = "SELECT pc16_codmater from solicitempcmater where pc16_solicitem = " . $oItem->pc11_codigo;
@@ -1340,7 +1340,7 @@ switch ($oParam->exec) {
                                     $sSqlSolicitemUnid = "SELECT * from solicitemunid where pc17_codigo = " . $oItem->pc11_codigo;
                                     $rsSolicitemUnid = db_query($sSqlSolicitemUnid);
                                     $oSolicitemUnid = db_utils::fieldsMemory($rsSolicitemUnid, 0);
-                                    //compilação
+                                    //compila\E7\E3o
                                     $oDaoSolicitemUnidReservado = db_utils::getDao('solicitemunid');
                                     $oDaoSolicitemUnidReservado->pc17_unid = $oSolicitemUnid->pc17_unid;
                                     $oDaoSolicitemUnidReservado->pc17_quant = $aItens[$count]->qtdexclusiva;
@@ -1488,7 +1488,7 @@ switch ($oParam->exec) {
                             if ($oParam->tipojulg == 1) {
                                 $clliclicitemlote->l04_descricao = "LOTE_AUTOITEM_" . $pc11_codigo;
                                 if ($pc80_tipoprocesso == 2) {
-                                    $erro_msg = "Tipo de compra é por Lote";
+                                    $erro_msg = "Tipo de compra \E9 por Lote";
                                     $sqlerro = true;
                                     break;
                                 }
@@ -1660,10 +1660,6 @@ switch ($oParam->exec) {
             }
         }
 
-        $result = db_query("UPDATE precoreferencia SET
-        si01_valorestimado = $oParam->valorsigiloso WHERE si01_processocompra = $oParam->codprocant");
-
-
         /**
          * Alterar o parametro passado na db_fim_transacao para receber o $sqlerro,
          * mas antes tem que verificar os preenchimentos das tabelas anteriores
@@ -1672,12 +1668,7 @@ switch ($oParam->exec) {
         db_fim_transacao($sqlerro);
 
         if ($sqlerro) {
-            if ($result == false) {
-                $sqlerro = true;
-                $oRetorno->status = 3;
-            } else {
-                $oRetorno->status = 2;
-            }
+            $oRetorno->status = 2;
         } else {
             $oRetorno->status = 1;
         }

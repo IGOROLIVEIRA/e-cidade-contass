@@ -138,11 +138,13 @@ if (isset($incluir)) {
 			$nomeCampo = "respEditalcodigo";
 			$sqlerro = true;
 		}
+		/*
 		if ($respPubliccodigo == "") {
 			$erro_msg .= 'Responsável pela publicação não informado\n\n';
 			$nomeCampo = "respPubliccodigo";
 			$sqlerro = true;
 		}
+		*/
 		if ($oPost->l20_naturezaobjeto == 1) {
 			if ($respObrascodigo == "") {
 				$erro_msg .= 'Responsável pelos orçamentos, obras e serviços não informado\n\n';
@@ -189,7 +191,7 @@ if (isset($incluir)) {
 		}
 	}
 	//verifica se as duas modalidades esto configuradas.
-	
+
 	$result_modalidade = $clpccflicitapar->sql_record($clpccflicitapar->sql_query_modalidade(null, "*", null, "l25_codcflicita = $l20_codtipocom and l25_anousu = $anousu and l03_instit = $instit"));
 	if ($clpccflicitapar->numrows == 0) {
 		$erro_msg = "Verifique se esta configurado a numeração de licitação por modalidade.";
@@ -212,13 +214,13 @@ if (isset($incluir)) {
 		$sqlerro = true;
 	}
 	if ($oPost->modalidade_tribunal != 100 && $oPost->modalidade_tribunal != 101 && $oPost->modalidade_tribunal != 102 && $oPost->modalidade_tribunal != 103) {
-		if($l20_leidalicitacao == 1){
-			if($l20_mododisputa == 0){
-			$erro_msg = "Selecione um modo de disputa para a licitação.";
-			$nomeCampo = "l20_mododisputa";
-			$sqlerro = true;
+		if ($l20_leidalicitacao == 1) {
+			if ($l20_mododisputa == 0) {
+				$erro_msg = "Selecione um modo de disputa para a licitação.";
+				$nomeCampo = "l20_mododisputa";
+				$sqlerro = true;
 			}
-		}	
+		}
 	}
 
 	//numeracao por modalidade
@@ -434,12 +436,14 @@ if (isset($incluir)) {
 				$clliccomissaocgm->l31_licitacao = $codigo;
 				$clliccomissaocgm->incluir(null);
 			}
+			/*
 			if ($respPubliccodigo != "") {
 				$clliccomissaocgm->l31_numcgm = $respPubliccodigo;
 				$clliccomissaocgm->l31_tipo = 8;
 				$clliccomissaocgm->l31_licitacao = $codigo;
 				$clliccomissaocgm->incluir(null);
 			}
+			*/
 			if ($respObrascodigo != "") {
 				$clliccomissaocgm->l31_numcgm = $respObrascodigo;
 				$clliccomissaocgm->l31_tipo = 10;
@@ -463,6 +467,14 @@ if (isset($incluir)) {
 
 		// db_fim_transacao(false);
 		db_fim_transacao($sqlerro);
+		if ($sqlerro == false) {
+			if ($oPost->modalidade_tribunal == 100 || $oPost->modalidade_tribunal == 101 || $oPost->modalidade_tribunal == 102 || $oPost->modalidade_tribunal == 103) {
+				echo "<script>parent.document.getElementById('liclicpublicacoes').style.display='none';\n</script>";
+			} else {
+				echo "<script>parent.document.getElementById('liclicpublicacoes').style.display='block';\n</script>";
+				echo "<script>parent.document.getElementById('liclicpublicacoes').disabled=false;\n</script>";
+			}
+		}
 	}
 }
 $l20_liclocal = 0;
@@ -527,6 +539,7 @@ if (isset($incluir)) {
 			} else {
 				if ($l20_tipojulg == 3) {
 					echo "<script>parent.document.formaba.liclicitemlote.disabled=false;</script>";
+					echo "<script>parent.document.getElementById('liclicitemlote').style.display='block';\n</script>";
 				}
 				echo " <script>
 		           parent.iframe_liclicita.location.href='lic1_liclicita002.php?chavepesquisa=$codigo';\n

@@ -32,60 +32,71 @@ include("libs/db_usuariosonline.php");
 include("dbforms/db_funcoes.php");
 include("dbforms/db_classesgenericas.php");
 $clcriaabas     = new cl_criaabas;
-if (!isset($db_opcao)){
+if (!isset($db_opcao)) {
   $db_opcao = 1;
 }
 ?>
 
 <html>
-<head>
-<title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta http-equiv="Expires" CONTENT="0">
-<script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
-<link href="estilos.css" rel="stylesheet" type="text/css">
-</head>
-<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" >
-<table width="790" height="18"  border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-  <tr> 
-    <td width="360">&nbsp;</td>
-    <td width="263">&nbsp;</td>
-    <td width="25">&nbsp;</td>
-    <td width="140">&nbsp;</td>
-  </tr>
-</table>
-<form name="formaba">
-<table valign="top" marginwidth="0" width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
-     <?
 
-       if(db_getsession('DB_anousu') >= 2016 ){
-         $clcriaabas->identifica = array("liclicita"=>"Licitação","liclicitem"=>"Itens","liclicitemlote"=>"Lotes");
-         $clcriaabas->sizecampo  = array("liclicita"=>"20","liclicitem"=>"20","liclicitemlote"=>"20");
-         $clcriaabas->title      = array("liclicita"=>"Licitação","liclicitem"=>"Itens da Licitação","liclicitemlote"=>"Lote de itens");
-         $clcriaabas->src        = array("liclicita"=>"lic1_liclicita001.php","liclicitem"=>"lic1_liclicitemalt001.php","liclicitemlote"=>"lic1_liclicitemlote001.php");
-         if ($db_opcao==1){
-           $clcriaabas->disabled   =  array("liclicitem"=>"true","resplicita"=>"true","liclicitemlote"=>"true");
-         }
-         $clcriaabas->cria_abas();
-       }else{
-         $clcriaabas->identifica = array("liclicita"=>"Licitação","liclicitem"=>"Itens","liclicitemlote"=>"Lotes");
-         $clcriaabas->sizecampo  = array("liclicita"=>"20","liclicitem"=>"20","liclicitemlote"=>"20");
-         $clcriaabas->title      = array("liclicita"=>"Licitação","liclicitem"=>"Itens da Licitação","liclicitemlote"=>"Lote de itens");
-         $clcriaabas->src        = array("liclicita"=>"lic1_liclicita001.php","liclicitem"=>"lic1_liclicitemalt001.php","liclicitemlote"=>"lic1_liclicitemlote001.php");
-         if ($db_opcao==1){
-           $clcriaabas->disabled   =  array("liclicitem"=>"false","liclicitemlote"=>"true");
-         }
-         $clcriaabas->cria_abas();
-       }
-	 ?> 
-	 </td>
+<head>
+  <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Expires" CONTENT="0">
+  <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+  <link href="estilos.css" rel="stylesheet" type="text/css">
+</head>
+
+<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+  <table width="790" height="18" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
+    <tr>
+      <td width="360">&nbsp;</td>
+      <td width="263">&nbsp;</td>
+      <td width="25">&nbsp;</td>
+      <td width="140">&nbsp;</td>
+    </tr>
+  </table>
+  <form name="formaba">
+    <table valign="top" marginwidth="0" width="790" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
+          <?
+
+          if (db_getsession('DB_anousu') >= 2016) {
+
+
+            $clcriaabas->identifica = array("liclicita" => "LicitaÃ§Ã£o", "liclicitem" => "Itens", "liclicitemlote" => "Lotes", "liclicpublicacoes" => "PublicaÃ§Ãµes");
+            $clcriaabas->sizecampo = array("liclicita" => "20", "liclicitem" => "20", "liclicitemlote" => "20", "liclicpublicacoes" => "20");
+            $clcriaabas->title = array("liclicita" => "LicitaÃ§Ã£o", "liclicitem" => "Itens da LicitaÃ§Ã£o", "liclicitemlote" => "Lote de itens", "liclicpublicacoes" => "PublicaÃ§Ãµes");
+            $clcriaabas->src = array("liclicita" => "lic1_liclicita001.php", "liclicitem" => "lic1_liclicitemalt001.php", "liclicitemlote" => "lic1_liclicitemlote001.php", "liclicpublicacoes" => "lic1_liclicpublicacao001.php");
+
+            if ($db_opcao == 1) {
+              $clcriaabas->disabled   =  array("liclicitem" => "true", "resplicita" => "true", "liclicitemlote" => "true", "liclicpublicacoes", "true");
+            }
+            $clcriaabas->cria_abas();
+          } else {
+            $clcriaabas->identifica = array("liclicita" => "LicitaÃ§Ã£o", "liclicitem" => "Itens", "liclicitemlote" => "Lotes");
+            $clcriaabas->sizecampo  = array("liclicita" => "20", "liclicitem" => "20", "liclicitemlote" => "20");
+            $clcriaabas->title      = array("liclicita" => "LicitaÃ§Ã£o", "liclicitem" => "Itens da LicitaÃ§Ã£o", "liclicitemlote" => "Lote de itens");
+            $clcriaabas->src        = array("liclicita" => "lic1_liclicita001.php", "liclicitem" => "lic1_liclicitemalt001.php", "liclicitemlote" => "lic1_liclicitemlote001.php");
+            if ($db_opcao == 1) {
+              $clcriaabas->disabled   =  array("liclicitem" => "false", "liclicitemlote" => "true");
+            }
+            $clcriaabas->cria_abas();
+          }
+          ?>
+        </td>
       </tr>
     </table>
-    </form>
-	<? 
-	  db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
-	?>
-    </body>
-    </html>
+  </form>
+  <?
+  db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit"));
+  ?>
+  <script>
+    document.getElementById("liclicitemlote").style.display = "none";
+    document.getElementById("liclicpublicacoes").style.display = "none";
+  </script>
+
+</body>
+
+</html>
