@@ -216,11 +216,25 @@ final class ItemEstimativa extends itemSolicitacao
     $sWhere                    .= "                     where pc10_numero  =  itemestimativa.pc11_numero)";
     $sSqlQuantidadesSolicitadas = $oDaoSolicitem->sql_query_compilacao_estimativa_empenhado(null, $sCampos, null, $sWhere);
     $rsQuantidades              = $oDaoSolicitem->sql_record($sSqlQuantidadesSolicitadas);
-    $nTotalEmpenhado            = 0;
+    //$nTotalEmpenhado            = 0;
     if ($oDaoSolicitem->numrows == 1) {
       $nTotalEmpenhado = db_utils::fieldsMemory($rsQuantidades, 0)->total;
     }
-    return $nTotalEmpenhado;
+    
+    //return $nTotalEmpenhado;
+
+    $oDaoSolicitemAnu           = db_utils::getDao("solicitem");
+    $sCampoAnu                  = "coalesce(sum(e37_qtd), 0) as anulado";
+    $sSqlQuantEmpAnu = $oDaoSolicitemAnu->sql_query_compilacao_estimativa_empanulado(null, $sCampoAnu, null, $sWhere);
+    $rsQuantEmpAnu              = $oDaoSolicitemAnu->sql_record($sSqlQuantEmpAnu);
+    if ($oDaoSolicitemAnu->numrows == 1) {
+      $nTotalEmpAnu = db_utils::fieldsMemory($rsQuantEmpAnu, 0)->anulado;
+    }
+     //return $nTotalEmpAnu;
+
+     $nSaldoEmpenhos = $nTotalEmpenhado-$nTotalEmpAnu;
+
+     return $nSaldoEmpenhos;
   }
 
   /**
