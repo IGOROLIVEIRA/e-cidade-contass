@@ -49,6 +49,7 @@ class cl_matmater {
    var $m60_codant = null;
    var $m60_ativo = 'f';
    var $m60_controlavalidade = 0;
+   var $m60_instit = null;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  m60_codmater = int8 = Código do material
@@ -58,6 +59,7 @@ class cl_matmater {
                  m60_codant = varchar(20) = Código anterior do item
                  m60_ativo = bool = Ativo
                  m60_controlavalidade = int4 = Controlar validade
+                 m60_instit = int4 = instituicao
                  ";
    //funcao construtor da classe
    function cl_matmater() {
@@ -84,6 +86,7 @@ class cl_matmater {
        $this->m60_codant = ($this->m60_codant == ""?@$GLOBALS["HTTP_POST_VARS"]["m60_codant"]:$this->m60_codant);
        $this->m60_ativo = ($this->m60_ativo == "f"?@$GLOBALS["HTTP_POST_VARS"]["m60_ativo"]:$this->m60_ativo);
        $this->m60_controlavalidade = ($this->m60_controlavalidade == ""?@$GLOBALS["HTTP_POST_VARS"]["m60_controlavalidade"]:$this->m60_controlavalidade);
+       $this->m60_instit = ($this->m60_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["m60_instit"]:$this->m60_instit);
      }else{
        $this->m60_codmater = ($this->m60_codmater == ""?@$GLOBALS["HTTP_POST_VARS"]["m60_codmater"]:$this->m60_codmater);
      }
@@ -168,6 +171,11 @@ class cl_matmater {
        $this->erro_status = "0";
        return false;
      }
+
+     if(($this->m60_instit == null) || ($this->m60_instit == "") ){
+      $this->m60_instit = db_getsession('DB_instit');
+     }
+
      $sql = "insert into matmater(
                                        m60_codmater
                                       ,m60_descr
@@ -176,6 +184,7 @@ class cl_matmater {
                                       ,m60_codant
                                       ,m60_ativo
                                       ,m60_controlavalidade
+                                      ,m60_instit
                        )
                 values (
                                 $this->m60_codmater
@@ -185,6 +194,7 @@ class cl_matmater {
                                ,'$this->m60_codant'
                                ,'$this->m60_ativo'
                                ,$this->m60_controlavalidade
+                               ,$this->m60_instit
                       )";
      $result = db_query($sql);
      if($result==false){

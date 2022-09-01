@@ -66,7 +66,7 @@ function calcula_data($data, $dias= 0, $meses = 0, $ano = 0)
     <table width='70%'>
       <tr> 
         <td>
-          <fieldset style="width:100%"><legend align='left'><b>Materiais</b></legend>
+          <fieldset style="width:80%"><legend align='left'><b>Materiais</b></legend>
             <table  border="0"  align="center" width='100%'>
               <tr>
                 <td width='15%' align='right'>
@@ -77,7 +77,7 @@ function calcula_data($data, $dias= 0, $meses = 0, $ano = 0)
                 <td nowrap> 
                   <?
                   db_input('m60_codmater',10,"'C&oacute;digo do material'",true,'text',1," onchange='js_pesquisam60_codmater(false);'");
-                  db_input('m60_descr',55,'Descri&ccedil;&atilde; do material',true,'text',3,'');
+                  db_input('m60_descr',100,'Descri&ccedil;&atilde; do material',true,'text',3,'');
                   ?>
                   &nbsp;&nbsp;&nbsp;&nbsp;
                   <input type='button' value='Lan&ccedil;ar' name='lancar_material' id='lancar_material'>
@@ -85,11 +85,8 @@ function calcula_data($data, $dias= 0, $meses = 0, $ano = 0)
               </tr>
 
               <tr>
-                <td>
-                  &nbsp;
-                </td>
-                <td>
-                  <select multiple size='8' name='select_material[]' id='select_material' style="width: 80%;" onDblClick="js_excluir_item_material();">
+                <td colspan="2">
+                  <select multiple size='8' name='select_material[]' id='select_material' style="width: 100%;" onDblClick="js_excluir_item_material();">
                   </select>
                 </td>
               </tr>

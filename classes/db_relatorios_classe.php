@@ -21,12 +21,14 @@ class cl_relatorios
   public $rel_descricao = null;
   public $rel_arquivo = 0;
   public $rel_corpo = null;
+  public $rel_instit = null;
   // cria propriedade com as variaveis do arquivo
   public $campos = "
                  rel_sequencial = int4 = Sequencial
                  rel_descricao = varchar(50) = Descrição
                  rel_arquivo = int4 = arquivo
                  rel_corpo = varchar(500) = Corpo
+                 rel_instit = int = Instituição
                  ";
 
   //funcao construtor da classe
@@ -56,6 +58,7 @@ class cl_relatorios
       $this->rel_descricao = ($this->rel_descricao == "" ? @$GLOBALS["HTTP_POST_VARS"]["rel_descricao"] : $this->rel_descricao);
       $this->rel_arquivo = ($this->rel_arquivo == "" ? @$GLOBALS["HTTP_POST_VARS"]["rel_arquivo"] : $this->rel_arquivo);
       $this->rel_corpo = ($this->rel_corpo == "" ? @$GLOBALS["HTTP_POST_VARS"]["rel_corpo"] : $this->rel_corpo);
+      $this->rel_instit = ($this->rel_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["rel_instit"] : $this->rel_instit);
     } else {
       $this->rel_sequencial = ($this->rel_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["rel_sequencial"] : $this->rel_sequencial);
     }
@@ -86,6 +89,15 @@ class cl_relatorios
     if ($this->rel_corpo == null) {
       $this->erro_sql = " Campo Corpo não informado.";
       $this->erro_campo = "rel_corpo";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
+    if ($this->rel_instit == null) {
+      $this->erro_sql = " Campo Instituição não informado.";
+      $this->erro_campo = "rel_instit";
       $this->erro_banco = "";
       $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
@@ -129,12 +141,14 @@ class cl_relatorios
                                       ,rel_descricao
                                       ,rel_arquivo
                                       ,rel_corpo
+                                      ,rel_instit
                        )
                 values (
                                 $this->rel_sequencial
                                ,'$this->rel_descricao'
                                ,$this->rel_arquivo
                                ,'$this->rel_corpo'
+                               ,$this->rel_instit
                       )";
     $result = db_query($sql);
     if ($result == false) {

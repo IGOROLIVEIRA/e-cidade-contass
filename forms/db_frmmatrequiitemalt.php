@@ -117,7 +117,9 @@ if ( !empty($m41_codmatmater) && $db_opcao == 1 && !isset($incluir) ) {
 }
 ?>
 <form name="form1" method="post" action="<?=basename($_SERVER['PHP_SELF'])?>" >
-<fieldset style="width: 90%" ><legend><b>Dados da requisição</b></legend>
+<fieldset style="width: 100%" >
+<legend><b>Dados da requisição</b>
+</legend>
 <table border="0" cellspacing="0" cellpadding="0"> <tr>
 <td nowrap title="<?=@$Tm40_codigo?>">
 <b>Requisição: </b>
@@ -139,7 +141,7 @@ db_input('m80_codigo',10,$Im80_codigo,true,'hidden',3,"");
 <td>
 <?
 db_input('m41_codmatmater',10,$Im60_codmater,true,'text',$db_opcao,"onchange='js_pesquisa_codmater(false);'");
-db_input('m60_descr',40,$Im60_descr,true,'text',3,"");
+db_input('m60_descr',100,$Im60_descr,true,'text',3,"");
 ?>
 <script type="text/javascript">
   document.form1.m41_codmatmater.focus();
@@ -153,7 +155,7 @@ db_input('m60_descr',40,$Im60_descr,true,'text',3,"");
 </td>
 <td>
 <?
-db_input('m41_quant',6,$Im41_quant,true,'text',$db_opcao,"");
+db_input('m41_quant',10,$Im41_quant,true,'text',$db_opcao,"");
 ?>
 <?if (isset($m41_codmatmater)&&$m41_codmatmater!=""){?>
   <b>Unid. Saída:</b>

@@ -25,23 +25,23 @@
  *                                licenca/licenca_pt.txt 
  */
 
-require_once ("libs/db_stdlib.php");
-require_once ("libs/db_app.utils.php");
-require_once ("libs/JSON.php");
-require_once ("std/db_stdClass.php");
-require_once ("std/DBDate.php");
-require_once ("dbforms/db_funcoes.php");
-require_once ("model/educacao/avaliacao/iElementoAvaliacao.interface.php");
-require_once ("model/educacao/avaliacao/iFormaObtencao.interface.php");
-require_once ("model/educacao/censo/DadosCenso.model.php");
-require_once ("model/CgmFactory.model.php");
-require_once ("libs/db_conecta.php");
-require_once ("libs/db_utils.php");
-require_once ("libs/db_sessoes.php");
-require_once ("libs/db_usuariosonline.php");
+require_once("libs/db_stdlib.php");
+require_once("libs/db_app.utils.php");
+require_once("libs/JSON.php");
+require_once("std/db_stdClass.php");
+require_once("std/DBDate.php");
+require_once("dbforms/db_funcoes.php");
+require_once("model/educacao/avaliacao/iElementoAvaliacao.interface.php");
+require_once("model/educacao/avaliacao/iFormaObtencao.interface.php");
+require_once("model/educacao/censo/DadosCenso.model.php");
+require_once("model/CgmFactory.model.php");
+require_once("libs/db_conecta.php");
+require_once("libs/db_utils.php");
+require_once("libs/db_sessoes.php");
+require_once("libs/db_usuariosonline.php");
 
 $oJson              = new services_json();
-$oParam             = $oJson->decode(str_replace("\\","",$_POST["json"]));
+$oParam             = $oJson->decode(str_replace("\\", "", $_POST["json"]));
 $oRetorno           = new stdClass();
 $oRetorno->dados    = new stdClass();
 $oRetorno->status   = 1;
@@ -61,7 +61,7 @@ switch ($oParam->exec) {
     if (db_getsession("DB_modulo") == $iModuloEscola) {
       $aFiltros[] = " ed18_i_codigo in ($iEscola) ";
     }
-    
+
     $sWhere = "";
     if (count($aFiltros) > 0) {
       $sWhere = implode(" and ", $aFiltros);
@@ -76,11 +76,11 @@ switch ($oParam->exec) {
 
     break;
 
-  /**
-   * Pesquisa todos calendários que possuem turma vinculádas
-   */
+    /**
+     * Pesquisa todos calendários que possuem turma vinculádas
+     */
   case "pesquisaCalendario":
-    
+
     $oRetorno->dados    = array();
     $aFiltros           = array();
     $sCalendarioPassivo = "ed52_c_passivo = 'N'";
@@ -94,12 +94,12 @@ switch ($oParam->exec) {
     if (isset($oParam->iEscola) && !empty($oParam->iEscola)) {
       $sEscola    = "ed38_i_escola in ({$oParam->iEscola})";
     }
-    
+
     if (isset($oParam->iEscola) && $oParam->iEscola == 0) {
       $sEscola = "";
     }
-    
-    
+
+
     if (!empty($sEscola)) {
       $aFiltros[] = $sEscola;
     }
@@ -128,20 +128,19 @@ switch ($oParam->exec) {
 
       $oRetorno->iEscola  = $iEscola;
       $oRetorno->dados    = db_utils::getCollectionByRecord($rsCalendario, false, false, true);
-
     } else {
 
       $oRetorno->status  = 2;
       $oRetorno->message = urlencode("Não foi possível localizar um Calendário para a escola selecionada!");
     }
- 
+
     break;
-    
-  /**
-   * Pesquisa todos calendários vinculádos a escola
-   */
+
+    /**
+     * Pesquisa todos calendários vinculádos a escola
+     */
   case "pesquisaCalendarioEscola":
-  
+
     $oRetorno->dados    = array();
     $aFiltros           = array();
     $sCalendarioPassivo = "ed52_c_passivo = 'N'";
@@ -149,46 +148,45 @@ switch ($oParam->exec) {
       $sCalendarioPassivo = "ed52_c_passivo in('N', 'S')";
     }
     $aFiltros[] = $sCalendarioPassivo;
-  
+
     $sEscola    = "ed38_i_escola in ({$iEscola})";
-  
+
     if (isset($oParam->iEscola) && !empty($oParam->iEscola)) {
       $sEscola    = "ed38_i_escola in ({$oParam->iEscola})";
     }
-  
+
     if (isset($oParam->iEscola) && $oParam->iEscola == 0) {
       $sEscola = "";
     }
-  
+
     if (!empty($sEscola)) {
       $aFiltros[] = $sEscola;
     }
-    
+
     $sCampos    = " ed52_i_codigo, ed52_c_descr, ed52_i_ano";
     $sWhere     = implode(" and ", $aFiltros);
-  
+
     $oDaoCalendario = new cl_calendario();
-  
+
     $sSqlCalendario  = " select distinct                                                                 \n";
     $sSqlCalendario .= "        ed52_i_codigo, ed52_c_descr, ed52_i_ano                                  \n";
     $sSqlCalendario .= "   from calendario                                                               \n";
     $sSqlCalendario .= "        inner join calendarioescola on calendarioescola.ed38_i_calendario = calendario.ed52_i_codigo \n";
     $sSqlCalendario .= "  where {$sWhere}                                                                \n";
     $sSqlCalendario .= "  order by ed52_i_ano desc                                                       \n";
-  
+
     $rsCalendario   = $oDaoCalendario->sql_record($sSqlCalendario);
-  
+
     if ($oDaoCalendario->numrows > 0) {
-  
+
       $oRetorno->iEscola  = $iEscola;
       $oRetorno->dados    = db_utils::getCollectionByRecord($rsCalendario, false, false, true);
-  
     } else {
-  
+
       $oRetorno->status  = 2;
       $oRetorno->message = urlencode("Não foi possível localizar um Calendário para a escola selecionada!");
     }
-  
+
     break;
 
   case 'pesquisaEtapa':  // Etapa = Série
@@ -233,23 +231,23 @@ switch ($oParam->exec) {
     } else if (isset($oParam->iEscola) && !empty($oParam->iEscola)) {
       $sEscola = " ed57_i_escola in ($iEscola) ";
     }
-    
+
     if (isset($oParam->iCalendario) && !empty($oParam->iCalendario)) {
       $aFiltros[] = " ed57_i_calendario in ({$oParam->iCalendario}) ";
     }
-    
+
     if (isset($oParam->iEtapa) && !empty($oParam->iEtapa)) {
       $aFiltros[] = " ed11_i_codigo in ({$oParam->iEtapa} )";
     }
-        
+
     if (isset($oParam->lEncerrada) && trim($oParam->lEncerrada) == "true") {
       $aFiltros[] = " EXISTS( select 1 from regencia where ed59_c_encerrada = 'S' and ed59_i_turma = ed57_i_codigo)";
     }
-    
+
     if (!empty($sEscola)) {
       $aFiltros[] = $sEscola;
     }
-    
+
     $aFiltros[] = " ed221_c_origem = 'S'";
 
     $sWhere = implode(" and ", $aFiltros);
@@ -258,7 +256,7 @@ switch ($oParam->exec) {
 
     $oDaoTurma  = new cl_turma();
     $sSqlTurma  = $oDaoTurma->sql_query_relatorio(null, $sCampo, $sOrder, $sWhere);
-    
+
     $rsTurma    = $oDaoTurma->sql_record($sSqlTurma);
 
     if ($oDaoTurma->numrows > 0) {
@@ -318,7 +316,6 @@ switch ($oParam->exec) {
       }
 
       $oRetorno->dados = $aAlunosTurma;
-
     } catch (BusinessException $oErro) {
 
       $oRetorno->status  = 2;
@@ -330,7 +327,7 @@ switch ($oParam->exec) {
     }
 
     break;
-  case 'getTurmasProgressaoParcial' :
+  case 'getTurmasProgressaoParcial':
 
     $aFiltros   = array();
     $aFiltros[] = " ed57_i_calendario = {$oParam->iCalendario}";
@@ -374,7 +371,7 @@ switch ($oParam->exec) {
     $oRetorno->aDisciplinas = $aDisciplinas;
     break;
 
-  case 'getPeriodosDeAvaliacaoTurma' :
+  case 'getPeriodosDeAvaliacaoTurma':
 
     $oTurma         = new Turma($oParam->iTurma);
     $aPeriodos      = array();
@@ -402,12 +399,12 @@ switch ($oParam->exec) {
      */
     $lValidaPeriodoAvaliacao = false;
     $aPeriodosCriterio       = array();
-    if( isset( $oParam->lCriterioAvaliacao ) && $oParam->lCriterioAvaliacao ) {
+    if (isset($oParam->lCriterioAvaliacao) && $oParam->lCriterioAvaliacao) {
 
       $lValidaPeriodoAvaliacao = true;
-      $aPeriodoAvaliacao       = PeriodoAvaliacaoRepository::getPeriodosCriteriosAvaliacaoPorEscola( new Escola( $iEscola ) );
+      $aPeriodoAvaliacao       = PeriodoAvaliacaoRepository::getPeriodosCriteriosAvaliacaoPorEscola(new Escola($iEscola));
 
-      foreach( $aPeriodoAvaliacao as $oPeriodoAvaliacao ) {
+      foreach ($aPeriodoAvaliacao as $oPeriodoAvaliacao) {
         $aPeriodosCriterio[] = $oPeriodoAvaliacao->getCodigo();
       }
     }
@@ -417,7 +414,7 @@ switch ($oParam->exec) {
       /**
        * Verifica se é necessário validar se o período de avaliação possui critério vinculado
        */
-      if( $lValidaPeriodoAvaliacao && !in_array( $oPeriodo->getCodigo(), $aPeriodosCriterio ) ) {
+      if ($lValidaPeriodoAvaliacao && !in_array($oPeriodo->getCodigo(), $aPeriodosCriterio)) {
         continue;
       }
 
@@ -461,7 +458,7 @@ switch ($oParam->exec) {
     $oRetorno->aTurmas = $aTurmas;
     break;
 
-  case 'buscaAnosDeTurmasDeProgressaoParcial' :
+  case 'buscaAnosDeTurmasDeProgressaoParcial':
 
     $aFiltros     = array();
 
@@ -471,8 +468,8 @@ switch ($oParam->exec) {
     $sWhere       = implode(" and ", $aFiltros);
     $sCampos      = " distinct ed114_ano ";
     $oDaoTurma    = new cl_progressaoparcialaluno();
-    $sSqlTurma    = $oDaoTurma->sql_query_aluno_escola( null, $sCampos, null, $sWhere );
-    $rsCalendario = $oDaoTurma->sql_record( $sSqlTurma );
+    $sSqlTurma    = $oDaoTurma->sql_query_aluno_escola(null, $sCampos, null, $sWhere);
+    $rsCalendario = $oDaoTurma->sql_record($sSqlTurma);
     $iRegistros   = $oDaoTurma->numrows;
     $aAnos        = array();
 
@@ -488,7 +485,6 @@ switch ($oParam->exec) {
       }
 
       $oRetorno->aAnos = $aAnos;
-
     } catch (BusinessException $eErro) {
 
       $oRetorno->status  = 2;
@@ -498,44 +494,44 @@ switch ($oParam->exec) {
     break;
   case 'pesquisaEscolaComProgressaoParcial':
 
-      $aFiltros = array();
+    $aFiltros = array();
 
-      if (isset($oParam->filtraModulo) && !empty($oParam->filtraModulo)) {
-        $aFiltros[] = " ed18_i_codigo in ($iEscola) ";
-      }
+    if (isset($oParam->filtraModulo) && !empty($oParam->filtraModulo)) {
+      $aFiltros[] = " ed18_i_codigo in ($iEscola) ";
+    }
 
-      $oRetorno->iEscolaAtual      = "";
-      $oRetorno->lPossuiProgressao = false;
-      if (db_getsession("DB_modulo") == $iModuloEscola) {
+    $oRetorno->iEscolaAtual      = "";
+    $oRetorno->lPossuiProgressao = false;
+    if (db_getsession("DB_modulo") == $iModuloEscola) {
 
-        $aFiltros[]             = " ed18_i_codigo in ($iEscola) ";
-        $oRetorno->iEscolaAtual = $iEscola;
-      }
-      if (isset($oParam->lEscolasComAlunosEmProgressao) && $oParam->lEscolasComAlunosEmProgressao == 1) {
+      $aFiltros[]             = " ed18_i_codigo in ($iEscola) ";
+      $oRetorno->iEscolaAtual = $iEscola;
+    }
+    if (isset($oParam->lEscolasComAlunosEmProgressao) && $oParam->lEscolasComAlunosEmProgressao == 1) {
 
-        $sSqlAlunoProgressao  = " exists(select 1 ";
-        $sSqlAlunoProgressao .= "          from progressaoparcialaluno ";
-        $sSqlAlunoProgressao .= "         where ed114_escola = ed18_i_codigo)";
-        $aFiltros[]           = $sSqlAlunoProgressao;
-      }
-      $aFiltros[] = "ed112_habilitado is true";
-      $sWhere = implode(" and ", $aFiltros);
+      $sSqlAlunoProgressao  = " exists(select 1 ";
+      $sSqlAlunoProgressao .= "          from progressaoparcialaluno ";
+      $sSqlAlunoProgressao .= "         where ed114_escola = ed18_i_codigo)";
+      $aFiltros[]           = $sSqlAlunoProgressao;
+    }
+    $aFiltros[] = "ed112_habilitado is true";
+    $sWhere = implode(" and ", $aFiltros);
 
-      $oDaoEscola     = new cl_parametroprogressaoparcial();
-      $sCamposEscola  = "ed18_i_codigo as codigo_escola, ed18_c_nome as nome_escola";
-      $sSqlEscola     = $oDaoEscola->sql_query("", $sCamposEscola, "ed18_c_nome", $sWhere);
-      $rsResultEscola = $oDaoEscola->sql_record($sSqlEscola);
+    $oDaoEscola     = new cl_parametroprogressaoparcial();
+    $sCamposEscola  = "ed18_i_codigo as codigo_escola, ed18_c_nome as nome_escola";
+    $sSqlEscola     = $oDaoEscola->sql_query("", $sCamposEscola, "ed18_c_nome", $sWhere);
+    $rsResultEscola = $oDaoEscola->sql_record($sSqlEscola);
 
-      $oRetorno->dados  = db_utils::getCollectionByRecord($rsResultEscola, false, false, true);
-      if ($oDaoEscola->numrows > 0) {
-        $oRetorno->lPossuiProgressao = true;
-      }
+    $oRetorno->dados  = db_utils::getCollectionByRecord($rsResultEscola, false, false, true);
+    if ($oDaoEscola->numrows > 0) {
+      $oRetorno->lPossuiProgressao = true;
+    }
 
-      break;
+    break;
 
-  /**
-   * Retorna as turmas e etapas vinculadas
-   */
+    /**
+     * Retorna as turmas e etapas vinculadas
+     */
   case 'pesquisaTurmaEtapa':
 
     $sEscola  = "";
@@ -544,29 +540,29 @@ switch ($oParam->exec) {
 
     /**
      * Sempre que estiver no módulo escola, deve buscar os dados da escola logada
-    */
+     */
     if (db_getsession("DB_modulo") == $iModuloEscola) {
       $sEscola = " ed57_i_escola in ($iEscola) ";
     } else if (isset($oParam->iEscola) && !empty($oParam->iEscola)) {
       $sEscola = " ed57_i_escola in ($iEscola) ";
     }
-    
+
     if (isset($oParam->iCalendario) && !empty($oParam->iCalendario)) {
       $aFiltros[] = " ed57_i_calendario in ({$oParam->iCalendario}) ";
     }
-    
+
     if (isset($oParam->iEtapa) && !empty($oParam->iEtapa)) {
       $aFiltros[] = " ed11_i_codigo in ({$oParam->iEtapa} )";
     }
-    
+
     $lTurmaEncerrada  = false;
     if (isset($oParam->lEncerrada) && trim($oParam->lEncerrada) == "true") {
-      
+
       $lTurmaEncerrada = true;
       $aFiltros[] = " EXISTS( select 1 from regencia where ed59_c_encerrada = 'S' and ed59_i_turma = ed57_i_codigo)";
     }
 
-    if ( isset( $oParam->lSomenteComCriterioAvaliacao ) && $oParam->lSomenteComCriterioAvaliacao ) {
+    if (isset($oParam->lSomenteComCriterioAvaliacao) && $oParam->lSomenteComCriterioAvaliacao) {
 
       $sQuery     = "sql_query_turma";
       $aFiltros[] = " EXISTS( select 1 from criterioavaliacaoturma where ed341_turma = ed57_i_codigo )";
@@ -576,8 +572,10 @@ switch ($oParam->exec) {
       $aFiltros[] = $sEscola;
     }
 
-    if (    !isset( $oParam->lSomenteComCriterioAvaliacao )
-         || isset( $oParam->lSomenteComCriterioAvaliacao ) && !$oParam->lSomenteComCriterioAvaliacao ) {
+    if (
+      !isset($oParam->lSomenteComCriterioAvaliacao)
+      || isset($oParam->lSomenteComCriterioAvaliacao) && !$oParam->lSomenteComCriterioAvaliacao
+    ) {
       $aFiltros[] = " ed221_c_origem = 'S'";
     }
 
@@ -599,16 +597,16 @@ switch ($oParam->exec) {
         $oDadosTurma   = db_utils::fieldsMemory($rsTurma, $iContador);
         $oTurma        = TurmaRepository::getTurmaByCodigo($oDadosTurma->ed57_i_codigo);
         $oEtapaTurma   = EtapaRepository::getEtapaByCodigo($oDadosTurma->ed11_i_codigo);
-        
+
         if (isset($oParam->lComAlunosMatriculados) && $oParam->lComAlunosMatriculados) {
-          
-          if ( count($oTurma->getAlunosMatriculadosNaTurmaPorSerie($oEtapaTurma)) == 0) {
+
+          if (count($oTurma->getAlunosMatriculadosNaTurmaPorSerie($oEtapaTurma)) == 0) {
             continue;
           }
         }
         $oRetornoTurma                 = new stdClass();
         $oRetornoTurma->ed57_i_codigo  = $oTurma->getCodigo();
-        $oRetornoTurma->ed57_c_descr   = urlencode($oTurma->getDescricao()." - ".$oEtapaTurma->getNome());
+        $oRetornoTurma->ed57_c_descr   = urlencode($oTurma->getDescricao() . " - " . $oEtapaTurma->getNome());
         $oRetornoTurma->codigo_etapa   = $oEtapaTurma->getCodigo();
 
         if ($lTurmaEncerrada && $oTurma->encerradaNaEtapa($oEtapaTurma)) {
@@ -629,96 +627,96 @@ switch ($oParam->exec) {
     $oEscola         = new Escola($iEscola);
     $oRetorno->dados = array();
     foreach ($oEscola->getDiretor() as $oDiretor) {
-    	
+
       $oDadosDiretor            = new stdClass();
-      $oDadosDiretor->iCodigo   = $oDiretor->iCodigo  ;
+      $oDadosDiretor->iCodigo   = $oDiretor->iCodigo;
       $oDadosDiretor->sNome     = urlencode($oDiretor->sNome);
       $oDadosDiretor->sAtoLegal = urlencode($oDiretor->sAtoLegal);
-      $oDadosDiretor->iNumero   = $oDiretor->iNumero  ;
-      
+      $oDadosDiretor->iNumero   = $oDiretor->iNumero;
+
       $oRetorno->dados[] = $oDadosDiretor;
-    } 
+    }
     break;
 
   case 'pesquisaTurmaTipoGradeHorario':
 
-  	$sEscola    = " ed57_i_escola in ($iEscola) ";
-  	if (isset($oParam->iEscola) && !empty($oParam->iEscola)) {
-  		$sEscola    = "ed57_i_escola in ({$oParam->iEscola})";
-  	}
+    $sEscola    = " ed57_i_escola in ($iEscola) ";
+    if (isset($oParam->iEscola) && !empty($oParam->iEscola)) {
+      $sEscola    = "ed57_i_escola in ({$oParam->iEscola})";
+    }
 
-  	$aFiltros   = array();
-  	$aFiltros[] = $sEscola;
-  	$aFiltros[] = " ed58_tipovinculo = {$oParam->tipoVinculo}";
+    $aFiltros   = array();
+    $aFiltros[] = $sEscola;
+    $aFiltros[] = " ed58_tipovinculo = {$oParam->tipoVinculo}";
 
-  	if (isset($oParam->iCalendario) && !empty($oParam->iCalendario)) {
-  		$aFiltros[] = " ed57_i_calendario in ({$oParam->iCalendario}) ";
-  	}
+    if (isset($oParam->iCalendario) && !empty($oParam->iCalendario)) {
+      $aFiltros[] = " ed57_i_calendario in ({$oParam->iCalendario}) ";
+    }
 
-  	if (isset($oParam->lEncerrada) && trim($oParam->lEncerrada) == "true") {
+    if (isset($oParam->lEncerrada) && trim($oParam->lEncerrada) == "true") {
 
-  		$aFiltros[] = " EXISTS( select 1 from regencia where ed59_c_encerrada = 'S' and ed59_i_turma = ed57_i_codigo)";
-  	}
-  	$aFiltros[] = " ed221_c_origem = 'S' ";
+      $aFiltros[] = " EXISTS( select 1 from regencia where ed59_c_encerrada = 'S' and ed59_i_turma = ed57_i_codigo)";
+    }
+    $aFiltros[] = " ed221_c_origem = 'S' ";
 
-  	$sWhere = implode(" and ", $aFiltros);
-  	$sCampo = "DISTINCT ed220_i_codigo, trim(ed57_c_descr) as ed57_c_descr, trim(ed11_c_descr) as ed11_c_descr";
-  	$sOrder = "ed57_c_descr";
+    $sWhere = implode(" and ", $aFiltros);
+    $sCampo = "DISTINCT ed220_i_codigo, trim(ed57_c_descr) as ed57_c_descr, trim(ed11_c_descr) as ed11_c_descr";
+    $sOrder = "ed57_c_descr";
 
 
-  	$sSqlTurma = " SELECT {$sCampo} ";
-  	$sSqlTurma .= "  FROM turma                                                               ";
-  	$sSqlTurma .= " inner join matricula           on ed60_i_turma    = ed57_i_codigo         ";
-  	$sSqlTurma .= " inner join turmaserieregimemat on ed220_i_turma   = ed57_i_codigo         ";
-  	$sSqlTurma .= " inner join serieregimemat      on ed223_i_codigo  = ed220_i_serieregimemat";
-  	$sSqlTurma .= " inner join serie               on ed11_i_codigo   = ed223_i_serie          ";
-  	$sSqlTurma .= " inner join regencia            on ed59_i_turma    = ed57_i_codigo          ";
-  	$sSqlTurma .= " inner join regenciahorario     on ed58_i_regencia = ed59_i_codigo        ";
-  	$sSqlTurma .= " inner join matriculaserie      on ed221_i_matricula = ed60_i_codigo      ";
-  	$sSqlTurma .= "                               and ed221_i_serie = ed223_i_serie          ";
-  	$sSqlTurma .= " WHERE {$sWhere}                                                          ";
-  	$sSqlTurma .= " ORDER BY ed57_c_descr                                                    ";
+    $sSqlTurma = " SELECT {$sCampo} ";
+    $sSqlTurma .= "  FROM turma                                                               ";
+    $sSqlTurma .= " inner join matricula           on ed60_i_turma    = ed57_i_codigo         ";
+    $sSqlTurma .= " inner join turmaserieregimemat on ed220_i_turma   = ed57_i_codigo         ";
+    $sSqlTurma .= " inner join serieregimemat      on ed223_i_codigo  = ed220_i_serieregimemat";
+    $sSqlTurma .= " inner join serie               on ed11_i_codigo   = ed223_i_serie          ";
+    $sSqlTurma .= " inner join regencia            on ed59_i_turma    = ed57_i_codigo          ";
+    $sSqlTurma .= " inner join regenciahorario     on ed58_i_regencia = ed59_i_codigo        ";
+    $sSqlTurma .= " inner join matriculaserie      on ed221_i_matricula = ed60_i_codigo      ";
+    $sSqlTurma .= "                               and ed221_i_serie = ed223_i_serie          ";
+    $sSqlTurma .= " WHERE {$sWhere}                                                          ";
+    $sSqlTurma .= " ORDER BY ed57_c_descr                                                    ";
 
-  	$oDaoTurma  = new cl_regenciahorario();
-  	$rsTurma    = $oDaoTurma->sql_record($sSqlTurma);
+    $oDaoTurma  = new cl_regenciahorario();
+    $rsTurma    = $oDaoTurma->sql_record($sSqlTurma);
 
-  	if ($oDaoTurma->numrows > 0) {
+    if ($oDaoTurma->numrows > 0) {
 
-  		$oRetorno->dados = db_utils::getCollectionByRecord($rsTurma, false, false, true);
-  	} else {
+      $oRetorno->dados = db_utils::getCollectionByRecord($rsTurma, false, false, true);
+    } else {
 
-  		$oRetorno->status  = 2;
-  		$oRetorno->message = urlencode("Não foi possível localizar as turmas solicitadas!");
-  	}
-  	break;
+      $oRetorno->status  = 2;
+      $oRetorno->message = urlencode("Não foi possível localizar as turmas solicitadas!");
+    }
+    break;
 
   case 'buscaProfessoresTurma':
 
-  	$sEscola    = " ed57_i_escola in ($iEscola) ";
+    $sEscola    = " ed57_i_escola in ($iEscola) ";
 
-  	$aFiltros   = array();
-  	$aFiltros[] = $sEscola;
-  	$aFiltros[] = " ed220_i_codigo = {$oParam->iTurmaSerieRegimeMat}";
+    $aFiltros   = array();
+    $aFiltros[] = $sEscola;
+    $aFiltros[] = " ed220_i_codigo = {$oParam->iTurmaSerieRegimeMat}";
 
-  	$sWhere   = implode(" and ", $aFiltros);
-  	$sWhere  .= " AND ed58_ativo is true";
-  	$sCampos  = " DISTINCT ed20_i_codigo, z01_nome, z01_numcgm ";
-  	$sOrder   = " z01_nome ";
+    $sWhere   = implode(" and ", $aFiltros);
+    $sWhere  .= " AND ed58_ativo is true";
+    $sCampos  = " DISTINCT ed20_i_codigo, z01_nome, z01_numcgm ";
+    $sOrder   = " z01_nome ";
 
-  	$oDaoTurma       = new cl_regenciahorario();
-  	$sSqlProfessores = $oDaoTurma->sql_query_rechumano_regimemat(null, $sCampos, $sOrder, $sWhere);
-  	$rsProfessores   = $oDaoTurma->sql_record($sSqlProfessores);
+    $oDaoTurma       = new cl_regenciahorario();
+    $sSqlProfessores = $oDaoTurma->sql_query_rechumano_regimemat(null, $sCampos, $sOrder, $sWhere);
+    $rsProfessores   = $oDaoTurma->sql_record($sSqlProfessores);
 
-  	if ($oDaoTurma->numrows > 0) {
+    if ($oDaoTurma->numrows > 0) {
 
-  		$oRetorno->dados = db_utils::getCollectionByRecord($rsProfessores, false, false, true);
-  	} else {
+      $oRetorno->dados = db_utils::getCollectionByRecord($rsProfessores, false, false, true);
+    } else {
 
-  		$oRetorno->status  = 2;
-  		$oRetorno->message = urlencode("Não foi possível localizar as turmas solicitadas!");
-  	}
+      $oRetorno->status  = 2;
+      $oRetorno->message = urlencode("Não foi possível localizar as turmas solicitadas!");
+    }
 
-  	break;
+    break;
 
   case 'buscaAtividadesServidor':
 
@@ -742,37 +740,36 @@ switch ($oParam->exec) {
           $oRetorno->aAtividades[] = $oAtividade;
         }
       }
-
     }
 
     break;
 
-  /**
-   * Retorna os cursos de uma escola. Caso iEscola passe 0, retornamos todos os cursos de todas as escolas
-   * @param integer $oParam->iEscola
-   * @return array $oRetorno->aCursos
-   */
+    /**
+     * Retorna os cursos de uma escola. Caso iEscola passe 0, retornamos todos os cursos de todas as escolas
+     * @param integer $oParam->iEscola
+     * @return array $oRetorno->aCursos
+     */
   case 'pesquisaCursos':
-    
+
     if (isset($oParam->iEscola)) {
-      
+
       $oRetorno->aCursos  = array();
       $sWhereCursoEscola  = '';
       $oDaoCursoEscola    = new cl_cursoescola();
       $sCamposCursoEscola = "distinct ed29_i_codigo, ed29_c_descr";
-      
+
       if ($oParam->iEscola != 0) {
         $sWhereCursoEscola = "ed71_i_escola = {$oParam->iEscola}";
       }
-      
+
       $sSqlCursoEscola   = $oDaoCursoEscola->sql_query(null, $sCamposCursoEscola, null, $sWhereCursoEscola);
       $rsCursoEscola     = $oDaoCursoEscola->sql_record($sSqlCursoEscola);
       $iTotalCursoEscola = $oDaoCursoEscola->numrows;
-      
+
       if ($iTotalCursoEscola > 0) {
-        
-        for ($iContador =0; $iContador < $iTotalCursoEscola; $iContador++) {
-          
+
+        for ($iContador = 0; $iContador < $iTotalCursoEscola; $iContador++) {
+
           $oDadosCursoEscola         = db_utils::fieldsMemory($rsCursoEscola, $iContador);
           $oDadosRetorno             = new stdClass();
           $oDadosRetorno->iCodigo    = $oDadosCursoEscola->ed29_i_codigo;
@@ -782,47 +779,48 @@ switch ($oParam->exec) {
       }
     }
     break;
-    
-  /**
-   * Retorna um array de disciplinas. Caso tenha sido informado um codigo de escola e/ou curso, filtramos as disciplinas
-   * de acordo com estes codigos
-   * @param integer $oParam->iEscola
-   * @param integer $oParam->iCurso
-   * @return array $oRetorno->aDisciplinas
-   */
+
+    /**
+     * Retorna um array de disciplinas. Caso tenha sido informado um codigo de escola e/ou curso, filtramos as disciplinas
+     * de acordo com estes codigos
+     * @param integer $oParam->iEscola
+     * @param integer $oParam->iCurso
+     * @return array $oRetorno->aDisciplinas
+     */
   case 'pesquisaDisciplinas':
-    
-      
+
+
     $oRetorno->aDisciplinas = array();
     $aWhereDisciplina       = array();
-    
+
     if (isset($oParam->iEscola) && (!empty($oParam->iEscola) || $oParam->iEscola != 0)) {
       $aWhereDisciplina[] = "ed71_i_escola = {$oParam->iEscola}";
     }
-    
+
     if (isset($oParam->iCurso) && (!empty($oParam->iCurso) || $oParam->iCurso != 0)) {
       $aWhereDisciplina[] = "ed29_i_codigo = {$oParam->iCurso}";
     }
-    
+
     if (isset($oParam->iEnsino) && (!empty($oParam->iEnsino) || $oParam->iEnsino != 0)) {
       $aWhereDisciplina[] = " ed10_i_codigo = {$oParam->iEnsino} ";
     }
-    
+
     $sWhereDisciplina  = implode(" and ", $aWhereDisciplina);
     $sCamposDisciplina = "distinct ed232_i_codigo, trim(ed232_c_descr) as ed232_c_descr";
     $oDaoDisciplina    = new cl_caddisciplina();
-    $sSqlDisciplina    = $oDaoDisciplina->sql_query_disciplinas_na_escola(null,
-                                                                          $sCamposDisciplina,
-                                                                          "ed232_c_descr",
-                                                                          $sWhereDisciplina
-                                                                         );
+    $sSqlDisciplina    = $oDaoDisciplina->sql_query_disciplinas_na_escola(
+      null,
+      $sCamposDisciplina,
+      "ed232_c_descr",
+      $sWhereDisciplina
+    );
     $rsDisciplina      = $oDaoDisciplina->sql_record($sSqlDisciplina);
     $iTotalDisciplina  = $oDaoDisciplina->numrows;
-    
+
     if ($iTotalDisciplina > 0) {
-      
+
       for ($iContador = 0; $iContador < $iTotalDisciplina; $iContador++) {
-        
+
         $oDadosSqlDisciplina          = db_utils::fieldsMemory($rsDisciplina, $iContador);
         $oDadosDisciplina             = new stdClass();
         $oDadosDisciplina->iCodigo    = $oDadosSqlDisciplina->ed232_i_codigo;
@@ -832,26 +830,26 @@ switch ($oParam->exec) {
     }
     break;
   case 'pesquisaEnsino':
-    
+
     $aWhere = array();
-    if (isset($oParam->iEscola) && ($oParam->iEscola != 0 || !empty($oParam->iEscola)) ) {
+    if (isset($oParam->iEscola) && ($oParam->iEscola != 0 || !empty($oParam->iEscola))) {
       $aWhere[] = "ed71_i_escola = {$oParam->iEscola}";
     }
-    
+
     $sWhere = implode(" and ", $aWhere);
     require_once 'classes/db_cursoedu_classe.php';
     $oDaoCursoEdu = new cl_curso();
-    
+
     $sCampos    = " distinct ed10_i_codigo, trim(ed10_c_descr) as ed10_c_descr ";
     $sSqlEnsino = $oDaoCursoEdu->sql_query_cursoescola(null, $sCampos, "ed10_c_descr", $sWhere);
     $rsEnsino   = $oDaoCursoEdu->sql_record($sSqlEnsino);
     $iLinhas    = $oDaoCursoEdu->numrows;
-    
+
     $oRetorno->aEnsino = array();
     if ($iLinhas > 0) {
-      
+
       for ($i = 0; $i < $iLinhas; $i++) {
-        
+
         $oDados              = db_utils::fieldsMemory($rsEnsino, $i);
         $oEnsino             = new stdClass();
         $oEnsino->iCodigo    = $oDados->ed10_i_codigo;
@@ -859,68 +857,67 @@ switch ($oParam->exec) {
         $oRetorno->aEnsino[] = $oEnsino;
       }
     }
-    
+
     break;
-    
+
   case "pesquisaAnoLetivoEscola":
-  
+
     $aFiltros   = array();
     $aFiltros[] = "ed52_c_passivo = 'N'";
-  
-    if ( isset($oParam->iEscola) && (!empty($oParam->iEscola)) ) {
+
+    if (isset($oParam->iEscola) && (!empty($oParam->iEscola))) {
       $aFiltros[] = "ed38_i_escola in ({$oParam->iEscola})";
     }
-  
+
     $sCampos    = " distinct ed52_i_ano";
     $sWhere     = implode(" and ", $aFiltros);
-  
+
     $oDaoCalendario = new cl_calendarioescola();
     $sSqlCalendario = $oDaoCalendario->sql_query(null, $sCampos, "ed52_i_ano desc", $sWhere);
     $rsCalendario   = $oDaoCalendario->sql_record($sSqlCalendario);
-  
+
     if ($oDaoCalendario->numrows > 0) {
       $oRetorno->aAno  = db_utils::getCollectionByRecord($rsCalendario, false, false, true);
-  
     } else {
-  
+
       $oRetorno->status  = 2;
       $oRetorno->message = urlencode("Não foi possível localizar um Calendário para a escola selecionada!");
     }
     break;
-    
+
   case 'pesquisaEtapaAno':
-    
+
     $aFiltros   = array();
-    
-    if ( isset($oParam->iEscola) && (!empty($oParam->iEscola)) ) {
+
+    if (isset($oParam->iEscola) && (!empty($oParam->iEscola))) {
       $aFiltros[] = "ed57_i_escola in ({$oParam->iEscola})";
     }
-    
-    if ( isset($oParam->iAno) && !empty($oParam->iAno) ) {
-      
+
+    if (isset($oParam->iAno) && !empty($oParam->iAno)) {
+
       $aFiltros[] = "ed52_i_ano = {$oParam->iAno}";
       $sWhere     = implode(" and ", $aFiltros);
-      
+
       $sCampos   = "DISTINCT ed11_i_codigo, ed11_c_descr, ed11_i_ensino, ed11_i_sequencia";
       $sOrdem    = "ed11_i_ensino,ed11_i_sequencia";
       $oDaoTurma = new cl_turma;
       $sSqlEtapa = $oDaoTurma->sql_query_relatorio(null, $sCampos, $sOrdem, $sWhere);
       $rsEtapa   = $oDaoTurma->sql_record($sSqlEtapa);
-    
+
       if ($oDaoTurma->numrows > 0) {
         $oRetorno->aEtapaAno = db_utils::getCollectionByRecord($rsEtapa, false, false, true);
       } else {
-        
+
         $oRetorno->status  = 2;
         $oRetorno->message = urlencode("Não foi possível localizar as etapas solicitadas!");
       }
     } else {
-      
+
       $oRetorno->status  = 2;
       $oRetorno->message = urlencode("Ano não informado!");
     }
-      
-  case 'buscaEmissor' :
+
+  case 'buscaEmissor':
 
     if (isset($oParam->iEscola) && !empty($oParam->iEscola)) {
 
@@ -952,57 +949,91 @@ switch ($oParam->exec) {
       $sSqlUnion         .= " UNION ";
       $sSqlUnion         .= $sSqlSec;
 
-      $rsAssinatura       = db_query($sSqlUnion);
-     
+
+      $instit = db_getsession("DB_instit");
+      $ano = db_anofolha();
+      $mes = db_mesfolha();
+      $escola = db_getsession("DB_coddepto");
+
+      $sql = "SELECT ed20_i_codigo,
+                     case when ed20_i_tiposervidor = 1 then rechumanopessoal.ed284_i_rhpessoal else rechumanocgm.ed285_i_cgm end as identificacao,
+                     case when ed20_i_tiposervidor = 1 then cgmrh.z01_nome else cgmcgm.z01_nome end as z01_nome,
+                     case when ed20_i_tiposervidor = 1 then cgmrh.z01_cgccpf else cgmcgm.z01_cgccpf end as z01_cgccpf,
+                     ed01_c_descr,
+                     case when ed20_i_tiposervidor = 1
+                      then regimerh.rh30_descr
+                      else regimecgm.rh30_descr
+                     end as rh30_descr
+              FROM rechumano
+               inner join rechumanoescola on ed75_i_rechumano = ed20_i_codigo
+               left join rechumanoativ on ed22_i_rechumanoescola = ed75_i_codigo
+               left join atividaderh on ed01_i_codigo = ed22_i_atividade
+               left join rechumanopessoal  on  rechumanopessoal.ed284_i_rechumano = rechumano.ed20_i_codigo
+               left join rhpessoal  on  rhpessoal.rh01_regist = rechumanopessoal.ed284_i_rhpessoal
+               left join rhpessoalmov on rhpessoalmov.rh02_anousu  = $ano
+                                          and rhpessoalmov.rh02_mesusu  = $mes
+                                          and rhpessoalmov.rh02_regist  = rhpessoal.rh01_regist
+                                          and rhpessoalmov.rh02_instit  = $instit
+               left join rhregime as regimerh on  regimerh.rh30_codreg = rhpessoalmov.rh02_codreg
+               left join cgm as cgmrh on  cgmrh.z01_numcgm = rhpessoal.rh01_numcgm
+               left join rechumanocgm  on  rechumanocgm.ed285_i_rechumano = rechumano.ed20_i_codigo
+               left join cgm as cgmcgm on  cgmcgm.z01_numcgm = rechumanocgm.ed285_i_cgm
+               left join rhregime as regimecgm on  regimecgm.rh30_codreg = rechumano.ed20_i_rhregime
+              WHERE ed75_i_escola = $escola 
+              ORDER BY z01_nome,ed01_c_descr
+             ";
+
+      $rsAssinatura       = db_query($sql);
+
       $oRetorno->dados = array();
 
-      if ( !$rsAssinatura ) {
+      if (!$rsAssinatura) {
 
         $oRetorno->status  = 2;
         $oRetorno->message = urlencode("Erro ao buscar emissor!");
       } else {
-      
+
         $oDados            = db_utils::getCollectionByRecord($rsAssinatura, false, false, true);
         $oRetorno->dados   = $oDados;
       }
     }
     break;
-    
-  case 'getPeriodosAvaliacao' :
-    
+
+  case 'getPeriodosAvaliacao':
+
     $oDaoPeriodo = new cl_periodoavaliacao();
     $sSqlPeriodo = $oDaoPeriodo->sql_query_file(null, "*", " ed09_i_sequencia ");
     $rsPeriodos  = db_query($sSqlPeriodo);
-    
+
     $aPeriodosAvaliacao = array();
-    if ( $rsPeriodos && pg_num_rows($rsPeriodos) > 0 ) {
-      
+    if ($rsPeriodos && pg_num_rows($rsPeriodos) > 0) {
+
       $iLinhas = pg_num_rows($rsPeriodos);
-      for ( $i = 0; $i < $iLinhas; $i ++ ) {
-        
+      for ($i = 0; $i < $iLinhas; $i++) {
+
         $oDado                       = db_utils::fieldsMemory($rsPeriodos, $i);
         $oPeriodo                    = new stdClass();
         $oPeriodo->iPeriodoAvaliacao = $oDado->ed09_i_codigo;
-        $oPeriodo->sPeriodoAvaliacao = utf8_encode( $oDado->ed09_c_descr );
-        $oPeriodo->sPeriodoAbrev     = utf8_encode( $oDado->ed09_c_abrev );
+        $oPeriodo->sPeriodoAvaliacao = utf8_encode($oDado->ed09_c_descr);
+        $oPeriodo->sPeriodoAbrev     = utf8_encode($oDado->ed09_c_abrev);
         $aPeriodosAvaliacao[]        = $oPeriodo;
       }
     }
     $oRetorno->aPeriodosAvaliacao = $aPeriodosAvaliacao;
-    
+
     break;
 
   case 'getAreasTrabalho':
 
     $iEscola = db_getsession('DB_coddepto');
-    if ( isset($oParam->iEscola) && $oParam->iEscola != '') {
+    if (isset($oParam->iEscola) && $oParam->iEscola != '') {
       $iEscola = $oParam->iEscola;
     } elseif (isset($oParam->iEscola) && $oParam->iEscola == 0) {
       $iEscola = null;
     }
 
     $sWhere = "";
-    if ( !empty($iEscola) ) {
+    if (!empty($iEscola)) {
       $sWhere = " ed75_i_escola = {$iEscola} ";
     }
 
@@ -1023,22 +1054,22 @@ switch ($oParam->exec) {
 
     break;
 
-  /**
-   * Retorna o código e a descrição de todos os Procedimentos de Avaliação que a Escola possui
-   */
+    /**
+     * Retorna o código e a descrição de todos os Procedimentos de Avaliação que a Escola possui
+     */
   case 'getProcedimentosAvaliacao':
-    
-    $oEscola     = new Escola( $oParam->iEscola );
-    $oCalendario = CalendarioRepository::getCalendarioByCodigo( $oParam->iCalendario );
+
+    $oEscola     = new Escola($oParam->iEscola);
+    $oCalendario = CalendarioRepository::getCalendarioByCodigo($oParam->iCalendario);
     $oRetorno->aProcedimentosAvaliacao = array();
 
 
-    foreach ($oEscola->getProcedimentosAvaliacao( $oCalendario ) as $oProcedimentoAvaliacao ) {
-      
+    foreach ($oEscola->getProcedimentosAvaliacao($oCalendario) as $oProcedimentoAvaliacao) {
+
       $oStdProcedimento                = new stdClass();
       $oStdProcedimento->iProcedimento = $oProcedimentoAvaliacao->getCodigo();
       $oStdProcedimento->sProcedimento = urlencode($oProcedimentoAvaliacao->getDescricao());
-      
+
       $oRetorno->aProcedimentosAvaliacao[] = $oStdProcedimento;
     }
 
