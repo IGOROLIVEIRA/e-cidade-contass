@@ -45,7 +45,7 @@ class ImportacaoReceitaExtraOrcamentariaLayout2
         $this->oReceita->sCodAgencia      = substr($sLinha, 3, 4);
         $this->oReceita->dDataCredito     = $this->montarData(substr($sLinha, 7, 8));
         $this->oReceita->nValor           = $this->montarValor(substr($sLinha, 21, 13));
-        $this->oReceita->sPcasp           = trim(str_replace(".", "", substr($sLinha, 35, 16)));
+        $this->oReceita->sPcasp           = trim(str_replace(".", "", substr($sLinha, 35, 24)));
         $this->oReceita->iRecurso         = substr(trim($sLinha), -3);
         $this->preencherContaCredito();
         $this->preencherAgenteArrecadador();
