@@ -143,7 +143,7 @@ if( !isset($m38_visualizacaoitens) or !isset($m38_visualizacaomatestoque) ) {
         }
         
         // visualizar apenas com movimentação na instituição que está sendo acessada
-                  $sWhereConfig .= "and ( m60_instit = ". db_getsession("DB_instit") ." or instit is null ) ";
+                  $sWhereConfig .= " and m60_instit = ". db_getsession("DB_instit");
         
         // apenas materiais com estoque
         if ( $m38_visualizacaomatestoque == "t") {

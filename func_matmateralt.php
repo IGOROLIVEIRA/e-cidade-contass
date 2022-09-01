@@ -126,7 +126,7 @@ $clmatmater->rotulo->label("m60_descr");
           }
            $sql = $clmatmater->sql_query("",$campos,"m60_codmater","$where_ativo $where_instit");
         }
-        echo $sql;
+        //echo $sql;
         db_lovrot($sql,15,"()","",$funcao_js);
       }else{
         if($pesquisa_chave!=null && $pesquisa_chave!=""){
