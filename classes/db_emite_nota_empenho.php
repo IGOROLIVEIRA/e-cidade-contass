@@ -171,6 +171,7 @@ class cl_emite_nota_empenho {
         $sqlitem .= "        solrp.pc11_numero, ";
         $sqlitem .= "        solrp.pc11_codigo, ";
         $sqlitem .= "        l20_prazoentrega, ";
+        $sqlitem .= "        m61_descr, ";
         $sqlitem .= "        e55_marca, ";
         $sqlitem .= "        case when pc10_solicitacaotipo = 5 then coalesce(trim(pcitemvalrp.pc23_obs), '') ";
         $sqlitem .= "             else  coalesce(trim(pcorcamval.pc23_obs), '') end as pc23_obs ";
@@ -334,7 +335,7 @@ class cl_emite_nota_empenho {
 
     function get_acordo($e60_numemp) {
 
-        $sSql = " SELECT ac16_numeroacordo, ac16_anousu from empempenhocontrato JOIN acordo ON ac16_sequencial = e100_acordo where e100_numemp = ".$e60_numemp;
+        $sSql = " SELECT ac16_numeroacordo, ac16_anousu, ac16_sequencial  from empempenhocontrato JOIN acordo ON ac16_sequencial = e100_acordo where e100_numemp = ".$e60_numemp;
         $rsAcordo = db_query($sSql);
         return db_utils::fieldsMemory($rsAcordo, 0);
 
