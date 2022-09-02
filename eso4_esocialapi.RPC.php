@@ -287,10 +287,7 @@ try {
                     }
                 } else {
                     $dadosTabela = $dadosESocial->getPorTipo(Tipo::getTipoFormulario($arquivo), empty($oParam->matricula) ? null : $oParam->matricula);
-                    //necessario para diferenciar envio individual do envio geral
-                    if ($arquivo == "S2230") {
-                        $arquivo = "S2230Individual";
-                    }
+
                     foreach (array_chunk($dadosTabela, 1) as $aTabela) {
                         $eventoFila = new Evento($arquivo, $iCgm, $iCgm, $aTabela, $oParam->tpAmb, "{$oParam->iAnoValidade}-{$oParam->iMesValidade}", $oParam->modo, $oParam->dtalteracao, $oParam->indapuracao);
                         $eventoFila->adicionarFila();
