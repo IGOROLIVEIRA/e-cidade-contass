@@ -1194,7 +1194,7 @@ db_logduplos("");
 exit(0);
 
 
-function db_fieldsmemory1($recordset,$indice,$formatar="",$mostravar=false) {
+/*function db_fieldsmemory1($recordset,$indice,$formatar="",$mostravar=false) {
   $fm_numfields = pg_numfields($recordset);
   for ($i = 0; $i < $fm_numfields; $i++) {
     $matriz[$i] = pg_fieldname($recordset,$i);
@@ -1262,5 +1262,5 @@ default:
   break;
     }
   }
-}
+}*/
 ?>
