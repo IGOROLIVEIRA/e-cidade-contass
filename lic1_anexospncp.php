@@ -36,8 +36,10 @@ require_once("dbforms/db_funcoes.php");
 $iOpcaoLicitacao = 1;
 $lExibirMenus   = true;
 $cltipoanexo = new cl_tipoanexo;
+$cllicanexopncp = new cl_licanexopncp;
 
-$oGet = db_utils::postMemory($_GET);
+db_postmemory($HTTP_POST_VARS);
+parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 
 /**
  * Codigo do precesso informado por GET
@@ -72,7 +74,7 @@ $oRotulo->label("l20_objeto");
       <form name="form" id="form" method="post" action="" enctype="multipart/form-data">
 
 
-        
+      <?php db_input("namefile", 30, 0, true, "hidden", 1); ?>
 
         <table class="form-container">
 
@@ -129,7 +131,8 @@ $oRotulo->label("l20_objeto");
       </form>
     </fieldset>
 
-    <input type="button" id="btnSalvar" value="Salvar" onClick="js_salvar();" />
+    <input type="button" id="btnSalvar" onClick="js_salvar();" value="Salvar" />
+ 
 
     <fieldset style="margin-top:15px;">
       <legend>Documentos Anexados</legend>
@@ -177,6 +180,184 @@ document.getElementById("l213_sequencial").style.display = "none";
   oGridDocumentos.allowSelectColumns(true);
   oGridDocumentos.show($('ctnDbGridDocumentos'));
 
+
+    /**
+   * Buscar documentos do processo
+   * @return boolean
+   */
+  function js_buscarDocumentos() {
+
+    var iCodigoProcesso = $('l20_codigo').value;
+
+    if (empty(iCodigoProcesso)) {
+      return false;
+    }
+
+    js_divCarregando('mensagem_buscando_documentos', 'msgbox');
+
+    var oParametros = new Object();
+
+    oParametros.exec = 'carregarDocumentos';
+    oParametros.iCodigoProcesso = iCodigoProcesso;
+
+    var oAjax = new Ajax.Request(
+      sUrlRpc, {
+        parameters: 'json=' + Object.toJSON(oParametros),
+        method: 'post',
+        asynchronous: false,
+
+        /**
+         * Retorno do RPC
+         */
+        onComplete: function(oAjax) {
+
+          js_removeObj("msgbox");
+          var oRetorno = eval('(' + oAjax.responseText + ")");
+
+          var sMensagem = oRetorno.sMensagem.urlDecode();
+
+          if (oRetorno.iStatus > 1) {
+
+            alert(sMensagem);
+            return false;
+          }
+
+          oGridDocumentos.clearAll(true);
+          var iDocumentos = oRetorno.aDocumentosVinculados.length;
+
+          for (var iIndice = 0; iIndice < iDocumentos; iIndice++) {
+
+            var oDocumento = oRetorno.aDocumentosVinculados[iIndice];
+            var sDescricaoDocumento = oDocumento.sDescricaoDocumento;
+
+          
+            var sHTMLBotoes = '<input type="button" value="Alterar" onClick="js_alterarDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\');" />  ';
+              sHTMLBotoes += '<input type="button" value="Download" onClick="js_downloadDocumento(' + oDocumento.iCodigoDocumento + ');" />  ';
+
+              $bBloquea = false;
+
+
+            
+            var aLinha = [oDocumento.iCodigoDocumento, sDescricaoDocumento.urlDecode(), sHTMLBotoes];
+            oGridDocumentos.addRow(aLinha, false, $bBloquea);
+          }
+
+          oGridDocumentos.renderRows();
+        }
+      }
+    );
+
+  }
+
+    /**
+   * Altera descricao de um documento
+   * @param integer iCodigoDocumento
+   * @param string sDescricaoDocumento
+   * @return void
+   */
+  function js_alterarDocumento(iCodigoDocumento) {
+
+    $('namefile').value = '';
+    $('uploadfile').value = '';
+    $('uploadfile').disabled = true;
+
+    /**
+     * Altera acao do botao salvar
+     * @return void
+     */
+    $('btnSalvar').onclick = function() {
+
+      var iCodigoProcesso = $('l20_codigo').value;
+      var oParametros = new Object();
+
+      if (empty(iCodigoProcesso)) {
+
+        alert(_M(MENSAGENS + 'erro_processo_nao_informado'));
+        return false;
+      }
+
+      js_divCarregando('mensagem_salvando_documento', 'msgbox');
+
+      oParametros.exec = 'salvarDocumento';
+      oParametros.iCodigoDocumento = iCodigoDocumento;
+      oParametros.iCodigoProcesso = iCodigoProcesso;
+
+      var oAjax = new Ajax.Request(
+        sUrlRpc, {
+          parameters: 'json=' + Object.toJSON(oParametros),
+          method: 'post',
+          asynchronous: false,
+          onComplete: function(oAjax) {
+
+            js_removeObj("msgbox");
+            var oRetorno = eval('(' + oAjax.responseText + ")");
+            var sMensagem = oRetorno.sMensagem.urlDecode();
+
+            if (oRetorno.iStatus > 1) {
+
+              alert(sMensagem);
+              return false;
+            }
+
+            $('btnSalvar').onclick = js_salvar;
+            $('namefile').value = '';
+            $('uploadfile').value = '';
+            $('uploadfile').disabled = false;
+
+            alert(sMensagem);
+            js_buscarDocumentos();
+          }
+        });
+
+    }
+  }
+
+  /**
+   * Download de um documento
+   * - busca arquivo do banco e salva no tmp
+   * - exibe janela com link para download
+   * @param  integer iCodigoDocumento
+   * @return void
+   */
+  function js_downloadDocumento(iCodigoDocumento) {
+
+    js_divCarregando('mensagem_carregando_documento', 'msgbox');
+
+    var oParametros = new Object();
+
+    oParametros.exec = 'download';
+    oParametros.iCodigoDocumento = iCodigoDocumento;
+
+    var oAjax = new Ajax.Request(
+      sUrlRpc, {
+        parameters: 'json=' + Object.toJSON(oParametros),
+        method: 'post',
+        asynchronous: false,
+
+        /**
+         * Retorno do RPC
+         */
+        onComplete: function(oAjax) {
+
+          js_removeObj("msgbox");
+          var oRetorno = eval('(' + oAjax.responseText + ")");
+          var sMensagem = oRetorno.sMensagem.urlDecode();
+
+          if (oRetorno.iStatus > 1) {
+
+            alert(sMensagem);
+            return false;
+          }
+
+          var sCaminhoDownloadArquivo = oRetorno.sCaminhoDownloadArquivo.urlDecode();
+          var sTituloArquivo = oRetorno.sTituloArquivo.urlDecode();
+
+          window.open("db_download.php?arquivo=" + sCaminhoDownloadArquivo);
+        }
+      });
+
+  }
+
   /**
    * Pesquisar Licitacao
    *
@@ -216,6 +397,8 @@ document.getElementById("l213_sequencial").style.display = "none";
     $('l20_objeto').value = descricao;
     $('uploadfile').disabled = false;
     db_iframe_proc.hide();
+
+    js_buscarDocumentos();
     
   }
 
@@ -239,7 +422,7 @@ document.getElementById("l213_sequencial").style.display = "none";
     }
 
     $('l20_objeto').value = iCodigoLicitacao;
-   
+    js_buscarDocumentos();
   }
 
   /**
@@ -255,7 +438,7 @@ document.getElementById("l213_sequencial").style.display = "none";
   }
 
   function startLoading() {
-    js_divCarregando(_M(MENSAGENS + 'mensagem_enviando_documento'), 'msgbox');
+    js_divCarregando('Aguarde... Enviando documento.', 'msgbox');
   }
 
   function endLoading() {
@@ -265,23 +448,38 @@ document.getElementById("l213_sequencial").style.display = "none";
   function js_salvar() {
 
     var iCodigoLicitacao = $('l20_codigo').value;
-    var iCodigoDocumento = $('l213_sequencial').value;
+
+    
 
     if (empty(iCodigoLicitacao)) {
 
-      alert(_M(MENSAGENS + 'erro_Licitacao_nao_informado'));
+      alert('Licitação não incluida');
       return false;
     }
 
+    var iCodigoDocumento = $('l213_sequencial').value;
 
-    js_divCarregando(_M(MENSAGENS + 'mensagem_salvando_documento'), 'msgbox');
+    var sCaminhoArquivo = $('namefile').value;
+  
+  
+	  if (sCaminhoArquivo == '') {
+	  
+		  alert('Arquivo de anexo não informado!');
+		  return false;
+	  }
+
+    
+    
+  
+
+    js_divCarregando('Aguarde... Salvando documento.', 'msgbox');
 
     var oParametros = new Object();
 
     oParametros.exec = 'salvarDocumento';
     oParametros.iCodigoDocumento = iCodigoDocumento;
     oParametros.iCodigoLicitacao = iCodigoLicitacao;
-
+    oParametros.sCaminhoArquivo = sCaminhoArquivo;
 
     var oAjax = new Ajax.Request(
       sUrlRpc, {
@@ -300,10 +498,9 @@ document.getElementById("l213_sequencial").style.display = "none";
             return false;
           }
 
-          $('namefile').value = '';
+          
           $('uploadfile').value = '';
           $('uploadfile').disabled = false;
-          $('p01_descricao').value = '';
 
           alert(sMensagem);
         }

@@ -24,7 +24,7 @@
  *  Copia da licenca no diretorio licenca/licenca_en.txt
  *                                licenca/licenca_pt.txt
  */
-
+//ini_set('display_errors','on');
 require_once("libs/db_stdlib.php");
 require_once("libs/db_utils.php");
 require_once("libs/db_app.utils.php");
@@ -34,7 +34,7 @@ require_once("libs/JSON.php");
 require_once("std/db_stdClass.php");
 require_once("dbforms/db_funcoes.php");
 
-define("URL_MENSAGEM_LIC1ANEXOSPNCP", "patrimonial.liciacao.lic1_anexospncp.");
+define("URL_MENSAGEM_LIC1ANEXOSPNCP", "patrimonial.licitacao.lic1_anexospncp.");
 
 $oJson               = new services_json();
 $oParam              = $oJson->decode(str_replace("\\", "", $_POST["json"]));
@@ -53,18 +53,46 @@ try {
     
     case "salvarDocumento":
 
-      $oLicitacaoDocumento = new LicitacaoAnexo($oParam->iCodigoLicitacao);
-      
+      $oLicitacaoAnexo = new LicitacaoAnexo($oParam->iCodigoLicitacao);
+      $oLicitacaoAnexo->setLicitacao($oParam->iCodigoLicitacao);
+      $oLicitacaoAnexo->salvar();
 
-      $oLicitacaoDocumento = new LicitacaoDocumento($oParam->iCodigoDocumento);
-      $oLicitacaoDocumento->setDescricao(db_stdClass::normalizeStringJsonEscapeString($oParam->sDescricaoDocumento));
-      $oLicitacaoDocumento->setProcessoProtocolo($oProcessoProtocolo);
+      $oLicitacaoDocumento = new LicitacaoDocumento();
+      $oLicitacaoDocumento->setProcessoProtocolo($oLicitacaoAnexo);
+      $oLicitacaoDocumento->setTipoanexo($oParam->iCodigoDocumento);
 
       if (!empty($oParam->sCaminhoArquivo)) {
         $oLicitacaoDocumento->setCaminhoArquivo($oParam->sCaminhoArquivo);
       }
 
       $oRetorno->sMensagem = urlencode($oLicitacaoDocumento->salvar());
+      
+
+      break;
+    
+    case "carregarDocumentos":
+
+      $oProcessoProtocolo    = new LicitacaoAnexo($oParam->iCodigoProcesso);
+
+      $aDocumentosVinculados = $oProcessoProtocolo->getDocumentos();
+      $aDocumentosRetorno    = array();
+      foreach ($aDocumentosVinculados as $oProcessoLicitacao) {
+
+        $oStdDocumento = new stdClass();
+        $oStdDocumento->iCodigoDocumento    = $oProcessoLicitacao->getCodigo();
+        $oStdDocumento->sDescricaoDocumento = $oProcessoLicitacao->getDescricaoTipo();
+
+        $aDocumentosRetorno[] = $oStdDocumento;
+      }
+      $oRetorno->aDocumentosVinculados = $aDocumentosRetorno;
+
+      break;
+      
+    case "download":
+
+      $oProcessoDocumento                = new LicitacaoDocumento($oParam->iCodigoDocumento);
+      $oRetorno->sCaminhoDownloadArquivo = $oProcessoDocumento->download();
+      $oRetorno->sTituloArquivo          = urlencode($oProcessoDocumento->getNomeDocumento());
 
       break;
 

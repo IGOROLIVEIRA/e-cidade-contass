@@ -59,15 +59,6 @@ class cl_licanexopncpdocumento {
   // funcao para inclusao
   function incluir () { 
       $this->atualizacampos();
-     if ($this->l216_sequencial == null ) { 
-       $this->erro_sql = " Campo l216_sequencial não informado.";
-       $this->erro_campo = "l216_sequencial";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
-     }
      if ($this->l216_licanexospncp == null ) { 
        $this->erro_sql = " Campo l216_licanexospncp não informado.";
        $this->erro_campo = "l216_licanexospncp";
@@ -95,6 +86,38 @@ class cl_licanexopncpdocumento {
        $this->erro_status = "0";
        return false;
      }
+     if($this->l216_sequencial == "" || $this->l216_sequencial == null ){
+      $result = db_query("select nextval('licanexopncpdocumento_l216_sequencial_seq')");
+      if($result==false){
+        $this->erro_banco = str_replace("\n","",@pg_last_error());
+        $this->erro_sql   = "Verifique o cadastro da sequencia: licanexopncpdocumento_l216_sequencial_seq do campo: l216_sequencial";
+        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+      $this->l216_sequencial = pg_result($result,0,0);
+    }else{
+      $result = db_query("select last_value from licanexopncpdocumento_l216_sequencial_seq");
+      if(($result != false) && (pg_result($result,0,0) < $this->l216_sequencial)){
+        $this->erro_sql = " Campo l216_sequencial maior que último número da sequencia.";
+        $this->erro_banco = "Sequencia menor que este número.";
+        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        $this->erro_status = "0";
+        return false;
+      }else{
+        $this->l216_sequencial = $this->l216_sequencial;
+      }
+    }
+    if(($this->l216_sequencial == null) || ($this->l216_sequencial == "") ){
+      $this->erro_sql = " Campo l216_sequencial nao declarado.";
+      $this->erro_banco = "Chave Primaria zerada.";
+      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
      $sql = "insert into licanexopncpdocumento(
                                        l216_sequencial 
                                       ,l216_licanexospncp 
