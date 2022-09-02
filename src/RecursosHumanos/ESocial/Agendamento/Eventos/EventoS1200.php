@@ -30,6 +30,8 @@ class EventoS1200 extends EventoBase
      */
     public function montarDados()
     {
+        $ano = date("Y", db_getsession("DB_datausu"));
+        $mes = date("m", db_getsession("DB_datausu"));
         $aDadosAPI = array();
         $iSequencial = 1;
         foreach ($this->dados as $oDados) {
@@ -41,9 +43,9 @@ class EventoS1200 extends EventoBase
             $oDadosAPI->evtRemun->nrRecibo            = null;
 
             $oDadosAPI->evtRemun->indapuracao         = $this->indapuracao;
-            $oDadosAPI->evtRemun->perapur             = date('Y-m');
+            $oDadosAPI->evtRemun->perapur             = $ano . '-' . $mes;
             if ($oDados->indapuracao == 2) {
-                $oDadosAPI->evtRemun->perapur         = date('Y');
+                $oDadosAPI->evtRemun->perapur         = $mes;
             }
             $oDadosAPI->evtRemun->cpftrab             = $oDados->cpftrab;
 
