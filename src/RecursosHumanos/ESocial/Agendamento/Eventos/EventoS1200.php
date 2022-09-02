@@ -49,39 +49,87 @@ class EventoS1200 extends EventoBase
 
             if (strlen($oDados->indmv) > 0) {
                 $oDadosAPI->evtRemun->infomv->indmv       = $oDados->indmv;
+
+                $oRemunoutrempr = new \stdClass;
+                $oRemunoutrempr->tpinsc      = 1;
+                $oRemunoutrempr->nrinsc      = $oDados->nrinsc;
+                $oRemunoutrempr->codcateg    = $oDados->codcateg;
+                if (strlen($oDados->vlrremunoe) > 0) {
+                    $oRemunoutrempr->vlrremunoe  = $oDados->vlrremunoe;
+                }
+                $aRemunoutrempr[] = $oRemunoutrempr;
+
+                $oDadosAPI->evtRemun->infomv->remunoutrempr = $aRemunoutrempr;
             }
 
-            $oRemunoutrempr = new \stdClass;
-            $oRemunoutrempr->tpinsc      = 1;
-            $oRemunoutrempr->nrinsc      = $oDados->nrinsc;
-            $oRemunoutrempr->codcateg    = $oDados->codcateg;
-            if (strlen($oDados->vlrremunoe) > 0) {
-                $oRemunoutrempr->vlrremunoe  = $oDados->vlrremunoe;
-            }
-            $aRemunoutrempr[] = $oRemunoutrempr;
+            // $oDmdev = new \stdClass;
+            // $oDmdev->idedmdev  = $this->buscarIdentificador($oDados->matricula);
 
-            $oDadosAPI->evtRemun->infomv->remunoutrempr = $aRemunoutrempr;
+            // $oDmdev->codcateg  = $oDados->codcateg;
 
-            $oDmdev = new \stdClass;
-            $oDmdev->idedmdev  = $this->buscarIdentificador($oDados->matricula);
-            $oDmdev->codcateg  = $oDados->codcateg;
-            $oDmdev->remunperapur->matricula   = $oDados->matricula;
-            $oDmdev->remunperapur->itensremun  = $this->buscarValorRubrica($oDados->matricula);
+            // $oIdeestablot = new \stdClass;
+            // $oIdeestablot->tpinsc = 1;
+            // $oIdeestablot->nrinsc = $oDados->nrinsc;
+            // $oIdeestablot->codlotacao = 'LOTA1';
 
-            $oDadosAPI->evtRemun->dmdev->idedmdev  = $this->buscarIdentificador($oDados->matricula);
-            // $oDadosAPI->evtRemun->dmdev->codcateg  = $oDados->codcateg;
+            // $oRemunperapur = new \stdClass;
+            // $oRemunperapur->matricula = $oDados->matricula;
 
-            // $oDadosAPI->evtRemun->dmdev->remunperapur->matricula   = $oDados->matricula;
+            // $oRemunperapur->itensremun = $this->buscarValorRubrica($oDados->matricula);
 
-            // $oDadosAPI->evtRemun->dmdev->remunperapur->itensremun  = $this->buscarValorRubrica($oDados->matricula);
+            // $aRemunperapur[] = $oRemunperapur;
 
-            if (!empty($oDados->grauExp)) {
-                //$oDadosAPI->evtRemun->dmdev->remunperapur->infoagnocivo->grauexp = $oDados->grauExp;
-                $oDmdev->remunperapur->infoagnocivo->grauexp = $oDados->grauExp;
-            }
+            // $oIdeestablot->remunperapur = $aRemunperapur;
 
-            $aDmdev[] = $oDmdev;
-            $oDadosAPI->evtRemun->dmdev = $aDmdev;
+            // $aIdeestablot[] = $oIdeestablot;
+
+            // $oDmdev->infoperapur->ideestablot = $aIdeestablot;
+
+            // if (!empty($oDados->grauExp)) {
+            //     $oDmdev->infoperapur->ideestablot->remunperapur->infoagnocivo->grauexp = $oDados->grauExp;
+            // }
+
+            // $aDmdev[] = $oDmdev;
+
+
+
+
+            $std = new \stdClass();
+
+            //Identificação de cada um dos demonstrativos de valores devidos ao trabalhador.
+            $std->dmdev[0] = new \stdClass(); //Obrigatório
+            $std->dmdev[0]->idedmdev = $this->buscarIdentificador($oDados->matricula); //Obrigatório
+            $std->dmdev[0]->codcateg = $oDados->codcateg; //Obrigatório
+
+            //Identificação do estabelecimento e da lotação nos quais o
+            //trabalhador possui remuneração no período de apuração
+            $std->dmdev[0]->ideestablot[0] = new \stdClass(); //Opcional
+            $std->dmdev[0]->ideestablot[0]->tpinsc = "1"; //Obrigatório
+            $std->dmdev[0]->ideestablot[0]->nrinsc = $oDados->nrinsc; //Obrigatório
+            $std->dmdev[0]->ideestablot[0]->codlotacao = 'LOTA1'; //Obrigatório
+            //$std->dmdev[0]->ideestablot[0]->qtddiasav = 20; //Opcional
+
+            //Informações relativas à remuneração do trabalhador no período de apuração.
+            $std->dmdev[0]->ideestablot[0]->remunperapur[0] = new \stdClass(); //Obrigatório
+            $std->dmdev[0]->ideestablot[0]->remunperapur[0]->matricula = $oDados->matricula; //Opcional
+            //$std->dmdev[0]->ideestablot[0]->remunperapur[0]->indsimples = 1; //Opcional
+
+            //Rubricas que compõem a remuneração do trabalhador.
+            $std->dmdev[0]->ideestablot[0]->remunperapur[0]->itensremun = $this->buscarValorRubrica($oDados->matricula);
+            // $std->dmdev[0]->ideestablot[0]->remunperapur[0]->itensremun[0]->codrubr = 'ksksksks'; //Obrigatório
+            // $std->dmdev[0]->ideestablot[0]->remunperapur[0]->itensremun[0]->idetabrubr = 'j2j2j'; //Obrigatório
+            // $std->dmdev[0]->ideestablot[0]->remunperapur[0]->itensremun[0]->qtdrubr = 150.30; //Opcional
+            // $std->dmdev[0]->ideestablot[0]->remunperapur[0]->itensremun[0]->fatorrubr = 1.20; //Opcional
+            // $std->dmdev[0]->ideestablot[0]->remunperapur[0]->itensremun[0]->vrunit = 123.90; //Obrigatório
+            // $std->dmdev[0]->ideestablot[0]->remunperapur[0]->itensremun[0]->vrrubr = 123.90; //Obrigatório
+            // $std->dmdev[0]->ideestablot[0]->remunperapur[0]->itensremun[0]->indapurir = 0; //Opcional
+
+            //Grupo referente ao detalhamento do grau de exposição do trabalhador aos agentes nocivos que ensejam a cobrança
+            //da contribuição adicional para financiamento dos benefícios de aposentadoria especial.
+            //$std->dmdev[0]->ideestablot[0]->remunperapur[0]->infoagnocivo = new \stdClass(); //Opcional
+            $std->dmdev[0]->ideestablot[0]->remunperapur[0]->infoagnocivo->grauexp = $oDados->grauexp; //Obrigatório
+
+            $oDadosAPI->evtRemun->dmdev = $std->dmdev;
 
             //$oDadosAPI->evtRemun->dtAlteracao         = '2021-01-29'; //$oDados->altContratual->dtAlteracao;
             $aDadosAPI[] = $oDadosAPI;
@@ -102,7 +150,7 @@ class EventoS1200 extends EventoBase
     {
         $iAnoUsu           = db_getsession('DB_anousu');
         $iMesusu           = DBPessoal::getMesFolha();
-        $aPontos = array('salario','complementar','13salario');
+        $aPontos = array('salario', 'complementar', '13salario');
         $aIdentificadores = array();
         foreach ($aPontos as $opcao) {
             switch ($opcao) {
@@ -136,9 +184,9 @@ class EventoS1200 extends EventoBase
                         when '{$arquivo}' = 'gerfs13' then 4
                         end as ideDmDev
                         from {$arquivo}
-                        where ".$sigla."anousu = '".$iAnoUsu."'
-                        and  ".$sigla."mesusu = '".$iMesusu."'
-                        and  ".$sigla."instit = ".db_getsession("DB_instit")."
+                        where " . $sigla . "anousu = '" . $iAnoUsu . "'
+                        and  " . $sigla . "mesusu = '" . $iMesusu . "'
+                        and  " . $sigla . "instit = " . db_getsession("DB_instit") . "
                         and {$sigla}regist = $matricula";
             }
 
@@ -158,7 +206,7 @@ class EventoS1200 extends EventoBase
     {
         $iAnoUsu           = db_getsession('DB_anousu');
         $iMesusu           = DBPessoal::getMesFolha();
-        $aPontos = array('salario','complementar','13salario');
+        $aPontos = array('salario', 'complementar', '13salario');
         $aIdentificadores = array();
         foreach ($aPontos as $opcao) {
             switch ($opcao) {
@@ -189,16 +237,20 @@ class EventoS1200 extends EventoBase
                         {$sigla}valor as valor,
                         {$sigla}rubric as rubrica
                         from {$arquivo}
-                        where ".$sigla."anousu = '".$iAnoUsu."'
-                        and  ".$sigla."mesusu = '".$iMesusu."'
-                        and  ".$sigla."instit = ".db_getsession("DB_instit")."
+                        where " . $sigla . "anousu = '" . $iAnoUsu . "'
+                        and  " . $sigla . "mesusu = '" . $iMesusu . "'
+                        and  " . $sigla . "instit = " . db_getsession("DB_instit") . "
+                        and  " . $sigla . "mesusu = '" . $iMesusu . "'
+                        and  " . $sigla . "pd <> 3
+                        and  " . $sigla . "rubric not in ('R985','R993','R981')
                         and {$sigla}regist = $matricula";
             }
-
-            $rsValores = db_query($sql);
             // echo $sql;
             // db_criatabela($rsValores);
             // exit;
+
+            $rsValores = db_query($sql);
+
             for ($iCont = 0; $iCont < pg_num_rows($rsValores); $iCont++) {
                 $oResult = \db_utils::fieldsMemory($rsValores, $iCont);
                 $oFormatado = new \stdClass;

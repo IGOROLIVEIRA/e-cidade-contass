@@ -1082,11 +1082,12 @@ where
     and rh05_recis is null";
 
         if ($matricula != null) {
-            $sql .= "and rh01_regist in ($matricula) ";
+            $sql .= " and rh01_regist in ($matricula) ";
         }
 
         $rs = \db_query($sql);
-
+        // echo $sql;
+        // db_criatabela($rs);
         if (!$rs) {
             throw new \Exception("Erro ao buscar os preenchimentos do S1200");
         }
