@@ -79,7 +79,7 @@ class EventoS1202 extends EventoBase
     {
         $iAnoUsu           = db_getsession('DB_anousu');
         $iMesusu           = DBPessoal::getMesFolha();
-        $aPontos = array('salario','complementar','13salario');
+        $aPontos = array('salario', 'complementar', '13salario');
         $aIdentificadores = array();
         foreach ($aPontos as $opcao) {
             switch ($opcao) {
@@ -113,9 +113,11 @@ class EventoS1202 extends EventoBase
                         when '{$arquivo}' = 'gerfs13' then 4
                         end as ideDmDev
                         from {$arquivo}
-                        where ".$sigla."anousu = '".$iAnoUsu."'
-                        and  ".$sigla."mesusu = '".$iMesusu."'
-                        and  ".$sigla."instit = ".db_getsession("DB_instit")."
+                        where " . $sigla . "anousu = '" . $iAnoUsu . "'
+                        and  " . $sigla . "mesusu = '" . $iMesusu . "'
+                        and  " . $sigla . "instit = " . db_getsession("DB_instit") . "
+                        and  " . $sigla . "pd <> 3
+                        and  " . $sigla . "rubric not in ('R985','R993','R981')
                         and {$sigla}regist = $matricula";
             }
 
@@ -135,7 +137,7 @@ class EventoS1202 extends EventoBase
     {
         $iAnoUsu           = db_getsession('DB_anousu');
         $iMesusu           = DBPessoal::getMesFolha();
-        $aPontos = array('salario','complementar','13salario');
+        $aPontos = array('salario', 'complementar', '13salario');
         $aIdentificadores = array();
         foreach ($aPontos as $opcao) {
             switch ($opcao) {
@@ -166,9 +168,9 @@ class EventoS1202 extends EventoBase
                         {$sigla}valor as valor,
                         {$sigla}rubric as rubrica
                         from {$arquivo}
-                        where ".$sigla."anousu = '".$iAnoUsu."'
-                        and  ".$sigla."mesusu = '".$iMesusu."'
-                        and  ".$sigla."instit = ".db_getsession("DB_instit")."
+                        where " . $sigla . "anousu = '" . $iAnoUsu . "'
+                        and  " . $sigla . "mesusu = '" . $iMesusu . "'
+                        and  " . $sigla . "instit = " . db_getsession("DB_instit") . "
                         and {$sigla}regist = $matricula
                         and not exists (select 1 from rhrubricas where rh27_rubric = {$sigla}rubric and rh27_pd = 3)";
             }

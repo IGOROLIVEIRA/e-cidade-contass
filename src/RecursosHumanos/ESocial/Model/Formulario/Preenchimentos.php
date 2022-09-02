@@ -1214,7 +1214,9 @@ where
             $sql .= "and rh01_regist in ($matricula) ";
         }
         $rs = \db_query($sql);
-
+        // echo $sql;
+        // db_criatabela($rs);
+        // exit;
         if (!$rs) {
             throw new \Exception("Erro ao buscar os preenchimentos do S1202");
         }
