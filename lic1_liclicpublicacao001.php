@@ -40,7 +40,9 @@ $clliclicitemlote = new cl_liclicitemlote;
 $clliclicita      = new cl_liclicita;
 $clliccomissaocgm     = new cl_liccomissaocgm;
 
-
+if ($licitacao == "") {
+    $licitacao = -1;
+}
 $result = $clliclicita->sql_record($clliclicita->sql_query($licitacao, "l08_altera, l20_usaregistropreco,  l20_formacontroleregistropreco, l20_datacria , l20_dataaber, l20_criterioadjudicacao, l20_codtipocom,l20_linkedital,l20_linkpncp, l20_dtpulicacaoedital,l20_dtpublic,l20_dtpulicacaopncp,l20_datapublicacao1,l20_datapublicacao2,l20_nomeveiculo1,l20_nomeveiculo2,l20_diariooficialdivulgacao "));
 $oLicitacao = db_utils::fieldsMemory($result, 0);
 $result = $clliccomissaocgm->sql_record($clliccomissaocgm->sql_query_file(null, 'l31_codigo,l31_liccomissao,l31_numcgm, (select cgm.z01_nome from cgm where z01_numcgm = l31_numcgm) as z01_nome, l31_tipo', null, "l31_licitacao=$licitacao"));
@@ -79,6 +81,7 @@ $comissao = db_utils::fieldsMemory($result, 0);
                             </td>
                             <td>
                                 <?
+
                                 db_inputdata('l20_dtpulicacaoedital', @$l20_dtpulicacaoedital_dia, @$l20_dtpulicacaoedital_mes, @$l20_dtpulicacaoedital_ano, true, 'text', $db_opcao);
                                 ?>
                             </td>
@@ -355,7 +358,6 @@ $comissao = db_utils::fieldsMemory($result, 0);
         var dataPublicacao = document.getElementById('l20_dtpublic').value;
         var dataAbertura = document.getElementById('l20_dataaber').value;
 
-
         if (js_CompararDatas(dataCriacao, dataPublicacao, '<=')) {
             if (js_CompararDatas(dataPublicacao, dataAbertura, '<=')) {
 
@@ -387,6 +389,11 @@ $comissao = db_utils::fieldsMemory($result, 0);
         oParam.l20_diariooficialdivulgacao = document.getElementById('l20_diariooficialdivulgacao').value;
         oParam.l20_datacria = document.getElementById('l20_datacria').value;
         oParam.l20_dataaber = document.getElementById('l20_dataaber').value;
+
+        if (oParam.licitacao == -1) {
+            alert("É necessário realizar a inclusão da licitação para cadastrar as datas referentes a publicação");
+            return false;
+        }
 
         var sUrl = 'lic1_licpublicacao.php';
 
@@ -436,7 +443,7 @@ $comissao = db_utils::fieldsMemory($result, 0);
             return false;
         }
     }
-
+    l20_dtpublic
     document.getElementById('l20_linkedital').value = "<?php echo $oLicitacao->l20_linkedital ?>";
     document.getElementById('l20_linkpncp').value = "<?php echo $oLicitacao->l20_linkpncp ?>";
     document.getElementById('l20_dtpulicacaoedital').value = "<?php echo implode('/', array_reverse(explode('-', $oLicitacao->l20_dtpulicacaoedital))); ?>";

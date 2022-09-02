@@ -16,6 +16,20 @@ $oRetorno->erro = "";
 
 try {
 
+    if ($oParam->l20_linkpncp == '') {
+        $oRetorno->status = 2;
+        $oRetorno->erro   = "campo Link no PNCP não informado";
+        echo json_encode($oRetorno);
+        exit;
+    }
+
+    if ($oParam->l20_diariooficialdivulgacao == '0') {
+        $oRetorno->status = 2;
+        $oRetorno->erro   = "Campo Diário oficial de divulgação não informado";
+        echo json_encode($oRetorno);
+        exit;
+    }
+
     if ($oParam->l20_dtpulicacaoedital == "") {
         $oParam->l20_dtpulicacaoedital = "null";
     } else {
@@ -24,8 +38,19 @@ try {
     }
 
     if ($oParam->l20_dtpublic == '') {
-        $oParam->l20_dtpublic = "null";
+        $oRetorno->status = 2;
+        $oRetorno->erro   = "Campo Data de Publicação em Diário oficial não informado";
+        echo json_encode($oRetorno);
+        exit;
     } else {
+
+        if ($oParam->l20_dtpublic < $oParam->l20_datacria) {
+            $oRetorno->status = 2;
+            $oRetorno->erro   = "A data da publicacao em diario oficial deve ser superior ou igual a data de criacao";
+            echo json_encode($oRetorno);
+            exit;
+        }
+
         $oParam->l20_dtpublic = implode("-", array_reverse(explode("/", $oParam->l20_dtpublic)));
         $oParam->l20_dtpublic = "'" . $oParam->l20_dtpublic . "'";
     }
@@ -40,6 +65,13 @@ try {
     if ($oParam->l20_datapublicacao1 == "") {
         $oParam->l20_datapublicacao1 = "null";
     } else {
+        if ($oParam->l20_datacria > $oParam->l20_datapublicacao1) {
+
+            $oRetorno->status = 2;
+            $oRetorno->erro   = "A data da publicação em Edital Veiculo 1 deve ser superior ou igual a data de criação.";
+            echo json_encode($oRetorno);
+            exit;
+        }
         $oParam->l20_datapublicacao1 = implode("-", array_reverse(explode("/", $oParam->l20_datapublicacao1)));
         $oParam->l20_datapublicacao1 = "'" . $oParam->l20_datapublicacao1 . "'";
     }
@@ -47,6 +79,13 @@ try {
     if ($oParam->l20_datapublicacao2 == "") {
         $oParam->l20_datapublicacao2 = "null";
     } else {
+        if ($oParam->l20_datacria > $oParam->l20_datapublicacao2) {
+
+            $oRetorno->status = 2;
+            $oRetorno->erro   = "A data da publicação em Edital Veiculo 2 deve ser superior ou igual a data de criação.";
+            echo json_encode($oRetorno);
+            exit;
+        }
         $oParam->l20_datapublicacao2 = implode("-", array_reverse(explode("/", $oParam->l20_datapublicacao2)));
         $oParam->l20_datapublicacao2 = "'" . $oParam->l20_datapublicacao2 . "'";
     }

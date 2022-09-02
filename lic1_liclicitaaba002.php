@@ -62,16 +62,16 @@ if (!isset($db_opcao)) {
         <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
           <?
           if (db_getsession('DB_anousu') >= 2016) {
-            $clcriaabas->identifica = array("liclicita" => "LicitaÃ§Ã£o", "liclicitem" => "Itens", "liclicitemlote" => "Lotes", "liclicpublicacoes" => "PublicaÃ§Ãµes");
+            $clcriaabas->identifica = array("liclicita" => "Licitação", "liclicitem" => "Itens", "liclicitemlote" => "Lotes", "liclicpublicacoes" => "Publicações");
             $clcriaabas->sizecampo = array("liclicita" => "20", "liclicitem" => "20", "liclicitemlote" => "20", "liclicpublicacoes" => "20");
-            $clcriaabas->title = array("liclicita" => "LicitaÃ§Ã£o", "liclicitem" => "Itens da LicitaÃ§Ã£o", "liclicitemlote" => "Lote de itens", "liclicpublicacoes" => "PublicaÃ§Ãµes");
+            $clcriaabas->title = array("liclicita" => "Licitação", "liclicitem" => "Itens da Licitação", "liclicitemlote" => "Lote de itens", "liclicpublicacoes" => "Publicações");
             $clcriaabas->src = array("liclicita" => "lic1_liclicita002.php", "liclicitem" => "lic1_liclicitemalt002.php", "liclicitemlote" => "lic1_liclicitemlote001.php", "liclicpublicacoes" => "lic1_liclicpublicacao001.php");
             $clcriaabas->disabled = array("liclicitem" => "true", "resplicita" => "true", "liclicitemlote" => "true");
             $clcriaabas->cria_abas();
           } else {
-            $clcriaabas->identifica = array("liclicita" => "LicitaÃ§Ã£o", "liclicitem" => "Itens", "liclicitemlote" => "Lotes");
+            $clcriaabas->identifica = array("liclicita" => "Licitação", "liclicitem" => "Itens", "liclicitemlote" => "Lotes");
             $clcriaabas->sizecampo = array("liclicita" => "20", "liclicitem" => "20", "liclicitemlote" => "20");
-            $clcriaabas->title = array("liclicita" => "LicitaÃ§Ã£o", "liclicitem" => "Itens da LicitaÃ§Ã£o", "liclicitemlote" => "Lote de itens");
+            $clcriaabas->title = array("liclicita" => "Licitação", "liclicitem" => "Itens da Licitação", "liclicitemlote" => "Lote de itens");
             $clcriaabas->src = array("liclicita" => "lic1_liclicita002.php", "liclicitem" => "lic1_liclicitemalt002.php", "liclicitemlote" => "lic1_liclicitemlote001.php");
             $clcriaabas->disabled = array("liclicitem" => "false", "liclicitemlote" => "true");
             $clcriaabas->cria_abas();
