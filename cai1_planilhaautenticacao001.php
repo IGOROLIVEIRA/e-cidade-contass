@@ -160,15 +160,21 @@ function js_excluirPlanilha(){
 	                            );
 
 }
+
+// Alteração para exibir mensagem e limpar a tela
 function js_retornoExclusaoPlanilha(oAjax) {
+    js_removeObj('msgBox');
+	var oRetorno = eval("("+oAjax.responseText+")");
 
-	  js_removeObj('msgBox');
-	  var oRetorno = eval("("+oAjax.responseText+")");
+    if (oRetorno.status != 1) {
+        alert(oRetorno.message.urlDecode());
+        return;
+    }
 
-    alert(oRetorno.message.urlDecode());
-
-	  js_limparDadosTela();
-	}
+    alert("Planilha excluída com sucesso!");
+	js_limparDadosTela();
+    return;
+}
 
 function js_excluirAutencacaoPlanilha(){
 
@@ -332,11 +338,12 @@ function js_preencheGridReceitas(oAjax) {
 
 
 function js_limparDadosTela() {
-
-  $('k80_codpla').value = "";
-  $('k80_data').value   = "";
-  $('TotalForCol2').innerHTML = "Total: 0";
-  oGridReceitas.clearAll(true);
+    $('k80_codpla').value = "";
+    $('k80_data').value   = "";
+    $('k144_numeroprocesso').value = "";
+    $('TotalForCol2').innerHTML = "Total: 0";
+    oGridReceitas.clearAll(true);
+    return;
 }
 
 

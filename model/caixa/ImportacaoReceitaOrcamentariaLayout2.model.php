@@ -25,8 +25,6 @@
  *                                licenca/licenca_pt.txt
  */
 
-use FFI\Exception;
-
 class ImportacaoReceitaOrcamentariaLayout2
 {
     private $oReceita;
