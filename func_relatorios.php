@@ -37,7 +37,7 @@ $clrelatorios = new cl_relatorios;
         $campos = "relatorios.rel_sequencial,relatorios.rel_descricao,relatorios.rel_arquivo,relatorios.rel_corpo";
       }
     }
-    if (db_getsession("DB_modulo") == 1)
+    if (db_getsession("DB_modulo") == 1 || db_getsession("DB_modulo") == 381)
       $sql = $clrelatorios->sql_query('', "relatorios.rel_sequencial,relatorios.rel_descricao,relatorios.rel_arquivo,relatorios.rel_corpo", 'rel_sequencial desc', "rel_instit = " . db_getsession("DB_instit"));
     else
       $sql = $clrelatorios->sql_query('', 'relatorios.rel_sequencial,relatorios.rel_descricao,relatorios.rel_arquivo,relatorios.rel_corpo', 'rel_sequencial desc', "db_modulos.id_item = " . db_getsession("DB_modulo"));
@@ -52,7 +52,7 @@ $clrelatorios = new cl_relatorios;
   } else {
     if ($pesquisa_chave != null && $pesquisa_chave != "") {
 
-      if (db_getsession("DB_modulo") == 1)
+      if (db_getsession("DB_modulo") == 1  || db_getsession("DB_modulo") == 381)
         $sql = $clrelatorios->sql_query($pesquisa_chave);
       else
         $sql = $clrelatorios->sql_query($pesquisa_chave, "relatorios.rel_sequencial,relatorios.rel_descricao,relatorios.rel_arquivo,relatorios.rel_corpo", 'rel_sequencial desc', "db_modulos.id_item = " . db_getsession("DB_modulo"));
