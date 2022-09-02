@@ -1367,7 +1367,8 @@ where
                         NULL AS dtiniafastferias,
                         NULL AS dtinicio,
                         NULL AS dtfim,
-                        NULL AS dttermafastferias
+                        NULL AS dttermafastferias,
+                        rh30_regime
                 FROM afasta
                 INNER JOIN rhpessoal ON rhpessoal.rh01_regist = afasta.r45_regist
                 LEFT JOIN rhpessoalmov ON rh02_anousu = fc_getsession('DB_anousu')::int
@@ -1376,6 +1377,7 @@ where
             AND rh02_instit = fc_getsession('DB_instit')::int
             INNER JOIN tpcontra ON tpcontra.h13_codigo = rhpessoalmov.rh02_tpcont
             INNER JOIN cgm ON cgm.z01_numcgm = rhpessoal.rh01_numcgm
+            left join rhregime on rhregime.rh30_codreg = rhpessoalmov.rh02_codreg
             WHERE date_part('month',afasta.r45_dtafas::date) = date_part('month',fc_getsession('DB_datausu')::date)
                 AND date_part('year',afasta.r45_dtafas::date) = fc_getsession('DB_anousu')::int
             UNION
@@ -1393,7 +1395,8 @@ where
                     WHEN (cadferia.r30_peraf - cadferia.r30_perai) > 365 THEN cadferia.r30_peraf
                     ELSE NULL
                 END AS dtfim,
-                r30_per1f AS dttermafastferias
+                r30_per1f AS dttermafastferias,
+                rh30_regime
             FROM cadferia
             INNER JOIN rhpessoal ON rhpessoal.rh01_regist = cadferia.r30_regist
             LEFT JOIN rhpessoalmov ON rh02_anousu = fc_getsession('DB_anousu')::int
@@ -1402,6 +1405,7 @@ where
             AND rh02_instit = fc_getsession('DB_instit')::int
             INNER JOIN tpcontra ON tpcontra.h13_codigo = rhpessoalmov.rh02_tpcont
             INNER JOIN cgm ON cgm.z01_numcgm = rhpessoal.rh01_numcgm
+            left join rhregime on rhregime.rh30_codreg = rhpessoalmov.rh02_codreg
             WHERE date_part('month',cadferia.r30_per1i::date) = date_part('month',fc_getsession('DB_datausu')::date)
                 AND date_part('year',cadferia.r30_per1i::date) = fc_getsession('DB_anousu')::int) AS xxx
         ";
@@ -1410,7 +1414,8 @@ where
         }
 
         $rsAfasta = \db_query($sql);
-
+        // echo $sql;
+        // db_criatabela($rsAfasta);
         if (!$rsAfasta) {
             throw new \Exception("Erro ao buscar os preenchimentos do S2230");
         }
