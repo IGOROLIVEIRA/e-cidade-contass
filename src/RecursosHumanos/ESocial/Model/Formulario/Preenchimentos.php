@@ -1211,12 +1211,13 @@ where
     and rh05_recis is null";
 
         if ($matricula != null) {
-            $sql .= "and rh01_regist in ($matricula) ";
+            $sql .= " and rh01_regist in ($matricula) ";
         }
+        //echo $sql;
         $rs = \db_query($sql);
-        // echo $sql;
-        // db_criatabela($rs);
-        // exit;
+
+        //db_criatabela($rs);
+        //exit;
         if (!$rs) {
             throw new \Exception("Erro ao buscar os preenchimentos do S1202");
         }
