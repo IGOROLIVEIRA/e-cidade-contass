@@ -16,18 +16,24 @@ $oRetorno->erro = "";
 
 try {
 
+    /*
     if ($oParam->l20_linkpncp == '') {
         $oRetorno->status = 2;
         $oRetorno->erro   = "campo Link no PNCP não informado";
         echo json_encode($oRetorno);
         exit;
-    }
+    } 
+    */
 
-    if ($oParam->l20_diariooficialdivulgacao == '0') {
+    if ($oParam->respPubliccodigo == "") {
         $oRetorno->status = 2;
-        $oRetorno->erro   = "Campo Diário oficial de divulgação não informado";
+        $oRetorno->erro   = "Campo Resp. pela Publicação não informado";
         echo json_encode($oRetorno);
         exit;
+    }
+
+    if ($oParam->l20_diariooficialdivulgacao == '') {
+        $oParam->l20_diariooficialdivulgacao = 0;
     }
 
     if ($oParam->l20_dtpulicacaoedital == "") {
@@ -115,7 +121,7 @@ try {
     WHERE l20_codigo = $oParam->licitacao;");
 
     if ($oParam->respPubliccodigo != "") {
-        $dbquery = "l31_tipo = '8' and l31_licitacao = $l20_codigo";
+        $dbquery = "l31_tipo = '8' and l31_licitacao = $oParam->licitacao";
         $clliccomissaocgm->excluir(null, $dbquery);
 
         $clliccomissaocgm->l31_numcgm = $oParam->respPubliccodigo;

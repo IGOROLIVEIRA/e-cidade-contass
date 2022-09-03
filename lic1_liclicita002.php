@@ -85,49 +85,49 @@ if (isset($alterar)) {
 
 
     /*
-            ValidaÃ§Ãµes dos membros da licitaÃ§Ã£o
+            Validações dos membros da licitação
             48 - Convite
-            49 - Tomada de PreÃ§os
-            50 - ConcorrÃªncia
-            52 - PregÃ£o presencial
-            53 - PregÃ£o eletrÃ´nico
-            54 - LeilÃ£o
+            49 - Tomada de Preços
+            50 - Concorrência
+            52 - Pregão presencial
+            53 - Pregão eletrônico
+            54 - Leilão
             */
 
     if ($oPost->modalidade_tribunal == 48 || $oPost->modalidade_tribunal == 49 || $oPost->modalidade_tribunal == 50 || $oPost->modalidade_tribunal == 52 || $oPost->modalidade_tribunal == 53 || $oPost->modalidade_tribunal == 54) {
         $salvarModalidade = 1;
         if ($respConducodigo == "") {
-            $erro_msg .= 'ResponsÃ¡vel pela conduÃ§Ã£o do processo nÃ£o informado\n\n';
+            $erro_msg .= 'Responsável pela condução do processo não informado\n\n';
             $nomeCampo = "respConducodigo";
             $sqlerro = true;
         }
         if ($respAbertcodigo == "") {
-            $erro_msg .= 'ResponsÃ¡vel pela abertura do processo nÃ£o informado\n\n';
+            $erro_msg .= 'Responsável pela abertura do processo não informado\n\n';
             $nomeCampo = "respAbertcodigo";
             $sqlerro = true;
         }
         if ($respEditalcodigo == "") {
-            $erro_msg .= 'ResponsÃ¡vel pela emissÃ£o do edital nÃ£o informado\n\n';
+            $erro_msg .= 'Responsável pela emissão do edital não informado\n\n';
             $nomeCampo = "respEditalcodigo";
             $sqlerro = true;
         }
         /*
             if ($respPubliccodigo == "") {
-                $erro_msg .= 'ResponsÃ¡vel pela publicaÃ§Ã£o nÃ£o informado\n\n';
+                $erro_msg .= 'Responsável pela publicação não informado\n\n';
                 $nomeCampo = "respPubliccodigo";
                 $sqlerro = true;
             }
             */
         if ($oPost->l20_naturezaobjeto == 1) {
             if ($respObrascodigo == "") {
-                $erro_msg .= 'ResponsÃ¡vel pelos orÃ§amentos, obras e serviÃ§os nÃ£o informado\n\n';
+                $erro_msg .= 'Responsável pelos orçamentos, obras e serviços não informado\n\n';
                 $nomeCampo = "respObrascodigo";
                 $sqlerro = true;
             }
         }
         if ($oPost->modalidade_tribunal == 54) {
             if ($respAvaliBenscodigo == "") {
-                $erro_msg .= 'ResponsÃ¡vel pela avaliaÃ§Ã£o de bens nÃ£o informado\n\n';
+                $erro_msg .= 'Responsável pela avaliação de bens não informado\n\n';
                 $nomeCampo = "respAvaliBenscodigo";
                 $sqlerro = true;
             }
@@ -135,13 +135,13 @@ if (isset($alterar)) {
     } else if ($oPost->modalidade_tribunal == 100 || $oPost->modalidade_tribunal == 101 || $oPost->modalidade_tribunal == 102 || $oPost->modalidade_tribunal == 103) {
         $salvarModalidade = 2;
         if ($respAutocodigo == "") {
-            $erro_msg .= 'ResponsÃ¡vel pela conduÃ§Ã£o do processo nÃ£o informado\n\n';
+            $erro_msg .= 'Responsável pela condução do processo não informado\n\n';
             $nomeCampo = "respAutocodigo";
             $sqlerro = true;
         }
         if ($oPost->l20_naturezaobjeto == 1) {
             if ($respObrascodigo == "") {
-                $erro_msg .= 'ResponsÃ¡vel pelos orÃ§amentos, obras e serviÃ§os nÃ£o informado\n\n';
+                $erro_msg .= 'Responsável pelos orçamentos, obras e serviços não informado\n\n';
                 $nomeCampo = "respObrascodigo";
                 $sqlerro = true;
             }
@@ -212,12 +212,12 @@ if (isset($alterar)) {
     }
 
     /*
-        Verifica se o campo "Regime de execuÃ§Ã£o" foi selecionado
+        Verifica se o campo "Regime de execução" foi selecionado
     */
 
     if ($oPost->l20_naturezaobjeto == 1 || $oPost->l20_naturezaobjeto == 7) {
         if ($oPost->l20_regimexecucao == 0) {
-            $erro_msg .= 'Campo Regime da ExecuÃ§Ã£o nÃ£o selecionado\n\n';
+            $erro_msg .= 'Campo Regime da Execução não selecionado\n\n';
             $sqlerro = true;
         }
     }
@@ -319,7 +319,7 @@ if (isset($alterar)) {
                 }
             } else {
 
-                $erro_msg = "Verifique se estÃ¡ configurado a numeraÃ§Ã£o de licitaÃ§Ã£o por modalidade.";
+                $erro_msg = "Verifique se está configurado a numeração de licitação por modalidade.";
                 $sqlerro  = true;
             }
         }
@@ -359,7 +359,7 @@ if (isset($alterar)) {
             }
         }
         if ($val != "" && $val != $l20_criterioadjudicacao) {
-            $erro_msg = "CritÃ©rio de adjudicaÃ§Ã£o nÃ£o corresponde aos itens de compras jÃ¡ inseridos";
+            $erro_msg = "Critério de adjudicação não corresponde aos itens de compras já inseridos";
             $sqlerro = true;
             $mostrar = 1;
         } else if ($val == "") {
@@ -401,14 +401,14 @@ if (isset($alterar)) {
 
         $verifica = $clliclicita->verificaMembrosModalidade("pregao", $l20_equipepregao);
         if (!$verifica) {
-            $erro_msg = "Para as modalidades PregÃ£o presencial e PregÃ£o eletrÃ´nico Ã© necessÃ¡rio\nque a ComissÃ£o de LicitaÃ§Ã£o tenham os tipos Pregoeiro e Membro da Equipe de Apoio";
+            $erro_msg = "Para as modalidades Pregão presencial e Pregão eletrônico é necessário\nque a Comissão de Licitação tenham os tipos Pregoeiro e Membro da Equipe de Apoio";
             $sqlerro = true;
         }
     } else if ($modalidade_tribunal == 48 || $modalidade_tribunal == 49 || $modalidade_tribunal == 50) {
 
         $verifica = $clliclicita->verificaMembrosModalidade("outros", $l20_equipepregao);
         if (!$verifica) {
-            $erro_msg = "Para as modalidades Tomada de PreÃ§os, ConcorrÃªncia e Convite Ã© necessÃ¡rio\nque a ComissÃ£o de LicitaÃ§Ã£o tenham os tipos SecretÃ¡rio, Presidente e Membro da Equipe de Apoio";
+            $erro_msg = "Para as modalidades Tomada de Preços, Concorrência e Convite é necessário\nque a Comissão de Licitação tenham os tipos Secretário, Presidente e Membro da Equipe de Apoio";
             $sqlerro = true;
         }
     }
@@ -765,7 +765,7 @@ if (isset($alterar)) {
 	if ($clhomologacao->numrows > 0) {
 		$db_opcao==22;
 		unset($chavepesquisa);
-		db_msgbox("Esta licitaÃ§Ã£o jÃ¡ estÃ¡ homologada.");
+		db_msgbox("Esta licitação já está homologada.");
 	} else {*/
 
     $db_opcao  = 2;
@@ -931,7 +931,7 @@ if (isset($alterar)) {
     } else {
         //$clliclicita->erro(true,true);
         $db_botao = true;
-        db_msgbox("AlteraÃ§Ã£o Efetuada com Sucesso!!");
+        db_msgbox("Alteração Efetuada com Sucesso!!");
         if (db_getsession("DB_anousu") >= 2016) {
             echo "<script> mo_camada('liclicitem'); </script>";
             echo "<script>parent.document.formaba.liclicitem.disabled=false;</script>";

@@ -71,7 +71,6 @@ if (!isset($db_opcao)) {
             $clcriaabas->src = array("liclicita" => "lic1_liclicita001.php", "liclicitem" => "lic1_liclicitemalt001.php", "liclicitemlote" => "lic1_liclicitemlote001.php", "liclicpublicacoes" => "lic1_liclicpublicacao001.php");
 
             if ($db_opcao == 1) {
-              //, "liclicpublicacoes" => "true"
               $clcriaabas->disabled   =  array("liclicitem" => "true", "resplicita" => "true", "liclicitemlote" => "true");
             }
             $clcriaabas->cria_abas();

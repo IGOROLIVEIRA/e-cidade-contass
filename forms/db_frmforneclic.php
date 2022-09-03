@@ -86,7 +86,7 @@ if (isset($db_opcaoal)) {
         <table border="0">
             <tr>
                 <td align="right" nowrap title="<?= @$Tl20_codigo ?>">
-                    <b>Licitaï¿½ï¿½o :
+                    <b>Licitação :
                     </b>
                 </td>
                 <td>
@@ -256,7 +256,7 @@ if (isset($db_opcaoal)) {
                     $sCampos = "DISTINCT pc21_orcamforne,pc21_codorc,pc21_numcgm,z01_nome,(CASE WHEN l205_datacred IS NOT NULL THEN 'SIM' ELSE 'Nï¿½o' END) AS ed18_i_credenciamento";
                     $cliframe_alterar_excluir->sql           = $clpcorcamforne->sql_query_credenciados(null, $sCampos, "", $sWhere);
                     $cliframe_alterar_excluir->campos        = "pc21_orcamforne,pc21_numcgm,z01_nome,ed18_i_credenciamento";
-                    $cliframe_alterar_excluir->legenda       = "FORNECEDORES LANï¿½ADOS";
+                    $cliframe_alterar_excluir->legenda       = "FORNECEDORES LANÇADOS";
                     $cliframe_alterar_excluir->iframe_height = "160";
                     $cliframe_alterar_excluir->iframe_width  = "700";
                     $cliframe_alterar_excluir->opcoes        = "3";

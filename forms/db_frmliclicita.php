@@ -1251,7 +1251,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
         }
 
         if (oRetorno.tribunal == 100 || oRetorno.tribunal == 101 || oRetorno.tribunal == 102 || oRetorno.tribunal == 103) {
-            parent.document.getElementById('liclicpublicacoes').style.display = 'none';
+            //parent.document.getElementById('liclicpublicacoes').style.display = 'none';
 
             document.form1.l20_justificativa.style.backgroundColor = '#FFFFFF ';
             document.form1.l20_razao.style.backgroundColor = '#FFFFFF ';
@@ -1321,7 +1321,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
         } else {
 
-            parent.document.getElementById('liclicpublicacoes').style.display = 'block';
+            //parent.document.getElementById('liclicpublicacoes').style.display = 'block';
             document.getElementById("l20_justificativa").disabled = true;
             document.getElementById("l20_razao").disabled = true;
             document.getElementById("l20_tipoprocesso").disabled = true;

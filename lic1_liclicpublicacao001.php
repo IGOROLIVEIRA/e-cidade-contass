@@ -45,7 +45,7 @@ if ($licitacao == "") {
 }
 $result = $clliclicita->sql_record($clliclicita->sql_query($licitacao, "l08_altera, l20_usaregistropreco,  l20_formacontroleregistropreco, l20_datacria , l20_dataaber, l20_criterioadjudicacao, l20_codtipocom,l20_linkedital,l20_linkpncp, l20_dtpulicacaoedital,l20_dtpublic,l20_dtpulicacaopncp,l20_datapublicacao1,l20_datapublicacao2,l20_nomeveiculo1,l20_nomeveiculo2,l20_diariooficialdivulgacao "));
 $oLicitacao = db_utils::fieldsMemory($result, 0);
-$result = $clliccomissaocgm->sql_record($clliccomissaocgm->sql_query_file(null, 'l31_codigo,l31_liccomissao,l31_numcgm, (select cgm.z01_nome from cgm where z01_numcgm = l31_numcgm) as z01_nome, l31_tipo', null, "l31_licitacao=$licitacao"));
+$result = $clliccomissaocgm->sql_record($clliccomissaocgm->sql_query_file(null, 'l31_codigo,l31_liccomissao,l31_numcgm, (select cgm.z01_nome from cgm where z01_numcgm = l31_numcgm) as z01_nome, l31_tipo', null, "l31_licitacao=$licitacao and l31_tipo = '8'"));
 $comissao = db_utils::fieldsMemory($result, 0);
 
 
@@ -296,6 +296,8 @@ $comissao = db_utils::fieldsMemory($result, 0);
                 js_OpenJanelaIframe('', 'db_iframe_cgm', 'func_nome.php?pesquisa_chave=' + numcgm + '&funcao_js=parent.js_mostracgm&filtro=1', 'Pesquisa', false);
             } else {
                 document.getElementById(numCampo).value = "";
+                document.getElementById(varNomeCampo).value = "";
+
             }
         }
     }
