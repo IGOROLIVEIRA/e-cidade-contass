@@ -1069,18 +1069,7 @@ WHERE rh30_vinculo IN ('I',
         and rescisao.r59_causa = rhpesrescisao.rh05_causa
         and rescisao.r59_caub = rhpesrescisao.rh05_caub::char(2)
     where h13_categoria in ('101', '106', '111', '301', '302', '303', '305', '306', '309', '312', '313', '902')
-    and rh30_vinculo = 'A'
-    and
-	exists (SELECT
-	1
-from
-	gerfsal
-where
-	r14_anousu = fc_getsession('DB_anousu')::int
-	and r14_mesusu = date_part('month', fc_getsession('DB_datausu')::date)
-	and r14_instit = fc_getsession('DB_instit')::int
-	and r14_regist = rhpessoal.rh01_regist)
-    and rh05_recis is null";
+    and rh30_vinculo = 'A' ";
 
         if ($matricula != null) {
             $sql .= " and rh01_regist in ($matricula) ";
