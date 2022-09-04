@@ -139,6 +139,8 @@ $mesfolha = DBPessoal::getMesFolha();
                             <option value="S2400">S-2400 - Cadastro de Beneficiário - Entes Públicos - Início</option>
                             <option value="S2410">S-2410 - Cadastro de Benefício - Entes Públicos - Início</option>
                             <option value="S2299">S-2299 - Desligamento</option>
+                            <option value="S1200">S-1200 - Remuneração de Trabalhador vinculado ao Regime Geral de Previd. Social
+                            </option>
                         </select>
                     </td>
                 </tr>

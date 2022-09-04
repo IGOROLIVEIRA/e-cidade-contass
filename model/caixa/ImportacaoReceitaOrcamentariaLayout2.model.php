@@ -24,6 +24,7 @@
  *  Copia da licenca no diretorio licenca/licenca_en.txt
  *                                licenca/licenca_pt.txt
  */
+
 class ImportacaoReceitaOrcamentariaLayout2
 {
     private $oReceita;
@@ -45,7 +46,7 @@ class ImportacaoReceitaOrcamentariaLayout2
         $this->oReceita->sCodAgencia      = substr($sLinha, 3, 4);
         $this->oReceita->dDataCredito     = $this->montarData(substr($sLinha, 7, 8));
         $this->oReceita->nValor           = $this->montarValor(substr($sLinha, 21, 13));
-        $this->oReceita->sCodReceita      = str_replace(".", "", substr($sLinha, 35, 17));
+        $this->oReceita->sCodReceita      = substr(str_replace(".", "", substr(trim($sLinha), 35, -3)), 0, 14);
         $this->preencherReceita();
         $this->preencherAgenteArrecadador();
     }
