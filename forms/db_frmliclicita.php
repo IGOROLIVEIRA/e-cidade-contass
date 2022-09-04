@@ -1254,25 +1254,40 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             //parent.document.getElementById('liclicpublicacoes').style.display = 'none';
 
             document.form1.l20_justificativa.style.backgroundColor = '#FFFFFF ';
+
             document.form1.l20_razao.style.backgroundColor = '#FFFFFF ';
+
             document.getElementById("l20_justificativa").disabled = false;
+
             document.getElementById("l20_razao").disabled = false;
+
             document.getElementById("l20_tipoprocesso").disabled = false;
+
             document.getElementById("dispensa").style.display = 'block';
+
             document.getElementById("recdocumentacao").style.display = 'none';
+
 
 
             /*Demandas sicom 2016*/
             document.form1.l20_tipliticacao.style.display = 'none';
+
             document.form1.l20_tipnaturezaproced.style.display = 'none';
+
             document.form1.l20_criterioadjudicacao.style.display = 'none';
+
             document.form1.l20_numeroconvidado.style.display = 'none';
+
             document.form1.l20_dataaber.style.display = 'none';
+
             document.form1.dtjs_l20_dataaber.style.display = 'none';
+
             //document.form1.l20_dtpublic.style.display = 'none';
             //document.form1.dtjs_l20_dtpublic.style.display = 'none';
             document.form1.l20_recdocumentacao.style.display = 'none';
+
             document.form1.dtjs_l20_recdocumentacao.style.display = 'none';
+
             //document.form1.l20_datapublicacao1.style.display = 'none';
             //document.form1.dtjs_l20_datapublicacao1.style.display = 'none';
             //document.form1.l20_nomeveiculo1.style.display = 'none';
@@ -1280,27 +1295,42 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             //document.form1.dtjs_l20_datapublicacao2.style.display = 'none';
             //document.form1.l20_nomeveiculo2.style.display = 'none';
             document.form1.l20_usaregistropreco.style.display = 'none';
+
             document.form1.l20_equipepregao.style.display = 'none';
+
             document.form1.l20_local.style.display = 'none';
+
             document.form1.l20_aceitabilidade.style.display = 'none';
-            document.form1.recdocumentacao.style.display = 'none';
+
+            //document.form1.recdocumentacao.style.display = 'none';
+
 
 
             document.getElementById("tipolicitacao").style.display = 'none';
+
             document.getElementById("tipnaturezaproced").style.display = 'none';
+
             document.getElementById("descontotab").style.display = 'none';
+
             document.getElementById("numeroconvidado").style.display = 'none';
+
             document.getElementById("dataaber").style.display = 'none';
+
             //document.getElementById("dtpublic").style.display = 'none';
             document.getElementById("recdocumentacao").style.display = 'none';
+
             //document.getElementById("datapublicacao1").style.display = 'none';
             //document.getElementById("nomeveiculo1").style.display = 'none';
             //document.getElementById("datapublicacao2").style.display = 'none';
             //document.getElementById("nomeveiculo2").style.display = 'none';
             document.getElementById("usaregistropreco").style.display = 'none';
+
             document.getElementById("equipepregao").style.display = 'none';
+
             document.getElementById("local").style.display = 'none';
+
             document.getElementById("aceitabilidade").style.display = 'none';
+
             //document.getElementById("datenpc").style.display = 'none';
             //document.getElementById("linkpnpc").style.display = 'none';
             //document.getElementById("diario").style.display = 'none';
@@ -1308,12 +1338,18 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             //document.getElementById("linkedital").style.display = 'none';
 
             document.getElementById("respAutoProcesso").style.display = "table-row";
+
             document.getElementById("respAvaliaBens").style.display = "none";
+
             document.getElementById("respCondProcesso").style.display = "none";
+
             document.getElementById("respAberProcesso").style.display = "none";
+
             document.getElementById("respEmissaoEdi").style.display = "none";
+
             //document.getElementById("respPublic").style.display = "none";
             document.getElementById("disputa").style.display = "none";
+
 
             //OC17312 toda vez que fizer uma alteração na modalidade a opção de lei de licitação volta para selecionar para que o usuario coloque novamente a lei
 
