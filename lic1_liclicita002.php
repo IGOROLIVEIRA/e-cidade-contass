@@ -753,13 +753,6 @@ if (isset($alterar)) {
     }
 
     db_fim_transacao($sqlerro);
-    if ($sqlerro == false) {
-        if ($oPost->modalidade_tribunal == 100 || $oPost->modalidade_tribunal == 101 || $oPost->modalidade_tribunal == 102 || $oPost->modalidade_tribunal == 103) {
-            echo "<script>parent.document.getElementById('liclicpublicacoes').style.display='none';\n</script>";
-        } else {
-            echo "<script>parent.document.getElementById('liclicpublicacoes').style.display='block';\n</script>";
-        }
-    }
 } else if (isset($chavepesquisa)) {
     /*$result = $clhomologacao->sql_record($clhomologacao->sql_query_file(null,"*","","l202_licitacao = {$chavepesquisa}"));
 	if ($clhomologacao->numrows > 0) {

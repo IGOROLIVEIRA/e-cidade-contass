@@ -47,6 +47,24 @@ $result = $clliclicita->sql_record($clliclicita->sql_query($licitacao, "l08_alte
 $oLicitacao = db_utils::fieldsMemory($result, 0);
 $result = $clliccomissaocgm->sql_record($clliccomissaocgm->sql_query_file(null, 'l31_codigo,l31_liccomissao,l31_numcgm, (select cgm.z01_nome from cgm where z01_numcgm = l31_numcgm) as z01_nome, l31_tipo', null, "l31_licitacao=$licitacao and l31_tipo = '8'"));
 $comissao = db_utils::fieldsMemory($result, 0);
+$tribunal = db_query("SELECT pctipocompratribunal.l44_sequencial
+FROM cflicita
+INNER JOIN db_config ON db_config.codigo = cflicita.l03_instit
+INNER JOIN pctipocompra ON pctipocompra.pc50_codcom = cflicita.l03_codcom
+INNER JOIN pctipocompratribunal ON pctipocompratribunal.l44_sequencial = cflicita.l03_pctipocompratribunal
+INNER JOIN cgm ON cgm.z01_numcgm = db_config.numcgm
+INNER JOIN db_tipoinstit ON db_tipoinstit.db21_codtipo = db_config.db21_tipoinstit
+INNER JOIN pctipocompratribunal AS a ON a.l44_sequencial = pctipocompra.pc50_pctipocompratribunal
+WHERE cflicita.l03_codigo = $oLicitacao->l20_codtipocom");
+$tribunal = db_utils::fieldsMemory($tribunal, 0);
+$tribunal = $tribunal->l44_sequencial;
+
+
+$ocultar_box_publicacoes = false;
+if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
+    $ocultar_box_publicacoes = true;
+}
+
 
 
 ?>
@@ -71,7 +89,9 @@ $comissao = db_utils::fieldsMemory($result, 0);
 
         <div style="margin-top: 20px">
 
-            <form name="form1">
+            <form name="form1" style="display: <?php if ($ocultar_box_publicacoes == true) {
+                                                    echo "none";
+                                                } ?>;">
                 <fieldset style="width: 550;">
                     <legend><strong>Publicações</strong></legend>
                     <table>
@@ -81,7 +101,6 @@ $comissao = db_utils::fieldsMemory($result, 0);
                             </td>
                             <td>
                                 <?
-
                                 db_inputdata('l20_dtpulicacaoedital', @$l20_dtpulicacaoedital_dia, @$l20_dtpulicacaoedital_mes, @$l20_dtpulicacaoedital_ano, true, 'text', $db_opcao);
                                 ?>
                             </td>
@@ -273,9 +292,8 @@ $comissao = db_utils::fieldsMemory($result, 0);
 <script>
     function js_emite() {
 
-        //query = 'l20_codigo=' + 3;
         var query = 'l214_tipo=' + document.getElementById('l214_tipo').value;
-        query += '&l214_texto=' + document.getElementById('l214_texto').value;
+        query += '&l214_texto=' + document.getElementById('l214_texto').value.replace(/\r\n|\r|\n/g, "<br />");
         query += '&l214_sequencial=' + document.getElementById('l214_sequencial').value;
         query += '&licitacao=' + "<?php echo $licitacao; ?>";
 
@@ -320,11 +338,20 @@ $comissao = db_utils::fieldsMemory($result, 0);
     }
 
     function js_pesquisa(mostra) {
+
+        tribunal = "<?php echo $tribunal; ?>";
+        texto2 = false;
+
+        if (texto2 == 102 || texto2 == 103) {
+            texto2 = true;
+
+        }
+
         if (mostra == true) {
-            js_OpenJanelaIframe('', 'db_iframe_liclicpublicacoes', 'func_lictextopublicacao.php?funcao_js=parent.js_preenchepesquisa|0|1|2', 'Pesquisa', true);
+            js_OpenJanelaIframe('', 'db_iframe_liclicpublicacoes', 'func_lictextopublicacao.php?texto2=' + texto2 + '&funcao_js=parent.js_preenchepesquisa|0|1|2', 'Pesquisa', true);
         } else {
             sequencial = document.getElementById('l214_sequencial').value
-            js_OpenJanelaIframe('', 'db_iframe_liclicpublicacoes', 'func_lictextopublicacao.php?publicacao=true&pesquisa_chave=' + sequencial + '&funcao_js=parent.js_preenchepesquisa2', 'Pesquisa', false);
+            js_OpenJanelaIframe('', 'db_iframe_liclicpublicacoes', 'func_lictextopublicacao.php?texto2=' + texto2 + '&publicacao=true&pesquisa_chave=' + sequencial + '&funcao_js=parent.js_preenchepesquisa2', 'Pesquisa', false);
 
         }
     }

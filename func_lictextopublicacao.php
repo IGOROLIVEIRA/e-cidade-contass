@@ -37,7 +37,11 @@ $cllictextopublicacao = new cl_lictextopublicacao;
         $campos = "lictextopublicacao.*";
       }
     }
-    $sql = $cllictextopublicacao->sql_query(null, $campos, null, "");
+    if ($texto2) {
+      $sql = $cllictextopublicacao->sql_query(null, $campos, "l214_sequencial", "l214_sequencial !=2");
+    } else {
+      $sql = $cllictextopublicacao->sql_query(null, $campos, "l214_sequencial", "");
+    }
     $repassa = array();
     echo '<div class="container">';
     echo '  <fieldset>';
@@ -56,7 +60,7 @@ $cllictextopublicacao = new cl_lictextopublicacao;
           echo "<script>" . $funcao_js . "('$l214_sequencial',false);</script>";
         }
       } else {
-        echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") não Encontrado',true);</script>";
+        echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") nï¿½o Encontrado',true);</script>";
       }
     } else {
       echo "<script>" . $funcao_js . "('',false);</script>";

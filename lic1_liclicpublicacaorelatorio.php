@@ -103,7 +103,8 @@ $texto = str_replace('$l20_localentrega', "$licita->l20_localentrega", $texto);
 $texto = str_replace('$instituição,', "", $texto);
 $texto = str_replace('data sistema (formato 01 de Janeiro de 2022.', "", $texto);
 
-
+$texto = str_replace('<br />', "\n", $texto);
+nl2br("One line.\nAnother line.");
 
 $oPDF->MultiCell(0, 4, $texto, 0, 'L', false);
 $oPDF->MultiCell(0, 4, $sDepartamento . " " . $data, 0, 'L', false);
