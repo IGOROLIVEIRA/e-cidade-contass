@@ -153,14 +153,14 @@ $rotulo->label("m60_descr");
                                   db_input('m60_codmater',7,$Im60_codmater,true,'text',1," onchange='js_pesquisam60_codmater(false);'","")
                                ?>
                                <?
-                                  db_input('m60_descr',35,$Im60_descr,true,'text',3,'')
+                                  db_input('m60_descr',100,$Im60_descr,true,'text',3,'')
                                ?>
                                <input type="button" value="Lançar" id="btn-lancar"/>
                               </td>
                             </tr>
                             <tr colspan="4">
                               <td>
-                                <select name="material[]" id="material" class="DBSelectMultiplo" size="8" multiple></select>
+                                <select name="material[]" id="material" class="DBSelectMultiplo" size="8" style="width: 100%;" multiple></select>
                               </td>
                             </tr>
                           </table>

@@ -90,7 +90,7 @@ db_postmemory($HTTP_POST_VARS);
         <td>
           <?
              db_input('m60_codmater',6,false,'','text',3," onchange='js_pesquisaMaterial(false);'");
-             db_input('m60_descr',45,'text',3,'');
+             db_input('m60_descr',100,'text',3,'');
          ?>
         </td>
       </tr>
@@ -126,12 +126,12 @@ db_postmemory($HTTP_POST_VARS);
       <tr>
         <td colspan="2">
 
-          <fieldset style="width: 500px;">
+          <fieldset style="width: 700px;">
           <legend><strong>Motivo</strong></legend>
             <table cellpadding="3" border="0">
               <tr>
                 <td>
-                  <textarea rows="5" cols="70" name="obs_precomedio" id='obs_precomedio'></textarea>
+                  <textarea rows="5" cols="140" name="obs_precomedio" id='obs_precomedio'></textarea>
                 </td>
               </tr>
             </table>

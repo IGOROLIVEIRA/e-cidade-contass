@@ -148,8 +148,8 @@ $clpcmater->rotulo->label("pc01_descrmater");
       if($filtra_atuais == 'true'){
           $where_ativo = $where_ativo ? $where_ativo . " AND " : $where_ativo;
           $where_ativo .= " extract(year from pc01_data) <= " . db_getsession('DB_anousu');
-          $where_ativo .= " and pc01_instit in (" . db_getsession('DB_instit').",0)";
       }
+      $where_ativo .= " and pc01_instit in (" . db_getsession('DB_instit').",0)";
 
       if (isset($chave_pc01_codmater) && (trim($chave_pc01_codmater)!="") ) {
         $sql = $clpcmater->sql_query(null,$campos,"pc01_codmater","pc01_codmater=$chave_pc01_codmater $where_ativo");

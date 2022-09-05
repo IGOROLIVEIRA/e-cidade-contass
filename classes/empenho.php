@@ -1,16 +1,16 @@
 <?php
-//ini_set('display_errors', 'On'); 
+//ini_set('display_errors', 'On');
 //error_reporting(E_ALL);
 /*
  *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2014  DBSeller Servicos de Informatica
  *                            www.dbseller.com.br
- *                         e-cidade@dbseller.com.br 
+ *                         e-cidade@dbseller.com.br
  *
  *  Este programa e software livre; voce pode redistribui-lo e/ou
  *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
  *  publicada pela Free Software Foundation; tanto a versao 2 da
- *  Licenca como (a seu criterio) qualquer versao mais nova.  
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
  *
  *  Este programa e distribuido na expectativa de ser util, mas SEM
  *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
@@ -139,7 +139,7 @@ class empenho {
 
   function liquidar($numemp = "", $codele = "", $codnota = "", $valor = "", $historico = "", $sHistoricoOrdem='', $iCompDesp ='',
                     $iContaPagadora = null, $lVerificaContaPagadora = true, $iCattrabalhador = null,$iNumempresa = null,$iContribuicaoPrev = null,$iCattrabalhadorremuneracao = null,$iValorremuneracao = null,$iValordesconto = null,$iCompetencia = null) {
-                       
+
     /*
      * Caso o usuário tenha marcado a opção 'Obriga Conta Pagadora na Liquidação'
      * obriga informar a conta pagadora
@@ -1137,7 +1137,7 @@ class empenho {
    */
   private function lancaOP($numemp = "", $codele = "", $codnota = "", $valor = "", $retencoes = "", $historico, $iCompDesp = '',
                             $iContaPagadora = null,$iCattrabalhador = null,$iNumempresa = null,$iContribuicaoPrev = null,$iCattrabalhadorremuneracao = null,$iValorremuneracao = null,$iValordesconto = null,$iCompetencia = null ) {
-                                      
+
 
     if ($numemp == "" || $codele == "" || $codnota == "" || $valor == "") {
       $this->erro_status = '0';
@@ -1160,7 +1160,7 @@ class empenho {
     $clpagordem->e50_anousu     = $this->anousu;
     $clpagordem->e50_compdesp   = $iCompDesp;
     $clpagordem->e50_contapag   = $iContaPagadora;
-    $clpagordem->e50_cattrabalhador = 'null'; 
+    $clpagordem->e50_cattrabalhador = 'null';
     $clpagordem->e50_cattrabalhadorremurenacao = 'null';
     $clpagordem->e50_empresadesconto = 'null';
     $clpagordem->e50_contribuicaoPrev = 'null';
@@ -1172,12 +1172,12 @@ class empenho {
     if($iNumempresa)
       $clpagordem->e50_empresadesconto = $iNumempresa;
     if($iContribuicaoPrev)
-      $clpagordem->e50_contribuicaoPrev = $iContribuicaoPrev; 
+      $clpagordem->e50_contribuicaoPrev = $iContribuicaoPrev;
     if($iCattrabalhadorremuneracao)
-      $clpagordem->e50_cattrabalhadorremurenacao  = $iCattrabalhadorremuneracao;  
+      $clpagordem->e50_cattrabalhadorremurenacao  = $iCattrabalhadorremuneracao;
     if($iValorremuneracao)
       $clpagordem->e50_valorremuneracao = $iValorremuneracao;
-    if($iValordesconto) 
+    if($iValordesconto)
       $clpagordem->e50_valordesconto = $iValordesconto;
     if($iCompetencia){
       $clpagordem->e50_datacompetencia = explode("/",$iCompetencia);
@@ -1506,10 +1506,10 @@ class empenho {
       return false;
     }
   }
- 
-  /**  
-   *  funcao para para converter dados do empenho e notas em string json;  
-   *  @param  integer iEmpenho 
+
+  /**
+   *  funcao para para converter dados do empenho e notas em string json;
+   *  @param  integer iEmpenho
    *  @param  string [sWhere]
    *  @return string json;
    */
@@ -1536,7 +1536,7 @@ class empenho {
 
       /**
        * query para retornar o  e64_codele da empelemento pelo e64_numemp
-       * 
+       *
        */
       $oDaoEmpElemento       = db_utils::getDao("empelemento");
       $sWhereEmpElemento     = "e64_numemp = {$this->dadosEmpenho->e60_numemp}";
@@ -2519,6 +2519,8 @@ class empenho {
     //pegamos os saldos da dotacao so empenho.
     $rsDotacaoSaldo = db_dotacaosaldo(8, 2, 2, "true", "o58_coddot={$this->dadosEmpenho->e60_coddot}", db_getsession("DB_anousu"));
     $oDotacaoSaldo  = db_utils::fieldsMemory($rsDotacaoSaldo, 0);
+    $saldoAtual = $oDotacaoSaldo->atual;
+
 
     /*
        testamos se existe saldo contabil disponivel para realizar a anulacao do empenho
@@ -2719,7 +2721,7 @@ class empenho {
       $clempanulado = $this->usarDao("empanulado",true);
       $clempanulado->e94_numemp         = $this->numemp;
       $clempanulado->e94_valor          = $nValorAnular;
-      $clempanulado->e94_saldoant       = $nValorAnular; // carlos atualizado
+      $clempanulado->e94_saldoant       = $saldoAtual; // saldo atualizado
       $clempanulado->e94_motivo         = $sMotivo;
       $clempanulado->e94_empanuladotipo = $iTipoAnulacao;
       $clempanulado->e94_data           = date("Y-m-d", db_getsession("DB_datausu"));
@@ -3573,7 +3575,7 @@ class empenho {
 
           $rsContrato  = $oDaoEmpenhoContrato->sql_record($sSqlContrato);
           $rsAnoEmp    = $oDaoEmpempenho->sql_record($sSqlAnoEmp) or die($sSqlAnoEmp);
-          
+
           $oAnoEmp     = db_utils::fieldsMemory($rsAnoEmp);
 
           if (!$this->lSqlErro && $oDaoEmpenhoContrato->numrows > 0) {

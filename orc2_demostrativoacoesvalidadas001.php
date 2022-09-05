@@ -352,7 +352,7 @@ function js_mostrappalei1(chave1,chave2){
 function js_imprimeRelatorio() {
 
   iProcessado = $('o05_ppaversao').options[$('o05_ppaversao').selectedIndex].processadodespesa;
-  if (iProcessado == 1) {
+  if (iProcessado == 1 || $F('selmodelo') == 2) {
 
     var sQuery  = "?ppalei="+$F('o05_ppalei');
     		sQuery += "&anoini="+$F('o01_anoinicio');

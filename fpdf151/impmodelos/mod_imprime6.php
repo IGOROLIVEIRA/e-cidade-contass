@@ -71,8 +71,8 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
     $this->objpdf->text($xcol + 2, $xlin + 43, 'Processo');
     $this->objpdf->text($xcol + 46, $xlin + 43, 'Nº da Modalidade');
     if($this->acordo != ''){
-        $this->objpdf->text($xcol + 2, $xlin + 46.5, 'Acordo');
-        $this->objpdf->text($xcol + 46, $xlin + 46.5, 'Código Acordo');
+        $this->objpdf->text($xcol + 2, $xlin + 46.5, 'Contrato');
+        $this->objpdf->text($xcol + 46, $xlin + 46.5, 'Código Contrato');
     }
     $this->objpdf->text($xcol + 2, $xlin + 50, 'Tipo de Compra');
     if ($this->prazo_ent != "") {
@@ -594,9 +594,9 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
         $this->objpdf->SetFont('Arial', '', 4);
         $this->objpdf->Text(2, 296, $this->texto);
         $this->objpdf->SetFont('Arial', '', 6);
-        $this->objpdf->Text(200, 296, ($xxx + 1) . 'ª via');
+        //$this->objpdf->Text(200, 296, ($xxx + 1) . 'ª via');
         $this->objpdf->SetFont('Arial', 'i', 6);
-        $this->objpdf->Text(42, 296, " Hora: {$sHora}");
+        $this->objpdf->Text(50, 296, " Hora: {$sHora}");
         $this->objpdf->setfont('Arial', '', 11);
 
         $xlin = 169;

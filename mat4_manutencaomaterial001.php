@@ -45,7 +45,7 @@ $rotulo->label("m60_descr");
     <link href="estilos.css" rel="stylesheet" type="text/css">
   </head>
   <body bgcolor="#CCCCCC" style="margin-top: 30px;">
-    <table width="600" align="center">
+    <table width="800" align="center">
       <tr>
         <td>
           <fieldset>
@@ -61,7 +61,7 @@ $rotulo->label("m60_descr");
             			<td>
             				<?php
             				  db_input('m60_codmater',10,$Im60_codmater,true,'text',1," onchange='js_pesquisam60_codmater(false);'");
-            				  db_input('m60_descr',40,$Im60_descr,true,'text',3,'');
+            				  db_input('m60_descr',100,$Im60_descr,true,'text',3,'');
             				?>
             		  </td>
             		</tr>

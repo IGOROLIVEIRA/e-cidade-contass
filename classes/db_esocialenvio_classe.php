@@ -140,6 +140,7 @@ class cl_esocialenvio
             $this->erro_status = "0";
             return false;
         }
+
         if ($this->rh213_dataprocessamento == null) {
             $this->erro_sql = " Campo Data Processamento não informado.";
             $this->erro_campo = "rh213_dataprocessamento";
@@ -168,10 +169,11 @@ class cl_esocialenvio
         //     return false;
         // }
         if ($rh213_sequencial == "" || $rh213_sequencial == null) {
+
             $result = db_query("select nextval('esocialenvio_rh213_sequencial_seq')");
             if ($result == false) {
                 $this->erro_banco = str_replace("\n", "", @pg_last_error());
-                $this->erro_sql   = "Verifique o cadastro da sequencia: esocialenvio_rh213_sequencial_seq do campo: rh213_sequencial";
+                $this->erro_sql   = " Verifique o cadastro da sequencia: esocialenvio_rh213_sequencial_seq do campo: rh213_sequencial";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";

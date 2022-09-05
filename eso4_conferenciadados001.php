@@ -130,7 +130,7 @@ $mesfolha = DBPessoal::getMesFolha();
                 <tr>
                     <td align="right"><label for="evento">Evento:</label></td>
                     <td>
-                        <select name="evento" id="evento" style="width: 78%;">
+                        <select name="evento" id="evento" style="width: 78%;" onchange="js_alt_evento()">
                             <option value="">selecione</option>
                             <option value="S2200">S-2200 - Cadastramento Inicial do Vínculo e Admissão/Ingresso de Trabalhador</option>
                             <option value="S2300">S-2300 - Trabalhador Sem Vínculo de Emprego/Estatutário - Início</option>
@@ -138,6 +138,61 @@ $mesfolha = DBPessoal::getMesFolha();
                             <option value="S2306">S-2306 - Trabalhador Sem Vínculo de Emprego/Estatutário - Alteração Contratual</option>
                             <option value="S2400">S-2400 - Cadastro de Beneficiário - Entes Públicos - Início</option>
                             <option value="S2410">S-2410 - Cadastro de Benefício - Entes Públicos - Início</option>
+                            <option value="S2299">S-2299 - Desligamento</option>
+                            <option value="S1200">S-1200 - Remuneração de Trabalhador vinculado ao Regime Geral de Previd. Social</option>
+                            <option value="S1202">S-1202 - Remuneração de Servidor vinculado ao Regime Próprio de Previd</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr id="indapuracao_col" style="display: none;">
+                    <td align="right"><label for="indapuracao">Apuração:</label></td>
+                    <td>
+                        <select name="indapuracao" id="indapuracao" style="width: 78%;">
+                            <option value="1">Mensal</option>
+                            <option value="2">Anual</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr id="dtalteracao" style="display:none">
+                    <td align="left"><label>Data Alteração:</label>
+
+                        <input name="dt_alteracao" type="text" id="dt_alteracao" value="" size="10" maxlength="10" autocomplete="off" onblur="js_validaDbData(this);" onkeyup="return js_mascaraData(this,event)" onfocus="js_validaEntrada(this);" onpaste="return false" ondrop="return false">
+                        <input name="dt_alteracao_dia" type="hidden" title="" id="dt_alteracao_dia" value="" size="2" maxlength="2">
+                        <input name="dt_alteracao_mes" type="hidden" title="" id="dt_alteracao_mes" value="" size="2" maxlength="2">
+                        <input name="dt_alteracao_ano" type="hidden" title="" id="dt_alteracao_ano" value="" size="4" maxlength="4">
+                        <script>
+                            var PosMouseY, PosMoudeX;
+
+                            function js_comparaDatasdt_alteracao(dia, mes, ano) {
+                                var objData = document.getElementById('dt_alteracao');
+                                objData.value = dia + "/" + mes + '/' + ano;
+                            }
+                        </script>
+
+                        <input value="D" type="button" id="dtjs_dt_alteracao" name="dtjs_dt_alteracao" onclick="pegaPosMouse(event);show_calendar('dt_alteracao','none')">
+                    </td>
+                </tr>
+                <tr id="tppgto_col" style="display:none">
+                    <td align="right"><label>Tipo de Pagamento:</label>
+                        <select name="tppgto" id="tppgto" style="width: 50%;">
+                            <option value="1">Pagamento de remuneração, conforme apurado em
+                                ideDmDev do S-1200
+                            </option>
+                            <option value="2">Pagamento de verbas rescisórias conforme apurado
+                                em ideDmDev do S-2299
+                            </option>
+                            <option value="3">Pagamento de verbas rescisórias conforme apurado
+                                em ideDmDev do S-2399
+                            </option>
+                            <option value="4">Pagamento de remuneração conforme apurado em
+                                ideDmDev do S-1202
+                            </option>
+                            <option value="4">Pagamento de remuneração conforme apurado em
+                                ideDmDev do S-1202
+                            </option>
+                            <option value="5">Pagamento de benefícios previdenciários, conforme
+                                apurado em ideDmDev do S-1207
+                            </option>
                         </select>
                     </td>
                 </tr>
@@ -237,6 +292,7 @@ $mesfolha = DBPessoal::getMesFolha();
                 'tpAmb': $F('tpAmb'),
                 'iAnoValidade': $F('anofolha'),
                 'iMesValidade': $F('mesfolha'),
+                'indapuracao': $F('indapuracao'),
                 'matricula': aMatriculas.join(',')
             }; //Codigo Tipo::CADASTRAMENTO_INICIAL
             new AjaxRequest('eso4_esocialapi.RPC.php', parametros, function(retorno) {
@@ -282,5 +338,28 @@ $mesfolha = DBPessoal::getMesFolha();
     function js_limpar_matric() {
         $('rh01_regist').value = '';
         $('z01_nome').value = '';
+    }
+
+    function js_alt_evento() {
+        if ((document.getElementById('evento').value == 'S1200' || document.getElementById('evento').value == 'S1202')) {
+            if (document.getElementById('indapuracao_col').style.display == 'none') {
+                document.getElementById('indapuracao_col').style.display = 'inline';
+            }
+        } else if ((document.getElementById('evento').value == 'S1210')) {
+            if (document.getElementById('tppgto_col').style.display == 'none') {
+                document.getElementById('tppgto_col').style.display = 'inline';
+            }
+        } else {
+            document.getElementById('indapuracao_col').style.display = 'none';
+            document.getElementById('tppgto_col').style.display = 'none'
+        }
+    }
+
+    function js_dataalt() {
+        if (document.getElementById('dtalteracao').style.display == 'none') {
+            document.getElementById('dtalteracao').style.display = 'inline';
+            return true;
+        }
+        document.getElementById('dtalteracao').style.display = 'none';
     }
 </script>

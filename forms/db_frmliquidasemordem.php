@@ -279,6 +279,16 @@ if (USE_PCASP) {
                   <td id='cattrab2'><? db_input('ct01_descricaocategoria', 50, $Ict01_descricaocategoria, true, 'text', 3, '');?></td>
         </tr>
         <tr>
+                <td id="idvinculos">
+                <strong>O trabalhador possui outro vínculo/atividade com desconto previdenciário: </strong>
+                <td colspan="4">
+                <?
+                  $multiplosvinculos = array(''=>'Selecione','1'=>'Sim', '2'=>'Não');
+                  db_select('multiplosvinculos', $multiplosvinculos, true, 1, "onchange='validarVinculos()'"); 
+                ?>
+                </td>
+        </tr>  
+        <tr>
                 <td id='idcontri'>
                 <strong>Indicador de Desconto da Contribuição Previdenciária:</strong>
                 <td colspan="4">
@@ -287,7 +297,7 @@ if (USE_PCASP) {
                   '2'=>'2 - O declarante aplica a alíquota de desconto do segurado sobre a diferença entre o limite máximo do salário de contribuição e a remuneração de outra empresa para as quais o trabalhador informou que houve o desconto',
                   '3'=>'3 - O declarante não realiza desconto do segurado, uma vez que houve desconto sobre o limite máximo de salário de contribuição em outra empresa',
                   );
-                  db_select('contribuicaoPrev', $aContribuicao, true, 1, "onchange='validarcamposEsocial()'"); 
+                  db_select('contribuicaoPrev', $aContribuicao, true, 1, ""); 
                 ?>
                 </td>
         </tr>
@@ -574,6 +584,48 @@ if (USE_PCASP) {
           document.form1.valordesconto.value = document.form1.valordesconto.value.substring(0, valordesconto)+virgula.substring(0,3);              
          }                     
 }
+function validarVinculos(){ 
+  if(document.form1.multiplosvinculos.value == '1'){
+      document.getElementById('idcontri').style.display = "table-cell";
+      document.getElementById('contribuicaoPrev').style.display = "table-cell";
+      document.getElementById('idcompetencia').style.display = "table-cell";
+      document.getElementById('idcompetencia2').style.display = "table-cell";
+      document.getElementById('empresa').style.display = "table-cell";
+      document.getElementById('empresa1').style.display = "table-cell";
+      document.getElementById('empresa2').style.display = "table-cell";
+      document.getElementById('catremuneracao').style.display = "table-cell";
+      document.getElementById('catremuneracao1').style.display = "table-cell";
+      document.getElementById('catremuneracao2').style.display = "table-cell";
+      document.getElementById('vlrremuneracao1').style.display = "table-cell";
+      document.getElementById('vlrremuneracao').style.display = "table-cell";
+      document.getElementById('vlrdesconto').style.display = "table-cell";
+      document.getElementById('vlrdesconto1').style.display = "table-cell";
+  }
+  if(document.form1.multiplosvinculos.value == '2'){
+      document.getElementById('idcontri').style.display = "none";
+      document.getElementById('contribuicaoPrev').style.display = "none";
+      document.getElementById('idcompetencia').style.display = "none";
+      document.getElementById('idcompetencia2').style.display = "none";
+      document.getElementById('empresa').style.display = "none";
+      document.getElementById('empresa1').style.display = "none";
+      document.getElementById('empresa2').style.display = "none";
+      document.getElementById('catremuneracao').style.display = "none";
+      document.getElementById('catremuneracao1').style.display = "none";
+      document.getElementById('catremuneracao2').style.display = "none";
+      document.getElementById('vlrremuneracao').style.display = "none";
+      document.getElementById('vlrremuneracao1').style.display = "none";
+      document.getElementById('vlrdesconto').style.display = "none";
+      document.getElementById('vlrdesconto1').style.display = "none";
+      document.form1.numempresa.value = '';
+      document.form1.nomeempresa.value = '';
+      document.form1.ct01_codcategoriaremuneracao.value = '';
+      document.form1.ct01_descricaocategoriaremuneracao.value = '';
+      document.form1.valorremuneracao.value = '';
+      document.form1.valordesconto.value = '';
+      document.form1.competencia.value= '';
+      document.form1.contribuicaoPrev.value= '';
+  }
+}
   function mensagemesocial(){
   if(document.form1.aIncide.value == '2'){
     var r=confirm("Tem certeza de que não há incidência de contribuição previdenciária para este prestador? ");
@@ -598,6 +650,8 @@ if (USE_PCASP) {
       document.getElementById('vlrremuneracao1').style.display = "none";
       document.getElementById('vlrdesconto').style.display = "none";
       document.getElementById('vlrdesconto1').style.display = "none";
+      document.getElementById('multiplosvinculos').style.display = "none";
+      document.getElementById('idvinculos').style.display = "none";
       document.form1.numempresa.value = '';
       document.form1.nomeempresa.value = '';
       document.form1.ct01_codcategoriaremuneracao.value = '';
@@ -605,6 +659,7 @@ if (USE_PCASP) {
       document.form1.valorremuneracao.value = '';
       document.form1.valordesconto.value = '';
       document.form1.competencia.value= '';
+      document.form1.multiplosvinculos.value= '';
       }
     else
       {
@@ -612,13 +667,13 @@ if (USE_PCASP) {
       return false;
       }
   }else{
-      document.getElementById('idcontri').style.display = "table-cell";
       document.getElementById('cattrab').style.display = "table-cell";
       document.getElementById('cattrab1').style.display = "table-cell";
       document.getElementById('cattrab2').style.display = "table-cell";
       document.getElementById('ct01_codcategoria').style.display = "table-cell";
       document.getElementById('ct01_descricaocategoria').style.display = "table-cell";
-      document.getElementById('contribuicaoPrev').style.display = "table-cell";
+      document.getElementById('multiplosvinculos').style.display = "table-cell";
+      document.getElementById('idvinculos').style.display = "table-cell";
       document.form1.contribuicaoPrev.value = '';
       document.form1.numempresa.value = '';
       document.form1.nomeempresa.value = '';
@@ -643,43 +698,8 @@ if (USE_PCASP) {
       document.getElementById('vlrremuneracao1').style.display = "none";
       document.getElementById('vlrdesconto').style.display = "none";
       document.getElementById('vlrdesconto1').style.display = "none";
-      
-function validarcamposEsocial(){
-    if($('contribuicaoPrev').value == 1 || $('contribuicaoPrev').value == ''){
-      document.getElementById('idcompetencia').style.display = "none";
-      document.getElementById('idcompetencia2').style.display = "none";
-      document.getElementById('empresa').style.display = "none";
-      document.getElementById('empresa1').style.display = "none";
-      document.getElementById('empresa2').style.display = "none";
-      document.getElementById('catremuneracao').style.display = "none";
-      document.getElementById('catremuneracao1').style.display = "none";
-      document.getElementById('catremuneracao2').style.display = "none";
-      document.getElementById('vlrremuneracao').style.display = "none";
-      document.getElementById('vlrremuneracao1').style.display = "none";
-      document.getElementById('vlrdesconto').style.display = "none";
-      document.getElementById('vlrdesconto1').style.display = "none";
-      document.form1.numempresa.value = '';
-      document.form1.nomeempresa.value = '';
-      document.form1.ct01_codcategoriaremuneracao.value = '';
-      document.form1.ct01_descricaocategoriaremuneracao.value = '';
-      document.form1.valorremuneracao.value = '';
-      document.form1.valordesconto.value = '';
-      document.form1.competencia.value= '';
-    }else{
-      document.getElementById('idcompetencia').style.display = "table-cell";
-      document.getElementById('idcompetencia2').style.display = "table-cell";
-      document.getElementById('empresa').style.display = "table-cell";
-      document.getElementById('empresa1').style.display = "table-cell";
-      document.getElementById('empresa2').style.display = "table-cell";
-      document.getElementById('catremuneracao').style.display = "table-cell";
-      document.getElementById('catremuneracao1').style.display = "table-cell";
-      document.getElementById('catremuneracao2').style.display = "table-cell";
-      document.getElementById('vlrremuneracao1').style.display = "table-cell";
-      document.getElementById('vlrremuneracao').style.display = "table-cell";
-      document.getElementById('vlrdesconto').style.display = "table-cell";
-      document.getElementById('vlrdesconto1').style.display = "table-cell";
-    }
-}
+      document.getElementById('idcontri').style.display = "none";
+      document.getElementById('contribuicaoPrev').style.display = "none";
    
   function js_marca(){
 
@@ -1084,19 +1104,23 @@ function validarcamposEsocial(){
       alert("Campo Categoria do Trabalhador Obrigatorio")
       return false;
    }
-   if(opcao != '3' && !document.form1.contribuicaoPrev.value &&  obj.Tipofornec =='cpf' && tipodesdobramento == '1' ){
+   if(opcao != '3' && !document.form1.multiplosvinculos.value &&  obj.Tipofornec =='cpf' && tipodesdobramento == '1' ){
+        alert("Campo Possui múltiplos vínculos Obrigatorio")
+        return false;
+    }
+    if(document.form1.multiplosvinculos.value == 1 && opcao != '3' && !document.form1.contribuicaoPrev.value &&  obj.Tipofornec =='cpf' && tipodesdobramento == '1' ){
       alert("Campo Indicador de Desconto da Contribuição Previdenciária Obrigatorio")
       return false;
    }
-   if(!document.form1.numempresa.value &&  opcao != '3' && (document.form1.contribuicaoPrev.value == '2' || document.form1.contribuicaoPrev.value == '3') &&  obj.Tipofornec =='cpf' && tipodesdobramento == '1' ){
+   if(!document.form1.numempresa.value &&  opcao != '3' && (document.form1.contribuicaoPrev.value == '1' || document.form1.contribuicaoPrev.value == '2' || document.form1.contribuicaoPrev.value == '3') &&  obj.Tipofornec =='cpf' && tipodesdobramento == '1' ){
       alert("Campo Empresa que efetuou desconto Obrigatorio")
       return false;
    }
-   if(!document.form1.ct01_codcategoriaremuneracao.value &&  opcao != '3' && (document.form1.contribuicaoPrev.value == '2' || document.form1.contribuicaoPrev.value == '3') &&  obj.Tipofornec =='cpf' && tipodesdobramento == '1' ){
+   if(!document.form1.ct01_codcategoriaremuneracao.value &&  opcao != '3' && (document.form1.contribuicaoPrev.value == '1' || document.form1.contribuicaoPrev.value == '2' || document.form1.contribuicaoPrev.value == '3') &&  obj.Tipofornec =='cpf' && tipodesdobramento == '1' ){
       alert("Campo Categoria do trabalhador na qual houve a remuneração Obrigatorio")
       return false;
    }
-   if(!document.form1.valorremuneracao.value &&  opcao != '3' && (document.form1.contribuicaoPrev.value == '2' || document.form1.contribuicaoPrev.value == '3') &&  obj.Tipofornec =='cpf' && tipodesdobramento == '1' ){
+   if(!document.form1.valorremuneracao.value &&  opcao != '3' && (document.form1.contribuicaoPrev.value == '1' || document.form1.contribuicaoPrev.value == '2' || document.form1.contribuicaoPrev.value == '3') &&  obj.Tipofornec =='cpf' && tipodesdobramento == '1' ){
       alert("Campo Valor da Remuneração Obrigatorio")
       return false;
    }
@@ -1104,7 +1128,7 @@ function validarcamposEsocial(){
       alert("Campo Valor do Desconto Obrigatorio")
       return false;
    }
-   if(!document.form1.competencia.value &&  opcao != '3' && (document.form1.contribuicaoPrev.value == '2' || document.form1.contribuicaoPrev.value == '3') &&  obj.Tipofornec =='cpf' && tipodesdobramento == '1' ){
+   if(!document.form1.competencia.value &&  opcao != '3' && (document.form1.contribuicaoPrev.value == '1' || document.form1.contribuicaoPrev.value == '2' || document.form1.contribuicaoPrev.value == '3') &&  obj.Tipofornec =='cpf' && tipodesdobramento == '1' ){
       alert("Campo Competência Obrigatorio")
       return false;
    }
@@ -1966,5 +1990,6 @@ function js_mostraCatTrabalhadorremuneracao1(chave1,chave2){
     }
     $('contribuicaoPrev').style.width =' 489px';
     $('aIncide').style.width =' 120px';
+    $('multiplosvinculos').style.width =' 120px';
 
 </script>

@@ -83,7 +83,7 @@ if (isset($m70_codmatmater) && trim($m70_codmatmater)!="") {
           db_input('m70_codmatmater',10,$Im70_codmatmater,true,"text",
           ((isset($m70_codmatmater) && trim($m70_codmatmater)!="" && (isset($numrows_matestoque) && $numrows_matestoque>0))?"3":"1"),
           "onchange='js_pesquisam70_codmatmater(false);'");
-          db_input('m60_descr',70,$Im60_descr,true,"text",3);
+          db_input('m60_descr',100,$Im60_descr,true,"text",3);
           ?>
           </td>
         </tr>

@@ -15,6 +15,7 @@ $db_botao = true;
 if (isset($incluir)) {
   db_inicio_transacao();
   $clrelatorios->rel_arquivo = $codarq;
+  $clrelatorios->rel_instit = db_getsession("DB_instit");
   $clrelatorios->incluir($rel_sequencial);
   db_fim_transacao();
 }
@@ -23,6 +24,7 @@ if (isset($alterar)) {
   $db_opcao = 2;
   $clrelatorios->rel_arquivo = $codarq;
   $clrelatorios->rel_corpo = $rel_corpo;
+  $clrelatorios->rel_instit = db_getsession("DB_instit");
   $clrelatorios->alterar($rel_sequencial);
   db_fim_transacao();
 }

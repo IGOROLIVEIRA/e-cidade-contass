@@ -259,7 +259,7 @@ if (isset($oGet->e69_codnota)) {
               ?>
            </td>
             <td>
-             <b>Competência</b> 
+             <b>Competência:</b> 
            </td>
            <td>
               <?
@@ -288,7 +288,7 @@ if (isset($oGet->e69_codnota)) {
             </tr>
            <tr>
            <td colspan="2">
-             <b>Indicador de Desconto da Contribuição Previdenciária</b> 
+             <b>Indicador de Desconto da Contribuição Previdenciária:</b> 
            </td>
            <td>
               <?

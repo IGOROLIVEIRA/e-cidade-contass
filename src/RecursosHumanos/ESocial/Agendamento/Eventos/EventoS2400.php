@@ -3,6 +3,7 @@
 namespace ECidade\RecursosHumanos\ESocial\Agendamento\Eventos;
 
 use ECidade\RecursosHumanos\ESocial\Agendamento\Eventos\EventoBase;
+use ECidade\RecursosHumanos\ESocial\Model\Formulario\EventoCargaS2400;
 
 /**
  * Classe responsável por montar as informações do evento S2400 Esocial
@@ -13,13 +14,16 @@ use ECidade\RecursosHumanos\ESocial\Agendamento\Eventos\EventoBase;
 class EventoS2400 extends EventoBase
 {
 
+    private $eventoCarga;
+
     /**
      *
      * @param \stdClass $dados
      */
-    function __construct($dados)
+    public function __construct($dados)
     {
         parent::__construct($dados);
+        $this->eventoCarga = new EventoCargaS2400();
     }
 
     /**
@@ -48,32 +52,33 @@ class EventoS2400 extends EventoBase
             $oDadosAPI->evtCdBenPrRP->sequencial = $iSequencial;
             $oDadosAPI->evtCdBenPrRP->indretif   = 1;
             $oDadosAPI->evtCdBenPrRP->nrrecibo   = null;
-            $oDadosAPI->evtCdBenPrRP->cpfbenef = $oDados->beneficiario->cpfBenef;
-            $oDadosAPI->evtCdBenPrRP->nmbenefic = $oDados->beneficiario->nmBenefic;
-            $oDadosAPI->evtCdBenPrRP->dtnascto = $oDados->beneficiario->dtNascto;
-            $oDadosAPI->evtCdBenPrRP->dtinicio = $oDados->beneficiario->dtInicio;
-            $oDadosAPI->evtCdBenPrRP->sexo = $oDados->beneficiario->sexo;
-            $oDadosAPI->evtCdBenPrRP->racacor = $oDados->beneficiario->racaCor;
-            $oDadosAPI->evtCdBenPrRP->estciv = $oDados->beneficiario->estCiv;
-            $oDadosAPI->evtCdBenPrRP->incfismen = $oDados->beneficiario->incFisMen;
-            $oDadosAPI->evtCdBenPrRP->incfismen = $oDados->beneficiario->incFisMen;
-            $oDadosAPI->evtCdBenPrRP->dtincfismen = $oDados->beneficiario->incFisMen == 'S' ? $oDados->beneficiario->dtIncFisMen : null;
+            $oDadosAPI->evtCdBenPrRP->cpfbenef = $oDados->cpfbenef;
+            $oDadosAPI->evtCdBenPrRP->nmbenefic = $oDados->nmbenefic;
+            $oDadosAPI->evtCdBenPrRP->dtnascto = $oDados->dtnascto;
+            $oDadosAPI->evtCdBenPrRP->dtinicio = $oDados->dtinicio;
+            $oDadosAPI->evtCdBenPrRP->sexo = $oDados->sexo;
+            $oDadosAPI->evtCdBenPrRP->racacor = $oDados->racacor;
+            $oDadosAPI->evtCdBenPrRP->estciv = $oDados->estciv;
+            $oDadosAPI->evtCdBenPrRP->incfismen = $oDados->incfismen;
+            $oDadosAPI->evtCdBenPrRP->dtincfismen = $oDados->incfismen == 'S' ? $oDados->dtIncFisMen : null;
 
-            $oDadosAPI->evtCdBenPrRP->endereco->brasil->tplograd = $oDados->brasil->tpLograd;
-            $oDadosAPI->evtCdBenPrRP->endereco->brasil->dsclograd = $oDados->brasil->dscLograd;
-            $oDadosAPI->evtCdBenPrRP->endereco->brasil->nrlograd = $oDados->brasil->nrLograd ?: 0;
-            $oDadosAPI->evtCdBenPrRP->endereco->brasil->bairro = $oDados->brasil->bairro;
-            $oDadosAPI->evtCdBenPrRP->endereco->brasil->cep = $oDados->brasil->cep;
-            $oDadosAPI->evtCdBenPrRP->endereco->brasil->codMunic = $oDados->brasil->codMunic;
-            $oDadosAPI->evtCdBenPrRP->endereco->brasil->uf = $oDados->brasil->uf;
+            $oDadosAPI->evtCdBenPrRP->endereco->brasil->tplograd = $oDados->tplograd;
+            $oDadosAPI->evtCdBenPrRP->endereco->brasil->dsclograd = $oDados->dsclograd;
+            $oDadosAPI->evtCdBenPrRP->endereco->brasil->nrlograd = $oDados->nrlograd ?: 0;
+            $oDadosAPI->evtCdBenPrRP->endereco->brasil->bairro = $oDados->bairro;
+            $oDadosAPI->evtCdBenPrRP->endereco->brasil->cep = $oDados->cep;
+            $oDadosAPI->evtCdBenPrRP->endereco->brasil->codMunic = $oDados->codmunic;
+            $oDadosAPI->evtCdBenPrRP->endereco->brasil->uf = $oDados->uf;
 
             $oDadosAPI->evtCdBenPrRP->endereco->exterior = null;
-            
-            $oDadosAPI->evtCdBenPrRP->dependente = $this->buscarDependentes($oDados->beneficiario->cpfBenef);
+
+            $oDadosAPI->evtCdBenPrRP->dependente = $this->buscarDependentes($oDados->cpfbenef);
 
             $aDadosAPI[] = $oDadosAPI;
             $iSequencial++;
         }
+        // var_dump($aDadosAPI);
+        // exit;
         return $aDadosAPI;
     }
 
@@ -88,7 +93,7 @@ class EventoS2400 extends EventoBase
         $oDaorhdepend = \db_utils::getDao("rhdepend");
         $sqlDependentes = $oDaorhdepend->sql_query_file(null, "*", "rh31_codigo", "rh31_regist = (SELECT rh01_regist FROM cgm JOIN rhpessoal ON z01_numcgm = rh01_numcgm WHERE z01_cgccpf = '{$cpf}' LIMIT 1)");
         $rsDependentes = db_query($sqlDependentes);
-        
+
         $aDependentes = array();
         for ($iCont = 0; $iCont < pg_num_rows($rsDependentes); $iCont++) {
             $oDependentes = \db_utils::fieldsMemory($rsDependentes, $iCont);
