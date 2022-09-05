@@ -44,27 +44,39 @@ class EventoS1202 extends EventoBase
             $oDadosAPI->evtEvtRmnRPPS->nrRecibo            = null;
 
             $oDadosAPI->evtEvtRmnRPPS->indapuracao         = $this->indapuracao;
-            $oDadosAPI->evtRemun->perapur             = $ano . '-' . $mes;
+            $oDadosAPI->evtEvtRmnRPPS->perapur             = $ano . '-' . $mes;
             if ($oDados->indapuracao == 2) {
-                $oDadosAPI->evtRemun->perapur         = $mes;
+                $oDadosAPI->evtEvtRmnRPPS->perapur         = $mes;
             }
             $oDadosAPI->evtEvtRmnRPPS->cpftrab             = $oDados->cpftrab;
 
-            $oIdeestab = new \stdClass();
-            $oIdeestab->idedmdev  = $this->buscarIdentificador($oDados->matricula);
-            $oIdeestab->idedmdev  = $oIdeestab->codcateg;
-            $oIdeestab->remumperant->matricula   = $oDados->matricula;
-            $oIdeestab->remumperant->itensremun  = $this->buscarValorRubrica($oDados->matricula);
+            $oDadosAPI->evtEvtRmnRPPS->infocomplem = new \stdClass(); //Opcional
+            $oDadosAPI->evtEvtRmnRPPS->infocomplem->nmtrab = $oDados->nmtrab; //Obritatório
+            $oDadosAPI->evtEvtRmnRPPS->infocomplem->dtnascto = $oDados->dtnascto; //Obritatório
 
-            //$oDadosAPI->evtEvtRmnRPPS->dmdev->idedmdev  = $this->buscarIdentificador($oDados->matricula);
+            $std = new \stdClass();
 
-            $oIdeestab->tpinsc = 1;
-            $oIdeestab->nrinsc = $oDados->nrinsc;
+            //Identificação de cada um dos demonstrativos de valores devidos ao trabalhador.
+            $std->dmdev[0] = new \stdClass(); //Obrigatório
+            $std->dmdev[0]->idedmdev = $this->buscarIdentificador($oDados->matricula, $oDados->rh30_regime); //Obrigatório
+            $std->dmdev[0]->codcateg = $oDados->codcateg; //Obrigatório
 
-            $aIdeestab[] = $oIdeestab;
-            $oDadosAPI->evtEvtRmnRPPS->dmdev->infoperant->ideperiodo = $aIdeestab;
+            //Identificação do estabelecimento e da lotação nos quais o
+            //trabalhador possui remuneração no período de apuração
+            $std->dmdev[0]->ideestablot[0] = new \stdClass(); //Opcional
+            $std->dmdev[0]->ideestablot[0]->tpinsc = "1"; //Obrigatório
+            $std->dmdev[0]->ideestablot[0]->nrinsc = $oDados->nrinsc; //Obrigatório
+            $std->dmdev[0]->ideestablot[0]->codlotacao = 'LOTA1'; //Obrigatório
 
-            //$oDadosAPI->evtEvtRmnRPPS->dtAlteracao         = '2021-01-29'; //$oDados->altContratual->dtAlteracao;
+            //Informações relativas à remuneração do trabalhador no período de apuração.
+            $std->dmdev[0]->ideestablot[0]->remunperapur[0] = new \stdClass(); //Obrigatório
+            $std->dmdev[0]->ideestablot[0]->remunperapur[0]->matricula = $oDados->matricula; //Opcional
+
+            //Rubricas que compõem a remuneração do trabalhador.
+            $std->dmdev[0]->ideestablot[0]->remunperapur[0]->itensremun = $this->buscarValorRubrica($oDados->matricula, $oDados->rh30_regime);
+
+            $oDadosAPI->evtEvtRmnRPPS->dmdev = $std->dmdev;
+
             $aDadosAPI[] = $oDadosAPI;
             $iSequencial++;
         }

@@ -144,8 +144,17 @@ $mesfolha = DBPessoal::getMesFolha();
                         </select>
                     </td>
                 </tr>
-                <tr>
-                    <td id="dtalteracao" style="display:none" align="left"><label>Data Altera??o:</label>
+                <tr id="indapuracao_col" style="display: none;">
+                    <td align="right"><label for="indapuracao">Apuração:</label></td>
+                    <td>
+                        <select name="indapuracao" id="indapuracao" style="width: 78%;">
+                            <option value="1">Mensal</option>
+                            <option value="2">Anual</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr id="dtalteracao" style="display:none">
+                    <td align="left"><label>Data Alteração:</label>
 
                         <input name="dt_alteracao" type="text" id="dt_alteracao" value="" size="10" maxlength="10" autocomplete="off" onblur="js_validaDbData(this);" onkeyup="return js_mascaraData(this,event)" onfocus="js_validaEntrada(this);" onpaste="return false" ondrop="return false">
                         <input name="dt_alteracao_dia" type="hidden" title="" id="dt_alteracao_dia" value="" size="2" maxlength="2">
@@ -162,13 +171,9 @@ $mesfolha = DBPessoal::getMesFolha();
 
                         <input value="D" type="button" id="dtjs_dt_alteracao" name="dtjs_dt_alteracao" onclick="pegaPosMouse(event);show_calendar('dt_alteracao','none')">
                     </td>
-                    <td id="indapuracao_col" style="display: none;" align="right"><label>Apuração:</label>
-                        <select name="indapuracao" id="indapuracao">
-                            <option value="1">Mensal</option>
-                            <option value="2">Anual</option>
-                        </select>
-                    </td>
-                    <td id="tppgto_col" style="display:none" align="right"><label>Tipo de Pagamento:</label>
+                </tr>
+                <tr id="tppgto_col" style="display:none">
+                    <td align="right"><label>Tipo de Pagamento:</label>
                         <select name="tppgto" id="tppgto" style="width: 50%;">
                             <option value="1">Pagamento de remuneração, conforme apurado em
                                 ideDmDev do S-1200
@@ -336,18 +341,14 @@ $mesfolha = DBPessoal::getMesFolha();
     }
 
     function js_alt_evento() {
-        if ((document.getElementById('evento').value == 'S1200')) {
+        if ((document.getElementById('evento').value == 'S1200' || document.getElementById('evento').value == 'S1202')) {
             if (document.getElementById('indapuracao_col').style.display == 'none') {
                 document.getElementById('indapuracao_col').style.display = 'inline';
-                return true;
             }
-            document.getElementById('indapuracao_col').style.display = 'none';
         } else if ((document.getElementById('evento').value == 'S1210')) {
             if (document.getElementById('tppgto_col').style.display == 'none') {
                 document.getElementById('tppgto_col').style.display = 'inline';
-                return true;
             }
-            document.getElementById('tppgto_col').style.display = 'none';
         } else {
             document.getElementById('indapuracao_col').style.display = 'none';
             document.getElementById('tppgto_col').style.display = 'none'
