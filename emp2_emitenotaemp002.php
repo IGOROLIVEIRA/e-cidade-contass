@@ -130,7 +130,7 @@ if(isset($listacgm) && $listacgm != ''){
 $sqlemp = $clemite_nota_emp->get_sql_empenho(db_getsession("DB_anousu"), db_getsession("DB_instit"), $dbwhere);
 
 $result = db_query($sqlemp);
-//die($sqlemp); db_criatabela($result);exit;
+ //db_criatabela($result);exit;
 
 if (pg_numrows($result)==0){
     db_redireciona("db_erros.php?fechar=true&db_erro=Nenhum registro encontrado !  ");
@@ -162,6 +162,7 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
 
     db_fieldsmemory($result,$i);
 
+    $pdf1->evento             = $evento;
     $sSqlPcFornecOnPad  = $cldb_pcforneconpad->sql_query(null, "*", null, "pc63_numcgm = {$e60_numcgm}");
     $rsSqlPcFornecOnPad = $cldb_pcforneconpad->sql_record($sSqlPcFornecOnPad);
 
@@ -190,7 +191,7 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
     }
 
     $sProcessoAdministrativo = $clemite_nota_emp->get_sql_processo_administrativo($e61_autori);
-    
+
     $sCondtipos = "";
     if (isset($tipos) && !empty($tipos)) {
       $sCondtipos = " $tipos as tipos, ";
@@ -198,8 +199,9 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
 
     $sqlitem    = $clemite_nota_emp->get_sql_item($sCondtipos, $e60_numemp);
     $resultitem = db_query($sqlitem);
+
     db_fieldsmemory($resultitem);
-    
+
     $result_cgmalt=$clcgmalt->sql_record($clcgmalt->sql_query_file(null,"z05_numcgm as z01_numcgm,z05_nome as z01_nome,z05_telef as z01_telef,z05_ender as z01_ender,z05_numero as z01_numero,z05_munic as z01_munic,z05_cgccpf as z01_cgccpf,z05_cep as z01_cep"," abs(z05_data_alt - date '$e60_emiss') asc, z05_sequencia desc limit 1","z05_numcgm = $z01_numcgm and z05_data_alt > '$e60_emiss' "));
 
     if ($clcgmalt->numrows>0) {
@@ -215,9 +217,10 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
         $cgc      = $o41_cnpj;
     }
 
-    $sSqlFuncaoOrdenaPagamento = $clemite_nota_emp->get_sql_funcao_ordena_pagamento($cgmpaga, 
-                                                                                    date( 'Y',strtotime($e60_emiss)), 
+    $sSqlFuncaoOrdenaPagamento = $clemite_nota_emp->get_sql_funcao_ordena_pagamento($cgmpaga,
+                                                                                    date( 'Y',strtotime($e60_emiss)),
                                                                                     date('m',strtotime($e60_emiss)));
+
 
     $pdf1->cargoordenapagamento = db_utils::fieldsMemory(db_query($sSqlFuncaoOrdenaPagamento),0)->cargoordenapagamento;
 
@@ -284,6 +287,10 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
     //Zera as variáveis
     $pdf1->resumo = "";
     $resumo_lic   = "";
+
+    $pdf1->edital_licitacao = $e60_numerol;
+    $pdf1->modalidade = $e54_nummodalidade;
+    $pdf1->descr_tipocompra = $pc50_descr;
 
     $result_licita = $clempautitem->sql_record($clempautitem->sql_query_lic(null, null, "distinct l20_edital, l20_numero, l20_anousu, l20_objeto,l03_descr", null, "e55_autori = $e54_autori "));
 
@@ -357,6 +364,8 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
     $pdf1->valor            = "e62_vlrun";
     $pdf1->descricaoitem    = "pc01_descrmater";
     $pdf1->complmater       = "pc01_complmater";
+    $pdf1->sequenitem       = "e62_sequen";
+    $pdf1->m61_descr       = "m61_descr";
 
     $pdf1->orcado	        = $e60_vlrorc;
     $pdf1->saldo_ant        = $e60_salant;
@@ -393,6 +402,8 @@ for ($i = 0;$i < pg_numrows($result);$i++) {
     $pdf1->marca            = 'e55_marca';
     $pdf1->acordo           = $oAcordo->ac16_numeroacordo;
     $pdf1->anoacordo        = $oAcordo->ac16_anousu;
+    $pdf1->seqacordo        = $oAcordo->ac16_sequencial;
+
 
     $sql  = "select c61_codcon
               from conplanoreduz
@@ -442,7 +453,7 @@ if ($oConfiguracaoGed->utilizaGED()) {
         $pdf1->objpdf->Output("tmp/{$sTipoDocumento}_{$e60_numemp}.pdf");
         $oGerenciador->moverArquivo(array($oStdDadosGED));
 
-    } catch (Exception $eErro) { 
+    } catch (Exception $eErro) {
 
         db_redireciona("db_erros.php?fechar=true&db_erro=".$eErro->getMessage());
     }

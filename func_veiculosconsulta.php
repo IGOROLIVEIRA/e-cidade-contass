@@ -133,7 +133,7 @@ $iInstituicao = db_getsession("DB_instit");
 
         if(isset($campos)==false){
 
-           $campos  = "distinct ve01_codigo,ve01_placa,ve20_descr,ve21_descr,";
+           $campos  = "distinct ve01_codigo,ve01_placa,upper(si05_descricao) as si05_descricao,ve21_descr,";
            $campos .= "ve22_descr,ve23_descr,ve01_chassi,ve01_certif,ve01_anofab,ve01_anomod";
         }
 

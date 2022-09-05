@@ -125,9 +125,17 @@ switch ($_POST["action"]) {
                 $itemRows[] = $oDados->pc01_descrmater;
                 $itemRows[] = $selectunid;
                 $itemRows[] = "<input type='text' id='qtddisponivel_{$oDados->pc01_codmater}' value='{$qtd_disponivel}' readonly style='background-color: #DEB887; width: 80px' />";
-                $itemRows[] = "<input type='text' id='vlr_{$oDados->pc01_codmater}' value='{$oDados->pc23_vlrun}' readonly style='background-color: #DEB887; width: 80px' />";
+                if($oDados->pc01_servico == "t" and $oDados->pc11_servicoquantidade = "f"){
+                    $itemRows[] = "<input type='text' id='vlr_{$oDados->pc01_codmater}' value='{$oDados->pc23_vlrun}' width: 80px' />";
+                }else{
+                    $itemRows[] = "<input type='text' id='vlr_{$oDados->pc01_codmater}' value='{$oDados->pc23_vlrun}' readonly style='background-color: #DEB887; width: 80px' />";
+                }
                 if ($oDadosEmpAutItem->e55_vlrun != "") {
-                    $itemRows[] = "<input type='text' id='qtd_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_quant}' maxlength='10' readonly style='background-color: #DEB887; width: 80px' />";
+                    if($oDados->pc01_servico == "t" and $oDados->pc11_servicoquantidade = "t"){
+                        $itemRows[] = "<input type='text' id='qtd_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_quant}' maxlength='10' width: 80px' />";
+                    }else{
+                        $itemRows[] = "<input type='text' id='qtd_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_quant}' maxlength='10' readonly style='background-color: #DEB887; width: 80px' />";
+                    }
                 } else {
                     $itemRows[] = "<input type='text' id='qtd_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_quant}' onkeyup='js_calcula(this)' maxlength='10' style='width: 80px' />";
                 }

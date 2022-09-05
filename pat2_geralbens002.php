@@ -252,11 +252,11 @@ if (isset($orgaos) && isset($unidades) && isset($departamentos)) {
         }
         $head6 = "Convênio : $convenio";
     } else if (isset($bens_convenio) && trim($bens_convenio) == "S") {
-        $where_instit .= " and benscedente.t09_bem is not null ";
+        $where_instit .= " and benscedente.t09_bem is not null";
         $sqlrelatorio = $clbens->sql_query_left_convenio(null, "$campos", $ordem, "$where_instit");
     } else if (isset($bens_convenio) && trim($bens_convenio) == "N") {
         $where_instit .= " and benscedente.t09_bem is null ";
-        $sqlrelatorio = $clbens->sql_query_left_convenio(null, "$campos", $ordem, "$where_instit");
+        $sqlrelatorio = $clbens->sql_query_n_convenio(null, "$campos", $ordem, "$where_instit");
     } else {
         $sqlrelatorio = $clbens->sql_query_orgao(null, "$campos", $ordem, "$where_instit");
     }
@@ -275,10 +275,10 @@ if (isset($orgaos) && isset($unidades) && isset($departamentos)) {
     } else if (isset($bens_convenio) && trim($bens_convenio) == "N") {
         //Opção nehum convênio
         $where_instit .= " and benscedente.t09_bem is null ";
-        $sqlrelatorio = $clbens->sql_query_left_convenio(null, "$campos", $ordem, "$where_instit");
+        $sqlrelatorio = $clbens->sql_query_n_convenio(null, "$campos", $ordem, "$where_instit");
     } else if (isset($bens_convenio) && trim($bens_convenio) == "S") {
         //Opção nehum convênio
-        $where_instit .= " and benscedente.t09_bem is not null ";
+        $where_instit .= " and benscedente.t09_bem is not null";
         $sqlrelatorio = $clbens->sql_query_left_convenio(null, "$campos", $ordem, "$where_instit");
     } else {
         //Opção todos
@@ -293,7 +293,7 @@ if($cgmFornecedor){
   }}
 }
 
-$sqlrelatorio = $clbens->sql_query(null,"$campos",$ordem,"$where_instit");
+//$sqlrelatorio = $clbens->sql_query(null,"$campos",$ordem,"$where_instit");
 $result = $clbens->sql_record($sqlrelatorio);
 if ($clbens->numrows == 0) {
 
