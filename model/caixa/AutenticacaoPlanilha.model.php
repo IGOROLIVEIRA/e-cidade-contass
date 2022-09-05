@@ -156,9 +156,8 @@ class AutenticacaoPlanilha {
   	if ($this->oPlanilha->existeLancamentoContabil()) {
 
     	foreach ($aAutenticacoes as $iCodigoAutenticacao) {
-
-    	  $oDadoAutenticacao  = self::getDadosAutenticacao($this->oPlanilha->getDataAutenticacao());
-    		$lReceita           = $this->executarLancamentoContabeis($iCodigoAutenticacao, true, $oDadoAutenticacao );
+    	    $oDadoAutenticacao  = self::getDadosAutenticacao($this->oPlanilha->getDataAutenticacao());
+    		$lReceita           = $this->executarLancamentoContabeis($iCodigoAutenticacao, true, $oDadoAutenticacao);
     		$lReceitaExtra      = $this->executarLancamentosReceitaExtraOrcamentaria($iCodigoAutenticacao, true, $oDadoAutenticacao );
 
     		if (!$lReceita && !$lReceitaExtra) {
@@ -370,34 +369,38 @@ class AutenticacaoPlanilha {
   }
 
 
-  /**
-   * Retorna os dados criados para a autenticacao atual
-   * @throws BusinessException
-   * @return stdClass - k12_data | k12_id | k12_autent
-   */
-  public static function getDadosAutenticacao($dtAutenticacao = null) {
+    /**
+     * Retorna os dados criados para a autenticacao atual
+     * @throws BusinessException
+     * @param date dtAutenticacao
+     * @return stdClass - k12_data | k12_id | k12_autent
+     */
+    public static function getDadosAutenticacao($dtAutenticacao = NULL) {
+        // Condição para mudar a data de autenticação
+        $dtDataBuscar = date("Y-m-d", db_getsession("DB_datausu"));
+        if (!empty($dtAutenticacao)) 
+            $dtDataBuscar = $dtAutenticacao;
 
-    $dtDataBuscar = $dtAutenticacao;
-    if (empty($dtAutenticacao)) {
-      $dtDataBuscar = date("Y-m-d", db_getsession("DB_datausu"));
-    }
-    $oDaoCorrenteAutenticacao     = db_utils::getDao("corautent");
-    $sCampoAutenticacao           = "max(k12_autent) as k12_autent, ";
-    $sCampoAutenticacao          .= "k12_data, ";
-    $sCampoAutenticacao          .= "k12_id ";
-    $sWhereAutenticacao           = "k12_data = '{$dtDataBuscar}' ";
-    $sWhereAutenticacao          .= " and k12_id   = (select k11_id ";
-    $sWhereAutenticacao          .= "                   from cfautent where k11_ipterm = '".db_getsession("DB_ip")."'";
-    $sWhereAutenticacao          .= "                    and k11_instit = ".db_getsession("DB_instit").")";
-    $sWhereAutenticacao          .= "group by k12_data, k12_id ";
-    $sSqlBuscaUltimaAutenticacao  = $oDaoCorrenteAutenticacao->sql_query_file(null, null, null, $sCampoAutenticacao, "k12_data", $sWhereAutenticacao);
+        $oDaoCorrenteAutenticacao     = db_utils::getDao("corautent");
+        $sCampoAutenticacao           = "max(k12_autent) as k12_autent, ";
+        $sCampoAutenticacao          .= "k12_data, ";
+        $sCampoAutenticacao          .= "k12_id ";
+        $sWhereAutenticacao           = "k12_data = '{$dtDataBuscar}' ";
+        // Comentado pois a validação só permite excluir autenticação feita pelo próprio IP de autênticadora.
+        
+        $sWhereAutenticacao          .= " and k12_id   = (select k11_id ";
+        $sWhereAutenticacao          .= "                   from cfautent where k11_ipterm = '".db_getsession("DB_ip")."'";
+        $sWhereAutenticacao          .= "                    and k11_instit = ".db_getsession("DB_instit").")";
+        
+        $sWhereAutenticacao          .= "group by k12_data, k12_id ";
+        $sSqlBuscaUltimaAutenticacao  = $oDaoCorrenteAutenticacao->sql_query_file(null, null, null, $sCampoAutenticacao, "k12_data", $sWhereAutenticacao);
+        $rsBuscaUltimaAutenticacao    = $oDaoCorrenteAutenticacao->sql_record($sSqlBuscaUltimaAutenticacao);
 
-    $rsBuscaUltimaAutenticacao    = $oDaoCorrenteAutenticacao->sql_record($sSqlBuscaUltimaAutenticacao);
-    if ($oDaoCorrenteAutenticacao->erro_status == "0") {
-      throw new BusinessException("Não foi possível validar a última autenticação executada.");
+        if ($oDaoCorrenteAutenticacao->erro_status == "0")
+            throw new BusinessException("Não foi possível validar a última autenticação executada.");
+    
+        return db_utils::fieldsMemory($rsBuscaUltimaAutenticacao, 0);
     }
-    return db_utils::fieldsMemory($rsBuscaUltimaAutenticacao, 0);
-  }
 
 
   /**

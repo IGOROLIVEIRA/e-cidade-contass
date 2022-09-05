@@ -146,13 +146,19 @@ class PlanilhaArrecadacao {
     $this->oDataCriacao = new DBDate($sDataCriacao);
   }
 
-  /**
-   * Retorna uma instancia de DBData com a data da autenticacao
-   * @return DBDate
-   */
-  public function getDataAutenticacao() {
-    return $this->oDataAutenticacao;
-  }
+    /**
+    * Converte casos de DBDate para string ou retorna a string
+    * @return string
+    */
+    public function getDataAutenticacao() {
+        // OC18200
+        // @todo Solução para conflitos em outras chamadas. Testes devem ser criados para encontrar todos os lugares e padronizar o tipo.
+        // @todo ideial é usar um modelo de data já existente no PHP
+        if ($this->oDataAutenticacao instanceof DBDate)
+            return $this->oDataAutenticacao->convertTo(DBDate::DATA_EN);
+        // Retorna sem tratativas
+        return $this->oDataAutenticacao;
+    }
 
 
   /**
