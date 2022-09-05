@@ -185,19 +185,6 @@ if (isset($incluir)) {
 
       db_inicio_transacao();
 
-      $licita = db_query("select l20_dtpublic,l31_codigo from liclicita inner join liccomissaocgm on l31_licitacao = l20_codigo where l20_codigo = $l20_codigo and l31_tipo = '8';");
-      $licita = db_utils::fieldsMemory($licita, 0);
-
-
-      if ($licita->l20_dtpublic == "" && $licita->l31_codigo == "") {
-        echo "<script>
-					           alert('Não permitido a inserção de fornecedor na licitação se os campos Data Publicação DO e Resp. pela Publicação não estiverem preenchidos.');
-                     top.corpo.location.href='lic1_fornec001.php';
-
-					        </script>";
-        exit;
-      }
-
       $result = $clliclicita->sql_record($clliclicita->sql_query_pco($l20_codigo));
 
       if ($clliclicita->numrows == 0) {
@@ -248,7 +235,7 @@ if (isset($incluir)) {
       $result_igualcgm = $clpcorcamforne->sql_record($clpcorcamforne->sql_query_file(null, "pc21_codorc", "", " pc21_numcgm=$pc21_numcgm and pc21_codorc=$pc20_codorc"));
       if ($clpcorcamforne->numrows > 0) {
         $sqlerro = true;
-        $erro_msg = "ERRO: Número de CGM já cadastrado. ";
+        $erro_msg = "ERRO: Número de CGM já cadastrado.";
       }
 
       if ($sqlerro == false) {

@@ -119,7 +119,7 @@ if (isset($incluir)) {
    49 - Tomada de Preços
    50 - Concorrência
    52 - Pregão presencial
-   53 - Pregão eletronico
+   53 - Pregão eletrônico
    54 - Leilão
   */
 	if ($oPost->modalidade_tribunal == 48 || $oPost->modalidade_tribunal == 49 || $oPost->modalidade_tribunal == 50 || $oPost->modalidade_tribunal == 52 || $oPost->modalidade_tribunal == 53 || $oPost->modalidade_tribunal == 54) {
@@ -138,10 +138,14 @@ if (isset($incluir)) {
 			$nomeCampo = "respEditalcodigo";
 			$sqlerro = true;
 		}
-
+		if ($respPubliccodigo == "") {
+			$erro_msg .= 'Responsável pela publicação não informado\n\n';
+			$nomeCampo = "respPubliccodigo";
+			$sqlerro = true;
+		}
 		if ($oPost->l20_naturezaobjeto == 1) {
 			if ($respObrascodigo == "") {
-				$erro_msg .= 'Responsável pelos orçamentos, obras e serviçoos não informado\n\n';
+				$erro_msg .= 'Responsável pelos orçamentos, obras e serviços não informado\n\n';
 				$nomeCampo = "respObrascodigo";
 				$sqlerro = true;
 			}
@@ -185,7 +189,7 @@ if (isset($incluir)) {
 		}
 	}
 	//verifica se as duas modalidades esto configuradas.
-
+	
 	$result_modalidade = $clpccflicitapar->sql_record($clpccflicitapar->sql_query_modalidade(null, "*", null, "l25_codcflicita = $l20_codtipocom and l25_anousu = $anousu and l03_instit = $instit"));
 	if ($clpccflicitapar->numrows == 0) {
 		$erro_msg = "Verifique se esta configurado a numeração de licitação por modalidade.";
@@ -208,13 +212,13 @@ if (isset($incluir)) {
 		$sqlerro = true;
 	}
 	if ($oPost->modalidade_tribunal != 100 && $oPost->modalidade_tribunal != 101 && $oPost->modalidade_tribunal != 102 && $oPost->modalidade_tribunal != 103) {
-		if ($l20_leidalicitacao == 1) {
-			if ($l20_mododisputa == 0) {
-				$erro_msg = "Selecione um modo de disputa para a licitação.";
-				$nomeCampo = "l20_mododisputa";
-				$sqlerro = true;
+		if($l20_leidalicitacao == 1){
+			if($l20_mododisputa == 0){
+			$erro_msg = "Selecione um modo de disputa para a licitação.";
+			$nomeCampo = "l20_mododisputa";
+			$sqlerro = true;
 			}
-		}
+		}	
 	}
 
 	//numeracao por modalidade
@@ -228,7 +232,11 @@ if (isset($incluir)) {
 			$sqlerro = true;
 		}
 
-
+		// if ($sqlerro == false){
+		// #1
+		// $clpccflicitapar->l25_numero=$l25_numero+1;
+		// $clpccflicitapar->alterar_where(null,"l25_codigo = $l25_codigo and l25_anousu = $anousu");
+		// }
 
 		//numeração geral
 
@@ -262,6 +270,14 @@ if (isset($incluir)) {
 			}
 		}
 
+		// if ($sqlerro == false){
+		// #2
+		// $clpccflicitanum->l24_numero=$l24_numero+1;
+		// $clpccflicitanum->alterar_where(null,"l24_instit=$instit and l24_anousu=$anousu");
+		// } else {
+		//   $sqlerro = true;
+		// }
+
 
 		//verifica se ja existe licitacao por modalidade
 		$sqlveriflicitamod = $clpccflicitapar->sql_query_mod_licita(null, "l25_numero as xx", null, "l20_instit=$instit and l25_anousu=$anousu and l20_codtipocom=$l20_codtipocom and l20_numero=$l20_numero and l20_anousu=$anousu");
@@ -291,6 +307,16 @@ if (isset($incluir)) {
 		}
 
 
+		//    /**
+		//     * Verificar Encerramento Periodo Contabil
+		//     */
+		//    if (!empty($l20_dtpubratificacao)) {
+		//			$clcondataconf = new cl_condataconf;
+		//	    if (!$clcondataconf->verificaPeriodoContabil($l20_dtpubratificacao)) {
+		//	      $erro_msg = $clcondataconf->erro_msg;
+		//	      $sqlerro  = true;
+		//	    }
+		//    }
 
 		/**
 		 * Verificar Encerramento Periodo Patrimonial
@@ -408,14 +434,12 @@ if (isset($incluir)) {
 				$clliccomissaocgm->l31_licitacao = $codigo;
 				$clliccomissaocgm->incluir(null);
 			}
-			/*
 			if ($respPubliccodigo != "") {
 				$clliccomissaocgm->l31_numcgm = $respPubliccodigo;
 				$clliccomissaocgm->l31_tipo = 8;
 				$clliccomissaocgm->l31_licitacao = $codigo;
 				$clliccomissaocgm->incluir(null);
 			}
-			*/
 			if ($respObrascodigo != "") {
 				$clliccomissaocgm->l31_numcgm = $respObrascodigo;
 				$clliccomissaocgm->l31_tipo = 10;
@@ -503,7 +527,6 @@ if (isset($incluir)) {
 			} else {
 				if ($l20_tipojulg == 3) {
 					echo "<script>parent.document.formaba.liclicitemlote.disabled=false;</script>";
-					echo "<script>parent.document.getElementById('liclicitemlote').style.display='block';\n</script>";
 				}
 				echo " <script>
 		           parent.iframe_liclicita.location.href='lic1_liclicita002.php?chavepesquisa=$codigo';\n
