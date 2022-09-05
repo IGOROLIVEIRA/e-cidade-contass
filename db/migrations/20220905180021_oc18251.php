@@ -8,7 +8,23 @@ class Oc18251 extends AbstractMigration
     public function up()
     {
 
-        $sql= "INSERT INTO db_sysarquivo VALUES((select max(codarq)+1 from db_sysarquivo),'tipoanexo','cadastro de tipo de anexos pncp','l213','2022-08-22','cadastro de tipo de anexos pncp',0,'f','f','f','f');
+        $sql= "INSERT INTO db_itensmenu VALUES((select max(id_item)+1 from db_itensmenu),'Tipo de Anexos','Tipo de Anexos','',1,1,'Tipo de Anexos','t');
+        INSERT INTO db_menu VALUES(3470,(select max(id_item) from db_itensmenu),(select max(menusequencia)+1 from db_menu where id_item = 3470 and modulo = 381),381);
+        
+        
+        INSERT INTO db_itensmenu values ((select max(id_item)+1 from db_itensmenu),'Inclusð£o','Inclusð£o','	lic1_tipoanexo.php',1,1,'Inclusð£o','t');
+        INSERT INTO db_menu VALUES((select id_item from db_itensmenu where descricao like'%Tipo de Anexos%'),(select max(id_item) from db_itensmenu),1,381);
+        
+        INSERT INTO db_itensmenu values ((select max(id_item)+1 from db_itensmenu),'Alteração','Alteração','lic1_tipoanexo002.php',1,1,'Alteração','t');
+        INSERT INTO db_menu VALUES((select id_item from db_itensmenu where descricao like'%Tipo de Anexos%'),(select max(id_item) from db_itensmenu),2,381);
+        
+        INSERT INTO db_itensmenu values ((select max(id_item)+1 from db_itensmenu),'Exclusão','Exclusão','lic1_tipoanexo003.php',1,1,'Exclusão','t');
+        INSERT INTO db_menu VALUES((select id_item from db_itensmenu where descricao like'%Tipo de Anexos%'),(select max(id_item) from db_itensmenu),3,381);
+        
+        INSERT INTO db_itensmenu VALUES((select max(id_item)+1 from db_itensmenu),'Anexos Envio PNCP','Anexos Envio PNCP','lic1_anexospncp.php',1,1,'Anexos Envio PNCP','t');
+        INSERT INTO db_menu VALUES(4680,(select max(id_item) from db_itensmenu),(select max(menusequencia)+1 from db_menu where id_item = 4680 and modulo = 381),381);
+        
+        INSERT INTO db_sysarquivo VALUES((select max(codarq)+1 from db_sysarquivo),'tipoanexo','cadastro de tipo de anexos pncp','l213','2022-08-22','cadastro de tipo de anexos pncp',0,'f','f','f','f');
 
 
         INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l213_sequencial','int8' ,'Cód. Sequencial','', 'Cód. Sequencial',8,false, false, false, 1, 'int8', 'Cód. Sequencial');
