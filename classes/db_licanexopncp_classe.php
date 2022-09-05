@@ -18,7 +18,6 @@ class cl_licanexopncp {
   // cria variaveis do arquivo 
   public $l215_sequencial = 0; 
   public $l215_liclicita = 0; 
-  public $l215_tipoanexo = 0; 
   public $l215_dataanexo_dia = null; 
   public $l215_dataanexo_mes = null; 
   public $l215_dataanexo_ano = null; 
@@ -30,7 +29,6 @@ class cl_licanexopncp {
   public $campos = "
                  l215_sequencial = int8 = l215_sequencial 
                  l215_liclicita = int8 = l215_liclicita 
-                 l215_tipoanexo = int8 = l215_tipoanexo 
                  l215_dataanexo = date = l215_dataanexo 
                  l215_id_usuario = int8 = l215_id_usuario 
                  l215_hora = varchar(5) = l215_hora 
@@ -59,7 +57,6 @@ class cl_licanexopncp {
     if ($exclusao==false) {
        $this->l215_sequencial = ($this->l215_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["l215_sequencial"]:$this->l215_sequencial);
        $this->l215_liclicita = ($this->l215_liclicita == ""?@$GLOBALS["HTTP_POST_VARS"]["l215_liclicita"]:$this->l215_liclicita);
-       $this->l215_tipoanexo = ($this->l215_tipoanexo == ""?@$GLOBALS["HTTP_POST_VARS"]["l215_tipoanexo"]:$this->l215_tipoanexo);
        if ($this->l215_dataanexo == "") {
          $this->l215_dataanexo_dia = ($this->l215_dataanexo_dia == ""?@$GLOBALS["HTTP_POST_VARS"]["l215_dataanexo_dia"]:$this->l215_dataanexo_dia);
          $this->l215_dataanexo_mes = ($this->l215_dataanexo_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["l215_dataanexo_mes"]:$this->l215_dataanexo_mes);
@@ -82,15 +79,6 @@ class cl_licanexopncp {
      if ($this->l215_liclicita == null ) { 
        $this->erro_sql = " Campo l215_liclicita não informado.";
        $this->erro_campo = "l215_liclicita";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
-     }
-     if ($this->l215_tipoanexo == null ) { 
-       $this->erro_sql = " Campo l215_tipoanexo não informado.";
-       $this->erro_campo = "l215_tipoanexo";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -168,7 +156,6 @@ class cl_licanexopncp {
      $sql = "insert into licanexopncp(
                                        l215_sequencial 
                                       ,l215_liclicita 
-                                      ,l215_tipoanexo 
                                       ,l215_dataanexo 
                                       ,l215_id_usuario 
                                       ,l215_hora 
@@ -177,7 +164,6 @@ class cl_licanexopncp {
                 values (
                                 $this->l215_sequencial 
                                ,$this->l215_liclicita 
-                               ,$this->l215_tipoanexo 
                                ,".($this->l215_dataanexo == "null" || $this->l215_dataanexo == ""?"null":"'".$this->l215_dataanexo."'")." 
                                ,$this->l215_id_usuario 
                                ,'$this->l215_hora' 
@@ -238,19 +224,6 @@ class cl_licanexopncp {
        if (trim($this->l215_liclicita) == null ) { 
          $this->erro_sql = " Campo l215_liclicita não informado.";
          $this->erro_campo = "l215_liclicita";
-         $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-         $this->erro_status = "0";
-         return false;
-       }
-     }
-     if (trim($this->l215_tipoanexo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["l215_tipoanexo"])) { 
-       $sql  .= $virgula." l215_tipoanexo = $this->l215_tipoanexo ";
-       $virgula = ",";
-       if (trim($this->l215_tipoanexo) == null ) { 
-         $this->erro_sql = " Campo l215_tipoanexo não informado.";
-         $this->erro_campo = "l215_tipoanexo";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));

@@ -75,6 +75,7 @@ $oRotulo->label("l20_objeto");
 
 
       <?php db_input("namefile", 30, 0, true, "hidden", 1); ?>
+      <?php db_input("iddocumento", 30, 0, true, "hidden", 1); ?>
 
         <table class="form-container">
 
@@ -109,7 +110,20 @@ $oRotulo->label("l20_objeto");
                                     </td>
             <td>
             <?
+
+
+                                        $tipo = array();
+                                        $tipo[0] = "Selecione";
                                         $result_tipo = $cltipoanexo->sql_record($cltipoanexo->sql_query());
+                                        
+
+                                        for($iIndiceTipo=0;$iIndiceTipo < $cltipoanexo->numrows;$iIndiceTipo++){
+
+                                          $oTipo = db_utils::fieldsMemory($result_tipo, $iIndiceTipo);
+
+                                          $tipo[$oTipo->l213_sequencial] = $oTipo->l213_descricao;
+                                        }
+
                                         if ($cltipoanexo->numrows == 0) {
                                             db_msgbox("Nenhuma Tipo de anexo cadastrado!!");
                                             $result_tipo = "";
@@ -118,10 +132,8 @@ $oRotulo->label("l20_objeto");
                                             db_input("l213_sequencial", 10, "", true, "text");
                                             db_input("l213_sequencial", 40, "", true, "text");
                                         } else {
-                                            db_selectrecord("l213_sequencial", @$result_tipo, true, $db_opcao, "js_mostraRegistroPreco()");
-                                            if (isset($l213_sequencial) && $l213_sequencial != "") {
-                                                echo "<script>document.form1.l213_sequencial.selected=$l213_sequencial;</script>";
-                                            }   
+                                            db_select("l213_sequencial", $tipo, true, $db_opcao, "");
+                                              
                                         }
                                         ?>
             </td>
@@ -132,6 +144,7 @@ $oRotulo->label("l20_objeto");
     </fieldset>
 
     <input type="button" id="btnSalvar" onClick="js_salvar();" value="Salvar" />
+    <input type="button" id="btnAlterar" onClick="js_alterar();" value="Alterar" />
  
 
     <fieldset style="margin-top:15px;">
@@ -154,7 +167,8 @@ $oRotulo->label("l20_objeto");
 </html>
 <script type="text/javascript">
 
-document.getElementById("l213_sequencial").style.display = "none";
+document.getElementById("btnAlterar").style.display = "none";
+
   /**
    * Pesquisa Licitacao do protocolo e depois os documentos anexados
    */
@@ -174,9 +188,10 @@ document.getElementById("l213_sequencial").style.display = "none";
 
   oGridDocumentos.nameInstance = "oGridDocumentos";
   oGridDocumentos.setCheckbox(0);
-  oGridDocumentos.setCellAlign(new Array("center", "center", "center"));
-  oGridDocumentos.setCellWidth([ "30%", "30%", "30%"]);
-  oGridDocumentos.setHeader(new Array("Código", "Tipo", "Ação"));
+  oGridDocumentos.setCellAlign(new Array("center","center", "center", "center"));
+  oGridDocumentos.setCellWidth([ "30%","30%", "30%", "30%"]);
+  oGridDocumentos.setHeader(new Array("Seq","Código", "Tipo", "Ação"));
+  oGridDocumentos.aHeaders[1].lDisplayed = false;
   oGridDocumentos.allowSelectColumns(true);
   oGridDocumentos.show($('ctnDbGridDocumentos'));
 
@@ -232,13 +247,13 @@ document.getElementById("l213_sequencial").style.display = "none";
 
           
             var sHTMLBotoes = '<input type="button" value="Alterar" onClick="js_alterarDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\');" />  ';
-              sHTMLBotoes += '<input type="button" value="Download" onClick="js_downloadDocumento(' + oDocumento.iCodigoDocumento + ');" />  ';
+              sHTMLBotoes += '<input type="button" value="Excluir" onClick="js_excluirDocumento(' + oDocumento.iCodigoDocumento + ');" />  ';
 
               $bBloquea = false;
 
 
             
-            var aLinha = [oDocumento.iCodigoDocumento, sDescricaoDocumento.urlDecode(), sHTMLBotoes];
+            var aLinha = [oDocumento.iCodigoDocumento,iIndice+1, sDescricaoDocumento, sHTMLBotoes];
             oGridDocumentos.addRow(aLinha, false, $bBloquea);
           }
 
@@ -257,60 +272,115 @@ document.getElementById("l213_sequencial").style.display = "none";
    */
   function js_alterarDocumento(iCodigoDocumento) {
 
-    $('namefile').value = '';
-    $('uploadfile').value = '';
-    $('uploadfile').disabled = true;
+
+    if (empty(iCodigoDocumento)) {
+
+      alert('Codigo do documento vazio.');
+      return false;
+    }
+
+    js_divCarregando('Aguarde... Buscando documento.', 'msgbox');
+
+    var oParametros = new Object();
+
+    oParametros.exec = 'buscardocumento';
+    oParametros.iCodigoDocumento = iCodigoDocumento;
+
+    var oAjax = new Ajax.Request(
+      sUrlRpc, {
+        parameters: 'json=' + Object.toJSON(oParametros),
+        method: 'post',
+        asynchronous: false,
+        onComplete: function(oAjax) {
+
+          js_removeObj("msgbox");
+          var oRetorno = eval('(' + oAjax.responseText + ")");
+          var sMensagem = oRetorno.sMensagem.urlDecode();
+
+          if (oRetorno.iStatus > 1) {
+
+            alert(sMensagem);
+            return false;
+          }
+
+          $('l213_sequencial').value = oRetorno.idtipo;
+          $('namefile').value = '';
+          $('uploadfile').value = '';
+          $('iddocumento').value = iCodigoDocumento;
+          $('uploadfile').disabled = true;
+          $("btnSalvar").style.display = "none";
+          $("btnAlterar").style.display = "";
+
+          
+        }
+      });
+   
+    
+  }
 
     /**
-     * Altera acao do botao salvar
-     * @return void
-     */
-    $('btnSalvar').onclick = function() {
+   * Altera descricao de um documento
+   * @param integer iCodigoDocumento
+   * @param string sDescricaoDocumento
+   * @return void
+   */
+  function js_alterar() {
 
-      var iCodigoProcesso = $('l20_codigo').value;
-      var oParametros = new Object();
+var iCodigoDocumento = $('iddocumento').value;
+var itipoanexo = $('l213_sequencial').value;
+if (empty(iCodigoDocumento)) {
 
-      if (empty(iCodigoProcesso)) {
+  alert('Codigo do documento vazio.');
+  return false;
+}
 
-        alert(_M(MENSAGENS + 'erro_processo_nao_informado'));
+if (itipoanexo==0) {
+
+alert('Selecione um tipo de anexo.');
+return false;
+}
+
+js_divCarregando('Aguarde... Alterando documento.', 'msgbox');
+
+var oParametros = new Object();
+
+oParametros.exec = 'alterardocumento';
+oParametros.iCodigoDocumento = iCodigoDocumento;
+oParametros.itipoanexo = itipoanexo;
+
+var oAjax = new Ajax.Request(
+  sUrlRpc, {
+    parameters: 'json=' + Object.toJSON(oParametros),
+    method: 'post',
+    asynchronous: false,
+    onComplete: function(oAjax) {
+
+      js_removeObj("msgbox");
+      var oRetorno = eval('(' + oAjax.responseText + ")");
+      var sMensagem = oRetorno.sMensagem.urlDecode();
+
+      if (oRetorno.iStatus > 1) {
+
+        alert(sMensagem);
         return false;
       }
 
-      js_divCarregando('mensagem_salvando_documento', 'msgbox');
-
-      oParametros.exec = 'salvarDocumento';
-      oParametros.iCodigoDocumento = iCodigoDocumento;
-      oParametros.iCodigoProcesso = iCodigoProcesso;
-
-      var oAjax = new Ajax.Request(
-        sUrlRpc, {
-          parameters: 'json=' + Object.toJSON(oParametros),
-          method: 'post',
-          asynchronous: false,
-          onComplete: function(oAjax) {
-
-            js_removeObj("msgbox");
-            var oRetorno = eval('(' + oAjax.responseText + ")");
-            var sMensagem = oRetorno.sMensagem.urlDecode();
-
-            if (oRetorno.iStatus > 1) {
-
-              alert(sMensagem);
-              return false;
-            }
-
-            $('btnSalvar').onclick = js_salvar;
-            $('namefile').value = '';
-            $('uploadfile').value = '';
-            $('uploadfile').disabled = false;
-
-            alert(sMensagem);
-            js_buscarDocumentos();
-          }
-        });
-
+      $('l213_sequencial').value = 0;
+      $('namefile').value = '';
+      $('uploadfile').value = '';
+      $('iddocumento').value = '';
+      $('uploadfile').disabled = false;
+      $("btnSalvar").style.display = "";
+      $("btnAlterar").style.display = "none";
+      js_buscarDocumentos();
+      alert(sMensagem);
     }
-  }
+  });
+
+
+}
+
+
 
   /**
    * Download de um documento
@@ -358,6 +428,235 @@ document.getElementById("l213_sequencial").style.display = "none";
 
   }
 
+
+    /**
+   * Exclui documentos selecionados
+   * @return boolean
+   */
+  function js_excluirDocumento(iCodigoDocumento) {
+
+
+
+
+
+
+js_divCarregando('Excluindo documento...', 'msgbox');
+
+var oParametros = new Object();
+
+oParametros.exec = 'excluir';
+oParametros.iCodigoDocumento = iCodigoDocumento;
+
+var oAjax = new Ajax.Request(
+  sUrlRpc, {
+    parameters: 'json=' + Object.toJSON(oParametros),
+    method: 'post',
+    asynchronous: false,
+
+    /**
+     * Retorno do RPC
+     */
+    onComplete: function(oAjax) {
+
+      js_removeObj("msgbox");
+      var oRetorno = eval('(' + oAjax.responseText + ")");
+      var sMensagem = oRetorno.sMensagem.urlDecode();
+
+      if (oRetorno.iStatus > 1) {
+
+        alert(sMensagem);
+        return false;
+      }
+
+      alert(sMensagem);
+      js_buscarDocumentos();
+    }
+  });
+
+}
+
+    /**
+   * Realiza o download de todos os anexos ou apenas selecionados
+   * @return boolean
+   */
+  const js_downloadAnexos = () => {
+
+    
+    const iCodigoProcesso = $('l20_codigo').value
+
+    if (empty(iCodigoProcesso)) {
+      return false
+    }
+
+    const documentosSelecionados = oGridDocumentos.getSelection("object")
+    if (documentosSelecionados.length == 0) {
+      alert('Selecione pelo menos arquivo para download')      
+      return false
+    }
+    js_divCarregando('Aguarde... Organizando documentos para o download', 'msgbox')
+    let codigosDosDocumentos = []
+
+    for (documento of documentosSelecionados) {
+      const codigoDoDocumento = documento.aCells[0].getValue()
+      codigosDosDocumentos.push(codigoDoDocumento)
+    }
+
+    if (codigosDosDocumentos.length == '1') {
+      js_downloadDocumento(codigosDosDocumentos[0])
+      js_removeObj("msgbox");
+      return false
+    }
+
+    let documentos = []
+    if (documentosSelecionados.length === 0) {
+      codigosDosDocumentos = js_documentosDeUmProcesso(iCodigoProcesso)
+    }
+
+    const urlDosArquivos = []
+
+    codigosDosDocumentos.map(codigoDoDocumento => {
+      const oCodigoDocumento = new Object()
+
+      oCodigoDocumento.exec = 'download'
+      oCodigoDocumento.iCodigoDocumento = codigoDoDocumento
+
+      urlDosArquivos.push(js_arquivos(oCodigoDocumento))
+    })
+
+    js_ziparAnexos(urlDosArquivos, nomeDoZip => {
+      js_removeObj("msgbox")
+      window.open(`db_download.php?arquivo=${nomeDoZip}`)
+
+      setTimeout(() => {
+        js_apagarZip(nomeDoZip)
+      }, 3000)
+    });
+
+  }
+
+
+  const js_arquivos = oCodigoDocumento => {
+    var oRetorno
+
+    var oAjax2 = new Ajax.Request(
+      sUrlRpc, {
+        parameters: 'json=' + Object.toJSON(oCodigoDocumento),
+        method: 'post',
+        asynchronous: false,
+
+        /**
+         * Retorno do RPC
+         */
+        onComplete: oAjax2 => {
+          oRetorno = eval('(' + oAjax2.responseText + ")")
+          var sMensagem = oRetorno.sMensagem.urlDecode()
+
+          if (oRetorno.iStatus > 1) {
+
+            alert(sMensagem)
+            return false
+          }
+        }
+      })
+
+    return oRetorno;
+
+  }
+
+  const js_documentosDeUmProcesso = iCodigoProcesso => {
+
+
+    if (empty(iCodigoProcesso)) {
+      return false
+    }
+
+    const oParametros = new Object()
+
+    oParametros.exec = 'carregarDocumentos'
+    oParametros.iCodigoProcesso = iCodigoProcesso
+
+    const codigosDeDocumentos = []
+
+    const oAjax = new Ajax.Request(
+      sUrlRpc, {
+        parameters: 'json=' + Object.toJSON(oParametros),
+        method: 'post',
+        asynchronous: false,
+        onComplete: oAjax => {
+          const documentos = JSON.parse(oAjax.responseText).aDocumentosVinculados
+          documentos.map(documento => {
+            codigosDeDocumentos.push(documento.iCodigoDocumento)
+          })
+          const sMensagem = oRetorno.sMensagem.urlDecode()
+
+          if (oRetorno.iStatus > 1) {
+            alert(sMensagem)
+            return false
+          }
+        }
+      }
+    )
+    return codigosDeDocumentos
+
+  }
+
+  const js_ziparAnexos = (arquivos, callback) => {
+
+    var oParametros = new Object()
+    oParametros.exec = 'ziparAnexos'
+
+    arquivos.map(documento => {
+      novoTituloDeArquivo = documento.sCaminhoDownloadArquivo.replace('/tmp/', '')
+      documento.sTituloArquivo = novoTituloDeArquivo
+    })
+
+    oParametros.arquivos = arquivos
+
+    let oRetorno = null
+    var oAjax = new Ajax.Request(
+      sUrlRpc, {
+        method: 'post',
+        parameters: `json=${JSON.stringify(oParametros)}`,
+        onComplete: oAjax => {
+
+          oRetorno = eval('(' + oAjax.responseText + ')')
+          var sMensagem = oRetorno.sMensagem.urlDecode()
+
+          if (oRetorno.iStatus > 1) {
+
+            alert(sMensagem)
+            return false
+          }
+
+          return callback(oRetorno.nomeDoZip)
+
+        }
+      })
+
+  }
+
+  const js_apagarZip = nomeDoZip => {
+    const oParametros = new Object()
+    oParametros.exec = 'apagarZip'
+    oParametros.nomeDoZip = nomeDoZip
+    const oAjax = new Ajax.Request(
+      sUrlRpc, {
+        method: 'post',
+        parameters: `json=${JSON.stringify(oParametros)}`,
+        onComplete: oAjax => {
+
+          oRetorno = eval('(' + oAjax.responseText + ')')
+          var sMensagem = oRetorno.sMensagem.urlDecode()
+
+          if (oRetorno.iStatus > 1) {
+
+            alert(sMensagem)
+            return false
+          }
+        }
+      })
+  }
+
   /**
    * Pesquisar Licitacao
    *
@@ -378,7 +677,7 @@ document.getElementById("l213_sequencial").style.display = "none";
         return false;
       }
 
-      sArquivo += 'js_mostraLicitacaoHidden&pesquisa_chave=' + iNumeroLicitacao + '&sCampoRetorno=l20_objeto';
+      sArquivo += 'js_mostraLicitacaoHidden&pesquisa_chave=' + iNumeroLicitacao + '&sCampoRetorno=l20_codigo';
     }
 
     js_OpenJanelaIframe('', 'db_iframe_proc', sArquivo, 'Pesquisa de Licitação', lMostra);
@@ -395,12 +694,78 @@ document.getElementById("l213_sequencial").style.display = "none";
 
     $('l20_codigo').value = iCodigoLicitacao;
     $('l20_objeto').value = descricao;
+    $('uploadfile').value = '';
     $('uploadfile').disabled = false;
+    $('iddocumento').value = '';
+    $('namefile').value = '';
     db_iframe_proc.hide();
 
     js_buscarDocumentos();
     
   }
+
+  function js_excluirSelecionados() {
+
+var documentosSelecionados = oGridDocumentos.getSelection("object");
+var iSelecionados = documentosSelecionados.length;
+var iCodigoProcesso = $('l20_codigo').value;
+var aDocumentos = [];
+
+if (iSelecionados == 0) {
+
+  alert('Nenhum docuento selecionado.');
+  return false;
+}
+
+
+
+if (empty(iCodigoProcesso)) {
+
+  alert('Licitação não informada.');
+  return false;
+}
+
+for (var iIndice = 0; iIndice < iSelecionados; iIndice++) {
+
+  var iDocumento = documentosSelecionados[iIndice].aCells[0].getValue();
+  aDocumentos.push(iDocumento);
+}
+
+js_divCarregando('Aguarde... Excluindo documentos!', 'msgbox');
+
+var oParametros = new Object();
+
+oParametros.exec = 'excluirDocumento';
+oParametros.iCodigoProcesso = iCodigoProcesso;
+oParametros.aDocumentosExclusao = aDocumentos;
+
+var oAjax = new Ajax.Request(
+  sUrlRpc, {
+    parameters: 'json=' + Object.toJSON(oParametros),
+    method: 'post',
+    asynchronous: false,
+
+    /**
+     * Retorno do RPC
+     */
+    onComplete: function(oAjax) {
+
+      js_removeObj("msgbox");
+      var oRetorno = eval('(' + oAjax.responseText + ")");
+      var sMensagem = oRetorno.sMensagem.urlDecode();
+
+      if (oRetorno.iStatus > 1) {
+
+        alert(sMensagem);
+        return false;
+      }
+
+      alert(sMensagem);
+      js_buscarDocumentos();
+    }
+  });
+
+}
 
   /**
    * Retorno da pesquisa js_pesquisarLicitacao apos mudar o campo l20_codigo
@@ -409,7 +774,7 @@ document.getElementById("l213_sequencial").style.display = "none";
    * @param  boolean lErro
    * @return void
    */
-  function js_mostraLicitacaoHidden(iCodigoLicitacao, descricao, lErro) {
+  function js_mostraLicitacaoHidden(descricao, lErro) {
 
     /**
      * Nao encontrou Licitacao
@@ -417,11 +782,14 @@ document.getElementById("l213_sequencial").style.display = "none";
     if (lErro) {
 
       $('l20_codigo').value = '';
+      $('uploadfile').value = '';
+      $('iddocumento').value = '';
+      $('namefile').value = '';
       $('uploadfile').disabled = false;
       oGridDocumentos.clearAll(true);
     }
 
-    $('l20_objeto').value = iCodigoLicitacao;
+    $('l20_objeto').value = descricao;
     js_buscarDocumentos();
   }
 
@@ -459,12 +827,18 @@ document.getElementById("l213_sequencial").style.display = "none";
 
     var iCodigoDocumento = $('l213_sequencial').value;
 
+    if(iCodigoDocumento == 0){
+      alert('Selecione um tipo de anexo!');
+		  return false;
+
+    }
+
     var sCaminhoArquivo = $('namefile').value;
   
   
 	  if (sCaminhoArquivo == '') {
 	  
-		  alert('Arquivo de anexo não informado!');
+		  alert('Arquivo anexo não informado!');
 		  return false;
 	  }
 
@@ -498,10 +872,11 @@ document.getElementById("l213_sequencial").style.display = "none";
             return false;
           }
 
-          
+          $('l213_sequencial').value = 0;
           $('uploadfile').value = '';
+          $('namefile').value = '';
           $('uploadfile').disabled = false;
-
+          js_buscarDocumentos();
           alert(sMensagem);
         }
       });

@@ -149,7 +149,7 @@ class LicitacaoAnexo {
   /**
    * Define processo protocolo
    *
-   * @param ProcessoLicitacao $oProcessoLicitacao
+   * @param LicitacaoAnexo $oProcessoLicitacao
    * @access public
    * @return void
    */
@@ -161,7 +161,7 @@ class LicitacaoAnexo {
    * Retorno o processo do protocolo
    *
    * @access public
-   * @return ProcessoLicitacao
+   * @return LicitacaoAnexo
    */
   public function getProcessoLicitacao() {
     return $this->oProcessoLicitacao;

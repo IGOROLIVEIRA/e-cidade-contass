@@ -20,12 +20,14 @@ class cl_licanexopncpdocumento {
   public $l216_licanexospncp = 0; 
   public $l216_documento = null; 
   public $l216_nomedocumento = null; 
+  public $l216_tipoanexo = 0; 
   // cria propriedade com as variaveis do arquivo 
   public $campos = "
                  l216_sequencial = int8 = l216_sequencial 
                  l216_licanexospncp = int8 = l216_licanexospncp 
                  l216_documento = varchar(255) = l216_documento 
                  l216_nomedocumento = varchar(255) = l216_nomedocumento 
+                 l216_tipoanexo = varchar(255) = l216_tipoanexo
                  ";
 
   //funcao construtor da classe 
@@ -52,6 +54,7 @@ class cl_licanexopncpdocumento {
        $this->l216_licanexospncp = ($this->l216_licanexospncp == ""?@$GLOBALS["HTTP_POST_VARS"]["l216_licanexospncp"]:$this->l216_licanexospncp);
        $this->l216_documento = ($this->l216_documento == ""?@$GLOBALS["HTTP_POST_VARS"]["l216_documento"]:$this->l216_documento);
        $this->l216_nomedocumento = ($this->l216_nomedocumento == ""?@$GLOBALS["HTTP_POST_VARS"]["l216_nomedocumento"]:$this->l216_nomedocumento);
+       $this->l216_tipoanexo = ($this->l216_tipoanexo == ""?@$GLOBALS["HTTP_POST_VARS"]["l216_tipoanexo"]:$this->l216_tipoanexo);
      } else {
      }
    }
@@ -86,6 +89,15 @@ class cl_licanexopncpdocumento {
        $this->erro_status = "0";
        return false;
      }
+     if ($this->l216_tipoanexo == null ) { 
+      $this->erro_sql = " Campo l216_tipoanexo não informado.";
+      $this->erro_campo = "l216_tipoanexo";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
      if($this->l216_sequencial == "" || $this->l216_sequencial == null ){
       $result = db_query("select nextval('licanexopncpdocumento_l216_sequencial_seq')");
       if($result==false){
@@ -122,13 +134,15 @@ class cl_licanexopncpdocumento {
                                        l216_sequencial 
                                       ,l216_licanexospncp 
                                       ,l216_documento 
-                                      ,l216_nomedocumento 
+                                      ,l216_nomedocumento
+                                      ,l216_tipoanexo
                        )
                 values (
                                 $this->l216_sequencial 
                                ,$this->l216_licanexospncp 
                                ,'$this->l216_documento' 
                                ,'$this->l216_nomedocumento' 
+                               ,$this->l216_tipoanexo
                       )";
      $result = db_query($sql); 
      if ($result==false) { 
@@ -162,7 +176,7 @@ class cl_licanexopncpdocumento {
   }
 
   // funcao para alteracao
-  function alterar ( $oid=null ) { 
+  function alterar ( $l216_sequencial=null ) { 
       $this->atualizacampos();
      $sql = " update licanexopncpdocumento set ";
      $virgula = "";
@@ -218,8 +232,22 @@ class cl_licanexopncpdocumento {
          return false;
        }
      }
+     if (trim($this->l216_tipoanexo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["l216_tipoanexo"])) { 
+      $sql  .= $virgula." l216_tipoanexo = '$this->l216_tipoanexo' ";
+      $virgula = ",";
+      if (trim($this->l216_tipoanexo) == null ) { 
+        $this->erro_sql = " Campo l216_tipoanexo não informado.";
+        $this->erro_campo = "l216_tipoanexo";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+    }
      $sql .= " where ";
-$sql .= "oid = '$oid'";     $result = db_query($sql);
+     $sql .= "l216_sequencial = '$l216_sequencial'";    
+     $result = db_query($sql);
      if ($result==false) { 
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "licanexopncpdocumento nao Alterado. Alteracao Abortada.\\n";
@@ -250,13 +278,13 @@ $sql .= "oid = '$oid'";     $result = db_query($sql);
   }
 
   // funcao para exclusao 
-  function excluir ( $oid=null ,$dbwhere=null) { 
+  function excluir ( $l216_sequencial=null ,$dbwhere=null) { 
 
      $sql = " delete from licanexopncpdocumento
                     where ";
      $sql2 = "";
      if ($dbwhere==null || $dbwhere =="") {
-       $sql2 = "oid = '$oid'";
+       $sql2 = "l216_sequencial = $l216_sequencial";
      } else {
        $sql2 = $dbwhere;
      }
@@ -379,6 +407,17 @@ $sql .= "oid = '$oid'";     $result = db_query($sql);
       }
     }
     return $sql;
+  }
+
+  function verificalic($licicitacao){
+    $sql = "select * from licanexopncpdocumento 
+    inner join licanexopncp on
+      licanexopncp.l215_sequencial  = licanexopncpdocumento.l216_licanexospncp
+    where 
+      l215_liclicita = $licicitacao";
+
+    return $sql;
+
   }
 }
 ?>

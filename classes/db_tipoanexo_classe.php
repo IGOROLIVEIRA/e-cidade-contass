@@ -129,12 +129,12 @@ class cl_tipoanexo {
      if($result==false){ 
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){
-         $this->erro_sql   = "Acordo Tipo ($this->l213_sequencial) nao Incluído. Inclusao Abortada.";
+         $this->erro_sql   = "Tipo Anexo ($this->l213_sequencial) nao Incluído. Inclusao Abortada.";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-         $this->erro_banco = "Acordo Tipo já Cadastrado";
+         $this->erro_banco = "Tipo Anexo já Cadastrado";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        }else{
-         $this->erro_sql   = "Acordo Tipo ($this->l213_sequencial) nao Incluído. Inclusao Abortada.";
+         $this->erro_sql   = "Tipo Anexo ($this->l213_sequencial) nao Incluído. Inclusao Abortada.";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        }
@@ -198,7 +198,7 @@ class cl_tipoanexo {
      $result = db_query($sql);
      if($result==false){ 
        $this->erro_banco = str_replace("\n","",@pg_last_error());
-       $this->erro_sql   = "Acordo Tipo nao Alterado. Alteracao Abortada.\\n";
+       $this->erro_sql   = "Tipo Anexo nao Alterado. Alteracao Abortada.\\n";
          $this->erro_sql .= "Valores : ".$this->l213_sequencial;
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -208,7 +208,7 @@ class cl_tipoanexo {
      }else{
        if(pg_affected_rows($result)==0){
          $this->erro_banco = "";
-         $this->erro_sql = "Acordo Tipo nao foi Alterado. Alteracao Executada.\\n";
+         $this->erro_sql = "Tipo Anexo nao foi Alterado. Alteracao Executada.\\n";
          $this->erro_sql .= "Valores : ".$this->l213_sequencial;
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -260,17 +260,17 @@ class cl_tipoanexo {
      $result = db_query($sql.$sql2);
      if($result==false){ 
        $this->erro_banco = str_replace("\n","",@pg_last_error());
-       $this->erro_sql   = "Acordo Tipo nao Excluído. Exclusão Abortada.\\n";
+       $this->erro_sql   = "Tipo Anexo nao Excluído. Exclusão Abortada.\\n";
        $this->erro_sql .= "Valores : ".$this->l213_sequencial;
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n Não é possível a exclusão do Tipo de Anexo selecionado, este já se encontra vinculado a um anexo. \\n"));
        $this->erro_status = "0";
        $this->numrows_excluir = 0;
        return false;
      }else{
        if(pg_affected_rows($result)==0){
          $this->erro_banco = "";
-         $this->erro_sql = "Acordo Tipo nao Encontrado. Exclusão não Efetuada.\\n";
+         $this->erro_sql = "Tipo Anexo nao Encontrado. Exclusão não Efetuada.\\n";
          $this->erro_sql .= "Valores : ".$this->l213_sequencial;
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));

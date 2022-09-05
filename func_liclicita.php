@@ -442,7 +442,7 @@ $sWhereContratos = " and 1 = 1 ";
                                 db_fieldsmemory($result, 0);
                                 echo "<script>" . $funcao_js . "('$l20_objeto',false);</script>";
                             } else {
-                                echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") não Encontrado',true);</script>";
+                                echo "<script>" . $funcao_js . "('','Chave(" . $pesquisa_chave . ") não Encontrado',true);</script>";
                             }
                         } else if (isset($criterioadjudicacao) && $criterioadjudicacao == true) {
                             $sql = "

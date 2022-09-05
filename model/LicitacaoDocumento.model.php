@@ -104,7 +104,7 @@ class LicitacaoDocumento {
    * @access public
    * @return void
    */
-  public function __construct($iCodigo = 0) {
+  public function __construct($iCodigo = null) {
 
     /**
      * Documento nao inforamdo, contrutor nao fara nada 
@@ -114,8 +114,11 @@ class LicitacaoDocumento {
     }
 
     $oDaoLicanexopncpdocumento = db_utils::getDao('licanexopncpdocumento');
-    $sSqlDocumento = $oDaoLicanexopncpdocumento->sql_query_file($iCodigo);
+    $dbwhere = "l216_sequencial = ".$iCodigo;
+    $sSqlDocumento = $oDaoLicanexopncpdocumento->sql_query_file(null,"*",null,$dbwhere);
+    
     $rsDocumento   = $oDaoLicanexopncpdocumento->sql_record($sSqlDocumento);
+    
 
     if ( $oDaoLicanexopncpdocumento->erro_status  == "0" ) {
 
@@ -131,9 +134,9 @@ class LicitacaoDocumento {
     $this->iTipoanexo         = $oDocumento->l216_tipoanexo;
 
     $oDaoTipoanexo = db_utils::getDao('tipoanexo');
-
     $sSqlTipo = $oDaoTipoanexo->sql_query_file($oDocumento->l216_tipoanexo);
-    $rsTipo = $oDaoTipoanexo->sql_record($sSqlTipo);
+    $rsTipo   = $oDaoTipoanexo->sql_record($sSqlTipo);
+    
 
     if ( $oDaoTipoanexo->erro_status  == "0" ) {
 
@@ -142,8 +145,10 @@ class LicitacaoDocumento {
     }
 
     $oTipo = db_utils::fieldsMemory($rsTipo, 0);
+    $this->sDescricaoTipo            = $oTipo->l213_descricao; 
 
-    $this->sDescricaoTipo = $oTipo->l213_descricao;
+
+    
 
   }
 
@@ -305,7 +310,7 @@ class LicitacaoDocumento {
   public function salvar() {
 
     if ( !db_utils::inTransaction() ) {
-      throw new DBException( 'erro_nenhuma_transacao_banco');
+      throw new DBException( 'Nenhuma transação de banco');
     }
 
 
@@ -330,7 +335,7 @@ class LicitacaoDocumento {
      * Processo do protocolo nao informado
      */
     if ( !($this->oLicitacaoAnexo instanceof LicitacaoAnexo) && $this->getProcessoProtocolo()->getProcessoLicitacao() != '' ) {
-      throw new Exception( 'erro_processo_nao_informado');
+      throw new Exception( 'Licitação não informada.');
     } 
     
     $this->iOi = $this->salvarArquivoBanco();
@@ -348,11 +353,11 @@ class LicitacaoDocumento {
      * Erro ao incluir documento
      */
     if ( $oDaoLicanexopncpdocumento->erro_status == "0" ) {
-      throw new Exception( 'erro_incluir_documento');
+      throw new Exception( 'Erro ao incluir o documento');
     }
 
     $this->iCodigo = $oDaoLicanexopncpdocumento->l216_sequencial;
-    return  'documento_salvo';//true;
+    return  'Anexo salvo com sucesso!';//true;
   }
 
 
@@ -369,7 +374,7 @@ class LicitacaoDocumento {
     $lEscreveuArquivo = DBLargeObject::escrita($this->sCaminhoArquivo, $iOid);
 
     if ( !$lEscreveuArquivo ) {
-      throw new BusinessException( 'erro_escrever_arquivo_banco');
+      throw new BusinessException( 'Erro ao escrever arquivo no banco.');
     } 
 
     return $iOid;
@@ -395,7 +400,7 @@ class LicitacaoDocumento {
 
       $oStdMensagemErro                  = new StdClass();
       $oStdMensagemErro->sCaminhoArquivo = $sCaminhoArquivo;
-      throw new BusinessException( 'erro_escrever_arquivo_diretorio', $oStdMensagemErro);
+      throw new BusinessException( 'Erro ao escrever o arquivo no diretorio.');
     }
 
     return $sCaminhoArquivo;
@@ -410,25 +415,78 @@ class LicitacaoDocumento {
   public function excluir() {
 
     if ( empty($this->iCodigo) ) {
-      throw new Exception( 'erro_documento_nao_especificado');
+      throw new Exception( 'Documento não especificado.');
     }
+    $oDaoLicanexopncpdocumento = db_utils::getDao('licanexopncpdocumento');
+    $oDaoLicanexopncpdocumento->excluir($this->iCodigo);
 
-    $oDaoProtprocessodocumento = db_utils::getDao('protprocessodocumento');
-    $oDaoProtprocessodocumento->excluir($this->iCodigo);
-
-    if ( $oDaoProtprocessodocumento->erro_status  == "0" ) {
-      throw new Exception( 'erro_excluir_documento');
+    if ( $oDaoLicanexopncpdocumento->erro_status  == "0" ) {
+      throw new Exception( 'Erro ao excluir o Arquivo.');
     }
+    
+/*
+    *$lExclusao = DBLargeObject::exclusao($this->iOid);
 
-    $lExclusao = DBLargeObject::exclusao($this->iOid);
-
-    /**
+    
      * Erro ao excluir documento do banco
-     */
+     
     if ( !$lExclusao ) {
-      throw new Exception( 'erro_excluir_documento_banco');
+      throw new Exception( 'Erro ao excluir aquivo no banco');
+    }
+*/
+    return true;
+  }
+
+  public function buscartipo() {
+
+    if ( empty($this->iCodigo) ) {
+      throw new Exception( 'Documento não especificado.');
+    }
+    
+
+    return $this->getTipoanexo();
+  }
+
+  public function alterartipo($idocumento,$itipoanexo) {
+
+    if ( empty($idocumento) ) {
+      throw new Exception( 'Documento não especificado.');
+    }
+    if ( empty($itipoanexo) ) {
+      throw new Exception( 'Tipo não especificado.');
+    }
+    
+    $oDaoLicanexopncpdocumento = db_utils::getDao('licanexopncpdocumento');
+    $oDaoLicanexopncpdocumento->l216_tipoanexo = $itipoanexo;
+    $oDaoLicanexopncpdocumento->alterar($idocumento);
+
+    if ( $oDaoLicanexopncpdocumento->erro_status  == "0" ) {
+      throw new Exception( 'Erro ao alterar o Arquivo.');
     }
 
+    return true;
+  }
+
+  public function verificavinculo($ilicitacao) {
+
+    if ( empty($ilicitacao) ) {
+      throw new Exception( 'Licitação não especificado.');
+    }
+   
+    
+    $oDaoLicanexopncpdocumento = db_utils::getDao('licanexopncpdocumento');
+    
+    $oDaoLicanexopncpdocumento->sql_record($oDaoLicanexopncpdocumento->verificalic($ilicitacao));
+    
+
+    
+
+    if ( $oDaoLicanexopncpdocumento->numrows  == 0 ) {
+      throw new Exception( 'A Licitação selecionada é decorrente da Lei nº 14133/2021, sendo assim, é necessário anexar no mínimo um documento na rotina Anexos Envio PNCP.');
+    }
+    if ( $oDaoLicanexopncpdocumento->erro_status  == "0" ) {
+      throw new Exception( 'Erro ao verificar vinculo com o PNCP');
+    }
     return true;
   }
 

@@ -96,6 +96,100 @@ try {
 
       break;
 
+    case "ziparAnexos":
+      $nomeDoZip = '/tmp/anexos-' . time() . '.zip';
+      $zip = new ZipArchive();
+      if ($zip->open($nomeDoZip, ZipArchive::CREATE) === true) {
+
+        foreach ($oParam->arquivos as $oArquivo) {
+          $zip->addFile($oArquivo->sCaminhoDownloadArquivo, $oArquivo->sTituloArquivo);
+        }
+
+        $zip->close();
+      }
+
+      $oRetorno->nomeDoZip = $nomeDoZip;
+      break;
+
+    case "excluir":
+
+        
+  
+          $oProcessoDocumento = new LicitacaoDocumento($oParam->iCodigoDocumento);
+  
+        
+            $oProcessoDocumento->excluir();
+           
+  
+        
+  
+       
+          $oRetorno->sMensagem = urlencode('Exclusão realizada com sucesso!');
+        
+  
+        break;
+
+    case "alterardocumento":
+
+        
+  
+          $oProcessoDocumento = new LicitacaoDocumento();
+  
+        
+            $oProcessoDocumento->alterartipo($oParam->iCodigoDocumento,$oParam->itipoanexo);
+           
+  
+        
+  
+       
+          $oRetorno->sMensagem = urlencode('Alteração realizada com sucesso!');
+        
+  
+        break;
+      case "excluirDocumento":
+
+          $aDocumentosNaoExcluidos = array();
+    
+          foreach ($oParam->aDocumentosExclusao as $iCodigoDocumento) {
+          
+    
+            $oProcessoDocumento = new LicitacaoDocumento($iCodigoDocumento);
+
+              $oProcessoDocumento->excluir();
+
+    
+          }
+    
+          $oRetorno->sMensagem = urlencode('Exclusão realizada com sucesso!');
+    
+          break;
+
+    case "buscardocumento":
+
+      $oProcessoDocumento = new LicitacaoDocumento($oParam->iCodigoDocumento);
+  
+      $oRetorno->idtipo =$oProcessoDocumento->buscartipo();
+
+      break;
+
+    case "verifica":
+     
+
+        $oProcessoDocumento = new LicitacaoDocumento();
+    
+        $oRetorno->idtipo =$oProcessoDocumento->verificavinculo($oParam->iCodigoDocumento);
+  
+        break;
+    
+
+    case "apagarZip":
+      if (file_exists($oParam->nomeDoZip) && unlink($oParam->nomeDoZip)) {
+        $oRetorno->zipApagado = 1;
+      } else {
+        $oRetorno->zipApagado = 0;
+      }
+      break;
+
 
   }
 

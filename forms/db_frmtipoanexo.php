@@ -29,13 +29,13 @@
 $cltipoanexo->rotulo->label();
 ?>
 <fieldset>
-      <legend>Tipos de anexos</legend>
+      <legend>Tipos de Anexos</legend>
 <form name="form1" method="post" action="">
 <center>
 <table border="0">
   <tr>
     <td nowrap title="<?=@$Tl213_sequencial?>">
-    <? echo "Sequencial";?>
+    <? echo "<b>Sequencial</b>";?>
     </td>
     <td> 
 <?
@@ -45,7 +45,7 @@ db_input('l213_sequencial',8,$Il213_sequencial,true,'text',3,"")
   </tr>
   <tr>
     <td nowrap title="<?=@$Tl213_descricao?>">
-       <? echo "Tipo de Anexo";?>
+       <? echo "<b>Tipo de Anexo</b>";?>
     </td>
     <td> 
 <?
