@@ -1192,11 +1192,10 @@ WHERE rh30_vinculo IN ('I',
         if ($matricula != null) {
             $sql .= " and rh01_regist in ($matricula) ";
         }
-        //echo $sql;
         $rs = \db_query($sql);
-
-        //db_criatabela($rs);
-        //exit;
+        // echo $sql;
+        // db_criatabela($rs);
+        // exit;
         if (!$rs) {
             throw new \Exception("Erro ao buscar os preenchimentos do S1202");
         }
