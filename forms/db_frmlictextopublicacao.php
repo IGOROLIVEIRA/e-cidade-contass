@@ -1,5 +1,5 @@
 <?
-//MODULO: licitacao
+//MODULO:  licitacao
 $cllictextopublicacao->rotulo->label();
 
 
