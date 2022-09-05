@@ -202,7 +202,7 @@ switch ($oParam->exec) {
                 }
             }
             /**
-             * Verificamos se o o item nao est? Bloqueado ou em desistencia
+             * Verificamos se o o item nao está Bloqueado ou em desistencia
              */
             if (isset($oParam->iFornecedor) && $oParam->iFornecedor != "") {
 
@@ -221,7 +221,7 @@ switch ($oParam->exec) {
                     if ($oBloqueio->datainicial != "" && $oBloqueio->datafinal != "") {
 
                         $oItemRetono->bloqueado  = true;
-                        $sMsgLegenda             = "Item com desist?ncia de <b>" . db_formatar($oBloqueio->datainicial, "d") . "</b> a ";
+                        $sMsgLegenda             = "Item com desistência de <b>" . db_formatar($oBloqueio->datainicial, "d") . "</b> a ";
                         $sMsgLegenda            .= "<b>" . db_formatar($oBloqueio->datafinal, "d") . "</b>";
                         $oItemRetono->legenda    = urlencode($sMsgLegenda);
                     }
@@ -351,7 +351,7 @@ switch ($oParam->exec) {
     case "salvarDesistencia":
 
         /**
-         * Verificamos se o usu?rio selecionou algum item
+         * Verificamos se o usuário selecionou algum item
          */
 
         if (isset($_SESSION["RP_fornecedores"])) {
@@ -503,7 +503,7 @@ switch ($oParam->exec) {
             $sWhere   = " l21_codliclicita = {$oParam->iCodigoLicitacao} ";
 
             /**
-             * adicionado essa condi??o pois licita??es do tipo 102 e 103 nao tem julgamento OC8339
+             * adicionado essa condição pois licitações do tipo 102 e 103 nao tem julgamento OC8339
              */
             $result = $clliclicita->sql_record($clliclicita->sql_query(null, "l03_pctipocompratribunal", null, "l20_codigo = {$oParam->iCodigoLicitacao} limit 1"));
 
@@ -737,7 +737,7 @@ switch ($oParam->exec) {
             '',
             "l200_sequencial, l200_data,
 		(CASE
-			WHEN l200_tipoparecer = 1 THEN 'Técnico'
+			WHEN l200_tipoparecer = 1 THEN 'T\E9cnico'
 			WHEN l200_tipoparecer = 2 THEN 'Juridico - Edital'
 			WHEN l200_tipoparecer = 3 THEN 'Juridico - Julgamento'
 			ELSE 						   'Juridico - Outros'
@@ -969,12 +969,12 @@ switch ($oParam->exec) {
                                     } else {
                                         $seqsolicitem = 1;
                                     }
-                                    //Compilação
+                                    //Compila\E7\E3o
                                     $nova_qtd = floatval($oItem->pc11_quant) - floatval($aItens[$count]->qtdexclusiva);
                                     //Estimativa
                                     $nova_qtd_estimativa = floatval($oItemControle->itemdaestimativaqtd) - floatval($aItens[$count]->qtdexclusiva);
 
-                                    //compilação
+                                    //compila\E7\E3o
                                     $oDaoSolicitemReservado->pc11_numero = $oItem->pc11_numero;
                                     $oDaoSolicitemReservado->pc11_seq   = $seqsolicitem;
                                     $oDaoSolicitemReservado->pc11_quant = $aItens[$count]->qtdexclusiva;
@@ -1048,7 +1048,7 @@ switch ($oParam->exec) {
                                      */
 
                                     if ($oDaoSolicitemReservado->numrows_incluir) {
-                                        //compilação
+                                        //compila\E7\E3o
                                         $oItemAlterado = db_utils::getDao('solicitem');
                                         $oItemAlterado->pc11_quant = $nova_qtd;
                                         $oItemAlterado->pc11_codigo = $oItem->pc11_codigo;
@@ -1086,7 +1086,7 @@ switch ($oParam->exec) {
                                     }
 
                                     if ($l20_usaregistropreco == 't') {
-                                        //compilação
+                                        //compila\E7\E3o
                                         $oDaoSolicitemVinculo = db_utils::getDao('solicitemvinculo');
                                         $oDaoSolicitemVinculo->pc55_solicitempai   = $oDaoSolicitemEstimativa->pc11_codigo;
                                         $oDaoSolicitemVinculo->pc55_solicitemfilho = $oDaoSolicitemReservado->pc11_codigo;
@@ -1145,7 +1145,7 @@ switch ($oParam->exec) {
 
                                     if ($l20_usaregistropreco == 't') {
 
-                                        //Compilação
+                                        //Compila\E7\E3o
                                         $oDaoSolicitemRegPrecoAlterado = db_utils::getDao('solicitemregistropreco');
 
                                         $sWhereSolicitem = ' pc57_solicitem = ' . $oItem->pc11_codigo;
@@ -1244,9 +1244,9 @@ switch ($oParam->exec) {
                                     }
 
                                     $codprocitemreservado = $oDaopcprocitem->pc81_codprocitem;
-                                    //echo "Código Item Reservado: " . $codprocitemreservado;
+                                    //echo "C\F3digo Item Reservado: " . $codprocitemreservado;
                                     /**
-                                     * Busca o código do material e insere as informa??es na tabela solicitempcmater
+                                     * Busca o c\F3digo do material e insere as informações na tabela solicitempcmater
                                      */
 
                                     $sSqlMaterial = "SELECT pc16_codmater from solicitempcmater where pc16_solicitem = " . $oItem->pc11_codigo;
@@ -1285,7 +1285,7 @@ switch ($oParam->exec) {
                                     if ($l20_usaregistropreco != 't') {
 
                                         /**
-                                         * Busca informa??es da dota??o vinculada ao item na pcdotac
+                                         * Busca informações da dotação vinculada ao item na pcdotac
                                          */
 
                                         $sSqlDotacaoItem = ' SELECT pcdotac.*
@@ -1297,7 +1297,7 @@ switch ($oParam->exec) {
                                         $oDotacaoItem = db_utils::fieldsMemory($rsSqlDotacaoItem, 0);
 
                                         /**
-                                         * Insere a dota??o do item j? cadastrado no novo item reservado,
+                                         * Insere a dotação do item já cadastrado no novo item reservado,
                                          * setando no campo quantidade a quantidade exclusiva reservada
                                          */
 
@@ -1318,7 +1318,7 @@ switch ($oParam->exec) {
                                         }
 
                                         /**
-                                         * Depois de incluir a dota??o reservada, deve-se alterar o valor da dota??o original
+                                         * Depois de incluir a dotação reservada, deve-se alterar o valor da dotação original
                                          */
 
                                         $oDaoDotacao = db_utils::getDao('pcdotac');
@@ -1334,13 +1334,13 @@ switch ($oParam->exec) {
                                     }
 
                                     /**
-                                     * Busca as informa??es do item na tabela solicitemunid incluindo o novo item reservado
+                                     * Busca as informações do item na tabela solicitemunid incluindo o novo item reservado
                                      */
 
                                     $sSqlSolicitemUnid = "SELECT * from solicitemunid where pc17_codigo = " . $oItem->pc11_codigo;
                                     $rsSolicitemUnid = db_query($sSqlSolicitemUnid);
                                     $oSolicitemUnid = db_utils::fieldsMemory($rsSolicitemUnid, 0);
-                                    //compilação
+                                    //compila\E7\E3o
                                     $oDaoSolicitemUnidReservado = db_utils::getDao('solicitemunid');
                                     $oDaoSolicitemUnidReservado->pc17_unid = $oSolicitemUnid->pc17_unid;
                                     $oDaoSolicitemUnidReservado->pc17_quant = $aItens[$count]->qtdexclusiva;
@@ -1488,7 +1488,7 @@ switch ($oParam->exec) {
                             if ($oParam->tipojulg == 1) {
                                 $clliclicitemlote->l04_descricao = "LOTE_AUTOITEM_" . $pc11_codigo;
                                 if ($pc80_tipoprocesso == 2) {
-                                    $erro_msg = "Tipo de compra é por Lote";
+                                    $erro_msg = "Tipo de compra \E9 por Lote";
                                     $sqlerro = true;
                                     break;
                                 }
@@ -1535,7 +1535,7 @@ switch ($oParam->exec) {
                             }
 
                             /**
-                             * Inclus?o na tabela liclicitemlote para o novo item com valor reservado
+                             * Inclusão na tabela liclicitemlote para o novo item com valor reservado
                              */
 
                             if (!empty($clliclicitemlotereservado->l04_descricao) && in_array($oParam->tipojulg, array(1, 2))) {
@@ -1569,7 +1569,7 @@ switch ($oParam->exec) {
             $clpcorcamitem = db_utils::getDao('pcorcamitem');
             $res_pcorcam = $clpcorcamitem->sql_record($clpcorcamitem->sql_query_pcmaterlic(null, "pc22_codorc", null, "l20_codigo = $oParam->licitacao limit 1"));
 
-            if ($clpcorcamitem->numrows > 0) {   // Tem or?amento para esta Licitacao
+            if ($clpcorcamitem->numrows > 0) {   // Tem orçamento para esta Licitacao
 
                 db_fieldsmemory($res_pcorcam, 0);
 
@@ -1616,7 +1616,7 @@ switch ($oParam->exec) {
                                 }
 
                                 /**
-                                 * @todo verificar se ser? inclu?do o novo item reservado na pcorcamitemlic
+                                 * @todo verificar se será incluído o novo item reservado na pcorcamitemlic
                                  */
 
                                 if (!$sqlerro) {
@@ -1660,10 +1660,6 @@ switch ($oParam->exec) {
             }
         }
 
-        $result = db_query("UPDATE precoreferencia SET
-        si01_valorestimado = $oParam->valorsigiloso WHERE si01_processocompra = $oParam->codprocant");
-
-
         /**
          * Alterar o parametro passado na db_fim_transacao para receber o $sqlerro,
          * mas antes tem que verificar os preenchimentos das tabelas anteriores
@@ -1672,12 +1668,7 @@ switch ($oParam->exec) {
         db_fim_transacao($sqlerro);
 
         if ($sqlerro) {
-            if ($result == false) {
-                $sqlerro = true;
-                $oRetorno->status = 3;
-            } else {
-                $oRetorno->status = 2;
-            }
+            $oRetorno->status = 2;
         } else {
             $oRetorno->status = 1;
         }
