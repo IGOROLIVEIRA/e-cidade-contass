@@ -69,7 +69,7 @@ if ($db_opcao == 1) {
     }
 
     /*
-     * verifica se existe apenas 1 cl_liclocal
+     *verifica se existe apenas 1 cl_liclocal
      */
     $oLicLocal = new cl_liclocal();
     $rsLicLocal = $oLicLocal->sql_record($oLicLocal->sql_query_file());

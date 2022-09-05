@@ -127,7 +127,7 @@ class cl_liclicita
     var $l20_criterioadjudicacao = null;
     var $l20_nroedital = null;
     var $l20_exercicioedital = null;
-    /* Valor 1 para cadastro inicial da Licita??o - demanda para atender o SICOM 2020 */
+    /* Valor 1 para cadastro inicial da Licitação - demanda para atender o SICOM 2020 */
     var $l20_cadinicial = null;
     var $l20_leidalicitacao = null;
     var $l20_dtpulicacaopncp = null;

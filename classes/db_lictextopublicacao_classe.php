@@ -46,7 +46,7 @@ class cl_lictextopublicacao
     }
   }
 
-  // funcao para atualizar campos
+  //funcao para atualizar campos
   function atualizacampos($exclusao = false)
   {
     if ($exclusao == false) {

@@ -147,7 +147,7 @@ if (isset($testanome) && $testanome == 'true' && !isset($pesquisa_chave)) {
 				alerta = "";
 
 				if (ender == "") {
-					alerta += "Endereï¿½o\n";
+					alerta += "Endereço\n";
 				}
 
 				valcpf = true;
@@ -174,7 +174,7 @@ if (isset($testanome) && $testanome == 'true' && !isset($pesquisa_chave)) {
 				}
 
 				if (alerta != "" && <?= $testanome ?> == true) {
-					alert("O Contribuinte nï¿½o possui o CGM atualizado");
+					alert("O Contribuinte não possui o CGM atualizado");
 					<?
 					//testa permissao de menu
 					echo "location.href = 'prot1_cadcgm002.php?chavepesquisa='+z01_numcgm+'&testanome=$func_antes&valores=$valores&funcao_js=" . $func_antes . $valores . "';";
@@ -205,7 +205,7 @@ if (isset($testanome) && $testanome == 'true' && !isset($pesquisa_chave)) {
 							</td>
 							<td>
 								<?
-								db_input('z01_numcgm', 6, $Iz01_numcgm, true, 'text', 4, "onkeyup='js_ValidaCampos(this,1,\"Cï¿½digo\",\"\",\"\",event);'", "numcgmDigitadoParaPesquisa");
+								db_input('z01_numcgm', 6, $Iz01_numcgm, true, 'text', 4, "onkeyup='js_ValidaCampos(this,1,\"Código\",\"\",\"\",event);'", "numcgmDigitadoParaPesquisa");
 								?>
 							</td>
 							<td align="right">
@@ -274,7 +274,7 @@ if (isset($testanome) && $testanome == 'true' && !isset($pesquisa_chave)) {
 			</td>
 			<script>
 				/*
-         Valida para nï¿½o deixar colar letras nos campos numï¿½ricos
+         Valida para não deixar colar letras nos campos numéricos
          */
 
 				$('numcgmDigitadoParaPesquisa').onpaste = function(event) {
@@ -332,7 +332,7 @@ if (isset($testanome) && $testanome == 'true' && !isset($pesquisa_chave)) {
 								</script>";
 
 					if (isset($campos) == false) {
-						$campos = " distinct cgm.z01_numcgm, to_ascii(z01_nome) as z01_nome,trim(z01_cgccpf) as z01_cgccpf, case when length(trim(z01_cgccpf)) = 14 then 'JURIDICA' else 'Fï¿½SICA' end as tipo, trim(z01_ender) as z01_ender, z01_munic, cgm.z01_uf, z01_cep, z01_email,cgm.z01_incest";
+						$campos = " distinct cgm.z01_numcgm, to_ascii(z01_nome) as z01_nome,trim(z01_cgccpf) as z01_cgccpf, case when length(trim(z01_cgccpf)) = 14 then 'JURIDICA' else 'FÍSICA' end as tipo, trim(z01_ender) as z01_ender, z01_munic, cgm.z01_uf, z01_cep, z01_email,cgm.z01_incest";
 					}
 
 					if ($filtro == 1) {
@@ -342,11 +342,11 @@ if (isset($testanome) && $testanome == 'true' && !isset($pesquisa_chave)) {
 					}
 
 					if (isset($lCadTecMunic)) {
-						$campos = " distinct cgm.z01_numcgm, to_ascii(z01_nome) as z01_nome,trim(z01_cgccpf) as z01_cgccpf, case when length(trim(z01_cgccpf)) = 14 then 'JURIDICA' else 'Fï¿½SICA' end as tipo, trim(z01_ender) as z01_ender, z01_numero, z01_compl, z01_munic, cgm.z01_uf, z01_cep, z01_email,cgm.z01_incest";
+						$campos = " distinct cgm.z01_numcgm, to_ascii(z01_nome) as z01_nome,trim(z01_cgccpf) as z01_cgccpf, case when length(trim(z01_cgccpf)) = 14 then 'JURIDICA' else 'FÍSICA' end as tipo, trim(z01_ender) as z01_ender, z01_numero, z01_compl, z01_munic, cgm.z01_uf, z01_cep, z01_email,cgm.z01_incest";
 					}
 
 					if (isset($lCadTec)) {
-						$campos = " distinct cgm.z01_numcgm, to_ascii(z01_nome) as z01_nome,trim(z01_cgccpf) as z01_cgccpf, case when length(trim(z01_cgccpf)) = 14 then 'JURIDICA' else 'Fï¿½SICA' end as tipo, q02_inscr, q02_inscmu, trim(z01_ender) as z01_ender, z01_numero, z01_compl, z01_munic, cgm.z01_uf, z01_cep, z01_email,cgm.z01_incest";
+						$campos = " distinct cgm.z01_numcgm, to_ascii(z01_nome) as z01_nome,trim(z01_cgccpf) as z01_cgccpf, case when length(trim(z01_cgccpf)) = 14 then 'JURIDICA' else 'FÍSICA' end as tipo, q02_inscr, q02_inscmu, trim(z01_ender) as z01_ender, z01_numero, z01_compl, z01_munic, cgm.z01_uf, z01_cep, z01_email,cgm.z01_incest";
 					}
 
 					$clnome		= new cl_cgm;
@@ -373,7 +373,7 @@ if (isset($testanome) && $testanome == 'true' && !isset($pesquisa_chave)) {
 					} else if (isset($cnpj) && $cnpj != "") {
 						$sql = $clnome->$sMetodoExecutar("", $campos, "", " z01_cgccpf = '$cnpj' ");
 					} else if (isset($pesquisa_cgmalt) && trim($pesquisa_cgmalt) != "") {
-						$campos 		 = "z05_numcgm as z01_numcgm, z05_nome as z01_nome,trim(z05_cgccpf) as z05_cgccpf, case when length(trim(z05_cgccpf)) = 14 then 'JURIDICA' else 'Fï¿½SICA' end as tipo, trim(z05_ender) as z05_ender, z05_munic, z05_uf, z05_cep, z05_email,z05_data_alt, z05_hora_alt,login";
+						$campos 		 = "z05_numcgm as z01_numcgm, z05_nome as z01_nome,trim(z05_cgccpf) as z05_cgccpf, case when length(trim(z05_cgccpf)) = 14 then 'JURIDICA' else 'FÍSICA' end as tipo, trim(z05_ender) as z05_ender, z05_munic, z05_uf, z05_cep, z05_email,z05_data_alt, z05_hora_alt,login";
 						$sSqlConv = "";
 						if (isset($z01_tipcre_cnpj)) {
 							$sSqlConv .= " and z01_tipcre = 2 ";
@@ -403,7 +403,7 @@ if (isset($testanome) && $testanome == 'true' && !isset($pesquisa_chave)) {
 												<table>
 													<tr>
 														<td>
-															Clique no botï¿½o abaixo para pesquisar nomes alterados!
+															Clique no botão abaixo para pesquisar nomes alterados!
 														</td>
 													</tr>
 												</table>
@@ -491,7 +491,7 @@ if (isset($testanome) && $testanome == 'true' && !isset($pesquisa_chave)) {
 								}
 							} else {
 
-								echo "<script>" . $funcao_js . "(true,'Cï¿½digo (" . $pesquisa_chave . ") nï¿½o Encontrado');</script>";
+								echo "<script>" . $funcao_js . "(true,'Código (" . $pesquisa_chave . ") não Encontrado');</script>";
 							}
 						} else {
 							if (($result != false) && (pg_numrows($result) != 0)) {
@@ -523,8 +523,7 @@ if (isset($testanome) && $testanome == 'true' && !isset($pesquisa_chave)) {
 								}
 								echo "</script>\n";
 							} else {
-								//echo "<script> alert('Cï¿½digo (".$pesquisa_chave.") nï¿½o Encontrado')</script>";
-								echo "<script>" . $funcao_js . "(true,'Cï¿½digo (" . $pesquisa_chave . ") nï¿½o Encontrado');</script>\n";
+								echo "<script>" . $funcao_js . "(true,'Código (" . $pesquisa_chave . ") não Encontrado');</script>\n";
 							}
 						}
 					}

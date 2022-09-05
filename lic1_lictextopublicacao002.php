@@ -58,7 +58,7 @@ if (isset($alterar)) {
   if ($cllictextopublicacao->erro_status == "0") {
     $cllictextopublicacao->erro(true, false);
     $db_botao = true;
-    echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
+    echo "<script> document.form1.db_opcao.disabled=false;</script>   ";
     if ($cllictextopublicacao->erro_campo != "") {
       echo "<script> document.form1." . $cllictextopublicacao->erro_campo . ".style.backgroundColor='#99A9AE';</script>";
       echo "<script> document.form1." . $cllictextopublicacao->erro_campo . ".focus();</script>";

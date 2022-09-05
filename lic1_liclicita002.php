@@ -754,7 +754,7 @@ if (isset($alterar)) {
 
     db_fim_transacao($sqlerro);
 } else if (isset($chavepesquisa)) {
-    /*$result = $clhomologacao->sql_record($clhomologacao->sql_query_file(null,"*","","l202_licitacao = {$chavepesquisa}"));
+    /*$result =  $clhomologacao->sql_record($clhomologacao->sql_query_file(null,"*","","l202_licitacao = {$chavepesquisa}"));
 	if ($clhomologacao->numrows > 0) {
 		$db_opcao==22;
 		unset($chavepesquisa);

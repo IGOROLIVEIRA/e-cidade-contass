@@ -168,7 +168,7 @@ if (isset($db_opcaoal)) {
                 </td>
                 <td nowrap title="<?= @$Tpc31_nomeretira ?>">
                     <?
-                    //         db_input('pc31_nomeretira',50,$Ipc31_nomeretira,true,'text',$db_opcao,"");
+                    //        db_input('pc31_nomeretira',50,$Ipc31_nomeretira,true,'text',$db_opcao,"");
                     db_input('pc31_nomeretira', 50, "", true, 'text', $db_opcao, "");
                     ?>
                 </td>

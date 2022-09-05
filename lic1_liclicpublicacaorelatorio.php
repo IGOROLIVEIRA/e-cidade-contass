@@ -11,7 +11,6 @@ $clrotulo = new rotulocampo;
 $clrotulo->label('');
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 db_postmemory($HTTP_SERVER_VARS);
-ini_set('display_errors', 'on');
 
 /*
 if ($numrows == 0) {

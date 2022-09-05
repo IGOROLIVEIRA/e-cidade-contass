@@ -16,18 +16,11 @@ $oRetorno->erro = "";
 
 try {
 
-    /*
-    if ($oParam->l20_linkpncp == '') {
-        $oRetorno->status = 2;
-        $oRetorno->erro   = "campo Link no PNCP nÃ£o informado";
-        echo json_encode($oRetorno);
-        exit;
-    } 
-    */
+
 
     if ($oParam->respPubliccodigo == "") {
         $oRetorno->status = 2;
-        $oRetorno->erro   = "Campo Resp. pela PublicaÃ§Ã£o nÃ£o informado";
+        $oRetorno->erro   = "Campo Resp. pela Publicação não informado";
         echo json_encode($oRetorno);
         exit;
     }
@@ -45,7 +38,7 @@ try {
 
     if ($oParam->l20_dtpublic == '') {
         $oRetorno->status = 2;
-        $oRetorno->erro   = "Campo Data de PublicaÃ§Ã£o em DiÃ¡rio oficial nÃ£o informado";
+        $oRetorno->erro   = "Campo Data de Publicação em Diário oficial não informado";
         echo json_encode($oRetorno);
         exit;
     } else {
@@ -74,7 +67,7 @@ try {
         if ($oParam->l20_datacria > $oParam->l20_datapublicacao1) {
 
             $oRetorno->status = 2;
-            $oRetorno->erro   = "A data da publicaÃ§Ã£o em Edital Veiculo 1 deve ser superior ou igual a data de criaÃ§Ã£o.";
+            $oRetorno->erro   = "A data da publicação em Edital Veiculo 1 deve ser superior ou igual a data de criação.";
             echo json_encode($oRetorno);
             exit;
         }
@@ -88,7 +81,7 @@ try {
         if ($oParam->l20_datacria > $oParam->l20_datapublicacao2) {
 
             $oRetorno->status = 2;
-            $oRetorno->erro   = "A data da publicaÃ§Ã£o em Edital Veiculo 2 deve ser superior ou igual a data de criaÃ§Ã£o.";
+            $oRetorno->erro   = "A data da publicação em Edital Veiculo 2 deve ser superior ou igual a data de criação.";
             echo json_encode($oRetorno);
             exit;
         }

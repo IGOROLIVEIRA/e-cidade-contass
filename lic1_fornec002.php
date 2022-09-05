@@ -248,7 +248,7 @@ if (isset($incluir)) {
       $result_igualcgm = $clpcorcamforne->sql_record($clpcorcamforne->sql_query_file(null, "pc21_codorc", "", " pc21_numcgm=$pc21_numcgm and pc21_codorc=$pc20_codorc"));
       if ($clpcorcamforne->numrows > 0) {
         $sqlerro = true;
-        $erro_msg = "ERRO: Número de CGM já cadastrado.";
+        $erro_msg = "ERRO: Número de CGM já cadastrado. ";
       }
 
       if ($sqlerro == false) {
