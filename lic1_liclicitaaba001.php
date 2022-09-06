@@ -64,7 +64,6 @@ if (!isset($db_opcao)) {
 
           if (db_getsession('DB_anousu') >= 2016) {
 
-
             $clcriaabas->identifica = array("liclicita" => "Licitação", "liclicitem" => "Itens", "liclicitemlote" => "Lotes", "liclicpublicacoes" => "Publicações");
             $clcriaabas->sizecampo = array("liclicita" => "20", "liclicitem" => "20", "liclicitemlote" => "20", "liclicpublicacoes" => "20");
             $clcriaabas->title = array("liclicita" => "Licitação", "liclicitem" => "Itens da Licitação", "liclicitemlote" => "Lote de itens", "liclicpublicacoes" => "Publicações");

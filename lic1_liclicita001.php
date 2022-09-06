@@ -1,3 +1,15 @@
+
+<?
+/*
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+Expandir
+message.txt
+20 KB
+lic1_liclicita001.php
+?
 <?
 /*
  *     E-cidade Software Publico para Gestao Municipal
@@ -60,6 +72,7 @@ $clliccomissaocgm     = new cl_liccomissaocgm;
 
 $db_opcao = 1;
 $db_botao = true;
+$exibe_publicacoes = false;
 
 if (isset($incluir)) {
 
@@ -119,7 +132,7 @@ if (isset($incluir)) {
    49 - Tomada de Preços
    50 - Concorrência
    52 - Pregão presencial
-   53 - Pregão eletronico
+   53 - Pregão eletrônico
    54 - Leilão
   */
 	if ($oPost->modalidade_tribunal == 48 || $oPost->modalidade_tribunal == 49 || $oPost->modalidade_tribunal == 50 || $oPost->modalidade_tribunal == 52 || $oPost->modalidade_tribunal == 53 || $oPost->modalidade_tribunal == 54) {
@@ -141,7 +154,7 @@ if (isset($incluir)) {
 
 		if ($oPost->l20_naturezaobjeto == 1) {
 			if ($respObrascodigo == "") {
-				$erro_msg .= 'Responsável pelos orçamentos, obras e serviçoos não informado\n\n';
+				$erro_msg .= 'Responsável pelos orçamentos, obras e serviços não informado\n\n';
 				$nomeCampo = "respObrascodigo";
 				$sqlerro = true;
 			}
@@ -228,7 +241,11 @@ if (isset($incluir)) {
 			$sqlerro = true;
 		}
 
-
+		// if ($sqlerro == false){
+		// #1
+		// $clpccflicitapar->l25_numero=$l25_numero+1;
+		// $clpccflicitapar->alterar_where(null,"l25_codigo = $l25_codigo and l25_anousu = $anousu");
+		// }
 
 		//numeração geral
 
@@ -262,6 +279,14 @@ if (isset($incluir)) {
 			}
 		}
 
+		// if ($sqlerro == false){
+		// #2
+		// $clpccflicitanum->l24_numero=$l24_numero+1;
+		// $clpccflicitanum->alterar_where(null,"l24_instit=$instit and l24_anousu=$anousu");
+		// } else {
+		//   $sqlerro = true;
+		// }
+
 
 		//verifica se ja existe licitacao por modalidade
 		$sqlveriflicitamod = $clpccflicitapar->sql_query_mod_licita(null, "l25_numero as xx", null, "l20_instit=$instit and l25_anousu=$anousu and l20_codtipocom=$l20_codtipocom and l20_numero=$l20_numero and l20_anousu=$anousu");
@@ -291,6 +316,16 @@ if (isset($incluir)) {
 		}
 
 
+		//    /**
+		//     * Verificar Encerramento Periodo Contabil
+		//     */
+		//    if (!empty($l20_dtpubratificacao)) {
+		//			$clcondataconf = new cl_condataconf;
+		//	    if (!$clcondataconf->verificaPeriodoContabil($l20_dtpubratificacao)) {
+		//	      $erro_msg = $clcondataconf->erro_msg;
+		//	      $sqlerro  = true;
+		//	    }
+		//    }
 
 		/**
 		 * Verificar Encerramento Periodo Patrimonial
@@ -408,14 +443,7 @@ if (isset($incluir)) {
 				$clliccomissaocgm->l31_licitacao = $codigo;
 				$clliccomissaocgm->incluir(null);
 			}
-			/*
-			if ($respPubliccodigo != "") {
-				$clliccomissaocgm->l31_numcgm = $respPubliccodigo;
-				$clliccomissaocgm->l31_tipo = 8;
-				$clliccomissaocgm->l31_licitacao = $codigo;
-				$clliccomissaocgm->incluir(null);
-			}
-			*/
+
 			if ($respObrascodigo != "") {
 				$clliccomissaocgm->l31_numcgm = $respObrascodigo;
 				$clliccomissaocgm->l31_tipo = 10;
@@ -439,6 +467,10 @@ if (isset($incluir)) {
 
 		// db_fim_transacao(false);
 		db_fim_transacao($sqlerro);
+
+		if ($oPost->modalidade_tribunal != 100 && $oPost->modalidade_tribunal != 101 && $oPost->modalidade_tribunal != 102 && $oPost->modalidade_tribunal != 103) {
+			$exibe_publicacoes = true;
+		}
 	}
 }
 $l20_liclocal = 0;
@@ -490,6 +522,11 @@ if (isset($incluir)) {
 		echo "<script> document.form1." . $nomeCampo . ".focus();</script>";
 		echo "<script> document.form1." . $nomeCampo . ".style.backgroundColor='#99A9AE';</script>";
 		if ($sqlerro == false) {
+
+			if ($exibe_publicacoes) {
+				echo "<script>parent.document.getElementById('liclicpublicacoes').style.display = 'block';</script>";
+			}
+
 			if (db_getsession("DB_anousu") >= 2016) {
 				if ($l20_tipojulg == 3) {
 					echo "<script>parent.document.formaba.liclicitemlote.disabled=false;</script>";
@@ -503,7 +540,6 @@ if (isset($incluir)) {
 			} else {
 				if ($l20_tipojulg == 3) {
 					echo "<script>parent.document.formaba.liclicitemlote.disabled=false;</script>";
-					echo "<script>parent.document.getElementById('liclicitemlote').style.display='block';\n</script>";
 				}
 				echo " <script>
 		           parent.iframe_liclicita.location.href='lic1_liclicita002.php?chavepesquisa=$codigo';\n
