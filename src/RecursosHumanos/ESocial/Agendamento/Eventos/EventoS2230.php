@@ -54,8 +54,11 @@ class EventoS2230 extends EventoBase
                     }
                 }
             }
-            if (!empty($oDados->fimAfastamento->dtTermAfast)) {
-                $oDadosAPI->evtAfastTemp->fimafastamento->dttermafast = $oDados->dttermafast;
+            // if (!empty($oDados->fimAfastamento->dtTermAfast)) {
+            //     $oDadosAPI->evtAfastTemp->fimafastamento->dttermafast = $oDados->dttermafast;
+            // }
+            if (!empty($oDados->dttermafastferias)) {
+                $oDadosAPI->evtAfastTemp->fimafastamento->dttermafast = $oDados->dttermafastferias;
             }
             // echo '<pre>';
             // var_dump($oDadosAPI);

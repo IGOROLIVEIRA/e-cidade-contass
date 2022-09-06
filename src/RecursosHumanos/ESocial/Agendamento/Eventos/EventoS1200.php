@@ -87,16 +87,16 @@ class EventoS1200 extends EventoBase
 
             //Rubricas que compõem a remuneração do trabalhador.
             $std->dmdev[0]->ideestablot[0]->remunperapur[0]->itensremun = $this->buscarValorRubrica($oDados->matricula, $oDados->rh30_regime);
+
             $std->dmdev[0]->ideestablot[0]->remunperapur[0]->infoagnocivo->grauexp = $oDados->grauexp; //Obrigatório
 
             $oDadosAPI->evtRemun->dmdev = $std->dmdev;
 
-            $aDadosAPI[] = $oDadosAPI;
-            $iSequencial++;
+            if ($std->dmdev[0]->ideestablot[0]->remunperapur[0]->itensremun != null) {
+                $aDadosAPI[] = $oDadosAPI;
+                $iSequencial++;
+            }
         }
-        // echo '<pre>';
-        // var_dump($aDadosAPI);
-        // exit;
         return $aDadosAPI;
     }
 
@@ -110,7 +110,7 @@ class EventoS1200 extends EventoBase
         $iAnoUsu = date("Y", db_getsession("DB_datausu"));
         $iMesusu = date("m", db_getsession("DB_datausu"));
         if ($rh30_regime == 1 || $rh30_regime == 3)
-            $aPontos = array('rescisao');
+            $aPontos = array('salario', 'complementar', '13salario');
         else
             $aPontos = array('salario', 'complementar', '13salario');
 
@@ -163,8 +163,7 @@ class EventoS1200 extends EventoBase
             $rsIdentificadores = db_query($sql);
             // echo $sql;
             // db_criatabela($rsIdentificadores);
-            // exit;
-            if ($rsIdentificadores) {
+            if (pg_num_rows($rsIdentificadores) > 0) {
                 $oIdentificadores = \db_utils::fieldsMemory($rsIdentificadores, 0);
                 return $oIdentificadores->idedmdev;
             }
@@ -252,6 +251,8 @@ class EventoS1200 extends EventoBase
                            order by {$sigla}pd,{$sigla}rubric";
             }
             $rsValores = db_query($sql);
+            // echo $sql;
+            // db_criatabela($rsValores);
             if ($opcao != 'rescisao') {
                 for ($iCont = 0; $iCont < pg_num_rows($rsValores); $iCont++) {
                     $oResult = \db_utils::fieldsMemory($rsValores, $iCont);
@@ -302,6 +303,7 @@ class EventoS1200 extends EventoBase
                 }
             }
         }
+        //exit;
         return $aItens;
     }
 }

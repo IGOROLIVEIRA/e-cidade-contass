@@ -1348,7 +1348,7 @@ class cl_rhpessoalmov
             } else if (trim($this->rh02_cnpjcedente) == "" && isset($GLOBALS["HTTP_POST_VARS"]["rh02_cnpjcedente"]) && !in_array($GLOBALS["HTTP_POST_VARS"]["tipadm"], array(3, 4))) {
                 $this->rh02_cnpjcedente = "null";
             }
-            $sql  .= $virgula . " rh02_cnpjcedente = $this->rh02_cnpjcedente ";
+            $sql  .= $virgula . " rh02_cnpjcedente = ".($this->rh02_cnpjcedente == "null" || $this->rh02_cnpjcedente == "" ? "null" : "'" . $this->rh02_cnpjcedente . "'")." ";
             $virgula = ",";
         }
 
