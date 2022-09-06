@@ -214,16 +214,23 @@ if (isset($incluir)) {
 
       $licita = db_query("select l20_dtpublic,l31_codigo from liclicita inner join liccomissaocgm on l31_licitacao = l20_codigo where l20_codigo = $l20_codigo and l31_tipo = '8';");
       $licita = db_utils::fieldsMemory($licita, 0);
+      $sSql = $clliclicita->buscartribunal($l20_codigo);
+      $result = db_query("select l03_pctipocompratribunal from liclicita inner join cflicita on l20_codtipocom  = l03_codigo where l20_codigo = $l20_codigo;");
+      $tribunal = db_utils::fieldsMemory($result, 0);
 
 
-      if ($licita->l20_dtpublic == "" && $licita->l31_codigo == "") {
-        echo "<script>
-                     alert('Não permitido a inserção de fornecedor na licitação se os campos Data Publicação DO e Resp. pela Publicação não estiverem preenchidos.');
-                     top.corpo.location.href='lic1_fornec001.php';
-
-                  </script>";
-        exit;
+      if ($tribunal->l03_pctipocompratribunal == "100" || $tribunal->l03_pctipocompratribunal == "101" || $tribunal->l03_pctipocompratribunal == "102" || $tribunal->l03_pctipocompratribunal == "103") {
+      } else {
+        if ($licita->l20_dtpublic == "" && $licita->l31_codigo == "") {
+          echo "<script>
+                       alert('Não permitido a inserção de fornecedor na licitação se os campos Data Publicação DO e Resp. pela Publicação não estiverem preenchidos.');
+                       top.corpo.location.href='lic1_fornec001.php';
+  
+                    </script>";
+          exit;
+        }
       }
+
 
       $result = $clliclicita->sql_record($clliclicita->sql_query_pco($l20_codigo));
 
