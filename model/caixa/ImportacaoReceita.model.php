@@ -120,7 +120,7 @@ class ImportacaoReceita
         $oReceitaPlanilha->setCaracteristicaPeculiar(new CaracteristicaPeculiar("000"));
         $oReceitaPlanilha->setCGM(CgmFactory::getInstanceByCgm($oReceitaOrcamentaria->iNumeroCgm));
         $oReceitaPlanilha->setContaTesouraria($oReceitaOrcamentaria->oContaTesouraria);
-        $oReceitaPlanilha->setDataRecebimento(new DBDate($oReceitaOrcamentaria->dDataCredito));
+        $oReceitaPlanilha->setDataRecebimento(new DBDate(date("Y-m-d", db_getsession("DB_datausu"))));
         $oReceitaPlanilha->setInscricao($this->iInscricao);
         $oReceitaPlanilha->setMatricula($this->iMatricula);
         $oReceitaPlanilha->setObservacao(db_stdClass::normalizeStringJsonEscapeString($this->sObservacao));
@@ -157,7 +157,7 @@ class ImportacaoReceita
         $oTransferencia->setCodigoCgm($oReceitaExtraOrcamentaria->iNumeroCgm);
         $oTransferencia->setCaracteristicaPeculiarDebito("000");
         $oTransferencia->setCaracteristicaPeculiarCredito("000");
-        $oTransferencia->setData(date("Y-m-d", strtotime($oReceitaExtraOrcamentaria->dDataCredito)));
+        $oTransferencia->setData(date("Y-m-d", db_getsession("DB_datausu")));
         $oTransferencia->setProcessoAdministrativo(db_stdClass::normalizeStringJsonEscapeString($this->sProcessoAdministrativo));
         $oTransferencia->setExercicioCompetenciaDevolucao("");
         if ($oTransferencia instanceof TransferenciaFinanceira) {
