@@ -12,13 +12,13 @@ class Oc18251 extends AbstractMigration
         INSERT INTO db_menu VALUES(3470,(select max(id_item) from db_itensmenu),(select max(menusequencia)+1 from db_menu where id_item = 3470 and modulo = 381),381);
         
         
-        INSERT INTO db_itensmenu values ((select max(id_item)+1 from db_itensmenu),'Inclusð£o','Inclusð£o','	lic1_tipoanexo.php',1,1,'Inclusð£o','t');
+        INSERT INTO db_itensmenu values ((select max(id_item)+1 from db_itensmenu),'InclusÃ£o','InclusÃ£o','	lic1_tipoanexo.php',1,1,'InclusÃ£o','t');
         INSERT INTO db_menu VALUES((select id_item from db_itensmenu where descricao like'%Tipo de Anexos%'),(select max(id_item) from db_itensmenu),1,381);
         
-        INSERT INTO db_itensmenu values ((select max(id_item)+1 from db_itensmenu),'Alteração','Alteração','lic1_tipoanexo002.php',1,1,'Alteração','t');
+        INSERT INTO db_itensmenu values ((select max(id_item)+1 from db_itensmenu),'AlteraÃ§Ã£o','AlteraÃ§Ã£o','lic1_tipoanexo002.php',1,1,'AlteraÃ§Ã£o','t');
         INSERT INTO db_menu VALUES((select id_item from db_itensmenu where descricao like'%Tipo de Anexos%'),(select max(id_item) from db_itensmenu),2,381);
         
-        INSERT INTO db_itensmenu values ((select max(id_item)+1 from db_itensmenu),'Exclusão','Exclusão','lic1_tipoanexo003.php',1,1,'Exclusão','t');
+        INSERT INTO db_itensmenu values ((select max(id_item)+1 from db_itensmenu),'Excluso','Excluso','lic1_tipoanexo003.php',1,1,'Excluso','t');
         INSERT INTO db_menu VALUES((select id_item from db_itensmenu where descricao like'%Tipo de Anexos%'),(select max(id_item) from db_itensmenu),3,381);
         
         INSERT INTO db_itensmenu VALUES((select max(id_item)+1 from db_itensmenu),'Anexos Envio PNCP','Anexos Envio PNCP','lic1_anexospncp.php',1,1,'Anexos Envio PNCP','t');
@@ -27,7 +27,7 @@ class Oc18251 extends AbstractMigration
         INSERT INTO db_sysarquivo VALUES((select max(codarq)+1 from db_sysarquivo),'tipoanexo','cadastro de tipo de anexos pncp','l213','2022-08-22','cadastro de tipo de anexos pncp',0,'f','f','f','f');
 
 
-        INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l213_sequencial','int8' ,'Cód. Sequencial','', 'Cód. Sequencial',8,false, false, false, 1, 'int8', 'Cód. Sequencial');
+        INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l213_sequencial','int8' ,'Cd. Sequencial','', 'Cd. Sequencial',8,false, false, false, 1, 'int8', 'Cd. Sequencial');
         INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l213_descricao','varchar' ,'Descricao do tipo do anexo pncp','', 'Descricao do tipo do anexo pncp',255 ,false, false, false, 0, 'varchar', 'Descricao do tipo do anexo pncp');
 
 
@@ -51,19 +51,19 @@ class Oc18251 extends AbstractMigration
         ALTER TABLE tipoanexo ADD PRIMARY KEY (l213_sequencial);
 
 
-        INSERT INTO tipoanexo VALUES (1,'Aviso de Contratação Direta');
+        INSERT INTO tipoanexo VALUES (1,'Aviso de ContraÃ§Ã£o Direta');
 
         INSERT INTO tipoanexo VALUES (2,'Edital');
 
         INSERT INTO tipoanexo VALUES (3,'Minuta do Contrato');
 
-        INSERT INTO tipoanexo VALUES (4,'Termo de Referência');
+        INSERT INTO tipoanexo VALUES (4,'Termo de ReferÃªncia');
 
         INSERT INTO tipoanexo VALUES (5,'Anteprojeto');
 
-        INSERT INTO tipoanexo VALUES (6,'Projeto Básico');
+        INSERT INTO tipoanexo VALUES (6,'Projeto BÃ¡sico');
 
-        INSERT INTO tipoanexo VALUES (7,'Estudo Técnico Preliminar');
+        INSERT INTO tipoanexo VALUES (7,'Estudo TÃ©cnico Preliminar');
 
         INSERT INTO tipoanexo VALUES (8,'Projeto Executivo');
 
@@ -71,11 +71,11 @@ class Oc18251 extends AbstractMigration
 
         INSERT INTO tipoanexo VALUES (10,'DOD');
 
-        INSERT INTO tipoanexo VALUES (11,'Ata de Registro de Preço');
+        INSERT INTO tipoanexo VALUES (11,'Ata de Registro de PreÃ§o');
 
         INSERT INTO tipoanexo VALUES (12,'Contrato');
 
-        INSERT INTO tipoanexo VALUES (13,'Termo de Rescisão');
+        INSERT INTO tipoanexo VALUES (13,'Termo de RescisÃ£o');
 
         INSERT INTO tipoanexo VALUES (14,'Termo Aditivo');
 
@@ -91,12 +91,12 @@ class Oc18251 extends AbstractMigration
         INSERT INTO db_sysarquivo VALUES((select max(codarq)+1 from db_sysarquivo),'licanexopncp','cadastro de anexos pncp','l215','2022-08-22','cadastro de anexos pncp',0,'f','f','f','f');
 
 
-        INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l215_sequencial','int8' ,'Cód. Sequencial','', 'Cód. Sequencial',8,false, false, false, 1, 'int8', 'Cód. Sequencial');
-        INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l215_liclicita','int8' ,'Processo Licitatório','', 'Processo Licitatório',8	,false, false, false, 1, 'int8', 'Processo Licitatório');
+        INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l215_sequencial','int8' ,'Cd. Sequencial','', 'Cd. Sequencial',8,false, false, false, 1, 'int8', 'Cd. Sequencial');
+        INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l215_liclicita','int8' ,'Processo Licitatorio','', 'Processo Licitatorio',8	,false, false, false, 1, 'int8', 'Processo Licitatorio');
         INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l215_dataanexo','date' ,'data do anexo','', 'data do anexo',16	,false, false, false, 0, 'date', 'data do anexo');
         INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l215_id_usuario','int8' ,'Usuario','', 'Usuario',16	,false, false, false, 0, 'int8', 'Usuario');
         INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l215_hora','varchar' ,'hora','', 'hora',5	,false, false, false, 0, 'varchar', 'hora');
-        INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l215_instit','int8' ,'Instituição','', 'Instituição',16	,false, false, false, 0, 'int8', 'Instituição');
+        INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l215_instit','int8' ,'InstituiÃ§Ã£o','', 'InstituiÃ§Ã£o',16	,false, false, false, 0, 'int8', 'InstituiÃ§Ã£o');
 
 
         INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'l215_sequencial')		 	, 1, 0);
@@ -132,9 +132,9 @@ class Oc18251 extends AbstractMigration
         
         INSERT INTO db_sysarquivo VALUES((select max(codarq)+1 from db_sysarquivo),'licanexopncpdocumento','cadastro dos documentos de anexos pncp','l216','2022-08-22','cadastro dos documentosde anexos pncp',0,'f','f','f','f');
 
-        INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l216_sequencial','int8' ,'Cód. Sequencial','', 'Cód. Sequencial',8,false, false, false, 1, 'int8', 'Cód. Sequencial');
-        INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l216_licanexospncp','int8' ,'Processo Licitatório','', 'Processo Licitatório',8	,false, false, false, 1, 'int8', 'Processo Licitatório');
-        INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l216_documento','oid' ,'identificação documento','', 'identificação documento',255	,false, false, false, 1, 'oid', 'identificação documento');
+        INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l216_sequencial','int8' ,'Cd. Sequencial','', 'Cd. Sequencial',8,false, false, false, 1, 'int8', 'Cd. Sequencial');
+        INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l216_licanexospncp','int8' ,'Processo Licitatorio','', 'Processo Licitatorio',8	,false, false, false, 1, 'int8', 'Processo Licitatorio');
+        INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l216_documento','oid' ,'identificao documento','', 'identificao documento',255	,false, false, false, 1, 'oid', 'identificao documento');
         INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l216_nomedocumento','varchar' ,'Nome documento','', 'Nome documento',255	,false, false, false, 0, 'varchar', 'Nome documento');
 
         INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l216_tipoanexo','int8' ,'Tipo do anexo','', 'Tipo do anexo',8	,false, false, false, 1, 'int8', 'Tipo do anexo');
