@@ -110,7 +110,7 @@ class Oc18251 extends AbstractMigration
         CREATE TABLE licanexopncp(
         l215_sequencial         int8 NOT NULL default 0,
         l215_liclicita          int8 NOT NULL default 0,
-        l215_dataanexo                date NOT NULL default 0,
+        l215_dataanexo                date NOT NULL,
         l215_id_usuario                int8 NOT NULL default 0,
         l215_hora                varchar(5) NOT NULL default 0,
         l215_instit                int8 NOT NULL default 0);
