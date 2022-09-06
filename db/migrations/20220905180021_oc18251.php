@@ -51,39 +51,39 @@ class Oc18251 extends AbstractMigration
         ALTER TABLE tipoanexo ADD PRIMARY KEY (l213_sequencial);
 
 
-        INSERT INTO licitacao.tipoanexo VALUES (1,'Aviso de Contratação Direta');
+        INSERT INTO tipoanexo VALUES (1,'Aviso de Contratação Direta');
 
-        INSERT INTO licitacao.tipoanexo VALUES (2,'Edital');
+        INSERT INTO tipoanexo VALUES (2,'Edital');
 
-        INSERT INTO licitacao.tipoanexo VALUES (3,'Minuta do Contrato');
+        INSERT INTO tipoanexo VALUES (3,'Minuta do Contrato');
 
-        INSERT INTO licitacao.tipoanexo VALUES (4,'Termo de Referência');
+        INSERT INTO tipoanexo VALUES (4,'Termo de Referência');
 
-        INSERT INTO licitacao.tipoanexo VALUES (5,'Anteprojeto');
+        INSERT INTO tipoanexo VALUES (5,'Anteprojeto');
 
-        INSERT INTO licitacao.tipoanexo VALUES (6,'Projeto Básico');
+        INSERT INTO tipoanexo VALUES (6,'Projeto Básico');
 
-        INSERT INTO licitacao.tipoanexo VALUES (7,'Estudo Técnico Preliminar');
+        INSERT INTO tipoanexo VALUES (7,'Estudo Técnico Preliminar');
 
-        INSERT INTO licitacao.tipoanexo VALUES (8,'Projeto Executivo');
+        INSERT INTO tipoanexo VALUES (8,'Projeto Executivo');
 
-        INSERT INTO licitacao.tipoanexo VALUES (9,'Mapa de Riscos');
+        INSERT INTO tipoanexo VALUES (9,'Mapa de Riscos');
 
-        INSERT INTO licitacao.tipoanexo VALUES (10,'DOD');
+        INSERT INTO tipoanexo VALUES (10,'DOD');
 
-        INSERT INTO licitacao.tipoanexo VALUES (11,'Ata de Registro de Preço');
+        INSERT INTO tipoanexo VALUES (11,'Ata de Registro de Preço');
 
-        INSERT INTO licitacao.tipoanexo VALUES (12,'Contrato');
+        INSERT INTO tipoanexo VALUES (12,'Contrato');
 
-        INSERT INTO licitacao.tipoanexo VALUES (13,'Termo de Rescisão');
+        INSERT INTO tipoanexo VALUES (13,'Termo de Rescisão');
 
-        INSERT INTO licitacao.tipoanexo VALUES (14,'Termo Aditivo');
+        INSERT INTO tipoanexo VALUES (14,'Termo Aditivo');
 
-        INSERT INTO licitacao.tipoanexo VALUES (15,'Termo de Apostilamento');
+        INSERT INTO tipoanexo VALUES (15,'Termo de Apostilamento');
 
-        INSERT INTO licitacao.tipoanexo VALUES (16,'Outros');
+        INSERT INTO tipoanexo VALUES (16,'Outros');
 
-        INSERT INTO licitacao.tipoanexo VALUES (17,'Nota de Empenho');
+        INSERT INTO tipoanexo VALUES (17,'Nota de Empenho');
         
         
         
