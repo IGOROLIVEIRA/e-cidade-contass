@@ -125,8 +125,7 @@ $clplacaixa->rotulo->label("k80_data");
         }
           
         $sql  = " select k80_codpla, k80_data, k80_dtaut as dl_autenticação, k81_valor , dtestorno as dl_estorno ";
-        $sql .= "   from ( select  k80_codpla,k80_data,  k80_dtaut, SUM(k81_valor) as k81_valor, '' as dtestorno "; 
-        /*
+        $sql .= "   from ( select DISTINCT k80_codpla,k80_data, k80_dtaut,  "; 
         $sql .= "                 (select sum(k81_valor)"; 
         $sql .= "                    from placaixarec";
         $sql .= "                   where k81_codpla = k80_codpla ) as k81_valor ";
@@ -140,7 +139,6 @@ $clplacaixa->rotulo->label("k80_data");
         $sql .= "                   AND extract(year from k80_data) = {$ano} ";
         $sql .= "                   ORDER BY 1 DESC limit 1 ";
         $sql .= "                ) as dtestorno        ";
-        */
 				$sql .= "	  from placaixa";
 				$sql .= "	      left join placaixarec a on k81_codpla = k80_codpla "; 
 				$sql .= "	      left join corplacaixa   on k82_seqpla = k81_seqpla";
@@ -149,7 +147,7 @@ $clplacaixa->rotulo->label("k80_data");
 				$sql .= "	 where k80_instit = ".db_getsession("DB_instit");   
 				$sql .= "     and extract(year from k80_data) = $ano ";  
 				$sql .= "     $where ";
-				$sql .= "	   {$sWhere} GROUP BY  k80_codpla,k80_data,  k80_dtaut";
+				$sql .= "	   {$sWhere} ";
 				$sql .= "	 order by k80_codpla desc )as x ";
 
 				
