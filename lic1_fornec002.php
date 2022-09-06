@@ -179,6 +179,33 @@ for ($iCont = 0; $iCont < pg_num_rows($result); $iCont++) {
 
 if (isset($incluir)) {
 
+  $sqllei = "select l20_leidalicitacao from liclicita where l20_codigo = $l20_codigo";
+
+  $rslei = db_query($sqllei);
+  $dleis = db_utils::fieldsMemory($rslei, 0);
+
+  if($dleis->l20_leidalicitacao==1){
+    $sqlvinculo = "select * from licanexopncpdocumento 
+    inner join licanexopncp on
+      licanexopncp.l215_sequencial  = licanexopncpdocumento.l216_licanexospncp
+    where 
+      l215_liclicita = $l20_codigo";
+      $rsvinculo = db_query($sqlvinculo);
+      $dvinculo = db_utils::fieldsMemory($rsvinculo, 0);
+      $quatrs = pg_num_rows($rsvinculo);
+
+      if($quatrs == 0){
+        echo "<script>
+					           alert('A Licitação selecionada é decorrente da Lei nº 14133/2021, sendo assim, é necessário anexar no mínimo um documento na rotina Anexos Envio PNCP!!');
+                     top.corpo.location.href='lic1_fornec001.php?chavepesquisa=$l20_codigo';
+					        </script>";
+
+        exit;
+
+      }
+     
+  }
+
   if (strlen($tipocgm) == 14) {
 
     if ((isset($tipopart1) && isset($tipopart2)) || isset($tipopart3)) {
