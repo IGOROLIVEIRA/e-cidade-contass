@@ -36,7 +36,6 @@ require_once("model/caixa/PlanilhaArrecadacao.model.php");
 require_once("classes/db_tabrec_classe.php");
 require_once("model/caixa/ImportacaoReceita.model.php");
 
-error_reporting(E_ALL);
 if (isset($processar)) {
     // Inicia uma transação no banco para rollback em caso de erro
     db_inicio_transacao();

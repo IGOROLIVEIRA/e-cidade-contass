@@ -24,16 +24,11 @@
  *  Copia da licenca no diretorio licenca/licenca_en.txt
  *                                licenca/licenca_pt.txt
  */
-class ImportacaoReceitaExtraOrcamentariaLayout2
-{
-    private $oReceita;
 
-    public function __construct($sLinha)
-    {
-        $this->oReceita = new stdClass();
-        $this->preencherLinha($sLinha);
-    }
+require_once("model/caixa/ImportacaoReceitaLayout2.php");
 
+class ImportacaoReceitaExtraOrcamentariaLayout2 extends ImportacaoReceitaLayout2
+{       
     public function preencherLinha($sLinha)
     {
         if (!$this->eReceitaExtraOrcamentaria($sLinha))
@@ -104,35 +99,5 @@ class ImportacaoReceitaExtraOrcamentariaLayout2
             $this->oReceita->oContaTesouraria = $oContaTesouraria;
             $this->oReceita->iNumeroCgm = $oAgenteArrecadador->k174_numcgm;
         }
-    }
-
-    public function recuperarLinha()
-    {
-        return $this->oReceita;
-    }
-
-    /**
-     * Função para formatar a data confida no txt
-     *
-     * @param [string] $sData
-     * @return date
-     */
-    public function montarData($sData)
-    {
-        $sDia = substr($sData, 0, 2);
-        $sMes = substr($sData, 2, 2);
-        $sAno = substr($sData, 4, 4);
-        return date("Y-m-d", strtotime("{$sDia}-{$sMes}-{$sAno}"));
-    }
-
-    /**
-     * Função para formatar os valores contidos no txt
-     *
-     * @param [string] $sValor
-     * @return float
-     */
-    public function montarValor($sValor)
-    {
-        return (float) ((int) substr($sValor, 0, 11)) . "." . substr($sValor, 11, 2);
     }
 }
