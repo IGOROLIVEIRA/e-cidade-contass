@@ -1,4 +1,3 @@
-
 <?
 /*
  *     E-cidade Software Publico para Gestao Municipal
@@ -72,7 +71,6 @@ $clliccomissaocgm     = new cl_liccomissaocgm;
 
 $db_opcao = 1;
 $db_botao = true;
-$exibe_publicacoes = false;
 
 if (isset($incluir)) {
 
@@ -467,10 +465,6 @@ if (isset($incluir)) {
 
 		// db_fim_transacao(false);
 		db_fim_transacao($sqlerro);
-
-		if ($oPost->modalidade_tribunal != 100 && $oPost->modalidade_tribunal != 101 && $oPost->modalidade_tribunal != 102 && $oPost->modalidade_tribunal != 103) {
-			$exibe_publicacoes = true;
-		}
 	}
 }
 $l20_liclocal = 0;
@@ -523,9 +517,7 @@ if (isset($incluir)) {
 		echo "<script> document.form1." . $nomeCampo . ".style.backgroundColor='#99A9AE';</script>";
 		if ($sqlerro == false) {
 
-			if ($exibe_publicacoes) {
-				echo "<script>parent.document.getElementById('liclicpublicacoes').style.display = 'block';</script>";
-			}
+			echo "<script>parent.document.getElementById('liclicpublicacoes').style.display = 'block';</script>";
 
 			if (db_getsession("DB_anousu") >= 2016) {
 				if ($l20_tipojulg == 3) {

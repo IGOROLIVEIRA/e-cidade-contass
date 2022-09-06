@@ -218,11 +218,11 @@ if (isset($db_opcaoal)) {
                         db_fieldsmemory($resultTipocom, 0)->l03_pctipocompratribunal;
                         if ($clpcorcamforne->numrows > 0) {
                             $tiposcompra = array(102, 103);
-                            echo "<input name='gera'    type='submit' id='gera'    value='Gerar relatï¿½rio' onclick='js_gerarel();' " . ($db_botao == false ? "disabled" : "") . ">&nbsp;";
+                            echo "<input name='gera'    type='submit' id='gera'    value='Gerar relatório' onclick='js_gerarel();' " . ($db_botao == false ? "disabled" : "") . ">&nbsp;";
                             echo "<input name='gerarxlsbranco' type='button' id='gerarxlsbranco' value='xls em Branco' onclick='js_gerarxlsbranco()'>&nbsp";
 
                             if (!in_array($l03_pctipocompratribunal, $tiposcompra)) {
-                                echo "<input name='lancval' type='button' id='lancval' value='Lanï¿½ar valores'  onclick='top.corpo.document.location.href=\"lic1_orcamlancval001.php?l20_codigo=$l20_codigo&pc20_codorc=$pc20_codorc\"' " . ($db_botao == false ? "disabled" : "") . ">";
+                                echo "<input name='lancval' type='button' id='lancval' value='Lançar valores'  onclick='top.corpo.document.location.href=\"lic1_orcamlancval001.php?l20_codigo=$l20_codigo&pc20_codorc=$pc20_codorc\"' " . ($db_botao == false ? "disabled" : "") . ">";
                             }
                         }
                     }
@@ -249,11 +249,11 @@ if (isset($db_opcaoal)) {
                         $sWhere = " pc21_codorc=" . @$pc20_codorc;
                     }
                     /*
-                     * O campo ed18_i_credenciamento faz parte da tabela escola, mas foi utilizado apenas porque possui o rï¿½tulo 'Credenciamento'
-                     * que ï¿½ utilizado na listagem dos fornecedores lanï¿½ados.
+                     * O campo ed18_i_credenciamento faz parte da tabela escola, mas foi utilizado apenas porque possui o rótulo 'Credenciamento'
+                     * que é utilizado na listagem dos fornecedores lançados.
                      *
                      * */
-                    $sCampos = "DISTINCT pc21_orcamforne,pc21_codorc,pc21_numcgm,z01_nome,(CASE WHEN l205_datacred IS NOT NULL THEN 'SIM' ELSE 'Nï¿½o' END) AS ed18_i_credenciamento";
+                    $sCampos = "DISTINCT pc21_orcamforne,pc21_codorc,pc21_numcgm,z01_nome,(CASE WHEN l205_datacred IS NOT NULL THEN 'SIM' ELSE 'NÃO' END) AS ed18_i_credenciamento";
                     $cliframe_alterar_excluir->sql           = $clpcorcamforne->sql_query_credenciados(null, $sCampos, "", $sWhere);
                     $cliframe_alterar_excluir->campos        = "pc21_orcamforne,pc21_numcgm,z01_nome,ed18_i_credenciamento";
                     $cliframe_alterar_excluir->legenda       = "FORNECEDORES LANÇADOS";
