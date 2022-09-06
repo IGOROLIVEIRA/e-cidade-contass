@@ -33,3 +33,4 @@ integracao_externa/portal_transparencia/libs/config.ini
 e-cidade.sublime-workspace
 e-cidade.sublime-project
 composer.lock
+tests/*
