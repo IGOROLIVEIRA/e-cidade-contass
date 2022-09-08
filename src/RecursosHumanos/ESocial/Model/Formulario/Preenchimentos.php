@@ -312,7 +312,8 @@ class Preenchimentos
         when rh02_ocorre = '3' then 3
         when rh02_ocorre = '4' then 4
         else '1'
-        end as grauExp
+        end as grauExp,
+        rh30_regime
     from
         rhpessoal
     left join rhpessoalmov on
@@ -388,27 +389,15 @@ class Preenchimentos
                                       and r33_instit = fc_getsession('DB_instit')::int
                                ) as x on r33_codtab = rhpessoalmov.rh02_tbprev+2
     where h13_categoria in ('101', '106', '111', '301', '302', '303','304', '305', '306', '309', '312', '313', '902')
-    and rh30_vinculo = 'A'
-    and r33_tiporegime = '2'
-    and
-	exists (SELECT
-	1
-from
-	gerfsal
-where
-	r14_anousu = fc_getsession('DB_anousu')::int
-	and r14_mesusu = date_part('month', fc_getsession('DB_datausu')::date)
-	and r14_instit = fc_getsession('DB_instit')::int
-	and r14_regist = rhpessoal.rh01_regist)
-    and rh05_recis is null";
+    and rh30_vinculo in ('I','P')";
 
         if ($matricula != null) {
-            $sql .= "and rh01_regist in ($matricula) ";
+            $sql .= " and rh01_regist in ($matricula) ";
         }
         $rs = \db_query($sql);
 
         if (!$rs) {
-            throw new \Exception("Erro ao buscar os preenchimentos do S1210");
+            throw new \Exception("Erro ao buscar os preenchimentos do S1207");
         }
         /**
          * @todo busca os empregadores da instituição e adicona para cada rubriuca
