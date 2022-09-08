@@ -389,16 +389,15 @@ class Preenchimentos
                                       and r33_instit = fc_getsession('DB_instit')::int
                                ) as x on r33_codtab = rhpessoalmov.rh02_tbprev+2
     where h13_categoria in ('101', '106', '111', '301', '302', '303','304', '305', '306', '309', '312', '313', '902')
-    and rh30_vinculo = 'A'
-    and r33_tiporegime = '2'";
+    and rh30_vinculo in ('I','P')";
 
         if ($matricula != null) {
-            $sql .= "and rh01_regist in ($matricula) ";
+            $sql .= " and rh01_regist in ($matricula) ";
         }
         $rs = \db_query($sql);
 
         if (!$rs) {
-            throw new \Exception("Erro ao buscar os preenchimentos do S1210");
+            throw new \Exception("Erro ao buscar os preenchimentos do S1207");
         }
         /**
          * @todo busca os empregadores da instituição e adicona para cada rubriuca
