@@ -144,6 +144,12 @@ class ImportacaoReceita
      */
     public function adicionarReceitaExtraOrcamentaria($oReceitaExtraOrcamentaria)
     {
+        if (array_key_exists($oReceitaExtraOrcamentaria->iIdentificadorReceita, $this->oTransferencias)) {
+            $valorAtualizado = $this->oTransferencias[$oReceitaExtraOrcamentaria->iIdentificadorReceita]->getValor() + $oReceitaExtraOrcamentaria->nValor;
+            $this->oTransferencias[$oReceitaExtraOrcamentaria->iIdentificadorReceita]->setValor($valorAtualizado);
+            return;
+        }
+
         $oTransferencia = TransferenciaFactory::getInstance($this->iCodigoTipoOperacao, $this->iCodigoSlip);
         $oTransferencia->setContaDebito($oReceitaExtraOrcamentaria->oContaTesouraria->getCodigoConta());
         $oTransferencia->setContaCredito($oReceitaExtraOrcamentaria->iContaCredito);
@@ -163,7 +169,9 @@ class ImportacaoReceita
         if ($oTransferencia instanceof TransferenciaFinanceira) {
             $oTransferencia->setInstituicaoDestino("");
         }
-        $this->oTransferencias[] = $oTransferencia;
+
+        $this->oTransferencias[$oReceitaExtraOrcamentaria->iIdentificadorReceita] = $oTransferencia;
+        return;
     }
 
     /**
@@ -198,6 +206,10 @@ class ImportacaoReceita
     public function salvarReceitaExtraOrcamentaria()
     {
         foreach ($this->oTransferencias as $oTransferencia) {
+            if ($oTransferencia->getValor() <= 0) {
+                $nomeCGM = CgmFactory::getInstanceByCgm($oTransferencia->getCodigoCgm())->getNome();
+                throw new BusinessException("Não foi possível importar o arquivo! O agente arrecadador {$nomeCGM} e conta contábil de reduzido " . $oTransferencia->getContaCredito() . " está com valor menor que zero na arrecadação. Ajuste o lançamento e tente novamente!");
+            }
             $oTransferencia->salvar();
             if ((int) $oTransferencia->getCodigoSlip() <= 0)
                 throw new BusinessException("Não foi possível salvar as receitas extra-orçamentárias");
