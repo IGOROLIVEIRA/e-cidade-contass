@@ -665,7 +665,7 @@ var oAjax = new Ajax.Request(
    */
   function js_pesquisarLicitacao(lMostra) {
 
-    var sArquivo = 'func_liclicita.php?situacao=0&lei=1&funcao_js=parent.';
+    var sArquivo = 'func_liclicita.php?situacao=0&pncp=1&lei=1&funcao_js=parent.';
 
     if (lMostra) {
       sArquivo += 'js_mostraLicitacao|l20_codigo|l20_objeto';
