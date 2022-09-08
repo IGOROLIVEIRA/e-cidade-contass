@@ -164,6 +164,22 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
     sContent += "             <td id=\"ctnVeiculoDivulgacao\"></td>";
     sContent += "           </tr> ";
 
+    sContent += "           <tr style='display: none;'>";
+    sContent += "             <td colspan='2'>";
+    sContent += "               <fieldset class=\"separator\">";
+    sContent += "                 <legend>Justificativa</legend> ";
+    sContent += "                 <table border='0'> ";
+    sContent += "                    <tr> ";
+    sContent += "                       <td><label class=\"bold\" for=\"oTxtJustificativa\"></label>";
+    sContent += "                       </td>";
+    sContent += "                       <td id=\"ctnJustificativa\">";     
+    sContent += "                       </td>";
+    sContent += "                    </tr> ";
+    sContent += "                  </table> ";
+    sContent += "               </fieldset> ";
+    sContent += "             </td> ";
+    sContent += "           </tr>";
+
     sContent += "           <tr> ";
     sContent += "             <td colspan='2'>";
     sContent += "               <fieldset class=\"separator\">";
@@ -229,7 +245,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
         if (lMostrar == true) {
 
-            var sUrl = 'func_acordo.php?funcao_js=parent.js_mostraacordo1|ac16_sequencial|ac16_resumoobjeto|ac16_datafim&iTipoFiltro=4&ac16_acordosituacao=4';
+            var sUrl = 'func_acordo.php?funcao_js=parent.js_mostraacordo1|ac16_sequencial|ac16_resumoobjeto|ac16_datafim|ac16_licitacao&iTipoFiltro=4&ac16_acordosituacao=4';
             js_OpenJanelaIframe('top.corpo',
                 'db_iframe_acordo',
                 sUrl,
@@ -268,7 +284,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
     /**
      * Retorno da pesquisa acordos
      */
-    js_mostraacordo = function (chave1, chave2, chave3, erro) {
+    js_mostraacordo = function (chave1, chave2, chave3, erro,chave4) {
 
         if (erro == true) {
 
@@ -276,8 +292,9 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             me.oTxtDescricaoAcordo.setValue('');
             $('oTxtDescricaoAcordo').focus();
         } else {
+            alert();
 
-            me.oTxtCodigoAcordo.setValue(chave1);
+            me.oTxtCodigoAcordo.setValue(chave4);
             me.oTxtDescricaoAcordo.setValue(chave2);
             me.pesquisarDadosAcordo();
         }
@@ -412,6 +429,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             me.oTxtDataReferencia.setValue('');
             me.oTextAreaDescricaoAlteracao.setValue('');
             me.oTxtVeiculoDivulgacao.setValue('');
+            me.oTxtJustificativa.setValue('');
             me.oTxtNumeroAditamento.setValue(oRetorno.seqaditivo);
 
             aItensPosicao = oRetorno.itens;
@@ -507,6 +525,12 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         me.oTxtVeiculoDivulgacao.show($('ctnVeiculoDivulgacao'));
 
         /**
+         * Justificativa
+         */
+         me.oTxtJustificativa = new DBTextField('oTxtJustificativa', me.sInstance + '.oTxtJustificativa', '', 150);
+         me.oTxtJustificativa.show($('ctnJustificativa'));
+
+        /**
          * Vigência
          */
         me.oTxtDataInicial = new DBTextFieldData('oTxtDataInicial', me.sInstance + '.oTxtDataInicial', '');
@@ -534,6 +558,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         me.oTextAreaDescricaoAlteracao.setRequired(true);
         me.oTextAreaDescricaoAlteracao.setMaxLength(250);
         me.oTxtVeiculoDivulgacao.setMaxLength(50);
+        me.oTxtJustificativa.setMaxLength(5120);
 
 
         /**
@@ -929,6 +954,10 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
         if (me.oTxtVeiculoDivulgacao.getValue() == "" && Assinatura == true) {
             return alert("Obrigatório informar o veículo de divulgação do aditivo.");
+        }
+
+        if (me.oTxtJustificativa.getValue() == "" && Assinatura == true) {
+            return alert("Obrigatório informar a justificativa do aditivo.");
         }
 
         if (me.oTxtDataAssinatura.getValue() == "" && Assinatura == true) {
