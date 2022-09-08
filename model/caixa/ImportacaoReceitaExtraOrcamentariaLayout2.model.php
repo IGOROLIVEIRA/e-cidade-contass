@@ -40,10 +40,11 @@ class ImportacaoReceitaExtraOrcamentariaLayout2 extends ImportacaoReceitaLayout2
         $this->oReceita->sCodAgencia      = substr($sLinha, 3, 4);
         $this->oReceita->dDataCredito     = $this->montarData(substr($sLinha, 7, 8));
         $this->oReceita->nValor           = $this->montarValor(substr($sLinha, 21, 13));
-        $this->oReceita->sPcasp           = $this->montarPcasp(trim(str_replace(".", "", substr($sLinha, 35, 24))));
+        $this->oReceita->sPcasp           = $this->montarPcasp(str_replace(".", "", substr(trim($sLinha), 35, -3)));
         $this->oReceita->iRecurso         = substr(trim($sLinha), -3);
         $this->preencherContaCredito();
         $this->preencherAgenteArrecadador();
+        $this->preencherIdentificadorReceita();
     }
 
     /**
@@ -59,9 +60,17 @@ class ImportacaoReceitaExtraOrcamentariaLayout2 extends ImportacaoReceitaLayout2
         return $pcasp;
     }
 
-    public function identificadorReceita()
+    /**
+     * Gera identificador para agrupamento de slip e correção de saldo negativo
+     *
+     * @return void
+     */
+    public function preencherIdentificadorReceita()
     {
-        $this->iIdentificadorReceita = $this->oReceita->iCodBanco . $this->oReceita->sCodAgencia . $this->oReceita->iContaCredito . $this->oReceita->iRecurso;
+        $this->oReceita->iIdentificadorReceita = $this->oReceita->iCodBanco . 
+            $this->oReceita->iNumeroCgm .
+            $this->oReceita->iContaCredito . 
+            $this->oReceita->iRecurso;
     }
 
     public function preencherContaCredito()
