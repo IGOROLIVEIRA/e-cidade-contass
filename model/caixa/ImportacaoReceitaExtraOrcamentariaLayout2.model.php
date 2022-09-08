@@ -40,10 +40,28 @@ class ImportacaoReceitaExtraOrcamentariaLayout2 extends ImportacaoReceitaLayout2
         $this->oReceita->sCodAgencia      = substr($sLinha, 3, 4);
         $this->oReceita->dDataCredito     = $this->montarData(substr($sLinha, 7, 8));
         $this->oReceita->nValor           = $this->montarValor(substr($sLinha, 21, 13));
-        $this->oReceita->sPcasp           = trim(str_replace(".", "", substr($sLinha, 35, 24)));
+        $this->oReceita->sPcasp           = $this->montarPcasp(trim(str_replace(".", "", substr($sLinha, 35, 24))));
         $this->oReceita->iRecurso         = substr(trim($sLinha), -3);
         $this->preencherContaCredito();
         $this->preencherAgenteArrecadador();
+    }
+
+    /**
+     * Função responsável por montar o pcasp da extra-orçamentária
+     *
+     * @param string $pcasp
+     * @return string
+     */
+    public function montarPcasp($pcasp)
+    {
+        if (substr($pcasp, 0, 3) === "922")
+            return substr($pcasp, 2);
+        return $pcasp;
+    }
+
+    public function identificadorReceita()
+    {
+        $this->iIdentificadorReceita = $this->oReceita->iCodBanco . $this->oReceita->sCodAgencia . $this->oReceita->iContaCredito . $this->oReceita->iRecurso;
     }
 
     public function preencherContaCredito()
@@ -70,7 +88,7 @@ class ImportacaoReceitaExtraOrcamentariaLayout2 extends ImportacaoReceitaLayout2
      */
     public function eReceitaExtraOrcamentaria($sLinha)
     {
-        if (in_array(substr($sLinha, 35, 1), array("2")))
+        if (in_array(substr($sLinha, 35, 1), array("2")) || in_array(substr($sLinha, 35, 3), array("922")))
             return true;
         return false;
     }
