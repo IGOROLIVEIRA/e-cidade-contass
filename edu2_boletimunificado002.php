@@ -25,13 +25,13 @@
  *                                licenca/licenca_pt.txt
  */
 
-require_once ("fpdf151/scpdf.php");
-require_once ("libs/db_utils.php");
-require_once ("libs/db_app.utils.php");
-require_once ("libs/db_stdlib.php");
-require_once ("libs/db_stdlibwebseller.php");
-require_once ("dbforms/db_funcoes.php");
-require_once ("std/DBDate.php");
+require_once("fpdf151/scpdf.php");
+require_once("libs/db_utils.php");
+require_once("libs/db_app.utils.php");
+require_once("libs/db_stdlib.php");
+require_once("libs/db_stdlibwebseller.php");
+require_once("dbforms/db_funcoes.php");
+require_once("std/DBDate.php");
 
 $oGet       = db_utils::postMemory($_GET);
 $aRegencias = array();
@@ -63,7 +63,7 @@ $oDadosTurma    = db_utils::fieldsMemory($rsTurma, 0);
 $sNomeEscola       = $oDadosTurma->escola;
 $iCodigoReferencia = $oDadosTurma->ed18_codigoreferencia;
 
-if ( $iCodigoReferencia != null ) {
+if ($iCodigoReferencia != null) {
   $sNomeEscola = "{$iCodigoReferencia} - {$sNomeEscola}";
 }
 
@@ -75,7 +75,7 @@ $sSqlDepart = $oDaoDepart->sql_query_dados_depart($oDadosTurma->ed18_i_codigo, "
 $rsDepart   = $oDaoDepart->sql_record($sSqlDepart);
 $sLogo      = "";
 if ($oDaoDepart->numrows > 0) {
-  $sLogo = "imagens/files/".db_utils::fieldsMemory($rsDepart, 0)->logo;
+  $sLogo = "imagens/files/" . db_utils::fieldsMemory($rsDepart, 0)->logo;
 }
 
 $iHeigth          = 4;
@@ -112,7 +112,7 @@ foreach ($aMatricula as $iMatricula) {
     $oPdf->Rect(7, $iAlturaInicial, 195, 17);
 
     if (!empty($sLogo)) {
-      $oPdf->Image($sLogo, ($oPdf->w - 20), $iAlturaInicial +2, 9);
+      $oPdf->Image($sLogo, ($oPdf->w - 20), $iAlturaInicial + 2, 9);
     }
   } else {
 
@@ -153,7 +153,7 @@ foreach ($aMatricula as $iMatricula) {
   $iTamanhoColunaPeriodo      = 10;
   // Numeros de periodos que serao apresentados no relatorio
   $iNumeroDePeriodosAvaliacao = count($oGradeAproveitamento->getPeriodos());
-  $iPeriodosParecer           = count( $oGradeAproveitamento->getPeriodos() );
+  $iPeriodosParecer           = count($oGradeAproveitamento->getPeriodos());
 
   /**
    * Este array sera preenchido com os pareceres descritivos de cada periodo, obdecendo o parametro "Disciplinas"
@@ -167,9 +167,32 @@ foreach ($aMatricula as $iMatricula) {
   /**
    * Cabecalho do relatorio
    */
-  $oPdf->Cell(7,   $iHeigth, "Acompanhamento do Rendimento do Aluno /".$oDadosTurma->anocalendario, 0, 1);
-  $oPdf->Cell(7,   $iHeigth, "{$sNomeEscola}" , 0, 1);
-  $oPdf->Cell(130, $iHeigth, "Aluno(a): " . $oMatricula->getAluno()->getNome(), 0, 0);
+
+  $oDepartamento = new DBDepartamento(db_getsession("DB_coddepto"));
+  $iDepartamento = $oDepartamento->getCodigo();
+
+
+  $result = db_query("select ed05_i_aparecerelatorio,ed05_i_ano,ed05_i_codigo, ed05_c_numero, ed05_c_finalidade, ed83_c_descr as dl_tipo,
+case when ed05_c_competencia='F' then 'FEDERAL' when ed05_c_competencia='E' then 'ESTADUAL' else 'MUNICIPAL'
+end as ed05_c_competencia, ed05_i_ano from atolegal inner join tipoato on tipoato.ed83_i_codigo
+= atolegal.ed05_i_tipoato inner join atoescola on atoescola.ed19_i_ato = atolegal.ed05_i_codigo
+where ed19_i_escola = $iDepartamento and ed05_i_aparecerelatorio = true order by ed05_i_codigo ;");
+
+  $atolegal = db_utils::fieldsMemory($result, 0);
+
+  if ($atolegal->ed05_c_finalidade == "") {
+    $atolegalcabecalho = "";
+  } else {
+    $atolegalcabecalho = $atolegal->ed05_c_finalidade . "/" . $atolegal->dl_tipo . " nº: " .  $atolegal->ed05_c_numero . "/" . $atolegal->ed05_i_ano;
+  }
+
+  $oPdf->SetFont('arial', '', 5);
+
+
+  $oPdf->Cell(7,   $iHeigth - 1, "Acompanhamento do Rendimento do Aluno /" . $oDadosTurma->anocalendario, 0, 1);
+  $oPdf->Cell(7,   $iHeigth - 1, "{$sNomeEscola}", 0, 1);
+  $oPdf->Cell(7,   $iHeigth - 1, $atolegalcabecalho, 0, 1);
+  $oPdf->Cell(130, $iHeigth - 1, "Aluno(a): " . $oMatricula->getAluno()->getNome(), 0, 0);
   $oPdf->Cell(20,  $iHeigth, "Nº " . $oMatricula->getAluno()->getCodigoAluno(), 0, 0);
   $oPdf->Cell(20,  $iHeigth, "Ano " . $oDadosTurma->anocalendario, 0, 1);
   $oPdf->Cell(70,  $iHeigth, "Turma: " . $oDadosTurma->turma, 0, 0);
@@ -234,7 +257,7 @@ foreach ($aMatricula as $iMatricula) {
       if ($oAproveitamento->oAproveitamento->sFormaAvaliacao == "PARECER") {
 
         if ($oGet->punico = "yes" && (isset($aDisciplinaParecer[$oAproveitamento->sDescricao]) &&
-            count($aDisciplinaParecer[$oAproveitamento->sDescricao]) > 0)) {
+          count($aDisciplinaParecer[$oAproveitamento->sDescricao]) > 0)) {
           break;
         }
 
@@ -259,7 +282,7 @@ foreach ($aMatricula as $iMatricula) {
         $mAproveitamento = "PD";
       }
       // Quando aluno possui uma NEE ele pode ser avaliado por parecer, mesmo a forma de avaliação da turma sendo outra
-      if ( $oMatricula->isAvaliadoPorParecer() && !empty($mAproveitamento) ) {
+      if ($oMatricula->isAvaliadoPorParecer() && !empty($mAproveitamento)) {
         $mAproveitamento = "PD";
       }
 
@@ -275,7 +298,7 @@ foreach ($aMatricula as $iMatricula) {
       $mAproveitamentoFinal = "";
     }
     $oPdf->Cell($iTamanhoColunaPeriodo, $iAlturaLinha, $mAproveitamentoFinal, 1, 1, "C");
-    */
+     */
     $oPdf->ln();
   }
 
@@ -309,7 +332,7 @@ foreach ($aMatricula as $iMatricula) {
   $oPdf->SetY($iYAntesImprimirDisciplina);
   $oPdf->SetX(52 + ($iNumeroDePeriodosAvaliacao * 10));
 
-  $iPosicaoDoEixoX             = 52 + (($iNumeroDePeriodosAvaliacao * 10 ));
+  $iPosicaoDoEixoX             = 52 + (($iNumeroDePeriodosAvaliacao * 10));
   $iAlturaInicialQuadroParecer = $iYAntesImprimirDisciplina; // A Altura inicial do quadro é a mesma da 1a disciplina
   $iLarguraDoQuadro            = ($oPdf->w - 8) - $iPosicaoDoEixoX;
 
@@ -319,7 +342,7 @@ foreach ($aMatricula as $iMatricula) {
     // Desenha o retangulo do Parecer
     $oPdf->Rect($iPosicaoDoEixoX, $iAlturaInicialQuadroParecer, $iLarguraDoQuadro, $iAlturaQuadroParecerDescritivo);
 
-    $sTextoParecer = "{$sPeriodo}: " ;
+    $sTextoParecer = "{$sPeriodo}: ";
 
     if (is_array($aParecer)) {
       // Concatenamos todos os pareceres do periodo em uma so string
@@ -328,7 +351,7 @@ foreach ($aMatricula as $iMatricula) {
       }
     }
 
-    $oPdf->SetY($oPdf->GetY() +1);
+    $oPdf->SetY($oPdf->GetY() + 1);
     $oPdf->SetX($iPosicaoDoEixoX);
 
     $iTamanhoStringValida = retornaQuantidadeDeCaracteresParaUmQuadro($iLarguraDoQuadro, $iAlturaQuadroParecerDescritivo);
@@ -348,13 +371,14 @@ foreach ($aMatricula as $iMatricula) {
   /**
    * Resultado final do aluno
    */
-  $sResultadoFinal = ResultadoFinal($oMatricula->getCodigo(),
-                                    $oMatricula->getAluno()->getCodigoAluno(),
-                                    $oMatricula->getTurma()->getCodigo(),
-                                    $oMatricula->getSituacao(),
-                                    $oMatricula->isConcluida()?'S':'N',
-                                    $oMatricula->getTurma()->getBaseCurricular()->getCurso()->getEnsino()->getCodigo()
-                                    );
+  $sResultadoFinal = ResultadoFinal(
+    $oMatricula->getCodigo(),
+    $oMatricula->getAluno()->getCodigoAluno(),
+    $oMatricula->getTurma()->getCodigo(),
+    $oMatricula->getSituacao(),
+    $oMatricula->isConcluida() ? 'S' : 'N',
+    $oMatricula->getTurma()->getBaseCurricular()->getCurso()->getEnsino()->getCodigo()
+  );
 
   /**
    * Retangulo das Legendas
@@ -372,7 +396,7 @@ foreach ($aMatricula as $iMatricula) {
   $oPdf->Cell(50, $iHeigth, $sResultadoFinal, 0, 1);
 
   $aConceitos = null;
-  if ($oFormaAvaliacao->getTipo() == "CONCEITO" || $oFormaAvaliacao->getTipo() == "NIVEL"){
+  if ($oFormaAvaliacao->getTipo() == "CONCEITO" || $oFormaAvaliacao->getTipo() == "NIVEL") {
     $aConceitos = $oFormaAvaliacao->getConceitos();
   }
 
@@ -413,13 +437,14 @@ foreach ($aMatricula as $iMatricula) {
  * @param float $iLargura
  * @return integer
  */
-function retornaQuantidadeDeCaracteresParaUmQuadro($iAltura, $iLargura) {
+function retornaQuantidadeDeCaracteresParaUmQuadro($iAltura, $iLargura)
+{
 
   $m2              = $iAltura * $iLargura;
   $m2Padrao        = 100; // mm2
   $iCaracterPadrao = 22;  // quantidade de caracteres por 100mm2
 
-  return floor(($m2 /$m2Padrao) *  $iCaracterPadrao);
+  return floor(($m2 / $m2Padrao) *  $iCaracterPadrao);
 }
 
 $oPdf->Output();

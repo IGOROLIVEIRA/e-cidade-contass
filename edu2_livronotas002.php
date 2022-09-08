@@ -25,21 +25,22 @@
  *                                licenca/licenca_pt.txt
  */
 
-require_once ("fpdf151/scpdf.php");
-require_once ("libs/db_sql.php");
-require_once ("libs/db_stdlib.php");
-require_once ("libs/db_conecta.php");
-require_once ("libs/db_sessoes.php");
-require_once ("libs/db_utils.php");
-require_once ("libs/db_usuariosonline.php");
-require_once ("libs/db_app.utils.php");
-require_once ("libs/JSON.php");
-require_once ("dbforms/db_funcoes.php");
-require_once ("std/DBDate.php");
+require_once("fpdf151/scpdf.php");
+require_once("libs/db_sql.php");
+require_once("libs/db_stdlib.php");
+require_once("libs/db_conecta.php");
+require_once("libs/db_sessoes.php");
+require_once("libs/db_utils.php");
+require_once("libs/db_usuariosonline.php");
+require_once("libs/db_app.utils.php");
+require_once("libs/JSON.php");
+require_once("dbforms/db_funcoes.php");
+require_once("std/DBDate.php");
+include("edu_cabecalhoatolegal.php");
 
 $oDados         = db_utils::postMemory($_GET);
 $oJson          = new services_json();
-$aRetornoTurmas = $oJson->decode(str_replace("\\","",$_GET["aTurmas"]));
+$aRetornoTurmas = $oJson->decode(str_replace("\\", "", $_GET["aTurmas"]));
 
 /**
  * Objeto com os dados do relatorio
@@ -186,7 +187,8 @@ foreach ($aRetornoTurmas as $oRetornoTurma) {
 /**
  * Imprimimos a grade de aproveitamento de cada aluno
  */
-function imprimeGradeAproveitamentoAluno( scpdf $oPdf, $aDisciplinasPagina, $oDadosRelatorio ) {
+function imprimeGradeAproveitamentoAluno(scpdf $oPdf, $aDisciplinasPagina, $oDadosRelatorio)
+{
 
   $iLinhasImpressas = 1;
   $oPdf->SetY(54);
@@ -247,12 +249,12 @@ function imprimeGradeAproveitamentoAluno( scpdf $oPdf, $aDisciplinasPagina, $oDa
         $oAproveitamentoPeriodo     = '';
         $oDiarioClasse              = $oMatricula->getDiarioDeClasse();
         $oDiarioAvaliacaoDisciplina = $oMatricula->getDiarioDeClasse()
-                                                 ->getDisciplinasPorRegencia(new Regencia($oRegencia->getCodigo()));
+          ->getDisciplinasPorRegencia(new Regencia($oRegencia->getCodigo()));
         db_fim_transacao();
 
-        foreach( $oDiarioAvaliacaoDisciplina->getAvaliacoes() as $oAvaliacaoAproveitamento ) {
+        foreach ($oDiarioAvaliacaoDisciplina->getAvaliacoes() as $oAvaliacaoAproveitamento) {
 
-          if( $oAvaliacaoAproveitamento->getElementoAvaliacao()->getOrdemSequencia() == $oDadosRelatorio->iOrdem ) {
+          if ($oAvaliacaoAproveitamento->getElementoAvaliacao()->getOrdemSequencia() == $oDadosRelatorio->iOrdem) {
             $oAproveitamentoPeriodo = $oAvaliacaoAproveitamento;
           }
         }
@@ -264,7 +266,7 @@ function imprimeGradeAproveitamentoAluno( scpdf $oPdf, $aDisciplinasPagina, $oDa
         $iAnoCalendario  = $oRegencia->getTurma()->getCalendario()->getAnoExecucao();
 
 
-        if ( $oAproveitamentoPeriodo != "" ) {
+        if ($oAproveitamentoPeriodo != "") {
 
           $sAproveitamento = $oAproveitamentoPeriodo->getValorAproveitamento()->getAproveitamento();
           $sAproveitamento = ArredondamentoNota::formatar($sAproveitamento, $iAnoCalendario);
@@ -308,9 +310,9 @@ function imprimeGradeAproveitamentoAluno( scpdf $oPdf, $aDisciplinasPagina, $oDa
          * Final.
          * Se o aluno for amparado para a disciplina no periodo, é apresentado 'Amp'
          */
-        if ( $oAproveitamentoPeriodo != "" ) {
+        if ($oAproveitamentoPeriodo != "") {
 
-          if ( $oRegencia->getProcedimentoAvaliacao()->getFormaAvaliacao()->getTipo() == 'PARECER') {
+          if ($oRegencia->getProcedimentoAvaliacao()->getFormaAvaliacao()->getTipo() == 'PARECER') {
 
             $sAproveitamento                  = "PD";
             $oDadosRelatorio->sFormaAvaliacao = 'PARECER';
@@ -325,11 +327,11 @@ function imprimeGradeAproveitamentoAluno( scpdf $oPdf, $aDisciplinasPagina, $oDa
         /**
          * Altera o resultado quando aluno é avaliado por parecer
          */
-        if ( $oMatricula->isAvaliadoPorParecer() ) {
+        if ($oMatricula->isAvaliadoPorParecer()) {
           $sAproveitamento = "PD";
         }
 
-        if ( $lNotaExterna && $sAproveitamento != '' ) {
+        if ($lNotaExterna && $sAproveitamento != '') {
           $sAproveitamento = "*{$sAproveitamento}";
         }
 
@@ -348,10 +350,12 @@ function imprimeGradeAproveitamentoAluno( scpdf $oPdf, $aDisciplinasPagina, $oDa
          * Verificamos se atingiu o aproveitamento minimo no periodo. Caso nao, alteramos a fonte para negrito, desde
          * que nao seja PARECER, nem esteja amparado
          */
-        if (   $oAproveitamentoPeriodo != ""
-            && !$oAproveitamentoPeriodo->temAproveitamentoMinimo()
-            && $oAproveitamentoPeriodo->getElementoAvaliacao()->getFormaDeAvaliacao()->getTipo() != 'PARECER'
-            && !$oAproveitamentoPeriodo->isAmparado()) {
+        if (
+          $oAproveitamentoPeriodo != ""
+          && !$oAproveitamentoPeriodo->temAproveitamentoMinimo()
+          && $oAproveitamentoPeriodo->getElementoAvaliacao()->getFormaDeAvaliacao()->getTipo() != 'PARECER'
+          && !$oAproveitamentoPeriodo->isAmparado()
+        ) {
           $oPdf->SetFont('arial', 'b', 7);
         }
 
@@ -391,7 +395,7 @@ function imprimeGradeAproveitamentoAluno( scpdf $oPdf, $aDisciplinasPagina, $oDa
           $oPdf->Cell($oDadosRelatorio->iTamanhoColunasFaltas, $oDadosRelatorio->iAltura, "", 1, 0, "C");
 
           if ($oDadosRelatorio->lProgressaoParcial) {
-            $sResultadoFinal = $sResultadoFinal."*";
+            $sResultadoFinal = $sResultadoFinal . "*";
           }
           $oPdf->Cell($oDadosRelatorio->iTamanhoColunasDisciplinas, $oDadosRelatorio->iAltura, $sResultadoFinal, 1, 0, "C");
         }
@@ -418,7 +422,8 @@ function imprimeGradeAproveitamentoAluno( scpdf $oPdf, $aDisciplinasPagina, $oDa
 /**
  * Montamos o cabecalho das disciplinas/faltas por periodo
  */
-function cabecalhoPeriodosDisciplinas( scpdf $oPdf, $aDisciplinasPagina, $oDadosRelatorio ) {
+function cabecalhoPeriodosDisciplinas(scpdf $oPdf, $aDisciplinasPagina, $oDadosRelatorio)
+{
 
   /**
    * Controlador de disciplinas impressas
@@ -477,7 +482,8 @@ function cabecalhoPeriodosDisciplinas( scpdf $oPdf, $aDisciplinasPagina, $oDados
 /**
  * Metodo com as posicoes padroes dos periodos e disciplinas/faltas
  */
-function posicionamentoCabecalho( scpdf $oPdf, $oDadosRelatorio) {
+function posicionamentoCabecalho(scpdf $oPdf, $oDadosRelatorio)
+{
 
   $oPdf->SetXY(127, 10);
 
@@ -490,7 +496,8 @@ function posicionamentoCabecalho( scpdf $oPdf, $oDadosRelatorio) {
 /**
  * Montamos o cabecalho padrao do relatorio
  */
-function cabecalhoPadrao( scpdf $oPdf, $oDadosRelatorio ) {
+function cabecalhoPadrao(scpdf $oPdf, $oDadosRelatorio)
+{
 
   $oPdf->SetXY(10, 10);
 
@@ -503,7 +510,7 @@ function cabecalhoPadrao( scpdf $oPdf, $oDadosRelatorio ) {
   $sNomeEscola       = $oEscola->getNome();
   $iCodigoReferencia = $oEscola->getCodigoReferencia();
 
-  if ( $iCodigoReferencia != null ) {
+  if ($iCodigoReferencia != null) {
     $sNomeEscola = "{$iCodigoReferencia} - {$sNomeEscola}";
   }
 
@@ -513,7 +520,21 @@ function cabecalhoPadrao( scpdf $oPdf, $oDadosRelatorio ) {
   $oPdf->SetFont('arial', 'bi', 7);
   $oPdf->Cell(117, $oDadosRelatorio->iAltura, $sTituloPadrao, 1, 0, 'C', 1);
 
+  $oDepartamento = new DBDepartamento(db_getsession("DB_coddepto"));
+  $iDepartamento = $oDepartamento->getCodigo();
+
+  $result = db_query("select ed05_i_aparecerelatorio,ed05_i_ano,ed05_i_codigo, ed05_c_numero, ed05_c_finalidade, ed83_c_descr as dl_tipo,
+case when ed05_c_competencia='F' then 'FEDERAL' when ed05_c_competencia='E' then 'ESTADUAL' else 'MUNICIPAL'
+end as ed05_c_competencia, ed05_i_ano from atolegal inner join tipoato on tipoato.ed83_i_codigo
+= atolegal.ed05_i_tipoato inner join atoescola on atoescola.ed19_i_ato = atolegal.ed05_i_codigo
+where ed19_i_escola = $iDepartamento and ed05_i_aparecerelatorio = true order by ed05_i_codigo ;");
+
+  $atolegal = db_utils::fieldsMemory($result, 0);
+  $atolegalcabecalho = $atolegal->ed05_c_finalidade . "/" . $atolegal->dl_tipo . " nº: " .  $atolegal->ed05_c_numero . "/" . $atolegal->ed05_i_ano;
+
+
   $sDados  = "Escola: {$oDadosRelatorio->sEscola}\n";
+  $sDados  .= "Ato Legal: $atolegalcabecalho\n";
   $sDados .= "Profº: {$oDadosRelatorio->sDocente}\n";
   $sDados .= "Série: {$oDadosRelatorio->sEtapa}\n";
   $sDados .= "Turma: {$oDadosRelatorio->sTurma}\n";
@@ -533,7 +554,8 @@ function cabecalhoPadrao( scpdf $oPdf, $oDadosRelatorio ) {
  * @param SCPF $oPdf
  * @param object $oDadosRelatorio
  */
-function mostraObservacoes( scpdf $oPdf, $oDadosRelatorio ) {
+function mostraObservacoes(scpdf $oPdf, $oDadosRelatorio)
+{
 
   $sObservacoes = '';
 

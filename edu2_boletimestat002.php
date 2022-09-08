@@ -26,6 +26,7 @@
  */
 
 require_once("fpdf151/pdfwebseller.php");
+include("edu_cabecalhoatolegal.php");
 require_once("libs/db_utils.php");
 
 $oDaoEduParametros = new cl_edu_parametros();
@@ -34,14 +35,14 @@ $oDaoTurma         = new cl_turma();
 $oDaoMatricula     = new cl_matricula();
 
 $sCampos          = "ed52_i_ano as ano_calendario,ed52_c_descr as descr_calendario";
-$sSql             = $oDaoCalendario->sql_query_file("", $sCampos, "", " ed52_i_codigo = $iCalendario" );
-$rsAno            = $oDaoCalendario->sql_record( $sSql );
+$sSql             = $oDaoCalendario->sql_query_file("", $sCampos, "", " ed52_i_codigo = $iCalendario");
+$rsAno            = $oDaoCalendario->sql_record($sSql);
 $oDadosCalendario = db_utils::fieldsmemory($rsAno, 0);
 
 if ($iMes == 1 || $iMes == 3 || $iMes == 5 || $iMes == 7 || $iMes == 8 || $iMes == 10 || $iMes == 12) {
   $iDiaLimite = 31;
 } else if ($iMes == 4 || $iMes == 6 || $iMes == 9 || $iMes == 11) {
-  $iDiaLimite = 30; 
+  $iDiaLimite = 30;
 } else {
   $iDiaLimite = 28;
 }
@@ -57,70 +58,70 @@ if ($sEnsino == "") {
  */
 $sCampos = " ed233_c_limitemov ";
 $sWhere  = " ed233_i_escola = $iEscola ";
-$sSql    =  $oDaoEduParametros->sql_query("", $sCampos, "", $sWhere);  
+$sSql    =  $oDaoEduParametros->sql_query("", $sCampos, "", $sWhere);
 $rs      = $oDaoEduParametros->sql_record($sSql);
 if ($oDaoEduParametros->numrows > 0) {
-	
+
   $oDadosParametros = db_utils::fieldsmemory($rs, 0);
-  if (!strstr($oDadosParametros->ed233_c_limitemov,"/")) {
-  	
-    ?>
+  if (!strstr($oDadosParametros->ed233_c_limitemov, "/")) {
+
+?>
     <table width='100%'>
-     <tr>
-      <td align='center'>
-       <font color='#FF0000' face='arial'>
-        <b>Parâmetro Dia/Mês Limite da Movimentação (Procedimentos->Parâmetros)<br>
-           deve estar no formato dd/mm ou d/m (Exemplo: 02/02 ou 2/2)<br><br>
-           Valor atual do parâmetro Dia/Mês Limite da Movimentação: 
-           <?= trim($oDadosParametros->ed233_c_limitemov) == "" ? "Não informado"
-             :$oDadosParametros->ed233_c_limitemov
-           ?><br>
-        <input type='button' value='Fechar' onclick='window.close()'>
-       </font>
-      </td>
-     </tr>
+      <tr>
+        <td align='center'>
+          <font color='#FF0000' face='arial'>
+            <b>Parâmetro Dia/Mês Limite da Movimentação (Procedimentos->Parâmetros)<br>
+              deve estar no formato dd/mm ou d/m (Exemplo: 02/02 ou 2/2)<br><br>
+              Valor atual do parâmetro Dia/Mês Limite da Movimentação:
+              <?= trim($oDadosParametros->ed233_c_limitemov) == "" ? "Não informado"
+                : $oDadosParametros->ed233_c_limitemov
+              ?><br>
+              <input type='button' value='Fechar' onclick='window.close()'>
+          </font>
+        </td>
+      </tr>
     </table>
-    <?php
+  <?php
     exit;
   }
- 
-  $aLimiteMov     = explode("/",$oDadosParametros->ed233_c_limitemov);
+
+  $aLimiteMov     = explode("/", $oDadosParametros->ed233_c_limitemov);
   $iDiaLimiteMov  = $aLimiteMov[0];
   $iMesLimiteMov  = $aLimiteMov[1];
 
   if (@!checkdate($iMesLimiteMov, $iDiaLimiteMov, $oDadosCalendario->ano_calendario)) {
-    ?>
+  ?>
     <table width='100%'>
-     <tr>
-      <td align='center'>
-       <font color='#FF0000' face='arial'>
-        <b>Parâmetro Dia/Mês Limite da Movimentação (Procedimentos->Parâmetros)<br>
-           deve estar no formato dd/mm ou d/m (Exemplo: 02/02 ou 2/2) e deve ser uma data válida.<br><br>
-           Valor atual do parâmetro Dia/Mês Limite da Movimentação:
-           <?= trim($oDadosParametros->ed233_c_limitemov) == "" ? "Não informado"
-             :$oDadosParametros->ed233_c_limitemov
-           ?><br>
-           Data Limite da Movimentação: <?= $iDiaLimiteMov."/".$iMesLimiteMov."/".$oDadosCalendario->ano_calendario
-                                        ?> (Data Inválida)<br></b>
-        <input type='button' value='Fechar' onclick='window.close()'>
-       </font>
-      </td>
-     </tr>
+      <tr>
+        <td align='center'>
+          <font color='#FF0000' face='arial'>
+            <b>Parâmetro Dia/Mês Limite da Movimentação (Procedimentos->Parâmetros)<br>
+              deve estar no formato dd/mm ou d/m (Exemplo: 02/02 ou 2/2) e deve ser uma data válida.<br><br>
+              Valor atual do parâmetro Dia/Mês Limite da Movimentação:
+              <?= trim($oDadosParametros->ed233_c_limitemov) == "" ? "Não informado"
+                : $oDadosParametros->ed233_c_limitemov
+              ?><br>
+              Data Limite da Movimentação: <?= $iDiaLimiteMov . "/" . $iMesLimiteMov . "/" . $oDadosCalendario->ano_calendario
+                                            ?> (Data Inválida)<br></b>
+            <input type='button' value='Fechar' onclick='window.close()'>
+          </font>
+        </td>
+      </tr>
     </table>
-    <?php
+  <?php
     exit;
   }
- 
-  $dDataLimiteMov  = $oDadosCalendario->ano_calendario."-".(strlen($iMesLimiteMov) == 1 ? "0".
-                                                            $iMesLimiteMov:$iMesLimiteMov
-                                                           );
-  $dDataLimiteMov .= "-".(strlen($iDiaLimiteMov) == 1 ? "0".$iDiaLimiteMov:$iDiaLimiteMov);
+
+  $dDataLimiteMov  = $oDadosCalendario->ano_calendario . "-" . (strlen($iMesLimiteMov) == 1 ? "0" .
+    $iMesLimiteMov : $iMesLimiteMov
+  );
+  $dDataLimiteMov .= "-" . (strlen($iDiaLimiteMov) == 1 ? "0" . $iDiaLimiteMov : $iDiaLimiteMov);
 } else {
-  $dDataLimiteMov = $oDadosCalendario->ano_calendario."-01-01";
+  $dDataLimiteMov = $oDadosCalendario->ano_calendario . "-01-01";
 }
 
-$dDataInicial = $oDadosCalendario->ano_calendario."-".(strlen($iMes) == 1 ? "0".$iMes:$iMes)."-01";
-$dDataLimite  = $oDadosCalendario->ano_calendario."-".(strlen($iMes) == 1 ? "0".$iMes:$iMes)."-".$iDiaLimite;
+$dDataInicial = $oDadosCalendario->ano_calendario . "-" . (strlen($iMes) == 1 ? "0" . $iMes : $iMes) . "-01";
+$dDataLimite  = $oDadosCalendario->ano_calendario . "-" . (strlen($iMes) == 1 ? "0" . $iMes : $iMes) . "-" . $iDiaLimite;
 
 /*
  * QUANTIDADE DE TURMAS.
@@ -133,24 +134,27 @@ $sWhereQtdTurmas  .= " AND ed60_d_datamatricula <= '$dDataLimite') ";
 $sGroupQtdTurmas   = " GROUP BY ed11_c_descr, ed11_i_codigo, ed11_i_sequencia, ed11_i_ensino, ed10_c_descr, ed15_i_codigo,";
 $sGroupQtdTurmas  .= " ed15_c_nome, ed15_i_sequencia, ed11_c_abrev ";
 $sOrderQtdTurmas   = " ed15_i_sequencia, ed11_i_ensino, ed11_i_sequencia ";
-$sSqlQtdTurmas     = $oDaoTurma->sql_query_boletimestat("", $sCamposQtdTurmas, $sOrderQtdTurmas,
-                                                        $sWhereQtdTurmas.$sGroupQtdTurmas
-                                                       );
+$sSqlQtdTurmas     = $oDaoTurma->sql_query_boletimestat(
+  "",
+  $sCamposQtdTurmas,
+  $sOrderQtdTurmas,
+  $sWhereQtdTurmas . $sGroupQtdTurmas
+);
 $rsQtdTurmas       = $oDaoTurma->sql_record($sSqlQtdTurmas);
 $iLinhasQtdTurmas  = $oDaoTurma->numrows;
-if ($iLinhasQtdTurmas == 0) {?>
+if ($iLinhasQtdTurmas == 0) { ?>
 
   <table width='100%'>
-   <tr>
-    <td align='center'>
-     <font color='#FF0000' face='arial'>
-      <b>Nenhum registro encontrado.<br>
-      <input type='button' value='Fechar' onclick='window.close()'></b>
-     </font>
-    </td>
-   </tr>
+    <tr>
+      <td align='center'>
+        <font color='#FF0000' face='arial'>
+          <b>Nenhum registro encontrado.<br>
+            <input type='button' value='Fechar' onclick='window.close()'></b>
+        </font>
+      </td>
+    </tr>
   </table>
-  <?php
+<?php
   exit;
 }
 
@@ -161,15 +165,15 @@ if ($sEnsino == "") {
   $sTituloEnsino = $oDadosTurmas->ed10_c_descr;
 }
 
-$oEscola     = EscolaRepository::getEscolaByCodigo( $iEscola );
+$oEscola     = EscolaRepository::getEscolaByCodigo($iEscola);
 $oPdf        = new PDF();
 $oPdf->Open();
 $oPdf->AliasNbPages();
 $head1 = "RELATÓRIO BOLETIM ESTATÍSTICO";
 $head2 = "Escola: {$oEscola->getNome()}";
-$head3 = "Mês: ".db_mes($iMes, 1);
-$head4 = "Calendário: ".$oDadosCalendario->descr_calendario;
-$head5 = "Ensino: ".$sTituloEnsino;
+$head3 = "Mês: " . db_mes($iMes, 1);
+$head4 = "Calendário: " . $oDadosCalendario->descr_calendario;
+$head5 = "Ensino: " . $sTituloEnsino;
 $oPdf->ln(5);
 $lTroca = 1;
 
@@ -211,29 +215,29 @@ for ($iContTurmas = 0; $iContTurmas < $iLinhasQtdTurmas; $iContTurmas++) {
 
   $oDadosTurmas = db_utils::fieldsmemory($rsQtdTurmas, $iContTurmas);
   $oDadosTurmas->ed15_c_nome;
-  if ($oPdf->gety() > $oPdf->h - 30 || $lTroca != 0 ) {
+  if ($oPdf->gety() > $oPdf->h - 30 || $lTroca != 0) {
 
     $oPdf->addpage('P');
     $oPdf->setfillcolor(215);
-    $oPdf->setfont('arial','b',8);
+    $oPdf->setfont('arial', 'b', 8);
     $iPosY = $oPdf->getY();
     $iPosX = $oPdf->getX();
     $oPdf->cell(15, 12, "Etapa", 1, 0, "C", 1);
     $oPdf->cell(15, 12, "N° Turmas", 1, 0, "C", 1);
     $oPdf->setY($iPosY);
-    $oPdf->setX($iPosX+30);
+    $oPdf->setX($iPosX + 30);
     $oPdf->cell(27, 8, "Matrícula Total", 1, 2, "C", 1);
     $oPdf->cell(9, 4, "M", 1, 0, "C", 1);
     $oPdf->cell(9, 4, "F", 1, 0, "C", 1);
     $oPdf->cell(9, 4, "T", 1, 0, "C", 1);
     $oPdf->setY($iPosY);
-    $oPdf->setX($iPosX+57);
+    $oPdf->setX($iPosX + 57);
     $oPdf->cell(81, 4, "Eliminados", 1, 2, "C", 1);
     $oPdf->cell(27, 4, "Transferidos", 1, 0, "C", 1);
     $oPdf->cell(27, 4, "Evad/Canc/Falec", 1, 0, "C", 1);
     $oPdf->cell(27, 4, "Progredidos", 1, 0, "C", 1);
-    $oPdf->setY($iPosY+8);
-    $oPdf->setX($iPosX+57);
+    $oPdf->setY($iPosY + 8);
+    $oPdf->setX($iPosX + 57);
     $oPdf->cell(9, 4, "M", 1, 0, "C", 1);
     $oPdf->cell(9, 4, "F", 1, 0, "C", 1);
     $oPdf->cell(9, 4, "T", 1, 0, "C", 1);
@@ -244,13 +248,13 @@ for ($iContTurmas = 0; $iContTurmas < $iLinhasQtdTurmas; $iContTurmas++) {
     $oPdf->cell(9, 4, "F", 1, 0, "C", 1);
     $oPdf->cell(9, 4, "T", 1, 0, "C", 1);
     $oPdf->setY($iPosY);
-    $oPdf->setX($iPosX+138);
+    $oPdf->setX($iPosX + 138);
     $oPdf->cell(27, 8, "Novos", 1, 2, "C", 1);
     $oPdf->cell(9, 4, "M", 1, 0, "C", 1);
     $oPdf->cell(9, 4, "F", 1, 0, "C", 1);
     $oPdf->cell(9, 4, "T", 1, 0, "C", 1);
     $oPdf->setY($iPosY);
-    $oPdf->setX($iPosX+165);
+    $oPdf->setX($iPosX + 165);
     $oPdf->cell(27, 8, "Matrícula Efetiva", 1, 2, "C", 1);
     $oPdf->cell(9, 4, "M", 1, 0, "C", 1);
     $oPdf->cell(9, 4, "F", 1, 0, "C", 1);
@@ -262,19 +266,19 @@ for ($iContTurmas = 0; $iContTurmas < $iLinhasQtdTurmas; $iContTurmas++) {
   $oPdf->setfillcolor(215);
 
   if ($iPriTurno != $oDadosTurmas->ed15_i_codigo) {
-    
-    $oPdf->cell(192, 4, "Turno: ".$oDadosTurmas->ed15_c_nome, 1, 1, "L", 1);
+
+    $oPdf->cell(192, 4, "Turno: " . $oDadosTurmas->ed15_c_nome, 1, 1, "L", 1);
     $iPriTurno = $oDadosTurmas->ed15_i_codigo;
   }
 
   $oPdf->setfillcolor(240);
 
   if ($iPrimeiro != $oDadosTurmas->ed11_i_ensino) {
-   
-    $oPdf->cell(192, 4,$oDadosTurmas->ed10_c_descr, 1, 1, "L", 1);
+
+    $oPdf->cell(192, 4, $oDadosTurmas->ed10_c_descr, 1, 1, "L", 1);
     $iPrimeiro = $oDadosTurmas->ed11_i_ensino;
   }
-  
+
   $oPdf->setfont('arial', '', 8);
   $oPdf->cell(15, 6, $oDadosTurmas->ed11_c_abrev, 1, 0, "C", 0);
   $oPdf->cell(15, 6, $oDadosTurmas->qtdturmas, 1, 0, "C", 0);
@@ -348,64 +352,64 @@ for ($iContTurmas = 0; $iContTurmas < $iLinhasQtdTurmas; $iContTurmas++) {
   $iTEfet  = 0;
 
   for ($iContMatricula = 0; $iContMatricula < $iLinhasMatricula; $iContMatricula++) {
- 	
-    $oDadosMatricula = db_utils::fieldsmemory($rsMatricula, $iContMatricula);	
+
+    $oDadosMatricula = db_utils::fieldsmemory($rsMatricula, $iContMatricula);
     if ($oDadosMatricula->ed47_v_sexo == "M" && $oDadosMatricula->situacao != "") {
-    	
+
       $iMTot++;
       $iSomaMTotal++;
     }
-    
+
     if ($oDadosMatricula->ed47_v_sexo == "F" && $oDadosMatricula->situacao != "") {
-    	
+
       $iFTot++;
       $iSomaFTotal++;
     }
-    
+
     if ($oDadosMatricula->ed47_v_sexo == "M" && $oDadosMatricula->situacao == "M2") {
-    	
+
       $iMTrans++;
       $iSomaMTrans++;
     }
-    
+
     if ($oDadosMatricula->ed47_v_sexo == "F" && $oDadosMatricula->situacao == "M2") {
-    	
+
       $iFTrans++;
       $iSomaFTrans++;
     }
-    
+
     if ($oDadosMatricula->ed47_v_sexo == "M" && $oDadosMatricula->situacao == "M3") {
-    	
+
       $iMEvad++;
       $iSomaMEvad++;
     }
-    
+
     if ($oDadosMatricula->ed47_v_sexo == "F" && $oDadosMatricula->situacao == "M3") {
-    	
+
       $iFEvad++;
       $iSomaFEvad++;
     }
-     
+
     if ($oDadosMatricula->ed47_v_sexo == "M" && $oDadosMatricula->situacao == "M4") {
-    	
+
       $iMProg++;
       $iSomaMProg++;
     }
-    
+
     if ($oDadosMatricula->ed47_v_sexo == "F" && $oDadosMatricula->situacao == "M4") {
-    	
+
       $iFProg++;
       $iSomaFProg++;
     }
-     
+
     if ($oDadosMatricula->ed47_v_sexo == "M" && $oDadosMatricula->novo == 1 && $oDadosMatricula->situacao != "") {
-    	
+
       $iMNov++;
       $iSomaMNov++;
     }
-    
+
     if ($oDadosMatricula->ed47_v_sexo == "F" && $oDadosMatricula->novo == 1 && $oDadosMatricula->situacao != "") {
-    	
+
       $iFNov++;
       $iSomaFNov++;
     }
@@ -413,45 +417,45 @@ for ($iContTurmas = 0; $iContTurmas < $iLinhasQtdTurmas; $iContTurmas++) {
 
   $oPdf->cell(9, 6, $iMTot == 0 ? "-" : $iMTot, 1, 0, "C", 0);
   $oPdf->cell(9, 6, $iFTot == 0 ? "-" : $iFTot, 1, 0, "C", 0);
-  $iTot      = $iMTot+$iFTot;
+  $iTot      = $iMTot + $iFTot;
   $iSomaTot += $iTot;
   $oPdf->cell(9, 6, $iTot == 0 ? "-" : $iTot, 1, 0, "C", 0);
 
   $oPdf->cell(9, 6, $iMTrans == 0 ? "-" : $iMTrans, 1, 0, "C", 0);
   $oPdf->cell(9, 6, $iFTrans == 0 ? "-" : $iFTrans, 1, 0, "C", 0);
-  $iTrans      = $iMTrans+$iFTrans;
+  $iTrans      = $iMTrans + $iFTrans;
   $iSomaTrans += $iTrans;
   $oPdf->cell(9, 6, $iTrans == 0 ? "-" : $iTrans, 1, 0, "C", 0);
 
   $oPdf->cell(9, 6, $iMEvad == 0 ? "-" : $iMEvad, 1, 0, "C", 0);
   $oPdf->cell(9, 6, $iFEvad == 0 ? "-" : $iFEvad, 1, 0, "C", 0);
-  $iTEvad      = $iMEvad+$iFEvad;
+  $iTEvad      = $iMEvad + $iFEvad;
   $iSomaTEvad += $iTEvad;
   $oPdf->cell(9, 6, $iTEvad == 0 ? "-" : $iTEvad, 1, 0, "C", 0);
 
-  $oPdf->cell(9,6,$iMProg == 0 ? "-" : $iMProg, 1, 0, "C", 0);
-  $oPdf->cell(9,6,$iFProg == 0 ? "-" : $iFProg, 1, 0, "C", 0);
-  $iTProg      = $iMProg+$iFProg;
+  $oPdf->cell(9, 6, $iMProg == 0 ? "-" : $iMProg, 1, 0, "C", 0);
+  $oPdf->cell(9, 6, $iFProg == 0 ? "-" : $iFProg, 1, 0, "C", 0);
+  $iTProg      = $iMProg + $iFProg;
   $iSomaTProg += $iTProg;
   $oPdf->cell(9, 6, $iTProg == 0 ? "-" : $iTProg, 1, 0, "C", 0);
 
   $oPdf->cell(9, 6, $iMNov == 0 ? "-" : $iMNov, 1, 0, "C", 0);
   $oPdf->cell(9, 6, $iFNov == 0 ? "-" : $iFNov, 1, 0, "C", 0);
-  $iTNov      = $iMNov+$iFNov;
+  $iTNov      = $iMNov + $iFNov;
   $iSomaTNov += $iTNov;
   $oPdf->cell(9, 6, $iTNov == 0 ? "-" : $iTNov, 1, 0, "C", 0);
 
   /*
    * Matricula efetiva
    */
-  $iMEfet      = $iMTot-($iMTrans+$iMEvad+$iMProg);
-  $iFEfet      = $iFTot-($iFTrans+$iFEvad+$iFProg);
+  $iMEfet      = $iMTot - ($iMTrans + $iMEvad + $iMProg);
+  $iFEfet      = $iFTot - ($iFTrans + $iFEvad + $iFProg);
   $iSomaMEfet += $iMEfet;
   $iSomaFEfet += $iFEfet;
 
   $oPdf->cell(9, 6, $iMEfet == 0 ? "-" : $iMEfet, 1, 0, "C", 0);
   $oPdf->cell(9, 6, $iFEfet == 0 ? "-" : $iFEfet, 1, 0, "C", 0);
-  $iTEfet      = $iMEfet+$iFEfet;
+  $iTEfet      = $iMEfet + $iFEfet;
   $iSomaTEfet += $iTEfet;
   $oPdf->cell(9, 6, $iTEfet == 0 ? "-" : $iTEfet, 1, 1, "C", 0);
 }
@@ -474,7 +478,7 @@ $oPdf->cell(9, 6, $iSomaTot == 0 ? "-" : $iSomaTot, 1, 0, "C", 1);
  */
 $oPdf->cell(9, 6, $iSomaMTrans == 0 ? "-" : $iSomaMTrans, 1, 0, "C", 1);
 $oPdf->cell(9, 6, $iSomaFTrans == 0 ? "-" : $iSomaFTrans, 1, 0, "C", 1);
-$oPdf->cell(9, 6, $iSomaTrans == 0 ? "-" : $iSomaTrans, 1, 0," C", 1);
+$oPdf->cell(9, 6, $iSomaTrans == 0 ? "-" : $iSomaTrans, 1, 0, " C", 1);
 
 /*
  * Evadidos/Cancelados
@@ -559,11 +563,11 @@ if ($sImprimeLista == "yes") {
   $lTroca        = 1;
   $iConta        = 0;
 
-  for($iContLista = 0; $iContLista < $iLinhasLista; $iContLista++) { 	
-  	
+  for ($iContLista = 0; $iContLista < $iLinhasLista; $iContLista++) {
+
     $oDadosMatricula = db_utils::fieldsmemory($rsLista, $iContLista);
-    if ($oPdf->gety() > $oPdf->h - 30 || $lTroca != 0 ) {
-    	
+    if ($oPdf->gety() > $oPdf->h - 30 || $lTroca != 0) {
+
       $oPdf->Addpage();
       $oPdf->setfont('arial', 'b', 7);
       $oPdf->cell(10, 4, "Seq", "B", 0, "C", 0);
@@ -576,11 +580,11 @@ if ($sImprimeLista == "yes") {
       $oPdf->cell(20, 4, "Data Matrícula", "B", 1, "C", 0);
       $lTroca = 0;
     }
-    
+
     if ($oDadosMatricula->situacao == "M1") {
-    	
+
       $oPdf->setfont('arial', '', 7);
-      $oPdf->cell(10, 4, ($iConta+1), 0, 0, "C", 0);
+      $oPdf->cell(10, 4, ($iConta + 1), 0, 0, "C", 0);
       $oPdf->cell(10, 4, $oDadosMatricula->ed47_i_codigo, 0, 0, "C", 0);
       $oPdf->cell(60, 4, $oDadosMatricula->ed47_v_nome, 0, 0, "L", 0);
       $oPdf->cell(10, 4, $oDadosMatricula->ed47_v_sexo, 0, 0, "C", 0);

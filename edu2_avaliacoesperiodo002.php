@@ -25,31 +25,31 @@
  *                                licenca/licenca_pt.txt 
  */
 
-require_once ("fpdf151/scpdf.php");
-require_once ("libs/db_sql.php");
-require_once ("libs/db_stdlib.php");
-require_once ("libs/db_conecta.php");
-require_once ("libs/db_sessoes.php");
-require_once ("libs/db_utils.php");
-require_once ("libs/db_usuariosonline.php");
-require_once ("libs/db_app.utils.php");
-require_once ("dbforms/db_funcoes.php");
+require_once("fpdf151/scpdf.php");
+require_once("libs/db_sql.php");
+require_once("libs/db_stdlib.php");
+require_once("libs/db_conecta.php");
+require_once("libs/db_sessoes.php");
+require_once("libs/db_utils.php");
+require_once("libs/db_usuariosonline.php");
+require_once("libs/db_app.utils.php");
+require_once("dbforms/db_funcoes.php");
 
 $oGet   = db_utils::postMemory($_GET);
 $aWhere = array();
 
-if(!empty($oGet->iEscola)) {
+if (!empty($oGet->iEscola)) {
   $aWhere[] = " ed18_i_codigo = {$oGet->iEscola} ";
 }
-if(!empty($oGet->iCalendario)) {
+if (!empty($oGet->iCalendario)) {
   $aWhere[] = " ed52_i_codigo = {$oGet->iCalendario} ";
 }
-if(!empty($oGet->iTurma)) {
+if (!empty($oGet->iTurma)) {
   $aWhere[] = " ed57_i_codigo = {$oGet->iTurma} ";
 }
 
 $oPdf = new scpdf();
- 
+
 $oPdf->Open();
 $oPdf->AliasNbPages();
 $oPdf->SetAutoPageBreak(false);
@@ -83,16 +83,16 @@ $sSqlAlunos                     = $oDaoAlunos->sql_query_alunomatriculado(null, 
 $rsAlunos                       = $oDaoAlunos->sql_record($sSqlAlunos);
 $iTotalLinhas                   = $oDaoAlunos->numrows;
 $oPdf->oDadosRelatorio->aAlunos = array();
-if($iTotalLinhas > 0) {
-  
-  for($iIndiceAlunos = 0; $iIndiceAlunos < $iTotalLinhas; $iIndiceAlunos++) {
-    
+if ($iTotalLinhas > 0) {
+
+  for ($iIndiceAlunos = 0; $iIndiceAlunos < $iTotalLinhas; $iIndiceAlunos++) {
+
     $oRetornoAlunos                   = db_utils::fieldsMemory($rsAlunos, $iIndiceAlunos);
-    
+
     if ($trocaTurma == 1 && $oRetornoAlunos->ed60_c_situacao == "TROCA DE TURMA") {
       continue;
     }
-      
+
     $oDadosAlunos                     = new stdClass();
     $oDadosAlunos->numero_matricula   = $oRetornoAlunos->ed60_matricula;
     $oDadosAlunos->ordem              = $oRetornoAlunos->ed60_i_numaluno;
@@ -109,8 +109,8 @@ $oDaoEscola                      = db_utils::getDao("escola");
 $sSqlEscola                      = $oDaoEscola->sql_query(null, "*", null, "ed18_i_codigo = {$oGet->iEscola}");
 $rsEscola                        = $oDaoEscola->sql_record($sSqlEscola);
 $oPdf->oDadosRelatorio->aEscolas = array();
-if($oDaoEscola->numrows > 0) {
-  
+if ($oDaoEscola->numrows > 0) {
+
   $oRetornoEscola                    = db_utils::fieldsMemory($rsEscola, 0);
   $oDadosEscola                      = new stdClass();
   $oDadosEscola->nome                = $oRetornoEscola->ed18_c_nome;
@@ -136,21 +136,21 @@ $sCamposTurma .= " , turno.ed15_c_nome, disciplina.ed12_i_codigo, caddisciplina.
 $oPdf->oDadosRelatorio->aDadosDisciplinas = array();
 $oPdf->oDadosRelatorio->aDadosTurma       = array();
 
-for($iIndiceTurma = 0; $iIndiceTurma < count($aDisciplinas); $iIndiceTurma++) {
-  
+for ($iIndiceTurma = 0; $iIndiceTurma < count($aDisciplinas); $iIndiceTurma++) {
+
   $sWhereTurma   = "ed57_i_codigo = {$oGet->iTurma} AND disciplina.ed12_i_caddisciplina = {$aDisciplinas[$iIndiceTurma]}";
   $sWhereTurma  .= " AND periodoavaliacao.ed09_i_codigo = {$oGet->iPeriodo}";
   $sSqlTurma     = $oDaoTurma->sql_query_avaliacao(null, "*", null, $sWhereTurma);
   $rsTurma       = $oDaoTurma->sql_record($sSqlTurma);
-  if($oDaoTurma->numrows > 0) {
-    
+  if ($oDaoTurma->numrows > 0) {
+
     $oRetornoTurma        = db_utils::fieldsMemory($rsTurma, 0);
     $oDadosTurma          = new stdClass();
     $oDadosTurma->ano     = $oRetornoTurma->ed52_i_ano;
     $oDadosTurma->turma   = $oRetornoTurma->ed57_c_descr;
     $oDadosTurma->periodo = $oRetornoTurma->ed09_c_descr;
     $oDadosTurma->turno   = $oRetornoTurma->ed15_c_nome;
-    
+
     $oPdf->oDadosRelatorio->aDadosDisciplinas[] = $oRetornoTurma->ed232_c_descr;
   }
 }
@@ -165,15 +165,15 @@ $oPdf->oCalculosRelatorio->iQuantidadeRegistrosPorPagina = 48;
 /**
  * Calcula se será necessário criar uma nova página, caso exceda o limite de registros por página
  */
-$oPdf->oCalculosRelatorio->iPaginasAdicionais            = floor(count($oPdf->oDadosRelatorio->aAlunos)/
-                                                                       $oPdf->oCalculosRelatorio->iQuantidadeRegistrosPorPagina);
+$oPdf->oCalculosRelatorio->iPaginasAdicionais            = floor(count($oPdf->oDadosRelatorio->aAlunos) /
+  $oPdf->oCalculosRelatorio->iQuantidadeRegistrosPorPagina);
 
 /**
  * Guarda a quantidade de registros total
  */
 $oPdf->oCalculosRelatorio->iQuantidadeRegistros          = $oPdf->oCalculosRelatorio->iQuantidadeRegistrosPorPagina +
-                                                          ($oPdf->oCalculosRelatorio->iQuantidadeRegistrosPorPagina * 
-                                                           $oPdf->oCalculosRelatorio->iPaginasAdicionais);
+  ($oPdf->oCalculosRelatorio->iQuantidadeRegistrosPorPagina *
+    $oPdf->oCalculosRelatorio->iPaginasAdicionais);
 
 /**
  * Largura da coluna "NOME DO ALUNO"
@@ -193,21 +193,21 @@ $oPdf->oCalculosRelatorio->iMultiplicadorTamanhoColuna   = 6 - $oPdf->oDadosRela
 /**
  * Define a nova largura da coluna "NOME DO ALUNO"
  */
-$oPdf->oCalculosRelatorio->iLarguraColunaAluno          += $oPdf->oCalculosRelatorio->iLarguraColunaAvaliacao * 
-                                                           $oPdf->oCalculosRelatorio->iMultiplicadorTamanhoColuna;
+$oPdf->oCalculosRelatorio->iLarguraColunaAluno          += $oPdf->oCalculosRelatorio->iLarguraColunaAvaliacao *
+  $oPdf->oCalculosRelatorio->iMultiplicadorTamanhoColuna;
 
 /**
  * Define a largura da coluna "AVALIAÇÕES"
  */
-$oPdf->oCalculosRelatorio->iLarguraColunaAvaliacoes      = $oPdf->oCalculosRelatorio->iLarguraColunaAvaliacao * 
-                                                           $oPdf->oDadosRelatorio->iAvaliacoes;
+$oPdf->oCalculosRelatorio->iLarguraColunaAvaliacoes      = $oPdf->oCalculosRelatorio->iLarguraColunaAvaliacao *
+  $oPdf->oDadosRelatorio->iAvaliacoes;
 
 /**
  * Quantidade de caracteres a mais, para cada avaliação a menos que foi selecionada
  */
 $oPdf->oCalculosRelatorio->iQuantidadeCaracteresPorAvaliacao = 4;
-$oPdf->oCalculosRelatorio->iQuantidadeCaracteresPorAvaliacao = $oPdf->oCalculosRelatorio->iQuantidadeCaracteresPorAvaliacao * 
-                                                               $oPdf->oDadosRelatorio->iAvaliacoesRodape;
+$oPdf->oCalculosRelatorio->iQuantidadeCaracteresPorAvaliacao = $oPdf->oCalculosRelatorio->iQuantidadeCaracteresPorAvaliacao *
+  $oPdf->oDadosRelatorio->iAvaliacoesRodape;
 
 /**
  * Quantidade mínima de caracteres para coluna "NOME DO ALUNO"
@@ -218,33 +218,33 @@ $oPdf->oCalculosRelatorio->iQuantidadeMaximaCaracteres   = 76;
  * Total de caracteres permitidos para coluna "NOME DO ALUNO"
  */
 $oPdf->oCalculosRelatorio->iTotalCaracteresPermitidos    = $oPdf->oCalculosRelatorio->iQuantidadeMaximaCaracteres -
-                                                           $oPdf->oCalculosRelatorio->iQuantidadeCaracteresPorAvaliacao - 5;
+  $oPdf->oCalculosRelatorio->iQuantidadeCaracteresPorAvaliacao - 5;
 
 /**
  * Inicia a montagem do PDF
  * Para cada disciplina selecionada, é gerada uma nova página
  */
-for($iIndiceDisciplinas = 0; $iIndiceDisciplinas < count($oPdf->oDadosRelatorio->aDadosDisciplinas); $iIndiceDisciplinas++) {
-  
+for ($iIndiceDisciplinas = 0; $iIndiceDisciplinas < count($oPdf->oDadosRelatorio->aDadosDisciplinas); $iIndiceDisciplinas++) {
+
 
   headerRelatorio($oPdf, $iIndiceDisciplinas);
-  
+
   $iContadorRegistros = 0;
   /**
    * Imprime os alunos da turma
    */
-  for($iIndiceAvaliacao = 0; $iIndiceAvaliacao < $oPdf->oCalculosRelatorio->iQuantidadeRegistrosPorPagina; $iIndiceAvaliacao++) {
-  
+  for ($iIndiceAvaliacao = 0; $iIndiceAvaliacao < $oPdf->oCalculosRelatorio->iQuantidadeRegistrosPorPagina; $iIndiceAvaliacao++) {
+
     $iNumeroMatricula = '';
     $iOrdemChamada    = '';
     $sNomeAluno       = '';
-    
+
     /**
      * Se a quantidade de registros (fixada em 48) for igual ao contador de registros,
      * uma nova página é gerada para cada disciplina
      */
     if ($oPdf->oCalculosRelatorio->iQuantidadeRegistrosPorPagina == $iContadorRegistros) {
-      
+
       headerRelatorio($oPdf, $iIndiceDisciplinas);
       Footer($oPdf);
     }
@@ -252,30 +252,30 @@ for($iIndiceDisciplinas = 0; $iIndiceDisciplinas < count($oPdf->oDadosRelatorio-
     /**
      * Guarda os valores do aluno no relatório, caso o índice do array esteja setado
      */
-    if(isset($oPdf->oDadosRelatorio->aAlunos[$iIndiceAvaliacao])) {
-      
+    if (isset($oPdf->oDadosRelatorio->aAlunos[$iIndiceAvaliacao])) {
+
       $oDadosAvaliacoes = $oPdf->oDadosRelatorio->aAlunos[$iIndiceAvaliacao];
       $iNumeroMatricula = $oDadosAvaliacoes->numero_matricula;
       $iOrdemChamada    = $oDadosAvaliacoes->ordem;
       $sNomeAluno       = $oDadosAvaliacoes->nome_aluno;
-      if(strlen($oDadosAvaliacoes->nome_aluno) > $oPdf->oCalculosRelatorio->iTotalCaracteresPermitidos) {
+      if (strlen($oDadosAvaliacoes->nome_aluno) > $oPdf->oCalculosRelatorio->iTotalCaracteresPermitidos) {
         $sNomeAluno = substr($oDadosAvaliacoes->nome_aluno, 0, $oPdf->oCalculosRelatorio->iTotalCaracteresPermitidos);
       }
     }
-    
+
     $oPdf->setfont('times', '', 8);
     $oPdf->Cell(16,                                             $iAlturaLinha,  "$iNumeroMatricula", 1, 0, "R", 0);
     $oPdf->Cell(14,                                             $iAlturaLinha,  "$iOrdemChamada",    1, 0, "C", 0);
     $oPdf->setfont('times', '', 6);
     $oPdf->Cell($oPdf->oCalculosRelatorio->iLarguraColunaAluno, $iAlturaLinha,  "$sNomeAluno",       1, 0, "L", 0);
-    
+
     /**
      * Monta a coluna das avaliações
      */
     for ($iIndiceColuna = 1; $iIndiceColuna <= $oPdf->oDadosRelatorio->iAvaliacoes; $iIndiceColuna++) {
-    
+
       $iQuebraLinha = 0;
-    
+
       if ($iIndiceColuna == $oPdf->oDadosRelatorio->iAvaliacoes) {
         $iQuebraLinha = 1;
       }
@@ -283,69 +283,86 @@ for($iIndiceDisciplinas = 0; $iIndiceDisciplinas < count($oPdf->oDadosRelatorio-
     }
     $iContadorRegistros++;
   }
-  
+
   Footer($oPdf);
 }
 
 /**
  * Função que monta o rodapé do relatório 
  */
-function Footer($oPdf) {
-  
+function Footer($oPdf)
+{
+
   $oPdf->SetLeftMargin(10);
 
   $oPdf->Cell(170,  $oPdf->oDadosRelatorio->iAlturaLinha,  "", 0, 1, "L", 0);
   $oPdf->SetFont('times', 'b', 8);
   $oPdf->Cell(170, $oPdf->oDadosRelatorio->iAlturaLinha, "DISCRIMINAÇÃO DAS AVALIAÇÕES", 0, 1, "L", 0);
-  
+
   for ($iTotalAvaliacoes = 1; $iTotalAvaliacoes <= $oPdf->oDadosRelatorio->iAvaliacoesRodape; $iTotalAvaliacoes++) {
-  
+
     $oPdf->Cell(22,  $oPdf->oDadosRelatorio->iAlturaLinha,  "AVALIAÇÃO {$iTotalAvaliacoes}", 1, 0, "L", 0);
     $oPdf->Cell(170, $oPdf->oDadosRelatorio->iAlturaLinha,  "",                              1, 1, "L", 0);
   }
-  
-  $oPdf->SetFont('times','b', 8);
+
+  $oPdf->SetFont('times', 'b', 8);
   $oPdf->text(40, 285, 'ASSINATURA DO PROFESSOR: __________________________________________________________________');
 }
 
 /**
  * Gera o cabeçalho do relatório 
  */
-function headerRelatorio($oPdf, $iContador) {
+function headerRelatorio($oPdf, $iContador)
+{
 
   $oPdf->setfont('times', 'b', 11);
   $oPdf->SetTopMargin(7);
   $oPdf->setfillcolor(235);
-  
+
   $oPdf->AddPage();
-  
+
   /**
    * Imprime os dados da escola
    */
   foreach ($oPdf->oDadosRelatorio->aEscolas as $oEscolas) {
-    
+
     /**
      * Verifica se a escola possui algum código referência e o adiciona na frente do nome
      */
     $sNomeEscola = $oEscolas->nome;
-    if ( $oEscolas->iCodigoReferencia != null ) {
+    if ($oEscolas->iCodigoReferencia != null) {
       $sNomeEscola = "{$oEscolas->iCodigoReferencia} - {$sNomeEscola}";
     }
 
     /**
      * Verifica se há complemento, para impressão da "/", separando endereço/complemento
      */
-    if($oEscolas->complemento == '') {
+    if ($oEscolas->complemento == '') {
       $sEnderecoCompleto  = "{$oEscolas->endereco}, {$oEscolas->numero}";
     } else {
       $sEnderecoCompleto  = "{$oEscolas->endereco}, {$oEscolas->numero}/{$oEscolas->complemento}";
     }
     $sEnderecoCompleto .= " - {$oEscolas->bairro} - {$oEscolas->municipio}/{$oEscolas->uf}";
-  
+
     /**
      * Imprime o cabeçalho com os dados da escola
      */
+
+    $oDepartamento = new DBDepartamento(db_getsession("DB_coddepto"));
+    $iDepartamento = $oDepartamento->getCodigo();
+
+    $result = db_query("select ed05_i_aparecerelatorio,ed05_i_ano,ed05_i_codigo, ed05_c_numero, ed05_c_finalidade, ed83_c_descr as dl_tipo,
+    case when ed05_c_competencia='F' then 'FEDERAL' when ed05_c_competencia='E' then 'ESTADUAL' else 'MUNICIPAL'
+    end as ed05_c_competencia, ed05_i_ano from atolegal inner join tipoato on tipoato.ed83_i_codigo
+    = atolegal.ed05_i_tipoato inner join atoescola on atoescola.ed19_i_ato = atolegal.ed05_i_codigo
+    where ed19_i_escola = $iDepartamento and ed05_i_aparecerelatorio = true order by ed05_i_codigo ;");
+
+    $atolegal = db_utils::fieldsMemory($result, 0);
+    $atolegalcabecalho = $atolegal->ed05_c_finalidade . "/" . $atolegal->dl_tipo . " nº: " .  $atolegal->ed05_c_numero . "/" . $atolegal->ed05_i_ano;
+
+
     $oPdf->Cell(200, $oPdf->oDadosRelatorio->iAlturaLinha, "{$sNomeEscola}",    0, 1, "C", 0);
+    $oPdf->Cell(200, $oPdf->oDadosRelatorio->iAlturaLinha, $atolegalcabecalho, 0, 1, "C", 0);
     $oPdf->Cell(200, $oPdf->oDadosRelatorio->iAlturaLinha, "{$sEnderecoCompleto}", 0, 1, "C", 0);
     $oPdf->Cell(200, $oPdf->oDadosRelatorio->iAlturaLinha, "{$oEscolas->estado}",  0, 1, "C", 0);
     $oPdf->Cell(200, $oPdf->oDadosRelatorio->iAlturaLinha, "{$oEscolas->depto}",   0, 1, "C", 0);
@@ -357,12 +374,12 @@ function headerRelatorio($oPdf, $iContador) {
   $oPdf->setfillcolor(235);
   $oPdf->Cell(200, $oPdf->oDadosRelatorio->iAlturaLinha, "REGISTRO DE AVALIAÇÕES POR PERÍODO", 0, 1, "C", 0);
   $oPdf->ln();
-  
+
   /**
    * Imprime os dados da turma
    */
   foreach ($oPdf->oDadosRelatorio->aDadosTurma as $oDados) {
-  
+
     $sDisciplina = $oPdf->oDadosRelatorio->aDadosDisciplinas[$iContador];
 
     /**
@@ -377,42 +394,62 @@ function headerRelatorio($oPdf, $iContador) {
     $oPdf->Cell(100, $oPdf->oDadosRelatorio->iAlturaLinha,  "Disciplina (Área): {$sDisciplina}", 0, 0, "L", 0);
     $oPdf->Cell(100, $oPdf->oDadosRelatorio->iAlturaLinha,  "Professor: ",                       0, 1, "L", 0);
   }
-  
+
   /**
    * Imprime os títulos das colunas
    */
   $oPdf->setfont('times', 'b', 8);
-  $oPdf->Cell(16, $oPdf->oDadosRelatorio->iAlturaLinha*2,  "Nº MATR.",  1, 0, "L", 0);
-  $oPdf->Cell(14, $oPdf->oDadosRelatorio->iAlturaLinha*2,  "ORDEM",     1, 0, "L", 0);
-  $oPdf->Cell($oPdf->oCalculosRelatorio->iLarguraColunaAluno, 
-              $oPdf->oDadosRelatorio->iAlturaLinha*2,  "NOME DO ALUNO", 1, 0, "L", 0);
-  
-  $oPdf->Cell($oPdf->oCalculosRelatorio->iLarguraColunaAvaliacoes, 
-              $oPdf->oDadosRelatorio->iAlturaLinha,    "AVALIAÇÕES",    1, 1, "C", 0);
-  
+  $oPdf->Cell(16, $oPdf->oDadosRelatorio->iAlturaLinha * 2,  "Nº MATR.",  1, 0, "L", 0);
+  $oPdf->Cell(14, $oPdf->oDadosRelatorio->iAlturaLinha * 2,  "ORDEM",     1, 0, "L", 0);
+  $oPdf->Cell(
+    $oPdf->oCalculosRelatorio->iLarguraColunaAluno,
+    $oPdf->oDadosRelatorio->iAlturaLinha * 2,
+    "NOME DO ALUNO",
+    1,
+    0,
+    "L",
+    0
+  );
+
+  $oPdf->Cell(
+    $oPdf->oCalculosRelatorio->iLarguraColunaAvaliacoes,
+    $oPdf->oDadosRelatorio->iAlturaLinha,
+    "AVALIAÇÕES",
+    1,
+    1,
+    "C",
+    0
+  );
+
   /**
    * Define a margem das colunas de avaliação
    */
   $iMargemAvaliacoes = $oPdf->getX() + 30 + $oPdf->oCalculosRelatorio->iLarguraColunaAluno;
   $oPdf->setX($iMargemAvaliacoes);
-  
+
   /**
-    * Monta a coluna dos títulos das avaliações, de acordo com a quantidade solicitada
-    */
+   * Monta a coluna dos títulos das avaliações, de acordo com a quantidade solicitada
+   */
   for ($iIndiceColuna = 1; $iIndiceColuna <= $oPdf->oDadosRelatorio->iAvaliacoes; $iIndiceColuna++) {
-  
+
     $iQuebraLinha = 0;
     $sAval        = "AVAL. {$iIndiceColuna}";
-  
+
     if ($iIndiceColuna == $oPdf->oDadosRelatorio->iAvaliacoes) {
-      
+
       $iQuebraLinha = 1;
       $sAval        = "MÉDIA";
     }
     $oPdf->setfont('times', 'b', 7);
-    $oPdf->Cell($oPdf->oCalculosRelatorio->iLarguraColunaAvaliacao, 
-                $oPdf->oDadosRelatorio->iAlturaLinha,  
-                $sAval, 1, $iQuebraLinha, "C", 0);
+    $oPdf->Cell(
+      $oPdf->oCalculosRelatorio->iLarguraColunaAvaliacao,
+      $oPdf->oDadosRelatorio->iAlturaLinha,
+      $sAval,
+      1,
+      $iQuebraLinha,
+      "C",
+      0
+    );
   }
 }
 

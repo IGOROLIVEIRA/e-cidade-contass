@@ -25,17 +25,19 @@
  *                                licenca/licenca_pt.txt
  */
 
-require_once ("libs/db_utils.php");
-require_once ("libs/db_app.utils.php");
-require_once ("libs/db_stdlib.php");
-require_once ("libs/db_conecta.php");
-require_once ("libs/db_sessoes.php");
-require_once ("dbforms/db_funcoes.php");
-require_once ("std/DBDate.php");
-require_once ("fpdf151/pdf.php");
-require_once ("classes/db_edu_parametros_classe.php");
-require_once ("model/educacao/avaliacao/iFormaObtencao.interface.php");
-require_once ("model/educacao/avaliacao/iElementoAvaliacao.interface.php");
+require_once("libs/db_utils.php");
+require_once("libs/db_app.utils.php");
+require_once("libs/db_stdlib.php");
+require_once("libs/db_conecta.php");
+require_once("libs/db_sessoes.php");
+require_once("dbforms/db_funcoes.php");
+require_once("std/DBDate.php");
+require_once("fpdf151/pdf.php");
+require_once("classes/db_edu_parametros_classe.php");
+require_once("model/educacao/avaliacao/iFormaObtencao.interface.php");
+require_once("model/educacao/avaliacao/iElementoAvaliacao.interface.php");
+include("edu_cabecalhoatolegal.php");
+
 
 $oGet = db_utils::postMemory($_GET);
 db_app::import("CgmFactory");
@@ -62,7 +64,7 @@ foreach ($aTurmas as $oTurma) {
   $sNomeEscola       = $oTurma->getEscola()->getNome();
   $iCodigoReferencia = $oTurma->getEscola()->getCodigoReferencia();
 
-  if ( $iCodigoReferencia != null ) {
+  if ($iCodigoReferencia != null) {
     $sNomeEscola = "{$iCodigoReferencia} - {$sNomeEscola}";
   }
 
@@ -149,7 +151,7 @@ foreach ($aTurmaProcessada as $oTurma) {
 
   foreach ($oTurma->aAlunos as $oAluno) {
 
-    if (($oPdf->GetY() > $oPdf->h -10) || $lPrimeiraVolta) {
+    if (($oPdf->GetY() > $oPdf->h - 10) || $lPrimeiraVolta) {
 
       $lPrimeiraVolta = false;
       imprimeHeader($oPdf, $iHeigth);
@@ -158,10 +160,10 @@ foreach ($aTurmaProcessada as $oTurma) {
     $nPercentualFaltas     = "0%";
     $nPercentualFrequencia = "100%";
 
-    if ( $oAluno->nPercentualFaltas != '' ) {
+    if ($oAluno->nPercentualFaltas != '') {
       $nPercentualFaltas = "{$oAluno->nPercentualFaltas}%";
     }
-    if ( $oAluno->nPercentualFrequencia != '' ) {
+    if ($oAluno->nPercentualFrequencia != '') {
       $nPercentualFrequencia = "{$oAluno->nPercentualFrequencia}%";
     }
 
@@ -172,7 +174,6 @@ foreach ($aTurmaProcessada as $oTurma) {
     $oPdf->Cell(15,  $iHeigth, "{$nPercentualFaltas}",         1, 0, "R");
     $oPdf->Cell(15,  $iHeigth, "{$nPercentualFrequencia}",     1, 0, "R");
     $oPdf->Cell(40,  $iHeigth, "{$oAluno->sSituacao}",     "TBL", 1, "L");
-
   }
   $oPdf->ln();
   $oPdf->SetFont("arial", "b", 7);
@@ -195,7 +196,8 @@ $oPdf->Output();
  * @param PDF $oPdf
  * @param integer $iHeigth altura da linha
  */
-function imprimeHeader($oPdf, $iHeigth) {
+function imprimeHeader($oPdf, $iHeigth)
+{
 
   $oPdf->AddPage();
   $oPdf->SetFont("arial", "b", 7);
