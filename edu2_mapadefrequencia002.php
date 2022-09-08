@@ -32,10 +32,11 @@ require_once("libs/db_conecta.php");
 require_once("libs/db_sessoes.php");
 require_once("dbforms/db_funcoes.php");
 require_once("std/DBDate.php");
-require_once("fpdf151/pdf.php");
+//require_once("fpdf151/pdf.php");
 require_once("classes/db_edu_parametros_classe.php");
 require_once("model/educacao/avaliacao/iFormaObtencao.interface.php");
 require_once("model/educacao/avaliacao/iElementoAvaliacao.interface.php");
+require_once("fpdf151/pdfwebseller.php");
 include("edu_cabecalhoatolegal.php");
 
 
