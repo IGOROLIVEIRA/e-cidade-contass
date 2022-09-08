@@ -145,8 +145,8 @@ class EventoS1202 extends EventoBase
             }
 
             $rsIdentificadores = db_query($sql);
-            echo $sql;
-            db_criatabela($rsIdentificadores);
+            // echo $sql;
+            // db_criatabela($rsIdentificadores);
             if (pg_num_rows($rsIdentificadores) > 0) {
                 $oIdentificadores = \db_utils::fieldsMemory($rsIdentificadores, 0);
                 return $oIdentificadores->idedmdev;
