@@ -724,7 +724,10 @@ class licitacao
         $sLista = $aLicitacoes[0];
         $sCampos          = "l21_codigo as codigo, pc01_codmater as codigomaterial,";
         $sCampos         .= "pc01_descrmater as material, pc23_vlrun as valorunitario,";
-        $sCampos         .= "pc01_servico as servico, 1 as origem, pc18_codele as elemento,";
+        $sCampos         .= "pc01_servico as servico, 1 as origem, (case
+		when pc18_codele is null 
+		then (select pc07_codele from pcmaterele where pc07_codmater = 2766 limit 1)
+	end) as elemento,";
         $sCampos         .= "pc23_quant as quantidade, pc23_valor as valortotal,l20_numero as numero";
         $sSqlLicitacoes   = $oDaoLicilicitem->sql_query_soljulg(
             null,
