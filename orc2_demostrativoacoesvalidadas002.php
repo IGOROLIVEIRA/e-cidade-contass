@@ -93,7 +93,7 @@ for ( $iInd=0; $iInd < $iLinhasEstimativa; $iInd++ ) {
 
     $sWhere = " o55_anousu = {$oGet->iAno} ";
 
-    $sSqlAcoes = " SELECT DISTINCT o55_projativ o08_projativ,
+    $sSqlAcoes = " SELECT DISTINCT o55_projativ AS o08_projativ,
                           o55_descr,
                           o55_anousu o05_anoreferencia,
                           (SELECT sum(o28_valor) FROM orcprojativprogramfisica
@@ -128,7 +128,7 @@ for ( $iInd=0; $iInd < $iLinhasEstimativa; $iInd++ ) {
                    WHERE $sWhere
                      AND o58_programa = {$oDados->iPrograma}
                      AND o58_instit IN ({$sListaInstit})
-                   GROUP BY o55_projativ, o08_projativ, o15_tipo, o55_tipo, o55_descr, o55_especproduto, o20_descricao, o55_descrunidade, o55_valorunidade, o55_anousu, o05_anoreferencia
+                   GROUP BY 1, 3, ppadotacao.o08_projativ, 4, 8, o05_anoreferencia
                    ORDER BY o08_projativ, o05_anoreferencia";
 
   } elseif ($iModelo == 1) {
