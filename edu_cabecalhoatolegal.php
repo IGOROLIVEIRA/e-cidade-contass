@@ -9,7 +9,7 @@ $result = db_query("select ed05_i_aparecerelatorio,ed05_i_ano,ed05_i_codigo, ed0
 case when ed05_c_competencia='F' then 'FEDERAL' when ed05_c_competencia='E' then 'ESTADUAL' else 'MUNICIPAL'
 end as ed05_c_competencia, ed05_i_ano from atolegal inner join tipoato on tipoato.ed83_i_codigo
 = atolegal.ed05_i_tipoato inner join atoescola on atoescola.ed19_i_ato = atolegal.ed05_i_codigo
-where ed19_i_escola = 68 and ed05_i_aparecerelatorio = true order by ed05_i_codigo ;");
+where ed19_i_escola = $iDepartamento and ed05_i_aparecerelatorio = true order by ed05_i_codigo ;");
 
 $atolegal = db_utils::fieldsMemory($result, 0);
 

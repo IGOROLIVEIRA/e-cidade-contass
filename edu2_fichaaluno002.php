@@ -109,7 +109,7 @@ $oPdf->SetAutoPageBreak(false, 10);
 for ($iCont = 0; $iCont < $oDaoAluno->numrows; $iCont++) {
 
   db_fieldsmemory($rsResult,  $iCont);
-  $head1 = "FICHA DO ALUNOooooooooooooo";
+  $head1 = "FICHA DO ALUNO";
   $head2 = "$ed47_i_codigo - $ed47_v_nome";
   $oPdf->addpage('P');
 

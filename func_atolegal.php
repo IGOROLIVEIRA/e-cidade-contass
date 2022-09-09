@@ -99,7 +99,6 @@ $clatolegal->rotulo->label("ed05_c_numero");
                     } else {
                         $sql = $clatolegal->sql_query("", $campos, "ed05_i_codigo", " ed19_i_escola = $escola");
                     }
-                    echo $sql;
                     db_lovrot($sql, 15, "()", "", $funcao_js);
                 } else {
                     if ($pesquisa_chave != null && $pesquisa_chave != "") {

@@ -31,6 +31,8 @@ require_once("libs/db_utils.php");
 require_once("libs/JSON.php");
 require_once("libs/db_libdocumento.php");
 require_once("std/db_stdClass.php");
+include("edu_cabecalhoatolegal.php");
+
 
 $oDaoPeriodoEscola = new cl_periodoescola;
 

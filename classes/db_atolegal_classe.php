@@ -169,6 +169,8 @@ class cl_atolegal
 
     if ($this->ed05_i_aparecerelatorio == 'f') {
       $this->ed05_i_aparecerelatorio = "false";
+    } else {
+      $this->ed05_i_aparecerelatorio = "true";
     }
 
 
@@ -335,10 +337,11 @@ class cl_atolegal
                                ,$this->ed05_i_aparecerelatorio 
                       )";
     $result = db_query($sql);
+
     if ($result == false) {
       $this->erro_banco = str_replace("\n", "", @pg_last_error());
       if (strpos(strtolower($this->erro_banco), "duplicate key") != 0) {
-        $this->erro_sql   = "Ato Legal ($this->ed05_i_codigo) nao Incluído. Inclusao Abortada.";
+        $this->erro_sql   =  "Ato Legal ($this->ed05_i_codigo) nao Incluído. Inclusao Abortada.";
         $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_banco = "Ato Legal já Cadastrado";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
@@ -383,8 +386,45 @@ class cl_atolegal
   function alterar($ed05_i_codigo = null)
   {
     $this->atualizacampos();
+
+    $oDepartamento = new DBDepartamento(db_getsession("DB_coddepto"));
+    $iDepartamento = $oDepartamento->getCodigo();
+
+    $result = db_query("select ed05_i_aparecerelatorio, ed05_i_codigo, ed05_c_numero, ed05_c_finalidade, ed83_c_descr as dl_tipo,
+     case when ed05_c_competencia='F' then 'FEDERAL' when ed05_c_competencia='E' then 'ESTADUAL' else 'MUNICIPAL'
+     end as ed05_c_competencia, ed05_i_ano from atolegal inner join tipoato on tipoato.ed83_i_codigo
+     = atolegal.ed05_i_tipoato inner join atoescola on atoescola.ed19_i_ato = atolegal.ed05_i_codigo
+     where ed19_i_escola = $iDepartamento and ed05_i_aparecerelatorio = true order by ed05_i_codigo ;");
+    $atolegal = db_utils::fieldsMemory($result, 0);
+
+    if ($atolegal->ed05_i_aparecerelatorio == 't' && $this->ed05_i_aparecerelatorio == 't') {
+      $this->erro_sql = "Por escola, o usuário só pode escolher uma opção de Ato Legal para listar nos relatórios.";
+      $this->erro_sql .= "\\n\\n O ato legal $atolegal->ed05_i_codigo está selecionado para listar nos relatórios.";
+      $this->erro_campo = "ed05_i_aparecerelatorio";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
+
+    if ($this->ed05_i_aparecerelatorio == 'f') {
+      $this->ed05_i_aparecerelatorio = "false";
+    } else {
+      $this->ed05_i_aparecerelatorio = "true";
+    }
+
+
+
+
+
     $sql = " update atolegal set ";
     $virgula = "";
+
+    $sql .= " ed05_i_aparecerelatorio = $this->ed05_i_aparecerelatorio ";
+    $virgula = ",";
+
+
     if (trim($this->ed05_i_codigo) != "" || isset($GLOBALS["HTTP_POST_VARS"]["ed05_i_codigo"])) {
       $sql  .= $virgula . " ed05_i_codigo = $this->ed05_i_codigo ";
       $virgula = ",";
