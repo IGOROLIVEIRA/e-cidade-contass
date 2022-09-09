@@ -1057,8 +1057,14 @@ WHERE rh30_vinculo IN ('I',
         and rescisao.r59_regime = rhregime.rh30_regime
         and rescisao.r59_causa = rhpesrescisao.rh05_causa
         and rescisao.r59_caub = rhpesrescisao.rh05_caub::char(2)
+    left  outer join (
+            SELECT distinct r33_codtab,r33_nome,r33_tiporegime
+                                from inssirf
+                                where     r33_instit = fc_getsession('DB_instit')::int
+                               ) as x on r33_codtab = rhpessoalmov.rh02_tbprev+2
     where h13_categoria in ('101', '106', '111', '301', '302', '303', '305', '306', '309', '312', '313', '902')
-    and rh30_vinculo = 'A' ";
+    and rh30_vinculo = 'A'
+    and r33_tiporegime = '1' ";
 
         if ($matricula != null) {
             $sql .= " and rh01_regist in ($matricula) ";
@@ -1171,9 +1177,7 @@ WHERE rh30_vinculo IN ('I',
     left  outer join (
             SELECT distinct r33_codtab,r33_nome,r33_tiporegime
                                 from inssirf
-                                where     r33_anousu = fc_getsession('DB_anousu')::int
-                                      and r33_mesusu = date_part('month',fc_getsession('DB_datausu')::date)
-                                      and r33_instit = fc_getsession('DB_instit')::int
+                                where r33_instit = fc_getsession('DB_instit')::int
                                ) as x on r33_codtab = rhpessoalmov.rh02_tbprev+2
     where h13_categoria in ('101', '106', '111', '301', '302', '303','304', '305', '306', '309', '312', '313', '902')
     and rh30_vinculo = 'A'
