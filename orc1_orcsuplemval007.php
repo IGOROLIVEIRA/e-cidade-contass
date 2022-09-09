@@ -25,7 +25,6 @@
  *                                licenca/licenca_pt.txt
  */
 
-
 require_once("libs/db_stdlib.php");
 require_once("libs/db_conecta.php");
 require_once("libs/db_utils.php");
@@ -53,8 +52,13 @@ include("classes/db_orcreservaaut_classe.php");
 include("classes/db_empautitem_classe.php");
 include("classes/db_condataconf_classe.php");
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
 db_app::import("orcamento.suplementacao.*");
+db_app::import("orcamento.ManutencaoSuplementacao");
+
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
 
@@ -64,7 +68,7 @@ $clorcdotacao   = new cl_orcdotacao;  // instancia da classe dotação
 $clorcsuplem    = new cl_orcsuplem;
 $clorcorgao     = new cl_orcorgao;
 $clorcprojeto   = new cl_orcprojeto;
-$clorcparametro           = new cl_orcparametro();
+$clorcparametro = new cl_orcparametro();
 $cloperacaodecredito = new cl_db_operacaodecredito;
 
 
@@ -164,10 +168,20 @@ if (isset($incluir)) {
             $limpa_dados = false;
         }
     }
-
+/*
+    try {
+        */
+        $oManutencaoSuplementacao = new ManutencaoSuplementacao($tiposup, new Recurso($o58_codigo), $o47_valor);
+        //$oManutencaoSuplementacao->validarSuplementacao();
+        /*
+    } catch (BusinessException $e) {
+        db_msgbox($e->getMessage());
+        $sqlerro = true;
+        $limpa_dados = false; 
+    }
+*/
     // Condição da OC 17280
     if ($tiposup == 2026 || $tiposup == 1003 || $tiposup == 1008 || $tiposup == 1024) {
-
         if (in_array(substr($o58_codigo, 1, 2), array("00", "01", "02", "18", "19"))) {
             if (in_array(substr($o58_codigo, 1, 2), array("00", "01", "02"))) {
                 $fontes = array("00", "01", "02");
