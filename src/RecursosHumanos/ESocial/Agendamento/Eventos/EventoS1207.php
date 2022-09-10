@@ -2,6 +2,8 @@
 
 namespace ECidade\RecursosHumanos\ESocial\Agendamento\Eventos;
 
+use cl_rubricasesocial;
+use db_utils;
 use DBPessoal;
 use ECidade\RecursosHumanos\ESocial\Agendamento\Eventos\EventoBase;
 use ECidade\RecursosHumanos\ESocial\Model\Formulario\EventoCargaS1207;
@@ -132,8 +134,8 @@ class EventoS1207 extends EventoBase
             }
 
             $rsIdentificadores = db_query($sql);
-            echo $sql;
-            db_criatabela($rsIdentificadores);
+            // echo $sql;
+            // db_criatabela($rsIdentificadores);
             if (pg_num_rows($rsIdentificadores) > 0) {
                 $oIdentificadores = \db_utils::fieldsMemory($rsIdentificadores, 0);
                 return $oIdentificadores->idedmdev;
