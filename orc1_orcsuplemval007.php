@@ -51,11 +51,11 @@ include("classes/db_orcreservaaut_classe.php");
 
 include("classes/db_empautitem_classe.php");
 include("classes/db_condataconf_classe.php");
-
+/*
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
-
+*/
 db_app::import("orcamento.suplementacao.*");
 db_app::import("orcamento.ManutencaoSuplementacao");
 
@@ -168,102 +168,14 @@ if (isset($incluir)) {
             $limpa_dados = false;
         }
     }
-/*
+
     try {
-        */
         $oManutencaoSuplementacao = new ManutencaoSuplementacao($tiposup, new Recurso($o58_codigo), $o47_valor);
-        //$oManutencaoSuplementacao->validarSuplementacao();
-        /*
+        $oManutencaoSuplementacao->validarSuplementacao();
     } catch (BusinessException $e) {
         db_msgbox($e->getMessage());
         $sqlerro = true;
         $limpa_dados = false; 
-    }
-*/
-    // Condição da OC 17280
-    if ($tiposup == 2026 || $tiposup == 1003 || $tiposup == 1008 || $tiposup == 1024) {
-        if (in_array(substr($o58_codigo, 1, 2), array("00", "01", "02", "18", "19"))) {
-            if (in_array(substr($o58_codigo, 1, 2), array("00", "01", "02"))) {
-                $fontes = array("00", "01", "02");
-            } else {
-                $fontes = array("18", "19");
-            }
-        } else {
-            $fontes[] = substr($o58_codigo, 1, 2);
-        }
-
-        $valorQuadro = 0;
-        $existeQuadro = false;
-
-        for ($i = 1; $i <= 2; $i ++) {
-            foreach ($fontes as $fonte) {
-                $fonteAtual = $i . $fonte;
-
-                $clquadrosuperavitdeficit = new cl_quadrosuperavitdeficit;
-                $result = $clquadrosuperavitdeficit->sql_record($clquadrosuperavitdeficit->sql_query("null", "*", null, "c241_fonte = {$fonteAtual} AND c241_ano = {$anousu} AND c241_instit = " . db_getsession("DB_instit")));
-
-                if (pg_num_rows($result) > 0) {
-                    $existeQuadro = true;
-                    $quadro = db_utils::fieldsMemory($result, 0);
-                    $valorQuadro += $quadro->c241_valor;
-
-                    $subSql = "SELECT
-                                concat('1', substring(o58_codigo::TEXT, 2, 2)) fonte,
-                                sum(o47_valor) as valor
-                            FROM
-                            orcsuplemval
-                                LEFT JOIN orcdotacao ON o47_coddot = o58_coddot
-                                AND o47_anousu = o58_anousu
-                                JOIN orcsuplem ON o47_codsup=o46_codsup
-                            WHERE
-                                o47_anousu = {$anousu}
-                                AND concat('1', substring(o58_codigo::TEXT, 2, 2)) = '$fonteAtual'
-                                AND o47_valor > 0
-                                AND o46_instit IN (" . db_getsession("DB_instit") . ")
-                                AND o46_tiposup IN (2026, 1003, 1008, 1024)
-                            GROUP BY concat('1', substring(o58_codigo::TEXT, 2, 2))
-                            UNION
-                            select
-                            concat('1', substring(o58_codigo::TEXT, 2, 2)) fonte,
-                                sum(o136_valor) as valor
-                            from
-                            orcsuplemdespesappa
-                                LEFT JOIN orcsuplemval ON o47_codsup = o136_orcsuplem
-                                LEFT JOIN orcdotacao ON o47_coddot = o58_coddot
-                                AND o47_anousu = o58_anousu
-                                JOIN orcsuplem ON o47_codsup=o46_codsup
-                        
-                            WHERE
-                                o47_anousu = {$anousu}
-                                AND o46_instit IN (" . db_getsession("DB_instit") . ")
-                                AND concat('1', substring(o58_codigo::TEXT, 2, 2)) = '$fonteAtual'
-                                AND o46_tiposup IN (2026, 1003, 1008, 1024)
-                            AND 
-                                o136_valor > 0 
-                            GROUP BY concat('1', substring(o58_codigo::TEXT, 2, 2))";
-                    $subResult = db_query($subSql);
-
-                    for ($y = 0; $y < pg_num_rows($subResult); $y++) {
-                        $oFonte = db_utils::fieldsMemory($subResult, $y);
-                        $valorQuadro -= $oFonte->valor;
-                    }
-                }
-            }
-        }
-        
-        if (!$existeQuadro) {
-            db_msgbox("Não existe cadastro no quadro de superávit e deficit para a fonte informada no exercício.");
-            $sqlerro = true;
-            $limpa_dados = false; 
-        }
-
-        $valorQuadro = number_format($valorQuadro, 2, ".", "");
-
-        if (number_format($o47_valor, 2, ".", "") > $valorQuadro) {
-            db_msgbox("Não existe superávit suficiente para realizar essa suplementação, saldo disponível R$ {$valorQuadro}");
-            $sqlerro = true;
-            $limpa_dados = false; 
-        }
     }
 
     // Novos tiposup adicionados na OC18040

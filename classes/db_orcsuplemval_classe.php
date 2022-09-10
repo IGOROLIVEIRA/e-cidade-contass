@@ -637,5 +637,50 @@ class cl_orcsuplemval {
      }
      return $sql;
   }
+
+    // Retorna valores de suplementação já executada
+    function sql_query_superavit_deficit_suplementado_scope(
+        $o47_anousu,
+        $o58_codigo,
+        $o46_instit,
+        $o46_tiposup)
+    {
+        $sql  = " SELECT SUM(valor) as valor FROM ( ";
+        $sql .= " SELECT ";
+        // $sql .= "   concat('1', substring(o58_codigo::TEXT, 2, 2)) fonte, ";
+        $sql .= "   sum(o47_valor) as valor ";
+        $sql .= " FROM ";
+        $sql .= "   orcsuplemval ";
+        $sql .= " LEFT JOIN orcdotacao ON o47_coddot = o58_coddot ";
+        $sql .= "   AND o47_anousu = o58_anousu ";
+        $sql .= " JOIN orcsuplem ON o47_codsup=o46_codsup ";
+        $sql .= " WHERE ";
+        $sql .= "   o47_anousu = {$o47_anousu} ";
+        $sql .= "   AND concat('1', substring(o58_codigo::TEXT, 2, 2)) = '{$o58_codigo}' ";
+        $sql .= "   AND o47_valor > 0 ";
+        $sql .= "   AND o46_instit IN ({$o46_instit}) ";
+        $sql .= "   AND o46_tiposup IN ({$o46_tiposup}) ";
+        $sql .= " GROUP BY concat('1', substring(o58_codigo::TEXT, 2, 2)) ";
+        $sql .= " UNION ";
+        $sql .= " SELECT ";
+        // $sql .= "   concat('1', substring(o58_codigo::TEXT, 2, 2)) fonte, ";
+        $sql .= "   sum(o136_valor) as valor ";
+        $sql .= " FROM ";
+        $sql .= "   orcsuplemdespesappa ";
+        $sql .= " LEFT JOIN orcsuplemval ON o47_codsup = o136_orcsuplem ";
+        $sql .= " LEFT JOIN orcdotacao ON o47_coddot = o58_coddot ";
+        $sql .= "   AND o47_anousu = o58_anousu ";
+        $sql .= " JOIN orcsuplem ON o47_codsup=o46_codsup ";
+        $sql .= " WHERE ";
+        $sql .= "   o47_anousu = {$o47_anousu} ";
+        $sql .= "   AND o46_instit IN ({$o46_instit}) ";
+        $sql .= "   AND concat('1', substring(o58_codigo::TEXT, 2, 2)) = '{$o58_codigo}' ";
+        $sql .= "   AND o46_tiposup IN ({$o46_tiposup}) ";
+        $sql .= "   AND o136_valor > 0  ";
+        $sql .= " GROUP BY concat('1', substring(o58_codigo::TEXT, 2, 2)) ";
+        $sql .= " ) as x ";
+
+        return $sql;
+    }
 }
 ?>

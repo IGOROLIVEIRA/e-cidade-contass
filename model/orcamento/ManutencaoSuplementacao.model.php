@@ -1,5 +1,8 @@
 <?php
 
+require_once("repositorios/QuadroSuperavitDeficitRepository.php");
+require_once("repositorios/OrcSuplemValRepository.php");
+
 /**
  * Classe responsavel pela regra de negocios da suplementação do orçamento
  * @author widouglas
@@ -24,23 +27,35 @@ class ManutencaoSuplementacao
     /**
      * @var array
      */
-    private $aSubTipoSuplementacao = array('1003', '1008', '1024', '1028', '2026');
+    private $aTipoSubSuplementacao = array('1003', '1008', '1024', '1028', '2026');
 
     /**
      * @var int
      */
-    private $iAnoUsu = db_getsession("DB_anousu");
+    private $iAnoUsu;
 
     /**
      * @var int
      */
-    private $iInstituicao = db_getsession("DB_instit");
+    private $iInstituicao;
+
+    /**
+     * @var bol
+     */
+    private $bExisteQuadro;
+
+    /**
+     * @var float
+     */
+    private $nValorQuadroSuperavitDeficit = 0;
 
     public function __construct($sSupTipo, Recurso $oRecurso, $nValor)
     {
         $this->sSupTipo = $sSupTipo;
         $this->oRecurso = $oRecurso;
         $this->nValor = $nValor;
+        $this->iAnoUsu = db_getsession("DB_anousu");
+        $this->iInstituicao = db_getsession("DB_instit");
     }
 
     /**
@@ -48,9 +63,9 @@ class ManutencaoSuplementacao
      *
      * @return bool
      */
-    public function eSubTipoSuplementacaoSuperavit()
+    public function eTipoSubSuplementacaoSuperavitDeficit()
     {
-        if (in_array($this->sSupTipo, $this->aSubTipoSuplementacao))
+        if (in_array($this->sSupTipo, $this->aTipoSubSuplementacao))
             return true;
         return false;
     }
@@ -72,94 +87,55 @@ class ManutencaoSuplementacao
         return array($sDigitosFonte);
     }
 
-    public function valorQuadroSuperavit($sFonte)
+    /**
+     * definir se existe quadro de superavit
+     *
+     * @param [type] $registros
+     * @return void
+     */
+    public function definirExisteQuadroSuperavitDeficit($registros)
     {
-        /*
-        $clQuadroSuperavitDeficit = new cl_quadrosuperavitdeficit;
-        $sWhere = " c241_fonte = {$sFonte} AND c241_ano = {$this->iAnoUsu} AND c241_instit = {$this->iInstituicao} ";
-        $rResult = $clQuadroSuperavitDeficit->sql_record($clQuadroSuperavitDeficit->sql_query(null, "c241_valor", null, $sWhere));
-        if (pg_num_rows($rResult) == 0) 
-            return 0;
-/*
-            $subSql = "SELECT
-            concat('1', substring(o58_codigo::TEXT, 2, 2)) fonte,
-                sum(o47_valor) as valor
-                    FROM
-                    orcsuplemval
-                        LEFT JOIN orcdotacao ON o47_coddot = o58_coddot
-                        AND o47_anousu = o58_anousu
-                        JOIN orcsuplem ON o47_codsup=o46_codsup
-                    WHERE
-                        o47_anousu = " . db_getsession("DB_anousu") . "
-                        AND concat('1', substring(o58_codigo::TEXT, 2, 2)) = '{$sFonteAtual}'
-                        AND o47_valor > 0
-                        AND o46_instit IN (" . db_getsession("DB_instit") . ")
-                        AND o46_tiposup IN (2026, 1003, 1008, 1024, 1028)
-                    GROUP BY concat('1', substring(o58_codigo::TEXT, 2, 2))
-                    UNION
-                    select
-                    concat('1', substring(o58_codigo::TEXT, 2, 2)) fonte,
-                        sum(o136_valor) as valor
-                    from
-                    orcsuplemdespesappa
-                        LEFT JOIN orcsuplemval ON o47_codsup = o136_orcsuplem
-                        LEFT JOIN orcdotacao ON o47_coddot = o58_coddot
-                        AND o47_anousu = o58_anousu
-                        JOIN orcsuplem ON o47_codsup=o46_codsup
-                
-                    WHERE
-                        o47_anousu = " . db_getsession("DB_anousu") . "
-                        AND o46_instit IN (" . db_getsession("DB_instit") . ")
-                        AND concat('1', substring(o58_codigo::TEXT, 2, 2)) = '$sFonteAtual'
-                        AND o46_tiposup IN (2026, 1003, 1008, 1024, 1028)
-                    AND 
-                        o136_valor > 0 
-                    GROUP BY concat('1', substring(o58_codigo::TEXT, 2, 2))";
-        $subResult = db_query($subSql);
+        if ($registros === 0)
+            $this->bExisteQuadro = FALSE;
+        $this->bExisteQuadro = TRUE;
+    }
 
-        for ($y = 0; $y < pg_num_rows($subResult); $y++) {
-            $oFonte = db_utils::fieldsMemory($subResult, $y);
-            $nValorTotalQuadro -= $oFonte->valor;
-        }
+    public function valorQuadroSuperavitDeficit($sFonte)
+    {
+        $oQuadroSuperavitDeficit = new QuadroSuperavitDeficitRepository($this->iAnoUsu, $this->iInstituicao);
+        $oQuadroSuperavitDeficit->calcularPorFonte($sFonte);
+        $this->definirExisteQuadroSuperavitDeficit($oQuadroSuperavitDeficit->pegarNumeroRegistros());
+        return $oQuadroSuperavitDeficit->pegarValor();
+    }
 
-        $oQuadro = db_utils::fieldsMemory($rResult, 0);
-        return $oQuadro->c241_valor;
-        
-        return 0;
-        */
+    public function valorSuplementado($sFonte)
+    {
+        $oOrcSuplemVal = new OrcSuplemValRepository($this->iAnoUsu, $this->iInstituicao);
+        return $oOrcSuplemVal->pegarValorSuplementadoPorFonteETipoSup($sFonte, $this->aTipoSubSuplementacao);
     }
 
     public function validarSuplementacao()
     {
-        /*
-        if (!$this->eSubTipoSuplementacaoSuperavit())
+        
+        if (!$this->eTipoSubSuplementacaoSuperavitDeficit())
             return false;
 
         $aFontes = $this->desmembrarFontes();
-        $nValorTotalQuadro = 0;
-        $bExisteQuadro = false;
 
         for ($i = 1; $i <= 2; $i++) {
             foreach ($aFontes as $sFonte) {
-                $sFonteAtual = $i . $sFonte;
-                /*
-                echo "Fonte {$sFonteAtual} <br/>";
-                $nValorQuadro = $this->valorQuadroSuperavit($sFonteAtual);
-                if ($nValorQuadro > 0)
-                    $bExisteQuadro = true;
-                $nValorTotalQuadro += $this->valorQuadroSuperavit($sFonteAtual);
-                echo $nValorTotalQuadro;
-                
+                $sFonteAtual = $i . $sFonte;        
+                $this->nValorQuadroSuperavitDeficit += $this->valorQuadroSuperavitDeficit($sFonteAtual);
+                $this->nValorSuplementado -= $this->valorSuplementado($sFonteAtual);
             }
-            */
         }
         
-        if (!$bExisteQuadro) 
+        if (!$this->bExisteQuadro) 
             throw new BusinessException("Não existe cadastro no quadro de superávit e deficit para a fonte informada no exercício.");
 
-        $nValorTotalQuadro = number_format($nValorTotalQuadro, 2, ".", "");
+        $nValorQuadroSuperavitDeficit = number_format($this->nValorQuadroSuperavitDeficit, 2, ".", "");
 
-        if (number_format($this->nValor, 2, ".", "") > $nValorTotalQuadro)
-            throw new BusinessException("Não existe superávit suficiente para realizar essa suplementação, saldo disponível R$ {$nValorTotalQuadro}");
+        if (number_format($this->nValor, 2, ".", "") > $nValorQuadroSuperavitDeficit)
+            throw new BusinessException("Não existe superávit suficiente para realizar essa suplementação, saldo disponível R$ {$nValorQuadroSuperavitDeficit}");
     }
 }
