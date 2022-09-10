@@ -57,7 +57,7 @@ class EventoS1200 extends EventoBase
 
                 $oRemunoutrempr = new \stdClass;
                 $oRemunoutrempr->tpinsc      = 1;
-                $oRemunoutrempr->nrinsc      = $oDados->nrinsc;
+                $oRemunoutrempr->nrinsc      = $oDados->rh51_cgcvinculo;
                 $oRemunoutrempr->codcateg    = $oDados->codcateg;
                 if (strlen($oDados->vlrremunoe) > 0) {
                     $oRemunoutrempr->vlrremunoe  = $oDados->vlrremunoe;
