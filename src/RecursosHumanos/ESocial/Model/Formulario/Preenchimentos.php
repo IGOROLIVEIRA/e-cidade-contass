@@ -989,7 +989,8 @@ WHERE rh30_vinculo IN ('I',
         when rh02_ocorre = '4' then 4
         else '1'
         end as grauExp,
-        rh30_regime
+        rh30_regime,
+        rh51_cgcvinculo
     from
         rhpessoal
     left join rhpessoalmov on
