@@ -649,7 +649,7 @@ class AcordoPosicao
             $oItem = new AcordoItem();
             $oItem->setCodigoPosicao($this->getCodigo());
             $oItem->setMaterial(new MaterialCompras($oItemLicitacao->pc01_codmater));
-            
+            $oItem->setElemento($oItemLicitacao->pc18_codele);
             if($oItemLicitacao->pc18_codele == ''){
                 $rsDadosEle    = $oDaoPcmaterele->sql_record("select pc07_codele from pcmaterele where pc07_codmater = $oItemLicitacao->pc01_codmater limit 1");
                 $oEleItem = db_utils::fieldsMemory($rsDadosEle, 0);
