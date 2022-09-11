@@ -2,6 +2,8 @@
 
 namespace ECidade\RecursosHumanos\ESocial\Agendamento\Eventos;
 
+use cl_rubricasesocial;
+use db_utils;
 use DBPessoal;
 use ECidade\RecursosHumanos\ESocial\Agendamento\Eventos\EventoBase;
 use ECidade\RecursosHumanos\ESocial\Model\Formulario\EventoCargaS1207;
@@ -62,8 +64,53 @@ class EventoS1207 extends EventoBase
             $oDadosAPI->evtBenPrRP->dmdev->infoperant->ideperiodo = $aIdeestab;
 
             //$oDadosAPI->evtBenPrRP->dtAlteracao         = '2021-01-29'; //$oDados->altContratual->dtAlteracao;
-            $aDadosAPI[] = $oDadosAPI;
-            $iSequencial++;
+
+
+            $std = new \stdClass();
+
+            //dentificação de cada um dos demonstrativos de valores devidos ao beneficiário.
+            $std->dmdev[0] = new \stdClass(); //Obrigatório
+            $std->dmdev[0]->idedmdev = $this->buscarIdentificador($oDados->matricula, $oDados->rh30_regime); //Obrigatório
+            $std->dmdev[0]->nrbeneficio = $oDados->matricula; //Obrigatório
+
+            //Informações relativas ao período de apuração.
+            $std->dmdev[0]->infoperapur = new \stdClass(); //Opcional
+
+            //Identificação da unidade do órgão público na qual o beneficiário possui provento ou pensão.
+            $std->dmdev[0]->infoperapur->ideestab[0] = new \stdClass(); //Obrigatório
+            $std->dmdev[0]->infoperapur->ideestab[0]->tpinsc = 1; //Obrigatório e igual a 1
+            $std->dmdev[0]->infoperapur->ideestab[0]->nrinsc = $oDados->nrinsc; //Obrigatório
+
+            //Rubricas que compõem o provento ou pensão do beneficiário.
+            $std->dmdev[0]->infoperapur->ideestab[0]->itensremun = $this->buscarValorRubrica($oDados->matricula, $oDados->rh30_regime);
+
+            //Grupo destinado às informações relativas a períodos anteriores. Somente preencher esse grupo se houver
+            //proventos ou pensões retroativos.
+            // $std->dmdev[0]->infoperant = new \stdClass(); //Opcional
+
+            // $std->dmdev[0]->infoperant->ideperiodo[0] = new \stdClass(); //Obrigatório
+            // $std->dmdev[0]->infoperant->ideperiodo[0]->perref = '2011-10'; //Obrigatório
+
+            //Identificação da unidade do órgão público na qual o beneficiário possui provento ou pensão.
+            // $std->dmdev[0]->infoperant->ideperiodo[0]->ideestab[0] = new \stdClass(); //Obrigatório
+            // $std->dmdev[0]->infoperant->ideperiodo[0]->ideestab[0]->tpinsc = 1; //Obrigatório e igual a 1
+            // $std->dmdev[0]->infoperant->ideperiodo[0]->ideestab[0]->nrinsc = $oDados->nrinsc; //Obrigatório
+
+            // //Rubricas que compõem o provento ou pensão do beneficiário.
+            // $std->dmdev[0]->infoperant->ideperiodo[0]->ideestab[0]->itensremun[0] = new \stdClass(); //Obrigatório
+            // $std->dmdev[0]->infoperant->ideperiodo[0]->ideestab[0]->itensremun[0]->codrubr = "slkjskjskj"; //Obrigatório
+            // $std->dmdev[0]->infoperant->ideperiodo[0]->ideestab[0]->itensremun[0]->idetabrubr = "kkkk"; //Obrigatório
+            // $std->dmdev[0]->infoperant->ideperiodo[0]->ideestab[0]->itensremun[0]->qtdrubr = 1; //Opcional
+            // $std->dmdev[0]->infoperant->ideperiodo[0]->ideestab[0]->itensremun[0]->fatorrubr = 2.2; //Opcional
+            // $std->dmdev[0]->infoperant->ideperiodo[0]->ideestab[0]->itensremun[0]->vrrubr = 100; //Obrigatório
+            // $std->dmdev[0]->infoperant->ideperiodo[0]->ideestab[0]->itensremun[0]->indapurir = 0; //Obrigatório
+
+            $oDadosAPI->evtBenPrRP->dmdev = $std->dmdev;
+
+            if ($std->dmdev[0]->infoperapur->ideestab[0]->itensremun != null) {
+                $aDadosAPI[] = $oDadosAPI;
+                $iSequencial++;
+            }
         }
         // echo '<pre>';
         // print_r($aDadosAPI);
@@ -132,8 +179,8 @@ class EventoS1207 extends EventoBase
             }
 
             $rsIdentificadores = db_query($sql);
-            echo $sql;
-            db_criatabela($rsIdentificadores);
+            // echo $sql;
+            // db_criatabela($rsIdentificadores);
             if (pg_num_rows($rsIdentificadores) > 0) {
                 $oIdentificadores = \db_utils::fieldsMemory($rsIdentificadores, 0);
                 return $oIdentificadores->idedmdev;

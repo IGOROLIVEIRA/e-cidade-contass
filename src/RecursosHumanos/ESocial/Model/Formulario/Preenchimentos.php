@@ -388,14 +388,15 @@ class Preenchimentos
                                       and r33_mesusu = date_part('month',fc_getsession('DB_datausu')::date)
                                       and r33_instit = fc_getsession('DB_instit')::int
                                ) as x on r33_codtab = rhpessoalmov.rh02_tbprev+2
-    where h13_categoria in ('101', '106', '111', '301', '302', '303','304', '305', '306', '309', '312', '313', '902')
-    and rh30_vinculo in ('I','P')";
+    where rh30_vinculo in ('I','P')";
 
         if ($matricula != null) {
             $sql .= " and rh01_regist in ($matricula) ";
         }
         $rs = \db_query($sql);
-
+        // echo $sql;
+        // db_criatabela($rs);
+        // exit;
         if (!$rs) {
             throw new \Exception("Erro ao buscar os preenchimentos do S1207");
         }
@@ -1083,9 +1084,7 @@ WHERE rh30_vinculo IN ('I',
     left  outer join (
             SELECT distinct r33_codtab,r33_nome,r33_tiporegime
                                 from inssirf
-                                where     r33_anousu = fc_getsession('DB_anousu')::int
-                                      and r33_mesusu = date_part('month',fc_getsession('DB_datausu')::date)
-                                      and r33_instit = fc_getsession('DB_instit')::int
+                                where r33_instit = fc_getsession('DB_instit')::int
                                ) as x on r33_codtab = rhpessoalmov.rh02_tbprev+2
     where h13_categoria in ('101', '106', '111', '301', '302', '303','304', '305', '306', '309', '312', '313', '902')
     and rh30_vinculo = 'A'
