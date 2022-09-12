@@ -57,7 +57,7 @@ class EventoCargaS2299 implements EventoCargaInterface
 		JOIN rhpessoalmov ON rhpessoal.rh01_regist = rhpessoalmov.rh02_regist
 		JOIN cgm ON rhpessoal.rh01_numcgm = cgm.z01_numcgm
 		JOIN rhpesrescisao ON rhpessoalmov.rh02_seqpes = rhpesrescisao.rh05_seqpes
-		JOIN rhmotivorescisao ON rhpesrescisao.rh05_motivo = rhmotivorescisao.rh173_sequencial
+		JOIN rhmotivorescisao ON rhpesrescisao.rh05_motivo::varchar = rhmotivorescisao.rh173_codigo
 		JOIN rhregime ON rhpessoalmov.rh02_codreg = rhregime.rh30_codreg
 		WHERE (rh02_anousu,rh02_mesusu) = ({$this->ano},{$this->mes})
 		AND DATE_PART('YEAR',rh05_recis) = {$this->ano}
@@ -71,7 +71,7 @@ class EventoCargaS2299 implements EventoCargaInterface
 		$rsResult = \db_query($sql);
 
         if (!$rsResult) {
-            throw new \Exception("Erro ao buscar preenchimentos do S2299");
+            throw new \Exception("Erro ao buscar preenchimentos do S2299. ".pg_last_error());
         }
         return $rsResult;
 	}
