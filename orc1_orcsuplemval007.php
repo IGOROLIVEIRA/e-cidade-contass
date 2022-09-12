@@ -53,7 +53,7 @@ include("classes/db_empautitem_classe.php");
 include("classes/db_condataconf_classe.php");
 
 db_app::import("orcamento.suplementacao.*");
-db_app::import("orcamento.ManutencaoSuplementacao");
+db_app::import("orcamento.ValidacaoSuplementacao");
 
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
@@ -166,8 +166,8 @@ if (isset($incluir)) {
     }
 
     try {
-        $oManutencaoSuplementacao = new ManutencaoSuplementacao($tiposup, new Recurso($o58_codigo), $o47_valor);
-        $oManutencaoSuplementacao->validarSuplementacao();
+        $oValidacaoSuplementacao = new ValidacaoSuplementacao($tiposup, new Recurso($o58_codigo), $o47_valor);
+        $oValidacaoSuplementacao->validar();
     } catch (BusinessException $e) {
         db_msgbox($e->getMessage());
         $sqlerro = true;

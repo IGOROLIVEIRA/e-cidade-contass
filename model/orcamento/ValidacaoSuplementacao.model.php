@@ -8,7 +8,7 @@ require_once("repositorios/TipoSuplementacaoSuperavitDeficit.php");
  * Classe responsavel pela regra de negocios da suplementação do orçamento
  * @author widouglas
  */
-class ManutencaoSuplementacao
+class ValidacaoSuplementacao
 {
     /**
      * @var string
@@ -134,9 +134,8 @@ class ManutencaoSuplementacao
         return $oOrcSuplemVal->pegarArrayValorPelaFonteSuplementadoPorTipoSup($this->aTipoSubSuplementacaoSuperavitDeficit);
     }
 
-    public function validarSuplementacao()
+    public function validar()
     {
-
         if (!$this->eTipoSubSuplementacaoSuperavitDeficit())
             return false;
 
