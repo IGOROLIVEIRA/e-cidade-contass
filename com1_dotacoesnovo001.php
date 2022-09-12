@@ -110,8 +110,7 @@ if (count($aParametrosOrcamento) > 0) {
 <head>
 	<title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
 	<?
-	db_app::load("scripts.js, strings.js, prototype.js,datagrid.widget.js, widgets/dbautocomplete.widget.js");
-	db_app::load("widgets/windowAux.widget.js");
+	db_app::load("scripts.js, strings.js, prototype.js, datagrid.widget.js, estilos.css");
 	?>
 	<meta http-equiv="Expires" CONTENT="0">
 	<link href="estilos.css" rel="stylesheet" type="text/css">
@@ -789,11 +788,76 @@ if (count($aParametrosOrcamento) > 0) {
 	}
 	?>
 	<div class="container">
-		<?php
-		require_once("forms/db_frmsolicitemnovo.php");
-		?>
+		<div>
+			<form name="form1" method="post" action="">
+				<fieldset>
+					<legend><strong>Dotações</strong></legend>
+					<table border="0">
+						<tr>
+							<td nowrap title="<?= @$Tpc16_codmater ?>">
+								<?
+								db_ancora("Dotações:", "js_pesquisapc16_codmater(true);", $tranca);
+								?>
+							</td>
+
+							<td>
+								<?
+								db_input('pc16_codmater', 8, $Ipc16_codmater, true, 'text', $tranca, " onchange='js_pesquisapc16_codmater(false);'");
+								db_input("iCodigoRegistro", 8, "iCodigoRegistro", true, 'hidden', $db_opcao);
+								db_input("pc01_veiculo", 8, "", true, 'hidden', $db_opcao);
+								db_input("codigoitemregistropreco", 8, "", true, 'hidden', $db_opcao);
+								db_input("pcmateranterior", 8, $pcmateranterior, true, 'hidden', $db_opcao);
+								?>
+							</td>
+
+							<td nowrap style="   display: block;">
+								<?
+								db_input('pc01_descrmater', 50, $Ipc01_descrmater, true, 'text', $db_opcao);
+								?>
+							</td>
+
+
+						</tr>
+
+
+
+
+					</table>
+
+				</fieldset>
+				<input style="float:center; margin-top:10px;" name="<?= ($db_opcao == 1 ? "Adicionar Item" : ($db_opcao == 2 || $db_opcao == 22 ? "alterar" : "excluir")) ?>" type="submit" id="db_opcao" value="<?= ($db_opcao == 1 ? "Incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "Alterar" : "Excluir")) ?>" <?= ($db_botao == false ? "disabled" : "") ?> onclick="return js_validaAlteracao(<?= $db_opcao ?>)">
+
+
+				<table>
+					<tr>
+						<td>
+							<fieldset>
+								<legend>Dotações Vinculadas</legend>
+								<div id='ctnGridItens' style="width: 500px"></div>
+							</fieldset>
+						</td>
+					</tr>
+				</table>
+
+
+
+				<br>
+
+			</form>
+		</div>
 	</div>
 </body>
+
+<script>
+	oGridItens = new DBGrid('oGridItens');
+	oGridItens.nameInstance = 'oGridItens';
+	oGridItens.setCellAlign(['center', 'left', "right"]);
+	oGridItens.setCellWidth(["30%", "50%", "20%"]);
+	oGridItens.setHeader(["Reduzido", "Estrutural", "Ação"]);
+
+	oGridItens.setHeight(200);
+	oGridItens.show($('ctnGridItens'));
+</script>
 
 </html>
 <?

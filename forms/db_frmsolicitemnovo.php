@@ -34,6 +34,13 @@ if ($clpcparam->numrows > 0) {
 }
 
 $iOpcaoTipoSolicitacao = $db_opcao;
+
+if ((isset($opcao) && $opcao == "alterar")) {
+  echo "<script>var operador = 1;</script>";
+} else {
+  echo "<script>var operador = 0;</script>";
+}
+
 ?>
 <div>
   <form name="form1" method="post" action="">
@@ -104,36 +111,62 @@ $iOpcaoTipoSolicitacao = $db_opcao;
 
 
         <tr>
-          <td>
-            <b> Desdobramento: </b>
-          </td>
-          <td>
+          <div id="codeleRow">
             <?
 
-            ?>
-          </td>
-          <td nowrap>
-            <select name="unidade[]" id="unidade2" style="width: 440;margin-left: -81;">
-
-              <?
-
-              echo "<option value=\"0\">  </option>";
-
-
-              $result = db_query("select * from matunid");
-              if (pg_numrows($result) != 0) {
-                $numrows = pg_numrows($result);
-                for ($i = 0; $i < $numrows; $i++) {
-
-                  $matunid = db_utils::fieldsMemory($result, $i);
-                  echo "<option value=\"$matunid->m61_codmatunid \">$matunid->m61_descr</option>";
-                }
+            if (isset($o56_codele) && $o56_codele != "") {
+              $o56_elemento_ant = $o56_codele;
+            }
+            if (isset($pc16_codmater) && trim($pc16_codmater) != "") {
+              $sql_record = $clpcmaterele->sql_record($clpcmaterele->sql_query($pc16_codmater, null, "o56_codele,o56_descr,o56_elemento", "o56_descr"));
+              $dad_select = array();
+              for ($i = 0; $i < $clpcmaterele->numrows; $i++) {
+                db_fieldsmemory($sql_record, $i);
+                //$dad_select[$o56_codele] = $o56_codele." - ".db_formatar($o56_elemento,"elemento_int")." - ".$o56_descr;
+                $dad_select[$o56_codele] = $o56_codele . " - " . $o56_elemento . " - " . $o56_descr;
               }
+            }
+            if (isset($o56_codele_ant)) {
+              $o56_codele = $o56_elemento_ant;
+            }
+            $numrows_materele = $clpcmaterele->numrows;
+            if ($numrows_materele > 0) {
+            ?>
+              <td nowrap title="<?= @$To56_descr ?>">
+                <strong>Sub. ele:</strong>
+              </td>
+              <td nowrap colspan="6">
+                <?
+                $result_pc18ele = $clsolicitemele->sql_record($clsolicitemele->sql_query_file($pc11_codigo, null, "pc18_codele as o56_codele"));
+                if ($clsolicitemele->numrows > 0) {
+                  db_fieldsmemory($result_pc18ele, 0);
+                }
 
-              ?>
+                db_select("o56_codele", $dad_select, true, $trancaCodEle, "");
+                if (isset($o56_codelefunc) && $o56_codelefunc != "") {
+                  echo "<script>document.form1.o56_codele.value=$o56_codelefunc;</script>";
+                }
+                ?>
 
-            </select>
-          </td>
+              </td>
+
+            <?
+            }
+            db_input("o56_codelefunc", 5, $Io56_codele, true, 'hidden', $db_opcao);
+            ?>
+
+          </div>
+          <div style="display:none;" id="subEl">
+            <td colspan="2" nowrap title="<?= @$To56_descr ?>">
+              <strong>Desdobramento:</strong>
+            </td>
+            <td>
+              <select style="margin-left: -80;width: 438;" id="eleSub" name="eleSub">
+                <options value="">Selecione</options>
+              </select>
+            </td>
+          </div>
+
 
 
           <td>
@@ -141,7 +174,7 @@ $iOpcaoTipoSolicitacao = $db_opcao;
           </td>
           <td>
             <?
-            db_input('pc01_ordem', 8, $Ipc01_descrmater, true, 'text', $db_opcao, '');
+            db_input('pc01_ordem', 8, $Ipc01_descrmater, true, 'text', $db_opcao, 'onkeypress="return event.charCode >= 48 && event.charCode <= 57" ');
             ?>
           </td>
 
@@ -170,6 +203,126 @@ $iOpcaoTipoSolicitacao = $db_opcao;
   </form>
 </div>
 <script>
+  const input = document.getElementById("pc01_quantidade");
+  input.addEventListener("keypress", mask_4casasdecimais);
+
+  numeros_apos_virgula = 0;
+
+
+  function mask_4casasdecimais(e) {
+    var valor = e.target.value.replace(/[^0-9\,]/g, "");
+    virgula = (valor.match(/,/g) || []).length;
+
+    if (e.key == '.') {
+      e.preventDefault();
+      return false;
+    }
+
+    if (virgula >= 1 && e.key == ',') {
+      e.preventDefault();
+      return false;
+    }
+
+    if (valor.length >= 14) {
+      valor = valor.substring(0, valor.length - 1);
+      e.target.value = valor;
+      return false;
+    }
+
+
+    if (virgula == 1) {
+      numeros_apos_virgula = valor.substring(valor.indexOf(",") + 1);
+
+    }
+
+
+    if (numeros_apos_virgula.length == 4) {
+      valor = valor.substring(0, valor.length - 1);
+      e.target.value = valor;
+      numeros_apos_virgula = 0;
+      return false;
+    }
+    e.target.value = valor;
+
+  }
+
+  function js_buscarEle() {
+    var sUrl = "com4_materialsolicitacao.RPC.php";
+
+    var oRequest = new Object();
+    oRequest.pc_mat = $F('pc16_codmater').valueOf();
+    oRequest.exec = "getDadosElementos";
+    var oAjax = new Ajax.Request(
+      sUrl, {
+        method: 'post',
+        parameters: 'json=' + js_objectToJson(oRequest),
+        onComplete: js_retornogetDados
+      }
+    );
+
+  }
+
+  function js_retornogetDados(oAjax) {
+    var oRetorno = eval("(" + oAjax.responseText + ")");
+    var i = 0;
+    console.log(oRetorno.dados.length)
+
+    if (oRetorno.dados.length > 1) {
+      $('eleSub').options[0] = new Option('Selecione', '0');
+
+      i = 1;
+    }
+
+    if (oRetorno.dados.length == 1) {
+      $('eleSub').disabled = true;
+    } else {
+      $('eleSub').disabled = false;
+
+    }
+
+    oRetorno.dados.forEach(function(oItem) {
+      valor = oItem.codigo + " - " + oItem.elemento + " - " + oItem.nome.urlDecode();
+      valorElem = oItem.elemento;
+      $('eleSub').options[i] = new Option(valor, oItem.codigo);
+      i++;
+    });
+
+    document.getElementById("subEl").style.display = "table-row";
+
+    valorEle = document.getElementById("o56_codele_select_descr").value;
+    const val = valorEle.split("-");
+    const num = val[1].split(" ");
+    if ((num[1].substr(0, 7)) != (valorElem.substr(0, 7))) {
+      alert("Elemento do item selecionado diferente do item anterior, é necessário remover as dotações vinculadas ao item para a troca do material");
+      var input = document.querySelector("#db_opcao");
+      input.disabled = true;
+      document.getElementById("codeleRow").style.display = "table-row";
+      document.form1.o56_codele_select_descr.focus();
+    } else {
+      var input = document.querySelector("#db_opcao");
+      input.disabled = false;
+    }
+    //$('ctnServicoQuantidade').style.display='table-row';
+
+  }
+
+  function js_materanterior() {
+
+    <?
+    echo "materanterior = '$pcmateranterior';\n";
+    if ($iRegistroPreco != "") {
+      echo  "document.form1.submit();";
+    } else {
+      echo "
+    if(materanterior!=document.form1.pc16_codmater.value){
+      document.form1.submit();
+    }
+  //js_pesquisapc01_servico(document.form1.pc16_codmater.value);
+  ";
+    }
+    ?>
+  }
+
   function js_pesquisapc16_codmater(mostra) {
 
     var iRegistroPrecoFuncao = false;
@@ -216,6 +369,7 @@ $iOpcaoTipoSolicitacao = $db_opcao;
 
     } else {
       document.form1.pc01_descrmater.value = chave;
+      js_materanterior();
 
     }
   }
@@ -225,7 +379,14 @@ $iOpcaoTipoSolicitacao = $db_opcao;
 
     document.form1.pc16_codmater.value = chave1;
     document.form1.pc01_descrmater.value = chave2;
+    document.form1.o56_codelefunc.value = codele;
+
     db_iframe_pcmater.hide();
+
+
+    js_buscarEle();
+
+
 
 
 
@@ -258,4 +419,8 @@ $iOpcaoTipoSolicitacao = $db_opcao;
 
   oGridItens.setHeight(200);
   oGridItens.show($('ctnGridItens'));
+
+  oAutoComplete = new dbAutoComplete($('pc01_descrmater'), 'com4_pesquisamateriais.RPC.php');
+  oAutoComplete.setTxtFieldId(document.getElementById('pc16_codmater'));
+  oAutoComplete.show();
 </script>
