@@ -36,7 +36,6 @@ require_once("model/caixa/PlanilhaArrecadacao.model.php");
 require_once("classes/db_tabrec_classe.php");
 require_once("model/caixa/ImportacaoReceita.model.php");
 
-error_reporting(E_ALL);
 if (isset($processar)) {
     // Inicia uma transação no banco para rollback em caso de erro
     db_inicio_transacao();
@@ -58,9 +57,9 @@ if (isset($processar)) {
         // Commita as modificações no banco
         db_fim_transacao(false);
         if (count($oImportacaoReceita->aCodigoPlanilhaArrecadada) > 0)
-            db_msgbox("Planilhas inclusas com sucesso. \n " . implode(", ", $oImportacaoReceita->aCodigoPlanilhaArrecadada) . " \n\n ");
+            db_msgbox("Planilhas inclusas com sucesso: \n" . implode(", ", $oImportacaoReceita->aCodigoPlanilhaArrecadada) . " \n\n ");
         if (count($oImportacaoReceita->aCodigoSlip) > 0)
-            db_msgbox("Receitas ExtraOrçamentárias importadas com sucesso, foram gerados os Slips: \n " . implode(", ", $oImportacaoReceita->aCodigoSlip) . " \n\n");
+            db_msgbox("Receitas ExtraOrçamentárias importadas com sucesso, foram gerados os Slips: \n" . implode(", ", $oImportacaoReceita->aCodigoSlip) . " \n\n");
         if (count($oImportacaoReceita->aCodigoPlanilhaArrecadada) == 0 and count($oImportacaoReceita->aCodigoSlip) == 0)
             db_msgbox("Nenhuma receita inclusa.\n\n");
     } catch (Exception $oException) {

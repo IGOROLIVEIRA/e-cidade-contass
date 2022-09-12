@@ -103,7 +103,7 @@ class EventoS2300 extends EventoBase
 
             $oDadosAPI->evtTSVInicio->infotrabcedido = null;
             if (!empty($oDados->infoTrabCedido->categOrig)) {
-                $oDadosAPI->evtTSVInicio->infotrabcedido->categorig = empty($oDados->infoTrabCedido->categOrig) ? null : $oDados->infoTrabCedido->categOrig;
+                $oDadosAPI->evtTSVInicio->infotrabcedido->categorig = empty($oDados->infoTrabCedido->categOrig) ? null : "301";
                 $oDadosAPI->evtTSVInicio->infotrabcedido->cnpjcednt = empty($oDados->infoTrabCedido->cnpjCednt) ? null : $oDados->infoTrabCedido->cnpjCednt;
                 $oDadosAPI->evtTSVInicio->infotrabcedido->matricCed = empty($oDados->infoTrabCedido->matricCed) ? null : $oDados->infoTrabCedido->matricCed;
                 $oDadosAPI->evtTSVInicio->infotrabcedido->dtAdmCed = empty($oDados->infoTrabCedido->dtAdmCed) ? null : $oDados->infoTrabCedido->dtAdmCed;

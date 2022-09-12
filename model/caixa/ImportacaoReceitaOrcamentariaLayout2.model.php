@@ -25,16 +25,10 @@
  *                                licenca/licenca_pt.txt
  */
 
-class ImportacaoReceitaOrcamentariaLayout2
+require_once("model/caixa/ImportacaoReceitaLayout2.php");
+
+class ImportacaoReceitaOrcamentariaLayout2 extends ImportacaoReceitaLayout2
 {
-    private $oReceita;
-
-    public function __construct($sLinha)
-    {
-        $this->oReceita = new stdClass();
-        $this->preencherLinha($sLinha);
-    }
-
     public function preencherLinha($sLinha)
     {
         if (!$this->eReceita($sLinha))
@@ -58,7 +52,7 @@ class ImportacaoReceitaOrcamentariaLayout2
      */
     public function eReceita($sLinha)
     {
-        if (in_array(substr($sLinha, 35, 1), array("1", "7", "9")))
+        if (in_array(substr($sLinha, 35, 1), array("1", "7", "9")) AND !in_array(substr($sLinha, 35, 3), array("922")))
             return true;
         return false;
     }
@@ -71,10 +65,12 @@ class ImportacaoReceitaOrcamentariaLayout2
     public function preencherAgenteArrecadador()
     {
         $clagentearrecadador = new cl_agentearrecadador();
-        $sqlAgenteArrecadador = $clagentearrecadador->sql_query("", 
-            "agentearrecadador.k174_idcontabancaria, agentearrecadador.k174_numcgm", 
-            "agentearrecadador.k174_idcontabancaria", 
-            "agentearrecadador.k174_codigobanco = {$this->oReceita->iCodBanco} AND agentearrecadador.k174_instit = " . db_getsession('DB_instit'));
+        $sqlAgenteArrecadador = $clagentearrecadador->sql_query(
+            "",
+            "agentearrecadador.k174_idcontabancaria, agentearrecadador.k174_numcgm",
+            "agentearrecadador.k174_idcontabancaria",
+            "agentearrecadador.k174_codigobanco = {$this->oReceita->iCodBanco} AND agentearrecadador.k174_instit = " . db_getsession('DB_instit')
+        );
         $rsAgenteArrecadador = $clagentearrecadador->sql_record($sqlAgenteArrecadador);
 
         if ($clagentearrecadador->numrows == 0) {
@@ -87,11 +83,6 @@ class ImportacaoReceitaOrcamentariaLayout2
             $this->oReceita->oContaTesouraria = $oContaTesouraria;
             $this->oReceita->iNumeroCgm = $oAgenteArrecadador->k174_numcgm;
         }
-    }
-
-    public function recuperarLinha()
-    {
-        return $this->oReceita;
     }
 
     public function preencherReceita()
@@ -108,30 +99,5 @@ class ImportacaoReceitaOrcamentariaLayout2
             $this->oReceita->iReceita = $oTabRec->k02_codigo;
             $this->oReceita->iRecurso = $oTabRec->o70_codigo;
         }
-    }
-
-    /**
-     * Função para formatar a data confida no txt
-     *
-     * @param [string] $sData
-     * @return date
-     */
-    public function montarData($sData)
-    {
-        $sDia = substr($sData, 0, 2);
-        $sMes = substr($sData, 2, 2);
-        $sAno = substr($sData, 4, 4);
-        return date("Y-m-d", strtotime("{$sDia}-{$sMes}-{$sAno}"));
-    }
-
-    /**
-     * Função para formatar os valores contidos no txt
-     *
-     * @param [string] $sValor
-     * @return float
-     */
-    public function montarValor($sValor)
-    {
-        return (float) ((int) substr($sValor, 0, 11)) . "." . substr($sValor, 11, 2);
     }
 }

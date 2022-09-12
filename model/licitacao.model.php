@@ -721,10 +721,13 @@ class licitacao
           $sLista = implode("", $aLicitacoes);
         }
          */
-        $sLista = $aLicitacoes[0];
+        $sLista = $aLicitacoes;
         $sCampos          = "l21_codigo as codigo, pc01_codmater as codigomaterial,";
         $sCampos         .= "pc01_descrmater as material, pc23_vlrun as valorunitario,";
-        $sCampos         .= "pc01_servico as servico, 1 as origem, pc18_codele as elemento,";
+        $sCampos         .= "pc01_servico as servico, 1 as origem, (case
+		when pc18_codele is null 
+		then (select pc07_codele from pcmaterele where pc07_codmater = pc01_codmater limit 1) else pc18_codele
+	end) as elemento,";
         $sCampos         .= "pc23_quant as quantidade, pc23_valor as valortotal,l20_numero as numero";
         $sSqlLicitacoes   = $oDaoLicilicitem->sql_query_soljulg(
             null,
@@ -735,7 +738,7 @@ class licitacao
       and l21_codliclicita in({$sLista})"
         );
         //echo $sSqlLicitacoes; die();
-
+        
         $rsLicitacoes    = $oDaoLicilicitem->sql_record($sSqlLicitacoes);
         return db_utils::getCollectionByRecord($rsLicitacoes, false, false, true);
     }
@@ -843,7 +846,7 @@ class licitacao
 
     static function getItensPorFornecedorCredenciamento($iFornecedor, $iLicitacao, $anousu = null)
     {
-
+        
         $oDaoLiclicitem  = db_utils::getDao("liclicitem");
 
         $sCampos = "l21_codigo AS codigo,pc01_codmater AS codigomaterial,pc01_descrmater AS material,

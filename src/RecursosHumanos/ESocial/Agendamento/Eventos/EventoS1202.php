@@ -37,22 +37,18 @@ class EventoS1202 extends EventoBase
         $iSequencial = 1;
         foreach ($this->dados as $oDados) {
             $oDadosAPI                                   = new \stdClass();
-            $oDadosAPI->evtEvtRmnRPPS                      = new \stdClass();
-            $oDadosAPI->evtEvtRmnRPPS->sequencial          = $iSequencial;
-            $oDadosAPI->evtEvtRmnRPPS->modo                = $this->modo;
-            $oDadosAPI->evtEvtRmnRPPS->indRetif            = 1;
-            $oDadosAPI->evtEvtRmnRPPS->nrRecibo            = null;
+            $oDadosAPI->evtRmnRPPS                      = new \stdClass();
+            $oDadosAPI->evtRmnRPPS->sequencial          = $iSequencial;
+            $oDadosAPI->evtRmnRPPS->modo                = $this->modo;
+            $oDadosAPI->evtRmnRPPS->indRetif            = 1;
+            $oDadosAPI->evtRmnRPPS->nrRecibo            = null;
 
-            $oDadosAPI->evtEvtRmnRPPS->indapuracao         = $this->indapuracao;
-            $oDadosAPI->evtEvtRmnRPPS->perapur             = $ano . '-' . $mes;
+            $oDadosAPI->evtRmnRPPS->indapuracao         = $this->indapuracao;
+            $oDadosAPI->evtRmnRPPS->perapur             = $ano . '-' . $mes;
             if ($oDados->indapuracao == 2) {
-                $oDadosAPI->evtEvtRmnRPPS->perapur         = $mes;
+                $oDadosAPI->evtRmnRPPS->perapur         = $mes;
             }
-            $oDadosAPI->evtEvtRmnRPPS->cpftrab             = $oDados->cpftrab;
-
-            $oDadosAPI->evtEvtRmnRPPS->infocomplem = new \stdClass(); //Opcional
-            $oDadosAPI->evtEvtRmnRPPS->infocomplem->nmtrab = $oDados->nmtrab; //Obritatório
-            $oDadosAPI->evtEvtRmnRPPS->infocomplem->dtnascto = $oDados->dtnascto; //Obritatório
+            $oDadosAPI->evtRmnRPPS->cpftrab             = $oDados->cpftrab;
 
             $std = new \stdClass();
 
@@ -61,28 +57,30 @@ class EventoS1202 extends EventoBase
             $std->dmdev[0]->idedmdev = $this->buscarIdentificador($oDados->matricula, $oDados->rh30_regime); //Obrigatório
             $std->dmdev[0]->codcateg = $oDados->codcateg; //Obrigatório
 
-            //Identificação do estabelecimento e da lotação nos quais o
-            //trabalhador possui remuneração no período de apuração
-            $std->dmdev[0]->ideestablot[0] = new \stdClass(); //Opcional
-            $std->dmdev[0]->ideestablot[0]->tpinsc = "1"; //Obrigatório
-            $std->dmdev[0]->ideestablot[0]->nrinsc = $oDados->nrinsc; //Obrigatório
-            $std->dmdev[0]->ideestablot[0]->codlotacao = 'LOTA1'; //Obrigatório
+            //dentificação de cada um dos demonstrativos de valores devidos ao trabalhador.
+            $std->dmdev[0] = new \stdClass(); //Obritatório
+            $std->dmdev[0]->idedmdev = $this->buscarIdentificador($oDados->matricula, $oDados->rh30_regime); //Obrigatório; //Obritatório
+            $std->dmdev[0]->codcateg = $oDados->codcateg;  //Obritatório
+
+            //Identificação da unidade do órgão público na qual o servidor possui remuneração.
+            $std->dmdev[0]->infoperapur->ideestab[0] = new \stdClass(); //Obrigatório
+            $std->dmdev[0]->infoperapur->ideestab[0]->tpinsc = 1; //Obrigatório somente pode ser 1 - cnpj
+            $std->dmdev[0]->infoperapur->ideestab[0]->nrinsc = $oDados->nrinsc; //Obrigatório
 
             //Informações relativas à remuneração do trabalhador no período de apuração.
-            $std->dmdev[0]->ideestablot[0]->remunperapur[0] = new \stdClass(); //Obrigatório
-            $std->dmdev[0]->ideestablot[0]->remunperapur[0]->matricula = $oDados->matricula; //Opcional
+            $std->dmdev[0]->infoperapur->ideestab[0]->remunperapur[0] = new \stdClass(); //Obrigatório
+            $std->dmdev[0]->infoperapur->ideestab[0]->remunperapur[0]->matricula = $oDados->matricula; //Opcional
 
             //Rubricas que compõem a remuneração do trabalhador.
-            $std->dmdev[0]->ideestablot[0]->remunperapur[0]->itensremun = $this->buscarValorRubrica($oDados->matricula, $oDados->rh30_regime);
+            $std->dmdev[0]->infoperapur->ideestab[0]->remunperapur[0]->itensremun = $this->buscarValorRubrica($oDados->matricula, $oDados->rh30_regime);
 
-            $oDadosAPI->evtEvtRmnRPPS->dmdev = $std->dmdev;
+            $oDadosAPI->evtRmnRPPS->dmdev = $std->dmdev;
 
-            $aDadosAPI[] = $oDadosAPI;
-            $iSequencial++;
+            if ($std->dmdev[0]->infoperapur->ideestab[0]->remunperapur[0]->itensremun != null) {
+                $aDadosAPI[] = $oDadosAPI;
+                $iSequencial++;
+            }
         }
-        // echo '<pre>';
-        // print_r($aDadosAPI);
-        // exit;
         return $aDadosAPI;
     }
 
@@ -96,7 +94,7 @@ class EventoS1202 extends EventoBase
         $iAnoUsu = date("Y", db_getsession("DB_datausu"));
         $iMesusu = date("m", db_getsession("DB_datausu"));
         if ($rh30_regime == 1 || $rh30_regime == 3)
-            $aPontos = array('rescisao');
+            $aPontos = array('salario', 'complementar', '13salario', 'rescisao');
         else
             $aPontos = array('salario', 'complementar', '13salario');
 
@@ -149,8 +147,7 @@ class EventoS1202 extends EventoBase
             $rsIdentificadores = db_query($sql);
             // echo $sql;
             // db_criatabela($rsIdentificadores);
-            // exit;
-            if ($rsIdentificadores) {
+            if (pg_num_rows($rsIdentificadores) > 0) {
                 $oIdentificadores = \db_utils::fieldsMemory($rsIdentificadores, 0);
                 return $oIdentificadores->idedmdev;
             }
@@ -238,6 +235,8 @@ class EventoS1202 extends EventoBase
                            order by {$sigla}pd,{$sigla}rubric";
             }
             $rsValores = db_query($sql);
+            // echo $sql;
+            // db_criatabela($rsValores);
             if ($opcao != 'rescisao') {
                 for ($iCont = 0; $iCont < pg_num_rows($rsValores); $iCont++) {
                     $oResult = \db_utils::fieldsMemory($rsValores, $iCont);
@@ -288,6 +287,7 @@ class EventoS1202 extends EventoBase
                 }
             }
         }
+        //exit;
         return $aItens;
     }
 }

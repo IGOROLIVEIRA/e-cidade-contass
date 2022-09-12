@@ -1324,7 +1324,7 @@ switch ($oParam->exec) {
     case "getItensOrigem":
 
         if (isset($_SESSION["oContrato"]) && $_SESSION["oContrato"] instanceof Acordo) {
-
+            
             $oContrato = $_SESSION["oContrato"];
 
             $oDataInicialAcordo        = new DBDate($oContrato->getDataInicial());
@@ -1343,13 +1343,13 @@ switch ($oParam->exec) {
             }
 
             $iTipocompraTribunal = $oContrato->getTipoCompraTribunal($oContrato->getLicitacao());
-
+            
             if ($oContrato->getOrigem() == 2) {
 
                 if ($iTipocompraTribunal == "103" || $iTipocompraTribunal == "102") {
                     $aItens = licitacao::getItensPorFornecedorCredenciamento($oContrato->getContratado()->getCodigo(), $oContrato->getLicitacao());
                 } else {
-                    $aItens = licitacao::getItensPorFornecedor($_SESSION["dadosSelecaoAcordo"], $oContrato->getContratado()->getCodigo(), 0);
+                    $aItens = licitacao::getItensPorFornecedor($oContrato->getLicitacao(), $oContrato->getContratado()->getCodigo(), 0);  
                 }
             } else {
 

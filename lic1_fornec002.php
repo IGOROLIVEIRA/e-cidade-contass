@@ -179,11 +179,58 @@ for ($iCont = 0; $iCont < pg_num_rows($result); $iCont++) {
 
 if (isset($incluir)) {
 
+  $sqllei = "select l20_leidalicitacao from liclicita where l20_codigo = $l20_codigo";
+
+  $rslei = db_query($sqllei);
+  $dleis = db_utils::fieldsMemory($rslei, 0);
+
+  if($dleis->l20_leidalicitacao==1){
+    $sqlvinculo = "select * from licanexopncpdocumento
+    inner join licanexopncp on
+      licanexopncp.l215_sequencial  = licanexopncpdocumento.l216_licanexospncp
+    where
+      l215_liclicita = $l20_codigo";
+      $rsvinculo = db_query($sqlvinculo);
+      $dvinculo = db_utils::fieldsMemory($rsvinculo, 0);
+      $quatrs = pg_num_rows($rsvinculo);
+
+      if($quatrs == 0){
+        echo "<script>
+					           alert('A Licitação selecionada é decorrente da Lei nº 14133/2021, sendo assim, é necessário anexar no mínimo um documento na rotina Anexos Envio PNCP!!');
+                     top.corpo.location.href='lic1_fornec001.php?chavepesquisa=$l20_codigo';
+					        </script>";
+
+        exit;
+
+      }
+
+  }
+
   if (strlen($tipocgm) == 14) {
 
     if ((isset($tipopart1) && isset($tipopart2)) || isset($tipopart3)) {
 
       db_inicio_transacao();
+
+      $licita = db_query("select l20_dtpublic,l31_codigo from liclicita inner join liccomissaocgm on l31_licitacao = l20_codigo where l20_codigo = $l20_codigo and l31_tipo = '8';");
+      $licita = db_utils::fieldsMemory($licita, 0);
+      $sSql = $clliclicita->buscartribunal($l20_codigo);
+      $result = db_query("select l03_pctipocompratribunal from liclicita inner join cflicita on l20_codtipocom  = l03_codigo where l20_codigo = $l20_codigo;");
+      $tribunal = db_utils::fieldsMemory($result, 0);
+
+
+      if ($tribunal->l03_pctipocompratribunal == "100" || $tribunal->l03_pctipocompratribunal == "101" || $tribunal->l03_pctipocompratribunal == "102" || $tribunal->l03_pctipocompratribunal == "103") {
+      } else {
+        if ($licita->l20_dtpublic == "" && $licita->l31_codigo == "") {
+          echo "<script>
+                       alert('Não permitido a inserção de fornecedor na licitação se os campos Data Publicação DO e Resp. pela Publicação não estiverem preenchidos.');
+                       top.corpo.location.href='lic1_fornec001.php';
+
+                    </script>";
+          exit;
+        }
+      }
+
 
       $result = $clliclicita->sql_record($clliclicita->sql_query_pco($l20_codigo));
 
@@ -235,7 +282,7 @@ if (isset($incluir)) {
       $result_igualcgm = $clpcorcamforne->sql_record($clpcorcamforne->sql_query_file(null, "pc21_codorc", "", " pc21_numcgm=$pc21_numcgm and pc21_codorc=$pc20_codorc"));
       if ($clpcorcamforne->numrows > 0) {
         $sqlerro = true;
-        $erro_msg = "ERRO: Número de CGM já cadastrado.";
+        $erro_msg = "ERRO: Número de CGM já cadastrado. ";
       }
 
       if ($sqlerro == false) {
