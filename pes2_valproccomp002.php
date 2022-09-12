@@ -97,7 +97,8 @@ imprimeCab($oPdf,$iAlt,$iFonte,true);
 for ( $iInd=0; $iInd < $iLinhasArquivo; $iInd++ ) {
   
   $oDadosGerados = db_utils::fieldsMemory($rsDadosArquivo,$iInd);
-  
+  $oDadosGeradosProx = db_utils::fieldsMemory($rsDadosArquivo,$iInd+1);
+    
 	imprimeCab($oPdf,$iAlt,$iFonte);
 	
 	if ($iPreenche == 1 ) {
@@ -122,7 +123,7 @@ for ( $iInd=0; $iInd < $iLinhasArquivo; $iInd++ ) {
 			$oPdf->Cell(59 ,$iAlt,$oDadosGerados->o15_descr,0,1,'C',0);
 			$oPdf->ln();
 		}else{
-			if($aux != $oDadosGerados->o58_projativ){
+			if($aux != $oDadosGerados->o58_projativ) {
 				// impimindo total
 				$oPdf->ln();
 				$oPdf->SetFont('Arial','b',$iFonte);
@@ -141,13 +142,34 @@ for ( $iInd=0; $iInd < $iLinhasArquivo; $iInd++ ) {
 				$oPdf->Cell(18 ,$iAlt,$oDadosGerados->o58_codigo,0,0,'C',0);
 				$oPdf->Cell(30 ,$iAlt, '   ' ,0,0,'C');
 				$oPdf->Cell(59 ,$iAlt,$oDadosGerados->o15_descr,0,1,'C',0);
-				$oPdf->ln();
+									
 				$aux =  $oDadosGerados->o58_projativ;
 				$contvalor = 0;
 				$contpatronal = 0;
 				$continss = 0;
 			}
+			elseif($aux == $oDadosGerados->o58_projativ && $oDadosGerados->o58_codigo != $aux2){
+				$oPdf->ln();
+				$oPdf->SetFont('Arial','b',$iFonte);
+				$oPdf->Cell(30 ,$iAlt, ' Total ' ,0,0,'C');
+				$oPdf->Cell(20 ,$iAlt, '' ,0,0,'C',0);
+				$oPdf->Cell(65 ,$iAlt, '' ,0,0,'L',0);
+				$oPdf->Cell(25 ,$iAlt,db_formatar($contvalor,'f'),0,0,'C',0);
+				$oPdf->Cell(24 ,$iAlt,db_formatar($contpatronal,'f'),0,0,'C',0);
+				$oPdf->Cell(25 ,$iAlt,db_formatar($continss,'f'),0,1,'C',0);
+				$oPdf->ln();
+				$oPdf->ln();
+				$oPdf->SetFont('Arial','b',$iFonte);
+				$oPdf->Cell(18 ,$iAlt,$oDadosGerados->o58_codigo,0,0,'C',0);
+				$oPdf->Cell(30 ,$iAlt, '   ' ,0,0,'C');
+				$oPdf->Cell(59 ,$iAlt,$oDadosGerados->o15_descr,0,1,'C',0);
+				$oPdf->ln();
+				$contvalor = 0;
+				$contpatronal = 0;
+				$continss = 0;
+			}
 		}	
+		$aux2 =  $oDadosGerados->o58_codigo;
 		$contvalor += $oDadosGerados->valor_servico;
 		$contpatronal += $oDadosGerados->valor_servico*20/100;
 		$continss += $oDadosGerados->valor_inss;
