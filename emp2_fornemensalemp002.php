@@ -154,7 +154,10 @@ $dataFinal = str_replace("/","-",db_formatar($dtDataFinal, "d"));
 $whereDatas = $clFornecedores->validaDatas($dataInicial, $dataFinal);
 
 if (isset($whereDatas)) {
-    $resultFornecedoresTotais = $clFornecedores->sql_record($clFornecedores->sql_query(null, "fm101_sequencial,fm101_numcgm,z01_nome,fm101_datafim", "z01_nome", " fm101_datafim >= '$dataInicial' or fm101_datafim is null "));
+    if($sCredoresSelecionados)
+        $resultFornecedoresTotais = $clFornecedores->sql_record($clFornecedores->sql_query(null, "fm101_sequencial,fm101_numcgm,z01_nome,fm101_datafim", "z01_nome", " fm101_numcgm in ($sCredoresSelecionados) and (fm101_datafim >= '$dataInicial' or fm101_datafim is null ) "));
+    else
+        $resultFornecedoresTotais = $clFornecedores->sql_record($clFornecedores->sql_query(null, "fm101_sequencial,fm101_numcgm,z01_nome,fm101_datafim", "z01_nome", " fm101_datafim >= '$dataInicial' or fm101_datafim is null "));
     $resultFornecedores = $clFornecedores->sql_record($clFornecedores->sqlNotasFiscais(null, "", null, $whereDatas, $tipoImpressao, $sCredoresSelecionados));
 }
     $aFornecedoresTotais = pg_fetch_all($resultFornecedoresTotais);
