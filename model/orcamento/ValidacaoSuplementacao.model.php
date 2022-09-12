@@ -2,7 +2,7 @@
 
 require_once("repositorios/QuadroSuperavitDeficitRepository.php");
 require_once("repositorios/OrcSuplemValRepository.php");
-require_once("repositorios/TipoSuplementacaoSuperavitDeficit.php");
+require_once("repositorios/TipoSuplementacaoSuperavitDeficitRepository.php");
 
 /**
  * Classe responsavel pela regra de negocios da suplementação do orçamento
@@ -63,7 +63,7 @@ class ValidacaoSuplementacao
 
     public function preencherTipoSuplementacao()
     {
-        $this->aTipoSubSuplementacaoSuperavitDeficit = TipoSuplementacaoSuperavitDeficit::pegarTipoSup();
+        $this->aTipoSubSuplementacaoSuperavitDeficit = TipoSuplementacaoSuperavitDeficitRepository::pegarTipoSup();
     }
 
     public function preencherValor($nValor)

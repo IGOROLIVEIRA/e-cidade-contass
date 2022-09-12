@@ -1,6 +1,6 @@
 <?php
 
-class TipoSuplementacaoSuperavitDeficit
+class TipoSuplementacaoSuperavitDeficitRepository
 {
     static function pegarTipoSup()
     {
