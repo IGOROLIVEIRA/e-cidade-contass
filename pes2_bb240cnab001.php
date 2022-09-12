@@ -66,19 +66,19 @@ if(isset($emite2)){
       function js_valores(){
 
         if(document.form1.rh34_codarq.value==""){
-          alert("Campo Código do Arquivo é de preenchimento obrigatório.");
+          alert("Campo Código do Arquivo é de preenchimento obrigatório.");
           document.form1.rh34_codarq.focus();
           return false;
         }else if(document.form1.datagera_dia.value == "" || document.form1.datagera_mes.value == "" || document.form1.datagera_ano.value == ""){
-          alert("Campo Data da Geração é de preenchimento obrigatório.");
+          alert("Campo Data da Geração é de preenchimento obrigatório.");
           document.form1.datagera_dia.select();
           return false;
         }else if(document.form1.datadeposit_dia.value == "" || document.form1.datadeposit_mes.value == "" || document.form1.datadeposit_ano.value == ""){
-          alert("Campo Data do Depósito é de preenchimento obrigatório.");
+          alert("Campo Data do Depósito é de preenchimento obrigatório.");
           document.form1.datadeposit_dia.select();
           return false;
         }else if(js_diferenca_datas(getDateInDatabaseFormat($F('datagera')), getDateInDatabaseFormat($F('datadeposit')),3) == true){
-          alert("Campo Data de Depósito deve ser igual ou maior que a Data de Geração.");
+          alert("Campo Data de Depósito deve ser igual ou maior que a Data de Geração.");
           return false;
         }else{
           return true;

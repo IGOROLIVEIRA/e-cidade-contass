@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 include("fpdf151/pdf.php");
@@ -56,10 +56,10 @@ $clrotulo->label("db83_tipoconta");
 $sqlerro = false;
 
 db_sel_instit();
-  
+
 $result_arqbanco = $clrharqbanco->sql_record($clrharqbanco->sql_query($rh34_codarq));
 /**
- * Soma a quantidade de registros do tipo 
+ * Soma a quantidade de registros do tipo
  * 0 HEader do Arquivo
  * if
  *   1 Header do Lote
@@ -83,7 +83,7 @@ if( $clrharqbanco->numrows > 0 ){
     $agenciaheader = $rh34_agencia;
     $contaheader   = $rh34_conta;
     $contalote     = $rh34_conta;
-    $conveniobanco = trim($rh34_convenio); 
+    $conveniobanco = trim($rh34_convenio);
     $convenio = trim($rh34_convenio);
     $brancos = " ";
     $descrarquivo  = "FOLHA PAGAMENTO"; // Campo somente do layout 3
@@ -109,9 +109,9 @@ if( $clrharqbanco->numrows > 0 ){
     $dvcontalote        = $dvcontaheader;
     $dvagenciacontalote = $dvagenciacontaheader;
 
-    $datageracao = $datagera; 
+    $datageracao = $datagera;
     $horageracao = date("H").':'.date("i").':'.date("s");
- 
+
     if (isset($datageracao) && $datageracao!="") {
       $datag = split('-',$datageracao);
       $datag_dia = $datag[2];
@@ -131,7 +131,7 @@ if( $clrharqbanco->numrows > 0 ){
 
     $adatadegeracao = $datag_ano."-".$datag_mes."-".$datag_dia;
     $datadedeposito = $datad_ano."-".$datad_mes."-".$datad_dia;
- 
+
     $sequenciaarqui = $rh34_sequencial;
     $versaodoarquiv = "030";
 
@@ -139,7 +139,7 @@ if( $clrharqbanco->numrows > 0 ){
     $nomearquivo = "folha_".$db90_codban."_".$paramnome.".txt";
     $db_layouttxt = new db_layouttxt($layoutimprime,"tmp/".$nomearquivo, $posicao);
 
-    $conveniobanco = trim($rh34_convenio); 
+    $conveniobanco = trim($rh34_convenio);
     ////// DADOS SOMENTE CNAB240 CEF
     $parametrotransmiss = substr($rh34_convenio,10,2);
     $indicaambcaixa   = "P";
@@ -147,9 +147,9 @@ if( $clrharqbanco->numrows > 0 ){
     $densidadearquivo = "01600";
     //////
 
-  
-    $iQuantidadeRegistrosArquivo += 1; 
-    db_setaPropriedadesLayoutTxt(&$db_layouttxt,1);
+
+    $iQuantidadeRegistrosArquivo += 1;
+    db_setaPropriedadesLayoutTxt($db_layouttxt,1);
 
  ///// }
 
@@ -160,7 +160,7 @@ if( $clrharqbanco->numrows > 0 ){
 
 
 $rh34_wherefolha = "";
-$rh34_wherepensa = ""; 
+$rh34_wherepensa = "";
 
 if($opt_todosbcos) {
   $rh34_wherefolha .= " r38_banco  = '$rh34_codban'     ";
@@ -185,14 +185,14 @@ if ($sqlerro == false) {
   if ($tiparq == 0) {
 
     $sql = $clfolha->sql_query_gerarqbag(null,"folha.*,cgm.*, length(trim(r38_agenc)) as qtddigitosagencia, contabancaria.*,
-                                               r70_descr, 
-                                               case when trim(translate(r38_conta,'0','')) = '' then '02' 
-                                                    when (select rh02_fpagto 
+                                               r70_descr,
+                                               case when trim(translate(r38_conta,'0','')) = '' then '02'
+                                                    when (select rh02_fpagto
                                                             from rhpessoalmov
                                                            where rh02_regist = r38_regist
                                                              and rh02_anousu = ".db_anofolha()."
                                                             and rh02_mesusu     = ".db_mesfolha()."
-                                                            and rh02_instit     = ".db_getsession("DB_instit").") = 4 then '02' 
+                                                            and rh02_instit     = ".db_getsession("DB_instit").") = 4 then '02'
                                                 else '01' end as tipo_pagamento,
                                                length(trim(z01_cgccpf)) as tam,
                                                r38_liq as valorori",
@@ -205,9 +205,9 @@ if ($sqlerro == false) {
 
       $titarquivo = "pensaojudicial";
       $titrelatorio = "PENSÃO JUDICIAL ";
-   
+
     if (!DBPessoal::verificarUtilizacaoEstruturaSuplementar()) {
-      
+
       if ($qfolha == 1) {
         $campovalor = " r52_valor+r52_valfer ";
         $rh34_wherepensa .= " and (r52_valor > 0 or r52_valfer > 0 ) ";
@@ -225,31 +225,31 @@ if ($sqlerro == false) {
         $rh34_wherepensa .= " and r52_valor > 0 ";
       }
     }
-    
+
     /**
      * Se a variável $DB_COMPLEMENTAR estiver setada, o valor do "r38_liq" será da tabela ("rhhistoricopensao")
      * lembrando que a folha de pagamento precisa ter registros na geração de disco ("folhapagamentogeracao").
      */
     if (DBPessoal::verificarUtilizacaoEstruturaSuplementar()) {
-      
+
       switch ($qfolha) {
-        
+
           case 1:
             $iTipoFolha  = FolhaPagamento::TIPO_FOLHA_SALARIO;
             $sOperacao   = "+r52_valfer";
             break;
-          
-          case 2: 
-            $iTipoFolha  = FolhaPagamento::TIPO_FOLHA_COMPLEMENTAR; 
+
+          case 2:
+            $iTipoFolha  = FolhaPagamento::TIPO_FOLHA_COMPLEMENTAR;
             $sOperacao   = "";
             break;
-          
-          case 5: 
+
+          case 5:
             $iTipoFolha  = FolhaPagamento::TIPO_FOLHA_SUPLEMENTAR;
             $sOperacao   = "";
-            break;  
+            break;
       }
-      
+
       $sCampo  = "(                                                                                      \n";
       $sCampo .= " SELECT SUM(rh145_valor)                                                               \n";
       $sCampo .= "   FROM rhhistoricopensao                                                              \n";
@@ -259,10 +259,10 @@ if ($sqlerro == false) {
       $sCampo .= "    and rh141_aberto is false                                                          \n";
       $sCampo .= "    and rh145_pensao    = r52_sequencial                                               \n";
       $sCampo .= " ){$sOperacao}                                                                         \n";
-      
+
       $campovalor       = $sCampo;
     }
-    
+
     $sWhere = "$rh34_wherepensa and $campovalor > 0";
 
     if (DBPessoal::verificarUtilizacaoEstruturaSuplementar()) {
@@ -280,7 +280,7 @@ if ($sqlerro == false) {
                                                length(trim(cgm.z01_cgccpf)) as tam,
                                                $campovalor as valorori",
                                               "r52_codbco,tipo_pagamento,cgm.z01_nome",
-                                               $sWhere 
+                                               $sWhere
                                               );
 
     $lPensionista = true;
@@ -289,7 +289,7 @@ if ($sqlerro == false) {
   }
 
   if ($numrows > 0) {
-    
+
     db_fieldsmemory($result,0);
 
     $idregistroimpressao = $posicao;
@@ -298,7 +298,7 @@ if ($sqlerro == false) {
     if (!is_writable("/tmp/")) {
       $sqlerro= true;
       $erro_msg = 'Sem permissão de gravar o arquivo. Contate suporte.';
-    }  
+    }
 
     ///// INICIA IMPRESSÃO DO RELATÓRIO
     $pdf = new PDF();
@@ -323,17 +323,17 @@ if ($sqlerro == false) {
     $tipocompromisso   = "02";
     $agencialote       = $agenciaheader;
 
-    
+
     $tiposervico = "30";
 
     $sequencialnolote = 0;
-  
+
     $troca_header     = 0;
 
     $quantidadefuncionarios = 0;
     $valortotal             = 0;
     $quantidaderegistarq    = 0;
-   
+
     /**
      * Monta cabecalho para o PDF
      */
@@ -371,15 +371,15 @@ if ($sqlerro == false) {
      * @var array Tipos de conta
      */
     $aTiposConta = array(
-      '1' => '01', 
-      '2' => '05', 
+      '1' => '01',
+      '2' => '05',
       '4' => '04',
       '0' => '02'//SEM CONTA/CONTA_ZERADA
     );
 
     /**
-     * Percorre os tipos de conta para 
-     * verificar se possui dados na tabela folha, 
+     * Percorre os tipos de conta para
+     * verificar se possui dados na tabela folha,
      * se existir monta o Lote com os dados do tipo de conta
      */
     $iLote = 0;
@@ -395,21 +395,21 @@ if ($sqlerro == false) {
       $sCampos = "case when trim(translate(r38_conta,'0','')) = '' then '02'                     ";
       $sCampos .= "     when db89_db_bancos <> '756'                then '03'                     ";
       $sCampos .= " else '01' end as tipo_pagamento,                                              ";
-      $sCampos .= "r52_codbco as r38_banco, r52_codage || r52_dvagencia as r38_agenc, r52_conta || r52_dvconta as r38_conta, $campovalor as r38_liq,cgm.*, length(trim(r38_agenc)) as qtddigitosagencia, 
-      contabancaria.*, 
-      r70_descr, 
+      $sCampos .= "r52_codbco as r38_banco, r52_codage || r52_dvagencia as r38_agenc, r52_conta || r52_dvconta as r38_conta, $campovalor as r38_liq,cgm.*, length(trim(r38_agenc)) as qtddigitosagencia,
+      contabancaria.*,
+      r70_descr,
       rh01_regist as r38_regist,
       db89_codagencia,
       db89_digito, ";
       $sCampos .= "length(trim(cgm.z01_cgccpf)) as tam,                                           ";
-      $sCampos .= "r38_liq as valorori                                                            ";  
+      $sCampos .= "r38_liq as valorori                                                            ";
       $sWhere   = $rh34_wherepensa;
 
       $sSql     = $clpensao->sql_query_gerarqbag(null, null, null, null, $sCampos, "r52_codbco,db83_tipoconta,tipo_pagamento,cgm.z01_nome", $sWhere);
 
     } else {
 
-      $sCampos = "folha.*,cgm.*, length(trim(r38_agenc)) as qtddigitosagencia, contabancaria.*, r70_descr, 
+      $sCampos = "folha.*,cgm.*, length(trim(r38_agenc)) as qtddigitosagencia, contabancaria.*, r70_descr,
       db89_codagencia,
       db89_digito, ";
       $sCampos .= "case when trim(translate(r38_conta,'0','')) = '' then '02'                                       ";
@@ -431,13 +431,13 @@ if ($sqlerro == false) {
     $rsDados   = db_query($sSql);
 
     if ( pg_num_rows($rsDados) == 0){
-      continue;
+      //continue;
     }
 
     /**
      * Percorre os servidores
      */
-    
+
     $troca_header = 0;
     $iQuantidadeServidoresLote = 0;
     $quantidadetotallote       = 0;
@@ -454,8 +454,8 @@ if ($sqlerro == false) {
 
       $iTipoConta       = $db83_tipoconta;
       $iCodigoTipoConta = $aTiposConta[$iTipoConta];
-       
-      if (   ($iTipoConta == "0" && $tipo_pagamento != "02") 
+
+      if (   ($iTipoConta == "0" && $tipo_pagamento != "02")
           || ($iTipoConta != "0" && $tipo_pagamento == "02") ) {
         continue;
       }
@@ -483,31 +483,31 @@ if ($sqlerro == false) {
           $lGerarTraillerLote = true;
         }
       }
-   
+
       if ($lGerarTraillerLote) {
 
         $iTotalizadorLote+=2;
-        $quantidadetotallote = $iTotalizadorLote; 
+        $quantidadetotallote = $iTotalizadorLote;
         $iQuantidadeRegistrosArquivo += 1;
-        db_setaPropriedadesLayoutTxt(&$db_layouttxt, 4);
+        db_setaPropriedadesLayoutTxt($db_layouttxt, 4);
         $lGerarTraillerLote = false;
         $valortotallote = 0;
       }
 
-      
+
       if ($lGerarHeaderLote) {
 
         $iLote++;
         $loteservico = $iLote;
         $iQuantidadeRegistrosArquivo += 1;
-        db_setaPropriedadesLayoutTxt(&$db_layouttxt, 2);
+        db_setaPropriedadesLayoutTxt($db_layouttxt, 2);
         $sequencialnolote = 0;
         $lGerarHeaderLote = false;
         $iTotalizadorLote = 0;
       }
 
       $iTotalizadorLote+=2;
-      
+
       if ($tipo_pagamento == "02") {
         $r38_banco = '';
       }
@@ -522,7 +522,7 @@ if ($sqlerro == false) {
       //////////////////////////////////////////////
       $quantidaderegistarq ++;
       if ($troca_header != $tipo_pagamento) {
-        
+
         if ($troca_header != 0) {
           $quantidadetotallote = $sequencialnolote + 2;
           $sequencialnolote = 0;
@@ -531,7 +531,7 @@ if ($sqlerro == false) {
 
         ///// HEADER DO LOTE
         $loteservico     = $iLote;
-        
+
         ///// FINAL DO HEADER DO LOTE
         $troca_header       = $tipo_pagamento;
         $sequencialnolote   = 0;
@@ -547,7 +547,7 @@ if ($sqlerro == false) {
       $agenciapagar = substr($agenciapagarT,0,5);
       $digitoagenci = substr($agenciapagarT,5,1);
 
-      
+
       $contasapagar = substr($contasapagarT,0,14)+0;
       $digitocontas = substr($contasapagarT,14,1);
 
@@ -570,19 +570,19 @@ if ($sqlerro == false) {
       $sequencialreg       = $iServidor + 1;
       //////////////////////////////////////////////
       //////////////////////////////////////////////
-      
+
       $valordebito = $r38_liq;
       $dataprocessamento = $datadedeposito;
 
       ///// REGISTRO A
-      
+
       $agenciafavorecido            = $db89_codagencia;
       $dvagenciafavorecido          = $db89_digito[0];
       $contafavorecido              = $db83_conta;
       $dvcontafavorecido            = $db83_dvconta[0];
       $dvagenciacontafav            = isset($db83_dvconta[1]) ? $db83_dvconta[1] : " ";
-      $iQuantidadeRegistrosArquivo += 1; 
-      db_setaPropriedadesLayoutTxt(&$db_layouttxt, 3, $posicao);
+      $iQuantidadeRegistrosArquivo += 1;
+      db_setaPropriedadesLayoutTxt($db_layouttxt, 3, $posicao);
 
       ///// FINAL DO REGISTRO A
      /**
@@ -600,7 +600,7 @@ if ($sqlerro == false) {
       $valorvencimento = $r38_liq;
       $sTipoConta      = '';
       switch ($db83_tipoconta) {
-      
+
         case '1':
           $sTipoConta = "Conta Corrente";
           break;
@@ -618,8 +618,8 @@ if ($sqlerro == false) {
       ///// REGISTRO B
       ///
       $sequencialnolote++;
-      $iQuantidadeRegistrosArquivo += 1;    
-      db_setaPropriedadesLayoutTxt(&$db_layouttxt, 3, "");
+      $iQuantidadeRegistrosArquivo += 1;
+      db_setaPropriedadesLayoutTxt($db_layouttxt, 3, "");
       ///// FINAL DO REGISTRO B
 
       if($pdf->gety() > $pdf->h - 30){
@@ -653,7 +653,7 @@ if ($sqlerro == false) {
 
       $pdf->setfont('arial','',7);
       $pdf->cell(15,$alt,$r38_regist,1,0,"C",0);
-      
+
       if ($tiparq < 5) {
 
         $pdf->cell(15, $alt, $z01_numcgm, 1, 0, "C", 0);
@@ -679,7 +679,7 @@ if ($sqlerro == false) {
       $pdf->cell(17,$alt,db_formatar($r38_liq,'f'),1,1,"R",0);
 
       $quantidadefuncionarios ++;
-      
+
       $valortotallote += $r38_liq;
 
       //Variáveis que guardam banco e tipo de conta para comparar no prÃ³xima repetição do laço
@@ -690,12 +690,12 @@ if ($sqlerro == false) {
   }
 
    /**
-    * Imprimi ultimo trailer do lote 
+    * Imprimi ultimo trailer do lote
     */
     $iTotalizadorLote += 2;
-    $quantidadetotallote = $iTotalizadorLote; 
+    $quantidadetotallote = $iTotalizadorLote;
     $iQuantidadeRegistrosArquivo += 1;
-    db_setaPropriedadesLayoutTxt(&$db_layouttxt, 4);
+    db_setaPropriedadesLayoutTxt($db_layouttxt, 4);
 
 
     $pdf->setfont('arial','b',8);
@@ -707,7 +707,7 @@ if ($sqlerro == false) {
 
     $quantidadetotallote = $sequencialnolote + 2;
     $quantidaderegistarq ++;
-  
+
 
     // VARIAVEIS PARA TRAILLER CEF
     $quanttrailler = $quantidadefuncionarios + 2;
@@ -717,11 +717,11 @@ if ($sqlerro == false) {
 
     ///// TRAILLER DE ARQUIVO
     $loteservico = '9999';
-    
+
     $iQuantidadeRegistrosArquivo += 1;
     $quantidaderegistarq  = $iQuantidadeRegistrosArquivo;
     $quantidadelotesarq   = $iLote;
-    db_setaPropriedadesLayoutTxt(&$db_layouttxt, 5);
+    db_setaPropriedadesLayoutTxt($db_layouttxt, 5);
     ///// FINAL DO TRAILLER DE ARQUIVO
     //////////////////////////////////
     $pdf->Output($nomearquivo_impressao,false,true);

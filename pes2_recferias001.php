@@ -202,6 +202,7 @@ function js_emite(){
   }
 
   if(document.form1.tipofol.value == 'r31'){
+    exit;
     jan = window.open('pes2_recferias002.php'+qry,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
     jan.moveTo(0,0);
   }else if(document.form1.tipofol.value == 'r14'){

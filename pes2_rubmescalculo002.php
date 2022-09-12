@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("fpdf151/pdf.php");
@@ -31,7 +31,7 @@ require_once("libs/db_utils.php");
 require_once ("libs/JSON.php");
 
 $oGet        = db_utils::postMemory($_GET);
-       
+
 $oJson       = new services_json();
 
 $oParametros = $oJson->decode(str_replace("\\", "", $oGet->sParametros));
@@ -62,50 +62,50 @@ $head3 = "RUBRICA : ".$sRubrica." - ".$sDescricaoRubrica;
 $head4 = "PERÍODO : ".$iMes." / ".$iAno;
 
 /*
- * Se o tipo da folha for Salário ou Suplementar, os valores  seram 
+ * Se o tipo da folha for Salário ou Suplementar, os valores  seram
  * retirados do histórico cálculo invéz da gerfsal.
  */
 if($sPonto == 's'){
-	
+
   $sTabela = 'gerfsal';
   $sSigla  = 'r14_';
   $head5   = 'PONTO : SALÁRIO';
-  
+
   if (DBPessoal::verificarUtilizacaoEstruturaSuplementar()) {
     $sTabela = sql_gerfsal_ficticio(FolhaPagamento::TIPO_FOLHA_SALARIO, $sSigla);
   }
-  
+
 } elseif($sPonto == 'c'){
-	
+
   $sTabela = 'gerfcom';
   $sSigla  = 'r48_';
   $head5   = 'PONTO : COMPLEMENTAR';
-  
+
 } elseif($sPonto == 'a'){
-	
+
   $sTabela = 'gerfadi';
   $sSigla  = 'r22_';
   $head5   = 'PONTO : ADIANTAMENTO';
-  
+
 } elseif($sPonto == 'r'){
-	
+
   $sTabela = 'gerfres';
   $sSigla  = 'r20_';
   $head5   = 'PONTO : RESCISÃO';
-  
+
 } elseif($sPonto == 'd'){
-	
+
   $sTabela = 'gerfs13';
   $sSigla  = 'r35_';
   $head5   = 'PONTO : 13o. SALÁRIO';
-  
+
 } elseif($sPonto == 'u'){
-  
+
   $sSigla  = 'r14_';
   $head5   = 'PONTO : SUPLEMENTAR';
   $sTabela = sql_gerfsal_ficticio(FolhaPagamento::TIPO_FOLHA_SUPLEMENTAR, $sSigla);
 } elseif($sPonto == 't'){
-  
+
   $aSiglas = array ('r14_' => 'gerfsal',
                     'r48_' => 'gerfcom',
                     'r35_' => 'gerfs13',
@@ -134,52 +134,52 @@ if (!empty($oParametros->rubini) && $sPonto != 't') {
 
 if (!empty($iCodigoSelecao)) {
 	$oDaoSelecao = db_utils::getDao('selecao');
-	
+
 	$sSqlSelecao = $oDaoSelecao->sql_query_file($iCodigoSelecao, $iInstituicao);
-	
+
 	$rsSelecao   = $oDaoSelecao->sql_record($sSqlSelecao);
-	
+
 	if  ($oDaoSelecao->numrows > 0) {
-		
+
 		$sWhereSelecao = db_utils::fieldsMemory($rsSelecao, 0)->r44_where;
-		
+
 		$sWhere       .= " and {$sWhereSelecao}";
-		
+
 	}
-	
-} 
-	
+
+}
+
 
 if($sOrdem == 'a'){
-	
+
   $head6    = 'ORDEM : ALFABÉTICA '.strtoupper($sTipoOrdem);
   $sOrderBy = 'order by '.$sSigla.'rubric, z01_nome '.$sTipoOrdem;
-  
+
 }elseif($sOrdem == 'n'){
-	
+
   $head6    = 'ORDEM : NUMÉRICA '.strtoupper($sTipoOrdem);
   $sOrderBy = 'order by '.$sSigla.'rubric, regist '.$sTipoOrdem;
-  
+
 }elseif($sOrdem == 'l'){
-	
+
   $head6    = 'ORDEM : LOTAÇÃO '.strtoupper($sTipoOrdem);
   $sOrderBy = 'order by '.$sSigla.'rubric, lotacao '.$sTipoOrdem.',z01_nome ';
-  
+
 }elseif($sOrdem == 'v'){
-	
+
   $head6    = 'ORDEM : VALOR '.strtoupper($sTipoOrdem);
   $sOrderBy = 'order by '.$sSigla.'rubric, valor '.$sTipoOrdem;
-  
+
 }elseif($sOrdem == 'q'){
-	
+
   $head6    = 'ORDEM : QUANTIDADE '.strtoupper($sTipoOrdem);
   $sOrderBy = 'order by '.$sSigla.'rubric, quant '.$sTipoOrdem;
-  
+
 }elseif($sOrdem == 'r'){
-	
+
   $head6    = 'ORDEM : RECURSO '.strtoupper($sTipoOrdem);
   $sOrderBy = 'order by '.$sSigla.'rubric, rh25_recurso '.$sTipoOrdem.', z01_nome ';
-  
+
 }
 
 $oDaoRhPessoalMov = db_utils::getDao('rhpessoalmov');
@@ -212,7 +212,7 @@ if ($oDaoRhPessoalMov->numrows == 0 ) {
 		db_msgbox("Não existem Cálculo no período de {$iMes} / {$iAno}");
 		exit;
 	}
-} 
+}
 
 
 db_fieldsmemory($rsFinanceiro, 0);
@@ -222,7 +222,7 @@ $xxrubrica       = '';
 if($sTipo == 'r'){
 
 	$pdf = new PDF();
-	
+
 	$pdf->Open();
 	$pdf->AliasNbPages();
 	$pdf->setfillcolor(235);
@@ -247,7 +247,7 @@ if($sTipo == 'r'){
 	}else{
 		$tot_espaco = 152;
 	}
-  
+
 	for($x = 0; $x < pg_numrows($rsFinanceiro);$x++){
 
 
@@ -465,7 +465,7 @@ if($sTipo == 'r'){
 				$pdf->addpage();
 				$pdf->setfont('arial','b',8);
 			}
-			
+
 			if($sTotalizacao == 'a') {
 				if ($sQuebra && ($sOrdem == 'l' || $sOrdem == 'r') || $x == 0) {
 					$pdf->setfont('arial', 'b', 8);
@@ -510,7 +510,7 @@ if($sTipo == 'r'){
 		if($sTotalizacao == 'a'){
 			if($pre == 1)
 				$pre = 0;
-			
+
 			else $pre = 1;
 
 			if($x == 0 ){	//Insere o cabeçalho na primeira ocorrência
@@ -540,11 +540,11 @@ if($sTipo == 'r'){
 				$pdf->cell(15,$alt,$cargo,0,0,"C",$pre);
 				$pdf->cell(62,$alt,substr(trim($desc_cargo),0,40),0,0,"L",$pre);
 			}
-			
+
 			$pdf->cell(15,$alt,db_formatar($quant,'f'),0,0,"R",$pre);
 			$pdf->cell(25,$alt,db_formatar(abs($valor),'f'),0,1,"R",$pre);
 		}
-		
+
 		$t_valor += $valor;
 		$t_quant += $quant;
 		$t_func  += 1;
@@ -555,9 +555,9 @@ if($sTipo == 'r'){
 		$xquant  += $quant;
 		$total   += 1;
 	}
-	
+
 	if(( $sOrdem == 'r' || $sOrdem == 'l') && $x != 0){
-		
+
 		$pdf->setfont('arial','b',8);
 		$quebra = $rh25_recurso;
 
@@ -594,7 +594,7 @@ if($sTipo == 'r'){
 	//db_redireciona('db_erros.php?fechar=true&db_erro=Relatório Gerado com Sucesso');
 
 }elseif($sTipo == 'a'){
-  
+
   $str_arquivo = "tmp/{$sRubrica}_{$iAno}{$iMes}.txt";
   $nomearq     = $str_arquivo;
   $fl_arquivo  = fopen($str_arquivo, "w" );
@@ -602,13 +602,13 @@ if($sTipo == 'r'){
   $str_dados = chr(15).$head2."\n".$head3."\n".$head4."\n";
   fputs( $fl_arquivo, $str_dados );
 
-  $str_dados = str_pad( " Matrícula", 09 )." ".
+  $str_dados = str_pad( " Matrícula", 9 )." ".
                str_pad( $RLz01_nome, 40 )." ".
                str_pad( "QUANTIDADE", 13 )." ".
                str_pad( "VALOR", 11 )." ".
-               str_pad( "LOTACAO", 08 )."   ".
+               str_pad( "LOTACAO", 8 )."   ".
                str_pad( "DESCRICAO", 30 )." ".
-               str_pad( "CARGO", 08 )."   ".
+               str_pad( "CARGO", 8 )."   ".
                str_pad( "DESCRICAO", 30 );
   fputs( $fl_arquivo, "+--------+----------------------------------------+-------------+-----------+--------+------------------------------+--------+------------------------------+\n" );
   fputs( $fl_arquivo, $str_dados."\n" );
@@ -621,12 +621,12 @@ if($sTipo == 'r'){
   $total = 0;
   for($x = 0; $x < pg_numrows($rsFinanceiro);$x++){
      db_fieldsmemory($rsFinanceiro,$x);
-     
+
      if ($pd == '2') { //desconto
      	$valor *= -1;
      	$quant *= -1;
      }
-     
+
      $str_dados = str_pad( $regist."-".modulo11($regist), 9, " ",STR_PAD_LEFT )." ".
                   str_pad( $z01_nome, 40," " )." ".
                   str_pad( trim( db_formatar($quant,'f') ), 13," ", STR_PAD_LEFT )." ".
@@ -636,7 +636,7 @@ if($sTipo == 'r'){
                   str_pad( $cargo, 4, "0", STR_PAD_LEFT )."   ".
                   substr(trim($desc_cargo),0,29);
      fputs( $fl_arquivo, $str_dados."\n" );
- 
+
      $xvalor += $valor;
      $xquant += $quant;
      $total  += 1;
@@ -682,12 +682,12 @@ if($sTipo == 'r'){
   $total = 0;
   for($x = 0; $x < pg_numrows($rsFinanceiro);$x++){
      db_fieldsmemory($rsFinanceiro,$x);
-     
+
      if ($pd == '2') { //desconto
      	$valor *= -1;
      	$quant *= -1;
      }
-     
+
      $str_dados = $regist.";".
                   $z01_nome.";".
                   trim( db_formatar($quant,'f') ).";".
@@ -697,7 +697,7 @@ if($sTipo == 'r'){
                   $cargo."; ".
                   substr(trim($desc_cargo),0,29);
      fputs( $fl_arquivo, $str_dados."\n" );
- 
+
      $xvalor += $valor;
      $xquant += $quant;
      $total  += 1;
@@ -747,14 +747,14 @@ function modulo11($num, $base=9, $r=0){
 }
 
 /**
- * Constrói uma query onde irá retornar a gersfal utilizando os valores da tabela rhhistoricocalculo  
- * 
+ * Constrói uma query onde irá retornar a gersfal utilizando os valores da tabela rhhistoricocalculo
+ *
  * @param Integer $iTipoFolha
  * @param String $sSigla
  * @return String
  */
 function sql_gerfsal_ficticio($iTipoFolha, $sSigla) {
-  
+
   $sSql  = "(select rh143_rubrica          as {$sSigla}rubric,                                                      \n";
   $sSql .= "        rh143_regist           as {$sSigla}regist,                                                      \n";
   $sSql .= "        sum(rh143_valor)       as {$sSigla}valor,                                                       \n";
@@ -771,6 +771,6 @@ function sql_gerfsal_ficticio($iTipoFolha, $sSigla) {
   $sSql .= "  where rh142_sequencial = {$iTipoFolha}                                                                \n";
   $sSql .= "      group by rh143_rubrica, rh143_regist, rh141_anousu, rh141_mesusu, rh141_instit, rh143_tipoevento) \n";
   $sSql .= "as gerfsal                                                                                              \n";
-  
+
   return $sSql;
 }
