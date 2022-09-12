@@ -164,7 +164,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
     sContent += "             <td id=\"ctnVeiculoDivulgacao\"></td>";
     sContent += "           </tr> ";
 
-    sContent += "           <tr style='display: none;'>";
+    sContent += "           <tr id=\"justificativa\">";
     sContent += "             <td colspan='2'>";
     sContent += "               <fieldset class=\"separator\">";
     sContent += "                 <legend>Justificativa</legend> ";
@@ -304,11 +304,34 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
      * Retorno da pesquisa acordos
      */
     js_mostraacordo1 = function (chave1, chave2) {
+        
+        var oParam = {
+            exec: 'getleilicitacao',
+            licitacao: chave1
+        }
+
+        new AjaxRequest(me.sUrlRpc, oParam, function (oRetorno, lErro) {
+            if(oRetorno.lei==2){
+                $('justificativa').style.display = '';
+            }else{
+                $('justificativa').style.display = 'none';
+            }
+
+        }).setMessage("Aguarde, pesquisando acordos.")
+            .execute();
+
+        
 
         me.oTxtCodigoAcordo.setValue(chave1);
         me.oTxtDescricaoAcordo.setValue(chave2);
         db_iframe_acordo.hide();
         me.pesquisarDadosAcordo();
+
+        
+    }
+
+    function js_retornoGetLeilicitacao(oAjax){
+
     }
 
     this.consultaAcordo = function () {

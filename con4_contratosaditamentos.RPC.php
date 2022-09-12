@@ -233,6 +233,21 @@ try {
             }
             $oRetorno->itens = $aUnidades;
             break;
+        case "getleilicitacao":
+            $sSQL = "select l20_leidalicitacao  from liclicita 
+            inner join acordo on
+                acordo.ac16_licitacao = liclicita.l20_codigo
+            where
+            acordo.ac16_origem = 2
+            and liclicita.l20_codigo = $oParam->licitacao";
+            
+
+            $rsResult       = db_query($sSQL);
+            $leilicitacao = db_utils::fieldsMemory($rsResult, 0);
+
+            $oRetorno->lei = $leilicitacao->l20_leidalicitacao;
+
+            break;
         case "salvaAssinatura":
 
             $clcondataconf = new cl_condataconf;
