@@ -61,7 +61,7 @@ class EventoS1010Individual extends EventoBase
             if (!empty($oDado->codincfgts)) {
                 $oDadosAPI->evtTabRubrica->dadosRubrica->codincfgts = $oDado->codincfgts;
             }
-            if (!empty($oDado->ideProcessoSIND->nrProc)) {
+            if (!empty($oDado->codinccprp)) {
                 $oDadosAPI->evtTabRubrica->dadosRubrica->codinccprp = $oDado->codinccprp;
             }
             if (!empty($oDado->tetoremun)) {
