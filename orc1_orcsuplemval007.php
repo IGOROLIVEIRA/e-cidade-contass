@@ -51,11 +51,7 @@ include("classes/db_orcreservaaut_classe.php");
 
 include("classes/db_empautitem_classe.php");
 include("classes/db_condataconf_classe.php");
-/*
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-*/
+
 db_app::import("orcamento.suplementacao.*");
 db_app::import("orcamento.ManutencaoSuplementacao");
 

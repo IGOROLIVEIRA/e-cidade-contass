@@ -19,6 +19,10 @@ class QuadroSuperavitDeficitRepository
      */
     private $iInstituicao;
 
+    /**
+     * 
+     */
+
     public function __construct($iAnoUsu, $iInstituicao)
     {
         $this->oRepositorio = new cl_quadrosuperavitdeficit;
@@ -26,20 +30,37 @@ class QuadroSuperavitDeficitRepository
         $this->iInstituicao = $iInstituicao;
     }
 
-    public function calcularPorFonte($sFonte)
+    public function pegarValorPorFonte($sFonte)
     {
         $sWhere = " c241_fonte = {$sFonte} AND c241_ano = {$this->iAnoUsu} AND c241_instit = {$this->iInstituicao} ";
         $rResult = $this->oRepositorio->sql_record($this->oRepositorio->sql_query(null, "c241_valor as valor", null, $sWhere));
         $this->iRegistros = pg_num_rows($rResult);
+
         if ($this->iRegistros === 0)
-            $this->nValor = 0;
+            return 0.00;
+
         $oQuadro = db_utils::fieldsMemory($rResult, 0);
-        $this->nValor = $oQuadro->valor;
+        return $oQuadro->valor;
     }
 
-    public function pegarValor()
+    /**
+     * Devolve array de valores por fonte
+     *
+     * @return array
+     */
+    public function pegarArrayValoresPelaFonte()
     {
-        return $this->nValor;
+        $aValorPelaFonte = array();
+        $sWhere = " c241_ano = {$this->iAnoUsu} AND c241_instit = {$this->iInstituicao} ";
+        $rResult = $this->oRepositorio->sql_record($this->oRepositorio->sql_query(null, " c241_fonte as fonte, c241_valor as valor ", null, $sWhere));
+        $this->iRegistros = pg_num_rows($rResult);
+        if ($this->iRegistros === 0)
+            return $aValorPelaFonte;
+        for ($i = 0; $i < $this->iRegistros; $i++) {
+            $oQuadro = db_utils::fieldsMemory($rResult, $i);
+            $aValorPelaFonte[$oQuadro->fonte] = $oQuadro->valor;
+        }
+        return $aValorPelaFonte;
     }
 
     public function pegarNumeroRegistros()

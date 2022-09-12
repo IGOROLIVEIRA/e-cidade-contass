@@ -2,6 +2,7 @@
 
 require_once("repositorios/QuadroSuperavitDeficitRepository.php");
 require_once("repositorios/OrcSuplemValRepository.php");
+require_once("repositorios/TipoSuplementacaoSuperavitDeficit.php");
 
 /**
  * Classe responsavel pela regra de negocios da suplementação do orçamento
@@ -27,7 +28,7 @@ class ManutencaoSuplementacao
     /**
      * @var array
      */
-    private $aTipoSubSuplementacao = array('1003', '1008', '1024', '1028', '2026');
+    private $aTipoSubSuplementacaoSuperavitDeficit = array();
 
     /**
      * @var int
@@ -47,15 +48,27 @@ class ManutencaoSuplementacao
     /**
      * @var float
      */
-    private $nValorQuadroSuperavitDeficit = 0;
+    private $nValorQuadroSuperavitDeficit = 0.00;
 
     public function __construct($sSupTipo, Recurso $oRecurso, $nValor)
     {
         $this->sSupTipo = $sSupTipo;
         $this->oRecurso = $oRecurso;
-        $this->nValor = $nValor;
+        $this->preencherValor($nValor);
+        $this->preencherTipoSuplementacao();
         $this->iAnoUsu = db_getsession("DB_anousu");
         $this->iInstituicao = db_getsession("DB_instit");
+        $this->oQuadroSuperavitDeficit = new QuadroSuperavitDeficitRepository($this->iAnoUsu, $this->iInstituicao);
+    }
+
+    public function preencherTipoSuplementacao()
+    {
+        $this->aTipoSubSuplementacaoSuperavitDeficit = TipoSuplementacaoSuperavitDeficit::pegarTipoSup();
+    }
+
+    public function preencherValor($nValor)
+    {
+        $this->nValor = number_format($nValor, 2, ".", "");
     }
 
     /**
@@ -65,7 +78,7 @@ class ManutencaoSuplementacao
      */
     public function eTipoSubSuplementacaoSuperavitDeficit()
     {
-        if (in_array($this->sSupTipo, $this->aTipoSubSuplementacao))
+        if (in_array($this->sSupTipo, $this->aTipoSubSuplementacaoSuperavitDeficit))
             return true;
         return false;
     }
@@ -100,42 +113,58 @@ class ManutencaoSuplementacao
         $this->bExisteQuadro = TRUE;
     }
 
-    public function valorQuadroSuperavitDeficit($sFonte)
+    /**
+     * @param string $sFonte
+     * @return float
+     */
+    public function pegarValorQuadroSuperavitDeficit($sFonte)
     {
-        $oQuadroSuperavitDeficit = new QuadroSuperavitDeficitRepository($this->iAnoUsu, $this->iInstituicao);
-        $oQuadroSuperavitDeficit->calcularPorFonte($sFonte);
-        $this->definirExisteQuadroSuperavitDeficit($oQuadroSuperavitDeficit->pegarNumeroRegistros());
-        return $oQuadroSuperavitDeficit->pegarValor();
+        return number_format($this->oQuadroSuperavitDeficit->pegarValorPorFonte($sFonte), 2, ".", "");
     }
 
-    public function valorSuplementado($sFonte)
+    public function pegarValorSuplementadoPorFonte($sFonte)
     {
         $oOrcSuplemVal = new OrcSuplemValRepository($this->iAnoUsu, $this->iInstituicao);
-        return $oOrcSuplemVal->pegarValorSuplementadoPorFonteETipoSup($sFonte, $this->aTipoSubSuplementacao);
+        return $oOrcSuplemVal->pegarValorSuplementadoPorFonteETipoSup($sFonte, $this->aTipoSubSuplementacaoSuperavitDeficit);
+    }
+
+    public function pegarArrayValorSuplementado()
+    {
+        $oOrcSuplemVal = new OrcSuplemValRepository($this->iAnoUsu, $this->iInstituicao);
+        return $oOrcSuplemVal->pegarArrayValorPelaFonteSuplementadoPorTipoSup($this->aTipoSubSuplementacaoSuperavitDeficit);
     }
 
     public function validarSuplementacao()
     {
-        
+
         if (!$this->eTipoSubSuplementacaoSuperavitDeficit())
             return false;
 
+        $this->verificarValoresSuperavitDeficitESuplementados();
+
+        if (!$this->bExisteQuadro)
+            throw new BusinessException("Não existe cadastro no quadro de superávit e deficit para a fonte informada no exercício.");
+
+        if ($this->nValor > $this->nValorQuadroSuperavitDeficit)
+            throw new BusinessException("Não existe superávit suficiente para realizar essa suplementação, saldo disponível R$ {$this->nValorQuadroSuperavitDeficit}");
+    }
+
+    /**
+     * Verifica os valores de superavit, deficit e suplementados
+     *
+     * @return void
+     */
+    public function verificarValoresSuperavitDeficitESuplementados()
+    {
         $aFontes = $this->desmembrarFontes();
 
         for ($i = 1; $i <= 2; $i++) {
             foreach ($aFontes as $sFonte) {
-                $sFonteAtual = $i . $sFonte;        
-                $this->nValorQuadroSuperavitDeficit += $this->valorQuadroSuperavitDeficit($sFonteAtual);
-                $this->nValorSuplementado -= $this->valorSuplementado($sFonteAtual);
+                $sFonteAtual = $i . $sFonte;
+                $this->nValorQuadroSuperavitDeficit += $this->pegarValorQuadroSuperavitDeficit($sFonteAtual);
+                $this->nValorQuadroSuperavitDeficit -= $this->pegarValorSuplementadoPorFonte($sFonteAtual);
+                $this->definirExisteQuadroSuperavitDeficit($this->oQuadroSuperavitDeficit->pegarNumeroRegistros());
             }
         }
-        
-        if (!$this->bExisteQuadro) 
-            throw new BusinessException("Não existe cadastro no quadro de superávit e deficit para a fonte informada no exercício.");
-
-        $nValorQuadroSuperavitDeficit = number_format($this->nValorQuadroSuperavitDeficit, 2, ".", "");
-
-        if (number_format($this->nValor, 2, ".", "") > $nValorQuadroSuperavitDeficit)
-            throw new BusinessException("Não existe superávit suficiente para realizar essa suplementação, saldo disponível R$ {$nValorQuadroSuperavitDeficit}");
     }
 }

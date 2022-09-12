@@ -28,12 +28,27 @@ class OrcSuplemValRepository
     public function pegarValorSuplementadoPorFonteETipoSup($sFonte, $aTipoSup)
     {
         $rResult = $this->oRepositorio->sql_record(
-            $this->oRepositorio->sql_query_superavit_deficit_suplementado_scope(
+            $this->oRepositorio->sql_query_superavit_deficit_suplementado_por_fonte_tiposup_scope(
                 $this->iAnoUsu, $sFonte, $this->iInstituicao, implode(", ", $aTipoSup)));
-
         if (pg_num_rows($rResult) === 0)
             return 0;
         $oSuplementado = db_utils::fieldsMemory($rResult, 0);
         return $oSuplementado->valor;
+    }
+
+    public function pegarArrayValorPelaFonteSuplementadoPorTipoSup($aTipoSup)
+    {
+        $aValorPelaFonte = array();
+        $rResult = $this->oRepositorio->sql_record(
+            $this->oRepositorio->sql_query_superavit_deficit_suplementado_por_tiposup_scope(
+                $this->iAnoUsu, $this->iInstituicao, implode(", ", $aTipoSup)));
+
+        for ($i = 0; $i < pg_num_rows($rResult); $i++) {
+            $oSuplementado = db_utils::fieldsMemory($rResult, $i);
+            $aValorPelaFonte[] = $oSuplementado;
+        }
+
+        ksort($aValorPelaFonte);
+        return $aValorPelaFonte;
     }
 }
