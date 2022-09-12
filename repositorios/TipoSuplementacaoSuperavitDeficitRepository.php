@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @author widouglas
+ */
 class TipoSuplementacaoSuperavitDeficitRepository
 {
     static function pegarTipoSup()

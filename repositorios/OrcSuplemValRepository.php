@@ -1,6 +1,9 @@
 <?php
 require_once("classes/db_orcsuplemval_classe.php");
 
+/**
+ * @author widouglas
+ */
 class OrcSuplemValRepository
 {
     /**

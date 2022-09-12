@@ -2,6 +2,9 @@
 
 require_once("classes/db_quadrosuperavitdeficit_classe.php");
 
+/**
+ * @author widouglas
+ */
 class QuadroSuperavitDeficitRepository
 {
     /**

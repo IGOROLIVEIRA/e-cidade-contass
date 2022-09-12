@@ -5,7 +5,6 @@ require_once("repositorios/OrcSuplemValRepository.php");
 require_once("repositorios/TipoSuplementacaoSuperavitDeficitRepository.php");
 
 /**
- * Classe responsavel pela regra de negocios da suplementação do orçamento
  * @author widouglas
  */
 class ValidacaoSuplementacao
