@@ -18,6 +18,10 @@ class OrcSuplemValRepository
      */
     private $iInstituicao;
 
+    /**
+     * @param string $iAnoUsu
+     * @param string $iInstituicao
+     */
     public function __construct($iAnoUsu, $iInstituicao)
     {
         $this->oRepositorio = new cl_orcsuplemval;
@@ -25,17 +29,26 @@ class OrcSuplemValRepository
         $this->iInstituicao = $iInstituicao;
     }
 
+    /**
+     * @param string $sFonte
+     * @param array $aTipoSup
+     * @return float
+     */
     public function pegarValorSuplementadoPorFonteETipoSup($sFonte, $aTipoSup)
     {
         $rResult = $this->oRepositorio->sql_record(
             $this->oRepositorio->sql_query_superavit_deficit_suplementado_por_fonte_tiposup_scope(
                 $this->iAnoUsu, $sFonte, $this->iInstituicao, implode(", ", $aTipoSup)));
         if (pg_num_rows($rResult) === 0)
-            return 0;
+            return 0.00;
         $oSuplementado = db_utils::fieldsMemory($rResult, 0);
         return $oSuplementado->valor;
     }
 
+    /**
+     * @param array $aTipoSup
+     * @return array
+     */
     public function pegarArrayValorPelaFonteSuplementadoPorTipoSup($aTipoSup)
     {
         $aValorPelaFonte = array();

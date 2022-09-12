@@ -50,6 +50,9 @@ class ValidacaoSuplementacao
      */
     private $nValorQuadroSuperavitDeficit = 0.00;
 
+    /**
+     * @return void
+     */
     public function __construct($sSupTipo, Recurso $oRecurso, $nValor)
     {
         $this->sSupTipo = $sSupTipo;
@@ -61,6 +64,9 @@ class ValidacaoSuplementacao
         $this->oQuadroSuperavitDeficit = new QuadroSuperavitDeficitRepository($this->iAnoUsu, $this->iInstituicao);
     }
 
+    /**
+     * @return void
+     */
     public function preencherTipoSuplementacao()
     {
         $this->aTipoSubSuplementacaoSuperavitDeficit = TipoSuplementacaoSuperavitDeficitRepository::pegarTipoSup();
@@ -103,7 +109,7 @@ class ValidacaoSuplementacao
     /**
      * definir se existe quadro de superavit
      *
-     * @param [type] $registros
+     * @param int $registros
      * @return void
      */
     public function definirExisteQuadroSuperavitDeficit($registros)
@@ -122,22 +128,32 @@ class ValidacaoSuplementacao
         return number_format($this->oQuadroSuperavitDeficit->pegarValorPorFonte($sFonte), 2, ".", "");
     }
 
+    /**
+     * @param string $sFonte
+     * @return float
+     */
     public function pegarValorSuplementadoPorFonte($sFonte)
     {
         $oOrcSuplemVal = new OrcSuplemValRepository($this->iAnoUsu, $this->iInstituicao);
         return $oOrcSuplemVal->pegarValorSuplementadoPorFonteETipoSup($sFonte, $this->aTipoSubSuplementacaoSuperavitDeficit);
     }
 
+    /**
+     * @return array
+     */
     public function pegarArrayValorSuplementado()
     {
         $oOrcSuplemVal = new OrcSuplemValRepository($this->iAnoUsu, $this->iInstituicao);
         return $oOrcSuplemVal->pegarArrayValorPelaFonteSuplementadoPorTipoSup($this->aTipoSubSuplementacaoSuperavitDeficit);
     }
 
+    /**
+     * @return void|BusinessException
+     */
     public function validar()
     {
         if (!$this->eTipoSubSuplementacaoSuperavitDeficit())
-            return false;
+            return;
 
         $this->verificarValoresSuperavitDeficitESuplementados();
 

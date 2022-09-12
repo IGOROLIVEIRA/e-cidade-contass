@@ -20,9 +20,10 @@ class QuadroSuperavitDeficitRepository
     private $iInstituicao;
 
     /**
-     * 
+     * @param string $iAnoUsu
+     * @param string $iInstituicao
+     * @return void
      */
-
     public function __construct($iAnoUsu, $iInstituicao)
     {
         $this->oRepositorio = new cl_quadrosuperavitdeficit;
@@ -30,6 +31,10 @@ class QuadroSuperavitDeficitRepository
         $this->iInstituicao = $iInstituicao;
     }
 
+    /**
+     * @param string $sFonte
+     * @return float
+     */
     public function pegarValorPorFonte($sFonte)
     {
         $sWhere = " c241_fonte = {$sFonte} AND c241_ano = {$this->iAnoUsu} AND c241_instit = {$this->iInstituicao} ";
@@ -63,6 +68,9 @@ class QuadroSuperavitDeficitRepository
         return $aValorPelaFonte;
     }
 
+    /**
+     * @return int
+     */
     public function pegarNumeroRegistros()
     {
         return $this->iRegistros;
