@@ -1,5 +1,7 @@
 <?php
-
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 require_once("libs/db_stdlib.php");
 require_once("libs/db_utils.php");
 require_once("libs/db_app.utils.php");
@@ -45,13 +47,14 @@ if ($alterando == 1 && !empty($q148_codigo) ) {
     if( $q148_codigo != "nova" ){
 
         $resultTipis = $clissbase->sql_record($clissisen->sql_query("", "q147_tipoisen", "", "q148_codigo = $q148_codigo"));
+
         $q147_tipoisen = db_utils::fieldsMemory($resultTipis,0)->q147_tipoisen;
         $q147_taxas = db_utils::fieldsMemory($resultTipis,0)->q147_taxas;
     }
 }
 
 $data = date("Y-m-d",db_getsession("DB_datausu"));
-$dat  = preg_split("-",$data);
+$dat  = explode("-",$data);
 
 if(isset($incluir) || isset($alterar)){
 
@@ -126,7 +129,7 @@ if (isset($q148_codigo) && $q148_codigo=="nova") {
 ?>
 <html lang="">
 <head>
-    <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+    <title>DBSeller Informática Ltda - Página Inicial</title>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
     <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
     <script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
@@ -231,42 +234,6 @@ if (isset($q148_codigo) && $q148_codigo=="nova") {
                     </td>
                 </tr>
                 <tr>
-                    <td nowrap title="Área total do lote">
-                        <strong>Área do lote:</strong>
-                    </td>
-                    <td colspan="2">
-                        <?php
-                        $sql_areatot = "select j34_area from issbase inner join lote on j34_idbql = j01_idbql where q02_inscr = $q148_inscr;";
-                        $result_areatot = $clissbase->sql_record($sql_areatot);
-
-                        if ($clissbase->numrows > 0) {
-                            db_fieldsmemory($result_areatot, 0);
-                        }
-                        db_input('j34_area', 10, $Ij34_area, true, 'text', 3, "");
-                        ?>
-                    </td>
-                </tr>
-                <tr>
-                    <td nowrap title="Área a isentar">
-                        <strong>Área isenta:</strong>
-                    </td>
-                    <td>
-                        <?php
-                        db_input('q148_arealo', 10, $Iq148_arealo, true, 'text', $db_opcao, "onchange = 'js_preenchedif(this.name,this.value,document.form1.j34_area.value);'");
-                        ?>
-                        <strong>Diferença:</strong>
-                        <?php
-                        db_input('q148_dif', 10, $Iq148_arealo, true, 'text', 3, "");
-
-                        if (!empty($j34_area) && !empty($q148_arealo)) {
-
-                            $q148_dif = $j34_area - $q148_arealo;
-                            echo "<script>document.form1.q148_dif.value = $q148_dif;</script>";
-                        }
-                        ?>
-                    </td>
-                </tr>
-                <tr>
                     <td>
                         <?php
                         $q148_idusu = db_getsession("DB_id_usuario");
@@ -312,7 +279,6 @@ if (isset($q148_codigo) && $q148_codigo=="nova") {
                                 if (isset($q148_inscr)) {
 
                                     if (!isset($excluir)) {
-
                                         $result = $clissisen->sql_record($clissisen->sql_query_file("", "q148_codigo as codigo", "", "q148_inscr=$q148_inscr"));
                                         if ($clissisen->numrows > 0) {
                                             db_fieldsmemory($result, 0);
@@ -565,9 +531,9 @@ if (!$alterando) {
     function js_pesquisaq148_tipo(mostra){
 
         if(mostra===true){
-            js_OpenJanelaIframe('','db_iframe','func_tipoisen.php?funcao_js=parent.js_mostratipoisen1|0|1|2|3','Pesquisa',true);
+            js_OpenJanelaIframe('','db_iframe','func_isstipoisen.php?funcao_js=parent.js_mostratipoisen1|0|1|2|3','Pesquisa',true);
         }else{
-            js_OpenJanelaIframe('','db_iframe','func_tipoisen.php?pesquisa_chave='+document.form1.q148_tipo.value+'&funcao_js=parent.js_mostratipoisen','Pesquisa',false);
+            js_OpenJanelaIframe('','db_iframe','func_isstipoisen.php?pesquisa_chave='+document.form1.q148_tipo.value+'&funcao_js=parent.js_mostratipoisen','Pesquisa',false);
         }
 
     }

@@ -202,6 +202,7 @@ if($db_opcao==1){
       iframe_observacao.location.href='iss1_issbase017.php?chavepesquisa=$q02_inscr&opcao=3';\n
       iframe_atividades.location.href=\"iss1_tabativ004.php?db_opcaoal=3&z01_nome=$z01_nome&q07_inscr=$q02_inscr\";\n
 	    iframe_socios.location.href=\"iss1_socios004.php?db_opcaoal=3&q07_inscr=$q02_inscr&z01_nome=$z01_nome&q95_cgmpri=$q02_numcgm\";\n
+	     iframe_isencao.location.href='iss4_issisen002.php?alterando=true&q148_inscr=$q02_inscr';\n
 	    iframe_documentos.location.href=\"iss4_docalvaratab_001.php?aba=1&q123_inscr=$q02_inscr\";\n
 	    iframe_liberacao.location.href=\"iss4_liberacaoalvara_001.php?aba=1&q123_inscr=$q02_inscr\";\n
 	    iframe_caracteristicas.location.href=\"iss4_issbasecaracteristicas003.php?aba=1&q123_inscr=$q02_inscr\";\n

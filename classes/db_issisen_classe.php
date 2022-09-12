@@ -617,18 +617,7 @@ class cl_issisen {
      return $sql;
   }
    function sql_query_file ( $q148_codigo=null,$campos="*",$ordem=null,$dbwhere=""){
-     $sql = "select ";
-     if($campos != "*" ){
-       $campos_sql = split("#",$campos);
-       $virgula = "";
-       for($i=0;$i<sizeof($campos_sql);$i++){
-         $sql .= $virgula.$campos_sql[$i];
-         $virgula = ",";
-       }
-     }else{
-       $sql .= $campos;
-     }
-     $sql .= " from issisen ";
+     $sql = "select {$campos} from issisen";
      $sql2 = "";
      if($dbwhere==""){
        if($q148_codigo!=null ){
