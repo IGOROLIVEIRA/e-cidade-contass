@@ -41,12 +41,6 @@ try {
         exit;
     } else {
 
-        if ($oParam->l20_dtpublic < $oParam->l20_datacria) {
-            $oRetorno->status = 2;
-            $oRetorno->erro   = "A data da publicacao em diario oficial deve ser superior ou igual a data de criacao";
-            echo json_encode($oRetorno);
-            exit;
-        }
 
         $oParam->l20_dtpublic = implode("-", array_reverse(explode("/", $oParam->l20_dtpublic)));
         $oParam->l20_dtpublic = "'" . $oParam->l20_dtpublic . "'";
