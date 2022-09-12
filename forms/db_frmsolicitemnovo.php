@@ -170,6 +170,86 @@ $iOpcaoTipoSolicitacao = $db_opcao;
   </form>
 </div>
 <script>
+  function js_pesquisapc16_codmater(mostra) {
+
+    var iRegistroPrecoFuncao = false;
+    <?
+    $sUrlLookup = "func_pcmatersolicita.php";
+    $sFiltro    = "";
+    if ($iRegistroPreco != "") {
+
+      $sUrlLookup = 'func_pcmaterregistropreco.php';
+      echo "iRegistroPrecoFuncao = true;\n";
+      $sFiltro = "|pc11_codigo";
+    }
+    ?>
+    if (mostra == true || iRegistroPrecoFuncao) {
+      js_OpenJanelaIframe('',
+        'db_iframe_pcmater',
+        '<?= $sUrlLookup ?>?funcao_js=parent.js_mostrapcmater1' +
+        '|pc01_codmater|pc01_descrmater|o56_codele|pc01_veiculo<?= $sFiltro ?><?= $db_opcao == 1 ? "&opcao_bloq=3&opcao=f" : "&opcao_bloq=1&opcao=i" ?>' +
+        '&iRegistroPreco=<?= $iRegistroPreco; ?>',
+        'Pesquisa de Materiais',
+        true);
+    } else {
+      if (document.form1.pc16_codmater.value != '') {
+        js_OpenJanelaIframe('',
+          'db_iframe_pcmater',
+          '<?= $sUrlLookup ?>?pesquisa_chave=' +
+          document.form1.pc16_codmater.value +
+          '&iRegistroPreco=<?= $iRegistroPreco; ?>' +
+          '&funcao_js=parent.js_mostrapcmater<?= $db_opcao == 1 ? "&opcao_bloq=3&opcao=f" : "&opcao_bloq=1&opcao=i" ?>',
+          'Pesquisa', false, '0');
+      } else {
+        document.form1.pc01_descrmater.value = '';
+
+        document.form1.submit();
+      }
+    }
+  }
+
+  function js_mostrapcmater(chave, erro, lVeic) {
+
+    if (erro == true) {
+      document.form1.pc16_codmater.focus();
+      document.form1.pc16_codmater.value = '';
+
+    } else {
+      document.form1.pc01_descrmater.value = chave;
+
+    }
+  }
+
+  function js_mostrapcmater1(chave1, chave2, codele, lVeic, iRegistro) {
+
+
+    document.form1.pc16_codmater.value = chave1;
+    document.form1.pc01_descrmater.value = chave2;
+    db_iframe_pcmater.hide();
+
+
+
+  }
+
+  function js_esconteVeic(mostra) {
+
+    if (!mostra) {
+      mostra = "f";
+    }
+
+    if (mostra == "t") {
+      document.form1.pc01_veiculo.value = "t";
+    } else {
+      if (document.form1.pc01_veiculo.value == "t") {
+        document.getElementById("MostraVeiculos").style.display = "none";
+        document.form1.ve01_placa = "";
+        document.form1.pc14_veiculos.value = "";
+      }
+      document.form1.pc01_veiculo.value = "";
+    }
+
+  }
+
   oGridItens = new DBGrid('oGridItens');
   oGridItens.nameInstance = 'oGridItens';
   oGridItens.setCellAlign(['center', 'left', "right", "right", "right"]);
