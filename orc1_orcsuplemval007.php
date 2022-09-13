@@ -54,7 +54,7 @@ include("classes/db_condataconf_classe.php");
 
 db_app::import("orcamento.suplementacao.*");
 
-require_once 'services/orcamento/ValidaSuplementacaoService.php'; 
+require_once 'services/orcamento/ValidaSuplementacaoService.php';
 
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
@@ -82,7 +82,7 @@ $clorcdotacao->rotulo->label();
 $cloperacaodecredito->rotulo->label();
 
 $clrotulo = new rotulocampo;
-$clrotulo->label("op01_numerocontratoopc"); 
+$clrotulo->label("op01_numerocontratoopc");
 
 $op = 1;
 $db_opcao = 1;
@@ -176,20 +176,20 @@ if (isset($incluir)) {
     } catch (BusinessException $e) {
         db_msgbox($e->getMessage());
         $sqlerro = true;
-        $limpa_dados = false; 
+        $limpa_dados = false;
     }
 
     // Novos tiposup adicionados na OC18040
     if ((!in_array($tiposup, array(1001, 1002, 1003, 1006, 1007, 1008, 1011, 1012, 1013, 1014, 1015, 1016, 1017, 1018, 1019, 1020, 1021, 1022, 1023, 1024, 1026, 1027, 1028, 2026))) && substr($o58_codigo, 0, 1) == 2) {
         db_msgbox("Usuário, inclusão abortada. Dotação incompatível com o tipo de suplementação utilizada");
         $sqlerro = true;
-        $limpa_dados = false; 
+        $limpa_dados = false;
     }
 
     if ((in_array($tiposup, array(1003, 1008, 1024, 1028, 2026))) && substr($o58_codigo, 0, 1) == 1) {
         db_msgbox("Usuário, inclusão abortada. Dotação incompatível com o tipo de suplementação utilizada");
         $sqlerro = true;
-        $limpa_dados = false; 
+        $limpa_dados = false;
     }
 
 
@@ -252,7 +252,7 @@ if (isset($incluir)) {
                             o57_fonte
                     ) as X
                     ) as y GROUP BY o70_codigo";
-       
+
 
             $qResult = db_query($sSql);
             $valor = 0;
@@ -264,7 +264,7 @@ if (isset($incluir)) {
             if ($valor <= 0) {
                 db_msgbox("Não existe excesso de arrecadação para a fonte informada.");
                 $sqlerro = true;
-                $limpa_dados = false; 
+                $limpa_dados = false;
             } else {
                 // Segunda condicao
                 $sSql = "SELECT
@@ -295,7 +295,7 @@ if (isset($incluir)) {
                             AND o58_codigo IN ($fontes)
                             AND o46_instit in (" . db_getsession("DB_instit") . ")
                             AND o46_tiposup IN (1004, 1025, 1012, 1019, 1009, 1010, 1029)
-                            AND o136_valor > 0 
+                            AND o136_valor > 0
                         GROUP BY o58_codigo";
                 $subResult = db_query($sSql);
 
@@ -308,15 +308,15 @@ if (isset($incluir)) {
                 if (number_format(($valor - $valorSuplementado), 2, ".", "") <= 0) {
                     db_msgbox("Não existe excesso suficiente para realizar essa suplementação, saldo disponível 0,00");
                     $sqlerro = true;
-                    $limpa_dados = false; 
+                    $limpa_dados = false;
                 } else {
                     if (number_format(($valor - $valorSuplementado - $o47_valor), 2, ".", "") < 0) {
                         $saldo = number_format($valor - $valorSuplementado, 2, ".", "");
                         db_msgbox("Não existe excesso suficiente para realizar essa suplementação, saldo disponível {$saldo}");
                         $sqlerro = true;
-                        $limpa_dados = false; 
+                        $limpa_dados = false;
                     }
-                } 
+                }
             }
         }
     }
@@ -419,7 +419,7 @@ WHERE o58_anousu=" . db_getsession('DB_anousu') . "
                     $limpa_dados = false;
                 }
             }
-            
+
             if ($o50_controlafote1017 == 't') {
                 /*valida fonte (100,101,102,118,119) OC 9112 */
                 // Adicionar Validação da fontes 166 e 167 - OC17881
@@ -537,7 +537,7 @@ $soma_suplem    = $oSuplementacao->getvalorSuplementacao();
 // --------------------------------------
 
 
-?> 
+?>
 <html>
 
 <head>
