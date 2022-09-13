@@ -177,16 +177,18 @@ $sWhereContratos = " and 1 = 1 ";
              }*/
 
 
-                if (isset($situacao) && trim($situacao) != '' && $cldbusuarios->vefica_adm_user(db_getsession('DB_id_usuario')) != "1") {
+                if (isset($pncp) && trim($pncp) == 1) {
+                $dbwhere .= " l20_licsituacao = 0 AND ";
+                }else{
+                    if (isset($situacao) && trim($situacao) != '' && $cldbusuarios->vefica_adm_user(db_getsession('DB_id_usuario')) != "1") {
 
-                    $dbwhere .= "l20_licsituacao in ($situacao) and ";
-                } else {
-                    if ($situacao == '10') {
-                        $dbwhere .= " l20_licsituacao = 10 AND ";
-                    } elseif ($situacao == '0') {
-                        $dbwhere .= " l20_licsituacao = 0 AND ";
-                    }elseif ($situacao) {
-                        $dbwhere .= " l20_licsituacao = 1 AND ";
+                        $dbwhere .= "l20_licsituacao in ($situacao) and ";
+                    } else {
+                        if ($situacao == '10') {
+                            $dbwhere .= " l20_licsituacao = 10 AND ";
+                        } elseif ($situacao) {
+                            $dbwhere .= " l20_licsituacao = 1 AND ";
+                        }
                     }
                 }
 
