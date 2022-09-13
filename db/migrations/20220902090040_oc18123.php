@@ -2,6 +2,9 @@
 
 class Oc18123 extends \Classes\PostgresMigration
 {
+    const TIPO_ISENCAO = 0;
+    const TIPO_IMUNIDADE = 1;
+
     public function up()
     {
         $this->createIsstipoisenTable();
@@ -29,16 +32,23 @@ class Oc18123 extends \Classes\PostgresMigration
         );
         $table->addColumn('q147_tipo','integer');
         $table->addColumn('q147_descr','text');
-        $table->addColumn('q147_tipoisen','integer', array('default' => 0));
+        $table->addColumn('q147_tipoisen','integer', array('default' => self::TIPO_ISENCAO));
         $table->create();
 
         $sqlSequence = 'CREATE SEQUENCE isstipoisen_q147_tipo_seq
                         INCREMENT BY 1
-                        MINVALUE 1
+                        MINVALUE 2
                         MAXVALUE 9223372036854775807';
 
         $this->execute($sqlSequence);
 
+        $columns = array('q147_tipo', 'q147_descr', 'q147_tipoisen');
+        $values = array(
+            array(1, 'ISENÇÃO', self::TIPO_ISENCAO),
+            array(2, 'IMUNIDADE', self::TIPO_IMUNIDADE),
+        );
+
+        $table->insert($columns, $values)->saveData();
     }
 
     private function createIssisenTable()

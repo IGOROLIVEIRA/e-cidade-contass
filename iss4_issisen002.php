@@ -1,7 +1,4 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
 require_once("libs/db_stdlib.php");
 require_once("libs/db_utils.php");
 require_once("libs/db_app.utils.php");
@@ -25,9 +22,9 @@ $clissisen->rotulo->label();
 
 $rotulocampo->label("z01_nome");
 $rotulocampo->label("q147_descr");
-$rotulocampo->label("j34_area");
 $rotulocampo->label("p58_codproc");
 $rotulocampo->label("p58_requer");
+$rotulocampo->label("k02_descr");
 
 $q147_tipoisen = 0;
 $result    = $clissbase->sql_record($clissbase->sql_query("","cgm.z01_nome as z01_nomematri","","q02_inscr=$q148_inscr"));
@@ -45,11 +42,8 @@ if ( $clissbase->numrows == 0 ) {
 if ($alterando == 1 && !empty($q148_codigo) ) {
 
     if( $q148_codigo != "nova" ){
-
         $resultTipis = $clissbase->sql_record($clissisen->sql_query("", "q147_tipoisen", "", "q148_codigo = $q148_codigo"));
-
         $q147_tipoisen = db_utils::fieldsMemory($resultTipis,0)->q147_tipoisen;
-        $q147_taxas = db_utils::fieldsMemory($resultTipis,0)->q147_taxas;
     }
 }
 
@@ -119,7 +113,7 @@ if (isset($q148_codigo) && $q148_codigo=="nova") {
 
 }else if(isset($q148_inscr) && isset($q148_codigo)){
 
-    $sql    = $clissisen->sql_query("$q148_codigo","issisen.*,q147_descr,j56_receit,j56_perc","","");
+    $sql    = $clissisen->sql_query("$q148_codigo","issisen.*,q147_descr, k02_drecei as k02_descr","","");
     $result = $clissisen->sql_record($sql);
     @db_fieldsmemory($result,0);
     $db_opcao    = "2";
@@ -142,7 +136,7 @@ if (isset($q148_codigo) && $q148_codigo=="nova") {
         function js_trocaid(valor){
 
             if(valor!==""){
-                location.href = "iss4_issisen002.php?<?=$alterando?'':'alterando=true&'?>q148_inscr=<?=$q148_inscr?>&q148_codigo="+valor;
+                location.href = "iss4_issisen002.php?<?=$alterando?'':'alterando=1&'?>q148_inscr=<?=$q148_inscr?>&q148_codigo="+valor;
             }
         }
         <?php } ?>
@@ -157,7 +151,6 @@ if (isset($q148_codigo) && $q148_codigo=="nova") {
 <body class="body-default" onLoad="js_carreg();">
 <div class="container">
     <form name="form1" method="post" action="">
-        <input name="dadostaxa" type="hidden" value="">
         <input name="q147_tipoisen" type="hidden" value="<?php echo $q147_tipoisen ?>">
 
         <fieldset style="width:520px;">
@@ -242,17 +235,15 @@ if (isset($q148_codigo) && $q148_codigo=="nova") {
                     </td>
                 </tr>
                 <tr>
-                    <td nowrap title="<?= @$Tp58_codproc ?>">
+                    <td nowrap title="<?=@$Tq148_receit?>">
                         <?php
-                        db_ancora(@$Lp58_codproc, "js_pesquisap58_codproc(true);", $db_opcao);
+                        db_ancora(@$Lq148_receit,"js_pesquisaq148_receit(true);",$db_opcao);
                         ?>
                     </td>
                     <td>
                         <?php
-                        db_input('p58_codproc', 10, $Ip58_codproc, true, 'text', $db_opcao, " onchange='js_pesquisap58_codproc(false);'")
-                        ?>
-                        <?php
-                        db_input('p58_requer', 40, $Ip58_requer, true, 'text', 3, '')
+                        db_input('q148_receit',10 , $Iq148_receit, true, 'text', $db_opcao, " onchange='js_pesquisaq148_receit(false);'");
+                        db_input('k02_descr'  ,34, $Ik02_descr  , true, 'text', 3, '')
                         ?>
                     </td>
                 </tr>
@@ -267,7 +258,7 @@ if (isset($q148_codigo) && $q148_codigo=="nova") {
                     </td>
                 </tr>
                 <tr>
-                    <td align="left" width="40%" valign="top">
+                    <td colspan="2" align="left" width="40%" valign="top">
                         <table border=0>
                             <?php
                             if (@$q148_tipo == "" || isset($incluir)) {
@@ -347,8 +338,9 @@ if (!$alterando) {
 </html>
 <script type="text/javascript">
 
+    const TIPO_ISENCAO = 0;
+    const TIPO_IMUNIDADE = 1;
     const tipoIsencao = document.form1.q147_tipoisen.value;
-    const isencaoTaxas = document.form1.q147_taxas.value;
     const alterando   = <?php echo $alterando ? 1 : 0;?>;
 
     if (alterando === 1 && tipoIsencao === 1) {
@@ -362,7 +354,9 @@ if (!$alterando) {
      */
     function js_validarCampo() {
 
-        let tipoIsencao = document.form1.q147_tipoisen.value;
+        const tipoIsencao = Number(document.form1.q147_tipoisen.value);
+
+        console.log(tipoIsencao, alterando);
 
         if (document.getElementById('q148_tipo').value === "") {
 
@@ -376,7 +370,7 @@ if (!$alterando) {
             return false;
         }
 
-        if ( (tipoIsencao !== 1 && tipoIsencao !== 2) && alterando !== 1) {
+        if (tipoIsencao !== TIPO_IMUNIDADE && alterando !== 1) {
 
             if (document.getElementById('q148_dtfim').value === "") {
 
@@ -414,6 +408,12 @@ if (!$alterando) {
         if (document.getElementById('q148_perc').value === "") {
 
             alert('Informe o percentual de isencão.');
+            return false;
+        }
+
+        if (document.getElementById('q148_receit').value === "") {
+
+            alert('Informe a receita.');
             return false;
         }
 
@@ -498,32 +498,6 @@ if (!$alterando) {
         js_OpenJanelaIframe('','db_iframe_cadastro','cad3_conscadastro_002.php?cod_matricula=<?=@$q148_inscr?>','Pesquisa',true);
     }
 
-    function js_pesquisap58_codproc(mostra){
-
-        if(mostra===true){
-            js_OpenJanelaIframe('','db_iframe_cgm','func_protprocesso.php?funcao_js=parent.js_mostraprotprocesso1|p58_codproc|p58_requer','Pesquisa',true);
-        }else{
-            js_OpenJanelaIframe('','db_iframe_cgm','func_protprocesso.php?pesquisa_chave='+document.form1.p58_codproc.value+'&funcao_js=parent.js_mostraprotprocesso','Pesquisa',false);
-        }
-    }
-
-    function js_mostraprotprocesso(chave,chave1,erro){
-
-        document.form1.p58_requer.value = chave1;
-        if(erro===true){
-
-            document.form1.p58_codproc.focus();
-            document.form1.p58_codproc.value = '';
-        }
-    }
-
-    function js_mostraprotprocesso1(chave1,chave2){
-
-        document.form1.p58_codproc.value = chave1;
-        document.form1.p58_requer.value  = chave2;
-        db_iframe_cgm.hide();
-    }
-
     function js_volta(){
         location.href = 'iss4_issisen001.php ';
     }
@@ -531,80 +505,52 @@ if (!$alterando) {
     function js_pesquisaq148_tipo(mostra){
 
         if(mostra===true){
-            js_OpenJanelaIframe('','db_iframe','func_isstipoisen.php?funcao_js=parent.js_mostratipoisen1|0|1|2|3','Pesquisa',true);
+            js_OpenJanelaIframe('','db_iframe','func_isstipoisen.php?funcao_js=parent.js_mostratipoisen1|0|1|2','Pesquisa',true);
         }else{
             js_OpenJanelaIframe('','db_iframe','func_isstipoisen.php?pesquisa_chave='+document.form1.q148_tipo.value+'&funcao_js=parent.js_mostratipoisen','Pesquisa',false);
         }
 
     }
 
-    function js_alteraValidacaoDataFim(q147_tipoisen, q147_taxas) {
+    function js_alteraValidacaoDataFim(q147_tipoisen) {
 
-        var elementosTaxas = document.getElementsByClassName('receit');
-
+        q147_tipoisen = Number(q147_tipoisen);
         document.form1.q148_perc.value    = '';
         document.form1.q148_perc.readOnly = '';
 
-        for (i in elementosTaxas) {
-
-            if (isNumeric(i)){
-
-                elementosTaxas[i].value    = '';
-                elementosTaxas[i].readOnly = '';
-            }
-        }
-
-        if (q147_tipoisen === 1) {
+        if (q147_tipoisen === TIPO_IMUNIDADE) {
 
             document.form1.q148_perc.value    = '100';
             document.form1.q148_perc.readOnly = 'true';
-
-            for (let i in elementosTaxas) {
-
-                if (isNumeric(i) && q147_taxas !== 't'){
-
-                    elementosTaxas[i].value    = '100';
-                    elementosTaxas[i].readOnly = 'true';
-                }
-            }
         }
 
-        if (q147_tipoisen === 1 || q147_tipoisen === 2) {
+        if (q147_tipoisen === TIPO_IMUNIDADE) {
             document.form1.q148_dtfim.style = "background-color:#e6e4f1;";
         } else {
             document.form1.q148_dtfim.style = "background-color:#FFFFFF;";
         }
     }
 
-    function js_mostratipoisen(chave,tipo,taxas,erro){
+    function js_mostratipoisen(chave,tipo,erro){
 
         document.form1.q147_descr.value = chave;
         document.form1.q147_tipoisen.value = tipo;
-        document.form1.q147_taxas.value = taxas;
+
         if(erro===true){
 
             document.form1.q148_tipo.focus();
             document.form1.q148_tipo.value = '';
         }
-        js_alteraValidacaoDataFim(document.form1.q147_tipoisen.value, document.form1.q147_taxas.value);
+        js_alteraValidacaoDataFim(document.form1.q147_tipoisen.value);
     }
 
-    function js_mostratipoisen1(chave1,chave2,chave3,chave4){
+    function js_mostratipoisen1(chave1,chave2,chave3){
 
         document.form1.q148_tipo.value  = chave1;
         document.form1.q147_descr.value = chave2;
         document.form1.q147_tipoisen.value = chave3;
-        document.form1.q147_taxas.value = chave4;
         db_iframe.hide();
-        js_alteraValidacaoDataFim(document.form1.q147_tipoisen.value, document.form1.q147_taxas.value);
-    }
-
-    function js_pesquisa(){
-        js_OpenJanelaIframe('','','func_issisen.php?funcao_js=parent.js_preenchepesquisa|0','Pesquisa',true);
-    }
-
-    function js_preenchepesquisa(chave){
-        location.href = '<?=basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"])?>'+"?chavepesquisa="+chave;
+        js_alteraValidacaoDataFim(document.form1.q147_tipoisen.value);
     }
 
     function js_pesquisaq148_inscr(mostra){
@@ -668,25 +614,35 @@ if (!$alterando) {
         }
     }
 
-    function js_preenchedif(nome,valor1,valor2){
-
-        valor1 = parseInt(valor1);
-        valor2 = parseInt(valor2);
-
-        if(valor1>valor2){
-
-            alert("A área a isentar deve ser menor que a área total do lote.");
-            eval('document.form1.'+nome+'.value = "";');
-            eval('document.form1.'+nome+'.focus();');
-            document.form1.q148_dif.value = "";
+    function js_pesquisaq148_receit(mostra){
+        if ( mostra === true ) {
+            js_OpenJanelaIframe('top.corpo','db_iframe_tabrec','func_tabrec_tipcalc.php?funcao_js=parent.js_mostratabrec1|k02_codigo|k02_descr','Pesquisa',true,'20');
         } else {
 
-            if((valor1 !== "" || valor1===0) && !isNaN(valor1)){
-                document.form1.q148_dif.value = valor2 - valor1;
+            if ( document.form1.q148_receit.value !== '' ) {
+                js_OpenJanelaIframe('top.corpo','db_iframe_tabrec','func_tabrec_tipcalc.php?pesquisa_chave='+document.form1.q148_receit.value+'&funcao_js=parent.js_mostratabrec','Pesquisa',false);
             }else{
-                document.form1.q148_dif.value = "";
+                document.form1.k02_descr.value = '';
             }
         }
+    }
+
+    function js_mostratabrec(chave,erro){
+
+        document.form1.k02_descr.value = chave;
+
+        if( erro === true ){
+
+            document.form1.q148_receit.focus();
+            document.form1.q148_receit.value = '';
+        }
+    }
+
+    function js_mostratabrec1(chave1,chave2) {
+
+        document.form1.q148_receit.value = chave1;
+        document.form1.k02_descr.value = chave2;
+        db_iframe_tabrec.hide();
     }
 </script>
 <?php
@@ -703,7 +659,7 @@ if(isset($incluir)||isset($excluir)||isset($alterar)){
     }else{
 
         $clissisen->erro(true,false);
-        db_redireciona("iss4_issisen002.php?q148_inscr=$q148_inscr&q148_codigo=nova".($alterando?"&alterando=true":""));
+        db_redireciona("iss4_issisen002.php?q148_inscr=$q148_inscr&q148_codigo=nova".($alterando?"&alterando=1":""));
     }
 }
 ?>
