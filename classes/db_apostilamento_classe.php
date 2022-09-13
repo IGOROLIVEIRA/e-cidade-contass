@@ -30,6 +30,7 @@ class cl_apostilamento
   var $si03_dataapostila_ano = null;
   var $si03_dataapostila = null;
   var $si03_descrapostila = null;
+  var $si03_justificativa = null;
   var $si03_tipoalteracaoapostila = 0;
   var $si03_numapostilamento = 0;
   var $si03_valorapostila = 0;
@@ -48,7 +49,8 @@ class cl_apostilamento
                  si03_dataassinacontrato = date = Data Ass Contrato 
                  si03_tipoapostila = int8 = TIpo de Apostila 
                  si03_dataapostila = date = Data da Apostila 
-                 si03_descrapostila = text = Descricao das alteracoes 
+                 si03_descrapostila = text = Descricao das alteracoes
+                 si03_justificativa = text = Justificativa do apostilamento
                  si03_tipoalteracaoapostila = int8 = Tipo de alteração Apostila 
                  si03_numapostilamento = int8 = Numero  Seq. Apostila 
                  si03_valorapostila = float8 = Valor da Aposlila 
@@ -101,6 +103,7 @@ class cl_apostilamento
         }
       }
       $this->si03_descrapostila = ($this->si03_descrapostila == "" ? @$GLOBALS["HTTP_POST_VARS"]["si03_descrapostila"] : $this->si03_descrapostila);
+      $this->si03_justificativa = ($this->si03_justificativa == "" ? @$GLOBALS["HTTP_POST_VARS"]["si03_justificativa"] : $this->si03_justificativa);
       $this->si03_tipoalteracaoapostila = ($this->si03_tipoalteracaoapostila == "" ? @$GLOBALS["HTTP_POST_VARS"]["si03_tipoalteracaoapostila"] : $this->si03_tipoalteracaoapostila);
       $this->si03_numapostilamento = ($this->si03_numapostilamento == "" ? @$GLOBALS["HTTP_POST_VARS"]["si03_numapostilamento"] : $this->si03_numapostilamento);
       $this->si03_valorapostila = ($this->si03_valorapostila == "" ? @$GLOBALS["HTTP_POST_VARS"]["si03_valorapostila"] : $this->si03_valorapostila);
@@ -257,6 +260,7 @@ class cl_apostilamento
                                       ,si03_acordoposicao
                                       ,si03_acordo
                                       ,si03_datareferencia
+                                      ,si03_justificativa 
 
                        )
                 values (
@@ -275,6 +279,7 @@ class cl_apostilamento
                                ," . ($this->si03_acordoposicao == null || $this->si03_acordoposicao == "" ? "null" : $this->si03_acordoposicao) . "
                                ," . ($this->si03_acordo == null || $this->si03_acordo == "" ? "null" : $this->si03_acordo) . "
                                ,'$this->si03_datareferencia' 
+                               ,'$this->si03_justificativa' 
 
                       )";
     $result = db_query($sql);
@@ -467,6 +472,19 @@ class cl_apostilamento
         return false;
       }
     }
+    if (trim($this->si03_justificativa) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si03_justificativa"])) {
+      $sql  .= $virgula . " si03_justificativa = '$this->si03_justificativa' ";
+      $virgula = ",";
+      if (trim($this->si03_justificativa) == null) {
+        $this->erro_sql = " Campo Descricao das alteracoes nao Informado.";
+        $this->erro_campo = "si03_justificativa";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+    }
     if (trim($this->si03_tipoalteracaoapostila) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si03_tipoalteracaoapostila"])) {
       $sql  .= $virgula . " si03_tipoalteracaoapostila = $this->si03_tipoalteracaoapostila ";
       $virgula = ",";
@@ -565,6 +583,8 @@ class cl_apostilamento
           $resac = db_query("insert into db_acount values($acount,2010197,2009265,'" . AddSlashes(pg_result($resaco, $conresaco, 'si03_dataapostila')) . "','$this->si03_dataapostila'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         if (isset($GLOBALS["HTTP_POST_VARS"]["si03_descrapostila"]) || $this->si03_descrapostila != "")
           $resac = db_query("insert into db_acount values($acount,2010197,2009266,'" . AddSlashes(pg_result($resaco, $conresaco, 'si03_descrapostila')) . "','$this->si03_descrapostila'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        if (isset($GLOBALS["HTTP_POST_VARS"]["si03_justificativa"]) || $this->si03_justificativa != "")
+          $resac = db_query("insert into db_acount values($acount,2010197,2009266,'" . AddSlashes(pg_result($resaco, $conresaco, 'si03_justificativa')) . "','$this->si03_justificativa'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         if (isset($GLOBALS["HTTP_POST_VARS"]["si03_tipoalteracaoapostila"]) || $this->si03_tipoalteracaoapostila != "")
           $resac = db_query("insert into db_acount values($acount,2010197,2011514,'" . AddSlashes(pg_result($resaco, $conresaco, 'si03_tipoalteracaoapostila')) . "','$this->si03_tipoalteracaoapostila'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         if (isset($GLOBALS["HTTP_POST_VARS"]["si03_numapostilamento"]) || $this->si03_numapostilamento != "")

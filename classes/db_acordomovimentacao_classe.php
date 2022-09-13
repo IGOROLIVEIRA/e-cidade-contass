@@ -53,6 +53,7 @@ class cl_acordomovimentacao
   var $ac10_datamovimento = null;
   var $ac10_hora = null;
   var $ac10_obs = null;
+  var $ac10_justificativa = null;
   // cria propriedade com as variaveis do arquivo 
   var $campos = "
                  ac10_sequencial = int4 = Sequencial 
@@ -62,6 +63,7 @@ class cl_acordomovimentacao
                  ac10_datamovimento = date = Data Movimentação 
                  ac10_hora = char(5) = Hora 
                  ac10_obs = text = Observação
+                 ac10_justificativa = text = Justificativa
                  ";
   //funcao construtor da classe 
   function cl_acordomovimentacao()
@@ -98,6 +100,7 @@ class cl_acordomovimentacao
       }
       $this->ac10_hora = ($this->ac10_hora == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac10_hora"] : $this->ac10_hora);
       $this->ac10_obs = ($this->ac10_obs == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac10_obs"] : $this->ac10_obs);
+      $this->ac10_justificativa = ($this->ac10_justificativa == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac10_justificativa"] : $this->ac10_justificativa);
     } else {
       $this->ac10_sequencial = ($this->ac10_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac10_sequencial"] : $this->ac10_sequencial);
     }
@@ -193,6 +196,7 @@ class cl_acordomovimentacao
             ,ac10_datamovimento 
             ,ac10_hora 
             ,ac10_obs
+            ,ac10_justificativa
       )
       values (
       $this->ac10_sequencial 
@@ -202,6 +206,7 @@ class cl_acordomovimentacao
       ," . ($this->ac10_datamovimento == "null" || $this->ac10_datamovimento == "" ? "null" : "'" . $this->ac10_datamovimento . "'") . " 
       ,'$this->ac10_hora' 
       ,'$this->ac10_obs'
+      ,'$this->ac10_justificativa'
       )";
 
 
@@ -346,6 +351,10 @@ class cl_acordomovimentacao
     }
     if (trim($this->ac10_obs) != "" || isset($GLOBALS["HTTP_POST_VARS"]["ac10_obs"])) {
       $sql  .= $virgula . " ac10_obs = '$this->ac10_obs' ";
+      $virgula = ",";
+    }
+    if (trim($this->ac10_justificativa) != "" || isset($GLOBALS["HTTP_POST_VARS"]["ac10_justificativa"])) {
+      $sql  .= $virgula . " ac10_justificativa = '$this->ac10_justificativa' ";
       $virgula = ",";
     }
     $sql .= " where ";

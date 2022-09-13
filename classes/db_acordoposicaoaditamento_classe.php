@@ -48,6 +48,7 @@ class cl_acordoposicaoaditamento
   var $ac35_dataassinaturatermoaditivo = 0;
   var $ac35_datapublicacao = 0;
   var $ac35_descricaoalteracao = null;
+  var $ac35_justificativa = null;
   var $ac35_veiculodivulgacao = null;
   var $ac35_acordoposicao = 0;
   var $ac35_datareferencia = null;
@@ -58,6 +59,7 @@ class cl_acordoposicaoaditamento
                  ac35_dataassinaturatermoaditivo = date = Data da assinatura
                  ac35_datapublicacao = date = Data da Publicação
                  ac35_descricaoalteracao = varchar = Descrição da Alteração
+                 ac35_justificativa = text = Justificativa da Alteração
                  ac35_veiculodivulgacao = varchar = Veiculo de Divulgação
                  ac35_acordoposicao = int4 = Código da posicao
                  ac35_datareferencia = date = Data de Referencia
@@ -89,6 +91,7 @@ class cl_acordoposicaoaditamento
       $this->ac35_dataassinaturatermoaditivo = ($this->ac35_dataassinaturatermoaditivo == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac35_dataassinaturatermoaditivo"] : $this->ac35_dataassinaturatermoaditivo);
       $this->ac35_datapublicacao = ($this->ac35_datapublicacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac35_datapublicacao"] : $this->ac35_datapublicacao);
       $this->ac35_descricaoalteracao = ($this->ac35_descricaoalteracao == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac35_descricaoalteracao"] : $this->ac35_descricaoalteracao);
+      $this->ac35_justificativa = ($this->ac35_justificativa == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac35_justificativa"] : $this->ac35_justificativa);
       $this->ac35_veiculodivulgacao = ($this->ac35_veiculodivulgacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac35_veiculodivulgacao"] : $this->ac35_veiculodivulgacao);
     } else {
       $this->ac35_sequencial = ($this->ac35_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac35_sequencial"] : $this->ac35_sequencial);
@@ -165,6 +168,7 @@ class cl_acordoposicaoaditamento
                                       ,ac35_descricaoalteracao
                                       ,ac35_veiculodivulgacao
                                       ,ac35_datareferencia
+                                      ,ac35_justificativa
                        )
                 values (
                                 $this->ac35_sequencial
@@ -175,6 +179,7 @@ class cl_acordoposicaoaditamento
                                ,'$this->ac35_descricaoalteracao'
                                ,'$this->ac35_veiculodivulgacao'
                                ," . ($this->ac35_datareferencia == "null" ? "null" : "'" . $this->ac35_datareferencia . "'") . "
+                               ,'$this->ac35_justificativa'
                       )";
     $result = db_query($sql);
     if ($result == false) {

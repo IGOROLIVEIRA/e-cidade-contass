@@ -234,6 +234,18 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
                 </fieldset>
               </td>
             </tr>
+            <tr id="justificativa" style="display:none;">
+              <td colspan="3">
+                <fieldset>
+                  <legend>
+                    <b>Justificativa</b>
+                  </legend>
+                  <?
+                  db_textarea('ac10_justificativa', 5, 66, $Iac10_justificativa, true, 'text', $db_opcao, "");
+                  ?>
+                </fieldset>
+              </td>
+            </tr>
           </table>
         </fieldset>
       </td>
@@ -309,10 +321,30 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
    * Retorno da pesquisa acordos
    */
   function js_mostraacordo1(chave1, chave2) {
+    var oParam = new Object();
+    oParam.exec = "getleilicitacao";
+    oParam.licitacao = chave1;
 
+    var oAjax = new Ajax.Request(sUrl, {
+      method: 'post',
+      parameters: 'json=' + js_objectToJson(oParam),
+      onComplete: js_retornoLeiLicitacao
+    });
     $('ac16_sequencial').value = chave1;
     $('ac16_resumoobjeto').value = chave2;
     db_iframe_acordo.hide();
+  }
+
+  function js_retornoLeiLicitacao(oAjax) {
+
+  
+
+    var oRetorno = eval("(" + oAjax.responseText + ")");
+    if(oRetorno.lei==1){
+      $('justificativa').style.display = '';
+    }else{
+      $('justificativa').style.display = 'none';
+    }
   }
 
   /**
@@ -335,6 +367,12 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
     if ($('ac10_datareferencia').value == '' && document.getElementById("trdatareferencia").style.display == 'contents') {
 
       alert('Data de Referencia não informada!');
+      return false;
+    }
+
+    if ($('ac10_justificativa').value == '' && document.getElementById("justificativa").style.display != 'none') {
+
+      alert('Usuário: Este contrato é decorrente de Licitação e está utilizando a lei nº 14133/2021, sendo assim, é necessário o preenchimento do campo Justificativa.');
       return false;
     }
 
@@ -386,6 +424,7 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
     oParam.valorrescisao = $F('ac16_valorrescisao');
     oParam.observacao = encodeURIComponent(tagString($F('ac10_obs')));
     oParam.datareferencia = $F('ac10_datareferencia');
+    oParam.justificativa = $F('ac10_justificativa');
 
     var oAjax = new Ajax.Request(sUrl, {
       method: 'post',
@@ -408,6 +447,7 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
     $('ac10_datamovimento').value = "";
     $('ac10_datareferencia').value = "";
     $('ac16_valorrescisao').value = "";
+    $('ac10_justificativa').value = "";
     $('ac10_obs').value = "";
     document.getElementById("trdatareferencia").style.display = 'none'
 

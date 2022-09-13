@@ -118,6 +118,17 @@ $clrotulo->label("ac16_resumoobjeto");
                 </td>
             </tr>
 
+            <tr id="justificativa">
+                <td nowrap nowrap title="<?= @$Tsi03_justificativa ?>">
+                    <b>Justificativa:</b>
+                </td>
+                <td>
+                    <?
+                    db_textarea('si03_justificativa', 3, 48, 0, true, 'text', $db_opcao, "style='resize: none'", "", "", "5120");
+                    ?>
+                </td>
+            </tr>
+
 
             <?
             $si03_instit = db_getsession("DB_instit");
@@ -380,6 +391,20 @@ $clrotulo->label("ac16_resumoobjeto");
      * Retorno da pesquisa acordos
      */
     function js_mostraacordo1(chave1, chave2, chave3) {
+        var oParam = {
+            exec: 'getleilicitacao',
+            licitacao: chave1
+        }
+
+        new AjaxRequest(sUrlRpc, oParam, function (oRetorno, lErro) {
+            if(oRetorno.lei==1){
+                $('justificativa').style.display = '';
+            }else{
+                $('justificativa').style.display = 'none';
+            }
+
+        }).setMessage("Aguarde, pesquisando acordos.")
+            .execute();
         $('ac16_sequencial').value = chave1;
         $('ac16_resumoobjeto').value = chave2;
 
@@ -1115,6 +1140,9 @@ $clrotulo->label("ac16_resumoobjeto");
         if ($("si03_datareferencia").value == "" && document.getElementById("trdatareferencia").style.display != 'none') {
             return alert("Obrigatório informar a data de Referencia.");
         }
+        if ($("si03_justificativa").value == "" && document.getElementById("justificativa").style.display != 'none') {
+            return alert("Usuário: Este contrato é decorrente de Licitação e está utilizando a lei nº 14133/2021, sendo assim, é necessário o preenchimento do campo Justificativa.");
+        }
 
         oGridItens.getRows().forEach(function(oRow) {
 
@@ -1135,6 +1163,7 @@ $clrotulo->label("ac16_resumoobjeto");
         oApostila.tipoalteracaoapostila = $("si03_tipoalteracaoapostila").value;
         oApostila.numapostilamento = $("si03_numapostilamento").value;
         oApostila.datareferencia = $("si03_datareferencia").value;
+        oApostila.justificativa = $("si03_justificativa").value;
 
 
         var oParam = {

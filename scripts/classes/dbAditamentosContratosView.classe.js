@@ -164,22 +164,6 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
     sContent += "             <td id=\"ctnVeiculoDivulgacao\"></td>";
     sContent += "           </tr> ";
 
-    sContent += "           <tr id=\"justificativa\">";
-    sContent += "             <td colspan='2'>";
-    sContent += "               <fieldset class=\"separator\">";
-    sContent += "                 <legend>Justificativa</legend> ";
-    sContent += "                 <table border='0'> ";
-    sContent += "                    <tr> ";
-    sContent += "                       <td><label class=\"bold\" for=\"oTxtJustificativa\"></label>";
-    sContent += "                       </td>";
-    sContent += "                       <td id=\"ctnJustificativa\">";     
-    sContent += "                       </td>";
-    sContent += "                    </tr> ";
-    sContent += "                  </table> ";
-    sContent += "               </fieldset> ";
-    sContent += "             </td> ";
-    sContent += "           </tr>";
-
     sContent += "           <tr> ";
     sContent += "             <td colspan='2'>";
     sContent += "               <fieldset class=\"separator\">";
@@ -195,6 +179,23 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
     sContent += "               </fieldset> ";
     sContent += "             </td> ";
     sContent += "           </tr> ";
+
+    sContent += "           <tr id=\"justificativa\">";
+    sContent += "             <td colspan='2'>";
+    sContent += "               <fieldset class=\"separator\">";
+    sContent += "                 <legend>Justificativa</legend> ";
+    sContent += "                 <table border='0'> ";
+    sContent += "                    <tr> ";
+
+
+    sContent += "    <textarea id='oTxtJustificativa' name='w3review' rows='4' cols='50'></textarea>";
+
+    sContent += "                    </tr> ";
+    sContent += "                  </table> ";
+    sContent += "               </fieldset> ";
+    sContent += "             </td> ";
+    sContent += "           </tr>";
+
 
     sContent += "           <tr style='display: none'> ";
     sContent += "             <td colspan='2'> ";
@@ -311,7 +312,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         }
 
         new AjaxRequest(me.sUrlRpc, oParam, function (oRetorno, lErro) {
-            if(oRetorno.lei==2){
+            if(oRetorno.lei==1){
                 $('justificativa').style.display = '';
             }else{
                 $('justificativa').style.display = 'none';
@@ -452,7 +453,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             me.oTxtDataReferencia.setValue('');
             me.oTextAreaDescricaoAlteracao.setValue('');
             me.oTxtVeiculoDivulgacao.setValue('');
-            me.oTxtJustificativa.setValue('');
+            $('oTxtJustificativa').setValue('');
             me.oTxtNumeroAditamento.setValue(oRetorno.seqaditivo);
 
             aItensPosicao = oRetorno.itens;
@@ -549,9 +550,9 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
         /**
          * Justificativa
-         */
-         me.oTxtJustificativa = new DBTextField('oTxtJustificativa', me.sInstance + '.oTxtJustificativa', '', 150);
-         me.oTxtJustificativa.show($('ctnJustificativa'));
+         
+         me.oTxtJustificativa = new DBTextField('oTxtJustificativa', me.sInstance + '.oTxtJustificativa', '', 81);
+         me.oTxtJustificativa.show($('ctnJustificativa'));*/
 
         /**
          * Vigência
@@ -581,7 +582,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         me.oTextAreaDescricaoAlteracao.setRequired(true);
         me.oTextAreaDescricaoAlteracao.setMaxLength(250);
         me.oTxtVeiculoDivulgacao.setMaxLength(50);
-        me.oTxtJustificativa.setMaxLength(5120);
+        //me.oTxtJustificativa.setMaxLength(5120);
 
 
         /**
@@ -979,8 +980,10 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             return alert("Obrigatório informar o veículo de divulgação do aditivo.");
         }
 
-        if (me.oTxtJustificativa.getValue() == "" && Assinatura == true) {
-            return alert("Obrigatório informar a justificativa do aditivo.");
+        if ($('oTxtJustificativa').getValue() == "" && Assinatura == true) {
+            if($("justificativa").style.display != 'none'){
+                return alert("Usuário: Este contrato é decorrente de Licitação e está utilizando a lei nº 14133/2021, sendo assim, é necessário o preenchimento do campo Justificativa.");
+            }
         }
 
         if (me.oTxtDataAssinatura.getValue() == "" && Assinatura == true) {
@@ -1040,6 +1043,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             datareferencia: me.oTxtDataReferencia.getValue(),
             descricaoalteracao: me.oTextAreaDescricaoAlteracao.getValue(),
             veiculodivulgacao: me.oTxtVeiculoDivulgacao.getValue(),
+            justificativa: $('oTxtJustificativa').getValue(),
             tipoaditamento: me.iTipoAditamento,
             sNumeroAditamento: me.oTxtNumeroAditamento.getValue(),
             aItens: [],
