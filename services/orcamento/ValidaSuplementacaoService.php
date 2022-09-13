@@ -30,16 +30,6 @@ class ValidaSuplementacaoService
     private $aTipoSubSuplementacaoSuperavitDeficit = array();
 
     /**
-     * @var int
-     */
-    private $iAnoUsu;
-
-    /**
-     * @var int
-     */
-    private $iInstituicao;
-
-    /**
      * @var bool
      */
     private $bExisteQuadro;
@@ -50,41 +40,44 @@ class ValidaSuplementacaoService
     private $nValorQuadroSuperavitDeficit = 0.00;
 
     /**
-     * @var QuadroSuperavitDeficitRepositoryLegacy
+     * @var IQuadroSuperavitDeficitRepository
      */
     private $oQuadroSuperavitDeficit;
 
     /**
-     * @var OrcSuplemValRepositoryLegacy
+     * @var IOrcSuplemValRepository
      */
     private $oOrcSuplemVal;
 
     /**
+     * @var ITipoSuplementacaoSuperavitDeficitRepository
+     */
+    private $tipoSuplementacaoSuperavitDeficitRepository;
+
+    /**
      * @return void
      */
-    public function __construct($sSupTipo, Recurso $oRecurso, $nValor)
+    public function __construct(
+        $sSupTipo,
+        Recurso $oRecurso,
+        $nValor,
+        IQuadroSuperavitDeficitRepository $QuadroSuperavitDeficitRepositoryLegacy,
+        IOrcSuplemValRepository $OrcSuplemValRepository,
+        ITipoSuplementacaoSuperavitDeficitRepository $TipoSuplementacaoSuperavitDeficitRepository
+    )
     {
         $this->sSupTipo = $sSupTipo;
         $this->oRecurso = $oRecurso;
         $this->preencherValor($nValor);
-        $this->preencherTipoSuplementacao();
-        $this->iAnoUsu = db_getsession("DB_anousu");
-        $this->iInstituicao = db_getsession("DB_instit");
-        $this->oQuadroSuperavitDeficit = new QuadroSuperavitDeficitRepositoryLegacy($this->iAnoUsu, $this->iInstituicao);
-        $this->oOrcSuplemVal = new OrcSuplemValRepositoryLegacy($this->iAnoUsu, $this->iInstituicao);
-    }
-
-    /**
-     * @return void
-     */
-    public function preencherTipoSuplementacao()
-    {
-        $this->aTipoSubSuplementacaoSuperavitDeficit = TipoSuplementacaoSuperavitDeficitRepositoryLegacy::pegarTipoSup();
+        $this->tipoSuplementacaoSuperavitDeficitRepository = $TipoSuplementacaoSuperavitDeficitRepository;
+        $this->aTipoSubSuplementacaoSuperavitDeficit = $this->tipoSuplementacaoSuperavitDeficitRepository->pegarTipoSup();
+        $this->oQuadroSuperavitDeficit = $QuadroSuperavitDeficitRepositoryLegacy;
+        $this->oOrcSuplemVal = $OrcSuplemValRepository;
     }
 
     /**
      * @param float $nValor
-     * @return string
+     * @return void
      */
     public function preencherValor($nValor)
     {
@@ -98,9 +91,7 @@ class ValidaSuplementacaoService
      */
     public function eTipoSubSuplementacaoSuperavitDeficit()
     {
-        if (in_array($this->sSupTipo, $this->aTipoSubSuplementacaoSuperavitDeficit))
-            return true;
-        return false;
+       return in_array($this->sSupTipo, $this->aTipoSubSuplementacaoSuperavitDeficit);
     }
 
     /**
@@ -137,11 +128,11 @@ class ValidaSuplementacaoService
 
     /**
      * @param string $sFonte
-     * @return string
+     * @return float
      */
     public function pegarValorQuadroSuperavitDeficit($sFonte)
     {
-        return number_format($this->oQuadroSuperavitDeficit->pegarValorPorFonte($sFonte), 2, ".", "");
+        return (float) number_format($this->oQuadroSuperavitDeficit->pegarValorPorFonte($sFonte), 2, ".", "");
     }
 
     /**

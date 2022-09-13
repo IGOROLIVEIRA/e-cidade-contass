@@ -167,7 +167,11 @@ if (isset($incluir)) {
     }
 
     try {
-        $oValidacaoSuplementacao = new ValidaSuplementacaoService($tiposup, new Recurso($o58_codigo), $o47_valor);
+        $iAnoUsu = db_getsession("DB_anousu");
+        $iInstituicao = db_getsession("DB_instit");
+        $oQuadroSuperavitDeficit = new QuadroSuperavitDeficitRepositoryLegacy($iAnoUsu, $iInstituicao);
+        $oOrcSuplemVal = new OrcSuplemValRepositoryLegacy($iAnoUsu, $iInstituicao);
+        $oValidacaoSuplementacao = new ValidaSuplementacaoService($tiposup, new Recurso($o58_codigo), $o47_valor, $oQuadroSuperavitDeficit, $oOrcSuplemVal);
         $oValidacaoSuplementacao->validar();
     } catch (BusinessException $e) {
         db_msgbox($e->getMessage());

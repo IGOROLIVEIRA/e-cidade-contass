@@ -3,9 +3,9 @@
 /**
  * @author widouglas
  */
-class TipoSuplementacaoSuperavitDeficitRepositoryLegacy
+class TipoSuplementacaoSuperavitDeficitRepositoryLegacy implements ITipoSuplementacaoSuperavitDeficitRepository
 {
-    static function pegarTipoSup()
+    public function pegarTipoSup()
     {
         return array('1003', '1008', '1024', '1028', '2026');
     }
