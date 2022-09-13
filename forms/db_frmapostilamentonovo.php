@@ -248,7 +248,7 @@ $clrotulo->label("ac16_resumoobjeto");
     oGridItens.setCheckbox(0);
     oGridItens.setCellAlign(['center', 'left', "right", "right", "right", "right", "center", "right", "center", "center", "center", "center", "center"]);
     //oGridItens.setCellWidth(["50px", "30%", "8%", "8%", "3%", "25%", "8%", "8%", "3%", "25%", "8%", "8%", "8%"]);
-    oGridItens.setHeader(["Cd", "Item", "Quantidade", "Unit. Anterior", "Quantidade", "Valor Unitrio", "Valor Total", "Valor Apostilado", "Qt Aditada", "Dotaes", "Seq"]);
+    oGridItens.setHeader(["Cd", "Item", "Quantidade", "Unit. Anterior", "Quantidade", "Valor Unitrio", "Valor Total", "Valor Apostilado", "Qt Aditada", "Dotacoes", "Seq"]);
     oGridItens.aHeaders[11].lDisplayed = false;
     oGridItens.aHeaders[10].lDisplayed = false;
     oGridItens.aHeaders[5].lDisplayed = false;
@@ -284,7 +284,7 @@ $clrotulo->label("ac16_resumoobjeto");
         if (oRetorno.erro != "") {
             $('o58_coddot').value = "";
             $('o55_descricao').value = "";
-            alert("Sem permisso para esta dotao!");
+            alert("Sem permissão para esta dotação!");
             return;
         }
         oRetorno.elemento = oRetorno.elemento.substr(0, 7);
@@ -655,16 +655,16 @@ $clrotulo->label("ac16_resumoobjeto");
         windowDotacaoItem = new windowAux('wndDotacoesItem', 'Dotaes Item', 430, 380);
 
         var sContent = "<div class=\"subcontainer\">";
-        sContent += "<fieldset><legend>Adicionar Dotao</legend>";
+        sContent += "<fieldset><legend>Adicionar Dotação</legend>";
         sContent += "  <table>";
         sContent += "   <tr>";
         sContent += "     <td>";
         sContent += "     <a href='#' class='dbancora' style='text-decoration: underline;'";
-        sContent += "       onclick='pesquisao47_coddot(true);'><b>Dotao:</b></a>";
+        sContent += "       onclick='pesquisao47_coddot(true);'><b>Dotação:</b></a>";
         sContent += "     </td>";
         sContent += "     <td id='inputdotacao'></td>";
         sContent += "     <td>";
-        sContent += "      <b>Saldo Dotao:</b>";
+        sContent += "      <b>Saldo Dotação:</b>";
         sContent += "     </td>";
         sContent += "     <td id='inputsaldodotacao'></td>";
         sContent += "   </tr>";
@@ -717,7 +717,7 @@ $clrotulo->label("ac16_resumoobjeto");
         oGridDotacoes = new DBGrid('gridDotacoes');
         oGridDotacoes.nameInstance = 'oGridDotacoes';
         oGridDotacoes.setCellWidth(['20% !important', '60% !important', '20% !important']);
-        oGridDotacoes.setHeader(["Dotao", "Valor", "&nbsp;"]);
+        oGridDotacoes.setHeader(["Dotação", "Valor", "&nbsp;"]);
         oGridDotacoes.setCellAlign(["center", "right", "Center"]);
         oGridDotacoes.setHeight(100);
         oGridDotacoes.hasTotalizador = true;
@@ -798,7 +798,7 @@ $clrotulo->label("ac16_resumoobjeto");
      */
     function removerDotacao(iLinha, iDotacao) {
 
-        if (confirm("Remover dotao do item?")) {
+        if (confirm("Remover Dotação do item?")) {
 
             aItensPosicao[iLinha].dotacoes.splice(iDotacao, 1);
             preencheGridDotacoes(iLinha);
@@ -809,7 +809,7 @@ $clrotulo->label("ac16_resumoobjeto");
 
         if (oTxtDotacao.getValue() == "") {
 
-            alert("Campo dotao  de preenchimento obrigatrio.");
+            alert("Campo dotação  de preenchimento obrigatório.");
             js_pesquisao47_coddot(true);
             return false;
         }
@@ -842,7 +842,7 @@ $clrotulo->label("ac16_resumoobjeto");
         });
 
         if (nValorTotal > (aItensPosicao[iLinha].quantidade * aItensPosicao[iLinha].valorunitario)) {
-            alert("Valor Dotaes maior que valor do item.");
+            alert("Valor Dotações maior que valor do item.");
             return false;
         }
 
@@ -855,7 +855,7 @@ $clrotulo->label("ac16_resumoobjeto");
 
             if (oDotacaoItem.dotacao == oDotacao.dotacao) {
                 lInserir = false;
-                alert("Dotao j incluida para o item.");
+                alert("Dotação já incluida para o item.");
             }
         });
 
@@ -876,7 +876,7 @@ $clrotulo->label("ac16_resumoobjeto");
         var oParam = new Object();
         oParam.exec = "getSaldoDotacao";
         oParam.iDotacao = iDotacao;
-        js_divCarregando('Aguarde, pesquisando saldo Dotaes', 'msgBox');
+        js_divCarregando('Aguarde, pesquisando saldo Dotações', 'msgBox');
         var oAjax = new Ajax.Request(
             "con4_contratos.RPC.php", {
                 method: 'post',
@@ -897,12 +897,12 @@ $clrotulo->label("ac16_resumoobjeto");
     function mostraSaldo(chave) {
 
         var arq = 'func_saldoorcdotacao.php?o58_coddot=' + chave
-        js_OpenJanelaIframe('top.corpo', 'db_iframe_saldos', arq, 'Saldo da dotao', true);
+        js_OpenJanelaIframe('top.corpo', 'db_iframe_saldos', arq, 'Saldo da Dotação', true);
         $('Jandb_iframe_saldos').style.zIndex = '1500000';
     }
 
     /**
-     * calcula os valores da dotao conforme o valor modificado pelo usuario
+     * calcula os valores da Dotação conforme o valor modificado pelo usuario
      */
     function salvarInfoDotacoes(iLinha) {
 
@@ -1038,7 +1038,7 @@ $clrotulo->label("ac16_resumoobjeto");
     function aplicarDotacoes() {
 
         if ($('o58_coddot').value == "") {
-            return alert('Obrigatrio selecionar uma dotao');
+            return alert('Obrigatório selecionar uma dotação');
         }
 
 
@@ -1083,15 +1083,15 @@ $clrotulo->label("ac16_resumoobjeto");
 
 
         if (itensSelecionados == false) {
-            return alert('Nenhum item selecionado para aplicar dotao.');
+            return alert('Nenhum item selecionado para aplicar dotação.');
         }
 
         if (elementoIncompativel == true) {
-            return alert('Usurio: Item(ns) ' + elementosIncompativeis + ' possui(em) elemento(s) divergente da dotao selecionada');
+            return alert('Usuário: Item(ns) ' + elementosIncompativeis + ' possui(em) elemento(s) divergente da dotação selecionada');
         }
 
         if (dotacaoAplicada == true) {
-            return alert("Erro! Dotao j incluida para o item.");
+            return alert("Erro! Dotação já incluida para o item.");
 
         }
 
@@ -1108,7 +1108,7 @@ $clrotulo->label("ac16_resumoobjeto");
         });
 
         dotacaoIncluida = true;
-        return alert('Dotao aplicada aos itens selecionados');
+        return alert('Dotação aplicada aos itens selecionados');
 
 
     }
@@ -1247,7 +1247,7 @@ $clrotulo->label("ac16_resumoobjeto");
         });
 
         if (dotacaoIncluida == false && $("si03_tipoapostila").value == "03") {
-            return alert("Usurio:  necessrio a insero de dotao em no mnimo um item.");
+            return alert("Usurio:  necessrio a insero de Dotação em no mnimo um item.");
 
         }
 
