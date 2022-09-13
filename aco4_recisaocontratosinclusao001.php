@@ -403,7 +403,7 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
     if ($F('ac10_datareferencia').value != "") {
 
       if (dataReferencia.getMonth() == dataPatrimonial.getMonth() && dataReferencia.getFullYear() == dataPatrimonial.getFullYear()) {
-        alert("Usurio: A data de referência dever ser no mês posterior ao mês da data inserida.");
+        alert("Usuário: A data de referência dever ser no mês posterior ao mês da data inserida.");
         return;
       }
 
