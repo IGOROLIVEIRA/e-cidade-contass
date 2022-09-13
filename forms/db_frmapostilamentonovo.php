@@ -821,7 +821,7 @@ $clrotulo->label("ac16_resumoobjeto");
          */
         /*if (nValor == 0) {
 
-            alert('Campo Valor  de preenchimento obrigatrio.');
+            alert('Campo Valor  de preenchimento Obrigatório.');
             $('oTxtValorDotacao').focus();
             return false;
         }*/
@@ -1119,26 +1119,26 @@ $clrotulo->label("ac16_resumoobjeto");
         var iSelecionados = [];
 
         /**
-         * @todo incluir aqui todas as validaes de campos obrigatrios para o SICOM contratos
+         * @todo incluir aqui todas as validaes de campos Obrigatórios para o SICOM contratos
          */
         if ($("si03_tipoapostila").value == "00") {
-            return alert("Obrigatrio informar o  tipo de Apostila.");
+            return alert("Obrigatório informar o  tipo de Apostila.");
         }
 
         if ($("si03_numapostilamento").value == "") {
-            return alert("Obrigatrio informar o  Numero Seq. Apostila.");
+            return alert("Obrigatório informar o  Numero Seq. Apostila.");
         }
 
         if ($("si03_dataapostila").value == "") {
-            return alert("Obrigatrio informar a data da Apostila.");
+            return alert("Obrigatório informar a data da Apostila.");
         }
 
         if ($("si03_descrapostila").value == "") {
-            return alert("Obrigatrio informar a descrio da Apostila.");
+            return alert("Obrigatório informar a descrio da Apostila.");
         }
 
         if ($("si03_datareferencia").value == "" && document.getElementById("trdatareferencia").style.display != 'none') {
-            return alert("Obrigatrio informar a data de Referencia.");
+            return alert("Obrigatório informar a data de Referencia.");
         }
         if ($("si03_justificativa").value == "" && document.getElementById("justificativa").style.display != 'none') {
             return alert("Usuário: Este contrato  decorrente de Licitação e está utilizando a lei n 14133/2021, sendo assim,  necessário o preenchimento do campo Justificativa.");
