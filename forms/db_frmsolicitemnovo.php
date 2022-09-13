@@ -66,7 +66,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
 
           <td nowrap style="   display: block;">
             <?
-            db_input('pc01_descrmater', 50, $Ipc01_descrmater, true, 'text', $db_opcao);
+            db_input('pc01_descrmater', 50, $Ipc01_descrmater, true, 'text', $db_opcao, "onchange='js_pesquisa_desdobramento();'");
             ?>
           </td>
 
@@ -76,7 +76,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
           <td nowrap>
 
             <?
-            db_input('pc01_quantidade', 8, $Ipc01_descrmater, true, 'text', $db_opcao, '');
+            db_input('pc01_quantidade', 8, $pc01_quantidade, true, 'text', $db_opcao, '');
             ?>
           </td>
 
@@ -246,6 +246,8 @@ if ((isset($opcao) && $opcao == "alterar")) {
 
   }
 
+
+
   function js_buscarEle() {
     var sUrl = "com4_materialsolicitacao.RPC.php";
 
@@ -265,7 +267,6 @@ if ((isset($opcao) && $opcao == "alterar")) {
   function js_retornogetDados(oAjax) {
     var oRetorno = eval("(" + oAjax.responseText + ")");
     var i = 0;
-    console.log(oRetorno.dados.length)
 
     if (oRetorno.dados.length > 1) {
       $('eleSub').options[0] = new Option('Selecione', '0');
@@ -325,6 +326,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
 
   function js_pesquisapc16_codmater(mostra) {
 
+
     var iRegistroPrecoFuncao = false;
     <?
     $sUrlLookup = "func_pcmatersolicita.php";
@@ -361,15 +363,57 @@ if ((isset($opcao) && $opcao == "alterar")) {
     }
   }
 
+  function js_pesquisa_desdobramento() {
+
+    if (document.form1.pc01_descrmater.value == '') {
+      document.form1.pc16_codmater.value = '';
+
+      var options = document.querySelectorAll('#eleSub option');
+      options.forEach(o => o.remove());
+
+
+      //js_buscarEle();
+      return false;
+    }
+
+    var iRegistroPrecoFuncao = false;
+    <?
+    $sUrlLookup = "func_pcmatersolicita.php";
+    $sFiltro    = "";
+    if ($iRegistroPreco != "") {
+
+      $sUrlLookup = 'func_pcmaterregistropreco.php';
+      echo "iRegistroPrecoFuncao = true;\n";
+      $sFiltro = "|pc11_codigo";
+    }
+    ?>
+
+    if (document.form1.pc16_codmater.value != '') {
+      js_OpenJanelaIframe('',
+        'db_iframe_pcmater',
+        '<?= $sUrlLookup ?>?pesquisa_chave=' +
+        document.form1.pc16_codmater.value +
+        '&iRegistroPreco=<?= $iRegistroPreco; ?>' +
+        '&funcao_js=parent.js_mostrapcmater<?= $db_opcao == 1 ? "&opcao_bloq=3&opcao=f" : "&opcao_bloq=1&opcao=i" ?>',
+        'Pesquisa', false, '0');
+    } else {
+      document.form1.pc01_descrmater.value = '';
+
+      document.form1.submit();
+    }
+  }
+
   function js_mostrapcmater(chave, erro, lVeic) {
 
     if (erro == true) {
       document.form1.pc16_codmater.focus();
       document.form1.pc16_codmater.value = '';
 
+
     } else {
       document.form1.pc01_descrmater.value = chave;
-      js_materanterior();
+      js_buscarEle();
+
 
     }
   }
@@ -410,6 +454,8 @@ if ((isset($opcao) && $opcao == "alterar")) {
     }
 
   }
+
+
 
   oGridItens = new DBGrid('oGridItens');
   oGridItens.nameInstance = 'oGridItens';
