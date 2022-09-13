@@ -54,14 +54,14 @@ class cl_acordoposicaoaditamento
   var $ac35_datareferencia = null;
   // cria propriedade com as variaveis do arquivo
   var $campos = "
-                 ac35_sequencial = int4 = Cdigo Sequencial
+                 ac35_sequencial = int4 = Codigo Sequencial
                  ac35_valor = float8 = Valor do Aditamento
                  ac35_dataassinaturatermoaditivo = date = Data da assinatura
-                 ac35_datapublicacao = date = Data da Publicao
-                 ac35_descricaoalteracao = varchar = Descrio da Alteracao
+                 ac35_datapublicacao = date = Data da Publicacao
+                 ac35_descricaoalteracao = varchar = Descricao da Alteracao
                  ac35_justificativa = text = Justificativa da Alteracao
-                 ac35_veiculodivulgacao = varchar = Veiculo de Divulgao
-                 ac35_acordoposicao = int4 = Cdigo da posicao
+                 ac35_veiculodivulgacao = varchar = Veiculo de Divulgacao
+                 ac35_acordoposicao = int4 = Codigo da posicao
                  ac35_datareferencia = date = Data de Referencia
                  ";
   //funcao construtor da classe
@@ -105,7 +105,7 @@ class cl_acordoposicaoaditamento
       $this->ac35_valor = "0";
     }
     if ($this->ac35_acordoposicao == null) {
-      $this->erro_sql = " Campo Cdigo da posicao nao Informado.";
+      $this->erro_sql = " Campo Codigo da posicao nao Informado.";
       $this->erro_campo = "ac35_acordoposicao";
       $this->erro_banco = "";
       $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
@@ -271,7 +271,7 @@ class cl_acordoposicaoaditamento
       $sql  .= $virgula . " ac35_sequencial = $this->ac35_sequencial ";
       $virgula = ",";
       if (trim($this->ac35_sequencial) == null) {
-        $this->erro_sql = " Campo Cdigo Sequencial nao Informado.";
+        $this->erro_sql = " Campo Codigo Sequencial nao Informado.";
         $this->erro_campo = "ac35_sequencial";
         $this->erro_banco = "";
         $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
@@ -291,7 +291,7 @@ class cl_acordoposicaoaditamento
       $sql  .= $virgula . " ac35_acordoposicao = $this->ac35_acordoposicao ";
       $virgula = ",";
       if (trim($this->ac35_acordoposicao) == null) {
-        $this->erro_sql = " Campo Cdigo da posicao nao Informado.";
+        $this->erro_sql = " Campo Codigo da posicao nao Informado.";
         $this->erro_campo = "ac35_acordoposicao";
         $this->erro_banco = "";
         $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
