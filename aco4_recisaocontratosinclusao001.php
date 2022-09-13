@@ -354,13 +354,13 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
 
     if ($('ac16_sequencial').value == '') {
 
-      alert('Acordo no informado!');
+      alert('Acordo não informado!');
       return false;
     }
 
     if ($('ac10_datamovimento').value == '') {
 
-      alert('Data no informada!');
+      alert('Data não informada!');
       return false;
     }
 
