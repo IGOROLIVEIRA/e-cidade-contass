@@ -53,7 +53,12 @@ include("classes/db_empautitem_classe.php");
 include("classes/db_condataconf_classe.php");
 
 db_app::import("orcamento.suplementacao.*");
-db_app::import("orcamento.ValidacaoSuplementacao");
+
+ini_set('display_errors',1);
+ini_set('display_startup_erros',1);
+error_reporting(E_ALL);
+
+require_once 'services/orcamento/ValidaSuplementacaoService.php'; 
 
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
@@ -166,7 +171,7 @@ if (isset($incluir)) {
     }
 
     try {
-        $oValidacaoSuplementacao = new ValidacaoSuplementacao($tiposup, new Recurso($o58_codigo), $o47_valor);
+        $oValidacaoSuplementacao = new ValidaSuplementacaoService($tiposup, new Recurso($o58_codigo), $o47_valor);
         $oValidacaoSuplementacao->validar();
     } catch (BusinessException $e) {
         db_msgbox($e->getMessage());

@@ -1,13 +1,13 @@
 <?php
 
-require_once("repositorios/QuadroSuperavitDeficitRepository.php");
-require_once("repositorios/OrcSuplemValRepository.php");
-require_once("repositorios/TipoSuplementacaoSuperavitDeficitRepository.php");
+require_once "repositories/QuadroSuperavitDeficitRepository.php";
+require_once "repositories/OrcSuplemValRepository.php";
+require_once "repositories/TipoSuplementacaoSuperavitDeficitRepository.php";
 
 /**
  * @author widouglas
  */
-class ValidacaoSuplementacao
+class ValidaSuplementacaoService
 {
     /**
      * @var string
@@ -40,7 +40,7 @@ class ValidacaoSuplementacao
     private $iInstituicao;
 
     /**
-     * @var bol
+     * @var bool
      */
     private $bExisteQuadro;
 
@@ -113,8 +113,10 @@ class ValidacaoSuplementacao
      */
     public function definirExisteQuadroSuperavitDeficit($registros)
     {
-        if ($registros === 0)
+        if ($registros === 0) {
             $this->bExisteQuadro = FALSE;
+            return;
+        }
         $this->bExisteQuadro = TRUE;
     }
 
