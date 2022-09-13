@@ -62,7 +62,7 @@ $clrotulo->label("ac16_resumoobjeto");
 
             <tr>
                 <td title="<?= @$Tsi03_numapostilamento ?>">
-                    <b>Nmero da Apostila:</b>
+                    <b>Número da Apostila:</b>
                 </td>
                 <td>
                     <?
@@ -87,7 +87,7 @@ $clrotulo->label("ac16_resumoobjeto");
 
             <tr id="trdatareferencia" style="display: none;">
                 <td align="left" title="<?= @$Tsi03_datareferencia ?>">
-                    <b>Data de Referncia:</b>
+                    <b>Data de Referência:</b>
                 </td>
 
                 <td align="left">
@@ -109,7 +109,7 @@ $clrotulo->label("ac16_resumoobjeto");
 
             <tr>
                 <td nowrap nowrap title="<?= @$Tsi03_descrapostila ?>">
-                    <b>Descrio da Alterao:</b>
+                    <b>Descrição da Alteração:</b>
                 </td>
                 <td>
                     <?
@@ -145,7 +145,7 @@ $clrotulo->label("ac16_resumoobjeto");
 
                 <td colspan='2'>
                     <fieldset class="" style="display: none;">
-                        <legend>Vigncia</legend>
+                        <legend>Vigência</legend>
                         <table border='0'>
                             <tr>
                                 <td><label class="bold">Inicial:</td>
@@ -190,7 +190,7 @@ $clrotulo->label("ac16_resumoobjeto");
             <tr id="edicaoBloco" style="display: none;">
                 <td colspan='2'>
                     <fieldset class="">
-                        <legend>Edio em bloco</legend>
+                        <legend>Edição em bloco</legend>
                         <table>
                             <td>
                                 <?php db_ancora("Dotaes", "pesquisao_coddot(true);", $db_opcao); ?>
