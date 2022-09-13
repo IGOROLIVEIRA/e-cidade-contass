@@ -167,7 +167,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
     sContent += "           <tr> ";
     sContent += "             <td colspan='2'>";
     sContent += "               <fieldset class=\"separator\">";
-    sContent += "                 <legend>Vigncia</legend> ";
+    sContent += "                 <legend>Vigência</legend> ";
     sContent += "                 <table border='0'> ";
     sContent += "                    <tr> ";
     sContent += "                      <td><label class=\"bold\" for=\"oTxtDataInicial\">Inicial:</td> ";
@@ -355,7 +355,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             js_OpenJanelaIframe('',
                 'db_iframe_orcdotacao',
                 'func_permorcdotacao.php?' + query + 'funcao_js=parent.' + me.sInstance + '.mostraorcdotacao1|o58_coddot',
-                'Pesquisa de Dotaes',
+                'Pesquisa de Dotacoes',
                 true, 0);
 
             $('Jandb_iframe_orcdotacao').style.zIndex = '100000000';
@@ -364,7 +364,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
                 'db_iframe_orcdotacao',
                 'func_permorcdotacao.php?' + query + 'pesquisa_chave=' + document.form1.o47_coddot.value +
                 '&funcao_js=parent.' + me.sInstance + '.mostraorcdotacao',
-                'Pesquisa de Dotaes',
+                'Pesquisa de Dotacoes',
                 false
             );
         }
@@ -527,17 +527,17 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         if(me.lTipoAlteracao) {
             me.oCboTipoAditivo = new DBComboBox('oCboTipoAditivo', me.sInstance + '.oCboTipoAditivo',null,'455px');
             me.oCboTipoAditivo.addItem('0', 'Selecione');
-            me.oCboTipoAditivo.addItem('2', 'Reequilbrio');
+            me.oCboTipoAditivo.addItem('2', 'Reequilíbrio');
             me.oCboTipoAditivo.addItem('5', 'Reajuste');
             me.oCboTipoAditivo.addItem('7', 'Outros');
-            me.oCboTipoAditivo.addItem('6', 'Alterao de Prazo de Vigncia');
-            me.oCboTipoAditivo.addItem('8', 'Alterao de Prazo de Execuo');
-            me.oCboTipoAditivo.addItem('9', 'Acrscimo de Item(ns)');
-            me.oCboTipoAditivo.addItem('10', 'Decrscimo de Item(ns)');
-            me.oCboTipoAditivo.addItem('11', 'Acrscimo e Decrscimo de Item(ns)');
-            me.oCboTipoAditivo.addItem('12', 'Alterao de Projeto/Especificao');
+            me.oCboTipoAditivo.addItem('6', 'Alteração de Prazo de Vigência');
+            me.oCboTipoAditivo.addItem('8', 'Alteração de Prazo de Execuo');
+            me.oCboTipoAditivo.addItem('9', 'Acréscimo de Item(ns)');
+            me.oCboTipoAditivo.addItem('10', 'Decréscimo de Item(ns)');
+            me.oCboTipoAditivo.addItem('11', 'Acréscimo e Decrscimo de Item(ns)');
+            me.oCboTipoAditivo.addItem('12', 'Alteração de Projeto/Especificação');
             me.oCboTipoAditivo.addItem('13', 'Vigncia/Execuo');
-            me.oCboTipoAditivo.addItem('14', 'Acrscimo/Decrscimo de item(ns) conjugado com outros tipos de termos aditivos');
+            me.oCboTipoAditivo.addItem('14', 'Acréscimo/Decréscimo de item(ns) conjugado com outros tipos de termos aditivos');
             me.oCboTipoAditivo.addEvent("onChange", me.sInstance + ".pesquisarDadosAcordo();"+me.sInstance + ".js_changeTipoAditivo();"+me.sInstance + ".ocultacampos();");
             me.oCboTipoAditivo.show($('ctnTipoAditivo'));
         }
@@ -606,7 +606,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         me.oGridItens.setCheckbox(0);
         me.oGridItens.setCellAlign(['center', 'center', "left", "right","right", "right", "center", "right", "center", "center", "center", "center", "center"]);
         me.oGridItens.setCellWidth(["5%", "5%", "28%", "7%", "9%", "7%", "9%", "9%", "6%", "8%", "2%", "9%","9%"]);
-        me.oGridItens.setHeader(["Ordem", "Codigo", "Descricao", "Qtd Atual", "Valor Atual", "Qtd Final", "Valor Final", "Valor Total", "Qtd Aditada", "Valor Aditado", "Dotaes", "Inicio Exec", "Fim Exec","Tipo"]);
+        me.oGridItens.setHeader(["Ordem", "Codigo", "Descricao", "Qtd Atual", "Valor Atual", "Qtd Final", "Valor Final", "Valor Total", "Qtd Aditada", "Valor Aditado", "Dotacoes", "Inicio Exec", "Fim Exec","Tipo"]);
         //me.oGridItens.aHeaders[11].lDisplayed = false;
         me.oGridItens.aHeaders[14].lDisplayed = false;
         me.oGridItens.aHeaders[11].lDisplayed = false;
@@ -652,19 +652,19 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
 
         oDadosItem = me.oGridItens.aRows[iLinha];
-        windowDotacaoItem = new windowAux('wndDotacoesItem', 'Dotaes Item', 430, 380);
+        windowDotacaoItem = new windowAux('wndDotacoesItem', 'Dotacoes Item', 430, 380);
 
         var sContent = "<div class=\"subcontainer\">";
-        sContent += "<fieldset><legend>Adicionar Dotao</legend>";
+        sContent += "<fieldset><legend>Adicionar Dotação</legend>";
         sContent += "  <table>";
         sContent += "   <tr>";
         sContent += "     <td>";
         sContent += "     <a href='#' class='dbancora' style='text-decoration: underline;'";
-        sContent += "       onclick='" + me.sInstance + ".pesquisao47_coddot(true);'><b>Dotao:</b></a>";
+        sContent += "       onclick='" + me.sInstance + ".pesquisao47_coddot(true);'><b>Dotação:</b></a>";
         sContent += "     </td>";
         sContent += "     <td id='inputdotacao'></td>";
         sContent += "     <td>";
-        sContent += "      <b>Saldo Dotao:</b>";
+        sContent += "      <b>Saldo Dotação:</b>";
         sContent += "     </td>";
         sContent += "     <td id='inputsaldodotacao'></td>";
         sContent += "   </tr>";
@@ -686,7 +686,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         windowDotacaoItem.setContent(sContent);
         oMessageBoard = new DBMessageBoard('msgboard1',
             'Adicionar Dotacoes',
-            'Dotaes Item ' + oDadosItem.aCells[1].getValue() + ' - ' + oDadosItem.aCells[2].getValue() + " (valor: <b>" +
+            'Dotacoes Item ' + oDadosItem.aCells[1].getValue() + ' - ' + oDadosItem.aCells[2].getValue() + " (valor: <b>" +
             oDadosItem.aCells[5].getValue() + "</b>)",
             $('windowwndDotacoesItem_content'));
 
@@ -717,7 +717,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         oGridDotacoes = new DBGrid('gridDotacoes');
         oGridDotacoes.nameInstance = 'oGridDotacoes';
         oGridDotacoes.setCellWidth(['20%', '60%', '20%']);
-        oGridDotacoes.setHeader(["Dotao", "Valor", "&nbsp;"]);
+        oGridDotacoes.setHeader(["Dotação", "Valor", "&nbsp;"]);
         oGridDotacoes.setCellAlign(["center", "right", "Center"]);
         oGridDotacoes.setHeight(100);
         oGridDotacoes.hasTotalizador = true;
@@ -766,7 +766,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
     }
 
     /**
-     * Atualiza a informao das dotaes do item
+     * Atualiza a informao das Dotacoes do item
      */
     this.atualizarItemDotacao = function (iLinha, iDotacao, oValor) {
 
@@ -797,7 +797,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
      */
     this.removerDotacao = function (iLinha, iDotacao) {
 
-        if (confirm("Remover dotao do item?")) {
+        if (confirm("Remover Dotação do item?")) {
 
             aItensPosicao[iLinha].dotacoes.splice(iDotacao, 1);
             me.preencheGridDotacoes(iLinha);
@@ -818,7 +818,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
         if (nValor == 0) {
 
-            alert('Campo Valor  de preenchimento obrigatrio.');
+            alert('Campo Valor  de preenchimento obrigatório.');
             $('oTxtValorDotacao').focus();
             return false;
         }
@@ -835,7 +835,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
             if (oDotacaoItem.dotacao == oDotacao.dotacao) {
                 lInserir = false;
-                alert("Dotao j incluida para o item.");
+                alert("Dotação já incluida para o item.");
             }
         });
 
@@ -856,7 +856,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         var oParam = new Object();
         oParam.exec = "getSaldoDotacao";
         oParam.iDotacao = iDotacao;
-        js_divCarregando('Aguarde, pesquisando saldo Dotaes', 'msgBox');
+        js_divCarregando('Aguarde, pesquisando saldo Dotacoes', 'msgBox');
         var oAjax = new Ajax.Request(
             "con4_contratos.RPC.php",
             {
@@ -878,12 +878,12 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
     me.mostraSaldo = function (chave) {
 
         var arq = 'func_saldoorcdotacao.php?o58_coddot=' + chave
-        js_OpenJanelaIframe('top.corpo', 'db_iframe_saldos', arq, 'Saldo da dotao', true);
+        js_OpenJanelaIframe('top.corpo', 'db_iframe_saldos', arq, 'Saldo da Dotação', true);
         $('Jandb_iframe_saldos').style.zIndex = '1500000';
     }
 
     /**
-     * calcula os valores da dotao conforme o valor modificado pelo usuario
+     * calcula os valores da Dotação conforme o valor modificado pelo usuario
      */
     this.salvarInfoDotacoes = function (iLinha) {
 
@@ -1222,7 +1222,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
                         /*if (oDotacao.valor == 0) {
 
                             lAditar = false;
-                            return alert("Os Valores das dotaes para o item " + oItem.descricaoitem.urlDecode() + " no podem estar zeradas.");
+                            return alert("Os Valores das Dotacoes para o item " + oItem.descricaoitem.urlDecode() + " no podem estar zeradas.");
                           }*/
 
                         nValorDotacao += oDotacao.valor;
@@ -1231,7 +1231,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 /*                    if (lAditar && nValorDotacao.toFixed(2) != oItemAdicionar.valor.toFixed(2)) {
 
                         lAditar = false;
-                        return alert("O valor da soma das Dotaes do item " + oItem.descricaoitem.urlDecode() + " deve ser igual ao Valor Total do item.");
+                        return alert("O valor da soma das Dotacoes do item " + oItem.descricaoitem.urlDecode() + " deve ser igual ao Valor Total do item.");
                     }
 */
                     oItemAdicionar.dotacoes = oItem.dotacoes;
@@ -1753,7 +1753,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             var oBotaoDotacao = document.createElement("input");
             oBotaoDotacao.type = "button";
             oBotaoDotacao.id = "dotacoes" + iSeq;
-            oBotaoDotacao.value = "Dotaes";
+            oBotaoDotacao.value = "Dotacoes";
             oBotaoDotacao.disabled = !me.lLiberaDotacoes;
             oBotaoDotacao.setAttribute("onclick", me.sInstance + ".ajusteDotacao(" + iSeq + ", " + oItem.elemento + ")");
 
