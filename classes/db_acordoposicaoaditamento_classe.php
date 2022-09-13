@@ -108,7 +108,7 @@ class cl_acordoposicaoaditamento
       $this->erro_sql = " Campo Codigo da posicao nao Informado.";
       $this->erro_campo = "ac35_acordoposicao";
       $this->erro_banco = "";
-      $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       return false;
@@ -118,7 +118,7 @@ class cl_acordoposicaoaditamento
       if ($result == false) {
         $this->erro_banco = str_replace("\n", "", @pg_last_error());
         $this->erro_sql   = "Verifique o cadastro da sequencia: acordoposicaoaditamento_ac35_sequencial_seq do campo: ac35_sequencial";
-        $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
         return false;
@@ -129,7 +129,7 @@ class cl_acordoposicaoaditamento
       if (($result != false) && (pg_result($result, 0, 0) < $ac35_sequencial)) {
         $this->erro_sql = " Campo ac35_sequencial maior que último número da sequencia.";
         $this->erro_banco = "Sequencia menor que este número.";
-        $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
         return false;
@@ -140,7 +140,7 @@ class cl_acordoposicaoaditamento
     if (($this->ac35_sequencial == null) || ($this->ac35_sequencial == "")) {
       $this->erro_sql = " Campo ac35_sequencial nao declarado.";
       $this->erro_banco = "Chave Primaria zerada.";
-      $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       return false;
@@ -186,12 +186,12 @@ class cl_acordoposicaoaditamento
       $this->erro_banco = str_replace("\n", "", @pg_last_error());
       if (strpos(strtolower($this->erro_banco), "duplicate key") != 0) {
         $this->erro_sql   = "Saldos dos Aditamentos ($this->ac35_sequencial) nao Includo. Inclusao Abortada.";
-        $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_banco = "Saldos dos Aditamentos j Cadastrado";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       } else {
         $this->erro_sql   = "Saldos dos Aditamentos ($this->ac35_sequencial) nao Includo. Inclusao Abortada.";
-        $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       }
       $this->erro_status = "0";
@@ -201,7 +201,7 @@ class cl_acordoposicaoaditamento
     $this->erro_banco = "";
     $this->erro_sql = "Inclusao efetuada com Sucesso\\n";
     $this->erro_sql .= "Valores : " . $this->ac35_sequencial;
-    $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
+    $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
     $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
     $this->erro_status = "1";
     $this->numrows_incluir = pg_affected_rows($result);
@@ -235,7 +235,7 @@ class cl_acordoposicaoaditamento
         $this->erro_sql = " Campo Data de assinatura.";
         $this->erro_campo = "ac35_dataassinaturatermoaditivo";
         $this->erro_banco = "";
-        $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
         return false;
@@ -248,7 +248,7 @@ class cl_acordoposicaoaditamento
         $this->erro_sql = " Campo Data Publicacao nao Informado.";
         $this->erro_campo = "ac35_datapublicacao";
         $this->erro_banco = "";
-        $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
         return false;
@@ -258,10 +258,10 @@ class cl_acordoposicaoaditamento
       $sql  .= $virgula . " ac35_veiculodivulgacao = '$this->ac35_veiculodivulgacao' ";
       $virgula = ",";
       if (trim($this->ac35_veiculodivulgacao) == null) {
-        $this->erro_sql = " Campo Veiculo divulgao nao Informado.";
+        $this->erro_sql = " Campo Veiculo divulgacao nao Informado.";
         $this->erro_campo = "ac35_veiculodivulgacao";
         $this->erro_banco = "";
-        $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
         return false;
@@ -274,7 +274,7 @@ class cl_acordoposicaoaditamento
         $this->erro_sql = " Campo Codigo Sequencial nao Informado.";
         $this->erro_campo = "ac35_sequencial";
         $this->erro_banco = "";
-        $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
         return false;
@@ -294,7 +294,7 @@ class cl_acordoposicaoaditamento
         $this->erro_sql = " Campo Codigo da posicao nao Informado.";
         $this->erro_campo = "ac35_acordoposicao";
         $this->erro_banco = "";
-        $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
         return false;
@@ -332,7 +332,7 @@ class cl_acordoposicaoaditamento
       $this->erro_banco = str_replace("\n", "", @pg_last_error());
       $this->erro_sql   = "Saldos dos Aditamentos nao Alterado. Alteracao Abortada.\\n";
       $this->erro_sql .= "Valores : " . $this->ac35_sequencial;
-      $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       $this->numrows_alterar = 0;
@@ -342,7 +342,7 @@ class cl_acordoposicaoaditamento
         $this->erro_banco = "";
         $this->erro_sql = "Saldos dos Aditamentos nao foi Alterado. Alteracao Executada.\\n";
         $this->erro_sql .= "Valores : " . $this->ac35_sequencial;
-        $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "1";
         $this->numrows_alterar = 0;
@@ -351,7 +351,7 @@ class cl_acordoposicaoaditamento
         $this->erro_banco = "";
         $this->erro_sql = "Alterao efetuada com Sucesso\\n";
         $this->erro_sql .= "Valores : " . $this->ac35_sequencial;
-        $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "1";
         $this->numrows_alterar = pg_affected_rows($result);
@@ -398,9 +398,9 @@ class cl_acordoposicaoaditamento
     $result = db_query($sql . $sql2);
     if ($result == false) {
       $this->erro_banco = str_replace("\n", "", @pg_last_error());
-      $this->erro_sql   = "Saldos dos Aditamentos nao Excludo. Excluso Abortada.\\n";
+      $this->erro_sql   = "Saldos dos Aditamentos nao Excludo. Exclusão Abortada.\\n";
       $this->erro_sql .= "Valores : " . $ac35_sequencial;
-      $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       $this->numrows_excluir = 0;
@@ -408,18 +408,18 @@ class cl_acordoposicaoaditamento
     } else {
       if (pg_affected_rows($result) == 0) {
         $this->erro_banco = "";
-        $this->erro_sql = "Saldos dos Aditamentos nao Encontrado. Excluso no Efetuada.\\n";
+        $this->erro_sql = "Saldos dos Aditamentos nao Encontrado. Exclusão no Efetuada.\\n";
         $this->erro_sql .= "Valores : " . $ac35_sequencial;
-        $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "1";
         $this->numrows_excluir = 0;
         return true;
       } else {
         $this->erro_banco = "";
-        $this->erro_sql = "Excluso efetuada com Sucesso\\n";
+        $this->erro_sql = "Exclusão efetuada com Sucesso\\n";
         $this->erro_sql .= "Valores : " . $ac35_sequencial;
-        $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "1";
         $this->numrows_excluir = pg_affected_rows($result);
@@ -435,7 +435,7 @@ class cl_acordoposicaoaditamento
       $this->numrows    = 0;
       $this->erro_banco = str_replace("\n", "", @pg_last_error());
       $this->erro_sql   = "Erro ao selecionar os registros.";
-      $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       return false;
@@ -444,7 +444,7 @@ class cl_acordoposicaoaditamento
     if ($this->numrows == 0) {
       $this->erro_banco = "";
       $this->erro_sql   = "Record Vazio na Tabela:acordoposicaoaditamento";
-      $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       return false;
