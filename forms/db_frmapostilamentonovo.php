@@ -42,7 +42,7 @@ $clrotulo->label("ac16_resumoobjeto");
                 </td>
                 <td>
                     <?
-                    $x = array("00" => "Selecione...", "01" => "Reajuste de preo previsto no contrato", "02" => "Atualizaes, compensaes ou penalizaes", "03" => "Empenho de dotaes oramentrias suplementares");
+                    $x = array("00" => "Selecione...", "01" => "Reajuste de preço previsto no contrato", "02" => "Atualizações, compensações ou penalizações", "03" => "Empenho de dotações oramentárias suplementares");
                     db_select('si03_tipoapostila', $x, true, $db_opcao, "onchange='js_changeTipoApostila(this.value)'");
                     ?>
                 </td>
@@ -54,7 +54,7 @@ $clrotulo->label("ac16_resumoobjeto");
                 </td>
                 <td>
                     <?
-                    $x = array("1" => "Acrscimo de valor", "2" => "Decrscimo de valor", "3" => "No houve alterao de valor");
+                    $x = array("1" => "Acrescimo de valor", "2" => "Decrescimo de valor", "3" => "Não houve alteração de valor");
                     db_select('si03_tipoalteracaoapostila', $x, true, $db_opcao, "");
                     ?>
                 </td>
@@ -193,7 +193,7 @@ $clrotulo->label("ac16_resumoobjeto");
                         <legend>Edição em bloco</legend>
                         <table>
                             <td>
-                                <?php db_ancora("Dotaes", "pesquisao_coddot(true);", $db_opcao); ?>
+                                <?php db_ancora("Dotações", "pesquisao_coddot(true);", $db_opcao); ?>
 
                             </td>
                             <td>
@@ -417,7 +417,7 @@ $clrotulo->label("ac16_resumoobjeto");
 
         if (iAcordo == "") {
 
-            alert('Acordo no informado!');
+            alert('Acordo não informado!');
             return false;
         }
 
@@ -533,7 +533,7 @@ $clrotulo->label("ac16_resumoobjeto");
             var oBotaoDotacao = document.createElement("input");
             oBotaoDotacao.type = "button";
             oBotaoDotacao.id = "dotacoes" + iSeq;
-            oBotaoDotacao.value = "Dotaes";
+            oBotaoDotacao.value = "Dotações";
             oBotaoDotacao.disabled = false;
             oBotaoDotacao.setAttribute("onclick", "ajusteDotacao(" + iSeq + ", " + oItem.elemento + ")");
             aLinha[9] = oBotaoDotacao.outerHTML;
@@ -652,7 +652,7 @@ $clrotulo->label("ac16_resumoobjeto");
         }
 
         oDadosItem = oGridItens.aRows[iLinha];
-        windowDotacaoItem = new windowAux('wndDotacoesItem', 'Dotaes Item', 430, 380);
+        windowDotacaoItem = new windowAux('wndDotacoesItem', 'Dotações Item', 430, 380);
 
         var sContent = "<div class=\"subcontainer\">";
         sContent += "<fieldset><legend>Adicionar Dotação</legend>";
@@ -686,7 +686,7 @@ $clrotulo->label("ac16_resumoobjeto");
         windowDotacaoItem.setContent(sContent);
         oMessageBoard = new DBMessageBoard('msgboard1',
             'Adicionar Dotacoes',
-            'Dotaes Item ' + oDadosItem.aCells[2].getValue() + " (valor: <b>" +
+            'Dotações Item ' + oDadosItem.aCells[2].getValue() + " (valor: <b>" +
             oDadosItem.aCells[5].getValue() + "</b>)",
             $('windowwndDotacoesItem_content'));
 
@@ -765,7 +765,7 @@ $clrotulo->label("ac16_resumoobjeto");
     }
 
     /**
-     * Atualiza a informao das dotaes do item
+     * Atualiza a informao das Dotações do item
      */
     function atualizarItemDotacao(iLinha, iDotacao, oValor) {
 
@@ -963,7 +963,7 @@ $clrotulo->label("ac16_resumoobjeto");
             js_OpenJanelaIframe('',
                 'db_iframe_orcdotacao',
                 'func_permorcdotacao.php?' + query + 'funcao_js=parent.mostraorcdotacao1|o58_coddot|o55_descr|o50_estrutdespesa',
-                'Pesquisa de Dotaes',
+                'Pesquisa de Dotações',
                 true, 0);
 
             $('Jandb_iframe_orcdotacao').style.zIndex = '100000000';
@@ -972,7 +972,7 @@ $clrotulo->label("ac16_resumoobjeto");
                 'db_iframe_orcdotacao',
                 'func_permorcdotacao.php?' + query + 'pesquisa_chave=' + $('o58_coddot').value +
                 '&funcao_js=parent.mostraorcdotacao',
-                'Pesquisa de Dotaes',
+                'Pesquisa de Dotações',
                 false
             );
         }
@@ -989,7 +989,7 @@ $clrotulo->label("ac16_resumoobjeto");
             js_OpenJanelaIframe('',
                 'db_iframe_orcdotacao',
                 'func_permorcdotacao.php?' + query + 'funcao_js=parent.mostraorcdotacao2|o58_coddot',
-                'Pesquisa de Dotaes',
+                'Pesquisa de Dotações',
                 true, 0);
 
             $('Jandb_iframe_orcdotacao').style.zIndex = '100000000';
@@ -998,7 +998,7 @@ $clrotulo->label("ac16_resumoobjeto");
                 'db_iframe_orcdotacao',
                 'func_permorcdotacao.php?' + query + 'pesquisa_chave=' + document.form1.o47_coddot.value +
                 '&funcao_js=parent.' + me.sInstance + '.mostraorcdotacao',
-                'Pesquisa de Dotaes',
+                'Pesquisa de Dotações',
                 false
             );
         }
@@ -1225,7 +1225,7 @@ $clrotulo->label("ac16_resumoobjeto");
                     /*if (oDotacao.valor == 0) {
 
                         lAditar = false;
-                        return alert("Os Valores das dotaes para o item " + oItem.descricaoitem.urlDecode() + " no podem estar zeradas.");
+                        return alert("Os Valores das Dotações para o item " + oItem.descricaoitem.urlDecode() + " no podem estar zeradas.");
                     }*/
                     nValorDotacao += Number(oDotacao.valor);
                 });
@@ -1233,7 +1233,7 @@ $clrotulo->label("ac16_resumoobjeto");
                 if (lAditar && nValorDotacao.toFixed(2) != oItemAdicionar.valor.toFixed(2)) {
 
                     lAditar = false;
-                    return alert("O valor da soma das Dotaes do item " + oItem.descricaoitem.urlDecode() + " deve ser igual ao Valor Total do item.");
+                    return alert("O valor da soma das Dotações do item " + oItem.descricaoitem.urlDecode() + " deve ser igual ao Valor Total do item.");
                 }
 
                 oItemAdicionar.dotacoes = oItem.dotacoes;
@@ -1247,7 +1247,7 @@ $clrotulo->label("ac16_resumoobjeto");
         });
 
         if (dotacaoIncluida == false && $("si03_tipoapostila").value == "03") {
-            return alert("Usurio:  necessrio a insero de Dotação em no mnimo um item.");
+            return alert("Usuário:  necessário a inserção de Dotação em no mínimo um item.");
 
         }
 
