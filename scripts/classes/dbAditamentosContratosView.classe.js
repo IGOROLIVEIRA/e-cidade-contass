@@ -606,7 +606,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         me.oGridItens.setCheckbox(0);
         me.oGridItens.setCellAlign(['center', 'center', "left", "right","right", "right", "center", "right", "center", "center", "center", "center", "center"]);
         me.oGridItens.setCellWidth(["5%", "5%", "28%", "7%", "9%", "7%", "9%", "9%", "6%", "8%", "2%", "9%","9%"]);
-        me.oGridItens.setHeader(["Ordem", "Cdigo", "Descrio", "Qtd Atual", "Valor Atual", "Qtd Final", "Valor Final", "Valor Total", "Qtd Aditada", "Valor Aditado", "Dotaes", "Inicio Exec", "Fim Exec","Tipo"]);
+        me.oGridItens.setHeader(["Ordem", "Codigo", "Descricao", "Qtd Atual", "Valor Atual", "Qtd Final", "Valor Final", "Valor Total", "Qtd Aditada", "Valor Aditado", "Dotaes", "Inicio Exec", "Fim Exec","Tipo"]);
         //me.oGridItens.aHeaders[11].lDisplayed = false;
         me.oGridItens.aHeaders[14].lDisplayed = false;
         me.oGridItens.aHeaders[11].lDisplayed = false;
@@ -1171,7 +1171,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
                     var data_2 = new Date(datafimV);
                     if (data_1 > data_2) {
                         lAditar = false;
-                        return alert("Data final da execuo de um item no pode ser maior que a data final da vigência do contrato!");
+                        return alert("Data final da execução de um item no pode ser maior que a data final da vigência do contrato!");
                     }
 
                 }
@@ -1503,7 +1503,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             js_comparadata(dtDataInicial, me.oTxtDataInicial.getValue(), "<") ||
             js_comparadata(dtDataFinal, me.oTxtDataFinal.getValue(), ">")) {
 
-            alert("H conflito entre as datas informadas.\n\nO Conflito pode estar ocorrendo entre as datas de vigência e/ou entre os perodos");
+            alert("Há conflito entre as datas informadas.\n\nO Conflito pode estar ocorrendo entre as datas de vigência e/ou entre os períodos");
             return false;
         }
 
@@ -1595,13 +1595,13 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
         if (iElemento == '0') {
 
-            alert('Campo Desdobramento  de preenchimento obrigatrio.');
+            alert('Campo Desdobramento  de preenchimento obrigatório.');
             return false;
         }
 
         if (iUnidade == '0') {
 
-            alert('Campo Unidade  de preenchimento obrigatrio.');
+            alert('Campo Unidade  de preenchimento obrigatório.');
             return false;
         }
 
@@ -1634,7 +1634,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         })
 
         if(itemCadastrado){
-          alert('Item j est inserido na lista. Verifique.');
+          alert('Item já está inserido na lista. Verifique.');
           return;
         }
 
@@ -2240,7 +2240,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
               alert('Os itens '+itensNaoRemovidos+' no podem ser removidos!');
             } else{
               me.oGridItens.aRows[numeroLinha[0]].isSelected = false;
-              alert('O item '+listaInvalida[0]+' no pode ser excludo!');
+              alert('O item '+listaInvalida[0]+' no pode ser excluído!');
             }
           }
 
