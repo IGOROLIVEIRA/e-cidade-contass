@@ -146,7 +146,7 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
     <tr>
       <td valign="top" align="center">
         <fieldset>
-          <legend><b>Rescisão do Acordo</b></legend>
+          <legend><b>Resciso do Acordo</b></legend>
           <table align="center" border="0">
             <tr>
               <td title="<?= @$Tac16_sequencial ?>" align="left">
@@ -194,7 +194,7 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
 
             <tr id="trdatareferencia" style="display: none;">
               <td title="<?= @$Tac10_datareferencia ?>" align="left">
-                <b>Data de Referência:</b>
+                <b>Data de Referncia:</b>
               </td>
               <td align="left">
                 <?
@@ -226,7 +226,7 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
               <td colspan="3">
                 <fieldset>
                   <legend>
-                    <b>Observação</b>
+                    <b>Observao</b>
                   </legend>
                   <?
                   db_textarea('ac10_obs', 5, 66, $Iac10_obs, true, 'text', $db_opcao, "");
@@ -354,25 +354,25 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
 
     if ($('ac16_sequencial').value == '') {
 
-      alert('Acordo não informado!');
+      alert('Acordo no informado!');
       return false;
     }
 
     if ($('ac10_datamovimento').value == '') {
 
-      alert('Data não informada!');
+      alert('Data no informada!');
       return false;
     }
 
     if ($('ac10_datareferencia').value == '' && document.getElementById("trdatareferencia").style.display == 'contents') {
 
-      alert('Data de Referencia não informada!');
+      alert('Data de Referencia no informada!');
       return false;
     }
 
     if ($('ac10_justificativa').value == '' && document.getElementById("justificativa").style.display != 'none') {
 
-      alert('Usuário: Este contrato é decorrente de Licitação e está utilizando a lei nº 14133/2021, sendo assim, é necessário o preenchimento do campo Justificativa.');
+      alert('UsuÃ¡rio: Este contrato  decorrente de LicitÃ§Ã£o e estÃ¡ utilizando a lei n 14133/2021, sendo assim,  necessÃ¡rio o preenchimento do campo Justificativa.');
       return false;
     }
 
@@ -389,33 +389,33 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
     var data = new Date(partesData[0], partesData[1] - 1, partesData[2]);
     var dataPatrimonial = data;
 
-    //    DATA DE REFERÊNCIA
+    //    DATA DE REFERNCIA
     var partesData = $('ac10_datareferencia').value.split("/");
     var dataReferencia = new Date(partesData[2], partesData[1] - 1, partesData[0]);
 
 
     if (dataInserida <= dataPatrimonial && $('ac10_datareferencia').value == '') {
       document.getElementById("trdatareferencia").style.display = 'contents';
-      alert("O período já foi encerrado para envio do SICOM. Preencha o campo Data de Referência com uma data no mês subsequente.");
+      alert("O perodo j foi encerrado para envio do SICOM. Preencha o campo Data de Referncia com uma data no ms subsequente.");
       return;
     }
 
     if ($F('ac10_datareferencia').value != "") {
 
       if (dataReferencia.getMonth() == dataPatrimonial.getMonth() && dataReferencia.getFullYear() == dataPatrimonial.getFullYear()) {
-        alert("Usuário: A data de referência deverá ser no mês posterior ao mês da data inserida.");
+        alert("Usurio: A data de referncia dever ser no ms posterior ao ms da data inserida.");
         return;
       }
 
       if (dataReferencia <= dataPatrimonial) {
-        alert("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
+        alert("O perodo j foi encerrado para envio do SICOM. Verifique os dados do lanamento e entre em contato com o suporte.");
         return;
       }
 
     }
 
 
-    js_divCarregando('Aguarde incluindo recisão...', 'msgBoxRecisaoContrato');
+    js_divCarregando('Aguarde incluindo reciso...', 'msgBoxRecisaoContrato');
 
     var oParam = new Object();
     oParam.exec = "rescindirContrato";
@@ -434,7 +434,7 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
   }
 
   /**
-   * Retorna os dados da inclusão
+   * Retorna os dados da incluso
    */
   function js_retornoDadosRecisao(oAjax) {
 
@@ -457,7 +457,7 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
       return false;
     } else {
 
-      alert("Inclusão efetuada com Sucesso.");
+      alert("Incluso efetuada com Sucesso.");
       return true;
     }
   }
