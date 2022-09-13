@@ -54,10 +54,6 @@ include("classes/db_condataconf_classe.php");
 
 db_app::import("orcamento.suplementacao.*");
 
-ini_set('display_errors',1);
-ini_set('display_startup_erros',1);
-error_reporting(E_ALL);
-
 require_once 'services/orcamento/ValidaSuplementacaoService.php'; 
 
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);

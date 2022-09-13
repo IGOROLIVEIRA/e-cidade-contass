@@ -10,8 +10,8 @@ require_once("dbforms/db_funcoes.php");
 require_once("libs/db_sessoes.php");
 include("classes/db_orctiporec_classe.php");
 include("classes/db_quadrosuperavitdeficit_classe.php");
-require_once("repositorios/OrcSuplemValRepository.php");
-require_once("repositorios/TipoSuplementacaoSuperavitDeficitRepository.php");
+require_once("repositories/OrcSuplemValRepositoryLegacy.php");
+require_once("repositories/TipoSuplementacaoSuperavitDeficitRepositoryLegacy.php");
 include("libs/db_libcontabilidade.php");
 $instit = db_getsession("DB_instit");
 $anousu = db_getsession("DB_anousu");
@@ -87,8 +87,8 @@ try {
                 break;    
 
         case "getSuplementado":
-            $oOrcSuplemVal = new OrcSuplemValRepository($anousu, $instit);
-            $oRetorno->fonte = $oOrcSuplemVal->pegarArrayValorPelaFonteSuplementadoPorTipoSup(TipoSuplementacaoSuperavitDeficitRepository::pegarTipoSup());
+            $oOrcSuplemVal = new OrcSuplemValRepositoryLegacy($anousu, $instit);
+            $oRetorno->fonte = $oOrcSuplemVal->pegarArrayValorPelaFonteSuplementadoPorTipoSup(TipoSuplementacaoSuperavitDeficitRepositoryLegacy::pegarTipoSup());
             break;
     }
 } catch (Exception $eErro) {

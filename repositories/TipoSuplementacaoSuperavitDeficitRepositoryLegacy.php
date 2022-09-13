@@ -3,7 +3,7 @@
 /**
  * @author widouglas
  */
-class TipoSuplementacaoSuperavitDeficitRepository
+class TipoSuplementacaoSuperavitDeficitRepositoryLegacy
 {
     static function pegarTipoSup()
     {

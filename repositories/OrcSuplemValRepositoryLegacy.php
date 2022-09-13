@@ -1,10 +1,11 @@
 <?php
 require_once "classes/db_orcsuplemval_classe.php";
+require_once "interfaces/orcamento/IOrcSuplemValRepository.php";
 
 /**
  * @author widouglas
  */
-class OrcSuplemValRepository
+class OrcSuplemValRepositoryLegacy implements IOrcSuplemValRepository
 {
     /**
      * @var cl_orcsuplemval

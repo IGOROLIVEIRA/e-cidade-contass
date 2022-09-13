@@ -1,11 +1,12 @@
 <?php
 
 require_once("classes/db_quadrosuperavitdeficit_classe.php");
+require_once('interfaces/contabilidade/IQuadroSuperavitDeficitRepository.php');
 
 /**
  * @author widouglas
  */
-class QuadroSuperavitDeficitRepository
+class QuadroSuperavitDeficitRepositoryLegacy implements IQuadroSuperavitDeficitRepository
 {
     /**
      * @var cl_quadrosuperavitdeficit
