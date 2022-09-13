@@ -68,7 +68,7 @@ require_once("dbforms/db_classesgenericas.php");
     <form name="form1" id="form1" method="POST">
         <center>
             <fieldset style="margin:25px auto 0 auto; width: 500px;">
-                <legend><b>Reinf</b></legend>
+                <legend><b>Retenções Pessoa Jurídica</b></legend>
                 <table>
                     <tr id="trFieldsetCredor">
                         <td >

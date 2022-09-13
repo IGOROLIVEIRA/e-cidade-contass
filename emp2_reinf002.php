@@ -104,11 +104,11 @@ if (isset($dtDataInicial)) {
 
   if($sCredoresSelecionados){
     if($sTipoSelecao == 1)
-        $sSqlNota .= "  where (e50_data BETWEEN '$dtDataInicial' AND '$dtDataFinal' ) and  e60_numcgm in ({$sCredoresSelecionados}) and Length(cgm.z01_cgccpf) like '14' and e60_instit = $instits";
+        $sSqlNota .= "  where (e50_data BETWEEN '$dtDataInicial' AND '$dtDataFinal' ) and  e60_numcgm in ({$sCredoresSelecionados}) and Length(cgm.z01_cgccpf) = 14 and e60_instit = $instits";
     if($sTipoSelecao == 2)
-        $sSqlNota .= "  where (e50_data BETWEEN '$dtDataInicial' AND '$dtDataFinal' ) and  e60_numcgm not in ({$sCredoresSelecionados}) and Length(cgm.z01_cgccpf) like '14' and e60_instit = $instits";
+        $sSqlNota .= "  where (e50_data BETWEEN '$dtDataInicial' AND '$dtDataFinal' ) and  e60_numcgm not in ({$sCredoresSelecionados}) and Length(cgm.z01_cgccpf) = 14 and e60_instit = $instits";
   }else 
-    $sSqlNota .= "  where e50_data BETWEEN '$dtDataInicial' AND '$dtDataFinal' and Length(cgm.z01_cgccpf) like '14' and e60_instit = $instits ";
+    $sSqlNota .= "  where e50_data BETWEEN '$dtDataInicial' AND '$dtDataFinal' and Length(cgm.z01_cgccpf) = 14 and e60_instit = $instits ";
  
  if($sTipo == '1')
     $sSqlNota .= "  and retencaotiporec.e21_retencaotipocalc in (1,2,3,4,5,6,7) ";
