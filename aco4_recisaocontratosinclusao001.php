@@ -146,7 +146,7 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
     <tr>
       <td valign="top" align="center">
         <fieldset>
-          <legend><b>Resciso do Acordo</b></legend>
+          <legend><b>Rescisão do Acordo</b></legend>
           <table align="center" border="0">
             <tr>
               <td title="<?= @$Tac16_sequencial ?>" align="left">
@@ -194,7 +194,7 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
 
             <tr id="trdatareferencia" style="display: none;">
               <td title="<?= @$Tac10_datareferencia ?>" align="left">
-                <b>Data de Referncia:</b>
+                <b>Data de Referência:</b>
               </td>
               <td align="left">
                 <?
@@ -226,7 +226,7 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
               <td colspan="3">
                 <fieldset>
                   <legend>
-                    <b>Observao</b>
+                    <b>Observação</b>
                   </legend>
                   <?
                   db_textarea('ac10_obs', 5, 66, $Iac10_obs, true, 'text', $db_opcao, "");
@@ -366,7 +366,7 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
 
     if ($('ac10_datareferencia').value == '' && document.getElementById("trdatareferencia").style.display == 'contents') {
 
-      alert('Data de Referencia no informada!');
+      alert('Data de Referência não informada!');
       return false;
     }
 
@@ -396,26 +396,26 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
 
     if (dataInserida <= dataPatrimonial && $('ac10_datareferencia').value == '') {
       document.getElementById("trdatareferencia").style.display = 'contents';
-      alert("O perodo j foi encerrado para envio do SICOM. Preencha o campo Data de Referncia com uma data no ms subsequente.");
+      alert("O período já foi encerrado para envio do SICOM. Preencha o campo Data de Referência com uma data no mês subsequente.");
       return;
     }
 
     if ($F('ac10_datareferencia').value != "") {
 
       if (dataReferencia.getMonth() == dataPatrimonial.getMonth() && dataReferencia.getFullYear() == dataPatrimonial.getFullYear()) {
-        alert("Usurio: A data de referncia dever ser no ms posterior ao ms da data inserida.");
+        alert("Usurio: A data de referência dever ser no mês posterior ao mês da data inserida.");
         return;
       }
 
       if (dataReferencia <= dataPatrimonial) {
-        alert("O perodo j foi encerrado para envio do SICOM. Verifique os dados do lanamento e entre em contato com o suporte.");
+        alert("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
         return;
       }
 
     }
 
 
-    js_divCarregando('Aguarde incluindo reciso...', 'msgBoxRecisaoContrato');
+    js_divCarregando('Aguarde incluindo recisão...', 'msgBoxRecisaoContrato');
 
     var oParam = new Object();
     oParam.exec = "rescindirContrato";
@@ -457,7 +457,7 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
       return false;
     } else {
 
-      alert("Incluso efetuada com Sucesso.");
+      alert("Inclusão efetuada com Sucesso.");
       return true;
     }
   }
