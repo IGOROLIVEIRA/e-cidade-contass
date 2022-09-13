@@ -49,7 +49,7 @@ class EventoS1200 extends EventoBase
 
             $oDadosAPI->evtRemun->indapuracao         = $this->indapuracao;
             $oDadosAPI->evtRemun->perapur             = $ano . '-' . $mes;
-            if ($oDados->indapuracao == 2) {
+            if ($this->indapuracao == 2) {
                 $oDadosAPI->evtRemun->perapur         = $mes;
             }
             $oDadosAPI->evtRemun->cpftrab             = $aDadosPorMatriculas[0]->cpftrab;

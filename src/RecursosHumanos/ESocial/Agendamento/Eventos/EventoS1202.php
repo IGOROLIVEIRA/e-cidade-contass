@@ -47,7 +47,7 @@ class EventoS1202 extends EventoBase
 
             $oDadosAPI->evtRmnRPPS->indapuracao         = $this->indapuracao;
             $oDadosAPI->evtRmnRPPS->perapur             = $ano . '-' . $mes;
-            if ($oDados->indapuracao == 2) {
+            if ($this->indapuracao == 2) {
                 $oDadosAPI->evtRmnRPPS->perapur         = $mes;
             }
             $oDadosAPI->evtRmnRPPS->cpftrab             = $aDadosPorMatriculas[0]->cpftrab;
