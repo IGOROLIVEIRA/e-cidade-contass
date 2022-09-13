@@ -19,7 +19,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             this.lLiberaDotacoes = true;
             this.lDatas = false;
             this.lLiberaNovosItens = false;
-            this.sLabelBotao = "Reequilbrio";
+            this.sLabelBotao = "Reequilíbrio";
             this.lBloqueiaItem = false;
             this.lObrigaDescricao = false;
             this.lTipoAlteracao = false;
@@ -41,7 +41,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             this.lLiberaDotacoes = true;
             this.lDatas = true;
             this.lLiberaNovosItens = false;
-            this.sLabelBotao = "Renovao";
+            this.sLabelBotao = "Renovação";
             this.lBloqueiaItem = false;
             this.lObrigaDescricao = false;
             this.lTipoAlteracao = false;
@@ -72,7 +72,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             this.lLiberaDotacoes = false;
             this.lDatas = false;
             this.lLiberaNovosItens = false;
-            this.sLabelBotao = "Execuo";
+            this.sLabelBotao = "Execução";
             this.lBloqueiaItem = false;
             this.lObrigaDescricao = false;
             this.lTipoAlteracao = false;
@@ -113,7 +113,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
     sContent += "           <tr> ";
     sContent += "             <td nowrap> ";
-    sContent += "               <label class=\"bold\" for=\"oTxtNumeroAditamento\">Nmero do Aditamento:</label>";
+    sContent += "               <label class=\"bold\" for=\"oTxtNumeroAditamento\">Número do Aditamento:</label>";
     sContent += "             </td>";
     sContent += "             <td id=\"ctnTxtNumeroAditamento\"></td>";
     sContent += "           </tr> ";
@@ -148,7 +148,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
     sContent += "           <tr id=\"descricaoaltera\"> ";
     sContent += "             <td nowrap> ";
-    sContent += "               <label class=\"bold\" for=\"oTextAreaDescricaoAlteracao\">Descrio da Alterao:</label>";
+    sContent += "               <label class=\"bold\" for=\"oTextAreaDescricaoAlteracao\">Descrio da Alteração:</label>";
     sContent += "             </td>";
     sContent += "             <td id=\"ctnDescricaoAlteracao\"></td>";
     sContent += "           </tr> ";
@@ -159,7 +159,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         sContent += "           <tr> ";
     }
     sContent += "             <td nowrap> ";
-    sContent += "               <label class=\"bold\" for=\"oTxtVeiculoDivulgacao\">Veculo de Divulgao:</label>";
+    sContent += "               <label class=\"bold\" for=\"oTxtVeiculoDivulgacao\">Veculo de Divulgação:</label>";
     sContent += "             </td>";
     sContent += "             <td id=\"ctnVeiculoDivulgacao\"></td>";
     sContent += "           </tr> ";
@@ -808,7 +808,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
         if (oTxtDotacao.getValue() == "") {
 
-            alert("Campo dotao  de preenchimento obrigatrio.");
+            alert("Campo dotação  de preenchimento obrigatório.");
             js_pesquisao47_coddot(true);
             return false;
         }
@@ -965,19 +965,19 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
 
         if ($('oCboTipoAditivo').value == 0 && $('oCboTipoAditivo').value != 6) {
-            return alert("Obrigatrio informar o tipo do aditamento.");
+            return alert("Obrigatório informar o tipo do aditamento.");
         }
 
         if (me.oTxtNumeroAditamento.getValue() == "") {
-            return alert("Obrigatrio informar o nmero do aditamento.");
+            return alert("Obrigatório informar o número do aditamento.");
         }
 
         if ((me.oCboTipoAditivo.getValue() == 7 || me.oCboTipoAditivo.getValue() == 14) && me.oTextAreaDescricaoAlteracao.getValue() == "") {
-            return alert("Obrigatrio informar a descrio da alterao.");
+            return alert("Obrigatório informar a descrição da alteração.");
         }
 
         if (me.oTxtVeiculoDivulgacao.getValue() == "" && Assinatura == true) {
-            return alert("Obrigatrio informar o veculo de divulgao do aditivo.");
+            return alert("Obrigatório informar o veculo de divulgação do aditivo.");
         }
 
         if ($('oTxtJustificativa').getValue() == "" && Assinatura == true) {
@@ -987,15 +987,15 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         }
 
         if (me.oTxtDataAssinatura.getValue() == "" && Assinatura == true) {
-            return alert("Obrigatrio informar a data de assinatura do aditivo.");
+            return alert("Obrigatório informar a data de assinatura do aditivo.");
         }
 
         if (me.oTxtDataPublicacao.getValue() == "" && Assinatura == true) {
-            return alert("Obrigatrio informar a data de Publicacao do aditivo.");
+            return alert("Obrigatório informar a data de Publicacao do aditivo.");
         }
 
         if (me.oTxtDataReferencia.getValue() == "" && document.getElementById("trdatareferencia").style.display != 'none') {
-            return alert("Obrigatrio informar a data de Referencia.");
+            return alert("Obrigatório informar a data de Referencia.");
         }
 
 
@@ -1005,7 +1005,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         var dtPublicacao   = dataPublicacao[2] + "-" + dataPublicacao[1] + "-" + dataPublicacao[0];
 
         if(dtAssinatura > dtPublicacao ){
-          return alert("Data de Assinatura deve ser menor ou igual a data de Publicao.")
+          return alert("Data de Assinatura deve ser menor ou igual a data de Publicação.")
         }
 
         me.oGridItens.getRows().forEach(function (oRow) {
@@ -1059,7 +1059,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
         if (dataini > datafim) {
             lAditar = false;
-            return alert("Data final da vigncia do aditivo deve ser maior que a data incio!");
+            return alert("Data final da vigência do aditivo deve ser maior que a data incio!");
         }
 
         if(iTipoAditamento == 7){
@@ -1149,13 +1149,13 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
                 if ($('oCboTipoAditivo').value == 9
                     && (oItemAdicionar.quantidade < qtanter || oItemAdicionar.valorunitario < vlranter)) {
                     lAditar = false;
-                    return alert("No  possvel realizar DESCRSCIMOS de itens no tipo ACRSCIMO de itens!");   
+                    return alert("Não  possvel realizar DESCRSCIMOS de itens no tipo ACRSCIMO de itens!");   
                 }
 
                 if ($('oCboTipoAditivo').value == 10
                     && (oItemAdicionar.quantidade > qtanter || oItemAdicionar.valorunitario > vlranter)) {
                     lAditar = false;
-                    return alert("No  possvel realizar ACRSCIMOS de itens no tipo DESCRSCIMO de itens!");
+                    return alert("Não  possvel realizar ACRSCIMOS de itens no tipo DESCRSCIMO de itens!");
                     
                 }
 
@@ -1171,7 +1171,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
                     var data_2 = new Date(datafimV);
                     if (data_1 > data_2) {
                         lAditar = false;
-                        return alert("Data final da execuo de um item no pode ser maior que a data final da vigncia do contrato!");
+                        return alert("Data final da execuo de um item no pode ser maior que a data final da vigência do contrato!");
                     }
 
                 }
@@ -1495,7 +1495,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
         if (dtDataInicial == '' || dtDataFinal == '') {
 
-            alert("Informe as datas de vigncia do item.");
+            alert("Informe as datas de vigência do item.");
             return false;
         }
 
@@ -1503,7 +1503,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             js_comparadata(dtDataInicial, me.oTxtDataInicial.getValue(), "<") ||
             js_comparadata(dtDataFinal, me.oTxtDataFinal.getValue(), ">")) {
 
-            alert("H conflito entre as datas informadas.\n\nO Conflito pode estar ocorrendo entre as datas de vigncia e/ou entre os perodos");
+            alert("H conflito entre as datas informadas.\n\nO Conflito pode estar ocorrendo entre as datas de vigência e/ou entre os perodos");
             return false;
         }
 
@@ -2171,7 +2171,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         if(item.isSelected){
           let sCodigo = item.aCells[0].content.replace(/ \s /g, '').split(' ');
 
-          /* Regex para extrair somente os nmeros da string */
+          /* Regex para extrair somente os números da string */
           let regra = /\d+/g;
 
           sCodigo = sCodigo[2].substr(17, sCodigo.length - 1).replace("'", '');
