@@ -646,7 +646,6 @@ class cl_orcsuplemval {
     {
         return $this->sql_query_superavit_deficit_suplementado_por_fonte_tiposup_scope(
             $o47_anousu,
-            NULL,
             $o46_instit,
             $o46_tiposup
         );
@@ -655,9 +654,9 @@ class cl_orcsuplemval {
     // Retorna valores de suplementação já executada filtrados por fonte e tiposup 
     function sql_query_superavit_deficit_suplementado_por_fonte_tiposup_scope(
         $o47_anousu,
-        $o58_codigo,
         $o46_instit,
-        $o46_tiposup)
+        $o46_tiposup,
+        $o58_codigo = NULL)
     {
 
         $sql  = " SELECT SUM(valor) as valor ";

@@ -1,5 +1,5 @@
 <?php
-require_once("classes/db_orcsuplemval_classe.php");
+require_once "classes/db_orcsuplemval_classe.php";
 
 /**
  * @author widouglas
@@ -41,7 +41,7 @@ class OrcSuplemValRepository
     {
         $rResult = $this->oRepositorio->sql_record(
             $this->oRepositorio->sql_query_superavit_deficit_suplementado_por_fonte_tiposup_scope(
-                $this->iAnoUsu, $sFonte, $this->iInstituicao, implode(", ", $aTipoSup)));
+                $this->iAnoUsu, $this->iInstituicao, implode(", ", $aTipoSup), $sFonte));
         if (pg_num_rows($rResult) === 0)
             return 0.00;
         $oSuplementado = db_utils::fieldsMemory($rResult, 0);
