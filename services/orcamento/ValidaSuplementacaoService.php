@@ -50,6 +50,16 @@ class ValidaSuplementacaoService
     private $nValorQuadroSuperavitDeficit = 0.00;
 
     /**
+     * @var QuadroSuperavitDeficitRepository
+     */
+    private $oQuadroSuperavitDeficit;
+
+    /**
+     * @var OrcSuplemValRepository
+     */
+    private $oOrcSuplemVal;
+
+    /**
      * @return void
      */
     public function __construct($sSupTipo, Recurso $oRecurso, $nValor)
@@ -61,6 +71,7 @@ class ValidaSuplementacaoService
         $this->iAnoUsu = db_getsession("DB_anousu");
         $this->iInstituicao = db_getsession("DB_instit");
         $this->oQuadroSuperavitDeficit = new QuadroSuperavitDeficitRepository($this->iAnoUsu, $this->iInstituicao);
+        $this->oOrcSuplemVal = new OrcSuplemValRepository($this->iAnoUsu, $this->iInstituicao);
     }
 
     /**
@@ -71,6 +82,10 @@ class ValidaSuplementacaoService
         $this->aTipoSubSuplementacaoSuperavitDeficit = TipoSuplementacaoSuperavitDeficitRepository::pegarTipoSup();
     }
 
+    /**
+     * @param float $nValor
+     * @return string
+     */
     public function preencherValor($nValor)
     {
         $this->nValor = number_format($nValor, 2, ".", "");
@@ -122,7 +137,7 @@ class ValidaSuplementacaoService
 
     /**
      * @param string $sFonte
-     * @return float
+     * @return string
      */
     public function pegarValorQuadroSuperavitDeficit($sFonte)
     {
@@ -135,8 +150,7 @@ class ValidaSuplementacaoService
      */
     public function pegarValorSuplementadoPorFonte($sFonte)
     {
-        $oOrcSuplemVal = new OrcSuplemValRepository($this->iAnoUsu, $this->iInstituicao);
-        return $oOrcSuplemVal->pegarValorSuplementadoPorFonteETipoSup($sFonte, $this->aTipoSubSuplementacaoSuperavitDeficit);
+        $this->oOrcSuplemVal->pegarValorSuplementadoPorFonteETipoSup($sFonte, $this->aTipoSubSuplementacaoSuperavitDeficit);
     }
 
     /**
@@ -144,12 +158,12 @@ class ValidaSuplementacaoService
      */
     public function pegarArrayValorSuplementado()
     {
-        $oOrcSuplemVal = new OrcSuplemValRepository($this->iAnoUsu, $this->iInstituicao);
-        return $oOrcSuplemVal->pegarArrayValorPelaFonteSuplementadoPorTipoSup($this->aTipoSubSuplementacaoSuperavitDeficit);
+        $this->oOrcSuplemVal->pegarArrayValorPelaFonteSuplementadoPorTipoSup($this->aTipoSubSuplementacaoSuperavitDeficit);
     }
 
     /**
-     * @return void|BusinessException
+     * @return void
+     * @throws BusinessException
      */
     public function validar()
     {
