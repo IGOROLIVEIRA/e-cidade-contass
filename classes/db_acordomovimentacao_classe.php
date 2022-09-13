@@ -57,12 +57,12 @@ class cl_acordomovimentacao
   // cria propriedade com as variaveis do arquivo 
   var $campos = "
                  ac10_sequencial = int4 = Sequencial 
-                 ac10_acordomovimentacaotipo = int4 = Acordo Movimentação Tipo 
+                 ac10_acordomovimentacaotipo = int4 = Acordo MovimentaÃ§Ã£o Tipo 
                  ac10_acordo = int4 = Acordo 
-                 ac10_id_usuario = int4 = Código Usúario 
-                 ac10_datamovimento = date = Data Movimentação 
+                 ac10_id_usuario = int4 = Codigo Usuario 
+                 ac10_datamovimento = date = Data MovimentaÃ§Ã£o 
                  ac10_hora = char(5) = Hora 
-                 ac10_obs = text = Observação
+                 ac10_obs = text = Observacaoo
                  ac10_justificativa = text = Justificativa
                  ";
   //funcao construtor da classe 
@@ -110,10 +110,10 @@ class cl_acordomovimentacao
   {
     $this->atualizacampos();
     if ($this->ac10_acordomovimentacaotipo == null) {
-      $this->erro_sql = " Campo Acordo Movimentação Tipo nao Informado.";
+      $this->erro_sql = " Campo Acordo MovimentaÃ§Ã£o Tipo nao Informado.";
       $this->erro_campo = "ac10_acordomovimentacaotipo";
       $this->erro_banco = "";
-      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       return false;
@@ -122,25 +122,25 @@ class cl_acordomovimentacao
       $this->erro_sql = " Campo Acordo nao Informado.";
       $this->erro_campo = "ac10_acordo";
       $this->erro_banco = "";
-      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       return false;
     }
     if ($this->ac10_id_usuario == null) {
-      $this->erro_sql = " Campo Código Usúario nao Informado.";
+      $this->erro_sql = " Campo Codigo Usuario nao Informado.";
       $this->erro_campo = "ac10_id_usuario";
       $this->erro_banco = "";
-      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       return false;
     }
     if ($this->ac10_datamovimento == null) {
-      $this->erro_sql = " Campo Data Movimentação nao Informado.";
+      $this->erro_sql = " Campo Data MovimentaÃ§Ã£o nao Informado.";
       $this->erro_campo = "ac10_datamovimento_dia";
       $this->erro_banco = "";
-      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       return false;
@@ -149,7 +149,7 @@ class cl_acordomovimentacao
       $this->erro_sql = " Campo Hora nao Informado.";
       $this->erro_campo = "ac10_hora";
       $this->erro_banco = "";
-      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       return false;
@@ -160,7 +160,7 @@ class cl_acordomovimentacao
       if ($result == false) {
         $this->erro_banco = str_replace("\n", "", @pg_last_error());
         $this->erro_sql   = "Verifique o cadastro da sequencia: acordomovimentacao_ac10_sequencial_seq do campo: ac10_sequencial";
-        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
         return false;
@@ -169,9 +169,9 @@ class cl_acordomovimentacao
     } else {
       $result = db_query("select last_value from acordomovimentacao_ac10_sequencial_seq");
       if (($result != false) && (pg_result($result, 0, 0) < $ac10_sequencial)) {
-        $this->erro_sql = " Campo ac10_sequencial maior que último número da sequencia.";
-        $this->erro_banco = "Sequencia menor que este número.";
-        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_sql = " Campo ac10_sequencial maior que ltimo nmero da sequencia.";
+        $this->erro_banco = "Sequencia menor que este nmero.";
+        $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
         return false;
@@ -182,7 +182,7 @@ class cl_acordomovimentacao
     if (($this->ac10_sequencial == null) || ($this->ac10_sequencial == "")) {
       $this->erro_sql = " Campo ac10_sequencial nao declarado.";
       $this->erro_banco = "Chave Primaria zerada.";
-      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       return false;
@@ -215,13 +215,13 @@ class cl_acordomovimentacao
     if ($result == false) {
       $this->erro_banco = str_replace("\n", "", @pg_last_error());
       if (strpos(strtolower($this->erro_banco), "duplicate key") != 0) {
-        $this->erro_sql   =   "Acordo Movimentação ($this->ac10_sequencial) nao Incluído. Inclusao Abortada.";
-        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-        $this->erro_banco = "Acordo Movimentação já Cadastrado";
+        $this->erro_sql   =   "Acordo MovimentaÃ§Ã£o ($this->ac10_sequencial) nao Includo. Inclusao Abortada.";
+        $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_banco = "Acordo MovimentaÃ§Ã£o j Cadastrado";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       } else {
-        $this->erro_sql   = $sql . "Acordo Movimentação ($this->ac10_sequencial) nao Incluído. Inclusao Abortada.";
-        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_sql   = $sql . "Acordo MovimentaÃ§Ã£o ($this->ac10_sequencial) nao Includo. Inclusao Abortada.";
+        $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       }
       $this->erro_status = "0";
@@ -231,7 +231,7 @@ class cl_acordomovimentacao
     $this->erro_banco = "";
     $this->erro_sql = "Inclusao efetuada com Sucesso\\n";
     $this->erro_sql .= "Valores : " . $this->ac10_sequencial;
-    $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+    $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
     $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
     $this->erro_status = "1";
     $this->numrows_incluir = pg_affected_rows($result);
@@ -264,7 +264,7 @@ class cl_acordomovimentacao
         $this->erro_sql = " Campo Sequencial nao Informado.";
         $this->erro_campo = "ac10_sequencial";
         $this->erro_banco = "";
-        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
         return false;
@@ -274,10 +274,10 @@ class cl_acordomovimentacao
       $sql  .= $virgula . " ac10_acordomovimentacaotipo = $this->ac10_acordomovimentacaotipo ";
       $virgula = ",";
       if (trim($this->ac10_acordomovimentacaotipo) == null) {
-        $this->erro_sql = " Campo Acordo Movimentação Tipo nao Informado.";
+        $this->erro_sql = " Campo Acordo MovimentaÃ§Ã£o Tipo nao Informado.";
         $this->erro_campo = "ac10_acordomovimentacaotipo";
         $this->erro_banco = "";
-        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
         return false;
@@ -290,7 +290,7 @@ class cl_acordomovimentacao
         $this->erro_sql = " Campo Acordo nao Informado.";
         $this->erro_campo = "ac10_acordo";
         $this->erro_banco = "";
-        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
         return false;
@@ -300,10 +300,10 @@ class cl_acordomovimentacao
       $sql  .= $virgula . " ac10_id_usuario = $this->ac10_id_usuario ";
       $virgula = ",";
       if (trim($this->ac10_id_usuario) == null) {
-        $this->erro_sql = " Campo Código Usúario nao Informado.";
+        $this->erro_sql = " Campo Codigo Usuario nao Informado.";
         $this->erro_campo = "ac10_id_usuario";
         $this->erro_banco = "";
-        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
         return false;
@@ -313,10 +313,10 @@ class cl_acordomovimentacao
       $sql  .= $virgula . " ac10_datamovimento = '$this->ac10_datamovimento' ";
       $virgula = ",";
       if (trim($this->ac10_datamovimento) == null) {
-        $this->erro_sql = " Campo Data Movimentação nao Informado.";
+        $this->erro_sql = " Campo Data MovimentaÃ§Ã£o nao Informado.";
         $this->erro_campo = "ac10_datamovimento_dia";
         $this->erro_banco = "";
-        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
         return false;
@@ -326,10 +326,10 @@ class cl_acordomovimentacao
         $sql  .= $virgula . " ac10_datamovimento = null ";
         $virgula = ",";
         if (trim($this->ac10_datamovimento) == null) {
-          $this->erro_sql = " Campo Data Movimentação nao Informado.";
+          $this->erro_sql = " Campo Data MovimentaÃ§Ã£o nao Informado.";
           $this->erro_campo = "ac10_datamovimento_dia";
           $this->erro_banco = "";
-          $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+          $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
           $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
           $this->erro_status = "0";
           return false;
@@ -343,7 +343,7 @@ class cl_acordomovimentacao
         $this->erro_sql = " Campo Hora nao Informado.";
         $this->erro_campo = "ac10_hora";
         $this->erro_banco = "";
-        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
         return false;
@@ -387,9 +387,9 @@ class cl_acordomovimentacao
     $result = db_query($sql);
     if ($result == false) {
       $this->erro_banco = str_replace("\n", "", @pg_last_error());
-      $this->erro_sql   = "Acordo Movimentação nao Alterado. Alteracao Abortada.\\n";
+      $this->erro_sql   = "Acordo MovimentaÃ§Ã£o nao Alterado. Alteracao Abortada.\\n";
       $this->erro_sql .= "Valores : " . $this->ac10_sequencial;
-      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       $this->numrows_alterar = 0;
@@ -397,18 +397,18 @@ class cl_acordomovimentacao
     } else {
       if (pg_affected_rows($result) == 0) {
         $this->erro_banco = "";
-        $this->erro_sql = "Acordo Movimentação nao foi Alterado. Alteracao Executada.\\n";
+        $this->erro_sql = "Acordo MovimentaÃ§Ã£o nao foi Alterado. Alteracao Executada.\\n";
         $this->erro_sql .= "Valores : " . $this->ac10_sequencial;
-        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "1";
         $this->numrows_alterar = 0;
         return true;
       } else {
         $this->erro_banco = "";
-        $this->erro_sql = "Alteração efetuada com Sucesso\\n";
+        $this->erro_sql = "Alterao efetuada com Sucesso\\n";
         $this->erro_sql .= "Valores : " . $this->ac10_sequencial;
-        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "1";
         $this->numrows_alterar = pg_affected_rows($result);
@@ -455,9 +455,9 @@ class cl_acordomovimentacao
     $result = db_query($sql . $sql2);
     if ($result == false) {
       $this->erro_banco = str_replace("\n", "", @pg_last_error());
-      $this->erro_sql   = "Acordo Movimentação nao Excluído. Exclusão Abortada.\\n";
+      $this->erro_sql   = "Acordo MovimentaÃ§Ã£o nao Excludo. Excluso Abortada.\\n";
       $this->erro_sql .= "Valores : " . $ac10_sequencial;
-      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       $this->numrows_excluir = 0;
@@ -465,18 +465,18 @@ class cl_acordomovimentacao
     } else {
       if (pg_affected_rows($result) == 0) {
         $this->erro_banco = "";
-        $this->erro_sql = "Acordo Movimentação nao Encontrado. Exclusão não Efetuada.\\n";
+        $this->erro_sql = "Acordo MovimentaÃ§Ã£o nao Encontrado. Excluso nao Efetuada.\\n";
         $this->erro_sql .= "Valores : " . $ac10_sequencial;
-        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "1";
         $this->numrows_excluir = 0;
         return true;
       } else {
         $this->erro_banco = "";
-        $this->erro_sql = "Exclusão efetuada com Sucesso\\n";
+        $this->erro_sql = "Excluso efetuada com Sucesso\\n";
         $this->erro_sql .= "Valores : " . $ac10_sequencial;
-        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "1";
         $this->numrows_excluir = pg_affected_rows($result);
@@ -492,7 +492,7 @@ class cl_acordomovimentacao
       $this->numrows    = 0;
       $this->erro_banco = str_replace("\n", "", @pg_last_error());
       $this->erro_sql   = "Erro ao selecionar os registros.";
-      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       return false;
@@ -501,7 +501,7 @@ class cl_acordomovimentacao
     if ($this->numrows == 0) {
       $this->erro_banco = "";
       $this->erro_sql   = "Record Vazio na Tabela:acordomovimentacao";
-      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   = "Usurio: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       return false;
