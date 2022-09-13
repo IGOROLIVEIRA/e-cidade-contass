@@ -31,6 +31,21 @@ require_once ("libs/db_sql.php");
 require_once("classes/db_orctiporec_classe.php");
 require_once("model/orcamento/ReceitaContabilRepository.model.php");
 
+
+/**
+ * Primeiro passo de refactory
+ * Mapeamento das variaveis
+ * = "Data Inicial"
+ * = "Data Final"
+ * = "Estrutural da Receita"
+ * $tipo = "Tipo de Receita"
+ * $sinana = "Tipo"
+ * = "Referente a Emenda Parlamentar"
+ * = "Regularizacao de Repasse"
+ * = "Forma de Arrecadacao"
+ * = "Recurso"
+ */
+
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 //var_dump($HTTP_SERVER_VARS['QUERY_STRING']);
 // quando for emissao sintetica coloca modelo retrato
@@ -630,6 +645,7 @@ $total_reco = 0;
 $total_rece = 0;
 $pagina = 0;
 $valatu = array (); /// array que guarda o recursos
+
 if ($sinana == 'S1' or $sinana == 'S3') {
 	// relatório sintético ( sem histórico )
 
