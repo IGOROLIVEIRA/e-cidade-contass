@@ -595,7 +595,8 @@ class cl_issisen {
      $sql .= " from issisen ";
      $sql .= "      inner join issbase  on  issbase.q02_inscr = issisen.q148_inscr";
      $sql .= "      inner join isstipoisen  on  isstipoisen.q147_tipo = issisen.q148_tipo";
-     $sql .= "      inner join cgm  on  cgm.z01_numcgm = iptubase.j01_numcgm";
+     $sql .= "      inner join cgm  on  cgm.z01_numcgm = issbase.q02_numcgm";
+     $sql .= "      inner join tabrec  on  tabrec.k02_codigo = issisen.q148_receit";
      $sql2 = "";
      if($dbwhere==""){
        if($q148_codigo!=null ){
