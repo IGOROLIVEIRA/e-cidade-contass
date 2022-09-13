@@ -169,8 +169,8 @@ class cl_acordomovimentacao
     } else {
       $result = db_query("select last_value from acordomovimentacao_ac10_sequencial_seq");
       if (($result != false) && (pg_result($result, 0, 0) < $ac10_sequencial)) {
-        $this->erro_sql = " Campo ac10_sequencial maior que ltimo nmero da sequencia.";
-        $this->erro_banco = "Sequencia menor que este nmero.";
+        $this->erro_sql = " Campo ac10_sequencial maior que último número da sequencia.";
+        $this->erro_banco = "Sequencia menor que este número.";
         $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
