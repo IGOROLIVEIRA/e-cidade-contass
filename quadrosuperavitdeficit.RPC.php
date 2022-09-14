@@ -88,7 +88,8 @@ try {
 
         case "getSuplementado":
             $oOrcSuplemVal = new OrcSuplemValRepositoryLegacy($anousu, $instit);
-            $oRetorno->fonte = $oOrcSuplemVal->pegarArrayValorPelaFonteSuplementadoPorTipoSup(TipoSuplementacaoSuperavitDeficitRepositoryLegacy::pegarTipoSup());
+            $oTipoSuplemenetacaoSuperavitDeficit = new TipoSuplementacaoSuperavitDeficitRepositoryLegacy();
+            $oRetorno->fonte = $oOrcSuplemVal->pegarArrayValorPelaFonteSuplementadoPorTipoSup($oTipoSuplemenetacaoSuperavitDeficit->pegarTipoSup());
             break;
     }
 } catch (Exception $eErro) {

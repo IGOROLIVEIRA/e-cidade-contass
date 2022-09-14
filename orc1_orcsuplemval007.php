@@ -53,7 +53,11 @@ include("classes/db_empautitem_classe.php");
 include("classes/db_condataconf_classe.php");
 
 db_app::import("orcamento.suplementacao.*");
-
+/*
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+*/
 require_once 'services/orcamento/ValidaSuplementacaoService.php';
 
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
@@ -167,11 +171,17 @@ if (isset($incluir)) {
     }
 
     try {
-        $iAnoUsu = db_getsession("DB_anousu");
         $iInstituicao = db_getsession("DB_instit");
-        $oQuadroSuperavitDeficit = new QuadroSuperavitDeficitRepositoryLegacy($iAnoUsu, $iInstituicao);
-        $oOrcSuplemVal = new OrcSuplemValRepositoryLegacy($iAnoUsu, $iInstituicao);
-        $oValidacaoSuplementacao = new ValidaSuplementacaoService($tiposup, new Recurso($o58_codigo), $o47_valor, $oQuadroSuperavitDeficit, $oOrcSuplemVal);
+        $oQuadroSuperavitDeficit = new QuadroSuperavitDeficitRepositoryLegacy($anousu, $iInstituicao);
+        $oOrcSuplemVal = new OrcSuplemValRepositoryLegacy($anousu, $iInstituicao);
+        $oTipoSuplemenetacaoSuperavitDeficit = new TipoSuplementacaoSuperavitDeficitRepositoryLegacy;
+        $oValidacaoSuplementacao = new ValidaSuplementacaoService($tiposup, 
+            new Recurso($o58_codigo), 
+            $o47_valor, 
+            $oQuadroSuperavitDeficit, 
+            $oOrcSuplemVal,
+            $oTipoSuplemenetacaoSuperavitDeficit
+        );
         $oValidacaoSuplementacao->validar();
     } catch (BusinessException $e) {
         db_msgbox($e->getMessage());

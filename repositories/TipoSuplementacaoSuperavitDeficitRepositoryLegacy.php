@@ -1,5 +1,7 @@
 <?php
 
+require_once('interfaces/orcamento/ITipoSuplementacaoSuperavitDeficitRepository.php');
+
 /**
  * @author widouglas
  */
