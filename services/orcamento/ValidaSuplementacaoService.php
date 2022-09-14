@@ -132,7 +132,7 @@ class ValidaSuplementacaoService
      */
     public function pegarValorQuadroSuperavitDeficit($sFonte)
     {
-        return number_format($this->oQuadroSuperavitDeficit->pegarValorPorFonte($sFonte), 2, ".", "");
+        return (float) number_format($this->oQuadroSuperavitDeficit->pegarValorPorFonte($sFonte), 2, ".", "");
     }
 
     /**
