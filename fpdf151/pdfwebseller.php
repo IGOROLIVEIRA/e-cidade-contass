@@ -141,6 +141,8 @@ class PDF extends FPDF
       if (@$GLOBALS["atolegalcabecalho"] != "") {
         $this->Text(33, 8, $nome);
         $this->Text(33, 11, $nomeescola);
+        //$this->SetFont('Arial', 'I', 8);
+
         $this->Text(33, 14, @$GLOBALS["atolegalcabecalho"]);
 
         $this->SetFont('Arial', 'I', 8);
@@ -166,17 +168,17 @@ class PDF extends FPDF
       $this->setleftmargin($Espaco);
       $this->sety(6);
       $this->setfillcolor(235);
-      $this->roundedrect($Espaco - 3, 5, 75, 28, 2, 'DF', '123');
+      //$this->roundedrect($Espaco - 3, 5, 75, 28, 2, 'DF', '123');
       $this->line(10, 33, $comprim, 33);
       $this->setfillcolor(255);
-      $this->multicell(0, 3, @$GLOBALS["head1"], 0, 1, "J", 0);
-      $this->multicell(0, 3, @$GLOBALS["head2"], 0, 1, "J", 0);
-      $this->multicell(0, 3, @$GLOBALS["head3"], 0, 1, "J", 0);
-      $this->multicell(0, 3, @$GLOBALS["head4"], 0, 1, "J", 0);
-      $this->multicell(0, 3, @$GLOBALS["head5"], 0, 1, "J", 0);
-      $this->multicell(0, 3, @$GLOBALS["head6"], 0, 1, "J", 0);
-      $this->multicell(0, 3, @$GLOBALS["head7"], 0, 1, "J", 0);
-      $this->multicell(0, 3, @$GLOBALS["head8"], 0, 1, "J", 0);
+      //$this->multicell(0, 3, @$GLOBALS["head1"], 0, 1, "J", 0);
+      //$this->multicell(0, 3, @$GLOBALS["head2"], 0, 1, "J", 0);
+      //$this->multicell(0, 3, @$GLOBALS["head3"], 0, 1, "J", 0);
+      //$this->multicell(0, 3, @$GLOBALS["head4"], 0, 1, "J", 0);
+      //$this->multicell(0, 3, @$GLOBALS["head5"], 0, 1, "J", 0);
+      //$this->multicell(0, 3, @$GLOBALS["head6"], 0, 1, "J", 0);
+      //$this->multicell(0, 3, @$GLOBALS["head7"], 0, 1, "J", 0);
+      //$this->multicell(0, 3, @$GLOBALS["head8"], 0, 1, "J", 0);
       $this->multicell(0, 3, @$GLOBALS["head9"], 0, 1, "J", 0);
       $this->setleftmargin($margemesquerda);
       $this->SetY(35);
