@@ -80,7 +80,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
             ?>
           </td>
 
-          <td nowrap>
+          <td id="titleUnidade" nowrap>
             <b> Unidade: </b>
           </td>
 
@@ -107,6 +107,21 @@ if ((isset($opcao) && $opcao == "alterar")) {
 
             </select>
           </td>
+
+          <td><strong id='ctnServicoQuantidade' style="display:none;">Serviço Controlado por Quantidades: </strong></td>
+          <td>
+            <?php
+
+            if (substr($o56_elemento, 0, 7) == '3449052') {
+              $aOpcoes = array("true" => "SIM");
+            } else {
+              $aOpcoes = array("false" => "NÃO", "true" => "SIM");
+            }
+
+            db_select('pc11_servicoquantidade', $aOpcoes, true, $db_opcao, "style='display:none;' onchange='js_changeControladoPorQtd(this.value);'");
+            ?>
+          </td>
+
         </tr>
 
 
@@ -156,18 +171,16 @@ if ((isset($opcao) && $opcao == "alterar")) {
             ?>
 
           </div>
-          <div style="display:none;" id="subEl">
+          <div id="subEl">
             <td colspan="2" nowrap title="<?= @$To56_descr ?>">
               <strong>Desdobramento:</strong>
             </td>
             <td>
               <select style="margin-left: -80;width: 438;" id="eleSub" name="eleSub">
-                <options value="">Selecione</options>
+                <option value="0"> </option>;
               </select>
             </td>
           </div>
-
-
 
           <td>
             <b> Ordem: </b>
@@ -181,7 +194,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
         </tr>
 
       </table>
-      <input style="float:center; margin-top:10px;" name="<?= ($db_opcao == 1 ? "Adicionar Item" : ($db_opcao == 2 || $db_opcao == 22 ? "alterar" : "excluir")) ?>" type="submit" id="db_opcao" value="<?= ($db_opcao == 1 ? "Adicionar Item" : ($db_opcao == 2 || $db_opcao == 22 ? "Alterar" : "Excluir")) ?>" <?= ($db_botao == false ? "disabled" : "") ?> onclick="return js_validaAlteracao(<?= $db_opcao ?>)">
+      <input style="float:center; margin-top:10px;" name="<?= ($db_opcao == 1 ? "Adicionar Item" : ($db_opcao == 2 || $db_opcao == 22 ? "alterar" : "excluir")) ?>" type="button" id="db_opcao" value="<?= ($db_opcao == 1 ? "Adicionar Item" : ($db_opcao == 2 || $db_opcao == 22 ? "Alterar" : "Excluir")) ?>" <?= ($db_botao == false ? "disabled" : "") ?> onclick="return js_adicionarItem()">
 
     </fieldset>
 
@@ -246,7 +259,21 @@ if ((isset($opcao) && $opcao == "alterar")) {
 
   }
 
+  function js_changeControladoPorQtd(quantidade) {
 
+    alert(quantidade);
+
+    if (quantidade == 'true') {
+
+      document.getElementById('unidade').style.display = "block";
+      document.getElementById('titleUnidade').style.display = "block";
+
+      //document.getElementById('ctnServicoQuantidade').style.marginLeft = "-105px;";
+
+
+    }
+
+  }
 
   function js_buscarEle() {
     var sUrl = "com4_materialsolicitacao.RPC.php";
@@ -342,7 +369,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
       js_OpenJanelaIframe('',
         'db_iframe_pcmater',
         '<?= $sUrlLookup ?>?funcao_js=parent.js_mostrapcmater1' +
-        '|pc01_codmater|pc01_descrmater|o56_codele|pc01_veiculo<?= $sFiltro ?><?= $db_opcao == 1 ? "&opcao_bloq=3&opcao=f" : "&opcao_bloq=1&opcao=i" ?>' +
+        '|pc01_codmater|pc01_descrmater|o56_codele|pc01_servico<?= $sFiltro ?><?= $db_opcao == 1 ? "&opcao_bloq=3&opcao=f" : "&opcao_bloq=1&opcao=i" ?>' +
         '&iRegistroPreco=<?= $iRegistroPreco; ?>',
         'Pesquisa de Materiais',
         true);
@@ -370,9 +397,8 @@ if ((isset($opcao) && $opcao == "alterar")) {
 
       var options = document.querySelectorAll('#eleSub option');
       options.forEach(o => o.remove());
+      $('eleSub').options[0] = new Option('', '0');
 
-
-      //js_buscarEle();
       return false;
     }
 
@@ -403,7 +429,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
     }
   }
 
-  function js_mostrapcmater(chave, erro, lVeic) {
+  function js_mostrapcmater(chave, erro, lVeic, servico) {
 
     if (erro == true) {
       document.form1.pc16_codmater.focus();
@@ -412,13 +438,18 @@ if ((isset($opcao) && $opcao == "alterar")) {
 
     } else {
       document.form1.pc01_descrmater.value = chave;
+      if (servico == 't') {
+        document.getElementById('titleUnidade').style.display = "none";
+        document.getElementById('unidade').style.display = "none";
+        document.getElementById('ctnServicoQuantidade').style.display = "block";
+        document.getElementById('pc11_servicoquantidade').style.display = "block";
+      }
       js_buscarEle();
-
 
     }
   }
 
-  function js_mostrapcmater1(chave1, chave2, codele, lVeic, iRegistro) {
+  function js_mostrapcmater1(chave1, chave2, codele, servico, iRegistro) {
 
 
     document.form1.pc16_codmater.value = chave1;
@@ -427,12 +458,15 @@ if ((isset($opcao) && $opcao == "alterar")) {
 
     db_iframe_pcmater.hide();
 
+    if (servico == 't') {
+      document.getElementById('titleUnidade').style.display = "none";
+      document.getElementById('unidade').style.display = "none";
+      document.getElementById('ctnServicoQuantidade').style.display = "block";
+      document.getElementById('pc11_servicoquantidade').style.display = "block";
+
+    }
 
     js_buscarEle();
-
-
-
-
 
   }
 
@@ -455,16 +489,98 @@ if ((isset($opcao) && $opcao == "alterar")) {
 
   }
 
+  function js_adicionarItem() {
+
+
+
+    if ($F('eleSub') == "0") {
+
+      alert('Informe o Desdobramento!');
+      return false;
+
+    }
+
+    if ($F('pc16_codmater') == "") {
+
+      alert('Informe o material!');
+      return false;
+
+    }
+
+    if ($F('pc01_ordem') == "") {
+
+      alert('Informe a ordem!');
+      return false;
+
+    }
+
+    if ($F('pc01_quantidade') == "") {
+
+      alert('Informe a quantidade!');
+      return false;
+
+    }
+
+    if ($F('unidade') == "0") {
+
+      alert('Informe a unidade!');
+      return false;
+
+    }
+
+    var sizeItens = oGridItens.aRows.length;
+
+    itens_antigos = oGridItens.aRows;
+
+    // Verifica se o item já foi incluído com o sequencial informado.
+    for (var i = 0; i < sizeItens; i++) {
+      if (document.getElementById('pc01_ordem').value == itens_antigos[i].aCells[0].content) {
+        alert('O item ' + itens_antigos[i].aCells[1].content + ' já foi incluído com o sequencial ' + document.getElementById('pc01_ordem').value + ' nesta solicitação.');
+        return;
+      }
+    }
+
+
+    oGridItens.clearAll(true);
+
+    var aLinha = new Array();
+
+    aLinha[0] = document.getElementById('pc01_ordem').value;
+    aLinha[1] = document.getElementById('pc16_codmater').value;
+    aLinha[2] = document.getElementById('pc01_descrmater').value;
+    select = document.getElementById('unidade');
+    var option = select.children[select.selectedIndex];
+    var unidade = option.textContent;
+    aLinha[3] = unidade;
+    aLinha[4] = "<input type='button' value='A' onclick='js_excluirLinha()'> <input type='button' value='E' onclick='js_excluirLinha()'>";
+    aLinha[5] = document.getElementById('eleSub').value;
+    aLinha[6] = document.getElementById('pc01_quantidade').value;
+
+    oGridItens.addRow(aLinha);
+
+    for (var i = 0; i < sizeItens; i++) {
+      oGridItens.addRow(itens_antigos[i]);
+    }
+
+    oGridItens.renderRows();
+
+
+  }
+
 
 
   oGridItens = new DBGrid('oGridItens');
   oGridItens.nameInstance = 'oGridItens';
-  oGridItens.setCellAlign(['center', 'left', "right", "right", "right"]);
-  oGridItens.setCellWidth(["10%", "10%", "50%", "20%", "10%"]);
-  oGridItens.setHeader(["Ordem", "Código", "Descrição", "Unidade", "Ação"]);
+  oGridItens.setCellAlign(['center', 'center', "center", "center", "center", "center", "center"]);
+  oGridItens.setCellWidth(["10%", "10%", "50%", "20%", "10%", "0%", "0%"]);
+  oGridItens.setHeader(["Ordem", "Código", "Descrição", "Unidade", "Ação", "", ""]);
+  oGridItens.aHeaders[5].lDisplayed = false;
+  oGridItens.aHeaders[6].lDisplayed = false;
+
 
   oGridItens.setHeight(200);
   oGridItens.show($('ctnGridItens'));
+
 
   oAutoComplete = new dbAutoComplete($('pc01_descrmater'), 'com4_pesquisamateriais.RPC.php');
   oAutoComplete.setTxtFieldId(document.getElementById('pc16_codmater'));
