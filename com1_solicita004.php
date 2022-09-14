@@ -57,6 +57,7 @@ require_once ("classes/db_pactovalormov_classe.php");
 require_once ("classes/db_pactovalormovsolicitem_classe.php");
 require_once ("classes/db_orctiporecconveniosolicita_classe.php");
 require_once ("classes/db_solicitaprotprocesso_classe.php");
+require_once ("classes/db_solicitavinculo_classe.php");
 
 db_postmemory($HTTP_GET_VARS);
 db_postmemory($HTTP_POST_VARS);
@@ -84,6 +85,7 @@ $oDaoItemPacto               = new cl_pactovalormovsolicitem();
 $oDaoItemPactomov            = new cl_pactovalormov;
 $oDaoOrctiporecConvenioPacto = new cl_orctiporecconveniosolicita();
 $oDaoProcessoAdministrativo  = new cl_solicitaprotprocesso();
+$clsolicitavinculo = new cl_solicitavinculo();
 
 $opselec   = 1;
 $db_opcao  = 1;
@@ -199,6 +201,9 @@ if (isset ($incluir) || (isset ($importar) && $confirma == true)) {
 		}
 
 		//echo "<br><br>ERRO [1] => ". $sqlerro;
+	
+
+	
 	}
 
 	if ($pc10_solicitacaotipo == "5") {
@@ -235,7 +240,9 @@ if (isset ($incluir) || (isset ($importar) && $confirma == true)) {
 	    $sqlerro = true;
 	  }
 	  $erro_msg = $clsolicita->erro_msg;
+	
 	}
+
 	//echo "<br><br>ERRO [2] => ". $sqlerro;
 	/**
 	 * Bloco que inclui o número do processo na solicitaprotprocesso
@@ -288,9 +295,26 @@ if (isset ($incluir) || (isset ($importar) && $confirma == true)) {
 	 * incluir o a informaca na tabela
 	 * solicita Vinculo
 	 */
-	 if ($pc10_solicitacaotipo == 5) {
 
-	   if ($pc54_solicita == "") {
+	 if ($pc10_solicitacaotipo == 5 && $importar != null) {
+		
+		$sSqlVinculo = db_query("select pc53_solicitapai vinculo from solicitavinculo where pc53_solicitafilho = " . $importar);
+		$rsVinculo = db_utils::fieldsMemory($sSqlVinculo, 0)->vinculo;
+
+		$oDaoSolicitaVinculo = db_utils::getDao("solicitavinculo");
+		$oDaoSolicitaVinculo->pc53_solicitafilho = $pc10_numero;
+		$oDaoSolicitaVinculo->pc53_solicitapai   = $rsVinculo;
+		$oDaoSolicitaVinculo->incluir(null);
+
+		if ($oDaoSolicitaVinculo->erro_status == 0) {
+		  $erro_msg = $oDaoSolicitaVinculo->erro_msg;
+		  $sqlerro  = true;
+		}
+	}
+	
+	if ($pc10_solicitacaotipo == 5 && $importar == null){
+	
+	if ($pc54_solicita == "") {
 
 	     $erro_msg = "Informe o Registro de Preço!";
 	     $sqlerro  = true;
@@ -308,8 +332,8 @@ if (isset ($incluir) || (isset ($importar) && $confirma == true)) {
 	       $erro_msg = $oDaoSolicitaVinculo->erro_msg;
          $sqlerro  = true;
 	     }
-	   }
 	 }
+	}
 
 	if (isset ($importar) && trim($importar) != "" && $sqlerro == false) {
 

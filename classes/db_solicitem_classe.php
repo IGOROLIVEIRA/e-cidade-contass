@@ -1444,7 +1444,9 @@ class cl_solicitem
     $sSql .= "        inner join empempenho                on e61_numemp                     = e60_numemp";
     $sSql .= "        inner join empempitem                on e60_numemp                     = e62_numemp";
     $sSql .= "                                            and e62_sequen                     = e55_sequen";
-    $sSql .= "        left join empanuladoitem             on e37_empempitem                 = e62_sequencial";
+    $sSql .= "        inner join empanulado                on e94_numemp                     = e60_numemp";
+    $sSql .= "        inner join empanuladoitem            on e37_empanulado                 = e94_codanu";
+    $sSql .= "                                            and e37_empempitem                 = e62_sequencial";
     $sSqlWhere = '';
     if ($dbwhere == "") {
       if ($pc11_codigo != null) {
