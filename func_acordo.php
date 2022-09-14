@@ -362,7 +362,7 @@ $pc01_libcontratodepart = db_utils::fieldsMemory($rsParametros,0)->pc01_libcontr
               db_fieldsmemory($result,0);
               if (isset($descricao) && $descricao == 'true') {
                 
-                echo "<script>".$funcao_js."('$ac16_sequencial','$ac16_resumoobjeto','$ac16_origem',false);</script>";
+                echo "<script>".$funcao_js."('$ac16_sequencial','$ac16_resumoobjeto','$ac16_origem',false,,'$ac16_licitacao');</script>";
                 
               } else {
                 
