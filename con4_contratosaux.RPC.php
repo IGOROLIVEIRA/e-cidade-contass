@@ -922,11 +922,12 @@ switch ($oParam->exec) {
         break;
 
     case "getItensAcordo":
+        
 
         if (isset($_SESSION["oContrato"]) && $_SESSION["oContrato"] instanceof Acordo) {
-
+            
             $oContrato                = $_SESSION["oContrato"];
-
+            
             $oRetorno->iTipoContrato  = $oContrato->getOrigem();
             $oPosicao                 = $oContrato->getUltimaPosicao(true);
             $oRetorno->iCodigoPosicao = $oPosicao->getCodigo();
@@ -1189,14 +1190,14 @@ switch ($oParam->exec) {
 
 
                 $aItens = licitacao::getItensPorFornecedor(
-                    $_SESSION["dadosSelecaoAcordo"],
+                    $oContrato->getLicitacao(),
                     $oContrato->getContratado()->getCodigo(),
                     0
                 );
             } else {
 
                 $aItens = ProcessoCompras::getItensPorFornecedor(
-                    $_SESSION["dadosSelecaoAcordo"],
+                    $oContrato->getLicitacao(),
                     $oContrato->getContratado()->getCodigo(),
                     0
                 );
