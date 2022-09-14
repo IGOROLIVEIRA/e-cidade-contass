@@ -115,7 +115,6 @@ function js_carregarValores(oRetorno) {
 
 function js_carregarValoresSuplementados(oRetorno) {
     var valores = JSON.parse(oRetorno.responseText.urlDecode());
-
     valores.fonte.forEach(function(fonte, b) {
         if (document.form1['aFonte[' + fonte.fonte + '][suplementado]']) {
             document.form1['aFonte[' + fonte.fonte + '][suplementado]'].value = fonte.valor;
