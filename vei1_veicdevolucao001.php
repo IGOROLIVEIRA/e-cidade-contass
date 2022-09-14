@@ -78,24 +78,29 @@ if (isset($incluir)) {
         $aAbastecimentos = $oVeiculo->getAbastecimentos();
 
         /*
+         * Verifica se há retirada vinculada ao abastecimento
+         */
+
+         $retirada = db_query("select ve73_veicabast from veicabastretirada where ve73_veicretirada = {$ve61_veicretirada}");
+         $rsRetirada = db_utils::fieldsMemory($retirada, 0);
+         
+        /*
          * Verifica se possui abastecimento e cria variáveis de controle
          */
         $lPossuiAbastecimento = false;
         $oUltimoAbastecimento = null;
         $sHoraAbastecimento   = null;
-        if (count($aAbastecimentos) > 0) {
+        if (count($aAbastecimentos) > 0 && pg_numrows($rsRetirada) > 0 ) {
 
           $lPossuiAbastecimento = true;
           $oUltimoAbastecimento = $aAbastecimentos[0];
           $sHoraAbastecimento   = str_replace(":", '', $oUltimoAbastecimento->getHoraInclusao());
-        }
 
-
-        /**
+          /**
          * Caso possua algum abastecimento, valida-se as horas
          */
         $oPost->ve61_horadevol = str_replace(":", '', $oPost->ve61_horadevol);
-        if ($lPossuiAbastecimento && !empty($oUltimoAbastecimento)) {
+        if ($lPossuiAbastecimento && !empty($oUltimoAbastecimento) && pg_numrows($rsRetirada) > 0 ) {
 
           if ($oUltimoAbastecimento->getDataAbastecimento()->getTimeStamp() > $oDataDevolucao->getTimeStamp()) {
 
@@ -120,6 +125,18 @@ if (isset($incluir)) {
           if ($clveicdevolucao->erro_status == "0") {
             $sqlerro = true;
             $erro_msg = $clveicdevolucao->erro_msg;
+          }
+        }
+      }
+      else {
+        $clveicdevolucao->ve61_usuario = db_getsession("DB_id_usuario");
+        $clveicdevolucao->ve61_data = $oDataAtual->getDate();
+        $clveicdevolucao->ve61_hora = $sHoraAtual;
+
+        $clveicdevolucao->incluir($ve61_codigo);
+        if ($clveicdevolucao->erro_status == "0") {
+          $sqlerro = true;
+          $erro_msg = $clveicdevolucao->erro_msg;
           }
         }
       }
