@@ -66,7 +66,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
 
           <td nowrap style="   display: block;">
             <?
-            db_input('pc01_descrmater', 50, $Ipc01_descrmater, true, 'text', $db_opcao, "onchange='js_pesquisa_desdobramento();'");
+            db_input('pc01_descrmater', 45, $Ipc01_descrmater, true, 'text', $db_opcao, "onchange='js_pesquisa_desdobramento();'");
             ?>
           </td>
 
@@ -86,29 +86,39 @@ if ((isset($opcao) && $opcao == "alterar")) {
 
           <td nowrap>
 
-            <select name="unidade[]" id="unidade">
 
-              <?
-
-              echo "<option value=\"0\">  </option>";
+            <?
+            $unidade = array();
 
 
-              $result = db_query("select * from matunid");
-              if (pg_numrows($result) != 0) {
-                $numrows = pg_numrows($result);
-                for ($i = 0; $i < $numrows; $i++) {
+            $result = db_query("select * from matunid");
+            if (pg_numrows($result) != 0) {
+              $numrows = pg_numrows($result);
+              $unidade[0] = "";
 
-                  $matunid = db_utils::fieldsMemory($result, $i);
-                  echo "<option value=\"$matunid->m61_codmatunid \">$matunid->m61_descr</option>";
-                }
+              for ($i = 0; $i < $numrows; $i++) {
+                $matunid = db_utils::fieldsMemory($result, $i);
+
+                $unidade[$matunid->m61_codmatunid] = $matunid->m61_descr;
+                /*
+      echo "<option value=\"$matunid->m61_codmatunid \">$matunid->m61_descr</option>";
+      */
               }
+            }
 
-              ?>
+            db_select(
+              "pc17_unid",
+              $unidade,
+              true,
+              $db_opcao,
+              ""
+            );
 
-            </select>
+            ?>
+
           </td>
 
-          <td><strong id='ctnServicoQuantidade' style="display:none;">Serviço Controlado por Quantidades: </strong></td>
+          <td><strong id='ctnServicoQuantidade' style="display:none;">Controlado por Quantidades: </strong></td>
           <td>
             <?php
 
@@ -176,18 +186,56 @@ if ((isset($opcao) && $opcao == "alterar")) {
               <strong>Desdobramento:</strong>
             </td>
             <td>
-              <select style="margin-left: -80;width: 438;" id="eleSub" name="eleSub">
+              <select style="margin-left: -80;width: 405;" id="eleSub" name="eleSub">
                 <option value="0"> </option>;
               </select>
             </td>
           </div>
 
+          <td style="display: none;" id="titleUnidade2" nowrap>
+            <b> Unidade: </b>
+          </td>
+
+          <td nowrap>
+
+
+            <?
+            $unidade = array();
+
+
+            $result = db_query("select * from matunid");
+            if (pg_numrows($result) != 0) {
+              $numrows = pg_numrows($result);
+              $unidade[0] = "";
+
+              for ($i = 0; $i < $numrows; $i++) {
+                $matunid = db_utils::fieldsMemory($result, $i);
+
+                $unidade[$matunid->m61_codmatunid] = $matunid->m61_descr;
+                /*
+      echo "<option value=\"$matunid->m61_codmatunid \">$matunid->m61_descr</option>";
+      */
+              }
+            }
+
+            db_select(
+              "pc17_unid2",
+              $unidade,
+              true,
+              $db_opcao,
+              "style='display: none;'"
+            );
+
+            ?>
+
+          </td>
+
           <td>
-            <b> Ordem: </b>
+            <b style="margin-left: -73px;" id="titleOrdem"> Ordem: </b>
           </td>
           <td>
             <?
-            db_input('pc01_ordem', 8, $Ipc01_descrmater, true, 'text', $db_opcao, 'onkeypress="return event.charCode >= 48 && event.charCode <= 57" ');
+            db_input('pc01_ordem', 8, $Ipc01_descrmater, true, 'text', $db_opcao, 'onkeypress="return event.charCode >= 48 && event.charCode <= 57" style="margin-left: -82px;"');
             ?>
           </td>
 
@@ -261,16 +309,28 @@ if ((isset($opcao) && $opcao == "alterar")) {
 
   function js_changeControladoPorQtd(quantidade) {
 
-    alert(quantidade);
 
     if (quantidade == 'true') {
 
-      document.getElementById('unidade').style.display = "block";
-      document.getElementById('titleUnidade').style.display = "block";
+      document.getElementById('pc17_unid2').style.display = "block";
+      document.getElementById('titleUnidade2').style.display = "block";
+      document.getElementById('pc01_ordem').style.marginLeft = "0px";
+      document.getElementById('titleOrdem').style.marginLeft = "60px";
+      document.getElementById('ctnServicoQuantidade').style.marginLeft = "-170px";
+      document.getElementById('pc11_servicoquantidade').style.marginLeft = "-80px";
+      document.getElementById('pc11_servicoquantidade').style.width = "76px";
 
-      //document.getElementById('ctnServicoQuantidade').style.marginLeft = "-105px;";
 
 
+
+    } else {
+      document.getElementById('pc17_unid2').style.display = "none";
+      document.getElementById('titleUnidade2').style.display = "none";
+      document.getElementById('pc01_ordem').style.marginLeft = "-82px";
+      document.getElementById('titleOrdem').style.marginLeft = "-73px";
+      document.getElementById('ctnServicoQuantidade').style.marginLeft = "0px";
+      document.getElementById('pc11_servicoquantidade').style.marginLeft = "0px";
+      document.getElementById('pc11_servicoquantidade').style.width = "48px";
     }
 
   }
@@ -440,9 +500,19 @@ if ((isset($opcao) && $opcao == "alterar")) {
       document.form1.pc01_descrmater.value = chave;
       if (servico == 't') {
         document.getElementById('titleUnidade').style.display = "none";
-        document.getElementById('unidade').style.display = "none";
+        document.getElementById('pc17_unid').style.display = "none";
         document.getElementById('ctnServicoQuantidade').style.display = "block";
         document.getElementById('pc11_servicoquantidade').style.display = "block";
+
+      } else {
+        document.getElementById('titleUnidade').style.display = "block";
+        document.getElementById('pc17_unid').style.display = "block";
+        document.getElementById('ctnServicoQuantidade').style.display = "none";
+        document.getElementById('pc11_servicoquantidade').style.display = "none";
+        document.getElementById('pc17_unid2').style.display = "none";
+        document.getElementById('titleUnidade2').style.display = "none";
+        document.getElementById('pc01_ordem').style.marginLeft = "-82px";
+        document.getElementById('titleOrdem').style.marginLeft = "-73px";
       }
       js_buscarEle();
 
@@ -460,10 +530,19 @@ if ((isset($opcao) && $opcao == "alterar")) {
 
     if (servico == 't') {
       document.getElementById('titleUnidade').style.display = "none";
-      document.getElementById('unidade').style.display = "none";
+      document.getElementById('pc17_unid').style.display = "none";
       document.getElementById('ctnServicoQuantidade').style.display = "block";
       document.getElementById('pc11_servicoquantidade').style.display = "block";
 
+    } else {
+      document.getElementById('titleUnidade').style.display = "block";
+      document.getElementById('pc17_unid').style.display = "block";
+      document.getElementById('ctnServicoQuantidade').style.display = "none";
+      document.getElementById('pc11_servicoquantidade').style.display = "none";
+      document.getElementById('pc17_unid2').style.display = "none";
+      document.getElementById('titleUnidade2').style.display = "none";
+      document.getElementById('pc01_ordem').style.marginLeft = "-82px";
+      document.getElementById('titleOrdem').style.marginLeft = "-73px";
     }
 
     js_buscarEle();
@@ -521,7 +600,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
 
     }
 
-    if ($F('unidade') == "0") {
+    if ($F('pc17_unid') == "0") {
 
       alert('Informe a unidade!');
       return false;
@@ -548,7 +627,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
     aLinha[0] = document.getElementById('pc01_ordem').value;
     aLinha[1] = document.getElementById('pc16_codmater').value;
     aLinha[2] = document.getElementById('pc01_descrmater').value;
-    select = document.getElementById('unidade');
+    select = document.getElementById('pc17_unid');
     var option = select.children[select.selectedIndex];
     var unidade = option.textContent;
     aLinha[3] = unidade;
