@@ -40,6 +40,10 @@ class EventoS1200 extends EventoBase
 
             $aDadosPorMatriculas = $this->buscarDadosPorMatricula($oDados->z01_cgccpf);
 
+            if ($aDadosPorMatriculas[0]->cpftrab == null) {
+                continue;
+            }
+
             $oDadosAPI                                   = new \stdClass;
             $oDadosAPI->evtRemun                      = new \stdClass;
             $oDadosAPI->evtRemun->sequencial          = $iSequencial;

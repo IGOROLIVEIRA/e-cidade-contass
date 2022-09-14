@@ -36,7 +36,12 @@ class EventoS1202 extends EventoBase
         $aDadosAPI = array();
         $iSequencial = 1;
         foreach ($this->dados as $oDados) {
+
             $aDadosPorMatriculas = $this->buscarDadosPorMatricula($oDados->z01_cgccpf);
+
+            if ($aDadosPorMatriculas[0]->cpftrab == null) {
+                continue;
+            }
 
             $oDadosAPI                                   = new \stdClass();
             $oDadosAPI->evtRmnRPPS                      = new \stdClass();
