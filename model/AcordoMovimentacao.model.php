@@ -68,6 +68,13 @@ abstract class AcordoMovimentacao
    */
   protected $sObservacao         = '';
 
+    /**
+   * Justificativa
+   *
+   * @var string
+   */
+  protected $sJustificativa         = '';
+
   /**
    * Código do Usuário
    *
@@ -179,6 +186,17 @@ abstract class AcordoMovimentacao
     return $this->sObservacao;
   }
 
+   /**
+   * Retorna a justificativa da movimentação
+   * 
+   * @return string
+   */
+  public function getJustificativa()
+  {
+
+    return $this->sJustificativa;
+  }
+
   /**
    * Seta o acordo de movimentação
    * 
@@ -212,6 +230,17 @@ abstract class AcordoMovimentacao
     $this->sObservacao = $sObservacao;
   }
 
+   /**
+   * Seta a observação da movimentação
+   * 
+   * @param string $sJustificativa
+   */
+  public function setJustificativa($sJustificativa)
+  {
+
+    $this->sJustificativa = $sJustificativa;
+  }
+
   /**
    * Método construtor
    * 
@@ -239,6 +268,7 @@ abstract class AcordoMovimentacao
       $this->sHora         = $oAcordoMovimentacao->ac10_hora;
       $this->iUsuario      = $oAcordoMovimentacao->ac10_id_usuario;
       $this->setObservacao($oAcordoMovimentacao->ac10_obs);
+      $this->setJustificativa($oAcordoMovimentacao->ac10_justificativa);
       $this->setAcordo($oAcordoMovimentacao->ac10_acordo);
       $this->setTipo($oAcordoMovimentacao->ac10_acordomovimentacaotipo);
     }
@@ -270,6 +300,7 @@ abstract class AcordoMovimentacao
     $oDaoAcordoMovimentacao->ac10_acordomovimentacaotipo = $this->getTipo();
     $oDaoAcordoMovimentacao->ac10_acordo                 = $this->getAcordo();
     $oDaoAcordoMovimentacao->ac10_obs                    = $this->getObservacao();
+    $oDaoAcordoMovimentacao->ac10_justificativa          = $this->getJustificativa();
 
     $iCodigo = $this->iCodigo;
     if (!empty($iCodigo)) {
@@ -405,6 +436,7 @@ abstract class AcordoMovimentacao
     $oDaoAcordoMovimentacao->ac10_acordomovimentacaotipo = $this->iCodigoCancelamento;
     $oDaoAcordoMovimentacao->ac10_acordo                 = $this->getAcordo();
     $oDaoAcordoMovimentacao->ac10_obs                    = $this->getObservacao();
+    $oDaoAcordoMovimentacao->ac10_justificativa          = $this->getJustificativa();
     $oDaoAcordoMovimentacao->ac10_id_usuario             = db_getsession('DB_id_usuario');
     $oDaoAcordoMovimentacao->ac10_datamovimento          = date("Y-m-d", db_getsession("DB_datausu"));
     $oDaoAcordoMovimentacao->ac10_hora                   = db_hora();

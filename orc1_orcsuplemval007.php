@@ -25,7 +25,6 @@
  *                                licenca/licenca_pt.txt
  */
 
-
 require_once("libs/db_stdlib.php");
 require_once("libs/db_conecta.php");
 require_once("libs/db_utils.php");
@@ -53,8 +52,14 @@ include("classes/db_orcreservaaut_classe.php");
 include("classes/db_empautitem_classe.php");
 include("classes/db_condataconf_classe.php");
 
-
 db_app::import("orcamento.suplementacao.*");
+/*
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+*/
+require_once 'services/orcamento/ValidaSuplementacaoService.php';
+
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
 
@@ -64,7 +69,7 @@ $clorcdotacao   = new cl_orcdotacao;  // instancia da classe dotação
 $clorcsuplem    = new cl_orcsuplem;
 $clorcorgao     = new cl_orcorgao;
 $clorcprojeto   = new cl_orcprojeto;
-$clorcparametro           = new cl_orcparametro();
+$clorcparametro = new cl_orcparametro();
 $cloperacaodecredito = new cl_db_operacaodecredito;
 
 
@@ -81,7 +86,7 @@ $clorcdotacao->rotulo->label();
 $cloperacaodecredito->rotulo->label();
 
 $clrotulo = new rotulocampo;
-$clrotulo->label("op01_numerocontratoopc"); 
+$clrotulo->label("op01_numerocontratoopc");
 
 $op = 1;
 $db_opcao = 1;
@@ -165,104 +170,36 @@ if (isset($incluir)) {
         }
     }
 
-    // Condição da OC 17280
-    if ($tiposup == 2026 || $tiposup == 1003 || $tiposup == 1008 || $tiposup == 1024) {
-
-        if (in_array(substr($o58_codigo, 1, 2), array("00", "01", "02", "18", "19"))) {
-            if (in_array(substr($o58_codigo, 1, 2), array("00", "01", "02"))) {
-                $fontes = array("00", "01", "02");
-            } else {
-                $fontes = array("18", "19");
-            }
-        } else {
-            $fontes[] = substr($o58_codigo, 1, 2);
-        }
-
-        $valorQuadro = 0;
-        $existeQuadro = false;
-
-        for ($i = 1; $i <= 2; $i ++) {
-            foreach ($fontes as $fonte) {
-                $fonteAtual = $i . $fonte;
-
-                $clquadrosuperavitdeficit = new cl_quadrosuperavitdeficit;
-                $result = $clquadrosuperavitdeficit->sql_record($clquadrosuperavitdeficit->sql_query("null", "*", null, "c241_fonte = {$fonteAtual} AND c241_ano = {$anousu} AND c241_instit = " . db_getsession("DB_instit")));
-
-                if (pg_num_rows($result) > 0) {
-                    $existeQuadro = true;
-                    $quadro = db_utils::fieldsMemory($result, 0);
-                    $valorQuadro += $quadro->c241_valor;
-
-                    $subSql = "SELECT
-                                concat('1', substring(o58_codigo::TEXT, 2, 2)) fonte,
-                                sum(o47_valor) as valor
-                            FROM
-                            orcsuplemval
-                                LEFT JOIN orcdotacao ON o47_coddot = o58_coddot
-                                AND o47_anousu = o58_anousu
-                                JOIN orcsuplem ON o47_codsup=o46_codsup
-                            WHERE
-                                o47_anousu = {$anousu}
-                                AND concat('1', substring(o58_codigo::TEXT, 2, 2)) = '$fonteAtual'
-                                AND o47_valor > 0
-                                AND o46_instit IN (" . db_getsession("DB_instit") . ")
-                                AND o46_tiposup IN (2026, 1003, 1008, 1024)
-                            GROUP BY concat('1', substring(o58_codigo::TEXT, 2, 2))
-                            UNION
-                            select
-                            concat('1', substring(o58_codigo::TEXT, 2, 2)) fonte,
-                                sum(o136_valor) as valor
-                            from
-                            orcsuplemdespesappa
-                                LEFT JOIN orcsuplemval ON o47_codsup = o136_orcsuplem
-                                LEFT JOIN orcdotacao ON o47_coddot = o58_coddot
-                                AND o47_anousu = o58_anousu
-                                JOIN orcsuplem ON o47_codsup=o46_codsup
-                        
-                            WHERE
-                                o47_anousu = {$anousu}
-                                AND o46_instit IN (" . db_getsession("DB_instit") . ")
-                                AND concat('1', substring(o58_codigo::TEXT, 2, 2)) = '$fonteAtual'
-                                AND o46_tiposup IN (2026, 1003, 1008, 1024)
-                            AND 
-                                o136_valor > 0 
-                            GROUP BY concat('1', substring(o58_codigo::TEXT, 2, 2))";
-                    $subResult = db_query($subSql);
-
-                    for ($y = 0; $y < pg_num_rows($subResult); $y++) {
-                        $oFonte = db_utils::fieldsMemory($subResult, $y);
-                        $valorQuadro -= $oFonte->valor;
-                    }
-                }
-            }
-        }
-        
-        if (!$existeQuadro) {
-            db_msgbox("Não existe cadastro no quadro de superávit e deficit para a fonte informada no exercício.");
-            $sqlerro = true;
-            $limpa_dados = false; 
-        }
-
-        $valorQuadro = number_format($valorQuadro, 2, ".", "");
-
-        if (number_format($o47_valor, 2, ".", "") > $valorQuadro) {
-            db_msgbox("Não existe superávit suficiente para realizar essa suplementação, saldo disponível R$ {$valorQuadro}");
-            $sqlerro = true;
-            $limpa_dados = false; 
-        }
+    try {
+        $iInstituicao = db_getsession("DB_instit");
+        $oQuadroSuperavitDeficit = new QuadroSuperavitDeficitRepositoryLegacy($anousu, $iInstituicao);
+        $oOrcSuplemVal = new OrcSuplemValRepositoryLegacy($anousu, $iInstituicao);
+        $oTipoSuplemenetacaoSuperavitDeficit = new TipoSuplementacaoSuperavitDeficitRepositoryLegacy;
+        $oValidacaoSuplementacao = new ValidaSuplementacaoService($tiposup, 
+            new Recurso($o58_codigo), 
+            $o47_valor, 
+            $oQuadroSuperavitDeficit, 
+            $oOrcSuplemVal,
+            $oTipoSuplemenetacaoSuperavitDeficit
+        );
+        $oValidacaoSuplementacao->validar();
+    } catch (BusinessException $e) {
+        db_msgbox($e->getMessage());
+        $sqlerro = true;
+        $limpa_dados = false;
     }
 
     // Novos tiposup adicionados na OC18040
     if ((!in_array($tiposup, array(1001, 1002, 1003, 1006, 1007, 1008, 1011, 1012, 1013, 1014, 1015, 1016, 1017, 1018, 1019, 1020, 1021, 1022, 1023, 1024, 1026, 1027, 1028, 2026))) && substr($o58_codigo, 0, 1) == 2) {
         db_msgbox("Usuário, inclusão abortada. Dotação incompatível com o tipo de suplementação utilizada");
         $sqlerro = true;
-        $limpa_dados = false; 
+        $limpa_dados = false;
     }
 
     if ((in_array($tiposup, array(1003, 1008, 1024, 1028, 2026))) && substr($o58_codigo, 0, 1) == 1) {
         db_msgbox("Usuário, inclusão abortada. Dotação incompatível com o tipo de suplementação utilizada");
         $sqlerro = true;
-        $limpa_dados = false; 
+        $limpa_dados = false;
     }
 
 
@@ -325,7 +262,7 @@ if (isset($incluir)) {
                             o57_fonte
                     ) as X
                     ) as y GROUP BY o70_codigo";
-       
+
 
             $qResult = db_query($sSql);
             $valor = 0;
@@ -337,7 +274,7 @@ if (isset($incluir)) {
             if ($valor <= 0) {
                 db_msgbox("Não existe excesso de arrecadação para a fonte informada.");
                 $sqlerro = true;
-                $limpa_dados = false; 
+                $limpa_dados = false;
             } else {
                 // Segunda condicao
                 $sSql = "SELECT
@@ -368,7 +305,7 @@ if (isset($incluir)) {
                             AND o58_codigo IN ($fontes)
                             AND o46_instit in (" . db_getsession("DB_instit") . ")
                             AND o46_tiposup IN (1004, 1025, 1012, 1019, 1009, 1010, 1029)
-                            AND o136_valor > 0 
+                            AND o136_valor > 0
                         GROUP BY o58_codigo";
                 $subResult = db_query($sSql);
 
@@ -381,15 +318,15 @@ if (isset($incluir)) {
                 if (number_format(($valor - $valorSuplementado), 2, ".", "") <= 0) {
                     db_msgbox("Não existe excesso suficiente para realizar essa suplementação, saldo disponível 0,00");
                     $sqlerro = true;
-                    $limpa_dados = false; 
+                    $limpa_dados = false;
                 } else {
                     if (number_format(($valor - $valorSuplementado - $o47_valor), 2, ".", "") < 0) {
                         $saldo = number_format($valor - $valorSuplementado, 2, ".", "");
                         db_msgbox("Não existe excesso suficiente para realizar essa suplementação, saldo disponível {$saldo}");
                         $sqlerro = true;
-                        $limpa_dados = false; 
+                        $limpa_dados = false;
                     }
-                } 
+                }
             }
         }
     }
@@ -492,7 +429,7 @@ WHERE o58_anousu=" . db_getsession('DB_anousu') . "
                     $limpa_dados = false;
                 }
             }
-            
+
             if ($o50_controlafote1017 == 't') {
                 /*valida fonte (100,101,102,118,119) OC 9112 */
                 // Adicionar Validação da fontes 166 e 167 - OC17881
@@ -610,7 +547,7 @@ $soma_suplem    = $oSuplementacao->getvalorSuplementacao();
 // --------------------------------------
 
 
-?> 
+?>
 <html>
 
 <head>
