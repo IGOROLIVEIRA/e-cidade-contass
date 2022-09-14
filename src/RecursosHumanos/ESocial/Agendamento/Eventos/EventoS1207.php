@@ -37,7 +37,12 @@ class EventoS1207 extends EventoBase
         $aDadosAPI = array();
         $iSequencial = 1;
         foreach ($this->dados as $oDados) {
+
             $aDadosPorMatriculas = $this->buscarDadosPorMatricula($oDados->z01_cgccpf);
+            if ($aDadosPorMatriculas[0]->cpftrab == null) {
+                continue;
+            }
+
             $oDadosAPI                                   = new \stdClass();
             $oDadosAPI->evtBenPrRP                      = new \stdClass();
             $oDadosAPI->evtBenPrRP->sequencial          = $iSequencial;
