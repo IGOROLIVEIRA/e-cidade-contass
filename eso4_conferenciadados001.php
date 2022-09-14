@@ -142,6 +142,7 @@ $mesfolha = DBPessoal::getMesFolha();
                             <option value="S1200">S-1200 - Remuneração de Trabalhador vinculado ao Regime Geral de Previd. Social</option>
                             <option value="S1202">S-1202 - Remuneração de Servidor vinculado ao Regime Próprio de Previd</option>
                             <option value="S1207">S-1207 - Benefícios - Entes Públicos</option>
+                            <option value="S1210">S-1210 - Pagamentos de Rendimentos do Trabalho</option>
                         </select>
                     </td>
                 </tr>
@@ -174,8 +175,8 @@ $mesfolha = DBPessoal::getMesFolha();
                     </td>
                 </tr>
                 <tr id="tppgto_col" style="display:none">
-                    <td align="right"><label>Tipo de Pagamento:</label>
-                        <select name="tppgto" id="tppgto" style="width: 50%;">
+                    <td><label>Tipo de Pagamento:</label></td>
+                    <td><select name="tppgto" id="tppgto" style="width: 50%;">
                             <option value="1">Pagamento de remuneração, conforme apurado em
                                 ideDmDev do S-1200
                             </option>
