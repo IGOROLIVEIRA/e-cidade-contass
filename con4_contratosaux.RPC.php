@@ -171,7 +171,7 @@ switch ($oParam->exec) {
             $dtcadastro = $oAcordo->getDataInicial();
 
             if ($dtcadastro < $z09_datacadastro) {
-                throw new Exception("Usuário: A data de cadastro do CGM informado é superior a data do procedimento que está sendo realizado. Corrija a data de cadastro do CGM e tente novamente!");
+                throw new Exception("UsuÃ¡rio: A data de cadastro do CGM informado Ã© superior a data do procedimento que estÃ¡ sendo realizado. Corrija a data de cadastro do CGM e tente novamente!");
             }
 
             $oMembro = new AcordoComissaoMembro($oParam->iCodigo);
@@ -203,7 +203,7 @@ switch ($oParam->exec) {
             $dtcadastro = $oAcordo->getDataInicial();
 
             if ($dtcadastro < $z09_datacadastro) {
-                throw new Exception("Usuário: A data de cadastro do CGM informado é superior a data do procedimento que está sendo realizado. Corrija a data de cadastro do CGM e tente novamente!");
+                throw new Exception("UsuÃ¡rio: A data de cadastro do CGM informado Ã© superior a data do procedimento que estÃ¡ sendo realizado. Corrija a data de cadastro do CGM e tente novamente!");
             }
 
             if (!$oAcordo->membroExists($oParam->iCodigoCgm)) {
@@ -221,7 +221,7 @@ switch ($oParam->exec) {
                 $oRetorno->iCodigo = $oMembro->getCodigoComissao();
             } else {
 
-                $oRetorno->message = urlencode("Membro já está presente na comissão.");
+                $oRetorno->message = urlencode("Membro jÃ¡ estÃ¡ presente na comissÃ£o.");
                 $oRetorno->iCodigo = $oParam->iCodigoComissao;
             }
         } catch (Exception  $eErro) {
@@ -239,7 +239,7 @@ switch ($oParam->exec) {
             $oMembro = new AcordoComissaoMembro($oParam->iCodigo);
             $erromsg = $oMembro->excluir();
 
-            $oRetorno->message = urlencode("Membro excluído com sucesso.");
+            $oRetorno->message = urlencode("Membro excluÃ­do com sucesso.");
             $oRetorno->iCodigo = $oMembro->getCodigoComissao();
         } catch (Exception  $eErro) {
 
@@ -454,9 +454,9 @@ switch ($oParam->exec) {
         }
 
         /**
-         * se o contrato esta preenchido, estamos em alteração
-         * verificamos se para esse contrato ja foi incluido itens, de alguma outra licitação
-         * se tiver, não mostramos outras licitações
+         * se o contrato esta preenchido, estamos em alteraÃ§Ã£o
+         * verificamos se para esse contrato ja foi incluido itens, de alguma outra licitaÃ§Ã£o
+         * se tiver, nÃ£o mostramos outras licitaÃ§Ãµes
          */
         if (isset($oParam->iContrato) && $oParam->iContrato != '') {
 
@@ -481,9 +481,9 @@ switch ($oParam->exec) {
 
         $oItens = ProcessoCompras::getProcessosByFornecedor($oParam->iContratado, true);
         /**
-         * se o contrato esta preenchido, estamos em alteração
-         * verificamos se para esse contrato ja foi incluido itens, de alguma outra licitação
-         * se tiver, não mostramos outras licitações
+         * se o contrato esta preenchido, estamos em alteraÃ§Ã£o
+         * verificamos se para esse contrato ja foi incluido itens, de alguma outra licitaÃ§Ã£o
+         * se tiver, nÃ£o mostramos outras licitaÃ§Ãµes
          */
         if (isset($oParam->iContrato) && $oParam->iContrato != '') {
 
@@ -547,12 +547,12 @@ switch ($oParam->exec) {
                 if (!isset($_SESSION["dadosSelecaoAcordo"])) {
 
                     $lAcordoValido = false;
-                    $sMessagemInvalido  = "Acordo sem vinculo com licitação/Processo de compras";
+                    $sMessagemInvalido  = "Acordo sem vinculo com licitaÃ§Ã£o/Processo de compras";
                 }
             } else if (isset($_SESSION["dadosSelecaoAcordo"]) && trim(isset($_SESSION["dadosSelecaoAcordo"])) == "") {
 
                 $lAcordoValido = false;
-                $sMessagemInvalido  = "Acordo sem vinculo com licitação/Processo de compras";
+                $sMessagemInvalido  = "Acordo sem vinculo com licitaÃ§Ã£o/Processo de compras";
             }
 
             if ($oParam->contrato->iOrigem != "1") {
@@ -565,20 +565,20 @@ switch ($oParam->exec) {
             if ($oParam->contrato->iOrigem == 1 && $oParam->contrato->iTipoOrigem == 2) {
                 if ($oParam->contrato->iLicitacao == "") {
                     $lAcordoValido = false;
-                    $sMessagemInvalido = "Acordo sem vinculo com Licitação.";
+                    $sMessagemInvalido = "Acordo sem vinculo com LicitaÃ§Ã£o.";
                 }
             }
 
             if ($oParam->contrato->iOrigem == 1 && $oParam->contrato->iTipoOrigem == 4) {
                 if ($oParam->contrato->iAdesaoregpreco == "") {
                     $lAcordoValido = false;
-                    $sMessagemInvalido = "Acordo sem vinculo com Adesão de Registro de Preço.";
+                    $sMessagemInvalido = "Acordo sem vinculo com AdesÃ£o de Registro de PreÃ§o.";
                 }
             }
 
             if ($oParam->contrato->dtPublicacao < $oParam->contrato->dtAssinatura) {
                 $lAcordoValido = false;
-                $sMessagemInvalido = "A data de publicação do acordo {$oParam->contrato->dtPublicacao} não pode ser anterior a data de assinatura {$oParam->contrato->dtAssinatura}.";
+                $sMessagemInvalido = "A data de publicaÃ§Ã£o do acordo {$oParam->contrato->dtPublicacao} nÃ£o pode ser anterior a data de assinatura {$oParam->contrato->dtAssinatura}.";
             }
 
             if ($lAcordoValido) {
@@ -587,7 +587,7 @@ switch ($oParam->exec) {
                 $dtsession   = date("Y-m-d", db_getsession("DB_datausu"));
 
                 if ($dtsession < $z09_datacadastro) {
-                    $sMessagemInvalido = "Usuário: A data de cadastro do CGM informado é superior a data do procedimento que está sendo realizado. Corrija a data de cadastro do CGM e tente novamente!";
+                    $sMessagemInvalido = "UsuÃ¡rio: A data de cadastro do CGM informado Ã© superior a data do procedimento que estÃ¡ sendo realizado. Corrija a data de cadastro do CGM e tente novamente!";
                     $lAcordoValido = true;
                 }
 
@@ -599,7 +599,7 @@ switch ($oParam->exec) {
                 db_fieldsmemory($resultControle, 0);
 
                 if ($dtsession <= $c99_datapat) {
-                    $sMessagemInvalido = "O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.";
+                    $sMessagemInvalido = "O perÃ­odo jÃ¡ foi encerrado para envio do SICOM. Verifique os dados do lanÃ§amento e entre em contato com o suporte.";
                     $lAcordoValido = true;
                 }
             }
@@ -613,7 +613,7 @@ switch ($oParam->exec) {
 
             if (in_array($oParam->contrato->iTipoOrigem, array(2, 3))) {
                 if ($iNatureza != $iNaturezaAcordo) {
-                    throw new Exception('Há divergência entre a Natureza do Contrato e a Natureza da Licitação!');
+                    throw new Exception('HÃ¡ divergÃªncia entre a Natureza do Contrato e a Natureza da LicitaÃ§Ã£o!');
                 }
             }
 
@@ -674,7 +674,7 @@ switch ($oParam->exec) {
                 $oContrato->save();
 
                 /*
-                 * verificamos se existe empenhos a serem vinculados na seção
+                 * verificamos se existe empenhos a serem vinculados na seÃ§Ã£o
                  */
                 $oDaoEmpEmpenhoContrato   = db_utils::getDao("empempenhocontrato");
                 $oDaoAcordoPosicao        = db_utils::getDao("acordoposicao");
@@ -890,7 +890,7 @@ switch ($oParam->exec) {
 
             foreach ($oPosicao->getItens() as $item) {
                 if ($item->getMaterial()->getMaterial() == $oParam->material->iMaterial) {
-                    throw new Exception("Material já vinculado.");
+                    throw new Exception("Material jÃ¡ vinculado.");
                 }
             }
             //                    var_dump($oParam->material->aPeriodo);
@@ -1074,7 +1074,7 @@ switch ($oParam->exec) {
             } else {
 
                 $oRetorno->status = 2;
-                $oRetorno->message = urlencode("O item selecionado não foi encontrado.");
+                $oRetorno->message = urlencode("O item selecionado nÃ£o foi encontrado.");
             }
         }
         break;
@@ -1121,7 +1121,7 @@ switch ($oParam->exec) {
             } else {
 
                 $oRetorno->status = 2;
-                $oRetorno->message = urlencode("O item selecionado não foi encontrado.");
+                $oRetorno->message = urlencode("O item selecionado nÃ£o foi encontrado.");
             }
         }
         break;
@@ -1160,7 +1160,7 @@ switch ($oParam->exec) {
             } else {
 
                 $oRetorno->status = 2;
-                $oRetorno->message = urlencode("O item selecionado não foi encontrado.");
+                $oRetorno->message = urlencode("O item selecionado nÃ£o foi encontrado.");
             }
             $oRetorno->dotacoes = $oItem->getDotacoes();
         }
@@ -1434,12 +1434,12 @@ switch ($oParam->exec) {
         $oDocumento = new AcordoDocumento($oParam->iCodigoDocumento);
         db_inicio_transacao();
 
-        // Abrindo o objeto no modo leitura "r" passando como parâmetro o OID.
+        // Abrindo o objeto no modo leitura "r" passando como parÃ¢metro o OID.
         $sNomeArquivo = "tmp/{$oDocumento->getNomeArquivo()}";
         pg_lo_export($conn, $oDocumento->getArquivo(), $sNomeArquivo);
         db_fim_transacao(true);
         $oRetorno->nomearquivo = $sNomeArquivo;
-        // Setando Cabeçalho do browser para interpretar que o binário que será carregado é de uma foto do tipo JPEG.
+        // Setando CabeÃ§alho do browser para interpretar que o binÃ¡rio que serÃ¡ carregado Ã© de uma foto do tipo JPEG.
         break;
 
     case "buscaPeriodosItem":
@@ -1456,7 +1456,7 @@ switch ($oParam->exec) {
         /**
          * Exclui um acordo
          *
-         * @param integer iAcordo - Código do Acordo
+         * @param integer iAcordo - CÃ³digo do Acordo
          */
     case 'excluirAcordo':
 
@@ -1499,7 +1499,7 @@ switch ($oParam->exec) {
         break;
 }
 /**
- * Função que verifica se a data de assinatura do acordo é anterior a data de homologação da licitação
+ * FunÃ§Ã£o que verifica se a data de assinatura do acordo Ã© anterior a data de homologaÃ§Ã£o da licitaÃ§Ã£o
  * @param $iLicitacao
  * @param $sDataAssinatura
  * @param $bDispensa
