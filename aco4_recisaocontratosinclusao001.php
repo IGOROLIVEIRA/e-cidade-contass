@@ -146,7 +146,7 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
     <tr>
       <td valign="top" align="center">
         <fieldset>
-          <legend><b>Rescisão do Acordo</b></legend>
+          <legend><b>RescisÃ£o do Acordo</b></legend>
           <table align="center" border="0">
             <tr>
               <td title="<?= @$Tac16_sequencial ?>" align="left">
@@ -194,7 +194,7 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
 
             <tr id="trdatareferencia" style="display: none;">
               <td title="<?= @$Tac10_datareferencia ?>" align="left">
-                <b>Data de Referência:</b>
+                <b>Data de ReferÃªncia:</b>
               </td>
               <td align="left">
                 <?
@@ -226,10 +226,22 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
               <td colspan="3">
                 <fieldset>
                   <legend>
-                    <b>Observação</b>
+                    <b>ObservaÃ§Ã£o</b>
                   </legend>
                   <?
                   db_textarea('ac10_obs', 5, 66, $Iac10_obs, true, 'text', $db_opcao, "");
+                  ?>
+                </fieldset>
+              </td>
+            </tr>
+            <tr id="justificativa" style="display:none;">
+              <td colspan="3">
+                <fieldset>
+                  <legend>
+                    <b>Justificativa</b>
+                  </legend>
+                  <?
+                  db_textarea('ac10_justificativa', 5, 66, $Iac10_justificativa, true, 'text', $db_opcao, "");
                   ?>
                 </fieldset>
               </td>
@@ -309,10 +321,30 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
    * Retorno da pesquisa acordos
    */
   function js_mostraacordo1(chave1, chave2) {
+    var oParam = new Object();
+    oParam.exec = "getleilicitacao";
+    oParam.licitacao = chave1;
 
+    var oAjax = new Ajax.Request(sUrl, {
+      method: 'post',
+      parameters: 'json=' + js_objectToJson(oParam),
+      onComplete: js_retornoLeiLicitacao
+    });
     $('ac16_sequencial').value = chave1;
     $('ac16_resumoobjeto').value = chave2;
     db_iframe_acordo.hide();
+  }
+
+  function js_retornoLeiLicitacao(oAjax) {
+
+  
+
+    var oRetorno = eval("(" + oAjax.responseText + ")");
+    if(oRetorno.lei==1){
+      $('justificativa').style.display = '';
+    }else{
+      $('justificativa').style.display = 'none';
+    }
   }
 
   /**
@@ -322,19 +354,25 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
 
     if ($('ac16_sequencial').value == '') {
 
-      alert('Acordo não informado!');
+      alert('Acordo nÃ£o informado!');
       return false;
     }
 
     if ($('ac10_datamovimento').value == '') {
 
-      alert('Data não informada!');
+      alert('Data nÃ£o informada!');
       return false;
     }
 
     if ($('ac10_datareferencia').value == '' && document.getElementById("trdatareferencia").style.display == 'contents') {
 
-      alert('Data de Referencia não informada!');
+      alert('Data de ReferÃªncia nÃ£o informada!');
+      return false;
+    }
+
+    if ($('ac10_justificativa').value == '' && document.getElementById("justificativa").style.display != 'none') {
+
+      alert('UsuÃ¡rio: Este contrato  decorrente de LicitÃ§Ã£o e estÃ¡ utilizando a lei n 14133/2021, sendo assim,  necessÃ¡rio o preenchimento do campo Justificativa.');
       return false;
     }
 
@@ -351,33 +389,33 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
     var data = new Date(partesData[0], partesData[1] - 1, partesData[2]);
     var dataPatrimonial = data;
 
-    //    DATA DE REFERÊNCIA
+    //    DATA DE REFERNCIA
     var partesData = $('ac10_datareferencia').value.split("/");
     var dataReferencia = new Date(partesData[2], partesData[1] - 1, partesData[0]);
 
 
     if (dataInserida <= dataPatrimonial && $('ac10_datareferencia').value == '') {
       document.getElementById("trdatareferencia").style.display = 'contents';
-      alert("O período já foi encerrado para envio do SICOM. Preencha o campo Data de Referência com uma data no mês subsequente.");
+      alert("O perÃ­odo jÃ¡ foi encerrado para envio do SICOM. Preencha o campo Data de ReferÃªncia com uma data no mÃªs subsequente.");
       return;
     }
 
     if ($F('ac10_datareferencia').value != "") {
 
       if (dataReferencia.getMonth() == dataPatrimonial.getMonth() && dataReferencia.getFullYear() == dataPatrimonial.getFullYear()) {
-        alert("Usuário: A data de referência deverá ser no mês posterior ao mês da data inserida.");
+        alert("UsuÃ¡rio: A data de referÃªncia dever ser no mÃªs posterior ao mÃªs da data inserida.");
         return;
       }
 
       if (dataReferencia <= dataPatrimonial) {
-        alert("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
+        alert("O perÃ­odo jÃ¡ foi encerrado para envio do SICOM. Verifique os dados do lanÃ§amento e entre em contato com o suporte.");
         return;
       }
 
     }
 
 
-    js_divCarregando('Aguarde incluindo recisão...', 'msgBoxRecisaoContrato');
+    js_divCarregando('Aguarde incluindo recisÃ£o...', 'msgBoxRecisaoContrato');
 
     var oParam = new Object();
     oParam.exec = "rescindirContrato";
@@ -386,6 +424,7 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
     oParam.valorrescisao = $F('ac16_valorrescisao');
     oParam.observacao = encodeURIComponent(tagString($F('ac10_obs')));
     oParam.datareferencia = $F('ac10_datareferencia');
+    oParam.justificativa = $F('ac10_justificativa');
 
     var oAjax = new Ajax.Request(sUrl, {
       method: 'post',
@@ -395,7 +434,7 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
   }
 
   /**
-   * Retorna os dados da inclusão
+   * Retorna os dados da incluso
    */
   function js_retornoDadosRecisao(oAjax) {
 
@@ -408,6 +447,7 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
     $('ac10_datamovimento').value = "";
     $('ac10_datareferencia').value = "";
     $('ac16_valorrescisao').value = "";
+    $('ac10_justificativa').value = "";
     $('ac10_obs').value = "";
     document.getElementById("trdatareferencia").style.display = 'none'
 
@@ -417,7 +457,7 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
       return false;
     } else {
 
-      alert("Inclusão efetuada com Sucesso.");
+      alert("InclusÃ£o efetuada com Sucesso.");
       return true;
     }
   }
