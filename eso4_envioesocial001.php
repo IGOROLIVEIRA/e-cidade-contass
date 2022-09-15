@@ -266,6 +266,7 @@ $mesfolha = DBPessoal::getMesFolha();
         oParam.modo = $("modo").value;
         oParam.dtalteracao = $("dt_alteracao").value;
         oParam.indapuracao = $("indapuracao").value;
+        oParam.tppgto = $("tppgto").value;
         var oAjax = new Ajax.Request("eso4_esocialapi.RPC.php", {
             method: 'post',
             parameters: 'json=' + Object.toJSON(oParam),

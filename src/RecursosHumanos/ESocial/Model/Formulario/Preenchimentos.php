@@ -1126,7 +1126,7 @@ WHERE rh30_vinculo IN ('I',
                                    where rh30_vinculo in ('I','P') ";
 
         if ($matricula != null) {
-            $sql .= "and cgm.z01_cgccpf in (select z01_cgccpf from cgm join rhpessoal on cgm.z01_numcgm = rhpessoal.rh01_numcgm where rh01_regist in ($matricula)) ";
+            $sql .= " and cgm.z01_cgccpf in (select z01_cgccpf from cgm join rhpessoal on cgm.z01_numcgm = rhpessoal.rh01_numcgm where rh01_regist in ($matricula)) ";
         }
         $rs = \db_query($sql);
         // echo $sql;
@@ -1147,27 +1147,7 @@ WHERE rh30_vinculo IN ('I',
      */
     public function buscarPreenchimentoS1210($codigoFormulario, $matricula = null)
     {
-        $sql = "SELECT
-        distinct
-        1 as tpInsc,
-        cgc as nrInsc,
-        z01_cgccpf as cpfTrab,
-        rh51_indicadesconto as indMV,
-        case when length(rh51_cgcvinculo) = 14 then 1
-        when length(rh51_cgcvinculo) = 11 then 2
-        end as tpInsc2,
-        rh51_cgcvinculo as nrInsc2,
-        rh51_basefo as vlrRemunOE,
-        h13_categoria as codCateg,
-        'LOTA1' as codLotacao,
-        rh01_regist as matricula,
-        case when rh02_ocorre = '2' then 2
-        when rh02_ocorre = '3' then 3
-        when rh02_ocorre = '4' then 4
-        else '1'
-        end as grauExp
-    from
-        rhpessoal
+        $sql = "SELECT distinct z01_cgccpf from rhpessoal
     left join rhpessoalmov on
         rh02_anousu = fc_getsession('DB_anousu')::int
         and rh02_mesusu = date_part('month', fc_getsession('DB_datausu')::date)
@@ -1240,26 +1220,15 @@ WHERE rh30_vinculo IN ('I',
                                       and r33_mesusu = date_part('month',fc_getsession('DB_datausu')::date)
                                       and r33_instit = fc_getsession('DB_instit')::int
                                ) as x on r33_codtab = rhpessoalmov.rh02_tbprev+2
-    where h13_categoria in ('101', '106', '111', '301', '302', '303', '305', '306', '309', '312', '313', '902','701','712','771','901','711','410')
-    and rh30_vinculo = 'A'
-    and r33_tiporegime = '2'
-    and
-	exists (SELECT
-	1
-from
-	gerfsal
-where
-	r14_anousu = fc_getsession('DB_anousu')::int
-	and r14_mesusu = date_part('month', fc_getsession('DB_datausu')::date)
-	and r14_instit = fc_getsession('DB_instit')::int
-	and r14_regist = rhpessoal.rh01_regist)
-    and rh05_recis is null";
+    where 1=1";
 
         if ($matricula != null) {
-            $sql .= "and rh01_regist in ($matricula) ";
+            $sql .= " and cgm.z01_cgccpf in (select z01_cgccpf from cgm join rhpessoal on cgm.z01_numcgm = rhpessoal.rh01_numcgm where rh01_regist in ($matricula)) ";
         }
         $rs = \db_query($sql);
-
+        // echo $sql;
+        // db_criatabela($rs);
+        // exit;
         if (!$rs) {
             throw new \Exception("Erro ao buscar os preenchimentos do S1210");
         }
