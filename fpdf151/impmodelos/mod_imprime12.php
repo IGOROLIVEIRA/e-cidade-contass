@@ -165,7 +165,10 @@
 	    $valoritemuni            = db_formatar(pg_result($this->recorddositens, $ii, 'e62_vlrun'), 'v', " ", $this->casadec);
 	    $valoritemtot            = pg_result($this->recorddositens, $ii, 'e37_vlranu');
 	    $nValorItemTotalAnulado += $valoritemtot;
-	    $valoritemtot            = db_formatar($valoritemtot, 'f');
+        $valoritemtot            = db_formatar($valoritemtot, 'f');
+        if(pg_result($this->recorddositens, $ii, 'e62_servicoquantidade') == 'f'){
+            $valoritemuni = $valoritemtot;
+        }
 
 	  } else {
 

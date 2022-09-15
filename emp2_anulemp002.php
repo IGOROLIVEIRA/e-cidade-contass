@@ -233,6 +233,7 @@ for($i = 0;$i < pg_numrows($result02);$i++){
 
    $pdf1->resumo           = $e60_resumo;
    $pdf1->licitacao        = $e60_codtipo;
+
    $pdf1->recorddositens   = $resultitem;
    $pdf1->linhasdositens   = pg_numrows($resultitem);
 // $pdf1->quantitem        = "e62_quant";
