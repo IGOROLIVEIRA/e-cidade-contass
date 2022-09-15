@@ -7,6 +7,7 @@ use \ECidade\V3\Extension\Registry;
 require_once("interfaces/iTarefa.interface.php");
 require_once("model/configuracao/Task.model.php");
 require_once("classes/db_esocialenvio_classe.php");
+require_once("model/pessoal/ImportarDadosEvt5001.model.php");
 
 class FilaESocialTask extends Task implements iTarefa
 {
@@ -127,7 +128,7 @@ class FilaESocialTask extends Task implements iTarefa
             /**
              * Esperar alguns segundos pois em muitos casos, o lote ainda não havia sido processado
              */
-            sleep(5);
+            sleep(7);
             $exportar = new ESocial(Registry::get('app.config'), "consulta.php");
             $exportar->setDados($dados);
             $retorno = $exportar->request();
@@ -140,6 +141,7 @@ class FilaESocialTask extends Task implements iTarefa
             }
 
             $this->incluirRecido($dadosEnvio->rh213_sequencial, $exportar->getNumeroRecibo());
+            $this->importarEvt5001($exportar->getObjXmlEvt5001(), $dadosEnvio->rh213_evento);
             echo "{$exportar->getDescResposta()} Recibo de Envio {$exportar->getNumeroRecibo()}";
         } catch (\Exception $e) {
             $dao->setSituacaoErroEnvio($dadosEnvio->rh213_sequencial, $e->getMessage());
@@ -235,6 +237,7 @@ class FilaESocialTask extends Task implements iTarefa
                     }
 
                     $this->incluirRecido($dadosConsulta->rh213_sequencial, $exportar->getNumeroRecibo());
+                    $this->importarEvt5001($exportar->getObjXmlEvt5001(), $dadosConsulta->rh213_evento);
                     echo "{$exportar->getDescResposta()} Recibo de Envio {$exportar->getNumeroRecibo()}";
                 }
             } catch (\Exception $e) {
@@ -278,5 +281,14 @@ class FilaESocialTask extends Task implements iTarefa
             return 3;
         }
         throw new Exception("Não foi possível encontrar a fase deste evento.");
+    }
+
+    private function importarEvt5001($oXml, $evento)
+    {
+        if (!in_array($evento, array("1200" ,"2299" ,"2399"))) {
+            return;
+        }
+        $oImportarDadosEvt5001 = new ImportarDadosEvt5001(null, $oXml);
+        $oImportarDadosEvt5001->processar();
     }
 }

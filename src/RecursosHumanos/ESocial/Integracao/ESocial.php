@@ -206,4 +206,17 @@ class ESocial
         return (string) $this->httpRequest->getObjXml()->retornoEventos->evento->retornoEvento->eSocial->retornoEvento->processamento->ocorrencias->ocorrencia->descricao;
     }
 
+    /**
+     * Retorna o objeto xml do evento 5001 retornado pelo envio dos eventos 1200,2299,2399
+     *
+     * @return object
+     */
+    public function getObjXmlEvt5001()
+    {
+        if (current(current($this->httpRequest->getObjXml()->retornoEventos->evento->tot->attributes())) == "S5001") {
+            return $this->httpRequest->getObjXml()->retornoEventos->evento->tot->eSocial;
+        }
+        return null;
+    }
+
 }

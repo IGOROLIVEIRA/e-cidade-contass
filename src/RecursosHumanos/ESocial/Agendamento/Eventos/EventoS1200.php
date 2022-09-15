@@ -40,6 +40,10 @@ class EventoS1200 extends EventoBase
 
             $aDadosPorMatriculas = $this->buscarDadosPorMatricula($oDados->z01_cgccpf);
 
+            if ($aDadosPorMatriculas[0]->cpftrab == null) {
+                continue;
+            }
+
             $oDadosAPI                                   = new \stdClass;
             $oDadosAPI->evtRemun                      = new \stdClass;
             $oDadosAPI->evtRemun->sequencial          = $iSequencial;
@@ -49,7 +53,7 @@ class EventoS1200 extends EventoBase
 
             $oDadosAPI->evtRemun->indapuracao         = $this->indapuracao;
             $oDadosAPI->evtRemun->perapur             = $ano . '-' . $mes;
-            if ($oDados->indapuracao == 2) {
+            if ($this->indapuracao == 2) {
                 $oDadosAPI->evtRemun->perapur         = $mes;
             }
             $oDadosAPI->evtRemun->cpftrab             = $aDadosPorMatriculas[0]->cpftrab;
@@ -69,88 +73,6 @@ class EventoS1200 extends EventoBase
                 $oDadosAPI->evtRemun->infomv->remunoutrempr = $aRemunoutrempr;
             }
 
-            // for ($iCont = 0; $iCont < count($aDadosPorMatriculas); $iCont++) {
-            //     echo $iCont . ' ';
-            //     echo $aDadosPorMatriculas[$iCont]->matricula . ' ';
-            // }
-            // exit;
-
-            // $std = new \stdClass();
-            // $std->dmdev[0] = new \stdClass(); //Obrigatório
-            // //Identificação de cada um dos demonstrativos de valores devidos ao trabalhador.
-            // $std->dmdev[0]->idedmdev = '1';
-            // $std->dmdev[0]->codcateg = '111'; //Obrigatório
-
-            // $std->dmdev[0]->ideestablot[0] = new \stdClass(); //Opcional
-            // $std->dmdev[0]->ideestablot[0]->tpinsc = "1"; //Obrigatório
-            // $std->dmdev[0]->ideestablot[0]->nrinsc = '123'; //Obrigatório
-            // $std->dmdev[0]->ideestablot[0]->codlotacao = 'LOTA1'; //Obrigatório
-
-            // // for ($iCont = 0; $iCont < 2; $iCont++) {
-            // //     $std->dmdev[0]->ideestablot[0]->remunperapur[$iCont] = new \stdClass(); //Obrigatório
-            // //     $std->dmdev[0]->ideestablot[0]->remunperapur[$iCont]->matricula = $iCont; //Opcional
-            // // }
-
-            // $std->dmdev[0]->ideestablot[0]->remunperapur[0] = new \stdClass(); //Obrigatório
-            // $std->dmdev[0]->ideestablot[0]->remunperapur[0]->matricula = '20'; //Opcional
-
-
-
-            // $std->dmdev[0]->ideestablot[0]->remunperapur[0]->itensremun[0] = new \stdClass(); //Obrigatório
-            // $std->dmdev[0]->ideestablot[0]->remunperapur[0]->itensremun[0]->codrubr = 'R001'; //Obrigatório
-            // $std->dmdev[0]->ideestablot[0]->remunperapur[0]->itensremun[1] = new \stdClass(); //Obrigatório
-            // $std->dmdev[0]->ideestablot[0]->remunperapur[0]->itensremun[1]->codrubr = 'R002'; //Obrigatório
-
-            // $std->dmdev[0]->ideestablot[0]->remunperapur[1] = new \stdClass(); //Obrigatório
-            // $std->dmdev[0]->ideestablot[0]->remunperapur[1]->matricula = '21'; //Opcional
-
-            // $std->dmdev[0]->ideestablot[0]->remunperapur[1]->itensremun[0] = new \stdClass(); //Obrigatório
-            // $std->dmdev[0]->ideestablot[0]->remunperapur[1]->itensremun[0]->codrubr = 'R001'; //Obrigatório
-            // $std->dmdev[0]->ideestablot[0]->remunperapur[1]->itensremun[1] = new \stdClass(); //Obrigatório
-            // $std->dmdev[0]->ideestablot[0]->remunperapur[1]->itensremun[1]->codrubr = 'R001'; //Obrigatório
-
-
-            // //-------------------------------
-
-            // $std->dmdev[1] = new \stdClass(); //Obrigatório
-            // //Identificação de cada um dos demonstrativos de valores devidos ao trabalhador.
-            // $std->dmdev[1]->idedmdev = '2';
-            // $std->dmdev[1]->codcateg = '111'; //Obrigatório
-
-            // $std->dmdev[1]->ideestablot[0] = new \stdClass(); //Opcional
-            // $std->dmdev[1]->ideestablot[0]->tpinsc = "1"; //Obrigatório
-            // $std->dmdev[1]->ideestablot[0]->nrinsc = '123'; //Obrigatório
-            // $std->dmdev[1]->ideestablot[0]->codlotacao = 'LOTA1'; //Obrigatório
-
-            // // for ($iCont = 0; $iCont < 2; $iCont++) {
-            // //     $std->dmdev[1]->ideestablot[0]->remunperapur[$iCont] = new \stdClass(); //Obrigatório
-            // //     $std->dmdev[1]->ideestablot[0]->remunperapur[$iCont]->matricula = $iCont; //Opcional
-            // // }
-
-            // $std->dmdev[1]->ideestablot[0]->remunperapur[0] = new \stdClass(); //Obrigatório
-            // $std->dmdev[1]->ideestablot[0]->remunperapur[0]->matricula = '20'; //Opcional
-
-
-
-            // $std->dmdev[1]->ideestablot[0]->remunperapur[0]->itensremun[0] = new \stdClass(); //Obrigatório
-            // $std->dmdev[1]->ideestablot[0]->remunperapur[0]->itensremun[0]->codrubr = 'T001'; //Obrigatório
-            // $std->dmdev[1]->ideestablot[0]->remunperapur[0]->itensremun[1] = new \stdClass(); //Obrigatório
-            // $std->dmdev[1]->ideestablot[0]->remunperapur[0]->itensremun[1]->codrubr = 'T002'; //Obrigatório
-
-            // $std->dmdev[1]->ideestablot[0]->remunperapur[1] = new \stdClass(); //Obrigatório
-            // $std->dmdev[1]->ideestablot[0]->remunperapur[1]->matricula = '21'; //Opcional
-
-            // $std->dmdev[1]->ideestablot[0]->remunperapur[1]->itensremun[0] = new \stdClass(); //Obrigatório
-            // $std->dmdev[1]->ideestablot[0]->remunperapur[1]->itensremun[0]->codrubr = 'T001'; //Obrigatório
-            // $std->dmdev[1]->ideestablot[0]->remunperapur[1]->itensremun[1] = new \stdClass(); //Obrigatório
-            // $std->dmdev[1]->ideestablot[0]->remunperapur[1]->itensremun[1]->codrubr = 'T001'; //Obrigatório
-
-
-
-            // echo '<pre>';
-            // var_dump($std);
-            // exit;
-
             $std = new \stdClass();
             $seqdmdev = 0;
             for ($iCont = 0; $iCont < count($aDadosPorMatriculas); $iCont++) {
@@ -158,7 +80,18 @@ class EventoS1200 extends EventoBase
                 for ($iCont2 = 0; $iCont2 < count($aIdentificador); $iCont2++) {
                     $std->dmdev[$seqdmdev] = new \stdClass(); //Obrigatório
                     //Identificação de cada um dos demonstrativos de valores devidos ao trabalhador.
-                    $std->dmdev[$seqdmdev]->idedmdev = uniqid(); //$aIdentificador[$iCont2]->idedmdev; //Obrigatório
+                    if ($aIdentificador[$iCont2]->idedmdev == 1) {
+                        $std->dmdev[$seqdmdev]->idedmdev = $aDadosPorMatriculas[$iCont]->matricula . 'gerfsal'; //uniqid(); //$aIdentificador[$iCont2]->idedmdev; //Obrigatório
+                    }
+                    if ($aIdentificador[$iCont2]->idedmdev == 2) {
+                        $std->dmdev[$seqdmdev]->idedmdev = $aDadosPorMatriculas[$iCont]->matricula . 'gerfres'; //uniqid(); //$aIdentificador[$iCont2]->idedmdev; //Obrigatório
+                    }
+                    if ($aIdentificador[$iCont2]->idedmdev == 3) {
+                        $std->dmdev[$seqdmdev]->idedmdev = $aDadosPorMatriculas[$iCont]->matricula . 'gerfcom'; //uniqid(); //$aIdentificador[$iCont2]->idedmdev; //Obrigatório
+                    }
+                    if ($aIdentificador[$iCont2]->idedmdev == 4) {
+                        $std->dmdev[$seqdmdev]->idedmdev = $aDadosPorMatriculas[$iCont]->matricula . 'gerfs13'; //uniqid(); //$aIdentificador[$iCont2]->idedmdev; //Obrigatório
+                    }
                     $std->dmdev[$seqdmdev]->codcateg = $aDadosPorMatriculas[$iCont]->codcateg; //Obrigatório
 
                     //Identificação do estabelecimento e da lotação nos quais o
@@ -168,26 +101,24 @@ class EventoS1200 extends EventoBase
                     $std->dmdev[$seqdmdev]->ideestablot[0]->nrinsc = $aDadosPorMatriculas[$iCont]->nrinsc; //Obrigatório
                     $std->dmdev[$seqdmdev]->ideestablot[0]->codlotacao = 'LOTA1'; //Obrigatório
 
-                    //for ($iCont3 = 0; $iCont3 < count($aDadosPorMatriculas); $iCont3++) {
                     //Informações relativas à remuneração do trabalhador no período de apuração.
-                    $std->dmdev[$seqdmdev]->ideestablot[0]->remunperapur[$iCont2] = new \stdClass(); //Obrigatório
-                    $std->dmdev[$seqdmdev]->ideestablot[0]->remunperapur[$iCont2]->matricula = $aDadosPorMatriculas[$iCont]->matricula; //Opcional
+                    $std->dmdev[$seqdmdev]->ideestablot[0]->remunperapur[0] = new \stdClass(); //Obrigatório
+                    $std->dmdev[$seqdmdev]->ideestablot[0]->remunperapur[0]->matricula = $aDadosPorMatriculas[$iCont]->matricula; //Opcional
 
                     $aDadosValoreRubrica = $this->buscarValorRubrica($aDadosPorMatriculas[$iCont]->matricula, $aDadosPorMatriculas[$iCont]->rh30_regime, $aIdentificador[$iCont2]->idedmdev);
 
                     for ($iCont4 = 0; $iCont4 < count($aDadosValoreRubrica); $iCont4++) {
                         //Rubricas que compõem a remuneração do trabalhador.
-                        $std->dmdev[$seqdmdev]->ideestablot[0]->remunperapur[$iCont2]->itensremun[$iCont4] = new \stdClass(); //Obrigatório
-                        $std->dmdev[$seqdmdev]->ideestablot[0]->remunperapur[$iCont2]->itensremun[$iCont4]->codrubr = $aDadosValoreRubrica[$iCont4]->codrubr; //Obrigatório
-                        $std->dmdev[$seqdmdev]->ideestablot[0]->remunperapur[$iCont2]->itensremun[$iCont4]->idetabrubr = $aDadosValoreRubrica[$iCont4]->idetabrubr; //Obrigatório
-                        $std->dmdev[$seqdmdev]->ideestablot[0]->remunperapur[$iCont2]->itensremun[$iCont4]->vrunit = $aDadosValoreRubrica[$iCont4]->vrrubr; //Obrigatório
-                        $std->dmdev[$seqdmdev]->ideestablot[0]->remunperapur[$iCont2]->itensremun[$iCont4]->vrrubr = $aDadosValoreRubrica[$iCont4]->vrrubr; //Obrigatório
-                        $std->dmdev[$seqdmdev]->ideestablot[0]->remunperapur[$iCont2]->itensremun[$iCont4]->indapurir = $aDadosValoreRubrica[$iCont4]->indapurir; //Opcional
+                        $std->dmdev[$seqdmdev]->ideestablot[0]->remunperapur[0]->itensremun[$iCont4] = new \stdClass(); //Obrigatório
+                        $std->dmdev[$seqdmdev]->ideestablot[0]->remunperapur[0]->itensremun[$iCont4]->codrubr = $aDadosValoreRubrica[$iCont4]->codrubr; //Obrigatório
+                        $std->dmdev[$seqdmdev]->ideestablot[0]->remunperapur[0]->itensremun[$iCont4]->idetabrubr = $aDadosValoreRubrica[$iCont4]->idetabrubr; //Obrigatório
+                        $std->dmdev[$seqdmdev]->ideestablot[0]->remunperapur[0]->itensremun[$iCont4]->vrunit = $aDadosValoreRubrica[$iCont4]->vrrubr; //Obrigatório
+                        $std->dmdev[$seqdmdev]->ideestablot[0]->remunperapur[0]->itensremun[$iCont4]->vrrubr = $aDadosValoreRubrica[$iCont4]->vrrubr; //Obrigatório
+                        $std->dmdev[$seqdmdev]->ideestablot[0]->remunperapur[0]->itensremun[$iCont4]->indapurir = $aDadosValoreRubrica[$iCont4]->indapurir; //Opcional
 
-                        $std->dmdev[$seqdmdev]->ideestablot[0]->remunperapur[$iCont2]->infoagnocivo->grauexp = $aDadosPorMatriculas[$iCont]->grauexp; //Obrigatório
+                        $std->dmdev[$seqdmdev]->ideestablot[0]->remunperapur[0]->infoagnocivo->grauexp = $aDadosPorMatriculas[$iCont]->grauexp; //Obrigatório
 
                     }
-                    //}
                     $seqdmdev++;
                 }
             }
@@ -301,7 +232,7 @@ class EventoS1200 extends EventoBase
                                       and r33_mesusu = date_part('month',fc_getsession('DB_datausu')::date)
                                       and r33_instit = fc_getsession('DB_instit')::int
                                ) as x on r33_codtab = rhpessoalmov.rh02_tbprev+2
-    where h13_categoria in ('101', '106', '111', '301', '302', '303', '305', '306', '309', '312', '313', '902')
+    where h13_categoria in ('101', '106', '111', '301', '302', '303', '305', '306', '309', '312', '313', '902','701','712','771','901','711')
     and rh30_vinculo = 'A'
     and r33_tiporegime = '1'
     and cgm.z01_cgccpf = '$cpf'
@@ -359,7 +290,7 @@ where
         if ($ponto == 1)
             $opcao = 'salario';
         if ($ponto == 2)
-            $opcao = 'gerfres';
+            $opcao = 'rescisao';
         if ($ponto == 3)
             $opcao = 'complementar';
         if ($ponto == 4)
@@ -552,7 +483,7 @@ where
             $rsIdentificadores = db_query($sql);
             // echo $sql;
             // db_criatabela($rsIdentificadores);
-            //exit;
+            // exit;
             if (pg_num_rows($rsIdentificadores) > 0) {
                 for ($iCont = 0; $iCont < pg_num_rows($rsIdentificadores); $iCont++) {
                     $oIdentificadores = \db_utils::fieldsMemory($rsIdentificadores, $iCont);
@@ -560,7 +491,7 @@ where
                     $aItens[] = $oIdentificadores;
                 }
             }
-            return $aItens;
         }
+        return $aItens;
     }
 }
