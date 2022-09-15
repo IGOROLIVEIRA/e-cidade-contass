@@ -324,9 +324,9 @@ BEGIN
             if V_INSCR = true then
 
                 select q148_perc, q148_receit, q147_tipoisen
-                into nPercentualIsencao, iReceitaIsencao, iTipoIsencao
+                    into nPercentualIsencao, iReceitaIsencao, iTipoIsencao
                 from issisen
-                         inner join isstipoisen on q148_tipo = q147_tipo
+                    inner join isstipoisen on q148_tipo = q147_tipo
                 where q148_inscr = V_Y71_INSCR
                   and fc_getsession('DB_datausu')::date between q148_dtini and q148_dtfim
                 order by q148_codigo
