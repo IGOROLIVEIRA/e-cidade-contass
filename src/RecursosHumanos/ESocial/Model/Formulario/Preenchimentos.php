@@ -931,7 +931,7 @@ WHERE rh30_vinculo IN ('I',
         and r33_tiporegime = '1' ";
 
         if ($matricula != null) {
-            $sql .= "where cgm.z01_cgccpf in (select z01_cgccpf from cgm join rhpessoal on cgm.z01_numcgm = rhpessoal.rh01_numcgm where rh01_regist in ($matricula)) ";
+            $sql .= "and cgm.z01_cgccpf in (select z01_cgccpf from cgm join rhpessoal on cgm.z01_numcgm = rhpessoal.rh01_numcgm where rh01_regist in ($matricula)) ";
         }
         $rs = \db_query($sql);
         // echo $sql;
@@ -1029,7 +1029,7 @@ WHERE rh30_vinculo IN ('I',
                 and r33_tiporegime = '2' ";
 
         if ($matricula != null) {
-            $sql .= "where cgm.z01_cgccpf in (select z01_cgccpf from cgm join rhpessoal on cgm.z01_numcgm = rhpessoal.rh01_numcgm where rh01_regist in ($matricula)) ";
+            $sql .= "and cgm.z01_cgccpf in (select z01_cgccpf from cgm join rhpessoal on cgm.z01_numcgm = rhpessoal.rh01_numcgm where rh01_regist in ($matricula)) ";
         }
         $rs = \db_query($sql);
         // echo $sql;
@@ -1126,7 +1126,7 @@ WHERE rh30_vinculo IN ('I',
                                    where rh30_vinculo in ('I','P') ";
 
         if ($matricula != null) {
-            $sql .= "where cgm.z01_cgccpf in (select z01_cgccpf from cgm join rhpessoal on cgm.z01_numcgm = rhpessoal.rh01_numcgm where rh01_regist in ($matricula)) ";
+            $sql .= "and cgm.z01_cgccpf in (select z01_cgccpf from cgm join rhpessoal on cgm.z01_numcgm = rhpessoal.rh01_numcgm where rh01_regist in ($matricula)) ";
         }
         $rs = \db_query($sql);
         // echo $sql;
