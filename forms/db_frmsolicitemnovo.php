@@ -570,7 +570,20 @@ if ((isset($opcao) && $opcao == "alterar")) {
 
   function js_adicionarItem() {
 
+    if (document.getElementById('pc17_unid2').style.display == 'block') {
+      if ($F('pc17_unid2') == "0") {
+        alert('Informe a Unidade!');
+        return false;
+      }
+    } else {
+      if ($F('pc17_unid') == "0" && document.getElementById('pc11_servicoquantidade').style.display != 'block') {
 
+        alert('Informe a unidade!');
+        return false;
+
+      }
+
+    }
 
     if ($F('eleSub') == "0") {
 
@@ -600,12 +613,6 @@ if ((isset($opcao) && $opcao == "alterar")) {
 
     }
 
-    if ($F('pc17_unid') == "0") {
-
-      alert('Informe a unidade!');
-      return false;
-
-    }
 
     var sizeItens = oGridItens.aRows.length;
 
@@ -627,9 +634,21 @@ if ((isset($opcao) && $opcao == "alterar")) {
     aLinha[0] = document.getElementById('pc01_ordem').value;
     aLinha[1] = document.getElementById('pc16_codmater').value;
     aLinha[2] = document.getElementById('pc01_descrmater').value;
-    select = document.getElementById('pc17_unid');
-    var option = select.children[select.selectedIndex];
-    var unidade = option.textContent;
+
+    var select;
+    var option;
+    var unidade;
+
+    if (document.getElementById('pc17_unid2').style.display == 'block') {
+      select = document.getElementById('pc17_unid2');
+    } else {
+      select = document.getElementById('pc17_unid');
+
+    }
+
+    option = select.children[select.selectedIndex];
+    unidade = option.textContent;
+
     aLinha[3] = unidade;
     aLinha[4] = "<input type='button' value='A' onclick='js_excluirLinha()'> <input type='button' value='E' onclick='js_excluirLinha()'>";
     aLinha[5] = document.getElementById('eleSub').value;
