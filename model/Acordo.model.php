@@ -3111,7 +3111,7 @@ class Acordo
      * @return $this
      * @throws Exception
      */
-    public function aditar($aItens, $iTipoAditamento, $dtVigenciaInicial, $dtVigenciaFinal, $sNumeroAditamento, $dtAssinatura, $dtPublicacao, $sDescricaoAlteracao, $sVeiculoDivulgacao, $iTipoalteracaoAditivo, $aSelecionados, $sVigenciaalterada, $lProvidencia, $datareferencia)
+    public function aditar($aItens, $iTipoAditamento, $dtVigenciaInicial, $dtVigenciaFinal, $sNumeroAditamento, $dtAssinatura, $dtPublicacao, $sDescricaoAlteracao, $sVeiculoDivulgacao, $sJustificativa, $iTipoalteracaoAditivo, $aSelecionados, $sVigenciaalterada, $lProvidencia, $datareferencia)
     {
         $nValorItens = 0;
         $nValorLancamentoContabil = 0;
@@ -3145,7 +3145,7 @@ class Acordo
 
         $oNovaPosicao->save();
 
-        $oNovaPosicao->salvarSaldoAditamento($nValorItens, $dtAssinatura, $dtPublicacao, $sDescricaoAlteracao, $sVeiculoDivulgacao, $datareferencia);
+        $oNovaPosicao->salvarSaldoAditamento($nValorItens, $dtAssinatura, $dtPublicacao, $sDescricaoAlteracao, $sVeiculoDivulgacao, $datareferencia, $sJustificativa);
         $aTiposAlteracao = array();
 
         if (in_array($iTipoAditamento, array(
