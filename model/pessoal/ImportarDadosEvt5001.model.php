@@ -48,9 +48,15 @@ class ImportarDadosEvt5001
      */
     protected $evt5001consulta;
 
+    /**
+     * @var boolean
+     */
+    protected $bImportViaEnvioEsocial;
+
     public function __construct($sFile = null, $oXml = null)
     {
         $this->sFile = $sFile;
+        $this->bImportViaEnvioEsocial = empty($sFile);
         $this->oXml = $oXml;
         $this->evt5001consulta = new cl_evt5001consulta();
     }
@@ -72,7 +78,7 @@ class ImportarDadosEvt5001
         $this->evt5001consulta->rh218_tpcr = $this->oXml->evtBasesTrab->infoCpCalc->tpCR;
         $this->evt5001consulta->rh218_vrdescseg = $this->oXml->evtBasesTrab->infoCpCalc->vrDescSeg;
         $this->evt5001consulta->rh218_vrcpseg = $this->oXml->evtBasesTrab->infoCpCalc->vrCpSeg;
-        $this->evt5001consulta->rh218_instit = db_getsession("DB_instit");
+        $this->evt5001consulta->rh218_instit = $this->getInstitMatricula($this->evt5001consulta->rh218_regist);
         $this->evt5001consulta->incluir(null);
         if ($this->evt5001consulta->erro_status == "0") {
             throw new Exception($this->evt5001consulta->erro_msg);
@@ -111,5 +117,22 @@ class ImportarDadosEvt5001
             throw new Exception("Matrícula não encontrada.");
         }
         return $regist;
+    }
+
+    /**
+     * Buscar instituição da matricula caso a importação seja via envio do esocial
+     * @param int $matricula
+     * @return int
+     */
+    protected function getInstitMatricula($matricula)
+    {
+        if (!$this->bImportViaEnvioEsocial) {
+            return db_getsession("DB_instit");
+        }
+        $instit = $this->evt5001consulta->sqlInstitMatricula($matricula);
+        if (empty($instit)) {
+            throw new Exception("instituição da Matrícula não encontrada.");
+        }
+        return $instit;
     }
 }

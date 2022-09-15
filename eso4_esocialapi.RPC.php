@@ -289,7 +289,7 @@ try {
                     $dadosTabela = $dadosESocial->getPorTipo(Tipo::getTipoFormulario($arquivo), empty($oParam->matricula) ? null : $oParam->matricula);
 
                     foreach (array_chunk($dadosTabela, 1) as $aTabela) {
-                        $eventoFila = new Evento($arquivo, $iCgm, $iCgm, $aTabela, $oParam->tpAmb, "{$oParam->iAnoValidade}-{$oParam->iMesValidade}", $oParam->modo, $oParam->dtalteracao, $oParam->indapuracao);
+                        $eventoFila = new Evento($arquivo, $iCgm, $iCgm, $aTabela, $oParam->tpAmb, "{$oParam->iAnoValidade}-{$oParam->iMesValidade}", $oParam->modo, $oParam->dtalteracao, $oParam->indapuracao, $oParam->tppgto);
                         $eventoFila->adicionarFila();
                     }
                 }
