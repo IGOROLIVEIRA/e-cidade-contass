@@ -853,12 +853,12 @@ WHERE rh30_vinculo IN ('I',
      */
     public function buscarPreenchimentoS1200($codigoFormulario, $matricula = null)
     {
-        $sql = "select z01_cgccpf from cgm
+        $sql = "select distinct z01_cgccpf from cgm
         inner join rhpessoal on cgm.z01_numcgm = rhpessoal.rh01_numcgm
                     and rh01_instit = fc_getsession('DB_instit')::int ";
 
         if ($matricula != null) {
-            $sql .= "where cgm.z01_cgccpf = (select z01_cgccpf from cgm join rhpessoal on cgm.z01_numcgm = rhpessoal.rh01_numcgm where rh01_regist in ($matricula)) ";
+            $sql .= "where cgm.z01_cgccpf in (select z01_cgccpf from cgm join rhpessoal on cgm.z01_numcgm = rhpessoal.rh01_numcgm where rh01_regist in ($matricula)) ";
         }
         $rs = \db_query($sql);
         // echo $sql;
@@ -878,12 +878,12 @@ WHERE rh30_vinculo IN ('I',
      */
     public function buscarPreenchimentoS1202($codigoFormulario, $matricula = null)
     {
-        $sql = "select z01_cgccpf from cgm
+        $sql = "select distinct z01_cgccpf from cgm
         inner join rhpessoal on cgm.z01_numcgm = rhpessoal.rh01_numcgm
                     and rh01_instit = fc_getsession('DB_instit')::int ";
 
         if ($matricula != null) {
-            $sql .= "where cgm.z01_cgccpf = (select z01_cgccpf from cgm join rhpessoal on cgm.z01_numcgm = rhpessoal.rh01_numcgm where rh01_regist in ($matricula)) ";
+            $sql .= "where cgm.z01_cgccpf in (select z01_cgccpf from cgm join rhpessoal on cgm.z01_numcgm = rhpessoal.rh01_numcgm where rh01_regist in ($matricula)) ";
         }
         $rs = \db_query($sql);
         // echo $sql;
@@ -904,12 +904,12 @@ WHERE rh30_vinculo IN ('I',
      */
     public function buscarPreenchimentoS1207($codigoFormulario, $matricula = null)
     {
-        $sql = "select z01_cgccpf from cgm
+        $sql = "select distinct z01_cgccpf from cgm
         inner join rhpessoal on cgm.z01_numcgm = rhpessoal.rh01_numcgm
                     and rh01_instit = fc_getsession('DB_instit')::int ";
 
         if ($matricula != null) {
-            $sql .= "where cgm.z01_cgccpf = (select z01_cgccpf from cgm join rhpessoal on cgm.z01_numcgm = rhpessoal.rh01_numcgm where rh01_regist in ($matricula)) ";
+            $sql .= "where cgm.z01_cgccpf in (select z01_cgccpf from cgm join rhpessoal on cgm.z01_numcgm = rhpessoal.rh01_numcgm where rh01_regist in ($matricula)) ";
         }
         $rs = \db_query($sql);
         // echo $sql;
