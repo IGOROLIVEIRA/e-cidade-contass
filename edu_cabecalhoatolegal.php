@@ -16,5 +16,5 @@ $atolegal = db_utils::fieldsMemory($result, 0);
 if ($atolegal->ed05_c_finalidade == "") {
     $atolegalcabecalho = "";
 } else {
-    $atolegalcabecalho = $atolegal->ed05_c_finalidade . "/" . $atolegal->dl_tipo . " nº: " .  $atolegal->ed05_c_numero . "/" . implode("/", array_reverse(explode("-", $atolegal->ed05_d_publicado))) . ", " . $atolegal->ed05_t_texto;
+    $atolegalcabecalho = $atolegal->ed05_c_finalidade . "/" . $atolegal->dl_tipo . " nº: " .  $atolegal->ed05_c_numero . "DE " . implode("/", array_reverse(explode("-", $atolegal->ed05_d_publicado))) . ", " . $atolegal->ed05_t_texto;
 }
