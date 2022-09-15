@@ -11,6 +11,7 @@ class Oc18123 extends \Classes\PostgresMigration
         $this->createIssisenTable();
         $this->insertMenus();
         $this->insertDicionarioDados();
+        $this->updateFunctions();
     }
 
     public function down()
@@ -18,6 +19,7 @@ class Oc18123 extends \Classes\PostgresMigration
         $this->dropTables();
         $this->dropMenu();
         $this->dropDicionarioDados();
+        $this->rollbackFunctions();
     }
 
     private function createIsstipoisenTable()
@@ -232,5 +234,27 @@ SQL;
         $this->execute("delete from db_sysarquivo where nomearq = 'issisen'");
         $this->execute("delete from db_sysarquivo where nomearq = 'isstipoisen'");
 
+    }
+
+    public function updateFunctions()
+    {
+        $this->execute(
+            file_get_contents(__DIR__ . '/sqls/functions/public.fc_issqn-2022-10-14.sql')
+        );
+
+        $this->execute(
+            file_get_contents(__DIR__ . '/sqls/functions/public.fc_vistorias-2022-09-15.sql')
+        );
+    }
+
+    public function rollbackFunctions()
+    {
+        $this->execute(
+            file_get_contents(__DIR__ . '/sqls/functions/public.fc_issqn.sql')
+        );
+
+        $this->execute(
+            file_get_contents(__DIR__ . '/sqls/functions/public.fc_vistorias.sql')
+        );
     }
 }
