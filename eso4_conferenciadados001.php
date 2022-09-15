@@ -189,9 +189,6 @@ $mesfolha = DBPessoal::getMesFolha();
                             <option value="4">Pagamento de remuneração conforme apurado em
                                 ideDmDev do S-1202
                             </option>
-                            <option value="4">Pagamento de remuneração conforme apurado em
-                                ideDmDev do S-1202
-                            </option>
                             <option value="5">Pagamento de benefícios previdenciários, conforme
                                 apurado em ideDmDev do S-1207
                             </option>
@@ -295,6 +292,7 @@ $mesfolha = DBPessoal::getMesFolha();
                 'iAnoValidade': $F('anofolha'),
                 'iMesValidade': $F('mesfolha'),
                 'indapuracao': $F('indapuracao'),
+                'tppgto': $F('tppgto'),
                 'matricula': aMatriculas.join(',')
             }; //Codigo Tipo::CADASTRAMENTO_INICIAL
             new AjaxRequest('eso4_esocialapi.RPC.php', parametros, function(retorno) {

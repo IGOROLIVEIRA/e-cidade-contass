@@ -8,7 +8,7 @@ use DBPessoal;
 use ECidade\RecursosHumanos\ESocial\Agendamento\Eventos\EventoBase;
 
 /**
- * Classe responsável por montar as informações do evento S1202 Esocial
+ * Classe responsável por montar as informações do evento S1210 Esocial
  *
  * @package  ECidade\RecursosHumanos\ESocial\Agendamento\Eventos
  * @author   Marcelo Hernane
@@ -33,10 +33,16 @@ class EventoS1210 extends EventoBase
     {
         $ano = date("Y", db_getsession("DB_datausu"));
         $mes = date("m", db_getsession("DB_datausu"));
+        $dia = date("d", db_getsession("DB_datausu"));
         $aDadosAPI = array();
         $iSequencial = 1;
+
         foreach ($this->dados as $oDados) {
-            $aDadosPorMatriculas = $this->buscarDadosPorMatricula($oDados->z01_cgccpf);
+
+            $aDadosPorMatriculas = $this->buscarDadosPorMatricula($oDados->z01_cgccpf, $this->tppgto);
+            if ($aDadosPorMatriculas[0]->cpftrab == null) {
+                continue;
+            }
             $oDadosAPI                                = new \stdClass();
             $oDadosAPI->evtPgtos                      = new \stdClass();
             $oDadosAPI->evtPgtos->sequencial          = $iSequencial;
@@ -49,7 +55,7 @@ class EventoS1210 extends EventoBase
             if ($oDados->indapuracao == 2) {
                 $oDadosAPI->evtPgtos->perapur         = date('Y');
             }
-            $oDadosAPI->evtPgtos->cpfbenef             = $oDados->cpftrab;
+            $oDadosAPI->evtPgtos->cpfbenef             = $aDadosPorMatriculas[0]->cpftrab;
 
             $std = new \stdClass();
             $seqinfopag = 0;
@@ -60,9 +66,9 @@ class EventoS1210 extends EventoBase
 
                     $std->infopgto[$seqinfopag] = new \stdClass(); //Obritat�rio
 
-                    $std->infopgto[$seqinfopag]->dtpgto = '14092022';
-                    $std->infopgto[$seqinfopag]->tppgto = '14092022';
-                    $std->infopgto[$seqinfopag]->perref = '14092022';
+                    $std->infopgto[$seqinfopag]->dtpgto = "$ano-$mes-$dia";
+                    $std->infopgto[$seqinfopag]->tppgto = $this->tppgto;
+                    $std->infopgto[$seqinfopag]->perref = "$ano-$mes";
 
                     if ($aIdentificador[$iCont2]->idedmdev == 1) {
                         $std->infopgto[$seqinfopag]->idedmdev = $aDadosPorMatriculas[$iCont]->matricula . 'gerfsal'; //uniqid(); //$aIdentificador[$iCont2]->idedmdev; //Obrigat?rio
@@ -89,8 +95,11 @@ class EventoS1210 extends EventoBase
         return $aDadosAPI;
     }
 
-    private function buscarDadosPorMatricula($cpf)
+    private function buscarDadosPorMatricula($cpf, $tppgto)
     {
+        $ano = date("Y", db_getsession("DB_datausu"));
+        $mes = date("m", db_getsession("DB_datausu"));
+
         $sql = "SELECT
         distinct
         1 as tpInsc,
@@ -186,10 +195,36 @@ class EventoS1210 extends EventoBase
                                       and r33_mesusu = date_part('month',fc_getsession('DB_datausu')::date)
                                       and r33_instit = fc_getsession('DB_instit')::int
                                ) as x on r33_codtab = rhpessoalmov.rh02_tbprev+2
-    where h13_categoria in ('101', '106', '111', '301', '302', '303', '305', '306', '309', '312', '313', '902','701', '712', '771', '901')
-    and rh30_vinculo = 'A'
-    and r33_tiporegime = '2'
-    and cgm.z01_cgccpf = '$cpf'
+    where 1=1
+    ";
+        //1200
+        if ($tppgto == 1) {
+            $sql .= " and h13_categoria in ('101', '106', '111', '301', '302', '303', '305', '306', '309', '312', '313', '902','701','712','771','901','711')
+            and rh30_vinculo = 'A'
+            and r33_tiporegime = '1' ";
+        }
+        //2299
+        if ($tppgto == 2) {
+            $sql .= " and r33_tiporegime = '2'
+            and rescisao.r59_mesusu = $mes
+            and rescisao.r59_mesusu = $ano ";
+        }
+        //2399
+        if ($tppgto == 3) {
+            $sql .= "";
+        }
+        //1202
+        if ($tppgto == 4) {
+            $sql .= " and h13_categoria in ('301', '302', '303', '305', '306', '309', '410')
+            and rh30_vinculo = 'A'
+            and r33_tiporegime = '2' ";
+        }
+        //1207
+        if ($tppgto == 5) {
+            $sql .= " and rh30_vinculo in ('I','P') ";
+        }
+
+        $sql .= " and cgm.z01_cgccpf = '$cpf'
     and (exists (SELECT
 	1
 from
