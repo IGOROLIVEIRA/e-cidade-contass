@@ -36,7 +36,12 @@ class EventoS1202 extends EventoBase
         $aDadosAPI = array();
         $iSequencial = 1;
         foreach ($this->dados as $oDados) {
+
             $aDadosPorMatriculas = $this->buscarDadosPorMatricula($oDados->z01_cgccpf);
+
+            if ($aDadosPorMatriculas[0]->cpftrab == null) {
+                continue;
+            }
 
             $oDadosAPI                                   = new \stdClass();
             $oDadosAPI->evtRmnRPPS                      = new \stdClass();
@@ -203,7 +208,7 @@ class EventoS1202 extends EventoBase
                                       and r33_mesusu = date_part('month',fc_getsession('DB_datausu')::date)
                                       and r33_instit = fc_getsession('DB_instit')::int
                                ) as x on r33_codtab = rhpessoalmov.rh02_tbprev+2
-    where h13_categoria in ('101', '106', '111', '301', '302', '303', '305', '306', '309', '312', '313', '902','701', '712', '771', '901')
+    where h13_categoria in ('301', '302', '303', '305', '306', '309', '410')
     and rh30_vinculo = 'A'
     and r33_tiporegime = '2'
     and cgm.z01_cgccpf = '$cpf'
