@@ -31,6 +31,40 @@ require_once ("libs/db_sql.php");
 require_once("classes/db_orctiporec_classe.php");
 require_once("model/orcamento/ReceitaContabilRepository.model.php");
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+use model\caixa\relatorios\ReceitaPeriodoTesouraria;
+use repositories\caixa\relatorios\ReceitaPeriodoTesourariaSinteticaRepositoryLegacy;
+
+require_once "model/caixa/relatorios/ReceitaPeriodoTesouraria.model.php";
+require_once "repositories/caixa/relatorios/ReceitaPeriodoTesourariaSinteticaRepositoryLegacy.php";
+
+$sTipo = $sinana;
+$sTipoReceita = $tipo;
+$iFormaArrecadacao = $formarrecadacao;
+$sOrdem = $ordem;
+$dDataInicial = $datai;
+$dDataFinal = $dataf;
+$sReceitas = $codrec;
+$sEstrutura = $estrut;
+$sContas = $conta;
+$sContribuintes = $contribuinte;
+
+$oRelatorioReceitaPeriodoTesouraria = new ReceitaPeriodoTesourariaSinteticaRepositoryLegacy(
+    $sTipo, 
+    $iFormaArrecadacao, 
+    $sOrdem, 
+    $dDataInicial, 
+    $dDataFinal, 
+    $sReceitas, 
+    $sEstrutura, 
+    $sContas, 
+    $sContribuintes
+);
+$oRelatorioReceitaPeriodoTesouraria = new ReceitaPeriodoTesouraria($oRelatorioReceitaPeriodoTesouraria);
+$oRelatorioReceitaPeriodoTesouraria->processar();
 
 /**
  * Primeiro passo de refactory
@@ -42,7 +76,7 @@ require_once("model/orcamento/ReceitaContabilRepository.model.php");
  * $sinana = "Tipo"
  * = "Referente a Emenda Parlamentar"
  * = "Regularizacao de Repasse"
- * = "Forma de Arrecadacao"
+ * $formarrecadacao = "Forma de Arrecadacao"
  * = "Recurso"
  */
 
@@ -164,7 +198,7 @@ elseif ($formarrecadacao == 2) {
 	$head8 = 'Forma de Arrecadação: Exceto via arquivo bancário';
 };
 
-if ($sinana == 'S1') {
+if ($sinana == 'S1') {  
 	// sintetico receita
 	if ($formarrecadacao == 0){
 		$sql = "select k02_codigo,k02_tipo,k02_drecei,codrec,estrutural,valor
@@ -633,6 +667,7 @@ elseif ($sinana == 'S2') {
 // echo $sql;exit;
 //die($sql);
 
+die($sql);
 $result = db_query($sql) or die("Erro realizando consulta : ".$sql);
 
 $xxnum = pg_numrows($result);
