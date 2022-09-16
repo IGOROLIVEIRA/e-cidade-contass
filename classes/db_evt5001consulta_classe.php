@@ -690,6 +690,21 @@ class cl_evt5001consulta {
     $result = db_query($sql);
     return db_utils::fieldsMemory($result, 0)->rh01_regist;
 
+  } 
+
+  /**
+   * Buscar instituição da matricula do servidor
+   * @param string $matricula
+   * @return int
+   */
+  public function sqlInstitMatricula($matricula) 
+  {
+    $sql = "select rh01_instit from rhpessoal
+    where rh01_regist = {$matricula}
+    order by rh01_regist desc limit 1";
+    $result = db_query($sql);
+    return db_utils::fieldsMemory($result, 0)->rh01_instit;
+
   }
 }
 ?>

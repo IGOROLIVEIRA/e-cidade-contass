@@ -99,7 +99,15 @@ require_once("dbforms/db_classesgenericas.php");
                             ?>
                         </td>
                     </tr>
-
+                    <tr>
+                                        <td  nowrap><b>&nbsp;&nbsp; Opção de Seleção :</b>
+                                            <?php
+                                            $aSelecao = array(1 => "Somente Selecionados", 2 => "Menos os Selecionados");
+                                            db_select("sTipoSelecao", $aSelecao, true, 1);
+                                            ?>
+                                        </td>
+           
+                    </tr>
                     <tr>
                         <td>
                             <fieldset style="margin:0 auto 0 auto; width: 500px;">
@@ -240,6 +248,7 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
         dados['dtDataFinal']                 = $F('dtDataFinal');
         dados['sTipoImpressao']              = $F('sTipoImpressao');
         dados['sTipo']                       = $F('sTipo');
+        dados['sTipoSelecao']                = $F('sTipoSelecao');
         
 
         var name = new Date().getTime();
