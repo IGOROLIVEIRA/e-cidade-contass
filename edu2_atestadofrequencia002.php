@@ -293,7 +293,9 @@ foreach ($aDadosAlunos as $oDadosAlunos) {
 
   $oPdf->Line(50, $oPdf->GetY(), 152, $oPdf->GetY());
   $oPdf->Ln(1);
-  $oPdf->Cell("192", $oParametros->iAlturaLinha, $sDiretor, 0, 1, "C");
+  $oPdf->Cell("192", $oParametros->iAlturaLinha, "Diretor (a) nº Aut. ou Secretário (a) Escolar nº Aut.", 0, 1, "C");
+
+
 
   /* 
   if ($oParametros->lExibeGradeAluno) { 

@@ -10,6 +10,8 @@ require_once("dbforms/db_funcoes.php");
 require_once("libs/db_sessoes.php");
 include("classes/db_orctiporec_classe.php");
 include("classes/db_quadrosuperavitdeficit_classe.php");
+require_once("repositories/OrcSuplemValRepositoryLegacy.php");
+require_once("repositories/TipoSuplementacaoSuperavitDeficitRepositoryLegacy.php");
 include("libs/db_libcontabilidade.php");
 $instit = db_getsession("DB_instit");
 $anousu = db_getsession("DB_anousu");
@@ -85,46 +87,9 @@ try {
                 break;    
 
         case "getSuplementado":
-            $sql = "SELECT
-                        concat('1', substring(o58_codigo::TEXT, 2, 2)) fonte,
-                        sum(o47_valor) as valor
-                    FROM
-                        orcsuplemval
-                        LEFT JOIN orcdotacao ON o47_coddot = o58_coddot
-                        AND o47_anousu = o58_anousu
-                        JOIN orcsuplem ON o47_codsup=o46_codsup
-                    WHERE
-                        o47_anousu = {$anousu}
-                        AND o47_valor > 0
-                        AND o46_instit = {$instit}
-                        AND o46_tiposup IN (2026, 1003, 1008, 1024)
-                    GROUP BY concat('1', substring(o58_codigo::TEXT, 2, 2))
-                    UNION
-                    select
-                        concat('1', substring(o58_codigo::TEXT, 2, 2)) fonte,
-                        sum(o136_valor) as valor
-                    from
-                        orcsuplemdespesappa
-                        LEFT JOIN orcsuplemval ON o47_codsup = o136_orcsuplem
-                        LEFT JOIN orcdotacao ON o47_coddot = o58_coddot
-                        AND o47_anousu = o58_anousu
-                        JOIN orcsuplem ON o47_codsup=o46_codsup
-                    WHERE
-                        o47_anousu = {$anousu}
-                        AND o46_instit = {$instit}
-                        AND o46_tiposup IN (2026, 1003, 1008, 1024)
-                    AND 
-                        o136_valor > 0 
-                    GROUP BY concat('1', substring(o58_codigo::TEXT, 2, 2))";
-            $result = db_query($sql);
-
-            for ($i = 0; $i < pg_num_rows($result); $i++) {
-                $oFonte = db_utils::fieldsMemory($result, $i);
-                $aFonte[] = $oFonte;
-            }
-            ksort($aFonte);
-            $oRetorno->fonte = $aFonte;
-            
+            $oOrcSuplemVal = new OrcSuplemValRepositoryLegacy($anousu, $instit);
+            $oTipoSuplemenetacaoSuperavitDeficit = new TipoSuplementacaoSuperavitDeficitRepositoryLegacy();
+            $oRetorno->fonte = $oOrcSuplemVal->pegarArrayValorPelaFonteSuplementadoPorTipoSup($oTipoSuplemenetacaoSuperavitDeficit->pegarTipoSup());
             break;
     }
 } catch (Exception $eErro) {

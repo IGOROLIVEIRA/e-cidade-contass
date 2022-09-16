@@ -59,6 +59,7 @@ class DadosESocial
             case TIPO::ALTERACAO_CONTRATO:
             case Tipo::CD_BENEF_IN:
             case Tipo::BENEFICIOS_ENTESPUBLICOS:
+            case Tipo::PAGAMENTOS_RENDIMENTOS:
                 return $this->buscaPreenchimentos($matricula);
                 break;
             default:

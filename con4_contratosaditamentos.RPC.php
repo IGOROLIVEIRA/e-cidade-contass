@@ -212,7 +212,7 @@ try {
             }
 
             $oContrato = AcordoRepository::getByCodigo($oParam->iAcordo); //var_dump($oParam->sVigenciaalterada);
-            $oContrato->aditar($oParam->aItens, $oParam->tipoaditamento, $oParam->datainicial, $oParam->datafinal, $oParam->sNumeroAditamento, $oParam->dataassinatura, $oParam->datapublicacao, $oParam->descricaoalteracao, $oParam->veiculodivulgacao, $oParam->tipoalteracaoaditivo, $oParam->aSelecionados, $oParam->sVigenciaalterada, $oParam->lProvidencia, $oParam->datareferencia);
+            $oContrato->aditar($oParam->aItens, $oParam->tipoaditamento, $oParam->datainicial, $oParam->datafinal, $oParam->sNumeroAditamento, $oParam->dataassinatura, $oParam->datapublicacao, $oParam->descricaoalteracao, $oParam->veiculodivulgacao, $oParam->justificativa, $oParam->tipoalteracaoaditivo, $oParam->aSelecionados, $oParam->sVigenciaalterada, $oParam->lProvidencia, $oParam->datareferencia);
 
             break;
 
@@ -232,6 +232,21 @@ try {
                 $aUnidades[] = $oUnidade;
             }
             $oRetorno->itens = $aUnidades;
+            break;
+        case "getleilicitacao":
+            $sSQL = "select l20_leidalicitacao  from liclicita 
+            inner join acordo on
+                acordo.ac16_licitacao = liclicita.l20_codigo
+            where
+            acordo.ac16_origem = 2
+            and acordo.ac16_sequencial = $oParam->licitacao";
+            
+            
+            $rsResult       = db_query($sSQL);
+            $leilicitacao = db_utils::fieldsMemory($rsResult, 0);
+
+            $oRetorno->lei = $leilicitacao->l20_leidalicitacao;
+
             break;
         case "salvaAssinatura":
 

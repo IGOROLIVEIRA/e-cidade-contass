@@ -141,6 +141,8 @@ $mesfolha = DBPessoal::getMesFolha();
                             <option value="S2299">S-2299 - Desligamento</option>
                             <option value="S1200">S-1200 - Remuneração de Trabalhador vinculado ao Regime Geral de Previd. Social</option>
                             <option value="S1202">S-1202 - Remuneração de Servidor vinculado ao Regime Próprio de Previd</option>
+                            <option value="S1207">S-1207 - Benefícios - Entes Públicos</option>
+                            <option value="S1210">S-1210 - Pagamentos de Rendimentos do Trabalho</option>
                         </select>
                     </td>
                 </tr>
@@ -173,8 +175,8 @@ $mesfolha = DBPessoal::getMesFolha();
                     </td>
                 </tr>
                 <tr id="tppgto_col" style="display:none">
-                    <td align="right"><label>Tipo de Pagamento:</label>
-                        <select name="tppgto" id="tppgto" style="width: 50%;">
+                    <td><label>Tipo de Pagamento:</label></td>
+                    <td><select name="tppgto" id="tppgto" style="width: 50%;">
                             <option value="1">Pagamento de remuneração, conforme apurado em
                                 ideDmDev do S-1200
                             </option>
@@ -183,9 +185,6 @@ $mesfolha = DBPessoal::getMesFolha();
                             </option>
                             <option value="3">Pagamento de verbas rescisórias conforme apurado
                                 em ideDmDev do S-2399
-                            </option>
-                            <option value="4">Pagamento de remuneração conforme apurado em
-                                ideDmDev do S-1202
                             </option>
                             <option value="4">Pagamento de remuneração conforme apurado em
                                 ideDmDev do S-1202
@@ -293,6 +292,7 @@ $mesfolha = DBPessoal::getMesFolha();
                 'iAnoValidade': $F('anofolha'),
                 'iMesValidade': $F('mesfolha'),
                 'indapuracao': $F('indapuracao'),
+                'tppgto': $F('tppgto'),
                 'matricula': aMatriculas.join(',')
             }; //Codigo Tipo::CADASTRAMENTO_INICIAL
             new AjaxRequest('eso4_esocialapi.RPC.php', parametros, function(retorno) {

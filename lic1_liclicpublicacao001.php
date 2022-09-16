@@ -388,14 +388,16 @@ if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103
         var dataAbertura = document.getElementById('l20_dataaber').value;
 
         if (js_CompararDatas(dataCriacao, dataPublicacao, '<=')) {
-            if (js_CompararDatas(dataPublicacao, dataAbertura, '<=')) {
-
-            } else {
-
-                alert("A Data Edital/Convite deve ser maior ou igual a Data de Publicação.");
+            if (js_CompararDatas(dataPublicacao, dataAbertura, '<')) {
+                alert("A Data de Publicação deve ser maior ou igual a Data Edital/Convite");
                 document.form1.l20_dataaber.style.backgroundColor = '#99A9AE';
                 document.form1.l20_dataaber.focus();
                 return false;
+            } else {
+
+
+
+
             }
         } else {
             alert("A Data de Publicação deve ser maior ou igual a Data de Criação.");
@@ -472,7 +474,7 @@ if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103
             return false;
         }
     }
-    
+
     document.getElementById('l20_linkedital').value = "<?php echo $oLicitacao->l20_linkedital ?>";
     document.getElementById('l20_linkpncp').value = "<?php echo $oLicitacao->l20_linkpncp ?>";
     document.getElementById('l20_dtpulicacaoedital').value = "<?php echo implode('/', array_reverse(explode('-', $oLicitacao->l20_dtpulicacaoedital))); ?>";

@@ -52,7 +52,7 @@ class ImportacaoReceitaOrcamentariaLayout2 extends ImportacaoReceitaLayout2
      */
     public function eReceita($sLinha)
     {
-        if (in_array(substr($sLinha, 35, 1), array("1", "7", "9")))
+        if (in_array(substr($sLinha, 35, 1), array("1", "7", "9")) AND !in_array(substr($sLinha, 35, 3), array("922")))
             return true;
         return false;
     }
