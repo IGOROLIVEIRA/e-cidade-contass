@@ -224,6 +224,7 @@ if (isset($l20_codigo) && trim($l20_codigo) != "") {
         $erro_msg = $clliclicita->erro_msg;
         $sqlerro  = true;
       }
+      
     }
      
     if ($sqlerro == false) {

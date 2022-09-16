@@ -1,7 +1,7 @@
 <?php
 //MODULO: licitacao
-//CLASSE DA ENTIDADE situacaoitemcompra
-class cl_situacaoitemcompra { 
+//CLASSE DA ENTIDADE situacaoitemlic
+class cl_situacaoitemlic { 
   // cria variaveis de erro 
   public $rotulo     = null; 
   public $query_sql  = null; 
@@ -16,30 +16,28 @@ class cl_situacaoitemcompra {
   public $erro_campo = null;  
   public $pagina_retorno = null; 
   // cria variaveis do arquivo 
-  public $l218_codigo = null; 
-  public $l218_codigolicitacao = 0; 
-  public $l218_pcorcamitemlic = 0; 
-  public $l218_liclicitem = 0; 
-  public $l218_pcmater = 0; 
-  public $l218_motivoanulacao = null; 
+  public $l219_codigo = 0; 
+  public $l219_situacao = 0; 
+  public $l219_data_dia = null; 
+  public $l219_data_mes = null; 
+  public $l219_data_ano = null; 
+  public $l219_data = null; 
+  public $l219_id_usuario = 0; 
+  public $l219_hora = null; 
   // cria propriedade com as variaveis do arquivo 
   public $campos = "
-                 l218_codigo = int8 = l218_codigo 
-                 l218_codigolicitacao = int8 = l218_codigolicitacao 
-                 l218_pcorcamitemlic = int8 = l218_pcorcamitemlic 
-                 l218_liclicitem = int8 = l218_liclicitem 
-                 l218_pcmater = int8 = l218_pcmater 
-                 l218_motivoanulacao = varchar(255) = l218_motivoanulacao 
+                 l219_codigo = int8 = l219_codigo 
+                 l219_situacao = int8 = l219_situacao 
+                 l219_data = date = l219_data 
+                 l219_id_usuario = int8 = l219_id_usuario 
+                 l219_hora = varchar(5) = l219_hora 
                  ";
 
   //funcao construtor da classe 
   function __construct() { 
-    
     //classes dos rotulos dos campos
-    $this->rotulo = new rotulo("situacaoitemcompra"); 
-    
+    $this->rotulo = new rotulo("situacaoitemlic"); 
     $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
-    
   }
 
   //funcao erro 
@@ -55,12 +53,18 @@ class cl_situacaoitemcompra {
   // funcao para atualizar campos
   function atualizacampos($exclusao=false) {
     if ($exclusao==false) {
-       $this->l218_codigo = ($this->l218_codigo == ""?@$GLOBALS["HTTP_POST_VARS"]["l218_codigo"]:$this->l218_codigo);
-       $this->l218_codigolicitacao = ($this->l218_codigolicitacao == ""?@$GLOBALS["HTTP_POST_VARS"]["l218_codigolicitacao"]:$this->l218_codigolicitacao);
-       $this->l218_pcorcamitemlic = ($this->l218_pcorcamitemlic == ""?@$GLOBALS["HTTP_POST_VARS"]["l218_pcorcamitemlic"]:$this->l218_pcorcamitemlic);
-       $this->l218_liclicitem = ($this->l218_liclicitem == ""?@$GLOBALS["HTTP_POST_VARS"]["l218_liclicitem"]:$this->l218_liclicitem);
-       $this->l218_pcmater = ($this->l218_pcmater == ""?@$GLOBALS["HTTP_POST_VARS"]["l218_pcmater"]:$this->l218_pcmater);
-       $this->l218_motivoanulacao = ($this->l218_motivoanulacao == ""?@$GLOBALS["HTTP_POST_VARS"]["l218_motivoanulacao"]:$this->l218_motivoanulacao);
+       $this->l219_codigo = ($this->l219_codigo == ""?@$GLOBALS["HTTP_POST_VARS"]["l219_codigo"]:$this->l219_codigo);
+       $this->l219_situacao = ($this->l219_situacao == ""?@$GLOBALS["HTTP_POST_VARS"]["l219_situacao"]:$this->l219_situacao);
+       if ($this->l219_data == "") {
+         $this->l219_data_dia = ($this->l219_data_dia == ""?@$GLOBALS["HTTP_POST_VARS"]["l219_data_dia"]:$this->l219_data_dia);
+         $this->l219_data_mes = ($this->l219_data_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["l219_data_mes"]:$this->l219_data_mes);
+         $this->l219_data_ano = ($this->l219_data_ano == ""?@$GLOBALS["HTTP_POST_VARS"]["l219_data_ano"]:$this->l219_data_ano);
+         if ($this->l219_data_dia != "") {
+            $this->l219_data = $this->l219_data_ano."-".$this->l219_data_mes."-".$this->l219_data_dia;
+         }
+       }
+       $this->l219_id_usuario = ($this->l219_id_usuario == ""?@$GLOBALS["HTTP_POST_VARS"]["l219_id_usuario"]:$this->l219_id_usuario);
+       $this->l219_hora = ($this->l219_hora == ""?@$GLOBALS["HTTP_POST_VARS"]["l219_hora"]:$this->l219_hora);
      } else {
      }
    }
@@ -68,67 +72,76 @@ class cl_situacaoitemcompra {
   // funcao para inclusao
   function incluir () { 
       $this->atualizacampos();
-     if($this->l218_codigo == "" || $this->l218_codigo == null ){
-       $result = db_query("select nextval('situacaoitemcompra_l218_codigo_seq')"); 
-       if($result==false){
-         $this->erro_banco = str_replace("\n","",@pg_last_error());
-         $this->erro_sql   = "Verifique o cadastro da sequencia: situacaoitemcompra_l218_codigo_seq do campo: l218_codigo"; 
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-         $this->erro_status = "0";
-         return false; 
-       }
-       $this->l218_codigo = pg_result($result,0,0); 
-     }else{
-       $result = db_query("select last_value from situacaoitemcompra_l218_codigo_seq");
-       if(($result != false) && (pg_result($result,0,0) < $this->l218_codigo)){
-         $this->erro_sql = " Campo l218_codigo maior que último número da sequencia.";
-         $this->erro_banco = "Sequencia menor que este número.";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-         $this->erro_status = "0";
-         return false;
-       }else{
-         $this->l218_codigo = $this->l218_codigo; 
-       }
-     }
-     if ($this->l218_pcorcamitemlic == null ) { 
-       $this->erro_sql = " Campo l218_pcorcamitemlic não informado.";
-       $this->erro_campo = "l218_pcorcamitemlic";
+     if ($this->l219_codigo == null ) { 
+       $this->erro_sql = " Campo l219_codigo não informado.";
+       $this->erro_campo = "l219_codigo";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
      }
-     $sql = "insert into situacaoitemcompra(
-                                       l218_codigo 
-                                      ,l218_codigolicitacao 
-                                      ,l218_pcorcamitemlic 
-                                      ,l218_liclicitem 
-                                      ,l218_pcmater 
-                                      ,l218_motivoanulacao 
+     if ($this->l219_situacao == null ) { 
+       $this->erro_sql = " Campo l219_situacao não informado.";
+       $this->erro_campo = "l219_situacao";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
+     if ($this->l219_data == null ) { 
+       $this->erro_sql = " Campo l219_data não informado.";
+       $this->erro_campo = "l219_data_dia";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
+     if ($this->l219_id_usuario == null ) { 
+       $this->erro_sql = " Campo l219_id_usuario não informado.";
+       $this->erro_campo = "l219_id_usuario";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
+     if ($this->l219_hora == null ) { 
+       $this->erro_sql = " Campo l219_hora não informado.";
+       $this->erro_campo = "l219_hora";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
+     $sql = "insert into situacaoitemlic(
+                                       l219_codigo 
+                                      ,l219_situacao 
+                                      ,l219_data 
+                                      ,l219_id_usuario 
+                                      ,l219_hora 
                        )
                 values (
-                                $this->l218_codigo 
-                               ,$this->l218_codigolicitacao 
-                               ,$this->l218_pcorcamitemlic 
-                               ,$this->l218_liclicitem 
-                               ,0
-                               ,'$this->l218_motivoanulacao' 
+                                $this->l219_codigo 
+                               ,$this->l219_situacao 
+                               ,".($this->l219_data == "null" || $this->l219_data == ""?"null":"'".$this->l219_data."'")." 
+                               ,$this->l219_id_usuario 
+                               ,'$this->l219_hora' 
                       )";
-                        
+                      
      $result = db_query($sql); 
-
      if ($result==false) { 
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        if ( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ) {
-         $this->erro_sql   = "situacaoitemcompra () nao Incluído. Inclusao Abortada.";
+         $this->erro_sql   = "situacaoitemlic () nao Incluído. Inclusao Abortada.";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-         $this->erro_banco = "situacaoitemcompra já Cadastrado";
+         $this->erro_banco = "situacaoitemlic já Cadastrado";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        } else {
-         $this->erro_sql   = "situacaoitemcompra () nao Incluído. Inclusao Abortada.";
+         $this->erro_sql   = "situacaoitemlic () nao Incluído. Inclusao Abortada.";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        }
@@ -153,14 +166,14 @@ class cl_situacaoitemcompra {
   // funcao para alteracao
   function alterar ( $oid=null ) { 
       $this->atualizacampos();
-     $sql = " update situacaoitemcompra set ";
+     $sql = " update situacaoitemlic set ";
      $virgula = "";
-     if (trim($this->l218_codigo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["l218_codigo"])) { 
-       $sql  .= $virgula." l218_codigo = $this->l218_codigo ";
+     if (trim($this->l219_codigo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["l219_codigo"])) { 
+       $sql  .= $virgula." l219_codigo = $this->l219_codigo ";
        $virgula = ",";
-       if (trim($this->l218_codigo) == null ) { 
-         $this->erro_sql = " Campo l218_codigo não informado.";
-         $this->erro_campo = "l218_codigo";
+       if (trim($this->l219_codigo) == null ) { 
+         $this->erro_sql = " Campo l219_codigo não informado.";
+         $this->erro_campo = "l219_codigo";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -168,12 +181,12 @@ class cl_situacaoitemcompra {
          return false;
        }
      }
-     if (trim($this->l218_codigolicitacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["l218_codigolicitacao"])) { 
-       $sql  .= $virgula." l218_codigolicitacao = $this->l218_codigolicitacao ";
+     if (trim($this->l219_situacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["l219_situacao"])) { 
+       $sql  .= $virgula." l219_situacao = $this->l219_situacao ";
        $virgula = ",";
-       if (trim($this->l218_codigolicitacao) == null ) { 
-         $this->erro_sql = " Campo l218_codigolicitacao não informado.";
-         $this->erro_campo = "l218_codigolicitacao";
+       if (trim($this->l219_situacao) == null ) { 
+         $this->erro_sql = " Campo l219_situacao não informado.";
+         $this->erro_campo = "l219_situacao";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -181,12 +194,39 @@ class cl_situacaoitemcompra {
          return false;
        }
      }
-     if (trim($this->l218_pcorcamitemlic)!="" || isset($GLOBALS["HTTP_POST_VARS"]["l218_pcorcamitemlic"])) { 
-       $sql  .= $virgula." l218_pcorcamitemlic = $this->l218_pcorcamitemlic ";
+     if (trim($this->l219_data)!="" || isset($GLOBALS["HTTP_POST_VARS"]["l219_data_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["l219_data_dia"] !="") ) { 
+       $sql  .= $virgula." l219_data = '$this->l219_data' ";
        $virgula = ",";
-       if (trim($this->l218_pcorcamitemlic) == null ) { 
-         $this->erro_sql = " Campo l218_pcorcamitemlic não informado.";
-         $this->erro_campo = "l218_pcorcamitemlic";
+       if (trim($this->l219_data) == null ) { 
+         $this->erro_sql = " Campo l219_data não informado.";
+         $this->erro_campo = "l219_data_dia";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }     else{ 
+       if (isset($GLOBALS["HTTP_POST_VARS"]["l219_data_dia"])) { 
+         $sql  .= $virgula." l219_data = null ";
+         $virgula = ",";
+         if (trim($this->l219_data) == null ) { 
+           $this->erro_sql = " Campo l219_data não informado.";
+           $this->erro_campo = "l219_data_dia";
+           $this->erro_banco = "";
+           $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+           $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+           $this->erro_status = "0";
+           return false;
+         }
+       }
+     }
+     if (trim($this->l219_id_usuario)!="" || isset($GLOBALS["HTTP_POST_VARS"]["l219_id_usuario"])) { 
+       $sql  .= $virgula." l219_id_usuario = $this->l219_id_usuario ";
+       $virgula = ",";
+       if (trim($this->l219_id_usuario) == null ) { 
+         $this->erro_sql = " Campo l219_id_usuario não informado.";
+         $this->erro_campo = "l219_id_usuario";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -194,38 +234,12 @@ class cl_situacaoitemcompra {
          return false;
        }
      }
-     if (trim($this->l218_liclicitem)!="" || isset($GLOBALS["HTTP_POST_VARS"]["l218_liclicitem"])) { 
-       $sql  .= $virgula." l218_liclicitem = $this->l218_liclicitem ";
+     if (trim($this->l219_hora)!="" || isset($GLOBALS["HTTP_POST_VARS"]["l219_hora"])) { 
+       $sql  .= $virgula." l219_hora = '$this->l219_hora' ";
        $virgula = ",";
-       if (trim($this->l218_liclicitem) == null ) { 
-         $this->erro_sql = " Campo l218_liclicitem não informado.";
-         $this->erro_campo = "l218_liclicitem";
-         $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-         $this->erro_status = "0";
-         return false;
-       }
-     }
-     if (trim($this->l218_pcmater)!="" || isset($GLOBALS["HTTP_POST_VARS"]["l218_pcmater"])) { 
-       $sql  .= $virgula." l218_pcmater = $this->l218_pcmater ";
-       $virgula = ",";
-       if (trim($this->l218_pcmater) == null ) { 
-         $this->erro_sql = " Campo l218_pcmater não informado.";
-         $this->erro_campo = "l218_pcmater";
-         $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-         $this->erro_status = "0";
-         return false;
-       }
-     }
-     if (trim($this->l218_motivoanulacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["l218_motivoanulacao"])) { 
-       $sql  .= $virgula." l218_motivoanulacao = '$this->l218_motivoanulacao' ";
-       $virgula = ",";
-       if (trim($this->l218_motivoanulacao) == null ) { 
-         $this->erro_sql = " Campo l218_motivoanulacao não informado.";
-         $this->erro_campo = "l218_motivoanulacao";
+       if (trim($this->l219_hora) == null ) { 
+         $this->erro_sql = " Campo l219_hora não informado.";
+         $this->erro_campo = "l219_hora";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -237,7 +251,7 @@ class cl_situacaoitemcompra {
 $sql .= "oid = '$oid'";     $result = db_query($sql);
      if ($result==false) { 
        $this->erro_banco = str_replace("\n","",@pg_last_error());
-       $this->erro_sql   = "situacaoitemcompra nao Alterado. Alteracao Abortada.\\n";
+       $this->erro_sql   = "situacaoitemlic nao Alterado. Alteracao Abortada.\\n";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
@@ -246,7 +260,7 @@ $sql .= "oid = '$oid'";     $result = db_query($sql);
      } else {
        if (pg_affected_rows($result)==0) {
          $this->erro_banco = "";
-         $this->erro_sql = "situacaoitemcompra nao foi Alterado. Alteracao Executada.\\n";
+         $this->erro_sql = "situacaoitemlic nao foi Alterado. Alteracao Executada.\\n";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "1";
@@ -267,7 +281,7 @@ $sql .= "oid = '$oid'";     $result = db_query($sql);
   // funcao para exclusao 
   function excluir ( $oid=null ,$dbwhere=null) { 
 
-     $sql = " delete from situacaoitemcompra
+     $sql = " delete from situacaoitemlic
                     where ";
      $sql2 = "";
      if ($dbwhere==null || $dbwhere =="") {
@@ -275,10 +289,11 @@ $sql .= "oid = '$oid'";     $result = db_query($sql);
      } else {
        $sql2 = $dbwhere;
      }
+
      $result = db_query($sql.$sql2);
      if ($result==false) { 
        $this->erro_banco = str_replace("\n","",@pg_last_error());
-       $this->erro_sql   = "situacaoitemcompra nao Excluído. Exclusão Abortada.\\n";
+       $this->erro_sql   = "situacaoitemlic nao Excluído. Exclusão Abortada.\\n";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
@@ -287,7 +302,7 @@ $sql .= "oid = '$oid'";     $result = db_query($sql);
      } else {
        if (pg_affected_rows($result)==0) {
          $this->erro_banco = "";
-         $this->erro_sql = "situacaoitemcompra nao Encontrado. Exclusão não Efetuada.\\n";
+         $this->erro_sql = "situacaoitemlic nao Encontrado. Exclusão não Efetuada.\\n";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "1";
@@ -320,7 +335,7 @@ $sql .= "oid = '$oid'";     $result = db_query($sql);
      $this->numrows = pg_numrows($result);
       if ($this->numrows==0) {
         $this->erro_banco = "";
-        $this->erro_sql   = "Record Vazio na Tabela:situacaoitemcompra";
+        $this->erro_sql   = "Record Vazio na Tabela:situacaoitemlic";
         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
         $this->erro_status = "0";
@@ -330,7 +345,7 @@ $sql .= "oid = '$oid'";     $result = db_query($sql);
   }
 
   // funcao do sql 
-  function sql_query ( $oid = null,$campos="situacaoitemcompra.oid,*",$ordem=null,$dbwhere="") { 
+  function sql_query ( $oid = null,$campos="situacaoitemlic.oid,*",$ordem=null,$dbwhere="") { 
      $sql = "select ";
      if ($campos != "*" ) {
        $campos_sql = explode("#", $campos);
@@ -342,11 +357,11 @@ $sql .= "oid = '$oid'";     $result = db_query($sql);
      } else {
        $sql .= $campos;
      }
-     $sql .= " from situacaoitemcompra ";
+     $sql .= " from situacaoitemlic ";
      $sql2 = "";
      if ($dbwhere=="") {
        if ( $oid != "" && $oid != null) {
-          $sql2 = " where situacaoitemcompra.oid = '$oid'";
+          $sql2 = " where situacaoitemlic.oid = '$oid'";
        }
      } else if ($dbwhere != "") {
        $sql2 = " where $dbwhere";
@@ -377,7 +392,7 @@ $sql .= "oid = '$oid'";     $result = db_query($sql);
      } else {
        $sql .= $campos;
      }
-     $sql .= " from situacaoitemcompra ";
+     $sql .= " from situacaoitemlic ";
      $sql2 = "";
      if ($dbwhere=="") {
      } else if ($dbwhere != "") {

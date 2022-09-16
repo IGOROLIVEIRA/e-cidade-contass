@@ -68,6 +68,7 @@ $clAtaTemplateGeral    = new cl_atatemplategeral;
 $clparecerlicitacao    = new cl_parecerlicitacao;
 $clcflicita            = new cl_cflicita;
 $clhomologadjudica     = new cl_homologacaoadjudica;
+$clsituacaoitemlic     = new cl_situacaoitemlic;
 
 $clpcorcam->rotulo->label();
 $clrotulo->label("l20_codigo");
@@ -168,7 +169,7 @@ if (isset($confirmar) && trim($confirmar) != "") {
                 $sqlerro = true;
             }
 
-//            4ª validação
+  //            4ª validação
             if(!$sqlerro){
                 $sqlHomoAdjudica = $clhomologadjudica->sql_query('', 'l202_datahomologacao, l202_dataadjudicacao',
                     '', 'l202_licitacao = ' . $l20_codigo);
@@ -190,7 +191,7 @@ if (isset($confirmar) && trim($confirmar) != "") {
         }
     }
 
-//     3ª validação
+  //     3ª validação
     if(!$sqlerro){
 		$sqlParecer = $clparecerlicitacao->sql_query('', 'l200_data', '',
 			'l200_licitacao = ' . $l20_codigo);
@@ -205,7 +206,7 @@ if (isset($confirmar) && trim($confirmar) != "") {
         }
     }
 
-//    5ª validação
+  //    5ª validação
     if(in_array($iTribunal, array(100, 101, 102, 103)) && !$sqlerro){
 		if($dtjulgamento > $oDadosLicitacao->l20_dtpubratificacao && $oDadosLicitacao->l20_dtpubratificacao){
 		    $erro_msg = 'Data de Julgamento é maior que a Data de Publicação do Termo de Ratificação. Verifique!';
@@ -231,7 +232,7 @@ if (isset($confirmar) && trim($confirmar) != "") {
 			 */
 
 			$iModalidade = $oDadosLicitacao->l20_codtipocom;
-//			$dtJulgamento = date("Y-m-d", db_getsession("DB_datausu"));
+  //			$dtJulgamento = date("Y-m-d", db_getsession("DB_datausu"));
 			$iItem = trim($vetor[0]);
 
 			if ($iItem != null) {
@@ -367,9 +368,11 @@ if (isset($confirmar) && trim($confirmar) != "") {
       $erro_msg = $oDaoLogJulgamento->erro_msg;
       $sqlerro  = true;
     }
-
+    $codpcorcamitemlic = '';
     for ($x = 0; $x < $linha; $x++) {
-
+      if($x>0){
+        $codpcorcamitemlic = ',';
+      }
       $pc24_orcamitem   = $vpcorcamjulg[$x]["item"];
       $pc24_orcamforne  = $vpcorcamjulg[$x]["forne"];
 
@@ -475,7 +478,21 @@ if (isset($confirmar) && trim($confirmar) != "") {
         $sqlerro  = true;
         break;
       }
+
+      $codpcorcamitemlic .= $pc24_orcamitem;
     }
+    $result_l218codigo = $clsituacaoitemlic->sql_record('select l218_codigo from situacaoitemcompra where l218_pcorcamitemlic not in ('.$codpcorcamitemlic.')');
+    
+    for($y=0;$y<count($result_l218codigo);$y++){
+      db_fieldsmemory($result_l218codigo,$y);
+      $clsituacaoitemlic->l219_codigo= $l218_codigo;
+      $clsituacaoitemlic->l219_situacao=4;
+      $clsituacaoitemlic->l219_hora = db_hora();
+      $clsituacaoitemlic->l219_data = date('Y-m-d',db_getsession('DB_datausu'));
+      $clsituacaoitemlic->l219_id_usuario = db_getsession('DB_id_usuario');
+      $clsituacaoitemlic->incluir();
+    }
+    
 
     if ($sqlerro == false) {
       $clliclicita->l20_licsituacao = 1;

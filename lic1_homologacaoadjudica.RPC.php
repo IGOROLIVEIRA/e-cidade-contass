@@ -523,6 +523,7 @@ switch($oParam->exec) {
         $clliclicitasituacao   = new cl_liclicitasituacao;
         $clitenshomologacao    = new cl_itenshomologacao();
         $clliccomissaocgm      = new cl_liccomissaocgm();
+        $clsituacaoitemlic     = new cl_situacaoitemlic();
 
         $l202_licitacao = $oParam->iLicitacao;
         $rsDataJulg = $clhomologacaoadjudica->verificadatajulgamento($l202_licitacao);
@@ -642,6 +643,14 @@ switch($oParam->exec) {
                             $clitenshomologacao->l203_homologaadjudicacao = $clhomologacaoadjudica->l202_sequencial;
                             $clitenshomologacao->l203_fornecedor          = $item->fornecedor;
                             $clitenshomologacao->incluir(null);
+                            $result_situacaitemlic = $clsituacaoitemlic->sql_record('select l218_codigo from situacaoitemcompra where  l218_liclicitem in (select l21_codigo from liclicitem where l21_codpcprocitem = '.$item->codigo.')');
+                            db_fieldsmemory($result_situacaitemlic);
+                            $clsituacaoitemlic->l219_codigo= $l218_codigo;
+                            $clsituacaoitemlic->l219_situacao=2;
+                            $clsituacaoitemlic->l219_hora = db_hora();
+                            $clsituacaoitemlic->l219_data = date('Y-m-d',db_getsession('DB_datausu'));
+                            $clsituacaoitemlic->l219_id_usuario = db_getsession('DB_id_usuario');
+                            $clsituacaoitemlic->incluir();
                         }
 
                         if ($clhomologacaoadjudica->erro_status == "0") {
@@ -697,6 +706,14 @@ switch($oParam->exec) {
                             $clitenshomologacao->l203_homologaadjudicacao = $clhomologacaoadjudica->l202_sequencial;
                             $clitenshomologacao->l203_fornecedor          = $item->fornecedor;
                             $clitenshomologacao->incluir(null);
+                            $result_situacaitemlic = $clsituacaoitemlic->sql_record('select l218_codigo from situacaoitemcompra where  l218_liclicitem in (select l21_codigo from liclicitem where l21_codpcprocitem = '.$item->codigo.')');
+                            db_fieldsmemory($result_situacaitemlic);
+                            $clsituacaoitemlic->l219_codigo= $l218_codigo;
+                            $clsituacaoitemlic->l219_situacao=2;
+                            $clsituacaoitemlic->l219_hora = db_hora();
+                            $clsituacaoitemlic->l219_data = date('Y-m-d',db_getsession('DB_datausu'));
+                            $clsituacaoitemlic->l219_id_usuario = db_getsession('DB_id_usuario');
+                            $clsituacaoitemlic->incluir();
                         }
 
                         if ($clhomologacaoadjudica->erro_status == "0") {
@@ -902,6 +919,7 @@ switch($oParam->exec) {
         $clliclicitasituacao   = new cl_liclicitasituacao();
         $clitenshomologacao    = new cl_itenshomologacao();
         $clliccomissaocgm      = new cl_liccomissaocgm();
+        $clsituacaoitemlic     = new cl_situacaoitemlic();
 
         $l202_licitacao = $oParam->iLicitacao;
         $rsDataJulg = $clhomologacaoadjudica->verificadatajulgamento($l202_licitacao);
@@ -963,11 +981,16 @@ switch($oParam->exec) {
                     }
 
                     $clitenshomologacao->excluir(null, "l203_homologaadjudicacao = {$oParam->iHomologacao} and l203_item = {$Item->codigo}");
+                    
                     if ($clitenshomologacao->erro_status == "0") {
                         $erro = $clhomologacaoadjudica->erro_msg;
                         $oRetorno->message = urlencode($erro);
                         $oRetorno->status = 2;
                     }
+                    
+                    $result_situacaitemlic = $clsituacaoitemlic->sql_record('select l218_codigo from situacaoitemcompra where  l218_liclicitem in (select l21_codigo from liclicitem where l21_codpcprocitem = '.$Item->codigo.')');
+                            db_fieldsmemory($result_situacaitemlic);
+                            $clsituacaoitemlic->excluir(null,'l219_codigo= '.$l218_codigo.' and l219_situacao=2');
                 }
 
                 /**
