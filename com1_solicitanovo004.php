@@ -831,14 +831,14 @@ if (isset($incluir) || (isset($importar) && $confirma == true)) {
 	              if (confirm('ATENÇÃO: \\n Solicitação de outro ano!!\\nDeseja incluir os itens com suas respectivas Dotações?')) {
 								  js_OpenJanelaIframe('top.corpo.iframe_solicita','db_iframe_dotac','com4_altdotacsol001.php?importado=$importar&codnovo=$pc10_numero','Dotações',true);
 								} else {
-				          location.href='com1_solicita005.php?db_opcaoBtnRegistroPreco=3&liberaaba=true&chavepesquisa=$pc10_numero';
+				          location.href='com1_solicitanovo005.php?db_opcaoBtnRegistroPreco=3&liberaaba=true&chavepesquisa=$pc10_numero';
 				        }
 						  </script>";
 			} else {
-				db_redireciona("com1_solicita005.php?db_opcaoBtnRegistroPreco=3&liberaaba=true&chavepesquisa=$pc10_numero$parametro");
+				db_redireciona("com1_solicitanovo005.php?db_opcaoBtnRegistroPreco=3&liberaaba=true&chavepesquisa=$pc10_numero$parametro");
 			}
 		} else {
-			db_redireciona("com1_solicita005.php?db_opcaoBtnRegistroPreco=1&liberaaba=true&chavepesquisa=$pc10_numero$parametro");
+			db_redireciona("com1_solicitanovo005.php?db_opcaoBtnRegistroPreco=1&liberaaba=true&chavepesquisa=$pc10_numero$parametro");
 		}
 	}
 }
