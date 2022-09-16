@@ -43,6 +43,7 @@ $clempautitem       = new cl_empautitem();
 $clpcorcamtroca     = new cl_pcorcamtroca();
 $clpcorcamval       = new cl_pcorcamval();
 $clpcorcamjulg      = new cl_pcorcamjulg();
+$clsituacaoitemcompra = new cl_situacaoitemcompra();
 $oDaoProcessoCompra = new cl_pcproc();
 
 $db_opcao = 22;
