@@ -43,7 +43,6 @@ $clempautitem       = new cl_empautitem();
 $clpcorcamtroca     = new cl_pcorcamtroca();
 $clpcorcamval       = new cl_pcorcamval();
 $clpcorcamjulg      = new cl_pcorcamjulg();
-$clsituacaoitemcompra = new cl_situacaoitemcompra();
 $oDaoProcessoCompra = new cl_pcproc();
 
 $db_opcao = 22;
@@ -90,13 +89,7 @@ if (isset($incluir) || isset($alterar)) {
       	      $erro_msg = $clpcorcamitemproc->erro_msg;
       	      $sqlerro=true;
       	      break;
-      	    }
-			
-			
-			$clsituacaoitemcompra->l218_pcorcamitemlic = $pc22_orcamitem;
-			
-			$clsituacaoitemcompra->incluir();
-			
+      	    }			
       	  }
       	}
       }
