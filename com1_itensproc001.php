@@ -91,6 +91,12 @@ if (isset($incluir) || isset($alterar)) {
       	      $sqlerro=true;
       	      break;
       	    }
+			
+			
+			$clsituacaoitemcompra->l218_pcorcamitemlic = $pc22_orcamitem;
+			
+			$clsituacaoitemcompra->incluir();
+			
       	  }
       	}
       }

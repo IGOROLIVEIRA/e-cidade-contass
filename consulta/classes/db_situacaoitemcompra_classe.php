@@ -114,8 +114,7 @@ class cl_situacaoitemcompra {
                                ,$this->l218_pcmater 
                                ,'$this->l218_motivoanulacao' 
                       )";
-                      var_dump($sql);
-                      exit;
+                                                     
      $result = db_query($sql); 
      if ($result==false) { 
        $this->erro_banco = str_replace("\n","",@pg_last_error());
