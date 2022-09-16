@@ -76,7 +76,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
           <td nowrap>
 
             <?
-            db_input('pc01_quantidade', 8, $pc01_quantidade, true, 'text', $db_opcao, '');
+            db_input('pc11_quant', 8, $pc11_quant, true, 'text', $db_opcao, '');
             ?>
           </td>
 
@@ -264,7 +264,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
   </form>
 </div>
 <script>
-  const input = document.getElementById("pc01_quantidade");
+  const input = document.getElementById("pc11_quant");
   input.addEventListener("keypress", mask_4casasdecimais);
 
   numeros_apos_virgula = 0;
@@ -606,7 +606,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
 
     }
 
-    if ($F('pc01_quantidade') == "") {
+    if ($F('pc11_quant') == "") {
 
       alert('Informe a quantidade!');
       return false;
@@ -652,7 +652,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
     aLinha[3] = unidade;
     aLinha[4] = "<input type='button' value='A' onclick='js_excluirLinha()'> <input type='button' value='E' onclick='js_excluirLinha()'>";
     aLinha[5] = document.getElementById('eleSub').value;
-    aLinha[6] = document.getElementById('pc01_quantidade').value;
+    aLinha[6] = document.getElementById('pc11_quant').value;
 
     oGridItens.addRow(aLinha);
 

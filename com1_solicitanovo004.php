@@ -230,7 +230,7 @@ if (count($aParametrosOrcamento) > 0) {
 			$clsolicita->pc10_login           = db_getsession("DB_id_usuario");
 			$clsolicita->pc10_data            = date("Y-m-d", db_getsession("DB_datausu"));
 			$clsolicita->pc10_resumo          = addslashes(stripslashes(chop($pc10_resumo)));
-			$clsolicita->pc10_solicitacaotipo = $pc10_solicitacaotipo;
+			$clsolicita->pc10_solicitacaotipo = 1;
 			$clsolicita->incluir(@$pc10_numero);
 			$pc10_numero = $clsolicita->pc10_numero;
 			if ($clsolicita->erro_status == 0) {
