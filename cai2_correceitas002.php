@@ -36,10 +36,8 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 use model\caixa\relatorios\ReceitaPeriodoTesourariaSintetica;
-use repositories\caixa\relatorios\ReceitaPeriodoTesourariaSinteticaRepositoryLegacy;
 
 require_once "model/caixa/relatorios/ReceitaPeriodoTesourariaSintetica.model.php";
-require_once "repositories/caixa/relatorios/ReceitaPeriodoTesourariaSinteticaRepositoryLegacy.php";
 
 $sDesdobramento = $desdobrar;
 $sTipo = $sinana;
@@ -56,7 +54,7 @@ $sEstrutura = $estrut;
 $sContas = $conta;
 $sContribuintes = $contribuinte;
 
-$oRelatorioReceitaPeriodoTesouraria = new ReceitaPeriodoTesourariaSinteticaRepositoryLegacy(
+$oRelatorioReceitaPeriodoTesouraria = new ReceitaPeriodoTesourariaSintetica(
     $sTipo,
     $sTipoReceita,
     $iFormaArrecadacao,
@@ -70,11 +68,7 @@ $oRelatorioReceitaPeriodoTesouraria = new ReceitaPeriodoTesourariaSinteticaRepos
     $sReceitas,
     $sEstrutura,
     $sContas,
-    $sContribuintes
-);
-$oRelatorioReceitaPeriodoTesouraria = new ReceitaPeriodoTesourariaSintetica(
-    $sTipoReceita,
-    $oRelatorioReceitaPeriodoTesouraria);
+    $sContribuintes);
 $oRelatorioReceitaPeriodoTesouraria->processar();
 
 /**

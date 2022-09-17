@@ -185,7 +185,7 @@ implements IReceitaPeriodoTesourariaRepository
                 k02_drecei descricao, 
                 codrec reduzido, 
                 estrutural, 
-                valor 
+                SUM(valor) as valor
             FROM ( 
                 {$this->sqlInterno}
                 UNION ALL 
@@ -193,7 +193,13 @@ implements IReceitaPeriodoTesourariaRepository
             ) as xxx 
             WHERE
                 {$this->sqlWhereUnion} 
-                {$this->sqlOrder} ";
+            GROUP BY 
+                k02_codigo, 
+                k02_tipo, 
+                k02_drecei, 
+                codrec, 
+                estrutural 
+            {$this->sqlOrder} ";
     }
 
     public function defnirSQLFormaArrecadacaoArquivoBancario()
