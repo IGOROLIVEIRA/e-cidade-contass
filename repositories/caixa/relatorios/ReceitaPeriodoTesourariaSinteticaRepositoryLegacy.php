@@ -19,7 +19,10 @@ implements IReceitaPeriodoTesourariaRepository
     private $dDataFinal;
     private $sEstrutura;
     private $sConta;
+    private $iInstituicao;
     private $sql;
+    private $sqlWhere;
+    private $sqlOrder;
     private $sqlWhereUnion;
 
     public function __construct(
@@ -28,11 +31,13 @@ implements IReceitaPeriodoTesourariaRepository
         $sOrdem,
         $dDataInicial,
         $dDataFinal,
+        $sDesdobramento,
         $iEmendaParlamentar,
         $iRegularizacaoRepasse,
+        $iInstituicao,
         $sReceitas = NULL,
         $sEstrutura = NULL,
-        $sConta = NULL,
+        $sContas = NULL,
         $sContribuintes = NULL
     ) {
         $this->sTipo = $sTipo;
@@ -42,25 +47,33 @@ implements IReceitaPeriodoTesourariaRepository
         $this->dDataFinal = $dDataFinal;
         $this->iEmendaParlamentar  = $iEmendaParlamentar;
         $this->iRegularizacaoRepasse = $iRegularizacaoRepasse;
-        $this->sEstrutura = $sEstrutura;
-        $this->sConta = $sConta;
+        $this->iInstituicao = $iInstituicao;
         $this->sReceitas = $sReceitas;
+        $this->sEstrutura = $sEstrutura;
+        $this->sContas = $sContas;
         $this->sContribuintes = $sContribuintes;
+        $this->definirSQL();
     }
 
     public function pegarDados()
     {
-        $this->definirSQL();
-        return $this->sql;
+        $aDados = array();
+        if (!$result = pg_query($this->sql))
+            throw new Exception("Erro realizando consulta");
+        while ($data = pg_fetch_object($result)) {
+            $aDados[$data->tipo][] = $data;
+        }
+        return $aDados;
     }
 
     public function definirSQL()
     {
         $this->definirSQLWhereExterno();
-        $this->definirSQLWhereReceita();
-        $this->definirSQLWhereContribuinte();
-        $this->definirSQLWhereEmenda();
-        $this->definirSQLWhereRepasse();
+        $this->sqlWhere .= $this->definirSQLWhereReceita();
+        $this->sqlWhere .= $this->definirSQLWhereContribuinte();
+        $this->sqlWhere .= $this->definirSQLWhereEmenda();
+        $this->sqlWhere .= $this->definirSQLWhereRepasse();
+        $this->sqlOrder .= $this->definirSQLOrderBy();
         $this->definirSQLInterno();
 
         if ($this->iFormaArrecadacao == ReceitaFormaArrecadacaoRepositoryLegacy::TODAS) {
@@ -135,35 +148,49 @@ implements IReceitaPeriodoTesourariaRepository
                 AND r.k12_data = f.k12_data
                 AND r.k12_autent = f.k12_autent
 			INNER JOIN tabrec g ON g.k02_codigo = f.k12_receit
-				left outer join taborc o on o.k02_codigo = g.k02_codigo
+			LEFT OUTER JOIN taborc o on o.k02_codigo = g.k02_codigo
                 AND o.k02_anousu = extract (year from r.k12_data)
-				left outer join tabplan p on p.k02_codigo = g.k02_codigo
+			LEFT OUTER JOIN tabplan p on p.k02_codigo = g.k02_codigo
                 AND p.k02_anousu = extract (year from r.k12_data)
-										 left outer join conplanoreduz c2 on r.k12_conta  	= c2.c61_reduz 
-										 AND	c2.c61_anousu	= extract (year from r.k12_data)							 
-				left join corplacaixa on r.k12_id 	   		= k82_id
-                AND r.k12_data   	= k82_data
-                AND r.k12_autent  	= k82_autent
-     			left join placaixarec on k82_seqpla 		= k81_seqpla
-                  left outer join orcreceita on o70_codrec = o.k02_codrec and 
-                  o70_anousu = o.k02_anousu 
-                  left outer join conplanoreduz c1 on c1.c61_codcon = o70_codfon   and 
-                  c1.c61_anousu = o70_anousu 
-                  left outer join conplanoreduz c2 on c2.c61_anousu = p.k02_anousu and 
-                  c2.c61_reduz  = p.k02_reduz 
-			    where {$this->sWhere} and f.k12_data between '{$this->dDataInicial}' and '{$this->dDataFinal}' and r.k12_instit = " . db_getsession("DB_instit") . "
-			    group by g.k02_tipo, g.k02_codigo, g.k02_drecei, codrec, estrutural,c2.c61_reduz ";
+			LEFT OUTER JOIN conplanoreduz c2 on r.k12_conta  	= c2.c61_reduz 
+                AND	c2.c61_anousu = extract (year from r.k12_data)							 
+			LEFT JOIN corplacaixa ON r.k12_id = k82_id
+                AND r.k12_data = k82_data
+                AND r.k12_autent = k82_autent
+     		LEFT JOIN placaixarec ON k82_seqpla = k81_seqpla
+			WHERE 
+                1 = 1 
+                {$this->sqlWhere} 
+                AND f.k12_data BETWEEN '{$this->dDataInicial}' AND '{$this->dDataFinal}' 
+                AND r.k12_instit = {$this->iInstituicao}
+			GROUP BY 
+                g.k02_tipo, 
+                g.k02_codigo, 
+                g.k02_drecei, 
+                codrec, 
+                estrutural,
+                c2.c61_reduz ";
     }
 
     public function defnirSQLFormaArrecadacaoTodas()
     {
         $sqlCorNumDesconto = str_replace("cornump ", "cornumpdesconto ", $this->sqlInterno);
         $this->sql = " 
-            SELECT k02_codigo, k02_tipo, k02_drecei, codrec, estrutural, valor FROM ( 
+            SELECT 
+                k02_codigo codigo, 
+                k02_tipo tipo, 
+                k02_drecei descricao, 
+                codrec reduzido, 
+                estrutural, 
+                valor 
+            FROM ( 
                 {$this->sqlInterno}
                 UNION ALL 
                 {$sqlCorNumDesconto}
-            ) as xxx {$this->sqlWhereUnion} {$this->sqlOrder} ";
+            ) as xxx 
+            WHERE
+                {$this->sqlWhereUnion} 
+                {$this->sqlOrder} ";
     }
 
     public function defnirSQLFormaArrecadacaoArquivoBancario()
@@ -210,6 +237,6 @@ implements IReceitaPeriodoTesourariaRepository
      */
     public function pegarFormatoPagina()
     {
-        return "L";
+        return "Portrait";
     }
 }

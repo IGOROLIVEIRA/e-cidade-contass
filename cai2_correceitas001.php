@@ -26,6 +26,7 @@
  */
 
 use repositories\caixa\relatorios\ReceitaFormaArrecadacaoRepositoryLegacy;
+use repositories\caixa\relatorios\ReceitaOrdemRepositoryLegacy;
 
 require("libs/db_stdlib.php");
 require("libs/db_conecta.php");
@@ -35,6 +36,7 @@ include("dbforms/db_classesgenericas.php");
 include("dbforms/db_funcoes.php");
 include("classes/db_orctiporec_classe.php");
 require_once 'repositories/caixa/relatorios/ReceitaFormaArrecadacaoRepositoryLegacy.php';
+require_once 'repositories/caixa/relatorios/ReceitaOrdemRepositoryLegacy.php';
 
 $clrotulo = new rotulocampo;
 $clrotulo->label('DBtxt10');
@@ -282,11 +284,12 @@ function js_emite(){
 						</td>
 						<td>
 							<select name="ordem" >
-								<option value = 'r'>Código Receita</option>
-								<option value = 'e'>Estrutural</option>
-								<option value = 'a'>Alfabética Descrição Receita</option>
-								<option value = 'd'>Reduzido Orçamento</option>
-								<option value = 'c'>Reduzido Conta</option>
+								<option value=<?= ReceitaOrdemRepositoryLegacy::CODIGO ?>>Código Receita</option>
+								<option value=<?= ReceitaOrdemRepositoryLegacy::ESTRUTURAL ?>>Estrutural</option>
+								<option value=<?= ReceitaOrdemRepositoryLegacy::ALFABETICA ?>>Alfabética Descrição Receita</option>
+								<option value=<?= ReceitaOrdemRepositoryLegacy::REDUZIDO_ORCAMENTO ?>>Reduzido Orçamento</option>
+								<option value=<?= ReceitaOrdemRepositoryLegacy::REDUZIDO_CONTA ?>>Reduzido Conta</option>
+                            </select>
 						</td>
 					</tr>
 					<tr>

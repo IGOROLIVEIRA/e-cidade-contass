@@ -41,26 +41,34 @@ use repositories\caixa\relatorios\ReceitaPeriodoTesourariaSinteticaRepositoryLeg
 require_once "model/caixa/relatorios/ReceitaPeriodoTesouraria.model.php";
 require_once "repositories/caixa/relatorios/ReceitaPeriodoTesourariaSinteticaRepositoryLegacy.php";
 
+$sDesdobramento = $desdobrar;
 $sTipo = $sinana;
 $sTipoReceita = $tipo;
 $iFormaArrecadacao = $formarrecadacao;
 $sOrdem = $ordem;
 $dDataInicial = $datai;
 $dDataFinal = $dataf;
+$iEmendaParlamentar = 0;
+$iRegularizacaoRepasse = 0;
+$iInstituicao = db_getsession("DB_instit");
 $sReceitas = $codrec;
 $sEstrutura = $estrut;
 $sContas = $conta;
 $sContribuintes = $contribuinte;
 
 $oRelatorioReceitaPeriodoTesouraria = new ReceitaPeriodoTesourariaSinteticaRepositoryLegacy(
-    $sTipo, 
-    $iFormaArrecadacao, 
-    $sOrdem, 
-    $dDataInicial, 
-    $dDataFinal, 
-    $sReceitas, 
-    $sEstrutura, 
-    $sContas, 
+    $sTipo,
+    $iFormaArrecadacao,
+    $sOrdem,
+    $dDataInicial,
+    $dDataFinal,
+    $sDesdobramento,
+    $iEmendaParlamentar,
+    $iRegularizacaoRepasse,
+    $iInstituicao,
+    $sReceitas,
+    $sEstrutura,
+    $sContas,
     $sContribuintes
 );
 $oRelatorioReceitaPeriodoTesouraria = new ReceitaPeriodoTesouraria($oRelatorioReceitaPeriodoTesouraria);
@@ -667,7 +675,7 @@ elseif ($sinana == 'S2') {
 // echo $sql;exit;
 //die($sql);
 
-die($sql);
+// die($sql);
 $result = db_query($sql) or die("Erro realizando consulta : ".$sql);
 
 $xxnum = pg_numrows($result);
@@ -695,10 +703,10 @@ if ($sinana == 'S1' or $sinana == 'S3') {
 		$pdf->Cell(10, 6, "RED", 1, 0, "C", 1);
 		$pdf->Cell(40, 6, "ESTRUTURAL", 1, 0, "C", 1);
 		$pdf->Cell(100, 6, "RECEITA ORÇAMENTÁRIA", 1, 0, "C", 1);
-    if ($sinana == 'S3') {
-      $pdf->Cell(15, 6, "CONTA", 1, 0, "C", 1);
-      $pdf->Cell(60, 6, "DESCRIÇÃO CONTA", 1, 0, "C", 1);
-    }
+        if ($sinana == 'S3') {
+        $pdf->Cell(15, 6, "CONTA", 1, 0, "C", 1);
+        $pdf->Cell(60, 6, "DESCRIÇÃO CONTA", 1, 0, "C", 1);
+        }
 		$pdf->Cell(25, 6, "VALOR", 1, 1, "C", 1);
 		$pdf->SetFont('Arial', 'B', 9);
 		for ($i = 0; $i < $xxnum; $i ++) {
@@ -857,7 +865,7 @@ if ($sinana == 'S1' or $sinana == 'S3') {
       $pdf->cell(235, 4, "TOTAL ...", 1, 0, "L", 0);
     }
     $pdf->cell(25, 4, db_formatar($total_reco, 'f'), 1, 1, "R", 0);
-	}
+	} 
 
 	if ($tipo == 'T' || $tipo == 'E') {
   	$pdf->ln(2);
@@ -947,6 +955,7 @@ if ($sinana == 'S1' or $sinana == 'S3') {
 	$pdf->setfont('arial', 'B', 7);
 	$pdf->cell(110, 5, db_formatar($totalrecursos, 'f'), 1, 1, "R", 0);
 
+// FINAL DA PRIMEIRA CONDICAO IF SINANA S1 OU S3
 } elseif ($sinana == 'S2') {
 	////// sintetico por estrutural
 	$troca = 1;
