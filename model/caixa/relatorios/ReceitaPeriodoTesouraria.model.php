@@ -4,9 +4,11 @@ namespace model\caixa\relatorios;
 
 use PDF;
 use interfaces\caixa\relatorios\IReceitaPeriodoTesourariaRepository;
+use repositories\caixa\relatorios\ReceitaTipoRepositoryLegacy;
 
 require_once "fpdf151/pdf.php";
 require_once "interfaces/caixa/relatorios/IReceitaPeriodoTesourariaRepository.php";
+require_once "repositories/caixa/relatorios/ReceitaTipoRepositoryLegacy.php";
 
 class ReceitaPeriodoTesouraria extends PDF
 {
@@ -21,12 +23,34 @@ class ReceitaPeriodoTesouraria extends PDF
      */
     private $oReceitaPeriodoTesourariaRepository;
 
-    public function __construct($oReceitaPeriodoTesourariaLegacy)
+    public function __construct($sTipoReceita, $oReceitaPeriodoTesourariaLegacy)
     {
         global $head3, $head4, $head5;
         $this->oReceitaPeriodoTesourariaRepository = $oReceitaPeriodoTesourariaLegacy;
+        $this->sTipoReceita = $sTipoReceita;
+        $this->definirCabecalho();
 
+        $head3 = $this->tituloRelatorio;
+        $head4 = $this->tituloTipoReceita;
         parent::__construct($this->oReceitaPeriodoTesourariaRepository->pegarFormatoPagina());
+    }
+
+    public function definirCabecalho()
+    {
+        $this->tituloRelatorio = "RELATÓRIO DE RECEITAS ARRECADADAS";
+        $this->tituloTipoReceita = $this->definirTituloTipoReceita();
+    }
+
+    public function definirTituloTipoReceita()
+    {
+        if ($this->sTipoReceita == ReceitaTipoRepositoryLegacy::TODOS)
+            return 'TODAS AS RECEITAS';
+
+        if ($this->sTipoReceita == ReceitaTipoRepositoryLegacy::ORCAMENTARIA)
+            return 'RECEITAS ORÇAMENTÁRIAS';
+
+        if ($this->sTipoReceita == ReceitaTipoRepositoryLegacy::EXTRA)
+            return 'RECEITAS EXTRA-ORÇAMENTÁRIAS';
     }
 
     public function processar()
@@ -50,6 +74,9 @@ class ReceitaPeriodoTesouraria extends PDF
 
     public function montarTabelaReceitaOrcamentaria()
     {
+        if (!array_key_exists(ReceitaTipoRepositoryLegacy::ORCAMENTARIA, $this->aDadosRelatorio))
+            return;
+
         $this->ln(2);
         $this->AddPage();
         $this->SetTextColor(0, 0, 0);
@@ -110,10 +137,20 @@ class ReceitaPeriodoTesouraria extends PDF
 
     public function montarTabelaReceitaExtraOrcamentaria()
     {
+        if (!array_key_exists(ReceitaTipoRepositoryLegacy::EXTRA, $this->aDadosRelatorio))
+            return;
+
         $this->ln(2);
-        if ($this->gety() > $this->h - 30) {
+
+        if (!array_key_exists(ReceitaTipoRepositoryLegacy::ORCAMENTARIA, $this->aDadosRelatorio))
+            $this->AddPage();
+
+        if ($this->gety() > $this->h - 30 
+            AND array_key_exists(ReceitaTipoRepositoryLegacy::ORCAMENTARIA, $this->aDadosRelatorio)
+            ) {
             $this->AddPage();
         }
+        
         $this->SetTextColor(0, 0, 0);
         $this->SetFillColor(220);
         $this->SetFont('Arial', 'B', 9);
@@ -167,9 +204,9 @@ class ReceitaPeriodoTesouraria extends PDF
     public function montarTotalGeral()
     {
         $this->cell(160, 4, "TOTAL GERAL", 1, 0, "L", 0);
-        $this->cell(25, 4, db_formatar($this->totalOrcamentario + $this->totalExtra, 'f'), 1, 1, "R", 0);
+        $this->cell(25, 4, db_formatar($this->totalOrcamentaria + $this->totalExtra, 'f'), 1, 1, "R", 0);
         $this->ln(5);
-      
+
         $this->cell(110, 4, "DEMONSTRATIVO DO DESDOBRAMENTO DA RECEITA LIVRE", 1, 1, "L", 0);
         /*
         VER COMO FUNCIONA O TOTAL POR RECURSOS

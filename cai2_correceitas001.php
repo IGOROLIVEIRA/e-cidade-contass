@@ -27,6 +27,7 @@
 
 use repositories\caixa\relatorios\ReceitaFormaArrecadacaoRepositoryLegacy;
 use repositories\caixa\relatorios\ReceitaOrdemRepositoryLegacy;
+use repositories\caixa\relatorios\ReceitaTipoRepositoryLegacy;
 
 require("libs/db_stdlib.php");
 require("libs/db_conecta.php");
@@ -37,6 +38,7 @@ include("dbforms/db_funcoes.php");
 include("classes/db_orctiporec_classe.php");
 require_once 'repositories/caixa/relatorios/ReceitaFormaArrecadacaoRepositoryLegacy.php';
 require_once 'repositories/caixa/relatorios/ReceitaOrdemRepositoryLegacy.php';
+require_once 'repositories/caixa/relatorios/ReceitaTipoRepositoryLegacy.php';
 
 $clrotulo = new rotulocampo;
 $clrotulo->label('DBtxt10');
@@ -263,9 +265,9 @@ function js_emite(){
 						</td>
 						<td>
 							<select name="tipo" onchange="js_valor();" style="width: 140px;">
-								<option value = 'T'>Todas</option>
-								<option value = 'O'>Orçamentarias</option>
-								<option value = 'E'>Extra-Orçamentarias</option>
+								<option value=<?= ReceitaTipoRepositoryLegacy::TODOS ?>>Todas</option>
+								<option value=<?= ReceitaTipoRepositoryLegacy::ORCAMENTARIA ?>>Orçamentarias</option>
+								<option value=<?= ReceitaTipoRepositoryLegacy::EXTRA ?>>Extra-Orçamentarias</option>
 						</td>
 					</tr>
 					<tr>

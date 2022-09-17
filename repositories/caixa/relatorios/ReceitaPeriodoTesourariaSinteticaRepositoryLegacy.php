@@ -27,6 +27,7 @@ implements IReceitaPeriodoTesourariaRepository
 
     public function __construct(
         $sTipo,
+        $sTipoReceita,
         $iFormaArrecadacao,
         $sOrdem,
         $dDataInicial,
@@ -41,6 +42,7 @@ implements IReceitaPeriodoTesourariaRepository
         $sContribuintes = NULL
     ) {
         $this->sTipo = $sTipo;
+        $this->sTipoReceita = $sTipoReceita;
         $this->iFormaArrecadacao = $iFormaArrecadacao;
         $this->sOrdem = $sOrdem;
         $this->dDataInicial = $dDataInicial;
@@ -69,6 +71,7 @@ implements IReceitaPeriodoTesourariaRepository
     public function definirSQL()
     {
         $this->definirSQLWhereExterno();
+        $this->sqlWhere .= $this->definirSQLWhereTipo();
         $this->sqlWhere .= $this->definirSQLWhereReceita();
         $this->sqlWhere .= $this->definirSQLWhereContribuinte();
         $this->sqlWhere .= $this->definirSQLWhereEmenda();

@@ -2,8 +2,10 @@
 namespace repositories\caixa\relatorios;
 
 use repositories\caixa\relatorios\ReceitaOrdemRepositoryLegacy;
+use repositories\caixa\relatorios\ReceitaTipoRepositoryLegacy;
 
 require_once 'repositories/caixa/relatorios/ReceitaOrdemRepositoryLegacy.php';
+require_once 'repositories/caixa/relatorios/ReceitaTipoRepositoryLegacy.php';
 
 class ReceitaPeriodoTesourariaRepositoryLegacy
 {
@@ -11,6 +13,12 @@ class ReceitaPeriodoTesourariaRepositoryLegacy
     private $iRegularizacaoRepasse;
     private $sReceitas;
     private $sContribuintes;
+
+    public function definirSQLWhereTipo()
+    {
+        if ($this->sTipoReceita != ReceitaTipoRepositoryLegacy::TODOS)
+            return " AND g.k02_tipo = '{$this->sTipoReceita}' ";
+    }
 
     public function definirSQLWhereReceita()
     {

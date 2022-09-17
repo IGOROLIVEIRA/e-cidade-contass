@@ -58,6 +58,7 @@ $sContribuintes = $contribuinte;
 
 $oRelatorioReceitaPeriodoTesouraria = new ReceitaPeriodoTesourariaSinteticaRepositoryLegacy(
     $sTipo,
+    $sTipoReceita,
     $iFormaArrecadacao,
     $sOrdem,
     $dDataInicial,
@@ -71,7 +72,9 @@ $oRelatorioReceitaPeriodoTesouraria = new ReceitaPeriodoTesourariaSinteticaRepos
     $sContas,
     $sContribuintes
 );
-$oRelatorioReceitaPeriodoTesouraria = new ReceitaPeriodoTesouraria($oRelatorioReceitaPeriodoTesouraria);
+$oRelatorioReceitaPeriodoTesouraria = new ReceitaPeriodoTesouraria(
+    $sTipoReceita,
+    $oRelatorioReceitaPeriodoTesouraria);
 $oRelatorioReceitaPeriodoTesouraria->processar();
 
 /**
