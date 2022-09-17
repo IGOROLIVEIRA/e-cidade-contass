@@ -10,7 +10,7 @@ require_once "fpdf151/pdf.php";
 require_once "repositories/caixa/relatorios/ReceitaTipoRepositoryLegacy.php";
 require_once "repositories/caixa/relatorios/ReceitaFormaArrecadacaoRepositoryLegacy.php";
 
-class ReceitaPeriodoTesouraria extends PDF
+abstract class ReceitaPeriodoTesouraria extends PDF
 {
     private $totalRecursos = 0;
 

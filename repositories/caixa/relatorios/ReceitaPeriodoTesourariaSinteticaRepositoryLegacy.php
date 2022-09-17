@@ -4,15 +4,17 @@ namespace repositories\caixa\relatorios;
 
 use repositories\caixa\relatorios\ReceitaFormaArrecadacaoRepositoryLegacy;
 use repositories\caixa\relatorios\ReceitaPeriodoTesourariaRepositoryLegacy;
+use repositories\caixa\relatorios\ReceitaTipoSelecaoRepositoryLegacy;
 use interfaces\caixa\relatorios\IReceitaPeriodoTesourariaRepository;
 use Exception;
 
 require_once 'repositories/caixa/relatorios/ReceitaFormaArrecadacaoRepositoryLegacy.php';
 require_once 'repositories/caixa/relatorios/ReceitaPeriodoTesourariaRepositoryLegacy.php';
+require_once 'repositories/caixa/relatorios/ReceitaTipoSelecaoRepositoryLegacy.php';
 require_once 'interfaces/caixa/relatorios/IReceitaPeriodoTesourariaRepository.php';
 
-class ReceitaPeriodoTesourariaSinteticaRepositoryLegacy 
-extends ReceitaPeriodoTesourariaRepositoryLegacy 
+class ReceitaPeriodoTesourariaSinteticaRepositoryLegacy
+extends ReceitaPeriodoTesourariaRepositoryLegacy
 implements IReceitaPeriodoTesourariaRepository
 {
     private $iFormaArrecadacao;
@@ -22,9 +24,11 @@ implements IReceitaPeriodoTesourariaRepository
     private $sConta;
     private $iInstituicao;
     private $sql;
+    private $sqlSelect;
     private $sqlWhere;
     private $sqlOrder;
     private $sqlWhereUnion;
+    private $sqlGroup;
 
     public function __construct(
         $sTipo,
@@ -72,6 +76,7 @@ implements IReceitaPeriodoTesourariaRepository
     public function definirSQL()
     {
         $this->definirSQLWhereExterno();
+        $this->definirSQLSelectEGroup();
         $this->sqlWhere .= $this->definirSQLWhereTipo();
         $this->sqlWhere .= $this->definirSQLWhereReceita();
         $this->sqlWhere .= $this->definirSQLWhereContribuinte();
@@ -114,22 +119,26 @@ implements IReceitaPeriodoTesourariaRepository
     {
         $this->sqlInterno = "
             SELECT 
-                g.k02_codigo, 
-                g.k02_tipo, 
+                g.k02_codigo,
+                g.k02_tipo,
                 g.k02_drecei,
-                c2.c61_reduz,
-  				CASE 
-                    WHEN o.k02_codrec IS NOT NULL
-                    THEN o.k02_codrec 
-                    ELSE p.k02_reduz 
-                END AS codrec,
-				CASE 
-                    WHEN p.k02_codigo IS NULL
-                    THEN o.k02_estorc 
-                    ELSE p.k02_estpla 
-                END AS estrutural,
+                case
+                    when o.k02_codrec is not null then o.k02_codrec
+                    else p.k02_reduz
+                end as codrec,
+                case
+                    when p.k02_codigo is null then o.k02_estorc
+                    else p.k02_estpla
+                end as estrutural,
+                k12_histcor as k00_histtxt,
+                f.k12_data,
+                f.k12_numpre,
+                f.k12_numpar,
+                c61_reduz,
+                c60_descr,
+                k12_conta,
 				ROUND(
-                    SUM( 
+                        ( 
                         f.k12_valor - COALESCE((
                             SELECT 
                                 CASE
@@ -148,45 +157,37 @@ implements IReceitaPeriodoTesourariaRepository
                         ), 0) 
                 ), 2) AS valor
 			FROM cornump f
-			INNER JOIN corrente r ON r.k12_id = f.k12_id
+            INNER JOIN corrente r ON r.k12_id = f.k12_id
                 AND r.k12_data = f.k12_data
                 AND r.k12_autent = f.k12_autent
-			INNER JOIN tabrec g ON g.k02_codigo = f.k12_receit
-			LEFT OUTER JOIN taborc o on o.k02_codigo = g.k02_codigo
-                AND o.k02_anousu = extract (year from r.k12_data)
-			LEFT OUTER JOIN tabplan p on p.k02_codigo = g.k02_codigo
-                AND p.k02_anousu = extract (year from r.k12_data)
-			LEFT OUTER JOIN conplanoreduz c2 on r.k12_conta  	= c2.c61_reduz 
-                AND	c2.c61_anousu = extract (year from r.k12_data)							 
-			LEFT JOIN corplacaixa ON r.k12_id = k82_id
+            INNER JOIN conplanoreduz c1 ON r.k12_conta = c1.c61_reduz
+                AND c1.c61_anousu = EXTRACT(YEAR FROM r.k12_data)
+            INNER JOIN conplano ON c1.c61_codcon = c60_codcon
+                AND c60_anousu = EXTRACT(YEAR FROM r.k12_data)
+            INNER JOIN tabrec g ON g.k02_codigo = f.k12_receit
+            LEFT OUTER JOIN taborc o ON o.k02_codigo = g.k02_codigo
+                AND o.k02_anousu = EXTRACT(YEAR FROM r.k12_data)
+            LEFT OUTER JOIN tabplan p ON p.k02_codigo = g.k02_codigo
+                AND p.k02_anousu = EXTRACT(YEAR FROM r.k12_data)
+            LEFT JOIN corhist hist ON hist.k12_id = f.k12_id
+                AND hist.k12_data = f.k12_data
+                AND hist.k12_autent = f.k12_autent
+            LEFT JOIN corplacaixa ON r.k12_id = k82_id
                 AND r.k12_data = k82_data
                 AND r.k12_autent = k82_autent
-     		LEFT JOIN placaixarec ON k82_seqpla = k81_seqpla
+            LEFT JOIN placaixarec ON k82_seqpla = k81_seqpla
 			WHERE 
                 1 = 1 
                 {$this->sqlWhere} 
                 AND f.k12_data BETWEEN '{$this->dDataInicial}' AND '{$this->dDataFinal}' 
-                AND r.k12_instit = {$this->iInstituicao}
-			GROUP BY 
-                g.k02_tipo, 
-                g.k02_codigo, 
-                g.k02_drecei, 
-                codrec, 
-                estrutural,
-                c2.c61_reduz ";
+                AND r.k12_instit = {$this->iInstituicao} ";
     }
 
     public function defnirSQLFormaArrecadacaoTodas()
     {
         $sqlCorNumDesconto = str_replace("cornump ", "cornumpdesconto ", $this->sqlInterno);
         $this->sql = " 
-            SELECT 
-                k02_codigo codigo, 
-                k02_tipo tipo, 
-                k02_drecei descricao, 
-                codrec reduzido, 
-                estrutural, 
-                SUM(valor) as valor
+            {$this->sqlSelect}
             FROM ( 
                 {$this->sqlInterno}
                 UNION ALL 
@@ -194,13 +195,53 @@ implements IReceitaPeriodoTesourariaRepository
             ) as xxx 
             WHERE
                 {$this->sqlWhereUnion} 
-            GROUP BY 
-                k02_codigo, 
-                k02_tipo, 
-                k02_drecei, 
-                codrec, 
-                estrutural 
+            {$this->sqlGroup}
             {$this->sqlOrder} ";
+    }
+
+    public function definirSQLSelectEGroup()
+    {
+        if ($this->sTipo == ReceitaTipoSelecaoRepositoryLegacy::RECEITA) {
+            $this->definirSQLSelectReceita();
+            $this->definirSQLGroupReceita();
+            return;
+        }
+
+        if ($this->sTipo == ReceitaTipoSelecaoRepositoryLegacy::ESTRUTURAL) {
+            $this->definirSQLSelectEstrutural();
+            $this->definirSQLGroupReceita();
+            return;
+        }
+    }
+
+    public function definirSQLSelectReceita()
+    {
+        $this->sqlSelect = "SELECT 
+                k02_codigo codigo, 
+                k02_tipo tipo, 
+                k02_drecei descricao, 
+                codrec reduzido, 
+                estrutural, 
+                SUM(valor) as valor ";
+    }
+
+    public function definirSQLSelectEstrutural()
+    {
+        $this->sqlSelect = "SELECT 
+                k02_tipo tipo, 
+                k02_drecei descricao, 
+                estrutural, 
+                SUM(valor) as valor ";
+    }
+
+    public function definirSQLGroupReceita()
+    {
+        $this->sqlGroup = "GROUP BY 
+            k02_codigo, 
+            k02_tipo, 
+            k02_drecei, 
+            codrec, 
+            estrutural ";
     }
 
     public function defnirSQLFormaArrecadacaoArquivoBancario()
@@ -210,13 +251,13 @@ implements IReceitaPeriodoTesourariaRepository
         $this->sql .= " from ( ";
         $this->sql .= " select distinct rc.vlrrec as vlrpago, db.idret, (select sum(vlrpago)  ";
         $this->sql .= " from disbanco  ";
-        $this->sql .= " where idret = db.idret and codret = db.codret)  ";
+        $this->sql .= " where idret = db.idret AND codret = db.codret)  ";
         $this->sql .= " from disbanco db ";
-        $this->sql .= " inner join discla dc on dc.codret = db.codret  ";
-        $this->sql .= " inner join disrec rc on rc.codcla = dc.codcla  ";
-        $this->sql .= " and db.idret = rc.idret  ";
-        $this->sql .= " and rc.k00_receit =  k02_codigo ";
-        $this->sql .= " where dc.dtaute between '{$this->dDataInicial}' and '{$this->dDataFinal}') as x ),2) as valor ";
+        $this->sql .= " INNER JOIN discla dc ON dc.codret = db.codret  ";
+        $this->sql .= " INNER JOIN disrec rc ON rc.codcla = dc.codcla  ";
+        $this->sql .= " AND db.idret = rc.idret  ";
+        $this->sql .= " AND rc.k00_receit =  k02_codigo ";
+        $this->sql .= " where dc.dtaute between '{$this->dDataInicial}' AND '{$this->dDataFinal}') as x ),2) as valor ";
         $this->sql .= " from ( ";
         $this->sql .= " ) as xxx {$this->sqlWhereUnion} {$this->sqlOrder} ";
         return;
@@ -230,13 +271,13 @@ implements IReceitaPeriodoTesourariaRepository
         $this->sql .= " round((select coalesce(sum(vlrpago),0) from ( ";
         $this->sql .= " select distinct rc.vlrrec as vlrpago, db.idret, (select sum(vlrpago)  ";
         $this->sql .= " from disbanco  ";
-        $this->sql .= " where idret = db.idret and codret = db.codret)  ";
+        $this->sql .= " where idret = db.idret AND codret = db.codret)  ";
         $this->sql .= " from disbanco db ";
-        $this->sql .= " inner join discla dc on dc.codret = db.codret  ";
-        $this->sql .= " inner join disrec rc on rc.codcla = dc.codcla  ";
-        $this->sql .= " and db.idret = rc.idret  ";
-        $this->sql .= " and rc.k00_receit =  k02_codigo ";
-        $this->sql .= " where dc.dtaute between '{$this->dDataInicial}' and '{$this->dDataFinal}') as x ), 2) as vlrarquivobanco ";
+        $this->sql .= " INNER JOIN discla dc ON dc.codret = db.codret  ";
+        $this->sql .= " INNER JOIN disrec rc ON rc.codcla = dc.codcla  ";
+        $this->sql .= " AND db.idret = rc.idret  ";
+        $this->sql .= " AND rc.k00_receit =  k02_codigo ";
+        $this->sql .= " where dc.dtaute between '{$this->dDataInicial}' AND '{$this->dDataFinal}') as x ), 2) as vlrarquivobanco ";
         $this->sql .= " from ( ";
         $this->sql .= " ) as xxx {$this->sqlWhereUnion} {$this->sqlOrder} ) as x ";
         return;
