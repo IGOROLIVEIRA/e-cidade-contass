@@ -92,6 +92,9 @@ class EventoS1210 extends EventoBase
             $aDadosAPI[] = $oDadosAPI;
             $iSequencial++;
         }
+        // echo '<pre>';
+        // var_dump($aDadosAPI);
+        // exit;
         return $aDadosAPI;
     }
 
@@ -359,21 +362,16 @@ where
                            order by {$sigla}pd,{$sigla}rubric";
         }
         $rsValores = db_query($sql);
-        echo $sql;
-        db_criatabela($rsValores);
-        exit;
+        // echo $sql;
+        // db_criatabela($rsValores);
+        // exit;
         if ($opcao != 'rescisao') {
             for ($iCont = 0; $iCont < pg_num_rows($rsValores); $iCont++) {
                 $oResult = \db_utils::fieldsMemory($rsValores, $iCont);
-                $oFormatado = new \stdClass();
-                $oFormatado->codrubr    = $oResult->rubrica;
-                $oFormatado->idetabrubr = 'tabrub1';
-                $oFormatado->vrrubr     = ($oResult->provdesc == 'Provento') ? $oResult->provento : $oResult->desconto;
-                $oFormatado->indapurir  = 0;
-                $oFormatado->idedmdev   = $oResult->idedmdev;
-
-                $aItens[] = $oFormatado;
+                $proventos  += ($oResult->provdesc == 'Provento') ? $oResult->provento : 0;
+                $descontos  += ($oResult->provdesc == 'Desconto') ? $oResult->desconto : 0;
             }
+            $vrliq = $proventos - $descontos;
         } else {
             for ($iCont2 = 0; $iCont2 < pg_num_rows($rsValores); $iCont2++) {
                 $oResult = \db_utils::fieldsMemory($rsValores, $iCont2);
@@ -403,17 +401,12 @@ where
                             break;
                     }
                 }
-                $oFormatado = new \stdClass();
-                $oFormatado->codrubr    = $rubrica;
-                $oFormatado->idetabrubr = 'tabrub1';
-                $oFormatado->vrrubr     = ($oResult->provdesc == 'Provento') ? $oResult->provento : $oResult->desconto;
-                $oFormatado->indapurir  = 0;
-                $oFormatado->idedmdev   = $oResult->idedmdev;
-
-                $aItens[] = $oFormatado;
+                $proventos  += ($oResult->provdesc == 'Provento') ? $oResult->provento : 0;
+                $descontos  += ($oResult->provdesc == 'Desconto') ? $oResult->desconto : 0;
             }
+            $vrliq = $proventos - $descontos;
         }
-        return $aItens;
+        return $vrliq;
     }
 
     /**
