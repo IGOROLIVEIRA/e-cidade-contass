@@ -25,6 +25,8 @@
  *                                licenca/licenca_pt.txt 
  */
 
+use repositories\caixa\relatorios\ReceitaFormaArrecadacaoRepositoryLegacy;
+
 require("libs/db_stdlib.php");
 require("libs/db_conecta.php");
 include("libs/db_sessoes.php");
@@ -32,6 +34,7 @@ include("libs/db_usuariosonline.php");
 include("dbforms/db_classesgenericas.php");
 include("dbforms/db_funcoes.php");
 include("classes/db_orctiporec_classe.php");
+require_once 'repositories/caixa/relatorios/ReceitaFormaArrecadacaoRepositoryLegacy.php';
 
 $clrotulo = new rotulocampo;
 $clrotulo->label('DBtxt10');
@@ -328,9 +331,9 @@ function js_emite(){
 						</td>
 						<td>
 							<select name="formarrecadacao" style="width: 175px;">
-								<option value = '0'>Todas</option>
-								<option value = '1'>Via arquivo bancário</option>
-								<option value = '2'>Exceto via arquivo bancário</option>
+								<option value=<?= ReceitaFormaArrecadacaoRepositoryLegacy::TODAS ?>>Todas</option>
+								<option value=<?= ReceitaFormaArrecadacaoRepositoryLegacy::ARQUIVO_BANCARIO ?>>Via arquivo bancário</option>
+								<option value=<?= ReceitaFormaArrecadacaoRepositoryLegacy::EXCETO_ARQUIVO_BANCARIO ?>>Exceto via arquivo bancário</option>
 						</td>
 					</tr>
 					<tr>
