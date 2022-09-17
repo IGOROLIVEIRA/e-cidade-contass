@@ -86,7 +86,7 @@ require_once("dbforms/db_funcoes.php");
           <div id="ctnAlunos" style="width:800px;"></div>
         </fieldset>
 
-        <fieldset class='separator'>
+        <fieldset style="display: none;" class='separator'>
           <legend>Outros Filtros</legend>
           <table class="form-container">
             <tr>
@@ -341,10 +341,10 @@ require_once("dbforms/db_funcoes.php");
     if (oRetorno.status == 2) {
       alert(oRetorno.message.urlDecode());
     }
-
+    console.log(oRetorno.dados);
     oRetorno.dados.each(function(oEmissor) {
 
-      var sValue = oEmissor.z01_nome.urlDecode();
+      var sValue = oEmissor.ed01_c_descr.urlDecode();
       var sString = oEmissor.z01_nome.urlDecode();
 
 
