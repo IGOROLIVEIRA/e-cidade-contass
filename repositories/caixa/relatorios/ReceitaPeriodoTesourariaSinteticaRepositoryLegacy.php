@@ -5,6 +5,7 @@ namespace repositories\caixa\relatorios;
 use repositories\caixa\relatorios\ReceitaFormaArrecadacaoRepositoryLegacy;
 use repositories\caixa\relatorios\ReceitaPeriodoTesourariaRepositoryLegacy;
 use interfaces\caixa\relatorios\IReceitaPeriodoTesourariaRepository;
+use Exception;
 
 require_once 'repositories/caixa/relatorios/ReceitaFormaArrecadacaoRepositoryLegacy.php';
 require_once 'repositories/caixa/relatorios/ReceitaPeriodoTesourariaRepositoryLegacy.php';

@@ -52,7 +52,12 @@ class ReceitaPeriodoTesourariaSintetica extends ReceitaPeriodoTesouraria
             $sContribuintes
         );
         $this->aDadosRelatorio = $this->pegarDados();
-        parent::__construct($sTipoReceita, $dDataInicial, $dDataFinal, $this->oReceitaPeriodoTesourariaRepository->pegarFormatoPagina());
+        parent::__construct(
+            $sTipoReceita, 
+            $iFormaArrecadacao,
+            $dDataInicial, 
+            $dDataFinal, 
+            $this->oReceitaPeriodoTesourariaRepository->pegarFormatoPagina());
     }
 
     public function montarTabelaReceitaOrcamentaria()

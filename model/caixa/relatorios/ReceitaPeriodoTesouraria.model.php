@@ -14,11 +14,12 @@ class ReceitaPeriodoTesouraria extends PDF
 {
     private $totalRecursos = 0;
 
-    public function __construct($sTipoReceita, $dDataInicial, $dDataFinal, $sFormatoPagina)
+    public function __construct($sTipoReceita, $iFormaArrecadacao, $dDataInicial, $dDataFinal, $sFormatoPagina)
     {
         global $head3, $head4, $head6, $head8;
 
         $this->sTipoReceita = $sTipoReceita;
+        $this->iFormaArrecadacao = $iFormaArrecadacao;
         $this->dDataInicial = $dDataInicial;
         $this->dDataFinal = $dDataFinal;
         $this->definirCabecalho();
