@@ -53,7 +53,7 @@ $sReceitas = $codrec;
 $sEstrutura = $estrut;
 $sContas = $conta;
 $sContribuintes = $contribuinte;
-
+/*
 $oRelatorioReceitaPeriodoTesouraria = new ReceitaPeriodoTesourariaSintetica(
     $sTipo,
     $sTipoReceita,
@@ -70,6 +70,7 @@ $oRelatorioReceitaPeriodoTesouraria = new ReceitaPeriodoTesourariaSintetica(
     $sContas,
     $sContribuintes);
 $oRelatorioReceitaPeriodoTesouraria->processar();
+*/
 
 /**
  * Primeiro passo de refactory

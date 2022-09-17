@@ -3,12 +3,12 @@
 namespace model\caixa\relatorios;
 
 use PDF;
-use interfaces\caixa\relatorios\IReceitaPeriodoTesourariaRepository;
 use repositories\caixa\relatorios\ReceitaTipoRepositoryLegacy;
+use repositories\caixa\relatorios\ReceitaFormaArrecadacaoRepositoryLegacy;
 
 require_once "fpdf151/pdf.php";
-require_once "interfaces/caixa/relatorios/IReceitaPeriodoTesourariaRepository.php";
 require_once "repositories/caixa/relatorios/ReceitaTipoRepositoryLegacy.php";
+require_once "repositories/caixa/relatorios/ReceitaFormaArrecadacaoRepositoryLegacy.php";
 
 class ReceitaPeriodoTesouraria extends PDF
 {
@@ -16,7 +16,7 @@ class ReceitaPeriodoTesouraria extends PDF
 
     public function __construct($sTipoReceita, $dDataInicial, $dDataFinal, $sFormatoPagina)
     {
-        global $head3, $head4, $head5, $head6;
+        global $head3, $head4, $head6, $head8;
 
         $this->sTipoReceita = $sTipoReceita;
         $this->dDataInicial = $dDataInicial;
@@ -26,6 +26,7 @@ class ReceitaPeriodoTesouraria extends PDF
         $head3 = $this->tituloRelatorio;
         $head4 = $this->tituloTipoReceita;
         $head6 = $this->tituloPeriodo;
+        $head8 = $this->tituloFormaArrecadacao;
         parent::__construct($sFormatoPagina);
     }
 
@@ -34,6 +35,7 @@ class ReceitaPeriodoTesouraria extends PDF
         $this->tituloRelatorio = "RELATÓRIO DE RECEITAS ARRECADADAS";
         $this->tituloTipoReceita = $this->definirTituloTipoReceita();
         $this->tituloPeriodo = $this->definirTituloPeriodo();
+        $this->tituloFormaArrecadacao = $this->definirTituloFormaArrecadacao();
     }
 
     public function definirTituloTipoReceita()
@@ -64,6 +66,18 @@ class ReceitaPeriodoTesouraria extends PDF
         $this->montarTabelaReceitaExtraOrcamentaria();
         $this->montarTotalGeral();
         $this->Output();
+    }
+
+    public function definirTituloFormaArrecadacao()
+    {
+        if ($this->iFormaArrecadacao == ReceitaFormaArrecadacaoRepositoryLegacy::TODAS)
+            return 'Forma de Arrecadação: Todas';
+
+        if ($this->iFormaArrecadacao == ReceitaFormaArrecadacaoRepositoryLegacy::ARQUIVO_BANCARIO)
+            return 'Forma de Arrecadação: Via arquivo bancário';
+
+        if ($this->iFormaArrecadacao == ReceitaFormaArrecadacaoRepositoryLegacy::EXCETO_ARQUIVO_BANCARIO)
+            return 'Forma de Arrecadação: Exceto via arquivo bancário';
     }
 
     public function montarTabelaReceitaOrcamentaria()
