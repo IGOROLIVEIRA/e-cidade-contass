@@ -10,13 +10,6 @@ require_once "interfaces/caixa/relatorios/IReceitaPeriodoTesourariaRepository.ph
 
 class ReceitaPeriodoTesouraria extends PDF
 {
-    private $sTipo;
-
-    /**
-     * @var array
-     */
-    private $aTipoLanscape = array("S1", "S2");
-
     private $aDadosRelatorio = array();
 
     /**
@@ -24,16 +17,13 @@ class ReceitaPeriodoTesouraria extends PDF
      */
     private $oRelatorioReceitaPeriodoTesouraria;
 
-    /**
-     * Construtor do Relatório 
-     */
     public function __construct($RelatorioReceitaPeriodoTesourariaLegacy)
     {
         global $head3, $head4, $head5;
         $this->oRelatorioReceitaPeriodoTesourariaLegacy = $RelatorioReceitaPeriodoTesourariaLegacy;
         $this->pegarDadosRelatorio();
 
-        parent::__construct($this->oRelatorioReceitaPeriodoTesourariaLegacy->pegarTipoConstrutor());
+        parent::__construct($this->oRelatorioReceitaPeriodoTesourariaLegacy->pegarFormatoPagina());
 
         $this->Open();
         $this->AliasNbPages();
