@@ -212,6 +212,7 @@ SQL;
         if (document.form1.datavenc_dia.value === '' ||
             document.form1.datavenc_mes.value === '' || document.form1.datavenc_ano.value === ''){
             alert("Informe corretamente a data do vencimento.");
+            return;
         } else {
             data = document.form1.datavenc_ano.value+'-'+document.form1.datavenc_mes.value+'-'+document.form1.datavenc_dia.value;
         }
