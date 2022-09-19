@@ -568,7 +568,7 @@ if (isset($chavepesquisa)) {
       ";
   if (!isset($ld)) {
     echo "
-         top.corpo.iframe_solicitem.location.href='com1_solicitem001.php?pc11_numero=$chavepesquisa$parametro';
+         top.corpo.iframe_solicitem.location.href='com1_solicitemnovo001.php?pc11_numero=$chavepesquisa$parametro';
             ";
   }
 
@@ -599,11 +599,11 @@ if (isset($chavepesquisa)) {
   <script>
       function js_db_bloqueia(){
          parent.document.formaba.solicitem.disabled=true;
-         //top.corpo.iframe_solicitem.location.href='com1_solicitem001.php?pc11_numero=$pc10_numero$parametro';
+         //top.corpo.iframe_solicitem.location.href='com1_solicitemnovo001.php?pc11_numero=$pc10_numero$parametro';
        ";
   if (!isset($ld)) {
     echo "
-         top.corpo.iframe_solicitem.location.href='com1_solicitem001.php?pc11_numero=$pc10_numero$parametro';
+         top.corpo.iframe_solicitem.location.href='com1_solicitemnovo001.php?pc11_numero=$pc10_numero$parametro';
 	    ";
   }
 

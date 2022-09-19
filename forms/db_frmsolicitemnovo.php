@@ -41,10 +41,16 @@ if ((isset($opcao) && $opcao == "alterar")) {
   echo "<script>var operador = 0;</script>";
 }
 
+
 ?>
+<style type="text/css">
+  input::placeholder {
+    color: black;
+  }
+</style>
 <div>
   <form name="form1" method="post" action="">
-    <fieldset>
+    <fieldset style="width: 1000px;">
       <legend><strong>Adicionar Item</strong></legend>
       <table border="0">
         <tr>
@@ -134,53 +140,8 @@ if ((isset($opcao) && $opcao == "alterar")) {
 
         </tr>
 
-
         <tr>
-          <div id="codeleRow">
-            <?
 
-            if (isset($o56_codele) && $o56_codele != "") {
-              $o56_elemento_ant = $o56_codele;
-            }
-            if (isset($pc16_codmater) && trim($pc16_codmater) != "") {
-              $sql_record = $clpcmaterele->sql_record($clpcmaterele->sql_query($pc16_codmater, null, "o56_codele,o56_descr,o56_elemento", "o56_descr"));
-              $dad_select = array();
-              for ($i = 0; $i < $clpcmaterele->numrows; $i++) {
-                db_fieldsmemory($sql_record, $i);
-                //$dad_select[$o56_codele] = $o56_codele." - ".db_formatar($o56_elemento,"elemento_int")." - ".$o56_descr;
-                $dad_select[$o56_codele] = $o56_codele . " - " . $o56_elemento . " - " . $o56_descr;
-              }
-            }
-            if (isset($o56_codele_ant)) {
-              $o56_codele = $o56_elemento_ant;
-            }
-            $numrows_materele = $clpcmaterele->numrows;
-            if ($numrows_materele > 0) {
-            ?>
-              <td nowrap title="<?= @$To56_descr ?>">
-                <strong>Sub. ele:</strong>
-              </td>
-              <td nowrap colspan="6">
-                <?
-                $result_pc18ele = $clsolicitemele->sql_record($clsolicitemele->sql_query_file($pc11_codigo, null, "pc18_codele as o56_codele"));
-                if ($clsolicitemele->numrows > 0) {
-                  db_fieldsmemory($result_pc18ele, 0);
-                }
-
-                db_select("o56_codele", $dad_select, true, $trancaCodEle, "");
-                if (isset($o56_codelefunc) && $o56_codelefunc != "") {
-                  echo "<script>document.form1.o56_codele.value=$o56_codelefunc;</script>";
-                }
-                ?>
-
-              </td>
-
-            <?
-            }
-            db_input("o56_codelefunc", 5, $Io56_codele, true, 'hidden', $db_opcao);
-            ?>
-
-          </div>
           <div id="subEl">
             <td colspan="2" nowrap title="<?= @$To56_descr ?>">
               <strong>Desdobramento:</strong>
@@ -212,9 +173,6 @@ if ((isset($opcao) && $opcao == "alterar")) {
                 $matunid = db_utils::fieldsMemory($result, $i);
 
                 $unidade[$matunid->m61_codmatunid] = $matunid->m61_descr;
-                /*
-      echo "<option value=\"$matunid->m61_codmatunid \">$matunid->m61_descr</option>";
-      */
               }
             }
 
@@ -235,7 +193,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
           </td>
           <td>
             <?
-            db_input('pc01_ordem', 8, $Ipc01_descrmater, true, 'text', $db_opcao, 'onkeypress="return event.charCode >= 48 && event.charCode <= 57" style="margin-left: -82px;"');
+            db_input('pc11_seq', 8, $pc11_seq, true, 'text', $db_opcao, 'onkeypress="return event.charCode >= 48 && event.charCode <= 57" style="margin-left: -82px;"');
             ?>
           </td>
 
@@ -256,7 +214,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
         </td>
       </tr>
     </table>
-    <input style="float:center; margin-top:10px;" name="salvar" type="submit" value="Salvar Itens">
+    <input style="float:center; margin-top:10px;" name="incluir" type="submit" value="Salvar Itens">
 
 
     <br>
@@ -314,7 +272,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
 
       document.getElementById('pc17_unid2').style.display = "block";
       document.getElementById('titleUnidade2').style.display = "block";
-      document.getElementById('pc01_ordem').style.marginLeft = "0px";
+      document.getElementById('pc11_seq').style.marginLeft = "0px";
       document.getElementById('titleOrdem').style.marginLeft = "60px";
       document.getElementById('ctnServicoQuantidade').style.marginLeft = "-170px";
       document.getElementById('pc11_servicoquantidade').style.marginLeft = "-80px";
@@ -326,7 +284,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
     } else {
       document.getElementById('pc17_unid2').style.display = "none";
       document.getElementById('titleUnidade2').style.display = "none";
-      document.getElementById('pc01_ordem').style.marginLeft = "-82px";
+      document.getElementById('pc11_seq').style.marginLeft = "-82px";
       document.getElementById('titleOrdem').style.marginLeft = "-73px";
       document.getElementById('ctnServicoQuantidade').style.marginLeft = "0px";
       document.getElementById('pc11_servicoquantidade').style.marginLeft = "0px";
@@ -511,7 +469,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
         document.getElementById('pc11_servicoquantidade').style.display = "none";
         document.getElementById('pc17_unid2').style.display = "none";
         document.getElementById('titleUnidade2').style.display = "none";
-        document.getElementById('pc01_ordem').style.marginLeft = "-82px";
+        document.getElementById('pc11_seq').style.marginLeft = "-82px";
         document.getElementById('titleOrdem').style.marginLeft = "-73px";
       }
       js_buscarEle();
@@ -524,7 +482,6 @@ if ((isset($opcao) && $opcao == "alterar")) {
 
     document.form1.pc16_codmater.value = chave1;
     document.form1.pc01_descrmater.value = chave2;
-    document.form1.o56_codelefunc.value = codele;
 
     db_iframe_pcmater.hide();
 
@@ -541,7 +498,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
       document.getElementById('pc11_servicoquantidade').style.display = "none";
       document.getElementById('pc17_unid2').style.display = "none";
       document.getElementById('titleUnidade2').style.display = "none";
-      document.getElementById('pc01_ordem').style.marginLeft = "-82px";
+      document.getElementById('pc11_seq').style.marginLeft = "-82px";
       document.getElementById('titleOrdem').style.marginLeft = "-73px";
     }
 
@@ -599,7 +556,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
 
     }
 
-    if ($F('pc01_ordem') == "") {
+    if ($F('pc11_seq') == "") {
 
       alert('Informe a ordem!');
       return false;
@@ -620,8 +577,8 @@ if ((isset($opcao) && $opcao == "alterar")) {
 
     // Verifica se o item já foi incluído com o sequencial informado.
     for (var i = 0; i < sizeItens; i++) {
-      if (document.getElementById('pc01_ordem').value == itens_antigos[i].aCells[0].content) {
-        alert('O item ' + itens_antigos[i].aCells[1].content + ' já foi incluído com o sequencial ' + document.getElementById('pc01_ordem').value + ' nesta solicitação.');
+      if (document.getElementById('pc11_seq').value == itens_antigos[i].aCells[0].content) {
+        alert('O item ' + itens_antigos[i].aCells[1].content + ' já foi incluído com o sequencial ' + document.getElementById('pc11_seq').value + ' nesta solicitação.');
         return;
       }
     }
@@ -631,9 +588,14 @@ if ((isset($opcao) && $opcao == "alterar")) {
 
     var aLinha = new Array();
 
-    aLinha[0] = document.getElementById('pc01_ordem').value;
-    aLinha[1] = document.getElementById('pc16_codmater').value;
-    aLinha[2] = document.getElementById('pc01_descrmater').value;
+    ordem = document.getElementById('pc11_seq').value;
+    aLinha[0] = "  <input style='text-align:center; width:90%; border:none;' readonly='' type='text'  name='ordem[]' value='" + ordem + "'>"
+
+    codmaterial = document.getElementById('pc16_codmater').value;
+    aLinha[1] = "  <input style='text-align:center; width:90%; border:none;' readonly='' type='text'  name='codmaterial[]' value='" + codmaterial + "'>"
+
+    descmaterial = document.getElementById('pc01_descrmater').value;
+    aLinha[2] = "  <input style='text-align:center; width:90%; border:none;' readonly='' type='text'  name='descmaterial[]' value='" + descmaterial + "'>"
 
     var select;
     var option;
@@ -649,10 +611,17 @@ if ((isset($opcao) && $opcao == "alterar")) {
     option = select.children[select.selectedIndex];
     unidade = option.textContent;
 
-    aLinha[3] = unidade;
+
+
+    aLinha[3] = "  <input style='text-align:center; width:90%; border:none;' readonly='' type='text'  name='unidade[]' value'3' placeholder='" + unidade + "'>";
     aLinha[4] = "<input type='button' value='A' onclick='js_excluirLinha()'> <input type='button' value='E' onclick='js_excluirLinha()'>";
-    aLinha[5] = document.getElementById('eleSub').value;
-    aLinha[6] = document.getElementById('pc11_quant').value;
+
+    elesub = document.getElementById('eleSub').value;
+    aLinha[5] = "  <input style='text-align:center; width:90%; border:none;' readonly='' type='text'  name='elesub[]' value='" + elesub + "'>";
+
+    quantidade = document.getElementById('pc11_quant').value;
+    aLinha[6] = "  <input style='text-align:center; width:90%; border:none;' readonly='' type='text'  name='quantidade[]' value='" + quantidade + "'>";
+
 
     oGridItens.addRow(aLinha);
 
@@ -661,6 +630,8 @@ if ((isset($opcao) && $opcao == "alterar")) {
     }
 
     oGridItens.renderRows();
+
+
 
 
   }
