@@ -17,7 +17,7 @@ class Oc18123 extends \Classes\PostgresMigration
     public function down()
     {
         $this->dropTables();
-        $this->dropMenu();
+        $this->dropMenus();
         $this->dropDicionarioDados();
         $this->rollbackFunctions();
     }
@@ -153,6 +153,10 @@ class Oc18123 extends \Classes\PostgresMigration
         INSERT INTO db_itensmenu VALUES ((SELECT max(id_item)+1 FROM db_itensmenu),'Isenção', 'Isenção de Taxa de Alvará','iss4_issisen001.php',1,1,'','t');
 
         INSERT INTO db_menu VALUES (32,(SELECT max(id_item) FROM db_itensmenu),(SELECT max(menusequencia)+1 FROM db_menu WHERE id_item = 32 AND modulo = 40),40);
+
+        INSERT INTO db_itensmenu VALUES ((SELECT max(id_item)+1 FROM db_itensmenu),'Isentos de Alvará', 'Inscrições Isentas de Taxa de Alvará','iss2_relisentos001.php',1,1,'','t');
+
+        INSERT INTO db_menu VALUES (228029,(SELECT max(id_item) FROM db_itensmenu),(SELECT max(menusequencia)+1 FROM db_menu WHERE id_item = 228029 AND modulo = 40),40);
 SQL;
         $this->execute($sql);
 
@@ -200,10 +204,13 @@ SQL;
         $this->execute($sql);
     }
 
-    private function dropMenu()
+    private function dropMenus()
     {
         $this->execute("delete from db_menu where id_item_filho in (select id_item from db_itensmenu where funcao = 'iss1_issisen001.php')");
         $this->execute("delete from db_itensmenu where funcao = 'iss1_issisen001.php'");
+
+        $this->execute("delete from db_menu where id_item_filho in (select id_item from db_itensmenu where funcao = 'iss2_relisentos001.php')");
+        $this->execute("delete from db_itensmenu where funcao = 'iss2_relisentos001.php'");
     }
 
     private function dropDicionarioDados()
