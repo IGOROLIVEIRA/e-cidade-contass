@@ -551,6 +551,22 @@ if (isset($incluir)) {
 
         if ($sqlerro == false) {
 
+
+          $sWhere="l219_codigo in (select l218_codigo from situacaoitemcompra where l218_codigolicitacao = {$l20_codigo})";
+          $clsituacaoitemlic->excluir(null,$sWhere);
+          
+          if ($clsituacaoitemlic->erro_status == 0) {
+            $sqlerro = true;
+            $erro_msg = $clsituacaoitemlic->erro_msg;
+          }
+
+          $sWhere = "l218_codigolicitacao = {$l20_codigo}";
+          $clsituacaoitemcompra->excluir(null,$sWhere);
+          if ($clsituacaoitemcompra->erro_status == 0) {
+            $sqlerro = true;
+            $erro_msg = $clsituacaoitemcompra->erro_msg;
+          }
+
           $sWhere = " pcorcamitem.pc22_codorc in (                          ";
           $sWhere .= " select pc20_codorc                                    ";
           $sWhere .= " from pcorcam                                          ";
@@ -567,20 +583,7 @@ if (isset($incluir)) {
             $erro_msg = $clpcorcamitem->erro_msg;
           }
           
-          $sWhere="l219_codigo in (select l218_codigo from situacaoitemcompra where l218_codigolicitacao = {$l20_codigo})";
-          $clsituacaoitemlic->excluir(null,$sWhere);
           
-          if ($clsituacaoitemlic->erro_status == 0) {
-            $sqlerro = true;
-            $erro_msg = $clsituacaoitemlic->erro_msg;
-          }
-
-          $sWhere = "l218_codigolicitacao = {$l20_codigo}";
-          $clsituacaoitemcompra->excluir(null,$sWhere);
-          if ($clsituacaoitemcompra->erro_status == 0) {
-            $sqlerro = true;
-            $erro_msg = $clsituacaoitemcompra->erro_msg;
-          }
         }
 
         if ($sqlerro == false) {

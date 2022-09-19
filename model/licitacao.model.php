@@ -471,6 +471,15 @@ class licitacao
             $sErro = "Erro ao alterar status da licitação:\n\n Erro técnico: erro ao incluir nova situação /{$oDaolicSituacao->erro_msg}";
             throw new Exception($sErro, 5);
         }
+        $oDaoSituacaoitemcompra = db_utils::getDao("situacaoitemcompra");
+
+        $rsSituacaoitemcompra = $oDaoSituacaoitemcompra->sql_query_file(null,"l218_codigo",null,"l218_codigolicitacao = {$this->iCodLicitacao}");
+        $aElementos    = db_utils::getCollectionByRecord($rsSituacaoitemcompra);
+
+        $oDaoSituacaoitemlic = db_utils::getDao("situacaoitemlic");
+
+
+
 
         return true;
     }

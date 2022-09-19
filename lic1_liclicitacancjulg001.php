@@ -46,6 +46,7 @@ $clpcorcamtroca       = new cl_pcorcamtroca;
 $clliclicitaata       = new cl_liclicitaata;
 $clliclicitasituacao  = new cl_liclicitasituacao;
 $oDaoRegistPrecoJulg  = new cl_registroprecojulgamento;
+$clsituacaoitemlic    = new cl_situacaoitemlic;
 
 $clrotulo = new rotulocampo;
 $clrotulo->label("l20_codigo");
@@ -258,9 +259,18 @@ if (isset($l20_codigo) && trim($l20_codigo) != "") {
       $sqlerro  = true;
   	}
   }  
-  
+
+
+  $sql =  " l219_codigo in (select l218_codigo from situacaoitemcompra where l218_codigolicitacao = ".$l20_codigo.") and l219_situacao = 4"; 
+  $res_situacaoitemlic = $clsituacaoitemlic->excluir(null,$sql);
+   if ($clsituacaoitemlic->erro_status == 0) {
+    $sqlerro = true;
+    $erro_msg = $clsituacaoitemlic->erro_msg;
+  }
+
+
   if ($sqlerro == false){
-    $erro_msg = "Exclusao feita com sucessos.";
+    $erro_msg = "Exclusao feita com sucesso.";
   }
 
   db_fim_transacao($sqlerro);

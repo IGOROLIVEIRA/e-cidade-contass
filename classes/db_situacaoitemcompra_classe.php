@@ -220,7 +220,10 @@ class cl_situacaoitemcompra {
          return false;
        }
      }
-     if (trim($this->l218_motivoanulacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["l218_motivoanulacao"])) { 
+     if (trim($this->l218_motivoanulacao)=="0") { 
+      $sql  .= $virgula." l218_motivoanulacao = '' ";
+      $virgula = ",";
+    }else if (trim($this->l218_motivoanulacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["l218_motivoanulacao"])) { 
        $sql  .= $virgula." l218_motivoanulacao = '$this->l218_motivoanulacao' ";
        $virgula = ",";
        if (trim($this->l218_motivoanulacao) == null ) { 
@@ -233,8 +236,11 @@ class cl_situacaoitemcompra {
          return false;
        }
      }
+     
      $sql .= " where ";
-$sql .= "oid = '$oid'";     $result = db_query($sql);
+$sql .= "l218_pcorcamitemlic = '$oid'";     
+
+$result = db_query($sql);
      if ($result==false) { 
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "situacaoitemcompra nao Alterado. Alteracao Abortada.\\n";

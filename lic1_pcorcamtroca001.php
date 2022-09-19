@@ -370,12 +370,13 @@ if (isset($confirmar) && trim($confirmar) != "") {
     }
     $codpcorcamitemlic = '';
     for ($x = 0; $x < $linha; $x++) {
+      
       if($x>0){
-        $codpcorcamitemlic = ',';
+        $codpcorcamitemlic .= ',';
       }
       $pc24_orcamitem   = $vpcorcamjulg[$x]["item"];
       $pc24_orcamforne  = $vpcorcamjulg[$x]["forne"];
-
+      $codpcorcamitemlic .= $pc24_orcamitem;
       $sWhereOrcamVal = "pc23_orcamitem = {$pc24_orcamitem} and pc23_orcamforne = {$pc24_orcamforne}";
       $oDaoOrcamVal   = db_utils::getDao('pcorcamval');
       $sSqlOrcamVal   = $oDaoOrcamVal->sql_query_file(null, null, "pc23_vlrun", null, $sWhereOrcamVal);
@@ -479,7 +480,7 @@ if (isset($confirmar) && trim($confirmar) != "") {
         break;
       }
 
-      $codpcorcamitemlic .= $pc24_orcamitem;
+      
     }
     $result_l218codigo = $clsituacaoitemlic->sql_record('select l218_codigo from situacaoitemcompra where l218_pcorcamitemlic not in ('.$codpcorcamitemlic.')');
     

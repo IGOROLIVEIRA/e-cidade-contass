@@ -35,7 +35,8 @@ include("dbforms/db_funcoes.php");
 db_postmemory($HTTP_POST_VARS);
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 
-$clpcorcamdescla = new cl_pcorcamdescla;
+$clpcorcamdescla      = new cl_pcorcamdescla;
+$clsituacaoitemcompra = new cl_situacaoitemcompra;
 $db_opcao = 1;
 $db_botao = true;
 
@@ -58,6 +59,13 @@ if(isset($incluir)){
             $sqlerro  = true;
             $erro_msg = $clpcorcamdescla->erro_msg;
             break;
+       }
+       $clsituacaoitemcompra->l218_motivoanulacao = $pc32_motivo;
+       $clsituacaoitemcompra->alterar($vetor[$i]);
+       if ($clsituacaoitemcompra->erro_status == 0){
+        $sqlerro  = true;
+        $erro_msg = $clsituacaoitemcompra->erro_msg;
+        break;
        }
   }
 
