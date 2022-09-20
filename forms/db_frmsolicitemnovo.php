@@ -693,7 +693,7 @@ db_input('db_botao', 5, 0, true, 'hidden', 3);
       document.getElementById('pc11_servicoquantidade').style.display = "none";
       document.getElementById('pc17_unid2').style.display = "none";
       document.getElementById('titleUnidade2').style.display = "none";
-      document.getElementById('pc11_seq').style.marginLeft = "-162px";
+      document.getElementById('pc11_seq').style.marginLeft = "-82px";
       document.getElementById('titleOrdem').style.marginLeft = "-73px";
     }
 

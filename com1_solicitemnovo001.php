@@ -2068,8 +2068,9 @@ if (isset($alterar) || isset($excluir) || isset($incluir)) {
 			}
 		}
 	} else {
+		db_msgbox("Itens incluídos com sucesso");
 
-		echo "<script>top.corpo.iframe_solicita.location.href = 'com1_solicita005.php?chavepesquisa=$pc11_numero&ld=false$parametro'</script>";
+		echo "<script>top.corpo.iframe_solicita.location.href = 'com1_solicitanovo005.php?chavepesquisa=$pc11_numero&ld=false&altera=true'</script>";
 		if ($pc30_sugforn == 't') {
 			echo "<script> top.corpo.iframe_sugforn.location.href='com1_sugforn001.php?pc40_solic=$pc11_numero$parametro';</script>";
 		}
