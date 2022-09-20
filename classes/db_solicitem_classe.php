@@ -110,7 +110,7 @@ class cl_solicitem
   // funcao para inclusao
   function incluir($pc11_codigo)
   {
-    $this->atualizacampos();
+    //$this->atualizacampos();
     if ($this->pc11_numero == null) {
       $this->erro_sql = " Campo Solicitacao nao Informado.";
       $this->erro_campo = "pc11_numero";

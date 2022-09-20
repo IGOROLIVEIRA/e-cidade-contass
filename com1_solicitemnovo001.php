@@ -238,17 +238,9 @@ if (isset($incluir) && $sqlerro == false) {
 	$codmaterial =  $_POST['codmaterial'];
 	$quantidade =  $_POST['quantidade'];
 	$elesub = $_POST['elesub'];
+	$servicoquantidade = $_POST['servicoquantidade'];
+	$codigo_unidade = $_POST['codigo_unidade'];
 
-	echo "Quantidade de itens: " . $ordem[0];
-	exit;
-
-	foreach ($_POST["colors"] as $color) {
-		echo "$color<br>";
-	}
-
-	foreach ($name as $key => $n) {
-		print "The name is " . $n . " and email is " . $email[$key] . ", thank you\n";
-	}
 
 	$sResumoRegistro = "";
 	if ($digitouresumo == "false" || (isset($pc11_resum) && $pc11_resum == "")) {
@@ -287,6 +279,7 @@ if (isset($incluir) && $sqlerro == false) {
 			$clsolicitem->pc11_pgto  = addslashes(stripslashes(trim($pc11_pgto)));
 			$clsolicitem->pc11_resum = addslashes(stripslashes(trim($sResumoRegistro)));
 			$clsolicitem->pc11_just  = addslashes(stripslashes(trim($pc11_just)));
+			$clsolicitem->pc11_servicoquantidade = $servicoquantidade[$i];
 			$clsolicitem->incluir(empty($pc11_codigo) ? null : $pc11_codigo);
 			$array_pc11_codigo[$i] = $clsolicitem->pc11_codigo;
 		}
@@ -548,7 +541,7 @@ if (isset($incluir) && $sqlerro == false) {
 				}
 				if ($sqlerro == false) {
 
-					$clsolicitemele->incluir($array_pc11_codigo[$i], $o56_codele);
+					$clsolicitemele->incluir($array_pc11_codigo[$i], $elesub[$i]);
 					if ($clsolicitemele->erro_status == 0) {
 						$sqlerro = true;
 						$erro_msg = $clsolicitemele->erro_msg;
@@ -559,7 +552,7 @@ if (isset($incluir) && $sqlerro == false) {
 					try {
 
 						$oSolicitacao = new solicitacaoCompra($pc11_numero);
-						$oSolicitacao->addItemRegistroPreco($pc11_codigo, $pc16_codmater, $iRegistroPreco, $pc11_quant, $registroprecoorigem, $pc11_vlrun);
+						$oSolicitacao->addItemRegistroPreco($array_pc11_codigo[$i], $codmaterial[$i], $iRegistroPreco, $quantidade[$i], $registroprecoorigem, $pc11_vlrun);
 					} catch (Exception $eErro) {
 
 						$sqlerro  = true;
@@ -571,45 +564,67 @@ if (isset($incluir) && $sqlerro == false) {
 		//if ((!isset($pc01_servico) || (isset($pc01_servico) && ($pc01_servico == "f" || trim($pc01_servico) == ""))) && $sqlerro == false) {
 
 		// echo "<br>" . $pc11_servicoquantidade; die();
-		if ($pc11_servicoquantidade == 'true' || $pc01_servico == "f" && $sqlerro == false) {
 
-			$clsolicitemunid->pc17_unid = $pc17_unid;
-			$clsolicitemunid->pc17_quant = $pc17_quant;
-			$clsolicitemunid->pc17_codigo = $pc11_codigo;
-			$clsolicitemunid->incluir($pc11_codigo);
-			if ($clsolicitemunid->erro_status == 0) {
-				$erro_msg = $clsolicitemunid->erro_msg;
-				$sqlerro = true;
+
+
+		for ($i = 0; $i < count($codmaterial); $i++) {
+			$result_servico = $clpcmater->sql_record($clpcmater->sql_query($codmaterial[$i], "pc01_servico, pc01_descrmater", "pc01_codmater"));
+			db_fieldsmemory($result_servico, 0);
+
+			if ($servicoquantidade[$i] == 'true' || $pc01_servico == "f" && $sqlerro == false) {
+
+				$clsolicitemunid->pc17_unid = $codigo_unidade[$i];
+				$clsolicitemunid->pc17_quant = 1; //$pc17_quant;
+				$clsolicitemunid->pc17_codigo = $array_pc11_codigo[$i];
+				$clsolicitemunid->incluir($array_pc11_codigo[$i]);
+				if ($clsolicitemunid->erro_status == 0) {
+					$erro_msg = $clsolicitemunid->erro_msg;
+					$sqlerro = true;
+				}
 			}
 		}
+
+
 		/**
 		 * Quando o Serviço Controlado por Quantidade: NÃO o sistema sete automaticamente a unidade de medida serviço para ele
 		 * @see: OC 3666
 		 */
-		if ($pc11_servicoquantidade == 'false' && $pc01_servico == "t") {
-			$clsolicitemunid->pc17_unid = 999999;
-			$clsolicitemunid->pc17_quant = 1;
-			$clsolicitemunid->pc17_codigo = $pc11_codigo;
-			$clsolicitemunid->incluir($pc11_codigo);
-			if ($clsolicitemunid->erro_status == 0) {
-				$erro_msg = $clsolicitemunid->erro_msg;
-				$sqlerro = true;
+
+		for ($i = 0; $i < count($codmaterial); $i++) {
+
+			$result_servico = $clpcmater->sql_record($clpcmater->sql_query($codmaterial[$i], "pc01_servico, pc01_descrmater", "pc01_codmater"));
+			db_fieldsmemory($result_servico, 0);
+
+			if ($servicoquantidade[$i] == 'false' && $pc01_servico == "t") {
+				$clsolicitemunid->pc17_unid = 999999;
+				$clsolicitemunid->pc17_quant = 1;
+				$clsolicitemunid->pc17_codigo = $array_pc11_codigo[$i];
+				$clsolicitemunid->incluir($array_pc11_codigo[$i]);
+				if ($clsolicitemunid->erro_status == 0) {
+					$erro_msg = $clsolicitemunid->erro_msg;
+					$sqlerro = true;
+				}
 			}
 		}
 
+
+
 		if ($sqlerro == false && $pc30_seltipo == 't') {
-			$result_vlsol = $clsolicitatipo->sql_record($clsolicitatipo->sql_query_file($pc11_numero, "pc12_vlrap"));
-			if ($clsolicitatipo->numrows > 0) {
-				db_fieldsmemory($result_vlsol, 0);
-			} else {
-				$pc12_vlrap = 0;
-			}
-			$clsolicitatipo->pc12_vlrap = $pc12_vlrap + ($pc11_quant * $pc11_vlrun);
-			$clsolicitatipo->pc12_numero = $pc11_numero;
-			$clsolicitatipo->alterar($pc11_numero);
-			if ($clsolicitatipo->erro_status == 0) {
-				$sqlerro = true;
-				$erro_msg = $clsolicitatipo->erro_msg;
+
+			for ($i = 0; $i < count($codmaterial); $i++) {
+				$result_vlsol = $clsolicitatipo->sql_record($clsolicitatipo->sql_query_file($pc11_numero, "pc12_vlrap"));
+				if ($clsolicitatipo->numrows > 0) {
+					db_fieldsmemory($result_vlsol, 0);
+				} else {
+					$pc12_vlrap = 0;
+				}
+				$clsolicitatipo->pc12_vlrap = $pc12_vlrap + ($quantidade[$i] * $pc11_vlrun);
+				$clsolicitatipo->pc12_numero = $pc11_numero;
+				$clsolicitatipo->alterar($pc11_numero);
+				if ($clsolicitatipo->erro_status == 0) {
+					$sqlerro = true;
+					$erro_msg = $clsolicitatipo->erro_msg;
+				}
 			}
 		}
 		if ($sqlerro == false && $pc30_permsemdotac == "f") {
@@ -662,9 +677,12 @@ db_fieldsmemory($result_pcparam1, 0);
 				}
 			}
 			if ($sqlerro == false) {
-				$clsolicitemprot->pc49_protprocesso = $codproc;
-				$clsolicitemprot->pc49_solicitem = $pc11_codigo;
-				$clsolicitemprot->incluir($pc11_codigo);
+				for ($i = 0; $i < count($codmaterial); $i++) {
+					$clsolicitemprot->pc49_protprocesso = $codproc;
+					$clsolicitemprot->pc49_solicitem = $array_pc11_codigo[$i];
+					$clsolicitemprot->incluir($array_pc11_codigo[$i]);
+				}
+
 				if ($clsolicitemprot->erro_status == 0) {
 					$sqlerro = true;
 					$erro_msg = $clsolicitem->erro_msg;
@@ -674,9 +692,12 @@ db_fieldsmemory($result_pcparam1, 0);
 
 		if (isset($pc14_veiculos) && $pc01_veiculo == "t") {
 			if ($sqlerro == false) {
-				$clsolicitemveic->pc14_veiculos  = $pc14_veiculos;
-				$clsolicitemveic->pc14_solicitem = $pc11_codigo;
-				$clsolicitemveic->incluir(null);
+				for ($i = 0; $i < count($codmaterial); $i++) {
+					$clsolicitemveic->pc14_veiculos  = $pc14_veiculos;
+					$clsolicitemveic->pc14_solicitem = $array_pc11_codigo[$i];
+					$clsolicitemveic->incluir(null);
+				}
+
 
 				if ($clsolicitemveic->erro_status == 0) {
 					$sqlerro  = true;
@@ -737,7 +758,7 @@ db_fieldsmemory($result_pcparam1, 0);
 			$pc11_vlrun = str_pad($pc11_vlrun, $tam, '0', STR_PAD_RIGHT);
 		}
 		$clsolicitem->pc11_vlrun = $pc11_vlrun;
-		$clsolicitem->pc11_liberado = $pc11_liberado;
+		$clsolicitem->pc11_liberado = "f";
 		$clsolicitem->pc11_prazo = AddSlashes(chop($pc11_prazo));
 		$clsolicitem->pc11_pgto = AddSlashes(chop($pc11_pgto));
 		$clsolicitem->pc11_resum = AddSlashes(chop($pc11_resum));

@@ -62,6 +62,91 @@ if ((isset($opcao) && $opcao == "alterar")) {
 
           <td>
             <?
+
+
+            // $tranca --> variável q torna o campo pc16_codmater readOnly
+            $tranca = 1;
+            // $tquant --> variável q passa para o iframe se valor ou quant é readOnly
+            $tquant = false;
+
+            if (isset($pc11_codigo) && trim($pc11_codigo) != "") {
+              $result_dotacaoitem = $clpcdotac->sql_record($clpcdotac->sql_query_file(@$pc11_codigo, db_getsession("DB_anousu"), null, "pc13_coddot"));
+              if ($clpcdotac->numrows > 0) {
+                $tranca = 3;
+              }
+            }
+            if ($iRegistroPreco != ""  && (isset($pc16_codmater) && trim($pc16_codmater) != "")) {
+
+              $oRegistroPreco              = new compilacaoRegistroPreco($iRegistroPreco);
+              $iFormaControleRegistroPreco = $oRegistroPreco->getFormaDeControle();
+
+              if ($pc11_codigo != "") {
+
+                $oDaoSolicitemVinculo = new cl_solicitemvinculo;
+                $sSqlVerificaVinculo  = $oDaoSolicitemVinculo->sql_query_file(
+                  null,
+                  "*",
+                  null,
+                  "pc55_solicitemfilho={$pc11_codigo}"
+                );
+                $rsVerificaVinculo    = $oDaoSolicitemVinculo->sql_record($sSqlVerificaVinculo);
+                if ($oDaoSolicitemVinculo->numrows > 0) {
+                  $codigoitemregistropreco = db_utils::fieldsMemory($rsVerificaVinculo, 0)->pc55_solicitempai;
+                }
+              }
+              if (!isset($codigoitemregistropreco)) {
+                $codigoitemregistropreco = $registroprecoorigem;
+              }
+              $oFornecedor    = $oRegistroPreco->getFornecedorItem($pc16_codmater, $codigoitemregistropreco);
+              $pc11_vlrun     = ($iFormaControleRegistroPreco == aberturaRegistroPreco::CONTROLA_QUANTIDADE ? $oFornecedor->valorunitario : '');
+              $pc17_unid      = $oFornecedor->unidade;
+              $pc17_quant     = $oFornecedor->quantidadeunidade;
+
+              /**
+               * devemos criar um input com o codigo do item original da Solicitacao:
+               *
+               */
+              $registroprecoorigem = @$codigoitemregistropreco;
+              db_input("registroprecoorigem", 10, $Ipc11_codigo, true, "hidden");
+              if ($pc11_codigo == "") {
+
+                $oItemCompilacao = new itemCompilacao($registroprecoorigem);
+                $pc11_resum      = urldecode($oItemCompilacao->getResumo());
+                $pc11_just       = urldecode($oItemCompilacao->getJustificativa());
+                $pc11_prazo      = urldecode($oItemCompilacao->getPrazos());
+                $pc11_pgto       = urldecode($oItemCompilacao->getPagamento());
+              }
+            } else {
+
+              if ($pc30_valoraproximadoautomatico == "t") {
+                if ($pc11_vlrun == "" && !empty($pc16_codmater)) {
+                  $pc11_vlrun = itemSolicitacao::calculaMediaPrecoOrcamentos(itemSolicitacao::getUltimosOrcamentos($pc16_codmater, array($pc17_unid)));
+                }
+              }
+            }
+            if (isset($pc16_codmater) && trim($pc16_codmater) != "" && isset($verificado) && (!isset($sqlerro) || (isset($sqlerro) && $sqlerro != true))) {
+              if ((isset($alterar) || isset($excluir) || isset($incluir) || (isset($opcao) && ($opcao == "alterar" || $opcao == "excluir"))) && isset($sqlerro) && $sqlerro == false) {
+                $tranca = 3;
+              }
+              if ((isset($alterar) || isset($incluir) || (isset($opcao) && ($opcao == "alterar" || $opcao == "excluir"))) && isset($sqlerro) && $sqlerro == false) {
+                if ($operadorRegistroPreco == 1 || $trancaIte == 1) {
+                  $tranca = 3;
+                } else {
+                  $tranca = 1;
+                }
+              }
+              $result_servico = $clpcmater->sql_record($clpcmater->sql_query($pc16_codmater, "pc01_servico, pc01_descrmater", "pc01_codmater"));
+              if ($clpcmater->numrows > 0) {
+                db_fieldsmemory($result_servico, 0);
+                if ($pc01_servico == "t") {
+                  $tquant = true;
+                }
+              }
+            }
+            if (!isset($pc01_servico) || (isset($pc01_servico) && $pc01_servico == "")) {
+              $pc01_servico = 'f';
+            }
+
             db_input('pc16_codmater', 8, $Ipc16_codmater, true, 'text', $tranca, " onchange='js_pesquisapc16_codmater(false);'");
             db_input("iCodigoRegistro", 8, "iCodigoRegistro", true, 'hidden', $db_opcao);
             db_input("pc01_veiculo", 8, "", true, 'hidden', $db_opcao);
@@ -84,6 +169,47 @@ if ((isset($opcao) && $opcao == "alterar")) {
             <?
             db_input('pc11_quant', 8, $pc11_quant, true, 'text', $db_opcao, '');
             ?>
+
+            <?
+            $hidval = "text";
+            if ($pc30_digval == 't') {
+            } else {
+              $hidval = "hidden";
+              $pc11_vlrun_ant = $pc11_vlrun;
+              $pc11_vlrun = 0;
+            }
+            ?>
+            <?
+            if (isset($pc11_vlrun) && $pc11_vlrun != "") {
+              $pc11_vlrun = str_replace(",", ".", $pc11_vlrun);
+              if (strpos($pc11_vlrun, ".") == "") {
+                $pc11_vlrun .= ".";
+                $tam = strlen($pc11_vlrun) + 2;
+                $pc11_vlrun = str_pad($pc11_vlrun, $tam, '0', STR_PAD_RIGHT);
+              }
+              if ($hidval != "hidden") {
+                $pc11_vlrun_ant = $pc11_vlrun;
+              }
+            }
+            $db_opcaovunit = $iRegistroPreco == "" ? $db_opcao : 3;
+
+            if (($pc11_vlrun == 0 || $pc11_vlrun == "") && $hidval != "hidden") {
+              $pc11_vlrun = 1;
+            }
+            db_input('pc11_vlrun', 8, $Ipc11_vlrun, true, "hidden", 3);
+            if ($pc30_digval == 't') {
+              echo "</td>";
+            }
+
+            // Alteração feita para processo de compra e licitacao
+            if (isset($param) && trim($param) != "") {
+              db_input("param", 10, "", false, "hidden", 3);
+              db_input("codproc", 10, "", false, "hidden", 3);
+              db_input("codliclicita", 10, "", false, "hidden", 3);
+            }
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            ?>
+
           </td>
 
           <td id="titleUnidade" nowrap>
@@ -112,6 +238,31 @@ if ((isset($opcao) && $opcao == "alterar")) {
               }
             }
 
+            if (isset($verificado)) {
+              if (isset($pc11_codigo) && (!isset($pc17_unid) || (isset($pc17_unid) && $pc17_unid == ""))) {
+                $result_solicitemunid = $clsolicitemunid->sql_record($clsolicitemunid->sql_query_file($pc11_codigo));
+                if ($clsolicitemunid->numrows > 0) {
+                  db_fieldsmemory($result_solicitemunid, 0);
+                } else {
+                  unset($pc17_unid);
+                }
+              }
+              if (!isset($pc17_unid) || (isset($pc17_unid) && $pc17_unid == "")) {
+                $result_uniddefault = $clpcparam->sql_record($clpcparam->sql_query_file(db_getsession("DB_instit"), "pc30_unid as pc17_unid,pc30_digval"));
+                if ($clpcparam->numrows > 0) {
+                  db_fieldsmemory($result_uniddefault, 0);
+                }
+              }
+            }
+
+            if (!isset($pc17_quant)) {
+              $pc17_quant = 1;
+            }
+            $db_opcaounidade = $db_opcao;
+            if ($iRegistroPreco != "") {
+              $db_opcaounidade = 33;
+            }
+
             db_select(
               "pc17_unid",
               $unidade,
@@ -135,6 +286,24 @@ if ((isset($opcao) && $opcao == "alterar")) {
             }
 
             db_select('pc11_servicoquantidade', $aOpcoes, true, $db_opcao, "style='display:none;' onchange='js_changeControladoPorQtd(this.value);'");
+
+
+            if ($lMostraItensPacto) {
+
+
+              db_input(
+                'o103_pactovalor',
+                8,
+                $Io103_pactovalor,
+                true,
+                'text',
+                $tranca,
+                " onchange='js_pesquisao103_pactovalor(false);'"
+              );
+
+              db_input('o109_descricao', 40, $Io109_descricao, true, 'text', 3, '');
+            }
+
             ?>
           </td>
 
@@ -193,7 +362,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
           </td>
           <td>
             <?
-            db_input('pc11_seq', 8, $pc11_seq, true, 'text', $db_opcao, 'onkeypress="return event.charCode >= 48 && event.charCode <= 57" style="margin-left: -82px;"');
+            db_input('pc11_seq', 8, $pc11_seq, true, 'text', $db_opcao, 'onkeypress="return event.charCode >= 48 && event.charCode <= 57" style="margin-left: -80px;"');
             ?>
           </td>
 
@@ -221,6 +390,32 @@ if ((isset($opcao) && $opcao == "alterar")) {
 
   </form>
 </div>
+<?
+$pc11_liberado = 'f';
+if (!isset($pc11_resum) || (isset($pc11_resum) && $pc11_resum == "")) {
+  $digitouresumo = "false";
+}
+@$pc11_pgto = stripslashes($pc11_pgto);
+@$pc11_just = stripslashes($pc11_just);
+@$pc11_resum = stripslashes($pc11_resum);
+@$pc11_prazo = stripslashes($pc11_prazo);
+$pc11_resum = addslashes($pc11_resum);
+db_input('pc11_liberado', 1, $Ipc11_liberado, true, 'hidden', 3);
+db_input('pc11_pgto', 40, $Ipc11_pgto, true, 'hidden', 3);
+db_textarea('pc11_resum', 10, 40, $Ipc11_resum, true, 'text', 3, "style='display:none'");
+db_textarea('pc11_just', 10, 40, $Ipc11_just, true, 'hidden', 3, "style='display:none'");
+db_textarea('pc11_prazo', 10, 40, $Ipc11_prazo, true, 'hidden', 3, "style='display:none'");
+db_input('digitouresumo', 5, 0, true, 'hidden', 3);
+
+db_input('pc11_vlrun_ant', 40, $Ipc11_vlrun, true, 'hidden', 3);
+db_input('pc11_quant_ant', 40, $Ipc11_vlrun, true, 'hidden', 3);
+db_input('pc16_codmater_ant', 40, $Ipc16_codmater, true, 'hidden', 3);
+db_input('pc01_servico', 40, $Ipc01_servico, true, 'hidden', 3);
+
+db_input('db_opcao', 5, 0, true, 'hidden', 3);
+db_input('db_botao', 5, 0, true, 'hidden', 3);
+?>
+
 <script>
   const input = document.getElementById("pc11_quant");
   input.addEventListener("keypress", mask_4casasdecimais);
@@ -284,7 +479,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
     } else {
       document.getElementById('pc17_unid2').style.display = "none";
       document.getElementById('titleUnidade2').style.display = "none";
-      document.getElementById('pc11_seq').style.marginLeft = "-82px";
+      document.getElementById('pc11_seq').style.marginLeft = "-80px";
       document.getElementById('titleOrdem').style.marginLeft = "-73px";
       document.getElementById('ctnServicoQuantidade').style.marginLeft = "0px";
       document.getElementById('pc11_servicoquantidade').style.marginLeft = "0px";
@@ -469,7 +664,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
         document.getElementById('pc11_servicoquantidade').style.display = "none";
         document.getElementById('pc17_unid2').style.display = "none";
         document.getElementById('titleUnidade2').style.display = "none";
-        document.getElementById('pc11_seq').style.marginLeft = "-82px";
+        document.getElementById('pc11_seq').style.marginLeft = "-80px";
         document.getElementById('titleOrdem').style.marginLeft = "-73px";
       }
       js_buscarEle();
@@ -498,7 +693,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
       document.getElementById('pc11_servicoquantidade').style.display = "none";
       document.getElementById('pc17_unid2').style.display = "none";
       document.getElementById('titleUnidade2').style.display = "none";
-      document.getElementById('pc11_seq').style.marginLeft = "-82px";
+      document.getElementById('pc11_seq').style.marginLeft = "-162px";
       document.getElementById('titleOrdem').style.marginLeft = "-73px";
     }
 
@@ -526,6 +721,8 @@ if ((isset($opcao) && $opcao == "alterar")) {
   }
 
   function js_adicionarItem() {
+
+
 
     if (document.getElementById('pc17_unid2').style.display == 'block') {
       if ($F('pc17_unid2') == "0") {
@@ -609,11 +806,12 @@ if ((isset($opcao) && $opcao == "alterar")) {
     }
 
     option = select.children[select.selectedIndex];
+    codigo_unidade = select.value;
     unidade = option.textContent;
 
 
 
-    aLinha[3] = "  <input style='text-align:center; width:90%; border:none;' readonly='' type='text'  name='unidade[]' value'3' placeholder='" + unidade + "'>";
+    aLinha[3] = "  <input style='text-align:center; width:90%; border:none;' readonly='' type='text'  name='unidade[]'  value='" + unidade + "'>";
     aLinha[4] = "<input type='button' value='A' onclick='js_excluirLinha()'> <input type='button' value='E' onclick='js_excluirLinha()'>";
 
     elesub = document.getElementById('eleSub').value;
@@ -622,6 +820,17 @@ if ((isset($opcao) && $opcao == "alterar")) {
     quantidade = document.getElementById('pc11_quant').value;
     aLinha[6] = "  <input style='text-align:center; width:90%; border:none;' readonly='' type='text'  name='quantidade[]' value='" + quantidade + "'>";
 
+
+    pc11_servicoquantidade = document.getElementById('pc11_servicoquantidade').value;
+
+    if (document.getElementById('pc11_servicoquantidade').style.display != 'block') {
+      pc11_servicoquantidade = false;
+    }
+
+    aLinha[7] = "  <input style='text-align:center; width:90%; border:none;' readonly='' type='text'  name='servicoquantidade[]' value='" + pc11_servicoquantidade + "'>";
+
+
+    aLinha[8] = "  <input style='text-align:center; width:90%; border:none;' readonly='' type='text'  name='codigo_unidade[]' value='" + codigo_unidade + "'>";
 
     oGridItens.addRow(aLinha);
 
@@ -640,11 +849,14 @@ if ((isset($opcao) && $opcao == "alterar")) {
 
   oGridItens = new DBGrid('oGridItens');
   oGridItens.nameInstance = 'oGridItens';
-  oGridItens.setCellAlign(['center', 'center', "center", "center", "center", "center", "center"]);
-  oGridItens.setCellWidth(["10%", "10%", "50%", "20%", "10%", "0%", "0%"]);
-  oGridItens.setHeader(["Ordem", "Código", "Descrição", "Unidade", "Ação", "", ""]);
+  oGridItens.setCellAlign(['center', 'center', "center", "center", "center", "center", "center", "center", "center"]);
+  oGridItens.setCellWidth(["10%", "10%", "50%", "20%", "10%", "0%", "0%", "0%", "0%"]);
+  oGridItens.setHeader(["Ordem", "Código", "Descrição", "Unidade", "Ação", "", "", "", ""]);
   oGridItens.aHeaders[5].lDisplayed = false;
   oGridItens.aHeaders[6].lDisplayed = false;
+  oGridItens.aHeaders[7].lDisplayed = false;
+  oGridItens.aHeaders[8].lDisplayed = false;
+
 
 
   oGridItens.setHeight(200);
