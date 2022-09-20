@@ -28,6 +28,7 @@
 require_once("fpdf151/pdfwebseller.php");
 require_once("dbforms/db_funcoes.php");
 require_once("libs/db_utils.php");
+include("edu_cabecalhoatolegal.php");
 
 $oCalendario = CalendarioRepository::getCalendarioByCodigo($iCalendario);
 $oEscola     = EscolaRepository::getEscolaByCodigo($iEscola);
@@ -47,7 +48,7 @@ if ($iSerieEscolhida == 0) {
   if ($rs && pg_num_rows($rs) > 0) {
 
     $iLinhas = pg_num_rows($rs);
-    for ($i=0; $i < $iLinhas ; $i++) {
+    for ($i = 0; $i < $iLinhas; $i++) {
       $aEtapas[] = db_utils::fieldsMemory($rs, $i)->ed11_i_codigo;
     }
   }
@@ -55,7 +56,7 @@ if ($iSerieEscolhida == 0) {
 
 $lPercentual = false;
 
-if ( $iFiltro == 1 ) {
+if ($iFiltro == 1) {
   $lPercentual = true;
 }
 

@@ -25,17 +25,18 @@
  *                                licenca/licenca_pt.txt
  */
 
-require_once ("fpdf151/pdfwebseller.php");
-require_once ("libs/db_utils.php");
-require_once ("libs/db_app.utils.php");
-require_once ("libs/db_stdlib.php");
-require_once ("libs/db_conecta.php");
-require_once ("libs/db_sessoes.php");
-require_once ("dbforms/db_funcoes.php");
-require_once ("std/DBDate.php");
-require_once ("classes/db_edu_parametros_classe.php");
-require_once ("model/educacao/avaliacao/iFormaObtencao.interface.php");
-require_once ("model/educacao/avaliacao/iElementoAvaliacao.interface.php");
+require_once("fpdf151/pdfwebseller.php");
+require_once("libs/db_utils.php");
+require_once("libs/db_app.utils.php");
+require_once("libs/db_stdlib.php");
+require_once("libs/db_conecta.php");
+require_once("libs/db_sessoes.php");
+require_once("dbforms/db_funcoes.php");
+require_once("std/DBDate.php");
+require_once("classes/db_edu_parametros_classe.php");
+require_once("model/educacao/avaliacao/iFormaObtencao.interface.php");
+require_once("model/educacao/avaliacao/iElementoAvaliacao.interface.php");
+include("edu_cabecalhoatolegal.php");
 
 $oGet = db_utils::postMemory($_GET);
 db_app::import("CgmFactory");
@@ -87,7 +88,7 @@ $oDocente         = null;
 if ($oDaoTurmaHorario->numrows > 0) {
 
   $iRecursoHumano = db_utils::fieldsMemory($rsBuscaDocente, 0)->ed346_rechumano;
-  $oDocente       = DocenteRepository:: getDocenteByCodigoRecursosHumano($iRecursoHumano);
+  $oDocente       = DocenteRepository::getDocenteByCodigoRecursosHumano($iRecursoHumano);
 }
 
 $sDiario      = "Diário de Classe - Turmas de AC e AEE";
@@ -133,10 +134,10 @@ $iLinhasImpressaNaPagina  = 0;
  */
 foreach ($aAlunosVinculados as $iIndice => $oAluno) {
 
-  $iLinhasImpressa ++;
-  $iLinhasImpressaNaPagina ++;
+  $iLinhasImpressa++;
+  $iLinhasImpressaNaPagina++;
 
-  if (($oPdf->GetY() > $oPdf->h -10) || $lPrimeiraVolta) {
+  if (($oPdf->GetY() > $oPdf->h - 10) || $lPrimeiraVolta) {
 
     $lPrimeiraVolta = false;
     imprimeHeader($oPdf, $iTamanhoColuna,  $oGet->iNumeroColunas);
@@ -152,9 +153,9 @@ foreach ($aAlunosVinculados as $iIndice => $oAluno) {
 
   $iEixoX = $oPdf->getX();
   $iEixoY = $oPdf->getY();
-  for($iColuna = 1; $iColuna <= $oGet->iNumeroColunas; $iColuna++) {
+  for ($iColuna = 1; $iColuna <= $oGet->iNumeroColunas; $iColuna++) {
 
-    $oPdf->setfont('arial','b',12);
+    $oPdf->setfont('arial', 'b', 12);
     $oPdf->Cell($iTamanhoColuna,  $iHeigth, "", 1, 0, "C");
     $oPdf->Text($iEixoX + ($iTamanhoColuna * 37 / 100), $iEixoY + 2, ".");
     $iEixoX = $oPdf->getX();
@@ -171,10 +172,10 @@ foreach ($aAlunosVinculados as $iIndice => $oAluno) {
    * Quando este caso for valido teremos no minimo duas paginas de relatorio
    */
   $iNumeroDeLinhasEmBranco = 0;
-  $lQuebrouPaginaPorLimiteDeAlunosPorPagina = false ;
+  $lQuebrouPaginaPorLimiteDeAlunosPorPagina = false;
   if (($iLinhasImpressa >= $iNumeroDeAlunosPorPagina) && ($iLinhasImpressa == $iQuantosAlunosTemNaTurma)) {
 
-    $lQuebrouPaginaPorLimiteDeAlunosPorPagina = true ;
+    $lQuebrouPaginaPorLimiteDeAlunosPorPagina = true;
     $iNumeroDeLinhasEmBranco = $iNumeroDeAlunosPorPagina - $iLinhasImpressaNaPagina;
   }
 
@@ -185,7 +186,8 @@ foreach ($aAlunosVinculados as $iIndice => $oAluno) {
    */
   $lMenosAlunosNaTurma = false;
   if (($iQuantosAlunosTemNaTurma == $iLinhasImpressaNaPagina) &&
-      ($iLinhasImpressaNaPagina < $iNumeroDeAlunosPorPagina)) {
+    ($iLinhasImpressaNaPagina < $iNumeroDeAlunosPorPagina)
+  ) {
 
     $lMenosAlunosNaTurma = true;
     $iNumeroDeLinhasEmBranco = $iNumeroDeAlunosPorPagina - $iQuantosAlunosTemNaTurma;
@@ -205,9 +207,9 @@ foreach ($aAlunosVinculados as $iIndice => $oAluno) {
 
       $iEixoX = $oPdf->getX();
       $iEixoY = $oPdf->getY();
-      for($iColuna = 1; $iColuna <= $oGet->iNumeroColunas; $iColuna++) {
+      for ($iColuna = 1; $iColuna <= $oGet->iNumeroColunas; $iColuna++) {
 
-        $oPdf->setfont('arial','b',12);
+        $oPdf->setfont('arial', 'b', 12);
         $oPdf->Cell($iTamanhoColuna,  $iHeigth, "", 1, 0, "C");
         $oPdf->Text($iEixoX + ($iTamanhoColuna * 37 / 100), $iEixoY + 2, ".");
         $iEixoX = $oPdf->getX();
@@ -235,7 +237,8 @@ $oPdf->Output();
  * Imprime o cabecalho do relatorio
  * @param PDF $oPdf
  */
-function imprimeHeader($oPdf, $iTamanhoColuna, $iNumeroColunas) {
+function imprimeHeader($oPdf, $iTamanhoColuna, $iNumeroColunas)
+{
 
   $oPdf->AddPage("L");
   $oPdf->SetFont("arial", "b", 7);
@@ -245,7 +248,7 @@ function imprimeHeader($oPdf, $iTamanhoColuna, $iNumeroColunas) {
   $oPdf->Cell(5,   4, "Nº",            1, 0);
   $oPdf->Cell(65,  4, "Nome do Aluno", 1, 0, "C");
   $oPdf->Cell(10,  4, "Dia >",         1, 0, "C");
-  for($i = 0; $i < $iNumeroColunas; $i++) {
+  for ($i = 0; $i < $iNumeroColunas; $i++) {
     $oPdf->Cell($iTamanhoColuna, 4, "", 1, 0);
   }
   $oPdf->Cell(5,  4, "Nº", 1, 0, "C");
@@ -256,7 +259,8 @@ function imprimeHeader($oPdf, $iTamanhoColuna, $iNumeroColunas) {
  * Imprime a Assinatura no fim da pagina
  * @param PDF $oPdf
  */
-function imprimeAssinatura($oPdf) {
+function imprimeAssinatura($oPdf)
+{
 
   $oPdf->SetFont("arial", "b", 7);
   $oPdf->Cell(140, 5.5, " Entregue em: ____/____/_____ POR ____________________________________", 1, 0);
