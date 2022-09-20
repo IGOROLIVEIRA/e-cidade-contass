@@ -25,21 +25,22 @@
  *                                licenca/licenca_pt.txt
  */
 
-require_once ("fpdf151/pdfwebseller.php");
-require_once ("std/DBDate.php");
-require_once ("std/db_stdClass.php");
-require_once ("dbforms/db_funcoes.php");
-require_once ("libs/db_sql.php");
-require_once ("libs/db_stdlib.php");
-require_once ("libs/db_conecta.php");
-require_once ("libs/db_sessoes.php");
-require_once ("libs/db_utils.php");
-require_once ("libs/JSON.php");
-require_once ("libs/db_usuariosonline.php");
-require_once ("libs/db_app.utils.php");
-require_once ("libs/exceptions/BusinessException.php");
-require_once ("libs/exceptions/ParameterException.php");
-require_once ("libs/exceptions/DBException.php");
+require_once("fpdf151/pdfwebseller.php");
+require_once("std/DBDate.php");
+require_once("std/db_stdClass.php");
+require_once("dbforms/db_funcoes.php");
+require_once("libs/db_sql.php");
+require_once("libs/db_stdlib.php");
+require_once("libs/db_conecta.php");
+require_once("libs/db_sessoes.php");
+require_once("libs/db_utils.php");
+require_once("libs/JSON.php");
+require_once("libs/db_usuariosonline.php");
+require_once("libs/db_app.utils.php");
+require_once("libs/exceptions/BusinessException.php");
+require_once("libs/exceptions/ParameterException.php");
+require_once("libs/exceptions/DBException.php");
+include("edu_cabecalhoatolegal.php");
 
 /**
  * Relatório de Conselho de Classe
@@ -135,12 +136,14 @@ foreach ($aTurmasSelecionadas as $oTurmaSelecionada) {
    */
   foreach ($oTurma->getDisciplinasPorEtapa($oEtapa) as $oRegencia) {
 
-    $iContDisciplinas ++;
+    $iContDisciplinas++;
 
     if ($iContDisciplinas <= $oConfigRelatorio->iMaximoDisciplinaPagina) {
       $oTurmaEtapa->aPaginas[0][$oRegencia->getCodigo()] = $oRegencia;
-    } else if ($iContDisciplinas > $oConfigRelatorio->iMaximoDisciplinaPagina &&
-               $iContDisciplinas <= ($oConfigRelatorio->iMaximoDisciplinaPagina * 2)) {
+    } else if (
+      $iContDisciplinas > $oConfigRelatorio->iMaximoDisciplinaPagina &&
+      $iContDisciplinas <= ($oConfigRelatorio->iMaximoDisciplinaPagina * 2)
+    ) {
       $oTurmaEtapa->aPaginas[1][$oRegencia->getCodigo()] = $oRegencia;
     } else {
       $oTurmaEtapa->aPaginas[2][$oRegencia->getCodigo()] = $oRegencia;
@@ -218,7 +221,7 @@ foreach ($aTurmasSelecionadas as $oTurmaSelecionada) {
 
     foreach ($oTurma->getDisciplinasPorEtapa($oEtapa) as $oRegencia) {
 
-      $iContDisciplinas ++;
+      $iContDisciplinas++;
       $oDisciplinaDiario        = $oDiarioDeClasse->getDisciplinasPorRegencia($oRegencia, $oAvaliacaoPeriodica);
       $oAvaliacaoAproveitamento = $oDisciplinaDiario->getAvaliacoesPorOrdem($oAvaliacaoPeriodica->getOrdemSequencia());
 
@@ -252,8 +255,10 @@ foreach ($aTurmasSelecionadas as $oTurmaSelecionada) {
        */
       if ($iContDisciplinas <= $oConfigRelatorio->iMaximoDisciplinaPagina) {
         $oDadosAluno->aAvaliacao[0][$oRegencia->getCodigo()] = $oAvaliacao;
-      } else if ($iContDisciplinas > $oConfigRelatorio->iMaximoDisciplinaPagina &&
-                 $iContDisciplinas <= ($oConfigRelatorio->iMaximoDisciplinaPagina * 2)) {
+      } else if (
+        $iContDisciplinas > $oConfigRelatorio->iMaximoDisciplinaPagina &&
+        $iContDisciplinas <= ($oConfigRelatorio->iMaximoDisciplinaPagina * 2)
+      ) {
         $oDadosAluno->aAvaliacao[1][$oRegencia->getCodigo()] = $oAvaliacao;
       } else {
         $oDadosAluno->aAvaliacao[2][$oRegencia->getCodigo()] = $oAvaliacao;
@@ -265,7 +270,6 @@ foreach ($aTurmasSelecionadas as $oTurmaSelecionada) {
     $oTurmaEtapa->aAlunos[] = $oDadosAluno;
     MatriculaRepository::removerMatricula($oMatricula);
     db_fim_transacao();
-
   }
 
   $aTurmas[] = $oTurmaEtapa;
@@ -295,7 +299,7 @@ foreach ($aTurmas as $oTurmaEtapa) {
   $lPrimeiraPagina = true;
   $iPaginas        = count($oTurmaEtapa->aPaginas);
 
-  for ($iPagina = 0; $iPagina < $iPaginas; $iPagina ++) {
+  for ($iPagina = 0; $iPagina < $iPaginas; $iPagina++) {
 
     /**
      * A cada página, calcula em tempo de excucao o tamanho de variáveis necessárias para o calculo
@@ -313,7 +317,7 @@ foreach ($aTurmas as $oTurmaEtapa) {
 
     foreach ($oTurmaEtapa->aAlunos as $oAluno) {
 
-      if ( $lPrimeiraPagina ) {
+      if ($lPrimeiraPagina) {
 
         $lPrimeiraPagina = false;
         adicionaHeader($oPdf, $oTurmaEtapa, $oConfigRelatorio, $iPagina);
@@ -323,7 +327,7 @@ foreach ($aTurmas as $oTurmaEtapa) {
         continue;
       }
 
-      $iAlunosImpressoPagina ++;
+      $iAlunosImpressoPagina++;
       if ($iAlunosImpressoPagina > $oConfigRelatorio->iAlunosPorPagina) {
 
         $iAlunosImpressoPagina = 1;
@@ -365,7 +369,7 @@ foreach ($aTurmas as $oTurmaEtapa) {
         if ($oAvaliacao->lNotaExterna && $mAvaliacao != '') {
           $mAvaliacao .= "*";
         }
-        if ( $oAluno->lAvaliadoPorParecer && !empty($mAvaliacao)) {
+        if ($oAluno->lAvaliadoPorParecer && !empty($mAvaliacao)) {
           $mAvaliacao = "PD";
         }
 
@@ -382,9 +386,9 @@ foreach ($aTurmas as $oTurmaEtapa) {
 
         if ($oAvaliacao->sTipoAvaliacao == 'NOTA' && $oConfigRelatorio->lCalculaMediaParcial) {
 
-          $oPdf->Cell($iLarguraAvaliacao/2, $oConfigRelatorio->iAlturaLinha, $mAvaliacao, 1, 0, "C");
+          $oPdf->Cell($iLarguraAvaliacao / 2, $oConfigRelatorio->iAlturaLinha, $mAvaliacao, 1, 0, "C");
           $oPdf->SetFont("arial", '', $oConfigRelatorio->iFonteAvaliacao); //Nota parcial não fica em negrito
-          $oPdf->Cell($iLarguraAvaliacao/2, $oConfigRelatorio->iAlturaLinha, $oAvaliacao->mNotaParcial, 1, 0, "C");
+          $oPdf->Cell($iLarguraAvaliacao / 2, $oConfigRelatorio->iAlturaLinha, $oAvaliacao->mNotaParcial, 1, 0, "C");
         } else {
           $oPdf->Cell($iLarguraAvaliacao, $oConfigRelatorio->iAlturaLinha, $mAvaliacao, 1, 0, "C");
         }
@@ -397,10 +401,9 @@ foreach ($aTurmas as $oTurmaEtapa) {
        * Imprime colunas de avaliação vazia
        */
       if ($iTotalDisciplina < $oConfigRelatorio->iMaximoDisciplinaPagina) {
-        imprimeQuadroAvaliacaoVazio ($oPdf, $oTurmaEtapa, $oTurmaEtapa->iTotalDisciplina, $oConfigRelatorio, false);
+        imprimeQuadroAvaliacaoVazio($oPdf, $oTurmaEtapa, $oTurmaEtapa->iTotalDisciplina, $oConfigRelatorio, false);
       }
       $oPdf->Cell($oConfigRelatorio->iColunaNumero, $oConfigRelatorio->iAlturaLinha, $oAluno->iTotalFaltas, 1, 1, 'C');
-
     }
 
     /**
@@ -424,15 +427,16 @@ foreach ($aTurmas as $oTurmaEtapa) {
  * @param FPDF $oPdf
  * @param stdClass $oConfigRelatorio
  */
-function montaQuadroLegendaAssinatura(FPDF $oPdf, $oConfigRelatorio, $lUltimoPeriodo, $oTurmaEtapa) {
+function montaQuadroLegendaAssinatura(FPDF $oPdf, $oConfigRelatorio, $lUltimoPeriodo, $oTurmaEtapa)
+{
 
   /**
    * Soma com base na configuração do layout a largura do quadro
    */
   $iLarguraQuadro  = $oConfigRelatorio->iLarguraTotalDisciplinas;
-  $iLarguraQuadro += $oConfigRelatorio->iColunaCodigo ;
+  $iLarguraQuadro += $oConfigRelatorio->iColunaCodigo;
   $iLarguraQuadro += $oTurmaEtapa->iColunaNome;
-  $iLarguraQuadro += ($oConfigRelatorio->iColunaNumero*3);
+  $iLarguraQuadro += ($oConfigRelatorio->iColunaNumero * 3);
   if (!$lUltimoPeriodo) {
     $iLarguraQuadro += $oConfigRelatorio->iColunaPareceres;
   }
@@ -448,7 +452,7 @@ function montaQuadroLegendaAssinatura(FPDF $oPdf, $oConfigRelatorio, $lUltimoPer
 
     $sLegendasSituacao  = montaLegendaSituacoes();
 
-    $oPdf->SetY($iYInicial+1);
+    $oPdf->SetY($iYInicial + 1);
     $oPdf->SetFont("arial", 'b', 5);
 
     $iAlturaLinhaLegenda = $oConfigRelatorio->iAlturaLinha - 1.5;
@@ -465,11 +469,11 @@ function montaQuadroLegendaAssinatura(FPDF $oPdf, $oConfigRelatorio, $lUltimoPer
 
   /**
    * Assinatura
-  */
+   */
   $oPdf->SetFont("arial", 'b', 5);
-  $oPdf->SetXY($iXInicial+200, $iYInicial+9);
+  $oPdf->SetXY($iXInicial + 200, $iYInicial + 9);
   $oPdf->Cell(81, $oConfigRelatorio->iAlturaLinha, "Regente Conselheiro", 0, 0, 'C');
-  $oPdf->Line($iXInicial+200, $iYInicial+9, $iXInicial+$iLarguraQuadro, $iYInicial+9);
+  $oPdf->Line($iXInicial + 200, $iYInicial + 9, $iXInicial + $iLarguraQuadro, $iYInicial + 9);
 }
 
 
@@ -480,7 +484,8 @@ function montaQuadroLegendaAssinatura(FPDF $oPdf, $oConfigRelatorio, $lUltimoPer
  * @param stdClass $oConfigRelatorio
  * @param integer  $iPagina
  */
-function calculaTamanhoDeCelulasDinamicas(FPDF $oPdf, $oTurmaEtapa, $oConfigRelatorio, $iPagina) {
+function calculaTamanhoDeCelulasDinamicas(FPDF $oPdf, $oTurmaEtapa, $oConfigRelatorio, $iPagina)
+{
 
   $oTurmaEtapa->iTotalDisciplina   = count($oTurmaEtapa->aPaginas[$iPagina]);
   $oTurmaEtapa->iLarguraDisciplina = $oConfigRelatorio->iLarguraTotalDisciplinas / $oConfigRelatorio->iMaximoDisciplinaPagina;
@@ -493,7 +498,6 @@ function calculaTamanhoDeCelulasDinamicas(FPDF $oPdf, $oTurmaEtapa, $oConfigRela
     $oTurmaEtapa->iColunaNome     += $oConfigRelatorio->iColunaPareceres;
     $oTurmaEtapa->iLarguraCelulaParecer = 0;
   }
-
 }
 
 /**
@@ -503,7 +507,8 @@ function calculaTamanhoDeCelulasDinamicas(FPDF $oPdf, $oTurmaEtapa, $oConfigRela
  * @param stdClass $oConfigRelatorio
  * @param integer  $iPagina
  */
-function adicionaHeader(FPDF $oPdf, $oTurmaEtapa, $oConfigRelatorio, $iPagina) {
+function adicionaHeader(FPDF $oPdf, $oTurmaEtapa, $oConfigRelatorio, $iPagina)
+{
 
   $oPdf->AddPage();
   $oPdf->SetFont("arial", 'b', 7);
@@ -526,19 +531,19 @@ function adicionaHeader(FPDF $oPdf, $oTurmaEtapa, $oConfigRelatorio, $iPagina) {
   $iLarguraDisciplina = $oTurmaEtapa->iLarguraDisciplina;
 
   $iEixoY = $oPdf->GetY();
-  imprimeLinhaSeparadora ($oPdf, $oConfigRelatorio);
+  imprimeLinhaSeparadora($oPdf, $oConfigRelatorio);
   foreach ($oTurmaEtapa->aPaginas[$iPagina] as $oRegencia) {
 
     $sAbreviatura = $oRegencia->getDisciplina()->getAbreviatura();
     $oPdf->Cell($iLarguraDisciplina, $oConfigRelatorio->iAlturaLinha, $sAbreviatura, 1, 0, "C");
-    imprimeLinhaSeparadora ($oPdf, $oConfigRelatorio);
+    imprimeLinhaSeparadora($oPdf, $oConfigRelatorio);
   }
 
   /**
    * Imprime colunas de avaliação vazia
    */
   if ($iTotalDisciplina < $oConfigRelatorio->iMaximoDisciplinaPagina) {
-    imprimeQuadroAvaliacaoVazio ($oPdf, $oTurmaEtapa, $oTurmaEtapa->iTotalDisciplina, $oConfigRelatorio, true);
+    imprimeQuadroAvaliacaoVazio($oPdf, $oTurmaEtapa, $oTurmaEtapa->iTotalDisciplina, $oConfigRelatorio, true);
   }
 
   /**
@@ -569,22 +574,21 @@ function adicionaHeader(FPDF $oPdf, $oTurmaEtapa, $oConfigRelatorio, $iPagina) {
     $sFormaAvaliacao   = $oRegencia->getProcedimentoAvaliacao()->getFormaAvaliacao()->getTipo();
     $iLarguraAvaliacao = $iLarguraDisciplina - 5;
 
-    if ( $sFormaAvaliacao == 'NOTA' && $oConfigRelatorio->lCalculaMediaParcial ) {
+    if ($sFormaAvaliacao == 'NOTA' && $oConfigRelatorio->lCalculaMediaParcial) {
 
-      $oPdf->Cell($iLarguraAvaliacao/2, $oConfigRelatorio->iAlturaLinha, 'NT', 1, 0, "C");
-      $oPdf->Cell($iLarguraAvaliacao/2, $oConfigRelatorio->iAlturaLinha, 'NP', 1, 0, "C");
+      $oPdf->Cell($iLarguraAvaliacao / 2, $oConfigRelatorio->iAlturaLinha, 'NT', 1, 0, "C");
+      $oPdf->Cell($iLarguraAvaliacao / 2, $oConfigRelatorio->iAlturaLinha, 'NP', 1, 0, "C");
     } else {
       $oPdf->Cell($iLarguraAvaliacao, $oConfigRelatorio->iAlturaLinha, $sFormaAvaliacao, 1, 0, "C");
     }
     $oPdf->Cell(5, $oConfigRelatorio->iAlturaLinha, 'Ft.', 1, 0, "C");
-
   }
 
   /**
    * Imprime colunas de avaliação vazia 2º linha do cabeçalho
    */
   if ($iTotalDisciplina < $oConfigRelatorio->iMaximoDisciplinaPagina) {
-    imprimeQuadroAvaliacaoVazio ($oPdf, $oTurmaEtapa, $oTurmaEtapa->iTotalDisciplina, $oConfigRelatorio, false);
+    imprimeQuadroAvaliacaoVazio($oPdf, $oTurmaEtapa, $oTurmaEtapa->iTotalDisciplina, $oConfigRelatorio, false);
   }
   $oPdf->Cell($oConfigRelatorio->iColunaNumero, $oConfigRelatorio->iAlturaLinha, 'TF', "BLR", "C");
   $oPdf->ln();
@@ -599,23 +603,28 @@ function adicionaHeader(FPDF $oPdf, $oTurmaEtapa, $oConfigRelatorio, $iPagina) {
  * @param stdClass $oConfigRelatorio -> Objeto de configuração
  * @param boolean  $lPrimeiraLinha   -> Se é a primeira linha do cabeçalho
  */
-function imprimeQuadroAvaliacaoVazio (FPDF $oPdf, $oTurmaEtapa, $iTotalDisciplina, $oConfigRelatorio,
-                                      $lPrimeiraLinha = true) {
+function imprimeQuadroAvaliacaoVazio(
+  FPDF $oPdf,
+  $oTurmaEtapa,
+  $iTotalDisciplina,
+  $oConfigRelatorio,
+  $lPrimeiraLinha = true
+) {
 
   for ($i = $iTotalDisciplina; $i < $oConfigRelatorio->iMaximoDisciplinaPagina; $i++) {
 
     if ($lPrimeiraLinha) {
 
       $oPdf->Cell($oTurmaEtapa->iLarguraDisciplina, $oConfigRelatorio->iAlturaLinha, '', 1, 0, "C");
-      imprimeLinhaSeparadora ($oPdf, $oConfigRelatorio);
+      imprimeLinhaSeparadora($oPdf, $oConfigRelatorio);
     } else {
 
       $iLarguraAvaliacao = $oTurmaEtapa->iLarguraDisciplina - 5;
 
       if ($oTurmaEtapa->sFormaAvaliacao == 'NOTA' && $oConfigRelatorio->lCalculaMediaParcial) {
 
-        $oPdf->Cell($iLarguraAvaliacao/2, $oConfigRelatorio->iAlturaLinha, '', 1);
-        $oPdf->Cell($iLarguraAvaliacao/2, $oConfigRelatorio->iAlturaLinha, '', 1);
+        $oPdf->Cell($iLarguraAvaliacao / 2, $oConfigRelatorio->iAlturaLinha, '', 1);
+        $oPdf->Cell($iLarguraAvaliacao / 2, $oConfigRelatorio->iAlturaLinha, '', 1);
       } else {
         $oPdf->Cell($iLarguraAvaliacao, $oConfigRelatorio->iAlturaLinha, '', 1);
       }
@@ -629,7 +638,8 @@ function imprimeQuadroAvaliacaoVazio (FPDF $oPdf, $oTurmaEtapa, $iTotalDisciplin
  * @param FPDF     $oPdf
  * @param stdClass $oConfigRelatorio
  */
-function imprimeLinhaSeparadora (FPDF $oPdf, $oConfigRelatorio) {
+function imprimeLinhaSeparadora(FPDF $oPdf, $oConfigRelatorio)
+{
 
   $oPdf->SetLineWidth(0.3);
   $oPdf->Line($oPdf->GetX(), $oPdf->GetY(), $oPdf->GetX(), $oConfigRelatorio->iAlturaLine);
@@ -642,7 +652,8 @@ function imprimeLinhaSeparadora (FPDF $oPdf, $oConfigRelatorio) {
  * @param integer  $iLarguraCelulaParecer
  * @param stdClass $oConfigRelatorio
  */
-function imprimeCelulasParecer(FPDF $oPdf, $iLarguraCelulaParecer, $oConfigRelatorio) {
+function imprimeCelulasParecer(FPDF $oPdf, $iLarguraCelulaParecer, $oConfigRelatorio)
+{
 
   $oPdf->Cell($iLarguraCelulaParecer, $oConfigRelatorio->iAlturaLinha, '', 1);
   $oPdf->Cell($iLarguraCelulaParecer, $oConfigRelatorio->iAlturaLinha, '', 1);
@@ -655,7 +666,8 @@ function imprimeCelulasParecer(FPDF $oPdf, $iLarguraCelulaParecer, $oConfigRelat
  * @param stdClass $oConfigRelatorio
  * @param stdClass  $oTurmaEtapa
  */
-function imprimeLinhaEmBranco(FPDF $oPdf, $oConfigRelatorio, $oTurmaEtapa) {
+function imprimeLinhaEmBranco(FPDF $oPdf, $oConfigRelatorio, $oTurmaEtapa)
+{
 
   $iLarguraCelulaNome = $oConfigRelatorio->iColunaNumero + $oTurmaEtapa->iColunaNome;
   if ($oConfigRelatorio->lClassificacaoAlunoTurma) {
@@ -670,9 +682,8 @@ function imprimeLinhaEmBranco(FPDF $oPdf, $oConfigRelatorio, $oTurmaEtapa) {
   if (!$oTurmaEtapa->lUltimoPeriodo) {
     imprimeCelulasParecer($oPdf, $oTurmaEtapa->iLarguraCelulaParecer, $oConfigRelatorio);
   }
-  imprimeQuadroAvaliacaoVazio ($oPdf, $oTurmaEtapa, 0, $oConfigRelatorio, false);
+  imprimeQuadroAvaliacaoVazio($oPdf, $oTurmaEtapa, 0, $oConfigRelatorio, false);
   $oPdf->Cell($oConfigRelatorio->iColunaNumero, $oConfigRelatorio->iAlturaLinha, '', 1, 1);
-
 }
 
 
@@ -681,7 +692,8 @@ function imprimeLinhaEmBranco(FPDF $oPdf, $oConfigRelatorio, $oTurmaEtapa) {
  * @param string $sSituacaoBusca
  * @return string $sSituacaoRetorno
  */
-function buscaAbreviaturaSituacao($sSituacaoBusca) {
+function buscaAbreviaturaSituacao($sSituacaoBusca)
+{
 
   $sSituacaoRetorno = '';
 
@@ -700,7 +712,8 @@ function buscaAbreviaturaSituacao($sSituacaoBusca) {
  * Retorna a legenda das Situações tratadas no relatório
  * @return string
  */
-function montaLegendaSituacoes() {
+function montaLegendaSituacoes()
+{
 
   $sLegenda = '';
   foreach (getSituacoes() as $sAbrev => $sSituacao) {
@@ -714,7 +727,8 @@ function montaLegendaSituacoes() {
  * Array com as situações tratadas no relatório
  * @return multitype:string
  */
-function getSituacoes() {
+function getSituacoes()
+{
 
   /**
    * Array com as situaçõe da matricula do aluno indexado pela abreviatura
@@ -741,41 +755,43 @@ function getSituacoes() {
  * @param integer $max
  * @param string $substr
  */
-function abreviar($nome, $max, $substr=false) {
+function abreviar($nome, $max, $substr = false)
+{
 
-  if(strlen(trim($nome))>$max){
+  if (strlen(trim($nome)) > $max) {
 
     $strinv = strrev(trim($nome));
-    $ultnome = substr($strinv,0,strpos($strinv," "));
+    $ultnome = substr($strinv, 0, strpos($strinv, " "));
     $ultnome = strrev($ultnome);
     $nome = strrev($strinv);
-    $prinome = substr($nome,0,strpos($nome," "));
+    $prinome = substr($nome, 0, strpos($nome, " "));
     $nomes = strtok($nome, " ");
     $iniciais = "";
 
-    while($nomes):
-    if(($nomes == 'E') || ($nomes == 'DE') || ($nomes == 'DOS') ||
-    ($nomes == 'DAS') || ($nomes == 'DA') || ($nomes == 'DO')){
-      $iniciais .= " ".$nomes;
-      $nomes = strtok(" ");
-    }elseif (($nomes == $ultnome) || ($nomes == $prinome)){
-      $nome = "";
-      $nomes = strtok(" ");
-    }else{
-      $iniciais .= " ".$nomes[0].".";
-      $nomes = strtok(" ");
-    }
+    while ($nomes) :
+      if (($nomes == 'E') || ($nomes == 'DE') || ($nomes == 'DOS') ||
+        ($nomes == 'DAS') || ($nomes == 'DA') || ($nomes == 'DO')
+      ) {
+        $iniciais .= " " . $nomes;
+        $nomes = strtok(" ");
+      } elseif (($nomes == $ultnome) || ($nomes == $prinome)) {
+        $nome = "";
+        $nomes = strtok(" ");
+      } else {
+        $iniciais .= " " . $nomes[0] . ".";
+        $nomes = strtok(" ");
+      }
     endwhile;
 
     $nome =  $prinome;
     $nome .= $iniciais;
-    $nome .= " ".$ultnome;
+    $nome .= " " . $ultnome;
   }
 
-  if (!$substr){
+  if (!$substr) {
     return trim($nome);
-  }else{
-    return substr(trim($nome),0,20);
+  } else {
+    return substr(trim($nome), 0, 20);
   }
 }
 $oPdf->Output();
