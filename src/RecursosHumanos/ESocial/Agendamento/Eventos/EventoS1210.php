@@ -33,7 +33,6 @@ class EventoS1210 extends EventoBase
     {
         $ano = date("Y", db_getsession("DB_datausu"));
         $mes = date("m", db_getsession("DB_datausu"));
-        $dia = date("d", db_getsession("DB_datausu"));
         $aDadosAPI = array();
         $iSequencial = 1;
 
@@ -51,9 +50,9 @@ class EventoS1210 extends EventoBase
             $oDadosAPI->evtPgtos->nrRecibo            = null;
 
             $oDadosAPI->evtPgtos->indapuracao         = $this->indapuracao;
-            $oDadosAPI->evtPgtos->perapur             = date('Y-m');
-            if ($oDados->indapuracao == 2) {
-                $oDadosAPI->evtPgtos->perapur         = date('Y');
+            $oDadosAPI->evtRemun->perapur             = $ano . '-' . $mes;
+            if ($this->indapuracao == 2) {
+                $oDadosAPI->evtRemun->perapur         = $ano;
             }
             $oDadosAPI->evtPgtos->cpfbenef             = $aDadosPorMatriculas[0]->cpftrab;
 

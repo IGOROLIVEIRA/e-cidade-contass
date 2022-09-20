@@ -2105,7 +2105,7 @@ if ($oInstit->db21_usasisagua == "t") {
         else  
            icontaAux  = iConta;
              
-      if((iContaReceita == 160 && icontaAux== 186) || (iContaReceita == 160 && iConta == 186) || (iContaReceita == 170 && iConta == 100) || (iContaReceita == 119 && iConta == 118) || (iContaReceita == 166 && iConta == 118) || (iContaReceita == 167 && iConta == 118) ||
+      if((iContaReceita == 136 && icontaAux== 100) || (iContaReceita == 136 && iConta == 100) || (iContaReceita == 160 && icontaAux== 186) || (iContaReceita == 160 && iConta == 186) || (iContaReceita == 170 && iConta == 100) || (iContaReceita == 119 && iConta == 118) || (iContaReceita == 166 && iConta == 118) || (iContaReceita == 167 && iConta == 118) ||
       (iContaReceita == 166 && iConta == 119) || (iContaReceita == 167 && iConta == 119) || (iContaReceita == 118 && iConta == 119) || (iContaReceita == 101 && iConta == 100) || (iContaReceita == 102 && iConta == 100) ||
       (iContaReceita == 154 && iConta == 159) || (iContaReceita == 132 && iConta == 159) || (iContaReceita == 154 && iConta == 153) ||(iContaReceita == 161 && iConta == 100) ||(iContaReceita == 160 && iConta == 186) ||
       (iContaReceita == 170 && icontaAux== 100) || (iContaReceita == 119 && icontaAux== 118) || (iContaReceita == 166 && icontaAux== 118) || (iContaReceita == 167 && icontaAux== 118) ||
