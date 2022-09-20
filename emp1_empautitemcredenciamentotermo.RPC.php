@@ -53,6 +53,7 @@ switch ($_POST["action"]) {
                        pc23_quant,
                        pc11_servicoquantidade,
                        sum(l213_qtdcontratada) AS l213_qtdcontratada,
+                       sum(l213_valorcontratado) as l213_valorcontratado,
                        pc01_servico
                 FROM credenciamento
                 INNER JOIN liclicita ON l20_codigo = l205_licitacao
@@ -118,20 +119,25 @@ switch ($_POST["action"]) {
                 }
                 $selectunid .= "</select>";
                 $qtd_disponivel = $oDados->pc23_quant - $oDados->l213_qtdcontratada;
+                $vlr_disponivel = $oDados->pc23_vlrun - $oDados->l213_valorcontratado;
+                if($oDados->pc01_servico == "t" && $oDados->pc11_servicoquantidade == "f"){
+                    $qtd_disponivel = 1;
+                }
                 $itemRows  = array();
                 $itemRows[] = "<input type='checkbox' id='checkbox_{$oDados->pc01_codmater}' name='checkbox_{$oDados->pc01_codmater}'>";
                 $itemRows[] = $oDados->pc11_seq;
                 $itemRows[] = $oDados->pc01_codmater;
                 $itemRows[] = $oDados->pc01_descrmater;
                 $itemRows[] = $selectunid;
-                $itemRows[] = "<input type='text' id='qtddisponivel_{$oDados->pc01_codmater}' value='{$qtd_disponivel}' readonly style='background-color: #DEB887; width: 80px' />";
-                if($oDados->pc01_servico == "t" and $oDados->pc11_servicoquantidade = "f"){
-                    $itemRows[] = "<input type='text' id='vlr_{$oDados->pc01_codmater}' value='{$oDados->pc23_vlrun}' width: 80px' />";
+                if($oDados->pc01_servico == "t" && $oDados->pc11_servicoquantidade == "f"){
+                    $itemRows[] = "<input type='text' id='qtddisponivel_{$oDados->pc01_codmater}' value='{$qtd_disponivel}' readonly style='background-color: #DEB887; width: 80px' />";
+                    $itemRows[] = "<input type='text' id='vlr_{$oDados->pc01_codmater}' value='{$vlr_disponivel}' width: 80px' />";
                 }else{
-                    $itemRows[] = "<input type='text' id='vlr_{$oDados->pc01_codmater}' value='{$oDados->pc23_vlrun}' readonly style='background-color: #DEB887; width: 80px' />";
+                    $itemRows[] = "<input type='text' id='qtddisponivel_{$oDados->pc01_codmater}' value='{$qtd_disponivel}' readonly style='background-color: #DEB887; width: 80px' />";
+                    $itemRows[] = "<input type='text' id='vlr_{$oDados->pc01_codmater}' value='{$vlr_disponivel}' readonly style='background-color: #DEB887; width: 80px' />";
                 }
                 if ($oDadosEmpAutItem->e55_vlrun != "") {
-                    if($oDados->pc01_servico == "t" and $oDados->pc11_servicoquantidade = "t"){
+                    if($oDados->pc01_servico == "t" && $oDados->pc11_servicoquantidade == "t"){
                         $itemRows[] = "<input type='text' id='qtd_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_quant}' maxlength='10' width: 80px' />";
                     }else{
                         $itemRows[] = "<input type='text' id='qtd_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_quant}' maxlength='10' readonly style='background-color: #DEB887; width: 80px' />";
@@ -272,6 +278,7 @@ switch ($_POST["action"]) {
                 $cl_credenciamentosaldo->l213_licitacao = $licitacao;
                 $cl_credenciamentosaldo->l213_item = $item['id'];
                 $cl_credenciamentosaldo->l213_qtdcontratada = $item['qtd'];
+                $cl_credenciamentosaldo->l213_valorcontratado = $item['vlrunit'];
                 $cl_credenciamentosaldo->l213_contratado = $fornecedor;
                 $cl_credenciamentosaldo->l213_itemlicitacao = $oDadositem->l21_codigo;
                 $cl_credenciamentosaldo->l213_qtdlicitada = $oDadositem->pc11_quant;
@@ -306,6 +313,7 @@ switch ($_POST["action"]) {
                 $cl_credenciamentosaldo->l213_licitacao = $licitacao;
                 $cl_credenciamentosaldo->l213_item = $item['id'];
                 $cl_credenciamentosaldo->l213_qtdcontratada = $item['qtd'];
+                $cl_credenciamentosaldo->l213_valorcontratado = $item['vlrunit'];
                 $cl_credenciamentosaldo->l213_contratado = $fornecedor;
                 $cl_credenciamentosaldo->l213_itemlicitacao = $oDadositem->l21_codigo;
                 $cl_credenciamentosaldo->l213_qtdlicitada = $oDadositem->pc11_quant;
