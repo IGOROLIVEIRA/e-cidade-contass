@@ -60,9 +60,11 @@ class calculoRetencao {
     switch ($this->iTipoCalculo) {
 
       case 1:
-
-        require_once("model/calculoRetencaoIrrf.model.php");
-        $this->oObjCalculo = new calculoRetencaoIrrfFisica($this->iCpfCnpj,1);
+        //COMENTADO POR IGOR RUAS PARA VER COM BARBARA COMO FAZER O CALCULO CORRETAMENTE.
+        // require_once("model/calculoRetencaoIrrf.model.php");
+        // $this->oObjCalculo = new calculoRetencaoIrrfFisica($this->iCpfCnpj,1);
+        require_once("model/calculoRetencaoOutros.model.php");
+        $this->oObjCalculo = new calculoRetencaoOutros($this->iCpfCnpj,5);
         break;
 
       case 2:
