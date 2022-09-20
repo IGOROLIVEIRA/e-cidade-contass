@@ -666,18 +666,18 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
           $sql_dot = $clsolicitem->sql_query_dot(
             null,
             "pc11_codigo,
-                                             					      pc11_quant,
-                    						                            sum(pc13_quant)",
+             pc11_quant,
+             sum(pc13_quant)",
             "",
             "",
             "group by pc10_numero,
-                    						    	                               pc10_depto,
-                    							                                   pc11_codigo,
-                    							                                   pc11_quant,
-                    							                                   pc11_numero,
-                    							                                   pc13_codigo
-                    						                              having (pc11_quant > sum(pc13_quant) or pc13_codigo is null)
-                    						                                 and pc11_numero = " . $pc11_numero
+                    	pc10_depto,
+                    	pc11_codigo,
+                    	pc11_quant,
+                    	pc11_numero,
+                    	pc13_codigo
+            having (pc11_quant > sum(pc13_quant) or pc13_codigo is null)
+              and pc11_numero = " . $pc11_numero
           );
 
           $sSqlVerificaAut = " select solicitem.* ";
@@ -695,10 +695,10 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
             null,
             null,
             "round(o80_valor,2)  as valorreserva,
-                                                                                       round(pc13_valor,2) as valordotacao,
-                                                                                       pc11_numero,
-                                                                                       pc11_codigo as pc11_codigo_reserva,
-                                                                                       pc11_seq",
+             round(pc13_valor,2) as valordotacao,
+             pc11_numero,
+             pc11_codigo as pc11_codigo_reserva,
+             pc11_seq",
             "pc11_numero,pc11_codigo",
             "pc11_numero = $pc11_numero"
           );
@@ -711,8 +711,9 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
                                 pc13_coddot,
                                 pc19_orctiporec,
                                 pc01_codmater,
-                                case when pc16_codmater is null then substr(pc11_resum,1,40)
-                                     else substr(pc01_descrmater,1,40)
+                                case
+                                  when pc16_codmater is null then substr(pc11_resum,1,40)
+                                  else substr(pc01_descrmater,1,40)
                                 end as pc01_descrmater,
                                 m61_descr,
                                 pc13_quant,

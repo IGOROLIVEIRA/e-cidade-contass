@@ -315,7 +315,15 @@ final class ItemEstimativa extends itemSolicitacao
       $oMovimentacao = $this->getMovimentacaoValor();
     }
 
-    $oMovimentacao->saldo = ($oMovimentacao->quantidade + $oMovimentacao->recebidas + $oMovimentacao->execedente + $oMovimentacao->anulada) -
+    /*
+     * calculo para identificar o valor restante do item
+     */
+    
+    //$saldoRest = $oMovimentacao->solicitada - $oMovimentacao->anulada;
+
+    //$oMovimentacao->saldo = ($oMovimentacao->quantidade + $oMovimentacao->recebidas + $oMovimentacao->execedente) - ($saldoRest + $oMovimentacao->cedidas);
+    
+    $oMovimentacao->saldo = ($oMovimentacao->quantidade + $oMovimentacao->recebidas + $oMovimentacao->execedente) -
     ($oMovimentacao->solicitada + $oMovimentacao->cedidas);
     
     return $oMovimentacao;

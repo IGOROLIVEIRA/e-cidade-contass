@@ -104,7 +104,7 @@ class cl_solicitemanul {
        return false;
      }
      if($this->e36_vrlanu == null ){ 
-       $this->erro_sql = " Campo Valor Anulado nao Informado.";
+       $this->erro_sql = " Valor Anulado nao Informado.";
        $this->erro_campo = "e36_vrlanu";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -113,7 +113,7 @@ class cl_solicitemanul {
        return false;
      }
      if($this->e36_qtdanu == null ){ 
-        $this->erro_sql = " Campo Quantidade Anulada nao Informado.";
+        $this->erro_sql = " Quantidade Anulada nao Informada.";
         $this->erro_campo = "e36_qtdanu";
         $this->erro_banco = "";
         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
