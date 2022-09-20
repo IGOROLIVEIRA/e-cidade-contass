@@ -33,6 +33,7 @@ require_once("fpdf151/pdfwebseller.php");
 require_once("dbforms/db_funcoes.php");
 require_once("libs/db_libdocumento.php");
 require_once("libs/db_libparagrafo.php");
+include("edu_cabecalhoatolegal.php");
 
 $oGet                 = db_utils::postMemory($_GET);
 $oDaoMatricula        = new cl_matricula();
@@ -53,7 +54,7 @@ $clrotulo = new rotulocampo;
 $clrotulo->label("ed76_i_escola");
 $clrotulo->label("ed76_d_data");
 
-$escola = db_getsession("DB_coddepto");// variavél $escola não está sendo usada na classe @matheus;
+$escola = db_getsession("DB_coddepto"); // variavél $escola não está sendo usada na classe @matheus;
 
 $sCampos  = " aluno.*,   ";
 $sCampos .= " censoufident.ed260_c_nome as ufident,  ";
@@ -74,30 +75,29 @@ $iLinhas           = $oDaoTipoSanguineo->numrows;
 
 $aTiposSanguineos = array();
 
-if ( isset( $rsTipoSanguineo ) && $iLinhas > 0) {
+if (isset($rsTipoSanguineo) && $iLinhas > 0) {
 
-  for ( $iContador = 0; $iContador < $iLinhas; $iContador++ ) {
+  for ($iContador = 0; $iContador < $iLinhas; $iContador++) {
 
     $oDados = db_utils::fieldsMemory($rsTipoSanguineo, $iContador);
     $aTiposSanguineos[$oDados->sd100_sequencial] = $oDados->sd100_tipo;
   }
 }
 
-if ($oDaoAluno->numrows == 0) {?>
+if ($oDaoAluno->numrows == 0) { ?>
 
   <table width='100%'>
     <tr>
       <td align='center'>
         <font color='#FF0000' face='arial'>
           <b>Nenhum registro encontrado.<br>
-          <input type='button' value='Fechar' onclick='window.close()'></b>
+            <input type='button' value='Fechar' onclick='window.close()'></b>
         </font>
       </td>
     </tr>
   </table>
 <?
   exit;
-
 }
 
 $oPdf = new PDF();
@@ -113,15 +113,15 @@ for ($iCont = 0; $iCont < $oDaoAluno->numrows; $iCont++) {
   $head2 = "$ed47_i_codigo - $ed47_v_nome";
   $oPdf->addpage('P');
 
-/** DADOS PESSOAIS */
+  /** DADOS PESSOAIS */
 
   $oPdf->setfont('arial',  'b',  7);
   $oPdf->cell(160,  4, "   DADOS PESSOAIS",  "LBT",  0,  "L",  1);
   $oPdf->cell(34,  4, "   FOTO",  1,  1,  "L",  1);
   $oPdf->cell(160,  2,  "",  "LR",  0,  "C",  0);
-  $oPdf->cell(34,  2,  "",  "LR" , 1,  "C" , 0);
+  $oPdf->cell(34,  2,  "",  "LR", 1,  "C", 0);
 
-  $oPdf->cell(3, 4 , "",  "L",  0,  "C",  0);
+  $oPdf->cell(3, 4, "",  "L",  0,  "C",  0);
   $oPdf->setfont('arial',  '',  7);
   $oPdf->cell(35,  4, strip_tags($Led47_v_nome), 0, 0, "L", 0);
   $oPdf->setfont('arial',  'b', 7);
@@ -145,13 +145,12 @@ for ($iCont = 0; $iCont < $oDaoAluno->numrows; $iCont++) {
 
   if ($ed47_o_oid != 0) {
 
-    $pArquivo = "tmp/".$ed47_c_foto;
+    $pArquivo = "tmp/" . $ed47_c_foto;
 
     db_query("begin");
     $lResultExport = pg_lo_export($ed47_o_oid,   $pArquivo,  $conn);
     db_query("end");
     $oPdf->Image($pArquivo,  177, 43, 20);
-
   }
 
   $oPdf->cell(3,  4, "", "L", 0, "C", 0);
@@ -162,7 +161,7 @@ for ($iCont = 0; $iCont < $oDaoAluno->numrows; $iCont++) {
   $oPdf->setfont('arial',  '', 7);
   $oPdf->cell(30,  4, strip_tags($Led47_v_sexo), 0, 0, "R", 0);
   $oPdf->setfont('arial',  'b', 7);
-  $oPdf->cell(20,  4, $ed47_v_sexo=="M"?"MASCULINO":"FEMININO", 0, 0, "L", 0);
+  $oPdf->cell(20,  4, $ed47_v_sexo == "M" ? "MASCULINO" : "FEMININO", 0, 0, "L", 0);
   $oPdf->setfont('arial',  '', 7);
   $oPdf->cell(25,  4, strip_tags($Led47_i_estciv), 0, 0, "R", 0);
 
@@ -184,7 +183,7 @@ for ($iCont = 0; $iCont < $oDaoAluno->numrows; $iCont++) {
   $oPdf->cell(35,  4,  strip_tags($Led47_tiposanguineo),  0,  0,  "L",  0);
   $oPdf->setfont('arial',  'b', 7);
   $oPdf->cell(65,  4,  $ed47_tiposanguineo == "" ? "NÃO INFORMADO" : $aTiposSanguineos[$ed47_tiposanguineo], 0, 0, "L", 0);
-  $oPdf->setfont('arial' , '',  7);
+  $oPdf->setfont('arial', '',  7);
   $oPdf->cell(30,  4,  strip_tags($Led47_c_raca),  0,  0,  "R",  0);
   $oPdf->setfont('arial', 'b', 7);
   $oPdf->cell(25,  4,  $ed47_c_raca,  0,  0,  "L",  0);
@@ -231,9 +230,9 @@ for ($iCont = 0; $iCont < $oDaoAluno->numrows; $iCont++) {
   $oPdf->cell(2,  4,  "",  "R",  1,  "C",  0);
   $oPdf->line(204,  35,  204,  80);
 
- //////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////
 
-  $oPdf->cell(160,  2 ,  "" ,  "LR" , 0 , "C" , 0);
+  $oPdf->cell(160,  2,  "",  "LR", 0, "C", 0);
   $oPdf->cell(34,  2,  "",  "LR",  1,  "C",  0);
   $oPdf->cell(194,  4,  "ENDEREÇO / CONTATOS",  1,  1,  "L",  1);
   $oPdf->cell(194,  2,  "",  "LR",  1,  "C",  0);
@@ -305,10 +304,10 @@ for ($iCont = 0; $iCont < $oDaoAluno->numrows; $iCont++) {
   $oPdf->cell(90,  4,  $ed47_v_cxpostal,  0,  0,  "L",  0);
   $oPdf->cell(1,  4,  "",  "R",  1,  "C",  0);
 
-//////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////
 
   $oPdf->cell(194,  2,  "",  "LR",  1,  "C",  0);
-  $oPdf->cell(194,  4,   "OUTRAS INFORMAÇÕES" , 1 ,  1,  "L",  1);
+  $oPdf->cell(194,  4,   "OUTRAS INFORMAÇÕES", 1,  1,  "L",  1);
   $oPdf->cell(194,  2,  "",  "LR",  1,  "C",  0);
 
   $oPdf->cell(3,  4,  "",  "L",  0,  "C",  0);
@@ -346,7 +345,7 @@ for ($iCont = 0; $iCont < $oDaoAluno->numrows; $iCont++) {
   $oPdf->setfont('arial',  '',  7);
   $oPdf->cell(30,  4,  strip_tags($Led47_i_transpublico),  0,  0,  "L",  0);
   $oPdf->setfont('arial',  'b',  7);
-  $oPdf->cell(40, 4, $ed47_i_transpublico=="0"?"NÃO UTILIZA":"UTILIZA", 0, 0, "L", 0);
+  $oPdf->cell(40, 4, $ed47_i_transpublico == "0" ? "NÃO UTILIZA" : "UTILIZA", 0, 0, "L", 0);
   $oPdf->setfont('arial', '', 7);
   $oPdf->cell(30, 4, strip_tags($Led47_c_transporte), 0, 0, "R", 0);
 
@@ -366,7 +365,7 @@ for ($iCont = 0; $iCont < $oDaoAluno->numrows; $iCont++) {
   $oPdf->setfont('arial', '', 7);
   $oPdf->cell(30, 4, strip_tags($Led47_c_bolsafamilia), 0, 0, "L", 0);
   $oPdf->setfont('arial', 'b', 7);
-  $oPdf->cell(23, 4, $ed47_c_bolsafamilia=='N'?'NÃO':'SIM', 0, 0, "L", 0);
+  $oPdf->cell(23, 4, $ed47_c_bolsafamilia == 'N' ? 'NÃO' : 'SIM', 0, 0, "L", 0);
   $oPdf->setfont('arial', '', 7);
   $oPdf->cell(47, 4, strip_tags($Led47_c_atenddifer), 0, 0, "L", 0);
 
@@ -384,7 +383,7 @@ for ($iCont = 0; $iCont < $oDaoAluno->numrows; $iCont++) {
   $oPdf->cell(25,  4,  strip_tags($Led47_v_profis),  0,  0,  "R",  0);
   $oPdf->setfont('arial', 'b', 7);
   $oPdf->cell(35,  4,  substr($ed47_v_profis, 0, 23),  0,  0,  "L",  0);
-  $oPdf->cell(1,  4,  "" ,  "R",  1,  "C",  0);
+  $oPdf->cell(1,  4,  "",  "R",  1,  "C",  0);
   $sCampos1   = " ed76_d_data,  ";
   $sCampos1  .= " case when ed76_c_tipo = 'M' ";
   $sCampos1  .= " then ed18_c_nome else ed82_c_nome end as nomeescola ";
@@ -412,7 +411,7 @@ for ($iCont = 0; $iCont < $oDaoAluno->numrows; $iCont++) {
   $oPdf->cell(160,  4,  db_formatar($ed76_d_data, 'd'),  0,  0,  "L",  0);
   $oPdf->cell(1,  4,  "",  "R",  1,  "C",  0);
 
- //////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////
 
   $oPdf->cell(194,  2,  "",  "LR",  1,  "C",  0);
   $oPdf->cell(194,  4,  " DOCUMENTOS",  1,  1,  "L",  1);
@@ -553,7 +552,7 @@ for ($iCont = 0; $iCont < $oDaoAluno->numrows; $iCont++) {
 
 
 
- //////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////
 
   $oPdf->cell(194, 2, "", "LR", 1, "C", 0);
   $oPdf->cell(194, 4, "   NECESSIDADES ESPECIAIS", 1, 1, "L", 1);
@@ -580,9 +579,7 @@ for ($iCont = 0; $iCont < $oDaoAluno->numrows; $iCont++) {
       $oPdf->cell(120, 4, $ed214_c_principal, 0, 0, "L", 0);
       $oPdf->cell(1, 4, "", "R", 1, "C", 0);
       $iCont++;
-
     }
-
   } else {
 
     $oPdf->cell(3, 4, "", "L", 0, "C", 0);
@@ -590,7 +587,6 @@ for ($iCont = 0; $iCont < $oDaoAluno->numrows; $iCont++) {
     $oPdf->cell(190, 4, "Nenhum registro.", 0, 0, "L", 0);
     $oPdf->cell(1, 4, "", "R", 1, "C", 0);
     $iCont++;
-
   }
 
   for ($iFor = $iCont; $iFor < 2; $iFor++) {
@@ -598,10 +594,9 @@ for ($iCont = 0; $iCont < $oDaoAluno->numrows; $iCont++) {
     $oPdf->cell(3, 4, "", "L", 0, "C", 0);
     $oPdf->cell(190, 4, "", 0, 0, "C", 0);
     $oPdf->cell(1, 4, "", "R", 1, "C", 0);
-
   }
 
- //////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////
   $oPdf->setfont('arial', 'b', 7);
   $oPdf->cell(194, 2, "", "LR", 1, "C", 0);
   $oPdf->cell(97, 4, "   OBSERVAÇÔES", 1, 0, "L", 1);
@@ -612,13 +607,13 @@ for ($iCont = 0; $iCont < $oDaoAluno->numrows; $iCont++) {
   $alt_obs = $oPdf->getY();
   $oPdf->setfont('arial', '', 7);
   $oPdf->cell(3, 50, "", "L", 0, "C", 0);
-  $oPdf->multicell(91, 4, trim($ed47_t_obs)==""?"Nenhum registro.":substr(trim($ed47_t_obs), 0, 600), 0, "J", 0, 0);
+  $oPdf->multicell(91, 4, trim($ed47_t_obs) == "" ? "Nenhum registro." : substr(trim($ed47_t_obs), 0, 600), 0, "J", 0, 0);
   $oPdf->setXY(104, $alt_obs);
   $oPdf->cell(3, 50, "", "R", 0, "C", 0);
 
   $oPdf->setXY(107, $alt_obs);
   $oPdf->cell(3, 50, "", "L", 0, "C", 0);
-  $oPdf->multicell(91, 4, trim($ed47_v_contato)==""?"Nenhum registro.":substr(trim($ed47_v_contato), 0, 600), 0, "J", 0, 0);
+  $oPdf->multicell(91, 4, trim($ed47_v_contato) == "" ? "Nenhum registro." : substr(trim($ed47_v_contato), 0, 600), 0, "J", 0, 0);
   $oPdf->setXY(201, $alt_obs);
   $oPdf->cell(3, 50, "", "R", 1, "C", 0);
 
@@ -630,15 +625,15 @@ for ($iCont = 0; $iCont < $oDaoAluno->numrows; $iCont++) {
 
     $oPdf->cell(60, 4, "Recebi e estou ciente das regras da escola.", 0, 0, "L", 0);
     $oPdf->cell(60, 4, "Assinatura do Responsável:", 0, 0, "R", 0);
-    $oPdf->cell(74, 4, "..............................................................................".
-                       "........................", 0, 1, "L", 0);
+    $oPdf->cell(74, 4, ".............................................................................." .
+      "........................", 0, 1, "L", 0);
     $oPdf->cell(120, 4, "", 0, 0, "L", 0);
-    $oPdf->cell(74, 4, trim($ed47_c_nomeresp)!=""?trim($ed47_c_nomeresp):"", 0, 1, "C", 0);
+    $oPdf->cell(74, 4, trim($ed47_c_nomeresp) != "" ? trim($ed47_c_nomeresp) : "", 0, 1, "C", 0);
   }
 
- //////////////////////////////////////////////////////////
- //MATRÌCULAS
- //////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////
+  //MATRÌCULAS
+  //////////////////////////////////////////////////////////
   $iContGeral = 0;
 
   if ($oGet->imp_matricula == "yes") {
@@ -676,7 +671,7 @@ for ($iCont = 0; $iCont < $oDaoAluno->numrows; $iCont++) {
     $sCamp .= "case when ed76_c_tipo = 'M' ";
     $sCamp .= " then escolaprimat.ed18_c_nome else escolaproc.ed82_c_nome end as nomeescola ";
 
-    $sSql1          = $oDaoMatricula->sql_query("",$sCamp,"ed60_d_datamatricula desc"," ed60_i_aluno = $ed47_i_codigo");
+    $sSql1          = $oDaoMatricula->sql_query("", $sCamp, "ed60_d_datamatricula desc", " ed60_i_aluno = $ed47_i_codigo");
     $rsResult1      = $oDaoMatricula->sql_record($sSql1);
     $iLinhas11      = $oDaoMatricula->numrows;
     $iEscolaEmissao = db_getsession("DB_coddepto");
@@ -697,7 +692,6 @@ for ($iCont = 0; $iCont < $oDaoAluno->numrows; $iCont++) {
           $oPdf->cell(191, 4, "", "LR", 1, "C", 0);
           $iContador = 0;
           $iContGeral = 0;
-
         }
 
         $iContador++;
@@ -724,17 +718,17 @@ for ($iCont = 0; $iCont < $oDaoAluno->numrows; $iCont++) {
         } else {
 
           if ($ed60_c_concluida == "S") {
-            $sitt = Situacao($ed60_c_situacao, $ed60_i_codigo)."(CONCLUÍDA)";
+            $sitt = Situacao($ed60_c_situacao, $ed60_i_codigo) . "(CONCLUÍDA)";
           } else {
             $sitt = Situacao($ed60_c_situacao, $ed60_i_codigo);
-
           }
-
         }
         $oPdf->cell(86, 4, $sitt, "R", 1, "L", 1);
 
-        if (trim(Situacao($ed60_c_situacao, $ed60_i_codigo)) != "MATRICULADO"
-           && trim(Situacao($ed60_c_situacao, $ed60_i_codigo)) != "REMATRICULADO") {
+        if (
+          trim(Situacao($ed60_c_situacao, $ed60_i_codigo)) != "MATRICULADO"
+          && trim(Situacao($ed60_c_situacao, $ed60_i_codigo)) != "REMATRICULADO"
+        ) {
 
           $sCamp  = "ed60_d_datasaida as datasaida,  ";
           $sCamp .= " case ";
@@ -760,7 +754,6 @@ for ($iCont = 0; $iCont < $oDaoAluno->numrows; $iCont++) {
           $oPdf->cell(30, 4, "Destino Saída:", 0, 0, "L", 1);
           $oPdf->setfont('arial', 'b', 7);
           $oPdf->cell(86, 4, @$destinosaida, "R", 1, "L", 1);
-
         }
 
         $oPdf->setfont('arial', '', 7);
@@ -779,19 +772,20 @@ for ($iCont = 0; $iCont < $oDaoAluno->numrows; $iCont++) {
          * No caso de turno Integral e Infantil, mostra também o turno referente o qual a matrícula está vinculada
          * Ex.: INTEGRAL - MANHÃ / TARDE
          */
-        $oMatricula = MatriculaRepository::getMatriculaByCodigo( $ed60_i_codigo );
-        if (    $oMatricula->getTurma()->getTurno()->isIntegral()
+        $oMatricula = MatriculaRepository::getMatriculaByCodigo($ed60_i_codigo);
+        if (
+          $oMatricula->getTurma()->getTurno()->isIntegral()
           && $oMatricula->getTurma()->getBaseCurricular()->getCurso()->getEnsino()->isInfantil()
         ) {
 
           $aDescricaoTurno = array();
-          $aTurnoReferente = array( 1 => 'MANHÃ', 2 => 'TARDE', 3 => 'NOITE' );
+          $aTurnoReferente = array(1 => 'MANHÃ', 2 => 'TARDE', 3 => 'NOITE');
 
-          foreach ( $oMatricula->getTurnosVinculados() as $oTurnoReferente ) {
-            $aDescricaoTurno[] = $aTurnoReferente[ $oTurnoReferente->ed336_turnoreferente ];
+          foreach ($oMatricula->getTurnosVinculados() as $oTurnoReferente) {
+            $aDescricaoTurno[] = $aTurnoReferente[$oTurnoReferente->ed336_turnoreferente];
           }
 
-          $ed15_c_nome = "INTEGRAL - " . implode( " / ", $aDescricaoTurno );
+          $ed15_c_nome = "INTEGRAL - " . implode(" / ", $aDescricaoTurno);
         }
 
         $oPdf->setfont('arial', '', 7);
@@ -801,7 +795,7 @@ for ($iCont = 0; $iCont < $oDaoAluno->numrows; $iCont++) {
         $oPdf->setfont('arial', '', 7);
         $oPdf->cell(30, 4, "Calendário:", 0, 0, "L", 1);
         $oPdf->setfont('arial', 'b', 7);
-        $oPdf->cell(86, 4, $ed52_c_descr." / ".$ed52_i_ano, "R", 1, "L", 1);
+        $oPdf->cell(86, 4, $ed52_c_descr . " / " . $ed52_i_ano, "R", 1, "L", 1);
 
         GradeAproveitamentoBOLETIM($ed60_i_codigo, 190, $oPdf, "", "P", 0, "S");
 
@@ -815,27 +809,27 @@ for ($iCont = 0; $iCont < $oDaoAluno->numrows; $iCont++) {
         $sCamposAprovCons  .= " ed232_c_descr, ed253_alterarnotafinal, ed253_avaliacaoconselho";
         $sWhereAprovCons    = "     ed95_i_aluno = {$ed47_i_codigo} ";
         $sWhereAprovCons   .= " and ed52_i_codigo = {$ed52_i_codigo} ";
-        $sSqlAprovCons      = $oDaoAprovConselho->sql_query( "", $sCamposAprovCons, "ed11_c_descr, ed52_i_ano", $sWhereAprovCons );
-        $rsAprovConselho    = $oDaoAprovConselho->sql_record( $sSqlAprovCons );
+        $sSqlAprovCons      = $oDaoAprovConselho->sql_query("", $sCamposAprovCons, "ed11_c_descr, ed52_i_ano", $sWhereAprovCons);
+        $rsAprovConselho    = $oDaoAprovConselho->sql_record($sSqlAprovCons);
         $iLinhasAprovCons   = $oDaoAprovConselho->numrows;
 
         $aAprovadoBaixaFrequencia   = array();
         $aAprovadoConselhoRegimento = array();
 
-        if ( $iLinhasAprovCons > 0 ) {
+        if ($iLinhasAprovCons > 0) {
 
-          for ( $iContObs = 0; $iContObs < $iLinhasAprovCons; $iContObs++ ) {
+          for ($iContObs = 0; $iContObs < $iLinhasAprovCons; $iContObs++) {
 
-            $oDadosAprovConselho = db_utils::fieldsmemory( $rsAprovConselho, $iContObs );
+            $oDadosAprovConselho = db_utils::fieldsmemory($rsAprovConselho, $iContObs);
 
             switch ($oDadosAprovConselho->ed253_aprovconselhotipo) {
 
-              /**
+                /**
                * Valida se a aprovação foi por conselho
                */
               case 1:
 
-                $oDocumento                = new libdocumento( 5013 );
+                $oDocumento                = new libdocumento(5013);
                 $oDocumento->disciplina    = $oDadosAprovConselho->ed232_c_descr;
                 $oDocumento->etapa         = $oDadosAprovConselho->serie_conselho;
                 $oDocumento->justificativa = $oDadosAprovConselho->ed253_t_obs;
@@ -845,24 +839,24 @@ for ($iCont = 0; $iCont < $oDaoAluno->numrows; $iCont++) {
                 $oDadosObservacao              = new stdClass();
                 $oDadosObservacao->aParagrafos = $oDocumento->getDocParagrafos();
 
-                if( trim( $oDadosObservacao->aParagrafos[1]->oParag->db02_texto ) != '' ) {
+                if (trim($oDadosObservacao->aParagrafos[1]->oParag->db02_texto) != '') {
                   $aAprovadoConselhoRegimento[]  = "- {$oDadosObservacao->aParagrafos[1]->oParag->db02_texto}";
                 }
                 break;
-              /**
-               * Valida se a aprovação não foi por baixa frequencia
-               */
+                /**
+                 * Valida se a aprovação não foi por baixa frequencia
+                 */
               case 2:
 
-                $sHashSerieAno = $oDadosAprovConselho->serie_conselho.$oDadosAprovConselho->ed52_i_ano;
-                if ( !isset( $aAprovadoBaixaFrequencia[$sHashSerieAno] ) ) {
+                $sHashSerieAno = $oDadosAprovConselho->serie_conselho . $oDadosAprovConselho->ed52_i_ano;
+                if (!isset($aAprovadoBaixaFrequencia[$sHashSerieAno])) {
                   $aAprovadoBaixaFrequencia[$sHashSerieAno] = $oDadosAprovConselho;
                 }
                 continue;
                 break;
-              /**
-               * Valida se a aprovação foi por regimento escolar
-               */
+                /**
+                 * Valida se a aprovação foi por regimento escolar
+                 */
               case 3;
 
                 $sTipoAprovacao = "foi aprovado pelo regimento escolar.";
@@ -877,39 +871,37 @@ for ($iCont = 0; $iCont < $oDaoAluno->numrows; $iCont++) {
         }
 
         $sObservacaoConselho = '';
-        if ( count( $aAprovadoBaixaFrequencia ) > 0 ) {
+        if (count($aAprovadoBaixaFrequencia) > 0) {
 
-          $oDocumento = new libdocumento( 5006 );
+          $oDocumento = new libdocumento(5006);
 
-          foreach ( $aAprovadoBaixaFrequencia as $oBaixaFrequencia ) {
+          foreach ($aAprovadoBaixaFrequencia as $oBaixaFrequencia) {
 
             $oDocumento->nome_aluno = $ed47_v_nome;
             $oDocumento->ano        = $oBaixaFrequencia->ed52_i_ano;
             $oDocumento->nome_etapa = $oBaixaFrequencia->serie_conselho;
             $aParagrafos            = $oDocumento->getDocParagrafos();
 
-            if ( isset( $aParagrafos[1] ) ) {
+            if (isset($aParagrafos[1])) {
               $sObservacaoConselho .= "- {$aParagrafos[1]->oParag->db02_texto}\n";
             }
           }
         }
 
-        $sObservacaoConselho .= implode( "\n", $aAprovadoConselhoRegimento );
+        $sObservacaoConselho .= implode("\n", $aAprovadoConselhoRegimento);
 
-        if ( $sObservacaoConselho != '' ) {
+        if ($sObservacaoConselho != '') {
 
           $sObservacaoConselho = substr($sObservacaoConselho, 0, 4600);
 
-          $oPdf->setfont( 'arial', 'b', 7 );
-          $oPdf->cell( 191, 4, "Observações Gerais:", 1, 1, "L", 1 );
+          $oPdf->setfont('arial', 'b', 7);
+          $oPdf->cell(191, 4, "Observações Gerais:", 1, 1, "L", 1);
 
-          $oPdf->setfont( 'arial', '', 7 );
+          $oPdf->setfont('arial', '', 7);
           $sObservacaoImprimir = "{$sObservacaoConselho}";
-          $oPdf->multicell( 191, 4, $sObservacaoImprimir, 1, "L", 0, 0 );
+          $oPdf->multicell(191, 4, $sObservacaoImprimir, 1, "L", 0, 0);
         }
-
       }
-
     } else {
 
       $oPdf->setfont('arial', '', 7);
@@ -918,7 +910,6 @@ for ($iCont = 0; $iCont < $oDaoAluno->numrows; $iCont++) {
       $oPdf->cell(180, 4, "Nenhum registro.", 1, 0, "C", 0);
       $oPdf->cell(5, 4, "", "R", 1, "C", 0);
       $oPdf->cell(190, 4, "", "LRB", 1, "C", 0);
-
     }
     db_putsession("DB_coddepto", $iEscolaEmissao);
     if ($oGet->imp_historico == "no" && $oGet->imp_movimentacao == "no") {
@@ -930,25 +921,23 @@ for ($iCont = 0; $iCont < $oDaoAluno->numrows; $iCont++) {
       $oPdf->cell(60, 4, "Assinatura do Responsável:", 0, 0, "R", 0);
       $oPdf->cell(70, 4, ".................................................................................................", 0, 1, "L", 0);
       $oPdf->cell(120, 4, "", 0, 0, "L", 0);
-      $oPdf->cell(70, 4, trim($ed47_c_nomeresp)!=""?trim($ed47_c_nomeresp):"", 0, 1, "C", 0);
+      $oPdf->cell(70, 4, trim($ed47_c_nomeresp) != "" ? trim($ed47_c_nomeresp) : "", 0, 1, "C", 0);
       $oPdf->setfont('arial', 'b', 7);
-
     }
   } else {
 
     $oDaoMatricula->numrows = 0;
   }
 
- //////////////////////////////////////////////////////////
- //HISTÓRICOS
- //////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////
+  //HISTÓRICOS
+  //////////////////////////////////////////////////////////
 
   if ($oGet->imp_historico == "yes") {
 
     if ($oGet->imp_matricula == "no" || ($oDaoMatricula->numrows > 0 && $iContGeral > 0)) {
       $oPdf->addpage('P');
       $oPdf->ln(5);
-
     } else {
       $oPdf->cell(190, 4, "", 0, 1, "C", 0);
     }
@@ -1056,7 +1045,7 @@ for ($iCont = 0; $iCont < $oDaoAluno->numrows; $iCont++) {
         $oPdf->setX(125);
         $oPdf->setfont('arial', 'b', 7);
         $oPdf->cell(70, 4, substr($ed18_c_nome, 0, 45), "RT", 2, "L", 0);
-        $oPdf->cell(70, 4, $ed62_i_qtdch , "RB", 2, "L", 0);
+        $oPdf->cell(70, 4, $ed62_i_qtdch, "RB", 2, "L", 0);
         $oPdf->setY($alt_geral);
         $oPdf->setX(195);
         $oPdf->cell(5, 8, "", "LR", 1, "C", 0);
@@ -1105,7 +1094,7 @@ for ($iCont = 0; $iCont < $oDaoAluno->numrows; $iCont++) {
                     $ed65_t_resultobtido = $ed65_t_resultobtido;
                   }
 
-                  $iAlt = ceil(strlen($ed232_c_descr)/45)*4;
+                  $iAlt = ceil(strlen($ed232_c_descr) / 45) * 4;
                   $oPdf->cell(5, $iAlt, "", "L", 0, "C", 0);
 
                   $aDados = array();
@@ -1138,34 +1127,29 @@ for ($iCont = 0; $iCont < $oDaoAluno->numrows; $iCont++) {
                     $ed65_i_qtdch = db_formatar($ed65_i_qtdch, 'p');
                   }
 
-                  $aDados[4] = $ed65_i_qtdch == "" ? 0 : (int)trim( $ed65_i_qtdch );
+                  $aDados[4] = $ed65_i_qtdch == "" ? 0 : (int)trim($ed65_i_qtdch);
 
                   $oPdf->SetWidths(array(85, 30, 30, 25, 10, 30));
                   $oPdf->SetAligns(array("L", "C", "C", "C", "C", "C"));
                   $alturaRow = $oPdf->h - 32;
                   $oPdf->Row_multicell($aDados,  3.8,  true,  4,  0,  false,  true,  2,  $alturaRow,  0);
 
-                  $oPdf->setXY($oPdf->getX()+185,  $oPdf->getY() - $iAlt);
+                  $oPdf->setXY($oPdf->getX() + 185,  $oPdf->getY() - $iAlt);
 
                   $oPdf->cell(5, $iAlt, "", "R", 1, "C", 0);
-
                 }
                 $sTextoAjuda = '';
                 if ($lMostrarLegenda) {
                   $sTextoAjuda = "* - Aprovado com Progressão Parcial /Dependência";
                 }
                 $oPdf->cell(190, 4, $sTextoAjuda, "LR", 1, "L", 0);
-
               } else {
 
                 $oPdf->cell(5, 4, "", "L", 0, "C", 0);
                 $oPdf->cell(180, 4, "Nenhuma disciplina cadastrada para esta etapa.", 1, 0, "C", 0);
                 $oPdf->cell(5, 4, "", "R", 1, "C", 0);
-
               }
-
             }
-
           } else {
 
             $sCampos  = " ed100_i_codigo, ed232_c_descr, ed100_c_situacao, ed100_i_ordenacao,  ";
@@ -1173,9 +1157,12 @@ for ($iCont = 0; $iCont < $oDaoAluno->numrows; $iCont++) {
             $sCampos .= "  ed100_t_resultobtido end as ed100_t_resultobtido, ";
             $sCampos .= " ed100_c_resultadofinal, ed100_i_qtdch, ed100_c_tiporesultado, ";
             $sCampos .= " ed100_i_historicompsfora, ed29_c_descr ";
-            $sSql22     = $oDaoHistmpsdiscfora->sql_query("", $sCampos, "ed100_i_ordenacao",
-                                                          " ed100_i_historicompsfora = $ed62_i_codigo"
-                                                         );
+            $sSql22     = $oDaoHistmpsdiscfora->sql_query(
+              "",
+              $sCampos,
+              "ed100_i_ordenacao",
+              " ed100_i_historicompsfora = $ed62_i_codigo"
+            );
             $rsResult22 = $oDaoHistmpsdiscfora->sql_record($sSql22);
 
             if ($rsResult22) {
@@ -1191,65 +1178,62 @@ for ($iCont = 0; $iCont < $oDaoAluno->numrows; $iCont++) {
 
               $lMostrarLegenda = false;
               if ($oDaoHistmpsdiscfora->numrows > 0) {
-               for ($iCont = 0; $iCont < $oDaoHistmpsdiscfora->numrows; $iCont++) {
+                for ($iCont = 0; $iCont < $oDaoHistmpsdiscfora->numrows; $iCont++) {
 
-                 db_fieldsmemory($rsResult22, $iCont);
-                 if (trim($ed100_c_situacao) == "AMPARADO") {
-                   $ed100_t_resultobtido = "&nbsp;";
-                 } else if ($ed100_c_tiporesultado == 'N') {
-                   $ed100_t_resultobtido = $ed100_t_resultobtido;
-                 }
+                  db_fieldsmemory($rsResult22, $iCont);
+                  if (trim($ed100_c_situacao) == "AMPARADO") {
+                    $ed100_t_resultobtido = "&nbsp;";
+                  } else if ($ed100_c_tiporesultado == 'N') {
+                    $ed100_t_resultobtido = $ed100_t_resultobtido;
+                  }
 
-                 $iAlt = ceil(strlen($ed232_c_descr)/45)*4;
-                 $oPdf->cell(5, $iAlt, "", "L", 0, "C", 0);
+                  $iAlt = ceil(strlen($ed232_c_descr) / 45) * 4;
+                  $oPdf->cell(5, $iAlt, "", "L", 0, "C", 0);
 
-                 $aDados = array();
+                  $aDados = array();
 
-                 $aDados[0] = $ed232_c_descr;
-                 $aDados[1] = $ed100_c_situacao;
-                 $aDados[2] = $ed100_t_resultobtido;
-                 $aDados[3] = "";
-                 $lProgressaoParcial = false;
-                 if ($ed100_c_resultadofinal == "D") {
+                  $aDados[0] = $ed232_c_descr;
+                  $aDados[1] = $ed100_c_situacao;
+                  $aDados[2] = $ed100_t_resultobtido;
+                  $aDados[3] = "";
+                  $lProgressaoParcial = false;
+                  if ($ed100_c_resultadofinal == "D") {
 
-                   $lProgressaoParcial    = true;
-                   $lMostrarLegenda       = true;
-                   $ed65_c_resultadofinal = "A";
-                 }
-                 if (!empty($ed11_i_ensino) && ($ed100_c_resultadofinal == "A" || $ed100_c_resultadofinal == "R")) {
+                    $lProgressaoParcial    = true;
+                    $lMostrarLegenda       = true;
+                    $ed65_c_resultadofinal = "A";
+                  }
+                  if (!empty($ed11_i_ensino) && ($ed100_c_resultadofinal == "A" || $ed100_c_resultadofinal == "R")) {
 
-                   $aDadosTermo = DBEducacaoTermo::getTermoEncerramento($ed11_i_ensino, $ed100_c_resultadofinal, $ed62_i_anoref);
-                   if (isset($aDadosTermo[0])) {
+                    $aDadosTermo = DBEducacaoTermo::getTermoEncerramento($ed11_i_ensino, $ed100_c_resultadofinal, $ed62_i_anoref);
+                    if (isset($aDadosTermo[0])) {
 
-                     $aDados[3] = $aDadosTermo[0]->sDescricao;
-                     if ($lProgressaoParcial) {
-                       $aDados[3] .= "*";
-                     }
-                   }
-                 }
-                 $aDados[4] = $ed100_i_qtdch == "" ? 0 : $ed100_i_qtdch;
+                      $aDados[3] = $aDadosTermo[0]->sDescricao;
+                      if ($lProgressaoParcial) {
+                        $aDados[3] .= "*";
+                      }
+                    }
+                  }
+                  $aDados[4] = $ed100_i_qtdch == "" ? 0 : $ed100_i_qtdch;
 
-                 $oPdf->SetWidths(array(85, 30, 30, 25, 10, 30));
-                 $oPdf->SetAligns(array("L", "C", "C", "C", "C", "C"));
-                 $alturaRow = $oPdf->h - 32;
-                 $oPdf->Row_multicell($aDados,  3.8,  true,  4,  0,  false,  true,  2,  $alturaRow,  0);
+                  $oPdf->SetWidths(array(85, 30, 30, 25, 10, 30));
+                  $oPdf->SetAligns(array("L", "C", "C", "C", "C", "C"));
+                  $alturaRow = $oPdf->h - 32;
+                  $oPdf->Row_multicell($aDados,  3.8,  true,  4,  0,  false,  true,  2,  $alturaRow,  0);
 
-                 $oPdf->setXY($oPdf->getX()+185,  $oPdf->getY() - $iAlt);
-                 $oPdf->cell(5, $iAlt, "", "R", 1, "L", 0);
-
-               }
-               $sTextoAjuda = '';
-               if ($lMostrarLegenda) {
-                 $sTextoAjuda = "* - Aprovado com Progressão Parcial /Dependência";
-               }
-               $oPdf->cell(190, 4, $sTextoAjuda, "LR", 1, "C", 0);
-
+                  $oPdf->setXY($oPdf->getX() + 185,  $oPdf->getY() - $iAlt);
+                  $oPdf->cell(5, $iAlt, "", "R", 1, "L", 0);
+                }
+                $sTextoAjuda = '';
+                if ($lMostrarLegenda) {
+                  $sTextoAjuda = "* - Aprovado com Progressão Parcial /Dependência";
+                }
+                $oPdf->cell(190, 4, $sTextoAjuda, "LR", 1, "C", 0);
               } else {
 
                 $oPdf->cell(5, 4, "", "L", 0, "C", 0);
                 $oPdf->cell(180, 4, "Nenhuma disciplina cadastrada para esta etapa.", 1, 0, "C", 0);
                 $oPdf->cell(5, 4, "", "R", 1, "C", 0);
-
               }
             }
           }
@@ -1265,7 +1249,6 @@ for ($iCont = 0; $iCont < $oDaoAluno->numrows; $iCont++) {
       $oPdf->cell(5, 4, "", "R", 1, "C", 0);
       $oPdf->cell(190, 4, "", "LR", 1, "C", 0);
       $oPdf->cell(190, 1, "", "LRB", 1, "C", 0);
-
     }
     if ($oGet->imp_movimentacao == "no") {
 
@@ -1276,27 +1259,25 @@ for ($iCont = 0; $iCont < $oDaoAluno->numrows; $iCont++) {
       $oPdf->cell(60, 4, "Assinatura do Responsável:", 0, 0, "R", 0);
       $oPdf->cell(70, 4, "..................................................................................................", 0, 1, "L", 0);
       $oPdf->cell(120, 4, "", 0, 0, "L", 0);
-      $oPdf->cell(70, 4, trim($ed47_c_nomeresp)!=""?trim($ed47_c_nomeresp):"", 0, 1, "C", 0);
-
+      $oPdf->cell(70, 4, trim($ed47_c_nomeresp) != "" ? trim($ed47_c_nomeresp) : "", 0, 1, "C", 0);
     }
-
   } else {
     $iLinhas3 = 0;
   }
 
- //////////////////////////////////////////////////////////
- //MOVIMENTAÇÃO ESCOLAR
- //////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////
+  //MOVIMENTAÇÃO ESCOLAR
+  //////////////////////////////////////////////////////////
 
   if ($oGet->imp_movimentacao == "yes") {
 
     if (($oDaoMatricula->numrows > 0 && $iContGeral > 0)
-         || ($iLinhas3 > 0 && $iContGeral > 1)
-         || ($oGet->imp_matricula == "no" && $oGet->imp_historico == "no")) {
+      || ($iLinhas3 > 0 && $iContGeral > 1)
+      || ($oGet->imp_matricula == "no" && $oGet->imp_historico == "no")
+    ) {
 
       $oPdf->addpage('P');
       $oPdf->ln(5);
-
     } else {
       $oPdf->cell(190, 4, "", 0, 1, "C", 0);
     }
@@ -1322,14 +1303,12 @@ for ($iCont = 0; $iCont < $oDaoAluno->numrows; $iCont++) {
       for ($iCont = 0; $iCont < $oDaoMatriculamov->numrows; $iCont++) {
 
         db_fieldsmemory($rsResult, $iCont);
-        $aArrayMov[]  = str_replace("-", "", $ed229_d_dataevento).$ed229_i_codigo;
-        $iContador    = count($aArrayMov)-1;
-        $aArrayMov[$iContador] .= "|".db_formatar($ed229_d_dataevento, 'd')."#".$ed18_i_codigo." - ".substr($ed18_c_nome, 0, 30);
-        $aArrayMov[$iContador] .= "#".$ed60_matricula."#".$ed57_c_descr."#".$ed52_i_ano."#".$ed11_c_descr;
-        $aArrayMov[$iContador] .="#".substr($ed229_c_procedimento, 0, 35)."#".$ed229_t_descr;
-
+        $aArrayMov[]  = str_replace("-", "", $ed229_d_dataevento) . $ed229_i_codigo;
+        $iContador    = count($aArrayMov) - 1;
+        $aArrayMov[$iContador] .= "|" . db_formatar($ed229_d_dataevento, 'd') . "#" . $ed18_i_codigo . " - " . substr($ed18_c_nome, 0, 30);
+        $aArrayMov[$iContador] .= "#" . $ed60_matricula . "#" . $ed57_c_descr . "#" . $ed52_i_ano . "#" . $ed11_c_descr;
+        $aArrayMov[$iContador] .= "#" . substr($ed229_c_procedimento, 0, 35) . "#" . $ed229_t_descr;
       }
-
     }
 
     $sCamposMatri  = "ed229_i_codigo, ed229_d_dataevento, ed18_i_codigo, ed18_c_nome, ed60_i_codigo, ed57_c_descr, ";
@@ -1342,11 +1321,10 @@ for ($iCont = 0; $iCont < $oDaoAluno->numrows; $iCont++) {
     if ($oDaoMatriculamov->numrows > 0) {
 
       db_fieldsmemory($rsResult1, 0);
-      $aArrayMov[] = str_replace("-", "", $ed229_d_dataevento).$ed229_i_codigo."|".db_formatar($ed229_d_dataevento, 'd');
-      $iContador    = count($aArrayMov)-1;
-      $aArrayMov[$iContador] .="#".$ed18_i_codigo." - ".substr($ed18_c_nome, 0, 30)."#".$ed60_matricula."#".$ed57_c_descr;
-      $aArrayMov[$iContador] .= "#".$ed52_i_ano."#".$ed11_c_descr."#".substr($ed229_c_procedimento, 0, 35)."#".$ed229_t_descr;
-
+      $aArrayMov[] = str_replace("-", "", $ed229_d_dataevento) . $ed229_i_codigo . "|" . db_formatar($ed229_d_dataevento, 'd');
+      $iContador    = count($aArrayMov) - 1;
+      $aArrayMov[$iContador] .= "#" . $ed18_i_codigo . " - " . substr($ed18_c_nome, 0, 30) . "#" . $ed60_matricula . "#" . $ed57_c_descr;
+      $aArrayMov[$iContador] .= "#" . $ed52_i_ano . "#" . $ed11_c_descr . "#" . substr($ed229_c_procedimento, 0, 35) . "#" . $ed229_t_descr;
     }
 
     $sCamposMat  = "ed229_i_codigo, ed229_d_dataevento, ed18_i_codigo, ed18_c_nome, ed60_i_codigo, ed57_c_descr, ";
@@ -1357,12 +1335,11 @@ for ($iCont = 0; $iCont < $oDaoAluno->numrows; $iCont++) {
 
     if ($oDaoMatriculamov->numrows > 0) {
 
-       db_fieldsmemory($rsResult2, 0);
-       $aArrayMov[]  = str_replace("-", "", $ed229_d_dataevento).$ed229_i_codigo."|".db_formatar($ed229_d_dataevento, 'd');
-       $iContador    = count($aArrayMov)-1;
-       $aArrayMov[$iContador] .= "#".$ed18_i_codigo." - ".substr($ed18_c_nome, 0, 30)."#".$ed60_matricula."#".$ed57_c_descr;
-       $aArrayMov[$iContador] .= "#".$ed52_i_ano."#".$ed11_c_descr."#".substr($ed229_c_procedimento, 0, 35)."#".$ed229_t_descr;
-
+      db_fieldsmemory($rsResult2, 0);
+      $aArrayMov[]  = str_replace("-", "", $ed229_d_dataevento) . $ed229_i_codigo . "|" . db_formatar($ed229_d_dataevento, 'd');
+      $iContador    = count($aArrayMov) - 1;
+      $aArrayMov[$iContador] .= "#" . $ed18_i_codigo . " - " . substr($ed18_c_nome, 0, 30) . "#" . $ed60_matricula . "#" . $ed57_c_descr;
+      $aArrayMov[$iContador] .= "#" . $ed52_i_ano . "#" . $ed11_c_descr . "#" . substr($ed229_c_procedimento, 0, 35) . "#" . $ed229_t_descr;
     }
 
     $aArrayOrdem = SORT_ASC;
@@ -1383,7 +1360,7 @@ for ($iCont = 0; $iCont < $oDaoAluno->numrows; $iCont++) {
       $oPdf->cell(5, 4, "", "R", 1, "C", 0);
       $oPdf->setfillcolor(230);
 
-      for($iCont = 0; $iCont < count($aArrayMov); $iCont++){
+      for ($iCont = 0; $iCont < count($aArrayMov); $iCont++) {
 
         $aArrayMov1 = explode("|", $aArrayMov[$iCont]);
         $aArrayMov2 = explode("#", $aArrayMov1[1]);
@@ -1405,9 +1382,8 @@ for ($iCont = 0; $iCont < $oDaoAluno->numrows; $iCont++) {
         $oPdf->multicell(165, 4, $aArrayMov2[7], 0, "L", 0, 0);
         $oPdf->cell(190, 1, "", "LR", 1, "C", 0);
         $iAltDescrFim = $oPdf->getY();
-        $oPdf->rect(15, $iAltDescrIni, 180, $iAltDescrFim-$iAltDescrIni, 'D');//retangulo
+        $oPdf->rect(15, $iAltDescrIni, 180, $iAltDescrFim - $iAltDescrIni, 'D'); //retangulo
         $oPdf->cell(190, 2, "", "LR", 1, "C", 0);
-
       }
 
       $oPdf->cell(190, 4, "", "LR", 1, "C", 0);
@@ -1415,7 +1391,6 @@ for ($iCont = 0; $iCont < $oDaoAluno->numrows; $iCont++) {
       $iAltFinal = $oPdf->getY();
       $oPdf->line(200, $iAltInicio, 200, $iAltFinal);
       $oPdf->line(10, $iAltInicio, 10, $iAltFinal);
-
     } else {
 
       $oPdf->cell(5, 4, "", "L", 0, "C", 0);
@@ -1425,7 +1400,6 @@ for ($iCont = 0; $iCont < $oDaoAluno->numrows; $iCont++) {
       $oPdf->cell(190, 4, "", "LR", 1, "C", 0);
       $oPdf->cell(190, 1, "", "LRB", 1, "C", 0);
       $oPdf->setfont('arial', 'b', 7);
-
     }
 
     $oPdf->setfont('arial', '', 7);
@@ -1433,12 +1407,11 @@ for ($iCont = 0; $iCont < $oDaoAluno->numrows; $iCont++) {
     $oPdf->cell(190, 2, "", 0, 1, "C", 0);
     $oPdf->cell(60, 4, "Recebi e estou ciente das regras da escola.", 0, 0, "L", 0);
     $oPdf->cell(60, 4, "Assinatura do Responsável:", 0, 0, "R", 0);
-    $oPdf->cell(70, 4, "......................................................................".
-                       "...........................", 0, 1, "L", 0);
+    $oPdf->cell(70, 4, "......................................................................" .
+      "...........................", 0, 1, "L", 0);
     $oPdf->cell(120, 4, "", 0, 0, "L", 0);
     $oPdf->cell(70, 4, trim($ed47_c_nomeresp) != "" ? trim($ed47_c_nomeresp) : "", 0, 1, "C", 0);
   }
-
 }
 
 $oPdf->Output();

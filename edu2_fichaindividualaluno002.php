@@ -27,6 +27,7 @@
 
 require_once("libs/db_stdlibwebseller.php");
 require_once("fpdf151/pdfwebseller.php");
+include("edu_cabecalhoatolegal.php");
 require_once("libs/db_utils.php");
 require_once("libs/db_libdocumento.php");
 require_once("libs/db_libparagrafo.php");

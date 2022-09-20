@@ -27,6 +27,7 @@
 
 include("fpdf151/pdfwebseller.php");
 include("classes/db_docaluno_classe.php");
+include("edu_cabecalhoatolegal.php");
 $cldocaluno = new cl_docaluno;
 $escola = db_getsession("DB_coddepto");
 $sql = "SELECT DISTINCT
@@ -52,62 +53,62 @@ $result = pg_query($sql);
 //db_criatabela($result);
 //exit;
 $linhas = pg_num_rows($result);
-if($linhas==0){?>
- <table width='100%'>
-  <tr>
-   <td align='center'>
-    <font color='#FF0000' face='arial'>
-     <b>Nenhum registro encontrado.<br>
-     <input type='button' value='Fechar' onclick='window.close()'></b>
-    </font>
-   </td>
-  </tr>
- </table>
- <?
- exit;
+if ($linhas == 0) { ?>
+       <table width='100%'>
+              <tr>
+                     <td align='center'>
+                            <font color='#FF0000' face='arial'>
+                                   <b>Nenhum registro encontrado.<br>
+                                          <input type='button' value='Fechar' onclick='window.close()'></b>
+                            </font>
+                     </td>
+              </tr>
+       </table>
+<?
+       exit;
 }
 $pdf = new PDF();
 $pdf->Open();
 $pdf->AliasNbPages();
 $head1 = "RELATÓRIO DE DOCUMENTOS PENDENTES";
-$head2 = "Calendário: ".pg_result($result,0,'ed52_c_descr');
+$head2 = "Calendário: " . pg_result($result, 0, 'ed52_c_descr');
 $pdf->ln(5);
 $troca = 1;
 $cor1 = "0";
 $cor2 = "1";
 $cor = "";
-for($c=0;$c<$linhas;$c++){
- db_fieldsmemory($result,$c);
- if($pdf->gety() > $pdf->h - 30 || $troca != 0 ){
-  $pdf->addpage('P');
-  $pdf->setfillcolor(215);
-  $pdf->setfont('arial','b',8);
-  $pdf->cell(20,4,"Código",1,0,"C",1);
-  $pdf->cell(110,4,"Nome",1,0,"L",1);
-  $pdf->cell(30,4,"Etapa",1,0,"C",1);
-  $pdf->cell(30,4,"Turma",1,1,"C",1);
-  $troca = 0;
- }
- if($cor==$cor1){
-  $cor = $cor2;
- }else{
-  $cor = $cor1;
- }
- $pdf->setfillcolor(240);
- $pdf->setfont('arial','',7);
- $pdf->cell(20,4,$ed47_i_codigo,"T",0,"C",$cor);
- $pdf->cell(110,4,$ed47_v_nome,"T",0,"L",$cor);
- $pdf->cell(30,4,$ed11_c_descr,"T",0,"C",$cor);
- $pdf->cell(30,4,$ed57_c_descr,"T",1,"C",$cor);
- $pdf->cell(20,4,"",0,0,"C",$cor);
- $pdf->cell(170,4,"Documentos pendentes:",0,1,"L",$cor);
- $result1 = $cldocaluno->sql_record($cldocaluno->sql_query("","ed02_c_descr,ed49_t_obs",""," ed49_i_aluno = $ed47_i_codigo"));
- for($x=0;$x<$cldocaluno->numrows;$x++){
-  db_fieldsmemory($result1,$x);
-  $pdf->cell(20,4,"",0,0,"C",$cor);
-  $pdf->cell(40,4,"* ".$ed02_c_descr,0,0,"L",$cor);
-  $pdf->cell(130,4,$ed49_t_obs,0,1,"L",$cor);
- }
+for ($c = 0; $c < $linhas; $c++) {
+       db_fieldsmemory($result, $c);
+       if ($pdf->gety() > $pdf->h - 30 || $troca != 0) {
+              $pdf->addpage('P');
+              $pdf->setfillcolor(215);
+              $pdf->setfont('arial', 'b', 8);
+              $pdf->cell(20, 4, "Código", 1, 0, "C", 1);
+              $pdf->cell(110, 4, "Nome", 1, 0, "L", 1);
+              $pdf->cell(30, 4, "Etapa", 1, 0, "C", 1);
+              $pdf->cell(30, 4, "Turma", 1, 1, "C", 1);
+              $troca = 0;
+       }
+       if ($cor == $cor1) {
+              $cor = $cor2;
+       } else {
+              $cor = $cor1;
+       }
+       $pdf->setfillcolor(240);
+       $pdf->setfont('arial', '', 7);
+       $pdf->cell(20, 4, $ed47_i_codigo, "T", 0, "C", $cor);
+       $pdf->cell(110, 4, $ed47_v_nome, "T", 0, "L", $cor);
+       $pdf->cell(30, 4, $ed11_c_descr, "T", 0, "C", $cor);
+       $pdf->cell(30, 4, $ed57_c_descr, "T", 1, "C", $cor);
+       $pdf->cell(20, 4, "", 0, 0, "C", $cor);
+       $pdf->cell(170, 4, "Documentos pendentes:", 0, 1, "L", $cor);
+       $result1 = $cldocaluno->sql_record($cldocaluno->sql_query("", "ed02_c_descr,ed49_t_obs", "", " ed49_i_aluno = $ed47_i_codigo"));
+       for ($x = 0; $x < $cldocaluno->numrows; $x++) {
+              db_fieldsmemory($result1, $x);
+              $pdf->cell(20, 4, "", 0, 0, "C", $cor);
+              $pdf->cell(40, 4, "* " . $ed02_c_descr, 0, 0, "L", $cor);
+              $pdf->cell(130, 4, $ed49_t_obs, 0, 1, "L", $cor);
+       }
 }
 $pdf->Output();
 ?>

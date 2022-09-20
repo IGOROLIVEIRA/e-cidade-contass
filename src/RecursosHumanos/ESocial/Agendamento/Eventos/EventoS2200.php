@@ -259,6 +259,7 @@ class EventoS2200 extends EventoBase
             $oDependFormatado->cpfdep = empty($oDependentes->rh31_cpf) ? null : $oDependentes->rh31_cpf;
             $oDependFormatado->depirrf = ($oDependentes->rh31_irf == "0" ? "N" : "S");
             $oDependFormatado->depsf = ($oDependentes->rh31_depend == "N" ? "N" : "S");
+            $oDependFormatado->sexodep = ($oDependentes->rh31_sexo == "M" ? "M" : "F");
             $oDependFormatado->inctrab = ($oDependentes->rh31_especi == "C" || $oDependentes->rh31_especi == "S" ? "S" : "N");
 
             $aDependentes[] = $oDependFormatado;

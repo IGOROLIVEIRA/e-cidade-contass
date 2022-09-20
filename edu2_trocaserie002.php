@@ -26,6 +26,7 @@
  */
 
 include("fpdf151/pdfwebseller.php");
+include("edu_cabecalhoatolegal.php");
 include("classes/db_trocaserie_classe.php");
 include("classes/db_matricula_classe.php");
 $cltrocaserie = new cl_trocaserie;
@@ -60,47 +61,47 @@ $sql = "SELECT DISTINCT
         ORDER BY ed47_v_nome
        ";
 $result = $cltrocaserie->sql_record($sql);
-if($cltrocaserie->numrows==0){?>
- <table width='100%'>
-  <tr>
-   <td align='center'>
-    <font color='#FF0000' face='arial'>
-     <b>Nenhuma registro encontrado.<br>
-     <input type='button' value='Fechar' onclick='window.close()'></b>
-    </font>
-   </td>
-  </tr>
- </table>
- <?
- exit;
+if ($cltrocaserie->numrows == 0) { ?>
+  <table width='100%'>
+    <tr>
+      <td align='center'>
+        <font color='#FF0000' face='arial'>
+          <b>Nenhuma registro encontrado.<br>
+            <input type='button' value='Fechar' onclick='window.close()'></b>
+        </font>
+      </td>
+    </tr>
+  </table>
+<?
+  exit;
 }
 $pdf = new PDF();
 $pdf->Open();
 $pdf->AliasNbPages();
 $linhas = $cltrocaserie->numrows;
-for($x=0;$x<$linhas;$x++){
- db_fieldsmemory($result,$x);
- $head1 = "ATA DE PROGRESSÃO DE ALUNOS";
- $pdf->setfillcolor(223);
- $pdf->addpage();
- $pdf->ln(5);
- $sql1 = $clmatricula->sql_query_file("","extract(month from ed60_d_datamatricula) as mes,extract(year from ed60_d_datamatricula) as ano",""," ed60_i_aluno = $ed101_i_aluno AND ed60_i_turma = $ed101_i_turmadest");
- $result1 = $clmatricula->sql_record($sql1);
- db_fieldsmemory($result1,0);
- if($tipo=="C"){
-  $texto = "       Mediante os trabalhos que o(a) $ed47_v_nome apresentou ao chegar na escola no mês de ".db_mes($mes,1)." de $ano, lavramos a presente ata para informar à família do aluno(a) que o(a) mesmo(a) irá ser classificado(a) da etapa $nomeserieorig para a etapa $nomeseriedest.\n\n       A classificação visa a melhoria do desenvolvimento escolar do aluno, ficando a família ciente de que, no ano letivo, deverá acompanhar o rendimento do aluno, bem como incentivar a sua participação nas aulas.\n\n       $ed101_t_obs ";
- }else{
-  $texto = "       Mediante os trabalhos que o(a) $ed47_v_nome apresentou durante o mês de ".db_mes($mes,1)." de $ano, lavramos a presente ata para informar à família do aluno(a) que o(a) mesmo(a) irá avançar da etapa $nomeserieorig para a etapa $nomeseriedest.\n\n       O avanço visa a melhoria do desenvolvimento escolar do aluno, ficando a família ciente de que, no ano letivo, deverá acompanhar o rendimento do aluno, bem como incentivar a sua participação nas aulas.\n\n       $ed101_t_obs ";
- }
- $pdf->setfont('arial','b',13);
- $pdf->cell(190,20,"ATA",0,1,"C",0);
- $pdf->setfont('arial','b',9);
- $pdf->multicell(190,4,$texto,0,"J",0,0);
- $pdf->cell(190,20,"",0,1,"C",0);
- $pdf->cell(190,6,"Assinatura do(a) professor(a):_____________________________________________",0,1,"L",0);
- $pdf->cell(190,6,"Assinatura do(a) responsável:_____________________________________________",0,1,"L",0);
- $pdf->cell(190,6,"Assinatura da supervisão:________________________________________________",0,1,"L",0);
- $pdf->cell(190,6,"Assinatura da direção:___________________________________________________",0,1,"L",0);
+for ($x = 0; $x < $linhas; $x++) {
+  db_fieldsmemory($result, $x);
+  $head1 = "ATA DE PROGRESSÃO DE ALUNOS";
+  $pdf->setfillcolor(223);
+  $pdf->addpage();
+  $pdf->ln(5);
+  $sql1 = $clmatricula->sql_query_file("", "extract(month from ed60_d_datamatricula) as mes,extract(year from ed60_d_datamatricula) as ano", "", " ed60_i_aluno = $ed101_i_aluno AND ed60_i_turma = $ed101_i_turmadest");
+  $result1 = $clmatricula->sql_record($sql1);
+  db_fieldsmemory($result1, 0);
+  if ($tipo == "C") {
+    $texto = "       Mediante os trabalhos que o(a) $ed47_v_nome apresentou ao chegar na escola no mês de " . db_mes($mes, 1) . " de $ano, lavramos a presente ata para informar à família do aluno(a) que o(a) mesmo(a) irá ser classificado(a) da etapa $nomeserieorig para a etapa $nomeseriedest.\n\n       A classificação visa a melhoria do desenvolvimento escolar do aluno, ficando a família ciente de que, no ano letivo, deverá acompanhar o rendimento do aluno, bem como incentivar a sua participação nas aulas.\n\n       $ed101_t_obs ";
+  } else {
+    $texto = "       Mediante os trabalhos que o(a) $ed47_v_nome apresentou durante o mês de " . db_mes($mes, 1) . " de $ano, lavramos a presente ata para informar à família do aluno(a) que o(a) mesmo(a) irá avançar da etapa $nomeserieorig para a etapa $nomeseriedest.\n\n       O avanço visa a melhoria do desenvolvimento escolar do aluno, ficando a família ciente de que, no ano letivo, deverá acompanhar o rendimento do aluno, bem como incentivar a sua participação nas aulas.\n\n       $ed101_t_obs ";
+  }
+  $pdf->setfont('arial', 'b', 13);
+  $pdf->cell(190, 20, "ATA", 0, 1, "C", 0);
+  $pdf->setfont('arial', 'b', 9);
+  $pdf->multicell(190, 4, $texto, 0, "J", 0, 0);
+  $pdf->cell(190, 20, "", 0, 1, "C", 0);
+  $pdf->cell(190, 6, "Assinatura do(a) professor(a):_____________________________________________", 0, 1, "L", 0);
+  $pdf->cell(190, 6, "Assinatura do(a) responsável:_____________________________________________", 0, 1, "L", 0);
+  $pdf->cell(190, 6, "Assinatura da supervisão:________________________________________________", 0, 1, "L", 0);
+  $pdf->cell(190, 6, "Assinatura da direção:___________________________________________________", 0, 1, "L", 0);
 }
 $pdf->Output();
 ?>

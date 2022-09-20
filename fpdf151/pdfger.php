@@ -150,5 +150,3 @@ function TextWithRotation($x,$y,$txt,$txt_angle,$font_angle=0)
 
 
 }
-
-?>
