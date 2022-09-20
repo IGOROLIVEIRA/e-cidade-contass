@@ -57,7 +57,7 @@ class EventoCargaS2299 implements EventoCargaInterface
 		JOIN rhpessoalmov ON rhpessoal.rh01_regist = rhpessoalmov.rh02_regist
 		JOIN cgm ON rhpessoal.rh01_numcgm = cgm.z01_numcgm
 		JOIN rhpesrescisao ON rhpessoalmov.rh02_seqpes = rhpesrescisao.rh05_seqpes
-		JOIN rhmotivorescisao ON rhpesrescisao.rh05_motivo::varchar = rhmotivorescisao.rh173_codigo
+		JOIN rhmotivorescisao ON lpad(rhpesrescisao.rh05_motivo::varchar, 2, '0') = rhmotivorescisao.rh173_codigo
 		JOIN rhregime ON rhpessoalmov.rh02_codreg = rhregime.rh30_codreg
 		WHERE (rh02_anousu,rh02_mesusu) = ({$this->ano},{$this->mes})
 		AND DATE_PART('YEAR',rh05_recis) = {$this->ano}
@@ -65,7 +65,7 @@ class EventoCargaS2299 implements EventoCargaInterface
 		AND rhpessoal.rh01_instit = {$this->instit}";
 
 		if (!empty($matricula)) {
-			$sql .= " AND rhpessoal.rh01_regist = {$matricula} ";
+			$sql .= " AND rhpessoal.rh01_regist in ({$matricula}) ";
 		}
 
 		$rsResult = \db_query($sql);
@@ -83,13 +83,22 @@ class EventoCargaS2299 implements EventoCargaInterface
 	 */
 	public function getVerbasResc($matricula)
 	{
-		$sql = "SELECT DISTINCT
+		$sql = "SELECT DISTINCT 
+		verbas.*, 
+		CASE 
+		WHEN e990_sequencial = '1000' THEN '9000'
+		WHEN e990_sequencial = '5001' THEN '9001'
+		WHEN e990_sequencial = '1020' AND verbas.r20_tpp = 'P' THEN '9002'
+		WHEN e990_sequencial = '1020' AND verbas.r20_tpp = 'V' THEN '9003'
+		ELSE NULL END AS codrubresocial
+		FROM (
+		SELECT DISTINCT
 				--dmDev
 				CASE 
-					WHEN gerfsal.r14_regist IS NOT NULL THEN 1
-					WHEN gerfres.r20_regist IS NOT NULL THEN 2
-					WHEN gerfcom.r48_regist IS NOT NULL THEN 3
-					WHEN gerfs13.r35_regist IS NOT NULL THEN 4
+					WHEN gerfsal.r14_regist IS NOT NULL THEN 'gerfsal'
+					WHEN gerfres.r20_regist IS NOT NULL THEN 'gerfres'
+					WHEN gerfcom.r48_regist IS NOT NULL THEN 'gerfcom'
+					WHEN gerfs13.r35_regist IS NOT NULL THEN 'gerfs13'
 				END AS ideDmDev,
 				--ideEstabLot
 				1 as tpInsc,
@@ -113,22 +122,26 @@ class EventoCargaS2299 implements EventoCargaInterface
 				1 as tpInscremunOutrEmpr,
 				rhinssoutros.rh51_cgcvinculo as nrInscremunOutrEmpr,
 				rhinssoutros.rh51_categoria as codCateg,
-				rhinssoutros.rh51_basefo as vlrRemunOE
+				rhinssoutros.rh51_basefo as vlrRemunOE,
+				gerfres.r20_tpp
 				FROM rhpessoal 
 				JOIN rhpessoalmov ON rhpessoal.rh01_regist = rhpessoalmov.rh02_regist
 				JOIN db_config ON rhpessoal.rh01_instit = db_config.codigo
 				JOIN cgm as cgminstit ON db_config.numcgm = cgminstit.z01_numcgm
 				LEFT JOIN rhinssoutros ON rhpessoalmov.rh02_seqpes = rhinssoutros.rh51_seqpes
-				LEFT JOIN gerfsal ON (rh02_anousu,rh02_mesusu,rh02_regist) = (r14_anousu,r14_mesusu,r14_regist)
-				LEFT JOIN gerfres ON (rh02_anousu,rh02_mesusu,rh02_regist) = (r20_anousu,r20_mesusu,r20_regist)
-				LEFT JOIN gerfcom ON (rh02_anousu,rh02_mesusu,rh02_regist) = (r48_anousu,r48_mesusu,r48_regist)
-				LEFT JOIN gerfs13 ON (rh02_anousu,rh02_mesusu,rh02_regist) = (r35_anousu,r35_mesusu,r35_regist)
-				WHERE (rh02_instit,rh02_anousu,rh02_mesusu,rh02_regist) = ({$this->instit},{$this->ano},{$this->mes},{$matricula})";
+				LEFT JOIN gerfsal ON (rh02_anousu,rh02_mesusu,rh02_regist) = (r14_anousu,r14_mesusu,r14_regist) AND r14_pd != 3
+				LEFT JOIN gerfres ON (rh02_anousu,rh02_mesusu,rh02_regist) = (r20_anousu,r20_mesusu,r20_regist) AND r20_pd != 3
+				LEFT JOIN gerfcom ON (rh02_anousu,rh02_mesusu,rh02_regist) = (r48_anousu,r48_mesusu,r48_regist) AND r48_pd != 3
+				LEFT JOIN gerfs13 ON (rh02_anousu,rh02_mesusu,rh02_regist) = (r35_anousu,r35_mesusu,r35_regist) AND r35_pd != 3
+				WHERE (rh02_instit,rh02_anousu,rh02_mesusu,rh02_regist) = ({$this->instit},{$this->ano},{$this->mes},{$matricula}) 
+			) AS verbas 
+		LEFT JOIN baserubricasesocial ON baserubricasesocial.e991_rubricas = verbas.codrubr AND e991_instit = {$this->instit}
+		LEFT JOIN rubricasesocial ON baserubricasesocial.e991_rubricasesocial = rubricasesocial.e990_sequencial AND e990_sequencial IN ('1000','5001','1020') ";
 
 		$rsResult = \db_query($sql);
 
         if (!$rsResult) {
-            throw new \Exception("Erro ao buscar Verbas Rescisórias.");
+            throw new \Exception("Erro ao buscar Verbas Rescisórias. ".pg_last_error());
         }
         return $rsResult;
 
