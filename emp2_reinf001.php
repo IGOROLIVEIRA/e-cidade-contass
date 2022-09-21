@@ -152,7 +152,7 @@ require_once("dbforms/db_classesgenericas.php");
                                         <td><b>Tipo:</b></td>
                                         <td>
                                             <?php
-                                            $aTipo = array(0 => "Selecione...", 1 => "Com Retenções", 2 => "Sem Retenções", 3 => "Todos");
+                                            $aTipo = array(1 => "Com Retenções", 2 => "Sem Retenções", 3 => "Todos");
                                             db_select("sTipo", $aTipo, true, 1);
                                             ?>
                                         </td>
