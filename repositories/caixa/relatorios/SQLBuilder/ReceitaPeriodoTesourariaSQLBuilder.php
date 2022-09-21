@@ -555,14 +555,17 @@ class ReceitaPeriodoTesourariaSQLBuilder
 
         if ($this->sOrdem == ReceitaOrdemRepositoryLegacy::ESTRUTURAL) {
             $this->sqlOrder = " ORDER BY k02_tipo, estrutural ";
+            return;
         }
 
         if ($this->sOrdem == ReceitaOrdemRepositoryLegacy::ALFABETICA) {
             $this->sqlOrder = " ORDER BY k02_tipo, k02_drecei ";
+            return;
         }
 
         if ($this->sOrdem == ReceitaOrdemRepositoryLegacy::REDUZIDO_ORCAMENTO) {
             $this->sqlOrder = " ORDER BY k02_tipo, codrec ";
+            return;
         }
 
         if ($this->sOrdem == ReceitaOrdemRepositoryLegacy::REDUZIDO_CONTA) {
