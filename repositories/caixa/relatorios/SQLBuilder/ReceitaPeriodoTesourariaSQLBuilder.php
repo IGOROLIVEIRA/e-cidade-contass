@@ -18,7 +18,7 @@ class ReceitaPeriodoTesourariaSQLBuilder
      * @var string
      */
     private $sql;
-    
+
     /**
      * @var string
      */
@@ -28,17 +28,17 @@ class ReceitaPeriodoTesourariaSQLBuilder
      * @var string
      */
     private $sqlWhere;
-    
+
     /**
      * @var string
      */
     private $sqlWhereUnion;
-    
+
     /**
      * @var string
      */
     private $sqlReceitaOrcamentaria;
-    
+
     /**
      * @var string
      */
@@ -73,37 +73,37 @@ class ReceitaPeriodoTesourariaSQLBuilder
      * @var string
      */
     private $sDesdobramento;
-    
+
     /**
      * @var int
      */
     private $iEmendaParlamentar;
-    
+
     /**
      * @var int
      */
     private $iRegularizacaoRepasse;
-    
+
     /**
      * @var int
      */
     private $iInstituicao;
-    
+
     /**
      * @var string
      */
     private $sReceitas;
-    
+
     /**
      * @var string
      */
     private $sEstrutura;
-    
+
     /**
      * @var string
      */
     private $sContas;
-    
+
     /**
      * @var string
      */
@@ -153,27 +153,13 @@ class ReceitaPeriodoTesourariaSQLBuilder
         $this->definirSQLReceitaOrcamentaria();
         $this->definirSQLExtraOrcamentaria();
         $this->definirSQLOrderBy();
-
-        if ($this->iFormaArrecadacao == ReceitaFormaArrecadacaoRepositoryLegacy::TODAS) {
-            $this->defnirSQLFormaArrecadacaoTodas();
-            return;
-        }
-
-        if ($this->iFormaArrecadacao == ReceitaFormaArrecadacaoRepositoryLegacy::ARQUIVO_BANCARIO) {
-            $this->defnirSQLFormaArrecadacaoArquivoBancario();
-            return;
-        }
-
-        if ($this->iFormaArrecadacao == ReceitaFormaArrecadacaoRepositoryLegacy::EXCETO_ARQUIVO_BANCARIO) {
-            $this->defnirSQLFormaArrecadacaoExcetoArquivoBancario();
-            return;
-        }
+        $this->definirSQLCompleta();
     }
 
     /**
      * @return void
      */
-    public function defnirSQLFormaArrecadacaoTodas()
+    public function definirSQLCompleta()
     {
         $sqlCorNumDesconto = str_replace("cornump ", "cornumpdesconto ", $this->sqlReceitaOrcamentaria);
         $this->sql = " 
@@ -189,87 +175,6 @@ class ReceitaPeriodoTesourariaSQLBuilder
                 {$this->sqlWhereUnion} 
             {$this->sqlGroup}
             {$this->sqlOrder} ";
-    }
-
-    /**
-     * @return void
-     */
-    public function defnirSQLFormaArrecadacaoArquivoBancario()
-    {
-        $this->sql = " 
-            SELECT 
-                k02_codigo, 
-                k02_tipo, 
-                k02_drecei, 
-                codrec, 
-                estrutural, 
-                SUM(valor) as vlrarquivobanco, 
-                ROUND((
-                    SELECT COALESCE(SUM(vlrpago), 0) FROM ( 
-                        SELECT 
-                            DISTINCT rc.vlrrec AS vlrpago, 
-                            db.idret, 
-                            (SELECT 
-                                SUM(vlrpago) 
-                            FROM disbanco 
-                            WHERE 
-                                idret = db.idret 
-                                AND codret = db.codret
-                            )  
-                        FROM disbanco db 
-                        INNER JOIN discla dc ON dc.codret = db.codret
-                        INNER JOIN disrec rc ON rc.codcla = dc.codcla
-                            AND db.idret = rc.idret 
-                            AND rc.k00_receit = k02_codigo 
-                        WHERE dc.dtaute between '{$this->dDataInicial}' AND '{$this->dDataFinal}') as x), 2) 
-                AS valor 
-            FROM ( 
-            
-            ) as xxx {$this->sqlWhereUnion} {$this->sqlOrder} ";
-    }
-
-    /**
-     * @return void
-     */
-    public function defnirSQLFormaArrecadacaoExcetoArquivoBancario()
-    {
-        $this->sql = " 
-            SELECT 
-                k02_codigo, 
-                k02_tipo, 
-                k02_drecei, 
-                codrec, 
-                estrutural, 
-                (valor - vlrarquivobanco) AS valor 
-            FROM ( 
-                SELECT 
-                    k02_codigo,
-                    k02_tipo,
-                    k02_drecei,
-                    codrec,
-                    estrutural,
-                    valor, 
-                    ROUND((
-                        SELECT COALESCE(SUM(vlrpago), 0) FROM ( 
-                            SELECT 
-                                DISTINCT rc.vlrrec AS vlrpago,
-                                db.idret, 
-                                (
-                                    SELECT sum(vlrpago) 
-                                    FROM disbanco  
-                                    WHERE idret = db.idret 
-                                    AND codret = db.codret
-                                ) 
-                            FROM disbanco db 
-                            INNER JOIN discla dc ON dc.codret = db.codret 
-                            INNER JOIN disrec rc ON rc.codcla = dc.codcla 
-                                AND db.idret = rc.idret 
-                                AND rc.k00_receit = k02_codigo
-                            WHERE dc.dtaute BETWEEN '{$this->dDataInicial}' AND '{$this->dDataFinal}') AS x ), 2) 
-                    AS vlrarquivobanco
-                FROM (  
-            
-            ) as xxx {$this->sqlWhereUnion} {$this->sqlOrder} ) as x ";
     }
 
     /**
@@ -295,6 +200,27 @@ class ReceitaPeriodoTesourariaSQLBuilder
      */
     public function definirSQLSelectReceita()
     {
+        if ($this->iFormaArrecadacao == ReceitaFormaArrecadacaoRepositoryLegacy::TODAS) {
+            $this->definirSQLSelectReceitaTodas();
+            return;
+        }
+
+        if ($this->iFormaArrecadacao == ReceitaFormaArrecadacaoRepositoryLegacy::ARQUIVO_BANCARIO) {
+            $this->definirSQLSelectReceitaArquivoBancario();
+            return;
+        }
+
+        if ($this->iFormaArrecadacao == ReceitaFormaArrecadacaoRepositoryLegacy::EXCETO_ARQUIVO_BANCARIO) {
+            $this->definirSQLSelectReceitaExcetoArquivoBancario();
+            return;
+        }
+    }
+
+    /**
+     * @return void
+     */
+    public function definirSQLSelectReceitaTodas()
+    {
         $this->sqlSelect = "
             SELECT 
                 k02_codigo codigo, 
@@ -308,9 +234,87 @@ class ReceitaPeriodoTesourariaSQLBuilder
     /**
      * @return void
      */
+    public function definirSQLSelectReceitaArquivoBancario()
+    {
+        $this->sqlSelect = "
+            SELECT 
+                k02_codigo codigo, 
+                k02_tipo tipo, 
+                k02_drecei descricao, 
+                codrec reduzido, 
+                estrutural, 
+                SUM(valor) as valor, 
+                ROUND((
+                    SELECT COALESCE(SUM(vlrpago), 0) FROM ( 
+                        SELECT 
+                            DISTINCT rc.vlrrec AS vlrpago, 
+                            db.idret, 
+                            (SELECT 
+                                SUM(vlrpago) 
+                            FROM disbanco 
+                            WHERE 
+                                idret = db.idret 
+                                AND codret = db.codret
+                            )  
+                        FROM disbanco db 
+                        INNER JOIN discla dc ON dc.codret = db.codret
+                        INNER JOIN disrec rc ON rc.codcla = dc.codcla
+                            AND db.idret = rc.idret 
+                            AND rc.k00_receit = k02_codigo 
+                        WHERE dc.dtaute between '{$this->dDataInicial}' AND '{$this->dDataFinal}') as x), 2)
+                AS valor ";
+    }
+
+    /**
+     * @return void
+     */
+    public function definirSQLSelectReceitaExcetoArquivoBancario()
+    {
+        $this->sqlSelect = " 
+            SELECT 
+                k02_codigo codigo, 
+                k02_tipo tipo, 
+                k02_drecei descricao, 
+                codrec reduzido, 
+                estrutural, 
+                (SUM(valor) - SUM(vlrarquivobanco)) AS valor 
+            FROM ( 
+                SELECT 
+                    k02_codigo,
+                    k02_tipo,
+                    k02_drecei,
+                    codrec,
+                    estrutural,
+                    valor, 
+                    ROUND((
+                        SELECT COALESCE(SUM(vlrpago), 0) FROM ( 
+                            SELECT 
+                                DISTINCT rc.vlrrec AS vlrpago,
+                                db.idret, 
+                                (
+                                    SELECT sum(vlrpago) 
+                                    FROM disbanco  
+                                    WHERE idret = db.idret 
+                                    AND codret = db.codret
+                                ) 
+                            FROM disbanco db 
+                            INNER JOIN discla dc ON dc.codret = db.codret 
+                            INNER JOIN disrec rc ON rc.codcla = dc.codcla 
+                                AND db.idret = rc.idret 
+                                AND rc.k00_receit = k02_codigo
+                            WHERE dc.dtaute BETWEEN '{$this->dDataInicial}' AND '{$this->dDataFinal}') AS x ), 2) 
+                    AS vlrarquivobanco ";
+    }
+
+    /**
+     * @return void
+     */
     public function definirSQLGroupReceita()
     {
-        $this->sqlGroup = "
+        if ($this->iFormaArrecadacao == ReceitaFormaArrecadacaoRepositoryLegacy::EXCETO_ARQUIVO_BANCARIO)
+            $this->sqlGroup = " ) as xx ";
+
+        $this->sqlGroup .= "
             GROUP BY 
                 k02_codigo, 
                 k02_tipo, 
@@ -385,7 +389,7 @@ class ReceitaPeriodoTesourariaSQLBuilder
     public function definirSQLWhereReceita()
     {
         if ($this->sReceitas) {
-           $this->sqlWhere .= " AND g.k02_codigo in ({$this->sReceitas}) ";
+            $this->sqlWhere .= " AND g.k02_codigo in ({$this->sReceitas}) ";
         }
     }
 
@@ -536,6 +540,10 @@ class ReceitaPeriodoTesourariaSQLBuilder
             LEFT JOIN corhist ON corhist.k12_id = corrente.k12_id
                 AND corhist.k12_data = corrente.k12_data
                 AND corhist.k12_autent = corrente.k12_autent
+            LEFT JOIN corplacaixa ON corrente.k12_id = k82_id
+                AND corrente.k12_data = k82_data
+                AND corrente.k12_autent = k82_autent
+            LEFT JOIN placaixarec ON k82_seqpla = k81_seqpla
             WHERE 
                 1 = 1 
                 {$this->sqlWhere} 

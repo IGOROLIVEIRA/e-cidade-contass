@@ -33,6 +33,7 @@ implements IReceitaPeriodoTesourariaRepository
         $sContas = NULL,
         $sContribuintes = NULL) 
     {
+
         $this->oReceitaPeriodoTesourariaSQLBuilder = new ReceitaPeriodoTesourariaSQLBuilder(
             $sTipo,
             $sTipoReceita,
@@ -56,6 +57,7 @@ implements IReceitaPeriodoTesourariaRepository
     public function pegarDados()
     {
         $aDados = array();
+
         if (!$result = pg_query($this->oReceitaPeriodoTesourariaSQLBuilder->pegarSQL()))
             throw new Exception("Erro realizando consulta");
         while ($data = pg_fetch_object($result)) {
