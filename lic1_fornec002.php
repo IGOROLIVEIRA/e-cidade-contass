@@ -179,7 +179,7 @@ for ($iCont = 0; $iCont < pg_num_rows($result); $iCont++) {
 
 if (isset($incluir)) {
 
-  $sSqlLicParametro = "select l12_pncp from licitaparam";
+  $sSqlLicParametro = "select l12_pncp from licitaparam where l12_instit = ".db_getsession('DB_instit');
 
   $rslicparam = db_query($sSqlLicParametro);
 
