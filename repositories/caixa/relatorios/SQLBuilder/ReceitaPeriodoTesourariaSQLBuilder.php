@@ -190,6 +190,24 @@ class ReceitaPeriodoTesourariaSQLBuilder
             $this->definirSQLGroupReceita();
             return;
         }
+
+        if ($this->sTipo == ReceitaTipoRepositoryLegacy::ANALITICO) {
+            $this->definirSQLSelectAnalitico();
+            $this->definirSQLGroupAnalitico();
+            return;
+        }
+
+        if ($this->sTipo == ReceitaTipoRepositoryLegacy::CONTA) {
+            $this->definirSQLSelectReceita();
+            $this->definirSQLGroupReceita();
+            return;
+        }
+
+        if ($this->sTipo == ReceitaTipoRepositoryLegacy::DIARIO) {
+            $this->definirSQLSelectReceita();
+            $this->definirSQLGroupReceita();
+            return;
+        }
     }
 
     /**
@@ -292,9 +310,17 @@ class ReceitaPeriodoTesourariaSQLBuilder
      */
     public function definirSQLSelectReceita()
     {
-        $this->sqlSelect .= " codrec reduzido, k02_codigo codigo ";
+        $this->sqlSelect .= " , codrec reduzido, k02_codigo codigo ";
     }
 
+    /**
+     * @return void
+     */
+    public function definirSQLSelectAnalitico()
+    {
+        $this->sqlSelect .= " , codrec reduzido, k02_codigo codigo, k00_histtxt historico, k12_data data, k12_numpre numpre, k12_numpar numpar, c61_reduz conta, c60_descr conta_descricao "; 
+    }
+    
     /**
      * @return void
      */
@@ -303,7 +329,18 @@ class ReceitaPeriodoTesourariaSQLBuilder
         if ($this->iFormaArrecadacao == ReceitaFormaArrecadacaoRepositoryLegacy::EXCETO_ARQUIVO_BANCARIO)
             $this->sqlGroup = " ) as xx ";
 
-        $this->sqlGroup .= " codrec, k02_codigo ";
+        $this->sqlGroup .= " , codrec, k02_codigo ";
+    }
+
+    /**
+     * @return void
+     */
+    public function definirSQLGroupAnalitico()
+    {
+        if ($this->iFormaArrecadacao == ReceitaFormaArrecadacaoRepositoryLegacy::EXCETO_ARQUIVO_BANCARIO)
+            $this->sqlGroup = " ) as xx ";
+
+        $this->sqlGroup .= " , codrec, k02_codigo, k00_histtxt, k12_data, k12_numpre, k12_numpar, c61_reduz, c60_descr ";
     }
 
     /**

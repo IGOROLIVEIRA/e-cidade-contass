@@ -129,6 +129,8 @@ class ReceitaPeriodoTesouraria extends PDF
 
     public function montarTabelaReceitaOrcamentaria()
     {
+        $sTitulo = "RECEITA ORÇAMENTÁRIA";
+
         if (!array_key_exists(ReceitaTipoReceitaRepositoryLegacy::ORCAMENTARIA, $this->aDadosRelatorio))
             return;
 
@@ -136,12 +138,12 @@ class ReceitaPeriodoTesouraria extends PDF
         $this->AddPage();
         $this->SetTextColor(0, 0, 0);
         $this->SetFillColor(220);
-        $this->montarTituloOrcamentario();
+        $this->montarTitulo($sTitulo);
 
         foreach ($this->aDadosRelatorio['O'] as $oReceita) {
             if ($this->gety() > $this->h - 30) {
                 $this->addpage();
-                $this->montarTituloOrcamentario();
+                $this->montarTitulo($sTitulo);
             }
             $this->montarDados($oReceita);
             $this->totalOrcamentaria += $oReceita->valor;
@@ -159,6 +161,8 @@ class ReceitaPeriodoTesouraria extends PDF
 
     public function montarTabelaReceitaExtraOrcamentaria()
     {
+        $sTitulo = "RECEITA EXTRA-ORÇAMENTÁRIA";
+
         if (!array_key_exists(ReceitaTipoReceitaRepositoryLegacy::EXTRA, $this->aDadosRelatorio))
             return;
 
@@ -176,11 +180,11 @@ class ReceitaPeriodoTesouraria extends PDF
 
         $this->SetTextColor(0, 0, 0);
         $this->SetFillColor(220);
-        $this->montarTituloExtra();
+        $this->montarTitulo($sTitulo);
         foreach ($this->aDadosRelatorio['E'] as $oReceita) {
             if ($this->gety() > $this->h - 30) {
                 $this->AddPage();
-                $this->montarTituloExtra();
+                $this->montarTitulo($sTitulo);
             }
             $this->montarDados($oReceita);
             $this->totalExtra += $oReceita->valor;
@@ -199,45 +203,45 @@ class ReceitaPeriodoTesouraria extends PDF
         }
         $this->cell(40, 4, $oReceita->estrutural, 1, 0, "C", $this->preencherCelula);
         $this->cell(100, 4, strtoupper($oReceita->descricao), 1, 0, "L", $this->preencherCelula);
-        /*
-            if ($sinana == 'S3') {
-                $this->cell(15, 4, $c61_reduz, 1, 0, "C", $this->preencherCelula);
-                $this->cell(60, 4, $c60_descr, 1, 0, "L", $this->preencherCelula);
-            }
-            */
+        if ($this->sTipo == ReceitaTipoRepositoryLegacy::CONTA) {
+            $this->cell(15, 4, $oReceita->conta, 1, 0, "C", $this->preencherCelula);
+            $this->cell(60, 4, $oReceita->conta_descricao, 1, 0, "L", $this->preencherCelula);
+        }
         $this->cell(25, 4, db_formatar($oReceita->valor, 'f'), 1, 1, "R", $this->preencherCelula);
     }
 
-    public function montarTituloOrcamentario()
+    public function montarTitulo($sTitulo)
     {
+
+        $iTamanhoEstrutural = 40;
+        $iTamanhoTitulo = 100;
+
         $this->SetFont('Arial', 'B', 9);
         if ($this->sTipo != ReceitaTipoRepositoryLegacy::ESTRUTURAL) {
             $this->Cell(10, 6, "COD", 1, 0, "C", 1);
             $this->Cell(10, 6, "RED", 1, 0, "C", 1);
         }
-        $this->Cell(40, 6, "ESTRUTURAL", 1, 0, "C", 1);
-        $this->Cell(100, 6, "RECEITA ORÇAMENTÁRIA", 1, 0, "C", 1);
-        // if ($sinana == 'S3') {
-        //     $this->Cell(15, 6, "CONTA", 1, 0, "C", 1);
-        //     $this->Cell(60, 6, "DESCRIÇÃO CONTA", 1, 0, "C", 1);
-        // }
+        if ($this->sTipo == ReceitaTipoRepositoryLegacy::ANALITICO) {
+            $this->Cell(15, 6, "DATA", 1, 0, "C", 1);
+            $this->Cell(15, 6, "NUMPRE", 1, 0, "C", 1);
+            $iTamanhoEstrutural = 25;
+            $iTamanhoTitulo = 80;
+        }
+        $this->Cell($iTamanhoEstrutural, 6, "ESTRUTURAL", 1, 0, "C", 1);
+        $this->Cell($iTamanhoTitulo, 6, $sTitulo, 1, 0, "C", 1);
+        if ($this->sTipo == ReceitaTipoRepositoryLegacy::CONTA) {
+            $this->Cell(15, 6, "CONTA", 1, 0, "C", 1);
+            $this->Cell(60, 6, "DESCRIÇÃO CONTA", 1, 0, "C", 1);
+        }
         $this->Cell(25, 6, "VALOR", 1, 1, "C", 1);
+        if ($this->sTipo == ReceitaTipoRepositoryLegacy::CONTA) {
+            $this->Cell(25, 6, "VALOR", 1, 0, "C", 1);
+            $this->Cell(15, 6, "CONTA", 1, 0, "C", 1);
+            $this->Cell(65, 6, "DESCRIÇÃO", 1, 1, "C", 1);
+        }
         $this->SetFont('Arial', 'B', 9);
     }
 
-    public function montarTituloExtra()
-    {
-        $this->SetFont('Arial', 'B', 9);
-        $this->Cell(10, 6, "COD", 1, 0, "C", 1);
-        $this->Cell(10, 6, "RED", 1, 0, "C", 1);
-        $this->Cell(40, 6, "ESTRUTURAL", 1, 0, "C", 1);
-        $this->Cell(100, 6, "RECEITA EXTRA-ORÇAMENTÁRIA", 1, 0, "C", 1);
-        // if ($sinana == 'S3') {
-        //    $this->Cell(15, 6, "CONTA", 1, 0, "C", 1);
-        //    $this->Cell(60, 6, "DESCRIÇÃO CONTA", 1, 0, "L", 1);
-        // }
-        $this->Cell(25, 6, "VALOR", 1, 1, "C", 1);
-    }
 
     public function pegarDados()
     {
