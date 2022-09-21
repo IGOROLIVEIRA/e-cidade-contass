@@ -26,7 +26,7 @@
  */
 
 
-//MODULO: licitaÃ§Ã£o
+//MODULO: licitação
 $cllicitaparam->rotulo->label();
 ?>
 <form name="form1" method="post" action="">
