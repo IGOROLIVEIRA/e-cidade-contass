@@ -483,8 +483,7 @@ if (isset($confirmar) && trim($confirmar) != "") {
       
     }
     $result_l218codigo = $clsituacaoitemlic->sql_record('select l218_codigo from situacaoitemcompra where l218_pcorcamitemlic not in ('.$codpcorcamitemlic.')');
-    
-    for($y=0;$y<count($result_l218codigo);$y++){
+    for($y=0;$y<$clsituacaoitemlic->numrows;$y++){
       db_fieldsmemory($result_l218codigo,$y);
       $clsituacaoitemlic->l219_codigo= $l218_codigo;
       $clsituacaoitemlic->l219_situacao=4;
