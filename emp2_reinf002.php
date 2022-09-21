@@ -83,7 +83,7 @@ if (isset($dtDataInicial)) {
   $sSqlNota .= " case when retencaotiporec.e21_retencaotipocalc in (5,6) then (coalesce(e23_valorretencao, 0))
 		            else 0 end as outrasretencoes, ";
   $sSqlNota .= " case when c71_coddoc = 904 then c71_data end as c71_data, ";
-  $sSqlNota .= " e69_nfserie, e21_descricao ";                                  
+  $sSqlNota .= " e69_nfserie, e21_descricao, e23_ativo, e71_anulado ";                                  
   $sSqlNota .= "       from empnota ";
   $sSqlNota .= "          inner join empempenho   on e69_numemp  = e60_numemp";
   $sSqlNota .= "          inner join cgm as cgm   on e60_numcgm  = cgm.z01_numcgm";
@@ -101,21 +101,27 @@ if (isset($dtDataInicial)) {
 
   $dtDataInicial = implode("-", array_reverse(explode("/", $dtDataInicial)));
   $dtDataFinal = implode("-", array_reverse(explode("/", $dtDataFinal)));
+   
+  if($sReferencia == 1)
+    $sSqlNota .= "  where (e50_data BETWEEN '$dtDataInicial' AND '$dtDataFinal' ) ";
+  if($sReferencia == 2)  
+    $sSqlNota .= "  where (e69_dtnota BETWEEN '$dtDataInicial' AND '$dtDataFinal' ) ";
 
   if($sCredoresSelecionados){
     if($sTipoSelecao == 1)
-        $sSqlNota .= "  where (e50_data BETWEEN '$dtDataInicial' AND '$dtDataFinal' ) and  e60_numcgm in ({$sCredoresSelecionados}) and Length(cgm.z01_cgccpf) = 14 and e60_instit = $instits";
+            $sSqlNota .= "   and  e60_numcgm in ({$sCredoresSelecionados}) and Length(cgm.z01_cgccpf) = 14 and e60_instit = $instits";
     if($sTipoSelecao == 2)
-        $sSqlNota .= "  where (e50_data BETWEEN '$dtDataInicial' AND '$dtDataFinal' ) and  e60_numcgm not in ({$sCredoresSelecionados}) and Length(cgm.z01_cgccpf) = 14 and e60_instit = $instits";
+        $sSqlNota .= "   and  e60_numcgm not in ({$sCredoresSelecionados}) and Length(cgm.z01_cgccpf) = 14 and e60_instit = $instits";
   }else 
-    $sSqlNota .= "  where e50_data BETWEEN '$dtDataInicial' AND '$dtDataFinal' and Length(cgm.z01_cgccpf) = 14 and e60_instit = $instits ";
+    $sSqlNota .= "  and Length(cgm.z01_cgccpf) = 14 and e60_instit = $instits ";
  
  if($sTipo == '1')
-    $sSqlNota .= "  and retencaotiporec.e21_retencaotipocalc in (1,2,3,4,5,6,7) ";
+    $sSqlNota .= "  and ( retencaotiporec.e21_retencaotipocalc in (1,2,3,4,5,6,7) and e23_ativo = true ) ";
   elseif($sTipo == '2')   
-    $sSqlNota .= "  and retencaotiporec.e21_retencaotipocalc is null ";
+    $sSqlNota .= "  and ( retencaotiporec.e21_retencaotipocalc is null or ( retencaotiporec.e21_retencaotipocalc is null and e23_ativo = false ) or (  retencaotiporec.e21_retencaotipocalc is not null
+    and e23_ativo = false) ) ";
  
-  $sSqlNota .= "  group by     1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16";
+  $sSqlNota .= "  group by     1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18";
   $sSqlNota .= "  order by     3,1 ";
 
   $rsNota    = $oDaoEmpNota->sql_record($sSqlNota);
@@ -339,8 +345,8 @@ $dataFinal = str_replace("/","-",db_formatar($dtDataFinal, "d"));
                 <th id="0R0" style="height: 30px;"></th>
                 <td class="s0" dir="ltr" ><font size="-1"> Empenho </font></td>
                 <td class="s0" dir="ltr" ><font size="-1"> OP </font></td>
-                <td class="s0" dir="ltr" ><font size="-1"> Referência OP </font></td>
-                <td class="s0" dir="ltr" ><font size="-1"> Data Estorno </font></td>
+                <td class="s0" dir="ltr" ><font size="-1"> Data OP </font></td>
+                <td class="s0" dir="ltr" ><font size="-1"> Data Estorno OP </font></td>
                 <td class="s0" dir="ltr" ><font size="-1"> Série da NF </font></td>
                 <td class="s0" dir="ltr" ><font size="-1"> Numero da NF</font></td>
                 <td class="s0" dir="ltr" ><font size="-1"> Data Emissão NF </font></td>                
@@ -388,6 +394,11 @@ $dataFinal = str_replace("/","-",db_formatar($dtDataFinal, "d"));
                         if ($cont >= 1) {
                             $or = "OR" . $cont;
                         }
+                    if($oNotas->e23_ativo == "f"){
+                            $oNotas->outrasretencoes = 0;
+                            $oNotas->valor_inss = 0;
+                            $oNotas->valor_irrf = 0;
+                    }       
                     if(!$auxe50_codord)
                         $auxe50_codord = $oNotas->e50_codord;    
                         // Lista de Fornecedores 
@@ -402,17 +413,26 @@ $dataFinal = str_replace("/","-",db_formatar($dtDataFinal, "d"));
 HTML;
                     $auxe60_numcgm = $oNotas->e60_numcgm;
                     }
+                   
                     if($oNotas->e50_codord == $oNotas2->e50_codord){
-                        $auxRetencoes += $oNotas->outrasretencoes;
-                        $auxInss += $oNotas->valor_inss;
-                        $auxIrrf +=$oNotas->valor_irrf;
+                        if($oNotas->e21_descricao != $oNotas2->e21_descricao){
+                            $auxRetencoes += $oNotas->outrasretencoes;
+                            $auxInss += $oNotas->valor_inss;
+                            $auxIrrf +=$oNotas->valor_irrf;
+                        }
                         $auxe50_codord = $oNotas->e50_codord;
-                                               
+                        echo $oNotas->e71_anulado;
+                        if($oNotas->e71_anulado == 't'){
+                            $dataestorno = $oNotas->c71_data;
+                        }
+                                             
                         if($oNotas->outrasretencoes == 0)
                             $descricao .= '';
                         else{
-                            $quebradelinha ++;
-                            $descricao .= " R$ ".db_formatar($oNotas->outrasretencoes, "f")." - ".$oNotas->e21_descricao;
+                            if($oNotas->e21_descricao != $oNotas2->e21_descricao){
+                                $quebradelinha ++;
+                                $descricao .= " R$ ".db_formatar($oNotas->outrasretencoes, "f")." - ".$oNotas->e21_descricao;
+                            }
                             if($quebradelinha == 1){
                                 $descricao .= "<br/>";
                                 $quebradelinha = 0;
@@ -444,11 +464,10 @@ HTML;
                         $totalvalor_irrf1 = db_formatar($totalvalor_irrf, "f");
                         $totaloutrasretencoes1 = db_formatar($totaloutrasretencoes, "f");
                        
-                        if($oNotas->e50_data){
-                            $auxcompetencia = explode("-", $oNotas->e50_data);
-                            $auxcompetencia = $auxcompetencia[1]."/".$auxcompetencia[2];
+                        if($oNotas->e71_anulado == 'f'){
+                            $dataestorno = $oNotas->c71_data;
                         }
-                                             
+                                          
                         if($oNotas->outrasretencoes == 0)
                             $descricao .= '';
                         else
@@ -462,8 +481,8 @@ HTML;
 
                             <td class="s1" dir="ltr">$oNotas->e60_codemp/$oNotas->e60_anousu</td>
                             <td class="s1" dir="ltr">$oNotas->e50_codord</td>
-                            <td class="s1" dir="ltr">$auxcompetencia</td>
-                            <td class="s3" dir="ltr">$oNotas->c71_data</td>
+                            <td class="s1" dir="ltr">$oNotas->e50_data</td>
+                            <td class="s3" dir="ltr">$dataestorno</td>
                             <td class="s1" dir="ltr">$oNotas->e69_nfserie</td>
                             <td class="s1" dir="ltr">$oNotas->e69_numero</td>
                             <td class="s1" dir="ltr">$oNotas->e69_dtnota</td>

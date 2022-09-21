@@ -89,7 +89,7 @@ class EventoS2299 extends EventoBase
             if (!isset($oVerbasResc->dmdev[array_search($hashDmDev, $aHashDmDev)])) {
                 $aHashDmDev[] = $hashDmDev;
                 $oVerbasFormatado = new \stdClass;
-                $oVerbasFormatado->idedmdev = $oVerbasSql->idedmdev;
+                $oVerbasFormatado->idedmdev = "{$matricula}{$oVerbasSql->idedmdev}";
 
                 $oVerbasFormatado->infoperapur = new \stdClass;
                 $oVerbasFormatado->infoperapur->ideestablot = array();
@@ -110,7 +110,7 @@ class EventoS2299 extends EventoBase
             }
 
             $oDetVerbasItems = new \stdClass;
-            $oDetVerbasItems->codrubr = $oVerbasSql->codrubr;
+            $oDetVerbasItems->codrubr = empty($oVerbasSql->codrubresocial) ? $oVerbasSql->codrubr : $oVerbasSql->codrubresocial;
             $oDetVerbasItems->idetabrubr = $oVerbasSql->idetabrubr;
             $oDetVerbasItems->qtdrubr = empty($oVerbasSql->qtdrubr) ? NULL : $oVerbasSql->qtdrubr;
             $oDetVerbasItems->vrrubr = $oVerbasSql->vrrubr;
