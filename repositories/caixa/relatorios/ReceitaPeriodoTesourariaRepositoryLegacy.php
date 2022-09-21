@@ -6,7 +6,6 @@ use repositories\caixa\relatorios\SQLBuilder\ReceitaPeriodoTesourariaSQLBuilder;
 use interfaces\caixa\relatorios\IReceitaPeriodoTesourariaRepository;
 use Exception;
 
-require_once 'repositories/caixa/relatorios/ReceitaTipoSelecaoRepositoryLegacy.php';
 require_once 'repositories/caixa/relatorios/SQLBuilder/ReceitaPeriodoTesourariaSQLBuilder.php';
 require_once 'interfaces/caixa/relatorios/IReceitaPeriodoTesourariaRepository.php';
 
@@ -34,7 +33,7 @@ implements IReceitaPeriodoTesourariaRepository
         $sContas = NULL,
         $sContribuintes = NULL) 
     {
-        $this->oReceitaPeriodoTesourariaSQLBuider = new ReceitaPeriodoTesourariaSQLBuilder(
+        $this->oReceitaPeriodoTesourariaSQLBuilder = new ReceitaPeriodoTesourariaSQLBuilder(
             $sTipo,
             $sTipoReceita,
             $iFormaArrecadacao,
@@ -57,7 +56,7 @@ implements IReceitaPeriodoTesourariaRepository
     public function pegarDados()
     {
         $aDados = array();
-        if (!$result = pg_query($this->oReceitaPeriodoTesourariaSQLBuider->pegarSQL()))
+        if (!$result = pg_query($this->oReceitaPeriodoTesourariaSQLBuilder->pegarSQL()))
             throw new Exception("Erro realizando consulta");
         while ($data = pg_fetch_object($result)) {
             $aDados[$data->tipo][] = $data;
