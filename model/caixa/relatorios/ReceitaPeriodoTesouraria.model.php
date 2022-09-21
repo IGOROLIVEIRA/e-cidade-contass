@@ -4,11 +4,13 @@ namespace model\caixa\relatorios;
 
 use PDF;
 use repositories\caixa\relatorios\ReceitaTipoReceitaRepositoryLegacy;
+use repositories\caixa\relatorios\ReceitaTipoRepositoryLegacy;
 use repositories\caixa\relatorios\ReceitaFormaArrecadacaoRepositoryLegacy;
 use interfaces\caixa\relatorios\IReceitaPeriodoTesourariaRepository;
 
 require_once "fpdf151/pdf.php";
 require_once "repositories/caixa/relatorios/ReceitaTipoReceitaRepositoryLegacy.php";
+require_once "repositories/caixa/relatorios/ReceitaTipoRepositoryLegacy.php";
 require_once "repositories/caixa/relatorios/ReceitaFormaArrecadacaoRepositoryLegacy.php";
 require_once "interfaces/caixa/relatorios/IReceitaPeriodoTesourariaRepository.php";
 
@@ -21,10 +23,17 @@ class ReceitaPeriodoTesouraria extends PDF
     private $oReceitaPeriodoTesourariaRepository;
     private $preencherCelula = 0;
 
-    public function __construct($sTipoReceita, $iFormaArrecadacao, $dDataInicial, $dDataFinal, $oReceitaPeriodoTesourariaRepository)
-    {
+    public function __construct(
+        $sTipo,
+        $sTipoReceita,
+        $iFormaArrecadacao,
+        $dDataInicial,
+        $dDataFinal,
+        $oReceitaPeriodoTesourariaRepository
+    ) {
         global $head3, $head4, $head6, $head8;
 
+        $this->sTipo = $sTipo;
         $this->sTipoReceita = $sTipoReceita;
         $this->iFormaArrecadacao = $iFormaArrecadacao;
         $this->dDataInicial = $dDataInicial;
@@ -134,18 +143,7 @@ class ReceitaPeriodoTesouraria extends PDF
                 $this->addpage();
                 $this->montarTituloOrcamentario();
             }
-            $this->setfont('arial', '', 7);
-            $this->cell(10, 4, $oReceita->codigo, 1, 0, "C", $this->preencherCelula);
-            $this->cell(10, 4, $oReceita->reduzido, 1, 0, "C", $this->preencherCelula);
-            $this->cell(40, 4, $oReceita->estrutural, 1, 0, "C", $this->preencherCelula);
-            $this->cell(100, 4, strtoupper($oReceita->descricao), 1, 0, "L", $this->preencherCelula);
-            /*
-            if ($sinana == 'S3') {
-                $this->cell(15, 4, $c61_reduz, 1, 0, "C", $this->preencherCelula);
-                $this->cell(60, 4, $c60_descr, 1, 0, "L", $this->preencherCelula);
-            }
-            */
-            $this->cell(25, 4, db_formatar($oReceita->valor, 'f'), 1, 1, "R", $this->preencherCelula);
+            $this->montarDados($oReceita);
             $this->totalOrcamentaria += $oReceita->valor;
         }
 
@@ -184,16 +182,7 @@ class ReceitaPeriodoTesouraria extends PDF
                 $this->AddPage();
                 $this->montarTituloExtra();
             }
-            $this->setfont('arial', '', 7);
-            $this->cell(10, 4, $oReceita->codigo, 1, 0, "C", $this->preencherCelula);
-            $this->cell(10, 4, $oReceita->reduzido, 1, 0, "C", $this->preencherCelula);
-            $this->cell(40, 4, $oReceita->estrutural, 1, 0, "C", $this->preencherCelula);
-            $this->cell(100, 4, strtoupper($oReceita->descricao), 1, 0, "L", $this->preencherCelula);
-            // if ($sinana == 'S3') {
-            // $this->cell(15, 4, $c61_reduz, 1, 0, "C", $this->preencherCelula);
-            // $this->cell(60, 4, $c60_descr, 1, 0, "L", $this->preencherCelula);
-            // }
-            $this->cell(25, 4, db_formatar($oReceita->valor, 'f'), 1, 1, "R", $this->preencherCelula);
+            $this->montarDados($oReceita);
             $this->totalExtra += $oReceita->valor;
         }
         $this->setfont('arial', 'B', 7);
@@ -201,11 +190,31 @@ class ReceitaPeriodoTesouraria extends PDF
         $this->cell(25, 4, db_formatar($this->totalExtra, 'f'), 1, 1, "R", 0);
     }
 
+    public function montarDados($oReceita)
+    {
+        $this->setfont('arial', '', 7);
+        if ($this->sTipo != ReceitaTipoRepositoryLegacy::ESTRUTURAL) {
+            $this->cell(10, 4, $oReceita->codigo, 1, 0, "C", $this->preencherCelula);
+            $this->cell(10, 4, $oReceita->reduzido, 1, 0, "C", $this->preencherCelula);
+        }
+        $this->cell(40, 4, $oReceita->estrutural, 1, 0, "C", $this->preencherCelula);
+        $this->cell(100, 4, strtoupper($oReceita->descricao), 1, 0, "L", $this->preencherCelula);
+        /*
+            if ($sinana == 'S3') {
+                $this->cell(15, 4, $c61_reduz, 1, 0, "C", $this->preencherCelula);
+                $this->cell(60, 4, $c60_descr, 1, 0, "L", $this->preencherCelula);
+            }
+            */
+        $this->cell(25, 4, db_formatar($oReceita->valor, 'f'), 1, 1, "R", $this->preencherCelula);
+    }
+
     public function montarTituloOrcamentario()
     {
         $this->SetFont('Arial', 'B', 9);
-        $this->Cell(10, 6, "COD", 1, 0, "C", 1);
-        $this->Cell(10, 6, "RED", 1, 0, "C", 1);
+        if ($this->sTipo != ReceitaTipoRepositoryLegacy::ESTRUTURAL) {
+            $this->Cell(10, 6, "COD", 1, 0, "C", 1);
+            $this->Cell(10, 6, "RED", 1, 0, "C", 1);
+        }
         $this->Cell(40, 6, "ESTRUTURAL", 1, 0, "C", 1);
         $this->Cell(100, 6, "RECEITA ORÇAMENTÁRIA", 1, 0, "C", 1);
         // if ($sinana == 'S3') {

@@ -182,36 +182,33 @@ class ReceitaPeriodoTesourariaSQLBuilder
      */
     public function definirSQLSelectEGroup()
     {
+        $this->definirSQLSelectEstrutural();
+        $this->definirSQLGroupEstrutural();
+
         if ($this->sTipo == ReceitaTipoRepositoryLegacy::RECEITA) {
             $this->definirSQLSelectReceita();
             $this->definirSQLGroupReceita();
             return;
         }
-
-        if ($this->sTipo == ReceitaTipoRepositoryLegacy::ESTRUTURAL) {
-            $this->definirSQLSelectEstrutural();
-            $this->definirSQLGroupEstrutural();
-            return;
-        }
     }
 
     /**
      * @return void
      */
-    public function definirSQLSelectReceita()
+    public function definirSQLSelectEstrutural()
     {
         if ($this->iFormaArrecadacao == ReceitaFormaArrecadacaoRepositoryLegacy::TODAS) {
-            $this->definirSQLSelectReceitaTodas();
+            $this->definirSQLSelectEstruturalTodas();
             return;
         }
 
         if ($this->iFormaArrecadacao == ReceitaFormaArrecadacaoRepositoryLegacy::ARQUIVO_BANCARIO) {
-            $this->definirSQLSelectReceitaArquivoBancario();
+            $this->definirSQLSelectEstruturalArquivoBancario();
             return;
         }
 
         if ($this->iFormaArrecadacao == ReceitaFormaArrecadacaoRepositoryLegacy::EXCETO_ARQUIVO_BANCARIO) {
-            $this->definirSQLSelectReceitaExcetoArquivoBancario();
+            $this->definirSQLSelectEstruturalExcetoArquivoBancario();
             return;
         }
     }
@@ -219,14 +216,12 @@ class ReceitaPeriodoTesourariaSQLBuilder
     /**
      * @return void
      */
-    public function definirSQLSelectReceitaTodas()
+    public function definirSQLSelectEstruturalTodas()
     {
         $this->sqlSelect = "
             SELECT 
-                k02_codigo codigo, 
                 k02_tipo tipo, 
                 k02_drecei descricao, 
-                codrec reduzido, 
                 estrutural, 
                 SUM(valor) as valor ";
     }
@@ -234,14 +229,12 @@ class ReceitaPeriodoTesourariaSQLBuilder
     /**
      * @return void
      */
-    public function definirSQLSelectReceitaArquivoBancario()
+    public function definirSQLSelectEstruturalArquivoBancario()
     {
         $this->sqlSelect = "
             SELECT 
-                k02_codigo codigo, 
                 k02_tipo tipo, 
                 k02_drecei descricao, 
-                codrec reduzido, 
                 estrutural, 
                 SUM(valor) as valor, 
                 " . $this->definirSQLValorArquivoBancario();
@@ -250,14 +243,12 @@ class ReceitaPeriodoTesourariaSQLBuilder
     /**
      * @return void
      */
-    public function definirSQLSelectReceitaExcetoArquivoBancario()
+    public function definirSQLSelectEstruturalExcetoArquivoBancario()
     {
         $this->sqlSelect = " 
             SELECT 
-                k02_codigo codigo, 
                 k02_tipo tipo, 
                 k02_drecei descricao, 
-                codrec reduzido, 
                 estrutural, 
                 (SUM(valor) - SUM(vlrarquivobanco)) AS valor 
             FROM ( 
@@ -271,6 +262,9 @@ class ReceitaPeriodoTesourariaSQLBuilder
             " . $this->definirSQLValorArquivoBancario();
     }
 
+    /**
+     * @return string
+     */
     public function definirSQLValorArquivoBancario()
     {
         return "ROUND((
@@ -296,31 +290,20 @@ class ReceitaPeriodoTesourariaSQLBuilder
     /**
      * @return void
      */
-    public function definirSQLGroupReceita()
+    public function definirSQLSelectReceita()
     {
-        if ($this->iFormaArrecadacao == ReceitaFormaArrecadacaoRepositoryLegacy::EXCETO_ARQUIVO_BANCARIO)
-            $this->sqlGroup = " ) as xx ";
-
-        $this->sqlGroup .= "
-            GROUP BY 
-                k02_codigo, 
-                k02_tipo, 
-                k02_drecei, 
-                codrec, 
-                estrutural ";
+        $this->sqlSelect .= " codrec reduzido, k02_codigo codigo ";
     }
 
     /**
      * @return void
      */
-    public function definirSQLSelectEstrutural()
+    public function definirSQLGroupReceita()
     {
-        $this->sqlSelect = "
-            SELECT 
-                k02_tipo tipo, 
-                k02_drecei descricao, 
-                estrutural, 
-                SUM(valor) as valor ";
+        if ($this->iFormaArrecadacao == ReceitaFormaArrecadacaoRepositoryLegacy::EXCETO_ARQUIVO_BANCARIO)
+            $this->sqlGroup = " ) as xx ";
+
+        $this->sqlGroup .= " codrec, k02_codigo ";
     }
 
     /**
@@ -330,7 +313,8 @@ class ReceitaPeriodoTesourariaSQLBuilder
     {
         $this->sqlGroup = "
             GROUP BY 
-                k02_drecei, 
+                k02_tipo,
+                k02_drecei,
                 estrutural ";
     }
 
@@ -543,6 +527,11 @@ class ReceitaPeriodoTesourariaSQLBuilder
      */
     public function definirSQLOrderBy()
     {
+        if ($this->sTipo == ReceitaTipoRepositoryLegacy::ESTRUTURAL) {
+            $this->sqlOrder = " ORDER BY k02_tipo, estrutural ";
+            return;
+        }
+
         if ($this->sOrdem == ReceitaOrdemRepositoryLegacy::CODIGO) {
             $this->sqlOrder = " ORDER BY k02_tipo, k02_codigo ";
             return;
