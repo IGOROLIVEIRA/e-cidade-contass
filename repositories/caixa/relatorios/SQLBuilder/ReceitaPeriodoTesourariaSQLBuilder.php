@@ -244,25 +244,7 @@ class ReceitaPeriodoTesourariaSQLBuilder
                 codrec reduzido, 
                 estrutural, 
                 SUM(valor) as valor, 
-                ROUND((
-                    SELECT COALESCE(SUM(vlrpago), 0) FROM ( 
-                        SELECT 
-                            DISTINCT rc.vlrrec AS vlrpago, 
-                            db.idret, 
-                            (SELECT 
-                                SUM(vlrpago) 
-                            FROM disbanco 
-                            WHERE 
-                                idret = db.idret 
-                                AND codret = db.codret
-                            )  
-                        FROM disbanco db 
-                        INNER JOIN discla dc ON dc.codret = db.codret
-                        INNER JOIN disrec rc ON rc.codcla = dc.codcla
-                            AND db.idret = rc.idret 
-                            AND rc.k00_receit = k02_codigo 
-                        WHERE dc.dtaute between '{$this->dDataInicial}' AND '{$this->dDataFinal}') as x), 2)
-                AS valor ";
+                " . $this->definirSQLValorArquivoBancario();
     }
 
     /**
@@ -286,24 +268,29 @@ class ReceitaPeriodoTesourariaSQLBuilder
                     codrec,
                     estrutural,
                     valor, 
-                    ROUND((
-                        SELECT COALESCE(SUM(vlrpago), 0) FROM ( 
-                            SELECT 
-                                DISTINCT rc.vlrrec AS vlrpago,
-                                db.idret, 
-                                (
-                                    SELECT sum(vlrpago) 
-                                    FROM disbanco  
-                                    WHERE idret = db.idret 
-                                    AND codret = db.codret
-                                ) 
-                            FROM disbanco db 
-                            INNER JOIN discla dc ON dc.codret = db.codret 
-                            INNER JOIN disrec rc ON rc.codcla = dc.codcla 
-                                AND db.idret = rc.idret 
-                                AND rc.k00_receit = k02_codigo
-                            WHERE dc.dtaute BETWEEN '{$this->dDataInicial}' AND '{$this->dDataFinal}') AS x ), 2) 
-                    AS vlrarquivobanco ";
+            " . $this->definirSQLValorArquivoBancario();
+    }
+
+    public function definirSQLValorArquivoBancario()
+    {
+        return "ROUND((
+            SELECT COALESCE(SUM(vlrpago), 0) FROM ( 
+                SELECT 
+                    DISTINCT rc.vlrrec AS vlrpago,
+                    db.idret, 
+                    (
+                        SELECT sum(vlrpago) 
+                        FROM disbanco  
+                        WHERE idret = db.idret 
+                        AND codret = db.codret
+                    ) 
+                FROM disbanco db 
+                INNER JOIN discla dc ON dc.codret = db.codret 
+                INNER JOIN disrec rc ON rc.codcla = dc.codcla 
+                    AND db.idret = rc.idret 
+                    AND rc.k00_receit = k02_codigo
+                WHERE dc.dtaute BETWEEN '{$this->dDataInicial}' AND '{$this->dDataFinal}') AS x ), 2) 
+        AS vlrarquivobanco ";
     }
 
     /**
