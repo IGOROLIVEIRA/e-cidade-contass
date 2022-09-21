@@ -26,92 +26,102 @@
  */
 
 
-//MODULO: licitaÁ„o
+//MODULO: licita√ß√£o
 $cllicitaparam->rotulo->label();
 ?>
 <form name="form1" method="post" action="">
-  <center>
-    <table>
-      <tr>
-        <td>
-          <fieldset>
-            <legend><b>Par‚metros<b></legend>
-            <table border="0">
-              <tr>
-              <tr>
-                <td nowrap title="<?= @$Tl12_escolherprocesso ?>">
-                  <?= @$Ll12_escolherprocesso ?>
-                </td>
-                <td>
-                  <?
-                  $x = array("f" => "NAO", "t" => "SIM");
-                  db_select('l12_escolherprocesso', $x, true, $db_opcao, "");
-                  ?>
-                </td>
-              </tr>
+<center>
+<table>
+ <tr>
+ <td>
+ <fieldset><legend><b>Par√¢metros<b></legend>
+<table border="0">
+  <tr>
+  <tr>
+    <td nowrap title="<?=@$Tl12_escolherprocesso?>">
+       <?=@$Ll12_escolherprocesso?>
+    </td>
+    <td>
+			<?
+			$x = array("f"=>"NAO","t"=>"SIM");
+			db_select('l12_escolherprocesso',$x,true,$db_opcao,"");
+			?>
+    </td>
+  </tr>
 
-              <tr>
-                <td nowrap title="<?= @$Tl12_escolheprotocolo ?>">
-                  <?= @$Ll12_escolheprotocolo ?>
-                </td>
-                <td>
-                  <?
-                  $x = array("f" => "NAO", "t" => "SIM");
-                  db_select('l12_escolheprotocolo', $x, true, $db_opcao, "");
-                  ?>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <strong>Disp. licitaÁ„o na web atÈ o julgamento:</strong>
-                </td>
-                <td>
-                  <?
-                  $x = getValoresPadroesCampo("l12_tipoliberacaoweb");
-                  //$x = array("f"=>"NAO","t"=>"SIM");
-                  db_select('l12_tipoliberacaoweb', $x, true, $db_opcao, "onChange=js_liberacaoWebDias();");
-                  ?>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <strong>Emitir usu·rio no relat·rio de adjudicaÁ„o:</strong>
-                </td>
-                <td>
-                  <?
-                  $x = array("f" => "NAO", "t" => "SIM");
-                  db_select('l12_usuarioadjundica', $x, true, $db_opcao, "");
-                  ?>
-                </td>
-              </tr>
-
-              <? $sDisplay = $l12_tipoliberacaoweb <> 1 ? '' : 'none'; ?>
-              <tr id="trLiberacaoWebDias" style="display: <?= $sDisplay; ?>;">
-                <td nowrap title="<?= @$Tl12_qtdediasliberacaoweb ?>">
-                  <?= @$Ll12_qtdediasliberacaoweb ?>
-                </td>
-                <td>
-                  <?
-                  db_input('l12_qtdediasliberacaoweb', 5, 0, true, 'text', $db_opcao);
-                  ?>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <strong>ValidaÁ„o no Cadastro de Fornecedores</strong>
-                </td>
-                <td>
-                  <?
-                  $x = array("f" => "NAO", "t" => "SIM");
-                  db_select('l12_validacadfornecedor', $x, true, $db_opcao, "");
-                  ?>
-                </td>
-              </tr>
-            </table>
-          </fieldset>
+  <tr>
+    <td nowrap title="<?=@$Tl12_escolheprotocolo?>">
+       <?=@$Ll12_escolheprotocolo?>
+    </td>
+    <td>
+			<?
+			$x = array("f"=>"NAO","t"=>"SIM");
+			db_select('l12_escolheprotocolo',$x,true,$db_opcao,"");
+			?>
+    </td>
+  </tr>
+  <tr>
+    <td>
+       <strong>Disp. licita√ß√£o na web at√© o julgamento:</strong>
+    </td>
+    <td>
+      <?
+      $x = getValoresPadroesCampo("l12_tipoliberacaoweb");
+      //$x = array("f"=>"NAO","t"=>"SIM");
+      db_select('l12_tipoliberacaoweb', $x, true, $db_opcao, "onChange=js_liberacaoWebDias();");
+      ?>
+    </td>
+  </tr>
+    <tr>
         <td>
-      </tr>
-    </table>
+            <strong>Emitir usu√°rio no relat√≥rio de adjudica√ß√£o:</strong>
+        </td>
+        <td>
+            <?
+            $x = array("f"=>"NAO","t"=>"SIM");
+            db_select('l12_usuarioadjundica',$x,true,$db_opcao,"");
+            ?>
+        </td>
+    </tr>
+
+  <? $sDisplay = $l12_tipoliberacaoweb <> 1 ? '' : 'none'; ?>
+  <tr id="trLiberacaoWebDias" style="display: <?=$sDisplay; ?>;">
+    <td nowrap title="<?=@$Tl12_qtdediasliberacaoweb?>">
+      <?=@$Ll12_qtdediasliberacaoweb?>
+    </td>
+    <td>
+      <?
+      db_input('l12_qtdediasliberacaoweb', 5, 0, true, 'text', $db_opcao);
+      ?>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <strong>Valida√ß√£o no Cadastro de Fornecedores</strong>
+    </td>
+    <td>
+      <?
+        $x = array("f"=>"NAO","t"=>"SIM");
+        db_select('l12_validacadfornecedor',$x,true,$db_opcao,"");
+      ?>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <strong>Valida√ß√£o do PNCP</strong>
+    </td>
+    <td>
+      <?
+        $x = array("f"=>"NAO","t"=>"SIM");
+        db_select('l12_pncp',$x,true,$db_opcao,"");
+      ?>
+    </td>
+  </tr>
+  </table>
+  </fieldset>
+  <td>
+  </tr>
+</table>
   </center>
 
   <input name="<?= ($db_opcao == 1 ? "incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "alterar" : "excluir")) ?>" type="submit" id="db_opcao" value="<?= ($db_opcao == 1 ? "Incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "Alterar" : "Excluir")) ?>" <?= ($db_botao == false ? "disabled" : "") ?>>
