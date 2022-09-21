@@ -6,5 +6,4 @@ interface IReceitaPeriodoTesourariaRepository
 {
     public function pegarDados();
     public function pegarFormatoPagina();
-    public function definirSQL();
 }

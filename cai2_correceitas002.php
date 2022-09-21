@@ -30,13 +30,11 @@ require_once ("libs/db_liborcamento.php");
 require_once ("libs/db_sql.php");
 require_once("classes/db_orctiporec_classe.php");
 require_once("model/orcamento/ReceitaContabilRepository.model.php");
-
-
+/*
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
-
-
+*/
 use model\caixa\relatorios\ReceitaPeriodoTesouraria;
 use repositories\caixa\relatorios\ReceitaPeriodoTesourariaRepositoryLegacy;
 
