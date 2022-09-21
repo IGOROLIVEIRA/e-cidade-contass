@@ -257,11 +257,11 @@ SQL;
     public function rollbackFunctions()
     {
         $this->execute(
-            file_get_contents(__DIR__ . '/sqls/functions/public.fc_issqn.sql')
+            file_get_contents(__DIR__ . '/sqls/functions/public.fc_issqn-2022-01-01.sql')
         );
 
         $this->execute(
-            file_get_contents(__DIR__ . '/sqls/functions/public.fc_vistorias.sql')
+            file_get_contents(__DIR__ . '/sqls/functions/public.fc_vistorias-2022-01-01.sql')
         );
     }
 }
