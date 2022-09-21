@@ -26,7 +26,7 @@
  */
 
 
-//MODULO: licitaÁ„o
+//MODULO: licita√ß√£o
 $cllicitaparam->rotulo->label();
 ?>
 <form name="form1" method="post" action="">
@@ -34,7 +34,7 @@ $cllicitaparam->rotulo->label();
 <table>
  <tr>
  <td>
- <fieldset><legend><b>Par‚metros<b></legend> 
+ <fieldset><legend><b>Par√¢metros<b></legend> 
 <table border="0">
   <tr>
   <tr>
@@ -62,7 +62,7 @@ $cllicitaparam->rotulo->label();
   </tr>
   <tr>
     <td>
-       <strong>Disp. licitaÁ„o na web atÈ o julgamento:</strong>
+       <strong>Disp. licita√ß√£o na web at√© o julgamento:</strong>
     </td>
     <td> 
       <?
@@ -74,7 +74,7 @@ $cllicitaparam->rotulo->label();
   </tr>
     <tr>
         <td>
-            <strong>Emitir usu·rio no relatÛrio de adjudicaÁ„o:</strong>
+            <strong>Emitir usu√°rio no relat√≥rio de adjudica√ß√£o:</strong>
         </td>
         <td>
             <?
@@ -97,7 +97,7 @@ $cllicitaparam->rotulo->label();
   </tr>
   <tr>
     <td>
-      <strong>ValidaÁ„o no Cadastro de Fornecedores</strong>
+      <strong>Valida√ß√£o no Cadastro de Fornecedores</strong>
     </td>
     <td> 
       <?
@@ -105,7 +105,18 @@ $cllicitaparam->rotulo->label();
         db_select('l12_validacadfornecedor',$x,true,$db_opcao,"");
       ?>
     </td>
-  </tr>   
+  </tr>
+  <tr>
+    <td>
+      <strong>Valida√ß√£o do PNCP</strong>
+    </td>
+    <td> 
+      <?
+        $x = array("f"=>"NAO","t"=>"SIM");
+        db_select('l12_pncp',$x,true,$db_opcao,"");
+      ?>
+    </td>
+  </tr> 
   </table>
   </fieldset>
   <td>
