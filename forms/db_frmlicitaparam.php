@@ -34,7 +34,7 @@ $cllicitaparam->rotulo->label();
 <table>
  <tr>
  <td>
- <fieldset><legend><b>Par√¢metros<b></legend> 
+ <fieldset><legend><b>Par‚metros<b></legend> 
 <table border="0">
   <tr>
   <tr>
@@ -62,7 +62,7 @@ $cllicitaparam->rotulo->label();
   </tr>
   <tr>
     <td>
-       <strong>Disp. licita√ß√£o na web at√© o julgamento:</strong>
+       <strong>Disp. licitaÁ„o na web atÈ o julgamento:</strong>
     </td>
     <td> 
       <?
@@ -74,7 +74,7 @@ $cllicitaparam->rotulo->label();
   </tr>
     <tr>
         <td>
-            <strong>Emitir usu√°rio no relat√≥rio de adjudica√ß√£o:</strong>
+            <strong>Emitir usu·rio no relatÛrio de adjudicaÁ„o:</strong>
         </td>
         <td>
             <?
@@ -97,7 +97,7 @@ $cllicitaparam->rotulo->label();
   </tr>
   <tr>
     <td>
-      <strong>Valida√ß√£o no Cadastro de Fornecedores</strong>
+      <strong>ValidaÁ„o no Cadastro de Fornecedores</strong>
     </td>
     <td> 
       <?
@@ -108,7 +108,7 @@ $cllicitaparam->rotulo->label();
   </tr>
   <tr>
     <td>
-      <strong>Valida√ß√£o do PNCP</strong>
+      <strong>ValidaÁ„o do PNCP</strong>
     </td>
     <td> 
       <?
