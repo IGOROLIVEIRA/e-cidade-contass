@@ -91,7 +91,7 @@ class EventoS2400 extends EventoBase
     {
 
         $oDaorhdepend = \db_utils::getDao("rhdepend");
-        $sqlDependentes = $oDaorhdepend->sql_query(null, "*", "rh31_codigo", "z01_cgccpf = '{$cpf}'");
+        $sqlDependentes = $oDaorhdepend->sql_query(null, "*", "rh31_codigo", "z01_cgccpf = '{$cpf}' and rh02_instit = ".db_getsession("DB_instit"));
 
         $rsDependentes = db_query($sqlDependentes);
 
