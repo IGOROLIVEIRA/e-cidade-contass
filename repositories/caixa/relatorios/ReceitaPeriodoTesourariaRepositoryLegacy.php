@@ -2,21 +2,21 @@
 
 namespace repositories\caixa\relatorios;
 
-use repositories\caixa\relatorios\SQLBuider\ReceitaPeriodoTesourariaSQLBuider;
+use repositories\caixa\relatorios\SQLBuilder\ReceitaPeriodoTesourariaSQLBuilder;
 use interfaces\caixa\relatorios\IReceitaPeriodoTesourariaRepository;
 use Exception;
 
 require_once 'repositories/caixa/relatorios/ReceitaTipoSelecaoRepositoryLegacy.php';
-require_once 'repositories/caixa/relatorios/SQLBuilder/ReceitaPeriodoTesourariaSQLBuider.php';
+require_once 'repositories/caixa/relatorios/SQLBuilder/ReceitaPeriodoTesourariaSQLBuilder.php';
 require_once 'interfaces/caixa/relatorios/IReceitaPeriodoTesourariaRepository.php';
 
 class ReceitaPeriodoTesourariaRepositoryLegacy
 implements IReceitaPeriodoTesourariaRepository
 {
     /**
-     * @var ReceitaPeriodoTesourariaSQLBuider
+     * @var ReceitaPeriodoTesourariaSQLBuilder
      */
-    private $oReceitaPeriodoTesourariaSQLBuider;
+    private $oReceitaPeriodoTesourariaSQLBuilder;
 
     public function __construct(
         $sTipo,
@@ -34,7 +34,7 @@ implements IReceitaPeriodoTesourariaRepository
         $sContas = NULL,
         $sContribuintes = NULL) 
     {
-        $this->oReceitaPeriodoTesourariaSQLBuider = new ReceitaPeriodoTesourariaSQLBuider(
+        $this->oReceitaPeriodoTesourariaSQLBuider = new ReceitaPeriodoTesourariaSQLBuilder(
             $sTipo,
             $sTipoReceita,
             $iFormaArrecadacao,
@@ -51,6 +51,9 @@ implements IReceitaPeriodoTesourariaRepository
             $sContribuintes);
     }
 
+    /**
+     * @return array
+     */
     public function pegarDados()
     {
         $aDados = array();

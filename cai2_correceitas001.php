@@ -27,6 +27,7 @@
 
 use repositories\caixa\relatorios\ReceitaFormaArrecadacaoRepositoryLegacy;
 use repositories\caixa\relatorios\ReceitaOrdemRepositoryLegacy;
+use repositories\caixa\relatorios\ReceitaTipoReceitaRepositoryLegacy;
 use repositories\caixa\relatorios\ReceitaTipoRepositoryLegacy;
 
 require("libs/db_stdlib.php");
@@ -36,8 +37,10 @@ include("libs/db_usuariosonline.php");
 include("dbforms/db_classesgenericas.php");
 include("dbforms/db_funcoes.php");
 include("classes/db_orctiporec_classe.php");
+
 require_once 'repositories/caixa/relatorios/ReceitaFormaArrecadacaoRepositoryLegacy.php';
 require_once 'repositories/caixa/relatorios/ReceitaOrdemRepositoryLegacy.php';
+require_once 'repositories/caixa/relatorios/ReceitaTipoReceitaRepositoryLegacy.php';
 require_once 'repositories/caixa/relatorios/ReceitaTipoRepositoryLegacy.php';
 
 $clrotulo = new rotulocampo;
@@ -265,9 +268,9 @@ function js_emite(){
 						</td>
 						<td>
 							<select name="tipo" onchange="js_valor();" style="width: 140px;">
-								<option value=<?= ReceitaTipoRepositoryLegacy::TODOS ?>>Todas</option>
-								<option value=<?= ReceitaTipoRepositoryLegacy::ORCAMENTARIA ?>>Orçamentarias</option>
-								<option value=<?= ReceitaTipoRepositoryLegacy::EXTRA ?>>Extra-Orçamentarias</option>
+								<option value=<?= ReceitaTipoReceitaRepositoryLegacy::TODOS ?>>Todas</option>
+								<option value=<?= ReceitaTipoReceitaRepositoryLegacy::ORCAMENTARIA ?>>Orçamentarias</option>
+								<option value=<?= ReceitaTipoReceitaRepositoryLegacy::EXTRA ?>>Extra-Orçamentarias</option>
 						</td>
 					</tr>
 					<tr>
@@ -300,11 +303,11 @@ function js_emite(){
 						</td>
 						<td>
 							<select name="sinana" style="width: 175px;">
-								<option value = 'S1'>Sintético/Receita</option>
-								<option value = 'S2'>Sintético/Estrutural</option>
-								<option value = 'A'>Analítico</option>
-								<option value = 'S3'>Sintético/Conta</option>
-								<option value = 'S4'>Diário</option>
+								<option value=<?= ReceitaTipoRepositoryLegacy::RECEITA ?>>Sintético/Receita</option>
+								<option value=<?= ReceitaTipoRepositoryLegacy::ESTRUTURAL ?>>Sintético/Estrutural</option>
+								<option value=<?= ReceitaTipoRepositoryLegacy::ANALITICO ?>>Analítico</option>
+								<option value=<?= ReceitaTipoRepositoryLegacy::CONTA ?>>Sintético/Conta</option>
+								<option value=<?= ReceitaTipoRepositoryLegacy::DIARIO ?>>Diário</option>
 						</td>
 					</tr>
 					<tr>

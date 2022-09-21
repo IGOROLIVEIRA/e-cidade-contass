@@ -3,12 +3,12 @@
 namespace model\caixa\relatorios;
 
 use PDF;
-use repositories\caixa\relatorios\ReceitaTipoRepositoryLegacy;
+use repositories\caixa\relatorios\ReceitaTipoReceitaRepositoryLegacy;
 use repositories\caixa\relatorios\ReceitaFormaArrecadacaoRepositoryLegacy;
 use interfaces\caixa\relatorios\IReceitaPeriodoTesourariaRepository;
 
 require_once "fpdf151/pdf.php";
-require_once "repositories/caixa/relatorios/ReceitaTipoRepositoryLegacy.php";
+require_once "repositories/caixa/relatorios/ReceitaTipoReceitaRepositoryLegacy.php";
 require_once "repositories/caixa/relatorios/ReceitaFormaArrecadacaoRepositoryLegacy.php";
 require_once "interfaces/caixa/relatorios/IReceitaPeriodoTesourariaRepository.php";
 
@@ -50,13 +50,13 @@ class ReceitaPeriodoTesouraria extends PDF
 
     public function definirTituloTipoReceita()
     {
-        if ($this->sTipoReceita == ReceitaTipoRepositoryLegacy::TODOS)
+        if ($this->sTipoReceita == ReceitaTipoReceitaRepositoryLegacy::TODOS)
             return 'TODAS AS RECEITAS';
 
-        if ($this->sTipoReceita == ReceitaTipoRepositoryLegacy::ORCAMENTARIA)
+        if ($this->sTipoReceita == ReceitaTipoReceitaRepositoryLegacy::ORCAMENTARIA)
             return 'RECEITAS ORÇAMENTÁRIAS';
 
-        if ($this->sTipoReceita == ReceitaTipoRepositoryLegacy::EXTRA)
+        if ($this->sTipoReceita == ReceitaTipoReceitaRepositoryLegacy::EXTRA)
             return 'RECEITAS EXTRA-ORÇAMENTÁRIAS';
     }
 
@@ -120,7 +120,7 @@ class ReceitaPeriodoTesouraria extends PDF
 
     public function montarTabelaReceitaOrcamentaria()
     {
-        if (!array_key_exists(ReceitaTipoRepositoryLegacy::ORCAMENTARIA, $this->aDadosRelatorio))
+        if (!array_key_exists(ReceitaTipoReceitaRepositoryLegacy::ORCAMENTARIA, $this->aDadosRelatorio))
             return;
 
         $this->ln(2);
@@ -161,17 +161,17 @@ class ReceitaPeriodoTesouraria extends PDF
 
     public function montarTabelaReceitaExtraOrcamentaria()
     {
-        if (!array_key_exists(ReceitaTipoRepositoryLegacy::EXTRA, $this->aDadosRelatorio))
+        if (!array_key_exists(ReceitaTipoReceitaRepositoryLegacy::EXTRA, $this->aDadosRelatorio))
             return;
 
         $this->ln(2);
 
-        if (!array_key_exists(ReceitaTipoRepositoryLegacy::ORCAMENTARIA, $this->aDadosRelatorio))
+        if (!array_key_exists(ReceitaTipoReceitaRepositoryLegacy::ORCAMENTARIA, $this->aDadosRelatorio))
             $this->AddPage();
 
         if (
             $this->gety() > $this->h - 30
-            and array_key_exists(ReceitaTipoRepositoryLegacy::ORCAMENTARIA, $this->aDadosRelatorio)
+            and array_key_exists(ReceitaTipoReceitaRepositoryLegacy::ORCAMENTARIA, $this->aDadosRelatorio)
         ) {
             $this->AddPage();
         }

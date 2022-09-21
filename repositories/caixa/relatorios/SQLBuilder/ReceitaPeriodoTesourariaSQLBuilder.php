@@ -1,17 +1,18 @@
 <?php
 
-namespace repositories\caixa\relatorios\SQLBuider;
+namespace repositories\caixa\relatorios\SQLBuilder;
 
 use repositories\caixa\relatorios\ReceitaFormaArrecadacaoRepositoryLegacy;
-use repositories\caixa\relatorios\ReceitaTipoSelecaoRepositoryLegacy;
 use repositories\caixa\relatorios\ReceitaTipoRepositoryLegacy;
+use repositories\caixa\relatorios\ReceitaTipoReceitaRepositoryLegacy;
 use repositories\caixa\relatorios\ReceitaOrdemRepositoryLegacy;
 
 require_once 'repositories/caixa/relatorios/ReceitaFormaArrecadacaoRepositoryLegacy.php';
 require_once 'repositories/caixa/relatorios/ReceitaTipoRepositoryLegacy.php';
+require_once 'repositories/caixa/relatorios/ReceitaTipoReceitaRepositoryLegacy.php';
 require_once 'repositories/caixa/relatorios/ReceitaOrdemRepositoryLegacy.php';
 
-class ReceitaPeriodoTesourariaSQLBuider
+class ReceitaPeriodoTesourariaSQLBuilder
 {
     /**
      * @var string
@@ -276,13 +277,13 @@ class ReceitaPeriodoTesourariaSQLBuider
      */
     public function definirSQLSelectEGroup()
     {
-        if ($this->sTipo == ReceitaTipoSelecaoRepositoryLegacy::RECEITA) {
+        if ($this->sTipo == ReceitaTipoRepositoryLegacy::RECEITA) {
             $this->definirSQLSelectReceita();
             $this->definirSQLGroupReceita();
             return;
         }
 
-        if ($this->sTipo == ReceitaTipoSelecaoRepositoryLegacy::ESTRUTURAL) {
+        if ($this->sTipo == ReceitaTipoRepositoryLegacy::ESTRUTURAL) {
             $this->definirSQLSelectEstrutural();
             $this->definirSQLGroupEstrutural();
             return;
@@ -373,7 +374,7 @@ class ReceitaPeriodoTesourariaSQLBuider
      */
     public function definirSQLWhereTipo()
     {
-        if ($this->sTipoReceita != ReceitaTipoRepositoryLegacy::TODOS) {
+        if ($this->sTipoReceita != ReceitaTipoReceitaRepositoryLegacy::TODOS) {
             $this->sqlWhere .= " AND g.k02_tipo = '{$this->sTipoReceita}' ";
         }
     }
@@ -565,7 +566,7 @@ class ReceitaPeriodoTesourariaSQLBuider
         }
 
         if ($this->sOrdem == ReceitaOrdemRepositoryLegacy::REDUZIDO_CONTA) {
-            if ($this->sTipo == ReceitaTipoSelecaoRepositoryLegacy::RECEITA) {
+            if ($this->sTipo == ReceitaTipoRepositoryLegacy::RECEITA) {
                 $this->sqlOrder = " ORDER BY k02_tipo, codrec ";
                 return;
             }
