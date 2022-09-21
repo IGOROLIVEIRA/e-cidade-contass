@@ -616,11 +616,11 @@ if (!$alterando) {
 
     function js_pesquisaq148_receit(mostra){
         if ( mostra === true ) {
-            js_OpenJanelaIframe('top.corpo','db_iframe_tabrec','func_tabrec_tipcalc.php?funcao_js=parent.js_mostratabrec1|k02_codigo|k02_descr','Pesquisa',true,'20');
+            js_OpenJanelaIframe('','db_iframe_tabrec','func_tabrec_tipcalc.php?funcao_js=parent.js_mostratabrec1|k02_codigo|k02_descr','Pesquisa',true,'20');
         } else {
 
             if ( document.form1.q148_receit.value !== '' ) {
-                js_OpenJanelaIframe('top.corpo','db_iframe_tabrec','func_tabrec_tipcalc.php?pesquisa_chave='+document.form1.q148_receit.value+'&funcao_js=parent.js_mostratabrec','Pesquisa',false);
+                js_OpenJanelaIframe('','db_iframe_tabrec','func_tabrec_tipcalc.php?pesquisa_chave='+document.form1.q148_receit.value+'&funcao_js=parent.js_mostratabrec','Pesquisa',false);
             }else{
                 document.form1.k02_descr.value = '';
             }
