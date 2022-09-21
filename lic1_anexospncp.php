@@ -114,7 +114,7 @@ $oRotulo->label("l20_objeto");
 
                                         $tipo = array();
                                         $tipo[0] = "Selecione";
-                                        $result_tipo = $cltipoanexo->sql_record($cltipoanexo->sql_query());
+                                        $result_tipo = $cltipoanexo->sql_record($cltipoanexo->sql_query(null,"*","l213_sequencial",""));
                                         
 
                                         for($iIndiceTipo=0;$iIndiceTipo < $cltipoanexo->numrows;$iIndiceTipo++){
