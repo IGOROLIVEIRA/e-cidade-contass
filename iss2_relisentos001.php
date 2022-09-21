@@ -84,9 +84,9 @@ db_postmemory($HTTP_POST_VARS);
                             <Legend>Selecione os Tipos</legend>
                             <table border="0">
                                 <tr>
-                                    <td nowrap title="<?= @$Tq147_tipo ?>" colspan="2">
+                                    <td nowrap title="<?= $Tq147_tipo ?>" colspan="2">
                                         <?php
-                                        db_ancora(@$Lq147_tipo, "js_pesquisaisencao(true);", 2);
+                                        db_ancora($Lq147_tipo, "js_pesquisaisencao(true);", 2);
                                         ?>
                                         <?php
                                         db_input('q147_tipo', 8, $Iq147_tipo, true, 'text', 2, " onchange='js_pesquisaisencao(false);'")
