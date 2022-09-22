@@ -146,7 +146,7 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
     <tr>
       <td valign="top" align="center">
         <fieldset>
-          <legend><b>RescisÃ£o do Acordo</b></legend>
+          <legend><b>Rescisão do Acordo</b></legend>
           <table align="center" border="0">
             <tr>
               <td title="<?= @$Tac16_sequencial ?>" align="left">
@@ -194,7 +194,7 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
 
             <tr id="trdatareferencia" style="display: none;">
               <td title="<?= @$Tac10_datareferencia ?>" align="left">
-                <b>Data de ReferÃªncia:</b>
+                <b>Data de Referência:</b>
               </td>
               <td align="left">
                 <?
@@ -226,7 +226,7 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
               <td colspan="3">
                 <fieldset>
                   <legend>
-                    <b>ObservaÃ§Ã£o</b>
+                    <b>Observação</b>
                   </legend>
                   <?
                   db_textarea('ac10_obs', 5, 66, $Iac10_obs, true, 'text', $db_opcao, "");
@@ -354,25 +354,25 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
 
     if ($('ac16_sequencial').value == '') {
 
-      alert('Acordo nÃ£o informado!');
+      alert('Acordo não informado!');
       return false;
     }
 
     if ($('ac10_datamovimento').value == '') {
 
-      alert('Data nÃ£o informada!');
+      alert('Data não informada!');
       return false;
     }
 
     if ($('ac10_datareferencia').value == '' && document.getElementById("trdatareferencia").style.display == 'contents') {
 
-      alert('Data de ReferÃªncia nÃ£o informada!');
+      alert('Data de Referência não informada!');
       return false;
     }
 
     if ($('ac10_justificativa').value == '' && document.getElementById("justificativa").style.display != 'none') {
 
-      alert('UsuÃ¡rio: Este contrato  decorrente de LicitÃ§Ã£o e estÃ¡ utilizando a lei n 14133/2021, sendo assim,  necessÃ¡rio o preenchimento do campo Justificativa.');
+      alert('Usuário: Este contrato  decorrente de Licitção e está utilizando a lei n 14133/2021, sendo assim, é necessário o preenchimento do campo Justificativa.');
       return false;
     }
 
@@ -396,26 +396,26 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
 
     if (dataInserida <= dataPatrimonial && $('ac10_datareferencia').value == '') {
       document.getElementById("trdatareferencia").style.display = 'contents';
-      alert("O perÃ­odo jÃ¡ foi encerrado para envio do SICOM. Preencha o campo Data de ReferÃªncia com uma data no mÃªs subsequente.");
+      alert("O período já foi encerrado para envio do SICOM. Preencha o campo Data de Referência com uma data no mês subsequente.");
       return;
     }
 
     if ($F('ac10_datareferencia').value != "") {
 
       if (dataReferencia.getMonth() == dataPatrimonial.getMonth() && dataReferencia.getFullYear() == dataPatrimonial.getFullYear()) {
-        alert("UsuÃ¡rio: A data de referÃªncia dever ser no mÃªs posterior ao mÃªs da data inserida.");
+        alert("Usuário: A data de referência dever ser no mês posterior ao mês da data inserida.");
         return;
       }
 
       if (dataReferencia <= dataPatrimonial) {
-        alert("O perÃ­odo jÃ¡ foi encerrado para envio do SICOM. Verifique os dados do lanÃ§amento e entre em contato com o suporte.");
+        alert("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
         return;
       }
 
     }
 
 
-    js_divCarregando('Aguarde incluindo recisÃ£o...', 'msgBoxRecisaoContrato');
+    js_divCarregando('Aguarde incluindo recisão...', 'msgBoxRecisaoContrato');
 
     var oParam = new Object();
     oParam.exec = "rescindirContrato";
@@ -457,7 +457,7 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
       return false;
     } else {
 
-      alert("InclusÃ£o efetuada com Sucesso.");
+      alert("Inclusão efetuada com Sucesso.");
       return true;
     }
   }
