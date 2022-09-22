@@ -35,10 +35,10 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 */
-use model\caixa\relatorios\ReceitaPeriodoTesouraria;
+use model\caixa\relatorios\ReceitaPeriodoTesourariaPDF;
 use repositories\caixa\relatorios\ReceitaPeriodoTesourariaRepositoryLegacy;
 
-require_once "model/caixa/relatorios/ReceitaPeriodoTesouraria.model.php";
+require_once "model/caixa/relatorios/ReceitaPeriodoTesourariaPDF.model.php";
 require_once "repositories/caixa/relatorios/ReceitaPeriodoTesourariaRepositoryLegacy.php";
 
 $sDesdobramento = $desdobrar;
@@ -73,7 +73,7 @@ $oReceitaPeriodoTesourariaRepository = new ReceitaPeriodoTesourariaRepositoryLeg
     $sContribuintes
 );
 
-$oRelatorioReceitaPeriodoTesouraria = new ReceitaPeriodoTesouraria(
+$oRelatorioReceitaPeriodoTesouraria = new ReceitaPeriodoTesourariaPDF(
     $sTipo,
     $sTipoReceita,
     $iFormaArrecadacao,
@@ -107,74 +107,8 @@ if ($sinana == 'S1' || $sinana == 'S2') {
 }
 $pdf->Open();
 $pdf->AliasNbPages();
-if ($ordem == 'r') {
-	$orderby = ' order by k02_tipo, k02_codigo ';
-}
-elseif ($ordem == 'e') {
-	$orderby = ' order by k02_tipo, estrutural ';
-}
-elseif ($ordem == 'd') {
-	$orderby = ' order by k02_tipo, codrec ';
-} elseif ($ordem == 'a') {
-	$orderby = ' order by k02_tipo, k02_drecei ';
-} elseif ($ordem == 'c') {
-  if ($sinana == 'S1') {
-	  $orderby = ' order by k02_tipo, codrec';
-  } else {
-	  $orderby = ' order by k02_tipo, c61_reduz ';
-  }
-}
 
-if($sinana == 'S4'){
-	$orderby = ' order by k12_data, k02_tipo, k02_codigo ';
-}
-
-$iInstit = db_getsession("DB_instit");
-$iAnousu = db_getsession("DB_anousu");
-$sSubQueryDesconto =  "  -       coalesce ( ( select case
-                                                       when r.k12_estorn is true
-                                                         then sum(d.k12_valor)
-                                                         else sum(d.k12_valor)
-                                                       end
-                	                               from cornumpdesconto d
-                  	                              where d.k12_id               = f.k12_id
-                                                        and d.k12_data             = f.k12_data
-                                                        and d.k12_autent           = f.k12_autent
-                                                        and d.k12_numpre           = f.k12_numpre
-                                                        and d.k12_numpar           = f.k12_numpar
-                                                        and d.k12_receitaprincipal = f.k12_receit
-                                                        and d.k12_numnov           = f.k12_numnov ),0 )  ";
-//$sSubQueryDesconto =  "  +   0 ";
-
-$where2 = ' where 1=1 and valor <> 0';
-
-if ($estrut != '') {
-	$where2 .= " and estrutural like '$estrut%' ";
-
-}
-$inner_sql = "";
-$where = ' 1=1 ';
-
-if ($codrec != '') {
-	$where .= ' and g.k02_codigo in ('.$codrec.') ';
-}
-if($sinana == 'S1' || $sinana == 'S2' || $sinana == 'A' || $sinana == 'S4' || $sinana == 'S3') {
-	if ($conta != '') {
-		$where2 .= " and c61_reduz in ({$conta}) ";
-	}
-}
-if ($contribuinte != '') {
-	$where .= " and k81_numcgm in ({$contribuinte}) ";
-}
-if ($emparlamentar != '0') {
-	$where .= " and k81_emparlamentar = {$emparlamentar} ";
-}
-if ($regrepasse != '0') {
-	$where .= " and k81_regrepasse = {$regrepasse} ";
-}
-
-$inner_sql = "";
-
+/** Implementar */
 if ($recurso != ""){
      $clorctiporec = new cl_orctiporec;
 
@@ -194,210 +128,8 @@ if ($recurso != ""){
      $where    .= " and c1.c61_codigo = ".$recurso;
 }
 
-$head3 = "RELATÓRIO DE RECEITAS ARRECADADAS";
-if($tipo == 'O') {
-  $head4 = 'RECEITAS ORÇAMENTÁRIAS';
-} elseif($tipo == 'E') {
-  $head4 = 'RECEITAS EXTRA-ORÇAMENTÁRIAS';
-} else {
-  $head4 = 'TODAS AS RECEITAS';
-}
-$ordem = ' order by g.k02_codigo, f.k00_dtpaga, f.k00_numpre ';
-$head6 = "Período : ".db_formatar($datai, 'd')." a ".db_formatar($dataf, 'd');
 
-if ($formarrecadacao == 0){
-	$head8 = 'Forma de Arrecadação: Todas';
-}
-elseif ($formarrecadacao == 1) {
-	$head8 = 'Forma de Arrecadação: Via arquivo bancário';
-}
-elseif ($formarrecadacao == 2) {
-	$head8 = 'Forma de Arrecadação: Exceto via arquivo bancário';
-};
-
-if ($sinana == 'S2') {
-	// sintetico estrutural
-	if ($formarrecadacao == 0){
-		$sql = "select estrutural,k02_tipo,descr,sum(valor) as valor
-				from
-				( ";
-	}elseif ($formarrecadacao == 1) {
-		$sql = "select estrutural,k02_tipo,descr,sum(valor) as vlrarquivobanco,
-				round((select coalesce (sum(vlrpago),0) 
-				from (
-					select distinct rc.vlrrec as vlrpago, db.idret, (select sum(vlrpago) 
-					from disbanco 
-					where idret = db.idret and codret = db.codret) 
-						from disbanco db
-						inner join discla dc on dc.codret 	  = db.codret 
-						inner join disrec rc on rc.codcla 	  = dc.codcla 
-											and db.idret 	  = rc.idret 
-											and rc.k00_receit =  k02_codigo
-						where dc.dtaute between '$datai' and '$dataf') as x ),2) as valor
-				from
-			    ( ";
-	}elseif ($formarrecadacao == 2) {
-		$sql = "select estrutural, k02_tipo, descr, vlrarquivobanco, (valor-vlrarquivobanco)as valor 
-				from(
-					select estrutural,k02_tipo,descr,sum(valor) as valor,
-					round((select coalesce(sum(vlrpago),0) from (
-					select distinct rc.vlrrec as vlrpago, db.idret, (select sum(vlrpago) 
-					from disbanco 
-					where idret = db.idret and codret = db.codret) 
-						from disbanco db
-						inner join discla dc on dc.codret 	  = db.codret 
-						inner join disrec rc on rc.codcla 	  = dc.codcla 
-											and db.idret 	  = rc.idret 
-											and rc.k00_receit =  k02_codigo
-						where dc.dtaute between '$datai' and '$dataf') as x ),2) as vlrarquivobanco
-				from
-			    ( ";
-	}
-
-	$sSqlInterno = "	select k02_tipo,c61_reduz,
-						case when c60_descr is not null then c60_descr else o57_descr end as descr,
-						case when p.k02_codigo is null then o.k02_estorc else p.k02_estpla end as estrutural,
-						round(f.k12_valor #subquery_desconto# ,2) as valor, g.k02_codigo, f.k12_data
-						from cornump f
-						inner join corrente r on  r.k12_id 					= f.k12_id 
-											and r.k12_data 					= f.k12_data 
-											and r.k12_autent 				= f.k12_autent
-						inner join tabrec g on g.k02_codigo  				= f.k12_receit
-						left outer join taborc o on o.k02_codigo 			= g.k02_codigo 
-												and	o.k02_anousu 			= extract (year from r.k12_data)
-						left outer join tabplan p on p.k02_codigo 			= g.k02_codigo 
-												and	 p.k02_anousu 			= extract (year from r.k12_data)
-						left outer join conplanoreduz c1 on		p.k02_reduz = c1.c61_reduz
-								or r.k12_conta  	= c1.c61_reduz
-														and	c1.c61_anousu	= extract (year from r.k12_data)
-						left outer join conplano on c1.c61_codcon 			= c60_codcon
-												and c1.c61_anousu 			= c60_anousu
-						left outer join orcreceita on o70_codrec 			= o.k02_codrec
-												  and o70_anousu 			= extract (year from r.k12_data)
-						left outer join orcfontes on o57_codfon 			= o70_codfon and o70_anousu = o57_anousu
-						left  join corplacaixa on r.k12_id 					= k82_id 
-											and r.k12_data   				= k82_data 
-											and r.k12_autent 				= k82_autent
-						left  join placaixarec on k82_seqpla 				= k81_seqpla
-						where $where and f.k12_data between '$datai'
-						and '$dataf'
-						and r.k12_instit = ".db_getsession("DB_instit");
-
-    $sql .= str_replace("#subquery_desconto#","$sSubQueryDesconto",$sSqlInterno).
-            " union all " .
-            str_replace("#subquery_desconto#","",str_replace("cornump ", "cornumpdesconto ",$sSqlInterno));
-
-	$sql .= " ) as xxx
-			    $where2 ";
-				
-	if ($formarrecadacao == 0){
-		$sql .= ' group by estrutural,descr,k02_tipo,k02_codigo';
-	}elseif ($formarrecadacao == 1) {
-		$sql .= ' group by estrutural,descr,k02_tipo,k02_codigo';
-	}elseif ($formarrecadacao == 2) {
-		$sql .= ' group by estrutural,descr,k02_tipo,k02_codigo,vlrarquivobanco) as total ';
-	}	
-
-	$sql .= ' order by estrutural';
-
-// die($sql);
-} elseif ($sinana == 'A') {
-	/**
-	 *  analitico
-	 *  baixas de banco não tem numpre, porque gera um total no caixa
-	*/
-	if ($formarrecadacao == 0){
-		$sql = "select k02_codigo, k02_tipo, k02_drecei, codrec, estrutural, k00_histtxt,
-				k12_data, k12_numpre, k12_numpar, c61_reduz, c60_descr, valor
-				from
-				( ";
-	}elseif ($formarrecadacao == 1) {
-		$sql = "select distinct k02_codigo, k02_tipo, k12_conta, k02_drecei, codrec, estrutural, k00_histtxt, k12_data, 
-				k12_numpre, k12_numpar, c61_reduz, c60_descr, 0 as vlrarquivobanco,
-				round((select coalesce (sum(vlrpago),0) 
-				from (
-					select distinct rc.vlrrec as vlrpago, db.idret, (select sum(vlrpago) 
-					from disbanco 
-					where idret = db.idret and codret = db.codret) 
-					from disbanco db
-					inner join cadban cb on cb.k15_codbco = db.k15_codbco 
-										and cb.k15_conta  = k12_conta
-					inner join discla dc on dc.codret 	  = db.codret 
-					inner join disrec rc on rc.codcla 	  = dc.codcla 
-										and rc.idret 	  = db.idret 
-										and rc.k00_receit =  k02_codigo
-					where dc.dtaute = k12_data) as x ),2) as valor
-				from
-			    ( ";
-	}
-	elseif ($formarrecadacao == 2) {
-		$sql = "select k02_codigo, k02_tipo, k02_drecei, codrec, estrutural, k00_histtxt, k12_data, 
-				k12_numpre, k12_numpar, c61_reduz, c60_descr, k12_conta,
-				(sum(valor)-vlrarquivobanco)as valor
-				from(
-					select k02_codigo, k02_tipo, k02_drecei, codrec, estrutural, k00_histtxt, k12_data, 
-					k12_numpre, k12_numpar, c61_reduz, c60_descr, k12_conta, (valor) as valor,
-					round((select coalesce (sum(vlrpago),0) 
-					from (
-						select distinct rc.vlrrec as vlrpago, db.idret, (select sum(vlrpago) 
-						from disbanco 
-						where idret = db.idret and codret = db.codret) 
-						from disbanco db
-						inner join cadban cb on cb.k15_codbco = db.k15_codbco 
-											and cb.k15_conta  = k12_conta
-						inner join discla dc on dc.codret 	  = db.codret 
-						inner join disrec rc on rc.codcla 	  = dc.codcla 
-											and db.idret 	  = rc.idret 
-											and rc.k00_receit =  k02_codigo
-						where dc.dtaute = k12_data) as x ),2) as vlrarquivobanco
-					from
-				( ";			
-	}
-
- 	$sSqlInterno =" select g.k02_codigo, g.k02_tipo, g.k02_drecei,
-				    case when o.k02_codrec is not null 	then o.k02_codrec else p.k02_reduz end as codrec,
-				    case when p.k02_codigo is null 	then o.k02_estorc else p.k02_estpla end as estrutural,
-				    k12_histcor as k00_histtxt, f.k12_data, f.k12_numpre, f.k12_numpar, c61_reduz, 
-					c60_descr, k12_conta, 
-				    round( f.k12_valor #subquery_desconto# ,2) as valor
-					from cornump f
-					inner join corrente r on r.k12_id        		= f.k12_id
-                                        and r.k12_data      		= f.k12_data
-                                        and r.k12_autent    		= f.k12_autent
-					inner join conplanoreduz c1	on r.k12_conta   	= c1.c61_reduz
-                                               and c1.c61_anousu	= extract (year from r.k12_data)
-					inner join conplano on c1.c61_codcon 			= c60_codcon
-                                       and c60_anousu    			= extract (year from r.k12_data)
-					inner join tabrec g on g.k02_codigo  			= f.k12_receit
-					left outer join taborc o on o.k02_codigo  		= g.k02_codigo
-                                        	and o.k02_anousu  		= extract (year from r.k12_data)
-					left outer join tabplan p on p.k02_codigo 		= g.k02_codigo
-                                             and p.k02_anousu 		= extract (year from r.k12_data)
-					left join corhist hist on hist.k12_id     		= f.k12_id
-                                          and hist.k12_data   		= f.k12_data
-										  and hist.k12_autent		= f.k12_autent
-					left join corplacaixa on r.k12_id				= k82_id 
-										 and r.k12_data				= k82_data 
-										 and r.k12_autent 			= k82_autent
-					left join placaixarec on k82_seqpla 			= k81_seqpla
-					where $where and f.k12_data between '$datai' and '$dataf'
-		           	and r.k12_instit = ".db_getsession("DB_instit");
-
-    $sql .= str_replace("#subquery_desconto#","$sSubQueryDesconto",$sSqlInterno).
-             " union all " .
-            str_replace("#subquery_desconto#","",str_replace("cornump ", "cornumpdesconto ",$sSqlInterno));
-
-	if ($formarrecadacao == 0){
-		$sql .= " ) as xxx $where2 $orderby";
-	}elseif ($formarrecadacao == 1) {
-		$sql .= " ) as xxx $where2 $orderby";
-	}elseif ($formarrecadacao == 2) {
-		$sql .= " ) as xxx $where2)as x 
-				group by k02_codigo, k02_tipo, k02_drecei, codrec, estrutural, k00_histtxt, k12_data,
-				k12_numpre, k12_numpar, c61_reduz, c60_descr, k12_conta, vlrarquivobanco";
-	}
-//die($sql);
-}elseif ($sinana == 'S4') {
+if ($sinana == 'S4') {
 	/**
 	 *  analitico
 	 *  baixas de banco não tem numpre, porque gera um total no caixa

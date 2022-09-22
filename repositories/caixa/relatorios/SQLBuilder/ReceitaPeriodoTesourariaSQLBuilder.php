@@ -318,7 +318,7 @@ class ReceitaPeriodoTesourariaSQLBuilder
      */
     public function definirSQLSelectAnalitico()
     {
-        $this->sqlSelect .= " , codrec reduzido, k02_codigo codigo, k00_histtxt historico, k12_data data, k12_numpre numpre, k12_numpar numpar, c61_reduz conta, c60_descr conta_descricao "; 
+        $this->sqlSelect .= " , codrec reduzido, k02_codigo codigo, k00_histtxt historico, k12_data as data, k12_numpre numpre, k12_numpar numpar, c61_reduz conta, c60_descr conta_descricao "; 
     }
     
     /**

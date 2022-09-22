@@ -14,7 +14,7 @@ require_once "repositories/caixa/relatorios/ReceitaTipoRepositoryLegacy.php";
 require_once "repositories/caixa/relatorios/ReceitaFormaArrecadacaoRepositoryLegacy.php";
 require_once "interfaces/caixa/relatorios/IReceitaPeriodoTesourariaRepository.php";
 
-class ReceitaPeriodoTesouraria extends PDF
+class ReceitaPeriodoTesourariaPDF extends PDF
 {
     private $totalRecursos = 0;
     /**
@@ -101,7 +101,7 @@ class ReceitaPeriodoTesouraria extends PDF
 
     public function montarTotalGeral()
     {
-        $this->cell(160, 4, "TOTAL GERAL", 1, 0, "L", 0);
+        $this->cell($this->PDFiTamanhoDescricaoTotal, 4, "TOTAL GERAL", 1, 0, "L", 0);
         $this->cell(25, 4, db_formatar($this->totalOrcamentaria + $this->totalExtra, 'f'), 1, 1, "R", 0);
         $this->ln(5);
 
@@ -130,6 +130,7 @@ class ReceitaPeriodoTesouraria extends PDF
     public function montarTabelaReceitaOrcamentaria()
     {
         $sTitulo = "RECEITA ORÇAMENTÁRIA";
+        $this->bHistoricoComCabecalho = FALSE;
 
         if (!array_key_exists(ReceitaTipoReceitaRepositoryLegacy::ORCAMENTARIA, $this->aDadosRelatorio))
             return;
@@ -146,13 +147,14 @@ class ReceitaPeriodoTesouraria extends PDF
                 $this->montarTitulo($sTitulo);
             }
             $this->montarDados($oReceita);
+            $this->definirFundoColorido();
             $this->totalOrcamentaria += $oReceita->valor;
         }
 
         # SE TEM DESDOBRAMENTO
 
         $this->setfont('arial', 'B', 7);
-        $this->cell(160, 4, "TOTAL ...", 1, 0, "L", 0);
+        $this->cell($this->PDFiTamanhoDescricaoTotal, 4, "TOTAL ...", 1, 0, "L", 0);
         /*    } elseif ($sinana == 'S3') {
       $this->cell(235, 4, "TOTAL ...", 1, 0, "L", 0);
     } */
@@ -162,6 +164,7 @@ class ReceitaPeriodoTesouraria extends PDF
     public function montarTabelaReceitaExtraOrcamentaria()
     {
         $sTitulo = "RECEITA EXTRA-ORÇAMENTÁRIA";
+        $this->bHistoricoComCabecalho = TRUE;
 
         if (!array_key_exists(ReceitaTipoReceitaRepositoryLegacy::EXTRA, $this->aDadosRelatorio))
             return;
@@ -181,6 +184,7 @@ class ReceitaPeriodoTesouraria extends PDF
         $this->SetTextColor(0, 0, 0);
         $this->SetFillColor(220);
         $this->montarTitulo($sTitulo);
+        $this->preencherCelula = 0;
         foreach ($this->aDadosRelatorio['E'] as $oReceita) {
             if ($this->gety() > $this->h - 30) {
                 $this->AddPage();
@@ -190,31 +194,90 @@ class ReceitaPeriodoTesouraria extends PDF
             $this->totalExtra += $oReceita->valor;
         }
         $this->setfont('arial', 'B', 7);
-        $this->cell(160, 4, "TOTAL ...", 1, 0, "L", 0);
+        $this->cell($this->PDFiTamanhoDescricaoTotal, 4, "TOTAL ...", 1, 0, "L", 0);
         $this->cell(25, 4, db_formatar($this->totalExtra, 'f'), 1, 1, "R", 0);
+    }
+
+    public function definirFundoColorido()
+    {
+        if ($this->sTipo == ReceitaTipoRepositoryLegacy::ANALITICO) {
+            if ($this->preencherCelula == 0) {
+                $this->preencherCelula = 1;
+                return;
+            }
+            $this->preencherCelula = 0;
+            return;
+        }
+        return;
     }
 
     public function montarDados($oReceita)
     {
+        $this->definirPropriedadesDeExibicao();
         $this->setfont('arial', '', 7);
         if ($this->sTipo != ReceitaTipoRepositoryLegacy::ESTRUTURAL) {
             $this->cell(10, 4, $oReceita->codigo, 1, 0, "C", $this->preencherCelula);
             $this->cell(10, 4, $oReceita->reduzido, 1, 0, "C", $this->preencherCelula);
         }
-        $this->cell(40, 4, $oReceita->estrutural, 1, 0, "C", $this->preencherCelula);
-        $this->cell(100, 4, strtoupper($oReceita->descricao), 1, 0, "L", $this->preencherCelula);
-        if ($this->sTipo == ReceitaTipoRepositoryLegacy::CONTA) {
-            $this->cell(15, 4, $oReceita->conta, 1, 0, "C", $this->preencherCelula);
-            $this->cell(60, 4, $oReceita->conta_descricao, 1, 0, "L", $this->preencherCelula);
+        if ($this->sTipo == ReceitaTipoRepositoryLegacy::ANALITICO) {
+            $this->Cell(15, 4, $oReceita->data, 1, 0, "C", $this->preencherCelula);
+            if ($oReceita->tipo == "O") {
+                $this->Cell(15, 4, $oReceita->numpre, 1, 0, "C", $this->preencherCelula);
+            }
+            if ($oReceita->tipo == "E") {
+                $this->PDFiTamanhoEstrutural += 15;
+            }
         }
-        $this->cell(25, 4, db_formatar($oReceita->valor, 'f'), 1, 1, "R", $this->preencherCelula);
+        $this->cell($this->PDFiTamanhoEstrutural, 4, $oReceita->estrutural, 1, 0, "C", $this->preencherCelula);
+        $this->cell($this->PDFiTamanhoTitulo, 4, strtoupper($oReceita->descricao), 1, 0, "L", $this->preencherCelula);
+
+        $this->cell(25, 4, db_formatar($oReceita->valor, 'f'), 1, $this->PDFbFinalValor, "R", $this->preencherCelula);
+        if (in_array($this->sTipo, array(ReceitaTipoRepositoryLegacy::CONTA, ReceitaTipoRepositoryLegacy::ANALITICO))) {
+            if ($oReceita->tipo == "O") {
+                $this->cell(15, 4, $oReceita->conta, 1, 0, "C", $this->preencherCelula);
+                $this->cell(65, 4, $oReceita->conta_descricao, 1, 1, "L", $this->preencherCelula);
+            }
+            if (trim($oReceita->historico) != '' and $this->sTipo == ReceitaTipoRepositoryLegacy::ANALITICO) {
+                $this->multicell($this->PDFiHistorico, 4, "{$this->PDFsTituloHistorico}{$oReceita->historico}", 1, "L", $this->preencherCelula);
+            }
+            if (trim($oReceita->historico) == '' and $this->sTipo == ReceitaTipoRepositoryLegacy::ANALITICO and $oReceita->tipo == "E") {
+                $this->multicell($this->PDFiHistorico, 4, "", 1, "L", $this->preencherCelula);
+            }
+        }
+    }
+
+    public function definirPropriedadesDeExibicao()
+    {
+        $this->PDFiTamanhoEstrutural = 40;
+        $this->PDFiTamanhoTitulo = 100;
+        $this->PDFbFinalValor = 0;
+        $this->PDFiTamanhoDescricaoTotal = 230;
+        $this->PDFsTituloHistorico = "HISTÓRICO :  ";
+        $this->PDFiHistorico = 260;
+        if (in_array($this->sTipo, array(ReceitaTipoRepositoryLegacy::ESTRUTURAL, ReceitaTipoRepositoryLegacy::RECEITA))) {
+            $this->PDFbFinalValor = 1;
+            $this->PDFiTamanhoDescricaoTotal = 160;
+            if ($this->sTipo == ReceitaTipoRepositoryLegacy::ESTRUTURAL) {
+                $this->PDFiTamanhoDescricaoTotal = 140;
+            }
+            return;
+        }
+
+        if ($this->sTipo == ReceitaTipoRepositoryLegacy::ANALITICO) {
+            if ($this->bHistoricoComCabecalho) {
+                $this->PDFsTituloHistorico = "";
+                $this->PDFiHistorico = 80;
+            }
+            $this->PDFiTamanhoDescricaoTotal = 155;
+            $this->PDFiTamanhoEstrutural = 25;
+            $this->PDFiTamanhoTitulo = 80;
+            return;
+        }
     }
 
     public function montarTitulo($sTitulo)
     {
-
-        $iTamanhoEstrutural = 40;
-        $iTamanhoTitulo = 100;
+        $this->definirPropriedadesDeExibicao();
 
         $this->SetFont('Arial', 'B', 9);
         if ($this->sTipo != ReceitaTipoRepositoryLegacy::ESTRUTURAL) {
@@ -223,23 +286,27 @@ class ReceitaPeriodoTesouraria extends PDF
         }
         if ($this->sTipo == ReceitaTipoRepositoryLegacy::ANALITICO) {
             $this->Cell(15, 6, "DATA", 1, 0, "C", 1);
-            $this->Cell(15, 6, "NUMPRE", 1, 0, "C", 1);
-            $iTamanhoEstrutural = 25;
-            $iTamanhoTitulo = 80;
+            if ($sTitulo == "RECEITA ORÇAMENTÁRIA") {
+                $this->Cell(15, 6, "NUMPRE", 1, 0, "C", 1);
+            } else {
+                $this->PDFiTamanhoEstrutural += 15;
+            }
         }
-        $this->Cell($iTamanhoEstrutural, 6, "ESTRUTURAL", 1, 0, "C", 1);
-        $this->Cell($iTamanhoTitulo, 6, $sTitulo, 1, 0, "C", 1);
+        $this->Cell($this->PDFiTamanhoEstrutural, 6, "ESTRUTURAL", 1, 0, "C", 1);
+        $this->Cell($this->PDFiTamanhoTitulo, 6, $sTitulo, 1, 0, "C", 1);
         if ($this->sTipo == ReceitaTipoRepositoryLegacy::CONTA) {
             $this->Cell(15, 6, "CONTA", 1, 0, "C", 1);
             $this->Cell(60, 6, "DESCRIÇÃO CONTA", 1, 0, "C", 1);
         }
-        $this->Cell(25, 6, "VALOR", 1, 1, "C", 1);
-        if ($this->sTipo == ReceitaTipoRepositoryLegacy::CONTA) {
-            $this->Cell(25, 6, "VALOR", 1, 0, "C", 1);
+        $this->Cell(25, 6, "VALOR", 1, $this->PDFbFinalValor, "C", 1);
+
+        if (in_array($this->sTipo, array(ReceitaTipoRepositoryLegacy::CONTA, ReceitaTipoRepositoryLegacy::ANALITICO)) and $sTitulo == "RECEITA ORÇAMENTÁRIA") {
             $this->Cell(15, 6, "CONTA", 1, 0, "C", 1);
             $this->Cell(65, 6, "DESCRIÇÃO", 1, 1, "C", 1);
         }
-        $this->SetFont('Arial', 'B', 9);
+
+        if ($this->bHistoricoComCabecalho)
+            $this->Cell(80, 6, "HISTÓRICO", 1, 1, "C", 1);
     }
 
 

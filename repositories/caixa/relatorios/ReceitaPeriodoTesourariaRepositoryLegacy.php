@@ -33,7 +33,7 @@ implements IReceitaPeriodoTesourariaRepository
         $sContas = NULL,
         $sContribuintes = NULL) 
     {
-
+        $this->sTipo = $sTipo;
         $this->oReceitaPeriodoTesourariaSQLBuilder = new ReceitaPeriodoTesourariaSQLBuilder(
             $sTipo,
             $sTipoReceita,
@@ -70,6 +70,8 @@ implements IReceitaPeriodoTesourariaRepository
      */
     public function pegarFormatoPagina()
     {
-        return "Portrait";
+        if (in_array($this->sTipo, array(ReceitaTipoRepositoryLegacy::RECEITA, ReceitaTipoRepositoryLegacy::ESTRUTURAL)))
+            return "Portrait";
+        return "Landscape";
     }
 }
