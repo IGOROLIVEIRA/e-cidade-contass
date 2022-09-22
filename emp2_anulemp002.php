@@ -202,7 +202,7 @@ for($i = 0;$i < pg_numrows($result02);$i++){
    /*OC4401*/
    $sqlitens .= "                LEFT JOIN db_usuarios ON db_usuarios.id_usuario = e94_id_usuario            ";
    /*FIM - OC4401*/
-   $sqlitens .= "       		     inner join orcelemento     on o56_codele            = e62_codele        ";
+   $sqlitens .= "       		 inner join orcelemento     on o56_codele            = e62_codele            ";
    $sqlitens .= "       		      					   and o56_anousu            = e60_anousu            ";
    $sqlitens .= "                inner join pcmater         on pc01_codmater         = e62_item              ";
    $sqlitens .= " 	where e95_codanu = $e94_codanu ";
