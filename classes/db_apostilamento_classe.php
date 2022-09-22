@@ -43,23 +43,6 @@ class cl_apostilamento
   var $si03_datareferencia = null;
   // cria propriedade com as variaveis do arquivo
   var $campos = "
-<<<<<<< HEAD
-                 si03_sequencial = int8 = Codigo Sequencial
-                 si03_licitacao = int8 = Numero da licitacao
-                 si03_numcontrato = int8 = N Contrato
-                 si03_dataassinacontrato = date = Data Ass Contrato
-                 si03_tipoapostila = int8 = TIpo de Apostila
-                 si03_dataapostila = date = Data da Apostila
-                 si03_descrapostila = text = Descricao das alteracoes
-                 si03_tipoalteracaoapostila = int8 = Tipo de alteração Apostila
-                 si03_numapostilamento = int8 = Numero  Seq. Apostila
-                 si03_valorapostila = float8 = Valor da Aposlila
-                 si03_instit = int8 = Instituição
-                 si03_numcontratoanosanteriores = int8 = Numero Contrato de Anos Anteriores
-                 si03_acordoposicao = int8 = Acordo Posicao
-                 si03_acordo = int8 = Acordo
-                 si03_datareferencia = date = Data de Referência
-=======
                  si03_sequencial = int8 = Codigo Sequencial 
                  si03_licitacao = int8 = Numero da licitacao 
                  si03_numcontrato = int8 = N Contrato 
@@ -76,7 +59,6 @@ class cl_apostilamento
                  si03_acordoposicao = int8 = Acordo Posicao 
                  si03_acordo = int8 = Acordo 
                  si03_datareferencia = date = Data de Referencia 
->>>>>>> master
 
                  ";
   //funcao construtor da classe
@@ -296,12 +278,8 @@ class cl_apostilamento
                                ," . ($this->si03_numcontratoanosanteriores == null ? '0' : $this->si03_numcontratoanosanteriores) . "
                                ," . ($this->si03_acordoposicao == null || $this->si03_acordoposicao == "" ? "null" : $this->si03_acordoposicao) . "
                                ," . ($this->si03_acordo == null || $this->si03_acordo == "" ? "null" : $this->si03_acordo) . "
-<<<<<<< HEAD
-                               ,'$this->si03_datareferencia'
-=======
                                ,'$this->si03_datareferencia' 
                                ,'$this->si03_justificativa' 
->>>>>>> master
 
                       )";
     $result = db_query($sql);
