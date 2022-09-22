@@ -246,6 +246,7 @@ if (isset ($procreg) && $procreg == 't') {
     $oService = new InscricaoDividaAtivaItbiService();
 
     try {
+        db_atutermometro(50,100,'termometro');
         $oDateTime = new DateTime($hoje);
         $oService->execute($oDateTime);
         $erro_msg = "Procedimento executado com sucesso!";
@@ -253,6 +254,7 @@ if (isset ($procreg) && $procreg == 't') {
         $sqlerro = true;
         $erro_msg = $ex->getMessage();
     }
+    db_atutermometro(100,100,'termometro');
 
     echo "<script>document.getElementById('filtro').style.visibility='hidden';</script>";
 
