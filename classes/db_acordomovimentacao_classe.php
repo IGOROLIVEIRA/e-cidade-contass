@@ -53,17 +53,6 @@ class cl_acordomovimentacao
   var $ac10_datamovimento = null;
   var $ac10_hora = null;
   var $ac10_obs = null;
-<<<<<<< HEAD
-  // cria propriedade com as variaveis do arquivo
-  var $campos = "
-                 ac10_sequencial = int4 = Sequencial
-                 ac10_acordomovimentacaotipo = int4 = Acordo Movimentação Tipo
-                 ac10_acordo = int4 = Acordo
-                 ac10_id_usuario = int4 = Código Usúario
-                 ac10_datamovimento = date = Data Movimentação
-                 ac10_hora = char(5) = Hora
-                 ac10_obs = text = Observação
-=======
   var $ac10_justificativa = null;
   // cria propriedade com as variaveis do arquivo 
   var $campos = "
@@ -75,7 +64,6 @@ class cl_acordomovimentacao
                  ac10_hora = char(5) = Hora 
                  ac10_obs = text = Observacaoo
                  ac10_justificativa = text = Justificativa
->>>>>>> master
                  ";
   //funcao construtor da classe
   function cl_acordomovimentacao()
