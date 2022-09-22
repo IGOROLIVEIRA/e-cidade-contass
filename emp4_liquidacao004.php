@@ -525,9 +525,10 @@ switch ($objJson->method) {
 
     $paremetrosaldo->sql_query_file('','pc01_liberarsaldoposicao');
     $resulparemetrosaldo  = db_utils::fieldsMemory($paremetrosaldo, 0);
-    
+    print_r($resulparemetrosaldo->pc01_liberarsaldoposicao);
     if($resulparemetrosaldo->pc01_liberarsaldoposicao == false) {
       
+    print_r($resulparemetrosaldo->pc01_liberarsaldoposicao);
 
 
 
@@ -579,37 +580,45 @@ switch ($objJson->method) {
           WHERE ac26_acordo = {$rsacordoMaterial->ac26_acordo})
           AND ac20_pcmater = {$rsacordoMaterial->ac20_pcmater} ");
         $ItemUltimaPosicao = db_utils::fieldsMemory($ItemUltimaPosicao);
-
-        $empempaut = db_query("select e61_autori from empempaut where e61_numemp = {$aItens[$iInd]->e62_sequencial}");
+        print_r($aItens[$iInd]->e62_sequencial);
+        $empempaut = db_query("select e61_autori from empempaut where e61_numemp = {$objJson->iEmpenho}");
         if(pg_num_rows($empempaut) == 0){
+          print_r('erro empaut');
           break;
         }
-        $rsempempaut = db_utils::fieldsMemory($empempaut);
-        $empautitem = db_query("select e55_sequen from empautitem where e55_autori = {$empempaut->e61_autori} and e55_item = {$rsacordoMaterial->ac20_pcmater}");
+        $rsempempaut = db_utils::fieldsMemory($empempaut,0);
+        $empautitem = db_query("select e55_sequen from empautitem where e55_autori = {$rsempempaut->e61_autori} and e55_item = {$rsacordoMaterial->ac20_pcmater}");
         if(pg_num_rows($empautitem) == 0){
+          print_r('erro empautitem');
           break;
         }
-        $rsempautitem = db_utils::fieldsMemory($empautitem);
-        $acordoitemexecutadoempautitem = db_query("select min(ac19_acordoitemexecutado) from acordoitemexecutadoempautitem  where ac19_autori = {$empempaut->e61_autori} and ac19_sequen = {$empautitem->e55_sequen}");
+        $rsempautitem = db_utils::fieldsMemory($empautitem,0);
+        print_r("select min(ac19_acordoitemexecutado) from acordoitemexecutadoempautitem  where ac19_autori = {$rsempempaut->e61_autori} and ac19_sequen = {$rsempautitem->e55_sequen}");
+        $acordoitemexecutadoempautitem = db_query("select min(ac19_acordoitemexecutado) from acordoitemexecutadoempautitem  where ac19_autori = {$rsempempaut->e61_autori} and ac19_sequen = {$rsempautitem->e55_sequen}");
         if(pg_num_rows($acordoitemexecutadoempautitem) == 0){
+          print_r('erro executempaut');
           break;
         }
-        $rsacordoitemexecutadoempautitem = db_utils::fieldsMemory($acordoitemexecutadoempautitem);
-        $acordoitemexecutado = db_query("select ac29_acordoitem from acordoitemexecutado where ac29_sequencial = {$acordoitemexecutadoempautitem->ac19_acordoitemexecutado}");
+        $rsacordoitemexecutadoempautitem = db_utils::fieldsMemory($acordoitemexecutadoempautitem,0);
+        print_r($rsacordoitemexecutadoempautitem->ac19_acordoitemexecutado);
+        $acordoitemexecutado = db_query("select ac29_acordoitem from acordoitemexecutado where ac29_sequencial = {$rsacordoitemexecutadoempautitem->ac19_acordoitemexecutado}");
         if(pg_num_rows($acordoitemexecutado) == 0){
+          print_r('erro itemexecutad');
           break;
         }
-        $rsacordoitemexecutado = db_utils::fieldsMemory($acordoitemexecutado);
-        $acordoitem = db_query("select ac20_acordoposicao from acordoitem where ac20_sequencial = {$acordoitemexecutado->ac29_acordoitem}");
+        $rsacordoitemexecutado = db_utils::fieldsMemory($acordoitemexecutado,0);
+        $acordoitem = db_query("select ac20_acordoposicao from acordoitem where ac20_sequencial = {$rsacordoitemexecutado->ac29_acordoitem}");
         if(pg_num_rows($acordoitem) == 0){
+          print_r('erro acordoitem');
           break;
         }
-        $rsacordoitem = db_utils::fieldsMemory($acordoitem);
+        $rsacordoitem = db_utils::fieldsMemory($acordoitem,0);
 
         if($acordoitem->ac20_acordoposicao != $ItemUltimaPosicao->ac20_sequencial){
+          print_r('possição diferente');
 
           if($ItemUltimaPosicao->ac20_valorunitario != $aItens[$iInd]->vlruni){
-            
+            print_r('valor unitario');
 
             if (confirm('O valor unitário atual do contrato é '+$ItemUltimaPosicao->ac20_valorunitario+' e o valor unitário do item a ser anulado é '+$aItens[$iInd]->vlruni+'. Ao anular os itens do empenho, o valor unitário será o'+$ItemUltimaPosicao->ac20_valorunitario)){
 
@@ -651,6 +660,7 @@ switch ($objJson->method) {
               }
             }
           }else{
+            print_r('valor unitario é igual');
               $DaoacordoItemDotacao->ac22_sequencial = $Dotacao->ac22_sequencial;
               $DaoacordoItemDotacao->ac22_valor = $Dotacao->ac22_valor + $aItens[$iInd]->vlrtot;
               if($ItemUltimaPosicao->ac20_valorunitario/$ItemUltimaPosicao->ac20_valortotal == 1){
