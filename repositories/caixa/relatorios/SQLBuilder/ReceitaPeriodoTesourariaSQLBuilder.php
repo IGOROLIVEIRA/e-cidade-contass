@@ -198,8 +198,8 @@ class ReceitaPeriodoTesourariaSQLBuilder
         }
 
         if ($this->sTipo == ReceitaTipoRepositoryLegacy::CONTA) {
-            $this->definirSQLSelectReceita();
-            $this->definirSQLGroupReceita();
+            $this->definirSQLSelectConta();
+            $this->definirSQLGroupConta();
             return;
         }
 
@@ -320,6 +320,14 @@ class ReceitaPeriodoTesourariaSQLBuilder
     {
         $this->sqlSelect .= " , codrec reduzido, k02_codigo codigo, k00_histtxt historico, k12_data as data, k12_numpre numpre, k12_numpar numpar, c61_reduz conta, c60_descr conta_descricao "; 
     }
+
+    /**
+     * @return void
+     */
+    public function definirSQLSelectConta()
+    {
+        $this->sqlSelect .= " , codrec reduzido, k02_codigo codigo, c61_reduz conta, c60_descr conta_descricao  ";
+    }
     
     /**
      * @return void
@@ -341,6 +349,17 @@ class ReceitaPeriodoTesourariaSQLBuilder
             $this->sqlGroup = " ) as xx ";
 
         $this->sqlGroup .= " , codrec, k02_codigo, k00_histtxt, k12_data, k12_numpre, k12_numpar, c61_reduz, c60_descr ";
+    }
+
+    /**
+     * @return void
+     */
+    public function definirSQLGroupConta()
+    {
+        if ($this->iFormaArrecadacao == ReceitaFormaArrecadacaoRepositoryLegacy::EXCETO_ARQUIVO_BANCARIO)
+            $this->sqlGroup = " ) as xx ";
+
+        $this->sqlGroup .= " , codrec, k02_codigo, c61_reduz, c60_descr ";
     }
 
     /**

@@ -230,9 +230,12 @@ class ReceitaPeriodoTesourariaPDF extends PDF
         }
         $this->cell($this->PDFiTamanhoEstrutural, 4, $oReceita->estrutural, 1, 0, "C", $this->preencherCelula);
         $this->cell($this->PDFiTamanhoTitulo, 4, strtoupper($oReceita->descricao), 1, 0, "L", $this->preencherCelula);
-
+        if ($this->sTipo == ReceitaTipoRepositoryLegacy::CONTA) {
+            $this->cell(15, 4, $oReceita->conta, 1, 0, "C", $this->preencherCelula);
+            $this->cell(60, 4, substr($oReceita->conta_descricao, 0, 37) , 1, 0, "L", $this->preencherCelula);
+        }
         $this->cell(25, 4, db_formatar($oReceita->valor, 'f'), 1, $this->PDFbFinalValor, "R", $this->preencherCelula);
-        if (in_array($this->sTipo, array(ReceitaTipoRepositoryLegacy::CONTA, ReceitaTipoRepositoryLegacy::ANALITICO))) {
+        if ($this->sTipo == ReceitaTipoRepositoryLegacy::ANALITICO) {
             if ($oReceita->tipo == "O") {
                 $this->cell(15, 4, $oReceita->conta, 1, 0, "C", $this->preencherCelula);
                 $this->cell(65, 4, $oReceita->conta_descricao, 1, 1, "L", $this->preencherCelula);
@@ -260,6 +263,12 @@ class ReceitaPeriodoTesourariaPDF extends PDF
             if ($this->sTipo == ReceitaTipoRepositoryLegacy::ESTRUTURAL) {
                 $this->PDFiTamanhoDescricaoTotal = 140;
             }
+            return;
+        }
+
+        if ($this->sTipo == ReceitaTipoRepositoryLegacy::CONTA) {
+            $this->PDFbFinalValor = 1;
+            $this->PDFiTamanhoDescricaoTotal = 235;
             return;
         }
 
@@ -300,12 +309,12 @@ class ReceitaPeriodoTesourariaPDF extends PDF
         }
         $this->Cell(25, 6, "VALOR", 1, $this->PDFbFinalValor, "C", 1);
 
-        if (in_array($this->sTipo, array(ReceitaTipoRepositoryLegacy::CONTA, ReceitaTipoRepositoryLegacy::ANALITICO)) and $sTitulo == "RECEITA ORÇAMENTÁRIA") {
+        if ($this->sTipo == ReceitaTipoRepositoryLegacy::ANALITICO and $sTitulo == "RECEITA ORÇAMENTÁRIA") {
             $this->Cell(15, 6, "CONTA", 1, 0, "C", 1);
             $this->Cell(65, 6, "DESCRIÇÃO", 1, 1, "C", 1);
         }
 
-        if ($this->bHistoricoComCabecalho)
+        if ($this->bHistoricoComCabecalho and $this->sTipo == ReceitaTipoRepositoryLegacy::ANALITICO)
             $this->Cell(80, 6, "HISTÓRICO", 1, 1, "C", 1);
     }
 
