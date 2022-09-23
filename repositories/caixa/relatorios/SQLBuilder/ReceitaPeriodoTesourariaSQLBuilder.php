@@ -381,8 +381,8 @@ class ReceitaPeriodoTesourariaSQLBuilder
     {
         $this->sqlWhereUnion = " valor <> 0 ";
 
-        if ($this->sConta)
-            $this->sqlWhereUnion .= " AND c61_reduz IN ({$this->sConta}) ";
+        if ($this->sContas)
+            $this->sqlWhereUnion .= " AND c61_reduz IN ({$this->sContas}) ";
 
         if ($this->sEstrutura)
             $this->sqlWhereUnion .= " AND estrutural LIKE '$this->sEstrutura%' ";
