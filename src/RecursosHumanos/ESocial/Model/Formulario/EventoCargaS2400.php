@@ -48,30 +48,28 @@ class EventoCargaS2400 implements EventoCargaInterface
             WHEN rh01_admiss <= '2021-11-22' THEN '2021-11-22'
             WHEN rh01_admiss > '2021-11-22' THEN rh01_admiss
         END AS dtinicio,
+        rh01_sexo AS sexo,
         CASE
-            WHEN rh01_sexo = 'F' THEN 4002049
-            ELSE 4002048
-        END AS sexo,
-        CASE
-            WHEN rh01_raca = 1 THEN 4002054
-            WHEN rh01_raca = 2 THEN 4002050
-            WHEN rh01_raca = 4 THEN 4002051
-            WHEN rh01_raca = 6 THEN 4002053
-            WHEN rh01_raca = 8 THEN 4002052
-            WHEN rh01_raca = 9 THEN 4002055
+            WHEN rh01_raca = 1 THEN 5
+            WHEN rh01_raca = 2 THEN 1
+            WHEN rh01_raca = 4 THEN 2
+            WHEN rh01_raca = 6 THEN 4
+            WHEN rh01_raca = 8 THEN 3
+            WHEN rh01_raca = 9 THEN 6
         END AS racacor,
         CASE
-            WHEN rh01_estciv = 1 THEN 4002056
-            WHEN rh01_estciv = 2 THEN 4002057
-            WHEN rh01_estciv = 3 THEN 4002060
-            WHEN rh01_estciv = 4 THEN 4002059
-            WHEN rh01_estciv = 5 THEN 4002058
-            ELSE 4002056
+            WHEN rh01_estciv = 1 THEN 1
+            WHEN rh01_estciv = 2 THEN 2
+            WHEN rh01_estciv = 3 THEN 5
+            WHEN rh01_estciv = 4 THEN 4
+            WHEN rh01_estciv = 5 THEN 3
+            ELSE 1
         END AS estciv,
         CASE
-            WHEN rh02_portadormolestia = 't' THEN 4002061
-            ELSE 4002062
+            WHEN rh02_portadormolestia = 't' THEN 'S'
+            ELSE 'N'
         END AS incfismen,
+        rh02_datalaudomolestia as dtIncFisMen,
         CASE
             WHEN ruas.j14_tipo IS NULL THEN 'R'
             ELSE j88_sigla
@@ -97,7 +95,7 @@ class EventoCargaS2400 implements EventoCargaInterface
             and cadendermunicipiosistema.db125_db_sistemaexterno = 4
         where to_ascii(db72_descricao) = to_ascii(trim((SELECT z01_munic FROM cgm join db_config ON z01_numcgm = numcgm WHERE codigo = fc_getsession('DB_instit')::int))) limit 1))
         ) AS codMunic,
-                    4002082 AS uf
+                    'MG' AS uf
     FROM rhpessoal
     INNER JOIN cgm ON cgm.z01_numcgm = rhpessoal.rh01_numcgm
     INNER JOIN db_config ON db_config.codigo = rhpessoal.rh01_instit
