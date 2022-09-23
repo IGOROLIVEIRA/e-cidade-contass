@@ -77,7 +77,12 @@ class EventoS1200 extends EventoBase
                 $std = new \stdClass();
                 $seqdmdev = 0;
                 for ($iCont = 0; $iCont < count($aDadosPorMatriculas); $iCont++) {
+
                     $aIdentificador = $this->buscarIdentificador($aDadosPorMatriculas[$iCont]->matricula, $aDadosPorMatriculas[$iCont]->rh30_regime);
+
+                    if (empty($aIdentificador))
+                        continue;
+
                     for ($iCont2 = 0; $iCont2 < count($aIdentificador); $iCont2++) {
                         $std->dmdev[$seqdmdev] = new \stdClass(); //Obrigatório
                         //Identificação de cada um dos demonstrativos de valores devidos ao trabalhador.
@@ -219,7 +224,14 @@ left outer join (
                 and rh30_vinculo = 'A'
                 and r33_tiporegime = '1')
             )
-    and cgm.z01_cgccpf = '$cpf'";
+    and cgm.z01_cgccpf = '$cpf'
+    and ((rh05_recis is not null
+		and date_part('month', rh05_recis) = date_part('month', fc_getsession('DB_datausu')::date)
+		and date_part('year', rh05_recis) = date_part('year', fc_getsession('DB_datausu')::date)
+		)
+		or
+		rh05_recis is null
+	)";
 
 
         $rsValores = db_query($sql);

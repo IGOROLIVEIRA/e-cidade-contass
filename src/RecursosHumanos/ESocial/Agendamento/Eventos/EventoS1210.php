@@ -199,7 +199,13 @@ class EventoS1210 extends EventoBase
                                       and r33_instit = fc_getsession('DB_instit')::int
                                ) as x on r33_codtab = rhpessoalmov.rh02_tbprev+2
     where 1=1
-    ";
+    and ((rh05_recis is not null
+		and date_part('month', rh05_recis) = date_part('month', fc_getsession('DB_datausu')::date)
+		and date_part('year', rh05_recis) = date_part('year', fc_getsession('DB_datausu')::date)
+		)
+		or
+		rh05_recis is null
+	) ";
         //1200
         if ($tppgto == 1) {
             $sql .= " and (
