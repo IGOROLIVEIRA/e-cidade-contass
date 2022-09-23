@@ -72,6 +72,7 @@ DECLARE
     iReceitaIsencao             integer;
     nPercentualIsencao          float8;
     iTipoIsencao                integer;
+    lImune                      boolean default false;
 
 BEGIN
 
@@ -322,19 +323,6 @@ BEGIN
             end if;
 
             if V_INSCR = true then
-
-                select q148_perc, q148_receit, q147_tipoisen
-                    into nPercentualIsencao, iReceitaIsencao, iTipoIsencao
-                from issisen
-                    inner join isstipoisen on q148_tipo = q147_tipo
-                where q148_inscr = V_Y71_INSCR
-                  and fc_getsession('DB_datausu')::date between q148_dtini and q148_dtfim
-                order by q148_codigo
-                    DESC limit 1;
-
-                if iReceitaIsencao is not null then
-                    lIsencao = true;
-                end if;
 
                 select MIN(Q85_FORCAL)
                 into iFormaCalculo
@@ -833,21 +821,35 @@ BEGIN
 
                         nValorVistoria = ROUND(nValorExercicio * nValorInflator * nValorBase, 2);
 
-                        if lIsencao
-                            and (nPercentualIsencao = 100 or iTipoIsencao = 1)
-                            and iCodigoReceitaExercicio = iReceitaIsencao
+                        select q148_perc, q148_receit, q147_tipoisen
+                        into nPercentualIsencao, iReceitaIsencao, iTipoIsencao
+                        from issisen
+                                 inner join isstipoisen on q148_tipo = q147_tipo
+                        where q148_inscr = V_Y71_INSCR
+                          and fc_getsession('DB_datausu')::date between q148_dtini and q148_dtfim
+                          and q148_receit = iCodigoReceitaExercicio
+                        order by q148_codigo
+                            DESC limit 1;
+
+                        if iReceitaIsencao is not null then
+                            lIsencao = true;
+                        end if;
+
+                        if lIsencao and (nPercentualIsencao = 100 or iTipoIsencao = 1)
                         then
                             perform fc_debug('Inscricao isento 100% ou imune para a receita '||iReceitaIsencao||', nao calculando vistoria.',lRaise,false,false);
+                            lImune := true;
                             continue;
                         end if;
 
-                        if lIsencao and iCodigoReceitaExercicio = iReceitaIsencao then
+                        if lIsencao then
                             raise notice 'nValorVistoria_antes: %, nPercentualIsencao: %, iReceitaIsencao: %, nValorVistoria_depois: %', nValorVistoria, nPercentualIsencao,iReceitaIsencao, (nValorVistoria-(nValorVistoria*(nPercentualIsencao/100)));
                             nValorVistoria := nValorVistoria-(nValorVistoria*(nPercentualIsencao/100));
                         end if;
 
                         perform fc_debug('Resultado -> nValorVistoria: ' || nValorVistoria,  lRaise);
 
+                        lImune := false;
                         lCalculou = true;
 
                         if lRaise is true then
@@ -884,6 +886,10 @@ BEGIN
 
             if lRaise is true then
                 raise notice 'fora do for... lCalculou: %', lCalculou;
+            end if;
+
+            if lCalculou is false and lImune is true then
+                return '50-INSCRICAO 100% ISENTO OU IMUNE.';
             end if;
 
             if lCalculou IS true then

@@ -159,19 +159,6 @@ declare
          RAISE EXCEPTION 'Erro: variavel de sessao DB_datausu nao declarado!';
       end if;
 
-    select q148_perc, q148_receit, q147_tipoisen
-        into nPercentualIsencao, iReceitaIsencao, iTipoIsencao
-        from issisen
-    inner join isstipoisen on q148_tipo = q147_tipo
-    where q148_inscr = iInscr
-    and fc_getsession('DB_datausu')::date between q148_dtini and q148_dtfim
-    order by q148_codigo
-    DESC limit 1;
-
-    if iReceitaIsencao is not null then
-        lIsencao = true;
-    end if;
-
     if iTipoCalculo = 1 then
        v_manual :=  '  ======================= Calculo de ISSQN          | Data de Calculo: ' || dtOperacao ||'  =========== \n';
     elsif  iTipoCalculo = 2 then
@@ -916,17 +903,30 @@ declare
               -- iTipoIsencao = 1 (imunidade)
               --
 
+              select q148_perc, q148_receit, q147_tipoisen
+              into nPercentualIsencao, iReceitaIsencao, iTipoIsencao
+              from issisen
+                       inner join isstipoisen on q148_tipo = q147_tipo
+              where q148_inscr = iInscr
+                and fc_getsession('DB_datausu')::date between q148_dtini and q148_dtfim
+                and q148_receit = v_record_tipcalc.q81_recexe
+              order by q148_codigo
+                  DESC limit 1;
+
+              if iReceitaIsencao is not null then
+                  lIsencao = true;
+              end if;
+
               if lIsencao
                   and v_record_tipcalc.q81_cadcalc = 1
                   and (nPercentualIsencao = 100 or iTipoIsencao = 1)
-                  and v_record_tipcalc.q81_recexe = iReceitaIsencao
               then
                 v_manual = v_manual ||'Inscricao isento 100% ou imune para a receita '||iReceitaIsencao||', nao calculando alvara.'||'\n';
                 perform fc_debug('Inscricao isento 100% ou imune para a receita '||iReceitaIsencao||', nao calculando alvara.',lRaise,false,false);
               continue;
               end if;
 
-              if lIsencao and v_record_tipcalc.q81_cadcalc = 1 and v_record_tipcalc.q81_recexe = iReceitaIsencao then
+              if lIsencao and v_record_tipcalc.q81_cadcalc = 1 then
                   raise notice 'v_q81_val_antes: %, nPercentualIsencao: %, iReceitaIsencao: %, v_q81_val_depois: %', v_q81_val, nPercentualIsencao,iReceitaIsencao, (v_q81_val-(v_q81_val*(nPercentualIsencao/100)));
                   v_q81_val := v_q81_val-(v_q81_val*(nPercentualIsencao/100));
               end if;
