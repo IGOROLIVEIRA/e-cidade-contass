@@ -126,7 +126,7 @@ class ReceitaPeriodoTesourariaPDF extends PDF
         $this->montarTabelaReceitaOrcamentaria();
         $this->montarTabelaReceitaExtraOrcamentaria();
         $this->montarTotalGeral();
-        
+
         $this->Output();
     }
 
@@ -135,23 +135,15 @@ class ReceitaPeriodoTesourariaPDF extends PDF
      */
     public function montarTabelaReceitaDiaria()
     {
-        $this->ln(2);
         $this->AddPage();
-        $this->SetTextColor(0, 0, 0);
-        $this->SetFillColor(220);
+        $this->montarIniciadoresPDF();
         $totalGeralDiario = 0;
         foreach ($this->aDadosRelatorio as $data => $aReceita) {
             $this->montarTituloDiario();
-            if ($this->gety() > $this->h - 30) {
-                $this->Addpage();
-                $this->montarTituloDiario();
-            }
+            $this->corrigirCabecalhoDiario();
             $totalDiario = 0;
             foreach ($aReceita as $oReceita) {
-                if ($this->gety() > $this->h - 30) {
-                    $this->Addpage();
-                    $this->montarTituloDiario();
-                }
+                $this->corrigirCabecalhoDiario();
                 $this->montarDadosDiarios($oReceita);
                 $this->definirFundoColorido();
                 $totalDiario += $oReceita->valor;
@@ -207,6 +199,17 @@ class ReceitaPeriodoTesourariaPDF extends PDF
     /**
      * @return void
      */
+    public function corrigirCabecalhoDiario()
+    {
+        if ($this->gety() > $this->h - 30) {
+            $this->Addpage();
+            $this->montarTituloDiario();
+        }
+    }
+
+    /**
+     * @return void
+     */
     public function montarTotalGeral()
     {
         $this->cell($this->PDFiTamanhoDescricaoTotal, 4, "TOTAL GERAL", 1, 0, "L", 0);
@@ -226,10 +229,8 @@ class ReceitaPeriodoTesourariaPDF extends PDF
         if (!array_key_exists(ReceitaTipoReceitaRepositoryLegacy::ORCAMENTARIA, $this->aDadosRelatorio))
             return;
 
-        $this->ln(2);
         $this->AddPage();
-        $this->SetTextColor(0, 0, 0);
-        $this->SetFillColor(220);
+        $this->montarIniciadoresPDF();
         $this->montarTitulo($sTitulo);
 
         foreach ($this->aDadosRelatorio['O'] as $oReceita) {
@@ -255,8 +256,6 @@ class ReceitaPeriodoTesourariaPDF extends PDF
         if (!array_key_exists(ReceitaTipoReceitaRepositoryLegacy::EXTRA, $this->aDadosRelatorio))
             return;
 
-        $this->ln(2);
-
         if (!array_key_exists(ReceitaTipoReceitaRepositoryLegacy::ORCAMENTARIA, $this->aDadosRelatorio))
             $this->AddPage();
 
@@ -266,9 +265,8 @@ class ReceitaPeriodoTesourariaPDF extends PDF
         ) {
             $this->AddPage();
         }
-
-        $this->SetTextColor(0, 0, 0);
-        $this->SetFillColor(220);
+        
+        $this->montarIniciadoresPDF();
         $this->montarTitulo($sTitulo);
         $this->preencherCelula = 0;
         foreach ($this->aDadosRelatorio['E'] as $oReceita) {
@@ -282,6 +280,16 @@ class ReceitaPeriodoTesourariaPDF extends PDF
         $this->setfont('arial', 'B', 7);
         $this->cell($this->PDFiTamanhoDescricaoTotal, 4, "TOTAL ...", 1, 0, "L", 0);
         $this->cell(25, 4, db_formatar($this->totalExtra, 'f'), 1, 1, "R", 0);
+    }
+
+    /**
+     * @return void
+     */
+    public function montarIniciadoresPDF()
+    {
+        $this->ln(2);
+        $this->SetTextColor(0, 0, 0);
+        $this->SetFillColor(220);
     }
 
     public function definirFundoColorido()
