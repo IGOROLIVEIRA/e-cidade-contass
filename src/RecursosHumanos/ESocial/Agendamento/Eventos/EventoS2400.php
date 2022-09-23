@@ -37,16 +37,6 @@ class EventoS2400 extends EventoBase
         $iSequencial = 1;
         foreach ($this->dados as $oDados) {
 
-            if (!empty($oDados->brasil) && empty($oDados->brasil->complemento)) {
-                $oDados->brasil->complemento = null;
-            }
-            if (!empty($oDados->brasil) && empty($oDados->brasil->bairro)) {
-                $oDados->brasil->bairro = null;
-            }
-            if (!empty($oDados->brasil) && empty($oDados->brasil->tpLograd)) {
-                $oDados->brasil->tpLograd = null;
-            }
-
             $oDadosAPI                                   = new \stdClass;
             $oDadosAPI->evtCdBenPrRP                    = new \stdClass;
             $oDadosAPI->evtCdBenPrRP->sequencial = $iSequencial;
@@ -69,6 +59,8 @@ class EventoS2400 extends EventoBase
             $oDadosAPI->evtCdBenPrRP->endereco->brasil->cep = $oDados->cep;
             $oDadosAPI->evtCdBenPrRP->endereco->brasil->codMunic = $oDados->codmunic;
             $oDadosAPI->evtCdBenPrRP->endereco->brasil->uf = $oDados->uf;
+            $oDadosAPI->evtCdBenPrRP->endereco->brasil->complemento = empty($oDados->complemento) ? null : $oDados->complemento;
+            $oDadosAPI->evtCdBenPrRP->endereco->brasil->tpLograd = empty($oDados->tplograd) ? null : $oDados->tplograd;
 
             $oDadosAPI->evtCdBenPrRP->endereco->exterior = null;
 
@@ -91,7 +83,8 @@ class EventoS2400 extends EventoBase
     {
 
         $oDaorhdepend = \db_utils::getDao("rhdepend");
-        $sqlDependentes = $oDaorhdepend->sql_query_file(null, "*", "rh31_codigo", "rh31_regist = (SELECT rh01_regist FROM cgm JOIN rhpessoal ON z01_numcgm = rh01_numcgm WHERE z01_cgccpf = '{$cpf}' LIMIT 1)");
+        $sqlDependentes = $oDaorhdepend->sql_query(null, "*", "rh31_codigo", "z01_cgccpf = '{$cpf}' and rh02_instit = ".db_getsession("DB_instit"));
+
         $rsDependentes = db_query($sqlDependentes);
 
         $aDependentes = array();

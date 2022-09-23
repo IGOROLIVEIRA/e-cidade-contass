@@ -1,0 +1,106 @@
+{
+    "fontes": [
+        {
+            "FonteEcidade": "133",
+            "FonteTCEMG": "133",
+            "FonteSTN": "1715",
+            "DESCRICAO": "TRANSF DEST SETOR CULTURAL LC 195-2022 ART 5 AUDIOVISUAL",
+            "FINALIDADE": "Transferencias Destinadas ao Setor Cultural - LC nro. 195-2022 - Art. 5 - Audiovisual",
+            "DataLimite": "2022-12-31"
+        },
+        {
+            "FonteEcidade": "134",
+            "FonteTCEMG": "134",
+            "FonteSTN": "1716",
+            "DESCRICAO": "TRANSF DEST SETOR CULTURAL LC 195-2022 ART 8 DEMAIS SETORES",
+            "FINALIDADE": "Transferencias Destinadas ao Setor Cultural - LC nro. 195-2022 - Art. 8 - Demais Setores da Cultura",
+            "DataLimite": "2022-12-31"
+        },
+        {
+            "FonteEcidade": "135",
+            "FonteTCEMG": "135",
+            "FonteSTN": "1717",
+            "DESCRICAO": "ASSISTENCIA FINANCEIRA TRANSPORTE COLETIVO ART 5 EC 123-2022",
+            "FINALIDADE": "Assistencia Financeira Transporte Coletivo - Art. 5, Inciso IV, EC nro. 123-2022",
+            "DataLimite": "2022-12-31"
+        },
+        {
+            "FonteEcidade": "136",
+            "FonteTCEMG": "136",
+            "FonteSTN": "1718",
+            "DESCRICAO": "AUXILIO FINANCEIRO OUTORGA CREDITO TRIBUTARIO ICMS - ART 5",
+            "FINALIDADE": "Auxilio Financeiro - Outorga Credito Tributario ICMS - Art. 5, Inciso V, EC nro. 123-2022",
+            "DataLimite": "2022-12-31"
+        },
+        {
+            "FonteEcidade": "17150000",
+            "FonteTCEMG": "1715000",
+            "FonteSTN": "1715",
+            "DESCRICAO": "TRANSF DEST SETOR CULTURAL LC 195-2022 ART 5 AUDIOVISUAL",
+            "FINALIDADE": "Transferencias Destinadas ao Setor Cultural - LC nro. 195-2022 - Art. 5 - Audiovisual"
+        },
+        {
+            "FonteEcidade": "17160000",
+            "FonteTCEMG": "1716000",
+            "FonteSTN": "1716",
+            "DESCRICAO": "TRANSF DEST SETOR CULTURAL LC 195-2022 ART 8 DEMAIS SETORES",
+            "FINALIDADE": "Transferencias Destinadas ao Setor Cultural - LC nro. 195-2022 - Art. 8 - Demais Setores da Cultura"
+        },
+        {
+            "FonteEcidade": "17170000",
+            "FonteTCEMG": "1717000",
+            "FonteSTN": "1717",
+            "DESCRICAO": "ASSISTENCIA FINANCEIRA TRANSPORTE COLETIVO ART 5 EC 123-2022",
+            "FINALIDADE": "Assistencia Financeira Transporte Coletivo - Art. 5, Inciso IV, EC nro. 123-2022"
+        },
+        {
+            "FonteEcidade": "17180000",
+            "FonteTCEMG": "1718000",
+            "FonteSTN": "1718",
+            "DESCRICAO": "AUXILIO FINANCEIRO OUTORGA CREDITO TRIBUTARIO ICMS - ART 5",
+            "FINALIDADE": "Auxilio Financeiro - Outorga Credito Tributario ICMS - Art. 5, Inciso V, EC nro. 123-2022"
+        },
+        {
+            "FonteEcidade": "27150000",
+            "FonteTCEMG": "2715000",
+            "FonteSTN": "2715",
+            "DESCRICAO": "TRANSF DEST SETOR CULTURAL LC 195-2022 ART 5 AUDIOVISUAL",
+            "FINALIDADE": "Transferencias Destinadas ao Setor Cultural - LC nro. 195-2022 - Art. 5 - Audiovisual"
+        },
+        {
+            "FonteEcidade": "27160000",
+            "FonteTCEMG": "2716000",
+            "FonteSTN": "2716",
+            "DESCRICAO": "TRANSF DEST SETOR CULTURAL LC 195-2022 ART 8 DEMAIS SETORES",
+            "FINALIDADE": "Transferencias Destinadas ao Setor Cultural - LC nro. 195-2022 - Art. 8 - Demais Setores da Cultura"
+        },
+        {
+            "FonteEcidade": "27170000",
+            "FonteTCEMG": "2717000",
+            "FonteSTN": "2717",
+            "DESCRICAO": "ASSISTENCIA FINANCEIRA TRANSPORTE COLETIVO ART 5 EC 123-2022",
+            "FINALIDADE": "Assistencia Financeira Transporte Coletivo - Art. 5, Inciso IV, EC nro. 123-2022"
+        },
+        {
+            "FonteEcidade": "27180000",
+            "FonteTCEMG": "2718000",
+            "FonteSTN": "2718",
+            "DESCRICAO": "AUXILIO FINANCEIRO OUTORGA CREDITO TRIBUTARIO ICMS - ART 5",
+            "FINALIDADE": "Auxilio Financeiro - Outorga Credito Tributario ICMS - Art. 5, Inciso V, EC nro. 123-2022"
+        },
+        {
+            "FonteEcidade": "17190000",
+            "FonteTCEMG": "1719000",
+            "FonteSTN": "1719",
+            "DESCRICAO": "TRANSF.DA POLITICA NACIONAL ALDIR BLANC DE FOMENTO A CULTURA",
+            "FINALIDADE": "Transferencias da Politica Nacional Aldir Blanc de Fomento a Cultura - Lei nro. 14.399-202"
+        },
+        {
+            "FonteEcidade": "27190000",
+            "FonteTCEMG": "2719000",
+            "FonteSTN": "2719",
+            "DESCRICAO": "TRANSF.DA POLITICA NACIONAL ALDIR BLANC DE FOMENTO A CULTURA",
+            "FINALIDADE": "Transferencias da Politica Nacional Aldir Blanc de Fomento a Cultura - Lei nro. 14.399-202"
+        }
+    ]
+}

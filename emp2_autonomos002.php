@@ -62,6 +62,8 @@ $clrotulo->label("e70_vlrliq");
 $clrotulo->label("e70_vlranu");
 $clrotulo->label("e53_vlrpag");
 
+$instits = str_replace('-', ', ', db_getsession("DB_instit"));
+
 if (isset($dtDataInicial)) {
   $aElementosFiltro = array('33903609','33903607','33903608','33903605','33903614','33903639','33903636','33903637','33903638','33903641','33903601','33903602','33903603','33903635','33903640');  
   $sSqlNota  = "select distinct e50_codord,";
@@ -76,7 +78,7 @@ if (isset($dtDataInicial)) {
   $sSqlNota .= " e50_contribuicaoprev,";
   $sSqlNota .= " e50_valorremuneracao,";
   $sSqlNota .= " e50_valordesconto,";
-  $sSqlNota .= " e50_datacompetencia, ";
+  $sSqlNota .= " corrente.k12_data as k12_data, ";
   $sSqlNota .= " e50_cattrabalhadorremurenacao, ";
   $sSqlNota .= " case when retencaotiporec.e21_retencaotipocalc in (3,4,7) then (coalesce(e23_valorretencao, 0))
                     else 0  end as valor_inss, ";
@@ -84,7 +86,7 @@ if (isset($dtDataInicial)) {
                     else 0 end as valor_irrf,";
   $sSqlNota .= " case when retencaotiporec.e21_retencaotipocalc in (5,6) then (coalesce(e23_valorretencao, 0))
 		            else 0 end as outrasretencoes, ";
-  $sSqlNota .= " case when c71_coddoc = 904 then c71_data end as c71_data, e60_anousu, e69_numero, cgm.z01_cgccpf,z04_rhcbo";                                  
+  $sSqlNota .= " case when c71_coddoc = 904 then c71_data end as c71_data, e60_anousu, e69_numero, cgm.z01_cgccpf,z04_rhcbo, corrente.k12_data,e23_ativo";                                  
   $sSqlNota .= "       from empnota ";
   $sSqlNota .= "          inner join empempenho   on e69_numemp  = e60_numemp";
   $sSqlNota .= "          inner join cgm as cgm   on e60_numcgm  = cgm.z01_numcgm";
@@ -94,7 +96,6 @@ if (isset($dtDataInicial)) {
   $sSqlNota .= "          left join conlancamemp on c75_numemp = e60_numemp ";
   $sSqlNota .= "          left join conlancamdoc on c71_codlan = c75_codlan and c71_coddoc = 904 ";
   $sSqlNota .= "          left  join pagordemnota on e71_codnota = e69_codnota";
-//   $sSqlNota .= "                                 and e71_anulado is false";
   $sSqlNota .= "          left  join pagordem    on  e71_codord = e50_codord";
   $sSqlNota .= "          left  join pagordemele  on e53_codord = e50_codord";
   $sSqlNota .= "          left  join cgm as empresa on empresa.z01_numcgm = e50_empresadesconto";
@@ -103,15 +104,28 @@ if (isset($dtDataInicial)) {
   $sSqlNota .= "          left join retencaopagordem on pagordem.e50_codord = retencaopagordem.e20_pagordem";
   $sSqlNota .= "          left join retencaoreceitas on retencaoreceitas.e23_retencaopagordem = retencaopagordem.e20_sequencial";
   $sSqlNota .= "          left join retencaotiporec on retencaotiporec.e21_sequencial = retencaoreceitas.e23_retencaotiporec";
- 
-
+  $sSqlNota .= "          left join empord on empord.e82_codord = pagordem.e50_codord";
+  $sSqlNota .= "          left join empagemov on empagemov.e81_codmov = empord.e82_codmov";
+  $sSqlNota .= "          left join corempagemov on corempagemov.k12_codmov = empagemov.e81_codmov";
+  $sSqlNota .= "          left join corrente on (
+                corrente.k12_id,
+                corrente.k12_data,
+                corrente.k12_autent
+            ) = (
+                corempagemov.k12_id,
+                corempagemov.k12_data,
+                corempagemov.k12_autent
+            )";		
   $dtDataInicial = implode("-", array_reverse(explode("/", $dtDataInicial)));
   $dtDataFinal = implode("-", array_reverse(explode("/", $dtDataFinal)));
 
   if($sCredoresSelecionados)
-    $sSqlNota .= "  where (e50_data BETWEEN '$dtDataInicial' AND '$dtDataFinal' ) and  e60_numcgm in ({$sCredoresSelecionados}) and Length(cgm.z01_cgccpf) like '11'";
+        if($sTipoSelecao == 1)            
+            $sSqlNota .= "  where (e50_data BETWEEN '$dtDataInicial' AND '$dtDataFinal' ) and  e60_numcgm in ({$sCredoresSelecionados}) and Length(cgm.z01_cgccpf) = 11 ";
+        if($sTipoSelecao == 2) 
+            $sSqlNota .= "  where (e50_data BETWEEN '$dtDataInicial' AND '$dtDataFinal' ) and  e60_numcgm not in ({$sCredoresSelecionados}) and Length(cgm.z01_cgccpf) = 11 ";           
   else 
-    $sSqlNota .= "  where e50_data BETWEEN '$dtDataInicial' AND '$dtDataFinal' and Length(cgm.z01_cgccpf) like '11'";
+    $sSqlNota .= "  where e50_data BETWEEN '$dtDataInicial' AND '$dtDataFinal' and Length(cgm.z01_cgccpf) = 11 ";
  
  if($sTipo == '1')
     $sSqlNota .= "  and e50_cattrabalhador is not null ";
@@ -120,7 +134,8 @@ if (isset($dtDataInicial)) {
  
   $sSqlNota .= "  and ((substr(orcelemento.o56_elemento,2,8) like '339036%') or (substr(orcelemento.o56_elemento,2,8) like '339035%') "; 
   $sSqlNota .= "  and (substr(orcelemento.o56_elemento,2,8) NOT IN ('".implode("','",$aElementosFiltro)."') ))  ";
-  $sSqlNota .= "  group by     1,3,2,4,6,7,8,9,10,e21_retencaotipocalc,c71_coddoc,c71_data,e60_anousu,e69_numero,e70_vlrliq,e23_valorretencao, cgm.z01_cgccpf,z04_rhcbo";
+  $sSqlNota .=  " and e60_instit = $instits ";
+  $sSqlNota .= "  group by     1,3,2,4,6,7,8,9,10,e21_retencaotipocalc,c71_coddoc,c71_data,e60_anousu,e69_numero,e70_vlrliq,e23_valorretencao, cgm.z01_cgccpf,z04_rhcbo,corrente.k12_data,e23_ativo";
   $sSqlNota .= "  order by     3 ";
 
   $rsNota    = $oDaoEmpNota->sql_record($sSqlNota);
@@ -138,7 +153,7 @@ $clinfocomplementaresinstit = new cl_infocomplementaresinstit();
 $cldadosexecicioanterior = new cl_dadosexercicioanterior();
 db_postmemory($HTTP_POST_VARS);
 
-$instits = str_replace('-', ', ', db_getsession("DB_instit"));
+
 $aInstits = explode(",", $instits);
 
 if (count($aInstits) > 1) {
@@ -357,7 +372,7 @@ $dataFinal = str_replace("/","-",db_formatar($dtDataFinal, "d"));
                 <td class="s0" dir="ltr" ><font size="-1"> Categoria </font></td>
                 <td class="s0" dir="ltr" ><font size="-1"> Valor Remuneração </font></td>
                 <td class="s0" dir="ltr" ><font size="-1"> Valor Desconto </font></td>
-                <td class="s0" dir="ltr" ><font size="-1"> Competência </font></td>
+                <td class="s0" dir="ltr" ><font size="-1"> Data Pagamento  </font></td>
                 
 
             </tr>
@@ -387,7 +402,7 @@ $dataFinal = str_replace("/","-",db_formatar($dtDataFinal, "d"));
                 $oFornecedores1 = $oNotas2      = db_utils::FieldsMemory($rsNota, $cont+1);  
 
                 // ordenar datas
-                $oNotas->e50_datacompetencia = implode("-", array_reverse(explode("-", $oNotas->e50_datacompetencia)));
+                $oNotas->k12_data = implode("-", array_reverse(explode("-", $oNotas->k12_data)));
                 $oNotas->e50_data = implode("-", array_reverse(explode("-", $oNotas->e50_data)));
                 $oNotas->c71_data = implode("-", array_reverse(explode("-", $oNotas->c71_data)));
                                      
@@ -395,6 +410,12 @@ $dataFinal = str_replace("/","-",db_formatar($dtDataFinal, "d"));
                         if ($cont >= 1) {
                             $or = "OR" . $cont;
                         }
+                    if($oNotas->e23_ativo == "f"){
+                        $oNotas->outrasretencoes = 0;
+                        $oNotas->valor_inss = 0;
+                        $oNotas->valor_irrf = 0;
+                    }    
+           
                     if(!$auxe50_codord)
                         $auxe50_codord = $oNotas->e50_codord;    
                         // Lista de Fornecedores 
@@ -447,16 +468,6 @@ HTML;
                         $auxIrrf = db_formatar($auxIrrf, "f");
                         $oNotas->e70_vlrliq = db_formatar($oNotas->e70_vlrliq, "f");
 
-                        if($oNotas->e50_datacompetencia){
-                            $auxcompetencia = explode("-", $oNotas->e50_datacompetencia);
-                            $auxcompetencia = $auxcompetencia[1]."/".$auxcompetencia[2];
-                        }
-                        // $totale70_vlrliq = db_formatar($totale70_vlrliq, "f");
-                        // $totalvalor_inss = db_formatar($totalvalor_inss, "f");
-                        // $totalvalor_irrf = db_formatar($totalvalor_irrf, "f");
-                        // $totaloutrasretencoes = db_formatar($totaloutrasretencoes, "f");
-                        // $totale50_valorremuneracao = db_formatar($totale50_valorremuneracao, "f");
-                        // $totale50_valordesconto = db_formatar($totale50_valordesconto, "f"); 
                         if(!$oNotas->e50_valorremuneracao)
                             $oNotas->e50_valorremuneracao = db_formatar(0, "f");
                         else 
@@ -487,7 +498,7 @@ HTML;
                             <td class="s3" dir="ltr">$oNotas->e50_cattrabalhadorremurenacao</td>
                             <td class="s1" dir="ltr">R$ $oNotas->e50_valorremuneracao</td>
                             <td class="s1" dir="ltr">R$ $oNotas->e50_valordesconto</td>
-                            <td class="s3" dir="ltr">$auxcompetencia</td>
+                            <td class="s3" dir="ltr">$oNotas->k12_data</td>
                         </tr> </br>                    
 HTML;
                         
