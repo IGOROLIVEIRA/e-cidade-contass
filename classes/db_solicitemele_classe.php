@@ -88,7 +88,7 @@ class cl_solicitemele {
        return false;
      }
      if(($this->pc18_codele == null) || ($this->pc18_codele == "") ){ 
-       $this->erro_sql = " Campo pc18_codele nao declarado.";
+       $this->erro_sql =  "aqui Campo pc18_codele nao declarado.";
        $this->erro_banco = "Chave Primaria zerada.";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -401,4 +401,3 @@ class cl_solicitemele {
      return $sql;
   }
 }
-?>

@@ -237,9 +237,10 @@ if (isset($incluir) && $sqlerro == false) {
 	$ordem = $_POST['ordem'];
 	$codmaterial =  $_POST['codmaterial'];
 	$quantidade =  $_POST['quantidade'];
-	$elesub = $_POST['elesub'];
+	$codele = $_POST['codele'];
 	$servicoquantidade = $_POST['servicoquantidade'];
 	$codigo_unidade = $_POST['codigo_unidade'];
+	//$codigoelemento = 
 
 	$aItens  = array();
 
@@ -250,7 +251,7 @@ if (isset($incluir) && $sqlerro == false) {
 		$oItem->pc11_seq =  $ordem[$i];
 		$oItem->pc01_codmater =  $codmaterial[$i];
 		$oItem->pc11_quant =  	$quantidade[$i];
-		$oItem->codele =  $elesub[$i];
+		$oItem->codele =  $codele[$i];
 		$oItem->pc11_servicoquantidade =  $servicoquantidade[$i];
 		$oItem->codunidade =  $codigo_unidade[$i];
 		$aItens[] = $oItem;
@@ -751,7 +752,7 @@ db_fieldsmemory($result_pcparam1, 0);
 		$pc11_codigo = $clsolicitem->pc11_codigo;
 		if ($sqlerro == false) {
 			$opcao = 'alterar';
-			$db_opcao = 2;
+			$db_opcao = 1;
 		} else {
 			$pc11_codigo = '';
 		}
@@ -973,9 +974,9 @@ db_fieldsmemory($result_pcparam1, 0);
 			}
 			if ($sqlerro == false) {
 				if ($eleSub == "") {
-					$clsolicitemele->incluir($pc11_codigo, $o56_codele);
+					$clsolicitemele->incluir($pc11_codigo, $_POST['eleSub']);
 				} else {
-					$clsolicitemele->incluir($pc11_codigo, $eleSub);
+					$clsolicitemele->incluir($pc11_codigo, $_POST['eleSub']);
 				}
 
 				if ($clsolicitemele->erro_status == 0) {
@@ -1729,7 +1730,7 @@ where pc20_codorc = $codorc";
 	//------------------------------------------------------------------------------------------------------------------------
 
 	if ($sqlerro == false) {
-		$clsolicitempcmater->excluir(null, @$pc11_codigo);
+		$clsolicitempcmater->excluir(null, $pc11_codigo);
 		if ($clsolicitempcmater->erro_status == 0) {
 			$sqlerro = true;
 			$erro_msg = $clsolicitempcmater->erro_msg;
@@ -1883,7 +1884,7 @@ where pc20_codorc = $codorc";
 
 	//  $sqlerro = true;
 	db_fim_transacao($sqlerro);
-	$db_opcao = 3;
+	$db_opcao = 1;
 	// A quantidade de itens das dotações serão atualizadas automaticamente!
 }
 

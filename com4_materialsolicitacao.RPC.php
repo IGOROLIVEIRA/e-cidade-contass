@@ -130,7 +130,10 @@ try {
       end as pc01_descrmater,
       m61_descr,
       m61_codmatunid,
-      pc18_codele";
+      pc18_codele,
+      o56_codele,
+      o56_descr,
+      o56_elemento";
       $sql = $clsolicitem->sql_query_item_processo_compras(null, $sCampos, "pc11_seq desc", "$codigos pc11_numero= " . $oParam->numero);
       $rsResult = db_query($sql);
 
@@ -148,6 +151,9 @@ try {
         $oItem->pc11_quant =  $item->pc11_quant;
         $oItem->pc11_servicoquantidade =  $item->pc11_servicoquantidade;
         $oItem->pc18_codele =  $item->pc18_codele;
+        $oItem->o56_codele = $item->o56_codele;
+        $oItem->o56_elemento  =  $item->o56_elemento;
+        $oItem->o56_descr = urlencode($item->o56_descr);
 
 
         $aItens[] = $oItem;
