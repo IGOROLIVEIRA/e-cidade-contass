@@ -517,14 +517,9 @@ switch ($oParam->exec) {
             ' sum(ac29_valor) as valor, sum(ac29_quantidade) as quantidade',
             '',
             ' ac20_pcmater = ' . $oDado->getMaterial()->getMaterial() . '
-						AND ac26_acordoposicaotipo =
-							(SELECT ac26_acordoposicaotipo
-							 FROM acordoposicao
-							 WHERE ac26_acordo = ' . $oParam->ac16_sequencial . '
-								 AND ac26_sequencial =
-									 (SELECT max(ac26_sequencial)
+						  AND ac26_sequencial = (SELECT max(ac26_sequencial)
 									  FROM acordoposicao
-									  WHERE ac26_acordo = ' . $oParam->ac16_sequencial . '))
+									  WHERE ac26_acordo = ' . $oParam->ac16_sequencial . ')
 					  	AND ac26_acordo = ' . $oParam->ac16_sequencial
           );
 
