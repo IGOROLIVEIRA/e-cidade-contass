@@ -523,11 +523,11 @@ switch ($objJson->method) {
     *AJUSTE PARA SALDO VOLTAR PARA OS ITENS DA ULTIMA POSIÇÃO
     */
 
-    $paremetrosaldo->sql_query_file('','pc01_liberarsaldoposicao');
-    $resulparemetrosaldo  = db_utils::fieldsMemory($paremetrosaldo, 0);
-    if($resulparemetrosaldo->pc01_liberarsaldoposicao == false && pg_num_rows($resulparemetrosaldo)>0) {
-      
-
+    $Sqlparemetrosaldo= $paremetrosaldo->sql_record($paremetrosaldo->sql_query_file('','pc01_liberarsaldoposicao'));
+    $resulparemetrosaldo  = db_utils::fieldsMemory($Sqlparemetrosaldo, 0);
+    if($Sqlparemetrosaldo->pc01_liberarsaldoposicao == false && pg_num_rows($Sqlparemetrosaldo)>0) {
+  
+     
 
       db_inicio_transacao();
       $aItens = $objJson->itensAnulados;
@@ -615,9 +615,8 @@ switch ($objJson->method) {
 
         if($acordoitem->ac20_acordoposicao != $ItemUltimaPosicao->ac20_sequencial){
 
-
+          
           if($ItemUltimaPosicao->ac20_valorunitario != $aItens[$iInd]->vlruni){
-            
             
             
 
