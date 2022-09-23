@@ -46,10 +46,24 @@ if(isset($alterar)){
    $result = $cllicitaparam->sql_record($cllicitaparam->sql_query(DB_getsession("DB_instit")));
    if($result==false || $cllicitaparam->numrows==0){
      $cllicitaparam->l12_validacadfornecedor = $l12_validacadfornecedor;
+     $cllicitaparam->l12_escolherprocesso = $l12_escolherprocesso;
+     $cllicitaparam->l12_escolheprotocolo = $l12_escolheprotocolo;
+     $cllicitaparam->l12_qtdediasliberacaoweb = $l12_qtdediasliberacaoweb;
+     $cllicitaparam->l12_tipoliberacaoweb = $l12_tipoliberacaoweb;
+     $cllicitaparam->l12_usuarioadjundica = $l12_usuarioadjundica;
+     $cllicitaparam->l12_validacadfornecedor = $l12_validacadfornecedor;
+     $cllicitaparam->l12_pncp = $l12_pncp;
      $cllicitaparam->l12_instit = DB_getsession("DB_instit");
      $cllicitaparam->incluir(DB_getsession("DB_instit"));
    }else {
-     $cllicitaparam->l12_validacadfornecedor = $l12_validacadfornecedor;
+    $cllicitaparam->l12_validacadfornecedor = $l12_validacadfornecedor;
+    $cllicitaparam->l12_escolherprocesso = $l12_escolherprocesso;
+    $cllicitaparam->l12_escolheprotocolo = $l12_escolheprotocolo;
+    $cllicitaparam->l12_qtdediasliberacaoweb = $l12_qtdediasliberacaoweb;
+    $cllicitaparam->l12_tipoliberacaoweb = $l12_tipoliberacaoweb;
+    $cllicitaparam->l12_usuarioadjundica = $l12_usuarioadjundica;
+    $cllicitaparam->l12_validacadfornecedor = $l12_validacadfornecedor;
+     $cllicitaparam->l12_pncp = $l12_pncp;
      $cllicitaparam->l12_instit = DB_getsession("DB_instit");
      $cllicitaparam->alterar(db_getsession("DB_instit"));
    }

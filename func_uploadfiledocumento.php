@@ -43,7 +43,7 @@ if(isset($uploadfile)) {
   $nometmp = $_FILES["uploadfile"]["tmp_name"];
 
   // Seta o nome do arquivo destino do upload
-  $arquivoDocument = "/tmp/$nomearq";
+  $arquivoDocument = db_removeAcentuacao("tmp/$nomearq");
   
   
   // Faz um upload do arquivo para o local especificado
