@@ -362,6 +362,9 @@ if ((isset($opcao) && $opcao == "alterar")) {
           </td>
           <td>
             <?
+            db_input('pc11_codigo', 8, $pc11_codigo, true, 'hidden', $db_opcao, 'onkeypress="return event.charCode >= 48 && event.charCode <= 57" style="margin-left: -80px;"');
+            ?>
+            <?
             db_input('pc11_seq', 8, $pc11_seq, true, 'text', $db_opcao, 'onkeypress="return event.charCode >= 48 && event.charCode <= 57" style="margin-left: -80px;"');
             ?>
           </td>
@@ -457,6 +460,46 @@ db_input('db_botao', 5, 0, true, 'hidden', 3);
       return false;
     }
     e.target.value = valor;
+
+  }
+
+  function js_alterarLinha(indice) {
+
+    document.getElementById('db_opcao').value = "Alterar";
+    document.getElementById("db_opcao").setAttribute('name', 'alterar');
+    document.getElementById("db_opcao").setAttribute('type', 'submit');
+    document.getElementById("db_opcao").setAttribute('onclick', '');
+
+
+
+    document.getElementById('pc16_codmater').value = document.getElementsByName("codmaterial[]")[indice].value;
+    document.getElementById('pc01_descrmater').value = document.getElementsByName("descmaterial[]")[indice].value;
+    document.getElementById('pc11_seq').value = document.getElementsByName("ordem[]")[indice].value;
+    document.getElementById('pc11_quant').value = document.getElementsByName("quantidade[]")[indice].value;
+    document.getElementById('pc17_unid').value = document.getElementsByName("codigo_unidade[]")[indice].value;
+    document.getElementById('pc11_servicoquantidade').value = document.getElementsByName("servicoquantidade[]")[indice].value;
+    document.getElementById('pc11_codigo').value = document.getElementsByName("codigo[]")[indice].value;
+
+  }
+
+  function js_excluirLinha(indice) {
+
+
+    document.getElementById('db_opcao').value = "Excluir";
+    document.getElementById("db_opcao").setAttribute('name', 'excluir');
+    document.getElementById("db_opcao").setAttribute('type', 'submit');
+    document.getElementById("db_opcao").setAttribute('onclick', '');
+
+
+
+    document.getElementById('pc16_codmater').value = document.getElementsByName("codmaterial[]")[indice].value;
+    document.getElementById('pc01_descrmater').value = document.getElementsByName("descmaterial[]")[indice].value;
+    document.getElementById('pc11_seq').value = document.getElementsByName("ordem[]")[indice].value;
+    document.getElementById('pc11_quant').value = document.getElementsByName("quantidade[]")[indice].value;
+    document.getElementById('pc17_unid').value = document.getElementsByName("codigo_unidade[]")[indice].value;
+    document.getElementById('pc11_servicoquantidade').value = document.getElementsByName("servicoquantidade[]")[indice].value;
+    document.getElementById('pc11_codigo').value = document.getElementsByName("codigo[]")[indice].value;
+
 
   }
 
@@ -720,8 +763,10 @@ db_input('db_botao', 5, 0, true, 'hidden', 3);
 
   }
 
-  function js_adicionarItem() {
+  indice = 0;
 
+
+  function js_adicionarItem() {
 
 
     if (document.getElementById('pc17_unid2').style.display == 'block') {
@@ -812,7 +857,7 @@ db_input('db_botao', 5, 0, true, 'hidden', 3);
 
 
     aLinha[3] = "  <input style='text-align:center; width:90%; border:none;' readonly='' type='text'  name='unidade[]'  value='" + unidade + "'>";
-    aLinha[4] = "<input type='button' value='A' onclick='js_excluirLinha()'> <input type='button' value='E' onclick='js_excluirLinha()'>";
+    aLinha[4] = "<input type='button' value='A' onclick='js_alterarLinha(" + indice + ")'> <input type='button' name='excluir' value='E' onclick='js_excluirLinha(" + indice + ")'>";
 
     elesub = document.getElementById('eleSub').value;
     aLinha[5] = "  <input style='text-align:center; width:90%; border:none;' readonly='' type='text'  name='elesub[]' value='" + elesub + "'>";
@@ -832,16 +877,19 @@ db_input('db_botao', 5, 0, true, 'hidden', 3);
 
     aLinha[8] = "  <input style='text-align:center; width:90%; border:none;' readonly='' type='text'  name='codigo_unidade[]' value='" + codigo_unidade + "'>";
 
+    aLinha[9] = "  <input style='text-align:center; width:90%; border:none;' readonly='' type='text'  name='codigo[]' value='" + 0 + "'>";
+
+
     oGridItens.addRow(aLinha);
 
     for (var i = 0; i < sizeItens; i++) {
       oGridItens.addRow(itens_antigos[i]);
     }
 
+
     oGridItens.renderRows();
 
-
-
+    indice++;
 
   }
 
@@ -849,18 +897,80 @@ db_input('db_botao', 5, 0, true, 'hidden', 3);
 
   oGridItens = new DBGrid('oGridItens');
   oGridItens.nameInstance = 'oGridItens';
-  oGridItens.setCellAlign(['center', 'center', "center", "center", "center", "center", "center", "center", "center"]);
-  oGridItens.setCellWidth(["10%", "10%", "50%", "20%", "10%", "0%", "0%", "0%", "0%"]);
-  oGridItens.setHeader(["Ordem", "Código", "Descrição", "Unidade", "Ação", "", "", "", ""]);
+  oGridItens.setCellAlign(['center', 'center', "center", "center", "center", "center", "center", "center", "center", "center"]);
+  oGridItens.setCellWidth(["10%", "10%", "50%", "20%", "10%", "0%", "0%", "0%", "0%", ""]);
+  oGridItens.setHeader(["Ordem", "Código", "Descrição", "Unidade", "Ação", "", "", "", "", ""]);
   oGridItens.aHeaders[5].lDisplayed = false;
   oGridItens.aHeaders[6].lDisplayed = false;
   oGridItens.aHeaders[7].lDisplayed = false;
   oGridItens.aHeaders[8].lDisplayed = false;
+  oGridItens.aHeaders[9].lDisplayed = false;
 
 
 
   oGridItens.setHeight(200);
   oGridItens.show($('ctnGridItens'));
+  var db_opcao = <?php echo $db_opcao; ?>;
+  console.log(db_opcao);
+
+  if (db_opcao == 2 || db_opcao == 3) {
+
+
+    var sUrl = "com4_materialsolicitacao.RPC.php";
+
+    var oRequest = new Object();
+    oRequest.numero = top.corpo.iframe_solicita.document.form1.pc10_numero.value;
+    oRequest.exec = "getItens";
+    var oAjax = new Ajax.Request(
+      sUrl, {
+        method: 'post',
+        parameters: 'json=' + js_objectToJson(oRequest),
+        onComplete: js_retornogetItens
+      }
+    );
+
+    function js_retornogetItens(oAjax) {
+      var oRetorno = eval("(" + oAjax.responseText + ")");
+
+      oGridItens.clearAll(true);
+      var aLinha = new Array();
+      for (var i = 0; i < oRetorno.aItens.length; i++) {
+
+
+
+        aLinha[0] = " <input style='text-align:center; width:90%; border:none;' readonly='' type='text' name='ordem[]' value='" + oRetorno.aItens[i].pc11_seq + "'>"
+
+        aLinha[1] = " <input style='text-align:center; width:90%; border:none;' readonly='' type='text' name='codmaterial[]' value='" + oRetorno.aItens[i].pc01_codmater + "'>"
+
+
+        aLinha[2] = " <input style='text-align:center; width:90%; border:none;' readonly='' type='text' name='descmaterial[]' value='" + oRetorno.aItens[i].pc01_descrmater + "'>"
+
+        aLinha[3] = " <input style='text-align:center; width:90%; border:none;' readonly='' type='text' name='unidade[]' value='" + oRetorno.aItens[i].m61_descr + "'>";
+        aLinha[4] = "<input type='button' value='A'  onclick='js_alterarLinha(" + i + ")'> <input type='button' name='excluir' value='E' onclick='js_excluirLinha(" + i + ")'>";
+
+
+        aLinha[5] = " <input style='text-align:center; width:90%; border:none;' readonly='' type='text' name='elesub[]' value='" + oRetorno.aItens[i].pc18_codele + "'>";
+
+
+        aLinha[6] = " <input style='text-align:center; width:90%; border:none;' readonly='' type='text' name='quantidade[]' value='" + oRetorno.aItens[i].pc11_quant + "'>";
+
+
+        aLinha[7] = " <input style='text-align:center; width:90%; border:none;' readonly='' type='text' name='servicoquantidade[]' value='" + oRetorno.aItens[i].pc11_servicoquantidade + "'>";
+
+        aLinha[8] = " <input style='text-align:center; width:90%; border:none;' readonly='' type='text' name='codigo_unidade[]' value='" + oRetorno.aItens[i].m61_codmatunid + "'>";
+
+        aLinha[9] = " <input style='text-align:center; width:90%; border:none;' readonly='' type='text' name='codigo[]' value='" + oRetorno.aItens[i].pc11_codigo + "'>";
+
+
+        oGridItens.addRow(aLinha);
+
+
+      }
+
+      oGridItens.renderRows();
+
+    }
+  }
 
 
   oAutoComplete = new dbAutoComplete($('pc01_descrmater'), 'com4_pesquisamateriais.RPC.php');

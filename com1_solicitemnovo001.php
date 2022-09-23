@@ -241,6 +241,41 @@ if (isset($incluir) && $sqlerro == false) {
 	$servicoquantidade = $_POST['servicoquantidade'];
 	$codigo_unidade = $_POST['codigo_unidade'];
 
+	$aItens  = array();
+
+	// Unindo o array das propriedades do item em apenas um array
+
+	for ($i = 0; $i < count($codmaterial); $i++) {
+		$oItem = new stdClass();
+		$oItem->pc11_seq =  $ordem[$i];
+		$oItem->pc01_codmater =  $codmaterial[$i];
+		$oItem->pc11_quant =  	$quantidade[$i];
+		$oItem->codele =  $elesub[$i];
+		$oItem->pc11_servicoquantidade =  $servicoquantidade[$i];
+		$oItem->codunidade =  $codigo_unidade[$i];
+		$aItens[] = $oItem;
+	}
+
+	// Ordenação dos arrays conforme sequencial
+
+	usort(
+
+		$aItens,
+
+		function ($a, $b) {
+
+			if ($a->pc11_seq == $b->pc11_seq) return 0;
+
+			return (($a->pc11_seq < $b->pc11_seq) ? -1 : 1);
+		}
+	);
+
+
+	for ($i = 0; $i < count($aItens); $i++) {
+		$aItens[$i]->pc11_seq = $i + 1;
+	}
+
+
 
 	$sResumoRegistro = "";
 	if ($digitouresumo == "false" || (isset($pc11_resum) && $pc11_resum == "")) {
@@ -271,15 +306,15 @@ if (isset($incluir) && $sqlerro == false) {
 
 		for ($i = 0; $i < count($ordem); $i++) {
 			$clsolicitem->pc11_numero = $pc11_numero;
-			$clsolicitem->pc11_seq    = $ordem[$i];
-			$clsolicitem->pc11_quant    = $quantidade[$i];
+			$clsolicitem->pc11_seq    = $aItens[$i]->pc11_seq;
+			$clsolicitem->pc11_quant    = 		$aItens[$i]->pc11_quant;
 			$clsolicitem->pc11_vlrun  = $pc11_vlrun;
 			$clsolicitem->pc11_liberado = "f";
 			$clsolicitem->pc11_prazo = addslashes(stripslashes(trim($pc11_prazo)));
 			$clsolicitem->pc11_pgto  = addslashes(stripslashes(trim($pc11_pgto)));
 			$clsolicitem->pc11_resum = addslashes(stripslashes(trim($sResumoRegistro)));
 			$clsolicitem->pc11_just  = addslashes(stripslashes(trim($pc11_just)));
-			$clsolicitem->pc11_servicoquantidade = $servicoquantidade[$i];
+			$clsolicitem->pc11_servicoquantidade = $aItens[$i]->pc11_servicoquantidade;
 			$clsolicitem->incluir(empty($pc11_codigo) ? null : $pc11_codigo);
 			$array_pc11_codigo[$i] = $clsolicitem->pc11_codigo;
 		}
@@ -491,7 +526,7 @@ if (isset($incluir) && $sqlerro == false) {
 						}
 
 						$clsolicitalog->pc15_solicitem  = $array_pc11_codigo[$i];
-						$clsolicitalog->pc15_quant      = $quantidade[$i];
+						$clsolicitalog->pc15_quant      = 		$aItens[$i]->pc11_quant;
 						$clsolicitalog->pc15_vlrun      = $pc11_vlrun;
 						$clsolicitalog->pc15_id_usuario = db_getsession("DB_id_usuario");
 						$clsolicitalog->pc15_data       = date("Y-m-d", db_getsession("DB_datausu"));
@@ -513,7 +548,7 @@ if (isset($incluir) && $sqlerro == false) {
 		if ($sqlerro == false && count($codmaterial) != 0) {
 
 			for ($i = 0; $i < count($codmaterial); $i++) {
-				$pc16_codmaterial = $codmaterial[$i];
+				$pc16_codmaterial = $aItens[$i]->pc01_codmater;
 				$result_msgcodmater = $clsolicitempcmater->sql_record($clsolicitempcmater->sql_query_file(null, null, "pc16_codmater", "", " pc16_codmater=$pc16_codmaterial and pc16_solicitem in (select pc11_codigo from solicitem where pc11_numero in ($pc11_numero))"));
 				if ($clsolicitempcmater->numrows > 0) {
 					$msg_alert = "AVISO \\n\\nItem ja cadastrado nesta solicitação.";
@@ -532,7 +567,7 @@ if (isset($incluir) && $sqlerro == false) {
 					try {
 
 						$oSolicitacao = new solicitacaoCompra($pc11_numero);
-						$oSolicitacao->vincularItemPacto($array_pc11_codigo[$i], $o103_pactovalor, $quantidade[$i], @($quantidade[$i] * $pc11_vlrun));
+						$oSolicitacao->vincularItemPacto($array_pc11_codigo[$i], $o103_pactovalor, $aItens[$i]->pc11_quant, @($aItens[$i]->pc11_quant * $pc11_vlrun));
 					} catch (Exception $eErro) {
 
 						$sqlerro  = true;
@@ -541,7 +576,7 @@ if (isset($incluir) && $sqlerro == false) {
 				}
 				if ($sqlerro == false) {
 
-					$clsolicitemele->incluir($array_pc11_codigo[$i], $elesub[$i]);
+					$clsolicitemele->incluir($array_pc11_codigo[$i], $aItens[$i]->codele);
 					if ($clsolicitemele->erro_status == 0) {
 						$sqlerro = true;
 						$erro_msg = $clsolicitemele->erro_msg;
@@ -552,7 +587,7 @@ if (isset($incluir) && $sqlerro == false) {
 					try {
 
 						$oSolicitacao = new solicitacaoCompra($pc11_numero);
-						$oSolicitacao->addItemRegistroPreco($array_pc11_codigo[$i], $codmaterial[$i], $iRegistroPreco, $quantidade[$i], $registroprecoorigem, $pc11_vlrun);
+						$oSolicitacao->addItemRegistroPreco($array_pc11_codigo[$i], $aItens[$i]->pc01_codmater, $iRegistroPreco, 		$aItens[$i]->pc11_quant, $registroprecoorigem, $pc11_vlrun);
 					} catch (Exception $eErro) {
 
 						$sqlerro  = true;
@@ -568,12 +603,12 @@ if (isset($incluir) && $sqlerro == false) {
 
 
 		for ($i = 0; $i < count($codmaterial); $i++) {
-			$result_servico = $clpcmater->sql_record($clpcmater->sql_query($codmaterial[$i], "pc01_servico, pc01_descrmater", "pc01_codmater"));
+			$result_servico = $clpcmater->sql_record($clpcmater->sql_query($aItens[$i]->pc01_codmater, "pc01_servico, pc01_descrmater", "pc01_codmater"));
 			db_fieldsmemory($result_servico, 0);
 
-			if ($servicoquantidade[$i] == 'true' || $pc01_servico == "f" && $sqlerro == false) {
+			if ($aItens[$i]->pc11_servicoquantidade == 'true' || $pc01_servico == "f" && $sqlerro == false) {
 
-				$clsolicitemunid->pc17_unid = $codigo_unidade[$i];
+				$clsolicitemunid->pc17_unid = $aItens[$i]->codunidade;
 				$clsolicitemunid->pc17_quant = 1; //$pc17_quant;
 				$clsolicitemunid->pc17_codigo = $array_pc11_codigo[$i];
 				$clsolicitemunid->incluir($array_pc11_codigo[$i]);
@@ -592,10 +627,10 @@ if (isset($incluir) && $sqlerro == false) {
 
 		for ($i = 0; $i < count($codmaterial); $i++) {
 
-			$result_servico = $clpcmater->sql_record($clpcmater->sql_query($codmaterial[$i], "pc01_servico, pc01_descrmater", "pc01_codmater"));
+			$result_servico = $clpcmater->sql_record($clpcmater->sql_query($aItens[$i]->pc01_codmater, "pc01_servico, pc01_descrmater", "pc01_codmater"));
 			db_fieldsmemory($result_servico, 0);
 
-			if ($servicoquantidade[$i] == 'false' && $pc01_servico == "t") {
+			if ($aItens[$i]->pc11_servicoquantidade == 'false' && $pc01_servico == "t") {
 				$clsolicitemunid->pc17_unid = 999999;
 				$clsolicitemunid->pc17_quant = 1;
 				$clsolicitemunid->pc17_codigo = $array_pc11_codigo[$i];
@@ -618,7 +653,7 @@ if (isset($incluir) && $sqlerro == false) {
 				} else {
 					$pc12_vlrap = 0;
 				}
-				$clsolicitatipo->pc12_vlrap = $pc12_vlrap + ($quantidade[$i] * $pc11_vlrun);
+				$clsolicitatipo->pc12_vlrap = $pc12_vlrap + ($aItens[$i]->pc11_quant * $pc11_vlrun);
 				$clsolicitatipo->pc12_numero = $pc11_numero;
 				$clsolicitatipo->alterar($pc11_numero);
 				if ($clsolicitatipo->erro_status == 0) {
@@ -1191,6 +1226,7 @@ db_fieldsmemory($result_pcparam1, 0);
 		}
 	}
 } else if (isset($excluir)) {
+
 	db_inicio_transacao();
 
 	// Para exclusao do item em processos e licitacoes nao autorizadas
@@ -1847,6 +1883,7 @@ where pc20_codorc = $codorc";
 
 	//  $sqlerro = true;
 	db_fim_transacao($sqlerro);
+	$db_opcao = 3;
 	// A quantidade de itens das dotações serão atualizadas automaticamente!
 }
 
@@ -1943,7 +1980,7 @@ if (isset($pc11_numero)) {
 	<meta http-equiv="Expires" CONTENT="0">
 	<?
 
-	db_app::load("scripts.js, prototype.js, datagrid.widget.js,windowAux.widget.js,messageboard.widget.js, strings.js, AjaxRequest.js");
+	db_app::load("scripts.js, prototype.js, datagrid.widget.js,windowAux.widget.js,messageboard.widget.js, strings.js, AjaxRequest.js,widgets/dbautocomplete.widget.js");
 	db_app::load("classes/ultimosOrcamentos.classe.js");
 	db_app::load("estilos.css, grid.style.css");
 	?>
@@ -2068,15 +2105,22 @@ if (isset($alterar) || isset($excluir) || isset($incluir)) {
 			}
 		}
 	} else {
-		db_msgbox("Itens incluídos com sucesso");
+
+		if (isset($excluir)) {
+			db_msgbox("Itens excluídos com sucesso");
+		} else if (isset($incluir)) {
+			db_msgbox("Itens incluídos com sucesso");
+		}
+
 
 		echo "<script>top.corpo.iframe_solicita.location.href = 'com1_solicitanovo005.php?chavepesquisa=$pc11_numero&ld=false&altera=true'</script>";
 		if ($pc30_sugforn == 't') {
 			echo "<script> top.corpo.iframe_sugforn.location.href='com1_sugforn001.php?pc40_solic=$pc11_numero$parametro';</script>";
 		}
+		/*
 		if (isset($excluir)) {
 			echo "<script> document.location.href = 'com1_solicitemnovo001.php?pc11_numero=$pc11_numero&selecao=" . @$selecao . "$parametro'; </script>";
-		}
+		}*/
 	}
 }
 ?>

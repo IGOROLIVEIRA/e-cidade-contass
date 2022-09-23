@@ -58,6 +58,7 @@ require_once("classes/db_pactovalormovsolicitem_classe.php");
 require_once("classes/db_orctiporecconveniosolicita_classe.php");
 require_once("classes/db_solicitaprotprocesso_classe.php");
 
+
 db_postmemory($HTTP_GET_VARS);
 db_postmemory($HTTP_POST_VARS);
 
