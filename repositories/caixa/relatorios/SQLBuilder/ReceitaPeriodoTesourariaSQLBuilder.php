@@ -528,9 +528,9 @@ class ReceitaPeriodoTesourariaSQLBuilder
     {
         $this->sqlExtraOrcamentaria = "
             SELECT
-                tabrec.k02_codigo,
-                tabrec.k02_tipo,
-                tabrec.k02_drecei,
+                g.k02_codigo,
+                g.k02_tipo,
+                g.k02_drecei,
                 CASE
                     WHEN taborc.k02_codrec IS NOT NULL 
                     THEN taborc.k02_codrec
@@ -561,8 +561,8 @@ class ReceitaPeriodoTesourariaSQLBuilder
                 AND c60_anousu = c61_anousu
             INNER JOIN tabplan ON tabplan.k02_anousu = conplanoreduz.c61_anousu
                 AND tabplan.k02_reduz = conplanoreduz.c61_reduz
-            INNER JOIN tabrec ON tabrec.k02_codigo = tabplan.k02_codigo
-            LEFT OUTER JOIN taborc ON taborc.k02_codigo = tabrec.k02_codigo
+            INNER JOIN tabrec AS g ON g.k02_codigo = tabplan.k02_codigo
+            LEFT OUTER JOIN taborc ON taborc.k02_codigo = g.k02_codigo
                 AND taborc.k02_anousu = EXTRACT(YEAR FROM corrente.k12_data)
             LEFT JOIN corhist ON corhist.k12_id = corrente.k12_id
                 AND corhist.k12_data = corrente.k12_data
