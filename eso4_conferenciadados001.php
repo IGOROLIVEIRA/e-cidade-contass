@@ -195,6 +195,14 @@ $mesfolha = DBPessoal::getMesFolha();
                         </select>
                     </td>
                 </tr>
+                <tr>
+                    <td align="left" id="tipo_col" style="display:none"><label>Tipo de evento:</label>
+                        <select name="tpevento" id="tpevento" style="width: 25%;">
+                            <option value="1">RH</option>
+                            <option value="2">Contabilidade</option>
+                        </select>
+                    </td>
+                </tr>
             </table>
         </fieldset>
         <input type="button" id="pesquisar" name="pesquisar" value="Pesquisar" />
@@ -293,6 +301,7 @@ $mesfolha = DBPessoal::getMesFolha();
                 'iMesValidade': $F('mesfolha'),
                 'indapuracao': $F('indapuracao'),
                 'tppgto': $F('tppgto'),
+                'tpevento': $F("tpevento"),
                 'matricula': aMatriculas.join(',')
             }; //Codigo Tipo::CADASTRAMENTO_INICIAL
             new AjaxRequest('eso4_esocialapi.RPC.php', parametros, function(retorno) {
@@ -345,6 +354,9 @@ $mesfolha = DBPessoal::getMesFolha();
             if (document.getElementById('indapuracao_col').style.display == 'none') {
                 document.getElementById('indapuracao_col').style.display = 'inline';
             }
+            if (document.getElementById('tipo_col').style.display == 'none') {
+                document.getElementById('tipo_col').style.display = 'inline';
+            }
         } else if ((document.getElementById('evento').value == 'S1210')) {
             if (document.getElementById('tppgto_col').style.display == 'none') {
                 document.getElementById('tppgto_col').style.display = 'inline';
@@ -352,6 +364,7 @@ $mesfolha = DBPessoal::getMesFolha();
         } else {
             document.getElementById('indapuracao_col').style.display = 'none';
             document.getElementById('tppgto_col').style.display = 'none'
+            document.getElementById('tipo_col').style.display = 'none';
         }
     }
 

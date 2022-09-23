@@ -202,9 +202,14 @@ class EventoS1210 extends EventoBase
     ";
         //1200
         if ($tppgto == 1) {
-            $sql .= " and h13_categoria in ('101', '106', '111', '301', '302', '303', '305', '306', '309', '312', '313', '902','701','712','771','901','711')
-            and rh30_vinculo = 'A'
-            and r33_tiporegime = '1' ";
+            $sql .= " and (
+                (h13_categoria = '901' and rh30_vinculo = 'A')
+                or
+                (h13_categoria in ('101', '106', '111', '301', '302', '303', '305', '306', '309', '312', '313', '902','701','712','771','711')
+                and rh30_vinculo = 'A'
+                and r33_tiporegime = '1')
+            )
+            ";
         }
         //2299
         if ($tppgto == 2) {
