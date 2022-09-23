@@ -121,7 +121,7 @@ if (isset($l20_codigo) && $l20_codigo) {
 if (isset($confirmar) && trim($confirmar) != "") {
 
 	if(!$dtjulgamento){
-		$erro_msg = 'Data do Julgamento não informada. Verifique!';
+		$erro_msg = 'Data do Julgamento nÃ£o informada. Verifique!';
 		$sqlerro = true;
 	}
 
@@ -132,14 +132,14 @@ if (isset($confirmar) && trim($confirmar) != "") {
         $rsTribunal = $clcflicita->sql_record($sqlTribunal);
         $iTribunal = db_utils::fieldsMemory($rsTribunal, 0)->l03_pctipocompratribunal;
 
-        // 1ª validação
+        // 1Âª validaÃ§Ã£o
         if($dtjulgamento < $oDadosLicitacao->l20_datacria){
             $erro_msg = 'Data de Julgamento menor que a data de Abertura de Procedimento Administrativo!';
             $sqlerro = true;
         }
     }
 
-    // 2ª validação
+    // 2Âª validaÃ§Ã£o
     if(!$sqlerro){
         if(in_array($iTribunal, array(49, 50, 51, 52, 53, 54))){
             $dataaber = $oDadosLicitacao->l20_dataaber;
@@ -149,27 +149,27 @@ if (isset($confirmar) && trim($confirmar) != "") {
             $public2 = $oDadosLicitacao->l20_datapublicacao2;
 
             if($dtjulgamento < $dataaber){
-				$erro_msg = 'Data inválida! Data de Julgamento menor que a Data de Abertura da Licitação\nVerifique!';
+				$erro_msg = 'Data invÃ¡lida! Data de Julgamento menor que a Data de Abertura da LicitaÃ§Ã£o\nVerifique!';
 				$sqlerro = true;
             }
             if($dtjulgamento < $dtpublic){
-				$erro_msg = 'Data inválida! Data de Julgamento menor que a Data de Publicação da Licitação\nVerifique!';
+				$erro_msg = 'Data invÃ¡lida! Data de Julgamento menor que a Data de PublicaÃ§Ã£o da LicitaÃ§Ã£o\nVerifique!';
 				$sqlerro = true;
             }
             if($dtjulgamento < $recdocumentacao){
-				$erro_msg = 'Data inválida! Data de Julgamento menor que a Data de Recebimento da Documentação.\nVerifique!';
+				$erro_msg = 'Data invÃ¡lida! Data de Julgamento menor que a Data de Recebimento da DocumentaÃ§Ã£o.\nVerifique!';
 				$sqlerro = true;
             }
             if($dtjulgamento < $public1){
-				$erro_msg = 'Data inválida! Data de Julgamento menor que a Data Publicação Edital Veiculo 1 .\nVerifique!';
+				$erro_msg = 'Data invÃ¡lida! Data de Julgamento menor que a Data PublicaÃ§Ã£o Edital Veiculo 1 .\nVerifique!';
 				$sqlerro = true;
             }
             if($dtjulgamento < $public2){
-                $erro_msg = 'Data inválida! Data de Julgamento menor que a Data Publicação Edital Veiculo 2.\nVerifique!';
+                $erro_msg = 'Data invÃ¡lida! Data de Julgamento menor que a Data PublicaÃ§Ã£o Edital Veiculo 2.\nVerifique!';
                 $sqlerro = true;
             }
 
-  //            4ª validação
+  //            4Âª validaÃ§Ã£o
             if(!$sqlerro){
                 $sqlHomoAdjudica = $clhomologadjudica->sql_query('', 'l202_datahomologacao, l202_dataadjudicacao',
                     '', 'l202_licitacao = ' . $l20_codigo);
@@ -178,12 +178,12 @@ if (isset($confirmar) && trim($confirmar) != "") {
 
                 if($oHomoAdjudica->l202_datahomologacao && $oHomoAdjudica->l202_dataadjudicacao){
                     if($dtjulgamento > $oHomoAdjudica->l202_datahomologacao){
-						$erro_msg = 'Data de Julgamento é maior que Data da Homologação ou maior que a data de adjudicação.';
+						$erro_msg = 'Data de Julgamento Ã© maior que Data da HomologaÃ§Ã£o ou maior que a data de adjudicaÃ§Ã£o.';
 						$sqlerro = true;
                     }
 
                     if($dtjulgamento > $oHomoAdjudica->l202_dataadjudicacao){
-                        $erro_msg = 'Data de Julgamento é maior que Data da Homologação ou maior que a data de adjudicação.';
+                        $erro_msg = 'Data de Julgamento Ã© maior que Data da HomologaÃ§Ã£o ou maior que a data de adjudicaÃ§Ã£o.';
                         $sqlerro = true;
                     }
                 }
@@ -191,7 +191,7 @@ if (isset($confirmar) && trim($confirmar) != "") {
         }
     }
 
-  //     3ª validação
+  //     3Âª validaÃ§Ã£o
     if(!$sqlerro){
 		$sqlParecer = $clparecerlicitacao->sql_query('', 'l200_data', '',
 			'l200_licitacao = ' . $l20_codigo);
@@ -206,10 +206,10 @@ if (isset($confirmar) && trim($confirmar) != "") {
         }
     }
 
-  //    5ª validação
+  //    5Âª validaÃ§Ã£o
     if(in_array($iTribunal, array(100, 101, 102, 103)) && !$sqlerro){
 		if($dtjulgamento > $oDadosLicitacao->l20_dtpubratificacao && $oDadosLicitacao->l20_dtpubratificacao){
-		    $erro_msg = 'Data de Julgamento é maior que a Data de Publicação do Termo de Ratificação. Verifique!';
+		    $erro_msg = 'Data de Julgamento Ã© maior que a Data de PublicaÃ§Ã£o do Termo de RatificaÃ§Ã£o. Verifique!';
 		    $sqlerro = true;
         }
     }
@@ -311,19 +311,19 @@ if (isset($confirmar) && trim($confirmar) != "") {
           $sStringArquivo   = file_get_contents($sCaminhoSalvoSxw);
 
           if ( !$sStringArquivo ) {
-            $erro_msg = "Falha ao abrir o arquivo {$sCaminhoSalvoSxw}! Modelo de ata inicial não foi gerado.";
+            $erro_msg = "Falha ao abrir o arquivo {$sCaminhoSalvoSxw}! Modelo de ata inicial nÃ£o foi gerado.";
             $sqlerro  = true;
           }
 
           $oLargeObject = pg_lo_open($iOidGravaArquivo, "w");
           if (!$oLargeObject) {
-            $erro_msg = "Falha ao buscar objeto do banco de dados! Modelo de ata inicial não foi gerado.";
+            $erro_msg = "Falha ao buscar objeto do banco de dados! Modelo de ata inicial nÃ£o foi gerado.";
             $sqlerro  = true;
           }
 
           $lObjetoEscrito = pg_lo_write($oLargeObject, $sStringArquivo);
           if (!$lObjetoEscrito) {
-            $erro_msg = "Falha na escrita do objeto no banco de dados! Modelo de ata inicial não foi gerado.";
+            $erro_msg = "Falha na escrita do objeto no banco de dados! Modelo de ata inicial nÃ£o foi gerado.";
             $sqlerro  = true;
           }
 
@@ -422,7 +422,7 @@ if (isset($confirmar) && trim($confirmar) != "") {
 
       if ($lRegistroPreco) {
         /**
-         * buscamos o código do item do registro de preço , e o valor unitário para inserir em registroprecojulgamento
+         * buscamos o cÃ³digo do item do registro de preÃ§o , e o valor unitÃ¡rio para inserir em registroprecojulgamento
          */
         $sSqlDadosRegistroPreco  = "SELECT pc81_solicitem, ";
         $sSqlDadosRegistroPreco .= "       pc23_vlrun ";
@@ -440,7 +440,7 @@ if (isset($confirmar) && trim($confirmar) != "") {
         if (pg_num_rows($rsRegistroPreco) != 1) {
 
           $sqlerro  = true;
-          $erro_msg = "Não existem registros de preços para esta solicitação.";
+          $erro_msg = "NÃ£o existem registros de preÃ§os para esta solicitaÃ§Ã£o.";
           break;
         }
 
@@ -514,7 +514,7 @@ if (isset($confirmar) && trim($confirmar) != "") {
         $clliclicitasituacao->l11_id_usuario  = DB_getSession("DB_id_usuario");
         $clliclicitasituacao->l11_licsituacao = 1;
         $clliclicitasituacao->l11_liclicita   = $clliclicita->l20_codigo;
-        $clliclicitasituacao->l11_obs         = "Licitação Julgada";
+        $clliclicitasituacao->l11_obs         = "LicitaÃ§Ã£o Julgada";
         $clliclicitasituacao->l11_data        = $dtjulgamento;
         $clliclicitasituacao->l11_hora        = DB_hora();
         //db_inicio_transacao();
