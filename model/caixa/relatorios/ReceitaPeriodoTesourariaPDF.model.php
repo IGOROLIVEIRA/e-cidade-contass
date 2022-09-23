@@ -81,9 +81,14 @@ class ReceitaPeriodoTesourariaPDF extends PDF
         if (count($this->aDadosRelatorio) == 0) {
             db_redireciona('db_erros.php?fechar=true&db_erro=Não existem lançamentos para a receita');
         }
-        $this->montarTabelaReceitaOrcamentaria();
-        $this->montarTabelaReceitaExtraOrcamentaria();
-        $this->montarTotalGeral();
+        if ($this->sTipo != ReceitaTipoRepositoryLegacy::DIARIO) {
+            $this->montarTabelaReceitaOrcamentaria();
+            $this->montarTabelaReceitaExtraOrcamentaria();
+            $this->montarTotalGeral();
+        } else {
+            $this->montarTabelaReceitaDiaria();
+        }
+
         $this->Output();
     }
 
@@ -106,23 +111,6 @@ class ReceitaPeriodoTesourariaPDF extends PDF
         $this->ln(5);
 
         $this->cell(110, 4, "DEMONSTRATIVO DO DESDOBRAMENTO DA RECEITA LIVRE", 1, 1, "L", 0);
-        /*
-        VER COMO FUNCIONA O TOTAL POR RECURSOS
-                
-          $totalrecursos=0;
-          while (list ($key, $valor) = each($valatu)) {
-              $totalrecursos += $valor;
-          }
-      
-        reset($valatu);
-      
-          while (list ($key, $valor) = each($valatu)) {
-              $this->cell(70, 5, $key, 0, 0, "L", 0, 0, ".");
-              $this->cell(20, 5, db_formatar($valor, 'f'), 0, 0, "R", 0);
-              $this->cell(20, 5, db_formatar($valor / $totalrecursos * 100, 'p') . "%", 0, 1, "R", 0);
-          }
-  
-          */
         $this->setfont('arial', 'B', 7);
         $this->cell(110, 5, db_formatar($this->totalRecursos, 'f'), 1, 1, "R", 0);
     }
@@ -151,13 +139,8 @@ class ReceitaPeriodoTesourariaPDF extends PDF
             $this->totalOrcamentaria += $oReceita->valor;
         }
 
-        # SE TEM DESDOBRAMENTO
-
         $this->setfont('arial', 'B', 7);
         $this->cell($this->PDFiTamanhoDescricaoTotal, 4, "TOTAL ...", 1, 0, "L", 0);
-        /*    } elseif ($sinana == 'S3') {
-      $this->cell(235, 4, "TOTAL ...", 1, 0, "L", 0);
-    } */
         $this->cell(25, 4, db_formatar($this->totalOrcamentaria, 'f'), 1, 1, "R", 0);
     }
 
@@ -232,7 +215,7 @@ class ReceitaPeriodoTesourariaPDF extends PDF
         $this->cell($this->PDFiTamanhoTitulo, 4, strtoupper($oReceita->descricao), 1, 0, "L", $this->preencherCelula);
         if ($this->sTipo == ReceitaTipoRepositoryLegacy::CONTA) {
             $this->cell(15, 4, $oReceita->conta, 1, 0, "C", $this->preencherCelula);
-            $this->cell(60, 4, substr($oReceita->conta_descricao, 0, 37) , 1, 0, "L", $this->preencherCelula);
+            $this->cell(60, 4, substr($oReceita->conta_descricao, 0, 37), 1, 0, "L", $this->preencherCelula);
         }
         $this->cell(25, 4, db_formatar($oReceita->valor, 'f'), 1, $this->PDFbFinalValor, "R", $this->preencherCelula);
         if ($this->sTipo == ReceitaTipoRepositoryLegacy::ANALITICO) {
@@ -318,6 +301,68 @@ class ReceitaPeriodoTesourariaPDF extends PDF
             $this->Cell(80, 6, "HISTÓRICO", 1, 1, "C", 1);
     }
 
+    public function montarTabelaReceitaDiaria()
+    {
+        $this->ln(2);
+        $this->AddPage();
+        $this->SetTextColor(0, 0, 0);
+        $this->SetFillColor(220);
+        foreach ($this->aDadosRelatorio as $data => $aReceita) {
+            $this->montarTituloDiario();
+            if ($this->gety() > $this->h - 30) {
+                $this->Addpage();
+                $this->montarTituloDiario();
+            }
+            $totalDiario = 0;
+            foreach ($aReceita as $oReceita) {
+                if ($this->gety() > $this->h - 30) {
+                    $this->Addpage();
+                    $this->montarTituloDiario();
+                }
+                $this->montarDadosDiarios($oReceita);
+                $this->definirFundoColorido();
+                $totalDiario += $oReceita->valor;
+                $this->totalGeralDiario += $oReceita->valor;
+            }
+            $this->setfont('arial', 'B', 7);
+            $this->cell(254, 4, "SubTotal:", 1, 0, "R", 1);
+            $this->cell(25, 4, db_formatar($totalDiario, 'f'), 1, 1, "R", 1);
+            $this->ln(5);
+        }
+        $this->cell(254, 4, "Total Geral....:", 1, 0, "R", 1);
+        $this->cell(25, 4, db_formatar($this->totalGeralDiario, 'f'), 1, 1, "R", 1);
+        $this->ln(5);
+    }
+
+    public function montarTituloDiario()
+    {
+        $this->SetFont('Arial', 'B', 9);
+        $this->Cell(10, 6, "COD", 1, 0, "C", 1);
+        $this->Cell(10, 6, "RED", 1, 0, "C", 1);
+        $this->Cell(15, 6, "DATA", 1, 0, "C", 1);
+        $this->Cell(15, 6, "GUIA Nº", 1, 0, "C", 1);
+        $this->Cell(25, 6, "ESTRUTURAL", 1, 0, "C", 1);
+        $this->Cell(15, 6, "FONTE", 1, 0, "C", 1);
+        $this->Cell(80, 6, "DESC DA RECEITA", 1, 0, "C", 1);
+        $this->Cell(15, 6, "CONTA", 1, 0, "L", 1);
+        $this->Cell(69, 6, "DESCRIÇÃO", 1, 0, "L", 1);
+        $this->Cell(25, 6, "VALOR", 1, 1, "C", 1);
+    }
+
+    public function montarDadosDiarios($oReceita)
+    {
+        $this->setfont('arial', '', 7);
+        $this->cell(10, 4, $oReceita->codigo, 1, 0, "C", $this->preencherCelula);
+        $this->cell(10, 4, $oReceita->reduzido, 1, 0, "C", $this->preencherCelula);
+        $this->Cell(15, 4, db_formatar($oReceita->data, 'd'), 1, 0, "C", $this->preencherCelula);
+        $this->Cell(15, 4, $oReceita->numpre, 1, 0, "C", $this->preencherCelula);
+        $this->cell(25, 4, $oReceita->estrutural, 1, 0, "C", $this->preencherCelula);
+        $this->Cell(15, 4, $oReceita->fonte, 1, 0, "C", $this->preencherCelula);
+        $this->cell(80, 4, strtoupper($oReceita->descricao), 1, 0, "L", $this->preencherCelula);
+        $this->cell(15, 4, $oReceita->conta, 1, 0, "C", $this->preencherCelula);
+        $this->cell(69, 4, $oReceita->conta_descricao, 1, 0, "L", $this->preencherCelula);
+        $this->cell(25, 4, db_formatar($oReceita->valor, 'f'), 1, 1, "R", $this->preencherCelula);
+    }
 
     public function pegarDados()
     {

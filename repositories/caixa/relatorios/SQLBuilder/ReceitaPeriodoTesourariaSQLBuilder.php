@@ -204,8 +204,8 @@ class ReceitaPeriodoTesourariaSQLBuilder
         }
 
         if ($this->sTipo == ReceitaTipoRepositoryLegacy::DIARIO) {
-            $this->definirSQLSelectReceita();
-            $this->definirSQLGroupReceita();
+            $this->definirSQLSelectAnalitico();
+            $this->definirSQLGroupAnalitico();
             return;
         }
     }
