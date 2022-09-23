@@ -34,6 +34,11 @@ class EventoS1200 extends EventoBase
     {
         $ano = date("Y", db_getsession("DB_datausu"));
         $mes = date("m", db_getsession("DB_datausu"));
+        $data = "$ano-$mes-01";
+        $data = new \DateTime($data);
+        $data->modify('last day of this month');
+        $ultimoDiaDoMes = $data->format('d');
+
         $aDadosAPI = array();
         $iSequencial = 1;
         foreach ($this->dados as $oDados) {
@@ -135,7 +140,37 @@ class EventoS1200 extends EventoBase
                 $aDadosAPI[] = $oDadosAPI;
                 $iSequencial++;
             } else {
-                $aDadosPorMatriculas = $this->buscarDadosContabilidade($oDados->z01_cgccpf);
+                $aDadosContabilidade = $this->buscarDadosContabilidade($oDados->z01_cgccpf, $ultimoDiaDoMes, $mes, $ano);
+                foreach ($aDadosContabilidade as $aDadosPorCpf) {
+                    $oDadosAPI                                   = new \stdClass();
+                    $oDadosAPI->evtRemun                      = new \stdClass();
+                    $oDadosAPI->evtRemun->sequencial          = $iSequencial;
+                    $oDadosAPI->evtRemun->modo                = $this->modo;
+                    $oDadosAPI->evtRemun->indRetif            = 1;
+                    $oDadosAPI->evtRemun->nrRecibo            = null;
+
+                    $oDadosAPI->evtRemun->indapuracao         = $this->indapuracao;
+                    $oDadosAPI->evtRemun->perapur             = $ano . '-' . $mes;
+                    if ($this->indapuracao == 2) {
+                        $oDadosAPI->evtRemun->perapur         = $ano;
+                    }
+                    $oDadosAPI->evtRemun->cpftrab             = $aDadosPorCpf[0]->cpftrab;
+
+                    if (strlen($aDadosPorCpf[0]->indmv) > 0) {
+                        $oDadosAPI->evtRemun->infomv->indmv       = $aDadosPorCpf[0]->indmv;
+
+                        $oRemunoutrempr = new \stdClass();
+                        $oRemunoutrempr->tpinsc      = 1;
+                        $oRemunoutrempr->nrinsc      = $aDadosPorCpf[0]->rh51_cgcvinculo;
+                        $oRemunoutrempr->codcateg    = $aDadosPorCpf[0]->codcateg;
+                        if (strlen($aDadosPorCpf[0]->vlrremunoe) > 0) {
+                            $oRemunoutrempr->vlrremunoe  = $aDadosPorCpf[0]->vlrremunoe;
+                        }
+                        $aRemunoutrempr[] = $oRemunoutrempr;
+
+                        $oDadosAPI->evtRemun->infomv->remunoutrempr = $aRemunoutrempr;
+                    }
+                }
             }
         }
         // echo '<pre>';
@@ -446,8 +481,9 @@ left outer join (
         return $aItens;
     }
 
-    private function buscarDadosContabilidade($cpf)
+    private function buscarDadosContabilidade($cpf, $ultimoDiaDoMes, $mes, $ano)
     {
+
         $sql = "SELECT distinct e50_codord as ideDmDev,
         e60_numcgm,
         e70_vlrliq,
@@ -490,9 +526,8 @@ left outer join (
         left join retencaopagordem on pagordem.e50_codord = retencaopagordem.e20_pagordem
         left join retencaoreceitas on retencaoreceitas.e23_retencaopagordem = retencaopagordem.e20_sequencial
         left join retencaotiporec on retencaotiporec.e21_sequencial = retencaoreceitas.e23_retencaotiporec
-    where e50_data BETWEEN '2022-01-01' AND '2022-08-31'
+    where e50_data BETWEEN '$ano-$mes-01' AND '$ano-$mes-$ultimoDiaDoMes'
         and Length(cgm.z01_cgccpf) like '11'
-        and cgm.z01_cgccpf = '$cpf'
         and e50_cattrabalhador is not null
     ";
 
@@ -507,6 +542,6 @@ left outer join (
                 $aItens[] = $oResult;
             }
         }
-        return $aItens;
+        //return $aItens;
     }
 }
