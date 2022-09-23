@@ -549,7 +549,7 @@ switch ($objJson->method) {
           AND (ac29_quantidade < 0
           OR ac29_valor < 0)");
 
-        $rsacordoMaterial = db_utils::fieldsMemory($acordoMaterial);
+        $rsacordoMaterial = db_utils::fieldsMemory($acordoMaterial,0);
 
         $DaoacordoItemDotacao = db_utils::getDao('acordoitemdotacao');
         $Dotacao = $DaoacordoItemDotacao->sql_record("SELECT ac22_sequencial,ac22_valor,ac22_quantidade
@@ -566,7 +566,7 @@ switch ($objJson->method) {
           break;
         }
 
-        $Dotacao = db_utils::fieldsMemory($Dotacao);
+        $Dotacao = db_utils::fieldsMemory($Dotacao,0);
 
         $DaoacordoItem = db_utils::getDao('acordoitem');
         $ItemUltimaPosicao = $DaoacordoItem->sql_record("
@@ -579,29 +579,31 @@ switch ($objJson->method) {
           FROM acordoposicao
           WHERE ac26_acordo = {$rsacordoMaterial->ac26_acordo})
           AND ac20_pcmater = {$rsacordoMaterial->ac20_pcmater} ");
-        $ItemUltimaPosicao = db_utils::fieldsMemory($ItemUltimaPosicao);
-        print_r($aItens[$iInd]->e62_sequencial);
+        $ItemUltimaPosicao = db_utils::fieldsMemory($ItemUltimaPosicao,0);
+        
         $empempaut = db_query("select e61_autori from empempaut where e61_numemp = {$objJson->iEmpenho}");
         if(pg_num_rows($empempaut) == 0){
           print_r('erro empaut');
           break;
         }
+
         $rsempempaut = db_utils::fieldsMemory($empempaut,0);
         $empautitem = db_query("select e55_sequen from empautitem where e55_autori = {$rsempempaut->e61_autori} and e55_item = {$rsacordoMaterial->ac20_pcmater}");
         if(pg_num_rows($empautitem) == 0){
           print_r('erro empautitem');
           break;
         }
+
         $rsempautitem = db_utils::fieldsMemory($empautitem,0);
-        print_r("select min(ac19_acordoitemexecutado) from acordoitemexecutadoempautitem  where ac19_autori = {$rsempempaut->e61_autori} and ac19_sequen = {$rsempautitem->e55_sequen}");
-        $acordoitemexecutadoempautitem = db_query("select min(ac19_acordoitemexecutado) from acordoitemexecutadoempautitem  where ac19_autori = {$rsempempaut->e61_autori} and ac19_sequen = {$rsempautitem->e55_sequen}");
+        $acordoitemexecutadoempautitem = db_query("select min(ac19_acordoitemexecutado) as itemexecutado from acordoitemexecutadoempautitem  where ac19_autori = {$rsempempaut->e61_autori} and ac19_sequen = {$rsempautitem->e55_sequen}");
         if(pg_num_rows($acordoitemexecutadoempautitem) == 0){
           print_r('erro executempaut');
           break;
         }
+
         $rsacordoitemexecutadoempautitem = db_utils::fieldsMemory($acordoitemexecutadoempautitem,0);
-        print_r($rsacordoitemexecutadoempautitem->ac19_acordoitemexecutado);
-        $acordoitemexecutado = db_query("select ac29_acordoitem from acordoitemexecutado where ac29_sequencial = {$rsacordoitemexecutadoempautitem->ac19_acordoitemexecutado}");
+
+        $acordoitemexecutado = db_query("select ac29_acordoitem from acordoitemexecutado where ac29_sequencial = {$rsacordoitemexecutadoempautitem->itemexecutado}");
         if(pg_num_rows($acordoitemexecutado) == 0){
           print_r('erro itemexecutad');
           break;
@@ -615,12 +617,12 @@ switch ($objJson->method) {
         $rsacordoitem = db_utils::fieldsMemory($acordoitem,0);
 
         if($acordoitem->ac20_acordoposicao != $ItemUltimaPosicao->ac20_sequencial){
-          print_r('possição diferente');
+          
 
           if($ItemUltimaPosicao->ac20_valorunitario != $aItens[$iInd]->vlruni){
-            print_r('valor unitario');
-
-            if (confirm('O valor unitário atual do contrato é '+$ItemUltimaPosicao->ac20_valorunitario+' e o valor unitário do item a ser anulado é '+$aItens[$iInd]->vlruni+'. Ao anular os itens do empenho, o valor unitário será o'+$ItemUltimaPosicao->ac20_valorunitario)){
+            
+            
+            
 
               $DaoacordoItemDotacao->ac22_sequencial = $Dotacao->ac22_sequencial;
               $DaoacordoItemDotacao->ac22_valor = $Dotacao->ac22_valor + $aItens[$iInd]->vlrtot;
@@ -658,9 +660,9 @@ switch ($objJson->method) {
                 $iStatus = 2;
                 break;
               }
-            }
+              
           }else{
-            print_r('valor unitario é igual');
+            
               $DaoacordoItemDotacao->ac22_sequencial = $Dotacao->ac22_sequencial;
               $DaoacordoItemDotacao->ac22_valor = $Dotacao->ac22_valor + $aItens[$iInd]->vlrtot;
               if($ItemUltimaPosicao->ac20_valorunitario/$ItemUltimaPosicao->ac20_valortotal == 1){
