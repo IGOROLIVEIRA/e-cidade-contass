@@ -255,17 +255,17 @@ class cl_issisen {
        $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
        $acount = pg_result($resac,0,0);
        $resac = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
-       $resac = db_query("insert into db_acountkey values($acount,187,'$this->q148_codigo','I')");
-       $resac = db_query("insert into db_acount values($acount,38,187,'','".AddSlashes(pg_result($resaco,0,'q148_codigo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-       $resac = db_query("insert into db_acount values($acount,38,188,'','".AddSlashes(pg_result($resaco,0,'q148_inscr'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-       $resac = db_query("insert into db_acount values($acount,38,189,'','".AddSlashes(pg_result($resaco,0,'q148_tipo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-       $resac = db_query("insert into db_acount values($acount,38,190,'','".AddSlashes(pg_result($resaco,0,'q148_dtini'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-       $resac = db_query("insert into db_acount values($acount,38,191,'','".AddSlashes(pg_result($resaco,0,'q148_dtfim'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-       $resac = db_query("insert into db_acount values($acount,38,192,'','".AddSlashes(pg_result($resaco,0,'q148_perc'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-       $resac = db_query("insert into db_acount values($acount,38,193,'','".AddSlashes(pg_result($resaco,0,'q148_dtinc'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-       $resac = db_query("insert into db_acount values($acount,38,194,'','".AddSlashes(pg_result($resaco,0,'q148_idusu'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-       $resac = db_query("insert into db_acount values($acount,38,195,'','".AddSlashes(pg_result($resaco,0,'q148_hist'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-       $resac = db_query("insert into db_acount values($acount,38,5908,'','".AddSlashes(pg_result($resaco,0,'q148_receit'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = db_query("insert into db_acountkey values($acount,(select codcam from db_syscampo where nomecam = 'q148_inscr'),'$this->q148_codigo','I')");
+       $resac = db_query("insert into db_acount values($acount,(select codarq from db_sysarquivo where nomearq = 'issisen'),(select codcam from db_syscampo where nomecam = 'q148_codigo'),'','".AddSlashes(pg_result($resaco,0,'q148_codigo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = db_query("insert into db_acount values($acount,(select codarq from db_sysarquivo where nomearq = 'issisen'),(select codcam from db_syscampo where nomecam = 'q148_inscr'),'','".AddSlashes(pg_result($resaco,0,'q148_inscr'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = db_query("insert into db_acount values($acount,(select codarq from db_sysarquivo where nomearq = 'issisen'),(select codcam from db_syscampo where nomecam = 'q148_tipo'),'','".AddSlashes(pg_result($resaco,0,'q148_tipo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = db_query("insert into db_acount values($acount,(select codarq from db_sysarquivo where nomearq = 'issisen'),(select codcam from db_syscampo where nomecam = 'q148_dtini'),'','".AddSlashes(pg_result($resaco,0,'q148_dtini'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = db_query("insert into db_acount values($acount,(select codarq from db_sysarquivo where nomearq = 'issisen'),(select codcam from db_syscampo where nomecam = 'q148_dtfim'),'','".AddSlashes(pg_result($resaco,0,'q148_dtfim'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = db_query("insert into db_acount values($acount,(select codarq from db_sysarquivo where nomearq = 'issisen'),(select codcam from db_syscampo where nomecam = 'q148_perc'),'','".AddSlashes(pg_result($resaco,0,'q148_perc'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = db_query("insert into db_acount values($acount,(select codarq from db_sysarquivo where nomearq = 'issisen'),(select codcam from db_syscampo where nomecam = 'q148_dtinc'),'','".AddSlashes(pg_result($resaco,0,'q148_dtinc'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = db_query("insert into db_acount values($acount,(select codarq from db_sysarquivo where nomearq = 'issisen'),(select codcam from db_syscampo where nomecam = 'q148_idusu'),'','".AddSlashes(pg_result($resaco,0,'q148_idusu'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = db_query("insert into db_acount values($acount,(select codarq from db_sysarquivo where nomearq = 'issisen'),(select codcam from db_syscampo where nomecam = 'q148_hist'),'','".AddSlashes(pg_result($resaco,0,'q148_hist'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = db_query("insert into db_acount values($acount,(select codarq from db_sysarquivo where nomearq = 'issisen'),(select codcam from db_syscampo where nomecam = 'q148_receit'),'','".AddSlashes(pg_result($resaco,0,'q148_receit'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
      }
      return true;
    }
@@ -431,28 +431,28 @@ class cl_issisen {
        for($conresaco=0;$conresaco<$this->numrows;$conresaco++){
          $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
          $acount = pg_result($resac,0,0);
-         $resac = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
-         $resac = db_query("insert into db_acountkey values($acount,187,'$this->q148_codigo','A')");
+         $resac = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")") or die(pg_last_error());
+         $resac = db_query("insert into db_acountkey values($acount,(select codcam from db_syscampo where nomecam = 'q148_inscr'),'$this->q148_codigo','A')") or die(pg_last_error());
          if(isset($GLOBALS["HTTP_POST_VARS"]["q148_codigo"]))
-           $resac = db_query("insert into db_acount values($acount,38,187,'".AddSlashes(pg_result($resaco,$conresaco,'q148_codigo'))."','$this->q148_codigo',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+           $resac = db_query("insert into db_acount values($acount,(select codarq from db_sysarquivo where nomearq = 'issisen'),(select codcam from db_syscampo where nomecam = 'q148_codigo'),'".AddSlashes(pg_result($resaco,$conresaco,'q148_codigo'))."','$this->q148_codigo',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")") or die(pg_last_error());
          if(isset($GLOBALS["HTTP_POST_VARS"]["q148_inscr"]))
-           $resac = db_query("insert into db_acount values($acount,38,188,'".AddSlashes(pg_result($resaco,$conresaco,'q148_inscr'))."','$this->q148_inscr',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+           $resac = db_query("insert into db_acount values($acount,(select codarq from db_sysarquivo where nomearq = 'issisen'),(select codcam from db_syscampo where nomecam = 'q148_inscr'),'".AddSlashes(pg_result($resaco,$conresaco,'q148_inscr'))."','$this->q148_inscr',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")") or die(pg_last_error());
          if(isset($GLOBALS["HTTP_POST_VARS"]["q148_tipo"]))
-           $resac = db_query("insert into db_acount values($acount,38,189,'".AddSlashes(pg_result($resaco,$conresaco,'q148_tipo'))."','$this->q148_tipo',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+           $resac = db_query("insert into db_acount values($acount,(select codarq from db_sysarquivo where nomearq = 'issisen'),(select codcam from db_syscampo where nomecam = 'q148_tipo'),'".AddSlashes(pg_result($resaco,$conresaco,'q148_tipo'))."','$this->q148_tipo',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")") or die(pg_last_error());
          if(isset($GLOBALS["HTTP_POST_VARS"]["q148_dtini"]))
-           $resac = db_query("insert into db_acount values($acount,38,190,'".AddSlashes(pg_result($resaco,$conresaco,'q148_dtini'))."','$this->q148_dtini',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+           $resac = db_query("insert into db_acount values($acount,(select codarq from db_sysarquivo where nomearq = 'issisen'),(select codcam from db_syscampo where nomecam = 'q148_dtini'),'".AddSlashes(pg_result($resaco,$conresaco,'q148_dtini'))."','$this->q148_dtini',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")") or die(pg_last_error());
          if(isset($GLOBALS["HTTP_POST_VARS"]["q148_dtfim"]))
-           $resac = db_query("insert into db_acount values($acount,38,191,'".AddSlashes(pg_result($resaco,$conresaco,'q148_dtfim'))."','$this->q148_dtfim',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+           $resac = db_query("insert into db_acount values($acount,(select codarq from db_sysarquivo where nomearq = 'issisen'),(select codcam from db_syscampo where nomecam = 'q148_dtfim'),'".AddSlashes(pg_result($resaco,$conresaco,'q148_dtfim'))."','$this->q148_dtfim',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")") or die(pg_last_error());
          if(isset($GLOBALS["HTTP_POST_VARS"]["q148_perc"]))
-           $resac = db_query("insert into db_acount values($acount,38,192,'".AddSlashes(pg_result($resaco,$conresaco,'q148_perc'))."','$this->q148_perc',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+           $resac = db_query("insert into db_acount values($acount,(select codarq from db_sysarquivo where nomearq = 'issisen'),(select codcam from db_syscampo where nomecam = 'q148_perc'),'".AddSlashes(pg_result($resaco,$conresaco,'q148_perc'))."','$this->q148_perc',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")") or die(pg_last_error());
          if(isset($GLOBALS["HTTP_POST_VARS"]["q148_dtinc"]))
-           $resac = db_query("insert into db_acount values($acount,38,193,'".AddSlashes(pg_result($resaco,$conresaco,'q148_dtinc'))."','$this->q148_dtinc',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+           $resac = db_query("insert into db_acount values($acount,(select codarq from db_sysarquivo where nomearq = 'issisen'),(select codcam from db_syscampo where nomecam = 'q148_dtinc'),'".AddSlashes(pg_result($resaco,$conresaco,'q148_dtinc'))."','$this->q148_dtinc',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")") or die(pg_last_error());
          if(isset($GLOBALS["HTTP_POST_VARS"]["q148_idusu"]))
-           $resac = db_query("insert into db_acount values($acount,38,194,'".AddSlashes(pg_result($resaco,$conresaco,'q148_idusu'))."','$this->q148_idusu',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+           $resac = db_query("insert into db_acount values($acount,(select codarq from db_sysarquivo where nomearq = 'issisen'),(select codcam from db_syscampo where nomecam = 'q148_idusu'),'".AddSlashes(pg_result($resaco,$conresaco,'q148_idusu'))."','$this->q148_idusu',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")") or die(pg_last_error());
          if(isset($GLOBALS["HTTP_POST_VARS"]["q148_hist"]))
-           $resac = db_query("insert into db_acount values($acount,38,195,'".AddSlashes(pg_result($resaco,$conresaco,'q148_hist'))."','$this->q148_hist',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+           $resac = db_query("insert into db_acount values($acount,(select codarq from db_sysarquivo where nomearq = 'issisen'),(select codcam from db_syscampo where nomecam = 'q148_hist'),'".AddSlashes(pg_result($resaco,$conresaco,'q148_hist'))."','$this->q148_hist',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")") or die(pg_last_error());
          if(isset($GLOBALS["HTTP_POST_VARS"]["q148_receit"]))
-           $resac = db_query("insert into db_acount values($acount,38,5908,'".AddSlashes(pg_result($resaco,$conresaco,'q148_receit'))."','$this->q148_receit',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+           $resac = db_query("insert into db_acount values($acount,(select codarq from db_sysarquivo where nomearq = 'issisen'),(select codcam from db_syscampo where nomecam = 'q148_receit'),'".AddSlashes(pg_result($resaco,$conresaco,'q148_receit'))."','$this->q148_receit',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")") or die(pg_last_error());
        }
      }
      $result = db_query($sql);
@@ -499,17 +499,17 @@ class cl_issisen {
          $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
          $acount = pg_result($resac,0,0);
          $resac = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
-         $resac = db_query("insert into db_acountkey values($acount,187,'$q148_codigo','E')");
-         $resac = db_query("insert into db_acount values($acount,38,187,'','".AddSlashes(pg_result($resaco,$iresaco,'q148_codigo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,38,188,'','".AddSlashes(pg_result($resaco,$iresaco,'q148_inscr'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,38,189,'','".AddSlashes(pg_result($resaco,$iresaco,'q148_tipo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,38,190,'','".AddSlashes(pg_result($resaco,$iresaco,'q148_dtini'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,38,191,'','".AddSlashes(pg_result($resaco,$iresaco,'q148_dtfim'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,38,192,'','".AddSlashes(pg_result($resaco,$iresaco,'q148_perc'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,38,193,'','".AddSlashes(pg_result($resaco,$iresaco,'q148_dtinc'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,38,194,'','".AddSlashes(pg_result($resaco,$iresaco,'q148_idusu'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,38,195,'','".AddSlashes(pg_result($resaco,$iresaco,'q148_hist'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,38,5908,'','".AddSlashes(pg_result($resaco,$iresaco,'q148_receit'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acountkey values($acount,(select codcam from db_syscampo where nomecam = 'q148_inscr'),'$q148_codigo','E')");
+           $resac = db_query("insert into db_acount values($acount,(select codarq from db_sysarquivo where nomearq = 'issisen'),(select codcam from db_syscampo where nomecam = 'q148_codigo'),'','".AddSlashes(pg_result($resaco,0,'q148_codigo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+           $resac = db_query("insert into db_acount values($acount,(select codarq from db_sysarquivo where nomearq = 'issisen'),(select codcam from db_syscampo where nomecam = 'q148_inscr'),'','".AddSlashes(pg_result($resaco,0,'q148_inscr'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+           $resac = db_query("insert into db_acount values($acount,(select codarq from db_sysarquivo where nomearq = 'issisen'),(select codcam from db_syscampo where nomecam = 'q148_tipo'),'','".AddSlashes(pg_result($resaco,0,'q148_tipo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+           $resac = db_query("insert into db_acount values($acount,(select codarq from db_sysarquivo where nomearq = 'issisen'),(select codcam from db_syscampo where nomecam = 'q148_dtini'),'','".AddSlashes(pg_result($resaco,0,'q148_dtini'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+           $resac = db_query("insert into db_acount values($acount,(select codarq from db_sysarquivo where nomearq = 'issisen'),(select codcam from db_syscampo where nomecam = 'q148_dtfim'),'','".AddSlashes(pg_result($resaco,0,'q148_dtfim'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+           $resac = db_query("insert into db_acount values($acount,(select codarq from db_sysarquivo where nomearq = 'issisen'),(select codcam from db_syscampo where nomecam = 'q148_perc'),'','".AddSlashes(pg_result($resaco,0,'q148_perc'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+           $resac = db_query("insert into db_acount values($acount,(select codarq from db_sysarquivo where nomearq = 'issisen'),(select codcam from db_syscampo where nomecam = 'q148_dtinc'),'','".AddSlashes(pg_result($resaco,0,'q148_dtinc'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+           $resac = db_query("insert into db_acount values($acount,(select codarq from db_sysarquivo where nomearq = 'issisen'),(select codcam from db_syscampo where nomecam = 'q148_idusu'),'','".AddSlashes(pg_result($resaco,0,'q148_idusu'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+           $resac = db_query("insert into db_acount values($acount,(select codarq from db_sysarquivo where nomearq = 'issisen'),(select codcam from db_syscampo where nomecam = 'q148_hist'),'','".AddSlashes(pg_result($resaco,0,'q148_hist'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+           $resac = db_query("insert into db_acount values($acount,(select codarq from db_sysarquivo where nomearq = 'issisen'),(select codcam from db_syscampo where nomecam = 'q148_receit'),'','".AddSlashes(pg_result($resaco,0,'q148_receit'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        }
      }
      $sql = " delete from issisen

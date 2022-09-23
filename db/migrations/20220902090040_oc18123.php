@@ -12,6 +12,7 @@ class Oc18123 extends \Classes\PostgresMigration
         $this->insertMenus();
         $this->insertDicionarioDados();
         $this->updateFunctions();
+        $this->insertNewErrorMessage();
     }
 
     public function down()
@@ -20,6 +21,7 @@ class Oc18123 extends \Classes\PostgresMigration
         $this->dropMenus();
         $this->dropDicionarioDados();
         $this->rollbackFunctions();
+        $this->dropNewErrorMessage();
     }
 
     private function createIsstipoisenTable()
@@ -191,6 +193,8 @@ SQL;
         INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'q148_perc'), 9, 0);
         INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'q148_receit'), 10, 0);
 
+        INSERT INTO db_sysprikey (codarq, codcam, sequen, referen, camiden) VALUES ((select codarq from db_sysarquivo where nomearq = 'issisen'), (select codcam from db_syscampo where nomecam = 'q148_inscr'), 1, 0, 0);
+
         INSERT INTO db_sysarquivo (codarq, nomearq, descricao, sigla, dataincl, rotulo, tipotabela, naolibclass, naolibfunc, naolibprog, naolibform) VALUES ((select max(codarq)+1 from db_sysarquivo), 'isstipoisen             ', 'Tipos de Isenção de Taxas de Alvará', 'q147', '2022-09-05', 'Tipos de Isenção de Taxas de Alvará', 0, false, false, false, false);
 
         INSERT INTO db_syscampo (codcam, nomecam, conteudo, descricao, valorinicial, rotulo, tamanho, nulo, maiusculo, autocompl, aceitatipo, tipoobj, rotulorel) VALUES ((select max(codcam)+1 from db_syscampo), 'q147_tipo                              ', 'int8                                    ', 'Código Sequencial', '0', 'Código Sequencial', 11, false, false, false, 1, 'text', 'Código Sequencial');
@@ -200,6 +204,7 @@ SQL;
         INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'q147_tipo'), 1, 0);
         INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'q147_descr'), 2, 0);
         INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'q147_tipoisen'), 3, 0);
+
 SQL;
         $this->execute($sql);
     }
@@ -263,5 +268,14 @@ SQL;
         $this->execute(
             file_get_contents(__DIR__ . '/sqls/functions/public.fc_vistorias-2022-01-01.sql')
         );
+    }
+
+    public function insertNewErrorMessage()
+    {
+        $this->execute("insert into vistretornocalc values (50, '50-INSCRICAO 100% ISENTO OU IMUNE.')");
+    }
+    public function dropNewErrorMessage()
+    {
+        $this->execute("delete from vistretornocalc where y04_codmsg = 50;");
     }
 }
