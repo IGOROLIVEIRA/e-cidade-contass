@@ -525,11 +525,8 @@ switch ($objJson->method) {
 
     $paremetrosaldo->sql_query_file('','pc01_liberarsaldoposicao');
     $resulparemetrosaldo  = db_utils::fieldsMemory($paremetrosaldo, 0);
-    print_r($resulparemetrosaldo->pc01_liberarsaldoposicao);
-    if($resulparemetrosaldo->pc01_liberarsaldoposicao == false) {
+    if($resulparemetrosaldo->pc01_liberarsaldoposicao == false && pg_num_rows($resulparemetrosaldo)>0) {
       
-    print_r($resulparemetrosaldo->pc01_liberarsaldoposicao);
-
 
 
       db_inicio_transacao();
@@ -617,7 +614,7 @@ switch ($objJson->method) {
         $rsacordoitem = db_utils::fieldsMemory($acordoitem,0);
 
         if($acordoitem->ac20_acordoposicao != $ItemUltimaPosicao->ac20_sequencial){
-          
+
 
           if($ItemUltimaPosicao->ac20_valorunitario != $aItens[$iInd]->vlruni){
             
