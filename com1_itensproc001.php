@@ -188,7 +188,7 @@ if(isset($alterar) || isset($excluir) || isset($incluir)){
   if($sqlerro==true){
     if(isset($alterar)){
       $erro_msg = str_replace("Inclusao","Alteracao",$erro_msg);
-      $erro_msg = str_replace("Exclus„o","Alteracao",$erro_msg);
+      $erro_msg = str_replace("Exclus√£o","Alteracao",$erro_msg);
     }
     db_msgbox($erro_msg);
   }
