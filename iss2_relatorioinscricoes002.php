@@ -41,9 +41,9 @@ $oGet = db_utils::postMemory($_GET);
 $sFrom  = "   issbase                                          ";
 $sFrom .= "   inner join cgm                   on cgm.z01_numcgm                   = issbase.q02_numcgm ";
 $sFrom .= "   inner join tabativ               on tabativ.q07_inscr                = issbase.q02_inscr  ";
-$sFrom .= "   inner join ativprinc             on ativprinc.q88_inscr              = tabativ.q07_inscr  ";
 $sFrom .= "   inner join ativid                on tabativ.q07_ativ                 = ativid.q03_ativ    ";
-$sFrom .= "    left join issbasecaracteristica on issbasecaracteristica.q138_inscr = issbase.q02_inscr  ";
+$sFrom .= "   left join issbasecaracteristica  on issbasecaracteristica.q138_inscr = issbase.q02_inscr  ";
+$sFrom .= "   inner join ativprinc             on ativprinc.q88_inscr              = tabativ.q07_inscr  ";
 // declaração das váriaveis
 $sWhere = null;
 
