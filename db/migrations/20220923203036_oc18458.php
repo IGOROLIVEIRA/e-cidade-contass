@@ -9,13 +9,13 @@ class Oc18458 extends AbstractMigration
     {
         $sql=" BEGIN;
         
-        INSERT INTO db_sysarquivo VALUES((select max(codarq)+1 from db_sysarquivo),'situacaoitem','cadastro da situação do item de uma licitacao','l217','2022-09-14','cadastro da situação do item de uma licitacao',0,'f','f','f','f');
+        INSERT INTO db_sysarquivo VALUES((select max(codarq)+1 from db_sysarquivo),'situacaoitem','cadastro da situaÃ§Ã£o do item de uma licitacao','l217','2022-09-14','cadastro da situaÃ§Ã£o do item de uma licitacao',0,'f','f','f','f');
 
 
-        INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l217_sequencial','int8' ,'Cód. Sequencial','', 'Cód. Sequencial',8,false, false, false, 1, 'int8', 'Cód. Sequencial');
-        INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l217_codsituacao','int8' ,'Cód. identificador','', 'CCód. identificador',8,false, false, false, 1, 'int8', 'Cód. identificador');
-        INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l217_descr','varchar' ,'Descricao da Situação','', 'Descricao da Situação',255 ,false, false, false, 0, 'varchar', 'Descricao da Situação');
-        INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l217_ativo','bool' ,'Alterações da leiaute','', 'Alterações da leiaute',10 ,false, false, false, 0, 'bool', 'Alterações da leiaute');
+        INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l217_sequencial','int8' ,'CÃ³d. Sequencial','', 'CÃ³d. Sequencial',8,false, false, false, 1, 'int8', 'CÃ³d. Sequencial');
+        INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l217_codsituacao','int8' ,'CÃ³d. identificador','', 'CCÃ³d. identificador',8,false, false, false, 1, 'int8', 'CÃ³d. identificador');
+        INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l217_descr','varchar' ,'Descricao da SituaÃ§Ã£o','', 'Descricao da SituaÃ§Ã£o',255 ,false, false, false, 0, 'varchar', 'Descricao da SituaÃ§Ã£o');
+        INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l217_ativo','bool' ,'AlteraÃ§Ãµes da leiaute','', 'AlteraÃ§Ãµes da leiaute',10 ,false, false, false, 0, 'bool', 'AlteraÃ§Ãµes da leiaute');
 
 
 
@@ -56,12 +56,12 @@ class Oc18458 extends AbstractMigration
         INSERT INTO db_sysarquivo VALUES((select max(codarq)+1 from db_sysarquivo),'situacaoitemcompra','Acompanhamento do processo licitatorio','l218','2022-09-14','Acompanhamento do processo licitatorio',0,'f','f','f','f');
 
 
-        INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l218_codigo','int8' ,'Cód. Sequencial','', 'Cód. Sequencial',8,false, false, false, 1, 'int8', 'Cód. Sequencial');
-        INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l218_codigolicitacao','int8' ,'Cód Licitacao','', 'Cód Licitacao',8,false, false, false, 1, 'int8', 'Cód Licitacao');
-        INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l218_pcorcamitemlic','int8' ,'Cód pcorcamjulg','', 'Cód pcorcamjulg',8,false, false, false, 1, 'int8', 'Cód pcorcamjulg');
-        INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l218_liclicitem','int8' ,'Cód. liclicitem','', 'Cód. liclicitem',8,false, false, false, 1, 'int8', 'Cód. liclicitem');
-        INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l218_pcmater','int8' ,'Cód. pcmater','', 'Cód. pcmater',8,false, false, false, 1, 'int8', 'Cód. pcmater');
-        INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l218_motivoanulacao','int8' ,'Motivo anulação','', 'Motivo anulação',8,false, false, false, 1, 'int8', 'Motivo anulação');
+        INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l218_codigo','int8' ,'CÃ³d. Sequencial','', 'CÃ³d. Sequencial',8,false, false, false, 1, 'int8', 'CÃ³d. Sequencial');
+        INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l218_codigolicitacao','int8' ,'CÃ³d Licitacao','', 'CÃ³d Licitacao',8,false, false, false, 1, 'int8', 'CÃ³d Licitacao');
+        INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l218_pcorcamitemlic','int8' ,'CÃ³d pcorcamjulg','', 'CÃ³d pcorcamjulg',8,false, false, false, 1, 'int8', 'CÃ³d pcorcamjulg');
+        INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l218_liclicitem','int8' ,'CÃ³d. liclicitem','', 'CÃ³d. liclicitem',8,false, false, false, 1, 'int8', 'CÃ³d. liclicitem');
+        INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l218_pcmater','int8' ,'CÃ³d. pcmater','', 'CÃ³d. pcmater',8,false, false, false, 1, 'int8', 'CÃ³d. pcmater');
+        INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l218_motivoanulacao','int8' ,'Motivo anulaÃ§Ã£o','', 'Motivo anulaÃ§Ã£o',8,false, false, false, 1, 'int8', 'Motivo anulaÃ§Ã£o');
 
 
 
@@ -107,9 +107,9 @@ class Oc18458 extends AbstractMigration
 
         INSERT INTO db_sysarquivo VALUES((select max(codarq)+1 from db_sysarquivo),'situacaoitemlic','Acompanhamento do item do processo licitatorio','l219','2022-09-14','Acompanhamento do item do processo licitatorio',0,'f','f','f','f');
 
-        INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l219_codigo','int8' ,'Cód. Sequencial','', 'Cód. Sequencial',8,false, false, false, 1, 'int8', 'Cód. Sequencial');
-        INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l219_situacao','int8' ,'Cód Situação','', 'Cód Situação',8,false, false, false, 1, 'int8', 'Cód Situação');
-        INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l219_data','date' ,'Data mudança de situação','', 'Data mudança de situação',16	,false, false, false, 0, 'date', 'Data mudança de situação');
+        INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l219_codigo','int8' ,'CÃ³d. Sequencial','', 'CÃ³d. Sequencial',8,false, false, false, 1, 'int8', 'CÃ³d. Sequencial');
+        INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l219_situacao','int8' ,'CÃ³d SituaÃ§Ã£o','', 'CÃ³d SituaÃ§Ã£o',8,false, false, false, 1, 'int8', 'CÃ³d SituaÃ§Ã£o');
+        INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l219_data','date' ,'Data mudanÃ§a de situaÃ§Ã£o','', 'Data mudanÃ§a de situaÃ§Ã£o',16	,false, false, false, 0, 'date', 'Data mudanÃ§a de situaÃ§Ã£o');
         INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l219_id_usuario','int8' ,'Usuario','', 'Usuario',16	,false, false, false, 0, 'int8', 'Usuario');
         INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l219_hora','varchar' ,'hora','', 'hora',5	,false, false, false, 0, 'varchar', 'hora');
 
