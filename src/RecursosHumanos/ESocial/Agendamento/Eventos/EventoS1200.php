@@ -161,13 +161,13 @@ class EventoS1200 extends EventoBase
         rh51_cgcvinculo,
         rh01_regist as matricula,
         h13_categoria as codCateg
-        from
-            rhpessoal
-            left join rhpessoalmov on
-        rh02_anousu = fc_getsession('DB_anousu')::int
-        and rh02_mesusu = date_part('month', fc_getsession('DB_datausu')::date)
-        and rh02_regist = rh01_regist
-        and rh02_instit = fc_getsession('DB_instit')::int
+    from
+        rhpessoal
+        left join rhpessoalmov on
+            rh02_anousu = fc_getsession('DB_anousu')::int
+            and rh02_mesusu = date_part('month', fc_getsession('DB_datausu')::date)
+            and rh02_regist = rh01_regist
+            and rh02_instit = fc_getsession('DB_instit')::int
         left join rhinssoutros on
             rh51_seqpes = rh02_seqpes
         left join rhlota on
@@ -182,7 +182,7 @@ class EventoS1200 extends EventoBase
         left join rhregime on
             rhregime.rh30_codreg = rhpessoalmov.rh02_codreg
         inner join tpcontra on
-        tpcontra.h13_codigo = rhpessoalmov.rh02_tpcont
+            tpcontra.h13_codigo = rhpessoalmov.rh02_tpcont
         left join rhcontratoemergencial on
             rh163_matricula = rh01_regist
         left join rhcontratoemergencialrenovacao on
@@ -194,21 +194,33 @@ class EventoS1200 extends EventoBase
             and rescisao.r59_causa = rhpesrescisao.rh05_causa
             and rescisao.r59_caub = rhpesrescisao.rh05_caub::char(2)
         left outer join (
-        select
-            distinct r33_codtab,
-            r33_nome,
-            r33_tiporegime
-        from
-            inssirf
-        where
-            r33_anousu = fc_getsession('DB_anousu')::int
-                and r33_mesusu = date_part('month', fc_getsession('DB_datausu')::date)
-                    and r33_instit = fc_getsession('DB_instit')::int ) as x on
-        r33_codtab = rhpessoalmov.rh02_tbprev + 2
-        where h13_categoria in ('101', '106', '111', '301', '302', '303', '305', '306', '309', '312', '313', '902','701','712','771','901','711','410')
-        and rh30_vinculo = 'A'
-        and r33_tiporegime = '1'
-        and cgm.z01_cgccpf = '$cpf'";
+            select
+                distinct r33_codtab,
+                r33_nome,
+                r33_tiporegime
+            from
+                inssirf
+            where
+                r33_anousu = fc_getsession('DB_anousu')::int
+                    and r33_mesusu = date_part('month', fc_getsession('DB_datausu')::date)
+                        and r33_instit = fc_getsession('DB_instit')::int ) as x on
+            r33_codtab = rhpessoalmov.rh02_tbprev + 2
+            where 1=1
+            and (
+                        (h13_categoria = '901' and rh30_vinculo = 'A')
+                        or
+                        (h13_categoria in ('101', '106', '111', '301', '302', '303', '305', '306', '309', '312', '313', '902','701','712','771','711')
+                        and rh30_vinculo = 'A'
+                        and r33_tiporegime = '1')
+                    )
+            and cgm.z01_cgccpf = '$cpf'
+            and ((rh05_recis is not null
+                and date_part('month', rh05_recis) = date_part('month', fc_getsession('DB_datausu')::date)
+                and date_part('year', rh05_recis) = date_part('year', fc_getsession('DB_datausu')::date)
+                )
+                or
+                rh05_recis is null
+            )";
 
 
         $rsValores = db_query($sql);

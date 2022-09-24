@@ -664,120 +664,6 @@ class Preenchimentos
      * @param integer $codigoFormulario
      * @return stdClass[]
      */
-    public function buscarPreenchimentoS2400($codigoFormulario, $matricula = null)
-    {
-        $sql = "SELECT DISTINCT z01_cgccpf AS cpfbenef,
-        z01_nome AS nmbenefic,
-        rh01_nasc AS dtnascto,
-        CASE
-            WHEN rh01_admiss <= '2021-11-22' THEN '2021-11-22'
-            WHEN rh01_admiss > '2021-11-22' THEN rh01_admiss
-        END AS dtinicio,
-        CASE
-            WHEN rh01_sexo = 'F' THEN 'F'
-            ELSE 'M'
-        END AS sexo,
-        CASE
-            WHEN rh01_raca = 1 THEN 5
-            WHEN rh01_raca = 2 THEN 1
-            WHEN rh01_raca = 4 THEN 2
-            WHEN rh01_raca = 6 THEN 4
-            WHEN rh01_raca = 8 THEN 3
-            WHEN rh01_raca = 9 THEN 6
-        END AS racacor,
-        CASE
-            WHEN rh01_estciv = 1 THEN 1
-            WHEN rh01_estciv = 2 THEN 2
-            WHEN rh01_estciv = 3 THEN 5
-            WHEN rh01_estciv = 4 THEN 4
-            WHEN rh01_estciv = 5 THEN 3
-            ELSE 1
-        END AS estciv,
-        CASE
-            WHEN rh02_portadormolestia = 't' THEN 'S'
-            ELSE 'N'
-        END AS incfismen,
-        CASE
-            WHEN ruas.j14_tipo IS NULL THEN 'R'
-            ELSE j88_sigla
-        END AS tplograd,
-        z01_ender AS dsclograd,
-        z01_numero AS nrlograd,
-        z01_compl AS complementolograd,
-        z01_bairro AS bairro,
-        rpad(z01_cep,8,'0') AS cep,
-        (coalesce((select
-            db125_codigosistema
-        from
-            cadendermunicipio
-        inner join cadendermunicipiosistema on
-            cadendermunicipiosistema.db125_cadendermunicipio = cadendermunicipio.db72_sequencial
-            and cadendermunicipiosistema.db125_db_sistemaexterno = 4
-        where to_ascii(db72_descricao) = to_ascii(trim(cgm.z01_munic)) limit 1), (select
-            db125_codigosistema
-        from
-            cadendermunicipio
-        inner join cadendermunicipiosistema on
-            cadendermunicipiosistema.db125_cadendermunicipio = cadendermunicipio.db72_sequencial
-            and cadendermunicipiosistema.db125_db_sistemaexterno = 4
-        where to_ascii(db72_descricao) = to_ascii(trim((SELECT z01_munic FROM cgm join db_config ON z01_numcgm = numcgm WHERE codigo = fc_getsession('DB_instit')::int))) limit 1))
-        ) AS codMunic,
-                    'MG' AS uf
-    FROM rhpessoal
-    INNER JOIN cgm ON cgm.z01_numcgm = rhpessoal.rh01_numcgm
-    INNER JOIN db_config ON db_config.codigo = rhpessoal.rh01_instit
-    LEFT JOIN db_cgmbairro ON cgm.z01_numcgm = db_cgmbairro.z01_numcgm
-    LEFT JOIN bairro ON bairro.j13_codi = db_cgmbairro.j13_codi
-    LEFT JOIN db_cgmruas ON cgm.z01_numcgm = db_cgmruas.z01_numcgm
-    LEFT JOIN ruas ON ruas.j14_codigo = db_cgmruas.j14_codigo
-    LEFT JOIN ruastipo ON j88_codigo = j14_tipo
-    LEFT JOIN rhpessoalmov ON rh02_anousu = (select r11_anousu from cfpess where r11_instit = fc_getsession('DB_instit')::int order by r11_anousu desc, r11_mesusu desc limit 1)
-    AND rh02_mesusu = (select r11_mesusu from cfpess where r11_instit = fc_getsession('DB_instit')::int order by r11_anousu desc, r11_mesusu desc limit 1)
-    AND rh02_regist = rh01_regist
-    AND rh02_instit = fc_getsession('DB_instit')::int
-    LEFT JOIN rhdepend ON rhdepend.rh31_regist = rhpessoal.rh01_regist
-    LEFT JOIN rhregime ON rhregime.rh30_codreg = rhpessoalmov.rh02_codreg
-    LEFT JOIN rhpesrescisao ON rh02_seqpes = rh05_seqpes
-    LEFT JOIN rescisao ON rescisao.r59_anousu = rhpessoalmov.rh02_anousu
-    AND rescisao.r59_mesusu = rhpessoalmov.rh02_mesusu
-    AND rescisao.r59_regime = rhregime.rh30_regime
-    AND rescisao.r59_causa = rhpesrescisao.rh05_causa
-    AND rescisao.r59_caub = rhpesrescisao.rh05_caub::char(2)
-    where rh30_vinculo in ('I','P')
-    AND (
-    (
-    (date_part('year',rhpessoal.rh01_admiss)::varchar || lpad(date_part('month',rhpessoal.rh01_admiss)::varchar,2,'0'))::integer <= 202207
-    and (date_part('year',fc_getsession('DB_datausu')::date)::varchar || lpad(date_part('month',fc_getsession('DB_datausu')::date)::varchar,2,'0'))::integer <= 202207
-    and (rh05_recis is null or (date_part('year',rh05_recis)::varchar || lpad(date_part('month',rh05_recis)::varchar,2,'0'))::integer > 202207)
-    ) or (
-    date_part('month',rhpessoal.rh01_admiss) = date_part('month',fc_getsession('DB_datausu')::date)
-    and date_part('year',rhpessoal.rh01_admiss) = date_part('year',fc_getsession('DB_datausu')::date)
-    and (date_part('year',fc_getsession('DB_datausu')::date)::varchar || lpad(date_part('month',fc_getsession('DB_datausu')::date)::varchar,2,'0'))::integer > 202207
-    )
-    )";
-        if ($matricula != null) {
-            $sql .= " and rh01_regist in ($matricula) ";
-        }
-
-        $rs = \db_query($sql);
-        // echo $sql;
-        // db_criatabela($rs);
-        // exit;
-        if (!$rs) {
-            throw new \Exception("Erro ao buscar os preenchimentos do S2410");
-        }
-
-
-        /**
-         * @todo busca os empregadores da instituição e adicona para cada rubriuca
-         */
-        return \db_utils::getCollectionByRecord($rs);
-    }
-
-    /**
-     * @param integer $codigoFormulario
-     * @return stdClass[]
-     */
     public function buscarPreenchimentoS2410($codigoFormulario, $matricula = null)
     {
         $sql = "SELECT cgm.z01_cgccpf AS cpfbenef,
@@ -884,7 +770,14 @@ WHERE rh30_vinculo IN ('I',
                                ) as x on r33_codtab = rhpessoalmov.rh02_tbprev+2
         where h13_categoria in ('101', '106', '111', '301', '302', '303', '305', '306', '309', '312', '313', '902','701','712','771','901','711','410')
         and rh30_vinculo = 'A'
-        and r33_tiporegime = '1' ";
+        and r33_tiporegime = '1'
+        and ((rh05_recis is not null
+		and date_part('month', rh05_recis) = date_part('month', fc_getsession('DB_datausu')::date)
+		and date_part('year', rh05_recis) = date_part('year', fc_getsession('DB_datausu')::date)
+		)
+		or
+		rh05_recis is null
+	    ) ";
 
         if ($matricula != null) {
             $sql .= "and cgm.z01_cgccpf in (select z01_cgccpf from cgm join rhpessoal on cgm.z01_numcgm = rhpessoal.rh01_numcgm where rh01_regist in ($matricula)) ";
@@ -938,7 +831,14 @@ WHERE rh30_vinculo IN ('I',
                                ) as x on r33_codtab = rhpessoalmov.rh02_tbprev+2
                     where h13_categoria in ('301', '302', '303', '305', '306', '309', '410')
                 and rh30_vinculo = 'A'
-                and r33_tiporegime = '2' ";
+                and r33_tiporegime = '2'
+                and ((rh05_recis is not null
+                and date_part('month', rh05_recis) = date_part('month', fc_getsession('DB_datausu')::date)
+                and date_part('year', rh05_recis) = date_part('year', fc_getsession('DB_datausu')::date)
+                )
+                or
+                rh05_recis is null
+                ) ";
 
         if ($matricula != null) {
             $sql .= "and cgm.z01_cgccpf in (select z01_cgccpf from cgm join rhpessoal on cgm.z01_numcgm = rhpessoal.rh01_numcgm where rh01_regist in ($matricula)) ";
@@ -991,7 +891,14 @@ WHERE rh30_vinculo IN ('I',
                                       and r33_mesusu = date_part('month',fc_getsession('DB_datausu')::date)
                                       and r33_instit = fc_getsession('DB_instit')::int
                                ) as x on r33_codtab = rhpessoalmov.rh02_tbprev+2
-                                   where rh30_vinculo in ('I','P') ";
+                                   where rh30_vinculo in ('I','P')
+                                   and ((rh05_recis is not null
+                                   and date_part('month', rh05_recis) = date_part('month', fc_getsession('DB_datausu')::date)
+                                   and date_part('year', rh05_recis) = date_part('year', fc_getsession('DB_datausu')::date)
+                                   )
+                                   or
+                                   rh05_recis is null
+                                   ) ";
 
         if ($matricula != null) {
             $sql .= " and cgm.z01_cgccpf in (select z01_cgccpf from cgm join rhpessoal on cgm.z01_numcgm = rhpessoal.rh01_numcgm where rh01_regist in ($matricula)) ";
@@ -1088,7 +995,14 @@ WHERE rh30_vinculo IN ('I',
                                       and r33_mesusu = date_part('month',fc_getsession('DB_datausu')::date)
                                       and r33_instit = fc_getsession('DB_instit')::int
                                ) as x on r33_codtab = rhpessoalmov.rh02_tbprev+2
-    where 1=1";
+    where 1=1
+        and ((rh05_recis is not null
+		and date_part('month', rh05_recis) = date_part('month', fc_getsession('DB_datausu')::date)
+		and date_part('year', rh05_recis) = date_part('year', fc_getsession('DB_datausu')::date)
+		)
+		or
+		rh05_recis is null
+	    ) ";
 
         if ($matricula != null) {
             $sql .= " and cgm.z01_cgccpf in (select z01_cgccpf from cgm join rhpessoal on cgm.z01_numcgm = rhpessoal.rh01_numcgm where rh01_regist in ($matricula)) ";
