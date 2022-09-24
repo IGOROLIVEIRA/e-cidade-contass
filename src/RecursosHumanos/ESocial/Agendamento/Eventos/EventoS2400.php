@@ -50,7 +50,7 @@ class EventoS2400 extends EventoBase
             $oDadosAPI->evtCdBenPrRP->racacor = $oDados->racacor;
             $oDadosAPI->evtCdBenPrRP->estciv = $oDados->estciv;
             $oDadosAPI->evtCdBenPrRP->incfismen = $oDados->incfismen;
-            $oDadosAPI->evtCdBenPrRP->dtincfismen = $oDados->incfismen == 'S' ? $oDados->dtIncFisMen : null;
+            $oDadosAPI->evtCdBenPrRP->dtincfismen = $oDados->incfismen == 'S' ? $oDados->dtincfismen : null;
 
             $oDadosAPI->evtCdBenPrRP->endereco->brasil->tplograd = $oDados->tplograd;
             $oDadosAPI->evtCdBenPrRP->endereco->brasil->dsclograd = $oDados->dsclograd;
