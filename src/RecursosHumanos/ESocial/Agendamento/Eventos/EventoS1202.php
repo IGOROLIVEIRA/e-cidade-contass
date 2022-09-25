@@ -212,6 +212,13 @@ class EventoS1202 extends EventoBase
     and rh30_vinculo = 'A'
     and r33_tiporegime = '2'
     and cgm.z01_cgccpf = '$cpf'
+    and ((rh05_recis is not null
+		and date_part('month', rh05_recis) = date_part('month', fc_getsession('DB_datausu')::date)
+		and date_part('year', rh05_recis) = date_part('year', fc_getsession('DB_datausu')::date)
+		)
+		or
+		rh05_recis is null
+	)
     and (exists (SELECT
 	1
 from
