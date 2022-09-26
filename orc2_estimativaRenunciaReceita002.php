@@ -97,18 +97,18 @@ $iAnoUsu      = db_getsession("DB_anousu")+1;
 $iAnoUsu_1    = $iAnoUsu + 1;
 $iAnoUsu_2    = $iAnoUsu + 2;
 /*
- * validação da opção ldo ou loa, para imprimir no head3.
+ * validaï¿½ï¿½o da opï¿½ï¿½o ldo ou loa, para imprimir no head3.
  */
 if ($oGet->sModelo == 'ldo') {
-  $sModelo = 'LEI DE DIRETRIZES ORÇAMENTÁRIAS';
+  $sModelo = 'LEI DE DIRETRIZES ORï¿½AMENTï¿½RIAS';
 } else {
-  $sModelo = 'LEI ORÇAMENTÁRIA ANUAL';
+  $sModelo = 'LEI ORï¿½AMENTï¿½RIA ANUAL';
 }
-$head2 = "MUNICÍPIO DE {$munic}";
+$head2 = "MUNICï¿½PIO DE {$munic}";
 $head3 = $sModelo;
 $head4 = "ANEXO DE METAS FISCAIS";
 $head5 = $iAnoUsu;
-$head6 = "ESTIMATIVA E COMPENSAÇÃO DA RENÚNCIA DE RECEITA";
+$head6 = "ESTIMATIVA E COMPENSAï¿½ï¿½O DA RENï¿½NCIA DE RECEITA";
 
 $pdf = new PDF("P", "mm", "A4");
 $pdf->Open();
@@ -120,7 +120,7 @@ $alt            = 4;
 $pagina         = 1;
 $pdf->addpage();
 $pdf->setfont('arial','',7);
-$pdf->cell(165,$alt,'AMF - Demonstrativo 7(LRF, art.4°,'.chr(167).'2° inciso V)','B',0,"L",0);
+$pdf->cell(165,$alt,'AMF - Demonstrativo 7(LRF, art.4ï¿½,'.chr(167).'2ï¿½ inciso V)','B',0,"L",0);
 $pdf->cell(25,$alt,'R$ 1,00','B',1,"R",0);
 //$pdf->cell(100,$alt,"",'RT',0,"C",0);
 //$pdf->cell(90,$alt,"VALOR",'LTB',1,"C",0);
@@ -133,12 +133,12 @@ $pdf->cell(40,$alt,"",'L',1,"C",0);
 $pdf->cell(30,$alt,"TRIBUTO",0,0,"C",0);
 $pdf->cell(30,$alt,"MODALIDADE",'L',0,"C",0);
 $pdf->cell(30,$alt,"PROGRAMAS/",'L',0,"C",0);
-$pdf->cell(60,$alt,"RENÚNCIA DE RECEITA PREVISTA",'LB',0,"C",0);
-$pdf->cell(40,$alt,"COMPENSAÇÃO",'L',1,"C",0);
+$pdf->cell(60,$alt,"RENï¿½NCIA DE RECEITA PREVISTA",'LB',0,"C",0);
+$pdf->cell(40,$alt,"COMPENSAï¿½ï¿½O",'L',1,"C",0);
 
 $pdf->cell(30,$alt,"",'B',0,"C",0);
 $pdf->cell(30,$alt,"",'BL',0,"C",0);
-$pdf->cell(30,$alt,"BENEFICIÁRIO",'LB',0,"C",0);
+$pdf->cell(30,$alt,"BENEFICIï¿½RIO",'LB',0,"C",0);
 $pdf->cell(20,$alt,$iAnoUsu,'LB',0,"C",0);
 $pdf->cell(20,$alt,$iAnoUsu_1,'LB',0,"C",0);
 $pdf->cell(20,$alt,$iAnoUsu_2,'LB',0,"C",0);
@@ -168,12 +168,12 @@ foreach ($aValores as $oValorlinha) {
     $pdf->cell(30,$alt,"TRIBUTO",0,0,"C",0);
     $pdf->cell(30,$alt,"MODALIDADE",'L',0,"C",0);
     $pdf->cell(30,$alt,"PROGRAMAS/",'L',0,"C",0);
-    $pdf->cell(60,$alt,"RENÚNCIA DE RECEITA PREVISTA",'LB',0,"C",0);
-    $pdf->cell(40,$alt,"COMPENSAÇÃO",'L',1,"C",0);
+    $pdf->cell(60,$alt,"RENï¿½NCIA DE RECEITA PREVISTA",'LB',0,"C",0);
+    $pdf->cell(40,$alt,"COMPENSAï¿½ï¿½O",'L',1,"C",0);
 
     $pdf->cell(30,$alt,"",'B',0,"C",0);
     $pdf->cell(30,$alt,"",'BL',0,"C",0);
-    $pdf->cell(30,$alt,"BENEFICIÁRIO",'LB',0,"C",0);
+    $pdf->cell(30,$alt,"BENEFICIï¿½RIO",'LB',0,"C",0);
     $pdf->cell(20,$alt,$iAnoUsu,'LB',0,"C",0);
     $pdf->cell(20,$alt,$iAnoUsu_1,'LB',0,"C",0);
     $pdf->cell(20,$alt,$iAnoUsu_2,'LB',0,"C",0);
