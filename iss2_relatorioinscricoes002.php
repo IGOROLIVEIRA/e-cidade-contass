@@ -43,7 +43,7 @@ $sFrom .= "   inner join cgm                   on cgm.z01_numcgm                
 $sFrom .= "   inner join tabativ               on tabativ.q07_inscr                = issbase.q02_inscr  ";
 $sFrom .= "   inner join ativprinc             on ativprinc.q88_inscr              = tabativ.q07_inscr  ";
 $sFrom .= "   inner join ativid                on tabativ.q07_ativ                 = ativid.q03_ativ    ";
-$sFrom .= "    left join issbasecaracteristica on issbasecaracteristica.q138_inscr = issbase.q02_inscr  ";
+$sFrom .= "   left join issbasecaracteristica  on issbasecaracteristica.q138_inscr = issbase.q02_inscr  ";
 // declaração das váriaveis
 $sWhere = null;
 
@@ -102,8 +102,8 @@ if ($sWhere != null) {
 switch ($oGet->atividade) {
 	
   case "p":
-	  $sAtividade = "Somente Principal";
-    $sFrom     .= "and q07_seq = q88_seq"; 
+	$sAtividade = "Somente Principal";
+    $sWhere    .= "{$and} q07_seq = q88_seq"; 
 	break;
 	
 	case "t":
