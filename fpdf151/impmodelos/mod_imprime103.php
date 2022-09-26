@@ -237,12 +237,11 @@ for ($ii = 0; $ii < $this->linhasdositens; $ii++) {
         0,
         false
     );
-
     if ($valorItemAnulado == $valorItem && $valorItemAnulado > 0) {
         $this->objpdf->Setfont('Arial', 'B', 8);
         $this->objpdf->text($this->objpdf->getx() + 61, $this->objpdf->gety() - 3, "(ANULADO)");
         $this->objpdf->Setfont('Arial', '', 8);
-    } else if ($valorItemAnulado < pg_result($this->recorddositens, $ii, $this->vlrunitem)) {
+    } else if ($valorItemAnulado > 0 && $valorItemAnulado < pg_result($this->recorddositens, $ii, $this->vlrunitem)) {
         $this->objpdf->Setfont('Arial', 'B', 8);
         $this->objpdf->text($this->objpdf->getx() + 61, $this->objpdf->gety() - 3, "(ANULADO PARCIALMENTE)");
         $this->objpdf->Setfont('Arial', '', 8);
