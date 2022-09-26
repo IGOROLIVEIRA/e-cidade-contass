@@ -32,8 +32,8 @@ $this->objpdf->text(155, $xlin - 7, substr($this->sOrigem, 0, 35));
 $this->objpdf->text(130, $xlin - 4, 'DEPTO. DESTINO :');
 $this->objpdf->text(155, $xlin - 4, substr($this->coddepto . " - " . $this->descrdepto, 0, 35));
 
-$this->objpdf->text(130, ($xlin + 2.5) - $linpc, 'PROCESSO DE COMPRA N' . CHR(176));
-$this->objpdf->text(165, ($xlin + 2.5) - $linpc, db_formatar(pg_result($this->recorddositens, 0, $this->Snumeroproc), 's', '0', 6, 'e'));
+$this->objpdf->text(130, ($xlin + 2.5) - $linpc, 'PROCESSO DE COMPRA N ' . CHR(176));
+$this->objpdf->text(165, ($xlin + 2.5) - $linpc, db_formatar(pg_result($this->recorddositens, 0, $this->numeroproc), 's', '0', 6, 'e'));
 $autori = pg_result($this->recorddositens, 0, $this->autori);
 
 $sqlLicitacao = "SELECT e54_numerl,
@@ -51,7 +51,7 @@ $this->objpdf->text(130, ($xlin + 6.5), 'PROCESSO LICITÓRIO:' . CHR(176));
 $this->objpdf->text(160, ($xlin + 6.5), $e54_numerl . " MODALIDADE: " . $e54_nummodalidade);
 $this->objpdf->text(130, ($xlin + $linpc - 2.25), 'TIPO DA COMPRA: ');
 $this->objpdf->Setfont('Arial', 'B', 7);
-$this->objpdf->text(153, 21.8, db_formatar(pg_result($this->recorddositens,0,$this->sTipoCompra), 's', '0', 6, 'e'));
+$this->objpdf->text(153, ($xlin + $linpc - 2.5), db_formatar(pg_result($this->recorddositens,0,$this->sTipoCompra), 's', '0', 6, 'e'));
 
 $this->objpdf->Setfont('Arial', 'B', 9);
 $this->objpdf->Image('imagens/files/' . $this->logo, 15, $xlin - 17, 12);
@@ -212,7 +212,15 @@ for ($ii = 0; $ii < $this->linhasdositens; $ii++) {
     //QtdAnulada
     if ($qtdAnulada > 0) {
         $qtdItem = pg_result($this->recorddositens, $ii, $this->quantitem) - $qtdAnulada;
-    } else $qtdItem = pg_result($this->recorddositens, $ii, $this->quantitem);
+    } else {
+        $qtdItem = pg_result($this->recorddositens, $ii, $this->quantitem);
+    }
+    $valorItem = pg_result($this->recorddositens, $ii, $this->vlrunitem);
+
+    if(pg_result($this->recorddositens, $ii, $this->servico) == 't'
+       && pg_result($this->recorddositens, $ii, $this->servicoquantidade) == 'f'){
+        $valorItem = $valorItemTotal;
+    }
 
     $this->objpdf->Row(
         array(
@@ -220,7 +228,7 @@ for ($ii = 0; $ii < $this->linhasdositens; $ii++) {
             $qtdItem,
             pg_result($this->recorddositens, $ii, $this->unid),
             pg_result($this->recorddositens, $ii, $this->descricaoitem) . pg_result($this->recorddositens, $ii, $this->pc01_complmater) . "\n" . 'Marca: ' . pg_result($this->recorddositens, $ii, $this->obs_ordcom_orcamval),
-            db_formatar(pg_result($this->recorddositens, $ii, $this->vlrunitem), 'v', " ", $this->numdec),
+            db_formatar($valorItem, 'v', " ", $this->numdec),
             db_formatar($valorItemTotal, 'f')
         ),
         5,
@@ -229,12 +237,11 @@ for ($ii = 0; $ii < $this->linhasdositens; $ii++) {
         0,
         false
     );
-
     if ($valorItemAnulado == $valorItem && $valorItemAnulado > 0) {
         $this->objpdf->Setfont('Arial', 'B', 8);
         $this->objpdf->text($this->objpdf->getx() + 61, $this->objpdf->gety() - 3, "(ANULADO)");
         $this->objpdf->Setfont('Arial', '', 8);
-    } else if ($valorItemAnulado < $valorItem) {
+    } else if ($valorItemAnulado > 0 && $valorItemAnulado < pg_result($this->recorddositens, $ii, $this->vlrunitem)) {
         $this->objpdf->Setfont('Arial', 'B', 8);
         $this->objpdf->text($this->objpdf->getx() + 61, $this->objpdf->gety() - 3, "(ANULADO PARCIALMENTE)");
         $this->objpdf->Setfont('Arial', '', 8);
