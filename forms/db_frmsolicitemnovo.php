@@ -390,34 +390,34 @@ if ((isset($opcao) && $opcao == "alterar")) {
 
 
     <br>
+    <?
+    $pc11_liberado = 'f';
+    if (!isset($pc11_resum) || (isset($pc11_resum) && $pc11_resum == "")) {
+      $digitouresumo = "false";
+    }
+    @$pc11_pgto = stripslashes($pc11_pgto);
+    @$pc11_just = stripslashes($pc11_just);
+    @$pc11_resum = stripslashes($pc11_resum);
+    @$pc11_prazo = stripslashes($pc11_prazo);
+    $pc11_resum = addslashes($pc11_resum);
+    db_input('pc11_liberado', 1, $Ipc11_liberado, true, 'hidden', 3);
+    db_input('pc11_pgto', 40, $Ipc11_pgto, true, 'hidden', 3);
+    db_textarea('pc11_resum', 10, 40, $Ipc11_resum, true, 'text', 3, "style='display:none'");
+    db_textarea('pc11_just', 10, 40, $Ipc11_just, true, 'hidden', 3, "style='display:none'");
+    db_textarea('pc11_prazo', 10, 40, $Ipc11_prazo, true, 'hidden', 3, "style='display:none'");
+    db_input('digitouresumo', 5, 0, true, 'hidden', 3);
 
+    db_input('pc11_vlrun_ant', 40, $Ipc11_vlrun, true, 'hidden', 3);
+    db_input('pc11_quant_ant', 40, $Ipc11_vlrun, true, 'hidden', 3);
+    db_input('pc16_codmater_ant', 40, $Ipc16_codmater, true, 'hidden', 3);
+    db_input('pc01_servico', 40, $Ipc01_servico, true, 'hidden', 3);
+
+    db_input('db_opcao', 5, 0, true, 'hidden', 3);
+    db_input('db_botao', 5, 0, true, 'hidden', 3);
+    ?>
   </form>
 </div>
-<?
-$pc11_liberado = 'f';
-if (!isset($pc11_resum) || (isset($pc11_resum) && $pc11_resum == "")) {
-  $digitouresumo = "false";
-}
-@$pc11_pgto = stripslashes($pc11_pgto);
-@$pc11_just = stripslashes($pc11_just);
-@$pc11_resum = stripslashes($pc11_resum);
-@$pc11_prazo = stripslashes($pc11_prazo);
-$pc11_resum = addslashes($pc11_resum);
-db_input('pc11_liberado', 1, $Ipc11_liberado, true, 'hidden', 3);
-db_input('pc11_pgto', 40, $Ipc11_pgto, true, 'hidden', 3);
-db_textarea('pc11_resum', 10, 40, $Ipc11_resum, true, 'text', 3, "style='display:none'");
-db_textarea('pc11_just', 10, 40, $Ipc11_just, true, 'hidden', 3, "style='display:none'");
-db_textarea('pc11_prazo', 10, 40, $Ipc11_prazo, true, 'hidden', 3, "style='display:none'");
-db_input('digitouresumo', 5, 0, true, 'hidden', 3);
 
-db_input('pc11_vlrun_ant', 40, $Ipc11_vlrun, true, 'hidden', 3);
-db_input('pc11_quant_ant', 40, $Ipc11_vlrun, true, 'hidden', 3);
-db_input('pc16_codmater_ant', 40, $Ipc16_codmater, true, 'hidden', 3);
-db_input('pc01_servico', 40, $Ipc01_servico, true, 'hidden', 3);
-
-db_input('db_opcao', 5, 0, true, 'hidden', 3);
-db_input('db_botao', 5, 0, true, 'hidden', 3);
-?>
 
 <script>
   const input = document.getElementById("pc11_quant");

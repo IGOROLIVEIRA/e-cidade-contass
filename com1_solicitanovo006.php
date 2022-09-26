@@ -618,18 +618,10 @@ if (isset($excluir)) {
   <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 
-<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1">
-  <table width="790" border="0" cellspacing="0" cellpadding="0">
-    <tr>
-      <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
-        <center>
-          <?
-          include("forms/db_frmsolicita.php");
-          ?>
-        </center>
-      </td>
-    </tr>
-  </table>
+<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" style="margin-top:30px;">
+  <center>
+    <?php include("forms/db_frmsolicitanovo.php"); ?>
+  </center>
 </body>
 
 </html>
@@ -659,7 +651,7 @@ if (isset($chavepesquisa)) {
   <script>
   function js_db_libera(){
     parent.document.formaba.solicitem.disabled=false;
-    top.corpo.iframe_solicitem.location.href='com1_solicitem001.php?pc11_numero=" . @$pc10_numero . "&selecao=3';
+    top.corpo.iframe_solicitem.location.href='com1_solicitemnovo001.php?pc11_numero=" . @$pc10_numero . "&selecao=3';
     ";
   if ($pc30_sugforn == 't') {
     echo "

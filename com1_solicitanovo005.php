@@ -498,7 +498,7 @@ if (empty($iTipoSolicitacao) && !empty($pc10_solicitacaotipo)) {
 
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" style="margin-top:30px;">
   <center>
-    <?php include("forms/db_frmsolicita.php"); ?>
+    <?php include("forms/db_frmsolicitanovo.php"); ?>
   </center>
 </body>
 

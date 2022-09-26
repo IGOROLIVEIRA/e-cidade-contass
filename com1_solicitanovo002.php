@@ -35,11 +35,11 @@ include("classes/db_pcparam_classe.php");
 
 db_postmemory($HTTP_GET_VARS);
 
-$clpcparam  = new cl_pcparam;
-$clcriaabas = new cl_criaabas;
+$clpcparam   = new cl_pcparam;
+$clcriaabas  = new cl_criaabas;
 
-$db_opcao   = 1;
-$erro       = false;
+$db_opcao    = 1;
+$erro        = false;
 
 $result_tipo = $clpcparam->sql_record($clpcparam->sql_query_file(db_getsession("DB_instit"), "*"));
 if ($clpcparam->numrows > 0) {
@@ -78,15 +78,15 @@ if ($clpcparam->numrows > 0) {
         }
 
         if (isset($pc30_sugforn) && $pc30_sugforn == 't') {
-          $clcriaabas->identifica = array("solicita" => "Solicitação", "solicitemnovo" => "Itens", "dotacoesnovo" => "Dotações", "solicitem" => "Itens/Dotações", "sugforn" => "Fornecedores sugeridos"); //nome do iframe e o label    
-          $clcriaabas->src = array("solicita" => "com1_solicitanovo004.php" . $parametro);
-          $clcriaabas->title      = array("solicita" => "Solicitação de compras", "solicitemnovo" => "Itens", "dotacoesnovo" => "Dotações", "solicitem" => "Itens/Dotações", "sugforn" => "Fornecedores Sugeridos"); //nome do iframe e o label    
-          $clcriaabas->sizecampo  = array("solicita" => "20", "solicitemnovo" => "20", "dotacoesnovo" => "20", "solicitem" => "20", "sugforn" => "25");
+          $clcriaabas->identifica = array("solicita" => "Solicitação", "solicitem" => "Itens", "dotacoesnovo" => "Dotações", "sugforn" => "Fornecedores sugeridos"); //nome do iframe e o label
+          $clcriaabas->src = array("solicita" => "com1_solicitanovo005.php" . $parametro);
+          $clcriaabas->title      = array("solicita" => "Cadastro de solicitação de compras", "solicitem" => "Cadastro de Itens", "sugforn" => "Cadastro de fornecedores sugeridos"); //nome do iframe e o label
+          $clcriaabas->sizecampo  = array("solicita" => "20", "solicitem" => "20", "sugforn" => "25");
           $clcriaabas->disabled = array("solicitem" => "true", "sugforn" => "true");
         } else {
-          $clcriaabas->identifica = array("solicita" => "Solicitação", "solicitem" => "Itens", "dotacoesnovo" => "Dotações"); //nome do iframe e o label    
-          $clcriaabas->src = array("solicita" => "com1_solicitanovo004.php" . $parametro,  "dotacoesnovo" => "com1_dotacoesnovo001.php");
-          $clcriaabas->title      = array("solicita" => "Solicitação de compras", "solicitem" => "Itens", "dotacoesnovo" => "Dotações"); //nome do iframe e o label    
+          $clcriaabas->identifica = array("solicita" => "Solicitação", "solicitem" => "Itens", "dotacoesnovo" => "Dotações"); //nome do iframe e o label
+          $clcriaabas->src = array("solicita" => "com1_solicitanovo005.php" . $parametro, "dotacoesnovo" => "com1_dotacoesnovo001.php");
+          $clcriaabas->title      = array("solicita" => "Cadastro de solicitação de compras", "solicitem" => "Cadastro de Itens", "dotacoesnovo" => "Dotações"); //nome do iframe e o label
           $clcriaabas->sizecampo  = array("solicita" => "20", "solicitem" => "20", "dotacoesnovo" => "20");
           $clcriaabas->disabled = array("solicitem" => "true");
         }

@@ -19,7 +19,19 @@ class Oc18229 extends AbstractMigration
         INSERT INTO db_menu VALUES((select id_item from db_itensmenu where descricao like'%Solicitação de Compras (Novo)%'),(select max(id_item) from db_itensmenu),2,28);
                 
         INSERT INTO db_itensmenu values ((select max(id_item)+1 from db_itensmenu),'Exclusão','Exclusão','com1_solicitanovo003.php',1,1,'Exclusão','t');
-        INSERT INTO db_menu VALUES((select id_item from db_itensmenu where descricao like'%Solicitação de Compras (Novo)%'),(select max(id_item) from db_itensmenu),3,28);";
+        INSERT INTO db_menu VALUES((select id_item from db_itensmenu where descricao like'%Solicitação de Compras (Novo)%'),(select max(id_item) from db_itensmenu),3,28);
+        
+        INSERT INTO db_itensmenu values ((select max(id_item)+1 from db_itensmenu),'Alterar Dotações','Alterar Dotações','com4_alterardotacaosolicitacao001.php',1,1,'Alterar Dotações','t');
+       
+
+INSERT INTO db_menu VALUES((select id_item from db_itensmenu where descricao like'%Solicitação de Compras (Novo)%'),(select max(id_item) from db_itensmenu),4,28);
+
+INSERT INTO db_itensmenu values ((select max(id_item)+1 from db_itensmenu),'Anulação','Anulação','com4_anularsolicitacaocompras001.php',1,1,'Anulação','t');
+       
+
+INSERT INTO db_menu VALUES((select id_item from db_itensmenu where descricao like'%Solicitação de Compras (Novo)%'),(select max(id_item) from db_itensmenu),5,28);
+
+        ";
 
         $this->execute($sql);
     }

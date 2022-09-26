@@ -290,10 +290,10 @@ $iOpcaoTipoSolicitacao = $db_opcao;
 
     <br>
 
-    <diV style="margin-left: 150px;">
-      <input style="float:left;" name="<?= ($db_opcao == 1 ? "incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "alterar" : "excluir")) ?>" type="submit" id="db_opcao" value="<?= ($db_opcao == 1 ? "Incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "Alterar" : "Excluir")) ?>" <?= ($db_botao == false ? "disabled" : "") ?> onclick="return js_validaAlteracao(<?= $db_opcao ?>)">
+    <diV style="margin-left: 0px;float:center;">
+      <input name="<?= ($db_opcao == 1 ? "incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "alterar" : "excluir")) ?>" type="submit" id="db_opcao" value="<?= ($db_opcao == 1 ? "Incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "Alterar" : "Excluir")) ?>" <?= ($db_botao == false ? "disabled" : "") ?> onclick="return js_validaAlteracao(<?= $db_opcao ?>)">
 
-      <input style="float:left;margin-left: 2px;" name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" <?= ($parampesquisa == false ? "disabled" : "") ?>>
+      <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" <?= ($parampesquisa == false ? "disabled" : "") ?>>
 
       <?
       if (isset($pc10_numero) || isset($chavepesquisa)) {
@@ -302,11 +302,11 @@ $iOpcaoTipoSolicitacao = $db_opcao;
         }
         $result_itens = $clsolicitem->sql_record($clsolicitem->sql_query_file(null, "pc11_codigo", "", " pc11_numero=$pc10_numero "));
         if ($clsolicitem->numrows > 0) {
-          echo "<input name='gera' style='float:left;margin-left: 2px;' type='submit' id='gera' value='Gerar relatório' onclick='js_gerarel();'>";
+          echo "<input name='gera'  type='submit' id='gera' value='Gerar relatório' onclick='js_gerarel();'>";
         }
       }
       if (isset($departusu) && trim($departusu) != "") {
-        echo '<input style="float:left;margin-left: 2px;" name="importar" type="button" id="importar" value="Importar Solicitação" onclick="js_importa();">';
+        echo '<input  name="importar" type="button" id="importar" value="Importar Solicitação" onclick="js_importa();">';
       }
       db_input('opselec', 40, "", true, 'hidden', 3);
       db_input('trancaIte', 40, "", true, 'hidden', 3);
