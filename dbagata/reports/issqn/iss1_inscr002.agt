@@ -68,7 +68,7 @@ Base: $db_base  #tab270$db_programa  Emissor: $db_nomeusu  Exercício: $db_anousu
         <PreQuery></PreQuery>
         <PosQuery></PosQuery>
         <Query>
-            <Select>distinct q02_inscr as "Inscrição", z01_cgccpf as "CNPJ/CPF", q02_numcgm as "CGM", z01_nome as "Nome / Razão Social", q07_ativ as "Atividade", q03_descr as "Descrição da Atividade"</Select>
+            <Select>distinct q02_inscr as "Inscrição", z01_cgccpf as "CNPJ/CPF", q02_numcgm as "CGM",fc_remove_acentos(z01_nome) as "Nome / Razão Social", q07_ativ as "Atividade", fc_remove_acentos(q03_descr) as "Descrição da Atividade"</Select>
             <From></From>
             <Where></Where>
             <GroupBy></GroupBy>
