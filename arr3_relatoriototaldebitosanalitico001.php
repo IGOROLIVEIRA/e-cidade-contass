@@ -333,7 +333,7 @@ foreach ($oDadosDebitos as $aDados) {
        if ($oDaoDivida->numrows > 0 ) {
          $sExercicios = db_utils::fieldsMemory($rsDadosDivida,0)->exercicios;
 
-         $aDadosProcessado->divida_exercicios   = ereg_replace("[{}]", "",$sExercicios);
+         $aDadosProcessado->divida_exercicios   = preg_replace("[{}]", "",$sExercicios);
 
          $aDadosProcessado->complemento_numpre  = " - Exercício: ".$aDadosProcessado->divida_exercicios;
 
@@ -594,7 +594,7 @@ foreach ($oDadosDebitos as $aDados) {
   	$aDadosProcessado->divida_exercicios = "";
   	if (in_array($oDadosArreTipo->k03_tipo, $aCadTipoBuscaDadosDivida) && !empty($sExercicios)) {
 
-  	  $aDadosProcessado->divida_exercicios   = ereg_replace("[{}]", "",$sExercicios);
+  	  $aDadosProcessado->divida_exercicios   = preg_replace("[{}]", "",$sExercicios);
   	  $aDadosProcessado->complemento_numpre  = " - Exercício: ".$aDadosProcessado->divida_exercicios;
   	}
 
