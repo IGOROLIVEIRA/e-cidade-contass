@@ -759,6 +759,12 @@ db_fieldsmemory($result_pcparam1, 0);
 	}
 } else if (isset($alterar) && $sqlerro == false) {
 
+	$item_cadastrado =  db_query("select * from solicitem where pc11_numero = $pc11_numero");
+	if (pg_numrows($item_cadastrado) == 0) {
+		$item_cadastrado = false;
+	} else {
+		$item_cadastrado = true;
+	}
 
 	if (!isset($pc16_codmater) || (isset($pc16_codmater) && $pc16_codmater == "")) {
 
@@ -1229,6 +1235,13 @@ db_fieldsmemory($result_pcparam1, 0);
 } else if (isset($excluir)) {
 
 	db_inicio_transacao();
+
+	$item_cadastrado =  db_query("select * from solicitem where pc11_numero = $pc11_numero");
+	if (pg_numrows($item_cadastrado) == 0) {
+		$item_cadastrado = false;
+	} else {
+		$item_cadastrado = true;
+	}
 
 	// Para exclusao do item em processos e licitacoes nao autorizadas
 	if (isset($param) && trim($param) != "") {
@@ -2092,9 +2105,23 @@ if (isset($alterar) || isset($excluir) || isset($incluir)) {
 	if ($msg_alert != "" && (@$passa == true || isset($incluir)) && $sqlerro == false) {
 		db_msgbox($msg_alert);
 	}
+
+	if (isset($item_cadastrado) && $item_cadastrado == false) {
+		$sqlerro = true;
+	}
+
 	if ($sqlerro == true) {
 		$erro_msg = str_replace("\n", "\\n", $erro_msg);
-		db_msgbox($erro_msg);
+		if (isset($item_cadastrado) && $item_cadastrado == false) {
+			if (isset($alterar)) {
+				db_msgbox("Erro ao realizar alteração, item não cadastrado");
+			}
+			if (isset($excluir)) {
+				db_msgbox("Erro ao realizar exclusão, item não cadastrado");
+			}
+		} else {
+			db_msgbox($erro_msg);
+		}
 		if ($clsolicitem->erro_campo != "") {
 			echo "<script> document.form1." . $clsolicitem->erro_campo . ".style.backgroundColor='#99A9AE';</script>";
 			echo "<script> document.form1." . $clsolicitem->erro_campo . ".focus();</script>";
@@ -2111,6 +2138,8 @@ if (isset($alterar) || isset($excluir) || isset($incluir)) {
 			db_msgbox("Itens excluídos com sucesso");
 		} else if (isset($incluir)) {
 			db_msgbox("Itens incluídos com sucesso");
+		} else if (isset($alterar)) {
+			db_msgbox("Itens alterados com sucesso");
 		}
 
 

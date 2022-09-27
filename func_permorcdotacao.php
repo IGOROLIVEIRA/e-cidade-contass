@@ -166,6 +166,19 @@ if (!isset($filtroquery)) {
       document.form1.submit();
     }
 
+    function js_verifica_depto2(coddot, descricao, estrutural) {
+      if (document.form1.departamento == undefined || document.form1.departamento.value == 0) {
+        alert('Selecione um departamento.');
+      } else {
+
+        <?
+        $executa = split("\|", $funcao_js);
+        echo $executa[0] . "(coddot,descricao,estrutural);";
+        ?>
+      }
+    }
+
+
     function js_verifica_depto(coddot) {
       if (document.form1.departamento == undefined || document.form1.departamento.value == 0) {
         alert('Selecione um departamento.');
@@ -177,6 +190,7 @@ if (!isset($filtroquery)) {
         ?>
       }
     }
+
 
     function js_origempermissao() {
 
@@ -280,6 +294,21 @@ if (!isset($filtroquery)) {
               $clpermusuario_dotacao->sql = substr_replace($clpermusuario_dotacao->sql, " and o56_elemento like any " . "(array[$elementos]) ", strpos($clpermusuario_dotacao->sql, "ORDER BY O50_ESTRUTDESPESA"), 0);
             }
 
+            if (isset($cod_elementos)) {
+
+              $array_elementos = $cod_elementos = explode(",", $cod_elementos);
+              for ($i = 0; $i < count($array_elementos); $i++) {
+                $array_elementos[$i] = "'" . $array_elementos[$i] . "%" . "'";
+                if ($i == count($array_elementos) - 1) {
+                  $elementos = $elementos . $array_elementos[$i];
+                } else {
+                  $elementos = $elementos . $array_elementos[$i] . ",";
+                }
+              }
+
+              $funcao_js =  "js_verifica_depto2|o58_coddot|o41_descr|o50_estrutdespesa";
+              $clpermusuario_dotacao->sql = substr_replace($clpermusuario_dotacao->sql, " and o56_elemento like any " . "(array[$elementos]) ", strpos($clpermusuario_dotacao->sql, "ORDER BY O50_ESTRUTDESPESA"), 0);
+            }
             db_lovrot($clpermusuario_dotacao->sql, 15, "()", "", $funcao_js, "", "NoMe", $variaveis, false);
           } else {
             echo "<table><tr><td><br><strong>Não existe dotação para este item</strong>.</td></tr></table>";

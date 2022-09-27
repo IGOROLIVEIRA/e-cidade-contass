@@ -796,23 +796,28 @@ if (count($aParametrosOrcamento) > 0) {
 						<tr>
 							<td nowrap title="<?= @$Tpc16_codmater ?>">
 								<?
-								db_ancora("Dotações:", "js_pesquisapc16_codmater(true);", $tranca);
+								db_ancora("Dotações:", "js_pesquisapc13_coddot(true);", 1, '', 'pc13_coddot');
+
+								//db_ancora("Dotações:", "js_pesquisapc16_codmater(true);", $tranca);
 								?>
 							</td>
 
 							<td>
 								<?
-								db_input('pc16_codmater', 8, $Ipc16_codmater, true, 'text', $tranca, " onchange='js_pesquisapc16_codmater(false);'");
-								db_input("iCodigoRegistro", 8, "iCodigoRegistro", true, 'hidden', $db_opcao);
-								db_input("pc01_veiculo", 8, "", true, 'hidden', $db_opcao);
-								db_input("codigoitemregistropreco", 8, "", true, 'hidden', $db_opcao);
-								db_input("pcmateranterior", 8, $pcmateranterior, true, 'hidden', $db_opcao);
+								db_input('o58_coddot', 8, $Io58_coddot, true, 'text', $tranca, "");
+
 								?>
 							</td>
 
 							<td nowrap style="   display: block;">
 								<?
-								db_input('pc01_descrmater', 50, $Ipc01_descrmater, true, 'text', $db_opcao);
+								db_input('o56_descr', 50, $Io56_descr, true, 'text', $db_opcao);
+								?>
+							</td>
+
+							<td nowrap style="   display: none;">
+								<?
+								db_input('o50_estrutdespesa', 50, $Io50_estrutdespesa, true, 'text', $db_opcao);
 								?>
 							</td>
 
@@ -825,7 +830,7 @@ if (count($aParametrosOrcamento) > 0) {
 					</table>
 
 				</fieldset>
-				<input style="float:center; margin-top:10px;" name="<?= ($db_opcao == 1 ? "Adicionar Item" : ($db_opcao == 2 || $db_opcao == 22 ? "alterar" : "excluir")) ?>" type="submit" id="db_opcao" value="<?= ($db_opcao == 1 ? "Incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "Alterar" : "Excluir")) ?>" <?= ($db_botao == false ? "disabled" : "") ?> onclick="return js_validaAlteracao(<?= $db_opcao ?>)">
+				<input style="float:center; margin-top:10px;" name="<?= ($db_opcao == 1 ? "Adicionar Item" : ($db_opcao == 2 || $db_opcao == 22 ? "alterar" : "excluir")) ?>" type="button" id="db_opcao" value="<?= ($db_opcao == 1 ? "Incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "Alterar" : "Excluir")) ?>" <?= ($db_botao == false ? "disabled" : "") ?> onclick="return incluirDotacao()">
 
 
 				<table>
@@ -851,12 +856,95 @@ if (count($aParametrosOrcamento) > 0) {
 <script>
 	oGridItens = new DBGrid('oGridItens');
 	oGridItens.nameInstance = 'oGridItens';
-	oGridItens.setCellAlign(['center', 'left', "right"]);
-	oGridItens.setCellWidth(["30%", "50%", "20%"]);
+	oGridItens.setCellAlign(['center', 'center', "center"]);
+	oGridItens.setCellWidth(["20%", "70%", "10%"]);
 	oGridItens.setHeader(["Reduzido", "Estrutural", "Ação"]);
 
 	oGridItens.setHeight(200);
 	oGridItens.show($('ctnGridItens'));
+
+	indice = 0;
+
+	function incluirDotacao() {
+
+		var sizeItens = oGridItens.aRows.length;
+
+		itens_antigos = oGridItens.aRows;
+
+
+		oGridItens.clearAll(true);
+
+		var aLinha = new Array();
+
+		o50_estrutdespesa = document.getElementById('o50_estrutdespesa').value;
+
+
+
+		aLinha[0] = o50_estrutdespesa.substring(23, 30);
+		aLinha[1] = o50_estrutdespesa;
+		aLinha[2] = " <input type='button' name='excluir' value='E' onclick='js_excluirLinha(" + indice + ")'>";
+
+
+		oGridItens.addRow(aLinha);
+
+		for (var i = 0; i < sizeItens; i++) {
+			oGridItens.addRow(itens_antigos[i]);
+		}
+
+		oGridItens.renderRows();
+
+		indice++;
+
+
+	}
+
+	function js_pesquisapc13_coddot(mostra) {
+		var cod_elementos = "";
+
+
+
+		for (var i = 0; i < parent.iframe_solicitem.document.getElementsByName('descrelemento[]').length; i++) {
+			elemento = '';
+			elemento = parent.iframe_solicitem.document.getElementsByName('descrelemento[]')[i].value;
+			elemento = elemento.split("-");
+			elemento = elemento[1];
+			elemento = elemento.trim();
+			elemento = elemento.substring(0, 7);
+			elemento = elemento + ",";
+			cod_elementos += elemento;
+			//teste += "'" + parent.iframe_solicitem.document.getElementsByName('descrelemento[]')[i].value + "'" + ",";
+		}
+
+		cod_elementos = cod_elementos.substring(0, cod_elementos.length - 1);
+
+		qry = 'obriga_depto=sim';
+		if (parent.iframe_solicitem.document.getElementsByName('codele[]').length != 0) {
+			qry += '&cod_elementos=' + cod_elementos;
+		}
+		<? if (@$pc30_passadepart == 't') { ?>
+			qry += '&departamento=<?= (db_getsession("DB_coddepto")) ?>';
+		<? } ?>
+		qry += '&retornadepart=true';
+		qry += '&pactoplano=<?= $iPactoPlano ?>';
+		if (mostra == true) {
+			qry += '&funcao_js=top.corpo.iframe_dotacoesnovo.js_mostraorcdotacao1|o58_coddot|o41_descr';
+			js_OpenJanelaIframe('top.corpo.iframe_dotacoesnovo', 'iframe_dotacoesnovo',
+				'func_permorcdotacao.php?' + qry, 'Pesquisa', true, '0');
+		} else {
+			qry += '&pesquisa_chave=' + document.form1.pc13_coddot.value;
+			js_OpenJanelaIframe('top.corpo.iframe_dotacoesnovo',
+				'db_iframe_orcdotacao',
+				'func_permorcdotacao.php?' + qry + '&funcao_js=parent.js_mostraorcdotacao', 'Pesquisa', false);
+		}
+	}
+
+	function js_mostraorcdotacao1(chave1, chave2, chave3) {
+		document.form1.o58_coddot.value = chave1;
+		document.form1.o56_descr.value = chave2;
+		document.form1.o50_estrutdespesa.value = chave3;
+		document.getElementById("o50_estrutdespesa");
+		iframe_dotacoesnovo.hide();
+	}
 </script>
 
 </html>

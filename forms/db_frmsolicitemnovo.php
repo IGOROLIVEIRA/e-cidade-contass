@@ -479,8 +479,8 @@ if ((isset($opcao) && $opcao == "alterar")) {
     document.getElementById('pc17_unid').value = document.getElementsByName("codigo_unidade[]")[indice].value;
     document.getElementById('pc11_servicoquantidade').value = document.getElementsByName("servicoquantidade[]")[indice].value;
     document.getElementById('pc11_codigo').value = document.getElementsByName("codigo[]")[indice].value;
-    $('eleSub').options[0] = new Option(document.getElementsByName("descrelemento[]")[indice].value, document.getElementsByName("codele[]")[indice].value);
-    document.getElementById('eleSub').readOnly = true;
+    $('eleSub').options[0] = new Option(document.getElementsByName("descrelemento[]")[indice].value.urlDecode(), document.getElementsByName("codele[]")[indice].value);
+    //document.getElementById('eleSub').readOnly = true;
 
 
   }
@@ -572,9 +572,20 @@ if ((isset($opcao) && $opcao == "alterar")) {
     }
 
     if (oRetorno.dados.length == 1) {
-      $('eleSub').disabled = true;
+      //$('eleSub').disabled = true;
+      document.getElementById("eleSub").setAttribute("tabindex", "-1");
+      document.getElementById("eleSub").setAttribute("aria-disabled", "true");
+
+      $('eleSub').style.background = "#EEE";
+      $('eleSub').style.pointerEvents = "none";
+
     } else {
-      $('eleSub').disabled = false;
+      document.getElementById("eleSub").removeAttribute("tabindex");
+      document.getElementById("eleSub").removeAttribute("aria-disabled");
+
+      $('eleSub').style.background = "";
+      $('eleSub').style.pointerEvents = "";
+      //$('eleSub').disabled = false;
 
     }
 
@@ -833,8 +844,8 @@ if ((isset($opcao) && $opcao == "alterar")) {
 
     // Verifica se o item já foi incluído com o sequencial informado.
     for (var i = 0; i < sizeItens; i++) {
-      if (document.getElementById('pc11_seq').value == itens_antigos[i].aCells[0].content) {
-        alert('O item ' + itens_antigos[i].aCells[1].content + ' já foi incluído com o sequencial ' + document.getElementById('pc11_seq').value + ' nesta solicitação.');
+      if (document.getElementById('pc11_seq').value == document.getElementsByName("ordem[]")[i].value) {
+        alert('O item ' + document.getElementsByName("codmaterial[]")[i].value + ' já foi incluído com o sequencial ' + document.getElementById('pc11_seq').value + ' nesta solicitação.');
         return;
       }
     }
@@ -893,7 +904,16 @@ if ((isset($opcao) && $opcao == "alterar")) {
 
     aLinha[9] = "  <input style='text-align:center; width:90%; border:none;' readonly='' type='text'  name='codigo[]' value='" + 0 + "'>";
 
-    aLinha[10] = "  <input style='text-align:center; width:90%; border:none;' readonly='' type='text'  name='descrelemento[]' value='" + 0 + "'>";
+    var select;
+    var option;
+
+    select = document.getElementById('eleSub');
+
+
+    option = select.children[select.selectedIndex];
+    desdobramento = option.textContent;
+
+    aLinha[10] = "  <input style='text-align:center; width:90%; border:none;' readonly='' type='text'  name='descrelemento[]' value='" + desdobramento + "'>";
 
 
     oGridItens.addRow(aLinha);
@@ -928,9 +948,6 @@ if ((isset($opcao) && $opcao == "alterar")) {
   oGridItens.setHeight(200);
   oGridItens.show($('ctnGridItens'));
   var db_opcao = <?php echo $db_opcao; ?>;
-  //console.log(db_opcao);
-
-  //if (db_opcao == 2 || db_opcao == 3) {
 
 
   var sUrl = "com4_materialsolicitacao.RPC.php";
@@ -992,10 +1009,16 @@ if ((isset($opcao) && $opcao == "alterar")) {
     oGridItens.renderRows();
 
   }
-  //}
 
 
   oAutoComplete = new dbAutoComplete($('pc01_descrmater'), 'com4_pesquisamateriais.RPC.php');
   oAutoComplete.setTxtFieldId(document.getElementById('pc16_codmater'));
   oAutoComplete.show();
+
+  document.getElementById('pc16_codmater').value = '';
+  document.getElementById('pc01_descrmater').value = '';
+  document.getElementById('pc11_quant').value = '';
+  document.getElementById('pc11_seq').value = '';
+  document.getElementById('pc17_unid').value = "0";
+  document.getElementById('eleSub').value = "0";
 </script>
