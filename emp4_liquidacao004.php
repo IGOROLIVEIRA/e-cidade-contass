@@ -541,10 +541,8 @@ switch ($objJson->method) {
           AND ac19_sequen=e55_sequen
           JOIN empautoriza ON e55_autori=e54_autori
           JOIN empempaut ON e61_autori=e54_autori
-          JOIN empempitem ON e62_numemp=e61_numemp
-          WHERE e62_sequencial = {$aItens[$iInd]->e62_sequencial}
-          AND (ac29_quantidade < 0
-          OR ac29_valor < 0)");
+          JOIN empempitem ON e62_numemp=e61_numemp and ac20_pcmater=e62_item
+          WHERE e62_sequencial = {$aItens[$iInd]->e62_sequencial}");
 
         $rsacordoMaterial = db_utils::fieldsMemory($acordoMaterial,0);
 
