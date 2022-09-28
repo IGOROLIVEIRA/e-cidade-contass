@@ -45,15 +45,14 @@ class cl_solicitemanul {
    var $pc28_sequencial = 0; 
    var $pc28_empempitem = 0; 
    var $pc28_solicitem = 0; 
-   var $e36_vrlanu = 0; 
-   var $e36_qtdanu = 0; 
+   var $pc28_vlranu = 0; 
+   var $pc28_qtd = 0; 
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  pc28_sequencial = int4 = Código Sequencial 
-                 pc28_empempitem = int4 = Item do Empenho 
                  pc28_solicitem = int4 = Código da Solicitação 
-                 pc28_vrlanu = float4 = Valor Anulado 
-                 pc28_qtdanu = float4 = Quantidade Anulada 
+                 pc28_vlranu = float4 = Valor Anulado 
+                 pc28_qtd = float4 = Quantidade Anulada 
                  ";
    //funcao construtor da classe 
    function cl_solicitemanul() { 
@@ -74,10 +73,9 @@ class cl_solicitemanul {
    function atualizacampos($exclusao=false) {
      if($exclusao==false){
        $this->pc28_sequencial = ($this->pc28_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["pc28_sequencial"]:$this->pc28_sequencial);
-       $this->pc28_empempitem = ($this->pc28_empempitem == ""?@$GLOBALS["HTTP_POST_VARS"]["pc28_empempitem"]:$this->pc28_empempitem);
        $this->pc28_solicitem = ($this->pc28_solicitem == ""?@$GLOBALS["HTTP_POST_VARS"]["pc28_solicitem"]:$this->pc28_solicitem);
-       $this->e36_vrlanu = ($this->e36_vrlanu == ""?@$GLOBALS["HTTP_POST_VARS"]["e36_vrlanu"]:$this->e36_vrlanu);
-       $this->e36_qtdanu = ($this->e36_qtdanu == ""?@$GLOBALS["HTTP_POST_VARS"]["e36_qtdanu"]:$this->e36_qtdanu);
+       $this->pc28_vlranu = ($this->pc28_vlranu == ""?@$GLOBALS["HTTP_POST_VARS"]["pc28_vlranu"]:$this->pc28_vlranu);
+       $this->pc28_qtd = ($this->pc28_qtd == ""?@$GLOBALS["HTTP_POST_VARS"]["pc28_qtd"]:$this->pc28_qtd);
      }else{
        $this->pc28_sequencial = ($this->pc28_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["pc28_sequencial"]:$this->pc28_sequencial);
      }
@@ -85,15 +83,6 @@ class cl_solicitemanul {
    // funcao para inclusao
    function incluir ($pc28_sequencial){ 
       $this->atualizacampos();
-     if($this->pc28_empempitem == null ){ 
-       $this->erro_sql = " Campo Item Anulado do Empenho nao Informado.";
-       $this->erro_campo = "pc28_empempitem";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
-     }
      if($this->pc28_solicitem == null ){ 
        $this->erro_sql = " Campo Código do Item na Solicitação nao Informado.";
        $this->erro_campo = "pc28_solicitem";
@@ -103,18 +92,18 @@ class cl_solicitemanul {
        $this->erro_status = "0";
        return false;
      }
-     if($this->e36_vrlanu == null ){ 
+     if($this->pc28_vlranu == null ){ 
        $this->erro_sql = " Valor Anulado nao Informado.";
-       $this->erro_campo = "e36_vrlanu";
+       $this->erro_campo = "pc28_vlranu";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
      }
-     if($this->e36_qtdanu == null ){ 
+     if($this->pc28_qtd == null ){ 
         $this->erro_sql = " Quantidade Anulada nao Informada.";
-        $this->erro_campo = "e36_qtdanu";
+        $this->erro_campo = "pc28_qtd";
         $this->erro_banco = "";
         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -155,17 +144,15 @@ class cl_solicitemanul {
      }
      $sql = "insert into solicitemanul(
                                        pc28_sequencial 
-                                      ,pc28_empempitem 
                                       ,pc28_solicitem 
-                                      ,e36_vrlanu 
-                                      ,e36_qtdanu 
+                                      ,pc28_vlranu 
+                                      ,pc28_qtd 
                        )
                 values (
                                 $this->pc28_sequencial 
-                               ,$this->pc28_empempitem 
                                ,$this->pc28_solicitem 
-                               ,$this->e36_vrlanu 
-                               ,$this->e36_qtdanu 
+                               ,$this->pc28_vlranu 
+                               ,$this->pc28_qtd 
                       )";
      $result = db_query($sql); 
      if($result==false){ 
@@ -192,17 +179,17 @@ class cl_solicitemanul {
      $this->erro_status = "1";
      $this->numrows_incluir= pg_affected_rows($result);
      $resaco = $this->sql_record($this->sql_query_file($this->pc28_sequencial));
-     if(($resaco!=false)||($this->numrows!=0)){
-       $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-       $acount = pg_result($resac,0,0);
-       $resac = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
-       $resac = db_query("insert into db_acountkey values($acount,10911,'$this->pc28_sequencial','I')");
-       $resac = db_query("insert into db_acount values($acount,1883,10911,'','".AddSlashes(pg_result($resaco,0,'pc28_sequencial'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-       $resac = db_query("insert into db_acount values($acount,1883,10912,'','".AddSlashes(pg_result($resaco,0,'pc28_empempitem'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-       $resac = db_query("insert into db_acount values($acount,1883,10913,'','".AddSlashes(pg_result($resaco,0,'pc28_solicitem'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-       $resac = db_query("insert into db_acount values($acount,1883,10914,'','".AddSlashes(pg_result($resaco,0,'e36_vrlanu'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-       $resac = db_query("insert into db_acount values($acount,1883,10969,'','".AddSlashes(pg_result($resaco,0,'e36_qtdanu'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-     }
+     //if(($resaco!=false)||($this->numrows!=0)){
+     //  $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
+     //  $acount = pg_result($resac,0,0);
+     //  $resac = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
+     //  $resac = db_query("insert into db_acountkey values($acount,10911,'$this->pc28_sequencial','I')");
+     //  $resac = db_query("insert into db_acount values($acount,1883,10911,'','".AddSlashes(pg_result($resaco,0,'pc28_sequencial'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+     //  $resac = db_query("insert into db_acount values($acount,1883,10912,'','".AddSlashes(pg_result($resaco,0,'pc28_empempitem'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+     //  $resac = db_query("insert into db_acount values($acount,1883,10913,'','".AddSlashes(pg_result($resaco,0,'pc28_solicitem'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+     //  $resac = db_query("insert into db_acount values($acount,1883,10914,'','".AddSlashes(pg_result($resaco,0,'pc28_vlranu'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+     //  $resac = db_query("insert into db_acount values($acount,1883,10969,'','".AddSlashes(pg_result($resaco,0,'pc28_qtd'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+     //}
      return true;
    } 
    // funcao para alteracao
@@ -223,24 +210,11 @@ class cl_solicitemanul {
          return false;
        }
      }
-     if(trim($this->pc28_empempitem)!="" || isset($GLOBALS["HTTP_POST_VARS"]["pc28_empempitem"])){ 
-       $sql  .= $virgula." pc28_empempitem = $this->pc28_empempitem ";
-       $virgula = ",";
-       if(trim($this->pc28_empempitem) == null ){ 
-         $this->erro_sql = " Campo Item do Empenho nao Informado.";
-         $this->erro_campo = "pc28_empempitem";
-         $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-         $this->erro_status = "0";
-         return false;
-       }
-     }
      if(trim($this->pc28_solicitem)!="" || isset($GLOBALS["HTTP_POST_VARS"]["pc28_solicitem"])){ 
        $sql  .= $virgula." pc28_solicitem = $this->pc28_solicitem ";
        $virgula = ",";
        if(trim($this->pc28_solicitem) == null ){ 
-         $this->erro_sql = " Campo Código da Solicitação nao Informado.";
+         $this->erro_sql = " Campo Código do Item da Solicitação nao Informado.";
          $this->erro_campo = "pc28_solicitem";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -249,12 +223,12 @@ class cl_solicitemanul {
          return false;
        }
      }
-     if(trim($this->e36_vrlanu)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e36_vrlanu"])){ 
-       $sql  .= $virgula." e36_vrlanu = $this->e36_vrlanu ";
+     if(trim($this->pc28_vlranu)!="" || isset($GLOBALS["HTTP_POST_VARS"]["pc28_vlranu"])){ 
+       $sql  .= $virgula." pc28_vlranu = $this->pc28_vlranu ";
        $virgula = ",";
-       if(trim($this->e36_vrlanu) == null ){ 
+       if(trim($this->pc28_vlranu) == null ){ 
          $this->erro_sql = " Campo Valor Anulado nao Informado.";
-         $this->erro_campo = "e36_vrlanu";
+         $this->erro_campo = "pc28_vlranu";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -262,11 +236,11 @@ class cl_solicitemanul {
          return false;
        }
      }
-     if(trim($this->e36_qtdanu)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e36_qtdanu"])){ 
-        if(trim($this->e36_qtdanu)=="" && isset($GLOBALS["HTTP_POST_VARS"]["e36_qtdanu"])){ 
-           $this->e36_qtdanu = "0" ; 
+     if(trim($this->pc28_qtd)!="" || isset($GLOBALS["HTTP_POST_VARS"]["pc28_qtd"])){ 
+        if(trim($this->pc28_qtd)=="" && isset($GLOBALS["HTTP_POST_VARS"]["pc28_qtd"])){ 
+           $this->pc28_qtd = "0" ; 
         } 
-       $sql  .= $virgula." e36_qtdanu = $this->e36_qtdanu ";
+       $sql  .= $virgula." pc28_qtd = $this->pc28_qtd ";
        $virgula = ",";
      }
      $sql .= " where ";
@@ -275,22 +249,20 @@ class cl_solicitemanul {
      }
      $resaco = $this->sql_record($this->sql_query_file($this->pc28_sequencial));
      if($this->numrows>0){
-       for($conresaco=0;$conresaco<$this->numrows;$conresaco++){
-         $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-         $acount = pg_result($resac,0,0);
-         $resac = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
-         $resac = db_query("insert into db_acountkey values($acount,10911,'$this->pc28_sequencial','A')");
-         if(isset($GLOBALS["HTTP_POST_VARS"]["pc28_sequencial"]))
-           $resac = db_query("insert into db_acount values($acount,1883,10911,'".AddSlashes(pg_result($resaco,$conresaco,'pc28_sequencial'))."','$this->pc28_sequencial',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         if(isset($GLOBALS["HTTP_POST_VARS"]["pc28_empempitem"]))
-           $resac = db_query("insert into db_acount values($acount,1883,10912,'".AddSlashes(pg_result($resaco,$conresaco,'pc28_empempitem'))."','$this->pc28_empempitem',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         if(isset($GLOBALS["HTTP_POST_VARS"]["pc28_solicitem"]))
-           $resac = db_query("insert into db_acount values($acount,1883,10913,'".AddSlashes(pg_result($resaco,$conresaco,'pc28_solicitem'))."','$this->pc28_solicitem',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         if(isset($GLOBALS["HTTP_POST_VARS"]["e36_vrlanu"]))
-           $resac = db_query("insert into db_acount values($acount,1883,10914,'".AddSlashes(pg_result($resaco,$conresaco,'e36_vrlanu'))."','$this->e36_vrlanu',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         if(isset($GLOBALS["HTTP_POST_VARS"]["e36_qtdanu"]))
-           $resac = db_query("insert into db_acount values($acount,1883,10969,'".AddSlashes(pg_result($resaco,$conresaco,'e36_qtdanu'))."','$this->e36_qtdanu',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-       }
+       //for($conresaco=0;$conresaco<$this->numrows;$conresaco++){
+       //  $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
+       //  $acount = pg_result($resac,0,0);
+       //  $resac = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
+       //  $resac = db_query("insert into db_acountkey values($acount,10911,'$this->pc28_sequencial','A')");
+       //  if(isset($GLOBALS["HTTP_POST_VARS"]["pc28_sequencial"]))
+       //    $resac = db_query("insert into db_acount values($acount,1883,10911,'".AddSlashes(pg_result($resaco,$conresaco,'pc28_sequencial'))."','$this->pc28_sequencial',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       //  if(isset($GLOBALS["HTTP_POST_VARS"]["pc28_solicitem"]))
+       //    $resac = db_query("insert into db_acount values($acount,1883,10913,'".AddSlashes(pg_result($resaco,$conresaco,'pc28_solicitem'))."','$this->pc28_solicitem',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       //  if(isset($GLOBALS["HTTP_POST_VARS"]["pc28_vlranu"]))
+       //    $resac = db_query("insert into db_acount values($acount,1883,10914,'".AddSlashes(pg_result($resaco,$conresaco,'pc28_vlranu'))."','$this->pc28_vlranu',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       //  if(isset($GLOBALS["HTTP_POST_VARS"]["pc28_qtd"]))
+       //    $resac = db_query("insert into db_acount values($acount,1883,10969,'".AddSlashes(pg_result($resaco,$conresaco,'pc28_qtd'))."','$this->pc28_qtd',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       //}
      }
      $result = db_query($sql);
      if($result==false){ 
@@ -340,8 +312,8 @@ class cl_solicitemanul {
          $resac = db_query("insert into db_acount values($acount,1883,10911,'','".AddSlashes(pg_result($resaco,$iresaco,'pc28_sequencial'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,1883,10912,'','".AddSlashes(pg_result($resaco,$iresaco,'pc28_empempitem'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,1883,10913,'','".AddSlashes(pg_result($resaco,$iresaco,'pc28_solicitem'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1883,10914,'','".AddSlashes(pg_result($resaco,$iresaco,'e36_vrlanu'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         $resac = db_query("insert into db_acount values($acount,1883,10969,'','".AddSlashes(pg_result($resaco,$iresaco,'e36_qtdanu'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1883,10914,'','".AddSlashes(pg_result($resaco,$iresaco,'pc28_vlranu'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,1883,10969,'','".AddSlashes(pg_result($resaco,$iresaco,'pc28_qtd'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        }
      }
      $sql = " delete from solicitemanul
@@ -425,9 +397,7 @@ class cl_solicitemanul {
        $sql .= $campos;
      }
      $sql .= " from solicitemanul ";
-     $sql .= "      inner join empsolicitaanul  on  empsolicitaanul.e35_sequencial = solicitemanul.pc28_solicitem";
-     $sql .= "      inner join db_usuarios  on  db_usuarios.id_usuario = empsolicitaanul.e35_usuario";
-     $sql .= "      inner join empempenho  on  empempenho.e60_numemp = empsolicitaanul.e35_numemp";
+     $sql .= "      inner join solicitem on solicitem.pc11_codigo = solicitemanul.pc28_solicitem";
      $sql2 = "";
      if($dbwhere==""){
        if($pc28_sequencial!=null ){
