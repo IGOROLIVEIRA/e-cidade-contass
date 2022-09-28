@@ -136,7 +136,7 @@ if (isset($q148_codigo) && $q148_codigo=="nova") {
         function js_trocaid(valor){
 
             if(valor!==""){
-                location.href = "iss4_issisen002.php?<?=$alterando?'':'alterando=1&'?>q148_inscr=<?=$q148_inscr?>&q148_codigo="+valor;
+                location.href = "iss4_issisen002.php?<?=$alterando?'':'alterando=1&'?>aba=<?= isset($aba) ? $aba : 0 ?>&q148_inscr=<?=$q148_inscr?>&q148_codigo="+valor;
             }
         }
         <?php } ?>
@@ -330,7 +330,16 @@ if (isset($q148_codigo) && $q148_codigo=="nova") {
     </form>
 </div>
 <?php
-if (empty($aba) === true) {
+/**
+ * @param $aba
+ * @return bool
+ */
+function shouldShowMenu($aba)
+{
+    return isset($aba) === false || (isset($aba) === true && $aba !== '1');
+}
+
+if (shouldShowMenu($aba) === true) {
     db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
 }
 ?>
