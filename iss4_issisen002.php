@@ -356,8 +356,6 @@ if (empty($aba) === true) {
 
         const tipoIsencao = Number(document.form1.q147_tipoisen.value);
 
-        console.log(tipoIsencao, alterando);
-
         if (document.getElementById('q148_tipo').value === "") {
 
             alert('Informe o tipo de isenção.');
