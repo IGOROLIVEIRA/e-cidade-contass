@@ -205,7 +205,6 @@ if (isset($o56_codele) and trim($o56_codele) != '') {
             }
             $sql = $clpcmater->sql_query_desdobra("", $campos, "pc01_codmater", "pc03_codgrupo = $chave_pc03_codgrupo and pc04_codsubgrupo = pc01_codsubgrupo and pc04_codgrupo = pc03_codgrupo and $where_ativo $where_subgrupo");
           } //print_r($sql);die;
-          //echo $sql;
           db_lovrot(@$sql, 15, "()", "", $funcao_js, "", "NoMe", $repassa);
         } else {
           if ($pesquisa_chave != null && $pesquisa_chave != "") {

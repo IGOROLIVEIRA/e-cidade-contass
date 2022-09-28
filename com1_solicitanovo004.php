@@ -809,6 +809,10 @@ if (isset($incluir) || (isset($importar) && $confirma == true)) {
 		};
 	} else {
 
+		echo "<script>
+		parent.document.formaba.dotacoesnovo.disabled=false;\n
+	  </script>";
+
 		if (isset($param) && trim($param) != "") {
 			$parametro = "&param=alterar&param_ant=incluir";
 			if (isset($codproc2) && trim($codproc2) != "" && $codproc2 > 0) {

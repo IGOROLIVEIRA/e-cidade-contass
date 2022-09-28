@@ -163,6 +163,47 @@ try {
       $oRetorno->aItens = $aItens;
       $oRetorno->sql = $sql;
       break;
+
+    case "getDotacoes":
+
+      $anousu = db_getsession('DB_anousu');
+      $sql = "select o58_coddot,fc_estruturaldotacao(o58_anousu,o58_coddot) as o50_estrutdespesa from orcdotacao 
+      inner join orcelemento on o56_codele = o58_codele and o56_anousu = o58_anousu
+      where o58_coddot in ((select distinct pc13_coddot from solicitem
+      inner join pcdotac on pc11_codigo = pc13_codigo where pc11_numero = $oParam->numero)) and o58_anousu = $anousu";
+      $rsResult = db_query($sql);
+
+      $aItens = array();
+
+      for ($i = 0; $i < pg_numrows($rsResult); $i++) {
+        $oItem = new stdClass();
+        $item = db_utils::fieldsMemory($rsResult, $i);
+        $oItem->reduzido =  $item->o58_coddot;
+        $oItem->estrutural =  $item->o50_estrutdespesa;
+
+        $aItens[] = $oItem;
+      }
+
+      $oRetorno->quantidade = pg_numrows($rsResult);
+      $oRetorno->aItens = $aItens;
+      $oRetorno->sql = $sql;
+      break;
+
+    case "excluirDotacoes":
+
+      $anousu = db_getsession('DB_anousu');
+      $sql = "delete from pcdotac where pc13_coddot = $oParam->dotacao and
+      pc13_codigo in ((select pc11_codigo from solicitem where pc11_numero = $oParam->numero));";
+      $rsResult = db_query($sql);
+
+      $oRetorno->sql = $sql;
+
+      if (!$rsResult) {
+        $oRetorno->erro  = true;
+        $oRetorno->message = "Erro ao excluir dotação";
+      }
+
+      break;
   }
 
   db_fim_transacao(false);

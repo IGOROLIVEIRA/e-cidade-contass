@@ -89,6 +89,7 @@ if ($clpcparam->numrows > 0) {
           $clcriaabas->title      = array("solicita" => "Solicitação de compras", "solicitem" => "Itens", "dotacoesnovo" => "Dotações"); //nome do iframe e o label    
           $clcriaabas->sizecampo  = array("solicita" => "20", "solicitem" => "20", "dotacoesnovo" => "20");
           $clcriaabas->disabled = array("solicitem" => "true");
+          $clcriaabas->disabled = array("dotacoesnovo" => "true");
         }
 
         $clcriaabas->cria_abas();
