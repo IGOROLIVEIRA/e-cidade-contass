@@ -282,14 +282,38 @@ try {
                         $dadosDoPreenchimento = $formatter->formatar($dadosDoPreenchimento);
                     }
                     foreach (array_chunk($dadosDoPreenchimento, 50) as $aTabela) {
-                        $eventoFila = new Evento($arquivo, $iCgm, $iCgm, $aTabela, $oParam->tpAmb, "{$oParam->iAnoValidade}-{$oParam->iMesValidade}", $oParam->modo, empty($oParam->dtalteracao) ? null : $oParam->dtalteracao);
+                        $eventoFila = new Evento(
+                            $arquivo,
+                            $iCgm,
+                            $iCgm,
+                            $aTabela,
+                            $oParam->tpAmb,
+                            "{$oParam->iAnoValidade}-{$oParam->iMesValidade}",
+                            $oParam->modo,
+                            empty($oParam->dtalteracao) ? null : $oParam->dtalteracao,
+                            $oParam->indapuracao,
+                            $oParam->tppgto,
+                            $oParam->tpevento
+                        );
                         $eventoFila->adicionarFila();
                     }
                 } else {
                     $dadosTabela = $dadosESocial->getPorTipo(Tipo::getTipoFormulario($arquivo), empty($oParam->matricula) ? null : $oParam->matricula);
 
                     foreach (array_chunk($dadosTabela, 1) as $aTabela) {
-                        $eventoFila = new Evento($arquivo, $iCgm, $iCgm, $aTabela, $oParam->tpAmb, "{$oParam->iAnoValidade}-{$oParam->iMesValidade}", $oParam->modo, $oParam->dtalteracao, $oParam->indapuracao, $oParam->tppgto);
+                        $eventoFila = new Evento(
+                            $arquivo,
+                            $iCgm,
+                            $iCgm,
+                            $aTabela,
+                            $oParam->tpAmb,
+                            "{$oParam->iAnoValidade}-{$oParam->iMesValidade}",
+                            $oParam->modo,
+                            empty($oParam->dtalteracao) ? null : $oParam->dtalteracao,
+                            $oParam->indapuracao,
+                            $oParam->tppgto,
+                            $oParam->tpevento
+                        );
                         $eventoFila->adicionarFila();
                     }
                 }
@@ -328,9 +352,8 @@ try {
             $iCgm = $oParam->empregador;
             $dadosESocial->setReponsavelPeloPreenchimento($iCgm);
             $dadosDoPreenchimento = $dadosESocial->getPorTipo(Tipo::RUBRICA, $stringRubricas);
-            $arquivo = "S1010Individual";
             foreach (array_chunk($dadosDoPreenchimento, 1) as $aTabela) {
-                $eventoFila = new Evento($arquivo, $iCgm, $iCgm, $aTabela, $oParam->tpAmb, "{$oParam->iAnoValidade}-{$oParam->iMesValidade}", $oParam->modo, $oParam->dtalteracao);
+                $eventoFila = new Evento(current($oParam->arquivos), $iCgm, $iCgm, $aTabela, $oParam->tpAmb, "{$oParam->iAnoValidade}-{$oParam->iMesValidade}", $oParam->modo, $oParam->dtalteracao);
                 $eventoFila->adicionarFila();
             }
             db_fim_transacao(false);

@@ -68,9 +68,9 @@ switch ($oParam->exec) {
     $class = "cl_" . $arquivo;
 
     $cl_arquivo = new $class;
-
+    
     $rsArquivo = $cl_arquivo->sql_record($cl_arquivo->sql_query_file($oParam->iArquivo));
-
+    
     $datasistema =  implode("/", array_reverse(explode("-", date('Y-m-d', db_getsession('DB_datausu')))));
 
 
@@ -78,9 +78,10 @@ switch ($oParam->exec) {
     date_default_timezone_set('America/Sao_Paulo');
 
     $dSistema = strftime('%A, %d de %B de %Y', strtotime('today'));
-
+    
     db_fieldsmemory($rsArquivo, 0);
-
+    $dCriacao = strftime('%A, %d de %B de %Y', strtotime($l20_datacria));
+    
     $mPDF = new mpdf('', 'A4-L', 0, '', 10, 10, 30, 10, 5, 5);
     if (file_exists("imagens/files/{$oInstit->getImagemLogo()}")) {
       $sLogo = "<img src='imagens/files/{$oInstit->getImagemLogo()}' width='70px' >";
@@ -104,8 +105,12 @@ switch ($oParam->exec) {
     if ($l20_codtipocom) {
       require_once("classes/db_" . $cflicita . "_classe.php");
       $clcflicita = new cl_cflicita;
-      db_fieldsmemory($clcflicita->sql_record($clcflicita->sql_query($l20_codtipocom, "distinct l03_descr")), 0);
+      db_fieldsmemory($clcflicita->sql_record($clcflicita->sql_query($l20_codtipocom, "distinct l03_descr")), 0);  
     }
+    
+    $cldbdepart = new cl_db_depart;
+    db_fieldsmemory($cldbdepart->sql_record($cldbdepart->sql_query($l20_codepartamento,"descrdepto")),0);
+    $l20_descricaodep = $descrdepto; 
 
     $sDescricao = base64_decode($oParam->sDescricao);
     $sCorpo = base64_decode(urlencode($oParam->sCorpo));

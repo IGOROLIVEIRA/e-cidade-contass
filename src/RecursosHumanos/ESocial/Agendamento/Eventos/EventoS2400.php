@@ -37,16 +37,6 @@ class EventoS2400 extends EventoBase
         $iSequencial = 1;
         foreach ($this->dados as $oDados) {
 
-            if (!empty($oDados->brasil) && empty($oDados->brasil->complemento)) {
-                $oDados->brasil->complemento = null;
-            }
-            if (!empty($oDados->brasil) && empty($oDados->brasil->bairro)) {
-                $oDados->brasil->bairro = null;
-            }
-            if (!empty($oDados->brasil) && empty($oDados->brasil->tpLograd)) {
-                $oDados->brasil->tpLograd = null;
-            }
-
             $oDadosAPI                                   = new \stdClass;
             $oDadosAPI->evtCdBenPrRP                    = new \stdClass;
             $oDadosAPI->evtCdBenPrRP->sequencial = $iSequencial;
@@ -60,7 +50,7 @@ class EventoS2400 extends EventoBase
             $oDadosAPI->evtCdBenPrRP->racacor = $oDados->racacor;
             $oDadosAPI->evtCdBenPrRP->estciv = $oDados->estciv;
             $oDadosAPI->evtCdBenPrRP->incfismen = $oDados->incfismen;
-            $oDadosAPI->evtCdBenPrRP->dtincfismen = $oDados->incfismen == 'S' ? $oDados->dtIncFisMen : null;
+            $oDadosAPI->evtCdBenPrRP->dtincfismen = $oDados->incfismen == 'S' ? $oDados->dtincfismen : null;
 
             $oDadosAPI->evtCdBenPrRP->endereco->brasil->tplograd = $oDados->tplograd;
             $oDadosAPI->evtCdBenPrRP->endereco->brasil->dsclograd = $oDados->dsclograd;
@@ -69,6 +59,8 @@ class EventoS2400 extends EventoBase
             $oDadosAPI->evtCdBenPrRP->endereco->brasil->cep = $oDados->cep;
             $oDadosAPI->evtCdBenPrRP->endereco->brasil->codMunic = $oDados->codmunic;
             $oDadosAPI->evtCdBenPrRP->endereco->brasil->uf = $oDados->uf;
+            $oDadosAPI->evtCdBenPrRP->endereco->brasil->complemento = empty($oDados->complemento) ? null : $oDados->complemento;
+            $oDadosAPI->evtCdBenPrRP->endereco->brasil->tpLograd = empty($oDados->tplograd) ? null : $oDados->tplograd;
 
             $oDadosAPI->evtCdBenPrRP->endereco->exterior = null;
 

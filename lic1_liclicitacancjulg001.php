@@ -46,6 +46,7 @@ $clpcorcamtroca       = new cl_pcorcamtroca;
 $clliclicitaata       = new cl_liclicitaata;
 $clliclicitasituacao  = new cl_liclicitasituacao;
 $oDaoRegistPrecoJulg  = new cl_registroprecojulgamento;
+$clsituacaoitemlic    = new cl_situacaoitemlic;
 
 $clrotulo = new rotulocampo;
 $clrotulo->label("l20_codigo");
@@ -116,7 +117,7 @@ if (isset($l20_codigo) && trim($l20_codigo) != "") {
         }
 
         $sqlerro  = true;
-        $erro_msg  = "Não é possível cancelar o julgamento. Licitação {$l20_codigo} ";
+        $erro_msg  = "Não é possí­vel cancelar o julgamento. Licitação {$l20_codigo} ";
         $erro_msg .= "possui vinculo com as seguintes solicitações: {$sSolicitacaoGeradas}.";
       }
 
@@ -125,7 +126,7 @@ if (isset($l20_codigo) && trim($l20_codigo) != "") {
         $aReequilibrios = $oRegistroPreco->getReequilibrios();
         if (count($aReequilibrios) > 0) {
 
-          $erro_msg = "Não é possível cancelar o julgamento, Licitação {$l20_codigo}, possui reequilíbrios.";
+          $erro_msg = "Não é possí­vel cancelar o julgamento, Licitação {$l20_codigo}, possui reequilírios.";
           $sqlerro  = true;
         }
       }
@@ -224,6 +225,7 @@ if (isset($l20_codigo) && trim($l20_codigo) != "") {
         $erro_msg = $clliclicita->erro_msg;
         $sqlerro  = true;
       }
+
     }
 
     if ($sqlerro == false) {
@@ -232,7 +234,7 @@ if (isset($l20_codigo) && trim($l20_codigo) != "") {
       $clliclicitasituacao->l11_id_usuario  = DB_getSession("DB_id_usuario");
       $clliclicitasituacao->l11_licsituacao = '0';
       $clliclicitasituacao->l11_liclicita   = $clliclicita->l20_codigo;
-		  $clliclicitasituacao->l11_obs         = "Julgamento da licitação cancelado.";
+		  $clliclicitasituacao->l11_obs         = "Julgamento da licitaÃ§Ã£o cancelado.";
       $clliclicitasituacao->l11_data        = date("Y-m-d",DB_getSession("DB_datausu"));
       $clliclicitasituacao->l11_hora        = DB_hora();
 	    $clliclicitasituacao->incluir($l11_sequencial);
@@ -258,8 +260,17 @@ if (isset($l20_codigo) && trim($l20_codigo) != "") {
   	}
   }
 
+
+  $sql =  " l219_codigo in (select l218_codigo from situacaoitemcompra where l218_codigolicitacao = ".$l20_codigo.") and l219_situacao = 4";
+  $res_situacaoitemlic = $clsituacaoitemlic->excluir(null,$sql);
+   if ($clsituacaoitemlic->erro_status == 0) {
+    $sqlerro = true;
+    $erro_msg = $clsituacaoitemlic->erro_msg;
+  }
+
+
   if ($sqlerro == false){
-    $erro_msg = "Exclusao feita com sucessos.";
+    $erro_msg = "Exclusao feita com sucesso.";
   }
 
   db_fim_transacao($sqlerro);
@@ -276,7 +287,7 @@ if (isset($l20_codigo) && trim($l20_codigo) != "") {
 function js_confirmar(){
   if(document.form1.l20_codigo.value == ""){
     document.form1.l20_codigo.focus();
-    alert("Informe o código da Licitação");
+    alert("Informe o cÃ³digo da LicitaÃ§Ã£o");
   }else{
     if (confirm("Todos os itens julgados e trocados serao excluidos. Tem certeza?")){
          document.form1.submit();
