@@ -666,7 +666,7 @@ if(isset($incluir)||isset($excluir)||isset($alterar)){
     }else{
 
         $clissisen->erro(true,false);
-        db_redireciona("iss4_issisen002.php?q148_inscr=$q148_inscr&q148_codigo=nova".($alterando?"&alterando=1":""));
+        db_redireciona("iss4_issisen002.php?q148_inscr=$q148_inscr&q148_codigo=nova".($alterando?"&alterando=1":""). "&aba=".(isset($aba) ? $aba : '0'));
     }
 }
 ?>
