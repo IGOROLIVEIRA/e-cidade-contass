@@ -414,6 +414,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
 
     db_input('db_opcao', 5, 0, true, 'hidden', 3);
     db_input('db_botao', 5, 0, true, 'hidden', 3);
+
     ?>
   </form>
 </div>
@@ -794,6 +795,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
   function js_adicionarItem() {
 
 
+
     if (document.getElementById('pc17_unid2').style.display == 'block') {
       if ($F('pc17_unid2') == "0") {
         alert('Informe a Unidade!');
@@ -882,13 +884,18 @@ if ((isset($opcao) && $opcao == "alterar")) {
 
 
     aLinha[3] = "  <input style='text-align:center; width:90%; border:none;' readonly='' type='text'  name='unidade[]'  value='" + unidade + "'>";
-    aLinha[4] = "<input type='button' value='A' onclick='js_alterarLinha(" + indice + ")'> <input type='button' name='excluir' value='E' onclick='js_excluirLinha(" + indice + ")'>";
 
-    elesub = document.getElementById('eleSub').value;
-    aLinha[5] = "  <input style='text-align:center; width:90%; border:none;' readonly='' type='text'  name='codele[]' value='" + elesub + "'>";
 
     quantidade = document.getElementById('pc11_quant').value;
-    aLinha[6] = "  <input style='text-align:center; width:90%; border:none;' readonly='' type='text'  name='quantidade[]' value='" + quantidade + "'>";
+    aLinha[4] = "  <input style='text-align:center; width:90%; border:none;' readonly='' type='text'  name='quantidade[]' value='" + quantidade + "'>";
+
+    aLinha[5] = "<input type='button' value='A' onclick='js_alterarLinha(" + indice + ")'> <input type='button' name='excluir' value='E' onclick='js_excluirLinha(" + indice + ")'>";
+
+    elesub = document.getElementById('eleSub').value;
+    aLinha[6] = "  <input style='text-align:center; width:90%; border:none;' readonly='' type='text'  name='codele[]' value='" + elesub + "'>";
+
+    //quantidade = document.getElementById('pc11_quant').value;
+    //aLinha[6] = "  <input style='text-align:center; width:90%; border:none;' readonly='' type='text'  name='quantidade[]' value='" + quantidade + "'>";
 
 
     pc11_servicoquantidade = document.getElementById('pc11_servicoquantidade').value;
@@ -934,9 +941,9 @@ if ((isset($opcao) && $opcao == "alterar")) {
   oGridItens = new DBGrid('oGridItens');
   oGridItens.nameInstance = 'oGridItens';
   oGridItens.setCellAlign(['center', 'center', "center", "center", "center", "center", "center", "center", "center", "center", "center"]);
-  oGridItens.setCellWidth(["10%", "10%", "50%", "20%", "10%", "0%", "0%", "0%", "0%", "0%", "0%"]);
-  oGridItens.setHeader(["Ordem", "Código", "Descrição", "Unidade", "Ação", "", "", "", "", "", ""]);
-  oGridItens.aHeaders[5].lDisplayed = false;
+  oGridItens.setCellWidth(["10%", "10%", "40%", "20%", "10%", "10%", "0%", "0%", "0%", "0%", "0%"]);
+  oGridItens.setHeader(["Ordem", "Código", "Descrição", "Unidade", "Quantidade", "Ação", "", "", "", "", ""]);
+  //oGridItens.aHeaders[5].lDisplayed = false;
   oGridItens.aHeaders[6].lDisplayed = false;
   oGridItens.aHeaders[7].lDisplayed = false;
   oGridItens.aHeaders[8].lDisplayed = false;
@@ -980,13 +987,17 @@ if ((isset($opcao) && $opcao == "alterar")) {
       aLinha[2] = " <input style='text-align:center; width:90%; border:none;' readonly='' type='text' name='descmaterial[]' value='" + oRetorno.aItens[i].pc01_descrmater + "'>"
 
       aLinha[3] = " <input style='text-align:center; width:90%; border:none;' readonly='' type='text' name='unidade[]' value='" + oRetorno.aItens[i].m61_descr + "'>";
-      aLinha[4] = "<input type='button' value='A'  onclick='js_alterarLinha(" + i + ")'> <input type='button' name='excluir' value='E' onclick='js_excluirLinha(" + i + ")'>";
+
+      aLinha[4] = " <input style='text-align:center; width:90%; border:none;' readonly='' type='text' name='quantidade[]' value='" + oRetorno.aItens[i].pc11_quant + "'>";
 
 
-      aLinha[5] = " <input style='text-align:center; width:90%; border:none;' readonly='' type='text' name='codele[]' value='" + oRetorno.aItens[i].pc18_codele + "'>";
+      aLinha[5] = "<input type='button' value='A'  onclick='js_alterarLinha(" + i + ")'> <input type='button' name='excluir' value='E' onclick='js_excluirLinha(" + i + ")'>";
 
 
-      aLinha[6] = " <input style='text-align:center; width:90%; border:none;' readonly='' type='text' name='quantidade[]' value='" + oRetorno.aItens[i].pc11_quant + "'>";
+      aLinha[6] = " <input style='text-align:center; width:90%; border:none;' readonly='' type='text' name='codele[]' value='" + oRetorno.aItens[i].pc18_codele + "'>";
+
+
+      //aLinha[6] = " <input style='text-align:center; width:90%; border:none;' readonly='' type='text' name='quantidade[]' value='" + oRetorno.aItens[i].pc11_quant + "'>";
 
 
       aLinha[7] = " <input style='text-align:center; width:90%; border:none;' readonly='' type='text' name='servicoquantidade[]' value='" + oRetorno.aItens[i].pc11_servicoquantidade + "'>";

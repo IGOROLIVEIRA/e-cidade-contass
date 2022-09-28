@@ -186,6 +186,8 @@ $rsRegistroPreco     = $oDaoSolicitaVInculo->sql_record($sSqlRegistroPreco);
 if ($oDaoSolicitaVInculo->numrows > 0) {
 	$iRegistroPreco = db_utils::fieldsMemory($rsRegistroPreco, 0)->pc53_solicitapai;
 }
+
+$pc11_vlrun = 0;
 if (isset($incluir) || isset($alterar)) {
 
 	if (isset($incluir)) {
@@ -247,15 +249,29 @@ if (isset($incluir) && $sqlerro == false) {
 	// Unindo o array das propriedades do item em apenas um array
 
 	for ($i = 0; $i < count($codmaterial); $i++) {
-		$oItem = new stdClass();
-		$oItem->pc11_seq =  $ordem[$i];
-		$oItem->pc01_codmater =  $codmaterial[$i];
-		$oItem->pc11_quant =  	$quantidade[$i];
-		$oItem->codele =  $codele[$i];
-		$oItem->pc11_servicoquantidade =  $servicoquantidade[$i];
-		$oItem->codunidade =  $codigo_unidade[$i];
-		$aItens[] = $oItem;
+
+		$material = $codmaterial[$i];
+
+
+		$result_msgcodmater = $clsolicitempcmater->sql_record($clsolicitempcmater->sql_query_file(null, null, "pc16_codmater", "", " pc16_codmater=$material and pc16_solicitem in (select pc11_codigo from solicitem where pc11_numero in ($pc11_numero))"));
+		if ($clsolicitempcmater->numrows == 0) {
+			$oItem = new stdClass();
+			$oItem->pc11_seq =  $ordem[$i];
+			$oItem->pc01_codmater =  $codmaterial[$i];
+			$oItem->pc11_quant =  	$quantidade[$i];
+			$oItem->codele =  $codele[$i];
+			$oItem->pc11_servicoquantidade =  $servicoquantidade[$i];
+			$oItem->codunidade =  $codigo_unidade[$i];
+			$aItens[] = $oItem;
+		}
 	}
+
+	if (count($aItens) == 0) {
+		$msg_alert = "AVISO \\n\\nTodos os itens selecionados ja foram cadastrados nesta solicitação.";
+		db_msgbox($msg_alert);
+		db_redireciona("com1_solicitemnovo001.php?pc11_numero=$pc11_numero");
+	}
+
 
 	// Ordenação dos arrays conforme sequencial
 
@@ -305,11 +321,11 @@ if (isset($incluir) && $sqlerro == false) {
 		$array_codliclicitem = array();
 
 
-		for ($i = 0; $i < count($ordem); $i++) {
+		for ($i = 0; $i < count($aItens); $i++) {
 			$clsolicitem->pc11_numero = $pc11_numero;
 			$clsolicitem->pc11_seq    = $aItens[$i]->pc11_seq;
 			$clsolicitem->pc11_quant    = 		$aItens[$i]->pc11_quant;
-			$clsolicitem->pc11_vlrun  = $pc11_vlrun;
+			$clsolicitem->pc11_vlrun  = "0";
 			$clsolicitem->pc11_liberado = "f";
 			$clsolicitem->pc11_prazo = addslashes(stripslashes(trim($pc11_prazo)));
 			$clsolicitem->pc11_pgto  = addslashes(stripslashes(trim($pc11_pgto)));
@@ -355,7 +371,7 @@ if (isset($incluir) && $sqlerro == false) {
 						}
 					}
 
-					for ($i = 0; $i < count($codmaterial); $i++) {
+					for ($i = 0; $i < count($aItens); $i++) {
 						$clpcprocitem->pc81_codproc   = $codproc;
 						$clpcprocitem->pc81_solicitem = $array_pc11_codigo[$i];
 						$clpcprocitem->incluir(null);
@@ -381,7 +397,7 @@ if (isset($incluir) && $sqlerro == false) {
 
 						if ($sqlerro == false) {
 
-							for ($i = 0; $i < count($codmaterial); $i++) {
+							for ($i = 0; $i < count($aItens); $i++) {
 								$codproc = $clpcproc->pc80_codproc;
 								$clpcprocitem->pc81_codproc   = $codproc;
 								$clpcprocitem->pc81_solicitem = $array_pc11_codigo[$i];
@@ -397,7 +413,7 @@ if (isset($incluir) && $sqlerro == false) {
 
 					if ($sqlerro == false) {
 
-						for ($i = 0; $i < count($codmaterial); $i++) {
+						for ($i = 0; $i < count($aItens); $i++) {
 							$clliclicitem->l21_codpcprocitem = $array_pc81_codprocitem[$i];
 							$clliclicitem->l21_codliclicita  = $codliclicita;
 							$clliclicitem->l21_situacao      = "0";
@@ -431,7 +447,7 @@ if (isset($incluir) && $sqlerro == false) {
 
 							if ($sqlerro == false) {
 
-								for ($i = 0; $i < count($codmaterial); $i++) {
+								for ($i = 0; $i < count($aItens); $i++) {
 
 									$clliclicitemlote->l04_liclicitem = $array_codliclicitem[$i];
 
@@ -475,7 +491,7 @@ if (isset($incluir) && $sqlerro == false) {
 						// Orçamento da Licitação
 						if ($sqlerro == false) {
 
-							for ($i = 0; $i < count($codmaterial); $i++) {
+							for ($i = 0; $i < count($aItens); $i++) {
 								$codigo        = $array_codliclicitem[$i];
 								$dbwhere_orcam = "l21_codliclicita = $codliclicita and l21_codigo != $codigo limit 1";
 								$result_pcorcamitem = $clpcorcamitem->sql_record($clpcorcamitem->sql_query_pcmaterlic(
@@ -511,7 +527,7 @@ if (isset($incluir) && $sqlerro == false) {
 
 				if ($sqlerro == false) {
 
-					for ($i = 0; $i < count($codmaterial); $i++) {
+					for ($i = 0; $i < count($aItens); $i++) {
 
 						$clsolicitalog->pc15_numsol  = $pc11_numero;
 						if (isset($codproc) && !empty($codproc)) {
@@ -546,9 +562,9 @@ if (isset($incluir) && $sqlerro == false) {
 		}
 
 		//if ($sqlerro == false && isset($pc16_codmater) && $pc16_codmater != "") {
-		if ($sqlerro == false && count($codmaterial) != 0) {
+		if ($sqlerro == false && count($aItens) != 0) {
 
-			for ($i = 0; $i < count($codmaterial); $i++) {
+			for ($i = 0; $i < count($aItens); $i++) {
 				$pc16_codmaterial = $aItens[$i]->pc01_codmater;
 				$result_msgcodmater = $clsolicitempcmater->sql_record($clsolicitempcmater->sql_query_file(null, null, "pc16_codmater", "", " pc16_codmater=$pc16_codmaterial and pc16_solicitem in (select pc11_codigo from solicitem where pc11_numero in ($pc11_numero))"));
 				if ($clsolicitempcmater->numrows > 0) {
@@ -603,7 +619,7 @@ if (isset($incluir) && $sqlerro == false) {
 
 
 
-		for ($i = 0; $i < count($codmaterial); $i++) {
+		for ($i = 0; $i < count($aItens); $i++) {
 			$result_servico = $clpcmater->sql_record($clpcmater->sql_query($aItens[$i]->pc01_codmater, "pc01_servico, pc01_descrmater", "pc01_codmater"));
 			db_fieldsmemory($result_servico, 0);
 
@@ -626,7 +642,7 @@ if (isset($incluir) && $sqlerro == false) {
 		 * @see: OC 3666
 		 */
 
-		for ($i = 0; $i < count($codmaterial); $i++) {
+		for ($i = 0; $i < count($aItens); $i++) {
 
 			$result_servico = $clpcmater->sql_record($clpcmater->sql_query($aItens[$i]->pc01_codmater, "pc01_servico, pc01_descrmater", "pc01_codmater"));
 			db_fieldsmemory($result_servico, 0);
@@ -647,7 +663,7 @@ if (isset($incluir) && $sqlerro == false) {
 
 		if ($sqlerro == false && $pc30_seltipo == 't') {
 
-			for ($i = 0; $i < count($codmaterial); $i++) {
+			for ($i = 0; $i < count($aItens); $i++) {
 				$result_vlsol = $clsolicitatipo->sql_record($clsolicitatipo->sql_query_file($pc11_numero, "pc12_vlrap"));
 				if ($clsolicitatipo->numrows > 0) {
 					db_fieldsmemory($result_vlsol, 0);
@@ -713,7 +729,7 @@ db_fieldsmemory($result_pcparam1, 0);
 				}
 			}
 			if ($sqlerro == false) {
-				for ($i = 0; $i < count($codmaterial); $i++) {
+				for ($i = 0; $i < count($aItens); $i++) {
 					$clsolicitemprot->pc49_protprocesso = $codproc;
 					$clsolicitemprot->pc49_solicitem = $array_pc11_codigo[$i];
 					$clsolicitemprot->incluir($array_pc11_codigo[$i]);
@@ -728,7 +744,7 @@ db_fieldsmemory($result_pcparam1, 0);
 
 		if (isset($pc14_veiculos) && $pc01_veiculo == "t") {
 			if ($sqlerro == false) {
-				for ($i = 0; $i < count($codmaterial); $i++) {
+				for ($i = 0; $i < count($aItens); $i++) {
 					$clsolicitemveic->pc14_veiculos  = $pc14_veiculos;
 					$clsolicitemveic->pc14_solicitem = $array_pc11_codigo[$i];
 					$clsolicitemveic->incluir(null);
@@ -745,6 +761,43 @@ db_fieldsmemory($result_pcparam1, 0);
 		//---------------------------------------------------------------------------------------------------------------------------------------------
 		//---------------------------------------------------------------------------------------------------------------------------------------------
 		//---------------------------------------------------------------------------------------------------------------------------------------------
+
+		/* Ordenação do sequencial dos itens */
+		$aItens  = array();
+
+		$itens = db_query("select * from solicitem where pc11_numero = $pc11_numero;");
+		$quantidade_itens = pg_numrows($itens);
+
+		for ($i = 0; $i < $quantidade_itens; $i++) {
+			$item = db_utils::fieldsMemory($itens, $i);
+			$oItem = new stdClass();
+			$oItem->pc11_codigo = $item->pc11_codigo;
+			$oItem->pc11_seq = $item->pc11_seq;
+			$aItens[] = $oItem;
+		}
+
+		// Ordenação dos arrays conforme sequencial
+
+		usort(
+
+			$aItens,
+
+			function ($a, $b) {
+
+				if ($a->pc11_seq == $b->pc11_seq) return 0;
+
+				return (($a->pc11_seq < $b->pc11_seq) ? -1 : 1);
+			}
+		);
+
+		for ($i = 0; $i < count($aItens); $i++) {
+			$aItens[$i]->pc11_seq = $i + 1;
+			$sequencial = $aItens[$i]->pc11_seq;
+			$codigo = $aItens[$i]->pc11_codigo;
+			db_query("UPDATE solicitem SET pc11_seq = $sequencial WHERE pc11_codigo = $codigo");
+		}
+
+
 
 		db_fim_transacao($sqlerro);
 

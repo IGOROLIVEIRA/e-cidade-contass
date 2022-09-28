@@ -277,7 +277,6 @@ if (!isset($filtroquery)) {
           </form>
           <?
 
-
           if ($clpermusuario_dotacao->sql != "") {
             if (isset($obriga_depto) && $obriga_depto == "sim") {
               $funcao_js = "js_verifica_depto|o58_coddot";
@@ -295,8 +294,8 @@ if (!isset($filtroquery)) {
             }
 
             if (isset($cod_elementos)) {
-
-              $array_elementos = $cod_elementos = explode(",", $cod_elementos);
+              $elementos = "";
+              $array_elementos =  explode(",", $cod_elementos);
               for ($i = 0; $i < count($array_elementos); $i++) {
                 $array_elementos[$i] = "'" . $array_elementos[$i] . "%" . "'";
                 if ($i == count($array_elementos) - 1) {
