@@ -1,0 +1,74 @@
+{
+    "receitas": [
+        {
+            "Estrutural": "417196100000000",
+            "DESCRICAO": "AUXILIO FINANCEIRO OUTORGA CREDITO TRIBUTARIO ICMS",
+            "Tipo": "SINTETICA"
+        },
+        {
+            "Estrutural": "417196101000000",
+            "DESCRICAO": "AUXILIO FINANCEIRO OUTORGA CREDITO TRIBUTARIO ICMS",
+            "Tipo": "SINTETICA"
+        },
+        {
+            "Estrutural": "417196101010000",
+            "DESCRICAO": "AUXILIO FINANCEIRO OUTORGA CREDITO TRIBUTARIO ICMS",
+            "Tipo": "Analitica",
+            "VinculoPCASP": "45244",
+            "INSTITUICAO": "1",
+            "Fonte2022": "136",
+            "Fonte2023": "17180000"
+        },
+        {
+            "Estrutural": "495171900000000",
+            "DESCRICAO": "DED OUTRAS TRANSFERENCIAS DE RECURSOS DA UNIAO E SUAS ENTIDADES",
+            "Tipo": "SINTETICA"
+        },
+        {
+            "Estrutural": "495171961000000",
+            "DESCRICAO": "DED. AUXILIO FINANCEIRO OUTORGA CREDITO TRIBUTARIO ICMS",
+            "Tipo": "SINTETICA"
+        },
+        {
+            "Estrutural": "495171961010000",
+            "DESCRICAO": "DED. AUXILIO FINANCEIRO OUTORGA CREDITO TRIBUTARIO ICMS",
+            "Tipo": "SINTETICA"
+        },
+        {
+            "Estrutural": "495171961010100",
+            "DESCRICAO": "DED. AUXILIO FINANCEIRO OUTORGA CREDITO TRIBUTARIO ICMS",
+            "Tipo": "Analitica",
+            "VinculoPCASP": "35224",
+            "INSTITUICAO": "1",
+            "Fonte2022": "136",
+            "Fonte2023": "17180000"
+        },
+        {
+            "Estrutural": "417199901060000",
+            "DESCRICAO": "OUTRAS TRANSFERENCIAS DE RECURSOS DA UNIAO",
+            "Tipo": "Analitica",
+            "VinculoPCASP": "4523399",
+            "INSTITUICAO": "1",
+            "Fonte2022": "133",
+            "Fonte2023": "17150000"
+        },
+        {
+            "Estrutural": "417199901070000",
+            "DESCRICAO": "OUTRAS TRANSFERENCIAS DE RECURSOS DA UNIAO",
+            "Tipo": "Analitica",
+            "VinculoPCASP": "4523399",
+            "INSTITUICAO": "1",
+            "Fonte2022": "134",
+            "Fonte2023": "17160000"
+        },
+        {
+            "Estrutural": "417199901080000",
+            "DESCRICAO": "OUTRAS TRANSFERENCIAS DE RECURSOS DA UNIAO",
+            "Tipo": "Analitica",
+            "VinculoPCASP": "4523399",
+            "INSTITUICAO": "1",
+            "Fonte2022": "135",
+            "Fonte2023": "17170000"
+        }
+    ]
+}

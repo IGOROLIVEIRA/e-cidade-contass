@@ -16,6 +16,9 @@ $oRetorno->erro = "";
 
 try {
 
+    $oParam->l20_datacria = implode("-", array_reverse(explode("/", $oParam->l20_datacria)));
+
+
     if ($oParam->respPubliccodigo == "") {
         $oRetorno->status = 2;
         $oRetorno->erro   = "Campo Resp. pela Publicacao nao informado";
@@ -41,12 +44,6 @@ try {
         exit;
     } else {
 
-        if ($oParam->l20_dtpublic < $oParam->l20_datacria) {
-            $oRetorno->status = 2;
-            $oRetorno->erro   = "A data da publicacao em diario oficial deve ser superior ou igual a data de criacao";
-            echo json_encode($oRetorno);
-            exit;
-        }
 
         $oParam->l20_dtpublic = implode("-", array_reverse(explode("/", $oParam->l20_dtpublic)));
         $oParam->l20_dtpublic = "'" . $oParam->l20_dtpublic . "'";
@@ -62,6 +59,8 @@ try {
     if ($oParam->l20_datapublicacao1 == "") {
         $oParam->l20_datapublicacao1 = "null";
     } else {
+        $oParam->l20_datapublicacao1 = implode("-", array_reverse(explode("/", $oParam->l20_datapublicacao1)));
+
         if ($oParam->l20_datacria > $oParam->l20_datapublicacao1) {
 
             $oRetorno->status = 2;
@@ -69,13 +68,13 @@ try {
             echo json_encode($oRetorno);
             exit;
         }
-        $oParam->l20_datapublicacao1 = implode("-", array_reverse(explode("/", $oParam->l20_datapublicacao1)));
         $oParam->l20_datapublicacao1 = "'" . $oParam->l20_datapublicacao1 . "'";
     }
 
     if ($oParam->l20_datapublicacao2 == "") {
         $oParam->l20_datapublicacao2 = "null";
     } else {
+        $oParam->l20_datapublicacao2 = implode("-", array_reverse(explode("/", $oParam->l20_datapublicacao2)));
         if ($oParam->l20_datacria > $oParam->l20_datapublicacao2) {
 
             $oRetorno->status = 2;
@@ -83,7 +82,6 @@ try {
             echo json_encode($oRetorno);
             exit;
         }
-        $oParam->l20_datapublicacao2 = implode("-", array_reverse(explode("/", $oParam->l20_datapublicacao2)));
         $oParam->l20_datapublicacao2 = "'" . $oParam->l20_datapublicacao2 . "'";
     }
 

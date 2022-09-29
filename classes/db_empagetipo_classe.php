@@ -840,6 +840,10 @@ class cl_empagetipo {
       $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codtri in ('100','170')) and";  
     }elseif(substr($iFonteEmpenho, 1, 2) == '60'){
       $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codtri in ('186')) and";
+    }elseif($iFonteEmpenho == '136'){
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codtri in ('$iFonteEmpenho','100')) and";   
+    }elseif($iFonteEmpenho == '117'){
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codtri in ('$iFonteEmpenho','100')) and";   
     }elseif(substr($iFonteEmpenho, 1, 2) == '22'){
         $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codtri in ('$iFonteEmpenho','122')) and";
     }elseif(substr($iFonteEmpenho, 1, 2) == '32'){
@@ -894,6 +898,7 @@ class cl_empagetipo {
     if(substr($iFonteEmpenho, 1, 2) == '61') {
         $sSql .= " or e83_descr ilike '%fpm%' ";
     }
+   
     if ($lVinculadas) {
 
       $sSql .= " or e83_conta in ";

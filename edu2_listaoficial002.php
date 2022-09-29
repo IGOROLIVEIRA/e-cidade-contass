@@ -27,6 +27,8 @@
 
 require_once("fpdf151/pdfwebseller.php");
 require_once("libs/db_utils.php");
+include("edu_cabecalhoatolegal.php");
+
 
 $oDaoMatricula       = new cl_matricula();
 $oDaoCalendario      = new cl_calendario();
@@ -51,7 +53,7 @@ if ($oDaoTurma->numrows == 0) { ?>
       <td align='center'>
         <font color='#FF0000' face='arial'>
           <b>Nenhuma turma para o curso selecionado<br>
-          <input type='button' value='Fechar' onclick='window.close()'></b>
+            <input type='button' value='Fechar' onclick='window.close()'></b>
         </font>
       </td>
     </tr>
@@ -77,55 +79,56 @@ $oPdf->Open();
 $oPdf->AliasNbPages();
 
 $aMeses           = array("JAN", "FEV", "MAR", "ABR", "MAI", "JUN", "JUL", "AGO", "SET", "OUT", "NOV", "DEZ");
-$aCamposCabecalho = explode( "|", $cabecalho );
-$aCamposLargura   = explode( "|", $colunas );
-$aCamposAlinha    = explode( "|", $alinhamento );
-$aCamposImpressao = explode( "__", $campos );
+$aCamposCabecalho = explode("|", $cabecalho);
+$aCamposLargura   = explode("|", $colunas);
+$aCamposAlinha    = explode("|", $alinhamento);
+$aCamposImpressao = explode("__", $campos);
 
 $campos  = implode(", ", $aCamposImpressao);
 $iLinhas = $oDaoTurma->numrows;
 
 $iLarguraMaxima      = $orientacao == "P" ? 195 : 280;
-$aCamposTexto        = array( "Nome do Aluno", "Endereço/Bairro", "Email", "Nome do Pai", "Nome da Mãe" );
-$aCamposData         = array( "ed47_d_nasc", "ed60_d_datamatricula", "ed60_d_datasaida", "ed76_d_data" );
-$iSomaColunas        = array_sum( $aCamposLargura );
-$aCabecalhosTexto    = array_intersect( $aCamposCabecalho, $aCamposTexto );
-$iTamanhoIncrementar = floor( ( $iLarguraMaxima - $iSomaColunas ) / count( $aCabecalhosTexto ) );
+$aCamposTexto        = array("Nome do Aluno", "Endereço/Bairro", "Email", "Nome do Pai", "Nome da Mãe");
+$aCamposData         = array("ed47_d_nasc", "ed60_d_datamatricula", "ed60_d_datasaida", "ed76_d_data");
+$iSomaColunas        = array_sum($aCamposLargura);
+$aCabecalhosTexto    = array_intersect($aCamposCabecalho, $aCamposTexto);
+$iTamanhoIncrementar = floor(($iLarguraMaxima - $iSomaColunas) / count($aCabecalhosTexto));
 $aLarguraCorrigida   = array();
 $aCamposConcatenados = array(
-                              "Endereço/Bairro",
-                              "Telefones",
-                              "Naturalidade",
-                              "Transporte Escolar",
-                              "Bolsa Família",
-                              "Rep",
-                              "Certidão",
-                              "Local de Procedência",
-                              "Assinatura 1",
-                              "Assinatura 2",
-                              "Assinatura 3",
-                              "Meses",
-                              "Idade",
-                              "Meses da Idade",
-                              "Dias da Idade",
-                              "Foto"
-                            );
+  "Endereço/Bairro",
+  "Telefones",
+  "Naturalidade",
+  "Transporte Escolar",
+  "Bolsa Família",
+  "Rep",
+  "Certidão",
+  "Local de Procedência",
+  "Assinatura 1",
+  "Assinatura 2",
+  "Assinatura 3",
+  "Meses",
+  "Idade",
+  "Meses da Idade",
+  "Dias da Idade",
+  "Foto"
+);
 
 for ($iContFor = 0; $iContFor < $iLinhas; $iContFor++) {
 
   $oDadosTurmaSerie    = db_utils::fieldsmemory($rsTurmaSerie, $iContFor);
 
-  $sSqlRegenteConselho = $oDaoRegenteConselho->sql_query("",
-                                                         "case when ed20_i_tiposervidor = 1 then cgmrh.z01_nome
+  $sSqlRegenteConselho = $oDaoRegenteConselho->sql_query(
+    "",
+    "case when ed20_i_tiposervidor = 1 then cgmrh.z01_nome
                                                           else cgmcgm.z01_nome end as regente",
-                                                         "",
-                                                         " ed235_i_turma = $oDadosTurmaSerie->ed57_i_codigo "
-                                                        );
+    "",
+    " ed235_i_turma = $oDadosTurmaSerie->ed57_i_codigo "
+  );
   $rsRegenteConselho   = $oDaoRegenteConselho->sql_record($sSqlRegenteConselho);
 
   $regente = "";
-  if($oDaoRegenteConselho->numrows > 0) {
-    $regente = db_utils::fieldsMemory( $rsRegenteConselho, 0 )->regente;
+  if ($oDaoRegenteConselho->numrows > 0) {
+    $regente = db_utils::fieldsMemory($rsRegenteConselho, 0)->regente;
   }
 
   $oPdf->setfillcolor(223);
@@ -149,12 +152,12 @@ for ($iContFor = 0; $iContFor < $iLinhas; $iContFor++) {
   for ($iContFor1 = 0; $iContFor1 < count($aCamposCabecalho); $iContFor1++) {
 
     $next = 0;
-    if ($iContFor1 == (count($aCamposCabecalho)-1)) {
+    if ($iContFor1 == (count($aCamposCabecalho) - 1)) {
       $next = 1;
     }
 
     $aLarguraCorrigida[$iContFor1] = $aCamposLargura[$iContFor1];
-    if( in_array( $aCamposCabecalho[$iContFor1], $aCabecalhosTexto ) ) {
+    if (in_array($aCamposCabecalho[$iContFor1], $aCabecalhosTexto)) {
       $aLarguraCorrigida[$iContFor1] = $aCamposLargura[$iContFor1] + $iTamanhoIncrementar;
     }
 
@@ -167,7 +170,7 @@ for ($iContFor = 0; $iContFor < $iLinhas; $iContFor++) {
           $next_mes = 0;
         }
 
-        $oPdf->cell($aLarguraCorrigida[$iContFor1]/12, 4, $aMeses[$iContFor2], 1, $next_mes, "C", 0);
+        $oPdf->cell($aLarguraCorrigida[$iContFor1] / 12, 4, $aMeses[$iContFor2], 1, $next_mes, "C", 0);
       }
     } else {
       $oPdf->cell($aLarguraCorrigida[$iContFor1], 4, $aCamposCabecalho[$iContFor1], 1, $next, "C", 0);
@@ -178,14 +181,14 @@ for ($iContFor = 0; $iContFor < $iLinhas; $iContFor++) {
 
   $condicao = "";
   if ($active == "SIM") {
-    $condicao=" AND ed60_c_situacao = 'MATRICULADO' ";
+    $condicao = " AND ed60_c_situacao = 'MATRICULADO' ";
   }
 
   if ($trocaTurma == 1) {
     $condicao .= " AND ed60_c_situacao != 'TROCA DE TURMA' ";
   }
 
-  $sOrdenacao       = $ordenacao.", ed60_c_ativa";
+  $sOrdenacao       = $ordenacao . ", ed60_c_ativa";
   $sWhereMatricula  = "    ed60_i_turma = {$oDadosTurmaSerie->ed57_i_codigo}";
   $sWhereMatricula .= "AND ed221_i_serie = {$oDadosTurmaSerie->ed223_i_serie} {$condicao}";
   $sSqlMatricula    = $oDaoMatricula->sql_query_naturalidade_aluno("", $campos, $sOrdenacao, $sWhereMatricula);
@@ -203,12 +206,12 @@ for ($iContFor = 0; $iContFor < $iLinhas; $iContFor++) {
 
   for ($iContFor3 = 0; $iContFor3 < $iLinha2; $iContFor3++) {
 
-    $oDadosAluno = db_utils::fieldsMemory( $rsMatricula, $iContFor3 );
+    $oDadosAluno = db_utils::fieldsMemory($rsMatricula, $iContFor3);
 
     for ($iContFor1 = 0; $iContFor1 < count($aCamposCabecalho); $iContFor1++) {
 
       $next = 0;
-      if ($iContFor1 == (count($aCamposCabecalho)-1)) {
+      if ($iContFor1 == (count($aCamposCabecalho) - 1)) {
         $next = 1;
       }
 
@@ -221,39 +224,39 @@ for ($iContFor = 0; $iContFor < $iLinhas; $iContFor++) {
             $next_mes = 0;
           }
 
-          $oPdf->cell($aLarguraCorrigida[$iContFor1]/12, 4, "", 1, $next_mes, "C", 0);
+          $oPdf->cell($aLarguraCorrigida[$iContFor1] / 12, 4, "", 1, $next_mes, "C", 0);
         }
       } else if (pg_field_name($rsMatricula, $iContFor1) == "ed47_certidaomatricula") {
 
         $iMatricula = pg_result($rsMatricula, $iContFor3, $iContFor1);
-        $sMatricula = substr($iMatricula, 0, 6)." ".substr($iMatricula, 6, 2)." ".
-                      substr($iMatricula, 8, 2)." ".substr($iMatricula, 10, 4)." ".
-                      substr($iMatricula, 14, 1)." ".substr($iMatricula, 15, 5)." ".
-                      substr($iMatricula, 20, 3)." ".substr($iMatricula, 23, 7)." ".
-                      substr($iMatricula, 30, 2);
+        $sMatricula = substr($iMatricula, 0, 6) . " " . substr($iMatricula, 6, 2) . " " .
+          substr($iMatricula, 8, 2) . " " . substr($iMatricula, 10, 4) . " " .
+          substr($iMatricula, 14, 1) . " " . substr($iMatricula, 15, 5) . " " .
+          substr($iMatricula, 20, 3) . " " . substr($iMatricula, 23, 7) . " " .
+          substr($iMatricula, 30, 2);
         $oPdf->cell($aLarguraCorrigida[$iContFor1], 4, $sMatricula, 1, $next, $aCamposAlinha[$iContFor1], 0);
       } else if (pg_field_name($rsMatricula, $iContFor1) == "anomes") {
 
         $sMes = pg_result($rsMatricula, $iContFor3, $iContFor1);
-        $aMes = explode(",",$sMes);
-        $iMes = str_replace("meses"," ",$aMes[1]);
+        $aMes = explode(",", $sMes);
+        $iMes = str_replace("meses", " ", $aMes[1]);
         $oPdf->cell($aLarguraCorrigida[$iContFor1], 4, $iMes, 1, $next, $aCamposAlinha[$iContFor1], 0);
       } else if (pg_field_name($rsMatricula, $iContFor1) == "idadedia") {
 
         $sDia = pg_result($rsMatricula, $iContFor3, $iContFor1);
-        $aDia = explode(",",$sDia);
-        $iDia = str_replace("dias"," ",$aDia[2]);
+        $aDia = explode(",", $sDia);
+        $iDia = str_replace("dias", " ", $aDia[2]);
         $oPdf->cell($aLarguraCorrigida[$iContFor1], 4, $iDia, 1, $next, $aCamposAlinha[$iContFor1], 0);
       } else if (pg_field_name($rsMatricula, $iContFor1) == "ed47_tiposanguineo") {
 
         $sTipoSanguineo = "Não informado";
         $iTipoSanguineo = pg_result($rsMatricula, $iContFor3, $iContFor1);
 
-        if ( !empty( $iTipoSanguineo ) ) {
+        if (!empty($iTipoSanguineo)) {
 
           $sSqlTipoSanguineo = $oDaoTipoSanguineo->sql_query_file(null, "sd100_tipo", null, " sd100_sequencial = {$iTipoSanguineo}");
           $rsTipoSanguineo   = $oDaoTipoSanguineo->sql_record($sSqlTipoSanguineo);
-          $sTipoSanguineo    = db_utils::fieldsMemory( $rsTipoSanguineo, 0 )->sd100_tipo;
+          $sTipoSanguineo    = db_utils::fieldsMemory($rsTipoSanguineo, 0)->sd100_tipo;
         }
 
         $oPdf->cell($aLarguraCorrigida[$iContFor1], 4, $sTipoSanguineo, 1, $next, $aCamposAlinha[$iContFor1], 0);
@@ -261,19 +264,19 @@ for ($iContFor = 0; $iContFor < $iLinhas; $iContFor++) {
 
         $sValor = "";
 
-        if( in_array( $aCamposCabecalho[$iContFor1], $aCamposConcatenados ) ) {
+        if (in_array($aCamposCabecalho[$iContFor1], $aCamposConcatenados)) {
           $sValor = pg_result($rsMatricula, $iContFor3, $iContFor1);
-        } else if( in_array( $aCamposImpressao[$iContFor1], $aCamposData ) ) {
+        } else if (in_array($aCamposImpressao[$iContFor1], $aCamposData)) {
 
           $sValor = pg_result($rsMatricula, $iContFor3, $iContFor1);
-          if ( !empty($sValor)) {
-            $sValor = db_formatar( $sValor, 'd' );
+          if (!empty($sValor)) {
+            $sValor = db_formatar($sValor, 'd');
           }
         } else {
           $sValor = isset($oDadosAluno->$aCamposImpressao[$iContFor1]) ? $oDadosAluno->$aCamposImpressao[$iContFor1] : "";
         }
 
-        $oPdf->Cell( $aLarguraCorrigida[$iContFor1], 4, $sValor, 1, $next, $aCamposAlinha[$iContFor1], 0 );
+        $oPdf->Cell($aLarguraCorrigida[$iContFor1], 4, $sValor, 1, $next, $aCamposAlinha[$iContFor1], 0);
       }
     }
 
@@ -288,7 +291,7 @@ for ($iContFor = 0; $iContFor < $iLinhas; $iContFor++) {
       for ($iContFor1 = 0; $iContFor1 < count($aCamposCabecalho); $iContFor1++) {
 
         $next = 0;
-        if ($iContFor1 == (count($aCamposCabecalho)-1)) {
+        if ($iContFor1 == (count($aCamposCabecalho) - 1)) {
           $next = 1;
         }
 
@@ -301,7 +304,7 @@ for ($iContFor = 0; $iContFor < $iLinhas; $iContFor++) {
               $next_mes = 0;
             }
 
-            $oPdf->cell($aLarguraCorrigida[$iContFor1]/12, 4, $aMeses[$iContFor2], 1, $next_mes, "C", 0);
+            $oPdf->cell($aLarguraCorrigida[$iContFor1] / 12, 4, $aMeses[$iContFor2], 1, $next_mes, "C", 0);
           }
         } else {
           $oPdf->cell($aLarguraCorrigida[$iContFor1], 4, $aCamposCabecalho[$iContFor1], 1, $next, "C", 0);
@@ -314,14 +317,14 @@ for ($iContFor = 0; $iContFor < $iLinhas; $iContFor++) {
     $cont++;
   }
 
-  $comeco = $cont-1;
+  $comeco = $cont - 1;
 
   for ($iContFor3 = $comeco; $iContFor3 < $limite; $iContFor3++) {
 
     for ($iContFor1 = 0; $iContFor1 < count($aCamposCabecalho); $iContFor1++) {
 
       $next = 0;
-      if ($iContFor1 == (count($aCamposCabecalho)-1)) {
+      if ($iContFor1 == (count($aCamposCabecalho) - 1)) {
         $next = 1;
       }
 
@@ -334,7 +337,7 @@ for ($iContFor = 0; $iContFor < $iLinhas; $iContFor++) {
             $next_mes = 0;
           }
 
-          $oPdf->cell($aLarguraCorrigida[$iContFor1]/12, 4, "", "LR", $next_mes, "C", 0);
+          $oPdf->cell($aLarguraCorrigida[$iContFor1] / 12, 4, "", "LR", $next_mes, "C", 0);
         }
       } else {
         $oPdf->cell($aLarguraCorrigida[$iContFor1], 4, "", "LR", $next, "C", 0);

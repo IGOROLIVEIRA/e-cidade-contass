@@ -292,123 +292,6 @@ class Preenchimentos
      * @param integer $codigoFormulario
      * @return stdClass[]
      */
-    public function buscarPreenchimentoS1207($codigoFormulario, $matricula = null)
-    {
-        $sql = "SELECT
-        distinct
-        1 as tpInsc,
-        cgc as nrInsc,
-        z01_cgccpf as cpfTrab,
-        rh51_indicadesconto as indMV,
-        case when length(rh51_cgcvinculo) = 14 then 1
-        when length(rh51_cgcvinculo) = 11 then 2
-        end as tpInsc2,
-        rh51_cgcvinculo as nrInsc2,
-        rh51_basefo as vlrRemunOE,
-        h13_categoria as codCateg,
-        'LOTA1' as codLotacao,
-        rh01_regist as matricula,
-        case when rh02_ocorre = '2' then 2
-        when rh02_ocorre = '3' then 3
-        when rh02_ocorre = '4' then 4
-        else '1'
-        end as grauExp,
-        rh30_regime
-    from
-        rhpessoal
-    left join rhpessoalmov on
-        rh02_anousu = fc_getsession('DB_anousu')::int
-        and rh02_mesusu = date_part('month', fc_getsession('DB_datausu')::date)
-        and rh02_regist = rh01_regist
-        and rh02_instit = fc_getsession('DB_instit')::int
-    left join rhinssoutros    on rh51_seqpes                 = rh02_seqpes
-    left join rhlota on
-        rhlota.r70_codigo = rhpessoalmov.rh02_lota
-        and rhlota.r70_instit = rhpessoalmov.rh02_instit
-    inner join cgm on
-        cgm.z01_numcgm = rhpessoal.rh01_numcgm
-    inner join db_config on
-        db_config.codigo = rhpessoal.rh01_instit
-    inner join rhestcivil on
-        rhestcivil.rh08_estciv = rhpessoal.rh01_estciv
-    inner join rhraca on
-        rhraca.rh18_raca = rhpessoal.rh01_raca
-    left join rhfuncao on
-        rhfuncao.rh37_funcao = rhpessoalmov.rh02_funcao
-        and rhfuncao.rh37_instit = rhpessoalmov.rh02_instit
-    left join rhpescargo on
-        rhpescargo.rh20_seqpes = rhpessoalmov.rh02_seqpes
-    left join rhcargo on
-        rhcargo.rh04_codigo = rhpescargo.rh20_cargo
-        and rhcargo.rh04_instit = rhpessoalmov.rh02_instit
-    inner join rhinstrucao on
-        rhinstrucao.rh21_instru = rhpessoal.rh01_instru
-    inner join rhnacionalidade on
-        rhnacionalidade.rh06_nacionalidade = rhpessoal.rh01_nacion
-    left join rhpesrescisao on
-        rh02_seqpes = rh05_seqpes
-    left join rhsindicato on
-        rh01_rhsindicato = rh116_sequencial
-    inner join rhreajusteparidade on
-        rhreajusteparidade.rh148_sequencial = rhpessoal.rh01_reajusteparidade
-    left join rhpesdoc on
-        rhpesdoc.rh16_regist = rhpessoal.rh01_regist
-    left join rhdepend on
-        rhdepend.rh31_regist = rhpessoal.rh01_regist
-    left join rhregime on
-        rhregime.rh30_codreg = rhpessoalmov.rh02_codreg
-    left join rhpesfgts on
-        rhpesfgts.rh15_regist = rhpessoal.rh01_regist
-    inner join tpcontra on
-        tpcontra.h13_codigo = rhpessoalmov.rh02_tpcont
-    left join rhcontratoemergencial on
-        rh163_matricula = rh01_regist
-    left join rhcontratoemergencialrenovacao on
-        rh164_contratoemergencial = rh163_sequencial
-    left join jornadadetrabalho on
-        jt_sequencial = rh02_jornadadetrabalho
-    left join db_cgmbairro on
-        cgm.z01_numcgm = db_cgmbairro.z01_numcgm
-    left join bairro on
-        bairro.j13_codi = db_cgmbairro.j13_codi
-    left join db_cgmruas on
-        cgm.z01_numcgm = db_cgmruas.z01_numcgm
-    left join ruas on
-        ruas.j14_codigo = db_cgmruas.j14_codigo
-    left join rescisao on
-        rescisao.r59_anousu = rhpessoalmov.rh02_anousu
-        and rescisao.r59_mesusu = rhpessoalmov.rh02_mesusu
-        and rescisao.r59_regime = rhregime.rh30_regime
-        and rescisao.r59_causa = rhpesrescisao.rh05_causa
-        and rescisao.r59_caub = rhpesrescisao.rh05_caub::char(2)
-    left  outer join (
-            SELECT distinct r33_codtab,r33_nome,r33_tiporegime
-                                from inssirf
-                                where     r33_anousu = fc_getsession('DB_anousu')::int
-                                      and r33_mesusu = date_part('month',fc_getsession('DB_datausu')::date)
-                                      and r33_instit = fc_getsession('DB_instit')::int
-                               ) as x on r33_codtab = rhpessoalmov.rh02_tbprev+2
-    where h13_categoria in ('101', '106', '111', '301', '302', '303','304', '305', '306', '309', '312', '313', '902')
-    and rh30_vinculo in ('I','P')";
-
-        if ($matricula != null) {
-            $sql .= " and rh01_regist in ($matricula) ";
-        }
-        $rs = \db_query($sql);
-
-        if (!$rs) {
-            throw new \Exception("Erro ao buscar os preenchimentos do S1207");
-        }
-        /**
-         * @todo busca os empregadores da instituição e adicona para cada rubriuca
-         */
-        return \db_utils::getCollectionByRecord($rs);
-    }
-
-    /**
-     * @param integer $codigoFormulario
-     * @return stdClass[]
-     */
     public function buscarPreenchimentoS2200($codigoFormulario, $matricula = null)
     {
         $sql = "SELECT distinct
@@ -765,123 +648,11 @@ class Preenchimentos
 				            ) order by z01_nome asc";
 
         $rs = \db_query($sql);
-
+        echo $sql;
+        db_criatabela($rs);
+        exit;
         if (!$rs) {
             throw new \Exception("Erro ao buscar os preenchimentos do S2200");
-        }
-
-
-        /**
-         * @todo busca os empregadores da instituição e adicona para cada rubriuca
-         */
-        return \db_utils::getCollectionByRecord($rs);
-    }
-
-    /**
-     * @param integer $codigoFormulario
-     * @return stdClass[]
-     */
-    public function buscarPreenchimentoS2400($codigoFormulario, $matricula = null)
-    {
-        $sql = "SELECT DISTINCT z01_cgccpf AS cpfbenef,
-        z01_nome AS nmbenefic,
-        rh01_nasc AS dtnascto,
-        CASE
-            WHEN rh01_admiss <= '2021-11-22' THEN '2021-11-22'
-            WHEN rh01_admiss > '2021-11-22' THEN rh01_admiss
-        END AS dtinicio,
-        CASE
-            WHEN rh01_sexo = 'F' THEN 'F'
-            ELSE 'M'
-        END AS sexo,
-        CASE
-            WHEN rh01_raca = 1 THEN 5
-            WHEN rh01_raca = 2 THEN 1
-            WHEN rh01_raca = 4 THEN 2
-            WHEN rh01_raca = 6 THEN 4
-            WHEN rh01_raca = 8 THEN 3
-            WHEN rh01_raca = 9 THEN 6
-        END AS racacor,
-        CASE
-            WHEN rh01_estciv = 1 THEN 1
-            WHEN rh01_estciv = 2 THEN 2
-            WHEN rh01_estciv = 3 THEN 5
-            WHEN rh01_estciv = 4 THEN 4
-            WHEN rh01_estciv = 5 THEN 3
-            ELSE 1
-        END AS estciv,
-        CASE
-            WHEN rh02_portadormolestia = 't' THEN 'S'
-            ELSE 'N'
-        END AS incfismen,
-        CASE
-            WHEN ruas.j14_tipo IS NULL THEN 'R'
-            ELSE j88_sigla
-        END AS tplograd,
-        z01_ender AS dsclograd,
-        z01_numero AS nrlograd,
-        z01_compl AS complementolograd,
-        z01_bairro AS bairro,
-        rpad(z01_cep,8,'0') AS cep,
-        (coalesce((select
-            db125_codigosistema
-        from
-            cadendermunicipio
-        inner join cadendermunicipiosistema on
-            cadendermunicipiosistema.db125_cadendermunicipio = cadendermunicipio.db72_sequencial
-            and cadendermunicipiosistema.db125_db_sistemaexterno = 4
-        where to_ascii(db72_descricao) = to_ascii(trim(cgm.z01_munic)) limit 1), (select
-            db125_codigosistema
-        from
-            cadendermunicipio
-        inner join cadendermunicipiosistema on
-            cadendermunicipiosistema.db125_cadendermunicipio = cadendermunicipio.db72_sequencial
-            and cadendermunicipiosistema.db125_db_sistemaexterno = 4
-        where to_ascii(db72_descricao) = to_ascii(trim((SELECT z01_munic FROM cgm join db_config ON z01_numcgm = numcgm WHERE codigo = fc_getsession('DB_instit')::int))) limit 1))
-        ) AS codMunic,
-                    'MG' AS uf
-    FROM rhpessoal
-    INNER JOIN cgm ON cgm.z01_numcgm = rhpessoal.rh01_numcgm
-    INNER JOIN db_config ON db_config.codigo = rhpessoal.rh01_instit
-    LEFT JOIN db_cgmbairro ON cgm.z01_numcgm = db_cgmbairro.z01_numcgm
-    LEFT JOIN bairro ON bairro.j13_codi = db_cgmbairro.j13_codi
-    LEFT JOIN db_cgmruas ON cgm.z01_numcgm = db_cgmruas.z01_numcgm
-    LEFT JOIN ruas ON ruas.j14_codigo = db_cgmruas.j14_codigo
-    LEFT JOIN ruastipo ON j88_codigo = j14_tipo
-    LEFT JOIN rhpessoalmov ON rh02_anousu = (select r11_anousu from cfpess where r11_instit = fc_getsession('DB_instit')::int order by r11_anousu desc, r11_mesusu desc limit 1)
-    AND rh02_mesusu = (select r11_mesusu from cfpess where r11_instit = fc_getsession('DB_instit')::int order by r11_anousu desc, r11_mesusu desc limit 1)
-    AND rh02_regist = rh01_regist
-    AND rh02_instit = fc_getsession('DB_instit')::int
-    LEFT JOIN rhdepend ON rhdepend.rh31_regist = rhpessoal.rh01_regist
-    LEFT JOIN rhregime ON rhregime.rh30_codreg = rhpessoalmov.rh02_codreg
-    LEFT JOIN rhpesrescisao ON rh02_seqpes = rh05_seqpes
-    LEFT JOIN rescisao ON rescisao.r59_anousu = rhpessoalmov.rh02_anousu
-    AND rescisao.r59_mesusu = rhpessoalmov.rh02_mesusu
-    AND rescisao.r59_regime = rhregime.rh30_regime
-    AND rescisao.r59_causa = rhpesrescisao.rh05_causa
-    AND rescisao.r59_caub = rhpesrescisao.rh05_caub::char(2)
-    where rh30_vinculo in ('I','P')
-    AND (
-    (
-    (date_part('year',rhpessoal.rh01_admiss)::varchar || lpad(date_part('month',rhpessoal.rh01_admiss)::varchar,2,'0'))::integer <= 202207
-    and (date_part('year',fc_getsession('DB_datausu')::date)::varchar || lpad(date_part('month',fc_getsession('DB_datausu')::date)::varchar,2,'0'))::integer <= 202207
-    and (rh05_recis is null or (date_part('year',rh05_recis)::varchar || lpad(date_part('month',rh05_recis)::varchar,2,'0'))::integer > 202207)
-    ) or (
-    date_part('month',rhpessoal.rh01_admiss) = date_part('month',fc_getsession('DB_datausu')::date)
-    and date_part('year',rhpessoal.rh01_admiss) = date_part('year',fc_getsession('DB_datausu')::date)
-    and (date_part('year',fc_getsession('DB_datausu')::date)::varchar || lpad(date_part('month',fc_getsession('DB_datausu')::date)::varchar,2,'0'))::integer > 202207
-    )
-    )";
-        if ($matricula != null) {
-            $sql .= " and rh01_regist in ($matricula) ";
-        }
-
-        $rs = \db_query($sql);
-        // echo $sql;
-        // db_criatabela($rs);
-        // exit;
-        if (!$rs) {
-            throw new \Exception("Erro ao buscar os preenchimentos do S2410");
         }
 
 
@@ -968,111 +739,118 @@ WHERE rh30_vinculo IN ('I',
      * @param integer $codigoFormulario
      * @return stdClass[]
      */
-    public function buscarPreenchimentoS1200($codigoFormulario, $matricula = null)
+    public function buscarPreenchimentoS1200($codigoFormulario, $matricula = null, $tipoevento = null)
     {
-        $sql = "SELECT
-        distinct
-        1 as tpInsc,
-        cgc as nrInsc,
-        z01_cgccpf as cpfTrab,
-        rh51_indicadesconto as indMV,
-        case when length(rh51_cgcvinculo) = 14 then 1
-        when length(rh51_cgcvinculo) = 11 then 2
-        end as tpInsc2,
-        rh51_cgcvinculo as nrInsc2,
-        rh51_basefo as vlrRemunOE,
-        h13_categoria as codCateg,
-        'LOTA1' as codLotacao,
-        rh01_regist as matricula,
-        case when rh02_ocorre = '2' then 2
-        when rh02_ocorre = '3' then 3
-        when rh02_ocorre = '4' then 4
-        else '1'
-        end as grauExp,
-        rh30_regime
-    from
-        rhpessoal
-    left join rhpessoalmov on
-        rh02_anousu = fc_getsession('DB_anousu')::int
-        and rh02_mesusu = date_part('month', fc_getsession('DB_datausu')::date)
-        and rh02_regist = rh01_regist
-        and rh02_instit = fc_getsession('DB_instit')::int
-    left join rhinssoutros    on rh51_seqpes                 = rh02_seqpes
-    left join rhlota on
-        rhlota.r70_codigo = rhpessoalmov.rh02_lota
-        and rhlota.r70_instit = rhpessoalmov.rh02_instit
-    inner join cgm on
-        cgm.z01_numcgm = rhpessoal.rh01_numcgm
-    inner join db_config on
-        db_config.codigo = rhpessoal.rh01_instit
-    inner join rhestcivil on
-        rhestcivil.rh08_estciv = rhpessoal.rh01_estciv
-    inner join rhraca on
-        rhraca.rh18_raca = rhpessoal.rh01_raca
-    left join rhfuncao on
-        rhfuncao.rh37_funcao = rhpessoalmov.rh02_funcao
-        and rhfuncao.rh37_instit = rhpessoalmov.rh02_instit
-    left join rhpescargo on
-        rhpescargo.rh20_seqpes = rhpessoalmov.rh02_seqpes
-    left join rhcargo on
-        rhcargo.rh04_codigo = rhpescargo.rh20_cargo
-        and rhcargo.rh04_instit = rhpessoalmov.rh02_instit
-    inner join rhinstrucao on
-        rhinstrucao.rh21_instru = rhpessoal.rh01_instru
-    inner join rhnacionalidade on
-        rhnacionalidade.rh06_nacionalidade = rhpessoal.rh01_nacion
-    left join rhpesrescisao on
-        rh02_seqpes = rh05_seqpes
-    left join rhsindicato on
-        rh01_rhsindicato = rh116_sequencial
-    inner join rhreajusteparidade on
-        rhreajusteparidade.rh148_sequencial = rhpessoal.rh01_reajusteparidade
-    left join rhpesdoc on
-        rhpesdoc.rh16_regist = rhpessoal.rh01_regist
-    left join rhdepend on
-        rhdepend.rh31_regist = rhpessoal.rh01_regist
-    left join rhregime on
-        rhregime.rh30_codreg = rhpessoalmov.rh02_codreg
-    left join rhpesfgts on
-        rhpesfgts.rh15_regist = rhpessoal.rh01_regist
-    inner join tpcontra on
-        tpcontra.h13_codigo = rhpessoalmov.rh02_tpcont
-    left join rhcontratoemergencial on
-        rh163_matricula = rh01_regist
-    left join rhcontratoemergencialrenovacao on
-        rh164_contratoemergencial = rh163_sequencial
-    left join jornadadetrabalho on
-        jt_sequencial = rh02_jornadadetrabalho
-    left join db_cgmbairro on
-        cgm.z01_numcgm = db_cgmbairro.z01_numcgm
-    left join bairro on
-        bairro.j13_codi = db_cgmbairro.j13_codi
-    left join db_cgmruas on
-        cgm.z01_numcgm = db_cgmruas.z01_numcgm
-    left join ruas on
-        ruas.j14_codigo = db_cgmruas.j14_codigo
-    left join rescisao on
-        rescisao.r59_anousu = rhpessoalmov.rh02_anousu
-        and rescisao.r59_mesusu = rhpessoalmov.rh02_mesusu
-        and rescisao.r59_regime = rhregime.rh30_regime
-        and rescisao.r59_causa = rhpesrescisao.rh05_causa
-        and rescisao.r59_caub = rhpesrescisao.rh05_caub::char(2)
-    left  outer join (
-            SELECT distinct r33_codtab,r33_nome,r33_tiporegime
-                                from inssirf
-                                where     r33_instit = fc_getsession('DB_instit')::int
-                               ) as x on r33_codtab = rhpessoalmov.rh02_tbprev+2
-    where h13_categoria in ('101', '106', '111', '301', '302', '303', '305', '306', '309', '312', '313', '902')
-    and rh30_vinculo = 'A'
-    and r33_tiporegime = '1' ";
+        if ($tipoevento == 1) {
+            $sql = "select distinct z01_cgccpf from rhpessoal
+                left join rhpessoalmov on
+                rh02_anousu = fc_getsession('DB_anousu')::int
+                and rh02_mesusu = date_part('month', fc_getsession('DB_datausu')::date)
+                and rh02_regist = rh01_regist
+                and rh02_instit = fc_getsession('DB_instit')::int
+            inner join cgm on
+                cgm.z01_numcgm = rhpessoal.rh01_numcgm
+            left join rhpesrescisao on
+                rh02_seqpes = rh05_seqpes
+            left join rhdepend on
+                rhdepend.rh31_regist = rhpessoal.rh01_regist
+            left join rhregime on
+                rhregime.rh30_codreg = rhpessoalmov.rh02_codreg
+            inner join tpcontra on
+                tpcontra.h13_codigo = rhpessoalmov.rh02_tpcont
+            left join rescisao on
+                rescisao.r59_anousu = rhpessoalmov.rh02_anousu
+                and rescisao.r59_mesusu = rhpessoalmov.rh02_mesusu
+                and rescisao.r59_regime = rhregime.rh30_regime
+                and rescisao.r59_causa = rhpesrescisao.rh05_causa
+                and rescisao.r59_caub = rhpesrescisao.rh05_caub::char(2)
+            left  outer join (
+                    SELECT distinct r33_codtab,r33_nome,r33_tiporegime
+                                        from inssirf
+                                        where     r33_anousu = fc_getsession('DB_anousu')::int
+                                            and r33_mesusu = date_part('month',fc_getsession('DB_datausu')::date)
+                                            and r33_instit = fc_getsession('DB_instit')::int
+                                    ) as x on r33_codtab = rhpessoalmov.rh02_tbprev+2
+                where h13_categoria in ('101', '106', '111', '301', '302', '303', '305', '306', '309', '312', '313', '902','701','712','771','901','711','410')
+                and rh30_vinculo = 'A'
+                and r33_tiporegime = '1'
+                and ((rh05_recis is not null
+                and date_part('month', rh05_recis) = date_part('month', fc_getsession('DB_datausu')::date)
+                and date_part('year', rh05_recis) = date_part('year', fc_getsession('DB_datausu')::date)
+                )
+                or
+                rh05_recis is null
+                ) ";
 
-        if ($matricula != null) {
-            $sql .= " and rh01_regist in ($matricula) ";
+            if ($matricula != null) {
+                $sql .= "and cgm.z01_cgccpf in (select z01_cgccpf from cgm join rhpessoal on cgm.z01_numcgm = rhpessoal.rh01_numcgm where rh01_regist in ($matricula)) ";
+            }
+        } else {
+
+            $ano = date("Y", db_getsession("DB_datausu"));
+            $mes = date("m", db_getsession("DB_datausu"));
+            $data = "$ano-$mes-01";
+            $data = new \DateTime($data);
+            $data->modify('last day of this month');
+            $ultimoDiaDoMes = $data->format('d');
+
+            $sql = "SELECT distinct e50_codord as ideDmDev,
+            e60_numcgm,
+            e70_vlrliq,
+            e50_data,
+            e50_empresadesconto,
+            e50_cattrabalhador as codCateg,
+            e50_contribuicaoprev as indMV,
+            e50_valorremuneracao as vlrRemunOE,
+            e50_valordesconto,
+            e50_datacompetencia,
+            e50_cattrabalhadorremurenacao as codCateg,
+            case
+                when retencaotiporec.e21_retencaotipocalc in (3, 4, 7) then (coalesce(e23_valorretencao, 0))
+                else 0
+            end as valor_inss,
+            case
+                when retencaotiporec.e21_retencaotipocalc in (1, 2) then (coalesce(e23_valorretencao, 0))
+                else 0
+            end as valor_irrf,
+            cgm.z01_cgccpf as cpfTrab,
+            cgm.z01_nome as nmTrab,
+            z04_rhcbo as codCBO,
+            cgm.z01_nasc as dtNascto,
+            cgc as nrInsc
+            from empnota
+                inner join empempenho on e69_numemp = e60_numemp
+                inner join cgm as cgm on e60_numcgm = cgm.z01_numcgm
+                inner join empnotaele on e69_codnota = e70_codnota
+                inner join orcelemento on empnotaele.e70_codele = orcelemento.o56_codele
+                inner join cgmfisico on z04_numcgm = cgm.z01_numcgm
+                left join conlancamemp on c75_numemp = e60_numemp
+                left join conlancamdoc on c71_codlan = c75_codlan
+                and c71_coddoc = 904
+                left join pagordemnota on e71_codnota = e69_codnota
+                and e71_anulado is false
+                left join pagordem on e71_codord = e50_codord
+                left join pagordemele on e53_codord = e50_codord
+                left join cgm as empresa on empresa.z01_numcgm = e50_empresadesconto
+                left join categoriatrabalhador as cattrabalhador on cattrabalhador.ct01_codcategoria = e50_cattrabalhador
+                left join categoriatrabalhador as catremuneracao on catremuneracao.ct01_codcategoria = e50_cattrabalhadorremurenacao
+                left join retencaopagordem on pagordem.e50_codord = retencaopagordem.e20_pagordem
+                left join retencaoreceitas on retencaoreceitas.e23_retencaopagordem = retencaopagordem.e20_sequencial
+                left join retencaotiporec on retencaotiporec.e21_sequencial = retencaoreceitas.e23_retencaotiporec
+                left join db_config on
+                db_config.codigo = fc_getsession('DB_instit')::int
+            where e50_data BETWEEN '$ano-$mes-01' AND '$ano-$mes-$ultimoDiaDoMes'
+                and Length(cgm.z01_cgccpf) like '11'
+                and e50_cattrabalhador is not null
+            ";
+            if ($matricula != null) {
+                $sql .= "and cgm.z01_cgccpf in (select z01_cgccpf from cgm join rhpessoal on cgm.z01_numcgm = rhpessoal.rh01_numcgm where rh01_regist in ($matricula)) ";
+            }
         }
-
         $rs = \db_query($sql);
         // echo $sql;
         // db_criatabela($rs);
+        // exit;
         if (!$rs) {
             throw new \Exception("Erro ao buscar os preenchimentos do S1200");
         }
@@ -1087,87 +865,22 @@ WHERE rh30_vinculo IN ('I',
      */
     public function buscarPreenchimentoS1202($codigoFormulario, $matricula = null)
     {
-        $sql = "SELECT
-        distinct
-        1 as tpInsc,
-        cgc as nrInsc,
-        z01_cgccpf as cpfTrab,
-        rh51_indicadesconto as indMV,
-        case when length(rh51_cgcvinculo) = 14 then 1
-        when length(rh51_cgcvinculo) = 11 then 2
-        end as tpInsc2,
-        rh51_cgcvinculo as nrInsc2,
-        rh51_basefo as vlrRemunOE,
-        h13_categoria as codCateg,
-        'LOTA1' as codLotacao,
-        rh01_regist as matricula,
-        case when rh02_ocorre = '2' then 2
-        when rh02_ocorre = '3' then 3
-        when rh02_ocorre = '4' then 4
-        else '1'
-        end as grauExp,
-        rh30_regime
-    from
-        rhpessoal
-    left join rhpessoalmov on
+        $sql = "select distinct z01_cgccpf from rhpessoal
+        left join rhpessoalmov on
         rh02_anousu = fc_getsession('DB_anousu')::int
         and rh02_mesusu = date_part('month', fc_getsession('DB_datausu')::date)
         and rh02_regist = rh01_regist
         and rh02_instit = fc_getsession('DB_instit')::int
-    left join rhinssoutros    on rh51_seqpes                 = rh02_seqpes
-    left join rhlota on
-        rhlota.r70_codigo = rhpessoalmov.rh02_lota
-        and rhlota.r70_instit = rhpessoalmov.rh02_instit
     inner join cgm on
         cgm.z01_numcgm = rhpessoal.rh01_numcgm
-    inner join db_config on
-        db_config.codigo = rhpessoal.rh01_instit
-    inner join rhestcivil on
-        rhestcivil.rh08_estciv = rhpessoal.rh01_estciv
-    inner join rhraca on
-        rhraca.rh18_raca = rhpessoal.rh01_raca
-    left join rhfuncao on
-        rhfuncao.rh37_funcao = rhpessoalmov.rh02_funcao
-        and rhfuncao.rh37_instit = rhpessoalmov.rh02_instit
-    left join rhpescargo on
-        rhpescargo.rh20_seqpes = rhpessoalmov.rh02_seqpes
-    left join rhcargo on
-        rhcargo.rh04_codigo = rhpescargo.rh20_cargo
-        and rhcargo.rh04_instit = rhpessoalmov.rh02_instit
-    inner join rhinstrucao on
-        rhinstrucao.rh21_instru = rhpessoal.rh01_instru
-    inner join rhnacionalidade on
-        rhnacionalidade.rh06_nacionalidade = rhpessoal.rh01_nacion
     left join rhpesrescisao on
         rh02_seqpes = rh05_seqpes
-    left join rhsindicato on
-        rh01_rhsindicato = rh116_sequencial
-    inner join rhreajusteparidade on
-        rhreajusteparidade.rh148_sequencial = rhpessoal.rh01_reajusteparidade
-    left join rhpesdoc on
-        rhpesdoc.rh16_regist = rhpessoal.rh01_regist
     left join rhdepend on
         rhdepend.rh31_regist = rhpessoal.rh01_regist
     left join rhregime on
         rhregime.rh30_codreg = rhpessoalmov.rh02_codreg
-    left join rhpesfgts on
-        rhpesfgts.rh15_regist = rhpessoal.rh01_regist
     inner join tpcontra on
         tpcontra.h13_codigo = rhpessoalmov.rh02_tpcont
-    left join rhcontratoemergencial on
-        rh163_matricula = rh01_regist
-    left join rhcontratoemergencialrenovacao on
-        rh164_contratoemergencial = rh163_sequencial
-    left join jornadadetrabalho on
-        jt_sequencial = rh02_jornadadetrabalho
-    left join db_cgmbairro on
-        cgm.z01_numcgm = db_cgmbairro.z01_numcgm
-    left join bairro on
-        bairro.j13_codi = db_cgmbairro.j13_codi
-    left join db_cgmruas on
-        cgm.z01_numcgm = db_cgmruas.z01_numcgm
-    left join ruas on
-        ruas.j14_codigo = db_cgmruas.j14_codigo
     left join rescisao on
         rescisao.r59_anousu = rhpessoalmov.rh02_anousu
         and rescisao.r59_mesusu = rhpessoalmov.rh02_mesusu
@@ -1177,14 +890,23 @@ WHERE rh30_vinculo IN ('I',
     left  outer join (
             SELECT distinct r33_codtab,r33_nome,r33_tiporegime
                                 from inssirf
-                                where r33_instit = fc_getsession('DB_instit')::int
+                                where     r33_anousu = fc_getsession('DB_anousu')::int
+                                      and r33_mesusu = date_part('month',fc_getsession('DB_datausu')::date)
+                                      and r33_instit = fc_getsession('DB_instit')::int
                                ) as x on r33_codtab = rhpessoalmov.rh02_tbprev+2
-    where h13_categoria in ('101', '106', '111', '301', '302', '303','304', '305', '306', '309', '312', '313', '902')
-    and rh30_vinculo = 'A'
-    and r33_tiporegime = '2'";
+                    where h13_categoria in ('301', '302', '303', '305', '306', '309', '410')
+                and rh30_vinculo = 'A'
+                and r33_tiporegime = '2'
+                and ((rh05_recis is not null
+                and date_part('month', rh05_recis) = date_part('month', fc_getsession('DB_datausu')::date)
+                and date_part('year', rh05_recis) = date_part('year', fc_getsession('DB_datausu')::date)
+                )
+                or
+                rh05_recis is null
+                ) ";
 
         if ($matricula != null) {
-            $sql .= " and rh01_regist in ($matricula) ";
+            $sql .= "and cgm.z01_cgccpf in (select z01_cgccpf from cgm join rhpessoal on cgm.z01_numcgm = rhpessoal.rh01_numcgm where rh01_regist in ($matricula)) ";
         }
         $rs = \db_query($sql);
         // echo $sql;
@@ -1203,88 +925,24 @@ WHERE rh30_vinculo IN ('I',
      * @param integer $codigoFormulario
      * @return stdClass[]
      */
-    public function buscarPreenchimentoS1210($codigoFormulario, $matricula = null)
+    public function buscarPreenchimentoS1207($codigoFormulario, $matricula = null)
     {
-        $sql = "SELECT
-        distinct
-        1 as tpInsc,
-        cgc as nrInsc,
-        z01_cgccpf as cpfTrab,
-        rh51_indicadesconto as indMV,
-        case when length(rh51_cgcvinculo) = 14 then 1
-        when length(rh51_cgcvinculo) = 11 then 2
-        end as tpInsc2,
-        rh51_cgcvinculo as nrInsc2,
-        rh51_basefo as vlrRemunOE,
-        h13_categoria as codCateg,
-        'LOTA1' as codLotacao,
-        rh01_regist as matricula,
-        case when rh02_ocorre = '2' then 2
-        when rh02_ocorre = '3' then 3
-        when rh02_ocorre = '4' then 4
-        else '1'
-        end as grauExp
-    from
-        rhpessoal
-    left join rhpessoalmov on
+        $sql = "select distinct z01_cgccpf from rhpessoal
+        left join rhpessoalmov on
         rh02_anousu = fc_getsession('DB_anousu')::int
         and rh02_mesusu = date_part('month', fc_getsession('DB_datausu')::date)
         and rh02_regist = rh01_regist
         and rh02_instit = fc_getsession('DB_instit')::int
-    left join rhinssoutros    on rh51_seqpes                 = rh02_seqpes
-    left join rhlota on
-        rhlota.r70_codigo = rhpessoalmov.rh02_lota
-        and rhlota.r70_instit = rhpessoalmov.rh02_instit
     inner join cgm on
         cgm.z01_numcgm = rhpessoal.rh01_numcgm
-    inner join db_config on
-        db_config.codigo = rhpessoal.rh01_instit
-    inner join rhestcivil on
-        rhestcivil.rh08_estciv = rhpessoal.rh01_estciv
-    inner join rhraca on
-        rhraca.rh18_raca = rhpessoal.rh01_raca
-    left join rhfuncao on
-        rhfuncao.rh37_funcao = rhpessoalmov.rh02_funcao
-        and rhfuncao.rh37_instit = rhpessoalmov.rh02_instit
-    left join rhpescargo on
-        rhpescargo.rh20_seqpes = rhpessoalmov.rh02_seqpes
-    left join rhcargo on
-        rhcargo.rh04_codigo = rhpescargo.rh20_cargo
-        and rhcargo.rh04_instit = rhpessoalmov.rh02_instit
-    inner join rhinstrucao on
-        rhinstrucao.rh21_instru = rhpessoal.rh01_instru
-    inner join rhnacionalidade on
-        rhnacionalidade.rh06_nacionalidade = rhpessoal.rh01_nacion
     left join rhpesrescisao on
         rh02_seqpes = rh05_seqpes
-    left join rhsindicato on
-        rh01_rhsindicato = rh116_sequencial
-    inner join rhreajusteparidade on
-        rhreajusteparidade.rh148_sequencial = rhpessoal.rh01_reajusteparidade
-    left join rhpesdoc on
-        rhpesdoc.rh16_regist = rhpessoal.rh01_regist
     left join rhdepend on
         rhdepend.rh31_regist = rhpessoal.rh01_regist
     left join rhregime on
         rhregime.rh30_codreg = rhpessoalmov.rh02_codreg
-    left join rhpesfgts on
-        rhpesfgts.rh15_regist = rhpessoal.rh01_regist
     inner join tpcontra on
         tpcontra.h13_codigo = rhpessoalmov.rh02_tpcont
-    left join rhcontratoemergencial on
-        rh163_matricula = rh01_regist
-    left join rhcontratoemergencialrenovacao on
-        rh164_contratoemergencial = rh163_sequencial
-    left join jornadadetrabalho on
-        jt_sequencial = rh02_jornadadetrabalho
-    left join db_cgmbairro on
-        cgm.z01_numcgm = db_cgmbairro.z01_numcgm
-    left join bairro on
-        bairro.j13_codi = db_cgmbairro.j13_codi
-    left join db_cgmruas on
-        cgm.z01_numcgm = db_cgmruas.z01_numcgm
-    left join ruas on
-        ruas.j14_codigo = db_cgmruas.j14_codigo
     left join rescisao on
         rescisao.r59_anousu = rhpessoalmov.rh02_anousu
         and rescisao.r59_mesusu = rhpessoalmov.rh02_mesusu
@@ -1298,26 +956,187 @@ WHERE rh30_vinculo IN ('I',
                                       and r33_mesusu = date_part('month',fc_getsession('DB_datausu')::date)
                                       and r33_instit = fc_getsession('DB_instit')::int
                                ) as x on r33_codtab = rhpessoalmov.rh02_tbprev+2
-    where h13_categoria in ('101', '106', '111', '301', '302', '303','304', '305', '306', '309', '312', '313', '902')
-    and rh30_vinculo = 'A'
-    and r33_tiporegime = '2'
-    and
-	exists (SELECT
-	1
-from
-	gerfsal
-where
-	r14_anousu = fc_getsession('DB_anousu')::int
-	and r14_mesusu = date_part('month', fc_getsession('DB_datausu')::date)
-	and r14_instit = fc_getsession('DB_instit')::int
-	and r14_regist = rhpessoal.rh01_regist)
-    and rh05_recis is null";
+                                   where rh30_vinculo in ('I','P')
+                                   and ((rh05_recis is not null
+                                   and date_part('month', rh05_recis) = date_part('month', fc_getsession('DB_datausu')::date)
+                                   and date_part('year', rh05_recis) = date_part('year', fc_getsession('DB_datausu')::date)
+                                   )
+                                   or
+                                   rh05_recis is null
+                                   ) ";
 
         if ($matricula != null) {
-            $sql .= "and rh01_regist in ($matricula) ";
+            $sql .= " and cgm.z01_cgccpf in (select z01_cgccpf from cgm join rhpessoal on cgm.z01_numcgm = rhpessoal.rh01_numcgm where rh01_regist in ($matricula)) ";
         }
         $rs = \db_query($sql);
+        // echo $sql;
+        // db_criatabela($rs);
+        // exit;
+        if (!$rs) {
+            throw new \Exception("Erro ao buscar os preenchimentos do S1207");
+        }
+        /**
+         * @todo busca os empregadores da instituição e adicona para cada rubriuca
+         */
+        return \db_utils::getCollectionByRecord($rs);
+    }
 
+    /**
+     * @param integer $codigoFormulario
+     * @return stdClass[]
+     */
+    public function buscarPreenchimentoS1210($codigoFormulario, $matricula = null, $tipoevento = null)
+    {
+        if ($tipoevento == 1) {
+            $sql = "SELECT distinct z01_cgccpf from rhpessoal
+            left join rhpessoalmov on
+                rh02_anousu = fc_getsession('DB_anousu')::int
+                and rh02_mesusu = date_part('month', fc_getsession('DB_datausu')::date)
+                and rh02_regist = rh01_regist
+                and rh02_instit = fc_getsession('DB_instit')::int
+            left join rhinssoutros    on rh51_seqpes                 = rh02_seqpes
+            left join rhlota on
+                rhlota.r70_codigo = rhpessoalmov.rh02_lota
+                and rhlota.r70_instit = rhpessoalmov.rh02_instit
+            inner join cgm on
+                cgm.z01_numcgm = rhpessoal.rh01_numcgm
+            inner join db_config on
+                db_config.codigo = rhpessoal.rh01_instit
+            inner join rhestcivil on
+                rhestcivil.rh08_estciv = rhpessoal.rh01_estciv
+            inner join rhraca on
+                rhraca.rh18_raca = rhpessoal.rh01_raca
+            left join rhfuncao on
+                rhfuncao.rh37_funcao = rhpessoalmov.rh02_funcao
+                and rhfuncao.rh37_instit = rhpessoalmov.rh02_instit
+            left join rhpescargo on
+                rhpescargo.rh20_seqpes = rhpessoalmov.rh02_seqpes
+            left join rhcargo on
+                rhcargo.rh04_codigo = rhpescargo.rh20_cargo
+                and rhcargo.rh04_instit = rhpessoalmov.rh02_instit
+            inner join rhinstrucao on
+                rhinstrucao.rh21_instru = rhpessoal.rh01_instru
+            inner join rhnacionalidade on
+                rhnacionalidade.rh06_nacionalidade = rhpessoal.rh01_nacion
+            left join rhpesrescisao on
+                rh02_seqpes = rh05_seqpes
+            left join rhsindicato on
+                rh01_rhsindicato = rh116_sequencial
+            inner join rhreajusteparidade on
+                rhreajusteparidade.rh148_sequencial = rhpessoal.rh01_reajusteparidade
+            left join rhpesdoc on
+                rhpesdoc.rh16_regist = rhpessoal.rh01_regist
+            left join rhdepend on
+                rhdepend.rh31_regist = rhpessoal.rh01_regist
+            left join rhregime on
+                rhregime.rh30_codreg = rhpessoalmov.rh02_codreg
+            left join rhpesfgts on
+                rhpesfgts.rh15_regist = rhpessoal.rh01_regist
+            inner join tpcontra on
+                tpcontra.h13_codigo = rhpessoalmov.rh02_tpcont
+            left join rhcontratoemergencial on
+                rh163_matricula = rh01_regist
+            left join rhcontratoemergencialrenovacao on
+                rh164_contratoemergencial = rh163_sequencial
+            left join jornadadetrabalho on
+                jt_sequencial = rh02_jornadadetrabalho
+            left join db_cgmbairro on
+                cgm.z01_numcgm = db_cgmbairro.z01_numcgm
+            left join bairro on
+                bairro.j13_codi = db_cgmbairro.j13_codi
+            left join db_cgmruas on
+                cgm.z01_numcgm = db_cgmruas.z01_numcgm
+            left join ruas on
+                ruas.j14_codigo = db_cgmruas.j14_codigo
+            left join rescisao on
+                rescisao.r59_anousu = rhpessoalmov.rh02_anousu
+                and rescisao.r59_mesusu = rhpessoalmov.rh02_mesusu
+                and rescisao.r59_regime = rhregime.rh30_regime
+                and rescisao.r59_causa = rhpesrescisao.rh05_causa
+                and rescisao.r59_caub = rhpesrescisao.rh05_caub::char(2)
+            left  outer join (
+                    SELECT distinct r33_codtab,r33_nome,r33_tiporegime
+                                        from inssirf
+                                        where     r33_anousu = fc_getsession('DB_anousu')::int
+                                            and r33_mesusu = date_part('month',fc_getsession('DB_datausu')::date)
+                                            and r33_instit = fc_getsession('DB_instit')::int
+                                    ) as x on r33_codtab = rhpessoalmov.rh02_tbprev+2
+            where 1=1
+                and ((rh05_recis is not null
+                and date_part('month', rh05_recis) = date_part('month', fc_getsession('DB_datausu')::date)
+                and date_part('year', rh05_recis) = date_part('year', fc_getsession('DB_datausu')::date)
+                )
+                or
+                rh05_recis is null
+                ) ";
+
+            if ($matricula != null) {
+                $sql .= " and cgm.z01_cgccpf in (select z01_cgccpf from cgm join rhpessoal on cgm.z01_numcgm = rhpessoal.rh01_numcgm where rh01_regist in ($matricula)) ";
+            }
+        } else {
+            $sql = "SELECT *
+            FROM (
+                    select e60_numcgm as num_cgm,
+                        z01_cgccpf as cpf_benef,
+                        e50_codord as ide_dm_dev,
+                        substr(e50_data::varchar, 1, 7) as per_ref,
+                        (e53_valor - e53_vlranu) as valor_op,
+                        corrente.k12_data as dt_pgto,
+                        sum(
+                            case
+                                when corgrupotipo.k106_sequencial = 4 then corrente.k12_valor * -1
+                                else corrente.k12_valor
+                            end
+                        ) as vr_liq
+                    from pagordem
+                        inner join empempenho ON empempenho.e60_numemp = pagordem.e50_numemp
+                        inner join cgm ON cgm.z01_numcgm = empempenho.e60_numcgm
+                        inner join empord on empord.e82_codord = pagordem.e50_codord
+                        inner join empagemov on empagemov.e81_codmov = empord.e82_codmov
+                        inner join corempagemov on corempagemov.k12_codmov = empagemov.e81_codmov
+                        inner join corrente on (
+                            corrente.k12_id,
+                            corrente.k12_data,
+                            corrente.k12_autent
+                        ) = (
+                            corempagemov.k12_id,
+                            corempagemov.k12_data,
+                            corempagemov.k12_autent
+                        )
+                        inner join corgrupocorrente on (
+                            corrente.k12_id,
+                            corrente.k12_data,
+                            corrente.k12_autent
+                        ) = (
+                            corgrupocorrente.k105_id,
+                            corgrupocorrente.k105_data,
+                            corgrupocorrente.k105_autent
+                        )
+                        inner join corgrupo ON corgrupo.k104_sequencial = corgrupocorrente.k105_corgrupo
+                        inner join corgrupotipo on corgrupotipo.k106_sequencial = corgrupocorrente.k105_corgrupotipo
+                        inner join pagordemele on e50_codord = e53_codord
+                    where e50_cattrabalhador is not null
+                        and corrente.k12_data between '2022-08-01' and '2022-08-31'
+                        and corgrupotipo.k106_sequencial in (1, 4) -- somente pagamento/estorno liquido
+                        and length(z01_cgccpf) = 11 --and e50_codord = 33521
+                    group by 1,
+                        2,
+                        3,
+                        4,
+                        5,
+                        6
+                    order by e50_codord, corrente.k12_data
+                ) AS pagamentos
+            WHERE vr_liq > 0 ;
+            ";
+            if ($matricula != null) {
+                $sql .= " and cgm.z01_cgccpf in (select z01_cgccpf from cgm join rhpessoal on cgm.z01_numcgm = rhpessoal.rh01_numcgm where rh01_regist in ($matricula)) ";
+            }
+        }
+        $rs = \db_query($sql);
+        // echo $sql;
+        // db_criatabela($rs);
+        // exit;
         if (!$rs) {
             throw new \Exception("Erro ao buscar os preenchimentos do S1210");
         }

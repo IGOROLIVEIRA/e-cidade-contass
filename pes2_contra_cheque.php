@@ -344,7 +344,7 @@ for($i=0;$i<$num;$i++){
   $res_env = db_query($sql);
   //modificado 
   $pdf1->registro	        = $rh01_regist;
-  $pdf1->nome		      = $z01_nome;
+  $pdf1->nome		      = substr($z01_nome, 0, 40);
   $pdf1->descr_funcao	  = substr($rh37_descr, 0, 37);
   $pdf1->descr_lota       = $estrut.'-'.$r70_descr;
   $pdf1->f010          	  = $f010;

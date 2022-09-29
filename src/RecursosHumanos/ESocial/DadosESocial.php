@@ -59,6 +59,8 @@ class DadosESocial
             case TIPO::ALTERACAO_CONTRATO:
             case Tipo::CD_BENEF_IN:
             case Tipo::BENEFICIOS_ENTESPUBLICOS:
+            case Tipo::PAGAMENTOS_RENDIMENTOS:
+            case Tipo::TSV_INICIO:
                 return $this->buscaPreenchimentos($matricula);
                 break;
             default:
@@ -110,7 +112,6 @@ class DadosESocial
             case Tipo::ESTABELECIMENTOS:
             case Tipo::ALTERACAODEDADOS:
             case Tipo::ALTERACAO_CONTRATO:
-            case Tipo::TSV_INICIO:
             case Tipo::TSV_ALT_CONTR:
                 return $preenchimento->buscarUltimoPreenchimentoInstituicao($formularioId, $matricula);
             case Tipo::CADASTRAMENTO_INICIAL:
@@ -125,11 +126,11 @@ class DadosESocial
                 return $preenchimento->buscarPreenchimentoS1210($formularioId, $matricula);
             case Tipo::AFASTAMENTO_TEMPORARIO:
                 return $preenchimento->buscarPreenchimentoS2230($formularioId, $matricula);
-            case Tipo::CD_BENEF_IN:
-                return $preenchimento->buscarPreenchimentoS2400($formularioId, $matricula);
             case Tipo::CADASTRO_BENEFICIO:
                 return $preenchimento->buscarPreenchimentoS2410($formularioId, $matricula);
             case Tipo::DESLIGAMENTO:
+            case Tipo::TSV_INICIO:
+            case Tipo::CD_BENEF_IN:
                 return $preenchimento->buscarPreenchimento($this->tipo, $matricula);
             default:
                 throw new Exception('Tipo não encontrado.');

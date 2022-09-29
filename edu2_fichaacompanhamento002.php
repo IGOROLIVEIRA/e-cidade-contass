@@ -30,18 +30,19 @@
  *         Fabio Esteves fabio.esteves@dbseller.com.br
  * @version $Revision: 1.13 $
  */
-require_once ("fpdf151/FpdfMultiCellBorder.php");
-require_once ("libs/db_sql.php");
-require_once ("libs/db_stdlib.php");
-require_once ("libs/db_conecta.php");
-require_once ("libs/db_sessoes.php");
-require_once ("libs/db_utils.php");
-require_once ("libs/db_usuariosonline.php");
-require_once ("libs/db_app.utils.php");
-require_once ("dbforms/db_funcoes.php");
-require_once ("model/educacao/avaliacao/iFormaObtencao.interface.php");
-require_once ("model/educacao/avaliacao/iElementoAvaliacao.interface.php");
-require_once ("std/DBDate.php");
+require_once("fpdf151/FpdfMultiCellBorder.php");
+require_once("libs/db_sql.php");
+require_once("libs/db_stdlib.php");
+require_once("libs/db_conecta.php");
+require_once("libs/db_sessoes.php");
+require_once("libs/db_utils.php");
+require_once("libs/db_usuariosonline.php");
+require_once("libs/db_app.utils.php");
+require_once("dbforms/db_funcoes.php");
+require_once("model/educacao/avaliacao/iFormaObtencao.interface.php");
+require_once("model/educacao/avaliacao/iElementoAvaliacao.interface.php");
+require_once("std/DBDate.php");
+include("edu_cabecalhoatolegal.php");
 
 db_app::import("educacao.*");
 db_app::import("educacao.avaliacao.*");
@@ -100,11 +101,12 @@ foreach ($aDisciplinaTurma as $oRegencia) {
   $sWhereDisciplina     .= " and ed105_i_turma = {$oTurma->getCodigo()}";
   $sWhereDisciplina     .= " and (ed106_disciplina  = {$iCodigoDisciplina}";
   $sWhereDisciplina     .= "       or ed106_disciplina is null)";
-  $sSqlParecerDisciplina = $oDaoParecer->sql_query_turma_disciplina_periodo(null,
-                                                                            $sCamposDisciplina,
-                                                                            null,
-                                                                            $sWhereDisciplina
-                                                                           );
+  $sSqlParecerDisciplina = $oDaoParecer->sql_query_turma_disciplina_periodo(
+    null,
+    $sCamposDisciplina,
+    null,
+    $sWhereDisciplina
+  );
   $rsParecerDisciplina   = $oDaoParecer->sql_record($sSqlParecerDisciplina);
   $iNumeroLinhas         = $oDaoParecer->numrows;
   $aDisciplinaParecer    = array();
@@ -142,18 +144,19 @@ for ($iContador = 0; $iContador < $iContadorAlunos; $iContador++) {
    * Ex.: INTEGRAL - MANHÃ / TARDE
    */
   $oMatricula = $aAlunos[$iContador]->getMatriculaByTurma($oTurma);
-  if (    $oMatricula->getTurma()->getTurno()->isIntegral()
+  if (
+    $oMatricula->getTurma()->getTurno()->isIntegral()
     && $oMatricula->getTurma()->getBaseCurricular()->getCurso()->getEnsino()->isInfantil()
   ) {
 
     $aDescricaoTurno = array();
-    $aTurnoReferente = array( 1 => 'MANHÃ', 2 => 'TARDE', 3 => 'NOITE' );
+    $aTurnoReferente = array(1 => 'MANHÃ', 2 => 'TARDE', 3 => 'NOITE');
 
-    foreach ( $oMatricula->getTurnosVinculados() as $oTurnoReferente ) {
-      $aDescricaoTurno[] = $aTurnoReferente[ $oTurnoReferente->ed336_turnoreferente ];
+    foreach ($oMatricula->getTurnosVinculados() as $oTurnoReferente) {
+      $aDescricaoTurno[] = $aTurnoReferente[$oTurnoReferente->ed336_turnoreferente];
     }
 
-    $sTurno                  = "INTEGRAL - " . implode( " / ", $aDescricaoTurno );
+    $sTurno                  = "INTEGRAL - " . implode(" / ", $aDescricaoTurno);
     $lDescricaoTurnoValidada = true;
   }
 
@@ -161,7 +164,7 @@ for ($iContador = 0; $iContador < $iContadorAlunos; $iContador++) {
   $oDiarioClasse              = $aAlunos[$iContador]->getMatriculaByTurma($oTurma)->getDiarioDeClasse();
   $aDiarioAvaliacaoDisciplina = $oDiarioClasse->getDisciplinas();
   db_fim_transacao();
-  $aPareceresAluno = Array();
+  $aPareceresAluno = array();
 
   $aParecerDescritivo = array();
 
@@ -184,8 +187,10 @@ for ($iContador = 0; $iContador < $iContadorAlunos; $iContador++) {
         $iCodigoPeriodo     = $oElementoAvaliacao->getPeriodoAvaliacao()->getCodigo();
         if (in_array($iCodigoPeriodo, $aPeriodosFiltros)) {
 
-          if ($oElementoAvaliacao->getFormaDeAvaliacao()->getTipo() == "PARECER"
-              && $oAvaliacao->getValorAproveitamento()->getAproveitamento() != "") {
+          if (
+            $oElementoAvaliacao->getFormaDeAvaliacao()->getTipo() == "PARECER"
+            && $oAvaliacao->getValorAproveitamento()->getAproveitamento() != ""
+          ) {
 
             $sParecerDescritivo          .= $oAvaliacao->getValorAproveitamento()->getAproveitamento();
             $oParecerDescritivo           = new stdClass();
@@ -221,12 +226,12 @@ for ($iContador = 0; $iContador < $iContadorAlunos; $iContador++) {
   /** *****************************************************************************************************************
    **************************************** IMPRIMIMOS O CABEÇALHO DO RELATORIO ***************************************
    *******************************************************************************************************************/
-  $oPdf->Image("imagens/files/".$oEscola->getLogo(), $oPdf->GetX(), $oPdf->GetY(), 15);
+  $oPdf->Image("imagens/files/" . $oEscola->getLogo(), $oPdf->GetX(), $oPdf->GetY(), 15);
 
   $sNomeEscola       = $oEscola->getDepartamento()->getNomeDepartamento();
   $iCodigoReferencia = $oEscola->getCodigoReferencia();
 
-  if ( $iCodigoReferencia != null ) {
+  if ($iCodigoReferencia != null) {
     $sNomeEscola = "{$iCodigoReferencia} - {$sNomeEscola}";
   }
 
@@ -236,6 +241,9 @@ for ($iContador = 0; $iContador < $iContadorAlunos; $iContador++) {
   $oPdf->SetX(30);
   $oPdf->Cell(150, $iHeigth, $sNomeEscola, 0, 1, "L");
   $oPdf->SetX(30);
+  $oPdf->Cell(150, $iHeigth, $atolegalcabecalho, 0, 1, "L");
+  $oPdf->SetX(30);
+
   $oPdf->Cell(150, $iHeigth, $sSecretaria, 0, 1, "L");
 
   $oPdf->ln(6);
@@ -306,7 +314,7 @@ for ($iContador = 0; $iContador < $iContadorAlunos; $iContador++) {
   $iTamanhoCelulaDescricaoParecerPadrao    = 175;
   $iTamanhoCelulaPeriodoPadrao             = 10;
   $iTamanhoCelulaDescricaoParecerCalculado = $iTamanhoCelulaDescricaoParecerPadrao -
-                                             ($iNumeroDePeriodos * $iTamanhoCelulaPeriodoPadrao);
+    ($iNumeroDePeriodos * $iTamanhoCelulaPeriodoPadrao);
 
   foreach ($aDisciplinaParecer as $aParecer) {
 
@@ -325,11 +333,16 @@ for ($iContador = 0; $iContador < $iContadorAlunos; $iContador++) {
       $sNomeDisciplina    = $oParecer->sDisciplina;
 
 
-      if ($oPdf->gety() > $oPdf->h - 15 ) {
+      if ($oPdf->gety() > $oPdf->h - 15) {
 
-        imprimeDisciplina($oPdf, $iYInicial, $iXInicial, $iAlturaRetangulo, $sNomeDisciplina,
-                          $iTamanhoCelulaDescricaoParecerCalculado
-                         );
+        imprimeDisciplina(
+          $oPdf,
+          $iYInicial,
+          $iXInicial,
+          $iAlturaRetangulo,
+          $sNomeDisciplina,
+          $iTamanhoCelulaDescricaoParecerCalculado
+        );
         $oPdf->AddPage();
         setHeader($oPdf, $iHeigth, $aPeriodos, $iTamanhoCelulaDescricaoParecerCalculado, $iTamanhoCelulaPeriodoPadrao);
         $lQuebrouPagina = true;
@@ -366,12 +379,14 @@ for ($iContador = 0; $iContador < $iContadorAlunos; $iContador++) {
       foreach ($aPeriodos as $oPeriodo) {
 
         $iCodigoPeriodo = $oPeriodo->getPeriodoAvaliacao()->getCodigo();
-        if (isset($aPareceresAluno[$oParecer->iCodigoDisciplina])
-            && isset($aPareceresAluno[$oParecer->iCodigoDisciplina][$oParecer->iCodigoParecer])) {
+        if (
+          isset($aPareceresAluno[$oParecer->iCodigoDisciplina])
+          && isset($aPareceresAluno[$oParecer->iCodigoDisciplina][$oParecer->iCodigoParecer])
+        ) {
 
           $aParecerDisciplina = $aPareceresAluno[$oParecer->iCodigoDisciplina][$oParecer->iCodigoParecer];
           $sLegendaAvaliada   = "";
-          if (array_key_exists($oPeriodo->getPeriodoAvaliacao()->getCodigo(), $aParecerDisciplina)){
+          if (array_key_exists($oPeriodo->getPeriodoAvaliacao()->getCodigo(), $aParecerDisciplina)) {
             $sLegendaAvaliada = $aParecerDisciplina[$oPeriodo->getPeriodoAvaliacao()->getCodigo()];
           }
           $oPdf->Cell($iTamanhoCelulaPeriodoPadrao,  $iHeigthPeriodo, "{$sLegendaAvaliada}", 1, 0, "C");
@@ -386,9 +401,14 @@ for ($iContador = 0; $iContador < $iContadorAlunos; $iContador++) {
     }
 
     $lPrimeiroLaco = true;
-    imprimeDisciplina($oPdf, $iYInicial, $iXInicial, $iAlturaRetangulo,
-                      $sNomeDisciplina, $iTamanhoCelulaDescricaoParecerCalculado
-                     );
+    imprimeDisciplina(
+      $oPdf,
+      $iYInicial,
+      $iXInicial,
+      $iAlturaRetangulo,
+      $sNomeDisciplina,
+      $iTamanhoCelulaDescricaoParecerCalculado
+    );
     $oPdf->Ln();
   }
 
@@ -455,7 +475,6 @@ for ($iContador = 0; $iContador < $iContadorAlunos; $iContador++) {
     for ($iApontamento = 0; $iApontamento < $iLinhasApontamento; $iApontamento++) {
       $oPdf->Cell(190, $iHeigth, "", 1, 1, "C");
     }
-
   }
   if ($oPdf->GetY() == ($oPdf->h - 55)) {
 
@@ -487,7 +506,7 @@ for ($iContador = 0; $iContador < $iContadorAlunos; $iContador++) {
   $oPdf->SetFont('arial', '', 7);
   $oPdf->Cell(35, $iHeigth, "Responsável pelo aluno(a): ",       0, 0, "L", 0);
   $oPdf->Cell(155, $iHeigth, $aAlunos[$iContador]->getNomeMae(), 0, 1, "L", 0);
-  $oPdf->Line(43,  $oPdf->GetY()-1, 200, $oPdf->GetY()-1);
+  $oPdf->Line(43,  $oPdf->GetY() - 1, 200, $oPdf->GetY() - 1);
 
   $lPrimeiroPeriodo = true;
   $iTotalFaltasAno  = 0;
@@ -525,26 +544,24 @@ for ($iContador = 0; $iContador < $iContadorAlunos; $iContador++) {
   $sTotalFaltasAno  = "O total de faltas no decorrer do ano letivo foi de:  ";
   $sTotalFrequencia = " e o percentual de frequência: ";
   $oPdf->Cell(55,  $iHeigth, $sTotalFaltasAno,  0, 0, "L", 0);
-  $oPdf->Cell(10,  $iHeigth, $iTotalFaltasAno , 0, 0, "C", 0);
+  $oPdf->Cell(10,  $iHeigth, $iTotalFaltasAno, 0, 0, "C", 0);
   $oPdf->Cell(95,  $iHeigth, $sTotalFrequencia, 0, 1, "L", 0);
-  $oPdf->Line(65,  $oPdf->GetY()-1,  75, $oPdf->GetY()-1);
-  $oPdf->Line(110, $oPdf->GetY()-1, 200, $oPdf->GetY()-1);
+  $oPdf->Line(65,  $oPdf->GetY() - 1,  75, $oPdf->GetY() - 1);
+  $oPdf->Line(110, $oPdf->GetY() - 1, 200, $oPdf->GetY() - 1);
 
   $oPdf->Cell(190, $iHeigth, "O(A) aluno(a) foi considerado(a):", 0, 1);
-  $oPdf->Line(50,  $oPdf->GetY()-1, 200, $oPdf->GetY()-1);
+  $oPdf->Line(50,  $oPdf->GetY() - 1, 200, $oPdf->GetY() - 1);
   $oPdf->ln(2);
 
   $oPdf->Cell(85,  $iHeigth, "Professor(a):",              0, 0);
   $oPdf->Cell(85,  $iHeigth, "Orientador(a) Pedagógico:",  0, 1);
-  $oPdf->Line(28,  $oPdf->GetY()-1,  93, $oPdf->GetY()-1);
-  $oPdf->Line(130, $oPdf->GetY()-1, 200, $oPdf->GetY()-1);
+  $oPdf->Line(28,  $oPdf->GetY() - 1,  93, $oPdf->GetY() - 1);
+  $oPdf->Line(130, $oPdf->GetY() - 1, 200, $oPdf->GetY() - 1);
 
   $oPdf->Cell(85,  $iHeigth, "Orientador(a) Educacional:", 0, 0);
   $oPdf->Cell(85,  $iHeigth, "Direção:",                   0, 1);
-  $oPdf->Line(42,  $oPdf->GetY()-1,  93, $oPdf->GetY()-1);
-  $oPdf->Line(110, $oPdf->GetY()-1, 200, $oPdf->GetY()-1);
-
-
+  $oPdf->Line(42,  $oPdf->GetY() - 1,  93, $oPdf->GetY() - 1);
+  $oPdf->Line(110, $oPdf->GetY() - 1, 200, $oPdf->GetY() - 1);
 }
 
 $oPdf->Output();
@@ -557,13 +574,19 @@ $oPdf->Output();
  * Para imprimir o nome da disciplina no centro, realizamos o calculo: (($iYInicial +  $iYFinalParecer)/2 )- 3
  * Onde -3 é o valor de correcao para centralizar o texto
  */
-function imprimeDisciplina(FPDF $oPdf, $iYInicial, $iXInicial, $iAlturaRetangulo, $sNomeDisciplina,
-                          $iTamanhoCelulaDescricaoParecerCalculado) {
+function imprimeDisciplina(
+  FPDF $oPdf,
+  $iYInicial,
+  $iXInicial,
+  $iAlturaRetangulo,
+  $sNomeDisciplina,
+  $iTamanhoCelulaDescricaoParecerCalculado
+) {
 
   $iYFinalParecer                      = $oPdf->GetY();
-  $iCalculoDoTextoDaAlturaDaDisciplina = (($iYInicial +  $iYFinalParecer)/2 )-2;
+  $iCalculoDoTextoDaAlturaDaDisciplina = (($iYInicial +  $iYFinalParecer) / 2) - 2;
   $iAlturaTextoDisciplina              = $iCalculoDoTextoDaAlturaDaDisciplina < $iYInicial ? $iYInicial
-                                                                             : $iCalculoDoTextoDaAlturaDaDisciplina ;
+    : $iCalculoDoTextoDaAlturaDaDisciplina;
 
   $oPdf->SetFont('arial', '', 5);
 
@@ -612,8 +635,13 @@ function imprimeDisciplina(FPDF $oPdf, $iYInicial, $iXInicial, $iAlturaRetangulo
 }
 
 
-function setHeader($oPdf, $iHeigth, $aPeriodos, $iTamanhoCelulaDescricaoParecerCalculado,
-                   $iTamanhoCelulaPeriodoPadrao) {
+function setHeader(
+  $oPdf,
+  $iHeigth,
+  $aPeriodos,
+  $iTamanhoCelulaDescricaoParecerCalculado,
+  $iTamanhoCelulaPeriodoPadrao
+) {
 
   $sLabelDescricaoParecer = "Aspecto desenvolvido ao longo do ano letivo";
 
@@ -624,9 +652,15 @@ function setHeader($oPdf, $iHeigth, $aPeriodos, $iTamanhoCelulaDescricaoParecerC
 
   $oPdf->setfont('arial', 'b', 6);
   foreach ($aPeriodos as $oPeriodos) {
-    $oPdf->Cell($iTamanhoCelulaPeriodoPadrao,  $iHeigth, $oPeriodos->getPeriodoAvaliacao()->getDescricaoAbreviada(),
-                1, 0, "C", 1
-               );
+    $oPdf->Cell(
+      $iTamanhoCelulaPeriodoPadrao,
+      $iHeigth,
+      $oPeriodos->getPeriodoAvaliacao()->getDescricaoAbreviada(),
+      1,
+      0,
+      "C",
+      1
+    );
   }
   $oPdf->ln();
 }
