@@ -254,8 +254,16 @@ class ReceitaPeriodoTesourariaSQLBuilder
                 k02_tipo tipo, 
                 k02_drecei descricao, 
                 estrutural, 
-                SUM(valor) as valor, 
-                " . $this->definirSQLValorArquivoBancario();
+                SUM(vlrarquivobanco) as valor 
+            FROM ( 
+                SELECT 
+                    k02_codigo,
+                    k02_tipo,
+                    k02_drecei,
+                    codrec,
+                    estrutural,
+                    valor, 
+                    " . $this->definirSQLValorArquivoBancario();
     }
 
     /**
@@ -334,7 +342,7 @@ class ReceitaPeriodoTesourariaSQLBuilder
      */
     public function definirSQLGroupReceita()
     {
-        if ($this->iFormaArrecadacao == ReceitaFormaArrecadacaoRepositoryLegacy::EXCETO_ARQUIVO_BANCARIO)
+        if ($this->iFormaArrecadacao != ReceitaFormaArrecadacaoRepositoryLegacy::TODAS)
             $this->sqlGroup = " ) as xx ";
 
         $this->sqlGroup .= " , codrec, k02_codigo ";
@@ -345,7 +353,7 @@ class ReceitaPeriodoTesourariaSQLBuilder
      */
     public function definirSQLGroupAnalitico()
     {
-        if ($this->iFormaArrecadacao == ReceitaFormaArrecadacaoRepositoryLegacy::EXCETO_ARQUIVO_BANCARIO)
+        if ($this->iFormaArrecadacao != ReceitaFormaArrecadacaoRepositoryLegacy::TODAS)
             $this->sqlGroup = " ) as xx ";
 
         $this->sqlGroup .= " , codrec, k02_codigo, k00_histtxt, k12_data, k12_numpre, k12_numpar, c61_reduz, c60_descr ";
@@ -356,7 +364,7 @@ class ReceitaPeriodoTesourariaSQLBuilder
      */
     public function definirSQLGroupConta()
     {
-        if ($this->iFormaArrecadacao == ReceitaFormaArrecadacaoRepositoryLegacy::EXCETO_ARQUIVO_BANCARIO)
+        if ($this->iFormaArrecadacao != ReceitaFormaArrecadacaoRepositoryLegacy::TODAS)
             $this->sqlGroup = " ) as xx ";
 
         $this->sqlGroup .= " , codrec, k02_codigo, c61_reduz, c60_descr ";

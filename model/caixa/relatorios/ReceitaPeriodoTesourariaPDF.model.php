@@ -355,9 +355,12 @@ class ReceitaPeriodoTesourariaPDF extends PDF
     {
         if ($oReceita->tipo == "O") {
             $this->Cell(15, 4, $oReceita->numpre, 1, 0, "C", $this->preencherCelula);
+            return;
         }
+
         if ($oReceita->tipo == "E") {
             $this->PDFiTamanhoEstrutural += 15;
+            return;
         }
     }
 

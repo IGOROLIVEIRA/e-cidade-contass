@@ -64,6 +64,9 @@ implements IReceitaPeriodoTesourariaRepository
     public function pegarDados()
     {
         $aDados = array();
+        echo "<pre>";
+        echo $this->oReceitaPeriodoTesourariaSQLBuilder->pegarSQL();
+        die();
         if (!$result = pg_query($this->oReceitaPeriodoTesourariaSQLBuilder->pegarSQL()))
             throw new Exception("Erro realizando consulta");
         while ($data = pg_fetch_object($result)) {
