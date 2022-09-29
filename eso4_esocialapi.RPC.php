@@ -51,7 +51,7 @@ Registry::set('app.config', new AppConfig());
     ),
 
     /**
-     * Configura??o de proxy para o e-cidade
+     * Configuração de proxy para o e-cidade
      */
     'app.proxy' => array(
         'http'  => '172.16.212.254:3128', // e.g. 172.16.212.254:3128
@@ -156,11 +156,11 @@ try {
             $rs = db_query($sql);
 
             if (!$rs) {
-                throw new DBException("Ocorreu um erro ao consultar os CGM vinculados as lota??es.\nContate o suporte.");
+                throw new DBException("Ocorreu um erro ao consultar os CGM vinculados as lotações.\nContate o suporte.");
             }
 
             if (pg_num_rows($rs) == 0) {
-                throw new Exception("N?o existe empregadores cadastrados na base.");
+                throw new Exception("Não existe empregadores cadastrados na base.");
             }
 
             $oRetorno->empregador = db_utils::fieldsMemory($rs, 0);
@@ -233,7 +233,7 @@ try {
                 $eventoFila->adicionarFila();
             }
 
-            $oRetorno->sMessage = "Dados das R?bricas agendados para envio.";
+            $oRetorno->sMessage = "Dados das Rúbricas agendados para envio.";
             break;
 
         case "agendarLotacaoTributaria":
@@ -250,7 +250,7 @@ try {
             $eventoFila->adicionarFila();
 
 
-            $oRetorno->sMessage = "Dados das Lota??es Tribut?rias agendados para envio.";
+            $oRetorno->sMessage = "Dados das Lotações Tributárias agendados para envio.";
             break;
 
         case "transmitir":
@@ -363,7 +363,7 @@ try {
             $response = system("php -q filaEsocial.php");
             ob_end_clean();
 
-            $oRetorno->sMessage = "Dados das R?bricas agendados para envio.";
+            $oRetorno->sMessage = "Dados das Rúbricas agendados para envio.";
 
             break;
     }
