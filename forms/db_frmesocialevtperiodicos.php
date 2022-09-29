@@ -27,25 +27,9 @@
                 </tr>
                 <tr>
                     <td>
-                        <input type="checkbox" value="S1260" id="S1260" />
-                        <label for="S1260">S-1260 - Comercialização da Produção Rural Pessoa Física</label><br>
-                    </td>
-                    <td>
-                        <input type="checkbox" value="S1270" id="S1270" />
-                        <label for="S1270">S-1270 - Contratação de Trabalhadores Avulsos Não Portuários</label><br>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <input type="checkbox" value="S1280" id="S1280" />
-                        <label for="S1280">S-1280 - Informações Complementares aos Eventos Periódicos</label><br>
-                    </td>
-                    <td>
                         <input type="checkbox" value="S1298" id="S1298" />
                         <label for="S1298">S-1298 - Reabertura dos Eventos Periódicos</label><br>
                     </td>
-                </tr>
-                <tr>
                     <td>
                         <input type="checkbox" value="S1299" id="S1299" />
                         <label for="S1299">S-1299 - Fechamento dos Eventos Periódicos</label><br>
