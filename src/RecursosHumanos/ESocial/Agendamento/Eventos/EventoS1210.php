@@ -89,7 +89,12 @@ class EventoS1210 extends EventoBase
                             $std->infopgto[$seqinfopag]->idedmdev = $aDadosPorMatriculas[$iCont]->matricula . 'gerfs13'; //uniqid(); //$aIdentificador[$iCont2]->idedmdev; //Obrigat?rio
                         }
 
+                        //$std->infopgto[$seqinfopag]->idedmdev = '1';
+
                         $std->infopgto[$seqinfopag]->vrliq = $this->buscarValorLiquido($aDadosPorMatriculas[$iCont]->matricula, $aDadosPorMatriculas[$iCont]->rh30_regime, $aIdentificador[$iCont2]->idedmdev);
+                        // echo $std->infopgto[$seqinfopag]->vrliq;
+                        // exit;
+                        //$std->infopgto[$seqinfopag]->vrliq = (float) number_format($std->infopgto[$seqinfopag]->vrliq, 2, ',', '.');
 
                         $seqinfopag++;
                     }

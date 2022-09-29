@@ -353,9 +353,8 @@ try {
             $iCgm = $oParam->empregador;
             $dadosESocial->setReponsavelPeloPreenchimento($iCgm);
             $dadosDoPreenchimento = $dadosESocial->getPorTipo(Tipo::RUBRICA, $stringRubricas);
-            $arquivo = "S1010Individual";
             foreach (array_chunk($dadosDoPreenchimento, 1) as $aTabela) {
-                $eventoFila = new Evento($arquivo, $iCgm, $iCgm, $aTabela, $oParam->tpAmb, "{$oParam->iAnoValidade}-{$oParam->iMesValidade}", $oParam->modo, $oParam->dtalteracao);
+                $eventoFila = new Evento(current($oParam->arquivos), $iCgm, $iCgm, $aTabela, $oParam->tpAmb, "{$oParam->iAnoValidade}-{$oParam->iMesValidade}", $oParam->modo, $oParam->dtalteracao);
                 $eventoFila->adicionarFila();
             }
             db_fim_transacao(false);
