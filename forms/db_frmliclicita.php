@@ -1182,21 +1182,21 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
     var l12_pncp = <? echo '"' . $l12_pncp . '"';      ?>;
 
-        if(document.getElementById('l20_leidalicitacao').value == "1" && document.getElementById('l20_codtipocomdescr').value == "9" && l12_pncp == "t"){
-            document.getElementById('datasProposta').style.display = '';
-        } else {
-            document.getElementById('datasProposta').style.display = 'none';
+    if (document.getElementById('l20_leidalicitacao').value == "1" && document.getElementById('l20_codtipocomdescr').value == "9" && l12_pncp == "t") {
+        document.getElementById('datasProposta').style.display = '';
+    } else {
+        document.getElementById('datasProposta').style.display = 'none';
 
-        }
+    }
 
 
     // alterando a função padrao para verificar  as opçoes de convite e de INEXIGIBILIDADE
     function js_ProcCod_l20_codtipocom(proc, res) {
 
-       
+
         var l12_pncp = <? echo '"' . $l12_pncp . '"';      ?>;
 
-        if(document.getElementById('l20_leidalicitacao').value == "1" && document.getElementById('l20_codtipocomdescr').value == "9" && l12_pncp == "t"){
+        if (document.getElementById('l20_leidalicitacao').value == "1" && document.getElementById('l20_codtipocomdescr').value == "9" && l12_pncp == "t") {
             document.getElementById('datasProposta').style.display = '';
         } else {
             document.getElementById('datasProposta').style.display = 'none';
@@ -1987,6 +1987,18 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
     function js_confirmadatas() {
 
+        var l12_pncp = <? echo '"' . $l12_pncp . '"';      ?>;
+
+        if (document.getElementById('l20_leidalicitacao').value == "1" && document.getElementById('l20_codtipocomdescr').value == "9" && l12_pncp == "t" && document.getElementById('l20_dataaberproposta').value == "") {
+            alert("Campo Data de Abertura da Proposta não Informado");
+            return false;
+        }
+
+        if (document.getElementById('l20_leidalicitacao').value == "1" && document.getElementById('l20_codtipocomdescr').value == "9" && l12_pncp == "t" && document.getElementById('l20_dataencproposta').value == "") {
+            alert("Campo Data de Encerramento da Proposta não Informado");
+            return false;
+        }
+
         var dataCriacao = $F('l20_datacria');
         //var dataPublicacao = $F('l20_dtpublic');
         var dataAbertura = $F('l20_dataaber');
@@ -2141,7 +2153,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
         var l12_pncp = <? echo '"' . $l12_pncp . '"';      ?>;
 
-        if(document.getElementById('l20_leidalicitacao').value == "1" && document.getElementById('l20_codtipocomdescr').value == "9" && l12_pncp == "t"){
+        if (document.getElementById('l20_leidalicitacao').value == "1" && document.getElementById('l20_codtipocomdescr').value == "9" && l12_pncp == "t") {
             document.getElementById('datasProposta').style.display = '';
         } else {
             document.getElementById('datasProposta').style.display = 'none';
