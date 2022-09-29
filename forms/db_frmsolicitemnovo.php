@@ -421,6 +421,9 @@ if ((isset($opcao) && $opcao == "alterar")) {
 
 
 <script>
+  //document.getElementsByName("codmaterial[]")[indice].value
+
+
   const input = document.getElementById("pc11_quant");
   input.addEventListener("keypress", mask_4casasdecimais);
 
@@ -711,6 +714,8 @@ if ((isset($opcao) && $opcao == "alterar")) {
 
   function js_mostrapcmater(chave, erro, lVeic, servico) {
 
+
+
     if (erro == true) {
       document.form1.pc16_codmater.focus();
       document.form1.pc16_codmater.value = '';
@@ -723,6 +728,8 @@ if ((isset($opcao) && $opcao == "alterar")) {
         document.getElementById('pc17_unid').style.display = "none";
         document.getElementById('ctnServicoQuantidade').style.display = "block";
         document.getElementById('pc11_servicoquantidade').style.display = "block";
+        document.getElementById('pc11_quant').value = 1;
+        document.getElementById('pc11_quant').readOnly = true;
 
       } else {
         document.getElementById('titleUnidade').style.display = "block";
@@ -733,6 +740,8 @@ if ((isset($opcao) && $opcao == "alterar")) {
         document.getElementById('titleUnidade2').style.display = "none";
         document.getElementById('pc11_seq').style.marginLeft = "-80px";
         document.getElementById('titleOrdem').style.marginLeft = "-73px";
+        document.getElementById('pc11_quant').value = "";
+        document.getElementById('pc11_quant').readOnly = false;
       }
       js_buscarEle();
 
@@ -752,6 +761,9 @@ if ((isset($opcao) && $opcao == "alterar")) {
       document.getElementById('pc17_unid').style.display = "none";
       document.getElementById('ctnServicoQuantidade').style.display = "block";
       document.getElementById('pc11_servicoquantidade').style.display = "block";
+      document.getElementById('pc11_quant').value = 1;
+      document.getElementById('pc11_quant').readOnly = true;
+
 
     } else {
       document.getElementById('titleUnidade').style.display = "block";
@@ -762,6 +774,8 @@ if ((isset($opcao) && $opcao == "alterar")) {
       document.getElementById('titleUnidade2').style.display = "none";
       document.getElementById('pc11_seq').style.marginLeft = "-82px";
       document.getElementById('titleOrdem').style.marginLeft = "-73px";
+      document.getElementById('pc11_quant').value = "";
+      document.getElementById('pc11_quant').readOnly = false;
     }
 
     js_buscarEle();
@@ -932,6 +946,15 @@ if ((isset($opcao) && $opcao == "alterar")) {
 
     indice++;
 
+    document.getElementById('pc16_codmater').value = '';
+    document.getElementById('pc01_descrmater').value = '';
+    document.getElementById('pc11_quant').value = '';
+    document.getElementById('pc17_unid').value = "1";
+    document.getElementById('pc17_unid2').value = "1";
+    document.getElementById('eleSub').value = "0";
+
+    document.getElementById('pc11_seq').value = parseInt(document.getElementById('pc11_seq').value) + 1;
+
   }
 
 
@@ -973,9 +996,12 @@ if ((isset($opcao) && $opcao == "alterar")) {
 
     oGridItens.clearAll(true);
     var aLinha = new Array();
+    sequencial = 0;
     for (var i = 0; i < oRetorno.aItens.length; i++) {
 
-
+      if (oRetorno.aItens[i].pc11_seq > sequencial) {
+        sequencial = oRetorno.aItens[i].pc11_seq;
+      }
 
       aLinha[0] = " <input style='text-align:center; width:90%; border:none;' readonly='' type='text' name='ordem[]' value='" + oRetorno.aItens[i].pc11_seq + "'>"
 
@@ -1015,6 +1041,8 @@ if ((isset($opcao) && $opcao == "alterar")) {
 
     }
 
+    document.getElementById("pc11_seq").value = parseInt(sequencial) + 1;
+
     oGridItens.renderRows();
 
   }
@@ -1027,7 +1055,6 @@ if ((isset($opcao) && $opcao == "alterar")) {
   document.getElementById('pc16_codmater').value = '';
   document.getElementById('pc01_descrmater').value = '';
   document.getElementById('pc11_quant').value = '';
-  document.getElementById('pc11_seq').value = '';
   document.getElementById('pc17_unid').value = "1";
   document.getElementById('pc17_unid2').value = "1";
   document.getElementById('eleSub').value = "0";

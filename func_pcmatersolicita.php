@@ -216,7 +216,7 @@ if (isset($o56_codele) and trim($o56_codele) != '') {
               echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") não Encontrado',true);</script>";
             }
           } else {
-            echo "<script>" . $funcao_js . "('',false);</script>";
+            echo "<script>" . $funcao_js . "('',false,'$pc01_servico');</script>";
           }
         }
         ?>
