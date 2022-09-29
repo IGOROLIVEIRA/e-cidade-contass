@@ -406,8 +406,8 @@ if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103
 
         var oParam = new Object();
         oParam.licitacao = "<?php echo $licitacao; ?>";
-        oParam.l20_linkedital = document.getElementById('l20_linkedital').value;
-        oParam.l20_linkpncp = document.getElementById('l20_linkpncp').value;
+        oParam.l20_linkedital = encodeURIComponent(tagString(document.getElementById('l20_linkedital').value));
+        oParam.l20_linkpncp = encodeURIComponent(tagString(document.getElementById('l20_linkpncp').value));
         oParam.l20_dtpulicacaoedital = document.getElementById('l20_dtpulicacaoedital').value;
         oParam.l20_dtpublic = document.getElementById('l20_dtpublic').value;
         oParam.l20_dtpulicacaopncp = document.getElementById('l20_dtpulicacaopncp').value;
