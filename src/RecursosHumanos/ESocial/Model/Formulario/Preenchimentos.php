@@ -648,9 +648,9 @@ class Preenchimentos
 				            ) order by z01_nome asc";
 
         $rs = \db_query($sql);
-        echo $sql;
-        db_criatabela($rs);
-        exit;
+        // echo $sql;
+        // db_criatabela($rs);
+        // exit;
         if (!$rs) {
             throw new \Exception("Erro ao buscar os preenchimentos do S2200");
         }
