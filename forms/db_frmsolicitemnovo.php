@@ -223,7 +223,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
             $unidade = array();
 
 
-            $result = db_query("select * from matunid");
+            $result = db_query("select * from matunid order by m61_descr");
             if (pg_numrows($result) != 0) {
               $numrows = pg_numrows($result);
               $unidade[0] = "";
@@ -333,7 +333,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
             $unidade = array();
 
 
-            $result = db_query("select * from matunid");
+            $result = db_query("select * from matunid order by m61_descr");
             if (pg_numrows($result) != 0) {
               $numrows = pg_numrows($result);
               $unidade[0] = "";
@@ -424,10 +424,8 @@ if ((isset($opcao) && $opcao == "alterar")) {
   const input = document.getElementById("pc11_quant");
   input.addEventListener("keypress", mask_4casasdecimais);
 
-  numeros_apos_virgula = 0;
-
-
   function mask_4casasdecimais(e) {
+    numeros_apos_virgula = 0;
     var valor = e.target.value.replace(/[^0-9\,]/g, "");
     virgula = (valor.match(/,/g) || []).length;
 
@@ -1030,6 +1028,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
   document.getElementById('pc01_descrmater').value = '';
   document.getElementById('pc11_quant').value = '';
   document.getElementById('pc11_seq').value = '';
-  document.getElementById('pc17_unid').value = "0";
+  document.getElementById('pc17_unid').value = "1";
+  document.getElementById('pc17_unid2').value = "1";
   document.getElementById('eleSub').value = "0";
 </script>

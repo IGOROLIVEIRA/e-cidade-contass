@@ -167,15 +167,13 @@ if (!isset($filtroquery)) {
     }
 
     function js_verifica_depto2(coddot, descricao, estrutural) {
-      if (document.form1.departamento == undefined || document.form1.departamento.value == 0) {
-        alert('Selecione um departamento.');
-      } else {
 
-        <?
-        $executa = split("\|", $funcao_js);
-        echo $executa[0] . "(coddot,descricao,estrutural);";
-        ?>
-      }
+
+      <?
+      $executa = split("\|", $funcao_js);
+      echo $executa[0] . "(coddot,descricao,estrutural);";
+      ?>
+
     }
 
 
