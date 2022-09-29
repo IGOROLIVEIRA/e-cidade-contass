@@ -35,56 +35,69 @@ $clcriaabas     = new cl_criaabas;
 $db_opcao = 1;
 ?>
 <html>
+
 <head>
-<title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta http-equiv="Expires" CONTENT="0">
-<script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
-<link href="estilos.css" rel="stylesheet" type="text/css">
+  <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Expires" CONTENT="0">
+  <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+  <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
-<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" >
-<table width="790" height="18"  border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-  <tr> 
-    <td width="360">&nbsp;</td>
-    <td width="263">&nbsp;</td>
-    <td width="25">&nbsp;</td>
-    <td width="140">&nbsp;</td>
-  </tr>
-</table>
-<table valign="top" marginwidth="0" width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
-     <?
-	 $clcriaabas->identifica = array("cflicita"       => "Modalidades",
-	                                 "pccflicitapar"  => "Numeração",
-	                                 "template"       => "Modelo Editais",
-	                                 "templateata"    => "Modelo Atas",
-	                                 "templateminuta" => "Modelo Minutas",
-                                   "faixavalores"   => "Faixa de Valores"); 
-	  
-	 $clcriaabas->src        = array("cflicita" => "lic1_cflicita005.php");
-	 
-   $clcriaabas->sizecampo  = array("cflicita"       => "20",
-                                   "pccflicitapar"  => "20",
-                                   "template"       => "20",
-                                   "templateata"    => "20",
-                                   "templateminuta" => "20",
-                                   "faixavalores"   => "20");
-	 
-	 $clcriaabas->disabled   = array("pccflicitapar"  => "true",
-	                                 "template"       => "true",
-	                                 "templateata"    => "true",
-	                                 "templateminuta" => "true",
-                                   "faixavalores"   => "true");
-	 $clcriaabas->cria_abas(); 
-       ?> 
-       </td>
+
+<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+  <table width="790" height="18" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
+    <tr>
+      <td width="360">&nbsp;</td>
+      <td width="263">&nbsp;</td>
+      <td width="25">&nbsp;</td>
+      <td width="140">&nbsp;</td>
+    </tr>
+  </table>
+  <table valign="top" marginwidth="0" width="790" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
+        <?
+        $clcriaabas->identifica = array(
+          "cflicita"       => "Modalidades",
+          "pccflicitapar"  => "Numeração",
+          "template"       => "Modelo Editais",
+          "templateata"    => "Modelo Atas",
+          "templateminuta" => "Modelo Minutas",
+          "faixavalores"   => "Faixa de Valores",
+          "amparolegal"   => "Amparo Legal"
+        );
+
+        $clcriaabas->src        = array("cflicita" => "lic1_cflicita005.php");
+
+        $clcriaabas->sizecampo  = array(
+          "cflicita"       => "20",
+          "pccflicitapar"  => "20",
+          "template"       => "20",
+          "templateata"    => "20",
+          "templateminuta" => "20",
+          "faixavalores"   => "20",
+          "amparolegal"   => "20"
+        );
+
+        $clcriaabas->disabled   = array(
+          "pccflicitapar"  => "true",
+          "template"       => "true",
+          "templateata"    => "true",
+          "templateminuta" => "true",
+          "faixavalores"   => "true",
+          "amparolegal"    => "true"
+
+        );
+        $clcriaabas->cria_abas();
+        ?>
+      </td>
     </tr>
   </table>
   <form name="form1">
   </form>
-      <? 
-	db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
-      ?>
-  </body>
-  </html>
+  <?
+  db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit"));
+  ?>
+</body>
+
+</html>
