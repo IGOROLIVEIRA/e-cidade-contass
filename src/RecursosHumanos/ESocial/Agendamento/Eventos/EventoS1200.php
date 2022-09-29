@@ -130,9 +130,9 @@ class EventoS1200 extends EventoBase
                 //}
             }
         }
-        // echo '<pre>';
-        // var_dump($aDadosAPI);
-        // exit;
+        echo '<pre>';
+        var_dump($aDadosAPI);
+        exit;
         return $aDadosAPI;
     }
 
