@@ -178,7 +178,7 @@ $mesfolha = DBPessoal::getMesFolha();
                 </tr>
                 <tr id="tppgto_col" style="display:none">
                     <td><label><strong>Tipo de Pagamento:</strong></label></td>
-                    <td><select name="tppgto" id="tppgto" style="width: 50%;">
+                    <td><select name="tppgto" id="tppgto" style="width: 100%;">
                             <option value="1">Pagamento de remuneração, conforme apurado em
                                 ideDmDev do S-1200
                             </option>
