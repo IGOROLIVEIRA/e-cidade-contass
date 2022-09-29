@@ -258,8 +258,6 @@ try {
             $dadosESocial = new DadosESocial();
 
             db_inicio_transacao();
-            var_dump($oParam);
-            exit;
             $iCgm = $oParam->empregador;
             foreach ($oParam->arquivos as $arquivo) {
                 $dadosESocial->setReponsavelPeloPreenchimento($iCgm);
