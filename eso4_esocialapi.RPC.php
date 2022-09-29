@@ -51,7 +51,7 @@ Registry::set('app.config', new AppConfig());
     ),
 
     /**
-     * Configuração de proxy para o e-cidade
+     * Configura??o de proxy para o e-cidade
      */
     'app.proxy' => array(
         'http'  => '172.16.212.254:3128', // e.g. 172.16.212.254:3128
@@ -156,11 +156,11 @@ try {
             $rs = db_query($sql);
 
             if (!$rs) {
-                throw new DBException("Ocorreu um erro ao consultar os CGM vinculados as lotações.\nContate o suporte.");
+                throw new DBException("Ocorreu um erro ao consultar os CGM vinculados as lota??es.\nContate o suporte.");
             }
 
             if (pg_num_rows($rs) == 0) {
-                throw new Exception("Não existe empregadores cadastrados na base.");
+                throw new Exception("N?o existe empregadores cadastrados na base.");
             }
 
             $oRetorno->empregador = db_utils::fieldsMemory($rs, 0);
@@ -233,7 +233,7 @@ try {
                 $eventoFila->adicionarFila();
             }
 
-            $oRetorno->sMessage = "Dados das Rúbricas agendados para envio.";
+            $oRetorno->sMessage = "Dados das R?bricas agendados para envio.";
             break;
 
         case "agendarLotacaoTributaria":
@@ -250,7 +250,7 @@ try {
             $eventoFila->adicionarFila();
 
 
-            $oRetorno->sMessage = "Dados das Lotações Tributárias agendados para envio.";
+            $oRetorno->sMessage = "Dados das Lota??es Tribut?rias agendados para envio.";
             break;
 
         case "transmitir":
@@ -258,7 +258,8 @@ try {
             $dadosESocial = new DadosESocial();
 
             db_inicio_transacao();
-
+            var_dump($oParam);
+            exit;
             $iCgm = $oParam->empregador;
             foreach ($oParam->arquivos as $arquivo) {
                 $dadosESocial->setReponsavelPeloPreenchimento($iCgm);
@@ -276,7 +277,7 @@ try {
                         Tipo::BENEFICIOS_ENTESPUBLICOS,
                     )
                 )) {
-                    $dadosDoPreenchimento = $dadosESocial->getPorTipo(Tipo::getTipoFormulario($arquivo), empty($oParam->matricula) ? null : $oParam->matricula);
+                    $dadosDoPreenchimento = $dadosESocial->getPorTipo(Tipo::getTipoFormulario($arquivo), empty($oParam->matricula) ? null : $oParam->matricula, empty($oParam->tpevento) ? null : $oParam->tpevento);
                     if (current($dadosDoPreenchimento) instanceof \ECidade\RecursosHumanos\ESocial\Model\Formulario\DadosPreenchimento) {
                         $formatter = FormatterFactory::get($arquivo);
                         $dadosDoPreenchimento = $formatter->formatar($dadosDoPreenchimento);
@@ -298,7 +299,7 @@ try {
                         $eventoFila->adicionarFila();
                     }
                 } else {
-                    $dadosTabela = $dadosESocial->getPorTipo(Tipo::getTipoFormulario($arquivo), empty($oParam->matricula) ? null : $oParam->matricula);
+                    $dadosTabela = $dadosESocial->getPorTipo(Tipo::getTipoFormulario($arquivo), empty($oParam->matricula) ? null : $oParam->matricula, empty($oParam->tpevento) ? null : $oParam->tpevento);
 
                     foreach (array_chunk($dadosTabela, 1) as $aTabela) {
                         $eventoFila = new Evento(
