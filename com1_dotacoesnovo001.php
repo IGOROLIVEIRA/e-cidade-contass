@@ -377,10 +377,13 @@ if (isset($incluir)) {
 
 	function js_excluirLinha(iSeq) {
 
-		if (iSeq == 'semVinculo') {
+
+		if (iSeq == null) {
 			alert('Dotação selecionada ainda não foi vinculada ao(s) item(ns)');
 			return false;
 		}
+
+
 
 		var oRow = oGridItens.aRows[iSeq];
 		var dotacao = document.getElementsByName("reduzido[]")[iSeq].value;
@@ -437,7 +440,8 @@ if (isset($incluir)) {
 
 		aLinha[0] = "  <input style='text-align:center; width:90%; border:none;' readonly='' type='text'  name='reduzido[]' value='" + reduzido + "'>";
 		aLinha[1] = "  <input style='text-align:center; width:90%; border:none;' readonly='' type='text'  name='estrutural[]' value='" + o50_estrutdespesa + "'>";
-		aLinha[2] = " <input type='button' name='excluir' value='E' onclick='js_excluirLinha('semVinculo')'>";
+		aLinha[2] = " <input type='button' name='excluir' value='E' onclick='js_excluirLinha(null)'>";
+
 
 
 		oGridItens.addRow(aLinha);

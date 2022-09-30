@@ -372,7 +372,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
         </tr>
 
       </table>
-      <input style="float:center; margin-top:10px;" name="<?= ($db_opcao == 1 ? "Adicionar Item" : ($db_opcao == 2 || $db_opcao == 22 ? "alterar" : "excluir")) ?>" type="button" id="db_opcao" value="<?= ($db_opcao == 1 ? "Adicionar Item" : ($db_opcao == 2 || $db_opcao == 22 ? "Alterar" : "Excluir")) ?>" <?= ($db_botao == false ? "disabled" : "") ?> onclick="return js_adicionarItem()">
+      <input style="float:center; margin-top:10px;" name="incluir" type="submit" id="db_opcao" value="Adicionar Item" onclick="return js_adicionarItem()">
 
     </fieldset>
 
@@ -386,7 +386,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
         </td>
       </tr>
     </table>
-    <input style="float:center; margin-top:10px;" name="incluir" type="submit" value="Salvar Itens">
+    <input style="float:center; margin-top:10px;" name="incluir" type="button" value="Salvar Itens" onclick="js_salvarItens()">
 
 
     <br>
@@ -544,6 +544,52 @@ if ((isset($opcao) && $opcao == "alterar")) {
       document.getElementById('pc11_servicoquantidade').style.marginLeft = "0px";
       document.getElementById('pc11_servicoquantidade').style.width = "48px";
     }
+
+  }
+
+  function js_salvarItens() {
+    var sUrl = "com4_materialsolicitacao.RPC.php";
+
+    parent.window.location.href = "com1_pcproc001.php";
+    //window.location.href = "com1_pcproc001.php";
+
+
+    var reduzido = [];
+    var estrutural = [];
+
+    var oRequest = new Object();
+
+    for (var i = 0; i < top.corpo.iframe_dotacoesnovo.document.getElementsByName("reduzido[]").length; i++) {
+      reduzido.push(top.corpo.iframe_dotacoesnovo.document.getElementsByName("reduzido[]")[i].value);
+    }
+
+    for (var i = 0; i < top.corpo.iframe_dotacoesnovo.document.getElementsByName("estrutural[]").length; i++) {
+      estrutural.push(top.corpo.iframe_dotacoesnovo.document.getElementsByName("estrutural[]")[i].value);
+    }
+
+    oRequest.reduzido = reduzido;
+    oRequest.estrutural = estrutural;
+    oRequest.numero = parent.iframe_solicita.document.getElementById('pc10_numero').value;
+
+
+    oRequest.exec = "salvarItens";
+    var oAjax = new Ajax.Request(
+      sUrl, {
+        method: 'post',
+        parameters: 'json=' + js_objectToJson(oRequest),
+        onComplete: js_retornoSalvarItens
+      }
+    );
+
+  }
+
+  function js_retornoSalvarItens(oAjax) {
+    var oRetorno = eval("(" + oAjax.responseText + ")");
+    alert(oRetorno.message.urlDecode());
+
+    window.location.assign("com1_pcproc001.php");
+
+    //window.location.href = "com1_pcproc001.php";
 
   }
 
@@ -860,100 +906,13 @@ if ((isset($opcao) && $opcao == "alterar")) {
     for (var i = 0; i < sizeItens; i++) {
       if (document.getElementById('pc11_seq').value == document.getElementsByName("ordem[]")[i].value) {
         alert('O item ' + document.getElementsByName("codmaterial[]")[i].value + ' já foi incluído com o sequencial ' + document.getElementById('pc11_seq').value + ' nesta solicitação.');
-        return;
+        return false;
       }
     }
 
 
-    oGridItens.clearAll(true);
-
-    var aLinha = new Array();
-
-    ordem = document.getElementById('pc11_seq').value;
-    aLinha[0] = "  <input style='text-align:center; width:90%; border:none;' readonly='' type='text'  name='ordem[]' value='" + ordem + "'>"
-
-    codmaterial = document.getElementById('pc16_codmater').value;
-    aLinha[1] = "  <input style='text-align:center; width:90%; border:none;' readonly='' type='text'  name='codmaterial[]' value='" + codmaterial + "'>"
-
-    descmaterial = document.getElementById('pc01_descrmater').value;
-    aLinha[2] = "  <input style='text-align:center; width:90%; border:none;' readonly='' type='text'  name='descmaterial[]' value='" + descmaterial + "'>"
-
-    var select;
-    var option;
-    var unidade;
-
-    if (document.getElementById('pc17_unid2').style.display == 'block') {
-      select = document.getElementById('pc17_unid2');
-    } else {
-      select = document.getElementById('pc17_unid');
-
-    }
-
-    option = select.children[select.selectedIndex];
-    codigo_unidade = select.value;
-    unidade = option.textContent;
 
 
-
-    aLinha[3] = "  <input style='text-align:center; width:90%; border:none;' readonly='' type='text'  name='unidade[]'  value='" + unidade + "'>";
-
-
-    quantidade = document.getElementById('pc11_quant').value;
-    aLinha[4] = "  <input style='text-align:center; width:90%; border:none;' readonly='' type='text'  name='quantidade[]' value='" + quantidade + "'>";
-
-    aLinha[5] = "<input type='button' value='A' onclick='js_alterarLinha(" + indice + ")'> <input type='button' name='excluir' value='E' onclick='js_excluirLinha(" + indice + ")'>";
-
-    elesub = document.getElementById('eleSub').value;
-    aLinha[6] = "  <input style='text-align:center; width:90%; border:none;' readonly='' type='text'  name='codele[]' value='" + elesub + "'>";
-
-    //quantidade = document.getElementById('pc11_quant').value;
-    //aLinha[6] = "  <input style='text-align:center; width:90%; border:none;' readonly='' type='text'  name='quantidade[]' value='" + quantidade + "'>";
-
-
-    pc11_servicoquantidade = document.getElementById('pc11_servicoquantidade').value;
-
-    if (document.getElementById('pc11_servicoquantidade').style.display != 'block') {
-      pc11_servicoquantidade = false;
-    }
-
-    aLinha[7] = "  <input style='text-align:center; width:90%; border:none;' readonly='' type='text'  name='servicoquantidade[]' value='" + pc11_servicoquantidade + "'>";
-
-
-    aLinha[8] = "  <input style='text-align:center; width:90%; border:none;' readonly='' type='text'  name='codigo_unidade[]' value='" + codigo_unidade + "'>";
-
-    aLinha[9] = "  <input style='text-align:center; width:90%; border:none;' readonly='' type='text'  name='codigo[]' value='" + 0 + "'>";
-
-    var select;
-    var option;
-
-    select = document.getElementById('eleSub');
-
-
-    option = select.children[select.selectedIndex];
-    desdobramento = option.textContent;
-
-    aLinha[10] = "  <input style='text-align:center; width:90%; border:none;' readonly='' type='text'  name='descrelemento[]' value='" + desdobramento + "'>";
-
-
-    oGridItens.addRow(aLinha);
-
-    for (var i = 0; i < sizeItens; i++) {
-      oGridItens.addRow(itens_antigos[i]);
-    }
-
-
-    oGridItens.renderRows();
-
-    indice++;
-
-    document.getElementById('pc16_codmater').value = '';
-    document.getElementById('pc01_descrmater').value = '';
-    document.getElementById('pc11_quant').value = '';
-    document.getElementById('pc17_unid').value = "1";
-    document.getElementById('pc17_unid2').value = "1";
-    document.getElementById('eleSub').value = "0";
-
-    document.getElementById('pc11_seq').value = parseInt(document.getElementById('pc11_seq').value) + 1;
 
   }
 
