@@ -238,19 +238,19 @@ try {
 }
 
 $aWhere       = array();
-$WhereAnd     = "";
+$iWhereAnd    = "";
 $where        = "";
 $and          = " and ";
 
 if ( $oGet->parReceit != '' ) {
   $aWhere[] = " y.k00_receit in($parReceit)";
-  $WhereAnd = "";
+  $iWhereAnd = "";
 }
 
 if ( $oGet->dtini != "--" && $oGet->dtfim != "--" ) {
 
 	$aWhere[]             = "k00_dtoper  between '{$oGet->dtini}' and '{$oGet->dtfim}'";
-	$WhereAnd             = " and k00_dtoper  between '{$oGet->dtini}' and '{$oGet->dtfim}'";
+  $iWhereAnd            = " and k00_dtoper  between '{$oGet->dtini}' and '{$oGet->dtfim}'";
   $sDataInicio          = db_formatar($oGet->dtini, "d");
 	$sDataFim             = db_formatar($oGet->dtfim, "d");
 	$sDadosPeriodo        = "De $sDataInicio até $sDataFim.";
@@ -258,14 +258,14 @@ if ( $oGet->dtini != "--" && $oGet->dtfim != "--" ) {
 } else if ($dtini != "--") {
 
 	$aWhere[]             = " k00_dtoper >= '{$oGet->dtini}'  ";
-	$WhereAnd             = " and k00_dtoper >= '{$oGet->dtini}'";
+  $iWhereAnd            = " and k00_dtoper >= '{$oGet->dtini}'";
   $sDataInicio          = db_formatar($oGet->dtini, "d");
   $sDataFim             = "";
 	$sDadosPeriodo        = "Apartir de $sDataInicio.";
 } else if ($dtfim != "--") {
 
   $aWhere[]             = " k00_dtoper <= '{$oGet->dtfim}'   ";
-  $WhereAnd             = " and k00_dtoper <= '{$oGet->dtfim}'"; 
+  $iWhereAnd            = " and k00_dtoper <= '{$oGet->dtfim}'"; 
   $sDataInicio          = "";
   $sDataFim             = db_formatar($oGet->dtfim, "d");
   $sDadosPeriodo        = "Até $sDataFim.";
@@ -274,21 +274,21 @@ if ( $oGet->dtini != "--" && $oGet->dtfim != "--" ) {
 if ( !empty($oGet->exercini) && !empty($oGet->exercfim) ) {
 
 	$aWhere[]              = "fc_arrecexerc(y.k00_numpre,y.k00_numpar)  between '{$oGet->exercini}' and '{$oGet->exercfim}'  ";
-	$WhereAnd              = " and extract(year from k00_dtoper) between '{$oGet->exercini}' and '{$oGet->exercfim}'  ";
+  $iWhereAnd             = " and extract(year from k00_dtoper) between '{$oGet->exercini}' and '{$oGet->exercfim}'  ";
   $sDadosExercicio       = "Do exercício {$oGet->exercini} até {$oGet->exercfim}.";
 } else if ( !empty($oGet->exercini) ) {
 
 	$aWhere[]              = "fc_arrecexerc(y.k00_numpre,y.k00_numpar) >= '{$oGet->exercini}'  ";
-	$WhereAnd              = " and extract(year from k00_dtoper) >= '{$oGet->exercini}'  ";
+  $iWhereAnd             = " and extract(year from k00_dtoper) >= '{$oGet->exercini}'  ";
   $sDadosExercicio       = "Apartir do exercício {$oGet->exercini}.";
 } else if ( !empty($oGet->exercfim) ) {
 
 	$aWhere[]              = "fc_arrecexerc(y.k00_numpre,y.k00_numpar) <= '{$oGet->exercfim}'   ";
-  $WhereAnd              = " and extract(year from k00_dtoper) <= '{$oGet->exercfim}'  ";
+  $iWhereAnd             = " and extract(year from k00_dtoper) <= '{$oGet->exercfim}'  ";
 	$sDadosExercicio       = "Até o exercício {$oGet->exercfim}.";
 }
 
-$aTipoDebitos = DBTributario::getTiposDebitoByOrigem($sTipoBusca, $sChavePesquisa, $WhereAnd);
+$aTipoDebitos = DBTributario::getTiposDebitoByOrigem($sTipoBusca, $sChavePesquisa, $iWhereAnd);
 
 /**
  * Percorre os Tipos de Débitos encontrados e retorna os seus dados
@@ -313,12 +313,11 @@ foreach ( $aTipoDebitos as $oTipoDebito ) {
   $aParametros[] = 0;                         // Limite de Registros
   $aParametros[] = $oTipoDebito->k00_tipo;    // Tipo de Debito
   $aParametros[] = $DB_DATACALC;              // Data Base para Calculo
-  $aParametros[] = db_getsession("DB_anousu");// Ano da Sessao
-  //$aParametros[] = "";                        // Numpar
+  $aParametros[] = db_getsession("DB_anousu");// Ano da Sessao  
   $aParametros[] = "";                        // Totaliza
   $aParametros[] = "";                        // Ordem Totalizacao
   $aParametros[] = count($aWhere) > 0 ? "and " . implode(" and ", $aWhere) : ""; // Filtros para a Pesquisa
-  $aParametros[] = $WhereAnd; //Filtro por Data/Competência
+  $aParametros[] = $iWhereAnd; //Filtro por Data/Competência
 
   /**
    * Chama a Função de débitos conforme o tipo de Origem selecionada
