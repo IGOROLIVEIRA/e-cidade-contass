@@ -57,9 +57,9 @@ class cl_licitaparam {
                  l12_escolheprotocolo = bool = Processo de Protocolo do Sistema 
                  l12_qtdediasliberacaoweb = int4 = Dias de disponibilidade 
                  l12_tipoliberacaoweb = int4 = Disp. licitação na web até o julgamento
-                 l12_usuarioadjundica = boll = Emitir usuario no relatorio de adjundicação
-                 l12_validacadfornecedor = boll = Validacao no Cadastro de Fornecedor 
-                 l12_pncp = boll = Validacao PNCP 
+                 l12_usuarioadjundica = bool = Emitir usuario no relatorio de adjundicação
+                 l12_validacadfornecedor = bool = Validacao no Cadastro de Fornecedor
+                 l12_pncp = bool = Validacao PNCP
                  ";
     //funcao construtor da classe
     function cl_licitaparam() {
