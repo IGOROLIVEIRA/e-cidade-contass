@@ -1163,6 +1163,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
     <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();">
 </form>
 <script>
+    var codigotribunal = 0;
     document.form1.l20_prazoentrega.style.backgroundColor = '#FFFFFF';
     document.form1.l20_condicoespag.style.backgroundColor = '#FFFFFF';
     document.form1.l20_local.style.backgroundColor = '#E6E4F1';
@@ -1180,28 +1181,17 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
     js_busca();
 
-    var l12_pncp = <? echo '"' . $l12_pncp . '"';      ?>;
-
-    if (document.getElementById('l20_leidalicitacao').value == "1" && document.getElementById('l20_codtipocomdescr').value == "9" && l12_pncp == "t") {
-        document.getElementById('datasProposta').style.display = '';
-    } else {
-        document.getElementById('datasProposta').style.display = 'none';
-
-    }
+    js_verificaDatasProposta();
 
 
     // alterando a função padrao para verificar  as opçoes de convite e de INEXIGIBILIDADE
     function js_ProcCod_l20_codtipocom(proc, res) {
 
 
-        var l12_pncp = <? echo '"' . $l12_pncp . '"';      ?>;
 
-        if (document.getElementById('l20_leidalicitacao').value == "1" && document.getElementById('l20_codtipocomdescr').value == "9" && l12_pncp == "t") {
-            document.getElementById('datasProposta').style.display = '';
-        } else {
-            document.getElementById('datasProposta').style.display = 'none';
+        js_verificaDatasProposta();
 
-        }
+
 
 
         var sel1 = document.forms[0].elements[proc];
@@ -1651,6 +1641,38 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
         js_verificaModalidade();
     });
+
+    function js_verificaDatasProposta() {
+
+        var sUrl = "lic4_licitacao.RPC.php";
+
+        var oParam = new Object();
+        oParam.exec = "getCodigoTribunal";
+        oParam.iModalidade = $F('l20_codtipocomdescr');
+
+        var oAjax = new Ajax.Request(sUrl, {
+            method: "post",
+            parameters: 'json=' + Object.toJSON(oParam),
+            onComplete: js_retornoVerificaDatasProposta
+        });
+
+    }
+
+    function js_retornoVerificaDatasProposta(oAjax) {
+
+        var oRetorno = eval("(" + oAjax.responseText + ")");
+        codigotribunal = oRetorno.l03_pctipocompratribunal;
+
+        var l12_pncp = <? echo '"' . $l12_pncp . '"';      ?>;
+
+        if (document.getElementById('l20_leidalicitacao').value == "1" && codigotribunal == 101 && l12_pncp == "t") {
+            document.getElementById('datasProposta').style.display = '';
+        } else {
+            document.getElementById('datasProposta').style.display = 'none';
+
+        }
+
+    }
 
     function js_verificaModalidade() {
 
@@ -2151,14 +2173,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
     function js_verificalei(lei) {
 
 
-        var l12_pncp = <? echo '"' . $l12_pncp . '"';      ?>;
-
-        if (document.getElementById('l20_leidalicitacao').value == "1" && document.getElementById('l20_codtipocomdescr').value == "9" && l12_pncp == "t") {
-            document.getElementById('datasProposta').style.display = '';
-        } else {
-            document.getElementById('datasProposta').style.display = 'none';
-
-        }
+        js_verificaDatasProposta();
 
 
         let opcoesreg = document.getElementById('l20_tipliticacao').options;
