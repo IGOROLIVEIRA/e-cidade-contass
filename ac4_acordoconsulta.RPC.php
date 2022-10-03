@@ -520,14 +520,14 @@ switch ($oParam->exec) {
 						  AND ac26_sequencial = (SELECT max(ac26_sequencial)
 									  FROM acordoposicao
 									  WHERE ac26_acordo = ' . $oParam->ac16_sequencial . ')
-					  	AND ac26_acordo = ' . $oParam->ac16_sequencial . 'GROUP BY ac20_servicoquantidade, pc01_servico'
+					  	AND ac26_acordo = ' . $oParam->ac16_sequencial . ' GROUP BY ac20_servicoquantidade, pc01_servico'
           );
 
           $rsItem = $oDaoItem->sql_record($sSqlItem);
           $controleItem = db_utils::fieldsMemory($rsItem, 0)->controle;
           $servicoItem = db_utils::fieldsMemory($rsItem, 0)->servico;
           $valorExecutado = db_utils::fieldsMemory($rsItem, 0)->valor;
-          if($controleItem == 'f' || $servicoItem == 't'){
+          if($controleItem == 'f' && $servicoItem == 't'){
           $qtdeExecutada = 0;
           } else {
           $qtdeExecutada = db_utils::fieldsMemory($rsItem, 0)->quantidade;
@@ -540,7 +540,7 @@ switch ($oParam->exec) {
           $oItem->vlrUnit = $oDado->getValorunitario();
           $oItem->vlrTotal = $oDado->getValorTotal() - $valorExecutado;
           $nSomaTotal += $oDado->getValorTotal();
-          $oRetorno->dados[] = $oItem;
+          $oRetorno->dados[] = $oItem; 
         }
       }
     }
