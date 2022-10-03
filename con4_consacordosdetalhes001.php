@@ -321,8 +321,8 @@ $oGet = db_utils::postMemory($_GET);
 
                                     aRow[0] = oDado.codigo;
                                     aRow[1] = oDado.descricao.urlDecode();
-                                    aRow[2] = js_formatar(oDado.quantidade, 'f');
-                                    aRow[3] = js_formatar(oDado.vlrTotal, 'f');
+                                    aRow[2] = js_formatar(oDado.quantidade, 'f', 4);
+                                    aRow[3] = js_formatar(oDado.vlrTotal, 'f', 2);
                                     oGrvDetalhes.addRow(aRow);
 
                                     var oDadosHint = new Object();
