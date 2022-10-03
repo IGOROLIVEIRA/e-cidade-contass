@@ -60,6 +60,12 @@ class EventoS2300 extends EventoBase
             $oDadosAPI->evtTSVInicio->endereco->brasil->cep = str_pad($oDados->cep, 8, "0", STR_PAD_RIGHT);
 
             $oDadosAPI->evtTSVInicio->infodeficiencia->observacao = empty($oDados->observacao) ? null : $oDados->observacao;
+            empty($oDados->deffisica) ? null : $oDadosAPI->evtTSVInicio->infodeficiencia->deffisica = $oDados->deffisica;
+            empty($oDados->defvisual) ? null : $oDadosAPI->evtTSVInicio->infodeficiencia->defvisual = $oDados->defvisual;
+            empty($oDados->defauditiva) ? null : $oDadosAPI->evtTSVInicio->infodeficiencia->defauditiva = $oDados->defauditiva;
+            empty($oDados->defmental) ? null : $oDadosAPI->evtTSVInicio->infodeficiencia->defmental = $oDados->defmental;
+            empty($oDados->defintelectual) ? null : $oDadosAPI->evtTSVInicio->infodeficiencia->defintelectual = $oDados->defintelectual;
+            empty($oDados->reabreadap) ? null : $oDadosAPI->evtTSVInicio->infodeficiencia->reabreadap = $oDados->reabreadap;
 
             $oDadosAPI->evtTSVInicio->dependente = $this->buscarDependentes($oDados->matricula);
             if (empty($oDadosAPI->evtTSVInicio->dependente)) {
