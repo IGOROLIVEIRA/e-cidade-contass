@@ -790,6 +790,8 @@ BEGIN
 
             FOR rAtivtipo IN EXECUTE sSql LOOP
 
+                    lIsencao = false;
+
                     if lRaise is true then
                         raise notice 'dentro do for... vcalculou : % - tipcalc: % - area: % - qiexe: % - qfexe: %',lCalculou, rAtivtipo.Q81_CODIGO, V_AREA, rAtivtipo.Q81_QIEXE, rAtivtipo.Q81_QFEXE;
                     end if;
