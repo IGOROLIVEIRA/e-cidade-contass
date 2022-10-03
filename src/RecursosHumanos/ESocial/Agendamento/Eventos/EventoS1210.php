@@ -34,63 +34,112 @@ class EventoS1210 extends EventoBase
         $ano = date("Y", db_getsession("DB_datausu"));
         $mes = date("m", db_getsession("DB_datausu"));
         $dia = date("d", db_getsession("DB_datausu"));
+        $data = "$ano-$mes-01";
+        $data = new \DateTime($data);
+        $data->modify('last day of this month');
+        $ultimoDiaDoMes = $data->format('d');
+
         $aDadosAPI = array();
         $iSequencial = 1;
 
         foreach ($this->dados as $oDados) {
 
-            $aDadosPorMatriculas = $this->buscarDadosPorMatricula($oDados->z01_cgccpf, $this->tppgto);
-            if ($aDadosPorMatriculas[0]->cpftrab == null) {
-                continue;
-            }
-            $oDadosAPI                                = new \stdClass();
-            $oDadosAPI->evtPgtos                      = new \stdClass();
-            $oDadosAPI->evtPgtos->sequencial          = $iSequencial;
-            $oDadosAPI->evtPgtos->modo                = $this->modo;
-            $oDadosAPI->evtPgtos->indRetif            = 1;
-            $oDadosAPI->evtPgtos->nrRecibo            = null;
-
-            $oDadosAPI->evtPgtos->indapuracao         = $this->indapuracao;
-            $oDadosAPI->evtPgtos->perapur             = $ano . '-' . $mes;
-            if ($this->indapuracao == 2) {
-                $oDadosAPI->evtPgtos->perapur         = $ano;
-            }
-            $oDadosAPI->evtPgtos->cpfbenef             = $aDadosPorMatriculas[0]->cpftrab;
-
-            $std = new \stdClass();
-            $seqinfopag = 0;
-            for ($iCont = 0; $iCont < count($aDadosPorMatriculas); $iCont++) {
-                $aIdentificador = $this->buscarIdentificador($aDadosPorMatriculas[$iCont]->matricula, $aDadosPorMatriculas[$iCont]->rh30_regime);
-                for ($iCont2 = 0; $iCont2 < count($aIdentificador); $iCont2++) {
-                    $std->infopgto[$seqinfopag]->codcateg = $oDados->codcateg; //Obrigatório
-
-                    $std->infopgto[$seqinfopag] = new \stdClass(); //Obritatório
-
-                    $std->infopgto[$seqinfopag]->dtpgto = "$ano-$mes-$dia";
-                    $std->infopgto[$seqinfopag]->tppgto = $this->tppgto;
-                    $std->infopgto[$seqinfopag]->perref = "$ano-$mes";
-
-                    if ($aIdentificador[$iCont2]->idedmdev == 1) {
-                        $std->infopgto[$seqinfopag]->idedmdev = $aDadosPorMatriculas[$iCont]->matricula . 'gerfsal'; //uniqid(); //$aIdentificador[$iCont2]->idedmdev; //Obrigat?rio
-                    }
-                    if ($aIdentificador[$iCont2]->idedmdev == 2) {
-                        $std->infopgto[$seqinfopag]->idedmdev = $aDadosPorMatriculas[$iCont]->matricula . 'gerfres'; //uniqid(); //$aIdentificador[$iCont2]->idedmdev; //Obrigat?rio
-                    }
-                    if ($aIdentificador[$iCont2]->idedmdev == 3) {
-                        $std->infopgto[$seqinfopag]->idedmdev = $aDadosPorMatriculas[$iCont]->matricula . 'gerfcom'; //uniqid(); //$aIdentificador[$iCont2]->idedmdev; //Obrigat?rio
-                    }
-                    if ($aIdentificador[$iCont2]->idedmdev == 4) {
-                        $std->infopgto[$seqinfopag]->idedmdev = $aDadosPorMatriculas[$iCont]->matricula . 'gerfs13'; //uniqid(); //$aIdentificador[$iCont2]->idedmdev; //Obrigat?rio
-                    }
-
-                    $std->infopgto[$seqinfopag]->vrliq = $this->buscarValorLiquido($aDadosPorMatriculas[$iCont]->matricula, $aDadosPorMatriculas[$iCont]->rh30_regime, $aIdentificador[$iCont2]->idedmdev);
-
-                    $seqinfopag++;
+            if ($this->tpevento == 1) {
+                $aDadosPorMatriculas = $this->buscarDadosPorMatricula($oDados->z01_cgccpf, $this->tppgto);
+                if ($aDadosPorMatriculas[0]->cpftrab == null) {
+                    continue;
                 }
+                $oDadosAPI                                = new \stdClass();
+                $oDadosAPI->evtPgtos                      = new \stdClass();
+                $oDadosAPI->evtPgtos->sequencial          = $iSequencial;
+                $oDadosAPI->evtPgtos->modo                = $this->modo;
+                $oDadosAPI->evtPgtos->indRetif            = 1;
+                $oDadosAPI->evtPgtos->nrRecibo            = null;
+
+                $oDadosAPI->evtPgtos->indapuracao         = $this->indapuracao;
+                $oDadosAPI->evtPgtos->perapur             = $ano . '-' . $mes;
+                if ($this->indapuracao == 2) {
+                    $oDadosAPI->evtPgtos->perapur         = $ano;
+                }
+                $oDadosAPI->evtPgtos->cpfbenef             = $aDadosPorMatriculas[0]->cpftrab;
+
+                $std = new \stdClass();
+                $seqinfopag = 0;
+                for ($iCont = 0; $iCont < count($aDadosPorMatriculas); $iCont++) {
+                    $aIdentificador = $this->buscarIdentificador($aDadosPorMatriculas[$iCont]->matricula, $aDadosPorMatriculas[$iCont]->rh30_regime);
+                    for ($iCont2 = 0; $iCont2 < count($aIdentificador); $iCont2++) {
+                        $std->infopgto[$seqinfopag]->codcateg = $oDados->codcateg; //Obrigatório
+
+                        $std->infopgto[$seqinfopag] = new \stdClass(); //Obritatório
+
+                        $std->infopgto[$seqinfopag]->dtpgto = "$ano-$mes-$dia";
+                        $std->infopgto[$seqinfopag]->tppgto = $this->tppgto;
+                        $std->infopgto[$seqinfopag]->perref = "$ano-$mes";
+
+                        if ($aIdentificador[$iCont2]->idedmdev == 1) {
+                            $std->infopgto[$seqinfopag]->idedmdev = $aDadosPorMatriculas[$iCont]->matricula . 'gerfsal'; //uniqid(); //$aIdentificador[$iCont2]->idedmdev; //Obrigat?rio
+                        }
+                        if ($aIdentificador[$iCont2]->idedmdev == 2) {
+                            $std->infopgto[$seqinfopag]->idedmdev = $aDadosPorMatriculas[$iCont]->matricula . 'gerfres'; //uniqid(); //$aIdentificador[$iCont2]->idedmdev; //Obrigat?rio
+                        }
+                        if ($aIdentificador[$iCont2]->idedmdev == 3) {
+                            $std->infopgto[$seqinfopag]->idedmdev = $aDadosPorMatriculas[$iCont]->matricula . 'gerfcom'; //uniqid(); //$aIdentificador[$iCont2]->idedmdev; //Obrigat?rio
+                        }
+                        if ($aIdentificador[$iCont2]->idedmdev == 4) {
+                            $std->infopgto[$seqinfopag]->idedmdev = $aDadosPorMatriculas[$iCont]->matricula . 'gerfs13'; //uniqid(); //$aIdentificador[$iCont2]->idedmdev; //Obrigat?rio
+                        }
+
+                        //$std->infopgto[$seqinfopag]->idedmdev = '1';
+
+                        $std->infopgto[$seqinfopag]->vrliq = $this->buscarValorLiquido($aDadosPorMatriculas[$iCont]->matricula, $aDadosPorMatriculas[$iCont]->rh30_regime, $aIdentificador[$iCont2]->idedmdev);
+                        // echo $std->infopgto[$seqinfopag]->vrliq;
+                        // exit;
+                        //$std->infopgto[$seqinfopag]->vrliq = (float) number_format($std->infopgto[$seqinfopag]->vrliq, 2, ',', '.');
+
+                        $seqinfopag++;
+                    }
+                }
+                $oDadosAPI->evtPgtos->infopgto = $std->infopgto;
+                $aDadosAPI[] = $oDadosAPI;
+                $iSequencial++;
+            } else {
+                // $aDadosContabilidade = $this->buscarDadosContabilidade($oDados->z01_cgccpf, $ultimoDiaDoMes, $mes, $ano);
+
+                // foreach ($aDadosContabilidade as $aDadosPorCpf) {
+                $oDadosAPI                                = new \stdClass();
+                $oDadosAPI->evtPgtos                      = new \stdClass();
+                $oDadosAPI->evtPgtos->sequencial          = $iSequencial;
+                $oDadosAPI->evtPgtos->modo                = $this->modo;
+                $oDadosAPI->evtPgtos->indRetif            = 1;
+                $oDadosAPI->evtPgtos->nrRecibo            = null;
+
+                $oDadosAPI->evtPgtos->indapuracao         = $this->indapuracao;
+                $oDadosAPI->evtPgtos->perapur             = $ano . '-' . $mes;
+                if ($this->indapuracao == 2) {
+                    $oDadosAPI->evtPgtos->perapur         = $ano;
+                }
+                $oDadosAPI->evtPgtos->cpfbenef             = $oDados->cpf_benef;
+
+                $std = new \stdClass();
+                $seqinfopag = 0;
+
+                $std->infopgto[$seqinfopag]->codcateg = $oDados->codcateg; //Obrigatório
+
+                $std->infopgto[$seqinfopag] = new \stdClass(); //Obritatório
+
+                $std->infopgto[$seqinfopag]->dtpgto = $oDados->dt_pgto;
+                $std->infopgto[$seqinfopag]->tppgto = $this->tppgto;
+                $std->infopgto[$seqinfopag]->perref = $oDados->per_ref;
+
+                $std->infopgto[$seqinfopag]->idedmdev = $oDados->ide_dm_dev; // . 'gerfsal'; //uniqid(); //$aIdentificador[$iCont2]->idedmdev; //Obrigat?rio
+
+                $std->infopgto[$seqinfopag]->vrliq = $oDados->vr_liq;
+
+                $oDadosAPI->evtPgtos->infopgto = $std->infopgto;
+                $aDadosAPI[] = $oDadosAPI;
+                $iSequencial++;
+                //}
             }
-            $oDadosAPI->evtPgtos->infopgto = $std->infopgto;
-            $aDadosAPI[] = $oDadosAPI;
-            $iSequencial++;
         }
         // echo '<pre>';
         // var_dump($aDadosAPI);
@@ -98,6 +147,11 @@ class EventoS1210 extends EventoBase
         return $aDadosAPI;
     }
 
+    /**
+     * Retorna dados por matricula no formato necessario para envio
+     * pela API sped-esocial
+     * @return array stdClass
+     */
     private function buscarDadosPorMatricula($cpf, $tppgto)
     {
         $ano = date("Y", db_getsession("DB_datausu"));
@@ -124,88 +178,88 @@ class EventoS1210 extends EventoBase
         rh51_cgcvinculo,
         rh01_regist as matricula,
         h13_categoria as codCateg
-    from
-        rhpessoal
-    left join rhpessoalmov on
-        rh02_anousu = fc_getsession('DB_anousu')::int
-        and rh02_mesusu = date_part('month', fc_getsession('DB_datausu')::date)
-        and rh02_regist = rh01_regist
-        and rh02_instit = fc_getsession('DB_instit')::int
-    left join rhinssoutros    on rh51_seqpes                 = rh02_seqpes
-    left join rhlota on
-        rhlota.r70_codigo = rhpessoalmov.rh02_lota
-        and rhlota.r70_instit = rhpessoalmov.rh02_instit
-    inner join cgm on
-        cgm.z01_numcgm = rhpessoal.rh01_numcgm
-    inner join db_config on
-        db_config.codigo = rhpessoal.rh01_instit
-    inner join rhestcivil on
-        rhestcivil.rh08_estciv = rhpessoal.rh01_estciv
-    inner join rhraca on
-        rhraca.rh18_raca = rhpessoal.rh01_raca
-    left join rhfuncao on
-        rhfuncao.rh37_funcao = rhpessoalmov.rh02_funcao
-        and rhfuncao.rh37_instit = rhpessoalmov.rh02_instit
-    left join rhpescargo on
-        rhpescargo.rh20_seqpes = rhpessoalmov.rh02_seqpes
-    left join rhcargo on
-        rhcargo.rh04_codigo = rhpescargo.rh20_cargo
-        and rhcargo.rh04_instit = rhpessoalmov.rh02_instit
-    inner join rhinstrucao on
-        rhinstrucao.rh21_instru = rhpessoal.rh01_instru
-    inner join rhnacionalidade on
-        rhnacionalidade.rh06_nacionalidade = rhpessoal.rh01_nacion
-    left join rhpesrescisao on
-        rh02_seqpes = rh05_seqpes
-    left join rhsindicato on
-        rh01_rhsindicato = rh116_sequencial
-    inner join rhreajusteparidade on
-        rhreajusteparidade.rh148_sequencial = rhpessoal.rh01_reajusteparidade
-    left join rhpesdoc on
-        rhpesdoc.rh16_regist = rhpessoal.rh01_regist
-    left join rhdepend on
-        rhdepend.rh31_regist = rhpessoal.rh01_regist
-    left join rhregime on
-        rhregime.rh30_codreg = rhpessoalmov.rh02_codreg
-    left join rhpesfgts on
-        rhpesfgts.rh15_regist = rhpessoal.rh01_regist
-    inner join tpcontra on
-        tpcontra.h13_codigo = rhpessoalmov.rh02_tpcont
-    left join rhcontratoemergencial on
-        rh163_matricula = rh01_regist
-    left join rhcontratoemergencialrenovacao on
-        rh164_contratoemergencial = rh163_sequencial
-    left join jornadadetrabalho on
-        jt_sequencial = rh02_jornadadetrabalho
-    left join db_cgmbairro on
-        cgm.z01_numcgm = db_cgmbairro.z01_numcgm
-    left join bairro on
-        bairro.j13_codi = db_cgmbairro.j13_codi
-    left join db_cgmruas on
-        cgm.z01_numcgm = db_cgmruas.z01_numcgm
-    left join ruas on
-        ruas.j14_codigo = db_cgmruas.j14_codigo
-    left join rescisao on
-        rescisao.r59_anousu = rhpessoalmov.rh02_anousu
-        and rescisao.r59_mesusu = rhpessoalmov.rh02_mesusu
-        and rescisao.r59_regime = rhregime.rh30_regime
-        and rescisao.r59_causa = rhpesrescisao.rh05_causa
-        and rescisao.r59_caub = rhpesrescisao.rh05_caub::char(2)
-    left  outer join (
-            SELECT distinct r33_codtab,r33_nome,r33_tiporegime
-                                from inssirf
-                                where     r33_anousu = fc_getsession('DB_anousu')::int
-                                      and r33_mesusu = date_part('month',fc_getsession('DB_datausu')::date)
-                                      and r33_instit = fc_getsession('DB_instit')::int
-                               ) as x on r33_codtab = rhpessoalmov.rh02_tbprev+2
-    where 1=1
-    and ((rh05_recis is not null
-		and date_part('month', rh05_recis) = date_part('month', fc_getsession('DB_datausu')::date)
-		and date_part('year', rh05_recis) = date_part('year', fc_getsession('DB_datausu')::date)
-		)
-		or
-		rh05_recis is null
-	) ";
+        from
+            rhpessoal
+        left join rhpessoalmov on
+            rh02_anousu = fc_getsession('DB_anousu')::int
+            and rh02_mesusu = date_part('month', fc_getsession('DB_datausu')::date)
+            and rh02_regist = rh01_regist
+            and rh02_instit = fc_getsession('DB_instit')::int
+        left join rhinssoutros    on rh51_seqpes                 = rh02_seqpes
+        left join rhlota on
+            rhlota.r70_codigo = rhpessoalmov.rh02_lota
+            and rhlota.r70_instit = rhpessoalmov.rh02_instit
+        inner join cgm on
+            cgm.z01_numcgm = rhpessoal.rh01_numcgm
+        inner join db_config on
+            db_config.codigo = rhpessoal.rh01_instit
+        inner join rhestcivil on
+            rhestcivil.rh08_estciv = rhpessoal.rh01_estciv
+        inner join rhraca on
+            rhraca.rh18_raca = rhpessoal.rh01_raca
+        left join rhfuncao on
+            rhfuncao.rh37_funcao = rhpessoalmov.rh02_funcao
+            and rhfuncao.rh37_instit = rhpessoalmov.rh02_instit
+        left join rhpescargo on
+            rhpescargo.rh20_seqpes = rhpessoalmov.rh02_seqpes
+        left join rhcargo on
+            rhcargo.rh04_codigo = rhpescargo.rh20_cargo
+            and rhcargo.rh04_instit = rhpessoalmov.rh02_instit
+        inner join rhinstrucao on
+            rhinstrucao.rh21_instru = rhpessoal.rh01_instru
+        inner join rhnacionalidade on
+            rhnacionalidade.rh06_nacionalidade = rhpessoal.rh01_nacion
+        left join rhpesrescisao on
+            rh02_seqpes = rh05_seqpes
+        left join rhsindicato on
+            rh01_rhsindicato = rh116_sequencial
+        inner join rhreajusteparidade on
+            rhreajusteparidade.rh148_sequencial = rhpessoal.rh01_reajusteparidade
+        left join rhpesdoc on
+            rhpesdoc.rh16_regist = rhpessoal.rh01_regist
+        left join rhdepend on
+            rhdepend.rh31_regist = rhpessoal.rh01_regist
+        left join rhregime on
+            rhregime.rh30_codreg = rhpessoalmov.rh02_codreg
+        left join rhpesfgts on
+            rhpesfgts.rh15_regist = rhpessoal.rh01_regist
+        inner join tpcontra on
+            tpcontra.h13_codigo = rhpessoalmov.rh02_tpcont
+        left join rhcontratoemergencial on
+            rh163_matricula = rh01_regist
+        left join rhcontratoemergencialrenovacao on
+            rh164_contratoemergencial = rh163_sequencial
+        left join jornadadetrabalho on
+            jt_sequencial = rh02_jornadadetrabalho
+        left join db_cgmbairro on
+            cgm.z01_numcgm = db_cgmbairro.z01_numcgm
+        left join bairro on
+            bairro.j13_codi = db_cgmbairro.j13_codi
+        left join db_cgmruas on
+            cgm.z01_numcgm = db_cgmruas.z01_numcgm
+        left join ruas on
+            ruas.j14_codigo = db_cgmruas.j14_codigo
+        left join rescisao on
+            rescisao.r59_anousu = rhpessoalmov.rh02_anousu
+            and rescisao.r59_mesusu = rhpessoalmov.rh02_mesusu
+            and rescisao.r59_regime = rhregime.rh30_regime
+            and rescisao.r59_causa = rhpesrescisao.rh05_causa
+            and rescisao.r59_caub = rhpesrescisao.rh05_caub::char(2)
+        left  outer join (
+                SELECT distinct r33_codtab,r33_nome,r33_tiporegime
+                                    from inssirf
+                                    where     r33_anousu = fc_getsession('DB_anousu')::int
+                                        and r33_mesusu = date_part('month',fc_getsession('DB_datausu')::date)
+                                        and r33_instit = fc_getsession('DB_instit')::int
+                                ) as x on r33_codtab = rhpessoalmov.rh02_tbprev+2
+        where 1=1
+        and ((rh05_recis is not null
+            and date_part('month', rh05_recis) = date_part('month', fc_getsession('DB_datausu')::date)
+            and date_part('year', rh05_recis) = date_part('year', fc_getsession('DB_datausu')::date)
+            )
+            or
+            rh05_recis is null
+        ) ";
         //1200
         if ($tppgto == 1) {
             $sql .= " and (
@@ -239,35 +293,35 @@ class EventoS1210 extends EventoBase
         }
 
         $sql .= " and cgm.z01_cgccpf = '$cpf'
-    and (exists (SELECT
-	1
-from
-	gerfsal
-where
-	r14_anousu = fc_getsession('DB_anousu')::int
-	and r14_mesusu = date_part('month', fc_getsession('DB_datausu')::date)
-	and r14_instit = fc_getsession('DB_instit')::int
-	and r14_regist = rhpessoal.rh01_regist)
-    or
-    exists (SELECT
-	1
-from
-	gerfcom
-where
-	r48_anousu = fc_getsession('DB_anousu')::int
-	and r48_mesusu = date_part('month', fc_getsession('DB_datausu')::date)
-	and r48_instit = fc_getsession('DB_instit')::int
-	and r48_regist = rhpessoal.rh01_regist)
-    or
-    exists (SELECT
-	1
-from
-	gerfres
-where
-	r20_anousu = fc_getsession('DB_anousu')::int
-	and r20_mesusu = date_part('month', fc_getsession('DB_datausu')::date)
-	and r20_instit = fc_getsession('DB_instit')::int
-	and r20_regist = rhpessoal.rh01_regist))";
+            and (exists (SELECT
+            1
+        from
+            gerfsal
+        where
+            r14_anousu = fc_getsession('DB_anousu')::int
+            and r14_mesusu = date_part('month', fc_getsession('DB_datausu')::date)
+            and r14_instit = fc_getsession('DB_instit')::int
+            and r14_regist = rhpessoal.rh01_regist)
+            or
+            exists (SELECT
+            1
+        from
+            gerfcom
+        where
+            r48_anousu = fc_getsession('DB_anousu')::int
+            and r48_mesusu = date_part('month', fc_getsession('DB_datausu')::date)
+            and r48_instit = fc_getsession('DB_instit')::int
+            and r48_regist = rhpessoal.rh01_regist)
+            or
+            exists (SELECT
+            1
+        from
+            gerfres
+        where
+            r20_anousu = fc_getsession('DB_anousu')::int
+            and r20_mesusu = date_part('month', fc_getsession('DB_datausu')::date)
+            and r20_instit = fc_getsession('DB_instit')::int
+            and r20_regist = rhpessoal.rh01_regist))";
 
 
         $rsValores = db_query($sql);
@@ -283,6 +337,11 @@ where
         return $aItens;
     }
 
+    /**
+     * Retorna o valor liquido no formato necessario para envio
+     * pela API sped-esocial
+     * @return array stdClass
+     */
     private function buscarValorLiquido($matricula, $rh30_regime, $ponto)
     {
         require_once 'libs/db_libpessoal.php';
@@ -485,6 +544,82 @@ where
 
                     $aItens[] = $oIdentificadores;
                 }
+            }
+        }
+        return $aItens;
+    }
+
+    /**
+     * Retorna dados da contabilidade no formato necessario para envio
+     * pela API sped-esocial
+     * @return array stdClass
+     */
+    private function buscarDadosContabilidade($cpf, $ultimoDiaDoMes, $mes, $ano)
+    {
+        $sql = "SELECT *
+        FROM (
+                select e60_numcgm as num_cgm,
+                    z01_cgccpf as cpf_benef,
+                    e50_codord as ide_dm_dev,
+                    substr(e50_data::varchar, 1, 7) as per_ref,
+                    (e53_valor - e53_vlranu) as valor_op,
+                    corrente.k12_data as dt_pgto,
+                    sum(
+                        case
+                            when corgrupotipo.k106_sequencial = 4 then corrente.k12_valor * -1
+                            else corrente.k12_valor
+                        end
+                    ) as vr_liq
+                from pagordem
+                    inner join empempenho ON empempenho.e60_numemp = pagordem.e50_numemp
+                    inner join cgm ON cgm.z01_numcgm = empempenho.e60_numcgm
+                    inner join empord on empord.e82_codord = pagordem.e50_codord
+                    inner join empagemov on empagemov.e81_codmov = empord.e82_codmov
+                    inner join corempagemov on corempagemov.k12_codmov = empagemov.e81_codmov
+                    inner join corrente on (
+                        corrente.k12_id,
+                        corrente.k12_data,
+                        corrente.k12_autent
+                    ) = (
+                        corempagemov.k12_id,
+                        corempagemov.k12_data,
+                        corempagemov.k12_autent
+                    )
+                    inner join corgrupocorrente on (
+                        corrente.k12_id,
+                        corrente.k12_data,
+                        corrente.k12_autent
+                    ) = (
+                        corgrupocorrente.k105_id,
+                        corgrupocorrente.k105_data,
+                        corgrupocorrente.k105_autent
+                    )
+                    inner join corgrupo ON corgrupo.k104_sequencial = corgrupocorrente.k105_corgrupo
+                    inner join corgrupotipo on corgrupotipo.k106_sequencial = corgrupocorrente.k105_corgrupotipo
+                    inner join pagordemele on e50_codord = e53_codord
+                where e50_cattrabalhador is not null
+                    and corrente.k12_data between '2022-08-01' and '2022-08-31'
+                    and corgrupotipo.k106_sequencial in (1, 4) -- somente pagamento/estorno liquido
+                    and length(z01_cgccpf) = 11 --and e50_codord = 33521
+                group by 1,
+                    2,
+                    3,
+                    4,
+                    5,
+                    6
+                order by e50_codord, corrente.k12_data
+            ) AS pagamentos
+        WHERE vr_liq > 0;
+        ";
+
+        $rsValores = db_query($sql);
+        // echo $sql;
+        // db_criatabela($rsValores);
+        // exit;
+        if (pg_num_rows($rsValores) > 0) {
+            for ($iCont = 0; $iCont < pg_num_rows($rsValores); $iCont++) {
+                $oResult = \db_utils::fieldsMemory($rsValores, $iCont);
+                $aItens[] = $oResult;
             }
         }
         return $aItens;

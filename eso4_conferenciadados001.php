@@ -146,8 +146,10 @@ $mesfolha = DBPessoal::getMesFolha();
                         </select>
                     </td>
                 </tr>
+            </table>
+            <table>
                 <tr id="indapuracao_col" style="display: none;">
-                    <td align="right"><label for="indapuracao">Apuração:</label></td>
+                    <td align="right"><label for="indapuracao"><strong>Apuração:</strong></label></td>
                     <td>
                         <select name="indapuracao" id="indapuracao" style="width: 78%;">
                             <option value="1">Mensal</option>
@@ -156,7 +158,7 @@ $mesfolha = DBPessoal::getMesFolha();
                     </td>
                 </tr>
                 <tr id="dtalteracao" style="display:none">
-                    <td align="left"><label>Data Alteração:</label>
+                    <td align="left"><label><strong>Data Alteração:</strong></label>
 
                         <input name="dt_alteracao" type="text" id="dt_alteracao" value="" size="10" maxlength="10" autocomplete="off" onblur="js_validaDbData(this);" onkeyup="return js_mascaraData(this,event)" onfocus="js_validaEntrada(this);" onpaste="return false" ondrop="return false">
                         <input name="dt_alteracao_dia" type="hidden" title="" id="dt_alteracao_dia" value="" size="2" maxlength="2">
@@ -175,8 +177,8 @@ $mesfolha = DBPessoal::getMesFolha();
                     </td>
                 </tr>
                 <tr id="tppgto_col" style="display:none">
-                    <td><label>Tipo de Pagamento:</label></td>
-                    <td><select name="tppgto" id="tppgto" style="width: 50%;">
+                    <td><label><strong>Tipo de Pagamento:</strong></label></td>
+                    <td><select name="tppgto" id="tppgto" style="width: 100%;">
                             <option value="1">Pagamento de remuneração, conforme apurado em
                                 ideDmDev do S-1200
                             </option>
@@ -196,7 +198,7 @@ $mesfolha = DBPessoal::getMesFolha();
                     </td>
                 </tr>
                 <tr>
-                    <td align="left" id="tipo_col" style="display:none"><label>Tipo de evento:</label>
+                    <td align="left" id="tipo_col" style="display:none"><label><strong>Tipo de evento:</strong></label>
                         <select name="tpevento" id="tpevento" style="width: 25%;">
                             <option value="1">RH</option>
                             <option value="2">Contabilidade</option>
@@ -360,6 +362,9 @@ $mesfolha = DBPessoal::getMesFolha();
         } else if ((document.getElementById('evento').value == 'S1210')) {
             if (document.getElementById('tppgto_col').style.display == 'none') {
                 document.getElementById('tppgto_col').style.display = 'inline';
+            }
+            if (document.getElementById('tipo_col').style.display == 'none') {
+                document.getElementById('tipo_col').style.display = 'inline';
             }
         } else {
             document.getElementById('indapuracao_col').style.display = 'none';

@@ -36,6 +36,7 @@ db_postmemory($HTTP_POST_VARS);
 db_postmemory($HTTP_GET_VARS);
 
 $clpcorcamdescla = new cl_pcorcamdescla;
+$clsituacaoitemcompra = new cl_situacaoitemcompra;
 $db_botao        = false;
 
 if (isset($coditens) && trim($coditens) != ""){
@@ -51,6 +52,14 @@ if (isset($coditens) && trim($coditens) != ""){
           if ($clpcorcamdescla->erro_status == "0"){
                $sqlerro = true;
                break;
+          }
+
+          $clsituacaoitemcompra->l218_motivoanulacao = "0";
+          $clsituacaoitemcompra->alterar($vetor_itens[$i]);
+          if ($clsituacaoitemcompra->erro_status == 0){
+           $sqlerro  = true;
+           $erro_msg = $clsituacaoitemcompra->erro_msg;
+           break;
           }
      }
 

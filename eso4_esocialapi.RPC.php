@@ -258,7 +258,6 @@ try {
             $dadosESocial = new DadosESocial();
 
             db_inicio_transacao();
-
             $iCgm = $oParam->empregador;
             foreach ($oParam->arquivos as $arquivo) {
                 $dadosESocial->setReponsavelPeloPreenchimento($iCgm);
@@ -276,7 +275,7 @@ try {
                         Tipo::BENEFICIOS_ENTESPUBLICOS,
                     )
                 )) {
-                    $dadosDoPreenchimento = $dadosESocial->getPorTipo(Tipo::getTipoFormulario($arquivo), empty($oParam->matricula) ? null : $oParam->matricula);
+                    $dadosDoPreenchimento = $dadosESocial->getPorTipo(Tipo::getTipoFormulario($arquivo), empty($oParam->matricula) ? null : $oParam->matricula, empty($oParam->tpevento) ? null : $oParam->tpevento);
                     if (current($dadosDoPreenchimento) instanceof \ECidade\RecursosHumanos\ESocial\Model\Formulario\DadosPreenchimento) {
                         $formatter = FormatterFactory::get($arquivo);
                         $dadosDoPreenchimento = $formatter->formatar($dadosDoPreenchimento);
@@ -298,7 +297,7 @@ try {
                         $eventoFila->adicionarFila();
                     }
                 } else {
-                    $dadosTabela = $dadosESocial->getPorTipo(Tipo::getTipoFormulario($arquivo), empty($oParam->matricula) ? null : $oParam->matricula);
+                    $dadosTabela = $dadosESocial->getPorTipo(Tipo::getTipoFormulario($arquivo), empty($oParam->matricula) ? null : $oParam->matricula, empty($oParam->tpevento) ? null : $oParam->tpevento);
 
                     foreach (array_chunk($dadosTabela, 1) as $aTabela) {
                         $eventoFila = new Evento(
@@ -352,9 +351,8 @@ try {
             $iCgm = $oParam->empregador;
             $dadosESocial->setReponsavelPeloPreenchimento($iCgm);
             $dadosDoPreenchimento = $dadosESocial->getPorTipo(Tipo::RUBRICA, $stringRubricas);
-            $arquivo = "S1010Individual";
             foreach (array_chunk($dadosDoPreenchimento, 1) as $aTabela) {
-                $eventoFila = new Evento($arquivo, $iCgm, $iCgm, $aTabela, $oParam->tpAmb, "{$oParam->iAnoValidade}-{$oParam->iMesValidade}", $oParam->modo, $oParam->dtalteracao);
+                $eventoFila = new Evento(current($oParam->arquivos), $iCgm, $iCgm, $aTabela, $oParam->tpAmb, "{$oParam->iAnoValidade}-{$oParam->iMesValidade}", $oParam->modo, $oParam->dtalteracao);
                 $eventoFila->adicionarFila();
             }
             db_fim_transacao(false);
@@ -363,7 +361,7 @@ try {
             $response = system("php -q filaEsocial.php");
             ob_end_clean();
 
-            $oRetorno->sMessage = "Dados das R?bricas agendados para envio.";
+            $oRetorno->sMessage = "Dados das Rúbricas agendados para envio.";
 
             break;
     }
