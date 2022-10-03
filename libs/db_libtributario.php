@@ -16,7 +16,7 @@ abstract class DBTributario {
    * @param integer $iChavePesquisa - Numero base para Pesquisa
    * @return stdClass[] Com as Definições dos Tipos de Débito encontrados
    */
-  public static function getTiposDebitoByOrigem( $sTipoOrigem, $iChavePesquisa, $iWhere, $iInstituicao = null ) {
+  public static function getTiposDebitoByOrigem( $sTipoOrigem, $iChavePesquisa, $sWhere, $iInstituicao = null ) {
 
 
     $oDaoArretipo = db_utils::getDao("arretipo");
@@ -53,7 +53,7 @@ abstract class DBTributario {
       $sSqlArretipo = $oDaoArretipo->sql_query_tiposDebitosByNumpre   ( $iChavePesquisa, $iInstituicao, $sCampos );
       break;
     }
-    $sSqlArretipo = $sSqlArretipo . $iWhere . " ORDER BY 1";
+    $sSqlArretipo = $sSqlArretipo . $sWhere . " ORDER BY 1";
     $rsTipos      = db_query($sSqlArretipo);
 
     if (!$rsTipos) {
