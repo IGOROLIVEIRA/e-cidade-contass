@@ -98,7 +98,7 @@ class EventoS2200 extends EventoBase
             $oDadosAPI->evtAdmissao->deficiencia->infoCota = empty($oDados->infocota) ? null : $oDados->infocota;
             $oDadosAPI->evtAdmissao->deficiencia->observacao = empty($oDados->observacao) ? null : $oDados->observacao;
 
-            $oDadosAPI->evtAdmissao->dependente = $this->buscarDependentes($oDados->matricula);
+            $oDadosAPI->evtAdmissao->dependente = $this->buscarDependentes($oDados->matricula, $oDados->tpRegPrev);
 
             if (empty($oDadosAPI->evtAdmissao->dependente)) {
                 unset($oDadosAPI->evtAdmissao->dependente);
@@ -225,7 +225,7 @@ class EventoS2200 extends EventoBase
      * pela API sped-esocial
      * @return array stdClass
      */
-    private function buscarDependentes($matricula)
+    private function buscarDependentes($matricula, $tpRegPrev)
     {
         $oDaorhdepend = \db_utils::getDao("rhdepend");
         $sqlDependentes = $oDaorhdepend->sql_query_file(null, "*", "rh31_codigo", "rh31_regist = {$matricula}");
@@ -259,6 +259,9 @@ class EventoS2200 extends EventoBase
             $oDependFormatado->cpfdep = empty($oDependentes->rh31_cpf) ? null : $oDependentes->rh31_cpf;
             $oDependFormatado->depirrf = ($oDependentes->rh31_irf == "0" ? "N" : "S");
             $oDependFormatado->depsf = ($oDependentes->rh31_depend == "N" ? "N" : "S");
+            if ($tpRegPrev == 2) {
+                $oDependFormatado->sexodep = ($oDependentes->rh31_sexo == "M" ? "M" : "F");
+            }
             $oDependFormatado->inctrab = ($oDependentes->rh31_especi == "C" || $oDependentes->rh31_especi == "S" ? "S" : "N");
 
             $aDependentes[] = $oDependFormatado;

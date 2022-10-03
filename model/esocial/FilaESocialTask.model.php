@@ -128,7 +128,7 @@ class FilaESocialTask extends Task implements iTarefa
             /**
              * Esperar alguns segundos pois em muitos casos, o lote ainda não havia sido processado
              */
-            sleep(5);
+            sleep(7);
             $exportar = new ESocial(Registry::get('app.config'), "consulta.php");
             $exportar->setDados($dados);
             $retorno = $exportar->request();
@@ -141,7 +141,7 @@ class FilaESocialTask extends Task implements iTarefa
             }
 
             $this->incluirRecido($dadosEnvio->rh213_sequencial, $exportar->getNumeroRecibo());
-            $this->importarEvt5001($exportar->getObjXmlEvt5001(), $dadosConsulta->rh213_evento);
+            $this->importarEvt5001($exportar->getObjXmlEvt5001(), $dadosEnvio->rh213_evento);
             echo "{$exportar->getDescResposta()} Recibo de Envio {$exportar->getNumeroRecibo()}";
         } catch (\Exception $e) {
             $dao->setSituacaoErroEnvio($dadosEnvio->rh213_sequencial, $e->getMessage());

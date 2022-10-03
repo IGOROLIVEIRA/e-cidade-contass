@@ -85,7 +85,7 @@ class cl_pcmater {
                  pc01_data = date = Data da inclusão
                  pc01_tabela = bool = Tabela
                  pc01_taxa = bool = Taxa
-                 pc01_obras = boll = obras
+                 pc01_obras = bool = obras
                  pc01_justificativa = varchar(100) = Justificativa da Alteração
                  pc01_dataalteracao = date = Data da Alteração
                  pc01_instit = int = instituicao do item
@@ -243,11 +243,11 @@ class cl_pcmater {
        $this->erro_status = "0";
        return false;
      }
-     if($this->pc01_instit == null ){ 
+     if($this->pc01_instit == null ){
         $this->pc01_instit = db_getsession('DB_instit');
       }
-      
-      if($this->pc01_codmaterant == null ){ 
+
+      if($this->pc01_codmaterant == null ){
         $this->pc01_codmaterant = "0";
       }
 

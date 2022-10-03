@@ -37,6 +37,8 @@ require_once("model/educacao/avaliacao/iFormaObtencao.interface.php");
 require_once("model/educacao/censo/DadosCenso.model.php");
 require_once("classes/db_cursoedu_classe.php");
 require_once("model/CgmFactory.model.php");
+include("edu_cabecalhoatolegal.php");
+
 
 db_app::import("exceptions.*");
 db_app::import("educacao.avaliacao.*");
@@ -134,4 +136,3 @@ $oPdf->Output();
 foreach ($aListaImagens as $sImagem) {
   unlink($sImagem);
 }
-?>

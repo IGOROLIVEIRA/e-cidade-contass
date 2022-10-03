@@ -25,20 +25,20 @@
  *                                licenca/licenca_pt.txt 
  */
 
-require_once ("fpdf151/scpdf.php");
-require_once ("libs/db_sql.php");
-require_once ("libs/db_stdlib.php");
-require_once ("libs/db_conecta.php");
-require_once ("libs/db_sessoes.php");
-require_once ("libs/db_utils.php");
-require_once ("libs/db_stdlib.php");
-require_once ("libs/db_usuariosonline.php");
-require_once ("libs/db_app.utils.php");
-require_once ("libs/JSON.php");
-require_once ("std/DBDate.php");
-require_once ("dbforms/db_funcoes.php");
-require_once ("model/educacao/avaliacao/iFormaObtencao.interface.php");
-require_once ("model/educacao/avaliacao/iElementoAvaliacao.interface.php");
+require_once("fpdf151/scpdf.php");
+require_once("libs/db_sql.php");
+require_once("libs/db_stdlib.php");
+require_once("libs/db_conecta.php");
+require_once("libs/db_sessoes.php");
+require_once("libs/db_utils.php");
+require_once("libs/db_stdlib.php");
+require_once("libs/db_usuariosonline.php");
+require_once("libs/db_app.utils.php");
+require_once("libs/JSON.php");
+require_once("std/DBDate.php");
+require_once("dbforms/db_funcoes.php");
+require_once("model/educacao/avaliacao/iFormaObtencao.interface.php");
+require_once("model/educacao/avaliacao/iElementoAvaliacao.interface.php");
 
 db_app::import("exceptions.*");
 db_app::import("educacao.*");
@@ -46,7 +46,7 @@ db_app::import("educacao.avaliacao.*");
 
 $oDadosFormulario = db_utils::postMemory($_GET);
 $oJson            = new Services_JSON();
-$aTurmas          = $oJson->decode(str_replace("\\","",$oDadosFormulario->aTurmas));
+$aTurmas          = $oJson->decode(str_replace("\\", "", $oDadosFormulario->aTurmas));
 $iEscola          = db_getsession("DB_coddepto");
 
 /**
@@ -58,11 +58,11 @@ $sTipoModelo = "{$oDadosFormulario->iTipo}{$oDadosFormulario->iModelo}";
  * Array com os titulos que devem ser apresentados no cabecalho, de acordo com o Tipo e Modelo selecionados
  */
 $aTituloCabecalho = array(
-                          "11" => "RELAÇÃO NOMINAL - MATRICULA INICIAL",
-                          "12" => "RELAÇÃO NOMINAL - MATRICULA INICIAL",
-                          "21" => "RELAÇÃO NOMINAL - MATRICULA FINAL",
-                          "22" => "RELAÇÃO NOMINAL - MATRICULA FINAL"
-                         );
+  "11" => "RELAÇÃO NOMINAL - MATRICULA INICIAL",
+  "12" => "RELAÇÃO NOMINAL - MATRICULA INICIAL",
+  "21" => "RELAÇÃO NOMINAL - MATRICULA FINAL",
+  "22" => "RELAÇÃO NOMINAL - MATRICULA FINAL"
+);
 
 /**
  * stdClass com filtros padroes a serem utilizados no relatorio
@@ -132,9 +132,9 @@ if (array_key_exists($sTipoModelo, $aTituloCabecalho)) {
    * Validacao do tipo e modelo selecionado. Por padrao, quando for '11', nao eh validado pois este eh o padrao ja
    * calculado
    */
-  switch($sTipoModelo) {
+  switch ($sTipoModelo) {
 
-    /**
+      /**
      * 1 - Matricula Inicial
      * 2 - Demais Cursos
      */
@@ -150,20 +150,20 @@ if (array_key_exists($sTipoModelo, $aTituloCabecalho)) {
       $oFiltros->iColunaSituacaoMatricula = 30;
       break;
 
-    /**
-     * 2 - Matricula Final
-     * 1 - Educacao Infantil
-     */
+      /**
+       * 2 - Matricula Final
+       * 1 - Educacao Infantil
+       */
     case ("21"):
 
       $oFiltros->iColunaAluno            = 97;
       tamanhosColunasMatriculaFinal($oFiltros);
       break;
 
-    /**
-     * 2 - Matricula Final
-     * 2 - Demais Cursos
-     */
+      /**
+       * 2 - Matricula Final
+       * 2 - Demais Cursos
+       */
     case ("22"):
 
       $oFiltros->iColunaAluno             = 81;
@@ -237,20 +237,41 @@ foreach ($aTurmas as $oTurmaSelecionada) {
  * @param stdClass $oFiltros
  * @param Turma $oTurma
  */
-function cabecalhoRelatorio($oPdf, $oFiltros, $oTurma) {
+function cabecalhoRelatorio($oPdf, $oFiltros, $oTurma)
+{
+
+  $oDepartamento = new DBDepartamento(db_getsession("DB_coddepto"));
+  $iDepartamento = $oDepartamento->getCodigo();
+
+
+  $result = db_query("select ed05_t_texto,ed05_d_publicado,ed05_i_aparecerelatorio,ed05_i_ano,ed05_i_codigo, ed05_c_numero, ed05_c_finalidade, ed83_c_descr as dl_tipo,
+case when ed05_c_competencia='F' then 'FEDERAL' when ed05_c_competencia='E' then 'ESTADUAL' else 'MUNICIPAL'
+end as ed05_c_competencia, ed05_i_ano from atolegal inner join tipoato on tipoato.ed83_i_codigo
+= atolegal.ed05_i_tipoato inner join atoescola on atoescola.ed19_i_ato = atolegal.ed05_i_codigo
+where ed19_i_escola = $iDepartamento and ed05_i_aparecerelatorio = true order by ed05_i_codigo ;");
+
+  $atolegal = db_utils::fieldsMemory($result, 0);
+
+  if ($atolegal->ed05_c_finalidade == "") {
+    $atolegalcabecalho = "";
+  } else {
+    $atolegalcabecalho = $atolegal->ed05_c_finalidade . "/" . $atolegal->dl_tipo . " nº: " .  $atolegal->ed05_c_numero . " DE " . implode("/", array_reverse(explode("-", $atolegal->ed05_d_publicado))) . ", " . $atolegal->ed05_t_texto;
+  }
+
 
   $sNomeEscola       = $oTurma->getEscola()->getNome();
   $iCodigoReferencia = $oTurma->getEscola()->getCodigoReferencia();
 
-  if ( $iCodigoReferencia != null ) {
+  if ($iCodigoReferencia != null) {
     $sNomeEscola = "{$iCodigoReferencia} - {$sNomeEscola}";
   }
 
-  $sDadosCabecalho  = $oTurma->getEscola()->getDepartamento()->getInstituicao()->getDescricao()."\n";
-  $sDadosCabecalho .= "SECRETÁRIA MUNICIPAL DE EDUCAÇÃO"."\n";
-  $sDadosCabecalho .= $sNomeEscola."\n\n";
-  $sDadosCabecalho .= $oFiltros->sTituloCabecalho."\n";
-  $sDadosCabecalho .= $oTurma->getBaseCurricular()->getCurso()->getEnsino()->getNome()."\n\n\n";
+  $sDadosCabecalho  = $oTurma->getEscola()->getDepartamento()->getInstituicao()->getDescricao() . "\n";
+  $sDadosCabecalho .= "SECRETÁRIA MUNICIPAL DE EDUCAÇÃO" . "\n";
+  $sDadosCabecalho .= $sNomeEscola . "\n\n";
+  $sDadosCabecalho .= $atolegalcabecalho . "\n\n";
+  $sDadosCabecalho .= $oFiltros->sTituloCabecalho . "\n";
+  $sDadosCabecalho .= $oTurma->getBaseCurricular()->getCurso()->getEnsino()->getNome() . "\n\n\n";
 
   $oPdf->SetFont('arial', 'b', 8);
   $oPdf->SetXY(90, 10);
@@ -264,7 +285,7 @@ function cabecalhoRelatorio($oPdf, $oFiltros, $oTurma) {
   if ($oTurma->getEscola()->getLogo() != '') {
 
     $oPdf->SetXY(30, 10);
-    $oPdf->Image("imagens/files/".$oTurma->getEscola()->getLogo(), $oPdf->GetX(), $oPdf->GetY()-6, 18);
+    $oPdf->Image("imagens/files/" . $oTurma->getEscola()->getLogo(), $oPdf->GetX(), $oPdf->GetY() - 6, 18);
   }
 
   /**
@@ -273,14 +294,16 @@ function cabecalhoRelatorio($oPdf, $oFiltros, $oTurma) {
   if ($oTurma->getEscola()->getLogoEscola() != '') {
 
     $oPdf->SetXY(90, 10);
-    $oPdf->Image("imagens/".$oTurma->getEscola()->getLogoEscola(), 230, $oPdf->GetY()-6, 18);
+    $oPdf->Image("imagens/" . $oTurma->getEscola()->getLogoEscola(), 230, $oPdf->GetY() - 6, 18);
   }
 
-  $oPdf->SetXY(30, $iPosicaoY);
+  $oPdf->SetXY(30, $iPosicaoY - 5);
   $oPdf->Cell(60,  4, "Etapa: {$oFiltros->sEtapa}", 0, 0, "C");
   $oPdf->Cell(20,  4, "Ano: {$oFiltros->iAno}",     0, 0, "C");
   $oPdf->Cell(100, 4, "Turma: {$oFiltros->sTurma}", 0, 0, "C");
   $oPdf->Cell(30,  4, "Turno: {$oFiltros->sTurno}", 0, 1, "C");
+
+  $oPdf->ln(5);
 
   $oPdf->SetXY(10, 45);
   $oPdf->SetFont('arial', 'b', 7);
@@ -292,7 +315,7 @@ function cabecalhoRelatorio($oPdf, $oFiltros, $oTurma) {
 
   switch ($oFiltros->sTipoModelo) {
 
-    /**
+      /**
      * 1 - Matricula Inicial
      * 2 - Demais Cursos
      */
@@ -305,19 +328,19 @@ function cabecalhoRelatorio($oPdf, $oFiltros, $oTurma) {
       }
       break;
 
-    /**
-     * 2 - Matricula Final
-     * 1 - Educacao Infantil
-     */
+      /**
+       * 2 - Matricula Final
+       * 1 - Educacao Infantil
+       */
     case ("21"):
 
       colunasMatriculaFinal($oPdf, $oFiltros);
       break;
 
-    /**
-     * 2 - Matricula Final
-     * 2 - Demais Cursos
-     */
+      /**
+       * 2 - Matricula Final
+       * 2 - Demais Cursos
+       */
     case ("22"):
 
       $oPdf->MultiCell($oFiltros->iColunaSituacaoMatricula, 6, "Situação de Matrícula", 1, "C");
@@ -338,7 +361,8 @@ function cabecalhoRelatorio($oPdf, $oFiltros, $oTurma) {
  * @param stdClass $oFiltros
  * @param Turma $oTurma
  */
-function corpoRelatorio($oPdf, $oFiltros, $oTurma) {
+function corpoRelatorio($oPdf, $oFiltros, $oTurma)
+{
 
   $oPdf->SetXY($oFiltros->iPosicaoX, $oFiltros->iPosicaoY);
   $iAlunosImpressos = 0;
@@ -401,7 +425,7 @@ function corpoRelatorio($oPdf, $oFiltros, $oTurma) {
 
     switch ($oFiltros->sTipoModelo) {
 
-      /**
+        /**
        * 1 - Matricula Inicial
        * 2 - Demais Cursos
        */
@@ -418,19 +442,19 @@ function corpoRelatorio($oPdf, $oFiltros, $oTurma) {
         }
         break;
 
-      /**
-       * 2 - Matricula Final
-       * 1 - Educacao Infantil
-       */
+        /**
+         * 2 - Matricula Final
+         * 1 - Educacao Infantil
+         */
       case ("21"):
 
         preencheColunasMatriculaFinal($oPdf, $oFiltros, $oMatricula);
         break;
 
-      /**
-       * 2 - Matricula Final
-       * 2 - Demais Cursos
-       */
+        /**
+         * 2 - Matricula Final
+         * 2 - Demais Cursos
+         */
       case ("22"):
 
         $oPdf->Cell($oFiltros->iColunaSituacaoMatricula, $oFiltros->iAlturaLinhaPadrao, $sSituacao, 1, 0, "C");
@@ -449,13 +473,14 @@ function corpoRelatorio($oPdf, $oFiltros, $oTurma) {
  * @param stdClass $oFiltros
  * @param Turma $oTurma
  */
-function rodapeRelatorio($oPdf, $oFiltros, $oTurma) {
+function rodapeRelatorio($oPdf, $oFiltros, $oTurma)
+{
 
   $oPdf->SetFont('arial', '', 7);
   $oPdf->SetXY(10, 190);
 
-  $sMunicipioData  = "{$oTurma->getEscola()->getMunicipio()}, ".date("d", db_getsession("DB_datausu"))." de ";
-  $sMunicipioData .= ucfirst(db_mes(date("m", db_getsession("DB_datausu"))))." de ".date("Y", db_getsession("DB_datausu")).".";
+  $sMunicipioData  = "{$oTurma->getEscola()->getMunicipio()}, " . date("d", db_getsession("DB_datausu")) . " de ";
+  $sMunicipioData .= ucfirst(db_mes(date("m", db_getsession("DB_datausu")))) . " de " . date("Y", db_getsession("DB_datausu")) . ".";
   $oPdf->Cell($oFiltros->iLarguraMaxima, $oFiltros->iAlturaLinhaPadrao, $sMunicipioData, 0, 1, "C");
 
   /**
@@ -471,7 +496,7 @@ function rodapeRelatorio($oPdf, $oFiltros, $oTurma) {
       $sFuncaoAto = "Diretor";
 
       if (!empty($oDiretor->sAtoLegal) && !empty($oDiretor->iNumero)) {
-        $sFuncaoAto .= " - ".ucwords(strtolower($oDiretor->sAtoLegal))." - Nº: {$oDiretor->iNumero}";
+        $sFuncaoAto .= " - " . ucwords(strtolower($oDiretor->sAtoLegal)) . " - Nº: {$oDiretor->iNumero}";
       }
     }
     $oPdf->Ln(4);
@@ -484,7 +509,8 @@ function rodapeRelatorio($oPdf, $oFiltros, $oTurma) {
  * Altera o tamanho das colunas extras quando for tipo 1 - Matricula Final
  * @param stdClass $oFiltros
  */
-function tamanhosColunasMatriculaFinal($oFiltros) {
+function tamanhosColunasMatriculaFinal($oFiltros)
+{
 
   $oFiltros->iColunaAfastado          = 46;
   $oFiltros->iColunaEvasaoMes         = 23;
@@ -500,7 +526,8 @@ function tamanhosColunasMatriculaFinal($oFiltros) {
  * @param SCPDF $oPdf
  * @param stdClass $oFiltros
  */
-function colunasMatriculaFinal($oPdf, $oFiltros) {
+function colunasMatriculaFinal($oPdf, $oFiltros)
+{
 
   $oPdf->Cell($oFiltros->iColunaAfastado, $oFiltros->iAlturaLinhaPadrao, "Afastado Por:", 1, 0, "C");
 
@@ -525,7 +552,8 @@ function colunasMatriculaFinal($oPdf, $oFiltros) {
  * @param stdClass $oFiltros
  * @param Matricula $oMatricula
  */
-function preencheColunasMatriculaFinal($oPdf, $oFiltros, $oMatricula) {
+function preencheColunasMatriculaFinal($oPdf, $oFiltros, $oMatricula)
+{
 
   $sResultadoFinal = '';
 
@@ -536,9 +564,11 @@ function preencheColunasMatriculaFinal($oPdf, $oFiltros, $oMatricula) {
   /**
    * Buscamos o resultado final de acordo com o termo do ensino
    */
-  $aResultadoFinal = DBEducacaoTermo::getTermoEncerramento($oFiltros->iEnsino,
-                                                           $oDiarioClasse->getResultadoFinal(),
-                                                           $oFiltros->iAno);
+  $aResultadoFinal = DBEducacaoTermo::getTermoEncerramento(
+    $oFiltros->iEnsino,
+    $oDiarioClasse->getResultadoFinal(),
+    $oFiltros->iAno
+  );
 
   if (count($aResultadoFinal) > 0) {
 
@@ -555,7 +585,7 @@ function preencheColunasMatriculaFinal($oPdf, $oFiltros, $oMatricula) {
   $oDataMatricula  = $oMatricula->getDataMatricula();
 
   if (DBDate::calculaIntervaloEntreDatas($oDataMatricula, $oFiltros->dtInicio, 'd') > 0) {
-    $dtTransferencia = $oDataMatricula->getDia()."/".$oDataMatricula->getMes();
+    $dtTransferencia = $oDataMatricula->getDia() . "/" . $oDataMatricula->getMes();
   }
 
   $iColunaDividida = $oFiltros->iColunaAfastado / 2;
@@ -566,4 +596,3 @@ function preencheColunasMatriculaFinal($oPdf, $oFiltros, $oMatricula) {
 }
 
 $oPdf->Output();
-?>

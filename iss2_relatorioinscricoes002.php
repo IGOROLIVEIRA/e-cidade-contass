@@ -38,12 +38,12 @@ $oGet = db_utils::postMemory($_GET);
 * pois ele é fixo na consulta e o FROM pode ser váriavel dependendo o tipo de 
 * configuração
 */
-$sFrom  = "   issbase                                          ";
+$sFrom  = "   issbase                                          											";
 $sFrom .= "   inner join cgm                   on cgm.z01_numcgm                   = issbase.q02_numcgm ";
 $sFrom .= "   inner join tabativ               on tabativ.q07_inscr                = issbase.q02_inscr  ";
-$sFrom .= "   inner join ativprinc             on ativprinc.q88_inscr              = tabativ.q07_inscr  ";
 $sFrom .= "   inner join ativid                on tabativ.q07_ativ                 = ativid.q03_ativ    ";
-$sFrom .= "    left join issbasecaracteristica on issbasecaracteristica.q138_inscr = issbase.q02_inscr  ";
+$sFrom .= "   inner join ativprinc             on ativprinc.q88_inscr              = tabativ.q07_inscr  ";
+$sFrom .= "   left join issbasecaracteristica  on issbasecaracteristica.q138_inscr = issbase.q02_inscr  ";
 // declaração das váriaveis
 $sWhere = null;
 
@@ -103,7 +103,7 @@ switch ($oGet->atividade) {
 	
   case "p":
 	  $sAtividade = "Somente Principal";
-    $sFrom     .= "and q07_seq = q88_seq"; 
+	  $sWhere .= " {$and} q07_seq = q88_seq"; 
 	break;
 	
 	case "t":

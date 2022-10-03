@@ -42,6 +42,10 @@ require_once("libs/db_utils.php");
 require_once("dbforms/db_funcoes.php");
 require_once("libs/db_libdocumento.php");
 require_once("std/DBDate.php");
+require_once("fpdf151/pdfwebseller.php");
+
+include("edu_cabecalhoatolegal.php");
+
 $cldiarioresultado = new cl_diarioresultado;
 $cldiarioavaliacao = new cl_diarioavaliacao;
 $clprocresultado   = new cl_procresultado;
@@ -53,20 +57,24 @@ $clturma           = new cl_turma;
 $clDBConfig        = new cl_db_config();
 $clEscola          = new cl_escola();
 $escola            = db_getsession("DB_coddepto");
-$result            = $clturma->sql_record($clturma->sql_query_turmaserie("",
-                                                                         "ed57_i_codigo as turma,
+$result            = $clturma->sql_record(
+  $clturma->sql_query_turmaserie(
+    "",
+    "ed57_i_codigo as turma,
                                                                           serie.ed11_i_codigo as etapa",
-                                                                         "",
-                                                                         " ed220_i_codigo = $turma"
-                                                                        )
-                                         );
-db_fieldsmemory($result,0);
-$result  = $clmatricula->sql_record($clmatricula->sql_query("",
-                                                            "*",
-                                                            "ed47_v_nome",
-                                                            " ed60_i_aluno in ($alunos) AND ed60_i_turma = $turma"
-                                                           )
-                                   );
+    "",
+    " ed220_i_codigo = $turma"
+  )
+);
+db_fieldsmemory($result, 0);
+$result  = $clmatricula->sql_record(
+  $clmatricula->sql_query(
+    "",
+    "*",
+    "ed47_v_nome",
+    " ed60_i_aluno in ($alunos) AND ed60_i_turma = $turma"
+  )
+);
 
 $oTurma = TurmaRepository::getTurmaByCodigo($turma);
 $oEtapa = EtapaRepository::getEtapaByCodigo($etapa);
@@ -80,7 +88,7 @@ if ($oTurma->getFormaCalculoCargaHoraria() == 1) {
 
 $oProcedimentoAvalicao = $oTurma->getProcedimentoDeAvaliacaoDaEtapa($oEtapa);
 
-$periodo = explode("|",$periodo);
+$periodo = explode("|", $periodo);
 if ($periodo[0] == 'R') {
 
   $oElementoAvaliacao = ResultadoAvaliacaoRepository::getResultadoAvaliacaoByCodigo($periodo[1]);
@@ -103,23 +111,23 @@ if ($periodo[0] == 'R') {
   $aAvaliacoes        = array($oElementoAvaliacao);
 }
 
-if ($clmatricula->numrows == 0) {?>
+if ($clmatricula->numrows == 0) { ?>
 
   <table width='100%'>
-   <tr>
-    <td align='center'>
-     <font color='#FF0000' face='arial'>
-      <b>Nenhuma matrícula para a turma selecionada<br>
-      <input type='button' value='Fechar' onclick='window.close()'></b>
-     </font>
-    </td>
-   </tr>
+    <tr>
+      <td align='center'>
+        <font color='#FF0000' face='arial'>
+          <b>Nenhuma matrícula para a turma selecionada<br>
+            <input type='button' value='Fechar' onclick='window.close()'></b>
+        </font>
+      </td>
+    </tr>
   </table>
-  <?
+<?
   exit;
 }
 
-$pdf = new FPDF();
+$pdf = new PDF();
 $pdf->Open();
 $pdf->AliasNbPages();
 $m0         = 9;
@@ -136,7 +144,7 @@ $f          = 190;
 $r          = 33;
 $alturahead = $pdf->setY(3);
 for ($x = 0; $x < $clmatricula->numrows; $x++) {
-  db_fieldsmemory($result,$x);
+  db_fieldsmemory($result, $x);
 
   db_inicio_transacao();
   $oMatricula = MatriculaRepository::getMatriculaByCodigo($ed60_i_codigo);
@@ -164,23 +172,25 @@ for ($x = 0; $x < $clmatricula->numrows; $x++) {
   /**
    * Dados Instituição
    */
+  /*
   $sCamposInstit   = "nomeinst as nome,ender,munic,uf,telef,email,url,logo";
-  $sSqlDadosInstit = $clDBConfig->sql_query_file(db_getsession('DB_instit'),$sCamposInstit);
+  $sSqlDadosInstit = $clDBConfig->sql_query_file(db_getsession('DB_instit'), $sCamposInstit);
   $rsDadosInstit   = db_query($sSqlDadosInstit);
-  $oDadosInstit    = db_utils::fieldsMemory($rsDadosInstit,0);
+  $oDadosInstit    = db_utils::fieldsMemory($rsDadosInstit, 0);
   $url             = $oDadosInstit->url;
   $nome            = $oDadosInstit->nome;
   $sLogoInstit     = $oDadosInstit->logo;
   $munic           = $oDadosInstit->munic;
-
+  */
   /**
    * Dados Escola
    */
+  /*
   $sCamposEscola     = "ed18_i_codigo,ed18_c_nome,j14_nome,ed18_i_numero,j13_descr,ed261_c_nome,ed260_c_sigla, ";
   $sCamposEscola    .= "ed18_c_email,ed18_c_logo, ed18_codigoreferencia";
-  $sSqlDadosEscola   = $clEscola->sql_query_dados(db_getsession("DB_coddepto"),$sCamposEscola);
+  $sSqlDadosEscola   = $clEscola->sql_query_dados(db_getsession("DB_coddepto"), $sCamposEscola);
   $rsDadosEscola     = db_query($sSqlDadosEscola);
-  $oDadosEscola      = db_utils::fieldsMemory($rsDadosEscola,0);
+  $oDadosEscola      = db_utils::fieldsMemory($rsDadosEscola, 0);
   $sNomeEscola       = $oDadosEscola->ed18_c_nome;
   $sLogoEscola       = $oDadosEscola->ed18_c_logo;
   $iCodigoEscola     = $oDadosEscola->ed18_i_codigo;
@@ -194,33 +204,31 @@ for ($x = 0; $x < $clmatricula->numrows; $x++) {
 
   /**
    * Valida se a turma possui Código Referência e o adiciona na frente do nome.
-   */
-  if ( $iCodigoReferencia != null ) {
+ 
+  if ($iCodigoReferencia != null) {
     $sNomeEscola = "{$iCodigoReferencia} - {$sNomeEscola}";
   }
 
-  $sSqlTelefoneEscola = $clEscola->sql_query_telefone("","ed26_i_numero,ed26_i_ddd","","ed26_i_escola= $iCodigoEscola");
+  $sSqlTelefoneEscola = $clEscola->sql_query_telefone("", "ed26_i_numero,ed26_i_ddd", "", "ed26_i_escola= $iCodigoEscola");
   $rsTelefoneEscola   = db_query($sSqlTelefoneEscola);
-  $oTelefoneEscola    = db_utils::fieldsMemory($rsTelefoneEscola,0);
+  $oTelefoneEscola    = db_utils::fieldsMemory($rsTelefoneEscola, 0);
   $iTelefoneEscola    = $oTelefoneEscola->ed26_i_numero;
   $iDTelefone         = $oTelefoneEscola->ed26_i_ddd;
 
-  $DadosCabecalho = $sNomeEscola. " (".$iDTelefone.")" .$iTelefoneEscola;
-
+  $DadosCabecalho = $sNomeEscola . " (" . $iDTelefone . ")" . $iTelefoneEscola;
+  */
   if ($periodo[0] == "A") {
 
     $tp_per  = "A";
-    $sql1    = $clprocavaliacao->sql_query("","ed09_c_descr as periodoselecionado",""," ed41_i_codigo = $periodo[1]");
+    $sql1    = $clprocavaliacao->sql_query("", "ed09_c_descr as periodoselecionado", "", " ed41_i_codigo = $periodo[1]");
     $result1 = $clprocavaliacao->sql_record($sql1);
-    db_fieldsmemory($result1,0);
-
+    db_fieldsmemory($result1, 0);
   } else {
 
     $tp_per  = "R";
-    $sql1    = $clprocresultado->sql_query("","ed42_c_descr  as periodoselecionado",""," ed43_i_codigo = $periodo[1]");
+    $sql1    = $clprocresultado->sql_query("", "ed42_c_descr  as periodoselecionado", "", " ed43_i_codigo = $periodo[1]");
     $result1 = $clprocresultado->sql_record($sql1);
-    db_fieldsmemory($result1,0);
-
+    db_fieldsmemory($result1, 0);
   }
 
 
@@ -239,7 +247,7 @@ for ($x = 0; $x < $clmatricula->numrows; $x++) {
   } else {
     $order = "ed232_c_descr";
   }
-  if (strlen($nome) > 42 || strlen($sNomeEscola) > 42 ) {
+  if (strlen($nome) > 42 || strlen($sNomeEscola) > 42) {
     $TamFonteNome = 8;
   } else {
     $TamFonteNome = 9;
@@ -262,10 +270,10 @@ for ($x = 0; $x < $clmatricula->numrows; $x++) {
   $r          = 33;
   $alturahead = $pdf->setY(6);
   $pdf->setfillcolor(225);
-  $pdf->SetFont('arial','b',7);
+  $pdf->SetFont('arial', 'b', 7);
   $margemesquerda  = $pdf->lMargin;
 
-  $oLibDocumento = new libdocumento(5001,null);
+  $oLibDocumento = new libdocumento(5001, null);
 
   if ($oLibDocumento->lErro) {
     db_redireciona("db_erros.php?fechar=true&db_erro={$oLibDocumento->sMsgErro}");
@@ -273,47 +281,45 @@ for ($x = 0; $x < $clmatricula->numrows; $x++) {
 
   $aParagrafo = $oLibDocumento->getDocParagrafos();
 
-  foreach ($aParagrafo as $oParagrafo ) {
+  foreach ($aParagrafo as $oParagrafo) {
     eval($oParagrafo->oParag->db02_texto);
   }
-  $result2 = $clregencia->sql_record($clregencia->sql_query("","*",$order," ed59_i_codigo in ($disciplinas) "));
+  $result2 = $clregencia->sql_record($clregencia->sql_query("", "*", $order, " ed59_i_codigo in ($disciplinas) "));
   $linhas2 = $clregencia->numrows;
   for ($y = 0; $y < $linhas2; $y++) {
 
-    db_fieldsmemory($result2,$y);
-    $pdf->setfont('arial','b',7);
+    db_fieldsmemory($result2, $y);
+    $pdf->setfont('arial', 'b', 7);
     if ($punico == "yes") {
       $titulo = "PARECER ÚNICO";
     } else {
       $titulo = "Disciplina: $ed232_c_descr";
     }
-    $pdf->cell(190,4,$titulo,1,1,"L",1);
-    $pdf->cell(190,4,"","LR",1,"L",0);
-    $pdf->cell(10,4,"","L",0,"L",0);
-    $pdf->cell(30,4,$sLabelTipoAula,0,0,"L",0);
-    $pdf->cell(150,4, $iTotalAulas,"R",1,"L",0);
-    $pdf->cell(10,4,"","L",0,"L",0);
-    $pdf->cell(30,4,"N° Faltas:",0,0,"L",0);
-    $pdf->cell(150,4,$iTotalFaltas,"R",1,"L",0);
-    $pdf->cell(190,4,"","LR",1,"L",0);
-    $pdf->cell(10,4,"","L",0,"L",0);
-    $pdf->cell(170,4,"PARECER DESCRITIVO:",0,0,"L",0);
-    $pdf->cell(10,4,"","R",1,"L",0);
+    $pdf->cell(190, 4, $titulo, 1, 1, "L", 1);
+    $pdf->cell(190, 4, "", "LR", 1, "L", 0);
+    $pdf->cell(10, 4, "", "L", 0, "L", 0);
+    $pdf->cell(30, 4, $sLabelTipoAula, 0, 0, "L", 0);
+    $pdf->cell(150, 4, $iTotalAulas, "R", 1, "L", 0);
+    $pdf->cell(10, 4, "", "L", 0, "L", 0);
+    $pdf->cell(30, 4, "N° Faltas:", 0, 0, "L", 0);
+    $pdf->cell(150, 4, $iTotalFaltas, "R", 1, "L", 0);
+    $pdf->cell(190, 4, "", "LR", 1, "L", 0);
+    $pdf->cell(10, 4, "", "L", 0, "L", 0);
+    $pdf->cell(170, 4, "PARECER DESCRITIVO:", 0, 0, "L", 0);
+    $pdf->cell(10, 4, "", "R", 1, "L", 0);
 
     for ($t = 0; $t < 30; $t++) {
 
-      $pdf->cell(10,6,"","L",0,"L",0);
-      $pdf->cell(170,6,"","B",0,"L",0);
-      $pdf->cell(10,6,"","R",1,"L",0);
-
+      $pdf->cell(10, 6, "", "L", 0, "L", 0);
+      $pdf->cell(170, 6, "", "B", 0, "L", 0);
+      $pdf->cell(10, 6, "", "R", 1, "L", 0);
     }
 
-    $pdf->cell(190,4,"","LR",1,"L",0);
-    $pdf->cell(190,4,"","LR",1,"C",0);
-    $pdf->cell(190,4,"__________________________________________________","LR",1,"C",0);
-    $pdf->cell(190,4,"Assinatura do Regente","LR",1,"C",0);
-    $pdf->cell(190,10,"","LBR",1,"L",0);
-
+    $pdf->cell(190, 4, "", "LR", 1, "L", 0);
+    $pdf->cell(190, 4, "", "LR", 1, "C", 0);
+    $pdf->cell(190, 4, "__________________________________________________", "LR", 1, "C", 0);
+    $pdf->cell(190, 4, "Assinatura do Regente", "LR", 1, "C", 0);
+    $pdf->cell(190, 10, "", "LBR", 1, "L", 0);
   }
 }
 $pdf->Output();

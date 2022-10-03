@@ -113,13 +113,14 @@ require_once("dbforms/db_classesgenericas.php");
                             <fieldset style="margin:0 auto 0 auto; width: 500px;">
                                 <legend><b>Período</b></legend>
                                 <table>
-                                    <tr>
-                                        <td>
+                                
+                                    <tr>    
+                                        
                                             <?php
                                             $aPeriodoDatas = explode('-', date('Y-m-d', db_getsession('DB_datausu')));
                                             list($iAnoInicial, $iMesInicial, $iDiaInicial) = $aPeriodoDatas;
                                             ?>
-                                            <table>
+                                           
                                                 <td nowrap title="<?=$TDBtxt21?>">
                                                     <b>Data Inicial:</b>
                                                 </td>
@@ -138,11 +139,20 @@ require_once("dbforms/db_classesgenericas.php");
                                             </td>
                                         </td>
                                     </tr>
+                                     <tr>  
+                                        <td><b>Referência:</b></td>
+                                        <td>
+                                            <?php
+                                            $aReferencia = array(0 => "Selecione...", 1 => "Liquidação", 2 => "Nota Fiscal");
+                                            db_select("sReferencia", $aReferencia, true, 1);
+                                            ?>
+                                        </td>
+                                    </tr>
                                     <tr>
                                         <td><b>Tipo:</b></td>
                                         <td>
                                             <?php
-                                            $aTipo = array(0 => "Selecione...", 1 => "Com Retenções", 2 => "Sem Retenções", 3 => "Todos");
+                                            $aTipo = array(1 => "Com Retenções", 2 => "Sem Retenções", 3 => "Todos");
                                             db_select("sTipo", $aTipo, true, 1);
                                             ?>
                                         </td>
@@ -203,6 +213,13 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
 
         function OpenWithPost(dados, name){
 
+            let referencia = $F('sReferencia');
+
+            if (referencia == 0){
+                alert("Selecione Uma Referencia de Data!")
+                return false
+            }
+
             let tipoImpressao = $F('sTipoImpressao');
 
             if (tipoImpressao == 0){
@@ -249,12 +266,13 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
         dados['sTipoImpressao']              = $F('sTipoImpressao');
         dados['sTipo']                       = $F('sTipo');
         dados['sTipoSelecao']                = $F('sTipoSelecao');
+        dados['sReferencia']                = $F('sReferencia');
 
         var name = new Date().getTime();
         OpenWithPost(dados, name);
 
     });
-
+    $('sReferencia').style.width =' 100%';
 
 </script>
 </html>
