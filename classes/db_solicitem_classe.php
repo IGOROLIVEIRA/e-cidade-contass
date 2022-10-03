@@ -1470,6 +1470,54 @@ class cl_solicitem
     return $sSql;
   }  
 
+  public function sql_query_solicitem_emp($pc11_codigo = null, $campos = "*", $ordem = null, $dbwhere = "")
+  {
+
+    $sSql = "select ";
+    if ($campos != "*") {
+
+      $campos_sql = split("#", $campos);
+      $virgula = "";
+      for ($i = 0; $i < sizeof($campos_sql); $i++) {
+
+        $sSql   .= $virgula . $campos_sql[$i];
+        $virgula = ",";
+      }
+    } else {
+
+      $sSql .= $campos;
+    }
+    $sSql .= "  from solicitem";
+    $sSql .="        inner join pcprocitem on pc81_solicitem = pc11_codigo";
+    $sSql .="        inner join empautitempcprocitem on e73_pcprocitem = pc81_codprocitem";
+    $sSql .="        inner join empautoriza on e54_autori = e73_autori";
+    $sSql .="        inner join empempaut on e61_autori = e54_autori";
+    $sSql .="        inner join empautitem on e55_autori = e54_autori";
+    $sSql .="        inner join empempitem on e62_numemp = e61_numemp";
+    $sSql .="                                            and e62_item = e55_item";
+    $sSqlWhere = '';
+    if ($dbwhere == "") {
+      if ($pc11_codigo != null) {
+        $sSqlWhere  .= " where comp.pc11_codigo = {$pc11_codigo} ";
+      }
+    } else if ($dbwhere != "") {
+      $sSqlWhere .= " where $dbwhere";
+    }
+    $sSql .= $sSqlWhere;
+    if ($ordem != null) {
+
+      $sSql       .= " order by ";
+      $campos_sql  = split("#", $ordem);
+      $virgula     = "";
+      for ($i = 0; $i < sizeof($campos_sql); $i++) {
+
+        $sSql    .= $virgula . $campos_sql[$i];
+        $virgula  = ",";
+      }
+    }
+    return $sSql;
+  }
+
   public function sql_query_solicitaprotprocesso($pc11_codigo = null, $campos = "*", $ordem = null, $dbwhere = "")
   {
     $sql = "select ";

@@ -2795,7 +2795,31 @@ class empenho {
           $this->sErroMsg .= "\nErro:{$clempanuladoitem->erro_msg}";
           return false;
         }
+
         /**
+         * Verifica se o empenho tem solicitação de Registro de Preco vinculada e inclui dados na tabela solicitemanul
+         * para anular o item na solicitação e anular a solicitação
+         */
+        $clsolicitem = $this->usarDao("solicitem",true);
+        $ItemSol = $clsolicitem->sql_record($clsolicitem->sql_query_solicitem_emp(null, "pc11_codigo", null,"e62_sequencial = " . $aItens[$iInd]->e62_sequencial));
+        $rsItemSol = db_utils::fieldsMemory($ItemSol,0);
+         
+        if(pg_num_rows($ItemSol) > 0){
+        $clsolicitemanul = $this->usarDao("solicitemanul",true); 
+        $clsolicitemanul->pc28_solicitem = $rsItemSol->pc11_codigo;
+        $clsolicitemanul->pc28_vlranu     = $aItens[$iInd]->vlrtot;
+        $clsolicitemanul->pc28_qtd       = $aItens[$iInd]->quantidade;
+        $clsolicitemanul->incluir(null);
+
+         if ($clsolicitemanul->erro_status == 0){
+           $this->lSqlErro = true;
+           $this->sErroMsg  = "Não Foi possível anular empenho.Erro ao incluir Item solicitacao como anulado.";
+           $this->sErroMsg .= "\nErro:{$clsolicitemanul->erro_msg}";
+           return false;
+        }
+      }
+
+        /**;
          * Verificamos se o item possui vinculo com algum item de pacto lancamos o o valor na pactoitemvalormov
          */
         if (!$this->lSqlErro && $lControlePacto) {
@@ -3577,7 +3601,7 @@ class empenho {
           $rsContrato  = $oDaoEmpenhoContrato->sql_record($sSqlContrato);
           $rsAnoEmp    = $oDaoEmpempenho->sql_record($sSqlAnoEmp) or die($sSqlAnoEmp);
 
-          $oAnoEmp     = db_utils::fieldsMemory($rsAnoEmp);
+          $oAnoEmp     = db_utils::fieldsMemory($rsAnoEmp, 0);
 
           if (!$this->lSqlErro && $oDaoEmpenhoContrato->numrows > 0) {
 
