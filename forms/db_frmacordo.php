@@ -1134,7 +1134,7 @@ db_app::load("dbtextFieldData.widget.js");
         $('ac02_natureza_obj').value = chave3;
         $('ac16_acordogrupo').focus();
 
-        js_verificaNatureza(chave1);
+        js_verificaNatureza(chave3);
         var oGet = js_urlToObject();
 
         /*
@@ -1150,14 +1150,8 @@ db_app::load("dbtextFieldData.widget.js");
     }
 
     function js_verificaNatureza(codnat) {
-
-        if(codnat == "1"){
-            $('ac16_qtdperiodo').style.backgroundColor = "#FFF";
-        }else if(codnat == "2"){
-            $('ac16_qtdperiodo').style.backgroundColor = "#FFF";
-        }else if(codnat == "3"){
-            $('ac16_qtdperiodo').style.backgroundColor = "#FFF";
-        }else if(codnat == "7"){
+console.log(codnat);
+        if(codnat == "1" ||codnat == "7"){
             $('ac16_qtdperiodo').style.backgroundColor = "#FFF";
         }else{
             $('ac16_qtdperiodo').style.backgroundColor = "#E6E4F1";
