@@ -249,43 +249,38 @@ if ( $oGet->parReceit != '' ) {
 
 if ( $oGet->dtini != "--" && $oGet->dtfim != "--" ) {
 
-	$aWhere[]             = "k00_dtoper  between '{$oGet->dtini}' and '{$oGet->dtfim}'";
+  $aWhere[]             = "k00_dtoper  between '{$oGet->dtini}' and '{$oGet->dtfim}'";
   $sWhereAnd            = " and k00_dtoper  between '{$oGet->dtini}' and '{$oGet->dtfim}'";
   $sDataInicio          = db_formatar($oGet->dtini, "d");
-	$sDataFim             = db_formatar($oGet->dtfim, "d");
-	$sDadosPeriodo        = "De $sDataInicio até $sDataFim.";
+  $sDataFim             = db_formatar($oGet->dtfim, "d");
+  $sDadosPeriodo        = "De $sDataInicio até $sDataFim.";
 
 } else if ($dtini != "--") {
-
-	$aWhere[]             = " k00_dtoper >= '{$oGet->dtini}'  ";
+  $aWhere[]             = " k00_dtoper >= '{$oGet->dtini}'  ";
   $sWhereAnd            = " and k00_dtoper >= '{$oGet->dtini}'";
   $sDataInicio          = db_formatar($oGet->dtini, "d");
   $sDataFim             = "";
-	$sDadosPeriodo        = "Apartir de $sDataInicio.";
+  $sDadosPeriodo        = "Apartir de $sDataInicio.";
 } else if ($dtfim != "--") {
-
   $aWhere[]             = " k00_dtoper <= '{$oGet->dtfim}'   ";
-  $sWhereAnd            = " and k00_dtoper <= '{$oGet->dtfim}'"; 
+  $sWhereAnd            = " and k00_dtoper <= '{$oGet->dtfim}'";
   $sDataInicio          = "";
   $sDataFim             = db_formatar($oGet->dtfim, "d");
   $sDadosPeriodo        = "Até $sDataFim.";
 }
 
 if ( !empty($oGet->exercini) && !empty($oGet->exercfim) ) {
-
-	$aWhere[]              = "fc_arrecexerc(y.k00_numpre,y.k00_numpar)  between '{$oGet->exercini}' and '{$oGet->exercfim}'  ";
+  $aWhere[]              = "fc_arrecexerc(y.k00_numpre,y.k00_numpar)  between '{$oGet->exercini}' and '{$oGet->exercfim}'  ";
   $sWhereAnd             = " and extract(year from k00_dtoper) between '{$oGet->exercini}' and '{$oGet->exercfim}'  ";
   $sDadosExercicio       = "Do exercício {$oGet->exercini} até {$oGet->exercfim}.";
 } else if ( !empty($oGet->exercini) ) {
-
-	$aWhere[]              = "fc_arrecexerc(y.k00_numpre,y.k00_numpar) >= '{$oGet->exercini}'  ";
+  $aWhere[]              = "fc_arrecexerc(y.k00_numpre,y.k00_numpar) >= '{$oGet->exercini}'  ";
   $sWhereAnd             = " and extract(year from k00_dtoper) >= '{$oGet->exercini}'  ";
   $sDadosExercicio       = "Apartir do exercício {$oGet->exercini}.";
 } else if ( !empty($oGet->exercfim) ) {
-
-	$aWhere[]              = "fc_arrecexerc(y.k00_numpre,y.k00_numpar) <= '{$oGet->exercfim}'   ";
+  $aWhere[]              = "fc_arrecexerc(y.k00_numpre,y.k00_numpar) <= '{$oGet->exercfim}'   ";
   $sWhereAnd             = " and extract(year from k00_dtoper) <= '{$oGet->exercfim}'  ";
-	$sDadosExercicio       = "Até o exercício {$oGet->exercfim}.";
+  $sDadosExercicio       = "Até o exercício {$oGet->exercfim}.";
 }
 
 $aTipoDebitos = DBTributario::getTiposDebitoByOrigem($sTipoBusca, $sChavePesquisa, $sWhereAnd);
@@ -313,7 +308,7 @@ foreach ( $aTipoDebitos as $oTipoDebito ) {
   $aParametros[] = 0;                         // Limite de Registros
   $aParametros[] = $oTipoDebito->k00_tipo;    // Tipo de Debito
   $aParametros[] = $DB_DATACALC;              // Data Base para Calculo
-  $aParametros[] = db_getsession("DB_anousu");// Ano da Sessao  
+  $aParametros[] = db_getsession("DB_anousu");// Ano da Sessao
   $aParametros[] = "";                        // Totaliza
   $aParametros[] = "";                        // Ordem Totalizacao
   $aParametros[] = count($aWhere) > 0 ? "and " . implode(" and ", $aWhere) : ""; // Filtros para a Pesquisa
