@@ -1345,25 +1345,24 @@ db_app::load("estilos.css, grid.style.css");
         oGridItensOrigem.nameInstance = 'oGridItensOrigem';
         oGridItensOrigem.setCheckbox(0);
         if (itipocompra === '103' || itipocompra === '102') {
-            oGridItensOrigem.setCellAlign(new Array("right", "right", "right", "left", 'right', 'right', 'right', "left", "center", "center", "center", "center", "center", "center", "center"));
+            oGridItensOrigem.setCellAlign(new Array("right", "right", "right", "left", 'right', 'right', 'right', "left", "center", "center","center","center", "center", "center", "center", "center", "center"));
 
-            oGridItensOrigem.setCellWidth(new Array("10%", '6%',"10%", "35%", '10%', '10%', '10%', "10%", "1%", "20%", "20%", "15%", "15%", "15%", "15%"));
+            oGridItensOrigem.setCellWidth(new Array("10%", '6%',"10%", "35%", '10%', '10%', '10%', "10%", "1%", "20%", "20%","15%", "15%","15%", "15%", "15%", "15%"));
 
-            oGridItensOrigem.setHeader(new Array("Código", "Ordem", "Cod.Mater", "Material", "Quantidade", "Vlr Un", "Total", "Tipo", "", "Qtd. Disponivel", "Qtd. Contratada", "Previsão Inicial", "Previsão Final", "Serviço", "Elemento"));
+            oGridItensOrigem.setHeader(new Array("Código", "Ordem", "Cod.Mater", "Material", "Quantidade", "Vlr Un", "Total", "Tipo", "", "Qtd. Disponivel","Vlr. Disponivel", "Qtd. Contratada", "Valor", "Previsão Inicial", "Previsão Final", "Serviço", "Elemento",""));
 
             oGridItensOrigem.aHeaders[1].lDisplayed = false;
-            //oGridItensOrigem.aHeaders[2].lDisplayed = false;
+            oGridItensOrigem.aHeaders[2].lDisplayed = false;
             
-            oGridItensOrigem.aHeaders[7].lDisplayed = false;
+            //oGridItensOrigem.aHeaders[7].lDisplayed = false;
             oGridItensOrigem.aHeaders[8].lDisplayed = false;
             oGridItensOrigem.aHeaders[9].lDisplayed = false;
-            oGridItensOrigem.aHeaders[12].lDisplayed = false;
-            oGridItensOrigem.aHeaders[13].lDisplayed = false;
             oGridItensOrigem.aHeaders[14].lDisplayed = false;
             oGridItensOrigem.aHeaders[15].lDisplayed = false;
-
-            
-            
+            oGridItensOrigem.aHeaders[16].lDisplayed = false;
+            //oGridItensOrigem.aHeaders[16].lDisplayed = false;
+            //oGridItensOrigem.aHeaders[17].lDisplayed = false;
+                
             oGridItensOrigem.show($('ctngridItensOrigem'));
             
         } else {
@@ -1376,6 +1375,7 @@ db_app::load("estilos.css, grid.style.css");
                 'right',
                 'right',
                 "left",
+                "center",
                 "center",
                 "center",
                 "center",
@@ -1479,7 +1479,7 @@ db_app::load("estilos.css, grid.style.css");
 
         windowItensOrigem = new windowAux('wndItensOrigem',
             'Selecionar Itens para Contrato',
-            900,
+            1200,
             iHeight
         );
 
@@ -1586,13 +1586,37 @@ db_app::load("estilos.css, grid.style.css");
             if (iTipoCompra === '103' || iTipoCompra === '102') {
                 var aLinha = new Array();
                 var QtdDisponivel = Number(oRow.quantidade) - Number(oRow.l213_qtdcontratada);
+                if (oRow.servico =='t' && oRow.pc11_servicoquantidade == 'f'){
+                    QtdDisponivel = 1;
+                }
 
+                var VlrDisponivel = Number(oRow.valortotal) - Number(oRow.l213_valorcontratado);
+                
                 aCodigos.push(oRow.codigo);
                 oTxtDataEmissaoInicial = new DBTextFieldData('oTxtDataEmissaoInicial' + oRow.codigo, 'oTxtDataEmissao', null);
                 oTxtDataEmissaoFinal = new DBTextFieldData('oTxtDataEmissaoFinal' + oRow.codigo, 'oTxtDataEmissao', null);
 
-                oTxtQtdContratada = new DBTextField('QtdContratada' + oRow.codigo, 'oTxtQtdContratada', null, 10);
+                oTxtQtdContratada = new DBTextField('QtdContratada' + oRow.codigo, 'oTxtQtdContratada'+ oRow.codigo, null, 10);
                 oTxtQtdContratada.addEvent("onBlur", "js_ValidaCampos(this, 4)");
+                oTxtQtdContratada.setValue(QtdDisponivel);
+
+                oTxtVlrContratado = new DBTextField('VlrContratada' + oRow.codigo, 'oTxtVlrContratada', null, 10);
+                oTxtVlrContratado.setValue(VlrDisponivel);
+                
+                //Material
+                if(oRow.servico == 'f'){
+                    oTxtVlrContratado.setReadOnly(true);
+                }
+                
+                //Serviço contrololado por valor
+                if(oRow.servico == 't' && oRow.pc11_servicoquantidade == 'f'){
+                    oTxtQtdContratada.setReadOnly(true);
+                }
+
+                //Serviço contrololado por quantidade
+                if(oRow.servico == 't' && oRow.pc11_servicoquantidade == 't'){
+                    oTxtVlrContratado.setReadOnly(true);
+                }
 
                 aLinha[0] = oRow.codigo;
                 aLinha[1] = oRow.sequencia;
@@ -1608,11 +1632,15 @@ db_app::load("estilos.css, grid.style.css");
                 } else {
                     aLinha[9] = QtdDisponivel;
                 }
-                aLinha[10] = oTxtQtdContratada.toInnerHtml();
-                aLinha[11] = oTxtDataEmissaoInicial.toInnerHtml();
-                aLinha[12] = oTxtDataEmissaoFinal.toInnerHtml();
-                aLinha[13] = oRow.servico;
-                aLinha[14] = oRow.elemento;
+                aLinha[10] = VlrDisponivel == 0 ? '0' : VlrDisponivel;
+                aLinha[11] = oTxtQtdContratada.toInnerHtml();
+                aLinha[12] = oTxtVlrContratado.toInnerHtml();
+                aLinha[13] = oTxtDataEmissaoInicial.toInnerHtml();;
+                aLinha[14] = oTxtDataEmissaoFinal.toInnerHtml();
+                aLinha[15] = oRow.servico;
+                aLinha[16] = oRow.elemento;
+                aLinha[17] = oRow.pc11_servicoquantidade;
+
 
                 var lMarcado = false;
                 var lDisabled = false;
@@ -1716,25 +1744,33 @@ db_app::load("estilos.css, grid.style.css");
         var oDadosItens;
         var lErro = false;
         if (iTipoCompra === '103' || iTipoCompra === '102') {
-            console.log(aListaCheckbox);
+            
             aListaCheckbox.each(function(aRow) {
+                
                 var VlrTotal = 0
 
                 VlrTotal = Number(aRow[6]) * Number(oRow[11]);
                 let nvalor = aRow[6];
-
+                console.log(aRow);
                 oDadosItens = new Object();
                 oDadosItens.codigo = aRow[0];
                 oDadosItens.codigomaterial = aRow[3];
-                oDadosItens.quantidade = aRow[11];
-                oDadosItens.valorunitario = nvalor.replace('.', '').replace(',', '.');
+                oDadosItens.quantidade = aRow[12];
+                if(aRow[16] == 't' && aRow[18] == 'f'){
+                    let nvalor = aRow[13];
+                    oDadosItens.valorunitario = nvalor.replace('.', '').replace(',', '.');
+                }else{
+                    oDadosItens.valorunitario = nvalor.replace('.', '').replace(',', '.');
+                }
                 oDadosItens.valortotal = VlrTotal;
                 oDadosItens.iFormaControle = 1;
-                oDadosItens.dtInicial = aRow[12];
-                oDadosItens.dtFinal = aRow[13];
-                oDadosItens.servico = aRow[14];
-                oDadosItens.elemento = aRow[15];
+                oDadosItens.dtInicial = aRow[14];
+                oDadosItens.dtFinal = aRow[15];
+                oDadosItens.servico = aRow[16];
+                oDadosItens.elemento = aRow[17];
                 oDadosItens.qtdDisponivel = aRow[10];
+                oDadosItens.vlrDisponivel = aRow[11];
+
 
                 if (oDadosItens.dtInicial == null || oDadosItens.dtInicial == '') {
 
@@ -1746,6 +1782,12 @@ db_app::load("estilos.css, grid.style.css");
                 if (oDadosItens.dtFinal == null || oDadosItens.dtFinal == '') {
 
                     alert('Preencha as datas finais do período de execução.');
+                    lErro = true;
+                    throw $break;
+                }
+
+                if (Number(oDadosItens.valorunitario) > Number(oDadosItens.vlrDisponivel)) {
+                    alert('O valor disponível para o item ' + oDadosItens.codigomaterial + ' é ' + oDadosItens.vlrDisponivel);
                     lErro = true;
                     throw $break;
                 }
