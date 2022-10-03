@@ -1,4 +1,4 @@
-<?
+<?php
 /*
  *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2014  DBseller Servicos de Informatica
@@ -49,8 +49,8 @@ $oDaoParDiv   = db_utils::getDao("pardiv");
 $sSqlPardiv   = $oDaoParDiv->sql_query_file(db_getsession("DB_instit"));
 $rsPardiv     = $oDaoParDiv->sql_record($sSqlPardiv);
 $lImpFolha    = false;
-$obsParam     = '';
-$lbProcedencia= 'PROCEDÊNCIA';
+$oInstit = new Instituicao(db_getsession('DB_instit'));
+$lbProcedencia=  $oInstit->getCodigoCliente() !== Instituicao::COD_CLI_PMPIRAPORA ? 'PROCEDÊNCIA' : 'PROCEDÊNCIA-HISTÓRICO';
 
 /*
  * Variavel tipo é retornada pelo $_GET
@@ -109,15 +109,6 @@ if (!isset($valormaximo) || $valormaximo == ""){
 if (!isset($valormonimo) || $valorminimo == ""){
     $valorminimo = 0;
 }
- 
-/**Parâmetros para inclusão/concatenação na Observação da CDA */
-$oInstit = new Instituicao(db_getsession('DB_instit'));
-
-if($oInstit->getCodigoCliente() == Instituicao::COD_CLI_PMPIRAPORA){
-$lbProcedencia  = "PROCEDÊNCIA-HISTÓRICO";
-$obsParam       = "\nEnquadramento legal: Código Tributário Municipal.\nLeis Complementares: 1815/2005 e 2.517/2021.";
-} 
-//Fim da inclusão/concatenação na observação da CDA
 
 /**
  * Buscamos o documento da que agrupa a CDA
@@ -218,7 +209,7 @@ $head5 = "";
 for ($numcertid = 0; $numcertid < $numero; $numcertid++) {
 
     if ($tipo == 2) {
-        
+
         $sql="select v14_certid,v13_dtemis
            from  certdiv
                  inner join divida 		on v01_coddiv = v14_coddiv
@@ -310,12 +301,12 @@ for ($numcertid = 0; $numcertid < $numero; $numcertid++) {
 
                 case "certifico" :
 
-                    drawCertifico($pdf, $oCDA, @$oDocumento->aParagrafos[1]);
+                    drawCertifico($pdf, $oCDA, $oDocumento->aParagrafos[1]);
                     break;
 
                 case "dados_parcelamento" :
 
-                    drawDadosParcelamento($pdf, $oCDA, @$oParagrafo);
+                    drawDadosParcelamento($pdf, $oCDA, $oParagrafo);
                     break;
 
                 case "fundamentacao_legal" :
@@ -704,7 +695,7 @@ function drawMetodologia($pdf, cda $oCertidao, $aProcedencias) {
 
 function drawDebitos(pdf3 $pdf, cda $oCertidao, $oPardiv, $lTotaliza=false, $lReemissao) {
 
-    global $tipo, $lImpFolha, $obsParam, $lbProcedencia, $oInstit;
+    global $tipo, $lImpFolha, $lbProcedencia, $oInstit;
     $aDebitos         = $oCertidao->getDebitos($lReemissao);
     if ($tipo == 1) {
 
@@ -768,7 +759,7 @@ function drawDebitos(pdf3 $pdf, cda $oCertidao, $oPardiv, $lTotaliza=false, $lRe
 
                     $pdf->SetFont('','I',5);
                     $pdf->setX(10);
-                    $pdf->Cell(188,4,"Observação: $oProcedencias->observacao . $obsParam",1,1,"L",0);
+                    $pdf->Cell(188,4,"Observação: $oProcedencias->observacao",1,1,"L",0);
                     $pdf->SetFont('','',7);
 
                 }
@@ -943,13 +934,13 @@ function drawDebitos(pdf3 $pdf, cda $oCertidao, $oPardiv, $lTotaliza=false, $lRe
 
                 }
                 if ( $oPardiv->v04_imphistcda == "t" && isset($oDebito->observacao)) {
-                    
+
                     $pdf->SetFont('','I',5);
                     $pdf->setX(10);
 
                     $pdf->SetAligns(array('J'));
                     $pdf->SetWidths(array(194));
-                    $pdf->Row_multicell(array("Observação: {$oDebito->observacao} . {$obsParam}"),4,true,4,0,true,true,3,3);
+                    $pdf->Row_multicell(array("Observação: {$oDebito->observacao}"),4,true,4,0,true,true,3,3);
 
                     $pdf->SetFont('','',6);
 
@@ -998,7 +989,7 @@ function drawDebitos(pdf3 $pdf, cda $oCertidao, $oPardiv, $lTotaliza=false, $lRe
 
 function drawDebitosHonorarios(pdf3 $pdf, cda $oCertidao, $oPardiv, $lTotaliza=false, $lReemissao) {
 
-    global $tipo, $lImpFolha, $obsParam, $lbProcedencia, $oInstit;
+    global $tipo, $lImpFolha, $lbProcedencia, $oInstit;
     $aDebitos         = $oCertidao->getDebitos($lReemissao);
     if ($tipo == 1) {
 
@@ -1062,7 +1053,7 @@ function drawDebitosHonorarios(pdf3 $pdf, cda $oCertidao, $oPardiv, $lTotaliza=f
 
                     $pdf->SetFont('','I',5);
                     $pdf->setX(10);
-                    $pdf->Cell(188,4,"Observação: $oProcedencias->observacao . $obsParam",1,1,"L",0);
+                    $pdf->Cell(188,4,"Observação: $oProcedencias->observacao",1,1,"L",0);
                     $pdf->SetFont('','',7);
 
                 }
@@ -1141,7 +1132,7 @@ function drawDebitosHonorarios(pdf3 $pdf, cda $oCertidao, $oPardiv, $lTotaliza=f
 
             //Data inicial para costumização da coluna Data Inscr. para Data Oper.
             $dtInicialModelo  = strtotime('2022-04-11');
-            $dtEmissao        = strtotime($oCertidao->getDataEmissao());   
+            $dtEmissao        = strtotime($oCertidao->getDataEmissao());
             //die($dtInicialModelo.' - '.$dtEmissao);
             if (($dtEmissao >= $dtInicialModelo) && ($oInstit->getCodigoCliente() == Instituicao::COD_CLI_PMPIRAPORA)){
                 $lbDtInscricao  = "DATA OPER.";
@@ -1185,7 +1176,7 @@ function drawDebitosHonorarios(pdf3 $pdf, cda $oCertidao, $oPardiv, $lTotaliza=f
             $iExercicioAnterior = null;
             $pagina             = 0;
             $iY = 0;
-            
+
             foreach ($aTipo as $oDebito) {
 
                 if ( $oDebito->exercicio != $iExercicioAnterior && $lEscreveTotal && $lTotaliza) {
@@ -1223,11 +1214,11 @@ function drawDebitosHonorarios(pdf3 $pdf, cda $oCertidao, $oPardiv, $lTotaliza=f
                     $pagina = $pdf->PageNo();
 
                 }
-                
+
                 $pdf->SetFont('','',6);
                 $pdf->Cell(10,5,$oDebito->exercicio,1,0,"C",0);
                 $pdf->Cell(9,5,$oDebito->numpar,1,0,"C",0);
-                
+
                 if($oInstit->getCodigoCliente() == Instituicao::COD_CLI_PMPIRAPORA){
                     $pdf->Cell(30,5,substr($oDebito->procedencia,0,12) . '-' . substr($oDebito->procedenciaHist,0,12),1,0,"L",0);
                 }else{
@@ -1252,15 +1243,15 @@ function drawDebitosHonorarios(pdf3 $pdf, cda $oCertidao, $oPardiv, $lTotaliza=f
                     $pdf->Cell(17,5,db_formatar(getValorHonorarios($oDebito->valorcorrigido),'f'),1,0,"R",0);
                     $pdf->Cell(20,5,db_formatar($oDebito->valorcorrigido+getValorHonorarios($oDebito->valorcorrigido),'f'),1,1,"R",0);
 
-                }                               
+                }
                 if ( $oPardiv->v04_imphistcda == "t" && isset($oDebito->observacao)) {
-                    
+
                     $pdf->SetFont('','I',5);
                     $pdf->setX(10);
-                  
+
                     $pdf->SetAligns(array('J'));
                     $pdf->SetWidths(array(194));
-                    $pdf->Row_multicell(array("Observação: {$oDebito->observacao} . {$obsParam}"),4,true,4,0,true,true,3,3);
+                    $pdf->Row_multicell(array("Observação: {$oDebito->observacao}"),4,true,4,0,true,true,3,3);
 
                     $pdf->SetFont('','',6);
 
@@ -1304,7 +1295,7 @@ function drawDebitosHonorarios(pdf3 $pdf, cda $oCertidao, $oPardiv, $lTotaliza=f
 
 function drawTotalizacaoDebitos(pdf3 $pdf, cda $oCertidao, $oPardiv, $lTotaliza=false, $lReemissao,$lComposicao=false,$lCorrigido=false) {
 
-    global $tipo, $lImpFolha, $obsParam, $lbProcedencia;
+    global $tipo, $lImpFolha, $lbProcedencia;
 
     $nTotalGeral         = 0;
     $nTotalGeralJuros    = 0;
@@ -1377,7 +1368,7 @@ function drawTotalizacaoDebitos(pdf3 $pdf, cda $oCertidao, $oPardiv, $lTotaliza=
 
 function drawDebitosOrigemCorrigido(pdf3 $pdf, cda $oCertidao, $oPardiv, $lTotaliza=false, $lReemissao, $lCorrigido) {
 
-    global $tipo, $lImpFolha, $obsParam, $lbProcedencia, $oInstit;
+    global $tipo, $lImpFolha, $lbProcedencia, $oInstit;
 
     $oCertidao->setComposicao(false);
 
@@ -1570,7 +1561,7 @@ function drawDebitosOrigemCorrigido(pdf3 $pdf, cda $oCertidao, $oPardiv, $lTotal
 
                 $pdf->SetAligns(array('J'));
                 $pdf->SetWidths(array(194));
-                $pdf->Row_multicell(array("Observação: {$oDebito->observacao} . {$obsParam}"),4,true,4,0,true,true,3,3);
+                $pdf->Row_multicell(array("Observação: {$oDebito->observacao}"),4,true,4,0,true,true,3,3);
 
                 $pdf->SetFont('','',6);
             }
@@ -1617,7 +1608,7 @@ function drawDebitosOrigemCorrigido(pdf3 $pdf, cda $oCertidao, $oPardiv, $lTotal
 
 function drawDebitosOrigemCorrigidoData(pdf3 $pdf, cda $oCertidao, $oPardiv, $lTotaliza=false, $lReemissao, $lCorrigido) {
 
-    global $tipo, $lImpFolha, $obsParam, $lbProcedencia, $oInstit;
+    global $tipo, $lImpFolha, $lbProcedencia, $oInstit;
 
     $oCertidao->setComposicao(false);
 
@@ -1817,7 +1808,7 @@ function drawDebitosOrigemCorrigidoData(pdf3 $pdf, cda $oCertidao, $oPardiv, $lT
 
                 $pdf->SetAligns(array('J'));
                 $pdf->SetWidths(array(194));
-                $pdf->Row_multicell(array("Observação: {$oDebito->observacao} . {$obsParam}"),4,true,4,0,true,true,3,3);
+                $pdf->Row_multicell(array("Observação: {$oDebito->observacao}"),4,true,4,0,true,true,3,3);
 
                 $pdf->SetFont('','',6);
             }
@@ -1864,7 +1855,7 @@ function drawDebitosOrigemCorrigidoData(pdf3 $pdf, cda $oCertidao, $oPardiv, $lT
 
 function drawDebitosComposicao(pdf3 $pdf, cda $oCertidao, $oPardiv, $lTotaliza=false, $lReemissao,$lCorrigido) {
 
-    global $tipo, $lImpFolha, $obsParam, $lbProcedencia, $oInstit;
+    global $tipo, $lImpFolha, $lbProcedencia, $oInstit;
 
 
     if ($tipo == 2 ) {
@@ -2032,7 +2023,7 @@ function drawDebitosComposicao(pdf3 $pdf, cda $oCertidao, $oPardiv, $lTotaliza=f
                 $pdf->Cell(27,5,substr($oDebito->procedencia,0,11) . '-' . substr($oDebito->procedenciaHist,0,11),1,0,"L",0);
             }else{
                 $pdf->Cell(27,5,$oDebito->procedencia,1,0,"L",0);
-            };           
+            };
             $pdf->Cell(17,5,$oDebito->origemdebito                   ,1,0,"C",0);
             $pdf->Cell(12,5,db_formatar($oDebito->datainscricao,'d') ,1,0,"C",0);
             $pdf->Cell(12,5,db_formatar($oDebito->datavencimento,'d'),1,0,"C",0);
@@ -2058,7 +2049,7 @@ function drawDebitosComposicao(pdf3 $pdf, cda $oCertidao, $oPardiv, $lTotaliza=f
 
                 $pdf->SetAligns(array('J'));
                 $pdf->SetWidths(array(194));
-                $pdf->Row_multicell(array("Observação: {$oDebito->observacao} . {$obsParam}"),4,true,4,0,true,true,3,3);
+                $pdf->Row_multicell(array("Observação: {$oDebito->observacao}"),4,true,4,0,true,true,3,3);
 
                 $pdf->SetFont('','',6);
             }
@@ -3143,7 +3134,7 @@ function drawDadosParcelamento($pdf, $oCertidao, $sTexto) {
 
 function drawDebitosInflator($pdf, cda $oCertidao, $oPardiv, $sInflator, $lTotaliza, $lReemissao) {
 
-    global $tipo, $lImpFolha, $obsParam, $lbProcedencia;
+    global $tipo, $lImpFolha, $lbProcedencia;
     $aDebitos         = $oCertidao->getDebitos($lReemissao);
 
     $dDataEmissao = date("Y-m-d",db_getsession("DB_datausu"));
@@ -3198,7 +3189,7 @@ function drawDebitosInflator($pdf, cda $oCertidao, $oPardiv, $sInflator, $lTotal
 
                     $pdf->SetFont('','I',5);
                     $pdf->setX(10);
-                    $pdf->Cell(188,4,"Observação: $oProcedencias->observacao . $obsParam",1,1,"L",0);
+                    $pdf->Cell(188,4,"Observação: $oProcedencias->observacao",1,1,"L",0);
                     $pdf->SetFont('','',7);
 
                 }
