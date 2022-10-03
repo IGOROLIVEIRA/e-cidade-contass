@@ -514,18 +514,24 @@ switch ($oParam->exec) {
           $oDaoItem = db_utils::getDao('acordoitemexecutado');
           $sSqlItem = $oDaoItem->sql_query(
             '',
-            ' sum(ac29_valor) as valor, sum(ac29_quantidade) as quantidade',
+            ' sum(ac29_valor) as valor, sum(ac29_quantidade) as quantidade, ac20_servicoquantidade as controle, pc01_servico as servico',
             '',
             ' ac20_pcmater = ' . $oDado->getMaterial()->getMaterial() . '
 						  AND ac26_sequencial = (SELECT max(ac26_sequencial)
 									  FROM acordoposicao
 									  WHERE ac26_acordo = ' . $oParam->ac16_sequencial . ')
-					  	AND ac26_acordo = ' . $oParam->ac16_sequencial
+					  	AND ac26_acordo = ' . $oParam->ac16_sequencial . 'GROUP BY ac20_servicoquantidade, pc01_servico'
           );
 
           $rsItem = $oDaoItem->sql_record($sSqlItem);
+          $controleItem = db_utils::fieldsMemory($rsItem, 0)->controle;
+          $servicoItem = db_utils::fieldsMemory($rsItem, 0)->servico;
           $valorExecutado = db_utils::fieldsMemory($rsItem, 0)->valor;
+          if($controleItem == 'f' || $servicoItem == 't'){
+          $qtdeExecutada = 0;
+          } else {
           $qtdeExecutada = db_utils::fieldsMemory($rsItem, 0)->quantidade;
+          }
 
           $oItem = new stdClass();
           $oItem->codigo = $oDado->getMaterial()->getMaterial();
