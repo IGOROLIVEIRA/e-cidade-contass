@@ -140,7 +140,7 @@ try {
                 }
             }
             $oContrato = AcordoRepository::getByCodigo($oParam->iAcordo);
-            $oContrato->apostilar($oParam->aItens, $oParam->oApostila, $oParam->datainicial, $oParam->datafinal, $oParam->aSelecionados);
+            $oContrato->apostilar($oParam->aItens, $oParam->oApostila, $oParam->datainicial, $oParam->datafinal, $oParam->aSelecionados, $oParam->oApostila->datareferencia);
             break;
         
         case "getleilicitacao":
