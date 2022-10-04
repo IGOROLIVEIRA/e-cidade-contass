@@ -670,7 +670,7 @@ if (empty ($e60_numemp)) {
             //$('confirmar').disabled = true;
             valorTotal = 0;
             for (i = 0;i < itens.length;i++){
-
+                
                 if (itens[i].checked == true){
 
                     if ($F('vlrtot'+itens[i].value) != 0 && $F('vlrtot'+itens[i].value) !=''){
@@ -692,8 +692,7 @@ if (empty ($e60_numemp)) {
                         }
                         itensEmp   += sV+'{"e62_sequencial":"'+$F('e62_sequencial'+itens[i].value)+'","sequen":"'+itens[i].value+'","quantidade":"';
                         itensEmp   += $F('qtdesol'+itens[i].value)+'","vlrtot":"'+$F('vlrtot'+itens[i].value)+'",';
-                        itensEmp   += '"vlruni":"'+js_strToFloat($('vlruni'+itens[i].value).innerHTML)+'",';
-                        itensEmp   += '"servico":"'+obj.data[i].pc01_servico+'"}';
+                        itensEmp   += '"vlruni":"'+js_strToFloat($('vlruni'+itens[i].value).innerHTML)+'"}';
                         sV          = ",";
 
                         valorTotal += nVlrSaldo;
@@ -748,7 +747,7 @@ if (empty ($e60_numemp)) {
         }else if(obj.status == 3){
             mensagem = obj.mensagem.replace(/\+/g," ");
             if(confirm(mensagem)){
-                
+                js_anularEmpenho()
             }
         }else if(obj.status == 4){
             alert('tudo certo');

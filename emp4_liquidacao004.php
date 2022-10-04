@@ -496,12 +496,12 @@ switch ($objJson->method) {
     break;
 
     case "verificaacordo":
-      print_r('entrou');
+      
       $Sqlparemetrosaldo= $paremetrosaldo->sql_record($paremetrosaldo->sql_query_file('','pc01_liberarsaldoposicao'));
       $resulparemetrosaldo  = db_utils::fieldsMemory($Sqlparemetrosaldo, 0);
       $aItens = $objJson->itensAnulados;
       $iStatus = 1;
-      $nMensagem = 'usuário: ';
+      $nMensagem = 'usuario: ';
       if($Sqlparemetrosaldo->pc01_liberarsaldoposicao == false && pg_num_rows($Sqlparemetrosaldo)>0) {
         db_inicio_transacao();
         for($iInd = 0; $iInd < count($aItens); $iInd++){
@@ -548,13 +548,7 @@ switch ($objJson->method) {
             WHERE ac26_acordo = {$rsacordoMaterial->ac26_acordo})
             AND ac20_pcmater = {$rsacordoMaterial->ac20_pcmater} ");
           $ItemUltimaPosicao = db_utils::fieldsMemory($ItemUltimaPosicao,0);
-
-          if($aItens[$iInd]->servico != $ItemUltimaPosicao->ac20_servicoquantidade){
-            $nMensagem = 'Usuario: Nao sera possivel a anulacao do empenho, devido a forma de controle do item no empenho e diferente da forma de controle do item no contrato.';
-            $iStatus = 2;
-            echo $json->encode(array("mensagem" => $nMensagem, "status" => $iStatus));
-            return;
-          }
+          
           
           $empempaut = db_query("select e61_autori from empempaut where e61_numemp = {$objJson->iEmpenho}");
           if(pg_num_rows($empempaut) == 0){
@@ -592,7 +586,7 @@ switch ($objJson->method) {
           $rsacordoitem = db_utils::fieldsMemory($acordoitem,0);
 
           if($ItemUltimaPosicao->ac20_valorunitario != $aItens[$iInd]->vlruni){
-            //$nMensagem .= 'Item '.$rsacordoMaterial->ac20_pcmater.': O valor unitário atual do contrato é '.$ItemUltimaPosicao->ac20_valorunitario.' e o valor unitário do item a ser anulado é '.$aItens[$iInd]->vlruni.'. Ao anular os itens do empenho, o valor unitário será o '.$ItemUltimaPosicao->ac20_valorunitario.'. ';
+            $nMensagem .= 'Item '.$rsacordoMaterial->ac20_pcmater.': O valor unitario atual do contrato e '.$ItemUltimaPosicao->ac20_valorunitario.' e o valor unitario do item a ser anulado e '.$aItens[$iInd]->vlruni.'. Ao anular os itens do empenho, o valor unitario sera o '.$ItemUltimaPosicao->ac20_valorunitario.'. ';
             
             $iStatus = 3;
             
@@ -612,10 +606,13 @@ switch ($objJson->method) {
     break;
 
     case "anularEmpenho":
+     
 
       $Sqlparemetrosaldo= $paremetrosaldo->sql_record($paremetrosaldo->sql_query_file('','pc01_liberarsaldoposicao'));
       $resulparemetrosaldo  = db_utils::fieldsMemory($Sqlparemetrosaldo, 0);
       $aItens = $objJson->itensAnulados;
+      print_r($aItens[$iInd]->servico);
+      return;
       if($Sqlparemetrosaldo->pc01_liberarsaldoposicao == false && pg_num_rows($Sqlparemetrosaldo)>0) {
 
         
