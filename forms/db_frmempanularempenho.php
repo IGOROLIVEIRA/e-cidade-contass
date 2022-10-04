@@ -136,7 +136,7 @@ if (empty ($e60_numemp)) {
                     </tr>
                     <tr>
                         <td colspan='4' style='text-align:center'>
-                            <input name="confirmar" type="button" id="confirmar" value="Confirmar" onclick="return js_anularEmpenho()" disabled>
+                            <input name="confirmar" type="button" id="confirmar" value="Confirmar" onclick="return js_verificacordo()" disabled>
                             <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa('');" >
                         </td>
                     </tr>
@@ -615,6 +615,148 @@ if (empty ($e60_numemp)) {
         $('valortotal').innerHTML = js_formatar(nTotal, 'f');
     }
 
+    function js_verificacordo(){
+        empAnulaTipo = document.getElementById('e94_empanuladotipo').value
+        if(parseInt(empAnulaTipo) === 0) {
+            alert("Para anular o empenho é obrigatório selecionar o tipo.")
+            document.getElementById('e94_empanuladotipodescr').focus()
+            return
+        }
+
+        //validamos se existe solicitacao de anulacao. caso exista, e nao foi atendida confirmar se o usuário
+        //se realmente vai deixar sem atendar a solicitracao.
+        var itensAnulados = js_getElementbyClass(form1,'chkmarcaanulado');
+        var iErro         = 0;
+        var sSolicAtend   = '';
+        var sV            = '';
+        if (confirm('Confirma a anulação do empenho?')){
+
+            if ($F('motivo').trim() == '') {
+
+                alert('Motivo da anulação não informado');
+                return false;
+
+            }
+            if (itensAnulados.length > 0){
+
+                var sSolicAnt = 0;
+                for (i = 0;i < itensAnulados.length;i++){
+                    if (itensAnulados[i].checked == true){
+
+                        //so uma entrada para cada solicitacao.
+                        if (sSolicAnt != $F('e36_empsolic'+itensAnulados[i].value)){
+                            sSolicAtend += sV+"{'e35_sequencial':'"+$F('e36_empsolic'+itensAnulados[i].value)+"'}";
+                            sV           = ','
+                        }
+                        sSolicAnt    = $F('e36_empsolic'+itensAnulados[i].value);
+                    }else{
+                        iErro++;
+                    }
+                }
+            }
+            
+
+            if (iErro != 0){
+
+                if (!confirm('Existem solicitações de anulação para esse empenho. Há itens não antendidos.\nContinuar assim mesmo?')){
+                    return false;
+                }
+            }
+            //pegamos os itens selecionados pelo usuário.
+            itens                   = js_getElementbyClass(form1,'chkmarca');
+            itensEmp                = '';
+            sV                      = '';
+            //$('pesquisar').disabled = true;
+            //$('confirmar').disabled = true;
+            valorTotal = 0;
+            for (i = 0;i < itens.length;i++){
+
+                if (itens[i].checked == true){
+
+                    if ($F('vlrtot'+itens[i].value) != 0 && $F('vlrtot'+itens[i].value) !=''){
+                        /*
+                         * verificamos o total digitado pelo usuario;
+                         * caso o total seja maior que o existente avisamos o usuário e nao deixamos
+                         * continuar com a operaçao;
+                         */
+                        nVlrItem    = new Number($('qtdesol'+itens[i].value).value);
+                        nVlrSaldo   = new Number($('vlrtot'+itens[i].value).value);
+                        nItensEmp   = new Number($('saldo'+itens[i].value).innerHTML);//saldo de itens do empenho
+                        nValorEmp   = new Number($('saldovlr'+itens[i].value).innerHTML); //saldo do valor do item;
+                        if ( (nVlrItem > nItensEmp) || ( nVlrSaldo > nValorEmp) ){
+
+                            $('pesquisar').disabled = false;
+                            $('confirmar').disabled = false;
+                            alert('Item '+itens[i].value+' com valor/quantidade maior que o disponível.\nVerifique.');
+                            return false;
+                        }
+                        itensEmp   += sV+'{"e62_sequencial":"'+$F('e62_sequencial'+itens[i].value)+'","sequen":"'+itens[i].value+'","quantidade":"';
+                        itensEmp   += $F('qtdesol'+itens[i].value)+'","vlrtot":"'+$F('vlrtot'+itens[i].value)+'",';
+                        itensEmp   += '"vlruni":"'+js_strToFloat($('vlruni'+itens[i].value).innerHTML)+'",';
+                        itensEmp   += '"servico":"'+obj.data[i].pc01_servico+'"}';
+                        sV          = ",";
+
+                        valorTotal += nVlrSaldo;
+                    }
+
+                }
+            }
+
+            if ($('reserva').checked){
+                lRecriarReserva = true;
+            } else {
+                lRecriarReserva = false;
+            }
+
+            var sJson  = '{"method":"verificaacordo","iEmpenho":"'+$F('e60_numemp')+'","itensAnulados":['+itensEmp+'],"nValor":"'+valorTotal+'",';
+            sJson     += '"aSolicitacoes":['+sSolicAtend+'],"lRecriarReserva":'+lRecriarReserva+',"sMotivo":"'+encodeURIComponent($F('motivo'))+'",';
+            sJson     += '"iTipoAnulacao":'+$F('e94_empanuladotipo')+'}';
+            if (itensEmp != ''){
+
+                js_divCarregando("Aguarde, efetuando Anulação do Empenho.","msgBox");
+                var url     = 'emp4_liquidacao004.php';
+                var oAjax   = new Ajax.Request(
+                    url,
+                    {
+                        method: 'post',
+                        parameters: 'json='+sJson,
+                        onComplete: js_saidaverificacordo
+                    }
+                );
+            }else{
+
+                alert('Selecione ao menos 1 (um) item para anular');'vlrtot'+itens[i].value
+                $('pesquisar').disabled = false;
+                $('confirmar').disabled = false;
+
+            }
+        }
+    }
+    
+    function js_saidaverificacordo(oAjax){
+
+
+        $('pesquisar').disabled = false;
+        $('confirmar').disabled = false;
+        js_removeObj("msgBox");
+        obj = eval("("+oAjax.responseText+")");
+        if(obj.status == 2){
+
+            mensagem = obj.mensagem.replace(/\+/g," ");
+            mensagem = unescape(mensagem);
+            alert(mensagem)
+        }else if(obj.status == 3){
+            mensagem = obj.mensagem.replace(/\+/g," ");
+            if(confirm(mensagem)){
+                
+            }
+        }else if(obj.status == 4){
+            alert('tudo certo');
+        }
+
+
+    }
+
     function js_anularEmpenho(){
 
         empAnulaTipo = document.getElementById('e94_empanuladotipo').value
@@ -655,6 +797,7 @@ if (empty ($e60_numemp)) {
                     }
                 }
             }
+            
 
             if (iErro != 0){
 
@@ -670,6 +813,7 @@ if (empty ($e60_numemp)) {
             //$('confirmar').disabled = true;
             valorTotal = 0;
             for (i = 0;i < itens.length;i++){
+
                 if (itens[i].checked == true){
 
                     if ($F('vlrtot'+itens[i].value) != 0 && $F('vlrtot'+itens[i].value) !=''){
@@ -691,7 +835,8 @@ if (empty ($e60_numemp)) {
                         }
                         itensEmp   += sV+'{"e62_sequencial":"'+$F('e62_sequencial'+itens[i].value)+'","sequen":"'+itens[i].value+'","quantidade":"';
                         itensEmp   += $F('qtdesol'+itens[i].value)+'","vlrtot":"'+$F('vlrtot'+itens[i].value)+'",';
-                        itensEmp   += '"vlruni":"'+js_strToFloat($('vlruni'+itens[i].value).innerHTML)+'"}';
+                        itensEmp   += '"vlruni":"'+js_strToFloat($('vlruni'+itens[i].value).innerHTML)+'",';
+                        itensEmp   += '"servico":"'+obj.data[i].pc01_servico+'"}';
                         sV          = ",";
 
                         valorTotal += nVlrSaldo;
@@ -746,11 +891,15 @@ if (empty ($e60_numemp)) {
             }
             js_reset();
             js_pesquisa();
-        }else{
+        }else if(obj.status == 2){
 
             mensagem = obj.mensagem.replace(/\+/g," ");
             mensagem = unescape(mensagem);
             alert(mensagem)
+        }else if(obj.status == 3){
+            if(confirm('usuário: O valor unitário atual do contrato é x e o valor unitário do item a ser anulado é Y. Ao anular os itens do empenho, o valor unitário será o x. Deseja continuar?')){
+                js_anularEmpenho();
+            }
         }
 
 

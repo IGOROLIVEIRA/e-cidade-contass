@@ -495,129 +495,258 @@ switch ($objJson->method) {
 
     break;
 
+    case "verificaacordo":
+      print_r('entrou');
+      $Sqlparemetrosaldo= $paremetrosaldo->sql_record($paremetrosaldo->sql_query_file('','pc01_liberarsaldoposicao'));
+      $resulparemetrosaldo  = db_utils::fieldsMemory($Sqlparemetrosaldo, 0);
+      $aItens = $objJson->itensAnulados;
+      $iStatus = 1;
+      $nMensagem = 'usuário: ';
+      if($Sqlparemetrosaldo->pc01_liberarsaldoposicao == false && pg_num_rows($Sqlparemetrosaldo)>0) {
+        db_inicio_transacao();
+        for($iInd = 0; $iInd < count($aItens); $iInd++){
+          $acordoMaterial = db_query("SELECT ac26_acordo, ac20_pcmater
+            FROM acordoitemexecutadoempautitem
+            JOIN acordoitemexecutado ON ac19_acordoitemexecutado=ac29_sequencial
+            JOIN acordoitem ON ac29_acordoitem=ac20_sequencial
+            JOIN acordoposicao ON ac20_acordoposicao=ac26_sequencial
+            JOIN empautitem ON ac19_autori=e55_autori
+            AND ac19_sequen=e55_sequen
+            JOIN empautoriza ON e55_autori=e54_autori
+            JOIN empempaut ON e61_autori=e54_autori
+            JOIN empempitem ON e62_numemp=e61_numemp and ac20_pcmater=e62_item
+            WHERE e62_sequencial = {$aItens[$iInd]->e62_sequencial}");
+
+          $rsacordoMaterial = db_utils::fieldsMemory($acordoMaterial,0);
+
+          $DaoacordoItemDotacao = db_utils::getDao('acordoitemdotacao');
+          $Dotacao = $DaoacordoItemDotacao->sql_record("SELECT ac22_sequencial,ac22_valor,ac22_quantidade
+            FROM acordoitemdotacao
+            JOIN acordoitem ON ac20_sequencial = ac22_acordoitem
+            JOIN acordoposicao ON ac20_acordoposicao = ac26_sequencial
+            WHERE ac26_acordo = {$rsacordoMaterial->ac26_acordo}
+            AND ac20_pcmater = {$rsacordoMaterial->ac20_pcmater}
+            AND ac20_acordoposicao =
+            (SELECT max(ac26_sequencial)
+            FROM acordoposicao
+            WHERE ac26_acordo = {$rsacordoMaterial->ac26_acordo} and ac26_acordoposicaotipo <> 1)");
+          if(pg_num_rows($Dotacao) == 0){
+            break;
+          }
+
+          $Dotacao = db_utils::fieldsMemory($Dotacao,0);
+
+          $DaoacordoItem = db_utils::getDao('acordoitem');
+          $ItemUltimaPosicao = $DaoacordoItem->sql_record("
+            SELECT ac20_sequencial,ac20_quantidade,ac20_valortotal,ac20_valorunitario,ac20_acordoposicao,ac20_servicoquantidade
+            FROM acordoitem
+            JOIN acordoposicao ON ac20_acordoposicao = ac26_sequencial
+            WHERE ac26_acordo = {$rsacordoMaterial->ac26_acordo}
+            AND ac26_sequencial =
+            (SELECT max(ac26_sequencial)
+            FROM acordoposicao
+            WHERE ac26_acordo = {$rsacordoMaterial->ac26_acordo})
+            AND ac20_pcmater = {$rsacordoMaterial->ac20_pcmater} ");
+          $ItemUltimaPosicao = db_utils::fieldsMemory($ItemUltimaPosicao,0);
+
+          if($aItens[$iInd]->servico != $ItemUltimaPosicao->ac20_servicoquantidade){
+            $nMensagem = 'Usuario: Nao sera possivel a anulacao do empenho, devido a forma de controle do item no empenho e diferente da forma de controle do item no contrato.';
+            $iStatus = 2;
+            echo $json->encode(array("mensagem" => $nMensagem, "status" => $iStatus));
+            return;
+          }
+          
+          $empempaut = db_query("select e61_autori from empempaut where e61_numemp = {$objJson->iEmpenho}");
+          if(pg_num_rows($empempaut) == 0){
+            print_r('erro empaut');
+            break;
+          }
+
+          $rsempempaut = db_utils::fieldsMemory($empempaut,0);
+          $empautitem = db_query("select e55_sequen from empautitem where e55_autori = {$rsempempaut->e61_autori} and e55_item = {$rsacordoMaterial->ac20_pcmater}");
+          if(pg_num_rows($empautitem) == 0){
+            print_r('erro empautitem');
+            break;
+          }
+
+          $rsempautitem = db_utils::fieldsMemory($empautitem,0);
+          $acordoitemexecutadoempautitem = db_query("select min(ac19_acordoitemexecutado) as itemexecutado from acordoitemexecutadoempautitem  where ac19_autori = {$rsempempaut->e61_autori} and ac19_sequen = {$rsempautitem->e55_sequen}");
+          if(pg_num_rows($acordoitemexecutadoempautitem) == 0){
+            print_r('erro executempaut');
+            break;
+          }
+
+          $rsacordoitemexecutadoempautitem = db_utils::fieldsMemory($acordoitemexecutadoempautitem,0);
+
+          $acordoitemexecutado = db_query("select ac29_acordoitem from acordoitemexecutado where ac29_sequencial = {$rsacordoitemexecutadoempautitem->itemexecutado}");
+          if(pg_num_rows($acordoitemexecutado) == 0){
+            print_r('erro itemexecutad');
+            break;
+          }
+          $rsacordoitemexecutado = db_utils::fieldsMemory($acordoitemexecutado,0);
+          $acordoitem = db_query("select ac20_acordoposicao from acordoitem where ac20_sequencial = {$rsacordoitemexecutado->ac29_acordoitem}");
+          if(pg_num_rows($acordoitem) == 0){
+            print_r('erro acordoitem');
+            break;
+          }
+          $rsacordoitem = db_utils::fieldsMemory($acordoitem,0);
+
+          if($ItemUltimaPosicao->ac20_valorunitario != $aItens[$iInd]->vlruni){
+            //$nMensagem .= 'Item '.$rsacordoMaterial->ac20_pcmater.': O valor unitário atual do contrato é '.$ItemUltimaPosicao->ac20_valorunitario.' e o valor unitário do item a ser anulado é '.$aItens[$iInd]->vlruni.'. Ao anular os itens do empenho, o valor unitário será o '.$ItemUltimaPosicao->ac20_valorunitario.'. ';
+            
+            $iStatus = 3;
+            
+          }
+          
+        }
+        
+      }else{
+        $nMensagem = '';
+        $iStatus = 4;
+        
+      }
+      
+      echo $json->encode(array("mensagem" => $nMensagem, "status" => $iStatus));
+      
+
+    break;
+
     case "anularEmpenho":
 
-    $objEmpenho->buscaUltimoDocumentoExecutadoDoc($objJson->iEmpenho,21,date('Y-m-d', db_getsession('DB_datausu')));
-    if ($objEmpenho->lSqlErro) {
-      $nMensagem = urlencode($objEmpenho->sErroMsg);
-      $iStatus = 2;
-    }else {
-      $objEmpenho->setRecriarSaldo($objJson->lRecriarReserva);
-      $objEmpenho->anularEmpenho($objJson->itensAnulados,
-        $objJson->nValor,
-        $objJson->sMotivo,
-        $objJson->aSolicitacoes,
-        $objJson->iTipoAnulacao);
-      if ($objEmpenho->lSqlErro) {
+      $Sqlparemetrosaldo= $paremetrosaldo->sql_record($paremetrosaldo->sql_query_file('','pc01_liberarsaldoposicao'));
+      $resulparemetrosaldo  = db_utils::fieldsMemory($Sqlparemetrosaldo, 0);
+      $aItens = $objJson->itensAnulados;
+      if($Sqlparemetrosaldo->pc01_liberarsaldoposicao == false && pg_num_rows($Sqlparemetrosaldo)>0) {
 
+        
+      }
+
+      $objEmpenho->buscaUltimoDocumentoExecutadoDoc($objJson->iEmpenho,21,date('Y-m-d', db_getsession('DB_datausu')));
+      if ($objEmpenho->lSqlErro) {
         $nMensagem = urlencode($objEmpenho->sErroMsg);
         $iStatus = 2;
+      }else {
+        $objEmpenho->setRecriarSaldo($objJson->lRecriarReserva);
+        $objEmpenho->anularEmpenho($objJson->itensAnulados,
+          $objJson->nValor,
+          $objJson->sMotivo,
+          $objJson->aSolicitacoes,
+          $objJson->iTipoAnulacao);
+        if ($objEmpenho->lSqlErro) {
 
-      } else {
-        $nMensagem = '';
-        $iStatus = 1;
+          $nMensagem = urlencode($objEmpenho->sErroMsg);
+          $iStatus = 2;
+
+        } else {
+          $nMensagem = '';
+          $iStatus = 1;
+        }
       }
-    }
     /**
     *ALTERAÇÃO DA ROTINA DE ANULAÇÃO DE EMPENHO
     *AJUSTE PARA SALDO VOLTAR PARA OS ITENS DA ULTIMA POSIÇÃO
     */
 
-    $Sqlparemetrosaldo= $paremetrosaldo->sql_record($paremetrosaldo->sql_query_file('','pc01_liberarsaldoposicao'));
-    $resulparemetrosaldo  = db_utils::fieldsMemory($Sqlparemetrosaldo, 0);
+    
     if($Sqlparemetrosaldo->pc01_liberarsaldoposicao == false && pg_num_rows($Sqlparemetrosaldo)>0) {
-  
-     
 
       db_inicio_transacao();
-      $aItens = $objJson->itensAnulados;
       for($iInd = 0; $iInd < count($aItens); $iInd++){
-        $acordoMaterial = db_query("SELECT ac26_acordo, ac20_pcmater
-          FROM acordoitemexecutadoempautitem
-          JOIN acordoitemexecutado ON ac19_acordoitemexecutado=ac29_sequencial
-          JOIN acordoitem ON ac29_acordoitem=ac20_sequencial
-          JOIN acordoposicao ON ac20_acordoposicao=ac26_sequencial
-          JOIN empautitem ON ac19_autori=e55_autori
-          AND ac19_sequen=e55_sequen
-          JOIN empautoriza ON e55_autori=e54_autori
-          JOIN empempaut ON e61_autori=e54_autori
-          JOIN empempitem ON e62_numemp=e61_numemp and ac20_pcmater=e62_item
-          WHERE e62_sequencial = {$aItens[$iInd]->e62_sequencial}");
+          $acordoMaterial = db_query("SELECT ac26_acordo, ac20_pcmater
+            FROM acordoitemexecutadoempautitem
+            JOIN acordoitemexecutado ON ac19_acordoitemexecutado=ac29_sequencial
+            JOIN acordoitem ON ac29_acordoitem=ac20_sequencial
+            JOIN acordoposicao ON ac20_acordoposicao=ac26_sequencial
+            JOIN empautitem ON ac19_autori=e55_autori
+            AND ac19_sequen=e55_sequen
+            JOIN empautoriza ON e55_autori=e54_autori
+            JOIN empempaut ON e61_autori=e54_autori
+            JOIN empempitem ON e62_numemp=e61_numemp and ac20_pcmater=e62_item
+            WHERE e62_sequencial = {$aItens[$iInd]->e62_sequencial}");
 
-        $rsacordoMaterial = db_utils::fieldsMemory($acordoMaterial,0);
+          $rsacordoMaterial = db_utils::fieldsMemory($acordoMaterial,0);
 
-        $DaoacordoItemDotacao = db_utils::getDao('acordoitemdotacao');
-        $Dotacao = $DaoacordoItemDotacao->sql_record("SELECT ac22_sequencial,ac22_valor,ac22_quantidade
-          FROM acordoitemdotacao
-          JOIN acordoitem ON ac20_sequencial = ac22_acordoitem
-          JOIN acordoposicao ON ac20_acordoposicao = ac26_sequencial
-          WHERE ac26_acordo = {$rsacordoMaterial->ac26_acordo}
-          AND ac20_pcmater = {$rsacordoMaterial->ac20_pcmater}
-          AND ac20_acordoposicao =
-          (SELECT max(ac26_sequencial)
-          FROM acordoposicao
-          WHERE ac26_acordo = {$rsacordoMaterial->ac26_acordo} and ac26_acordoposicaotipo <> 1)");
-        if(pg_num_rows($Dotacao) == 0){
-          break;
-        }
+          $DaoacordoItemDotacao = db_utils::getDao('acordoitemdotacao');
+          $Dotacao = $DaoacordoItemDotacao->sql_record("SELECT ac22_sequencial,ac22_valor,ac22_quantidade
+            FROM acordoitemdotacao
+            JOIN acordoitem ON ac20_sequencial = ac22_acordoitem
+            JOIN acordoposicao ON ac20_acordoposicao = ac26_sequencial
+            WHERE ac26_acordo = {$rsacordoMaterial->ac26_acordo}
+            AND ac20_pcmater = {$rsacordoMaterial->ac20_pcmater}
+            AND ac20_acordoposicao =
+            (SELECT max(ac26_sequencial)
+            FROM acordoposicao
+            WHERE ac26_acordo = {$rsacordoMaterial->ac26_acordo} and ac26_acordoposicaotipo <> 1)");
+          if(pg_num_rows($Dotacao) == 0){
+            break;
+          }
 
-        $Dotacao = db_utils::fieldsMemory($Dotacao,0);
+          $Dotacao = db_utils::fieldsMemory($Dotacao,0);
 
-        $DaoacordoItem = db_utils::getDao('acordoitem');
-        $ItemUltimaPosicao = $DaoacordoItem->sql_record("
-          SELECT ac20_sequencial,ac20_quantidade,ac20_valortotal,ac20_valorunitario
-          FROM acordoitem
-          JOIN acordoposicao ON ac20_acordoposicao = ac26_sequencial
-          WHERE ac26_acordo = {$rsacordoMaterial->ac26_acordo}
-          AND ac26_sequencial =
-          (SELECT max(ac26_sequencial)
-          FROM acordoposicao
-          WHERE ac26_acordo = {$rsacordoMaterial->ac26_acordo})
-          AND ac20_pcmater = {$rsacordoMaterial->ac20_pcmater} ");
-        $ItemUltimaPosicao = db_utils::fieldsMemory($ItemUltimaPosicao,0);
-        
-        $empempaut = db_query("select e61_autori from empempaut where e61_numemp = {$objJson->iEmpenho}");
-        if(pg_num_rows($empempaut) == 0){
-          print_r('erro empaut');
-          break;
-        }
+          $DaoacordoItem = db_utils::getDao('acordoitem');
+          $ItemUltimaPosicao = $DaoacordoItem->sql_record("
+            SELECT ac20_sequencial,ac20_quantidade,ac20_valortotal,ac20_valorunitario,ac20_acordoposicao,ac20_servicoquantidade
+            FROM acordoitem
+            JOIN acordoposicao ON ac20_acordoposicao = ac26_sequencial
+            WHERE ac26_acordo = {$rsacordoMaterial->ac26_acordo}
+            AND ac26_sequencial =
+            (SELECT max(ac26_sequencial)
+            FROM acordoposicao
+            WHERE ac26_acordo = {$rsacordoMaterial->ac26_acordo})
+            AND ac20_pcmater = {$rsacordoMaterial->ac20_pcmater} ");
+          $ItemUltimaPosicao = db_utils::fieldsMemory($ItemUltimaPosicao,0);
 
-        $rsempempaut = db_utils::fieldsMemory($empempaut,0);
-        $empautitem = db_query("select e55_sequen from empautitem where e55_autori = {$rsempempaut->e61_autori} and e55_item = {$rsacordoMaterial->ac20_pcmater}");
-        if(pg_num_rows($empautitem) == 0){
-          print_r('erro empautitem');
-          break;
-        }
+          if($aItens[$iInd]->servico != $ItemUltimaPosicao->ac20_servicoquantidade){
+            $nMensagem = 'Usuario: Nao sera possivel a anulacao do empenho, devido a forma de controle do item no empenho e diferente da forma de controle do item no contrato.';
+            $iStatus = 2;
+            echo $json->encode(array("mensagem" => $nMensagem, "status" => $iStatus));
+            return;
+          }
+          
+          $empempaut = db_query("select e61_autori from empempaut where e61_numemp = {$objJson->iEmpenho}");
+          if(pg_num_rows($empempaut) == 0){
+            print_r('erro empaut');
+            break;
+          }
 
-        $rsempautitem = db_utils::fieldsMemory($empautitem,0);
-        $acordoitemexecutadoempautitem = db_query("select min(ac19_acordoitemexecutado) as itemexecutado from acordoitemexecutadoempautitem  where ac19_autori = {$rsempempaut->e61_autori} and ac19_sequen = {$rsempautitem->e55_sequen}");
-        if(pg_num_rows($acordoitemexecutadoempautitem) == 0){
-          print_r('erro executempaut');
-          break;
-        }
+          $rsempempaut = db_utils::fieldsMemory($empempaut,0);
+          $empautitem = db_query("select e55_sequen from empautitem where e55_autori = {$rsempempaut->e61_autori} and e55_item = {$rsacordoMaterial->ac20_pcmater}");
+          if(pg_num_rows($empautitem) == 0){
+            print_r('erro empautitem');
+            break;
+          }
 
-        $rsacordoitemexecutadoempautitem = db_utils::fieldsMemory($acordoitemexecutadoempautitem,0);
+          $rsempautitem = db_utils::fieldsMemory($empautitem,0);
+          $acordoitemexecutadoempautitem = db_query("select min(ac19_acordoitemexecutado) as itemexecutado from acordoitemexecutadoempautitem  where ac19_autori = {$rsempempaut->e61_autori} and ac19_sequen = {$rsempautitem->e55_sequen}");
+          if(pg_num_rows($acordoitemexecutadoempautitem) == 0){
+            print_r('erro executempaut');
+            break;
+          }
 
-        $acordoitemexecutado = db_query("select ac29_acordoitem from acordoitemexecutado where ac29_sequencial = {$rsacordoitemexecutadoempautitem->itemexecutado}");
-        if(pg_num_rows($acordoitemexecutado) == 0){
-          print_r('erro itemexecutad');
-          break;
-        }
-        $rsacordoitemexecutado = db_utils::fieldsMemory($acordoitemexecutado,0);
-        $acordoitem = db_query("select ac20_acordoposicao from acordoitem where ac20_sequencial = {$rsacordoitemexecutado->ac29_acordoitem}");
-        if(pg_num_rows($acordoitem) == 0){
-          print_r('erro acordoitem');
-          break;
-        }
-        $rsacordoitem = db_utils::fieldsMemory($acordoitem,0);
+          $rsacordoitemexecutadoempautitem = db_utils::fieldsMemory($acordoitemexecutadoempautitem,0);
 
-        if($acordoitem->ac20_acordoposicao != $ItemUltimaPosicao->ac20_sequencial){
+          $acordoitemexecutado = db_query("select ac29_acordoitem from acordoitemexecutado where ac29_sequencial = {$rsacordoitemexecutadoempautitem->itemexecutado}");
+          if(pg_num_rows($acordoitemexecutado) == 0){
+            print_r('erro itemexecutad');
+            break;
+          }
+          $rsacordoitemexecutado = db_utils::fieldsMemory($acordoitemexecutado,0);
+          $acordoitem = db_query("select ac20_acordoposicao from acordoitem where ac20_sequencial = {$rsacordoitemexecutado->ac29_acordoitem}");
+          if(pg_num_rows($acordoitem) == 0){
+            print_r('erro acordoitem');
+            break;
+          }
+          $rsacordoitem = db_utils::fieldsMemory($acordoitem,0);
 
           
+          
+        
+  
+        if($rsacordoitem->ac20_acordoposicao != $ItemUltimaPosicao->ac20_acordoposicao){
+          
+
           if($ItemUltimaPosicao->ac20_valorunitario != $aItens[$iInd]->vlruni){
             
-            
-
               $DaoacordoItemDotacao->ac22_sequencial = $Dotacao->ac22_sequencial;
               $DaoacordoItemDotacao->ac22_valor = $Dotacao->ac22_valor + $aItens[$iInd]->vlrtot;
               if($ItemUltimaPosicao->ac20_valorunitario/$ItemUltimaPosicao->ac20_valortotal == 1){
@@ -695,8 +824,8 @@ switch ($objJson->method) {
               }
           }
 
+        
         }
-
 
       }
 
