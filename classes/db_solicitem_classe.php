@@ -1458,64 +1458,6 @@ class cl_solicitem
      return $sSql;
   }
 
-  // public function sql_query_compilacao_estimativa_empanulado($pc11_codigo = null, $campos = "*", $ordem = null, $dbwhere = "")
-  // {
-
-  //   $sSql = "select ";
-  //   if ($campos != "*") {
-
-  //     $campos_sql = split("#", $campos);
-  //     $virgula = "";
-  //     for ($i = 0; $i < sizeof($campos_sql); $i++) {
-
-  //       $sSql   .= $virgula . $campos_sql[$i];
-  //       $virgula = ",";
-  //     }
-  //   } else {
-
-  //     $sSql .= $campos;
-  //   }
-  //   $sSql .= "  from solicitem registropreco";
-  //   $sSql .= "        inner join solicita on registropreco.pc11_numero                    = pc10_numero ";
-  //   $sSql .= "        inner join solicitemvinculo vinccomp on registropreco.pc11_codigo   = vinccomp.pc55_solicitemfilho";
-  //   $sSql .= "        inner join solicitem comp            on comp.pc11_codigo            = vinccomp.pc55_solicitempai";
-  //   $sSql .= "        inner join solicitemvinculo vincest  on comp.pc11_codigo            = vincest.pc55_solicitemfilho";
-  //   $sSql .= "        inner join solicitem itemestimativa  on vincest.pc55_solicitempai   = itemestimativa.pc11_codigo";
-  //   $sSql .= "        inner join pcprocitem                on registropreco.pc11_codigo      = pc81_solicitem ";
-  //   $sSql .= "        inner join empautitempcprocitem      on pc81_codprocitem               = e73_pcprocitem";
-  //   $sSql .= "        inner join empautitem                on e73_sequen                     = e55_sequen";
-  //   $sSql .= "                                            and e73_autori                     = e55_autori";
-  //   $sSql .= "        inner join empautoriza               on e55_autori                     = e54_autori";
-  //   $sSql .= "        inner join empempaut                 on e61_autori                     = e54_autori";
-  //   $sSql .= "        inner join empempenho                on e61_numemp                     = e60_numemp";
-  //   $sSql .= "        inner join empempitem                on e60_numemp                     = e62_numemp";
-  //   $sSql .= "                                            and e62_sequen                     = e55_sequen";
-  //   $sSql .= "        inner join empanulado                on e94_numemp                     = e60_numemp";
-  //   $sSql .= "        inner join empanuladoitem            on e37_empanulado                 = e94_codanu";
-  //   $sSql .= "                                            and e37_empempitem                 = e62_sequencial";
-  //   $sSqlWhere = '';
-  //   if ($dbwhere == "") {
-  //     if ($pc11_codigo != null) {
-  //       $sSqlWhere  .= " where comp.pc11_codigo = {$pc11_codigo} ";
-  //     }
-  //   } else if ($dbwhere != "") {
-  //     $sSqlWhere .= " where $dbwhere";
-  //   }
-  //   $sSql .= $sSqlWhere;
-  //   if ($ordem != null) {
-
-  //     $sSql       .= " order by ";
-  //     $campos_sql  = split("#", $ordem);
-  //     $virgula     = "";
-  //     for ($i = 0; $i < sizeof($campos_sql); $i++) {
-
-  //       $sSql    .= $virgula . $campos_sql[$i];
-  //       $virgula  = ",";
-  //     }
-  //   }
-  //   return $sSql;
-  // }  
-
   public function sql_query_solicitem_emp($pc11_codigo = null, $campos = "*", $ordem = null, $dbwhere = "")
   {
 

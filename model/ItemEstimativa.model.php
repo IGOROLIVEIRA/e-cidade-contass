@@ -272,12 +272,12 @@ final class ItemEstimativa extends itemSolicitacao
   {
 
     $oDaoSolicitem              = db_utils::getDao("solicitem");
-    $sCampos                    = "coalesce(sum(e37_vlranu), 0) as total";
+    $sCampos                    = "coalesce(sum(pc28_vlranu), 0) as total";
     $sWhere                     = "vincest.pc55_solicitempai = {$this->getCodigoItemSolicitacao()} ";
     $sWhere                    .= "and pc10_depto  = (select pc10_depto ";
     $sWhere                    .= "                     from solicita ";
     $sWhere                    .= "                     where pc10_numero  =  itemestimativa.pc11_numero)";
-    $sSqlQuantidadesSolicitadas = $oDaoSolicitem->sql_query_compilacao_estimativa_empanulado(null, $sCampos, null, $sWhere);
+    $sSqlQuantidadesSolicitadas = $oDaoSolicitem->sql_query_solicitemanul(null, $sCampos, null, $sWhere);
     $rsQuantidades              = $oDaoSolicitem->sql_record($sSqlQuantidadesSolicitadas);
     $nTotalAnulado              = 0;
     if ($oDaoSolicitem->numrows == 1) {
@@ -318,11 +318,6 @@ final class ItemEstimativa extends itemSolicitacao
     /*
      * calculo para identificar o valor restante do item
      */
-    
-    //$saldoRest = $oMovimentacao->solicitada - $oMovimentacao->anulada;
-
-    //$oMovimentacao->saldo = ($oMovimentacao->quantidade + $oMovimentacao->recebidas + $oMovimentacao->execedente) - ($saldoRest + $oMovimentacao->cedidas);
-    
     $oMovimentacao->saldo = ($oMovimentacao->quantidade + $oMovimentacao->recebidas + $oMovimentacao->execedente + $oMovimentacao->anulada) -
     ($oMovimentacao->solicitada + $oMovimentacao->cedidas);
     

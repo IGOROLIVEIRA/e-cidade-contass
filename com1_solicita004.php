@@ -429,6 +429,26 @@ if (isset ($incluir) || (isset ($importar) && $confirma == true)) {
 				$sqlerro  = true;
 				}
 
+				$iCodigoSolicitacao = $clsolicita->pc10_numero;
+				$sSqlCodigoPcmater = "select * from solicitempcmater where pc16_solicitem = {$iCodigoSolicitemImportado}";
+  				  $rsCodigoItemPcmater = db_query($sSqlCodigoPcmater);
+
+  				  if ($rsCodigoItemPcmater > 0) {
+  				    $iCodigoPcmater = db_utils::fieldsMemory($rsCodigoItemPcmater, 0)->pc16_codmater;
+  				  }
+				require_once("classes/solicitacaocompras.model.php");
+				require_once("classes/db_pcprocitem_classe.php");
+				require_once("classes/db_pcorcam_classe.php");
+				require_once("classes/db_pcorcamitem_classe.php");
+				require_once("classes/db_pcorcamforne_classe.php");
+				require_once("classes/db_pcorcamitemproc_classe.php");
+				require_once("classes/db_pcorcamjulg_classe.php");
+				require_once("classes/db_pcorcamval_classe.php");
+				require_once("model/ItemEstimativa.model.php");
+
+				$oSolicitacao = new solicitacaoCompra($pc11_numero);
+				$oSolicitacao->addItemRegistroPreco($pc11_codigo, $iCodigoPcmater, $rsVinculo, $clsolicitem->pc11_quant, $rsVinculoItem);
+
 				if ($clsolicitem->erro_status == 0) {
 					$sqlerro = true;
 					$erro_msg = $clsolicitem->erro_msg;
