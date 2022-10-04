@@ -2798,7 +2798,7 @@ class empenho {
 
         /**
          * Verifica se o empenho tem solicitação de Registro de Preco vinculada e inclui dados na tabela solicitemanul
-         * para anular o item na solicitação e anular a solicitação
+         * para anular o item na solicitação
          */
         $clsolicitem = $this->usarDao("solicitem",true);
         $ItemSol = $clsolicitem->sql_record($clsolicitem->sql_query_solicitem_emp(null, "pc11_codigo", null,"e62_sequencial = " . $aItens[$iInd]->e62_sequencial));
@@ -3064,8 +3064,26 @@ class empenho {
           $this->lSqlErro  = true;
           $this->sErroMsg  = $eErro->getMessage();
         }
-
-      }
+        
+        /*anular a solicitacao de compras caso anule a autorização de empenho*/
+        $sSql = db_query("select distinct pc11_numero as solicitacao from solicitem inner join pcprocitem on pc81_solicitem = pc11_codigo inner join empautitempcprocitem on e73_pcprocitem = pc81_codprocitem inner join empautoriza on e54_autori = e73_autori where e54_autori = {$iAutori}");
+        $result = $sSql;
+        $solicita = db_utils::fieldsMemory($result,0);
+          if(pg_num_rows($result) > 0){
+            $oDaoSolicitaAnulada = new cl_solicitaanulada();
+            $oDaoSolicitaAnulada->pc67_sequencial = null;
+            $oDaoSolicitaAnulada->pc67_usuario    = db_getsession('DB_id_usuario');
+            $oDaoSolicitaAnulada->pc67_data       = date('Y-m-d', db_getsession('DB_datausu'));
+            $oDaoSolicitaAnulada->pc67_hora       = db_hora();
+            $oDaoSolicitaAnulada->pc67_solicita   = $solicita->solicitacao;
+            $oDaoSolicitaAnulada->pc67_motivo     = $sMotivo;
+            $oDaoSolicitaAnulada->pc67_processoadministrativo = null;
+            $oDaoSolicitaAnulada->incluir(null);
+            if ($oDaoSolicitaAnulada->erro_status == 0) {
+              $oErro->erro_msg = $oDaoSolicitaAnulada->erro_msg;
+            }
+          }
+        }
 
     }
 

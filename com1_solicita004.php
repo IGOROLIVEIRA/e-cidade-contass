@@ -329,14 +329,13 @@ if (isset ($incluir) || (isset ($importar) && $confirma == true)) {
 	     $oDaoSolicitaVinculo->incluir(null);
 	     if ($oDaoSolicitaVinculo->erro_status == 0) {
 
-	       $erro_msg = $oDaoSolicitaVinculo->erro_msg;
-         $sqlerro  = true;
+		 	$erro_msg = $oDaoSolicitaVinculo->erro_msg;
+         	$sqlerro  = true;
 	     }
 	 }
 	}
 
 	if (isset ($importar) && trim($importar) != "" && $sqlerro == false) {
-
 
 	if (isset($lRegistroPreco)) {
 	  $sItensNaoImportados = db_getsession("sCodigoItensSemSaldo");
@@ -370,8 +369,6 @@ if (isset ($incluir) || (isset ($importar) && $confirma == true)) {
 
 			$sequencia ++;
 			db_fieldsmemory($result_importacaoitem, $i);
-
-
 
 			if ($pc30_obrigajust == 't') {
 
@@ -416,77 +413,23 @@ if (isset ($incluir) || (isset ($importar) && $confirma == true)) {
 				$pc11_codigo = $clsolicitem->pc11_codigo;
 
 				/*
-				 * se for regisatro de preço
-				 * criamos vinculo na solicitemvinclulo
-				 *
-				*/
-				if (isset($lRegistroPreco)) {
+				 * Vincular item da nova solicitação com item da compilação
+				 */
+				$sSqlVinculoItem = db_query("select pc55_solicitempai vinculoitem from solicitemvinculo where pc55_solicitemfilho = " . $iCodigoSolicitemImportado);
+				$rsVinculoItem = db_utils::fieldsMemory($sSqlVinculoItem, 0)->vinculoitem;
 
-  				$lVinculoRegistroPreco = db_getsession("lVinculoRegistroPreco");
-  				if ( isset($lVinculoRegistroPreco) ) {
-
-            /**
-             *  para criar o vinculo na solicitemvinculo:
-             *  1º - retornar o codigo do item da solicitacao que esta sendo importada = $importa
-             *  2º - descobrir o codigo do pai da solicitacao do item na
-             *
-             *    $iCodigoSolicitemImportado
-             *    $iCodigoItemNovo
-             *    $iCodigoPaiItemImportado
-  				   */
-  				  //echo $iCodigoSolicitemImportado."\n";
-  				  $iCodigoItemNovo           = $clsolicitem->pc11_codigo;
-
-  				  $sSqlPai  = " select *                                                  ";
-  				  $sSqlPai .= " from solicitemvinculo                                     ";
-  				  $sSqlPai .= " where pc55_solicitemfilho = {$iCodigoSolicitemImportado}  ";
-
-  				  $rsSolicitacaoPai = db_query($sSqlPai);
-
-  				  if ($rsSolicitacaoPai > 0) {
-  			      $iCodigoPaiItemImportado = db_utils::fieldsMemory($rsSolicitacaoPai, 0)->pc55_solicitempai;
-  				  }
-
-  				 // echo "<br/> Pai {$iCodigoPaiItemImportado} filho {$iCodigoSolicitemImportado} ";
-  				//  echo "<br/> Pai {$iCodigoPaiItemImportado} filho importado {$iCodigoItemNovo} <br/>**<br/>";
-
-  				  $iCodigoSolicitacao = $clsolicita->pc10_numero;
-
-  				  /**
-  				   *   Descobrir o código do item na pcmater, de acordo com o vinculo na solicitempcmater,
-  				   *   usando  o código do item da solicitação que está sendo importada.
-  				   *
-  				  **/
-
-  				  $sSqlCodigoPcmater = "select * from solicitempcmater where pc16_solicitem = {$iCodigoSolicitemImportado}";
-  				  $rsCodigoItemPcmater = db_query($sSqlCodigoPcmater);
-
-  				  if ($rsCodigoItemPcmater > 0) {
-  				    $iCodigoPcmater = db_utils::fieldsMemory($rsCodigoItemPcmater, 0)->pc16_codmater;
-  				  }
-
-      		  /**
-      		   *  Cria vinculos na solicitemvinculo
-      		   *
-      		   **/
-  				  require_once("classes/solicitacaocompras.model.php");
-  				  require_once("classes/db_pcprocitem_classe.php");
-  				  require_once("classes/db_pcorcam_classe.php");
-  				  require_once("classes/db_pcorcamitem_classe.php");
-  				  require_once("classes/db_pcorcamforne_classe.php");
-  				  require_once("classes/db_pcorcamitemproc_classe.php");
-  				  require_once("classes/db_pcorcamjulg_classe.php");
-  				  require_once("classes/db_pcorcamval_classe.php");
-  				  require_once("model/ItemEstimativa.model.php");
-
-      		  $oSolicitacao = new solicitacaoCompra($iCodigoSolicitacao);
-  				  $oSolicitacao->addItemRegistroPreco($iCodigoItemNovo, $iCodigoPcmater, $pc54_solicita, $clsolicitem->pc11_quant, $iCodigoPaiItemImportado);
-
-  				}
+				$oDaoSolicitemVinculo = db_utils::getDao("solicitemvinculo");
+				$oDaoSolicitemVinculo->pc55_solicitemfilho = $pc11_codigo;
+				$oDaoSolicitemVinculo->pc55_solicitempai   = $rsVinculoItem;
+	   
+				$oDaoSolicitemVinculo->incluir(null);
+				if ($oDaoSolicitemVinculo->erro_status == 0) {
+	   
+				  $erro_msg = $oDaoSolicitemVinculo->erro_msg;
+				$sqlerro  = true;
 				}
 
 				if ($clsolicitem->erro_status == 0) {
-
 					$sqlerro = true;
 					$erro_msg = $clsolicitem->erro_msg;
 					break;
