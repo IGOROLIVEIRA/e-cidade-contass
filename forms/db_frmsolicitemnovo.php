@@ -316,7 +316,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
               <strong>Desdobramento:</strong>
             </td>
             <td>
-              <select style="margin-left: -80;width: 405;" id="eleSub" name="eleSub">
+              <select style="margin-left: -84px;width: 410px;" id="eleSub" name="eleSub">
                 <option value="0"> </option>;
               </select>
             </td>
@@ -362,10 +362,10 @@ if ((isset($opcao) && $opcao == "alterar")) {
           </td>
           <td>
             <?
-            db_input('pc11_codigo', 8, $pc11_codigo, true, 'hidden', $db_opcao, 'onkeypress="return event.charCode >= 48 && event.charCode <= 57" style="margin-left: -80px;"');
+            db_input('pc11_codigo', 8, $pc11_codigo, true, 'hidden', $db_opcao, 'onkeypress="return event.charCode >= 48 && event.charCode <= 57" style="margin-left: -84px;"');
             ?>
             <?
-            db_input('pc11_seq', 8, $pc11_seq, true, 'text', $db_opcao, 'onkeypress="return event.charCode >= 48 && event.charCode <= 57" style="margin-left: -80px;"');
+            db_input('pc11_seq', 8, 1, true, 'text', 1, 'onkeypress="return event.charCode >= 48 && event.charCode <= 57" style="margin-left: -84px;"');
             ?>
           </td>
 
@@ -529,7 +529,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
       document.getElementById('pc11_seq').style.marginLeft = "0px";
       document.getElementById('titleOrdem').style.marginLeft = "60px";
       document.getElementById('ctnServicoQuantidade').style.marginLeft = "-170px";
-      document.getElementById('pc11_servicoquantidade').style.marginLeft = "-80px";
+      document.getElementById('pc11_servicoquantidade').style.marginLeft = "-84px";
       document.getElementById('pc11_servicoquantidade').style.width = "76px";
 
 
@@ -538,7 +538,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
     } else {
       document.getElementById('pc17_unid2').style.display = "none";
       document.getElementById('titleUnidade2').style.display = "none";
-      document.getElementById('pc11_seq').style.marginLeft = "-80px";
+      document.getElementById('pc11_seq').style.marginLeft = "-84px";
       document.getElementById('titleOrdem').style.marginLeft = "-73px";
       document.getElementById('ctnServicoQuantidade').style.marginLeft = "0px";
       document.getElementById('pc11_servicoquantidade').style.marginLeft = "0px";
@@ -550,14 +550,24 @@ if ((isset($opcao) && $opcao == "alterar")) {
   function js_salvarItens() {
     var sUrl = "com4_materialsolicitacao.RPC.php";
 
-    parent.window.location.href = "com1_pcproc001.php";
-    //window.location.href = "com1_pcproc001.php";
-
 
     var reduzido = [];
     var estrutural = [];
+    var pc30_permsemdotac = '<? echo $pc30_permsemdotac; ?>';
 
     var oRequest = new Object();
+
+    if (top.corpo.iframe_dotacoesnovo.document.getElementsByName("reduzido[]").length == 0 && document.getElementById('dotacoesnovo').style.display != 'none') {
+      alert('Permitido salvar somente se tiver no mínimo 1 dotação inserida na aba dotações;');
+      return false;
+    }
+
+
+    if (pc30_permsemdotac == "f") {
+      pc30_permsemdotac = false;
+    } else {
+      pc30_permsemdotac = true;
+    }
 
     for (var i = 0; i < top.corpo.iframe_dotacoesnovo.document.getElementsByName("reduzido[]").length; i++) {
       reduzido.push(top.corpo.iframe_dotacoesnovo.document.getElementsByName("reduzido[]")[i].value);
@@ -570,6 +580,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
     oRequest.reduzido = reduzido;
     oRequest.estrutural = estrutural;
     oRequest.numero = parent.iframe_solicita.document.getElementById('pc10_numero').value;
+    oRequest.pc30_permsemdotac = pc30_permsemdotac;
 
 
     oRequest.exec = "salvarItens";
@@ -585,9 +596,17 @@ if ((isset($opcao) && $opcao == "alterar")) {
 
   function js_retornoSalvarItens(oAjax) {
     var oRetorno = eval("(" + oAjax.responseText + ")");
-    alert(oRetorno.message.urlDecode());
 
-    window.location.assign("com1_pcproc001.php");
+    if (oRetorno.erro == true) {
+      alert(oRetorno.message.urlDecode());
+
+    }
+
+    numero = top.corpo.iframe_solicita.document.form1.pc10_numero.value;
+    data = top.corpo.iframe_solicita.document.form1.pc10_data.value;
+    descrdepto = top.corpo.iframe_solicita.document.form1.descrdepto.value;
+
+    parent.window.location.href = "com1_pcproc001.php?pc10_numero=" + numero + "&data=" + data + "&descrdepto=" + descrdepto + "";
 
     //window.location.href = "com1_pcproc001.php";
 
@@ -784,7 +803,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
         document.getElementById('pc11_servicoquantidade').style.display = "none";
         document.getElementById('pc17_unid2').style.display = "none";
         document.getElementById('titleUnidade2').style.display = "none";
-        document.getElementById('pc11_seq').style.marginLeft = "-80px";
+        document.getElementById('pc11_seq').style.marginLeft = "-84px";
         document.getElementById('titleOrdem').style.marginLeft = "-73px";
         document.getElementById('pc11_quant').value = "";
         document.getElementById('pc11_quant').readOnly = false;

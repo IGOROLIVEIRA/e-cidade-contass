@@ -93,83 +93,59 @@ $confirma  = false;
 if (isset($incluir)) {
 
 
-	$reduzido =  $_POST['reduzido'];
-	$estrutural = $_POST['estrutural'];
-	$itens = db_query("select * from solicitem where pc11_numero = $pc10_numero;");
-	$quantidade_itens = pg_numrows($itens);
-	$quantidade_dotacoes = 0;
+	$itens_processos = db_query("select distinct pc81_codproc from pcprocitem inner join solicitem on pc81_solicitem = pc11_codigo
+	where pc81_codprocitem in (select l21_codpcprocitem from liclicitem where l21_codliclicita = $licitacao) 
+	order by pc81_codproc ;");
 
-	/*
-	for ($j = 0; $j < count($reduzido); $j++) {
-		$dotacao = $reduzido[$j];
-		$rsResult = db_query("select * from pcdotac where pc13_coddot = $dotacao and
-		pc13_codigo in ((select pc11_codigo from solicitem where pc11_numero = $pc10_numero))");
-
-		if (pg_numrows($rsResult) > 0) {
-			db_msgbox("Dotação " . $reduzido[$j] . " ja está vinculada");
-			db_redireciona("com1_dotacoesnovo001.php?pc11_numero=$pc11_numero");
-		}
+	$aCodProcessos = array();
+	for ($i = 0; $i < pg_numrows($itens_processos); $i++) {
+		$item = db_utils::fieldsMemory($itens_processos, $i);
+		$oItem = new stdClass();
+		$oItem->codproc =  $item->pc81_codproc;
+		$aCodProcessos[] = $oItem;
 	}
-	*/
+
+
+	for ($i = 0; $i < count($aCodProcessos); $i++) {
+
+
+		$reduzido =  $_POST['reduzido'];
+		$estrutural = $_POST['estrutural'];
+		$codigo = $aCodProcessos[$i]->codproc;
+		$itens = db_query("select * from solicitem where pc11_codigo in (select pc11_codigo from pcprocitem inner join solicitem on pc81_solicitem = pc11_codigo
+		where pc81_codprocitem in (select l21_codpcprocitem from liclicitem where l21_codliclicita = $licitacao and pc81_codproc = $codigo) 
+		order by pc81_codproc);");
+		$quantidade_itens = pg_numrows($itens);
+		$quantidade_dotacoes = 0;
 
 
 
-
-
-	for ($i = 0; $i < $quantidade_itens; $i++) {
-		$item = db_utils::fieldsMemory($itens, $i);
-		$codigo_item =  $item->pc11_codigo;
-		$servico = db_query("select * from solicitempcmater inner join pcmater on pc16_codmater = pc01_codmater  where pc16_solicitem = $codigo_item ;");
-		$servico = db_utils::fieldsMemory($servico, 0);
-		$codele = db_query("select * from solicitemele where pc18_solicitem = $codigo_item ;");
-		$codele = db_utils::fieldsMemory($codele, 0);
-		$anousu = db_getsession('DB_anousu');
-		$elemento =  db_query("select * from orcelemento where o56_codele = $codele->pc18_codele and o56_anousu = $anousu ;");
-		$elemento = db_utils::fieldsMemory($elemento, 0);
-		$elemento = substr($elemento->o56_elemento, 0, 7);
+		for ($i = 0; $i < $quantidade_itens; $i++) {
+			$item = db_utils::fieldsMemory($itens, $i);
+			$codigo_item =  $item->pc11_codigo;
+			$servico = db_query("select * from solicitempcmater inner join pcmater on pc16_codmater = pc01_codmater  where pc16_solicitem = $codigo_item ;");
+			$servico = db_utils::fieldsMemory($servico, 0);
+			$codele = db_query("select * from solicitemele where pc18_solicitem = $codigo_item ;");
+			$codele = db_utils::fieldsMemory($codele, 0);
+			$anousu = db_getsession('DB_anousu');
+			$elemento =  db_query("select * from orcelemento where o56_codele = $codele->pc18_codele and o56_anousu = $anousu ;");
+			$elemento = db_utils::fieldsMemory($elemento, 0);
+			$elemento = substr($elemento->o56_elemento, 0, 7);
 
 
 
-		if ($servico->pc01_servico == "f") {
+			if ($servico->pc01_servico == "f") {
 
-			for ($j = 0; $j < count($reduzido); $j++) {
-				$quantidade_dotacoes = 0;
-
-
-				// Verificando se item já possui a dotação a ser lançada
-				$dotacao = $reduzido[$j];
-				$result =  db_query("select * from pcdotac where pc13_codigo = $codigo_item and pc13_coddot = $dotacao;");
-
-				if (pg_numrows($result) == 0) {
-
-
-					for ($k = 0; $k < count($reduzido); $k++) {
-						if ($elemento == substr($estrutural[$k], 23, 7)) {
-							$quantidade_dotacoes++;
-						}
-					}
-
-					$clpcdotac->pc13_anousu = db_getsession('DB_anousu');
-					$clpcdotac->pc13_coddot = $reduzido[$j];
-					$clpcdotac->pc13_depto  = db_getsession('DB_coddepto');
-					$clpcdotac->pc13_quant  = $item->pc11_quant / $quantidade_dotacoes;
-					$clpcdotac->pc13_valor  = $item->pc11_quant / $quantidade_dotacoes;
-					$clpcdotac->pc13_codele = $codele->pc18_codele;
-					$clpcdotac->pc13_codigo = $codigo_item;
-					$clpcdotac->incluir(null);
-				}
-			}
-		} else {
-
-			if ($item->pc11_servicoquantidade == "t") {
 				for ($j = 0; $j < count($reduzido); $j++) {
 					$quantidade_dotacoes = 0;
+
 
 					// Verificando se item já possui a dotação a ser lançada
 					$dotacao = $reduzido[$j];
 					$result =  db_query("select * from pcdotac where pc13_codigo = $codigo_item and pc13_coddot = $dotacao;");
 
 					if (pg_numrows($result) == 0) {
+
 
 						for ($k = 0; $k < count($reduzido); $k++) {
 							if ($elemento == substr($estrutural[$k], 23, 7)) {
@@ -188,32 +164,61 @@ if (isset($incluir)) {
 					}
 				}
 			} else {
-				for ($j = 0; $j < count($reduzido); $j++) {
 
-					$quantidade_dotacoes = 0;
+				if ($item->pc11_servicoquantidade == "t") {
+					for ($j = 0; $j < count($reduzido); $j++) {
+						$quantidade_dotacoes = 0;
 
+						// Verificando se item já possui a dotação a ser lançada
+						$dotacao = $reduzido[$j];
+						$result =  db_query("select * from pcdotac where pc13_codigo = $codigo_item and pc13_coddot = $dotacao;");
 
-					// Verificando se item já possui a dotação a ser lançada
-					$dotacao = $reduzido[$j];
-					$result =  db_query("select * from pcdotac where pc13_codigo = $codigo_item and pc13_coddot = $dotacao;");
+						if (pg_numrows($result) == 0) {
 
-					if (pg_numrows($result) == 0) {
-
-
-						for ($k = 0; $k < count($reduzido); $k++) {
-							if ($elemento == substr($estrutural[$k], 23, 7)) {
-								$quantidade_dotacoes++;
+							for ($k = 0; $k < count($reduzido); $k++) {
+								if ($elemento == substr($estrutural[$k], 23, 7)) {
+									$quantidade_dotacoes++;
+								}
 							}
-						}
 
-						$clpcdotac->pc13_anousu = db_getsession('DB_anousu');
-						$clpcdotac->pc13_coddot = $reduzido[$j];
-						$clpcdotac->pc13_depto  = db_getsession('DB_coddepto');
-						$clpcdotac->pc13_quant  = 1;
-						$clpcdotac->pc13_valor  = 1;
-						$clpcdotac->pc13_codele = $codele->pc18_codele;
-						$clpcdotac->pc13_codigo = $codigo_item;
-						$clpcdotac->incluir(null);
+							$clpcdotac->pc13_anousu = db_getsession('DB_anousu');
+							$clpcdotac->pc13_coddot = $reduzido[$j];
+							$clpcdotac->pc13_depto  = db_getsession('DB_coddepto');
+							$clpcdotac->pc13_quant  = $item->pc11_quant / $quantidade_dotacoes;
+							$clpcdotac->pc13_valor  = $item->pc11_quant / $quantidade_dotacoes;
+							$clpcdotac->pc13_codele = $codele->pc18_codele;
+							$clpcdotac->pc13_codigo = $codigo_item;
+							$clpcdotac->incluir(null);
+						}
+					}
+				} else {
+					for ($j = 0; $j < count($reduzido); $j++) {
+
+						$quantidade_dotacoes = 0;
+
+
+						// Verificando se item já possui a dotação a ser lançada
+						$dotacao = $reduzido[$j];
+						$result =  db_query("select * from pcdotac where pc13_codigo = $codigo_item and pc13_coddot = $dotacao;");
+
+						if (pg_numrows($result) == 0) {
+
+
+							for ($k = 0; $k < count($reduzido); $k++) {
+								if ($elemento == substr($estrutural[$k], 23, 7)) {
+									$quantidade_dotacoes++;
+								}
+							}
+
+							$clpcdotac->pc13_anousu = db_getsession('DB_anousu');
+							$clpcdotac->pc13_coddot = $reduzido[$j];
+							$clpcdotac->pc13_depto  = db_getsession('DB_coddepto');
+							$clpcdotac->pc13_quant  = 1;
+							$clpcdotac->pc13_valor  = 1;
+							$clpcdotac->pc13_codele = $codele->pc18_codele;
+							$clpcdotac->pc13_codigo = $codigo_item;
+							$clpcdotac->incluir(null);
+						}
 					}
 				}
 			}
@@ -224,7 +229,7 @@ if (isset($incluir)) {
 
 
 
-	db_redireciona("com1_dotacoesnovo001.php?pc11_numero=$pc11_numero");
+	db_redireciona("com1_dotacoesnovo001lic.php?pc11_numero=$pc11_numero&licitacao=$licitacao");
 }
 
 
@@ -292,7 +297,7 @@ if (isset($incluir)) {
 					</table>
 
 				</fieldset>
-				<input style="float:center; margin-top:10px;" name="<?= ($db_opcao == 1 ? "Adicionar Item" : ($db_opcao == 2 || $db_opcao == 22 ? "alterar" : "excluir")) ?>" type="button" id="db_opcao" value="<?= ($db_opcao == 1 ? "Incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "Alterar" : "Excluir")) ?>" <?= ($db_botao == false ? "disabled" : "") ?> onclick="return incluirDotacao()">
+				<input style="float:center; margin-top:10px;" name="incluir" type="submit" id="incluir" value="Incluir" onclick="return incluirDotacao()">
 
 
 				<table>
@@ -316,8 +321,6 @@ if (isset($incluir)) {
 </body>
 
 <script>
-	document.getElementById('pc10_numero').value = parent.iframe_solicita.document.getElementById('pc10_numero').value;
-
 	oGridItens = new DBGrid('oGridItens');
 	oGridItens.nameInstance = 'oGridItens';
 	oGridItens.setCellAlign(['center', 'center', "center"]);
@@ -328,16 +331,14 @@ if (isset($incluir)) {
 	oGridItens.show($('ctnGridItens'));
 
 
-
-
 	function carregaDotacoes() {
-
 
 		var sUrl = "com4_materialsolicitacao.RPC.php";
 
 		var oRequest = new Object();
-		oRequest.numero = top.corpo.iframe_solicita.document.form1.pc10_numero.value;
-		oRequest.exec = "getDotacoes";
+		oRequest.licitacao = <? echo $licitacao; ?>;
+		//oRequest.numero = top.corpo.iframe_solicita.document.form1.pc10_numero.value;
+		oRequest.exec = "getDotacoesProcItens";
 		var oAjax = new Ajax.Request(
 			sUrl, {
 				method: 'post',
@@ -368,12 +369,9 @@ if (isset($incluir)) {
 
 		}
 
-
 	}
 
-	setTimeout(carregaDotacoes, 3000);
-
-
+	carregaDotacoes();
 
 
 	function js_excluirLinha(iSeq, vinculo) {
@@ -425,7 +423,8 @@ if (isset($incluir)) {
 
 		var oParam = new Object();
 		oParam.exec = "excluirDotacoes";
-		oParam.numero = top.corpo.iframe_solicita.document.form1.pc10_numero.value;
+		oParam.licitacao = <? echo $licitacao; ?>;
+		//oParam.numero = top.corpo.iframe_solicita.document.form1.pc10_numero.value;
 		oParam.dotacao = dotacao;
 		var oAjax = new Ajax.Request(sUrlRC, {
 			method: "post",
@@ -452,6 +451,11 @@ if (isset($incluir)) {
 	indice = 0;
 
 	function incluirDotacao() {
+
+		if (document.getElementById("o58_coddot").value == "") {
+			alert('Dotação não informada !');
+			return false;
+		}
 
 		var sizeItens = oGridItens.aRows.length;
 
@@ -488,47 +492,76 @@ if (isset($incluir)) {
 
 	}
 
+	cod_elementos = "";
+
+
 	function js_pesquisapc13_coddot(mostra) {
-		var cod_elementos = "";
 
-		if (parent.iframe_solicitem.document.getElementsByName('descrelemento[]').length == 0 || parent.iframe_solicitem.document.getElementsByName('codigo[]')[0].value == 0) {
-			alert('Solicitação de compras sem item(ns) cadastrado(s)');
-			return false;
-		}
 
-		for (var i = 0; i < parent.iframe_solicitem.document.getElementsByName('descrelemento[]').length; i++) {
-			elemento = '';
-			elemento = parent.iframe_solicitem.document.getElementsByName('descrelemento[]')[i].value;
-			elemento = elemento.split("-");
-			elemento = elemento[1];
-			elemento = elemento.trim();
-			elemento = elemento.substring(0, 7);
-			elemento = elemento + ",";
-			cod_elementos += elemento;
-			//teste += "'" + parent.iframe_solicitem.document.getElementsByName('descrelemento[]')[i].value + "'" + ",";
-		}
+		var sUrl = "com4_materialsolicitacao.RPC.php";
 
-		cod_elementos = cod_elementos.substring(0, cod_elementos.length - 1);
+		var oRequest = new Object();
+		oRequest.licitacao = <? echo $licitacao; ?>;
+		//oRequest.numero = top.corpo.iframe_solicita.document.form1.pc10_numero.value;
+		oRequest.exec = "getElementos";
+		var oAjax = new Ajax.Request(
+			sUrl, {
+				method: 'post',
+				parameters: 'json=' + js_objectToJson(oRequest),
+				onComplete: js_retornogetDotacoes
+			}
+		);
 
-		qry = 'obriga_depto=sim';
-		if (parent.iframe_solicitem.document.getElementsByName('codele[]').length != 0) {
+		var quantidade_itens;
+
+
+		function js_retornogetDotacoes(oAjax) {
+			var oRetorno = eval("(" + oAjax.responseText + ")");
+			quantidade_itens = oRetorno.quantidade;
+			if (oRetorno.quantidade == 0) {
+				alert('Processo(s) de compra não vinculado a licitação ou sem item(ns) cadastrado(s)');
+				return false;
+			}
+
+			for (var i = 0; i < oRetorno.quantidade; i++) {
+				elemento = oRetorno.aItens[i].elemento.toString();
+				elemento = elemento.substring(0, 7);
+				elemento = elemento + ",";
+				cod_elementos = elemento + cod_elementos;
+			}
+
+
+
+			cod_elementos = cod_elementos.substring(0, cod_elementos.length - 1);
+
+
+
+
+
+			qry = 'obriga_depto=sim';
+
 			qry += '&cod_elementos=' + cod_elementos;
+
+			<? if (@$pc30_passadepart == 't') { ?>
+				qry += '&departamento=<?= (db_getsession("DB_coddepto")) ?>';
+			<? } ?>
+			qry += '&retornadepart=true';
+			qry += '&pactoplano=<?= $iPactoPlano ?>';
+			if (mostra == true) {
+				qry += '&funcao_js=top.corpo.iframe_dotacoesnovo.js_mostraorcdotacao1|o58_coddot|o41_descr';
+				js_OpenJanelaIframe('top.corpo.iframe_dotacoesnovo', 'iframe_dotacoesnovo',
+					'func_permorcdotacao.php?' + qry, 'Pesquisa', true, '0');
+			} else {
+				qry += '&pesquisa_chave=' + document.form1.pc13_coddot.value;
+				js_OpenJanelaIframe('top.corpo.iframe_dotacoesnovo',
+					'db_iframe_orcdotacao',
+					'func_permorcdotacao.php?' + qry + '&funcao_js=parent.js_mostraorcdotacao', 'Pesquisa', false);
+			}
+
+
 		}
-		<? if (@$pc30_passadepart == 't') { ?>
-			qry += '&departamento=<?= (db_getsession("DB_coddepto")) ?>';
-		<? } ?>
-		qry += '&retornadepart=true';
-		qry += '&pactoplano=<?= $iPactoPlano ?>';
-		if (mostra == true) {
-			qry += '&funcao_js=top.corpo.iframe_dotacoesnovo.js_mostraorcdotacao1|o58_coddot|o41_descr';
-			js_OpenJanelaIframe('top.corpo.iframe_dotacoesnovo', 'iframe_dotacoesnovo',
-				'func_permorcdotacao.php?' + qry, 'Pesquisa', true, '0');
-		} else {
-			qry += '&pesquisa_chave=' + document.form1.pc13_coddot.value;
-			js_OpenJanelaIframe('top.corpo.iframe_dotacoesnovo',
-				'db_iframe_orcdotacao',
-				'func_permorcdotacao.php?' + qry + '&funcao_js=parent.js_mostraorcdotacao', 'Pesquisa', false);
-		}
+
+
 	}
 
 	function js_mostraorcdotacao1(chave1, chave2, chave3) {
@@ -540,67 +573,3 @@ if (isset($incluir)) {
 </script>
 
 </html>
-<?
-if (isset($incluir) || (isset($importar) && $confirma == true)) {
-
-
-	$db_opcaoBtnRegistroPreco = 3;
-	if ($sqlerro == true) {
-		db_msgbox(str_replace("\n", "\\n", $erro_msg));
-		if ($clsolicita->erro_campo != "") {
-			echo "<script> document.form1." . $clsolicita->erro_campo . ".style.backgroundColor='#99A9AE';</script>";
-			echo "<script> document.form1." . $clsolicita->erro_campo . ".focus();</script>";
-		};
-	} else {
-
-		if (isset($param) && trim($param) != "") {
-			$parametro = "&param=alterar&param_ant=incluir";
-			if (isset($codproc2) && trim($codproc2) != "" && $codproc2 > 0) {
-				$parametro .= "&codproc=" . $codproc2;
-			}
-			if (isset($codliclicita2) && trim($codliclicita2) != "" && $codliclicita2 > 0) {
-				$parametro .= "&codliclicita=" . $codliclicita2;
-			}
-		} else {
-			$parametro = "";
-		}
-
-		if ($pc30_contrandsol == 't') {
-			db_msgbox("Controle da solicitação ativo!!É necessário efetuar o andamento inicial após a inclusão dos itens!!");
-		}
-		if (isset($importar) && trim($importar) != "") {
-
-			if ($ano_imp != db_getsession("DB_anousu")) {
-
-				echo "<script>
-	              if (confirm('ATENÇÃO: \\n Solicitação de outro ano!!\\nDeseja incluir os itens com suas respectivas Dotações?')) {
-								  js_OpenJanelaIframe('top.corpo.iframe_solicita','db_iframe_dotac','com4_altdotacsol001.php?importado=$importar&codnovo=$pc10_numero','Dotações',true);
-								} else {
-				          location.href='com1_solicita005.php?db_opcaoBtnRegistroPreco=3&liberaaba=true&chavepesquisa=$pc10_numero';
-				        }
-						  </script>";
-			} else {
-				db_redireciona("com1_solicita005.php?db_opcaoBtnRegistroPreco=3&liberaaba=true&chavepesquisa=$pc10_numero$parametro");
-			}
-		} else {
-			db_redireciona("com1_solicita005.php?db_opcaoBtnRegistroPreco=1&liberaaba=true&chavepesquisa=$pc10_numero$parametro");
-		}
-	}
-}
-
-if (isset($confirma) && $confirma == false && isset($importar)) {
-
-	$db_opcaoBtnRegistroPreco = 3;
-	$sQueryString = "";
-	if (isset($pc54_solicita)) {
-		$sQueryString = "&pc54_solicita={$pc54_solicita}";
-	}
-
-	echo "<script>
-
-		      if(confirm('ATENÇÃO: \\nSerão importados os itens, as dotações e os fornecedores sugeridos desta solicitação.\\nDeseja continuar?')){
-		      	location.href = 'com1_solicita004.php?lBloqueiaAncoraRegistro=1&db_opcaoBtnRegistroPreco=3$sQueryString&importar=$importar&conf=true';
-		      }
-		    </script>";
-}
-?>

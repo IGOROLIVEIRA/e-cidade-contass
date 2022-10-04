@@ -104,8 +104,18 @@ if ($clpcparam->numrows > 0) {
   ?>
 </body>
 
+
 </html>
 <?
+
+if ($pc30_permsemdotac == "t") {
+  echo "<script>
+
+  document.getElementById('dotacoesnovo').style.display = 'none';
+
+  </script>";
+}
+
 if ($erro == true) {
   db_msgbox("Parâmetros do compras não configurados");
 }

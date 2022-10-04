@@ -863,4 +863,13 @@ if (isset($confirma) && $confirma == false && isset($importar)) {
 		      }
 		    </script>";
 }
+
+if ($pc30_permsemdotac == null) {
+	echo "<script>
+
+	if(confirm('ATENÇÃO: \\nSerão importados os itens, as dotações e os fornecedores sugeridos desta solicitação.\\nDeseja continuar?')){
+		location.href = 'com1_solicita004.php?lBloqueiaAncoraRegistro=1&db_opcaoBtnRegistroPreco=3$sQueryString&importar=$importar&conf=true';
+	}
+  </script>";
+}
 ?>
