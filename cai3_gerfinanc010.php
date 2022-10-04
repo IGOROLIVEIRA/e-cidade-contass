@@ -43,13 +43,13 @@ $sTipoRelatorio = (isset($tiposoma) || ( isset($tiposoma) && ($tiposoma=="Por Ti
 
 if (isset($db_datausu)) {
   if (!checkdate(substr($db_datausu,5,2),substr($db_datausu,8,2),substr($db_datausu,0,4))) {
-    echo "Data para Clculo Invlida. <br><br>";
+    echo "Data para Cálculo Inválida. <br><br>";
     echo "Data dever se superior a : ".date('Y-m-d',db_getsession("DB_datausu"));
     exit;
   }
   if (mktime(0,0,0,substr($db_datausu,5,2),substr($db_datausu,8,2),substr($db_datausu,0,4)) <
       mktime(0,0,0,date('m',db_getsession("DB_datausu")),date('d',db_getsession("DB_datausu")),date('Y',db_getsession("DB_datausu"))) ) {
-    echo "Data no permitida para clculo. <br><br>";
+    echo "Data não permitida para cálculo. <br><br>";
     echo "Data dever se superior a : ".date('Y-m-d',db_getsession("DB_datausu"));
     exit;
   }
@@ -194,7 +194,7 @@ function js_somatotal(linha) {
      }
 
      if(tipos==''){
-       alert("Você deve selecionar um tipo para emissâo.");
+       alert("Você deve selecionar um tipo para emissão.");
      }else{
 
 	   query="";
@@ -295,8 +295,8 @@ MM_reloadPage(true);
 <table border="1" cellpadding="0" cellspacing="0">
 <tr bgcolor="#FFCC66">
 <th class="borda" style="font-size:12px" nowrap>Tipo</th>
-<th class="borda" style="font-size:12px" nowrap>Descrio</th>
-<th class="borda" style="font-size:12px" nowrap>Valor Histrico</th>
+<th class="borda" style="font-size:12px" nowrap>Descrição</th>
+<th class="borda" style="font-size:12px" nowrap>Valor Histórico</th>
 <th class="borda" style="font-size:12px" nowrap>Valor Corrigido</th>
 <th class="borda" style="font-size:12px" nowrap>Valor Juros</th>
 <th class="borda" style="font-size:12px" nowrap>Valor Multa</th>
@@ -602,7 +602,7 @@ function js_emiteRelatorioSintetico(programa) {
   }
 
   if( tipos=='' ){
-    alert("Você deve selecionar um tipo para emissâo.");
+    alert("Você deve selecionar um tipo para emissão.");
   }else{
 
     query="";
