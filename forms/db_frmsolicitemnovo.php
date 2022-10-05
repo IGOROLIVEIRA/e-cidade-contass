@@ -386,7 +386,9 @@ if ((isset($opcao) && $opcao == "alterar")) {
         </td>
       </tr>
     </table>
-    <input style="float:center; margin-top:10px;" name="incluir" type="button" value="Salvar Itens" onclick="js_salvarItens()">
+    <input style="float:center; margin-top:10px;display:<? if ($pc30_permsemdotac == "f") {
+                                                          echo "none";
+                                                        } ?>" name="incluir" type="button" value="Liberar Solicitação" onclick="js_salvarItens()">
 
 
     <br>
@@ -559,11 +561,11 @@ if ((isset($opcao) && $opcao == "alterar")) {
 
     var oRequest = new Object();
 
-
+    /*
     if (top.corpo.iframe_dotacoesnovo.document.getElementsByName("reduzido[]").length == 0 && pc30_permsemdotac == "f") {
       alert('Usuário, é necessário inserir no mínimo 1 dotação na aba Dotações.');
       return false;
-    }
+    } */
 
 
     if (pc30_permsemdotac == "f") {
