@@ -105,7 +105,18 @@ $cllicitaparam->rotulo->label();
         db_select('l12_validacadfornecedor',$x,true,$db_opcao,"");
       ?>
     </td>
-  </tr>   
+  </tr>
+  <tr>
+    <td>
+      <strong>Validação do PNCP</strong>
+    </td>
+    <td> 
+      <?
+        $x = array("f"=>"NAO","t"=>"SIM");
+        db_select('l12_pncp',$x,true,$db_opcao,"");
+      ?>
+    </td>
+  </tr> 
   </table>
   </fieldset>
   <td>

@@ -54,19 +54,28 @@ if (isset($oGet->orgao) && $oGet->orgao != "") {
   $sWhereOrgao = " AND o08_orgao IN({$oGet->orgao}) ";  
 }
 
-$sSqlEstimativa  = " SELECT DISTINCT o08_programa, /* Programa do PPA */
-                                     o54_descr /* Descrição do Programa */
-                    FROM ppadotacao
-                    INNER JOIN ppaestimativadespesa ON o08_sequencial = o07_coddot
-                    INNER JOIN ppaestimativa ON o07_ppaestimativa = o05_sequencial
-                    INNER JOIN orcprograma ON orcprograma.o54_anousu = {$oGet->iAno} AND orcprograma.o54_programa = ppadotacao.o08_programa
-                    LEFT JOIN orcindicaprograma ON orcindicaprograma.o18_orcprograma = orcprograma.o54_programa AND orcindicaprograma.o18_anousu = ".db_getsession('DB_anousu')."
-                    WHERE $sWhere
-                      AND o08_instit IN ({$sListaInstit}) {$sWherePrograma} {$sWhereOrgao}
-                    ORDER BY o08_programa";  
+if ($iModelo == 1) {
+    $sSqlEstimativa = " SELECT DISTINCT o08_programa, /* Programa do PPA */
+                                        o54_descr /* Descrição do Programa */
+                        FROM ppadotacao
+                        INNER JOIN ppaestimativadespesa ON o08_sequencial = o07_coddot
+                        INNER JOIN ppaestimativa ON o07_ppaestimativa = o05_sequencial
+                        INNER JOIN orcprograma ON orcprograma.o54_anousu = {$oGet->iAno} AND orcprograma.o54_programa = ppadotacao.o08_programa
+                        LEFT JOIN orcindicaprograma ON orcindicaprograma.o18_orcprograma = orcprograma.o54_programa AND orcindicaprograma.o18_anousu = " . db_getsession('DB_anousu') . "
+                        WHERE $sWhere
+                          AND o08_instit IN ({$sListaInstit}) {$sWherePrograma} {$sWhereOrgao}
+                        ORDER BY o08_programa";
 
-$rsEstimativa 	   = pg_query($sSqlEstimativa); 
+} else {
+    $sSqlEstimativa = "SELECT o54_programa AS o08_programa, 
+                              o54_descr
+                       FROM orcprograma
+                       WHERE o54_anousu = {$oGet->iAno}";
+
+}
+$rsEstimativa = pg_query($sSqlEstimativa);
 $iLinhasEstimativa = pg_num_rows($rsEstimativa);
+
 $aEstimativa	   = array();	 
 
 $valor = 0;
@@ -84,7 +93,7 @@ for ( $iInd=0; $iInd < $iLinhasEstimativa; $iInd++ ) {
 
     $sWhere = " o55_anousu = {$oGet->iAno} ";
 
-    $sSqlAcoes = " SELECT DISTINCT o55_projativ o08_projativ,
+    $sSqlAcoes = " SELECT DISTINCT o55_projativ AS o08_projativ,
                           o55_descr,
                           o55_anousu o05_anoreferencia,
                           (SELECT sum(o28_valor) FROM orcprojativprogramfisica
@@ -119,7 +128,7 @@ for ( $iInd=0; $iInd < $iLinhasEstimativa; $iInd++ ) {
                    WHERE $sWhere
                      AND o58_programa = {$oDados->iPrograma}
                      AND o58_instit IN ({$sListaInstit})
-                   GROUP BY o55_projativ, o08_projativ, o15_tipo, o55_tipo, o55_descr, o55_especproduto, o20_descricao, o55_descrunidade, o55_valorunidade, o55_anousu, o05_anoreferencia
+                   GROUP BY 1, 3, ppadotacao.o08_projativ, 4, 8, o05_anoreferencia
                    ORDER BY o08_projativ, o05_anoreferencia";
 
   } elseif ($iModelo == 1) {
@@ -383,7 +392,7 @@ if ( $oGet->selforma == "s" ) {
     $pdf->Cell(40 ,$alt,"Valor"       ,"TBR",1,"C",0);
     
     $iY = $pdf->getY();
-    $pdf->Cell(193,$alt*4," TOTAL PROGRAMA","TBR",1,"C",0);
+    $pdf->Cell(193,$alt*3," TOTAL PROGRAMA","TBR",1,"C",0);
     $pdf->setY($iY);
     $nTotalGeral     = 0; 
     foreach ( $aTotalAcoes[$oEstimativa->iPrograma] as $iExercicio => $aDados ) {
@@ -395,7 +404,7 @@ if ( $oGet->selforma == "s" ) {
       $pdf->Cell(40,$alt,db_formatar($nTotalValor,"f")        ,"TB" ,1,"R",0);
         
     }
-    $pdf->Cell(193,$alt,"Total dos Exercícios","TBR",0,"C",0);
+    $pdf->Cell(193,$alt*-1,"Total dos Exercícios","TBR",0,"C",0);
     $pdf->Cell(40,$alt,""                               ,"BR" ,0,"C",0);
     $pdf->Cell(40,$alt,db_formatar($nTotalGeral,"f")  ,"TB" ,1,"R",0);
     $pdf->ln();
@@ -856,7 +865,7 @@ if ( $oGet->selforma == "s" ) {
     $pdf->Cell(40 ,$alt,"Valor"       ,"TBR",1,"C",0);
     
     $iY = $pdf->getY();
-    $pdf->Cell(193,$alt*4," TOTAL PROGRAMA","TBR",1,"C",0);
+    $pdf->Cell(193,$alt*3," TOTAL PROGRAMA","TBR",1,"C",0);
     $pdf->setY($iY);
     
     $nTotalGeral  = 0;
@@ -871,7 +880,7 @@ if ( $oGet->selforma == "s" ) {
       $pdf->Cell(40,$alt,db_formatar($nTotalValor,"f")        ,"TB" ,1,"R",0);
         
     }
-    $pdf->Cell(193,$alt,"Total dos Exercícios","TBR",0,"C",0);
+    $pdf->Cell(193,$alt*-1,"Total dos Exercícios","TBR",0,"C",0);
     $pdf->Cell(40,$alt,""                               ,"BR" ,0,"C",0);
     $pdf->Cell(40,$alt,db_formatar($nTotalGeral,"f")  ,"TB" ,1,"R",0);
     $iPrograma = $oEstimativa->iPrograma;
@@ -889,7 +898,7 @@ $pdf->Cell(40 ,$alt,"Ano"       ,"TBR",0,"C",0);
 $pdf->Cell(40 ,$alt,"Valor"       ,"TBR",1,"C",0);
   
 $iY = $pdf->getY();
-$pdf->Cell(193,$alt*4," TOTAL GERAL","TBR",1,"C",0);
+$pdf->Cell(193,$alt*3," TOTAL GERAL","TBR",1,"C",0);
 $pdf->setY($iY);
 $nTotalGeral = 0;  
 foreach ( $aTotalAcoes as $oProjativ) {
@@ -912,7 +921,7 @@ foreach ( $aTotalFinal as $iExercicio => $nTotalValor) {
   $pdf->Cell(40,$alt,db_formatar($nTotalValor,"f")        ,"TB" ,1,"R",0);
   
 }
-$pdf->Cell(193,$alt,"Total dos Exercícios","TBR",0,"C",0);
+$pdf->Cell(193,$alt*-1,"Total dos Exercícios","TBR",0,"C",0);
 $pdf->Cell(40,$alt,""                               ,"BR" ,0,"C",0);
 $pdf->Cell(40,$alt,db_formatar($nTotalGeral,"f")  ,"TB" ,1,"R",0);
 $pdf->Output();

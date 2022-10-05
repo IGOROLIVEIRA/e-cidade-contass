@@ -1330,7 +1330,7 @@ class db_impcarne extends cl_assinatura
   function imprime()
   {
 
-    $sSqlConfig  = "select db21_codcli from db_config where prefeitura is true";
+    $sSqlConfig  = "select db21_codcli from db_config where codigo =".db_getsession("DB_instit");
     $rsSqlConfig = db_query($sSqlConfig);
     $sCodCliente = pg_fetch_object($rsSqlConfig, 0);
     $sCodCliente = $sCodCliente->db21_codcli;
@@ -1340,10 +1340,12 @@ class db_impcarne extends cl_assinatura
     /** Extensao : Inicio [guia-itbi-recibo-mensagem-modelo-codcli15] */
     /** Extensao : Fim [guia-itbi-recibo-mensagem-modelo-codcli15] */
 
+
     /**
      * Valida se existe modelo especifico
      */
     if (file_exists("fpdf151/impmodelos/especificos/mod_imprime_especifico_{$this->impmodelo}_{$sCodCliente}{$sInstit}.php")) {
+      $this->lUtilizaModeloDefault = false;
       include(Modification::getFile("fpdf151/impmodelos/especificos/mod_imprime_especifico_{$this->impmodelo}_{$sCodCliente}{$sInstit}.php"));
     }
 

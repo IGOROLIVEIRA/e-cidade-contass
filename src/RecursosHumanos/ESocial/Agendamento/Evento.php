@@ -86,8 +86,19 @@ class Evento
      * @param string $responsavelPreenchimento
      * @param \stdClass $dados
      */
-    public function __construct($tipoEvento, $empregador, $responsavelPreenchimento, $dado, $tpAmb, $iniValid, $modo, $dt_alteracao = null, $indapuracao = null, $tppgto = null)
-    {
+    public function __construct(
+        $tipoEvento,
+        $empregador,
+        $responsavelPreenchimento,
+        $dado,
+        $tpAmb,
+        $iniValid,
+        $modo,
+        $dt_alteracao = null,
+        $indapuracao = null,
+        $tppgto = null,
+        $tpevento = null
+    ) {
         /**
          * @todo pesquisar exite na fila um evento do tipo: $tipoEvento para o : $responsavelPreenchimento
          * @todo Não existido, cria uma agenda e inclui na tabela
@@ -105,6 +116,7 @@ class Evento
         $this->dt_alteracao             = $dt_alteracao;
         $this->indapuracao              = $indapuracao;
         $this->tppgto                   = $tppgto;
+        $this->tpevento                 = $tpevento;
 
         $dado = json_encode(\DBString::utf8_encode_all($this->dado));
         if (is_null($dado)) {
@@ -149,6 +161,7 @@ class Evento
      */
     private function adicionarEvento()
     {
+
         $dados                                          = $this->montarDadosAPI();
         //adicionado esse str_replace pra pegar o evendo quando o envio foi individual
         $tipoEvento                                     = str_replace('Individual', '', $this->tipoEvento);
@@ -204,6 +217,7 @@ class Evento
         $evento->setDtAlteracao($this->dt_alteracao);
         $evento->setIndApuracao($this->indapuracao);
         $evento->setTppgto($this->tppgto);
+        $evento->setTpevento($this->tpevento);
         if (!is_object($evento)) {
             throw new \Exception("Objeto S{$this->tipoEvento} não encontrado.");
         }

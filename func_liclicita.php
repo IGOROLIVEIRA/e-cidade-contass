@@ -177,15 +177,23 @@ $sWhereContratos = " and 1 = 1 ";
              }*/
 
 
-                if (isset($situacao) && trim($situacao) != '' && $cldbusuarios->vefica_adm_user(db_getsession('DB_id_usuario')) != "1") {
+                if (isset($pncp) && trim($pncp) == 1) {
+                $dbwhere .= " l20_licsituacao = 0 AND ";
+                }else{
+                    if (isset($situacao) && trim($situacao) != '' && $cldbusuarios->vefica_adm_user(db_getsession('DB_id_usuario')) != "1") {
 
-                    $dbwhere .= "l20_licsituacao in ($situacao) and ";
-                } else {
-                    if ($situacao == '10') {
-                        $dbwhere .= " l20_licsituacao = 10 AND ";
-                    } elseif ($situacao) {
-                        $dbwhere .= " l20_licsituacao = 1 AND ";
+                        $dbwhere .= "l20_licsituacao in ($situacao) and ";
+                    } else {
+                        if ($situacao == '10') {
+                            $dbwhere .= " l20_licsituacao = 10 AND ";
+                        } elseif ($situacao) {
+                            $dbwhere .= " l20_licsituacao = 1 AND ";
+                        }
                     }
+                }
+
+                if (isset($lei) && $lei == '1') {
+                    $dbwhere .= " l20_leidalicitacao = 1 AND ";
                 }
 
                 if (!empty($oGet->validasaldo)) {
@@ -436,7 +444,7 @@ $sWhereContratos = " and 1 = 1 ";
                                 db_fieldsmemory($result, 0);
                                 echo "<script>" . $funcao_js . "('$l20_objeto',false);</script>";
                             } else {
-                                echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") não Encontrado',true);</script>";
+                                echo "<script>" . $funcao_js . "('','Chave(" . $pesquisa_chave . ") não Encontrado',true);</script>";
                             }
                         } else if (isset($criterioadjudicacao) && $criterioadjudicacao == true) {
                             $sql = "

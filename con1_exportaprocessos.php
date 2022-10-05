@@ -61,10 +61,18 @@ $clrotulo->label("l20_numero");
             var codigo = document.form1.l20_codigo.value;
             var delimitador = document.form1.delimitador.value;
             var extensao = document.form1.extensao.value;
+            var leiaute = document.form1.leiaute.value;
 
             var sQuery = 'l20_codigo=' + codigo;
             sQuery += '&delimitador=' + delimitador;
-            sQuery += '&extensao=' + extensao
+            sQuery += '&extensao=' + extensao;
+            sQuery += '&leiaute=' + leiaute;
+
+            if (leiaute == 0) {
+                alert("Selecione um Leiaute!");
+                return false;
+
+            }
 
             if (codigo == '' || codigo == null) {
 
@@ -92,7 +100,6 @@ $clrotulo->label("l20_numero");
             sQuery += '&file=' + file
 
             if (codigo == '' || codigo == null) {
-
                 alert("Selecione uma Licitação.");
                 return false;
             }
@@ -143,6 +150,20 @@ $clrotulo->label("l20_numero");
                 <fieldset style="width: 400px; float:left">
                     <legend><strong>Exportar Itens</strong></legend>
                     <table align="center" border='0'>
+
+                        <tr>
+                            <td align="left" nowrap><b>Modelo :</b></td>
+                            <td align="left" nowrap>
+                                <?
+                                $aLeiaute = array(
+                                    "0" => "Selecione",
+                                    "1" => "Leiaute Padrão",
+                                    "2" => "Leiaute Licitar",
+                                );
+                                db_select('leiaute', $aLeiaute, true, 1, "onchange='js_changeleiaute();'");
+                                ?>
+                            </td>
+                        </tr>
 
                         <tr>
                             <td align="left" nowrap><b>Delimitador de Campos :</b></td>
@@ -260,5 +281,20 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsessio
     function js_mostraliclicita1(chave1) {
         document.form1.l20_codigo.value = chave1;
         db_iframe_liclicita.hide();
+    }
+
+    function js_changeleiaute() {
+
+        leiaute = document.form1.leiaute.value;
+
+        if (leiaute == 2) {
+            document.form1.delimitador.disabled = true;
+            document.form1.extensao.disabled = true;
+            return;
+        }
+
+        document.form1.delimitador.disabled = false;
+        document.form1.extensao.disabled = false;
+
     }
 </script>

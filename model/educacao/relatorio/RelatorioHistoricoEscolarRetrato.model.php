@@ -33,7 +33,8 @@
  * @author andrio.costa <andrio.costa@dbseller.com.br>
  * @version $Revision: 1.39 $
  */
-class RelatorioHistoricoEscolarRetrato extends RelatorioHistoricoEscolar {
+class RelatorioHistoricoEscolarRetrato extends RelatorioHistoricoEscolar
+{
 
   const NUMERO_ETAPAS_PAGINA      = 9;
   const LARGURA_DISCIPLINA        = 60;
@@ -77,7 +78,7 @@ class RelatorioHistoricoEscolarRetrato extends RelatorioHistoricoEscolar {
    * Instancia da Biblioteca FPDF
    * @var FPDF
    */
-  protected $oPdf ;
+  protected $oPdf;
 
   /**
    * Disposdição do cabeçalho do relatorio
@@ -99,7 +100,8 @@ class RelatorioHistoricoEscolarRetrato extends RelatorioHistoricoEscolar {
    * @param integer $iTipoRelatorio
    * @param boolean $lExibirReclassificacao
    */
-  public function __construct( FPDF $oPdf, Aluno $oAluno, Escola $oEscola, $iTipoRelatorio, $lExibirReclassificacao ) {
+  public function __construct(FPDF $oPdf, Aluno $oAluno, Escola $oEscola, $iTipoRelatorio, $lExibirReclassificacao)
+  {
 
     parent::__construct($oAluno, $oEscola, $iTipoRelatorio, $lExibirReclassificacao);
     $this->oPdf        = $oPdf;
@@ -111,7 +113,8 @@ class RelatorioHistoricoEscolarRetrato extends RelatorioHistoricoEscolar {
    * Atribui a disposição selecionada para impressão
    * @param integer $iDisposicao
    */
-  public function setDisposicao($iDisposicao = 1) {
+  public function setDisposicao($iDisposicao = 1)
+  {
 
     $this->iDisposicao = $iDisposicao;
   }
@@ -121,7 +124,8 @@ class RelatorioHistoricoEscolarRetrato extends RelatorioHistoricoEscolar {
    *
    * @return void
    */
-  public function escreveCabecalho () {
+  public function escreveCabecalho()
+  {
 
     $iAlturaLinha = self::ALTURA_LINHA;
 
@@ -129,18 +133,18 @@ class RelatorioHistoricoEscolarRetrato extends RelatorioHistoricoEscolar {
     $sNomePai  = trim($this->oAluno->getNomePai());
     $sFiliacao = "";
 
-    if (empty($sNomePai) && !empty($sNomeMae) ) {
+    if (empty($sNomePai) && !empty($sNomeMae)) {
       $sFiliacao = $sNomeMae;
-    } else if (!empty($sNomePai) &&  empty($sNomeMae) ) {
+    } else if (!empty($sNomePai) &&  empty($sNomeMae)) {
       $sFiliacao = $sNomePai;
-    } else if (!empty($sNomePai) && !empty($sNomeMae) ) {
+    } else if (!empty($sNomePai) && !empty($sNomeMae)) {
       $sFiliacao = "{$sNomePai} e de {$sNomeMae}";
     }
 
     $aNacionalidade = array(
-                            "1" => "BRASILEIRO",
-                            "2" => "BRASILEIRO NASCIDO NO EXTERIOR OU NATURALIZADO",
-                            "3" => "ESTRANGEIRO"
+      "1" => "BRASILEIRO",
+      "2" => "BRASILEIRO NASCIDO NO EXTERIOR OU NATURALIZADO",
+      "3" => "ESTRANGEIRO"
     );
 
     $oDtNascimento     = new DBDate($this->oAluno->getDataNascimento());
@@ -155,18 +159,17 @@ class RelatorioHistoricoEscolarRetrato extends RelatorioHistoricoEscolar {
         $sNaturalidade .= "{$this->oAluno->getNaturalidade()->getUF()->getUF()}";
       }
 
-      if ( $this->oAluno->getNacionalidade() == 1 ) {
+      if ($this->oAluno->getNacionalidade() == 1) {
         $sLocalNascimento .= " em {$sNaturalidade} ";
       }
-
     }
 
-    $iInstituicao = db_getsession( "DB_instit" );
-    $sImagem      = RelatorioHistoricoEscolar::getBrasao( $this->oParametros->brasao, new Instituicao( $iInstituicao ) );
-    $this->oPdf->image( $sImagem, 10, 10, 20, 20 );
+    $iInstituicao = db_getsession("DB_instit");
+    $sImagem      = RelatorioHistoricoEscolar::getBrasao($this->oParametros->brasao, new Instituicao($iInstituicao));
+    $this->oPdf->image($sImagem, 10, 10, 20, 20);
     $this->oPdf->setfont('arial', 'B', 6);
 
-    if ( $this->iDisposicao == 1) {
+    if ($this->iDisposicao == 1) {
       $this->escreverCabecalhoDisposicao1();
     } else {
       $this->escreverCabecalhoDisposicao2();
@@ -182,7 +185,7 @@ class RelatorioHistoricoEscolarRetrato extends RelatorioHistoricoEscolar {
 
 
     $this->oPdf->cell(15, $iAlturaLinha, "Filho(a) de:", 0, 0, "l", 0);
-    $this->oPdf->cell(93, $iAlturaLinha, $sFiliacao    , 0, 1, "L", 0);
+    $this->oPdf->cell(93, $iAlturaLinha, $sFiliacao, 0, 1, "L", 0);
 
     $this->oPdf->cell(15, $iAlturaLinha, "Nacionalidade:", 0, 0, "L", 0);
     $this->oPdf->cell(25, $iAlturaLinha, $aNacionalidade[$this->oAluno->getNacionalidade()], 0, 1, "L", 0);
@@ -190,9 +193,9 @@ class RelatorioHistoricoEscolarRetrato extends RelatorioHistoricoEscolar {
     $this->oPdf->cell(30, $iAlturaLinha, $this->oAluno->getIdentidade(), 0, 0, "L", 0);
 
     $this->oPdf->cell(15, $iAlturaLinha, "Nascido(a) em:", 0, 0, "L", 0);
-    $this->oPdf->cell(80, $iAlturaLinha, $sLocalNascimento, 0, 0, "L", 0 );
+    $this->oPdf->cell(80, $iAlturaLinha, $sLocalNascimento, 0, 0, "L", 0);
     $this->oPdf->cell(12, $iAlturaLinha, "ID INEP: ", 0, 0, "L", 0);
-    $this->oPdf->cell(5,  $iAlturaLinha, $this->oAluno->getCodigoInep(), 0, 1, "L",0);
+    $this->oPdf->cell(5,  $iAlturaLinha, $this->oAluno->getCodigoInep(), 0, 1, "L", 0);
 
     $this->oPdf->SetFontSize($this->oParametros->fonte_observacao);
     return;
@@ -203,10 +206,11 @@ class RelatorioHistoricoEscolarRetrato extends RelatorioHistoricoEscolar {
    *
    * @return void
    */
-  private function escreverCabecalhoDisposicao1() {
+  private function escreverCabecalhoDisposicao1()
+  {
 
     $iPosicaoXDadosEscola    = 110;
-    $this->oPdf->setX(32);//POsicao Texto Cabecalho
+    $this->oPdf->setX(32); //POsicao Texto Cabecalho
     $this->oPdf->multicell(75, 4, $this->oParametros->cabecalho, 0, "C", 0, 0);
 
     /**
@@ -220,8 +224,8 @@ class RelatorioHistoricoEscolarRetrato extends RelatorioHistoricoEscolar {
     foreach ($aAtoEscola as $sAtoLegal) {
 
       $iLinhas += $this->oPdf->NbLines(100, $sAtoLegal);
-      if ($iLinhas > self::MAXIMO_LINHAS_ATOS_LEGAIS ) {
-      	continue;
+      if ($iLinhas > self::MAXIMO_LINHAS_ATOS_LEGAIS) {
+        continue;
       }
       $sAtoEscola .= $sAtoLegal . "\n";
     }
@@ -232,7 +236,7 @@ class RelatorioHistoricoEscolarRetrato extends RelatorioHistoricoEscolar {
     if (count($aTelefones) > 0) {
 
       $sTelefoneEscola = "Fone: ({$aTelefones[0]->iDDD}) {$aTelefones[0]->iNumero}";
-      $sTelefoneEscola.= !empty($aTelefones[0]->iRamal) ? "Ramal: {$aTelefones[0]->iRamal}" : "" ;
+      $sTelefoneEscola .= !empty($aTelefones[0]->iRamal) ? "Ramal: {$aTelefones[0]->iRamal}" : "";
     }
 
     $sEnderecoEscola  = "{$this->oEscola->getEndereco()}, {$this->oEscola->getNumeroEndereco()}";
@@ -243,11 +247,35 @@ class RelatorioHistoricoEscolarRetrato extends RelatorioHistoricoEscolar {
     $sNomeEscola       = $this->oEscola->getNome();
     $iCodigoReferencia = $this->oEscola->getCodigoReferencia();
 
-    if ( $iCodigoReferencia != null ) {
+    if ($iCodigoReferencia != null) {
       $sNomeEscola = "{$iCodigoReferencia} - {$sNomeEscola}";
     }
 
+    $oDepartamento = new DBDepartamento(db_getsession("DB_coddepto"));
+    $iDepartamento = $oDepartamento->getCodigo();
+
+
+    $oDepartamento = new DBDepartamento(db_getsession("DB_coddepto"));
+    $iDepartamento = $oDepartamento->getCodigo();
+
+
+    $result = db_query("select ed05_t_texto,ed05_d_publicado,ed05_i_aparecerelatorio,ed05_i_ano,ed05_i_codigo, ed05_c_numero, ed05_c_finalidade, ed83_c_descr as dl_tipo,
+case when ed05_c_competencia='F' then 'FEDERAL' when ed05_c_competencia='E' then 'ESTADUAL' else 'MUNICIPAL'
+end as ed05_c_competencia, ed05_i_ano from atolegal inner join tipoato on tipoato.ed83_i_codigo
+= atolegal.ed05_i_tipoato inner join atoescola on atoescola.ed19_i_ato = atolegal.ed05_i_codigo
+where ed19_i_escola = $iDepartamento and ed05_i_aparecerelatorio = true order by ed05_i_codigo ;");
+
+    $atolegal = db_utils::fieldsMemory($result, 0);
+
+    if ($atolegal->ed05_c_finalidade == "") {
+      $atolegalcabecalho = "";
+    } else {
+      $atolegalcabecalho = $atolegal->ed05_c_finalidade . "/" . $atolegal->dl_tipo . " nº: " .  $atolegal->ed05_c_numero . " DE " . implode("/", array_reverse(explode("-", $atolegal->ed05_d_publicado))) . ", " . $atolegal->ed05_t_texto;
+    }
+
+
     $mCabecalhoEscola  = $sNomeEscola;
+    $mCabecalhoEscola  .= "\n$atolegalcabecalho";
     $mCabecalhoEscola .= "\nMantenedora: ";
     $mCabecalhoEscola .=  $this->oEscola->getDepartamento()->getInstituicao()->getDescricao();
     $mCabecalhoEscola .= "\nEndereço: {$sEnderecoEscola}";
@@ -263,7 +291,7 @@ class RelatorioHistoricoEscolarRetrato extends RelatorioHistoricoEscolar {
     $this->oPdf->setfont('arial', 'b', 7);
     $this->oPdf->multicell(120, 2, $this->sTituloRelatorio, "", "L", 0, 0);
     $this->oPdf->setXY(80, 40);
-    $this->oPdf->multicell(120, 2, $this->getNomeUltimoCurso()." Lei 9.394/96", "", "L", 0, 0);
+    $this->oPdf->multicell(120, 2, $this->getNomeUltimoCurso() . " Lei 9.394/96", "", "L", 0, 0);
 
     return;
   }
@@ -274,14 +302,15 @@ class RelatorioHistoricoEscolarRetrato extends RelatorioHistoricoEscolar {
    * @access private
    * @return void
    */
-  private function escreverCabecalhoDisposicao2() {
+  private function escreverCabecalhoDisposicao2()
+  {
 
     $sTelefoneEscola = "";
     $aTelefones      = $this->oEscola->getTelefones();
     if (count($aTelefones) > 0) {
 
       $sTelefoneEscola = "Fone: ({$aTelefones[0]->iDDD}) {$aTelefones[0]->iNumero}";
-      $sTelefoneEscola.= !empty($aTelefones[0]->iRamal) ? " Ramal: {$aTelefones[0]->iRamal}" : "" ;
+      $sTelefoneEscola .= !empty($aTelefones[0]->iRamal) ? " Ramal: {$aTelefones[0]->iRamal}" : "";
     }
 
     $sEnderecoEscola1  = "Endereço: {$this->oEscola->getEndereco()}, {$this->oEscola->getNumeroEndereco()}";
@@ -302,8 +331,8 @@ class RelatorioHistoricoEscolarRetrato extends RelatorioHistoricoEscolar {
     foreach ($aAtoEscola as $sAtoLegal) {
 
       $iLinhas += $this->oPdf->NbLines(100, $sAtoLegal);
-      if ($iLinhas > self::MAXIMO_LINHAS_ATOS_LEGAIS ) {
-      	continue;
+      if ($iLinhas > self::MAXIMO_LINHAS_ATOS_LEGAIS) {
+        continue;
       }
       $sAtoEscola .= $sAtoLegal . "\n";
     }
@@ -311,8 +340,26 @@ class RelatorioHistoricoEscolarRetrato extends RelatorioHistoricoEscolar {
     $sNomeEscola       = $this->oEscola->getNome();
     $iCodigoReferencia = $this->oEscola->getCodigoReferencia();
 
-    if ( $iCodigoReferencia != null ) {
+    if ($iCodigoReferencia != null) {
       $sNomeEscola = "{$iCodigoReferencia} - {$sNomeEscola}";
+    }
+
+    $oDepartamento = new DBDepartamento(db_getsession("DB_coddepto"));
+    $iDepartamento = $oDepartamento->getCodigo();
+
+
+    $result = db_query("select ed05_t_texto,ed05_d_publicado,ed05_i_aparecerelatorio,ed05_i_ano,ed05_i_codigo, ed05_c_numero, ed05_c_finalidade, ed83_c_descr as dl_tipo,
+case when ed05_c_competencia='F' then 'FEDERAL' when ed05_c_competencia='E' then 'ESTADUAL' else 'MUNICIPAL'
+end as ed05_c_competencia, ed05_i_ano from atolegal inner join tipoato on tipoato.ed83_i_codigo
+= atolegal.ed05_i_tipoato inner join atoescola on atoescola.ed19_i_ato = atolegal.ed05_i_codigo
+where ed19_i_escola = $iDepartamento and ed05_i_aparecerelatorio = true order by ed05_i_codigo ;");
+
+    $atolegal = db_utils::fieldsMemory($result, 0);
+
+    if ($atolegal->ed05_c_finalidade == "") {
+      $atolegalcabecalho = "";
+    } else {
+      $atolegalcabecalho = $atolegal->ed05_c_finalidade . "/" . $atolegal->dl_tipo . " nº: " .  $atolegal->ed05_c_numero . " DE " . implode("/", array_reverse(explode("-", $atolegal->ed05_d_publicado))) . ", " . $atolegal->ed05_t_texto;
     }
 
     $this->oPdf->SetY(15);
@@ -322,6 +369,9 @@ class RelatorioHistoricoEscolarRetrato extends RelatorioHistoricoEscolar {
     $this->oPdf->SetX(60);
     $this->oPdf->setfont('arial', 'b', 8);
     $this->oPdf->cell(100, 5, strtoupper($sNomeEscola), 0, 1, "C", 0);
+    $this->oPdf->SetX(60);
+    $this->oPdf->multicell(100, 5, $atolegalcabecalho, 0, "C", 0, 0);
+    $this->oPdf->SetX(60);
     $this->oPdf->setfont('arial', 'b', 7);
     $this->oPdf->SetX(60);
     $this->oPdf->cell(100, 4, mb_strtoupper($this->sTituloRelatorio), 0, 1, "C", 0);
@@ -332,8 +382,8 @@ class RelatorioHistoricoEscolarRetrato extends RelatorioHistoricoEscolar {
     if ($sAtoEscola != "") {
       $this->oPdf->multicell(110, 4, $sAtoEscola, "", "L", 0, 0);
     }
-    $this->oPdf->cell(98, 5, $sEnderecoEscola1 ,0, 0, "L", 0);
-    $this->oPdf->cell(98, 5, $sEnderecoEscola2 ,0, 1, "L", 0);
+    $this->oPdf->cell(98, 5, $sEnderecoEscola1, 0, 0, "L", 0);
+    $this->oPdf->cell(98, 5, $sEnderecoEscola2, 0, 1, "L", 0);
   }
 
 
@@ -341,11 +391,12 @@ class RelatorioHistoricoEscolarRetrato extends RelatorioHistoricoEscolar {
    * Verifica se o aluno cursou uma disciplina diversificada no seu histórico
    * @return boolean
    */
-  private function possuiBaseDiversificada() {
+  private function possuiBaseDiversificada()
+  {
 
     foreach ($this->aDadosOrganizados as $oEtapaCursada) {
 
-      foreach ($oEtapaCursada->aDisicplinasEtapa as $oDisciplina ) {
+      foreach ($oEtapaCursada->aDisicplinasEtapa as $oDisciplina) {
         if (!$oDisciplina->lBaseComum) {
           return true;
         }
@@ -358,7 +409,8 @@ class RelatorioHistoricoEscolarRetrato extends RelatorioHistoricoEscolar {
    * Reorganiza a estrutura da grade agora devemos separar as disciplinas e as etapas pelo tipo da Base curricular;
    * @return array
    */
-  private function reorganizaEstrutura() {
+  private function reorganizaEstrutura()
+  {
 
     $aGrade = array();
 
@@ -369,16 +421,16 @@ class RelatorioHistoricoEscolarRetrato extends RelatorioHistoricoEscolar {
 
     foreach ($this->aDadosOrganizados as $oEtapaCursada) {
 
-      if ( count( $oEtapaCursada->aDisicplinasEtapa ) == 0  && !$this->lExibirTodasEtapasCurso ) {
+      if (count($oEtapaCursada->aDisicplinasEtapa) == 0  && !$this->lExibirTodasEtapasCurso) {
         continue;
       }
 
       if ($iColunasImpressas == RelatorioHistoricoEscolarRetrato::NUMERO_ETAPAS_PAGINA) {
 
         $iColunasImpressas = 0;
-        $iPaginas ++;
+        $iPaginas++;
       }
-      $iColunasImpressas ++;
+      $iColunasImpressas++;
       $oEtapaComum               = new stdClass();
       $oEtapaComum->iEtapa       = $oEtapaCursada->iEtapa;
       $oEtapaComum->sEtapa       = $oEtapaCursada->sEtapa;
@@ -389,9 +441,9 @@ class RelatorioHistoricoEscolarRetrato extends RelatorioHistoricoEscolar {
       $oEtapaDiversificada->sEtapa       = $oEtapaCursada->sEtapa;
       $oEtapaDiversificada->aDisciplinas = array();
 
-      foreach ($oEtapaCursada->aDisicplinasEtapa as $oDisciplina ) {
+      foreach ($oEtapaCursada->aDisicplinasEtapa as $oDisciplina) {
 
-        if ( $oDisciplina->lBaseComum ) {
+        if ($oDisciplina->lBaseComum) {
           $oEtapaComum->aDisciplinas[$oDisciplina->iCadDisciplina] = $oDisciplina;
         } else {
           $oEtapaDiversificada->aDisciplinas[$oDisciplina->iCadDisciplina] = $oDisciplina;
@@ -400,7 +452,7 @@ class RelatorioHistoricoEscolarRetrato extends RelatorioHistoricoEscolar {
 
       $aGrade[$iPaginas]['comum'][] = $oEtapaComum;
 
-      if ( $lPossuiBaseDiversificada ) {
+      if ($lPossuiBaseDiversificada) {
         $aGrade[$iPaginas]['diversificada'][] = $oEtapaDiversificada;
       }
     }
@@ -408,20 +460,20 @@ class RelatorioHistoricoEscolarRetrato extends RelatorioHistoricoEscolar {
     /**
      * Adiciona a grade as etapas ainda não cursadas pelo aluno
      */
-    if ( $this->lExibirTodasEtapasCurso ) {
+    if ($this->lExibirTodasEtapasCurso) {
 
-      foreach ($this->aEtapasPosterior as $oEtapaPosterior ) {
+      foreach ($this->aEtapasPosterior as $oEtapaPosterior) {
 
         if ($iColunasImpressas == RelatorioHistoricoEscolarRetrato::NUMERO_ETAPAS_PAGINA) {
 
           $iColunasImpressas = 0;
-          $iPaginas ++;
+          $iPaginas++;
         }
 
-        $iColunasImpressas ++;
+        $iColunasImpressas++;
         $aGrade[$iPaginas]['comum'][] = $oEtapaPosterior;
 
-        if ( $lPossuiBaseDiversificada ) {
+        if ($lPossuiBaseDiversificada) {
           $aGrade[$iPaginas]['diversificada'][] = $oEtapaPosterior;
         }
       }
@@ -433,7 +485,8 @@ class RelatorioHistoricoEscolarRetrato extends RelatorioHistoricoEscolar {
   /**
    * Cria a tabela de ComponentesCurriculares
    */
-  public function criarTabelaComponentesCurriculares() {
+  public function criarTabelaComponentesCurriculares()
+  {
 
     $aDisciplinasCursadas = $this->disciplinasCursadas();
 
@@ -448,7 +501,7 @@ class RelatorioHistoricoEscolarRetrato extends RelatorioHistoricoEscolar {
     $iNumeroEtapasPagina = RelatorioHistoricoEscolarRetrato::NUMERO_ETAPAS_PAGINA;
     $iTotalEtapas        = 0;
 
-    $iAlturaGradeComponenteCurricular = (count($aDisciplinasCursadas) +1)  * $iAlturaLinha;
+    $iAlturaGradeComponenteCurricular = (count($aDisciplinasCursadas) + 1)  * $iAlturaLinha;
 
     /**
      * Impressão da grade
@@ -470,7 +523,7 @@ class RelatorioHistoricoEscolarRetrato extends RelatorioHistoricoEscolar {
           $sBase = "Base Diversificada";
         }
 
-        $this->oPdf->ln(0,5);
+        $this->oPdf->ln(0, 5);
         $this->oPdf->SetFont("arial", "B", 8);
         $this->oPdf->Cell($iLarguraDisciplina, $iAlturaLinha, $sBase, 0, 1, "C");
         $this->oPdf->SetFont("arial", "B", $iFonteGrade);
@@ -482,7 +535,7 @@ class RelatorioHistoricoEscolarRetrato extends RelatorioHistoricoEscolar {
         }
 
         foreach ($aEtapa as $oEtapa) {
-          
+
           $iTotalEtapas++;
           $this->oPdf->Cell(15, $iAlturaLinha, substr($oEtapa->sEtapa, 0, $iSubString), 1, 0, "C");
         }
@@ -520,9 +573,10 @@ class RelatorioHistoricoEscolarRetrato extends RelatorioHistoricoEscolar {
 
             if (isset($oEtapa->aDisciplinas[$oDisciplina->iDisciplina])) {
 
-              if (    $oEtapa->aDisciplinas[$oDisciplina->iDisciplina]->mAvaliacao != ""
-                   || (    $oEtapa->aDisciplinas[$oDisciplina->iDisciplina]->mAvaliacao == ""
-                        && $oEtapa->aDisciplinas[$oDisciplina->iDisciplina]->sSituacao == 'AMPARADO' )
+              if (
+                $oEtapa->aDisciplinas[$oDisciplina->iDisciplina]->mAvaliacao != ""
+                || ($oEtapa->aDisciplinas[$oDisciplina->iDisciplina]->mAvaliacao == ""
+                  && $oEtapa->aDisciplinas[$oDisciplina->iDisciplina]->sSituacao == 'AMPARADO')
               ) {
 
                 $lPossuiAvaliacaoNaDisciplina = true;
@@ -531,7 +585,7 @@ class RelatorioHistoricoEscolarRetrato extends RelatorioHistoricoEscolar {
             }
           }
 
-          if ( !$lPossuiAvaliacaoNaDisciplina ) {
+          if (!$lPossuiAvaliacaoNaDisciplina) {
             continue;
           }
 
@@ -545,7 +599,7 @@ class RelatorioHistoricoEscolarRetrato extends RelatorioHistoricoEscolar {
 
           $iYInicio = $this->oPdf->GetY();
           $this->oPdf->MultiCell($iLarguraDisciplina, $iAlturaLinha, $oDisciplina->sDisciplina, 1, "L", $lZebra);
-          $this->oPdf->SetXY($this->oPdf->GetLeftMargin() + $iLarguraDisciplina, $iYInicio );
+          $this->oPdf->SetXY($this->oPdf->GetLeftMargin() + $iLarguraDisciplina, $iYInicio);
 
           $this->oPdf->SetFont("arial", "", $iFonteGrade);
 
@@ -554,16 +608,17 @@ class RelatorioHistoricoEscolarRetrato extends RelatorioHistoricoEscolar {
             $sAproveitamento = ' - ';
 
 
-            if ( isset($oEtapa->aDisciplinas[$oDisciplina->iDisciplina]) ) {
+            if (isset($oEtapa->aDisciplinas[$oDisciplina->iDisciplina])) {
 
-              if (  trim($oEtapa->aDisciplinas[$oDisciplina->iDisciplina]->mAvaliacao) != ''
-                 || ( trim($oEtapa->aDisciplinas[$oDisciplina->iDisciplina]->mAvaliacao) == ''
-                      && $oEtapa->aDisciplinas[$oDisciplina->iDisciplina]->sSituacao == 'AMPARADO' )
-               ) {
+              if (
+                trim($oEtapa->aDisciplinas[$oDisciplina->iDisciplina]->mAvaliacao) != ''
+                || (trim($oEtapa->aDisciplinas[$oDisciplina->iDisciplina]->mAvaliacao) == ''
+                  && $oEtapa->aDisciplinas[$oDisciplina->iDisciplina]->sSituacao == 'AMPARADO')
+              ) {
 
                 $sAproveitamento = $oEtapa->aDisciplinas[$oDisciplina->iDisciplina]->mAvaliacao;
 
-                if( $oEtapa->aDisciplinas[$oDisciplina->iDisciplina]->sSituacao == 'AMPARADO' ) {
+                if ($oEtapa->aDisciplinas[$oDisciplina->iDisciplina]->sSituacao == 'AMPARADO') {
                   $sAproveitamento = 'AMPARO';
                 }
               }
@@ -585,7 +640,7 @@ class RelatorioHistoricoEscolarRetrato extends RelatorioHistoricoEscolar {
           $this->oPdf->ln(); // Quebra linha ao imprimir disciplina mais etapas
         }
 
-        if ( $lImprimeLinhaComponentesCurricularesEmBranco ) {
+        if ($lImprimeLinhaComponentesCurricularesEmBranco) {
           $this->imprimeLinhaEmBrancoComponenteCurricular($iTotalEtapas);
         }
       }
@@ -596,18 +651,19 @@ class RelatorioHistoricoEscolarRetrato extends RelatorioHistoricoEscolar {
   /**
    * Imprime uma linha em branco contendo as colunas das etapas
    */
-  private function imprimeLinhaEmBrancoComponenteCurricular($iTotalEtapas) {
+  private function imprimeLinhaEmBrancoComponenteCurricular($iTotalEtapas)
+  {
 
     $iColunasEmBranco = self::NUMERO_ETAPAS_PAGINA - $iTotalEtapas;
 
-    $this->oPdf->Cell( self::LARGURA_DISCIPLINA, 4, " - ", 1, 0, "", true );
+    $this->oPdf->Cell(self::LARGURA_DISCIPLINA, 4, " - ", 1, 0, "", true);
 
-    for ( $iContador = 0; $iContador < $iTotalEtapas; $iContador++ ) {
-      $this->oPdf->Cell(  15, 4, " - ", 1, 0, "C", true );
+    for ($iContador = 0; $iContador < $iTotalEtapas; $iContador++) {
+      $this->oPdf->Cell(15, 4, " - ", 1, 0, "C", true);
     }
 
-    for ( $iContador = 0; $iContador < $iColunasEmBranco; $iContador++ ) {
-      $this->oPdf->Cell(  15, 4, " ", 1, 0, "C", true );
+    for ($iContador = 0; $iContador < $iColunasEmBranco; $iContador++) {
+      $this->oPdf->Cell(15, 4, " ", 1, 0, "C", true);
     }
     $this->oPdf->Ln();
   }
@@ -615,7 +671,8 @@ class RelatorioHistoricoEscolarRetrato extends RelatorioHistoricoEscolar {
   /**
    * Cria a tabela de ComponentesCurriculares
    */
-  public function criarTabelaResumoEtapas() {
+  public function criarTabelaResumoEtapas()
+  {
 
     $iAlturaLinha    = RelatorioHistoricoEscolarRetrato::ALTURA_LINHA;
     $aDadosRelatorio = $this->montarEstruturaDeDados();
@@ -624,19 +681,19 @@ class RelatorioHistoricoEscolarRetrato extends RelatorioHistoricoEscolar {
     RelatorioHistoricoEscolarRetrato::$aLarguraColunaEtapa['escola'] = 58;
     RelatorioHistoricoEscolarRetrato::$aLarguraColunaEtapa['cidade'] = 40;
 
-    if ( !$this->oParametros->exibe_turma ) {
+    if (!$this->oParametros->exibe_turma) {
       RelatorioHistoricoEscolarRetrato::$aLarguraColunaEtapa['escola'] += RelatorioHistoricoEscolarRetrato::$aLarguraColunaEtapa['turma'];
     }
-    if ( !$this->oParametros->exibe_percentual_frequencia ) {
+    if (!$this->oParametros->exibe_percentual_frequencia) {
       RelatorioHistoricoEscolarRetrato::$aLarguraColunaEtapa['cidade'] += RelatorioHistoricoEscolarRetrato::$aLarguraColunaEtapa['percentual_frequencia'];
     }
 
     $aLargura          = RelatorioHistoricoEscolarRetrato::$aLarguraColunaEtapa;
     $aLabel            = RelatorioHistoricoEscolarRetrato::$aLabelColunaEtapa;
-    $iAlturaTotalGrade = $iAlturaLinha * ( count($aDadosRelatorio) + 1 ); // + pois tem que escrever cabecalho
+    $iAlturaTotalGrade = $iAlturaLinha * (count($aDadosRelatorio) + 1); // + pois tem que escrever cabecalho
     $iAlturaDisponivel = $this->oPdf->getAvailHeight();
 
-    if ( $iAlturaTotalGrade > $iAlturaDisponivel ) {
+    if ($iAlturaTotalGrade > $iAlturaDisponivel) {
 
       $this->oPdf->AddPage();
       $this->escreveCabecalho();
@@ -649,36 +706,36 @@ class RelatorioHistoricoEscolarRetrato extends RelatorioHistoricoEscolar {
 
     $iLinhasLabelTurma = 0;
 
-    $this->oPdf->Cell( $aLargura['etapa'], $iAlturaLinha, $aLabel['etapa'], 1, 0, "C");
-    $this->oPdf->Cell( $aLargura['ano'],   $iAlturaLinha, $aLabel['ano'],   1, 0, "C");
-    $this->oPdf->Cell( $aLargura['dias'],  $iAlturaLinha, $aLabel['dias'],  1, 0, "C");
+    $this->oPdf->Cell($aLargura['etapa'], $iAlturaLinha, $aLabel['etapa'], 1, 0, "C");
+    $this->oPdf->Cell($aLargura['ano'],   $iAlturaLinha, $aLabel['ano'],   1, 0, "C");
+    $this->oPdf->Cell($aLargura['dias'],  $iAlturaLinha, $aLabel['dias'],  1, 0, "C");
 
-    if ( $this->oParametros->exibe_turma ) {
-      $this->oPdf->Cell( $aLargura['turma'], $iAlturaLinha, $aLabel['turma'], 1, 0, "C");
+    if ($this->oParametros->exibe_turma) {
+      $this->oPdf->Cell($aLargura['turma'], $iAlturaLinha, $aLabel['turma'], 1, 0, "C");
     }
 
-    $this->oPdf->Cell( $aLargura['carga_horaria'], $iAlturaLinha, $aLabel['carga_horaria'], 1, 0, "C");
+    $this->oPdf->Cell($aLargura['carga_horaria'], $iAlturaLinha, $aLabel['carga_horaria'], 1, 0, "C");
 
-    if ( $this->oParametros->exibe_percentual_frequencia ) {
-      $this->oPdf->Cell( $aLargura['percentual_frequencia'], $iAlturaLinha, $aLabel['percentual_frequencia'], 1, 0, "C");
+    if ($this->oParametros->exibe_percentual_frequencia) {
+      $this->oPdf->Cell($aLargura['percentual_frequencia'], $iAlturaLinha, $aLabel['percentual_frequencia'], 1, 0, "C");
     }
-    $this->oPdf->Cell( $aLargura['resultado'], $iAlturaLinha, $aLabel['resultado'], 1, 0, "C");
-    $this->oPdf->Cell( $aLargura['escola'],  $iAlturaLinha, $aLabel['escola'],    1, 0, "C");
-    $this->oPdf->Cell( $aLargura['cidade'],  $iAlturaLinha, $aLabel['cidade'],    1, 0, "C");
-    $this->oPdf->Cell( $aLargura['uf'],        $iAlturaLinha, $aLabel['uf'],        1, 1, "C");
+    $this->oPdf->Cell($aLargura['resultado'], $iAlturaLinha, $aLabel['resultado'], 1, 0, "C");
+    $this->oPdf->Cell($aLargura['escola'],  $iAlturaLinha, $aLabel['escola'],    1, 0, "C");
+    $this->oPdf->Cell($aLargura['cidade'],  $iAlturaLinha, $aLabel['cidade'],    1, 0, "C");
+    $this->oPdf->Cell($aLargura['uf'],        $iAlturaLinha, $aLabel['uf'],        1, 1, "C");
 
     $this->oPdf->SetFont("arial", "", $iFonteGrade);
 
     $iLinhaPadrao = RelatorioHistoricoEscolarRetrato::ALTURA_LINHA;
 
-    foreach ( $aDadosRelatorio as $oDadosEtapa ) {
-      $this->escreverResumoEtapas( $oDadosEtapa );
+    foreach ($aDadosRelatorio as $oDadosEtapa) {
+      $this->escreverResumoEtapas($oDadosEtapa);
     }
 
-    if ( $this->lExibirTodasEtapasCurso) {
+    if ($this->lExibirTodasEtapasCurso) {
 
       foreach ($this->aEtapasPosterior as $oEtapaPosterior) {
-        $this->escreverResumoEtapas( $oEtapaPosterior );
+        $this->escreverResumoEtapas($oEtapaPosterior);
       }
     }
 
@@ -689,7 +746,8 @@ class RelatorioHistoricoEscolarRetrato extends RelatorioHistoricoEscolar {
    * Organiza as disciplinas em uma segunda estrutura para facilitar impressão
    * @return multitype:stdClass
    */
-  private function disciplinasCursadas() {
+  private function disciplinasCursadas()
+  {
 
     $aDisciplinas = array();
 
@@ -721,7 +779,8 @@ class RelatorioHistoricoEscolarRetrato extends RelatorioHistoricoEscolar {
    * - Colocar na observação se os dados da trocou de série se houver
    * @return string
    */
-  public function montaQuadroObservacao() {
+  public function montaQuadroObservacao()
+  {
 
     $sObsParametros = $this->oParametros->observacao;
     $sObsHistorico  = implode("\n", $this->aObservacaoHistorico);
@@ -731,13 +790,13 @@ class RelatorioHistoricoEscolarRetrato extends RelatorioHistoricoEscolar {
       $sProAprovacaoComProgressao .= " * = Aprovado com progressão parcial / Dependência";
     }
 
-    $sObsEtapaHistorico       = implode( "\n", $this->getObservacaoHistoricoEtapa());
+    $sObsEtapaHistorico       = implode("\n", $this->getObservacaoHistoricoEtapa());
     $sObsAprovadoPeloConselho = $this->getObservacaoAprovadoPeloConselho();
     $sObsTrocaSerie           = $this->getObservacaoTrocaSerie();
 
     $sObservacao  = "Observações: ";
 
-    $sObservacao .= !empty( $sObsParametros )           ? "{$sObsParametros}\n"             : '';
+    $sObservacao .= !empty($sObsParametros)           ? "{$sObsParametros}\n"             : '';
     $sObservacao .= !empty($sProAprovacaoComProgressao) ? "{$sProAprovacaoComProgressao}\n" : '';
     $sObservacao .= !empty($sObsHistorico)              ? "{$sObsHistorico}\n"              : '';
     $sObservacao .= !empty($sObsAprovadoPeloConselho)   ? "{$sObsAprovadoPeloConselho}\n"   : '';
@@ -761,20 +820,21 @@ class RelatorioHistoricoEscolarRetrato extends RelatorioHistoricoEscolar {
 
     $this->oPdf->SetAutoPageBreak(true, 30);
     $this->oPdf->ln();
-    $this->oPdf->setMulticellBreakPageFunction( array($this, "escreveCabecalho") );
+    $this->oPdf->setMulticellBreakPageFunction(array($this, "escreveCabecalho"));
     $this->oPdf->MultiCell(195, self::ALTURA_LINHA, $sObservacao, $iBordaMulticell, "L");
     $this->oPdf->SetAutoPageBreak(false);
     if ($iPosicaoFinalObservacao > 0) {
       $this->oPdf->sety($iPosicaoFinalObservacao);
     }
-    return ;
+    return;
   }
 
   /**
    * Retorna uma as convenções
    * @return string
    */
-  private function getObservacaoConvencao() {
+  private function getObservacaoConvencao()
+  {
 
     $sConvencoes = "";
     if (!empty($this->iDisposicao) && $this->iDisposicao == 1) {
@@ -789,7 +849,8 @@ class RelatorioHistoricoEscolarRetrato extends RelatorioHistoricoEscolar {
   /**
    * Retorna o nome do último curso cursado pelo aluno.
    */
-  private function getNomeUltimoCurso() {
+  private function getNomeUltimoCurso()
+  {
 
     $sCamposHist   = "*";
     $sWhereHist    = " ed61_i_aluno = {$this->oAluno->getCodigoAluno()}";
@@ -810,7 +871,6 @@ class RelatorioHistoricoEscolarRetrato extends RelatorioHistoricoEscolar {
       if (!empty($oDadosHist->ed61_i_anoconc)) {
         $sCurso = $oDadosHist->ed29_c_descr;
       }
-
     }
     return $sCurso;
   }
@@ -820,7 +880,8 @@ class RelatorioHistoricoEscolarRetrato extends RelatorioHistoricoEscolar {
    *
    * @param String $sSecretario
    */
-  private function escreverAssinatura($sTexto, $iPosicaoInicial) {
+  private function escreverAssinatura($sTexto, $iPosicaoInicial)
+  {
 
     if (empty($sTexto)) {
       return;
@@ -828,22 +889,24 @@ class RelatorioHistoricoEscolarRetrato extends RelatorioHistoricoEscolar {
     $iLarguraAssinatura = self::LARGURA_ASSINATURA;
     $aTexto             = explode("-", $sTexto);
     $sNome              = $aTexto[1];
-    $sFuncao            = $aTexto[0].(trim($aTexto[2]) != "" ? " ($aTexto[2])":"");
+    $sFuncao            = $aTexto[0] . (trim($aTexto[2]) != "" ? " ($aTexto[2])" : "");
     $sNomeCargo         = "{$sNome}\n {$sFuncao}";
     $iYAntesEscrever    = $this->oPdf->GetY();
 
     $this->oPdf->SetX($iPosicaoInicial);
 
-    $this->oPdf->Line($this->oPdf->GetX(),
-                      $this->oPdf->GetY(),
-                      $this->oPdf->GetX() + $iLarguraAssinatura,
-                      $this->oPdf->GetY());
+    $this->oPdf->Line(
+      $this->oPdf->GetX(),
+      $this->oPdf->GetY(),
+      $this->oPdf->GetX() + $iLarguraAssinatura,
+      $this->oPdf->GetY()
+    );
 
     $this->oPdf->Ln(1);
     $this->oPdf->SetX($iPosicaoInicial);
     $this->oPdf->MultiCell($iLarguraAssinatura, 4, $sNomeCargo, 0, "C");
     $this->oPdf->SetY($iYAntesEscrever);
-    return ;
+    return;
   }
 
   /**
@@ -851,7 +914,8 @@ class RelatorioHistoricoEscolarRetrato extends RelatorioHistoricoEscolar {
    *
    * @return void
    */
-  private function escreverDataPorExtenso() {
+  private function escreverDataPorExtenso()
+  {
 
     $this->oPdf->Ln();
     $oData  = new DBDate(date("d/m/Y"));
@@ -859,7 +923,6 @@ class RelatorioHistoricoEscolarRetrato extends RelatorioHistoricoEscolar {
     $sData .= $oData->dataPorExtenso();
     $this->oPdf->Cell(205, 4, $sData, 0, 1, "C");
     $this->oPdf->Ln();
-
   }
 
   /**
@@ -867,9 +930,10 @@ class RelatorioHistoricoEscolarRetrato extends RelatorioHistoricoEscolar {
    *
    * @param unknown $sTitulo
    */
-  public function setTitulo($sTitulo) {
+  public function setTitulo($sTitulo)
+  {
 
-  	$this->sTituloRelatorio = $sTitulo;
+    $this->sTituloRelatorio = $sTitulo;
   }
 
   /**
@@ -878,7 +942,8 @@ class RelatorioHistoricoEscolarRetrato extends RelatorioHistoricoEscolar {
    * @param String $sDiretor
    * @param String $sSecretario
    */
-  public function escreverRodape( $sDiretor, $sSecretario ) {
+  public function escreverRodape($sDiretor, $sSecretario)
+  {
 
     $this->oPdf->Ln();
     $iAlturaDisponivel = $this->oPdf->getAvailHeight() + $this->oPdf->bMargin;
@@ -893,7 +958,8 @@ class RelatorioHistoricoEscolarRetrato extends RelatorioHistoricoEscolar {
     return;
   }
 
-  private function escreverResumoEtapas( $oDadosEtapa ) {
+  private function escreverResumoEtapas($oDadosEtapa)
+  {
 
     $iSubString = 18;
     if ($this->oPdf->FontSizePt > 6) {
@@ -907,7 +973,7 @@ class RelatorioHistoricoEscolarRetrato extends RelatorioHistoricoEscolar {
      * Calcula o maior número de linhas que será preciso para excrever uma descrição
      */
     $aLinhas = array();
-    if ( $this->oParametros->exibe_turma ) {
+    if ($this->oParametros->exibe_turma) {
       $aLinhas[] = $this->oPdf->NbLines($aLargura['turma'], $oDadosEtapa->sTurma);
     }
 
@@ -925,68 +991,68 @@ class RelatorioHistoricoEscolarRetrato extends RelatorioHistoricoEscolar {
     $iYInicial = $this->oPdf->GetY();
     $iXInicial = $this->oPdf->GetX();
     $this->oPdf->Cell($aLargura['etapa'], $iAlturaLinha, $oDadosEtapa->sEtapa, 0, 0, 'C');
-    $this->oPdf->Line( $this->oPdf->GetX(), $iYInicial, $this->oPdf->GetX(), $iYInicial + $iAlturaLinha);
+    $this->oPdf->Line($this->oPdf->GetX(), $iYInicial, $this->oPdf->GetX(), $iYInicial + $iAlturaLinha);
     $this->oPdf->Cell($aLargura['ano'], $iAlturaLinha, $oDadosEtapa->iAno, 0, 0, 'C');
-    $this->oPdf->Line( $this->oPdf->GetX(), $iYInicial, $this->oPdf->GetX(), $iYInicial + $iAlturaLinha);
+    $this->oPdf->Line($this->oPdf->GetX(), $iYInicial, $this->oPdf->GetX(), $iYInicial + $iAlturaLinha);
     $this->oPdf->Cell($aLargura['dias'], $iAlturaLinha, $oDadosEtapa->iDiasLetivos, 0, 0, 'C');
-    $this->oPdf->Line( $this->oPdf->GetX(), $iYInicial, $this->oPdf->GetX(), $iYInicial + $iAlturaLinha);
+    $this->oPdf->Line($this->oPdf->GetX(), $iYInicial, $this->oPdf->GetX(), $iYInicial + $iAlturaLinha);
 
-    if ( $this->oParametros->exibe_turma ) {
+    if ($this->oParametros->exibe_turma) {
 
       $iYAtual = $this->oPdf->GetY();
       $iXAtual = $this->oPdf->GetX();
       $this->oPdf->MultiCell($aLargura['turma'], $iAlturaLinhaPadrao, $oDadosEtapa->sTurma, 0, 'L');
-      $this->oPdf->setY( $iYAtual );
-      $this->oPdf->SetX( $iXAtual + $aLargura['turma'] );
-      $this->oPdf->Line( $this->oPdf->GetX(), $iYInicial, $this->oPdf->GetX(), $iYInicial + $iAlturaLinha);
+      $this->oPdf->setY($iYAtual);
+      $this->oPdf->SetX($iXAtual + $aLargura['turma']);
+      $this->oPdf->Line($this->oPdf->GetX(), $iYInicial, $this->oPdf->GetX(), $iYInicial + $iAlturaLinha);
     }
 
     $this->oPdf->Cell($aLargura['carga_horaria'], $iAlturaLinha, $oDadosEtapa->iCargaHoraria, 0, 0, 'C');
-    $this->oPdf->Line( $this->oPdf->GetX(), $iYInicial, $this->oPdf->GetX(), $iYInicial + $iAlturaLinha);
+    $this->oPdf->Line($this->oPdf->GetX(), $iYInicial, $this->oPdf->GetX(), $iYInicial + $iAlturaLinha);
 
-    if ( $this->oParametros->exibe_percentual_frequencia ) {
+    if ($this->oParametros->exibe_percentual_frequencia) {
 
       $this->oPdf->Cell($aLargura['percentual_frequencia'], $iAlturaLinha, $oDadosEtapa->nPercentualFalta, 0, 0, 'R');
-      $this->oPdf->Line( $this->oPdf->GetX(), $iYInicial, $this->oPdf->GetX(), $iYInicial + $iAlturaLinha);
+      $this->oPdf->Line($this->oPdf->GetX(), $iYInicial, $this->oPdf->GetX(), $iYInicial + $iAlturaLinha);
     }
 
     $this->oPdf->Cell($aLargura['resultado'], $iAlturaLinha, $oDadosEtapa->sResultado, 0, 0, 'C');
-    $this->oPdf->Line( $this->oPdf->GetX(), $iYInicial, $this->oPdf->GetX(), $iYInicial + $iAlturaLinha);
+    $this->oPdf->Line($this->oPdf->GetX(), $iYInicial, $this->oPdf->GetX(), $iYInicial + $iAlturaLinha);
 
     $iYAtual = $this->oPdf->GetY();
     $iXAtual = $this->oPdf->GetX();
     $this->oPdf->MultiCell($aLargura['escola'], $iAlturaLinhaPadrao, $oDadosEtapa->sEscola, 0, 'L');
-    $this->oPdf->setY( $iYAtual );
-    $this->oPdf->SetX( $iXAtual + $aLargura['escola'] );
-    $this->oPdf->Line( $this->oPdf->GetX(), $iYInicial, $this->oPdf->GetX(), $iYInicial + $iAlturaLinha);
+    $this->oPdf->setY($iYAtual);
+    $this->oPdf->SetX($iXAtual + $aLargura['escola']);
+    $this->oPdf->Line($this->oPdf->GetX(), $iYInicial, $this->oPdf->GetX(), $iYInicial + $iAlturaLinha);
 
     $iYAtual = $this->oPdf->GetY();
     $iXAtual = $this->oPdf->GetX();
     $this->oPdf->MultiCell($aLargura['cidade'], $iAlturaLinhaPadrao, $oDadosEtapa->sMunicipio, 0, 'L');
-    $this->oPdf->setY( $iYAtual );
-    $this->oPdf->SetX( $iXAtual + $aLargura['cidade'] );
-    $this->oPdf->Line( $this->oPdf->GetX(), $iYInicial, $this->oPdf->GetX(), $iYInicial + $iAlturaLinha);
+    $this->oPdf->setY($iYAtual);
+    $this->oPdf->SetX($iXAtual + $aLargura['cidade']);
+    $this->oPdf->Line($this->oPdf->GetX(), $iYInicial, $this->oPdf->GetX(), $iYInicial + $iAlturaLinha);
 
     $this->oPdf->Cell($aLargura['uf'], $iAlturaLinha, $oDadosEtapa->sUF, 0, 0, 'C');
-    $this->oPdf->Line( $this->oPdf->GetX(), $iYInicial, $this->oPdf->GetX(), $iYInicial + $iAlturaLinha);
+    $this->oPdf->Line($this->oPdf->GetX(), $iYInicial, $this->oPdf->GetX(), $iYInicial + $iAlturaLinha);
 
     /**
      * Monta a grade utilizando line
      */
-    $this->oPdf->Line( $iXInicial, $iYInicial, $iLarguraTotal, $iYInicial);
+    $this->oPdf->Line($iXInicial, $iYInicial, $iLarguraTotal, $iYInicial);
 
-    $this->oPdf->SetY( $iYInicial + $iAlturaLinha );
-    $this->oPdf->Line( $iXInicial,     $iYInicial,           $iXInicial,     $this->oPdf->getY());
-    $this->oPdf->Line( $iLarguraTotal, $iYInicial,           $iLarguraTotal, $this->oPdf->getY());
-    $this->oPdf->Line( $iXInicial,     $this->oPdf->getY() , $iLarguraTotal, $this->oPdf->getY());
-
+    $this->oPdf->SetY($iYInicial + $iAlturaLinha);
+    $this->oPdf->Line($iXInicial,     $iYInicial,           $iXInicial,     $this->oPdf->getY());
+    $this->oPdf->Line($iLarguraTotal, $iYInicial,           $iLarguraTotal, $this->oPdf->getY());
+    $this->oPdf->Line($iXInicial,     $this->oPdf->getY(), $iLarguraTotal, $this->oPdf->getY());
   }
 
   /**
    * Define se deve exibir todas as etapas do curso ou somente as etapas cursadas
    * @param boolean $lExibirTodasEtapasCurso
    */
-  public function setExibirTodasEtapasCurso( $lExibirTodasEtapasCurso ) {
+  public function setExibirTodasEtapasCurso($lExibirTodasEtapasCurso)
+  {
     $this->lExibirTodasEtapasCurso = $lExibirTodasEtapasCurso;
   }
 }

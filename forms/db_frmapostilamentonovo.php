@@ -118,6 +118,17 @@ $clrotulo->label("ac16_resumoobjeto");
                 </td>
             </tr>
 
+            <tr id="justificativa">
+                <td nowrap nowrap title="<?= @$Tsi03_justificativa ?>">
+                    <b>Justificativa:</b>
+                </td>
+                <td>
+                    <?
+                    db_textarea('si03_justificativa', 3, 48, 0, true, 'text', $db_opcao, "style='resize: none'", "", "", "5120");
+                    ?>
+                </td>
+            </tr>
+
 
             <?
             $si03_instit = db_getsession("DB_instit");
@@ -151,7 +162,7 @@ $clrotulo->label("ac16_resumoobjeto");
                 </td>
 
                 <!-- tag <td> a seguir ocultada pois apresenta inconsistencia
-                     no valor apresentado, a tag só ficará visivel novamente 
+                     no valor apresentado, a tag s ficar visivel novamente 
                     caso cliente solicite o retorno  -->
 
                 <td colspan='2' style="display: none;">
@@ -237,7 +248,7 @@ $clrotulo->label("ac16_resumoobjeto");
     oGridItens.setCheckbox(0);
     oGridItens.setCellAlign(['center', 'left', "right", "right", "right", "right", "center", "right", "center", "center", "center", "center", "center"]);
     //oGridItens.setCellWidth(["50px", "30%", "8%", "8%", "3%", "25%", "8%", "8%", "3%", "25%", "8%", "8%", "8%"]);
-    oGridItens.setHeader(["Cód", "Item", "Quantidade", "Unit. Anterior", "Quantidade", "Valor Unitário", "Valor Total", "Valor Apostilado", "Qt Aditada", "Dotações", "Seq"]);
+    oGridItens.setHeader(["Cd", "Item", "Quantidade", "Unit. Anterior", "Quantidade", "Valor Unitário", "Valor Total", "Valor Apostilado", "Qt Aditada", "Dotacoes", "Seq"]);
     oGridItens.aHeaders[11].lDisplayed = false;
     oGridItens.aHeaders[10].lDisplayed = false;
     oGridItens.aHeaders[5].lDisplayed = false;
@@ -273,7 +284,7 @@ $clrotulo->label("ac16_resumoobjeto");
         if (oRetorno.erro != "") {
             $('o58_coddot').value = "";
             $('o55_descricao').value = "";
-            alert("Sem permissão para esta dotação!");
+            alert("Sem permissão para esta Dotação!");
             return;
         }
         oRetorno.elemento = oRetorno.elemento.substr(0, 7);
@@ -380,6 +391,20 @@ $clrotulo->label("ac16_resumoobjeto");
      * Retorno da pesquisa acordos
      */
     function js_mostraacordo1(chave1, chave2, chave3) {
+        var oParam = {
+            exec: 'getleilicitacao',
+            licitacao: chave1
+        }
+
+        new AjaxRequest(sUrlRpc, oParam, function (oRetorno, lErro) {
+            if(oRetorno.lei==1){
+                $('justificativa').style.display = '';
+            }else{
+                $('justificativa').style.display = 'none';
+            }
+
+        }).setMessage("Aguarde, pesquisando acordos.")
+            .execute();
         $('ac16_sequencial').value = chave1;
         $('ac16_resumoobjeto').value = chave2;
 
@@ -392,7 +417,7 @@ $clrotulo->label("ac16_resumoobjeto");
 
         if (iAcordo == "") {
 
-            alert('Acordo não informado!');
+            alert('Acordo Não informado!');
             return false;
         }
 
@@ -740,7 +765,7 @@ $clrotulo->label("ac16_resumoobjeto");
     }
 
     /**
-     * Atualiza a informação das dotações do item
+     * Atualiza a informao das Dotações do item
      */
     function atualizarItemDotacao(iLinha, iDotacao, oValor) {
 
@@ -773,7 +798,7 @@ $clrotulo->label("ac16_resumoobjeto");
      */
     function removerDotacao(iLinha, iDotacao) {
 
-        if (confirm("Remover dotação do item?")) {
+        if (confirm("Remover Dotação do item?")) {
 
             aItensPosicao[iLinha].dotacoes.splice(iDotacao, 1);
             preencheGridDotacoes(iLinha);
@@ -796,7 +821,7 @@ $clrotulo->label("ac16_resumoobjeto");
          */
         /*if (nValor == 0) {
 
-            alert('Campo Valor é de preenchimento obrigatório.');
+            alert('Campo Valor  de preenchimento Obrigatório.');
             $('oTxtValorDotacao').focus();
             return false;
         }*/
@@ -872,12 +897,12 @@ $clrotulo->label("ac16_resumoobjeto");
     function mostraSaldo(chave) {
 
         var arq = 'func_saldoorcdotacao.php?o58_coddot=' + chave
-        js_OpenJanelaIframe('top.corpo', 'db_iframe_saldos', arq, 'Saldo da dotação', true);
+        js_OpenJanelaIframe('top.corpo', 'db_iframe_saldos', arq, 'Saldo da Dotação', true);
         $('Jandb_iframe_saldos').style.zIndex = '1500000';
     }
 
     /**
-     * calcula os valores da dotação conforme o valor modificado pelo usuario
+     * calcula os valores da Dotação conforme o valor modificado pelo usuario
      */
     function salvarInfoDotacoes(iLinha) {
 
@@ -1013,7 +1038,7 @@ $clrotulo->label("ac16_resumoobjeto");
     function aplicarDotacoes() {
 
         if ($('o58_coddot').value == "") {
-            return alert('Obrigatório selecionar uma dotação');
+            return alert('Obrigatório selecionar uma Dotação');
         }
 
 
@@ -1058,11 +1083,11 @@ $clrotulo->label("ac16_resumoobjeto");
 
 
         if (itensSelecionados == false) {
-            return alert('Nenhum item selecionado para aplicar dotação.');
+            return alert('Nenhum item selecionado para aplicar Dotação.');
         }
 
         if (elementoIncompativel == true) {
-            return alert('Usuário: Item(ns) ' + elementosIncompativeis + ' possui(em) elemento(s) divergente da dotação selecionada');
+            return alert('Usuário: Item(ns) ' + elementosIncompativeis + ' possui(em) elemento(s) divergente da Dotação selecionada');
         }
 
         if (dotacaoAplicada == true) {
@@ -1094,7 +1119,7 @@ $clrotulo->label("ac16_resumoobjeto");
         var iSelecionados = [];
 
         /**
-         * @todo incluir aqui todas as validações de campos obrigatórios para o SICOM contratos
+         * @todo incluir aqui todas as validaes de campos Obrigatórios para o SICOM contratos
          */
         if ($("si03_tipoapostila").value == "00") {
             return alert("Obrigatório informar o  tipo de Apostila.");
@@ -1109,11 +1134,14 @@ $clrotulo->label("ac16_resumoobjeto");
         }
 
         if ($("si03_descrapostila").value == "") {
-            return alert("Obrigatório informar a descrição da Apostila.");
+            return alert("Obrigatório informar a descrio da Apostila.");
         }
 
         if ($("si03_datareferencia").value == "" && document.getElementById("trdatareferencia").style.display != 'none') {
             return alert("Obrigatório informar a data de Referencia.");
+        }
+        if ($("si03_justificativa").value == "" && document.getElementById("justificativa").style.display != 'none') {
+            return alert("Usuário: Este contrato  decorrente de Licitação e está utilizando a lei n 14133/2021, sendo assim,  necessário o preenchimento do campo Justificativa.");
         }
 
         oGridItens.getRows().forEach(function(oRow) {
@@ -1135,6 +1163,7 @@ $clrotulo->label("ac16_resumoobjeto");
         oApostila.tipoalteracaoapostila = $("si03_tipoalteracaoapostila").value;
         oApostila.numapostilamento = $("si03_numapostilamento").value;
         oApostila.datareferencia = $("si03_datareferencia").value;
+        oApostila.justificativa = $("si03_justificativa").value;
 
 
         var oParam = {
@@ -1196,7 +1225,7 @@ $clrotulo->label("ac16_resumoobjeto");
                     /*if (oDotacao.valor == 0) {
 
                         lAditar = false;
-                        return alert("Os Valores das dotações para o item " + oItem.descricaoitem.urlDecode() + " não podem estar zeradas.");
+                        return alert("Os Valores das Dotações para o item " + oItem.descricaoitem.urlDecode() + " no podem estar zeradas.");
                     }*/
                     nValorDotacao += Number(oDotacao.valor);
                 });
@@ -1218,7 +1247,7 @@ $clrotulo->label("ac16_resumoobjeto");
         });
 
         if (dotacaoIncluida == false && $("si03_tipoapostila").value == "03") {
-            return alert("Usuário: É necessário a inserção de dotação em no mínimo um item.");
+            return alert("Usuário:  necessário a inserção de Dotação em no mínimo um item.");
 
         }
 

@@ -673,6 +673,9 @@ if (substr($nivel,-1) == 'A'){
         $pdf->cell(53,$alt,substr($descr,0,35),0,0,"L",0);
         $pdf->cell(10,$alt,db_formatar($o58_codigo,'s','0',4,'e'),0,0,"C",0);
 	      if ($nivela == 8) {
+           if ($nivel == '8A') {
+                $o15_descr = '';
+           }
 	       $pdf->cell(30,$alt,$o15_descr,0,0,"L",0);
 		    } else{
 	        $pdf->cell(30,$alt,$o15_descr,0,0,"L",0);

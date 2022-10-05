@@ -80,6 +80,7 @@ $clrotulo->label("pc01_descrmater");
                             <th data-orderable="false">Descrição Item</th>
                             <th data-orderable="false">Unidade</th>
                             <th data-orderable="false">Quantidade Disponivel</th>
+                            <th data-orderable="false">Valor Disponivel</th>
                             <th data-orderable="false">Vl. Unitário</th>
                             <th data-orderable="false">Qtd. Solicitada</th>
                             <th data-orderable="false">Vlr. Total.</th>
@@ -226,6 +227,18 @@ $clrotulo->label("pc01_descrmater");
         $('#total_' + id).val(t.toFixed(2));
     }
 
+    function js_calculaVrUnit(origem) {
+
+        const item = origem.id.split('_');
+        const id = item[1];
+        const quant = new Number($('#qtddisponivel_' + id).val());
+        const vlun = new Number($('#vlr_' + id).val());
+        // $('checkbox_'+ id).attr("checked",true);
+        t = new Number(vlun * quant);
+        $('#qtd_' + id).val(quant.toFixed(2));
+        $('#total_' + id).val(t.toFixed(2));
+    }
+
     function js_salvar() {
 
         if (!$("input[type='checkbox']").is(':checked')) {
@@ -254,7 +267,14 @@ $clrotulo->label("pc01_descrmater");
 
             if ($(this).find("input[type='checkbox']").is(":checked")) {
                 var qtdDisponivel = $(this).find("td").eq(5).find("input").val();
-                var qtdSolicitada = $(this).find("td").eq(7).find("input").val();
+                var qtdSolicitada = $(this).find("td").eq(8).find("input").val();
+                var vlrDisponivel = $(this).find("td").eq(6).find("input").val();
+                var vlrSolicitado = $(this).find("td").eq(7).find("input").val();
+
+                if (Number(vlrSolicitado) > Number(vlrDisponivel)) {
+                    alert('Vlr. Solicitado maior que a Vlr. Disponível!');
+                    return false;
+                }
 
                 if (Number(qtdSolicitada) > Number(qtdDisponivel)) {
                     alert('Qtd. Solicitada maior que a Qtd. Disponível!');
@@ -262,9 +282,9 @@ $clrotulo->label("pc01_descrmater");
                 }
                 oDados.id = $(this).find("td").eq(2).html();
                 oDados.unidade = $(this).find("td").eq(4).find("select").val();
-                oDados.vlrunit = $(this).find("td").eq(6).find("input").val();
-                oDados.qtd = $(this).find("td").eq(7).find("input").val();
-                oDados.total = $(this).find("td").eq(8).find("input").val();
+                oDados.vlrunit = $(this).find("td").eq(7).find("input").val();
+                oDados.qtd = $(this).find("td").eq(8).find("input").val();
+                oDados.total = $(this).find("td").eq(9).find("input").val();
 
                 aDados.push(oDados);
                 oDados = {};

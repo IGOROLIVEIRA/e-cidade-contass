@@ -83,6 +83,8 @@ $mesfolha = DBPessoal::getMesFolha();
                                                 </select>
                                             </td>
                                         </tr>
+                                    </table>
+                                    <table>
                                         <tr>
                                             <td align="left" id="dtalteracao" style="display:none" style="width: 25%;"><label>Data Alteração:</label>
                                                 <?php
@@ -124,6 +126,12 @@ $mesfolha = DBPessoal::getMesFolha();
                                                     <option value="5">Pagamento de benefícios previdenciários, conforme
                                                         apurado em ideDmDev do S-1207
                                                     </option>
+                                                </select>
+                                            </td>
+                                            <td align="left" id="tipo_col" style="display:none"><label>Tipo de evento:</label>
+                                                <select name="tpevento" id="tpevento" style="width: 25%;">
+                                                    <option value="1">RH</option>
+                                                    <option value="2">Contabilidade</option>
                                                 </select>
                                             </td>
                                         </tr>
@@ -266,6 +274,8 @@ $mesfolha = DBPessoal::getMesFolha();
         oParam.modo = $("modo").value;
         oParam.dtalteracao = $("dt_alteracao").value;
         oParam.indapuracao = $("indapuracao").value;
+        oParam.tppgto = $("tppgto").value;
+        oParam.tpevento = $("tpevento").value;
         var oAjax = new Ajax.Request("eso4_esocialapi.RPC.php", {
             method: 'post',
             parameters: 'json=' + Object.toJSON(oParam),
@@ -319,28 +329,24 @@ $mesfolha = DBPessoal::getMesFolha();
         js_OpenJanelaIframe('top.corpo', 'iframe_consulta_envio', 'func_consultaenvioesocial.php', 'Pesquisa', true);
     }
 
-    function js_1200_alt() {
-        if (document.getElementById('indapuracao_col').style.display == 'none') {
+    function js_alt() {
+        if (document.getElementById('S1200').checked || document.getElementById('S1210').checked) {
             document.getElementById('indapuracao_col').style.display = 'inline';
-            return true;
-        }
-        document.getElementById('indapuracao_col').style.display = 'none';
-    }
-
-    function js_1210_alt() {
-        if (document.getElementById('tppgto_col').style.display == 'none') {
             document.getElementById('tppgto_col').style.display = 'inline';
-            return true;
+            document.getElementById('tipo_col').style.display = 'inline';
+        } else {
+            document.getElementById('indapuracao_col').style.display = 'none';
+            document.getElementById('tppgto_col').style.display = 'none';
+            document.getElementById('tipo_col').style.display = 'none';
         }
-        document.getElementById('tppgto_col').style.display = 'none';
     }
 
     function js_dataalt() {
-        if (document.getElementById('dtalteracao').style.display == 'none') {
+        if (document.getElementById('S1210').checked) {
             document.getElementById('dtalteracao').style.display = 'inline';
-            return true;
+        } else {
+            document.getElementById('dtalteracao').style.display = 'none';
         }
-        document.getElementById('dtalteracao').style.display = 'none';
     }
 
     checkFase('');

@@ -141,12 +141,10 @@ if( !isset($m38_visualizacaoitens) or !isset($m38_visualizacaomatestoque) ) {
              $campos = "matmater.*";
            }
         }
-
+        
         // visualizar apenas com movimentação na instituição que está sendo acessada
-        if ( $m38_visualizacaoitens == 2) {
-          $sWhereConfig .= "and ( instit = ". db_getsession("DB_instit") ." or instit is null ) ";
-        }
-
+                  $sWhereConfig .= " and m60_instit = ". db_getsession("DB_instit");
+        
         // apenas materiais com estoque
         if ( $m38_visualizacaomatestoque == "t") {
           $sWhereConfig .= " and matestoque.m70_codmatmater is not null and ( m70_quant > 0 or m70_valor > 0 )";
@@ -167,6 +165,7 @@ if( !isset($m38_visualizacaoitens) or !isset($m38_visualizacaomatestoque) ) {
         } else {
            $sql = $clmatmater->sql_query_config("",$campos,"m60_codmater","m60_ativo is true {$sWhereConfig}");
         }
+        //echo $sql;
         db_lovrot($sql,15,"()","",$funcao_js);
       } else {
 

@@ -31,7 +31,7 @@ class EventoS2230 extends EventoBase
     {
         $aDadosAPI = array();
         $iSequencial = 1;
-        
+
         foreach ($this->dados as $oDados) {
             $oDadosAPI                                                        = new \stdClass;
             $oDadosAPI->evtAfastTemp                                          = new \stdClass;
@@ -39,24 +39,30 @@ class EventoS2230 extends EventoBase
             $oDadosAPI->evtAfastTemp->modo                                    = $this->modo;
             $oDadosAPI->evtAfastTemp->indRetif                                = 1;
             $oDadosAPI->evtAfastTemp->nrRecibo                                = null;
-            $oDadosAPI->evtAfastTemp->idevinculo->cpftrab                     = $oDados->ideVinculo->cpfTrab;
-            $oDadosAPI->evtAfastTemp->idevinculo->matricula                   = $oDados->ideVinculo->matricula;
-            //$oDadosAPI->evtAfastTemp->idevinculo->codcateg                  = $oDados->ideVinculo->codCateg;
-            
-            if($oDados->iniAfastamento->dtIniAfast != null){
-                $oDadosAPI->evtAfastTemp->iniafastamento->dtiniafast          = $oDados->iniAfastamento->dtIniAfast;
-                $oDadosAPI->evtAfastTemp->iniafastamento->codmotafast         = $oDados->iniAfastamento->codMotAfast;
-                if(!empty($oDados->perAquis->dtInicio)){
-                    $oDadosAPI->evtAfastTemp->iniafastamento->peraquis->dtinicio  = $oDados->perAquis->dtInicio;                
-                }
-                if(!empty($oDados->perAquis->dtFim)){
-                    $oDadosAPI->evtAfastTemp->iniafastamento->peraquis->dtfim = $oDados->perAquis->dtFim;
-                }
-            }
-            if(!empty($oDados->fimAfastamento->dtTermAfast)){
-                $oDadosAPI->evtAfastTemp->fimafastamento->dttermafast = $oDados->fimAfastamento->dtTermAfast;
-            }
+            $oDadosAPI->evtAfastTemp->idevinculo->cpftrab                     = $oDados->cpftrab;
+            $oDadosAPI->evtAfastTemp->idevinculo->matricula                   = $oDados->matricula;
 
+            if ($oDados->dtiniafast != null) {
+                $oDadosAPI->evtAfastTemp->iniafastamento->dtiniafast          = $oDados->dtiniafast;
+                $oDadosAPI->evtAfastTemp->iniafastamento->codmotafast         = $oDados->codmotafast;
+                if ($oDados->codmotafast == "15" && $oDados->rh30_regime == 2) {
+                    if (!empty($oDados->dtinicio)) {
+                        $oDadosAPI->evtAfastTemp->peraquis->dtinicio  = $oDados->dtinicio;
+                    }
+                    if (!empty($oDados->dtfim)) {
+                        $oDadosAPI->evtAfastTemp->peraquis->dtfim = $oDados->dtfim;
+                    }
+                }
+            }
+            if (!empty($oDados->dttermafast)) {
+                $oDadosAPI->evtAfastTemp->fimafastamento->dttermafast = $oDados->dttermafast;
+            }
+            if (!empty($oDados->dttermafastferias)) {
+                $oDadosAPI->evtAfastTemp->fimafastamento->dttermafast = $oDados->dttermafastferias;
+            }
+            // echo '<pre>';
+            // var_dump($oDadosAPI);
+            // exit;
             $aDadosAPI[] = $oDadosAPI;
             $iSequencial++;
         }

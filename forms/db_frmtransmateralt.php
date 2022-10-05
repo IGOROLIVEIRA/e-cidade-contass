@@ -53,7 +53,7 @@ if(isset($opcao) && $opcao=="alterar"){
            db_fieldsmemory($result_descr,0);
       }
       db_input('m60_codmater',10,$Im60_codmater,true,'text',3,"onchange='js_pesquisa_codmater(false);'");
-      db_input('m60_descr',40,$Im60_descr,true,'text',3,"");
+      db_input('m60_descr',100,$Im60_descr,true,'text',3,"");
       ?>
 	  </td>
 	</tr>
@@ -73,7 +73,7 @@ if(isset($m63_codpcmater)&&trim($m63_codpcmater)!=""){
 }
 
 db_input('m63_codpcmater',10,$Im63_codpcmater,true,'text',$db_opcao,"onchange='js_pesquisam63_codpcmater(false);'");
-db_input('pc01_descrmater',40,'',true,'text',3)
+db_input('pc01_descrmater',100,'',true,'text',3)
 ?>
     </td>
   </tr>
