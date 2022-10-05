@@ -989,8 +989,10 @@ switch($oParam->exec) {
                     }
                     
                     $result_situacaitemlic = $clsituacaoitemlic->sql_record('select l218_codigo from situacaoitemcompra where  l218_liclicitem in (select l21_codigo from liclicitem where l21_codpcprocitem = '.$Item->codigo.')');
-                            db_fieldsmemory($result_situacaitemlic);
+                        if(pg_numrows($result_situacaitemlic)>0){
+                            db_fieldsmemory($result_situacaitemlic,0);
                             $clsituacaoitemlic->excluir(null,'l219_codigo= '.$l218_codigo.' and l219_situacao=2');
+                        }
                 }
 
                 /**
