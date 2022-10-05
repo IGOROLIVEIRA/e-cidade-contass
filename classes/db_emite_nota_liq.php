@@ -132,40 +132,43 @@ class cl_emite_nota_liq {
       return $sql1;
     }
 
-    function get_sql_item_ordem($e50_codord) {
+    function get_sql_item_ordem($e50_codord, $e50_data = null) {
 
-        $sqlitem = "select *,e53_valor - e53_vlranu as saldo, e53_valor - e53_vlranu - e53_vlrpag as saldo_final
-              from pagordemele
+        $sqlitem = "select *,
+                           e53_valor - e53_vlranu as saldo,
+                           e53_valor - e53_vlranu - e53_vlrpag as saldo_final
+                    from pagordemele
+                    inner join pagordem on pagordem.e50_codord = pagordemele.e53_codord
+                    inner join empempenho on empempenho.e60_numemp = pagordem.e50_numemp
+                    left join orcelemento on orcelemento.o56_codele = pagordemele.e53_codele and orcelemento.o56_anousu = empempenho.e60_anousu
+		            left join empelemento on empelemento.e64_numemp = empempenho.e60_numemp and orcelemento.o56_codele = empelemento.e64_codele
+		            where pagordemele.e53_codord = {$e50_codord} ";
 
-	           inner join pagordem on pagordem.e50_codord = pagordemele.e53_codord
-		   inner join empempenho on empempenho.e60_numemp = pagordem.e50_numemp
-		   left join orcelemento on orcelemento.o56_codele = pagordemele.e53_codele and
-		                             orcelemento.o56_anousu = empempenho.e60_anousu
-
-		   left join empelemento on empelemento.e64_numemp = empempenho.e60_numemp
-		   			 and orcelemento.o56_codele = empelemento.e64_codele
-
-		   where pagordemele.e53_codord = {$e50_codord} ";
+        if ($e50_data){
+            $sqlitem .= " and e50_data <= '{$e50_data}'";
+        }
 
         return $sqlitem;
 
     }
 
-    function get_sql_outras_ordens($e50_codord, $e50_numemp) {
+    function get_sql_outras_ordens($e50_codord, $e50_numemp, $e50_data = null) {
 
-        $sqloutrasordens = " select sum(saldo) as outrasordens
-              from
-              (select *,e53_valor - e53_vlranu as saldo
-              from pagordemele
-	           inner join pagordem on pagordem.e50_codord = pagordemele.e53_codord
-		   inner join empempenho on empempenho.e60_numemp = pagordem.e50_numemp
-		   inner join orcelemento on orcelemento.o56_codele = pagordemele.e53_codele and
-		                             orcelemento.o56_anousu = empempenho.e60_anousu
-		   inner join empelemento on empelemento.e64_numemp = empempenho.e60_numemp
-		   			 and orcelemento.o56_codele = empelemento.e64_codele
+        $sqloutrasordens = "select sum(saldo) as outrasordens from
+                                  (select *,
+                                          e53_valor - e53_vlranu as saldo
+                                  from pagordemele
+                                  inner join pagordem on pagordem.e50_codord = pagordemele.e53_codord
+                                  inner join empempenho on empempenho.e60_numemp = pagordem.e50_numemp
+                                  inner join orcelemento on orcelemento.o56_codele = pagordemele.e53_codele and orcelemento.o56_anousu = empempenho.e60_anousu
+                                  inner join empelemento on empelemento.e64_numemp = empempenho.e60_numemp and orcelemento.o56_codele = empelemento.e64_codele                    
+                                  where pagordem.e50_codord <> {$e50_codord}";
 
-		   where pagordem.e50_codord <> {$e50_codord}
-		     and pagordem.e50_numemp = {$e50_numemp}) as x";
+        if ($e50_data){
+            $sqloutrasordens .= " and e50_data <= '{$e50_data}'";
+        }
+
+        $sqloutrasordens .= " and pagordem.e50_numemp = {$e50_numemp}) as x";
 
         return $sqloutrasordens;
 
