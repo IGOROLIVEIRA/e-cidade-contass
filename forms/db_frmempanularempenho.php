@@ -745,12 +745,12 @@ if (empty ($e60_numemp)) {
             mensagem = unescape(mensagem);
             alert(mensagem)
         }else if(obj.status == 3){
-            mensagem = obj.mensagem.replace(/\+/g," ");
+            mensagem = obj.mensagem.urlDecode().replace(/\+/g," ")+' Deseja continuar ?';
             if(confirm(mensagem)){
-                js_anularEmpenho()
+                js_anularEmpenho();
             }
-        }else if(obj.status == 4){
-            alert('tudo certo');
+        }else if(obj.status == 1){
+            js_anularEmpenho();
         }
 
 
@@ -771,14 +771,7 @@ if (empty ($e60_numemp)) {
         var iErro         = 0;
         var sSolicAtend   = '';
         var sV            = '';
-        if (confirm('Confirma a anulação do empenho?')){
-
-            if ($F('motivo').trim() == '') {
-
-                alert('Motivo da anulação não informado');
-                return false;
-
-            }
+       
             if (itensAnulados.length > 0){
 
                 var sSolicAnt = 0;
@@ -834,8 +827,7 @@ if (empty ($e60_numemp)) {
                         }
                         itensEmp   += sV+'{"e62_sequencial":"'+$F('e62_sequencial'+itens[i].value)+'","sequen":"'+itens[i].value+'","quantidade":"';
                         itensEmp   += $F('qtdesol'+itens[i].value)+'","vlrtot":"'+$F('vlrtot'+itens[i].value)+'",';
-                        itensEmp   += '"vlruni":"'+js_strToFloat($('vlruni'+itens[i].value).innerHTML)+'",';
-                        itensEmp   += '"servico":"'+obj.data[i].pc01_servico+'"}';
+                        itensEmp   += '"vlruni":"'+js_strToFloat($('vlruni'+itens[i].value).innerHTML)+'"}';
                         sV          = ",";
 
                         valorTotal += nVlrSaldo;
@@ -872,7 +864,7 @@ if (empty ($e60_numemp)) {
                 $('confirmar').disabled = false;
 
             }
-        }
+        
     }
     function js_saidaAnulacao(oAjax){
 

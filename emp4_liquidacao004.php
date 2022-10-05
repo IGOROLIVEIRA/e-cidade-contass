@@ -501,7 +501,7 @@ switch ($objJson->method) {
       $resulparemetrosaldo  = db_utils::fieldsMemory($Sqlparemetrosaldo, 0);
       $aItens = $objJson->itensAnulados;
       $iStatus = 1;
-      $nMensagem = 'usuario: ';
+      $nMensagem = 'Usuario: ';
       if($Sqlparemetrosaldo->pc01_liberarsaldoposicao == false && pg_num_rows($Sqlparemetrosaldo)>0) {
         db_inicio_transacao();
         for($iInd = 0; $iInd < count($aItens); $iInd++){
@@ -585,18 +585,31 @@ switch ($objJson->method) {
           }
           $rsacordoitem = db_utils::fieldsMemory($acordoitem,0);
 
+          $ItemAtualPosicao = $DaoacordoItem->sql_record("
+            SELECT ac20_sequencial,ac20_quantidade,ac20_valortotal,ac20_valorunitario,ac20_acordoposicao,ac20_servicoquantidade
+            FROM acordoitem
+            JOIN acordoposicao ON ac20_acordoposicao = ac26_sequencial
+            WHERE ac26_acordo = {$rsacordoMaterial->ac26_acordo}
+            AND ac26_sequencial ={$rsacordoitem->ac20_acordoposicao}
+            AND ac20_pcmater = {$rsacordoMaterial->ac20_pcmater} ");
+          $ItemAtualPosicao = db_utils::fieldsMemory($ItemAtualPosicao,0);
+
+
+          if($ItemAtualPosicao->ac20_servicoquantidade != $ItemUltimaPosicao->ac20_servicoquantidade){
+            $nMensagem = 'Usuario: Nao sera possivel a anulacao do empenho, devido a forma de controle do item no empenho e diferente da forma de controle do item no contrato.';
+            $iStatus = 2;
+            echo $json->encode(array("mensagem" => $nMensagem, "status" => $iStatus));
+            return;
+          }
+  
           if($ItemUltimaPosicao->ac20_valorunitario != $aItens[$iInd]->vlruni){
-            $nMensagem .= 'Item '.$rsacordoMaterial->ac20_pcmater.': O valor unitario atual do contrato e '.$ItemUltimaPosicao->ac20_valorunitario.' e o valor unitario do item a ser anulado e '.$aItens[$iInd]->vlruni.'. Ao anular os itens do empenho, o valor unitario sera o '.$ItemUltimaPosicao->ac20_valorunitario.'. ';
+            $nMensagem .= 'Item '.$rsacordoMaterial->ac20_pcmater.': O valor unitario atual do contrato e '.$ItemUltimaPosicao->ac20_valorunitario.' e o valor unitario do item a ser anulado e '.$aItens[$iInd]->vlruni.'. Ao anular os itens do empenho, o valor unitario sera o '.$ItemUltimaPosicao->ac20_valorunitario.'.';
             
             $iStatus = 3;
             
           }
           
         }
-        
-      }else{
-        $nMensagem = '';
-        $iStatus = 4;
         
       }
       
@@ -611,12 +624,7 @@ switch ($objJson->method) {
       $Sqlparemetrosaldo= $paremetrosaldo->sql_record($paremetrosaldo->sql_query_file('','pc01_liberarsaldoposicao'));
       $resulparemetrosaldo  = db_utils::fieldsMemory($Sqlparemetrosaldo, 0);
       $aItens = $objJson->itensAnulados;
-      print_r($aItens[$iInd]->servico);
-      return;
-      if($Sqlparemetrosaldo->pc01_liberarsaldoposicao == false && pg_num_rows($Sqlparemetrosaldo)>0) {
 
-        
-      }
 
       $objEmpenho->buscaUltimoDocumentoExecutadoDoc($objJson->iEmpenho,21,date('Y-m-d', db_getsession('DB_datausu')));
       if ($objEmpenho->lSqlErro) {
@@ -693,12 +701,6 @@ switch ($objJson->method) {
             AND ac20_pcmater = {$rsacordoMaterial->ac20_pcmater} ");
           $ItemUltimaPosicao = db_utils::fieldsMemory($ItemUltimaPosicao,0);
 
-          if($aItens[$iInd]->servico != $ItemUltimaPosicao->ac20_servicoquantidade){
-            $nMensagem = 'Usuario: Nao sera possivel a anulacao do empenho, devido a forma de controle do item no empenho e diferente da forma de controle do item no contrato.';
-            $iStatus = 2;
-            echo $json->encode(array("mensagem" => $nMensagem, "status" => $iStatus));
-            return;
-          }
           
           $empempaut = db_query("select e61_autori from empempaut where e61_numemp = {$objJson->iEmpenho}");
           if(pg_num_rows($empempaut) == 0){
@@ -746,7 +748,7 @@ switch ($objJson->method) {
             
               $DaoacordoItemDotacao->ac22_sequencial = $Dotacao->ac22_sequencial;
               $DaoacordoItemDotacao->ac22_valor = $Dotacao->ac22_valor + $aItens[$iInd]->vlrtot;
-              if($ItemUltimaPosicao->ac20_valorunitario/$ItemUltimaPosicao->ac20_valortotal == 1){
+              if($ItemUltimaPosicao->ac20_servicoquantidade == 't'){
                 $DaoacordoItemDotacao->ac22_quantidade = $Dotacao->ac22_quantidade;
               }else{
                 $DaoacordoItemDotacao->ac22_quantidade = $Dotacao->ac22_quantidade + $aItens[$iInd]->quantidade;
@@ -763,13 +765,13 @@ switch ($objJson->method) {
 
               $DaoacordoItem->ac20_sequencial = $ItemUltimaPosicao->ac20_sequencial;
               
-              if($ItemUltimaPosicao->ac20_valorunitario/$ItemUltimaPosicao->ac20_valortotal == 1){
+              if($ItemUltimaPosicao->ac20_servicoquantidade == 't'){
                 $DaoacordoItem->ac20_quantidade = $ItemUltimaPosicao->ac20_quantidade;
                 $DaoacordoItem->ac20_valortotal = $ItemUltimaPosicao->ac20_valortotal + $aItens[$iInd]->vlrtot;
                 $DaoacordoItem->ac20_valorunitario = $ItemUltimaPosicao->ac20_valortotal + $aItens[$iInd]->vlrtot;
               }else{
                 $DaoacordoItem->ac20_quantidade = $ItemUltimaPosicao->ac20_quantidade + $aItens[$iInd]->quantidade;
-                $DaoacordoItem->ac20_valortotal = $ItemUltimaPosicao->ac20_valortotal + $aItens[$iInd]->vlrtot;
+                $DaoacordoItem->ac20_valortotal = $DaoacordoItem->ac20_quantidade * $ItemUltimaPosicao->ac20_valorunitario;
                 $DaoacordoItem->ac20_valorunitario = $ItemUltimaPosicao->ac20_valorunitario;
               }
               $DaoacordoItem->alterar($ItemUltimaPosicao->ac20_sequencial);
@@ -785,7 +787,7 @@ switch ($objJson->method) {
             
               $DaoacordoItemDotacao->ac22_sequencial = $Dotacao->ac22_sequencial;
               $DaoacordoItemDotacao->ac22_valor = $Dotacao->ac22_valor + $aItens[$iInd]->vlrtot;
-              if($ItemUltimaPosicao->ac20_valorunitario/$ItemUltimaPosicao->ac20_valortotal == 1){
+              if($ItemUltimaPosicao->ac20_servicoquantidade == 't'){
                 $DaoacordoItemDotacao->ac22_quantidade = $Dotacao->ac22_quantidade;
               }else{
                 $DaoacordoItemDotacao->ac22_quantidade = $Dotacao->ac22_quantidade + $aItens[$iInd]->quantidade;
@@ -802,7 +804,7 @@ switch ($objJson->method) {
 
               $DaoacordoItem->ac20_sequencial = $ItemUltimaPosicao->ac20_sequencial;
               
-              if($ItemUltimaPosicao->ac20_valorunitario/$ItemUltimaPosicao->ac20_valortotal == 1){
+              if($ItemUltimaPosicao->ac20_servicoquantidade == 't'){
                 $DaoacordoItem->ac20_quantidade = $ItemUltimaPosicao->ac20_quantidade;
                 $DaoacordoItem->ac20_valortotal = $ItemUltimaPosicao->ac20_valortotal + $aItens[$iInd]->vlrtot;
                 $DaoacordoItem->ac20_valorunitario = $ItemUltimaPosicao->ac20_valortotal + $aItens[$iInd]->vlrtot;
