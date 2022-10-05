@@ -739,7 +739,7 @@ WHERE rh30_vinculo IN ('I',
      * @param integer $codigoFormulario
      * @return stdClass[]
      */
-    public function buscarPreenchimentoS1200($codigoFormulario, $matricula = null, $tipoevento = null)
+    public function buscarPreenchimentoS1200($codigoFormulario, $matricula = null, $cgm = null, $tipoevento = null)
     {
         if ($tipoevento == 1) {
             $sql = "select distinct z01_cgccpf from rhpessoal
@@ -804,47 +804,60 @@ WHERE rh30_vinculo IN ('I',
             e50_valorremuneracao as vlrRemunOE,
             e50_valordesconto,
             e50_datacompetencia,
-            e50_cattrabalhadorremurenacao as codCateg,
+            e50_cattrabalhadorremurenacao as codCategRemun,
             case
-                when retencaotiporec.e21_retencaotipocalc in (3, 4, 7) then (coalesce(e23_valorretencao, 0))
-                else 0
+         when (retencaotiporec.e21_retencaotipocalc in (3, 4, 7) and e23_ativo = true) then (coalesce(e23_valorretencao, 0))
+         else 0
             end as valor_inss,
             case
-                when retencaotiporec.e21_retencaotipocalc in (1, 2) then (coalesce(e23_valorretencao, 0))
+         when (retencaotiporec.e21_retencaotipocalc in (1, 2) and e23_ativo = true) then   (coalesce(e23_valorretencao, 0))
                 else 0
             end as valor_irrf,
+          case
+          when (retencaotiporec.e21_retencaotipocalc in (5,6) and e23_ativo = true) then                (coalesce(e23_valorretencao, 0))
+                   else 0
+                   end as outrasretencoes,
+                   case
+          when (retencaotiporec.e21_retencaotipocalc in (8) and e23_ativo = true) then                (coalesce(e23_valorretencao, 0))
+                   else 0
+                   end as sest,
+                    case
+          when (retencaotiporec.e21_retencaotipocalc in (9) and e23_ativo = true) then                (coalesce(e23_valorretencao, 0))
+                   else 0
+                   end as senat,
             cgm.z01_cgccpf as cpfTrab,
             cgm.z01_nome as nmTrab,
-            z04_rhcbo as codCBO,
+            rh70_estrutural  as codCBO,
             cgm.z01_nasc as dtNascto,
             cgc as nrInsc
-            from empnota
-                inner join empempenho on e69_numemp = e60_numemp
-                inner join cgm as cgm on e60_numcgm = cgm.z01_numcgm
-                inner join empnotaele on e69_codnota = e70_codnota
-                inner join orcelemento on empnotaele.e70_codele = orcelemento.o56_codele
-                inner join cgmfisico on z04_numcgm = cgm.z01_numcgm
-                left join conlancamemp on c75_numemp = e60_numemp
-                left join conlancamdoc on c71_codlan = c75_codlan
-                and c71_coddoc = 904
-                left join pagordemnota on e71_codnota = e69_codnota
-                and e71_anulado is false
-                left join pagordem on e71_codord = e50_codord
-                left join pagordemele on e53_codord = e50_codord
-                left join cgm as empresa on empresa.z01_numcgm = e50_empresadesconto
-                left join categoriatrabalhador as cattrabalhador on cattrabalhador.ct01_codcategoria = e50_cattrabalhador
-                left join categoriatrabalhador as catremuneracao on catremuneracao.ct01_codcategoria = e50_cattrabalhadorremurenacao
-                left join retencaopagordem on pagordem.e50_codord = retencaopagordem.e20_pagordem
-                left join retencaoreceitas on retencaoreceitas.e23_retencaopagordem = retencaopagordem.e20_sequencial
-                left join retencaotiporec on retencaotiporec.e21_sequencial = retencaoreceitas.e23_retencaotiporec
+        from empnota
+            inner join empempenho on e69_numemp = e60_numemp
+            inner join cgm as cgm on e60_numcgm = cgm.z01_numcgm
+            inner join empnotaele on e69_codnota = e70_codnota
+            inner join orcelemento on empnotaele.e70_codele = orcelemento.o56_codele
+            inner join cgmfisico on z04_numcgm = cgm.z01_numcgm
+                    inner join rhcbo on rh70_sequencial = z04_rhcbo
+            left join conlancamemp on c75_numemp = e60_numemp
+            left join conlancamdoc on c71_codlan = c75_codlan
+            and c71_coddoc = 904
+            left join pagordemnota on e71_codnota = e69_codnota
+            and e71_anulado is false
+            left join pagordem on e71_codord = e50_codord
+            left join pagordemele on e53_codord = e50_codord
+            left join cgm as empresa on empresa.z01_numcgm = e50_empresadesconto
+            left join categoriatrabalhador as cattrabalhador on cattrabalhador.ct01_codcategoria = e50_cattrabalhador
+            left join categoriatrabalhador as catremuneracao on catremuneracao.ct01_codcategoria = e50_cattrabalhadorremurenacao
+            left join retencaopagordem on pagordem.e50_codord = retencaopagordem.e20_pagordem
+            left join retencaoreceitas on retencaoreceitas.e23_retencaopagordem = retencaopagordem.e20_sequencial
+            left join retencaotiporec on retencaotiporec.e21_sequencial = retencaoreceitas.e23_retencaotiporec
                 left join db_config on
                 db_config.codigo = fc_getsession('DB_instit')::int
             where e50_data BETWEEN '$ano-$mes-01' AND '$ano-$mes-$ultimoDiaDoMes'
                 and Length(cgm.z01_cgccpf) like '11'
                 and e50_cattrabalhador is not null
             ";
-            if ($matricula != null) {
-                $sql .= "and cgm.z01_cgccpf in (select z01_cgccpf from cgm join rhpessoal on cgm.z01_numcgm = rhpessoal.rh01_numcgm where rh01_regist in ($matricula)) ";
+            if ($cgm != null) {
+                $sql .= " and cgm.z01_cgccpf in ($cgm) ";
             }
         }
         $rs = \db_query($sql);
@@ -933,37 +946,37 @@ WHERE rh30_vinculo IN ('I',
         and rh02_mesusu = date_part('month', fc_getsession('DB_datausu')::date)
         and rh02_regist = rh01_regist
         and rh02_instit = fc_getsession('DB_instit')::int
-    inner join cgm on
-        cgm.z01_numcgm = rhpessoal.rh01_numcgm
-    left join rhpesrescisao on
-        rh02_seqpes = rh05_seqpes
-    left join rhdepend on
-        rhdepend.rh31_regist = rhpessoal.rh01_regist
-    left join rhregime on
-        rhregime.rh30_codreg = rhpessoalmov.rh02_codreg
-    inner join tpcontra on
-        tpcontra.h13_codigo = rhpessoalmov.rh02_tpcont
-    left join rescisao on
-        rescisao.r59_anousu = rhpessoalmov.rh02_anousu
-        and rescisao.r59_mesusu = rhpessoalmov.rh02_mesusu
-        and rescisao.r59_regime = rhregime.rh30_regime
-        and rescisao.r59_causa = rhpesrescisao.rh05_causa
-        and rescisao.r59_caub = rhpesrescisao.rh05_caub::char(2)
-    left  outer join (
-            SELECT distinct r33_codtab,r33_nome,r33_tiporegime
-                                from inssirf
-                                where     r33_anousu = fc_getsession('DB_anousu')::int
-                                      and r33_mesusu = date_part('month',fc_getsession('DB_datausu')::date)
-                                      and r33_instit = fc_getsession('DB_instit')::int
-                               ) as x on r33_codtab = rhpessoalmov.rh02_tbprev+2
-                                   where rh30_vinculo in ('I','P')
-                                   and ((rh05_recis is not null
-                                   and date_part('month', rh05_recis) = date_part('month', fc_getsession('DB_datausu')::date)
-                                   and date_part('year', rh05_recis) = date_part('year', fc_getsession('DB_datausu')::date)
-                                   )
-                                   or
-                                   rh05_recis is null
-                                   ) ";
+        inner join cgm on
+            cgm.z01_numcgm = rhpessoal.rh01_numcgm
+        left join rhpesrescisao on
+            rh02_seqpes = rh05_seqpes
+        left join rhdepend on
+            rhdepend.rh31_regist = rhpessoal.rh01_regist
+        left join rhregime on
+            rhregime.rh30_codreg = rhpessoalmov.rh02_codreg
+        inner join tpcontra on
+            tpcontra.h13_codigo = rhpessoalmov.rh02_tpcont
+        left join rescisao on
+            rescisao.r59_anousu = rhpessoalmov.rh02_anousu
+            and rescisao.r59_mesusu = rhpessoalmov.rh02_mesusu
+            and rescisao.r59_regime = rhregime.rh30_regime
+            and rescisao.r59_causa = rhpesrescisao.rh05_causa
+            and rescisao.r59_caub = rhpesrescisao.rh05_caub::char(2)
+        left  outer join (
+                SELECT distinct r33_codtab,r33_nome,r33_tiporegime
+                                    from inssirf
+                                    where     r33_anousu = fc_getsession('DB_anousu')::int
+                                        and r33_mesusu = date_part('month',fc_getsession('DB_datausu')::date)
+                                        and r33_instit = fc_getsession('DB_instit')::int
+                                ) as x on r33_codtab = rhpessoalmov.rh02_tbprev+2
+                                    where rh30_vinculo in ('I','P')
+                                    and ((rh05_recis is not null
+                                    and date_part('month', rh05_recis) = date_part('month', fc_getsession('DB_datausu')::date)
+                                    and date_part('year', rh05_recis) = date_part('year', fc_getsession('DB_datausu')::date)
+                                    )
+                                    or
+                                    rh05_recis is null
+                                    ) ";
 
         if ($matricula != null) {
             $sql .= " and cgm.z01_cgccpf in (select z01_cgccpf from cgm join rhpessoal on cgm.z01_numcgm = rhpessoal.rh01_numcgm where rh01_regist in ($matricula)) ";
@@ -985,7 +998,7 @@ WHERE rh30_vinculo IN ('I',
      * @param integer $codigoFormulario
      * @return stdClass[]
      */
-    public function buscarPreenchimentoS1210($codigoFormulario, $matricula = null, $tipoevento = null)
+    public function buscarPreenchimentoS1210($codigoFormulario, $matricula = null, $cgm = null, $tipoevento = null)
     {
         if ($tipoevento == 1) {
             $sql = "SELECT distinct z01_cgccpf from rhpessoal
@@ -1127,10 +1140,10 @@ WHERE rh30_vinculo IN ('I',
                         6
                     order by e50_codord, corrente.k12_data
                 ) AS pagamentos
-            WHERE vr_liq > 0 ;
+            WHERE vr_liq > 0
             ";
-            if ($matricula != null) {
-                $sql .= " and cgm.z01_cgccpf in (select z01_cgccpf from cgm join rhpessoal on cgm.z01_numcgm = rhpessoal.rh01_numcgm where rh01_regist in ($matricula)) ";
+            if ($cgm != null) {
+                $sql .= " and cgm.z01_cgccpf in ($cgm) ";
             }
         }
         $rs = \db_query($sql);

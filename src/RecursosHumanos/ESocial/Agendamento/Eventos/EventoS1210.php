@@ -105,7 +105,6 @@ class EventoS1210 extends EventoBase
             } else {
                 // $aDadosContabilidade = $this->buscarDadosContabilidade($oDados->z01_cgccpf, $ultimoDiaDoMes, $mes, $ano);
 
-                // foreach ($aDadosContabilidade as $aDadosPorCpf) {
                 $oDadosAPI                                = new \stdClass();
                 $oDadosAPI->evtPgtos                      = new \stdClass();
                 $oDadosAPI->evtPgtos->sequencial          = $iSequencial;
@@ -138,7 +137,6 @@ class EventoS1210 extends EventoBase
                 $oDadosAPI->evtPgtos->infopgto = $std->infopgto;
                 $aDadosAPI[] = $oDadosAPI;
                 $iSequencial++;
-                //}
             }
         }
         // echo '<pre>';
@@ -544,82 +542,6 @@ class EventoS1210 extends EventoBase
 
                     $aItens[] = $oIdentificadores;
                 }
-            }
-        }
-        return $aItens;
-    }
-
-    /**
-     * Retorna dados da contabilidade no formato necessario para envio
-     * pela API sped-esocial
-     * @return array stdClass
-     */
-    private function buscarDadosContabilidade($cpf, $ultimoDiaDoMes, $mes, $ano)
-    {
-        $sql = "SELECT *
-        FROM (
-                select e60_numcgm as num_cgm,
-                    z01_cgccpf as cpf_benef,
-                    e50_codord as ide_dm_dev,
-                    substr(e50_data::varchar, 1, 7) as per_ref,
-                    (e53_valor - e53_vlranu) as valor_op,
-                    corrente.k12_data as dt_pgto,
-                    sum(
-                        case
-                            when corgrupotipo.k106_sequencial = 4 then corrente.k12_valor * -1
-                            else corrente.k12_valor
-                        end
-                    ) as vr_liq
-                from pagordem
-                    inner join empempenho ON empempenho.e60_numemp = pagordem.e50_numemp
-                    inner join cgm ON cgm.z01_numcgm = empempenho.e60_numcgm
-                    inner join empord on empord.e82_codord = pagordem.e50_codord
-                    inner join empagemov on empagemov.e81_codmov = empord.e82_codmov
-                    inner join corempagemov on corempagemov.k12_codmov = empagemov.e81_codmov
-                    inner join corrente on (
-                        corrente.k12_id,
-                        corrente.k12_data,
-                        corrente.k12_autent
-                    ) = (
-                        corempagemov.k12_id,
-                        corempagemov.k12_data,
-                        corempagemov.k12_autent
-                    )
-                    inner join corgrupocorrente on (
-                        corrente.k12_id,
-                        corrente.k12_data,
-                        corrente.k12_autent
-                    ) = (
-                        corgrupocorrente.k105_id,
-                        corgrupocorrente.k105_data,
-                        corgrupocorrente.k105_autent
-                    )
-                    inner join corgrupo ON corgrupo.k104_sequencial = corgrupocorrente.k105_corgrupo
-                    inner join corgrupotipo on corgrupotipo.k106_sequencial = corgrupocorrente.k105_corgrupotipo
-                    inner join pagordemele on e50_codord = e53_codord
-                where e50_cattrabalhador is not null
-                    and corrente.k12_data between '2022-08-01' and '2022-08-31'
-                    and corgrupotipo.k106_sequencial in (1, 4) -- somente pagamento/estorno liquido
-                    and length(z01_cgccpf) = 11 --and e50_codord = 33521
-                group by 1,
-                    2,
-                    3,
-                    4,
-                    5,
-                    6
-                order by e50_codord, corrente.k12_data
-            ) AS pagamentos
-        WHERE vr_liq > 0;
-        ";
-
-        $rsValores = db_query($sql);
-        // echo $sql;
-        // db_criatabela($rsValores);
-        // exit;
-        if (pg_num_rows($rsValores) > 0) {
-            for ($iCont = 0; $iCont < pg_num_rows($rsValores); $iCont++) {
-                $oResult = \db_utils::fieldsMemory($rsValores, $iCont);
-                $aItens[] = $oResult;
             }
         }
         return $aItens;

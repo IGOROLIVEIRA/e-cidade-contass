@@ -275,7 +275,12 @@ try {
                         Tipo::BENEFICIOS_ENTESPUBLICOS,
                     )
                 )) {
-                    $dadosDoPreenchimento = $dadosESocial->getPorTipo(Tipo::getTipoFormulario($arquivo), empty($oParam->matricula) ? null : $oParam->matricula, empty($oParam->tpevento) ? null : $oParam->tpevento);
+                    $dadosDoPreenchimento = $dadosESocial->getPorTipo(
+                        Tipo::getTipoFormulario($arquivo),
+                        empty($oParam->matricula) ? null : $oParam->matricula,
+                        empty($oParam->cgm) ? null : $oParam->cgm,
+                        empty($oParam->tpevento) ? null : $oParam->tpevento
+                    );
                     if (current($dadosDoPreenchimento) instanceof \ECidade\RecursosHumanos\ESocial\Model\Formulario\DadosPreenchimento) {
                         $formatter = FormatterFactory::get($arquivo);
                         $dadosDoPreenchimento = $formatter->formatar($dadosDoPreenchimento);
@@ -297,7 +302,13 @@ try {
                         $eventoFila->adicionarFila();
                     }
                 } else {
-                    $dadosTabela = $dadosESocial->getPorTipo(Tipo::getTipoFormulario($arquivo), empty($oParam->matricula) ? null : $oParam->matricula, empty($oParam->tpevento) ? null : $oParam->tpevento);
+
+                    $dadosTabela = $dadosESocial->getPorTipo(
+                        Tipo::getTipoFormulario($arquivo),
+                        empty($oParam->matricula) ? null : $oParam->matricula,
+                        empty($oParam->cgm) ? null : $oParam->cgm,
+                        empty($oParam->tpevento) ? null : $oParam->tpevento
+                    );
 
                     foreach (array_chunk($dadosTabela, 1) as $aTabela) {
                         $eventoFila = new Evento(
