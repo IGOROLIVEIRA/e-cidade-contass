@@ -531,7 +531,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
       document.getElementById('ctnServicoQuantidade').style.marginLeft = "-170px";
       document.getElementById('pc11_servicoquantidade').style.marginLeft = "-84px";
       document.getElementById('pc11_servicoquantidade').style.width = "76px";
-
+      document.getElementById('pc11_quant').readOnly = false;
 
 
 
@@ -543,6 +543,8 @@ if ((isset($opcao) && $opcao == "alterar")) {
       document.getElementById('ctnServicoQuantidade').style.marginLeft = "0px";
       document.getElementById('pc11_servicoquantidade').style.marginLeft = "0px";
       document.getElementById('pc11_servicoquantidade').style.width = "48px";
+      document.getElementById('pc11_quant').readOnly = true;
+
     }
 
   }
@@ -557,8 +559,9 @@ if ((isset($opcao) && $opcao == "alterar")) {
 
     var oRequest = new Object();
 
-    if (top.corpo.iframe_dotacoesnovo.document.getElementsByName("reduzido[]").length == 0 && document.getElementById('dotacoesnovo').style.display != 'none') {
-      alert('Permitido salvar somente se tiver no mínimo 1 dotação inserida na aba dotações;');
+
+    if (top.corpo.iframe_dotacoesnovo.document.getElementsByName("reduzido[]").length == 0 && pc30_permsemdotac == "f") {
+      alert('Usuário, é necessário inserir no mínimo 1 dotação na aba Dotações.');
       return false;
     }
 
@@ -599,12 +602,15 @@ if ((isset($opcao) && $opcao == "alterar")) {
 
     if (oRetorno.erro == true) {
       alert(oRetorno.message.urlDecode());
+      return false;
 
     }
 
     numero = top.corpo.iframe_solicita.document.form1.pc10_numero.value;
     data = top.corpo.iframe_solicita.document.form1.pc10_data.value;
     descrdepto = top.corpo.iframe_solicita.document.form1.descrdepto.value;
+
+    alert(oRetorno.message.urlDecode())
 
     parent.window.location.href = "com1_pcproc001.php?pc10_numero=" + numero + "&data=" + data + "&descrdepto=" + descrdepto + "";
 
@@ -986,7 +992,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
       aLinha[1] = " <input style='text-align:center; width:90%; border:none;' readonly='' type='text' name='codmaterial[]' value='" + oRetorno.aItens[i].pc01_codmater + "'>"
 
 
-      aLinha[2] = " <input style='text-align:center; width:90%; border:none;' readonly='' type='text' name='descmaterial[]' value='" + oRetorno.aItens[i].pc01_descrmater + "'>"
+      aLinha[2] = " <input style='text-align:center; width:90%; border:none;' readonly='' type='text' name='descmaterial[]' value='" + oRetorno.aItens[i].pc01_descrmater.urlDecode() + "'>"
 
       aLinha[3] = " <input style='text-align:center; width:90%; border:none;' readonly='' type='text' name='unidade[]' value='" + oRetorno.aItens[i].m61_descr + "'>";
 

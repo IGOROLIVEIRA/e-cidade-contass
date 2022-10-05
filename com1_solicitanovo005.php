@@ -572,6 +572,8 @@ if (isset($chavepesquisa)) {
             ";
   }
 
+  echo "parent.iframe_dotacoesnovo.location.href='com1_dotacoesnovo001.php?pc10_numero=$chavepesquisa';\n";
+
   /**
    * Habilita aba de fornecedores sugeridos
    * - Parametro definido para exibir aba 

@@ -457,6 +457,15 @@ if (isset($incluir)) {
 			return false;
 		}
 
+		for (var i = 0; i < document.getElementsByName("reduzido[]").length; i++) {
+
+			if (document.getElementsByName("reduzido[]")[i].value == document.getElementById("o58_coddot").value) {
+				alert('Dotação já incluída');
+				return false;
+			}
+		}
+
+
 		var sizeItens = oGridItens.aRows.length;
 
 		itens_antigos = oGridItens.aRows;

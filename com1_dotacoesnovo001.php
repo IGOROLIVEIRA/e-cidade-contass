@@ -328,15 +328,13 @@ if (isset($incluir)) {
 	oGridItens.show($('ctnGridItens'));
 
 
-
-
 	function carregaDotacoes() {
 
 
 		var sUrl = "com4_materialsolicitacao.RPC.php";
 
 		var oRequest = new Object();
-		oRequest.numero = top.corpo.iframe_solicita.document.form1.pc10_numero.value;
+		oRequest.numero = <? echo $pc10_numero; ?>;
 		oRequest.exec = "getDotacoes";
 		var oAjax = new Ajax.Request(
 			sUrl, {
@@ -371,7 +369,7 @@ if (isset($incluir)) {
 
 	}
 
-	setTimeout(carregaDotacoes, 3000);
+	carregaDotacoes();
 
 
 
@@ -456,6 +454,15 @@ if (isset($incluir)) {
 		var sizeItens = oGridItens.aRows.length;
 
 		itens_antigos = oGridItens.aRows;
+
+
+		for (var i = 0; i < document.getElementsByName("reduzido[]").length; i++) {
+
+			if (document.getElementsByName("reduzido[]")[i].value == document.getElementById("o58_coddot").value) {
+				alert('Dotação já incluída');
+				return false;
+			}
+		}
 
 
 		oGridItens.clearAll(true);

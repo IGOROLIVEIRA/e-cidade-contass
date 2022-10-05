@@ -734,7 +734,7 @@ db_fieldsmemory($result_pcparam1, 0);
 		//---------------------------------------------------------------------------------------------------------------------------------------------
 		//---------------------------------------------------------------------------------------------------------------------------------------------
 
-		/* Ordenação do sequencial dos itens */
+		/* Ordenação do sequencial dos itens 
 		$aItens  = array();
 
 		$itens = db_query("select * from solicitem where pc11_numero = $pc11_numero;");
@@ -767,7 +767,7 @@ db_fieldsmemory($result_pcparam1, 0);
 			$sequencial = $aItens[$i]->pc11_seq;
 			$codigo = $aItens[$i]->pc11_codigo;
 			db_query("UPDATE solicitem SET pc11_seq = $sequencial WHERE pc11_codigo = $codigo");
-		}
+		} */
 
 
 
@@ -2160,11 +2160,11 @@ if (isset($alterar) || isset($excluir) || isset($incluir)) {
 	} else {
 
 		if (isset($excluir)) {
-			db_msgbox("Itens excluídos com sucesso");
+			db_msgbox("Item excluído com sucesso");
 		} else if (isset($incluir)) {
-			db_msgbox("Itens incluídos com sucesso");
+			db_msgbox("Item incluído com sucesso");
 		} else if (isset($alterar)) {
-			db_msgbox("Itens alterados com sucesso");
+			db_msgbox("Item alterado com sucesso");
 		}
 
 

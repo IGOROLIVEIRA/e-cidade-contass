@@ -42,6 +42,8 @@ $oRetorno          = new stdClass();
 $oRetorno->erro    = false;
 $oRetorno->message = '';
 
+
+
 try {
 
   db_inicio_transacao();
@@ -146,7 +148,7 @@ try {
         $item = db_utils::fieldsMemory($rsResult, $i);
         $oItem->pc11_seq =  $item->pc11_seq;
         $oItem->pc01_codmater =  $item->pc01_codmater;
-        $oItem->pc01_descrmater =  $item->pc01_descrmater;
+        $oItem->pc01_descrmater =  urlencode($item->pc01_descrmater);
         $oItem->pc11_codigo = $item->pc11_codigo;
         $oItem->m61_descr =  $item->m61_descr;
         $oItem->m61_codmatunid =  $item->m61_codmatunid;
@@ -272,33 +274,88 @@ try {
       $estrutural = $oParam->estrutural;
       $pc10_numero = $oParam->numero;
 
-      if ($oParam->pc30_permsemdotac == true) {
+
+
+      $itens = db_query("select * from solicitem where pc11_numero = $pc10_numero;");
+      $quantidade_itens = pg_numrows($itens);
+      $quantidade_dotacoes = 0;
 
 
 
-        $itens = db_query("select * from solicitem where pc11_numero = $pc10_numero;");
-        $quantidade_itens = pg_numrows($itens);
-        $quantidade_dotacoes = 0;
+      for ($i = 0; $i < $quantidade_itens; $i++) {
+        $item = db_utils::fieldsMemory($itens, $i);
+        $codigo_item =  $item->pc11_codigo;
+        $servico = db_query("select * from solicitempcmater inner join pcmater on pc16_codmater = pc01_codmater  where pc16_solicitem = $codigo_item ;");
+        $servico = db_utils::fieldsMemory($servico, 0);
+        $codele = db_query("select * from solicitemele where pc18_solicitem = $codigo_item ;");
+        $codele = db_utils::fieldsMemory($codele, 0);
+        $anousu = db_getsession('DB_anousu');
+        $elemento =  db_query("select * from orcelemento where o56_codele = $codele->pc18_codele and o56_anousu = $anousu ;");
+        $elemento = db_utils::fieldsMemory($elemento, 0);
+        $elemento = substr($elemento->o56_elemento, 0, 7);
 
 
 
-        for ($i = 0; $i < $quantidade_itens; $i++) {
-          $item = db_utils::fieldsMemory($itens, $i);
-          $codigo_item =  $item->pc11_codigo;
-          $servico = db_query("select * from solicitempcmater inner join pcmater on pc16_codmater = pc01_codmater  where pc16_solicitem = $codigo_item ;");
-          $servico = db_utils::fieldsMemory($servico, 0);
-          $codele = db_query("select * from solicitemele where pc18_solicitem = $codigo_item ;");
-          $codele = db_utils::fieldsMemory($codele, 0);
-          $anousu = db_getsession('DB_anousu');
-          $elemento =  db_query("select * from orcelemento where o56_codele = $codele->pc18_codele and o56_anousu = $anousu ;");
-          $elemento = db_utils::fieldsMemory($elemento, 0);
-          $elemento = substr($elemento->o56_elemento, 0, 7);
+        if ($servico->pc01_servico == "f") {
+
+          for ($j = 0; $j < count($reduzido); $j++) {
+            $quantidade_dotacoes = 0;
 
 
+            // Verificando se item já possui a dotação a ser lançada
+            $dotacao = $reduzido[$j];
+            $result =  db_query("select * from pcdotac where pc13_codigo = $codigo_item and pc13_coddot = $dotacao;");
 
-          if ($servico->pc01_servico == "f") {
+            if (pg_numrows($result) == 0) {
 
+
+              for ($k = 0; $k < count($reduzido); $k++) {
+                if ($elemento == substr($estrutural[$k], 23, 7)) {
+                  $quantidade_dotacoes++;
+                }
+              }
+
+              $clpcdotac->pc13_anousu = db_getsession('DB_anousu');
+              $clpcdotac->pc13_coddot = $reduzido[$j];
+              $clpcdotac->pc13_depto  = db_getsession('DB_coddepto');
+              $clpcdotac->pc13_quant  = $item->pc11_quant / $quantidade_dotacoes;
+              $clpcdotac->pc13_valor  = $item->pc11_quant / $quantidade_dotacoes;
+              $clpcdotac->pc13_codele = $codele->pc18_codele;
+              $clpcdotac->pc13_codigo = $codigo_item;
+              $clpcdotac->incluir(null);
+            }
+          }
+        } else {
+
+          if ($item->pc11_servicoquantidade == "t") {
             for ($j = 0; $j < count($reduzido); $j++) {
+              $quantidade_dotacoes = 0;
+
+              // Verificando se item já possui a dotação a ser lançada
+              $dotacao = $reduzido[$j];
+              $result =  db_query("select * from pcdotac where pc13_codigo = $codigo_item and pc13_coddot = $dotacao;");
+
+              if (pg_numrows($result) == 0) {
+
+                for ($k = 0; $k < count($reduzido); $k++) {
+                  if ($elemento == substr($estrutural[$k], 23, 7)) {
+                    $quantidade_dotacoes++;
+                  }
+                }
+
+                $clpcdotac->pc13_anousu = db_getsession('DB_anousu');
+                $clpcdotac->pc13_coddot = $reduzido[$j];
+                $clpcdotac->pc13_depto  = db_getsession('DB_coddepto');
+                $clpcdotac->pc13_quant  = $item->pc11_quant / $quantidade_dotacoes;
+                $clpcdotac->pc13_valor  = $item->pc11_quant / $quantidade_dotacoes;
+                $clpcdotac->pc13_codele = $codele->pc18_codele;
+                $clpcdotac->pc13_codigo = $codigo_item;
+                $clpcdotac->incluir(null);
+              }
+            }
+          } else {
+            for ($j = 0; $j < count($reduzido); $j++) {
+
               $quantidade_dotacoes = 0;
 
 
@@ -318,78 +375,56 @@ try {
                 $clpcdotac->pc13_anousu = db_getsession('DB_anousu');
                 $clpcdotac->pc13_coddot = $reduzido[$j];
                 $clpcdotac->pc13_depto  = db_getsession('DB_coddepto');
-                $clpcdotac->pc13_quant  = $item->pc11_quant / $quantidade_dotacoes;
-                $clpcdotac->pc13_valor  = $item->pc11_quant / $quantidade_dotacoes;
+                $clpcdotac->pc13_quant  = 1;
+                $clpcdotac->pc13_valor  = 1;
                 $clpcdotac->pc13_codele = $codele->pc18_codele;
                 $clpcdotac->pc13_codigo = $codigo_item;
                 $clpcdotac->incluir(null);
               }
             }
-          } else {
-
-            if ($item->pc11_servicoquantidade == "t") {
-              for ($j = 0; $j < count($reduzido); $j++) {
-                $quantidade_dotacoes = 0;
-
-                // Verificando se item já possui a dotação a ser lançada
-                $dotacao = $reduzido[$j];
-                $result =  db_query("select * from pcdotac where pc13_codigo = $codigo_item and pc13_coddot = $dotacao;");
-
-                if (pg_numrows($result) == 0) {
-
-                  for ($k = 0; $k < count($reduzido); $k++) {
-                    if ($elemento == substr($estrutural[$k], 23, 7)) {
-                      $quantidade_dotacoes++;
-                    }
-                  }
-
-                  $clpcdotac->pc13_anousu = db_getsession('DB_anousu');
-                  $clpcdotac->pc13_coddot = $reduzido[$j];
-                  $clpcdotac->pc13_depto  = db_getsession('DB_coddepto');
-                  $clpcdotac->pc13_quant  = $item->pc11_quant / $quantidade_dotacoes;
-                  $clpcdotac->pc13_valor  = $item->pc11_quant / $quantidade_dotacoes;
-                  $clpcdotac->pc13_codele = $codele->pc18_codele;
-                  $clpcdotac->pc13_codigo = $codigo_item;
-                  $clpcdotac->incluir(null);
-                }
-              }
-            } else {
-              for ($j = 0; $j < count($reduzido); $j++) {
-
-                $quantidade_dotacoes = 0;
-
-
-                // Verificando se item já possui a dotação a ser lançada
-                $dotacao = $reduzido[$j];
-                $result =  db_query("select * from pcdotac where pc13_codigo = $codigo_item and pc13_coddot = $dotacao;");
-
-                if (pg_numrows($result) == 0) {
-
-
-                  for ($k = 0; $k < count($reduzido); $k++) {
-                    if ($elemento == substr($estrutural[$k], 23, 7)) {
-                      $quantidade_dotacoes++;
-                    }
-                  }
-
-                  $clpcdotac->pc13_anousu = db_getsession('DB_anousu');
-                  $clpcdotac->pc13_coddot = $reduzido[$j];
-                  $clpcdotac->pc13_depto  = db_getsession('DB_coddepto');
-                  $clpcdotac->pc13_quant  = 1;
-                  $clpcdotac->pc13_valor  = 1;
-                  $clpcdotac->pc13_codele = $codele->pc18_codele;
-                  $clpcdotac->pc13_codigo = $codigo_item;
-                  $clpcdotac->incluir(null);
-                }
-              }
-            }
           }
         }
-
-        $oRetorno->message = $clpcdotac->erro_sql;
       }
+
+      $oRetorno->message = $clpcdotac->erro_sql;
+
       db_query("UPDATE solicitem SET pc11_liberado = true WHERE pc11_numero = $pc10_numero");
 
+
+      /* Ordenação do sequencial dos itens  */
+      $aItens  = array();
+
+      $itens = db_query("select * from solicitem where pc11_numero = $pc10_numero;");
+      $quantidade_itens = pg_numrows($itens);
+
+      for ($i = 0; $i < $quantidade_itens; $i++) {
+        $item = db_utils::fieldsMemory($itens, $i);
+        $oItem = new stdClass();
+        $oItem->pc11_codigo = $item->pc11_codigo;
+        $oItem->pc11_seq = $item->pc11_seq;
+        $aItens[] = $oItem;
+      }
+
+      // Ordenação dos arrays conforme sequencial
+
+      usort(
+
+        $aItens,
+
+        function ($a, $b) {
+
+          if ($a->pc11_seq == $b->pc11_seq) return 0;
+
+          return (($a->pc11_seq < $b->pc11_seq) ? -1 : 1);
+        }
+      );
+
+      for ($i = 0; $i < count($aItens); $i++) {
+        $aItens[$i]->pc11_seq = $i + 1;
+        $sequencial = $aItens[$i]->pc11_seq;
+        $codigo = $aItens[$i]->pc11_codigo;
+        db_query("UPDATE solicitem SET pc11_seq = $sequencial WHERE pc11_codigo = $codigo");
+      }
 
 
       break;
@@ -403,8 +438,8 @@ try {
   $oRetorno->message = urlencode($eErro->getMessage());
 }
 
-if ($oRetorno->message == '') {
+/*if ($oRetorno->message == '') {
   $oRetorno->message = null;
-}
+} */
 
 echo $oJson->encode($oRetorno);
