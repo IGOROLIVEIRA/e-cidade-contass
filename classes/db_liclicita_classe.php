@@ -1625,7 +1625,7 @@ class cl_liclicita
             }
         }
 
-        if (($this->l20_datacria != null || isset($GLOBALS["HTTP_POST_VARS"]["l20_datacria"])) && ($this->l20_dataaberproposta != null || isset($GLOBALS["HTTP_POST_VARS"]["l20_dataaberproposta"]))) {
+        if ($this->l20_datacria != null  && $this->l20_dataaberproposta != null) {
             if ($this->l20_datacria > $this->l20_dataaberproposta) {
                 $this->erro_sql = "A data inserida no campo 'Data Abertura Proposta' deverá ser maior ou igual a data inserida no campo 'Data Abertura Proc. Adm.'.";
                 $this->erro_campo = "l20_dataaberproposta";
@@ -1637,7 +1637,7 @@ class cl_liclicita
             }
         }
 
-        if (($this->l20_datacria != null || isset($GLOBALS["HTTP_POST_VARS"]["l20_datacria"])) && ($this->l20_dataencproposta != null || isset($GLOBALS["HTTP_POST_VARS"]["l20_dataencproposta"]))) {
+        if ($this->l20_datacria != null  && $this->l20_dataencproposta != null) {
             if ($this->l20_datacria > $this->l20_dataaberproposta) {
                 $this->erro_sql = "A data inserida no campo 'Data Encerramento Proposta' deverá ser maior ou igual a data inserida no campo 'Data Abertura Proc. Adm.'.";
                 $this->erro_campo = "l20_dataencproposta";
