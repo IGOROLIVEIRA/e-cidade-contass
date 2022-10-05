@@ -77,7 +77,9 @@ class SicomArquivoItem extends SicomArquivoBase implements iPadArquivoBaseCSV
 
 
     $sSql = "SELECT distinct  '10' AS tipoRegistro ,
-       (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1 ELSE m61_codmatunid END)::varchar) AS coditem,
+         CASE
+  WHEN pcmater.pc01_codmaterant IS NOT NULL THEN pcmater.pc01_codmaterant::varchar
+ELSE (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1 ELSE m61_codmatunid END)::varchar) END AS coditem,
        (pcmater.pc01_descrmater||substring(pc01_complmater,1,900) ) AS dscItem ,
        (CASE WHEN m61_abrev IS NULL THEN 'UNIDAD' ELSE m61_abrev END) AS unidadeMedida ,
        '1' AS tipoCadastro ,
@@ -148,7 +150,9 @@ WHERE DATE_PART ('YEAR' , homologacao . l202_datahomologacao) =" . db_getsession
       )
 UNION
 SELECT distinct '10' AS tipoRegistro ,
-       (pcmater.pc01_codmater::varchar || (CASE WHEN COALESCE(e55_unid,0) = 0 THEN 1 ELSE e55_unid END)::varchar) AS coditem,
+CASE
+WHEN pcmater.pc01_codmaterant IS NOT NULL THEN pcmater.pc01_codmaterant::varchar
+ELSE (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1 ELSE m61_codmatunid END)::varchar) END AS coditem,
        (pcmater.pc01_descrmater||substring(pc01_complmater,1,900) ) AS dscItem ,
        (CASE WHEN m61_abrev IS NULL THEN 'UNIDAD' ELSE m61_abrev END) AS unidadeMedida ,
        '1' AS tipoCadastro ,
@@ -223,7 +227,9 @@ WHERE empempenho.e60_instit = " . db_getsession("DB_instit") . " AND ((DATE_PART
 
   UNION
   SELECT distinct '10' AS tipoRegistro ,
-       (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1 ELSE m61_codmatunid END)::varchar) AS coditem,
+  CASE
+  WHEN pcmater.pc01_codmaterant IS NOT NULL THEN pcmater.pc01_codmaterant::varchar
+ELSE (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1 ELSE m61_codmatunid END)::varchar) END AS coditem,
        (pcmater.pc01_descrmater||substring(pc01_complmater,1,900) ) AS dscItem ,
        (CASE WHEN m61_abrev IS NULL THEN 'UNIDAD' ELSE m61_abrev END) AS unidadeMedida ,
        '1' AS tipoCadastro ,
@@ -293,7 +299,9 @@ WHERE DATE_PART ('MONTH' , si172_dataassinatura) = " . $this->sDataFinal['5'] . 
 
   UNION
   select distinct '10' AS tipoRegistro ,
-       (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1 ELSE m61_codmatunid END)::varchar) AS coditem,
+  CASE
+  WHEN pcmater.pc01_codmaterant IS NOT NULL THEN pcmater.pc01_codmaterant::varchar
+ELSE (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1 ELSE m61_codmatunid END)::varchar) END AS coditem,
        (pcmater.pc01_descrmater||substring(pc01_complmater,1,900) ) AS dscItem ,
        (CASE WHEN m61_abrev IS NULL THEN 'UNIDAD' ELSE m61_abrev END) AS unidadeMedida ,
        '1' AS tipoCadastro ,
@@ -368,7 +376,9 @@ WHERE DATE_PART ('MONTH' , si172_dataassinatura) = " . $this->sDataFinal['5'] . 
 
 	UNION
   SELECT distinct '10' AS tipoRegistro ,
-       (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1 ELSE m61_codmatunid END)::varchar) AS coditem,
+  CASE
+  WHEN pcmater.pc01_codmaterant IS NOT NULL THEN pcmater.pc01_codmaterant::varchar
+ELSE (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1 ELSE m61_codmatunid END)::varchar) END AS coditem,
        (pcmater.pc01_descrmater||substring(pc01_complmater,1,900) ) AS dscItem ,
        (CASE WHEN m61_abrev IS NULL THEN 'UNIDAD' ELSE m61_abrev END) AS unidadeMedida ,
        '1' AS tipoCadastro ,
@@ -537,10 +547,9 @@ WHERE DATE_PART ('MONTH' , si172_dataassinatura) = " . $this->sDataFinal['5'] . 
       UNION
   SELECT
 '10' AS tipoRegistro,
-                (pcmater.pc01_codmater::varchar || (CASE
-                                                        WHEN m61_codmatunid IS NULL THEN 1
-                                                        ELSE m61_codmatunid
-                                                    END)::varchar) AS coditem,
+    CASE
+    WHEN pcmater.pc01_codmaterant IS NOT NULL THEN pcmater.pc01_codmaterant::varchar
+    ELSE (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1 ELSE m61_codmatunid END)::varchar) END AS coditem,
                 (pcmater.pc01_descrmater||substring(pc01_complmater,1,900)) AS dscItem,
                 (CASE
                      WHEN m61_abrev IS NULL THEN 'UNIDAD'
@@ -637,7 +646,7 @@ where DATE_PART ('MONTH', si06_dataadesao) = " . $this->sDataFinal['5'] . $this-
       )
   AND si06_instit=" . db_getsession("DB_instit");
 
-    $rsResult10 = db_query($sSql); // echo $sSql;db_criatabela($rsResult10);die($sSql);
+    $rsResult10 = db_query($sSql);  //echo $sSql;//db_criatabela($rsResult10);die($sSql);
     //$aCaracteres = array("/","\","'","\"","°","ª","º","§");
     // matriz de entrada
     $what = array("°", chr(13), chr(10), 'ä', 'ã', 'à', 'á', 'â', 'ê', 'ë', 'è', 'é', 'ï', 'ì', 'í', 'ö', 'õ', 'ò', 'ó', 'ô', 'ü', 'ù', 'ú', 'û', 'À', 'Á', 'Ã', 'É', 'Í', 'Ó', 'Ú', 'ñ', 'Ñ', 'ç', 'Ç', ' ', '-', '(', ')', ',', ';', ':', '|', '!', '"', '#', '$', '%', '&', '/', '=', '?', '~', '^', '>', '<', 'ª', 'º');

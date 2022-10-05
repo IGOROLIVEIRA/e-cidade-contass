@@ -103,42 +103,42 @@ class EventoS1210 extends EventoBase
                 $aDadosAPI[] = $oDadosAPI;
                 $iSequencial++;
             } else {
-                $aDadosContabilidade = $this->buscarDadosContabilidade($oDados->z01_cgccpf, $ultimoDiaDoMes, $mes, $ano);
+                // $aDadosContabilidade = $this->buscarDadosContabilidade($oDados->z01_cgccpf, $ultimoDiaDoMes, $mes, $ano);
 
-                foreach ($aDadosContabilidade as $aDadosPorCpf) {
-                    $oDadosAPI                                = new \stdClass();
-                    $oDadosAPI->evtPgtos                      = new \stdClass();
-                    $oDadosAPI->evtPgtos->sequencial          = $iSequencial;
-                    $oDadosAPI->evtPgtos->modo                = $this->modo;
-                    $oDadosAPI->evtPgtos->indRetif            = 1;
-                    $oDadosAPI->evtPgtos->nrRecibo            = null;
+                // foreach ($aDadosContabilidade as $aDadosPorCpf) {
+                $oDadosAPI                                = new \stdClass();
+                $oDadosAPI->evtPgtos                      = new \stdClass();
+                $oDadosAPI->evtPgtos->sequencial          = $iSequencial;
+                $oDadosAPI->evtPgtos->modo                = $this->modo;
+                $oDadosAPI->evtPgtos->indRetif            = 1;
+                $oDadosAPI->evtPgtos->nrRecibo            = null;
 
-                    $oDadosAPI->evtPgtos->indapuracao         = $this->indapuracao;
-                    $oDadosAPI->evtPgtos->perapur             = $ano . '-' . $mes;
-                    if ($this->indapuracao == 2) {
-                        $oDadosAPI->evtPgtos->perapur         = $ano;
-                    }
-                    $oDadosAPI->evtPgtos->cpfbenef             = $aDadosPorCpf->cpf_benef;
-
-                    $std = new \stdClass();
-                    $seqinfopag = 0;
-
-                    $std->infopgto[$seqinfopag]->codcateg = $oDados->codcateg; //Obrigatório
-
-                    $std->infopgto[$seqinfopag] = new \stdClass(); //Obritatório
-
-                    $std->infopgto[$seqinfopag]->dtpgto = $aDadosPorCpf->dt_pgto;
-                    $std->infopgto[$seqinfopag]->tppgto = $this->tppgto;
-                    $std->infopgto[$seqinfopag]->perref = $aDadosPorCpf->per_ref;
-
-                    $std->infopgto[$seqinfopag]->idedmdev = $aDadosPorCpf->ide_dm_dev; // . 'gerfsal'; //uniqid(); //$aIdentificador[$iCont2]->idedmdev; //Obrigat?rio
-
-                    $std->infopgto[$seqinfopag]->vrliq = $aDadosPorCpf->vr_liq;
-
-                    $oDadosAPI->evtPgtos->infopgto = $std->infopgto;
-                    $aDadosAPI[] = $oDadosAPI;
-                    $iSequencial++;
+                $oDadosAPI->evtPgtos->indapuracao         = $this->indapuracao;
+                $oDadosAPI->evtPgtos->perapur             = $ano . '-' . $mes;
+                if ($this->indapuracao == 2) {
+                    $oDadosAPI->evtPgtos->perapur         = $ano;
                 }
+                $oDadosAPI->evtPgtos->cpfbenef             = $oDados->cpf_benef;
+
+                $std = new \stdClass();
+                $seqinfopag = 0;
+
+                $std->infopgto[$seqinfopag]->codcateg = $oDados->codcateg; //Obrigatório
+
+                $std->infopgto[$seqinfopag] = new \stdClass(); //Obritatório
+
+                $std->infopgto[$seqinfopag]->dtpgto = $oDados->dt_pgto;
+                $std->infopgto[$seqinfopag]->tppgto = $this->tppgto;
+                $std->infopgto[$seqinfopag]->perref = $oDados->per_ref;
+
+                $std->infopgto[$seqinfopag]->idedmdev = $oDados->ide_dm_dev; // . 'gerfsal'; //uniqid(); //$aIdentificador[$iCont2]->idedmdev; //Obrigat?rio
+
+                $std->infopgto[$seqinfopag]->vrliq = $oDados->vr_liq;
+
+                $oDadosAPI->evtPgtos->infopgto = $std->infopgto;
+                $aDadosAPI[] = $oDadosAPI;
+                $iSequencial++;
+                //}
             }
         }
         // echo '<pre>';

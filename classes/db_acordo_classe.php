@@ -1406,6 +1406,54 @@ class cl_acordo
         return $sql;
     }
 
+    function sql_query_vinculos($ac16_sequencial = null, $campos = "*", $ordem = null, $dbwhere = "")
+    {
+        $sql = "select ";
+        if ($campos != "*") {
+            $campos_sql = split("#", $campos);
+            $virgula = "";
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
+                $virgula = ",";
+            }
+        } else {
+            $sql .= $campos;
+        }
+        $sql .= " from acordo ";
+        $sql .= "      inner join cgm contratado           on  contratado.z01_numcgm = acordo.ac16_contratado";
+        $sql .= "      inner join db_depart                on  db_depart.coddepto = acordo.ac16_coddepto";
+        $sql .= "      inner join db_depart as responsavel on responsavel.coddepto = acordo.ac16_deptoresponsavel";
+        $sql .= "      inner join acordogrupo              on  acordogrupo.ac02_sequencial = acordo.ac16_acordogrupo";
+        $sql .= "      inner join acordosituacao           on acordosituacao.ac17_sequencial = acordo.ac16_acordosituacao";
+        $sql .= "      left join acordocomissao            on  acordocomissao.ac08_sequencial = acordo.ac16_acordocomissao";
+        $sql .= "      inner join db_config                on  db_config.codigo = db_depart.instit";
+        $sql .= "      inner join acordonatureza           on  acordonatureza.ac01_sequencial = acordogrupo.ac02_acordonatureza";
+        $sql .= "      inner join acordotipo               on  acordotipo.ac04_sequencial = acordogrupo.ac02_acordotipo";
+        $sql .= "      left join liclicita                 on  liclicita.l20_codigo = acordo.ac16_licitacao";
+        $sql .= "      left join liclicitaoutrosorgaos     on liclicitaoutrosorgaos.lic211_sequencial  = acordo.ac16_licoutroorgao";
+        $sql .= "      left join cgm orgao                 on orgao.z01_numcgm  = liclicitaoutrosorgaos.lic211_orgao";
+        $sql .= "      left join adesaoregprecos           on adesaoregprecos.si06_sequencial  = acordo.ac16_adesaoregpreco";
+        $sql2 = "";
+        if ($dbwhere == "") {
+            if ($ac16_sequencial != null) {
+                $sql2 .= " where acordo.ac16_sequencial = $ac16_sequencial ";
+            }
+        } else if ($dbwhere != "") {
+            $sql2 = " where $dbwhere";
+        }
+        $sql .= $sql2;
+        if ($ordem != null) {
+            $sql .= " order by ";
+            $campos_sql = split("#", $ordem);
+            $virgula = "";
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
+                $virgula = ",";
+            }
+        }
+        return $sql;
+    }
+
     function sql_query_acordoscredenciamento($ac16_sequencial = null, $campos = "*", $ordem = null, $dbwhere = "")
     {
         $sql = "select ";

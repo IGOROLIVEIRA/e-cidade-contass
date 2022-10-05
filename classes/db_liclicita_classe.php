@@ -136,6 +136,14 @@ class cl_liclicita
     var $l20_dtpulicacaoedital = null;
     var $l20_linkedital = null;
     var $l20_mododisputa = null;
+    var $l20_dataaberproposta = null;
+    var $l20_dataaberproposta_dia = null;
+    var $l20_dataaberproposta_mes = null;
+    var $l20_dataaberproposta_ano = null;
+    var $l20_dataencproposta = null;
+    var $l20_dataencproposta_dia = null;
+    var $l20_dataencproposta_mes = null;
+    var $l20_dataencproposta_ano = null;
 
     // cria propriedade com as variaveis do arquivo
     var $campos = "
@@ -207,6 +215,8 @@ class cl_liclicita
                  l20_dtpulicacaoedital = date = Data Publicação Termo Ratificação
                  l20_linkedital = text = Prorrogacao
                  l20_mododisputa = int8 = Lei de licitacao
+                 l20_dataaberproposta = date = Data encerramento Proposta;
+                 l20_dataencproposta = date = Data encerramento Proposta;
                  ";
 
     //funcao construtor da classe
@@ -326,6 +336,24 @@ class cl_liclicita
                 $this->l20_recdocumentacao_ano = ($this->l20_recdocumentacao_ano == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_recdocumentacao_ano"] : $this->l20_recdocumentacao_ano);
                 if ($this->l20_recdocumentacao_dia != "") {
                     $this->l20_recdocumentacao = $this->l20_recdocumentacao_ano . "-" . $this->l20_recdocumentacao_mes . "-" . $this->l20_recdocumentacao_dia;
+                }
+            }
+
+            if ($this->l20_dataaberproposta == "") {
+                $this->l20_dataaberproposta_dia = ($this->l20_dataaberproposta_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_dataaberproposta_dia"] : $this->l20_dataaberproposta_dia);
+                $this->l20_dataaberproposta_mes = ($this->l20_dataaberproposta_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_dataaberproposta_mes"] : $this->l20_dataaberproposta_mes);
+                $this->l20_dataaberproposta_ano = ($this->l20_dataaberproposta_ano == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_dataaberproposta_ano"] : $this->l20_dataaberproposta_ano);
+                if ($this->l20_dataaberproposta_dia != "") {
+                    $this->l20_dataaberproposta = $this->l20_dataaberproposta_ano . "-" . $this->l20_dataaberproposta_mes . "-" . $this->l20_dataaberproposta_dia;
+                }
+            }
+
+            if ($this->l20_dataencproposta == "") {
+                $this->l20_dataencproposta_dia = ($this->l20_dataencproposta_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_dataencproposta_dia"] : $this->l20_dataencproposta_dia);
+                $this->l20_dataencproposta_mes = ($this->l20_dataencproposta_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_dataencproposta_mes"] : $this->l20_dataencproposta_mes);
+                $this->l20_dataencproposta_ano = ($this->l20_dataencproposta_ano == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_dataencproposta_ano"] : $this->l20_dataencproposta_ano);
+                if ($this->l20_dataencproposta_dia != "") {
+                    $this->l20_dataencproposta = $this->l20_dataencproposta_ano . "-" . $this->l20_dataencproposta_mes . "-" . $this->l20_dataencproposta_dia;
                 }
             }
 
@@ -635,6 +663,30 @@ class cl_liclicita
             }
         }
 
+        if ($this->l20_dataaberproposta != null && $this->l20_datacria != null) {
+            if ($this->l20_datacria > $this->l20_dataaberproposta) {
+                $this->erro_sql = "A data inserida no campo 'Data Abertura Proposta' deverá ser maior ou igual a data inserida no campo 'Data Abertura Proc. Adm.'.";
+                $this->erro_campo = "l20_dataaberproposta";
+                $this->erro_banco = "";
+                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+        }
+
+        if ($this->l20_dataencproposta != null && $this->l20_datacria != null) {
+            if ($this->l20_datacria > $this->l20_dataencproposta) {
+                $this->erro_sql = "A data inserida no campo 'Data Encerramento Proposta' deverá ser maior ou igual a data inserida no campo 'Data Abertura Proc. Adm.'.";
+                $this->erro_campo = "l20_dataencproposta";
+                $this->erro_banco = "";
+                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+        }
+
         if ($this->l20_dataaber == null and $tribunal != 100 and $tribunal != 101 and $tribunal != 102 and $tribunal != 103) {
             $this->erro_sql = " Campo Data Edital/Convite não Informado.";
             $this->erro_campo = "l20_dataaber";
@@ -762,6 +814,7 @@ class cl_liclicita
                 return false;
             }
         }
+
 
 
         if ($this->l20_numeroconvidado == null) {
@@ -1046,6 +1099,8 @@ class cl_liclicita
                 ,l20_exercicioedital
                 ,l20_leidalicitacao
                 ,l20_mododisputa
+                ,l20_dataaberproposta
+                ,l20_dataencproposta
                        )
                 values (
                  $this->l20_codigo
@@ -1099,6 +1154,9 @@ class cl_liclicita
                 ,$this->l20_exercicioedital
                 ,$this->l20_leidalicitacao
                 ,$this->l20_mododisputa
+                ," . ($this->l20_dataaberproposta == "null" || $this->l20_dataaberproposta == "" ? "null" : "'" . $this->l20_dataaberproposta . "'") . "
+                ," . ($this->l20_dataencproposta == "null" || $this->l20_dataencproposta == "" ? "null" : "'" . $this->l20_dataencproposta . "'") . "
+
                       )";
         $result = db_query($sql);
         if ($result == false) {
@@ -1567,6 +1625,30 @@ class cl_liclicita
             }
         }
 
+        if (($this->l20_datacria != null || isset($GLOBALS["HTTP_POST_VARS"]["l20_datacria"])) && ($this->l20_dataaberproposta != null || isset($GLOBALS["HTTP_POST_VARS"]["l20_dataaberproposta"]))) {
+            if ($this->l20_datacria > $this->l20_dataaberproposta) {
+                $this->erro_sql = "A data inserida no campo 'Data Abertura Proposta' deverá ser maior ou igual a data inserida no campo 'Data Abertura Proc. Adm.'.";
+                $this->erro_campo = "l20_dataaberproposta";
+                $this->erro_banco = "";
+                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+        }
+
+        if (($this->l20_datacria != null || isset($GLOBALS["HTTP_POST_VARS"]["l20_datacria"])) && ($this->l20_dataencproposta != null || isset($GLOBALS["HTTP_POST_VARS"]["l20_dataencproposta"]))) {
+            if ($this->l20_datacria > $this->l20_dataaberproposta) {
+                $this->erro_sql = "A data inserida no campo 'Data Encerramento Proposta' deverá ser maior ou igual a data inserida no campo 'Data Abertura Proc. Adm.'.";
+                $this->erro_campo = "l20_dataencproposta";
+                $this->erro_banco = "";
+                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+        }
+
         if (trim($this->l20_objeto != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_objeto"]))) {
             $sql .= $virgula . " l20_objeto =' $this->l20_objeto' ";
             $virgula = ",";
@@ -1650,6 +1732,22 @@ class cl_liclicita
             $virgula = ",";
         } else {
             $sql .= $virgula . " l20_procadmin = '$this->l20_procadmin' ";
+            $virgula = ",";
+        }
+
+        if (trim($this->l20_dataaberproposta) == null || trim($this->l20_dataaberproposta) == "") {
+            $sql .= $virgula . " l20_dataaberproposta =null ";
+            $virgula = ",";
+        } else {
+            $sql .= $virgula . " l20_dataaberproposta = '$this->l20_dataaberproposta' ";
+            $virgula = ",";
+        }
+
+        if (trim($this->l20_dataencproposta) == null || trim($this->l20_dataencproposta) == "") {
+            $sql .= $virgula . " l20_dataencproposta =null ";
+            $virgula = ",";
+        } else {
+            $sql .= $virgula . " l20_dataencproposta = '$this->l20_dataencproposta' ";
             $virgula = ",";
         }
 

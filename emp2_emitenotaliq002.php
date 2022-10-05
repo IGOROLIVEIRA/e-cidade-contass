@@ -1,6 +1,6 @@
 <?
 /* aa a
- *     E-cidade Software Publico para Gestao Municipal  
+ *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2014  DBSeller Servicos de Informatica
  *                            www.dbseller.com.br
  *                         e-cidade@dbseller.com.br
@@ -120,7 +120,7 @@ if(isset($codordem) && $codordem != ''){
   if(strlen($dbwhere) > 0) {
 	  $dbwhere .= " and ";
   }
-  
+
   if(isset($e50_codord_fim) && $e50_codord_fim != ''){
   $dbwhere .= "e50_codord::integer between ".$e50_codord_ini." and ".$e50_codord_fim;
   }else{
@@ -137,7 +137,7 @@ if(isset($dtini) && $dtini!=""){
   if(strlen($dbwhere) > 0) {
 	  $dbwhere .= " and ";
   }
-  $dtini=str_replace("X","-",$dtini); 
+  $dtini=str_replace("X","-",$dtini);
   $dbwhere.=" e50_data >= '$dtini'";
 }
 
@@ -160,7 +160,7 @@ if ( !empty($sFornecedor) ) {
 
   if(strlen($dbwhere) > 0) {
 	  $dbwhere .= " and ";
-  } 
+  }
   $dbwhere .= " z01_numcgm in ({$sFornecedor}) ";
 }
 
@@ -169,8 +169,9 @@ $pdf->Open();
 $pdf1 = new db_impcarne($pdf,'7');
 $pdf1->objpdf->SetTextColor(0,0,0);
 
-$sSqlPagordem = $clpagordem->sql_query_notaliquidacao('',' e50_codord,e71_codnota ',' e50_codord ', $dbwhere);
+$sSqlPagordem = $clpagordem->sql_query_notaliquidacao('',' e50_codord,e71_codnota,e60_numerol,pc50_descr ',' e50_codord ', $dbwhere);
 $result = $clpagordem->sql_record($sSqlPagordem);
+
 if($clpagordem->numrows>0){
   db_fieldsmemory($result,0);
 }else{
@@ -179,9 +180,9 @@ if($clpagordem->numrows>0){
 
 $result2 = db_query("select * from empparametro where e39_anousu = ".db_getsession("DB_anousu"));
 
-if(pg_numrows($result2)>0){ 
+if(pg_numrows($result2)>0){
   db_fieldsmemory($result2,0);
-  $pdf1->nvias= $e30_nroviaord; 
+  $pdf1->nvias= $e30_nroviaord;
 }
 
 /*
@@ -206,7 +207,7 @@ for($i = 0;$i < $clpagordem->numrows;$i++){
   $resultordass = db_query($sql1);
   db_fieldsmemory($resultordass,0);
 
-  $sqlitem      = $clemite_nota_liq->get_sql_item_ordem($e50_codord);  
+  $sqlitem      = $clemite_nota_liq->get_sql_item_ordem($e50_codord);
   $resultitem   = db_query($sqlitem);
 
   $sqloutrasordens      = $clemite_nota_liq->get_sql_outras_ordens($e50_codord, $e50_numemp);
@@ -228,14 +229,14 @@ for($i = 0;$i < $clpagordem->numrows;$i++){
 
    }
 
-   $sSqlFuncaoOrdenaPagamento = $clemite_nota_liq->get_sql_funcao_ordena_pagamento($cgmpaga);   
+   $sSqlFuncaoOrdenaPagamento = $clemite_nota_liq->get_sql_funcao_ordena_pagamento($cgmpaga);
    $pdf1->cargoordenapagamento = db_utils::fieldsMemory(db_query($sSqlFuncaoOrdenaPagamento),0)->cargoordenapagamento;
 
-   $sSqlFuncaoOrdenadespesa = $clemite_nota_liq->get_sql_funcao_ordena_despesa($cgmordenadespesa);   
+   $sSqlFuncaoOrdenadespesa = $clemite_nota_liq->get_sql_funcao_ordena_despesa($cgmordenadespesa);
    $pdf1->cargoordenadespesa = db_utils::fieldsMemory(db_query($sSqlFuncaoOrdenadespesa),0)->cargoordenadespesa;
 
    $sSqlFuncaoLiquida = $clemite_nota_liq->get_sql_funcao_ordena_liquida($cgmliquida);
-   $pdf1->cargoliquida = db_utils::fieldsMemory(db_query($sSqlFuncaoLiquida),0)->cargoliquida; 
+   $pdf1->cargoliquida = db_utils::fieldsMemory(db_query($sSqlFuncaoLiquida),0)->cargoliquida;
 
   /*OC4401*/
   $pdf1->usuario = $usuario;
@@ -253,7 +254,8 @@ for($i = 0;$i < $clpagordem->numrows;$i++){
    $pdf1->datanota         = $e69_dtnota;
    $pdf1->valor_ordem      = '';
    $pdf1->logo             = $logo;
-   $pdf1->processo         = $processo;
+   $pdf1->processo         = $e60_numerol;
+   $pdf1->descr_tipocompra = $pc50_descr;
    $pdf1->prefeitura       = $nomeinst;
    $pdf1->enderpref        = $ender;
    $pdf1->municpref        = $munic;
@@ -307,7 +309,7 @@ for($i = 0;$i < $clpagordem->numrows;$i++){
    $pdf1->projativ         = $o58_projativ;
    $pdf1->descr_projativ   = $o55_descr;
    $pdf1->recurso          = $o58_codigo;
-   $pdf1->descr_recurso    = $o15_descr; 
+   $pdf1->descr_recurso    = $o15_descr;
    $pdf1->elemento     	   = $o56_elemento;
    $pdf1->descr_elemento   = $o56_descr;
    $pdf1->obs		       = substr($e50_obs,0,300);
@@ -316,8 +318,8 @@ for($i = 0;$i < $clpagordem->numrows;$i++){
 
    $pdf1->telef            = $z01_telef;
    $pdf1->fax              = $z01_numero;
-   
-  
+
+
    /**
     * Variáveis utilizadas na assinatura. Sómente utilizada na impressão por movimento
     */
@@ -357,7 +359,7 @@ for($i = 0;$i < $clpagordem->numrows;$i++){
         $pdf1->processo         = $oAutoriza->processo;
         $pdf1->descr_tipocompra = $pc50_descr;
 
-    }   
+    }
 
     if ($e50_contapag != '') {
 
@@ -367,7 +369,7 @@ for($i = 0;$i < $clpagordem->numrows;$i++){
         $rsContaPagadora    = $clempagetipo->sql_record($sSqlContaPagadora);
 
         if ($clempagetipo->numrows > 0) {
-            
+
             db_fieldsmemory($rsContaPagadora, 0);
             $pdf1->conta_pagadora_reduz     = $e83_conta;
             $pdf1->conta_pagadora_agencia   = "{$c63_agencia}-{$c63_dvagencia}";
@@ -375,7 +377,7 @@ for($i = 0;$i < $clpagordem->numrows;$i++){
 
         }
     }
-    
+
    $pdf1->imprime();
 }
 

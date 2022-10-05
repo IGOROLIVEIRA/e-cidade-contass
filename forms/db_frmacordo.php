@@ -1239,7 +1239,7 @@ db_app::load("dbtextFieldData.widget.js");
         $('ac02_natureza_obj').value = chave3;
         $('ac16_acordogrupo').focus();
 
-        js_verificaNatureza(chave1);
+        js_verificaNatureza(chave3);
         var oGet = js_urlToObject();
 
         /*

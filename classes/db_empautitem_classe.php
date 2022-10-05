@@ -627,7 +627,7 @@ class cl_empautitem
     $sql .= "      inner join solicitem            on  solicitem.pc11_codigo          = pcprocitem.pc81_solicitem";
     $sql .= "      inner join pcmater              on  pcmater.pc01_codmater          = empautitem.e55_item";
     $sql .= "      inner join cgm                  on  cgm.z01_numcgm                 = empautoriza.e54_numcgm";
-    $sql .= "      inner join empautidot           on  empautidot.e56_autori          = empautitem.e55_autori ";
+    $sql .= "      left join empautidot           on  empautidot.e56_autori          = empautitem.e55_autori ";
     $sql .= "      left  join empempaut            on  empempaut.e61_autori           = empautitem.e55_autori ";
     $sql .= "      left  join empempenho           on  empempenho.e60_numemp          = empempaut.e61_numemp";
     $sql2 = "";

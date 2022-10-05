@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once(modification('libs/db_utils.php'));
@@ -34,7 +34,7 @@ abstract class DBTributario {
 
   /**
    * Buscas os Tipos de Debitos pela Origem
-   * @param string  $sTipoOrigem 
+   * @param string  $sTipoOrigem
    *                | M - Matricula
    *                | I - Inscricao
    *                | C - CGM
@@ -42,7 +42,7 @@ abstract class DBTributario {
    * @param integer $iChavePesquisa - Numero base para Pesquisa
    * @return stdClass[] Com as Definições dos Tipos de Débito encontrados
    */
-  public static function getTiposDebitoByOrigem( $sTipoOrigem, $iChavePesquisa, $db_where, $iInstituicao = null ) {
+  public static function getTiposDebitoByOrigem( $sTipoOrigem, $iChavePesquisa, $sWhere, $iInstituicao = null ) {
 
 
     $oDaoArretipo = db_utils::getDao("arretipo");
@@ -65,21 +65,21 @@ abstract class DBTributario {
     case "M": //Matricula
       $sCampos     .= "iptubase.j01_numcgm as k00_numcgm";
       $sSqlArretipo = $oDaoArretipo->sql_query_tiposDebitosByMatricula( $iChavePesquisa, $iInstituicao, $sCampos );
-      break;                                                                                                      
-    case "I": //Inscricao                                                                                       
-      $sCampos     .= "issbase.q02_numcgm  as k00_numcgm";                                                    
+      break;
+    case "I": //Inscricao
+      $sCampos     .= "issbase.q02_numcgm  as k00_numcgm";
       $sSqlArretipo = $oDaoArretipo->sql_query_tiposDebitosByInscricao( $iChavePesquisa, $iInstituicao, $sCampos );
-      break;                                                                                                      
-    case "C": //CGM                                                                                             
-      $sCampos     .= "arrenumcgm.k00_numcgm as k00_numcgm";                                                    
+      break;
+    case "C": //CGM
+      $sCampos     .= "arrenumcgm.k00_numcgm as k00_numcgm";
       $sSqlArretipo = $oDaoArretipo->sql_query_tiposDebitosByCgm      ( $iChavePesquisa, $iInstituicao, $sCampos );
-      break;                                                                                                    
-    case "N": //Numpre                                                                                          
-      $sCampos     .= "arrenumcgm.k00_numcgm as k00_numcgm";                                                    
+      break;
+    case "N": //Numpre
+      $sCampos     .= "arrenumcgm.k00_numcgm as k00_numcgm";
       $sSqlArretipo = $oDaoArretipo->sql_query_tiposDebitosByNumpre   ( $iChavePesquisa, $iInstituicao, $sCampos );
       break;
     }
-    $sSqlArretipo = $sSqlArretipo . $db_where . " ORDER BY 1";
+    $sSqlArretipo = $sSqlArretipo . $sWhere . " ORDER BY 1";
     $rsTipos      = db_query($sSqlArretipo);
 
     if (!$rsTipos) {
@@ -103,18 +103,18 @@ abstract class DBTributario {
   public static function emitirBic($parametro,$pdf,$tipo,$geracalculo) {
     return db_emitebic($parametro,$pdf,$tipo,$geracalculo);
   }
-  
+
   /**
-   * Retorna dados Basicos Referentes a Parcela de Débito 
-   * 
-   * @param mixed $iNumpre 
-   * @param mixed $iNumpar 
+   * Retorna dados Basicos Referentes a Parcela de Débito
+   *
+   * @param mixed $iNumpre
+   * @param mixed $iNumpar
    * @static
    * @access public
    * @return stdClass
    */
   public static function getMensagensParcela( $iNumpre, $iNumpar, $dDataEmissao ) {
-    
+
     $oRetorno                        = new stdClass();
     $oRetorno->sMensagemContribuinte = "";
     $oRetorno->sMensagemCaixa        = "";
@@ -139,7 +139,7 @@ abstract class DBTributario {
       $sSql .= "   AND k00_numpar = $iNumpar  ";
     }
     $rsSql = db_query($sSql);
-   
+
     if ( !$rsSql ) {
       throw new DBException("Erro ao Buscar os Dados da Parcela. Descrição do Erro:". pg_last_error());
     }
@@ -149,8 +149,8 @@ abstract class DBTributario {
     if ( empty($iNumpar) ) {
 
       $oRetorno->sMensagemContribuinte = $oDadosDebito->k00_msguni2;
-      $oRetorno->sMensagemCaixa        = $oDadosDebito->k00_msguni; 
-      $oRetorno->sTipoMensagem         = "Unica"; 
+      $oRetorno->sMensagemCaixa        = $oDadosDebito->k00_msguni;
+      $oRetorno->sTipoMensagem         = "Unica";
       return $oRetorno;
     }
 
@@ -158,16 +158,16 @@ abstract class DBTributario {
     $oDataEmissao                     = new DBDate( $dDataEmissao );
 
     if ( $oDataEmissao->getTimeStamp() <= $oDataVencimentoDebito->getTimeStamp() ) {
-    
+
       $oRetorno->sMensagemContribuinte = $oDadosDebito->k00_msgparc;
       $oRetorno->sMensagemCaixa        = $oDadosDebito->k00_msgparc2;
-      $oRetorno->sTipoMensagem         = "Parcela Normal"; 
-      return $oRetorno;                                             
+      $oRetorno->sTipoMensagem         = "Parcela Normal";
+      return $oRetorno;
     }
 
     $oRetorno->sMensagemContribuinte = $oDadosDebito->k00_msgparcvenc;
     $oRetorno->sMensagemCaixa        = $oDadosDebito->k00_msgparcvenc2;
-    $oRetorno->sTipoMensagem         = "Parcela Vencida"; 
+    $oRetorno->sTipoMensagem         = "Parcela Vencida";
 
 
 
@@ -194,7 +194,7 @@ function db_getNomeSecretaria(){
   if (pg_numrows($resparag) > 0) {
     $nomeSecretaria = pg_result($resparag,0,'db02_texto');
   }
-  return $nomeSecretaria;  
+  return $nomeSecretaria;
 }
 
 /**
@@ -224,12 +224,12 @@ function db_getcadbancobranca($arretipo,$ip,$datahj,$instit,$tipomod){
   $sqlexe .= "									false ";
   $sqlexe .= "							end ";
   $sqlexe .= "           else ";
-  $sqlexe .= "             true ";														
+  $sqlexe .= "             true ";
   $sqlexe .= "         end ";
   $sqlexe .= "     and k48_dataini    <='".$datahj."'";
   $sqlexe .= "     and k48_datafim    >='".$datahj."'";
   $sqlexe .= "     and k48_instit     =    $instit ";
-  $sqlexe .= "     and k48_cadtipomod =    $tipomod "; 
+  $sqlexe .= "     and k48_cadtipomod =    $tipomod ";
 
   //*   die ($sqlexe);
   $rsModexe   = db_query($sqlexe) or die ($sqlexe);
@@ -238,7 +238,7 @@ function db_getcadbancobranca($arretipo,$ip,$datahj,$instit,$tipomod){
     db_fieldsmemory($rsModexe,0);
     return true;
   }else{
-    return false; 
+    return false;
   }
 }
 
@@ -297,7 +297,7 @@ function db_emitebic($parametro,$pdf,$tipo,$geracalculo){
         $sql .= "       inner join  lote               on lote.j34_idbql                 = j01_idbql                      ";
         $sql .= "        left join  loteloteam         on loteloteam.j34_idbql           = lote.j34_idbql                 ";
         $sql .= "        left join  loteam             on loteam.j34_loteam              = loteloteam.j34_loteam          ";
-        $sql .= "        left join  bairro             on bairro.j13_codi                = lote.j34_bairro                ";  
+        $sql .= "        left join  bairro             on bairro.j13_codi                = lote.j34_bairro                ";
 
         $sql .= "   where j01_matric = {$iMatriculaAtual} limit 1   ";
 
@@ -322,7 +322,7 @@ function db_emitebic($parametro,$pdf,$tipo,$geracalculo){
 
         }
 
-        if ( $exerciciocalculo == "" ){ 
+        if ( $exerciciocalculo == "" ){
           $lTemCalculo = false;
           $exerciciocalculo = $_SESSION['DB_anousu'];
         }
@@ -337,15 +337,15 @@ function db_emitebic($parametro,$pdf,$tipo,$geracalculo){
         } else {
           $fieldmatriculaSelecionada  = db_utils::fieldsMemory($matriculaSelecionada,0);
 
-          $resultcgm = $clcgm->sql_record($clcgm->sql_query($fieldmatriculaSelecionada->z01_numcgm, "z01_ender as ender_propri, z01_numero as numero_propri, z01_compl as compl_propri, z01_bairro as bairro_propri, z01_munic as munic_propri, z01_uf as uf_propri, z01_telef as telef_propri, z01_cep as cep_propri")); 
+          $resultcgm = $clcgm->sql_record($clcgm->sql_query($fieldmatriculaSelecionada->z01_numcgm, "z01_ender as ender_propri, z01_numero as numero_propri, z01_compl as compl_propri, z01_bairro as bairro_propri, z01_munic as munic_propri, z01_uf as uf_propri, z01_telef as telef_propri, z01_cep as cep_propri"));
           $fieldcgm  = db_utils::fieldsMemory($resultcgm,0);
 
-          $sqlareatotal = " select sum(j34_area) as areatotal 
+          $sqlareatotal = " select sum(j34_area) as areatotal
             from (select distinct j34_idbql, j34_area
-            from lote 
-            inner join iptubase on j01_idbql = j34_idbql 
+            from lote
+            inner join iptubase on j01_idbql = j34_idbql
             where j34_setor  = '".$fieldmatriculaSelecionada->j34_setor."'
-            and j34_quadra = '".$fieldmatriculaSelecionada->j34_quadra."' 
+            and j34_quadra = '".$fieldmatriculaSelecionada->j34_quadra."'
             and j34_lote   = '".$fieldmatriculaSelecionada->j34_lote."'
             and j01_baixa is null) as x";
 
@@ -357,10 +357,10 @@ function db_emitebic($parametro,$pdf,$tipo,$geracalculo){
 
           $sqlareaconst = "
             select sum(j39_area) as areaconst
-            from iptuconstr 
-            inner join iptubase on j01_matric = j39_matric 
+            from iptuconstr
+            inner join iptubase on j01_matric = j39_matric
             where j39_matric = ".$fieldmatriculaSelecionada->j01_matric."
-            and j39_dtdemo is null 
+            and j39_dtdemo is null
             and j01_baixa is null";
           // echo "xxxxxxxxxxxxxxxxxxxxxxxxxx sql 4 areaconst = ".$sqlareaconst;
           $resultareaconst = db_query($sqlareaconst);
@@ -371,10 +371,10 @@ function db_emitebic($parametro,$pdf,$tipo,$geracalculo){
           }
 
           $sqlareaconsttotal = "
-            select j34_totcon 
-            from lote 
-            where j34_setor = '".$fieldmatriculaSelecionada->j34_setor."' 
-            and j34_quadra  = '".$fieldmatriculaSelecionada->j34_quadra."' 
+            select j34_totcon
+            from lote
+            where j34_setor = '".$fieldmatriculaSelecionada->j34_setor."'
+            and j34_quadra  = '".$fieldmatriculaSelecionada->j34_quadra."'
             and j34_lote    = '".$fieldmatriculaSelecionada->j34_lote."'  limit 1";
           //echo "xxxxxxxxxxxxxxxxxxxxxxxxxx sql 5 areaconsttotal = ".$sqlareaconsttotal;
 
@@ -387,10 +387,10 @@ function db_emitebic($parametro,$pdf,$tipo,$geracalculo){
 
           $sqledifmat = "
             select count(*) as edmat
-            from iptuconstr 
-            inner join iptubase on j01_matric = j39_matric 
+            from iptuconstr
+            inner join iptubase on j01_matric = j39_matric
             where j39_matric =  ".$fieldmatriculaSelecionada->j01_matric."
-            and j39_dtdemo is null 
+            and j39_dtdemo is null
             and j01_baixa is null";
           //die ($sqledif);
           //echo "xxxxxxxxxxxxxxxxxxxxxxxxxx sql 6 sqledifmat = ".$sqledifmat;
@@ -403,11 +403,11 @@ function db_emitebic($parametro,$pdf,$tipo,$geracalculo){
 
           $sqled="
             select count(*) as ed
-            from iptuconstr 
-            inner join iptubase on j01_matric = j39_matric 
+            from iptuconstr
+            inner join iptubase on j01_matric = j39_matric
             inner join lote on j34_idbql = j01_idbql
-            where j34_setor = '".$fieldmatriculaSelecionada->j34_setor."' 
-            and j34_quadra  = '".$fieldmatriculaSelecionada->j34_quadra."'      
+            where j34_setor = '".$fieldmatriculaSelecionada->j34_setor."'
+            and j34_quadra  = '".$fieldmatriculaSelecionada->j34_quadra."'
             and j34_lote    = '".$fieldmatriculaSelecionada->j34_lote."' ";
 
           $resulted = db_query($sqled);
@@ -504,10 +504,10 @@ function db_emitebic($parametro,$pdf,$tipo,$geracalculo){
             z01_compl  as compl_promitente,
             z01_uf     as uf_promitente,
             z01_cgccpf,
-            z01_telef  as telef_promitente 
-            from promitente 
-            inner join cgm on j41_numcgm = z01_numcgm 
-            where j41_matric = $fieldmatriculaSelecionada->j01_matric 
+            z01_telef  as telef_promitente
+            from promitente
+            inner join cgm on j41_numcgm = z01_numcgm
+            where j41_matric = $fieldmatriculaSelecionada->j01_matric
             order by  j41_tipopro desc";
 
           $resultpromitente = db_query($sqlpromitente);
@@ -533,7 +533,7 @@ function db_emitebic($parametro,$pdf,$tipo,$geracalculo){
               if(trim($fieldpromitente->compl_promitente) != ""){
                 $comple = " / ".trim($fieldpromitente->compl_promitente);
               }
-              $ender1 = trim($fieldpromitente->ender_promitente)." $num $comple "; 
+              $ender1 = trim($fieldpromitente->ender_promitente)." $num $comple ";
               $ender  = substr($ender1,0,30);
               //$ender = substr($fieldmatriculaSelecionada->ender_promitente . ($fieldmatriculaSelecionada->numero_promitente != ""?", ".$fieldmatriculaSelecionada->numero_promitente:"") . ($fieldmatriculaSelecionada->compl_promitente != ""?" / $fieldmatriculaSelecionada->compl_promitente":""),0,30);
               $pdf->Cell(60,4,"$ender ","",1,"L",0);
@@ -623,7 +623,7 @@ function db_emitebic($parametro,$pdf,$tipo,$geracalculo){
 
 
   // Busca a descrição do tipo da RUA
-  $sSqlEndeTipo  = " select j88_sigla, j88_descricao from ruas "; 
+  $sSqlEndeTipo  = " select j88_sigla, j88_descricao from ruas ";
   $sSqlEndeTipo .= " join ruastipo on ruastipo.j88_codigo = ruas.j14_tipo ";
   $sSqlEndeTipo .= " where ruas.j14_codigo = {$fieldmatriculaSelecionada->codpri} ";
 
@@ -757,9 +757,9 @@ function db_emitebic($parametro,$pdf,$tipo,$geracalculo){
 
 
     $result = db_query("select carlote.*,caracter.*,upper(j32_descr) as j32_descr
-      from carlote, caracter 
+      from carlote, caracter
       left outer join cargrup on j31_grupo = j32_grupo
-      where j35_idbql = {$fieldmatriculaSelecionada->j01_idbql} 
+      where j35_idbql = {$fieldmatriculaSelecionada->j01_idbql}
       and j35_caract = j31_codigo order by j31_grupo ");
 
     if( pg_numrows($result) != 0 ) {
@@ -853,10 +853,10 @@ function db_emitebic($parametro,$pdf,$tipo,$geracalculo){
     $pdf->Cell(200,4,"TESTADA","B",1,"L",0);
     $pdf->setX(5);
 
-    $result = db_query("select * 
-      from testada 
+    $result = db_query("select *
+      from testada
       inner join face on j37_face = j36_face,ruas,ruastipo
-      where j36_idbql  = $fieldmatriculaSelecionada->j01_idbql  
+      where j36_idbql  = $fieldmatriculaSelecionada->j01_idbql
       and j36_codigo = j14_codigo and j88_codigo = j14_tipo");
 
     if( pg_numrows($result) != 0 ) {
@@ -886,7 +886,7 @@ function db_emitebic($parametro,$pdf,$tipo,$geracalculo){
           from carface
           inner join caracter on j38_caract = j31_codigo
           left outer join cargrup on j31_grupo = j32_grupo
-          where j38_face = {$field3->j37_face} 
+          where j38_face = {$field3->j37_face}
           order by j31_grupo ");
 
         if( pg_numrows($result) != 0 ) {
@@ -945,7 +945,7 @@ function db_emitebic($parametro,$pdf,$tipo,$geracalculo){
     $sql .= "        left  join tesintertipo    on j92_sequencial    = j84_tesintertipo ";
     $sql .= "        left  join tesinterlote    on j39_sequencial    = j69_tesinter ";
     $sql .= "        left  join iptubase        on j01_idbql         = j69_idbql ";
-    $sql .= "        left  join lote as interno on interno.j34_idbql = j69_idbql ";  
+    $sql .= "        left  join lote as interno on interno.j34_idbql = j69_idbql ";
     $sql .= " where j39_idbql = {$fieldmatriculaSelecionada->j01_idbql} ";
 
     $result = db_query($sql);
@@ -991,24 +991,24 @@ function db_emitebic($parametro,$pdf,$tipo,$geracalculo){
   $pdf->setX(5);
   $pdf->Cell(200,4,"","",1,"C",0);
 
-  $sql = " select * 
+  $sql = " select *
     from iptuender
     where j43_matric = ".(gettype($parametro)=="array"?$parametro[$totalRegistos]:$parametro)." ";
 
   $result = db_query($sql);
-  
+
   $pdf->setX(5);
   $pdf->SetFont('Arial','B',9);
   $pdf->Cell(50,4,"Endereço de entrega","B",(pg_numrows($result) == 0?0:1),"L",0);
   if (pg_numrows($result) != 0) {
     $field4 = db_utils::fieldsMemory($result,0);
-    //db_fieldsmemory($result,0);	  
+    //db_fieldsmemory($result,0);
     $pdf->setX(5);
     $pdf->setX(5);
     $pdf->SetFont('Arial','',9);
     $pdf->Cell(20,4,"Endereço:","",0,"L",0);
     $pdf->SetFont('Arial','B',9);
-    
+
     $sEndereco = $field4->j43_ender;
     if (!empty($field4->j43_numimo)) {
       $sEndereco .= ", {$field4->j43_numimo}";
@@ -1073,13 +1073,13 @@ function db_emitebic($parametro,$pdf,$tipo,$geracalculo){
   $pdf->setX(5);
   //  $pdf->Cell(200,4,"","",1,"C",0);
 
-  $result = db_query("select * 
+  $result = db_query("select *
     from iptuconstr, carconstr, ruas, caracter
-    left outer join cargrup on j31_grupo = j32_grupo     
-    where j39_matric = ".(gettype($parametro)=="array"?$parametro[$totalRegistos]:$parametro)." 
-    and j39_matric = j48_matric 
-    and j39_idcons = j48_idcons 
-    and j48_caract = j31_codigo 
+    left outer join cargrup on j31_grupo = j32_grupo
+    where j39_matric = ".(gettype($parametro)=="array"?$parametro[$totalRegistos]:$parametro)."
+    and j39_matric = j48_matric
+    and j39_idcons = j48_idcons
+    and j48_caract = j31_codigo
     and j39_codigo = j14_codigo
     order by j39_idcons, j31_grupo ");
 
@@ -1096,7 +1096,7 @@ function db_emitebic($parametro,$pdf,$tipo,$geracalculo){
         $numero = $field5->j39_idcons;
         $pdf->setX(5);
         $pdf->SetFont('Arial','',9);
-        $pdf->Ln(4); 
+        $pdf->Ln(4);
         $pdf->Cell(18,4,"Construção:","",0,"L",0);
         $pdf->Cell(05,4,"$field5->j39_idcons","",0,"L",0);
         $pdf->Cell(10,4,"Área:","",0,"L",0);
@@ -1108,20 +1108,20 @@ function db_emitebic($parametro,$pdf,$tipo,$geracalculo){
         $pdf->Cell(12,4,"Frente:","",0,"L",0);
         $pdf->Cell(80,4,"$field5->j14_nome $field5->j39_numero $field5->j39_compl","",1,"L",0);
 
-        $sCampos = "j131_sequencial, 
-          login, 
-          j131_data, 
+        $sCampos = "j131_sequencial,
+          login,
+          j131_data,
           j131_hora,
           j131_obs,
-          ob09_data, 
-          case 
-            when obrashabite.ob09_codhab is null 
-            then j131_cadhab 
-      else cast(ob09_habite as varchar) 
+          ob09_data,
+          case
+            when obrashabite.ob09_codhab is null
+            then j131_cadhab
+      else cast(ob09_habite as varchar)
         end as j131_cadhab,
-        case 
-          when protprocesso.p58_codproc is null 
-          then j131_codprot 
+        case
+          when protprocesso.p58_codproc is null
+          then j131_codprot
   else cast(p58_codproc as varchar)
     end as j131_codprot,
     j131_dthabite";
@@ -1145,7 +1145,7 @@ function db_emitebic($parametro,$pdf,$tipo,$geracalculo){
     }
   }
 
-  if ($field5->j39_dtdemo!=""){            
+  if ($field5->j39_dtdemo!=""){
     $pdf->Cell(30,4,"Demolição Total: ","",0,"L",0);
     $pdf->Cell(25 ,4,db_formatar($field5->j39_dtdemo,'d'),"",1,"L",0);
   }else{
@@ -1184,20 +1184,20 @@ function db_emitebic($parametro,$pdf,$tipo,$geracalculo){
     $pdf->Cell(20,3,"Sem construções lançadas","",1,"L",0);
   }
 
-  $sql = " select j52_matric as matric,  
-    j52_idcons as idcons, 
+  $sql = " select j52_matric as matric,
+    j52_idcons as idcons,
     j52_codigo as cod
-    , j52_area   as area, 
-    j52_ano    as ano, 
-    j52_numero as numero, 
-    j52_compl  as compl, 
-    j53_caract, 
+    , j52_area   as area,
+    j52_ano    as ano,
+    j52_numero as numero,
+    j52_compl  as compl,
+    j53_caract,
     j31_descr
     from constrescr, constrcar, caracter, ruas
-    where j52_matric = ".(gettype($parametro)=="array"?$parametro[$totalRegistos]:$parametro)." 
-    and j52_matric = j53_matric 
-    and j52_idcons = j53_idcons 
-    and j53_caract = j31_codigo 
+    where j52_matric = ".(gettype($parametro)=="array"?$parametro[$totalRegistos]:$parametro)."
+    and j52_matric = j53_matric
+    and j52_idcons = j53_idcons
+    and j53_caract = j31_codigo
     and j52_codigo = j14_codigo
     order by j52_idcons ";
   $result = db_query($sql);
@@ -1249,7 +1249,7 @@ function db_emitebic($parametro,$pdf,$tipo,$geracalculo){
     }
   }
 
-  if ($tipo == 2) {      
+  if ($tipo == 2) {
 
     $pdf->setX(5);
     $pdf->Cell(200,4,"","",1,"C",0);
@@ -1262,9 +1262,9 @@ function db_emitebic($parametro,$pdf,$tipo,$geracalculo){
 
     $result = db_query("select z01_numcgm,
       z01_nome,
-      z01_ender 
+      z01_ender
       from propri,cgm
-      where j42_matric = ".(gettype($parametro)=="array"?$parametro[$totalRegistos]:$parametro)." 
+      where j42_matric = ".(gettype($parametro)=="array"?$parametro[$totalRegistos]:$parametro)."
       and j42_numcgm = z01_numcgm ");
 
     if( pg_numrows($result) != 0 ) {
@@ -1290,7 +1290,7 @@ function db_emitebic($parametro,$pdf,$tipo,$geracalculo){
       $pdf->Cell(200,3,"Sem registros.","",1,"C",0);
     }
 
-    if ($lTemCalculo) { 
+    if ($lTemCalculo) {
 
       $pdf->setX(5);
       $pdf->SetFont('Arial','B',9);
@@ -1298,10 +1298,10 @@ function db_emitebic($parametro,$pdf,$tipo,$geracalculo){
       $pdf->setX(5);
       $pdf->Cell(200,4,"","",1,"C",0);
 
-      $sqlIptucale = " select * 
+      $sqlIptucale = " select *
         from iptucale
         inner join iptuconstr on j22_matric = j39_matric and  j22_idcons = j39_idcons
-        where j22_matric = ".(gettype($parametro)=="array"?$parametro[$totalRegistos]:$parametro)." 
+        where j22_matric = ".(gettype($parametro)=="array"?$parametro[$totalRegistos]:$parametro)."
         and j22_anousu = ".$exerciciocalculo;
 
       $resultSqlIptucale = db_query($sqlIptucale);
@@ -1313,20 +1313,20 @@ function db_emitebic($parametro,$pdf,$tipo,$geracalculo){
         }
       }
       $j23_matric = gettype($parametro)=="array"?$parametro[$totalRegistos]:$parametro;
-      $sql = "select iptucalc.j23_anousu,         
+      $sql = "select iptucalc.j23_anousu,
         iptucalc.j23_matric ,
-        iptucalc.j23_testad , 
-        iptucalc.j23_arealo ,  
+        iptucalc.j23_testad ,
+        iptucalc.j23_arealo ,
         iptucalc.j23_areafr ,
         iptucalc.j23_areaed ,
         iptucalc.j23_m2terr ,
         iptucalc.j23_vlrter ,
         iptucalc.j23_aliq   ,
         iptucalc.j23_vlrisen
-        from iptucalc 
-        where j23_matric = ".(gettype($parametro)=="array"?$parametro[$totalRegistos]:$parametro)." 
-        and j23_anousu = ".$exerciciocalculo." ";  
-      
+        from iptucalc
+        where j23_matric = ".(gettype($parametro)=="array"?$parametro[$totalRegistos]:$parametro)."
+        and j23_anousu = ".$exerciciocalculo." ";
+
       $result = db_query($sql);
       if( pg_numrows($result) > 0 ) {
         $field7 = db_utils::fieldsMemory($result,0);
@@ -1416,9 +1416,9 @@ function db_emitebic($parametro,$pdf,$tipo,$geracalculo){
       $sql2 .= "                            case  ";
       $sql2 .= "                              when iptucalh.j17_codhis = iptucadtaxaexe.j08_histisen or iptucalh.j17_codhis = (select j18_iptuhistisen from cfiptu where j18_anousu = $j23_anousu) then ";
       $sql2 .= "                                j21_valor ";
-      $sql2 .= "                              else 0 "; 
+      $sql2 .= "                              else 0 ";
       $sql2 .= "                          end as j21_valorisen ";
-      $sql2 .= "                     from iptucalv  "; 
+      $sql2 .= "                     from iptucalv  ";
       $sql2 .= "                          inner join iptucalh       on iptucalh.j17_codhis       = j21_codhis  ";
       $sql2 .= "                          inner join tabrec         on tabrec.k02_codigo         = j21_receit  ";
       $sql2 .= "                          left  join iptucadtaxaexe on iptucadtaxaexe.j08_tabrec = j21_receit  ";
@@ -1429,7 +1429,7 @@ function db_emitebic($parametro,$pdf,$tipo,$geracalculo){
       $sql2 .= "               ) as x ";
       $sql2 .= "               group by k02_codigo, ";
       $sql2 .= "                        k02_descr, ";
-      $sql2 .= "                        j17_descr ";  
+      $sql2 .= "                        j17_descr ";
       $sql2 .= "   having sum(j21_valor) <> 0 or sum(j21_valorisen) <> 0 ";
       $sql2 .= " ) as total ";
       $sql2 .= " group by k02_codigo, ";
@@ -1483,7 +1483,7 @@ function db_emitebic($parametro,$pdf,$tipo,$geracalculo){
         $pdf->Cell(50 ,4,"Total : ","",0,"L",0);
         $pdf->Cell(25 ,4,db_formatar($somacalc,'f'),"",0,"R",0);
         $pdf->Cell(25 ,4,db_formatar($somaisen,'f'),"",0,"R",0);
-        $pdf->Cell(30 ,4,db_formatar($soma,'f'),"",1,"R",0) ; 
+        $pdf->Cell(30 ,4,db_formatar($soma,'f'),"",1,"R",0) ;
 
 
       } else {
@@ -1499,8 +1499,8 @@ function db_emitebic($parametro,$pdf,$tipo,$geracalculo){
       ////// DEMONSTRATIVO DE CÁLCULO
       $exercicio = $exerciciocalculo;
       $xmatric = gettype($parametro)=="array"?$parametro[$totalRegistos]:$parametro;
-      $sql2 = "select j23_manual 
-        from iptucalc 
+      $sql2 = "select j23_manual
+        from iptucalc
         where j23_anousu =  $exercicio
         and j23_matric = $xmatric ";
 
@@ -1518,9 +1518,9 @@ function db_emitebic($parametro,$pdf,$tipo,$geracalculo){
     }
     // Insere valor venal ultimo calculo
     $sqlUltimoCalculo = "select iptucalc.j23_anousu as ultimocalculo,
-      (select sum(iptucale.j22_valor) 
-      from iptucale 
-      where j22_matric = iptucalc.j23_matric 
+      (select sum(iptucale.j22_valor)
+      from iptucale
+      where j22_matric = iptucalc.j23_matric
       and j22_anousu = iptucalc.j23_anousu) as venaledificacao,
       iptucalc.j23_vlrter as venalterreno
       from iptucalc
@@ -1530,13 +1530,13 @@ function db_emitebic($parametro,$pdf,$tipo,$geracalculo){
 
     $resultUltimoCalculo = db_query($sqlUltimoCalculo) or die($sqlUltimoCalculo);
 
-    if ((!empty($resultUltimoCalculo)) and (pg_num_rows($resultUltimoCalculo) == 1)){ 
+    if ((!empty($resultUltimoCalculo)) and (pg_num_rows($resultUltimoCalculo) == 1)){
       $fieldUltimoCalculo = db_utils::fieldsMemory($resultUltimoCalculo,0);
       db_fieldsmemory($resultUltimoCalculo,0);
-      $pdf->SetFont('Arial','B',10); 
-      $pdf->Ln(2); 
-      $pdf->Cell(200,4,"VALORES VENAIS ULTIMO CALCULO - EXERCICIO $fieldUltimoCalculo->ultimocalculo","B",1,"L",0); 
-      $pdf->Ln(1); 
+      $pdf->SetFont('Arial','B',10);
+      $pdf->Ln(2);
+      $pdf->Cell(200,4,"VALORES VENAIS ULTIMO CALCULO - EXERCICIO $fieldUltimoCalculo->ultimocalculo","B",1,"L",0);
+      $pdf->Ln(1);
       $pdf->SetFont('Arial','',9);
       $pdf->setX(7);
       $pdf->Cell(30 ,4,"   Valor Venal Terreno:","",0,"L",0);
@@ -1545,12 +1545,12 @@ function db_emitebic($parametro,$pdf,$tipo,$geracalculo){
       $pdf->Cell(30 ,4,"Valor Venal Edificacao:","",0,"L",0);
       $pdf->Cell(40 ,4,db_formatar($fieldUltimoCalculo->venaledificacao,'f'),"",1,"R",0);
     }else{
-      $pdf->SetFont('Arial','B',10); 
-      $pdf->Ln(3); 
-      $pdf->Cell(200,4,"VALORES VENAIS ULTIMO CALCULO - EXERCICIO ".@$fieldUltimoCalculo->ultimocalculo,"B",1,"L",0); 
+      $pdf->SetFont('Arial','B',10);
+      $pdf->Ln(3);
+      $pdf->Cell(200,4,"VALORES VENAIS ULTIMO CALCULO - EXERCICIO ".@$fieldUltimoCalculo->ultimocalculo,"B",1,"L",0);
       $pdf->SetFont('Arial','B',9);
       $pdf->setX(7);
-      $pdf->Cell(200,4,"Nao possui valores disponiveis","",1,"C",0);  
+      $pdf->Cell(200,4,"Nao possui valores disponiveis","",1,"C",0);
     }
   }
         }

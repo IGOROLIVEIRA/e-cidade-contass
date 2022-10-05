@@ -54,6 +54,8 @@ echo "<script>
 parent.iframe_liclicpublicacoes.location.href='lic1_liclicpublicacao001.php?licitacao=$l20_codigo&db_opcao=$db_opcao';\n;
 </script>";
 
+$oParamLicicita = db_stdClass::getParametro('licitaparam', array(db_getsession("DB_instit")));
+$l12_pncp = $oParamLicicita[0]->l12_pncp;
 
 if ($db_opcao == 1) {
 
@@ -541,6 +543,9 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                         ?>
                                     </td>
                                 </tr>
+
+
+
                                 <tr style="display:none;" id="respAutoProcesso">
                                     <td nowrap title="respAutocodigo">
                                         <?
@@ -588,6 +593,25 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                         ?>
                                     </td>
                                 </tr>
+
+                                <tr style="display: none;" id="datasProposta">
+                                    <td nowrap title="Data Abertura Poposta">
+                                        <b>Data Abertura Proposta :</b>
+                                    </td>
+                                    <td>
+                                        <?
+
+                                        db_inputdata("l20_dataaberproposta", @$l20_dataaberproposta_dia, @$l20_dataaberproposta_mes, @$l20_dataaberproposta_ano, true, 'text', $db_opcao);
+                                        ?>
+                                        <b> Data Encerramento Proposta: </b>
+                                        <?
+
+                                        echo "&nbsp;";
+                                        db_inputdata("l20_dataencproposta", @$l20_dataencproposta_dia, @$l20_dataencproposta_mes, @$l20_dataencproposta_ano, true, 'text', $db_opcao);
+                                        ?>
+                                    </td>
+                                </tr>
+
                                 <!--
                                 <tr id="datenpc">
                                     <td nowrap title="Data de Publicação PNCP">
@@ -1139,6 +1163,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
     <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();">
 </form>
 <script>
+    var codigotribunal = 0;
     document.form1.l20_prazoentrega.style.backgroundColor = '#FFFFFF';
     document.form1.l20_condicoespag.style.backgroundColor = '#FFFFFF';
     document.form1.l20_local.style.backgroundColor = '#E6E4F1';
@@ -1156,9 +1181,18 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
     js_busca();
 
+    js_verificaDatasProposta();
+
 
     // alterando a função padrao para verificar  as opçoes de convite e de INEXIGIBILIDADE
     function js_ProcCod_l20_codtipocom(proc, res) {
+
+
+
+        js_verificaDatasProposta();
+
+
+
 
         var sel1 = document.forms[0].elements[proc];
         var sel2 = document.forms[0].elements[res];
@@ -1608,6 +1642,38 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
         js_verificaModalidade();
     });
 
+    function js_verificaDatasProposta() {
+
+        var sUrl = "lic4_licitacao.RPC.php";
+
+        var oParam = new Object();
+        oParam.exec = "getCodigoTribunal";
+        oParam.iModalidade = $F('l20_codtipocomdescr');
+
+        var oAjax = new Ajax.Request(sUrl, {
+            method: "post",
+            parameters: 'json=' + Object.toJSON(oParam),
+            onComplete: js_retornoVerificaDatasProposta
+        });
+
+    }
+
+    function js_retornoVerificaDatasProposta(oAjax) {
+
+        var oRetorno = eval("(" + oAjax.responseText + ")");
+        codigotribunal = oRetorno.l03_pctipocompratribunal;
+
+        var l12_pncp = <? echo '"' . $l12_pncp . '"';      ?>;
+
+        if (document.getElementById('l20_leidalicitacao').value == "1" && codigotribunal == 101 && l12_pncp == "t") {
+            document.getElementById('datasProposta').style.display = '';
+        } else {
+            document.getElementById('datasProposta').style.display = 'none';
+
+        }
+
+    }
+
     function js_verificaModalidade() {
 
 
@@ -1943,6 +2009,18 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
     function js_confirmadatas() {
 
+        var l12_pncp = <? echo '"' . $l12_pncp . '"';      ?>;
+
+        if (document.getElementById('l20_leidalicitacao').value == "1" && document.getElementById('l20_codtipocomdescr').value == "9" && l12_pncp == "t" && document.getElementById('l20_dataaberproposta').value == "") {
+            alert("Campo Data de Abertura da Proposta não Informado");
+            return false;
+        }
+
+        if (document.getElementById('l20_leidalicitacao').value == "1" && document.getElementById('l20_codtipocomdescr').value == "9" && l12_pncp == "t" && document.getElementById('l20_dataencproposta').value == "") {
+            alert("Campo Data de Encerramento da Proposta não Informado");
+            return false;
+        }
+
         var dataCriacao = $F('l20_datacria');
         //var dataPublicacao = $F('l20_dtpublic');
         var dataAbertura = $F('l20_dataaber');
@@ -2093,6 +2171,11 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
     }
 
     function js_verificalei(lei) {
+
+
+        js_verificaDatasProposta();
+
+
         let opcoesreg = document.getElementById('l20_tipliticacao').options;
 
         let modalidade = document.form1.modalidade_tribunal.value;

@@ -39,6 +39,20 @@ switch ($oParam->exec) {
 
         break;
 
+    case 'getCodigoTribunal':
+
+        $oDaoModalidade = new cl_cflicita();
+        $sSqlModalidade = $oDaoModalidade->sql_query_file($oParam->iModalidade);
+        $rsModalidade   = $oDaoModalidade->sql_record($sSqlModalidade);
+        if ($oDaoModalidade->numrows > 0) {
+
+            $oDados = db_utils::fieldsMemory($rsModalidade, 0);
+            $oRetorno->l03_pctipocompratribunal = $oDados->l03_pctipocompratribunal;
+        }
+
+
+        break;
+
 
     case "salvarTrocaFornecedor":
 
