@@ -389,6 +389,7 @@ try {
       $oRetorno->message = $clpcdotac->erro_sql;
 
       db_query("UPDATE solicitem SET pc11_liberado = true WHERE pc11_numero = $pc10_numero");
+      db_query("UPDATE solicita SET pc10_correto = true WHERE pc10_numero = $pc10_numero");
 
 
       /* Ordenação do sequencial dos itens  */
