@@ -89,7 +89,7 @@ $mesfolha = DBPessoal::getMesFolha();
                     </td>
                     <td>
                         <?php db_input('z01_numcgm', 10, $Iz01_numcgm, true, "text", 1, "", "", "", "width: 16%"); ?>
-                        <?php db_input('z01_nome', 50, $Iz01_nome, true, "text", 3, "", "", "", "width: 61%"); ?>
+                        <?php db_input('z01_nomecgm', 50, $Iz01_nomecgm, true, "text", 3, "", "", "", "width: 61%"); ?>
                         <input type="button" name="adicionar" value="Adicionar" onclick="js_adicionar_cgm()" />
                     </td>
                 </tr>
@@ -293,12 +293,12 @@ $mesfolha = DBPessoal::getMesFolha();
             this.form.submit();
         });
 
-        var oLookUpCgm = new DBLookUp($('lbl_z01_numcgm'), $('z01_numcgm'), $('z01_nome'), {
-            'sArquivo': 'func_cgm.php',
+        var oLookUpCgm = new DBLookUp($('lbl_z01_numcgm'), $('z01_numcgm'), $('z01_nomecgm'), {
+            'sArquivo': 'func_cgmesocial.php',
             'oObjetoLookUp': 'func_nome'
         });
 
-        var oLookUpCgm = new DBLookUp($('lbl_rh01_regist'), $('rh01_regist'), $('z01_nome'), {
+        var oLookUpMatricula = new DBLookUp($('lbl_rh01_regist'), $('rh01_regist'), $('z01_nome'), {
             'sArquivo': 'func_rhpessoal.php',
             'oObjetoLookUp': 'func_nome'
         });
@@ -417,7 +417,7 @@ $mesfolha = DBPessoal::getMesFolha();
         var select = document.getElementById('cgms');
         var opt = document.createElement('option');
         opt.value = $F('z01_numcgm');
-        opt.innerHTML = $F('z01_numcgm') + ' - ' + $F('z01_nome');
+        opt.innerHTML = $F('z01_numcgm') + ' - ' + $F('z01_nomecgm');
         select.appendChild(opt);
         js_limpar_cgm();
     }
@@ -438,7 +438,7 @@ $mesfolha = DBPessoal::getMesFolha();
 
     function js_limpar_cgm() {
         $('z01_numcgm').value = '';
-        $('z01_nome').value = '';
+        $('z01_nomecgm').value = '';
     }
 
     function js_alt_evento() {
