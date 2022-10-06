@@ -848,25 +848,24 @@ if (isset($_POST["processar"])) {
 
     function js_verificarEmpenho() {
         var nControle = 0;
-        nEmpenho = <?php echo json_encode($i - 1) ?>;
-        var empenho = [];
-        for (i = 0; i < nEmpenho; i++) {
-            nInput = i + 1;
-            empenho[i] = $F('empenho' + nInput);
-            const myArr = empenho[i].split("/");
-            if (empenho[i] == "") {
+        var itens = getItensMarcados();
+
+        for (i = 0; i < itens.length; i++) {
+            var id_registro = itens[i].value;
+            var numempenho = document.getElementById('empenho'+id_registro).value;
+            if(!numempenho){
                 nControle = 1;
                 alert("Preencher número de empenho");
                 break;
             }
         }
+
         if (nControle == 0) {
             js_importxlsfornecedor();
         }
     }
 
     function js_liberarButton() {
-
         document.getElementById("Processar").style.display = "block";
     }
 
