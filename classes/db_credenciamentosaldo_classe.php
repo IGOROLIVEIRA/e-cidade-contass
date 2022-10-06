@@ -26,6 +26,7 @@ class cl_credenciamentosaldo
     public $l213_contratado = 0;
     public $l213_acordo = 0;
     public $l213_autori = 0;
+    public $l213_valorcontratado = 0;
 
     // cria propriedade com as variaveis do arquivo
     public $campos = "
@@ -38,6 +39,7 @@ class cl_credenciamentosaldo
                  l213_contratado    = int4 = contratado
                  l213_acordo = int4 = acordo 
                  l213_autori = int4 = autorizacao
+                 l213_valorcontratado = float8 = valor contratado
                  ";
 
     //funcao construtor da classe
@@ -72,6 +74,7 @@ class cl_credenciamentosaldo
             $this->l213_contratado = ($this->l213_contratado == "" ? @$GLOBALS["HTTP_POST_VARS"]["l213_contratado"] : $this->l213_contratado);
             $this->l213_acordo = ($this->l213_acordo == "" ? @$GLOBALS["HTTP_POST_VARS"]["l213_acordo"] : $this->l213_acordo);
             $this->l213_autori = ($this->l213_autori == "" ? @$GLOBALS["HTTP_POST_VARS"]["l213_autori"] : $this->l213_autori);
+            $this->l213_valorcontratado = ($this->l213_valorcontratado == "" ? @$GLOBALS["HTTP_POST_VARS"]["l213_valorcontratado"] : $this->l213_valorcontratado);
         }
     }
 
@@ -139,6 +142,16 @@ class cl_credenciamentosaldo
             return false;
         }
 
+        if ($this->l213_valorcontratado == null) {
+            $this->erro_sql = " Campo Vlr. Contratado não informado.";
+            $this->erro_campo = "l213_valorcontratado";
+            $this->erro_banco = "";
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_status = "0";
+            return false;
+        }
+
         if ($this->l213_contratado == null) {
             $this->erro_sql = " Campo Contratado não informado.";
             $this->erro_campo = "l213_contratado";
@@ -167,6 +180,7 @@ class cl_credenciamentosaldo
                                       ,l213_contratado 
                                       ,l213_acordo
                                       ,l213_autori
+                                      ,l213_valorcontratado
                                        
                        )
                 values (
@@ -179,6 +193,7 @@ class cl_credenciamentosaldo
                                ,$this->l213_contratado 
                                ,$this->l213_acordo 
                                ,$this->l213_autori 
+                               ,$this->l213_valorcontratado
                       )";
         $result = db_query($sql);
         if ($result == false) {
@@ -281,9 +296,22 @@ class cl_credenciamentosaldo
                 return false;
             }
         }
+        if (trim($this->l213_valorcontratado) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l213_valorcontratado"])) {
+            $sql  .= $virgula . " l213_valorcontratado = $this->l213_valorcontratado ";
+            $virgula = ",";
+            if (trim($this->l213_valorcontratado) == null) {
+                $this->erro_sql = " Campo Vlr. Contratado não informado.";
+                $this->erro_campo = "l213_valorcontratado";
+                $this->erro_banco = "";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+        }
         $sql .= " where ";
         $sql .= "l213_sequencial = $l213_sequencial";
-        $result = db_query($sql);
+        $result = db_query($sql);die($sql);
         if ($result == false) {
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
             $this->erro_sql   = "credenciamentosaldo nao Alterado. Alteracao Abortada.\\n";

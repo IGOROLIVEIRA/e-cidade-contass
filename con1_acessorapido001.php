@@ -31,7 +31,7 @@ require_once("libs/db_app.utils.php");
 require_once("libs/db_conecta.php");
 $_SESSION["DB_itemmenu_acessado"] = "0";
 require_once("libs/db_sessoes.php");
-require_once("dbforms/db_funcoes.php"); 
+require_once("dbforms/db_funcoes.php");
 require_once('model/configuracao/PreferenciaUsuario.model.php');
 
 $oPost = db_utils::postMemory($_POST);
@@ -122,7 +122,7 @@ $sStatusBtnPreMenus = 'ativar';
 $sValueBtnPreMenus  = 'Ativar PreMenus';
 
 if ( db_getsession("DB_premenus", false) != null  ) {
-  
+
   $sStatusBtnPreMenus = 'desativar';
   $sValueBtnPreMenus  = 'Desativar PreMenus';
 }
@@ -159,16 +159,16 @@ if ( db_getsession("DB_premenus", false) != null  ) {
           <td>
             <input type="button" class="field-size-max" id="btnDebug" value="Debug.PHP" />
           </td>
-        </tr>    
-        
+        </tr>
+
         <tr>
           <td>
-          
+
             <input type="button" class="field-size-max" id="btnPreMenus" value="<?=$sValueBtnPreMenus; ?>" status="<?=$sStatusBtnPreMenus;?>" />
           </td>
-        </tr>            
-            
-        
+        </tr>
+
+
         <tr>
           <td>
            <?php db_select('departamento', $aDepartamentos, true, 1); ?>
@@ -209,8 +209,8 @@ if ( db_getsession("DB_premenus", false) != null  ) {
           <table class="form-container">
             <tr>
               <td colspan="2">
-                <input type="checkbox" id="lHabilitaCacheMenu" name="lHabilitaCacheMenu" 
-                       style="margin: 0px; padding: 0px; height: 0px;"
+                <input type="checkbox" id="lHabilitaCacheMenu" name="lHabilitaCacheMenu"
+                       style="margin: 0px; padding: 0px;"
                        <?php echo ($oPreferenciaUsuario->getHabilitaCacheMenu() ? 'checked="checked"' : ''); ?>/>
                 <label for="lHabilitaCacheMenu">Ativar Cache dos Menus</label>
               </td>
@@ -237,31 +237,31 @@ if ( db_getsession("DB_premenus", false) != null  ) {
     js_OpenJanelaIframe("", "iframe_debug", "debug.php", "Debug.php", true);
   });
 
-    
+
   $("btnRetornaDataSistema").observe("click", function() {
 
-     js_OpenJanelaIframe( "", 
-                          "iframe_retornadatasistema", 
-                          "con4_trocadata.php?lParametroExibeMenu=false", 
-                          "Retorna Data do Sistema", 
+     js_OpenJanelaIframe( "",
+                          "iframe_retornadatasistema",
+                          "con4_trocadata.php?lParametroExibeMenu=false",
+                          "Retorna Data do Sistema",
                           true );
   });
 
   $("btnHabilitarTraceLog").observe("click", function() {
 
-     js_OpenJanelaIframe( "", 
-                          "iframe_tracelog", 
-                          "con1_ativatrace001.php?lParametroExibeMenu=false", 
-                          "Habilitar / Desabilitar TraceLog", 
+     js_OpenJanelaIframe( "",
+                          "iframe_tracelog",
+                          "con1_ativatrace001.php?lParametroExibeMenu=false",
+                          "Habilitar / Desabilitar TraceLog",
                           true );
   });
 
   $("btnMensagensSistema").observe("click", function() {
 
-     js_OpenJanelaIframe( "", 
-                          "iframe_mensagenssistema", 
-                          "con4_mensagens001.php?lIframe=false", 
-                          "Mensagens do Sistema", 
+     js_OpenJanelaIframe( "",
+                          "iframe_mensagenssistema",
+                          "con4_mensagens001.php?lIframe=false",
+                          "Mensagens do Sistema",
                           true );
   });
 
@@ -296,17 +296,17 @@ if ( db_getsession("DB_premenus", false) != null  ) {
     oRequest.asynchronous = false,
     oRequest.parameters   = 'json='+Object.toJSON(oParamentro),
     oRequest.onComplete   = function(oAjax) {
-    
+
       var oRetorno = eval( '(' + oAjax.responseText + ')' );
-      
+
       $('btnPreMenus').value = oRetorno.sValue;
       $('btnPreMenus').setAttribute('status', oRetorno.sStatus);
     }
-    
+
     new Ajax.Request( 'con1_ativatrace.RPC.php' , oRequest);
-    
+
   });
-  
+
 
   <?php if (isset($sMensagem)): ?>
     alert('<?php echo $sMensagem; ?>');
