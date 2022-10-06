@@ -74,7 +74,7 @@ if (isset($_POST["processar"])) {
         db_msgbox("Arquivo inválido! O arquivo selecionado deve ser do tipo .xlsx");
         unlink($nometmp);
         $lFail = true;
-        return false;
+        db_redireciona('vei1_abastimportacao001.php');
     }
 
     $files = glob('libs/Pat_xls_import/*');
