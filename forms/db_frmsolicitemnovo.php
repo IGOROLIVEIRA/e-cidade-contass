@@ -534,6 +534,8 @@ if ((isset($opcao) && $opcao == "alterar")) {
       document.getElementById('pc11_servicoquantidade').style.marginLeft = "-84px";
       document.getElementById('pc11_servicoquantidade').style.width = "76px";
       document.getElementById('pc11_quant').readOnly = false;
+      document.getElementById('pc11_quant').style.background = "";
+
 
 
 
@@ -546,6 +548,8 @@ if ((isset($opcao) && $opcao == "alterar")) {
       document.getElementById('pc11_servicoquantidade').style.marginLeft = "0px";
       document.getElementById('pc11_servicoquantidade').style.width = "48px";
       document.getElementById('pc11_quant').readOnly = true;
+      document.getElementById('pc11_quant').style.background = "#EEE";
+
 
     }
 
@@ -770,6 +774,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
         document.getElementById('pc11_servicoquantidade').style.display = "block";
         document.getElementById('pc11_quant').value = 1;
         document.getElementById('pc11_quant').readOnly = true;
+        document.getElementById('pc11_quant').style.background = "#EEE";
 
       } else {
         document.getElementById('titleUnidade').style.display = "block";
@@ -782,6 +787,8 @@ if ((isset($opcao) && $opcao == "alterar")) {
         document.getElementById('titleOrdem').style.marginLeft = "-73px";
         document.getElementById('pc11_quant').value = "";
         document.getElementById('pc11_quant').readOnly = false;
+        document.getElementById('pc11_quant').style.background = "";
+
       }
       js_buscarEle();
 
@@ -803,6 +810,8 @@ if ((isset($opcao) && $opcao == "alterar")) {
       document.getElementById('pc11_servicoquantidade').style.display = "block";
       document.getElementById('pc11_quant').value = 1;
       document.getElementById('pc11_quant').readOnly = true;
+      document.getElementById('pc11_quant').style.background = "#EEE";
+
 
 
     } else {
@@ -816,6 +825,8 @@ if ((isset($opcao) && $opcao == "alterar")) {
       document.getElementById('titleOrdem').style.marginLeft = "-73px";
       document.getElementById('pc11_quant').value = "";
       document.getElementById('pc11_quant').readOnly = false;
+      document.getElementById('pc11_quant').style.background = "";
+
     }
 
     js_buscarEle();

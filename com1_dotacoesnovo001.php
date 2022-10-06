@@ -429,7 +429,7 @@ if (isset($incluir)) {
 		var sUrlRC = "com4_materialsolicitacao.RPC.php";
 
 		var oParam = new Object();
-		oParam.exec = "excluirDotacoes";
+		oParam.exec = "excluirDotacoesCompras";
 		oParam.numero = top.corpo.iframe_solicita.document.form1.pc10_numero.value;
 		oParam.dotacao = dotacao;
 		var oAjax = new Ajax.Request(sUrlRC, {
@@ -496,6 +496,8 @@ if (isset($incluir)) {
 		var reduzido = [];
 		var estrutural = [];
 		var pc30_permsemdotac = '<? echo $pc30_permsemdotac; ?>';
+		var o50_estrutdespesa = document.getElementById('o50_estrutdespesa').value;
+
 
 		var oRequest = new Object();
 
@@ -526,6 +528,7 @@ if (isset($incluir)) {
 		oRequest.numero = parent.iframe_solicita.document.getElementById('pc10_numero').value;
 		oRequest.pc30_permsemdotac = pc30_permsemdotac;
 		oRequest.dotacao = dotacao;
+		oRequest.o50_estrutdespesa = o50_estrutdespesa;
 
 
 		oRequest.exec = "salvarDotacoes";
@@ -548,7 +551,9 @@ if (isset($incluir)) {
 
 		}
 
-		alert(oRetorno.message.urlDecode())
+		alert(oRetorno.message.urlDecode());
+
+		carregaDotacoes();
 
 
 	}
@@ -649,6 +654,10 @@ if (isset($incluir)) {
 	}
 
 	function js_mostraorcdotacao1(chave1, chave2, chave3) {
+		console.log(chave1);
+		console.log(chave2);
+		console.log(chave3);
+
 		document.form1.o58_coddot.value = chave1;
 		document.form1.o56_descr.value = chave2;
 		document.form1.o50_estrutdespesa.value = chave3;

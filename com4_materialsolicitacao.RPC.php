@@ -263,6 +263,21 @@ try {
       }
 
       break;
+    case "excluirDotacoesCompras":
+
+      $sql = "delete from pcdotac where pc13_coddot = $oParam->dotacao and
+      pc13_codigo in ((select pc11_codigo from solicitem where pc11_numero = $oParam->numero));";
+      $rsResult = db_query($sql);
+
+      $oRetorno->sql = $sql;
+
+      if (!$rsResult) {
+        $oRetorno->erro  = true;
+        $oRetorno->message = "Erro ao excluir dotação";
+      }
+
+      break;
+
 
     case "liberarSolicitacao":
       $pc10_numero = $oParam->numero;
@@ -343,7 +358,7 @@ try {
       $quantidade_itens = pg_numrows($itens);
       $quantidade_dotacoes = 0;
       $dotacao = $oParam->dotacao;
-
+      $elemento_dotacao = $oParam->o50_estrutdespesa;
 
 
       for ($i = 0; $i < $quantidade_itens; $i++) {
@@ -360,6 +375,7 @@ try {
 
 
 
+
         if ($servico->pc01_servico == "f") {
 
           $quantidade_dotacoes = 0;
@@ -368,14 +384,15 @@ try {
           // Verificando se item já possui a dotação a ser lançada
           $result =  db_query("select * from pcdotac where pc13_codigo = $codigo_item and pc13_coddot = $dotacao;");
 
-          if (pg_numrows($result) == 0) {
 
-
-            for ($k = 0; $k < count($reduzido); $k++) {
-              if ($elemento == substr($estrutural[$k], 23, 7)) {
-                $quantidade_dotacoes++;
-              }
+          for ($k = 0; $k < count($reduzido); $k++) {
+            if ($elemento == substr($estrutural[$k], 23, 7)) {
+              $quantidade_dotacoes++;
             }
+          }
+
+
+          if (pg_numrows($result) == 0 && $elemento == substr($elemento_dotacao, 23, 7)) {
 
             $clpcdotac->pc13_anousu = db_getsession('DB_anousu');
             $clpcdotac->pc13_coddot = $dotacao;
@@ -394,14 +411,15 @@ try {
 
             // Verificando se item já possui a dotação a ser lançada
             $result =  db_query("select * from pcdotac where pc13_codigo = $codigo_item and pc13_coddot = $dotacao;");
-
-            if (pg_numrows($result) == 0) {
-
-              for ($k = 0; $k < count($reduzido); $k++) {
-                if ($elemento == substr($estrutural[$k], 23, 7)) {
-                  $quantidade_dotacoes++;
-                }
+            for ($k = 0; $k < count($reduzido); $k++) {
+              if ($elemento == substr($estrutural[$k], 23, 7)) {
+                $quantidade_dotacoes++;
               }
+            }
+
+            if (pg_numrows($result) == 0 && $elemento == substr($elemento_dotacao, 23, 7)) {
+
+
 
               $clpcdotac->pc13_anousu = db_getsession('DB_anousu');
               $clpcdotac->pc13_coddot = $dotacao;
@@ -419,15 +437,16 @@ try {
 
             // Verificando se item já possui a dotação a ser lançada
             $result =  db_query("select * from pcdotac where pc13_codigo = $codigo_item and pc13_coddot = $dotacao;");
-
-            if (pg_numrows($result) == 0) {
-
-
-              for ($k = 0; $k < count($reduzido); $k++) {
-                if ($elemento == substr($estrutural[$k], 23, 7)) {
-                  $quantidade_dotacoes++;
-                }
+            for ($k = 0; $k < count($reduzido); $k++) {
+              if ($elemento == substr($estrutural[$k], 23, 7)) {
+                $quantidade_dotacoes++;
               }
+            }
+
+
+            if (pg_numrows($result) == 0 && $elemento == substr($elemento_dotacao, 23, 7)) {
+
+
 
               $clpcdotac->pc13_anousu = db_getsession('DB_anousu');
               $clpcdotac->pc13_coddot = $dotacao;
