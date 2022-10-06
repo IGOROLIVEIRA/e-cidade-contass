@@ -314,7 +314,7 @@ if (isset($incluir)) {
 
 				<input style="float:center; margin-top:10px;display:<? if ($pc30_permsemdotac != "f") {
 																		echo "none";
-																	} ?>" name="incluir" type="button" value="Liberar Solicitação" onclick="js_salvarItens()">
+																	} ?>" name="incluir" type="button" value="Liberar Solicitação" onclick="js_liberarSolicitacao()">
 
 			</form>
 		</div>
@@ -333,74 +333,6 @@ if (isset($incluir)) {
 	oGridItens.setHeight(200);
 	oGridItens.show($('ctnGridItens'));
 
-	function js_salvarItens() {
-		var sUrl = "com4_materialsolicitacao.RPC.php";
-
-
-		var reduzido = [];
-		var estrutural = [];
-		var pc30_permsemdotac = '<? echo $pc30_permsemdotac; ?>';
-
-		var oRequest = new Object();
-
-
-
-		if (document.getElementsByName("reduzido[]").length == 0 && pc30_permsemdotac == "f") {
-			alert('Usuário, é necessário inserir no mínimo 1 dotação na aba Dotações.');
-			return false;
-		}
-
-
-		if (pc30_permsemdotac == "f") {
-			pc30_permsemdotac = false;
-		} else {
-			pc30_permsemdotac = true;
-		}
-
-		for (var i = 0; i < document.getElementsByName("reduzido[]").length; i++) {
-			reduzido.push(document.getElementsByName("reduzido[]")[i].value);
-		}
-
-		for (var i = 0; i < document.getElementsByName("estrutural[]").length; i++) {
-			estrutural.push(document.getElementsByName("estrutural[]")[i].value);
-		}
-
-		oRequest.reduzido = reduzido;
-		oRequest.estrutural = estrutural;
-		oRequest.numero = parent.iframe_solicita.document.getElementById('pc10_numero').value;
-		oRequest.pc30_permsemdotac = pc30_permsemdotac;
-
-
-		oRequest.exec = "salvarItens";
-		var oAjax = new Ajax.Request(
-			sUrl, {
-				method: 'post',
-				parameters: 'json=' + js_objectToJson(oRequest),
-				onComplete: js_retornoSalvarItens
-			}
-		);
-
-	}
-
-	function js_retornoSalvarItens(oAjax) {
-		var oRetorno = eval("(" + oAjax.responseText + ")");
-
-		if (oRetorno.erro == true) {
-			alert(oRetorno.message.urlDecode());
-			return false;
-
-		}
-
-		numero = top.corpo.iframe_solicita.document.form1.pc10_numero.value;
-		data = top.corpo.iframe_solicita.document.form1.pc10_data.value;
-		descrdepto = top.corpo.iframe_solicita.document.form1.descrdepto.value;
-
-		alert(oRetorno.message.urlDecode())
-
-		parent.window.location.href = "com1_pcproc001.php?pc10_numero=" + numero + "&data=" + data + "&descrdepto=" + descrdepto + "";
-
-
-	}
 
 
 	function carregaDotacoes() {
@@ -521,6 +453,107 @@ if (isset($incluir)) {
 		}
 	}
 
+	function js_liberarSolicitacao() {
+		var sUrl = "com4_materialsolicitacao.RPC.php";
+		var oRequest = new Object();
+		oRequest.numero = parent.iframe_solicita.document.getElementById('pc10_numero').value;
+		oRequest.exec = "liberarSolicitacao";
+		var oAjax = new Ajax.Request(
+			sUrl, {
+				method: 'post',
+				parameters: 'json=' + js_objectToJson(oRequest),
+				onComplete: js_retornoliberarSolicitacao
+			}
+		);
+
+	}
+
+	function js_retornoliberarSolicitacao(oAjax) {
+		var oRetorno = eval("(" + oAjax.responseText + ")");
+
+		if (oRetorno.erro == true) {
+			alert(oRetorno.message.urlDecode());
+			return false;
+
+		} else {
+			alert('Solicitação de compra Liberada !');
+		}
+
+		numero = top.corpo.iframe_solicita.document.form1.pc10_numero.value;
+		data = top.corpo.iframe_solicita.document.form1.pc10_data.value;
+		descrdepto = top.corpo.iframe_solicita.document.form1.descrdepto.value;
+
+
+		parent.window.location.href = "com1_pcproc001.php?pc10_numero=" + numero + "&data=" + data + "&descrdepto=" + descrdepto + "";
+
+
+	}
+
+	function js_salvarDotacoes() {
+		var sUrl = "com4_materialsolicitacao.RPC.php";
+
+		var dotacao = document.getElementById("o58_coddot").value;
+		var reduzido = [];
+		var estrutural = [];
+		var pc30_permsemdotac = '<? echo $pc30_permsemdotac; ?>';
+
+		var oRequest = new Object();
+
+
+
+		if (document.getElementsByName("reduzido[]").length == 0 && pc30_permsemdotac == "f") {
+			alert('Usuário, é necessário inserir no mínimo 1 dotação na aba Dotações.');
+			return false;
+		}
+
+
+		if (pc30_permsemdotac == "f") {
+			pc30_permsemdotac = false;
+		} else {
+			pc30_permsemdotac = true;
+		}
+
+		for (var i = 0; i < document.getElementsByName("reduzido[]").length; i++) {
+			reduzido.push(document.getElementsByName("reduzido[]")[i].value);
+		}
+
+		for (var i = 0; i < document.getElementsByName("estrutural[]").length; i++) {
+			estrutural.push(document.getElementsByName("estrutural[]")[i].value);
+		}
+
+		oRequest.reduzido = reduzido;
+		oRequest.estrutural = estrutural;
+		oRequest.numero = parent.iframe_solicita.document.getElementById('pc10_numero').value;
+		oRequest.pc30_permsemdotac = pc30_permsemdotac;
+		oRequest.dotacao = dotacao;
+
+
+		oRequest.exec = "salvarDotacoes";
+		var oAjax = new Ajax.Request(
+			sUrl, {
+				method: 'post',
+				parameters: 'json=' + js_objectToJson(oRequest),
+				onComplete: js_retornoSalvarDotacoes
+			}
+		);
+
+	}
+
+	function js_retornoSalvarDotacoes(oAjax) {
+		var oRetorno = eval("(" + oAjax.responseText + ")");
+
+		if (oRetorno.erro == true) {
+			alert(oRetorno.message.urlDecode());
+			return false;
+
+		}
+
+		alert(oRetorno.message.urlDecode())
+
+
+	}
+
+
 
 	indice = 0;
 
@@ -566,6 +599,8 @@ if (isset($incluir)) {
 		oGridItens.renderRows();
 
 		indice++;
+
+		js_salvarDotacoes();
 
 
 	}
