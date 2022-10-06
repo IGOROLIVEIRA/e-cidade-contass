@@ -120,9 +120,6 @@ $mesfolha = DBPessoal::getMesFolha();
                                                     <option value="4">Pagamento de remuneração conforme apurado em
                                                         ideDmDev do S-1202
                                                     </option>
-                                                    <option value="4">Pagamento de remuneração conforme apurado em
-                                                        ideDmDev do S-1202
-                                                    </option>
                                                     <option value="5">Pagamento de benefícios previdenciários, conforme
                                                         apurado em ideDmDev do S-1207
                                                     </option>
@@ -330,15 +327,30 @@ $mesfolha = DBPessoal::getMesFolha();
     }
 
     function js_alt() {
-        if (document.getElementById('S1200').checked || document.getElementById('S1210').checked) {
+
+        if (document.getElementById('S1200').checked && document.getElementById('S1210').checked) {
             document.getElementById('indapuracao_col').style.display = 'inline';
             document.getElementById('tppgto_col').style.display = 'inline';
             document.getElementById('tipo_col').style.display = 'inline';
-        } else {
-            document.getElementById('indapuracao_col').style.display = 'none';
-            document.getElementById('tppgto_col').style.display = 'none';
-            document.getElementById('tipo_col').style.display = 'none';
+            return true;
         }
+
+        if (document.getElementById('S1200').checked) {
+            document.getElementById('indapuracao_col').style.display = 'inline';
+            document.getElementById('tppgto_col').style.display = 'none';
+            document.getElementById('tipo_col').style.display = 'inline';
+            return true;
+        }
+        if (document.getElementById('S1210').checked) {
+            document.getElementById('indapuracao_col').style.display = 'inline';
+            document.getElementById('tppgto_col').style.display = 'inline';
+            document.getElementById('tipo_col').style.display = 'inline';
+            return true;
+        }
+        document.getElementById('indapuracao_col').style.display = 'none';
+        document.getElementById('tppgto_col').style.display = 'none';
+        document.getElementById('tipo_col').style.display = 'none';
+
     }
 
     function js_dataalt() {
