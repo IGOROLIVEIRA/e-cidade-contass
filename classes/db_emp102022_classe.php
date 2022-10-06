@@ -107,7 +107,7 @@ class cl_emp102022
                  si106_mes = int8 = Mês
                  si106_instit = int8 = Instituição
                  ";
-  
+
   //funcao construtor da classe
   function cl_emp102022()
   {
@@ -115,7 +115,7 @@ class cl_emp102022
     $this->rotulo = new rotulo("emp102022");
     $this->pagina_retorno = basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
   }
-  
+
   //funcao erro
   function erro($mostra, $retorna)
   {
@@ -126,7 +126,7 @@ class cl_emp102022
       }
     }
   }
-  
+
   // funcao para atualizar campos
   function atualizacampos($exclusao = false)
   {
@@ -195,9 +195,9 @@ class cl_emp102022
       $this->si106_sequencial = ($this->si106_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["si106_sequencial"] : $this->si106_sequencial);
     }
   }
-  
+
   // funcao para inclusao
-  function incluir($si106_sequencial)
+  function incluir($si106_sequencial = null)
   {
     $this->atualizacampos();
     if ($this->si106_tiporegistro == null) {
@@ -207,7 +207,7 @@ class cl_emp102022
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si106_naturezadespesa == null) {
@@ -257,7 +257,7 @@ class cl_emp102022
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si106_instit == null) {
@@ -267,7 +267,7 @@ class cl_emp102022
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($si106_sequencial == "" || $si106_sequencial == null) {
@@ -279,7 +279,7 @@ class cl_emp102022
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
       $this->si106_sequencial = pg_result($result, 0, 0);
@@ -291,7 +291,7 @@ class cl_emp102022
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       } else {
         $this->si106_sequencial = $si106_sequencial;
@@ -303,7 +303,7 @@ class cl_emp102022
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     $sql = "insert into emp102022(
@@ -404,7 +404,7 @@ class cl_emp102022
       }
       $this->erro_status = "0";
       $this->numrows_incluir = 0;
-      
+
       return false;
     }
     $this->erro_banco = "";
@@ -456,10 +456,10 @@ class cl_emp102022
       $resac = db_query("insert into db_acount values($acount,2010335,2010677,'','" . AddSlashes(pg_result($resaco, 0, 'si106_mes')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010335,2011678,'','" . AddSlashes(pg_result($resaco, 0, 'si106_instit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
     }
-    
+
     return true;
   }
-  
+
   // funcao para alteracao
   function alterar($si106_sequencial = null)
   {
@@ -483,7 +483,7 @@ class cl_emp102022
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -670,7 +670,7 @@ class cl_emp102022
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -684,7 +684,7 @@ class cl_emp102022
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -781,7 +781,7 @@ class cl_emp102022
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
       $this->numrows_alterar = 0;
-      
+
       return false;
     } else {
       if (pg_affected_rows($result) == 0) {
@@ -792,7 +792,7 @@ class cl_emp102022
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "1";
         $this->numrows_alterar = 0;
-        
+
         return true;
       } else {
         $this->erro_banco = "";
@@ -802,12 +802,12 @@ class cl_emp102022
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "1";
         $this->numrows_alterar = pg_affected_rows($result);
-        
+
         return true;
       }
     }
   }
-  
+
   // funcao para exclusao
   function excluir($si106_sequencial = null, $dbwhere = null)
   {
@@ -882,7 +882,7 @@ class cl_emp102022
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
       $this->numrows_excluir = 0;
-      
+
       return false;
     } else {
       if (pg_affected_rows($result) == 0) {
@@ -893,7 +893,7 @@ class cl_emp102022
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "1";
         $this->numrows_excluir = 0;
-        
+
         return true;
       } else {
         $this->erro_banco = "";
@@ -903,12 +903,12 @@ class cl_emp102022
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "1";
         $this->numrows_excluir = pg_affected_rows($result);
-        
+
         return true;
       }
     }
   }
-  
+
   // funcao do recordset
   function sql_record($sql)
   {
@@ -921,7 +921,7 @@ class cl_emp102022
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     $this->numrows = pg_numrows($result);
@@ -931,13 +931,13 @@ class cl_emp102022
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
-    
+
     return $result;
   }
-  
+
   // funcao do sql
   function sql_query($si106_sequencial = null, $campos = "*", $ordem = null, $dbwhere = "")
   {
@@ -971,10 +971,10 @@ class cl_emp102022
         $virgula = ",";
       }
     }
-    
+
     return $sql;
   }
-  
+
   // funcao do sql
   function sql_query_file($si106_sequencial = null, $campos = "*", $ordem = null, $dbwhere = "")
   {
@@ -1008,7 +1008,7 @@ class cl_emp102022
         $virgula = ",";
       }
     }
-    
+
     return $sql;
   }
 }

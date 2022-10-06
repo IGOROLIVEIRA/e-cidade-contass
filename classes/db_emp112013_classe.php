@@ -28,15 +28,15 @@ class cl_emp112013
   var $si107_instit = 0;
   // cria propriedade com as variaveis do arquivo
   var $campos = "
-                 si107_sequencial = int8 = sequencial 
-                 si107_tiporegistro = int8 = Tipo do  registro 
-                 si107_codunidadesub = varchar(8) = Código da unidade 
-                 si107_nroempenho = int8 = Número do  empenho 
-                 si107_codfontrecursos = int8 = Código da fonte de  recursos 
-                 si107_valorfonte = float8 = Valor empenhado  na fonte 
-                 si107_mes = int8 = Mês 
-                 si107_reg10 = int8 = reg10 
-                 si107_instit = int8 = Instituição 
+                 si107_sequencial = int8 = sequencial
+                 si107_tiporegistro = int8 = Tipo do  registro
+                 si107_codunidadesub = varchar(8) = Código da unidade
+                 si107_nroempenho = int8 = Número do  empenho
+                 si107_codfontrecursos = int8 = Código da fonte de  recursos
+                 si107_valorfonte = float8 = Valor empenhado  na fonte
+                 si107_mes = int8 = Mês
+                 si107_reg10 = int8 = reg10
+                 si107_instit = int8 = Instituição
                  ";
 
   //funcao construtor da classe
@@ -158,26 +158,26 @@ class cl_emp112013
       return false;
     }
     $sql = "insert into emp112013(
-                                       si107_sequencial 
-                                      ,si107_tiporegistro 
-                                      ,si107_codunidadesub 
-                                      ,si107_nroempenho 
-                                      ,si107_codfontrecursos 
-                                      ,si107_valorfonte 
-                                      ,si107_mes 
-                                      ,si107_reg10 
-                                      ,si107_instit 
+                                       si107_sequencial
+                                      ,si107_tiporegistro
+                                      ,si107_codunidadesub
+                                      ,si107_nroempenho
+                                      ,si107_codfontrecursos
+                                      ,si107_valorfonte
+                                      ,si107_mes
+                                      ,si107_reg10
+                                      ,si107_instit
                        )
                 values (
-                                $this->si107_sequencial 
-                               ,$this->si107_tiporegistro 
-                               ,'$this->si107_codunidadesub' 
-                               ,$this->si107_nroempenho 
-                               ,$this->si107_codfontrecursos 
-                               ,$this->si107_valorfonte 
-                               ,$this->si107_mes 
-                               ,$this->si107_reg10 
-                               ,$this->si107_instit 
+                                $this->si107_sequencial
+                               ,$this->si107_tiporegistro
+                               ,'$this->si107_codunidadesub'
+                               ,$this->si107_nroempenho
+                               ,$this->si107_codfontrecursos
+                               ,$this->si107_valorfonte
+                               ,$this->si107_mes
+                               ,$this->si107_reg10
+                               ,$this->si107_instit
                       )";
     $result = db_query($sql);
     if ($result == false) {
