@@ -90,9 +90,9 @@ if (isset($db_opcaoal)) {
 		</legend>
 		<table id="tablePerfis" class="DBGrid" style="width: 70%; border: 1px solid #a4a4a4;">
 			<tr>
-				<th class="table_header" style="background:#e6e6e6; cursor: pointer; border: 1px solid #a4a4a4;" onclick="marcarTodos();">M</th>
-				<th style="border: 0px solid red;  background:#e6e6e6; border: 1px solid #a4a4a4;">Código</th>
-				<th style="border: 0px solid red;  background:#e6e6e6; border: 1px solid #a4a4a4;">Lei</th>
+				<th class="table_header" style="background:#aacccc; color:#02038c; cursor: pointer; border: 1px solid #02038c;" onclick="marcarTodos();">M</th>
+				<th style="border: 0px solid red;  background:#aacccc; color:#02038c; border: 1px solid #02038c;">Código</th>
+				<th style="border: 0px solid red;  background:#aacccc; color:#02038c; border: 1px solid #02038c;">Lei</th>
 			</tr>
 
 
@@ -111,11 +111,11 @@ if (isset($db_opcaoal)) {
                               <input id=" . pg_result($result, $i, "l212_codigo") . " type='checkbox' class='marca_itens' name='aItensMarcados[]' value='" . pg_result($result, $i, "l212_codigo") . "'>
                         </td>
 
-						<td style='text-align:center; background:#ffffff; border: 1px solid #a4a4a4;'>" .
+						<td style='text-align:center; background:#cddecd; border: 1px solid #a4a4a4;'>" .
 					pg_result($result, $i, "l212_codigo") . "
 							</td>
 
-                        <td style='text-align:center; background:#ffffff; border: 1px solid #a4a4a4;'>" .
+                        <td style='text-align:center; background:#cddecd; border: 1px solid #a4a4a4;'>" .
 					pg_result($result, $i, "l212_lei") . "
                         </td>
 
