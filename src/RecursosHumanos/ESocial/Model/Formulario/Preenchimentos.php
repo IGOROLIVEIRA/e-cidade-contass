@@ -797,7 +797,7 @@ WHERE rh30_vinculo IN ('I',
             $sql = "SELECT
             x.ideDmDev,
             x.e60_numcgm,
-            sum(x.e70_vlrliq) as e70_vlrliq,
+            x.e70_vlrliq as e70_vlrliq,
             x.e50_data,
             x.e50_empresadesconto,
             x.codCateg,
@@ -923,7 +923,8 @@ WHERE rh30_vinculo IN ('I',
             x.nmtrab,
             x.codcbo,
             x.dtnascto,
-            x.nrinsc";
+            x.nrinsc,
+            x.e70_vlrliq";
         }
         $rs = \db_query($sql);
         // echo $sql;
