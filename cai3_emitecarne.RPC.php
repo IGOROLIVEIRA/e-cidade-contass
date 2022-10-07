@@ -274,8 +274,8 @@ switch ($oParam->exec) {
       INNER JOIN itbiavalia ON itbiavalia.it14_guia = itbi.it01_guia
       INNER JOIN itbinome ON itbinome.it03_guia = itbi.it01_guia
       INNER JOIN itbinomecgm ON itbinomecgm.it21_itbinome = itbinome.it03_seq
-      INNER JOIN arrecad_itbi ON arrecad_itbi.it01_guia = itbi.it01_guia
-      INNER JOIN arrecad ON arrecad.k00_numpre = arrecad_itbi.k00_numpre
+      INNER JOIN itbinumpre ON itbinumpre.it15_guia = itbi.it01_guia
+      INNER JOIN arrecad ON arrecad.k00_numpre = itbinumpre.it15_numpre
       LEFT JOIN itbimatric ON itbi.it01_guia = itbimatric.it06_guia
       LEFT JOIN itbicancela ON itbicancela.it16_guia = itbi.it01_guia
      WHERE itbicancela.it16_guia IS NULL

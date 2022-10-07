@@ -128,38 +128,6 @@ $oGet = db_utils::postMemory($_GET);
 $config = db_query("select * from db_config where codigo = ".db_getsession("DB_instit"));
 db_fieldsmemory($config,0);
 
-if ($db21_usadebitoitbi == 't') {                                         
-
-     $sSQL_ITBI = <<<SQL
-              select arrecad_itbi.k00_numpre as numprearrecad, recibo.k00_numpre as numprerecibo 
-                from itbi
-                    inner join itbinumpre on itbinumpre.it15_guia = itbi.it01_guia
-                    inner join recibo on recibo.k00_numpre = itbinumpre.it15_numpre
-                    inner join arrecad_itbi on arrecad_itbi.it01_guia = itbi.it01_guia
-                        where recibo.k00_numpre IN (select k00_numpre from disbanco where codret = $oGet->codret);
-SQL;
-
-    $resultItbi = db_query($sSQL_ITBI);    
-
-    for ($iCont=0; $iCont < pg_num_rows($resultItbi); $iCont++) {
-        $numprearrecad =  db_utils::fieldsMemory($resultItbi,$iCont)->numprearrecad;
-        $numprerecibo =  db_utils::fieldsMemory($resultItbi,$iCont)->numprerecibo;
-        
-        $sSQL_ALTERA_NUMPRE_ITBI = "UPDATE disbanco 
-                                      SET k00_numpre = {$numprearrecad}, k00_numpar = 1 
-                                        WHERE disbanco.codret = {$oGet->codret} 
-                                        and disbanco.k00_numpre = {$numprerecibo}";
-                                          
-        $result_itbi = db_query($sSQL_ALTERA_NUMPRE_ITBI);
-
-        if (!$result_itbi) {
-            throw new Exception("Ocorreu um erro ao processar o registro {$numprerecibo} e codret {$oGet->codret}");
-        }
-
-    }
-    
-}
-
    	$sSql = "select fc_executa_baixa_banco($oGet->codret,'".date("Y-m-d",db_getsession("DB_datausu"))."')";
    	$rsBaixaBanco = db_query($sSql);
    	if (!$rsBaixaBanco) {
