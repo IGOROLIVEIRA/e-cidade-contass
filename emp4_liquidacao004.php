@@ -500,8 +500,8 @@ switch ($objJson->method) {
       $Sqlparemetrosaldo= $paremetrosaldo->sql_record($paremetrosaldo->sql_query_file('','pc01_liberarsaldoposicao'));
       $resulparemetrosaldo  = db_utils::fieldsMemory($Sqlparemetrosaldo, 0);
       $aItens = $objJson->itensAnulados;
-      $iStatus = 1;
-      $nMensagem = 'Usuario: ';
+      $iStatus = 2;
+      $nMensagem = 'Usuário: ';
       if($Sqlparemetrosaldo->pc01_liberarsaldoposicao == false && pg_num_rows($Sqlparemetrosaldo)>0) {
         db_inicio_transacao();
         for($iInd = 0; $iInd < count($aItens); $iInd++){
@@ -596,14 +596,14 @@ switch ($objJson->method) {
 
 
           if($ItemAtualPosicao->ac20_servicoquantidade != $ItemUltimaPosicao->ac20_servicoquantidade){
-            $nMensagem = 'Usuario: Nao sera possivel a anulacao do empenho, devido a forma de controle do item no empenho e diferente da forma de controle do item no contrato.';
+            $nMensagem = 'Usuário: Não será possível a anulação do empenho, devido a forma de controle do item no empenho é diferente da forma de controle do item no contrato';
             $iStatus = 2;
-            echo $json->encode(array("mensagem" => $nMensagem, "status" => $iStatus));
+            echo $json->encode(array("mensagem" => urlencode($nMensagem), "status" => $iStatus));
             return;
           }
   
           if($ItemUltimaPosicao->ac20_valorunitario != $aItens[$iInd]->vlruni){
-            $nMensagem .= 'Item '.$rsacordoMaterial->ac20_pcmater.': O valor unitario atual do contrato e '.$ItemUltimaPosicao->ac20_valorunitario.' e o valor unitario do item a ser anulado e '.$aItens[$iInd]->vlruni.'. Ao anular os itens do empenho, o valor unitario sera o '.$ItemUltimaPosicao->ac20_valorunitario.'.';
+            $nMensagem .= 'Item '.$rsacordoMaterial->ac20_pcmater.': O valor unitário atual do contrato é '.$ItemUltimaPosicao->ac20_valorunitario.' e o valor unitário do item a ser anulado é '.$aItens[$iInd]->vlruni.'. Ao anular os itens do empenho, o valor unitario será o '.$ItemUltimaPosicao->ac20_valorunitario.'.';
             
             $iStatus = 3;
             
@@ -613,7 +613,7 @@ switch ($objJson->method) {
         
       }
       
-      echo $json->encode(array("mensagem" => $nMensagem, "status" => $iStatus));
+      echo $json->encode(array("mensagem" => urlencode($nMensagem), "status" => $iStatus));
       
 
     break;

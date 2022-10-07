@@ -743,9 +743,10 @@ if (empty ($e60_numemp)) {
 
             mensagem = obj.mensagem.replace(/\+/g," ");
             mensagem = unescape(mensagem);
-            alert(mensagem)
+            alert(mensagem);
         }else if(obj.status == 3){
             mensagem = obj.mensagem.urlDecode().replace(/\+/g," ")+' Deseja continuar ?';
+            mensagem = unescape(mensagem);
             if(confirm(mensagem)){
                 js_anularEmpenho();
             }
