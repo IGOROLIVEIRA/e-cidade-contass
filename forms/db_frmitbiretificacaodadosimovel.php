@@ -984,9 +984,9 @@ function js_mostrasetorregimovel1(chave1,chave2){
 js_criaGrid();
 
 function js_pesquisa(){
-  js_OpenJanelaIframe('',
+  js_OpenJanelaIframe('CurrentWindow.corpo',
                       'db_iframe_itbi',
-                      'func_itbilib.php?funcao_js=parent.js_preenchepesquisa|it01_guia','Pesquisa',true,0);
+                      'func_itbiretifica.php?funcao_js=parent.js_preenchepesquisa|it01_guia','Pesquisa',true,0);
 }
 
 function js_preenchepesquisa(chave){
