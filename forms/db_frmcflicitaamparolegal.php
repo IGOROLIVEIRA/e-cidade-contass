@@ -83,14 +83,52 @@ if (isset($db_opcaoal)) {
 		</table>
 	</fieldset>
 
-	<fieldset>
-		<legend>
+	<fieldset style="  height: 400px;
+    overflow-y: scroll;">
+		<legend align="center">
 			<b>Amparo Legal</b>
 		</legend>
-		<table align="left">
+		<table id="tablePerfis" class="DBGrid" style="width: 70%; border: 1px solid #a4a4a4;">
+			<tr>
+				<th class="table_header" style="background:#e6e6e6; cursor: pointer; border: 1px solid #a4a4a4;" onclick="marcarTodos();">M</th>
+				<th style="border: 0px solid red;  background:#e6e6e6; border: 1px solid #a4a4a4;">Código</th>
+				<th style="border: 0px solid red;  background:#e6e6e6; border: 1px solid #a4a4a4;">Lei</th>
+			</tr>
+
+
+
+			<?php
+			$instit = db_getsession("DB_instit");
+			$result = db_query("select * from amparolegal");
+
+
+
+			$numrows = pg_numrows($result);
+			for ($i = 0; $i < $numrows; $i++) {
+
+				echo "<tr>
+                          <td  style='text-align:center; background:#e6e6e6; border: 1px solid #a4a4a4;'>
+                              <input id=" . pg_result($result, $i, "l212_codigo") . " type='checkbox' class='marca_itens' name='aItensMarcados[]' value='" . pg_result($result, $i, "l212_codigo") . "'>
+                        </td>
+
+						<td style='text-align:center; background:#ffffff; border: 1px solid #a4a4a4;'>" .
+					pg_result($result, $i, "l212_codigo") . "
+							</td>
+
+                        <td style='text-align:center; background:#ffffff; border: 1px solid #a4a4a4;'>" .
+					pg_result($result, $i, "l212_lei") . "
+                        </td>
+
+                        
+                      </tr>";
+			}
+
+
+			?>
 
 		</table>
 	</fieldset>
+	<input style="margin-top: 20px;" value="Salvar" type="submit" name="incluir"></input>
 </form>
 <script>
 	//document.getElementById('l03_descr').value = <?php echo $l03_descr; ?>;
