@@ -76,14 +76,14 @@ $mesfolha = DBPessoal::getMesFolha();
                     </td>
                     <td>
                         <select name="tpid" id="tpid" style="width: 25%;" onchange="js_alt_identificador(this)">
-                            <option value="1">CGM</option>
                             <option value="2">Matricula</option>
+                            <option value="1">CGM</option>
                         </select>
                     </td>
                 </tr>
             </table>
             <table class="form-container">
-                <tr class="linha_cgm">
+                <tr class="linha_cgm" style="display: none">
                     <td nowrap title="<?php echo $Tz01_numcgm; ?>">
                         <a id="lbl_z01_numcgm" for="cgm"><?= $Lz01_numcgm ?></a>
                     </td>
@@ -93,7 +93,7 @@ $mesfolha = DBPessoal::getMesFolha();
                         <input type="button" name="adicionar" value="Adicionar" onclick="js_adicionar_cgm()" />
                     </td>
                 </tr>
-                <tr class="linha_cgm">
+                <tr class="linha_cgm" style="display: none">
                     <td>
                         <strong>Cgm</strong>
                     </td>
@@ -103,7 +103,7 @@ $mesfolha = DBPessoal::getMesFolha();
                     </td>
                 </tr>
 
-                <tr class="linha_matricula" style="display: none">
+                <tr class="linha_matricula">
                     <td nowrap title="<?php echo $Trh01_regist; ?>">
                         <a id="lbl_rh01_regist" for="matricula"><?= $Lrh01_regist ?></a>
                     </td>
@@ -113,7 +113,7 @@ $mesfolha = DBPessoal::getMesFolha();
                         <input type="button" name="adicionar" value="Adicionar" onclick="js_adicionar_matric()" />
                     </td>
                 </tr>
-                <tr class="linha_matricula" style="display: none">
+                <tr class="linha_matricula">
                     <td>
                         <strong>Matrículas</strong>
                     </td>
