@@ -97,6 +97,9 @@ if (isset($incluir)) {
 	where pc81_codprocitem in (select l21_codpcprocitem from liclicitem where l21_codliclicita = $licitacao) 
 	order by pc81_codproc ;");
 
+	$dotacao = $_POST['o58_coddot'];
+	$elemento_dotacao = $_POST['o50_estrutdespesa'];
+
 	$aCodProcessos = array();
 	for ($i = 0; $i < pg_numrows($itens_processos); $i++) {
 		$item = db_utils::fieldsMemory($itens_processos, $i);
@@ -105,6 +108,7 @@ if (isset($incluir)) {
 		$aCodProcessos[] = $oItem;
 	}
 
+	$teste = 0;
 
 	for ($i = 0; $i < count($aCodProcessos); $i++) {
 
@@ -117,6 +121,7 @@ if (isset($incluir)) {
 		order by pc81_codproc);");
 		$quantidade_itens = pg_numrows($itens);
 		$quantidade_dotacoes = 0;
+
 
 
 
@@ -136,25 +141,52 @@ if (isset($incluir)) {
 
 			if ($servico->pc01_servico == "f") {
 
-				for ($j = 0; $j < count($reduzido); $j++) {
+				$quantidade_dotacoes = 0;
+
+
+				// Verificando se item já possui a dotação a ser lançada
+				$result =  db_query("select * from pcdotac where pc13_codigo = $codigo_item and pc13_coddot = $dotacao;");
+
+				for ($k = 0; $k < count($reduzido); $k++) {
+					if ($elemento == substr($estrutural[$k], 23, 7)) {
+						$quantidade_dotacoes++;
+					}
+				}
+
+
+
+				if (pg_numrows($result) == 0 && $elemento == substr($elemento_dotacao, 23, 7)) {
+
+					$clpcdotac->pc13_anousu = db_getsession('DB_anousu');
+					$clpcdotac->pc13_coddot = $dotacao;
+					$clpcdotac->pc13_depto  = db_getsession('DB_coddepto');
+					$clpcdotac->pc13_quant  = $item->pc11_quant / $quantidade_dotacoes;
+					$clpcdotac->pc13_valor  = $item->pc11_quant / $quantidade_dotacoes;
+					$clpcdotac->pc13_codele = $codele->pc18_codele;
+					$clpcdotac->pc13_codigo = $codigo_item;
+					$clpcdotac->incluir(null);
+				}
+				$quantidade_valor =  $item->pc11_quant / $quantidade_dotacoes;
+				$rsResult = db_query("UPDATE pcdotac SET pc13_quant = $quantidade_valor,pc13_valor = $quantidade_valor WHERE pc13_codigo = $codigo_item");
+			} else {
+
+				if ($item->pc11_servicoquantidade == "t") {
 					$quantidade_dotacoes = 0;
 
-
 					// Verificando se item já possui a dotação a ser lançada
-					$dotacao = $reduzido[$j];
 					$result =  db_query("select * from pcdotac where pc13_codigo = $codigo_item and pc13_coddot = $dotacao;");
 
-					if (pg_numrows($result) == 0) {
-
-
-						for ($k = 0; $k < count($reduzido); $k++) {
-							if ($elemento == substr($estrutural[$k], 23, 7)) {
-								$quantidade_dotacoes++;
-							}
+					for ($k = 0; $k < count($reduzido); $k++) {
+						if ($elemento == substr($estrutural[$k], 23, 7)) {
+							$quantidade_dotacoes++;
 						}
+					}
+
+
+					if (pg_numrows($result) == 0 && $elemento == substr($elemento_dotacao, 23, 7)) {
 
 						$clpcdotac->pc13_anousu = db_getsession('DB_anousu');
-						$clpcdotac->pc13_coddot = $reduzido[$j];
+						$clpcdotac->pc13_coddot = $dotacao;
 						$clpcdotac->pc13_depto  = db_getsession('DB_coddepto');
 						$clpcdotac->pc13_quant  = $item->pc11_quant / $quantidade_dotacoes;
 						$clpcdotac->pc13_valor  = $item->pc11_quant / $quantidade_dotacoes;
@@ -162,68 +194,45 @@ if (isset($incluir)) {
 						$clpcdotac->pc13_codigo = $codigo_item;
 						$clpcdotac->incluir(null);
 					}
-				}
-			} else {
 
-				if ($item->pc11_servicoquantidade == "t") {
-					for ($j = 0; $j < count($reduzido); $j++) {
-						$quantidade_dotacoes = 0;
-
-						// Verificando se item já possui a dotação a ser lançada
-						$dotacao = $reduzido[$j];
-						$result =  db_query("select * from pcdotac where pc13_codigo = $codigo_item and pc13_coddot = $dotacao;");
-
-						if (pg_numrows($result) == 0) {
-
-							for ($k = 0; $k < count($reduzido); $k++) {
-								if ($elemento == substr($estrutural[$k], 23, 7)) {
-									$quantidade_dotacoes++;
-								}
-							}
-
-							$clpcdotac->pc13_anousu = db_getsession('DB_anousu');
-							$clpcdotac->pc13_coddot = $reduzido[$j];
-							$clpcdotac->pc13_depto  = db_getsession('DB_coddepto');
-							$clpcdotac->pc13_quant  = $item->pc11_quant / $quantidade_dotacoes;
-							$clpcdotac->pc13_valor  = $item->pc11_quant / $quantidade_dotacoes;
-							$clpcdotac->pc13_codele = $codele->pc18_codele;
-							$clpcdotac->pc13_codigo = $codigo_item;
-							$clpcdotac->incluir(null);
-						}
-					}
+					$quantidade_valor =  $item->pc11_quant / $quantidade_dotacoes;
+					$rsResult = db_query("UPDATE pcdotac SET pc13_quant = $quantidade_valor,pc13_valor = $quantidade_valor WHERE pc13_codigo = $codigo_item");
 				} else {
-					for ($j = 0; $j < count($reduzido); $j++) {
-
-						$quantidade_dotacoes = 0;
 
 
-						// Verificando se item já possui a dotação a ser lançada
-						$dotacao = $reduzido[$j];
-						$result =  db_query("select * from pcdotac where pc13_codigo = $codigo_item and pc13_coddot = $dotacao;");
-
-						if (pg_numrows($result) == 0) {
+					$quantidade_dotacoes = 0;
 
 
-							for ($k = 0; $k < count($reduzido); $k++) {
-								if ($elemento == substr($estrutural[$k], 23, 7)) {
-									$quantidade_dotacoes++;
-								}
-							}
+					// Verificando se item já possui a dotação a ser lançada
+					$result =  db_query("select * from pcdotac where pc13_codigo = $codigo_item and pc13_coddot = $dotacao;");
 
-							$clpcdotac->pc13_anousu = db_getsession('DB_anousu');
-							$clpcdotac->pc13_coddot = $reduzido[$j];
-							$clpcdotac->pc13_depto  = db_getsession('DB_coddepto');
-							$clpcdotac->pc13_quant  = 1;
-							$clpcdotac->pc13_valor  = 1;
-							$clpcdotac->pc13_codele = $codele->pc18_codele;
-							$clpcdotac->pc13_codigo = $codigo_item;
-							$clpcdotac->incluir(null);
+					for ($k = 0; $k < count($reduzido); $k++) {
+						if ($elemento == substr($estrutural[$k], 23, 7)) {
+							$quantidade_dotacoes++;
 						}
 					}
+
+
+					if (pg_numrows($result) == 0 && $elemento == substr($elemento_dotacao, 23, 7)) {
+
+
+
+						$clpcdotac->pc13_anousu = db_getsession('DB_anousu');
+						$clpcdotac->pc13_coddot = $dotacao;
+						$clpcdotac->pc13_depto  = db_getsession('DB_coddepto');
+						$clpcdotac->pc13_quant  = 1;
+						$clpcdotac->pc13_valor  = 1;
+						$clpcdotac->pc13_codele = $codele->pc18_codele;
+						$clpcdotac->pc13_codigo = $codigo_item;
+						$clpcdotac->incluir(null);
+					}
+					$quantidade_valor =  $item->pc11_quant / $quantidade_dotacoes;
+					$rsResult = db_query("UPDATE pcdotac SET pc13_quant = $quantidade_valor,pc13_valor = $quantidade_valor WHERE pc13_codigo = $codigo_item");
 				}
 			}
 		}
 	}
+
 
 	db_msgbox($clpcdotac->erro_sql);
 

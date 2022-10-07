@@ -7,6 +7,7 @@
     parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
     db_postmemory($HTTP_POST_VARS);
     $clitemprecoreferencia = new cl_itemprecoreferencia;
+    ini_set('display_errors', 'on');
 
     switch ($oGet->tipoprecoreferencia) {
         case '2':
@@ -232,7 +233,7 @@
                 ";
 
                 $rsResult = db_query($sSql) or die(pg_last_error());
-    
+
                 $pc80_criterioadjudicacao = db_utils::fieldsMemory($rsResult, 0)->pc80_criterioadjudicacao;
 
                 $sWhere  = " db02_descr like 'ASS. RESP. DEC. DE RECURSOS FINANCEIROS' ";
@@ -249,8 +250,8 @@
                 $sWhere .= " AND db03_instit = db02_instit ";
                 $sWhere .= " AND db02_instit = " . db_getsession('DB_instit');
 
-            
-                if(!isset($cabecalho[$oLotes->pc68_sequencial])){
+
+                if (!isset($cabecalho[$oLotes->pc68_sequencial])) {
 
                     if ($pc80_criterioadjudicacao == 2 || $pc80_criterioadjudicacao == 1) { //OC8365
                         echo <<<HTML
@@ -269,7 +270,7 @@
                                 <td class="item-menu item-menu-color">TOTAL/VLR ESTIMADO</td>
                             </tr>
 HTML;
-                } else {
+                    } else {
                         echo <<<HTML
                         <div class="table" autosize="1">
                             <div class="tr bg_eb">
@@ -287,7 +288,7 @@ HTML;
 HTML;
                     }
                 }
-?>
+        ?>
             <?php
                 for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
 
@@ -369,8 +370,7 @@ HTML;
                 }
                 $cabecalho[$oLotes->pc68_sequencial] = $oLotes->pc68_sequencial;
             }
-
-        } /*fim do if lotes*/else {
+        } /*fim do if lotes*/ else {
             $sSql = "select *
                 from
                 itemprecoreferencia

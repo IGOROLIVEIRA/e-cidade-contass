@@ -103,21 +103,6 @@ if (isset($incluir)) {
 	$quantidade_itens = pg_numrows($itens);
 	$quantidade_dotacoes = 0;
 
-	/*
-	for ($j = 0; $j < count($reduzido); $j++) {
-		$dotacao = $reduzido[$j];
-		$rsResult = db_query("select * from pcdotac where pc13_coddot = $dotacao and
-		pc13_codigo in ((select pc11_codigo from solicitem where pc11_numero = $pc10_numero))");
-
-		if (pg_numrows($rsResult) > 0) {
-			db_msgbox("Dotação " . $reduzido[$j] . " ja está vinculada");
-			db_redireciona("com1_dotacoesnovo001.php?pc11_numero=$pc11_numero");
-		}
-	}
-	*/
-
-
-
 
 
 	for ($i = 0; $i < $quantidade_itens; $i++) {
@@ -551,7 +536,10 @@ if (isset($incluir)) {
 
 		}
 
-		alert(oRetorno.message.urlDecode());
+		alert("Inclusão efetuado com Sucesso.");
+		document.getElementById("o58_coddot").value = "";
+		document.getElementById("o56_descr").value = "";
+
 
 		carregaDotacoes();
 
@@ -654,10 +642,6 @@ if (isset($incluir)) {
 	}
 
 	function js_mostraorcdotacao1(chave1, chave2, chave3) {
-		console.log(chave1);
-		console.log(chave2);
-		console.log(chave3);
-
 		document.form1.o58_coddot.value = chave1;
 		document.form1.o56_descr.value = chave2;
 		document.form1.o50_estrutdespesa.value = chave3;

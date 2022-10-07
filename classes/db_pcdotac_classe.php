@@ -98,7 +98,9 @@ class cl_pcdotac
   // funcao para inclusao
   function incluir($pc13_sequencial)
   {
+
     $this->atualizacampos();
+
     if ($this->pc13_anousu == null) {
       $this->erro_sql = " Campo Ano nao Informado.";
       $this->erro_campo = "pc13_anousu";
