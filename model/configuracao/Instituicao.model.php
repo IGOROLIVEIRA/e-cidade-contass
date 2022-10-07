@@ -217,6 +217,12 @@ class Instituicao {
    */
   protected $sDataContabilidade;
 
+    /**
+     * @var bool
+     */
+  protected $usaDebitosItbi;
+
+
   /**
    * Instituicao constructor.
    * @param null $iSequencial
@@ -228,9 +234,9 @@ class Instituicao {
 
       $oDaoDBConfig  = db_utils::getDao("db_config");
 
-      $sCampos       = "nomeinst, prefeitura, db21_tipoinstit, numcgm, cgc, munic, logo, nomeinstabrev, ender, numero,";
-      $sCampos      .= "telef, url, uf, db21_compl, email, db21_usasisagua, ";
-      $sCampos      .= " (select db21_codcli from db_config where prefeitura is true) as db21_codcli ";
+      $sCampos       = "nomeinst, prefeitura, si09_tipoinstit, numcgm, cgc, munic, logo, nomeinstabrev, ender, numero,";
+      $sCampos      .= "telef, url, uf, db21_compl, email, db21_usasisagua, db21_usadebitoitbi, ";
+      $sCampos      .= " (select db21_codcli from db_config where prefeitura is true) as db21_codcli,db21_habitantes,dtcont ";
 
       $sSqlDBConfig  = $oDaoDBConfig->sql_query_file($iSequencial, $sCampos);
       $rsDBConfig    = $oDaoDBConfig->sql_record($sSqlDBConfig);
@@ -240,25 +246,28 @@ class Instituicao {
 
       if ($oDaoDBConfig->numrows > 0) {
 
-        $oDadoInstituicao     = db_utils::fieldsMemory($rsDBConfig, 0);
-        $this->sDescricao     = $oDadoInstituicao->nomeinst;
-        $this->lPrefeitura    = $oDadoInstituicao->prefeitura;
-        $this->iSequencial    = $iSequencial;
-        $this->iTipo          = $oDadoInstituicao->db21_tipoinstit;
-        $this->iCodigoCGM     = $oDadoInstituicao->numcgm;
-        $this->iCodigoCliente = $oDadoInstituicao->db21_codcli;
-        $this->sCNPJ          = $oDadoInstituicao->cgc;
-        $this->sMunicipio     = $oDadoInstituicao->munic;
-        $this->sEmail         = $oDadoInstituicao->email;
-        $this->sSite          = $oDadoInstituicao->url;
-        $this->sImagemLogo    = $oDadoInstituicao->logo;
-        $this->sLogradouro    = $oDadoInstituicao->ender;
-        $this->sUf            = $oDadoInstituicao->uf;
-        $this->sNumero        = $oDadoInstituicao->numero;
-        $this->sComplemento   = $oDadoInstituicao->db21_compl;
-        $this->sTelefone      = $oDadoInstituicao->telef;
-        $this->sDescricaoAbreviada = $oDadoInstituicao->nomeinstabrev;
-        $this->lUsaSisagua         = $oDadoInstituicao->db21_usasisagua == 't';
+        $oDadoInstituicao            = db_utils::fieldsMemory($rsDBConfig, 0);
+        $this->sDescricao            = $oDadoInstituicao->nomeinst;
+        $this->lPrefeitura           = $oDadoInstituicao->prefeitura;
+        $this->iSequencial           = $iSequencial;
+        $this->iTipoInstit           = $oDadoInstituicao->si09_tipoinstit;
+        $this->iCodigoCGM            = $oDadoInstituicao->numcgm;
+        $this->iCodigoCliente        = $oDadoInstituicao->db21_codcli;
+        $this->sCNPJ                 = $oDadoInstituicao->cgc;
+        $this->sMunicipio            = $oDadoInstituicao->munic;
+        $this->sEmail                = $oDadoInstituicao->email;
+        $this->sSite                 = $oDadoInstituicao->url;
+        $this->sImagemLogo           = $oDadoInstituicao->logo;
+        $this->sLogradouro           = $oDadoInstituicao->ender;
+        $this->sUf                   = $oDadoInstituicao->uf;
+        $this->sNumero               = $oDadoInstituicao->numero;
+        $this->sComplemento          = $oDadoInstituicao->db21_compl;
+        $this->sTelefone             = $oDadoInstituicao->telef;
+        $this->sDescricaoAbreviada   = $oDadoInstituicao->nomeinstabrev;
+        $this->lUsaSisagua           = $oDadoInstituicao->db21_usasisagua == 't';
+        $this->iHabitantes           = $oDadoInstituicao->db21_habitantes;
+        $this->sDataContabilidade    = $oDadoInstituicao->dtcont;
+        $this->usaDebitosItbi        = $oDadoInstituicao->db21_usadebitoitbi;
       }
     }
   }
@@ -620,5 +629,13 @@ class Instituicao {
   {
     $this->sDataContabilidade = $sDataContabilidade;
     return $this;
+  }
+
+  /**
+   * @return bool
+   */
+  public function getUsaDebitosItbi()
+  {
+    return (boolean) $this->usaDebitosItbi;
   }
 }

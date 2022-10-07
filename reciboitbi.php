@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_barras.php");
@@ -31,6 +31,7 @@ require_once("fpdf151/scpdf.php");
 
 require_once("libs/db_conecta.php");
 require_once("libs/db_utils.php");
+require_once("libs/db_sql.php");
 
 require_once("dbforms/db_funcoes.php");
 require_once("classes/db_itbiavalia_classe.php");
@@ -60,7 +61,8 @@ require_once("classes/db_paritbi_classe.php");
 require_once("model/regraEmissao.model.php");
 require_once("model/convenio.model.php");
 require_once("classes/db_itbiretificacao_classe.php");
-
+require_once("model/configuracao/Instituicao.model.php");
+require_once("model/itbi/Itbi.model.php");
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 
 try {
@@ -193,9 +195,9 @@ if ($clitbiavalia->numrows > 0) {
   $lLiberado = true;
 }
 
-$rsItbi = $clitbi->sql_record($clitbi->sql_query( null, 
-                                                  "*", 
-                                                  null, 
+$rsItbi = $clitbi->sql_record($clitbi->sql_query( null,
+                                                  "*",
+                                                  null,
                                                   "it01_guia = {$itbi}"
                                                   . " and it01_coddepto = " . db_getsession("DB_coddepto") ));
 
@@ -360,12 +362,9 @@ if($clitbiconstr->numrows  > 0){
 /********************************************************** T R A N S M I T E N T E S *****************************************************************************************/
 /*============================================================================================================================================================================*/
 
-//die($clitbinome->sql_queryguia("","it03_nome as z01_nome,it03_sexo,it03_cpfcnpj as z01_cgccpf,it03_endereco as z01_ender,it03_numero,it03_compl,it03_cxpostal,it03_bairro as z01_bairro,it03_munic as z01_munic,it03_uf as z01_uf,it03_cep as z01_cep,it03_mail,it22_itbi,it22_setor as j34_setor,it22_quadra as j34_quadra,it22_lote as j34_lote,it22_descrlograd as j14_nome,it22_numero as j39_numero,it22_compl,it06_matric,it04_codigo,it04_descr,it04_desconto,it04_obs,it04_aliquota,itbi.*,itburbano.*,itbirural.*,itbiavalia.*",""," it03_guia  = $itbi and upper(it03_tipo)  = 'T' and it03_princ = 't' "));
-
 $result1 = $clitbinome->sql_record($clitbinome->sql_queryguia("","z01_numcgm,it03_nome as z01_nome,z01_telef as fonetransmitente,it03_mail as mailtransmitente ,it03_sexo,it03_cpfcnpj as z01_cgccpf,it03_endereco as z01_ender,it03_numero,it03_compl,it03_cxpostal,it03_bairro as z01_bairro,it03_munic as z01_munic,it03_uf as z01_uf,it03_cep as z01_cep,it03_mail,it22_itbi,it22_setor as j34_setor,it22_quadra as j34_quadra,j34_distrito,it22_lote as j34_lote,it22_descrlograd as j14_nome,j13_descr,it22_numero as j39_numero,it22_compl as j39_compl,it06_matric,it04_codigo,it04_descr,it04_desconto,it04_obs,itbi.*,itburbano.*,itbirural.*,itbiavalia.*",""," it03_guia  = $itbi and upper(it03_tipo)  = 'T' and it03_princ = 't' "));
 
 if($clitbinome->numrows  > 0){
-  //db_criatabela($result1);exit;
   db_fieldsmemory($result1,0);
 }
 
@@ -439,7 +438,7 @@ $pdf1->cgc = $cgc;
  * Verifica se a guia está liberada para emissão
  * Caso não esteja não gera recibo
  */
-if ($lLiberado and $tipoguia != "q") {
+if ($lLiberado && $tipoguia != "q") {
 
 /**************************************************    I N S E R E   O   R E C I B O    **********************************************************************************/
 // Não Insere Recibo quando não estiver liberada
@@ -448,6 +447,8 @@ if ($lLiberado and $tipoguia != "q") {
   $numpre       = $clnumpref->sql_numpre();
   $numpre_ficha = $numpre;
   $resnumpre    = $clitbinumpre->sql_record($clitbinumpre->sql_query(null,"*",""," it15_guia = {$itbi}"));
+  $oItbi = new Itbi($itbi);
+  $oInstituicao = new Instituicao(db_getsession('DB_instit','1'));
   /**
    * Se existirem guias emitidas altera a situação de ultima emitida para false
    */
@@ -458,13 +459,25 @@ if ($lLiberado and $tipoguia != "q") {
 
       $clitbinumpre->it15_sequencial = $oItbiNumpre->it15_sequencial;
       $clitbinumpre->it15_ultimaguia = 'f';
-    	$clitbinumpre->alterar($oItbiNumpre->it15_sequencial);
+      $clitbinumpre->alterar($oItbiNumpre->it15_sequencial);
+      if ($oInstituicao->getUsaDebitosItbi() === true) {
+          $oItbi->removeArrecad($oItbiNumpre->it15_numpre);
+      }
     }
   }
   $clitbinumpre->it15_guia       = $itbi;
   $clitbinumpre->it15_numpre     = $numpre;
   $clitbinumpre->it15_ultimaguia = 't';
   $clitbinumpre->incluir(null);
+
+  if ($oInstituicao->getUsaDebitosItbi() === true) {
+      try {
+        $oItbi->incluirArrecad($numpre);
+      } catch (Exception $ex) {
+        $sqlerro = true;
+        $erromsg = $ex->getMessage();
+      }
+  }
 
   $numpre = $clitbinumpre->it15_numpre;
 
@@ -511,8 +524,8 @@ if ($lLiberado and $tipoguia != "q") {
           $erromsg = "Erro arrenumcgm ".$clarrenumcgm->erro_msg;
       }
   }
-  
-  if ($sqlerro == true) { 
+
+  if ($sqlerro == true) {
     db_msgbox($erromsg);
     echo "<script>window.close()</script>";
      exit;
@@ -560,11 +573,11 @@ if ( $tipoguia == "q" ) {
     $oItbiNumpre = db_utils::fieldsMemory($rsItbiNumpre, $x);
 
       if ( $oItbiNumpre->datapagamento != "" ) {
-      	
+
       	$iAnoPagamento = date( 'Y', strtotime($oItbiNumpre->it01_data) );
       	$rsTxParItbi   = db_query($clparitbi->sql_query($iAnoPagamento, 'it24_taxabancaria '));
       	$oParItbi      = db_utils::fieldsMemory($rsTxParItbi, 0);
-      	
+
         $pdf1->datapagamento    = $oItbiNumpre->datapagamento;
         $pdf1->valorpagamento   = $oItbiNumpre->k00_valor;
         $pdf1->bancopagamento   = $oItbiNumpre->bancopagamento;
@@ -587,20 +600,12 @@ if(isset($tx_banc) && $tx_banc != '' && $tx_banc > 0){
 }
 
 // #################################### Atualização dos valores do ITBI
-if ($db21_usadebitoitbi == 't') {
-  $sSQL_guia_numpre = <<<SQL
-      select arrecad_itbi.k00_numpre, arrecad.*
-      from arrecad_itbi
-          inner join arrecad on arrecad.k00_numpre = arrecad_itbi.k00_numpre
-          inner join itbi on itbi.it01_guia = arrecad_itbi.it01_guia
-            where itbi.it01_guia = $itbi;
+if ($oInstituicao->getUsaDebitosItbi() === true) {
+  $resultGuiaNumpre    = $clitbinumpre->sql_record($clitbinumpre->sql_query(null,"*",""," it15_guia = {$itbi}"));
 
-SQL;
-
-  $resultGuiaNumpre = db_query($sSQL_guia_numpre);
   $oDado = db_utils::fieldsMemory($resultGuiaNumpre,0);
   $ano = db_getsession('DB_anousu');
-  $data = (isset($novadatavencimento) && !empty($novadatavencimento)) ? implode("-", array_reverse(explode("/", $novadatavencimento))) : date("Y-m-d", db_getsession("DB_datausu"));
+  $data = empty($novadatavencimento) === false ? implode("-", array_reverse(explode("/", $novadatavencimento))) : date("Y-m-d", db_getsession("DB_datausu"));
 
   $sSQL = <<<SQL
               select
@@ -613,7 +618,7 @@ SQL;
                 substr(fc_calcula,28,13)::float8+
                 substr(fc_calcula,41,13)::float8-
                 substr(fc_calcula,54,13)::float8) as total
-                FROM fc_calcula($oDado->k00_numpre, 1, 3, '$data'::date, '$data'::date, $ano);
+                FROM fc_calcula($oDado->it15_numpre, 1, 3, '$data'::date, '$data'::date, $ano);
 SQL;
 
   $resultCorrecoes = db_query($sSQL);
@@ -639,9 +644,9 @@ if($oRegraEmissao->isCobranca()){
 
 if ($lLiberado) {
   // Nao gera código de barras quando não estiver liberada
-  try {    
+  try {
      $vencItbi = (strtotime($oDado->k00_dtvenc) > strtotime($datavencimento)) ? $oDado->k00_dtvenc : $datavencimento;
-     $oConvenio = new convenio($oRegraEmissao->getConvenio(), $numpre, 1, (float)$valorpagamento, $vlrbar, $vencItbi, 6); 
+     $oConvenio = new convenio($oRegraEmissao->getConvenio(), $numpre, 1, (float)$valorpagamento, $vlrbar, $vencItbi, 6);
   } catch (Exception $eExeption){
      db_redireciona("db_erros.php?fechar=true&db_erro={$eExeption->getMessage()}");
      exit;
@@ -888,15 +893,15 @@ if($oRegraEmissao->isCobranca()){
 
   $sMsgObs = @$it01_obs;
   if ( $lRetificado ) {
-  	
+
   	// Pega o ano da itbi retificada
   	$rsItbiRetificativa = db_query($clitbi->sql_query($oItbiRetificada->it32_itbiretif));
   	$oItbiRetificativa  = db_utils::fieldsMemory($rsItbiRetificativa, 0);
-  	
+
   	// Repassa a qual guia a atual é retificativa
   	$pdf1->sOrigemRetificacaoNumero = $oItbiRetificada->it32_itbiretif;
   	$pdf1->sOrigemRetificacaoAno    = date('Y', strtotime($oItbiRetificativa->it01_data));
-  	
+
   	// Se for de Araruama, não escreve esta observação, pois é escrita em outra parte do relatório
   	if ($db21_codcli != 74) {
       $sMsgObs .= " GUIA RETIFICATIVA À GUIA DE NÚMERO {$oItbiRetificada->it32_itbiretif}";
@@ -933,7 +938,7 @@ $rsArreTipo    = $oDaoArreTipo->sql_record($sSqlArreTipo);
 if ($oDaoArreTipo->numrows > 0) {
   $k00_msgrecibo = db_utils::fieldsMemory($rsArreTipo, 0)->k00_msgrecibo;
 }
-  
+
 $pdf1->usuario_atual_regist = $oUsuarioAtual->rh01_regist;
 $pdf1->usuario_atual_nome   = $oUsuarioAtual->z01_nome;
 $pdf1->usuario_atual_funcao = $oUsuarioAtual->rh37_descr;
@@ -969,7 +974,7 @@ $pdf1->it06_matric               =@$it06_matric;
 $pdf1->j39_numero                =@$j39_numero;
 $pdf1->j39_compl                 =@$j39_compl;
 $pdf1->db21_usadistritounidade   =@$db21_usadistritounidade;
-$pdf1->db21_usadebitoitbi        =@$db21_usadebitoitbi;
+$pdf1->db21_usadebitoitbi        =@$oInstituicao->getUsaDebitosItbi() === true ? 't' : 'f';
 $pdf1->j34_distrito              =@$j34_distrito;
 $pdf1->j34_setor                 =@$j34_setor;
 $pdf1->j34_quadra                =@$j34_quadra;
@@ -1062,7 +1067,7 @@ $pdf1->tipoguia                  = @$tipoguia;
 
 $pdf1->lRetificado 				 = $lRetificado;
 
-if ($db21_usadebitoitbi == 't') {
+if ($oInstituicao->getUsaDebitosItbi() === true) {
     $pdf1->vlrhis       = $oDadoCorrecoes->vlrhis      != "" ? (float)$oDadoCorrecoes->vlrhis      : (float)"0,00";
     $pdf1->vlrcor       = $oDadoCorrecoes->vlrcor      != "" ? (float)$oDadoCorrecoes->vlrcor      : (float)"0,00";
     $pdf1->vlrjuros     = $oDadoCorrecoes->vlrjuros    != "" ? (float)$oDadoCorrecoes->vlrjuros    : (float)"0,00";

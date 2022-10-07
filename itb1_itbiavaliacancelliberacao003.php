@@ -1,4 +1,4 @@
-<?
+<?php
 /*
  *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2013  DBselller Servicos de Informatica
@@ -42,7 +42,7 @@ require_once("classes/db_cancdebitos_classe.php");
 require_once("classes/db_cancdebitosreg_classe.php");
 require_once("classes/db_cancdebitosproc_classe.php");
 require_once("classes/db_cancdebitosprocreg_classe.php");
-
+require_once("model/configuracao/Instituicao.model.php");
 require_once("dbforms/db_funcoes.php");
 
 $oGet   = db_utils::postMemory($_GET);
@@ -214,6 +214,17 @@ SQL;
         }
 
     }
+  }
+
+  $oInstituicao = new Instituicao(db_getsession('DB_instit'));
+  if ($oInstituicao->getUsaDebitosItbi() === true && $lSqlErro === false) {
+      $oItbi = new Itbi($it01_guia);
+      try {
+          $oItbi->removeArrecad();
+      } catch (Exception $ex) {
+          $lSqlErro = true;
+          $sMsgErro = $ex->getMessage();
+      }
   }
   db_fim_transacao($lSqlErro);
 

@@ -3122,6 +3122,8 @@ class Acordo
 
         $oNovaPosicao = new AcordoPosicao(null);
         $oNovaPosicao->setData(date("Y-m-d", db_getsession("DB_datausu")));
+        if($datareferencia)
+            $oNovaPosicao->setData($datareferencia);
         $oNovaPosicao->setAcordo($this->getCodigoAcordo());
         $oNovaPosicao->setEmergencial(false);
         $oNovaPosicao->setNumero($this->getUltimaPosicao(true)->getNumero() + 1);
@@ -3304,9 +3306,9 @@ class Acordo
         $oAcordoLancamentoContabil = new AcordoLancamentoContabil();
         $sHistorico = "Valor referente ao aditivo {$oNovaPosicao->getNumeroAditamento()} do contrato de c�digo: {$this->getCodigoAcordo()}.";
         if ($nValorLancamentoContabil > 0) {
-            $oAcordoLancamentoContabil->registraControleContrato($this->getCodigoAcordo(), $nValorLancamentoContabil, $sHistorico, $dtAssinatura);
+            $oAcordoLancamentoContabil->registraControleContrato($this->getCodigoAcordo(), $nValorLancamentoContabil, $sHistorico, $datareferencia);
         } else {
-            $oAcordoLancamentoContabil->anulaRegistroControleContrato($this->getCodigoAcordo(), abs($nValorLancamentoContabil), $sHistorico, $dtAssinatura);
+            $oAcordoLancamentoContabil->anulaRegistroControleContrato($this->getCodigoAcordo(), abs($nValorLancamentoContabil), $sHistorico, $datareferencia);
         }
         return $this;
     }
@@ -4136,7 +4138,7 @@ class Acordo
      * @return $this
      * @throws Exception
      */
-    public function apostilar($aItens, $oApostila, $dtVigenciaInicial, $dtVigenciaFinal, $aSelecionados)
+    public function apostilar($aItens, $oApostila, $dtVigenciaInicial, $dtVigenciaFinal, $aSelecionados, $datareferencia)
     {
         $nValorItens = 0;
         $nValorLancamentoContabil = 0;
@@ -4265,10 +4267,10 @@ class Acordo
         $oAcordoLancamentoContabil = new AcordoLancamentoContabil();
         $sHistorico = "Valor referente ao apostilamento {$oNovaPosicao->getNumeroApostilamento()} do contrato de c�digo: {$this->getCodigoAcordo()}.";
         if ($nValorLancamentoContabil < 0) {
-            $oAcordoLancamentoContabil->registraControleContrato($this->getCodigoAcordo(), abs($nValorLancamentoContabil), $sHistorico, $this->getDataAssinatura());
+            $oAcordoLancamentoContabil->registraControleContrato($this->getCodigoAcordo(), abs($nValorLancamentoContabil), $sHistorico, $datareferencia);
         }
         if ($nValorLancamentoContabil > 0) {
-            $oAcordoLancamentoContabil->anulaRegistroControleContrato($this->getCodigoAcordo(), abs($nValorLancamentoContabil), $sHistorico, $this->getDataAssinatura());
+            $oAcordoLancamentoContabil->anulaRegistroControleContrato($this->getCodigoAcordo(), abs($nValorLancamentoContabil), $sHistorico, $datareferencia);
         }
 
         return $this;

@@ -198,6 +198,7 @@ for($i = 0;$i < $clpagordem->numrows;$i++){
   $sql = $clemite_nota_liq->get_sql_ordem_pagamento(db_getsession("DB_instit"), db_getsession("DB_anousu"), $e50_codord);
 
   $resultord = db_query($sql);
+  db_fieldsmemory($resultord, $i);
 
   if (pg_numrows($resultord)==0) continue;
 
@@ -207,10 +208,10 @@ for($i = 0;$i < $clpagordem->numrows;$i++){
   $resultordass = db_query($sql1);
   db_fieldsmemory($resultordass,0);
 
-  $sqlitem      = $clemite_nota_liq->get_sql_item_ordem($e50_codord);
+  $sqlitem      = $clemite_nota_liq->get_sql_item_ordem($e50_codord, $e50_data);
   $resultitem   = db_query($sqlitem);
 
-  $sqloutrasordens      = $clemite_nota_liq->get_sql_outras_ordens($e50_codord, $e50_numemp);
+  $sqloutrasordens      = $clemite_nota_liq->get_sql_outras_ordens($e50_codord, $e50_numemp, $e50_data);
   $resultoutrasordens   = db_query($sqloutrasordens);
   db_fieldsmemory($resultoutrasordens,0);
 
