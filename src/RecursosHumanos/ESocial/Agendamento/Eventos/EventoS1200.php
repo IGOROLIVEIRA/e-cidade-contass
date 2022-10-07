@@ -8,10 +8,10 @@ use DBPessoal;
 use ECidade\RecursosHumanos\ESocial\Agendamento\Eventos\EventoBase;
 
 /**
- * Classe responsÃ¡vel por montar as informaÃ§Ãµes do evento S2200 Esocial
+ * Classe responsÃ¡vel por montar as informaÃ§Ãµes do evento S1200 Esocial
  *
  * @package  ECidade\RecursosHumanos\ESocial\Agendamento\Eventos
- * @author   Robson de Jesus
+ * @author   Marcelo Hernane
  */
 class EventoS1200 extends EventoBase
 {
@@ -439,8 +439,8 @@ class EventoS1200 extends EventoBase
         $std->dmdev[$seqdmdev]->ideestablot[0]->codlotacao = 'LOTA1'; //Obrigatório
         //}
         //Informações relativas à remuneração do trabalhador no período de apuração.
-        $std->dmdev[$seqdmdev]->ideestablot[0]->remunperapur[0] = new \stdClass(); //Obrigatório
-        $std->dmdev[$seqdmdev]->ideestablot[0]->remunperapur[0]->matricula = $aDadosPorCpf->e60_numcgm; //Opcional
+        // $std->dmdev[$seqdmdev]->ideestablot[0]->remunperapur[0] = new \stdClass(); //Obrigatório
+        // $std->dmdev[$seqdmdev]->ideestablot[0]->remunperapur[0]->matricula = $aDadosPorCpf->e60_numcgm; //Opcional
 
 
         //Rubricas que compõem a remuneração do trabalhador.
@@ -525,7 +525,7 @@ class EventoS1200 extends EventoBase
 
         $std->dmdev[$seqdmdev]->infocomplcont = new \stdClass(); //Opcional
         $std->dmdev[$seqdmdev]->infocomplcont->codcbo = $aDadosPorCpf->codcbo; //Obrigatório
-        //$std->dmdev[$seqdmdev]->infocomplcont->natatividade = 1; //Obrigatório
+        $std->dmdev[$seqdmdev]->infocomplcont->natatividade = 1; //Obrigatório
 
         return $std;
     }

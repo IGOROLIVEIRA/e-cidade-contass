@@ -44,9 +44,9 @@ class DadosESocial
      */
     public function getPorTipo($tipo, $matricula = null, $cgm = null, $tipoevento = null)
     {
+
         $this->tipo = $tipo;
-        //echo $tipo;
-        //exit;
+
         switch ($tipo) {
             case Tipo::AFASTAMENTO_TEMPORARIO:
             case Tipo::CADASTRAMENTO_INICIAL:
