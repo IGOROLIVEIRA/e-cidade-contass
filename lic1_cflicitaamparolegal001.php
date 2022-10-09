@@ -108,6 +108,14 @@ if (isset($oPost->incluir) || isset($oPost->excluir)) {
 
 </html>
 <?
+
+$result = db_query("select * from cflicita_amparo where l213_modalidade = $l03_codigo");
+$numrows = pg_numrows($result);
+for ($i = 0; $i < $numrows; $i++) {
+  $codigo_amparo = pg_result($result, $i, "l213_amparo");
+  echo "<script> document.getElementById('$codigo_amparo').checked = true; </script>";
+}
+
 if (isset($oPost->incluir) || isset($oPost->excluir)) {
   db_msgbox($sErroMsg);
 }
