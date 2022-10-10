@@ -25,35 +25,9 @@
  *                                licenca/licenca_pt.txt 
  */
 
-include("dbforms/db_classesgenericas.php");
-$cliframe_alterar_excluir = new cl_iframe_alterar_excluir;
-$clcflicitatemplateata->rotulo->label();
 
-if (isset($db_opcaoal)) {
-	$db_opcao = 33;
-	$db_botao = false;
-} else if (isset($oPost->opcao) && $oPost->opcao == "excluir") {
-	$db_opcao = 3;
-	$db_botao = true;
-} else {
-	$db_opcao = 1;
-	$db_botao = true;
-	if (isset($oPost->novo) || isset($oPost->excluir) || (isset($oPost->incluir) && !$lErro)) {
-		$l37_db_documentotemplate = "";
-		$db82_descricao           = "";
-	}
-}
 ?>
-<style>
-	td {
-		white-space: nowrap
-	}
 
-	fieldset table td:first-child {
-		width: 60px;
-		white-space: nowrap
-	}
-</style>
 <form name="form1" method="post" action="">
 	<fieldset>
 		<legend>
@@ -130,6 +104,3 @@ if (isset($db_opcaoal)) {
 	</fieldset>
 	<input style="margin-top: 20px;" value="Salvar" type="submit" name="incluir"></input>
 </form>
-<script>
-	//document.getElementById('l03_descr').value = <?php echo $l03_descr; ?>;
-</script>

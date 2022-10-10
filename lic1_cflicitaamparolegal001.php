@@ -38,43 +38,28 @@ $oPost = db_utils::postMemory($_POST);
 $oGet  = db_utils::postMemory($_GET);
 
 
-$clcflicita            = new cl_cflicita();
-$clcflicitatemplateata = new cl_cflicitatemplateata();
 
-$db_opcao = 22;
-$db_botao = false;
-$lErro    = false;
+if (isset($incluir)) {
+  $erro = false;
 
-if (isset($oGet->l37_cflicita) && trim($oGet->l37_cflicita) != '') {
-  $l37_cflicita = $oGet->l37_cflicita;
-} else if (isset($oPost->l37_cflicita) && trim($oPost->l37_cflicita) != '') {
-  $l37_cflicita = $oPost->l37_cflicita;
-}
+  $amparos = $oPost->aItensMarcados;
+  $modalidade = $oPost->l03_codigo;
 
-if (isset($oPost->incluir) || isset($oPost->excluir)) {
-
-  db_inicio_transacao();
-
-  if (isset($oPost->incluir)) {
-    $clcflicitatemplateata->l37_cflicita             = $oPost->l37_cflicita;
-    $clcflicitatemplateata->l37_db_documentotemplate = $oPost->l37_db_documentotemplate;
-    $clcflicitatemplateata->incluir(null);
-  } else if (isset($oPost->excluir)) {
-    $clcflicitatemplateata->excluir($oPost->l37_sequencial);
+  if (!db_query("delete from cflicita_amparo where l213_modalidade = $modalidade;")) {
+    db_msgbox(pg_last_error());
+    $erro = true;
   }
 
-  $sErroMsg = $clcflicitatemplateata->erro_msg;
-
-  if ($clcflicitatemplateata->erro_status == 0) {
-    $lErro = true;
+  for ($i = 0; $i < count($amparos); $i++) {
+    $amparo = $amparos[$i];
+    if (!db_query("INSERT INTO cflicita_amparo VALUES ($amparo,$modalidade);")) {
+      db_msgbox(pg_last_error());
+      $erro = true;
+    }
   }
 
-  db_fim_transacao($lErro);
-} else if (isset($oPost->opcao)) {
-
-  $rsModelo = $clcflicitatemplateata->sql_record($clcflicitatemplateata->sql_query($oPost->l37_sequencial));
-  if ($rsModelo  && $clcflicitatemplateata->numrows > 0) {
-    db_fieldsmemory($rsModelo, 0);
+  if ($erro == false) {
+    db_msgbox("Amaparos Legais salvos com sucesso");
   }
 }
 
@@ -116,7 +101,5 @@ for ($i = 0; $i < $numrows; $i++) {
   echo "<script> document.getElementById('$codigo_amparo').checked = true; </script>";
 }
 
-if (isset($oPost->incluir) || isset($oPost->excluir)) {
-  db_msgbox($sErroMsg);
-}
+
 ?>
