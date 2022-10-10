@@ -91,7 +91,9 @@ switch ($oParam->exec) {
         try {
 
             db_inicio_transacao();
-
+            $dataReferencia = db_query("select ac16_datareferencia from acordo where ac16_sequencial = $oParam->acordo");
+            $dataReferencia = pg_result($dataReferencia, 0, 'ac16_datareferencia');
+            $datoDataLancamentoLancamento = $dataReferencia;
             $oHomologacao = new AcordoHomologacao();
             $oHomologacao->setAcordo($oParam->acordo);
             $oHomologacao->setObservacao($sObservacao);
@@ -99,7 +101,7 @@ switch ($oParam->exec) {
             $oAcordo                   = new Acordo($oParam->acordo);
             $oAcordoLancamentoContabil = new AcordoLancamentoContabil();
             $sHistorico = "Valor referente a homologação do contrato de código: {$oParam->acordo}.";
-            $oAcordoLancamentoContabil->registraControleContrato($oParam->acordo, $oAcordo->getValorContrato(), $sHistorico, $oHomologacao->getDataMovimento());
+            $oAcordoLancamentoContabil->registraControleContrato($oParam->acordo, $oAcordo->getValorContrato(), $sHistorico, $datoDataLancamentoLancamento);
 
             db_fim_transacao(false);
         } catch (Exception $eExeption) {

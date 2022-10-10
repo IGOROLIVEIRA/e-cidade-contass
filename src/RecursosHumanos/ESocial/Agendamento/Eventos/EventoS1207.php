@@ -51,9 +51,9 @@ class EventoS1207 extends EventoBase
             $oDadosAPI->evtBenPrRP->nrRecibo            = null;
 
             $oDadosAPI->evtBenPrRP->indapuracao         = $this->indapuracao;
-            $oDadosAPI->evtBenPrRP->perapur             = date('Y-m');
+            $oDadosAPI->evtBenPrRP->perapur             = $ano . '-' . $mes;
             if ($this->indapuracao == 2) {
-                $oDadosAPI->evtBenPrRP->perapur         = date('Y');
+                $oDadosAPI->evtBenPrRP->perapur         = $ano;
             }
             $oDadosAPI->evtBenPrRP->cpfbenef             = $aDadosPorMatriculas[0]->cpftrab;
 

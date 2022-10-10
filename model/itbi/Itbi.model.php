@@ -1,10 +1,15 @@
 <?php
+
+use Model\Itbi\Paritbi;
+
 require_once "Itbinumpre.model.php";
 require_once "Itbimatric.model.php";
 require_once "Itbinome.model.php";
 require_once "Paritbi.model.php";
 require_once "Transfautomaticas.model.php";
 require_once "model/cadastro/Imovel.model.php";
+require_once "model/configuracao/Instituicao.model.php";
+require_once "Itbiavalia.model.php";
 class Itbi
 {
     public $it01_guia;
@@ -29,6 +34,15 @@ class Itbi
     public $Itbinumpre;
     public $Itbimatric;
     public $Itbinome;
+    public $ItbiAvalia;
+    /**
+     * @var Paritbi
+     */
+    public $parItbi;
+    /**
+     * @var cancelamentoDebitos
+     */
+    protected $cancelamentoDebitos;
 
     public function __construct($it01_guia = null)
     {
@@ -58,6 +72,9 @@ class Itbi
             $this->Itbinome = new Itbinome();
             $this->Itbinome = $this->Itbinome->findByItbi($it01_guia);
             $this->Itbinumpre = $this->getItbinumpre();
+            $this->parItbi = new Paritbi(db_getsession('DB_anousu'));
+            $this->ItbiAvalia = new Itbiavalia($this->it01_guia);
+            $this->cancelamentoDebitos = new cancelamentoDebitos();
         }
         return $this;
     }
@@ -70,21 +87,27 @@ class Itbi
      */
     public function processarTransferenciaAutomatica($iCodRet)
     {
-        $oParItbi = new Paritbi(db_getsession('DB_anousu'));
-        if($oParItbi->getTransfautomatica() == 't') {
-            $oDisbanco = new Disbanco();
-            $aDisbanco = $oDisbanco->getNumpresByCodRet($iCodRet);
+        if($this->parItbi->getTransfautomatica() === false) {
+            return;
+        }
 
-            foreach ($aDisbanco as $obj) {
+        $oDisbanco = new Disbanco();
+        $aDisbanco = $oDisbanco->getNumpresByCodRet($iCodRet);
 
-                $oItbi = $this->getinstanceByNumpre($obj->k00_numpre);
-                if ($oItbi->it01_guia != null) {
-                    $this->_processarTransferenciaAutomatica($oItbi);
-                }
+        foreach ($aDisbanco as $obj) {
+
+            $oItbi = $this->getinstanceByNumpre($obj->k00_numpre);
+            if (empty($oItbi) === false) {
+                $this->_processarTransferenciaAutomatica($oItbi);
+                $this->removeNumpreArrecad($obj->k00_numpre);
             }
         }
     }
 
+    /**
+     * Retorna o último numpre gerado para o ITBI
+     * @return int
+     */
     public function getNumpre()
     {
         return current($this->Itbinumpre)->it15_numpre;
@@ -92,13 +115,22 @@ class Itbi
 
     public function getMatric()
     {
-        $this->Itbimatric->it06_matric;
+        return $this->Itbimatric->it06_matric;
     }
 
+    /**
+     * @param $iNumpre
+     * @return Itbi|null
+     * @throws BusinessException
+     */
     public function getinstanceByNumpre($iNumpre)
     {
         $oItbinumpre = new Itbinumpre();
         $oItbinumpre = $oItbinumpre->getInstanceByNumpre($iNumpre);
+
+        if(empty($oItbinumpre)) {
+            return null;
+        }
         return new Itbi($oItbinumpre->it15_guia);
     }
 
@@ -119,6 +151,22 @@ class Itbi
     }
 
     /**
+     * @return Itbinome[]
+     */
+    public function getDemaisCompradores()
+    {
+        $itbiNomes = array();
+        foreach($this->Itbinome as $obj)
+        {
+            if($obj->isComprador() && $obj->it03_princ === false){
+                $itbiNomes[] = $obj;
+            }
+        }
+
+        return $itbiNomes;
+    }
+
+    /**
      * Retorna o transmitente principal
      * @author Rodrigo Cabral <rodrigo.cabral@contassconsultoria.com.br>
      * @return Itbinome|null
@@ -132,6 +180,22 @@ class Itbi
             }
         }
         return null;
+    }
+
+    /**
+     * Retorna os demais transmitentes
+     * @return Itbinome[] | []
+     */
+    public function getDemaisTransmitentes()
+    {
+        $itbiNomes = array();
+        foreach($this->Itbinome as $obj)
+        {
+            if($obj->isTransmitente() && $obj->it03_princ === false){
+                $itbiNomes[] = $obj;
+            }
+        }
+        return $itbiNomes;
     }
 
     /**
@@ -196,4 +260,150 @@ class Itbi
         $oTransf->incluir();
     }
 
+    /**
+     * @param $iNumpre
+     * @return void
+     */
+    private function removeNumpreArrecad($iNumpre)
+    {
+        $oInstit = new Instituicao(db_getsession('DB_instit'));
+
+        if ($oInstit->getUsaDebitosItbi() === false) {
+            return;
+        }
+
+        $arrecad = db_utils::getDao('arrecad');
+        $arrecad->sql_record($arrecad->excluir(null, "k00_numpre = {$iNumpre}"));
+    }
+
+    public function incluirArrecad($numpre = null)
+    {
+        if(empty($numpre) === true) {
+            return;
+        }
+
+        $clarrecad = db_utils::getDao('arrecad');
+        $clarrecad->k00_numcgm = $this->getCgmDevedor();
+        $clarrecad->k00_dtoper = date('Y-m-d',db_getsession('DB_datausu'));
+        $clarrecad->k00_receit = $this->parItbi->getReceita();
+        $clarrecad->k00_hist   = Paritbi::HISTCALC_DEFAULT;
+        $clarrecad->k00_valor  = $this->ItbiAvalia->it14_valorpaga;
+        $clarrecad->k00_dtvenc = $this->ItbiAvalia->it14_dtvenc;
+        $clarrecad->k00_numpre = $numpre;
+        $clarrecad->k00_numpar = 1;
+        $clarrecad->k00_numtot = 1;
+        $clarrecad->k00_numdig = '0';
+        $clarrecad->k00_tipo   = Paritbi::TIPO_DEBITO_DEFAULT;
+        $clarrecad->k00_tipojm = '0';
+        $clarrecad->incluir();
+
+        if ($clarrecad->erro_status == 0) {
+            throw new LogicException('Erro ao inserir arrecad do ITBI: '. $clarrecad->erro_msg);
+        }
+    }
+
+    /**
+     * @todo refatorar depois que for para o php 7
+     * @return int
+     * @throws Exception
+     */
+    public function getCgmDevedor()
+    {
+        $cgmDevedor = null;
+        if ($this->parItbi->getDevedorPrincipal() === Paritbi::DEVEDOR_PRINCIPAL_ADQUIRENTE) {
+            $cgmDevedor = $this->getCgmDevedorAdquirente();
+        }
+
+        if ($this->parItbi->getDevedorPrincipal() === Paritbi::DEVEDOR_PRINCIPAL_TRANSMITENTE) {
+            $cgmDevedor = $this->getCgmDevedorTransmitente();
+        }
+
+        if(empty($cgmDevedor) === true) {
+            $cgmDevedor = $this->getCgmDevedorProprietarioImovel();
+        }
+
+        return empty($cgmDevedor) === false ? $cgmDevedor : $this->parItbi->Parreciboitbi->it17_numcgm;
+    }
+
+    /**
+     * @return int | null
+     */
+    public function getCgmDevedorAdquirente()
+    {
+        $compradorPrincipal = $this->getCompradorPrincipal();
+        $demaisCompradores = $this->getDemaisCompradores();
+
+        if(empty($compradorPrincipal) === false) {
+            return $compradorPrincipal->getCgm();
+        }
+
+        foreach ($demaisCompradores as $comprador) {
+            $cgm = $comprador->getCgm();
+            if(empty($cgm) !== false){
+                return $cgm;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * @return int | null
+     */
+    public function getCgmDevedorTransmitente()
+    {
+        $transmitentePrincipal = $this->getTransmitentePrincipal();
+        $demaisTransmitentes = $this->getDemaisTransmitentes();
+
+        if(empty($transmitentePrincipal) === false) {
+            return $transmitentePrincipal->getCgm();
+        }
+
+
+        foreach ($demaisTransmitentes as $transmitente) {
+            $cgm = $transmitente->getCgm();
+            if(empty($cgm) !== false){
+                return $cgm;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * @return int | null
+     */
+    public function getCgmDevedorProprietarioImovel()
+    {
+        $imovel = $this->getMatric();
+
+        if(empty($imovel) === true) {
+            return null;
+        }
+
+        $imovel = new Imovel($this->getMatric());
+        return $imovel->getProprietarioPrincipal()->getCodigo();
+    }
+
+    /**
+     * @param $numpre
+     * @return void
+     * @throws Exception
+     */
+    public function removeArrecad($numpre = null)
+    {
+        $aDadosDebitos = array();
+
+        if(empty($numpre) === true) {
+            return;
+        }
+        $this->cancelamentoDebitos->setArreHistTXT('Cancelamento de débito ITBI');
+        $this->cancelamentoDebitos->setTipoCancelamento(cancelamentoDebitos::TIPO_CANCELAMENTO_NORMAL);
+
+        $aDadosDebitos['Numpre']  = $numpre;
+        $aDadosDebitos['Numpar']  = 1;
+        $aDadosDebitos['Receita'] = $this->parItbi->getReceita();
+
+        $aDebitos[] = $aDadosDebitos;
+
+        $this->cancelamentoDebitos->geraCancelamento($aDebitos);
+    }
 }

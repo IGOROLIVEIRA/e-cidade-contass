@@ -21,14 +21,22 @@ class Itbinumpre {
         return $this;
     }
 
+    /**
+     * @throws BusinessException
+     * @return Itbinumpre | null
+     */
     public function getInstanceByNumpre($iNumpre)
     {
         if(empty($iNumpre)){
-            throw new Exception('Numpre não informado!');
+            throw new BusinessException('Numpre não informado!');
         }
 
         $oItbinumpre = db_utils::getDao('itbinumpre');
         $oItbinumpre = current(db_utils::getCollectionByRecord($oItbinumpre->sql_record($oItbinumpre->sql_query(null, "*", null, "it15_numpre = {$iNumpre}"))));
+
+        if(empty($oItbinumpre->it15_sequencial)){
+            return null;
+        }
 
         return new Itbinumpre($oItbinumpre->it15_sequencial);
     }
@@ -40,9 +48,12 @@ class Itbinumpre {
      */
     public function findAllByItbi($it15_guia)
     {
+        /**
+         * @var $oItbinumpre cl_itbinumpre
+         */
         $oItbinumpre = db_utils::getDao('itbinumpre');
-        $oItbinumpre = db_utils::getCollectionByRecord($oItbinumpre->sql_record($oItbinumpre->sql_query(null, "*", null, "it15_guia = {$it15_guia}")));
-        
+        $oItbinumpre = db_utils::getCollectionByRecord($oItbinumpre->sql_record($oItbinumpre->sql_query(null, "*", "it15_ultimaguia DESC", "it15_guia = {$it15_guia}")));
+
         foreach ($oItbinumpre as $obj) {
             $this->aItbinumpre[] = new Itbinumpre($obj->it15_sequencial);
         }
@@ -50,5 +61,4 @@ class Itbinumpre {
         return $this->aItbinumpre;
 
     }
-
 }
