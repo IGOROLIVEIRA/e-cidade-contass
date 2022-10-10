@@ -87,7 +87,8 @@ class Itbi
      */
     public function processarTransferenciaAutomatica($iCodRet)
     {
-        if($this->parItbi->getTransfautomatica() === false) {
+        $oParItbi = new Paritbi(db_getsession('DB_anousu'));
+        if($oParItbi->getTransfautomatica() === false) {
             return;
         }
 
