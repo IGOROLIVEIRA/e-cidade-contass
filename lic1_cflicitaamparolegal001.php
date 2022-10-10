@@ -50,13 +50,17 @@ if (isset($incluir)) {
     $erro = true;
   }
 
-  for ($i = 0; $i < count($amparos); $i++) {
-    $amparo = $amparos[$i];
-    if (!db_query("INSERT INTO cflicita_amparo VALUES ($amparo,$modalidade);")) {
-      db_msgbox(pg_last_error());
-      $erro = true;
+  if ($erro == false) {
+    for ($i = 0; $i < count($amparos); $i++) {
+      $amparo = $amparos[$i];
+      if (!db_query("INSERT INTO cflicita_amparo VALUES ($amparo,$modalidade);")) {
+        db_msgbox(pg_last_error());
+        $erro = true;
+      }
     }
   }
+
+
 
   if ($erro == false) {
     db_msgbox("Amaparos Legais salvos com sucesso");
