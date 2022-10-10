@@ -469,6 +469,12 @@ if ((isset($opcao) && $opcao == "alterar")) {
 
   function js_alterarLinha(indice) {
 
+
+
+    servicoquantidade = document.getElementsByName("servicoquantidade[]")[indice].value;
+    servico = document.getElementsByName("servico[]")[indice].value;
+
+
     document.getElementById('db_opcao').value = "Alterar";
     document.getElementById("db_opcao").setAttribute('name', 'alterar');
     document.getElementById("db_opcao").setAttribute('type', 'submit');
@@ -484,7 +490,50 @@ if ((isset($opcao) && $opcao == "alterar")) {
     document.getElementById('pc11_servicoquantidade').value = document.getElementsByName("servicoquantidade[]")[indice].value;
     document.getElementById('pc11_codigo').value = document.getElementsByName("codigo[]")[indice].value;
     $('eleSub').options[0] = new Option(document.getElementsByName("descrelemento[]")[indice].value.urlDecode(), document.getElementsByName("codele[]")[indice].value);
-    //document.getElementById('eleSub').readOnly = true;
+
+
+    if (servico == 't') {
+      document.getElementById('titleUnidade').style.display = "none";
+      document.getElementById('pc17_unid').style.display = "none";
+      document.getElementById('ctnServicoQuantidade').style.display = "block";
+      document.getElementById('pc11_servicoquantidade').style.display = "block";
+      document.getElementById('pc11_quant').value = 1;
+      document.getElementById('pc11_quant').readOnly = true;
+      document.getElementById('pc11_quant').style.background = "#EEE";
+
+      if (servicoquantidade == 't') {
+        document.getElementById('pc17_unid2').style.display = "block";
+        document.getElementById('titleUnidade2').style.display = "block";
+        document.getElementById('pc11_seq').style.marginLeft = "0px";
+        document.getElementById('titleOrdem').style.marginLeft = "60px";
+        document.getElementById('ctnServicoQuantidade').style.marginLeft = "-170px";
+        document.getElementById('pc11_servicoquantidade').style.marginLeft = "-84px";
+        document.getElementById('pc11_servicoquantidade').style.width = "76px";
+        document.getElementById('pc11_quant').readOnly = false;
+        document.getElementById('pc11_quant').style.background = "";
+        document.getElementById("pc11_servicoquantidade").options[1].selected = "true";
+
+      } else {
+        document.getElementById("pc11_servicoquantidade").options[0].selected = "true";
+
+      }
+
+    } else {
+      document.getElementById('titleUnidade').style.display = "block";
+      document.getElementById('pc17_unid').style.display = "block";
+      document.getElementById('ctnServicoQuantidade').style.display = "none";
+      document.getElementById('pc11_servicoquantidade').style.display = "none";
+      document.getElementById('pc17_unid2').style.display = "none";
+      document.getElementById('titleUnidade2').style.display = "none";
+      document.getElementById('pc11_seq').style.marginLeft = "-84px";
+      document.getElementById('titleOrdem').style.marginLeft = "-73px";
+      document.getElementById('pc11_quant').value = "";
+      document.getElementById('pc11_quant').readOnly = false;
+      document.getElementById('pc11_quant').style.background = "";
+
+    }
+
+    document.getElementById("pc11_servicoquantidade").options[1].selected = "true";
 
 
   }
@@ -925,15 +974,16 @@ if ((isset($opcao) && $opcao == "alterar")) {
 
   oGridItens = new DBGrid('oGridItens');
   oGridItens.nameInstance = 'oGridItens';
-  oGridItens.setCellAlign(['center', 'center', "center", "center", "center", "center", "center", "center", "center", "center", "center"]);
-  oGridItens.setCellWidth(["10%", "10%", "40%", "20%", "10%", "10%", "0%", "0%", "0%", "0%", "0%"]);
-  oGridItens.setHeader(["Ordem", "Código", "Descrição", "Unidade", "Quantidade", "Ação", "", "", "", "", ""]);
+  oGridItens.setCellAlign(['center', 'center', "center", "center", "center", "center", "center", "center", "center", "center", "center", "center"]);
+  oGridItens.setCellWidth(["10%", "10%", "40%", "20%", "10%", "10%", "0%", "0%", "0%", "0%", "0%", "0%"]);
+  oGridItens.setHeader(["Ordem", "Código", "Descrição", "Unidade", "Quantidade", "Ação", "", "", "", "", "", ""]);
   //oGridItens.aHeaders[5].lDisplayed = false;
   oGridItens.aHeaders[6].lDisplayed = false;
   oGridItens.aHeaders[7].lDisplayed = false;
   oGridItens.aHeaders[8].lDisplayed = false;
   oGridItens.aHeaders[9].lDisplayed = false;
   oGridItens.aHeaders[10].lDisplayed = false;
+  oGridItens.aHeaders[11].lDisplayed = false;
 
 
 
@@ -998,6 +1048,9 @@ if ((isset($opcao) && $opcao == "alterar")) {
       //valorElem = oItem.elemento;
 
       aLinha[10] = "  <input style='text-align:center; width:90%; border:none;' readonly='' type='text'  name='descrelemento[]' value='" + valor + "'>";
+
+      aLinha[11] = "  <input style='text-align:center; width:90%; border:none;' readonly='' type='text'  name='servico[]' value='" + oRetorno.aItens[i].pc01_servico + "'>";
+
 
 
       oGridItens.addRow(aLinha);

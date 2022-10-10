@@ -226,15 +226,12 @@ if (isset($incluir)) {
 						$clpcdotac->pc13_codigo = $codigo_item;
 						$clpcdotac->incluir(null);
 					}
-					$quantidade_valor =  $item->pc11_quant / $quantidade_dotacoes;
-					$rsResult = db_query("UPDATE pcdotac SET pc13_quant = $quantidade_valor,pc13_valor = $quantidade_valor WHERE pc13_codigo = $codigo_item");
 				}
 			}
 		}
 	}
 
 
-	db_msgbox($clpcdotac->erro_sql);
 
 
 

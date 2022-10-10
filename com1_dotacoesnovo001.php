@@ -536,7 +536,6 @@ if (isset($incluir)) {
 
 		}
 
-		alert("Inclusão efetuado com Sucesso.");
 		document.getElementById("o58_coddot").value = "";
 		document.getElementById("o56_descr").value = "";
 

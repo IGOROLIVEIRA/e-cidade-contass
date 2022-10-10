@@ -123,7 +123,8 @@ try {
         }
         $codigos .= ") and";
       }
-      $sCampos = "pc11_seq,
+      $sCampos = "pc01_servico,
+      pc11_seq,
       pc11_codigo,
       pc11_numero,
       pc11_quant,
@@ -158,6 +159,7 @@ try {
         $oItem->o56_codele = $item->o56_codele;
         $oItem->o56_elemento  =  $item->o56_elemento;
         $oItem->o56_descr = urlencode($item->o56_descr);
+        $oItem->pc01_servico = $item->pc01_servico;
 
 
         $aItens[] = $oItem;
