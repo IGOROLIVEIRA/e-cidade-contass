@@ -217,7 +217,6 @@ $clrotulo->label("pc01_descrmater");
     }
 
     function js_calcula(origem) {
-
         const item = origem.id.split('_');
         const id = item[1];
         const quant = new Number($('#qtd_' + id).val());
@@ -228,7 +227,6 @@ $clrotulo->label("pc01_descrmater");
     }
 
     function js_calculaVrUnit(origem) {
-
         const item = origem.id.split('_');
         const id = item[1];
         const quant = new Number($('#qtddisponivel_' + id).val());
