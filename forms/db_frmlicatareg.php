@@ -92,7 +92,7 @@ db_inputdata('l221_datapublica',@$l221_datapublica_dia,@$l221_datapublica_mes,@$
     </td>
     <td> 
 <?
-db_input('l221_veiculopublica',255,$Il221_veiculopublica,true,'text',$db_opcao,"")
+db_input('l221_veiculopublica',100,$Il221_veiculopublica,true,'text',$db_opcao,"")
 ?>
     </td>
   </tr>
