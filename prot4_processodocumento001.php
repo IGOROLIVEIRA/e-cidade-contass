@@ -134,7 +134,7 @@ $oRotulo->label("z01_nome");
               $result = db_query("select distinct p203_permanexo,p202_sequencial,p202_tipo  from perfispermanexo
               inner join db_permherda p203_perfil on p203_perfil = id_perfil
               inner join permanexo  p203_permanexo on p203_permanexo  = p202_sequencial 
-              where id_usuario = $usuario");
+             ");
               $numrows = pg_numrows($result);
               $permissoes = array();
               $permissoes[0] =  'Selecione';

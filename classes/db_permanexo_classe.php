@@ -59,18 +59,6 @@ class cl_permanexo
   {
     $this->atualizacampos();
 
-    /*
-     if ($this->p202_sequencial == null ) { 
-       $this->erro_sql = " Campo Sequencial não informado.";
-       $this->erro_campo = "p202_sequencial";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
-     }
-     */
-
     if ($this->p202_sequencial == "" || $this->p202_sequencial == null) {
       $result = db_query("select nextval('permanexo_p202_sequencial_seq')");
       if ($result == false) {

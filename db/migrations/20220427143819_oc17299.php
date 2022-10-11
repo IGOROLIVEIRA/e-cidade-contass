@@ -9,6 +9,24 @@ class Oc17299 extends AbstractMigration
     public function up()
     {
         $sql = "
+        begin;
+
+        INSERT INTO db_sysarquivo VALUES((select max(codarq)+1 from db_sysarquivo),'permanexo','Permissão de Anexo','p202','2022-10-10','Permissão de Anexo',0,'f','f','f','f');
+
+        INSERT INTO db_sysarquivo VALUES((select max(codarq)+1 from db_sysarquivo),'perfispermanexo','Perfis Permissão de Anexo','p202','2022-10-10','Perfis Permissão de Anexo',0,'f','f','f','f');
+
+        INSERT INTO db_syscampo 
+        VALUES ((select max(codcam)+1 from db_syscampo),'p202_sequencial', 'int8', 'Sequencial','','Sequencial',10,false,false,false,0,'int8','Sequencial');
+
+        INSERT INTO db_syscampo 
+        VALUES ((select max(codcam)+1 from db_syscampo),'p202_tipo', 'varchar(200)', 'Tipo','','Tipo',10,false,false,false,0,'varchar(200)','Tipo');
+
+        INSERT INTO db_syscampo 
+        VALUES ((select max(codcam)+1 from db_syscampo),'p203_permanexo', 'int8', 'Permissão de Anexo','','Permissão de Anexo',10,false,false,false,0,'int8','Permissão de Anexo');
+
+        INSERT INTO db_syscampo 
+        VALUES ((select max(codcam)+1 from db_syscampo),'p203_perfil', 'int8', 'Perfil','','Perfil',10,false,false,false,0,'int8','Perfil');
+
         alter table protparam add column p90_protocolosigiloso bool null default false;
 
         create table permanexo(
@@ -25,7 +43,7 @@ class Oc17299 extends AbstractMigration
         START 1
         CACHE 1;
         
-        CREATE TABLE public.perfispermanexo (
+        CREATE TABLE perfispermanexo (
             p203_permanexo int8 NOT NULL DEFAULT 0,
             p203_perfil int8 NOT NULL DEFAULT 0,
             CONSTRAINT perfispermanexo_permanexo_perfil_pk PRIMARY KEY (p203_permanexo, p203_perfil),

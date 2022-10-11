@@ -19,8 +19,9 @@ $clpermanexo->rotulo->label();
             <table border="0">
               <tr>
                 <td nowrap title="<?= @$Tp202_sequencial ?>">
+                  <b> Sequencial: </b>
+
                   <input name="oid" type="hidden" value="<?= @$oid ?>">
-                  <?= @$Lp202_sequencial ?>
                 </td>
                 <td>
                   <?
@@ -30,7 +31,7 @@ $clpermanexo->rotulo->label();
               </tr>
               <tr>
                 <td nowrap title="<?= @$Tp202_tipo ?>">
-                  <?= @$Lp202_tipo ?>
+                  <b> Tipo: </b>
                 </td>
                 <td>
                   <?
