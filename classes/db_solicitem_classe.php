@@ -1988,4 +1988,87 @@ class cl_solicitem
     }
     return $sql;
   }
+
+  function sql_query_item_autoriza($pc11_codigo = null, $campos = "*", $ordem = null, $dbwhere = "")
+  {
+    $sql = "select ";
+    if ($campos != "*") {
+      $campos_sql = split("#", $campos);
+      $virgula = "";
+      for ($i = 0; $i < sizeof($campos_sql); $i++) {
+        $sql .= $virgula . $campos_sql[$i];
+        $virgula = ",";
+      }
+    } else {
+      $sql .= $campos;
+    }
+    $sql .= "      from solicitem                                                                         ";
+    $sql .= "            inner join pcprocitem on solicitem.pc11_codigo       = pcprocitem.pc81_solicitem ";
+    $sql .= "            inner join empautitempcprocitem on e73_pcprocitem    = pc81_codprocitem          ";
+    $sql .= "            inner join empautoriza on e54_autori                 = e73_autori                ";
+
+    $sql2 = "";
+    if ($dbwhere == "") {
+      if ($pc11_codigo != null) {
+        $sql2 .= " where solicitem.pc11_codigo = $pc11_codigo ";
+      }
+    } else if ($dbwhere != "") {
+      $sql2 = " where $dbwhere";
+    }
+    $sql .= $sql2;
+    if ($ordem != null) {
+      $sql .= " order by ";
+      $campos_sql = split("#", $ordem);
+      $virgula = "";
+      for ($i = 0; $i < sizeof($campos_sql); $i++) {
+        $sql .= $virgula . $campos_sql[$i];
+        $virgula = ",";
+      }
+    }
+    return $sql;
+  }
+
+  function sql_query_sol_proc_orc($pc11_codigo = null, $campos = "*", $ordem = null, $dbwhere = "")
+  {
+    $sql = "select ";
+    if ($campos != "*") {
+      $campos_sql = split("#", $campos);
+      $virgula = "";
+      for ($i = 0; $i < sizeof($campos_sql); $i++) {
+        $sql .= $virgula . $campos_sql[$i];
+        $virgula = ",";
+      }
+    } else {
+      $sql .= $campos;
+    }
+    $sql .= "      from solicitem                                                                         ";
+    $sql .= "            inner join pcprocitem           on pc81_solicitem  = pc11_codigo      ";
+    $sql .= "            inner join pcproc               on pc80_codproc    = pc81_codproc     ";
+    $sql .= "            inner join empautitempcprocitem on e73_pcprocitem  = pc81_codprocitem ";
+    $sql .= "            inner join pcorcamitemproc      on pc31_pcprocitem = pc81_codprocitem ";
+    $sql .= "            inner join pcorcamitem          on pc22_orcamitem  = pc31_orcamitem   ";
+    $sql .= "            inner join pcorcam              on pc20_codorc     = pc22_codorc      ";
+    $sql .= "            inner join empautitem           on (e55_autori, e55_sequen) = (e73_autori, e73_sequen)";
+    $sql .= "            inner join empautoriza          on e54_autori      = e55_autori       ";
+
+    $sql2 = "";
+    if ($dbwhere == "") {
+      if ($pc11_codigo != null) {
+        $sql2 .= " where solicitem.pc11_codigo = $pc11_codigo ";
+      }
+    } else if ($dbwhere != "") {
+      $sql2 = " where $dbwhere";
+    }
+    $sql .= $sql2;
+    if ($ordem != null) {
+      $sql .= " order by ";
+      $campos_sql = split("#", $ordem);
+      $virgula = "";
+      for ($i = 0; $i < sizeof($campos_sql); $i++) {
+        $sql .= $virgula . $campos_sql[$i];
+        $virgula = ",";
+      }
+    }
+    return $sql;
+  }
 }

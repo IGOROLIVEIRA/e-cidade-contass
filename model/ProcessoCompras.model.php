@@ -570,7 +570,7 @@ class ProcessoCompras {
                     $oDados->dotacaocomsaldo = false;
                 }
 
-                if (($nSaldoAtualReserva) < $oDados->valorunitario && $oDados->servico == false) {
+                if (($nSaldoAtualReserva) < ($oDados->quanttotalitem*$oDados->valorunitario) && $oDados->servico == false) {
                     $oDados->dotacaocomsaldo = false;
                     if ($oDados->valorreserva > $oDados->valorunitario) {
                         $oDados->dotacaocomsaldo = true;
