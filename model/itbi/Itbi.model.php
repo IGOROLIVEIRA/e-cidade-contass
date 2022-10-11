@@ -71,11 +71,14 @@ class Itbi
             $this->Itbimatric = new Itbimatric($it01_guia);
             $this->Itbinome = new Itbinome();
             $this->Itbinome = $this->Itbinome->findByItbi($it01_guia);
-            $this->Itbinumpre = $this->getItbinumpre();
-            $this->parItbi = new Paritbi(db_getsession('DB_anousu'));
+            $this->Itbinumpre = $this->getItbinumpre();            
             $this->ItbiAvalia = new Itbiavalia($this->it01_guia);
-            $this->cancelamentoDebitos = new cancelamentoDebitos();
+            
         }
+
+        $this->parItbi = new Paritbi(db_getsession('DB_anousu'));
+        $this->cancelamentoDebitos = new cancelamentoDebitos();
+
         return $this;
     }
 
@@ -87,8 +90,8 @@ class Itbi
      */
     public function processarTransferenciaAutomatica($iCodRet)
     {
-        $oParItbi = new Paritbi(db_getsession('DB_anousu'));
-        if($oParItbi->getTransfautomatica() === false) {
+        
+        if($this->parItbi->getTransfautomatica() === false) {
             return;
         }
 
@@ -406,5 +409,8 @@ class Itbi
         $aDebitos[] = $aDadosDebitos;
 
         $this->cancelamentoDebitos->geraCancelamento($aDebitos);
+    }
+}
+lamento($aDebitos);
     }
 }
