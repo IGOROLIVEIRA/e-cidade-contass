@@ -426,7 +426,7 @@ class cl_licatareg {
        }
      }
      $sql .= " where ";
-$sql .= "oid = '$oid'";     $result = db_query($sql);
+$sql .= "l221_sequencial = '$oid'";     $result = db_query($sql);
      if ($result==false) { 
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "licatareg nao Alterado. Alteracao Abortada.\\n";
@@ -463,10 +463,11 @@ $sql .= "oid = '$oid'";     $result = db_query($sql);
                     where ";
      $sql2 = "";
      if ($dbwhere==null || $dbwhere =="") {
-       $sql2 = "oid = '$oid'";
+       $sql2 = "l221_sequencial = $oid";
      } else {
        $sql2 = $dbwhere;
      }
+
      $result = db_query($sql.$sql2);
      if ($result==false) { 
        $this->erro_banco = str_replace("\n","",@pg_last_error());

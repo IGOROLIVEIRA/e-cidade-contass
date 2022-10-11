@@ -9,34 +9,22 @@ parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
 $cllicatareg = new cl_licatareg;
 $clliclicita= new cl_liclicita;
-$db_opcao = 22;
 $db_botao = false;
-if(isset($alterar)){
+$db_opcao = 33;
+if(isset($excluir)){
   db_inicio_transacao();
-  $db_opcao = 2;
-  $cllicatareg->l221_licitacao = $l221_licitacao;
-  $cllicatareg->l221_numata = $l221_numata;
-  $cllicatareg->l221_exercicio = $l221_exercicio;
-  $cllicatareg->l221_fornecedor = $l221_fornecedor;
-  $cllicatareg->l221_dataini = $l221_dataini;
-  $cllicatareg->l221_datafinal = $l221_datafinal;
-  $cllicatareg->l221_datapublica = $l221_datapublica;
-  $cllicatareg->l221_veiculopublica = $l221_veiculopublica;
-  $cllicatareg->alterar($l221_sequencial);
+  $db_opcao = 3;
+  $cllicatareg->excluir($l221_sequencial);
   db_fim_transacao();
-  db_msgbox("Alterado com Sucesso");
+  db_msgbox("Excluido com Sucesso!");
 }else if(isset($chavepesquisa)){
-   $db_opcao = 2;
+   $db_opcao = 3;
    $result = $cllicatareg->sql_record($cllicatareg->sql_query_file(null,"*",null,"l221_sequencial = ".$chavepesquisa)); 
    db_fieldsmemory($result,0);
    $l221_numata = $l221_numata.'/'.$l221_exercicio;
    $db_botao = true;
    $rsObjeto = $clliclicita->sql_record($clliclicita->sql_query_file($l221_licitacao,"l20_objeto"));
    db_fieldsmemory($rsObjeto,0);
-   echo "<script>
-               parent.iframe_licataregitem.location.href='lic1_licataregitem001.php?l222_licatareg= $l221_sequencial&licitacao=$l221_licitacao&fornecedor=$l221_fornecedor';\n
-               parent.document.formaba.licataregitem.disabled=false;\n
-        </script>";
 }
 ?>
 <html>
@@ -48,7 +36,14 @@ if(isset($alterar)){
 <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
-
+<table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
+  <tr> 
+    <td width="360" height="18">&nbsp;</td>
+    <td width="263">&nbsp;</td>
+    <td width="25">&nbsp;</td>
+    <td width="140">&nbsp;</td>
+  </tr>
+</table>
 
     <center>
 	<?
@@ -56,27 +51,23 @@ if(isset($alterar)){
 	?>
     </center>
 
-
+<?
+db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
+?>
 </body>
 </html>
 <?
-if(isset($alterar)){
+if(isset($excluir)){
   if($cllicatareg->erro_status=="0"){
     $cllicatareg->erro(true,false);
-    $db_botao=true;
-    echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
-    if($cllicatareg->erro_campo!=""){
-      echo "<script> document.form1.".$cllicatareg->erro_campo.".style.backgroundColor='#99A9AE';</script>";
-      echo "<script> document.form1.".$cllicatareg->erro_campo.".focus();</script>";
-    }
   }else{
     $cllicatareg->erro(true,true);
   }
 }
-if($db_opcao==22){
+if($db_opcao==33){
   echo "<script>document.form1.pesquisar.click();</script>";
 }
 ?>
 <script>
-js_tabulacaoforms("form1","l221_licitacao",true,1,"l221_licitacao",true);
+js_tabulacaoforms("form1","excluir",true,1,"excluir",true);
 </script>

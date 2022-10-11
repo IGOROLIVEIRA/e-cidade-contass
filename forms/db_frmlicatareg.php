@@ -38,8 +38,11 @@ $cllicatareg = new cl_licatareg;
           </td>
           <td> 
               <?php
-              db_input('l221_licitacao', 12, $Il221_licitacao, true, 'text', $iOpcaoLicitacao, " onChange='js_pesquisarLicitacao(false);'");
-              
+              if(isset($l221_sequencial) && $l221_sequencial != "" && $l221_sequencial != null){
+                db_input('l221_licitacao', 12, $Il221_licitacao, true, 'text', 3, " onChange='js_pesquisarLicitacao(false);'");
+              }else{
+                db_input('l221_licitacao', 12, $Il221_licitacao, true, 'text', $iOpcaoLicitacao, " onChange='js_pesquisarLicitacao(false);'");
+              }
               ?>
           </td>
         </tr>
@@ -161,13 +164,14 @@ $cllicatareg = new cl_licatareg;
 <script>
 document.form1.l221_exercicio.value = <?=db_getsession('DB_anousu')?>;
 function js_pesquisa(){
-  js_OpenJanelaIframe('top.corpo','db_iframe_licatareg','func_licatareg.php?funcao_js=parent.js_preenchepesquisa|0','Pesquisa',true);
+  js_OpenJanelaIframe('','db_iframe_licatareg','func_licatareg.php?funcao_js=parent.js_preenchepesquisa|0','Pesquisa',true);
 }
 function js_preenchepesquisa(chave){
   db_iframe_licatareg.hide();
   <?
   if($db_opcao!=1){
     echo " location.href = '".basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"])."?chavepesquisa='+chave";
+
   }
   ?>
 }

@@ -80,10 +80,7 @@ if (!isset($db_opcao)) {
   <?
   db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit"));
   ?>
-  <script>
-    document.getElementById("liclicitemlote").style.display = "none";
-    document.getElementById("liclicpublicacoes").style.display = "none";
-  </script>
+ 
 
 </body>
 
