@@ -101,7 +101,6 @@ $clcflicita->rotulo->label("l03_descr");
           } else {
             $sql = $clcflicita->sql_query("", $campos, "l03_codigo", "l03_instit = " . db_getsession("DB_instit"));
           }
-          echo $sql;
           db_lovrot($sql, 15, "()", "", $funcao_js);
         } else {
           if ($pesquisa_chave != null && $pesquisa_chave != "") {
