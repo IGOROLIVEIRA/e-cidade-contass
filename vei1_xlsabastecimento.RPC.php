@@ -247,7 +247,7 @@ switch ($oParam->exec) {
                     $arrayKm[$k][0]  = $codigoVeic;
                     $arrayKm[$k][1]  = $test1;
                     $arrayKm[$k][2]  = $medidasaida;
-                    $arrayKm[$k][3]  = $resultAbaste->max;
+                    $arrayKm[$k][3]  = $resultAbaste->ve70_medida;
                     $opKm = 1;
                     $k++;
                 }
@@ -255,6 +255,7 @@ switch ($oParam->exec) {
 
             if ($opKm == 1) {
                 $arrayRetornoKm = array();
+                echo "<pre>"; print_r($arrayKm);exit;
                 foreach ($arrayKm as $keyRow => $Row) {
 
                     $objValorPlanilhaKm = new stdClass();
