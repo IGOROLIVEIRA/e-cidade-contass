@@ -411,6 +411,3 @@ class Itbi
         $this->cancelamentoDebitos->geraCancelamento($aDebitos);
     }
 }
-lamento($aDebitos);
-    }
-}
