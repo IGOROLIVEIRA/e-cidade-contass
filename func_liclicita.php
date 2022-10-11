@@ -196,6 +196,10 @@ $sWhereContratos = " and 1 = 1 ";
                     $dbwhere .= " l20_leidalicitacao = 1 AND ";
                 }
 
+                if (isset($tiponatu) && $tiponatu == '2') {
+                    $dbwhere .= " l20_tipnaturezaproced  = 2 AND ";
+                }
+
                 if (!empty($oGet->validasaldo)) {
                     $dbwhere .= " $sWhere and ";
                 }

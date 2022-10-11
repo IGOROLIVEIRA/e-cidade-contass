@@ -68,11 +68,8 @@ if (!isset($db_opcao)) {
             $clcriaabas->identifica = array("licatareg" => "Ata de Registro de preço", "licataregitem" => "Itens");
             $clcriaabas->sizecampo = array("licatareg" => "25", "licataregitem" => "20");
             $clcriaabas->title = array("licatareg" => "Ata de Registro de preço", "licataregitem" => "Itens da Licitação");
-            $clcriaabas->src = array("licatareg" => "lic1_licatareg001.php", "licataregitem" => "lic1_licataregitem001.php");
-
-            if ($db_opcao == 1) {
-              $clcriaabas->disabled   =  array("licataregitem" => "true");
-            }
+            $clcriaabas->src = array("licatareg" => "lic1_licatareg002.php", "licataregitem" => "lic1_licataregitem001.php");
+            $clcriaabas->disabled = array("licataregitem" => "true");
             $clcriaabas->cria_abas();
 
           ?>

@@ -104,15 +104,38 @@ class cl_licatareg {
   // funcao para inclusao
   function incluir () { 
       $this->atualizacampos();
-     if ($this->l221_sequencial == null ) { 
-       $this->erro_sql = " Campo l221_sequencial não informado.";
-       $this->erro_campo = "l221_sequencial";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
-     }
+      if ($this->l221_sequencial == "" || $this->l221_sequencial == null) {
+        $result = db_query("select nextval('licatareg_l221_sequencial_seq')");
+        if ($result == false) {
+            $this->erro_banco = str_replace("\n", "", @pg_last_error());
+            $this->erro_sql = "Verifique o cadastro da sequencia: liclicita_l20_codigo_seq do campo: l221_sequencial";
+            $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_status = "0";
+            return false;
+        }
+        $this->l221_sequencial = pg_result($result, 0, 0);
+    } else {
+        $result = db_query("select last_value from licatareg_l221_sequencial_seq");
+        if (($result != false) && (pg_result($result, 0, 0) < $this->l221_sequencial)) {
+            $this->erro_sql = " Campo l221_sequencial maior que último número da sequencia.";
+            $this->erro_banco = "Sequencia menor que este número.";
+            $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_status = "0";
+            return false;
+        } else {
+            $this->l221_sequencial = pg_result($result, 0, 0);
+        }
+    }
+    if (($this->l221_sequencial == null) || ($this->l221_sequencial == "")) {
+        $this->erro_sql = " Campo l221_sequencial nao declarado.";
+        $this->erro_banco = "Chave Primaria zerada.";
+        $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+        $this->erro_status = "0";
+        return false;
+    }
      if ($this->l221_licitacao == null ) { 
        $this->erro_sql = " Campo l221_licitacao não informado.";
        $this->erro_campo = "l221_licitacao";
@@ -499,7 +522,7 @@ $sql .= "oid = '$oid'";     $result = db_query($sql);
   }
 
   // funcao do sql 
-  function sql_query ( $oid = null,$campos="licatareg.oid,*",$ordem=null,$dbwhere="") { 
+  function sql_query ( $oid = null,$campos="*",$ordem=null,$dbwhere="") { 
      $sql = "select ";
      if ($campos != "*" ) {
        $campos_sql = explode("#", $campos);

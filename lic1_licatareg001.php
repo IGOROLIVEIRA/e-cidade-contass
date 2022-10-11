@@ -9,10 +9,55 @@ db_postmemory($HTTP_POST_VARS);
 $cllicatareg = new cl_licatareg;
 $db_opcao = 1;
 $db_botao = true;
+$sqlerro=false;
 if(isset($incluir)){
-  db_inicio_transacao();
-  $cllicatareg->incluir();
-  db_fim_transacao();
+  if($l221_licitacao == "" || $l221_licitacao == null){
+    $sqlerro=true;
+    db_msgbox("Escolha uma Licitação!");
+    
+  }else if($l221_numata == "" || $l221_numata == null){
+    $sqlerro=true;
+    db_msgbox("Informe o número da Ata!");
+  }else if($l221_fornecedor == 0){
+    $sqlerro=true;
+    db_msgbox("Selecione um fornecedor!");
+  }else if($l221_dataini == "" || $l221_dataini == null){
+    $sqlerro=true;
+    db_msgbox("Insera uma Data Inicial!");
+  }else if($l221_datafinal == "" || $l221_datafinal == null){
+    $sqlerro=true;
+    db_msgbox("Insera uma Data Final!");
+  }else if($l221_datapublica == "" || $l221_datapublica == null){
+    $sqlerro=true;
+    db_msgbox("Insera uma Data de Publicação!");
+  }else if($l221_veiculopublica == "" || $l221_veiculopublica == null){
+    $sqlerro=true;
+    db_msgbox("Insera o veiculo de publicação !");
+  }
+  if($sqlerro == false){
+    $rsLicatareg = $cllicatareg->sql_record("select * from licatareg where l221_licitacao= $l221_licitacao and l221_fornecedor= $l221_fornecedor and l221_exercicio = '$l221_exercicio'");
+    if(pg_num_rows($rsLicatareg)>0){
+      $sqlerro=true;
+      db_msgbox("Fornecedor dessa licitação já inserido!");
+    }else{
+
+      db_inicio_transacao();
+      $cllicatareg->l221_licitacao = $l221_licitacao;
+      $cllicatareg->l221_numata = $l221_numata;
+      $cllicatareg->l221_exercicio = $l221_exercicio;
+      $cllicatareg->l221_fornecedor = $l221_fornecedor;
+      $cllicatareg->l221_dataini = $l221_dataini;
+      $cllicatareg->l221_datafinal = $l221_datafinal;
+      $cllicatareg->l221_datapublica = $l221_datapublica;
+      $cllicatareg->l221_veiculopublica = $l221_veiculopublica;
+      $cllicatareg->incluir();
+      $codigo = $cllicatareg->l221_sequencial;
+      $licitacao =$cllicatareg->l221_licitacao;
+      $fornecedor = $cllicatareg->l221_fornecedor;
+      
+      db_fim_transacao();
+    }
+  }
 }
 ?>
 <html>
@@ -26,12 +71,10 @@ if(isset($incluir)){
 
 
     <center>
-      <fieldset style="margin-top: 30px;">
-        <legend>Ata de Refistro de Preço</legend>
+      
           <?
             include("forms/db_frmlicatareg.php");
           ?>
-      </fieldset>
     </center>
 
 
@@ -41,17 +84,16 @@ if(isset($incluir)){
 js_tabulacaoforms("form1","l221_licitacao",true,1,"l221_licitacao",true);
 </script>
 <?
-if(isset($incluir)){
-  if($cllicatareg->erro_status=="0"){
-    $cllicatareg->erro(true,false);
-    $db_botao=true;
-    echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
-    if($cllicatareg->erro_campo!=""){
-      echo "<script> document.form1.".$cllicatareg->erro_campo.".style.backgroundColor='#99A9AE';</script>";
-      echo "<script> document.form1.".$cllicatareg->erro_campo.".focus();</script>";
-    }
-  }else{
-    $cllicatareg->erro(true,true);
-  }
+if (isset($incluir)) {
+
+        if($sqlerro==false){
+				echo " <script>
+                parent.iframe_licatareg.location.href = 'lic1_licatareg002.php?chavepesquisa= $codigo';
+                parent.iframe_licataregitem.location.href = 'lic1_licataregitem001.php?l222_licatareg= $codigo&licitacao=$licitacao&fornecedor=$fornecedor';
+                parent.document.formaba.licataregitem.disabled=false;
+		            parent.mo_camada('licataregitem');
+	            </script> ";
+        }
+
 }
 ?>
