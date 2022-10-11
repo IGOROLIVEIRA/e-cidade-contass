@@ -71,9 +71,9 @@ class Itbi
             $this->Itbimatric = new Itbimatric($it01_guia);
             $this->Itbinome = new Itbinome();
             $this->Itbinome = $this->Itbinome->findByItbi($it01_guia);
-            $this->Itbinumpre = $this->getItbinumpre();            
+            $this->Itbinumpre = $this->getItbinumpre();
             $this->ItbiAvalia = new Itbiavalia($this->it01_guia);
-            
+
         }
 
         $this->parItbi = new Paritbi(db_getsession('DB_anousu'));
@@ -90,7 +90,7 @@ class Itbi
      */
     public function processarTransferenciaAutomatica($iCodRet)
     {
-        
+
         if($this->parItbi->getTransfautomatica() === false) {
             return;
         }
