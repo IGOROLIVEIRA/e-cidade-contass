@@ -147,7 +147,7 @@ switch ($_POST["action"]) {
                 if($oDados->pc01_servico == "t" && $oDados->pc11_servicoquantidade == "t"){
                     $itemRows[] = "<input type='text' id='qtddisponivel_{$oDados->pc01_codmater}' value='{$qtd_disponivel}' readonly style='background-color: #DEB887; width: 80px' />";
                     $itemRows[] = "<input type='text' id='vlrdisponivel_{$oDados->pc01_codmater}' value='{$vlr_total}' readonly style='background-color: #DEB887; width: 80px' />";
-                    $itemRows[] = "<input type='text' id='vlr_{$oDados->pc01_codmater}' value='{$vlr_disponivel}' readonly style='background-color: #DEB887; width: 80px' />";
+                    $itemRows[] = "<input type='text' id='vlr_{$oDados->pc01_codmater}' value='{$oDados->pc23_vlrun}' readonly style='background-color: #DEB887; width: 80px' />";
                     $itemRows[] = "<input type='text' id='qtd_{$oDados->pc01_codmater}' value='{$qtd_disponivel}' onkeyup='js_calcula(this)' maxlength='10' style='width: 80px' />";
                 }
 
