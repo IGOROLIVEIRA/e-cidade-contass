@@ -151,7 +151,7 @@ try {
         $oItem->pc01_codmater =  $item->pc01_codmater;
         $oItem->pc01_descrmater =  urlencode($item->pc01_descrmater);
         $oItem->pc11_codigo = $item->pc11_codigo;
-        $oItem->m61_descr =  $item->m61_descr;
+        $oItem->m61_descr =   urlencode($item->m61_descr);
         $oItem->m61_codmatunid =  $item->m61_codmatunid;
         $oItem->pc11_quant =  $item->pc11_quant;
         $oItem->pc11_servicoquantidade =  $item->pc11_servicoquantidade;
@@ -280,6 +280,78 @@ try {
 
       break;
 
+    case "liberarSolicitacaoRotinaDotacao":
+
+      $pc10_numero = $oParam->numero;
+
+
+      $itens = db_query("select * from solicitem where pc11_numero = $pc10_numero;");
+
+      $quantidade_itens = pg_numrows($itens);
+
+      for ($i = 0; $i < $quantidade_itens; $i++) {
+        $item = db_utils::fieldsMemory($itens, $i);
+        $pc11_codigo =  $item->pc11_codigo;
+        $result = db_query("select * from pcdotac where pc13_codigo = $pc11_codigo;");
+        if (pg_numrows($result) == 0) {
+          $oRetorno->erro  = true;
+          $oRetorno->message = " Usuário: Item $pc11_codigo sem dotação vinculada.";
+          break;
+        }
+      }
+
+
+      $rsResult = db_query("UPDATE solicitem SET pc11_liberado = true WHERE pc11_numero = $pc10_numero");
+      $rsResult = db_query("UPDATE solicita SET pc10_correto = true WHERE pc10_numero = $pc10_numero");
+
+
+
+      /* Ordenação do sequencial dos itens  */
+      $aItens  = array();
+
+      $itens = db_query("select * from solicitem where pc11_numero = $pc10_numero;");
+
+
+      $quantidade_itens = pg_numrows($itens);
+
+      for ($i = 0; $i < $quantidade_itens; $i++) {
+        $item = db_utils::fieldsMemory($itens, $i);
+        $oItem = new stdClass();
+        $oItem->pc11_codigo = $item->pc11_codigo;
+        $oItem->pc11_seq = $item->pc11_seq;
+        $aItens[] = $oItem;
+      }
+
+      // Ordenação dos arrays conforme sequencial
+
+      usort(
+
+        $aItens,
+
+        function ($a, $b) {
+
+          if ($a->pc11_seq == $b->pc11_seq) return 0;
+
+          return (($a->pc11_seq < $b->pc11_seq) ? -1 : 1);
+        }
+      );
+
+      for ($i = 0; $i < count($aItens); $i++) {
+        $aItens[$i]->pc11_seq = $i + 1;
+        $sequencial = $aItens[$i]->pc11_seq;
+        $codigo = $aItens[$i]->pc11_codigo;
+        $rsResult = db_query("UPDATE solicitem SET pc11_seq = $sequencial WHERE pc11_codigo = $codigo");
+
+        if (!$rsResult) {
+          $oRetorno->erro  = true;
+          $oRetorno->message = "Erro ao realziar ordenação do sequencial dos itens da solicitação";
+        }
+      }
+
+      $oRetorno->message =  urlencode($oRetorno->message);
+
+      break;
+
 
     case "liberarSolicitacao":
       $pc10_numero = $oParam->numero;
@@ -349,7 +421,6 @@ try {
 
     case "salvarDotacoes":
 
-
       $clpcdotac = new cl_pcdotac;
 
 
@@ -361,6 +432,8 @@ try {
       $quantidade_dotacoes = 0;
       $dotacao = $oParam->dotacao;
       $elemento_dotacao = $oParam->o50_estrutdespesa;
+
+
 
 
       for ($i = 0; $i < $quantidade_itens; $i++) {
@@ -404,10 +477,9 @@ try {
             $clpcdotac->pc13_codele = $codele->pc18_codele;
             $clpcdotac->pc13_codigo = $codigo_item;
             $clpcdotac->incluir(null);
+            $quantidade_valor =  $item->pc11_quant / $quantidade_dotacoes;
+            $rsResult = db_query("UPDATE pcdotac SET pc13_quant = $quantidade_valor,pc13_valor = $quantidade_valor WHERE pc13_codigo = $codigo_item");
           }
-
-          $quantidade_valor =  $item->pc11_quant / $quantidade_dotacoes;
-          $rsResult = db_query("UPDATE pcdotac SET pc13_quant = $quantidade_valor,pc13_valor = $quantidade_valor WHERE pc13_codigo = $codigo_item");
         } else {
 
           if ($item->pc11_servicoquantidade == "t") {
@@ -434,10 +506,9 @@ try {
               $clpcdotac->pc13_codele = $codele->pc18_codele;
               $clpcdotac->pc13_codigo = $codigo_item;
               $clpcdotac->incluir(null);
+              $quantidade_valor =  $item->pc11_quant / $quantidade_dotacoes;
+              $rsResult = db_query("UPDATE pcdotac SET pc13_quant = $quantidade_valor,pc13_valor = $quantidade_valor WHERE pc13_codigo = $codigo_item");
             }
-
-            $quantidade_valor =  $item->pc11_quant / $quantidade_dotacoes;
-            $rsResult = db_query("UPDATE pcdotac SET pc13_quant = $quantidade_valor,pc13_valor = $quantidade_valor WHERE pc13_codigo = $codigo_item");
           } else {
 
             $quantidade_dotacoes = 0;

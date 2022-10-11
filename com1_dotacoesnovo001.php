@@ -442,7 +442,7 @@ if (isset($incluir)) {
 		var sUrl = "com4_materialsolicitacao.RPC.php";
 		var oRequest = new Object();
 		oRequest.numero = parent.iframe_solicita.document.getElementById('pc10_numero').value;
-		oRequest.exec = "liberarSolicitacao";
+		oRequest.exec = "liberarSolicitacaoRotinaDotacao";
 		var oAjax = new Ajax.Request(
 			sUrl, {
 				method: 'post',
@@ -529,6 +529,7 @@ if (isset($incluir)) {
 
 	function js_retornoSalvarDotacoes(oAjax) {
 		var oRetorno = eval("(" + oAjax.responseText + ")");
+		console.log(oRetorno);
 
 		if (oRetorno.erro == true) {
 			alert(oRetorno.message.urlDecode());
@@ -551,6 +552,11 @@ if (isset($incluir)) {
 
 	function incluirDotacao() {
 
+		if (document.getElementById("o58_coddot").value == "") {
+			alert('Usuário: Dotação não informada !');
+			return false;
+		}
+
 		var sizeItens = oGridItens.aRows.length;
 
 		itens_antigos = oGridItens.aRows;
@@ -559,7 +565,7 @@ if (isset($incluir)) {
 		for (var i = 0; i < document.getElementsByName("reduzido[]").length; i++) {
 
 			if (document.getElementsByName("reduzido[]")[i].value == document.getElementById("o58_coddot").value) {
-				alert('Dotação já incluída');
+				alert('Usuário: Dotação já incluída');
 				return false;
 			}
 		}

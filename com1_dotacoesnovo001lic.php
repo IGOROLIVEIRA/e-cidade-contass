@@ -90,6 +90,7 @@ $db_opcao  = 1;
 $db_botao  = true;
 $confirma  = false;
 
+
 if (isset($incluir)) {
 
 
@@ -108,7 +109,6 @@ if (isset($incluir)) {
 		$aCodProcessos[] = $oItem;
 	}
 
-	$teste = 0;
 
 	for ($i = 0; $i < count($aCodProcessos); $i++) {
 
@@ -459,14 +459,14 @@ if (isset($incluir)) {
 	function incluirDotacao() {
 
 		if (document.getElementById("o58_coddot").value == "") {
-			alert('Dotação não informada !');
+			alert('Usuário: Dotação não informada !');
 			return false;
 		}
 
 		for (var i = 0; i < document.getElementsByName("reduzido[]").length; i++) {
 
 			if (document.getElementsByName("reduzido[]")[i].value == document.getElementById("o58_coddot").value) {
-				alert('Dotação já incluída');
+				alert('Usuário: Dotação já incluída');
 				return false;
 			}
 		}
@@ -538,6 +538,8 @@ if (isset($incluir)) {
 				return false;
 			}
 
+			cod_elementos = "";
+
 			for (var i = 0; i < oRetorno.quantidade; i++) {
 				elemento = oRetorno.aItens[i].elemento.toString();
 				elemento = elemento.substring(0, 7);
@@ -548,9 +550,6 @@ if (isset($incluir)) {
 
 
 			cod_elementos = cod_elementos.substring(0, cod_elementos.length - 1);
-
-
-
 
 
 			qry = 'obriga_depto=sim';

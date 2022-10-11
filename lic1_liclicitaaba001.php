@@ -70,7 +70,7 @@ if (!isset($db_opcao)) {
             $clcriaabas->src = array("liclicita" => "lic1_liclicita001.php", "liclicitem" => "lic1_liclicitemalt001.php", "liclicitemlote" => "lic1_liclicitemlote001.php", "dotacoesnovo" => "com1_dotacoesnovo001lic.php", "liclicpublicacoes" => "lic1_liclicpublicacao001.php");
 
             if ($db_opcao == 1) {
-              $clcriaabas->disabled   =  array("liclicitem" => "true", "resplicita" => "true", "liclicitemlote" => "true");
+              $clcriaabas->disabled   =  array("liclicitem" => "true", "resplicita" => "true", "liclicitemlote" => "true", "dotacoesnovo" => "true");
             }
             $clcriaabas->cria_abas();
           } else {
@@ -79,7 +79,7 @@ if (!isset($db_opcao)) {
             $clcriaabas->title      = array("liclicita" => "Licitação", "liclicitem" => "Itens da Licitação", "liclicitemlote" => "Lote de itens");
             $clcriaabas->src        = array("liclicita" => "lic1_liclicita001.php", "liclicitem" => "lic1_liclicitemalt001.php", "liclicitemlote" => "lic1_liclicitemlote001.php");
             if ($db_opcao == 1) {
-              $clcriaabas->disabled   =  array("liclicitem" => "false", "liclicitemlote" => "true");
+              $clcriaabas->disabled   =  array("liclicitem" => "false", "liclicitemlote" => "true", "dotacoesnovo" => "true");
             }
             $clcriaabas->cria_abas();
           }
@@ -93,7 +93,7 @@ if (!isset($db_opcao)) {
   ?>
   <script>
     document.getElementById("liclicitemlote").style.display = "none";
-    document.getElementById("dotacoesnovo").style.display = "none";
+    //document.getElementById("dotacoesnovo").style.display = "none";
     document.getElementById("liclicpublicacoes").style.display = "none";
   </script>
 

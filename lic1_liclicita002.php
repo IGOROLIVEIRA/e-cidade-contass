@@ -823,7 +823,8 @@ if (isset($alterar)) {
         echo "<script>
       
         parent.iframe_dotacoesnovo.location.href='com1_dotacoesnovo001lic.php?licitacao=$chavepesquisa&tipojulg=" . @$tipojulg . "';\n
-        parent.document.getElementById('dotacoesnovo').style.display='block'\n
+        parent.document.getElementById('dotacoesnovo').style.display='block';\n
+        parent.document.formaba.dotacoesnovo.disabled=false;\n
       
         </script>";
     } else {

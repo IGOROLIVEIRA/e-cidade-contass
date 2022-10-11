@@ -167,7 +167,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
           <td nowrap>
 
             <?
-            db_input('pc11_quant', 8, $pc11_quant, true, 'text', $db_opcao, '');
+            db_input('pc11_quant', 8, $pc11_quant, true, 'text', 1, '');
             ?>
 
             <?
@@ -527,9 +527,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
       document.getElementById('titleUnidade2').style.display = "none";
       document.getElementById('pc11_seq').style.marginLeft = "-84px";
       document.getElementById('titleOrdem').style.marginLeft = "-73px";
-      document.getElementById('pc11_quant').value = "";
-      document.getElementById('pc11_quant').readOnly = false;
-      document.getElementById('pc11_quant').style.background = "";
+
 
     }
 
@@ -1024,7 +1022,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
 
       aLinha[2] = " <input style='text-align:center; width:90%; border:none;' readonly='' type='text' name='descmaterial[]' value='" + oRetorno.aItens[i].pc01_descrmater.urlDecode() + "'>"
 
-      aLinha[3] = " <input style='text-align:center; width:90%; border:none;' readonly='' type='text' name='unidade[]' value='" + oRetorno.aItens[i].m61_descr + "'>";
+      aLinha[3] = " <input style='text-align:center; width:90%; border:none;' readonly='' type='text' name='unidade[]' value='" + oRetorno.aItens[i].m61_descr.urlDecode() + "'>";
 
       aLinha[4] = " <input style='text-align:center; width:90%; border:none;' readonly='' type='text' name='quantidade[]' value='" + oRetorno.aItens[i].pc11_quant + "'>";
 
@@ -1035,8 +1033,6 @@ if ((isset($opcao) && $opcao == "alterar")) {
       aLinha[6] = " <input style='text-align:center; width:90%; border:none;' readonly='' type='text' name='codele[]' value='" + oRetorno.aItens[i].pc18_codele + "'>";
 
 
-      //aLinha[6] = " <input style='text-align:center; width:90%; border:none;' readonly='' type='text' name='quantidade[]' value='" + oRetorno.aItens[i].pc11_quant + "'>";
-
 
       aLinha[7] = " <input style='text-align:center; width:90%; border:none;' readonly='' type='text' name='servicoquantidade[]' value='" + oRetorno.aItens[i].pc11_servicoquantidade + "'>";
 
@@ -1045,7 +1041,6 @@ if ((isset($opcao) && $opcao == "alterar")) {
       aLinha[9] = " <input style='text-align:center; width:90%; border:none;' readonly='' type='text' name='codigo[]' value='" + oRetorno.aItens[i].pc11_codigo + "'>";
 
       valor = oRetorno.aItens[i].o56_codele + " - " + oRetorno.aItens[i].o56_elemento + " - " + oRetorno.aItens[i].o56_descr;
-      //valorElem = oItem.elemento;
 
       aLinha[10] = "  <input style='text-align:center; width:90%; border:none;' readonly='' type='text'  name='descrelemento[]' value='" + valor + "'>";
 
