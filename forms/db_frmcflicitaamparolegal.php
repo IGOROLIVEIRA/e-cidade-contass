@@ -104,3 +104,27 @@
 	</fieldset>
 	<input style="margin-top: 20px;" value="Salvar" type="submit" name="incluir"></input>
 </form>
+<script>
+	marcarTodosPerfis = false;
+
+	function marcarTodos() {
+		qntdperfis = document.getElementsByClassName("marca_itens").length;
+		perfis = document.getElementsByClassName("marca_itens");
+
+		if (marcarTodosPerfis == false) {
+			for (let i = 0; i < qntdperfis; i++) {
+				perfis[i].checked = true;
+			}
+
+			marcarTodosPerfis = true;
+		} else {
+			for (let i = 0; i < qntdperfis; i++) {
+				perfis[i].checked = false;
+			}
+
+			marcarTodosPerfis = false;
+		}
+
+
+	}
+</script>

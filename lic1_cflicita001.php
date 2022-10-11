@@ -24,7 +24,7 @@
  *  Copia da licenca no diretorio licenca/licenca_en.txt 
  *                                licenca/licenca_pt.txt 
  */
-
+require_once("libs/db_utils.php");
 require("libs/db_stdlib.php");
 require("libs/db_conecta.php");
 include("libs/db_sessoes.php");
@@ -98,6 +98,20 @@ $db_opcao = 1;
   <form name="form1">
   </form>
   <?
+  $sSqlLicParametro = "select l12_pncp from licitaparam where l12_instit = " . db_getsession('DB_instit');
+
+  $rslicparam = db_query($sSqlLicParametro);
+
+  $dlicparam = db_utils::fieldsMemory($rslicparam, 0);
+
+  $l12_pncp = $dlicparam->l12_pncp;
+
+  if ($dlicparam->l12_pncp != 't') {
+    echo '<script>
+    document.getElementById("amparolegal").style.display = "none";
+    </script>';
+  }
+
   db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit"));
   ?>
 </body>
