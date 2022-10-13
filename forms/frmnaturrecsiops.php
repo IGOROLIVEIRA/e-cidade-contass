@@ -18,12 +18,16 @@ $clnaturrecsiops->rotulo->label();
                 <td><strong>Código da Receita:</strong></td>
                 <td>
                     <?
-                    db_input('c230_natrececidade',15,$Ic230_natrececidade,true,'text',1,"")
+                    if(db_getsession("DB_anousu") > 2021)
+                       $iMaxLen = 8;
+                    db_input('c230_natrececidade',15,$Ic230_natrececidade,true,'text',1,"","","","",$iMaxLen)
                     ?>
                 </td>
                 <td>
                     <?
-                    db_input('c230_natrecsiops',15,$Ic230_natrecsiops,true,'text',1,"")
+                    if(db_getsession("DB_anousu") > 2021)
+                        $iMaxLen = 8;
+                    db_input('c230_natrecsiops',15,$Ic230_natrecsiops,true,'text',1,"","","","",$iMaxLen)
                     ?>
                 </td>
             </tr>
