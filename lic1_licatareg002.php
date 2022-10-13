@@ -29,7 +29,6 @@ if(isset($alterar)){
    $db_opcao = 2;
    $result = $cllicatareg->sql_record($cllicatareg->sql_query_file(null,"*",null,"l221_sequencial = ".$chavepesquisa)); 
    db_fieldsmemory($result,0);
-   $l221_numata = $l221_numata.'/'.$l221_exercicio;
    $db_botao = true;
    $rsObjeto = $clliclicita->sql_record($clliclicita->sql_query_file($l221_licitacao,"l20_objeto"));
    db_fieldsmemory($rsObjeto,0);

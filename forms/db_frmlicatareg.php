@@ -22,7 +22,7 @@ $cllicatareg = new cl_licatareg;
           </td>
           <td> 
           <?
-            db_input('l221_sequencial',8,$Il221_sequencial,true,'text',3,"")
+            db_input('l221_sequencial',10,$Il221_sequencial,true,'text',3,"")
           ?>
           </td>
         </tr>
@@ -30,7 +30,7 @@ $cllicatareg = new cl_licatareg;
           <td nowrap title="<?=@$Tl221_licitacao?>">
           <?php 
             if(isset($l221_sequencial) && $l221_sequencial != "" && $l221_sequencial != null){
-              echo "<b>Licitação</b>";
+              echo "<b>Licitação:</b>";
             }else{
               db_ancora("Licitação: ", "js_pesquisarLicitacao(true);", $iOpcaoLicitacao); 
             }  
@@ -39,26 +39,26 @@ $cllicatareg = new cl_licatareg;
           <td> 
               <?php
               if(isset($l221_sequencial) && $l221_sequencial != "" && $l221_sequencial != null){
-                db_input('l221_licitacao', 12, $Il221_licitacao, true, 'text', 3, " onChange='js_pesquisarLicitacao(false);'");
+                db_input('l221_licitacao', 10, $Il221_licitacao, true, 'text', 3, " onChange='js_pesquisarLicitacao(false);'");
               }else{
-                db_input('l221_licitacao', 12, $Il221_licitacao, true, 'text', $iOpcaoLicitacao, " onChange='js_pesquisarLicitacao(false);'");
+                db_input('l221_licitacao', 10, $Il221_licitacao, true, 'text', $iOpcaoLicitacao, " onChange='js_pesquisarLicitacao(false);'");
               }
               ?>
           </td>
         </tr>
         <tr>
           <td nowrap title="<?=@$Tl221_numata?>">
-            <?echo "<b>Número da Ata</b>" ?>
+            <?echo "<b>Número da Ata:</b>" ?>
           </td>
           <td> 
           <?
-            db_input('l221_numata',15,$Il221_numata,true,'text',$db_opcao,"")
+            db_input('l221_numata',10,$Il221_numata,true,'text',$db_opcao,"")
           ?>
           </td>
         </tr>
         <tr>
           <td nowrap title="<?=@$Tl221_exercicio?>">
-            <?echo "<b>Exercício da Ata</b>" ?>
+            <?echo "<b>Exercício da Ata:</b>" ?>
           </td>
           <td> 
           <?
@@ -105,7 +105,7 @@ $cllicatareg = new cl_licatareg;
         </tr>
         <tr>
           <td nowrap title="<?=@$Tl221_dataini?>">
-            <? echo "<b>Vigência</b>" ?>
+            <? echo "<b>Vigência:</b>" ?>
           </td>
           <td> 
           <?
@@ -117,7 +117,7 @@ $cllicatareg = new cl_licatareg;
 
         <tr>
           <td nowrap title="<?=@$Tl221_datapublica?>">
-            <?echo "<b>Data de Publicação</b>" ?>
+            <?echo "<b>Data de Publicação:</b>" ?>
           </td>
           <td> 
           <?
@@ -127,7 +127,7 @@ $cllicatareg = new cl_licatareg;
         </tr>
         <tr>
           <td nowrap title="<?=@$Tl221_veiculopublica?>">
-            <?echo "<b>Veículo de Puclicação</b>" ?>
+            <?echo "<b>Veículo de Publicação:</b>" ?>
           </td>
           <td> 
           <?
