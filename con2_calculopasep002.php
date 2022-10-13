@@ -123,7 +123,7 @@ foreach ($aReceitas as $Receitas) {
         $fTCons = atualizaSaldo($fTCons, $Receitas, array(417395000000000));
         $fPFM = atualizaSaldo($fPFM, $Receitas, array(417115111000000, 417115121000000, 417115131000000));
         $fFEP = atualizaSaldo($fFEP, $Receitas, array(417125241000000));
-        $fICMS = atualizaSaldo($fICMS, $Receitas, array(417195101000000, 417195801000000));
+        $fICMS = atualizaSaldo($fICMS, $Receitas, array(417195101000000, 417195801000000, 417196101000000));
         $fITR = atualizaSaldo($fITR, $Receitas, array(417115201000000));
         $fCFM = atualizaSaldo($fCFM, $Receitas, array(417225101000000, 417125101000000));
         $fCIDE = atualizaSaldo($fCIDE, $Receitas, array(417215301000000));
@@ -990,8 +990,13 @@ ob_start();
                             ?>
                         </td>
                     </tr>
+                    <?php
+                        $sDescricaoICMS = "ICMS - Desoneração das Exportações - LC n.º 87/96 / Transferência  LC n.º 176/2020";
+                        if (db_getsession('DB_anousu') >= 2022) 
+                            $sDescricaoICMS .= " / EC nº 123/2022 ";
+                    ?>
                     <tr style=''>
-                        <td class="s3 bdleft">ICMS - Desoneração das Exportações - LC n.º 87/96 / Transferência  LC n.º 176/2020</td>
+                        <td class="s3 bdleft"><?=$sDescricaoICMS?></td>
                         <td class="s4">
                             <?php
                             echo db_formatar($fICMS, "f");
