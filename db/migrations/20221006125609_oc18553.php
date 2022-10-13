@@ -7,7 +7,7 @@ class Oc18553 extends AbstractMigration
 
     public function up()
     {
-        $sql = "
+        $sql =  "
 
         BEGIN;
 
@@ -84,67 +84,107 @@ class Oc18553 extends AbstractMigration
         INSERT INTO amparolegal VALUES (nextval('amparolegal_l212_codigo_seq'), 'Lei 9.636/1998, Art. 24-C, II');
         INSERT INTO amparolegal VALUES (nextval('amparolegal_l212_codigo_seq'), 'Lei 9.636/1998, Art. 24-C, III'); 
 
-        create table cflicita_amparo(
+        create table amparocflicita(
             l213_amparo int not null,
             l213_modalidade int not null,
             PRIMARY KEY (l213_amparo,l213_modalidade),
             FOREIGN KEY (l213_amparo) REFERENCES amparolegal(l212_codigo),
-            FOREIGN KEY (l213_modalidade) REFERENCES cflicita(l03_codigo));
+            FOREIGN KEY (l213_modalidade) REFERENCES cflicita(l03_codigo));";
 
-        INSERT INTO cflicita_amparo VALUES (5,(select l03_codigo from cflicita where l03_pctipocompratribunal = 110 limit 1));
-        INSERT INTO cflicita_amparo VALUES (3,(select l03_codigo from cflicita where l03_pctipocompratribunal = 51 limit 1));
-        INSERT INTO cflicita_amparo VALUES (2,(select l03_codigo from cflicita where l03_pctipocompratribunal = 50 limit 1));
-        INSERT INTO cflicita_amparo VALUES (1,(select l03_codigo from cflicita where l03_pctipocompratribunal = 53 limit 1));
-        INSERT INTO cflicita_amparo VALUES (1,(select l03_codigo from cflicita where l03_pctipocompratribunal = 52 limit 1));
-        INSERT INTO cflicita_amparo VALUES (18,(select l03_codigo from cflicita where l03_pctipocompratribunal = 101 limit 1));
-        INSERT INTO cflicita_amparo VALUES (19,(select l03_codigo from cflicita where l03_pctipocompratribunal = 101 limit 1));
-        INSERT INTO cflicita_amparo VALUES (20,(select l03_codigo from cflicita where l03_pctipocompratribunal = 101 limit 1));
-        INSERT INTO cflicita_amparo VALUES (21,(select l03_codigo from cflicita where l03_pctipocompratribunal = 101 limit 1));
-        INSERT INTO cflicita_amparo VALUES (22,(select l03_codigo from cflicita where l03_pctipocompratribunal = 101 limit 1));
-        INSERT INTO cflicita_amparo VALUES (23,(select l03_codigo from cflicita where l03_pctipocompratribunal = 101 limit 1));
-        INSERT INTO cflicita_amparo VALUES (24,(select l03_codigo from cflicita where l03_pctipocompratribunal = 101 limit 1));
-        INSERT INTO cflicita_amparo VALUES (25,(select l03_codigo from cflicita where l03_pctipocompratribunal = 101 limit 1));
-        INSERT INTO cflicita_amparo VALUES (26,(select l03_codigo from cflicita where l03_pctipocompratribunal = 101 limit 1));
-        INSERT INTO cflicita_amparo VALUES (27,(select l03_codigo from cflicita where l03_pctipocompratribunal = 101 limit 1));
-        INSERT INTO cflicita_amparo VALUES (28,(select l03_codigo from cflicita where l03_pctipocompratribunal = 101 limit 1));
-        INSERT INTO cflicita_amparo VALUES (29,(select l03_codigo from cflicita where l03_pctipocompratribunal = 101 limit 1));
-        INSERT INTO cflicita_amparo VALUES (30,(select l03_codigo from cflicita where l03_pctipocompratribunal = 101 limit 1));
-        INSERT INTO cflicita_amparo VALUES (31,(select l03_codigo from cflicita where l03_pctipocompratribunal = 101 limit 1));
-        INSERT INTO cflicita_amparo VALUES (32,(select l03_codigo from cflicita where l03_pctipocompratribunal = 101 limit 1));
-        INSERT INTO cflicita_amparo VALUES (33,(select l03_codigo from cflicita where l03_pctipocompratribunal = 101 limit 1));
-        INSERT INTO cflicita_amparo VALUES (34,(select l03_codigo from cflicita where l03_pctipocompratribunal = 101 limit 1));
-        INSERT INTO cflicita_amparo VALUES (35,(select l03_codigo from cflicita where l03_pctipocompratribunal = 101 limit 1));
-        INSERT INTO cflicita_amparo VALUES (36,(select l03_codigo from cflicita where l03_pctipocompratribunal = 101 limit 1));
-        INSERT INTO cflicita_amparo VALUES (37,(select l03_codigo from cflicita where l03_pctipocompratribunal = 101 limit 1));
-        INSERT INTO cflicita_amparo VALUES (38,(select l03_codigo from cflicita where l03_pctipocompratribunal = 101 limit 1));
-        INSERT INTO cflicita_amparo VALUES (39,(select l03_codigo from cflicita where l03_pctipocompratribunal = 101 limit 1));
-        INSERT INTO cflicita_amparo VALUES (40,(select l03_codigo from cflicita where l03_pctipocompratribunal = 101 limit 1));
-        INSERT INTO cflicita_amparo VALUES (41,(select l03_codigo from cflicita where l03_pctipocompratribunal = 101 limit 1));
-        INSERT INTO cflicita_amparo VALUES (42,(select l03_codigo from cflicita where l03_pctipocompratribunal = 101 limit 1));
-        INSERT INTO cflicita_amparo VALUES (43,(select l03_codigo from cflicita where l03_pctipocompratribunal = 101 limit 1));
-        INSERT INTO cflicita_amparo VALUES (44,(select l03_codigo from cflicita where l03_pctipocompratribunal = 101 limit 1));
-        INSERT INTO cflicita_amparo VALUES (45,(select l03_codigo from cflicita where l03_pctipocompratribunal = 101 limit 1));
-        INSERT INTO cflicita_amparo VALUES (46,(select l03_codigo from cflicita where l03_pctipocompratribunal = 101 limit 1));
-        INSERT INTO cflicita_amparo VALUES (6,(select l03_codigo from cflicita where l03_pctipocompratribunal = 100 limit 1));
-        INSERT INTO cflicita_amparo VALUES (7,(select l03_codigo from cflicita where l03_pctipocompratribunal = 100 limit 1));
-        INSERT INTO cflicita_amparo VALUES (8,(select l03_codigo from cflicita where l03_pctipocompratribunal = 100 limit 1));
-        INSERT INTO cflicita_amparo VALUES (9,(select l03_codigo from cflicita where l03_pctipocompratribunal = 100 limit 1));
-        INSERT INTO cflicita_amparo VALUES (10,(select l03_codigo from cflicita where l03_pctipocompratribunal = 100 limit 1));
-        INSERT INTO cflicita_amparo VALUES (11,(select l03_codigo from cflicita where l03_pctipocompratribunal = 100 limit 1));
-        INSERT INTO cflicita_amparo VALUES (12,(select l03_codigo from cflicita where l03_pctipocompratribunal = 100 limit 1));
-        INSERT INTO cflicita_amparo VALUES (13,(select l03_codigo from cflicita where l03_pctipocompratribunal = 100 limit 1));
-        INSERT INTO cflicita_amparo VALUES (14,(select l03_codigo from cflicita where l03_pctipocompratribunal = 100 limit 1));
-        INSERT INTO cflicita_amparo VALUES (15,(select l03_codigo from cflicita where l03_pctipocompratribunal = 100 limit 1));
-        INSERT INTO cflicita_amparo VALUES (16,(select l03_codigo from cflicita where l03_pctipocompratribunal = 100 limit 1));
-        INSERT INTO cflicita_amparo VALUES (17,(select l03_codigo from cflicita where l03_pctipocompratribunal = 100 limit 1));
-        INSERT INTO cflicita_amparo VALUES (50,(select l03_codigo from cflicita where l03_pctipocompratribunal = 100 limit 1));
-        INSERT INTO cflicita_amparo VALUES (47,(select l03_codigo from cflicita where l03_pctipocompratribunal = 102 limit 1));
-        INSERT INTO cflicita_amparo VALUES (47,(select l03_codigo from cflicita where l03_pctipocompratribunal = 103 limit 1));
-          
-            
+        $aRowsModalidade =   $this->fetchAll("SELECT l03_codigo FROM cflicita WHERE l03_pctipocompratribunal = 110");
 
-        COMMIT;
+        foreach ($aRowsModalidade as $modalidade) {
+            $sql .= " INSERT INTO amparocflicita VALUES (5,{$modalidade['l03_codigo']});";
+        }
 
-        ";
+        $aRowsModalidade =   $this->fetchAll("SELECT l03_codigo FROM cflicita WHERE l03_pctipocompratribunal = 51");
+
+        foreach ($aRowsModalidade as $modalidade) {
+            $sql .= " INSERT INTO amparocflicita VALUES (3,{$modalidade['l03_codigo']});";
+        }
+
+        $aRowsModalidade =   $this->fetchAll("SELECT l03_codigo FROM cflicita WHERE l03_pctipocompratribunal = 50");
+
+        foreach ($aRowsModalidade as $modalidade) {
+            $sql .= " INSERT INTO amparocflicita VALUES (2,{$modalidade['l03_codigo']});";
+        }
+
+        $aRowsModalidade =   $this->fetchAll("SELECT l03_codigo FROM cflicita WHERE l03_pctipocompratribunal = 53");
+
+        foreach ($aRowsModalidade as $modalidade) {
+            $sql .= " INSERT INTO amparocflicita VALUES (1,{$modalidade['l03_codigo']});";
+        }
+
+        $aRowsModalidade =   $this->fetchAll("SELECT l03_codigo FROM cflicita WHERE l03_pctipocompratribunal = 52");
+
+        foreach ($aRowsModalidade as $modalidade) {
+            $sql .= " INSERT INTO amparocflicita VALUES (1,{$modalidade['l03_codigo']});";
+        }
+
+        $aRowsModalidade =   $this->fetchAll("SELECT l03_codigo FROM cflicita WHERE l03_pctipocompratribunal = 101");
+
+        foreach ($aRowsModalidade as $modalidade) {
+            $sql .= " INSERT INTO amparocflicita VALUES (18,{$modalidade['l03_codigo']});";
+            $sql .= " INSERT INTO amparocflicita VALUES (19,{$modalidade['l03_codigo']});";
+            $sql .= " INSERT INTO amparocflicita VALUES (20,{$modalidade['l03_codigo']});";
+            $sql .= " INSERT INTO amparocflicita VALUES (21,{$modalidade['l03_codigo']});";
+            $sql .= " INSERT INTO amparocflicita VALUES (22,{$modalidade['l03_codigo']});";
+            $sql .= " INSERT INTO amparocflicita VALUES (23,{$modalidade['l03_codigo']});";
+            $sql .= " INSERT INTO amparocflicita VALUES (24,{$modalidade['l03_codigo']});";
+            $sql .= " INSERT INTO amparocflicita VALUES (25,{$modalidade['l03_codigo']});";
+            $sql .= " INSERT INTO amparocflicita VALUES (26,{$modalidade['l03_codigo']});";
+            $sql .= " INSERT INTO amparocflicita VALUES (27,{$modalidade['l03_codigo']});";
+            $sql .= " INSERT INTO amparocflicita VALUES (28,{$modalidade['l03_codigo']});";
+            $sql .= " INSERT INTO amparocflicita VALUES (29,{$modalidade['l03_codigo']});";
+            $sql .= " INSERT INTO amparocflicita VALUES (30,{$modalidade['l03_codigo']});";
+            $sql .= " INSERT INTO amparocflicita VALUES (31,{$modalidade['l03_codigo']});";
+            $sql .= " INSERT INTO amparocflicita VALUES (32,{$modalidade['l03_codigo']});";
+            $sql .= " INSERT INTO amparocflicita VALUES (33,{$modalidade['l03_codigo']});";
+            $sql .= " INSERT INTO amparocflicita VALUES (34,{$modalidade['l03_codigo']});";
+            $sql .= " INSERT INTO amparocflicita VALUES (35,{$modalidade['l03_codigo']});";
+            $sql .= " INSERT INTO amparocflicita VALUES (36,{$modalidade['l03_codigo']});";
+            $sql .= " INSERT INTO amparocflicita VALUES (37,{$modalidade['l03_codigo']});";
+            $sql .= " INSERT INTO amparocflicita VALUES (38,{$modalidade['l03_codigo']});";
+            $sql .= " INSERT INTO amparocflicita VALUES (39,{$modalidade['l03_codigo']});";
+            $sql .= " INSERT INTO amparocflicita VALUES (40,{$modalidade['l03_codigo']});";
+            $sql .= " INSERT INTO amparocflicita VALUES (41,{$modalidade['l03_codigo']});";
+            $sql .= " INSERT INTO amparocflicita VALUES (42,{$modalidade['l03_codigo']});";
+            $sql .= " INSERT INTO amparocflicita VALUES (43,{$modalidade['l03_codigo']});";
+            $sql .= " INSERT INTO amparocflicita VALUES (44,{$modalidade['l03_codigo']});";
+            $sql .= " INSERT INTO amparocflicita VALUES (45,{$modalidade['l03_codigo']});";
+            $sql .= " INSERT INTO amparocflicita VALUES (46,{$modalidade['l03_codigo']});";
+        }
+
+        $aRowsModalidade =   $this->fetchAll("SELECT l03_codigo FROM cflicita WHERE l03_pctipocompratribunal = 100");
+
+        foreach ($aRowsModalidade as $modalidade) {
+            $sql .= " INSERT INTO amparocflicita VALUES (6,{$modalidade['l03_codigo']});";
+            $sql .= " INSERT INTO amparocflicita VALUES (7,{$modalidade['l03_codigo']});";
+            $sql .= " INSERT INTO amparocflicita VALUES (8,{$modalidade['l03_codigo']});";
+            $sql .= " INSERT INTO amparocflicita VALUES (9,{$modalidade['l03_codigo']});";
+            $sql .= " INSERT INTO amparocflicita VALUES (10,{$modalidade['l03_codigo']});";
+            $sql .= " INSERT INTO amparocflicita VALUES (11,{$modalidade['l03_codigo']});";
+            $sql .= " INSERT INTO amparocflicita VALUES (12,{$modalidade['l03_codigo']});";
+            $sql .= " INSERT INTO amparocflicita VALUES (13,{$modalidade['l03_codigo']});";
+            $sql .= " INSERT INTO amparocflicita VALUES (14,{$modalidade['l03_codigo']});";
+            $sql .= " INSERT INTO amparocflicita VALUES (15,{$modalidade['l03_codigo']});";
+            $sql .= " INSERT INTO amparocflicita VALUES (16,{$modalidade['l03_codigo']});";
+            $sql .= " INSERT INTO amparocflicita VALUES (17,{$modalidade['l03_codigo']});";
+            $sql .= " INSERT INTO amparocflicita VALUES (50,{$modalidade['l03_codigo']});";
+        }
+
+        $aRowsModalidade =   $this->fetchAll("SELECT l03_codigo FROM cflicita WHERE l03_pctipocompratribunal = 102");
+
+        foreach ($aRowsModalidade as $modalidade) {
+            $sql .= " INSERT INTO amparocflicita VALUES (47,{$modalidade['l03_codigo']});";
+        }
+
+        $aRowsModalidade =   $this->fetchAll("SELECT l03_codigo FROM cflicita WHERE l03_pctipocompratribunal = 103");
+
+        foreach ($aRowsModalidade as $modalidade) {
+            $sql .= " INSERT INTO amparocflicita VALUES (47,{$modalidade['l03_codigo']});";
+        }
+
+        $sql .= " COMMIT;";
     }
 }
