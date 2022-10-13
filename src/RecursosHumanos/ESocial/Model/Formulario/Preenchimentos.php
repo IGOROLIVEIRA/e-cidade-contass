@@ -1070,6 +1070,9 @@ WHERE rh30_vinculo IN ('I',
      */
     public function buscarPreenchimentoS1210($codigoFormulario, $matricula = null, $cgm = null, $tipoevento = null)
     {
+        $ano = date("Y", db_getsession("DB_datausu"));
+        $mes = date("m", db_getsession("DB_datausu"));
+
         if ($tipoevento == 1) {
             $sql = "SELECT distinct z01_cgccpf from rhpessoal
             left join rhpessoalmov on
@@ -1199,7 +1202,8 @@ WHERE rh30_vinculo IN ('I',
                         inner join corgrupotipo on corgrupotipo.k106_sequencial = corgrupocorrente.k105_corgrupotipo
                         inner join pagordemele on e50_codord = e53_codord
                     where e50_cattrabalhador is not null
-                        and corrente.k12_data between '2022-08-01' and '2022-08-31'
+                        and date_part('month',corrente.k12_data) = $mes
+                        and date_part('year',corrente.k12_data) = $ano
                         and corgrupotipo.k106_sequencial in (1, 4) -- somente pagamento/estorno liquido
                         and length(z01_cgccpf) = 11 --and e50_codord = 33521
                     group by 1,
@@ -1213,7 +1217,7 @@ WHERE rh30_vinculo IN ('I',
             WHERE vr_liq > 0
             ";
             if ($cgm != null) {
-                $sql .= " and cgm.z01_cgccpf in ($cgm) ";
+                $sql .= " and num_cgm in ($cgm) ";
             }
         }
         $rs = \db_query($sql);
