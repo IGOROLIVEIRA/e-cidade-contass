@@ -156,36 +156,36 @@ if ($sinana == 'S1') {
 				from ( ";
 	}elseif ($formarrecadacao == 1) {
 		$sql = "select k02_codigo,k02_tipo,k02_drecei,codrec,estrutural,(valor) as vlrarquivobanco,
-				round((select coalesce (sum(vlrpago),0) 
+				round((select coalesce (sum(vlrpago),0)
 					from (
-						select distinct rc.vlrrec as vlrpago, db.idret, (select sum(vlrpago) 
-						from disbanco 
-						where idret = db.idret and codret = db.codret) 
+						select distinct rc.vlrrec as vlrpago, db.idret, (select sum(vlrpago)
+						from disbanco
+						where idret = db.idret and codret = db.codret)
 							from disbanco db
-							inner join discla dc on dc.codret 	  = db.codret 
-							inner join disrec rc on rc.codcla 	  = dc.codcla 
-												and db.idret 	  = rc.idret 
+							inner join discla dc on dc.codret 	  = db.codret
+							inner join disrec rc on rc.codcla 	  = dc.codcla
+												and db.idret 	  = rc.idret
 												and rc.k00_receit =  k02_codigo
 							where dc.dtaute between '$datai' and '$dataf') as x ),2) as valor
 					from
 				( ";
 	}elseif ($formarrecadacao == 2) {
-		$sql = "select k02_codigo,k02_tipo,k02_drecei,codrec,estrutural,(valor-vlrarquivobanco)as valor 
+		$sql = "select k02_codigo,k02_tipo,k02_drecei,codrec,estrutural,(valor-vlrarquivobanco)as valor
 				from(
 					select k02_codigo,k02_tipo,k02_drecei,codrec,estrutural,valor,
 					round((select coalesce(sum(vlrpago),0) from (
-					select distinct rc.vlrrec as vlrpago, db.idret, (select sum(vlrpago) 
-					from disbanco 
-					where idret = db.idret and codret = db.codret) 
+					select distinct rc.vlrrec as vlrpago, db.idret, (select sum(vlrpago)
+					from disbanco
+					where idret = db.idret and codret = db.codret)
 						from disbanco db
-							inner join discla dc on dc.codret 	  = db.codret 
-							inner join disrec rc on rc.codcla 	  = dc.codcla 
-												and db.idret 	  = rc.idret 
+							inner join discla dc on dc.codret 	  = db.codret
+							inner join disrec rc on rc.codcla 	  = dc.codcla
+												and db.idret 	  = rc.idret
 												and rc.k00_receit =  k02_codigo
 							where dc.dtaute between '$datai' and '$dataf') as x ),2) as vlrarquivobanco
 						from
 						( ";
-	}				
+	}
 
   $sSqlInterno ="select g.k02_codigo, g.k02_tipo, g.k02_drecei,c2.c61_reduz,
   				case when o.k02_codrec is not null 	then o.k02_codrec else p.k02_reduz end as codrec,
@@ -200,8 +200,8 @@ if ($sinana == 'S1') {
 										and o.k02_anousu	= extract (year from r.k12_data)
 				left outer join tabplan p on p.k02_codigo	= g.k02_codigo
 										 and p.k02_anousu 	= extract (year from r.k12_data)
-										 left outer join conplanoreduz c2 on r.k12_conta  	= c2.c61_reduz 
-										 and	c2.c61_anousu	= extract (year from r.k12_data)							 
+										 left outer join conplanoreduz c2 on r.k12_conta  	= c2.c61_reduz
+										 and	c2.c61_anousu	= extract (year from r.k12_data)
 				left join corplacaixa on r.k12_id 	   		= k82_id
 										 and r.k12_data   	= k82_data
 										 and r.k12_autent  	= k82_autent
@@ -213,14 +213,14 @@ if ($sinana == 'S1') {
      $sql .= str_replace("#subquery_desconto#","$sSubQueryDesconto",$sSqlInterno).
              " union all " .
              str_replace("#subquery_desconto#","",str_replace("cornump ", "cornumpdesconto ",$sSqlInterno));
-    
+
 	 if ($formarrecadacao == 0){
 		$sql .= " ) as xxx $where2 $orderby ";
 	}elseif ($formarrecadacao == 1) {
 		$sql .= " ) as xxx $where2 $orderby ";
 	}elseif ($formarrecadacao == 2) {
 		$sql .= " ) as xxx $where2 $orderby)as x ";
-	}	
+	}
 // die($sql);
 }
 elseif ($sinana == 'S2') {
@@ -231,31 +231,31 @@ elseif ($sinana == 'S2') {
 				( ";
 	}elseif ($formarrecadacao == 1) {
 		$sql = "select estrutural,k02_tipo,descr,sum(valor) as vlrarquivobanco,
-				round((select coalesce (sum(vlrpago),0) 
+				round((select coalesce (sum(vlrpago),0)
 				from (
-					select distinct rc.vlrrec as vlrpago, db.idret, (select sum(vlrpago) 
-					from disbanco 
-					where idret = db.idret and codret = db.codret) 
+					select distinct rc.vlrrec as vlrpago, db.idret, (select sum(vlrpago)
+					from disbanco
+					where idret = db.idret and codret = db.codret)
 						from disbanco db
-						inner join discla dc on dc.codret 	  = db.codret 
-						inner join disrec rc on rc.codcla 	  = dc.codcla 
-											and db.idret 	  = rc.idret 
+						inner join discla dc on dc.codret 	  = db.codret
+						inner join disrec rc on rc.codcla 	  = dc.codcla
+											and db.idret 	  = rc.idret
 											and rc.k00_receit =  k02_codigo
 						where dc.dtaute between '$datai' and '$dataf') as x ),2) as valor
 				from
 			    ( ";
 	}elseif ($formarrecadacao == 2) {
-		$sql = "select estrutural, k02_tipo, descr, vlrarquivobanco, (valor-vlrarquivobanco)as valor 
+		$sql = "select estrutural, k02_tipo, descr, vlrarquivobanco, (valor-vlrarquivobanco)as valor
 				from(
 					select estrutural,k02_tipo,descr,sum(valor) as valor,
 					round((select coalesce(sum(vlrpago),0) from (
-					select distinct rc.vlrrec as vlrpago, db.idret, (select sum(vlrpago) 
-					from disbanco 
-					where idret = db.idret and codret = db.codret) 
+					select distinct rc.vlrrec as vlrpago, db.idret, (select sum(vlrpago)
+					from disbanco
+					where idret = db.idret and codret = db.codret)
 						from disbanco db
-						inner join discla dc on dc.codret 	  = db.codret 
-						inner join disrec rc on rc.codcla 	  = dc.codcla 
-											and db.idret 	  = rc.idret 
+						inner join discla dc on dc.codret 	  = db.codret
+						inner join disrec rc on rc.codcla 	  = dc.codcla
+											and db.idret 	  = rc.idret
 											and rc.k00_receit =  k02_codigo
 						where dc.dtaute between '$datai' and '$dataf') as x ),2) as vlrarquivobanco
 				from
@@ -267,13 +267,13 @@ elseif ($sinana == 'S2') {
 						case when p.k02_codigo is null then o.k02_estorc else p.k02_estpla end as estrutural,
 						round(f.k12_valor #subquery_desconto# ,2) as valor, g.k02_codigo, f.k12_data
 						from cornump f
-						inner join corrente r on  r.k12_id 					= f.k12_id 
-											and r.k12_data 					= f.k12_data 
+						inner join corrente r on  r.k12_id 					= f.k12_id
+											and r.k12_data 					= f.k12_data
 											and r.k12_autent 				= f.k12_autent
 						inner join tabrec g on g.k02_codigo  				= f.k12_receit
-						left outer join taborc o on o.k02_codigo 			= g.k02_codigo 
+						left outer join taborc o on o.k02_codigo 			= g.k02_codigo
 												and	o.k02_anousu 			= extract (year from r.k12_data)
-						left outer join tabplan p on p.k02_codigo 			= g.k02_codigo 
+						left outer join tabplan p on p.k02_codigo 			= g.k02_codigo
 												and	 p.k02_anousu 			= extract (year from r.k12_data)
 						left outer join conplanoreduz c1 on		p.k02_reduz = c1.c61_reduz
 								or r.k12_conta  	= c1.c61_reduz
@@ -283,8 +283,8 @@ elseif ($sinana == 'S2') {
 						left outer join orcreceita on o70_codrec 			= o.k02_codrec
 												  and o70_anousu 			= extract (year from r.k12_data)
 						left outer join orcfontes on o57_codfon 			= o70_codfon and o70_anousu = o57_anousu
-						left  join corplacaixa on r.k12_id 					= k82_id 
-											and r.k12_data   				= k82_data 
+						left  join corplacaixa on r.k12_id 					= k82_id
+											and r.k12_data   				= k82_data
 											and r.k12_autent 				= k82_autent
 						left  join placaixarec on k82_seqpla 				= k81_seqpla
 						where $where and f.k12_data between '$datai'
@@ -297,14 +297,14 @@ elseif ($sinana == 'S2') {
 
 	$sql .= " ) as xxx
 			    $where2 ";
-				
+
 	if ($formarrecadacao == 0){
 		$sql .= ' group by estrutural,descr,k02_tipo,k02_codigo';
 	}elseif ($formarrecadacao == 1) {
 		$sql .= ' group by estrutural,descr,k02_tipo,k02_codigo';
 	}elseif ($formarrecadacao == 2) {
 		$sql .= ' group by estrutural,descr,k02_tipo,k02_codigo,vlrarquivobanco) as total ';
-	}	
+	}
 
 	$sql .= ' order by estrutural';
 
@@ -320,53 +320,53 @@ elseif ($sinana == 'S2') {
 				from
 				( ";
 	}elseif ($formarrecadacao == 1) {
-		$sql = "select distinct k02_codigo, k02_tipo, k12_conta, k02_drecei, codrec, estrutural, k00_histtxt, k12_data, 
+		$sql = "select distinct k02_codigo, k02_tipo, k12_conta, k02_drecei, codrec, estrutural, k00_histtxt, k12_data,
 				k12_numpre, k12_numpar, c61_reduz, c60_descr, 0 as vlrarquivobanco,
-				round((select coalesce (sum(vlrpago),0) 
+				round((select coalesce (sum(vlrpago),0)
 				from (
-					select distinct rc.vlrrec as vlrpago, db.idret, (select sum(vlrpago) 
-					from disbanco 
-					where idret = db.idret and codret = db.codret) 
+					select distinct rc.vlrrec as vlrpago, db.idret, (select sum(vlrpago)
+					from disbanco
+					where idret = db.idret and codret = db.codret)
 					from disbanco db
-					inner join cadban cb on cb.k15_codbco = db.k15_codbco 
+					inner join cadban cb on cb.k15_codbco = db.k15_codbco
 										and cb.k15_conta  = k12_conta
-					inner join discla dc on dc.codret 	  = db.codret 
-					inner join disrec rc on rc.codcla 	  = dc.codcla 
-										and rc.idret 	  = db.idret 
+					inner join discla dc on dc.codret 	  = db.codret
+					inner join disrec rc on rc.codcla 	  = dc.codcla
+										and rc.idret 	  = db.idret
 										and rc.k00_receit =  k02_codigo
 					where dc.dtaute = k12_data) as x ),2) as valor
 				from
 			    ( ";
 	}
 	elseif ($formarrecadacao == 2) {
-		$sql = "select k02_codigo, k02_tipo, k02_drecei, codrec, estrutural, k00_histtxt, k12_data, 
+		$sql = "select k02_codigo, k02_tipo, k02_drecei, codrec, estrutural, k00_histtxt, k12_data,
 				k12_numpre, k12_numpar, c61_reduz, c60_descr, k12_conta,
 				(sum(valor)-vlrarquivobanco)as valor
 				from(
-					select k02_codigo, k02_tipo, k02_drecei, codrec, estrutural, k00_histtxt, k12_data, 
+					select k02_codigo, k02_tipo, k02_drecei, codrec, estrutural, k00_histtxt, k12_data,
 					k12_numpre, k12_numpar, c61_reduz, c60_descr, k12_conta, (valor) as valor,
-					round((select coalesce (sum(vlrpago),0) 
+					round((select coalesce (sum(vlrpago),0)
 					from (
-						select distinct rc.vlrrec as vlrpago, db.idret, (select sum(vlrpago) 
-						from disbanco 
-						where idret = db.idret and codret = db.codret) 
+						select distinct rc.vlrrec as vlrpago, db.idret, (select sum(vlrpago)
+						from disbanco
+						where idret = db.idret and codret = db.codret)
 						from disbanco db
-						inner join cadban cb on cb.k15_codbco = db.k15_codbco 
+						inner join cadban cb on cb.k15_codbco = db.k15_codbco
 											and cb.k15_conta  = k12_conta
-						inner join discla dc on dc.codret 	  = db.codret 
-						inner join disrec rc on rc.codcla 	  = dc.codcla 
-											and db.idret 	  = rc.idret 
+						inner join discla dc on dc.codret 	  = db.codret
+						inner join disrec rc on rc.codcla 	  = dc.codcla
+											and db.idret 	  = rc.idret
 											and rc.k00_receit =  k02_codigo
 						where dc.dtaute = k12_data) as x ),2) as vlrarquivobanco
 					from
-				( ";			
+				( ";
 	}
 
  	$sSqlInterno =" select g.k02_codigo, g.k02_tipo, g.k02_drecei,
 				    case when o.k02_codrec is not null 	then o.k02_codrec else p.k02_reduz end as codrec,
 				    case when p.k02_codigo is null 	then o.k02_estorc else p.k02_estpla end as estrutural,
-				    k12_histcor as k00_histtxt, f.k12_data, f.k12_numpre, f.k12_numpar, c61_reduz, 
-					c60_descr, k12_conta, 
+				    k12_histcor as k00_histtxt, f.k12_data, f.k12_numpre, f.k12_numpar, c61_reduz,
+					c60_descr, k12_conta,
 				    round( f.k12_valor #subquery_desconto# ,2) as valor
 					from cornump f
 					inner join corrente r on r.k12_id        		= f.k12_id
@@ -384,8 +384,8 @@ elseif ($sinana == 'S2') {
 					left join corhist hist on hist.k12_id     		= f.k12_id
                                           and hist.k12_data   		= f.k12_data
 										  and hist.k12_autent		= f.k12_autent
-					left join corplacaixa on r.k12_id				= k82_id 
-										 and r.k12_data				= k82_data 
+					left join corplacaixa on r.k12_id				= k82_id
+										 and r.k12_data				= k82_data
 										 and r.k12_autent 			= k82_autent
 					left join placaixarec on k82_seqpla 			= k81_seqpla
 					where $where and f.k12_data between '$datai' and '$dataf'
@@ -400,7 +400,7 @@ elseif ($sinana == 'S2') {
 	}elseif ($formarrecadacao == 1) {
 		$sql .= " ) as xxx $where2 $orderby";
 	}elseif ($formarrecadacao == 2) {
-		$sql .= " ) as xxx $where2)as x 
+		$sql .= " ) as xxx $where2)as x
 				group by k02_codigo, k02_tipo, k02_drecei, codrec, estrutural, k00_histtxt, k12_data,
 				k12_numpre, k12_numpar, c61_reduz, c60_descr, k12_conta, vlrarquivobanco";
 	}
@@ -425,46 +425,46 @@ elseif ($sinana == 'S2') {
 		$sql = "select distinct k02_codigo, k02_tipo, k02_drecei, codrec, estrutural, k12_data, k12_numpre, k12_numpar,
 				c61_reduz, c60_descr, k12_conta,
 				0 as vlrarquivobanco,
-				round((select coalesce (sum(vlrpago),0) 
+				round((select coalesce (sum(vlrpago),0)
 					from (
-						select distinct rc.vlrrec as vlrpago, db.idret, (select sum(vlrpago) 
-						from disbanco 
-						where idret = db.idret and codret = db.codret) 
+						select distinct rc.vlrrec as vlrpago, db.idret, (select sum(vlrpago)
+						from disbanco
+						where idret = db.idret and codret = db.codret)
 						from disbanco db
-						inner join cadban cb on cb.k15_codbco 	= db.k15_codbco 
+						inner join cadban cb on cb.k15_codbco 	= db.k15_codbco
 											and cb.k15_conta  	= k12_conta
-						inner join discla dc on dc.codret 	 	= db.codret 
-						inner join disrec rc on rc.codcla 	  	= dc.codcla 
-						and rc.idret 	  = db.idret 
+						inner join discla dc on dc.codret 	 	= db.codret
+						inner join disrec rc on rc.codcla 	  	= dc.codcla
+						and rc.idret 	  = db.idret
 						and rc.k00_receit =  k02_codigo
 						where dc.dtaute = k12_data) as x ),2) as valor
 						from (
 							select * from
 								( ";
 	}elseif ($formarrecadacao == 2) {
-		$sql = "select k02_codigo, k02_tipo, k02_drecei, codrec, estrutural, k12_data, k12_numpre, k12_numpar, 
+		$sql = "select k02_codigo, k02_tipo, k02_drecei, codrec, estrutural, k12_data, k12_numpre, k12_numpar,
 				c61_reduz, c60_descr, k12_conta,
 				(sum(valor)-vlrarquivobanco)as valor
 				from(
 					select k02_codigo, k02_tipo, k02_drecei, codrec, estrutural,k12_data, k12_numpre, k12_numpar,
-					c61_reduz, c60_descr,k12_conta, 
+					c61_reduz, c60_descr,k12_conta,
 					valor,
-					round((select coalesce (sum(vlrpago),0) 
+					round((select coalesce (sum(vlrpago),0)
 						from (
-							select distinct rc.vlrrec as vlrpago, db.idret, (select sum(vlrpago) 
-							from disbanco 
-							where idret = db.idret and codret = db.codret) 
+							select distinct rc.vlrrec as vlrpago, db.idret, (select sum(vlrpago)
+							from disbanco
+							where idret = db.idret and codret = db.codret)
 							from disbanco db
-							inner join cadban cb on cb.k15_codbco = db.k15_codbco 
+							inner join cadban cb on cb.k15_codbco = db.k15_codbco
 												and cb.k15_conta  = k12_conta
-							inner join discla dc on dc.codret 	  = db.codret 
-							inner join disrec rc on rc.codcla 	  = dc.codcla 
-												and rc.idret 	  = db.idret 
+							inner join discla dc on dc.codret 	  = db.codret
+							inner join disrec rc on rc.codcla 	  = dc.codcla
+												and rc.idret 	  = db.idret
 												and rc.k00_receit =  k02_codigo
 							where dc.dtaute = k12_data) as x ),2) as vlrarquivobanco
 								from (
 									select * from
-										( ";		
+										( ";
 	}
   	$sSqlInterno =" select g.k02_codigo, g.k02_tipo, g.k02_drecei,
 	  				case when o.k02_codrec is not null 	then o.k02_codrec else p.k02_reduz end as codrec,
@@ -503,32 +503,32 @@ elseif ($sinana == 'S2') {
 	}elseif ($formarrecadacao == 1) {
 		$sql .=	" ) as xxx $where2 $orderby)as x";
 	}elseif ($formarrecadacao == 2) {
-		$sql .=	" ) as xxx $where2 $orderby)as x)as xx 
-				group by k02_codigo, k02_tipo, k02_drecei, codrec, estrutural, k12_data, k12_numpre, k12_numpar,  
+		$sql .=	" ) as xxx $where2 $orderby)as x)as xx
+				group by k02_codigo, k02_tipo, k02_drecei, codrec, estrutural, k12_data, k12_numpre, k12_numpar,
 						 c61_reduz, c60_descr, k12_conta, vlrarquivobanco";
 	}
 //die($sql);
 } elseif ($sinana == 'S3') {
 	if ($formarrecadacao == 0){
-		$sql = "select k02_codigo, k02_tipo, k02_drecei, codrec, estrutural, c61_reduz, c60_descr, 
+		$sql = "select k02_codigo, k02_tipo, k02_drecei, codrec, estrutural, c61_reduz, c60_descr,
 				sum(valor)as valor
 				from (
 					select * from
 						( ";
 	}elseif ($formarrecadacao == 1) {
-		$sql = "select k02_codigo, k02_tipo, k02_drecei, codrec, estrutural, c61_reduz, c60_descr,k12_conta, 
+		$sql = "select k02_codigo, k02_tipo, k02_drecei, codrec, estrutural, c61_reduz, c60_descr,k12_conta,
 				sum(valor) as vlrarquivobanco,
-				round((select coalesce (sum(vlrpago),0) 
+				round((select coalesce (sum(vlrpago),0)
 				from (
-					select distinct rc.vlrrec as vlrpago, db.idret, (select sum(vlrpago) 
-					from disbanco 
-					where idret = db.idret and codret = db.codret) 
+					select distinct rc.vlrrec as vlrpago, db.idret, (select sum(vlrpago)
+					from disbanco
+					where idret = db.idret and codret = db.codret)
 					from disbanco db
-					inner join cadban cb on cb.k15_codbco = db.k15_codbco 
+					inner join cadban cb on cb.k15_codbco = db.k15_codbco
 										and cb.k15_conta  = k12_conta
-					inner join discla dc on dc.codret 	  = db.codret 
-					inner join disrec rc on rc.codcla 	  = dc.codcla 
-					and rc.idret 	  = db.idret 
+					inner join discla dc on dc.codret 	  = db.codret
+					inner join disrec rc on rc.codcla 	  = dc.codcla
+					and rc.idret 	  = db.idret
 					and rc.k00_receit =  k02_codigo
 					where dc.dtaute between '$datai' and '$dataf') as x ),2) as valor
 					from (
@@ -539,27 +539,27 @@ elseif ($sinana == 'S2') {
 					$sql = "select k02_codigo, k02_tipo, k02_drecei, codrec, estrutural, c61_reduz, c60_descr,k12_conta,
 							(valor-vlrarquivobanco)as valor
 							from(
-								select k02_codigo, k02_tipo, k02_drecei, codrec, estrutural, c61_reduz, c60_descr,k12_conta, 
+								select k02_codigo, k02_tipo, k02_drecei, codrec, estrutural, c61_reduz, c60_descr,k12_conta,
 								sum(valor) as valor,
-								round((select coalesce (sum(vlrpago),0) 
+								round((select coalesce (sum(vlrpago),0)
 								from (
-									select distinct rc.vlrrec as vlrpago, db.idret, (select sum(vlrpago) 
-									from disbanco 
-									where idret = db.idret and codret = db.codret) 
+									select distinct rc.vlrrec as vlrpago, db.idret, (select sum(vlrpago)
+									from disbanco
+									where idret = db.idret and codret = db.codret)
 									from disbanco db
-									inner join cadban cb on cb.k15_codbco = db.k15_codbco 
+									inner join cadban cb on cb.k15_codbco = db.k15_codbco
 														and cb.k15_conta  = k12_conta
-									inner join discla dc on dc.codret 	  = db.codret 
-									inner join disrec rc on rc.codcla 	  = dc.codcla 
-									and rc.idret 	  = db.idret 
+									inner join discla dc on dc.codret 	  = db.codret
+									inner join disrec rc on rc.codcla 	  = dc.codcla
+									and rc.idret 	  = db.idret
 									and rc.k00_receit =  k02_codigo
 									where dc.dtaute between '$datai' and '$dataf'
 									) as x ),2) as vlrarquivobanco
 									from (
 										select * from
-											( ";		
+											( ";
 		}
-				
+
  	$sSqlInterno = " select g.k02_codigo, g.k02_tipo, g.k02_drecei,
 	 				case when o.k02_codrec is not null 	then o.k02_codrec else p.k02_reduz end as codrec,
 				    case when p.k02_codigo is null 	then o.k02_estorc else p.k02_estpla end as estrutural,
@@ -576,7 +576,7 @@ elseif ($sinana == 'S2') {
 				 	inner join tabrec g on g.k02_codigo  		= f.k12_receit
 				 	left outer join taborc o on o.k02_codigo    = g.k02_codigo
 					 						and o.k02_anousu    = extract (year from r.k12_data)
-				 	left outer join tabplan p on p.k02_codigo   = g.k02_codigo 
+				 	left outer join tabplan p on p.k02_codigo   = g.k02_codigo
 					 						 and p.k02_anousu   = extract (year from r.k12_data)
 					left join corhist hist on hist.k12_id     	= f.k12_id
 										  and hist.k12_data   	= f.k12_data

@@ -771,9 +771,13 @@ WHERE rh30_vinculo IN ('I',
                                             and r33_mesusu = date_part('month',fc_getsession('DB_datausu')::date)
                                             and r33_instit = fc_getsession('DB_instit')::int
                                     ) as x on r33_codtab = rhpessoalmov.rh02_tbprev+2
-                where h13_categoria in ('101', '106', '111', '301', '302', '303', '305', '306', '309', '312', '313', '902','701','712','771','901','711','410')
-                and rh30_vinculo = 'A'
-                and r33_tiporegime = '1'
+                where (
+                    (h13_categoria = '901' and rh30_vinculo = 'A')
+                    or
+                    (h13_categoria in ('101', '106', '111', '301', '302', '303', '305', '306', '309', '312', '313', '902','701','712','771','711')
+                    and rh30_vinculo = 'A'
+                    and r33_tiporegime = '1')
+                )
                 and ((rh05_recis is not null
                 and date_part('month', rh05_recis) = date_part('month', fc_getsession('DB_datausu')::date)
                 and date_part('year', rh05_recis) = date_part('year', fc_getsession('DB_datausu')::date)
@@ -794,71 +798,137 @@ WHERE rh30_vinculo IN ('I',
             $data->modify('last day of this month');
             $ultimoDiaDoMes = $data->format('d');
 
-            $sql = "SELECT distinct e50_codord as ideDmDev,
-            e60_numcgm,
-            e70_vlrliq,
-            e50_data,
-            e50_empresadesconto,
-            e50_cattrabalhador as codCateg,
-            e50_contribuicaoprev as indMV,
-            e50_valorremuneracao as vlrRemunOE,
-            e50_valordesconto,
-            e50_datacompetencia,
-            e50_cattrabalhadorremurenacao as codCategRemun,
-            case
-         when (retencaotiporec.e21_retencaotipocalc in (3, 4, 7) and e23_ativo = true) then (coalesce(e23_valorretencao, 0))
-         else 0
-            end as valor_inss,
-            case
-         when (retencaotiporec.e21_retencaotipocalc in (1, 2) and e23_ativo = true) then   (coalesce(e23_valorretencao, 0))
-                else 0
-            end as valor_irrf,
-          case
-          when (retencaotiporec.e21_retencaotipocalc in (5,6) and e23_ativo = true) then                (coalesce(e23_valorretencao, 0))
-                   else 0
-                   end as outrasretencoes,
-                   case
-          when (retencaotiporec.e21_retencaotipocalc in (8) and e23_ativo = true) then                (coalesce(e23_valorretencao, 0))
-                   else 0
-                   end as sest,
-                    case
-          when (retencaotiporec.e21_retencaotipocalc in (9) and e23_ativo = true) then                (coalesce(e23_valorretencao, 0))
-                   else 0
-                   end as senat,
-            cgm.z01_cgccpf as cpfTrab,
-            cgm.z01_nome as nmTrab,
-            rh70_estrutural  as codCBO,
-            cgm.z01_nasc as dtNascto,
-            cgc as nrInsc
-        from empnota
-            inner join empempenho on e69_numemp = e60_numemp
-            inner join cgm as cgm on e60_numcgm = cgm.z01_numcgm
-            inner join empnotaele on e69_codnota = e70_codnota
-            inner join orcelemento on empnotaele.e70_codele = orcelemento.o56_codele
-            inner join cgmfisico on z04_numcgm = cgm.z01_numcgm
-                    inner join rhcbo on rh70_sequencial = z04_rhcbo
-            left join conlancamemp on c75_numemp = e60_numemp
-            left join conlancamdoc on c71_codlan = c75_codlan
-            and c71_coddoc = 904
-            left join pagordemnota on e71_codnota = e69_codnota
-            and e71_anulado is false
-            left join pagordem on e71_codord = e50_codord
-            left join pagordemele on e53_codord = e50_codord
-            left join cgm as empresa on empresa.z01_numcgm = e50_empresadesconto
-            left join categoriatrabalhador as cattrabalhador on cattrabalhador.ct01_codcategoria = e50_cattrabalhador
-            left join categoriatrabalhador as catremuneracao on catremuneracao.ct01_codcategoria = e50_cattrabalhadorremurenacao
-            left join retencaopagordem on pagordem.e50_codord = retencaopagordem.e20_pagordem
-            left join retencaoreceitas on retencaoreceitas.e23_retencaopagordem = retencaopagordem.e20_sequencial
-            left join retencaotiporec on retencaotiporec.e21_sequencial = retencaoreceitas.e23_retencaotiporec
-                left join db_config on
+            $sql = "SELECT
+            x.ideDmDev,
+            x.e60_numcgm,
+            x.e70_vlrliq as e70_vlrliq,
+            x.e50_data,
+            x.e50_empresadesconto,
+            x.codCateg,
+            x.indMV,
+            x.vlrRemunOE,
+            x.e50_valordesconto,
+            x.e50_datacompetencia,
+            x.codCategRemun,
+            sum(x.valor_inss) as valor_inss,
+            sum(x.valor_irrf) as valor_irrf,
+            sum(x.outrasretencoes) as outrasretencoes,
+            sum(x.sest) as sest,
+            sum(x.senat) as senat,
+            x.cpfTrab,
+            x.nmTrab,
+            x.codCBO,
+            x.dtNascto,
+            x.nrInsc
+            from
+            (
+            select
+                distinct e50_codord as ideDmDev,
+                e60_numcgm,
+                e70_vlrliq,
+                e50_data,
+                e50_empresadesconto,
+                e50_cattrabalhador as codCateg,
+                e50_contribuicaoprev as indMV,
+                e50_valorremuneracao as vlrRemunOE,
+                e50_valordesconto,
+                e50_datacompetencia,
+                e50_cattrabalhadorremurenacao as codCategRemun,
+                case
+                    when (retencaotiporec.e21_retencaotipocalc in (3, 4, 7)
+                    and e23_ativo = true) then (coalesce(e23_valorretencao, 0))
+                    else 0
+                end as valor_inss,
+                case
+                    when (retencaotiporec.e21_retencaotipocalc in (1, 2)
+                    and e23_ativo = true) then (coalesce(e23_valorretencao, 0))
+                    else 0
+                end as valor_irrf,
+                case
+                    when (retencaotiporec.e21_retencaotipocalc in (5, 6)
+                    and e23_ativo = true) then (coalesce(e23_valorretencao, 0))
+                    else 0
+                end as outrasretencoes,
+                case
+                    when (retencaotiporec.e21_retencaotipocalc in (8)
+                    and e23_ativo = true) then (coalesce(e23_valorretencao, 0))
+                    else 0
+                end as sest,
+                case
+                    when (retencaotiporec.e21_retencaotipocalc in (9)
+                    and e23_ativo = true) then (coalesce(e23_valorretencao, 0))
+                    else 0
+                end as senat,
+                cgm.z01_cgccpf as cpfTrab,
+                cgm.z01_nome as nmTrab,
+                rh70_estrutural as codCBO,
+                cgm.z01_nasc as dtNascto,
+                cgc as nrInsc
+            from
+                empnota
+            inner join empempenho on
+                e69_numemp = e60_numemp
+            inner join cgm as cgm on
+                e60_numcgm = cgm.z01_numcgm
+            inner join empnotaele on
+                e69_codnota = e70_codnota
+            inner join orcelemento on
+                empnotaele.e70_codele = orcelemento.o56_codele
+            inner join cgmfisico on
+                z04_numcgm = cgm.z01_numcgm
+            inner join rhcbo on
+                rh70_sequencial = z04_rhcbo
+            left join conlancamemp on
+                c75_numemp = e60_numemp
+            left join conlancamdoc on
+                c71_codlan = c75_codlan
+                and c71_coddoc = 904
+            left join pagordemnota on
+                e71_codnota = e69_codnota
+                and e71_anulado is false
+            left join pagordem on
+                e71_codord = e50_codord
+            left join pagordemele on
+                e53_codord = e50_codord
+            left join cgm as empresa on
+                empresa.z01_numcgm = e50_empresadesconto
+            left join categoriatrabalhador as cattrabalhador on
+                cattrabalhador.ct01_codcategoria = e50_cattrabalhador
+            left join categoriatrabalhador as catremuneracao on
+                catremuneracao.ct01_codcategoria = e50_cattrabalhadorremurenacao
+            left join retencaopagordem on
+                pagordem.e50_codord = retencaopagordem.e20_pagordem
+            left join retencaoreceitas on
+                retencaoreceitas.e23_retencaopagordem = retencaopagordem.e20_sequencial
+            left join retencaotiporec on
+                retencaotiporec.e21_sequencial = retencaoreceitas.e23_retencaotiporec
+            left join db_config on
                 db_config.codigo = fc_getsession('DB_instit')::int
             where e50_data BETWEEN '$ano-$mes-01' AND '$ano-$mes-$ultimoDiaDoMes'
                 and Length(cgm.z01_cgccpf) like '11'
                 and e50_cattrabalhador is not null
             ";
             if ($cgm != null) {
-                $sql .= " and cgm.z01_cgccpf in ($cgm) ";
+                $sql .= " and cgm.z01_numcgm in ($cgm) ";
             }
+            $sql .= " ) as x ";
+            $sql .= " group by
+            x.idedmdev,
+            x.e60_numcgm,
+            x.e50_data,
+            x.e50_empresadesconto,
+            x.codcateg,
+            x.indmv,
+            x.vlrremunoe,
+            x.e50_valordesconto,
+            x.e50_datacompetencia,
+            x.codcategremun,
+            x.cpftrab,
+            x.nmtrab,
+            x.codcbo,
+            x.dtnascto,
+            x.nrinsc,
+            x.e70_vlrliq";
         }
         $rs = \db_query($sql);
         // echo $sql;
@@ -1000,6 +1070,9 @@ WHERE rh30_vinculo IN ('I',
      */
     public function buscarPreenchimentoS1210($codigoFormulario, $matricula = null, $cgm = null, $tipoevento = null)
     {
+        $ano = date("Y", db_getsession("DB_datausu"));
+        $mes = date("m", db_getsession("DB_datausu"));
+
         if ($tipoevento == 1) {
             $sql = "SELECT distinct z01_cgccpf from rhpessoal
             left join rhpessoalmov on
@@ -1129,7 +1202,8 @@ WHERE rh30_vinculo IN ('I',
                         inner join corgrupotipo on corgrupotipo.k106_sequencial = corgrupocorrente.k105_corgrupotipo
                         inner join pagordemele on e50_codord = e53_codord
                     where e50_cattrabalhador is not null
-                        and corrente.k12_data between '2022-08-01' and '2022-08-31'
+                        and date_part('month',corrente.k12_data) = $mes
+                        and date_part('year',corrente.k12_data) = $ano
                         and corgrupotipo.k106_sequencial in (1, 4) -- somente pagamento/estorno liquido
                         and length(z01_cgccpf) = 11 --and e50_codord = 33521
                     group by 1,
@@ -1143,7 +1217,7 @@ WHERE rh30_vinculo IN ('I',
             WHERE vr_liq > 0
             ";
             if ($cgm != null) {
-                $sql .= " and cgm.z01_cgccpf in ($cgm) ";
+                $sql .= " and num_cgm in ($cgm) ";
             }
         }
         $rs = \db_query($sql);
