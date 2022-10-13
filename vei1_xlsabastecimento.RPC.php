@@ -255,7 +255,7 @@ switch ($oParam->exec) {
 
             if ($opKm == 1) {
                 $arrayRetornoKm = array();
-                echo "<pre>"; print_r($arrayKm);exit;
+                //echo "<pre>"; print_r($arrayKm);exit;
                 foreach ($arrayKm as $keyRow => $Row) {
 
                     $objValorPlanilhaKm = new stdClass();
