@@ -133,14 +133,20 @@ $oRotulo->label("z01_nome");
               $usuario = db_getsession('DB_id_usuario');
               $result = db_query("select distinct p203_permanexo,p202_sequencial,p202_tipo  from perfispermanexo
               inner join db_permherda p203_perfil on p203_perfil = id_perfil
-              inner join permanexo  p203_permanexo on p203_permanexo  = p202_sequencial 
+              inner join permanexo  p203_permanexo on p203_permanexo  = p202_sequencial  where p202_tipo != 'Todos/Público'; 
              ");
               $numrows = pg_numrows($result);
+              $result2 = db_query("select distinct p203_permanexo,p202_sequencial,p202_tipo  from perfispermanexo
+              inner join db_permherda p203_perfil on p203_perfil = id_perfil
+              inner join permanexo  p203_permanexo on p203_permanexo  = p202_sequencial  where p202_tipo = 'Todos/Público'; 
+             ");
+              $numrows2 = pg_numrows($result2);
               $permissoes = array();
-              $permissoes[0] =  'Selecione';
+              $permissoes[pg_result($result2, 0, "p202_sequencial")] =  pg_result($result2, 0, "p202_tipo");
+
               for ($i = 0; $i < $numrows; $i++) {
 
-                $permissoes[$i + 1] = pg_result($result, $i, "p202_tipo");
+                $permissoes[pg_result($result, $i, "p202_sequencial")] = pg_result($result, $i, "p202_tipo");
               }
 
 
@@ -361,7 +367,7 @@ $oRotulo->label("z01_nome");
           oGridDocumentos.renderRows();
           for (var i = 0; i < anexosSigilosos.length; i++) {
             linhaAnexo = anexosSigilosos[i];
-            document.getElementById('gridDocumentosrowgridDocumentos' + linhaAnexo).style.backgroundColor = "red";
+            document.getElementById('gridDocumentosrowgridDocumentos' + linhaAnexo).style.color = "red";
 
           }
         }
