@@ -1621,12 +1621,23 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                             $matServico = db_utils::fieldsMemory($rsMatServicoR21, 0);
                             
                             if ($matServico->pc01_servico == "t" && $matServico->ac20_servicoquantidade == "f") {
-                                $iTipoAlteraoItem = 1;
+                                
                                 $clcontratos21->si88_valorunitarioitem = abs($oAcordoItem->getValorUnitario());
                             } else {
-                                $iTipoAlteraoItem = 2;
+                                
                                 $clcontratos21->si88_valorunitarioitem = abs($oAcordoItem->getValorUnitario());
                             }
+                             
+                            if ($oAcordoItem->getQuantiAditada() <0 || $oAcordoItem->getValorAditado() <0 ) {
+                                
+                                $iTipoAlteraoItem = 2;
+                            } else {
+                                
+                                $iTipoAlteraoItem = 1;
+                            }
+                            
+
+                            
                             
 
                             $clcontratos21->si88_tipoalteracaoitem = $iTipoAlteraoItem;
