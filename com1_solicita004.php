@@ -446,7 +446,7 @@ if (isset ($incluir) || (isset ($importar) && $confirma == true)) {
 				require_once("classes/db_pcorcamval_classe.php");
 				require_once("model/ItemEstimativa.model.php");
 
-				$oSolicitacao = new solicitacaoCompra($pc11_numero);
+				$oSolicitacao = new solicitacaoCompra($clsolicitem->pc11_numero);
 				$oSolicitacao->addItemRegistroPreco($pc11_codigo, $iCodigoPcmater, $rsVinculo, $clsolicitem->pc11_quant, $rsVinculoItem);
 
 				if ($clsolicitem->erro_status == 0) {
@@ -684,7 +684,7 @@ if (isset ($incluir) || (isset ($importar) && $confirma == true)) {
 					}
 				}
 			}
-		  }
+		 } //die;
       /*
        * Caso o item possua vinculacao de controle de pacto incluimos ele para a nova solicitacao
        */
