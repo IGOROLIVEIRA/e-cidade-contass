@@ -130,7 +130,7 @@ try {
         if ( (int)$oDaoObrasConstr->erro_status == 0 ) {
           
           $oParms = new stdClass();
-          $oParms->sErroBanco = $oDaoObrasConstr->erro_banco;
+          $oParms->sErroBanco = $oDaoObrasConstr->erro_sql;
           throw new Exception(_M('tributario.projetos.pro1_obrasconstr.erro_salvar_construcao', $oParms));
         }
         /**
