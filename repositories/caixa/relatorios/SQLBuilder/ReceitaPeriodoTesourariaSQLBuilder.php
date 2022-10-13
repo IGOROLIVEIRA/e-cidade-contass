@@ -220,15 +220,8 @@ class ReceitaPeriodoTesourariaSQLBuilder
             return;
         }
 
-        if ($this->iFormaArrecadacao == ReceitaFormaArrecadacaoRepositoryLegacy::ARQUIVO_BANCARIO) {
-            $this->definirSQLSelectEstruturalArquivoBancario();
-            return;
-        }
-
-        if ($this->iFormaArrecadacao == ReceitaFormaArrecadacaoRepositoryLegacy::EXCETO_ARQUIVO_BANCARIO) {
-            $this->definirSQLSelectEstruturalExcetoArquivoBancario();
-            return;
-        }
+        $this->definirSQLSelectEstruturalOutros();
+        return;
     }
 
     /**
@@ -247,45 +240,17 @@ class ReceitaPeriodoTesourariaSQLBuilder
     /**
      * @return void
      */
-    public function definirSQLSelectEstruturalArquivoBancario()
-    {
-        $this->sqlSelect = "
-            SELECT 
-                k02_tipo tipo, 
-                k02_drecei descricao, 
-                estrutural, 
-                SUM(vlrarquivobanco) as valor 
-            FROM ( 
-                SELECT 
-                    k02_codigo,
-                    k02_tipo,
-                    k02_drecei,
-                    codrec,
-                    estrutural,
-                    valor, 
-                    " . $this->definirSQLValorArquivoBancario();
-    }
-
-    /**
-     * @return void
-     */
-    public function definirSQLSelectEstruturalExcetoArquivoBancario()
+    public function definirSQLSelectEstruturalOutros()
     {
         $this->sqlSelect = " 
             SELECT 
                 k02_tipo tipo, 
                 k02_drecei descricao, 
                 estrutural, 
-                (SUM(valor) - SUM(vlrarquivobanco)) AS valor 
-            FROM ( 
-                SELECT 
-                    k02_codigo,
-                    k02_tipo,
-                    k02_drecei,
-                    codrec,
-                    estrutural,
-                    valor, 
-            " . $this->definirSQLValorArquivoBancario();
+                codrec reduzido, 
+                k02_codigo codigo,
+                arquivo,
+                SUM(valor) as valor ";
     }
 
     /**
@@ -309,8 +274,7 @@ class ReceitaPeriodoTesourariaSQLBuilder
                 INNER JOIN disrec rc ON rc.codcla = dc.codcla 
                     AND db.idret = rc.idret 
                     AND rc.k00_receit = k02_codigo
-                WHERE dc.dtaute BETWEEN '{$this->dDataInicial}' AND '{$this->dDataFinal}') AS x ), 2) 
-        AS vlrarquivobanco ";
+                WHERE dc.dtaute BETWEEN '{$this->dDataInicial}' AND '{$this->dDataFinal}') AS x ), 2) ";
     }
 
     /**
@@ -326,7 +290,7 @@ class ReceitaPeriodoTesourariaSQLBuilder
      */
     public function definirSQLSelectAnalitico()
     {
-        $this->sqlSelect .= " , codrec reduzido, k02_codigo codigo, k00_histtxt historico, k12_data as data, k12_numpre numpre, k12_numpar numpar, c61_reduz conta, c60_descr conta_descricao "; 
+        $this->sqlSelect .= " , codrec reduzido, k02_codigo codigo, k00_histtxt historico, k12_data as data, k12_numpre numpre, k12_numpar numpar, c61_reduz conta, c60_descr conta_descricao ";
     }
 
     /**
@@ -336,16 +300,22 @@ class ReceitaPeriodoTesourariaSQLBuilder
     {
         $this->sqlSelect .= " , codrec reduzido, k02_codigo codigo, c61_reduz conta, c60_descr conta_descricao  ";
     }
-    
+
     /**
      * @return void
      */
     public function definirSQLGroupReceita()
     {
-        if ($this->iFormaArrecadacao != ReceitaFormaArrecadacaoRepositoryLegacy::TODAS)
-            $this->sqlGroup = " ) as xx ";
+        $this->sqlGroup .= " , arquivo, codrec, k02_codigo ";
+    }
 
-        $this->sqlGroup .= " , codrec, k02_codigo ";
+    /**
+     * @return void
+     */
+    public function definirCondicoesSQLGroup()
+    {
+        if ($this->iFormaArrecadacao != ReceitaFormaArrecadacaoRepositoryLegacy::TODAS)
+            $this->sqlGroup .= " , arquivo ";
     }
 
     /**
@@ -353,9 +323,7 @@ class ReceitaPeriodoTesourariaSQLBuilder
      */
     public function definirSQLGroupAnalitico()
     {
-        if ($this->iFormaArrecadacao != ReceitaFormaArrecadacaoRepositoryLegacy::TODAS)
-            $this->sqlGroup = " ) as xx ";
-
+        $this->definirCondicoesSQLGroup();
         $this->sqlGroup .= " , codrec, k02_codigo, k00_histtxt, k12_data, k12_numpre, k12_numpar, c61_reduz, c60_descr ";
     }
 
@@ -364,9 +332,7 @@ class ReceitaPeriodoTesourariaSQLBuilder
      */
     public function definirSQLGroupConta()
     {
-        if ($this->iFormaArrecadacao != ReceitaFormaArrecadacaoRepositoryLegacy::TODAS)
-            $this->sqlGroup = " ) as xx ";
-
+        $this->definirCondicoesSQLGroup();
         $this->sqlGroup .= " , codrec, k02_codigo, c61_reduz, c60_descr ";
     }
 
@@ -375,11 +341,12 @@ class ReceitaPeriodoTesourariaSQLBuilder
      */
     public function definirSQLGroupEstrutural()
     {
-        $this->sqlGroup = "
+        $this->sqlGroup .= "
             GROUP BY 
                 k02_tipo,
                 k02_drecei,
                 estrutural ";
+        $this->definirCondicoesSQLGroup();
     }
 
     /**
@@ -394,6 +361,15 @@ class ReceitaPeriodoTesourariaSQLBuilder
 
         if ($this->sEstrutura)
             $this->sqlWhereUnion .= " AND estrutural LIKE '$this->sEstrutura%' ";
+
+        if ($this->iFormaArrecadacao == ReceitaFormaArrecadacaoRepositoryLegacy::RETENCAO)
+            $this->sqlWhereUnion .= " AND arquivo = 2 ";
+
+        if ($this->iFormaArrecadacao == ReceitaFormaArrecadacaoRepositoryLegacy::ARQUIVO_BANCARIO)
+            $this->sqlWhereUnion .= " AND arquivo = 1 ";
+
+        if ($this->iFormaArrecadacao == ReceitaFormaArrecadacaoRepositoryLegacy::EXCETO_ARQUIVO_BANCARIO)
+            $this->sqlWhereUnion .= " AND arquivo = 0 ";
     }
 
     /**
@@ -465,6 +441,11 @@ class ReceitaPeriodoTesourariaSQLBuilder
     {
         $this->sqlReceitaOrcamentaria = "
             SELECT 
+                CASE
+                    WHEN k82_id IS NOT NULL THEN 0
+                    WHEN k12_histcor LIKE '%Em contrapartida %' THEN 2
+                    ELSE 1
+                END as arquivo,
                 g.k02_codigo,
                 g.k02_tipo,
                 g.k02_drecei,
@@ -536,6 +517,11 @@ class ReceitaPeriodoTesourariaSQLBuilder
     {
         $this->sqlExtraOrcamentaria = "
             SELECT
+                CASE
+                    WHEN k82_id IS NOT NULL THEN 0
+                    WHEN k12_histcor LIKE '%Em contrapartida %' THEN 2
+                    ELSE 1
+                END as arquivo,
                 g.k02_codigo,
                 g.k02_tipo,
                 g.k02_drecei,
