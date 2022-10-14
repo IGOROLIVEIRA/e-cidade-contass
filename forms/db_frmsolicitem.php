@@ -688,7 +688,7 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
           $sSqlVerificaAut .= "                                       and empautitem.e55_sequen               = empautitempcprocitem.e73_sequen";
           $sSqlVerificaAut .= "				 inner join empautoriza          on e54_autori			                    = e55_autori";
           $sSqlVerificaAut .= "	 where pc11_numero = {$pc11_numero}";
-          $sSqlVerificaAut .= "	   and e54_anulad is null";
+          $sSqlVerificaAut .= "	   and e54_autori is not null";
 
           $sql_servico = $clsolicitem->sql_query_serv(null, "pc11_codigo as codsol,pc11_vlrun", "pc11_codigo", "pc11_numero = $pc11_numero ");
           $sql_reservasaldo = $clorcreservasol->sql_query_saldo(
@@ -731,7 +731,7 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
           $cliframe_alterar_excluir->sql_comparar = $sql_dot;
           $cliframe_alterar_excluir->sql_servico = $sql_servico;
           $cliframe_alterar_excluir->sql_reservasaldo = $sql_reservasaldo;
-          $cliframe_alterar_excluir->sql_disabled = $sSqlVerificaAut; // Desabilita Itens que tem Autorização de Empenho
+          $cliframe_alterar_excluir->sql_disabled = $sSqlVerificaAut; // Desabilita Itens que tem Autorização de Empenho vinculadas
           $cliframe_alterar_excluir->campos_comparar = "pc11_codigo";
 
           $val = 1;

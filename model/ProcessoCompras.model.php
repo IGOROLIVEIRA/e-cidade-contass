@@ -494,7 +494,9 @@ class ProcessoCompras {
         $sCampos .= "pc22_orcamitem,";
         $sCampos .= "pc18_codele as codigoelemento,";
         $sCampos .= "o56_descr as descricaoelemento,";
-        $sCampos .= "o56_elemento as elemento, pc11_servicoquantidade as servicoquantidade";
+        $sCampos .= "o56_elemento as elemento,";
+        $sCampos .= "pc11_servicoquantidade as servicoquantidade,";
+        $sCampos .= "pc28_solicitem itemanulado";
 
         $sOrder = "z01_numcgm,pc13_coddot,pc18_codele, pc19_sequencial, pc19_orctiporec,pc13_sequencial";
         $sWhere = "pc80_codproc = {$this->getCodigo()} and pcorcamjulg.pc24_pontuacao = 1 and pc10_instit = ".db_getsession("DB_instit");
@@ -512,6 +514,7 @@ class ProcessoCompras {
                 if ($oDados->codigofornecedor == "") {
                     throw new Exception("Não existe orçamento julgado para este processo de compras.");
                 }
+
                 /*
                  * calcula o percentual da dotação em relacao ao valor total
                  */

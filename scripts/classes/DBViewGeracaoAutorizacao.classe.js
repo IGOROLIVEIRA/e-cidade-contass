@@ -645,7 +645,8 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
                 if (!oItem.dotacaocomsaldo ||
                     (oItem.saldoquantidade == 0 || oItem.saldovalor == 0) ||
                     oItem.anodotacao < me.getAno() ||
-                    oItem.fornecedor == "") {
+                    oItem.fornecedor == "" ||
+                    oItem.itemanulado != null) {
                     lDisabled = true;
                 }
 
@@ -760,6 +761,15 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
 
                         var sColor = "red";
                         aRows[id].setClassName("disabled");
+
+                        /*
+                         * Item possui anulação na solicitação de compras
+                         */
+                        if(oItem.itemanulado != null){
+                           
+                            var sTextoInformacao = "Item indisponível para autorizar. Há anulação do item na solicitação de compras.";
+                        }
+
                         /*
                          * Item sem saldo para gerar autorização
                          */
