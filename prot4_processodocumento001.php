@@ -42,7 +42,7 @@ if ($protocolosigiloso->p90_protocolosigiloso == "f") {
 }
 
 
-
+$departamento  = db_getsession('DB_coddepto', false);
 $iInstit     = db_getsession('DB_instit');
 $adm = db_getsession('DB_administrador');
 $iOpcaoProcesso = 1;
@@ -243,7 +243,7 @@ $oRotulo->label("z01_nome");
    */
   function js_buscarDocumentos() {
 
-    var instituicao = <?php print_r($iInstit) ?>;
+    var instituicao = <?php print_r($departamento) ?>;
     var adm = <?php print_r($adm) ?>;
     var iCodigoProcesso = $('p58_codproc').value;
     anexosSigilosos = new Array();
