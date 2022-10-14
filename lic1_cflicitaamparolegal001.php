@@ -45,7 +45,7 @@ if (isset($incluir)) {
   $amparos = $oPost->aItensMarcados;
   $modalidade = $oPost->l03_codigo;
 
-  if (!db_query("delete from cflicita_amparo where l213_modalidade = $modalidade;")) {
+  if (!db_query("delete from amparocflicita where l213_modalidade = $modalidade;")) {
     db_msgbox(pg_last_error());
     $erro = true;
   }
@@ -53,7 +53,7 @@ if (isset($incluir)) {
   if ($erro == false) {
     for ($i = 0; $i < count($amparos); $i++) {
       $amparo = $amparos[$i];
-      if (!db_query("INSERT INTO cflicita_amparo VALUES ($amparo,$modalidade);")) {
+      if (!db_query("INSERT INTO amparocflicita VALUES ($amparo,$modalidade);")) {
         db_msgbox(pg_last_error());
         $erro = true;
       }
@@ -98,7 +98,7 @@ if (isset($incluir)) {
 </html>
 <?
 
-$result = db_query("select * from cflicita_amparo where l213_modalidade = $l03_codigo");
+$result = db_query("select * from amparocflicita where l213_modalidade = $l03_codigo");
 $numrows = pg_numrows($result);
 for ($i = 0; $i < $numrows; $i++) {
   $codigo_amparo = pg_result($result, $i, "l213_amparo");
