@@ -774,7 +774,7 @@ WHERE rh30_vinculo IN ('I',
                 where (
                     (h13_categoria = '901' and rh30_vinculo = 'A')
                     or
-                    (h13_categoria in ('101', '106', '111', '301', '302', '303', '305', '306', '309', '312', '313', '902','701','712','771','711')
+                    (h13_categoria in ('101', '106', '111', '301', '302', '303', '305', '306', '309', '312', '313','410', '902','701','712','771','711')
                     and rh30_vinculo = 'A'
                     and r33_tiporegime = '1')
                 )
@@ -790,7 +790,6 @@ WHERE rh30_vinculo IN ('I',
                 $sql .= "and cgm.z01_cgccpf in (select z01_cgccpf from cgm join rhpessoal on cgm.z01_numcgm = rhpessoal.rh01_numcgm where rh01_regist in ($matricula)) ";
             }
         } else {
-
             $ano = date("Y", db_getsession("DB_datausu"));
             $mes = date("m", db_getsession("DB_datausu"));
             $data = "$ano-$mes-01";
