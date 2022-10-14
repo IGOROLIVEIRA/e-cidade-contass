@@ -179,17 +179,7 @@ class cl_solicitemanul {
      $this->erro_status = "1";
      $this->numrows_incluir= pg_affected_rows($result);
      $resaco = $this->sql_record($this->sql_query_file($this->pc28_sequencial));
-     //if(($resaco!=false)||($this->numrows!=0)){
-     //  $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-     //  $acount = pg_result($resac,0,0);
-     //  $resac = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
-     //  $resac = db_query("insert into db_acountkey values($acount,10911,'$this->pc28_sequencial','I')");
-     //  $resac = db_query("insert into db_acount values($acount,1883,10911,'','".AddSlashes(pg_result($resaco,0,'pc28_sequencial'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-     //  $resac = db_query("insert into db_acount values($acount,1883,10912,'','".AddSlashes(pg_result($resaco,0,'pc28_empempitem'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-     //  $resac = db_query("insert into db_acount values($acount,1883,10913,'','".AddSlashes(pg_result($resaco,0,'pc28_solicitem'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-     //  $resac = db_query("insert into db_acount values($acount,1883,10914,'','".AddSlashes(pg_result($resaco,0,'pc28_vlranu'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-     //  $resac = db_query("insert into db_acount values($acount,1883,10969,'','".AddSlashes(pg_result($resaco,0,'pc28_qtd'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-     //}
+
      return true;
    } 
    // funcao para alteracao
@@ -248,22 +238,7 @@ class cl_solicitemanul {
        $sql .= " pc28_sequencial = $this->pc28_sequencial";
      }
      $resaco = $this->sql_record($this->sql_query_file($this->pc28_sequencial));
-     if($this->numrows>0){
-       //for($conresaco=0;$conresaco<$this->numrows;$conresaco++){
-       //  $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-       //  $acount = pg_result($resac,0,0);
-       //  $resac = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
-       //  $resac = db_query("insert into db_acountkey values($acount,10911,'$this->pc28_sequencial','A')");
-       //  if(isset($GLOBALS["HTTP_POST_VARS"]["pc28_sequencial"]))
-       //    $resac = db_query("insert into db_acount values($acount,1883,10911,'".AddSlashes(pg_result($resaco,$conresaco,'pc28_sequencial'))."','$this->pc28_sequencial',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-       //  if(isset($GLOBALS["HTTP_POST_VARS"]["pc28_solicitem"]))
-       //    $resac = db_query("insert into db_acount values($acount,1883,10913,'".AddSlashes(pg_result($resaco,$conresaco,'pc28_solicitem'))."','$this->pc28_solicitem',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-       //  if(isset($GLOBALS["HTTP_POST_VARS"]["pc28_vlranu"]))
-       //    $resac = db_query("insert into db_acount values($acount,1883,10914,'".AddSlashes(pg_result($resaco,$conresaco,'pc28_vlranu'))."','$this->pc28_vlranu',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-       //  if(isset($GLOBALS["HTTP_POST_VARS"]["pc28_qtd"]))
-       //    $resac = db_query("insert into db_acount values($acount,1883,10969,'".AddSlashes(pg_result($resaco,$conresaco,'pc28_qtd'))."','$this->pc28_qtd',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-       //}
-     }
+
      $result = db_query($sql);
      if($result==false){ 
        $this->erro_banco = str_replace("\n","",@pg_last_error());
