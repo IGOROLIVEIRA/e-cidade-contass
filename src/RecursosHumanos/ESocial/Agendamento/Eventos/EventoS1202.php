@@ -113,6 +113,8 @@ class EventoS1202 extends EventoBase
 
     private function buscarDadosPorMatricula($cpf)
     {
+        $anofolha = db_anofolha();
+        $mesfolha = db_mesfolha();
         $sql = "SELECT
         distinct
         1 as tpInsc,
@@ -204,8 +206,8 @@ class EventoS1202 extends EventoBase
     left  outer join (
             SELECT distinct r33_codtab,r33_nome,r33_tiporegime
                                 from inssirf
-                                where     r33_anousu = fc_getsession('DB_anousu')::int
-                                      and r33_mesusu = date_part('month',fc_getsession('DB_datausu')::date)
+                                where     r33_anousu = $anofolha
+                                            and r33_mesusu = $mesfolha
                                       and r33_instit = fc_getsession('DB_instit')::int
                                ) as x on r33_codtab = rhpessoalmov.rh02_tbprev+2
     where h13_categoria in ('301', '302', '303', '305', '306', '309', '410')
