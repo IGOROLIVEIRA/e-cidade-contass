@@ -23,17 +23,21 @@ if(isset($incluir)){
     db_msgbox("Selecione um fornecedor!");
   }else if($l221_dataini == "" || $l221_dataini == null){
     $sqlerro=true;
-    db_msgbox("Insera uma Data Inicial!");
+    db_msgbox("Insira uma Data Inicial!");
   }else if($l221_datafinal == "" || $l221_datafinal == null){
     $sqlerro=true;
-    db_msgbox("Insera uma Data Final!");
+    db_msgbox("Insira uma Data Final!");
   }else if($l221_datapublica == "" || $l221_datapublica == null){
     $sqlerro=true;
-    db_msgbox("Insera uma Data de Publicação!");
+    db_msgbox("Insira uma Data de Publicação!");
   }else if($l221_veiculopublica == "" || $l221_veiculopublica == null){
     $sqlerro=true;
-    db_msgbox("Insera o veiculo de publicação !");
+    db_msgbox("Insira o veiculo de publicação !");
+  }else if($l221_dataini < $l221_datafinal){
+    $sqlerro=true;
+    db_msgbox("Data inicial maior que data final !");
   }
+
   if($sqlerro == false){
     $rsLicatareg = $cllicatareg->sql_record("select * from licatareg where l221_licitacao= $l221_licitacao and l221_fornecedor= $l221_fornecedor and l221_exercicio = '$l221_exercicio'");
     if(pg_num_rows($rsLicatareg)>0){

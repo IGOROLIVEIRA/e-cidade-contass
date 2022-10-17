@@ -8,6 +8,10 @@ include("classes/db_licatareg_classe.php");
 db_postmemory($HTTP_POST_VARS);
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 $cllicatareg = new cl_licatareg;
+$cllicatareg->rotulo->label("l221_sequencial");
+$cllicatareg->rotulo->label("l221_licitacao");
+$cllicatareg->rotulo->label("l221_numata");
+$cllicatareg->rotulo->label("l221_fornecedor");
 ?>
 <html>
 <head>
@@ -17,14 +21,74 @@ $cllicatareg = new cl_licatareg;
 </head>
 <body>
   <form name="form2" method="post" action="" class="container">
-    <fieldset>
-      <legend>Dados para Pesquisa</legend>
+    
+      
       <table width="35%" border="0" align="center" cellspacing="3" class="form-container">
+          <tr>
+            <td height="63" align="center" valign="top">
+                <table width="35%" border="0" align="center" cellspacing="0">
+                    <form name="form2" method="post" action="">
+                        <tr>
+                            <td width="4%" align="right" nowrap title="<?= $Tl221_sequencial ?>">
+                                <?=@$Ll221_sequencial ?>
+                            </td>
+                            <td width="96%" align="left" nowrap>
+                                <?
+                                db_input("l221_sequencial", 10, $Il221_sequencial, true, "text", 4, "", "chave_l221_sequencial");
+                                ?>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td width="4%" align="right" nowrap title="<?= $Tl221_licitacao ?>">
+                                <?= $Ll221_licitacao ?>
+                            </td>
+                            <td width="96%" align="left" nowrap>
+                                <?
+                                db_input("l221_licitacao", 10, $Il221_licitacao, true, "text", 4, "", "chave_l221_licitacao");
+                                ?>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td width="4%" align="right" nowrap title="<?= $Tl221_numata ?>">
+                                <?= $Ll221_numata ?>
+                            </td>
+                            <td width="96%" align="left" nowrap>
+                                <?
+                                db_input("l221_numata", 10, $Il221_numata, true, "text", 4, "", "chave_l221_numata");
+                                ?>
+                            </td>
+                        </tr>
+                        <tr>
+
+                        <tr>
+                            <td width="4%" align="right" nowrap title="<?= $Tl221_fornecedor ?>">
+                                <?= $Ll221_fornecedor ?>
+                            </td>
+                            <td width="96%" align="left" nowrap>
+                                <?
+                                db_input("l221_fornecedor", 60, $Il221_fornecedor, true, "text", 4, "", "chave_l221_fornecedor");
+                                ?>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            
+                            <td colspan="2" align="center">
+                              <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar">
+                              <input name="limpar" type="reset" id="limpar" value="Limpar" >
+                              <input name="Fechar" type="button" id="fechar" value="Fechar" onClick="parent.db_iframe_licatareg.hide();">  
+                            </td>
+                        </tr>
+                        
+                    </form>
+                </table>
+            </td>
+          </tr>
       </table>
-    </fieldset>
-    <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar">
-    <input name="limpar" type="reset" id="limpar" value="Limpar" >
-    <input name="Fechar" type="button" id="fechar" value="Fechar" onClick="parent.db_iframe_licatareg.hide();">
+   
+    
   </form>
       <?
       if(!isset($pesquisa_chave)){
@@ -35,7 +99,18 @@ $cllicatareg = new cl_licatareg;
            $campos = "licatareg.oid,licatareg.*";
            }
         }
-	         $sql = $cllicatareg->sql_query();
+	         
+        if(isset($chave_l221_sequencial) && (trim($chave_l221_sequencial)!="") ){
+            $sql = $cllicatareg->sql_query(null,"*","l221_sequencial","l221_sequencial = $chave_l221_sequencial");
+        }else if(isset($chave_l221_licitacao) && (trim($chave_l221_licitacao)!="") ){
+            $sql = $cllicatareg->sql_query(null,"*","l221_licitacao","l221_licitacao=$chave_l221_licitacao");
+        }else if(isset($chave_l221_numata) && (trim($chave_l221_numata)!="") ){
+            $sql = $cllicatareg->sql_query(null,"*","l221_sequencial","l221_numata like '$chave_l221_numata%'");
+        }else if(isset($chave_l221_fornecedor) && (trim($chave_l221_fornecedor)!="") ){
+            $sql = $cllicatareg->sql_query(null,"*","l221_sequencial","l221_fornecedor=$chave_l221_fornecedor");
+        }else{
+            $sql = $cllicatareg->sql_query();
+        }
         $repassa = array();
         echo '<div class="container">';
         echo '  <fieldset>';
