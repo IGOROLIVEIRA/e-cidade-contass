@@ -1078,7 +1078,7 @@ class RelatorioDiarioClasseBase extends PDF
       for ($i = 0; $i < $oEstrutura->iNumeroColunas; $i++) {
 
         $this->exibePontos($oEstrutura->iLarguraCelulaGrade);
-       // $this->Cell($oEstrutura->iLarguraCelulaGrade, 4, "A", 1);
+        $this->Cell($oEstrutura->iLarguraCelulaGrade, 4, " ", 1);
       }
     } else {
 
@@ -1125,7 +1125,7 @@ class RelatorioDiarioClasseBase extends PDF
       for ($i = 0; $i < $oEstrutura->iNumeroColunas; $i++) {
 
         $this->exibePontos($oEstrutura->iLarguraCelulaGrade);
-       // $this->Cell($oEstrutura->iLarguraCelulaGrade, 4, 'C', 1);
+        $this->Cell($oEstrutura->iLarguraCelulaGrade, 4, " ", 1);
       }
     } else {
 
