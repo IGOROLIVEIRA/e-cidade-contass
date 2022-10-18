@@ -272,6 +272,8 @@ $oRotulo->label("z01_nome");
 
           js_removeObj("msgbox");
           var oRetorno = eval('(' + oAjax.responseText + ")");
+          console.log(oRetorno);
+          console.log(adm);
 
           var sMensagem = oRetorno.sMensagem.urlDecode();
 
@@ -305,59 +307,72 @@ $oRotulo->label("z01_nome");
             }
 
 
-            if (oDocumento.iDepartUsuario == oDocumento.iDepart && oRetorno.andamento == 0) {
-
-              var sHTMLBotoes = '';
-              if (instituicao == oDocumento.iDepart && adm == 1 && oDocumento.permissao) {
-
-                sHTMLBotoes += '<input type="button"  value="Alterar Acesso" onClick="js_alterarNivelAcessoDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + nivelacesso + '\' );" />  ';
-                sHTMLBotoes += '<input type="button"  value="Alterar" onClick="js_alterarDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + nivelacesso + '\' );" />  ';
-                sHTMLBotoes += '<input type="button" value="Download" onClick="js_downloadDocumento(' + oDocumento.iCodigoDocumento + ');" />  ';
-
-              } else if (instituicao == oDocumento.iDepart && adm == 1 && !oDocumento.permissao) {
-                sHTMLBotoes += '<input type="button" style="width:50%;" value="Alterar Acesso" onClick="js_alterarNivelAcessoDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + nivelacesso + '\' );" />  ';
-                //sHTMLBotoes += '<input type="button" style="width:48%;" value="Alterar" onClick="js_alterarDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + nivelacesso + '\' );" />  ';
-                anexosSigilosos.push(iIndice);
-
-              } else if (instituicao == oDocumento.iDepart && adm != 1 && !oDocumento.permissao) {
-                //sHTMLBotoes += '<input type="button" style="width:100%;" value="Alterar" onClick="js_alterarDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + nivelacesso + '\' );" />  ';
-                anexosSigilosos.push(iIndice);
-
-
-              } else if (instituicao == oDocumento.iDepart && adm != 1 && oDocumento.permissao) {
-                sHTMLBotoes += '<input type="button"  value="Alterar" onClick="js_alterarDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + nivelacesso + '\' );" />  ';
-                sHTMLBotoes += '<input type="button" value="Download" onClick="js_downloadDocumento(' + oDocumento.iCodigoDocumento + ');" />  ';
-              }
-
-              /*if (oDocumento.permissao) {
-                sHTMLBotoes += '<input type="button" value="Download" onClick="js_downloadDocumento(' + oDocumento.iCodigoDocumento + ');" />  ';
-
-              } else {
-                //sHTMLBotoes += '<input disabled type="button" value="Download" onClick="js_downloadDocumento(' + oDocumento.iCodigoDocumento + ');" />  ';
-              }*/
+            if (oDocumento.nivelacesso == '1') {
               $bBloquea = false;
 
-            } else if (oDocumento.iDepartUsuario != oDocumento.iDepart && oRetorno.andamento > 0) {
-
-              var sHTMLBotoes = '<input type="button" value="Download" onClick="js_downloadDocumento(' + oDocumento.iCodigoDocumento + ');" />  ';
-
-              $bBloquea = false;
-
-            } else if (oDocumento.iDepartUsuario == oDocumento.iDepart && oRetorno.andamento > 0) {
-
               var sHTMLBotoes = '';
-              if (instituicao == oDocumento.iDepart && adm == 1) {
-
-                sHTMLBotoes += '<input type="button" value="Alterar Acesso" onClick="js_alterarNivelAcessoDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + nivelacesso + '\' );" />  ';
-
-              }
-              sHTMLBotoes = '<input type="button" value="Alterar" onClick="js_alterarDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + nivelacesso + '\');" />  ';
+              sHTMLBotoes += '<input type="button"  value="Alterar Acesso" onClick="js_alterarNivelAcessoDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + nivelacesso + '\' );" />  ';
+              sHTMLBotoes += '<input type="button"  value="Alterar" onClick="js_alterarDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + nivelacesso + '\' );" />  ';
               sHTMLBotoes += '<input type="button" value="Download" onClick="js_downloadDocumento(' + oDocumento.iCodigoDocumento + ');" />  ';
+            } else {
 
-              $bBloquea = false;
+              if (oDocumento.iDepartUsuario == oDocumento.iDepart && oRetorno.andamento == 0) {
+
+                var sHTMLBotoes = '';
+                if (instituicao == oDocumento.iDepart && adm == 1 && oDocumento.permissao) {
+
+                  sHTMLBotoes += '<input type="button"  value="Alterar Acesso" onClick="js_alterarNivelAcessoDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + nivelacesso + '\' );" />  ';
+                  sHTMLBotoes += '<input type="button"  value="Alterar" onClick="js_alterarDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + nivelacesso + '\' );" />  ';
+                  sHTMLBotoes += '<input type="button" value="Download" onClick="js_downloadDocumento(' + oDocumento.iCodigoDocumento + ');" />  ';
+
+                } else if (instituicao == oDocumento.iDepart && adm == 1 && !oDocumento.permissao) {
+                  sHTMLBotoes += '<input type="button" style="width:50%;" value="Alterar Acesso" onClick="js_alterarNivelAcessoDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + nivelacesso + '\' );" />  ';
+                  //sHTMLBotoes += '<input type="button" style="width:48%;" value="Alterar" onClick="js_alterarDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + nivelacesso + '\' );" />  ';
+                  anexosSigilosos.push(iIndice);
+
+                } else if (instituicao == oDocumento.iDepart && adm != 1 && !oDocumento.permissao) {
+                  //sHTMLBotoes += '<input type="button" style="width:100%;" value="Alterar" onClick="js_alterarDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + nivelacesso + '\' );" />  ';
+                  anexosSigilosos.push(iIndice);
+
+
+                } else if (instituicao == oDocumento.iDepart && adm != 1 && oDocumento.permissao) {
+                  sHTMLBotoes += '<input type="button"  value="Alterar" onClick="js_alterarDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + nivelacesso + '\' );" />  ';
+                  sHTMLBotoes += '<input type="button" value="Download" onClick="js_downloadDocumento(' + oDocumento.iCodigoDocumento + ');" />  ';
+                }
+
+                /*if (oDocumento.permissao) {
+                  sHTMLBotoes += '<input type="button" value="Download" onClick="js_downloadDocumento(' + oDocumento.iCodigoDocumento + ');" />  ';
+
+                } else {
+                  //sHTMLBotoes += '<input disabled type="button" value="Download" onClick="js_downloadDocumento(' + oDocumento.iCodigoDocumento + ');" />  ';
+                }*/
+                $bBloquea = false;
+
+              } else if (oDocumento.iDepartUsuario != oDocumento.iDepart && oRetorno.andamento > 0) {
+
+                var sHTMLBotoes = '<input type="button" value="Download" onClick="js_downloadDocumento(' + oDocumento.iCodigoDocumento + ');" />  ';
+
+                $bBloquea = false;
+
+              } else if (oDocumento.iDepartUsuario == oDocumento.iDepart && oRetorno.andamento > 0) {
+
+                var sHTMLBotoes = '';
+                if (instituicao == oDocumento.iDepart && adm == 1) {
+
+                  sHTMLBotoes += '<input type="button" value="Alterar Acesso" onClick="js_alterarNivelAcessoDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + nivelacesso + '\' );" />  ';
+
+                }
+                sHTMLBotoes = '<input type="button" value="Alterar" onClick="js_alterarDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + nivelacesso + '\');" />  ';
+                sHTMLBotoes += '<input type="button" value="Download" onClick="js_downloadDocumento(' + oDocumento.iCodigoDocumento + ');" />  ';
+
+                $bBloquea = false;
+              }
             }
 
-            sel = "<select id='p01_nivelacessodoc' name='select' class='field-size-max'>" + document.getElementById('p01_nivelacesso').innerHTML + "</select> ";
+
+
+
+
 
             var aLinha = [oDocumento.iCodigoDocumento, sDescricaoDocumento.urlDecode(), oDocumento.iDepart + ' - ' + oDocumento.sDepartamento, sHTMLBotoes];
             oGridDocumentos.addRow(aLinha, false, $bBloquea);
