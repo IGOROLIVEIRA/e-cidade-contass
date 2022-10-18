@@ -109,7 +109,7 @@ $cllicatareg->rotulo->label("l221_fornecedor");
         }else if(isset($chave_l221_fornecedor) && (trim($chave_l221_fornecedor)!="") ){
             $sql = $cllicatareg->sql_query(null,"*","l221_sequencial","l221_fornecedor=$chave_l221_fornecedor");
         }else{
-            $sql = $cllicatareg->sql_query();
+            $sql = $cllicatareg->sql_query(null,"*","l221_sequencial");
         }
         $repassa = array();
         echo '<div class="container">';

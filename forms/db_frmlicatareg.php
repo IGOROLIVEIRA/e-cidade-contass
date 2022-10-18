@@ -79,7 +79,7 @@ $cllicatareg = new cl_licatareg;
                                         $result_forn = $cllicatareg->sql_record("select z01_numcgm,z01_nome from cgm JOIN habilitacaoforn ON z01_numcgm=l206_fornecedor where l206_licitacao = ".$l221_licitacao."and l206_fornecedor =".$l221_fornecedor);
                                         $oForn = db_utils::fieldsMemory($result_forn, $iIndiceTipo);
                                         $tipo[$oForn->z01_numcgm] = $oForn->z01_nome;
-                                        db_select("l221_fornecedor", $tipo, true, $db_opcao, "");
+                                        db_select("l221_fornecedor", $tipo, true, $db_opcao, "style='width: 100%;'");
 
 
             }else{
@@ -96,7 +96,7 @@ $cllicatareg = new cl_licatareg;
                                         }
 
                                         
-                                            db_select("l221_fornecedor", $tipo, true, $db_opcao, "style='width: 610px;'");
+                                            db_select("l221_fornecedor", $tipo, true, $db_opcao, "style='width: 100%;'");
                                             
                                       }                                
                                         
@@ -131,7 +131,7 @@ $cllicatareg = new cl_licatareg;
           </td>
           <td> 
           <?
-            db_input('l221_veiculopublica',104,$Il221_veiculopublica,true,'text',$db_opcao,"")
+            db_input('l221_veiculopublica',82,$Il221_veiculopublica,true,'text',$db_opcao,"")
           ?>
           </td>
         </tr>
@@ -144,7 +144,7 @@ $cllicatareg = new cl_licatareg;
               <td> 
               <?
                 
-                db_textarea('l20_objeto', 0, 125, $Il20_objeto, true, 'text', $db_opcao, "onkeyup='limitaTextareaobj(this);' onkeypress='doNothing()';");
+                db_textarea('l20_objeto', 0, 100, $Il20_objeto, true, 'text', $db_opcao, "onkeyup='limitaTextareaobj(this);' onkeypress='doNothing()';");
                 
               ?>
               </td>

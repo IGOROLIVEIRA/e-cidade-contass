@@ -11,6 +11,12 @@ $db_opcao = 1;
 $db_botao = true;
 $sqlerro=false;
 if(isset($incluir)){
+  $datainicial = DateTime::createFromFormat('d/m/Y', $l221_dataini);
+  $datafinal = DateTime::createFromFormat('d/m/Y', $l221_datafinal);
+  if($datainicial>$datafinal){
+    $sqlerro=true;
+    db_msgbox("Data inicial é maior que data final!");
+  }
   if($l221_licitacao == "" || $l221_licitacao == null){
     $sqlerro=true;
     db_msgbox("Escolha uma Licitação!");
@@ -27,22 +33,20 @@ if(isset($incluir)){
   }else if($l221_datafinal == "" || $l221_datafinal == null){
     $sqlerro=true;
     db_msgbox("Insira uma Data Final!");
-  }else if($l221_datapublica == "" || $l221_datapublica == null){
-    $sqlerro=true;
-    db_msgbox("Insira uma Data de Publicação!");
-  }else if($l221_veiculopublica == "" || $l221_veiculopublica == null){
-    $sqlerro=true;
-    db_msgbox("Insira o veiculo de publicação !");
-  }else if($l221_dataini < $l221_datafinal){
-    $sqlerro=true;
-    db_msgbox("Data inicial maior que data final !");
   }
+  
 
   if($sqlerro == false){
     $rsLicatareg = $cllicatareg->sql_record("select * from licatareg where l221_licitacao= $l221_licitacao and l221_fornecedor= $l221_fornecedor and l221_exercicio = '$l221_exercicio'");
     if(pg_num_rows($rsLicatareg)>0){
       $sqlerro=true;
       db_msgbox("Fornecedor dessa licitação já inserido!");
+    }
+
+    $rsLicatareg = $cllicatareg->sql_record("select * from licatareg where l221_numata= '$l221_numata' and l221_exercicio= '$l221_exercicio'");
+    if(pg_num_rows($rsLicatareg)>0){
+      $sqlerro=true;
+      db_msgbox("Número da ata já inserido nesse exercício!");
     }else{
 
       db_inicio_transacao();
@@ -52,8 +56,14 @@ if(isset($incluir)){
       $cllicatareg->l221_fornecedor = $l221_fornecedor;
       $cllicatareg->l221_dataini = $l221_dataini;
       $cllicatareg->l221_datafinal = $l221_datafinal;
-      $cllicatareg->l221_datapublica = $l221_datapublica;
-      $cllicatareg->l221_veiculopublica = $l221_veiculopublica;
+      if($l221_datapublica != "" || $l221_datapublica != null){
+        $cllicatareg->l221_datapublica = $l221_datapublica;
+      }
+      if($l221_veiculopublica != "" || $l221_veiculopublica != null){
+        $cllicatareg->l221_veiculopublica = $l221_veiculopublica;
+      }
+      
+      
       $cllicatareg->incluir();
       $codigo = $cllicatareg->l221_sequencial;
       $licitacao =$cllicatareg->l221_licitacao;

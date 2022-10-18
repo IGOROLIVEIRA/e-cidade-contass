@@ -7,16 +7,16 @@ $cllicataregitem->rotulo->label();
 
 &nbsp;
 &nbsp;
-<table border='1' cellspacing="2" cellpadding="0" style='border:2px inset white; padding-bottom:15px;' width='90%' bgcolor="white" id="dadosDaOrdem">
-                <tr class=''>
+<table border='1' cellspacing="4" cellpadding="4" style='background-color:#EEEFF2;' width='90%' bgcolor="white" id="dadosDaOrdem">
+                <tr class=''  >
                   
-                  <td class='table_header' align='center'><b>Ordem</b></td>
-                  <td class='table_header' align='center'><b>Item</b></td>
-                  <td class='table_header' align='center'><b>Descrição Item</b></td>
-                  <td class='table_header' align='center'><b>Unidade</b></td>
-                  <td class='table_header' align='center'><b>Quantidade</b></td>
-                  <td class='table_header' align='center'><b>Vlr Unitario</b></td>
-                  <td class='table_header' align='center'><b>Vlr Total</b></td>
+                  <td class='table_header' align='center' style='border-style: outset;'><b>Ordem</b></td>
+                  <td class='table_header' align='center' style='border-style: outset;'><b>Item</b></td>
+                  <td class='table_header' align='center' style='border-style: outset;'><b>Descrição Item</b></td>
+                  <td class='table_header' align='center' style='border-style: outset;'><b>Unidade</b></td>
+                  <td class='table_header' align='center' style='border-style: outset;'><b>Quantidade</b></td>
+                  <td class='table_header' align='center' style='border-style: outset;'><b>Vlr Unitario</b></td>
+                  <td class='table_header' align='center' style='border-style: outset;'><b>Vlr Total</b></td>
 
                 </tr>
                 <tbody id='dados' style='height:150px;width:95%;overflow:scroll;overflow-x:hidden;background-color:white'>
@@ -75,27 +75,27 @@ $cllicataregitem->rotulo->label();
 
                      
                       // Sequencia
-                      echo "  <td class='linhagrid' id='sequen{$l21_ordem}' align='center'>$l21_ordem</td>";
+                      echo "  <td class='linhagrid' id='sequen{$l21_ordem}' align='center'  style='border-style: outset;'>$l21_ordem</td>";
 
                       // Número do empenho
-                      echo "  <td class='linhagrid' align='center'>$pc01_codmater</td>";
+                      echo "  <td class='linhagrid' align='center'  style='border-style: outset;'>$pc01_codmater</td>";
 
                       // Sequência do empenho
-                      echo "  <td class='linhagrid' align='center'>$pc01_descrmater</td>";
+                      echo "  <td class='linhagrid' align='center'  style='border-style: outset;'>$pc01_descrmater</td>";
 
                       // Código do item
-                      echo "  <td class='linhagrid' align='center'>$m61_descr</td>";
+                      echo "  <td class='linhagrid' align='center'  style='border-style: outset;'>$m61_descr</td>";
 
                       // Item
-                      echo "  <td class='linhagrid' align='center'>$pc23_quant</td>";
+                      echo "  <td class='linhagrid' align='center'  style='border-style: outset;'>$pc23_quant</td>";
 
                       // Unidade
-                      echo "  <td class='linhagrid' align='center'>$pc23_vlrun</td>";
+                      echo "  <td class='linhagrid' align='center'  style='border-style: outset;'>$pc23_vlrun</td>";
 
                       // Descrição
                       $vlrtotal = $pc23_quant*$pc23_vlrun;
                       $SomaTotal = $SomaTotal + $vlrtotal;
-                      echo "  <td class='linhagrid' align='center'>$vlrtotal</td>";
+                      echo "  <td class='linhagrid' align='center'  style='border-style: outset;'>$vlrtotal</td>";
 
    
 
@@ -109,15 +109,14 @@ $cllicataregitem->rotulo->label();
 
                   echo " <tr style='height: 35; background-color:#EEEFF2; border-top:1px solid #444444;'>";
                
-                  echo " <td colspan='7' align='right'><b>Total dos Itens: </b><span id='valor_total'>$SomaTotal</span></td>";
+                  echo " <td colspan='7' align='right'><b>Total dos Itens: </b><span id='valor_total'><b>".number_format($SomaTotal,2,',','.')."</b></span></td>";
                               ?>
                           </tr>
 
                 </tbody>
               </table>
               </center>
-              &nbsp;
-&nbsp;
+             
               <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Salvar":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> >
 
 
