@@ -5,6 +5,8 @@ include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
 include("classes/db_licatareg_classe.php");
 include("dbforms/db_funcoes.php");
+require_once("libs/db_utils.php");
+require_once("libs/db_app.utils.php");
 db_postmemory($HTTP_POST_VARS);
 $cllicatareg = new cl_licatareg;
 $db_opcao = 1;
@@ -13,10 +15,7 @@ $sqlerro=false;
 if(isset($incluir)){
   $datainicial = DateTime::createFromFormat('d/m/Y', $l221_dataini);
   $datafinal = DateTime::createFromFormat('d/m/Y', $l221_datafinal);
-  if($datainicial>$datafinal){
-    $sqlerro=true;
-    db_msgbox("Data inicial é maior que data final!");
-  }
+  
   if($l221_licitacao == "" || $l221_licitacao == null){
     $sqlerro=true;
     db_msgbox("Escolha uma Licitação!");
@@ -33,10 +32,10 @@ if(isset($incluir)){
   }else if($l221_datafinal == "" || $l221_datafinal == null){
     $sqlerro=true;
     db_msgbox("Insira uma Data Final!");
+  }else if($datainicial>$datafinal){
+    $sqlerro=true;
+    db_msgbox("Data inicial é maior que data final!");
   }
-  
-
-  if($sqlerro == false){
     $rsLicatareg = $cllicatareg->sql_record("select * from licatareg where l221_licitacao= $l221_licitacao and l221_fornecedor= $l221_fornecedor and l221_exercicio = '$l221_exercicio'");
     if(pg_num_rows($rsLicatareg)>0){
       $sqlerro=true;
@@ -44,10 +43,13 @@ if(isset($incluir)){
     }
 
     $rsLicatareg = $cllicatareg->sql_record("select * from licatareg where l221_numata= '$l221_numata' and l221_exercicio= '$l221_exercicio'");
-    if(pg_num_rows($rsLicatareg)>0){
+    if(pg_num_rows($rsLicatareg)>0 && $sqlerro == false){
       $sqlerro=true;
       db_msgbox("Número da ata já inserido nesse exercício!");
-    }else{
+    }
+
+  if($sqlerro == false){
+    
 
       db_inicio_transacao();
       $cllicatareg->l221_licitacao = $l221_licitacao;
@@ -70,7 +72,7 @@ if(isset($incluir)){
       $fornecedor = $cllicatareg->l221_fornecedor;
       
       db_fim_transacao();
-    }
+    
   }
 }
 ?>

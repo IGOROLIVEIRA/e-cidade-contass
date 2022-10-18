@@ -180,17 +180,16 @@ function js_pesquisarLicitacao(lMostra) {
   
   var sArquivo = 'func_liclicita.php?situacao=10&tiponatu=2&funcao_js=parent.';
 
-  if (lMostra) {
+  if (lMostra == true) {
     sArquivo += 'js_mostraLicitacao|l20_codigo|l20_objeto';
   } else {
 
-    var iNumeroLicitacao = $('l221_licitacao').value;
+    var iNumeroLicitacao = document.getElementById('l221_licitacao').value;
     
-    if (empty(iNumeroLicitacao)) {
-      return false;
-    }
+    
 
     sArquivo += 'js_mostraLicitacaoHidden&pesquisa_chave=' + iNumeroLicitacao + '&sCampoRetorno=l20_codigo';
+    
   }
 
   js_OpenJanelaIframe('', 'db_iframe_proc', sArquivo, 'Pesquisa de Licitação', lMostra);
@@ -215,7 +214,8 @@ function js_mostraLicitacaoHidden(descricao, lErro) {
  * Nao encontrou Licitacao
  */
 
-  $('l20_codigo').value = '';
+  location.href = 'lic1_licatareg001.php?l221_licitacao=' + document.getElementById('l221_licitacao').value + '&l20_objeto=' + descricao;
+
 
 }
 </script>

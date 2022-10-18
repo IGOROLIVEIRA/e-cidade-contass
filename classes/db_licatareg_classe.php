@@ -368,46 +368,7 @@ class cl_licatareg {
          }
        }
      }
-     if (trim($this->l221_datapublica)!="" || isset($GLOBALS["HTTP_POST_VARS"]["l221_datapublica_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["l221_datapublica_dia"] !="") ) { 
-       $sql  .= $virgula." l221_datapublica = '$this->l221_datapublica' ";
-       $virgula = ",";
-       if (trim($this->l221_datapublica) == null ) { 
-         $this->erro_sql = " Campo l221_datapublica não informado.";
-         $this->erro_campo = "l221_datapublica_dia";
-         $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-         $this->erro_status = "0";
-         return false;
-       }
-     }     else{ 
-       if (isset($GLOBALS["HTTP_POST_VARS"]["l221_datapublica_dia"])) { 
-         $sql  .= $virgula." l221_datapublica = null ";
-         $virgula = ",";
-         if (trim($this->l221_datapublica) == null ) { 
-           $this->erro_sql = " Campo l221_datapublica não informado.";
-           $this->erro_campo = "l221_datapublica_dia";
-           $this->erro_banco = "";
-           $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-           $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-           $this->erro_status = "0";
-           return false;
-         }
-       }
-     }
-     if (trim($this->l221_veiculopublica)!="" || isset($GLOBALS["HTTP_POST_VARS"]["l221_veiculopublica"])) { 
-       $sql  .= $virgula." l221_veiculopublica = '$this->l221_veiculopublica' ";
-       $virgula = ",";
-       if (trim($this->l221_veiculopublica) == null ) { 
-         $this->erro_sql = " Campo l221_veiculopublica não informado.";
-         $this->erro_campo = "l221_veiculopublica";
-         $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-         $this->erro_status = "0";
-         return false;
-       }
-     }
+     
      $sql .= " where ";
 $sql .= "l221_sequencial = '$oid'";     $result = db_query($sql);
      if ($result==false) { 

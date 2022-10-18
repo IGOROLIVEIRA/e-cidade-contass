@@ -22,7 +22,7 @@ $cllicataregitem->rotulo->label();
                 <tbody id='dados' style='height:150px;width:95%;overflow:scroll;overflow-x:hidden;background-color:white'>
                   <?
                   if ((isset($l222_licatareg) && $l222_licatareg != "" && isset($licitacao) && $licitacao != "" && isset($fornecedor) && $fornecedor != "")) {
-
+                    
                     
                     $sSQLemp  = "SELECT DISTINCT
                     l21_ordem,
@@ -95,7 +95,7 @@ $cllicataregitem->rotulo->label();
                       // Descrição
                       $vlrtotal = $pc23_quant*$pc23_vlrun;
                       $SomaTotal = $SomaTotal + $vlrtotal;
-                      echo "  <td class='linhagrid' align='center'  style='border-style: outset;'>$vlrtotal</td>";
+                      echo "  <td class='linhagrid' align='center'  style='border-style: outset;'>".number_format($vlrtotal,2,',','.')."</td>";
 
    
 

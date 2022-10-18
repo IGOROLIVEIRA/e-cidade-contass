@@ -9,14 +9,24 @@ parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
 $cllicatareg = new cl_licatareg;
 $clliclicita= new cl_liclicita;
+$cllicataregitem = new cl_licataregitem;
 $db_botao = false;
 $db_opcao = 33;
 if(isset($excluir)){
-  db_inicio_transacao();
-  $db_opcao = 3;
-  $cllicatareg->excluir($l221_sequencial);
-  db_fim_transacao();
-  db_msgbox("Excluido com Sucesso!");
+  
+    $rscllicataregitem = $cllicataregitem->sql_record("select * from licataregitem where l222_licatareg = $l221_sequencial");
+    if(pg_num_rows($rscllicataregitem)>0){
+      $db_opcao = 3;
+      db_msgbox("Ata já possui itens vinculados!");
+    }else{
+      db_inicio_transacao();
+      $db_opcao = 3;
+      $cllicatareg->excluir($l221_sequencial);
+      db_fim_transacao();
+      db_msgbox("Excluido com Sucesso!");
+    }
+  
+  
 }else if(isset($chavepesquisa)){
    $db_opcao = 3;
    $result = $cllicatareg->sql_record($cllicatareg->sql_query_file(null,"*",null,"l221_sequencial = ".$chavepesquisa)); 

@@ -12,19 +12,47 @@ $clliclicita= new cl_liclicita;
 $db_opcao = 22;
 $db_botao = false;
 if(isset($alterar)){
-  db_inicio_transacao();
-  $db_opcao = 2;
-  $cllicatareg->l221_licitacao = $l221_licitacao;
-  $cllicatareg->l221_numata = $l221_numata;
-  $cllicatareg->l221_exercicio = $l221_exercicio;
-  $cllicatareg->l221_fornecedor = $l221_fornecedor;
-  $cllicatareg->l221_dataini = $l221_dataini;
-  $cllicatareg->l221_datafinal = $l221_datafinal;
-  $cllicatareg->l221_datapublica = $l221_datapublica;
-  $cllicatareg->l221_veiculopublica = $l221_veiculopublica;
-  $cllicatareg->alterar($l221_sequencial);
-  db_fim_transacao();
-  db_msgbox("Alterado com Sucesso");
+
+  $datainicial = DateTime::createFromFormat('d/m/Y', $l221_dataini);
+  $datafinal = DateTime::createFromFormat('d/m/Y', $l221_datafinal);
+  
+  $rsLicatareg = $cllicatareg->sql_record("select * from licatareg where l221_numata= '$l221_numata' and l221_exercicio= '$l221_exercicio' and l221_licitacao <> $l221_licitacao");
+    if(pg_num_rows($rsLicatareg)>0){
+      $sqlerro=true;
+      db_msgbox("Número da ata já inserido nesse exercício!");
+    }else if($l221_numata == "" || $l221_numata == null){
+      $sqlerro=true;
+      db_msgbox("Informe o número da Ata!");
+    }else if($l221_dataini == "" || $l221_dataini == null){
+      $sqlerro=true;
+      db_msgbox("Insira uma Data Inicial!");
+    }else if($l221_datafinal == "" || $l221_datafinal == null){
+      $sqlerro=true;
+      db_msgbox("Insira uma Data Final!");
+    }else if($datainicial>$datafinal){
+      $sqlerro=true;
+      db_msgbox("Data inicial é maior que data final!");
+    }  
+  if($sqlerro == false){
+
+    db_inicio_transacao();
+    $db_opcao = 2;
+    $cllicatareg->l221_licitacao = $l221_licitacao;
+    $cllicatareg->l221_numata = $l221_numata;
+    $cllicatareg->l221_exercicio = $l221_exercicio;
+    $cllicatareg->l221_fornecedor = $l221_fornecedor;
+    $cllicatareg->l221_dataini = $l221_dataini;
+    $cllicatareg->l221_datafinal = $l221_datafinal;
+    if($l221_datapublica != "" || $l221_datapublica != null){
+      $cllicatareg->l221_datapublica = $l221_datapublica;
+    }
+    if($l221_veiculopublica != "" || $l221_veiculopublica != null){
+      $cllicatareg->l221_veiculopublica = $l221_veiculopublica;
+    }
+    $cllicatareg->alterar($l221_sequencial);
+    db_fim_transacao();
+    db_msgbox("Alterado com Sucesso");
+  }
 }else if(isset($chavepesquisa)){
    $db_opcao = 2;
    $result = $cllicatareg->sql_record($cllicatareg->sql_query_file(null,"*",null,"l221_sequencial = ".$chavepesquisa)); 
