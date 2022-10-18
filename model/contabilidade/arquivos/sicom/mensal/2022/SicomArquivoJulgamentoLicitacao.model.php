@@ -332,8 +332,11 @@ class SicomArquivoJulgamentoLicitacao extends SicomArquivoBase implements iPadAr
 	INNER JOIN solicitempcmater ON (solicitem.pc11_codigo=solicitempcmater.pc16_solicitem)
 	INNER JOIN pcorcamval ON (pcorcamitem.pc22_orcamitem = pcorcamval.pc23_orcamitem and pcorcamforne.pc21_orcamforne=pcorcamval.pc23_orcamforne)
   LEFT  JOIN liclicitemlote on (liclicitem.l21_codigo=liclicitemlote.l04_liclicitem)
-  LEFT JOIN aberlic102022 on (aberlic102022.si46_nroprocessolicitatorio = liclicita.l20_edital::varchar)
-	LEFT JOIN aberlic112022 on (liclicitemlote.l04_descricao = aberlic112022.si47_dsclote and aberlic112022.si47_nroprocessolicitatorio = liclicita.l20_edital::varchar)
+  LEFT JOIN aberlic102022 on (aberlic102022.si46_nroprocessolicitatorio = liclicita.l20_edital::varchar
+  and aberlic102022.si46_instit = liclicita.l20_instit)
+	LEFT JOIN aberlic112022 on (liclicitemlote.l04_descricao = aberlic112022.si47_dsclote 
+	and aberlic112022.si47_nroprocessolicitatorio = liclicita.l20_edital::varchar
+	and aberlic102022.si46_instit = liclicita.l20_instit)
 	LEFT JOIN descontotabela on (liclicita.l20_codigo=descontotabela.l204_licitacao
 	and pcorcamforne.pc21_orcamforne=descontotabela.l204_fornecedor
 	and descontotabela.l204_item=solicitempcmater.pc16_codmater)
@@ -341,8 +344,7 @@ class SicomArquivoJulgamentoLicitacao extends SicomArquivoBase implements iPadAr
   LEFT JOIN matunid AS matunid ON solicitemunid.pc17_unid = matunid.m61_codmatunid
 	LEFT JOIN infocomplementaresinstit on db_config.codigo = infocomplementaresinstit.si09_instit
 	LEFT JOIN manutencaolicitacao on (manutencaolicitacao.manutlic_licitacao = liclicita.l20_codigo)
-	WHERE db_config.codigo = " . db_getsession("DB_instit") . "
-	AND aberlic102022.si46_criterioadjudicacao = 1 AND liclicita.l20_codigo in (" . implode(",", $aLicitacoes) . ")";
+	WHERE aberlic102022.si46_criterioadjudicacao = 1 AND liclicita.l20_codigo in (" . implode(",", $aLicitacoes) . ")";
 
 		if (count($aLicitacoes) > 0) {
 			$rsResult20 = db_query($sSql);
