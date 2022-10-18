@@ -344,6 +344,8 @@ class ReceitaPeriodoTesourariaSQLBuilder
         $this->sqlGroup .= "
             GROUP BY 
                 k02_tipo,
+                codrec,
+                k02_codigo,
                 k02_drecei,
                 estrutural ";
         $this->definirCondicoesSQLGroup();
@@ -430,7 +432,11 @@ class ReceitaPeriodoTesourariaSQLBuilder
     public function definirSQLWhereRepasse()
     {
         if ($this->iRegularizacaoRepasse != 0) {
-            $this->sqlWhere .= " and k81_regrepasse = {$this->iRegularizacaoRepasse} ";
+            if ($this->iRegularizacaoRepasse == 1) {
+                $this->sqlWhere .= " and k81_regrepasse = {$this->iRegularizacaoRepasse} ";
+                return; 
+            }
+            $this->sqlWhere .= " and (k81_regrepasse = {$this->iRegularizacaoRepasse} OR k81_regrepasse IS NULL) ";
         }
     }
 

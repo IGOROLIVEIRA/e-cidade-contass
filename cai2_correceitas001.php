@@ -273,6 +273,7 @@ function js_emite(){
 								<option value=<?= ReceitaTipoReceitaRepositoryLegacy::EXTRA ?>>Extra-Orçamentarias</option>
 						</td>
 					</tr>
+                    <!--
 					<tr>
 						<td align="right">
 							<strong>Desdobrar Receita:</strong> 
@@ -284,6 +285,7 @@ function js_emite(){
 						</td>
 					</tr>
 					<tr>
+                    -->
 						<td align="right">
 							<strong>Ordem:</strong> 
 						</td>
@@ -341,7 +343,7 @@ function js_emite(){
 							<select name="formarrecadacao" style="width: 175px;">
 								<option value=<?= ReceitaFormaArrecadacaoRepositoryLegacy::TODAS ?>>Todas</option>
 								<option value=<?= ReceitaFormaArrecadacaoRepositoryLegacy::ARQUIVO_BANCARIO ?>>Via arquivo bancário</option>
-								<option value=<?= ReceitaFormaArrecadacaoRepositoryLegacy::EXCETO_ARQUIVO_BANCARIO ?>>Exceto via arquivo bancário</option>
+								<option value=<?= ReceitaFormaArrecadacaoRepositoryLegacy::EXCETO_ARQUIVO_BANCARIO ?>>Exceto via arquivo bancário e retenções</option>
 								<option value=<?= ReceitaFormaArrecadacaoRepositoryLegacy::RETENCAO ?>>Via Retenções</option>
 						</td>
 					</tr>

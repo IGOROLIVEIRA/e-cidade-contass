@@ -103,7 +103,10 @@ class ReceitaPeriodoTesourariaPDF extends PDF
             return 'Forma de Arrecadação: Via arquivo bancário';
 
         if ($this->iFormaArrecadacao == ReceitaFormaArrecadacaoRepositoryLegacy::EXCETO_ARQUIVO_BANCARIO)
-            return 'Forma de Arrecadação: Exceto via arquivo bancário';
+            return 'Forma de Arrecadação: Exceto via arquivo bancário e retenções';
+
+        if ($this->iFormaArrecadacao == ReceitaFormaArrecadacaoRepositoryLegacy::RETENCAO)
+            return 'Forma de Arrecadação: Via retenções';
     }
 
     /**
@@ -271,7 +274,7 @@ class ReceitaPeriodoTesourariaPDF extends PDF
         ) {
             $this->AddPage();
         }
-        
+
         $this->montarIniciadoresPDF();
         $this->montarTitulo($sTitulo);
         $this->preencherCelula = 0;
@@ -327,7 +330,7 @@ class ReceitaPeriodoTesourariaPDF extends PDF
             $this->cell(10, 4, $oReceita->codigo, 1, 0, "C", $this->preencherCelula);
             $this->cell(10, 4, $oReceita->reduzido, 1, 0, "C", $this->preencherCelula);
         }
-        
+
         if ($this->sTipo == ReceitaTipoRepositoryLegacy::ANALITICO) {
             $this->Cell(15, 4, $oReceita->data, 1, 0, "C", $this->preencherCelula);
             $this->montarCamposNumpreETamanhoEstruturalAnalitico($oReceita);
