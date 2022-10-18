@@ -51,9 +51,9 @@ class EventoS1207 extends EventoBase
             $oDadosAPI->evtBenPrRP->nrRecibo            = null;
 
             $oDadosAPI->evtBenPrRP->indapuracao         = $this->indapuracao;
-            $oDadosAPI->evtBenPrRP->perapur             = date('Y-m');
+            $oDadosAPI->evtBenPrRP->perapur             = $ano . '-' . $mes;
             if ($this->indapuracao == 2) {
-                $oDadosAPI->evtBenPrRP->perapur         = date('Y');
+                $oDadosAPI->evtBenPrRP->perapur         = $ano;
             }
             $oDadosAPI->evtBenPrRP->cpfbenef             = $aDadosPorMatriculas[0]->cpftrab;
 
@@ -210,6 +210,13 @@ class EventoS1207 extends EventoBase
                                ) as x on r33_codtab = rhpessoalmov.rh02_tbprev+2
     where rh30_vinculo in ('I','P')
     and cgm.z01_cgccpf = '$cpf'
+    and ((rh05_recis is not null
+		and date_part('month', rh05_recis) = date_part('month', fc_getsession('DB_datausu')::date)
+		and date_part('year', rh05_recis) = date_part('year', fc_getsession('DB_datausu')::date)
+		)
+		or
+		rh05_recis is null
+	)
     and (exists (SELECT
 	1
 from

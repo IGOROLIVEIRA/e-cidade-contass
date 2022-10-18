@@ -34,6 +34,7 @@ require_once("dbforms/db_funcoes.php");
 
 $clrotulo = new rotulocampo;
 $clrotulo->label("rh01_regist");
+$clrotulo->label("z01_numcgm");
 $clrotulo->label("z01_nome");
 
 $db_opcao = 1;
@@ -70,6 +71,39 @@ $mesfolha = DBPessoal::getMesFolha();
             <legend>Conferência dos dados informados pelo servidor:</legend>
             <table class="form-container">
                 <tr>
+                    <td style="width: 22%;">
+                        <strong>Tipo identificador:</strong>
+                    </td>
+                    <td>
+                        <select name="tpid" id="tpid" style="width: 25%;" onchange="js_alt_identificador(this)">
+                            <option value="2">Matricula</option>
+                            <option value="1">CGM</option>
+                        </select>
+                    </td>
+                </tr>
+            </table>
+            <table class="form-container">
+                <tr class="linha_cgm" style="display: none">
+                    <td nowrap title="<?php echo $Tz01_numcgm; ?>">
+                        <a id="lbl_z01_numcgm" for="cgm"><?= $Lz01_numcgm ?></a>
+                    </td>
+                    <td>
+                        <?php db_input('z01_numcgm', 10, $Iz01_numcgm, true, "text", 1, "", "", "", "width: 16%"); ?>
+                        <?php db_input('z01_nomecgm', 50, $Iz01_nomecgm, true, "text", 3, "", "", "", "width: 61%"); ?>
+                        <input type="button" name="adicionar" value="Adicionar" onclick="js_adicionar_cgm()" />
+                    </td>
+                </tr>
+                <tr class="linha_cgm" style="display: none">
+                    <td>
+                        <strong>Cgm</strong>
+                    </td>
+                    <td style="width:100%">
+                        <select multiple="multiple" name="cgms" id="cgms" style="width: 78%;" ondblclick="js_remover_cgm(this);">
+                        </select>
+                    </td>
+                </tr>
+
+                <tr class="linha_matricula">
                     <td nowrap title="<?php echo $Trh01_regist; ?>">
                         <a id="lbl_rh01_regist" for="matricula"><?= $Lrh01_regist ?></a>
                     </td>
@@ -79,15 +113,17 @@ $mesfolha = DBPessoal::getMesFolha();
                         <input type="button" name="adicionar" value="Adicionar" onclick="js_adicionar_matric()" />
                     </td>
                 </tr>
-                <tr>
+                <tr class="linha_matricula">
                     <td>
                         <strong>Matrículas</strong>
                     </td>
-                    <td>
+                    <td style="width:100%">
                         <select multiple="multiple" name="matriculas" id="matriculas" style="width: 78%;" ondblclick="js_remover_matric(this);">
                         </select>
                     </td>
                 </tr>
+            </table>
+            <table class="form-container">
                 <tr>
                     <td align="left"><label for="cboEmpregador">Empregador:</label></td>
                     <td>
@@ -146,8 +182,10 @@ $mesfolha = DBPessoal::getMesFolha();
                         </select>
                     </td>
                 </tr>
+            </table>
+            <table>
                 <tr id="indapuracao_col" style="display: none;">
-                    <td align="right"><label for="indapuracao">Apuração:</label></td>
+                    <td align="right"><label for="indapuracao"><strong>Apuração:</strong></label></td>
                     <td>
                         <select name="indapuracao" id="indapuracao" style="width: 78%;">
                             <option value="1">Mensal</option>
@@ -156,7 +194,7 @@ $mesfolha = DBPessoal::getMesFolha();
                     </td>
                 </tr>
                 <tr id="dtalteracao" style="display:none">
-                    <td align="left"><label>Data Alteração:</label>
+                    <td align="left"><label><strong>Data Alteração:</strong></label>
 
                         <input name="dt_alteracao" type="text" id="dt_alteracao" value="" size="10" maxlength="10" autocomplete="off" onblur="js_validaDbData(this);" onkeyup="return js_mascaraData(this,event)" onfocus="js_validaEntrada(this);" onpaste="return false" ondrop="return false">
                         <input name="dt_alteracao_dia" type="hidden" title="" id="dt_alteracao_dia" value="" size="2" maxlength="2">
@@ -175,8 +213,8 @@ $mesfolha = DBPessoal::getMesFolha();
                     </td>
                 </tr>
                 <tr id="tppgto_col" style="display:none">
-                    <td><label>Tipo de Pagamento:</label></td>
-                    <td><select name="tppgto" id="tppgto" style="width: 50%;">
+                    <td><label><strong>Tipo de Pagamento:</strong></label></td>
+                    <td><select name="tppgto" id="tppgto" style="width: 100%;">
                             <option value="1">Pagamento de remuneração, conforme apurado em
                                 ideDmDev do S-1200
                             </option>
@@ -192,6 +230,14 @@ $mesfolha = DBPessoal::getMesFolha();
                             <option value="5">Pagamento de benefícios previdenciários, conforme
                                 apurado em ideDmDev do S-1207
                             </option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="left" id="tipo_col" style="display:none"><label><strong>Tipo de evento:</strong></label>
+                        <select name="tpevento" id="tpevento" style="width: 25%;">
+                            <option value="1">RH</option>
+                            <option value="2">Contabilidade</option>
                         </select>
                     </td>
                 </tr>
@@ -247,7 +293,12 @@ $mesfolha = DBPessoal::getMesFolha();
             this.form.submit();
         });
 
-        var oLookUpCgm = new DBLookUp($('lbl_rh01_regist'), $('rh01_regist'), $('z01_nome'), {
+        var oLookUpCgm = new DBLookUp($('lbl_z01_numcgm'), $('z01_numcgm'), $('z01_nomecgm'), {
+            'sArquivo': 'func_cgmesocial.php',
+            'oObjetoLookUp': 'func_nome'
+        });
+
+        var oLookUpMatricula = new DBLookUp($('lbl_rh01_regist'), $('rh01_regist'), $('z01_nome'), {
             'sArquivo': 'func_rhpessoal.php',
             'oObjetoLookUp': 'func_nome'
         });
@@ -272,15 +323,32 @@ $mesfolha = DBPessoal::getMesFolha();
             let aArquivosSelecionados = new Array();
             aArquivosSelecionados.push($F('evento'));
 
-            var selectobject = document.getElementById("matriculas");
+            var tpid = document.getElementById("tpid");
             var aMatriculas = [];
-            for (var iCont = 0; iCont < selectobject.length; iCont++) {
-                aMatriculas.push(selectobject.options[iCont].value);
+            var aCgms = [];
+
+            if (tpid.value == 2) {
+                var selectobject = document.getElementById("matriculas");
+                for (var iCont = 0; iCont < selectobject.length; iCont++) {
+                    aMatriculas.push(selectobject.options[iCont].value);
+                }
+
+                if (aMatriculas.length == 0) {
+                    alert('Selecione pelo menos uma matrícula.');
+                    return;
+                }
             }
 
-            if (aMatriculas.length == 0) {
-                alert('Selecione pelo menos uma matrícula.');
-                return;
+            if (tpid.value == 1) {
+                var selectobject = document.getElementById("cgms");
+                for (var iCont = 0; iCont < selectobject.length; iCont++) {
+                    aCgms.push('' + selectobject.options[iCont].value + '');
+                }
+
+                if (aCgms.length == 0) {
+                    alert('Selecione pelo menos um cgm.');
+                    return;
+                }
             }
 
             var parametros = {
@@ -293,7 +361,10 @@ $mesfolha = DBPessoal::getMesFolha();
                 'iMesValidade': $F('mesfolha'),
                 'indapuracao': $F('indapuracao'),
                 'tppgto': $F('tppgto'),
-                'matricula': aMatriculas.join(',')
+                'tpevento': $F("tpevento"),
+                'matricula': aMatriculas.join(','),
+                'cgm': aCgms.map(aCgms => `'${aCgms}'`).join(','), // aCgms.join(',').join(),
+                'tipoid': tpid.value
             }; //Codigo Tipo::CADASTRAMENTO_INICIAL
             new AjaxRequest('eso4_esocialapi.RPC.php', parametros, function(retorno) {
 
@@ -335,9 +406,39 @@ $mesfolha = DBPessoal::getMesFolha();
         }
     }
 
+    function js_adicionar_cgm() {
+        var selectobject = document.getElementById("cgms");
+        for (var iCont = 0; iCont < selectobject.length; iCont++) {
+            if (selectobject.options[iCont].value == $F('z01_numcgm')) {
+                js_limpar_cgm();
+                return;
+            }
+        }
+        var select = document.getElementById('cgms');
+        var opt = document.createElement('option');
+        opt.value = $F('z01_numcgm');
+        opt.innerHTML = $F('z01_numcgm') + ' - ' + $F('z01_nomecgm');
+        select.appendChild(opt);
+        js_limpar_cgm();
+    }
+
+    function js_remover_cgm(select) {
+        var selectobject = document.getElementById("cgms");
+        for (var iCont = 0; iCont < selectobject.length; iCont++) {
+            if (selectobject.options[iCont].value == select.value) {
+                selectobject.remove(iCont);
+            }
+        }
+    }
+
     function js_limpar_matric() {
         $('rh01_regist').value = '';
         $('z01_nome').value = '';
+    }
+
+    function js_limpar_cgm() {
+        $('z01_numcgm').value = '';
+        $('z01_nomecgm').value = '';
     }
 
     function js_alt_evento() {
@@ -345,13 +446,20 @@ $mesfolha = DBPessoal::getMesFolha();
             if (document.getElementById('indapuracao_col').style.display == 'none') {
                 document.getElementById('indapuracao_col').style.display = 'inline';
             }
+            if (document.getElementById('tipo_col').style.display == 'none') {
+                document.getElementById('tipo_col').style.display = 'inline';
+            }
         } else if ((document.getElementById('evento').value == 'S1210')) {
             if (document.getElementById('tppgto_col').style.display == 'none') {
                 document.getElementById('tppgto_col').style.display = 'inline';
             }
+            if (document.getElementById('tipo_col').style.display == 'none') {
+                document.getElementById('tipo_col').style.display = 'inline';
+            }
         } else {
             document.getElementById('indapuracao_col').style.display = 'none';
             document.getElementById('tppgto_col').style.display = 'none'
+            document.getElementById('tipo_col').style.display = 'none';
         }
     }
 
@@ -361,5 +469,24 @@ $mesfolha = DBPessoal::getMesFolha();
             return true;
         }
         document.getElementById('dtalteracao').style.display = 'none';
+    }
+
+    function js_alt_identificador(e) {
+        if (e.value == 1) {
+            document.getElementsByClassName('linha_cgm')[0].style.display = 'inline';
+            document.getElementsByClassName('linha_cgm')[1].style.display = 'inline';
+            document.getElementsByClassName('linha_matricula')[0].style.display = 'none';
+            document.getElementsByClassName('linha_matricula')[1].style.display = 'none';
+            document.getElementById('cgms').style.width = '78%';
+        }
+
+        if (e.value == 2) {
+            document.getElementsByClassName('linha_cgm')[0].style.display = 'none';
+            document.getElementsByClassName('linha_cgm')[1].style.display = 'none';
+            document.getElementsByClassName('linha_matricula')[0].style.display = 'inline';
+            document.getElementsByClassName('linha_matricula')[1].style.display = 'inline';
+            document.getElementById('matriculas').style.width = '78%';
+
+        }
     }
 </script>

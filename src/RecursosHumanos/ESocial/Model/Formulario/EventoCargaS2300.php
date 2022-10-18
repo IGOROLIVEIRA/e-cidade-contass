@@ -39,9 +39,9 @@ class EventoCargaS2300 implements EventoCargaInterface
      * @param integer|null $matricula
      * @return resource
      */
-    public function execute($matricula = null) 
+    public function execute($matricula = null)
     {
-    	$sql = "
+        $sql = "
     	SELECT distinct
         --trabalhador
         rh02_instit AS instituicao,
@@ -80,10 +80,20 @@ class EventoCargaS2300 implements EventoCargaInterface
             rhpessoal.rh01_nasc as dtNascto,
             '105' as paisNascto,
             '105' as paisNac,
-            case when ruas.j14_tipo is null then 'R'
-            else j88_sigla
-            --brasil
-            end as tpLograd,
+            (SELECT j88_sigla from cgm intcgm
+            inner join patrimonio.cgmendereco as cgmendereco on (intcgm.z01_numcgm=cgmendereco.z07_numcgm)
+            inner join configuracoes.endereco as endereco on (cgmendereco.z07_endereco = endereco.db76_sequencial)
+            inner join cadenderlocal on cadenderlocal.db75_sequencial = db76_sequencial
+            inner join cadenderbairrocadenderrua on db87_sequencial = db75_cadenderbairrocadenderrua
+             inner join cadenderbairro     on  db73_sequencial  = db87_cadenderbairro
+             inner join cadenderrua        on  db74_sequencial  = db87_cadenderrua
+             inner join cadendermunicipio  on  db72_sequencial  = db73_cadendermunicipio
+             inner join cadendermunicipio  as a on a.db72_sequencial = db74_cadendermunicipio
+             inner join cadenderestado     on  db71_sequencial  = a.db72_cadenderestado
+             inner join cadenderpais       on  db70_sequencial  = db71_cadenderpais
+             inner join cadenderruaruastipo on db85_cadenderrua = db74_sequencial
+             inner join ruastipo           on  j88_codigo       = db85_ruastipo
+            where z01_numcgm = intcgm.z01_numcgm limit 1) as tpLograd,
             cgm.z01_ender as dscLograd, 
             cgm.z01_numero  as nrLograd,
             cgm.z01_compl as complemento,
@@ -268,7 +278,7 @@ class EventoCargaS2300 implements EventoCargaInterface
             )
     	";
 
-    	if (!empty($matricula)) {
+        if (!empty($matricula)) {
             $sql .= " AND rhpessoal.rh01_regist in ({$matricula}) ";
         }
         $rsResult = \db_query($sql);

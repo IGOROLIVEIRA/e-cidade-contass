@@ -496,7 +496,7 @@ if ($x->consultarDataDoSistema == true) {
         oGridItens.hasTotalValue = true;
         oGridItens.setCheckbox(0);
         //oGridItens.allowSelectColumns(true);
-        oGridItens.setCellWidth(new Array('10%', '40%', "15%", "15%", "15%", "15%", "15%", "15%"));
+        oGridItens.setCellWidth(new Array("8%", "39%", "14%", "14%", "14%", "16%", "15%", "15%"));
         oGridItens.setHeader(new Array("Código", "Material", "Quantidade", "Vlr. Unit.",
             "Valor Total", "Qtde Autorizar", "Valor Autorizar", "Dotacoes", "iSeq"));
         // oGridItens.aHeaders[4].lDisplayed = false;

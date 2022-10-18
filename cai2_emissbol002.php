@@ -150,13 +150,15 @@ $sql_rec_ext = "
                        f.c60_codsis as sis_debito,
                        saiu as credito,
                        h.c60_descr as descr_credito,
-                       h.c60_codsis as sis_credito
+                       h.c60_codsis as sis_credito,
+                       k153_slipoperacaotipo
                 from
                      (select
                              k12_id,
                              k12_autent,
                              k12_data,
                              k12_valor,
+                             k153_slipoperacaotipo,
                              corlanc as entrou,
                              corrente as saiu
                       from
@@ -167,6 +169,7 @@ $sql_rec_ext = "
                                    corrente.k12_conta as corrente,
                                    coalesce(c.k13_conta,0) as corr_saltes,
                                    b.k12_conta as corlanc,
+                                   k153_slipoperacaotipo,
                                    coalesce(d.k13_conta,0) as corl_saltes
                             from corrente
                                  inner join corlanc b on corrente.k12_id = b.k12_id
@@ -289,7 +292,7 @@ if ($agrupar == 'S') {
                                         j.c61_anousu = h.c60_anousu
                                         and j.c61_instit = ".db_getsession("DB_instit")."
     ";
-   
+
 $resultdespesaextra = db_query($sql);
 //echo ' Despesa Extra-Orçamentaria ';
 // db_criatabela($resultdespesaextra);exit;
@@ -481,13 +484,12 @@ for ($i = 0; $i < $numlin; $i ++) {
 
 //RECEITAS EXTRAS RECEBIDAS NO CAIXA
 $numlin = pg_numrows($resultextraorcamentaria);
-for ($i = 0; $i < $numlin; $i ++) {
-  db_fieldsmemory($resultextraorcamentaria, $i);
+for ($x = 0; $x < $numlin; $x ++) {
+  db_fieldsmemory($resultextraorcamentaria, $x);
 	//if ($sis_debito == 5) {
      $cai_rec_ext += $k12_valor;
 	//}
 }
-
 //DESPESAS ORÇAMENTARIAS PAGAS NO CAIXA
 //db_criatabela($resultdespesaorca);
 $numlin = pg_numrows($resultdespesaorca);
@@ -569,41 +571,41 @@ $pdf->SetFont('Arial', 'B', 12);
 $pdf->Setfillcolor(235);
 $pdf->Cell(190, 5, "BOLETIM DE CAIXA E DE BANCOS DE ".db_formatar($datai, 'd')." ATÉ ".db_formatar($dataf,'d'), 0, 1, "C", 0);
 $pdf->SetFont('Arial', 'B', 10);
-$pdf->ln(6);
-$pdf->Cell(192, 6, "MOVIMENTAÇÕES DOS CAIXA/BANCOS", 1, 1, "L", 0);
-$pdf->SetFont('Arial', 'B', 8);
-$pdf->cell(48, $alt, 'ENTRADAS (DÉBITO)', 1, 0, 'C', 0);
-$pdf->cell(48, $alt, 'VALORES', 1, 0, 'C', 0);
-$pdf->cell(48, $alt, 'SAÍDAS (CRÉDITO)', 1, 0, 'C', 0);
-$pdf->cell(48, $alt, 'VALORES', 1, 1, 'C', 0);
-$pdf->SetTextColor(0);
-$pdf->cell(48, $alt, 'Receitas Orçamentárias', 1, 0, 'L', 0);
-$pdf->cell(48, $alt, db_formatar($cai_rec_orc, 'f'), 1, 0, 'R', 0);
-$pdf->cell(48, $alt, 'Despesas Orçamentárias', 1, 0, 'L', 0);
-$pdf->cell(48, $alt, db_formatar($cai_desp_orca, 'f'), 1, 1, 'R', 0);
-$pdf->cell(48, $alt, 'Receitas Extra-Orçamentárias', 1, 0, 'L', 0);
-$pdf->cell(48, $alt, db_formatar($cai_rec_ext, 'f'), 1, 0, 'R', 0);
-$pdf->cell(48, $alt, 'Despesas Extra-Orçamentárias', 1, 0, 'L', 0);
-$pdf->cell(48, $alt, db_formatar($cai_desp_ext, 'f'), 1, 1, 'R', 0);
-$pdf->cell(48, $alt, 'Retiradas de Bancos', 1, 0, 'L', 0);
-$pdf->cell(48, $alt, db_formatar($cai_ret_bco, 'f'), 1, 0, 'R', 0);
-$pdf->cell(48, $alt, 'Depósitos Bancários', 1, 0, 'L', 0);
-$pdf->cell(48, $alt, db_formatar($cai_dep_bco, 'f'), 1, 1, 'R', 0);
-//$pdf->SetTextColor(0,100,255);
-$pdf->cell(48, $alt, 'TOTAL', 1, 0, 'L', 0);
-$pdf->cell(48, $alt, db_formatar($cai_tot_entradas, 'f'), 1, 0, 'R', 0);
-$pdf->cell(48, $alt, 'TOTAL', 1, 0, 'L', 0);
-$pdf->cell(48, $alt, db_formatar($cai_tot_saidas, 'f'), 1, 1, 'R', 0);
-$pdf->SetTextColor(0, 0, 0);
-$pdf->cell(48, $alt, 'Saldo Anterior', 1, 0, 'L', 0);
-$pdf->cell(48, $alt, db_formatar($caixa_saldo_anterior, 'f'), 1, 0, 'R', 0);
-$pdf->cell(48, $alt, 'Saldo do dia', 1, 0, 'L', 0);
-$pdf->cell(48, $alt, db_formatar($saldo_seguinte, 'f'), 1, 1, 'R', 0);
-//$pdf->SetTextColor(0,100,255);
-$pdf->cell(48, $alt, 'SOMA', 1, 0, 'L', 0);
-$pdf->cell(48, $alt, db_formatar($caixa_saldo_anterior + $cai_tot_entradas, 'f'), 1, 0, 'R', 0);
-$pdf->cell(48, $alt, 'SOMA', 1, 0, 'L', 0);
-$pdf->cell(48, $alt, db_formatar($cai_tot_saidas + $saldo_seguinte, 'f'), 1, 1, 'R', 0);
+// $pdf->ln(6);
+// $pdf->Cell(192, 6, "MOVIMENTAÇÕES DOS CAIXA/BANCOS", 1, 1, "L", 0);
+// $pdf->SetFont('Arial', 'B', 8);
+// $pdf->cell(48, $alt, 'ENTRADAS (DÉBITO)', 1, 0, 'C', 0);
+// $pdf->cell(48, $alt, 'VALORES', 1, 0, 'C', 0);
+// $pdf->cell(48, $alt, 'SAÍDAS (CRÉDITO)', 1, 0, 'C', 0);
+// $pdf->cell(48, $alt, 'VALORES', 1, 1, 'C', 0);
+// $pdf->SetTextColor(0);
+// $pdf->cell(48, $alt, 'Receitas Orçamentárias', 1, 0, 'L', 0);
+// $pdf->cell(48, $alt, db_formatar($cai_rec_orc, 'f'), 1, 0, 'R', 0);
+// $pdf->cell(48, $alt, 'Despesas Orçamentárias', 1, 0, 'L', 0);
+// $pdf->cell(48, $alt, db_formatar($cai_desp_orca, 'f'), 1, 1, 'R', 0);
+// $pdf->cell(48, $alt, 'Receitas Extra-Orçamentárias', 1, 0, 'L', 0);
+// $pdf->cell(48, $alt, db_formatar($cai_rec_ext, 'f'), 1, 0, 'R', 0);
+// $pdf->cell(48, $alt, 'Despesas Extra-Orçamentárias', 1, 0, 'L', 0);
+// $pdf->cell(48, $alt, db_formatar($cai_desp_ext, 'f'), 1, 1, 'R', 0);
+// $pdf->cell(48, $alt, 'Retiradas de Bancos', 1, 0, 'L', 0);
+// $pdf->cell(48, $alt, db_formatar($cai_ret_bco, 'f'), 1, 0, 'R', 0);
+// $pdf->cell(48, $alt, 'Depósitos Bancários', 1, 0, 'L', 0);
+// $pdf->cell(48, $alt, db_formatar($cai_dep_bco, 'f'), 1, 1, 'R', 0);
+// //$pdf->SetTextColor(0,100,255);
+// $pdf->cell(48, $alt, 'TOTAL', 1, 0, 'L', 0);
+// $pdf->cell(48, $alt, db_formatar($cai_tot_entradas, 'f'), 1, 0, 'R', 0);
+// $pdf->cell(48, $alt, 'TOTAL', 1, 0, 'L', 0);
+// $pdf->cell(48, $alt, db_formatar($cai_tot_saidas, 'f'), 1, 1, 'R', 0);
+// $pdf->SetTextColor(0, 0, 0);
+// $pdf->cell(48, $alt, 'Saldo Anterior', 1, 0, 'L', 0);
+// $pdf->cell(48, $alt, db_formatar($caixa_saldo_anterior, 'f'), 1, 0, 'R', 0);
+// $pdf->cell(48, $alt, 'Saldo do dia', 1, 0, 'L', 0);
+// $pdf->cell(48, $alt, db_formatar($saldo_seguinte, 'f'), 1, 1, 'R', 0);
+// //$pdf->SetTextColor(0,100,255);
+// $pdf->cell(48, $alt, 'SOMA', 1, 0, 'L', 0);
+// $pdf->cell(48, $alt, db_formatar($caixa_saldo_anterior + $cai_tot_entradas, 'f'), 1, 0, 'R', 0);
+// $pdf->cell(48, $alt, 'SOMA', 1, 0, 'L', 0);
+// $pdf->cell(48, $alt, db_formatar($cai_tot_saidas + $saldo_seguinte, 'f'), 1, 1, 'R', 0);
 
 $pdf->ln(6);
 
@@ -692,7 +694,7 @@ for ($i = 0; $i < pg_numrows($resultcontasmovimento); $i ++) {
 		$saldoc_creditado += $creditado;
 		$saldoc_atual += $atual;
 	}
-  
+
 }
 $pdf->SetFont('Arial', 'B', 8);
 //$pdf->SetTextColor(0,100,255);
@@ -800,21 +802,21 @@ $saldo_atual = 0;
 $pdf->SetTextColor(0);
 $pdf->SetFont('Arial', '', 8);
 if($agrupar_tipo_conta == '2'&& $tipo_conta !=0){
-  if($c63_tipoconta == '1'){ 
+  if($c63_tipoconta == '1'){
     $pdf->SetFont('Arial', 'B', 8);
     $pdf->cell(192, 6, " CONTAS CORRENTES ",1, 1, "L", 0);
   }
   if($c63_tipoconta == '2'){
       $pdf->SetFont('Arial', 'B', 8);
-      $pdf->cell(192, 6, " CONTAS POUPANÇA ",1, 1, "L", 0); 
-    }  
+      $pdf->cell(192, 6, " CONTAS POUPANÇA ",1, 1, "L", 0);
+    }
   if($c63_tipoconta == '3'){
-      $pdf->SetFont('Arial', 'B', 8); 
+      $pdf->SetFont('Arial', 'B', 8);
       $pdf->cell(192, 6, " CONTAS APLICAÇÕES ",1, 1, "L", 0);
-      
-    }  
 
-} 
+    }
+
+}
 
 $contasNegrito = array();
 $sql = "SELECT k171_conta FROM conciliacaobancaria WHERE k171_datafechamento >= '{$dataf}' ";
@@ -846,7 +848,7 @@ for ($i = 0; $i < pg_numrows($resultcontasmovimento); $i ++) {
         if ($negrito == 't') {
             if (array_key_exists($k13_reduz, $contasNegrito))
                 $oConta->negrito = '';
-            else 
+            else
                 $oConta->negrito = 'B';
             } else {
                 $oConta->negrito = '';
@@ -900,7 +902,7 @@ foreach ($aContasMovs as $oConta) {
       $pdf->cell(24, $alt, db_formatar($debitadoa, 'f'), 1, 0, 'R', 0);
       $pdf->cell(24, $alt, db_formatar($creditadoa, 'f'), 1, 0, 'R', 0);
       $pdf->cell(24, $alt, db_formatar($atuala, 'f'), 1, 1, 'R', 0);
-    
+
     }
   }
 
@@ -922,11 +924,11 @@ foreach ($aContasMovs as $oConta) {
 		$pdf->cell(24, $alt, ' ', "LRB", 0, 'C', 0);
 		$pdf->cell(24, $alt, ' ', "LRB", 0, 'C', 0);
 		$pdf->cell(24, $alt, 'ATUAL', "LRB", 1, 'C', 0);
-   
+
 		$pdf->SetFont('Arial', '', 8);
 
 	}
-    
+
 
   $pre = 0;
   if($negrito == 't' && $oConta->negrito == "B"){
@@ -962,7 +964,7 @@ foreach ($aContasMovs as $oConta) {
 		$saldo_creditado += $oConta->creditado;
 		$saldo_atual += $oConta->atual;
 	}
-  
+
 
 }
 

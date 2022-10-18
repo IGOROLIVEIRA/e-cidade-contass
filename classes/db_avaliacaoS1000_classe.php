@@ -46,8 +46,8 @@ class cl_avaliacaoS1000 {
                  eso05_indicativodesoneracao = bool = Indicativo de desoneração da folha
                  eso05_microempresa = bool = Indicativo de microempresa - ME
                  eso05_registroeletronicodeempregados = bool = registro eletrônico de empregados
-                 eso05_cnpjdoentefederativoresp = varchar(14) = CNPJ do Ente Federativo Responsável                 
-                 eso05_indicativoprodutorrural = boll = eso05_indicativoprodutorrural
+                 eso05_cnpjdoentefederativoresp = varchar(14) = CNPJ do Ente Federativo Responsável
+                 eso05_indicativoprodutorrural = bool = eso05_indicativoprodutorrural
                  eso05_ideminlei = text = eso05_ideminlei
                  eso05_nrocertificado = int8 = eso05_nrocertificado
                  eso05_dtemitcertificado = date = eso05_dtemitcertificado
@@ -57,7 +57,7 @@ class cl_avaliacaoS1000 {
                  eso05_dtpublicacao = date = eso05_dtpublicacao
                  eso05_veicpublicacao = text = eso05_veicpublicacao
                  eso05_nropaginadou = text = eso05_nropaginadou
-                 eso05_indicativoacordo = boll = eso05_indicativoacordo
+                 eso05_indicativoacordo = bool = eso05_indicativoacordo
                  eso05_instit = int4 = instituicao
                  ";
 

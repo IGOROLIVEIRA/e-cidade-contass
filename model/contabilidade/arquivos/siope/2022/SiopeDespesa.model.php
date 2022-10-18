@@ -332,8 +332,9 @@ class SiopeDespesa extends Siope {
 
             $iCodPlanilha = $this->getCodPlanilha($oDespesa);
 
-            $sHash = $iCodPlanilha.substr($oDespesa->o58_codigo,-2).$oDespesa->elemento_siope;
-            
+            // $sHash = $iCodPlanilha.substr($oDespesa->o58_codigo,-2).$oDespesa->elemento_siope;
+            $sHash = $iCodPlanilha.$oDespesa->elemento_siope;
+          
             /**
              * Caso específico das fontes 122/222
              * Por padrão, a dotação atualizada é do convênio federal (esferaconcedente == 1 ou esferaconcedente == '')
@@ -490,8 +491,16 @@ class SiopeDespesa extends Siope {
             return $this->getCod166266($oDespesa->o58_subfuncao, $oDespesa->o55_tipoensino, $oDespesa->o55_tipopasta);
         } elseif(substr($oDespesa->o58_codigo,1,2) == 67) {
             return $this->getCod167267($oDespesa->o58_subfuncao, $oDespesa->o55_tipoensino, $oDespesa->o55_tipopasta);
-        } elseif(substr($oDespesa->o58_codigo,1,2) == 90 || substr($oDespesa->o58_codigo,1,2) == 91) {
-            return $this->getCod190191290291($oDespesa->o58_subfuncao, $oDespesa->o55_tipoensino, $oDespesa->o55_tipopasta);
+        } elseif(substr($oDespesa->o58_codigo,1,2) == 71) {
+            return $this->getCod171271($oDespesa->o58_subfuncao, $oDespesa->o55_tipoensino, $oDespesa->o55_tipopasta);     
+        } elseif(substr($oDespesa->o58_codigo,1,2) == 72) {
+            return $this->getCod172272($oDespesa->o58_subfuncao, $oDespesa->o55_tipoensino, $oDespesa->o55_tipopasta);    
+        } elseif(substr($oDespesa->o58_codigo,1,2) == 73) {
+            return $this->getCod173273($oDespesa->o58_subfuncao, $oDespesa->o55_tipoensino, $oDespesa->o55_tipopasta);    
+        } elseif(substr($oDespesa->o58_codigo,1,2) == 75) {
+            return $this->getCod175275($oDespesa->o58_subfuncao, $oDespesa->o55_tipoensino, $oDespesa->o55_tipopasta);    
+        } elseif(substr($oDespesa->o58_codigo,1,2) == 74 ||substr($oDespesa->o58_codigo,1,2) == 90 || substr($oDespesa->o58_codigo,1,2) == 91) {
+            return $this->getCod174190191174290291($oDespesa->o58_subfuncao, $oDespesa->o55_tipoensino, $oDespesa->o55_tipopasta);
         } else {
             return $this->getCodGenerico($oDespesa->o58_subfuncao, $oDespesa->o55_tipoensino, $oDespesa->o55_tipopasta);
         }
@@ -2489,8 +2498,795 @@ class SiopeDespesa extends Siope {
 
         }
     }
+    public function getCod171271($iSubFuncao, $iTipoEnsino, $iTipoPasta) {
 
-    public function getCod190191290291($iSubFuncao, $iTipoEnsino, $iTipoPasta) {
+        switch ($iSubFuncao) {
+
+            case 121:
+            case 122:
+            case 123:
+            case 124:
+            case 125:
+            case 126:
+            case 127:
+            case 128:
+            case 129:
+            case 130:
+            case 131:
+                switch ($iTipoEnsino) {
+                    case 2:
+                        switch ($iTipoPasta) {
+                            case 1: return 1188;
+                            case 2: return 1193;
+                            default: return 1500;
+                        }
+                    case 3:
+                        switch ($iTipoPasta) {
+                            case 1: return 1215;
+                            case 2: return 1218;
+                            default: return 1501;
+                        }
+                    case 4:
+                            switch ($iTipoPasta) {
+                                case 1: return 1203;
+                                case 2: return 1206;
+                                default: return 1502;
+                            }    
+                    case 5:
+                        switch ($iTipoPasta) {
+                            case 1: return 1227;
+                            case 2: return 1231;
+                            default: return 1503;
+                        }
+                    case 6:
+                        switch ($iTipoPasta) {
+                            case 1: return 1240;
+                            case 2: return 1244;
+                            default: return 1504;
+                        }
+                    default:
+                        switch ($iTipoPasta) {
+                            case 1: return 1174;
+                            case 2: return 1179;
+                            default: return 1499;
+                        }
+                }
+            case 361:
+                switch ($iTipoPasta) {
+                    case 1: return 1174;
+                    case 2: return 1179;
+                    default: return 1176;
+                }
+            case 362:
+                switch ($iTipoPasta) {
+                    case 1: return 1188;
+                    case 2: return 1193;
+                    default: return 1190;
+                }
+            case 363:
+                switch ($iTipoPasta) {
+                    case 1: return 1215;
+                    case 2: return 1218;
+                    default: return 1217;
+                }
+            case 364:
+                    switch ($iTipoPasta) {
+                        case 1: return 1203;
+                        case 2: return 1206;
+                        default: return 1205;
+                    }    
+            case 366:
+                switch ($iTipoEnsino) {
+                    case 2:
+                        switch ($iTipoPasta) {
+                            case 1: return 1188;
+                            case 2: return 1193;
+                            default: return 1465;
+                        }
+                    default:
+                        switch ($iTipoPasta) {
+                            case 1: return 1174;
+                            case 2: return 1179;
+                            default: return 1463;
+                        }
+                }
+            case 367:
+                switch ($iTipoEnsino) {
+                    case 2:
+                        switch ($iTipoPasta) {
+                            case 1: return 1188;
+                            case 2: return 1193;
+                            default: return 1466;
+                        }
+                    case 5:
+                        switch ($iTipoPasta) {
+                            case 1: return 1227;
+                            case 2: return 1231;
+                            default: return 1467;
+                        }
+                    case 6:
+                        switch ($iTipoPasta) {
+                            case 1: return 1240;
+                            case 2: return 1244;
+                            default: return 1468;
+                        }
+                    default:
+                        switch ($iTipoPasta) {
+                            case 1: return 1174;
+                            case 2: return 1179;
+                            default: return 1464;
+                        }
+                }
+            case 365:
+                switch ($iTipoEnsino) {
+                    case 5:
+                        switch ($iTipoPasta) {
+                            case 1: return 1227;
+                            case 2: return 1231;
+                            default: return 1229;
+                        }
+                    default:
+                        switch ($iTipoPasta) {
+                            case 1: return 1240;
+                            case 2: return 1244;
+                            default: return 1242;
+                        }
+                }
+            case 306:
+                switch ($iTipoEnsino) {
+                    case 2: return 1188;
+                    case 3: return 1215;
+                    case 4: return 1203;
+                    case 5: return 1227;
+                    case 6: return 1240;
+                    default: return 1174;
+                }
+            case 782:
+            case 784:
+            case 785:
+                switch ($iTipoEnsino) {
+                    case 2: return 1193;
+                    case 3: return 1218;
+                    case 4: return 1206;
+                    case 5: return 1231;
+                    case 6: return 1244;
+                    default: return 1179;
+                }
+            default:
+                switch ($iTipoEnsino) {
+                    case 2:
+                        switch ($iTipoPasta) {
+                            case 1: return 1188;
+                            case 2: return 1193;
+                            default: return 1190;
+                        }
+                    case 3: 
+                        switch ($iTipoPasta) {
+                            case 1: return 1215;
+                            case 2: return 1218;
+                            default: return 1217;
+                        }
+                    case 4: 
+                            switch ($iTipoPasta) {
+                                case 1: return 1203;
+                                case 2: return 1206;
+                                default: return 1205;
+                            }    
+                    case 5:
+                        switch ($iTipoPasta) {
+                            case 1: return 1227;
+                            case 2: return 1231;
+                            default: return 1229;
+                        }
+                    case 6:
+                        switch ($iTipoPasta) {
+                            case 1: return 1240;
+                            case 2: return 1244;
+                            default: return 1242;
+                        }
+                    default:
+                        switch ($iTipoPasta) {
+                            case 1: return 1174;
+                            case 2: return 1179;
+                            default: return 1176;
+                        }
+                }
+        }
+         
+     
+    }
+    public function getCod172272($iSubFuncao, $iTipoEnsino, $iTipoPasta) {
+
+        switch ($iSubFuncao) {
+
+            case 121:
+            case 122:
+            case 123:
+            case 124:
+            case 125:
+            case 126:
+            case 127:
+            case 128:
+            case 129:
+            case 130:
+            case 131:
+                switch ($iTipoEnsino) {
+                    case 2:
+                        switch ($iTipoPasta) {
+                            case 1: return 1541;
+                            case 2: return 1596;
+                            default: return 1540;
+                        }
+                    case 3:
+                        switch ($iTipoPasta) {
+                            case 1: return 1545;
+                            case 2: return 1598;
+                            default: return 1544;
+                        }
+                    case 4:
+                            switch ($iTipoPasta) {
+                                case 1: return 1548;
+                                case 2: return 1600;
+                                default: return 1547;
+                            }    
+                    case 5:
+                        switch ($iTipoPasta) {
+                            case 1: return 1551;
+                            case 2: return 1603;
+                            default: return 1550;
+                        }
+                    case 6:
+                        switch ($iTipoPasta) {
+                            case 1: return 1554;
+                            case 2: return 1606;
+                            default: return 1553;
+                        }
+                    default:
+                        switch ($iTipoPasta) {
+                            case 1: return 1537;
+                            case 2: return 1595;
+                            default: return 1536;
+                        }
+                }
+            case 361:
+                switch ($iTipoPasta) {
+                    case 1: return 1537;
+                    case 2: return 1595;
+                    default: return 1538;
+                }
+            case 362:
+                switch ($iTipoPasta) {
+                    case 1: return 1541;
+                    case 2: return 1596;
+                    default: return 1542;
+                }
+            case 363:
+                switch ($iTipoPasta) {
+                    case 1: return 1545;
+                    case 2: return 1598;
+                    default: return 1597;
+                }
+            case 364:
+                    switch ($iTipoPasta) {
+                        case 1: return 1548;
+                        case 2: return 1600;
+                        default: return 1599;
+                    }    
+            case 366:
+                switch ($iTipoEnsino) {
+                    case 2:
+                        switch ($iTipoPasta) {
+                            case 1: return 1541;
+                            case 2: return 1596;
+                            default: return 1633;
+                        }
+                    default:
+                        switch ($iTipoPasta) {
+                            case 1: return 1537;
+                            case 2: return 1595;
+                            default: return 1631;
+                        }
+                }
+            case 367:
+                switch ($iTipoEnsino) {
+                    case 2:
+                        switch ($iTipoPasta) {
+                            case 1: return 1541;
+                            case 2: return 1596;
+                            default: return 1634;
+                        }
+                    case 5:
+                        switch ($iTipoPasta) {
+                            case 1: return 1551;
+                            case 2: return 1603;
+                            default: return 1602;
+                        }
+                    case 6:
+                        switch ($iTipoPasta) {
+                            case 1: return 1554;
+                            case 2: return 1606;
+                            default: return 1605;
+                        }
+                    default:
+                        switch ($iTipoPasta) {
+                            case 1: return 1537;
+                            case 2: return 1631;
+                            default: return 1632;
+                        }
+                }
+            case 365:
+                switch ($iTipoEnsino) {
+                    case 5:
+                        switch ($iTipoPasta) {
+                            case 1: return 1551;
+                            case 2: return 1603;
+                            default: return 1601;
+                        }
+                    default:
+                        switch ($iTipoPasta) {
+                            case 1: return 1554;
+                            case 2: return 1606;
+                            default: return 1604;
+                        }
+                }
+            case 306:
+                switch ($iTipoEnsino) {
+                    case 2: return 1541;
+                    case 3: return 1545;
+                    case 4: return 1548;
+                    case 5: return 1551;
+                    case 6: return 1554;
+                    default: return 1537;
+                }
+            case 782:
+            case 784:
+            case 785:
+                switch ($iTipoEnsino) {
+                    case 2: return 1596;
+                    case 3: return 1598;
+                    case 4: return 1600;
+                    case 5: return 1603;
+                    case 6: return 1606;
+                    default: return 1595;
+                }
+            default:
+                switch ($iTipoEnsino) {
+                    case 2:
+                        switch ($iTipoPasta) {
+                            case 1: return 1541;
+                            case 2: return 1596;
+                            default: return 1542;
+                        }
+                    case 3: 
+                        switch ($iTipoPasta) {
+                            case 1: return 1545;
+                            case 2: return 1598;
+                            default: return 1598;
+                        }
+                    case 4: 
+                            switch ($iTipoPasta) {
+                                case 1: return 1548;
+                                case 2: return 1600;
+                                default: return 1599;
+                            }    
+                    case 5:
+                        switch ($iTipoPasta) {
+                            case 1: return 1551;
+                            case 2: return 1603;
+                            default: return 1601;
+                        }
+                    case 6:
+                        switch ($iTipoPasta) {
+                            case 1: return 1554;
+                            case 2: return 1606;
+                            default: return 1604;
+                        }
+                    default:
+                        switch ($iTipoPasta) {
+                            case 1: return 1537;
+                            case 2: return 1595;
+                            default: return 1538;
+                        }
+                }
+        }
+         
+     
+    }
+    public function getCod173273($iSubFuncao, $iTipoEnsino, $iTipoPasta) {
+
+        switch ($iSubFuncao) {
+
+            case 121:
+            case 122:
+            case 123:
+            case 124:
+            case 125:
+            case 126:
+            case 127:
+            case 128:
+            case 129:
+            case 130:
+            case 131:
+                switch ($iTipoEnsino) {
+                    case 2:
+                        switch ($iTipoPasta) {
+                            case 1: return 1721;
+                            case 2: return 1725;
+                            default: return 1720;
+                        }
+                    case 3:
+                        switch ($iTipoPasta) {
+                            case 1: return 1728;
+                            case 2: return 1730;
+                            default: return 1727;
+                        }
+                    case 4:
+                            switch ($iTipoPasta) {
+                                case 1: return 1733;
+                                case 2: return 1735;
+                                default: return 1732;
+                            }    
+                    case 5:
+                        switch ($iTipoPasta) {
+                            case 1: return 1738;
+                            case 2: return 1741;
+                            default: return 1737;
+                        }
+                    case 6:
+                        switch ($iTipoPasta) {
+                            case 1: return 1744;
+                            case 2: return 1747;
+                            default: return 1743;
+                        }
+                    default:
+                        switch ($iTipoPasta) {
+                            case 1: return 1714;
+                            case 2: return 1718;
+                            default: return 1713;
+                        }
+                }
+            case 361:
+                switch ($iTipoPasta) {
+                    case 1: return 1714;
+                    case 2: return 1718;
+                    default: return 1715;
+                }
+            case 362:
+                switch ($iTipoPasta) {
+                    case 1: return 1721;
+                    case 2: return 1725;
+                    default: return 1722;
+                }
+            case 363:
+                switch ($iTipoPasta) {
+                    case 1: return 1728;
+                    case 2: return 1725;
+                    default: return 1722;
+                }
+            case 364:
+                    switch ($iTipoPasta) {
+                        case 1: return 1733;
+                        case 2: return 1735;
+                        default: return 1734;
+                    }    
+            case 366:
+                switch ($iTipoEnsino) {
+                    case 2:
+                        switch ($iTipoPasta) {
+                            case 1: return 1721;
+                            case 2: return 1725;
+                            default: return 1723;
+                        }
+                    default:
+                        switch ($iTipoPasta) {
+                            case 1: return 1714;
+                            case 2: return 1718;
+                            default: return 1716;
+                        }
+                }
+            case 367:
+                switch ($iTipoEnsino) {
+                    case 2:
+                        switch ($iTipoPasta) {
+                            case 1: return 1721;
+                            case 2: return 1725;
+                            default: return 1724;
+                        }
+                    case 5:
+                        switch ($iTipoPasta) {
+                            case 1: return 1738;
+                            case 2: return 1741;
+                            default: return 1740;
+                        }
+                    case 6:
+                        switch ($iTipoPasta) {
+                            case 1: return 1744;
+                            case 2: return 1747;
+                            default: return 1746;
+                        }
+                    default:
+                        switch ($iTipoPasta) {
+                            case 1: return 1714;
+                            case 2: return 1718;
+                            default: return 1717;
+                        }
+                }
+            case 365:
+                switch ($iTipoEnsino) {
+                    case 5:
+                        switch ($iTipoPasta) {
+                            case 1: return 1738;
+                            case 2: return 1741;
+                            default: return 1739;
+                        }
+                    default:
+                        switch ($iTipoPasta) {
+                            case 1: return 1744;
+                            case 2: return 1747;
+                            default: return 1745;
+                        }
+                }
+            case 306:
+                switch ($iTipoEnsino) {
+                    case 2: return 1721;
+                    case 3: return 1728;
+                    case 4: return 1733;
+                    case 5: return 1738;
+                    case 6: return 1744;
+                    default: return 1714;
+                }
+            case 782:
+            case 784:
+            case 785:
+                switch ($iTipoEnsino) {
+                    case 2: return 1725;
+                    case 3: return 1730;
+                    case 4: return 1735;
+                    case 5: return 1741;
+                    case 6: return 1747;
+                    default: return 1718;
+                }
+            default:
+                switch ($iTipoEnsino) {
+                    case 2:
+                        switch ($iTipoPasta) {
+                            case 1: return 1721;
+                            case 2: return 1725;
+                            default: return 1722;
+                        }
+                    case 3: 
+                        switch ($iTipoPasta) {
+                            case 1: return 1728;
+                            case 2: return 1730;
+                            default: return 1729;
+                        }
+                    case 4: 
+                            switch ($iTipoPasta) {
+                                case 1: return 1733;
+                                case 2: return 1735;
+                                default: return 1734;
+                            }    
+                    case 5:
+                        switch ($iTipoPasta) {
+                            case 1: return 1738;
+                            case 2: return 1741;
+                            default: return 1739;
+                        }
+                    case 6:
+                        switch ($iTipoPasta) {
+                            case 1: return 1744;
+                            case 2: return 1747;
+                            default: return 1745;
+                        }
+                    default:
+                        switch ($iTipoPasta) {
+                            case 1: return 1714;
+                            case 2: return 1718;
+                            default: return 1715;
+                        }
+                }
+        }
+         
+     
+    }
+    public function getCod175275($iSubFuncao, $iTipoEnsino, $iTipoPasta) {
+
+        switch ($iSubFuncao) {
+
+            case 121:
+            case 122:
+            case 123:
+            case 124:
+            case 125:
+            case 126:
+            case 127:
+            case 128:
+            case 129:
+            case 130:
+            case 131:
+                switch ($iTipoEnsino) {
+                    case 2:
+                        switch ($iTipoPasta) {
+                            case 1: return 1561;
+                            case 2: return 1608;
+                            default: return 1560;
+                        }
+                    case 3:
+                        switch ($iTipoPasta) {
+                            case 1: return 1565;
+                            case 2: return 1610;
+                            default: return 1564;
+                        }
+                    case 4:
+                            switch ($iTipoPasta) {
+                                case 1: return 1568;
+                                case 2: return 1612;
+                                default: return 1567;
+                            }    
+                    case 5:
+                        switch ($iTipoPasta) {
+                            case 1: return 1571;
+                            case 2: return 1615;
+                            default: return 1570;
+                        }
+                    case 6:
+                        switch ($iTipoPasta) {
+                            case 1: return 1574;
+                            case 2: return 1618;
+                            default: return 1573;
+                        }
+                    default:
+                        switch ($iTipoPasta) {
+                            case 1: return 1557;
+                            case 2: return 1607;
+                            default: return 1556;
+                        }
+                }
+            case 361:
+                switch ($iTipoPasta) {
+                    case 1: return 1557;
+                    case 2: return 1607;
+                    default: return 1558;
+                }
+            case 362:
+                switch ($iTipoPasta) {
+                    case 1: return 1561;
+                    case 2: return 1608;
+                    default: return 1562;
+                }
+            case 363:
+                switch ($iTipoPasta) {
+                    case 1: return 1565;
+                    case 2: return 1610;
+                    default: return 1609;
+                }
+            case 364:
+                    switch ($iTipoPasta) {
+                        case 1: return 1568;
+                        case 2: return 1612;
+                        default: return 1611;
+                    }    
+            case 366:
+                switch ($iTipoEnsino) {
+                    case 2:
+                        switch ($iTipoPasta) {
+                            case 1: return 1561;
+                            case 2: return 1608;
+                            default: return 1637;
+                        }
+                    default:
+                        switch ($iTipoPasta) {
+                            case 1: return 1557;
+                            case 2: return 1607;
+                            default: return 1635;
+                        }
+                }
+            case 367:
+                switch ($iTipoEnsino) {
+                    case 2:
+                        switch ($iTipoPasta) {
+                            case 1: return 1561;
+                            case 2: return 1608;
+                            default: return 1638;
+                        }
+                    case 5:
+                        switch ($iTipoPasta) {
+                            case 1: return 1571;
+                            case 2: return 1615;
+                            default: return 1614;
+                        }
+                    case 6:
+                        switch ($iTipoPasta) {
+                            case 1: return 1574;
+                            case 2: return 1618;
+                            default: return 1617;
+                        }
+                    default:
+                        switch ($iTipoPasta) {
+                            case 1: return 1557;
+                            case 2: return 1607;
+                            default: return 1636;
+                        }
+                }
+            case 365:
+                switch ($iTipoEnsino) {
+                    case 5:
+                        switch ($iTipoPasta) {
+                            case 1: return 1571;
+                            case 2: return 1615;
+                            default: return 1613;
+                        }
+                    default:
+                        switch ($iTipoPasta) {
+                            case 1: return 1574;
+                            case 2: return 1618;
+                            default: return 1616;
+                        }
+                }
+            case 306:
+                switch ($iTipoEnsino) {
+                    case 2: return 1561;
+                    case 3: return 1565;
+                    case 4: return 1568;
+                    case 5: return 1571;
+                    case 6: return 1574;
+                    default: return 1557;
+                }
+            case 782:
+            case 784:
+            case 785:
+                switch ($iTipoEnsino) {
+                    case 2: return 1608;
+                    case 3: return 1610;
+                    case 4: return 1612;
+                    case 5: return 1615;
+                    case 6: return 1618;
+                    default: return 1607;
+                }
+            default:
+                switch ($iTipoEnsino) {
+                    case 2:
+                        switch ($iTipoPasta) {
+                            case 1: return 1561;
+                            case 2: return 1608;
+                            default: return 1562;
+                        }
+                    case 3: 
+                        switch ($iTipoPasta) {
+                            case 1: return 1565;
+                            case 2: return 1610;
+                            default: return 1609;
+                        }
+                    case 4: 
+                            switch ($iTipoPasta) {
+                                case 1: return 1568;
+                                case 2: return 1612;
+                                default: return 1611;
+                            }    
+                    case 5:
+                        switch ($iTipoPasta) {
+                            case 1: return 1571;
+                            case 2: return 1615;
+                            default: return 1613;
+                        }
+                    case 6:
+                        switch ($iTipoPasta) {
+                            case 1: return 1574;
+                            case 2: return 1618;
+                            default: return 1616;
+                        }
+                    default:
+                        switch ($iTipoPasta) {
+                            case 1: return 1557;
+                            case 2: return 1607;
+                            default: return 1558;
+                        }
+                }
+        }
+         
+     
+    }
+    public function getCod174190191174290291($iSubFuncao, $iTipoEnsino, $iTipoPasta) {
 
         switch ($iSubFuncao) {
 

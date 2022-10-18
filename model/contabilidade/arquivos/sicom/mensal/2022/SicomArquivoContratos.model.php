@@ -568,11 +568,11 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             $clcontratos10->si83_dataassinatura = $oDados10->ac16_dataassinatura;
             $clcontratos10->si83_contdeclicitacao = $oDados10->contdeclicitacao;
             $clcontratos10->si83_codorgaoresp = '';
-            if ($oDados10->contdeclicitacao == 1 || $oDados10->contdeclicitacao == 8) {
-                $clcontratos10->si83_codunidadesubresp = ' ';
+            if ($oDados10->contdeclicitacao == 1 || $oDados10->contdeclicitacao == 8 || $oDados10->contdeclicitacao == 9) {
+                $clcontratos10->si83_codunidadesubresp = '';
             } elseif ($oDados10->contdeclicitacao == 4) {
                 $clcontratos10->si83_codunidadesubresp = $this->getCodunidadesubrespAdesao($oDados10->ac16_sequencial);
-            } elseif (in_array($oDados10->contdeclicitacao, array(5, 6))) {
+            } elseif (in_array($oDados10->contdeclicitacao, array(5, 6,))) {
                 $clcontratos10->si83_codorgaoresp = $oDados10->lic211_codorgaoresplicit;
                 $clcontratos10->si83_codunidadesubresp = $oDados10->lic211_codunisubres;
             } elseif ($oDados10->ac16_origem == self::ORIGEM_MANUAL) {
@@ -587,7 +587,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                 if ($oDados10->ac16_tipoorigem == self::TIPO_ORIGEM_ADESAO_REGISTRO_PRECO) {
                     $clcontratos10->si83_nroprocesso = $oDados10->numeroproc;
                     $clcontratos10->si83_exercicioprocesso = substr($oDados10->anoproc, 0, 4);
-                } elseif (in_array($oDados10->contdeclicitacao, array(5, 6))) {
+                } elseif (in_array($oDados10->contdeclicitacao, array(5, 6, 7, 8, 9))) {
                     $clcontratos10->si83_nroprocesso = $oDados10->lic211_processo;
                     $clcontratos10->si83_exercicioprocesso = $oDados10->lic211_anousu;
                 } else {

@@ -46,7 +46,7 @@ switch($oParam->exec) {
         $l202_dataAdjudicacao = DateTime::createFromFormat('d/m/Y', $data);
 
         try {
-            //Verifica se os fornecedores vencedores estão habilitados
+            //Verifica se os fornecedores vencedores estÃo habilitados
             if (!$clhomologacaoadjudica->validaFornecedoresHabilitados($l202_licitacao)) {
                 throw new Exception( "Procedimento abortado. Verifique os fornecedores habilitados.");
             }
@@ -91,7 +91,7 @@ switch($oParam->exec) {
                 $dtencerramento = DateTime::createFromFormat('d/m/Y', $data);
 
                 if ($l202_dataAdjudicacao <= $dtencerramento) {
-                    throw new Exception ("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
+                    throw new Exception ("O período já foi encerrado para envio do SICOM. Verifique os dados do lançaamento e entre em contato com o suporte.");
                 }
             }
 
@@ -438,7 +438,7 @@ switch($oParam->exec) {
             $sWhere = " liclicitem.l21_codliclicita = {$oParam->iLicitacao} and pc24_pontuacao = 1 AND itenshomologacao.l203_homologaadjudicacao = {$oParam->iHomologacao}";
             $result = $clhomologacaoadjudica->sql_record($clhomologacaoadjudica->sql_query_itens_comhomologacao(null,$campos,"pc11_seq,z01_nome",$sWhere));
         }
-        //Itens para Exclusão
+        //Itens para ExclusÃo
         if($oParam->dbopcao == "3"){
             $sWhere = " liclicitem.l21_codliclicita = {$oParam->iLicitacao} and pc24_pontuacao = 1 AND itenshomologacao.l203_homologaadjudicacao = {$oParam->iHomologacao}";
             $result = $clhomologacaoadjudica->sql_record($clhomologacaoadjudica->sql_query_itens_comhomologacao(null,$campos,"pc11_seq,z01_nome",$sWhere));
@@ -523,6 +523,7 @@ switch($oParam->exec) {
         $clliclicitasituacao   = new cl_liclicitasituacao;
         $clitenshomologacao    = new cl_itenshomologacao();
         $clliccomissaocgm      = new cl_liccomissaocgm();
+        $clsituacaoitemlic     = new cl_situacaoitemlic();
 
         $l202_licitacao = $oParam->iLicitacao;
         $rsDataJulg = $clhomologacaoadjudica->verificadatajulgamento($l202_licitacao);
@@ -547,7 +548,7 @@ switch($oParam->exec) {
         $l20_cadinicial  = db_utils::fieldsMemory($result, 0)->l20_cadinicial;
 
         try {
-            //Verifica se os fornecedores vencedores estão habilitados
+            //Verifica se os fornecedores vencedores estÃo habilitados
             if (!$clhomologacaoadjudica->validaFornecedoresHabilitados($l202_licitacao)) {
                 throw new Exception( "Procedimento abortado. Verifique os fornecedores habilitados.");
             }
@@ -642,6 +643,14 @@ switch($oParam->exec) {
                             $clitenshomologacao->l203_homologaadjudicacao = $clhomologacaoadjudica->l202_sequencial;
                             $clitenshomologacao->l203_fornecedor          = $item->fornecedor;
                             $clitenshomologacao->incluir(null);
+                            $result_situacaitemlic = $clsituacaoitemlic->sql_record('select l218_codigo from situacaoitemcompra where  l218_liclicitem in (select l21_codigo from liclicitem where l21_codpcprocitem = '.$item->codigo.')');
+                            db_fieldsmemory($result_situacaitemlic);
+                            $clsituacaoitemlic->l219_codigo = $l218_codigo;
+                            $clsituacaoitemlic->l219_situacao = 2;
+                            $clsituacaoitemlic->l219_hora = db_hora();
+                            $clsituacaoitemlic->l219_data = date('Y-m-d',db_getsession('DB_datausu'));
+                            $clsituacaoitemlic->l219_id_usuario = db_getsession('DB_id_usuario');
+                            $clsituacaoitemlic->incluir();
                         }
 
                         if ($clhomologacaoadjudica->erro_status == "0") {
@@ -697,6 +706,14 @@ switch($oParam->exec) {
                             $clitenshomologacao->l203_homologaadjudicacao = $clhomologacaoadjudica->l202_sequencial;
                             $clitenshomologacao->l203_fornecedor          = $item->fornecedor;
                             $clitenshomologacao->incluir(null);
+                            $result_situacaitemlic = $clsituacaoitemlic->sql_record('select l218_codigo from situacaoitemcompra where  l218_liclicitem in (select l21_codigo from liclicitem where l21_codpcprocitem = '.$item->codigo.')');
+                            db_fieldsmemory($result_situacaitemlic);
+                            $clsituacaoitemlic->l219_codigo= $l218_codigo;
+                            $clsituacaoitemlic->l219_situacao=2;
+                            $clsituacaoitemlic->l219_hora = db_hora();
+                            $clsituacaoitemlic->l219_data = date('Y-m-d',db_getsession('DB_datausu'));
+                            $clsituacaoitemlic->l219_id_usuario = db_getsession('DB_id_usuario');
+                            $clsituacaoitemlic->incluir();
                         }
 
                         if ($clhomologacaoadjudica->erro_status == "0") {
@@ -776,7 +793,7 @@ switch($oParam->exec) {
         $l202_datahomologacao = DateTime::createFromFormat('d/m/Y', $data);
 
         /**
-         * VERIFICA SE E REGISTRO DE PREÇO
+         * VERIFICA SE E REGISTRO DE PREÃ‡O
          */
 
         $result = $clliclicita->sql_record($clliclicita->sql_query($l202_licitacao));
@@ -785,7 +802,7 @@ switch($oParam->exec) {
         $ac16_sequencial = db_utils::fieldsMemory($result, 0)->ac16_sequencial;
 
         try {
-            //Verifica se os fornecedores vencedores estão habilitados
+            //Verifica se os fornecedores vencedores estÃo habilitados
             if (!$clhomologacaoadjudica->validaFornecedoresHabilitados($l202_licitacao)) {
                 throw new Exception( "Procedimento abortado. Verifique os fornecedores habilitados.");
             }
@@ -902,6 +919,7 @@ switch($oParam->exec) {
         $clliclicitasituacao   = new cl_liclicitasituacao();
         $clitenshomologacao    = new cl_itenshomologacao();
         $clliccomissaocgm      = new cl_liccomissaocgm();
+        $clsituacaoitemlic     = new cl_situacaoitemlic();
 
         $l202_licitacao = $oParam->iLicitacao;
         $rsDataJulg = $clhomologacaoadjudica->verificadatajulgamento($l202_licitacao);
@@ -963,11 +981,18 @@ switch($oParam->exec) {
                     }
 
                     $clitenshomologacao->excluir(null, "l203_homologaadjudicacao = {$oParam->iHomologacao} and l203_item = {$Item->codigo}");
+                    
                     if ($clitenshomologacao->erro_status == "0") {
                         $erro = $clhomologacaoadjudica->erro_msg;
                         $oRetorno->message = urlencode($erro);
                         $oRetorno->status = 2;
                     }
+                    
+                    $result_situacaitemlic = $clsituacaoitemlic->sql_record('select l218_codigo from situacaoitemcompra where  l218_liclicitem in (select l21_codigo from liclicitem where l21_codpcprocitem = '.$Item->codigo.')');
+                        if(pg_numrows($result_situacaitemlic)>0){
+                            db_fieldsmemory($result_situacaitemlic,0);
+                            $clsituacaoitemlic->excluir(null,'l219_codigo= '.$l218_codigo.' and l219_situacao=2');
+                        }
                 }
 
                 /**

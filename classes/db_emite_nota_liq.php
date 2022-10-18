@@ -28,8 +28,8 @@
 class cl_emite_nota_liq {
 
     function get_sql_ordem_pagamento($iInstit, $iAnoUsu, $e50_codord) {
-        
-        $sql = "select *, 
+
+        $sql = "select *,
                     o56_elemento AS sintetico,
                     o56_descr AS descr_sintetico,
                     e03_numeroprocesso as processo
@@ -75,19 +75,19 @@ class cl_emite_nota_liq {
         left join cgm as ordena on ordena.z01_numcgm = o41_orddespesa
         left join cgm as paga on paga.z01_numcgm = o41_ordpagamento
         left join cgm as liquida on liquida.z01_numcgm = o41_ordliquidacao
-        left join identificacaoresponsaveis contad on contad.si166_instit= e60_instit 
+        left join identificacaoresponsaveis contad on contad.si166_instit= e60_instit
         and contad.si166_tiporesponsavel=2
         and {$iAnoUsu} between DATE_PART('YEAR',contad.si166_dataini) AND DATE_PART('YEAR',contad.si166_datafim)
         and contad.si166_dataini <= e50_data
         and contad.si166_datafim >= e50_data
         left join cgm as contador on contador.z01_numcgm = contad.si166_numcgm
-        left join identificacaoresponsaveis controle on controle.si166_instit= e60_instit 
+        left join identificacaoresponsaveis controle on controle.si166_instit= e60_instit
         and controle.si166_tiporesponsavel=3
         and {$iAnoUsu} between DATE_PART('YEAR',controle.si166_dataini) AND DATE_PART('YEAR',controle.si166_datafim)
      		and controle.si166_dataini <= e50_data
      		and controle.si166_datafim >= e50_data
         left join cgm as controleinterno on controleinterno.z01_numcgm = controle.si166_numcgm
-        left JOIN identificacaoresponsaveis ordenapaga ON ordenapaga.si166_instit= e60_instit 
+        left JOIN identificacaoresponsaveis ordenapaga ON ordenapaga.si166_instit= e60_instit
         and ordenapaga.si166_tiporesponsavel=1
      		and {$iAnoUsu} between DATE_PART('YEAR',ordenapaga.si166_dataini) AND DATE_PART('YEAR',ordenapaga.si166_datafim)
      		and ordenapaga.si166_dataini <= e50_data
@@ -109,86 +109,89 @@ class cl_emite_nota_liq {
     }
 
     function get_sql_assinaturas($e50_codord) {
-        
-        $sql1 = "SELECT desp.z01_nome assindsp, 
-            liqu.z01_nome assinlqd, 
+
+        $sql1 = "SELECT desp.z01_nome assindsp,
+            liqu.z01_nome assinlqd,
             orde.z01_nome assinord
             FROM orcunidade
             LEFT JOIN cgm desp ON desp.z01_numcgm = o41_orddespesa
             LEFT JOIN cgm liqu ON liqu.z01_numcgm = o41_ordliquidacao
-            LEFT JOIN cgm orde ON orde.z01_numcgm = o41_ordpagamento 
-            LEFT JOIN orcorgao ON o40_anousu = o41_anousu 
-            AND o40_orgao = o41_orgao 
-            INNER JOIN orcdotacao ON o58_orgao = o41_orgao 
-            AND o58_unidade = o41_unidade 
-            AND o58_instit = o41_instit 
+            LEFT JOIN cgm orde ON orde.z01_numcgm = o41_ordpagamento
+            LEFT JOIN orcorgao ON o40_anousu = o41_anousu
+            AND o40_orgao = o41_orgao
+            INNER JOIN orcdotacao ON o58_orgao = o41_orgao
+            AND o58_unidade = o41_unidade
+            AND o58_instit = o41_instit
             INNER JOIN empempenho ON e60_coddot = o58_coddot
             AND e60_anousu = o58_anousu
-            INNER JOIN pagordem ON e50_numemp = e60_numemp 
-            WHERE e50_codord = {$e50_codord} 
+            INNER JOIN pagordem ON e50_numemp = e60_numemp
+            WHERE e50_codord = {$e50_codord}
             AND o41_anousu = DATE_PART('YEAR',pagordem.e50_data)
         ";
 
       return $sql1;
     }
 
-    function get_sql_item_ordem($e50_codord) {
+    function get_sql_item_ordem($e50_codord, $e50_data = null) {
 
-        $sqlitem = "select *,e53_valor - e53_vlranu as saldo, e53_valor - e53_vlranu - e53_vlrpag as saldo_final
-              from pagordemele
+        $sqlitem = "select *,
+                           e53_valor - e53_vlranu as saldo,
+                           e53_valor - e53_vlranu - e53_vlrpag as saldo_final
+                    from pagordemele
+                    inner join pagordem on pagordem.e50_codord = pagordemele.e53_codord
+                    inner join empempenho on empempenho.e60_numemp = pagordem.e50_numemp
+                    left join orcelemento on orcelemento.o56_codele = pagordemele.e53_codele and orcelemento.o56_anousu = empempenho.e60_anousu
+		            left join empelemento on empelemento.e64_numemp = empempenho.e60_numemp and orcelemento.o56_codele = empelemento.e64_codele
+		            where pagordemele.e53_codord = {$e50_codord} ";
 
-	           inner join pagordem on pagordem.e50_codord = pagordemele.e53_codord
-		   inner join empempenho on empempenho.e60_numemp = pagordem.e50_numemp
-		   left join orcelemento on orcelemento.o56_codele = pagordemele.e53_codele and
-		                             orcelemento.o56_anousu = empempenho.e60_anousu
-
-		   left join empelemento on empelemento.e64_numemp = empempenho.e60_numemp
-		   			 and orcelemento.o56_codele = empelemento.e64_codele
-
-		   where pagordemele.e53_codord = {$e50_codord} ";
+        if ($e50_data){
+            $sqlitem .= " and e50_data <= '{$e50_data}'";
+        }
 
         return $sqlitem;
 
     }
 
-    function get_sql_outras_ordens($e50_codord, $e50_numemp) {
+    function get_sql_outras_ordens($e50_codord, $e50_numemp, $e50_data = null) {
 
-        $sqloutrasordens = " select sum(saldo) as outrasordens
-              from
-              (select *,e53_valor - e53_vlranu as saldo
-              from pagordemele
-	           inner join pagordem on pagordem.e50_codord = pagordemele.e53_codord
-		   inner join empempenho on empempenho.e60_numemp = pagordem.e50_numemp
-		   inner join orcelemento on orcelemento.o56_codele = pagordemele.e53_codele and
-		                             orcelemento.o56_anousu = empempenho.e60_anousu
-		   inner join empelemento on empelemento.e64_numemp = empempenho.e60_numemp
-		   			 and orcelemento.o56_codele = empelemento.e64_codele
+        $sqloutrasordens = "select sum(saldo) as outrasordens from
+                                  (select *,
+                                          e53_valor - e53_vlranu as saldo
+                                  from pagordemele
+                                  inner join pagordem on pagordem.e50_codord = pagordemele.e53_codord
+                                  inner join empempenho on empempenho.e60_numemp = pagordem.e50_numemp
+                                  inner join orcelemento on orcelemento.o56_codele = pagordemele.e53_codele and orcelemento.o56_anousu = empempenho.e60_anousu
+                                  inner join empelemento on empelemento.e64_numemp = empempenho.e60_numemp and orcelemento.o56_codele = empelemento.e64_codele                    
+                                  where pagordem.e50_codord <> {$e50_codord}";
 
-		   where pagordem.e50_codord <> {$e50_codord}
-		     and pagordem.e50_numemp = {$e50_numemp}) as x";
+        if ($e50_data){
+            $sqloutrasordens .= " and e50_data <= '{$e50_data}'";
+        }
+
+        $sqloutrasordens .= " and pagordem.e50_numemp = {$e50_numemp}) as x";
 
         return $sqloutrasordens;
 
     }
 
     function get_sql_fornecedor($z01_cgccpf) {
-        
+
         $sqlfornecon = "    select *,
-                                case 
-                                    when pc63_cnpjcpf is not null and trim(pc63_cnpjcpf) <> '' and pc63_cnpjcpf::text::int8 > 0 
-                                        then pc63_cnpjcpf 
-                                    else '".$z01_cgccpf."' 
-                                end as z01_cgccpf 
-                            from pcfornecon 
-                            inner join pcforneconpad on pc64_contabanco = pc63_contabanco 
+                                case
+                                    when pc63_cnpjcpf is not null and trim(pc63_cnpjcpf) <> '' and pc63_cnpjcpf::text::int8 > 0
+                                        then pc63_cnpjcpf
+                                    else '".$z01_cgccpf."'
+                                end as z01_cgccpf
+                            from pcfornecon
+                            inner join pcforneconpad on pc64_contabanco = pc63_contabanco
                             where pc63_cnpjcpf = '".$z01_cgccpf."' limit 1";
-        
+
         return $sqlfornecon;
 
     }
 
     function get_sql_funcao_ordena_pagamento($cgmpaga) {
-        
+
         $sSqlFuncaoOrdenaPagamento  = " select case when length(rh04_descr)>0 then rh04_descr else rh37_descr end as cargoordenapagamento ";
         $sSqlFuncaoOrdenaPagamento .= " from rhpessoal  ";
         $sSqlFuncaoOrdenaPagamento .= " LEFT join rhpessoalmov on rh02_regist=rh01_regist  ";
@@ -202,7 +205,7 @@ class cl_emite_nota_liq {
     }
 
     function get_sql_funcao_ordena_despesa($cgmordenadespesa) {
-        
+
         $sSqlFuncaoOrdenadespesa  = " select case when length(rh04_descr)>0 then rh04_descr else rh37_descr end as cargoordenadespesa";
         $sSqlFuncaoOrdenadespesa .= " from rhpessoal ";
         $sSqlFuncaoOrdenadespesa .= " LEFT join rhpessoalmov on rh02_regist=rh01_regist ";
@@ -224,7 +227,7 @@ class cl_emite_nota_liq {
         $sSqlFuncaoLiquida .= " LEFT JOIN rhfuncao ON rhfuncao.rh37_funcao = rhpessoalmov.rh02_funcao";
         $sSqlFuncaoLiquida .= " LEFT JOIN rhpescargo ON rhpescargo.rh20_seqpes = rhpessoalmov.rh02_seqpes";
         $sSqlFuncaoLiquida .= " LEFT JOIN rhcargo ON rhcargo.rh04_codigo = rhpescargo.rh20_cargo ";
-        $sSqlFuncaoLiquida .= " where rh01_numcgm = $cgmliquida and rh01_admiss >= (select max(rh01_admiss) from rhpessoal where rh01_numcgm = $cgmliquida)"; 
+        $sSqlFuncaoLiquida .= " where rh01_numcgm = $cgmliquida and rh01_admiss >= (select max(rh01_admiss) from rhpessoal where rh01_numcgm = $cgmliquida)";
         $sSqlFuncaoLiquida .= " order by rh02_seqpes desc limit 1 ";
 
         return $sSqlFuncaoLiquida;
@@ -245,7 +248,7 @@ class cl_emite_nota_liq {
         //tipo Direta
         if ($e54_tipoautorizacao == 1 || $e54_tipoautorizacao == 0) {
 
-            if ($clempautitem->numrows > 0) {         
+            if ($clempautitem->numrows > 0) {
                 $oDado->processo            = db_utils::fieldsMemory($result_empaut, 0)->e54_numerl;
             }
 
@@ -253,17 +256,17 @@ class cl_emite_nota_liq {
 
         //tipo licitacao de outros orgaos
         if ($e54_tipoautorizacao == 2) {
-            
+
             if ($clempautitem->numrows > 0) {
                 $arr_numerl = split("/", db_utils::fieldsMemory($result_empaut, 0)->e54_numerl);
                 $oDado->processo            = $arr_numerl[0].'/'.$arr_numerl[1];
             }
-        
+
         }
 
         //tipo licitacao
         if ($e54_tipoautorizacao == 3) {
-            
+
             if ($clempautitem->numrows > 0) {
                 $arr_numerl = split("/", db_utils::fieldsMemory($result_empaut, 0)->e54_numerl);
                 $oDado->processo            = $arr_numerl[0].'/'.$arr_numerl[1];
@@ -273,7 +276,7 @@ class cl_emite_nota_liq {
 
         //tipo Adesao regpreco
         if ($e54_tipoautorizacao == 4) {
-            
+
             if ($clempautitem->numrows > 0) {
                 $arr_numerl = split("/", db_utils::fieldsMemory($result_empaut, 0)->e54_numerl);
                 $oDado->processo            = $arr_numerl[0].'/'.$arr_numerl[1];
