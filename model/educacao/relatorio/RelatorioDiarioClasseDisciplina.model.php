@@ -55,12 +55,4 @@ class RelatorioDiarioClasseDisciplina extends RelatorioDiarioClasseBase {
     $this->lExibirAvaliacao = $lExibirAvaliacao;
   }
 
-  /**
-   * Define se devemos exibir a coluna de faltas
-   * @param boolean $lExibirFaltas
-   */
-  public function setExibirFaltas($lExibirFaltas) {
-    $this->lExibirFaltas = $lExibirFaltas;
-  }
-
 }

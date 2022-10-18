@@ -72,10 +72,13 @@ class Itbi
             $this->Itbinome = new Itbinome();
             $this->Itbinome = $this->Itbinome->findByItbi($it01_guia);
             $this->Itbinumpre = $this->getItbinumpre();
-            $this->parItbi = new Paritbi(db_getsession('DB_anousu'));
             $this->ItbiAvalia = new Itbiavalia($this->it01_guia);
-            $this->cancelamentoDebitos = new cancelamentoDebitos();
+
         }
+
+        $this->parItbi = new Paritbi(db_getsession('DB_anousu'));
+        $this->cancelamentoDebitos = new cancelamentoDebitos();
+
         return $this;
     }
 
@@ -87,6 +90,7 @@ class Itbi
      */
     public function processarTransferenciaAutomatica($iCodRet)
     {
+
         if($this->parItbi->getTransfautomatica() === false) {
             return;
         }
@@ -99,7 +103,6 @@ class Itbi
             $oItbi = $this->getinstanceByNumpre($obj->k00_numpre);
             if (empty($oItbi) === false) {
                 $this->_processarTransferenciaAutomatica($oItbi);
-                $this->removeNumpreArrecad($obj->k00_numpre);
             }
         }
     }
@@ -258,22 +261,6 @@ class Itbi
         $oTransf->it35_observacao = $oRetorno->msg;
         $oTransf->it35_status = $oRetorno->error ? Transfautomaticas::STATUS_FAIL : Transfautomaticas::STATUS_SUCCESS;
         $oTransf->incluir();
-    }
-
-    /**
-     * @param $iNumpre
-     * @return void
-     */
-    private function removeNumpreArrecad($iNumpre)
-    {
-        $oInstit = new Instituicao(db_getsession('DB_instit'));
-
-        if ($oInstit->getUsaDebitosItbi() === false) {
-            return;
-        }
-
-        $arrecad = db_utils::getDao('arrecad');
-        $arrecad->sql_record($arrecad->excluir(null, "k00_numpre = {$iNumpre}"));
     }
 
     public function incluirArrecad($numpre = null)

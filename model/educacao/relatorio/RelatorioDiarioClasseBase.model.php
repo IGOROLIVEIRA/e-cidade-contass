@@ -230,6 +230,14 @@ class RelatorioDiarioClasseBase extends PDF
   }
 
   /**
+   * Define se devemos exibir a coluna de faltas
+   * @param boolean $lExibirFaltas
+   */
+  public function setExibirFaltas($lExibirFaltas) {
+    $this->lExibirFaltas = $lExibirFaltas;
+  }
+
+  /**
    * Define número de colunas da grade
    * @param int $iDiasLetivos
    */
@@ -762,7 +770,7 @@ class RelatorioDiarioClasseBase extends PDF
     $this->escreverColunaNumeroAluno();
     $this->escreverColunasAvaliacao(false);
     $this->escreverColunasDisciplinasGlobalizada(false);
-    $this->escreverColunaFalta();
+    $this->escreverColunaFalta(false);
     $this->ln();
   }
 
@@ -875,19 +883,20 @@ class RelatorioDiarioClasseBase extends PDF
   private function escreverColunaNumeroAluno($sValor = '')
   {
 
-    if ($this->lExibirAvaliacao || $this->lExibirFaltas) {
-      $this->Cell($this->iLarguraColunaPadrao, 4, $sValor, 1, 0, "C");
-    }
+    // if (!$this->lExibirAvaliacao || !$this->lExibirFaltas) {
+    //   $this->Cell($this->iLarguraColunaPadrao, 4, $sValor, 1, 0, "C");
+    // }
   }
 
   /**
    * Escreve a coluna para informar o total de faltas
    * @param string $sTitulo titulo da Coluna
    */
-  private function escreverColunaFalta($sTitulo = '')
+  private function escreverColunaFalta($sTitulo)
   {
 
     if ($this->lExibirFaltas) {
+      
       $this->Cell($this->iLarguraColunaPadrao, 4, $sTitulo, 1, 0, "C");
     }
   }
@@ -1021,11 +1030,14 @@ class RelatorioDiarioClasseBase extends PDF
         } else {
           $this->imprimeSituacaoAluno($oDadosAluno->oMatricula->getSituacao(), $oEstrutura->iTamanhoGrade);
         }
+        
+        $oAvaliacaoDisciplina = $this->getDiarioAvaliacaoDisciplinaAluno($oDadosAluno->oMatricula);
+        $iFaltasPeriodo         = $oAvaliacaoDisciplina->getTotalFaltasPorPeriodo($this->oAvaliacaoPeriodica->getPeriodoAvaliacao());
 
         $this->escreverColunaNumeroAluno($iClassificacao);
         $this->escreverColunasAvaliacao(false);
         $this->escreverColunasDisciplinasGlobalizada(false);
-        $this->escreverColunaFalta();
+        $this->escreverColunaFalta($iFaltasPeriodo);
 
         $this->ln();
         $iAlunosImpressos++;
@@ -1043,7 +1055,7 @@ class RelatorioDiarioClasseBase extends PDF
           $this->escreverColunaNumeroAluno();
           $this->escreverColunasAvaliacao(false);
           $this->escreverColunasDisciplinasGlobalizada(false);
-          $this->escreverColunaFalta();
+          $this->escreverColunaFalta($iFaltasPeriodo);
 
           $this->ln();
         }
@@ -1066,7 +1078,7 @@ class RelatorioDiarioClasseBase extends PDF
       for ($i = 0; $i < $oEstrutura->iNumeroColunas; $i++) {
 
         $this->exibePontos($oEstrutura->iLarguraCelulaGrade);
-        $this->Cell($oEstrutura->iLarguraCelulaGrade, 4, "", 1);
+        $this->Cell($oEstrutura->iLarguraCelulaGrade, 4, " ", 1);
       }
     } else {
 
@@ -1113,7 +1125,7 @@ class RelatorioDiarioClasseBase extends PDF
       for ($i = 0; $i < $oEstrutura->iNumeroColunas; $i++) {
 
         $this->exibePontos($oEstrutura->iLarguraCelulaGrade);
-        $this->Cell($oEstrutura->iLarguraCelulaGrade, 4, "", 1);
+        $this->Cell($oEstrutura->iLarguraCelulaGrade, 4, " ", 1);
       }
     } else {
 
@@ -1121,8 +1133,8 @@ class RelatorioDiarioClasseBase extends PDF
 
         foreach ($oMes->aDias as $oDia) {
 
-          $this->exibePontos($oEstrutura->iLarguraCelulaGrade);
-          $this->Cell($oEstrutura->iLarguraCelulaGrade, 4, '', 1, 0, "C");
+          //$this->exibePontos($oEstrutura->iLarguraCelulaGrade);
+          $this->Cell($oEstrutura->iLarguraCelulaGrade, 4, " ", 1, 0, "C");
         }
       }
       $this->escreverColunasFaltasEmBranco($oEstrutura);
@@ -1153,7 +1165,7 @@ class RelatorioDiarioClasseBase extends PDF
   protected function escreverAssinatura()
   {
 
-    $iTamanhoLinha = 140.5;
+    $iTamanhoLinha = 138;
     $iAlturaLinha  = 5;
 
     $sTexto = "Entregue em ____/____/____ POR " . str_repeat("_", 31);

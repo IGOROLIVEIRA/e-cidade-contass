@@ -81,6 +81,9 @@ class EventoS1200 extends EventoBase
 
                 $std = $this->dmDevRH($aDadosPorMatriculas);
 
+                if ($std->dmdev == null)
+                    continue;
+
                 $oDadosAPI->evtRemun->dmdev = $std->dmdev;
                 $aDadosAPI[] = $oDadosAPI;
                 $iSequencial++;
@@ -364,6 +367,7 @@ class EventoS1200 extends EventoBase
         $seqdmdev = 0;
         for ($iCont = 0; $iCont < count($aDadosPorMatriculas); $iCont++) {
             $aIdentificador = $this->buscarIdentificador($aDadosPorMatriculas[$iCont]->matricula, $aDadosPorMatriculas[$iCont]->rh30_regime);
+
             for ($iCont2 = 0; $iCont2 < count($aIdentificador); $iCont2++) {
                 $std->dmdev[$seqdmdev] = new \stdClass(); //Obrigatório
                 //Identificação de cada um dos demonstrativos de valores devidos ao trabalhador.
@@ -546,6 +550,8 @@ class EventoS1200 extends EventoBase
      */
     private function buscarDadosPorMatricula($cpf)
     {
+        $anofolha = db_anofolha();
+        $mesfolha = db_mesfolha();
         $sql = "SELECT
         distinct
         1 as tpInsc,
@@ -606,16 +612,15 @@ class EventoS1200 extends EventoBase
                     r33_tiporegime
                 from
                     inssirf
-                where
-                    r33_anousu = fc_getsession('DB_anousu')::int
-                        and r33_mesusu = date_part('month', fc_getsession('DB_datausu')::date)
+                where     r33_anousu = $anofolha
+                                            and r33_mesusu = $mesfolha
                             and r33_instit = fc_getsession('DB_instit')::int ) as x on
                 r33_codtab = rhpessoalmov.rh02_tbprev + 2
                 where 1=1
                 and (
                             (h13_categoria = '901' and rh30_vinculo = 'A')
                             or
-                            (h13_categoria in ('101', '106', '111', '301', '302', '303', '305', '306', '309', '312', '313', '902','701','712','771','711')
+                            (h13_categoria in ('101', '106', '111', '301', '302', '303', '305', '306', '309', '312', '313','410', '902','701','712','771','711')
                             and rh30_vinculo = 'A'
                             and r33_tiporegime = '1')
                         )
