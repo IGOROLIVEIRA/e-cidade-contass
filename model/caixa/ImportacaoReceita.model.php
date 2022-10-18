@@ -206,14 +206,14 @@ class ImportacaoReceita
     public function salvarReceitaExtraOrcamentaria()
     {
         foreach ($this->oTransferencias as $oTransferencia) {
+            if ($oTransferencia->getValor() == 0)
+                continue;
+
             if ($oTransferencia->getValor() < 0) {
                 $nomeCGM = CgmFactory::getInstanceByCgm($oTransferencia->getCodigoCgm())->getNome();
                 throw new BusinessException("Não foi possível importar o arquivo! O agente arrecadador {$nomeCGM} e conta contábil de reduzido " . $oTransferencia->getContaCredito() . " está com valor menor que zero na arrecadação. Ajuste o lançamento e tente novamente!");
             }
             
-            if ($oTransferencia->getValor() == 0) 
-                continue;
-
             $oTransferencia->salvar();
             if ((int) $oTransferencia->getCodigoSlip() <= 0)
                 throw new BusinessException("Não foi possível salvar as receitas extra-orçamentárias");
