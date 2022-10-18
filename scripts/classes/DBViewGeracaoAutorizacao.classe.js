@@ -646,7 +646,7 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
                     (oItem.saldoquantidade == 0 || oItem.saldovalor == 0) ||
                     oItem.anodotacao < me.getAno() ||
                     oItem.fornecedor == "" ||
-                    oItem.itemanulado != null) {
+                    oItem.itemanulado != "") {
                     lDisabled = true;
                 }
 
@@ -765,7 +765,7 @@ DBViewGeracaoAutorizacao = function (sInstancia, oNode, iTipoOrigemDados) {
                         /*
                          * Item possui anulação na solicitação de compras
                          */
-                        if(oItem.itemanulado != null){
+                        if(oItem.itemanulado != ""){
                            
                             var sTextoInformacao = "Item indisponível para autorizar. Há anulação do item na solicitação de compras.";
                         }
