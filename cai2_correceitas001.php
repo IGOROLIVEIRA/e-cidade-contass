@@ -25,6 +25,11 @@
  *                                licenca/licenca_pt.txt 
  */
 
+use repositories\caixa\relatorios\ReceitaFormaArrecadacaoRepositoryLegacy;
+use repositories\caixa\relatorios\ReceitaOrdemRepositoryLegacy;
+use repositories\caixa\relatorios\ReceitaTipoReceitaRepositoryLegacy;
+use repositories\caixa\relatorios\ReceitaTipoRepositoryLegacy;
+
 require("libs/db_stdlib.php");
 require("libs/db_conecta.php");
 include("libs/db_sessoes.php");
@@ -32,6 +37,11 @@ include("libs/db_usuariosonline.php");
 include("dbforms/db_classesgenericas.php");
 include("dbforms/db_funcoes.php");
 include("classes/db_orctiporec_classe.php");
+
+require_once 'repositories/caixa/relatorios/ReceitaFormaArrecadacaoRepositoryLegacy.php';
+require_once 'repositories/caixa/relatorios/ReceitaOrdemRepositoryLegacy.php';
+require_once 'repositories/caixa/relatorios/ReceitaTipoReceitaRepositoryLegacy.php';
+require_once 'repositories/caixa/relatorios/ReceitaTipoRepositoryLegacy.php';
 
 $clrotulo = new rotulocampo;
 $clrotulo->label('DBtxt10');
@@ -258,11 +268,12 @@ function js_emite(){
 						</td>
 						<td>
 							<select name="tipo" onchange="js_valor();" style="width: 140px;">
-								<option value = 'T'>Todas</option>
-								<option value = 'O'>Orçamentarias</option>
-								<option value = 'E'>Extra-Orçamentarias</option>
+								<option value=<?= ReceitaTipoReceitaRepositoryLegacy::TODOS ?>>Todas</option>
+								<option value=<?= ReceitaTipoReceitaRepositoryLegacy::ORCAMENTARIA ?>>Orçamentarias</option>
+								<option value=<?= ReceitaTipoReceitaRepositoryLegacy::EXTRA ?>>Extra-Orçamentarias</option>
 						</td>
 					</tr>
+                    <!--
 					<tr>
 						<td align="right">
 							<strong>Desdobrar Receita:</strong> 
@@ -274,16 +285,18 @@ function js_emite(){
 						</td>
 					</tr>
 					<tr>
+                    -->
 						<td align="right">
 							<strong>Ordem:</strong> 
 						</td>
 						<td>
 							<select name="ordem" >
-								<option value = 'r'>Código Receita</option>
-								<option value = 'e'>Estrutural</option>
-								<option value = 'a'>Alfabética Descrição Receita</option>
-								<option value = 'd'>Reduzido Orçamento</option>
-								<option value = 'c'>Reduzido Conta</option>
+								<option value=<?= ReceitaOrdemRepositoryLegacy::CODIGO ?>>Código Receita</option>
+								<option value=<?= ReceitaOrdemRepositoryLegacy::ESTRUTURAL ?>>Estrutural</option>
+								<option value=<?= ReceitaOrdemRepositoryLegacy::ALFABETICA ?>>Alfabética Descrição Receita</option>
+								<option value=<?= ReceitaOrdemRepositoryLegacy::REDUZIDO_ORCAMENTO ?>>Reduzido Orçamento</option>
+								<option value=<?= ReceitaOrdemRepositoryLegacy::REDUZIDO_CONTA ?>>Reduzido Conta</option>
+                            </select>
 						</td>
 					</tr>
 					<tr>
@@ -292,11 +305,11 @@ function js_emite(){
 						</td>
 						<td>
 							<select name="sinana" style="width: 175px;">
-								<option value = 'S1'>Sintético/Receita</option>
-								<option value = 'S2'>Sintético/Estrutural</option>
-								<option value = 'A'>Analítico</option>
-								<option value = 'S3'>Sintético/Conta</option>
-								<option value = 'S4'>Diário</option>
+								<option value=<?= ReceitaTipoRepositoryLegacy::RECEITA ?>>Sintético/Receita</option>
+								<option value=<?= ReceitaTipoRepositoryLegacy::ESTRUTURAL ?>>Sintético/Estrutural</option>
+								<option value=<?= ReceitaTipoRepositoryLegacy::ANALITICO ?>>Analítico</option>
+								<option value=<?= ReceitaTipoRepositoryLegacy::CONTA ?>>Sintético/Conta</option>
+								<option value=<?= ReceitaTipoRepositoryLegacy::DIARIO ?>>Diário</option>
 						</td>
 					</tr>
 					<tr>
@@ -328,9 +341,10 @@ function js_emite(){
 						</td>
 						<td>
 							<select name="formarrecadacao" style="width: 175px;">
-								<option value = '0'>Todas</option>
-								<option value = '1'>Via arquivo bancário</option>
-								<option value = '2'>Exceto via arquivo bancário</option>
+								<option value=<?= ReceitaFormaArrecadacaoRepositoryLegacy::TODAS ?>>Todas</option>
+								<option value=<?= ReceitaFormaArrecadacaoRepositoryLegacy::ARQUIVO_BANCARIO ?>>Via arquivo bancário</option>
+								<option value=<?= ReceitaFormaArrecadacaoRepositoryLegacy::EXCETO_ARQUIVO_BANCARIO ?>>Exceto via arquivo bancário e retenções</option>
+								<option value=<?= ReceitaFormaArrecadacaoRepositoryLegacy::RETENCAO ?>>Via Retenções</option>
 						</td>
 					</tr>
 					<tr>
