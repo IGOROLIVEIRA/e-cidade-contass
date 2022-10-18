@@ -208,14 +208,9 @@ if (isset($incluir)) {
 			}
 		}
 	}
-
 	db_msgbox($clpcdotac->erro_sql);
-
-
-
 	db_redireciona("com1_dotacoesnovo001.php?pc11_numero=$pc11_numero");
 }
-
 
 ?>
 <html>
@@ -230,8 +225,6 @@ if (isset($incluir)) {
 </head>
 
 <body style="background-color: #CCCCCC; margin-top:30px;">
-
-
 	<div class="container">
 		<div>
 			<form name="form1" method="post" action="">
@@ -246,20 +239,17 @@ if (isset($incluir)) {
 								//db_ancora("Dotações:", "js_pesquisapc16_codmater(true);", $tranca);
 								?>
 							</td>
-
 							<td>
 								<?
-								db_input('o58_coddot', 8, $Io58_coddot, true, 'text', $tranca, "");
+								db_input('o58_coddot', 8, $Io58_coddot, true, 'text', $tranca, "onchange='js_pesquisapc13_coddot(false)'");
 
 								?>
 							</td>
-
 							<td nowrap style="   display: block;">
 								<?
-								db_input('o56_descr', 50, $Io56_descr, true, 'text', $db_opcao);
+								db_input('o56_descr', 50, $Io56_descr, true, 'text', 3);
 								?>
 							</td>
-
 							<td nowrap style="   display: none;">
 								<?
 								db_input('o50_estrutdespesa', 50, $Io50_estrutdespesa, true, 'text', $db_opcao);
@@ -271,19 +261,11 @@ if (isset($incluir)) {
 								db_input('pc10_numero', 50, $Ipc10_numero, true, 'text', $db_opcao);
 								?>
 							</td>
-
-
 						</tr>
-
-
-
-
 					</table>
 
 				</fieldset>
 				<input style="float:center; margin-top:10px;" name="<?= ($db_opcao == 1 ? "Adicionar Item" : ($db_opcao == 2 || $db_opcao == 22 ? "alterar" : "excluir")) ?>" type="button" id="db_opcao" value="<?= ($db_opcao == 1 ? "Incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "Alterar" : "Excluir")) ?>" <?= ($db_botao == false ? "disabled" : "") ?> onclick="return incluirDotacao()">
-
-
 				<table>
 					<tr>
 						<td>
@@ -294,9 +276,6 @@ if (isset($incluir)) {
 						</td>
 					</tr>
 				</table>
-
-
-
 				<input style="float:center; margin-top:10px;display:<? if ($pc30_permsemdotac != "f") {
 																		echo "none";
 																	} ?>" name="incluir" type="button" value="Liberar Solicitação" onclick="js_liberarSolicitacao()">
@@ -529,7 +508,6 @@ if (isset($incluir)) {
 
 	function js_retornoSalvarDotacoes(oAjax) {
 		var oRetorno = eval("(" + oAjax.responseText + ")");
-		console.log(oRetorno);
 
 		if (oRetorno.erro == true) {
 			alert(oRetorno.message.urlDecode());
@@ -605,6 +583,7 @@ if (isset($incluir)) {
 
 	function js_pesquisapc13_coddot(mostra) {
 		var cod_elementos = "";
+		var dotacao = document.getElementById('o58_coddot').value;
 
 		if (parent.iframe_solicitem.document.getElementsByName('descrelemento[]').length == 0 || parent.iframe_solicitem.document.getElementsByName('codigo[]')[0].value == 0) {
 			alert('Solicitação de compras sem item(ns) cadastrado(s)');
@@ -639,10 +618,18 @@ if (isset($incluir)) {
 			js_OpenJanelaIframe('top.corpo.iframe_dotacoesnovo', 'iframe_dotacoesnovo',
 				'func_permorcdotacao.php?' + qry, 'Pesquisa', true, '0');
 		} else {
-			qry += '&pesquisa_chave=' + document.form1.pc13_coddot.value;
+			qry += '&pesquisa_chave=' + dotacao;
 			js_OpenJanelaIframe('top.corpo.iframe_dotacoesnovo',
 				'db_iframe_orcdotacao',
 				'func_permorcdotacao.php?' + qry + '&funcao_js=parent.js_mostraorcdotacao', 'Pesquisa', false);
+		}
+	}
+
+	function js_mostraorcdotacao(chave1, erro) {
+		document.getElementById("o56_descr").value = chave1;
+
+		if (erro) {
+			document.getElementById("o58_coddot").value = "";
 		}
 	}
 

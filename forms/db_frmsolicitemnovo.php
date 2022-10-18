@@ -167,7 +167,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
           <td nowrap>
 
             <?
-            db_input('pc11_quant', 8, $pc11_quant, true, 'text', 1, '');
+            db_input('pc11_quant', 8, 0, true, 'text', 1, '');
             ?>
 
             <?
@@ -467,6 +467,17 @@ if ((isset($opcao) && $opcao == "alterar")) {
 
   }
 
+  function js_alterar(indice) {
+    var sizeItens = oGridItens.aRows.length;
+
+    for (var i = 0; i < sizeItens; i++) {
+      if (document.getElementById('pc11_seq').value == document.getElementsByName("ordem[]")[i].value && document.getElementById('pc16_codmater').value != document.getElementsByName("codmaterial[]")[i].value) {
+        alert('O item ' + document.getElementsByName("codmaterial[]")[i].value + ' já foi incluído com o sequencial ' + document.getElementById('pc11_seq').value + ' nesta solicitação.');
+        return false;
+      }
+    }
+  }
+
   function js_alterarLinha(indice) {
 
 
@@ -478,7 +489,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
     document.getElementById('db_opcao').value = "Alterar";
     document.getElementById("db_opcao").setAttribute('name', 'alterar');
     document.getElementById("db_opcao").setAttribute('type', 'submit');
-    document.getElementById("db_opcao").setAttribute('onclick', '');
+    document.getElementById("db_opcao").setAttribute('onclick', 'return js_alterar(indice)');
 
 
 
@@ -511,10 +522,10 @@ if ((isset($opcao) && $opcao == "alterar")) {
         document.getElementById('pc11_servicoquantidade').style.width = "76px";
         document.getElementById('pc11_quant').readOnly = false;
         document.getElementById('pc11_quant').style.background = "";
-        document.getElementById("pc11_servicoquantidade").options[1].selected = "true";
+        document.getElementById("pc11_servicoquantidade").options[1].selected = true;
 
       } else {
-        document.getElementById("pc11_servicoquantidade").options[0].selected = "true";
+        document.getElementById("pc11_servicoquantidade").value = false;
 
       }
 
@@ -531,7 +542,6 @@ if ((isset($opcao) && $opcao == "alterar")) {
 
     }
 
-    document.getElementById("pc11_servicoquantidade").options[1].selected = "true";
 
 
   }
@@ -596,6 +606,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
       document.getElementById('pc11_servicoquantidade').style.width = "48px";
       document.getElementById('pc11_quant').readOnly = true;
       document.getElementById('pc11_quant').style.background = "#EEE";
+      document.getElementById('pc11_quant').value = 1;
 
 
     }
@@ -819,9 +830,17 @@ if ((isset($opcao) && $opcao == "alterar")) {
         document.getElementById('pc17_unid').style.display = "none";
         document.getElementById('ctnServicoQuantidade').style.display = "block";
         document.getElementById('pc11_servicoquantidade').style.display = "block";
-        document.getElementById('pc11_quant').value = 1;
+        document.getElementById('pc17_unid2').style.display = "none";
+        document.getElementById('titleUnidade2').style.display = "none";
+        document.getElementById('pc11_seq').style.marginLeft = "-84px";
+        document.getElementById('titleOrdem').style.marginLeft = "-73px";
+        document.getElementById('ctnServicoQuantidade').style.marginLeft = "0px";
+        document.getElementById('pc11_servicoquantidade').style.marginLeft = "0px";
+        document.getElementById('pc11_servicoquantidade').style.width = "48px";
         document.getElementById('pc11_quant').readOnly = true;
         document.getElementById('pc11_quant').style.background = "#EEE";
+        document.getElementById('pc11_quant').value = 1;
+        document.getElementById('pc11_servicoquantidade').value = "false";
 
       } else {
         document.getElementById('titleUnidade').style.display = "block";
@@ -855,9 +874,17 @@ if ((isset($opcao) && $opcao == "alterar")) {
       document.getElementById('pc17_unid').style.display = "none";
       document.getElementById('ctnServicoQuantidade').style.display = "block";
       document.getElementById('pc11_servicoquantidade').style.display = "block";
-      document.getElementById('pc11_quant').value = 1;
+      document.getElementById('pc17_unid2').style.display = "none";
+      document.getElementById('titleUnidade2').style.display = "none";
+      document.getElementById('pc11_seq').style.marginLeft = "-84px";
+      document.getElementById('titleOrdem').style.marginLeft = "-73px";
+      document.getElementById('ctnServicoQuantidade').style.marginLeft = "0px";
+      document.getElementById('pc11_servicoquantidade').style.marginLeft = "0px";
+      document.getElementById('pc11_servicoquantidade').style.width = "48px";
       document.getElementById('pc11_quant').readOnly = true;
       document.getElementById('pc11_quant').style.background = "#EEE";
+      document.getElementById('pc11_quant').value = 1;
+      document.getElementById('pc11_servicoquantidade').value = "false";
 
 
 

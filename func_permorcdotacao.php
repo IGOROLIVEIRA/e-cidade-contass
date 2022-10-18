@@ -99,6 +99,34 @@ $clpermusuario_dotacao =  new cl_permusuario_dotacao(
   $sWhere
 );
 
+if ($pesquisa_chave != null && $pesquisa_chave != "") {
+  if (isset($cod_elementos)) {
+    $elementos = "";
+    $array_elementos =  explode(",", $cod_elementos);
+    for ($i = 0; $i < count($array_elementos); $i++) {
+      $array_elementos[$i] = "'" . $array_elementos[$i] . "%" . "'";
+      if ($i == count($array_elementos) - 1) {
+        $elementos = $elementos . $array_elementos[$i];
+      } else {
+        $elementos = $elementos . $array_elementos[$i] . ",";
+      }
+    }
+
+    $clpermusuario_dotacao->sql = substr_replace($clpermusuario_dotacao->sql, " and o56_elemento like any " . "(array[$elementos]) and o58_coddot = $pesquisa_chave", strpos($clpermusuario_dotacao->sql, "ORDER BY O50_ESTRUTDESPESA"), 0);
+  }
+
+
+
+  $result = db_query($clpermusuario_dotacao->sql);
+
+  if (pg_numrows($result) != 0) {
+    db_fieldsmemory($result, 0);
+    echo "<script>" . "parent.js_mostraorcdotacao" . "('$o41_descr',false);</script>";
+  } else {
+    echo "<script>" . "parent.js_mostraorcdotacao" . "('Chave não encontrada',true);</script>";
+  }
+}
+
 
 
 if (!isset($filtroquery)) {

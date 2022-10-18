@@ -271,14 +271,14 @@ if (isset($incluir)) {
 
 							<td>
 								<?
-								db_input('o58_coddot', 8, $Io58_coddot, true, 'text', $tranca, "");
+								db_input('o58_coddot', 8, $Io58_coddot, true, 'text', $tranca, "onchange='js_pesquisapc13_coddot(false)'");
 
 								?>
 							</td>
 
 							<td nowrap style="   display: block;">
 								<?
-								db_input('o56_descr', 50, $Io56_descr, true, 'text', $db_opcao);
+								db_input('o56_descr', 50, $Io56_descr, true, 'text', 3);
 								?>
 							</td>
 
@@ -539,6 +539,8 @@ if (isset($incluir)) {
 			}
 
 			cod_elementos = "";
+			var dotacao = document.getElementById('o58_coddot').value;
+
 
 			for (var i = 0; i < oRetorno.quantidade; i++) {
 				elemento = oRetorno.aItens[i].elemento.toString();
@@ -566,7 +568,7 @@ if (isset($incluir)) {
 				js_OpenJanelaIframe('top.corpo.iframe_dotacoesnovo', 'iframe_dotacoesnovo',
 					'func_permorcdotacao.php?' + qry, 'Pesquisa', true, '0');
 			} else {
-				qry += '&pesquisa_chave=' + document.form1.pc13_coddot.value;
+				qry += '&pesquisa_chave=' + dotacao;
 				js_OpenJanelaIframe('top.corpo.iframe_dotacoesnovo',
 					'db_iframe_orcdotacao',
 					'func_permorcdotacao.php?' + qry + '&funcao_js=parent.js_mostraorcdotacao', 'Pesquisa', false);
@@ -576,6 +578,14 @@ if (isset($incluir)) {
 		}
 
 
+	}
+
+	function js_mostraorcdotacao(chave1, erro) {
+		document.getElementById("o56_descr").value = chave1;
+
+		if (erro) {
+			document.getElementById("o58_coddot").value = "";
+		}
 	}
 
 	function js_mostraorcdotacao1(chave1, chave2, chave3) {

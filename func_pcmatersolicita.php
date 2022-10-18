@@ -189,7 +189,7 @@ if (isset($o56_codele) and trim($o56_codele) != '') {
           );
           if (isset($chave_pc01_codmater) && (trim($chave_pc01_codmater) != "")) {
             $sql = $clpcmater->sql_query_desdobra(null, $campos, "pc01_codmater", "pc01_codmater=$chave_pc01_codmater and $where_ativo");
-          } else if (isset($chave_pc01_descrmater) && (trim($chave_pc01_descrmater) != "")) {
+          } else if (isset($chave_pc01_descrmater)) {
             $sql = $clpcmater->sql_query_desdobra("", $campos, "pc01_descrmater", " pc01_descrmater like '$chave_pc01_descrmater%' and $where_ativo");
           } elseif (isset($chave_pc07_codele) && (trim($chave_pc07_codele) != "")) {
             $sql = $clpcmater->sql_query_desdobra(null, $campos, "pc01_codmater", "pc07_codele=$chave_pc07_codele and $where_ativo");
