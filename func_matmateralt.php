@@ -117,7 +117,7 @@ $clmatmater->rotulo->label("m60_descr");
            $where_instit = "m60_instit = ".db_getsession('DB_instit');
            $where= " and m60_codmater = $chave_m60_codmater";
 	         $sql = $clmatmater->sql_query(null,$campos,"m60_codmater",$where_instit.$where);
-           echo $sql;
+           //echo $sql;
         }else if(isset($chave_m60_descr) && (trim($chave_m60_descr)!="") ){
            if($opcao == 't' || $opcao == 'f'){
              $where_ativo = "and ".$where_ativo;   
