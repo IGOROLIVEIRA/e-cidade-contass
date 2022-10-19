@@ -1277,10 +1277,16 @@ if ($situacao == 2) {
                             if ($lDebugAtivo == true) {
                                 echo "     </br> continuando Guia da HLH";                                    
                             }
-                            $numpre   = substr($arq_array[$i],67-1,10);
+                            $numpre   = (int) substr($arq_array[$i],66,10);
                             $hlhvalor = substr($arq_array[$i], 81, 10).'.'.substr($arq_array[$i], 91, 2);
 	                        $numrows = 0;
 	                        $numrowsarrecad = 0;
+                           /**
+                            * Tamanho máximo para int
+                            */
+                            if(strlen((string) $numpre) > 9) {
+                                $numpre = (int) substr($numpre,0, 9);
+                            }
 	                        if ($lDebugAtivo == true) {
 	                        	echo "     </br> Guia original da HLH:".$numpre. " e valor ".$hlhvalor;
 	                    	}
