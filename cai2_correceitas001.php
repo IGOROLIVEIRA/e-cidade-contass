@@ -296,7 +296,6 @@ function js_emite(){
 								<option value=<?= ReceitaOrdemRepositoryLegacy::ALFABETICA ?>>Alfabética Descrição Receita</option>
 								<option value=<?= ReceitaOrdemRepositoryLegacy::REDUZIDO_ORCAMENTO ?>>Reduzido Orçamento</option>
 								<option value=<?= ReceitaOrdemRepositoryLegacy::REDUZIDO_CONTA ?>>Reduzido Conta</option>
-								<option value=<?= ReceitaOrdemRepositoryLegacy::CONTRIBUINTE ?>>Contribuinte</option>
                             </select>
 						</td>
 					</tr>
@@ -323,7 +322,6 @@ function js_emite(){
 								<option value = '1'>1 - Emenda parlamentar individual</option>
 								<option value = '2'>2 - Emenda parlamentar de bancada</option>
 								<option value = '3'>3 - Não se aplica</option>
-								<option value = '4'>4 - Emenda não impositiva</option>
 						</td>
 					</tr>
 					<tr>
