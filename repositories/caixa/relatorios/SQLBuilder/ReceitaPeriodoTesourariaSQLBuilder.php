@@ -185,11 +185,6 @@ class ReceitaPeriodoTesourariaSQLBuilder
         $this->definirSQLSelectEstrutural();
         $this->definirSQLGroupEstrutural();
 
-        if ($this->sOrdem == ReceitaOrdemRepositoryLegacy::CONTRIBUINTE) {
-            $this->definirSQLSelectContribuinte();
-            $this->definirSQLGroupContribuinte();
-        } 
-
         if ($this->sTipo == ReceitaTipoRepositoryLegacy::RECEITA) {
             $this->definirSQLSelectReceita();
             $this->definirSQLGroupReceita();
@@ -304,22 +299,6 @@ class ReceitaPeriodoTesourariaSQLBuilder
     public function definirSQLSelectConta()
     {
         $this->sqlSelect .= " , codrec reduzido, k02_codigo codigo, c61_reduz conta, c60_descr conta_descricao  ";
-    }
-
-    /**
-     * @return void
-     */
-    public function definirSQLSelectContribuinte()
-    {
-        $this->sqlSelect .= " , k81_numcgm ";
-    }
-
-    /**
-     * @return void
-     */
-    public function definirSQLGroupContribuinte()
-    {
-        $this->sqlGroup .= " , k81_numcgm ";
     }
 
     /**
@@ -491,7 +470,6 @@ class ReceitaPeriodoTesourariaSQLBuilder
                 c61_reduz,
                 c60_descr,
                 k12_conta,
-                k81_numcgm,
 				ROUND(
                         ( 
                         f.k12_valor - COALESCE((
@@ -570,7 +548,6 @@ class ReceitaPeriodoTesourariaSQLBuilder
                 c61_reduz,
                 c60_descr,
                 corrente.k12_conta,
-                k81_numcgm,
                 corrente.k12_valor AS valor
             FROM
                 corlanc
@@ -637,11 +614,6 @@ class ReceitaPeriodoTesourariaSQLBuilder
                 return;
             }
             $this->sqlOrder = " ORDER BY k02_tipo, c61_reduz ";
-            return;
-        }
-
-        if ($this->sOrdem == ReceitaOrdemRepositoryLegacy::CONTRIBUINTE) {
-            $this->sqlOrder = " ORDER BY k02_tipo, k81_numcgm ";
             return;
         }
     }
