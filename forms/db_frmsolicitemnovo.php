@@ -373,6 +373,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
 
       </table>
       <input style="float:center; margin-top:10px;" name="incluir" type="submit" id="db_opcao" value="Adicionar Item" onclick="return js_adicionarItem()">
+      <input style="float:center; margin-top:10px; display:none;" name="novo" type="button" id="novo" value="Novo" onclick="return js_novoitem()">
 
     </fieldset>
 
@@ -481,7 +482,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
   function js_alterarLinha(indice) {
 
 
-
+    document.getElementById('novo').style.display = "";
     servicoquantidade = document.getElementsByName("servicoquantidade[]")[indice].value;
     servico = document.getElementsByName("servico[]")[indice].value;
 
@@ -508,7 +509,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
       document.getElementById('pc17_unid').style.display = "none";
       document.getElementById('ctnServicoQuantidade').style.display = "block";
       document.getElementById('pc11_servicoquantidade').style.display = "block";
-      document.getElementById('pc11_quant').value = 1;
+      //document.getElementById('pc11_quant').value = 1;
       document.getElementById('pc11_quant').readOnly = true;
       document.getElementById('pc11_quant').style.background = "#EEE";
 
@@ -548,6 +549,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
 
   function js_excluirLinha(indice) {
 
+    document.getElementById('novo').style.display = "";
 
     document.getElementById('db_opcao').value = "Excluir";
     document.getElementById("db_opcao").setAttribute('name', 'excluir');
@@ -928,6 +930,28 @@ if ((isset($opcao) && $opcao == "alterar")) {
 
   indice = 0;
 
+  function js_novoitem() {
+    document.getElementById('novo').style.display = "none";
+    document.getElementById('pc16_codmater').value = '';
+    document.getElementById('pc01_descrmater').value = '';
+    document.getElementById('pc11_quant').value = '';
+    document.getElementById('pc17_unid').value = "1";
+    document.getElementById('pc17_unid2').value = "1";
+    document.getElementById('eleSub').value = "0";
+
+    document.getElementById('titleUnidade').style.display = "block";
+    document.getElementById('pc17_unid').style.display = "block";
+    document.getElementById('ctnServicoQuantidade').style.display = "none";
+    document.getElementById('pc11_servicoquantidade').style.display = "none";
+    document.getElementById('pc17_unid2').style.display = "none";
+    document.getElementById('titleUnidade2').style.display = "none";
+    document.getElementById('pc11_seq').style.marginLeft = "-82px";
+    document.getElementById('titleOrdem').style.marginLeft = "-73px";
+    document.getElementById('pc11_quant').value = "";
+    document.getElementById('pc11_quant').readOnly = false;
+    document.getElementById('pc11_quant').style.background = "";
+
+  }
 
   function js_adicionarItem() {
 

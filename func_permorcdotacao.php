@@ -121,7 +121,7 @@ if ($pesquisa_chave != null && $pesquisa_chave != "") {
 
   if (pg_numrows($result) != 0) {
     db_fieldsmemory($result, 0);
-    echo "<script>" . "parent.js_mostraorcdotacao" . "('$o41_descr',false);</script>";
+    echo "<script>" . "parent.js_mostraorcdotacao" . "('$o41_descr','$o50_estrutdespesa',false);</script>";
   } else {
     echo "<script>" . "parent.js_mostraorcdotacao" . "('Chave não encontrada',true);</script>";
   }

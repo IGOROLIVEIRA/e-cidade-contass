@@ -240,6 +240,8 @@ if (isset($incluir)) {
 								?>
 							</td>
 							<td>
+								<b>Código do Material:</b>
+
 								<?
 								db_input('o58_coddot', 8, $Io58_coddot, true, 'text', $tranca, "onchange='js_pesquisapc13_coddot(false)'");
 
@@ -271,7 +273,7 @@ if (isset($incluir)) {
 						<td>
 							<fieldset>
 								<legend>Dotações Vinculadas</legend>
-								<div id='ctnGridItens' style="width: 500px"></div>
+								<div id='ctnGridItens' style="width: 650px"></div>
 							</fieldset>
 						</td>
 					</tr>
@@ -625,8 +627,9 @@ if (isset($incluir)) {
 		}
 	}
 
-	function js_mostraorcdotacao(chave1, erro) {
+	function js_mostraorcdotacao(chave1, chave2, erro) {
 		document.getElementById("o56_descr").value = chave1;
+		document.form1.o50_estrutdespesa.value = chave2;
 
 		if (erro) {
 			document.getElementById("o58_coddot").value = "";
@@ -634,6 +637,7 @@ if (isset($incluir)) {
 	}
 
 	function js_mostraorcdotacao1(chave1, chave2, chave3) {
+
 		document.form1.o58_coddot.value = chave1;
 		document.form1.o56_descr.value = chave2;
 		document.form1.o50_estrutdespesa.value = chave3;
