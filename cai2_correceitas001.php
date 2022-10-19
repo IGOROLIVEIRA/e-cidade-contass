@@ -123,7 +123,7 @@ function js_emite(){
 	qry  = "estrut="+document.form1.estrut.value;
 	qry += "&sinana="+document.form1.sinana.value;
 	qry += "&ordem="+document.form1.ordem.value;
-	qry += "&desdobrar="+document.form1.desdobrar.value;
+	// qry += "&desdobrar="+document.form1.desdobrar.value;
 	qry += "&codrec="+cods;
 	qry += "&datai="+document.form1.datai_ano.value+'-'+document.form1.datai_mes.value+'-'+document.form1.datai_dia.value;
 	qry += "&dataf="+document.form1.dataf_ano.value+'-'+document.form1.dataf_mes.value+'-'+document.form1.dataf_dia.value;
@@ -296,6 +296,7 @@ function js_emite(){
 								<option value=<?= ReceitaOrdemRepositoryLegacy::ALFABETICA ?>>Alfabética Descrição Receita</option>
 								<option value=<?= ReceitaOrdemRepositoryLegacy::REDUZIDO_ORCAMENTO ?>>Reduzido Orçamento</option>
 								<option value=<?= ReceitaOrdemRepositoryLegacy::REDUZIDO_CONTA ?>>Reduzido Conta</option>
+								<option value=<?= ReceitaOrdemRepositoryLegacy::CONTRIBUINTE ?>>Contribuinte</option>
                             </select>
 						</td>
 					</tr>
@@ -322,6 +323,7 @@ function js_emite(){
 								<option value = '1'>1 - Emenda parlamentar individual</option>
 								<option value = '2'>2 - Emenda parlamentar de bancada</option>
 								<option value = '3'>3 - Não se aplica</option>
+								<option value = '4'>4 - Emenda não impositiva</option>
 						</td>
 					</tr>
 					<tr>
