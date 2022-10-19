@@ -10,7 +10,7 @@ db_postmemory($HTTP_POST_VARS);
 $cllicatareg = new cl_licatareg;
 $clliclicita= new cl_liclicita;
 $db_opcao = 22;
-$db_botao = false;
+$db_botao = true;
 if(isset($alterar)){
 
   $datainicial = DateTime::createFromFormat('d/m/Y', $l221_dataini);
@@ -18,18 +18,24 @@ if(isset($alterar)){
   
   $rsLicatareg = $cllicatareg->sql_record("select * from licatareg where l221_numata= '$l221_numata' and l221_exercicio= '$l221_exercicio' and l221_licitacao <> $l221_licitacao");
     if(pg_num_rows($rsLicatareg)>0){
+      $db_opcao = 2;
       $sqlerro=true;
       db_msgbox("Número da ata já inserido nesse exercício!");
     }else if($l221_numata == "" || $l221_numata == null){
+      $db_opcao = 2;
       $sqlerro=true;
       db_msgbox("Informe o número da Ata!");
     }else if($l221_dataini == "" || $l221_dataini == null){
+      $db_opcao = 2;
       $sqlerro=true;
       db_msgbox("Insira uma Data Inicial!");
     }else if($l221_datafinal == "" || $l221_datafinal == null){
+      $db_opcao = 2;
       $sqlerro=true;
       db_msgbox("Insira uma Data Final!");
     }else if($datainicial>$datafinal){
+      $db_opcao = 2;
+      $db_opcao = 2;
       $sqlerro=true;
       db_msgbox("Data inicial é maior que data final!");
     }  

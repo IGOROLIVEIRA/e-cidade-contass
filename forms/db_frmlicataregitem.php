@@ -75,27 +75,27 @@ $cllicataregitem->rotulo->label();
 
                      
                       // Sequencia
-                      echo "  <td class='linhagrid' id='sequen{$l21_ordem}' align='center'  style='border-style: outset;'>$l21_ordem</td>";
+                      echo "  <td class='linhagrid' id='sequen{$l21_ordem}' align='center'  style='border-style: outset;height:5px;'>$l21_ordem</td>";
 
                       // Número do empenho
-                      echo "  <td class='linhagrid' align='center'  style='border-style: outset;'>$pc01_codmater</td>";
+                      echo "  <td class='linhagrid' align='center'  style='border-style: outset;height5px;'>$pc01_codmater</td>";
 
                       // Sequência do empenho
-                      echo "  <td class='linhagrid' align='center'  style='border-style: outset;'>$pc01_descrmater</td>";
+                      echo "  <td class='linhagrid' align='center'  style='border-style: outset;height5px;'>$pc01_descrmater</td>";
 
                       // Código do item
-                      echo "  <td class='linhagrid' align='center'  style='border-style: outset;'>$m61_descr</td>";
+                      echo "  <td class='linhagrid' align='center'  style='border-style: outset;height5px;'>$m61_descr</td>";
 
                       // Item
-                      echo "  <td class='linhagrid' align='center'  style='border-style: outset;'>$pc23_quant</td>";
+                      echo "  <td class='linhagrid' align='center'  style='border-style: outset;height5px;'>$pc23_quant</td>";
 
                       // Unidade
-                      echo "  <td class='linhagrid' align='center'  style='border-style: outset;'>$pc23_vlrun</td>";
+                      echo "  <td class='linhagrid' align='center'  style='border-style: outset;height5px;'>$pc23_vlrun</td>";
 
                       // Descrição
                       $vlrtotal = $pc23_quant*$pc23_vlrun;
                       $SomaTotal = $SomaTotal + $vlrtotal;
-                      echo "  <td class='linhagrid' align='center'  style='border-style: outset;'>".number_format($vlrtotal,2,',','.')."</td>";
+                      echo "  <td class='linhagrid' align='center'  style='border-style: outset;height5px;'>".number_format($vlrtotal,2,',','.')."</td>";
 
    
 

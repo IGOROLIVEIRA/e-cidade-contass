@@ -97,7 +97,7 @@ if(isset($incluir)){
 </body>
 </html>
 <script>
-js_tabulacaoforms("form1","l221_licitacao",true,1,"l221_licitacao",true);
+js_tabulacaoforms("form1","l221_numata",true,1,"l221_numata",true);
 </script>
 <?
 if (isset($incluir)) {
