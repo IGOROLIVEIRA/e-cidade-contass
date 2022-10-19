@@ -519,7 +519,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
         document.getElementById('pc11_seq').style.marginLeft = "0px";
         document.getElementById('titleOrdem').style.marginLeft = "60px";
         document.getElementById('ctnServicoQuantidade').style.marginLeft = "-170px";
-        document.getElementById('pc11_servicoquantidade').style.marginLeft = "-84px";
+        document.getElementById('pc11_servicoquantidade').style.marginLeft = "-79px";
         document.getElementById('pc11_servicoquantidade').style.width = "76px";
         document.getElementById('pc11_quant').readOnly = false;
         document.getElementById('pc11_quant').style.background = "";
@@ -590,7 +590,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
       document.getElementById('pc11_seq').style.marginLeft = "0px";
       document.getElementById('titleOrdem').style.marginLeft = "60px";
       document.getElementById('ctnServicoQuantidade').style.marginLeft = "-170px";
-      document.getElementById('pc11_servicoquantidade').style.marginLeft = "-84px";
+      document.getElementById('pc11_servicoquantidade').style.marginLeft = "-79px";
       document.getElementById('pc11_servicoquantidade').style.width = "76px";
       document.getElementById('pc11_quant').readOnly = false;
       document.getElementById('pc11_quant').style.background = "";

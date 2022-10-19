@@ -2036,8 +2036,6 @@ if (isset($pc11_numero)) {
 			<td height="100%" align="left" valign="top" bgcolor="#CCCCCC">
 				<center>
 					<?
-
-
 					require_once("forms/db_frmsolicitemnovo.php");
 					?>
 				</center>
@@ -2048,41 +2046,6 @@ if (isset($pc11_numero)) {
 
 </html>
 <script>
-	/*
-function js_ver(){
-  campo = "";
-  x = document.form1;
-  for(i=0;i<x.length;i++){
-    if(x.elements[i].type == "submit"){
-      if(x.elements[i].name == "incluir"){
-        campo = "incluir";
-      }else if(x.elements[i].name == "excluir"){
-        campo = "excluir";
-      }
-    }
-  }
-  if(campo!=''){
-    if(campo=='incluir'){
-      if(parent.document.form1.quant_rest.value==0 || parent.document.form1.quant_rest.value==''){
-        eval("document.form1."+campo+".disabled=true");
-      }else{
-        eval("document.form1."+campo+".disabled=false");
-      }
-    }
-    if(campo=='excluir'){
-      if(document.form1.pc13_coddot.value==''){
-        eval("document.form1."+campo+".disabled=true");
-      }else{
-        eval("document.form1."+campo+".disabled=false");
-      }
-    }
-  }
-}
-*/
-	//$codigo_proc = localStorage.getItem("codigoprocesso");
-
-
-
 	function teste() {
 
 		teste = new ultimosOrcamentos();
@@ -2107,7 +2070,6 @@ function js_ver(){
 			oOrcamento.getOrcamentos();
 			oOrcamento.onMediaCalculada = function() {
 
-				//$('pc11_vlrun').value = oOrcamento.getMediaPrecos();
 				oOrcamento.window.destroy();
 			}
 
@@ -2172,10 +2134,6 @@ if (isset($alterar) || isset($excluir) || isset($incluir)) {
 		if ($pc30_sugforn == 't') {
 			echo "<script> top.corpo.iframe_sugforn.location.href='com1_sugforn001.php?pc40_solic=$pc11_numero$parametro';</script>";
 		}
-		/*
-		if (isset($excluir)) {
-			echo "<script> document.location.href = 'com1_solicitemnovo001.php?pc11_numero=$pc11_numero&selecao=" . @$selecao . "$parametro'; </script>";
-		}*/
 	}
 }
 ?>
