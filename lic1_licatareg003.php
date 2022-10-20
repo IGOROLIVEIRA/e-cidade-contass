@@ -68,11 +68,7 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
 </html>
 <?
 if(isset($excluir)){
-  if($cllicatareg->erro_status=="0"){
-    $cllicatareg->erro(true,false);
-  }else{
-    $cllicatareg->erro(true,true);
-  }
+  echo "<script>document.form1.pesquisar.click();</script>";
 }
 if($db_opcao==33){
   echo "<script>document.form1.pesquisar.click();</script>";

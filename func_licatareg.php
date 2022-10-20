@@ -101,15 +101,15 @@ $cllicatareg->rotulo->label("l221_fornecedor");
         }
 	         
         if(isset($chave_l221_sequencial) && (trim($chave_l221_sequencial)!="") ){
-            $sql = $cllicatareg->sql_query(null,"*","l221_sequencial","l221_sequencial = $chave_l221_sequencial");
+            $sql = $cllicatareg->sql_query_for(null,"l221_sequencial,l221_licitacao,l221_numata,l221_exercicio,z01_nome,l221_dataini,l221_datafinal,l221_datapublica,l221_veiculopublica","l221_sequencial DESC","l221_sequencial = $chave_l221_sequencial");
         }else if(isset($chave_l221_licitacao) && (trim($chave_l221_licitacao)!="") ){
-            $sql = $cllicatareg->sql_query(null,"*","l221_licitacao","l221_licitacao=$chave_l221_licitacao");
+            $sql = $cllicatareg->sql_query_for(null,"l221_sequencial,l221_licitacao,l221_numata,l221_exercicio,z01_nome,l221_dataini,l221_datafinal,l221_datapublica,l221_veiculopublica","l221_licitacao DESC","l221_licitacao=$chave_l221_licitacao");
         }else if(isset($chave_l221_numata) && (trim($chave_l221_numata)!="") ){
-            $sql = $cllicatareg->sql_query(null,"*","l221_sequencial","l221_numata like '$chave_l221_numata%'");
+            $sql = $cllicatareg->sql_query_for(null,"l221_sequencial,l221_licitacao,l221_numata,l221_exercicio,z01_nome,l221_dataini,l221_datafinal,l221_datapublica,l221_veiculopublica","l221_sequencial DESC","l221_numata like '$chave_l221_numata%'");
         }else if(isset($chave_l221_fornecedor) && (trim($chave_l221_fornecedor)!="") ){
-            $sql = $cllicatareg->sql_query(null,"*","l221_sequencial","l221_fornecedor=$chave_l221_fornecedor");
+            $sql = $cllicatareg->sql_query_for(null,"l221_sequencial,l221_licitacao,l221_numata,l221_exercicio,z01_nome,l221_dataini,l221_datafinal,l221_datapublica,l221_veiculopublica","l221_sequencial DESC","l221_fornecedor=$chave_l221_fornecedor");
         }else{
-            $sql = $cllicatareg->sql_query(null,"*","l221_sequencial");
+            $sql = $cllicatareg->sql_query_for(null,"l221_sequencial,l221_licitacao,l221_numata,l221_exercicio,z01_nome,l221_dataini,l221_datafinal,l221_datapublica,l221_veiculopublica","l221_sequencial DESC");
         }
         $repassa = array();
         echo '<div class="container">';

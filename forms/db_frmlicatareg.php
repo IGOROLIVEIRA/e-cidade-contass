@@ -73,86 +73,15 @@ $cllicatareg = new cl_licatareg;
           <td> 
           <?
           
-            if(isset($l221_fornecedor)){
+            if(isset($l221_sequencial) && $l221_sequencial != "" && $l221_sequencial != null){
               
                                         
-                                        $result_forn = $cllicatareg->sql_record(" 	select
-                                        distinct (
-                                        select
-                                          z01_nome
-                                        from
-                                          liclicita
-                                        inner join liclicitem lli on
-                                          lli.l21_codliclicita = liclicita.l20_codigo
-                                        inner join pcorcamitemlic on
-                                          pcorcamitemlic.pc26_liclicitem = lli.l21_codigo
-                                        inner join pcorcamval on
-                                          pcorcamval.pc23_orcamitem = pcorcamitemlic.pc26_orcamitem
-                                        inner join pcorcamjulg on
-                                          pcorcamval.pc23_orcamitem = pcorcamjulg.pc24_orcamitem
-                                          and pcorcamval.pc23_orcamforne = pcorcamjulg.pc24_orcamforne
-                                          and pcorcamjulg.pc24_pontuacao = 1
-                                        inner join pcorcamforne on
-                                          pcorcamforne.pc21_orcamforne = pcorcamjulg.pc24_orcamforne
+                                        $result_forn = $cllicatareg->sql_record("select z01_numcgm, z01_nome 
+                                        from  licatareg 
                                         inner join cgm on
-                                          cgm.z01_numcgm = pcorcamforne.pc21_numcgm
-                                        where
-                                          lli.l21_codigo = liclicitem.l21_codigo) as z01_nome,
-                                          (
-                                        select
-                                          z01_numcgm
-                                        from
-                                          liclicita
-                                        inner join liclicitem lli on
-                                          lli.l21_codliclicita = liclicita.l20_codigo
-                                        inner join pcorcamitemlic on
-                                          pcorcamitemlic.pc26_liclicitem = lli.l21_codigo
-                                        inner join pcorcamval on
-                                          pcorcamval.pc23_orcamitem = pcorcamitemlic.pc26_orcamitem
-                                        inner join pcorcamjulg on
-                                          pcorcamval.pc23_orcamitem = pcorcamjulg.pc24_orcamitem
-                                          and pcorcamval.pc23_orcamforne = pcorcamjulg.pc24_orcamforne
-                                          and pcorcamjulg.pc24_pontuacao = 1
-                                        inner join pcorcamforne on
-                                          pcorcamforne.pc21_orcamforne = pcorcamjulg.pc24_orcamforne
-                                        inner join cgm on
-                                          cgm.z01_numcgm = pcorcamforne.pc21_numcgm
-                                        where
-                                          lli.l21_codigo = liclicitem.l21_codigo) as z01_numcgm
-                                        from liclicitem 
-                                        inner join pcprocitem on liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem 
-                                        left join pcorcamitemproc on pc31_pcprocitem = pc81_codprocitem 
-                                        inner join pcproc on pcproc.pc80_codproc = pcprocitem.pc81_codproc 
-                                        left join itemprecoreferencia on si02_itemproccompra = pcorcamitemproc.pc31_orcamitem 
-                                        inner join solicitem on solicitem.pc11_codigo = pcprocitem.pc81_solicitem 
-                                        inner join solicita on solicita.pc10_numero = solicitem.pc11_numero 
-                                        inner join db_depart on db_depart.coddepto = solicita.pc10_depto 
-                                        left join liclicita on liclicita.l20_codigo = liclicitem.l21_codliclicita 
-                                        left join licsituacao on l08_sequencial = l20_licsituacao 
-                                        left join cflicita on cflicita.l03_codigo = liclicita.l20_codtipocom 
-                                        left join pctipocompra on pctipocompra.pc50_codcom = cflicita.l03_codcom 
-                                        left join solicitemunid on solicitemunid.pc17_codigo = solicitem.pc11_codigo 
-                                        left join matunid on matunid.m61_codmatunid = solicitemunid.pc17_unid 
-                                        left join pcorcamitemlic on l21_codigo = pc26_liclicitem 
-                                        left join pcorcamval on pc26_orcamitem = pc23_orcamitem 
-                                        left join pcorcamjulg on pcorcamval.pc23_orcamitem = pcorcamjulg.pc24_orcamitem and pcorcamval.pc23_orcamforne = pcorcamjulg.pc24_orcamforne 
-                                        left join pcorcamforne on pc21_orcamforne = pc23_orcamforne 
-                                        left join cgm on pc21_numcgm = z01_numcgm 
-                                        left join db_usuarios on pcproc.pc80_usuario = db_usuarios.id_usuario 
-                                        left join solicitempcmater on solicitempcmater.pc16_solicitem = solicitem.pc11_codigo 
-                                        left join pcmater on pcmater.pc01_codmater = solicitempcmater.pc16_codmater 
-                                        left join pcsubgrupo on pcsubgrupo.pc04_codsubgrupo = pcmater.pc01_codsubgrupo 
-                                        left join pctipo on pctipo.pc05_codtipo = pcsubgrupo.pc04_codtipo 
-                                        left join solicitemele on solicitemele.pc18_solicitem = solicitem.pc11_codigo 
-                                        left join orcelemento on orcelemento.o56_codele = solicitemele.pc18_codele and orcelemento.o56_anousu = 2022 
-                                        left join empautitempcprocitem on empautitempcprocitem.e73_pcprocitem = pcprocitem.pc81_codprocitem 
-                                        left join empautitem on empautitem.e55_autori = empautitempcprocitem.e73_autori and empautitem.e55_sequen = empautitempcprocitem.e73_sequen 
-                                        left join empautoriza on empautoriza.e54_autori = empautitem.e55_autori 
-                                        left join empempaut on empempaut.e61_autori = empautitem.e55_autori 
-                                        left join empempenho on empempenho.e60_numemp = empempaut.e61_numemp 
-                                        left join pcdotac on solicitem.pc11_codigo = pcdotac.pc13_codigo 
-                                        where l21_codliclicita =".$l221_licitacao." 
-                                        order by z01_nome ");
+                                        cgm.z01_numcgm = licatareg.l221_fornecedor
+                                        where 
+                                        l221_sequencial =".$l221_sequencial);
                                         $oForn = db_utils::fieldsMemory($result_forn, $iIndiceTipo);
                                         $tipo[$oForn->z01_numcgm] = $oForn->z01_nome;
                                         db_select("l221_fornecedor", $tipo, true, $db_opcao, "style='width: 100%;'");
@@ -229,7 +158,7 @@ $cllicatareg = new cl_licatareg;
                                         left join pcsubgrupo on pcsubgrupo.pc04_codsubgrupo = pcmater.pc01_codsubgrupo 
                                         left join pctipo on pctipo.pc05_codtipo = pcsubgrupo.pc04_codtipo 
                                         left join solicitemele on solicitemele.pc18_solicitem = solicitem.pc11_codigo 
-                                        left join orcelemento on orcelemento.o56_codele = solicitemele.pc18_codele and orcelemento.o56_anousu = 2022 
+                                        left join orcelemento on orcelemento.o56_codele = solicitemele.pc18_codele and orcelemento.o56_anousu = ".db_getsession("DB_anousu")." 
                                         left join empautitempcprocitem on empautitempcprocitem.e73_pcprocitem = pcprocitem.pc81_codprocitem 
                                         left join empautitem on empautitem.e55_autori = empautitempcprocitem.e73_autori and empautitem.e55_sequen = empautitempcprocitem.e73_sequen 
                                         left join empautoriza on empautoriza.e54_autori = empautitem.e55_autori 
@@ -243,8 +172,9 @@ $cllicatareg = new cl_licatareg;
                                         for($iIndiceTipo=0;$iIndiceTipo < $cllicatareg->numrows;$iIndiceTipo++){
 
                                           $oForn = db_utils::fieldsMemory($result_forn, $iIndiceTipo);
-
-                                          $tipo[$oForn->z01_numcgm] = $oForn->z01_nome;
+                                          if($oForn->z01_numcgm != null && $oForn->z01_nome != null){
+                                            $tipo[$oForn->z01_numcgm] = $oForn->z01_nome;
+                                          }
                                         }
 
                                         
@@ -365,9 +295,12 @@ function js_mostraLicitacaoHidden(descricao, lErro) {
 /**
  * Nao encontrou Licitacao
  */
-
+  if(!lErro){
   location.href = 'lic1_licatareg001.php?l221_licitacao=' + document.getElementById('l221_licitacao').value + '&l20_objeto=' + descricao;
-
+  }else{
+    alert("Licitação não permitida!");
+    location.href = 'lic1_licatareg001.php';
+  }
 
 }
 </script>

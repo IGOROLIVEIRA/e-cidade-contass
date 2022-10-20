@@ -532,5 +532,40 @@ $sql .= "l221_sequencial = '$oid'";     $result = db_query($sql);
     }
     return $sql;
   }
+
+  function sql_query_for ( $oid = null,$campos="*",$ordem=null,$dbwhere="") { 
+    $sql = "select ";
+    if ($campos != "*" ) {
+      $campos_sql = explode("#", $campos);
+      $virgula = "";
+      for($i=0;$i<sizeof($campos_sql);$i++) {
+        $sql .= $virgula.$campos_sql[$i];
+        $virgula = ",";
+      }
+    } else {
+      $sql .= $campos;
+    }
+    $sql .= " from licatareg inner join cgm on
+    cgm.z01_numcgm = licatareg.l221_fornecedor ";
+    $sql2 = "";
+    if ($dbwhere=="") {
+      if ( $oid != "" && $oid != null) {
+         $sql2 = " where licatareg.oid = '$oid'";
+      }
+    } else if ($dbwhere != "") {
+      $sql2 = " where $dbwhere";
+    }
+    $sql .= $sql2;
+    if ($ordem != null ) {
+      $sql .= " order by ";
+      $campos_sql = explode("#", $ordem);
+      $virgula = "";
+      for($i=0;$i<sizeof($campos_sql);$i++) {
+        $sql .= $virgula.$campos_sql[$i];
+        $virgula = ",";
+     }
+   }
+   return $sql;
+ }
 }
 ?>
