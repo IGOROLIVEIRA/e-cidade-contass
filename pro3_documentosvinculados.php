@@ -30,6 +30,9 @@ require_once("libs/db_utils.php");
 require_once("libs/db_app.utils.php");
 require_once("libs/db_conecta.php");
 require_once("libs/db_sessoes.php");
+$departamento  = db_getsession('DB_coddepto', false);
+$adm = db_getsession('DB_administrador');
+
 
 ?>
 <html>
@@ -92,6 +95,9 @@ require_once("libs/db_sessoes.php");
    */
   function preencherGridComDocumentos(oAjax) {
 
+    var departamentoLogado = <?php print_r($departamento) ?>;
+    var adm = <?php print_r($adm) ?>;
+
     js_removeObj("msgBox");
     var oRetorno = eval("(" + oAjax.responseText + ")");
     anexosSigilosos = new Array();
@@ -107,19 +113,32 @@ require_once("libs/db_sessoes.php");
       var aLinha = new Array();
       aLinha[0] = oDocumento.iCodigoDocumento;
       aLinha[1] = oDocumento.sDescricaoDocumento.urlDecode();
-      aLinha[2] = "<input type='button' id='btnDownload" + oDocumento.iCodigoDocumento + "' value='Download' onclick='downloadDocumento(" + oDocumento.iCodigoDocumento + ");' />";
-      if (oDocumento.permissao == false && oDocumento.permissao != undefined) {
-        aLinha[2] = "";
+
+      if (oDocumento.nivelacesso == '1') {
+        aLinha[2] = "<input type='button' id='btnDownload" + oDocumento.iCodigoDocumento + "' value='Download' onclick='downloadDocumento(" + oDocumento.iCodigoDocumento + ");' />";
+      } else {
         anexosSigilosos.push(iDocumento);
+        if (adm == 1) {
+          aLinha[2] = "<input type='button' id='btnDownload" + oDocumento.iCodigoDocumento + "' value='Download' onclick='downloadDocumento(" + oDocumento.iCodigoDocumento + ");' />";
+        } else if (departamentoLogado == oDocumento.iDepart && adm != 1 && !oDocumento.permissao) {
+          aLinha[2] = "";
+        } else if (departamentoLogado == oDocumento.iDepart && adm != 1 && oDocumento.permissao) {
+          aLinha[2] = "<input type='button' id='btnDownload" + oDocumento.iCodigoDocumento + "' value='Download' onclick='downloadDocumento(" + oDocumento.iCodigoDocumento + ");' />";
+        } else if (departamentoLogado != oDocumento.iDepart && adm != 1 && oDocumento.permissao) {
+          aLinha[2] = "<input type='button' id='btnDownload" + oDocumento.iCodigoDocumento + "' value='Download' onclick='downloadDocumento(" + oDocumento.iCodigoDocumento + ");' />";
+        } else if (departamentoLogado != oDocumento.iDepart && adm != 1 && !oDocumento.permissao) {
+          aLinha[2] = "";
+        }
 
       }
+
       oGridDocumento.addRow(aLinha);
     }
+
     oGridDocumento.renderRows();
     for (var i = 0; i < anexosSigilosos.length; i++) {
       linhaAnexo = anexosSigilosos[i];
       document.getElementById('oGridDocumentorowoGridDocumento' + linhaAnexo).style.color = "red";
-
     }
   }
 

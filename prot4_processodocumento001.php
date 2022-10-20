@@ -86,6 +86,19 @@ $oRotulo->label("z01_nome");
   db_app::load("estilos.css, grid.style.css");
   db_app::load("scripts.js, prototype.js, strings.js, datagrid.widget.js");
   ?>
+
+  <script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
+  <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+  <script language="JavaScript" type="text/javascript" src="scripts/strings.js"></script>
+  <script language="JavaScript" type="text/javascript" src="scripts/datagrid.widget.js"></script>
+  <script language="JavaScript" type="text/javascript" src="scripts/AjaxRequest.js"></script>
+  <script language="JavaScript" type="text/javascript" src="scripts/widgets/windowAux.widget.js"></script>
+  <script language="JavaScript" type="text/javascript" src="scripts/widgets/dbautocomplete.widget.js"></script>
+  <script language="JavaScript" type="text/javascript" src="scripts/widgets/dbmessageBoard.widget.js"></script>
+  <script language="JavaScript" type="text/javascript" src="scripts/widgets/dbtextField.widget.js"></script>
+  <script language="JavaScript" type="text/javascript" src="scripts/widgets/dbtextFieldData.widget.js"></script>
+  <script language="JavaScript" type="text/javascript" src="scripts/widgets/dbcomboBox.widget.js"></script>
+  <script language="JavaScript" type="text/javascript" src="scripts/widgets/DBHint.widget.js"></script>
 </head>
 
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
@@ -243,7 +256,7 @@ $oRotulo->label("z01_nome");
    */
   function js_buscarDocumentos() {
 
-    var departamentoLogado = <?php print_r($departamento) ?>; // Considerar renomear nome da variável
+    var departamentoLogado = <?php print_r($departamento) ?>;
     var adm = <?php print_r($adm) ?>;
     var iCodigoProcesso = $('p58_codproc').value;
     anexosSigilosos = new Array();
@@ -302,45 +315,28 @@ $oRotulo->label("z01_nome");
 
               anexosSigilosos.push(iIndice);
 
-              if (departamentoLogado == oDocumento.iDepart && oRetorno.andamento == 0) {
-
-                if (departamentoLogado == oDocumento.iDepart || adm == 1 && oDocumento.permissao) {
-
-                  sHTMLBotoes += '<input type="button"  value="Alterar Acesso" onClick="js_alterarNivelAcessoDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + oDocumento.nivelacesso + '\' );" />  ';
-                  sHTMLBotoes += '<input type="button"  value="Alterar" onClick="js_alterarDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + oDocumento.nivelacesso + '\' );" />  ';
-                  sHTMLBotoes += '<input type="button" value="Download" onClick="js_downloadDocumento(' + oDocumento.iCodigoDocumento + ');" />  ';
-
-                } else if (departamentoLogado == oDocumento.iDepart && adm != 1 && !oDocumento.permissao) {
-                  sHTMLBotoes += '<input type="button"  value="Alterar Acesso" onClick="js_alterarNivelAcessoDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + oDocumento.nivelacesso + '\' );" />  ';
-                  sHTMLBotoes += '<input type="button"  value="Alterar" onClick="js_alterarDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + oDocumento.nivelacesso + '\' );" />  ';
-                } else if (departamentoLogado == oDocumento.iDepart && adm != 1 && oDocumento.permissao) {
-                  sHTMLBotoes += '<input type="button"  value="Alterar Acesso" onClick="js_alterarNivelAcessoDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + oDocumento.nivelacesso + '\' );" />  ';
-                  sHTMLBotoes += '<input type="button"  value="Alterar" onClick="js_alterarDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + oDocumento.nivelacesso + '\' );" />  ';
-                  sHTMLBotoes += '<input type="button" value="Download" onClick="js_downloadDocumento(' + oDocumento.iCodigoDocumento + ');" />  ';
-                } else if (departamentoLogado != oDocumento.iDepart && adm != 1 && oDocumento.permissao) {
-                  sHTMLBotoes += '<input type="button" value="Download" onClick="js_downloadDocumento(' + oDocumento.iCodigoDocumento + ');" />  ';
-                } else if (departamentoLogado != oDocumento.iDepart && adm != 1 && !oDocumento.permissao) {
-                  sHTMLBotoes += '';
-                }
 
 
+              if (adm == 1) {
 
-              } else if (departamentoLogado != oDocumento.iDepart && oRetorno.andamento > 0) {
-
-                sHTMLBotoes = '<input type="button" value="Download" onClick="js_downloadDocumento(' + oDocumento.iCodigoDocumento + ');" />  ';
-
-
-              } else if (departamentoLogado == oDocumento.iDepart && oRetorno.andamento > 0) {
-
-                if (departamentoLogado == oDocumento.iDepart && adm == 1) {
-
-                  sHTMLBotoes += '<input type="button" value="Alterar Acesso" onClick="js_alterarNivelAcessoDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + oDocumento.nivelacesso + '\' );" />  ';
-
-                }
-                sHTMLBotoes = '<input type="button" value="Alterar" onClick="js_alterarDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + oDocumento.nivelacesso + '\');" />  ';
+                sHTMLBotoes += '<input type="button"  value="Alterar Acesso" onClick="js_alterarNivelAcessoDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + oDocumento.nivelacesso + '\' );" />  ';
+                sHTMLBotoes += '<input type="button"  value="Alterar" onClick="js_alterarDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + oDocumento.nivelacesso + '\' );" />  ';
                 sHTMLBotoes += '<input type="button" value="Download" onClick="js_downloadDocumento(' + oDocumento.iCodigoDocumento + ');" />  ';
 
+              } else if (departamentoLogado == oDocumento.iDepart && adm != 1 && !oDocumento.permissao) {
+                sHTMLBotoes += '<input type="button"  value="Alterar Acesso" onClick="js_alterarNivelAcessoDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + oDocumento.nivelacesso + '\' );" />  ';
+                sHTMLBotoes += '<input type="button"  value="Alterar" onClick="js_alterarDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + oDocumento.nivelacesso + '\' );" />  ';
+              } else if (departamentoLogado == oDocumento.iDepart && adm != 1 && oDocumento.permissao) {
+                sHTMLBotoes += '<input type="button"  value="Alterar Acesso" onClick="js_alterarNivelAcessoDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + oDocumento.nivelacesso + '\' );" />  ';
+                sHTMLBotoes += '<input type="button"  value="Alterar" onClick="js_alterarDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + oDocumento.nivelacesso + '\' );" />  ';
+                sHTMLBotoes += '<input type="button" value="Download" onClick="js_downloadDocumento(' + oDocumento.iCodigoDocumento + ');" />  ';
+              } else if (departamentoLogado != oDocumento.iDepart && adm != 1 && oDocumento.permissao) {
+                sHTMLBotoes += '<input type="button" value="Download" onClick="js_downloadDocumento(' + oDocumento.iCodigoDocumento + ');" />  ';
+              } else if (departamentoLogado != oDocumento.iDepart && adm != 1 && !oDocumento.permissao) {
+                sHTMLBotoes += '';
               }
+
+
             }
 
             var aLinha = [oDocumento.iCodigoDocumento, sDescricaoDocumento.urlDecode(), oDocumento.iDepart + ' - ' + oDocumento.sDepartamento, sHTMLBotoes];
@@ -348,7 +344,21 @@ $oRotulo->label("z01_nome");
 
           }
 
+
           oGridDocumentos.renderRows();
+
+          for (var iIndice = iDocumentos; iIndice > 0; iIndice--) {
+            var oDocumento = oRetorno.aDocumentosVinculados[iIndice - 1];
+            var sDescricaoDocumento = oDocumento.sDescricaoDocumento;
+            idLinha = `gridDocumentosrow${iIndice-1}cell1`;
+            linha = document.getElementById(idLinha);
+            linha.setAttribute("title", sDescricaoDocumento.urlDecode());
+            idLinha = `gridDocumentosrow${iIndice-1}cell2`;
+            linha = document.getElementById(idLinha);
+            linha.setAttribute("title", oDocumento.iDepart + ' - ' + oDocumento.sDepartamento.urlDecode());
+          }
+
+
           for (var i = 0; i < anexosSigilosos.length; i++) {
             linhaAnexo = anexosSigilosos[i];
             document.getElementById('gridDocumentosrowgridDocumentos' + linhaAnexo).style.color = "red";
