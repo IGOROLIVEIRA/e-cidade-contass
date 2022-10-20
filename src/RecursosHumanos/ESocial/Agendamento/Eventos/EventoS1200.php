@@ -112,12 +112,12 @@ class EventoS1200 extends EventoBase
                     $oDadosAPI->evtRemun->infomv->indmv       = $oDados->indmv;
 
                     $oRemunoutrempr = new \stdClass();
-                    $oRemunoutrempr->tpinsc = (!empty($oDados->z01_cpf)) ? "1" : "2";
-                    $oRemunoutrempr->nrinsc      = ($oRemunoutrempr->tpinsc == "1") ? $oDados->z01_cpf : $oDados->z01_cgc;
-                    if (!empty($oDados->e50_cattrabalhadorremurenacao)) {
+                    $oRemunoutrempr->tpinsc = (strlen($oDados->doc_empresa) != 11) ? "1" : "2";
+                    $oRemunoutrempr->nrinsc      = $oDados->doc_empresa;
+                    if (!empty($oDados->codcategremun)) {
                         $oRemunoutrempr->codcateg    = $oDados->codcategremun;
                     }
-                    if (!empty($oDados->e50_valorremuneracao)) {
+                    if (!empty($oDados->vlrremunoe)) {
                         $oRemunoutrempr->vlrremunoe  = $oDados->vlrremunoe;
                     }
                     $aRemunoutrempr[] = $oRemunoutrempr;
