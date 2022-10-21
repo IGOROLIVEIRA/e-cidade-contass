@@ -314,9 +314,7 @@ $oRotulo->label("z01_nome");
             } else {
 
               anexosSigilosos.push(iIndice);
-              adm = 10;
-              departamentoLogado = 321;
-              permissao = false;
+
 
               if (adm == 1) {
 
