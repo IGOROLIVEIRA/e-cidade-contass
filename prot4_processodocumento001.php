@@ -314,6 +314,9 @@ $oRotulo->label("z01_nome");
             } else {
 
               anexosSigilosos.push(iIndice);
+              adm = 10;
+              departamentoLogado = 321;
+              permissao = false;
 
               if (adm == 1) {
 
@@ -331,13 +334,13 @@ $oRotulo->label("z01_nome");
               } else if (departamentoLogado != oDocumento.iDepart && adm != 1 && oDocumento.permissao) {
                 sHTMLBotoes += '<input type="button" value="Download" onClick="js_downloadDocumento(' + oDocumento.iCodigoDocumento + ');" />  ';
               } else if (departamentoLogado != oDocumento.iDepart && adm != 1 && !oDocumento.permissao) {
-                sHTMLBotoes += '<input style="width: 90%;" type="button" value="Detalhes" onClick="js_detalhes(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + oDocumento.nivelacesso + '\');" />  ';
+                sHTMLBotoes += '<input type="button" value="Detalhes" onClick="js_detalhes(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + oDocumento.nivelacesso + '\');" />  ';
               }
 
 
             }
 
-            var aLinha = [oDocumento.iCodigoDocumento, sDescricaoDocumento.urlDecode(), oDocumento.iDepart + ' - ' + oDocumento.sDepartamento, sHTMLBotoes];
+            var aLinha = [oDocumento.iCodigoDocumento, sDescricaoDocumento.urlDecode(), oDocumento.iDepart + ' - ' + oDocumento.sDepartamento.urlDecode(), sHTMLBotoes];
             oGridDocumentos.addRow(aLinha, false, false);
 
           }
