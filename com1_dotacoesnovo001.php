@@ -325,7 +325,6 @@ if (isset($incluir)) {
 				aLinha[0] = "  <input style='text-align:center; width:90%; border:none;' readonly='' type='text'  name='reduzido[]' value='" + oRetorno.aItens[i].reduzido + "'>";
 				aLinha[1] = "  <input style='text-align:center; width:90%; border:none;' readonly='' type='text'  name='estrutural[]' value='" + oRetorno.aItens[i].estrutural + "'>";
 				excluirLinha = 'onclick=js_excluirLinha(0,true,' + "'" + oRetorno.aItens[i].reduzido + "'," + "'" + oRetorno.aItens[i].estrutural + "'" + ")";
-
 				aLinha[2] = " <input type='button' name='excluir' value='E'" + excluirLinha + ">";
 
 				oGridItens.addRow(aLinha);
@@ -343,9 +342,6 @@ if (isset($incluir)) {
 	}
 
 	carregaDotacoes();
-
-
-
 
 	function js_excluirLinha(iSeq, vinculo, dot, estrut) {
 

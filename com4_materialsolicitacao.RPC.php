@@ -251,6 +251,101 @@ try {
 
     case "excluirDotacoes":
 
+
+      $clpcdotac = new cl_pcdotac;
+
+      $licitacao = $oParam->licitacao;
+      $itens_processos = db_query("select distinct pc81_codproc from pcprocitem inner join solicitem on pc81_solicitem = pc11_codigo
+      where pc81_codprocitem in (select l21_codpcprocitem from liclicitem where l21_codliclicita = $licitacao) 
+      order by pc81_codproc ;");
+
+
+
+      $aCodProcessos = array();
+      for ($i = 0; $i < pg_numrows($itens_processos); $i++) {
+        $item = db_utils::fieldsMemory($itens_processos, $i);
+        $oItem = new stdClass();
+        $oItem->codproc =  $item->pc81_codproc;
+        $aCodProcessos[] = $oItem;
+      }
+
+      for ($i = 0; $i < count($aCodProcessos); $i++) {
+
+        $pc81_codproc = $aCodProcessos[$i]->codproc;
+        $pc10_numero = db_query("select pc11_numero from pcprocitem inner join solicitem on pc81_solicitem = pc11_codigo where pc81_codproc = $pc81_codproc limit 1;");
+        $pc10_numero = db_utils::fieldsMemory($pc10_numero, 0);
+        $pc10_numero = $pc10_numero->pc11_numero;
+
+
+        $reduzido =  $oParam->reduzido;
+        $estrutural = $oParam->estrutural;
+        $itens = db_query("select * from solicitem where pc11_numero = $pc10_numero;");
+        $quantidade_itens = pg_numrows($itens);
+        $quantidade_dotacoes = 0;
+        $dotacao = $oParam->dotacao;
+        $elemento_dotacao = $oParam->o50_estrutdespesa;
+
+        for ($i = 0; $i < $quantidade_itens; $i++) {
+          $item = db_utils::fieldsMemory($itens, $i);
+          $codigo_item =  $item->pc11_codigo;
+          $servico = db_query("select * from solicitempcmater inner join pcmater on pc16_codmater = pc01_codmater  where pc16_solicitem = $codigo_item ;");
+          $servico = db_utils::fieldsMemory($servico, 0);
+          $codele = db_query("select * from solicitemele where pc18_solicitem = $codigo_item ;");
+          $codele = db_utils::fieldsMemory($codele, 0);
+          $anousu = db_getsession('DB_anousu');
+          $elemento =  db_query("select * from orcelemento where o56_codele = $codele->pc18_codele and o56_anousu = $anousu ;");
+          $elemento = db_utils::fieldsMemory($elemento, 0);
+          $elemento = substr($elemento->o56_elemento, 0, 7);
+
+          if ($servico->pc01_servico == "f") {
+
+            $quantidade_dotacoes = 0;
+
+
+            for ($k = 0; $k < count($reduzido); $k++) {
+              if ($elemento == substr($estrutural[$k], 23, 7)) {
+                $quantidade_dotacoes++;
+              }
+            }
+
+            if ($quantidade_dotacoes != 1) {
+              $quantidade_dotacoes--;
+            }
+
+
+            if ($elemento == substr($elemento_dotacao, 23, 7)) {
+
+              $quantidade_valor =  $item->pc11_quant / $quantidade_dotacoes;
+              $rsResult = db_query("UPDATE pcdotac SET pc13_quant = $quantidade_valor,pc13_valor = $quantidade_valor WHERE pc13_codigo = $codigo_item");
+            }
+          } else {
+
+            if ($item->pc11_servicoquantidade == "t") {
+
+              $quantidade_dotacoes = 0;
+
+              // Verificando se item já possui a dotação a ser lançada
+              $result =  db_query("select * from pcdotac where pc13_codigo = $codigo_item and pc13_coddot = $dotacao;");
+              for ($k = 0; $k < count($reduzido); $k++) {
+                if ($elemento == substr($estrutural[$k], 23, 7)) {
+                  $quantidade_dotacoes++;
+                }
+              }
+
+              if ($quantidade_dotacoes != 1) {
+                $quantidade_dotacoes--;
+              }
+
+              if (pg_numrows($result) == 0 && $elemento == substr($elemento_dotacao, 23, 7)) {
+                $quantidade_valor =  $item->pc11_quant / $quantidade_dotacoes;
+                $rsResult = db_query("UPDATE pcdotac SET pc13_quant = $quantidade_valor,pc13_valor = $quantidade_valor WHERE pc13_codigo = $codigo_item");
+              }
+            }
+          }
+        }
+      }
+
+
       $anousu = db_getsession('DB_anousu');
       $sql = "delete from pcdotac where pc13_coddot = $oParam->dotacao and
       pc13_codigo in (select pc11_codigo from pcprocitem inner join solicitem on pc81_solicitem = pc11_codigo

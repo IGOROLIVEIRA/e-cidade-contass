@@ -231,10 +231,6 @@ if (isset($incluir)) {
 		}
 	}
 
-
-
-
-
 	db_redireciona("com1_dotacoesnovo001lic.php?pc11_numero=$pc11_numero&licitacao=$licitacao");
 }
 
@@ -265,7 +261,6 @@ if (isset($incluir)) {
 								<?
 								db_ancora("Dotações:", "js_pesquisapc13_coddot(true);", 1, '', 'pc13_coddot');
 
-								//db_ancora("Dotações:", "js_pesquisapc16_codmater(true);", $tranca);
 								?>
 							</td>
 
@@ -362,8 +357,8 @@ if (isset($incluir)) {
 
 				aLinha[0] = "  <input style='text-align:center; width:90%; border:none;' readonly='' type='text'  name='reduzido[]' value='" + oRetorno.aItens[i].reduzido + "'>";
 				aLinha[1] = "  <input style='text-align:center; width:90%; border:none;' readonly='' type='text'  name='estrutural[]' value='" + oRetorno.aItens[i].estrutural + "'>";
-				aLinha[2] = " <input type='button' name='excluir' value='E' onclick='js_excluirLinha(" + i + ",true)'>";
-
+				excluirLinha = 'onclick=js_excluirLinha(0,true,' + "'" + oRetorno.aItens[i].reduzido + "'," + "'" + oRetorno.aItens[i].estrutural + "'" + ")";
+				aLinha[2] = " <input type='button' name='excluir' value='E'" + excluirLinha + ">";
 				oGridItens.addRow(aLinha);
 
 			}
@@ -380,9 +375,18 @@ if (isset($incluir)) {
 	carregaDotacoes();
 
 
-	function js_excluirLinha(iSeq, vinculo) {
+	function js_excluirLinha(iSeq, vinculo, dot, estrut) {
 
+		var reduzido = [];
+		var estrutural = [];
 
+		for (var i = 0; i < document.getElementsByName("reduzido[]").length; i++) {
+			reduzido.push(document.getElementsByName("reduzido[]")[i].value);
+		}
+
+		for (var i = 0; i < document.getElementsByName("estrutural[]").length; i++) {
+			estrutural.push(document.getElementsByName("estrutural[]")[i].value);
+		}
 
 		if (vinculo == null) {
 
@@ -430,7 +434,9 @@ if (isset($incluir)) {
 		var oParam = new Object();
 		oParam.exec = "excluirDotacoes";
 		oParam.licitacao = <? echo $licitacao; ?>;
-		//oParam.numero = top.corpo.iframe_solicita.document.form1.pc10_numero.value;
+		oParam.reduzido = reduzido;
+		oParam.estrutural = estrutural;
+		oParam.o50_estrutdespesa = estrut;
 		oParam.dotacao = dotacao;
 		var oAjax = new Ajax.Request(sUrlRC, {
 			method: "post",
