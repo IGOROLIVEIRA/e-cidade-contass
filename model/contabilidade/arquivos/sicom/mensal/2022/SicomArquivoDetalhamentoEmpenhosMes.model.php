@@ -107,7 +107,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
      */
     $sArquivo = "config/sicom/" . db_getsession("DB_anousu") . "/{$sCnpj}_sicomelementodespesa.xml";
     // print_r('enter');
-    // print_r($sArquivo);
+     //print_r($sArquivo);
     if (!file_exists($sArquivo)) {
       throw new Exception("Arquivo de elemento da despesa inexistente!");
     }
@@ -352,11 +352,9 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
         LEFT JOIN orcorgao ON (orcorgao.o40_orgao, orcorgao.o40_anousu) = (orcunidade.o41_orgao, orcunidade.o41_anousu)
         LEFT JOIN cgm o ON o.z01_numcgm = orcunidade.o41_orddespesa
         LEFT JOIN homologacaoadjudica ON l20_codigo = l202_licitacao
-        LEFT JOIN acordoitemexecutadoempautitem on ac19_autori = e61_autori
-        LEFT JOIN acordoitemexecutado on ac29_sequencial = ac19_acordoitemexecutado
-        LEFT JOIN acordoitem on ac20_sequencial = ac29_acordoitem
-        LEFT JOIN acordoposicao on ac20_acordoposicao = ac26_sequencial
-        LEFT JOIN acordo on ac26_acordo = ac16_sequencial
+        LEFT JOIN empempenhocontrato on e100_numemp = e60_numemp
+        LEFT JOIN acordo ON e100_acordo = ac16_sequencial
+        LEFT JOIN acordoposicao on ac26_acordo=ac16_sequencial
         LEFT JOIN adesaoregprecos adesaoacordo on adesaoacordo.si06_sequencial = ac16_adesaoregpreco
         LEFT JOIN acordoposicaoaditamento ON ac35_acordoposicao = ac26_sequencial
         LEFT JOIN manutencaoacordo ON manutac_acordo = ac16_sequencial
@@ -370,9 +368,9 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
 
     $rsEmpenho10 = db_query($sSql);
 
-    //    echo $sSql;
-    //    db_criatabela($rsEmpenho10);
-    //    exit;
+        //echo $sSql;
+        //db_criatabela($rsEmpenho10);
+        //exit;
 
     $aCaracteres = array("°", chr(13), chr(10), "'", ";");
     // matriz de entrada
