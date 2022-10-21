@@ -1296,6 +1296,7 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
       document.form1.pc11_quant.style.backgroundColor = "";
       document.form1.pc11_quant.focus();
       document.form1.pc17_unid.style.visibility = 'visible';
+      document.form1.pc17_quant.style.visibility = 'hidden';
       js_desabilidaqtd(document.form1.pc17_unid.value);
     }
     <?
@@ -1448,7 +1449,7 @@ if ($pc01_servico == 't' && substr($o56_elemento, 0, 7) != '34490') {
   echo "  $('pc11_servicoquantidade').options[0]     = new Option('SIM', 'true');  ";
   echo "  $('pc11_servicoquantidade').options[1]     = new Option('NÃO', 'false'); ";
   echo "  $('pc17_unid').style.visibility           = 'visible';                  ";
-  echo "  $('pc17_quant').style.visibility           = 'visible';                  ";
+  echo "  $('pc17_quant').style.visibility           = 'hidden';                  ";
   echo "  $('ctnServicoQuantidade').style.display='none'; ";
   //echo "  js_habilitaCamposServico(\$F('pc11_servicoquantidade'));                 ";
 
@@ -1466,7 +1467,7 @@ if ($pc01_servico == 't' && substr($o56_elemento, 0, 7) != '34490') {
   echo "  $('pc11_servicoquantidade').options[0]     = new Option('SIM', 'true');  ";
   echo "  $('pc11_servicoquantidade').options[1]     = new Option('NÃO', 'false'); ";
   echo "  $('pc17_unid').style.visibility           = 'visible';                  ";
-  echo "  $('pc17_quant').style.visibility           = 'visible';                  ";
+  echo "  $('pc17_quant').style.visibility           = 'hidden';                  ";
   echo "  document.form1.pc11_servicoquantidade.style.visibility  = 'hidden'; ";
   echo "  document.form1.pc11_servicoquantidade.value = 'false';  ";
 

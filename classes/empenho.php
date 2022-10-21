@@ -2801,7 +2801,7 @@ class empenho {
          * para anular o item na solicitação
          */
         $clsolicitem = $this->usarDao("solicitem",true);
-        $ItemSol = $clsolicitem->sql_record($clsolicitem->sql_query_solicitem_emp(null, "pc11_codigo", null,"e62_sequencial = " . $aItens[$iInd]->e62_sequencial));
+        $ItemSol = $clsolicitem->sql_record($clsolicitem->sql_query_solicitem_emp(null, "distinct pc11_codigo", null,"e62_sequencial = " . $aItens[$iInd]->e62_sequencial));
         $rsItemSol = db_utils::fieldsMemory($ItemSol,0);
          
         if(pg_num_rows($ItemSol) > 0){

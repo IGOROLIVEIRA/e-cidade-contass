@@ -1476,13 +1476,14 @@ class cl_solicitem
       $sSql .= $campos;
     }
     $sSql .= "  from solicitem";
-    $sSql .="        inner join pcprocitem on pc81_solicitem = pc11_codigo";
+    $sSql .="        inner join pcprocitem           on pc81_solicitem = pc11_codigo";
     $sSql .="        inner join empautitempcprocitem on e73_pcprocitem = pc81_codprocitem";
-    $sSql .="        inner join empautoriza on e54_autori = e73_autori";
-    $sSql .="        inner join empempaut on e61_autori = e54_autori";
-    $sSql .="        inner join empautitem on e55_autori = e54_autori";
-    $sSql .="        inner join empempitem on e62_numemp = e61_numemp";
-    $sSql .="                                            and e62_item = e55_item";
+    $sSql .="        inner join empautoriza          on e54_autori     = e73_autori";
+    $sSql .="        inner join empempaut            on e61_autori     = e54_autori";
+    $sSql .="        inner join empautitem           on e55_autori     = e54_autori";
+    $sSql .="        inner join empempitem           on e62_numemp     = e61_numemp";
+    $sSql .="        inner join solicitempcmater     on pc16_solicitem = pc11_codigo";
+    $sSql .="                                 and pc16_codmater        = e62_item";
     $sSqlWhere = '';
     if ($dbwhere == "") {
       if ($pc11_codigo != null) {
