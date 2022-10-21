@@ -56,7 +56,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
         <tr>
           <td nowrap title="<?= @$Tpc16_codmater ?>">
             <?
-            db_ancora("Código do material", "js_pesquisapc16_codmater(true);", $tranca);
+            db_ancora("Código do material: ", "js_pesquisapc16_codmater(true);", $tranca);
             ?>
           </td>
 
@@ -931,6 +931,12 @@ if ((isset($opcao) && $opcao == "alterar")) {
   indice = 0;
 
   function js_novoitem() {
+
+    document.getElementById('db_opcao').value = "Adicionar Item";
+    document.getElementById("db_opcao").setAttribute('name', 'incluir');
+    document.getElementById("db_opcao").setAttribute('type', 'submit');
+    document.getElementById("db_opcao").setAttribute('onclick', '');
+
     document.getElementById('novo').style.display = "none";
     document.getElementById('pc16_codmater').value = '';
     document.getElementById('pc01_descrmater').value = '';

@@ -236,11 +236,9 @@ if (isset($incluir)) {
 								<?
 								db_ancora("Dotações:", "js_pesquisapc13_coddot(true);", 1, '', 'pc13_coddot');
 
-								//db_ancora("Dotações:", "js_pesquisapc16_codmater(true);", $tranca);
 								?>
 							</td>
 							<td>
-								<b>Código do Material:</b>
 
 								<?
 								db_input('o58_coddot', 8, $Io58_coddot, true, 'text', $tranca, "onchange='js_pesquisapc13_coddot(false)'");
@@ -326,7 +324,9 @@ if (isset($incluir)) {
 
 				aLinha[0] = "  <input style='text-align:center; width:90%; border:none;' readonly='' type='text'  name='reduzido[]' value='" + oRetorno.aItens[i].reduzido + "'>";
 				aLinha[1] = "  <input style='text-align:center; width:90%; border:none;' readonly='' type='text'  name='estrutural[]' value='" + oRetorno.aItens[i].estrutural + "'>";
-				aLinha[2] = " <input type='button' name='excluir' value='E' onclick='js_excluirLinha(" + i + ",true)'>";
+				excluirLinha = 'onclick=js_excluirLinha(0,true,' + "'" + oRetorno.aItens[i].reduzido + "'," + "'" + oRetorno.aItens[i].estrutural + "'" + ")";
+
+				aLinha[2] = " <input type='button' name='excluir' value='E'" + excluirLinha + ">";
 
 				oGridItens.addRow(aLinha);
 
@@ -347,44 +347,22 @@ if (isset($incluir)) {
 
 
 
-	function js_excluirLinha(iSeq, vinculo) {
-
-
-
-		if (vinculo == null) {
-
-			var sizeItens = oGridItens.aRows.length;
-
-			itens_antigos = oGridItens.aRows;
-
-
-			oGridItens.clearAll(true);
-
-			for (var i = 0; i < sizeItens; i++) {
-				if (i != iSeq) {
-					oGridItens.addRow(itens_antigos[i]);
-
-				}
-			}
-			oGridItens.renderRows();
-
-			for (var i = 0; i < sizeItens; i++) {
-				str = top.corpo.iframe_dotacoesnovo.document.getElementsByName('excluir')[i].getAttribute("onclick");
-				if (str.includes("true")) {
-					top.corpo.iframe_dotacoesnovo.document.getElementsByName('excluir')[i].setAttribute("onclick", "js_excluirLinha(" + i + ", true)");
-				} else {
-					top.corpo.iframe_dotacoesnovo.document.getElementsByName('excluir')[i].setAttribute("onclick", "js_excluirLinha(" + i + ", null)");
-
-				}
-			}
-
-			return false;
-		}
-
-
+	function js_excluirLinha(iSeq, vinculo, dot, estrut) {
 
 		var oRow = oGridItens.aRows[iSeq];
+		var reduzido = [];
+		var estrutural = [];
+
+		for (var i = 0; i < document.getElementsByName("reduzido[]").length; i++) {
+			reduzido.push(document.getElementsByName("reduzido[]")[i].value);
+		}
+
+		for (var i = 0; i < document.getElementsByName("estrutural[]").length; i++) {
+			estrutural.push(document.getElementsByName("estrutural[]")[i].value);
+		}
+
 		var dotacao = document.getElementsByName("reduzido[]")[iSeq].value;
+
 		var sMsg = 'Confirma a Exclusão da dotação ' + dotacao + ' ?';
 
 		if (!confirm(sMsg)) {
@@ -397,7 +375,12 @@ if (isset($incluir)) {
 		var oParam = new Object();
 		oParam.exec = "excluirDotacoesCompras";
 		oParam.numero = top.corpo.iframe_solicita.document.form1.pc10_numero.value;
-		oParam.dotacao = dotacao;
+		oParam.dotacao = dot;
+		oParam.reduzido = reduzido;
+		oParam.estrutural = estrutural;
+		oParam.o50_estrutdespesa = estrut;
+
+
 		var oAjax = new Ajax.Request(sUrlRC, {
 			method: "post",
 			parameters: 'json=' + Object.toJSON(oParam),

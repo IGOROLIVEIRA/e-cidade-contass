@@ -270,7 +270,6 @@ if (isset($incluir)) {
 							</td>
 
 							<td>
-								<b>Código do Material:</b>
 								<?
 								db_input('o58_coddot', 8, $Io58_coddot, true, 'text', $tranca, "onchange='js_pesquisapc13_coddot(false)'");
 
