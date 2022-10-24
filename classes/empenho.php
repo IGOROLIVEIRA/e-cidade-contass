@@ -3280,7 +3280,7 @@ class empenho {
             }
           }
         }
-      } die;
+      }
     }
 
     /**
