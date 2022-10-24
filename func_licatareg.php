@@ -125,7 +125,7 @@ $cllicatareg->rotulo->label("l221_fornecedor");
             db_fieldsmemory($result,0);
             echo "<script>".$funcao_js."('$oid',false);</script>";
           }else{
-	         echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") n„o Encontrado',true);</script>";
+	         echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") n√£o Encontrado',true);</script>";
           }
         }else{
 	       echo "<script>".$funcao_js."('',false);</script>";
