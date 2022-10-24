@@ -94,7 +94,7 @@ if (isset($alterar)) {
       db_query("update acordovigencia set ac18_datainicio = '$datainicio', ac18_datafim = '$datafim' WHERE ac18_acordoposicao = $posicao;");
       db_query("update apostilamento set si03_dataapostila = '$dataapostila' WHERE si03_acordoposicao = $posicao;");
       db_query("update acordoposicao set ac26_numeroapostilamento = '$numeroapostilamento' WHERE ac26_sequencial = $posicao;");
-      db_query("update acordoposicao set ac26_data = '$dataapostila' WHERE ac26_sequencial = $posicao;");
+      //db_query("update acordoposicao set ac26_data = '$dataapostila' WHERE ac26_sequencial = $posicao;");
     }
   }
 
@@ -335,7 +335,7 @@ if (isset($alterar)) {
           db_query("update acordoitemperiodo set ac41_datainicial = '$dTinicio', ac41_datafinal = '$dTfim' where ac41_acordoposicao = '$oPosicao->posicao'");
         }
         if (!empty($dTassaditivo)) {
-          db_query("update acordoposicao set ac26_data = '$dTassaditivo' WHERE ac26_sequencial = '$oPosicao->posicao';");
+          //db_query("update acordoposicao set ac26_data = '$dTassaditivo' WHERE ac26_sequencial = '$oPosicao->posicao';");
           db_query("update acordoposicaoaditamento set ac35_dataassinaturatermoaditivo = '$dTassaditivo' where ac35_acordoposicao = '$oPosicao->posicao'");
         }
       } else {
@@ -913,14 +913,14 @@ if (isset($alterar)) {
                             <?php
                             $iCampo = 2;
                             db_inputdata(
-                              "ac18_datainicio",
+                              "ac18_datainicio_$ac18_sequencial",
                               @$ac18_datainicio_dia,
                               @$ac18_datainicio_mes,
                               @$ac18_datainicio_ano,
                               true,
                               'text',
                               $iCampo,
-                              "class='datainicio"
+                              " onkeypress='mascaraData(this)' class='datainicio'"
                             ); ?>
                           </td>
 
@@ -931,14 +931,14 @@ if (isset($alterar)) {
                           <td>
                             <?php
                             db_inputdata(
-                              "ac18_datafim",
+                              "ac18_datafim_$ac18_sequencial",
                               @$ac18_datafim_dia,
                               @$ac18_datafim_mes,
                               @$ac18_datafim_ano,
                               true,
                               'text',
                               $iCampo,
-                              "class='datafim"
+                              "onkeypress='mascaraData(this)' class='datafim'"
                             ); ?>
                           </td>
                           <td nowrap>
@@ -947,14 +947,14 @@ if (isset($alterar)) {
                           <td>
                             <?php
                             db_inputdata(
-                              "si03_dataapostila",
+                              "si03_dataapostila__$ac18_sequencial",
                               @$si03_dataapostila_dia,
                               @$si03_dataapostila_mes,
                               @$si03_dataapostila_ano,
                               true,
                               'text',
                               $iOpcao,
-                              "class='dataapostila"
+                              "onkeypress='mascaraData(this)' class='dataapostila'"
 
                             ); ?>
                           </td>
@@ -988,6 +988,77 @@ if (isset($alterar)) {
 
 </div>
 <script>
+  function mascaraData(val) {
+    var pass = val.value;
+    var expr = /[0123456789]/;
+
+    for (i = 0; i < pass.length; i++) {
+      // charAt -> retorna o caractere posicionado no índice especificado
+      var lchar = val.value.charAt(i);
+      var nchar = val.value.charAt(i + 1);
+
+      if (i == 0) {
+        // search -> retorna um valor inteiro, indicando a posição do inicio da primeira
+        // ocorrência de expReg dentro de instStr. Se nenhuma ocorrencia for encontrada o método retornara -1
+        // instStr.search(expReg);
+        if ((lchar.search(expr) != 0) || (lchar > 3)) {
+          val.value = "";
+        }
+
+      } else if (i == 1) {
+
+        if (lchar.search(expr) != 0) {
+          // substring(indice1,indice2)
+          // indice1, indice2 -> será usado para delimitar a string
+          var tst1 = val.value.substring(0, (i));
+          val.value = tst1;
+          continue;
+        }
+
+        if ((nchar != '/') && (nchar != '')) {
+          var tst1 = val.value.substring(0, (i) + 1);
+
+          if (nchar.search(expr) != 0)
+            var tst2 = val.value.substring(i + 2, pass.length);
+          else
+            var tst2 = val.value.substring(i + 1, pass.length);
+
+          val.value = tst1 + '/' + tst2;
+        }
+
+      } else if (i == 4) {
+
+        if (lchar.search(expr) != 0) {
+          var tst1 = val.value.substring(0, (i));
+          val.value = tst1;
+          continue;
+        }
+
+        if ((nchar != '/') && (nchar != '')) {
+          var tst1 = val.value.substring(0, (i) + 1);
+
+          if (nchar.search(expr) != 0)
+            var tst2 = val.value.substring(i + 2, pass.length);
+          else
+            var tst2 = val.value.substring(i + 1, pass.length);
+
+          val.value = tst1 + '/' + tst2;
+        }
+      }
+
+      if (i >= 6) {
+        if (lchar.search(expr) != 0) {
+          var tst1 = val.value.substring(0, (i));
+          val.value = tst1;
+        }
+      }
+    }
+
+    if (pass.length > 10)
+      val.value = val.value.substring(0, 10);
+    return true;
+  }
+
   // criando array dos inputs de apostilamento
 
   ac26_numeroapostilamento = document.getElementsByClassName('numeroapostilamento');
