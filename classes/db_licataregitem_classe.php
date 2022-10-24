@@ -72,73 +72,73 @@ class cl_licataregitem {
   function incluir () { 
       $this->atualizacampos();
      if ($this->l222_licatareg == null ) { 
-       $this->erro_sql = " Campo l222_licatareg não informado.";
+       $this->erro_sql = " Campo l222_licatareg nÃ£o informado.";
        $this->erro_campo = "l222_licatareg";
        $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   = "UsuÃ¡rio: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
      }
      if ($this->l222_ordem == null ) { 
-       $this->erro_sql = " Campo l222_ordem não informado.";
+       $this->erro_sql = " Campo l222_ordem nÃ£o informado.";
        $this->erro_campo = "l222_ordem";
        $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   = "UsuÃ¡rio: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
      }
      if ($this->l222_item == null ) { 
-       $this->erro_sql = " Campo l222_item não informado.";
+       $this->erro_sql = " Campo l222_item nÃ£o informado.";
        $this->erro_campo = "l222_item";
        $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   = "UsuÃ¡rio: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
      }
      if ($this->l222_descricao == null ) { 
-       $this->erro_sql = " Campo l222_descricao não informado.";
+       $this->erro_sql = " Campo l222_descricao nÃ£o informado.";
        $this->erro_campo = "l222_descricao";
        $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   = "UsuÃ¡rio: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
      }
      if ($this->l222_unidade == null ) { 
-       $this->erro_sql = " Campo l222_unidade não informado.";
+       $this->erro_sql = " Campo l222_unidade nÃ£o informado.";
        $this->erro_campo = "l222_unidade";
        $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   = "UsuÃ¡rio: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
      }
      if ($this->l222_quantidade == null ) { 
-       $this->erro_sql = " Campo l222_quantidade não informado.";
+       $this->erro_sql = " Campo l222_quantidade nÃ£o informado.";
        $this->erro_campo = "l222_quantidade";
        $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   = "UsuÃ¡rio: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
      }
      if ($this->l222_valorunit == null ) { 
-       $this->erro_sql = " Campo l222_valorunit não informado.";
+       $this->erro_sql = " Campo l222_valorunit nÃ£o informado.";
        $this->erro_campo = "l222_valorunit";
        $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   = "UsuÃ¡rio: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
      }
      if ($this->l222_valortot == null ) { 
-       $this->erro_sql = " Campo l222_valortot não informado.";
+       $this->erro_sql = " Campo l222_valortot nÃ£o informado.";
        $this->erro_campo = "l222_valortot";
        $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   = "UsuÃ¡rio: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
@@ -167,13 +167,13 @@ class cl_licataregitem {
      if ($result==false) { 
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        if ( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ) {
-         $this->erro_sql   = "licataregitem () nao Incluído. Inclusao Abortada.";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-         $this->erro_banco = "licataregitem já Cadastrado";
+         $this->erro_sql   = "licataregitem () nao IncluÃ­do. Inclusao Abortada.";
+         $this->erro_msg   = "UsuÃ¡rio: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_banco = "licataregitem jÃ¡ Cadastrado";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        } else {
-         $this->erro_sql   = "licataregitem () nao Incluído. Inclusao Abortada.";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_sql   = "licataregitem () nao IncluÃ­do. Inclusao Abortada.";
+         $this->erro_msg   = "UsuÃ¡rio: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        }
        $this->erro_status = "0";
@@ -182,7 +182,7 @@ class cl_licataregitem {
      }
      $this->erro_banco = "";
      $this->erro_sql = "Inclusao efetuada com Sucesso\\n";
-     $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+     $this->erro_msg   = "UsuÃ¡rio: \\n\\n ".$this->erro_sql." \\n\\n";
      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
      $this->erro_status = "1";
      $this->numrows_incluir= pg_affected_rows($result);
@@ -203,10 +203,10 @@ class cl_licataregitem {
        $sql  .= $virgula." l222_licatareg = $this->l222_licatareg ";
        $virgula = ",";
        if (trim($this->l222_licatareg) == null ) { 
-         $this->erro_sql = " Campo l222_licatareg não informado.";
+         $this->erro_sql = " Campo l222_licatareg nÃ£o informado.";
          $this->erro_campo = "l222_licatareg";
          $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   = "UsuÃ¡rio: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "0";
          return false;
@@ -216,10 +216,10 @@ class cl_licataregitem {
        $sql  .= $virgula." l222_ordem = $this->l222_ordem ";
        $virgula = ",";
        if (trim($this->l222_ordem) == null ) { 
-         $this->erro_sql = " Campo l222_ordem não informado.";
+         $this->erro_sql = " Campo l222_ordem nÃ£o informado.";
          $this->erro_campo = "l222_ordem";
          $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   = "UsuÃ¡rio: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "0";
          return false;
@@ -229,10 +229,10 @@ class cl_licataregitem {
        $sql  .= $virgula." l222_item = $this->l222_item ";
        $virgula = ",";
        if (trim($this->l222_item) == null ) { 
-         $this->erro_sql = " Campo l222_item não informado.";
+         $this->erro_sql = " Campo l222_item nÃ£o informado.";
          $this->erro_campo = "l222_item";
          $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   = "UsuÃ¡rio: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "0";
          return false;
@@ -242,10 +242,10 @@ class cl_licataregitem {
        $sql  .= $virgula." l222_descricao = '$this->l222_descricao' ";
        $virgula = ",";
        if (trim($this->l222_descricao) == null ) { 
-         $this->erro_sql = " Campo l222_descricao não informado.";
+         $this->erro_sql = " Campo l222_descricao nÃ£o informado.";
          $this->erro_campo = "l222_descricao";
          $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   = "UsuÃ¡rio: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "0";
          return false;
@@ -255,10 +255,10 @@ class cl_licataregitem {
        $sql  .= $virgula." l222_unidade = '$this->l222_unidade' ";
        $virgula = ",";
        if (trim($this->l222_unidade) == null ) { 
-         $this->erro_sql = " Campo l222_unidade não informado.";
+         $this->erro_sql = " Campo l222_unidade nÃ£o informado.";
          $this->erro_campo = "l222_unidade";
          $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   = "UsuÃ¡rio: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "0";
          return false;
@@ -268,10 +268,10 @@ class cl_licataregitem {
        $sql  .= $virgula." l222_quantidade = $this->l222_quantidade ";
        $virgula = ",";
        if (trim($this->l222_quantidade) == null ) { 
-         $this->erro_sql = " Campo l222_quantidade não informado.";
+         $this->erro_sql = " Campo l222_quantidade nÃ£o informado.";
          $this->erro_campo = "l222_quantidade";
          $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   = "UsuÃ¡rio: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "0";
          return false;
@@ -281,10 +281,10 @@ class cl_licataregitem {
        $sql  .= $virgula." l222_valorunit = $this->l222_valorunit ";
        $virgula = ",";
        if (trim($this->l222_valorunit) == null ) { 
-         $this->erro_sql = " Campo l222_valorunit não informado.";
+         $this->erro_sql = " Campo l222_valorunit nÃ£o informado.";
          $this->erro_campo = "l222_valorunit";
          $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   = "UsuÃ¡rio: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "0";
          return false;
@@ -294,10 +294,10 @@ class cl_licataregitem {
        $sql  .= $virgula." l222_valortot = $this->l222_valortot ";
        $virgula = ",";
        if (trim($this->l222_valortot) == null ) { 
-         $this->erro_sql = " Campo l222_valortot não informado.";
+         $this->erro_sql = " Campo l222_valortot nÃ£o informado.";
          $this->erro_campo = "l222_valortot";
          $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   = "UsuÃ¡rio: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "0";
          return false;
@@ -308,7 +308,7 @@ $sql .= "oid = '$oid'";     $result = db_query($sql);
      if ($result==false) { 
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "licataregitem nao Alterado. Alteracao Abortada.\\n";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   = "UsuÃ¡rio: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        $this->numrows_alterar = 0;
@@ -317,15 +317,15 @@ $sql .= "oid = '$oid'";     $result = db_query($sql);
        if (pg_affected_rows($result)==0) {
          $this->erro_banco = "";
          $this->erro_sql = "licataregitem nao foi Alterado. Alteracao Executada.\\n";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   = "UsuÃ¡rio: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "1";
          $this->numrows_alterar = 0;
          return true;
        } else {
          $this->erro_banco = "";
-         $this->erro_sql = "Alteração efetuada com Sucesso\\n";
-        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_sql = "AlteraÃ§Ã£o efetuada com Sucesso\\n";
+        $this->erro_msg   = "UsuÃ¡rio: \\n\\n ".$this->erro_sql." \\n\\n";
         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
         $this->erro_status = "1";
         $this->numrows_alterar = pg_affected_rows($result);
@@ -348,8 +348,8 @@ $sql .= "oid = '$oid'";     $result = db_query($sql);
      $result = db_query($sql.$sql2);
      if ($result==false) { 
        $this->erro_banco = str_replace("\n","",@pg_last_error());
-       $this->erro_sql   = "licataregitem nao Excluído. Exclusão Abortada.\\n";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_sql   = "licataregitem nao ExcluÃ­do. ExclusÃ£o Abortada.\\n";
+       $this->erro_msg   = "UsuÃ¡rio: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        $this->numrows_excluir = 0;
@@ -357,16 +357,16 @@ $sql .= "oid = '$oid'";     $result = db_query($sql);
      } else {
        if (pg_affected_rows($result)==0) {
          $this->erro_banco = "";
-         $this->erro_sql = "licataregitem nao Encontrado. Exclusão não Efetuada.\\n";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_sql = "licataregitem nao Encontrado. ExclusÃ£o nÃ£o Efetuada.\\n";
+         $this->erro_msg   = "UsuÃ¡rio: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "1";
          $this->numrows_excluir = 0;
          return true;
        } else {
          $this->erro_banco = "";
-         $this->erro_sql = "Exclusão efetuada com Sucesso\\n";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_sql = "ExclusÃ£o efetuada com Sucesso\\n";
+         $this->erro_msg   = "UsuÃ¡rio: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "1";
          $this->numrows_excluir = pg_affected_rows($result);
@@ -382,7 +382,7 @@ $sql .= "oid = '$oid'";     $result = db_query($sql);
        $this->numrows    = 0;
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "Erro ao selecionar os registros.";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   = "UsuÃ¡rio: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
@@ -391,7 +391,7 @@ $sql .= "oid = '$oid'";     $result = db_query($sql);
       if ($this->numrows==0) {
         $this->erro_banco = "";
         $this->erro_sql   = "Record Vazio na Tabela:licataregitem";
-        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_msg   = "UsuÃ¡rio: \\n\\n ".$this->erro_sql." \\n\\n";
         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
         $this->erro_status = "0";
         return false;
