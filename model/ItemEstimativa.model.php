@@ -146,7 +146,7 @@ final class ItemEstimativa extends itemSolicitacao
     $sWhere                    .= "and pc10_depto  = (select pc10_depto ";
     $sWhere                    .= "                     from solicita ";
     $sWhere                    .= "                     where pc10_numero  =  itemestimativa.pc11_numero) ";
-    $sWhere                    .= "and pc67_solicita is null ";
+    //$sWhere                    .= "and pc67_solicita is null ";
     $sSqlQuantidadesSolicitadas = $oDaoSolicitem->sql_query_compilacao_estimativa_rp(null, $sCampos, null, $sWhere);
     $rsQuantidades              = $oDaoSolicitem->sql_record($sSqlQuantidadesSolicitadas);
     $nTotalSolicitado           = 0;
@@ -224,6 +224,28 @@ final class ItemEstimativa extends itemSolicitacao
   }
 
   /**
+   * Verifica a Quantidade de Itens que já foram anulados nos Empenhos
+   * @return float
+   */
+  public function getQuantidadesEmpenhadasAnuladas()
+  {
+
+    $oDaoSolicitem              = db_utils::getDao("solicitem");
+    $sCampos                    = "coalesce(sum(pc28_qtd), 0) as total";
+    $sWhere                     = "vincest.pc55_solicitempai = {$this->getCodigoItemSolicitacao()} ";
+    $sWhere                    .= "and pc10_depto  = (select pc10_depto ";
+    $sWhere                    .= "                     from solicita ";
+    $sWhere                    .= "                     where pc10_numero  =  itemestimativa.pc11_numero)";
+    $sSqlQuantidadesSolicitadas = $oDaoSolicitem->sql_query_solicitemanul(null, $sCampos, null, $sWhere);
+    $rsQuantidades              = $oDaoSolicitem->sql_record($sSqlQuantidadesSolicitadas);
+    $nTotalAnulado              = 0;
+    if ($oDaoSolicitem->numrows == 1) {
+      $nTotalAnulado = db_utils::fieldsMemory($rsQuantidades, 0)->total;
+    }
+    return $nTotalAnulado;
+  }
+
+  /**
    * Verifica o Valor de Itens Que já foram Empenhados
    * @return float
    */
@@ -240,6 +262,28 @@ final class ItemEstimativa extends itemSolicitacao
       $nTotalEmpenhado = db_utils::fieldsMemory($rsQuantidades, 0)->total;
     }
     return $nTotalEmpenhado;
+  }
+
+  /**
+   * Verifica os valores de Itens que já foram anulados nos Empenhos
+   * @return float
+   */
+  public function getValoresEmpenhadosAnulados()
+  {
+
+    $oDaoSolicitem              = db_utils::getDao("solicitem");
+    $sCampos                    = "coalesce(sum(pc28_vlranu), 0) as total";
+    $sWhere                     = "vincest.pc55_solicitempai = {$this->getCodigoItemSolicitacao()} ";
+    $sWhere                    .= "and pc10_depto  = (select pc10_depto ";
+    $sWhere                    .= "                     from solicita ";
+    $sWhere                    .= "                     where pc10_numero  =  itemestimativa.pc11_numero)";
+    $sSqlQuantidadesSolicitadas = $oDaoSolicitem->sql_query_solicitemanul(null, $sCampos, null, $sWhere);
+    $rsQuantidades              = $oDaoSolicitem->sql_record($sSqlQuantidadesSolicitadas);
+    $nTotalAnulado              = 0;
+    if ($oDaoSolicitem->numrows == 1) {
+      $nTotalAnulado = db_utils::fieldsMemory($rsQuantidades, 0)->total;
+    }
+    return $nTotalAnulado;
   }
 
   /**
@@ -271,9 +315,12 @@ final class ItemEstimativa extends itemSolicitacao
       $oMovimentacao = $this->getMovimentacaoValor();
     }
 
-    $oMovimentacao->saldo = ($oMovimentacao->quantidade + $oMovimentacao->recebidas + $oMovimentacao->execedente) -
-      ($oMovimentacao->solicitada + $oMovimentacao->cedidas);
-
+    /*
+     * calculo para identificar o valor restante do item
+     */
+    $oMovimentacao->saldo = ($oMovimentacao->quantidade + $oMovimentacao->recebidas + $oMovimentacao->execedente + $oMovimentacao->anulada) -
+    ($oMovimentacao->solicitada + $oMovimentacao->cedidas);
+    
     return $oMovimentacao;
   }
 
@@ -288,6 +335,7 @@ final class ItemEstimativa extends itemSolicitacao
     $oMovimentacao->quantidade = $this->getValorTotal();
     $oMovimentacao->solicitada = $this->getValorSolicitado();
     $oMovimentacao->empenhada  = $this->getValoresEmpenhados();
+    $oMovimentacao->anulada  = $this->getValoresEmpenhadosAnulados();
     $oMovimentacao->execedente = 0;
     $oMovimentacao->cedidas    = 0;
     $oMovimentacao->recebidas  = 0;
@@ -306,6 +354,7 @@ final class ItemEstimativa extends itemSolicitacao
     $oMovimentacao->solicitada = $this->getQuantidadesSolicitadas();
     $oMovimentacao->empenhada  = $this->getQuantidadesEmpenhadas();
     $oMovimentacao->execedente = $this->getQuantidadeExecedente();
+    $oMovimentacao->anulada    = $this->getQuantidadesEmpenhadasAnuladas();
     $oCedencias                = $this->getQuantidadesCedencias();
     $oMovimentacao->cedidas    = $oCedencias->cedidas;
     $oMovimentacao->recebidas  = $oCedencias->recebidas;
