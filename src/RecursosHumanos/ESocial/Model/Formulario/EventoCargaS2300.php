@@ -41,6 +41,8 @@ class EventoCargaS2300 implements EventoCargaInterface
      */
     public function execute($matricula = null)
     {
+        $anofolha = db_anofolha();
+        $mesfolha = db_mesfolha();
         $sql = "
     	SELECT distinct
         --trabalhador
@@ -260,7 +262,7 @@ class EventoCargaS2300 implements EventoCargaInterface
         left join rhestagiocurricular on rhpessoal.rh01_regist = h83_regist
         left join rhpessoal as rhpessoalsupervisor on h83_supervisor = rhpessoalsupervisor.rh01_regist
         left join cgm as cgmsupervisor ON cgmsupervisor.z01_numcgm = rhpessoalsupervisor.rh01_numcgm
-        left join inssirf on (r33_codtab::integer-2,r33_anousu,r33_mesusu) = (rh02_tbprev,rh02_anousu,rh02_mesusu)
+        left join inssirf on (r33_codtab::integer-2,r33_anousu,r33_mesusu) = (rh02_tbprev,{$anofolha},{$mesfolha})
         left join rhpesrescisao on rh05_seqpes = rh02_seqpes
         WHERE rhpessoal.rh01_instit = {$this->instit} 
         AND h13_categoria in (304,701,711,712,721,722,723,731,734,738,771,901,903,410)
