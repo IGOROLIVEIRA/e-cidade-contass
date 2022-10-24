@@ -1142,7 +1142,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
                 oItemAdicionar.servico = oItem.servico;
                 oItemAdicionar.controlaServico = oItem.servico;
 
-                if(oSelecionados[iIndice].aCells[9].getValue().getNumber() == 0 && oSelecionados[iIndice].aCells[10].getValue().getNumber()==0){
+                if(oSelecionados[iIndice].aCells[9].getValue().getNumber() == 0 && oSelecionados[iIndice].aCells[10].getValue().getNumber()==0 && $('oCboTipoAditivo').value != 12 && $('oCboTipoAditivo').value != 8 && $('oCboTipoAditivo').value != 13 && $('oCboTipoAditivo').value != 6){
                     lAditar = false;
                     return alert("Desmarque os itens que não foram aditados!"); 
                 }
