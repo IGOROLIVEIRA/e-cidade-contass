@@ -58,6 +58,7 @@ $instit = db_getsession('DB_instit');
 if (isset($alterar)) {
   $sqlerro = false;
   $aditivo = false;
+  $erro_msg = "";
   db_inicio_transacao();
 
   $ac26_sequencial = $_POST['ac26_sequencial'];
@@ -73,13 +74,34 @@ if (isset($alterar)) {
     $datainicio = implode('-', array_reverse(explode('/', $ac18_datainicio[$i])));
     $datafim = implode('-', array_reverse(explode('/', $ac18_datafim[$i])));
     $dataapostila = implode('-', array_reverse(explode('/', $si03_dataapostila[$i])));
+    $dataassinatura = implode('-', array_reverse(explode('/', $ac16_dataassinatura)));
 
 
-    db_query("update acordovigencia set ac18_datainicio = '$datainicio', ac18_datafim = '$datafim' WHERE ac18_acordoposicao = $posicao;");
-    db_query("update apostilamento set si03_dataapostila = '$dataapostila' WHERE si03_acordoposicao = $posicao;");
-    db_query("update acordoposicao set ac26_numeroapostilamento = '$numeroapostilamento' WHERE ac26_sequencial = $posicao;");
+    if (
+      $datainicio < $dataassinatura  || $datafim < $dataassinatura
+      || $dataapostila < $dataassinatura
+    ) {
+      $erro = true;
+      $erro_msg = "Apostilamento: $posicao \nData de assinatura/vigencia de apostilamento não pode ser \nanterior a data de assinatura do contrato";
+    }
+
+    if ($datainicio > $datafim) {
+      $erro = true;
+      $erro_msg = "Apostilamento: $posicao \nData inicial da vigencia nao pode ser posterior a data fim.";
+    }
+
+    if ($erro != true) {
+      db_query("update acordovigencia set ac18_datainicio = '$datainicio', ac18_datafim = '$datafim' WHERE ac18_acordoposicao = $posicao;");
+      db_query("update apostilamento set si03_dataapostila = '$dataapostila' WHERE si03_acordoposicao = $posicao;");
+      db_query("update acordoposicao set ac26_numeroapostilamento = '$numeroapostilamento' WHERE ac26_sequencial = $posicao;");
+      db_query("update acordoposicao set ac26_data = '$dataapostila' WHERE ac26_sequencial = $posicao;");
+    }
   }
 
+  if ($erro) {
+    db_msgbox($erro_msg);
+    $erro_msg = "";
+  }
 
 
   $rsPosicoes = db_query(
@@ -246,6 +268,47 @@ if (isset($alterar)) {
     }
   }
 
+  for ($iCont = 0; $iCont < pg_num_rows($rsPosicoes); $iCont++) {
+    $oPosicao = db_utils::fieldsMemory($rsPosicoes, $iCont);
+
+    if ($aditivo) {
+
+      $inicio = 'ac18_datainicio_' . $oPosicao->ac18_sequencial;
+      $fim = 'ac18_datafim_' . $oPosicao->ac18_sequencial;
+      $dataaditivo = 'ac35_dataassinaturatermoaditivo_' . $oPosicao->ac18_sequencial;
+
+      $dTinicio = '';
+      $dTfim = '';
+      $dTassaditivo = '';
+
+      $dTinicio = implode('-', array_reverse(explode('/', $$inicio)));
+      $dTfim = implode('-', array_reverse(explode('/', $$fim)));
+      $dTassaditivo = implode('-', array_reverse(explode('/', $$dataaditivo)));
+      $dataassinatura = implode('-', array_reverse(explode('/', $ac16_dataassinatura)));
+
+      if ($dTassaditivo != "") {
+
+
+
+        if ($dTinicio > $dTfim) {
+          $erro = true;
+          $erro_msg = "Aditamento: $oPosicao->posicao \nData inicial da vigencia nao pode ser posterior a data fim.";
+        }
+        if (
+          $dTinicio < $dataassinatura  || $dTfim < $dataassinatura
+          || $dTassaditivo < $dataassinatura
+        ) {
+          $erro = true;
+          $erro_msg = "Aditamento: $oPosicao->posicao \nData de assinatura/vigencia de aditamento não pode ser \nanterior a data de assinatura do contrato";
+        }
+      }
+    }
+  }
+  if ($erro_msg != "") {
+    db_msgbox($erro_msg);
+  }
+
+
 
   if (!isset($erro)) {
     for ($iCont = 0; $iCont < pg_num_rows($rsPosicoes); $iCont++) {
@@ -272,6 +335,7 @@ if (isset($alterar)) {
           db_query("update acordoitemperiodo set ac41_datainicial = '$dTinicio', ac41_datafinal = '$dTfim' where ac41_acordoposicao = '$oPosicao->posicao'");
         }
         if (!empty($dTassaditivo)) {
+          db_query("update acordoposicao set ac26_data = '$dTassaditivo' WHERE ac26_sequencial = '$oPosicao->posicao';");
           db_query("update acordoposicaoaditamento set ac35_dataassinaturatermoaditivo = '$dTassaditivo' where ac35_acordoposicao = '$oPosicao->posicao'");
         }
       } else {
