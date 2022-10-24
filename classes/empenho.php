@@ -3150,6 +3150,22 @@ class empenho {
             }
           }
 
+          require_once("classes/db_pcorcamtroca_classe.php");
+          $oDaoOrcamTroca = new cl_pcorcamtroca();
+          $sSqlOrcamTroca = $oDaoOrcamTroca->sql_query_file(null,"*",null,"pc25_orcamitem in (select pc22_orcamitem from pcorcamitem where pc22_codorc = {$oResult->orcamento})");
+          $rsOrcamTroca   = $oDaoOrcamTroca->sql_record($sSqlOrcamTroca);
+          if($oDaoOrcamTroca->numrows > 0){
+            $oDaoOrcamTroca->excluir(null,"pc25_orcamitem in (select pc22_orcamitem from pcorcamitem where pc22_codorc = {$oResult->orcamento})");
+
+            if ($oDaoOrcamTroca->erro_status == 0) {
+
+              $this->lSqlErro  = true;
+              $this->sErroMsg  = "Erro[]:Empenho não anulado.\n";
+              $this->sErroMsg .= "({$oDaoOrcamTroca->erro_msg})";
+      
+            }
+          }
+
           require_once("classes/db_pcorcamforne_classe.php");
           $oDaoOrcamForne = new cl_pcorcamforne();
           $sSqlOrcamForne = $oDaoOrcamForne->sql_query_file(null,"*","pc21_codorc = {$oResult->orcamento}");
