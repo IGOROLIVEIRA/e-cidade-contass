@@ -3077,7 +3077,7 @@ class empenho {
          *Se todas estiverem anuladas, executa os comandos de exclusao de orcamento, processo de compras e anulacao de solicitacao
          */
 
-        if(pg_num_rows($clsolicitem->solicitacao) > 0){
+        if($clsolicitem->numrows > 0){
 
         $sSql = db_query("select distinct e54_autori autoriza, e54_anulad from empautitempcprocitem inner join empautoriza on e54_autori = e73_autori where e73_pcprocitem in (select pc81_codprocitem from pcprocitem where pc81_solicitem in (select pc11_codigo from solicitem where pc11_numero = {$oSolicitem->solicitacao}))");
         $rsSql = $sSql;
@@ -3264,7 +3264,7 @@ class empenho {
             }
           }
         }
-      }
+      } die;
     }
 
     /**
