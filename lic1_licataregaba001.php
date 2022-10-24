@@ -65,9 +65,9 @@ if (!isset($db_opcao)) {
           <?
 
 
-            $clcriaabas->identifica = array("licatareg" => "Ata de Registro de preço", "licataregitem" => "Itens");
+            $clcriaabas->identifica = array("licatareg" => "Ata de Registro de preÃ§o", "licataregitem" => "Itens");
             $clcriaabas->sizecampo = array("licatareg" => "25", "licataregitem" => "20");
-            $clcriaabas->title = array("licatareg" => "Ata de Registro de preço", "licataregitem" => "Itens da Licitação");
+            $clcriaabas->title = array("licatareg" => "Ata de Registro de preÃ§o", "licataregitem" => "Itens da LicitaÃ§Ã£o");
             $clcriaabas->src = array("licatareg" => "lic1_licatareg001.php", "licataregitem" => "lic1_licataregitem001.php");
 
             if ($db_opcao == 1) {
@@ -83,10 +83,7 @@ if (!isset($db_opcao)) {
   <?
   db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit"));
   ?>
-  <script>
-    document.getElementById("liclicitemlote").style.display = "none";
-    document.getElementById("liclicpublicacoes").style.display = "none";
-  </script>
+
 
 </body>
 
