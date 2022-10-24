@@ -12,7 +12,7 @@ $cllicataregitem->rotulo->label();
                   
                   <td class='table_header' align='center' style='border-style: outset;'><b>Ordem</b></td>
                   <td class='table_header' align='center' style='border-style: outset;'><b>Item</b></td>
-                  <td class='table_header' align='center' style='border-style: outset;'><b>Descrição Item</b></td>
+                  <td class='table_header' align='center' style='border-style: outset;'><b>DescriÃ§Ã£o Item</b></td>
                   <td class='table_header' align='center' style='border-style: outset;'><b>Unidade</b></td>
                   <td class='table_header' align='center' style='border-style: outset;'><b>Quantidade</b></td>
                   <td class='table_header' align='center' style='border-style: outset;'><b>Vlr Unitario</b></td>
@@ -77,13 +77,13 @@ $cllicataregitem->rotulo->label();
                       // Sequencia
                       echo "  <td class='linhagrid' id='sequen{$l21_ordem}' align='center'  style='border-style: outset;height:5px;'>$l21_ordem</td>";
 
-                      // Número do empenho
+                      // NÃºmero do empenho
                       echo "  <td class='linhagrid' align='center'  style='border-style: outset;height5px;'>$pc01_codmater</td>";
 
-                      // Sequência do empenho
+                      // SequÃªncia do empenho
                       echo "  <td class='linhagrid' align='center'  style='border-style: outset;height5px;'>$pc01_descrmater</td>";
 
-                      // Código do item
+                      // CÃ³digo do item
                       echo "  <td class='linhagrid' align='center'  style='border-style: outset;height5px;'>$m61_descr</td>";
 
                       // Item
@@ -92,7 +92,7 @@ $cllicataregitem->rotulo->label();
                       // Unidade
                       echo "  <td class='linhagrid' align='center'  style='border-style: outset;height5px;'>$pc23_vlrun</td>";
 
-                      // Descrição
+                      // DescriÃ§Ã£o
                       $vlrtotal = $pc23_quant*$pc23_vlrun;
                       $SomaTotal = $SomaTotal + $vlrtotal;
                       echo "  <td class='linhagrid' align='center'  style='border-style: outset;height5px;'>".number_format($vlrtotal,2,',','.')."</td>";
