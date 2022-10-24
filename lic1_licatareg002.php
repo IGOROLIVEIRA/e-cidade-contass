@@ -1,4 +1,4 @@
-<?
+<?php
 require("libs/db_stdlib.php");
 require("libs/db_conecta.php");
 include("libs/db_sessoes.php");
@@ -84,7 +84,7 @@ if(isset($alterar)){
 
 
     <center>
-	<?
+  <?php
 	include("forms/db_frmlicatareg.php");
 	?>
     </center>
@@ -92,7 +92,7 @@ if(isset($alterar)){
 
 </body>
 </html>
-<?
+<?php
 if(isset($alterar)){
   if($cllicatareg->erro_status=="0"){
     $cllicatareg->erro(true,false);

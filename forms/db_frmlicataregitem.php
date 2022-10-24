@@ -1,4 +1,4 @@
-<?
+<?php
 //MODULO: licitacao
 $cllicataregitem->rotulo->label();
 ?>
@@ -20,7 +20,7 @@ $cllicataregitem->rotulo->label();
 
                 </tr>
                 <tbody id='dados' style='height:150px;width:95%;overflow:scroll;overflow-x:hidden;background-color:white'>
-                  <?
+                <?php
                   if ((isset($l222_licatareg) && $l222_licatareg != "" && isset($licitacao) && $licitacao != "" && isset($fornecedor) && $fornecedor != "")) {
                     
                     
@@ -128,7 +128,7 @@ function js_pesquisa(){
 }
 function js_preenchepesquisa(chave){
   db_iframe_licataregitem.hide();
-  <?
+  <?php
   if($db_opcao!=1){
     echo " location.href = '".basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"])."?chavepesquisa='+chave";
   }

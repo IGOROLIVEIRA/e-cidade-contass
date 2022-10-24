@@ -1,4 +1,4 @@
-<?
+<?php
 /*
  *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2014  DBSeller Servicos de Informatica
@@ -106,7 +106,7 @@ $sWhereContratos = " and 1 = 1 ";
                                 <?= $Ll20_codigo ?>
                             </td>
                             <td width="96%" align="left" nowrap>
-                                <?
+                            <?php
                                 db_input("l20_codigo", 10, $Il20_codigo, true, "text", 4, "", "chave_l20_codigo");
                                 ?>
                             </td>
@@ -117,7 +117,7 @@ $sWhereContratos = " and 1 = 1 ";
                                 <?= $Ll20_edital ?>
                             </td>
                             <td width="96%" align="left" nowrap>
-                                <?
+                                <?php
                                 db_input("l20_edital", 10, $Il20_edital, true, "text", 4, "", "chave_l20_edital");
                                 ?>
                             </td>
@@ -128,7 +128,7 @@ $sWhereContratos = " and 1 = 1 ";
                                 <?= $Ll20_numero ?>
                             </td>
                             <td width="96%" align="left" nowrap>
-                                <?
+                                <?php
                                 db_input("l20_numero", 10, $Il20_numero, true, "text", 4, "", "chave_l20_numero");
                                 ?>
                             </td>
@@ -140,7 +140,7 @@ $sWhereContratos = " and 1 = 1 ";
                                 <?= $Ll03_descr ?>
                             </td>
                             <td width="96%" align="left" nowrap>
-                                <?
+                                <?php
                                 db_input("l03_descr", 60, $Il03_descr, true, "text", 4, "", "chave_l03_descr");
                                 db_input("param", 10, "", false, "hidden", 3);
                                 ?>
@@ -169,7 +169,7 @@ $sWhereContratos = " and 1 = 1 ";
         </tr>
         <tr>
             <td align="center" valign="top">
-                <?
+                <?php
                 $and            = "and ";
                 $dbwhere        = "";
                 /* if (isset($tipo) && trim($tipo)!=""){
@@ -577,11 +577,11 @@ $sWhereContratos = " and 1 = 1 ";
 </body>
 
 </html>
-<?
+<?php
 if (!isset($pesquisa_chave)) {
 ?>
     <script>
     </script>
-<?
+<?php
 }
 ?>

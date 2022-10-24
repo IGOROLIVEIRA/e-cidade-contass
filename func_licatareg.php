@@ -1,4 +1,4 @@
-<?
+<?php
 require("libs/db_stdlib.php");
 require("libs/db_conecta.php");
 include("libs/db_sessoes.php");
@@ -33,7 +33,7 @@ $cllicatareg->rotulo->label("l221_fornecedor");
                                 <?=@$Ll221_sequencial ?>
                             </td>
                             <td width="96%" align="left" nowrap>
-                                <?
+                            <?php
                                 db_input("l221_sequencial", 10, $Il221_sequencial, true, "text", 4, "", "chave_l221_sequencial");
                                 ?>
                             </td>
@@ -44,7 +44,7 @@ $cllicatareg->rotulo->label("l221_fornecedor");
                                 <?= $Ll221_licitacao ?>
                             </td>
                             <td width="96%" align="left" nowrap>
-                                <?
+                            <?php
                                 db_input("l221_licitacao", 10, $Il221_licitacao, true, "text", 4, "", "chave_l221_licitacao");
                                 ?>
                             </td>
@@ -55,7 +55,7 @@ $cllicatareg->rotulo->label("l221_fornecedor");
                                 <?= $Ll221_numata ?>
                             </td>
                             <td width="96%" align="left" nowrap>
-                                <?
+                            <?php
                                 db_input("l221_numata", 10, $Il221_numata, true, "text", 4, "", "chave_l221_numata");
                                 ?>
                             </td>
@@ -67,7 +67,7 @@ $cllicatareg->rotulo->label("l221_fornecedor");
                                 <?= $Ll221_fornecedor ?>
                             </td>
                             <td width="96%" align="left" nowrap>
-                                <?
+                            <?php
                                 db_input("l221_fornecedor", 60, $Il221_fornecedor, true, "text", 4, "", "chave_l221_fornecedor");
                                 ?>
                             </td>
@@ -90,7 +90,7 @@ $cllicatareg->rotulo->label("l221_fornecedor");
    
     
   </form>
-      <?
+  <?php
       if(!isset($pesquisa_chave)){
         if(isset($campos)==false){
            if(file_exists("funcoes/db_func_licatareg.php")==true){
@@ -134,11 +134,11 @@ $cllicatareg->rotulo->label("l221_fornecedor");
       ?>
 </body>
 </html>
-<?
+<?php
 if(!isset($pesquisa_chave)){
   ?>
   <script>
   </script>
-  <?
+  <?php
 }
 ?>

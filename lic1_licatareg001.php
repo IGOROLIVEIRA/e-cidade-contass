@@ -1,4 +1,4 @@
-<?
+<?php
 require("libs/db_stdlib.php");
 require("libs/db_conecta.php");
 include("libs/db_sessoes.php");
@@ -88,7 +88,7 @@ if(isset($incluir)){
 
     <center>
       
-          <?
+          <?php
             include("forms/db_frmlicatareg.php");
           ?>
     </center>
@@ -99,7 +99,7 @@ if(isset($incluir)){
 <script>
 js_tabulacaoforms("form1","l221_numata",true,1,"l221_numata",true);
 </script>
-<?
+<?php
 if (isset($incluir)) {
 
         if($sqlerro==false){

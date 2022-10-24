@@ -1,4 +1,4 @@
-<?
+<?php
 require("libs/db_stdlib.php");
 require("libs/db_conecta.php");
 include("libs/db_sessoes.php");
@@ -56,17 +56,17 @@ if(isset($excluir)){
 </table>
 
     <center>
-	<?
+  <?php
 	include("forms/db_frmlicatareg.php");
 	?>
     </center>
 
-<?
+<?php
 db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
 ?>
 </body>
 </html>
-<?
+<?php
 if(isset($excluir)){
   echo "<script>document.form1.pesquisar.click();</script>";
 }

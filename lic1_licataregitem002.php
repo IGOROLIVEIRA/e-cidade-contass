@@ -1,4 +1,4 @@
-<?
+<?php
 require("libs/db_stdlib.php");
 require("libs/db_conecta.php");
 include("libs/db_sessoes.php");
@@ -30,7 +30,7 @@ if(isset($excluir)){
 
 
     <center>
-	<?
+  <?php
 	include("forms/db_frmlicataregitem.php");
 	?>
     </center>
@@ -41,7 +41,7 @@ if(isset($excluir)){
 <script>
 js_tabulacaoforms("form1","l222_ordem",true,1,"l222_ordem",true);
 </script>
-<?
+<?php
 if(isset($excluir)){
   echo " <script>
   parent.iframe_licataregitem.location.href = 'lic1_licataregitem001.php?l222_licatareg= $l222_sequencial&licitacao=$licitacao&fornecedor=$fornecedor';

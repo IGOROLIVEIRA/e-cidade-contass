@@ -1,4 +1,4 @@
-<?
+<?php
 //MODULO: licitacao
 
 use ECidade\V3\Extension\Document;
@@ -21,7 +21,7 @@ $cllicatareg = new cl_licatareg;
             <?=@$Ll221_sequencial?>
           </td>
           <td> 
-          <?
+          <?php
             db_input('l221_sequencial',10,$Il221_sequencial,true,'text',3,"")
           ?>
           </td>
@@ -48,20 +48,20 @@ $cllicatareg = new cl_licatareg;
         </tr>
         <tr>
           <td nowrap title="<?=@$Tl221_numata?>">
-            <?echo "<b>Número da Ata:</b>" ?>
+          <?php echo "<b>Número da Ata:</b>" ?>
           </td>
           <td> 
-          <?
+          <?php
             db_input('l221_numata',10,$Il221_numata,true,'text',$db_opcao,"")
           ?>
           </td>
         </tr>
         <tr>
           <td nowrap title="<?=@$Tl221_exercicio?>">
-            <?echo "<b>Exercício da Ata:</b>" ?>
+            <?php echo "<b>Exercício da Ata:</b>" ?>
           </td>
           <td> 
-          <?
+          <?php
             db_input('l221_exercicio',4,$Il221_exercicio,true,'text',3,"")
           ?>
           </td>
@@ -71,7 +71,7 @@ $cllicatareg = new cl_licatareg;
             <?=@$Ll221_fornecedor?>
           </td>
           <td> 
-          <?
+          <?php
           
             if(isset($l221_sequencial) && $l221_sequencial != "" && $l221_sequencial != null){
               
@@ -187,10 +187,10 @@ $cllicatareg = new cl_licatareg;
         </tr>
         <tr>
           <td nowrap title="<?=@$Tl221_dataini?>">
-            <? echo "<b>Vigência:</b>" ?>
+          <?php echo "<b>Vigência:</b>" ?>
           </td>
           <td> 
-          <?
+          <?php
             db_inputdata('l221_dataini',@$l221_dataini_dia,@$l221_dataini_mes,@$l221_dataini_ano,true,'text',$db_opcao,"");echo "<b>á</b>";
             db_inputdata('l221_datafinal',@$l221_datafinal_dia,@$l221_datafinal_mes,@$l221_datafinal_ano,true,'text',$db_opcao,"");
           ?>
@@ -199,20 +199,20 @@ $cllicatareg = new cl_licatareg;
 
         <tr>
           <td nowrap title="<?=@$Tl221_datapublica?>">
-            <?echo "<b>Data de Publicação:</b>" ?>
+          <?php echo "<b>Data de Publicação:</b>" ?>
           </td>
           <td> 
-          <?
+          <?php
             db_inputdata('l221_datapublica',@$l221_datapublica_dia,@$l221_datapublica_mes,@$l221_datapublica_ano,true,'text',$db_opcao,"")
           ?>
           </td>
         </tr>
         <tr>
           <td nowrap title="<?=@$Tl221_veiculopublica?>">
-            <?echo "<b>Veículo de Publicação:</b>" ?>
+          <?php echo "<b>Veículo de Publicação:</b>" ?>
           </td>
           <td> 
-          <?
+          <?php
             db_input('l221_veiculopublica',82,$Il221_veiculopublica,true,'text',$db_opcao,"")
           ?>
           </td>
@@ -224,7 +224,7 @@ $cllicatareg = new cl_licatareg;
             <tr>
               
               <td> 
-              <?
+              <?php
                 
                 db_textarea('l20_objeto', 0, 100, $Il20_objeto, true, 'text', $db_opcao, "onkeyup='limitaTextareaobj(this);' onkeypress='doNothing()';");
                 
@@ -250,7 +250,7 @@ function js_pesquisa(){
 }
 function js_preenchepesquisa(chave){
   db_iframe_licatareg.hide();
-  <?
+  <?php
   if($db_opcao!=1){
     echo " location.href = '".basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"])."?chavepesquisa='+chave";
 
