@@ -217,7 +217,6 @@ $clrotulo->label("pc01_descrmater");
     }
 
     function js_calcula(origem) {
-
         const item = origem.id.split('_');
         const id = item[1];
         const quant = new Number($('#qtd_' + id).val());
@@ -228,7 +227,6 @@ $clrotulo->label("pc01_descrmater");
     }
 
     function js_calculaVrUnit(origem) {
-
         const item = origem.id.split('_');
         const id = item[1];
         const quant = new Number($('#qtddisponivel_' + id).val());
@@ -270,6 +268,16 @@ $clrotulo->label("pc01_descrmater");
                 var qtdSolicitada = $(this).find("td").eq(8).find("input").val();
                 var vlrDisponivel = $(this).find("td").eq(6).find("input").val();
                 var vlrSolicitado = $(this).find("td").eq(7).find("input").val();
+
+                if(Number(vlrSolicitado) <= 0){
+                    alert('Vlr. Solicitado deve ser maior que Zero!');
+                    return false;
+                }
+
+                if(Number(qtdSolicitada) <= 0){
+                    alert('Qtd. Solicitada deve ser maior que Zero!');
+                    return false;
+                }
 
                 if (Number(vlrSolicitado) > Number(vlrDisponivel)) {
                     alert('Vlr. Solicitado maior que a Vlr. Disponível!');
