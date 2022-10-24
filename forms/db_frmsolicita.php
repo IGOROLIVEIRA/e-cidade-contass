@@ -243,7 +243,6 @@ $iOpcaoTipoSolicitacao = $db_opcao;
     <td colspan="3">
       <?
         $aTiposDisponiveis = array(1 => "Normal",
-                                   2 => "Pacto",
                                    5 => "Registro de Preço"
                                   );
 
