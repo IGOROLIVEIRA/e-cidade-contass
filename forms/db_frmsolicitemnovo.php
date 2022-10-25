@@ -232,9 +232,6 @@ if ((isset($opcao) && $opcao == "alterar")) {
                 $matunid = db_utils::fieldsMemory($result, $i);
 
                 $unidade[$matunid->m61_codmatunid] = $matunid->m61_descr;
-                /*
-      echo "<option value=\"$matunid->m61_codmatunid \">$matunid->m61_descr</option>";
-      */
               }
             }
 
@@ -425,9 +422,6 @@ if ((isset($opcao) && $opcao == "alterar")) {
 
 
 <script>
-  //document.getElementsByName("codmaterial[]")[indice].value
-
-
   const input = document.getElementById("pc11_quant");
   input.addEventListener("keypress", mask_4casasdecimais);
 
@@ -513,7 +507,6 @@ if ((isset($opcao) && $opcao == "alterar")) {
       document.getElementById('pc17_unid').style.display = "none";
       document.getElementById('ctnServicoQuantidade').style.display = "";
       document.getElementById('pc11_servicoquantidade').style.display = "";
-      //document.getElementById('pc11_quant').value = 1;
       document.getElementById('pc11_quant').readOnly = true;
       document.getElementById('pc11_quant').style.background = "#EEE";
       document.getElementById('tdunidade').style.display = "none";
@@ -523,14 +516,13 @@ if ((isset($opcao) && $opcao == "alterar")) {
         document.getElementById('titleUnidade2').style.display = "";
         document.getElementById('pc11_seq').style.marginLeft = "0px";
         document.getElementById('titleOrdem').style.marginLeft = "";
-        document.getElementById('ctnServicoQuantidade').style.marginLeft = "";
+        document.getElementById('ctnServicoQuantidade').style.marginLeft = "-20%";
         document.getElementById('pc11_servicoquantidade').style.marginLeft = "";
-        document.getElementById('pc11_servicoquantidade').style.width = "76px";
+        document.getElementById('pc11_servicoquantidade').style.width = "100%";
         document.getElementById('pc11_quant').readOnly = false;
         document.getElementById('pc11_quant').style.background = "";
         document.getElementById("pc11_servicoquantidade").options[1].selected = true;
         document.getElementById('tdunidade2').style.display = "";
-
 
 
       } else {
@@ -579,7 +571,6 @@ if ((isset($opcao) && $opcao == "alterar")) {
     document.getElementById('pc17_unid').value = document.getElementsByName("codigo_unidade[]")[indice].value;
     document.getElementById('pc11_servicoquantidade').value = document.getElementsByName("servicoquantidade[]")[indice].value;
     document.getElementById('pc11_codigo').value = document.getElementsByName("codigo[]")[indice].value;
-    //document.getElementById('eleSub').value = document.getElementsByName("descrelemento[]")[indice].value;
     $('eleSub').options[0] = new Option(document.getElementsByName("descrelemento[]")[indice].value, document.getElementsByName("descrelemento[]")[indice].value);
 
     document.getElementById('pc16_codmater').disabled = true;
@@ -589,7 +580,6 @@ if ((isset($opcao) && $opcao == "alterar")) {
     document.getElementById('pc17_unid').disabled = true;
     document.getElementById('pc11_servicoquantidade').disabled = true;
     document.getElementById('eleSub').disabled = true;
-    //document.getElementById('pc11_codigo').disabled = true;
 
 
   }
@@ -603,9 +593,9 @@ if ((isset($opcao) && $opcao == "alterar")) {
       document.getElementById('titleUnidade2').style.display = "";
       document.getElementById('pc11_seq').style.marginLeft = "0px";
       document.getElementById('titleOrdem').style.marginLeft = "";
-      document.getElementById('ctnServicoQuantidade').style.marginLeft = "";
+      document.getElementById('ctnServicoQuantidade').style.marginLeft = "-20%";
       document.getElementById('pc11_servicoquantidade').style.marginLeft = "";
-      document.getElementById('pc11_servicoquantidade').style.width = "76px";
+      document.getElementById('pc11_servicoquantidade').style.width = "100%";
       document.getElementById('pc11_quant').readOnly = false;
       document.getElementById('pc11_quant').style.background = "";
       document.getElementById('tdunidade2').style.display = "";
@@ -695,7 +685,6 @@ if ((isset($opcao) && $opcao == "alterar")) {
     }
 
     if (oRetorno.dados.length == 1) {
-      //$('eleSub').disabled = true;
       document.getElementById("eleSub").setAttribute("tabindex", "-1");
       document.getElementById("eleSub").setAttribute("aria-disabled", "true");
 
@@ -708,7 +697,6 @@ if ((isset($opcao) && $opcao == "alterar")) {
 
       $('eleSub').style.background = "";
       $('eleSub').style.pointerEvents = "";
-      //$('eleSub').disabled = false;
 
     }
 
@@ -734,7 +722,6 @@ if ((isset($opcao) && $opcao == "alterar")) {
       var input = document.querySelector("#db_opcao");
       input.disabled = false;
     }
-    //$('ctnServicoQuantidade').style.display='table-row';
 
   }
 
@@ -977,6 +964,8 @@ if ((isset($opcao) && $opcao == "alterar")) {
     document.getElementById('pc11_quant').style.background = "";
     document.getElementById('tdunidade2').style.display = "none";
     document.getElementById('tdunidade').style.display = "";
+    document.getElementById('ctnServicoQuantidade').style.marginLeft = "";
+
 
     sequencial = 0;
     for (var i = 0; i < oGridItens.aRows.length; i++) {
