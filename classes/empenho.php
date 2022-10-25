@@ -3076,6 +3076,9 @@ class empenho {
          *verificar se todas as autorizacoes estao anuladas.
          *Se todas estiverem anuladas, executa os comandos de exclusao de orcamento, processo de compras e anulacao de solicitacao
          */
+
+        if($clsolicitem->numrows > 0){
+
         $sSql = db_query("select distinct e54_autori autoriza, e54_anulad from empautitempcprocitem inner join empautoriza on e54_autori = e73_autori where e73_pcprocitem in (select pc81_codprocitem from pcprocitem where pc81_solicitem in (select pc11_codigo from solicitem where pc11_numero = {$oSolicitem->solicitacao}))");
         $rsSql = $sSql;
         
@@ -3143,6 +3146,22 @@ class empenho {
               $this->lSqlErro  = true;
               $this->sErroMsg  = "Erro[]:Empenho não anulado.\n";
               $this->sErroMsg .= "({$oDaoOrcamVal->erro_msg})";
+      
+            }
+          }
+
+          require_once("classes/db_pcorcamtroca_classe.php");
+          $oDaoOrcamTroca = new cl_pcorcamtroca();
+          $sSqlOrcamTroca = $oDaoOrcamTroca->sql_query_file(null,"*",null,"pc25_orcamitem in (select pc22_orcamitem from pcorcamitem where pc22_codorc = {$oResult->orcamento})");
+          $rsOrcamTroca   = $oDaoOrcamTroca->sql_record($sSqlOrcamTroca);
+          if($oDaoOrcamTroca->numrows > 0){
+            $oDaoOrcamTroca->excluir(null,"pc25_orcamitem in (select pc22_orcamitem from pcorcamitem where pc22_codorc = {$oResult->orcamento})");
+
+            if ($oDaoOrcamTroca->erro_status == 0) {
+
+              $this->lSqlErro  = true;
+              $this->sErroMsg  = "Erro[]:Empenho não anulado.\n";
+              $this->sErroMsg .= "({$oDaoOrcamTroca->erro_msg})";
       
             }
           }
@@ -3257,6 +3276,7 @@ class empenho {
               $this->sErroMsg  = "Erro[]:Empenho não anulado.\n";
               $this->sErroMsg .= "({$oDaoProc->erro_msg})";
       
+              }
             }
           }
         }
