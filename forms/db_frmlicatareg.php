@@ -13,7 +13,7 @@ $cllicatareg = new cl_licatareg;
   <tr>
     <td>
       <fieldset style="margin-top: 30px;">
-        <legend>Ata de Registro de PreÃ§o</legend>
+        <legend>Ata de Registro de Preço</legend>
         <table border="0">
         <tr>
           <td nowrap title="<?=@$Tl221_sequencial?>">
@@ -274,7 +274,7 @@ function js_pesquisarLicitacao(lMostra) {
     
   }
 
-  js_OpenJanelaIframe('', 'db_iframe_proc', sArquivo, 'Pesquisa de LicitaÃ§Ã£o', lMostra);
+  js_OpenJanelaIframe('', 'db_iframe_proc', sArquivo, 'Pesquisa de Licitação', lMostra);
 }
 
 function js_mostraLicitacao(iCodigoLicitacao, descricao) {
@@ -298,7 +298,7 @@ function js_mostraLicitacaoHidden(descricao, lErro) {
   if(!lErro){
   location.href = 'lic1_licatareg001.php?l221_licitacao=' + document.getElementById('l221_licitacao').value + '&l20_objeto=' + descricao;
   }else{
-    alert("LicitaÃ§Ã£o nÃ£o permitida!");
+    alert("Licitação não permitida!");
     location.href = 'lic1_licatareg001.php';
   }
 
