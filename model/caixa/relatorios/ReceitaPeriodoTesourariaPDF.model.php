@@ -249,7 +249,7 @@ class ReceitaPeriodoTesourariaPDF extends PDF
                 continue;
             }
 
-            $this->preencherDadosReceita($sTitulo, $oReceita, 'O');
+            $this->preencherDadosReceita($sTitulo, $oReceita);
         }
 
         $this->setfont('arial', 'B', 7);
@@ -265,7 +265,11 @@ class ReceitaPeriodoTesourariaPDF extends PDF
             $this->cell(($this->PDFiTamanhoDescricaoTotal + 25), 6, $cgm, 1, 1, "L", 1);
             $this->totalCGM = 0;
             foreach ($oReceitaContribuinte as $oReceitaFinal) {
-                $this->preencherDadosReceita($sTitulo, $oReceitaFinal, $sTipo);
+                if ($sTipo == "O") {
+                    $this->preencherDadosReceita($sTitulo, $oReceitaFinal);
+                    continue;
+                }
+                $this->preencherDadosReceitaExtraOrcamentaria($sTitulo, $oReceitaFinal);
             }
             $this->setfont('arial', 'b', 7);
             $this->cell($this->PDFiTamanhoDescricaoTotal, 4, "TOTAL CGM...", 1, 0, "L", 0);
@@ -274,7 +278,7 @@ class ReceitaPeriodoTesourariaPDF extends PDF
         }
     }
 
-    public function preencherDadosReceita($sTitulo, $oReceita, $sTipo)
+    public function preencherDadosReceita($sTitulo, $oReceita)
     {
         $this->definirPropriedadesDeExibicao();
         if ($this->gety() > $this->h - 30) {
@@ -284,17 +288,8 @@ class ReceitaPeriodoTesourariaPDF extends PDF
         $this->montarDados($oReceita);
         $this->definirFundoColorido();
 
-        if ($sTipo == "O") {
-            $this->totalOrcamentaria += $oReceita->valor;
-            $this->totalCGM += $oReceita->valor;
-            return;
-        }
-
-        if ($sTipo == "E") {
-            $this->totalExtra += $oReceita->valor;
-            $this->totalCGM += $oReceita->valor;
-            return;
-        }
+        $this->totalOrcamentaria += $oReceita->valor;
+        $this->totalCGM += $oReceita->valor;
     }
 
     public function preencherDadosReceitaExtraOrcamentaria($sTitulo, $oReceita)
