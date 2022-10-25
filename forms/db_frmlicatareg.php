@@ -30,9 +30,9 @@ $cllicatareg = new cl_licatareg;
           <td nowrap title="<?=@$Tl221_licitacao?>">
           <?php 
             if(isset($l221_sequencial) && $l221_sequencial != "" && $l221_sequencial != null){
-              echo "<b>LicitaÃ§Ã£o:</b>";
+              echo "<b>Licitação:</b>";
             }else{
-              db_ancora("LicitaÃ§Ã£o: ", "js_pesquisarLicitacao(true);", $iOpcaoLicitacao); 
+              db_ancora("Licitação: ", "js_pesquisarLicitacao(true);", $iOpcaoLicitacao); 
             }  
               ?>
           </td>
