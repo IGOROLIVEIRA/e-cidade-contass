@@ -13,7 +13,7 @@ $cllicatareg = new cl_licatareg;
   <tr>
     <td>
       <fieldset style="margin-top: 30px;">
-        <legend>Ata de Registro de PreÁo</legend>
+        <legend>Ata de Registro de Pre√ßo</legend>
         <table border="0">
         <tr>
           <td nowrap title="<?=@$Tl221_sequencial?>">
@@ -30,9 +30,9 @@ $cllicatareg = new cl_licatareg;
           <td nowrap title="<?=@$Tl221_licitacao?>">
           <?php 
             if(isset($l221_sequencial) && $l221_sequencial != "" && $l221_sequencial != null){
-              echo "<b>LicitaÁ„o:</b>";
+              echo "<b>Licita√ß√£o:</b>";
             }else{
-              db_ancora("LicitaÁ„o: ", "js_pesquisarLicitacao(true);", $iOpcaoLicitacao); 
+              db_ancora("Licita√ß√£o: ", "js_pesquisarLicitacao(true);", $iOpcaoLicitacao); 
             }  
               ?>
           </td>
@@ -274,7 +274,7 @@ function js_pesquisarLicitacao(lMostra) {
     
   }
 
-  js_OpenJanelaIframe('', 'db_iframe_proc', sArquivo, 'Pesquisa de LicitaÁ„o', lMostra);
+  js_OpenJanelaIframe('', 'db_iframe_proc', sArquivo, 'Pesquisa de Licita√ß√£o', lMostra);
 }
 
 function js_mostraLicitacao(iCodigoLicitacao, descricao) {
@@ -298,7 +298,7 @@ function js_mostraLicitacaoHidden(descricao, lErro) {
   if(!lErro){
   location.href = 'lic1_licatareg001.php?l221_licitacao=' + document.getElementById('l221_licitacao').value + '&l20_objeto=' + descricao;
   }else{
-    alert("LicitaÁ„o n„o permitida!");
+    alert("Licita√ß√£o n√£o permitida!");
     location.href = 'lic1_licatareg001.php';
   }
 

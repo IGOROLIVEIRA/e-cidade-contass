@@ -9,38 +9,38 @@ class Oc18547 extends AbstractMigration
     {
         $sql = "BEGIN;
 
-        INSERT INTO db_itensmenu VALUES((select max(id_item)+1 from db_itensmenu),'Ata de Registro de Preço','Ata de Registro de Preço','',1,1,'Ata de Registro de Preço','t');
+        INSERT INTO db_itensmenu VALUES((select max(id_item)+1 from db_itensmenu),'Ata de Registro de PreÃ§o','Ata de Registro de PreÃ§o','',1,1,'Ata de Registro de PreÃ§o','t');
         INSERT INTO db_menu VALUES(1818,(select max(id_item) from db_itensmenu),7,381);
         
-        INSERT INTO db_itensmenu values ((select max(id_item)+1 from db_itensmenu),'Inclusão','Inclusão','lic1_licatareg002.php',1,1,'Inclusão','t');
+        INSERT INTO db_itensmenu values ((select max(id_item)+1 from db_itensmenu),'InclusÃ£o','InclusÃ£o','lic1_licatareg002.php',1,1,'InclusÃ£o','t');
         INSERT INTO db_menu VALUES((select id_item from db_itensmenu where descricao like'%Ata de Registro%'),(select max(id_item) from db_itensmenu),1,381);
 
-        INSERT INTO db_itensmenu values ((select max(id_item)+1 from db_itensmenu),'Alteração','Alteração','lic1_licatareg002.php',1,1,'Alteração','t');
+        INSERT INTO db_itensmenu values ((select max(id_item)+1 from db_itensmenu),'AlteraÃ§Ã£o','AlteraÃ§Ã£o','lic1_licatareg002.php',1,1,'AlteraÃ§Ã£o','t');
         INSERT INTO db_menu VALUES((select id_item from db_itensmenu where descricao like'%Ata de Registro%'),(select max(id_item) from db_itensmenu),2,381);
 
-        INSERT INTO db_itensmenu values ((select max(id_item)+1 from db_itensmenu),'Exclusão','Exclusão','lic1_licatareg002.php',1,1,'Exclusão','t');
+        INSERT INTO db_itensmenu values ((select max(id_item)+1 from db_itensmenu),'ExclusÃ£o','ExclusÃ£o','lic1_licatareg002.php',1,1,'ExclusÃ£o','t');
         INSERT INTO db_menu VALUES((select id_item from db_itensmenu where descricao like'%Ata de Registro%'),(select max(id_item) from db_itensmenu),3,381);
 
-        INSERT INTO db_itensmenu values ((select max(id_item)+1 from db_itensmenu),'Gerar Autorizção','Gerar Autorizção','lic1_licatareg002.php',1,1,'Gerar Autorizção','t');
+        INSERT INTO db_itensmenu values ((select max(id_item)+1 from db_itensmenu),'Gerar AutorizÃ§Ã£o','Gerar AutorizÃ§Ã£o','lic1_licatareg002.php',1,1,'Gerar AutorizÃ§Ã£o','t');
         INSERT INTO db_menu VALUES((select id_item from db_itensmenu where descricao like'%Ata de Registro%'),(select max(id_item) from db_itensmenu),4,381);
 
-        INSERT INTO db_itensmenu values ((select max(id_item)+1 from db_itensmenu),'Reequilíbrio','Reequilíbrio','lic1_licatareg002.php',1,1,'Reequilíbrio','t');
+        INSERT INTO db_itensmenu values ((select max(id_item)+1 from db_itensmenu),'ReequilÃ­brio','ReequilÃ­brio','lic1_licatareg002.php',1,1,'ReequilÃ­brio','t');
         INSERT INTO db_menu VALUES((select id_item from db_itensmenu where descricao like'%Ata de Registro%'),(select max(id_item) from db_itensmenu),5,381);
 
-        INSERT INTO db_itensmenu values ((select max(id_item)+1 from db_itensmenu),'Desistência','Desistência','lic1_licatareg002.php',1,1,'Desistência','t');
+        INSERT INTO db_itensmenu values ((select max(id_item)+1 from db_itensmenu),'DesistÃªncia','DesistÃªncia','lic1_licatareg002.php',1,1,'DesistÃªncia','t');
         INSERT INTO db_menu VALUES((select id_item from db_itensmenu where descricao like'%Ata de Registro%'),(select max(id_item) from db_itensmenu),6,381);
 
         INSERT INTO db_sysarquivo VALUES((select max(codarq)+1 from db_sysarquivo),'licatareg','cadastro de ata de registro de preco','l221','2022-10-07','cadastro de ata de registro de preco',0,'f','f','f','f');
 
         INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l221_sequencial'	 		,'int8' ,'Sequencial'			,'', 'Sequencial'			 ,11	,false, false, false, 1, 'int8', 'Sequencial');
-        INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l221_licitacao'	 		,'int8' ,'Licitação' ,'', 'Licitação'	 ,11	,false, false, false, 1, 'int8', 'Licitação');
-        INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l221_numata'		,'varchar' ,'Número da Ata'		,'', 'Número da Ata'		 ,16	,false, false, false, 1, 'varchar', 'Número da Ata');
-        INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l221_exercicio'  		,'varchar' ,'Exercício da Ata'				,'', 'Exercício da Ata'				 ,4	,false, false, false, 1, 'varchar', 'Exercício da Ata');
+        INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l221_licitacao'	 		,'int8' ,'LicitaÃ§Ã£o' ,'', 'LicitaÃ§Ã£o'	 ,11	,false, false, false, 1, 'int8', 'LicitaÃ§Ã£o');
+        INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l221_numata'		,'varchar' ,'NÃºmero da Ata'		,'', 'NÃºmero da Ata'		 ,16	,false, false, false, 1, 'varchar', 'NÃºmero da Ata');
+        INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l221_exercicio'  		,'varchar' ,'ExercÃ­cio da Ata'				,'', 'ExercÃ­cio da Ata'				 ,4	,false, false, false, 1, 'varchar', 'ExercÃ­cio da Ata');
         INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l221_fornecedor'    		,'int8' ,'Fornecedor'			,'', 'Fornecedor'			 ,11	,false, false, false, 0, 'int8', 'Fornecedor');
         INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l221_dataini'	,'date' ,'Data Inicio da Ata'		,'', 'Data Inicio da Ata'		 ,16	,false, false, false, 0, 'date', 'Data Inicio da Ata');
         INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l221_datafinal'	,'date' ,'Data Final da Ata'		,'', 'Data Final da Ata'		 ,16	,false, false, false, 0, 'date', 'Data Final da Ata');
-        INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l221_datapublica'	,'date' ,'Data de Publicação'		,'', 'Data de Publicação'		 ,16	,false, false, false, 0, 'date', 'Data de Publicação');
-        INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l221_veiculopublica','text' ,'Veículo de Publicação'	,'', 'Veículo de Publicação'		 ,255	,false, false, false, 1, 'text', 'Veículo de Publicação');
+        INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l221_datapublica'	,'date' ,'Data de PublicaÃ§Ã£o'		,'', 'Data de PublicaÃ§Ã£o'		 ,16	,false, false, false, 0, 'date', 'Data de PublicaÃ§Ã£o');
+        INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l221_veiculopublica','text' ,'VeÃ­culo de PublicaÃ§Ã£o'	,'', 'VeÃ­culo de PublicaÃ§Ã£o'		 ,255	,false, false, false, 1, 'text', 'VeÃ­culo de PublicaÃ§Ã£o');
 
         INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'l221_sequencial')		 	, 1, 0);
         INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'l221_licitacao')			 	, 2, 0);
@@ -83,7 +83,7 @@ class Oc18547 extends AbstractMigration
         INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l222_licatareg'	 		,'int8' ,'Sequencial'			,'', 'Sequencial'			 ,11	,false, false, false, 1, 'int8', 'Sequencial');
         INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l222_ordem'	 		,'int4' ,'Ordem' ,'', 'Ordem'	 ,11	,false, false, false, 1, 'int4', 'Ordem');
         INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l222_item'		,'int8' ,'Item'		,'', 'Item'		 ,11	,false, false, false, 0, 'int8', 'Item');
-        INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l222_descricao'  		,'varchar' ,'Descrição Item'				,'', 'Descrição Item'				 ,255	,false, false, false, 1, 'varchar', 'Descrição Item');
+        INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l222_descricao'  		,'varchar' ,'DescriÃ§Ã£o Item'				,'', 'DescriÃ§Ã£o Item'				 ,255	,false, false, false, 1, 'varchar', 'DescriÃ§Ã£o Item');
         INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l222_unidade'    		,'varchar' ,'Unidade'			,'', 'Unidade'			 ,255	,false, false, false, 0, 'int8', 'Unidade');
         INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l222_quantidade'	,'float8' ,'Quatidade'		,'', 'Quatidade'		 ,16	,false, false, false, 0, 'float8', 'Quatidade');
         INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l222_valorunit'	,'float8' ,'Valor Unitario'		,'', 'Valor Unitario'		 ,16	,false, false, false, 0, 'float8', 'Valor Unitario');
