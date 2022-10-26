@@ -94,7 +94,6 @@ if (isset($alterar)) {
       db_query("update acordovigencia set ac18_datainicio = '$datainicio', ac18_datafim = '$datafim' WHERE ac18_acordoposicao = $posicao;");
       db_query("update apostilamento set si03_dataapostila = '$dataapostila' WHERE si03_acordoposicao = $posicao;");
       db_query("update acordoposicao set ac26_numeroapostilamento = '$numeroapostilamento' WHERE ac26_sequencial = $posicao;");
-      //db_query("update acordoposicao set ac26_data = '$dataapostila' WHERE ac26_sequencial = $posicao;");
     }
   }
 
@@ -335,7 +334,6 @@ if (isset($alterar)) {
           db_query("update acordoitemperiodo set ac41_datainicial = '$dTinicio', ac41_datafinal = '$dTfim' where ac41_acordoposicao = '$oPosicao->posicao'");
         }
         if (!empty($dTassaditivo)) {
-          //db_query("update acordoposicao set ac26_data = '$dTassaditivo' WHERE ac26_sequencial = '$oPosicao->posicao';");
           db_query("update acordoposicaoaditamento set ac35_dataassinaturatermoaditivo = '$dTassaditivo' where ac35_acordoposicao = '$oPosicao->posicao'");
         }
       } else {
@@ -1059,7 +1057,7 @@ if (isset($alterar)) {
     return true;
   }
 
-  // criando array dos inputs de apostilamento
+  // criando array dos campos referente ao apostilamento que serão enviados via POST
 
   ac26_numeroapostilamento = document.getElementsByClassName('numeroapostilamento');
   ac18_datainicio = document.getElementsByClassName('datainicio');
