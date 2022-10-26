@@ -196,6 +196,14 @@ class cl_solicita {
        $this->erro_status = "0";
        return false;
      }
+
+     if(($this->pc10_resumo == null) || ($this->pc10_resumo == "") ){
+      $this->erro_banco = "Campo Resumo da Solicitação não informado pelo usuário.";
+      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
+
      $sql = "insert into solicita(
                                        pc10_numero
                                       ,pc10_data

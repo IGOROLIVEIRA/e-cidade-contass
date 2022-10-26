@@ -389,11 +389,13 @@ $mesfolha = DBPessoal::getMesFolha();
                 return;
             }
         }
-        var select = document.getElementById('matriculas');
+        if (!$F('z01_nome') || $F('z01_nome').toLowerCase().indexOf("não encontrado") > 0) {
+            return;
+        } 
         var opt = document.createElement('option');
         opt.value = $F('rh01_regist');
         opt.innerHTML = $F('rh01_regist') + ' - ' + $F('z01_nome');
-        select.appendChild(opt);
+        selectobject.appendChild(opt);
         js_limpar_matric();
     }
 
@@ -414,11 +416,13 @@ $mesfolha = DBPessoal::getMesFolha();
                 return;
             }
         }
-        var select = document.getElementById('cgms');
+        if (!$F('z01_nomecgm') || $F('z01_nomecgm').toLowerCase().indexOf("não encontrado") > 0) {
+            return;
+        } 
         var opt = document.createElement('option');
         opt.value = $F('z01_numcgm');
         opt.innerHTML = $F('z01_numcgm') + ' - ' + $F('z01_nomecgm');
-        select.appendChild(opt);
+        selectobject.appendChild(opt);
         js_limpar_cgm();
     }
 
