@@ -942,7 +942,7 @@ if (isset($alterar)) {
                             ); ?>
                           </td>
                           <td nowrap>
-                            <b> Data da apostilamento: </b>
+                            <b> Data da apostila: </b>
                           </td>
                           <td>
                             <?php
