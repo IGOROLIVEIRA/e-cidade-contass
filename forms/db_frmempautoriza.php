@@ -430,6 +430,7 @@ db_app::load("DBFormCache.js");
 </form>
 <script>
     var opcao = <?php echo $db_opcao ?>;
+    var codigotribunal = <?php echo $e54_codcom ?>;
 
     if (opcao == 2) {
         if ($('e54_tipoautorizacao').value == '1') {
@@ -472,54 +473,28 @@ db_app::load("DBFormCache.js");
 
     function js_validaLicitacao() {
 
+        if (codigotribunal != 13) {
+            alert("usuário:\nO tipo de compra selecionado não pode ser utilizado para autorização direta. Gentileza alterar para o tipo de autorização adequado");
+            return false;
+        }
+
         if ($('e54_tipoautorizacao').value == '3' && $('e54_codlicitacao').value == '') {
-            alert("usuário:\nA licitação deve ser informada!!.");
+            alert("usuário:\nA licitação deve ser informada.");
             return false;
         }
 
         if ($('e54_tipoautorizacao').value == '2' && $('e54_licoutrosorgaos').value == '') {
-            alert("usuário:\nA licitação deve ser informada!!.");
+            alert("usuário:\nA licitação deve ser informada.");
             return false;
         }
 
         if ($('e54_tipoautorizacao').value == '4' && $('e54_adesaoregpreco').value == '') {
-            alert("usuário:\nA Adesão de registro de preço deve ser informada!!.");
+            alert("usuário:\nA Adesão de registro de preço deve ser informada.");
             return false;
         }
 
-        if ($('e54_tipoautorizacao').value == '1') {
-
-            var js_validacaotipocompra;
-            var sUrlRPC = 'com4_tipocompra.RPC.php';
-            var pc50_codcom = $('e54_codcom').value;
-            var oParam = new Object();
-            oParam.sExecucao = 'getTipocompratribunal';
-            oParam.Codtipocom = pc50_codcom;
-
-            var oAjax = new Ajax.Request(sUrlRPC, {
-                method: 'post',
-                parameters: 'json=' + Object.toJSON(oParam),
-                onComplete: js_retornotipocompra
-            });
-
-
-            function js_retornotipocompra(oAjax) {
-
-                oRetorno = eval("(" + oAjax.responseText + ")");
-                if (oRetorno.tipocompratribunal != 13) {
-                    erro = true;
-                }
-            }
-
-            if (erro) {
-                alert("usuário:\nO tipo de compra selecionado não pode ser utilizado para autorização direta. Gentileza alterar para o tipo de autorização adequado!!.");
-                return false;
-            }
-
-        }
-
         if ($('e54_tipoautorizacao').value == '0') {
-            alert("usuário:\nO tipo de autorização deve ser informado!!.");
+            alert("usuário:\nO tipo de autorização deve ser informado.");
             return false;
         }
 
@@ -1250,7 +1225,7 @@ db_app::load("DBFormCache.js");
     function js_validacampos(oAjax) {
 
         oRetorno = eval("(" + oAjax.responseText + ")");
-
+        codigotribunal = oRetorno.tipocompratribunal;
         if (oRetorno.tipocompratribunal == 13) {
             document.getElementById('trdadoslicitacao').style.display = 'none';
             document.form1.e54_nummodalidade.value = '';
