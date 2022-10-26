@@ -473,28 +473,28 @@ db_app::load("DBFormCache.js");
 
     function js_validaLicitacao() {
 
-        if (codigotribunal != 13) {
-            alert("usuário:\nO tipo de compra selecionado não pode ser utilizado para autorização direta. Gentileza alterar para o tipo de autorização adequado");
+        if (codigotribunal != 13 && $('e54_tipoautorizacao').value == '1') {
+            alert("Usuário:\nO tipo de compra selecionado não pode ser utilizado para autorização direta. Gentileza alterar para o tipo de autorização adequado");
             return false;
         }
 
         if ($('e54_tipoautorizacao').value == '3' && $('e54_codlicitacao').value == '') {
-            alert("usuário:\nA licitação deve ser informada.");
+            alert("Usuário:\nA licitação deve ser informada.");
             return false;
         }
 
         if ($('e54_tipoautorizacao').value == '2' && $('e54_licoutrosorgaos').value == '') {
-            alert("usuário:\nA licitação deve ser informada.");
+            alert("Usuário:\nA licitação deve ser informada.");
             return false;
         }
 
         if ($('e54_tipoautorizacao').value == '4' && $('e54_adesaoregpreco').value == '') {
-            alert("usuário:\nA Adesão de registro de preço deve ser informada.");
+            alert("Usuário:\nA Adesão de registro de preço deve ser informada.");
             return false;
         }
 
         if ($('e54_tipoautorizacao').value == '0') {
-            alert("usuário:\nO tipo de autorização deve ser informado.");
+            alert("Usuário:\nO tipo de autorização deve ser informado.");
             return false;
         }
 
