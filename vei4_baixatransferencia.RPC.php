@@ -195,8 +195,8 @@ switch ($oParam->exec){
                 $clveiculos->ve01_ativo                 = $aVeiculo->ve01_ativo;
                 $clveiculos->ve01_veictipoabast         = $aVeiculo->ve01_veictipoabast;
                 $clveiculos->ve01_nroserie              = $aVeiculo->ve01_nroserie;
-                $clveiculos->ve01_codigoant             = $aVeiculo->ve01_codigoant;
-                $clveiculos->ve01_codunidadesub         = $aUnidadeAtual->codunidadesub;
+                $clveiculos->ve01_codigoant             = null;
+                $clveiculos->ve01_codunidadesub         = null;
                 $clveiculos->ve01_veiccadpotencia       = $aVeiculo->ve01_veiccadpotencia;
                 $clveiculos->ve01_instit                = $aVeiculo->ve01_instit;
 
