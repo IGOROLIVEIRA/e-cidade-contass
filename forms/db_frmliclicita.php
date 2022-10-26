@@ -1230,7 +1230,8 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             document.getElementById("l20_codtipocomdescr").disabled = true;
         }
 
-        document.getElementById("l20_descricaodep").style.width = "372px";
+        document.getElementById("respCondunome").style.width = "251px";
+        document.getElementById("l20_descricaodep").style.width = "281px";
         document.getElementById("lprocsis").style.width = "85px";
         document.getElementById("l20_usaregistropreco").style.width = "85px";
         document.getElementById("l20_codtipocomdescr").style.width = "307px";
