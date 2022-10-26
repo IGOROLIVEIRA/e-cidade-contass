@@ -464,13 +464,65 @@ if ((isset($opcao) && $opcao == "alterar")) {
   }
 
   function js_alterar(indice) {
+
+    if (document.getElementById('pc17_unid2').style.display == '') {
+      document.getElementById('pc17_unid').value = document.getElementById('pc17_unid2').value;
+      if ($F('pc17_unid2') == "0") {
+        alert('Informe a Unidade!');
+        return false;
+      }
+    } else {
+      if ($F('pc17_unid') == "0" && document.getElementById('pc11_servicoquantidade').style.display != '') {
+
+        alert('Informe a unidade!');
+        return false;
+
+      }
+
+    }
+
+    if ($F('eleSub') == "0") {
+
+      alert('Informe o Desdobramento!');
+      return false;
+
+    }
+
+    if ($F('pc16_codmater') == "") {
+
+      alert('Informe o material!');
+      return false;
+
+    }
+
+    if ($F('pc11_seq') == "") {
+
+      alert('Informe a ordem!');
+      return false;
+
+    }
+
+    if ($F('pc11_quant') == "") {
+
+      alert('Informe a quantidade!');
+      return false;
+
+    }
+
+    if (document.getElementById('pc11_servicoquantidade').value == 'false' && document.getElementById('pc11_servicoquantidade').style.display != 'none') {
+      document.getElementById('pc17_unid').value = 999999;
+    }
+
+
     var sizeItens = oGridItens.aRows.length;
-
-
     for (var i = 0; i < sizeItens; i++) {
       if (indice != i) {
         if (document.getElementById('pc11_seq').value == document.getElementsByName("ordem[]")[i].value && document.getElementById('pc16_codmater').value != document.getElementsByName("codmaterial[]")[i].value) {
           alert('O item ' + document.getElementsByName("codmaterial[]")[i].value + ' já foi incluído com o sequencial ' + document.getElementById('pc11_seq').value + ' nesta solicitação.');
+          return false;
+        }
+        if (document.getElementById('pc16_codmater').value == document.getElementsByName("codmaterial[]")[i].value) {
+          alert('AVISO Item ja cadastrado nesta solicitação..');
           return false;
         }
       }
@@ -1056,6 +1108,11 @@ if ((isset($opcao) && $opcao == "alterar")) {
       return false;
 
     }
+
+    if (document.getElementById('pc11_servicoquantidade').value == 'false' && document.getElementById('pc11_servicoquantidade').style.display != 'none') {
+      document.getElementById('pc17_unid').value = 999999;
+    }
+
 
 
     var sizeItens = oGridItens.aRows.length;
