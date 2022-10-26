@@ -820,7 +820,7 @@ if (isset($alterar)) {
                             $numadtmOld = "ac26_numeroaditamento_old_{$ac18_sequencial}";
                             $$numadtm = $ac26_numeroaditamento;
                             $$numadtmOld = $ac26_numeroaditamento;
-                            db_input("ac26_numeroaditamento_{$ac18_sequencial}", 10, $Iac26_sequencial, true, "text", 2, "");
+                            db_input("ac26_numeroaditamento_{$ac18_sequencial}", 10, 1, true, "text", 2, "");
                             db_input("ac26_numeroaditamento_old_{$ac18_sequencial}", 10, $Iac26_sequencial, true, 'hidden', 2, "");
                             ?>
                           </td>
@@ -900,7 +900,7 @@ if (isset($alterar)) {
                           <td>
                             <?php
                             db_input("ac26_sequencial", 10, $ac26_sequencial, true, "hidden", 2, "class='ac26_sequencial'");
-                            db_input("ac26_numeroapostilamento", 10, $ac26_numeroapostilamento, true, "text", 2, "class='numeroapostilamento'");
+                            db_input("ac26_numeroapostilamento", 10, 1, true, "text", 2, "class='numeroapostilamento'");
 
                             ?>
                           </td>
