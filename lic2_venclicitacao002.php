@@ -62,7 +62,7 @@ if ($l03_codigo != "") {
 }
 
 $sWhere        .= $sAnd." l20_licsituacao = 10 and l20_instit = ".db_getsession("DB_instit");
-$sSqlLicLicita  = $clliclicita->sql_query(null,"*","l20_codtipocom,l20_numero,l20_anousu",$sWhere);
+$sSqlLicLicita  = $clliclicita->sql_query(null,"distinct l20_codtipocom,l20_edital,l20_dataaber,l20_objeto,l20_numero,l03_descr,l20_anousu","l20_codtipocom,l20_numero,l20_anousu",$sWhere);
 $result         = $clliclicita->sql_record($sSqlLicLicita);
 $numrows        = $clliclicita->numrows;
 
@@ -139,7 +139,7 @@ for ($i = 0; $i < $numrows; $i++) {
   $pdf->setfont('arial','b',8);
   $pdf->cell(30,$alt,'Modalidade :',0,0,"R",0);
   $pdf->setfont('arial','',7);
-  $pdf->cell(60,$alt,$l20_codtipocom.' - '.$l03_descr,0,1,"L",0);
+  $pdf->cell(60,$alt,$l03_descr,0,1,"L",0);
 
   $pdf->setfont('arial','b',8); 
   $pdf->cell(30,$alt,'Data Abertura :',0,0,"R",0); 
