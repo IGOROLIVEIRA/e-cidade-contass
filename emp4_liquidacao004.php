@@ -585,8 +585,21 @@ switch ($objJson->method) {
         }
         
         $ItemAtualPosicao = db_utils::fieldsMemory($ItemAtualPosicao, 0);
+
+        $Dadosemp = $DaoacordoItem->sql_record("select e62_servicoquantidade,pcmater.pc01_servico from empempitem 
+        inner join pcmater on
+        pcmater.pc01_codmater = empempitem.e62_item
+        where e62_numemp = $objJson->iEmpenho");
+
+        if (pg_num_rows($Dadosemp) == 0) {
+          break;
+        }
         
-        if ($ItemAtualPosicao->ac20_servicoquantidade != $ItemUltimaPosicao->ac20_servicoquantidade) {
+        $rsDadosemp = db_utils::fieldsMemory($Dadosemp, 0);
+        
+        
+
+        if ($rsDadosemp->e62_servicoquantidade != $ItemUltimaPosicao->ac20_servicoquantidade) {
           $nMensagem = "Usuário: Não será possível a anulação do empenho.\n\nMotivo: A forma de controle do item " . $rsacordoMaterial->ac20_pcmater . " no empenho é diferente da posição atual do contrato!";
           $iStatus = 2;
           echo $json->encode(array("mensagem" => urlencode($nMensagem), "status" => $iStatus));
@@ -745,8 +758,8 @@ switch ($objJson->method) {
           
 
           if ($ItemUltimaPosicao->ac20_servicoquantidade == 'f' && $ItemUltimaPosicao->pc01_servico == 't') {
-            print_r("update acordoitem set ac20_quantidade = ".$ItemUltimaPosicao->ac20_quantidade.", ac20_valortotal = ".$ItemUltimaPosicao->ac20_valortotal + $aItens[$iInd]->vlrtot.", ac20_valorunitario = ".$ItemUltimaPosicao->ac20_valortotal + $aItens[$iInd]->vlrtot." where ac20_sequencial = ".$ItemUltimaPosicao->ac20_sequencial);
-            exit;
+            //print_r("update acordoitem set ac20_quantidade = ".$ItemUltimaPosicao->ac20_quantidade.", ac20_valortotal = ".$ItemUltimaPosicao->ac20_valortotal + $aItens[$iInd]->vlrtot.", ac20_valorunitario = ".$ItemUltimaPosicao->ac20_valortotal + $aItens[$iInd]->vlrtot." where ac20_sequencial = ".$ItemUltimaPosicao->ac20_sequencial);
+            //exit;
             db_query("update acordoitem set ac20_quantidade = ".$ItemUltimaPosicao->ac20_quantidade.", ac20_valortotal = ".$ItemUltimaPosicao->ac20_valortotal + $aItens[$iInd]->vlrtot.", ac20_valorunitario = ".$ItemUltimaPosicao->ac20_valortotal + $aItens[$iInd]->vlrtot." where ac20_sequencial = ".$ItemUltimaPosicao->ac20_sequencial);
           } else {
             //print_r("update acordoitem set ac20_quantidade = ".($ItemUltimaPosicao->ac20_quantidade+$aItens[$iInd]->quantidade).", ac20_valortotal = ".(($ItemUltimaPosicao->ac20_quantidade+$aItens[$iInd]->quantidade) * $ItemUltimaPosicao->ac20_valorunitario).", ac20_valorunitario = ".$ItemUltimaPosicao->ac20_valorunitario." where ac20_sequencial = ".$ItemUltimaPosicao->ac20_sequencial);
