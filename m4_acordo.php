@@ -58,7 +58,50 @@ $instit = db_getsession('DB_instit');
 if (isset($alterar)) {
   $sqlerro = false;
   $aditivo = false;
+  $erro_msg = "";
   db_inicio_transacao();
+
+  $ac26_sequencial = $_POST['ac26_sequencial'];
+  $ac26_numeroapostilamento = $_POST['ac26_numeroapostilamento'];
+  $ac18_datainicio = $_POST['ac18_datainicio'];
+  $ac18_datafim = $_POST['ac18_datafim'];
+  $si03_dataapostila = $_POST['si03_dataapostila'];
+
+
+  for ($i = 0; $i < count($ac26_sequencial); $i++) {
+    $posicao = $ac26_sequencial[$i];
+    $numeroapostilamento = $ac26_numeroapostilamento[$i];
+    $datainicio = implode('-', array_reverse(explode('/', $ac18_datainicio[$i])));
+    $datafim = implode('-', array_reverse(explode('/', $ac18_datafim[$i])));
+    $dataapostila = implode('-', array_reverse(explode('/', $si03_dataapostila[$i])));
+    $dataassinatura = implode('-', array_reverse(explode('/', $ac16_dataassinatura)));
+
+
+    if (
+      $datainicio < $dataassinatura  || $datafim < $dataassinatura
+      || $dataapostila < $dataassinatura
+    ) {
+      $erro = true;
+      $erro_msg = "Apostilamento: $posicao \nData de assinatura/vigencia de apostilamento não pode ser \nanterior a data de assinatura do contrato";
+    }
+
+    if ($datainicio > $datafim) {
+      $erro = true;
+      $erro_msg = "Apostilamento: $posicao \nData inicial da vigencia nao pode ser posterior a data fim.";
+    }
+
+    if ($erro != true) {
+      db_query("update acordovigencia set ac18_datainicio = '$datainicio', ac18_datafim = '$datafim' WHERE ac18_acordoposicao = $posicao;");
+      db_query("update apostilamento set si03_dataapostila = '$dataapostila' WHERE si03_acordoposicao = $posicao;");
+      db_query("update acordoposicao set ac26_numeroapostilamento = '$numeroapostilamento' WHERE ac26_sequencial = $posicao;");
+    }
+  }
+
+  if ($erro) {
+    db_msgbox($erro_msg);
+    $erro_msg = "";
+  }
+
 
   $rsPosicoes = db_query(
     "select distinct
@@ -114,8 +157,6 @@ if (isset($alterar)) {
                 acordogrupo.ac02_sequencial = acordo.ac16_acordogrupo
                 inner join acordosituacao on
                 acordosituacao.ac17_sequencial = acordo.ac16_acordosituacao
-                inner join acordocomissao on
-                acordocomissao.ac08_sequencial = acordo.ac16_acordocomissao
                 inner join acordovigencia on
                 ac26_sequencial = ac18_acordoposicao
                 inner join acordoposicaoaditamento on
@@ -125,6 +166,13 @@ if (isset($alterar)) {
 
   if (pg_num_rows($rsPosicoes) > 1) {
     $aditivo = true;
+
+    $rsApostilamento = db_query(
+      " select * from apostilamento
+      join acordoposicao on ac26_sequencial=si03_acordoposicao
+      join acordovigencia on ac18_acordoposicao=ac26_sequencial
+      where ac26_acordo='$ac16_sequencial';"
+    );
 
     $rsAditivo = db_query(
       "select distinct
@@ -150,8 +198,6 @@ if (isset($alterar)) {
         acordogrupo.ac02_sequencial = acordo.ac16_acordogrupo
         inner join acordosituacao on
         acordosituacao.ac17_sequencial = acordo.ac16_acordosituacao
-        inner join acordocomissao on
-        acordocomissao.ac08_sequencial = acordo.ac16_acordocomissao
         inner join acordovigencia on
         ac26_sequencial = ac18_acordoposicao
         inner join acordoposicaoaditamento on
@@ -220,6 +266,47 @@ if (isset($alterar)) {
       $erro = true;
     }
   }
+
+  for ($iCont = 0; $iCont < pg_num_rows($rsPosicoes); $iCont++) {
+    $oPosicao = db_utils::fieldsMemory($rsPosicoes, $iCont);
+
+    if ($aditivo) {
+
+      $inicio = 'ac18_datainicio_' . $oPosicao->ac18_sequencial;
+      $fim = 'ac18_datafim_' . $oPosicao->ac18_sequencial;
+      $dataaditivo = 'ac35_dataassinaturatermoaditivo_' . $oPosicao->ac18_sequencial;
+
+      $dTinicio = '';
+      $dTfim = '';
+      $dTassaditivo = '';
+
+      $dTinicio = implode('-', array_reverse(explode('/', $$inicio)));
+      $dTfim = implode('-', array_reverse(explode('/', $$fim)));
+      $dTassaditivo = implode('-', array_reverse(explode('/', $$dataaditivo)));
+      $dataassinatura = implode('-', array_reverse(explode('/', $ac16_dataassinatura)));
+
+      if ($dTassaditivo != "") {
+
+
+
+        if ($dTinicio > $dTfim) {
+          $erro = true;
+          $erro_msg = "Aditamento: $oPosicao->posicao \nData inicial da vigencia nao pode ser posterior a data fim.";
+        }
+        if (
+          $dTinicio < $dataassinatura  || $dTfim < $dataassinatura
+          || $dTassaditivo < $dataassinatura
+        ) {
+          $erro = true;
+          $erro_msg = "Aditamento: $oPosicao->posicao \nData de assinatura/vigencia de aditamento não pode ser \nanterior a data de assinatura do contrato";
+        }
+      }
+    }
+  }
+  if ($erro_msg != "") {
+    db_msgbox($erro_msg);
+  }
+
 
 
   if (!isset($erro)) {
@@ -293,6 +380,13 @@ if (isset($alterar)) {
     if ($sqlerro == false) {
       db_msgbox('Alteração efetuada');
 
+      $rsApostilamento = db_query(
+        " select * from apostilamento
+        join acordoposicao on ac26_sequencial=si03_acordoposicao
+        join acordovigencia on ac18_acordoposicao=ac26_sequencial
+        where ac26_acordo='$ac16_sequencial';"
+      );
+
       if ($aditivo) {
 
         $rsAditivo = db_query(
@@ -319,8 +413,6 @@ if (isset($alterar)) {
                 acordogrupo.ac02_sequencial = acordo.ac16_acordogrupo
                 inner join acordosituacao on
                 acordosituacao.ac17_sequencial = acordo.ac16_acordosituacao
-                inner join acordocomissao on
-                acordocomissao.ac08_sequencial = acordo.ac16_acordocomissao
                 inner join acordovigencia on
                 ac26_sequencial = ac18_acordoposicao
                 inner join acordoposicaoaditamento on
@@ -339,7 +431,7 @@ if (isset($alterar)) {
 } elseif (isset($chavepesquisa)) {
   $db_opcao = 2;
   $db_botao = true;
-  $result = $clacordo->sql_record($clacordo->sql_query_vinculos($chavepesquisa,"ac16_sequencial,ac16_resumoobjeto, ac16_objeto,ac16_origem,ac16_tipoorigem,ac16_licitacao,l20_objeto,ac16_adesaoregpreco,si06_objetoadesao,orgao.z01_nome,ac16_licoutroorgao,ac16_acordogrupo,ac02_descricao,ac16_numeroacordo,ac16_dataassinatura,ac16_datainicio,ac16_datafim",null,""));
+  $result = $clacordo->sql_record($clacordo->sql_query_vinculos($chavepesquisa, "ac16_sequencial,ac16_resumoobjeto, ac16_objeto,ac16_origem,ac16_tipoorigem,ac16_licitacao,l20_objeto,ac16_adesaoregpreco,si06_objetoadesao,orgao.z01_nome,ac16_licoutroorgao,ac16_acordogrupo,ac02_descricao,ac16_numeroacordo,ac16_dataassinatura,ac16_datainicio,ac16_datafim", null, ""));
 
   db_fieldsmemory($result, 0);
 
@@ -382,14 +474,19 @@ if (isset($alterar)) {
             acordogrupo.ac02_sequencial = acordo.ac16_acordogrupo
             inner join acordosituacao on
             acordosituacao.ac17_sequencial = acordo.ac16_acordosituacao
-            inner join acordocomissao on
-            acordocomissao.ac08_sequencial = acordo.ac16_acordocomissao
             inner join acordovigencia on
             ac26_sequencial = ac18_acordoposicao
             inner join acordoposicaoaditamento on
             ac26_sequencial = ac35_acordoposicao
             inner join acordoposicaoperiodo on ac36_acordoposicao = ac26_sequencial
             where ac16_sequencial = '$ac16_sequencial' order by posicao"
+    );
+
+    $rsApostilamento = db_query(
+      " select * from apostilamento
+      join acordoposicao on ac26_sequencial=si03_acordoposicao
+      join acordovigencia on ac18_acordoposicao=ac26_sequencial
+      where ac26_acordo='$ac16_sequencial';"
     );
   }
 
@@ -446,7 +543,7 @@ if (isset($alterar)) {
   } else {
   ?>
 
-    <form name='form1' method="post" action="" onsubmit="return confirm('Deseja realmente alterar?');">
+    <form name='form1' method="post" action="">
       <div class="container">
         <fieldset>
           <legend><b></b></legend>
@@ -509,7 +606,7 @@ if (isset($alterar)) {
                   );
                 }
 
-                db_select('ac16_origem',$aValores,true,$db_opcao,"onchange='js_verificaorigem();'");
+                db_select('ac16_origem', $aValores, true, $db_opcao, "onchange='js_verificaorigem();'");
 
                 ?>
               </td>
@@ -589,7 +686,7 @@ if (isset($alterar)) {
               </td>
               <td>
                 <?
-                db_input("ac16_licitacao",10,$Iac16_licitacao,true,"text",1,"onchange='js_pesquisa_liclicita(false)'");
+                db_input("ac16_licitacao", 10, $Iac16_licitacao, true, "text", 1, "onchange='js_pesquisa_liclicita(false)'");
                 db_input("l20_objeto", 40, $Il20_objeto, true, "text", 3, '');
                 ?>
               </td>
@@ -721,7 +818,7 @@ if (isset($alterar)) {
                             $numadtmOld = "ac26_numeroaditamento_old_{$ac18_sequencial}";
                             $$numadtm = $ac26_numeroaditamento;
                             $$numadtmOld = $ac26_numeroaditamento;
-                            db_input("ac26_numeroaditamento_{$ac18_sequencial}", 10, $Iac26_sequencial, true, "text", 2, "");
+                            db_input("ac26_numeroaditamento_{$ac18_sequencial}", 10, 1, true, "text", 2, "");
                             db_input("ac26_numeroaditamento_old_{$ac18_sequencial}", 10, $Iac26_sequencial, true, 'hidden', 2, "");
                             ?>
                           </td>
@@ -780,9 +877,96 @@ if (isset($alterar)) {
             <?php
               }
             endif; ?>
+            <?php
+
+            if (pg_numrows($rsApostilamento) > 0) :
+
+              for ($i = 0; $i < pg_numrows($rsApostilamento); $i++) {
+                db_fieldsmemory($rsApostilamento, $i); ?>
+                <tr>
+                  <td colspan="2">
+                    <fieldset class='fieldsetinterno'>
+                      <legend>
+                        <b>Apostilamento <?php echo $ac26_sequencial; ?></b>
+                      </legend>
+                      <table cellpadding="0" border="0" width="100%" class="table-vigencia">
+                        <tr width="1%">
+
+                          <td nowrap title="numero aditamento">
+                            <strong>Nº Apostilamento: </strong>
+                          </td>
+                          <td>
+                            <?php
+                            db_input("ac26_sequencial", 10, $ac26_sequencial, true, "hidden", 2, "class='ac26_sequencial'");
+                            db_input("ac26_numeroapostilamento", 10, 1, true, "text", 2, "class='numeroapostilamento'");
+
+                            ?>
+                          </td>
+
+                        </tr>
+                        <tr>
+                          <td width="1%">
+                            <b>Inicio:</b>
+                          <td>
+                            <?php
+                            $iCampo = 2;
+                            db_inputdata(
+                              "ac18_datainicio_$ac18_sequencial",
+                              @$ac18_datainicio_dia,
+                              @$ac18_datainicio_mes,
+                              @$ac18_datainicio_ano,
+                              true,
+                              'text',
+                              $iCampo,
+                              " onkeypress='mascaraData(this)' class='datainicio'"
+                            ); ?>
+                          </td>
+
+
+                          <td>
+                            <b>Fim:</b>
+                          </td>
+                          <td>
+                            <?php
+                            db_inputdata(
+                              "ac18_datafim_$ac18_sequencial",
+                              @$ac18_datafim_dia,
+                              @$ac18_datafim_mes,
+                              @$ac18_datafim_ano,
+                              true,
+                              'text',
+                              $iCampo,
+                              "onkeypress='mascaraData(this)' class='datafim'"
+                            ); ?>
+                          </td>
+                          <td nowrap>
+                            <b> Data da apostila: </b>
+                          </td>
+                          <td>
+                            <?php
+                            db_inputdata(
+                              "si03_dataapostila__$ac18_sequencial",
+                              @$si03_dataapostila_dia,
+                              @$si03_dataapostila_mes,
+                              @$si03_dataapostila_ano,
+                              true,
+                              'text',
+                              $iOpcao,
+                              "onkeypress='mascaraData(this)' class='dataapostila'"
+
+                            ); ?>
+                          </td>
+                        </tr>
+                      </table>
+                    </fieldset>
+                  </td>
+                </tr>
+            <?php
+              }
+            endif; ?>
           </table>
         </fieldset>
-        <input name="alterar" type="submit" id="alterar" value="Alterar" <?= ($db_botao == false ? 'disabled' : '') ?>>
+        <input name="alterar" type="submit" id="alterar" value="Alterar" <?= ($db_botao == false ? 'disabled' : '') ?> onclick="return alteraAcordo();">
       </div>
     </form>
     </div>
@@ -802,17 +986,136 @@ if (isset($alterar)) {
 
 </div>
 <script>
+  function mascaraData(val) {
+    var pass = val.value;
+    var expr = /[0123456789]/;
+
+    for (i = 0; i < pass.length; i++) {
+      // charAt -> retorna o caractere posicionado no índice especificado
+      var lchar = val.value.charAt(i);
+      var nchar = val.value.charAt(i + 1);
+
+      if (i == 0) {
+        // search -> retorna um valor inteiro, indicando a posição do inicio da primeira
+        // ocorrência de expReg dentro de instStr. Se nenhuma ocorrencia for encontrada o método retornara -1
+        // instStr.search(expReg);
+        if ((lchar.search(expr) != 0) || (lchar > 3)) {
+          val.value = "";
+        }
+
+      } else if (i == 1) {
+
+        if (lchar.search(expr) != 0) {
+          // substring(indice1,indice2)
+          // indice1, indice2 -> será usado para delimitar a string
+          var tst1 = val.value.substring(0, (i));
+          val.value = tst1;
+          continue;
+        }
+
+        if ((nchar != '/') && (nchar != '')) {
+          var tst1 = val.value.substring(0, (i) + 1);
+
+          if (nchar.search(expr) != 0)
+            var tst2 = val.value.substring(i + 2, pass.length);
+          else
+            var tst2 = val.value.substring(i + 1, pass.length);
+
+          val.value = tst1 + '/' + tst2;
+        }
+
+      } else if (i == 4) {
+
+        if (lchar.search(expr) != 0) {
+          var tst1 = val.value.substring(0, (i));
+          val.value = tst1;
+          continue;
+        }
+
+        if ((nchar != '/') && (nchar != '')) {
+          var tst1 = val.value.substring(0, (i) + 1);
+
+          if (nchar.search(expr) != 0)
+            var tst2 = val.value.substring(i + 2, pass.length);
+          else
+            var tst2 = val.value.substring(i + 1, pass.length);
+
+          val.value = tst1 + '/' + tst2;
+        }
+      }
+
+      if (i >= 6) {
+        if (lchar.search(expr) != 0) {
+          var tst1 = val.value.substring(0, (i));
+          val.value = tst1;
+        }
+      }
+    }
+
+    if (pass.length > 10)
+      val.value = val.value.substring(0, 10);
+    return true;
+  }
+
+  // criando array dos campos referente ao apostilamento que serão enviados via POST
+
+  ac26_numeroapostilamento = document.getElementsByClassName('numeroapostilamento');
+  ac18_datainicio = document.getElementsByClassName('datainicio');
+  ac18_datafim = document.getElementsByClassName('datafim');
+  si03_dataapostila = document.getElementsByClassName('dataapostila');
+  ac26_sequencial = document.getElementsByClassName('ac26_sequencial');
+  for (i = 0; i < ac26_numeroapostilamento.length; i++) {
+    ac26_numeroapostilamento[i].removeAttribute(" name");
+    ac26_numeroapostilamento[i].setAttribute("name", "ac26_numeroapostilamento[]");
+    ac18_datainicio[i].removeAttribute("name");
+    ac18_datainicio[i].setAttribute("name", "ac18_datainicio[]");
+    ac18_datafim[i].removeAttribute("name");
+    ac18_datafim[i].setAttribute("name", "ac18_datafim[]");
+    si03_dataapostila[i].removeAttribute("name");
+    si03_dataapostila[i].setAttribute("name", "si03_dataapostila[]");
+    ac26_sequencial[i].removeAttribute("name");
+    ac26_sequencial[i].setAttribute("name", "ac26_sequencial[]");
+  }
+
+
+  function alteraAcordo() {
+
+    if (!confirm("Deseja realmente alterar")) {
+      return false;
+    }
+
+    ac26_numeroapostilamento = document.getElementsByClassName('numeroapostilamento');
+    ac18_datainicio = document.getElementsByClassName('datainicio');
+    ac18_datafim = document.getElementsByClassName('datafim');
+    si03_dataapostila = document.getElementsByClassName('dataapostila');
+    ac26_sequencial = document.getElementsByClassName('ac26_sequencial');
+
+    for (i = 0; i < ac26_numeroapostilamento.length; i++) {
+      if (ac26_numeroapostilamento[i].value == "") {
+        alert("O preenchimento do número do apostilamento é obrigatório !");
+        return false;
+      }
+      if (ac18_datainicio[i].value == "") {
+        alert("O preenchimento da data inicial é obrigatório !");
+        return false;
+      }
+      if (ac18_datafim[i].value == "") {
+        alert("O preenchimento da data final é obrigatório !");
+        return false;
+      }
+      if (si03_dataapostila[i].value == "") {
+        alert("O preenchimento da data de apostilamento é obrigatório !");
+        return false;
+      }
+    }
+  }
+
   function js_acordo(mostra) {
     if (mostra == true) {
-      js_OpenJanelaIframe('', 'db_iframe_acordo',
-        'func_acordoinstit.php?funcao_js=parent.js_mostraAcordo1|ac16_sequencial|z01_nome',
-        'Pesquisa', true);
+      js_OpenJanelaIframe('', 'db_iframe_acordo', 'func_acordoinstit.php?funcao_js=parent.js_mostraAcordo1|ac16_sequencial|z01_nome', 'Pesquisa', true);
     } else {
       if ($F('ac16_sequencial').trim() != '') {
-        js_OpenJanelaIframe('', 'db_iframe_depart',
-          'func_acordoinstit.php?pesquisa_chave=' + $F('ac16_sequencial') + '&funcao_js=parent.js_mostraAcordo' +
-          '&descricao=true',
-          'Pesquisa', false);
+        js_OpenJanelaIframe('', 'db_iframe_depart', 'func_acordoinstit.php?pesquisa_chave=' + $F('ac16_sequencial') + '&funcao_js=parent.js_mostraAcordo' + '&descricao=true', 'Pesquisa', false);
       } else {
         $('ac16_resumoobjeto').value = '';
       }
@@ -820,24 +1123,20 @@ if (isset($alterar)) {
   }
 
   function js_preenchepesquisa(chave) {
-
     db_iframe_acordo.hide();
     <?
     if ($db_opcao != 1) {
       echo " location.href = '" . basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]) . "?chavepesquisa='+chave";
     }
     ?>
-
   }
 
   function js_mostraAcordo(chave, descricao, erro) {
-
     $('ac16_resumoobjeto').value = descricao;
     if (erro == true) {
       $('ac16_sequencial').focus();
       $('ac16_sequencial').value = '';
     }
-
     <?php
     echo " location.href = '" . basename($GLOBALS['HTTP_SERVER_VARS']['PHP_SELF']) .
       "?chavepesquisa='+chave;";
@@ -848,7 +1147,6 @@ if (isset($alterar)) {
     $('ac16_sequencial').value = chave1;
     $('ac16_resumoobjeto').value = chave2;
     db_iframe_acordo.hide();
-
     <?php
     echo " location.href = '" . basename($GLOBALS['HTTP_SERVER_VARS']['PHP_SELF']) .
       "?chavepesquisa='+chave1;";
@@ -857,28 +1155,15 @@ if (isset($alterar)) {
 
   function js_pesquisa_liclicita(mostra) {
     if (mostra == true) {
-
-      js_OpenJanelaIframe('top.corpo.iframe_acordo',
-        'db_iframe_liclicita',
-        'func_liclicita.php?&funcao_js=parent.js_preencheLicitacao|l20_codigo|l20_objeto',
-        'Pesquisa Licitações', true);
+      js_OpenJanelaIframe('top.corpo.iframe_acordo', 'db_iframe_liclicita', 'func_liclicita.php?&funcao_js=parent.js_preencheLicitacao|l20_codigo|l20_objeto', 'Pesquisa Licitações', true);
     } else {
-
       if (document.form1.ac16_licitacao.value != '') {
-
-        js_OpenJanelaIframe('top.corpo.iframe_acordo',
-          'db_iframe_liclicita',
-          'func_liclicita.php?&pesquisa_chave=' +
-          document.form1.ac16_licitacao.value + '&funcao_js=parent.js_preencheLicitacao1',
-          'Pesquisa', false);
+        js_OpenJanelaIframe('top.corpo.iframe_acordo', 'db_iframe_liclicita', 'func_liclicita.php?&pesquisa_chave=' + document.form1.ac16_licitacao.value + '&funcao_js=parent.js_preencheLicitacao1', 'Pesquisa', false);
       } else {
         document.form1.ac16_licitacao.value = '';
       }
     }
-  }
-  /**
-   * funcao para preencher licitacao  da ancora
-   */
+  } /** * funcao para preencher licitacao da ancora */
   function js_preencheLicitacao(codigo, objeto) {
     document.form1.ac16_licitacao.value = codigo;
     document.form1.l20_objeto.value = objeto;
@@ -886,31 +1171,16 @@ if (isset($alterar)) {
   }
 
   function js_preencheLicitacao1(objeto) {
-        document.form1.l20_objeto.value = objeto;
-    }
+    document.form1.l20_objeto.value = objeto;
+  }
 
   function js_pesquisaac16_acordogrupo(mostra) {
-
     if (mostra == true) {
-
       var sUrl = 'func_acordogrupo.php?funcao_js=parent.js_mostraacordogrupo1|ac02_sequencial|ac02_descricao';
-      js_OpenJanelaIframe('top.corpo.iframe_acordo',
-        'db_iframe_acordogrupo',
-        sUrl,
-        'Pesquisar Grupos de Acordo',
-        true,
-        '0');
+      js_OpenJanelaIframe('top.corpo.iframe_acordo', 'db_iframe_acordogrupo', sUrl, 'Pesquisar Grupos de Acordo', true, '0');
     } else {
-
       if ($('ac16_acordogrupo').value != '') {
-
-        js_OpenJanelaIframe('top.corpo.iframe_acordo',
-          'db_iframe_acordogrupo',
-          'func_acordogrupo.php?pesquisa_chave=' + $('ac16_acordogrupo').value +
-          '&funcao_js=parent.js_mostraacordogrupo',
-          'Pesquisar Grupos de Acordo',
-          false,
-          '0');
+        js_OpenJanelaIframe('top.corpo.iframe_acordo', 'db_iframe_acordogrupo', 'func_acordogrupo.php?pesquisa_chave=' + $('ac16_acordogrupo').value + '&funcao_js=parent.js_mostraacordogrupo', 'Pesquisar Grupos de Acordo', false, '0');
       } else {
         $('ac02_sequencial').value = '';
       }
@@ -919,122 +1189,88 @@ if (isset($alterar)) {
 
   function js_mostraacordogrupo(chave, erro) {
     let chave1 = $('ac16_acordogrupo').value;
-
     $('ac02_descricao').value = chave;
     if (erro == true) {
-
       $('ac16_acordogrupo').focus();
       $('ac16_acordogrupo').value = '';
     } else {
-
-      var oGet = js_urlToObject();
-
-      /*
-      * Verifica se está sendo setada a variavel chavepesquisa na url. Caso sim, quer dizer que é um procedimento de alteração ou exclusão,
-      * sendo assim o programa não pode chamar a nova numeração
-      *
-
-      if (!oGet.chavepesquisa) {
-      oContrato.getNumeroAcordo();
-      }*/
-
+      var oGet = js_urlToObject(); /* * Verifica se está sendo setada a variavel chavepesquisa na url. Caso sim, quer dizer que é um procedimento de alteração ou exclusão, * sendo assim o programa não pode chamar a nova numeração * if (!oGet.chavepesquisa) { oContrato.getNumeroAcordo(); }*/
     }
-
   }
 
   function js_mostraacordogrupo1(chave1, chave2) {
     $('ac16_acordogrupo').value = chave1;
     $('ac02_descricao').value = chave2;
     $('ac16_acordogrupo').focus();
-
     db_iframe_acordogrupo.hide();
-  }
-
-  /**
-   *funçao para verificar tipo origem do acordo para listar ancorar relacionada
-   */
+  } /** *funçao para verificar tipo origem do acordo para listar ancorar relacionada */
   function js_verificatipoorigem() {
     iTipoOrigem = document.form1.ac16_tipoorigem.value;
     iOrigem = document.form1.ac16_origem.value;
-    
     if (iOrigem == 1 && iTipoOrigem == 1) {
       document.getElementById('tradesaoregpreco').style.display = "none";
       document.getElementById('trLicitacao').style.display = "none";
       document.getElementById('trlicoutroorgao').style.display = "none";
     }
-
     if ((iOrigem == 1 && iTipoOrigem == 2) || (iOrigem == 1 && iTipoOrigem == 3)) {
       document.getElementById('tradesaoregpreco').style.display = "none";
       document.getElementById('trLicitacao').style.display = "";
       document.getElementById('trlicoutroorgao').style.display = "none";
     }
-
     if (iOrigem == 1 && iTipoOrigem == 4) {
       document.getElementById('tradesaoregpreco').style.display = "";
       document.getElementById('trLicitacao').style.display = "none";
       document.getElementById('trlicoutroorgao').style.display = "none";
     }
-
     if ((iOrigem == 1 && iTipoOrigem == 5) || (iOrigem == 1 && iTipoOrigem == 6) || (iOrigem == 1 && iTipoOrigem == 7) || (iOrigem == 1 && iTipoOrigem == 8) || (iOrigem == 1 && iTipoOrigem == 9)) {
       document.getElementById('trlicoutroorgao').style.display = "";
       document.getElementById('tradesaoregpreco').style.display = "none";
       document.getElementById('trLicitacao').style.display = "none";
     }
-
     if (iOrigem == 2 && iTipoOrigem == 1) {
       document.getElementById('trLicitacao').style.display = "none";
       document.getElementById('tradesaoregpreco').style.display = "none";
       document.getElementById('trlicoutroorgao').style.display = "none";
     }
-
     if ((iOrigem == 2 && iTipoOrigem == 2) || (iOrigem == 2 && iTipoOrigem == 3)) {
       document.getElementById('trLicitacao').style.display = "";
       document.getElementById('tradesaoregpreco').style.display = "none";
       document.getElementById('trlicoutroorgao').style.display = "none";
     }
-
     if (iOrigem == 2 && iTipoOrigem == 4) {
       document.getElementById('trLicitacao').style.display = "none";
       document.getElementById('tradesaoregpreco').style.display = "";
       document.getElementById('trlicoutroorgao').style.display = "none";
     }
-
     if ((iOrigem == 2 && iTipoOrigem == 5) || (iOrigem == 2 && iTipoOrigem == 6) || (iOrigem == 2 && iTipoOrigem == 7) || (iOrigem == 2 && iTipoOrigem == 8) || (iOrigem == 2 && iTipoOrigem == 9)) {
       document.getElementById('trlicoutroorgao').style.display = "";
       document.getElementById('tradesaoregpreco').style.display = "none";
       document.getElementById('trLicitacao').style.display = "none";
     }
-
     if (iOrigem == 3 && iTipoOrigem == 1) {
       document.getElementById('trLicitacao').style.display = "none";
       document.getElementById('tradesaoregpreco').style.display = "none";
       document.getElementById('trlicoutroorgao').style.display = "none";
     }
-
     if ((iOrigem == 3 && iTipoOrigem == 2) || (iOrigem == 3 && iTipoOrigem == 3)) {
       document.getElementById('trLicitacao').style.display = "";
       document.getElementById('tradesaoregpreco').style.display = "none";
       document.getElementById('trlicoutroorgao').style.display = "none";
     }
-
     if (iOrigem == 3 && iTipoOrigem == 4) {
       document.getElementById('tradesaoregpreco').style.display = "";
       document.getElementById('trlicoutroorgao').style.display = "none";
       document.getElementById('trLicitacao').style.display = "none";
     }
-
     if ((iOrigem == 3 && iTipoOrigem == 5) || (iOrigem == 3 && iTipoOrigem == 6) || (iOrigem == 3 && iTipoOrigem == 7) || (iOrigem == 3 && iTipoOrigem == 8) || (iOrigem == 3 && iTipoOrigem == 9)) {
       document.getElementById('trlicoutroorgao').style.display = "";
       document.getElementById('tradesaoregpreco').style.display = "none";
       document.getElementById('trLicitacao').style.display = "none";
     }
-
   }
 
   function js_verificaorigem() {
-
     iOrigem = document.form1.ac16_origem.value;
-
     if (iOrigem == 1 || iOrigem == 2) {
       document.getElementById('trLicitacao').style.display = "none";
       document.getElementById('tradesaoregpreco').style.display = "none";
@@ -1048,10 +1284,7 @@ if (isset($alterar)) {
       js_OpenJanelaIframe('', 'db_iframe_liclicitaoutrosorgaos', sUrl, 'Pesquisar', true, '0');
     } else {
       if (document.form1.ac16_licoutroorgao.value != '') {
-        js_OpenJanelaIframe('', 'db_iframe_liclicitaoutrosorgaos', 'func_liclicitaoutrosorgaos.php?poo=true&pesquisa_chave=' + document.form1.ac16_licoutroorgao.value + '&funcao_js=parent.js_mostrarlicoutroorgao',
-          'Pesquisar licitação Outro Órgão',
-          false,
-          '0');
+        js_OpenJanelaIframe('', 'db_iframe_liclicitaoutrosorgaos', 'func_liclicitaoutrosorgaos.php?poo=true&pesquisa_chave=' + document.form1.ac16_licoutroorgao.value + '&funcao_js=parent.js_mostrarlicoutroorgao', 'Pesquisar licitação Outro Órgão', false, '0');
       } else {
         $('z01_nome').value = '';
       }
@@ -1064,8 +1297,7 @@ if (isset($alterar)) {
       js_OpenJanelaIframe('', 'db_iframe_adesaoregprecos', sUrl, 'Pesquisar', true, '0');
     } else {
       if (document.form1.ac16_adesaoregpreco.value != '') {
-        js_OpenJanelaIframe('', 'db_iframe_adesaoregprecos', 'func_adesaoregprecos.php?par=true&pesquisa_chave=' + document.form1.ac16_adesaoregpreco.value + '&funcao_js=parent.js_mostraradesao',
-          'Pesquisar', false, '0');
+        js_OpenJanelaIframe('', 'db_iframe_adesaoregprecos', 'func_adesaoregprecos.php?par=true&pesquisa_chave=' + document.form1.ac16_adesaoregpreco.value + '&funcao_js=parent.js_mostraradesao', 'Pesquisar', false, '0');
       } else {
         $('si06_objetoadesao').value = '';
       }
@@ -1073,20 +1305,12 @@ if (isset($alterar)) {
   }
 
   function js_validaCampoLicitacao() {
-
     var iOrigem = $('ac16_origem').value;
     if (iOrigem == 3) {
-
       $('tdLicitacao').style.display = 'block';
     }
-
-  }
-
-  /**
-   * função para carregar os dados da licitação selecionada no campo
-   */
+  } /** * função para carregar os dados da licitação selecionada no campo */
   function js_buscalicoutrosorgaos(chave1, chave2) {
-
     $('ac16_licoutroorgao').value = chave1;
     $('z01_nome').value = chave2;
     db_iframe_liclicitaoutrosorgaos.hide();
@@ -1094,17 +1318,11 @@ if (isset($alterar)) {
 
   function js_mostrarlicoutroorgao(chave, erro) {
     document.form1.z01_nome.value = chave;
-
     if (erro == true) {
       document.form1.z01_nome.focus();
     }
-  }
-
-  /**
-   * funcao para carregar adesao de registro de preco escolhida no campo
-   * */
+  } /** * funcao para carregar adesao de registro de preco escolhida no campo * */
   function js_buscaadesaoregpreco(chave1, chave2) {
-
     $('ac16_adesaoregpreco').value = chave1;
     $('si06_objetoadesao').value = chave2;
     db_iframe_adesaoregprecos.hide();
@@ -1112,7 +1330,6 @@ if (isset($alterar)) {
 
   function js_mostraradesao(chave, erro) {
     document.form1.si06_objetoadesao.value = chave;
-
     if (erro == true) {
       document.form1.si06_objetoadesao.focus();
     }
