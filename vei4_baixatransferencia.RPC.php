@@ -162,8 +162,9 @@ switch ($oParam->exec){
             foreach ($oParam->veiculos as $veiculo){
                 $clveiculos = new cl_veiculos();
                 $clveicretirada = new cl_veicretirada();
+                $clveiculoscomb = new cl_veiculoscomb();
 
-                $rsveiculo = $clveiculos->sql_record($clveiculos->sql_query_veiculo($veiculo));
+                $rsveiculo = $clveiculos->sql_record($clveiculos->sql_query_veiculo($veiculo,"distinct veiculos.*,veicresp.*,tipoveiculos.*"));
                 $aVeiculo = db_utils::fieldsMemory($rsveiculo,0);
 
                 $rsultimamedida = $clveiculos->sql_record($clveiculos->sql_query_ultimamedida($veiculo));
@@ -229,11 +230,19 @@ switch ($oParam->exec){
                 $cltipoveiculos->incluir(null);
 
                 //criando a veiculoscomb
-                $clveiculoscomb = new cl_veiculoscomb();
-                $clveiculoscomb->ve06_veiccadcomb = $aVeiculo->ve06_veiccadcomb;
-                $clveiculoscomb->ve06_veiculos = $clveiculos->ve01_codigo;
-                $clveiculoscomb->ve06_padrao = $aVeiculo->ve06_padrao;
-                $clveiculoscomb->incluir(null);
+
+                $rscombustivel = $clveiculoscomb->sql_record($clveiculoscomb->sql_query_file(null,"distinct ve06_veiccadcomb combustivel,ve06_padrao padrao",null,"ve06_veiculos = $veiculo"));
+                $numrs = $clveiculoscomb->numrows;
+
+                for($n = 0; $n < $numrs; $n++){
+                  
+                  $dados = db_utils::fieldsmemory($rscombustivel,$n);
+
+                  $clveiculoscomb->ve06_veiccadcomb = $dados->combustivel;
+                  $clveiculoscomb->ve06_veiculos = $clveiculos->ve01_codigo;
+                  $dados->padrao == 'f' ? $clveiculoscomb->ve06_padrao = 'false' : $clveiculoscomb->ve06_padrao = 'true';
+                  $clveiculoscomb->incluir(null);
+                }
 
                 //incluindo central nova
                 $clveiccadcentral = new cl_veiccadcentral();

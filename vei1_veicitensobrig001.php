@@ -94,7 +94,7 @@ if(isset($incluir)){
     $clveicitensobrig->ve09_dtinc             = date("Y-m-d",db_getsession("DB_datausu"));
 
     $clveicitensobrig->incluir(null);
-    $erro_msg = $clveicitensobrig->erro_msg;
+    //$erro_msg = $clveicitensobrig->erro_msg
     if ($clveicitensobrig->erro_status == 0){
       $sqlerro = true;
       $clveicitensobrig->erro_campo = "ve09_veiccaditensobrig";
