@@ -854,7 +854,11 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                     <td>
                         <?
                         $arr_tipo = array("0" => "Selecione", "1" => "Por item", "3" => "Por lote");
-                        db_select("l20_tipojulg", $arr_tipo, true, $lBloqueadoRegistroPreco);
+                        if ($lBloqueadoRegistroPreco == 3) {
+                            db_select("l20_tipojulg", $arr_tipo, true, 1, "disabled=");
+                        } else {
+                            db_select("l20_tipojulg", $arr_tipo, true, 1);
+                        }
                         db_input("tipojulg", 1, "", true, "hidden", 3, "");
                         db_input("confirmado", 1, "", true, "hidden", 3, "");
                         ?>

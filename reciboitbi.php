@@ -1050,4 +1050,3 @@ if ( $db21_codcli == 19985 or $db21_codcli == 18 or $db21_codcli == 74 or $db21_
 
 $pdf1->imprime();
 $pdf1->objpdf->output();
-?>

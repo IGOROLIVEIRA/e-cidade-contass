@@ -2794,7 +2794,31 @@ class empenho {
           $this->sErroMsg .= "\nErro:{$clempanuladoitem->erro_msg}";
           return false;
         }
+
         /**
+         * Verifica se o empenho tem solicitação de Registro de Preco vinculada e inclui dados na tabela solicitemanul
+         * para anular o item na solicitação
+         */
+        $clsolicitem = $this->usarDao("solicitem",true);
+        $ItemSol = $clsolicitem->sql_record($clsolicitem->sql_query_solicitem_emp(null, "distinct pc11_codigo", null,"e62_sequencial = " . $aItens[$iInd]->e62_sequencial));
+        $rsItemSol = db_utils::fieldsMemory($ItemSol,0);
+         
+        if(pg_num_rows($ItemSol) > 0){
+        $clsolicitemanul = $this->usarDao("solicitemanul",true); 
+        $clsolicitemanul->pc28_solicitem = $rsItemSol->pc11_codigo;
+        $clsolicitemanul->pc28_vlranu     = $aItens[$iInd]->vlrtot;
+        $clsolicitemanul->pc28_qtd       = $aItens[$iInd]->quantidade;
+        $clsolicitemanul->incluir(null);
+
+         if ($clsolicitemanul->erro_status == 0){
+           $this->lSqlErro = true;
+           $this->sErroMsg  = "Não Foi possível anular empenho.Erro ao incluir Item solicitacao como anulado.";
+           $this->sErroMsg .= "\nErro:{$clsolicitemanul->erro_msg}";
+           return false;
+        }
+      }
+
+        /**;
          * Verificamos se o item possui vinculo com algum item de pacto lancamos o o valor na pactoitemvalormov
          */
         if (!$this->lSqlErro && $lControlePacto) {
@@ -3002,7 +3026,6 @@ class empenho {
         }
     }
 
-
     /*
      ** fim dos lancamentos Contabeis e verificamos se o usuario solicitou a recriacao do saldo...
      */
@@ -3016,6 +3039,7 @@ class empenho {
         $oItensSolic = db_utils::fieldsMemory($rsItemSolic,0);
         $iAutori     = $oItensSolic->autori;
       }
+
       // Se nao for RP e valor anulado nao for parcial e tiver solicitacao de compras
       if ($this->dadosEmpenho->e60_anousu >= db_getsession("DB_anousu") &&
         (round($this->dadosEmpenho->e60_vlremp,2) - round(($nValorAnular + $this->dadosEmpenho->e60_vlranu),2) == 0) &&
@@ -3040,12 +3064,226 @@ class empenho {
           $this->sErroMsg  = $eErro->getMessage();
         }
 
-      }
+        /*anular a solicitacao de compras caso anule a autorização de empenho*/
+        $clsolicitem = db_utils::getDao("solicitem");
+        $campos = "distinct pc11_numero as solicitacao";
+        $dbwhere = "e54_autori = {$iAutori}";
+        $result = $clsolicitem->sql_record($clsolicitem->sql_query_item_autoriza(null,$campos,null,$dbwhere));
+        $oSolicitem = db_utils::fieldsMemory($result,0);
 
+        /*verificar quais autorizacoes estao vinculadas ao processo de compras,
+         *verificar se todas as autorizacoes estao anuladas.
+         *Se todas estiverem anuladas, executa os comandos de exclusao de orcamento, processo de compras e anulacao de solicitacao
+         */
+
+        if($clsolicitem->numrows > 0){
+
+        $sSql = db_query("select distinct e54_autori autoriza, e54_anulad from empautitempcprocitem inner join empautoriza on e54_autori = e73_autori where e73_pcprocitem in (select pc81_codprocitem from pcprocitem where pc81_solicitem in (select pc11_codigo from solicitem where pc11_numero = {$oSolicitem->solicitacao}))");
+        $rsSql = $sSql;
+        
+        for($i = 0; $i < pg_num_rows($sSql); $i++){
+          
+          $oDadoAutoriza = db_utils::fieldsMemory($rsSql,$i)->e54_anulad;
+          
+          $Autoriza[] = $oDadoAutoriza;
+        }
+
+        if(!in_array("",$Autoriza)){
+
+        /*antes de anular verifica se ja existe anulacao para solicitacao*/
+        $oDaoSolicitaAnulada  = new cl_solicitaanulada();
+        $sSqlAnulada = $oDaoSolicitaAnulada->sql_query_file(null, "*", null, "pc67_solicita = {$oSolicitem->solicitacao}");
+        $rsAnulada   = $oDaoSolicitaAnulada->sql_record($sSqlAnulada);
+
+          if(pg_num_rows($result) > 0 && pg_num_rows($rsAnulada) == 0){
+            
+            $oDaoSolicitaAnulada->pc67_sequencial = null;
+            $oDaoSolicitaAnulada->pc67_usuario    = db_getsession('DB_id_usuario');
+            $oDaoSolicitaAnulada->pc67_data       = date('Y-m-d', db_getsession('DB_datausu'));
+            $oDaoSolicitaAnulada->pc67_hora       = db_hora();
+            $oDaoSolicitaAnulada->pc67_solicita   = $oSolicitem->solicitacao;
+            $oDaoSolicitaAnulada->pc67_motivo     = $sMotivo;
+            $oDaoSolicitaAnulada->pc67_processoadministrativo = null;
+            $oDaoSolicitaAnulada->incluir(null);
+            if ($oDaoSolicitaAnulada->erro_status == 0) {
+              $oErro->erro_msg = $oDaoSolicitaAnulada->erro_msg;
+            }
+          }
+
+          /*busca de orçamento e processo de compras vinculado a solicitacao*/
+          $campos = "distinct pc11_numero solicitacao,pc80_codproc processo,pc20_codorc orcamento";
+          $dbwhere = "e54_autori = {$iAutori}";
+          $result1 = $clsolicitem->sql_record($clsolicitem->sql_query_sol_proc_orc(null,$campos,null,$dbwhere));
+          $oResult = db_utils::fieldsMemory($result1, 0);
+          
+          /*excluir orcamento do processo de compras e tabelas relacionadas*/
+          require_once("classes/db_pcorcamjulg_classe.php");
+          $oDaoOrcamJulg = new cl_pcorcamjulg();
+          $sSqlOrcamJulg = $oDaoOrcamJulg->sql_query_file(null,null,"*",null,"pc24_orcamitem in (select pc22_orcamitem from pcorcamitem where pc22_codorc = {$oResult->orcamento})");
+          $rsOrcamJulg   = $oDaoOrcamJulg->sql_record($sSqlOrcamJulg);
+          if($oDaoOrcamJulg->numrows > 0){
+            $oDaoOrcamJulg->excluir(null,null,"pc24_orcamitem in (select pc22_orcamitem from pcorcamitem where pc22_codorc = {$oResult->orcamento})");
+
+            if ($oDaoOrcamJulg->erro_status == 0) {
+
+              $this->lSqlErro  = true;
+              $this->sErroMsg  = "Erro[]:Empenho não anulado.\n";
+              $this->sErroMsg .= "({$oDaoOrcamJulg->erro_msg})";
+      
+            }
+          }
+
+          require_once("classes/db_pcorcamval_classe.php");
+          $oDaoOrcamVal = new cl_pcorcamval();
+          $sSqlOrcamVal = $oDaoOrcamVal->sql_query_file(null,null,"*",null,"pc23_orcamitem in (select pc22_orcamitem from pcorcamitem where pc22_codorc = {$oResult->orcamento})");
+          $rsOrcamVal   = $oDaoOrcamVal->sql_record($sSqlOrcamVal);
+          if($oDaoOrcamVal->numrows > 0){
+            $oDaoOrcamVal->excluir(null,null,"pc23_orcamitem in (select pc22_orcamitem from pcorcamitem where pc22_codorc = {$oResult->orcamento})");
+
+            if ($oDaoOrcamVal->erro_status == 0) {
+
+              $this->lSqlErro  = true;
+              $this->sErroMsg  = "Erro[]:Empenho não anulado.\n";
+              $this->sErroMsg .= "({$oDaoOrcamVal->erro_msg})";
+      
+            }
+          }
+
+          require_once("classes/db_pcorcamtroca_classe.php");
+          $oDaoOrcamTroca = new cl_pcorcamtroca();
+          $sSqlOrcamTroca = $oDaoOrcamTroca->sql_query_file(null,"*",null,"pc25_orcamitem in (select pc22_orcamitem from pcorcamitem where pc22_codorc = {$oResult->orcamento})");
+          $rsOrcamTroca   = $oDaoOrcamTroca->sql_record($sSqlOrcamTroca);
+          if($oDaoOrcamTroca->numrows > 0){
+            $oDaoOrcamTroca->excluir(null,"pc25_orcamitem in (select pc22_orcamitem from pcorcamitem where pc22_codorc = {$oResult->orcamento})");
+
+            if ($oDaoOrcamTroca->erro_status == 0) {
+
+              $this->lSqlErro  = true;
+              $this->sErroMsg  = "Erro[]:Empenho não anulado.\n";
+              $this->sErroMsg .= "({$oDaoOrcamTroca->erro_msg})";
+      
+            }
+          }
+
+          require_once("classes/db_pcorcamforne_classe.php");
+          $oDaoOrcamForne = new cl_pcorcamforne();
+          $sSqlOrcamForne = $oDaoOrcamForne->sql_query_file(null,"*","pc21_codorc = {$oResult->orcamento}");
+          $rsOrcamForne   = $oDaoOrcamForne->sql_record($sSqlOrcamForne);
+          if($oDaoOrcamForne->numrows > 0){
+            $oDaoOrcamForne->excluir(null,"pc21_codorc = {$oResult->orcamento}");
+
+            if ($oDaoOrcamForne->erro_status == 0) {
+
+              $this->lSqlErro  = true;
+              $this->sErroMsg  = "Erro[]:Empenho não anulado.\n";
+              $this->sErroMsg .= "({$oDaoOrcamForne->erro_msg})";
+      
+            }
+          }
+
+          require_once("classes/db_pcorcamitemproc_classe.php");
+          $oDaoOrcItemProc = new cl_pcorcamitemproc();
+          $sSqlOrcItemProc = $oDaoOrcItemProc->sql_query_file(null,null,"*",null,"pc31_orcamitem in (select pc22_orcamitem from pcorcamitem where pc22_codorc = {$oResult->orcamento})");
+          $rsOrcItemProc   = $oDaoOrcItemProc->sql_record($sSqlOrcItemProc);
+          if($oDaoOrcItemProc->numrows > 0){
+            $oDaoOrcItemProc->excluir(null,null,"pc31_orcamitem in (select pc22_orcamitem from pcorcamitem where pc22_codorc = {$oResult->orcamento})");
+
+            if ($oDaoOrcItemProc->erro_status == 0) {
+
+              $this->lSqlErro  = true;
+              $this->sErroMsg  = "Erro[]:Empenho não anulado.\n";
+              $this->sErroMsg .= "({$oDaoOrcItemProc->erro_msg})";
+      
+            }
+          }
+
+          require_once("classes/db_pcorcamitem_classe.php");
+          $oDaoOrcamItem = new cl_pcorcamitem();
+          $sSqlOrcamItem = $oDaoOrcamItem->sql_query_file(null,"*",null,"pc22_codorc = {$oResult->orcamento}");
+          $rsOrcam   = $oDaoOrcamItem->sql_record($sSqlOrcamItem);
+          if($oDaoOrcamItem->numrows > 0){
+            $oDaoOrcamItem->excluir(null,"pc22_codorc = {$oResult->orcamento}");
+            
+            if ($oDaoOrcamItem->erro_status == 0) {
+
+              $this->lSqlErro  = true;
+              $this->sErroMsg  = "Erro[]:Empenho não anulado.\n";
+              $this->sErroMsg .= "({$oDaoOrcamItem->erro_msg})";
+      
+            }
+          }
+
+          require_once("classes/db_pcorcam_classe.php");
+          $oDaoOrcam = new cl_pcorcam();
+          $sSqlOrcam = $oDaoOrcam->sql_query_file(null,"*",null,"pc20_codorc = {$oResult->orcamento}");
+          $rsOrcam   = $oDaoOrcam->sql_record($sSqlOrcam);
+          if($oDaoOrcam->numrows > 0){
+            $oDaoOrcam->excluir(null,"pc20_codorc = {$oResult->orcamento}");
+
+            if ($oDaoOrcam->erro_status == 0) {
+
+              $this->lSqlErro  = true;
+              $this->sErroMsg  = "Erro[]:Empenho não anulado.\n";
+              $this->sErroMsg .= "({$oDaoOrcam->erro_msg})";
+      
+            }
+          }
+
+          /*excluir processo de compras*/
+          require_once("classes/db_empautitempcprocitem_classe.php");
+          $oDaoEmpAutProcItem = new cl_empautitempcprocitem();
+          $sSqlEmpAutProcItem = $oDaoEmpAutProcItem->sql_query_file(null,"*",null,"e73_pcprocitem in (select pc81_codprocitem from pcprocitem where pc81_codproc = {$oResult->processo})");
+          $rsEmpAutProcItem   = $oDaoEmpAutProcItem->sql_record($sSqlEmpAutProcItem);
+          if($oDaoEmpAutProcItem->numrows > 0){
+            $oDaoEmpAutProcItem->excluir(null,"e73_pcprocitem in (select pc81_codprocitem from pcprocitem where pc81_codproc = {$oResult->processo})");
+
+            if ($oDaoEmpAutProcItem->erro_status == 0) {
+
+              $this->lSqlErro  = true;
+              $this->sErroMsg  = "Erro[]:Empenho não anulado.\n";
+              $this->sErroMsg .= "({$oDaoEmpAutProcItem->erro_msg})";
+      
+            }
+          }
+                   
+          require_once("classes/db_pcprocitem_classe.php");
+          $oDaoProcItem = new cl_pcprocitem();
+          $sSqlProcItem = $oDaoProcItem->sql_query_file(null,"*",null,"pc81_codproc = {$oResult->processo}");
+          $rsProcItem   = $oDaoProcItem->sql_record($sSqlProcItem);
+          if($oDaoProcItem->numrows > 0){
+            $oDaoProcItem->excluir(null,"pc81_codproc = {$oResult->processo}");
+            
+            if ($oDaoProcItem->erro_status == 0) {
+
+              $this->lSqlErro  = true;
+              $this->sErroMsg  = "Erro[]:Empenho não anulado.\n";
+              $this->sErroMsg .= "({$oDaoProcItem->erro_msg})";
+      
+            }
+          }
+          
+          require_once("classes/db_pcproc_classe.php");
+          $oDaoProc = new cl_pcproc();
+          $sSqlProc = $oDaoProc->sql_query_file(null,"*",null,"pc80_codproc = {$oResult->processo}");
+          $rsProc   = $oDaoProc->sql_record($sSqlProc);
+          if($oDaoProc->numrows > 0){
+            $oDaoProc->excluir(null,"pc80_codproc = {$oResult->processo}");
+            
+            if ($oDaoProc->erro_status == 0) {
+
+              $this->lSqlErro  = true;
+              $this->sErroMsg  = "Erro[]:Empenho não anulado.\n";
+              $this->sErroMsg .= "({$oDaoProc->erro_msg})";
+      
+              }
+            }
+          }
+        }
+      }
     }
 
     /**
-     * Caso o empenho seje da folha, devemso excluir a vinculaçao do empenho
+     * Caso o empenho seje da folha, devemos excluir a vinculaçao do empenho
      */
     require_once("classes/db_rhempenhofolhaempenho_classe.php");
     $oDaoEmpenhoFolhaEmpenho = new cl_rhempenhofolhaempenho();
@@ -3576,7 +3814,7 @@ class empenho {
           $rsContrato  = $oDaoEmpenhoContrato->sql_record($sSqlContrato);
           $rsAnoEmp    = $oDaoEmpempenho->sql_record($sSqlAnoEmp) or die($sSqlAnoEmp);
 
-          $oAnoEmp     = db_utils::fieldsMemory($rsAnoEmp);
+          $oAnoEmp     = db_utils::fieldsMemory($rsAnoEmp, 0);
 
           if (!$this->lSqlErro && $oDaoEmpenhoContrato->numrows > 0) {
 

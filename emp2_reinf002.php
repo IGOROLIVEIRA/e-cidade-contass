@@ -421,7 +421,7 @@ HTML;
                             $auxIrrf +=$oNotas->valor_irrf;
                         }
                         $auxe50_codord = $oNotas->e50_codord;
-                        echo $oNotas->e71_anulado;
+                        
                         if($oNotas->e71_anulado == 't'){
                             $dataestorno = $oNotas->c71_data;
                         }

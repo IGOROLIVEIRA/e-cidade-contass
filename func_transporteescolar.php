@@ -53,7 +53,8 @@ $cltransporteescolar = new cl_transporteescolar;
                         ,v200_diasrodados, v200_distancia,v200_turno,v200_anousu";
                     }
                 }
-                $sql = $cltransporteescolar->sql_query(null, $campos, " v200_sequencial desc ");
+                $where = "ve01_instit = ".db_getsession('DB_instit');
+                $sql = $cltransporteescolar->sql_query(null, $campos, " v200_sequencial desc ",$where);
                 $repassa = array();
                 db_lovrot($sql, 15, "()", "", $funcao_js, "", "NoMe", $repassa);
             } else {

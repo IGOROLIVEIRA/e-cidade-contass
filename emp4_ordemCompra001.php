@@ -224,10 +224,8 @@ db_postmemory($HTTP_POST_VARS);
                 js_OpenJanelaIframe('top.corpo', 'db_iframe_empempenho', 'func_empempenho.php?anul=false&inclusaoordemcompra=true&funcao_js=parent.js_mostraempempenho1|e60_codemp|e60_numemp|si172_nrocontrato|si172_datafinalvigencia|si174_novadatatermino|e60_anousu', 'Pesquisa', true);
             } else {
                 if (document.form1.e60_numemp.value != '') {
-                    alert('eii')
                     js_OpenJanelaIframe('top.corpo', 'db_iframe_empempenho', 'func_empempenho.php?anul=false&inclusaoordemcompra=true&numemp=true&pesquisa_chave=' + document.form1.e60_numemp.value + '&funcao_js=parent.js_mostraempempenho', 'Pesquisa', false);
                 } else {
-                    alert('oii')
                     document.form1.e60_numemp.value = '';
                 }
             }

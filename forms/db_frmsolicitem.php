@@ -666,18 +666,18 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
           $sql_dot = $clsolicitem->sql_query_dot(
             null,
             "pc11_codigo,
-                                             					      pc11_quant,
-                    						                            sum(pc13_quant)",
+             pc11_quant,
+             sum(pc13_quant)",
             "",
             "",
             "group by pc10_numero,
-                    						    	                               pc10_depto,
-                    							                                   pc11_codigo,
-                    							                                   pc11_quant,
-                    							                                   pc11_numero,
-                    							                                   pc13_codigo
-                    						                              having (pc11_quant > sum(pc13_quant) or pc13_codigo is null)
-                    						                                 and pc11_numero = " . $pc11_numero
+                    	pc10_depto,
+                    	pc11_codigo,
+                    	pc11_quant,
+                    	pc11_numero,
+                    	pc13_codigo
+            having (pc11_quant > sum(pc13_quant) or pc13_codigo is null)
+              and pc11_numero = " . $pc11_numero
           );
 
           $sSqlVerificaAut = " select solicitem.* ";
@@ -688,17 +688,17 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
           $sSqlVerificaAut .= "                                       and empautitem.e55_sequen               = empautitempcprocitem.e73_sequen";
           $sSqlVerificaAut .= "				 inner join empautoriza          on e54_autori			                    = e55_autori";
           $sSqlVerificaAut .= "	 where pc11_numero = {$pc11_numero}";
-          $sSqlVerificaAut .= "	   and e54_anulad is null";
+          $sSqlVerificaAut .= "	   and e54_autori is not null";
 
           $sql_servico = $clsolicitem->sql_query_serv(null, "pc11_codigo as codsol,pc11_vlrun", "pc11_codigo", "pc11_numero = $pc11_numero ");
           $sql_reservasaldo = $clorcreservasol->sql_query_saldo(
             null,
             null,
             "round(o80_valor,2)  as valorreserva,
-                                                                                       round(pc13_valor,2) as valordotacao,
-                                                                                       pc11_numero,
-                                                                                       pc11_codigo as pc11_codigo_reserva,
-                                                                                       pc11_seq",
+             round(pc13_valor,2) as valordotacao,
+             pc11_numero,
+             pc11_codigo as pc11_codigo_reserva,
+             pc11_seq",
             "pc11_numero,pc11_codigo",
             "pc11_numero = $pc11_numero"
           );
@@ -711,8 +711,9 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
                                 pc13_coddot,
                                 pc19_orctiporec,
                                 pc01_codmater,
-                                case when pc16_codmater is null then substr(pc11_resum,1,40)
-                                     else substr(pc01_descrmater,1,40)
+                                case
+                                  when pc16_codmater is null then substr(pc11_resum,1,40)
+                                  else substr(pc01_descrmater,1,40)
                                 end as pc01_descrmater,
                                 m61_descr,
                                 pc13_quant,
@@ -730,7 +731,7 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
           $cliframe_alterar_excluir->sql_comparar = $sql_dot;
           $cliframe_alterar_excluir->sql_servico = $sql_servico;
           $cliframe_alterar_excluir->sql_reservasaldo = $sql_reservasaldo;
-          $cliframe_alterar_excluir->sql_disabled = $sSqlVerificaAut; // Desabilita Itens que tem Autorização de Empenho
+          $cliframe_alterar_excluir->sql_disabled = $sSqlVerificaAut; // Desabilita Itens que tem Autorização de Empenho vinculadas
           $cliframe_alterar_excluir->campos_comparar = "pc11_codigo";
 
           $val = 1;
@@ -1295,6 +1296,7 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
       document.form1.pc11_quant.style.backgroundColor = "";
       document.form1.pc11_quant.focus();
       document.form1.pc17_unid.style.visibility = 'visible';
+      document.form1.pc17_quant.style.visibility = 'hidden';
       js_desabilidaqtd(document.form1.pc17_unid.value);
     }
     <?
@@ -1447,7 +1449,7 @@ if ($pc01_servico == 't' && substr($o56_elemento, 0, 7) != '34490') {
   echo "  $('pc11_servicoquantidade').options[0]     = new Option('SIM', 'true');  ";
   echo "  $('pc11_servicoquantidade').options[1]     = new Option('NÃO', 'false'); ";
   echo "  $('pc17_unid').style.visibility           = 'visible';                  ";
-  echo "  $('pc17_quant').style.visibility           = 'visible';                  ";
+  echo "  $('pc17_quant').style.visibility           = 'hidden';                  ";
   echo "  $('ctnServicoQuantidade').style.display='none'; ";
   //echo "  js_habilitaCamposServico(\$F('pc11_servicoquantidade'));                 ";
 
@@ -1464,7 +1466,7 @@ if ($pc01_servico == 't' && substr($o56_elemento, 0, 7) != '34490') {
   echo "  $('pc11_servicoquantidade').options[0]     = new Option('SIM', 'true');  ";
   echo "  $('pc11_servicoquantidade').options[1]     = new Option('NÃO', 'false'); ";
   echo "  $('pc17_unid').style.visibility           = 'visible';                  ";
-  echo "  $('pc17_quant').style.visibility           = 'visible';                  ";
+  echo "  $('pc17_quant').style.visibility           = 'hidden';                  ";
   echo "  document.form1.pc11_servicoquantidade.style.visibility  = 'hidden'; ";
   echo "  document.form1.pc11_servicoquantidade.value = 'false';  ";
   echo "</script>                                                                  ";

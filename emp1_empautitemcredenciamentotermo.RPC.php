@@ -98,7 +98,7 @@ switch ($_POST["action"]) {
 
         $iAnoSessao         = db_getsession('DB_anousu');
         $rsDados      = $oDaoSysArqCamp->sql_record($sqlItens);
-
+        //echo $sqlItens;db_criatabela($rsDados);die();
         if ($oDaoSysArqCamp->numrows > 0) {
             $employeeData = array();
             for ($i = 0; $i < pg_numrows($rsDados); $i++) {
@@ -143,10 +143,11 @@ switch ($_POST["action"]) {
                     $itemRows[] = "<input type='text' id='vlrdisponivel_{$oDados->pc01_codmater}' value='{$vlr_disponivel}' readonly style='background-color: #DEB887; width: 80px' />";
                     $itemRows[] = "<input type='text' id='vlr_{$oDados->pc01_codmater}' value='{$vlr_disponivel}' onkeyup='js_calculaVrUnit(this)' style='width: 80px' />";
                     $itemRows[] = "<input type='text' id='qtd_{$oDados->pc01_codmater}' value='{$qtd_disponivel}' onkeyup='js_calcula(this)' maxlength='10' readonly style='background-color: #DEB887; width: 80px' />";
-                }else{
+                }
+                if($oDados->pc01_servico == "t" && $oDados->pc11_servicoquantidade == "t"){
                     $itemRows[] = "<input type='text' id='qtddisponivel_{$oDados->pc01_codmater}' value='{$qtd_disponivel}' readonly style='background-color: #DEB887; width: 80px' />";
                     $itemRows[] = "<input type='text' id='vlrdisponivel_{$oDados->pc01_codmater}' value='{$vlr_total}' readonly style='background-color: #DEB887; width: 80px' />";
-                    $itemRows[] = "<input type='text' id='vlr_{$oDados->pc01_codmater}' value='{$vlr_disponivel}' readonly style='background-color: #DEB887; width: 80px' />";
+                    $itemRows[] = "<input type='text' id='vlr_{$oDados->pc01_codmater}' value='{$oDados->pc23_vlrun}' readonly style='background-color: #DEB887; width: 80px' />";
                     $itemRows[] = "<input type='text' id='qtd_{$oDados->pc01_codmater}' value='{$qtd_disponivel}' onkeyup='js_calcula(this)' maxlength='10' style='width: 80px' />";
                 }
 

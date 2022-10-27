@@ -962,6 +962,7 @@ class cl_pcproc {
    //$sql .= "                                      and pc24_pontuacao = 1 ";
     $sql .= "       left  join orcelemento          on orcelemento.o56_codele = solicitemele.pc18_codele";
     $sql .= "                                      and o56_anousu = ".db_getsession("DB_anousu");
+    $sql .= "       left  join solicitemanul        on solicitemanul.pc28_solicitem = solicitem.pc11_codigo";
     $sql2 = "";
     if($dbwhere==""){
       if($pc80_codproc!=null ){

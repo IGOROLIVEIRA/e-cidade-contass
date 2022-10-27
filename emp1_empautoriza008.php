@@ -106,11 +106,12 @@
   }
 
   if (isset($excluir) && !$sqlerro) {
-
+    $result = db_query("select o83_codres from orcreservaaut where o83_autori = " . $e54_autori);
+    db_fieldsmemory($result, 0);
     $db_opcao = 3;
     $db_botao = true;
-
     db_query("delete from orcreservaaut where o83_autori = " . $e54_autori);
+    db_query("delete from orcreserva where o80_codres = " . $o83_codres);
     db_query("delete from empautorizaprocesso where e150_empautoriza = " . $e54_autori);
     db_query("delete from empautidot where e56_autori = " . $e54_autori);
     db_query("delete from empautitempcprocitem where e73_autori = " . $e54_autori);

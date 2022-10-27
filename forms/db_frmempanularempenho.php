@@ -147,7 +147,7 @@ if (empty ($e60_numemp)) {
                                 <tr>
                                     <td>
                                         <fieldset><legend><b>Itens do Empenho</b></legend>
-                                            <table style='border:2px inset white;backgorund-color:white;' width='100%' cellspacing='0'>
+                                            <table style='border:2px inset white;background-color:white;' width='100%' cellspacing='0'>
 
                                                 <thead>
                                                 <tr>
@@ -171,7 +171,7 @@ if (empty ($e60_numemp)) {
                                                 <tfoot>
                                                 <tr>
                                                     <td class='table_footer' style='text-align:right'  colspan='7'><b>Total</b></td>
-                                                    <td class='table_footer' colspan='1' id='valortotal' style='text-align:right;font-weigth:bold'>0.00</td>
+                                                    <td class='table_footer' colspan='1' id='valortotal' style='text-align:right;font-weight:bold'>0.00</td>
                                                     <td class='table_footer' colspan='1'>&nbsp;</td>
                                                 </tr>
                                                 </tfoot>
@@ -188,7 +188,7 @@ if (empty ($e60_numemp)) {
                                 <tr>
                                     <td>
                                         <fieldset><legend><b>Solicitacao de Anulação</b></legend>
-                                            <table style='border:2px inset white;backgorund-color:white;' width='100%' cellspacing='0'>
+                                            <table style='border:2px inset white;background-color:white;' width='100%' cellspacing='0'>
                                                 <thead>
                                                 <tr>
                                                     <th class='table_header'>&nbsp;</th>

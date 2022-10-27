@@ -138,6 +138,7 @@ if (isset($chavepesquisa)) {
          CurrentWindow.corpo.iframe_templateata.location.href='lic1_cflicitatemplateata001.php?l37_cflicita=" . @$l03_codigo . "';
          CurrentWindow.corpo.iframe_templateminuta.location.href='lic1_cflicitatemplateminuta001.php?l41_cflicita=" . @$l03_codigo . "';
          CurrentWindow.corpo.iframe_faixavalores.location.href='lic1_cflicitafaixavalor001.php?l37_cflicita=" . @$l03_codigo . "';
+         CurrentWindow.corpo.iframe_amparolegal.location.href='lic1_cflicitaamparolegal001.php?l03_codigo=" . @$l03_codigo . "&l03_descr=" . @$l03_descr . "';
      ";
   if (isset($liberaaba)) {
     echo "  parent.mo_camada('pccflicitapar');";
