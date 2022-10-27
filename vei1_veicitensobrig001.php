@@ -119,7 +119,7 @@ if (isset($excluir)){
   db_inicio_transacao();
 
   $clveicitensobrig->excluir($ve09_sequencial);
-  $erro_msg = $clveicitensobrig->erro_msg;
+  //$erro_msg = $clveicitensobrig->erro_msg;
   if ($clveicitensobrig->erro_status == 0){
     $sqlerro = true;
     $clveicitensobrig->erro_campo = "ve09_veiccaditensobrig";
