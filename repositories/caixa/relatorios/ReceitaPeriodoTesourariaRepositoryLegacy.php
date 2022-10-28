@@ -40,6 +40,7 @@ implements IReceitaPeriodoTesourariaRepository
         $this->sTipo = $sTipo;
         $this->iAno = date("Y", strtotime($dDataInicial));
         $this->iInstituicao = $iInstituicao;
+        $this->sOrdem = $sOrdem;
         $this->oReceitaPeriodoTesourariaSQLBuilder = new ReceitaPeriodoTesourariaSQLBuilder(
             $sTipo,
             $sTipoReceita,
@@ -67,11 +68,20 @@ implements IReceitaPeriodoTesourariaRepository
         
         if (!$result = pg_query($this->oReceitaPeriodoTesourariaSQLBuilder->pegarSQL()))
             throw new Exception("Erro realizando consulta");
+            
         while ($data = pg_fetch_object($result)) {
             if ($this->sTipo == ReceitaTipoRepositoryLegacy::DIARIO) {
                 $aDados[$data->data][] = $this->tratarDadosReceitaDiario($data);
                 continue;
             } 
+            
+            if ($this->sOrdem == ReceitaOrdemRepositoryLegacy::CONTRIBUINTE) {
+                $data->cgm = $data->cgm ? $data->cgm : 0;
+                $chave = $data->nome ? "CGM: $data->cgm CPF: $data->cpfcnpj NOME: $data->nome" : "Sem contribuinte informado";
+                $aDados[$data->tipo]["CGM"][$chave][] = $data;
+                continue;
+            }
+
             $aDados[$data->tipo][] = $data;
         }
         ksort($aDados);
