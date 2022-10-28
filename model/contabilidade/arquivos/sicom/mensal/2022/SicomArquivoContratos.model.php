@@ -1400,7 +1400,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                             if ($clcontratos21->erro_status == 0) {
                                 throw new Exception($clcontratos21->erro_msg);
                             }
-                            if ($matServico->pc01_servico == "t" && $matServico->ac20_servicoquantidade == "f") {
+                            if ($matServico->pc01_servico == "t" && $matServico->ac20_servicoquantidade == "f" && abs(abs($oAcordoItem->getValorUnitario())+($oAcordoItem->getValorAditado()*-1)) != 0) {
                                             
                                             
                                 $clcontratos21->si88_tiporegistro = 21;
@@ -1753,8 +1753,8 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                     $valortotaladitado = 0;
                     foreach ($oAcordoPosicao->getItens() as $oAcordoItem) {
                         
-                            if ($oAcordoItem->getQuantiAditada() != 0 ||  $oAcordoItem->getValorUnitario() != $oAcordoItem->getValorTotalPosicaoAnteriors($oDados20->ac26_numero)) {
-                                if(abs($oAcordoItem->getQuantidade()) == 0 || abs($oAcordoItem->getValorUnitario()) == abs($oAcordoItem->getValorTotalPosicaoAnteriors($oDados20->ac26_numero))){
+                        if ($oAcordoItem->getQuantiAditada() != 0 ||  ($oAcordoItem->getValorUnitario() != $oAcordoItem->getValorTotalPosicaoAnteriors($oDados20->ac26_numero) && $oAcordoItem->getValorAditado() != 0)) {
+                            if(abs($oAcordoItem->getQuantidade()) == 0 || abs($oAcordoItem->getValorUnitario()) == abs($oAcordoItem->getValorTotalPosicaoAnteriors($oDados20->ac26_numero)) || abs(abs($oAcordoItem->getValorUnitario())+($oAcordoItem->getValorAditado()*-1))==0){
                                     $valortotaladitado = $oAcordoItem->getValorUnitario() - $oAcordoItem->getValorTotalPosicaoAnteriors($oDados20->ac26_numero);
                                         $iTotalPosicaoAnterior += $oAcordoItem->getValorTotalPosicaoAnterior($oDados20->ac26_numero);
                                         $iTotalPosicaoAditivo += $oAcordoItem->getValorTotal();

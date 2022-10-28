@@ -9,4 +9,5 @@ class ReceitaOrdemRepositoryLegacy
     CONST ALFABETICA = 3;
     CONST REDUZIDO_ORCAMENTO = 4;
     CONST REDUZIDO_CONTA = 5;
+    CONST CONTRIBUINTE = 6;
 }
