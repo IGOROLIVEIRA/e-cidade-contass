@@ -290,12 +290,13 @@ function js_emite(){
 							<strong>Ordem:</strong> 
 						</td>
 						<td>
-							<select name="ordem" >
+							<select name="ordem" id="ordem" onchange="js_validarTipo(this)">
 								<option value=<?= ReceitaOrdemRepositoryLegacy::CODIGO ?>>Código Receita</option>
 								<option value=<?= ReceitaOrdemRepositoryLegacy::ESTRUTURAL ?>>Estrutural</option>
 								<option value=<?= ReceitaOrdemRepositoryLegacy::ALFABETICA ?>>Alfabética Descrição Receita</option>
 								<option value=<?= ReceitaOrdemRepositoryLegacy::REDUZIDO_ORCAMENTO ?>>Reduzido Orçamento</option>
 								<option value=<?= ReceitaOrdemRepositoryLegacy::REDUZIDO_CONTA ?>>Reduzido Conta</option>
+								<option value=<?= ReceitaOrdemRepositoryLegacy::CONTRIBUINTE ?>>Contribuinte</option>
                             </select>
 						</td>
 					</tr>
@@ -304,7 +305,7 @@ function js_emite(){
 							<strong>Tipo:</strong> 
 						</td>
 						<td>
-							<select name="sinana" style="width: 175px;">
+							<select name="sinana" id="sinana" style="width: 175px;">
 								<option value=<?= ReceitaTipoRepositoryLegacy::RECEITA ?>>Sintético/Receita</option>
 								<option value=<?= ReceitaTipoRepositoryLegacy::ESTRUTURAL ?>>Sintético/Estrutural</option>
 								<option value=<?= ReceitaTipoRepositoryLegacy::ANALITICO ?>>Analítico</option>
@@ -322,6 +323,7 @@ function js_emite(){
 								<option value = '1'>1 - Emenda parlamentar individual</option>
 								<option value = '2'>2 - Emenda parlamentar de bancada</option>
 								<option value = '3'>3 - Não se aplica</option>
+								<option value = '4'>4 - Emenda não impositiva</option>
 						</td>
 					</tr>
 					<tr>
@@ -395,6 +397,18 @@ function js_mostratabrec1(chave1,chave2){
      document.form1.k02_codigo.value = chave1;
      document.form1.k02_drecei.value = chave2;
      db_iframe.hide();
+}
+
+function js_validarTipo(select)
+{
+    if (select.options[select.selectedIndex].value == <?= ReceitaOrdemRepositoryLegacy::CONTRIBUINTE ?>) {
+        if (document.getElementById('sinana').value == 'S4')
+            document.getElementById('sinana').options[3].setAttribute('selected', '');
+        document.getElementById('sinana').options[4].setAttribute('disabled', '');
+        return;
+    }
+    document.getElementById('sinana').options[4].removeAttribute('disabled', '');
+    return
 }
 </script>
 
