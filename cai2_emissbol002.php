@@ -1718,30 +1718,21 @@ if( $pdf->gety() > ( $pdf->h - 30 ) ){
 $largura = ($pdf->w) / 3;
 $pdf->ln(10);
 
-if ( strlen(trim($ass_sec_original)) == 0 ) { // se nao tiver o documento das assinaturas do secretário da fazenda configurado, imprime apenas 3 assinaturas na mesma linha
-                                              // prefeito/tesoureiro/contador
-  $pos = $pdf->gety();
-  $pdf->setxy(30, $pos);
-  $pdf->multicell(0, 2, $ass_pref, 0, "L", 0);
-  $pdf->setxy(($largura), $pos);
-  $pdf->multicell($largura, 2, $ass_tes, 0, "C", 0, 0);
-  $pdf->setxy(($largura * 2), $pos);
-  $pdf->multicell($largura, 2, $ass_cont, 0, "C", 0, 0);
+$sqlparagpadrao  = " select db61_texto ";
+$sqlparagpadrao .= " from db_documentopadrao ";
+$sqlparagpadrao .= "     inner join db_docparagpadrao  on db62_coddoc   = db60_coddoc ";
+$sqlparagpadrao .= "     inner join db_tipodoc         on db08_codigo   = db60_tipodoc ";
+$sqlparagpadrao .= "     inner join db_paragrafopadrao on db61_codparag = db62_codparag ";
+$sqlparagpadrao .= " where db60_tipodoc = 1508 and db60_instit = " . db_getsession("DB_instit") . " order by db62_ordem";
 
-} else {
-
-  $pdf->multicell(0, 2, $ass_pref, 0, "C", 0);
-  $pdf->ln(10);
-  $pos = $pdf->gety();
-  $pdf->multicell($largura, 2, $ass_tes, 0, "C", 0, 0);
-  $pdf->setxy($largura, $pos);
-  $pdf->multicell($largura, 2, $ass_cont, 0, "C", 0, 0);
-  $pdf->setxy(($largura * 2), $pos);
-
-  if (strtoupper(trim($munic)) != 'ALEGRETE') {
-    $pdf->multicell($largura, 2, $ass_sec, 0, "C", 0, 0);
-  }
-
+$resparagpadrao = @db_query($sqlparagpadrao);
+if (@pg_numrows($resparagpadrao) > 0) {
+    db_fieldsmemory($resparagpadrao, 0);
+    // echo $db61_texto;
+    if ($pdf->GetY() > $pdf->h - 35) {
+        $pdf->AddPage("L");
+    }
+    @eval($db61_texto);
 }
+
 $pdf->Output();
-?>
