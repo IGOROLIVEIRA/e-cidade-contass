@@ -374,7 +374,7 @@ switch ($oParam->exec) {
                                         SELECT pc53_solicitapai
                                           FROM solicitavinculo
                                             WHERE pc53_solicitafilho = (
-                                                                        SELECT pc10_numero
+                                                                        SELECT DISTINCT pc10_numero
                                                                           FROM solicita
                                                                             JOIN solicitem  ON pc11_numero    = pc10_numero
                                                                             JOIN pcprocitem ON pc81_solicitem = pc11_codigo

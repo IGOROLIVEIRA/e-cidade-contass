@@ -198,7 +198,7 @@ $sWhereContrato = " and 1 = 1 ";
       }
 
       if (isset($param_mostra_regprecos) && $param_mostra_regprecos == "nao") {
-        $where_depart .= " and pc10_solicitacaotipo <> 5";
+        $where_depart .= " and pc10_solicitacaotipo in (1,5)";
       }
 
       if (!empty($oGet->tiposolicitacao)) {

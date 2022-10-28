@@ -1199,6 +1199,7 @@ order by
             $cl_credenciamentosaldo->l213_licitacao = $this->getILicitacao();
             $cl_credenciamentosaldo->l213_item = $this->getCodigo();
             $cl_credenciamentosaldo->l213_qtdcontratada = $this->getIQtdcontratada();
+            $cl_credenciamentosaldo->l213_valorcontratado = "" . round(($this->getQuantidade() * $nValorUnitario), 2) . "";
             $cl_credenciamentosaldo->l213_contratado = $this->getIContratado();
             $cl_credenciamentosaldo->l213_acordo = $this->getIContrato();
             $cl_credenciamentosaldo->l213_itemlicitacao = $this->getILicitem();

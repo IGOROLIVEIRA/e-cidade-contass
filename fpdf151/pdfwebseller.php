@@ -113,7 +113,7 @@ class PDF extends FPDF
       else
         $TamFonteNome = 9;
       if (trim(pg_result($dados1, 0, "ed18_c_logo")) != "") {
-        $this->Image('imagens/' . trim(pg_result($dados1, 0, "ed18_c_logo")), 105, 4, 20);
+        $this->Image('imagens/' . trim(pg_result($dados1, 0, "ed18_c_logo")), 180, 4, 20); // modifica a posicao da logo
       }
       $ruaescola = trim(pg_result($dados1, 0, "j14_nome"));
       $numescola = trim(pg_result($dados1, 0, "ed18_i_numero"));
@@ -150,7 +150,7 @@ class PDF extends FPDF
         $this->Text(33, 21, $cidadeescola . " - " . $estadoescola);
         $this->Text(33, 24, $telefoneescola);
         $comprim = ($this->w - $this->rMargin - $this->lMargin);
-        $this->Text(33, 28, ($emailescola != "" ? $emailescola . " - " : "") . $url);
+        $this->Text(33, 28, ($emailescola != "" ? $emailescola . " + " : "") . $url);
       } else {
         $this->Text(33, 9, $nome);
         $this->Text(33, 14, $nomeescola);
@@ -159,7 +159,7 @@ class PDF extends FPDF
         $this->Text(33, 22, $cidadeescola . " - " . $estadoescola);
         $this->Text(33, 26, $telefoneescola);
         $comprim = ($this->w - $this->rMargin - $this->lMargin);
-        $this->Text(33, 30, ($emailescola != "" ? $emailescola . " - " : "") . $url);
+        $this->Text(33, 30, ($emailescola != "" ? strtolower($emailescola) : "")); //configurar para retornar email da escola ao inves da instituicao
       }
 
       $Espaco = $this->w - 80;

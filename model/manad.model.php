@@ -672,7 +672,7 @@ class manad {
 		$sSql0000 .= "        '1'           as ind_centr, ";
 		$sSql0000 .= "        '{$sDtIni}'   as dt_ini, ";
 		$sSql0000 .= "        '{$sDtFim}'   as dt_fin, ";
-		$sSql0000 .= "        '003'         as cod_ver, ";
+		$sSql0000 .= "        '004'         as cod_ver, ";
 		$sSql0000 .= "        '{$iCodFin}' as cod_fin, ";
 		$sSql0000 .= "        '1'           as ind_ed ";
 		$sSql0000 .= "   from db_config      ";
@@ -779,8 +779,10 @@ class manad {
     $sSqlEmpenho .= "        replace(e60_resumo,'\n', ' ') AS hist_emp, ";
     $sSqlEmpenho .= "        'L050' AS reg, ";
     $sSqlEmpenho .= "        '' AS cod_sub_pro, ";
+    $sSqlEmpenho .= "       substr(e41_descr,1,1) as ind_tipo_emp, ";
     $sSqlEmpenho .= "        '' AS cod_cont_rec ";
     $sSqlEmpenho .= " FROM empempenho ";
+    $sSqlEmpenho .= " INNER JOIN emptipo ON e60_codtipo = e41_codtipo ";
     $sSqlEmpenho .= " INNER JOIN conlancamemp ON c75_numemp = e60_numemp ";
     $sSqlEmpenho .= " INNER JOIN conlancamdoc ON c71_codlan = c75_codlan ";
     $sSqlEmpenho .= " INNER JOIN conlancam ON c70_codlan = c75_codlan ";
@@ -822,9 +824,11 @@ class manad {
     $sSqlEmpenho .= "       replace(e60_resumo,'\n', ' ') AS e60_resumo, ";
     $sSqlEmpenho .= "       'L050' AS reg, ";
     $sSqlEmpenho .= "       '' AS cod_sub_pro, ";
+    $sSqlEmpenho .= "       substr(e41_descr,1,1) as ind_tipo_emp, ";
     $sSqlEmpenho .= "       '' AS cod_cont_rec ";
     $sSqlEmpenho .= " FROM empresto ";
     $sSqlEmpenho .= " INNER JOIN empempenho ON e60_numemp = e91_numemp ";
+    $sSqlEmpenho .= " INNER JOIN emptipo ON e60_codtipo = e41_codtipo ";
     $sSqlEmpenho .= " INNER JOIN cgm ON z01_numcgm = e60_numcgm ";
     $sSqlEmpenho .= " INNER JOIN orcdotacao ON o58_coddot=e60_coddot ";
     $sSqlEmpenho .= " AND o58_anousu=e60_anousu ";
@@ -866,9 +870,11 @@ class manad {
     $sSqlEmpenho .= "        replace(e60_resumo,'\n', ' ') AS e60_resumo, ";
     $sSqlEmpenho .= "        'L050' AS reg, ";
     $sSqlEmpenho .= "        '' AS cod_sub_pro, ";
+    $sSqlEmpenho .= "       substr(e41_descr,1,1) as ind_tipo_emp, ";
     $sSqlEmpenho .= "        '' AS cod_cont_rec ";
     $sSqlEmpenho .= " FROM empresto ";
     $sSqlEmpenho .= " INNER JOIN empempenho ON e91_numemp = e60_numemp ";
+    $sSqlEmpenho .= " INNER JOIN emptipo ON e60_codtipo = e41_codtipo ";
     $sSqlEmpenho .= " INNER JOIN conlancamemp ON c75_numemp = e60_numemp ";
     $sSqlEmpenho .= " INNER JOIN conlancamdoc ON c71_codlan = c75_codlan ";
     $sSqlEmpenho .= " INNER JOIN conhistdoc ON c71_coddoc = c53_coddoc ";
@@ -888,7 +894,7 @@ class manad {
 
     $rsEmpenho    = db_query($sSqlEmpenho);
     $iTotalLinhas = pg_num_rows($rsEmpenho);
-    return db_utils::getColectionByRecord($rsEmpenho);
+    return db_utils::getColLectionByRecord($rsEmpenho);
   }
 
   /**
@@ -984,6 +990,7 @@ class manad {
     $sSqlPagamentos .= "        END AS cta_deb,";
     $sSqlPagamentos .= "        db_config.codtrib AS cod_org_un_deb,";
     $sSqlPagamentos .= "        db_config.codtrib AS cod_org_un_cred,";
+    $sSqlPagamentos .= "        case when c53_tipo = 30 THEN 0 else 2 end as status_pag, ";
     $sSqlPagamentos .= "        'L150' AS reg";
     $sSqlPagamentos .= " FROM conlancamemp";
     $sSqlPagamentos .= " INNER JOIN conlancam ON c70_codlan = c75_codlan";
@@ -1019,6 +1026,7 @@ class manad {
     $sSqlPagamentos .= "        END AS cta_deb,";
     $sSqlPagamentos .= "        db_config.codtrib AS cod_org_un_deb,";
     $sSqlPagamentos .= "        db_config.codtrib AS cod_org_un_cre,";
+    $sSqlPagamentos .= "        case when c53_tipo = 30 THEN 0 else 2 end as status_pag, ";
     $sSqlPagamentos .= "        'L150' AS reg";
     $sSqlPagamentos .= " FROM empresto";
     $sSqlPagamentos .= " INNER JOIN conlancamemp ON c75_numemp = e91_numemp";

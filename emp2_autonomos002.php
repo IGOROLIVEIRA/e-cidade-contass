@@ -86,13 +86,14 @@ if (isset($dtDataInicial)) {
                     else 0 end as valor_irrf,";
   $sSqlNota .= " case when retencaotiporec.e21_retencaotipocalc in (5,6) then (coalesce(e23_valorretencao, 0))
 		            else 0 end as outrasretencoes, ";
-  $sSqlNota .= " case when c71_coddoc = 904 then c71_data end as c71_data, e60_anousu, e69_numero, cgm.z01_cgccpf,z04_rhcbo, corrente.k12_data,e23_ativo";                                  
+  $sSqlNota .= " case when c71_coddoc = 904 then c71_data end as c71_data, e60_anousu, e69_numero, cgm.z01_cgccpf,rh70_estrutural, corrente.k12_data,e23_ativo";                                  
   $sSqlNota .= "       from empnota ";
   $sSqlNota .= "          inner join empempenho   on e69_numemp  = e60_numemp";
   $sSqlNota .= "          inner join cgm as cgm   on e60_numcgm  = cgm.z01_numcgm";
   $sSqlNota .= "          inner join empnotaele   on e69_codnota = e70_codnota";
   $sSqlNota .= "          inner join orcelemento  on empnotaele.e70_codele = orcelemento.o56_codele";
-  $sSqlNota .= "          inner join cgmfisico on z04_numcgm = cgm.z01_numcgm"; 	
+  $sSqlNota .= "          inner join cgmfisico on z04_numcgm = cgm.z01_numcgm"; 
+  $sSqlNota .= "          inner join rhcbo on rh70_sequencial = z04_rhcbo";
   $sSqlNota .= "          left join conlancamemp on c75_numemp = e60_numemp ";
   $sSqlNota .= "          left join conlancamdoc on c71_codlan = c75_codlan and c71_coddoc = 904 ";
   $sSqlNota .= "          left  join pagordemnota on e71_codnota = e69_codnota";
@@ -119,11 +120,12 @@ if (isset($dtDataInicial)) {
   $dtDataInicial = implode("-", array_reverse(explode("/", $dtDataInicial)));
   $dtDataFinal = implode("-", array_reverse(explode("/", $dtDataFinal)));
 
-  if($sCredoresSelecionados)
+  if($sCredoresSelecionados){
         if($sTipoSelecao == 1)            
             $sSqlNota .= "  where (e50_data BETWEEN '$dtDataInicial' AND '$dtDataFinal' ) and  e60_numcgm in ({$sCredoresSelecionados}) and Length(cgm.z01_cgccpf) = 11 ";
         if($sTipoSelecao == 2) 
             $sSqlNota .= "  where (e50_data BETWEEN '$dtDataInicial' AND '$dtDataFinal' ) and  e60_numcgm not in ({$sCredoresSelecionados}) and Length(cgm.z01_cgccpf) = 11 ";           
+  }
   else 
     $sSqlNota .= "  where e50_data BETWEEN '$dtDataInicial' AND '$dtDataFinal' and Length(cgm.z01_cgccpf) = 11 ";
  
@@ -135,7 +137,7 @@ if (isset($dtDataInicial)) {
   $sSqlNota .= "  and ((substr(orcelemento.o56_elemento,2,8) like '339036%') or (substr(orcelemento.o56_elemento,2,8) like '339035%') "; 
   $sSqlNota .= "  and (substr(orcelemento.o56_elemento,2,8) NOT IN ('".implode("','",$aElementosFiltro)."') ))  ";
   $sSqlNota .=  " and e60_instit = $instits ";
-  $sSqlNota .= "  group by     1,3,2,4,6,7,8,9,10,e21_retencaotipocalc,c71_coddoc,c71_data,e60_anousu,e69_numero,e70_vlrliq,e23_valorretencao, cgm.z01_cgccpf,z04_rhcbo,corrente.k12_data,e23_ativo";
+  $sSqlNota .= "  group by     1,3,2,4,6,7,8,9,10,e21_retencaotipocalc,c71_coddoc,c71_data,e60_anousu,e69_numero,e70_vlrliq,e23_valorretencao, cgm.z01_cgccpf,rh70_estrutural,corrente.k12_data,e23_ativo";
   $sSqlNota .= "  order by     3 ";
 
   $rsNota    = $oDaoEmpNota->sql_record($sSqlNota);
@@ -425,7 +427,7 @@ $dataFinal = str_replace("/","-",db_formatar($dtDataFinal, "d"));
                         echo <<<HTML
                        
                         <tr>
-                            <td class="s1" colspan="20"><b>$oNotas->e60_numcgm - $oNotas->z01_cgccpf-$oNotas->z01_nome - CBO - $oNotas->z04_rhcbo</b></td>
+                            <td class="s1" colspan="20"><b>$oNotas->e60_numcgm - $oNotas->z01_cgccpf-$oNotas->z01_nome - CBO - $oNotas->rh70_estrutural</b></td>
                         </tr>
 HTML;
                     $auxe60_numcgm = $oNotas->e60_numcgm;

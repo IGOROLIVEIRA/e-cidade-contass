@@ -251,7 +251,7 @@ foreach ($aDadosAlunos as $oDadosAlunos) {
   $oPdf->setfont('arial', 'b', 12);
   $oPdf->SetY($oPdf->getY() + 10);
   $oPdf->Cell(192, $oParametros->iAlturaLinha, "Declaração de Frequência", 0, 1, "C");
-  $oPdf->Ln($oParametros->iAlturaLinha * 2);
+  $oPdf->Ln($oParametros->iAlturaLinha * 15); //modifica a posicao do paragrafo no relatório
 
   $oPdf->setfont('arial', '', 10);
   $oPdf->setXY(16, $oPdf->GetY());

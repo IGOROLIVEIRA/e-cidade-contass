@@ -93,9 +93,10 @@ $cldb_usuarios->rotulo->label("nome");
            }
         }
         if (isset($chave_id_usuario) && (trim($chave_id_usuario) !="" )) {
-	         $sql = $cldb_usuarios->sql_query($chave_id_usuario,$campos,"nome"," usuarioativo = '1' and usuext = 0 and id_usuario = {$chave_id_usuario}");
+	         $sql = $cldb_usuarios->sql_query($chave_id_usuario,$campos,"nome"," usuarioativo = '1' and usuext = 0 and db_usuarios.id_usuario = {$chave_id_usuario}");
         } else if(isset($chave_nome) && (trim($chave_nome)!="")) {
-	         $sql = $cldb_usuarios->sql_query("",$campos,"nome"," usuarioativo = '1' and usuext = 0 and nome like '$chave_nome%' ");
+           $nome = strtoupper($chave_nome);
+	         $sql = $cldb_usuarios->sql_query("",$campos,"nome"," usuarioativo = '1' and usuext = 0 and nome like '$nome%' ");
         }else{
            $sql = $cldb_usuarios->sql_query("",$campos,"nome"," usuarioativo = '1' and usuext = 0");
         }

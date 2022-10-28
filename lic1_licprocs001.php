@@ -313,7 +313,8 @@ if ($clliclicita->numrows > 0) {
                             echo "<script>";
                             echo "parent.document.form1.exportarcsv.disabled = true; ";
                             echo "</script>";
-
+                            echo "<select name='codprocanu' id='codprocanu' style='display: none;'>";
+                            echo " </select>";
                             echo "Nenhum Processo de Compra incluído.";
                         }
                         ?>
@@ -373,5 +374,12 @@ if ($clliclicita->numrows > 0) {
         </center>
     </form>
 </body>
+<script>
+    if (document.getElementById('codprocanu').value == '') {
+        top.corpo.iframe_liclicita.document.form1.l20_tipojulg.disabled = false;
+    } else {
+        top.corpo.iframe_liclicita.document.form1.l20_tipojulg.disabled = true;
+    }
+</script>
 
 </html>

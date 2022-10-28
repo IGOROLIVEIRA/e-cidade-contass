@@ -46,12 +46,12 @@ switch ($oParam->exec) {
         $l202_dataAdjudicacao = DateTime::createFromFormat('d/m/Y', $data);
 
         try {
-            //Verifica se os fornecedores vencedores estÃ£o habilitados
+            //Verifica se os fornecedores vencedores estÃo habilitados
             if (!$clhomologacaoadjudica->validaFornecedoresHabilitados($l202_licitacao)) {
                 throw new Exception("Procedimento abortado. Verifique os fornecedores habilitados.");
             }
 
-            //Verifica data de julgamento da licitaÃ§Ã£o
+            //Verifica data de julgamento da licitação
             if ($dataJulgamentoLicitacao > $l202_dataAdjudicacao) {
                 throw new Exception("Data de Julgamento maior que a Data de Adjudicação");
             }
@@ -79,7 +79,7 @@ switch ($oParam->exec) {
             }
 
             /**
-             * Verificar Encerramento Periodo Patrimonial e data do julgamento da licitaÃ§Ã£o
+             * Verificar Encerramento Periodo Patrimonial e data do julgamento da licitação
              */
 
             if (!empty($l202_dataAdjudicacao)) {
@@ -126,7 +126,7 @@ switch ($oParam->exec) {
                         $oRetorno->status = 1;
                     }
                     /**
-                     * Incluindo nova situaÃ§Ã£o a licitacao ADJUDICADA
+                     * Incluindo nova situação a licitacao ADJUDICADA
                      */
                     $clhomologacaoadjudica->alteraLicitacao($l202_licitacao, 13);
 
@@ -224,12 +224,12 @@ switch ($oParam->exec) {
         $l202_dataAdjudicacao = DateTime::createFromFormat('d/m/Y', $data);
 
         try {
-            //Verifica se os fornecedores vencedores estÃ£o habilitados
+            //Verifica se os fornecedores vencedores estão habilitados
             if (!$clhomologacaoadjudica->validaFornecedoresHabilitados($l202_licitacao)) {
                 throw new Exception("Procedimento abortado. Verifique os fornecedores habilitados.");
             }
 
-            //Verifica data de julgamento da licitaÃ§Ã£o
+            //Verifica data de julgamento da licitação
             if ($dataJulgamentoLicitacao > $l202_dataAdjudicacao) {
                 throw new Exception("Data de julgamento maior que data de adjudicacao");
             }
@@ -259,7 +259,7 @@ switch ($oParam->exec) {
             }
 
             /**
-             * Verificar Encerramento Periodo Patrimonial e data do julgamento da licitaÃ§Ã£o
+             * Verificar Encerramento Periodo Patrimonial e data do julgamento da licitação
              */
 
             if (!empty($l202_dataAdjudicacao)) {
@@ -294,7 +294,7 @@ switch ($oParam->exec) {
                     }
                     db_inicio_transacao();
                     /**
-                     * Alterar responsÃ¡vel
+                     * Alterar responsável
                      */
 
                     if ($oParam->respAdjudicodigo != "") {
@@ -324,7 +324,7 @@ switch ($oParam->exec) {
                         $oRetorno->status = 1;
                     }
                     /**
-                     * Alterado nova situaÃ§Ã£o a licitacao ADJUDICADA
+                     * Alterado nova situação a licitacao ADJUDICADA
                      */
                     $rsSituacao = $clliclicitasituacao->sql_record($clliclicitasituacao->sql_query_file(null, "l11_sequencial", null, "l11_liclicita = {$l202_licitacao} and l11_licsituacao = 13"));
                     db_fieldsmemory($rsSituacao, 0);
@@ -364,7 +364,7 @@ switch ($oParam->exec) {
 
         try {
             /**
-             * Verificar Encerramento Periodo Patrimonial e data do julgamento da licitaÃ§Ã£o
+             * Verificar Encerramento Periodo Patrimonial e data do julgamento da licitação
              */
 
             if (!empty($l202_dataAdjudicacao)) {
@@ -430,12 +430,12 @@ switch ($oParam->exec) {
                         inner join itenshomologacao on l203_homologaadjudicacao = l202_sequencial where l202_licitacao = {$oParam->iLicitacao})";
             $result = $clhomologacaoadjudica->sql_record($clhomologacaoadjudica->sql_query_itens_semhomologacao(null, $campos, "pc11_seq,z01_nome", $sWhere));
         }
-        //Itens para alteraÃ§Ã£o
+        //Itens para alteração
         if ($oParam->dbopcao == "2") {
             $sWhere = " liclicitem.l21_codliclicita = {$oParam->iLicitacao} and pc24_pontuacao = 1 AND itenshomologacao.l203_homologaadjudicacao = {$oParam->iHomologacao}";
             $result = $clhomologacaoadjudica->sql_record($clhomologacaoadjudica->sql_query_itens_comhomologacao(null, $campos, "pc11_seq,z01_nome", $sWhere));
         }
-        //Itens para ExclusÃ£o
+        //Itens para ExclusÃo
         if ($oParam->dbopcao == "3") {
             $sWhere = " liclicitem.l21_codliclicita = {$oParam->iLicitacao} and pc24_pontuacao = 1 AND itenshomologacao.l203_homologaadjudicacao = {$oParam->iHomologacao}";
             $result = $clhomologacaoadjudica->sql_record($clhomologacaoadjudica->sql_query_itens_comhomologacao(null, $campos, "pc11_seq,z01_nome", $sWhere));
@@ -533,30 +533,30 @@ switch ($oParam->exec) {
         $datadeAdjudicacao = DateTime::createFromFormat('d/m/Y', $dtadjudicaca);
 
         /**
-         * VERIFICA SE E REGISTRO DE PREÃ‡O
+         * VERIFICA SE E REGISTRO DE PREÇO
          */
 
         $result = $clliclicita->sql_record($clliclicita->sql_query($l202_licitacao));
         $l20_tipnaturezaproced  = db_utils::fieldsMemory($result, 0)->l20_tipnaturezaproced;
 
         /**
-         * VALIDAÃ‡ÃƒO COM EDITAL
+         * VALIDAÇÃO COM EDITAL
          */
         $l20_cadinicial  = db_utils::fieldsMemory($result, 0)->l20_cadinicial;
 
         try {
-            //Verifica se os fornecedores vencedores estÃ£o habilitados
+            //Verifica se os fornecedores vencedores estÃo habilitados
             if (!$clhomologacaoadjudica->validaFornecedoresHabilitados($l202_licitacao)) {
                 throw new Exception("Procedimento abortado. Verifique os fornecedores habilitados.");
             }
 
-            //Verifica data de julgamento da licitaÃ§Ã£o
+            //Verifica data de julgamento da licitação
             if ($l202_datahomologacao < $dataJulgamentoLicitacao) {
                 throw new Exception("Data de julgamento maior que data de adjudicacao.");
             }
 
 
-            //Verifica data de adjudicacao da licitaÃ§Ã£o
+            //Verifica data de adjudicacao da licitação
             if ($l202_datahomologacao < $datadeAdjudicacao) {
                 throw new Exception("Data de homologação menor que a data de adjudicação.");
             }
@@ -590,7 +590,7 @@ switch ($oParam->exec) {
             }
 
             /**
-             * Verificar Encerramento Periodo Patrimonial e data do julgamento da licitaÃ§Ã£o
+             * Verificar Encerramento Periodo Patrimonial e data do julgamento da licitação
              */
 
             if (!empty($l202_datahomologacao)) {
@@ -661,7 +661,7 @@ switch ($oParam->exec) {
                             $oRetorno->status = 1;
                         }
                         /**
-                         * Incluindo nova situaÃ§Ã£o a licitacao Homologada
+                         * Incluindo nova situação a licitacao Homologada
                          */
                         $clhomologacaoadjudica->alteraLicitacao($l202_licitacao, 10);
 
@@ -682,12 +682,12 @@ switch ($oParam->exec) {
                         $clhomologacaoadjudica->incluir(null);
 
                         /**
-                         * Incluindo nova situaÃ§Ã£o a licitacao Homologada
+                         * Incluindo nova situação a licitacao Homologada
                          */
                         $clhomologacaoadjudica->alteraLicitacao($l202_licitacao, 10);
 
                         /**
-                         * Incluindo nova situaÃ§Ã£o a licitacao Homologada
+                         * Incluindo nova situação a licitacao Homologada
                          */
                         $clliclicitasituacao->l11_data        = date("Y-m-d", db_getsession("DB_datausu"));
                         $clliclicitasituacao->l11_hora        = db_hora();
@@ -723,18 +723,18 @@ switch ($oParam->exec) {
                             $oRetorno->sequencial = $clhomologacaoadjudica->l202_sequencial;
                             $oRetorno->status = 1;
 
-                            /*Verifica se Ã© registro de preco*/
+                            /*Verifica se é registro de preco*/
                             $result = $clliclicita->sql_record($clliclicita->sql_query($l202_licitacao));
                             $l20_tipnaturezaproced  = db_utils::fieldsMemory($result, 0)->l20_tipnaturezaproced;
                             $oRetorno->regpreco = $l20_tipnaturezaproced;
 
-                            /*cria consulta da solicitaÃ§Ã£o com licitaÃ§Ã£o*/
+                            /*cria consulta da solicitação com licitação*/
                             $resultsolicita = $clliclicita->sql_record($clliclicita->sql_query_consulta_regpreco(null, "pc10_numero", null, "l20_codigo = {$l202_licitacao}"));
                             $pc10_numero = db_utils::fieldsMemory($resultsolicita, 0)->pc10_numero;
                             $oRetorno->pc10_numero = $pc10_numero;
                         }
                         /**
-                         * Incluindo nova situaÃ§Ã£o a licitacao Homologada
+                         * Incluindo nova situação a licitacao Homologada
                          */
                         $clhomologacaoadjudica->alteraLicitacao($l202_licitacao, 10);
 
@@ -797,18 +797,18 @@ switch ($oParam->exec) {
         $ac16_sequencial = db_utils::fieldsMemory($result, 0)->ac16_sequencial;
 
         try {
-            //Verifica se os fornecedores vencedores estÃ£o habilitados
+            //Verifica se os fornecedores vencedores estÃo habilitados
             if (!$clhomologacaoadjudica->validaFornecedoresHabilitados($l202_licitacao)) {
                 throw new Exception("Procedimento abortado. Verifique os fornecedores habilitados.");
             }
 
-            //Verifica data de julgamento da licitaÃ§Ã£o
+            //Verifica data de julgamento da licitação
             if ($dataJulgamentoLicitacao > $l202_datahomologacao) {
                 throw new Exception("Data de julgamento maior que data de adjudicacao");
             }
 
             if ($ac16_sequencial != "") {
-                throw new Exception("NÃ£o e Permitida alteração de Homologação com Contrato lançado!");
+                throw new Exception("Não e Permitida alteração de Homologação com Contrato lançado!");
             }
 
             $result = $clliclicita->sql_record($clliclicita->sql_query($l202_licitacao));
@@ -834,7 +834,7 @@ switch ($oParam->exec) {
             }
 
             /**
-             * Verificar Encerramento Periodo Patrimonial e data do julgamento da licitaÃ§Ã£o
+             * Verificar Encerramento Periodo Patrimonial e data do julgamento da licitação
              */
 
             if (!empty($l202_datahomologacao)) {
@@ -923,7 +923,7 @@ switch ($oParam->exec) {
         $l202_dataAdjudicacao = DateTime::createFromFormat('d/m/Y', $data);
 
         /**
-         * VERIFICA SE E REGISTRO DE PREÃ‡O
+         * VERIFICA SE E REGISTRO DE PREÇO
          */
 
         $result = $clliclicita->sql_record($clliclicita->sql_query($l202_licitacao));
@@ -931,7 +931,7 @@ switch ($oParam->exec) {
 
         try {
             /**
-             * Verificar Encerramento Periodo Patrimonial e data do julgamento da licitaÃ§Ã£o
+             * Verificar Encerramento Periodo Patrimonial e data do julgamento da licitação
              */
 
 

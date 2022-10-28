@@ -42,11 +42,11 @@ class DadosESocial
      * @param integer $tipo
      * @return ECidade\RecursosHumanos\ESocial\Model\Formulario\DadosPreenchimento[]
      */
-    public function getPorTipo($tipo, $matricula = null)
+    public function getPorTipo($tipo, $matricula = null, $cgm = null, $tipoevento = null)
     {
+
         $this->tipo = $tipo;
-        //echo $tipo;
-        //exit;
+
         switch ($tipo) {
             case Tipo::AFASTAMENTO_TEMPORARIO:
             case Tipo::CADASTRAMENTO_INICIAL:
@@ -61,10 +61,10 @@ class DadosESocial
             case Tipo::BENEFICIOS_ENTESPUBLICOS:
             case Tipo::PAGAMENTOS_RENDIMENTOS:
             case Tipo::TSV_INICIO:
-                return $this->buscaPreenchimentos($matricula);
+                return $this->buscaPreenchimentos($matricula, $cgm, $tipoevento);
                 break;
             default:
-                $preenchimentos = $this->buscaPreenchimentos($matricula);
+                $preenchimentos = $this->buscaPreenchimentos($matricula, $cgm, $tipoevento);
 
                 $this->buscaRespostas($preenchimentos);
                 /**
@@ -87,7 +87,7 @@ class DadosESocial
      * @throws \Exception
      * @return \stdClass[]
      */
-    private function buscaPreenchimentos($matricula = null)
+    private function buscaPreenchimentos($matricula = null, $cgm = null, $tipoevento = null)
     {
         $configuracao = new Configuracao();
         $formularioId = $configuracao->getFormulario($this->tipo);
@@ -117,13 +117,13 @@ class DadosESocial
             case Tipo::CADASTRAMENTO_INICIAL:
                 return $preenchimento->buscarPreenchimentoS2200($formularioId, $matricula);
             case Tipo::REMUNERACAO_TRABALHADOR:
-                return $preenchimento->buscarPreenchimentoS1200($formularioId, $matricula);
+                return $preenchimento->buscarPreenchimentoS1200($formularioId, $matricula, $cgm, $tipoevento);
             case Tipo::REMUNERACAO_SERVIDOR:
                 return $preenchimento->buscarPreenchimentoS1202($formularioId, $matricula);
             case Tipo::BENEFICIOS_ENTESPUBLICOS:
                 return $preenchimento->buscarPreenchimentoS1207($formularioId, $matricula);
             case Tipo::PAGAMENTOS_RENDIMENTOS:
-                return $preenchimento->buscarPreenchimentoS1210($formularioId, $matricula);
+                return $preenchimento->buscarPreenchimentoS1210($formularioId, $matricula, $cgm, $tipoevento);
             case Tipo::AFASTAMENTO_TEMPORARIO:
                 return $preenchimento->buscarPreenchimentoS2230($formularioId, $matricula);
             case Tipo::CADASTRO_BENEFICIO:
