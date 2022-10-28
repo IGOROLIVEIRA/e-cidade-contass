@@ -147,7 +147,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
               $pc01_servico = 'f';
             }
 
-            db_input('pc16_codmater', 8, $Ipc16_codmater, true, 'text', $tranca, " onchange='js_pesquisapc16_codmater(false);'");
+            db_input('pc16_codmater', 8, $Ipc16_codmater, true, 'text', $db_opcao, " onchange='js_pesquisapc16_codmater(false);'");
             db_input("iCodigoRegistro", 8, "iCodigoRegistro", true, 'hidden', $db_opcao);
             db_input("pc01_veiculo", 8, "", true, 'hidden', $db_opcao);
             db_input("codigoitemregistropreco", 8, "", true, 'hidden', $db_opcao);
