@@ -1308,6 +1308,9 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             listaNatureza.add(new Option('3- Locação de Imóveis',3));
             listaNatureza.add(new Option('7- Compras Para Obras e/ou Serviços de Engenharia',7));
 
+            document.querySelector("#l20_naturezaobjeto").value = oRetornoNatu;
+
+
 
             document.form1.l20_justificativa.style.backgroundColor = '#FFFFFF ';
 
@@ -1429,6 +1432,8 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             listaNatureza.add(new Option('5- Permissão',5));
             listaNatureza.add(new Option('6- Alienação de Bens',6));
             listaNatureza.add(new Option('7- Compras Para Obras e/ou Serviços de Engenharia',7));
+
+            document.querySelector("#l20_naturezaobjeto").value = oRetornoNatu;
 
             //parent.document.getElementById('liclicpublicacoes').style.display = 'block';
             document.getElementById("l20_justificativa").disabled = true;
