@@ -431,10 +431,11 @@ db_app::load("DBFormCache.js");
 <script>
     var opcao = <?php echo $db_opcao ?>;
     var codigotribunal = <?php echo $e54_codcom ?>;
-
-    if (opcao == 1) {
+    var e54_autori = <?php echo $e54_autori == null ? "null" : $e54_autori ?>;
+    if (e54_autori == null) {
         js_verificatipocompratribunal(document.getElementById('e54_codcom').value);
     }
+
 
     if (opcao == 2) {
         if ($('e54_tipoautorizacao').value == '1') {
@@ -476,6 +477,7 @@ db_app::load("DBFormCache.js");
     }
 
     function js_validaLicitacao() {
+
 
         if (codigotribunal != 13 && $('e54_tipoautorizacao').value == '1') {
             alert("Usuário:\nO tipo de compra selecionado não pode ser utilizado para autorização direta. Gentileza alterar para o tipo de autorização adequado");
@@ -1187,28 +1189,7 @@ db_app::load("DBFormCache.js");
 
     }
 
-    function js_validacaotipocompra(value) {
-        var sUrlRPC = 'com4_tipocompra.RPC.php';
-        var pc50_codcom = value;
-        var oParam = new Object();
-        oParam.sExecucao = 'getTipocompratribunal';
-        oParam.Codtipocom = pc50_codcom;
 
-        var oAjax = new Ajax.Request(sUrlRPC, {
-            method: 'post',
-            parameters: 'json=' + Object.toJSON(oParam),
-            onComplete: js_retornotipocompra
-        });
-
-    }
-
-    function js_retornotipocompra(oAjax) {
-
-        oRetorno = eval("(" + oAjax.responseText + ")");
-        if (oRetorno.tipocompratribunal == 13) {
-
-        }
-    }
 
 
     function js_verificatipocompratribunal(value) {
