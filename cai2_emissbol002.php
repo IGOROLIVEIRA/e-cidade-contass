@@ -1736,3 +1736,4 @@ if (@pg_numrows($resparagpadrao) > 0) {
 }
 
 $pdf->Output();
+?>
