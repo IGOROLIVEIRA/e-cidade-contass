@@ -432,6 +432,10 @@ db_app::load("DBFormCache.js");
     var opcao = <?php echo $db_opcao ?>;
     var codigotribunal = <?php echo $e54_codcom ?>;
 
+    if (opcao == 1) {
+        js_verificatipocompratribunal(document.getElementById('e54_codcom').value);
+    }
+
     if (opcao == 2) {
         if ($('e54_tipoautorizacao').value == '1') {
             document.getElementById('trdadoslicitacao').style.display = "none";
