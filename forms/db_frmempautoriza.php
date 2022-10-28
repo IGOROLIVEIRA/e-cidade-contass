@@ -571,7 +571,7 @@ db_app::load("DBFormCache.js");
     function js_nova() {
         // e40_historico
         destin = document.form1.e54_destin.value;
-        resumo = document.form1.e40_historico.value;
+        resumo = document.form1.e54_resumo.value;
         numcgm = document.form1.e54_numcgm.value;
         nome = document.form1.z01_nome.value;
         parent.location.href = "emp1_empautoriza001.php?z01_nome=" + nome + "&e54_numcgm=" + numcgm + "&e54_destin=" + destin + "&e54_resumo=" + resumo;
@@ -1214,6 +1214,7 @@ db_app::load("DBFormCache.js");
     function js_verificatipocompratribunal(value) {
         var sUrlRPC = 'com4_tipocompra.RPC.php';
         var pc50_codcom = value;
+        js_divCarregando('Aguarde, carregando informações...', 'msgbox');
         var oParam = new Object();
         oParam.sExecucao = 'getTipocompratribunal';
         oParam.Codtipocom = pc50_codcom;
@@ -1230,6 +1231,7 @@ db_app::load("DBFormCache.js");
 
         oRetorno = eval("(" + oAjax.responseText + ")");
         codigotribunal = oRetorno.tipocompratribunal;
+
         if (oRetorno.tipocompratribunal == 13) {
             document.getElementById('trdadoslicitacao').style.display = 'none';
             document.form1.e54_nummodalidade.value = '';
@@ -1239,6 +1241,8 @@ db_app::load("DBFormCache.js");
             document.getElementById('e54_codcom').value = oRetorno.tipocompra;
             document.getElementById('e54_codcomdescr').value = oRetorno.tipocompra;
         }
+        js_removeObj('msgbox');
+
     }
 
     function js_tipocompra(codigotipocompratribunal) {
