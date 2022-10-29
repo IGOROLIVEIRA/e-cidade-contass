@@ -144,7 +144,7 @@ $rotulo->label("z01_cgccpf");
           $campos = "empempenho.e60_numemp,
           empempenho.e60_codemp,
           empempenho.e60_anousu,
-          e61_autori,
+          empempaut.e61_autori,
           empempenho.e60_numcgm,
           case when ac16_numeroacordo is null then si172_nrocontrato::varchar else (ac16_numeroacordo || '/' || ac16_anousu)::varchar end as si172_nrocontrato,
           case when (select ac18_datafim from acordovigencia where ac18_acordoposicao in (select min(ac26_sequencial) from acordoposicao where ac26_acordo = acordo.ac16_sequencial) and ac18_ativo  = true) is null then si172_datafinalvigencia else (select ac18_datafim from acordovigencia where ac18_acordoposicao in (select min(ac26_sequencial) from acordoposicao where ac26_acordo = acordo.ac16_sequencial) and ac18_ativo  = true) end as si172_datafinalvigencia,
@@ -189,8 +189,8 @@ $rotulo->label("z01_cgccpf");
             //$dbwhere .= " and empempenho.e60_emiss <= '$ve70_abast'";
             //adicionado nova validadacao OC 6848 
             $dbwhere .= " or elementoempenho.o56_elemento like '335041%')";
-            $dbwhere .= "AND ((date_part('year', empempenho.e60_emiss) < date_part('year', date '" . $ve70_abast . "') AND date_part('month', empempenho.e60_emiss) <= 12)
-                               OR (date_part('year', empempenho.e60_emiss) = date_part('year', date '" . $ve70_abast . "') AND date_part('month', empempenho.e60_emiss) <= date_part('month', date '" . $ve70_abast . "')))";
+            $dbwhere .= "	and ((e91_anousu < date_part('year', date '" . $ve70_abast . "'))
+                               or (date_part('year', empempenho.e60_emiss) = date_part('year', date '" . $ve70_abast . "') and date_part('month', empempenho.e60_emiss) <= date_part('month', date '" . $ve70_abast . "'))) ";
             $filtroempelemento = 1;
           }
 
