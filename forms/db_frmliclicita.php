@@ -2234,13 +2234,13 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             opcoesreg.remove(2);
             opcoesreg.remove(1);
             
-            opcoesreg.add(new Option('1- Menor Preço'), 1);
-            opcoesreg.add(new Option('2- Melhor Técnica'), 2);
-            opcoesreg.add(new Option('3- Técnica e Preço'), 3);
-            opcoesreg.add(new Option('4- Maior Lance ou Oferta'), 4);
-            opcoesreg.add(new Option('6- Maior Retorno Econômico'), 6);
-            opcoesreg.add(new Option('7- Maior desconto'), 7);
-            opcoesreg.add(new Option('8- Melhor técnica ou conteúdo artístico'), 8);
+            opcoesreg.add(new Option('1- Menor Preço'),1);
+            opcoesreg.add(new Option('2- Melhor Técnica'),2);
+            opcoesreg.add(new Option('3- Técnica e Preço'),3);
+            opcoesreg.add(new Option('4- Maior Lance ou Oferta'),4);
+            opcoesreg.add(new Option('6- Maior Retorno Econômico'),6);
+            opcoesreg.add(new Option('7- Maior desconto'),7);
+            opcoesreg.add(new Option('8- Melhor técnica ou conteúdo artístico'),8);
 
             document.querySelector("#l20_tipliticacao").value = oRetornoCriterio
 
@@ -2261,10 +2261,10 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             opcoesreg.remove(2);
             opcoesreg.remove(1);
             
-            opcoesreg.add(new Option('1- Menor Preço'), 1);
-            opcoesreg.add(new Option('2- Melhor Técnica'), 2);
-            opcoesreg.add(new Option('3- Técnica e Preço'), 3);
-            opcoesreg.add(new Option('4- Maior Lance ou Oferta'), 4);
+            opcoesreg.add(new Option('1- Menor Preço',1));
+            opcoesreg.add(new Option('2- Melhor Técnica',2));
+            opcoesreg.add(new Option('3- Técnica e Preço',3));
+            opcoesreg.add(new Option('4- Maior Lance ou Oferta',4));
             
             document.querySelector("#l20_tipliticacao").value = oRetornoCriterio;
         }
