@@ -445,10 +445,11 @@ if ($clempparametro->numrows > 0) {
                                 pc01_tabela,
                                 pc01_taxa,
                                 pc11_reservado,
-                                l04_seq";
+                                l04_seq,
+                                l04_codigo";
                                 $mostra_lote        = true;
                                 $cols               = 11;
-                                $ordem              = "pc11_seq,l04_seq,l04_descricao,pc81_codproc,pc22_orcamitem";
+                                $ordem              = "l04_codigo,pc11_codigo,pc81_codproc,pc81_codprocitem,l04_seq";
                             } else {
                                 $camposItens = "distinct l21_ordem,
                             pc81_codprocitem,
