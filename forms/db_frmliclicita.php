@@ -1219,6 +1219,8 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
     function js_retornolicitacao(oAjax) {
 
+        var oRetornoCriterio = document.getElementById("l20_tipliticacao").value;
+
         var oRetornoNatu = document.getElementById("l20_naturezaobjeto").value;
         if (oRetornoNatu == 1) {
             document.getElementById("respObras").style.display = "table-row";
@@ -2219,16 +2221,29 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
         js_verificaDatasProposta();
 
-
         let opcoesreg = document.getElementById('l20_tipliticacao').options;
 
         let modalidade = document.form1.modalidade_tribunal.value;
 
         if (lei == 1) {
-
+            opcoesreg.remove(7);
+            opcoesreg.remove(6);
+            opcoesreg.remove(5);
+            opcoesreg.remove(4);
+            opcoesreg.remove(3);
+            opcoesreg.remove(2);
+            opcoesreg.remove(1);
+            
+            opcoesreg.add(new Option('1- Menor Preço'), 1);
+            opcoesreg.add(new Option('2- Melhor Técnica'), 2);
+            opcoesreg.add(new Option('3- Técnica e Preço'), 3);
+            opcoesreg.add(new Option('4- Maior Lance ou Oferta'), 4);
             opcoesreg.add(new Option('6- Maior Retorno Econômico'), 6);
             opcoesreg.add(new Option('7- Maior desconto'), 7);
             opcoesreg.add(new Option('8- Melhor técnica ou conteúdo artístico'), 8);
+
+            document.querySelector("#l20_tipliticacao").value = oRetornoCriterio
+
             if (modalidade != 100 && modalidade != 101 && modalidade != 102 && modalidade != 103) {
                 document.getElementById('disputa').style.display = '';
 
@@ -2238,9 +2253,20 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
         }
         if (lei == 2 || lei == 0) {
             document.getElementById('disputa').style.display = 'none';
-            opcoesreg.remove(6);
             opcoesreg.remove(7);
-            opcoesreg.remove(8);
+            opcoesreg.remove(6);
+            opcoesreg.remove(5);
+            opcoesreg.remove(4);
+            opcoesreg.remove(3);
+            opcoesreg.remove(2);
+            opcoesreg.remove(1);
+            
+            opcoesreg.add(new Option('1- Menor Preço'), 1);
+            opcoesreg.add(new Option('2- Melhor Técnica'), 2);
+            opcoesreg.add(new Option('3- Técnica e Preço'), 3);
+            opcoesreg.add(new Option('4- Maior Lance ou Oferta'), 4);
+            
+            document.querySelector("#l20_tipliticacao").value = oRetornoCriterio;
         }
     }
 
