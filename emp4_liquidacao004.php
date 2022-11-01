@@ -649,7 +649,7 @@ switch ($objJson->method) {
         $iStatus = 1;
       }
     }
-    /**
+    /*
      *ALTERAÇÃO DA ROTINA DE ANULAÇÃO DE EMPENHO
      *AJUSTE PARA SALDO VOLTAR PARA OS ITENS DA ULTIMA POSIÇÃO
      */
@@ -760,7 +760,7 @@ switch ($objJson->method) {
           if ($ItemUltimaPosicao->ac20_servicoquantidade == 'f' && $ItemUltimaPosicao->pc01_servico == 't') {
             //print_r("update acordoitem set ac20_quantidade = ".$ItemUltimaPosicao->ac20_quantidade.", ac20_valortotal = ".$ItemUltimaPosicao->ac20_valortotal + $aItens[$iInd]->vlrtot.", ac20_valorunitario = ".$ItemUltimaPosicao->ac20_valortotal + $aItens[$iInd]->vlrtot." where ac20_sequencial = ".$ItemUltimaPosicao->ac20_sequencial);
             //exit;
-            db_query("update acordoitem set ac20_quantidade = ".$ItemUltimaPosicao->ac20_quantidade.", ac20_valortotal = ".$ItemUltimaPosicao->ac20_valortotal + $aItens[$iInd]->vlrtot.", ac20_valorunitario = ".$ItemUltimaPosicao->ac20_valortotal + $aItens[$iInd]->vlrtot." where ac20_sequencial = ".$ItemUltimaPosicao->ac20_sequencial);
+            db_query("update acordoitem set ac20_quantidade = ".$ItemUltimaPosicao->ac20_quantidade.", ac20_valortotal = ".($ItemUltimaPosicao->ac20_valortotal + $aItens[$iInd]->vlrtot).", ac20_valorunitario = ".($ItemUltimaPosicao->ac20_valortotal + $aItens[$iInd]->vlrtot)." where ac20_sequencial = ".$ItemUltimaPosicao->ac20_sequencial);
           } else {
             //print_r("update acordoitem set ac20_quantidade = ".($ItemUltimaPosicao->ac20_quantidade+$aItens[$iInd]->quantidade).", ac20_valortotal = ".(($ItemUltimaPosicao->ac20_quantidade+$aItens[$iInd]->quantidade) * $ItemUltimaPosicao->ac20_valorunitario).", ac20_valorunitario = ".$ItemUltimaPosicao->ac20_valorunitario." where ac20_sequencial = ".$ItemUltimaPosicao->ac20_sequencial);
             //exit;

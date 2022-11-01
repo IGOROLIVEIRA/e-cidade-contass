@@ -1,4 +1,5 @@
 <?php
+
 /*
  *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2014  DBSeller Servicos de Informatica
@@ -2547,58 +2548,7 @@ class Acordo
                 if ($oDaoAcordoItemExecutadoAut->erro_status == 0) {
                     throw new Exception("Erro ao salvar movimentação do acordo!\nErro:{$oDaoExecucaoDotacao->erro_msg}");
                 }
-                if($oDadosacordoitem->ac20_acordoposicao != $oDadosacordoitemd->codigoposicao){
-
-                    $sql = "select ac20_sequencial, ac20_quantidade, ac20_valorunitario, ac20_valortotal, ac20_servicoquantidade
-                    from acordoitem 
-                    where ac20_acordoposicao = $oDadosacordoitemd->codigoposicao
-                    and ac20_pcmater = $oItem->ac20_pcmater";
-                    
-
-                    $rssequencial = db_query($sql);
-                    $oDadossequencial = db_utils::fieldsMemory($rssequencial, 0);
-
-                    /*$oDaoAcordoItemExecutadoatual                   = db_utils::getDao("acordoitemexecutado");
-                    $oDaoAcordoItemExecutadoatual->ac29_acordoitem  = $oDadossequencial->ac20_sequencial;
-                    $oDaoAcordoItemExecutadoatual->ac29_automatico  = 'true';
-                    $oDaoAcordoItemExecutadoatual->ac29_quantidade  = $oItem->quantidade * -1;
-                    $oDaoAcordoItemExecutadoatual->ac29_valor       = $oItem->valor * -1;
-                    $oDaoAcordoItemExecutadoatual->ac29_tipo        = 1;
-                    $oDaoAcordoItemExecutadoatual->ac29_datainicial = date("Y-m-d", db_getsession("DB_datausu"));
-                    $oDaoAcordoItemExecutadoatual->ac29_datafinal   = date("Y-m-d", db_getsession("DB_datausu"));
-                    $oDaoAcordoItemExecutadoatual->incluir(null);
-                    if ($oDaoAcordoItemExecutadoatual->erro_status == 0) {
-                        throw new Exception("Erro ao salvar movimentação do acordo!\nErro:{$$oDaoAcordoItemExecutadoatual->erro_msg}");
-                    }*/
-                    /**
-                     * Vinculamos a autorizacao ao item do acordo
-                     */
-                    /*$oDaoAcordoItemExecutadoAutatual                           = db_utils::getDao("acordoitemexecutadoempautitem");
-                    $oDaoAcordoItemExecutadoAutatual->ac19_acordoitemexecutado = $oDaoAcordoItemExecutadoatual->ac29_sequencial;
-                    $oDaoAcordoItemExecutadoAutatual->ac19_autori              = $iAutorizacao;
-                    $oDaoAcordoItemExecutadoAutatual->ac19_sequen              = $oItem->itemautorizacao;
-                    $oDaoAcordoItemExecutadoAutatual->incluir(null);
-                    if ($oDaoAcordoItemExecutadoAutatual->erro_status == 0) {
-                        throw new Exception("Erro ao salvar movimentação do acordo!\nErro:{$oDaoAcordoItemExecutadoAutatual->erro_msg}");
-                    }*/
-                    if($oDadossequencial->ac20_servicoquantidade == 'f'){
-                        $DaoacordoItem = db_utils::getDao('acordoitem');
-                        $DaoacordoItem->ac20_sequencial = $oDadossequencial->ac20_sequencial;
-                        $DaoacordoItem->ac20_quantidade = $oDadossequencial->ac20_quantidade + $oItem->quantidade;
-                        $DaoacordoItem->ac20_valortotal = $oDadossequencial->ac20_valorunitario * $DaoacordoItem->ac20_quantidade;
-                        $DaoacordoItem->ac20_valorunitario = $oDadossequencial->ac20_valorunitario;
-                        $DaoacordoItem->alterar($oDadossequencial->ac20_sequencial);
-                    }else{
-                        $DaoacordoItem = db_utils::getDao('acordoitem');
-                        $DaoacordoItem->ac20_sequencial = $oDadosacordoitemd->ac20_sequencial;
-                        $DaoacordoItem->ac20_quantidade = $oDadossequencial->ac20_quantidade;
-                        $DaoacordoItem->ac20_valortotal = $oDadossequencial->ac20_valorunitario + $oItem->valor;
-                        $DaoacordoItem->ac20_valorunitario = $oDadossequencial->ac20_valorunitario + $oItem->valor;
-                        $DaoacordoItem->alterar($oDadossequencial->ac20_sequencial);
-                    }
-
-
-                }
+                
                 //$oItemContrato = $this->getUltimaPosicao()->getItemByCodigo($oItem->codigo);
                 $aDotacoes    = array();
                 $oDotacaoItem = null;
