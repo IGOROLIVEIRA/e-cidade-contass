@@ -139,8 +139,10 @@ if (!isset($chave_rh218_perapurmes)) {
           if (!isset($pesquisa_chave)) {
 
             $campos = "rh218_sequencial,
-                    z01_cgccpf,
-                    z01_nome,
+                    case when z01_cgccpf is null then (select z01_cgccpf from cgm where z01_numcgm = rh218_numcgm)
+                    else z01_cgccpf end as z01_cgccpf,
+                    case when z01_nome is null then (select z01_nome from cgm where z01_numcgm = rh218_numcgm)
+                    else z01_nome end as z01_nome,
                     rh218_regist,
                     rh218_numcgm as dl_Cgm,
                     rh218_codcateg,
