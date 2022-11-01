@@ -543,6 +543,7 @@ class cl_pcorcamjulg {
      $sql .= "      left  join pctipo  on  pctipo.pc05_codtipo = pcsubgrupo.pc04_codtipo";
      $sql .= "      left  join orcelemento on pc18_codele = o56_codele";
      $sql .= "                         and o56_anousu = ".db_getsession("DB_anousu");
+     $sql .= "      left join solicitemanul on pc28_solicitem = pc11_codigo";
      $sql2 = "";
      if($dbwhere==""){
        if($pc24_orcamitem!=null ){
