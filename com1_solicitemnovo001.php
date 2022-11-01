@@ -2125,6 +2125,44 @@ if (isset($alterar) || isset($excluir) || isset($incluir)) {
 			db_msgbox("Item excluído com sucesso");
 		} else if (isset($incluir)) {
 			db_msgbox("Item incluído com sucesso");
+			echo "<script> function js_distribuicaoDotacoes() {
+				var dotacao = parent.iframe_dotacoesnovo.document.getElementById('o58_coddot').value;
+				var o50_estrutdespesa = parent.iframe_dotacoesnovo.document.getElementById('o50_estrutdespesa').value;
+				var reduzido = [];
+				var estrutural = [];
+
+				for (var i = 0; i < parent.iframe_dotacoesnovo.document.getElementsByName('reduzido[]').length; i++) {
+					reduzido.push(parent.iframe_dotacoesnovo.document.getElementsByName('reduzido[]')[i].value);
+				}
+		
+				for (var i = 0; i < parent.iframe_dotacoesnovo.document.getElementsByName('estrutural[]').length; i++) {
+					estrutural.push(parent.iframe_dotacoesnovo.document.getElementsByName('estrutural[]')[i].value);
+				}
+
+				var sUrl = 'com4_materialsolicitacao.RPC.php';
+				var oRequest = new Object();
+				oRequest.numero = parent.iframe_solicita.document.getElementById('pc10_numero').value;
+				oRequest.exec = 'distribuicaoDotacoes';
+				oRequest.item = $pc11_codigo;
+				oRequest.reduzido = reduzido;
+				oRequest.estrutural = estrutural;
+				oRequest.dotacao = dotacao;
+				oRequest.o50_estrutdespesa = o50_estrutdespesa;
+				var oAjax = new Ajax.Request(
+				  sUrl, {
+					method: 'post',
+					parameters: 'json=' + js_objectToJson(oRequest),
+					onComplete: js_retornodistribuicaoDotacoes
+				  }
+				);
+			
+			  }
+			  
+			  function js_retornodistribuicaoDotacoes(oAjax) {
+				var oRetorno = eval('(' + oAjax.responseText + ')');
+			
+			  }
+			  js_distribuicaoDotacoes(); </script>";
 		} else if (isset($alterar)) {
 			db_msgbox("Item alterado com sucesso");
 		}

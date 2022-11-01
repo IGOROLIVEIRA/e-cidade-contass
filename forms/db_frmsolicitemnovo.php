@@ -1127,10 +1127,6 @@ if ((isset($opcao) && $opcao == "alterar")) {
       }
     }
 
-
-
-
-
   }
 
 
@@ -1140,7 +1136,6 @@ if ((isset($opcao) && $opcao == "alterar")) {
   oGridItens.setCellAlign(['center', 'center', "center", "center", "center", "center", "center", "center", "center", "center", "center", "center"]);
   oGridItens.setCellWidth(["10%", "10%", "40%", "20%", "10%", "10%", "0%", "0%", "0%", "0%", "0%", "0%"]);
   oGridItens.setHeader(["Ordem", "Código", "Descrição", "Unidade", "Quantidade", "Ação", "", "", "", "", "", ""]);
-  //oGridItens.aHeaders[5].lDisplayed = false;
   oGridItens.aHeaders[6].lDisplayed = false;
   oGridItens.aHeaders[7].lDisplayed = false;
   oGridItens.aHeaders[8].lDisplayed = false;

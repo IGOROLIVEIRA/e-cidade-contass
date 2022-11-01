@@ -245,18 +245,18 @@ if (isset($incluir)) {
 
 								?>
 							</td>
-							<td nowrap style="   display: block;">
+							<td nowrap style="display: block;">
 								<?
 								db_input('o56_descr', 50, $Io56_descr, true, 'text', 3);
 								?>
 							</td>
-							<td nowrap style="   display: none;">
+							<td nowrap style="display: none;">
 								<?
 								db_input('o50_estrutdespesa', 50, $Io50_estrutdespesa, true, 'text', $db_opcao);
 								?>
 							</td>
 
-							<td nowrap style="   display: none;">
+							<td nowrap style="display: none;">
 								<?
 								db_input('pc10_numero', 50, $Ipc10_numero, true, 'text', $db_opcao);
 								?>
