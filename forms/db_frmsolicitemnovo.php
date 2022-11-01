@@ -518,7 +518,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
     for (var i = 0; i < sizeItens; i++) {
       if (indice != i) {
         if (document.getElementById('pc11_seq').value == document.getElementsByName("ordem[]")[i].value && document.getElementById('pc16_codmater').value != document.getElementsByName("codmaterial[]")[i].value) {
-          alert('O item ' + document.getElementsByName("codmaterial[]")[i].value + ' já foi incluído com o sequencial ' + document.getElementById('pc11_seq').value + ' nesta solicitação.');
+          alert('A ordem ' + document.getElementById('pc11_seq').value + ' já foi utilizada nesta solicitação.');
           return false;
         }
         if (document.getElementById('pc16_codmater').value == document.getElementsByName("codmaterial[]")[i].value) {
@@ -1044,7 +1044,6 @@ if ((isset($opcao) && $opcao == "alterar")) {
         sequencial = parseInt(document.getElementsByName("ordem[]")[i].value);
       }
     }
-
     document.getElementById("pc11_seq").value = parseInt(sequencial) + 1;
 
     document.getElementById('pc16_codmater').disabled = false;
@@ -1122,7 +1121,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
     // Verifica se o item já foi incluído com o sequencial informado.
     for (var i = 0; i < sizeItens; i++) {
       if (document.getElementById('pc11_seq').value == document.getElementsByName("ordem[]")[i].value) {
-        alert('O item ' + document.getElementsByName("codmaterial[]")[i].value + ' já foi incluído com o sequencial ' + document.getElementById('pc11_seq').value + ' nesta solicitação.');
+        alert('A ordem ' + document.getElementById('pc11_seq').value + ' já foi utilizada nesta solicitação.');
         return false;
       }
     }
@@ -1170,8 +1169,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
     var aLinha = new Array();
     sequencial = 0;
     for (var i = 0; i < oRetorno.aItens.length; i++) {
-
-      if (oRetorno.aItens[i].pc11_seq > sequencial) {
+      if (parseInt(oRetorno.aItens[i].pc11_seq) > parseInt(sequencial)) {
         sequencial = oRetorno.aItens[i].pc11_seq;
       }
 
