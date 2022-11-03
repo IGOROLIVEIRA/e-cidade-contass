@@ -466,7 +466,7 @@ db_app::load("DBFormCache.js");
 
     function js_validaLicitacao() {
         if ($('dop').value != 3 && ($('e54_numerl').value == '' || $('e54_numerl').value == 0)) {
-            alert("Para esse Tipo de Compra é necessário informar o campo Número da Licitação.");
+            alert("Para esse Tipo de Compra é necessário informar o campo Número da Licitação. ");
             return false;
         } else {
             return true;
