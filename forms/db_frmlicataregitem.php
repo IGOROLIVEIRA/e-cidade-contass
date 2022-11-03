@@ -12,7 +12,7 @@ $cllicataregitem->rotulo->label();
                   
                   <td class='table_header' align='center' style='border-style: outset;'><b>Ordem</b></td>
                   <td class='table_header' align='center' style='border-style: outset;'><b>Item</b></td>
-                  <td class='table_header' align='center' style='border-style: outset;'><b>DescriÃ§Ã£o Item</b></td>
+                  <td class='table_header' align='center' style='border-style: outset;'><b>Descrição Item</b></td>
                   <td class='table_header' align='center' style='border-style: outset;'><b>Unidade</b></td>
                   <td class='table_header' align='center' style='border-style: outset;'><b>Quantidade</b></td>
                   <td class='table_header' align='center' style='border-style: outset;'><b>Vlr Unitario</b></td>
@@ -92,7 +92,7 @@ $cllicataregitem->rotulo->label();
                       // Unidade
                       echo "  <td class='linhagrid' align='center'  style='border-style: outset;height5px;'>$pc23_vlrun</td>";
 
-                      // DescriÃ§Ã£o
+                      // Descrição
                       $vlrtotal = $pc23_quant*$pc23_vlrun;
                       $SomaTotal = $SomaTotal + $vlrtotal;
                       echo "  <td class='linhagrid' align='center'  style='border-style: outset;height5px;'>".number_format($vlrtotal,2,',','.')."</td>";
