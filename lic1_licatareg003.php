@@ -17,7 +17,7 @@ if(isset($excluir)){
     $rscllicataregitem = $cllicataregitem->sql_record("select * from licataregitem where l222_licatareg = $l221_sequencial");
     if(pg_num_rows($rscllicataregitem)>0){
       $db_opcao = 3;
-      db_msgbox("Ata j√° possui itens vinculados!");
+      db_msgbox("Ata j· possui itens vinculados!");
     }else{
       db_inicio_transacao();
       $db_opcao = 3;

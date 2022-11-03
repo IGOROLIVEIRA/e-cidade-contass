@@ -20,11 +20,11 @@ if(isset($alterar)){
     if(pg_num_rows($rsLicatareg)>0){
       $db_opcao = 2;
       $sqlerro=true;
-      db_msgbox("NÃºmero da ata jÃ¡ inserido nesse exercÃ­cio!");
+      db_msgbox("Número da Ata já inserido nesse exercício!");
     }else if($l221_numata == "" || $l221_numata == null){
       $db_opcao = 2;
       $sqlerro=true;
-      db_msgbox("Informe o nÃºmero da Ata!");
+      db_msgbox("Informe o número da Ata!");
     }else if($l221_dataini == "" || $l221_dataini == null){
       $db_opcao = 2;
       $sqlerro=true;
@@ -37,7 +37,7 @@ if(isset($alterar)){
       $db_opcao = 2;
       $db_opcao = 2;
       $sqlerro=true;
-      db_msgbox("Data inicial Ã© maior que data final!");
+      db_msgbox("Data inicial é maior que data final!");
     }  
   if($sqlerro == false){
 
