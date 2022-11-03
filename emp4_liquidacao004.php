@@ -608,7 +608,7 @@ switch ($objJson->method) {
         if($ItemUltimaPosicao->ac20_servicoquantidade == 'f' && $ItemUltimaPosicao->pc01_servico == 't'){
 
         }else if ($ItemUltimaPosicao->ac20_valorunitario != $ItemAtualPosicao->ac20_valorunitario) {
-          $nMensagem .= 'Item ' . $rsacordoMaterial->ac20_pcmater . ': O valor unitário atual do contrato é ' . $ItemUltimaPosicao->ac20_valorunitario . ' e o valor unitário do item a ser anulado é ' . $ItemAtualPosicao->ac20_valorunitario . '. Ao anular os itens do empenho, o valor unitario será o ' . $ItemUltimaPosicao->ac20_valorunitario . '.';
+          $nMensagem .= "Item " . $rsacordoMaterial->ac20_pcmater . ": O valor unitário atual do contrato é " . $ItemUltimaPosicao->ac20_valorunitario . " e o valor unitário do item a ser anulado é " . $ItemAtualPosicao->ac20_valorunitario . ". Ao anular os itens do empenho, o valor unitario será o " . $ItemUltimaPosicao->ac20_valorunitario . ".\n\n";
           $iStatus = 3;
         }
       }
