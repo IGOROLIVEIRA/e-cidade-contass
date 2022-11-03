@@ -485,8 +485,8 @@ switch ($objJson->method) {
     $aItens = $objJson->itensAnulados;
     $iStatus = 1;
     $nMensagem = 'Usuário: ';
-
-    if ($Sqlparemetrosaldo->pc01_liberarsaldoposicao == false && pg_num_rows($Sqlparemetrosaldo) > 0) {
+    
+    if ($resulparemetrosaldo->pc01_liberarsaldoposicao == false && pg_num_rows($Sqlparemetrosaldo) > 0) {
       
       db_inicio_transacao();
       
@@ -655,7 +655,7 @@ switch ($objJson->method) {
      */
 
 
-    if ($Sqlparemetrosaldo->pc01_liberarsaldoposicao == false && pg_num_rows($Sqlparemetrosaldo) > 0 && $iStatus == 1) {
+    if ($resulparemetrosaldo->pc01_liberarsaldoposicao == false && pg_num_rows($Sqlparemetrosaldo) > 0 && $iStatus == 1) {
 
       db_inicio_transacao();
       
