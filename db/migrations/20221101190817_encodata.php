@@ -17,14 +17,14 @@ class Encodata extends AbstractMigration
 
         UPDATE db_itensmenu SET descricao = 'Exclusão', help = 'Exclusão', desctec = 'Exclusão', funcao = 'lic1_licatareg003.php' WHERE funcao = 'lic1_licatareg002.php' AND descricao like '%Exclus%';
 
-        DELETE FROM db_menu WHERE id_item_filho in (select max(id_item) FROM db_itensmenu WHERE descricao like '%Gerar Autoriz%' AND funcao = '');
-        DELETE FROM db_itensmenu WHERE descricao like '%Gerar Autoriz%' and funcao = '';
+        DELETE FROM db_menu WHERE id_item_filho in (select max(id_item) FROM db_itensmenu WHERE descricao like '%Gerar Autoriz%' AND funcao = 'lic1_licatareg002.php');
+        DELETE FROM db_itensmenu WHERE descricao like '%Gerar Autoriz%' and funcao = 'lic1_licatareg002.php';
 
-        DELETE FROM db_menu WHERE id_item_filho in (select max(id_item) FROM db_itensmenu WHERE descricao like '%Reequil%' AND funcao = '');
-        DELETE FROM db_itensmenu WHERE descricao like '%Reequil%' AND funcao = '';
+        DELETE FROM db_menu WHERE id_item_filho in (select max(id_item) FROM db_itensmenu WHERE descricao like '%Reequil%' AND funcao = 'lic1_licatareg002.php');
+        DELETE FROM db_itensmenu WHERE descricao like '%Reequil%' AND funcao = 'lic1_licatareg002.php';
 
-        DELETE FROM db_menu WHERE id_item_filho in (select max(id_item) FROM db_itensmenu WHERE descricao like '%Desist%' AND funcao = '');
-        DELETE FROM db_itensmenu WHERE descricao like '%Desist%' AND funcao = '';
+        DELETE FROM db_menu WHERE id_item_filho in (select max(id_item) FROM db_itensmenu WHERE descricao like '%Desist%' AND funcao = 'lic1_licatareg002.php');
+        DELETE FROM db_itensmenu WHERE descricao like '%Desist%' AND funcao = 'lic1_licatareg002.php';
         
         UPDATE db_syscampo SET descricao = 'Licitação', rotulo = 'Licitação', rotulorel = 'Licitação' WHERE nomecam = 'l221_licitacao';
 
