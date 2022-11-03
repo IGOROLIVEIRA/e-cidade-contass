@@ -13,7 +13,7 @@ $cllicatareg = new cl_licatareg;
   <tr>
     <td>
       <fieldset style="margin-top: 30px;">
-        <legend>Ata de Registro de PreÃ§o</legend>
+        <legend>Ata de Registro de Preço</legend>
         <table border="0">
         <tr>
           <td nowrap title="<?=@$Tl221_sequencial?>">
@@ -30,9 +30,9 @@ $cllicatareg = new cl_licatareg;
           <td nowrap title="<?=@$Tl221_licitacao?>">
           <?php 
             if(isset($l221_sequencial) && $l221_sequencial != "" && $l221_sequencial != null){
-              echo "<b>LicitaÃ§Ã£o:</b>";
+              echo "<b>Licitação:</b>";
             }else{
-              db_ancora("LicitaÃ§Ã£o: ", "js_pesquisarLicitacao(true);", $iOpcaoLicitacao); 
+              db_ancora("Licitação: ", "js_pesquisarLicitacao(true);", $iOpcaoLicitacao); 
             }  
               ?>
           </td>
@@ -48,7 +48,7 @@ $cllicatareg = new cl_licatareg;
         </tr>
         <tr>
           <td nowrap title="<?=@$Tl221_numata?>">
-          <?php echo "<b>NÃºmero da Ata:</b>" ?>
+          <?php echo "<b>Número da Ata:</b>" ?>
           </td>
           <td> 
           <?php
@@ -58,7 +58,7 @@ $cllicatareg = new cl_licatareg;
         </tr>
         <tr>
           <td nowrap title="<?=@$Tl221_exercicio?>">
-            <?php echo "<b>ExercÃ­cio da Ata:</b>" ?>
+            <?php echo "<b>Exercí­cio da Ata:</b>" ?>
           </td>
           <td> 
           <?php
@@ -187,11 +187,11 @@ $cllicatareg = new cl_licatareg;
         </tr>
         <tr>
           <td nowrap title="<?=@$Tl221_dataini?>">
-          <?php echo "<b>VigÃªncia:</b>" ?>
+          <?php echo "<b>Vigência:</b>" ?>
           </td>
           <td> 
           <?php
-            db_inputdata('l221_dataini',@$l221_dataini_dia,@$l221_dataini_mes,@$l221_dataini_ano,true,'text',$db_opcao,"");echo "<b>Ã¡</b>";
+            db_inputdata('l221_dataini',@$l221_dataini_dia,@$l221_dataini_mes,@$l221_dataini_ano,true,'text',$db_opcao,"");echo "<b>Á</b>";
             db_inputdata('l221_datafinal',@$l221_datafinal_dia,@$l221_datafinal_mes,@$l221_datafinal_ano,true,'text',$db_opcao,"");
           ?>
           </td>
@@ -199,7 +199,7 @@ $cllicatareg = new cl_licatareg;
 
         <tr>
           <td nowrap title="<?=@$Tl221_datapublica?>">
-          <?php echo "<b>Data de PublicaÃ§Ã£o:</b>" ?>
+          <?php echo "<b>Data de Publicação:</b>" ?>
           </td>
           <td> 
           <?php
@@ -209,7 +209,7 @@ $cllicatareg = new cl_licatareg;
         </tr>
         <tr>
           <td nowrap title="<?=@$Tl221_veiculopublica?>">
-          <?php echo "<b>VeÃ­culo de PublicaÃ§Ã£o:</b>" ?>
+          <?php echo "<b>Veí­culo de Publicação:</b>" ?>
           </td>
           <td> 
           <?php
@@ -274,7 +274,7 @@ function js_pesquisarLicitacao(lMostra) {
     
   }
 
-  js_OpenJanelaIframe('', 'db_iframe_proc', sArquivo, 'Pesquisa de LicitaÃ§Ã£o', lMostra);
+  js_OpenJanelaIframe('', 'db_iframe_proc', sArquivo, 'Pesquisa de Licitação', lMostra);
 }
 
 function js_mostraLicitacao(iCodigoLicitacao, descricao) {
@@ -298,7 +298,7 @@ function js_mostraLicitacaoHidden(descricao, lErro) {
   if(!lErro){
   location.href = 'lic1_licatareg001.php?l221_licitacao=' + document.getElementById('l221_licitacao').value + '&l20_objeto=' + descricao;
   }else{
-    alert("LicitaÃ§Ã£o nÃ£o permitida!");
+    alert("Licitação não permitida!");
     location.href = 'lic1_licatareg001.php';
   }
 

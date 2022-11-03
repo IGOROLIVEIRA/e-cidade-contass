@@ -18,11 +18,11 @@ if(isset($incluir)){
   
   if($l221_licitacao == "" || $l221_licitacao == null){
     $sqlerro=true;
-    db_msgbox("Escolha uma LicitaÃ§Ã£o!");
+    db_msgbox("Escolha uma Licitação!");
     
   }else if($l221_numata == "" || $l221_numata == null){
     $sqlerro=true;
-    db_msgbox("Informe o nÃºmero da Ata!");
+    db_msgbox("Informe o número da Ata!");
   }else if($l221_fornecedor == 0){
     $sqlerro=true;
     db_msgbox("Selecione um fornecedor!");
@@ -34,18 +34,18 @@ if(isset($incluir)){
     db_msgbox("Insira uma Data Final!");
   }else if($datainicial>$datafinal){
     $sqlerro=true;
-    db_msgbox("Data inicial Ã© maior que data final!");
+    db_msgbox("Data inicial é maior que data final!");
   }
     $rsLicatareg = $cllicatareg->sql_record("select * from licatareg where l221_licitacao= $l221_licitacao and l221_fornecedor= $l221_fornecedor and l221_exercicio = '$l221_exercicio'");
     if(pg_num_rows($rsLicatareg)>0){
       $sqlerro=true;
-      db_msgbox("Fornecedor dessa licitaÃ§Ã£o jÃ¡ inserido!");
+      db_msgbox("Fornecedor dessa Licitação já inserido!");
     }
 
     $rsLicatareg = $cllicatareg->sql_record("select * from licatareg where l221_numata= '$l221_numata' and l221_exercicio= '$l221_exercicio'");
     if(pg_num_rows($rsLicatareg)>0 && $sqlerro == false){
       $sqlerro=true;
-      db_msgbox("NÃºmero da ata jÃ¡ inserido nesse exercÃ­cio!");
+      db_msgbox("número da ata já inserido nesse ecercício!");
     }
 
   if($sqlerro == false){
