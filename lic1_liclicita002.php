@@ -47,6 +47,8 @@ require_once("classes/db_cflicita_classe.php");
 require_once("classes/db_homologacaoadjudica_classe.php");
 require_once("classes/db_liccomissaocgm_classe.php");
 require_once("classes/db_condataconf_classe.php");
+include("classes/db_pcparam_classe.php");
+
 
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
@@ -69,6 +71,8 @@ $clliccomissaocgm     = new cl_liccomissaocgm;
 $clpccfeditalnum      = new cl_pccfeditalnum;
 $clpcprocitem         = new cl_pcprocitem;
 $clpcproc             = new cl_pcproc;
+$clpcparam  = new cl_pcparam;
+
 
 $db_opcao = 22;
 $db_botao = true;
@@ -76,6 +80,13 @@ $sqlerro  = false;
 $instit     = db_getsession("DB_instit");
 $anousu     = db_getsession("DB_anousu");
 $mostrar  = 0;
+
+$result_tipo = $clpcparam->sql_record($clpcparam->sql_query_file(db_getsession("DB_instit"), "*"));
+if ($clpcparam->numrows > 0) {
+    db_fieldsmemory($result_tipo, 0);
+} else {
+    $erro = true;
+}
 
 
 
@@ -792,6 +803,7 @@ if (isset($alterar)) {
         echo "<script>
                parent.iframe_liclicitem.location.href='lic1_liclicitemalt001.php?licitacao=$chavepesquisa&tipojulg=" . @$tipojulg . "';\n
                parent.document.formaba.liclicitem.disabled=false;\n
+             
              </script>";
 
         echo "<script>
@@ -803,6 +815,25 @@ if (isset($alterar)) {
                   parent.iframe_liclicpublicacoes.location.href='lic1_liclicpublicacao001.php?licitacao=$chavepesquisa&tipojulg=" . @$tipojulg . "';\n
                parent.document.formaba.liclicitem.disabled=false;\n
              </script>";
+    }
+
+
+
+    if ($pc30_permsemdotac == "t") {
+        echo "<script>
+      
+        parent.iframe_dotacoesnovo.location.href='com1_dotacoesnovo001lic.php?licitacao=$chavepesquisa&tipojulg=" . @$tipojulg . "';\n
+        parent.document.getElementById('dotacoesnovo').style.display='block';\n
+        parent.document.formaba.dotacoesnovo.disabled=false;\n
+      
+        </script>";
+    } else {
+        echo "<script>
+      
+        parent.iframe_dotacoesnovo.location.href='com1_dotacoesnovo001lic.php?licitacao=$chavepesquisa&tipojulg=" . @$tipojulg . "';\n
+        parent.document.getElementById('dotacoesnovo').style.display='none'\n
+      
+        </script>";
     }
 
     $script = "<script>";

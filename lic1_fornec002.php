@@ -46,6 +46,8 @@ require_once("libs/db_utils.php");
 require_once("model/licitacao.model.php");
 require_once("classes/db_habilitacaoforn_classe.php");
 require_once("classes/db_registroprecovalores_classe.php");
+require_once("classes/db_pcparam_classe.php");
+
 
 db_postmemory($HTTP_POST_VARS);
 if (isset($_GET['chavepesquisa']) && $_GET['chavepesquisa'] != '') {
@@ -69,7 +71,14 @@ $oDaoPcorcamjulgamentologitem = new cl_pcorcamjulgamentologitem;
 $clpcorcamjulg                = new cl_pcorcamjulg;
 $clsituacaoitemlic            = new cl_situacaoitemlic;
 $clsituacaoitemcompra         = new cl_situacaoitemcompra;
+$clpcparam                   = new cl_pcparam;
 
+$result_tipo = $clpcparam->sql_record($clpcparam->sql_query_file(db_getsession("DB_instit"), "*"));
+if ($clpcparam->numrows > 0) {
+  db_fieldsmemory($result_tipo, 0);
+} else {
+  $erro = true;
+}
 
 $db_opcao = 2;
 $db_botao = true;
@@ -181,39 +190,76 @@ for ($iCont = 0; $iCont < pg_num_rows($result); $iCont++) {
 
 if (isset($incluir)) {
 
-  $sSqlLicParametro = "select l12_pncp from licitaparam where l12_instit = ".db_getsession('DB_instit');
+  if ($pc30_permsemdotac == "t") {
+    $itens_processos = db_query("select distinct pc81_codproc from pcprocitem inner join solicitem on pc81_solicitem = pc11_codigo
+    where pc81_codprocitem in (select l21_codpcprocitem from liclicitem where l21_codliclicita = $l20_codigo) 
+    order by pc81_codproc ;");
+
+    $aCodProcessos = array();
+    for ($i = 0; $i < pg_numrows($itens_processos); $i++) {
+      $item = db_utils::fieldsMemory($itens_processos, $i);
+      $oItem = new stdClass();
+      $oItem->codproc = $item->pc81_codproc;
+      $aCodProcessos[] = $oItem;
+    }
+
+    for ($i = 0; $i < count($aCodProcessos); $i++) {
+
+      $codigo = $aCodProcessos[$i]->codproc;
+      $itens = db_query("select * from solicitem where pc11_codigo in (select pc11_codigo from pcprocitem inner join solicitem on pc81_solicitem = pc11_codigo
+    where pc81_codprocitem in (select l21_codpcprocitem from liclicitem where l21_codliclicita = $l20_codigo and pc81_codproc = $codigo) 
+    order by pc81_codproc);");
+      $quantidade_itens = pg_numrows($itens);
+    }
+
+    for ($i = 0; $i < $quantidade_itens; $i++) {
+      $item = db_utils::fieldsMemory($itens, $i);
+      $codigo_item =  $item->pc11_codigo;
+      $result = db_query("select * from pcdotac where pc13_codigo = $codigo_item;");
+      if (pg_numrows($result) == 0) {
+        echo "<script>
+          alert('Usu�rio: Item $codigo_item sem dota��o vinculada.');
+          top.corpo.location.href='lic1_fornec001.php?chavepesquisa=$l20_codigo';
+        </script>";
+
+        exit;
+      }
+    }
+  }
+
+
+
+  $sSqlLicParametro = "select l12_pncp from licitaparam where l12_instit = " . db_getsession('DB_instit');
 
   $rslicparam = db_query($sSqlLicParametro);
 
   $dlicparam = db_utils::fieldsMemory($rslicparam, 0);
 
-  if($dlicparam->l12_pncp == 't'){
+  if ($dlicparam->l12_pncp == 't') {
 
     $sqllei = "select l20_leidalicitacao from liclicita where l20_codigo = $l20_codigo";
 
     $rslei = db_query($sqllei);
     $dleis = db_utils::fieldsMemory($rslei, 0);
 
-    if($dleis->l20_leidalicitacao==1){
+    if ($dleis->l20_leidalicitacao == 1) {
       $sqlvinculo = "select * from licanexopncpdocumento 
       inner join licanexopncp on
         licanexopncp.l215_sequencial  = licanexopncpdocumento.l216_licanexospncp
       where 
         l215_liclicita = $l20_codigo";
-        $rsvinculo = db_query($sqlvinculo);
-        $dvinculo = db_utils::fieldsMemory($rsvinculo, 0);
-        $quatrs = pg_num_rows($rsvinculo);
+      $rsvinculo = db_query($sqlvinculo);
+      $dvinculo = db_utils::fieldsMemory($rsvinculo, 0);
+      $quatrs = pg_num_rows($rsvinculo);
 
-        if($quatrs == 0){
-          echo "<script>
+      if ($quatrs == 0) {
+        echo "<script>
                       alert('A Licitação selecionada é decorrente da Lei ná 14133/2021, sendo assim, é necessário anexar no mí­nimo um documento na rotina Anexos Envio PNCP!!');
                       top.corpo.location.href='lic1_fornec001.php?chavepesquisa=$l20_codigo';
                     </script>";
 
-          exit;
-
-        }
-      
+        exit;
+      }
     }
   }
 
@@ -288,7 +334,7 @@ if (isset($incluir)) {
               inner join pcorcamitemproc on
               pcorcamitemproc.pc31_pcprocitem = pcprocitem.pc81_codprocitem
               where
-              pcorcamitemproc.pc31_orcamitem = '.$pc22_orcamitem.'');
+              pcorcamitemproc.pc31_orcamitem = ' . $pc22_orcamitem . '');
               db_fieldsmemory($result_pcmater, 0);
               $clsituacaoitemcompra->l218_pcmater = 0;
               $clsituacaoitemcompra->incluir();
@@ -299,7 +345,7 @@ if (isset($incluir)) {
               $clsituacaoitemlic->l219_codigo = $clsituacaoitemcompra->l218_codigo;
               $clsituacaoitemlic->l219_situacao = 1;
               $clsituacaoitemlic->l219_hora = db_hora();
-              $clsituacaoitemlic->l219_data = date('Y-m-d',db_getsession('DB_datausu'));
+              $clsituacaoitemlic->l219_data = date('Y-m-d', db_getsession('DB_datausu'));
               $clsituacaoitemlic->l219_id_usuario = db_getsession('DB_id_usuario');
               $clsituacaoitemlic->incluir();
               if ($clsituacaoitemlic->erro_status == 0) {
@@ -386,34 +432,34 @@ if (isset($incluir)) {
               $erro_msg = $clpcorcamitem->erro_msg;
             }
             $clsituacaoitemcompra->l218_codigo = null;
-              $clsituacaoitemcompra->l218_pcorcamitemlic = $pc22_orcamitem;
-              $clsituacaoitemcompra->l218_codigolicitacao = $l20_codigo;
-              $clsituacaoitemcompra->l218_liclicitem = $l21_codigo;
-              $result_pcmater = $clsituacaoitemcompra->sql_record('select pc16_codmater 
+            $clsituacaoitemcompra->l218_pcorcamitemlic = $pc22_orcamitem;
+            $clsituacaoitemcompra->l218_codigolicitacao = $l20_codigo;
+            $clsituacaoitemcompra->l218_liclicitem = $l21_codigo;
+            $result_pcmater = $clsituacaoitemcompra->sql_record('select pc16_codmater 
               from solicitempcmater 
               inner join pcprocitem on 
               pcprocitem.pc81_solicitem = solicitempcmater.pc16_solicitem
               inner join pcorcamitemproc on
               pcorcamitemproc.pc31_pcprocitem = pcprocitem.pc81_codprocitem
               where
-              pcorcamitemproc.pc31_orcamitem = '.$pc22_orcamitem.'');
-              db_fieldsmemory($result_pcmater, 0);
-              $clsituacaoitemcompra->l218_pcmater = 0;
-              $clsituacaoitemcompra->incluir();
-              if ($clsituacaoitemcompra->erro_status == 0) {
-                $sqlerro = true;
-                $erro_msg = $clsituacaoitemcompra->erro_msg;
-              }
-              $clsituacaoitemlic->l219_codigo = $clsituacaoitemcompra->l218_codigo;
-              $clsituacaoitemlic->l219_situacao = 1;
-              $clsituacaoitemlic->l219_hora = db_hora();
-              $clsituacaoitemlic->l219_data = date('Y-m-d',db_getsession('DB_datausu'));
-              $clsituacaoitemlic->l219_id_usuario = db_getsession('DB_id_usuario');
-              $clsituacaoitemlic->incluir();
-              if ($clsituacaoitemlic->erro_status == 0) {
-                $sqlerro = true;
-                $erro_msg = $clsituacaoitemlic->erro_msg;
-              }
+              pcorcamitemproc.pc31_orcamitem = ' . $pc22_orcamitem . '');
+            db_fieldsmemory($result_pcmater, 0);
+            $clsituacaoitemcompra->l218_pcmater = 0;
+            $clsituacaoitemcompra->incluir();
+            if ($clsituacaoitemcompra->erro_status == 0) {
+              $sqlerro = true;
+              $erro_msg = $clsituacaoitemcompra->erro_msg;
+            }
+            $clsituacaoitemlic->l219_codigo = $clsituacaoitemcompra->l218_codigo;
+            $clsituacaoitemlic->l219_situacao = 1;
+            $clsituacaoitemlic->l219_hora = db_hora();
+            $clsituacaoitemlic->l219_data = date('Y-m-d', db_getsession('DB_datausu'));
+            $clsituacaoitemlic->l219_id_usuario = db_getsession('DB_id_usuario');
+            $clsituacaoitemlic->incluir();
+            if ($clsituacaoitemlic->erro_status == 0) {
+              $sqlerro = true;
+              $erro_msg = $clsituacaoitemlic->erro_msg;
+            }
           }
           if ($sqlerro == false) {
             $clpcorcamitemlic->pc26_orcamitem = $pc22_orcamitem;
@@ -561,16 +607,16 @@ if (isset($incluir)) {
         if ($sqlerro == false) {
 
 
-          $sWhere="l219_codigo in (select l218_codigo from situacaoitemcompra where l218_codigolicitacao = {$l20_codigo})";
-          $clsituacaoitemlic->excluir(null,$sWhere);
-          
+          $sWhere = "l219_codigo in (select l218_codigo from situacaoitemcompra where l218_codigolicitacao = {$l20_codigo})";
+          $clsituacaoitemlic->excluir(null, $sWhere);
+
           if ($clsituacaoitemlic->erro_status == 0) {
             $sqlerro = true;
             $erro_msg = $clsituacaoitemlic->erro_msg;
           }
 
           $sWhere = "l218_codigolicitacao = {$l20_codigo}";
-          $clsituacaoitemcompra->excluir(null,$sWhere);
+          $clsituacaoitemcompra->excluir(null, $sWhere);
           if ($clsituacaoitemcompra->erro_status == 0) {
             $sqlerro = true;
             $erro_msg = $clsituacaoitemcompra->erro_msg;
@@ -591,8 +637,6 @@ if (isset($incluir)) {
             $sqlerro = true;
             $erro_msg = $clpcorcamitem->erro_msg;
           }
-          
-          
         }
 
         if ($sqlerro == false) {

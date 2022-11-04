@@ -1,0 +1,264 @@
+{
+    "Reativa_Receitas": [
+        {
+            "Estrutural": "417395%"
+        },
+        {
+            "Estrutural": "424295%"
+        },
+        {
+            "Estrutural": "417195200000000"
+        },
+        {
+            "Estrutural": "417195201000000"
+        },
+        {
+            "Estrutural": "417195201010000"
+        },
+        {
+            "Estrutural": "417295000000000"
+        },
+        {
+            "Estrutural": "417295001000000"
+        },
+        {
+            "Estrutural": "417295001010000"
+        },
+        {
+            "Estrutural": "424195000000000"
+        },
+        {
+            "Estrutural": "424195001000000"
+        },
+        {
+            "Estrutural": "424195001010000"
+        },
+        {
+            "Estrutural": "472150211020000"
+        },
+        {
+            "Estrutural": "472150212020000"
+        },
+        {
+            "Estrutural": "472150213020000"
+        },
+        {
+            "Estrutural": "472150214020000"
+        },
+        {
+            "Estrutural": "472150221020000"
+        },
+        {
+            "Estrutural": "472150222020000"
+        },
+        {
+            "Estrutural": "472150223020000"
+        },
+        {
+            "Estrutural": "472150224020000"
+        },
+        {
+            "Estrutural": "472155011020000"
+        },
+        {
+            "Estrutural": "472155012020000"
+        },
+        {
+            "Estrutural": "472155013020000"
+        },
+        {
+            "Estrutural": "472155014020000"
+        },
+        {
+            "Estrutural": "472155021020000"
+        },
+        {
+            "Estrutural": "472155022020000"
+        },
+        {
+            "Estrutural": "472155023020000"
+        },
+        {
+            "Estrutural": "472155024020000"
+        },
+        {
+            "Estrutural": "472155031020000"
+        },
+        {
+            "Estrutural": "472155032020000"
+        },
+        {
+            "Estrutural": "472155033020000"
+        },
+        {
+            "Estrutural": "472155034020000"
+        },
+        {
+            "Estrutural": "472155041020000"
+        },
+        {
+            "Estrutural": "472155042020000"
+        },
+        {
+            "Estrutural": "472155043020000"
+        },
+        {
+            "Estrutural": "472155044020000"
+        },
+        {
+            "Estrutural": "472155111020000"
+        },
+        {
+            "Estrutural": "472155112020000"
+        },
+        {
+            "Estrutural": "472155113020000"
+        },
+        {
+            "Estrutural": "472155114020000"
+        },
+        {
+            "Estrutural": "472155121020000"
+        },
+        {
+            "Estrutural": "472155122020000"
+        },
+        {
+            "Estrutural": "472155123020000"
+        },
+        {
+            "Estrutural": "472155124020000"
+        },
+        {
+            "Estrutural": "472155131020000"
+        },
+        {
+            "Estrutural": "472155132020000"
+        },
+        {
+            "Estrutural": "472155133020000"
+        },
+        {
+            "Estrutural": "472155134020000"
+        },
+        {
+            "Estrutural": "412150111020000"
+        },
+        {
+            "Estrutural": "412150121020000"
+        },
+        {
+            "Estrutural": "412150131010000"
+        },
+        {
+            "Estrutural": "412150141020000"
+        },
+        {
+            "Estrutural": "412150151010000"
+        },
+        {
+            "Estrutural": "412150161020000"
+        },
+        {
+            "Estrutural": "412150211020000"
+        },
+        {
+            "Estrutural": "412150221020000"
+        },
+        {
+            "Estrutural": "412155011020000"
+        },
+        {
+            "Estrutural": "412155021020000"
+        },
+        {
+            "Estrutural": "412155031020000"
+        },
+        {
+            "Estrutural": "412155041020000"
+        },
+        {
+            "Estrutural": "412155111020000"
+        },
+        {
+            "Estrutural": "412155121020000"
+        },
+        {
+            "Estrutural": "412155131020000"
+        }
+    ],
+    "Novas_Receitas": [
+        {
+            "Ano": "2023",
+            "Estrutural": "417196000000000",
+            "Descricao": "TRANSF. POLITICA NAC. ALDIR BLANC FOMENTO CULTURA",
+            "Finalidade": "Transferencias da Politica Nacional Aldir Blanc de Fomento a Cultura - Lei nro 14.399/2022",
+            "Fonte": "sintetica"
+        },
+        {
+            "Ano": "2023",
+            "Estrutural": "417196001000000",
+            "Descricao": "TRANSF. POLITICA NAC. ALDIR BLANC FOMENTO CULTURA",
+            "Finalidade": "Transferencias da Politica Nacional Aldir Blanc de Fomento a Cultura - Lei nro 14.399/2022 - Principal",
+            "Fonte": "sintetica"
+        },
+        {
+            "Ano": "2023",
+            "Estrutural": "417196001010000",
+            "Descricao": "TRANSF. POLITICA NAC. ALDIR BLANC FOMENTO CULTURA",
+            "Finalidade": "Transferencias da Politica Nacional Aldir Blanc de Fomento a Cultura - Lei nro 14.399/2022 - Principal",
+            "Fonte": "17190000",
+            "VinculoPCASP": "45244%"
+        }
+    ],
+    "Novas_Fontes": [
+        {
+            "Fonte": "18980000",
+            "Descricao": "Recursos a Classificar",
+            "Finalidade": "Classificacao temporaria enquanto nao se identifica a correta vinculacao.",
+            "Tipo_Recurso": "Vinculado",
+            "Cod_STN": "1898",
+            "Cod_TCE": "1898000"
+        },
+        {
+            "Fonte": "28980000",
+            "Descricao": "Recursos a Classificar",
+            "Finalidade": "Classificacao temporaria enquanto nao se identifica a correta vinculacao.",
+            "Tipo_Recurso": "Vinculado",
+            "Cod_STN": "2898",
+            "Cod_TCE": "2898000"
+        },
+        {
+            "Fonte": "18620000",
+            "Descricao": "Recursos Depositos de terceiros",
+            "Finalidade": "Recursos Depositos de terceiros",
+            "Tipo_Recurso": "Vinculado",
+            "Cod_STN": "1862",
+            "Cod_TCE": "1862000"
+        },
+        {
+            "Fonte": "18690000",
+            "Descricao": "Outros recursos extraorcamentarios",
+            "Finalidade": "Outros recursos extraorcamentarios",
+            "Tipo_Recurso": "Vinculado",
+            "Cod_STN": "1869",
+            "Cod_TCE": "1869000"
+        },
+        {
+            "Fonte": "28620000",
+            "Descricao": "Recursos Depositos de terceiros",
+            "Finalidade": "Recursos Depositos de terceiros",
+            "Tipo_Recurso": "Vinculado",
+            "Cod_STN": "2862",
+            "Cod_TCE": "2862000"
+        },
+        {
+            "Fonte": "28690000",
+            "Descricao": "Outros recursos extraorcamentarios",
+            "Finalidade": "Outros recursos extraorcamentarios",
+            "Tipo_Recurso": "Vinculado",
+            "Cod_STN": "2869",
+            "Cod_TCE": "2869000"
+        }
+    ]
+}

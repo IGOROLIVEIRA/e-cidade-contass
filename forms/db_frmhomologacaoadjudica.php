@@ -245,19 +245,19 @@ db_app::load("estilos.css, grid.style.css");
 
             var seq = 0;
             oRetornoitens.itens.each(function(oLinha, iLinha) {
-                    seq ++;
-                    var aLinha = new Array();
-                    aLinha[0] = oLinha.pc81_codprocitem;
-                    aLinha[1] = oLinha.pc11_seq;
-                    aLinha[2] = oLinha.pc01_descrmater.urlDecode();
-                    aLinha[3] = oLinha.l04_descricao.urlDecode();
-                    aLinha[4] = oLinha.z01_numcgm;
-                    aLinha[5] = oLinha.z01_nome.urlDecode();
-                    aLinha[6] = oLinha.m61_descr;
-                    aLinha[7] = oLinha.pc11_quant;
-                    aLinha[8] = oLinha.pc23_valor;
-                    oGridItens.addRow(aLinha);
-                nTotal = nTotal + Number(oLinha.pc23_valor);
+                seq ++;
+                var aLinha = new Array();
+                aLinha[0] = oLinha.pc81_codprocitem;
+                aLinha[1] = oLinha.pc11_seq;
+                aLinha[2] = oLinha.pc01_descrmater.urlDecode();
+                aLinha[3] = oLinha.l04_descricao.urlDecode();
+                aLinha[4] = oLinha.z01_numcgm;
+                aLinha[5] = oLinha.z01_nome.urlDecode();
+                aLinha[6] = oLinha.m61_descr;
+                aLinha[7] = oLinha.pc11_quant;
+                aLinha[8] = oLinha.pc23_valor;
+                oGridItens.addRow(aLinha);
+            nTotal = nTotal + Number(oLinha.pc23_valor);
 
                 var sTextEvent  = " ";
 

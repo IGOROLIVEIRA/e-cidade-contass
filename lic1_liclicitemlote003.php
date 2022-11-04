@@ -57,12 +57,16 @@ if (isset($excluir) && trim($excluir) != "") {
 
     if ($sLotesVinculados) {
         $sSqlDadosCompLote = "
-               SELECT db150_lote
-                   FROM obrasdadoscomplementareslote
-                   WHERE db150_lote in
-                       (SELECT l04_codigo
-                           FROM liclicitemlote
-                           WHERE l04_descricao like '" . $l04_descricao . "');
+        SELECT db150_lote
+        FROM obrasdadoscomplementareslote
+        INNER JOIN obrascodigos ON db150_seqobrascodigos = db151_sequencial
+        WHERE 
+        db151_liclicita = {$licitacao}
+        AND 
+        db150_lote in
+            (SELECT l04_codigo
+                FROM liclicitemlote
+                WHERE l04_descricao like '" . $l04_descricao . "');
                ";
 
         $rsDadosCompLote = db_query($sSqlDadosCompLote);
