@@ -103,7 +103,7 @@ if (isset($dtDataInicial)) {
   $sSqlNota .= "          inner join rhcbo on rh70_sequencial = z04_rhcbo";
   $sSqlNota .= "          left join conlancamemp on c75_numemp = e60_numemp ";
   $sSqlNota .= "          left join conlancamdoc on c71_codlan = c75_codlan and c71_coddoc = 904 ";
-  $sSqlNota .= "          left  join pagordemnota on e71_codnota = e69_codnota";
+  $sSqlNota .= "          left  join pagordemnota on e71_codnota = e69_codnota and e71_anulado is false";
   $sSqlNota .= "          left  join pagordem    on  e71_codord = e50_codord";
   $sSqlNota .= "          left  join pagordemele  on e53_codord = e50_codord";
   $sSqlNota .= "          left  join cgm as empresa on empresa.z01_numcgm = e50_empresadesconto";
@@ -486,12 +486,13 @@ HTML;
                         $oNotas->e70_vlrliq = db_formatar($oNotas->e70_vlrliq, "f");
                         $oNotas->patronal = db_formatar($oNotas->patronal, "f");
                         $oNotas->basepatronal = db_formatar($oNotas->basepatronal, "f");
-                        $oNotas->e50_valorremuneracao = db_formatar($oNotas->e50_valorremuneracao, "f");
+                        
 
                         if(!$oNotas->e50_valorremuneracao)
                             $oNotas->e50_valorremuneracao = db_formatar(0, "f");
                         else 
-                            $oNotas->e50_valorremuneracao = db_formatar($oNotas->e50_valorremuneracao, "f");    
+                            $oNotas->e50_valorremuneracao = db_formatar($oNotas->e50_valorremuneracao, "f");  
+                            
                                                                
                         echo <<<HTML
                         <tr style="height: 20px">
