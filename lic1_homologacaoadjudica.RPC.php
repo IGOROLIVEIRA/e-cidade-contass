@@ -425,23 +425,23 @@ switch($oParam->exec) {
         $clhomologacaoadjudica = new cl_homologacaoadjudica();
         $clliclicita           = new cl_liclicita();
 
-        $campos = "DISTINCT pc01_codmater,pc01_descrmater,cgmforncedor.z01_numcgm,cgmforncedor.z01_nome,m61_descr,pc11_quant,pc23_valor,l203_homologaadjudicacao,pc81_codprocitem,l04_descricao,pc11_seq";
+        $campos = "DISTINCT pc01_codmater,pc01_descrmater,cgmforncedor.z01_numcgm,cgmforncedor.z01_nome,m61_descr,pc11_quant,pc23_valor,l203_homologaadjudicacao,pc81_codprocitem,l04_descricao,pc11_seq,l04_seq";
 
         //Itens para Inclusao
         if($oParam->dbopcao == "1"){
             $sWhere = " liclicitem.l21_codliclicita = {$oParam->iLicitacao} and pc24_pontuacao = 1 AND pc81_codprocitem not in (select l203_item from homologacaoadjudica
                         inner join itenshomologacao on l203_homologaadjudicacao = l202_sequencial where l202_licitacao = {$oParam->iLicitacao})";
-            $result = $clhomologacaoadjudica->sql_record($clhomologacaoadjudica->sql_query_itens_semhomologacao(null,$campos,"pc11_seq,z01_nome",$sWhere));
+            $result = $clhomologacaoadjudica->sql_record($clhomologacaoadjudica->sql_query_itens_semhomologacao(null,$campos,"l04_descricao,pc11_seq,z01_nome",$sWhere));
         }
         //Itens para alteração
         if($oParam->dbopcao == "2"){
             $sWhere = " liclicitem.l21_codliclicita = {$oParam->iLicitacao} and pc24_pontuacao = 1 AND itenshomologacao.l203_homologaadjudicacao = {$oParam->iHomologacao}";
-            $result = $clhomologacaoadjudica->sql_record($clhomologacaoadjudica->sql_query_itens_comhomologacao(null,$campos,"pc11_seq,z01_nome",$sWhere));
+            $result = $clhomologacaoadjudica->sql_record($clhomologacaoadjudica->sql_query_itens_comhomologacao(null,$campos,"l04_descricao,pc11_seq,z01_nome",$sWhere));
         }
         //Itens para ExclusÃo
         if($oParam->dbopcao == "3"){
             $sWhere = " liclicitem.l21_codliclicita = {$oParam->iLicitacao} and pc24_pontuacao = 1 AND itenshomologacao.l203_homologaadjudicacao = {$oParam->iHomologacao}";
-            $result = $clhomologacaoadjudica->sql_record($clhomologacaoadjudica->sql_query_itens_comhomologacao(null,$campos,"pc11_seq,z01_nome",$sWhere));
+            $result = $clhomologacaoadjudica->sql_record($clhomologacaoadjudica->sql_query_itens_comhomologacao(null,$campos,"l04_descricao,pc11_seq,z01_nome",$sWhere));
         }
 
         /**
@@ -478,10 +478,10 @@ switch($oParam->exec) {
         $clhomologacaoadjudica = new cl_homologacaoadjudica();
         $clliclicita           = new cl_liclicita();
 
-        $campos = "DISTINCT pc01_codmater,pc01_descrmater,cgmforncedor.z01_nome,m61_descr,pc11_quant,pc23_valor,l203_homologaadjudicacao,pc81_codprocitem,l04_descricao,pc11_seq";
+        $campos = "DISTINCT pc01_codmater,pc01_descrmater,cgmforncedor.z01_nome,m61_descr,pc11_quant,pc23_valor,l203_homologaadjudicacao,pc81_codprocitem,l04_descricao,pc11_seq,l04_seq";
 
         $sWhere = " liclicitem.l21_codliclicita = {$oParam->iLicitacao} and pc24_pontuacao = 1 AND itenshomologacao.l203_sequencial is null";
-        $result = $clhomologacaoadjudica->sql_record($clhomologacaoadjudica->sql_query_itens_semhomologacao(null,$campos,"pc11_seq,z01_nome",$sWhere));
+        $result = $clhomologacaoadjudica->sql_record($clhomologacaoadjudica->sql_query_itens_semhomologacao(null,$campos,"l04_descricao,pc11_seq,z01_nome",$sWhere));
 
 
         /**
