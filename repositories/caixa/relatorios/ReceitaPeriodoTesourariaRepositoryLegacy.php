@@ -77,7 +77,8 @@ implements IReceitaPeriodoTesourariaRepository
             
             if ($this->sOrdem == ReceitaOrdemRepositoryLegacy::CONTRIBUINTE) {
                 $data->cgm = $data->cgm ? $data->cgm : 0;
-                $chave = $data->nome ? "CGM: $data->cgm CPF: $data->cpfcnpj NOME: $data->nome" : "Sem contribuinte informado";
+                $descricaoCpfCnpj = strlen($data->cpfcnpj) == 11 ? "CPF:" : "CNPJ:";
+                $chave = $data->nome ? "CGM: $data->cgm {$descricaoCpfCnpj} $data->cpfcnpj NOME: $data->nome" : "Sem contribuinte informado";
                 $aDados[$data->tipo]["CGM"][$chave][] = $data;
                 continue;
             }
