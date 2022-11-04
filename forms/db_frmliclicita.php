@@ -378,8 +378,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                             "1" => "1- Menor Preço",
                                             "2" => "2- Melhor Técnica",
                                             "3" => "3- Técnica e Preço",
-                                            "4" => "4- Maior Lance ou Oferta",
-                                            "5" => "5- Maior Oferta de Preço"
+                                            "4" => "4- Maior Lance ou Oferta"
                                         );
                                         db_select("l20_tipliticacao", $arr_tipo, true, $db_opcao);
                                         ?>
@@ -406,7 +405,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                             <?
                                             $al20_naturezaobjeto = array("0" => "Selecione", "1" => "1- Obras e Serviços de Engenharia", "2" => "2- Compras e outros serviços", "3" => "3- Locação de Imóveis", "4" => "4- Concessão", "5" => "5- Permissão", "6" => "6- Alienação de bens");
                                             if (db_getsession('DB_anousu') >= 2019) {
-                                                $al20_naturezaobjeto[7] = "7-Compras para obras e/ou serviços de engenharia";
+                                                $al20_naturezaobjeto[7] = "7- Compras Para Obras e/ou Serviços de Engenharia";
                                             }
                                             db_select("l20_naturezaobjeto", $al20_naturezaobjeto, true, $db_opcao, "onchange='js_regime(this.value)'");
                                             ?>
@@ -854,7 +853,11 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                     <td>
                         <?
                         $arr_tipo = array("0" => "Selecione", "1" => "Por item", "3" => "Por lote");
-                        db_select("l20_tipojulg", $arr_tipo, true, $lBloqueadoRegistroPreco);
+                        if ($lBloqueadoRegistroPreco == 3) {
+                            db_select("l20_tipojulg", $arr_tipo, true, 1, "disabled=");
+                        } else {
+                            db_select("l20_tipojulg", $arr_tipo, true, 1);
+                        }
                         db_input("tipojulg", 1, "", true, "hidden", 3, "");
                         db_input("confirmado", 1, "", true, "hidden", 3, "");
                         ?>
@@ -1231,13 +1234,17 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             document.getElementById("l20_codtipocomdescr").disabled = true;
         }
 
+        document.getElementById("respCondunome").style.width = "251px";
+        document.getElementById("l20_descricaodep").style.width = "281px";
         document.getElementById("lprocsis").style.width = "85px";
         document.getElementById("l20_usaregistropreco").style.width = "85px";
-        document.getElementById("l20_tipliticacao").style.width = "300px";
-        document.getElementById("l20_leidalicitacao").style.width = "300px";
-        document.getElementById("l20_tipnaturezaproced").style.width = "300px";
-        document.getElementById("l20_regimexecucao").style.width = "300px";
-        document.getElementById("l20_criterioadjudicacao").style.width = "300px";
+        document.getElementById("l20_codtipocomdescr").style.width = "307px";
+        document.getElementById("l20_tipliticacao").style.width = "307px";
+        document.getElementById("l20_leidalicitacao").style.width = "307px";
+        document.getElementById("l20_tipnaturezaproced").style.width = "307px";
+        document.getElementById("l20_regimexecucao").style.width = "307px";
+        document.getElementById("l20_naturezaobjeto").style.width = "307px";
+        document.getElementById("l20_criterioadjudicacao").style.width = "307px";
         document.getElementById("l20_tipojulg").style.width = "85px";
         document.getElementById("l20_tipoprocesso").style.width = "400px";
         //document.getElementById("l20_codtipocom").style.width="85px";
@@ -1286,6 +1293,24 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
         if (oRetorno.tribunal == 100 || oRetorno.tribunal == 101 || oRetorno.tribunal == 102 || oRetorno.tribunal == 103) {
             //parent.document.getElementById('liclicpublicacoes').style.display = 'none';
+
+            let listaNatureza = document.getElementById('l20_naturezaobjeto').options;
+
+            listaNatureza.remove(7);
+            listaNatureza.remove(6);
+            listaNatureza.remove(5);
+            listaNatureza.remove(4);
+            listaNatureza.remove(3);
+            listaNatureza.remove(2);
+            listaNatureza.remove(1);
+            listaNatureza.add(new Option('1- Obras e Serviços de Engenharia',1));
+            listaNatureza.add(new Option('2- Compras e Outros Serviços',2));
+            listaNatureza.add(new Option('3- Locação de Imóveis',3));
+            listaNatureza.add(new Option('7- Compras Para Obras e/ou Serviços de Engenharia',7));
+
+            document.querySelector("#l20_naturezaobjeto").value = oRetornoNatu;
+
+
 
             document.form1.l20_justificativa.style.backgroundColor = '#FFFFFF ';
 
@@ -1390,6 +1415,25 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
 
         } else {
+            
+            let listaNatureza = document.getElementById('l20_naturezaobjeto').options;
+
+            listaNatureza.remove(7);
+            listaNatureza.remove(6);
+            listaNatureza.remove(5);
+            listaNatureza.remove(4);
+            listaNatureza.remove(3);
+            listaNatureza.remove(2);
+            listaNatureza.remove(1);
+            listaNatureza.add(new Option('1- Obras e Serviços de Engenharia',1));
+            listaNatureza.add(new Option('2- Compras e Outros Serviços',2));
+            listaNatureza.add(new Option('3- Locação de Imóveis',3));
+            listaNatureza.add(new Option('4- Concessão',4));
+            listaNatureza.add(new Option('5- Permissão',5));
+            listaNatureza.add(new Option('6- Alienação de Bens',6));
+            listaNatureza.add(new Option('7- Compras Para Obras e/ou Serviços de Engenharia',7));
+
+            document.querySelector("#l20_naturezaobjeto").value = oRetornoNatu;
 
             //parent.document.getElementById('liclicpublicacoes').style.display = 'block';
             document.getElementById("l20_justificativa").disabled = true;
@@ -2175,16 +2219,30 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
         js_verificaDatasProposta();
 
+        var oRetornoTipo = document.getElementById('l20_tipliticacao').value;
 
-        let opcoesreg = document.getElementById('l20_tipliticacao').options;
+        var opcoesreg = document.getElementById('l20_tipliticacao').options;
 
         let modalidade = document.form1.modalidade_tribunal.value;
 
         if (lei == 1) {
+            opcoesreg.remove(7);
+            opcoesreg.remove(6);
+            opcoesreg.remove(5);
+            opcoesreg.remove(4);
+            opcoesreg.remove(3);
+            opcoesreg.remove(2);
+            opcoesreg.remove(1);
+            opcoesreg.add(new Option('1- Menor Preço',1));
+            opcoesreg.add(new Option('2- Melhor Técnica',2));
+            opcoesreg.add(new Option('3- Técnica e Preço',3));
+            opcoesreg.add(new Option('4- Maior Lance ou Oferta',4));
+            opcoesreg.add(new Option('6- Maior Retorno Econômico',6));
+            opcoesreg.add(new Option('7- Maior desconto',7));
+            opcoesreg.add(new Option('8- Melhor técnica ou conteúdo artístico',8));
 
-            opcoesreg.add(new Option('6- Maior Retorno Econômico'), 6);
-            opcoesreg.add(new Option('7- Maior desconto'), 7);
-            opcoesreg.add(new Option('8- Melhor técnica ou conteúdo artístico'), 8);
+            document.querySelector("#l20_tipliticacao").value = oRetornoTipo;
+
             if (modalidade != 100 && modalidade != 101 && modalidade != 102 && modalidade != 103) {
                 document.getElementById('disputa').style.display = '';
 
@@ -2194,9 +2252,21 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
         }
         if (lei == 2 || lei == 0) {
             document.getElementById('disputa').style.display = 'none';
-            opcoesreg.remove(6);
+
             opcoesreg.remove(7);
-            opcoesreg.remove(8);
+            opcoesreg.remove(6);
+            opcoesreg.remove(5);
+            opcoesreg.remove(4);
+            opcoesreg.remove(3);
+            opcoesreg.remove(2);
+            opcoesreg.remove(1);
+
+            opcoesreg.add(new Option('1- Menor Preço',1));
+            opcoesreg.add(new Option('2- Melhor Técnica',2));
+            opcoesreg.add(new Option('3- Técnica e Preço',3));
+            opcoesreg.add(new Option('4- Maior Lance ou Oferta',4));
+
+            document.querySelector("#l20_tipliticacao").value = oRetornoTipo;
         }
     }
 

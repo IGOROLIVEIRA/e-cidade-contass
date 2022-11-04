@@ -141,7 +141,7 @@ class FilaESocialTask extends Task implements iTarefa
             }
 
             $this->incluirRecido($dadosEnvio->rh213_sequencial, $exportar->getNumeroRecibo());
-            $this->importarEvt5001($exportar->getObjXmlEvt5001(), $dadosEnvio->rh213_evento);
+            $this->importarEvt5001($exportar->getObjXmlEvt5001(), $dadosEnvio);
             echo "{$exportar->getDescResposta()} Recibo de Envio {$exportar->getNumeroRecibo()}";
         } catch (\Exception $e) {
             $dao->setSituacaoErroEnvio($dadosEnvio->rh213_sequencial, $e->getMessage());
@@ -237,7 +237,7 @@ class FilaESocialTask extends Task implements iTarefa
                     }
 
                     $this->incluirRecido($dadosConsulta->rh213_sequencial, $exportar->getNumeroRecibo());
-                    $this->importarEvt5001($exportar->getObjXmlEvt5001(), $dadosConsulta->rh213_evento);
+                    $this->importarEvt5001($exportar->getObjXmlEvt5001(), $dadosConsulta);
                     echo "{$exportar->getDescResposta()} Recibo de Envio {$exportar->getNumeroRecibo()}";
                 }
             } catch (\Exception $e) {
@@ -283,12 +283,12 @@ class FilaESocialTask extends Task implements iTarefa
         throw new Exception("Não foi possível encontrar a fase deste evento.");
     }
 
-    private function importarEvt5001($oXml, $evento)
+    private function importarEvt5001($oXml, $dadosEvento)
     {
-        if (!in_array($evento, array("1200" ,"2299" ,"2399"))) {
+        if (!in_array($dadosEvento->rh213_evento, array("1200", "2299", "2399"))) {
             return;
         }
-        $oImportarDadosEvt5001 = new ImportarDadosEvt5001(null, $oXml);
+        $oImportarDadosEvt5001 = new ImportarDadosEvt5001(null, $oXml, $dadosEvento);
         $oImportarDadosEvt5001->processar();
     }
 }

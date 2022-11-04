@@ -40,6 +40,7 @@ $clcgm = new cl_cgm;
 $clevt5001consulta->rotulo->label("rh218_perapurano");
 $clevt5001consulta->rotulo->label("rh218_perapurmes");
 $clevt5001consulta->rotulo->label("rh218_regist");
+$clevt5001consulta->rotulo->label("rh218_numcgm");
 $clcgm->rotulo->label("z01_cgccpf");
 if (!isset($chave_rh218_perapurano)) {
   $chave_rh218_perapurano = db_getsession("DB_anousu");
@@ -49,85 +50,101 @@ if (!isset($chave_rh218_perapurmes)) {
 }
 ?>
 <html xmlns="http://www.w3.org/1999/html">
+
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<link href="estilos.css" rel="stylesheet" type="text/css">
-<script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <link href="estilos.css" rel="stylesheet" type="text/css">
+    <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
 </head>
+
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
-<table height="100%" border="0"  align="center" cellspacing="0" bgcolor="#CCCCCC">
-  <tr> 
-    <td height="63" align="center" valign="top">
-      <form name="form2" method="post" action="" >
-        <fieldset style="width: 35%">
-          <legend>Pesquisa de Função</legend>
-          <table width="35%" border="0" align="center" cellspacing="0">
-            <tr>
-              <td width="4%" align="left" nowrap title="<?=$Trh218_perapurano?>">
-                <?=$Lrh218_perapurano?>
-              </td>
-              <td width="96%" align="left" nowrap>
-                <?
-                db_input("rh218_perapurano",5,$Irh218_perapurano,true,"text",4,"","chave_rh218_perapurano");
-                ?>
-              </td>
-            </tr>
-            <tr>
-              <td width="4%" align="left" nowrap title="<?=$Trh218_perapurmes?>">
-                <?=$Lrh218_perapurmes?>
-              </td>
-              <td width="96%" align="left" nowrap>
-                <?
-                db_input("rh218_perapurmes",5,$Irh218_perapurmes,true,"text",4,"","chave_rh218_perapurmes");
-                ?>
-              </td>
-            </tr>
-            <tr>
-              <td width="4%" align="left" nowrap title="<?=$Trh218_regist?>">
-                <?=$Lrh218_regist?>
-              </td>
-              <td width="96%" align="left" nowrap>
-                <?
-                db_input("rh218_regist",5,$Irh218_regist,true,"text",4,"","chave_rh218_regist");
-                ?>
-              </td>
-            </tr>
-            <tr>
-              <td width="4%" align="left" nowrap title="<?=$Tz01_cgccpf?>">
-                <?=$Lz01_cgccpf?>
-              </td>
-              <td width="96%" align="left" nowrap>
-                <?
-                db_input("z01_cgccpf",40 ,1 ,true,"text",4,"","chave_z01_cgccpf");
-                ?>
-              </td>
-            </tr>
-          </table>
-        </fieldset>
-        <table width="35%" border="0" align="center" cellspacing="0">
-          <tr>
-            <td colspan="2" align="center">
-              <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar">
-              <input name="limpar" type="reset" id="limpar" value="Limpar" >
-              <input name="Fechar" type="button" id="fechar" value="Fechar" onClick="parent.db_iframe_evt5001consulta.hide();">
+    <table height="100%" border="0" align="center" cellspacing="0" bgcolor="#CCCCCC">
+        <tr>
+            <td height="63" align="center" valign="top">
+                <form name="form2" method="post" action="">
+                    <fieldset style="width: 35%">
+                        <legend>Pesquisa de Função</legend>
+                        <table width="35%" border="0" align="center" cellspacing="0">
+                            <tr>
+                                <td width="4%" align="left" nowrap title="<?= $Trh218_perapurano ?>">
+                                    <?= $Lrh218_perapurano ?>
+                                </td>
+                                <td width="96%" align="left" nowrap>
+                                    <?
+                  db_input("rh218_perapurano", 5, $Irh218_perapurano, true, "text", 4, "", "chave_rh218_perapurano");
+                  ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="4%" align="left" nowrap title="<?= $Trh218_perapurmes ?>">
+                                    <?= $Lrh218_perapurmes ?>
+                                </td>
+                                <td width="96%" align="left" nowrap>
+                                    <?
+                  db_input("rh218_perapurmes", 5, $Irh218_perapurmes, true, "text", 4, "", "chave_rh218_perapurmes");
+                  ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="4%" align="left" nowrap title="<?= $Trh218_regist ?>">
+                                    <?= $Lrh218_regist ?>
+                                </td>
+                                <td width="96%" align="left" nowrap>
+                                    <?
+                  db_input("rh218_regist", 5, $Irh218_regist, true, "text", 4, "", "chave_rh218_regist");
+                  ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="4%" align="left" nowrap title="<?= $Tz01_cgccpf ?>">
+                                    <?= $Lz01_cgccpf ?>
+                                </td>
+                                <td width="96%" align="left" nowrap>
+                                    <?
+                  db_input("z01_cgccpf", 40, 1, true, "text", 4, "", "chave_z01_cgccpf");
+                  ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="4%" align="left" nowrap title="Cgm">
+                                    <strong>Cgm:</strong>
+                                </td>
+                                <td width="96%" align="left" nowrap>
+                                    <?
+                  db_input("rh218_numcgm", 5, $Irh218_numcgm, true, "text", 4, "", "chave_rh218_numcgm");
+                  ?>
+                                </td>
+                            </tr>
+                        </table>
+                    </fieldset>
+                    <table width="35%" border="0" align="center" cellspacing="0">
+                        <tr>
+                            <td colspan="2" align="center">
+                                <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar">
+                                <input name="limpar" type="reset" id="limpar" value="Limpar">
+                                <input name="Fechar" type="button" id="fechar" value="Fechar"
+                                    onClick="parent.db_iframe_evt5001consulta.hide();">
+                            </td>
+                        </tr>
+                    </table>
+                </form>
             </td>
-          </tr>
-        </table>
-      </form>
-      </td>
-  </tr>
-  <tr> 
-    <td align="center" valign="top">
-      <fieldset>
-        <legend>Resultado da Pesquisa</legend>
-      <?
-      $where = " rh218_instit = ".db_getsession("DB_instit");
-      if(!isset($pesquisa_chave)) {
-        
-         $campos = "rh218_sequencial,
+        </tr>
+        <tr>
+            <td align="center" valign="top">
+                <fieldset>
+                    <legend>Resultado da Pesquisa</legend>
+                    <?
+          $where = " rh218_instit = " . db_getsession("DB_instit");
+          if (!isset($pesquisa_chave)) {
+
+            $campos = "rh218_sequencial,
+                    case when z01_cgccpf is null then (select z01_cgccpf from cgm where z01_numcgm = rh218_numcgm)
+                    else z01_cgccpf end as z01_cgccpf,
+                    case when z01_nome is null then (select z01_nome from cgm where z01_numcgm = rh218_numcgm)
+                    else z01_nome end as z01_nome,
                     rh218_regist,
-                    z01_cgccpf,
-                    z01_nome,
+                    rh218_numcgm as dl_Cgm,
                     rh218_codcateg,
                     CASE WHEN rh218_indapuracao = 1 THEN 'Mensal'::varchar ELSE '13º Salário'::varchar END AS rh218_indapuracao,
                     rh218_nrrecarqbase,
@@ -136,45 +153,47 @@ if (!isset($chave_rh218_perapurmes)) {
                     rh218_vrcpseg, 
                     (rh218_vrdescseg - rh218_vrcpseg) as dl_Diferença";
 
-        if (isset($chave_rh218_regist) && (trim($chave_rh218_regist)!="") ) {
-	         $where .= " and rh218_regist = $chave_rh218_regist ";
-        }
-        if (isset($chave_z01_cgccpf) && (trim($chave_z01_cgccpf)!="") ) {
-	         $where .= " and z01_cgccpf = '$chave_z01_cgccpf' ";
-        }
-        if (isset($chave_rh218_perapurano) && (trim($chave_rh218_perapurano)!="") ) {
-           $where .= " and rh218_perapurano = $chave_rh218_perapurano ";
-        }
-        if (isset($chave_rh218_perapurmes) && (trim($chave_rh218_perapurmes)!="") ) {
-           $where .= " and rh218_perapurmes = $chave_rh218_perapurmes ";
-        }
-        $sql = $clevt5001consulta->sql_query(null,$campos,"rh218_regist",$where);
-        db_lovrot($sql,15,"()","",$funcao_js);
-      }else{
-        if($pesquisa_chave!=null && $pesquisa_chave!=""){
-          $result = $clevt5001consulta->sql_record($clevt5001consulta->sql_query($pesquisa_chave,db_getsession("DB_instit")));
-          if($clevt5001consulta->numrows!=0){
-            db_fieldsmemory($result,0);
-            echo "<script>".$funcao_js."('$rh218_sequencial',false);</script>";
-          }else{
-	         echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
+            if (isset($chave_rh218_regist) && (trim($chave_rh218_regist) != "")) {
+              $where .= " and rh218_regist = $chave_rh218_regist ";
+            }
+            if (isset($chave_z01_cgccpf) && (trim($chave_z01_cgccpf) != "")) {
+              $where .= " and z01_cgccpf = '$chave_z01_cgccpf' ";
+            }
+            if (isset($chave_rh218_perapurano) && (trim($chave_rh218_perapurano) != "")) {
+              $where .= " and rh218_perapurano = $chave_rh218_perapurano ";
+            }
+            if (isset($chave_rh218_perapurmes) && (trim($chave_rh218_perapurmes) != "")) {
+              $where .= " and rh218_perapurmes = $chave_rh218_perapurmes ";
+            }
+            $sql = $clevt5001consulta->sql_query(null, $campos, "rh218_sequencial desc", $where);
+            db_lovrot($sql, 15, "()", "", $funcao_js);
+          } else {
+            if ($pesquisa_chave != null && $pesquisa_chave != "") {
+              echo $clevt5001consulta->sql_query($pesquisa_chave, db_getsession("DB_instit"));
+              $result = $clevt5001consulta->sql_record($clevt5001consulta->sql_query($pesquisa_chave, db_getsession("DB_instit"), 'rh218_sequencial desc'));
+              if ($clevt5001consulta->numrows != 0) {
+                db_fieldsmemory($result, 0);
+                echo "<script>" . $funcao_js . "('$rh218_sequencial',false);</script>";
+              } else {
+                echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") não Encontrado',true);</script>";
+              }
+            } else {
+              echo "<script>" . $funcao_js . "('',false);</script>";
+            }
           }
-        }else{
-	       echo "<script>".$funcao_js."('',false);</script>";
-        }
-      }
-      ?>
-     </fieldset>
-     </td>
-   </tr>
-</table>
+          ?>
+                </fieldset>
+            </td>
+        </tr>
+    </table>
 </body>
+
 </html>
 <?
-if(!isset($pesquisa_chave)){
-  ?>
-  <script>
-  </script>
-  <?
+if (!isset($pesquisa_chave)) {
+?>
+<script>
+</script>
+<?
 }
 ?>

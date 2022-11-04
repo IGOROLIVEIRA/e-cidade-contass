@@ -185,6 +185,11 @@ class ReceitaPeriodoTesourariaSQLBuilder
         $this->definirSQLSelectEstrutural();
         $this->definirSQLGroupEstrutural();
 
+        if ($this->sOrdem == ReceitaOrdemRepositoryLegacy::CONTRIBUINTE) {
+            $this->definirSQLSelectContribuinte();
+            $this->definirSQLGroupContribuinte();
+        } 
+
         if ($this->sTipo == ReceitaTipoRepositoryLegacy::RECEITA) {
             $this->definirSQLSelectReceita();
             $this->definirSQLGroupReceita();
@@ -304,6 +309,22 @@ class ReceitaPeriodoTesourariaSQLBuilder
     /**
      * @return void
      */
+    public function definirSQLSelectContribuinte()
+    {
+        $this->sqlSelect .= " , z01_numcgm cgm, z01_cgccpf cpfcnpj, z01_nome nome";
+    }
+
+    /**
+     * @return void
+     */
+    public function definirSQLGroupContribuinte()
+    {
+        $this->sqlGroup .= " , z01_numcgm, z01_cgccpf, z01_nome ";
+    }
+
+    /**
+     * @return void
+     */
     public function definirSQLGroupReceita()
     {
         $this->sqlGroup .= " , arquivo, codrec, k02_codigo ";
@@ -412,7 +433,7 @@ class ReceitaPeriodoTesourariaSQLBuilder
     public function definirSQLWhereContribuinte()
     {
         if ($this->sContribuintes) {
-            $this->sqlWhere .= " AND k81_numcgm in ({$this->sContribuintes}) ";
+            $this->sqlWhere .= " AND z01_numcgm in ({$this->sContribuintes}) ";
         }
     }
 
@@ -470,6 +491,9 @@ class ReceitaPeriodoTesourariaSQLBuilder
                 c61_reduz,
                 c60_descr,
                 k12_conta,
+                z01_numcgm, 
+                z01_cgccpf,
+                z01_nome,
 				ROUND(
                         ( 
                         f.k12_valor - COALESCE((
@@ -509,6 +533,7 @@ class ReceitaPeriodoTesourariaSQLBuilder
                 AND r.k12_data = k82_data
                 AND r.k12_autent = k82_autent
             LEFT JOIN placaixarec ON k82_seqpla = k81_seqpla
+            LEFT JOIN cgm ON z01_numcgm = k81_numcgm
 			WHERE 
                 1 = 1 
                 {$this->sqlWhere} 
@@ -548,6 +573,9 @@ class ReceitaPeriodoTesourariaSQLBuilder
                 c61_reduz,
                 c60_descr,
                 corrente.k12_conta,
+                z01_numcgm, 
+                z01_cgccpf,
+                z01_nome,
                 corrente.k12_valor AS valor
             FROM
                 corlanc
@@ -571,6 +599,7 @@ class ReceitaPeriodoTesourariaSQLBuilder
                 AND corrente.k12_data = k82_data
                 AND corrente.k12_autent = k82_autent
             LEFT JOIN placaixarec ON k82_seqpla = k81_seqpla
+            LEFT JOIN cgm ON z01_numcgm = k81_numcgm 
             WHERE 
                 1 = 1 
                 {$this->sqlWhere} 
@@ -614,6 +643,11 @@ class ReceitaPeriodoTesourariaSQLBuilder
                 return;
             }
             $this->sqlOrder = " ORDER BY k02_tipo, c61_reduz ";
+            return;
+        }
+
+        if ($this->sOrdem == ReceitaOrdemRepositoryLegacy::CONTRIBUINTE) {
+            $this->sqlOrder = " ORDER BY k02_tipo, z01_numcgm, z01_cgccpf ";
             return;
         }
     }
