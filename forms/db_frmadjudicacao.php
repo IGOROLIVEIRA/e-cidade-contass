@@ -248,6 +248,7 @@ $clrotulo->label("l20_codigo");
         var aEventsIn  = ["onmouseover"];
         var aEventsOut = ["onmouseout"];
         aDadosHintGrid = new Array();
+        aDadosHintGridlote = new Array();
 
         var oRetornoitens = JSON.parse(oAjax.responseText);
         var nTotal = new Number(0);
@@ -281,8 +282,24 @@ $clrotulo->label("l20_codigo");
                 oDadosHint.idLinha   = `gridItensrowgridItens${iLinha}`;
                 oDadosHint.sText     = sTextEvent;
                 aDadosHintGrid.push(oDadosHint);
+
+                /*LOTE*/
+                var sTextEventlote = " ";
+
+                if (aLinha[3] !== '') {
+                    sTextEventlote += "<b>Lote: </b>"+aLinha[3];
+                } else {
+                    sTextEventlote += "<b>Nenhum dado à mostrar</b>";
+                }
+
+                var oDadosHintlote       = new Object();
+                oDadosHintlote.idLinha   = `gridItensrowgridItens${iLinha}`;
+                oDadosHintlote.sTextlote = sTextEventlote;
+                aDadosHintGridlote.push(oDadosHintlote);
             });
+
             document.getElementById('gridItenstotalValue').innerText = js_formatar(nTotal, 'f');
+            
             oGridItens.renderRows();
 
             aDadosHintGrid.each(function(oHint, id) {
@@ -292,8 +309,19 @@ $clrotulo->label("l20_codigo");
                 oDBHint.setHideEvents(aEventsOut);
                 oDBHint.setPosition('B', 'L');
                 oDBHint.setUseMouse(true);
-                oDBHint.make($(oHint.idLinha),2);
+                oDBHint.make($(oHint.idLinha), 2);
             });
+        
+            aDadosHintGridlote.each(function(oHintlote, id) {
+                var oDBHintlote    = eval("oDBHintlote_"+id+" = new DBHint('oDBHintlote_"+id+"')");
+                oDBHintlote.setText(oHintlote.sTextlote);
+                oDBHintlote.setShowEvents(aEventsIn);
+                oDBHintlote.setHideEvents(aEventsOut);
+                oDBHintlote.setPosition('B', 'L');
+                oDBHintlote.setUseMouse(true);
+                oDBHintlote.make($(oHintlote.idLinha),3);
+            });
+        
         }
     }
 
