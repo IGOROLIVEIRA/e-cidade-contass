@@ -3068,7 +3068,7 @@ class empenho {
         /*anular a solicitacao de compras caso anule a autorização de empenho*/
         $clsolicitem = db_utils::getDao("solicitem");
         $campos = "distinct pc11_numero as solicitacao";
-        $dbwhere = "e54_autori = {$iAutori}";
+        $dbwhere = "e54_autori = {$iAutori} and pc10_solicitacaotipo = 5";
         $result = $clsolicitem->sql_record($clsolicitem->sql_query_item_autoriza(null,$campos,null,$dbwhere));
         $oSolicitem = db_utils::fieldsMemory($result,0);
 
@@ -3113,7 +3113,7 @@ class empenho {
 
           /*busca de orçamento e processo de compras vinculado a solicitacao*/
           $campos = "distinct pc11_numero solicitacao,pc80_codproc processo,pc20_codorc orcamento";
-          $dbwhere = "e54_autori = {$iAutori}";
+          $dbwhere = "e54_autori = {$iAutori} and pc10_solicitacaotipo = 5";
           $result1 = $clsolicitem->sql_record($clsolicitem->sql_query_sol_proc_orc(null,$campos,null,$dbwhere));
           $oResult = db_utils::fieldsMemory($result1, 0);
           
@@ -3246,7 +3246,15 @@ class empenho {
       
             }
           }
-                   
+
+          require_once("classes/db_liclicitem_classe.php");
+          $oDaoLiclicitem = new cl_liclicitem();
+          $sSqlLiclicitem = $oDaoLiclicitem->sql_query_file(null,"*","l21_codpcprocitem in (select pc81_codprocitem from pcprocitem where pc81_codproc = {$oResult->processo})");
+          $rsLiclicitem   = $oDaoLiclicitem->sql_record($sSqlLiclicitem);
+          if($oDaoLiclicitem->numrows > 0){
+
+          }
+
           require_once("classes/db_pcprocitem_classe.php");
           $oDaoProcItem = new cl_pcprocitem();
           $sSqlProcItem = $oDaoProcItem->sql_query_file(null,"*",null,"pc81_codproc = {$oResult->processo}");
