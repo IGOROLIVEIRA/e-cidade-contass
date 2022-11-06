@@ -164,7 +164,7 @@ $rotulo->label("z01_cgccpf");
 
           if ($inclusaoordemcompra == true) {
 
-            $dbwhere .= " and e60_vlremp >  (e60_vlranu + e60_vlrliq)";
+            $dbwhere .= " and e60_vlremp > (e60_vlranu + e60_vlrliq)";
           }
 
           if (isset($pegaAnousu)) {
@@ -172,55 +172,53 @@ $rotulo->label("z01_cgccpf");
           }
 
           if (isset($anul) && $anul == false) {
-            $dbwhere .= " and e60_vlranu<e60_vlremp ";
+            $dbwhere .= " and e60_vlranu < e60_vlremp ";
           }
           /**
            * Filtro $filtroabast
            * Busca pelo elemento do empenho para abastecimento
-           * @see ocorrÃªncia contass 1011
+           * @see ocorrência contass 1011
            *
            */
 
-
-
           if ($filtroabast == 1) {
+
+            $anoant = db_getsession("DB_anousu") - 1;
+
             $dbwhere .= " and (elementoempenho.o56_elemento in ('3339030010000','3390330100000','3390339900000','3339033990000','3339030030000','3339092000000','3339033000000','3339093010000','3339093020000','3339093030000') ";
-            //removido por meio da solicitacao da oc 6848 
-            //$dbwhere .= " and empempenho.e60_emiss <= '$ve70_abast'";
-            //adicionado nova validadacao OC 6848 
             $dbwhere .= " or elementoempenho.o56_elemento like '335041%')";
-            $dbwhere .= "	and ((e91_anousu < date_part('year', date '" . $ve70_abast . "'))
-                               or (date_part('year', empempenho.e60_emiss) = date_part('year', date '" . $ve70_abast . "') and date_part('month', empempenho.e60_emiss) <= date_part('month', date '" . $ve70_abast . "'))) ";
+            $dbwhere .= " and (date_part('year', empempenho.e60_emiss) = date_part('year', date '" . $ve70_abast . "')";
+            $dbwhere .= " and date_part('month', empempenho.e60_emiss) <= date_part('month', date '" . $ve70_abast . "')";
+            $dbwhere .= "	or (empempenho.e60_anousu = " . $anoant . "";
+            $dbwhere .= "	and e91_anousu = ". db_getsession('DB_anousu') . "))";
             $filtroempelemento = 1;
           }
-
-
 
           /**
            * Filtro $filtromanut
            * Busca pelo elemento do empenho para manutencao
-           * @see ocorrÃªncias contass 2079, 20105
+           * @see ocorrências contass 2079, 20105
            *
            */
 
           if ($importacaoveiculo == 1) {
+            
+            $anoant = db_getsession("DB_anousu") - 1;
+
             $dbwhere .= " and (elementoempenho.o56_elemento in ('3339030010000','3390330100000','3390339900000','3339033990000','3339030030000','3339092000000','3339033000000','3339093010000','3339093020000','3339093030000') ";
-            //removido por meio da solicitacao da oc 6848 
-            //$dbwhere .= " and empempenho.e60_emiss <= '$ve70_abast'";
-            //adicionado nova validadacao OC 6848 
             $dbwhere .= " or elementoempenho.o56_elemento like '335041%')";
-            $dbwhere .= " and empempenho.e60_emiss < '$dataAbastecimento'";
+            $dbwhere .= " and (date_part('year',empempenho.e60_emiss) = date_part('year', date '" . $dataAbastecimento ."')";
+            $dbwhere .= " and date_part('month', empempenho.e60_emiss) <= date_part('month', date '" . $dataAbastecimento . "')";
+            $dbwhere .= "	or (empempenho.e60_anousu = " . $anoant . "";
+            $dbwhere .= "	and e91_anousu = ". db_getsession('DB_anousu') . "))";
             $filtroempelemento = 1;
           }
-
-
 
           if ($filtromanut == 1) {
 
             $anoant = db_getsession("DB_anousu") - 1;
 
             $dbwhere .= "and ((e91_anousu >= " . db_getsession("DB_anousu") . " and e60_anousu >= $anoant  ) or (e60_anousu >= " . db_getsession("DB_anousu") . "))";
-
             $dbwhere .= " and (elementoempenho.o56_elemento like '3339039%' ";
             $dbwhere .= " or elementoempenho.o56_elemento like '3339036%' ";
             $dbwhere .= " or elementoempenho.o56_elemento like '335041%' ";
@@ -232,8 +230,8 @@ $rotulo->label("z01_cgccpf");
 
           /**
            * Filtro $emperro
-           * Busca pelos empenhos anulados por erro na emissÃ£o, validando perÃ­odo contÃ¡bil
-           * @see ocorrÃªncia contass 3414
+           * Busca pelos empenhos anulados por erro na emissão, validando período contábil
+           * @see ocorrência contass 3414
            *
            */
 
@@ -310,7 +308,7 @@ $rotulo->label("z01_cgccpf");
             $campos = "empempenho.e60_numemp,
             empempenho.e60_codemp,
             empempenho.e60_anousu,
-            e61_autori,
+            empempaut.e61_autori,
             empempenho.e60_numcgm,
             case when ac16_numeroacordo is null then si172_nrocontrato::varchar else (ac16_numeroacordo || '/' || ac16_anousu)::varchar end as si172_nrocontrato,
             case when (select ac18_datafim from acordovigencia where ac18_acordoposicao in (select min(ac26_sequencial) from acordoposicao where ac26_acordo = acordo.ac16_sequencial) and ac18_ativo  = true) is null then si172_datafinalvigencia else (select ac18_datafim from acordovigencia where ac18_acordoposicao in (select min(ac26_sequencial) from acordoposicao where ac26_acordo = acordo.ac16_sequencial) and ac18_ativo  = true) end as si172_datafinalvigencia,
@@ -362,8 +360,6 @@ $rotulo->label("z01_cgccpf");
 
           if ($pesquisa_chave != null && $pesquisa_chave != "") {
 
-
-
             if (isset($lPesquisaPorCodigoEmpenho)) {
 
               if (!empty($iAnoEmpenho)) {
@@ -376,37 +372,44 @@ $rotulo->label("z01_cgccpf");
               /**
                * Filtro $filtroabast
                * Busca pelo elemento do empenho para abastecimento
-               * @see ocorrÃªncia contass 1011
+               * @see ocorrência contass 1011
                *
                */
               if ($filtroabast == 1) {
-                $sWherePesquisaPorCodigoEmpenho .= " and elementoempenho.o56_elemento in ('3339030990000','339033010000','339033990000','3339033990000'.'3339030030000','3339092000000','3339033000000','3339093010000','3339093020000','3339093030000') ";
-                //comentado por solicitaÃ§Ã£o da OC 8035
-                $dbwhere .= " or elementoempenho.o56_elemento like '335041%' ";
-                $dbwhere .= " and empempenho.e60_emiss <= '$ve70_abast'";
+
+                $anoant = db_getsession("DB_anousu") - 1;
+
+                $dbwhere .= " and (elementoempenho.o56_elemento in ('3339030010000','3390330100000','3390339900000','3339033990000','3339030030000','3339092000000','3339033000000','3339093010000','3339093020000','3339093030000') ";
+                $dbwhere .= " or elementoempenho.o56_elemento like '335041%')";
+                $dbwhere .= " and (date_part('year', empempenho.e60_emiss) = date_part('year', date '" . $ve70_abast . "')";
                 $dbwhere .= " and date_part('month', empempenho.e60_emiss) <= date_part('month', date '" . $ve70_abast . "')";
-                $dbwhere .= " and date_part('year', empempenho.e60_emiss) <= date_part('year', date '" . $ve70_abast . "')";
+                $dbwhere .= "	or (empempenho.e60_anousu = " . $anoant . "";
+                $dbwhere .= "	and e91_anousu = ". db_getsession("DB_anousu") . "))";
                 $filtroempelemento = 1;
               }
 
               if ($importacaoveiculo == 1) {
+
                 $aCodEmp  = explode("/", $pesquisa_chave);
-                $where .= "empempenho.e60_codemp = '" . $aCodEmp[0] . "'" . " and e60_anousu = " . $aCodEmp[1];
-                //$where .= " and e60_anousu = " . db_getsession("DB_anousu");
-                $where .= " and (elementoempenho.o56_elemento in ('3339030010000','3390330100000','3390339900000','3339033990000','3339030030000','3339092000000','3339033000000','3339093010000','3339093020000','3339093030000') ";
-                //removido por meio da solicitacao da oc 6848 
-                //$dbwhere .= " and empempenho.e60_emiss <= '$ve70_abast'";
-                //adicionado nova validadacao OC 6848 
-                $where .= " or elementoempenho.o56_elemento like '335041%')";
-                $where .= " and empempenho.e60_emiss < '$dataAbastecimento'";
+                
+                $anoant = db_getsession("DB_anousu") - 1;
+                
+                $dbwhere .= "(elementoempenho.o56_elemento in ('3339030010000','3390330100000','3390339900000','3339033990000','3339030030000','3339092000000','3339033000000','3339093010000','3339093020000','3339093030000')";
+                $dbwhere .= " or elementoempenho.o56_elemento like '335041%')";
+                $dbwhere .= " and (date_part('year', empempenho.e60_emiss) = date_part('year', date '" . $dataAbastecimento . "')";
+                $dbwhere .= " and date_part('month', empempenho.e60_emiss) <= date_part('month', date '" . $dataAbastecimento . "')";
+                $dbwhere .= "	or (empempenho.e60_anousu = " . $anoant . "";
+                $dbwhere .= "	and e91_anousu = " . db_getsession("DB_anousu") . "))";
+                $dbwhere .= " and e60_instit = " . db_getsession('DB_instit');
+                $dbwhere .= " and e60_codemp = '". $aCodEmp[0] ."'";
+                $dbwhere .= " and e60_anousu = " . $aCodEmp[1];
                 $filtroempelemento = 1;
               }
-
 
               /**
                * Filtro $filtromanut
                * Busca pelo elemento do empenho para manutencao
-               * @see ocorrÃªncia contass 2079
+               * @see ocorrência contass 2079
                *
                */
               if ($filtromanut == 1) {
@@ -418,14 +421,6 @@ $rotulo->label("z01_cgccpf");
 
               $aCodEmp  = explode("/", $pesquisa_chave);
               $sWherePesquisaPorCodigoEmpenho .= " and e60_codemp = '" . $aCodEmp[0] . "'";
-
-              // $sWherePesquisaPorCodigoEmpenho .= " AND e60_vlremp = e60_vlranu
-              //               AND e60_vlrliq = 0
-              //               AND e60_numemp NOT IN
-              //               (SELECT m52_numemp FROM matordemitem
-              //               UNION
-              //               SELECT e69_numemp FROM empnota)";
-
 
               $sSql = $clempempenho->sql_query(null, $campos, null, $sWherePesquisaPorCodigoEmpenho, $filtroempelemento);
             }
@@ -440,10 +435,6 @@ $rotulo->label("z01_cgccpf");
               }
             }
              else {
-                $dbwhere .= "empempenho.e60_codemp = '$aCodEmp[0]'";
-                $dbwhere .= " and e60_anousu = ". $aCodEmp[1];
-                $dbwhere .= " and e60_instit = ". db_getsession("DB_instit");
-
                 $sSql = $clempempenho->sql_query($pesquisa_chave, "*", null, $dbwhere, $filtroempelemento);
             }
 
@@ -462,7 +453,7 @@ $rotulo->label("z01_cgccpf");
               $campos = "empempenho.e60_numemp,
               empempenho.e60_codemp,
               empempenho.e60_anousu,
-              e61_autori,
+              empempaut.e61_autori,
               empempenho.e60_numcgm,
               case when ac16_numeroacordo is null then si172_nrocontrato::varchar else (ac16_numeroacordo || '/' || ac16_anousu)::varchar end as si172_nrocontrato,
               case when (select ac18_datafim from acordovigencia where ac18_acordoposicao in (select min(ac26_sequencial) from acordoposicao where ac26_acordo = acordo.ac16_sequencial) and ac18_ativo  = true) is null then si172_datafinalvigencia else (select ac18_datafim from acordovigencia where ac18_acordoposicao in (select min(ac26_sequencial) from acordoposicao where ac26_acordo = acordo.ac16_sequencial) and ac18_ativo  = true) end as si172_datafinalvigencia,
