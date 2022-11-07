@@ -44,15 +44,18 @@ class Oc18728Insert extends PostgresMigration
                 foreach ($aInstit as $instit) {
                     
                     $codInstit = $instit['codigo'];
-                    $sSqlVerificaReduz = "SELECT c61_reduz FROM conplanoorcamentoanalitica
-                                          JOIN conplanoorcamento ON (c60_codcon, c60_anousu) = (c61_codcon, c61_anousu)
-                                          WHERE (c60_estrut, c61_instit) = ('{$contasInserir->Estrutural}', {$codInstit})
-                                            AND c61_anousu >= 2023";
+                    $sSqlVerificaReduz = $this->query("SELECT c60_codcon, c61_reduz FROM conplanoorcamento
+                                                       LEFT JOIN conplanoorcamentoanalitica ON (c60_codcon, c60_anousu, {$codInstit}) = (c61_codcon, c61_anousu, c61_instit)
+                                                       WHERE c60_estrut = '{$contasInserir->Estrutural}'
+                                                         AND c60_anousu >= 2023");
     
-                    $aReduzExiste = $this->fetchAll($sSqlVerificaReduz);
+                    $aReduzExiste = $sSqlVerificaReduz->fetchAll(\PDO::FETCH_ASSOC);
                     $c61_reduz = intval(current($this->fetchRow("SELECT nextval('conplanoorcamentoanalitica_c61_reduz_seq')")));
+                    
+                    $codigo = $aReduzExiste[0]['c60_codcon'];
+                    $reduzido = $aReduzExiste[0]['c61_reduz'];
     
-                    if (empty($aReduzExiste)){
+                    if (empty($reduzido) && !empty($codigo)){
     
                         $c61_codcon = $c60_codcon;
                         $c61_anousu = 1;
@@ -64,7 +67,7 @@ class Oc18728Insert extends PostgresMigration
                         $this->insertReduzOrcamento($aReduzOrcamento, $contasInserir->Fonte);
     
                         $this->insertGrupo($c61_codcon, $c61_instit);
-                        $this->insertVinculo($c61_codcon, $contasInserir->VinculoPCASP, $c61_instit);
+                        $this->insertVinculo($c61_codcon, $contasInserir->VinculoPCASP, $codigo);
                     }
                 }
 
@@ -109,8 +112,6 @@ class Oc18728Insert extends PostgresMigration
                 'c60_funcao'
             );
             
-            // $this->getAdapter()->setOptions(array_replace($this->getAdapter()->getOptions(), array('schema' => 'contabilidade')));
-            // $this->table('conplanoorcamento')->insert($fields, array($data))->saveData();
             $this->table('conplanoorcamento', array('schema' => 'contabilidade'))->insert($fields, array($data))->saveData();
             
         }
@@ -161,7 +162,7 @@ class Oc18728Insert extends PostgresMigration
         }
     }
 
-    public function insertVinculo($codconOrc, $estrutPcasp, $instit)
+    public function insertVinculo($codconOrc, $estrutPcasp, $codcon)
     {
         $anoInsert = $this->getExercicio();
 
@@ -172,7 +173,7 @@ class Oc18728Insert extends PostgresMigration
                                              AND c60_estrut LIKE '{$estrutPcasp}'
                                            LIMIT 1");
 
-            if (!empty($contaPcasp)) {
+            if (!empty($contaPcasp) && !empty($codcon)) {
 
                 $c72_sequencial = intval(current($this->fetchRow("SELECT nextval('conplanoconplanoorcamento_c72_sequencial_seq')")));
 
