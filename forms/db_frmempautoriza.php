@@ -430,7 +430,7 @@ db_app::load("DBFormCache.js");
 </form>
 <script>
     var opcao = <?php echo $db_opcao ?>;
-    if (opcao == 1) {
+    if (opcao == 1 && document.getElementById('e54_autori').value == "") {
         js_verificatipocompratribunal(document.getElementById('e54_codcom').value);
     }
 
