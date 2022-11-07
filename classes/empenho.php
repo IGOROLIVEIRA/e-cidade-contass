@@ -3247,14 +3247,6 @@ class empenho {
             }
           }
 
-          require_once("classes/db_liclicitem_classe.php");
-          $oDaoLiclicitem = new cl_liclicitem();
-          $sSqlLiclicitem = $oDaoLiclicitem->sql_query_file(null,"*","l21_codpcprocitem in (select pc81_codprocitem from pcprocitem where pc81_codproc = {$oResult->processo})");
-          $rsLiclicitem   = $oDaoLiclicitem->sql_record($sSqlLiclicitem);
-          if($oDaoLiclicitem->numrows > 0){
-
-          }
-
           require_once("classes/db_pcprocitem_classe.php");
           $oDaoProcItem = new cl_pcprocitem();
           $sSqlProcItem = $oDaoProcItem->sql_query_file(null,"*",null,"pc81_codproc = {$oResult->processo}");
