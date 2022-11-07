@@ -313,25 +313,7 @@ switch ($oParam->exec) {
                 $oParam->dados->pagamento = db_stdClass::normalizeStringJsonEscapeString($oParam->dados->pagamento);
             }
 
-            foreach ($oParam->aItens as $iItem => $oItem) {
 
-                $nTotalExecutar = 0;
-
-                $oAcordoItem     = new AcordoItem($oItem->codigo);
-                $nValorTotalItem = $oAcordoItem->getValorTotal();
-                //print_r($oItem->dotacoes);
-                foreach ($oItem->dotacoes as $iDotacoes => $oDotacoes) {
-
-                    $nTotalExecutar += $oDotacoes->valorexecutar;
-                }
-
-                if (round($nTotalExecutar, 2) > round($nValorTotalItem, 2)) {
-
-                    $nExecutar  = trim(db_formatar($nTotalExecutar, "f"));
-                    $nTotalItem = trim(db_formatar($nValorTotalItem, "f"));
-                    throw new BusinessException(" Valor a executar {$nExecutar} maior que o total do item {$nTotalItem}. ");
-                }
-            }
             /**
              * verifico o tipo de licitação para escolher o tipoorigem
              * @MarioJunior

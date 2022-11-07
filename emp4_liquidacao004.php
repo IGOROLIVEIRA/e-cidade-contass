@@ -530,7 +530,7 @@ switch ($objJson->method) {
         
         $ItemUltimaPosicao = db_utils::fieldsMemory($ItemUltimaPosicao, 0);
 
-
+        
         $empempaut = db_query("select e61_autori from empempaut where e61_numemp = {$objJson->iEmpenho}");
         
         if (pg_num_rows($empempaut) == 0) {
@@ -613,7 +613,6 @@ switch ($objJson->method) {
         }
       }
     }
-
     echo $json->encode(array("mensagem" => urlencode($nMensagem), "status" => $iStatus));
 
 
@@ -656,7 +655,7 @@ switch ($objJson->method) {
 
 
     if ($resulparemetrosaldo->pc01_liberarsaldoposicao == 'f' && pg_num_rows($Sqlparemetrosaldo) > 0 && $iStatus == 1) {
-
+      
       db_inicio_transacao();
       
       for ($iInd = 0; $iInd < count($aItens); $iInd++) {
@@ -756,21 +755,39 @@ switch ($objJson->method) {
         if ($rsacordoitem->ac20_acordoposicao != $ItemUltimaPosicao->ac20_acordoposicao) {
 
           
-
+          $DaoacordoItem = db_utils::getDao('acordoitemexecutado');
           if ($ItemUltimaPosicao->ac20_servicoquantidade == 'f' && $ItemUltimaPosicao->pc01_servico == 't') {
             //print_r("update acordoitem set ac20_quantidade = ".$ItemUltimaPosicao->ac20_quantidade.", ac20_valortotal = ".$ItemUltimaPosicao->ac20_valortotal + $aItens[$iInd]->vlrtot.", ac20_valorunitario = ".$ItemUltimaPosicao->ac20_valortotal + $aItens[$iInd]->vlrtot." where ac20_sequencial = ".$ItemUltimaPosicao->ac20_sequencial);
             //exit;
-            db_query("update acordoitem set ac20_quantidade = ".$ItemUltimaPosicao->ac20_quantidade.", ac20_valortotal = ".($ItemUltimaPosicao->ac20_valortotal + $aItens[$iInd]->vlrtot).", ac20_valorunitario = ".($ItemUltimaPosicao->ac20_valortotal + $aItens[$iInd]->vlrtot)." where ac20_sequencial = ".$ItemUltimaPosicao->ac20_sequencial);
+            //db_query("update acordoitem set ac20_quantidade = ".$ItemUltimaPosicao->ac20_quantidade.", ac20_valortotal = ".($ItemUltimaPosicao->ac20_valortotal + $aItens[$iInd]->vlrtot).", ac20_valorunitario = ".($ItemUltimaPosicao->ac20_valortotal + $aItens[$iInd]->vlrtot)." where ac20_sequencial = ".$ItemUltimaPosicao->ac20_sequencial);
+            $DaoacordoItem->ac29_acordoitem = $ItemUltimaPosicao->ac20_sequencial;
+            $DaoacordoItem->ac29_quantidade = -1;
+            $DaoacordoItem->ac29_valor = ($aItens[$iInd]->vlrtot)*-1;
+            $DaoacordoItem->ac29_tipo = 1; 
+            $DaoacordoItem->ac29_observacao = 'liberarsaldoposicao';
+            $DaoacordoItem->ac29_automatico = 't';
+            $DaoacordoItem->ac29_datainicial = date('Y-m-d', db_getsession('DB_datausu'));
+            $DaoacordoItem->ac29_datafinal = date('Y-m-d', db_getsession('DB_datausu'));
+            $DaoacordoItem->incluir();
+
           } else {
             //print_r("update acordoitem set ac20_quantidade = ".($ItemUltimaPosicao->ac20_quantidade+$aItens[$iInd]->quantidade).", ac20_valortotal = ".(($ItemUltimaPosicao->ac20_quantidade+$aItens[$iInd]->quantidade) * $ItemUltimaPosicao->ac20_valorunitario).", ac20_valorunitario = ".$ItemUltimaPosicao->ac20_valorunitario." where ac20_sequencial = ".$ItemUltimaPosicao->ac20_sequencial);
             //exit;
-            db_query("update acordoitem set ac20_quantidade = ".($ItemUltimaPosicao->ac20_quantidade+$aItens[$iInd]->quantidade).", ac20_valortotal = ".(($ItemUltimaPosicao->ac20_quantidade+$aItens[$iInd]->quantidade) * $ItemUltimaPosicao->ac20_valorunitario).", ac20_valorunitario = ".$ItemUltimaPosicao->ac20_valorunitario." where ac20_sequencial = ".$ItemUltimaPosicao->ac20_sequencial);
+            //db_query("update acordoitem set ac20_quantidade = ".($ItemUltimaPosicao->ac20_quantidade+$aItens[$iInd]->quantidade).", ac20_valortotal = ".(($ItemUltimaPosicao->ac20_quantidade+$aItens[$iInd]->quantidade) * $ItemUltimaPosicao->ac20_valorunitario).", ac20_valorunitario = ".$ItemUltimaPosicao->ac20_valorunitario." where ac20_sequencial = ".$ItemUltimaPosicao->ac20_sequencial);
+            $DaoacordoItem->ac29_acordoitem = $ItemUltimaPosicao->ac20_sequencial;
+            $DaoacordoItem->ac29_quantidade = $aItens[$iInd]->quantidade*-1;
+            $DaoacordoItem->ac29_valor = ($aItens[$iInd]->quantidade * $ItemUltimaPosicao->ac20_valorunitario)*-1;
+            $DaoacordoItem->ac29_tipo = 1; 
+            $DaoacordoItem->ac29_observacao = 'liberarsaldoposicao';
+            $DaoacordoItem->ac29_automatico = 't';
+            $DaoacordoItem->ac29_datainicial = date('Y-m-d', db_getsession('DB_datausu'));
+            $DaoacordoItem->ac29_datafinal = date('Y-m-d', db_getsession('DB_datausu'));
+            $DaoacordoItem->incluir();
           }
 
 
         }
       }
-
       if ($iStatus == 2) {
         db_fim_transacao(true);
       } else {
