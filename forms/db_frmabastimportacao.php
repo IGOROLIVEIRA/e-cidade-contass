@@ -811,7 +811,7 @@ if (isset($_POST["processar"])) {
 
 
             e60_numemp = document.getElementById("e60_codemp").value;
-            js_OpenJanelaIframe('top.corpo', 'db_iframe_empempenho', 'func_empempenho.php?filtroabast=0&ve70_abast=' + ve70_abast + '&importacaoveiculo=1&dataAbastecimento=' + dataAbastecimento + '&pesquisa_chave=' + e60_numemp + '&funcao_js=parent.js_mostraempempenho&lPesquisaPorCodigoEmpenho=1', 'Pesquisa', false);
+            js_OpenJanelaIframe('top.corpo', 'db_iframe_empempenho', 'func_empempenho.php?filtroabast=0&importacaoveiculo=1&dataAbastecimento=' + dataAbastecimento + '&pesquisa_chave=' + e60_numemp + '&funcao_js=parent.js_mostraempempenho&lPesquisaPorCodigoEmpenho=1', 'Pesquisa', false);
         }
     }
 
