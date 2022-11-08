@@ -347,38 +347,6 @@ class cl_solicita
         $this->erro_status = "0";
         return false;
       }
-<<<<<<< HEAD
-     return $result;
-   }
-   // funcao do sql
-   function sql_query ( $pc10_numero=null,$campos="*",$ordem=null,$dbwhere="",$joinDotac=false){
-     $sql = "select ";
-     if($campos != "*" ){
-       $campos_sql = explode("#",$campos);
-       $virgula = "";
-       for($i=0;$i<sizeof($campos_sql);$i++){
-         $sql .= $virgula.$campos_sql[$i];
-         $virgula = ",";
-       }
-     }else{
-       $sql .= $campos;
-     }
-     $sql .= " from solicita ";
-//     $sql .= "      inner join db_config  on  db_config.codigo = solicita.pc10_instit";
-     $sql .= "      inner join db_usuarios          on db_usuarios.id_usuario              = solicita.pc10_login";
-     $sql .= "      inner join db_depart            on db_depart.coddepto                  = solicita.pc10_depto";
-     $sql .= "      left  join solicitem            on solicitem.pc11_numero               = solicita.pc10_numero";
-     $sql .= "      left  join pcprocitem           on pcprocitem.pc81_solicitem           = solicitem.pc11_codigo";
-     $sql .= "      left  join acordopcprocitem     on pcprocitem.pc81_codprocitem         = acordopcprocitem.ac23_pcprocitem";
-     $sql .= "      left  join empautitempcprocitem on empautitempcprocitem.e73_pcprocitem = pcprocitem.pc81_codprocitem";
-     $sql .= "      left  join empautitem           on empautitem.e55_autori               = empautitempcprocitem.e73_autori";
-     $sql .= "                                     and empautitem.e55_sequen               = empautitempcprocitem.e73_sequen";
-     $sql .= "      left  join empautoriza          on empautoriza.e54_autori              = empautitem.e55_autori ";
-     $sql .= "      left  join empempaut            on empempaut.e61_autori                = empautitem.e55_autori ";
-     $sql .= "      left  join empempenho           on empempenho.e60_numemp               = empempaut.e61_numemp ";
-     $sql .= "      left  join solicitacaotipo      on solicita.pc10_solicitacaotipo       = solicitacaotipo.pc52_sequencial";
-     $sql2 = "";
-=======
     }
     if (trim($this->pc10_correto) != "" || isset($GLOBALS["HTTP_POST_VARS"]["pc10_correto"])) {
       $sql  .= $virgula . " pc10_correto = '$this->pc10_correto' ";
@@ -581,7 +549,7 @@ class cl_solicita
   {
     $sql = "select ";
     if ($campos != "*") {
-      $campos_sql = split("#", $campos);
+      $campos_sql = explode("#", $campos);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -605,76 +573,11 @@ class cl_solicita
     $sql .= "      left  join empempenho           on empempenho.e60_numemp               = empempaut.e61_numemp ";
     $sql .= "      left  join solicitacaotipo      on solicita.pc10_solicitacaotipo       = solicitacaotipo.pc52_sequencial";
     $sql2 = "";
->>>>>>> master
 
     if ($joinDotac) {
       $sql .= "    inner join pcdotac on pcdotac.pc13_codigo = solicitem.pc11_codigo";
     }
 
-<<<<<<< HEAD
-     if($dbwhere==""){
-       if($pc10_numero!=null ){
-         $sql2 .= " where solicita.pc10_numero = $pc10_numero ";
-       }
-     }else if($dbwhere != ""){
-       $sql2 = " where $dbwhere";
-     }
-     $sql .= $sql2;
-     if($ordem != null ){
-       $sql .= " order by ";
-       $campos_sql = explode("#",$ordem);
-       $virgula = "";
-       for($i=0;$i<sizeof($campos_sql);$i++){
-         $sql .= $virgula.$campos_sql[$i];
-         $virgula = ",";
-       }
-     }
-     return $sql;
-  }
-
-function sql_query_estregistro ( $pc10_numero=null,$campos="*",$ordem=null,$dbwhere=""){
-     $sql = "select ";
-     if($campos != "*" ){
-       $campos_sql = explode("#",$campos);
-       $virgula = "";
-       for($i=0;$i<sizeof($campos_sql);$i++){
-         $sql .= $virgula.$campos_sql[$i];
-         $virgula = ",";
-       }
-     }else{
-       $sql .= $campos;
-     }
-     $sql .= " from solicita ";
-//     $sql .= "      inner join db_config  on  db_config.codigo = solicita.pc10_instit";
-     $sql .= "      inner join db_usuarios  on  db_usuarios.id_usuario = solicita.pc10_login";
-     $sql .= "      inner join db_depart    on  db_depart.coddepto = solicita.pc10_depto";
-     $sql .= "      left join solicitem    on  solicita.pc10_numero = solicitem.pc11_numero";
-     $sql .= "      left  join solicitaregistropreco  on  solicita.pc10_numero = solicitaregistropreco.pc54_solicita";
-     $sql .= "      left  join pcprocitem   on  solicitem.pc11_codigo = pcprocitem.pc81_solicitem";
-     $sql .= "      left  join liclicitem   on  pcprocitem.pc81_codprocitem = l21_codpcprocitem";
-     $sql .= "      left  join liclicita    on  l21_codliclicita = l20_codigo";
-     $sql .= "      inner join solicitacaotipo  on  solicitacaotipo.pc52_sequencial = solicita.pc10_solicitacaotipo";
-     $sql .= "      left  join solicitaanulada  on  solicitaanulada.pc67_solicita = solicita.pc10_numero ";
-     $sql2 = "";
-     if($dbwhere==""){
-       if($pc10_numero!=null ){
-         $sql2 .= " where solicita.pc10_numero = $pc10_numero ";
-       }
-     }else if($dbwhere != ""){
-       $sql2 = " where $dbwhere";
-     }
-     $sql .= $sql2;
-     if($ordem != null ){
-       $sql .= " order by ";
-       $campos_sql = explode("#",$ordem);
-       $virgula = "";
-       for($i=0;$i<sizeof($campos_sql);$i++){
-         $sql .= $virgula.$campos_sql[$i];
-         $virgula = ",";
-       }
-     }
-     return $sql;
-=======
     if ($dbwhere == "") {
       if ($pc10_numero != null) {
         $sql2 .= " where solicita.pc10_numero = $pc10_numero ";
@@ -685,7 +588,7 @@ function sql_query_estregistro ( $pc10_numero=null,$campos="*",$ordem=null,$dbwh
     $sql .= $sql2;
     if ($ordem != null) {
       $sql .= " order by ";
-      $campos_sql = split("#", $ordem);
+      $campos_sql = explode("#", $ordem);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -699,7 +602,7 @@ function sql_query_estregistro ( $pc10_numero=null,$campos="*",$ordem=null,$dbwh
   {
     $sql = "select ";
     if ($campos != "*") {
-      $campos_sql = split("#", $campos);
+      $campos_sql = explode("#", $campos);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -730,7 +633,7 @@ function sql_query_estregistro ( $pc10_numero=null,$campos="*",$ordem=null,$dbwh
     $sql .= $sql2;
     if ($ordem != null) {
       $sql .= " order by ";
-      $campos_sql = split("#", $ordem);
+      $campos_sql = explode("#", $ordem);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -738,7 +641,6 @@ function sql_query_estregistro ( $pc10_numero=null,$campos="*",$ordem=null,$dbwh
       }
     }
     return $sql;
->>>>>>> master
   }
 
   function sql_query_andsol($campos = "*", $dbwhere = "")
@@ -821,396 +723,11 @@ function sql_query_estregistro ( $pc10_numero=null,$campos="*",$ordem=null,$dbwh
 
     return $sql;
   }
-<<<<<<< HEAD
-   function sql_query_file ( $pc10_numero=null,$campos="*",$ordem=null,$dbwhere=""){
-     $sql = "select ";
-     if($campos != "*" ){
-       $campos_sql = explode("#",$campos);
-       $virgula = "";
-       for($i=0;$i<sizeof($campos_sql);$i++){
-         $sql .= $virgula.$campos_sql[$i];
-         $virgula = ",";
-       }
-     }else{
-       $sql .= $campos;
-     }
-     $sql .= " from solicita ";
-     $sql2 = "";
-     if($dbwhere==""){
-       if($pc10_numero!=null ){
-         $sql2 .= " where solicita.pc10_numero = $pc10_numero ";
-       }
-     }else if($dbwhere != ""){
-       $sql2 = " where $dbwhere";
-     }
-     $sql .= $sql2;
-     if($ordem != null ){
-       $sql .= " order by ";
-       $campos_sql = explode("#",$ordem);
-       $virgula = "";
-       for($i=0;$i<sizeof($campos_sql);$i++){
-         $sql .= $virgula.$campos_sql[$i];
-         $virgula = ",";
-       }
-     }
-     return $sql;
-  }
-   function sql_query_func ($pc10_numero=null,$campos="*",$ordem=null,$dbwhere=""){
-     $sql = "select ";
-     if($campos != "*" ){
-       $campos_sql = explode("#",$campos);
-       $virgula = "";
-       for($i=0;$i<sizeof($campos_sql);$i++){
-         $sql .= $virgula.$campos_sql[$i];
-         $virgula = ",";
-       }
-     }else{
-       $sql .= $campos;
-     }
-     $sql .= " from solicita ";
-     $sql .= "      left join solicitatipo on solicitatipo.pc12_numero = solicita.pc10_numero";
-     $sql .= "      left join pctipocompra on pctipocompra.pc50_codcom = solicitatipo.pc12_tipo";
-     $sql .= "      inner join solicitem on solicitem.pc11_numero = solicita.pc10_numero";
-     $sql .= "      left  join pcdotac on pcdotac.pc13_codigo = solicitem.pc11_codigo";
-     $sql .= "      left  join solicitempcmater on solicitempcmater.pc16_solicitem = solicitem.pc11_codigo";
-     $sql .= "      left  join pcmater on pcmater.pc01_codmater = solicitempcmater.pc16_codmater";
-     $sql .= "      inner join db_depart on db_depart.coddepto = solicita.pc10_depto";
-     $sql .= "      inner join pcprocitem on pcprocitem.pc81_solicitem = solicitem.pc11_codigo";
-     $sql .= "      inner join pcproc on pcproc.pc80_codproc = pcprocitem.pc81_codproc";
-     $sql .= "      inner join pcorcamitemproc on pcorcamitemproc.pc31_pcprocitem = pcprocitem.pc81_codprocitem";
-     $sql .= "      inner join pcorcamitem on pcorcamitem.pc22_orcamitem = pcorcamitemproc.pc31_orcamitem";
-     $sql .= "      inner join pcorcam on pcorcam.pc20_codorc = pcorcamitem.pc22_codorc";
-     $sql2 = "";
-     if($dbwhere==""){
-       if($pc10_numero!=null ){
-         $sql2 .= " where solicita.pc10_numero = $pc10_numero ";
-       }
-     }else if($dbwhere != ""){
-       $sql2 = " where $dbwhere";
-     }
-     $sql .= $sql2;
-     if($ordem != null ){
-       $sql .= " order by ";
-       $campos_sql = explode("#",$ordem);
-       $virgula = "";
-       for($i=0;$i<sizeof($campos_sql);$i++){
-         $sql .= $virgula.$campos_sql[$i];
-         $virgula = ",";
-       }
-     }
-     return $sql;
-  }
-   function sql_query_numero_solicita ( $pc10_numero=null,$campos="*",$ordem=null,$dbwhere=""){
-     $sql = "select ";
-  if($campos != "*" ){
-     $campos_sql = explode("#",$campos);
-     $virgula = "";
- for($i=0;$i<sizeof($campos_sql);$i++){
-     $sql .= $virgula.$campos_sql[$i];
-     $virgula = ",";
-     }
-     }else{
-     $sql .= $campos;
-     }
-     $sql .= " from solicita ";
-     $sql .= " inner join solicitem on pc11_numero=pc10_numero";
-     $sql .= " inner join pcprocitem on pc81_solicitem=pc11_codigo ";
-     $sql .= " inner join pcproc on pc80_codproc=pc81_codproc";
-     $sql2 = "";
-  if($dbwhere==""){
-       if($pc10_numero!=null ){
-          $sql2 .= " where solicita.pc10_numero = $pc10_numero ";
-     }
-     }else if($dbwhere != ""){
-     $sql2 = " where $dbwhere";
-     }
-     $sql .= $sql2;
-  if($ordem != null ){
-     $sql .= " order by ";
-     $campos_sql = explode("#",$ordem);
-     $virgula = "";
-  for($i=0;$i<sizeof($campos_sql);$i++){
-     $sql .= $virgula.$campos_sql[$i];
-     $virgula = ",";
- }
-}
-  return $sql;
-}
-   function sql_query_prot ( $pc10_numero=null,$campos="*",$ordem=null,$dbwhere=""){
-     $sql = "select ";
-     if($campos != "*" ){
-       $campos_sql = explode("#",$campos);
-       $virgula = "";
-       for($i=0;$i<sizeof($campos_sql);$i++){
-         $sql .= $virgula.$campos_sql[$i];
-         $virgula = ",";
-       }
-     }else{
-       $sql .= $campos;
-     }
-     $sql .= " from solicita ";
-     $sql .= "      inner join db_usuarios   	      on db_usuarios.id_usuario 		         = solicita.pc10_login";
-     $sql .= "      inner join db_depart  	 	      on db_depart.coddepto 			           = solicita.pc10_depto";
-     $sql .= "      left  join solicitem     	      on solicitem.pc11_numero 		           = solicita.pc10_numero";
-     $sql .= "      left  join solicitemprot 	      on solicitemprot.pc49_solicitem        = solicitem.pc11_codigo";
-     $sql .= "      left  join protprocesso  	      on protprocesso.p58_codproc 	         = solicitemprot.pc49_protprocesso";
-     $sql .= "      left  join procandam	 	        on procandam.p61_codandam 		         = protprocesso.p58_codandam";
-     $sql .= "      left  join pcprocitem           on pcprocitem.pc81_solicitem           = solicitem.pc11_codigo";
-     $sql .= "      left  join empautitempcprocitem on empautitempcprocitem.e73_pcprocitem = pcprocitem.pc81_codprocitem";
-     $sql .= "      left  join empautitem           on empautitem.e55_autori               = empautitempcprocitem.e73_autori";
-     $sql .= "                                     and empautitem.e55_sequen               = empautitempcprocitem.e73_sequen";
-     $sql .= "      left  join empautoriza 	 	      on empautoriza.e54_autori 		         = empautitem.e55_autori ";
-     $sql .= "      left  join empempaut   	 	      on empempaut.e61_autori 		           = empautitem.e55_autori ";
-     $sql .= "      left  join empempenho  	        on empempenho.e60_numemp 		           = empempaut.e61_numemp ";
-     $sql .= "      left  join proctransferproc     on proctransferproc.p63_codproc        = protprocesso.p58_codproc";
-     $sql .= "      left  join proctransand 	      on proctransferproc.p63_codtran        = proctransand.p64_codtran";
-     $sql2 = "";
-     if($dbwhere==""){
-       if($pc10_numero!=null ){
-         $sql2 .= " where solicita.pc10_numero = $pc10_numero ";
-       }
-     }else if($dbwhere != ""){
-       $sql2 = " where $dbwhere";
-     }
-     $sql .= $sql2;
-     if($ordem != null ){
-       $sql .= " order by ";
-       $campos_sql = explode("#",$ordem);
-       $virgula = "";
-       for($i=0;$i<sizeof($campos_sql);$i++){
-         $sql .= $virgula.$campos_sql[$i];
-         $virgula = ",";
-       }
-     }
-     return $sql;
-  }
-   function sql_query_rel ( $pc10_numero=null,$campos="*",$ordem=null,$dbwhere=""){
-     $sql = "select ";
-     if($campos != "*" ){
-       $campos_sql = explode("#",$campos);
-       $virgula = "";
-       for($i=0;$i<sizeof($campos_sql);$i++){
-         $sql .= $virgula.$campos_sql[$i];
-         $virgula = ",";
-       }
-     }else{
-       $sql .= $campos;
-     }
-     $sql .= " from solicita ";
-     $sql .= "      left  join solicitatipo         on solicitatipo.pc12_numero            = solicita.pc10_numero";
-     $sql .= "      left  join pctipocompra         on pctipocompra.pc50_codcom            = solicitatipo.pc12_tipo";
-     $sql .= "      inner join solicitem            on solicitem.pc11_numero               = solicita.pc10_numero";
-     $sql .= "      left  join pcdotac              on pcdotac.pc13_codigo                 = solicitem.pc11_codigo";
-     $sql .= "      left  join solicitempcmater     on solicitempcmater.pc16_solicitem     = solicitem.pc11_codigo";
-     $sql .= "      left  join pcmater              on pcmater.pc01_codmater               = solicitempcmater.pc16_codmater";
-     $sql .= "      inner join db_depart            on db_depart.coddepto                  = solicita.pc10_depto";
-     $sql .= "      left  join pcsugforn            on pcsugforn.pc40_solic                = solicita.pc10_numero";
-     $sql .= "      left  join cgm                  on pcsugforn.pc40_numcgm               = cgm.z01_numcgm";
-     $sql .= "      left  join pcprocitem           on pcprocitem.pc81_solicitem           = solicitem.pc11_codigo";
-     $sql .= "      left  join empautitempcprocitem on empautitempcprocitem.e73_pcprocitem = pcprocitem.pc81_codprocitem";
-     $sql .= "      left  join empautidot           on empautidot.e56_autori               = empautitempcprocitem.e73_autori";
-     $sql .= "      left  join empautitem           on empautitem.e55_autori               = empautitempcprocitem.e73_autori";
-     $sql .= "                                     and empautitem.e55_sequen               = empautitempcprocitem.e73_sequen";
-
-     $sql2 = "";
-     if($dbwhere==""){
-       if($pc10_numero!=null ){
-         $sql2 .= " where solicita.pc10_numero = $pc10_numero ";
-       }
-     }else if($dbwhere != ""){
-       $sql2 = " where $dbwhere";
-     }
-     $sql .= $sql2;
-     if($ordem != null ){
-       $sql .= " order by ";
-       $campos_sql = explode("#",$ordem);
-       $virgula = "";
-       for($i=0;$i<sizeof($campos_sql);$i++){
-         $sql .= $virgula.$campos_sql[$i];
-         $virgula = ",";
-       }
-     }
-     return $sql;
-  }
-   function sql_query_reserv ( $pc10_numero=null,$campos="*",$ordem=null,$dbwhere=""){
-     $sql = "select ";
-     if($campos != "*" ){
-       $campos_sql = explode("#",$campos);
-       $virgula = "";
-       for($i=0;$i<sizeof($campos_sql);$i++){
-         $sql .= $virgula.$campos_sql[$i];
-         $virgula = ",";
-       }
-     }else{
-       $sql .= $campos;
-     }
-     $sql .= " from solicita ";
-     $sql .= "      inner join db_config            on db_config.codigo                    = solicita.pc10_instit";
-     $sql .= "      inner join db_usuarios          on db_usuarios.id_usuario              = solicita.pc10_login";
-     $sql .= "      inner join db_depart            on db_depart.coddepto                  = solicita.pc10_depto";
-     $sql .= "      left  join solicitem            on solicitem.pc11_numero               = solicita.pc10_numero";
-     $sql .= "      left  join pcdotac              on solicitem.pc11_codigo               = pcdotac.pc13_codigo";
-     $sql .= "      left  join orcreservasol        on pcdotac.pc13_sequencial             = orcreservasol.o82_pcdotac";
-     $sql .= "      left  join orcreserva           on orcreserva.o80_codres               = orcreservasol.o82_codres";
-     $sql .= "      left  join pcprocitem           on pcprocitem.pc81_solicitem           = solicitem.pc11_codigo";
-     $sql .= "      left  join empautitempcprocitem on empautitempcprocitem.e73_pcprocitem = pcprocitem.pc81_codprocitem";
-     $sql .= "      left  join empautitem           on empautitem.e55_autori               = empautitempcprocitem.e73_autori";
-     $sql .= "                                     and empautitem.e55_sequen               = empautitempcprocitem.e73_sequen";
-     $sql .= "      left  join empautoriza          on empautoriza.e54_autori              = empautitem.e55_autori ";
-     $sql .= "      left  join empempaut            on empempaut.e61_autori                = empautitem.e55_autori ";
-     $sql .= "      left  join empempenho           on empempenho.e60_numemp               = empempaut.e61_numemp ";
-     $sql2 = "";
-     if($dbwhere==""){
-       if($pc10_numero!=null ){
-         $sql2 .= " where solicita.pc10_numero = $pc10_numero ";
-       }
-     }else if($dbwhere != ""){
-       $sql2 = " where $dbwhere";
-     }
-     $sql .= $sql2;
-     if($ordem != null ){
-       $sql .= " order by ";
-       $campos_sql = explode("#",$ordem);
-       $virgula = "";
-       for($i=0;$i<sizeof($campos_sql);$i++){
-         $sql .= $virgula.$campos_sql[$i];
-         $virgula = ",";
-       }
-     }
-     return $sql;
-  }
-   function sql_query_solicita ( $pc10_numero=null,$campos="*",$ordem=null,$dbwhere=""){
-     $sql = "select ";
-     if($campos != "*" ){
-       $campos_sql = explode("#",$campos);
-       $virgula = "";
-       for($i=0;$i<sizeof($campos_sql);$i++){
-         $sql .= $virgula.$campos_sql[$i];
-         $virgula = ",";
-       }
-     }else{
-       $sql .= $campos;
-     }
-     $sql .= " from solicita ";
-     $sql .= "      left join solicitatipo on solicitatipo.pc12_numero = solicita.pc10_numero";
-     $sql .= "      inner join db_depart on db_depart.coddepto = solicita.pc10_depto";
-     $sql .= "      left join pctipocompra on pctipocompra.pc50_codcom = solicitatipo.pc12_tipo";
-     $sql .= "      inner join db_usuarios on db_usuarios.id_usuario = solicita.pc10_login";
-     $sql .= "      left  join orctiporecconveniosolicita	on o78_solicita  	 = pc10_numero";
-     $sql .= "      left  join pactoplano                	on o78_pactoplano  	 = o74_sequencial";
-     $sql .= "      left  join solicitaprotprocesso      	on solicitaprotprocesso.pc90_solicita = solicita.pc10_numero";
-     $sql .= "      left  join solicitaanulada on pc67_solicita = pc10_numero";
-     $sql2 = "";
-     if($dbwhere==""){
-       if($pc10_numero!=null ){
-         $sql2 .= " where solicita.pc10_numero = $pc10_numero ";
-       }
-     }else if($dbwhere != ""){
-       $sql2 = " where $dbwhere";
-     }
-     $sql .= $sql2;
-     if($ordem != null ){
-       $sql .= " order by ";
-       $campos_sql = explode("#",$ordem);
-       $virgula = "";
-       for($i=0;$i<sizeof($campos_sql);$i++){
-         $sql .= $virgula.$campos_sql[$i];
-         $virgula = ",";
-       }
-     }
-     return $sql;
-  }
-   function sql_query_tipo ( $pc10_numero=null,$campos="*",$ordem=null,$dbwhere=""){
-     $sql = "select ";
-     if($campos != "*" ){
-       $campos_sql = explode("#",$campos);
-       $virgula = "";
-       for($i=0;$i<sizeof($campos_sql);$i++){
-         $sql .= $virgula.$campos_sql[$i];
-         $virgula = ",";
-       }
-     }else{
-       $sql .= $campos;
-     }
-     $sql .= " from solicita ";
-     $sql .= "      left join solicitatipo on solicitatipo.pc12_numero = solicita.pc10_numero";
-     $sql .= "      inner join solicitacaotipo on pc52_sequencial = solicita.pc10_solicitacaotipo";
-     $sql .= "      left join pctipocompra on pctipocompra.pc50_codcom = solicitatipo.pc12_tipo";
-     $sql .= "      inner join db_depart on db_depart.coddepto = solicita.pc10_depto";
-     $sql .= "      inner join db_usuarios on db_usuarios.id_usuario = solicita.pc10_login";
-     $sql2 = "";
-     if($dbwhere==""){
-       if($pc10_numero!=null ){
-         $sql2 .= " where solicita.pc10_numero = $pc10_numero ";
-       }
-     }else if($dbwhere != ""){
-       $sql2 = " where $dbwhere";
-     }
-     $sql .= $sql2;
-     if($ordem != null ){
-       $sql .= " order by ";
-       $campos_sql = explode("#",$ordem);
-       $virgula = "";
-       for($i=0;$i<sizeof($campos_sql);$i++){
-         $sql .= $virgula.$campos_sql[$i];
-         $virgula = ",";
-       }
-     }
-     return $sql;
-  }
-
-
-   function sql_query_solprot( $pc10_numero=null,$campos="*",$ordem=null,$dbwhere=""){
-     $sql = "select ";
-     if($campos != "*" ){
-       $campos_sql = explode("#",$campos);
-       $virgula = "";
-       for($i=0;$i<sizeof($campos_sql);$i++){
-         $sql .= $virgula.$campos_sql[$i];
-         $virgula = ",";
-       }
-     }else{
-       $sql .= $campos;
-     }
-     $sql .= " from solicita ";
-     $sql .= "      inner join db_usuarios   	            on db_usuarios.id_usuario 		         = solicita.pc10_login";
-     $sql .= "      inner join db_depart     	            on db_depart.coddepto 			           = solicita.pc10_depto";
-     $sql .= "      left  join solicitem 	 	              on solicitem.pc11_numero 		           = solicita.pc10_numero";
-     $sql .= "		  left  join solicitemprot 	            on solicitemprot.pc49_solicitem        = solicitem.pc11_codigo";
-     $sql .= "		  left  join protprocesso  	            on protprocesso.p58_codproc            = solicitemprot.pc49_protprocesso";
-     $sql .= "		  left  join proctransferproc           on proctransferproc.p63_codproc        = protprocesso.p58_codproc";
-     $sql .= "      left  join pcprocitem                 on pcprocitem.pc81_solicitem           = solicitem.pc11_codigo";
-     $sql .= "      left  join empautitempcprocitem       on empautitempcprocitem.e73_pcprocitem = pcprocitem.pc81_codprocitem";
-     $sql .= "      left  join empautitem                 on empautitem.e55_autori               = empautitempcprocitem.e73_autori";
-     $sql .= "                                           and empautitem.e55_sequen               = empautitempcprocitem.e73_sequen";
-     $sql .= "      left  join empautoriza	 	            on empautoriza.e54_autori 		         = empautitem.e55_autori";
-     $sql .= "      left  join orctiporecconveniosolicita	on o78_solicita  	                     = pc10_numero";
-     $sql2 = "";
-
-     if($dbwhere==""){
-       if($pc10_numero!=null ){
-         $sql2 .= " where solicita.pc10_numero = $pc10_numero ";
-       }
-     }else if($dbwhere != ""){
-       $sql2 = " where $dbwhere";
-     }
-     $sql .= $sql2;
-     if($ordem != null ){
-       $sql .= " order by ";
-       $campos_sql = explode("#",$ordem);
-       $virgula = "";
-       for($i=0;$i<sizeof($campos_sql);$i++){
-         $sql .= $virgula.$campos_sql[$i];
-         $virgula = ",";
-       }
-     }
-     return $sql;
-=======
   function sql_query_file($pc10_numero = null, $campos = "*", $ordem = null, $dbwhere = "")
   {
     $sql = "select ";
     if ($campos != "*") {
-      $campos_sql = split("#", $campos);
+      $campos_sql = explode("#", $campos);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -1231,7 +748,7 @@ function sql_query_estregistro ( $pc10_numero=null,$campos="*",$ordem=null,$dbwh
     $sql .= $sql2;
     if ($ordem != null) {
       $sql .= " order by ";
-      $campos_sql = split("#", $ordem);
+      $campos_sql = explode("#", $ordem);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -1244,7 +761,7 @@ function sql_query_estregistro ( $pc10_numero=null,$campos="*",$ordem=null,$dbwh
   {
     $sql = "select ";
     if ($campos != "*") {
-      $campos_sql = split("#", $campos);
+      $campos_sql = explode("#", $campos);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -1277,7 +794,7 @@ function sql_query_estregistro ( $pc10_numero=null,$campos="*",$ordem=null,$dbwh
     $sql .= $sql2;
     if ($ordem != null) {
       $sql .= " order by ";
-      $campos_sql = split("#", $ordem);
+      $campos_sql = explode("#", $ordem);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -1290,7 +807,7 @@ function sql_query_estregistro ( $pc10_numero=null,$campos="*",$ordem=null,$dbwh
   {
     $sql = "select ";
     if ($campos != "*") {
-      $campos_sql = split("#", $campos);
+      $campos_sql = explode("#", $campos);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -1314,7 +831,7 @@ function sql_query_estregistro ( $pc10_numero=null,$campos="*",$ordem=null,$dbwh
     $sql .= $sql2;
     if ($ordem != null) {
       $sql .= " order by ";
-      $campos_sql = split("#", $ordem);
+      $campos_sql = explode("#", $ordem);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -1327,7 +844,7 @@ function sql_query_estregistro ( $pc10_numero=null,$campos="*",$ordem=null,$dbwh
   {
     $sql = "select ";
     if ($campos != "*") {
-      $campos_sql = split("#", $campos);
+      $campos_sql = explode("#", $campos);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -1363,7 +880,7 @@ function sql_query_estregistro ( $pc10_numero=null,$campos="*",$ordem=null,$dbwh
     $sql .= $sql2;
     if ($ordem != null) {
       $sql .= " order by ";
-      $campos_sql = split("#", $ordem);
+      $campos_sql = explode("#", $ordem);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -1376,7 +893,7 @@ function sql_query_estregistro ( $pc10_numero=null,$campos="*",$ordem=null,$dbwh
   {
     $sql = "select ";
     if ($campos != "*") {
-      $campos_sql = split("#", $campos);
+      $campos_sql = explode("#", $campos);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -1412,7 +929,7 @@ function sql_query_estregistro ( $pc10_numero=null,$campos="*",$ordem=null,$dbwh
     $sql .= $sql2;
     if ($ordem != null) {
       $sql .= " order by ";
-      $campos_sql = split("#", $ordem);
+      $campos_sql = explode("#", $ordem);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -1425,7 +942,7 @@ function sql_query_estregistro ( $pc10_numero=null,$campos="*",$ordem=null,$dbwh
   {
     $sql = "select ";
     if ($campos != "*") {
-      $campos_sql = split("#", $campos);
+      $campos_sql = explode("#", $campos);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -1460,7 +977,7 @@ function sql_query_estregistro ( $pc10_numero=null,$campos="*",$ordem=null,$dbwh
     $sql .= $sql2;
     if ($ordem != null) {
       $sql .= " order by ";
-      $campos_sql = split("#", $ordem);
+      $campos_sql = explode("#", $ordem);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -1473,7 +990,7 @@ function sql_query_estregistro ( $pc10_numero=null,$campos="*",$ordem=null,$dbwh
   {
     $sql = "select ";
     if ($campos != "*") {
-      $campos_sql = split("#", $campos);
+      $campos_sql = explode("#", $campos);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -1502,7 +1019,7 @@ function sql_query_estregistro ( $pc10_numero=null,$campos="*",$ordem=null,$dbwh
     $sql .= $sql2;
     if ($ordem != null) {
       $sql .= " order by ";
-      $campos_sql = split("#", $ordem);
+      $campos_sql = explode("#", $ordem);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -1515,7 +1032,7 @@ function sql_query_estregistro ( $pc10_numero=null,$campos="*",$ordem=null,$dbwh
   {
     $sql = "select ";
     if ($campos != "*") {
-      $campos_sql = split("#", $campos);
+      $campos_sql = explode("#", $campos);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -1541,7 +1058,7 @@ function sql_query_estregistro ( $pc10_numero=null,$campos="*",$ordem=null,$dbwh
     $sql .= $sql2;
     if ($ordem != null) {
       $sql .= " order by ";
-      $campos_sql = split("#", $ordem);
+      $campos_sql = explode("#", $ordem);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -1556,7 +1073,7 @@ function sql_query_estregistro ( $pc10_numero=null,$campos="*",$ordem=null,$dbwh
   {
     $sql = "select ";
     if ($campos != "*") {
-      $campos_sql = split("#", $campos);
+      $campos_sql = explode("#", $campos);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -1590,7 +1107,7 @@ function sql_query_estregistro ( $pc10_numero=null,$campos="*",$ordem=null,$dbwh
     $sql .= $sql2;
     if ($ordem != null) {
       $sql .= " order by ";
-      $campos_sql = split("#", $ordem);
+      $campos_sql = explode("#", $ordem);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -1598,112 +1115,14 @@ function sql_query_estregistro ( $pc10_numero=null,$campos="*",$ordem=null,$dbwh
       }
     }
     return $sql;
->>>>>>> master
   }
 
   function sql_query_estimativa($pc10_numero = null, $campos = "*", $ordem = null, $dbwhere = "")
   {
 
     $sql = "select ";
-<<<<<<< HEAD
-     if($campos != "*" ){
-       $campos_sql = explode("#",$campos);
-       $virgula = "";
-       for($i=0;$i<sizeof($campos_sql);$i++){
-         $sql .= $virgula.$campos_sql[$i];
-         $virgula = ",";
-       }
-     }else{
-       $sql .= $campos;
-     }
-     $sql .= " from solicita ";
-//     $sql .= "      inner join db_config     on  db_config.codigo = solicita.pc10_instit";
-     $sql .= "      inner join db_usuarios     on  db_usuarios.id_usuario = solicita.pc10_login";
-     $sql .= "      inner join db_depart       on  db_depart.coddepto = solicita.pc10_depto";
-     $sql .= "      left  join solicitavinculo on  solicita.pc10_numero = solicitavinculo.pc53_solicitafilho";
-     $sql .= "      left  join solicitaanulada  on  solicitaanulada.pc67_solicita = solicita.pc10_numero ";
-     $sql2 = "";
-     if($dbwhere==""){
-       if($pc10_numero!=null ){
-         $sql2 .= " where solicita.pc10_numero = $pc10_numero ";
-       }
-     }else if($dbwhere != ""){
-       $sql2 = " where $dbwhere";
-     }
-     $sql .= $sql2;
-     if($ordem != null ){
-       $sql .= " order by ";
-       $campos_sql = explode("#",$ordem);
-       $virgula = "";
-       for($i=0;$i<sizeof($campos_sql);$i++){
-         $sql .= $virgula.$campos_sql[$i];
-         $virgula = ",";
-       }
-     }
-     return $sql;
-  }
-
-  function sql_query_solicitaanulada ( $pc10_numero=null,$campos="*",$ordem=null,$dbwhere=""){
-     $sql = "select ";
-     if($campos != "*" ){
-       $campos_sql = explode("#",$campos);
-       $virgula = "";
-       for($i=0;$i<sizeof($campos_sql);$i++){
-         $sql .= $virgula.$campos_sql[$i];
-         $virgula = ",";
-       }
-     }else{
-       $sql .= $campos;
-     }
-     $sql .= " from solicita ";
-     $sql .= "      inner join db_config  on  db_config.codigo = solicita.pc10_instit";
-     $sql .= "      inner join db_usuarios          on db_usuarios.id_usuario              = solicita.pc10_login";
-     $sql .= "      inner join db_depart            on db_depart.coddepto                  = solicita.pc10_depto";
-     $sql .= "      left  join solicitem            on solicitem.pc11_numero               = solicita.pc10_numero";
-     $sql .= "      left  join pcprocitem           on pcprocitem.pc81_solicitem           = solicitem.pc11_codigo";
-     $sql .= "      left  join empautitempcprocitem on empautitempcprocitem.e73_pcprocitem = pcprocitem.pc81_codprocitem";
-     $sql .= "      left  join empautitem           on empautitem.e55_autori               = empautitempcprocitem.e73_autori";
-     $sql .= "                                     and empautitem.e55_sequen               = empautitempcprocitem.e73_sequen";
-     $sql .= "      left  join empautoriza          on empautoriza.e54_autori              = empautitem.e55_autori ";
-     $sql .= "      left  join empempaut            on empempaut.e61_autori                = empautitem.e55_autori ";
-     $sql .= "      left  join empempenho           on empempenho.e60_numemp               = empempaut.e61_numemp ";
-     $sql .= "      left  join solicitaanulada      on solicitaanulada.pc67_solicita       = solicita.pc10_numero ";
-     $sql2 = "";
-     if($dbwhere==""){
-       if($pc10_numero!=null ){
-         $sql2 .= " where solicita.pc10_numero = $pc10_numero ";
-       }
-     }else if($dbwhere != ""){
-       $sql2 = " where $dbwhere";
-     }
-     $sql .= $sql2;
-     if($ordem != null ){
-       $sql .= " order by ";
-       $campos_sql = explode("#",$ordem);
-       $virgula = "";
-       for($i=0;$i<sizeof($campos_sql);$i++){
-         $sql .= $virgula.$campos_sql[$i];
-         $virgula = ",";
-       }
-     }
-     return $sql;
-  }
-
-  function sql_query_compilacao ( $pc10_numero=null,$campos="*",$ordem=null,$dbwhere="", $lVerificaVinculos = false){
-     $sql = "select ";
-     if($campos != "*" ){
-       $campos_sql = explode("#",$campos);
-       $virgula = "";
-       for($i=0;$i<sizeof($campos_sql);$i++){
-         $sql .= $virgula.$campos_sql[$i];
-         $virgula = ",";
-       }
-     }else{
-       $sql .= $campos;
-     }
-=======
     if ($campos != "*") {
-      $campos_sql = split("#", $campos);
+      $campos_sql = explode("#", $campos);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -1729,7 +1148,7 @@ function sql_query_estregistro ( $pc10_numero=null,$campos="*",$ordem=null,$dbwh
     $sql .= $sql2;
     if ($ordem != null) {
       $sql .= " order by ";
-      $campos_sql = split("#", $ordem);
+      $campos_sql = explode("#", $ordem);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -1743,7 +1162,7 @@ function sql_query_estregistro ( $pc10_numero=null,$campos="*",$ordem=null,$dbwh
   {
     $sql = "select ";
     if ($campos != "*") {
-      $campos_sql = split("#", $campos);
+      $campos_sql = explode("#", $campos);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -1776,7 +1195,7 @@ function sql_query_estregistro ( $pc10_numero=null,$campos="*",$ordem=null,$dbwh
     $sql .= $sql2;
     if ($ordem != null) {
       $sql .= " order by ";
-      $campos_sql = split("#", $ordem);
+      $campos_sql = explode("#", $ordem);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -1790,7 +1209,7 @@ function sql_query_estregistro ( $pc10_numero=null,$campos="*",$ordem=null,$dbwh
   {
     $sql = "select ";
     if ($campos != "*") {
-      $campos_sql = split("#", $campos);
+      $campos_sql = explode("#", $campos);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -1799,7 +1218,6 @@ function sql_query_estregistro ( $pc10_numero=null,$campos="*",$ordem=null,$dbwh
     } else {
       $sql .= $campos;
     }
->>>>>>> master
     $sql .= " from solicita";
     $sql .= "      inner join solicitem  on solicitem.pc11_numero        = solicita.pc10_numero         ";
     $sql .= "      inner join pcprocitem on pcprocitem.pc81_solicitem    = solicitem.pc11_codigo        ";
@@ -1830,23 +1248,10 @@ function sql_query_estregistro ( $pc10_numero=null,$campos="*",$ordem=null,$dbwh
       $sql2 = " and $dbwhere";
     }
 
-<<<<<<< HEAD
-     $sql .= $sql2;
-     if($ordem != null ){
-       $sql .= " order by ";
-       $campos_sql = explode("#",$ordem);
-       $virgula = "";
-       for($i=0;$i<sizeof($campos_sql);$i++){
-         $sql .= $virgula.$campos_sql[$i];
-         $virgula = ",";
-       }
-     }
-     return $sql;
-=======
     $sql .= $sql2;
     if ($ordem != null) {
       $sql .= " order by ";
-      $campos_sql = split("#", $ordem);
+      $campos_sql = explode("#", $ordem);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -1854,7 +1259,6 @@ function sql_query_estregistro ( $pc10_numero=null,$campos="*",$ordem=null,$dbwh
       }
     }
     return $sql;
->>>>>>> master
   }
 
 
@@ -1862,13 +1266,8 @@ function sql_query_estregistro ( $pc10_numero=null,$campos="*",$ordem=null,$dbwh
   {
 
     $sql = "select ";
-<<<<<<< HEAD
-    if($campos != "*" ){
-      $campos_sql = explode("#",$campos);
-=======
     if ($campos != "*") {
-      $campos_sql = split("#", $campos);
->>>>>>> master
+      $campos_sql = explode("#", $campos);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -1915,11 +1314,7 @@ function sql_query_estregistro ( $pc10_numero=null,$campos="*",$ordem=null,$dbwh
     $sql .= $sql2;
     if ($ordem != null) {
       $sql .= " order by ";
-<<<<<<< HEAD
-      $campos_sql = explode("#",$ordem);
-=======
-      $campos_sql = split("#", $ordem);
->>>>>>> master
+      $campos_sql = explode("#", $ordem);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -1929,55 +1324,11 @@ function sql_query_estregistro ( $pc10_numero=null,$campos="*",$ordem=null,$dbwh
     return $sql;
   }
 
-<<<<<<< HEAD
-function sql_query_licitacao_dotacao ( $pc10_numero=null,$campos="*",$ordem=null,$dbwhere=""){
-     $sql = "select ";
-     if($campos != "*" ){
-       $campos_sql = explode("#",$campos);
-       $virgula = "";
-       for($i=0;$i<sizeof($campos_sql);$i++){
-         $sql .= $virgula.$campos_sql[$i];
-         $virgula = ",";
-       }
-     }else{
-       $sql .= $campos;
-     }
-     $sql .= " from solicita ";
-//     $sql .= "      inner join db_config  on  db_config.codigo = solicita.pc10_instit";
-     $sql .= "      inner join db_usuarios  on  db_usuarios.id_usuario = solicita.pc10_login";
-     $sql .= "      inner join db_depart    on  db_depart.coddepto    = solicita.pc10_depto";
-     $sql .= "      inner join solicitem    on  solicita.pc10_numero  = solicitem.pc11_numero";
-     $sql .= "      left  join pcdotac      on  solicitem.pc11_codigo = pcdotac.pc13_codigo";
-     $sql .= "      left  join pcprocitem   on  solicitem.pc11_codigo = pcprocitem.pc81_solicitem";
-     $sql .= "      left  join liclicitem   on  pcprocitem.pc81_codprocitem = l21_codpcprocitem";
-     $sql .= "      left  join liclicita    on  l21_codliclicita = l20_codigo";
-     $sql .= "      inner join solicitacaotipo  on  solicitacaotipo.pc52_sequencial = solicita.pc10_solicitacaotipo";
-     $sql .= "      left  join solicitaanulada  on  solicitaanulada.pc67_solicita = solicita.pc10_numero ";
-     $sql2 = "";
-     if($dbwhere==""){
-       if($pc10_numero!=null ){
-         $sql2 .= " where solicita.pc10_numero = $pc10_numero ";
-       }
-     }else if($dbwhere != ""){
-       $sql2 = " where $dbwhere";
-     }
-     $sql .= $sql2;
-     if($ordem != null ){
-       $sql .= " order by ";
-       $campos_sql = explode("#",$ordem);
-       $virgula = "";
-       for($i=0;$i<sizeof($campos_sql);$i++){
-         $sql .= $virgula.$campos_sql[$i];
-         $virgula = ",";
-       }
-     }
-     return $sql;
-=======
   function sql_query_licitacao_dotacao($pc10_numero = null, $campos = "*", $ordem = null, $dbwhere = "")
   {
     $sql = "select ";
     if ($campos != "*") {
-      $campos_sql = split("#", $campos);
+      $campos_sql = explode("#", $campos);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -2008,7 +1359,7 @@ function sql_query_licitacao_dotacao ( $pc10_numero=null,$campos="*",$ordem=null
     $sql .= $sql2;
     if ($ordem != null) {
       $sql .= " order by ";
-      $campos_sql = split("#", $ordem);
+      $campos_sql = explode("#", $ordem);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -2016,7 +1367,6 @@ function sql_query_licitacao_dotacao ( $pc10_numero=null,$campos="*",$ordem=null
       }
     }
     return $sql;
->>>>>>> master
   }
 
   /**
@@ -2051,13 +1401,8 @@ function sql_query_licitacao_dotacao ( $pc10_numero=null,$campos="*",$ordem=null
   function sql_query_consulta($pc10_numero = null, $campos = "*", $ordem = null, $dbwhere = "")
   {
     $sql = "select ";
-<<<<<<< HEAD
-    if($campos != "*" ){
-      $campos_sql = explode("#",$campos);
-=======
     if ($campos != "*") {
-      $campos_sql = split("#", $campos);
->>>>>>> master
+      $campos_sql = explode("#", $campos);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -2092,11 +1437,7 @@ function sql_query_licitacao_dotacao ( $pc10_numero=null,$campos="*",$ordem=null
     $sql .= $sql2;
     if ($ordem != null) {
       $sql .= " order by ";
-<<<<<<< HEAD
-         $campos_sql = explode("#",$ordem);
-=======
-      $campos_sql = split("#", $ordem);
->>>>>>> master
+      $campos_sql = explode("#", $ordem);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -2106,45 +1447,11 @@ function sql_query_licitacao_dotacao ( $pc10_numero=null,$campos="*",$ordem=null
     return $sql;
   }
 
-<<<<<<< HEAD
-    function sql_query_liberadas ( $pc10_numero=null,$campos="*",$ordem=null,$dbwhere=""){
-      $sql = "select ";
-      if($campos != "*" ){
-        $campos_sql = explode("#",$campos);
-        $virgula = "";
-        for($i=0;$i<sizeof($campos_sql);$i++){
-          $sql .= $virgula.$campos_sql[$i];
-          $virgula = ",";
-        }
-      }else{
-        $sql .= $campos;
-      }
-      $sql .= " FROM solicita ";
-      $sql .= " INNER JOIN solicitem ON solicitem.pc11_numero = solicita.pc10_numero ";
-      $sql .= " INNER JOIN db_depart ON db_depart.coddepto = solicita.pc10_depto ";
-      $sql2 = "";
-      if($dbwhere==""){
-        if($pc10_numero!=null ){
-          $sql2 .= " where solicita.pc10_numero = $pc10_numero ";
-        }
-      }else if($dbwhere != ""){
-        $sql2 = " where $dbwhere";
-      }
-      $sql .= $sql2;
-      if($ordem != null ){
-        $sql .= " order by ";
-        $campos_sql = explode("#",$ordem);
-        $virgula = "";
-        for($i=0;$i<sizeof($campos_sql);$i++){
-          $sql .= $virgula.$campos_sql[$i];
-          $virgula = ",";
-        }
-=======
   function sql_query_liberadas($pc10_numero = null, $campos = "*", $ordem = null, $dbwhere = "")
   {
     $sql = "select ";
     if ($campos != "*") {
-      $campos_sql = split("#", $campos);
+      $campos_sql = explode("#", $campos);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -2167,58 +1474,21 @@ function sql_query_licitacao_dotacao ( $pc10_numero=null,$campos="*",$ordem=null
     $sql .= $sql2;
     if ($ordem != null) {
       $sql .= " order by ";
-      $campos_sql = split("#", $ordem);
+      $campos_sql = explode("#", $ordem);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
         $virgula = ",";
->>>>>>> master
       }
     }
     return $sql;
   }
 
-<<<<<<< HEAD
-    function sql_query_tipocompra ($pc10_numero=null,$campos="*",$ordem=null,$dbwhere=""){
-    	$sql = "select ";
-    	if($campos != "*" ){
-    		$campos_sql = explode("#",$campos);
-    		$virgula = "";
-    		for($i=0;$i<sizeof($campos_sql);$i++){
-    			$sql .= $virgula.$campos_sql[$i];
-    			$virgula = ",";
-    		}
-    	}else{
-    		$sql .= $campos;
-    	}
-    	$sql .= " from solicita ";
-    	$sql .= "      inner join solicitatipo on solicitatipo.pc12_numero = solicita.pc10_numero ";
-    	$sql .= "      inner join pctipocompra on pctipocompra.pc50_codcom = solicitatipo.pc12_tipo ";
-    	$sql2 = "";
-    	if($dbwhere==""){
-    		if($pc10_numero!=null ){
-    			$sql2 .= " where solicita.pc10_numero = $pc10_numero ";
-    		}
-    	}else if($dbwhere != ""){
-    		$sql2 = " where $dbwhere";
-    	}
-    	$sql .= $sql2;
-    	if($ordem != null ){
-    		$sql .= " order by ";
-    		$campos_sql = explode("#",$ordem);
-    		$virgula = "";
-    		for($i=0;$i<sizeof($campos_sql);$i++){
-    			$sql .= $virgula.$campos_sql[$i];
-    			$virgula = ",";
-    		}
-    	}
-    	return $sql;
-=======
   function sql_query_tipocompra($pc10_numero = null, $campos = "*", $ordem = null, $dbwhere = "")
   {
     $sql = "select ";
     if ($campos != "*") {
-      $campos_sql = split("#", $campos);
+      $campos_sql = explode("#", $campos);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -2226,7 +1496,6 @@ function sql_query_licitacao_dotacao ( $pc10_numero=null,$campos="*",$ordem=null
       }
     } else {
       $sql .= $campos;
->>>>>>> master
     }
     $sql .= " from solicita ";
     $sql .= "      inner join solicitatipo on solicitatipo.pc12_numero = solicita.pc10_numero ";
@@ -2242,7 +1511,7 @@ function sql_query_licitacao_dotacao ( $pc10_numero=null,$campos="*",$ordem=null
     $sql .= $sql2;
     if ($ordem != null) {
       $sql .= " order by ";
-      $campos_sql = split("#", $ordem);
+      $campos_sql = explode("#", $ordem);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];

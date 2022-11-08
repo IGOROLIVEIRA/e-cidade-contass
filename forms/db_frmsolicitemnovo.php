@@ -1152,7 +1152,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
   var sUrl = "com4_materialsolicitacao.RPC.php";
 
   var oRequest = new Object();
-  oRequest.numero = top.corpo.iframe_solicita.document.form1.pc10_numero.value;
+  oRequest.numero = CurrentWindow.corpo.iframe_solicita.document.form1.pc10_numero.value;
   oRequest.exec = "getItens";
   var oAjax = new Ajax.Request(
     sUrl, {

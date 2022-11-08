@@ -521,7 +521,7 @@ if (isset($chavepesquisa) || isset($pc10_numero)) {
   }
   if($erro==true){
     db_msgbox("Usuário: \\n\\nFoi gerada autorização de empenho para um ou mais item desta solicitação.\\nSolicitação de compras não poderá ser alterada.\\n\\nAdiministrador:");
-    echo "<script>top.corpo.iframe_solicita.location.href = 'com1_solicita005.php'</script>";
+    echo "<script>CurrentWindow.corpo.iframe_solicita.location.href = 'com1_solicita005.php'</script>";
   } 
   */
 
@@ -546,7 +546,7 @@ if (isset($chavepesquisa) || isset($pc10_numero)) {
         db_msgbox(_M('patrimonial.compras.com1_solicitanovo005.erro_processo_vinculado_mais_um_item_solicitacao'));
       }
 
-      echo "<script>top.corpo.iframe_solicita.location.href = 'com1_solicitanovo005.php';</script>";
+      echo "<script>CurrentWindow.corpo.iframe_solicita.location.href = 'com1_solicitanovo005.php';</script>";
     }
   }
 }
@@ -568,7 +568,7 @@ if (isset($chavepesquisa)) {
       ";
   if (!isset($ld)) {
     echo "
-         top.corpo.iframe_solicitem.location.href='com1_solicitemnovo001.php?pc11_numero=$chavepesquisa$parametro';
+         CurrentWindow.corpo.iframe_solicitem.location.href='com1_solicitemnovo001.php?pc11_numero=$chavepesquisa$parametro';
             ";
   }
 
@@ -582,7 +582,7 @@ if (isset($chavepesquisa)) {
   if ($pc30_sugforn == 't' && $iTipoSolicitacao != TIPO_SOLICITACAO_REGISTRO_PRECO) {
     echo "
                 parent.document.formaba.sugforn.disabled=false;
-                top.corpo.iframe_sugforn.location.href='com1_sugforn001.php?pc40_solic=$chavepesquisa$parametro';
+                CurrentWindow.corpo.iframe_sugforn.location.href='com1_sugforn001.php?pc40_solic=$chavepesquisa$parametro';
               ";
   }
   if (@$liberaaba == 'true') {
@@ -601,11 +601,11 @@ if (isset($chavepesquisa)) {
   <script>
       function js_db_bloqueia(){
          parent.document.formaba.solicitem.disabled=true;
-         //top.corpo.iframe_solicitem.location.href='com1_solicitemnovo001.php?pc11_numero=$pc10_numero$parametro';
+         //CurrentWindow.corpo.iframe_solicitem.location.href='com1_solicitemnovo001.php?pc11_numero=$pc10_numero$parametro';
        ";
   if (!isset($ld)) {
     echo "
-         top.corpo.iframe_solicitem.location.href='com1_solicitemnovo001.php?pc11_numero=$pc10_numero$parametro';
+         CurrentWindow.corpo.iframe_solicitem.location.href='com1_solicitemnovo001.php?pc11_numero=$pc10_numero$parametro';
 	    ";
   }
 
@@ -617,7 +617,7 @@ if (isset($chavepesquisa)) {
   if ($pc30_sugforn == 't' && $iTipoSolicitacao == TIPO_SOLICITACAO_REGISTRO_PRECO) {
     echo "
           parent.document.formaba.sugforn.disabled=true;
-          top.corpo.iframe_sugforn.location.href='com1_sugforn001.php?pc40_solic=$pc10_numero';
+          CurrentWindow.corpo.iframe_sugforn.location.href='com1_sugforn001.php?pc40_solic=$pc10_numero';
         ";
   }
   echo "

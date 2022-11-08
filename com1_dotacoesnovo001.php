@@ -370,7 +370,7 @@ if (isset($incluir)) {
 
 		var oParam = new Object();
 		oParam.exec = "excluirDotacoesCompras";
-		oParam.numero = top.corpo.iframe_solicita.document.form1.pc10_numero.value;
+		oParam.numero = CurrentWindow.corpo.iframe_solicita.document.form1.pc10_numero.value;
 		oParam.dotacao = dot;
 		oParam.reduzido = reduzido;
 		oParam.estrutural = estrutural;
@@ -424,9 +424,9 @@ if (isset($incluir)) {
 			alert('Solicitação de compra Liberada !');
 		}
 
-		numero = top.corpo.iframe_solicita.document.form1.pc10_numero.value;
-		data = top.corpo.iframe_solicita.document.form1.pc10_data.value;
-		descrdepto = top.corpo.iframe_solicita.document.form1.descrdepto.value;
+		numero = CurrentWindow.corpo.iframe_solicita.document.form1.pc10_numero.value;
+		data = CurrentWindow.corpo.iframe_solicita.document.form1.pc10_data.value;
+		descrdepto = CurrentWindow.corpo.iframe_solicita.document.form1.descrdepto.value;
 
 
 		parent.window.location.href = "com1_pcproc001.php?pc10_numero=" + numero + "&data=" + data + "&descrdepto=" + descrdepto + "";
@@ -595,12 +595,12 @@ if (isset($incluir)) {
 		qry += '&retornadepart=true';
 		qry += '&pactoplano=<?= $iPactoPlano ?>';
 		if (mostra == true) {
-			qry += '&funcao_js=top.corpo.iframe_dotacoesnovo.js_mostraorcdotacao1|o58_coddot|o41_descr';
-			js_OpenJanelaIframe('top.corpo.iframe_dotacoesnovo', 'iframe_dotacoesnovo',
+			qry += '&funcao_js=CurrentWindow.corpo.iframe_dotacoesnovo.js_mostraorcdotacao1|o58_coddot|o41_descr';
+			js_OpenJanelaIframe('CurrentWindow.corpo.iframe_dotacoesnovo', 'iframe_dotacoesnovo',
 				'func_permorcdotacao.php?' + qry, 'Pesquisa', true, '0');
 		} else {
 			qry += '&pesquisa_chave=' + dotacao;
-			js_OpenJanelaIframe('top.corpo.iframe_dotacoesnovo',
+			js_OpenJanelaIframe('CurrentWindow.corpo.iframe_dotacoesnovo',
 				'db_iframe_orcdotacao',
 				'func_permorcdotacao.php?' + qry + '&funcao_js=parent.js_mostraorcdotacao', 'Pesquisa', false);
 		}
@@ -659,7 +659,7 @@ if (isset($incluir) || (isset($importar) && $confirma == true)) {
 
 				echo "<script>
 	              if (confirm('ATENÇÃO: \\n Solicitação de outro ano!!\\nDeseja incluir os itens com suas respectivas Dotações?')) {
-								  js_OpenJanelaIframe('top.corpo.iframe_solicita','db_iframe_dotac','com4_altdotacsol001.php?importado=$importar&codnovo=$pc10_numero','Dotações',true);
+								  js_OpenJanelaIframe('CurrentWindow.corpo.iframe_solicita','db_iframe_dotac','com4_altdotacsol001.php?importado=$importar&codnovo=$pc10_numero','Dotações',true);
 								} else {
 				          location.href='com1_solicita005.php?db_opcaoBtnRegistroPreco=3&liberaaba=true&chavepesquisa=$pc10_numero';
 				        }
