@@ -26,7 +26,8 @@
  */
 
 
-class ProcessoCompras {
+class ProcessoCompras
+{
 
     const ARQUIVO_MENSAGEM = 'patrimonial.compras.ProcessoCompras.';
 
@@ -116,7 +117,8 @@ class ProcessoCompras {
     /**
      *
      */
-    function __construct($iCodigo = null) {
+    function __construct($iCodigo = null)
+    {
 
         if (!empty($iCodigo)) {
 
@@ -147,14 +149,16 @@ class ProcessoCompras {
      * Seta valor na propriedade iCodigo
      * @param integer $iCodigo
      */
-    public function setCodigo($iCodigo) {
+    public function setCodigo($iCodigo)
+    {
         $this->iCodigo = $iCodigo;
     }
     /**
      * Retorna o valor da propriedade iCodigo
      * @return integer
      */
-    public function getCodigo() {
+    public function getCodigo()
+    {
         return $this->iCodigo;
     }
 
@@ -163,7 +167,8 @@ class ProcessoCompras {
      * Retorno data no formato DD/MM/YYYY
      * @return string
      */
-    public function getDataEmissao() {
+    public function getDataEmissao()
+    {
         return $this->dtDataEmissao;
     }
 
@@ -171,7 +176,8 @@ class ProcessoCompras {
      * Define a data da emissao do processo de compras
      * @param string $dtDataEmissao data no formado dd/mm/YYYY
      */
-    public function setDataEmissao($dtDataEmissao) {
+    public function setDataEmissao($dtDataEmissao)
+    {
         $this->dtDataEmissao = $dtDataEmissao;
     }
 
@@ -179,7 +185,8 @@ class ProcessoCompras {
      * Retorna o codigo do departamento que pertence o process de compras
      * @return integer
      */
-    public function getCodigoDepartamento() {
+    public function getCodigoDepartamento()
+    {
         return $this->iCodigoDepartamento;
     }
 
@@ -187,7 +194,8 @@ class ProcessoCompras {
      * Define o departamento que pertence o processo de compras
      * @param integer $iCodigoDepartamento códigfo do departamento (db_Depart.coddeto)
      */
-    public function setCodigoDepartamento($iCodigoDepartamento) {
+    public function setCodigoDepartamento($iCodigoDepartamento)
+    {
         $this->iCodigoDepartamento = $iCodigoDepartamento;
     }
 
@@ -196,7 +204,8 @@ class ProcessoCompras {
      * Os valores que o método retorna são 1 - Em Analise 2 - Autorizado 3 - Não Autorizado
      * @return integer
      */
-    public function getSituacao() {
+    public function getSituacao()
+    {
         return $this->iSituacao;
     }
 
@@ -209,7 +218,8 @@ class ProcessoCompras {
      *        3 - O processo não foi autorizado, e não poderá ser mais utilizado.
      * @param integer $iSituacao
      */
-    public function setSituacao($iSituacao) {
+    public function setSituacao($iSituacao)
+    {
         $this->iSituacao = $iSituacao;
     }
 
@@ -217,7 +227,8 @@ class ProcessoCompras {
      * Retorna o usuário responsável pelo processo de compras
      * @return integer
      */
-    public function getUsuario() {
+    public function getUsuario()
+    {
         return $this->iUsuario;
     }
 
@@ -225,7 +236,8 @@ class ProcessoCompras {
      * Define o usuário responsável pelo processo de compras
      * @param integer $iUsuario Código do usuário db_usuarios.id_usuario
      */
-    public function setUsuario($iUsuario) {
+    public function setUsuario($iUsuario)
+    {
         $this->iUsuario = $iUsuario;
     }
 
@@ -233,7 +245,8 @@ class ProcessoCompras {
      * Retorna o nome do usuario responsável pelo processo de compras
      * @return string
      */
-    public function getNomeUsuario() {
+    public function getNomeUsuario()
+    {
         return $this->sNomeUsuario;
     }
 
@@ -241,14 +254,16 @@ class ProcessoCompras {
      * Define o nome do usuario
      * @param string $sNomeUsuario nome do usuario
      */
-    protected function setNomeUsuario($sNomeUsuario) {
+    protected function setNomeUsuario($sNomeUsuario)
+    {
         $this->sNomeUsuario = $sNomeUsuario;
     }
     /**
      * Retorna a descrição do departamento do processo de compras
      * @return string
      */
-    public function getDescricaoDepartamento() {
+    public function getDescricaoDepartamento()
+    {
         return $this->sDescricaoDepartamento;
     }
 
@@ -256,7 +271,8 @@ class ProcessoCompras {
      * define a descrição do departamento do processo de compras
      * @param unknown_type $sDescricaoDepartamento
      */
-    protected function setDescricaoDepartamento($sDescricaoDepartamento) {
+    protected function setDescricaoDepartamento($sDescricaoDepartamento)
+    {
         $this->sDescricaoDepartamento = $sDescricaoDepartamento;
     }
 
@@ -264,7 +280,8 @@ class ProcessoCompras {
      * Retorna o resumo do processo de compras
      * @return string
      */
-    public function getResumo() {
+    public function getResumo()
+    {
         return $this->sResumo;
     }
 
@@ -272,7 +289,8 @@ class ProcessoCompras {
      * define o resumo do processo de comprsa
      * @param string $sResumo
      */
-    public function setResumo($sResumo) {
+    public function setResumo($sResumo)
+    {
         $this->sResumo = $sResumo;
     }
 
@@ -280,7 +298,8 @@ class ProcessoCompras {
      * Adiciona um item no array que armazena
      * @param stdClass $oItem
      */
-    public function adicionarItem($oItem) {
+    public function adicionarItem($oItem)
+    {
         $this->aItens[] = $oItem;
     }
 
@@ -289,7 +308,8 @@ class ProcessoCompras {
      * @return ItemProcessoCompra[]
      * @acess public
      */
-    public function getItens() {
+    public function getItens()
+    {
 
         if (count($this->aItens) == 0 && !empty($this->iCodigo)) {
 
@@ -311,14 +331,15 @@ class ProcessoCompras {
         return $this->aItens;
     }
 
-    static function getItensPorFornecedor($aProcessos, $iFornecedor, $lTipo) {
+    static function getItensPorFornecedor($aProcessos, $iFornecedor, $lTipo)
+    {
 
         $oDaoPCprocItem  = db_utils::getDao("pcprocitem");
 
         $sVirgula   = "";
         $sProcessos = "";
 
-        foreach ($aProcessos as $oProcesso){
+        foreach ($aProcessos as $oProcesso) {
 
             if ($oProcesso != null || $oProcesso != '') {
 
@@ -331,10 +352,14 @@ class ProcessoCompras {
         $sCampos         .= "pc01_descrmater as material, pc23_vlrun as valorunitario,";
         $sCampos         .= "pc01_servico as servico, 1 as origem, pc18_codele as elemento,";
         $sCampos         .= "pc23_quant as quantidade, pc23_valor as valortotal,pc81_codproc as numero";
-        $sSqlProcessos   = $oDaoPCprocItem->sql_query_soljulg(null, $sCampos, "pc81_codproc, pc11_seq",
+        $sSqlProcessos   = $oDaoPCprocItem->sql_query_soljulg(
+            null,
+            $sCampos,
+            "pc81_codproc, pc11_seq",
             "pc21_numcgm= {$iFornecedor}
                                                     and ac23_sequencial is null
-                                                   and pc81_codproc in({$sProcessos})");
+                                                   and pc81_codproc in({$sProcessos})"
+        );
 
         $rsProcessos    = $oDaoPCprocItem->sql_record($sSqlProcessos);
         return db_utils::getCollectionByRecord($rsProcessos, false, false, true);
@@ -346,7 +371,8 @@ class ProcessoCompras {
      * @param integer $iFornecedor codigo do fornecedor
      * @return array
      */
-    static function getProcessosByFornecedor($iFornecedor, $lValidaAutorizadas=false) {
+    static function getProcessosByFornecedor($iFornecedor, $lValidaAutorizadas = false)
+    {
 
         $oDaoPCprocItem = db_utils::getDao("pcprocitem");
         $sWhere = '';
@@ -367,8 +393,12 @@ class ProcessoCompras {
         }
         $sCampos        = "distinct pc81_codproc as licitacao, pc10_resumo as objeto, '' as numero, pc21_numcgm as cgm";
         $sCampos       .= ", pc11_numero as numero_exercicio, pc80_data as data";
-        $sSqlProcessos  = $oDaoPCprocItem->sql_query_soljulg(null, $sCampos, "1",
-            "pc21_numcgm= {$iFornecedor} and ac23_sequencial is null  {$sWhere}");
+        $sSqlProcessos  = $oDaoPCprocItem->sql_query_soljulg(
+            null,
+            $sCampos,
+            "1",
+            "pc21_numcgm= {$iFornecedor} and ac23_sequencial is null  {$sWhere}"
+        );
 
         $rsProcessos    = $oDaoPCprocItem->sql_record($sSqlProcessos);
         return db_utils::getCollectionByRecord($rsProcessos, false, false, true);
@@ -378,7 +408,8 @@ class ProcessoCompras {
      * Salva um processo de compras para uma solicitação
      * @throws Exception
      */
-    public function salvar() {
+    public function salvar()
+    {
 
         $oDaoPcProc                    = new cl_pcproc();
         $oDaoPcProc->pc80_codproc      = null;
@@ -394,7 +425,6 @@ class ProcessoCompras {
 
             $oDaoPcProc->incluir(null);
             $this->iCodigo = $oDaoPcProc->pc80_codproc;
-
         } else {
 
             $oDaoPcProc->pc80_codproc = $this->getCodigo();
@@ -431,7 +461,6 @@ class ProcessoCompras {
                 } else {
                     $oItemProcessoCompra->pc81_codprocitem = $oDaoPcProcItem->pc81_codprocitem;
                 }
-
             } else {
                 $oDaoPcProcItem->alterar($oItemProcessoCompra->getCodigo());
             }
@@ -444,7 +473,7 @@ class ProcessoCompras {
         /**
          * Salva os lotes no processo compra informado
          */
-        if ($this->getTipoProcesso() == self::TIPO_LOTE){
+        if ($this->getTipoProcesso() == self::TIPO_LOTE) {
 
             foreach ($this->getLotes() as $oLote) {
                 $oLote->salvar();
@@ -454,7 +483,8 @@ class ProcessoCompras {
         return true;
     }
 
-    public function getItensParaAutorizacao() {
+    public function getItensParaAutorizacao()
+    {
 
         $oDaoPcOrcamJulg      = db_utils::getDao("pcorcamjulg");
         $oDaoOrcReservaSol    = db_utils::getDao("orcreservasol");
@@ -499,7 +529,7 @@ class ProcessoCompras {
         $sCampos .= "pc28_solicitem itemanulado";
 
         $sOrder = "z01_numcgm,pc13_coddot,pc18_codele, pc19_sequencial, pc19_orctiporec,pc13_sequencial";
-        $sWhere = "pc80_codproc = {$this->getCodigo()} and pcorcamjulg.pc24_pontuacao = 1 and pc10_instit = ".db_getsession("DB_instit");
+        $sWhere = "pc80_codproc = {$this->getCodigo()} and pcorcamjulg.pc24_pontuacao = 1 and pc10_instit = " . db_getsession("DB_instit");
 
         $sSqlProcCompras    = $oDaoPcProc->sql_query_gerautproc(null, $sCampos, $sOrder, $sWhere);
         $rsProcessoCompra   = $oDaoPcProc->sql_record($sSqlProcCompras);
@@ -520,14 +550,14 @@ class ProcessoCompras {
                  */
 
                 $nPercentualDotacao = 100;
-                if ( $oDados->valorunitario > 0 ) {
-                    $nPercentualDotacao = ($oDados->valordotacao*100)/($oDados->quanttotalitem*$oDados->valorunitario);
+                if ($oDados->valorunitario > 0) {
+                    $nPercentualDotacao = ($oDados->valordotacao * 100) / ($oDados->quanttotalitem * $oDados->valorunitario);
                     $oDados->percentual = $nPercentualDotacao;
                 }
                 /**
                  * retorna o valor novo da dotacao; (pode ter um aumento/diminuição do valor)
                  */
-                $nValorDotacao          = round(($oDados->valorfornecedor * $nPercentualDotacao)/100, 2);
+                $nValorDotacao          = round(($oDados->valorfornecedor * $nPercentualDotacao) / 100, 2);
                 $oDados->valordiferenca = $nValorDotacao;
 
                 /**
@@ -538,7 +568,8 @@ class ProcessoCompras {
                     null,
                     "o80_codres,o80_valor",
                     "",
-                    "o82_pcdotac = {$oDados->codigodotacaoitem}");
+                    "o82_pcdotac = {$oDados->codigodotacaoitem}"
+                );
                 $rsReservaDotacao          = $oDaoOrcReservaSol->sql_record($sSqlReservaDotacao);
                 $oDados->valorreserva      = 0;
                 $oDados->dotacaocomsaldo   = true;
@@ -553,9 +584,11 @@ class ProcessoCompras {
                 $oDados->saldoautorizar       = $oDados->valordotacao;
                 if (!empty($oDados->codigoitemprocesso)) {
 
-                    $oValoresAutorizados          = $this->getValoresParciais($oDados->codigoitemprocesso,
+                    $oValoresAutorizados          = $this->getValoresParciais(
+                        $oDados->codigoitemprocesso,
                         $oDados->codigodotacao,
-                        $oDados->contrapartida);
+                        $oDados->contrapartida
+                    );
 
                     $oDados->quantidadeautorizada = $oValoresAutorizados->iQuantidadeAutorizacao;
                     $oDados->valorautorizado      = $oValoresAutorizados->nValorAutorizacao;
@@ -563,7 +596,7 @@ class ProcessoCompras {
                 }
                 $oDotacao                     = new Dotacao($oDados->codigodotacao, $oDados->anodotacao);
                 $oDados->saldofinaldotacao    = $oDotacao->getSaldoAtualMenosReservado();
-                $oDados->servico              = $oDados->servico=='t'?true:false;
+                $oDados->servico              = $oDados->servico == 't' ? true : false;
 
                 /**
                  * Verifica se a dotação tem saldo para poder autorizar o item
@@ -573,7 +606,7 @@ class ProcessoCompras {
                     $oDados->dotacaocomsaldo = false;
                 }
 
-                if (($nSaldoAtualReserva) < ($oDados->quanttotalitem*$oDados->valorunitario) && $oDados->servico == false) {
+                if (($nSaldoAtualReserva) < ($oDados->quanttotaldotacao * $oDados->valorunitario) && $oDados->servico == false) {
                     $oDados->dotacaocomsaldo = false;
                     if ($oDados->valorreserva > $oDados->valorunitario) {
                         $oDados->dotacaocomsaldo = true;
@@ -604,24 +637,25 @@ class ProcessoCompras {
                 if ($this->oDaoParametros->numrows > 0) {
 
                     $iNumDec =  (int)db_utils::fieldsMemory($rsPeriodoParametro, 0)->e30_numdec;
-
                 }
-                $oDados->valorunitariofornecedor = number_format((float)$oDados->valorunitariofornecedor,
+                $oDados->valorunitariofornecedor = number_format(
+                    (float)$oDados->valorunitariofornecedor,
                     $iNumDec,
-                    '.','');
+                    '.',
+                    ''
+                );
                 /**
                  * buscamos o saldo da dotação do item na data que está sendo feita a atorização
                  */
-                $dataini = "2016-".date("m",db_getsession("DB_datausu"))."-01";
-                $datafim = date("Y-m-d",db_getsession("DB_datausu"));
-                $result = db_dotacaosaldo(8, 2, 2, true, ' o58_coddot = '.$oDados->codigodotacao.' and o58_anousu = '.db_getsession("DB_anousu"), db_getsession("DB_anousu"), $dataini, $datafim);
+                $dataini = "2016-" . date("m", db_getsession("DB_datausu")) . "-01";
+                $datafim = date("Y-m-d", db_getsession("DB_datausu"));
+                $result = db_dotacaosaldo(8, 2, 2, true, ' o58_coddot = ' . $oDados->codigodotacao . ' and o58_anousu = ' . db_getsession("DB_anousu"), db_getsession("DB_anousu"), $dataini, $datafim);
                 if (pg_numrows($result) > 0) {
-                    $oSaldoDotacao = db_utils::fieldsMemory($result,0);
-                    $oDados->saldodotacao = ($oSaldoDotacao->dot_ini+$oSaldoDotacao->suplementado_acumulado-$oSaldoDotacao->reduzido_acumulado)-$oSaldoDotacao->empenhado_acumulado+$oSaldoDotacao->anulado_acumulado-$oSaldoDotacao->reservado;
+                    $oSaldoDotacao = db_utils::fieldsMemory($result, 0);
+                    $oDados->saldodotacao = ($oSaldoDotacao->dot_ini + $oSaldoDotacao->suplementado_acumulado - $oSaldoDotacao->reduzido_acumulado) - $oSaldoDotacao->empenhado_acumulado + $oSaldoDotacao->anulado_acumulado - $oSaldoDotacao->reservado;
                 }
 
                 $aItens[] = $oDados;
-
             }
         }
 
@@ -638,7 +672,8 @@ class ProcessoCompras {
      * @param integer_type $iOrcTipoRec
      * @return $oDadoValorParcial
      */
-    public function getValoresParciais($iCodigoItemProcesso, $iCodigoDotacao, $iOrcTipoRec=null) {
+    public function getValoresParciais($iCodigoItemProcesso, $iCodigoDotacao, $iOrcTipoRec = null)
+    {
 
         if (empty($iCodigoItemProcesso)) {
             throw new Exception("Código do item do processo não informado!");
@@ -721,7 +756,7 @@ class ProcessoCompras {
                 $oDadoValorParcial->iQuantidadeItemJulgado += $oItemJulgado->pc23_quant;
             }
         }
-        $oDadoValorParcial->nValorSaldoTotal = ( $oDadoValorParcial->nValorItemJulgado
+        $oDadoValorParcial->nValorSaldoTotal = ($oDadoValorParcial->nValorItemJulgado
             - $oDadoValorParcial->nValorAutorizacao);
         return $oDadoValorParcial;
     }
@@ -732,7 +767,8 @@ class ProcessoCompras {
      * Gera a autorização de empenho para uma solicitação de compras
      * @param array $aDadosAutorizacao
      */
-    public function gerarAutorizacoes($aDadosAutorizacao) {
+    public function gerarAutorizacoes($aDadosAutorizacao)
+    {
 
         $aAutorizacoes     = array();
         $oDaoOrcReservaSol = db_utils::getDao("orcreservasol");
@@ -783,7 +819,8 @@ class ProcessoCompras {
                     /**
                      * Incluímos os dados na OrcReserva, caso o item ainda tenha valor dispo
                      */
-                    $oSaldo = $this->getValoresParciais($oItem->codigoprocesso,
+                    $oSaldo = $this->getValoresParciais(
+                        $oItem->codigoprocesso,
                         $oDados->dotacao,
                         $oDados->contrapartida
                     );
@@ -793,7 +830,7 @@ class ProcessoCompras {
 
                         $oDaoOrcReserva->o80_anousu = db_getsession("DB_anousu");
                         $oDaoOrcReserva->o80_coddot = $oDados->dotacao;
-                        $oDaoOrcReserva->o80_dtfim  = db_getsession("DB_anousu")."-12-31";
+                        $oDaoOrcReserva->o80_dtfim  = db_getsession("DB_anousu") . "-12-31";
                         $oDaoOrcReserva->o80_dtini  = date("Y-m-d", db_getsession("DB_datausu"));
                         $oDaoOrcReserva->o80_dtlanc = date("Y-m-d", db_getsession("DB_datausu"));
                         $oDaoOrcReserva->o80_valor  = $nNovoValorReserva;
@@ -823,16 +860,16 @@ class ProcessoCompras {
             /**
              * verificamos se a dotação tem saldo na data que está sendo feita a atorização
              */
-            $dataini = "2016-".date("m",db_getsession("DB_datausu"))."-01";
-            $datafim = date("Y-m-d",db_getsession("DB_datausu"));
-            $result = db_dotacaosaldo(8, 2, 2, true, ' o58_coddot = '.$oDados->dotacao.' and o58_anousu = '.db_getsession("DB_anousu"), db_getsession("DB_anousu"), $dataini, $datafim);
+            $dataini = "2016-" . date("m", db_getsession("DB_datausu")) . "-01";
+            $datafim = date("Y-m-d", db_getsession("DB_datausu"));
+            $result = db_dotacaosaldo(8, 2, 2, true, ' o58_coddot = ' . $oDados->dotacao . ' and o58_anousu = ' . db_getsession("DB_anousu"), db_getsession("DB_anousu"), $dataini, $datafim);
             if (pg_numrows($result) > 0) {
-                $oSaldoDotacao = db_utils::fieldsMemory($result,0);
-                $nSaldoAcumuladoDisponivel = ($oSaldoDotacao->dot_ini+$oSaldoDotacao->suplementado_acumulado-$oSaldoDotacao->reduzido_acumulado)-$oSaldoDotacao->empenhado_acumulado+$oSaldoDotacao->anulado_acumulado-$oSaldoDotacao->reservado;
+                $oSaldoDotacao = db_utils::fieldsMemory($result, 0);
+                $nSaldoAcumuladoDisponivel = ($oSaldoDotacao->dot_ini + $oSaldoDotacao->suplementado_acumulado - $oSaldoDotacao->reduzido_acumulado) - $oSaldoDotacao->empenhado_acumulado + $oSaldoDotacao->anulado_acumulado - $oSaldoDotacao->reservado;
                 if (db_formatar($nValorTotal, 'f') > db_formatar($nSaldoAcumuladoDisponivel, 'f')) {
-                    $nSaldoAcumuladoDisponivel = trim(db_formatar($nSaldoAcumuladoDisponivel,'f'));
-                    $nValorTotal = trim(db_formatar($nValorTotal,'f'));
-                    $sMsgErro = "Valor a autorizar($nValorTotal) maior que saldo($nSaldoAcumuladoDisponivel) da Dotação $oDados->dotacao na data atual(".date("d/m/Y",db_getsession("DB_datausu")).")";
+                    $nSaldoAcumuladoDisponivel = trim(db_formatar($nSaldoAcumuladoDisponivel, 'f'));
+                    $nValorTotal = trim(db_formatar($nValorTotal, 'f'));
+                    $sMsgErro = "Valor a autorizar($nValorTotal) maior que saldo($nSaldoAcumuladoDisponivel) da Dotação $oDados->dotacao na data atual(" . date("d/m/Y", db_getsession("DB_datausu")) . ")";
                     throw new Exception($sMsgErro);
                 }
             }
@@ -841,12 +878,14 @@ class ProcessoCompras {
              * Salvamos a Autorizacao;
              * Resumo da autorização
              */
-            $rsPcdotac = $oDaoPcdotac->sql_record($oDaoPcdotac->sql_query_solicita(null,
+            $rsPcdotac = $oDaoPcdotac->sql_record($oDaoPcdotac->sql_query_solicita(
+                null,
                 null,
                 null,
                 "pc10_resumo",
                 null,
-                "pc13_sequencial = {$oItem->pcdotac}"));
+                "pc13_sequencial = {$oItem->pcdotac}"
+            ));
 
             $sResumo   = $oDaoPcdotac->numrows > 0 ? db_utils::fieldsMemory($rsPcdotac, 0)->pc10_resumo : $oDados->resumo;
 
@@ -870,11 +909,11 @@ class ProcessoCompras {
 
             $oDadosRegistroPreco = $this->getDadosAutorizacao();
 
-            if($oDados->oAdesaoRegPrecoCod != ""){
+            if ($oDados->oAdesaoRegPrecoCod != "") {
                 $oDadosAdesao = $this->getDadosAdesaoRegpreco($oDados->oAdesaoRegPrecoCod);
             }
 
-            if($oDados->oLicoutrosorgaosCod != ""){
+            if ($oDados->oLicoutrosorgaosCod != "") {
                 $oDadosLicOutrosOrgaos = $this->getLicoutrosOrgaos($oDados->oLicoutrosorgaosCod);
             }
 
@@ -885,38 +924,38 @@ class ProcessoCompras {
             $oAutorizacao->setTipoCompra($oDados->tipocompra);
             $oAutorizacao->setPrazoEntrega($oDados->prazoentrega);
 
-            if($oDadosRegistroPreco[0]->l20_usaregistropreco == 't') {
-                $oAutorizacao->setNumeroLicitacao($oDadosRegistroPreco[0]->l20_edital.'/'.$oDadosRegistroPreco[0]->l20_anousu);
+            if ($oDadosRegistroPreco[0]->l20_usaregistropreco == 't') {
+                $oAutorizacao->setNumeroLicitacao($oDadosRegistroPreco[0]->l20_edital . '/' . $oDadosRegistroPreco[0]->l20_anousu);
                 $oAutorizacao->setModalidade($oDadosRegistroPreco[0]->l20_numero);
                 $oAutorizacao->setTipoCompra($oDadosRegistroPreco[0]->tipocompra);
                 $oAutorizacao->setCodigoLicitacao($oDadosRegistroPreco[0]->sequenciallicitacao);
                 $oAutorizacao->setSTipoorigem(2);
                 $oAutorizacao->setSTipoautorizacao(3);
-            }else if ($oDados->oAdesaoRegPrecoCod != null || $oDados->oAdesaoRegPrecoCod != "") {
+            } else if ($oDados->oAdesaoRegPrecoCod != null || $oDados->oAdesaoRegPrecoCod != "") {
                 $oAutorizacao->setNumeroLicitacao($oDadosAdesao[0]->si06_numeroprc . '/' . $oDadosAdesao[0]->si06_anoproc);
                 $oAutorizacao->setModalidade($oDadosAdesao[0]->si06_numlicitacao);
                 $oAutorizacao->setTipoCompra($oDados->tipocompra);
                 $oAutorizacao->setSTipoorigem(2);
                 $oAutorizacao->setSTipoautorizacao(4);
-            }else if($oDados->oLicoutrosorgaosCod != null || $oDados->oLicoutrosorgaosCod != "") {
+            } else if ($oDados->oLicoutrosorgaosCod != null || $oDados->oLicoutrosorgaosCod != "") {
                 $oAutorizacao->setNumeroLicitacao($oDadosLicOutrosOrgaos[0]->lic211_processo . '/' . $oDadosLicOutrosOrgaos[0]->lic211_anousu);
                 $oAutorizacao->setModalidade($oDadosLicOutrosOrgaos[0]->lic211_numero);
                 $oAutorizacao->setTipoCompra($oDados->tipocompra);
                 $oAutorizacao->setSTipoorigem(2);
                 $oAutorizacao->setSTipoautorizacao(2);
-            }else{
-            $oAutorizacao->setNumeroLicitacao($oDados->iNumeroLicitacao);
-            $oAutorizacao->setModalidade($oDados->iModalidade);
-            $oAutorizacao->setOutrasCondicoes($oDados->sOutrasCondicoes);
-            $oAutorizacao->setCondicaoPagamento($oDados->condicaopagamento);
-            $oAutorizacao->setSTipoorigem(1);
-            $oAutorizacao->setSTipoautorizacao(1);
+            } else {
+                $oAutorizacao->setNumeroLicitacao($oDados->iNumeroLicitacao);
+                $oAutorizacao->setModalidade($oDados->iModalidade);
+                $oAutorizacao->setOutrasCondicoes($oDados->sOutrasCondicoes);
+                $oAutorizacao->setCondicaoPagamento($oDados->condicaopagamento);
+                $oAutorizacao->setSTipoorigem(1);
+                $oAutorizacao->setSTipoautorizacao(1);
             }
             $oAutorizacao->salvar();
 
             $sProcessoAdministrativo = null;
 
-            if ( isset($oDados->e150_numeroprocesso) && !empty($oDados->e150_numeroprocesso) ){
+            if (isset($oDados->e150_numeroprocesso) && !empty($oDados->e150_numeroprocesso)) {
                 $sProcessoAdministrativo = db_stdClass::normalizeStringJsonEscapeString($oDados->e150_numeroprocesso);
             }
 
@@ -925,14 +964,16 @@ class ProcessoCompras {
              */
             $oDaoSolicitem             = db_utils::getDao("solicitem");
             $sCodigosItens             = implode(",", $aItemSolcitem);
-            $sSqlBuscaSolicitem        = $oDaoSolicitem->sql_query_solicitaprotprocesso(null,
+            $sSqlBuscaSolicitem        = $oDaoSolicitem->sql_query_solicitaprotprocesso(
+                null,
                 "solicitaprotprocesso.*",
                 null,
-                "pc11_codigo in ({$sCodigosItens})");
+                "pc11_codigo in ({$sCodigosItens})"
+            );
             $rsBuscaSolicitem          = $oDaoSolicitem->sql_record($sSqlBuscaSolicitem);
             $oDadoSolicitaProtProcesso = db_utils::fieldsMemory($rsBuscaSolicitem, 0);
 
-            if ( empty($sProcessoAdministrativo) &&  !empty($oDadoSolicitaProtProcesso->pc90_numeroprocesso) ) {
+            if (empty($sProcessoAdministrativo) &&  !empty($oDadoSolicitaProtProcesso->pc90_numeroprocesso)) {
                 $sProcessoAdministrativo = $oDadoSolicitaProtProcesso->pc90_numeroprocesso;
             }
 
@@ -959,10 +1000,11 @@ class ProcessoCompras {
      * Busca as solicitações que tem dotação do ano anterior.
      * @return mixed
      */
-    public function getSolicitacoesDotacaoAnoAnterior() {
+    public function getSolicitacoesDotacaoAnoAnterior()
+    {
 
         $oDaoPcProcItem   = db_utils::getDao("pcprocitem");
-        $sWhereDotacao    = "pc81_codproc = {$this->getCodigo()} and pc13_anousu < ".db_getsession("DB_anousu");
+        $sWhereDotacao    = "pc81_codproc = {$this->getCodigo()} and pc13_anousu < " . db_getsession("DB_anousu");
         $sCamposDotacao   = "distinct pc11_numero as solicita";
         $sSqlBuscaDotacao = $oDaoPcProcItem->sql_query_dotac(null, $sCamposDotacao, null, $sWhereDotacao);
         $rsBuscaDotacao   = $oDaoPcProcItem->sql_record($sSqlBuscaDotacao);
@@ -988,7 +1030,8 @@ class ProcessoCompras {
      * @throws BusinessException
      * @access public
      */
-    public function adicionarLote($sNomeLote) {
+    public function adicionarLote($sNomeLote)
+    {
 
         if (empty($sNomeLote)) {
             throw new BusinessException(_M(ProcessoCompras::ARQUIVO_MENSAGEM . "descricao_nao_informado"));
@@ -1017,7 +1060,8 @@ class ProcessoCompras {
      * @return LoteProcessoCompra[]
      * @acess public
      */
-    public function getLotes() {
+    public function getLotes()
+    {
 
         if (count($this->aLotes) == 0) {
 
@@ -1043,7 +1087,8 @@ class ProcessoCompras {
      * @param Integer $iCodigoLote
      * @return LoteProcessaCompra|boolean
      */
-    public function getLotePorCodigo($iCodigoLote) {
+    public function getLotePorCodigo($iCodigoLote)
+    {
 
         foreach ($this->getLotes() as $oLote) {
 
@@ -1062,11 +1107,12 @@ class ProcessoCompras {
      * @param Integer $iCodigoItem
      * @return boolean | ItemProcessoCompra
      */
-    public function getItemPorCodigo($iCodigoItem) {
+    public function getItemPorCodigo($iCodigoItem)
+    {
 
         foreach ($this->getItens() as $oItemProcessoCompra) {
 
-            if ($oItemProcessoCompra->getCodigo() == $iCodigoItem){
+            if ($oItemProcessoCompra->getCodigo() == $iCodigoItem) {
                 return $oItemProcessoCompra;
             }
         }
@@ -1078,7 +1124,8 @@ class ProcessoCompras {
      * Retorna o tipo de processo de compra
      * @return integer
      */
-    public function getTipoProcesso() {
+    public function getTipoProcesso()
+    {
         return $this->iTipoProcesso;
     }
 
@@ -1086,7 +1133,8 @@ class ProcessoCompras {
      * Retorna o Criterio de Adjudicacao
      * @return integer
      */
-    public function getCriterioAdjudicacao() {
+    public function getCriterioAdjudicacao()
+    {
         return $this->iCriterioAdjudicacao;
     }
 
@@ -1094,7 +1142,8 @@ class ProcessoCompras {
      * Retorna todos os orcamentos do processo de compras
      * @return OrcamentoCompra[]
      */
-    public function getOrcamentos() {
+    public function getOrcamentos()
+    {
 
         $aOrcamentos     = array();
         $oDaoPcOrcamItem = new cl_pcorcamitemproc();
@@ -1116,7 +1165,8 @@ class ProcessoCompras {
      * Seta o tipo de processo de compra
      * @param integer $iTipoProcesso
      */
-    public function setTipoProcesso($iTipoProcesso) {
+    public function setTipoProcesso($iTipoProcesso)
+    {
         $this->iTipoProcesso = $iTipoProcesso;
     }
 
@@ -1124,12 +1174,14 @@ class ProcessoCompras {
      * Seta o Criterio de Adjudicacao
      * @param integer $iTipoProcesso
      */
-    public function setCriterioAdjudicacao($iCriterioAdjudicacao) {
+    public function setCriterioAdjudicacao($iCriterioAdjudicacao)
+    {
         $this->iCriterioAdjudicacao = $iCriterioAdjudicacao;
     }
     /*FIM - OC3770*/
 
-    public function remover() {
+    public function remover()
+    {
 
         if (!db_utils::inTransaction()) {
             throw new DBException(_M(self::ARQUIVO_MENSAGEM . "sem_transacao_ativa"));
@@ -1145,10 +1197,10 @@ class ProcessoCompras {
         }
 
         $oDaoAdesao       = db_utils::getDao("adesaoregprecos");
-        $sSqlAdesao       = $oDaoAdesao->sql_query_file('','*','',"si06_processocompra = {$this->getCodigo()}");
+        $sSqlAdesao       = $oDaoAdesao->sql_query_file('', '*', '', "si06_processocompra = {$this->getCodigo()}");
         $oDaoAdesao->sql_record($sSqlAdesao);
 
-        if($oDaoAdesao->numrows > 0){
+        if ($oDaoAdesao->numrows > 0) {
             throw new DBException("Processo de compras em Adesão de registro de preço");
         }
 
@@ -1176,15 +1228,15 @@ class ProcessoCompras {
         if ($oDaoPcProcItem->erro_status == "0") {
             throw new DBException(_M(self::ARQUIVO_MENSAGEM . "erro_excluir_processo_compra"));
         }
-
     }
 
-    public function getDadosAutorizacao () {
+    public function getDadosAutorizacao()
+    {
 
         $oDaoPcProc = new cl_pcproc();
         $sWhere          = "pc80_codproc = {$this->getCodigo()}";
 
-        $sSql            ="select distinct
+        $sSql            = "select distinct
     l03_descr as TipoLicitacao,
     pc50_codcom as tipocompra, 
     l20_edital||'/'||l20_anousu as numerolicitacao, 
@@ -1216,7 +1268,8 @@ class ProcessoCompras {
         return $aDados;
     }
 
-    public function getDadosAdesaoRegpreco($sequencial){
+    public function getDadosAdesaoRegpreco($sequencial)
+    {
 
         $oDadosAdesao = new cl_adesaoregprecos();
 
@@ -1229,15 +1282,15 @@ class ProcessoCompras {
         return $aDados;
     }
 
-    public function getLicoutrosOrgaos($sequencial){
+    public function getLicoutrosOrgaos($sequencial)
+    {
 
         $oLicOutrosOrgaos       = db_utils::getDao("liclicitaoutrosorgaos");
 
-        $rsDadoslic = $oLicOutrosOrgaos->sql_record($oLicOutrosOrgaos->sql_query_file($sequencial,"*",null,null));
+        $rsDadoslic = $oLicOutrosOrgaos->sql_record($oLicOutrosOrgaos->sql_query_file($sequencial, "*", null, null));
         $oDadoslic = db_utils::fieldsMemory($rsDadoslic, 0);
         $oDadoslicarray[] = $oDadoslic;
 
         return $oDadoslicarray;
     }
-
 }
