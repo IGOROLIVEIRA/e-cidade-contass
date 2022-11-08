@@ -34,8 +34,8 @@ require_once("classes/db_evt5001consulta_classe.php");
 class ImportarDadosEvt5001
 {
     /**
-    * @var String
-    */
+     * @var String
+     */
     protected $sFile = '';
 
     /**
@@ -53,11 +53,17 @@ class ImportarDadosEvt5001
      */
     protected $bImportViaEnvioEsocial;
 
-    public function __construct($sFile = null, $oXml = null)
+    /**
+     * @var dadosEvento
+     */
+    protected $dadosEvento;
+
+    public function __construct($sFile = null, $oXml = null, $dadosEvento)
     {
         $this->sFile = $sFile;
         $this->bImportViaEnvioEsocial = empty($sFile);
         $this->oXml = $oXml;
+        $this->dadosEvento = $dadosEvento;
         $this->evt5001consulta = new cl_evt5001consulta();
     }
 
@@ -70,15 +76,22 @@ class ImportarDadosEvt5001
         $this->openFile();
         $aPerApur = explode("-", $this->oXml->evtBasesTrab->ideEvento->perApur);
         $this->evt5001consulta->rh218_perapurano = $aPerApur[0];
-        $this->evt5001consulta->rh218_perapurmes = isset($aPerApur[1]) ? $aPerApur[1] : NULL;
+        $this->evt5001consulta->rh218_perapurmes = isset($aPerApur[1]) ? $aPerApur[1] : null;
         $this->evt5001consulta->rh218_indapuracao = $this->oXml->evtBasesTrab->ideEvento->indApuracao;
-        $this->evt5001consulta->rh218_regist = $this->getMatricula($this->oXml->evtBasesTrab->ideTrabalhador->cpfTrab, $this->oXml->evtBasesTrab->infoCp->ideEstabLot->infoCategIncid->matricula);
+        $this->evt5001consulta->rh218_numcgm = $this->getCgm($this->oXml->evtBasesTrab->ideTrabalhador->cpfTrab);
+        $this->evt5001consulta->rh218_regist = null;
+        if (!empty($this->oXml->evtBasesTrab->infoCp->ideEstabLot->infoCategIncid->matricula)) {
+            $this->evt5001consulta->rh218_regist = $this->getMatricula($this->oXml->evtBasesTrab->ideTrabalhador->cpfTrab, $this->oXml->evtBasesTrab->infoCp->ideEstabLot->infoCategIncid->matricula);
+        }
         $this->evt5001consulta->rh218_codcateg = $this->oXml->evtBasesTrab->infoCp->ideEstabLot->infoCategIncid->codCateg;
         $this->evt5001consulta->rh218_nrrecarqbase = $this->oXml->evtBasesTrab->ideEvento->nrRecArqBase;
         $this->evt5001consulta->rh218_tpcr = $this->oXml->evtBasesTrab->infoCpCalc->tpCR;
         $this->evt5001consulta->rh218_vrdescseg = $this->oXml->evtBasesTrab->infoCpCalc->vrDescSeg;
         $this->evt5001consulta->rh218_vrcpseg = $this->oXml->evtBasesTrab->infoCpCalc->vrCpSeg;
-        $this->evt5001consulta->rh218_instit = $this->getInstitMatricula($this->evt5001consulta->rh218_regist);
+        $this->evt5001consulta->rh218_instit = $this->getInstitCgm($this->dadosEvento->rh213_empregador);
+        if (!empty($this->oXml->evtBasesTrab->infoCp->ideEstabLot->infoCategIncid->matricula)) {
+            $this->evt5001consulta->rh218_instit = $this->getInstitMatricula($this->evt5001consulta->rh218_regist);
+        }
         $this->evt5001consulta->incluir(null);
         if ($this->evt5001consulta->erro_status == "0") {
             throw new Exception($this->evt5001consulta->erro_msg);
@@ -114,9 +127,24 @@ class ImportarDadosEvt5001
     {
         $regist = $this->evt5001consulta->sqlMatricula($cpf, $matricula);
         if (empty($regist)) {
-            throw new Exception("Matrícula não encontrada.");
+            throw new Exception("Matrícula $matricula não encontrada no evento 5001.");
         }
         return $regist;
+    }
+
+    /**
+     * Buscar cgm do servidor para garantir que o servidor está cadastrado 
+     * para esta instituição
+     * @param string $cpf
+     * @return int
+     */
+    protected function getCgm($cpf)
+    {
+        $cgm = $this->evt5001consulta->sqlCgm($cpf);
+        if (empty($cgm)) {
+            throw new Exception("Cgm $cgm não encontrada no evento 5001.");
+        }
+        return $cgm;
     }
 
     /**
@@ -132,6 +160,18 @@ class ImportarDadosEvt5001
         $instit = $this->evt5001consulta->sqlInstitMatricula($matricula);
         if (empty($instit)) {
             throw new Exception("instituição da Matrícula não encontrada.");
+        }
+        return $instit;
+    }
+
+    protected function getInstitCgm($cgmEmpregador)
+    {
+        if (!$this->bImportViaEnvioEsocial) {
+            return db_getsession("DB_instit");
+        }
+        $instit = $this->evt5001consulta->sqlInstitCgm($cgmEmpregador);
+        if (empty($instit)) {
+            throw new Exception("instituição do Empregador não encontrada.");
         }
         return $instit;
     }
