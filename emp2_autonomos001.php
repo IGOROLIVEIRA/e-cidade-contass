@@ -147,12 +147,20 @@ require_once("dbforms/db_classesgenericas.php");
                                             ?>
                                         </td>
                                     </tr>
-                                    <tr>
+                                    <tr >
+                                        <td><b>Quebra:</b></td>
+                                        <td>
+                                            <?php
+                                            $aQuebra = array(1 => "Não",2 => "Sim");
+                                            db_select("sQuebra", $aQuebra, true, 1);
+                                            ?>
+                                        </td>
+                                    </tr>
+                                    <tr style="display: none;">
                                         <td><b>Tipo Impressão:</b></td>
                                         <td>
                                             <?php
                                             $aOrdem = array(1 => "PDF");
-                                            // $aOrdem = array(0 => "Selecione...", 1 => "PDF", 2 => "CSV");
                                             db_select("sTipoImpressao", $aOrdem, true, 1);
                                             ?>
                                         </td>
@@ -249,6 +257,8 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
         dados['sTipoImpressao']              = $F('sTipoImpressao');
         dados['sTipo']                       = $F('sTipo');
         dados['sTipoSelecao']                = $F('sTipoSelecao');
+        dados['sQuebra']                     = $F('sQuebra');
+        
         
 
         var name = new Date().getTime();
@@ -257,6 +267,7 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
     });
     $('sTipoImpressao').style.width =' 180px';
     $('sTipo').style.width =' 180px';
+    $('sQuebra').style.width =' 180px';
    
 </script>
 </html>

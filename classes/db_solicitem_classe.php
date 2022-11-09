@@ -2004,6 +2004,7 @@ class cl_solicitem
       $sql .= $campos;
     }
     $sql .= "      from solicitem                                                                         ";
+    $sql .= "            inner join solicita   on pc10_numero                 = pc11_numero               ";
     $sql .= "            inner join pcprocitem on solicitem.pc11_codigo       = pcprocitem.pc81_solicitem ";
     $sql .= "            inner join empautitempcprocitem on e73_pcprocitem    = pc81_codprocitem          ";
     $sql .= "            inner join empautoriza on e54_autori                 = e73_autori                ";
@@ -2042,7 +2043,8 @@ class cl_solicitem
     } else {
       $sql .= $campos;
     }
-    $sql .= "      from solicitem                                                                         ";
+    $sql .= "      from solicitem                                                              ";
+    $sql .= "            inner join solicita             on pc10_numero     = pc11_numero      ";
     $sql .= "            inner join pcprocitem           on pc81_solicitem  = pc11_codigo      ";
     $sql .= "            inner join pcproc               on pc80_codproc    = pc81_codproc     ";
     $sql .= "            inner join empautitempcprocitem on e73_pcprocitem  = pc81_codprocitem ";

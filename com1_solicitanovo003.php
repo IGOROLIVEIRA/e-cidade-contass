@@ -1,4 +1,4 @@
-<?php
+<?
 /*
  *     E-cidade Software Publico para Gestao Municipal                
  *  Copyright (C) 2009  DBselller Servicos de Informatica             
@@ -18,7 +18,7 @@
  *                                                                    
  *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
  *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation,  Inc., 59 Temple Place, Suite 330, Boston, MA          
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
  *  02111-1307, USA.                                                  
  *  
  *  Copia da licenca no diretorio licenca/licenca_en.txt 
@@ -31,14 +31,18 @@ include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
 include("dbforms/db_funcoes.php");
 include("dbforms/db_classesgenericas.php");
-db_postmemory($HTTP_POST_VARS);
-$clcriaabas     = new cl_criaabas;
-if (!isset($db_opcao)) {
-  $db_opcao = 1;
+include("classes/db_pcparam_classe.php");
+$clpcparam = new cl_pcparam;
+$clcriaabas = new cl_criaabas;
+$db_opcao   = 1;
+$erro = false;
+$result_tipo = $clpcparam->sql_record($clpcparam->sql_query_file(null, "pc30_sugforn"));
+if ($clpcparam->numrows > 0) {
+  db_fieldsmemory($result_tipo, 0);
+} else {
+  $erro = true;
 }
-
 ?>
-
 <html>
 
 <head>
@@ -50,38 +54,46 @@ if (!isset($db_opcao)) {
 </head>
 
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
-  <table width="790" height="18" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
+  <table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
     <tr>
-      <td width="360">&nbsp;</td>
+      <td width="360" height="18">&nbsp;</td>
       <td width="263">&nbsp;</td>
       <td width="25">&nbsp;</td>
       <td width="140">&nbsp;</td>
     </tr>
   </table>
-  <form name="formaba">
-    <table valign="top" marginwidth="0" width="790" border="0" cellspacing="0" cellpadding="0">
-      <tr>
-        <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
-          <?php
-
-
-            $clcriaabas->identifica = array("licatareg" => "Ata de Registro de preço", "licataregitem" => "Itens");
-            $clcriaabas->sizecampo = array("licatareg" => "25", "licataregitem" => "20");
-            $clcriaabas->title = array("licatareg" => "Ata de Registro de preço", "licataregitem" => "Itens da Licitação");
-            $clcriaabas->src = array("licatareg" => "lic1_licatareg002.php", "licataregitem" => "lic1_licataregitem002.php");
-            $clcriaabas->disabled = array("licataregitem" => "true");
-            $clcriaabas->cria_abas();
-
-          ?>
-        </td>
-      </tr>
-    </table>
-  </form>
-  <?php
+  <table valign="top" marginwidth="0" width="790" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td>
+        <?
+        if (isset($pc30_sugforn) && $pc30_sugforn == 't') {
+          $clcriaabas->identifica = array("solicita" => "Solicitação", "solicitem" => "Itens/Dotações", "sugforn" => "Fornecedores sugeridos"); //nome do iframe e o label
+          $clcriaabas->src = array("solicita" => "com1_solicita006.php");
+          $clcriaabas->title      = array("solicita" => "Cadastro de solicitação de compras", "solicitem" => "Cadastro de Itens e Dotações", "sugforn" => "Cadastro de fornecedores sugeridos"); //nome do iframe e o label
+          $clcriaabas->sizecampo  = array("solicita" => "20", "solicitem" => "20", "sugforn" => "25");
+          $clcriaabas->disabled = array("solicitem" => "true", "sugforn" => "true");
+        } else {
+          $clcriaabas->identifica = array("solicita" => "Solicitação", "solicitem" => "Itens", "dotacoesnovo" => "Dotações"); //nome do iframe e o label
+          $clcriaabas->src = array("solicita" => "com1_solicitanovo006.php", "dotacoesnovo" => "com1_dotacoesnovo001.php");
+          $clcriaabas->title      = array("solicita" => "Cadastro de solicitação de compras", "solicitem" => "Cadastro de Itens", "dotacoesnovo" => "Dotações"); //nome do iframe e o label
+          $clcriaabas->sizecampo  = array("solicita" => "20", "solicitem" => "20", "dotacoesnovo" => "20");
+          $clcriaabas->disabled = array("solicitem" => "true");
+        }
+        $clcriaabas->cria_abas();
+        ?>
+      </td>
+    </tr>
+    <tr>
+    </tr>
+  </table>
+  <?
   db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit"));
   ?>
- 
-
 </body>
 
 </html>
+<?
+if ($erro == true) {
+  db_msgbox("Parâmetros do compras não configurados");
+}
+?>

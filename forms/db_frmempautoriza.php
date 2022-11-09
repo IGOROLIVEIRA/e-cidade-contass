@@ -1,31 +1,31 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal 
- *  Copyright (C) 2014  DBselller Servicos de Informatica
- *                            www.dbseller.com.br
- *                         e-cidade@dbseller.com.br
- *
- *  Este programa e software livre; voce pode redistribui-lo e/ou
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
- *  publicada pela Free Software Foundation; tanto a versao 2 da
- *  Licenca como (a seu criterio) qualquer versao mais nova.
- *
- *  Este programa e distribuido na expectativa de ser util, mas SEM
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
- *  detalhes.
- *
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
- *  junto com este programa; se nao, escreva para a Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
- *  02111-1307, USA.
- *
- *  Copia da licenca no diretorio licenca/licenca_en.txt
- *                                licenca/licenca_pt.txt
- */
+* E-cidade Software Publico para Gestao Municipal 
+* Copyright (C) 2014 DBselller Servicos de Informatica
+* www.dbseller.com.br
+* e-cidade@dbseller.com.br
+*
+* Este programa e software livre; voce pode redistribui-lo e/ou
+* modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+* publicada pela Free Software Foundation; tanto a versao 2 da
+* Licenca como (a seu criterio) qualquer versao mais nova.
+*
+* Este programa e distribuido na expectativa de ser util, mas SEM
+* QUALQUER GARANTIA; sem mesmo a garantia implicita de
+* COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+* PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+* detalhes.
+*
+* Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+* junto com este programa; se nao, escreva para a Free Software
+* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+* 02111-1307, USA.
+*
+* Copia da licenca no diretorio licenca/licenca_en.txt
+* licenca/licenca_pt.txt
+*/
 
-//MODULO: empenho   
+//MODULO: empenho 
 $clempautoriza->rotulo->label();
 $clrotulo = new rotulocampo;
 
@@ -62,7 +62,6 @@ if (!$e57_codhist) {
     $resultado = db_utils::fieldsMemory($resultado, 0);
     $e40_descr = $resultado->e40_descr;
 }
-
 
 db_app::load("DBFormCache.js");
 
@@ -138,7 +137,7 @@ db_app::load("DBFormCache.js");
                     $valores = array(
                         0 => 'Selecione',
                         1 => 'Direta',
-                        3 => 'Decorrente de  Licitação',
+                        3 => 'Decorrente de Licitação',
                         2 => 'Decorrente de Licitação de Outro Órgão',
                         4 => 'Adesão à ata de Registro de Preços'
                     );
@@ -243,8 +242,8 @@ db_app::load("DBFormCache.js");
                     }
 
                     /*
-                     * alterado para liberar o campo tipo de compra para alteracao
-                     */
+* alterado para liberar o campo tipo de compra para alteracao
+*/
                     $result = $clpctipocompra->sql_record($clpctipocompra->sql_query_file(null, "pc50_codcom as e54_codcom,pc50_descr"));
                     db_selectrecord("e54_codcom", $result, true, isset($emprocesso) && $emprocesso == true ? "1" : $db_opcao, "", "", "", "", "js_verificatipocompratribunal(this.value)");
                     ?>
@@ -265,21 +264,21 @@ db_app::load("DBFormCache.js");
                         $result = $clcflicita->sql_record($clcflicita->sql_query_file(null, "l03_tipo,l03_descr", '', "l03_codcom=$tipocompra and l03_instit = " . db_getsession('DB_instit')));
                         if ($clcflicita->numrows > 0) {
                             /*
-                             * alterado para liberar o campo tipo licitacao para alteracao
-                             */
+* alterado para liberar o campo tipo licitacao para alteracao
+*/
                             db_selectrecord("e54_tipol", $result, true, isset($emprocesso) && $emprocesso == true ? "1" : "1", "", "", "");
                             $dop = $db_opcao;
                         } else {
 
-                            $e54_tipol  = '';
+                            $e54_tipol = '';
                             $e54_numerl = '';
-                            $dop        = '3';
+                            $dop = '3';
                             db_input('e54_tipol', 8, $Ie54_tipol, true, 'text', 3);
                         }
                     } else {
 
-                        $dop        = '3';
-                        $e54_tipol  = '';
+                        $dop = '3';
+                        $e54_tipol = '';
                         $e54_numerl = '';
                         db_input('e54_tipol', 8, $Ie54_tipol, true, 'text', 3);
                     }
@@ -294,8 +293,8 @@ db_app::load("DBFormCache.js");
                     <?
 
                     /*
-                     * alterado para liberar o campo tipo de empenho para alteracao
-                     */
+* alterado para liberar o campo tipo de empenho para alteracao
+*/
                     $result = $clemptipo->sql_record($clemptipo->sql_query_file(null, "e41_codtipo,e41_descr"));
                     db_selectrecord("e54_codtipo", $result, true, isset($emprocesso) && $emprocesso == true ? "1" : $db_opcao, "", "", "", "0-Selecione");
                     ?>
@@ -307,9 +306,9 @@ db_app::load("DBFormCache.js");
                 </td>
                 <td>
                     <?
-                    $result  = $clempprestatip->sql_record($clempprestatip->sql_query_file(null, "e44_tipo as tipo,e44_descr,e44_obriga", "e44_obriga "));
+                    $result = $clempprestatip->sql_record($clempprestatip->sql_query_file(null, "e44_tipo as tipo,e44_descr,e44_obriga", "e44_obriga "));
                     $numrows = $clempprestatip->numrows;
-                    $arr     = array();
+                    $arr = array();
                     for ($i = 0; $i < $numrows; $i++) {
 
                         db_fieldsmemory($result, $i);
@@ -329,8 +328,8 @@ db_app::load("DBFormCache.js");
                 <td>
                     <?
                     /*
-                     * alterado para liberar o campo destino para alteracao
-                     */
+* alterado para liberar o campo destino para alteracao
+*/
                     db_input('e54_destin', 61, $Ie54_destin, true, 'text', isset($emprocesso) && $emprocesso == true ? "1" : $db_opcao, "")
                     ?>
                 </td>
@@ -405,7 +404,6 @@ db_app::load("DBFormCache.js");
         <input name="<?= ($db_opcao == 1 ? "incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "alterar" : "excluir")) ?>" type="submit" id="db_opcao" value="<?= ($db_opcao == 1 ? "Incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "Alterar" : "Excluir")) ?>" <?= ($db_botao == false ? "disabled" : "") ?> onclick="return js_validaLicitacao();<?php ($db_opcao == 1) ? 'return js_salvaCache();' : ' '; ?>">
         <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();">
 
-
         <? if ($db_opcao == 2) { ?>
             <input name="novo" type="button" id="novo" value="Nova autorização" onclick="js_nova();">
 
@@ -431,6 +429,17 @@ db_app::load("DBFormCache.js");
 
 </form>
 <script>
+    var opcao = <?php echo $db_opcao ?>;
+    if (opcao == 1 && document.getElementById('e54_autori').value == "") {
+        js_verificatipocompratribunal(document.getElementById('e54_codcom').value);
+    }
+
+    if (opcao == 2) {
+        if ($('e54_tipoautorizacao').value == '1') {
+            document.getElementById('trdadoslicitacao').style.display = "none";
+        }
+    }
+
     function js_pesquisahistorico(mostra) {
         if (mostra == true) {
             js_OpenJanelaIframe('', 'db_iframe_emphist', 'func_emphist.php?funcao_js=parent.js_mostrahistorico1|e40_codhist|e40_descr|e40_historico|e54_resumo', 'Pesquisa', true);
@@ -465,6 +474,32 @@ db_app::load("DBFormCache.js");
     }
 
     function js_validaLicitacao() {
+
+        if (codigotribunal != 13 && $('e54_tipoautorizacao').value == '1') {
+            alert("Usuário:\nO tipo de compra selecionado não pode ser utilizado para autorização direta. Gentileza alterar para o tipo de autorização adequado");
+            return false;
+        }
+
+        if ($('e54_tipoautorizacao').value == '3' && $('e54_codlicitacao').value == '') {
+            alert("Usuário:\nA licitação deve ser informada.");
+            return false;
+        }
+
+        if ($('e54_tipoautorizacao').value == '2' && $('e54_licoutrosorgaos').value == '') {
+            alert("Usuário:\nA licitação deve ser informada.");
+            return false;
+        }
+
+        if ($('e54_tipoautorizacao').value == '4' && $('e54_adesaoregpreco').value == '') {
+            alert("Usuário:\nA Adesão de registro de preço deve ser informada.");
+            return false;
+        }
+
+        if ($('e54_tipoautorizacao').value == '0') {
+            alert("Usuário:\nO tipo de autorização deve ser informado.");
+            return false;
+        }
+
         if ($('dop').value != 3 && ($('e54_numerl').value == '' || $('e54_numerl').value == 0)) {
             alert("Para esse Tipo de Compra é necessário informar o campo Número da Licitação.");
             return false;
@@ -534,7 +569,7 @@ db_app::load("DBFormCache.js");
     function js_nova() {
         // e40_historico
         destin = document.form1.e54_destin.value;
-        resumo = document.form1.e40_historico.value;
+        resumo = document.form1.e54_resumo.value;
         numcgm = document.form1.e54_numcgm.value;
         nome = document.form1.z01_nome.value;
         parent.location.href = "emp1_empautoriza001.php?z01_nome=" + nome + "&e54_numcgm=" + numcgm + "&e54_destin=" + destin + "&e54_resumo=" + resumo;
@@ -879,7 +914,7 @@ db_app::load("DBFormCache.js");
     }
 
     /**
-     * funcao para preencher licitacao  da ancora
+     * funcao para preencher licitacao da ancora
      */
     function js_preencheLicitacao(codigo, modalidade, processo, l20_objeto, ano) {
         js_buscaTipos({
@@ -1096,6 +1131,8 @@ db_app::load("DBFormCache.js");
             document.getElementById('c58_descr').value = 'NÃO SE APLICA';
             document.form1.e54_nummodalidade.readOnly = false;
             document.form1.e54_numerl.readOnly = false;
+            document.getElementById('trdadoslicitacao').style.display = "none";
+
         }
     }
 
@@ -1148,9 +1185,12 @@ db_app::load("DBFormCache.js");
 
     }
 
+
+
     function js_verificatipocompratribunal(value) {
         var sUrlRPC = 'com4_tipocompra.RPC.php';
         var pc50_codcom = value;
+        js_divCarregando('Aguarde, carregando informações...', 'msgbox');
         var oParam = new Object();
         oParam.sExecucao = 'getTipocompratribunal';
         oParam.Codtipocom = pc50_codcom;
@@ -1166,6 +1206,7 @@ db_app::load("DBFormCache.js");
     function js_validacampos(oAjax) {
 
         oRetorno = eval("(" + oAjax.responseText + ")");
+        codigotribunal = oRetorno.tipocompratribunal;
 
         if (oRetorno.tipocompratribunal == 13) {
             document.getElementById('trdadoslicitacao').style.display = 'none';
@@ -1176,6 +1217,8 @@ db_app::load("DBFormCache.js");
             document.getElementById('e54_codcom').value = oRetorno.tipocompra;
             document.getElementById('e54_codcomdescr').value = oRetorno.tipocompra;
         }
+        js_removeObj('msgbox');
+
     }
 
     function js_tipocompra(codigotipocompratribunal) {

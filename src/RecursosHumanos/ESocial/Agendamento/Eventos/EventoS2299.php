@@ -56,8 +56,8 @@ class EventoS2299 extends EventoBase
             }
 
             $oDtDeslig = new \DateTime($oDados->dtdeslig);
-            $oDtAtual  = new \DateTime(db_getsession("DB_anousu")."-".date("m", db_getsession("DB_datausu"))."-".date("d", db_getsession("DB_datausu")));
-            if ($oDados->rh30_regime == "2" && $oDtDeslig >= $oDtAtual) {
+            $oDtInicioObrigatoriedadeEvtPeriodicos  = new \DateTime("2022-08-22");
+            if ($oDados->rh30_regime == "2" && $oDtDeslig >= $oDtInicioObrigatoriedadeEvtPeriodicos) {
                 $oDadosAPI->evtDeslig->verbasresc = $this->buscarVerbasResc($oDados->matricula);
             }
 

@@ -618,15 +618,15 @@ class cl_evt5001consulta
       $sql .= $campos;
     }
     $sql .= " from evt5001consulta ";
-    $sql .= "      inner join rhpessoal  on  rhpessoal.rh01_regist = evt5001consulta.rh218_regist";
-    $sql .= "      inner join cgm  on  cgm.z01_numcgm = rhpessoal.rh01_numcgm";
-    $sql .= "      inner join rhestcivil  on  rhestcivil.rh08_estciv = rhpessoal.rh01_estciv";
-    $sql .= "      inner join rhraca  on  rhraca.rh18_raca = rhpessoal.rh01_raca";
+    $sql .= "      left join rhpessoal  on  rhpessoal.rh01_regist = evt5001consulta.rh218_regist";
+    $sql .= "      left join cgm  on  cgm.z01_numcgm = rhpessoal.rh01_numcgm";
+    $sql .= "      left join rhestcivil  on  rhestcivil.rh08_estciv = rhpessoal.rh01_estciv";
+    $sql .= "      left join rhraca  on  rhraca.rh18_raca = rhpessoal.rh01_raca";
     $sql .= "      left  join rhfuncao  on  rhfuncao.rh37_funcao = rhpessoal.rh01_funcao and  rhfuncao.rh37_instit = rhpessoal.rh01_instit";
-    $sql .= "      inner join rhinstrucao  on  rhinstrucao.rh21_instru = rhpessoal.rh01_instru";
-    $sql .= "      inner join rhnacionalidade  on  rhnacionalidade.rh06_nacionalidade = rhpessoal.rh01_nacion";
+    $sql .= "      left join rhinstrucao  on  rhinstrucao.rh21_instru = rhpessoal.rh01_instru";
+    $sql .= "      left join rhnacionalidade  on  rhnacionalidade.rh06_nacionalidade = rhpessoal.rh01_nacion";
     $sql .= "      left  join rhsindicato  on  rhsindicato.rh116_sequencial = rhpessoal.rh01_rhsindicato";
-    $sql .= "      inner join rhreajusteparidade  on  rhreajusteparidade.rh148_sequencial = rhpessoal.rh01_reajusteparidade";
+    $sql .= "      left join rhreajusteparidade  on  rhreajusteparidade.rh148_sequencial = rhpessoal.rh01_reajusteparidade";
     $sql2 = "";
     if ($dbwhere == "") {
       if ($rh218_sequencial != null) {
