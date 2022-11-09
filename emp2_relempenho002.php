@@ -1118,6 +1118,8 @@ if ($lSepararAcordo && !empty($listaacordo)) {
 }
 
 $pdf = new PDF(); // abre a classe
+// Padronização necessária para impressão do rodape - OC18369
+$pdf->imprime_rodape = true;
 $pdf->Open(); // abre o relatorio
 $pdf->AliasNbPages(); // gera alias para as paginas
 $pdf->AddPage('L'); // adiciona uma pagina
@@ -3139,5 +3141,4 @@ if ($hist == "h") {
     }
 }
 // echo $sqlrelemp;exit;
-
 $pdf->output();
