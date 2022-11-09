@@ -70,7 +70,7 @@ parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
                                 <?= $Lo58_coddot ?>
                             </td>
                             <td width="75%" align="left" nowrap>
-                                <? db_input("o58_coddot", 6, $Io58_coddot, true, "text", 4, "", "chave_o58_coddot"); ?>
+                                <? db_input("o58_coddot", 6, $Io58_coddot, true, "text", 4, "", "o58_coddot"); ?>
                             </td>
                         </tr>
                         <?
@@ -350,23 +350,22 @@ parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
                 $where_instit = "1=1 ";
         }
         $sql = " select fc_estruturaldotacao(" . db_getsession("DB_anousu") . ",o58_coddot) as dl_estrutural,
- o56_elemento,
-o55_descr::text,
-o56_descr,
-o58_coddot,
-o58_instit
-from orcdotacao d
-inner join orcprojativ p on p.o55_anousu = " . db_getsession("DB_anousu") . " and p.o55_projativ = d.o58_projativ
-inner join orcelemento e on e.o56_codele = d.o58_codele and o56_anousu = o58_anousu
-where  $where_instit  
-and o58_anousu=" . db_getsession('DB_anousu') . " $filtro
-order by dl_estrutural";
-
+            o56_elemento,
+            o55_descr::text,
+            o56_descr,
+            o58_coddot,
+            o58_instit
+            from orcdotacao d
+            inner join orcprojativ p on p.o55_anousu = " . db_getsession("DB_anousu") . " and p.o55_projativ = d.o58_projativ
+            inner join orcelemento e on e.o56_codele = d.o58_codele and o56_anousu = o58_anousu
+            where  $where_instit  
+            and o58_anousu=" . db_getsession('DB_anousu') . " $filtro
+            order by dl_estrutural";
         ?>
         <tr>
             <td align="center" valign="top">
                 <?
-                db_lovrot($sql, 15, "()", "", $funcao_js);
+                    db_lovrot($sql, 15, "()", "", $funcao_js , "", "NoMe", array(), false, array());
                 ?>
             </td>
         </tr>
