@@ -245,6 +245,7 @@ if (isset($incluir) && $sqlerro == false) {
       }
     }
   }
+
   if ($sqlerro == false) {
     db_inicio_transacao();
     $pc11_vlrun = str_replace(",", ".", $pc11_vlrun);

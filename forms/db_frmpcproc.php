@@ -297,6 +297,19 @@ $val = false;
   ?>
 </form>
 <script>
+  /* Inclusão dos campos referente a solicitação caso a tela
+     seja carregada apartir da rotina de solicitação de compras
+    */
+  numero = <?php echo $pc10_numero; ?>;
+  data = ' <?php echo $data; ?> ';
+  descrdepto = ' <?php echo $descrdepto; ?> ';
+
+  const select = document.querySelector('#pc10_numero');
+  select.options[select.options.length] = new Option(numero, numero);
+  document.getElementById('pc10_data').value = data;
+  document.getElementById('descrdepto').value = descrdepto;
+
+
   function js_mudasolicita() {
     location.href = 'com1_pcproc001.php?cod=' + document.form1.pc10_numero.value;
 

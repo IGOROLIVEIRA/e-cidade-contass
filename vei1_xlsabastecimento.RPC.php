@@ -285,7 +285,7 @@ switch ($oParam->exec) {
                 $codEmp = $codemp[0];
                 $anoEmp = $codemp[1];
 
-                $resultadoEm = $clempempenho->sql_record($clempempenho->sql_query(null, "*", null, "e60_codemp like '$codEmp' and e60_anousu = $anoEmp"));
+                $resultadoEm = $clempempenho->sql_record($clempempenho->sql_query(null, "*", null, "e60_codemp like '$codEmp' and e60_anousu = $anoEmp and e60_instit = ". db_getsession('DB_instit')));
                 $resultEm = db_utils::fieldsMemory($resultadoEm, 0);
 
                 $resultParam = $clveicparam->sql_record($clveicparam->sql_query_file(1, "*", null, ""));
@@ -376,7 +376,7 @@ switch ($oParam->exec) {
                 }
                 $filtroempelemento = 1;
                 $data = date('d/m/Y');
-                $resultadoEmpenhoo = $clempempenho1->sql_record($clempempenho1->sql_query(null, "*", null, "e60_instit = 1 and elementoempenho.o56_elemento in ('3339030010000','3390330100000','3390339900000','3339033990000','3339030030000','3339092000000','3339033000000','3339093010000','3339093020000','3339093030000') AND ((date_part('year', empempenho.e60_emiss) < date_part('year', date '$data') AND date_part('month', empempenho.e60_emiss) <= 12)
+                $resultadoEmpenhoo = $clempempenho1->sql_record($clempempenho1->sql_query(null, "*", null, "e60_instit = " .db_getsession('DB_instit'). " and elementoempenho.o56_elemento in ('3339030010000','3390330100000','3390339900000','3339033990000','3339030030000','3339092000000','3339033000000','3339093010000','3339093020000','3339093030000') AND ((date_part('year', empempenho.e60_emiss) < date_part('year', date '$data') AND date_part('month', empempenho.e60_emiss) <= 12)
                     OR (date_part('year', empempenho.e60_emiss) = date_part('year', date '$data') AND date_part('month', empempenho.e60_emiss) <= date_part('month', date '$data'))) and e60_codemp like '$codEmp' and e60_anousu = $anoEmp", $filtroempelemento));
                 $resultEmpenho = db_utils::fieldsMemory($resultadoEmpenhoo, 0);
 
@@ -385,7 +385,7 @@ switch ($oParam->exec) {
                 }
 
                 if ($anoAnterior == $anoEmp) {
-                    $resultadoEmpenhoo = $clempempenho->sql_record($clempempenho->sql_query(null, "*", null, " e60_codemp like '$codEmp' and e60_anousu = $anoEmp and orcelemento.o56_elemento in ('3339039990400','3339039990000','3339039170000','3339039160000','3339039150000','3339039050000','3339036990000','3339036170000','3339036160000','3339036060000','3339030010000','3339030250000','3339030370000','3339030990000','3339030020000','3339030030000','3339092000000')"));
+                    $resultadoEmpenhoo = $clempempenho->sql_record($clempempenho->sql_query(null, "*", null, "e60_instit = " .db_getsession('DB_instit'). " and e60_codemp like '$codEmp' and e60_anousu = $anoEmp and orcelemento.o56_elemento in ('3339039990400','3339039990000','3339039170000','3339039160000','3339039150000','3339039050000','3339036990000','3339036170000','3339036160000','3339036060000','3339030010000','3339030250000','3339030370000','3339030990000','3339030020000','3339030030000','3339092000000')"));
                     $resultEmpenho = db_utils::fieldsMemory($resultadoEmpenhoo, 0);
 
                     if ($clempempenho->numrows == 0) {

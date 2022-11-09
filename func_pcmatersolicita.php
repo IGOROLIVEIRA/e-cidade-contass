@@ -183,7 +183,11 @@ if (isset($o56_codele) and trim($o56_codele) != '') {
                   WHEN pcmater.pc01_veiculo = true THEN 'Sim'
                   END AS pc01_veiculo,
                   pcmater.pc01_instit,
-                  pcmater.pc01_codmaterant";
+                  pcmater.pc01_codmaterant,
+                  pcmater.pc01_servico,
+								 pcmater.pc01_veiculo,
+                 pcmater.pc01_instit,
+                 pcmater.pc01_codmaterant";
           $repassa = array(
             "chave_pc01_codmater"    => @$chave_pc01_codmater,
             "chave_pc01_descrmater"  => @$chave_pc01_descrmater,
@@ -214,15 +218,15 @@ if (isset($o56_codele) and trim($o56_codele) != '') {
           db_lovrot(@$sql, 15, "()", "", $funcao_js, "", "NoMe", $repassa);
         } else {
           if ($pesquisa_chave != null && $pesquisa_chave != "") {
-            $result = $clpcmater->sql_record($clpcmater->sql_query_desdobra(null, "regexp_replace(pcmater.pc01_descrmater,'\r|\n','','g') as pc01_descrmater,pc01_veiculo", "", "pc01_codmater=$pesquisa_chave and $where_ativo"));
+            $result = $clpcmater->sql_record($clpcmater->sql_query_desdobra(null, "regexp_replace(pcmater.pc01_descrmater,'\r|\n','','g') as pc01_descrmater,pc01_veiculo,pc01_servico", "", "pc01_codmater=$pesquisa_chave and $where_ativo"));
             if ($clpcmater->numrows != 0) {
               db_fieldsmemory($result, 0);
-              echo "<script>" . $funcao_js . "('" . addslashes($pc01_descrmater) . "',false,'$pc01_veiculo');</script>";
+              echo "<script>" . $funcao_js . "('" . addslashes($pc01_descrmater) . "',false,'$pc01_veiculo','$pc01_servico');</script>";
             } else {
               echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") não Encontrado',true);</script>";
             }
           } else {
-            echo "<script>" . $funcao_js . "('',false);</script>";
+            echo "<script>" . $funcao_js . "('',false,'$pc01_servico');</script>";
           }
         }
         ?>

@@ -137,7 +137,7 @@ class cl_solicitem {
        return false;
      }
      if($this->pc11_liberado == null ){ 
-       $this->erro_sql = " Campo Liberar para contabilidade nao Informado.";
+       $this->erro_sql = " Campo Liberaraaaaaa para contabilidade nao Informado.";
        $this->erro_campo = "pc11_liberado";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -646,4 +646,3 @@ class cl_solicitem {
      return $sql;
   }
 }
-?>

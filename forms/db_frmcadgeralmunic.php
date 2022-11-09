@@ -1896,6 +1896,13 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
          */
         if (lPessoaFisica == true) {
 
+            if ($F('z01_nasc').trim() == "") {
+                var strMessageUsuario = "Campo DATA DE NASCIMENTO não informada!";
+                js_messageBox(strMessageUsuario, '');
+                $('z01_nasc').focus();
+                return false;
+            }
+
             /*Valida cpf*/
             if ($F('z01_cpf').trim() == "") {
                 var strMessageUsuario = "Campo CPF não informado !";
