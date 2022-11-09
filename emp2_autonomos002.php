@@ -151,7 +151,7 @@ if (isset($dtDataInicial)) {
   $sSqlNota .=  " and e60_instit = $instits";
   $sSqlNota .= "  group by     1,3,2,4,6,7,8,9,10,e21_retencaotipocalc,c71_coddoc,e60_anousu,e69_numero,e70_vlrliq,e23_valorretencao, cgm.z01_cgccpf,rh70_estrutural,corrente.k12_data,e23_ativo,o58_codigo,o58_projativ,o55_descr,o15_descr,cgm.z01_nasc";
   if($sQuebra == 1)
-    $sSqlNota .= "  order by 3 ";
+    $sSqlNota .= "  order by cgm.z01_cgccpf  ";
   if($sQuebra == 2)
     $sSqlNota .= "  order by o58_projativ,o58_codigo";  
 
@@ -472,13 +472,13 @@ HTML;
                         $totale50_valorremuneracao += $oNotas->e50_valorremuneracao;
                         $totalbasepatronal += $oNotas->basepatronal;
 
-                        $Geraltotale70_vlrliq += $totale70_vlrliq;
-                        $Geraltotalvalor_inss += $totalvalor_inss;
-                        $Geraltotalvalor_irrf += $totalvalor_irrf;
-                        $Geraltotaloutrasretencoes += $totaloutrasretencoes;
-                        $Geraltotalpatronal += $totalpatronal;
-                        $Geraltotale50_valorremuneracao += $totale50_valorremuneracao;
-                        $Geraltotalbasepatronal += $totalbasepatronal;
+                        $Geraltotale70_vlrliq += $oNotas->e70_vlrliq;
+                        $Geraltotalvalor_inss += $auxInss;
+                        $Geraltotalvalor_irrf += $auxIrrf;
+                        $Geraltotaloutrasretencoes += $auxRetencoes;
+                        $Geraltotalpatronal += $oNotas->patronal;
+                        $Geraltotale50_valorremuneracao += $oNotas->e50_valorremuneracao;
+                        $Geraltotalbasepatronal += $oNotas->basepatronal;
 
                         $auxRetencoes = db_formatar($auxRetencoes, "f");
                         $auxInss = db_formatar($auxInss, "f");
@@ -586,7 +586,14 @@ HTML;
                             </tr>
 HTML;
       
-} 
+                        $Geraltotale70_vlrliq = 0;
+                        $Geraltotalvalor_inss = 0;
+                        $Geraltotalvalor_irrf = 0;
+                        $Geraltotaloutrasretencoes = 0;
+                        $Geraltotalpatronal = 0;
+                        $Geraltotale50_valorremuneracao = 0;
+                        $Geraltotalbasepatronal = 0;
+                        } 
                         }
                      
                     }
