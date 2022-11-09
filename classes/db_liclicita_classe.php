@@ -2484,7 +2484,7 @@ class cl_liclicita
     {
         $sql = "select ";
         if ($campos != "*") {
-            $campos_sql = split("#", $campos);
+            $campos_sql = explode("#", $campos);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -2530,7 +2530,7 @@ class cl_liclicita
         $sql .= $sql2;
         if ($groupby != null) {
             $sql .= " group by ";
-            $campos_sql = split("#", $groupby);
+            $campos_sql = explode("#", $groupby);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -2541,7 +2541,7 @@ class cl_liclicita
         }
         if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = split("#", $ordem);
+            $campos_sql = explode("#", $ordem);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -2555,7 +2555,7 @@ class cl_liclicita
     {
         $sql = "select ";
         if ($campos != "*") {
-            $campos_sql = split("#", $campos);
+            $campos_sql = explode("#", $campos);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -2589,7 +2589,7 @@ class cl_liclicita
         $sql .= $sql2;
         if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = split("#", $ordem);
+            $campos_sql = explode("#", $ordem);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -2604,7 +2604,7 @@ class cl_liclicita
     {
         $sql = "select ";
         if ($campos != "*") {
-            $campos_sql = split("#", $campos);
+            $campos_sql = explode("#", $campos);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -2642,7 +2642,7 @@ class cl_liclicita
         $sql .= $sql2;
         if ($groupby != null) {
             $sql .= " group by ";
-            $campos_sql = split("#", $groupby);
+            $campos_sql = explode("#", $groupby);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -2653,7 +2653,7 @@ class cl_liclicita
         }
         if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = split("#", $ordem);
+            $campos_sql = explode("#", $ordem);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -2667,7 +2667,7 @@ class cl_liclicita
     {
         $sql = "select ";
         if ($campos != "*") {
-            $campos_sql = split("#", $campos);
+            $campos_sql = explode("#", $campos);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -2713,7 +2713,7 @@ class cl_liclicita
         $sql .= $sql2;
         if ($groupby != null) {
             $sql .= " group by ";
-            $campos_sql = split("#", $groupby);
+            $campos_sql = explode("#", $groupby);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -2724,7 +2724,7 @@ class cl_liclicita
         }
         if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = split("#", $ordem);
+            $campos_sql = explode("#", $ordem);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -2740,7 +2740,7 @@ class cl_liclicita
     {
         $sql = "select ";
         if ($campos != "*") {
-            $campos_sql = split("#", $campos);
+            $campos_sql = explode("#", $campos);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -2788,7 +2788,7 @@ class cl_liclicita
         $sql .= $sql2;
         if ($groupby != null) {
             $sql .= " group by ";
-            $campos_sql = split("#", $groupby);
+            $campos_sql = explode("#", $groupby);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -2799,7 +2799,7 @@ class cl_liclicita
         }
         if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = split("#", $ordem);
+            $campos_sql = explode("#", $ordem);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -2815,7 +2815,7 @@ class cl_liclicita
     {
         $sql = "select ";
         if ($campos != "*") {
-            $campos_sql = split("#", $campos);
+            $campos_sql = explode("#", $campos);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -2836,7 +2836,7 @@ class cl_liclicita
         $sql .= $sql2;
         if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = split("#", $ordem);
+            $campos_sql = explode("#", $ordem);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -2850,7 +2850,7 @@ class cl_liclicita
     {
         $sql = "select ";
         if ($campos != "*") {
-            $campos_sql = split("#", $campos);
+            $campos_sql = explode("#", $campos);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -2871,7 +2871,7 @@ class cl_liclicita
         $sql .= $sql2;
         if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = split("#", $ordem);
+            $campos_sql = explode("#", $ordem);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -2888,7 +2888,7 @@ class cl_liclicita
     {
         $sql = "select ";
         if ($campos != "*") {
-            $campos_sql = split("#", $campos);
+            $campos_sql = explode("#", $campos);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -2926,7 +2926,7 @@ class cl_liclicita
         $sql .= $sql2;
         if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = split("#", $ordem);
+            $campos_sql = explode("#", $ordem);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -2941,7 +2941,7 @@ class cl_liclicita
     {
         $sql = "select ";
         if ($campos != "*") {
-            $campos_sql = split("#", $campos);
+            $campos_sql = explode("#", $campos);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -2982,7 +2982,7 @@ class cl_liclicita
         $sql .= $sql2;
         if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = split("#", $ordem);
+            $campos_sql = explode("#", $ordem);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -2997,7 +2997,7 @@ class cl_liclicita
     {
         $sql = "select ";
         if ($campos != "*") {
-            $campos_sql = split("#", $campos);
+            $campos_sql = explode("#", $campos);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -3021,7 +3021,7 @@ class cl_liclicita
         $sql .= $sql2;
         if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = split("#", $ordem);
+            $campos_sql = explode("#", $ordem);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -3035,7 +3035,7 @@ class cl_liclicita
     {
         $sql = "select ";
         if ($campos != "*") {
-            $campos_sql = split("#", $campos);
+            $campos_sql = explode("#", $campos);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -3059,7 +3059,7 @@ class cl_liclicita
         $sql .= $sql2;
         if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = split("#", $ordem);
+            $campos_sql = explode("#", $ordem);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -3074,7 +3074,7 @@ class cl_liclicita
 
         $sql = "select ";
         if ($campos != "*") {
-            $campos_sql = split("#", $campos);
+            $campos_sql = explode("#", $campos);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -3103,7 +3103,7 @@ class cl_liclicita
         $sql .= $sql2;
         if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = split("#", $ordem);
+            $campos_sql = explode("#", $ordem);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -3117,7 +3117,7 @@ class cl_liclicita
     {
         $sql = "select ";
         if ($campos != "*") {
-            $campos_sql = split("#", $campos);
+            $campos_sql = explode("#", $campos);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -3147,7 +3147,7 @@ class cl_liclicita
         $sql .= $sql2;
         if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = split("#", $ordem);
+            $campos_sql = explode("#", $ordem);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -3161,7 +3161,7 @@ class cl_liclicita
     {
         $sql = "select ";
         if ($campos != "*") {
-            $campos_sql = split("#", $campos);
+            $campos_sql = explode("#", $campos);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -3191,7 +3191,7 @@ class cl_liclicita
         $sql .= $sql2;
         if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = split("#", $ordem);
+            $campos_sql = explode("#", $ordem);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -3205,7 +3205,7 @@ class cl_liclicita
     {
         $sql = "select ";
         if ($campos != "*") {
-            $campos_sql = split("#", $campos);
+            $campos_sql = explode("#", $campos);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -3229,7 +3229,7 @@ class cl_liclicita
         $sql .= $sql2;
         if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = split("#", $ordem);
+            $campos_sql = explode("#", $ordem);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -3243,7 +3243,7 @@ class cl_liclicita
     {
         $sql = "select ";
         if ($campos != "*") {
-            $campos_sql = split("#", $campos);
+            $campos_sql = explode("#", $campos);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -3271,7 +3271,7 @@ class cl_liclicita
         $sql .= $sql2;
         if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = split("#", $ordem);
+            $campos_sql = explode("#", $ordem);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -3285,7 +3285,7 @@ class cl_liclicita
     {
         $sql = "select ";
         if ($campos != "*") {
-            $campos_sql = split("#", $campos);
+            $campos_sql = explode("#", $campos);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -3324,7 +3324,7 @@ class cl_liclicita
         if ($ordem != null) {
 
             $sql .= " order by ";
-            $campos_sql = split("#", $ordem);
+            $campos_sql = explode("#", $ordem);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -3338,7 +3338,7 @@ class cl_liclicita
     {
         $sql = "select distinct ";
         if ($campos != "*") {
-            $campos_sql = split("#", $campos);
+            $campos_sql = explode("#", $campos);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -3373,7 +3373,7 @@ class cl_liclicita
         if ($ordem != null) {
 
             $sql .= " order by ";
-            $campos_sql = split("#", $ordem);
+            $campos_sql = explode("#", $ordem);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -3398,7 +3398,7 @@ class cl_liclicita
 
         $sql = "select ";
         if ($campos != "*") {
-            $campos_sql = split("#", $campos);
+            $campos_sql = explode("#", $campos);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -3437,7 +3437,7 @@ class cl_liclicita
         $sql .= $sql2;
         if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = split("#", $ordem);
+            $campos_sql = explode("#", $ordem);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -3658,7 +3658,7 @@ class cl_liclicita
 
         $sql = "select ";
         if ($campos != "*") {
-            $campos_sql = split("#", $campos);
+            $campos_sql = explode("#", $campos);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -3694,7 +3694,7 @@ class cl_liclicita
         $sql .= $sql2;
         if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = split("#", $ordem);
+            $campos_sql = explode("#", $ordem);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -3713,7 +3713,7 @@ class cl_liclicita
 
         $sql = "select ";
         if ($campos != "*") {
-            $campos_sql = split("#", $campos);
+            $campos_sql = explode("#", $campos);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -3743,7 +3743,7 @@ class cl_liclicita
         $sql .= $sql2;
         if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = split("#", $ordem);
+            $campos_sql = explode("#", $ordem);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -3929,6 +3929,119 @@ class cl_liclicita
             $sql .= " order by {$ordem} ";
         }
 
+        return $sql;
+    }
+
+    public function sql_query_pncp($l20_codigo = null)
+    {
+        $sql  = " select distinct (SELECT CASE
+        WHEN o41_subunidade != 0
+             OR NOT NULL THEN lpad((CASE WHEN o40_codtri = '0'
+                OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
+                  OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)||lpad(o41_subunidade::integer,3,0)
+        ELSE lpad((CASE WHEN o40_codtri = '0'
+             OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
+               OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)
+       END AS codunidadesub
+       FROM db_departorg
+       JOIN infocomplementares ON si08_anousu = db01_anousu
+       AND si08_instit = " . db_getsession("DB_instit") . "
+       JOIN orcunidade ON db01_orgao=o41_orgao
+       AND db01_unidade=o41_unidade
+       AND db01_anousu = o41_anousu
+       JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
+       WHERE db01_coddepto=l20_codepartamento and db01_anousu=" . db_getsession("DB_anousu") . " LIMIT 1) AS codigoUnidadeCompradora,
+       CASE
+            WHEN l03_pctipocompratribunal IN (110,51,53,52,102) THEN 1
+            WHEN l03_pctipocompratribunal = 101 AND liclicita.l20_mododisputa != 5 THEN 2
+            WHEN l03_pctipocompratribunal = 100 AND liclicita.l20_mododisputa != 5 THEN 3
+            WHEN l03_pctipocompratribunal = 101 AND liclicita.l20_mododisputa = 5 THEN 3
+       END AS tipoInstrumentoConvocatorioId,
+       CASE
+           WHEN l03_pctipocompratribunal = 110 THEN 2
+           WHEN l03_pctipocompratribunal = 51 THEN 3
+           WHEN l03_pctipocompratribunal = 53 THEN 6
+           WHEN l03_pctipocompratribunal = 52 THEN 7
+           WHEN l03_pctipocompratribunal = 101 THEN 8
+           WHEN l03_pctipocompratribunal = 100 THEN 9
+           WHEN l03_pctipocompratribunal = 102 THEN 12
+       END AS modalidadeId,
+        liclicita.l20_mododisputa AS modoDisputaId,
+        liclicita.l20_edital AS numeroCompra,
+        liclicita.l20_anousu AS anoCompra,
+        liclicita.l20_edital||'/'||liclicita.l20_anousu AS numeroProcesso,
+        liclicita.l20_objeto AS objetoCompra,
+        '' as informacaoComplementar,
+        liclicita.l20_usaregistropreco AS srp,
+        false as orcamentoSigiloso,
+        liclicita.l20_recdocumentacao as dataAberturaProposta,
+        liclicita.l20_recdocumentacao as dataEncerramentoProposta,
+        1 as amparoLegalId,
+        liclicita.l20_linkpncp as linkSistemaOrigem
+        from liclicita
+        join db_depart on coddepto=l20_codepartamento
+        join db_config on codigo=instit
+        join infocomplementaresinstit on si09_instit=instit
+        join liclicitem on l21_codliclicita=l20_codigo
+        join pcprocitem on pc81_codprocitem=l21_codpcprocitem
+        join pcproc on pc80_codproc=pc81_codproc
+        join solicitem on pc11_codigo=pc81_solicitem
+        join solicitempcmater on pc16_solicitem=pc11_codigo
+        join pcmater on pc16_codmater = pc01_codmater
+        join solicitemunid on pc17_codigo=pc11_codigo
+        join matunid on m61_codmatunid=pc17_unid
+        left JOIN pcorcamitemproc ON pc81_codprocitem = pc31_pcprocitem
+        left JOIN pcorcamitem ON pc31_orcamitem = pc22_orcamitem
+        left JOIN pcorcamval ON pc22_orcamitem = pc23_orcamitem
+        left JOIN itemprecoreferencia ON pc23_orcamitem = si02_itemproccompra
+        left JOIN precoreferencia ON itemprecoreferencia.si02_precoreferencia = precoreferencia.si01_sequencial
+        LEFT JOIN liclicitemlote ON l04_liclicitem=l21_codigo
+        INNER JOIN cflicita ON cflicita.l03_codigo = liclicita.l20_codtipocom
+        where liclicita.l20_codigo = {$l20_codigo}";
+        return $sql;
+    }
+
+    public function sql_query_pncp_itens($l20_codigo = null)
+    {
+        $sql  = " SELECT solicitem.pc11_seq AS numeroItem,
+                    CASE
+                        WHEN pcmater.pc01_servico='t' THEN 'S'
+                        ELSE 'M'
+                    END AS materialOuServico,
+                    1 AS tipoBeneficioId,
+                    TRUE AS incentivoProdutivoBasico,
+                    pcmater.pc01_descrmater AS descricao,
+                    matunid.m61_descr AS unidadeMedida,
+                    si02_vlprecoreferencia AS valorUnitarioEstimado,
+                    sum(si02_qtditem* si02_vlprecoreferencia) AS valorTotal,
+                    liclicita.l20_criterioadjudicacao AS criterioJulgamentoId
+                FROM liclicita
+                JOIN db_depart ON coddepto=l20_codepartamento
+                JOIN db_config ON codigo=instit
+                JOIN infocomplementaresinstit ON si09_instit=instit
+                JOIN liclicitem ON l21_codliclicita=l20_codigo
+                JOIN pcprocitem ON pc81_codprocitem=l21_codpcprocitem
+                JOIN pcproc ON pc80_codproc=pc81_codproc
+                JOIN solicitem ON pc11_codigo=pc81_solicitem
+                JOIN solicitempcmater ON pc16_solicitem=pc11_codigo
+                JOIN pcmater ON pc16_codmater = pc01_codmater
+                JOIN solicitemunid ON pc17_codigo=pc11_codigo
+                JOIN matunid ON m61_codmatunid=pc17_unid
+                LEFT JOIN pcorcamitemproc ON pc81_codprocitem = pc31_pcprocitem
+                LEFT JOIN pcorcamitem ON pc31_orcamitem = pc22_orcamitem
+                LEFT JOIN pcorcamval ON pc22_orcamitem = pc23_orcamitem
+                LEFT JOIN itemprecoreferencia ON pc23_orcamitem = si02_itemproccompra
+                LEFT JOIN precoreferencia ON itemprecoreferencia.si02_precoreferencia = precoreferencia.si01_sequencial
+                LEFT JOIN liclicitemlote ON l04_liclicitem=l21_codigo
+                INNER JOIN cflicita ON cflicita.l03_codigo = liclicita.l20_codtipocom
+                WHERE liclicita.l20_codigo = {$l20_codigo}
+                GROUP BY solicitem.pc11_seq,
+                        pcmater.pc01_servico,
+                        pcmater.pc01_descrmater,
+                        itemprecoreferencia.si02_vlprecoreferencia,
+                        matunid.m61_descr,
+                        liclicita.l20_criterioadjudicacao
+                ORDER BY numeroitem";
         return $sql;
     }
 }
