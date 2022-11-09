@@ -1386,7 +1386,7 @@ switch ($oParam->exec) {
                                         $oDaoSolicitemUnidReservado->pc17_unid = $oSolicitemUnid->pc17_unid;
                                         $oDaoSolicitemUnidReservado->pc17_quant = $aItens[$count]->qtdexclusiva;
                                         $oDaoSolicitemUnidReservado->pc17_codigo = $oDaoSolicitemAbertura->pc11_codigo;
-                                        $oDaoSolicitemUnidReservado->incluir();
+                                        $oDaoSolicitemUnidReservado->incluir(null);
 
                                         if (!$oDaoSolicitemUnidReservado->numrows_incluir) {
                                             $erro_msg = $oDaoSolicitemUnidReservado->erro_msg;
