@@ -103,7 +103,7 @@ if (isset($dtDataInicial)) {
   $sSqlNota .= "          inner join rhcbo on rh70_sequencial = z04_rhcbo";
   $sSqlNota .= "          left join conlancamemp on c75_numemp = e60_numemp ";
   $sSqlNota .= "          left join conlancamdoc on c71_codlan = c75_codlan and c71_coddoc = 904 ";
-  $sSqlNota .= "          left  join pagordemnota on e71_codnota = e69_codnota";
+  $sSqlNota .= "          left  join pagordemnota on e71_codnota = e69_codnota and e71_anulado is false";
   $sSqlNota .= "          left  join pagordem    on  e71_codord = e50_codord";
   $sSqlNota .= "          left  join pagordemele  on e53_codord = e50_codord";
   $sSqlNota .= "          left  join cgm as empresa on empresa.z01_numcgm = e50_empresadesconto";
@@ -151,7 +151,7 @@ if (isset($dtDataInicial)) {
   $sSqlNota .=  " and e60_instit = $instits";
   $sSqlNota .= "  group by     1,3,2,4,6,7,8,9,10,e21_retencaotipocalc,c71_coddoc,e60_anousu,e69_numero,e70_vlrliq,e23_valorretencao, cgm.z01_cgccpf,rh70_estrutural,corrente.k12_data,e23_ativo,o58_codigo,o58_projativ,o55_descr,o15_descr,cgm.z01_nasc";
   if($sQuebra == 1)
-    $sSqlNota .= "  order by 3 ";
+    $sSqlNota .= "  order by cgm.z01_cgccpf  ";
   if($sQuebra == 2)
     $sSqlNota .= "  order by o58_projativ,o58_codigo";  
 
@@ -472,13 +472,13 @@ HTML;
                         $totale50_valorremuneracao += $oNotas->e50_valorremuneracao;
                         $totalbasepatronal += $oNotas->basepatronal;
 
-                        $Geraltotale70_vlrliq += $totale70_vlrliq;
-                        $Geraltotalvalor_inss += $totalvalor_inss;
-                        $Geraltotalvalor_irrf += $totalvalor_irrf;
-                        $Geraltotaloutrasretencoes += $totaloutrasretencoes;
-                        $Geraltotalpatronal += $totalpatronal;
-                        $Geraltotale50_valorremuneracao += $totale50_valorremuneracao;
-                        $Geraltotalbasepatronal += $totalbasepatronal;
+                        $Geraltotale70_vlrliq += $oNotas->e70_vlrliq;
+                        $Geraltotalvalor_inss += $auxInss;
+                        $Geraltotalvalor_irrf += $auxIrrf;
+                        $Geraltotaloutrasretencoes += $auxRetencoes;
+                        $Geraltotalpatronal += $oNotas->patronal;
+                        $Geraltotale50_valorremuneracao += $oNotas->e50_valorremuneracao;
+                        $Geraltotalbasepatronal += $oNotas->basepatronal;
 
                         $auxRetencoes = db_formatar($auxRetencoes, "f");
                         $auxInss = db_formatar($auxInss, "f");
@@ -486,12 +486,13 @@ HTML;
                         $oNotas->e70_vlrliq = db_formatar($oNotas->e70_vlrliq, "f");
                         $oNotas->patronal = db_formatar($oNotas->patronal, "f");
                         $oNotas->basepatronal = db_formatar($oNotas->basepatronal, "f");
-                        $oNotas->e50_valorremuneracao = db_formatar($oNotas->e50_valorremuneracao, "f");
+                        
 
                         if(!$oNotas->e50_valorremuneracao)
                             $oNotas->e50_valorremuneracao = db_formatar(0, "f");
                         else 
-                            $oNotas->e50_valorremuneracao = db_formatar($oNotas->e50_valorremuneracao, "f");    
+                            $oNotas->e50_valorremuneracao = db_formatar($oNotas->e50_valorremuneracao, "f");  
+                            
                                                                
                         echo <<<HTML
                         <tr style="height: 20px">
@@ -585,7 +586,14 @@ HTML;
                             </tr>
 HTML;
       
-} 
+                        $Geraltotale70_vlrliq = 0;
+                        $Geraltotalvalor_inss = 0;
+                        $Geraltotalvalor_irrf = 0;
+                        $Geraltotaloutrasretencoes = 0;
+                        $Geraltotalpatronal = 0;
+                        $Geraltotale50_valorremuneracao = 0;
+                        $Geraltotalbasepatronal = 0;
+                        } 
                         }
                      
                     }

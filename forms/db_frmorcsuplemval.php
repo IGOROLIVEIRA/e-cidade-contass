@@ -385,16 +385,14 @@ function js_pesquisaop01_db_operacaodecredito(mostra) {
   
 	}
 
-function js_mostraorcdotacao1(chave1) {
-  
-  if ($('o07_sequencial')) {
-    $('o07_sequencial').value = '';
-  }
-  document.form1.o47_coddot.value = chave1;
-  db_iframe_orcdotacao.hide();
-  document.form1.pesquisa_dot.click();
-  
+function js_mostraorcdotacao1(chave1) {  
+    if ($('o07_sequencial')) {
+        $('o07_sequencial').value = '';
+    }
+    document.form1.o47_coddot.value = chave1;
+    document.form1.pesquisa_dot.click();
 }
+
 function js_mostracontratoop(chave1) {
 
 if ($('o07_sequencial')) {

@@ -21,7 +21,7 @@ class gerarEXEOBRAS extends GerarAM
         $this->sArquivo = "EXEOBRAS";
         $this->abreArquivo();
 
-        $sSql = "select distinct  * from exeobras102022 where si197_mes = " . $this->iMes . " and si197_instit=" . db_getsession("DB_instit") . " order by si197_nroprocessolicitatorio";
+        $sSql = "select distinct * from exeobras102022 where si197_mes = " . $this->iMes . " and si197_instit=" . db_getsession("DB_instit") . " order by si197_nroprocessolicitatorio";
         $rsexeobras102022 = db_query($sSql);
 
         $sSql = "select * from exeobras202022 where si204_mes = " . $this->iMes . " and si204_instit=" . db_getsession("DB_instit");
@@ -39,7 +39,6 @@ class gerarEXEOBRAS extends GerarAM
             $this->adicionaLinha();
         } else {
 
-
             /**
              *
              * Registros 10
@@ -56,21 +55,20 @@ class gerarEXEOBRAS extends GerarAM
                 $aCSVEXEOBRAS10['si197_contdeclicitacao'] = $aEXEOBRAS10['si197_contdeclicitacao'];
                 $aCSVEXEOBRAS10['si197_exerciciolicitacao'] = $aEXEOBRAS10['si197_exerciciolicitacao'];
                 $aCSVEXEOBRAS10['si197_nroprocessolicitatorio'] = $aEXEOBRAS10['si197_nroprocessolicitatorio'];
-                $aCSVEXEOBRAS10['si197_codunidadesubresp'] =  str_pad($aEXEOBRAS10['si197_codunidadesubresp'], 5, "0", STR_PAD_LEFT);
+                $aCSVEXEOBRAS10['si197_codunidadesubresp'] = str_pad($aEXEOBRAS10['si197_codunidadesubresp'], 5, "0", STR_PAD_LEFT);
 
                 /*
-                * Trecho do código responsável por gerar sequenciais para o número do lote
-                * de acordo a l04_descricao e número do lote.
-                */
+* Trecho do código responsável por gerar sequenciais para o número do lote
+* de acordo a l04_descricao e número do lote.
+*/
 
                 $nrolote = $aEXEOBRAS10['si197_nrolote'];
                 $sql = "select liclicitemlote.* from liclicitem
-                join liclicita on l20_codigo=l21_codliclicita
-                join liclicitemlote on l04_liclicitem=l21_codigo
-                where l04_codigo=$nrolote order by l04_descricao;";
+join liclicita on l20_codigo=l21_codliclicita
+join liclicitemlote on l04_liclicitem=l21_codigo
+where l04_codigo=$nrolote order by l04_descricao;";
                 $rslotedescricao = db_query($sql);
                 $rslotedescricao = pg_fetch_array($rslotedescricao, 0);
-
 
 
                 $l04_descricao = $rslotedescricao['l04_descricao'];
@@ -82,9 +80,8 @@ class gerarEXEOBRAS extends GerarAM
                 }
 
 
-
                 if (in_array($l04_descricao, $seqnumlotes)) {
-                    $seq =  array_search($l04_descricao, $seqnumlotes);
+                    $seq = array_search($l04_descricao, $seqnumlotes);
                     $aCSVEXEOBRAS10['si197_nrolote'] = $seq;
                 } else {
                     $seqnumlotes[$sequencial] = $l04_descricao;
@@ -92,17 +89,33 @@ class gerarEXEOBRAS extends GerarAM
                     $sequencial++;
                 }
 
-
                 $aCSVEXEOBRAS10['si197_codobra'] = $aEXEOBRAS10['si197_codobra'];
                 $aCSVEXEOBRAS10['si197_objeto'] = $aEXEOBRAS10['si197_objeto'];
                 $aCSVEXEOBRAS10['si197_linkobra'] = $aEXEOBRAS10['si197_linkobra'];
                 $inserir = true;
 
-                /*
-                 * Trecho do código responsável por verificar se o registro 
-                *  após atribuição do sequencial ao número do lote já existe na planilha.
-                */
+                $processolicitatorio = $aCSVEXEOBRAS10['si197_nroprocessolicitatorio'];
 
+                $l20_tipojulg = db_query("select l20_tipojulg from liclicita where l20_edital = $processolicitatorio and l20_anousu = 2022");
+                $l20_tipojulg = pg_fetch_array($l20_tipojulg, 0);
+
+                if ($l20_tipojulg['l20_tipojulg'] != 3) {
+                    $aCSVEXEOBRAS10['si197_nrolote'] = "";
+                } else if ($l20_tipojulg['l20_tipojulg'] == 3) {
+                    $l20_codigo = db_query("select l20_codigo from liclicita where l20_edital = $processolicitatorio and l20_anousu = " . db_getsession("DB_anousu"));
+                    $l20_codigo = pg_fetch_array($l20_codigo, 0);
+                    $l20_codigo = $l20_codigo['l20_codigo'];
+                    $lotes = db_query("select distinct l04_descricao from liclicitemlote where l04_liclicitem in (select l21_codigo from liclicitem where l21_codliclicita = $l20_codigo)");
+
+                    if (pg_num_rows($lotes) == 1) {
+                        $aCSVEXEOBRAS10['si197_nrolote'] = "";
+                    }
+                }
+
+                /*
+                * Trecho do código responsável por verificar se o registro 
+                * após atribuição do sequencial ao número do lote já existe na planilha.
+                */
 
                 if (count($linhas) > 0) {
 
@@ -166,7 +179,6 @@ class gerarEXEOBRAS extends GerarAM
                 $this->adicionaLinha();
             }
         }
-
 
         $this->fechaArquivo();
     }

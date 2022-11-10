@@ -57,7 +57,7 @@ require_once("classes/db_pactovalormov_classe.php");
 require_once("classes/db_pactovalormovsolicitem_classe.php");
 require_once("classes/db_orctiporecconveniosolicita_classe.php");
 require_once("classes/db_solicitaprotprocesso_classe.php");
-require_once("classes/db_solicitavinculo_classe.php");
+
 
 db_postmemory($HTTP_GET_VARS);
 db_postmemory($HTTP_POST_VARS);
@@ -85,7 +85,6 @@ $oDaoItemPacto               = new cl_pactovalormovsolicitem();
 $oDaoItemPactomov            = new cl_pactovalormov;
 $oDaoOrctiporecConvenioPacto = new cl_orctiporecconveniosolicita();
 $oDaoProcessoAdministrativo  = new cl_solicitaprotprocesso();
-$clsolicitavinculo = new cl_solicitavinculo();
 
 $opselec   = 1;
 $db_opcao  = 1;
@@ -203,9 +202,6 @@ if (count($aParametrosOrcamento) > 0) {
 			}
 
 			//echo "<br><br>ERRO [1] => ". $sqlerro;
-
-
-
 		}
 
 		if ($pc10_solicitacaotipo == "5") {
@@ -235,7 +231,7 @@ if (count($aParametrosOrcamento) > 0) {
 			$clsolicita->pc10_login           = db_getsession("DB_id_usuario");
 			$clsolicita->pc10_data            = date("Y-m-d", db_getsession("DB_datausu"));
 			$clsolicita->pc10_resumo          = addslashes(stripslashes(chop($pc10_resumo)));
-			$clsolicita->pc10_solicitacaotipo = $pc10_solicitacaotipo;
+			$clsolicita->pc10_solicitacaotipo = 1;
 			$clsolicita->incluir(@$pc10_numero);
 			$pc10_numero = $clsolicita->pc10_numero;
 			if ($clsolicita->erro_status == 0) {
@@ -243,7 +239,6 @@ if (count($aParametrosOrcamento) > 0) {
 			}
 			$erro_msg = $clsolicita->erro_msg;
 		}
-
 		//echo "<br><br>ERRO [2] => ". $sqlerro;
 		/**
 		 * Bloco que inclui o número do processo na solicitaprotprocesso
@@ -295,24 +290,7 @@ if (count($aParametrosOrcamento) > 0) {
 		 * incluir o a informaca na tabela
 		 * solicita Vinculo
 		 */
-
-		if ($pc10_solicitacaotipo == 5 && $importar != null) {
-
-			$sSqlVinculo = db_query("select pc53_solicitapai vinculo from solicitavinculo where pc53_solicitafilho = " . $importar);
-			$rsVinculo = db_utils::fieldsMemory($sSqlVinculo, 0)->vinculo;
-
-			$oDaoSolicitaVinculo = db_utils::getDao("solicitavinculo");
-			$oDaoSolicitaVinculo->pc53_solicitafilho = $pc10_numero;
-			$oDaoSolicitaVinculo->pc53_solicitapai   = $rsVinculo;
-			$oDaoSolicitaVinculo->incluir(null);
-
-			if ($oDaoSolicitaVinculo->erro_status == 0) {
-				$erro_msg = $oDaoSolicitaVinculo->erro_msg;
-				$sqlerro  = true;
-			}
-		}
-
-		if ($pc10_solicitacaotipo == 5 && $importar == null) {
+		if ($pc10_solicitacaotipo == 5) {
 
 			if ($pc54_solicita == "") {
 
@@ -335,6 +313,7 @@ if (count($aParametrosOrcamento) > 0) {
 		}
 
 		if (isset($importar) && trim($importar) != "" && $sqlerro == false) {
+
 
 			if (isset($lRegistroPreco)) {
 				$sItensNaoImportados = db_getsession("sCodigoItensSemSaldo");
@@ -370,6 +349,8 @@ if (count($aParametrosOrcamento) > 0) {
 
 				$sequencia++;
 				db_fieldsmemory($result_importacaoitem, $i);
+
+
 
 				if ($pc30_obrigajust == 't') {
 
@@ -413,48 +394,79 @@ if (count($aParametrosOrcamento) > 0) {
 					$pc11_codigo = $clsolicitem->pc11_codigo;
 
 					/*
-				 * Vincular item da nova solicitação com item da compilação
-				 */
-					if ($pc10_solicitacaotipo == 5 && $importar == null) {
-						$sSqlVinculoItem = db_query("select pc55_solicitempai vinculoitem from solicitemvinculo where pc55_solicitemfilho = " . $iCodigoSolicitemImportado);
-						$rsVinculoItem = db_utils::fieldsMemory($sSqlVinculoItem, 0)->vinculoitem;
+				 * se for regisatro de preço
+				 * criamos vinculo na solicitemvinclulo
+				 *
+				*/
+					if (isset($lRegistroPreco)) {
 
-						$oDaoSolicitemVinculo = db_utils::getDao("solicitemvinculo");
-						$oDaoSolicitemVinculo->pc55_solicitemfilho = $pc11_codigo;
-						$oDaoSolicitemVinculo->pc55_solicitempai   = $rsVinculoItem;
+						$lVinculoRegistroPreco = db_getsession("lVinculoRegistroPreco");
+						if (isset($lVinculoRegistroPreco)) {
 
-						$oDaoSolicitemVinculo->incluir(null);
-						if ($oDaoSolicitemVinculo->erro_status == 0) {
+							/**
+							 *  para criar o vinculo na solicitemvinculo:
+							 *  1º - retornar o codigo do item da solicitacao que esta sendo importada = $importa
+							 *  2º - descobrir o codigo do pai da solicitacao do item na
+							 *
+							 *    $iCodigoSolicitemImportado
+							 *    $iCodigoItemNovo
+							 *    $iCodigoPaiItemImportado
+							 */
+							//echo $iCodigoSolicitemImportado."\n";
+							$iCodigoItemNovo           = $clsolicitem->pc11_codigo;
 
-							$erro_msg = $oDaoSolicitemVinculo->erro_msg;
-							$sqlerro  = true;
+							$sSqlPai  = " select *                                                  ";
+							$sSqlPai .= " from solicitemvinculo                                     ";
+							$sSqlPai .= " where pc55_solicitemfilho = {$iCodigoSolicitemImportado}  ";
+
+							$rsSolicitacaoPai = db_query($sSqlPai);
+
+							if ($rsSolicitacaoPai > 0) {
+								$iCodigoPaiItemImportado = db_utils::fieldsMemory($rsSolicitacaoPai, 0)->pc55_solicitempai;
+							}
+
+							// echo "<br/> Pai {$iCodigoPaiItemImportado} filho {$iCodigoSolicitemImportado} ";
+							//  echo "<br/> Pai {$iCodigoPaiItemImportado} filho importado {$iCodigoItemNovo} <br/>**<br/>";
+
+							$iCodigoSolicitacao = $clsolicita->pc10_numero;
+
+							/**
+							 *   Descobrir o código do item na pcmater, de acordo com o vinculo na solicitempcmater,
+							 *   usando  o código do item da solicitação que está sendo importada.
+							 *
+							 **/
+
+							$sSqlCodigoPcmater = "select * from solicitempcmater where pc16_solicitem = {$iCodigoSolicitemImportado}";
+							$rsCodigoItemPcmater = db_query($sSqlCodigoPcmater);
+
+							if ($rsCodigoItemPcmater > 0) {
+								$iCodigoPcmater = db_utils::fieldsMemory($rsCodigoItemPcmater, 0)->pc16_codmater;
+							}
+
+							/**
+							 *  Cria vinculos na solicitemvinculo
+							 *
+							 **/
+							require_once("classes/solicitacaocompras.model.php");
+							require_once("classes/db_pcprocitem_classe.php");
+							require_once("classes/db_pcorcam_classe.php");
+							require_once("classes/db_pcorcamitem_classe.php");
+							require_once("classes/db_pcorcamforne_classe.php");
+							require_once("classes/db_pcorcamitemproc_classe.php");
+							require_once("classes/db_pcorcamjulg_classe.php");
+							require_once("classes/db_pcorcamval_classe.php");
+							require_once("model/ItemEstimativa.model.php");
+
+							$oSolicitacao = new solicitacaoCompra($iCodigoSolicitacao);
+							$oSolicitacao->addItemRegistroPreco($iCodigoItemNovo, $iCodigoPcmater, $pc54_solicita, $clsolicitem->pc11_quant, $iCodigoPaiItemImportado);
 						}
 					}
-					$iCodigoSolicitacao = $clsolicita->pc10_numero;
-					$sSqlCodigoPcmater = "select * from solicitempcmater where pc16_solicitem = {$iCodigoSolicitemImportado}";
-					$rsCodigoItemPcmater = db_query($sSqlCodigoPcmater);
 
-					if ($rsCodigoItemPcmater > 0) {
-						$iCodigoPcmater = db_utils::fieldsMemory($rsCodigoItemPcmater, 0)->pc16_codmater;
-					}
-					require_once("classes/solicitacaocompras.model.php");
-					require_once("classes/db_pcprocitem_classe.php");
-					require_once("classes/db_pcorcam_classe.php");
-					require_once("classes/db_pcorcamitem_classe.php");
-					require_once("classes/db_pcorcamforne_classe.php");
-					require_once("classes/db_pcorcamitemproc_classe.php");
-					require_once("classes/db_pcorcamjulg_classe.php");
-					require_once("classes/db_pcorcamval_classe.php");
-					require_once("model/ItemEstimativa.model.php");
-					if ($pc10_solicitacaotipo == 5 && $importar == null) {
-						$oSolicitacao = new solicitacaoCompra($clsolicitem->pc11_numero);
-						$oSolicitacao->addItemRegistroPreco($pc11_codigo, $iCodigoPcmater, $rsVinculo, $clsolicitem->pc11_quant, $rsVinculoItem);
+					if ($clsolicitem->erro_status == 0) {
 
-						if ($clsolicitem->erro_status == 0) {
-							$sqlerro = true;
-							$erro_msg = $clsolicitem->erro_msg;
-							break;
-						}
+						$sqlerro = true;
+						$erro_msg = $clsolicitem->erro_msg;
+						break;
 					}
 					//echo "<br><br>ERRO [8] => ". $sqlerro;
 					if ($sqlerro == false) {
@@ -691,7 +703,7 @@ if (count($aParametrosOrcamento) > 0) {
 							}
 						}
 					}
-				} //die;
+				}
 				/*
        * Caso o item possua vinculacao de controle de pacto incluimos ele para a nova solicitacao
        */
@@ -778,7 +790,7 @@ if (count($aParametrosOrcamento) > 0) {
 	?>
 	<div class="container">
 		<?php
-		require_once("forms/db_frmsolicita.php");
+		require_once("forms/db_frmsolicitanovo.php");
 		?>
 	</div>
 </body>
@@ -796,6 +808,10 @@ if (isset($incluir) || (isset($importar) && $confirma == true)) {
 			echo "<script> document.form1." . $clsolicita->erro_campo . ".focus();</script>";
 		};
 	} else {
+
+		echo "<script>
+		parent.document.formaba.dotacoesnovo.disabled=false;\n
+	  </script>";
 
 		if (isset($param) && trim($param) != "") {
 			$parametro = "&param=alterar&param_ant=incluir";
@@ -820,14 +836,14 @@ if (isset($incluir) || (isset($importar) && $confirma == true)) {
 	              if (confirm('ATENÇÃO: \\n Solicitação de outro ano!!\\nDeseja incluir os itens com suas respectivas Dotações?')) {
 								  js_OpenJanelaIframe('top.corpo.iframe_solicita','db_iframe_dotac','com4_altdotacsol001.php?importado=$importar&codnovo=$pc10_numero','Dotações',true);
 								} else {
-				          location.href='com1_solicita005.php?db_opcaoBtnRegistroPreco=3&liberaaba=true&chavepesquisa=$pc10_numero';
+				          location.href='com1_solicitanovo005.php?db_opcaoBtnRegistroPreco=3&liberaaba=true&chavepesquisa=$pc10_numero';
 				        }
 						  </script>";
 			} else {
-				db_redireciona("com1_solicita005.php?db_opcaoBtnRegistroPreco=3&liberaaba=true&chavepesquisa=$pc10_numero$parametro");
+				db_redireciona("com1_solicitanovo005.php?db_opcaoBtnRegistroPreco=3&liberaaba=true&chavepesquisa=$pc10_numero$parametro");
 			}
 		} else {
-			db_redireciona("com1_solicita005.php?db_opcaoBtnRegistroPreco=1&liberaaba=true&chavepesquisa=$pc10_numero$parametro");
+			db_redireciona("com1_solicitanovo005.php?db_opcaoBtnRegistroPreco=1&liberaaba=true&chavepesquisa=$pc10_numero$parametro");
 		}
 	}
 }
@@ -843,8 +859,17 @@ if (isset($confirma) && $confirma == false && isset($importar)) {
 	echo "<script>
 
 		      if(confirm('ATENÇÃO: \\nSerão importados os itens, as dotações e os fornecedores sugeridos desta solicitação.\\nDeseja continuar?')){
-		      	location.href = 'com1_solicita004.php?lBloqueiaAncoraRegistro=1&db_opcaoBtnRegistroPreco=3$sQueryString&importar=$importar&conf=true';
+		      	location.href = 'com1_solicitanovo004.php?lBloqueiaAncoraRegistro=1&db_opcaoBtnRegistroPreco=3$sQueryString&importar=$importar&conf=true';
 		      }
 		    </script>";
+}
+
+if ($pc30_permsemdotac == null) {
+	echo "<script>
+
+	if(confirm('ATENÇÃO: \\nSerão importados os itens, as dotações e os fornecedores sugeridos desta solicitação.\\nDeseja continuar?')){
+		location.href = 'com1_solicitanovo004.php?lBloqueiaAncoraRegistro=1&db_opcaoBtnRegistroPreco=3$sQueryString&importar=$importar&conf=true';
+	}
+  </script>";
 }
 ?>
