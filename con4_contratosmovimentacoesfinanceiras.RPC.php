@@ -589,7 +589,7 @@ switch ($oParam->exec) {
                         if($oDadosItemUltimaPosicao->ac20_servicoquantidade == 'f' && $oDadosItemUltimaPosicao->pc01_servico == 't'){
                   
                         }else if ($oDadosItemUltimaPosicao->ac20_valorunitario != $oDadosItemAtualPosicao->ac20_valorunitario) {
-                            $smessage .= "Item " . $oItem->ac20_pcmater . ": O valor unitário atual do contrato é " . $oDadosItemUltimaPosicao->ac20_valorunitario . " e o valor unitário do item a ser anulado é " . $oDadosItemAtualPosicao->ac20_valorunitario . ". Ao anular os itens do empenho, o valor unitario será o " . $oDadosItemUltimaPosicao->ac20_valorunitario . ".\n\n";
+                            $smessage .= "Item " . $oItem->ac20_pcmater . " da autorização ".$iAutorizacao.": O valor unitário atual do contrato é " . $oDadosItemUltimaPosicao->ac20_valorunitario . " e o valor unitário do item a ser anulado é " . $oDadosItemAtualPosicao->ac20_valorunitario . ". Ao anular os itens do empenho, o valor unitario será o " . $oDadosItemUltimaPosicao->ac20_valorunitario . ".\n\n";
                             $oRetorno->status = 3;
                         }
                     }
