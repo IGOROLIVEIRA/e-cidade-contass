@@ -214,7 +214,7 @@ class licitacao
     public function getDados()
     {
 
-        $rsLicita     = $this->oDaoLicita->sql_record($this->oDaoLicita->sql_query($this->iCodLicitacao));
+        $rsLicita     = $this->oDaoLicita->sql_record($this->oDaoLicita->sql_queryContratos($this->iCodLicitacao));
         $this->oDados = db_utils::fieldsMemory($rsLicita, 0);
         return $this->oDados;
     }
@@ -473,7 +473,7 @@ class licitacao
         }
         $oDaoSituacaoitemcompra = db_utils::getDao("situacaoitemcompra");
 
-        $rsSituacaoitemcompra = $oDaoSituacaoitemcompra->sql_query_file(null,"l218_codigo",null,"l218_codigolicitacao = {$this->iCodLicitacao}");
+        $rsSituacaoitemcompra = $oDaoSituacaoitemcompra->sql_query_file(null, "l218_codigo", null, "l218_codigolicitacao = {$this->iCodLicitacao}");
         $aElementos    = db_utils::getCollectionByRecord($rsSituacaoitemcompra);
 
         $oDaoSituacaoitemlic = db_utils::getDao("situacaoitemlic");
@@ -747,7 +747,7 @@ class licitacao
       and l21_codliclicita in({$sLista})"
         );
         //echo $sSqlLicitacoes; die();
-        
+
         $rsLicitacoes    = $oDaoLicilicitem->sql_record($sSqlLicitacoes);
         return db_utils::getCollectionByRecord($rsLicitacoes, false, false, true);
     }
@@ -791,7 +791,7 @@ class licitacao
         if ($filtro) {
             $sWhere .= " AND l03_pctipocompratribunal {$filtro}";
         }
-        
+
         $sSqlLicitacoes  = $oDaoLicilicitem->sql_query_soljulg(
             null,
             $sCampos,
@@ -799,7 +799,7 @@ class licitacao
             $sWhere,
             true
         );
-        
+
 
         $rsLicitacoes    = $oDaoLicilicitem->sql_record($sSqlLicitacoes);
         return db_utils::getCollectionByRecord($rsLicitacoes, false, false, true);
@@ -855,7 +855,7 @@ class licitacao
 
     static function getItensPorFornecedorCredenciamento($iFornecedor, $iLicitacao, $anousu)
     {
-        
+
         $oDaoLiclicitem  = db_utils::getDao("liclicitem");
 
         $sCampos = "l21_codigo AS codigo,
