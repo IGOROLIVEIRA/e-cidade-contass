@@ -2449,150 +2449,7 @@ class Acordo
         }
         return true;
     }
-    public function verificaAutorizacao($iAutorizacao, $aItensEmpempItem = array())
-    {
-
-        if (empty($iAutorizacao)) {
-            throw new Exception("Codigo da autorização não informado.");
-        }
-        if (!db_utils::inTransaction()) {
-            throw new Exception("Nenhuma transação com o banco de dados aberta.\nProcessamento cancelado.");
-        }
-        $sql = "select distinct       
-        ac20_acordoposicao  from acordoposicao        
-        inner join acordoitem          on ac20_acordoposicao = ac26_sequencial        
-        inner join acordoitemexecutado on ac20_sequencial    = ac29_acordoitem        
-        inner join acordoitemexecutadoempautitem on ac29_sequencial = ac19_acordoitemexecutado        
-        inner join empautitem on e55_sequen = ac19_sequen and ac19_autori = e55_autori        
-        inner join empautoriza on e54_autori = e55_autori        
-        inner join empautidot on e56_autori = e54_autori  
-        where ac26_acordo = {$this->getCodigoAcordo()}     
-        and e54_autori = {$iAutorizacao}";
-
-
-        $rsacordoitem = db_query($sql);
-        $oDadosacordoitem = db_utils::fieldsMemory($rsacordoitem, 0);
-
-        
-
-
-        $sql2 = "select max(ac20_acordoposicao) as codigoposicao
-        from acordoposicao 
-        inner join acordoitem on ac20_acordoposicao = ac26_sequencial 
-        where ac26_acordo = {$this->getCodigoAcordo()}";
-
-
-        $rsacordoitemd = db_query($sql2);
-        $oDadosacordoitemd = db_utils::fieldsMemory($rsacordoitemd, 0);
-
-        
-
-        $sql3 = "select pc01_liberarsaldoposicao from parametroscontratos";
-        $rsparamcontrato = db_query($sql3);
-        $oDadosparamcontrato = db_utils::fieldsMemory($rsparamcontrato, 0);
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-         * Verifica se a autorizacao é do contrato,
-         */
-        $aAutorizacoes = $this->getAutorizacoes($iAutorizacao);
-        if (count($aAutorizacoes) == 1) {
-
-            $oAutorizacao = new AutorizacaoEmpenho($iAutorizacao);
-            $oAutorizacao->excluirReservaSaldo();
-            $oAutorizacao->anularAutorizacaoEmpenho(new DBDate(date("d/m/Y", db_getsession("DB_datausu"))));
-
-            $iStatus = 1;
-            /**
-             * Buscamos todos os itens que são da autorizacao
-             */
-            $aItens = $this->getItensAcordoNaAutorizacao($iAutorizacao);
-            
-            /**
-             * incluimos um saldo executado negativo, informando que houve um estorno
-             */
-            foreach ($aItens as $oItem) {
-
-                if ($oDadosparamcontrato->pc01_liberarsaldoposicao == 'f' && pg_num_rows($rsparamcontrato) > 0) {
-                    $ItemUltimaPosicao = db_query("
-                    SELECT ac20_sequencial,ac20_quantidade,ac20_valortotal,ac20_valorunitario,ac20_acordoposicao,ac20_servicoquantidade,pc01_servico
-                    FROM acordoitem
-                    inner join pcmater on pc01_codmater = ac20_pcmater
-                    inner join acordoposicao on ac26_sequencial = ac20_acordoposicao
-                    WHERE ac26_acordo = {$this->getCodigoAcordo()}
-                    AND ac26_sequencial =
-                    {$oDadosacordoitemd->codigoposicao}
-                    AND ac20_pcmater = {$oItem->ac20_pcmater} ");
-
-                    $oDadosItemUltimaPosicao = db_utils::fieldsMemory($ItemUltimaPosicao, 0);
-
-                    $ItemAtualPosicao = db_query("
-                    SELECT ac20_sequencial,ac20_quantidade,ac20_valortotal,ac20_valorunitario,ac20_acordoposicao,ac20_servicoquantidade
-                    FROM acordoitem
-                    JOIN acordoposicao ON ac20_acordoposicao = ac26_sequencial
-                    WHERE ac26_acordo = {$this->getCodigoAcordo()}
-                    AND ac26_sequencial ={$oDadosacordoitem->ac20_acordoposicao}
-                    AND ac20_pcmater = {$oItem->ac20_pcmater} ");
-                    
-                    $oDadosItemAtualPosicao = db_utils::fieldsMemory($ItemAtualPosicao, 0);
-
-                    $ItemAutoriza = db_query("
-                    select * from empautitem where e55_autori ={$iAutorizacao} and e55_item = {$oItem->ac20_pcmater}");
-                    
-                    $oDadosItemAutoriza = db_utils::fieldsMemory($ItemAutoriza, 0);
-
-                    if ($oDadosItemAtualPosicao->ac20_acordoposicao != $oDadosItemUltimaPosicao->ac20_acordoposicao) {
-                        
-                        if ($oDadosItemAutoriza->e55_servicoquantidade != $oDadosItemUltimaPosicao->ac20_servicoquantidade) {
-                            //$nMensagem = "Usuário: Não será possível a anulação da autorização.\n\nMotivo: A forma de controle do item " . $oItem->ac20_pcmater . " na autorização é diferente da posição atual do contrato!";
-                            $iStatus = 2;
-                            //echo $json->encode(array("mensagem" => urlencode($nMensagem), "status" => $iStatus));
-                            return $iStatus;
-                        }
-                        if($oDadosItemUltimaPosicao->ac20_servicoquantidade == 'f' && $oDadosItemUltimaPosicao->pc01_servico == 't'){
-                  
-                        }else if ($oDadosItemUltimaPosicao->ac20_valorunitario != $ItemAtualPosicao->ac20_valorunitario) {
-                            //$nMensagem .= "Item " . $rsacordoMaterial->ac20_pcmater . ": O valor unitário atual do contrato é " . $ItemUltimaPosicao->ac20_valorunitario . " e o valor unitário do item a ser anulado é " . $ItemAtualPosicao->ac20_valorunitario . ". Ao anular os itens do empenho, o valor unitario será o " . $ItemUltimaPosicao->ac20_valorunitario . ".\n\n";
-                            $iStatus = 3;
-                        }
-                    }
-                }
-                /*
-                 * incluirmos na tabela acordoitemexecutado
-                 
-                $oDaoAcordoItemExecutado                   = db_utils::getDao("acordoitemexecutado");
-                $oDaoAcordoItemExecutado->ac29_acordoitem  = $oItem->codigo;
-                $oDaoAcordoItemExecutado->ac29_automatico  = 'true';
-                $oDaoAcordoItemExecutado->ac29_quantidade  = $oItem->quantidade * -1;
-                $oDaoAcordoItemExecutado->ac29_valor       = $oItem->valor * -1;
-                $oDaoAcordoItemExecutado->ac29_tipo        = 1;
-                $oDaoAcordoItemExecutado->ac29_datainicial = date("Y-m-d", db_getsession("DB_datausu"));
-                $oDaoAcordoItemExecutado->ac29_datafinal   = date("Y-m-d", db_getsession("DB_datausu"));
-                $oDaoAcordoItemExecutado->incluir(null);
-                if ($oDaoAcordoItemExecutado->erro_status == 0) {
-                    throw new Exception("Erro ao salvar movimentação do acordo!\nErro:{$oDaoAcordoItemExecutado->erro_msg}");
-                }*/
-                /**
-                 * Vinculamos a autorizacao ao item do acordo
-                 */
-                
-                
-            }
-        }
-        return $iStatus;
-    }
+    
     public function anularAutorizacao2($iAutorizacao, $aItensEmpempItem = array())
     {
 
@@ -2696,9 +2553,10 @@ class Acordo
                     AND ac20_pcmater = {$oItem->ac20_pcmater} ");
                     
                     $oDadosItemAtualPosicao = db_utils::fieldsMemory($ItemAtualPosicao, 0);
-
+                //VERIFICA O PARAMETRO DO SALDO POR POSICAO E SE A POSICAO DO EMPENHO E DIFERENTE DA ULTIMA POSICAO DO ACORDO
                 if ($oDadosparamcontrato->pc01_liberarsaldoposicao == 'f' && pg_num_rows($rsparamcontrato) > 0) {
                     if ($oDadosItemAtualPosicao->ac20_acordoposicao != $oDadosItemUltimaPosicao->ac20_acordoposicao) {
+                        //CRIA UMA POSICAO NA TABELA acordoitemexecutado
                         $oDaoAcordoItemExecutadonovo                   = db_utils::getDao("acordoitemexecutado");
                         $oDaoAcordoItemExecutadonovo->ac29_acordoitem  = $oDadosItemUltimaPosicao->ac20_sequencial;
                         $oDaoAcordoItemExecutadonovo->ac29_automatico  = 'true';

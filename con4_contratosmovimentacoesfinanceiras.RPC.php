@@ -499,8 +499,6 @@ switch ($oParam->exec) {
         $rsacordoitem = db_query($sql);
         $oDadosacordoitem = db_utils::fieldsMemory($rsacordoitem, 0);
 
-        
-
 
         $sql2 = "select max(ac20_acordoposicao) as codigoposicao
         from acordoposicao 
@@ -518,25 +516,11 @@ switch ($oParam->exec) {
         $oDadosparamcontrato = db_utils::fieldsMemory($rsparamcontrato, 0);
         
 
-
-
-
-
-
-
-
-
-
-
-
-
-/*
+        /*
          * Verifica se a autorizacao é do contrato,
          */
         $aAutorizacoes = $oContrato->getAutorizacoes($iAutorizacao);
         if (count($aAutorizacoes) == 1) {
-
-            
 
             $status = 1;
             /**
@@ -545,7 +529,7 @@ switch ($oParam->exec) {
             $aItens = $oContrato->getItensAcordoNaAutorizacao($iAutorizacao);
             
             /**
-             * incluimos um saldo executado negativo, informando que houve um estorno
+             * Verifica se tema alguma alteracao do empenho para ultima posicao do acordo
              */
             foreach ($aItens as $oItem) {
 
@@ -583,7 +567,6 @@ switch ($oParam->exec) {
                             $smessage = "Usuário: Não será possível a anulação da autorização ".$iAutorizacao." .\n\nMotivo: A forma de controle do item " . $oItem->ac20_pcmater . " na autorização é diferente da posição atual do contrato!";
                             $oRetorno->message = urlencode($smessage);
                             $oRetorno->status = 2;
-                            //echo $json->encode(array("mensagem" => urlencode($nMensagem), "status" => $iStatus));
                             return;
                         }
                         if($oDadosItemUltimaPosicao->ac20_servicoquantidade == 'f' && $oDadosItemUltimaPosicao->pc01_servico == 't'){
@@ -594,25 +577,7 @@ switch ($oParam->exec) {
                         }
                     }
                 }
-                /*
-                 * incluirmos na tabela acordoitemexecutado
-                 
-                $oDaoAcordoItemExecutado                   = db_utils::getDao("acordoitemexecutado");
-                $oDaoAcordoItemExecutado->ac29_acordoitem  = $oItem->codigo;
-                $oDaoAcordoItemExecutado->ac29_automatico  = 'true';
-                $oDaoAcordoItemExecutado->ac29_quantidade  = $oItem->quantidade * -1;
-                $oDaoAcordoItemExecutado->ac29_valor       = $oItem->valor * -1;
-                $oDaoAcordoItemExecutado->ac29_tipo        = 1;
-                $oDaoAcordoItemExecutado->ac29_datainicial = date("Y-m-d", db_getsession("DB_datausu"));
-                $oDaoAcordoItemExecutado->ac29_datafinal   = date("Y-m-d", db_getsession("DB_datausu"));
-                $oDaoAcordoItemExecutado->incluir(null);
-                if ($oDaoAcordoItemExecutado->erro_status == 0) {
-                    throw new Exception("Erro ao salvar movimentação do acordo!\nErro:{$oDaoAcordoItemExecutado->erro_msg}");
-                }*/
-                /**
-                 * Vinculamos a autorizacao ao item do acordo
-                 */
-                
+              
                 
             }
         }
