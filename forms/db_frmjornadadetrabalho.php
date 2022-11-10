@@ -5,7 +5,7 @@ $cljornadadetrabalho->rotulo->label();
 <form name="form1" method="post" action="">
     <center>
         <table border="0">
-            <tr>
+            <tr style="display: none;">
                 <td nowrap title="<?= @$Tjt_sequencial ?>">
                     <?= @$Ljt_sequencial ?>
                 </td>

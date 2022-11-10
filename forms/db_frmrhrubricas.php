@@ -121,7 +121,7 @@ define('ESOCIAL_OPCAO_REGIME', 4000361);
                                 </td>
                                 <td>
                                     <?
-                                    $info = array("1" => "Fixa", "2" => "Variï¿½vel");
+                                    $info = array("1" => "Fixa", "2" => "Variável");
                                     db_select('rh27_tipo', $info, true, $db_opcao, "style='width:101px;'");
                                     ?>
                                 </td>
@@ -177,7 +177,7 @@ define('ESOCIAL_OPCAO_REGIME', 4000361);
                     </fieldset>
 
                     <fieldset id="ctnInformacoes">
-                        <Legend><b>Informaï¿½ï¿½es</b></Legend>
+                        <Legend><b>Informações</b></Legend>
                         <table width="100%">
                             <?
                             if ($db_opcao == 1 && (!isset($rh27_calc1) || $rh27_calc1 == "") && (!isset($rh27_calc2) || $rh27_calc2 == "")) {
@@ -452,7 +452,7 @@ define('ESOCIAL_OPCAO_REGIME', 4000361);
                     </fieldset>
 
                     <fieldset id="ctnFormulas">
-                        <Legend> <b>Fï¿½rmulas</b> </Legend>
+                        <Legend> <b>Fórmulas</b> </Legend>
                         <table width="100%">
                             <tr>
                                 <td title="<?= @$Trh27_form ?>" width="35%"> <?= @$Lrh27_form ?> </td>
