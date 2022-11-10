@@ -115,7 +115,7 @@ db_app::load("estilos.css, grid.style.css");
          </tr>
          <tr>
            <td colspan="2" style="text-align: center;">
-             <input type="button" value='Anular' id='btnAnularAutorizacoes' onclick="js_anularAutorizacoes()">
+             <input type="button" value='Anular' id='btnAnularAutorizacoes' onclick="js_verificaAutorizacoes()">
            </td>
          </tr>
       </table>
@@ -259,6 +259,56 @@ function js_visualizarAutorizacao(iAutorizacao) {
                       'Dados da Autorizacao',
                         true
                         );
+}
+
+function js_verificaAutorizacoes() {
+
+var aLinhas = oGridAutorizacoes.getSelection("object");
+if (aLinhas.length == 0) {
+
+  alert('Nenhuma autorização de empenho selecionada.');
+  return false;
+}
+if (!confirm("Confirma a anulação das autorizações selecionadas?")) {
+  return false;
+}
+js_divCarregando('Aguarde, anulando autorizações selecionadas...', 'msgbox');
+var oParam           = new Object();
+oParam.exec          = "verificaAutorizacoes";
+oParam.aAutorizacoes = new Array();
+aLinhas.each(function(iAut, iSeq){
+   oParam.aAutorizacoes.push(iAut.aCells[0].getValue());
+});
+var oAjax = new Ajax.Request(sUrlRpc,
+                            {method:'post',
+                             parameters:'json='+Object.toJSON(oParam),
+                             onComplete:js_retornoVerificaAutorizacoes
+                            }
+                            );
+
+}
+
+function js_retornoVerificaAutorizacoes(oResponse) {
+
+js_removeObj('msgbox');
+var oRetorno = eval("("+oResponse.responseText+")");
+
+
+
+            if(oRetorno.status == 2){
+
+              mensagem = oRetorno.message.replace(/\+/g," ");
+            mensagem = unescape(mensagem);
+            alert(mensagem);
+}else if(oRetorno.status == 3){
+  mensagem = oRetorno.message.replace(/\+/g," ");
+            mensagem = unescape(mensagem);
+if(confirm(mensagem)){
+  js_anularAutorizacoes()
+}
+}else if(oRetorno.status == 1){
+  js_anularAutorizacoes()
+}
 }
 
 function js_anularAutorizacoes() {

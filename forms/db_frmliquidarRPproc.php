@@ -204,7 +204,7 @@ if ($sfileName == "emp4_anularrpproc.php"){
         </tr>
 
     </table>
-    <input name="confirmar" type="button" id="confirmar" value="Confirmar" onclick="return js_estornaRP(<?=$iTipoResto?>)" disabled>
+    <input name="confirmar" type="button" id="confirmar" value="Confirmar" onclick="return js_verificaRP(<?=$iTipoResto?>)" disabled>
     <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
 </form>
 <script>
@@ -411,7 +411,7 @@ if ($sfileName == "emp4_anularrpproc.php"){
         $('confirmar').disabled = lDisabled;
     }
 
-    function js_estornaRP(iTipo) {
+    function js_verificaRP(iTipo) {
 
         empAnulaTipo = document.getElementById('e94_empanuladotipo').value
         if(parseInt(empAnulaTipo) === 0) {
@@ -575,6 +575,153 @@ if ($sfileName == "emp4_anularrpproc.php"){
         sSenderJson      = "{";
         sSenderJson     += "'iEmpenho':"+iEmpenho+",'sValorEstornar':"+(nTotalNotas+nTotalItens)+",";
         sSenderJson     += "'aNotas':["+sJsonNotas+"],";
+        sSenderJson     += "'iTipo':"+iTipo+",'method':'verificaRP','sMotivo':'"+$F('motivo')+"',";
+        sSenderJson     += "'sAto':'"+$F('ato')+"',";
+        sSenderJson     += "'dDataAto':'"+$F('data_ato')+"',";
+        sSenderJson     += "'tipoAnulacao':"+$('e94_empanuladotipo').value+",";
+        sSenderJson     += "'aItens':["+sJsonItens+"]";
+        sSenderJson     += "}";
+        var oResponse    = new Ajax.Request
+        (
+            'emp4_liquidacao004.php',
+            {
+                method: 'post',
+                parameters: 'json='+sSenderJson,
+                onComplete: js_retornoverificaRP
+            }
+        );
+
+
+
+    }
+
+    function js_estornaRP(iTipo) {
+
+        
+        
+
+        var iEmpenho      = $F('e60_numemp');
+        var nSaldoEmpenho = js_strToFloat($('saldoRP').value);
+        var sAto          = new String($F('ato'));
+        var DataAto       = $F('data_ato');
+        var sMotivo       = new String($F('motivo'));
+        var nTotalNotas   = new Number(0);
+        var nTotalItens   = new Number(0);
+        var sJsonNotas    = new String();
+        var sJsonItens    = new String();
+        var iTotNotas     = new Number(0);
+        var iTotItens     = new Number(0);
+        var aItens        = '';
+        var aNotas        = '';
+
+     
+
+        /*
+        * Vamos percorrer as notas de RP existentes no empenho
+        * e retornar as selecionadas pelo usuario.
+        */
+        var aNotas = js_getElementbyClass(frmAnularEmpenho, 'chkmarca');
+        for (i = 0; i < aNotas.length; i++) {
+
+            /*
+            * trabalhamos com a nota apenas.
+            * com a estrutura with, podemos acessar diretamente os metodos/propriedades do
+            * objeto que passamos como parametro, logo não é necessário utilizar
+            */
+            with (aNotas[i]) {
+
+                if (checked) {
+                    iTotNotas++;
+                    if (iTipoRP == 2) {
+                        nValorNota = js_strToFloat($('vlrapagar' + value).innerHTML);
+                    }else{
+                        nValorNota = js_strToFloat($('e70_valor' + value).innerHTML);
+                    }
+                    nTotalNotas += nValorNota;
+                    sJsonNotas  += (sJsonNotas != '' ? ',' : '') + "{'iCodNota':" + value + ",'sValorEstornado':" + nValorNota + "}";
+
+                }
+            }
+        }
+        /*
+        * Separamos algumas validacoes pelo tipo de RP;
+        *  1 = RP nao processado
+        *  2 = RP processado
+        */
+        nTotalNotas = +nTotalNotas.toFixed(2);
+        if (iTipo == 2) {
+
+            /* Validações
+            *  - Deve ter ao menos uma nota pra estornar;
+            */
+            try {
+
+                if (iTotNotas == 0) {
+                    throw 'E1';
+                }
+
+                if (nTotalNotas > nSaldoEmpenho) {
+                    throw 'E2';
+                }
+            }
+
+            catch (exeption) {
+
+                switch (exeption) {
+
+                    case 'E1':
+
+                        alert("Não há notas selecionadas. Procedimento cancelado");
+                        return false;
+                        break;
+
+                    case 'E2':
+
+                        alert("Não há saldo para efetuar essa operação.");
+                        return false;
+                        break;
+                }
+            }
+        }else if (iTipo == 1) {
+
+            var aItens = js_getElementbyClass(frmAnularEmpenho, 'chkmarcaItens');
+
+            var sVirg  = '';
+            for (i = 0; i < aItens.length; i++) {
+
+                /*
+                * trabalhamos com a nota apenas.
+                * com a estrutura with, podemos acessar diretamente os metodos/propriedades do
+                * objeto que passamos como parametro, logo não é necessário utilizar
+                */
+                with (aItens[i]) {
+
+                    if (checked) {
+
+                        iTotItens++;
+                        var nValorItem = new Number($F('vlrtot' + value));
+                        var nQtdItem   = new Number($F('qtdesol' + value));
+                        nTotalItens   += nValorItem;
+                        sJsonItens    += sVirg+"{'iCodItem':" + value + ",'vlrtot':" + nValorItem + ",'quantidade':"+nQtdItem+"}";
+                        sVirg = ',';
+                    }
+                }
+
+            }
+            if (iTotItens == 0) {
+
+                alert("Pelo menos um item deve ser informado.\nProcesso Anulado");
+                return false;
+
+            }
+        }
+        /*
+        * Criamos a requisição para o RPC efetuar os procedimentos necessários;
+        */
+        var sSenderJson  = new String();
+        sSenderJson      = "{";
+        sSenderJson     += "'iEmpenho':"+iEmpenho+",'sValorEstornar':"+(nTotalNotas+nTotalItens)+",";
+        sSenderJson     += "'aNotas':["+sJsonNotas+"],";
         sSenderJson     += "'iTipo':"+iTipo+",'method':'estornarRP','sMotivo':'"+$F('motivo')+"',";
         sSenderJson     += "'sAto':'"+$F('ato')+"',";
         sSenderJson     += "'dDataAto':'"+$F('data_ato')+"',";
@@ -595,26 +742,40 @@ if ($sfileName == "emp4_anularrpproc.php"){
 
     }
 
-    function js_retornoProcedimento(oResponse) {
+    function js_retornoverificaRP(oResponse) {
 
         var oRetorno = eval("(" + oResponse.responseText + ")");
         if (oRetorno.iStatus == '1') {
-
+            js_estornaRP(oRetorno.iTipo)
+        }else if (oRetorno.iStatus == '2'){
             alert(oRetorno.sMensagem.urlDecode());
-            if ($('imprimir').checked) {
-
-                jan = window.open('emp2_anulemp002.php?e60_numemp=' + $F('e60_numemp'), '', 'width=' + (screen.availWidth - 5) + ',height=' + (screen.availHeight - 40) + ',scrollbars=1,location=0 ');
-                jan.moveTo(0, 0);
-                js_pesquisa();
-
-            } else {
-                js_pesquisa();
+        }else if (oRetorno.iStatus == '3'){
+            if (confirm(oRetorno.sMensagem.urlDecode()+ " Deseja continuar ?")){
+                js_estornaRP(oRetorno.iTipo)
             }
-        }else {
+        }
+    }
 
-            alert(oRetorno.sMensagem.urlDecode());
+    function js_retornoProcedimento(oResponse) {
+
+    var oRetorno = eval("(" + oResponse.responseText + ")");
+    if (oRetorno.iStatus == '1') {
+
+        alert(oRetorno.sMensagem.urlDecode());
+        if ($('imprimir').checked) {
+
+            jan = window.open('emp2_anulemp002.php?e60_numemp=' + $F('e60_numemp'), '', 'width=' + (screen.availWidth - 5) + ',height=' + (screen.availHeight - 40) + ',scrollbars=1,location=0 ');
+            jan.moveTo(0, 0);
+            js_pesquisa();
+
+        } else {
             js_pesquisa();
         }
+    }else {
+
+        alert(oRetorno.sMensagem.urlDecode());
+        js_pesquisa();
+    }
     }
 
     /*
