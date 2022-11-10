@@ -388,9 +388,19 @@ if (isset($incluir) && trim($incluir) != "") {
 
             $natureza_objeto = db_utils::fieldsMemory($rsSql, 0)->l20_naturezaobjeto;
             //db_criatabela($rsSql);exit;
+
+            $rsCodtribunal = db_query("select l03_pctipocompratribunal from liclicita
+            inner join cflicita on l20_codtipocom =  l03_codigo
+            where l20_codigo = $licitacao;");
+            $codtribunal = db_utils::fieldsMemory($rsCodtribunal, 0);
+            $codtribunal = $codtribunal->l03_pctipocompratribunal;
+
             if (!$sqlerro && $incluir && pg_numrows($rsLotes) == pg_numrows($rsCodigos)) {
-                if (in_array(intval($natureza_objeto), array(1, 7))) {
-                    echo "<script> parent.parent.window.location.href='lic4_editalabas.php?licitacao=$licitacao';</script>";
+                if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
+
+                    if (in_array(intval($natureza_objeto), array(1, 7))) {
+                        echo "<script> parent.parent.window.location.href='lic4_editalabas.php?licitacao=$licitacao';</script>";
+                    }
                 }
             }
 
