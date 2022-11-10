@@ -1,4 +1,5 @@
 <?php
+
 /*
  *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2014  DBSeller Servicos de Informatica
@@ -2448,6 +2449,7 @@ class Acordo
         }
         return true;
     }
+    
     public function anularAutorizacao2($iAutorizacao, $aItensEmpempItem = array())
     {
 
@@ -2457,6 +2459,39 @@ class Acordo
         if (!db_utils::inTransaction()) {
             throw new Exception("Nenhuma transação com o banco de dados aberta.\nProcessamento cancelado.");
         }
+        $sql = "select distinct       
+        ac20_acordoposicao  from acordoposicao        
+        inner join acordoitem          on ac20_acordoposicao = ac26_sequencial        
+        inner join acordoitemexecutado on ac20_sequencial    = ac29_acordoitem        
+        inner join acordoitemexecutadoempautitem on ac29_sequencial = ac19_acordoitemexecutado        
+        inner join empautitem on e55_sequen = ac19_sequen and ac19_autori = e55_autori        
+        inner join empautoriza on e54_autori = e55_autori        
+        inner join empautidot on e56_autori = e54_autori  
+        where ac26_acordo = {$this->getCodigoAcordo()}     
+        and e54_autori = {$iAutorizacao}";
+
+
+        $rsacordoitem = db_query($sql);
+        $oDadosacordoitem = db_utils::fieldsMemory($rsacordoitem, 0);
+
+
+        $sql2 = "select max(ac20_acordoposicao) as codigoposicao
+        from acordoposicao 
+        inner join acordoitem on ac20_acordoposicao = ac26_sequencial 
+        where ac26_acordo = {$this->getCodigoAcordo()}";
+
+
+        $rsacordoitemd = db_query($sql2);
+        $oDadosacordoitemd = db_utils::fieldsMemory($rsacordoitemd, 0);
+
+        $sql3 = "select pc01_liberarsaldoposicao from parametroscontratos";
+        $rsparamcontrato = db_query($sql3);
+        $oDadosparamcontrato = db_utils::fieldsMemory($rsparamcontrato, 0);
+        
+
+
+
+
         /*
          * Verifica se a autorizacao é do contrato,
          */
@@ -2496,6 +2531,48 @@ class Acordo
                 if ($oDaoAcordoItemExecutado->erro_status == 0) {
                     throw new Exception("Erro ao salvar movimentação do acordo!\nErro:{$oDaoAcordoItemExecutado->erro_msg}");
                 }
+
+                $ItemUltimaPosicao = db_query("
+                    SELECT ac20_sequencial,ac20_quantidade,ac20_valortotal,ac20_valorunitario,ac20_acordoposicao,ac20_servicoquantidade,pc01_servico
+                    FROM acordoitem
+                    inner join pcmater on pc01_codmater = ac20_pcmater
+                    inner join acordoposicao on ac26_sequencial = ac20_acordoposicao
+                    WHERE ac26_acordo = {$this->getCodigoAcordo()}
+                    AND ac26_sequencial =
+                    {$oDadosacordoitemd->codigoposicao}
+                    AND ac20_pcmater = {$oItem->ac20_pcmater} ");
+
+                    $oDadosItemUltimaPosicao = db_utils::fieldsMemory($ItemUltimaPosicao, 0);
+
+                    $ItemAtualPosicao = db_query("
+                    SELECT ac20_sequencial,ac20_quantidade,ac20_valortotal,ac20_valorunitario,ac20_acordoposicao,ac20_servicoquantidade
+                    FROM acordoitem
+                    JOIN acordoposicao ON ac20_acordoposicao = ac26_sequencial
+                    WHERE ac26_acordo = {$this->getCodigoAcordo()}
+                    AND ac26_sequencial ={$oDadosacordoitem->ac20_acordoposicao}
+                    AND ac20_pcmater = {$oItem->ac20_pcmater} ");
+                    
+                    $oDadosItemAtualPosicao = db_utils::fieldsMemory($ItemAtualPosicao, 0);
+                //VERIFICA O PARAMETRO DO SALDO POR POSICAO E SE A POSICAO DO EMPENHO E DIFERENTE DA ULTIMA POSICAO DO ACORDO
+                if ($oDadosparamcontrato->pc01_liberarsaldoposicao == 'f' && pg_num_rows($rsparamcontrato) > 0) {
+                    if ($oDadosItemAtualPosicao->ac20_acordoposicao != $oDadosItemUltimaPosicao->ac20_acordoposicao) {
+                        //CRIA UMA POSICAO NA TABELA acordoitemexecutado
+                        $oDaoAcordoItemExecutadonovo                   = db_utils::getDao("acordoitemexecutado");
+                        $oDaoAcordoItemExecutadonovo->ac29_acordoitem  = $oDadosItemUltimaPosicao->ac20_sequencial;
+                        $oDaoAcordoItemExecutadonovo->ac29_automatico  = 'true';
+                        $oDaoAcordoItemExecutadonovo->ac29_quantidade  = $oItem->quantidade * -1;
+                        if ($oDadosItemUltimaPosicao->ac20_servicoquantidade == 'f' && $oDadosItemUltimaPosicao->pc01_servico == 't') {
+                            $oDaoAcordoItemExecutadonovo->ac29_valor       = $oItem->valor * -1;
+                        }else{
+                            $oDaoAcordoItemExecutadonovo->ac29_valor       = ($oItem->quantidade * $oDadosItemUltimaPosicao->ac20_valorunitario) * -1;
+                        }
+                        $oDaoAcordoItemExecutadonovo->ac29_tipo        = 1;
+                        $oDaoAcordoItemExecutadonovo->ac29_observacao = 'liberarsaldoposicao';
+                        $oDaoAcordoItemExecutadonovo->ac29_datainicial = date("Y-m-d", db_getsession("DB_datausu"));
+                        $oDaoAcordoItemExecutadonovo->ac29_datafinal   = date("Y-m-d", db_getsession("DB_datausu"));
+                        $oDaoAcordoItemExecutadonovo->incluir(null);
+                    }
+                }
                 /**
                  * Vinculamos a autorizacao ao item do acordo
                  */
@@ -2517,6 +2594,7 @@ class Acordo
                 if ($oDaoAcordoItemExecutadoAut->erro_status == 0) {
                     throw new Exception("Erro ao salvar movimentação do acordo!\nErro:{$oDaoExecucaoDotacao->erro_msg}");
                 }
+                
                 //$oItemContrato = $this->getUltimaPosicao()->getItemByCodigo($oItem->codigo);
                 $aDotacoes    = array();
                 $oDotacaoItem = null;
