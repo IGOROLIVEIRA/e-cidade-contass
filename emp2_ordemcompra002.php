@@ -120,7 +120,7 @@ if (isset($m51_codordem_ini) && $m51_codordem_ini == "" && isset($m51_codordem_f
   }
 }
 
-$result = $clmatordem->sql_record($clmatordem->sql_query(null, "*", "", "$txt_where"));
+$result = $clmatordem->sql_record($clmatordem->sql_query_instit(null, "*", "", "$txt_where"));
 
 $num = $clmatordem->numrows;
 
