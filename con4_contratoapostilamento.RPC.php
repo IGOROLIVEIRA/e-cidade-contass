@@ -132,9 +132,9 @@ try {
 
                 $dateassinatura = implode("-", array_reverse(explode("/", $oParam->oApostila->dataapostila)));
 
-
                 if ($dateassinatura != "" && $oParam->oApostila->datareferencia == "") {
                     if ($c99_datapat != "" && $dateassinatura <= $c99_datapat) {
+                        $oRetorno->datareferencia = true;
                         throw new Exception(' O período já foi encerrado para envio do SICOM. Preencha o campo Data de Referência com uma data no mês subsequente.');
                     }
                 }
@@ -142,7 +142,7 @@ try {
             $oContrato = AcordoRepository::getByCodigo($oParam->iAcordo);
             $oContrato->apostilar($oParam->aItens, $oParam->oApostila, $oParam->datainicial, $oParam->datafinal, $oParam->aSelecionados, $oParam->oApostila->datareferencia);
             break;
-        
+
         case "getleilicitacao":
             $sSQL = "select l20_leidalicitacao  from liclicita 
             inner join acordo on
@@ -150,7 +150,7 @@ try {
             where
             acordo.ac16_origem = 2
             and acordo.ac16_sequencial = $oParam->licitacao";
-            
+
 
             $rsResult       = db_query($sSQL);
             $leilicitacao = db_utils::fieldsMemory($rsResult, 0);
@@ -183,7 +183,6 @@ try {
 
     db_fim_transacao(true);
     $oRetorno->erro  = true;
-    $oRetorno->datareferencia = true;
     $oRetorno->message = urlencode($eErro->getMessage());
 }
 
