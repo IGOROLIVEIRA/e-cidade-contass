@@ -66,16 +66,10 @@ class Oc17299 extends AbstractMigration
         ALTER TABLE protprocessodocumento ADD column p01_nivelacesso int8;  
         
         
-        ALTER TABLE protprocessodocumento ADD CONSTRAINT protprocessodocumento_p01_nivelacesso_fk FOREIGN KEY(p01_nivelacesso) REFERENCES permanexo(p202_sequencial);";
+        ALTER TABLE protprocessodocumento ADD CONSTRAINT protprocessodocumento_p01_nivelacesso_fk FOREIGN KEY(p01_nivelacesso) REFERENCES permanexo(p202_sequencial);
+        
+        commit;";
 
-        $sql .= "insert into permanexo(p202_sequencial, p202_tipo ) values ((select nextval('permanexo_p202_sequencial_seq')),'Todos/Público');";
-
-        $aRowsPerfis =   $this->fetchAll("select id_usuario from (select distinct u.id_usuario,u.nome,u.login from db_usuarios u
-        inner join db_permissao p on p.id_usuario = u.id_usuario where u.usuarioativo = 1 and u.usuext = 2) as x order by lower(login)");
-
-        foreach ($aRowsPerfis as $perfil) {
-            $sql .= "insert into perfispermanexo (p203_permanexo,p203_perfil) values ((select last_value from permanexo_p202_sequencial_seq),{$perfil['id_usuario']})";
-        }
 
         $this->execute($sql);
     }
