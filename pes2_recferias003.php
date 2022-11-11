@@ -24,7 +24,7 @@
  *  Copia da licenca no diretorio licenca/licenca_en.txt
  *                                licenca/licenca_pt.txt
  */
-
+phpinfo();
 require ("libs/db_stdlib.php");
 require ("libs/db_utils.php");
 require ("libs/db_conecta.php");
@@ -118,7 +118,6 @@ $xml["Report"]["DataSet"]["Query"]["Where"] 	= $sWhere;
 
 $api->setReport($xml);
 
-
 try {
 	$oRecModel = new documentoTemplate(1);
 
@@ -130,6 +129,7 @@ try {
 //ob_start();
 //$ok      = $api->generateReport();
 $ok 		 = $api->parseOpenOffice($oRecModel->getArquivoTemplate());
+
 if($ok==true){
 	$sNomeRelatorio   = "tmp/geraRelatorio".date("YmdHis").db_getsession("DB_id_usuario").".pdf";
 
