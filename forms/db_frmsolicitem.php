@@ -556,7 +556,7 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
 
 
       <tr id='ctnServicoQuantidade' style="display:none;">
-        <td><strong>Serviço Controlado por Quantidades: </strong></td>
+        <td><strong>Serviço/Material Permanente usa qtd: </strong></td>
         <td>
           <?php
 
@@ -1288,7 +1288,7 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
       document.form1.pc11_vlrun.style.backgroundColor = "";
       document.form1.pc11_vlrun.focus();
       document.form1.pc17_quant.style.visibility = "hidden";
-      document.form1.pc17_unid.style.visibility = 'hidden';
+      //document.form1.pc17_unid.style.visibility = 'hidden';
       document.form1.pc01_descrmater.size = '65';
     } else {
 
@@ -1351,7 +1351,7 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
       $('pc11_quant').style.backgroundColor = 'white';
     } else {
 
-      $('pc17_unid').style.visibility = 'hidden';
+      //$('pc17_unid').style.visibility = 'hidden';
       $('pc11_quant').readOnly = true;
       $('pc11_quant').style.backgroundColor = '#DEB887';
       $('pc11_quant').value = "1";
@@ -1429,7 +1429,7 @@ if ($pc01_servico == 't' && substr($o56_elemento, 0, 7) != '34490') {
   echo "  $('pc11_servicoquantidade').options[1]     = new Option('NÃO', 'false'); ";
   echo "  $('pc11_servicoquantidade').value = false;";
 
-  echo "  $('pc17_unid') .style.visibility           = 'hidden';                  ";
+  //echo "  $('pc17_unid') .style.visibility           = 'hidden';                  ";
   echo "  $('pc17_quant').style.visibility           = 'hidden';                  ";
 
 
@@ -1465,7 +1465,7 @@ if ($pc01_servico == 't' && substr($o56_elemento, 0, 7) != '34490') {
   echo "  $('pc11_servicoquantidade').options.length = 0;                          ";
   echo "  $('pc11_servicoquantidade').options[0]     = new Option('SIM', 'true');  ";
   echo "  $('pc11_servicoquantidade').options[1]     = new Option('NÃO', 'false'); ";
-  echo "  $('pc17_unid').style.visibility           = 'visible';                  ";
+  //echo "  $('pc17_unid').style.visibility           = 'visible';                  ";
   echo "  $('pc17_quant').style.visibility           = 'hidden';                  ";
   echo "  document.form1.pc11_servicoquantidade.style.visibility  = 'hidden'; ";
   echo "  document.form1.pc11_servicoquantidade.value = 'false';  ";

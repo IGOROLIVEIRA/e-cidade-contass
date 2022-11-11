@@ -14,6 +14,7 @@ if(isset($alterar)){
    db_inicio_transacao();
    $result = $clparametroscontratos->sql_record($clparametroscontratos->sql_query());
    $clparametroscontratos->pc01_liberargerenciamentocontratos = $pc01_liberargerenciamentocontratos;
+   $clparametroscontratos->pc01_liberarsaldoposicao = $pc01_liberarsaldoposicao;
    if($result==false || $clparametroscontratos->numrows==0){
      $clparametroscontratos->incluir();
    }else{
