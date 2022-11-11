@@ -104,7 +104,7 @@ if (isset($codtab) && $codigo_tab <= 2) {
                 <td align="center">
                     <fieldset>
                         <legend>
-                            <strong>Previdï¿½ncia e IRRF</strong>
+                            <strong>Previdência e IRRF</strong>
                         </legend>
                         <table width="100%">
                             <?
@@ -214,7 +214,7 @@ if (isset($codtab) && $codigo_tab <= 2) {
                                     </td>
                                     <td>
                                         <?
-                                        $arrNovoCalculo = array("f" => "Nï¿½o", "t" => "Sim");
+                                        $arrNovoCalculo = array("f" => "Não", "t" => "Sim");
                                         db_select("r33_novocalculo", $arrNovoCalculo, true, $db_opcao);
                                         ?>
                                     </td>
@@ -236,7 +236,7 @@ if (isset($codtab) && $codigo_tab <= 2) {
             <tr>
                 <td>
                     <fieldset>
-                        <!--<legend><b>Configuraï¿½ï¿½o</b></legend>-->
+                        <!--<legend><b>Configuração</b></legend>-->
                         <table width="100%">
                             <tr>
                                 <td nowrap title="<?= $Tr33_rubmat ?>">
@@ -414,7 +414,7 @@ if (isset($codtab) && $codigo_tab <= 2) {
                     $cliframe_alterar_excluir->opcoes   = 1;
                     $cliframe_alterar_excluir->sql      = $sql_iframe;
                     $cliframe_alterar_excluir->campos   = "r33_inic,r33_fim,r33_perc,r33_deduzi,r33_novocalculo";
-                    $cliframe_alterar_excluir->legenda  = "FAIXAS LANï¿½ADAS";
+                    $cliframe_alterar_excluir->legenda  = "FAIXAS LANÇADAS";
                     $cliframe_alterar_excluir->alignlegenda  = "left";
                     $cliframe_alterar_excluir->iframe_height = "200";
                     $cliframe_alterar_excluir->iframe_width  = "100%";

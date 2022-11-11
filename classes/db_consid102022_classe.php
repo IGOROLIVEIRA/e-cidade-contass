@@ -27,15 +27,17 @@ class cl_consid102022
   var $si158_instit = 0;
   // cria propriedade com as variaveis do arquivo
   var $campos = "
-                 si158_sequencial = int8 = sequencial 
-                 si158_tiporegistro = int8 = Tipo de registro 
+                 si158_sequencial = int8 = sequencial
+                 si158_tiporegistro = int8 = Tipo de registro
                  si158_codarquivo = varchar(20) = Código do arquivo da consideração
                  si158_exercicioreferenciaconsid = int8 = Do arquivo a que se refere a consideração
                  si158_mesreferenciaconsid = varchar(2) = Do arquivo a que se refere a consideração
                  si158_consideracoes = varchar(3000) = Considerações
-                 si158_mes = int8 = Mês 
-                 si158_instit = int8 = Instituição 
+                 si158_mes = int8 = Mês
+                 si158_instit = int8 = Instituição
                  ";
+
+
 
   //funcao construtor da classe
   function cl_consid102022()
@@ -43,6 +45,11 @@ class cl_consid102022
     //classes dos rotulos dos campos
     $this->rotulo = new rotulo("consid102022");
     $this->pagina_retorno = basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
+  }
+
+  function __construct()
+  {
+    $this->cl_consid102022();
   }
 
   //funcao erro
@@ -144,24 +151,24 @@ class cl_consid102022
       return false;
     }
     $sql = "insert into consid102022(
-                                       si158_sequencial 
-                                      ,si158_tiporegistro 
+                                       si158_sequencial
+                                      ,si158_tiporegistro
                                       ,si158_codarquivo
                                       ,si158_exercicioreferenciaconsid
                                       ,si158_mesreferenciaconsid
                                       ,si158_consideracoes
-                                      ,si158_mes 
-                                      ,si158_instit 
+                                      ,si158_mes
+                                      ,si158_instit
                        )
                 values (
-                                $this->si158_sequencial 
-                               ,$this->si158_tiporegistro 
+                                $this->si158_sequencial
+                               ,$this->si158_tiporegistro
                                ,'$this->si158_codarquivo'
                                ,$this->si158_exercicioreferenciaconsid
                                ,'$this->si158_mesreferenciaconsid'
-                               ,'$this->si158_consideracoes' 
-                               ,$this->si158_mes 
-                               ,$this->si158_instit 
+                               ,'$this->si158_consideracoes'
+                               ,$this->si158_mes
+                               ,$this->si158_instit
                       )";
     $result = db_query($sql);
     if ($result == false) {
