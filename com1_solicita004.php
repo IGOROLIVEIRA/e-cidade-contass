@@ -415,10 +415,9 @@ if (count($aParametrosOrcamento) > 0) {
 					/*
 				 * Vincular item da nova solicitação com item da compilação
 				 */
-					if ($pc10_solicitacaotipo == 5 && $importar == null) {
-						$sSqlVinculoItem = db_query("select pc55_solicitempai vinculoitem from solicitemvinculo where pc55_solicitemfilho = " . $iCodigoSolicitemImportado);
-						$rsVinculoItem = db_utils::fieldsMemory($sSqlVinculoItem, 0)->vinculoitem;
-
+					$sSqlVinculoItem = db_query("select pc55_solicitempai vinculoitem from solicitemvinculo where pc55_solicitemfilho = " . $iCodigoSolicitemImportado);
+					$rsVinculoItem = db_utils::fieldsMemory($sSqlVinculoItem, 0)->vinculoitem;
+					if (pg_num_rows($sSqlVinculoItem) > 0) {
 						$oDaoSolicitemVinculo = db_utils::getDao("solicitemvinculo");
 						$oDaoSolicitemVinculo->pc55_solicitemfilho = $pc11_codigo;
 						$oDaoSolicitemVinculo->pc55_solicitempai   = $rsVinculoItem;
@@ -446,7 +445,7 @@ if (count($aParametrosOrcamento) > 0) {
 					require_once("classes/db_pcorcamjulg_classe.php");
 					require_once("classes/db_pcorcamval_classe.php");
 					require_once("model/ItemEstimativa.model.php");
-					if ($pc10_solicitacaotipo == 5 && $importar == null) {
+					if (pg_num_rows($sSqlVinculoItem) > 0) {
 						$oSolicitacao = new solicitacaoCompra($clsolicitem->pc11_numero);
 						$oSolicitacao->addItemRegistroPreco($pc11_codigo, $iCodigoPcmater, $rsVinculo, $clsolicitem->pc11_quant, $rsVinculoItem);
 
