@@ -167,7 +167,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
           <td nowrap>
 
             <?
-            db_input('pc11_quant', 8, 0, true, 'text', 1, '');
+            db_input('pc11_quant', 8, 4, true, 'text', 1, 'onkeypress="mask_4casasdecimais(event)"');
             ?>
 
             <?
@@ -422,44 +422,16 @@ if ((isset($opcao) && $opcao == "alterar")) {
 
 
 <script>
-  const input = document.getElementById("pc11_quant");
-  input.addEventListener("keypress", mask_4casasdecimais);
-
   function mask_4casasdecimais(e) {
-    numeros_apos_virgula = 0;
-    var valor = e.target.value.replace(/[^0-9\,]/g, "");
-    virgula = (valor.match(/,/g) || []).length;
+    var valor = e.target.value.replace(/[^0-9\.]/g, "");
 
-    if (e.key == '.') {
-      e.preventDefault();
-      return false;
+    if (valor.lastIndexOf('.') != -1) {
+      if (valor.substring(valor.indexOf(".") + 1).length == 4) {
+        e.preventDefault();
+        return false;
+
+      }
     }
-
-    if (virgula >= 1 && e.key == ',') {
-      e.preventDefault();
-      return false;
-    }
-
-    if (valor.length >= 14) {
-      valor = valor.substring(0, valor.length - 1);
-      e.target.value = valor;
-      return false;
-    }
-
-
-    if (virgula == 1) {
-      numeros_apos_virgula = valor.substring(valor.indexOf(",") + 1);
-
-    }
-
-
-    if (numeros_apos_virgula.length == 4) {
-      valor = valor.substring(0, valor.length - 1);
-      e.target.value = valor;
-      numeros_apos_virgula = 0;
-      return false;
-    }
-    e.target.value = valor;
 
   }
 
