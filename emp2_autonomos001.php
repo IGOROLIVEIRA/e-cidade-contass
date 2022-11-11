@@ -138,6 +138,15 @@ require_once("dbforms/db_classesgenericas.php");
                                             </td>
                                         </td>
                                     </tr>
+                                    <tr >
+                                        <td><b>Posição:</b></td>
+                                        <td>
+                                            <?php
+                                            $aPosicao = array(1 => "Liquidação (S-1200)",2 => "Pagamento (S-1210)");
+                                            db_select("sPosicao", $aPosicao, true, 1);
+                                            ?>
+                                        </td>
+                                    </tr>
                                     <tr>
                                         <td><b>Tipo:</b></td>
                                         <td>
@@ -258,7 +267,9 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
         dados['sTipo']                       = $F('sTipo');
         dados['sTipoSelecao']                = $F('sTipoSelecao');
         dados['sQuebra']                     = $F('sQuebra');
-        
+        dados['sPosicao']                     = $F('sPosicao');
+
+               
         
 
         var name = new Date().getTime();
@@ -268,6 +279,8 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
     $('sTipoImpressao').style.width =' 180px';
     $('sTipo').style.width =' 180px';
     $('sQuebra').style.width =' 180px';
+    $('sPosicao').style.width =' 180px';
+    
    
 </script>
 </html>
