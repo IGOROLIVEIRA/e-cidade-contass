@@ -42,3 +42,4 @@ extension/modification/data/cache/user/*
 extension/modification/data/file/file-type-modification.data
 extension/data/config.data
 extension/modification/data/modification/dbportal-v3-desktop.data
+composer.lock
