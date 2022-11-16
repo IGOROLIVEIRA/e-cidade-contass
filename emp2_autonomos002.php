@@ -99,8 +99,8 @@ if (isset($dtDataInicial)) {
   $sSqlNota .= "          inner join cgm as cgm   on e60_numcgm  = cgm.z01_numcgm";
   $sSqlNota .= "          inner join empnotaele   on e69_codnota = e70_codnota";
   $sSqlNota .= "          inner join orcelemento  on empnotaele.e70_codele = orcelemento.o56_codele";
-  $sSqlNota .= "          inner join cgmfisico on z04_numcgm = cgm.z01_numcgm"; 
-  $sSqlNota .= "          inner join rhcbo on rh70_sequencial = z04_rhcbo";
+  $sSqlNota .= "          left join cgmfisico on z04_numcgm = cgm.z01_numcgm"; 
+  $sSqlNota .= "          left join rhcbo on rh70_sequencial = z04_rhcbo";
   $sSqlNota .= "          left join conlancamemp on c75_numemp = e60_numemp ";
   $sSqlNota .= "          left join conlancamdoc on c71_codlan = c75_codlan and c71_coddoc = 904 ";
   $sSqlNota .= "          left  join pagordemnota on e71_codnota = e69_codnota and e71_anulado is false";
@@ -127,14 +127,19 @@ if (isset($dtDataInicial)) {
   $dtDataInicial = implode("-", array_reverse(explode("/", $dtDataInicial)));
   $dtDataFinal = implode("-", array_reverse(explode("/", $dtDataFinal)));
 
+  $filtroData = " where (e50_data BETWEEN '$dtDataInicial' AND '$dtDataFinal' ) ";
+  if($sPosicao == 2){
+        $filtroData = " where (corrente.k12_data BETWEEN '$dtDataInicial' AND '$dtDataFinal' ) ";
+  }
   if($sCredoresSelecionados){
         if($sTipoSelecao == 1)            
-            $sSqlNota .= "  where (e50_data BETWEEN '$dtDataInicial' AND '$dtDataFinal' ) and  e60_numcgm in ({$sCredoresSelecionados}) and Length(cgm.z01_cgccpf) = 11 ";
+            $sSqlNota .= "  $filtroData and  e60_numcgm in ({$sCredoresSelecionados}) and Length(cgm.z01_cgccpf) = 11 ";
         if($sTipoSelecao == 2) 
-            $sSqlNota .= "  where (e50_data BETWEEN '$dtDataInicial' AND '$dtDataFinal' ) and  e60_numcgm not in ({$sCredoresSelecionados}) and Length(cgm.z01_cgccpf) = 11 ";           
+            $sSqlNota .= " $filtroData and  e60_numcgm not in ({$sCredoresSelecionados}) and Length(cgm.z01_cgccpf) = 11 ";           
   }
-  else 
-    $sSqlNota .= "  where e50_data BETWEEN '$dtDataInicial' AND '$dtDataFinal' and Length(cgm.z01_cgccpf) = 11 ";
+  else{ 
+            $sSqlNota .= "  $filtroData and Length(cgm.z01_cgccpf) = 11 ";
+  }
  
  if($sTipo == '1')
     $sSqlNota .= "  and e50_cattrabalhador is not null ";
@@ -225,7 +230,7 @@ for ($i = 0; $i < pg_num_rows($rsTipoinstit); $i++) {
  * Nenhum dos parâmetros é obrigatório
  */
 
-$mPDF = new mpdf('', 'A4', 0, '', 15, 15, 20, 15, 5, 11);
+$mPDF = new mpdf('', 'A4-L', 0, '', 15, 15, 20, 15, 5, 11, 'L');
 
 /*Nome do relatório.*/
 $header = " <header>
@@ -243,9 +248,12 @@ foreach ($aInstits as $iInstit) {
     $oInstituicao = new Instituicao($iInstit);
     $header .= "<b>Instituição: </b>".trim($oInstituicao->getCodigo()) . " - " . $oInstituicao->getDescricao();
 }
-
+$aPosicao = "Pagamento (S-1210)";
+if($sPosicao == 1)
+    $aPosicao ="Liquidação (S-1200)";
 /*Período do relatório.*/
-$header .= "<br/><b>Período:</b> {$dtDataInicial} <b>A</b> {$dtDataFinal}
+$header .= "<br/><b>Período:</b> {$dtDataInicial} <b>A</b> {$dtDataFinal}    
+            <b>Posição:</b> {$aPosicao} 
                     </div>
                 </div>
             </header>";
@@ -254,7 +262,7 @@ $header .= "<br/><b>Período:</b> {$dtDataInicial} <b>A</b> {$dtDataFinal}
 $footer  = "<footer style='padding-top: 150px;'>";
 $footer .= "   <div style='border-top:1px solid #000; width:100%; font-family:sans-serif; font-size:7px; height:5px;padding-bottom: -12px;'>";
 $footer .= "    <div style='text-align:left;font-style:italic;width:90%;float:left;padding-bottom: -82px;'>";
-$footer .= "       Financeiro>Empenho>Relatorios de Conferencia>Fornecedoers Mensais de Empenhos";
+$footer .= "       Financeiro>Empenho>Relatorios de Conferencia>Fornecedoers Mensais";
 $footer .= "       Emissor: " . db_getsession("DB_login") . " Exerc: " . db_getsession("DB_anousu") . " Data:" . date("d/m/Y H:i:s", db_getsession("DB_datausu"))  . "";
 $footer .= "      <div style='text-align:right;float:right;width:10%;padding-bottom: -122px;'>";
 $footer .= "                        {PAGENO}";
@@ -372,14 +380,13 @@ $dataFinal = str_replace("/","-",db_formatar($dtDataFinal, "d"));
             <tbody>
             <tr style="height: 30px">
                 <th id="0R0" style="height: 30px;"></th>
-                <td class="s0" dir="ltr" ><font size="-1"> Empenho </font></td>
                 <? if($sQuebra == 2){?>
                     <td class="s0" dir="ltr" ><font size="-1"> CGM - Nome </font></td>    
                 <?}?>
-                <td class="s0" dir="ltr" ><font size="-1"> Número da NF </font></td>
                 <td class="s0" dir="ltr" ><font size="-1"> OP </font></td>
                 <td class="s0" dir="ltr" ><font size="-1"> Data OP </font></td>
-                <td class="s0" dir="ltr" ><font size="-1"> Valor Liquidado </font></td>
+                <td class="s0" dir="ltr" ><font size="-1"> Número da NF </font></td>
+                <td class="s0" dir="ltr" ><font size="-1"> Valor Nota </font></td>
                 <td class="s0" dir="ltr" ><font size="-1"> Valor INSS </font></td>
                 <td class="s0" dir="ltr" ><font size="-1"> Valor IRRF </font></td>
                 <td class="s0" dir="ltr" ><font size="-1"> Outras Retenções </font></td>
@@ -390,7 +397,9 @@ $dataFinal = str_replace("/","-",db_formatar($dtDataFinal, "d"));
                 <td class="s0" dir="ltr" ><font size="-1"> Empresa </font></td>
                 <td class="s0" dir="ltr" ><font size="-1"> Categoria </font></td>
                 <td class="s0" dir="ltr" ><font size="-1"> Valor Remuneração </font></td>
+                <td class="s0" dir="ltr" ><font size="-1"> Valor Liquido  </font></td>
                 <td class="s0" dir="ltr" ><font size="-1"> Data Pagamento  </font></td>
+                
                 
 
             </tr>
@@ -415,7 +424,9 @@ $dataFinal = str_replace("/","-",db_formatar($dtDataFinal, "d"));
             $auxRetencoes = 0;
             $auxInss = 0;
             $auxIrrf = 0;
-            
+            $valorliquido = 0;
+            $totalvalorliquido = 0;
+            $Geraltotalvalorliquido = 0;
             for ($cont = 0; $cont < count($aFornecedores); $cont++) {
                 $oFornecedores = $oNotas      = db_utils::FieldsMemory($rsNota, $cont);  
                 $oFornecedores1 = $oNotas2      = db_utils::FieldsMemory($rsNota, $cont+1);  
@@ -464,6 +475,8 @@ HTML;
                         
                         $auxe50_codord = $oNotas->e50_codord;
                         
+                        $valorliquido = $oNotas->e70_vlrliq - $auxInss - $auxIrrf - $auxRetencoes;
+            
                         $totale70_vlrliq += $oNotas->e70_vlrliq;
                         $totalvalor_inss += $auxInss;
                         $totalvalor_irrf += $auxIrrf;
@@ -471,6 +484,8 @@ HTML;
                         $totalpatronal += $oNotas->patronal;
                         $totale50_valorremuneracao += $oNotas->e50_valorremuneracao;
                         $totalbasepatronal += $oNotas->basepatronal;
+                        $totalvalorliquido += $valorliquido;
+            
 
                         $Geraltotale70_vlrliq += $oNotas->e70_vlrliq;
                         $Geraltotalvalor_inss += $auxInss;
@@ -479,6 +494,7 @@ HTML;
                         $Geraltotalpatronal += $oNotas->patronal;
                         $Geraltotale50_valorremuneracao += $oNotas->e50_valorremuneracao;
                         $Geraltotalbasepatronal += $oNotas->basepatronal;
+                        $Geraltotalvalorliquido += $valorliquido;
 
                         $auxRetencoes = db_formatar($auxRetencoes, "f");
                         $auxInss = db_formatar($auxInss, "f");
@@ -486,6 +502,7 @@ HTML;
                         $oNotas->e70_vlrliq = db_formatar($oNotas->e70_vlrliq, "f");
                         $oNotas->patronal = db_formatar($oNotas->patronal, "f");
                         $oNotas->basepatronal = db_formatar($oNotas->basepatronal, "f");
+                        $valorliquido    = db_formatar($valorliquido, "f");
                         
 
                         if(!$oNotas->e50_valorremuneracao)
@@ -499,11 +516,9 @@ HTML;
                             <th id="0R{$or}" style="height: 20px;" class="row-headers-background">
                             <div class="row-header-wrapper" style="line-height: 20px">
                             </th>
-
-                            <td class="s1" dir="ltr">$oNotas->e60_codemp/$oNotas->e60_anousu</td>
-                            <td class="s1" dir="ltr">$oNotas->e69_numero</td>
                             <td class="s1" dir="ltr">$oNotas->e50_codord</td>
                             <td class="s1" dir="ltr">$oNotas->e50_data</td>
+                            <td class="s1" dir="ltr">$oNotas->e69_numero</td>
                             <td class="s1" dir="ltr">R$ $oNotas->e70_vlrliq</td>
                             <td class="s1" dir="ltr">R$ $auxInss</td>
                             <td class="s1" dir="ltr">R$ $auxIrrf</td>
@@ -515,6 +530,7 @@ HTML;
                             <td class="s3" dir="ltr">$oNotas->e50_empresadesconto</td>
                             <td class="s3" dir="ltr">$oNotas->e50_cattrabalhadorremurenacao</td>
                             <td class="s1" dir="ltr">R$ $oNotas->e50_valorremuneracao</td>
+                            <td class="s1" dir="ltr">R$ $valorliquido</td>
                             <td class="s3" dir="ltr">$oNotas->k12_data</td>
                         </tr> </br>                    
 HTML;
@@ -525,13 +541,14 @@ HTML;
                             $totalvalor_inss      = db_formatar($totalvalor_inss, "f");
                             $totale70_vlrliq      = db_formatar($totale70_vlrliq, "f");
                             $totalvalor_irrf      = db_formatar($totalvalor_irrf, "f");
-                            $totalbasepatronal        = db_formatar($totalbasepatronal, "f");
+                            $totalbasepatronal    = db_formatar($totalbasepatronal, "f");
                             $totale50_valorremuneracao        = db_formatar($totale50_valorremuneracao, "f");
+                            $totalvalorliquido    = db_formatar($totalvalorliquido, "f");
 
                             echo <<<HTML
                        
                             <tr>
-                                <td class="s0" colspan="5"><b>Total Fornecedor: </b></td>
+                                <td class="s0" colspan="4"><b>Total Fornecedor: </b></td>
                                 <td class="s0" ><b>R$ $totale70_vlrliq</b></td>
                                 <td class="s0" ><b>R$ $totalvalor_inss</b></td>
                                 <td class="s0" ><b>R$ $totalvalor_irrf</b></td>
@@ -543,6 +560,7 @@ HTML;
                                 <td class="s0" ><b></b></td>
                                 <td class="s0" ><b></b></td>
                                 <td class="s0" ><b>R$ $totale50_valorremuneracao</b></td>
+                                <td class="s0" ><b>R$ $totalvalorliquido</b></td>
                                 <td class="s0" ><b></b></td>
                             </tr>
 HTML;
@@ -554,6 +572,7 @@ HTML;
                         $totalpatronal = 0;
                         $totale50_valorremuneracao = 0;
                         $totalbasepatronal = 0;
+                        $totalvalorliquido = 0;
                         
                         }
                         $auxRetencoes = 0;
@@ -561,16 +580,17 @@ HTML;
                         $auxIrrf = 0; 
 
                         if(($cont+1) == count($aFornecedores)){
-                            $Geraltotale70_vlrliq = db_formatar($Geraltotale70_vlrliq, "f");
-                            $Geraltotalvalor_inss = db_formatar($Geraltotalvalor_inss, "f");
-                            $Geraltotalvalor_irrf = db_formatar($Geraltotalvalor_irrf, "f");
+                            $Geraltotale70_vlrliq   = db_formatar($Geraltotale70_vlrliq, "f");
+                            $Geraltotalvalor_inss   = db_formatar($Geraltotalvalor_inss, "f");
+                            $Geraltotalvalor_irrf   = db_formatar($Geraltotalvalor_irrf, "f");
                             $Geraltotaloutrasretencoes = db_formatar($Geraltotaloutrasretencoes, "f");
-                            $Geraltotalpatronal = db_formatar($Geraltotalpatronal, "f");
+                            $Geraltotalpatronal     = db_formatar($Geraltotalpatronal, "f");
                             $Geraltotale50_valorremuneracao = db_formatar($Geraltotale50_valorremuneracao, "f");
                             $Geraltotalbasepatronal = db_formatar($Geraltotalbasepatronal, "f");
+                            $Geraltotalvalorliquido = db_formatar($Geraltotalvalorliquido, "f");
                             echo <<<HTML
                             <tr>
-                                <td class="s0" colspan="5"><b>Total Geral: </b></td>
+                                <td class="s0" colspan="4"><b>Total Geral: </b></td>
                                 <td class="s0" ><b>R$ $Geraltotale70_vlrliq</b></td>
                                 <td class="s0" ><b>R$ $Geraltotalvalor_inss</b></td>
                                 <td class="s0" ><b>R$ $Geraltotalvalor_irrf</b></td>
@@ -582,6 +602,7 @@ HTML;
                                 <td class="s0" ><b></b></td>
                                 <td class="s0" ><b></b></td>
                                 <td class="s0" ><b>R$ $Geraltotale50_valorremuneracao</b></td>
+                                <td class="s0" ><b>R$ $Geraltotalvalorliquido</b></td>
                                 <td class="s0" ><b></b></td>
                             </tr>
 HTML;
@@ -593,6 +614,7 @@ HTML;
                         $Geraltotalpatronal = 0;
                         $Geraltotale50_valorremuneracao = 0;
                         $Geraltotalbasepatronal = 0;
+                        $Geraltotalvalorliquido = 0;
                         } 
                         }
                      
@@ -652,6 +674,7 @@ HTML;
                         $auxRetencoes += $oNotas->outrasretencoes;
                         $auxInss += $oNotas->valor_inss;
                         $auxIrrf +=$oNotas->valor_irrf;
+                        $valorliquido = $oNotas->e70_vlrliq - $auxInss - $auxIrrf - $auxRetencoes;
 
                         $totale70_vlrliq += $oNotas->e70_vlrliq;
                         $totalvalor_inss += $auxInss;
@@ -660,11 +683,13 @@ HTML;
                         $totalpatronal += $oNotas->patronal;
                         $totale50_valorremuneracao += $oNotas->e50_valorremuneracao;
                         $totalbasepatronal += $oNotas->basepatronal;
+                        $totalvalorliquido += $valorliquido;
 
                         $auxRetencoes = db_formatar($auxRetencoes, "f");
                         $auxInss = db_formatar($auxInss, "f");
                         $auxIrrf = db_formatar($auxIrrf, "f");
                         $oe70_vlrliq = db_formatar($oNotas->e70_vlrliq, "f");
+                        $valorliquido = db_formatar($valorliquido, "f");
 
                         $oNotas->patronal = db_formatar($oNotas->patronal, "f");
                         $oNotas->basepatronal = db_formatar($oNotas->basepatronal, "f");
@@ -675,12 +700,10 @@ HTML;
                             <th id="0R{$or}" style="height: 20px;" class="row-headers-background">
                             <div class="row-header-wrapper" style="line-height: 20px">
                             </th>
-
-                            <td class="s1" dir="ltr">$oNotas->e60_codemp/$oNotas->e60_anousu</td>
                             <td class="s1" dir="ltr">$oNotas->e60_numcgm - $oNotas->z01_nome - Nascimento - $oNotas->z01_nasc</td>
-                            <td class="s1" dir="ltr">$oNotas->e69_numero</td>
                             <td class="s1" dir="ltr">$oNotas->e50_codord</td>
                             <td class="s1" dir="ltr">$oNotas->e50_data</td>
+                            <td class="s1" dir="ltr">$oNotas->e69_numero</td>
                             <td class="s1" dir="ltr">R$ $oe70_vlrliq</td>
                             <td class="s1" dir="ltr">R$ $auxInss</td>
                             <td class="s1" dir="ltr">R$ $auxIrrf</td>
@@ -692,6 +715,7 @@ HTML;
                             <td class="s3" dir="ltr">$oNotas->e50_empresadesconto</td>
                             <td class="s3" dir="ltr">$oNotas->e50_cattrabalhadorremurenacao</td>
                             <td class="s1" dir="ltr">R$ $oNotas->e50_valorremuneracao</td>
+                            <td class="s1" dir="ltr">R$ $valorliquido</td>
                             <td class="s3" dir="ltr">$oNotas->k12_data</td>
                         </tr> </br>                    
 HTML;
@@ -704,20 +728,21 @@ HTML;
                             $Geraltotalpatronal += $totalpatronal;
                             $Geraltotale50_valorremuneracao += $totale50_valorremuneracao;
                             $Geraltotalbasepatronal += $totalbasepatronal;
-
-                            $totalpatronal        = db_formatar($totalpatronal, "f");
-                            $totaloutrasretencoes = db_formatar($totaloutrasretencoes, "f");
-                            $totalvalor_inss      = db_formatar($totalvalor_inss, "f");
-                            $totale70_vlrliq      = db_formatar($totale70_vlrliq, "f");
-                            $totalvalor_irrf      = db_formatar($totalvalor_irrf, "f");
-                            $totalbasepatronal        = db_formatar($totalbasepatronal, "f");
-                            $totale50_valorremuneracao        = db_formatar($totale50_valorremuneracao, "f");
-                            
+                            $Geraltotalvalorliquido += $totalvalorliquido;
+                        
+                            $totalpatronal           = db_formatar(floor(($totalpatronal*100))/100,"f");
+                            $totalbasepatronal       = db_formatar(floor(($totalbasepatronal*100))/100,"f");
+                            $totaloutrasretencoes    = db_formatar($totaloutrasretencoes, "f");
+                            $totalvalor_inss         = db_formatar($totalvalor_inss, "f");
+                            $totale70_vlrliq         = db_formatar($totale70_vlrliq, "f");
+                            $totalvalor_irrf         = db_formatar($totalvalor_irrf, "f");
+                            $totale50_valorremuneracao = db_formatar($totale50_valorremuneracao, "f");
+                            $totalvalorliquido      = db_formatar($totalvalorliquido, "f");
 
                             echo <<<HTML
                        
                             <tr>
-                                <td class="s0" colspan="6"><b>Total Ação: </b></td>
+                                <td class="s0" colspan="5"><b>Total Ação: </b></td>
                                 <td class="s0" ><b>R$ $totale70_vlrliq</b></td>
                                 <td class="s0" ><b>R$ $totalvalor_inss</b></td>
                                 <td class="s0" ><b>R$ $totalvalor_irrf</b></td>
@@ -729,6 +754,7 @@ HTML;
                                 <td class="s0" ><b></b></td>
                                 <td class="s0" ><b></b></td>
                                 <td class="s0" ><b>R$ $totale50_valorremuneracao</b></td>
+                                <td class="s0" ><b>R$ $totalvalorliquido</b></td>
                                 <td class="s0" ><b></b></td>
                             </tr>
 HTML;
@@ -755,9 +781,10 @@ HTML;
                             $Geraltotalpatronal = db_formatar($Geraltotalpatronal, "f");
                             $Geraltotale50_valorremuneracao = db_formatar($Geraltotale50_valorremuneracao, "f");
                             $Geraltotalbasepatronal = db_formatar($Geraltotalbasepatronal, "f");
+                            $Geraltotalvalorliquido = db_formatar($Geraltotalvalorliquido, "f");
                             echo <<<HTML
                             <tr>
-                                <td class="s0" colspan="6"><b>Total Geral: </b></td>
+                                <td class="s0" colspan="5"><b>Total Geral: </b></td>
                                 <td class="s0" ><b>R$ $Geraltotale70_vlrliq</b></td>
                                 <td class="s0" ><b>R$ $Geraltotalvalor_inss</b></td>
                                 <td class="s0" ><b>R$ $Geraltotalvalor_irrf</b></td>
@@ -769,6 +796,7 @@ HTML;
                                 <td class="s0" ><b></b></td>
                                 <td class="s0" ><b></b></td>
                                 <td class="s0" ><b>R$ $Geraltotale50_valorremuneracao</b></td>
+                                <td class="s0" ><b>R$ $Geraltotalvalorliquido</b></td>
                                 <td class="s0" ><b></b></td>
                             </tr>
 HTML;
