@@ -1896,11 +1896,13 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
          */
         if (lPessoaFisica == true) {
 
-            if ($F('z01_nasc').trim() == "") {
-                var strMessageUsuario = "Campo DATA DE NASCIMENTO não informada!";
-                js_messageBox(strMessageUsuario, '');
-                $('z01_nasc').focus();
-                return false;
+            if (<?=$db_opcao?> == 1) {
+                if ($F('z01_nasc').trim() == "") {
+                    var strMessageUsuario = "Campo DATA DE NASCIMENTO não informada!";
+                    js_messageBox(strMessageUsuario, '');
+                    $('z01_nasc').focus();
+                    return false;
+                }
             }
 
             /*Valida cpf*/
