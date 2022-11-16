@@ -39,8 +39,13 @@ $clrotulo->label("z01_nome");
 
 $db_opcao = 1;
 
-$anofolha = DBPessoal::getAnoFolha();
-$mesfolha = DBPessoal::getMesFolha();
+try {
+    $anofolha = DBPessoal::getAnoFolha();
+    $mesfolha = DBPessoal::getMesFolha();
+} catch(Exception $error) {
+    $anofolha = db_getsession("DB_anousu");
+    $mesfolha = date("m", db_getsession("DB_datausu"));
+}
 
 ?>
 <html>

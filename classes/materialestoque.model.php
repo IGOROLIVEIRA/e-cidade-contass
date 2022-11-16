@@ -260,6 +260,7 @@ class materialEstoque {
     }
 
     $sSqlSaldoItem = $this->oDaoMater->sqlQuerySaldo ( null, $sCampos, $sOrder, $sWhere );
+    
     $rsSaldoItem = $this->oDaoMater->sql_record ( $sSqlSaldoItem );
     if ($this->oDaoMater->numrows > 0) {
 
@@ -273,7 +274,7 @@ class materialEstoque {
       return $aItens;
     } else {
 
-      throw new Exception ( "Nao existe estoque para esse item" );
+      throw new Exception ( "Nao existe estoque para o item ". $this->getcodMater () );
       return false;
 
     }
