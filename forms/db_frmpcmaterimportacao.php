@@ -239,7 +239,7 @@ if (isset($_POST["processar"])) {
 
 <script>
     function gerar() {
-        window.location.href = "vei1_xlsabastecimentoPlanilha.php";
+        window.location.href = "com1_xlsimportacaoitensPlanilha.php";
     }
 
     function js_liberarButton() {
