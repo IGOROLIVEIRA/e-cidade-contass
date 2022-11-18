@@ -142,21 +142,10 @@ if (isset($incluir)) {
       $sqlerro  = true;
     }
   }
-    if ($sqlerro==false) {
+  if ($sqlerro == false) {
 
-        $result_cgmzerado = db_query("SELECT z01_cgccpf FROM cgm WHERE z01_numcgm = {$e54_numcgm}");
-        db_fieldsmemory($result_cgmzerado, 0)->z01_cgccpf;
-
-        if (strlen($z01_cgccpf) != 14 && strlen($z01_cgccpf) != 11) {
-
-            $sqlerro = true;
-            $erro_msg = "ERRO!\nNúmero do CPF/CNPJ cadastrado está incorreto.\nCorrija o CGM do fornecedor e tente novamente!";
-        }
-        if ($z01_cgccpf == '00000000000000' || $z01_cgccpf == '00000000000') {
-
-            $sqlerro = true;
-            $erro_msg = "ERRO!\nNúmero do CPF/CNPJ cadastrado está zerado.\nCorrija o CGM do fornecedor e tente novamente!";
-        }
+    $result_cgmzerado = db_query("SELECT z01_cgccpf FROM cgm WHERE z01_numcgm = {$e54_numcgm}");
+    db_fieldsmemory($result_cgmzerado, 0)->z01_cgccpf;
 
     if (strlen($z01_cgccpf) != 14 && strlen($z01_cgccpf) != 11) {
 
@@ -284,58 +273,22 @@ if (isset($incluir)) {
 } else if (isset($autori_importa)) {
 
   $sqlerro = false;
-
-  $res_codtribunal = db_query("select pc50_pctipocompratribunal from pctipocompra where pc50_codcom = $e54_codcom");
-  $codigo_tribunal = db_utils::fieldsMemory($res_codtribunal, 0)->pc50_pctipocompratribunal;
-
-  if ($codigo_tribunal != "13" && $e54_tipoautorizacao == "1") {
-    $erro_msg = "Usuário:\nO tipo de compra selecionado não pode ser utilizado para autorização direta. \nCorrija a autorização e tente novamente.";
-    $sqlerro = true;
-  }
-
-  if ($e54_tipoautorizacao == "3" && $e54_codlicitacao == "") {
-    $erro_msg = "Usuário:\nA licitação deve ser informada. \nCorrija a autorização e tente novamente.";
-    $sqlerro = true;
-  }
-
-  if ($e54_tipoautorizacao == "2" && $e54_licoutrosorgaos == "") {
-    $erro_msg = $codigo_tribunal . "Usuário:\nA licitação deve ser informada. \nCorrija a autorização e tente novamente.";
-    $sqlerro = true;
-  }
-
-  if ($e54_tipoautorizacao == "4" && $e54_adesaoregpreco == "") {
-    $erro_msg = "Usuário:\nA Adesão de registro de preço deve ser informada. \nCorrija a autorização e tente novamente.";
-    $sqlerro = true;
-  }
-
-  if ($e54_tipoautorizacao == "0") {
-    $erro_msg = "Usuário:\nO tipo de autorização deve ser informado. \nCorrija a autorização e tente novamente.";
-    $sqlerro = true;
-  }
-
-
-
-
   db_inicio_transacao();
 
   if ($sqlerro == false) {
-	  //verifica inclui os registros do empautoriza
-	  $result = $clempautoriza->sql_record($clempautoriza->sql_query_file($autori_importa));
-	  db_fieldsmemory($result,0);
+    //verifica inclui os registros do empautoriza
+    $result = $clempautoriza->sql_record($clempautoriza->sql_query_file($autori_importa));
+    db_fieldsmemory($result, 0);
 
-      $result_cgmzerado = db_query("SELECT z01_cgccpf FROM cgm WHERE z01_numcgm = {$e54_numcgm}");
-      db_fieldsmemory($result_cgmzerado, 0)->z01_cgccpf;
+    $result_cgmzerado = db_query("SELECT z01_cgccpf FROM cgm WHERE z01_numcgm = {$e54_numcgm}");
+    db_fieldsmemory($result_cgmzerado, 0)->z01_cgccpf;
 
-      if (strlen($z01_cgccpf) != 14 && strlen($z01_cgccpf) != 11) {
+    if (strlen($z01_cgccpf) != 14 && strlen($z01_cgccpf) != 11) {
 
-          $sqlerro = true;
-          $erro_msg = "ERRO!\nNúmero do CPF/CNPJ cadastrado está incorreto.\nCorrija o CGM do fornecedor e tente novamente!";
-      }
-      if ($z01_cgccpf == '00000000000000' || $z01_cgccpf == '00000000000') {
-
-          $sqlerro = true;
-          $erro_msg = "ERRO!\nNúmero do CPF/CNPJ cadastrado está zerado.\nCorrija o CGM do fornecedor e tente novamente!";
-      }
+      $sqlerro = true;
+      $erro_msg = "ERRO!\nNúmero do CPF/CNPJ cadastrado está incorreto.\nCorrija o CGM do fornecedor e tente novamente!";
+    }
+    if ($z01_cgccpf == '00000000000000' || $z01_cgccpf == '00000000000') {
 
       $sqlerro = true;
       $erro_msg = "ERRO!\nNúmero do CPF/CNPJ cadastrado está zerado.\nCorrija o CGM do fornecedor e tente novamente!";
