@@ -7,7 +7,7 @@
     parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
     db_postmemory($HTTP_POST_VARS);
     $clitemprecoreferencia = new cl_itemprecoreferencia;
-    ini_set('display_errors', 'on');
+    //ini_set('display_errors', 'on');
 
     switch ($oGet->tipoprecoreferencia) {
         case '2':
