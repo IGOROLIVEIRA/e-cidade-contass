@@ -146,12 +146,12 @@ $oRotulo->label("z01_nome");
               $usuario = db_getsession('DB_id_usuario');
               $result = db_query("select distinct p203_permanexo,p202_sequencial,p202_tipo  from perfispermanexo
               inner join db_permherda p203_perfil on p203_perfil = id_perfil
-              inner join permanexo  p203_permanexo on p203_permanexo  = p202_sequencial  where p202_tipo != 'Todos/Público'; 
+              inner join permanexo  p203_permanexo on p203_permanexo  = p202_sequencial where id_usuario = $usuario; 
              ");
               $numrows = pg_numrows($result);
               $result2 = db_query("select distinct p203_permanexo,p202_sequencial,p202_tipo  from perfispermanexo
               inner join db_permherda p203_perfil on p203_perfil = id_perfil
-              inner join permanexo  p203_permanexo on p203_permanexo  = p202_sequencial  where p202_tipo = 'Todos/Público'; 
+              inner join permanexo  p203_permanexo on p203_permanexo  = p202_sequencial  where p202_sequencial = 1; 
              ");
               $numrows2 = pg_numrows($result2);
               $permissoes = array();
