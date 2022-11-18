@@ -445,7 +445,7 @@ if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103
 
         if (oRetorno.status == 1) {
             alert("Publicações alteradas com sucesso");
-            parent.parent.window.location.href = `lic4_editalabas.php?licitacao=${licitacao}`;
+            parent.window.location.href = `lic4_editalabas.php?licitacao=${licitacao}`;
         } else {
             alert(sMensagem);
         }
