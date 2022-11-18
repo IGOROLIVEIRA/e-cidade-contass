@@ -70,11 +70,8 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
         if ($zip->open($filename, ZipArchive::CREATE) !== TRUE) {
             exit("cannot open <$filename>\n");
         }
-        $zip->addFile("model/licitacao/PNCP/arquivos/Compra132.json", "Compra132.json");
-        //echo "numfiles: " . $zip->filename . "\n";
-        //echo "status:" . $zip->status . "\n";
+        $zip->addFile("model/licitacao/PNCP/arquivos/" . $name, $name);
         $zip->close();
-        //exit("aqui");
     }
 
     /**

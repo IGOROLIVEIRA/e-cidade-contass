@@ -43,13 +43,10 @@ switch ($oParam->exec) {
         foreach ($oParam->aLicitacoes as $aLicitacao) {
             $rsDadosEnvio = $clLicitacao->sql_record($clLicitacao->sql_query_pncp($aLicitacao->codigo));
             $rsDadosEnvioItens = $clLicitacao->sql_record($clLicitacao->sql_query_pncp_itens($aLicitacao->codigo));
-            /*echo $clLicitacao->sql_query_pncp_itens($aLicitacao->codigo);
-            db_criatabela($rsDadosEnvioItens);
-            exit;*/
             $aItensLicitacao = array();
             for ($lic = 0; $lic < pg_numrows($rsDadosEnvio); $lic++) {
                 $oDadosLicitacao = db_utils::fieldsMemory($rsDadosEnvio, $lic);
-                $tipoDocumento = $oDadosLicitacao->numerocompra;
+                $tipoDocumento = $oDadosLicitacao->tipoinstrumentoconvocatorioid;
                 $processo = $oDadosLicitacao->numerocompra;
                 for ($item = 0; $item < pg_numrows($rsDadosEnvioItens); $item++) {
                     $oDadosLicitacaoItens = db_utils::fieldsMemory($rsDadosEnvioItens, $item);
@@ -62,7 +59,7 @@ switch ($oParam->exec) {
             //monta o json com os dados da licitacao
             $clAvisoLicitacaoPNCP->montarDados();
             //envia para pncp
-            $clAvisoLicitacaoPNCP->enviar($tipoDocumento, $processo);
+            $clAvisoLicitacaoPNCP->enviarAviso($tipoDocumento, $processo);
         }
 
         break;

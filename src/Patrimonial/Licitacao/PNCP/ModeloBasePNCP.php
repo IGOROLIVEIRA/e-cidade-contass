@@ -86,9 +86,10 @@ abstract class ModeloBasePNCP
         $header['errno']   = $err;
         $header['errmsg']  = $errmsg;
         $header['header']  = $content;
+
         $aHeader = explode(':', $content);
-        $stoken = str_replace('x-content-type-options', '', $aHeader[5]);
-        $token = str_replace(' Bearer ', '', $stoken);
+        $token = substr($aHeader[5], 1, -24);
+
         return $token;
     }
 
@@ -131,13 +132,18 @@ abstract class ModeloBasePNCP
 
     /**
      * Realiza o requisicao na api do PNCP
+     *
+     * @param \int $tipoDocumento
+     * 1  - Aviso de Contratao Direta
+     * 2  - Edital
+     * 11 - Ata de Registro de Preo
      */
 
     public function enviarAviso($tipodocumento, $processo)
     {
-        //realizo o login para receber o token
-        //$token = $this->login();
-        $token = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJmOTY5NTFmMS1kYzZkLTQ3NjItYTA1NC1lMjgxODhmYmY2NDIiLCJleHAiOjE2Njg3MDgwNjgsImFkbWluaXN0cmFkb3IiOmZhbHNlLCJjcGZDbnBqIjoiMTczMTY1NjMwMDAxOTYiLCJlbWFpbCI6ImRpdnRlY0BjbWJoLm1nLmdvdi5iciIsImlkQmFzZURhZG9zIjoxODUsIm5vbWUiOiJDw6JtYXJhIE11bmljaXBhbCBkZSBCZWxvIEhvcml6b250ZSJ9.pJDyU9t9V9fAnnWCutNvQQN_IMOaUVWwDg0YtSxdFl8Q3RkH2jtt8p657qlQnRPT7X3dGd6-wxck43OoIAh8uA';
+
+        $token = $this->login();
+
         //aqui sera necessario informar o cnpj da instituicao de envio
         $cnpj = '17316563000196';
 
@@ -158,15 +164,11 @@ abstract class ModeloBasePNCP
         $chpncp      = curl_init($url);
 
         $headers = array(
-            //'Expect: 100-continue',
             'Content-Type: multipart/form-data',
-            'Authorization: Bearer ' . $token,
-            'Titulo-Documento:Compra132',
-            'Tipo-Documento-Id:1'
+            'Authorization: ' . $token,
+            'Titulo-Documento:Compra' . $processo,
+            'Tipo-Documento-Id:' . $tipodocumento
         );
-        /*echo "<pre>";
-        print_r($headers);
-        exit;*/
 
         $optionspncp = array(
             CURLOPT_RETURNTRANSFER => 1,            // return web page
