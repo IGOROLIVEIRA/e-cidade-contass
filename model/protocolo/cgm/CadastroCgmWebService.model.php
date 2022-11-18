@@ -25,10 +25,10 @@
  *                                licenca/licenca_pt.txt 
  */
 
-require_once 'model/CgmFactory.model.php';
-require_once 'model/endereco.model.php';
-require_once 'libs/db_utils.php';
-require_once 'dbforms/db_funcoes.php';
+require_once modification('model/CgmFactory.model.php');
+require_once modification('model/endereco.model.php');
+require_once modification('libs/db_utils.php');
+require_once modification('dbforms/db_funcoes.php');
 
 /**
  * Model para cadastro de cgm do sistemas webservice
