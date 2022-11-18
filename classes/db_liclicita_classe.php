@@ -4003,7 +4003,7 @@ class cl_liclicita
 
     public function sql_query_pncp_itens($l20_codigo = null)
     {
-        $sql  = " SELECT solicitem.pc11_seq AS numeroItem,
+        $sql  = " SELECT liclicitem.l21_ordem AS numeroItem,
                     CASE
                         WHEN pcmater.pc01_servico='t' THEN 'S'
                         ELSE 'M'
@@ -4035,7 +4035,7 @@ class cl_liclicita
                 LEFT JOIN liclicitemlote ON l04_liclicitem=l21_codigo
                 INNER JOIN cflicita ON cflicita.l03_codigo = liclicita.l20_codtipocom
                 WHERE liclicita.l20_codigo = {$l20_codigo}
-                GROUP BY solicitem.pc11_seq,
+                GROUP BY liclicitem.l21_ordem,
                         pcmater.pc01_servico,
                         pcmater.pc01_descrmater,
                         itemprecoreferencia.si02_vlprecoreferencia,

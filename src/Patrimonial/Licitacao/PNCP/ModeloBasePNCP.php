@@ -33,6 +33,12 @@ abstract class ModeloBasePNCP
      */
     abstract public function montarDados();
 
+    public function formatDate($date)
+    {
+        $date = \DateTime::createFromFormat('Y-m-d', $date);
+        return $date->format('Y-m-d\TH:i:s');
+    }
+
     /**
      * Realiza o login com Usuario e Senha da Instituicao na api do PNCP
      * @return token de acesso valido por 60 minutos
@@ -80,10 +86,9 @@ abstract class ModeloBasePNCP
         $header['errno']   = $err;
         $header['errmsg']  = $errmsg;
         $header['header']  = $content;
-
         $aHeader = explode(':', $content);
-        $token = str_replace('x-content-type-options', '', $aHeader[5]);
-
+        $stoken = str_replace('x-content-type-options', '', $aHeader[5]);
+        $token = str_replace(' Bearer ', '', $stoken);
         return $token;
     }
 
@@ -120,32 +125,72 @@ abstract class ModeloBasePNCP
      * method = todos os metodos HTTP
      * headers = header da requisicao OBS: Obrigatorio token de auth
      */
-    public function requestPNCP($url, $curl_data = null, $method, $headers)
+    public function requestPNCP($url, $curl_data = null, $method, $headers, $token = null)
     {
+    }
+
+    /**
+     * Realiza o requisicao na api do PNCP
+     */
+
+    public function enviarAviso($tipodocumento, $processo)
+    {
+        //realizo o login para receber o token
+        //$token = $this->login();
+        $token = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJmOTY5NTFmMS1kYzZkLTQ3NjItYTA1NC1lMjgxODhmYmY2NDIiLCJleHAiOjE2Njg3MDgwNjgsImFkbWluaXN0cmFkb3IiOmZhbHNlLCJjcGZDbnBqIjoiMTczMTY1NjMwMDAxOTYiLCJlbWFpbCI6ImRpdnRlY0BjbWJoLm1nLmdvdi5iciIsImlkQmFzZURhZG9zIjoxODUsIm5vbWUiOiJDw6JtYXJhIE11bmljaXBhbCBkZSBCZWxvIEhvcml6b250ZSJ9.pJDyU9t9V9fAnnWCutNvQQN_IMOaUVWwDg0YtSxdFl8Q3RkH2jtt8p657qlQnRPT7X3dGd6-wxck43OoIAh8uA';
+        //aqui sera necessario informar o cnpj da instituicao de envio
+        $cnpj = '17316563000196';
+
+        $url = "https://treina.pncp.gov.br/pncp-api/v1/orgaos/" . $cnpj . "/compras";
+
+        $method = 'POST';
+
+        $file = 'model/licitacao/PNCP/arquivos/Compra' . $processo . '.json';
+        $filezip = 'model/licitacao/PNCP/arquivos/Compra' . $processo . '.zip';
+
+        $cfile = new \CURLFile($file, 'application/json', 'compra');
+        $cfilezip = new \CURLFile($filezip, 'application/json', 'documento');
+        $post_data =  array(
+            'compra' => $cfile,
+            'documento' => $cfilezip
+        );
+
+        $chpncp      = curl_init($url);
+
+        $headers = array(
+            //'Expect: 100-continue',
+            'Content-Type: multipart/form-data',
+            'Authorization: Bearer ' . $token,
+            'Titulo-Documento:Compra132',
+            'Tipo-Documento-Id:1'
+        );
         /*echo "<pre>";
-        print_r($curl_data);
+        print_r($headers);
         exit;*/
 
         $optionspncp = array(
             CURLOPT_RETURNTRANSFER => 1,            // return web page
             CURLOPT_POST           => 1,
             CURLOPT_HEADER         => true,         // don't return headers
-            CURLOPT_HTTPHEADER     => $headers,
             CURLOPT_FOLLOWLOCATION => true,         // follow redirects
+            CURLOPT_HTTPHEADER     => $headers,
             CURLOPT_AUTOREFERER    => true,         // set referer on redirect
             CURLOPT_CONNECTTIMEOUT => 120,          // timeout on connect
             CURLOPT_TIMEOUT        => 120,          // timeout on response
             CURLOPT_MAXREDIRS      => 10,           // stop after 10 redirects
             CURLOPT_CUSTOMREQUEST  => $method,      // i am sending post data
-            CURLOPT_POSTFIELDS     => $curl_data,   // this are my post vars
+            CURLOPT_POSTFIELDS     => $post_data,
             CURLOPT_SSL_VERIFYHOST => 0,            // don't verify ssl
             CURLOPT_SSL_VERIFYPEER => false,        //
             CURLOPT_VERBOSE        => 1,            //
+            CURLINFO_HEADER_OUT    => true
         );
 
-        $chpncp      = curl_init($url);
+
         curl_setopt_array($chpncp, $optionspncp);
         $contentpncp = curl_exec($chpncp);
+        echo "<pre>";
+        print_r($optionspncp);
         $err     = curl_errno($chpncp);
         $errmsg  = curl_error($chpncp);
         $header  = curl_getinfo($chpncp);
@@ -156,78 +201,5 @@ abstract class ModeloBasePNCP
         print_r($header);
         exit;
         return $header;
-    }
-
-    /**
-     * Realiza o requisicao na api do PNCP
-     */
-
-    public function enviarAviso($tipodocumento, $processo)
-    {
-        //realizo o login para receber o token
-        $token = $this->login();
-        ini_set('display_errors', 'on');
-        //aqui sera necessario informar o cnpj da instituicao de envio
-        $cnpj = '01348745000109';
-
-        $url = "https://treina.pncp.gov.br/pncp-api/v1/orgaos/" . $cnpj . "/compras";
-
-        $method = 'POST';
-
-        // data fields for POST request
-        //$fields = array("codigoUnidadeCompradora" => "mariojunior1", "tipoinstrumentoconvocatorioid" => "mariojunior12");
-
-        $file = 'model/licitacao/PNCP/arquivos/Compra' . $processo . '.json';
-
-        // files to upload
-        $filenames = array($file);
-
-        $files = array();
-        foreach ($filenames as $f) {
-            $files['compra'] = file_get_contents($f);
-        }
-
-        $boundary = uniqid();
-        $delimiter = '-------------' . $boundary;
-
-        $post_data = $this->build_data_files($boundary, null, $files);
-        /*echo "<pre>";
-        print_r($post_data);
-        exit;*/
-        $headers = array(
-            'Content-Type: multipart/form-data;boundary=' . $delimiter,
-            'type: application/json',
-            'Content-Length: ' . strlen($post_data),
-            'Authorizarion: ' . $token,
-            'Titulo-Documento: Compra' . $processo,
-            'Tipo-Documento-Id: ' . $tipodocumento
-        );
-
-        //realiza a requisicao post para pncp
-        $response = $this->requestPNCP($url, $post_data, $method, $headers);
-
-        return $response;
-    }
-
-    function build_data_files($boundary, $fields, $files)
-    {
-        $data = '';
-
-        $eol = "\r\n";
-
-        $delimiter = '-------------' . $boundary;
-
-        foreach ($files as $name => $content) {
-            $data .= "--" . $delimiter . $eol
-                . 'Content-Disposition: form-data; name="' . $name . '"; filename="' . $name . '"' . $eol
-                //. 'Content-Type: image/png'.$eol
-                . 'Content-Transfer-Encoding: binary' . $eol;
-
-            $data .= $eol;
-            $data .= $content . $eol;
-        }
-        $data .= "--" . $delimiter . "--" . $eol;
-
-        return $data;
     }
 }

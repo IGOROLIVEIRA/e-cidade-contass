@@ -43,6 +43,9 @@ switch ($oParam->exec) {
         foreach ($oParam->aLicitacoes as $aLicitacao) {
             $rsDadosEnvio = $clLicitacao->sql_record($clLicitacao->sql_query_pncp($aLicitacao->codigo));
             $rsDadosEnvioItens = $clLicitacao->sql_record($clLicitacao->sql_query_pncp_itens($aLicitacao->codigo));
+            /*echo $clLicitacao->sql_query_pncp_itens($aLicitacao->codigo);
+            db_criatabela($rsDadosEnvioItens);
+            exit;*/
             $aItensLicitacao = array();
             for ($lic = 0; $lic < pg_numrows($rsDadosEnvio); $lic++) {
                 $oDadosLicitacao = db_utils::fieldsMemory($rsDadosEnvio, $lic);
