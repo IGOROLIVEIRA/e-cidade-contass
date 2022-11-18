@@ -46,7 +46,7 @@ $clpermanexo = new cl_permanexo;
       }
     }
 
-    $sql = $clpermanexo->sql_query();
+    $sql = $clpermanexo->sql_query(null, "*", "p202_sequencial", "p202_sequencial != 1");
 
     if ($p202_sequencial != null) {
       $sql = $clpermanexo->sql_query($p202_sequencial, "*", null, "p202_sequencial = $p202_sequencial");
