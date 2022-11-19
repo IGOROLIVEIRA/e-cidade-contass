@@ -1,4 +1,7 @@
 <?
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ERROR);
 /*
  *     E-cidade Software Publico para Gestao Municipal                
  *  Copyright (C) 2012  DBselller Servicos de Informatica             
@@ -33,6 +36,9 @@ include("dbforms/db_funcoes.php");
 include("fpdf151/pdf.php");
 include("libs/db_sql.php");
 include("classes/db_relempenhospatronais_classe.php");
+include("classes/db_basesr_classe.php");
+
+$clbasesr = new cl_basesr;
 
 $clrotulo = new rotulocampo;
 $clrotulo->label('r06_codigo');
@@ -76,6 +82,15 @@ foreach ($arrSalarioMaternidade as $rubrica) {
     }
 }
 db_fim_transacao(false);
+
+$sql_in = $clbasesr->sql_query_file($ano, $mes, "B502", null, db_getsession("DB_instit"), "r09_rubric as rubric_salmat13");
+$result_salmaternidade13 = db_query($sql_in);
+
+$vir = "";
+for ($i = 0; $i < pg_num_rows($result_salmaternidade13); $i++) {
+    $salmaternidade13 .= $vir . "'" . db_utils::fieldsMemory($result_salmaternidade13, $i)->rubric_salmat13 . "'";
+    $vir = ",";
+}
 
 $salarioFamilia = str_replace(',', "','", "'$salarioFamilia'");
 $salarioMaternidade = str_replace(',', "','", "'$salarioMaternidade'");
@@ -142,7 +157,8 @@ if ($salario == 's') {
             o15_descr,
             round(sum(inss),2) AS inss,
             round(sum(salario_familia),2) AS salario_familia,
-            round(sum(salario_maternidade),2) AS salario_maternidade
+            round(sum(salario_maternidade),2) AS salario_maternidade,
+            round(sum(salmat13),2) AS salmat13
     from 
     (
         select 
@@ -180,7 +196,8 @@ if ($salario == 's') {
                 end as o15_descr,
                 inss,
                 salario_familia,
-                salario_maternidade
+                salario_maternidade,
+                salmat13
         from
         (
         select rh02_regist as r01_regist,
@@ -190,7 +207,8 @@ if ($salario == 's') {
                 rh02_instit,
                 case when r14_rubric = '$rub_base' then r14_valor else 0 end as inss,
                 case when r14_rubric in ({$salarioFamilia}) then r14_valor else 0 end as salario_familia,
-                case when r14_rubric in ({$salarioMaternidade}) then r14_valor else 0 end as salario_maternidade
+                case when r14_rubric in ({$salarioMaternidade}) then r14_valor else 0 end as salario_maternidade,
+                case when r14_rubric in ({$salmaternidade13}) then r14_valor else 0 end as salmat13
         from gerfsal 
             inner join rhpessoalmov on rh02_anousu = r14_anousu 
                                     and rh02_mesusu = r14_mesusu 
@@ -202,7 +220,7 @@ if ($salario == 's') {
         where r14_anousu = $ano 
             and r14_mesusu = $mes
             and r14_instit = " . db_getsession("DB_instit") . "
-            and r14_rubric in ('$rub_base',{$salarioFamilia},{$salarioMaternidade})
+            and r14_rubric in ('$rub_base',{$salarioFamilia},{$salarioMaternidade},{$salmaternidade13})
             " . ($tab_prev == 0 ? '' : " and rh02_tbprev in ($tab_prev)") . "
 
         union all
@@ -214,7 +232,8 @@ if ($salario == 's') {
                 rh02_instit,
                 case when r48_rubric = '$rub_base' then r48_valor else 0 end as inss,
                 case when r48_rubric in ({$salarioFamilia}) then r48_valor else 0 end as salario_familia,
-                case when r48_rubric in ({$salarioMaternidade}) then r48_valor else 0 end as salario_maternidade
+                case when r48_rubric in ({$salarioMaternidade}) then r48_valor else 0 end as salario_maternidade,
+                case when r48_rubric in ({$salmaternidade13}) then r48_valor else 0 end as salmat13
         from gerfcom
             inner join rhpessoalmov on rh02_anousu = r48_anousu 
                                     and rh02_mesusu = r48_mesusu 
@@ -226,7 +245,7 @@ if ($salario == 's') {
         where r48_anousu = $ano
             and r48_mesusu = $mes
             and r48_instit = " . db_getsession("DB_instit") . "
-            and r48_rubric in ('$rub_base',{$salarioFamilia},{$salarioMaternidade})
+            and r48_rubric in ('$rub_base',{$salarioFamilia},{$salarioMaternidade},{$salmaternidade13})
             " . ($tab_prev == 0 ? '' : " and rh02_tbprev in ($tab_prev)") . "
                         
         union all
@@ -238,7 +257,8 @@ if ($salario == 's') {
                 rh02_instit,
                 case when r20_rubric = '$rub_base' then r20_valor else 0 end as inss,
                 case when r20_rubric in ({$salarioFamilia}) then r20_valor else 0 end as salario_familia,
-                case when r20_rubric in ({$salarioMaternidade}) then r20_valor else 0 end as salario_maternidade
+                case when r20_rubric in ({$salarioMaternidade}) then r20_valor else 0 end as salario_maternidade,
+                case when r20_rubric in ({$salmaternidade13}) then r20_valor else 0 end as salmat13
         from gerfres
             inner join rhpessoalmov on rh02_anousu = r20_anousu 
                                     and rh02_mesusu = r20_mesusu 
@@ -250,7 +270,8 @@ if ($salario == 's') {
         where r20_anousu = $ano
             and r20_mesusu = $mes
             and r20_instit = " . db_getsession("DB_instit") . "
-            and r20_rubric in ('$rub_base',{$salarioFamilia},{$salarioMaternidade})
+            and r20_rubric in ('$rub_base',{$salarioFamilia},{$salarioMaternidade},{$salmaternidade13}
+            )
             " . ($tab_prev == 0 ? '' : " and rh02_tbprev in ($tab_prev)") . "
                         
         ) as x
@@ -442,7 +463,8 @@ $rub_basee  = 'R991';
 $head4      = "ARQUIVO : " . $descr_arq;
 $head6      = "PERÍODO : " . $mes . " / " . $ano;
 
-// echo $sql ; exit;
+// echo $sql;
+// exit;
 //echo "patronal --> $r33_ppatro" ; exit;
 
 $result = pg_exec($sql);
