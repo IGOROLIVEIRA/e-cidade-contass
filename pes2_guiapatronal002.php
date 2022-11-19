@@ -25,6 +25,8 @@
  *                                licenca/licenca_pt.txt
  */
 
+use PHP\Utils;
+
 include("fpdf151/impcarne.php");
 include("fpdf151/scpdf.php");
 include("libs/db_sql.php");
@@ -62,10 +64,22 @@ if ($tipo == 'd') {
 }
 
 $sql_in = $clbasesr->sql_query_file($ano, $mes, "B501", null, db_getsession("DB_instit"), "r09_rubric as rubric_salmat");
-
-
 $result_salmaternidade = db_query($sql_in);
-db_fieldsmemory($result_salmaternidade, 0);
+
+$vir = "";
+for ($i = 0; $i < pg_num_rows($result_salmaternidade); $i++) {
+    $salmaternidade .= $vir . "'" . db_utils::fieldsMemory($result_salmaternidade, $i)->rubric_salmat . "'";
+    $vir = ",";
+}
+
+$sql_in = $clbasesr->sql_query_file($ano, $mes, "B502", null, db_getsession("DB_instit"), "r09_rubric as rubric_salmat13");
+$result_salmaternidade13 = db_query($sql_in);
+
+$vir = "";
+for ($i = 0; $i < pg_num_rows($result_salmaternidade13); $i++) {
+    $salmaternidade13 .= $vir . "'" . db_utils::fieldsMemory($result_salmaternidade13, $i)->rubric_salmat13 . "'";
+    $vir = ",";
+}
 
 $sql_in = $clbasesr->sql_query_file($ano, $mes, "B995", null, db_getsession("DB_instit"), "r09_rubric");
 
@@ -135,7 +149,8 @@ for ($inome = 0; $inome < pg_numrows($res_nome); $inome++) {
            round(sum(parcela_patronal),2)     as patronal1,
            round(sum(campoextra),2) AS campoextra1,
            round(sum(agentes_nocivos),2) AS agentes_nocivos1,
-           round(sum(parcela_salmat),2)     AS salmat1
+           round(sum(parcela_salmat),2)     AS salmat1,
+           round(sum(parcela_salmat13),2)     AS salmat13
     from
     (
     select r01_regist                           as soma,
@@ -146,7 +161,8 @@ for ($inome = 0; $inome < pg_numrows($res_nome); $inome++) {
            sum(base)/100*$r33_ppatro   as parcela_patronal,
            sum(base)/100* " . $campoextra . " AS campoextra,
            sum(nocivo) AS agentes_nocivos,
-           sum(salmat) AS parcela_salmat
+           sum(salmat) AS parcela_salmat,
+           sum(salmat13) AS parcela_salmat13
     from
     (
     select
@@ -162,7 +178,8 @@ for ($inome = 0; $inome < pg_numrows($res_nome); $inome++) {
                     when r14_rubric = 'R992' and rh02_ocorre IN ('03','07') then r14_valor*9/100
                     when r14_rubric = 'R992' and rh02_ocorre IN ('04','08') then r14_valor*6/100
            else 0 end) as nocivo,
-           sum(case when r14_rubric in ('" . $rubric_salmat . "') then r14_valor else 0 end) as salmat
+           sum(case when r14_rubric in (" . $salmaternidade . ") then r14_valor else 0 end) as salmat,
+           sum(case when r14_rubric in (" . $salmaternidade13 . ") then r14_valor else 0 end) as salmat13
     from gerfsal
          inner join rhpessoalmov on rh02_anousu = r14_anousu
                                 and rh02_mesusu = r14_mesusu
@@ -206,7 +223,8 @@ for ($inome = 0; $inome < pg_numrows($res_nome); $inome++) {
                     when r48_rubric = 'R992' and rh02_ocorre IN ('03','07') then r48_valor*9/100
                     when r48_rubric = 'R992' and rh02_ocorre IN ('04','08') then r48_valor*6/100
            else 0 end) as nocivo,
-           sum(case when r48_rubric in ('" . $rubric_salmat . "') then r48_valor else 0 end) as salmat
+           sum(case when r48_rubric in (" . $salmaternidade . ") then r48_valor else 0 end) as salmat,
+           sum(case when r48_rubric in (" . $salmaternidade13 . ") then r48_valor else 0 end) as salmat13
     from gerfcom
          inner join rhpessoalmov on rh02_anousu = r48_anousu
                                 and rh02_mesusu = r48_mesusu
@@ -250,7 +268,8 @@ for ($inome = 0; $inome < pg_numrows($res_nome); $inome++) {
                     when r20_rubric = 'R992' and rh02_ocorre IN ('03','07') then r20_valor*9/100
                     when r20_rubric = 'R992' and rh02_ocorre IN ('04','08') then r20_valor*6/100
            else 0 end) as nocivo,
-           sum(case when r20_rubric in ('" . $rubric_salmat . "') then r20_valor else 0 end) as salmat
+           sum(case when r20_rubric in (" . $salmaternidade . ") then r20_valor else 0 end) as salmat,
+           sum(case when r20_rubric in (" . $salmaternidade13 . ") then r20_valor else 0 end) as salmat13
     from gerfres
          inner join rhpessoalmov on rh02_anousu = r20_anousu
                                 and rh02_mesusu = r20_mesusu
@@ -320,7 +339,8 @@ for ($inome = 0; $inome < pg_numrows($res_nome); $inome++) {
            sum(case when r35_rubric in " . $xrubricas . " then r35_valor else 0 end) as desco,
            sum(case when r35_rubric in " . $xdeducao . " then r35_valor else 0 end) as ded ,
            sum(case when r35_rubric in " . $devolucao . " then r35_valor else 0 end) as dev ,
-           sum(case when r35_rubric in " . $xbases . " and r35_rubric not in ('" . $rubric_salmat . "') then r35_valor else 0 end) as base,
+           sum(case when r35_rubric in " . $xbases . " and r35_rubric not in (" . $salmaternidade . ") then r35_valor else 0 end) as base,
+           sum(case when r35_rubric in " . $xbases . " and r35_rubric not in (" . $salmaternidade13 . ") then r35_valor else 0 end) as base13,
            sum(case when r35_rubric = 'R992' and rh02_ocorre IN ('02','06') then r35_valor*12/100
                     when r35_rubric = 'R992' and rh02_ocorre IN ('03','07') then r35_valor*9/100
                     when r35_rubric = 'R992' and rh02_ocorre IN ('04','08') then r35_valor*6/100
@@ -365,6 +385,8 @@ for ($inome = 0; $inome < pg_numrows($res_nome); $inome++) {
     // exit;
     $result = db_query($sql);
     $xxnum = pg_numrows($result);
+    // db_criatabela($result);
+    // exit;
     if ($xxnum == 0) {
         db_redireciona('db_erros.php?fechar=true&db_erro=Não existem Códigos cadastrados no período de ' . $mes . ' / ' . $ano);
     }
@@ -402,10 +424,10 @@ $pdf1->emailpref        = $email;
 $pdf1->ano              = $ano;
 $pdf1->mes              = $mesPdf;
 $pdf1->func             = $soma;
-$pdf1->base             = $base - $salmat1;
+$pdf1->base             = $base - $salmat1 - $salmat13;
 $pdf1->deducao          = $ded;
 $pdf1->desconto         = $desco - $dev;
-$pdf1->patronal         = $patronal - ($salmat1 * ($r33_ppatro / 100));
+$pdf1->patronal         = $patronal - (($salmat1 + $salmat13) * ($r33_ppatro / 100));
 $pdf1->campoextra       = $cmpextra;
 $pdf1->cod_pagto        = $cod_pagto;
 $pdf1->terceiros        = round(db_utils::fieldsMemory($rsTerceiros, 0)->terceiros, 2);
