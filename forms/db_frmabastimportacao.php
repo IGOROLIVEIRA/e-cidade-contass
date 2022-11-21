@@ -852,8 +852,8 @@ if (isset($_POST["processar"])) {
 
         for (i = 0; i < itens.length; i++) {
             var id_registro = itens[i].value;
-            var numempenho = document.getElementById('empenho'+id_registro).value;
-            if(!numempenho){
+            var numempenho = document.getElementById('empenho' + id_registro).value;
+            if (!numempenho) {
                 nControle = 1;
                 alert("Preencher número de empenho");
                 break;

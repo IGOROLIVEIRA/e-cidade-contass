@@ -28,6 +28,160 @@
 
 
 if (isset($_POST["processar"])) {
+    $contTama = 1;
+
+    $pc01_data = $_POST["pc01_data"];
+    $pc01_data = explode("/", $pc01_data);
+    $pc01_data = $pc01_data[2] . "-" . $pc01_data[1] . "-" . $pc01_data[0];
+
+    $novo_nome = $_FILES["uploadfile"]["name"];
+
+    // Nome do novo arquivo
+    $nomearq = $_FILES["uploadfile"]["name"];
+
+    $extensao = strtolower(substr($nomearq, -5));
+
+    $diretorio = "libs/Pat_xls_import/";
+
+    // Nome do arquivo temporário gerado no /tmp
+    $nometmp = $_FILES["uploadfile"]["tmp_name"];
+
+    // Seta o nome do arquivo destino do upload
+    $arquivoDocument = "$diretorio" . "$novo_nome";
+
+
+    if ($extensao != ".xlsx") {
+        db_msgbox("Arquivo inválido! O arquivo selecionado deve ser do tipo .xlsx");
+        unlink($nometmp);
+        $lFail = true;
+        db_redireciona('com1_pcmaterimportacao001.php');
+    }
+
+    $files = glob('libs/Pat_xls_import/*');
+    foreach ($files as $file) {
+        if (is_file($file)) {
+            unlink($file);
+        }
+    }
+
+    // Faz um upload do arquivo para o local especificado
+    if (move_uploaded_file($_FILES["uploadfile"]["tmp_name"], $diretorio . $novo_nome)) {
+
+        $href = $arquivoDocument;
+    } else {
+
+        db_msgbox("Erro ao enviar arquivo.");
+        unlink($nometmp);
+        $lFail = true;
+        return false;
+    }
+
+    $dir = "libs/Pat_xls_import/";
+    $files1 = scandir($dir, 1);
+    $arquivo = "libs/Pat_xls_import/" . $files1[0];
+
+    if (!file_exists($arquivo)) {
+        echo "<script>alert('Arquivo não localizado')</script>";
+    } else {
+
+        $objPHPExcel = PHPExcel_IOFactory::load($arquivo);
+        $sheetData = $objPHPExcel->getActiveSheet()->toArray(null, true, true, true);
+        $objWorksheet = $objPHPExcel->getActiveSheet();
+        $highestRow = $objWorksheet->getHighestRow();
+        $highestRow = $highestRow;
+
+        $i = 0;
+        for ($row = 7; $row <= $highestRow; $row++) {
+
+            if (
+                $objWorksheet->getCellByColumnAndRow(0, $row)->getValue() == NULL &&
+                $objWorksheet->getCellByColumnAndRow(1, $row)->getValue() == NULL &&
+                $objWorksheet->getCellByColumnAndRow(2, $row)->getValue() == NULL &&
+                $objWorksheet->getCellByColumnAndRow(3, $row)->getValue() == NULL &&
+                $objWorksheet->getCellByColumnAndRow(4, $row)->getValue() == NULL &&
+                $objWorksheet->getCellByColumnAndRow(5, $row)->getValue() == NULL &&
+                $objWorksheet->getCellByColumnAndRow(6, $row)->getValue() == NULL &&
+                $objWorksheet->getCellByColumnAndRow(7, $row)->getValue() == NULL &&
+                $objWorksheet->getCellByColumnAndRow(8, $row)->getValue() == NULL
+            ) {
+                break;
+            }
+
+            $cell = $objWorksheet->getCellByColumnAndRow(0, $row);
+            $pc01_codsubgrupo = $cell->getValue();
+
+            $cell = $objWorksheet->getCellByColumnAndRow(1, $row);
+            $pc01_complmater = $cell->getValue();
+
+            $cell = $objWorksheet->getCellByColumnAndRow(2, $row);
+            $pc01_servico = $cell->getValue();
+
+            $cell = $objWorksheet->getCellByColumnAndRow(3, $row);
+            $nota = $cell->getValue();
+
+            $cell = $objWorksheet->getCellByColumnAndRow(4, $row);
+            $pc01_obras = $cell->getValue();
+
+            $cell = $objWorksheet->getCellByColumnAndRow(5, $row);
+            $pc01_tabela = $cell->getValue();
+
+            $cell = $objWorksheet->getCellByColumnAndRow(6, $row);
+            $pc01_taxa = $cell->getValue();
+
+            $cell = $objWorksheet->getCellByColumnAndRow(7, $row);
+            $pc07_codele = $cell->getValue();
+
+
+            $dataArr[$i][0] = $pc01_codsubgrupo;
+            $dataArr[$i][1] = $pc01_complmater;
+            $dataArr[$i][2] = $pc01_servico;
+            $dataArr[$i][3] = $pc01_codsubgrupo;
+            $dataArr[$i][4] = $pc01_obras;
+            $dataArr[$i][5] = $pc01_tabela;
+            $dataArr[$i][6] = $pc01_taxa;
+            $dataArr[$i][7] = $pc07_codele;
+
+
+            $i++;
+        }
+        $totalitens = $i;
+        $arrayItensPlanilha = array();
+
+        foreach ($dataArr as $keyRow => $Row) {
+
+
+            $objItensPlanilha = new stdClass();
+            foreach ($Row as $keyCel => $cell) {
+
+                if ($keyCel == 0) {
+                    $objItensPlanilha->pc01_codsubgrupo = $cell;
+                }
+
+                if ($keyCel == 1) {
+                    $objItensPlanilha->pc01_complmater = $cell;
+                }
+                if ($keyCel == 2) {
+                    $objItensPlanilha->pc01_servico = $cell;
+                }
+                if ($keyCel == 3) {
+                    $objItensPlanilha->pc01_codsubgrupo = $cell;
+                }
+                if ($keyCel == 4) {
+                    $objItensPlanilha->pc01_obras = $cell;
+                }
+                if ($keyCel == 5) {
+                    $objItensPlanilha->pc01_tabela = $cell;
+                }
+                if ($keyCel == 6) {
+                    $objItensPlanilha->pc01_taxa = $cell;
+                }
+                if ($keyCel == 7) {
+                    $objItensPlanilha->pc07_codele = $cell;
+                }
+            }
+            $arrayItensPlanilha[] = $objItensPlanilha;
+        }
+    }
 }
 ?>
 
@@ -98,7 +252,7 @@ if (isset($_POST["processar"])) {
                                     </td>
                                     <td>
                                         <?
-                                        db_inputdata("data", '', true, "text", 1, "", "dataI");
+                                        db_inputdata("pc01_data", '', true, "text", 1, "", "dataI");
                                         ?>
                                     </td>
                                 </tr>

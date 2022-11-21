@@ -133,23 +133,22 @@ $styleItens = array(
 $sheet->setCellValue('A1', str_replace($what, $by, 'IMPORTAÇÃO DE ITENS'));
 
 //merge das cells
-$sheet->mergeCells('A1:O5');
+$sheet->mergeCells('A1:H5');
 //cabeçalho
-$sheet->getStyle('A1:O5')->applyFromArray($styleTitulo);
+$sheet->getStyle('A1:H5')->applyFromArray($styleTitulo);
 
 //itens
 $sheet->setCellValue('A6', 'Descricao do Material');
 $sheet->setCellValue('B6', 'Complemento Material');
 $sheet->setCellValue('C6', 'Material Permanente/Servico');
-$sheet->setCellValue('D6', 'Cod. do Grupo');
-$sheet->setCellValue('E6', 'Cod do Subgrupo');
-$sheet->setCellValue('F6', 'Material de Obra');
-$sheet->setCellValue('G6', 'Tabela');
-$sheet->setCellValue('H6', 'Taxa');
-$sheet->setCellValue('I6', 'Reduzido do Desdobramento');
+$sheet->setCellValue('D6', 'Cod do Subgrupo');
+$sheet->setCellValue('E6', 'Material de Obra');
+$sheet->setCellValue('F6', 'Tabela');
+$sheet->setCellValue('G6', 'Taxa');
+$sheet->setCellValue('H6', 'Reduzido do Desdobramento');
 
 
-$sheet->getStyle('A6:I6')->applyFromArray($styleItens2);
+$sheet->getStyle('A6:H6')->applyFromArray($styleItens2);
 $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(40);
 $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(40);
 $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(40);
@@ -157,22 +156,10 @@ $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(20);
 $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(20);
 $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(40);
 $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(20);
-$objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(20);
-$objPHPExcel->getActiveSheet()->getColumnDimension('I')->setWidth(50);
+$objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(50);
 
 
-
-
-
-//cria protecao na planilha
-//senha para alteração
-//sheet->getProtection()->setPassword('PHPExcel');
-//$sheet->getProtection()->setSheet(false);
-//$sheet->getProtection()->setSort(false);
-//$sheet->getProtection()->setInsertRows(false);
-//$sheet->getProtection()->setFormatCells(false);
-
-$objPHPExcel->getActiveSheet()->protectCells('A6:I6', 'php');
+$objPHPExcel->getActiveSheet()->protectCells('A6:H6', 'php');
 $objPHPExcel->getActiveSheet()->getProtection()->setSheet(true);
 
 
@@ -191,19 +178,10 @@ for ($i = 0; $i < 1; $i++) {
     $collK = 'K' . $numrow;
     $collL = 'L' . $numrow;
     $collM = 'M' . $numrow;
-
-    //$sheet->setCellValue($collA,"");
-    //$sheet->setCellValue($collB,iconv('UTF-8', 'ISO-8859-1//IGNORE',""));
-    //$sheet->setCellValue($collC,iconv('UTF-8', 'ISO-8859-1//IGNORE',"10:20:30"));
-    //$sheet->setCellValue($collF,iconv('UTF-8', 'ISO-8859-1//IGNORE',"111.111.111-11"));
-
-
-
-
 }
 
-$sheet->getStyle('A7:I1000')->applyFromArray($styleItens);
-$sheet->getStyle('A7:I1000')->getProtection()->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
+$sheet->getStyle('A7:H1000')->applyFromArray($styleItens);
+$sheet->getStyle('A7:H1000')->getProtection()->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
 $objPHPExcel->getActiveSheet()
     ->getStyle($collB)
     ->getNumberFormat()
