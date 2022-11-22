@@ -71,6 +71,8 @@ for ($i = 0; $i < pg_num_rows($result_salmaternidade); $i++) {
     $salmaternidade .= $vir . "'" . db_utils::fieldsMemory($result_salmaternidade, $i)->rubric_salmat . "'";
     $vir = ",";
 }
+if (empty($salmaternidade))
+    $salmaternidade = "''";
 
 $sql_in = $clbasesr->sql_query_file($ano, $mes, "B502", null, db_getsession("DB_instit"), "r09_rubric as rubric_salmat13");
 $result_salmaternidade13 = db_query($sql_in);
@@ -80,6 +82,8 @@ for ($i = 0; $i < pg_num_rows($result_salmaternidade13); $i++) {
     $salmaternidade13 .= $vir . "'" . db_utils::fieldsMemory($result_salmaternidade13, $i)->rubric_salmat13 . "'";
     $vir = ",";
 }
+if (empty($salmaternidade13))
+    $salmaternidade13 = "''";
 
 $sql_in = $clbasesr->sql_query_file($ano, $mes, "B995", null, db_getsession("DB_instit"), "r09_rubric");
 
