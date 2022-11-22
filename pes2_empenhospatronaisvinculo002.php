@@ -91,6 +91,8 @@ for ($i = 0; $i < pg_num_rows($result_salmaternidade13); $i++) {
     $salmaternidade13 .= $vir . "'" . db_utils::fieldsMemory($result_salmaternidade13, $i)->rubric_salmat13 . "'";
     $vir = ",";
 }
+if (empty($salmaternidade13))
+    $salmaternidade13 = "''";
 
 $salarioFamilia = str_replace(',', "','", "'$salarioFamilia'");
 $salarioMaternidade = str_replace(',', "','", "'$salarioMaternidade'");
