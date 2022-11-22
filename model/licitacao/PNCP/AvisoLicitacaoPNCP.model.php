@@ -22,6 +22,7 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
 
     public function montarDados()
     {
+        //ini_set('display_errors', 'on');
         $aDadosAPI = array();
 
         $oDado = $this->dados;
@@ -34,7 +35,7 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
         $oDadosAPI->numeroCompra                    = $oDado->numerocompra;
         $oDadosAPI->anoCompra                       = $oDado->anocompra;
         $oDadosAPI->numeroProcesso                  = $oDado->numeroprocesso;
-        $oDadosAPI->objetoCompra                    = urlencode($oDado->objetocompra);
+        $oDadosAPI->objetoCompra                    = $this->formatText($oDado->objetocompra);
         $oDadosAPI->informacaoComplementar          = $oDado->informacaocomplementar;
         $oDadosAPI->srp                             = $oDado->srp == 'f' ? 'false' : 'true';
         $oDadosAPI->orcamentoSigiloso               = $oDado->orcamentosigiloso == 'f' ? 'false' : 'true';
@@ -43,16 +44,18 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
         $oDadosAPI->amparoLegalId                   = $oDado->amparolegalid;
         $oDadosAPI->linkSistemaOrigem               = $oDado->linksistemaorigem;
         //ITENS
+        $vlrtotal = 0;
         foreach ($oDado->itensCompra as $key => $item) {
             $oDadosAPI->itensCompra[$key]->numeroItem                  = $item->numeroitem;
             $oDadosAPI->itensCompra[$key]->materialOuServico           = $item->materialouservico;
             $oDadosAPI->itensCompra[$key]->tipoBeneficioId             = $item->tipobeneficioid;
             $oDadosAPI->itensCompra[$key]->incentivoProdutivoBasico    = $item->incentivoprodutivobasico == 'f' ? 'false' : 'true';
-            $oDadosAPI->itensCompra[$key]->descricao                   = urlencode($item->descricao);
-            $oDadosAPI->itensCompra[$key]->quantidade                  = 1;
-            $oDadosAPI->itensCompra[$key]->unidadeMedida               = urlencode($item->unidademedida);
-            $oDadosAPI->itensCompra[$key]->valorUnitarioEstimado       = 1; //$item->valorunitarioestimado;
-            $oDadosAPI->itensCompra[$key]->valorTotal                  = 1; //$item->valortotal;
+            $oDadosAPI->itensCompra[$key]->descricao                   = $this->formatText($item->descricao);
+            $oDadosAPI->itensCompra[$key]->quantidade                  = $item->pc11_quant;
+            $oDadosAPI->itensCompra[$key]->unidadeMedida               = $this->formatText($item->unidademedida);
+            $oDadosAPI->itensCompra[$key]->valorUnitarioEstimado       = $item->valorunitarioestimado;
+            $vlrtotal = $item->pc11_quant * $item->valorunitarioestimado;
+            $oDadosAPI->itensCompra[$key]->valorTotal                  = $vlrtotal;
             $oDadosAPI->itensCompra[$key]->criterioJulgamentoId        = $item->criteriojulgamentoid;
         }
 
@@ -63,14 +66,19 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
         if (file_exists($arquivo)) {
             unlink($arquivo);
         }
-
         file_put_contents($arquivo, json_encode($aDadosAPI));
+
+        /*
+        * Anexos da licitacao
+        */
         $filename = 'model/licitacao/PNCP/arquivos/Compra' . $oDado->numerocompra . '.zip';
         $zip = new ZipArchive();
         if ($zip->open($filename, ZipArchive::CREATE) !== TRUE) {
             exit("cannot open <$filename>\n");
         }
-        $zip->addFile("model/licitacao/PNCP/arquivos/" . $name, $name);
+        foreach ($oDado->anexos as $key => $anexo) {
+            $zip->addFile("model/licitacao/PNCP/anexoslicitacao/" . $anexo->l216_nomedocumento, $anexo->l216_nomedocumento);
+        }
         $zip->close();
     }
 

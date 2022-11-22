@@ -39,6 +39,11 @@ abstract class ModeloBasePNCP
         return $date->format('Y-m-d\TH:i:s');
     }
 
+    public function formatText($text)
+    {
+        return preg_replace(array("/(á|à|ã|â|ä)/", "/(Á|À|Ã|Â|Ä)/", "/(é|è|ê|ë)/", "/(É|È|Ê|Ë)/", "/(í|ì|î|ï)/", "/(Í|Ì|Î|Ï)/", "/(ó|ò|õ|ô|ö)/", "/(Ó|Ò|Õ|Ô|Ö)/", "/(ú|ù|û|ü)/", "/(Ú|Ù|Û|Ü)/", "/(ñ)/", "/(Ñ)/"), explode(" ", "a A e E i I o O u U n N"), $text);
+    }
+
     /**
      * Realiza o login com Usuario e Senha da Instituicao na api do PNCP
      * @return token de acesso valido por 60 minutos
@@ -152,13 +157,13 @@ abstract class ModeloBasePNCP
         $method = 'POST';
 
         $file = 'model/licitacao/PNCP/arquivos/Compra' . $processo . '.json';
-        $filezip = 'model/licitacao/PNCP/arquivos/Compra' . $processo . '.zip';
+        $filezip = curl_file_create('model/licitacao/PNCP/arquivos/Compra' . $processo . '.zip');
 
         $cfile = new \CURLFile($file, 'application/json', 'compra');
-        $cfilezip = new \CURLFile($filezip, 'application/json', 'documento');
+        //$cfilezip = new \CURLFile($filezip, 'application/zip', 'documento');
         $post_data =  array(
             'compra' => $cfile,
-            'documento' => $cfilezip
+            'documento' => $filezip,
         );
 
         $chpncp      = curl_init($url);

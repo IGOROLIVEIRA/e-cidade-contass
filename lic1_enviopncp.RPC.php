@@ -39,10 +39,16 @@ switch ($oParam->exec) {
     case 'enviarAviso':
 
         $clLicitacao  = db_utils::getDao("liclicita");
+        $cllicanexopncp = db_utils::getDao("licanexopncp");
         //todas as licitacoes marcadas
         foreach ($oParam->aLicitacoes as $aLicitacao) {
+            //licitacao
             $rsDadosEnvio = $clLicitacao->sql_record($clLicitacao->sql_query_pncp($aLicitacao->codigo));
+            //itens
             $rsDadosEnvioItens = $clLicitacao->sql_record($clLicitacao->sql_query_pncp_itens($aLicitacao->codigo));
+            //Anexos da Licitacao
+            $rsAnexos = $cllicanexopncp->sql_record($cllicanexopncp->sql_anexos_licitacao($aLicitacao->codigo));
+
             $aItensLicitacao = array();
             for ($lic = 0; $lic < pg_numrows($rsDadosEnvio); $lic++) {
                 $oDadosLicitacao = db_utils::fieldsMemory($rsDadosEnvio, $lic);
@@ -50,9 +56,24 @@ switch ($oParam->exec) {
                 $processo = $oDadosLicitacao->numerocompra;
                 for ($item = 0; $item < pg_numrows($rsDadosEnvioItens); $item++) {
                     $oDadosLicitacaoItens = db_utils::fieldsMemory($rsDadosEnvioItens, $item);
+                    /*
+                    * Aqui eu fiz uma consulta para conseguir o valor estimado do item reservado
+                    */
+                    if ($oDadosLicitacaoItens->pc11_reservado == "t") {
+                        $rsReservado = $clLicitacao->sql_record($clLicitacao->sql_query_valor_item_reservado($oDadosLicitacaoItens->pc11_numero, $oDadosLicitacaoItens->pc01_codmater));
+                        db_fieldsmemory($rsReservado, 0);
+                        $oDadosLicitacaoItens->valorunitarioestimado = $valorunitarioestimado;
+                    }
                     $aItensLicitacao[] = $oDadosLicitacaoItens;
                 }
+
+                //vinculando os anexos
+                for ($anex = 0; $anex < pg_numrows($rsAnexos); $anex++) {
+                    $oAnexos = db_utils::fieldsMemory($rsAnexos, $anex);
+                    $aAnexos[] = $oAnexos;
+                }
                 $oDadosLicitacao->itensCompra = $aItensLicitacao;
+                $oDadosLicitacao->anexos = $aAnexos;
             }
 
             $clAvisoLicitacaoPNCP = new AvisoLicitacaoPNCP($oDadosLicitacao);
