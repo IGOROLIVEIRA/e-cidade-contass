@@ -180,6 +180,7 @@ for ($i = 0; $i < 1; $i++) {
     $collM = 'M' . $numrow;
 }
 
+
 $sheet->getStyle('A7:H1000')->applyFromArray($styleItens);
 $sheet->getStyle('A7:H1000')->getProtection()->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
 $objPHPExcel->getActiveSheet()

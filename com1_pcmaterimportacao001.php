@@ -47,6 +47,13 @@ $db_botao = true;
     <meta http-equiv="Expires" CONTENT="0">
     <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
     <link href="estilos.css" rel="stylesheet" type="text/css">
+    <style>
+        .itens {
+            height: 300px;
+            width: 80%;
+            overflow-y: scroll;
+        }
+    </style>
 </head>
 <?
 db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit"));

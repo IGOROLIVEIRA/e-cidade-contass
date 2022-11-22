@@ -25,7 +25,7 @@
 * licenca/licenca_pt.txt
 */
 
-
+$totalitens = 0;
 
 if (isset($_POST["processar"])) {
     $contTama = 1;
@@ -101,14 +101,13 @@ if (isset($_POST["processar"])) {
                 $objWorksheet->getCellByColumnAndRow(4, $row)->getValue() == NULL &&
                 $objWorksheet->getCellByColumnAndRow(5, $row)->getValue() == NULL &&
                 $objWorksheet->getCellByColumnAndRow(6, $row)->getValue() == NULL &&
-                $objWorksheet->getCellByColumnAndRow(7, $row)->getValue() == NULL &&
-                $objWorksheet->getCellByColumnAndRow(8, $row)->getValue() == NULL
+                $objWorksheet->getCellByColumnAndRow(7, $row)->getValue() == NULL
             ) {
                 break;
             }
 
             $cell = $objWorksheet->getCellByColumnAndRow(0, $row);
-            $pc01_codsubgrupo = $cell->getValue();
+            $pc01_descrmater = $cell->getValue();
 
             $cell = $objWorksheet->getCellByColumnAndRow(1, $row);
             $pc01_complmater = $cell->getValue();
@@ -117,7 +116,7 @@ if (isset($_POST["processar"])) {
             $pc01_servico = $cell->getValue();
 
             $cell = $objWorksheet->getCellByColumnAndRow(3, $row);
-            $nota = $cell->getValue();
+            $pc01_codsubgrupo = $cell->getValue();
 
             $cell = $objWorksheet->getCellByColumnAndRow(4, $row);
             $pc01_obras = $cell->getValue();
@@ -132,7 +131,7 @@ if (isset($_POST["processar"])) {
             $pc07_codele = $cell->getValue();
 
 
-            $dataArr[$i][0] = $pc01_codsubgrupo;
+            $dataArr[$i][0] = $pc01_descrmater;
             $dataArr[$i][1] = $pc01_complmater;
             $dataArr[$i][2] = $pc01_servico;
             $dataArr[$i][3] = $pc01_codsubgrupo;
@@ -154,7 +153,7 @@ if (isset($_POST["processar"])) {
             foreach ($Row as $keyCel => $cell) {
 
                 if ($keyCel == 0) {
-                    $objItensPlanilha->pc01_codsubgrupo = $cell;
+                    $objItensPlanilha->pc01_descrmater = $cell;
                 }
 
                 if ($keyCel == 1) {
@@ -260,7 +259,7 @@ if (isset($_POST["processar"])) {
                             </table>
                             <div style="margin-left: 120px; margin-top: 10px; width: 220px;">
                                 <div style="width: 70px; float: left;">
-                                    <input name='processar' type='submit' id="Processar" value="Processar" />
+                                    <input name='processar' type='submit' id="Processar" value="Processar" onClick="return validaData()" />
                                 </div>
                                 <div style="width: 100px; float: left;">
                                     <input name='exportar' type='button' id="exportar" value="Gerar Planilha" onclick="gerar()" />
@@ -279,126 +278,129 @@ if (isset($_POST["processar"])) {
     </center>
 </form>
 
-<form name="form1" id="form1" method="post" action="" enctype="multipart/form-data">
-    <table class="DBGrid" style="width: 70%; border: 0px solid black;" id="tableResult">
+<form name="form3" id="form3" method="post" action="" enctype="multipart/form-data">
+    <div class="itens">
+        <table style="width:80%; border: 0px solid black;">
+            <tr>
+                <!--<th class="table_header" style="width: 30px; cursor: pointer;" onclick="marcarTodos();">M</th> -->
 
-        <tr>
-            <!--<th class="table_header" style="width: 30px; cursor: pointer;" onclick="marcarTodos();">M</th> -->
+                <th style="border: 0px solid red; width:300px; background:#eeeff2;">
+                    Item
+                </th>
 
-            <th style="border: 0px solid red; width:120px; background:#eeeff2;">
-                Item
-            </th>
+                <th style="border: 0px solid red; width:120px; background:#eeeff2;">
+                    Data
+                </th>
 
-            <th style="border: 0px solid red; width:120px; background:#eeeff2;">
-                Data
-            </th>
+                <th style="border: 0px solid red; width:100px; background:#eeeff2;">
+                    Tipo
+                </th>
 
-            <th style="border: 0px solid red; width:100px; background:#eeeff2;">
-                Tipo
-            </th>
-
-            <th style="border: 0px solid red; width:200px; background:#eeeff2;">
-                Grupo
-            </th>
-            <th style="background:#eeeff2;">
-                Subgrupo
-            </th>
-            <th style="background:#eeeff2;">
-                Desdobramento
-            </th>
-        </tr>
+                <th style="background:#eeeff2;">
+                    Subgrupo
+                </th>
+                <th style="background:#eeeff2;">
+                    Desdobramento
+                </th>
+            </tr>
 
 
-        <?php
-        $i = 1;
-        $tamanho = count($arrayItensPlanilha);
-        if ($contTama == 1 && $tamanho == 0) {
-            echo "<script>alert('Nenhum registro encontrato!')</script>";
-        }
-        //var_dump($arrayItensPlanilha);
-        foreach ($arrayItensPlanilha as $rown) {
+            <?php
+            $i = 1;
+            $tamanho = count($arrayItensPlanilha);
+            if ($contTama == 1 && $tamanho == 0) {
+                echo "<script>alert('Nenhum registro encontrato!')</script>";
+                echo "<script>location.href = 'com1_pcmaterimportacao001.php'</script>;";
+            }
+            $pc01_data = $_POST["pc01_data"];
 
-            $dataAbastecimento = $rown->data;
+            foreach ($arrayItensPlanilha as $rown) {
 
-            if ($dataAbastecimento == null) {
-                $dataAbastecimento = $rown->data;
+                $anousu = db_getsession("DB_anousu");
+                $sSQL = "select o56_descr from orcelemento where o56_codele = $rown->pc07_codele and o56_anousu = $anousu;";
+                $rsResult       = db_query($sSQL);
+                $o56_descr = db_utils::fieldsMemory($rsResult, 0)->o56_descr;
+
+                $instituicao = db_getsession('DB_instit');
+                $sSQL = "select pc04_descrsubgrupo from pcsubgrupo where pc04_codsubgrupo = $rown->pc01_codsubgrupo and pc04_instit in ($instituicao,0);";
+                $rsResult       = db_query($sSQL);
+                $pc04_descrsubgrupo = db_utils::fieldsMemory($rsResult, 0)->pc04_descrsubgrupo;
+
+                echo "<tr style='background-color:#ffffff;'>";
+
+                echo "<td id='abastecimento$i' style='text-align:center; display:none' >";
+                echo $rown->nota;
+                echo "</td>";
+
+                echo "<td name='descricao[]' style='text-align:center;'>";
+                echo $rown->pc01_descrmater;
+                echo "</td>";
+
+                echo "<td name='data[]' id='placa$i' style='text-align:center;' >";
+
+                echo $pc01_data;
+                echo "</td>";
+
+                echo "<td style='text-align:center;'>";
+                echo $rown->pc01_servico;
+                echo "</td>";
+
+                echo "<td style='text-align:center;'>";
+                echo $pc04_descrsubgrupo;
+                echo "</td>";
+
+                echo "<td style='text-align:center;'>";
+                echo $o56_descr;
+                echo "</td>";
+
+
+                echo "</tr>";
+                $i++;
             }
 
-            if ($dataAbastecimento < $rown->data && $dataAbastecimento != null) {
-                $dataAbastecimento = $rown->data;
-            }
+            ?>
+            </tr>
 
-            echo "<tr style='background-color:#ffffff;'>";
+            <tr style='background-color:#eeeff2;'>
 
-            echo "<td id='abastecimento$i' style='text-align:center; display:none' >";
-            echo $rown->nota;
-            echo "</td>";
+                <td colspan="6" align="center"> <strong>Total de itens:</strong>
+                    <span class="nowrap" id="totalitens"> <?php echo $totalitens ?> </span>
+                </td>
 
-            echo "<td style='text-align:center;'>";
-            echo "<input type='checkbox' class='marca_itens' name='aItonsMarcados[]' value='$i'> ";
-
-            echo "</td>";
-
-            echo "<td id='placa$i' style='text-align:center;' >";
-            echo $rown->placa;
-            echo "</td>";
-
-            echo "<td id='data$i' style='text-align:center;'>";
-            $dataV = $rown->data;
-            $dataV = explode("-", $dataV);
-            echo $dataV[2] . "-" . $dataV[1] . "-" . $dataV[0];
-            echo "</td>";
-
-            echo "<td style='text-align:center;'>";
-            echo $rown->valor;
-            echo "</td>";
-
-            echo "<td style='text-align:center;'>";
-            echo $rown->secretaria;
-            echo "</td>";
-
-            echo "<td style='text-align:center; width:100px;'>";
-            echo "<input type='text' style='text-align:center;' id='empenho$i' name='empenho$i' placeholder='num/ano' onkeypress='return onlynumber();'>";
-            echo "</td>";
-            echo "</tr>";
-            $i++;
-        }
-
-        ?>
-        </tr>
-
-        <tr style='background-color:#eeeff2;'>
-
-            <td colspan="6" align="center"> <strong>Total de itens:</strong>
-                <span class="nowrap" id="totalitens"> <?php echo $totalitens ?> </span>
-            </td>
-
-        </tr>
+            </tr>
 
 
-        <?
+            <?
 
-        echo
-        "<tr>
-<td colspan='6' align='center'>
-<input style='margin-top:10px;' type='button' id='db_opcao' value='Salvar' " . ($db_botao == false ? "disabled" : "") . " onclick='js_verificarEmpenho();'>
-</td>
-</tr>";
+            ?>
+        </table>
+    </div>
+    <?php
 
-        $valor = array("valor" => 1, "teste" => 2);
+    if (isset($_POST["processar"])) {
+        echo  "<input style='margin-top: 10px;' type='button' id='db_opcao' value='Salvar'>";
+    } else {
+        echo  "<input style='margin-top: -200px;' type='button' id='db_opcao' value='Salvar'>";
+    }
 
-        ?>
-    </table>
+    ?>
+
 </form>
-
 <script>
+    function validaData() {
+        if (document.getElementById('pc01_data').value == '') {
+            alert('Usuário: obrigatório preencher a data de cadastro dos itens.');
+            return false;
+        }
+
+    }
+
     function gerar() {
-        window.location.href = "com1_xlsimportacaoitensPlanilha.php";
+        window.location.href = " com1_xlsimportacaoitensPlanilha.php";
     }
 
     function js_liberarButton() {
         document.getElementById("Processar").style.display = "block";
     }
-
     $('uploadfile').observe("change", js_liberarButton);
 </script>
