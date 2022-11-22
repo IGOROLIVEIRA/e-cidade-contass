@@ -1312,12 +1312,12 @@ if ($tipo == "a" or 1 == 1) {
             if ($agrupar == "do") {
                 if ($sememp == "n") {
                     $pdf->Cell(45, $tam, 'REDUZIDO', 1, 0, "C", 1);
-                    $pdf->Cell(120, $tam, 'DOTAO ORAMENTRIA', 1, 0, "C", 1);
+                    $pdf->Cell(120, $tam, 'DOTA플O ORAMENTRIA', 1, 0, "C", 1);
                     $pdf->Cell(72, $tam, "MOVIMENTAO", 1, 0, "C", 1);
                     $pdf->Cell(54, $tam, "SALDO A PAGAR", 1, 1, "C", 1);
                 } else {
                     $pdf->Cell(45, $tam, 'REDUZIDO', 1, 0, "C", 1);
-                    $pdf->Cell(80, $tam, 'DOTAO ORAMENTRIA', 1, 0, "C", 1);
+                    $pdf->Cell(80, $tam, 'DOTA플O ORAMENTRIA', 1, 0, "C", 1);
                     $pdf->Cell(97, $tam, "MOVIMENTAO", 1, 0, "C", 1);
                     $pdf->Cell(54, $tam, "SALDO A PAGAR", 1, 1, "C", 1);
 
@@ -1342,7 +1342,7 @@ if ($tipo == "a" or 1 == 1) {
                 $pdf->Cell(20, $tam, "TP COMPRA", 1, 0, "C", 1);
                 $pdf->Cell(11, $tam, "LICI.", 1, 0, "C", 1);
                 $pdf->Cell(11, $tam, "EMP.", 1, 0, "C", 1);
-                $pdf->Cell(15, $tam, "EMISSO", 1, 0, "C", 1);
+                $pdf->Cell(15, $tam, "EMISS홒", 1, 0, "C", 1);
 
                 if ($agrupar == "a") {
                     if ($mostrar == "r") {
@@ -1389,13 +1389,13 @@ if ($tipo == "a" or 1 == 1) {
                 if ($agrupar == "do") {
                     if ($mostrar == "r") {
                         $pdf->Cell(46, $tam, 'NOME', 1, 0, "C", 1); //108
-                        $pdf->Cell(62, $tam, 'DOTAO', 1, 0, "C", 1);
+                        $pdf->Cell(62, $tam, 'DOTA플O', 1, 0, "C", 1);
                     } elseif ($mostrar == "t") {
                         $pdf->Cell(40, $tam, strtoupper('Tipo de Compra'), 1, 0, "C", 1); // tipo de compra
                     }
                 } else {
                     //strtoupper($RLe60_coddot)
-                    $pdf->Cell(62, $tam, 'DOTAO', 1, 0, "L", 1); // cod+estrut dotatao // quebra linha
+                    $pdf->Cell(62, $tam, 'DOTA플O', 1, 0, "L", 1); // cod+estrut dotatao // quebra linha
                 }
                 //$pdf->Cell(15, $tam, "CP", 1, 0, "C", 1);
                 $pdf->Cell(18, $tam, strtoupper($RLe60_vlremp), 1, 0, "C", 1);
@@ -1792,7 +1792,7 @@ if ($tipo == "a" or 1 == 1) {
             $pdf->SetFont('Arial', '', 7);
         }
 
-        /* ----------- AGRUPAR POR DOTAO ORAMENTRIA ----------- */
+        /* ----------- AGRUPAR POR DOTA플O ORAMENTRIA ----------- */
         if ($repete_r != $e60_coddot and $agrupar == "do") {
             if ($quantimp > 0 or ($sememp == "s" and $quantimp > 0)) {
                 if (($quantimp > 0 and $sememp == "n") or ($quantimp > 0 and $sememp == "s")) {
