@@ -634,10 +634,10 @@ if (($db_opcao == 2 || $db_opcao == 22) && isset($rh01_regist) && $rh01_regist !
 
   function js_pesquisarh01_numcgm(mostra) {
     if (mostra == true) {
-      js_OpenJanelaIframe('top.corpo.iframe_rhpessoal', 'func_nome', 'func_nome.php?campos=' + 'cgm.z01_numcgm\, z01_nome\,trim\(z01_cgccpf\) as z01_cgccpf\, trim\(z01_ender\) as z01_ender\, z01_munic\, z01_uf\, z01_cep\, z01_email\,z01_sexo\,z01_nasc' + '&testanome=true&funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome|z01_sexo|z01_nasc', 'Pesquisa', true, '0');
+      js_OpenJanelaIframe('CurrentWindow.corpo.iframe_rhpessoal', 'func_nome', 'func_nome.php?campos=' + 'cgm.z01_numcgm\, z01_nome\,trim\(z01_cgccpf\) as z01_cgccpf\, trim\(z01_ender\) as z01_ender\, z01_munic\, z01_uf\, z01_cep\, z01_email\,z01_sexo\,z01_nasc' + '&testanome=true&funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome|z01_sexo|z01_nasc', 'Pesquisa', true, '0');
     } else {
       if (document.form1.rh01_numcgm.value != '') {
-        js_OpenJanelaIframe('top.corpo.iframe_rhpessoal', 'func_nome', 'func_nome.php?novosvalores=|z01_numcgm|z01_nome|z01_sexo|z01_nasc&testanome=true&pesquisa_chave=' + document.form1.rh01_numcgm.value + '&funcao_js=parent.js_mostracgm', 'Pesquisa', false, '0');
+        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_rhpessoal', 'func_nome', 'func_nome.php?novosvalores=|z01_numcgm|z01_nome|z01_sexo|z01_nasc&testanome=true&pesquisa_chave=' + document.form1.rh01_numcgm.value + '&funcao_js=parent.js_mostracgm', 'Pesquisa', false, '0');
       } else {
         document.form1.z01_nome.value = '';
       }

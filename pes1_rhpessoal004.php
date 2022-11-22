@@ -25,30 +25,30 @@
  *                                licenca/licenca_pt.txt
  */
 
-require("libs/db_stdlib.php");
-require("libs/db_utils.php");
-require("libs/db_app.utils.php");
-require("libs/db_conecta.php");
-include("libs/db_sessoes.php");
-include("libs/db_usuariosonline.php");
-include("dbforms/db_funcoes.php");
-include("classes/db_rhpessoal_classe.php");
-include("classes/db_rhpesfgts_classe.php");
-include("classes/db_rhpesdoc_classe.php");
-include("classes/db_rhpessoalmov_classe.php");
-include("classes/db_rhraca_classe.php");
-include("classes/db_rhinstrucao_classe.php");
-include("classes/db_rhestcivil_classe.php");
-include("classes/db_rhnacionalidade_classe.php");
-include("classes/db_cfpess_classe.php");
-include("classes/db_rhfotos_classe.php");
-include("classes/db_rhpesorigem_classe.php");
-include("classes/db_cgm_classe.php");
-include("classes/db_rhdepend_classe.php");
-include("classes/db_rhcfpessmatr_classe.php");
-include("classes/db_rhcontratoemergencial_classe.php");
-include("classes/db_rhcontratoemergencialrenovacao_classe.php");
-include("libs/db_libpessoal.php");
+require(modification("libs/db_stdlib.php"));
+require(modification("libs/db_utils.php"));
+require(modification("libs/db_app.utils.php"));
+require(modification("libs/db_conecta.php"));
+include(modification("libs/db_sessoes.php"));
+include(modification("libs/db_usuariosonline.php"));
+include(modification("dbforms/db_funcoes.php"));
+include(modification("classes/db_rhpessoal_classe.php"));
+include(modification("classes/db_rhpesfgts_classe.php"));
+include(modification("classes/db_rhpesdoc_classe.php"));
+include(modification("classes/db_rhpessoalmov_classe.php"));
+include(modification("classes/db_rhraca_classe.php"));
+include(modification("classes/db_rhinstrucao_classe.php"));
+include(modification("classes/db_rhestcivil_classe.php"));
+include(modification("classes/db_rhnacionalidade_classe.php"));
+include(modification("classes/db_cfpess_classe.php"));
+include(modification("classes/db_rhfotos_classe.php"));
+include(modification("classes/db_rhpesorigem_classe.php"));
+include(modification("classes/db_cgm_classe.php"));
+include(modification("classes/db_rhdepend_classe.php"));
+include(modification("classes/db_rhcfpessmatr_classe.php"));
+include(modification("classes/db_rhcontratoemergencial_classe.php"));
+include(modification("classes/db_rhcontratoemergencialrenovacao_classe.php"));
+include(modification("libs/db_libpessoal.php"));
 
 $clrhpessoal                      = new cl_rhpessoal;
 $clrhpesfgts                      = new cl_rhpesfgts;
@@ -535,8 +535,8 @@ if (isset($incluir)) {
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
     <meta http-equiv="Expires" CONTENT="0">
     <?
-    db_app::load("scripts.js, prototype.js, widgets/windowAux.widget.js,strings.js,widgets/dbtextField.widget.js,
-               dbmessageBoard.widget.js,dbautocomplete.widget.js,dbcomboBox.widget.js,dates.js,
+    db_app::load("scripts.js, prototype.js, widgets/windowAux.widget.js,strings.js, widgets/dbtextField.widget.js,
+               dbmessageBoard.widget.js, dbautocomplete.widget.js, dbcomboBox.widget.js, dates.js,
                datagrid.widget.js");
     db_app::load("estilos.css,grid.style.css");
     ?>
