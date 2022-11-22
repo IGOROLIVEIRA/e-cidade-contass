@@ -743,6 +743,10 @@ WHERE rh30_vinculo IN ('I',
     {
         $anofolha = db_anofolha();
         $mesfolha = db_mesfolha();
+        if (empty($mesfolha)) {
+            $anofolha = db_getsession("DB_anousu");
+            $mesfolha = date("m", db_getsession("DB_datausu"));
+        }
         if ($tipoevento == 1) {
             $sql = "select distinct z01_cgccpf from rhpessoal
                 left join rhpessoalmov on

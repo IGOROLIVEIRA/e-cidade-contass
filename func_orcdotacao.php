@@ -337,6 +337,9 @@ parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
             if (!empty($o61_codigo)) {
                 $filtro .= " and o61_codigo = $o61_codigo ";
             }
+            if (!empty($pesquisa_chave))
+                $filtro .= " and o58_coddot = $pesquisa_chave ";
+            echo $pesquisa_chave;
         }
         /* quando a instituição é prefeitura, é permitido selecionar dotações de outras instituições */
         $where_instit = "o58_instit=" . db_getsession("DB_instit");
@@ -365,7 +368,25 @@ parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
         <tr>
             <td align="center" valign="top">
                 <?
-                    db_lovrot($sql, 15, "()", "", $funcao_js , "", "NoMe", array(), false, array());
+                if (!isset($pesquisa_chave)) {
+                    db_lovrot($sql, 15, "()", "", $funcao_js, "", "NoMe", array(), false, array());
+                } else {
+                    if ($pesquisa_chave != null && $pesquisa_chave != "") {
+                        // Dim result as RecordSet
+                        $result = $clorcdotacao->sql_record($clorcdotacao->sql_query(db_getsession("DB_anousu"), $pesquisa_chave));
+
+                        if ($clorcdotacao->numrows != 0) {
+                            db_fieldsmemory($result, 0);
+                            echo $result;
+                            echo "<script>" . $funcao_js . "('$o56_descr',false);</script>";
+                        } else {
+                            echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") não Encontrado',true);</script>";
+                        }
+                    } else {
+                        echo "<script>" . $funcao_js . "('',false);</script>";
+                    }
+                }
+
                 ?>
             </td>
         </tr>
