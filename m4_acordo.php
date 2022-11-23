@@ -31,7 +31,7 @@ $clrotulo->label('l20_objeto');
 $clrotulo->label('ac16_dataassinatura');
 $clrotulo->label('ac35_dataassinaturatermoaditivo');
 $clrotulo->label('ac26_numeroaditamento');
-
+$clrotulo->label('ac16_datareferencia');
 if (isset($alterar)) {
   if (empty($_POST['ac16_adesaoregpreco'])) {
     unset($_POST['ac16_adesaoregpreco']);
@@ -91,6 +91,7 @@ if (isset($alterar)) {
     }
 
     if ($erro != true) {
+      //print_r("update acordovigencia set ac18_datainicio = '$datainicio', ac18_datafim = '$datafim' WHERE ac18_acordoposicao = $posicao;");
       db_query("update acordovigencia set ac18_datainicio = '$datainicio', ac18_datafim = '$datafim' WHERE ac18_acordoposicao = $posicao;");
       db_query("update apostilamento set si03_dataapostila = '$dataapostila' WHERE si03_acordoposicao = $posicao;");
       db_query("update acordoposicao set ac26_numeroapostilamento = '$numeroapostilamento' WHERE ac26_sequencial = $posicao;");
@@ -239,7 +240,29 @@ if (isset($alterar)) {
     ");
 
     $cflicita = db_utils::fieldsMemory($resultadocflicita, 0);
-    db_query("update acordo set ac16_numodalidade = '$licitacao->l20_numero', ac16_tipomodalidade = '$cflicita->l03_descr' WHERE ac16_sequencial = '$ac16_sequencial';");
+    $ac16_datareferencia = implode('-', array_reverse(explode('/', $ac16_datareferencia)));
+    $ac16_datapublicacao = implode('-', array_reverse(explode('/', $ac16_datapublicacao)));
+    $dTinicio = implode('-', array_reverse(explode('/', $ac16_datainicio)));
+    $dTfim = implode('-', array_reverse(explode('/', $ac16_datafim)));
+    $setac16 = '';
+    if($ac16_datareferencia != "" && $ac16_datareferencia != null){
+      $setac16 .= ",ac16_datareferencia = '$ac16_datareferencia'";
+    }
+    if($ac16_datapublicacao != "" && $ac16_datapublicacao != null){
+      $setac16 .= ",ac16_datapublicacao = '$ac16_datapublicacao'";
+    }
+    if($ac16_veiculodivulgacao != "" && $ac16_veiculodivulgacao != null){
+      $setac16 .= ",ac16_veiculodivulgacao = '$ac16_veiculodivulgacao'";
+    }
+    if($dTinicio != "" && $dTinicio != null){
+      $setac16 .= ",ac16_datainicio = '$dTinicio'";
+    }
+    if($dTfim != "" && $dTfim != null){
+      $setac16 .= ",ac16_datafim = '$dTfim'";
+    }
+    
+    //print_r("update acordo set ac16_numodalidade = '$licitacao->l20_numero', ac16_tipomodalidade = '$cflicita->l03_descr' $setac16 WHERE ac16_sequencial = '$ac16_sequencial';");
+    db_query("update acordo set ac16_numodalidade = '$licitacao->l20_numero', ac16_tipomodalidade = '$cflicita->l03_descr' $setac16 WHERE ac16_sequencial = '$ac16_sequencial';");
   }
 
   $ac16_datainicio = implode('-', array_reverse(explode('/', $ac16_datainicio)));
@@ -340,6 +363,7 @@ if (isset($alterar)) {
       } else {
         $dTinicio = implode('-', array_reverse(explode('/', $ac16_datainicio)));
         $dTfim = implode('-', array_reverse(explode('/', $ac16_datafim)));
+        //print_r("teste2");
         db_query("update acordovigencia  set ac18_datainicio = '$dTinicio', ac18_datafim  = '$dTfim' where ac18_acordoposicao  = '$oPosicao->posicao'");
         db_query("update acordoitemperiodo set ac41_datainicial = '$dTinicio', ac41_datafinal = '$dTfim' where ac41_acordoposicao = '$oPosicao->posicao'");
       }
@@ -421,6 +445,9 @@ if (isset($alterar)) {
                 inner join acordoposicaoperiodo on ac36_acordoposicao = ac26_sequencial
                 where ac16_sequencial = '$ac16_sequencial' order by posicao"
         );
+        $result = $clacordo->sql_record($clacordo->sql_query_vinculos($ac16_sequencial, "ac16_sequencial,ac16_resumoobjeto,ac16_datareferencia,ac16_datapublicacao,ac16_veiculodivulgacao,ac16_acordosituacao, ac16_objeto,ac16_origem,ac16_tipoorigem,ac16_licitacao,l20_objeto,ac16_adesaoregpreco,si06_objetoadesao,orgao.z01_nome,ac16_licoutroorgao,ac16_acordogrupo,ac02_descricao,ac16_numeroacordo,ac16_dataassinatura,ac16_datainicio,ac16_datafim", null, ""));
+
+        db_fieldsmemory($result, 0);
       }
     }
   }
@@ -432,7 +459,7 @@ if (isset($alterar)) {
 } elseif (isset($chavepesquisa)) {
   $db_opcao = 2;
   $db_botao = true;
-  $result = $clacordo->sql_record($clacordo->sql_query_vinculos($chavepesquisa, "ac16_sequencial,ac16_resumoobjeto,ac16_acordosituacao, ac16_objeto,ac16_origem,ac16_tipoorigem,ac16_licitacao,l20_objeto,ac16_adesaoregpreco,si06_objetoadesao,orgao.z01_nome,ac16_licoutroorgao,ac16_acordogrupo,ac02_descricao,ac16_numeroacordo,ac16_dataassinatura,ac16_datainicio,ac16_datafim", null, ""));
+  $result = $clacordo->sql_record($clacordo->sql_query_vinculos($chavepesquisa, "ac16_sequencial,ac16_resumoobjeto,ac16_datareferencia,ac16_datapublicacao,ac16_veiculodivulgacao,ac16_acordosituacao, ac16_objeto,ac16_origem,ac16_tipoorigem,ac16_licitacao,l20_objeto,ac16_adesaoregpreco,si06_objetoadesao,orgao.z01_nome,ac16_licoutroorgao,ac16_acordogrupo,ac02_descricao,ac16_numeroacordo,ac16_dataassinatura,ac16_datainicio,ac16_datafim", null, ""));
 
   db_fieldsmemory($result, 0);
 
@@ -749,12 +776,20 @@ if (isset($alterar)) {
               </td>
             </tr>
             <tr>
-              <td nowrap><?= $Lac16_datareferencia ?>
+              <td nowrap><?php echo "<b>Data de Referência</b>"; ?>
               </td>
               <td>
                 <?=
                 
-                db_select('ac16_datareferencia', array('1'=> 'Ativo','4' => 'Homologado'), true, $db_opcao, "", "");
+                db_inputdata(
+                  'ac16_datareferencia',
+                  @$ac16_datareferencia_dia,
+                  @$ac16_datareferencia_mes,
+                  @$ac16_datareferencia_ano,
+                  true,
+                  'text',
+                  $iOpcao
+                );
                  ?>
               </td>
             </tr>
@@ -763,8 +798,15 @@ if (isset($alterar)) {
               </td>
               <td>
                 <?=
-                
-                db_select('ac16_datapublicacao', array('1'=> 'Ativo','4' => 'Homologado'), true, $db_opcao, "", "");
+                db_inputdata(
+                  'ac16_datapublicacao',
+                  @$ac16_datapublicacao_dia,
+                  @$ac16_datapublicacao_mes,
+                  @$ac16_datapublicacao_ano,
+                  true,
+                  'text',
+                  $iOpcao
+                );
                  ?>
               </td>
             </tr>
@@ -773,8 +815,7 @@ if (isset($alterar)) {
               </td>
               <td>
                 <?=
-                
-                db_select('ac16_veiculodivulgacao', array('1'=> 'Ativo','4' => 'Homologado'), true, $db_opcao, "", "");
+                db_textarea('ac16_veiculodivulgacao', 0, 65, $Iac16_veiculodivulgacao, true, 'text', $db_opcao, "");
                  ?>
               </td>
             </tr>
