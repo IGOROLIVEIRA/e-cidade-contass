@@ -564,10 +564,10 @@ class EventoS1200 extends EventoBase
         rh51_cgcvinculo as nrInsc2,
         rh51_basefo as vlrRemunOE,
         'LOTA1' as codLotacao,
-        case when rh02_ocorre = '2' then 2
-        when rh02_ocorre = '3' then 3
-        when rh02_ocorre = '4' then 4
-        else '1'
+        case when rh02_ocorre = '02' then 2
+        when rh02_ocorre = '03' then 3
+        when rh02_ocorre = '04' then 4
+        else 1
         end as grauExp,
         rh30_regime,
         rh51_cgcvinculo,
