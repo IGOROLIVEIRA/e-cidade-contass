@@ -183,11 +183,6 @@ for ($i = 0; $i < 1; $i++) {
 
 $sheet->getStyle('A7:H1000')->applyFromArray($styleItens);
 $sheet->getStyle('A7:H1000')->getProtection()->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
-$objPHPExcel->getActiveSheet()
-    ->getStyle($collB)
-    ->getNumberFormat()
-    ->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_TEXT);
-
 
 $nomefile = "Itens" . db_getsession('DB_instit') . ".xlsx";
 

@@ -27,6 +27,7 @@
 
 $totalitens = 0;
 
+
 if (isset($_POST["processar"])) {
     $contTama = 1;
 
@@ -107,13 +108,13 @@ if (isset($_POST["processar"])) {
             }
 
             $cell = $objWorksheet->getCellByColumnAndRow(0, $row);
-            $pc01_descrmater = $cell->getValue();
+            $pc01_descrmater = utf8_decode($cell->getValue());
 
             $cell = $objWorksheet->getCellByColumnAndRow(1, $row);
-            $pc01_complmater = $cell->getValue();
+            $pc01_complmater = utf8_decode($cell->getValue());
 
             $cell = $objWorksheet->getCellByColumnAndRow(2, $row);
-            $pc01_servico = $cell->getValue();
+            $pc01_servico =  utf8_decode($cell->getValue());
 
             $cell = $objWorksheet->getCellByColumnAndRow(3, $row);
             $pc01_codsubgrupo = $cell->getValue();
@@ -306,6 +307,13 @@ if (isset($_POST["processar"])) {
 
 
             <?php
+
+            function removeAccents($string)
+            {
+                return strtolower(trim(preg_replace('~[^0-9a-z]+~i', '-', preg_replace('~&([a-z]{1,2})(acute|cedil|circ|grave|lig|orn|ring|slash|th|tilde|uml);~i', '$1', htmlentities($string, ENT_QUOTES, 'UTF-8'))), ' '));
+            }
+
+
             $i = 1;
             $tamanho = count($arrayItensPlanilha);
             if ($contTama == 1 && $tamanho == 0) {
@@ -313,6 +321,8 @@ if (isset($_POST["processar"])) {
                 echo "<script>location.href = 'com1_pcmaterimportacao001.php'</script>;";
             }
             $pc01_data = $_POST["pc01_data"];
+
+
 
             foreach ($arrayItensPlanilha as $rown) {
 
@@ -341,9 +351,17 @@ if (isset($_POST["processar"])) {
                 echo $pc01_data;
                 echo "</td>";
 
-                echo "<td style='text-align:center;'>";
-                echo $rown->pc01_servico;
-                echo "</td>";
+                if (mb_strtolower($rown->pc01_servico) != "sim" && mb_strtolower($rown->pc01_servico) != "não") {
+                    echo "<td style='text-align:center; background-color:#f09999;'>";
+                    echo $rown->pc01_servico;
+                    echo "</td>";
+                } else {
+                    echo "<td style='text-align:center;'>";
+                    echo $rown->pc01_servico;
+                    echo "</td>";
+                }
+
+
 
                 echo "<td style='text-align:center;'>";
                 echo $pc04_descrsubgrupo;
@@ -374,6 +392,8 @@ if (isset($_POST["processar"])) {
 
             ?>
         </table>
+
+
     </div>
     <?php
 
