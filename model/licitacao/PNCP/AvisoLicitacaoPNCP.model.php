@@ -81,19 +81,4 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
         }
         $zip->close();
     }
-
-    /**
-     *
-     * @param \int $tipoDocumento
-     * 1  - Aviso de Contratao Direta
-     * 2  - Edital
-     * 11 - Ata de Registro de Preo
-     */
-
-    public function enviar($tipoDocumento, $processo)
-    {
-        ini_set('display_errors', 'on');
-        $this->enviarAviso($tipoDocumento, $processo);
-        //criar forma de controle de informacoes enviadas
-    }
 }

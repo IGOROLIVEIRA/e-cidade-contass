@@ -41,7 +41,7 @@ abstract class ModeloBasePNCP
 
     public function formatText($text)
     {
-        return preg_replace(array("/(á|à|ã|â|ä)/", "/(Á|À|Ã|Â|Ä)/", "/(é|è|ê|ë)/", "/(É|È|Ê|Ë)/", "/(í|ì|î|ï)/", "/(Í|Ì|Î|Ï)/", "/(ó|ò|õ|ô|ö)/", "/(Ó|Ò|Õ|Ô|Ö)/", "/(ú|ù|û|ü)/", "/(Ú|Ù|Û|Ü)/", "/(ñ)/", "/(Ñ)/"), explode(" ", "a A e E i I o O u U n N"), $text);
+        return preg_replace(array("/(á|à|ã|â|ä)/", "/(Á|À|Ã|Â|Ä)/", "/(é|è|ê|ë)/", "/(É|È|Ê|Ë)/", "/(í|ì|î|ï)/", "/(Í|Ì|Î|Ï)/", "/(ó|ò|õ|ô|ö)/", "/(Ó|Ò|Õ|Ô|Ö)/", "/(ú|ù|û|ü)/", "/(Ú|Ù|Û|Ü)/", "/(ñ)/", "/(ç)/", "/(Ç)/", "/(Ñ)/", "/(-)/"), explode(" ", "a A e E i I o O u U n c C N "), $text);
     }
 
     /**
@@ -163,7 +163,7 @@ abstract class ModeloBasePNCP
         //$cfilezip = new \CURLFile($filezip, 'application/zip', 'documento');
         $post_data =  array(
             'compra' => $cfile,
-            'documento' => $filezip,
+            'documento' => $filezip
         );
 
         $chpncp      = curl_init($url);
@@ -178,7 +178,7 @@ abstract class ModeloBasePNCP
         $optionspncp = array(
             CURLOPT_RETURNTRANSFER => 1,            // return web page
             CURLOPT_POST           => 1,
-            CURLOPT_HEADER         => true,         // don't return headers
+            CURLOPT_HEADER         => false,         // don't return headers
             CURLOPT_FOLLOWLOCATION => true,         // follow redirects
             CURLOPT_HTTPHEADER     => $headers,
             CURLOPT_AUTOREFERER    => true,         // set referer on redirect
@@ -196,9 +196,7 @@ abstract class ModeloBasePNCP
 
         curl_setopt_array($chpncp, $optionspncp);
         $contentpncp = curl_exec($chpncp);
-        echo "<pre>";
-        print_r($optionspncp);
-        $err     = curl_errno($chpncp);
+        /*$err     = curl_errno($chpncp);
         $errmsg  = curl_error($chpncp);
         $header  = curl_getinfo($chpncp);
         $header['errno']   = $err;
@@ -206,7 +204,12 @@ abstract class ModeloBasePNCP
         $header['header']  = $contentpncp;
         echo "<pre>";
         print_r($header);
-        exit;
-        return $header;
+        exit;*/
+
+        curl_close($chpncp);
+
+        $retorno = json_decode($contentpncp);
+
+        return $retorno;
     }
 }

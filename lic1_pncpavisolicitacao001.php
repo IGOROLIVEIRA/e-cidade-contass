@@ -181,7 +181,11 @@ db_app::load("time.js");
 
     function js_returnEnvPncp(oAjax) {
         js_removeObj('msgBox');
-        var oRetornoLicitacoes = JSON.parse(oAjax.responseText);
-        console.log(oRetornoLicitacoes);
+        var oRetornoLicitacoes = eval('(' + oAjax.responseText + ")");
+        if (oRetornoLicitacoes.status == '2') {
+            alert(oRetornoLicitacoes.message.urlDecode());
+        } else {
+            alert('Enviado com Sucesso !');
+        }
     }
 </script>
