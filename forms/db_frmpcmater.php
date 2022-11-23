@@ -354,6 +354,12 @@ function verPermissaoAlteraServico($iItem)
 
 
     function js_coloca(codele) {
+
+        if (document.getElementById('pc01_servico').value == 'selecione') {
+            alert("Usuário: Selecione o tipo do item.");
+            return false;
+        }
+
         obj = pcmater0011.document.form1;
         var coluna = '';
         var sep = '';

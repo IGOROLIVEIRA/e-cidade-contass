@@ -25,26 +25,26 @@
  *                                licenca/licenca_pt.txt
  */
 
-require("libs/db_stdlib.php");
-require("libs/db_utils.php");
-require("libs/db_app.utils.php");
-require("libs/db_conecta.php");
-include("libs/db_sessoes.php");
-include("libs/db_usuariosonline.php");
-include("dbforms/db_funcoes.php");
-include("classes/db_rhpessoal_classe.php");
-include("classes/db_rhpesrescisao_classe.php");
-include("classes/db_rhpesfgts_classe.php");
-include("classes/db_rhpesdoc_classe.php");
-include("classes/db_rhpessoalmov_classe.php");
-include("classes/db_rhraca_classe.php");
-include("classes/db_rhinstrucao_classe.php");
-include("classes/db_rhestcivil_classe.php");
-include("classes/db_rhnacionalidade_classe.php");
-include("classes/db_cfpess_classe.php");
-include("classes/db_rhfotos_classe.php");
-include("classes/db_rhpesorigem_classe.php");
-include("libs/db_libpessoal.php");
+require_once(modification("libs/db_stdlib.php"));
+require_once(modification("libs/db_utils.php"));
+require_once(modification("libs/db_app.utils.php"));
+require_once(modification("libs/db_conecta.php"));
+require_once(modification("libs/db_sessoes.php"));
+require_once(modification("libs/db_usuariosonline.php"));
+require_once(modification("dbforms/db_funcoes.php"));
+require_once(modification("classes/db_rhpessoal_classe.php"));
+require_once(modification("classes/db_rhpesrescisao_classe.php"));
+require_once(modification("classes/db_rhpesfgts_classe.php"));
+require_once(modification("classes/db_rhpesdoc_classe.php"));
+require_once(modification("classes/db_rhpessoalmov_classe.php"));
+require_once(modification("classes/db_rhraca_classe.php"));
+require_once(modification("classes/db_rhinstrucao_classe.php"));
+require_once(modification("classes/db_rhestcivil_classe.php"));
+require_once(modification("classes/db_rhnacionalidade_classe.php"));
+require_once(modification("classes/db_cfpess_classe.php"));
+require_once(modification("classes/db_rhfotos_classe.php"));
+require_once(modification("classes/db_rhpesorigem_classe.php"));
+require_once(modification("libs/db_libpessoal.php"));
 
 $clrhpessoal = new cl_rhpessoal;
 $clrhpesrescisao = new cl_rhpesrescisao;

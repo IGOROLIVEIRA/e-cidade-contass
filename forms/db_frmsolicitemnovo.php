@@ -526,7 +526,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
     $('eleSub').options[0] = new Option(document.getElementsByName("descrelemento[]")[indice].value.urlDecode(), document.getElementsByName("codele[]")[indice].value);
 
 
-    if (servico == 't') {
+    if (servico == 'Sim') {
       document.getElementById('titleUnidade').style.display = "none";
       document.getElementById('pc17_unid').style.display = "none";
       document.getElementById('ctnServicoQuantidade').style.display = "";
@@ -857,7 +857,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
 
     } else {
       document.form1.pc01_descrmater.value = chave;
-      if (servico == 't') {
+      if (servico == 'Sim') {
         document.getElementById('titleUnidade').style.display = "none";
         document.getElementById('pc17_unid').style.display = "none";
         document.getElementById('ctnServicoQuantidade').style.display = "";
@@ -911,7 +911,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
 
     db_iframe_pcmater.hide();
 
-    if (servico == 't') {
+    if (servico == 'Sim') {
       document.getElementById('titleUnidade').style.display = "none";
       document.getElementById('pc17_unid').style.display = "none";
       document.getElementById('ctnServicoQuantidade').style.display = "";

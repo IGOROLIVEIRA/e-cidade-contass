@@ -198,7 +198,7 @@ if (!isset($filtroquery)) {
 
 
       <?
-      $executa = split("\|", $funcao_js);
+      $executa = split("|", $funcao_js);
       echo $executa[0] . "(coddot,descricao,estrutural);";
       ?>
 
