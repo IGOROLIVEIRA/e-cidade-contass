@@ -312,9 +312,9 @@ if (isset($alterar)) {
   if (!isset($erro)) {
     for ($iCont = 0; $iCont < pg_num_rows($rsPosicoes); $iCont++) {
       $oPosicao = db_utils::fieldsMemory($rsPosicoes, $iCont);
-
+      
       if ($aditivo) {
-
+        
 
 
         $inicio = 'ac18_datainicio_' . $oPosicao->ac18_sequencial;
@@ -330,6 +330,7 @@ if (isset($alterar)) {
         $dTassaditivo = implode('-', array_reverse(explode('/', $$dataaditivo)));
 
         if (!empty($dTinicio) && !empty($dTfim)) {
+          //print_r("update acordovigencia  set ac18_datainicio = '$dTinicio', ac18_datafim  = '$dTfim' where ac18_acordoposicao  = '$oPosicao->posicao'");
           db_query("update acordovigencia  set ac18_datainicio = '$dTinicio', ac18_datafim  = '$dTfim' where ac18_acordoposicao  = '$oPosicao->posicao'");
           db_query("update acordoitemperiodo set ac41_datainicial = '$dTinicio', ac41_datafinal = '$dTfim' where ac41_acordoposicao = '$oPosicao->posicao'");
         }
@@ -431,7 +432,7 @@ if (isset($alterar)) {
 } elseif (isset($chavepesquisa)) {
   $db_opcao = 2;
   $db_botao = true;
-  $result = $clacordo->sql_record($clacordo->sql_query_vinculos($chavepesquisa, "ac16_sequencial,ac16_resumoobjeto, ac16_objeto,ac16_origem,ac16_tipoorigem,ac16_licitacao,l20_objeto,ac16_adesaoregpreco,si06_objetoadesao,orgao.z01_nome,ac16_licoutroorgao,ac16_acordogrupo,ac02_descricao,ac16_numeroacordo,ac16_dataassinatura,ac16_datainicio,ac16_datafim", null, ""));
+  $result = $clacordo->sql_record($clacordo->sql_query_vinculos($chavepesquisa, "ac16_sequencial,ac16_resumoobjeto,ac16_acordosituacao, ac16_objeto,ac16_origem,ac16_tipoorigem,ac16_licitacao,l20_objeto,ac16_adesaoregpreco,si06_objetoadesao,orgao.z01_nome,ac16_licoutroorgao,ac16_acordogrupo,ac02_descricao,ac16_numeroacordo,ac16_dataassinatura,ac16_datainicio,ac16_datafim", null, ""));
 
   db_fieldsmemory($result, 0);
 
@@ -745,6 +746,48 @@ if (isset($alterar)) {
                   'text',
                   $iOpcao
                 ); ?>
+              </td>
+            </tr>
+            <tr>
+              <td nowrap><?= $Lac16_datareferencia ?>
+              </td>
+              <td>
+                <?=
+                
+                db_select('ac16_datareferencia', array('1'=> 'Ativo','4' => 'Homologado'), true, $db_opcao, "", "");
+                 ?>
+              </td>
+            </tr>
+            <tr>
+              <td nowrap><?= $Lac16_datapublicacao ?>
+              </td>
+              <td>
+                <?=
+                
+                db_select('ac16_datapublicacao', array('1'=> 'Ativo','4' => 'Homologado'), true, $db_opcao, "", "");
+                 ?>
+              </td>
+            </tr>
+            <tr>
+              <td nowrap><?= $Lac16_veiculodivulgacao ?>
+              </td>
+              <td>
+                <?=
+                
+                db_select('ac16_veiculodivulgacao', array('1'=> 'Ativo','4' => 'Homologado'), true, $db_opcao, "", "");
+                 ?>
+              </td>
+            </tr>
+
+
+            <tr>
+              <td nowrap><?= $Lac16_acordosituacao ?>
+              </td>
+              <td>
+                <?=
+                
+                db_select('ac16_acordosituacao', array('1'=> 'Ativo','4' => 'Homologado'), true, $db_opcao, "", "");
+                 ?>
               </td>
             </tr>
             <tr>
@@ -1076,13 +1119,22 @@ if (isset($alterar)) {
     ac26_sequencial[i].removeAttribute("name");
     ac26_sequencial[i].setAttribute("name", "ac26_sequencial[]");
   }
-
+  if($('ac16_acordosituacao').value == 1){
+    $('ac16_acordosituacao').options[0].disabled=true;
+  }else if($('ac16_acordosituacao').value == 4){
+    $('ac16_acordosituacao').options[1].disabled=true;
+  }
 
   function alteraAcordo() {
 
     if (!confirm("Deseja realmente alterar")) {
       return false;
     }
+    if(($('ac16_dataassinatura').value=="" || $('ac16_dataassinatura').value == null) && $('ac16_acordosituacao').value == 4){
+      alert("O preenchimento da Data de Assinatura é obrigatório ! ");
+      return false;
+    }
+ 
 
     ac26_numeroapostilamento = document.getElementsByClassName('numeroapostilamento');
     ac18_datainicio = document.getElementsByClassName('datainicio');
