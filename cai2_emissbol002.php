@@ -1725,12 +1725,14 @@ $sqlparagpadrao .= "     inner join db_tipodoc         on db08_codigo   = db60_t
 $sqlparagpadrao .= "     inner join db_paragrafopadrao on db61_codparag = db62_codparag ";
 $sqlparagpadrao .= " where db60_tipodoc = 1508 and db60_instit = " . db_getsession("DB_instit") . " order by db62_ordem";
 
+$pdf->h -= 50;
+
 $resparagpadrao = @db_query($sqlparagpadrao);
 if (@pg_numrows($resparagpadrao) > 0) {
     db_fieldsmemory($resparagpadrao, 0);
     // echo $db61_texto;
-    if ($pdf->GetY() > $pdf->h - 35) {
-        $pdf->AddPage("L");
+    if ($pdf->gety() > ($pdf->h - 70)) {
+        $pdf->addpage();
     }
     @eval($db61_texto);
 }

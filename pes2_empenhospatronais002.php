@@ -81,10 +81,28 @@ foreach ($arrSalarioMaternidade as $rubrica) {
 }
 db_fim_transacao(false);
 
-$sql_in = $clbasesr->sql_query_file($ano, $mes, "B501", null, db_getsession("DB_instit"), "r09_rubric as rubric_salmat");
-
+$sql_in = $clbasesr->sql_query_file($ano, $mes, "B501", null, db_getsession("DB_instit"), "r09_rubric as salmaternidade");
 $result_salmaternidade = db_query($sql_in);
-db_fieldsmemory($result_salmaternidade, 0);
+
+$vir = "";
+for ($i = 0; $i < pg_num_rows($result_salmaternidade); $i++) {
+  $salmaternidade .= $vir . "'" . db_utils::fieldsMemory($result_salmaternidade, $i)->salmaternidade . "'";
+  $vir = ",";
+}
+if (empty($salmaternidade))
+  $salmaternidade = "''";
+
+$sql_in = $clbasesr->sql_query_file($ano, $mes, "B502", null, db_getsession("DB_instit"), "r09_rubric as rubric_salmat13");
+$result_salmaternidade13 = db_query($sql_in);
+// db_criatabela($result_salmaternidade13);
+// exit;
+$vir = "";
+for ($i = 0; $i < pg_num_rows($result_salmaternidade13); $i++) {
+  $salmaternidade13 .= $vir . "'" . db_utils::fieldsMemory($result_salmaternidade13, $i)->rubric_salmat13 . "'";
+  $vir = ",";
+}
+if (empty($salmaternidade13))
+  $salmaternidade13 = "''";
 
 $salarioFamilia = str_replace(',', "','", "'$salarioFamilia'");
 $salarioMaternidade = str_replace(',', "','", "'$salarioMaternidade'");
@@ -152,7 +170,8 @@ if ($salario == 's') {
          inss,
          salario_familia,
          salario_maternidade,
-         salmat
+         salmat,
+         salmat13
   from 
   (
   select 
@@ -167,8 +186,8 @@ if ($salario == 's') {
          round(sum(inss),2) as inss, 
          round(sum(salario_familia),2) as salario_familia, 
          round(sum(salario_maternidade),2) as salario_maternidade,
-         round(sum(salmat),2) as salmat
-
+         round(sum(salmat),2) as salmat,
+         round(sum(salmat13),2) as salmat13
   from 
 
   (
@@ -180,7 +199,8 @@ if ($salario == 's') {
          case when r14_rubric = '$rub_base' then r14_valor else 0 end as inss,
          case when r14_rubric in ({$salarioFamilia}) then r14_valor else 0 end as salario_familia,
          case when r14_rubric in ({$salarioMaternidade}) then r14_valor else 0 end as salario_maternidade,
-         case when r14_rubric in ('{$rubric_salmat}') then r14_valor else 0 end as salmat
+         case when r14_rubric in ({$salmaternidade}) then r14_valor else 0 end as salmat,
+         case when r14_rubric in ({$salmaternidade13}) then r14_valor else 0 end as salmat13
   from gerfsal 
        inner join rhpessoalmov on rh02_anousu = r14_anousu 
                               and rh02_mesusu = r14_mesusu 
@@ -205,7 +225,8 @@ if ($salario == 's') {
          case when r48_rubric = '$rub_base' then r48_valor else 0 end as inss,
          case when r48_rubric in ({$salarioFamilia}) then r48_valor else 0 end as salario_familia,
          case when r48_rubric in ({$salarioMaternidade}) then r48_valor else 0 end as salario_maternidade,
-         case when r48_rubric in ('{$rubric_salmat}') then r48_valor else 0 end as salmat
+         case when r48_rubric in ({$salmaternidade}) then r48_valor else 0 end as salmat,
+         case when r48_rubric in ({$salmaternidade13}) then r48_valor else 0 end as salmat13
   from gerfcom
        inner join rhpessoalmov on rh02_anousu = r48_anousu 
                               and rh02_mesusu = r48_mesusu 
@@ -230,7 +251,8 @@ if ($salario == 's') {
          case when r20_rubric = '$rub_base' then r20_valor else 0 end as inss,
          case when r20_rubric in ({$salarioFamilia}) then r20_valor else 0 end as salario_familia,
          case when r20_rubric in ({$salarioMaternidade}) then r20_valor else 0 end as salario_maternidade,
-         case when r20_rubric in ('{$rubric_salmat}') then r20_valor else 0 end as salmat
+         case when r20_rubric in ({$salmaternidade}) then r20_valor else 0 end as salmat,
+         case when r20_rubric in ({$salmaternidade13}) then r20_valor else 0 end as salmat13
   from gerfres
        inner join rhpessoalmov on rh02_anousu = r20_anousu 
                               and rh02_mesusu = r20_mesusu 
@@ -295,7 +317,8 @@ if ($salario == 's') {
          inss,
          salario_familia,
          salario_maternidade,
-         salmat
+         salmat,
+         salmat13
   from 
   (
   select 
@@ -310,8 +333,8 @@ if ($salario == 's') {
          round(sum(inss),2) as inss, 
          round(sum(salario_familia),2) as salario_familia, 
          round(sum(salario_maternidade),2) as salario_maternidade,
-         round(sum(salmat),2) as salmat
-
+         round(sum(salmat),2) as salmat,
+         round(sum(salmat13),2) as salmat13
   from 
 
   (
@@ -323,7 +346,8 @@ if ($salario == 's') {
          case when r35_rubric = '$rub_base' then r35_valor else 0 end as inss,
          case when r35_rubric in ({$salarioFamilia}) then r35_valor else 0 end as salario_familia,
          case when r35_rubric in ({$salarioMaternidade}) then r35_valor else 0 end as salario_maternidade,
-         case when r35_rubric in ('{$rubric_salmat}') then r35_valor else 0 end as salmat
+         case when r35_rubric in ({$salmaternidade}) then r35_valor else 0 end as salmat,
+         case when r35_rubric in ({$salmaternidade13}) then r35_valor else 0 end as salmat13
   from gerfs13 
        inner join rhpessoalmov on rh02_anousu = r35_anousu 
                               and rh02_mesusu = r35_mesusu 

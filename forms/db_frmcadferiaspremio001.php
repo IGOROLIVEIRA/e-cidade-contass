@@ -182,11 +182,6 @@ if ($clcadferia->numrows > 0) {
       document.form1.r95_per1i.focus();
       return false;
     }*/
-    if (document.form1.r95_ndias.value > 90) {
-      alert("Período de gozo deve ser até 90 dias");
-      document.form1.r95_ndias.focus();
-      return false
-    }
   }
 
   function js_calculaPeriodo() {
