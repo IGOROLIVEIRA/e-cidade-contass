@@ -45,8 +45,9 @@ class EventoS1210 extends EventoBase
         foreach ($this->dados as $oDados) {
 
             if ($this->tpevento == 1) {
+
                 $aDadosPorMatriculas = $this->buscarDadosPorMatricula($oDados->z01_cgccpf, $this->tppgto);
-                if ($aDadosPorMatriculas[0]->cpftrab == null) {
+                if (empty($aDadosPorMatriculas)) {
                     continue;
                 }
                 $oDadosAPI                                = new \stdClass();
@@ -186,61 +187,19 @@ class EventoS1210 extends EventoBase
             and rh02_mesusu = date_part('month', fc_getsession('DB_datausu')::date)
             and rh02_regist = rh01_regist
             and rh02_instit = fc_getsession('DB_instit')::int
-        left join rhinssoutros    on rh51_seqpes                 = rh02_seqpes
-        left join rhlota on
-            rhlota.r70_codigo = rhpessoalmov.rh02_lota
-            and rhlota.r70_instit = rhpessoalmov.rh02_instit
-        inner join cgm on
-            cgm.z01_numcgm = rhpessoal.rh01_numcgm
-        inner join db_config on
-            db_config.codigo = rhpessoal.rh01_instit
-        inner join rhestcivil on
-            rhestcivil.rh08_estciv = rhpessoal.rh01_estciv
-        inner join rhraca on
-            rhraca.rh18_raca = rhpessoal.rh01_raca
-        left join rhfuncao on
-            rhfuncao.rh37_funcao = rhpessoalmov.rh02_funcao
-            and rhfuncao.rh37_instit = rhpessoalmov.rh02_instit
-        left join rhpescargo on
-            rhpescargo.rh20_seqpes = rhpessoalmov.rh02_seqpes
-        left join rhcargo on
-            rhcargo.rh04_codigo = rhpescargo.rh20_cargo
-            and rhcargo.rh04_instit = rhpessoalmov.rh02_instit
-        inner join rhinstrucao on
-            rhinstrucao.rh21_instru = rhpessoal.rh01_instru
-        inner join rhnacionalidade on
-            rhnacionalidade.rh06_nacionalidade = rhpessoal.rh01_nacion
-        left join rhpesrescisao on
-            rh02_seqpes = rh05_seqpes
-        left join rhsindicato on
-            rh01_rhsindicato = rh116_sequencial
-        inner join rhreajusteparidade on
-            rhreajusteparidade.rh148_sequencial = rhpessoal.rh01_reajusteparidade
-        left join rhpesdoc on
-            rhpesdoc.rh16_regist = rhpessoal.rh01_regist
-        left join rhdepend on
-            rhdepend.rh31_regist = rhpessoal.rh01_regist
-        left join rhregime on
-            rhregime.rh30_codreg = rhpessoalmov.rh02_codreg
-        left join rhpesfgts on
-            rhpesfgts.rh15_regist = rhpessoal.rh01_regist
-        inner join tpcontra on
-            tpcontra.h13_codigo = rhpessoalmov.rh02_tpcont
-        left join rhcontratoemergencial on
-            rh163_matricula = rh01_regist
-        left join rhcontratoemergencialrenovacao on
-            rh164_contratoemergencial = rh163_sequencial
-        left join jornadadetrabalho on
-            jt_sequencial = rh02_jornadadetrabalho
-        left join db_cgmbairro on
-            cgm.z01_numcgm = db_cgmbairro.z01_numcgm
-        left join bairro on
-            bairro.j13_codi = db_cgmbairro.j13_codi
-        left join db_cgmruas on
-            cgm.z01_numcgm = db_cgmruas.z01_numcgm
-        left join ruas on
-            ruas.j14_codigo = db_cgmruas.j14_codigo
-        left join rescisao on
+       left join rhinssoutros on
+	rh51_seqpes = rh02_seqpes
+    inner join cgm on
+        cgm.z01_numcgm = rhpessoal.rh01_numcgm
+    inner join db_config on
+	db_config.codigo = rhpessoal.rh01_instit
+    left join rhpesrescisao on
+	rh02_seqpes = rh05_seqpes
+    left join rhregime on
+        rhregime.rh30_codreg = rhpessoalmov.rh02_codreg
+    inner join tpcontra on
+        tpcontra.h13_codigo = rhpessoalmov.rh02_tpcont
+    left join rescisao on
             rescisao.r59_anousu = rhpessoalmov.rh02_anousu
             and rescisao.r59_mesusu = rhpessoalmov.rh02_mesusu
             and rescisao.r59_regime = rhregime.rh30_regime
@@ -274,7 +233,7 @@ class EventoS1210 extends EventoBase
         }
         //2299
         if ($tppgto == 2) {
-            $sql .= " and r33_tiporegime = '2'
+            $sql .= " and rh30_regime = '2'
             and rescisao.r59_mesusu = $mes
             and rescisao.r59_mesusu = $ano ";
         }
@@ -293,41 +252,40 @@ class EventoS1210 extends EventoBase
             $sql .= " and rh30_vinculo in ('I','P') ";
         }
 
-        $sql .= " and cgm.z01_cgccpf = '$cpf'
-            and (exists (SELECT
-            1
-        from
-            gerfsal
-        where
-            r14_anousu = fc_getsession('DB_anousu')::int
-            and r14_mesusu = date_part('month', fc_getsession('DB_datausu')::date)
-            and r14_instit = fc_getsession('DB_instit')::int
-            and r14_regist = rhpessoal.rh01_regist)
-            or
-            exists (SELECT
-            1
-        from
-            gerfcom
-        where
-            r48_anousu = fc_getsession('DB_anousu')::int
-            and r48_mesusu = date_part('month', fc_getsession('DB_datausu')::date)
-            and r48_instit = fc_getsession('DB_instit')::int
-            and r48_regist = rhpessoal.rh01_regist)
-            or
-            exists (SELECT
-            1
-        from
-            gerfres
-        where
-            r20_anousu = fc_getsession('DB_anousu')::int
-            and r20_mesusu = date_part('month', fc_getsession('DB_datausu')::date)
-            and r20_instit = fc_getsession('DB_instit')::int
-            and r20_regist = rhpessoal.rh01_regist))";
+        $sql .= " and cgm.z01_cgccpf = '$cpf' ";
+        //     and (exists (SELECT
+        //     1
+        // from
+        //     gerfsal
+        // where
+        //     r14_anousu = fc_getsession('DB_anousu')::int
+        //     and r14_mesusu = date_part('month', fc_getsession('DB_datausu')::date)
+        //     and r14_instit = fc_getsession('DB_instit')::int
+        //     and r14_regist = rhpessoal.rh01_regist)
+        //     or
+        //     exists (SELECT
+        //     1
+        // from
+        //     gerfcom
+        // where
+        //     r48_anousu = fc_getsession('DB_anousu')::int
+        //     and r48_mesusu = date_part('month', fc_getsession('DB_datausu')::date)
+        //     and r48_instit = fc_getsession('DB_instit')::int
+        //     and r48_regist = rhpessoal.rh01_regist)
+        //     or
+        //     exists (SELECT
+        //     1
+        // from
+        //     gerfres
+        // where
+        //     r20_anousu = fc_getsession('DB_anousu')::int
+        //     and r20_mesusu = date_part('month', fc_getsession('DB_datausu')::date)
+        //     and r20_instit = fc_getsession('DB_instit')::int
+        //     and r20_regist = rhpessoal.rh01_regist))";
 
 
         $rsValores = db_query($sql);
         // echo $sql;
-        // db_criatabela($rsValores);
         // exit;
         if (pg_num_rows($rsValores) > 0) {
             for ($iCont = 0; $iCont < pg_num_rows($rsValores); $iCont++) {
