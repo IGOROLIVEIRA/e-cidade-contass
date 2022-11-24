@@ -333,6 +333,9 @@ if (isset($alterar)) {
 
 
   if (!isset($erro)) {
+    
+    $resprimeirapos = db_query("select min(ac26_sequencial) as primeirapos from acordoposicao where ac26_acordo=$ac16_sequencial");
+      $oDaoprimeirapos = pg_result($resprimeirapos, 0);
     for ($iCont = 0; $iCont < pg_num_rows($rsPosicoes); $iCont++) {
       $oPosicao = db_utils::fieldsMemory($rsPosicoes, $iCont);
       
@@ -353,6 +356,7 @@ if (isset($alterar)) {
         $dTassaditivo = implode('-', array_reverse(explode('/', $$dataaditivo)));
 
         if (!empty($dTinicio) && !empty($dTfim)) {
+          
           //print_r("update acordovigencia  set ac18_datainicio = '$dTinicio', ac18_datafim  = '$dTfim' where ac18_acordoposicao  = '$oPosicao->posicao'");
           db_query("update acordovigencia  set ac18_datainicio = '$dTinicio', ac18_datafim  = '$dTfim' where ac18_acordoposicao  = '$oPosicao->posicao'");
           db_query("update acordoitemperiodo set ac41_datainicial = '$dTinicio', ac41_datafinal = '$dTfim' where ac41_acordoposicao = '$oPosicao->posicao'");
@@ -367,6 +371,12 @@ if (isset($alterar)) {
         db_query("update acordovigencia  set ac18_datainicio = '$dTinicio', ac18_datafim  = '$dTfim' where ac18_acordoposicao  = '$oPosicao->posicao'");
         db_query("update acordoitemperiodo set ac41_datainicial = '$dTinicio', ac41_datafinal = '$dTfim' where ac41_acordoposicao = '$oPosicao->posicao'");
       }
+      if($oDaoprimeirapos == $oPosicao->posicao){
+        $dTinicio = implode('-', array_reverse(explode('/', $ac16_datainicio)));
+        $dTfim = implode('-', array_reverse(explode('/', $ac16_datafim)));
+        db_query("update acordovigencia  set ac18_datainicio = '$dTinicio', ac18_datafim  = '$dTfim' where ac18_acordoposicao  = '$oPosicao->posicao'");
+      }
+      
 
       $resmanut = db_query("select nextval('db_manut_log_manut_sequencial_seq') as seq");
       $seq = pg_result($resmanut, 0, 0);
