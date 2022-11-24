@@ -1,6 +1,6 @@
-## Instruções
+## InstruÃ§Ãµes
 
-- Copie o arquivo requisicao.webservice.php e faças as alterações. Exemplo:
-    - `cp requisicao.webservice.php requisicao.webservice.php`
-- Não altere o arquivo `requisicao.webservice.php` que fica na raiz da pasta `webservices` pois este arquivo é
-versionado e pode ser revertido, perdendo-se assim a conexão com o nfse.
+- Copie o arquivo requisicao.webservice.php e faÃ§as as alteraÃ§Ãµes. Exemplo:
+    - `cp requisicao.webservice.php requisicao.webservice.cliente.php`
+- NÃ£o altere o arquivo `requisicao.webservice.php` que fica na raiz da pasta `webservices` pois este arquivo Ã©
+versionado e pode ser revertido, perdendo-se assim a conexÃ£o com o nfse.
