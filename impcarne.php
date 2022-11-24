@@ -587,7 +587,7 @@ class db_impcarne extends cl_assinatura {
       $this->objpdf->text(132,74,$this->bairropri);
 
       $this->objpdf->Setfont('Arial','B',11);
-      $this->objpdf->text(70,87,'RECIBO VÁLIDO ATÉ: '.$this->datacalc);
+      $this->objpdf->text(70,87,'DAM VÁLIDO ATÉ: '.$this->datacalc);
 
       $this->objpdf->setfillcolor(245);
       $this->objpdf->Roundedrect(15,90,180,65,2,'DF','1234');
@@ -964,7 +964,7 @@ class db_impcarne extends cl_assinatura {
         $this->objpdf->setfillcolor(255,255,255);
 //		$this->objpdf->roundedrect(10,07,190,183,2,'DF','1234');
         $this->objpdf->Setfont('Arial','B',11);
-        $this->objpdf->text(150,$xlin-13,'RECIBO VÁLIDO ATÉ: ');
+        $this->objpdf->text(150,$xlin-13,'DAM VÁLIDO ATÉ: ');
         $this->objpdf->text(159,$xlin-8,$this->datacalc);
         $this->objpdf->Image('imagens/files/'.$this->logo,15,$xlin-17,12);
         $this->objpdf->Setfont('Arial','B',9);
