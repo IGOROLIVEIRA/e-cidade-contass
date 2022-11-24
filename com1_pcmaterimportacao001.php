@@ -50,7 +50,7 @@ $db_botao = true;
     <style>
         .itens {
             height: 300px;
-            width: 80%;
+            width: 90%;
             overflow-y: scroll;
         }
     </style>

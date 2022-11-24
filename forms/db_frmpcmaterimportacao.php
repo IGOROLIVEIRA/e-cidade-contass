@@ -27,6 +27,8 @@
 
 $totalitens = 0;
 
+if (isset($_POST["salvar"])) {
+}
 
 if (isset($_POST["processar"])) {
     $contTama = 1;
@@ -120,13 +122,13 @@ if (isset($_POST["processar"])) {
             $pc01_codsubgrupo = $cell->getValue();
 
             $cell = $objWorksheet->getCellByColumnAndRow(4, $row);
-            $pc01_obras = $cell->getValue();
+            $pc01_obras = utf8_decode($cell->getValue());
 
             $cell = $objWorksheet->getCellByColumnAndRow(5, $row);
-            $pc01_tabela = $cell->getValue();
+            $pc01_tabela = utf8_decode($cell->getValue());
 
             $cell = $objWorksheet->getCellByColumnAndRow(6, $row);
-            $pc01_taxa = $cell->getValue();
+            $pc01_taxa = utf8_decode($cell->getValue());
 
             $cell = $objWorksheet->getCellByColumnAndRow(7, $row);
             $pc07_codele = $cell->getValue();
@@ -281,38 +283,40 @@ if (isset($_POST["processar"])) {
 
 <form name="form3" id="form3" method="post" action="" enctype="multipart/form-data">
     <div class="itens">
-        <table style="width:80%; border: 0px solid black;">
+        <table style="width:100%; border: 0px solid black;">
             <tr>
-                <!--<th class="table_header" style="width: 30px; cursor: pointer;" onclick="marcarTodos();">M</th> -->
 
-                <th style="border: 0px solid red; width:300px; background:#eeeff2;">
+                <th style="border: 0px solid red; width:20%; background:#eeeff2;">
                     Item
                 </th>
 
-                <th style="border: 0px solid red; width:120px; background:#eeeff2;">
+                <th style="border: 0px solid red; background:#eeeff2;">
                     Data
                 </th>
 
-                <th style="border: 0px solid red; width:100px; background:#eeeff2;">
+                <th style="border: 0px solid red; background:#eeeff2;">
                     Tipo
                 </th>
 
-                <th style="background:#eeeff2;">
+                <th style="background:#eeeff2; width:20%;">
                     Subgrupo
                 </th>
                 <th style="background:#eeeff2;">
+                    Obra
+                </th>
+                <th style="background:#eeeff2;">
+                    Tabela
+                </th>
+                <th style="background:#eeeff2;">
+                    Taxa
+                </th>
+                <th style="background:#eeeff2; width:25%; ">
                     Desdobramento
                 </th>
             </tr>
 
 
             <?php
-
-            function removeAccents($string)
-            {
-                return strtolower(trim(preg_replace('~[^0-9a-z]+~i', '-', preg_replace('~&([a-z]{1,2})(acute|cedil|circ|grave|lig|orn|ring|slash|th|tilde|uml);~i', '$1', htmlentities($string, ENT_QUOTES, 'UTF-8'))), ' '));
-            }
-
 
             $i = 1;
             $tamanho = count($arrayItensPlanilha);
@@ -323,30 +327,21 @@ if (isset($_POST["processar"])) {
             $pc01_data = $_POST["pc01_data"];
 
 
-
             foreach ($arrayItensPlanilha as $rown) {
-
-                $anousu = db_getsession("DB_anousu");
-                $sSQL = "select o56_descr from orcelemento where o56_codele = $rown->pc07_codele and o56_anousu = $anousu;";
-                $rsResult       = db_query($sSQL);
-                $o56_descr = db_utils::fieldsMemory($rsResult, 0)->o56_descr;
-
-                $instituicao = db_getsession('DB_instit');
-                $sSQL = "select pc04_descrsubgrupo from pcsubgrupo where pc04_codsubgrupo = $rown->pc01_codsubgrupo and pc04_instit in ($instituicao,0);";
-                $rsResult       = db_query($sSQL);
-                $pc04_descrsubgrupo = db_utils::fieldsMemory($rsResult, 0)->pc04_descrsubgrupo;
 
                 echo "<tr style='background-color:#ffffff;'>";
 
-                echo "<td id='abastecimento$i' style='text-align:center; display:none' >";
-                echo $rown->nota;
-                echo "</td>";
+                if (mb_strlen($rown->pc01_descrmater, 'UTF-8') > 80) {
+                    echo "<td name='descricao[]' style='text-align:center; background-color:#f09999;'>";
+                    echo  $rown->pc01_descrmater;
+                    echo "</td>";
+                } else {
+                    echo "<td name='descricao[]' style='text-align:center;'>";
+                    echo $rown->pc01_descrmater;
+                    echo "</td>";
+                }
 
-                echo "<td name='descricao[]' style='text-align:center;'>";
-                echo $rown->pc01_descrmater;
-                echo "</td>";
-
-                echo "<td name='data[]' id='placa$i' style='text-align:center;' >";
+                echo "<td name='data[]' style='text-align:center;' >";
 
                 echo $pc01_data;
                 echo "</td>";
@@ -361,16 +356,76 @@ if (isset($_POST["processar"])) {
                     echo "</td>";
                 }
 
+                if (is_numeric($rown->pc01_codsubgrupo)) {
+                    $instituicao = db_getsession('DB_instit');
+                    $sSQL = "select pc04_descrsubgrupo from pcsubgrupo where pc04_codsubgrupo = $rown->pc01_codsubgrupo and pc04_instit in ($instituicao,0);";
+                    $rsResult       = db_query($sSQL);
+                    $pc04_descrsubgrupo = db_utils::fieldsMemory($rsResult, 0)->pc04_descrsubgrupo;
+                    if ($pc04_descrsubgrupo == "") {
+                        echo "<td style='text-align:center; background-color:#f09999;'>";
+                        echo $rown->pc01_codsubgrupo;
+                        echo "</td>";
+                    } else {
+                        echo "<td style='text-align:center;'>";
+                        echo $pc04_descrsubgrupo;
+                        echo "</td>";
+                    }
+                } else {
+                    echo "<td style='text-align:center; background-color:#f09999;'>";
+                    echo $rown->pc01_codsubgrupo;
+                    echo "</td>";
+                }
 
 
-                echo "<td style='text-align:center;'>";
-                echo $pc04_descrsubgrupo;
-                echo "</td>";
+                if (mb_strtolower($rown->pc01_obras) != "sim" && mb_strtolower($rown->pc01_obras) != "não" && mb_strtolower($rown->pc01_obras) != "nao") {
+                    echo "<td style='text-align:center; background-color:#f09999;'>";
+                    echo $rown->pc01_obras;
+                    echo "</td>";
+                } else {
+                    echo "<td style='text-align:center;'>";
+                    echo $rown->pc01_obras;
+                    echo "</td>";
+                }
 
-                echo "<td style='text-align:center;'>";
-                echo $o56_descr;
-                echo "</td>";
+                if (mb_strtolower($rown->pc01_tabela) != "sim" && mb_strtolower($rown->pc01_tabela) != "não" && mb_strtolower($rown->pc01_tabela) != "nao") {
+                    echo "<td style='text-align:center; background-color:#f09999;'>";
+                    echo $rown->pc01_tabela;
+                    echo "</td>";
+                } else {
+                    echo "<td style='text-align:center;'>";
+                    echo $rown->pc01_tabela;
+                    echo "</td>";
+                }
 
+                if (mb_strtolower($rown->pc01_taxa) != "sim" && mb_strtolower($rown->pc01_taxa) != "não" && mb_strtolower($rown->pc01_taxa) != "nao") {
+                    echo "<td style='text-align:center; background-color:#f09999;'>";
+                    echo $rown->pc01_taxa;
+                    echo "</td>";
+                } else {
+                    echo "<td style='text-align:center;'>";
+                    echo $rown->pc01_taxa;
+                    echo "</td>";
+                }
+
+                if (is_numeric($rown->pc07_codele)) {
+                    $anousu = db_getsession("DB_anousu");
+                    $sSQL = "select o56_elemento,o56_descr from orcelemento where o56_codele = $rown->pc07_codele and o56_anousu = $anousu;";
+                    $rsResult       = db_query($sSQL);
+                    $orcelemento = db_utils::fieldsMemory($rsResult, 0);
+                    if ($orcelemento->o56_descr == "") {
+                        echo "<td style='text-align:center; background-color:#f09999;'>";
+                        echo $rown->pc07_codele;
+                        echo "</td>";
+                    } else {
+                        echo "<td style='text-align:center;'>";
+                        echo $orcelemento->o56_elemento . " - " . $orcelemento->o56_descr;
+                        echo "</td>";
+                    }
+                } else {
+                    echo "<td style='text-align:center; background-color:#f09999;'>";
+                    echo $rown->pc07_codele;
+                    echo "</td>";
+                }
 
                 echo "</tr>";
                 $i++;
@@ -381,7 +436,7 @@ if (isset($_POST["processar"])) {
 
             <tr style='background-color:#eeeff2;'>
 
-                <td colspan="6" align="center"> <strong>Total de itens:</strong>
+                <td colspan="9" align="center"> <strong>Total de itens:</strong>
                     <span class="nowrap" id="totalitens"> <?php echo $totalitens ?> </span>
                 </td>
 
@@ -398,9 +453,9 @@ if (isset($_POST["processar"])) {
     <?php
 
     if (isset($_POST["processar"])) {
-        echo  "<input style='margin-top: 10px;' type='button' id='db_opcao' value='Salvar'>";
+        echo  "<input style='margin-top: 10px;' type='submit' id='db_opcao' name='salvar' id='salvar' value='Salvar'>";
     } else {
-        echo  "<input style='margin-top: -200px;' type='button' id='db_opcao' value='Salvar'>";
+        echo  "<input style='margin-top: -200px;' type='submit' id='db_opcao' value='Salvar'>";
     }
 
     ?>
