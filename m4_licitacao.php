@@ -197,7 +197,7 @@ if (isset($alterar)) {
       $clliclicita->l20_nroedital = $l20_nroedital;
       $clliclicita->l20_codtipocom = $l20_codtipocom;
       $clliclicita->l20_veicdivulgacao = $l20_veicdivulgacao;
-      $clliclicita->l20_tipoprocesso = $l20_tipoprocesso;
+      $clliclicita->l20_tipojulg = $l20_tipojulg;
       
       $clliclicita->alterar($l20_codigo, $descricao);
 
@@ -419,15 +419,17 @@ if (isset($alterar)) {
                       ?>
                     </td>
                   </tr>
-             
+                  <? 
+              endif;
+              ?>
                   <tr>
                     <td nowrap title="<?= @$Tl20_tipoprocesso ?>">
                         <?= @$Ll20_tipoprocesso ?>
                     </td>
                     <td>
                         <?
-                        $al20_tipoprocesso = array("0" => "", "1" => "1-Dispensa", "2" => "2-Inexigibilidade", "3" => "3-Inexigibilidade por credenciamento/chamada pública", "4" => "4-Dispensa por chamada publica");
-                        db_select("l20_tipoprocesso", $al20_tipoprocesso, true, $db_opcao);
+                        $arr_tipo = array("1" => "Por item", "3" => "Por lote");
+                        db_select("l20_tipojulg", $arr_tipo, true, 1);
                         db_input("l20_codtipocom",0, $l20_codtipocom, true,'text',$db_opcao,'style="display:none;"');
                         ?>
                     </td>
@@ -444,9 +446,7 @@ if (isset($alterar)) {
                       ?>
                     </td>
                   </tr>
-                  <? 
-              endif;
-              ?>
+                  
               <?php
               if ($chavepesquisa2 != 101) :
                 if ($chavepesquisa2 != 100) :
