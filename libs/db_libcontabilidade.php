@@ -5937,44 +5937,45 @@ function getSaldoDespesaSentenca($o58_elemento = null, $campos = "*", $ordem = n
  * @param $group
  * @return array|stdClass[]
  */
-function getSaldoDesdobramento($where, $aAnousu, $instit, $dtIni, $dtFim, $fonte = "", $group)
-{
+
+
+function getSaldoDesdobramento($where, $aAnousu, $instit, $dtIni, $dtFim, $fonte="", $group) {
 
     $aDatas = array();
     $dt_inicial = "";
     $dt_final   = "";
     if (count($aAnousu) == 2) {
-        $aDatas[$aAnousu[0]] = $dtIni . 'a' . $aAnousu[0] . '-12-31';
-        $aDatas[$aAnousu[1]] = $aAnousu[1] . '-01-01' . 'a' . $dtFim;
+        $aDatas[$aAnousu[0]] = $dtIni.'a'.$aAnousu[0].'-12-31';
+        $aDatas[$aAnousu[1]] = $aAnousu[1].'-01-01'.'a'.$dtFim;
     }
 
     $sql = " SELECT COALESCE(SUM(CASE
-                                WHEN c53_tipo = 20 THEN ROUND(c70_valor, 2)
-                                WHEN c53_tipo = 21 THEN ROUND(c70_valor * -(1::FLOAT8),2)
-                                ELSE 0::FLOAT8
-                            END),0) AS liquidado,
-                        COALESCE(SUM(CASE
-                                WHEN c53_tipo = 10 THEN ROUND(c70_valor, 2)
-                                WHEN c53_tipo = 11 THEN ROUND(c70_valor * -(1::FLOAT8),2)
-                                ELSE 0::FLOAT8
-                            END),0) AS empenhado
-					FROM (SELECT DISTINCT ON (c70_codlan)
-							c53_tipo,
-							c70_valor
-						FROM conlancamele
-							INNER JOIN conlancam ON c70_codlan = c67_codlan
-							INNER JOIN conlancamdoc ON c70_codlan = c71_codlan
-							INNER JOIN conhistdoc ON c53_coddoc = c71_coddoc
-							INNER JOIN conplanoorcamentoanalitica ON c61_codcon = c67_codele AND c61_anousu = c70_anousu
-							INNER JOIN conplanoorcamento ON c61_codcon = c60_codcon AND c61_anousu = c60_anousu
-							INNER JOIN conlancamemp ON c70_codlan = c75_codlan
-							INNER JOIN empempenho ON e60_numemp = c75_numemp ";
+                            WHEN c53_tipo = 20 THEN ROUND(c70_valor, 2)
+                            WHEN c53_tipo = 21 THEN ROUND(c70_valor * -(1::FLOAT8),2)
+                            ELSE 0::FLOAT8
+                        END),0) AS liquidado,
+                    COALESCE(SUM(CASE
+                            WHEN c53_tipo = 10 THEN ROUND(c70_valor, 2)
+                            WHEN c53_tipo = 11 THEN ROUND(c70_valor * -(1::FLOAT8),2)
+                            ELSE 0::FLOAT8
+                        END),0) AS empenhado
+                FROM (SELECT DISTINCT ON (c70_codlan)
+                        c53_tipo,
+                        c70_valor
+                    FROM conlancamele
+                        INNER JOIN conlancam ON c70_codlan = c67_codlan
+                        INNER JOIN conlancamdoc ON c70_codlan = c71_codlan
+                        INNER JOIN conhistdoc ON c53_coddoc = c71_coddoc
+                        INNER JOIN conplanoorcamentoanalitica ON c61_codcon = c67_codele AND c61_anousu = c70_anousu
+                        INNER JOIN conplanoorcamento ON c61_codcon = c60_codcon AND c61_anousu = c60_anousu
+                        INNER JOIN conlancamemp ON c70_codlan = c75_codlan
+                        INNER JOIN empempenho ON e60_numemp = c75_numemp ";
 
-    if ($fonte != "") {
+    if($fonte!="") {
         $sql .= " INNER JOIN orcdotacao ON e60_coddot = o58_coddot AND e60_anousu = o58_anousu ";
     }
 
-    $sql .= "WHERE " . $where;
+    $sql .= "WHERE ".$where;
 
     if (count($aAnousu) == 2) {
         $sql .= " AND c70_anousu IN ({$aAnousu[0]}, {$aAnousu[1]})";
@@ -5986,33 +5987,33 @@ function getSaldoDesdobramento($where, $aAnousu, $instit, $dtIni, $dtFim, $fonte
     $sql .= " AND c53_tipo IN (10, 11, 20, 21)";
     $sql .= " AND (";
     $i = 1;
-    foreach ($aAnousu as $anousu) {
+    foreach($aAnousu as $anousu) {
 
         if (count($aAnousu) == 2) {
 
-            $dt_inicial = explode("a", $aDatas[$anousu]);
-            $dt_final = explode("a", $aDatas[$anousu]);
-            $sql .= "(c70_data BETWEEN '{$dt_inicial[0]}' AND '{$dt_final[1]}') ";
-            if ($i < count($aAnousu)) {
-                $sql .= " OR ";
-            }
-            $i++;
+          $dt_inicial = explode("a", $aDatas[$anousu]);
+          $dt_final = explode("a", $aDatas[$anousu]);
+          $sql .= "(c70_data BETWEEN '{$dt_inicial[0]}' AND '{$dt_final[1]}') ";
+          if ($i < count($aAnousu)) {
+              $sql .= " OR ";
+          }
+          $i++;
+
         } else {
 
-          $sql .= ")";
-          if($fonte!="") {
-              $sql .= " AND o58_codigo IN ({$fonte}) ";
-          }
-          $sql .= " {$group} ) AS x";
+          $sql .= "(c70_data BETWEEN '{$dtIni}' AND '{$dtFim}') ";
+
         }
-          return db_utils::getColectionByRecord(db_query($sql));
-    }
-    $sql .= ")";
-    if ($fonte != "") {
-        $sql .= " AND o58_codigo IN ({$fonte}) ";
-    }
-    $sql .= " {$group} ) AS x";
-    return db_utils::getColectionByRecord(db_query($sql));
+      }
+
+      $sql .= ")";
+      if($fonte!="") {
+          $sql .= " AND o58_codigo IN ({$fonte}) ";
+      }
+      $sql .= " {$group} ) AS x";
+
+      return db_utils::getColectionByRecord(db_query($sql));
+
 }
 
 /**
@@ -6025,7 +6026,6 @@ function getSaldoDesdobramento($where, $aAnousu, $instit, $dtIni, $dtFim, $fonte
  */
 function getSaldoArrecadadoEmendaParlamentar($dtIni, $dtFim, $emenda = NULL)
 {
-
     $sql = "SELECT SUM(
                         CASE
                             WHEN ( C53_TIPO = 100 AND K81_EMPARLAMENTAR IN (1,2) ) THEN ROUND(C70_VALOR,2)::FLOAT8
