@@ -221,7 +221,7 @@ db_postmemory($HTTP_POST_VARS);
         //----------------------------------------------------------------------
         function js_pesquisae60_numemp(mostra) {
             if (mostra == true) {
-                js_OpenJanelaIframe('top.corpo', 'db_iframe_empempenho', 'func_empempenho.php?anul=false&inclusaoordemcompra=true&funcao_js=parent.js_mostraempempenho1|e60_codemp|e60_numemp|si172_nrocontrato|si172_datafinalvigencia|si174_novadatatermino|e60_anousu', 'Pesquisa', true);
+                js_OpenJanelaIframe('top.corpo', 'db_iframe_empempenho', 'func_empempenho.php?anul=false&inclusaoordemcompra=true&funcao_js=parent.js_mostraempempenho1|e60_codemp|e60_numemp|si172_nrocontrato|si172_datafinalvigencia|si174_novadatatermino|e60_anousu|pc30_liboccontrato', 'Pesquisa', true);
             } else {
                 if (document.form1.e60_numemp.value != '') {
                     js_OpenJanelaIframe('top.corpo', 'db_iframe_empempenho', 'func_empempenho.php?anul=false&inclusaoordemcompra=true&numemp=true&pesquisa_chave=' + document.form1.e60_numemp.value + '&funcao_js=parent.js_mostraempempenho', 'Pesquisa', false);
@@ -231,10 +231,10 @@ db_postmemory($HTTP_POST_VARS);
             }
         }
 
-        function js_mostraempempenho(chave, chave2, chave3, chave4, erro) {
+        function js_mostraempempenho(chave, chave2, chave3, chave4, liberar, erro) {
 
             var r = true;
-            console.log(chave, chave2, chave3, chave4, erro);
+            console.log(chave, chave2, chave3, chave4, liberar, erro);
 
 
             if (chave3 != "") {
@@ -260,46 +260,78 @@ db_postmemory($HTTP_POST_VARS);
             }
         }
 
-        function js_mostraempempenho1(chave1, x, chave2, chave3, chave4, chave5) {
-
-            if (chave3 != "") {
-                data1 = new Date(chave3);
-                data2 = new Date(chave4);
-                dataAtual = new Date();
-                if (chave4 != "") {
-                    if (data2 < dataAtual) {
-                        var r = confirm("Atenção! Empenho com o contrato " + chave2 + " vencido em " + dataFormatada(chave4) + ". Deseja continuar?");
+        function js_mostraempempenho1(chave1, x, chave2, chave3, chave4, chave5, liberar) {
+            console.log(chave1);
+            console.log(x);
+            console.log(chave2);
+            console.log(chave3);
+            console.log(chave4);
+            console.log(chave5);
+            console.log(liberar);
+            if (liberar == 1) {
+                if (chave3 != "") {
+                    data1 = new Date(chave3);
+                    data2 = new Date(chave4);
+                    dataAtual = new Date();
+                    if (chave4 != "") {
+                        if (data2 < dataAtual) {
+                            var r = confirm("Atenção! Empenho com o contrato " + chave2 + " vencido em " + dataFormatada(chave4) + ". Deseja continuar?");
+                        } else {
+                            document.form1.e60_numemp.value = x;
+                            document.form1.e60_codemp.value = chave1 + "/" + chave5;
+                            db_iframe_empempenho.hide();
+                        }
                     } else {
+                        if (data1 < dataAtual) {
+                            var r = confirm("Atenção! Empenho com o contrato " + chave2 + " vencido em " + dataFormatada(chave3) + ". Deseja continuar?");
+                        } else {
+                            document.form1.e60_numemp.value = x;
+                            document.form1.e60_codemp.value = chave1 + "/" + chave5;
+                            db_iframe_empempenho.hide();
+                        }
+                    }
+                    if (r == true) {
                         document.form1.e60_numemp.value = x;
                         document.form1.e60_codemp.value = chave1 + "/" + chave5;
                         db_iframe_empempenho.hide();
                     }
                 } else {
-                    if (data1 < dataAtual) {
-                        var r = confirm("Atenção! Empenho com o contrato " + chave2 + " vencido em " + dataFormatada(chave3) + ". Deseja continuar?");
-                    } else {
-                        document.form1.e60_numemp.value = x;
-                        document.form1.e60_codemp.value = chave1 + "/" + chave5;
-                        db_iframe_empempenho.hide();
-                    }
-                }
-                if (r == true) {
                     document.form1.e60_numemp.value = x;
                     document.form1.e60_codemp.value = chave1 + "/" + chave5;
                     db_iframe_empempenho.hide();
                 }
             } else {
-                document.form1.e60_numemp.value = x;
-                document.form1.e60_codemp.value = chave1 + "/" + chave5;
-                db_iframe_empempenho.hide();
-            }
 
+                if (chave3 != "") {
+                    data1 = new Date(chave3);
+                    data2 = new Date(chave4);
+                    dataAtual = new Date();
+                    if (chave4 != "") {
+                        if (data2 < dataAtual) {
+                            alert("Usuário: Empenho vinculado ao Contrato " + chave2 + ", vencido em " + dataFormatada(chave4));
+                            document.form1.e60_numemp.value = '';
+                            document.form1.e60_codemp.value = '';
+                            db_iframe_empempenho.hide();
+                        }
+                    } else {
+                        if (data1 < dataAtual) {
+                            alert("Usuário: Empenho vinculado ao Contrato " + chave2 + ", vencido em " + dataFormatada(chave3));
+                            document.form1.e60_numemp.value = '';
+                            document.form1.e60_codemp.value = '';
+                            db_iframe_empempenho.hide();
+                        }
+                    }
+                }
+
+                document.form1.e60_codemp.value = '';
+                document.form1.e60_codemp.focus();
+            }
 
         }
         //-----------------------------------------------------
         function js_pesquisae60_codemp(mostra) {
             if (mostra == true) {
-                js_OpenJanelaIframe('top.corpo', 'db_iframe_empempenho', 'func_empempenho.php?anul=false&inclusaoordemcompra=true&funcao_js=parent.js_mostraempempenho1|e60_codemp|e60_numemp|si172_nrocontrato|si172_datafinalvigencia|si174_novadatatermino|e60_anousu', 'Pesquisa', true);
+                js_OpenJanelaIframe('top.corpo', 'db_iframe_empempenho', 'func_empempenho.php?anul=false&inclusaoordemcompra=true&funcao_js=parent.js_mostraempempenho1|e60_codemp|e60_numemp|si172_nrocontrato|si172_datafinalvigencia|si174_novadatatermino|e60_anousu|pc30_liboccontrato', 'Pesquisa', true);
             } else {
                 if (document.form1.e60_codemp.value != '') {
                     js_OpenJanelaIframe('top.corpo', 'db_iframe_empempenho', 'func_empempenho.php?anul=false&inclusaoordemcompra=true&codemp=true&pesquisa_chave=' + document.form1.e60_codemp.value + '&funcao_js=parent.js_mostraempempenho3', 'Pesquisa', false);
@@ -309,27 +341,39 @@ db_postmemory($HTTP_POST_VARS);
             }
         }
 
-        function js_mostraempempenho3(chave, chave2, chave3, chave4, erro) {
+        function js_mostraempempenho3(chave2, chave3, chave4, liberar, erro) {
 
-            console.log(chave, chave2, chave3, chave4, erro);
-
-            if (chave3 != "") {
-                data1 = new Date(chave3);
-                data2 = new Date(chave4)
-                dataAtual = new Date();
-                if (chave4 != "") {
-                    if (data2 < dataAtual) {
-                        var r = confirm("Atenção! Empenho com o contrato " + chave2 + " vencido em " + dataFormatada(chave4) + ". Deseja continuar?");
-                    }
-                } else {
-                    if (data1 < dataAtual) {
-                        var r = confirm("Atenção! Empenho com o contrato " + chave2 + " vencido em " + dataFormatada(chave3) + ". Deseja continuar?");
+            if (liberar == 1) {
+                if (chave3 != "") {
+                    data1 = new Date(chave3);
+                    data2 = new Date(chave4)
+                    dataAtual = new Date();
+                    if (chave4 != "") {
+                        if (data2 < dataAtual) {
+                            var r = confirm("Atenção! Empenho com o contrato " + chave2 + " vencido em " + dataFormatada(chave4) + ". Deseja continuar?");
+                        }
+                    } else {
+                        if (data1 < dataAtual) {
+                            var r = confirm("Atenção! Empenho com o contrato " + chave2 + " vencido em " + dataFormatada(chave3) + ". Deseja continuar?");
+                        }
                     }
                 }
 
-            }
-
-            if (erro == true || r == false || chave2 == true) {
+            } else {
+                if (chave3 != "") {
+                    data1 = new Date(chave3);
+                    data2 = new Date(chave4)
+                    dataAtual = new Date();
+                    if (chave4 != "") {
+                        if (data2 < dataAtual) {
+                            alert("Usuário: Empenho vinculado ao Contrato " + chave2 + ", vencido em " + dataFormatada(chave4));
+                        }
+                    } else {
+                        if (data1 < dataAtual) {
+                            alert("Usuário: Empenho vinculado ao Contrato " + chave2 + ", vencido em " + dataFormatada(chave3));
+                        }
+                    }
+                }
                 document.form1.e60_codemp.value = '';
                 document.form1.e60_codemp.focus();
             }

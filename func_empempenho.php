@@ -31,6 +31,7 @@ include "libs/db_sessoes.php";
 include "libs/db_usuariosonline.php";
 include "dbforms/db_funcoes.php";
 include "classes/db_empempenho_classe.php";
+include "classes/db_pcparam_classe.php";
 
 db_postmemory($HTTP_POST_VARS);
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
@@ -190,7 +191,7 @@ $rotulo->label("z01_cgccpf");
             $dbwhere .= " and (date_part('year', empempenho.e60_emiss) = date_part('year', date '" . $ve70_abast . "')";
             $dbwhere .= " and date_part('month', empempenho.e60_emiss) <= date_part('month', date '" . $ve70_abast . "')";
             $dbwhere .= "	or (empempenho.e60_anousu = " . $anoant . "";
-            $dbwhere .= "	and e91_anousu = ". db_getsession('DB_anousu') . "))";
+            $dbwhere .= "	and e91_anousu = " . db_getsession('DB_anousu') . "))";
             $filtroempelemento = 1;
           }
 
@@ -202,15 +203,15 @@ $rotulo->label("z01_cgccpf");
            */
 
           if ($importacaoveiculo == 1) {
-            
+
             $anoant = db_getsession("DB_anousu") - 1;
 
             $dbwhere .= " and (elementoempenho.o56_elemento in ('3339030010000','3390330100000','3390339900000','3339033990000','3339030030000','3339092000000','3339033000000','3339093010000','3339093020000','3339093030000') ";
             $dbwhere .= " or elementoempenho.o56_elemento like '335041%')";
-            $dbwhere .= " and (date_part('year',empempenho.e60_emiss) = date_part('year', date '" . $dataAbastecimento ."')";
+            $dbwhere .= " and (date_part('year',empempenho.e60_emiss) = date_part('year', date '" . $dataAbastecimento . "')";
             $dbwhere .= " and date_part('month', empempenho.e60_emiss) <= date_part('month', date '" . $dataAbastecimento . "')";
             $dbwhere .= "	or (empempenho.e60_anousu = " . $anoant . "";
-            $dbwhere .= "	and e91_anousu = ". db_getsession('DB_anousu') . "))";
+            $dbwhere .= "	and e91_anousu = " . db_getsession('DB_anousu') . "))";
             $filtroempelemento = 1;
           }
 
@@ -302,6 +303,10 @@ $rotulo->label("z01_cgccpf");
           }
 
           if ($inclusaoordemcompra == true) {
+            $clpcparam = new cl_pcparam();
+            //Parametro adicionado a pedido de ivan OC18994
+            $rspcparam = $clpcparam->sql_record($clpcparam->sql_query(db_getsession('DB_instit'), "pc30_liboccontrato"));
+            db_fieldsmemory($rspcparam, 0);
 
             $campos = "";
 
@@ -311,7 +316,7 @@ $rotulo->label("z01_cgccpf");
             empempaut.e61_autori,
             empempenho.e60_numcgm,
             case when ac16_numeroacordo is null then si172_nrocontrato::varchar else (ac16_numeroacordo || '/' || ac16_anousu)::varchar end as si172_nrocontrato,
-            case when (select ac18_datafim from acordovigencia where ac18_acordoposicao in (select min(ac26_sequencial) from acordoposicao where ac26_acordo = acordo.ac16_sequencial) and ac18_ativo  = true) is null then si172_datafinalvigencia else (select ac18_datafim from acordovigencia where ac18_acordoposicao in (select min(ac26_sequencial) from acordoposicao where ac26_acordo = acordo.ac16_sequencial) and ac18_ativo  = true) end as si172_datafinalvigencia,
+            case when (select ac18_datafim from acordovigencia where ac18_acordoposicao in (select max(ac26_sequencial) from acordoposicao where ac26_acordo = acordo.ac16_sequencial) and ac18_ativo  = true) is null then si172_datafinalvigencia else (select ac18_datafim from acordovigencia where ac18_acordoposicao in (select max(ac26_sequencial) from acordoposicao where ac26_acordo = acordo.ac16_sequencial) and ac18_ativo  = true) end as si172_datafinalvigencia,
             case when ac16_datafim is null then si174_novadatatermino else ac16_datafim end as si174_novadatatermino,
             empempenho.e60_emiss as DB_e60_emiss,
             cgm.z01_nome,
@@ -321,8 +326,13 @@ $rotulo->label("z01_cgccpf");
             e60_vlrliq,
             e60_vlrpag,
             e60_vlranu,
-            RPAD(SUBSTR(convconvenios.c206_objetoconvenio,0,47),50,'...') AS c206_objetoconvenio
+            RPAD(SUBSTR(convconvenios.c206_objetoconvenio,0,47),50,'...') AS c206_objetoconvenio,
             ";
+            if ($pc30_liboccontrato == 't') {
+              $campos .= "1 as pc30_liboccontrato";
+            } else {
+              $campos .= "2 as pc30_liboccontrato";
+            }
             $campos = " distinct " . $campos;
             $dbwhere = "";
             $dbwhere = " WHERE (e60_vlremp - e60_vlranu) >
@@ -384,16 +394,16 @@ $rotulo->label("z01_cgccpf");
                 $dbwhere .= " and (date_part('year', empempenho.e60_emiss) = date_part('year', date '" . $ve70_abast . "')";
                 $dbwhere .= " and date_part('month', empempenho.e60_emiss) <= date_part('month', date '" . $ve70_abast . "')";
                 $dbwhere .= "	or (empempenho.e60_anousu = " . $anoant . "";
-                $dbwhere .= "	and e91_anousu = ". db_getsession("DB_anousu") . "))";
+                $dbwhere .= "	and e91_anousu = " . db_getsession("DB_anousu") . "))";
                 $filtroempelemento = 1;
               }
 
               if ($importacaoveiculo == 1) {
 
                 $aCodEmp  = explode("/", $pesquisa_chave);
-                
+
                 $anoant = db_getsession("DB_anousu") - 1;
-                
+
                 $dbwhere .= "(elementoempenho.o56_elemento in ('3339030010000','3390330100000','3390339900000','3339033990000','3339030030000','3339092000000','3339033000000','3339093010000','3339093020000','3339093030000')";
                 $dbwhere .= " or elementoempenho.o56_elemento like '335041%')";
                 $dbwhere .= " and (date_part('year', empempenho.e60_emiss) = date_part('year', date '" . $dataAbastecimento . "')";
@@ -401,7 +411,7 @@ $rotulo->label("z01_cgccpf");
                 $dbwhere .= "	or (empempenho.e60_anousu = " . $anoant . "";
                 $dbwhere .= "	and e91_anousu = " . db_getsession("DB_anousu") . "))";
                 $dbwhere .= " and e60_instit = " . db_getsession('DB_instit');
-                $dbwhere .= " and e60_codemp = '". $aCodEmp[0] ."'";
+                $dbwhere .= " and e60_codemp = '" . $aCodEmp[0] . "'";
                 $dbwhere .= " and e60_anousu = " . $aCodEmp[1];
                 $filtroempelemento = 1;
               }
@@ -433,13 +443,11 @@ $rotulo->label("z01_cgccpf");
               } else {
                 $sSql = $clempempenho->sql_query($pesquisa_chave, "*", null, $where, $filtroempelemento);
               }
-            }
-             else {
-                $sSql = $clempempenho->sql_query($pesquisa_chave, "*", null, $dbwhere, $filtroempelemento);
+            } else {
+              $sSql = $clempempenho->sql_query($pesquisa_chave, "*", null, $dbwhere, $filtroempelemento);
             }
 
-            if ($inclusaoordemcompra == true) {
-
+            if ($inclusaoordemcompra == "true") {
               if ($codemp == true) {
                 $dbwhere = " WHERE empempenho.e60_codemp = '$pesquisa_chave' ";
               }
@@ -447,6 +455,10 @@ $rotulo->label("z01_cgccpf");
               if ($numemp == true) {
                 $dbwhere = " WHERE empempenho.e60_numemp = $pesquisa_chave ";
               }
+              //Parametro adicionado a pedido de ivan OC18994
+              $clpcparam = new cl_pcparam();
+              $rspcparam = $clpcparam->sql_record($clpcparam->sql_query(db_getsession('DB_instit'), "pc30_liboccontrato"));
+              db_fieldsmemory($rspcparam, 0);
 
               $campos = "";
 
@@ -456,7 +468,7 @@ $rotulo->label("z01_cgccpf");
               empempaut.e61_autori,
               empempenho.e60_numcgm,
               case when ac16_numeroacordo is null then si172_nrocontrato::varchar else (ac16_numeroacordo || '/' || ac16_anousu)::varchar end as si172_nrocontrato,
-              case when (select ac18_datafim from acordovigencia where ac18_acordoposicao in (select min(ac26_sequencial) from acordoposicao where ac26_acordo = acordo.ac16_sequencial) and ac18_ativo  = true) is null then si172_datafinalvigencia else (select ac18_datafim from acordovigencia where ac18_acordoposicao in (select min(ac26_sequencial) from acordoposicao where ac26_acordo = acordo.ac16_sequencial) and ac18_ativo  = true) end as si172_datafinalvigencia,
+              case when (select ac18_datafim from acordovigencia where ac18_acordoposicao in (select max(ac26_sequencial) from acordoposicao where ac26_acordo = acordo.ac16_sequencial) and ac18_ativo  = true) is null then si172_datafinalvigencia else (select ac18_datafim from acordovigencia where ac18_acordoposicao in (select max(ac26_sequencial) from acordoposicao where ac26_acordo = acordo.ac16_sequencial) and ac18_ativo  = true) end as si172_datafinalvigencia,
               case when ac16_datafim is null then si174_novadatatermino else ac16_datafim end as si174_novadatatermino,
               empempenho.e60_emiss as DB_e60_emiss,
               cgm.z01_nome,
@@ -466,8 +478,13 @@ $rotulo->label("z01_cgccpf");
               e60_vlrliq,
               e60_vlrpag,
               e60_vlranu,
-              RPAD(SUBSTR(convconvenios.c206_objetoconvenio,0,47),50,'...') AS c206_objetoconvenio
+              RPAD(SUBSTR(convconvenios.c206_objetoconvenio,0,47),50,'...') AS c206_objetoconvenio,
               ";
+              if ($pc30_liboccontrato == 't') {
+                $campos .= "1 as pc30_liboccontrato";
+              } else {
+                $campos .= "2 as pc30_liboccontrato";
+              }
               $campos = " distinct " . $campos;
               $dbwhere .= " and (e60_vlremp - e60_vlranu) >
               (SELECT case when sum(m52_valor)  is null then 0 else sum(m52_valor) end as totalemordemdecompra
@@ -492,6 +509,8 @@ $rotulo->label("z01_cgccpf");
                 echo "<script>" . $funcao_js . "('{$e60_codemp}/{$e60_anousu}', false);</script>";
               } elseif (isset($lPesquisaPorCodigoEmpenho)) {
                 echo "<script>" . $funcao_js . "('{$e60_codemp}/{$e60_anousu}', '" . str_replace("'", "\'", $z01_nome) . "', '{$si172_nrocontrato}','{$si172_datafinalvigencia}','{$si174_novadatatermino}','{$e60_emiss}',false);</script>";
+              } elseif ($inclusaoordemcompra) {
+                echo "<script>" . $funcao_js . "('{$si172_nrocontrato}','{$si172_datafinalvigencia}','{$si174_novadatatermino}','{$pc30_liboccontrato}',false);</script>";
               } else {
                 if ($funcao_js == 'parent.js_mostraempempenhotesta') {
                   echo "<script>" . $funcao_js . "('{$e60_codemp} / {$e60_anousu}', false);</script>";
