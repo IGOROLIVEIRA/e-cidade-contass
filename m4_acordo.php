@@ -1242,14 +1242,18 @@ if (isset($alterar)) {
     si03_dataapostila = document.getElementsByClassName('dataapostila');
     si03_datareferencia = document.getElementsByClassName('datareferenciaapostila');
     ac26_sequencial = document.getElementsByClassName('ac26_sequencial');
-
+    
+    if (($('ac16_datareferencia').value == "" || $('ac16_datareferencia').value == null) && $('ac16_acordosituacao').value == 4) {
+        alert("O preenchimento a data de referência do acordo é obrigatório !");
+        return false;
+      }
     for (i = 0; i < ac16_numeroaditivo.length; i++) {
       if ((ac16_numeroaditivo[i].value == "" || ac16_numeroaditivo[i].value == null) && $('ac16_acordosituacao').value == 4) {
         alert("O preenchimento a data de referência no aditamento é obrigatório !");
         return false;
       }
     }
-
+    
     for (i = 0; i < ac26_numeroapostilamento.length; i++) {
       if (ac26_numeroapostilamento[i].value == "") {
         alert("O preenchimento do número do apostilamento é obrigatório !");
