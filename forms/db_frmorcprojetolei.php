@@ -29,6 +29,13 @@
 $clorcprojetolei->rotulo->label();
 $clrotulo = new rotulocampo;
 $clrotulo->label("nomeinst");
+
+function encerramentoContabil(){
+   $sSQL = "SELECT c99_data FROM condataconf WHERE c99_instit = " . db_getsession('DB_instit') . " AND c99_anousu = " . db_getsession("DB_anousu");
+   $rsResult = db_query($sSQL);
+   $encerramentoContabil = db_utils::fieldsMemory($rsResult, 0)->c99_data ? date("Y-m-d", strtotime(db_utils::fieldsMemory($rsResult, 0)->c99_data)) : "";
+   return $encerramentoContabil;
+  }
 ?>
 <form name="form1" method="post" action="">
   <center>
@@ -131,10 +138,32 @@ $clrotulo->label("nomeinst");
 </tr>
 </table>
 </center>
-<input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> >
+<input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?>>
 <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
 </form>
 <script>
+  
+  const btn = document.querySelector("#db_opcao");
+  btn.addEventListener("click", function(e) { 
+      let encerramentoContabil = '<?php echo encerramentoContabil(); ?>';
+      data = document.form1.o138_data.value
+      var dataSancao = data.split('/').reverse().join('-');
+      if(dataSancao <= encerramentoContabil){
+        e.preventDefault();
+        js_validaData();
+      }  
+  }); 
+  function js_validaData(){
+    var db_opcao = document.form1.db_opcao.value;
+    if(db_opcao == 'Alterar'){
+        alert("Alteração não efetuada. A data de Sanção da Lei é menor ou igual a data do encerramento do período contábil.");
+        document.form1.o138_data.focus();
+        return;
+    }
+    alert("Inclusão não efetuada. A data de Sanção da Lei é menor ou igual a data do encerramento do período contábil.");
+    document.form1.o138_data.focus();
+    return;
+  }  
   function js_pesquisao138_instit(mostra){
     if(mostra==true){
       js_OpenJanelaIframe('','db_iframe_db_config','func_db_config.php?funcao_js=parent.js_mostradb_config1|codigo|nomeinst','Pesquisa',true);
