@@ -373,7 +373,7 @@ if (isset($alterar)) {
           db_query("update acordoposicaoaditamento set ac35_dataassinaturatermoaditivo = '$dTassaditivo' where ac35_acordoposicao = '$oPosicao->posicao'");
         }
         if (!empty($dTassaditivoreferencia)) {
-          print_r("update acordoposicaoaditamento set ac35_datareferencia = '$dTassaditivoreferencia' where ac35_acordoposicao = '$oPosicao->posicao'");
+          //print_r("update acordoposicaoaditamento set ac35_datareferencia = '$dTassaditivoreferencia' where ac35_acordoposicao = '$oPosicao->posicao'");
           db_query("update acordoposicaoaditamento set ac35_datareferencia = '$dTassaditivoreferencia' where ac35_acordoposicao = '$oPosicao->posicao'");
         }
       } else {
@@ -988,7 +988,8 @@ if (isset($alterar)) {
                               @$ac35_datareferencia_ano,
                               true,
                               'text',
-                              $iOpcao
+                              $iOpcao,
+                              "class='numeroaditivo'"
                             ); ?>
                           </td>
                         </tr>
@@ -1232,14 +1233,22 @@ if (isset($alterar)) {
       alert("O preenchimento da Data de Assinatura é obrigatório ! ");
       return false;
     }
- 
+    
 
     ac26_numeroapostilamento = document.getElementsByClassName('numeroapostilamento');
+    ac16_numeroaditivo = document.getElementsByClassName('numeroaditivo');
     ac18_datainicio = document.getElementsByClassName('datainicio');
     ac18_datafim = document.getElementsByClassName('datafim');
     si03_dataapostila = document.getElementsByClassName('dataapostila');
     si03_datareferencia = document.getElementsByClassName('datareferenciaapostila');
     ac26_sequencial = document.getElementsByClassName('ac26_sequencial');
+
+    for (i = 0; i < ac16_numeroaditivo.length; i++) {
+      if ((ac16_numeroaditivo[i].value == "" || ac16_numeroaditivo[i].value == null) && $('ac16_acordosituacao').value == 4) {
+        alert("O preenchimento a data de referência no aditamento é obrigatório !");
+        return false;
+      }
+    }
 
     for (i = 0; i < ac26_numeroapostilamento.length; i++) {
       if (ac26_numeroapostilamento[i].value == "") {
