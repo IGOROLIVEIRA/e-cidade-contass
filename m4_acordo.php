@@ -93,7 +93,6 @@ if (isset($alterar)) {
     }
 
     if ($erro != true) {
-      //print_r("update acordovigencia set ac18_datainicio = '$datainicio', ac18_datafim = '$datafim' WHERE ac18_acordoposicao = $posicao;");
       db_query("update acordovigencia set ac18_datainicio = '$datainicio', ac18_datafim = '$datafim' WHERE ac18_acordoposicao = $posicao;");
       db_query("update apostilamento set si03_dataapostila = '$dataapostila',si03_datareferencia = '$dataapostilareferencia' WHERE si03_acordoposicao = $posicao;");
       db_query("update acordoposicao set ac26_numeroapostilamento = '$numeroapostilamento' WHERE ac26_sequencial = $posicao;");
@@ -263,7 +262,7 @@ if (isset($alterar)) {
       $setac16 .= ",ac16_datafim = '$dTfim'";
     }
     
-    //print_r("update acordo set ac16_numodalidade = '$licitacao->l20_numero', ac16_tipomodalidade = '$cflicita->l03_descr' $setac16 WHERE ac16_sequencial = '$ac16_sequencial';");
+    
     db_query("update acordo set ac16_numodalidade = '$licitacao->l20_numero', ac16_tipomodalidade = '$cflicita->l03_descr' $setac16 WHERE ac16_sequencial = '$ac16_sequencial';");
   }
 
@@ -364,8 +363,6 @@ if (isset($alterar)) {
         $dTassaditivoreferencia = implode('-', array_reverse(explode('/', $$dataaditivoreferencia)));
 
         if (!empty($dTinicio) && !empty($dTfim)) {
-          
-          //print_r("update acordovigencia  set ac18_datainicio = '$dTinicio', ac18_datafim  = '$dTfim' where ac18_acordoposicao  = '$oPosicao->posicao'");
           db_query("update acordovigencia  set ac18_datainicio = '$dTinicio', ac18_datafim  = '$dTfim' where ac18_acordoposicao  = '$oPosicao->posicao'");
           db_query("update acordoitemperiodo set ac41_datainicial = '$dTinicio', ac41_datafinal = '$dTfim' where ac41_acordoposicao = '$oPosicao->posicao'");
         }
@@ -373,13 +370,12 @@ if (isset($alterar)) {
           db_query("update acordoposicaoaditamento set ac35_dataassinaturatermoaditivo = '$dTassaditivo' where ac35_acordoposicao = '$oPosicao->posicao'");
         }
         if (!empty($dTassaditivoreferencia)) {
-          //print_r("update acordoposicaoaditamento set ac35_datareferencia = '$dTassaditivoreferencia' where ac35_acordoposicao = '$oPosicao->posicao'");
           db_query("update acordoposicaoaditamento set ac35_datareferencia = '$dTassaditivoreferencia' where ac35_acordoposicao = '$oPosicao->posicao'");
         }
       } else {
         $dTinicio = implode('-', array_reverse(explode('/', $ac16_datainicio)));
         $dTfim = implode('-', array_reverse(explode('/', $ac16_datafim)));
-        //print_r("teste2");
+        
         db_query("update acordovigencia  set ac18_datainicio = '$dTinicio', ac18_datafim  = '$dTfim' where ac18_acordoposicao  = '$oPosicao->posicao'");
         db_query("update acordoitemperiodo set ac41_datainicial = '$dTinicio', ac41_datafinal = '$dTfim' where ac41_acordoposicao = '$oPosicao->posicao'");
       }

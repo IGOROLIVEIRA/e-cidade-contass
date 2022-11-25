@@ -1181,7 +1181,6 @@ class cl_acordo
                 }
             }
         }
-        //print_r($sql);
         $result = db_query($sql);
         if ($result == false) {
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
