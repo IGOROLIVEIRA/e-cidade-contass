@@ -2519,6 +2519,7 @@ class cl_liclicita
         $sql .= "       left join pcorcamval on pc23_orcamitem = pc22_orcamitem and pc23_orcamforne = pc21_orcamforne";
         $sql .= "       left join pcorcam on pc20_codorc = pc22_codorc";
         $sql .= "       left join acordo on ac16_licitacao = l20_codigo";
+        $sql .= "       left join liccontrolepncp on l213_licitacao = l20_codigo";
         $sql2 = "";
         if ($dbwhere == "") {
             if ($l20_codigo != null) {

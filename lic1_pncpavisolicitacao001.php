@@ -30,17 +30,16 @@ db_app::load("time.js");
                 <tr>
                     <td colspan="2">
                         <strong>Ambiente: </strong>
-
                         <select name="ambiente" id="ambiente">
                             <option value="1">Ambiente de Homologao Externa (teste)</option>
                             <option value="2">Ambiente de Produo</option>
                         </select>
 
-                        <strong>Leiaute: </strong>
-
-                        <select name="leiaute" id="leiaute">
-                            <option value="teste">Teste</option>
-                            <option value="producao">Produo</option>
+                        <strong>Tipo: </strong>
+                        <select name="tipo" id="tipo">
+                            <option value="1">Inclusão</option>
+                            <option value="2">Retificação</option>
+                            <option value="3">Exclusão</option>
                         </select>
                     </td>
                 </tr>
@@ -71,9 +70,9 @@ db_app::load("time.js");
         oGridLicitacao = new DBGrid('gridLicitacao');
         oGridLicitacao.nameInstance = 'oGridLicitacao';
         oGridLicitacao.setCheckbox(0);
-        oGridLicitacao.setCellAlign(new Array("center", "center", "Left"));
-        oGridLicitacao.setCellWidth(new Array("5%", "10%", "90%"));
-        oGridLicitacao.setHeader(new Array("Cdigo", "Processo Licitatrio", "Objeto"));
+        oGridLicitacao.setCellAlign(new Array("center", "center", "Left", "Left", "Center"));
+        oGridLicitacao.setCellWidth(new Array("5%", "10%", "20%", "80%", "20%"));
+        oGridLicitacao.setHeader(new Array("Código", "Processo", "Modalidade", "Objeto", "Número de Controle"));
         oGridLicitacao.hasTotalValue = false;
         oGridLicitacao.show($('cntgridlicitacoes'));
 
@@ -116,12 +115,14 @@ db_app::load("time.js");
                 var aLinha = new Array();
                 aLinha[0] = oLinha.l20_codigo;
                 aLinha[1] = oLinha.l20_edital;
-                aLinha[2] = oLinha.l20_objeto.urlDecode();
+                aLinha[2] = oLinha.l03_descr;
+                aLinha[3] = oLinha.l20_objeto.urlDecode();
+                aLinha[4] = oLinha.l213_numerocontrolepncp;
                 oGridLicitacao.addRow(aLinha);
 
                 var sTextEvent = " ";
-                if (aLinha[2] !== '') {
-                    sTextEvent += "<b>objeto: </b>" + aLinha[2];
+                if (aLinha[3] !== '') {
+                    sTextEvent += "<b>objeto: </b>" + aLinha[3];
                 } else {
                     sTextEvent += "<b>Nenhum dado  mostrar</b>";
                 }
@@ -154,8 +155,16 @@ db_app::load("time.js");
             return false;
         }
 
+        let tipo = $F('tipo');
+
         var oParam = new Object();
-        oParam.exec = "enviarAviso";
+        if (tipo == 1) {
+            oParam.exec = "enviarAviso";
+        } else if (tipo == 2) {
+            oParam.exec = "RetificarAviso";
+        } else {
+            oParam.exec = "ExcluirAviso";
+        }
         oParam.ambiente = $F('ambiente');
         oParam.aLicitacoes = new Array();
 

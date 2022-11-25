@@ -33,6 +33,13 @@ abstract class ModeloBasePNCP
      */
     abstract public function montarDados();
 
+    /**
+     * Retorna dados no formato necessario para envio de Retificacao
+     * @return array stdClass
+     */
+    abstract public function montarRetificacao();
+
+
     public function formatDate($date)
     {
         $date = \DateTime::createFromFormat('Y-m-d', $date);
@@ -96,43 +103,6 @@ abstract class ModeloBasePNCP
         $token = substr($aHeader[5], 1, -24);
 
         return $token;
-    }
-
-    /**
-     * Realiza o requisicao para buscar orgaos na api do PNCP
-     * @return stdClass
-     */
-
-    public function getOrgao()
-    {
-        /* $token = $this->login();
-
-        $url = "https://treina.pncp.gov.br/pncp-api/v1/orgaos/01348745000109";
-
-        $curl_data = array(
-            'cnpj' => '01348745000109'
-        );
-
-        $headers = array(
-            'Content-Type: application/json',
-            'Authorizarion:' . $token
-        );
-
-        $method = 'GET';
-
-        $response = $this->requestPNCP($url, json_encode($curl_data), $method, $headers);*/
-    }
-
-    /**
-     * Realiza o requisicao na api do PNCP
-     * @paran
-     * url = url da requisicao
-     * curl_data = campos para requisicao
-     * method = todos os metodos HTTP
-     * headers = header da requisicao OBS: Obrigatorio token de auth
-     */
-    public function requestPNCP($url, $curl_data = null, $method, $headers, $token = null)
-    {
     }
 
     /**
@@ -211,5 +181,9 @@ abstract class ModeloBasePNCP
         $retorno = json_decode($contentpncp);
 
         return $retorno;
+    }
+
+    public function enviarRetificacao()
+    {
     }
 }
