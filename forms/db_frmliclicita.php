@@ -1,4 +1,5 @@
 <?
+
 /*
  *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2014  DBselller Servicos de Informatica
@@ -312,6 +313,45 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                         );
                                         db_select("l20_leidalicitacao", $arr_tipo, true, $db_opcao, "onchange='js_verificalei(this.value);'");
                                         ?>
+                                    </td>
+                                </tr>
+                                <tr style="display:table-row;" id="amparolegal">
+                                    <td nowrap title="Amparo Legal">
+                                        <?
+                                        echo "<b>Amparo Legal</b>";
+                                        ?>
+                                    </td>
+                                    <td>
+                                        <?
+                                        $tipo = array();
+                                        $tipo[0] = "Selecione";
+                                        
+                                            
+                                        
+                                            if (isset($l20_codtipocom) && $l20_codtipocom != "") {
+                                                $result_tipo = db_query("select * from amparolegal where l212_codigo in (select l213_amparo from amparocflicita where l213_modalidade = $l20_codtipocom)");
+                                            }else{
+                                                $result_tipo = db_query("select * from amparolegal");
+                                            }
+                                        
+
+                                        for($iIndiceTipo=0;$iIndiceTipo < pg_numrows($result_tipo);$iIndiceTipo++){
+
+                                          $oTipo = db_utils::fieldsMemory($result_tipo, $iIndiceTipo);
+
+                                          $tipo[$oTipo->l212_codigo] = $oTipo->l212_lei;
+                                        }
+
+                                        //db_selectrecord("l20_codtipocom", @$result_tipo, true, $db_opcao, "js_mostraRegistroPreco()");
+                                        db_select("l212_codigo", $tipo, true, $db_opcao, "");
+                                        
+                                            if (isset($l20_amparolegal) && $l20_amparolegal != "") {
+                                                echo "<script>document.getElementById('l212_codigo').value=$l20_amparolegal;</script>";
+                                                
+                                            }
+                                        
+                                        ?>
+                                        
                                     </td>
                                 </tr>
                                 <tr style="display:none;" id="respAvaliaBens">
@@ -1166,6 +1206,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
     <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();">
 </form>
 <script>
+ 
     var codigotribunal = 0;
     document.form1.l20_prazoentrega.style.backgroundColor = '#FFFFFF';
     document.form1.l20_condicoespag.style.backgroundColor = '#FFFFFF';
@@ -1190,11 +1231,9 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
     // alterando a função padrao para verificar  as opçoes de convite e de INEXIGIBILIDADE
     function js_ProcCod_l20_codtipocom(proc, res) {
 
-
-
         js_verificaDatasProposta();
 
-
+        
 
 
         var sel1 = document.forms[0].elements[proc];
@@ -1203,10 +1242,12 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             if (sel1.options[sel1.selectedIndex].value == sel2.options[i].value)
                 sel2.options[i].selected = true;
         }
+
         // ajax para fazer consulta sql, retornando o codigo do tribunal
         var codigocompra = document.getElementById("l20_codtipocom").options[document.getElementById("l20_codtipocom").selectedIndex].text;
         var oParam = new Object();
         oParam.codigo = codigocompra;
+        
         var url = 'lic1_liclicita_consulta.php';
         var oAjax = new Ajax.Request(url, {
             method: 'post',
@@ -1220,6 +1261,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
     function js_retornolicitacao(oAjax) {
 
         var oRetornoNatu = document.getElementById("l20_naturezaobjeto").value;
+        var oRetornoamparo = document.getElementById("l212_codigo").value;
         if (oRetornoNatu == 1) {
             document.getElementById("respObras").style.display = "table-row";
         }
@@ -1245,11 +1287,47 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
         document.getElementById("l20_regimexecucao").style.width = "307px";
         document.getElementById("l20_naturezaobjeto").style.width = "307px";
         document.getElementById("l20_criterioadjudicacao").style.width = "307px";
+        document.getElementById("l212_codigo").style.width = "307px";
         document.getElementById("l20_tipojulg").style.width = "85px";
         document.getElementById("l20_tipoprocesso").style.width = "400px";
         //document.getElementById("l20_codtipocom").style.width="85px";
         document.form1.modalidade_tribunal.value = oRetorno.tribunal;
 
+        var l12_pncp = <? echo '"' . $l12_pncp . '"';      ?>;
+        alert($l20_amparolegal);
+        if(document.form1.l20_leidalicitacao.value == 1 && l12_pncp == 't'){
+            if(oRetorno.numrows > 0){
+                document.getElementById("amparolegal").style.display = "";
+                let listaamparolegal = document.getElementById('l212_codigo').options;
+                for ($x=59;$x>0;$x--){
+                    
+                    listaamparolegal.remove($x);
+                }
+
+                for ($x=0;$x<60;$x++){
+                    if(oRetorno.amparo[$x] != "" && oRetorno.amparo[$x] != null){
+                        
+                        listaamparolegal.add(new Option(oRetorno.amparo[$x],$x));
+                    }
+                }
+            }else if(oRetorno.numrows == 0 && document.getElementById("l20_codtipocom").value != 99){
+                document.getElementById("amparolegal").style.display = "none";
+                let listaamparolegal = document.getElementById('l212_codigo').options;
+                for ($x=59;$x>0;$x--){
+                    
+                    listaamparolegal.remove($x);
+                }
+            }
+        }else{
+            document.getElementById("amparolegal").style.display = "none";
+                let listaamparolegal = document.getElementById('l212_codigo').options;
+                for ($x=59;$x>0;$x--){
+                    
+                    listaamparolegal.remove($x);
+                }
+
+        }
+        document.querySelector("#l212_codigo").value = oRetornoamparo;
         // verifica se e do tipo convite
         if (oRetorno.tribunal == 48) {
             document.form1.l20_numeroconvidado.style.backgroundColor = '#FFFFFF';
@@ -1282,6 +1360,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             document.getElementById("l20_numeroconvidado").readOnly = true;
 
         }
+        
         //validação para responsável na modalidade Leilão
         if (oRetorno.tribunal == 54) {
 
@@ -2024,7 +2103,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
     function js_mostraRegistroPreco() {
 
-
+        alert($F('l20_codtipocom'));
 
         js_divCarregando("Aguarde, pesquisando parametros", "msgBox");
         var oParam = new Object();
@@ -2268,6 +2347,8 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
             document.querySelector("#l20_tipliticacao").value = oRetornoTipo;
         }
+        js_ProcCod_l20_codtipocom('l20_codtipocomdescr','l20_codtipocom');
+        
     }
 
     function limitaTextareacpro(valor) {
