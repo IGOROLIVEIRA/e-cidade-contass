@@ -255,5 +255,3 @@ $this->objpdf->SetLineWidth(0.05);
 $this->objpdf->SetDash(1,1);
 $this->objpdf->Line(0,$this->objpdf->gety()-13, $this->objpdf->w ,$this->objpdf->gety()-13); // linha tracejada vertical
 $this->objpdf->SetDash();
-
-?>
