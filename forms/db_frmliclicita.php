@@ -315,7 +315,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                         ?>
                                     </td>
                                 </tr>
-                                <tr style="display:table-row;" id="amparolegal">
+                                <tr style="display:none;" id="amparolegal">
                                     <td nowrap title="Amparo Legal">
                                         <?
                                         echo "<b>Amparo Legal</b>";
@@ -1294,10 +1294,11 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
         document.form1.modalidade_tribunal.value = oRetorno.tribunal;
 
         var l12_pncp = <? echo '"' . $l12_pncp . '"';      ?>;
-        alert($l20_amparolegal);
+        
         if(document.form1.l20_leidalicitacao.value == 1 && l12_pncp == 't'){
+            document.getElementById("amparolegal").style.display = "";
             if(oRetorno.numrows > 0){
-                document.getElementById("amparolegal").style.display = "";
+                document.getElementById("amparolegal").style.display = "table_row";
                 let listaamparolegal = document.getElementById('l212_codigo').options;
                 for ($x=59;$x>0;$x--){
                     
@@ -1307,7 +1308,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                 for ($x=0;$x<60;$x++){
                     if(oRetorno.amparo[$x] != "" && oRetorno.amparo[$x] != null){
                         
-                        listaamparolegal.add(new Option(oRetorno.amparo[$x],$x));
+                        listaamparolegal.add(new Option(oRetorno.amparo[$x].replace(/\s/g, ''),$x));
                     }
                 }
             }else if(oRetorno.numrows == 0 && document.getElementById("l20_codtipocom").value != 99){

@@ -219,6 +219,7 @@ if (isset($alterar)) {
 		if($oPost->l212_codigo == 0){
 			$erro_msg .= 'Campo Amparo Legal não informado\n\n';
 			$sqlerro = true;
+            $mostrar = 1;
 		}
 	}
 
@@ -433,7 +434,7 @@ if (isset($alterar)) {
             $sqlerro = true;
         }
     }
-
+    
     if ($sqlerro == false) {
         $clliclicita->l20_amparolegal       = $oPost->l212_codigo;
         $clliclicita->l20_numero       = $iNumero;
@@ -451,7 +452,7 @@ if (isset($alterar)) {
         }
     }
 
-
+   
     /**
      * Acoes na troca de tipo de julgamento
      *

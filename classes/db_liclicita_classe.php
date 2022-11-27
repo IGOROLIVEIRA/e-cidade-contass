@@ -2338,7 +2338,7 @@ class cl_liclicita
             // }
         }
         //print_r($sql);
-        exit;
+        //exit;
         $result = db_query($sql);
 
 
