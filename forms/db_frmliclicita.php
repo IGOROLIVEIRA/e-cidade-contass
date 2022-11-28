@@ -318,7 +318,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                 <tr style="display:none;" id="amparolegal">
                                     <td nowrap title="Amparo Legal">
                                         <?
-                                        echo "<b>Amparo Legal</b>";
+                                        echo "<b>Amparo Legal:</b>";
                                         ?>
                                     </td>
                                     <td>
@@ -1308,7 +1308,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                 for ($x=0;$x<60;$x++){
                     if(oRetorno.amparo[$x] != "" && oRetorno.amparo[$x] != null){
                         
-                        listaamparolegal.add(new Option(oRetorno.amparo[$x].replace(/\s/g, ''),$x));
+                        listaamparolegal.add(new Option(oRetorno.amparo[$x]));
                     }
                 }
             }else if(oRetorno.numrows == 0 && document.getElementById("l20_codtipocom").value != 99){
