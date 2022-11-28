@@ -22,6 +22,7 @@ $oRetorno->status  = 1;
 
 switch ($oParam->exec) {
     case 'getLicitacoes':
+
         $clliclicita = new cl_liclicita();
         $rsLicitacaoAbertas = $clliclicita->sql_record($clliclicita->sql_query(null, 'distinct l20_codigo,l20_edital,l20_objeto,l213_numerocontrolepncp,l03_descr,l20_numero', 'l20_codigo desc', "l20_licsituacao = 0 and l03_pctipocompratribunal in (110,51,53,52,102,101,100,101) and liclicita.l20_leidalicitacao = 1 and l20_instit = " . db_getsession('DB_instit')));
         for ($iCont = 0; $iCont < pg_num_rows($rsLicitacaoAbertas); $iCont++) {
@@ -32,7 +33,7 @@ switch ($oParam->exec) {
             $oLicitacao->l20_edital = $oLicitacaos->l20_edital;
             $oLicitacao->l20_objeto = urlencode($oLicitacaos->l20_objeto);
             $oLicitacao->l213_numerocontrolepncp = $oLicitacaos->l213_numerocontrolepncp;
-            $oLicitacao->l03_descr = $oLicitacaos->l03_descr . '-' . $oLicitacaos->l20_numero;
+            $oLicitacao->l03_descr = urlencode($oLicitacaos->l03_descr . ' - ' . $oLicitacaos->l20_numero);
 
             $itens[] = $oLicitacao;
         }

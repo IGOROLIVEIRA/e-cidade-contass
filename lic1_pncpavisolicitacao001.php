@@ -115,7 +115,7 @@ db_app::load("time.js");
                 var aLinha = new Array();
                 aLinha[0] = oLinha.l20_codigo;
                 aLinha[1] = oLinha.l20_edital;
-                aLinha[2] = oLinha.l03_descr;
+                aLinha[2] = oLinha.l03_descr.urlDecode();
                 aLinha[3] = oLinha.l20_objeto.urlDecode();
                 aLinha[4] = oLinha.l213_numerocontrolepncp;
                 oGridLicitacao.addRow(aLinha);
