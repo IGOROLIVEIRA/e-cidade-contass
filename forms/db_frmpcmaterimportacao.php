@@ -28,6 +28,46 @@
 $totalitens = 0;
 
 if (isset($_POST["salvar"])) {
+    $descricao = $_POST['descricao'];
+    $data =  $_POST['data'];
+    $servico =  $_POST['servico'];
+    $codsubgrupo = $_POST['codsubgrupo'];
+    $obra = $_POST['obra'];
+    $taxa = $_POST['taxa'];
+    $tabela = $_POST['tabela'];
+    $codele = $_POST['codele'];
+
+    db_inicio_transacao();
+
+    for ($i = 0; $i < count($descricao); $i++) {
+        $clpcmater = new cl_pcmater;
+        $sqlerro = false;
+
+        $clpcmater->$pc01_descrmater = $descricao[$i];
+        $clpcmater->pc01_data = $data[$i];
+        $clpcmater->pc01_servico   = $servico[$i];
+        $clpcmater->pc01_codsubgrupo = $codsubgrupo[$i];
+        $clpcmater->obras = "true";
+        $clpcmater->taxa   = "true";
+        $clpcmater->tabela = "true";
+    }
+
+    $pc01_data = $_POST["pc01_data"];
+    $pc01_data = explode("/", $pc01_data);
+    $pc01_data = $pc01_data[2] . "-" . $pc01_data[1] . "-" . $pc01_data[0];
+
+    if (!empty($pc01_data)) {
+        $anousu = db_getsession('DB_anousu');
+        $instituicao = db_getsession('DB_instit');
+        $result = $clcondataconf->sql_record($clcondataconf->sql_query_file($anousu, $instituicao, "c99_datapat", null, null));
+        $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
+
+        if (strtotime($pc01_data) <= strtotime($c99_datapat)) {
+            $erro_msg = "O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.";
+            $sqlerro  = true;
+            db_msgbox($erro_msg);
+        }
+    }
 }
 
 if (isset($_POST["processar"])) {
@@ -332,27 +372,31 @@ if (isset($_POST["processar"])) {
                 echo "<tr style='background-color:#ffffff;'>";
 
                 if (mb_strlen($rown->pc01_descrmater, 'UTF-8') > 80) {
-                    echo "<td name='descricao[]' style='text-align:center; background-color:#f09999;'>";
-                    echo  $rown->pc01_descrmater;
+                    echo "<td style='text-align:center;'>";
+                    echo "<input style='text-align:center; background-color:#f09999; width:90%; border:none;' readonly='' type='text' name='descricao[]' value='" . $rown->pc01_descrmater . "'>";
+                    //echo  $rown->pc01_descrmater;
                     echo "</td>";
                 } else {
-                    echo "<td name='descricao[]' style='text-align:center;'>";
-                    echo $rown->pc01_descrmater;
+                    echo "<td  style='text-align:center;'>";
+                    echo "<input style='text-align:center; width:90%; border:none;' readonly='' type='text' name='descricao[]' value='" . $rown->pc01_descrmater . "'>";
                     echo "</td>";
                 }
 
                 echo "<td name='data[]' style='text-align:center;' >";
+                echo "<input style='text-align:center; width:90%; border:none;' readonly='' type='text' name='data[]' value='" . $pc01_data . "'>";
 
-                echo $pc01_data;
+                //echo $pc01_data;
                 echo "</td>";
 
                 if (mb_strtolower($rown->pc01_servico) != "sim" && mb_strtolower($rown->pc01_servico) != "não") {
-                    echo "<td style='text-align:center; background-color:#f09999;'>";
-                    echo $rown->pc01_servico;
+                    echo "<td style='text-align:center;'>";
+                    echo "<input style='text-align:center; width:90%; border:none; background-color:#f09999;' readonly='' type='text' name='servico[]' value='" . $rown->pc01_servico . "'>";
+                    //echo $rown->pc01_servico;
                     echo "</td>";
                 } else {
                     echo "<td style='text-align:center;'>";
-                    echo $rown->pc01_servico;
+                    echo "<input style='text-align:center; width:90%; border:none;' readonly='' type='text' name='servico[]' value='" . $rown->pc01_servico . "'>";
+                    //echo $rown->pc01_servico;
                     echo "</td>";
                 }
 
@@ -362,48 +406,57 @@ if (isset($_POST["processar"])) {
                     $rsResult       = db_query($sSQL);
                     $pc04_descrsubgrupo = db_utils::fieldsMemory($rsResult, 0)->pc04_descrsubgrupo;
                     if ($pc04_descrsubgrupo == "") {
-                        echo "<td style='text-align:center; background-color:#f09999;'>";
-                        echo $rown->pc01_codsubgrupo;
+                        echo "<td style='text-align:center; '>";
+                        echo "<input style='text-align:center; width:90%; border:none; background-color:#f09999;' readonly='' type='text' name='codsubgrupo[]' value='" . $rown->pc01_codsubgrupo . "'>";
+                        //echo $rown->pc01_codsubgrupo;
                         echo "</td>";
                     } else {
                         echo "<td style='text-align:center;'>";
-                        echo $pc04_descrsubgrupo;
+                        echo "<input style='text-align:center; width:90%; border:none;' readonly='' type='text' name='codsubgrupo[]' value='" . $rown->pc01_codsubgrupo . "'>";
+                        //echo $pc04_descrsubgrupo;
                         echo "</td>";
                     }
                 } else {
                     echo "<td style='text-align:center; background-color:#f09999;'>";
-                    echo $rown->pc01_codsubgrupo;
+                    echo "<input style='text-align:center; width:90%; border:none; background-color:#f09999;' readonly='' type='text' name='codsubgrupo[]' value='" . $rown->pc01_codsubgrupo . "'>";
+                    //echo $rown->pc01_codsubgrupo;
                     echo "</td>";
                 }
 
 
                 if (mb_strtolower($rown->pc01_obras) != "sim" && mb_strtolower($rown->pc01_obras) != "não" && mb_strtolower($rown->pc01_obras) != "nao") {
                     echo "<td style='text-align:center; background-color:#f09999;'>";
-                    echo $rown->pc01_obras;
+                    echo "<input style='text-align:center; width:90%; border:none; background-color:#f09999;' readonly='' type='text' name='obra[]' value='" . $rown->pc01_obras . "'>";
+                    //echo $rown->pc01_obras;
                     echo "</td>";
                 } else {
                     echo "<td style='text-align:center;'>";
-                    echo $rown->pc01_obras;
+                    echo "<input style='text-align:center; width:90%; border:none;' readonly='' type='text' name='obra[]' value='" . $rown->pc01_obras . "'>";
+                    //echo $rown->pc01_obras;
                     echo "</td>";
                 }
 
                 if (mb_strtolower($rown->pc01_tabela) != "sim" && mb_strtolower($rown->pc01_tabela) != "não" && mb_strtolower($rown->pc01_tabela) != "nao") {
-                    echo "<td style='text-align:center; background-color:#f09999;'>";
-                    echo $rown->pc01_tabela;
+                    echo "<td style='text-align:center;'>";
+                    echo "<input style='text-align:center; width:90%; border:none; background-color:#f09999;' readonly='' type='text' name='tabela[]' value='" . $rown->pc01_tabela . "'>";
+                    //echo $rown->pc01_tabela;
                     echo "</td>";
                 } else {
                     echo "<td style='text-align:center;'>";
-                    echo $rown->pc01_tabela;
+                    echo "<input style='text-align:center; width:90%; border:none;' readonly='' type='text' name='tabela[]' value='" . $rown->pc01_tabela . "'>";
+                    //echo $rown->pc01_tabela;
                     echo "</td>";
                 }
 
                 if (mb_strtolower($rown->pc01_taxa) != "sim" && mb_strtolower($rown->pc01_taxa) != "não" && mb_strtolower($rown->pc01_taxa) != "nao") {
                     echo "<td style='text-align:center; background-color:#f09999;'>";
-                    echo $rown->pc01_taxa;
+                    echo "<input style='text-align:center; width:90%; border:none; background-color:#f09999;' readonly='' type='text' name='taxa[]' value='" . $rown->pc01_taxa . "'>";
+                    //echo $rown->pc01_taxa;
                     echo "</td>";
                 } else {
                     echo "<td style='text-align:center;'>";
-                    echo $rown->pc01_taxa;
+                    echo "<input style='text-align:center; width:90%; border:none;' readonly='' type='text' name='taxa[]' value='" . $rown->pc01_taxa . "'>";
+                    //echo $rown->pc01_taxa;
                     echo "</td>";
                 }
 
@@ -414,18 +467,25 @@ if (isset($_POST["processar"])) {
                     $orcelemento = db_utils::fieldsMemory($rsResult, 0);
                     if ($orcelemento->o56_descr == "") {
                         echo "<td style='text-align:center; background-color:#f09999;'>";
-                        echo $rown->pc07_codele;
+                        echo "<input style='text-align:center; width:90%; border:none; background-color:#f09999;' readonly='' type='text' name='desdobramento[]' value='" . $rown->pc07_codele . "'>";
+                        //echo $rown->pc07_codele;
                         echo "</td>";
                     } else {
                         echo "<td style='text-align:center;'>";
-                        echo $orcelemento->o56_elemento . " - " . $orcelemento->o56_descr;
+                        echo "<input style='text-align:center; width:90%; border:none;' readonly='' type='text' name='desdobramento[]' value='" . $orcelemento->o56_elemento . " - " . $orcelemento->o56_descr . "'>";
+                        //echo $orcelemento->o56_elemento . " - " . $orcelemento->o56_descr;
                         echo "</td>";
                     }
                 } else {
                     echo "<td style='text-align:center; background-color:#f09999;'>";
-                    echo $rown->pc07_codele;
+                    echo "<input style='text-align:center; width:90%; border:none; background-color:#f09999;' readonly='' type='text' name='desdobramento[]' value='" . $rown->pc07_codele . "'>";
+                    //echo $rown->pc07_codele;
                     echo "</td>";
                 }
+
+                echo "<td style='text-align:center; display:none;'>";
+                echo "<input style='text-align:center; width:90%; border:none; display:none;' readonly='' type='text' name='desdobramento[]' value='" . $rown->pc07_codele . "'>";
+                echo "</td>";
 
                 echo "</tr>";
                 $i++;
@@ -453,9 +513,9 @@ if (isset($_POST["processar"])) {
     <?php
 
     if (isset($_POST["processar"])) {
-        echo  "<input style='margin-top: 10px;' type='submit' id='db_opcao' name='salvar' id='salvar' value='Salvar'>";
+        echo  "<input style='margin-top: 10px;' type='submit' id='salvar' name='salvar'  value='Salvar'>";
     } else {
-        echo  "<input style='margin-top: -200px;' type='submit' id='db_opcao' value='Salvar'>";
+        echo  "<input style='margin-top: -200px;' type='submit' id='salvar' value='Salvar' name='salvar'>";
     }
 
     ?>
