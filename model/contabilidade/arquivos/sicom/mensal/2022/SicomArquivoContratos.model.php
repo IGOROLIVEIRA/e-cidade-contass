@@ -443,7 +443,8 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                       lic211_codorgaoresplicit,
 					  lic211_codunisubres,
 					  lic211_processo,
-					  lic211_anousu
+					  lic211_anousu,
+                      manutac_codunidsubanterior
                 FROM acordoitem
                 INNER JOIN acordoposicao ON ac20_acordoposicao = ac26_sequencial
                 INNER JOIN acordo ON ac16_sequencial = ac26_acordo
@@ -466,6 +467,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                 LEFT JOIN cflicita c2 ON l2.l20_codtipocom = c2.l03_codigo
                 LEFT JOIN pctipocompra p2 ON p2.pc50_codcom = c2.l03_codcom
                 INNER JOIN acordogrupo ON ac02_sequencial = ac16_acordogrupo
+                LEFT JOIN manutencaoacordo ON manutac_acordo = ac16_sequencial
                 WHERE ac16_datareferencia <= '{$this->sDataFinal}'
                 AND ac16_datareferencia >= '{$this->sDataInicial}'
                 AND ac16_instit = " . db_getsession("DB_instit");
@@ -562,7 +564,11 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             $clcontratos10->si83_tiporegistro = 10;
             $clcontratos10->si83_codcontrato = $oDados10->ac16_sequencial;
             $clcontratos10->si83_codorgao = $sCodorgao;
-            $clcontratos10->si83_codunidadesub = $sCodUnidade;
+            if($oDados10->manutac_codunidsubanterior != '' && $oDados10->manutac_codunidsubanterior != null){
+                $clcontratos10->si83_codunidadesub = $oDados10->manutac_codunidsubanterior;
+            }else{
+                $clcontratos10->si83_codunidadesub = $sCodUnidade;
+            }
             $clcontratos10->si83_nrocontrato = $oDados10->ac16_numeroacordo;
             $clcontratos10->si83_exerciciocontrato = $oDados10->ac16_anousu;
             $clcontratos10->si83_dataassinatura = $oDados10->ac16_dataassinatura;
