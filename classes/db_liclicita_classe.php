@@ -1,4 +1,5 @@
 <?
+
 /*
  *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2014  DBSeller Servicos de Informatica
@@ -144,6 +145,7 @@ class cl_liclicita
     var $l20_dataencproposta_dia = null;
     var $l20_dataencproposta_mes = null;
     var $l20_dataencproposta_ano = null;
+    var $l20_amparolegal = null;
 
     // cria propriedade com as variaveis do arquivo
     var $campos = "
@@ -217,6 +219,7 @@ class cl_liclicita
                  l20_mododisputa = int8 = Lei de licitacao
                  l20_dataaberproposta = date = Data encerramento Proposta;
                  l20_dataencproposta = date = Data encerramento Proposta;
+                 l20_amparolegal = Amparo legal;
                  ";
 
     //funcao construtor da classe
@@ -409,6 +412,7 @@ class cl_liclicita
         } else {
             $this->l20_codigo = ($this->l20_codigo == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_codigo"] : $this->l20_codigo);
         }
+        $this->l20_amparolegal = ($this->l20_amparolegal == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_amparolegal"] : $this->l20_amparolegal);
     }
 
     // funcao para inclusao aqui
@@ -1039,6 +1043,16 @@ class cl_liclicita
             }
         }
 
+        if ($this->l20_amparolegal == null) {
+            $this->erro_sql = " Campo Tipo da Natureza do Procedimento não foi informada.";
+            $this->erro_campo = "l20_amparolegal";
+            $this->erro_banco = "";
+            $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_status = "0";
+            return false;
+        }
+
         if (db_getsession('DB_anousu') >= 2020) {
             $this->l20_cadinicial = 1;
             $this->l20_exercicioedital = db_getsession('DB_anousu');
@@ -1101,6 +1115,7 @@ class cl_liclicita
                 ,l20_mododisputa
                 ,l20_dataaberproposta
                 ,l20_dataencproposta
+                ,l20_amparolegal
                        )
                 values (
                  $this->l20_codigo
@@ -1156,6 +1171,7 @@ class cl_liclicita
                 ,$this->l20_mododisputa
                 ," . ($this->l20_dataaberproposta == "null" || $this->l20_dataaberproposta == "" ? "null" : "'" . $this->l20_dataaberproposta . "'") . "
                 ," . ($this->l20_dataencproposta == "null" || $this->l20_dataencproposta == "" ? "null" : "'" . $this->l20_dataencproposta . "'") . "
+                ,$this->l20_amparolegal
 
                       )";
         $result = db_query($sql);
@@ -1952,6 +1968,20 @@ class cl_liclicita
             }
         }
 
+        if (trim($this->l20_amparolegal != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_amparolegal"]))) {
+            $sql .= $virgula . " l20_amparolegal = $this->l20_amparolegal ";
+            $virgula = ",";
+            if ($this->l20_amparolegal == null) {
+                $this->erro_sql = " Campo Tipo da Natureza do Procedimento nao foi informada.";
+                $this->erro_campo = "l20_amparolegal";
+                $this->erro_banco = "";
+                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+        }
+
 
         if (trim($this->l20_critdesempate != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_critdesempate"]))) {
             $sql .= $virgula . " l20_critdesempate = $this->l20_critdesempate ";
@@ -2303,6 +2333,8 @@ class cl_liclicita
             //     }
             // }
         }
+        //print_r($sql);
+        //exit;
         $result = db_query($sql);
 
 
@@ -2544,6 +2576,7 @@ class cl_liclicita
                 $virgula = ",";
             }
         }
+        //print_r($sql);
         return $sql;
     }
 
