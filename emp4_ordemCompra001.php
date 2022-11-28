@@ -206,6 +206,7 @@ db_postmemory($HTTP_POST_VARS);
         }
 
         function js_mostracgm(erro, chave) {
+            document.getElementById('processar').disabled = false;
             document.form1.z01_nome.value = chave;
             if (erro == true) {
                 document.form1.e60_numcgm.focus();
@@ -214,6 +215,7 @@ db_postmemory($HTTP_POST_VARS);
         }
 
         function js_mostracgm1(chave1, chave2) {
+            document.getElementById('processar').disabled = false;
             document.form1.e60_numcgm.value = chave1;
             document.form1.z01_nome.value = chave2;
             db_iframe_cgm.hide();
