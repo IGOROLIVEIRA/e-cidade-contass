@@ -509,8 +509,8 @@ $rotulo->label("z01_cgccpf");
                 echo "<script>" . $funcao_js . "('{$e60_codemp}/{$e60_anousu}', false);</script>";
               } elseif (isset($lPesquisaPorCodigoEmpenho)) {
                 echo "<script>" . $funcao_js . "('{$e60_codemp}/{$e60_anousu}', '" . str_replace("'", "\'", $z01_nome) . "', '{$si172_nrocontrato}','{$si172_datafinalvigencia}','{$si174_novadatatermino}','{$e60_emiss}',false);</script>";
-              } elseif ($inclusaoordemcompra) {
-                echo "<script>" . $funcao_js . "('{$si172_nrocontrato}','{$si172_datafinalvigencia}','{$si174_novadatatermino}','{$pc30_liboccontrato}',false);</script>";
+              } elseif (isset($inclusaoordemcompra)) {
+                echo "<script>" . $funcao_js . "('{$e60_codemp}/{$e60_anousu}','{$si172_nrocontrato}','{$si172_datafinalvigencia}','{$si174_novadatatermino}','{$pc30_liboccontrato}',false);</script>";
               } else {
                 if ($funcao_js == 'parent.js_mostraempempenhotesta') {
                   echo "<script>" . $funcao_js . "('{$e60_codemp} / {$e60_anousu}', false);</script>";
