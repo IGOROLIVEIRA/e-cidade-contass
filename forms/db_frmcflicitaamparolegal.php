@@ -79,7 +79,7 @@
 
 			$numrows = pg_numrows($result);
 			for ($i = 0; $i < $numrows; $i++) {
-				$lei = str_replace(' ', '', pg_result($result, $i, "l212_lei"));
+				
 				echo "<tr>
                           <td  style='text-align:center; background:#e6e6e6; border: 1px solid #a4a4a4;'>
                               <input id=" . pg_result($result, $i, "l212_codigo") . " type='checkbox' class='marca_itens' name='aItensMarcados[]' value='" . pg_result($result, $i, "l212_codigo") . "'>
@@ -89,7 +89,7 @@
 					pg_result($result, $i, "l212_codigo") . "
 							</td>
 
-                        <td style='text-align:left; background:#cddecd; border: 1px solid #a4a4a4;padding-left: 25px;'>".$lei."</td></tr>";
+                        <td style='text-align:left; background:#cddecd; border: 1px solid #a4a4a4;padding-left: 25px;'>".pg_result($result, $i, "l212_lei")."</td></tr>";
 			}
 
 
