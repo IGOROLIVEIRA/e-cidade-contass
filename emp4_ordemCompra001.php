@@ -261,13 +261,7 @@ db_postmemory($HTTP_POST_VARS);
         }
 
         function js_mostraempempenho1(chave1, x, chave2, chave3, chave4, chave5, liberar) {
-            console.log(chave1);
-            console.log(x);
-            console.log(chave2);
-            console.log(chave3);
-            console.log(chave4);
-            console.log(chave5);
-            console.log(liberar);
+
             if (liberar == 1) {
                 if (chave3 != "") {
                     data1 = new Date(chave3);
@@ -322,9 +316,9 @@ db_postmemory($HTTP_POST_VARS);
                         }
                     }
                 }
-
-                document.form1.e60_codemp.value = '';
-                document.form1.e60_codemp.focus();
+                document.form1.e60_numemp.value = x;
+                document.form1.e60_codemp.value = chave1 + "/" + chave5;
+                db_iframe_empempenho.hide();
             }
 
         }
