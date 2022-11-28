@@ -59,7 +59,7 @@ $aSeqPontuacao = array();
 $i = 0;
 foreach ($fieldsAll as $fields) {
 
-    if (count($fields) != 10) {
+    if (count($fields) != 11) {
         db_redireciona('db_erros.php?fechar=true&db_erro=Arquivo inválido ');
     }
 

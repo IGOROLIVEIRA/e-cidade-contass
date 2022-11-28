@@ -1360,17 +1360,13 @@ class cl_liclicita
         }
 
         if (trim($this->l20_dtpubratificacao != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_dtpubratificacao"])) && ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103)) {
-            $sql .= $virgula . " l20_dtpubratificacao = '$this->l20_dtpubratificacao '";
+            if (trim($this->l20_numeroconvidado == null)) {
+                $sql .= $virgula . " l20_dtpubratificacao = null ";
             $virgula = ",";
-            if (trim($this->l20_dtpubratificacao) == null) {
-                $this->erro_sql = "Você informou um tipo de 'INEXIGIBILIDADE'. Para este tipo é  \\n\\n obrigatorio preencher os campos: Tipo de Processo, \\n\\n Data Publica??o Termo Ratifica??o, Veiculo de Divulga??o,Justificativa,Raz?o";
-                $this->erro_campo = "l20_dtpubratificacao";
-                $this->erro_banco = "";
-                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
-            }
+            }else{
+            $sql .= $virgula . " l20_dtpubratificacao = $this->l20_dtpubratificacao ";
+            $virgula = ",";
+        }
         }
 
         if (trim($this->l20_dtlimitecredenciamento != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_dtlimitecredenciamento"])) && ($tribunal == 102 || $tribunal == 103)) {
@@ -1424,7 +1420,7 @@ class cl_liclicita
                 return false;
             }
         }
-
+        
         if (trim($this->l20_numero != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_numero"]))) {
             $sql .= $virgula . " l20_numero = $this->l20_numero ";
             $virgula = ",";
