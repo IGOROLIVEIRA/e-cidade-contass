@@ -73,7 +73,7 @@
 
 			<?php
 			$instit = db_getsession("DB_instit");
-			$result = db_query("select * from amparolegal");
+			$result = db_query("select * from amparolegal order by l212_codigo");
 
 
 
