@@ -41,7 +41,7 @@ if (isset($_POST["salvar"])) {
     $pc01_data = explode("/", $pc01_data);
     $pc01_data = $pc01_data[2] . "-" . $pc01_data[1] . "-" . $pc01_data[0];
 
-
+    $itens = "";
 
     for ($i = 0; $i < count($descricao); $i++) {
         db_inicio_transacao();
@@ -94,17 +94,19 @@ if (isset($_POST["salvar"])) {
         $clpcmaterele->pc07_codmater = $clpcmater->pc01_codmater;
         $clpcmaterele->pc07_codele = $codele[$i];
         $clpcmaterele->incluir($clpcmater->pc01_codmater, $codele[$i]);
-
+        $codigoitens .= $clpcmater->pc01_codmater . ",";
 
         db_fim_transacao(false);
     }
+
+    $codigoitens = substr($codigoitens, 0, -1);
 
     db_msgbox($clpcmater->erro_msg);
 
     echo "<script> 
 
     Filtros = '';
-            Filtros += 'processodecompras='+$descricao;
+            Filtros += 'codigoitens='+'$codigoitens';
 
     var jan = window.open('com2_relatorioimportacaoitens.php?'+Filtros, '', 'location=0, width='+(screen.availWidth - 5)+
                 'width='+(screen.availWidth - 5)+', scrollbars=1');
@@ -493,7 +495,7 @@ if (isset($_POST["processar"])) {
                     $orcelemento = db_utils::fieldsMemory($rsResult, 0);
                     if ($orcelemento->o56_descr == "") {
                         echo "<td style='text-align:center; background-color:#f09999;'>";
-                        echo "<input style='text-align:center; width:90%; border:none; background-color:#f09999;' readonly='' type='text' name='desdobramento[]' value='" . $rown->pc07_codele . "'>";
+                        echo "<input title='Desdobramento não encontrado' style='text-align:center; width:90%; border:none; background-color:#f09999;' readonly='' type='text' name='desdobramento[]' value='" . $rown->pc07_codele . "'>";
                         echo "</td>";
                         $erro = true;
                     } else {
