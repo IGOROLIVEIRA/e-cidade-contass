@@ -2303,6 +2303,26 @@ function db_dotacaosaldo($nivel = 8, $tipo_nivel = 1, $tipo_saldo = 2, $descr = 
 
   return $resultdotacao;
 }
+function db_resto_a_pagar($sqlprinc){
+  $sqltot = "	select
+                                        sum(dot_ini) as totdot_ini,
+                                        sum(suplemen_acumulado) as totsuplemen_acumulado,
+                                        sum(especial_acumulado) as totespecial_acumulado,
+                                        sum(reduzido_acumulado) as totreduzido_acumulado,
+                                        sum(suplementado_acumulado) as totsuplementado_acumulado,
+                                        sum(empenhado) as totempenhado,
+                                        sum(anulado) as totanulado,
+                                        sum(liquidado) as totliquidado,
+                                        sum(pago) as totpago,
+                                        sum(atual_a_pagar) as totatual_a_pagar,
+                                        sum(empenhado_acumulado) as totempenhado_acumulado,
+                                        sum(anulado_acumulado) as totanulado_acumulado,
+                                        sum(liquidado_acumulado) as totliquidado_acumulado,
+                                        sum(pago_acumulado) as totpago_acumulado
+                                        from ($sqlprinc) as x where o58_orgao > 0";
+  return $sqltot;
+
+}
 
 function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr = true, $where = '', $anousu = null, $dataini = null, $datafim = null, $query = false, $campos = ' * ', $comit = true, $nivel_agrupar = 0)
 {
@@ -4793,5 +4813,6 @@ class cl_selorcdotacao
     if ($sepc != "")
       $this->recurso = $sele_work_recurso;
   }
+ 
 }
 ?>
