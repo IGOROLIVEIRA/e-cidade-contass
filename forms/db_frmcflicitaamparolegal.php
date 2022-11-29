@@ -73,7 +73,7 @@
 
 			<?php
 			$instit = db_getsession("DB_instit");
-			$result = db_query("select * from amparolegal");
+			$result = db_query("select * from amparolegal order by l212_codigo");
 
 
 
@@ -89,7 +89,7 @@
 					pg_result($result, $i, "l212_codigo") . "
 							</td>
 
-                        <td style='text-align:center; background:#cddecd; border: 1px solid #a4a4a4;'>" .
+                        <td style='text-align:left; background:#cddecd; border: 1px solid #a4a4a4;padding-left: 25px;'>" .
 					pg_result($result, $i, "l212_lei") . "
                         </td>
 

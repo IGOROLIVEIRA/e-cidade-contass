@@ -11,7 +11,7 @@ require_once("std/db_stdClass.php");
 $oJson             = new services_json();
 $oParam            = $oJson->decode(db_stdClass::db_stripTagsJson(str_replace("\\","",$_POST["json"])));
 $oRetorno          = new stdClass();
-
+$amparo = array();
       $sSql="SELECT pctipocompratribunal.l44_sequencial
       FROM cflicita
       INNER JOIN db_config ON db_config.codigo = cflicita.l03_instit
@@ -23,9 +23,26 @@ $oRetorno          = new stdClass();
       WHERE cflicita.l03_codigo = $oParam->codigo ";
       $result = db_query($sSql);
       $tribunal=pg_result($result,0,0);
-
+      
       $oRetorno->tribunal=$tribunal;
-	  echo $oJson->encode($oRetorno);
+
+      $sSql="select * from amparolegal where l212_codigo in (select l213_amparo from amparocflicita where l213_modalidade = $oParam->codigo)";
+      $result = db_query($sSql);
+      if(pg_numrows($result)==0 && $oParam->codigo==99){
+            $sSql="select * from amparolegal";
+            $result = db_query($sSql);
+            for ($x=0;$x<pg_numrows($result);$x++){
+                  db_fieldsmemory($result, $x);
+                  $oRetorno->amparo[$l212_codigo] = $l212_lei;
+            }
+      }else{
+            for ($x=0;$x<pg_numrows($result);$x++){
+                  db_fieldsmemory($result, $x);
+                  $oRetorno->amparo[$l212_codigo] = $l212_lei;
+            }
+      }
+      $oRetorno->numrows = pg_numrows($result);
+	echo $oJson->encode($oRetorno);
 
 ?>
 

@@ -442,7 +442,7 @@ class cl_acordo
             return false;
         }
 
-        if($this->ac16_acordocategoria == null ){
+        if ($this->ac16_acordocategoria == null) {
             $this->ac16_acordocategoria = "0";
         }
 
@@ -1059,16 +1059,12 @@ class cl_acordo
         }
 
         if (($this->ac16_licoutroorgao) != "" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_veiculodivulgacao"])) {
-            $sql  .= $virgula . " ac16_licoutroorgao = '$this->ac16_licoutroorgao' ";
-            $virgula = ",";
             if (($this->ac16_licoutroorgao) == null) {
-                $this->erro_sql = " Campo Licita��o Outro Org�o n�o informado.";
-                $this->erro_campo = "ac16_licoutroorgao";
-                $this->erro_banco = "";
-                $this->erro_msg   = "Usu�rio: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
+                $sql  .= $virgula . " ac16_licoutroorgao = null ";
+                $virgula = ",";
+            } else {
+                $sql  .= $virgula . " ac16_licoutroorgao = '$this->ac16_licoutroorgao' ";
+                $virgula = ",";
             }
         }
 
@@ -1360,7 +1356,7 @@ class cl_acordo
     {
         $sql = "select ";
         if ($campos != "*") {
-            $campos_sql = split("#", $campos);
+            $campos_sql = explode("#", $campos);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -1396,7 +1392,7 @@ class cl_acordo
         $sql .= $sql2;
         if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = split("#", $ordem);
+            $campos_sql = explode("#", $ordem);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -1410,7 +1406,7 @@ class cl_acordo
     {
         $sql = "select ";
         if ($campos != "*") {
-            $campos_sql = split("#", $campos);
+            $campos_sql = explode("#", $campos);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -1444,7 +1440,7 @@ class cl_acordo
         $sql .= $sql2;
         if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = split("#", $ordem);
+            $campos_sql = explode("#", $ordem);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -1458,7 +1454,7 @@ class cl_acordo
     {
         $sql = "select ";
         if ($campos != "*") {
-            $campos_sql = split("#", $campos);
+            $campos_sql = explode("#", $campos);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -1496,7 +1492,7 @@ class cl_acordo
         $sql .= $sql2;
         if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = split("#", $ordem);
+            $campos_sql = explode("#", $ordem);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -1512,7 +1508,7 @@ class cl_acordo
     {
         $sql = "select ";
         if ($campos != "*") {
-            $campos_sql = split("#", $campos);
+            $campos_sql = explode("#", $campos);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -1533,7 +1529,7 @@ class cl_acordo
         $sql .= $sql2;
         if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = split("#", $ordem);
+            $campos_sql = explode("#", $ordem);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -1597,10 +1593,11 @@ class cl_acordo
         return $sSql;
     }
 
-    function sql_query_completo( $ac16_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){
+    function sql_query_completo($ac16_sequencial = null, $campos = "*", $ordem = null, $dbwhere = "")
+    {
         $sql = "select ";
         if ($campos != "*") {
-            $campos_sql = split("#", $campos);
+            $campos_sql = explode("#", $campos);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -1651,7 +1648,7 @@ class cl_acordo
         $sql .= $sql2;
         if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = split("#", $ordem);
+            $campos_sql = explode("#", $ordem);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -1684,7 +1681,7 @@ class cl_acordo
     {
         $sql = "select ";
         if ($campos != "*") {
-            $campos_sql = split("#", $campos);
+            $campos_sql = explode("#", $campos);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -1723,7 +1720,7 @@ class cl_acordo
         $sql .= $sql2;
         if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = split("#", $ordem);
+            $campos_sql = explode("#", $ordem);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -1778,7 +1775,7 @@ class cl_acordo
         if ($ordem != null) {
 
             $sSqlAutorizacoes .= " order by ";
-            $campos_sql = split("#", $ordem);
+            $campos_sql = explode("#", $ordem);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
 
@@ -1864,7 +1861,7 @@ class cl_acordo
     {
         $sql = "select ";
         if ($campos != "*") {
-            $campos_sql = split("#", $campos);
+            $campos_sql = explode("#", $campos);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -1894,7 +1891,7 @@ class cl_acordo
         $sql .= $sql2;
         if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = split("#", $ordem);
+            $campos_sql = explode("#", $ordem);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -1987,7 +1984,7 @@ class cl_acordo
         if ($ordem != null) {
 
             $sql       .= " order by ";
-            $campos_sql = split("#", $ordem);
+            $campos_sql = explode("#", $ordem);
             $virgula    = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
 
@@ -2002,7 +1999,7 @@ class cl_acordo
 
         $sql = "select ";
         if ($campos != "*") {
-            $campos_sql = split("#", $campos);
+            $campos_sql = explode("#", $campos);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -2036,7 +2033,7 @@ class cl_acordo
         $sql .= $sql2;
         if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = split("#", $ordem);
+            $campos_sql = explode("#", $ordem);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -2087,7 +2084,7 @@ class cl_acordo
     {
         $sql = "select ";
         if ($campos != "*") {
-            $campos_sql = split("#", $campos);
+            $campos_sql = explode("#", $campos);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -2122,7 +2119,7 @@ class cl_acordo
         $sql .= $sql2;
         if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = split("#", $ordem);
+            $campos_sql = explode("#", $ordem);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];

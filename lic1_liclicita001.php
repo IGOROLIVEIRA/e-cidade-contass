@@ -102,7 +102,15 @@ if (isset($incluir)) {
 			$sqlerro = true;
 		}
 	}
-
+	$oParamLicicita = db_stdClass::getParametro('licitaparam', array(db_getsession("DB_instit")));
+	$l12_pncp = $oParamLicicita[0]->l12_pncp;
+	
+	if ($l20_leidalicitacao == 1 && $l12_pncp == 't') {
+		if($oPost->l212_codigo == 0){
+			$erro_msg .= 'Campo Amparo Legal não informado\n\n';
+			$sqlerro = true;
+		}
+	}
 	/*
     Verifica se o Campo "Natureza do Objeto" no foi selecionado.
   */
@@ -353,6 +361,7 @@ if (isset($incluir)) {
 		}
 
 		if ($sqlerro == false) {
+			$clliclicita->l20_amparolegal      	  =  $oPost->l212_codigo;
 			$clliclicita->l20_numero      	  =  $l20_numero;
 			$clliclicita->l20_edital      	  =  $l20_edital;
 			if ($anousu >= 2020) {

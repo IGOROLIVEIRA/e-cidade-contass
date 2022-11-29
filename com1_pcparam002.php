@@ -41,152 +41,154 @@ $oPost = db_utils::postMemory($_POST);
 $clpcparam   = new cl_pcparam;
 $cldb_config = new cl_db_config;
 $db_botao    = true;
-$lSqlErro 	 = false;
-$db_opcao 	 = 2;
+$lSqlErro    = false;
+$db_opcao    = 2;
 
 if (isset($oPost->incluir) || isset($oPost->alterar)) {
-	
+
   if ($oPost->pc30_validadepadraocertificado > 0 && $oPost->pc30_tipovalidade == 0) {
-      
-    $clpcparam->erro_status = 0;    
+
+    $clpcparam->erro_status = 0;
     $clpcparam->erro_msg    = "Usuário: \\n\\n Ao atualizar a Validade do Certificado você deve selecionar um Tipo de Validade. \\n\\n";
-    $lSqlErro               = true;       
-  } 
+    $lSqlErro               = true;
+  }
 }
 
 if (!$lSqlErro) {
-	
-	if (isset($oPost->incluir)) {
-		
-	  if (!$lSqlErro) {
-    	
-			db_inicio_transacao();
-		   
-			$clpcparam->pc30_notificaemail = 'false';
-			if (isset($pc30_notificaemail)) {
-			  $clpcparam->pc30_notificaemail = 'true';  
-			}
-			
-			$clpcparam->pc30_notificacarta = 'false';
-			if (isset($pc30_notificacarta)) {
-			  $clpcparam->pc30_notificacarta = 'true'; 
-			}
-			
-	    if (isset($pc30_fornecdeb) && $pc30_fornecdeb == 1) {
-	      if ($pc30_diasdebitosvencidos == null) {
-	        $clpcparam->pc30_diasdebitosvencidos = '0';
-	      }
-        $clpcparam->pc30_permitirgerarnotifdebitos = 'false'; 
+
+  if (isset($oPost->incluir)) {
+
+    if (!$lSqlErro) {
+
+      db_inicio_transacao();
+
+      $clpcparam->pc30_notificaemail = 'false';
+      if (isset($pc30_notificaemail)) {
+        $clpcparam->pc30_notificaemail = 'true';
       }
-			
-		  $clpcparam->incluir($oPost->pc30_instit);  
-		  if ($clpcparam->erro_status == 0) {
-		  	$lSqlErro = true;
-		  }
-		  
-		  db_fim_transacao($lSqlErro);
+
+      $clpcparam->pc30_notificacarta = 'false';
+      if (isset($pc30_notificacarta)) {
+        $clpcparam->pc30_notificacarta = 'true';
+      }
+
+      if (isset($pc30_fornecdeb) && $pc30_fornecdeb == 1) {
+        if ($pc30_diasdebitosvencidos == null) {
+          $clpcparam->pc30_diasdebitosvencidos = '0';
+        }
+        $clpcparam->pc30_permitirgerarnotifdebitos = 'false';
+      }
+
+      $clpcparam->incluir($oPost->pc30_instit);
+      if ($clpcparam->erro_status == 0) {
+        $lSqlErro = true;
+      }
+
+      db_fim_transacao($lSqlErro);
     }
-	
-	} else if(isset($oPost->alterar)) {
+  } else if (isset($oPost->alterar)) {
 
-		if (!$lSqlErro) {
-			
-            db_inicio_transacao();
+    if (!$lSqlErro) {
 
-            $clpcparam->pc30_notificaemail = 'false';
-            if (isset($pc30_notificaemail)) {
-                $clpcparam->pc30_notificaemail = 'true';
-            }
+      db_inicio_transacao();
 
-            $clpcparam->pc30_notificacarta = 'false';
-            if (isset($pc30_notificacarta)) {
-                $clpcparam->pc30_notificacarta = 'true';
-            }
+      $clpcparam->pc30_notificaemail = 'false';
+      if (isset($pc30_notificaemail)) {
+        $clpcparam->pc30_notificaemail = 'true';
+      }
 
-            if (isset($pc30_fornecdeb) && $pc30_fornecdeb == 1) {
-                if ($pc30_diasdebitosvencidos == null) {
-                    $clpcparam->pc30_diasdebitosvencidos = '0';
-                }
-                $clpcparam->pc30_permitirgerarnotifdebitos = 'false';
-            }
+      $clpcparam->pc30_notificacarta = 'false';
+      if (isset($pc30_notificacarta)) {
+        $clpcparam->pc30_notificacarta = 'true';
+      }
 
-            $clpcparam->pc30_emitedpsolicitante = $pc30_emitedpsolicitante == 't' ? 'true' : 'false';
-            $clpcparam->pc30_emitedpcompras     = $pc30_emitedpcompras == 't' ? 'true' : 'false';
+      if (isset($pc30_fornecdeb) && $pc30_fornecdeb == 1) {
+        if ($pc30_diasdebitosvencidos == null) {
+          $clpcparam->pc30_diasdebitosvencidos = '0';
+        }
+        $clpcparam->pc30_permitirgerarnotifdebitos = 'false';
+      }
 
-            $clpcparam->alterar($pc30_instit);
-            if ($clpcparam->erro_status == 0) {
-                $lSqlErro = true;
-            }
+      $clpcparam->pc30_emitedpsolicitante = $pc30_emitedpsolicitante == 't' ? 'true' : 'false';
+      $clpcparam->pc30_emitedpcompras     = $pc30_emitedpcompras == 't' ? 'true' : 'false';
+      $clpcparam->pc30_liboccontrato      = $pc30_liboccontrato == 't' ? 'true' : 'false';
 
-            db_fim_transacao($lSqlErro);
-		}
-	   
-	} else {
-		
-	  $rsConsultaParametros = $clpcparam->sql_record($clpcparam->sql_query(db_getsession("DB_instit")));
-	
-	  if ($clpcparam->numrows > 0 ) {	  	
-	  	db_fieldsmemory($rsConsultaParametros, 0);
-	  } else {
-	  	
-	  	$rsConfig 	 = $cldb_config->sql_record($cldb_config->sql_query_file(db_getsession('DB_instit'),"codigo, nomeinst"));
-	  	$oConfig 	   = db_utils::fieldsMemory($rsConfig, 0);
-	  	$pc30_instit = $oConfig->codigo;
-	  	$nomeinst	   = $oConfig->nomeinst;	  	
-	  	$db_opcao    = 1;
-	    
-	  }
-	}
+
+      $clpcparam->alterar($pc30_instit);
+      if ($clpcparam->erro_status == 0) {
+        $lSqlErro = true;
+      }
+
+      db_fim_transacao($lSqlErro);
+    }
+  } else {
+
+    $rsConsultaParametros = $clpcparam->sql_record($clpcparam->sql_query(db_getsession("DB_instit")));
+
+    if ($clpcparam->numrows > 0) {
+      db_fieldsmemory($rsConsultaParametros, 0);
+    } else {
+
+      $rsConfig    = $cldb_config->sql_record($cldb_config->sql_query_file(db_getsession('DB_instit'), "codigo, nomeinst"));
+      $oConfig      = db_utils::fieldsMemory($rsConfig, 0);
+      $pc30_instit = $oConfig->codigo;
+      $nomeinst     = $oConfig->nomeinst;
+      $db_opcao    = 1;
+    }
+  }
 }
 ?>
 <html>
+
 <head>
-<title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta http-equiv="Expires" CONTENT="0">
-<script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
-<link href="estilos.css" rel="stylesheet" type="text/css">
+  <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Expires" CONTENT="0">
+  <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+  <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
+
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onload="js_vericaparamfornecdeb();">
-<table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-  <tr> 
-    <td width="360" height="18">&nbsp;</td>
-    <td width="263">&nbsp;</td>
-    <td width="25">&nbsp;</td>
-    <td width="140">&nbsp;</td>
-  </tr>
-</table>
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="center" valign="top" bgcolor="#CCCCCC"> 
-    <center>
-			<?
-			  include("forms/db_frmpcparam.php");
-			?>
-    </center>
-	</td>
-  </tr>
-</table>
-<?
-db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
-?>
+  <table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
+    <tr>
+      <td width="360" height="18">&nbsp;</td>
+      <td width="263">&nbsp;</td>
+      <td width="25">&nbsp;</td>
+      <td width="140">&nbsp;</td>
+    </tr>
+  </table>
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td height="430" align="center" valign="top" bgcolor="#CCCCCC">
+        <center>
+          <?
+          include("forms/db_frmpcparam.php");
+          ?>
+        </center>
+      </td>
+    </tr>
+  </table>
+  <?
+  db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit"));
+  ?>
 </body>
+
 </html>
 <?
-if(isset($oPost->incluir)  || isset($oPost->alterar)){
-	
+if (isset($oPost->incluir)  || isset($oPost->alterar)) {
+
   if ($clpcparam->erro_status == "0") {
-  	
+
     $db_botao = true;
     $clpcparam->erro(true, false);
     echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
     if ($clpcparam->erro_campo != "") {
-    	
-      echo "<script> document.form1.".$clpcparam->erro_campo.".style.backgroundColor='#99A9AE';</script>";
-      echo "<script> document.form1.".$clpcparam->erro_campo.".focus();</script>";
+
+      echo "<script> document.form1." . $clpcparam->erro_campo . ".style.backgroundColor='#99A9AE';</script>";
+      echo "<script> document.form1." . $clpcparam->erro_campo . ".focus();</script>";
     }
   } else {
-    $clpcparam->erro(true,true);
+    $clpcparam->erro(true, true);
   }
 }
 ?>
