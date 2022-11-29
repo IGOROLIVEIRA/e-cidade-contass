@@ -25,7 +25,7 @@
 * licenca/licenca_pt.txt
 */
 
-$totalitens = 0;
+
 
 if (isset($_POST["salvar"])) {
     $descricao = $_POST['descricao'];
@@ -37,38 +37,73 @@ if (isset($_POST["salvar"])) {
     $tabela = $_POST['tabela'];
     $codele = $_POST['codele'];
 
-    db_inicio_transacao();
-
-    for ($i = 0; $i < count($descricao); $i++) {
-        $clpcmater = new cl_pcmater;
-        $sqlerro = false;
-
-        $clpcmater->$pc01_descrmater = $descricao[$i];
-        $clpcmater->pc01_data = $data[$i];
-        $clpcmater->pc01_servico   = $servico[$i];
-        $clpcmater->pc01_codsubgrupo = $codsubgrupo[$i];
-        $clpcmater->obras = "true";
-        $clpcmater->taxa   = "true";
-        $clpcmater->tabela = "true";
-    }
-
-    $pc01_data = $_POST["pc01_data"];
+    $pc01_data = $data[0];
     $pc01_data = explode("/", $pc01_data);
     $pc01_data = $pc01_data[2] . "-" . $pc01_data[1] . "-" . $pc01_data[0];
 
-    if (!empty($pc01_data)) {
-        $anousu = db_getsession('DB_anousu');
-        $instituicao = db_getsession('DB_instit');
-        $result = $clcondataconf->sql_record($clcondataconf->sql_query_file($anousu, $instituicao, "c99_datapat", null, null));
-        $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
 
-        if (strtotime($pc01_data) <= strtotime($c99_datapat)) {
-            $erro_msg = "O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.";
-            $sqlerro  = true;
-            db_msgbox($erro_msg);
+
+    for ($i = 0; $i < count($descricao); $i++) {
+        db_inicio_transacao();
+
+        $clpcmater = new cl_pcmater;
+        $clpcmaterele = new cl_pcmaterele;
+
+        $GLOBALS["HTTP_POST_VARS"]["pc01_conversao"] = 'f';
+        $GLOBALS["HTTP_POST_VARS"]["pc01_id_usuario"] = '0';
+        $GLOBALS["HTTP_POST_VARS"]["pc01_libaut"] = 'f';
+        $GLOBALS["HTTP_POST_VARS"]["pc01_veiculo"] = 'f';
+        $GLOBALS["HTTP_POST_VARS"]["pc01_veiculo"] = 'f';
+        $GLOBALS["HTTP_POST_VARS"]["pc01_fraciona"] = 'f';
+        $GLOBALS["HTTP_POST_VARS"]["pc01_validademinima"] = 'f';
+        $GLOBALS["HTTP_POST_VARS"]["pc01_obrigatorio"] = 'f';
+        $GLOBALS["HTTP_POST_VARS"]["pc01_liberaresumo"] = 'f';
+        $GLOBALS["HTTP_POST_VARS"]["pc01_obras"] = 'f';
+        $GLOBALS["HTTP_POST_VARS"]["pc01_taxa"] = 'f';
+        $GLOBALS["HTTP_POST_VARS"]["pc01_tabela"] = 'f';
+
+
+        $sqlerro = false;
+
+        $clpcmater->pc01_descrmater = $descricao[$i];
+        $clpcmater->pc01_data = $pc01_data;
+        $clpcmater->pc01_servico   = $servico[$i] == "Sim" ? "true" : "false";
+        $clpcmater->pc01_codsubgrupo = $codsubgrupo[$i];
+        $clpcmater->pc01_obras = $obra[$i] == "Sim" ? "true" : "false";
+        $clpcmater->pc01_taxa   = $taxa[$i] == "Sim" ? "true" : "false";
+        $clpcmater->pc01_tabela = $tabela[$i] == "Sim" ? "true" : "false";
+        $clpcmater->pc01_ativo =  "true";
+        $clpcmater->pc01_conversao = 'f';
+        $clpcmater->pc01_id_usuario =  db_getsession("DB_id_usuario");
+        $clpcmater->pc01_libaut = 'f';
+        $clpcmater->pc01_veiculo = 'f';
+        $clpcmater->pc01_fraciona = 'f';
+        $clpcmater->pc01_validademinima = 'f';
+        $clpcmater->pc01_obrigatorio = 'f';
+        $clpcmater->pc01_liberaresumo = 'f';
+
+
+
+        $clpcmater->incluir(null);
+        if ($clpcmater->erro_status = "0") {
+            db_msgbox($clpcmater->erro_msg);
+            break;
         }
+
+
+        $clpcmaterele->pc07_codmater = $clpcmater->pc01_codmater;
+        $clpcmaterele->pc07_codele = $codele[$i];
+        $clpcmaterele->incluir($clpcmater->pc01_codmater, $codele[$i]);
+
+
+        db_fim_transacao(false);
     }
+
+    db_msgbox($clpcmater->erro_msg);
 }
+
+$totalitens = 0;
+
 
 if (isset($_POST["processar"])) {
     $contTama = 1;
@@ -229,22 +264,6 @@ if (isset($_POST["processar"])) {
 
 
 <style>
-    #pc21_orcamfornedescr {
-        width: 296;
-    }
-
-    #tdcontrol {
-        width: 11%;
-    }
-
-    #dias_validade,
-    #dias_prazo,
-    #pc20_codorc,
-    #Exportarxlsforne,
-    #importar {
-        width: 91px;
-    }
-
     #uploadfile {
         height: 25px;
     }
@@ -357,7 +376,7 @@ if (isset($_POST["processar"])) {
 
 
             <?php
-
+            $erro = false;
             $i = 1;
             $tamanho = count($arrayItensPlanilha);
             if ($contTama == 1 && $tamanho == 0) {
@@ -374,8 +393,8 @@ if (isset($_POST["processar"])) {
                 if (mb_strlen($rown->pc01_descrmater, 'UTF-8') > 80) {
                     echo "<td style='text-align:center;'>";
                     echo "<input style='text-align:center; background-color:#f09999; width:90%; border:none;' readonly='' type='text' name='descricao[]' value='" . $rown->pc01_descrmater . "'>";
-                    //echo  $rown->pc01_descrmater;
                     echo "</td>";
+                    $erro = true;
                 } else {
                     echo "<td  style='text-align:center;'>";
                     echo "<input style='text-align:center; width:90%; border:none;' readonly='' type='text' name='descricao[]' value='" . $rown->pc01_descrmater . "'>";
@@ -385,18 +404,16 @@ if (isset($_POST["processar"])) {
                 echo "<td name='data[]' style='text-align:center;' >";
                 echo "<input style='text-align:center; width:90%; border:none;' readonly='' type='text' name='data[]' value='" . $pc01_data . "'>";
 
-                //echo $pc01_data;
                 echo "</td>";
 
                 if (mb_strtolower($rown->pc01_servico) != "sim" && mb_strtolower($rown->pc01_servico) != "não") {
                     echo "<td style='text-align:center;'>";
-                    echo "<input style='text-align:center; width:90%; border:none; background-color:#f09999;' readonly='' type='text' name='servico[]' value='" . $rown->pc01_servico . "'>";
-                    //echo $rown->pc01_servico;
+                    echo "<input style='text-align:center; width:90%; border:none; background-color:#f09999;' readonly='' type='text' name='servico[]' value='" . mb_convert_case($rown->pc01_servico, MB_CASE_TITLE, "ISO-8859-1")  . "'>";
                     echo "</td>";
+                    $erro = true;
                 } else {
                     echo "<td style='text-align:center;'>";
-                    echo "<input style='text-align:center; width:90%; border:none;' readonly='' type='text' name='servico[]' value='" . $rown->pc01_servico . "'>";
-                    //echo $rown->pc01_servico;
+                    echo "<input style='text-align:center; width:90%; border:none;' readonly='' type='text' name='servico[]' value='" . mb_convert_case($rown->pc01_servico, MB_CASE_TITLE, "ISO-8859-1") . "'>";
                     echo "</td>";
                 }
 
@@ -407,56 +424,52 @@ if (isset($_POST["processar"])) {
                     $pc04_descrsubgrupo = db_utils::fieldsMemory($rsResult, 0)->pc04_descrsubgrupo;
                     if ($pc04_descrsubgrupo == "") {
                         echo "<td style='text-align:center; '>";
-                        echo "<input style='text-align:center; width:90%; border:none; background-color:#f09999;' readonly='' type='text' name='codsubgrupo[]' value='" . $rown->pc01_codsubgrupo . "'>";
-                        //echo $rown->pc01_codsubgrupo;
+                        echo "<input style='text-align:center; width:90%; border:none; background-color:#f09999;' readonly='' type='text' name='subgrupo[]' value='" . $rown->pc01_codsubgrupo . "'>";
                         echo "</td>";
+                        $erro = true;
                     } else {
                         echo "<td style='text-align:center;'>";
-                        echo "<input style='text-align:center; width:90%; border:none;' readonly='' type='text' name='codsubgrupo[]' value='" . $rown->pc01_codsubgrupo . "'>";
-                        //echo $pc04_descrsubgrupo;
+                        echo "<input style='text-align:center; width:90%; border:none;' readonly='' type='text' name='subgrupo[]' value='" . $pc04_descrsubgrupo . "'>";
                         echo "</td>";
                     }
                 } else {
                     echo "<td style='text-align:center; background-color:#f09999;'>";
-                    echo "<input style='text-align:center; width:90%; border:none; background-color:#f09999;' readonly='' type='text' name='codsubgrupo[]' value='" . $rown->pc01_codsubgrupo . "'>";
-                    //echo $rown->pc01_codsubgrupo;
+                    echo "<input style='text-align:center; width:90%; border:none; background-color:#f09999;' readonly='' type='text' name='subgrupo[]' value='" . $rown->pc01_codsubgrupo . "'>";
                     echo "</td>";
+                    $erro = true;
                 }
 
 
                 if (mb_strtolower($rown->pc01_obras) != "sim" && mb_strtolower($rown->pc01_obras) != "não" && mb_strtolower($rown->pc01_obras) != "nao") {
                     echo "<td style='text-align:center; background-color:#f09999;'>";
-                    echo "<input style='text-align:center; width:90%; border:none; background-color:#f09999;' readonly='' type='text' name='obra[]' value='" . $rown->pc01_obras . "'>";
-                    //echo $rown->pc01_obras;
+                    echo "<input style='text-align:center; width:90%; border:none; background-color:#f09999;' readonly='' type='text' name='obra[]' value='" . mb_convert_case($rown->pc01_obras, MB_CASE_TITLE, "ISO-8859-1") . "'>";
                     echo "</td>";
+                    $erro = true;
                 } else {
                     echo "<td style='text-align:center;'>";
-                    echo "<input style='text-align:center; width:90%; border:none;' readonly='' type='text' name='obra[]' value='" . $rown->pc01_obras . "'>";
-                    //echo $rown->pc01_obras;
+                    echo "<input style='text-align:center; width:90%; border:none;' readonly='' type='text' name='obra[]' value='" . mb_convert_case($rown->pc01_obras, MB_CASE_TITLE, "ISO-8859-1") . "'>";
                     echo "</td>";
                 }
 
                 if (mb_strtolower($rown->pc01_tabela) != "sim" && mb_strtolower($rown->pc01_tabela) != "não" && mb_strtolower($rown->pc01_tabela) != "nao") {
                     echo "<td style='text-align:center;'>";
-                    echo "<input style='text-align:center; width:90%; border:none; background-color:#f09999;' readonly='' type='text' name='tabela[]' value='" . $rown->pc01_tabela . "'>";
-                    //echo $rown->pc01_tabela;
+                    echo "<input style='text-align:center; width:90%; border:none; background-color:#f09999;' readonly='' type='text' name='tabela[]' value='" . mb_convert_case($rown->pc01_tabela, MB_CASE_TITLE, "ISO-8859-1")  . "'>";
                     echo "</td>";
+                    $erro = true;
                 } else {
                     echo "<td style='text-align:center;'>";
-                    echo "<input style='text-align:center; width:90%; border:none;' readonly='' type='text' name='tabela[]' value='" . $rown->pc01_tabela . "'>";
-                    //echo $rown->pc01_tabela;
+                    echo "<input style='text-align:center; width:90%; border:none;' readonly='' type='text' name='tabela[]' value='" . mb_convert_case($rown->pc01_tabela, MB_CASE_TITLE, "ISO-8859-1") . "'>";
                     echo "</td>";
                 }
 
                 if (mb_strtolower($rown->pc01_taxa) != "sim" && mb_strtolower($rown->pc01_taxa) != "não" && mb_strtolower($rown->pc01_taxa) != "nao") {
                     echo "<td style='text-align:center; background-color:#f09999;'>";
-                    echo "<input style='text-align:center; width:90%; border:none; background-color:#f09999;' readonly='' type='text' name='taxa[]' value='" . $rown->pc01_taxa . "'>";
-                    //echo $rown->pc01_taxa;
+                    echo "<input style='text-align:center; width:90%; border:none; background-color:#f09999;' readonly='' type='text' name='taxa[]' value='" . mb_convert_case($rown->pc01_taxa, MB_CASE_TITLE, "ISO-8859-1") . "'>";
                     echo "</td>";
+                    $erro = true;
                 } else {
                     echo "<td style='text-align:center;'>";
-                    echo "<input style='text-align:center; width:90%; border:none;' readonly='' type='text' name='taxa[]' value='" . $rown->pc01_taxa . "'>";
-                    //echo $rown->pc01_taxa;
+                    echo "<input style='text-align:center; width:90%; border:none;' readonly='' type='text' name='taxa[]' value='" . mb_convert_case($rown->pc01_taxa, MB_CASE_TITLE, "ISO-8859-1") . "'>";
                     echo "</td>";
                 }
 
@@ -468,24 +481,28 @@ if (isset($_POST["processar"])) {
                     if ($orcelemento->o56_descr == "") {
                         echo "<td style='text-align:center; background-color:#f09999;'>";
                         echo "<input style='text-align:center; width:90%; border:none; background-color:#f09999;' readonly='' type='text' name='desdobramento[]' value='" . $rown->pc07_codele . "'>";
-                        //echo $rown->pc07_codele;
                         echo "</td>";
+                        $erro = true;
                     } else {
                         echo "<td style='text-align:center;'>";
                         echo "<input style='text-align:center; width:90%; border:none;' readonly='' type='text' name='desdobramento[]' value='" . $orcelemento->o56_elemento . " - " . $orcelemento->o56_descr . "'>";
-                        //echo $orcelemento->o56_elemento . " - " . $orcelemento->o56_descr;
                         echo "</td>";
                     }
                 } else {
                     echo "<td style='text-align:center; background-color:#f09999;'>";
                     echo "<input style='text-align:center; width:90%; border:none; background-color:#f09999;' readonly='' type='text' name='desdobramento[]' value='" . $rown->pc07_codele . "'>";
-                    //echo $rown->pc07_codele;
                     echo "</td>";
+                    $erro = true;
                 }
 
                 echo "<td style='text-align:center; display:none;'>";
-                echo "<input style='text-align:center; width:90%; border:none; display:none;' readonly='' type='text' name='desdobramento[]' value='" . $rown->pc07_codele . "'>";
+                echo "<input style='text-align:center; width:90%; border:none; display:none;' readonly='' type='text' name='codele[]' value='" . $rown->pc07_codele . "'>";
                 echo "</td>";
+
+                echo "<td style='text-align:center; display:none;'>";
+                echo "<input style='text-align:center; width:90%; border:none; display:none;' readonly='' type='text' name='codsubgrupo[]' value='" . $rown->pc01_codsubgrupo . "'>";
+                echo "</td>";
+
 
                 echo "</tr>";
                 $i++;
@@ -516,6 +533,10 @@ if (isset($_POST["processar"])) {
         echo  "<input style='margin-top: 10px;' type='submit' id='salvar' name='salvar'  value='Salvar'>";
     } else {
         echo  "<input style='margin-top: -200px;' type='submit' id='salvar' value='Salvar' name='salvar'>";
+    }
+    if ($erro) {
+        echo "<script> document.getElementById('salvar').disabled = true; </script>";
+        echo "<script>  alert('Corrija os itens grifados em vermelho e reprocesse a planilha.'); </script>";
     }
 
     ?>

@@ -32,6 +32,8 @@ include("libs/db_usuariosonline.php");
 include("dbforms/db_funcoes.php");
 include("libs/db_utils.php");
 include("libs/PHPExcel/Classes/PHPExcel.php");
+include("classes/db_pcmater_classe.php");
+include("classes/db_pcmaterele_classe.php");
 
 db_postmemory($HTTP_POST_VARS);
 
