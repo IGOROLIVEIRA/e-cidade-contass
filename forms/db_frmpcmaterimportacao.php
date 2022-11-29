@@ -100,6 +100,19 @@ if (isset($_POST["salvar"])) {
     }
 
     db_msgbox($clpcmater->erro_msg);
+
+    echo "<script> 
+
+    Filtros = '';
+            Filtros += 'processodecompras='+$descricao;
+
+    var jan = window.open('com2_relatorioimportacaoitens.php?'+Filtros, '', 'location=0, width='+(screen.availWidth - 5)+
+                'width='+(screen.availWidth - 5)+', scrollbars=1');
+            jan.moveTo(0, 0);
+
+    </script>
+    
+    ";
 }
 
 $totalitens = 0;
