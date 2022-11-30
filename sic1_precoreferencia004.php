@@ -7,7 +7,7 @@
     parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
     db_postmemory($HTTP_POST_VARS);
     $clitemprecoreferencia = new cl_itemprecoreferencia;
-    ini_set('display_errors', 'on');
+    //ini_set('display_errors', 'on');
 
     switch ($oGet->tipoprecoreferencia) {
         case '2':
@@ -210,7 +210,8 @@
                 m61_usaquant,
                 pc69_seq,
                 pc11_reservado,
-                si02_vlprecoreferencia
+                si02_vlprecoreferencia,
+                si01_justificativa
                 FROM pcprocitem
                 JOIN solicitem ON pc11_codigo=pc81_solicitem
                 JOIN solicita ON pc10_numero = pc11_numero
@@ -221,6 +222,7 @@
                 JOIN pcorcamitemproc ON pc31_pcprocitem=pc81_codprocitem
                 JOIN pcorcamitem ON pc22_orcamitem=pc31_orcamitem
                 JOIN itemprecoreferencia ON si02_itemproccompra = pc22_orcamitem
+                JOIN precoreferencia ON si02_precoreferencia = si01_sequencial
                 JOIN pcorcamval ON pc23_orcamitem=pc22_orcamitem
                 JOIN pcorcamforne ON pc21_orcamforne=pc23_orcamforne
                 AND pc23_orcamitem=pc22_orcamitem

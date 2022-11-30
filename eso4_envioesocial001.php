@@ -18,9 +18,13 @@ $clrotulo->label("o124_descricao");
 $clrotulo->label("o124_sequencial");
 $clrotulo->label("o15_descr");
 $clrotulo->label("o15_codigo");
-
-$anofolha = DBPessoal::getAnoFolha();
-$mesfolha = DBPessoal::getMesFolha();
+try {
+    $anofolha = DBPessoal::getAnoFolha();
+    $mesfolha = DBPessoal::getMesFolha();
+} catch(Exception $error) {
+    $anofolha = db_getsession("DB_anousu");
+    $mesfolha = date("m", db_getsession("DB_datausu"));
+}
 ?>
 <html>
 

@@ -21,6 +21,7 @@ class cl_parametroscontratos {
   public $pc01_liberarsemassinaturaaditivo = 'f';
   public $pc01_libcontratodepart = 't';
   public $pc01_liberargerenciamentocontratos = 'f';
+  public $pc01_liberarsaldoposicao = 'f';
   // cria propriedade com as variaveis do arquivo
   public $campos = "
                  pc01_liberaautorizacao = bool = Liberar autorização de empenho sem assinatura
@@ -28,6 +29,7 @@ class cl_parametroscontratos {
                  pc01_liberarsemassinaturaaditivo = bool = Liberar autotização de empenho sem assinatura de aditivo
                  pc01_libcontratodepart = bool = Controlar a alteração de dados do contrato por departamento
                  pc01_liberargerenciamentocontratos = bool = Liberar Gerenciamento de Contratos
+                 pc01_liberarsaldoposicao = bool = Liberar o controle de saldo por porsicao de contrato
                  ";
 
   //funcao construtor da classe
@@ -55,6 +57,7 @@ class cl_parametroscontratos {
        $this->pc01_liberarsemassinaturaaditivo = ($this->pc01_liberarsemassinaturaaditivo == "f"?@$GLOBALS["HTTP_POST_VARS"]["pc01_liberarsemassinaturaaditivo"]:$this->pc01_liberarsemassinaturaaditivo);
        $this->pc01_libcontratodepart = ($this->pc01_libcontratodepart == "t" ? @$GLOBALS["HTTP_POST_VARS"]["pc01_libcontratodepart"] : $this->pc01_libcontratodepart);
        $this->pc01_liberargerenciamentocontratos = ($this->pc01_liberargerenciamentocontratos == "t" ? @$GLOBALS["HTTP_POST_VARS"]["pc01_liberargerenciamentocontratos"] : $this->pc01_liberargerenciamentocontratos);
+       $this->pc01_liberarsaldoposicao = ($this->pc01_liberarsaldoposicao == "t" ? @$GLOBALS["HTTP_POST_VARS"]["pc01_liberarsaldoposicao"] : $this->pc01_liberarsaldoposicao);
       } else {
      }
    }
@@ -107,12 +110,22 @@ class cl_parametroscontratos {
       $this->erro_status = "0";
       return false;
     }
+    if ($this->pc01_liberarsaldoposicao == null ) {
+      $this->erro_sql = " Campo Liberar gerenciamento de saldo por posicao de contratos";
+      $this->erro_campo = "pc01_liberarsaldoposicao";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
      $sql = "insert into parametroscontratos(
                                        pc01_liberaautorizacao,
                                        pc01_liberarcadastrosemvigencia,
                                        pc01_liberarsemassinaturaaditivo,
                                        pc01_libcontratodepart,
-                                       pc01_liberargerenciamentocontratos
+                                       pc01_liberargerenciamentocontratos,
+                                       pc01_liberarsaldoposicao
                        )
                 values (
                                 '$this->pc01_liberaautorizacao' ,
@@ -120,6 +133,7 @@ class cl_parametroscontratos {
                                 '$this->pc01_liberarsemassinaturaaditivo' ,
                                 '$this->pc01_libcontratodepart',
                                 '$this->pc01_liberargerenciamentocontratos'
+                                '$this->pc01_liberarsaldoposicao'
                       )";
      $result = db_query($sql);
      if ($result==false) {
@@ -222,6 +236,19 @@ class cl_parametroscontratos {
             return false;
         }
     }
+    if (trim($this->pc01_liberarsaldoposicao) !="" || isset($GLOBALS["HTTP_POST_VARS"]["pc01_liberarsaldoposicao"])) {
+      $sql  .= $virgula." pc01_liberarsaldoposicao = '$this->pc01_liberarsaldoposicao' ";
+      $virgula = ",";
+      if (trim($this->pc01_liberarsaldoposicao) == null ) {
+          $this->erro_sql = " Campo Liberar gerenciamento de saldo por posicao de contratos.";
+          $this->erro_campo = "pc01_liberarsaldoposicao";
+          $this->erro_banco = "";
+          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+          $this->erro_status = "0";
+          return false;
+      }
+  }
      $result = db_query($sql);
      if ($result==false) {
        $this->erro_banco = str_replace("\n","",@pg_last_error());

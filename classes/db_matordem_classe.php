@@ -624,6 +624,43 @@ class cl_matordem
     }
     return $sql;
   }
+  function sql_query_instit($m51_codordem = null, $campos = "*", $ordem = null, $dbwhere = "")
+  {
+    $sql = "select ";
+    if ($campos != "*") {
+      $campos_sql = split("#", $campos);
+      $virgula = "";
+      for ($i = 0; $i < sizeof($campos_sql); $i++) {
+        $sql .= $virgula . $campos_sql[$i];
+        $virgula = ",";
+      }
+    } else {
+      $sql .= $campos;
+    }
+    $sql .= " from matordem                                                                                       ";
+    $sql .= "  inner join cgm on cgm.z01_numcgm = matordem.m51_numcgm                                             ";
+    $sql .= "    inner join db_depart on db_depart.coddepto = matordem.m51_depto                                  ";
+    $sql .= "    inner join db_depart as db_depart_origem on db_depart_origem.coddepto = matordem.m51_deptoorigem and db_depart.instit = ".db_getsession("DB_instit");
+    $sql2 = "    inner join db_config on db_config.codigo = db_depart.instit                                      ";
+    if ($dbwhere == "") {
+      if ($m51_codordem != null) {
+        $sql2 .= " where matordem.m51_codordem = $m51_codordem ";
+      }
+    } else if ($dbwhere != "") {
+      $sql2 = " where $dbwhere";
+    }
+    $sql .= $sql2;
+    if ($ordem != null) {
+      $sql .= " order by ";
+      $campos_sql = split("#", $ordem);
+      $virgula = "";
+      for ($i = 0; $i < sizeof($campos_sql); $i++) {
+        $sql .= $virgula . $campos_sql[$i];
+        $virgula = ",";
+      }
+    }
+    return $sql;
+  }
   function sql_query_anu($m51_codordem = null, $campos = "*", $ordem = null, $dbwhere = "")
   {
     $sql = "select ";

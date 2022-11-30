@@ -56,8 +56,17 @@ $clorcprograma = new cl_orcprograma;
 $clorcprojativ = new cl_orcprojativ;
 $clorcparametro = new cl_orcparametro;
 $clorctiporec = new cl_orctiporec;
+$clorcsuplementacaoparametro = new cl_orcsuplementacaoparametro;
 $db_opcao = 22;
 $db_botao = false;
+
+function saberStatusDoOrcamento($clorcsuplementacaoparametro){
+	$result = $clorcsuplementacaoparametro->sql_record($clorcsuplementacaoparametro->sql_query(db_getsession("DB_anousu"),"*"));
+	db_fieldsmemory($result,0);
+}
+
+saberStatusDoOrcamento($clorcsuplementacaoparametro);
+
 if((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Alterar"){
   db_inicio_transacao();
   $erro_trans = false;
@@ -112,6 +121,13 @@ if((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Alterar
     $clorcdotacao->erro_msg = "Elemento não Cadastrado.";
     $clorcdotacao->erro_status = 0;
   }
+ 
+  if($o134_orcamentoaprovado == 't' && $o58_valor > 0){
+		$erro_trans = true;
+		$clorcdotacao->erro_msg = "ORÇAMENTO APROVADO. O PROCEDIMENTO NÃO PODE SER REALIZADO..";
+		$clorcdotacao->erro_status = 0;
+	}	
+
   db_fim_transacao($erro_trans);
   $db_opcao = 2;
 }else if(isset($chavepesquisa)){
@@ -124,6 +140,8 @@ if((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Alterar
    $db_botao = true;
 }
 
+if($o134_orcamentoaprovado == 't')
+    // $db_opcao = 3; 
 ?>
 <html>
 <head>

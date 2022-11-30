@@ -1012,7 +1012,7 @@ where j18_anousu = iptucalc.j23_anousu and j21_matric = iptucalc.j23_matric limi
         $sql .= "                 r.k00_dtvenc as dtvencunicuni, ";
         $sql .= "                 r.k00_dtoper as dtoperunic, ";
         $sql .= "                 r.k00_percdes, ";
-        $sql .= "                 fc_calcula(r.k00_numpre,0,0,r.k00_dtvenc,r.k00_dtvenc,".db_getsession("DB_anousu").") ";
+        $sql .= "                 fc_calcula(r.k00_numpre,0,0,r.k00_dtvenc,r.k00_dtvenc,".db_getsession("DB_anousu").",null,r.k00_receit) ";
         $sql .= "            from recibounica r ";
         $sql .= "           where r.k00_numpre = ".$k00_numpre;
         if ($datasUnicas != "") {

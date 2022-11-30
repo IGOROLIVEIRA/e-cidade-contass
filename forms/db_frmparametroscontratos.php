@@ -66,6 +66,17 @@ $clparametroscontratos->rotulo->label();
           ?>
         </td>
       </tr>
+      <tr>
+        <td nowrap title="<?= @$pc01_liberarsaldoposicao ?>">
+          <input name="oid" type="hidden" value="<?= @$oid ?>">
+          Saldo Controlado por posição:
+        </td>
+        <td>
+          <?php
+          db_select('pc01_liberarsaldoposicao', array('f' => 'NAO', 't' => 'SIM'), true, $db_opcao);
+          ?>
+        </td>
+      </tr>
     </table>
     <table>
       <tr>
