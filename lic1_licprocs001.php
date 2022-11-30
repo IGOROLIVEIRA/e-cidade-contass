@@ -376,9 +376,9 @@ if ($clliclicita->numrows > 0) {
 </body>
 <script>
     if (document.getElementById('codprocanu').value == '') {
-        top.corpo.iframe_liclicita.document.form1.l20_tipojulg.disabled = false;
+        CurrentWindow.corpo.iframe_liclicita.document.form1.l20_tipojulg.disabled = false;
     } else {
-        top.corpo.iframe_liclicita.document.form1.l20_tipojulg.disabled = true;
+        CurrentWindow.corpo.iframe_liclicita.document.form1.l20_tipojulg.disabled = true;
     }
 </script>
 

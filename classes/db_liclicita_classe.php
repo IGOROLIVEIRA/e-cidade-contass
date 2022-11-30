@@ -1362,11 +1362,11 @@ class cl_liclicita
         if (trim($this->l20_dtpubratificacao != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_dtpubratificacao"])) && ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103)) {
             if (trim($this->l20_numeroconvidado == null)) {
                 $sql .= $virgula . " l20_dtpubratificacao = null ";
-            $virgula = ",";
-            }else{
-            $sql .= $virgula . " l20_dtpubratificacao = $this->l20_dtpubratificacao ";
-            $virgula = ",";
-        }
+                $virgula = ",";
+            } else {
+                $sql .= $virgula . " l20_dtpubratificacao = $this->l20_dtpubratificacao ";
+                $virgula = ",";
+            }
         }
 
         if (trim($this->l20_dtlimitecredenciamento != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_dtlimitecredenciamento"])) && ($tribunal == 102 || $tribunal == 103)) {
@@ -1420,7 +1420,7 @@ class cl_liclicita
                 return false;
             }
         }
-        
+
         if (trim($this->l20_numero != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_numero"]))) {
             $sql .= $virgula . " l20_numero = $this->l20_numero ";
             $virgula = ",";
@@ -4006,7 +4006,7 @@ class cl_liclicita
         false as orcamentoSigiloso,
         liclicita.l20_recdocumentacao as dataAberturaProposta,
         liclicita.l20_recdocumentacao as dataEncerramentoProposta,
-        1 as amparoLegalId,
+        liclicita.l20_amparolegal as amparoLegalId,
         liclicita.l20_linkpncp as linkSistemaOrigem,
         pc80_codproc
         from liclicita

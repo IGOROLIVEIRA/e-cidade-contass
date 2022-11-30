@@ -195,6 +195,7 @@ db_app::load("time.js");
             alert(oRetornoLicitacoes.message.urlDecode());
         } else {
             alert('Enviado com Sucesso !');
+            window.location.href = "lic1_pncpavisolicitacao001.php";
         }
     }
 </script>

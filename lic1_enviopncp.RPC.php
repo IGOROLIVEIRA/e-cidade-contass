@@ -114,7 +114,7 @@ switch ($oParam->exec) {
                     $clliccontrolepncp->l213_instit = db_getsession('DB_instit');
                     $clliccontrolepncp->incluir();
 
-                    $oRetorno->status  = 2;
+                    $oRetorno->status  = 1;
                 } else {
                     throw new Exception(utf8_decode($rsApiPNCP->message));
                 }
