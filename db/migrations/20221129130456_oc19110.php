@@ -18,7 +18,7 @@ class Oc19110 extends AbstractMigration
         SET
           o134_orcamentoaprovado = 't'
         WHERE
-          o134_anousu = 2022
+          o134_anousu = 2022;
   
         COMMIT;
 
