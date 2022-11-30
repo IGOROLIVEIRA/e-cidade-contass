@@ -35,16 +35,27 @@ parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 $clrotulo = new rotulocampo;
 $lFail    = false;
 if (isset($uploadfile)) {
-    ini_set('display_errors', 'on');
     // Nome do novo arquivo
     $nomearq = $_FILES["uploadfile"]["name"];
 
     // Nome do arquivo temporário gerado no /tmp
     $nometmp = $_FILES["uploadfile"]["tmp_name"];
 
-    // Seta o nome do arquivo destino do upload
-    $arquivoDocument = db_removeAcentuacao("model/licitacao/PNCP/anexoslicitacao/$nomearq");
+    $extensao = strtolower(substr($nomearq, -4));
 
+    if ($extensao != ".pdf") {
+        db_msgbox("Arquivo inválido! O arquivo selecionado deve ser do tipo PDF");
+        unlink($nometmp);
+        $lFail = true;
+        return false;
+    }
+
+    if ($extensao == ".pdf") {
+        $novo_nome = md5(time()) . $extensao;
+    }
+
+    // Seta o nome do arquivo destino do upload
+    $arquivoDocument = db_removeAcentuacao("model/licitacao/PNCP/anexoslicitacao/$novo_nome");
 
     // Faz um upload do arquivo para o local especificado
     if (copy($nometmp, $arquivoDocument)) {
@@ -110,6 +121,8 @@ if (isset($uploadfile)) {
         }
         echo "parent.endLoading();";
         echo "parent.$('teste').removeChild(parent.$('uploadIframe'));";
+    } else {
+        echo "parent.endLoading();";
     }
     ?>
 </script>
