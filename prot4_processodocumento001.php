@@ -143,34 +143,26 @@ $oRotulo->label("z01_nome");
             </td>
             <td>
               <?
-              if ($adm == 1) {
-                $usuario = db_getsession('DB_id_usuario');
-                $result = db_query("select distinct p203_permanexo,p202_sequencial,p202_tipo  from perfispermanexo
+
+              if ($adm = 1) {
+                $rsPermissoes = db_query("select distinct p203_permanexo,p202_sequencial,p202_tipo  from perfispermanexo
                 inner join db_permherda p203_perfil on p203_perfil = id_perfil
                 inner join permanexo  p203_permanexo on p203_permanexo  = p202_sequencial order by p203_permanexo; 
                ");
-                $numrows = pg_numrows($result);
+                $numrows = pg_numrows($rsPermissoes);
               } else {
                 $usuario = db_getsession('DB_id_usuario');
-                $result = db_query("select distinct p203_permanexo,p202_sequencial,p202_tipo  from perfispermanexo
+                $rsPermissoes = db_query("select distinct p203_permanexo,p202_sequencial,p202_tipo  from perfispermanexo
                 inner join db_permherda p203_perfil on p203_perfil = id_perfil
-                inner join permanexo  p203_permanexo on p203_permanexo  = p202_sequencial where id_usuario = $usuario; 
+                inner join permanexo  p203_permanexo on p203_permanexo  = p202_sequencial where id_usuario = $usuario or p202_sequencial = 1 order by p202_sequencial; 
                ");
-                $numrows = pg_numrows($result);
-                $result2 = db_query("select distinct p203_permanexo,p202_sequencial,p202_tipo  from perfispermanexo
-                inner join db_permherda p203_perfil on p203_perfil = id_perfil
-                inner join permanexo  p203_permanexo on p203_permanexo  = p202_sequencial where p202_sequencial = 1; 
-               ");
-                $numrows2 = pg_numrows($result2);
-                $permissoes = array();
-                $permissoes[pg_result($result2, 0, "p202_sequencial")] =  pg_result($result2, 0, "p202_tipo");
+                $numrows = pg_numrows($rsPermissoes);
               }
 
 
 
               for ($i = 0; $i < $numrows; $i++) {
-
-                $permissoes[pg_result($result, $i, "p202_sequencial")] = pg_result($result, $i, "p202_tipo");
+                $permissoes[pg_result($rsPermissoes, $i, "p202_sequencial")] = pg_result($rsPermissoes, $i, "p202_tipo");
               }
 
 
@@ -670,7 +662,7 @@ $oRotulo->label("z01_nome");
     $('btnSalvar').onclick = function() {
 
       var iCodigoProcesso = $('p58_codproc').value;
-      var sDescricaoDocumento = descricaoDocumento;
+      var sDescricaoDocumento = encodeURIComponent(tagString($('p01_descricao').value));
       var iNivelAcesso = $('p01_nivelacesso').value;
 
       var oParam = new Object();
@@ -992,6 +984,7 @@ $oRotulo->label("z01_nome");
     var iCodigoProcesso = $('p58_codproc').value;
     var iCodigoDocumento = $('p01_sequencial').value;
     var sDescricaoDocumento = encodeURIComponent(tagString($('p01_descricao').value));
+
     var sCaminhoArquivo = $('namefile').value;
     var iNivelAcesso = $('p01_nivelacesso').value;
 
