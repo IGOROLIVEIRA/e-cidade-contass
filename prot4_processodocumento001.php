@@ -144,7 +144,7 @@ $oRotulo->label("z01_nome");
             <td>
               <?
 
-              if ($adm = 1) {
+              if ($adm == 1) {
                 $rsPermissoes = db_query("select distinct p203_permanexo,p202_sequencial,p202_tipo  from perfispermanexo
                 inner join db_permherda p203_perfil on p203_perfil = id_perfil
                 inner join permanexo  p203_permanexo on p203_permanexo  = p202_sequencial order by p203_permanexo; 
