@@ -44,3 +44,5 @@ extension/data/config.data
 extension/modification/data/modification/dbportal-v3-desktop.data
 composer.lock
 webservices/environments/
+model/licitacao/PNCP/arquivos/anexoslicitacao/*
+model/licitacao/PNCP/arquivos/arquivos/*
