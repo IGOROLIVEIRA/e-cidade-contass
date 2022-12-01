@@ -15,7 +15,7 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
      *
      * @param \stdClass $dados
      */
-    function __construct($dados)
+    function __construct($dados = null)
     {
         parent::__construct($dados);
     }
@@ -107,8 +107,7 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
         $oDadosAPI->linkSistemaOrigem               = $oDado->linksistemaorigem;
 
         $aDadosAPI = json_encode($oDadosAPI);
-        echo "<pre>";
-        print_r($aDadosAPI);
-        exit;
+
+        return $aDadosAPI;
     }
 }

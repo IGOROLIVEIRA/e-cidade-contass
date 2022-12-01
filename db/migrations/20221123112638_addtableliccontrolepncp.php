@@ -19,7 +19,7 @@ class Addtableliccontrolepncp extends AbstractMigration
             insert into licsituacaocontrolepncp values(1,'Enviada');
             insert into licsituacaocontrolepncp values(2,'Ratificada');
             insert into licsituacaocontrolepncp values(3,'Excluida');
-
+            
             CREATE TABLE liccontrolepncp(
                 l213_sequencial           int8 NOT NULL,
                 l213_licitacao            int8 NOT NULL,
@@ -27,6 +27,8 @@ class Addtableliccontrolepncp extends AbstractMigration
                 l213_dtlancamento         date NOT NULL,
                 l213_numerocontrolepncp   text NOT NULL,
                 l213_situacao			  int8 NOT NULL,
+                l213_numerocompra   	  int8 NOT NULL,
+                l213_anousu 			  int8 NOT NULL,
                 l213_instit               int8 NOT NULL,
                 PRIMARY KEY (l213_sequencial),
                 FOREIGN KEY (l213_licitacao) REFERENCES liclicita (l20_codigo)

@@ -163,7 +163,7 @@ db_app::load("time.js");
         } else if (tipo == 2) {
             oParam.exec = "RetificarAviso";
         } else {
-            oParam.exec = "ExcluirAviso";
+            oParam.exec = "excluiraviso";
         }
         oParam.ambiente = $F('ambiente');
         oParam.aLicitacoes = new Array();
@@ -172,8 +172,14 @@ db_app::load("time.js");
 
             with(aLicitacoes[i]) {
                 var licitacao = new Object();
+                let numerocontrole = aCells[5].getValue();
+                if (tipo == '2' && numerocontrole.length == 1) {
+                    alert('Licitao Selecionada não esta presente no PNCP');
+                    return false;
+                }
                 licitacao.codigo = aCells[1].getValue();
                 licitacao.processo = aCells[2].getValue();
+                licitacao.numerocontrole = numerocontrole;
                 oParam.aLicitacoes.push(licitacao);
             }
         }
@@ -194,8 +200,9 @@ db_app::load("time.js");
         if (oRetornoLicitacoes.status == '2') {
             alert(oRetornoLicitacoes.message.urlDecode());
         } else {
-            alert('Enviado com Sucesso !');
-            window.location.href = "lic1_pncpavisolicitacao001.php";
+            if (confirm(oRetornoLicitacoes.message.urlDecode())) {
+                window.location.href = "lic1_pncpavisolicitacao001.php";
+            }
         }
     }
 </script>
