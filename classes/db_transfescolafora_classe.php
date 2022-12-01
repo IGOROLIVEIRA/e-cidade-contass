@@ -592,6 +592,7 @@ class cl_transfescolafora {
      $sql .= "      inner join bairro  on  bairro.j13_codi = escola.ed18_i_bairro";
      $sql .= "      inner join ruas  on  ruas.j14_codigo = escola.ed18_i_rua";
      $sql .= "      inner join db_depart  on  db_depart.coddepto = escola.ed18_i_codigo";
+     $sql .= "      left join obstransferencia on obstransferencia.ed283_i_escola = escola.ed18_i_codigo";
      $sql2 = "";
      if (empty($dbwhere)) {
        if (!empty($ed104_i_codigo)) {

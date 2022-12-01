@@ -467,6 +467,15 @@ if (isset($pc30_instit) && $pc30_instit != "") {
 																			?>
 																		</td>
 																	</tr>
+																	<tr>
+																		<td><strong>Emitir Ordem de Compra com contrato vencido:</strong></td>
+																		<td>
+																			<?
+																			$x = array("f" => "NAO", "t" => "SIM");
+																			db_select('pc30_liboccontrato', $x, true, $db_opcao, "");
+																			?>
+																		</td>
+																	</tr>
 																</table>
 															</fieldset>
 														</td>

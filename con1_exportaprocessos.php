@@ -204,12 +204,12 @@ $clrotulo->label("l20_numero");
                     <table align="center" border='0'>
                         <tr>
                             <td>
-                                <input type="file" name="PROC" />
+                                <input id="file" type="file" name="PROC" />
 
                                 <div id="PROC" class="recebe">&nbsp;</div>
                             </td>
                             <td>
-                                <input type="button" value="Enviar" onclick="micoxUpload(this.form,'con4_uploadarquivoslic.php','PROC','Carregando...','Erro ao carregar')" />
+                                <input type="button" value="Enviar" onclick="micoxUpload(this.form,'con4_uploadarquivoslic.php','PROC','Carregando...','Erro ao carregar');js_habilita_processamento()" />
 
                                 <div>&nbsp;</div>
                             </td>
@@ -242,7 +242,7 @@ $clrotulo->label("l20_numero");
                         </tr>
                         <tr>
                             <td colspan="2" align="center">
-                                <input name="emite3" id="emite3" type="button" value="Processar" onclick="js_importa()">
+                                <input disabled="true" name="emite3" id="emite3" type="button" value="Processar" onclick="js_importa()">
                             </td>
                         </tr>
                     </table>
@@ -258,6 +258,14 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsessio
 
 </html>
 <script>
+    function js_habilita_processamento() {
+        console.log(document.getElementById('file').value);
+        if (document.form1.PROC.value != "" &&
+            (document.form1.PROC.value.indexOf("txt") != -1 || document.form1.PROC.value.indexOf("csv") != -1 || document.form1.PROC.value.indexOf("txt") != -1)) {
+            document.getElementById('emite3').disabled = false;
+        }
+    }
+
     function js_pesquisa_liclicita(mostra) {
         if (mostra == true) {
             js_OpenJanelaIframe('top.corpo', 'db_iframe_liclicita', 'func_liclicita.php?funcao_js=parent.js_mostraliclicita1|l20_codigo', 'Pesquisa', true);

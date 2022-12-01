@@ -517,7 +517,7 @@ function js_retornoaddRetencao(oAjax) {
          aLinha[2]  = js_formatar(e23_deducao,'f');
          aLinha[3]  = js_formatar(e23_valorbase,'f');
          aLinha[4]  = js_formatar(e23_aliquota,'f');
-         aLinha[5]  = js_formatar(e23_valorretencao,'f');
+         aLinha[5]  = ParseFloat(e23_valorretencao,2);
          aLinha[6]  = e21_retencaotipocalc;
          aLinha[7]  = e21_retencaotiporecgrupo;
          gridRetencoes.addRow(aLinha);
@@ -533,6 +533,12 @@ function js_retornoaddRetencao(oAjax) {
            aBaseDeCalculo[e21_sequencial] = aMov;
          }
       }
+    }
+
+    function ParseFloat(str,val) {
+      str = str.toString();
+      str = str.slice(0, (str.indexOf(".")) + val + 1); 
+      return Number(str);   
     }
 
     gridRetencoes.renderRows();

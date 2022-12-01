@@ -818,7 +818,7 @@ class RelatorioDiarioClasseBase extends PDF
 
       foreach ($oEstrutura->aMeses as $iMes => $oMes) {
 
-        $mes = substr($iMes, 1);
+        $mes = $iMes;
         $mes = intval($mes);
         $mes = $meses[$mes];
         $iLarguraColunaMes = count($oMes->aDias) * $oEstrutura->iLarguraCelulaGrade;

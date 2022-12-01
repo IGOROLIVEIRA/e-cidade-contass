@@ -33,6 +33,7 @@ $clrotulo->label("pc50_descr");
 $clrotulo->label("l34_protprocesso");
 $clrotulo->label("p58_numero");
 $clrotulo->label("l20_nroedital");
+$clrotulo->label("l20_tipoprocesso");
 
 $clliclicita          = new cl_liclicita;
 $clliclicitaproc      = new cl_liclicitaproc;
@@ -157,7 +158,7 @@ if (isset($alterar)) {
   if ($l20_dtpubratificacao != $l20_dtpubratificacao_old) {
     $change = true;
   }
-
+  
   if (!isset($erro)) {
     //altera data homologação
     if ($sqlerro == false) {
@@ -195,7 +196,9 @@ if (isset($alterar)) {
       $clliclicita->l20_numero = $l20_numero;
       $clliclicita->l20_nroedital = $l20_nroedital;
       $clliclicita->l20_codtipocom = $l20_codtipocom;
-
+      $clliclicita->l20_veicdivulgacao = $l20_veicdivulgacao;
+      $clliclicita->l20_tipojulg = $l20_tipojulg;
+      
       $clliclicita->alterar($l20_codigo, $descricao);
 
       $db_opcao = 2;
@@ -204,7 +207,7 @@ if (isset($alterar)) {
         $erro_msg = $clliclicita->erro_msg;
         $sqlerro = true;
       }
-
+      
       //altera data julgamento
 
       if ($sqlerro == false) {
@@ -216,7 +219,7 @@ if (isset($alterar)) {
 
         if ($clliclicitasituacao->erro_status == "0") {
           $erro_msg = $clliclicitasituacao->erro_msg;
-          $sqlerro = true;
+          $sqlerro = false;
         }
       }
 
@@ -231,7 +234,7 @@ if (isset($alterar)) {
 
         if ($clliclicita->erro_status == "0") {
           $erro_msg = $clliclicita->erro_msg;
-          $sqlerro = true;
+          $sqlerro = false;
         }
       }
     }
@@ -241,10 +244,14 @@ if (isset($alterar)) {
 
     $clmanutencaolicitacao->incluir();
 
+
+    
+    
     if ($sqlerro == false) {
       $resmanut = db_query("select nextval('db_manut_log_manut_sequencial_seq') as seq");
       $seq = pg_result($resmanut, 0, 0);
       $result = db_query("insert into db_manut_log values($seq,'Vigencia anterior: " . $oPosicao->ac16_datainicio . " - " . $oPosicao->ac16_datafim . " atual: " . $ac16_datainicio . " - " . $ac16_datafim . "  '," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+      
       echo "<script>alert('Alteração efetuada');</script>";
       $db_opcao = 3;
       $l20_codigo = '';
@@ -399,10 +406,36 @@ if (isset($alterar)) {
                 db_inputdata('l20_dtpubratificacao_old', @$l20_dtpubratificacao_dia, @$l20_dtpubratificacao_mes, @$l20_dtpubratificacao_ano, true, 'hidden', $iCampo);
               endif;
               ?>
+              <?php
+              if ($l20_codtipocom == 9 || $l20_codtipocom == 11 || $l20_codtipocom == 10 ||$l20_codtipocom == 8 ) :
+              ?>
+                  <tr>  
+                    <td nowrap title="Veículo de Publicação">
+                      <strong>Veículo de Publicação:</strong>
+                    </td>
+                    <td>
+                      <?
+                      db_textarea('l20_veicdivulgacao', 0, 50, $Il20_veicdivulgacao, true, 'text', $db_opcao, "");
+                      ?>
+                    </td>
+                  </tr>
+                  <? 
+              endif;
+              ?>
+                  <tr>
+                    <td nowrap title="<?= @$Tl20_tipoprocesso ?>">
+                        <?= @$Ll20_tipoprocesso ?>
+                    </td>
+                    <td>
+                        <?
+                        $arr_tipo = array("1" => "Por item", "3" => "Por lote");
+                        db_select("l20_tipojulg", $arr_tipo, true, 1);
+                        db_input("l20_codtipocom",0, $l20_codtipocom, true,'text',$db_opcao,'style="display:none;"');
+                        ?>
+                    </td>
+                  </tr>
 
-
-
-<tr>
+                  <tr>
                     <td nowrap title="Codunidsubanterior">
                       <strong>Codunidsubanterior:</strong>
                     </td>
@@ -413,7 +446,7 @@ if (isset($alterar)) {
                       ?>
                     </td>
                   </tr>
-
+                  
               <?php
               if ($chavepesquisa2 != 101) :
                 if ($chavepesquisa2 != 100) :
