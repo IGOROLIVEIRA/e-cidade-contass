@@ -501,8 +501,6 @@ if (isset($alterar)) {
       "select distinct
             ac26_sequencial as POSICAO,
                         ac18_sequencial,
-                        ac16_datainicio,
-                        ac16_datafim,
                         ac18_datainicio,
                         ac18_datafim,
                         ac35_dataassinaturatermoaditivo,
@@ -814,7 +812,8 @@ if (isset($alterar)) {
               </td>
             </tr>
             <tr>
-              <td nowrap><?= $Lac16_datapublicacao ?>
+              <td nowrap>
+              <b>Data da Publicação</b>
               </td>
               <td>
                 <?=
@@ -831,7 +830,8 @@ if (isset($alterar)) {
               </td>
             </tr>
             <tr>
-              <td nowrap><?= $Lac16_veiculodivulgacao ?>
+              <td nowrap>
+              <b>Veículo de Divulgação</b>
               </td>
               <td>
                 <?=
