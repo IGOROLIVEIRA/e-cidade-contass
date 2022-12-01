@@ -357,7 +357,7 @@ if (isset($_POST["processar"])) {
 
 <form name="form3" id="form3" method="post" action="" enctype="multipart/form-data">
     <div class="itens">
-        <table style="width:100%; border: 0px solid black;">
+        <table style="width:100%; border: 0px solid black; margin-top:30px;">
             <tr>
 
                 <th style="border: 0px solid red; width:20%; background:#eeeff2;">
@@ -407,7 +407,12 @@ if (isset($_POST["processar"])) {
 
                 if (mb_strlen($rown->pc01_descrmater, 'UTF-8') > 80) {
                     echo "<td style='text-align:center;'>";
-                    echo "<input style='text-align:center; background-color:#f09999; width:90%; border:none;' readonly='' type='text' name='descricao[]' value='" . $rown->pc01_descrmater . "'>";
+                    echo "<input title='Campo de texto limitado a 80 caracteres' style='text-align:center; background-color:#f09999; width:90%; border:none;' readonly='' type='text' name='descricao[]' value='" . $rown->pc01_descrmater . "'>";
+                    echo "</td>";
+                    $erro = true;
+                } else if ($rown->pc01_descrmater == "") {
+                    echo "<td style='text-align:center;'>";
+                    echo "<input title='Campo Descrição do material não informado' style='text-align:center; background-color:#f09999; width:90%; border:none;' readonly='' type='text' name='descricao[]' value='" . $rown->pc01_descrmater . "'>";
                     echo "</td>";
                     $erro = true;
                 } else {
@@ -423,7 +428,12 @@ if (isset($_POST["processar"])) {
 
                 if (mb_strtolower($rown->pc01_servico) != "sim" && mb_strtolower($rown->pc01_servico) != "não") {
                     echo "<td style='text-align:center;'>";
-                    echo "<input style='text-align:center; width:90%; border:none; background-color:#f09999;' readonly='' type='text' name='servico[]' value='" . mb_convert_case($rown->pc01_servico, MB_CASE_TITLE, "ISO-8859-1")  . "'>";
+                    echo "<input title='O campo serviço permite somente ?Sim? ou ?Não?' style='text-align:center; width:90%; border:none; background-color:#f09999;' readonly='' type='text' name='servico[]' value='" . mb_convert_case($rown->pc01_servico, MB_CASE_TITLE, "ISO-8859-1")  . "'>";
+                    echo "</td>";
+                    $erro = true;
+                } else if ($rown->pc01_servico == "") {
+                    echo "<td style='text-align:center;'>";
+                    echo "<input title='Campo Serviço não informado' style='text-align:center; width:90%; border:none; background-color:#f09999;' readonly='' type='text' name='servico[]' value='" . mb_convert_case($rown->pc01_servico, MB_CASE_TITLE, "ISO-8859-1")  . "'>";
                     echo "</td>";
                     $erro = true;
                 } else {
@@ -439,7 +449,7 @@ if (isset($_POST["processar"])) {
                     $pc04_descrsubgrupo = db_utils::fieldsMemory($rsResult, 0)->pc04_descrsubgrupo;
                     if ($pc04_descrsubgrupo == "") {
                         echo "<td style='text-align:center; '>";
-                        echo "<input style='text-align:center; width:90%; border:none; background-color:#f09999;' readonly='' type='text' name='subgrupo[]' value='" . $rown->pc01_codsubgrupo . "'>";
+                        echo "<input title='Campo subgrupo não encontrado' style='text-align:center; width:90%; border:none; background-color:#f09999;' readonly='' type='text' name='subgrupo[]' value='" . $rown->pc01_codsubgrupo . "'>";
                         echo "</td>";
                         $erro = true;
                     } else {
@@ -449,7 +459,7 @@ if (isset($_POST["processar"])) {
                     }
                 } else {
                     echo "<td style='text-align:center; background-color:#f09999;'>";
-                    echo "<input style='text-align:center; width:90%; border:none; background-color:#f09999;' readonly='' type='text' name='subgrupo[]' value='" . $rown->pc01_codsubgrupo . "'>";
+                    echo "<input title='Campo Cód Subgrupo permite somente números' style='text-align:center; width:90%; border:none; background-color:#f09999;' readonly='' type='text' name='subgrupo[]' value='" . $rown->pc01_codsubgrupo . "'>";
                     echo "</td>";
                     $erro = true;
                 }
@@ -457,7 +467,12 @@ if (isset($_POST["processar"])) {
 
                 if (mb_strtolower($rown->pc01_obras) != "sim" && mb_strtolower($rown->pc01_obras) != "não" && mb_strtolower($rown->pc01_obras) != "nao") {
                     echo "<td style='text-align:center; background-color:#f09999;'>";
-                    echo "<input style='text-align:center; width:90%; border:none; background-color:#f09999;' readonly='' type='text' name='obra[]' value='" . mb_convert_case($rown->pc01_obras, MB_CASE_TITLE, "ISO-8859-1") . "'>";
+                    echo "<input title='Campo serviço permite somente ?Sim? ou ?Não?'  style='text-align:center; width:90%; border:none; background-color:#f09999;' readonly='' type='text' name='obra[]' value='" . mb_convert_case($rown->pc01_obras, MB_CASE_TITLE, "ISO-8859-1") . "'>";
+                    echo "</td>";
+                    $erro = true;
+                } else if ($rown->pc01_obras == "") {
+                    echo "<td style='text-align:center; background-color:#f09999;'>";
+                    echo "<input title='Campo obras não informado'  style='text-align:center; width:90%; border:none; background-color:#f09999;' readonly='' type='text' name='obra[]' value='" . mb_convert_case($rown->pc01_obras, MB_CASE_TITLE, "ISO-8859-1") . "'>";
                     echo "</td>";
                     $erro = true;
                 } else {
@@ -468,7 +483,12 @@ if (isset($_POST["processar"])) {
 
                 if (mb_strtolower($rown->pc01_tabela) != "sim" && mb_strtolower($rown->pc01_tabela) != "não" && mb_strtolower($rown->pc01_tabela) != "nao") {
                     echo "<td style='text-align:center;'>";
-                    echo "<input style='text-align:center; width:90%; border:none; background-color:#f09999;' readonly='' type='text' name='tabela[]' value='" . mb_convert_case($rown->pc01_tabela, MB_CASE_TITLE, "ISO-8859-1")  . "'>";
+                    echo "<input title='Campo serviço permite somente ?Sim? ou ?Não?' style='text-align:center; width:90%; border:none; background-color:#f09999;' readonly='' type='text' name='tabela[]' value='" . mb_convert_case($rown->pc01_tabela, MB_CASE_TITLE, "ISO-8859-1")  . "'>";
+                    echo "</td>";
+                    $erro = true;
+                } else if ($rown->pc01_tabela == "") {
+                    echo "<td style='text-align:center;'>";
+                    echo "<input title='Campo Tabela não informado' style='text-align:center; width:90%; border:none; background-color:#f09999;' readonly='' type='text' name='tabela[]' value='" . mb_convert_case($rown->pc01_tabela, MB_CASE_TITLE, "ISO-8859-1")  . "'>";
                     echo "</td>";
                     $erro = true;
                 } else {
@@ -479,7 +499,12 @@ if (isset($_POST["processar"])) {
 
                 if (mb_strtolower($rown->pc01_taxa) != "sim" && mb_strtolower($rown->pc01_taxa) != "não" && mb_strtolower($rown->pc01_taxa) != "nao") {
                     echo "<td style='text-align:center; background-color:#f09999;'>";
-                    echo "<input style='text-align:center; width:90%; border:none; background-color:#f09999;' readonly='' type='text' name='taxa[]' value='" . mb_convert_case($rown->pc01_taxa, MB_CASE_TITLE, "ISO-8859-1") . "'>";
+                    echo "<input title='Campo Taxa permite somente ?Sim? ou ?Não?' style='text-align:center; width:90%; border:none; background-color:#f09999;' readonly='' type='text' name='taxa[]' value='" . mb_convert_case($rown->pc01_taxa, MB_CASE_TITLE, "ISO-8859-1") . "'>";
+                    echo "</td>";
+                    $erro = true;
+                } else if ($rown->pc01_taxa == "") {
+                    echo "<td style='text-align:center; background-color:#f09999;'>";
+                    echo "<input title='Campo Taxa não informado' style='text-align:center; width:90%; border:none; background-color:#f09999;' readonly='' type='text' name='taxa[]' value='" . mb_convert_case($rown->pc01_taxa, MB_CASE_TITLE, "ISO-8859-1") . "'>";
                     echo "</td>";
                     $erro = true;
                 } else {
@@ -505,7 +530,7 @@ if (isset($_POST["processar"])) {
                     }
                 } else {
                     echo "<td style='text-align:center; background-color:#f09999;'>";
-                    echo "<input style='text-align:center; width:90%; border:none; background-color:#f09999;' readonly='' type='text' name='desdobramento[]' value='" . $rown->pc07_codele . "'>";
+                    echo "<input title='Campo reduzido permite somente números' style='text-align:center; width:90%; border:none; background-color:#f09999;' readonly='' type='text' name='desdobramento[]' value='" . $rown->pc07_codele . "'>";
                     echo "</td>";
                     $erro = true;
                 }
