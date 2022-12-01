@@ -815,7 +815,11 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                                         $oContrato12->si85_reg10 = $clcontratos10->si83_sequencial;
                                         $oContrato12->si85_codcontrato = $oAcordo->getCodigo();
                                         $oContrato12->si85_codorgao = $sCodorgao;
-                                        $oContrato12->si85_codunidadesub = $sCodUnidade;
+                                        if($oDados10->manutac_codunidsubanterior != '' && $oDados10->manutac_codunidsubanterior != null){
+                                            $oContrato12->si85_codunidadesub = $oDados10->manutac_codunidsubanterior;
+                                        }else{
+                                            $oContrato12->si85_codunidadesub = $sCodUnidade;
+                                        }
                                         $oContrato12->si85_codfuncao = $oDadosElemento->o58_funcao;
                                         $oContrato12->si85_codsubfuncao = $oDadosElemento->o58_subfuncao;
                                         $oContrato12->si85_codprograma = $oDadosElemento->o58_programa;
@@ -904,7 +908,11 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                                         $oContrato12->si85_reg10 = $clcontratos10->si83_sequencial;
                                         $oContrato12->si85_codcontrato = $oAcordo->getCodigo();
                                         $oContrato12->si85_codorgao = $sCodorgao;
-                                        $oContrato12->si85_codunidadesub = $sCodUnidade;
+                                        if($oDados10->manutac_codunidsubanterior != '' && $oDados10->manutac_codunidsubanterior != null){
+                                            $oContrato12->si85_codunidadesub = $oDados10->manutac_codunidsubanterior;
+                                        }else{
+                                            $oContrato12->si85_codunidadesub = $sCodUnidade;
+                                        }
                                         $oContrato12->si85_codfuncao = $oDadosElemento->o58_funcao;
                                         $oContrato12->si85_codsubfuncao = $oDadosElemento->o58_subfuncao;
                                         $oContrato12->si85_codprograma = $oDadosElemento->o58_programa;
@@ -1053,7 +1061,11 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                                     $oContrato12->si85_reg10 = $clcontratos10->si83_sequencial;
                                     $oContrato12->si85_codcontrato = $oAcordo->getCodigo();
                                     $oContrato12->si85_codorgao = $sCodorgao;
-                                    $oContrato12->si85_codunidadesub = $sCodUnidade;
+                                    if($oDados10->manutac_codunidsubanterior != '' && $oDados10->manutac_codunidsubanterior != null){
+                                        $oContrato12->si85_codunidadesub = $oDados10->manutac_codunidsubanterior;
+                                    }else{
+                                        $oContrato12->si85_codunidadesub = $sCodUnidade;
+                                    }
                                     $oContrato12->si85_codfuncao = $oDadosElemento->o58_funcao;
                                     $oContrato12->si85_codsubfuncao = $oDadosElemento->o58_subfuncao;
                                     $oContrato12->si85_codprograma = $oDadosElemento->o58_programa;
@@ -1071,6 +1083,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                             }
                         }
                     }
+                    
                 }
 
                 foreach ($aDadosAgrupados12 as $oDadosReg12) {
@@ -1132,6 +1145,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                 throw new Exception($clcontratos13->erro_msg);
             }
         }
+        
 
         /*
          * Registro 20
@@ -2200,9 +2214,11 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
         */
         $sSql = "SELECT *
           FROM acordo
+          LEFT JOIN manutencaoacordo ON manutac_acordo = ac16_sequencial
           WHERE ac16_acordosituacao = 2
             AND ac16_datareferenciarescisao BETWEEN '{$this->sDataInicial}' AND '{$this->sDataFinal}'
             AND ac16_instit = " . db_getsession("DB_instit");
+
 
         $rsResult40 = db_query($sSql);
 
@@ -2237,7 +2253,12 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
 
             $clcontratos40->si91_tiporegistro               = 40;
             $clcontratos40->si91_codorgao                   = $sCodorgao;
-            $clcontratos40->si91_codunidadesub              = $sCodUnidadeSub;
+            if($oDados40->manutac_codunidsubanterior != '' && $oDados40->manutac_codunidsubanterior != null){
+                $clcontratos40->si91_codunidadesub  = $oDados40->manutac_codunidsubanterior;
+            }else{
+                $clcontratos40->si91_codunidadesub              = $sCodUnidadeSub;
+            }
+            
             $clcontratos40->si91_nrocontrato                = $oDados40->ac16_numeroacordo;
             $clcontratos40->si91_dtassinaturacontoriginal   = $oDados40->ac16_dataassinatura;
             $clcontratos40->si91_datarescisao               = $oDados40->ac16_datarescisao;
