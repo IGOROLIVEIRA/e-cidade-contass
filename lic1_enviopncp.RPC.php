@@ -184,12 +184,14 @@ switch ($oParam->exec) {
         break;
 
     case 'excluiraviso':
+        $clliccontrolepncp = db_utils::getDao("liccontrolepncp");
         try {
             foreach ($oParam->aLicitacoes as $aLicitacao) {
                 $clAvisoLicitacaoPNCP = new AvisoLicitacaoPNCP();
                 //envia exclusao de aviso
                 $rsApiPNCP = $clAvisoLicitacaoPNCP->excluirAviso(substr($aLicitacao->numerocontrole, 17, -5), substr($aLicitacao->numerocontrole, 24));
-                if ($rsApiPNCP->status == 200) {
+
+                if ($rsApiPNCP == null) {
                     //monto o codigo da compra no pncp
                     $l213_numerocontrolepncp = $aLicitacao->numerocontrole;
                     $clliccontrolepncp->l213_licitacao = $aLicitacao->codigo;
@@ -197,8 +199,8 @@ switch ($oParam->exec) {
                     $clliccontrolepncp->l213_dtlancamento = date('Y-m-d', db_getsession('DB_datausu'));
                     $clliccontrolepncp->l213_numerocontrolepncp = $l213_numerocontrolepncp;
                     $clliccontrolepncp->l213_situacao = 3;
-                    $clliccontrolepncp->l213_numerocompra = substr($aLicitacao->numerocontrole, 24);
-                    $clliccontrolepncp->l213_anousu = $oDadosLicitacao->anocompra;
+                    $clliccontrolepncp->l213_numerocompra = substr($aLicitacao->numerocontrole, 17, -5);
+                    $clliccontrolepncp->l213_anousu = substr($aLicitacao->numerocontrole, 24);
                     $clliccontrolepncp->l213_instit = db_getsession('DB_instit');
                     $clliccontrolepncp->incluir();
 
