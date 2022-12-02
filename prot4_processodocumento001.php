@@ -1064,7 +1064,7 @@ for ($i = 0; $i < pg_numrows($rsAllPermissoes); $i++) {
 
           if (oRetorno.iStatus > 1) {
             document.getElementById('p01_nivelacesso').innerHTML = niveisdeacesso;
-            alert('sMensagem');
+            alert(sMensagem);
             return false;
           }
 
