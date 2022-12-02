@@ -66,6 +66,7 @@ if (isset($_POST["salvar"])) {
         $sqlerro = false;
 
         $clpcmater->pc01_descrmater = $descricao[$i];
+        $clpcmater->pc01_complmater = $complemento[$i];
         $clpcmater->pc01_data = $pc01_data;
         $clpcmater->pc01_servico   = $servico[$i] == "Sim" ? "true" : "false";
         $clpcmater->pc01_codsubgrupo = $codsubgrupo[$i];
@@ -542,6 +543,11 @@ if (isset($_POST["processar"])) {
                 echo "<td style='text-align:center; display:none;'>";
                 echo "<input style='text-align:center; width:90%; border:none; display:none;' readonly='' type='text' name='codsubgrupo[]' value='" . $rown->pc01_codsubgrupo . "'>";
                 echo "</td>";
+
+                echo "<td style='text-align:center; display:none;'>";
+                echo "<input style='text-align:center; width:90%; border:none; display:none;' readonly='' type='text' name='complemento[]' value='" . $rown->pc01_complmater . "'>";
+                echo "</td>";
+
 
 
                 echo "</tr>";
