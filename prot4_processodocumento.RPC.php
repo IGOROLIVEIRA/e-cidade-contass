@@ -99,13 +99,24 @@ try {
 
     case "salvarDocumento":
 
+      $erro = false;
+
+      $protocolosigiloso = db_query("select * from protparam");
+      $protocolosigiloso = db_utils::fieldsMemory($protocolosigiloso, 0);
+
       $oProcessoProtocolo = new processoProtocolo($oParam->iCodigoProcesso);
       $oDepartamentoAtual = $oProcessoProtocolo->getDepartamentoAtual();
 
       if ($oDepartamentoAtual->getCodigo() != db_getsession("DB_coddepto")) {
 
         $oStdErro = (object)array("sDepartamento" => "{$oDepartamentoAtual->getCodigo()} - {$oDepartamentoAtual->getNomeDepartamento()}");
-        throw new BusinessException(_M(URL_MENSAGEM_PROT4PROCESSODOCUMENTO . "departamento_diferente_vinculo_documento", $oStdErro));
+        if ($protocolosigiloso->p90_protocolosigiloso == "t") {
+          $oRetorno->sMensagem = "So o departamento {$oDepartamentoAtual->getCodigo()} - {$oDepartamentoAtual->getNomeDepartamento()} em que o processo se encontra atualmente pode vincular documento.";
+          $oRetorno->iStatus   = 2;
+          break;
+        } else {
+          throw new BusinessException(_M(URL_MENSAGEM_PROT4PROCESSODOCUMENTO . "departamento_diferente_vinculo_documento", $oStdErro));
+        }
       }
       $oProcessoDocumento = new ProcessoDocumento($oParam->iCodigoDocumento);
       $oProcessoDocumento->setDescricao(db_stdClass::normalizeStringJsonEscapeString($oParam->sDescricaoDocumento));

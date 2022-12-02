@@ -76,6 +76,13 @@ $oDaoProtprocessodocumento->rotulo->label();
 
 $oRotulo->label("p58_numero");
 $oRotulo->label("z01_nome");
+
+$allpermissoes = array();
+
+$rsAllPermissoes = db_query("select * from permanexo;");
+for ($i = 0; $i < pg_numrows($rsAllPermissoes); $i++) {
+  $allpermissoes[pg_result($rsAllPermissoes, $i, "p202_sequencial")] = urlencode(pg_result($rsAllPermissoes, $i, "p202_tipo"));
+}
 ?>
 <html>
 
@@ -216,6 +223,8 @@ $oRotulo->label("z01_nome");
   var permissaoDocumentos = new Map();
 
 
+
+
   /**
    * Inserindo ID nos options do select de nível de acesso
    */
@@ -225,6 +234,12 @@ $oRotulo->label("z01_nome");
     var value = select.options[i].value;
     select.options[i].setAttribute("id", value);
   }
+
+  /**
+   * Criação de variavel para armazenamento dos niveis de acesso que o usuário possui permissão
+   */
+  const niveisdeacesso = document.getElementById('p01_nivelacesso').innerHTML;
+
 
   /**
    * Pesquisa processo do protocolo e depois os documentos anexados
@@ -365,6 +380,9 @@ $oRotulo->label("z01_nome");
             document.getElementById('gridDocumentosrowgridDocumentos' + linhaAnexo).style.color = "red";
 
           }
+
+          document.getElementById('p01_nivelacesso').innerHTML = niveisdeacesso;
+
         }
       }
     );
@@ -642,6 +660,8 @@ $oRotulo->label("z01_nome");
     $('uploadfile').disabled = true;
     $('p01_descricao').value = sDescricaoDocumento.urlDecode();
 
+    document.getElementById('p01_nivelacesso').innerHTML = niveisdeacesso;
+
     descricaoDocumento = sDescricaoDocumento;
     var select = document.querySelector('#p01_nivelacesso');
     for (var i = 0; i < select.options.length; i++) {
@@ -701,7 +721,7 @@ $oRotulo->label("z01_nome");
             var sMensagem = oRetorno.sMensagem.urlDecode();
 
             if (oRetorno.iStatus > 1) {
-
+              document.getElementById('p01_nivelacesso').innerHTML = niveisdeacesso;
               alert(sMensagem);
               return false;
             }
@@ -734,6 +754,13 @@ $oRotulo->label("z01_nome");
         break;
       }
     }
+
+    var permissoes = <?= json_encode($allpermissoes); ?>;
+
+    var selectnivelacesso = document.querySelector('#p01_nivelacesso');
+    selectnivelacesso.options[select.options.length] = new Option(permissoes[nivelAcesso].urlDecode(), nivelAcesso);
+    document.getElementById("p01_nivelacesso").value = nivelAcesso;
+
     $('p01_descricao').disabled = true;
     $('p01_nivelacesso').disabled = true;
     $('btnSalvar').disabled = true;
@@ -762,6 +789,11 @@ $oRotulo->label("z01_nome");
         break;
       }
     }
+
+    var permissoes = <?= json_encode($allpermissoes); ?>;
+    var selectnivelacesso = document.querySelector('#p01_nivelacesso');
+    selectnivelacesso.options[select.options.length] = new Option(permissoes[nivelAcesso].urlDecode(), nivelAcesso);
+    document.getElementById("p01_nivelacesso").value = nivelAcesso;
 
     $('p01_descricao').disabled = false;
     $('p01_nivelacesso').disabled = true;
@@ -812,7 +844,7 @@ $oRotulo->label("z01_nome");
             var sMensagem = oRetorno.sMensagem.urlDecode();
 
             if (oRetorno.iStatus > 1) {
-
+              document.getElementById('p01_nivelacesso').innerHTML = niveisdeacesso;
               alert(sMensagem);
               return false;
             }
@@ -1007,7 +1039,7 @@ $oRotulo->label("z01_nome");
       return false;
     }
 
-    js_divCarregando(_M(MENSAGENS + 'mensagem_salvando_documento'), 'msgbox');
+    //js_divCarregando(_M(MENSAGENS + 'mensagem_salvando_documento'), 'msgbox');
 
     var oParametros = new Object();
 
@@ -1025,13 +1057,14 @@ $oRotulo->label("z01_nome");
         asynchronous: false,
         onComplete: function(oAjax) {
 
-          js_removeObj("msgbox");
+          //js_removeObj("msgbox");
           var oRetorno = eval('(' + oAjax.responseText + ")");
+
           var sMensagem = oRetorno.sMensagem.urlDecode();
 
           if (oRetorno.iStatus > 1) {
-
-            alert(sMensagem);
+            document.getElementById('p01_nivelacesso').innerHTML = niveisdeacesso;
+            alert('sMensagem');
             return false;
           }
 
@@ -1043,7 +1076,9 @@ $oRotulo->label("z01_nome");
 
           alert(sMensagem);
           js_buscarDocumentos();
+
         }
       });
+
   }
 </script>
