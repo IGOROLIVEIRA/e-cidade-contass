@@ -147,7 +147,7 @@ class cl_protprocessodocumento
         return false;
       }
     } else {
-      $this->p01_nivelacesso = "null";
+      $this->p01_nivelacesso = 1;
     }
 
     if ($p01_sequencial == "" || $p01_sequencial == null) {
