@@ -90,6 +90,14 @@ if ($oGet->lRegistroOcorrencia == "true") {
 
 $oDadosCabecalho->sPeriodo = $oPeriodoAvaliacao->getDescricao();
 
+$oDaoBimestre = db_utils::getDao('periodocalendario');
+$sWhere       = " ed53_i_periodoavaliacao = {$periodo} and ed53_i_calendario = {$calendario}";
+$sCampos	  = " ed53_d_inicio inicio,ed53_d_fim fim";
+$sSqlBimestre = $oDaoBimestre->sql_query_file(null, $sCampos, null, $sWhere); //print_r($sSqlBimestre);die;
+$rsBimestre  = $oDaoBimestre->sql_record($sSqlBimestre);
+
+$datasBim = db_utils::fieldsMemory($rsBimestre,0); //var_dump($datasBim);die;
+
 $oPdf->Open();
 $oPdf->SetAutoPageBreak(false);
 $oPdf->SetFillColor(230);
@@ -119,7 +127,7 @@ if (count($aDisciplinas) > 0) {
 		 */
 		$aConteudoDesenvolvido = array();
 		if ($oGet->preenchimento == 'diario') {
-			$aConteudoDesenvolvido = buscaConteudoDesenvolvidoDiario($oRegencia);
+			$aConteudoDesenvolvido = buscaConteudoDesenvolvidoDiario($oRegencia,$datasBim);
 		}
 
 
@@ -150,22 +158,33 @@ function imprimeCabecalho($oPdf, $oDadosCabecalho)
 	$oDepartamento = new DBDepartamento(db_getsession("DB_coddepto"));
 	$iDepartamento = $oDepartamento->getCodigo();
 
-
-	$result = db_query("select ed05_t_texto,ed05_d_publicado,ed05_i_aparecerelatorio,ed05_i_ano,ed05_i_codigo, ed05_c_numero, ed05_c_finalidade, ed83_c_descr as dl_tipo,
-case when ed05_c_competencia='F' then 'FEDERAL' when ed05_c_competencia='E' then 'ESTADUAL' else 'MUNICIPAL'
-end as ed05_c_competencia, ed05_i_ano from atolegal inner join tipoato on tipoato.ed83_i_codigo
-= atolegal.ed05_i_tipoato inner join atoescola on atoescola.ed19_i_ato = atolegal.ed05_i_codigo
-where ed19_i_escola = $iDepartamento and ed05_i_aparecerelatorio = true order by ed05_i_codigo ;");
+	$result = db_query("select ed05_t_texto, 
+							   ed05_d_publicado,
+							   ed05_i_aparecerelatorio,
+							   ed05_i_ano,
+							   ed05_i_codigo,
+							   ed05_c_numero,
+							   ed05_c_finalidade,
+							   ed83_c_descr as dl_tipo,
+							   case 
+							   		when ed05_c_competencia='F' then 'FEDERAL'
+									when ed05_c_competencia='E' then 'ESTADUAL'
+									else 'MUNICIPAL'
+							   end as ed05_c_competencia,
+							   ed05_i_ano from atolegal
+						inner join tipoato on tipoato.ed83_i_codigo = atolegal.ed05_i_tipoato
+						inner join atoescola on atoescola.ed19_i_ato = atolegal.ed05_i_codigo
+						where ed19_i_escola = $iDepartamento
+							and ed05_i_aparecerelatorio = true
+						order by ed05_i_codigo ;");
 
 	$atolegal = db_utils::fieldsMemory($result, 0);
 
 	if ($atolegal->ed05_c_finalidade == "") {
 		$atolegalcabecalho = "";
 	} else {
-		$atolegalcabecalho = $atolegal->ed05_c_finalidade . "/" . $atolegal->dl_tipo . " nº: " .  $atolegal->ed05_c_numero . " DE " . implode("/", array_reverse(explode("-", $atolegal->ed05_d_publicado))) . ", " . $atolegal->ed05_t_texto;
+		$atolegalcabecalho = $atolegal->ed05_c_finalidade . "/" . $atolegal->dl_tipo . " nº: " .  $atolegal->ed05_c_numero . " DE " . implode("/", array_reverse(explode("-", $atolegal->ed05_d_publicado)));
 	}
-
-
 
 	$oPdf->AddPage();
 
@@ -173,31 +192,25 @@ where ed19_i_escola = $iDepartamento and ed05_i_aparecerelatorio = true order by
 
 	$oPdf->Cell(290, 4, mb_strtoupper($oDadosCabecalho->sTitulo) . " - {$oDadosCabecalho->sPeriodo}", 0, 1, "C");
 	$oPdf->Cell(290, 4, $oDadosCabecalho->sEscola, 0, 1, "C");
-	$oPdf->Cell(
-		290,
-		4,
-		$atolegalcabecalho,
-		0,
-		1,
-		"C"
-	);
+	$oPdf->Cell(290, 4, $atolegalcabecalho, 0, 1, "C");
 
 	$oPdf->Ln();
-	$oPdf->SetFont('arial', 'b', 9);
+	$oPdf->SetFont('arial', 'b', 8);
+	$oPdf->Cell(40,  4, "", 0, 0, "L");
 	$oPdf->Cell(20,  4, "Ano Letivo:", 0, 0, "L");
-	$oPdf->Cell(40,  4, $oDadosCabecalho->iAnoExecucao, 0, 0, "L");
-	$oPdf->Cell(20,  4, "Etapa:", 0, 0, "L");
-	$oPdf->Cell(50,  4, $oDadosCabecalho->sEtapa, 0, 0, "L");
-	$oPdf->Cell(20,  4, "Turma:", 0, 0, "L");
-	$oPdf->Cell(50,  4, $oDadosCabecalho->sTurma, 0, 0, "L");
-	$oPdf->Cell(20,  4, "Turno:", 0, 0, "L");
+	$oPdf->Cell(20,  4, $oDadosCabecalho->iAnoExecucao, 0, 0, "L");
+	$oPdf->Cell(20,  4, "Etapa:", 0, 0, "R");
+	$oPdf->Cell(30,  4, $oDadosCabecalho->sEtapa, 0, 0, "L");
+	$oPdf->Cell(15,  4, "Turma:", 0, 0, "R");
+	$oPdf->Cell(80,  4, $oDadosCabecalho->sTurma, 0, 0, "L");
+	$oPdf->Cell(15,  4, "Turno:", 0, 0, "C");
 	$oPdf->Cell(30,  4, $oDadosCabecalho->sTurno, 0, 1, "L");
 
 	if (isset($oDadosCabecalho->sNomeDisciplina)) {
 
-		$oPdf->Cell(20,  4, "Disciplina:", 0, 0, "L");
-		$oPdf->Cell(165, 4, $oDadosCabecalho->sNomeDisciplina, 0, 0, "L");
-		$oPdf->Cell(20,  4, "Professor:", 0, 0, "L");
+		$oPdf->Cell(16,  4, "Disciplina:", 0, 0, "L");
+		$oPdf->Cell(175, 4, $oDadosCabecalho->sNomeDisciplina, 0, 0, "L");
+		$oPdf->Cell(30,  4, "Professor:", 0, 0, "R");
 		$oPdf->Cell(30,  4, $oDadosCabecalho->sNomeProfessor, 0, 0, "L");
 	}
 
@@ -213,8 +226,6 @@ where ed19_i_escola = $iDepartamento and ed05_i_aparecerelatorio = true order by
 function imprimeManual($oPdf, $oDadosCabecalho)
 {
 
-	for ($i = 0; $i < $oDadosCabecalho->iPaginas; $i++) {
-
 		imprimeCabecalho($oPdf, $oDadosCabecalho);
 
 		/**
@@ -222,33 +233,16 @@ function imprimeManual($oPdf, $oDadosCabecalho)
 		 */
 		$iPosicaoYInicial = $oPdf->GetY();
 		$iPosicaoXInicial = $oPdf->GetX();
-		$iMaximoLinha     = 33;
+		$iMaximoLinha     = 32;
 
-		/**
-		 * Conforme layout dividimos cada pagina em duas colunas.
-		 */
-		for ($iColuna = 0; $iColuna < 2; $iColuna++) {
-
-			if ($iColuna == 1) {
-
-				$oPdf->SetY($iPosicaoYInicial);
-				$oPdf->SetX(149);
-			}
-
-			$oPdf->Cell(14,   5, "Data", 1, 0, "C", 1);
-			$oPdf->Cell(125,  5, $oDadosCabecalho->sTitulo, 1, 1, "C", 1);
+			$oPdf->Cell(20,   5, "Data", 1, 0, "C", 1);
+			$oPdf->Cell(255,  5, $oDadosCabecalho->sTitulo, 1, 1, "C", 1);
 
 			for ($iLinha = 0; $iLinha < $iMaximoLinha; $iLinha++) {
 
-				if ($iColuna == 1) {
-					$oPdf->SetX(149);
-				}
-
-				$oPdf->Cell(14,   5, "", 1, 0);
-				$oPdf->Cell(125,  5, "", 1, 1);
+				$oPdf->Cell(20,   5, "", 1, 0);
+				$oPdf->Cell(255,  5, "", 1, 1);
 			}
-		}
-	}
 }
 
 /**
@@ -261,8 +255,6 @@ function imprimeManual($oPdf, $oDadosCabecalho)
 function imprimeDiario($oPdf, $aConteudoDesenvolvido, $oDadosCabecalho)
 {
 
-	for ($i = 0; $i < $oDadosCabecalho->iPaginas; $i++) {
-
 		imprimeCabecalho($oPdf, $oDadosCabecalho);
 
 		/**
@@ -270,75 +262,27 @@ function imprimeDiario($oPdf, $aConteudoDesenvolvido, $oDadosCabecalho)
 		 */
 		$iPosicaoYInicial = $oPdf->GetY();
 		$iPosicaoXInicial = $oPdf->GetX();
-		$iMaximoLinha     = 33;
+		$iMaximoLinha     = 32;
 
-		for ($iColuna = 0; $iColuna < 2; $iColuna++) {
+		$oPdf->SetFont('arial', 'b', 7);
+		$oPdf->Cell(20,  5, "Data", 1, 0, "C", 1);
+		$oPdf->Cell(255, 5, $oDadosCabecalho->sTitulo, 1, 1, "C", 1);
 
-			if ($iColuna == 1) {
-
-				$oPdf->SetY($iPosicaoYInicial);
-				$oPdf->SetX(149);
-			}
-
-			$oPdf->SetFont('arial', 'b', 7);
-			$oPdf->Cell(14,  5, "Data", 1, 0, "C", 1);
-			$oPdf->Cell(125, 5, $oDadosCabecalho->sTitulo, 1, 1, "C", 1);
-
-			$oPdf->SetFont('arial', '', 7);
+			$oPdf->SetFont('arial', '', 6);
 
 			for ($iLinha = 0; $iLinha < $iMaximoLinha; $iLinha++) {
 
 				$iConteudoImpresso = 0;
 
-				/**
-				 * Removemos do array cada linha impressa
-				 */
 				foreach ($aConteudoDesenvolvido as $iIndice => $oConteudo) {
 
-					if ($iColuna == 1) {
-						$oPdf->SetX(149);
-					}
-
-					$iYAntes = $oPdf->getY();
-					$oPdf->Cell(14,  5, db_formatar($oConteudo->ed300_datalancamento, 'd'), 1, 0);
-					$oPdf->MultiCell(125, 5, $oConteudo->ed300_auladesenvolvida, 1, "L");
-					$iYDepois = $oPdf->getY();
-
-					/**
-					 * Calculo para saber quantas linha ocupou o MultCell 
-					 */
-					$iLinhasUtilizadas  = floor(($iYDepois - $iYAntes) / 5);
-					$iConteudoImpresso += $iLinhasUtilizadas;
-
-					$iLinha += $iLinhasUtilizadas;
-
+					$oPdf->Cell(20,  5, db_formatar($oConteudo->ed300_datalancamento, 'd'), 1, 0,"C");
+					$oPdf->Cell(255, 5, $oConteudo->ed300_auladesenvolvida, 1, 1,"L");
 					unset($aConteudoDesenvolvido[$iIndice]);
-
-					/**
-					 * Se foi impresso o limite de linhas, interrompemos a execucao para continuar escrevendo na proxima colula 
-					 */
-					if ($iConteudoImpresso == $iMaximoLinha) {
-						break;
-					}
-				}
-
-				if ($iColuna == 1) {
-					$oPdf->SetX(149);
-				}
-
-				/**
-				 * So ira imprimir linhas em branco se nao houver mais conteudo a ser impresso 
-				 */
-				if (count($aConteudoDesenvolvido) == 0) {
-
-					$oPdf->Cell(14,  5, "", 1, 0);
-					$oPdf->Cell(125, 5, "", 1, 1);
+					
+					$oPdf->SetAutoPageBreak(true,5);
 				}
 			}
-		}
-		$oPdf->line($iPosicaoXInicial, $iPosicaoYInicial, $iPosicaoXInicial, $oPdf->getY());
-		$oPdf->line($oPdf->GetX(), $oPdf->GetY(), 288, $oPdf->getY());
-	}
 }
 
 /**
@@ -346,13 +290,13 @@ function imprimeDiario($oPdf, $aConteudoDesenvolvido, $oDadosCabecalho)
  * @param Regencia $oRegencia
  * @return array:stdClass
  */
-function buscaConteudoDesenvolvidoDiario($oRegencia)
+function buscaConteudoDesenvolvidoDiario($oRegencia,$datasBim = null)
 {
 
 	$oDaoConteudos = db_utils::getDao('diarioclasse');
-	$sWhere 			 = " ed58_i_regencia = {$oRegencia->getCodigo()}";
+	$sWhere 			 = " ed58_i_regencia = {$oRegencia->getCodigo()} and ed300_datalancamento between '{$datasBim->inicio}' and '{$datasBim->fim}'";
 	$sCampos			 = " distinct ed300_datalancamento, ed300_auladesenvolvida";
-	$sSqlConteudo  = $oDaoConteudos->sql_query_faltas(null, $sCampos, "ed300_datalancamento", $sWhere);
+	$sSqlConteudo  = $oDaoConteudos->sql_query_faltas(null, $sCampos, "ed300_datalancamento", $sWhere);// print_r($sSqlConteudo);die;
 	$rsConteudo    = $oDaoConteudos->sql_record($sSqlConteudo);
 	$iRegistros    = $oDaoConteudos->numrows;
 
