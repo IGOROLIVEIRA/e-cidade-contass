@@ -807,7 +807,7 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
 
 
             $sSql = " select tiporegistro,codorgaoresp,codunidadesubresp,exerciciolicitacao,nroprocessolicitatorio,codorgao,
- codunidadesub,codfuncao,codsubfuncao,codprograma,idacao,idsubacao,naturezadespesa,codfontrecursos,sum(vlrecurso) as vlrecurso
+ codunidadesub,codfuncao,codsubfuncao,codprograma,idacao,idsubacao,naturezadespesa,codfontrecursos,sum(vlrecurso) as vlrecurso,codunidsubant
  from (select distinct '16' as tipoRegistro,
     infocomplementaresinstit.si09_codorgaotce as codOrgaoResp,
   (SELECT CASE
@@ -863,7 +863,7 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
     WHERE db_config.codigo= " . db_getsession("DB_instit") . "
     AND liclicita.l20_codigo= $oDados10->seqlicitacao) as x group by tiporegistro,codorgaoresp,codunidadesubresp,
     exerciciolicitacao,nroprocessolicitatorio,codorgao,codunidadesub,codfuncao,codsubfuncao,codprograma,idacao,idsubacao,
-    naturezadespesa,codfontrecursos";
+    naturezadespesa,codfontrecursos,codunidsubant";
 
 
             $rsResult16 = db_query($sSql); //db_criatabela($rsResult16);echo pg_last_error();

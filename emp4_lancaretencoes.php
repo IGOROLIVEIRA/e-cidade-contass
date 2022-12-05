@@ -536,9 +536,12 @@ function js_retornoaddRetencao(oAjax) {
     }
 
     function ParseFloat(str,val) {
-      str = str.toString();
-      str = str.slice(0, (str.indexOf(".")) + val + 1); 
-      return Number(str);   
+      if(str % 1 != 0 && !isNaN(str % 1)){
+        str = str.toString();
+        str = str.slice(0, (str.indexOf(".")) + val + 1);
+        return Number(str);   
+      }
+      return Number(str); 
     }
 
     gridRetencoes.renderRows();

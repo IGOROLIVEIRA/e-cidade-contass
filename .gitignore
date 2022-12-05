@@ -46,3 +46,5 @@ composer.lock
 webservices/environments/
 model/licitacao/PNCP/anexoslicitacao/*
 model/licitacao/PNCP/arquivos/*
+webservices/*.php
+!webservices/requisicao.webservice.php

@@ -122,20 +122,6 @@ $clrotulo->label("ed47_v_nome");
             </fieldset>
             <table class="tabela">
             	<tr>
-            		<td class="bold">
-            			<label>Número de páginas</label>
-            		</td>
-            		<td>
-            			<select id='numeroPaginas' >
-            				<option value='1' selected="selected">1</option>
-            				<option value='2'>2</option>
-            				<option value='3'>3</option>
-            				<option value='4'>4</option>
-            				<option value='5'>5</option>
-            			</select>
-            		</td>
-            	</tr>
-            	<tr>
             		<td nowrap="nowrap" class="bold">
             			<label >Preenchimento:</label>
             		</td>
@@ -449,7 +435,7 @@ $clrotulo->label("ed47_v_nome");
     sUrlRelatorio    += '&turma='+oCboTurma.getValue();
     sUrlRelatorio    += '&periodo='+oCboPeriodo.getValue();
     sUrlRelatorio    += '&disciplinas='+aDisciplinas;
-    sUrlRelatorio    += '&paginas='+$F('numeroPaginas');
+//    sUrlRelatorio    += '&paginas='+$F('numeroPaginas');
     sUrlRelatorio    += '&preenchimento='+sPreenchimento;
     sUrlRelatorio    += '&lRegistroOcorrencia=false';
 
