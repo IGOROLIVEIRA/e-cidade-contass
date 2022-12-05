@@ -1313,7 +1313,7 @@ inner join pcorcamjulg on
       $dispensa18->si82_tiporegistro = 20;
       $dispensa18->si82_codorgaoresp = $oDados18->codorgaoresp;
       if($oDados18->codunidsubant!= null || $oDados18->codunidsubant!=''){
-        $dispensa18->si81_codunidadesubresp = $oDados18->codunidsubant;    
+        $dispensa18->si82_codunidadesubresp = $oDados18->codunidsubant;    
       }else{
         $dispensa18->si82_codunidadesubresp = $oDados18->codunidadesubresp;
       }

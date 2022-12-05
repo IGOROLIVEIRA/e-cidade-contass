@@ -748,7 +748,7 @@ WHERE rh30_vinculo IN ('I',
             $mesfolha = date("m", db_getsession("DB_datausu"));
         }
         if ($tipoevento == 1) {
-            $sql = "select distinct z01_cgccpf from rhpessoal
+            $sql = "SELECT distinct z01_cgccpf from rhpessoal
                 left join rhpessoalmov on
                 rh02_anousu = fc_getsession('DB_anousu')::int
                 and rh02_mesusu = date_part('month', fc_getsession('DB_datausu')::date)
@@ -880,9 +880,9 @@ WHERE rh30_vinculo IN ('I',
                 e69_codnota = e70_codnota
             inner join orcelemento on
                 empnotaele.e70_codele = orcelemento.o56_codele
-            inner join cgmfisico on
+            left join cgmfisico on
                 z04_numcgm = cgm.z01_numcgm
-            inner join rhcbo on
+            left join rhcbo on
                 rh70_sequencial = z04_rhcbo
             left join conlancamemp on
                 c75_numemp = e60_numemp
@@ -909,10 +909,11 @@ WHERE rh30_vinculo IN ('I',
             left join retencaotiporec on
                 retencaotiporec.e21_sequencial = retencaoreceitas.e23_retencaotiporec
             left join db_config on
-                db_config.codigo = fc_getsession('DB_instit')::int
+		        db_config.codigo = empempenho.e60_instit
             where e50_data BETWEEN '$ano-$mes-01' AND '$ano-$mes-$ultimoDiaDoMes'
                 and Length(cgm.z01_cgccpf) like '11'
                 and e50_cattrabalhador is not null
+                and db_config.codigo = fc_getsession('DB_instit')::int
             ";
             if ($cgm != null) {
                 $sql .= " and cgm.z01_numcgm in ($cgm) ";
@@ -1091,66 +1092,18 @@ WHERE rh30_vinculo IN ('I',
                 and rh02_mesusu = date_part('month', fc_getsession('DB_datausu')::date)
                 and rh02_regist = rh01_regist
                 and rh02_instit = fc_getsession('DB_instit')::int
-            left join rhinssoutros    on rh51_seqpes                 = rh02_seqpes
-            left join rhlota on
-                rhlota.r70_codigo = rhpessoalmov.rh02_lota
-                and rhlota.r70_instit = rhpessoalmov.rh02_instit
-            inner join cgm on
-                cgm.z01_numcgm = rhpessoal.rh01_numcgm
-            inner join db_config on
-                db_config.codigo = rhpessoal.rh01_instit
-            inner join rhestcivil on
-                rhestcivil.rh08_estciv = rhpessoal.rh01_estciv
-            inner join rhraca on
-                rhraca.rh18_raca = rhpessoal.rh01_raca
-            left join rhfuncao on
-                rhfuncao.rh37_funcao = rhpessoalmov.rh02_funcao
-                and rhfuncao.rh37_instit = rhpessoalmov.rh02_instit
-            left join rhpescargo on
-                rhpescargo.rh20_seqpes = rhpessoalmov.rh02_seqpes
-            left join rhcargo on
-                rhcargo.rh04_codigo = rhpescargo.rh20_cargo
-                and rhcargo.rh04_instit = rhpessoalmov.rh02_instit
-            inner join rhinstrucao on
-                rhinstrucao.rh21_instru = rhpessoal.rh01_instru
-            inner join rhnacionalidade on
-                rhnacionalidade.rh06_nacionalidade = rhpessoal.rh01_nacion
-            left join rhpesrescisao on
-                rh02_seqpes = rh05_seqpes
-            left join rhsindicato on
-                rh01_rhsindicato = rh116_sequencial
-            inner join rhreajusteparidade on
-                rhreajusteparidade.rh148_sequencial = rhpessoal.rh01_reajusteparidade
-            left join rhpesdoc on
-                rhpesdoc.rh16_regist = rhpessoal.rh01_regist
-            left join rhdepend on
-                rhdepend.rh31_regist = rhpessoal.rh01_regist
-            left join rhregime on
-                rhregime.rh30_codreg = rhpessoalmov.rh02_codreg
-            left join rhpesfgts on
-                rhpesfgts.rh15_regist = rhpessoal.rh01_regist
-            inner join tpcontra on
-                tpcontra.h13_codigo = rhpessoalmov.rh02_tpcont
-            left join rhcontratoemergencial on
-                rh163_matricula = rh01_regist
-            left join rhcontratoemergencialrenovacao on
-                rh164_contratoemergencial = rh163_sequencial
-            left join jornadadetrabalho on
-                jt_sequencial = rh02_jornadadetrabalho
-            left join db_cgmbairro on
-                cgm.z01_numcgm = db_cgmbairro.z01_numcgm
-            left join bairro on
-                bairro.j13_codi = db_cgmbairro.j13_codi
-            left join db_cgmruas on
-                cgm.z01_numcgm = db_cgmruas.z01_numcgm
-            left join ruas on
-                ruas.j14_codigo = db_cgmruas.j14_codigo
-            left join rescisao on
-                rescisao.r59_anousu = rhpessoalmov.rh02_anousu
-                and rescisao.r59_mesusu = rhpessoalmov.rh02_mesusu
-                and rescisao.r59_regime = rhregime.rh30_regime
-                and rescisao.r59_causa = rhpesrescisao.rh05_causa
-                and rescisao.r59_caub = rhpesrescisao.rh05_caub::char(2)
+            left join rhinssoutros on
+	rh51_seqpes = rh02_seqpes
+    inner join cgm on
+        cgm.z01_numcgm = rhpessoal.rh01_numcgm
+    inner join db_config on
+	db_config.codigo = rhpessoal.rh01_instit
+    left join rhpesrescisao on
+	rh02_seqpes = rh05_seqpes
+    left join rhregime on
+        rhregime.rh30_codreg = rhpessoalmov.rh02_codreg
+    inner join tpcontra on
+        tpcontra.h13_codigo = rhpessoalmov.rh02_tpcont
             left  outer join (
                     SELECT distinct r33_codtab,r33_nome,r33_tiporegime
                                         from inssirf
@@ -1158,7 +1111,7 @@ WHERE rh30_vinculo IN ('I',
                                             and r33_mesusu = $mesfolha
                                             and r33_instit = fc_getsession('DB_instit')::int
                                     ) as x on r33_codtab = rhpessoalmov.rh02_tbprev+2
-            where 1=1
+             where 1=1
                 and ((rh05_recis is not null
                 and date_part('month', rh05_recis) = date_part('month', fc_getsession('DB_datausu')::date)
                 and date_part('year', rh05_recis) = date_part('year', fc_getsession('DB_datausu')::date)

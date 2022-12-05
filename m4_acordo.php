@@ -30,8 +30,9 @@ $clrotulo->label('ac16_licitacao');
 $clrotulo->label('l20_objeto');
 $clrotulo->label('ac16_dataassinatura');
 $clrotulo->label('ac35_dataassinaturatermoaditivo');
+$clrotulo->label('ac35_datareferencia');
 $clrotulo->label('ac26_numeroaditamento');
-
+$clrotulo->label('ac16_datareferencia');
 if (isset($alterar)) {
   if (empty($_POST['ac16_adesaoregpreco'])) {
     unset($_POST['ac16_adesaoregpreco']);
@@ -66,7 +67,7 @@ if (isset($alterar)) {
   $ac18_datainicio = $_POST['ac18_datainicio'];
   $ac18_datafim = $_POST['ac18_datafim'];
   $si03_dataapostila = $_POST['si03_dataapostila'];
-
+  $si03_datareferencia = $_POST['si03_datareferencia'];
 
   for ($i = 0; $i < count($ac26_sequencial); $i++) {
     $posicao = $ac26_sequencial[$i];
@@ -74,6 +75,7 @@ if (isset($alterar)) {
     $datainicio = implode('-', array_reverse(explode('/', $ac18_datainicio[$i])));
     $datafim = implode('-', array_reverse(explode('/', $ac18_datafim[$i])));
     $dataapostila = implode('-', array_reverse(explode('/', $si03_dataapostila[$i])));
+    $dataapostilareferencia = implode('-', array_reverse(explode('/', $si03_datareferencia[$i])));
     $dataassinatura = implode('-', array_reverse(explode('/', $ac16_dataassinatura)));
 
 
@@ -92,7 +94,7 @@ if (isset($alterar)) {
 
     if ($erro != true) {
       db_query("update acordovigencia set ac18_datainicio = '$datainicio', ac18_datafim = '$datafim' WHERE ac18_acordoposicao = $posicao;");
-      db_query("update apostilamento set si03_dataapostila = '$dataapostila' WHERE si03_acordoposicao = $posicao;");
+      db_query("update apostilamento set si03_dataapostila = '$dataapostila',si03_datareferencia = '$dataapostilareferencia' WHERE si03_acordoposicao = $posicao;");
       db_query("update acordoposicao set ac26_numeroapostilamento = '$numeroapostilamento' WHERE ac26_sequencial = $posicao;");
     }
   }
@@ -239,7 +241,29 @@ if (isset($alterar)) {
     ");
 
     $cflicita = db_utils::fieldsMemory($resultadocflicita, 0);
-    db_query("update acordo set ac16_numodalidade = '$licitacao->l20_numero', ac16_tipomodalidade = '$cflicita->l03_descr' WHERE ac16_sequencial = '$ac16_sequencial';");
+    $ac16_datareferencia = implode('-', array_reverse(explode('/', $ac16_datareferencia)));
+    $ac16_datapublicacao = implode('-', array_reverse(explode('/', $ac16_datapublicacao)));
+    $dTinicio = implode('-', array_reverse(explode('/', $ac16_datainicio)));
+    $dTfim = implode('-', array_reverse(explode('/', $ac16_datafim)));
+    $setac16 = '';
+    if($ac16_datareferencia != "" && $ac16_datareferencia != null){
+      $setac16 .= ",ac16_datareferencia = '$ac16_datareferencia'";
+    }
+    if($ac16_datapublicacao != "" && $ac16_datapublicacao != null){
+      $setac16 .= ",ac16_datapublicacao = '$ac16_datapublicacao'";
+    }
+    if($ac16_veiculodivulgacao != "" && $ac16_veiculodivulgacao != null){
+      $setac16 .= ",ac16_veiculodivulgacao = '$ac16_veiculodivulgacao'";
+    }
+    if($dTinicio != "" && $dTinicio != null){
+      $setac16 .= ",ac16_datainicio = '$dTinicio'";
+    }
+    if($dTfim != "" && $dTfim != null){
+      $setac16 .= ",ac16_datafim = '$dTfim'";
+    }
+    
+    
+    db_query("update acordo set ac16_numodalidade = '$licitacao->l20_numero', ac16_tipomodalidade = '$cflicita->l03_descr' $setac16 WHERE ac16_sequencial = '$ac16_sequencial';");
   }
 
   $ac16_datainicio = implode('-', array_reverse(explode('/', $ac16_datainicio)));
@@ -275,14 +299,17 @@ if (isset($alterar)) {
       $inicio = 'ac18_datainicio_' . $oPosicao->ac18_sequencial;
       $fim = 'ac18_datafim_' . $oPosicao->ac18_sequencial;
       $dataaditivo = 'ac35_dataassinaturatermoaditivo_' . $oPosicao->ac18_sequencial;
+      $dataaditivoreferencia = 'ac35_datareferencia_' . $oPosicao->ac18_sequencial;
 
       $dTinicio = '';
       $dTfim = '';
       $dTassaditivo = '';
+      $dTassaditivoreferencia = '';
 
       $dTinicio = implode('-', array_reverse(explode('/', $$inicio)));
       $dTfim = implode('-', array_reverse(explode('/', $$fim)));
       $dTassaditivo = implode('-', array_reverse(explode('/', $$dataaditivo)));
+      $dTassaditivoreferencia = implode('-', array_reverse(explode('/', $$dataaditivoreferencia)));
       $dataassinatura = implode('-', array_reverse(explode('/', $ac16_dataassinatura)));
 
       if ($dTassaditivo != "") {
@@ -310,24 +337,30 @@ if (isset($alterar)) {
 
 
   if (!isset($erro)) {
+    
+    $resprimeirapos = db_query("select min(ac26_sequencial) as primeirapos from acordoposicao where ac26_acordo=$ac16_sequencial");
+      $oDaoprimeirapos = pg_result($resprimeirapos, 0);
     for ($iCont = 0; $iCont < pg_num_rows($rsPosicoes); $iCont++) {
       $oPosicao = db_utils::fieldsMemory($rsPosicoes, $iCont);
-
+      
       if ($aditivo) {
-
+        
 
 
         $inicio = 'ac18_datainicio_' . $oPosicao->ac18_sequencial;
         $fim = 'ac18_datafim_' . $oPosicao->ac18_sequencial;
         $dataaditivo = 'ac35_dataassinaturatermoaditivo_' . $oPosicao->ac18_sequencial;
+        $dataaditivoreferencia = 'ac35_datareferencia_' . $oPosicao->ac18_sequencial;
 
         $dTinicio = '';
         $dTfim = '';
         $dTassaditivo = '';
+        $dTassaditivoreferencia = '';
 
         $dTinicio = implode('-', array_reverse(explode('/', $$inicio)));
         $dTfim = implode('-', array_reverse(explode('/', $$fim)));
         $dTassaditivo = implode('-', array_reverse(explode('/', $$dataaditivo)));
+        $dTassaditivoreferencia = implode('-', array_reverse(explode('/', $$dataaditivoreferencia)));
 
         if (!empty($dTinicio) && !empty($dTfim)) {
           db_query("update acordovigencia  set ac18_datainicio = '$dTinicio', ac18_datafim  = '$dTfim' where ac18_acordoposicao  = '$oPosicao->posicao'");
@@ -336,12 +369,22 @@ if (isset($alterar)) {
         if (!empty($dTassaditivo)) {
           db_query("update acordoposicaoaditamento set ac35_dataassinaturatermoaditivo = '$dTassaditivo' where ac35_acordoposicao = '$oPosicao->posicao'");
         }
+        if (!empty($dTassaditivoreferencia)) {
+          db_query("update acordoposicaoaditamento set ac35_datareferencia = '$dTassaditivoreferencia' where ac35_acordoposicao = '$oPosicao->posicao'");
+        }
       } else {
         $dTinicio = implode('-', array_reverse(explode('/', $ac16_datainicio)));
         $dTfim = implode('-', array_reverse(explode('/', $ac16_datafim)));
+        
         db_query("update acordovigencia  set ac18_datainicio = '$dTinicio', ac18_datafim  = '$dTfim' where ac18_acordoposicao  = '$oPosicao->posicao'");
         db_query("update acordoitemperiodo set ac41_datainicial = '$dTinicio', ac41_datafinal = '$dTfim' where ac41_acordoposicao = '$oPosicao->posicao'");
       }
+      if($oDaoprimeirapos == $oPosicao->posicao){
+        $dTinicio = implode('-', array_reverse(explode('/', $ac16_datainicio)));
+        $dTfim = implode('-', array_reverse(explode('/', $ac16_datafim)));
+        db_query("update acordovigencia  set ac18_datainicio = '$dTinicio', ac18_datafim  = '$dTfim' where ac18_acordoposicao  = '$oPosicao->posicao'");
+      }
+      
 
       $resmanut = db_query("select nextval('db_manut_log_manut_sequencial_seq') as seq");
       $seq = pg_result($resmanut, 0, 0);
@@ -398,6 +441,7 @@ if (isset($alterar)) {
                             ac18_datainicio,
                             ac18_datafim,
                             ac35_dataassinaturatermoaditivo,
+                            ac35_datareferencia,
                             ac26_numeroaditamento
               from
                 acordoposicao
@@ -420,6 +464,9 @@ if (isset($alterar)) {
                 inner join acordoposicaoperiodo on ac36_acordoposicao = ac26_sequencial
                 where ac16_sequencial = '$ac16_sequencial' order by posicao"
         );
+        $result = $clacordo->sql_record($clacordo->sql_query_vinculos($ac16_sequencial, "ac16_sequencial,ac16_resumoobjeto,ac16_datareferencia,ac16_datapublicacao,ac16_veiculodivulgacao,ac16_acordosituacao, ac16_objeto,ac16_origem,ac16_tipoorigem,ac16_licitacao,l20_objeto,ac16_adesaoregpreco,si06_objetoadesao,orgao.z01_nome,ac16_licoutroorgao,ac16_acordogrupo,ac02_descricao,ac16_numeroacordo,ac16_dataassinatura,ac16_datainicio,ac16_datafim", null, ""));
+
+        db_fieldsmemory($result, 0);
       }
     }
   }
@@ -431,7 +478,7 @@ if (isset($alterar)) {
 } elseif (isset($chavepesquisa)) {
   $db_opcao = 2;
   $db_botao = true;
-  $result = $clacordo->sql_record($clacordo->sql_query_vinculos($chavepesquisa, "ac16_sequencial,ac16_resumoobjeto, ac16_objeto,ac16_origem,ac16_tipoorigem,ac16_licitacao,l20_objeto,ac16_adesaoregpreco,si06_objetoadesao,orgao.z01_nome,ac16_licoutroorgao,ac16_acordogrupo,ac02_descricao,ac16_numeroacordo,ac16_dataassinatura,ac16_datainicio,ac16_datafim", null, ""));
+  $result = $clacordo->sql_record($clacordo->sql_query_vinculos($chavepesquisa, "ac16_sequencial,ac16_resumoobjeto,ac16_datareferencia,ac16_datapublicacao,ac16_veiculodivulgacao,ac16_acordosituacao, ac16_objeto,ac16_origem,ac16_tipoorigem,ac16_licitacao,l20_objeto,ac16_adesaoregpreco,si06_objetoadesao,orgao.z01_nome,ac16_licoutroorgao,ac16_acordogrupo,ac02_descricao,ac16_numeroacordo,ac16_dataassinatura,ac16_datainicio,ac16_datafim", null, ""));
 
   db_fieldsmemory($result, 0);
 
@@ -454,11 +501,10 @@ if (isset($alterar)) {
       "select distinct
             ac26_sequencial as POSICAO,
                         ac18_sequencial,
-                        ac16_datainicio,
-                        ac16_datafim,
                         ac18_datainicio,
                         ac18_datafim,
                         ac35_dataassinaturatermoaditivo,
+                        ac35_datareferencia,
                         ac26_numeroaditamento
           from
             acordoposicao
@@ -748,6 +794,64 @@ if (isset($alterar)) {
               </td>
             </tr>
             <tr>
+              <td nowrap><?php echo "<b>Data de Referência</b>"; ?>
+              </td>
+              <td>
+                <?=
+                
+                db_inputdata(
+                  'ac16_datareferencia',
+                  @$ac16_datareferencia_dia,
+                  @$ac16_datareferencia_mes,
+                  @$ac16_datareferencia_ano,
+                  true,
+                  'text',
+                  $iOpcao
+                );
+                 ?>
+              </td>
+            </tr>
+            <tr>
+              <td nowrap>
+              <b>Data da Publicação</b>
+              </td>
+              <td>
+                <?=
+                db_inputdata(
+                  'ac16_datapublicacao',
+                  @$ac16_datapublicacao_dia,
+                  @$ac16_datapublicacao_mes,
+                  @$ac16_datapublicacao_ano,
+                  true,
+                  'text',
+                  $iOpcao
+                );
+                 ?>
+              </td>
+            </tr>
+            <tr>
+              <td nowrap>
+              <b>Veículo de Divulgação</b>
+              </td>
+              <td>
+                <?=
+                db_textarea('ac16_veiculodivulgacao', 0, 65, $Iac16_veiculodivulgacao, true, 'text', $db_opcao, "");
+                 ?>
+              </td>
+            </tr>
+
+
+            <tr>
+              <td nowrap><?= $Lac16_acordosituacao ?>
+              </td>
+              <td>
+                <?=
+                
+                db_select('ac16_acordosituacao', array('1'=> 'Ativo','4' => 'Homologado'), true, $db_opcao, "", "");
+                 ?>
+              </td>
+            </tr>
+            <tr>
               <td colspan="2">
                 <fieldset class='fieldsetinterno'>
                   <legend>
@@ -855,7 +959,7 @@ if (isset($alterar)) {
                               $iCampo
                             ); ?>
                           </td>
-                          <td nowrap><?= $Lac16_dataassinatura ?>
+                          <td nowrap><?= $Lac16_dataassinatura?>
                           </td>
                           <td>
                             <?php
@@ -867,6 +971,21 @@ if (isset($alterar)) {
                               true,
                               'text',
                               $iOpcao
+                            ); ?>
+                          </td>
+                          <td nowrap><?php echo "<b>Data de Referência</b>";?>
+                          </td>
+                          <td>
+                            <?php
+                            db_inputdata(
+                              "ac35_datareferencia_$ac18_sequencial",
+                              @$ac35_datareferencia_dia,
+                              @$ac35_datareferencia_mes,
+                              @$ac35_datareferencia_ano,
+                              true,
+                              'text',
+                              $iOpcao,
+                              "class='numeroaditivo'"
                             ); ?>
                           </td>
                         </tr>
@@ -954,6 +1073,22 @@ if (isset($alterar)) {
                               $iOpcao,
                               "onkeypress='mascaraData(this)' class='dataapostila'"
 
+                            ); ?>
+                          </td>
+                          <td nowrap>
+                            <b>Data de Referência</b>
+                          </td>
+                          <td>
+                            <?php
+                            db_inputdata(
+                              "si03_datareferencia_$ac18_sequencial",
+                              @$si03_datareferencia_dia,
+                              @$si03_datareferencia_mes,
+                              @$si03_datareferencia_ano,
+                              true,
+                              'text',
+                              $iOpcao,
+                              "onkeypress='mascaraData(this)' class='datareferenciaapostila'"
                             ); ?>
                           </td>
                         </tr>
@@ -1063,6 +1198,7 @@ if (isset($alterar)) {
   ac18_datainicio = document.getElementsByClassName('datainicio');
   ac18_datafim = document.getElementsByClassName('datafim');
   si03_dataapostila = document.getElementsByClassName('dataapostila');
+  si03_datareferencia = document.getElementsByClassName('datareferenciaapostila');
   ac26_sequencial = document.getElementsByClassName('ac26_sequencial');
   for (i = 0; i < ac26_numeroapostilamento.length; i++) {
     ac26_numeroapostilamento[i].removeAttribute(" name");
@@ -1073,23 +1209,47 @@ if (isset($alterar)) {
     ac18_datafim[i].setAttribute("name", "ac18_datafim[]");
     si03_dataapostila[i].removeAttribute("name");
     si03_dataapostila[i].setAttribute("name", "si03_dataapostila[]");
+    si03_datareferencia[i].removeAttribute("name");
+    si03_datareferencia[i].setAttribute("name", "si03_datareferencia[]");
     ac26_sequencial[i].removeAttribute("name");
     ac26_sequencial[i].setAttribute("name", "ac26_sequencial[]");
   }
-
+  if($('ac16_acordosituacao').value == 1){
+    $('ac16_acordosituacao').options[0].disabled=true;
+  }else if($('ac16_acordosituacao').value == 4){
+    $('ac16_acordosituacao').options[1].disabled=true;
+  }
 
   function alteraAcordo() {
 
     if (!confirm("Deseja realmente alterar")) {
       return false;
     }
+    if(($('ac16_dataassinatura').value=="" || $('ac16_dataassinatura').value == null) && $('ac16_acordosituacao').value == 4){
+      alert("O preenchimento da Data de Assinatura é obrigatório ! ");
+      return false;
+    }
+    
 
     ac26_numeroapostilamento = document.getElementsByClassName('numeroapostilamento');
+    ac16_numeroaditivo = document.getElementsByClassName('numeroaditivo');
     ac18_datainicio = document.getElementsByClassName('datainicio');
     ac18_datafim = document.getElementsByClassName('datafim');
     si03_dataapostila = document.getElementsByClassName('dataapostila');
+    si03_datareferencia = document.getElementsByClassName('datareferenciaapostila');
     ac26_sequencial = document.getElementsByClassName('ac26_sequencial');
-
+    
+    if (($('ac16_datareferencia').value == "" || $('ac16_datareferencia').value == null) && $('ac16_acordosituacao').value == 4) {
+        alert("O preenchimento a data de referência do acordo é obrigatório !");
+        return false;
+      }
+    for (i = 0; i < ac16_numeroaditivo.length; i++) {
+      if ((ac16_numeroaditivo[i].value == "" || ac16_numeroaditivo[i].value == null) && $('ac16_acordosituacao').value == 4) {
+        alert("O preenchimento a data de referência no aditamento é obrigatório !");
+        return false;
+      }
+    }
+    
     for (i = 0; i < ac26_numeroapostilamento.length; i++) {
       if (ac26_numeroapostilamento[i].value == "") {
         alert("O preenchimento do número do apostilamento é obrigatório !");
@@ -1105,6 +1265,10 @@ if (isset($alterar)) {
       }
       if (si03_dataapostila[i].value == "") {
         alert("O preenchimento da data de apostilamento é obrigatório !");
+        return false;
+      }
+      if (si03_datareferencia[i].value == "") {
+        alert("O preenchimento da data de referência é obrigatório !");
         return false;
       }
     }

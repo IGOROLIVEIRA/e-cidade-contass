@@ -251,68 +251,78 @@ $valorp = "and orcsuplem.o46_data is not null";
      	 }
      }
 
-
-
-//    $txt="Autoriza o Poder Executivo Municipal a abrir $tipo_sup na importancia de ".
-//         "R$ ".db_formatar($total_suplementado,'f')." (".db_extenso($total_suplementado,true).") e da outras providências. ";
     $pdf->setX(100);
     $pdf->multicell(90,4,$txt,'0','J','0',20);
     $pdf->Ln(7);
 
-
-    if ($projeto_tipo == "1"){ // decreto
-        $res= $cldbconfig->sql_record($cldbconfig->sql_query(db_getsession("DB_instit")));
-        db_fieldsmemory($res,0);
-        $pdf->setX(20);
-        $pref = ucfirst($pref);
-        $nomeinst = ucwords($nomeinst);
-
-        if ($si09_tipoinstit == 3 || $si09_tipoinstit == 4 || $si09_tipoinstit == 5 || $si09_tipoinstit == 51) {
-            $txt = "$pref, PRESIDENTE DO $nomeinst localizado no município de $munic, $uf, no uso de suas atribuições legais e de conformidade legal";
-        } else if ($si09_tipoinstit == 1) {
-            $txt = "$pref, PRESIDENTE DA CAMARA MUNICIPAL DE VEREADORES DE $munic, $uf, no uso de suas atribuições legais e de conformidade com a Lei Municipal n" . chr(186) ." $o45_numlei";
-        } else {
-            $txt = "$pref, PREFEITO MUNICIPAL DE $munic, $uf, no uso de suas atribuições legais e de conformidade com a Lei Municipal $o45_numlei";
+    function verificarTipoDeInstituicao($si09_tipoinstit,$pref,$nomeinst,$munic,$uf,$o45_numlei){
+        if ($si09_tipoinstit == 1) {
+          $txt = "$pref, PRESIDENTE DA CAMARA MUNICIPAL DE VEREADORES DE $munic, $uf, no uso de suas atribuições legais e de conformidade com a Lei Municipal n" . chr(186) ." $o45_numlei";
+          return $txt;
         }
-       if($o39_compllei != ""){
-         $txt .= ", $o39_compllei, DECRETA:";
-       }else{
-         $txt .= " DECRETA:";
-       }
-       $pdf->multicell(170,4,$txt,'0','J','0');
-       $pdf->Ln(7);
-       $artigo = $artigo +1;
-       $txt="Art $artigo. - Fica aberto $tipo_sup ".
-                "na importância de  R$ ".db_formatar($total_suplementado,'f')." (".db_extenso($total_suplementado,true)." ) ".
-	            "sob a seguinte classificação econômica e programática ";
-    } else {   // quando for lei
-       $res = $cldbconfig->sql_record($cldbconfig->sql_query(db_getsession("DB_instit")));
-       db_fieldsmemory($res,0);
-
-       $pdf->setX(20);
-       $pref = strtoupper($pref);
-       $nomeinst = ucwords($nomeinst);
-       
-       if($si09_tipoinstit == 3 || $si09_tipoinstit == 5 || $si09_tipoinstit == 51){
-            $txt = "$pref, PRESIDENTE DO $nomeinst localizado no município de $munic, $uf, no uso de suas atribuições legais e de conformidade legal";
-        } else if ($si09_tipoinstit == 1) {
-            $txt = "$pref, PRESIDENTE DA CAMARA MUNICIPAL DE VEREADORES DE $munic, $uf.";
-       } else {
-            $txt = "$pref, PREFEITO MUNICIPAL DE $munic, $uf.";
-       }
-       $pdf->multicell(170,4,$txt,'0','J','0');
-       $pdf->Ln(7);
-       $pdf->setX(20);
-       $txt="FAÇO SABER, que a Camara Municipal aprovou e eu sanciono a seguinte Lei: ";
-       $pdf->multicell(170,4,$txt,'0','J','0');
-       $pdf->Ln(7);
-       $artigo = $artigo +1;
-       $txt="Art $artigo. -  Fica o Poder Executivo Municipal autorizado a abrir $tipo_sup ".
-            "na importância de  R$ ".db_formatar($total_suplementado,'f')." (".db_extenso($total_suplementado,true)." ) ".
-	    "sob a seguinte classificação econômica e programática ";
+        if ($si09_tipoinstit == 4 || $si09_tipoinstit == 5 || $si09_tipoinstit == 51) {
+          $txt = "$pref, PRESIDENTE DO $nomeinst localizado no município de $munic, $uf, no uso de suas atribuições legais e de conformidade legal";
+          return $txt;
+        }  
+          $txt = "$pref, PREFEITO MUNICIPAL DE $munic, $uf, no uso de suas atribuições legais e de conformidade com a Lei Municipal $o45_numlei";
+          return $txt;
     }
+   function tipoProjetoDecreto($txt,$tipo_sup,$pdf,$artigo,$total_suplementado){
+      $pdf->multicell(170,4,$txt,'0','J','0');
+      $pdf->Ln(7);
+      $artigo = $artigo +1;
+      $txt="Art $artigo. - Fica aberto $tipo_sup ".
+              "na importância de  R$ ".db_formatar($total_suplementado,'f')." (".db_extenso($total_suplementado,true)." ) ".
+            "sob a seguinte classificação econômica e programática ";
+      return $txt;    
 
+   }
+   function tipoProjetoLei($txt,$tipo_sup,$pdf,$artigo,$total_suplementado){
+      $pdf->multicell(170,4,$txt,'0','J','0');
+      $pdf->Ln(7);
+      $pdf->setX(20);
+      $txt="FAÇO SABER, que a Camara Municipal aprovou e eu sanciono a seguinte Lei: ";
+      $pdf->multicell(170,4,$txt,'0','J','0');
+      $pdf->Ln(7);
+      $artigo = $artigo +1;
+      $txt="Art $artigo. -  Fica o Poder Executivo Municipal autorizado a abrir $tipo_sup ".
+          "na importância de  R$ ".db_formatar($total_suplementado,'f')." (".db_extenso($total_suplementado,true)." ) ".
+    "sob a seguinte classificação econômica e programática ";
+      return $txt; 
+  }
+  function verificarComllei($o39_compllei,$txt){
+      if($o39_compllei != ""){
+        $txt .= ", $o39_compllei, DECRETA:";
+        return $txt;
+      }
+        $txt .= " DECRETA:";
+        return $txt;
+  }
 
+  $res = $cldbconfig->sql_record($cldbconfig->sql_query(db_getsession("DB_instit")));
+  db_fieldsmemory($res,0);
+  $pdf->setX(20);
+  $pref = strtoupper($pref);
+  $nomeinst = ucwords($nomeinst);
+
+  function verificarProjetoTipo($projeto_tipo,$si09_tipoinstit,$pref,$nomeinst,$munic,$uf,$o45_numlei,$tipo_sup,$pdf,$artigo,$total_suplementado,$o39_compllei){
+      if ($projeto_tipo == "1"){ // decreto
+        
+        $txt = verificarTipoDeInstituicao($si09_tipoinstit,$pref,$nomeinst,$munic,$uf,$o45_numlei) ;
+
+        verificarComllei($o39_compllei,$txt); 
+
+        $txt = tipoProjetoDecreto($txt,$tipo_sup,$pdf,$artigo,$total_suplementado);
+        return $txt;
+      } 
+      $txt = verificarTipoDeInstituicao($si09_tipoinstit,$pref,$nomeinst,$munic,$uf,$o45_numlei) ;  
+
+      $txt = tipoProjetoLei($txt,$tipo_sup,$pdf,$artigo,$total_suplementado);
+      return $txt;    
+ }
+
+ $txt = verificarProjetoTipo($projeto_tipo,$si09_tipoinstit,$pref,$nomeinst,$munic,$uf,$o45_numlei,$tipo_sup,$pdf,$artigo,$total_suplementado,$o39_compllei);
+    
 ////////// primeiro artigo, das suplementações
 //       $artigo = $artigo +1;
 //    $txt="Art $artigo. -  Fica o Poder Executivo Municipal autorizado a abrir $tipo_sup ".
@@ -321,7 +331,6 @@ $valorp = "and orcsuplem.o46_data is not null";
     $pdf->setX(20);
     $pdf->multicell(170,4,$txt,'0','J','0',20);
     $pdf->Ln(4);
-
 
   // seleciona suplementacoes do projeto
   // executa o mesmo select, só que agora pra listar as suplementações

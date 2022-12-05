@@ -26,7 +26,7 @@ for ($i = 0; $i < 3; $i++){
   $this->objpdf->roundedrect($xcol-2, $xlin-18, 206, $iAltQuadroPrincipal, 2,'DF','1234');
   $this->objpdf->setfillcolor(255,255,255);
   $this->objpdf->Setfont('Arial','B',11);
-  $this->objpdf->text(150,$xlin-13,'RECIBO VÁLIDO ATÉ: ');
+  $this->objpdf->text(150,$xlin-13,'DAM VÁLIDO ATÉ: ');
   $this->objpdf->text(159,$xlin-8,$this->datacalc);
   //Via
   if( $i == 0 ){

@@ -90,6 +90,9 @@ class EventoS1202 extends EventoBase
                     $std->dmdev[$seqdmdev]->infoperapur->ideestab[0]->remunperapur[0]->matricula = $aDadosPorMatriculas[$iCont]->matricula; //Opcional
 
                     $aDadosValoreRubrica = $this->buscarValorRubrica($aDadosPorMatriculas[$iCont]->matricula, $aDadosPorMatriculas[$iCont]->rh30_regime, $aIdentificador[$iCont2]->idedmdev);
+                    if (empty($aDadosValoreRubrica))
+                        continue;
+
                     for ($iCont4 = 0; $iCont4 < count($aDadosValoreRubrica); $iCont4++) {
                         //Rubricas que comp?em a remunera??o do trabalhador.
                         $std->dmdev[$seqdmdev]->infoperapur->ideestab[0]->remunperapur[0]->itensremun[$iCont4] = new \stdClass(); //Obrigat?rio
@@ -169,34 +172,10 @@ class EventoS1202 extends EventoBase
         rhnacionalidade.rh06_nacionalidade = rhpessoal.rh01_nacion
     left join rhpesrescisao on
         rh02_seqpes = rh05_seqpes
-    left join rhsindicato on
-        rh01_rhsindicato = rh116_sequencial
-    inner join rhreajusteparidade on
-        rhreajusteparidade.rh148_sequencial = rhpessoal.rh01_reajusteparidade
-    left join rhpesdoc on
-        rhpesdoc.rh16_regist = rhpessoal.rh01_regist
-    left join rhdepend on
-        rhdepend.rh31_regist = rhpessoal.rh01_regist
     left join rhregime on
         rhregime.rh30_codreg = rhpessoalmov.rh02_codreg
-    left join rhpesfgts on
-        rhpesfgts.rh15_regist = rhpessoal.rh01_regist
     inner join tpcontra on
         tpcontra.h13_codigo = rhpessoalmov.rh02_tpcont
-    left join rhcontratoemergencial on
-        rh163_matricula = rh01_regist
-    left join rhcontratoemergencialrenovacao on
-        rh164_contratoemergencial = rh163_sequencial
-    left join jornadadetrabalho on
-        jt_sequencial = rh02_jornadadetrabalho
-    left join db_cgmbairro on
-        cgm.z01_numcgm = db_cgmbairro.z01_numcgm
-    left join bairro on
-        bairro.j13_codi = db_cgmbairro.j13_codi
-    left join db_cgmruas on
-        cgm.z01_numcgm = db_cgmruas.z01_numcgm
-    left join ruas on
-        ruas.j14_codigo = db_cgmruas.j14_codigo
     left join rescisao on
         rescisao.r59_anousu = rhpessoalmov.rh02_anousu
         and rescisao.r59_mesusu = rhpessoalmov.rh02_mesusu
@@ -220,42 +199,11 @@ class EventoS1202 extends EventoBase
 		)
 		or
 		rh05_recis is null
-	)
-    and (exists (SELECT
-	1
-from
-	gerfsal
-where
-	r14_anousu = fc_getsession('DB_anousu')::int
-	and r14_mesusu = date_part('month', fc_getsession('DB_datausu')::date)
-	and r14_instit = fc_getsession('DB_instit')::int
-	and r14_regist = rhpessoal.rh01_regist)
-    or
-    exists (SELECT
-	1
-from
-	gerfcom
-where
-	r48_anousu = fc_getsession('DB_anousu')::int
-	and r48_mesusu = date_part('month', fc_getsession('DB_datausu')::date)
-	and r48_instit = fc_getsession('DB_instit')::int
-	and r48_regist = rhpessoal.rh01_regist)
-    or
-    exists (SELECT
-	1
-from
-	gerfres
-where
-	r20_anousu = fc_getsession('DB_anousu')::int
-	and r20_mesusu = date_part('month', fc_getsession('DB_datausu')::date)
-	and r20_instit = fc_getsession('DB_instit')::int
-	and r20_regist = rhpessoal.rh01_regist))";
+	)";
 
 
         $rsValores = db_query($sql);
-        // echo $sql;
-        // db_criatabela($rsValores);
-        // exit;
+
         if (pg_num_rows($rsValores) > 0) {
             for ($iCont = 0; $iCont < pg_num_rows($rsValores); $iCont++) {
                 $oResult = \db_utils::fieldsMemory($rsValores, $iCont);

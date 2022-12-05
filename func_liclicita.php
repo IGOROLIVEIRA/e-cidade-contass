@@ -226,6 +226,11 @@ $sWhereContratos = " and 1 = 1 ";
                     $dbwhere .= " l20_naturezaobjeto in (1,7) and";
                 }
 
+                if ($itemobra == "true") {
+                    $dbwhere .= " l20_naturezaobjeto in (1,7) and l20_licsituacao in (0,1,10,13) and";
+
+                }
+
                 if ($credenciamento == 'true') {
                     //			    $dbwhere .= $dbwhere ? ' AND ' : ' ';
                     $dbwhere .= " l03_pctipocompratribunal IN (100,101,102,103) AND ";

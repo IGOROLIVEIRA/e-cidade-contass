@@ -56,6 +56,13 @@ $clliclancedital   = new cl_liclancedital;
 $db_opcao = 1;
 $db_botao = true;
 
+$rsCodtribunal = db_query("select l03_pctipocompratribunal from liclicita
+inner join cflicita on l20_codtipocom =  l03_codigo
+where l20_codigo = $licitacao;");
+$codtribunal = db_utils::fieldsMemory($rsCodtribunal, 0);
+$codtribunal = $codtribunal->l03_pctipocompratribunal;
+
+
 ?>
 <html>
 
@@ -210,6 +217,8 @@ $db_botao = true;
         let tipoJulgamento = "<?= $tipojulg ?>";
         let licitacao = "<?= $licitacao ?>";
         let naturezaObj = "<?= $naturezaobj ?>";
+        let codtribunal = "<?= $codtribunal ?>";
+
 
         if (oRetorno.status == 1) {
             js_removeObj('msgbox');
@@ -224,10 +233,14 @@ $db_botao = true;
                 parent.parent.document.formaba.liclicitemlote.disabled = false;
             }
 
-            if (tipoJulgamento == '1') {
-                if (naturezaObj == '1' || naturezaObj == '7') {
-                    parent.parent.window.location.href = `lic4_editalabas.php?licitacao=${licitacao}`;
+            if (codtribunal == 100 || codtribunal == 101 || codtribunal == 102 || codtribunal == 103) {
+
+                if (tipoJulgamento == '1') {
+                    if (naturezaObj == '1' || naturezaObj == '7') {
+                        parent.parent.window.location.href = `lic4_editalabas.php?licitacao=${licitacao}`;
+                    }
                 }
+
             }
 
             let oParam = new Object();

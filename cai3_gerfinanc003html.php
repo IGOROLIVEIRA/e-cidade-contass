@@ -466,7 +466,7 @@ $str = base64_encode($idenpar."##".$codigobarras."##".$valor_parm."##".$datavenc
                   <td height="37" colspan="2" align="left" valign="middle"> <table width="100%" border="0" cellpadding="0" cellspacing="0">
                       <tr> 
                         <td height="27" align="center" style="font-size:12px;font-family: Arial, Helvetica, sans-serif;font-weight: bold;border: 1px solid #000000">
-						RECIBO VÁLIDO ATÉ: <font size='4' color='red'><?=date('d-m-Y',$DB_DATACALC)?></font></td>
+						DAM VÁLIDO ATÉ: <font size='4' color='red'><?=date('d-m-Y',$DB_DATACALC)?></font></td>
                       </tr>
                     </table></td>
                 </tr>

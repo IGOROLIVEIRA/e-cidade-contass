@@ -174,9 +174,11 @@ if(isset($atualizar)){
       }
    } 
  }
-
- 
 }
+$db_opcaoNovo = $db_opcao; 
+if ($o134_orcamentoaprovado == 't' && ($db_opcao == 2 || $db_opcao == 22 ))
+   $db_opcaoNovo = 3;
+
 ?>
 <form name="form1" method="post" action="">
 <table border="0">
@@ -236,12 +238,12 @@ db_input('o58_anousu',4,$Io58_anousu,true,'text',3,"")
   <tr>
     <td nowrap title="<?=@$To58_orgao?>">
        <?
-	       db_ancora(@$Lo58_orgao,"js_pesquisao58_orgao(true);",$db_opcao);
+	       db_ancora(@$Lo58_orgao,"js_pesquisao58_orgao(true);",$db_opcaoNovo);
        ?>
     </td>
     <td> 
 			<?
-				db_input('o58_orgao',11,$Io58_orgao,true,'text',$db_opcao," onchange='js_pesquisao58_orgao(false);'");
+				db_input('o58_orgao',11,$Io58_orgao,true,'text',$db_opcaoNovo," onchange='js_pesquisao58_orgao(false);'");
 				db_input('o40_descr',55,$Io40_descr,true,'text',3,'');
       ?>
     </td>
@@ -249,7 +251,7 @@ db_input('o58_anousu',4,$Io58_anousu,true,'text',3,"")
 	<?
    $mostraUni = 3;
 	 if (isset($o58_orgao) && @$o58_orgao != ''){
-		 $mostraUni = $db_opcao;
+		 $mostraUni = $db_opcaoNovo;
 		 $filtrar   = "orgao=$o58_orgao&";
 	 }
 	?>
@@ -271,12 +273,12 @@ db_input('o41_descr',55,$Io41_descr,true,'text',3,'')
   <tr>
     <td nowrap title="<?=@$To58_funcao?>">
        <?
-       db_ancora(@$Lo58_funcao,"js_pesquisao58_funcao(true);",$db_opcao);
+       db_ancora(@$Lo58_funcao,"js_pesquisao58_funcao(true);",$db_opcaoNovo);
        ?>
     </td>
     <td> 
 <?
-db_input('o58_funcao',11,$Io58_funcao,true,'text',$db_opcao," onchange='js_pesquisao58_funcao(false);'")
+db_input('o58_funcao',11,$Io58_funcao,true,'text',$db_opcaoNovo," onchange='js_pesquisao58_funcao(false);'")
 ?>
        <?
 db_input('o52_descr',55,$Io52_descr,true,'text',3,'')
@@ -286,12 +288,12 @@ db_input('o52_descr',55,$Io52_descr,true,'text',3,'')
   <tr>
     <td nowrap title="<?=@$To58_subfuncao?>">
        <?
-       db_ancora(@$Lo58_subfuncao,"js_pesquisao58_subfuncao(true);",$db_opcao);
+       db_ancora(@$Lo58_subfuncao,"js_pesquisao58_subfuncao(true);",$db_opcaoNovo);
        ?>
     </td>
     <td> 
 <?
-db_input('o58_subfuncao',11,$Io58_subfuncao,true,'text',$db_opcao," onchange='js_pesquisao58_subfuncao(false);'")
+db_input('o58_subfuncao',11,$Io58_subfuncao,true,'text',$db_opcaoNovo," onchange='js_pesquisao58_subfuncao(false);'")
 ?>
        <?
 db_input('o53_descr',55,$Io53_descr,true,'text',3,'')
@@ -301,12 +303,12 @@ db_input('o53_descr',55,$Io53_descr,true,'text',3,'')
   <tr>
     <td nowrap title="<?=@$To58_programa?>">
        <?
-       db_ancora(@$Lo58_programa,"js_pesquisao58_programa(true);",$db_opcao);
+       db_ancora(@$Lo58_programa,"js_pesquisao58_programa(true);",$db_opcaoNovo);
        ?>
     </td>
     <td> 
 <?
-db_input('o58_programa',11,$Io58_programa,true,'text',$db_opcao," onchange='js_pesquisao58_programa(false);'")
+db_input('o58_programa',11,$Io58_programa,true,'text',$db_opcaoNovo," onchange='js_pesquisao58_programa(false);'")
 ?>
        <?
 db_input('o54_descr',55,$Io54_anousu,true,'text',3,'');
@@ -316,12 +318,12 @@ db_input('o54_descr',55,$Io54_anousu,true,'text',3,'');
   <tr>
     <td nowrap title="<?=@$To58_projativ?>">
        <?
-       db_ancora(@$Lo58_projativ,"js_pesquisao58_projativ(true);",$db_opcao);
+       db_ancora(@$Lo58_projativ,"js_pesquisao58_projativ(true);",$db_opcaoNovo);
        ?>
     </td>
     <td> 
 <?
-db_input('o58_projativ',11,$Io58_projativ,true,'text',$db_opcao," onchange='js_pesquisao58_projativ(false);'")
+db_input('o58_projativ',11,$Io58_projativ,true,'text',$db_opcaoNovo," onchange='js_pesquisao58_projativ(false);'")
 ?>
        <?
 db_input('o55_descr',55,$Io55_descr,true,'text',3,'')
@@ -331,12 +333,12 @@ db_input('o55_descr',55,$Io55_descr,true,'text',3,'')
   <tr>
     <td nowrap title="<?=@$To58_elemento?>">
        <?
-       db_ancora(@$Lo56_elemento,"js_pesquisao58_codele(true);",$db_opcao);
+       db_ancora(@$Lo56_elemento,"js_pesquisao58_codele(true);",$db_opcaoNovo);
        ?>
     </td>
     <td> 
 <?
-db_input('o56_elemento',11,$Io56_elemento,true,'text',$db_opcao," onchange='js_pesquisao58_codele(false);'")
+db_input('o56_elemento',11,$Io56_elemento,true,'text',$db_opcaoNovo," onchange='js_pesquisao58_codele(false);'")
 ?>
        <?
 db_input('o56_descr',55,$Io56_descr,true,'text',3,'')
@@ -346,12 +348,12 @@ db_input('o56_descr',55,$Io56_descr,true,'text',3,'')
   <tr>
     <td nowrap title="<?=@$To58_codigo?>">
        <?
-       db_ancora(@$Lo58_codigo,"js_pesquisao58_codigo(true);",$db_opcao);
+       db_ancora(@$Lo58_codigo,"js_pesquisao58_codigo(true);",$db_opcaoNovo);
        ?>
     </td>
     <td> 
 <?
-db_input('o58_codigo',11,$Io58_codigo,true,'text',$db_opcao," onchange='js_pesquisao58_codigo(false);'")
+db_input('o58_codigo',11,$Io58_codigo,true,'text',$db_opcaoNovo," onchange='js_pesquisao58_codigo(false);'")
 ?>
        <?
 db_input('o15_descr',55,$Io15_descr,true,'text',3,'')
@@ -361,12 +363,12 @@ db_input('o15_descr',55,$Io15_descr,true,'text',3,'')
   <tr>
     <td nowrap title="<?=@$To58_localizadorgastos?>">
        <?
-       db_ancora(@$Lo58_localizadorgastos,"js_pesquisao58_localizadorgastos(true);",$db_opcao,"","o58_gastosancora");
+       db_ancora(@$Lo58_localizadorgastos,"js_pesquisao58_localizadorgastos(true);",$db_opcaoNovo,"","o58_gastosancora");
        ?>
     </td>
     <td> 
    <?
-   db_input('o58_localizadorgastos',11,$Io58_localizadorgastos,true,'text',$db_opcao,"onchange='js_pesquisao58_localizadorgastos(false);'");  
+   db_input('o58_localizadorgastos',11,$Io58_localizadorgastos,true,'text',$db_opcaoNovo,"onchange='js_pesquisao58_localizadorgastos(false);'");  
    db_input('o11_descricao',55,$Io11_descricao,true,'text',3,'');
     ?>
     </td>
@@ -374,12 +376,12 @@ db_input('o15_descr',55,$Io15_descr,true,'text',3,'')
   <tr>
     <td nowrap title="<?=@$To58_concarpeculiar?>">
        <?
-       db_ancora(@$Lo58_concarpeculiar,"js_pesquisao58_concarpeculiar(true);",$db_opcao,"","o58_concarpeculiarancora");
+       db_ancora(@$Lo58_concarpeculiar,"js_pesquisao58_concarpeculiar(true);",$db_opcaoNovo,"","o58_concarpeculiarancora");
        ?>
     </td>
     <td> 
    <?
-   db_input('o58_concarpeculiar',11,$Io58_concarpeculiar,true,'text',$db_opcao,"onchange='js_pesquisao58_concarpeculiar(false);'");  
+   db_input('o58_concarpeculiar',11,$Io58_concarpeculiar,true,'text',$db_opcaoNovo,"onchange='js_pesquisao58_concarpeculiar(false);'");  
    db_input('c58_descr',55,$Ic58_descr,true,'text',3,'');
     ?>
     </td>
@@ -390,7 +392,7 @@ db_input('o15_descr',55,$Io15_descr,true,'text',3,'')
     </td>
     <td> 
     <?
-    db_input('o58_valor',11,$Io58_valor,true,'text',$db_opcao," ")
+    db_input('o58_valor',11,$Io58_valor,true,'text',$db_opcaoNovo," ")
     ?>
     </td>
 
