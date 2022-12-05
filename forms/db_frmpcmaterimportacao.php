@@ -298,6 +298,18 @@ if (isset($_POST["processar"])) {
                                     <td style="width: 100px">
                                         <b>Importar xls:</b>
                                     </td>
+                                    <td style="width: 100px;display:none;">
+                                        <?php
+                                        $rs_encpatrimonial = $clcondataconf->sql_record($clcondataconf->sql_query_file(db_getsession('DB_anousu'), db_getsession('DB_instit'), "c99_datapat", null, null));
+                                        $c99_datapat = db_utils::fieldsMemory($rs_encpatrimonial, 0)->c99_datapat;
+                                        $c99_datapat = implode('/', array_reverse(explode('-', $c99_datapat)));
+                                        $c99_datapat = explode("/", $c99_datapat);
+                                        $c99_datapat_dia = $c99_datapat[0];
+                                        $c99_datapat_mes = $c99_datapat[1];
+                                        $c99_datapat_ano = $c99_datapat[2];
+                                        db_inputdata("c99_datapat", $c99_datapat_dia, $c99_datapat_mes, $c99_datapat_ano, true, "text", 1, "", "c99_datapat");
+                                        ?>
+                                    </td>
                                     <td>
                                         <?php
                                         db_input("uploadfile", 30, 0, true, "file", 1);
@@ -328,12 +340,11 @@ if (isset($_POST["processar"])) {
                                         <b> Data: </b>
                                     </td>
                                     <td>
-                                        <?
+                                        <?php
                                         db_inputdata("pc01_data", '', true, "text", 1, "", "dataI");
                                         ?>
                                     </td>
                                 </tr>
-
                             </table>
                             <div style="margin-left: 120px; margin-top: 10px; width: 220px;">
                                 <div style="width: 70px; float: left;">
@@ -360,7 +371,6 @@ if (isset($_POST["processar"])) {
     <div class="itens">
         <table style="width:100%; border: 0px solid black; margin-top:30px;">
             <tr>
-
                 <th style="border: 0px solid red; width:20%; background:#eeeff2;">
                     Item
                 </th>
@@ -392,15 +402,14 @@ if (isset($_POST["processar"])) {
 
 
             <?php
-            $erro = false;
             $i = 1;
             $tamanho = count($arrayItensPlanilha);
             if ($contTama == 1 && $tamanho == 0) {
                 echo "<script>alert('Nenhum registro encontrato!')</script>";
                 echo "<script>location.href = 'com1_pcmaterimportacao001.php'</script>;";
             }
-            $pc01_data = $_POST["pc01_data"];
 
+            $erro = false;
 
             foreach ($arrayItensPlanilha as $rown) {
 
@@ -422,6 +431,7 @@ if (isset($_POST["processar"])) {
                     echo "</td>";
                 }
 
+                $pc01_data = $_POST["pc01_data"];
                 echo "<td name='data[]' style='text-align:center;' >";
                 echo "<input style='text-align:center; width:90%; border:none;' readonly='' type='text' name='data[]' value='" . $pc01_data . "'>";
 
@@ -590,6 +600,17 @@ if (isset($_POST["processar"])) {
 </form>
 <script>
     function validaData() {
+
+        var data_patrimonial = document.getElementById('c99_datapat').value;
+        data_patrimonial = data_patrimonial.substr(6, 4) + '-' + data_patrimonial.substr(3, 2) + '-' + data_patrimonial.substr(0, 2);
+        var data_pcmater = document.getElementById('pc01_data').value;
+        data_pcmater = data_pcmater.substr(6, 4) + '-' + data_pcmater.substr(3, 2) + '-' + data_pcmater.substr(0, 2);
+
+        if (data_pcmater <= data_patrimonial) {
+            alert('O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.');
+            return false;
+        }
+
         if (document.getElementById('pc01_data').value == '') {
             alert('Usuário: obrigatório preencher a data de cadastro dos itens.');
             return false;

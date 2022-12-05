@@ -34,11 +34,11 @@ include("libs/db_utils.php");
 include("libs/PHPExcel/Classes/PHPExcel.php");
 include("classes/db_pcmater_classe.php");
 include("classes/db_pcmaterele_classe.php");
+include("classes/db_condataconf_classe.php");
 
+$clcondataconf = new cl_condataconf;
 db_postmemory($HTTP_POST_VARS);
 
-$db_opcao = 1;
-$db_botao = true;
 
 ?>
 <html>
