@@ -43,15 +43,18 @@ class cl_obstransferencia {
    var $pagina_retorno  = null; 
    // cria variaveis do arquivo 
    var $ed283_i_codigo        = 0; 
-   var $ed283_t_mensagem        = null; 
-   var $ed283_c_bolsafamilia        = null; 
+   var $ed283_t_mensagem      = null; 
+   var $ed283_c_bolsafamilia  = null; 
    var $ed283_i_escola        = 0; 
+   var $ed283_c_concletapa    = 0; 
+
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  ed283_i_codigo = int4 = Código 
                  ed283_t_mensagem = text = Mensagem 
                  ed283_c_bolsafamilia = char(1) = Bolsa Família 
                  ed283_i_escola = int4 = Escola 
+                 ed283_c_concletapa = char(1) = Aluno concluindo etapa
                  ";
    //funcao construtor da classe 
    function cl_obstransferencia() { 
@@ -75,6 +78,7 @@ class cl_obstransferencia {
        $this->ed283_t_mensagem = ($this->ed283_t_mensagem == ""?@$GLOBALS["HTTP_POST_VARS"]["ed283_t_mensagem"]:$this->ed283_t_mensagem);
        $this->ed283_c_bolsafamilia = ($this->ed283_c_bolsafamilia == ""?@$GLOBALS["HTTP_POST_VARS"]["ed283_c_bolsafamilia"]:$this->ed283_c_bolsafamilia);
        $this->ed283_i_escola = ($this->ed283_i_escola == ""?@$GLOBALS["HTTP_POST_VARS"]["ed283_i_escola"]:$this->ed283_i_escola);
+       $this->ed283_c_concletapa = ($this->ed283_c_concletapa == ""?@$GLOBALS["HTTP_POST_VARS"]["ed283_c_concletapa"]:$this->ed283_c_concletapa);
      }else{
        $this->ed283_i_codigo = ($this->ed283_i_codigo == ""?@$GLOBALS["HTTP_POST_VARS"]["ed283_i_codigo"]:$this->ed283_i_codigo);
      }
@@ -100,6 +104,15 @@ class cl_obstransferencia {
        $this->erro_status = "0";
        return false;
      }
+     if($this->ed283_c_concletapa == null ){ 
+      $this->erro_sql = " Campo Aluno Concluindo Etapa nao Informado.";
+      $this->erro_campo = "ed283_c_concletapa";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
      if($ed283_i_codigo == "" || $ed283_i_codigo == null ){
        $result = db_query("select nextval('obstransferencia_e283_i_codigo_seq')"); 
        if($result==false){
@@ -136,13 +149,15 @@ class cl_obstransferencia {
                                        ed283_i_codigo 
                                       ,ed283_t_mensagem 
                                       ,ed283_c_bolsafamilia 
-                                      ,ed283_i_escola 
+                                      ,ed283_i_escola
+                                      ,ed283_c_concletapa 
                        )
                 values (
                                 $this->ed283_i_codigo 
                                ,'$this->ed283_t_mensagem' 
                                ,'$this->ed283_c_bolsafamilia' 
                                ,$this->ed283_i_escola 
+                               ,'$this->ed283_c_concletapa'
                       )";
      $result = db_query($sql); 
      if($result==false){ 
@@ -230,6 +245,19 @@ class cl_obstransferencia {
          return false;
        }
      }
+     if(trim($this->ed283_c_concletapa)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ed283_c_concletapa"])){ 
+      $sql  .= $virgula." ed283_c_concletapa = '$this->ed283_c_concletapa' ";
+      $virgula = ",";
+      if(trim($this->ed283_c_concletapa) == null ){ 
+        $this->erro_sql = " Campo Aluno Concluindo Etapa nao Informado.";
+        $this->erro_campo = "ed283_c_concletapa";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+    }
      $sql .= " where ";
      if($ed283_i_codigo!=null){
        $sql .= " ed283_i_codigo = $this->ed283_i_codigo";
