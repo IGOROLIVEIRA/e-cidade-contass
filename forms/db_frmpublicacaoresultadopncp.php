@@ -16,7 +16,7 @@ db_app::load("estilos.css, grid.style.css");
                 db_input('l20_codigo', 10, $Il20_codigo, true, 'text', 3, "")
                 ?>
                 <?
-                db_input('l20_objeto', 40, $Il20_objeto, true, 'text', 3, '')
+                db_input('l20_objeto', 80, $Il20_objeto, true, 'text', 3, '')
                 ?>
             </td>
         </tr>

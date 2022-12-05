@@ -56,7 +56,6 @@ switch ($oParam->exec) {
 
         $clLicitacao  = db_utils::getDao("liclicita");
         $cllicanexopncp = db_utils::getDao("licanexopncp");
-        $clliccontrolepncp = db_utils::getDao("liccontrolepncp");
 
         //todas as licitacoes marcadas
         try {
@@ -117,6 +116,7 @@ switch ($oParam->exec) {
 
                 if ($rsApiPNCP->compraUri) {
                     //monto o codigo da compra no pncp
+                    $clliccontrolepncp = new cl_liccontrolepncp();
                     $l213_numerocontrolepncp = '17316563000196-1-' . str_pad(substr($rsApiPNCP->compraUri, 74), 6, '0', STR_PAD_LEFT) . '/' . $oDadosLicitacao->anocompra;
                     $clliccontrolepncp->l213_licitacao = $aLicitacao->codigo;
                     $clliccontrolepncp->l213_usuario = db_getsession('DB_id_usuario');
@@ -192,17 +192,7 @@ switch ($oParam->exec) {
                 $rsApiPNCP = $clAvisoLicitacaoPNCP->excluirAviso(substr($aLicitacao->numerocontrole, 17, -5), substr($aLicitacao->numerocontrole, 24));
 
                 if ($rsApiPNCP == null) {
-                    //monto o codigo da compra no pncp
-                    $l213_numerocontrolepncp = $aLicitacao->numerocontrole;
-                    $clliccontrolepncp->l213_licitacao = $aLicitacao->codigo;
-                    $clliccontrolepncp->l213_usuario = db_getsession('DB_id_usuario');
-                    $clliccontrolepncp->l213_dtlancamento = date('Y-m-d', db_getsession('DB_datausu'));
-                    $clliccontrolepncp->l213_numerocontrolepncp = $l213_numerocontrolepncp;
-                    $clliccontrolepncp->l213_situacao = 3;
-                    $clliccontrolepncp->l213_numerocompra = substr($aLicitacao->numerocontrole, 17, -5);
-                    $clliccontrolepncp->l213_anousu = substr($aLicitacao->numerocontrole, 24);
-                    $clliccontrolepncp->l213_instit = db_getsession('DB_instit');
-                    $clliccontrolepncp->incluir();
+                    $clliccontrolepncp->excluir(null, "l213_licitacao = $aLicitacao->codigo");
 
                     $oRetorno->status  = 1;
                     $oRetorno->message = "Excluido com Sucesso !";
