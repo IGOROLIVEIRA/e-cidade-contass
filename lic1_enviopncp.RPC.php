@@ -24,7 +24,19 @@ switch ($oParam->exec) {
     case 'getLicitacoes':
 
         $clliclicita = new cl_liclicita();
-        $rsLicitacaoAbertas = $clliclicita->sql_record($clliclicita->sql_query(null, 'distinct l20_codigo,l20_edital,l20_objeto,l213_numerocontrolepncp,l03_descr,l20_numero', 'l20_codigo desc', "l20_licsituacao = 0 and l03_pctipocompratribunal in (110,51,53,52,102,101,100,101) and liclicita.l20_leidalicitacao = 1 and l20_instit = " . db_getsession('DB_instit')));
+        $campos = "distinct l20_codigo,l20_edital,l20_objeto,(SELECT l213_numerocontrolepncp
+        FROM liccontrolepncp
+        WHERE l213_situacao = 1
+            AND l213_licitacao=l20_codigo
+            AND l213_licitacao NOT IN
+                (SELECT l213_licitacao
+                 FROM liccontrolepncp
+                 WHERE l213_situacao = 3
+                     AND l213_licitacao=l20_codigo)
+        ORDER BY l213_sequencial DESC
+        LIMIT 1) AS l213_numerocontrolepncp,l03_descr,l20_numero";
+        $rsLicitacaoAbertas = $clliclicita->sql_record($clliclicita->sql_query(null, $campos, 'l20_codigo desc', "l20_licsituacao = 0 and l03_pctipocompratribunal in (110,51,53,52,102,101,100,101) and liclicita.l20_leidalicitacao = 1 and l20_instit = " . db_getsession('DB_instit')));
+
         for ($iCont = 0; $iCont < pg_num_rows($rsLicitacaoAbertas); $iCont++) {
 
             $oLicitacaos = db_utils::fieldsMemory($rsLicitacaoAbertas, $iCont);
@@ -44,7 +56,6 @@ switch ($oParam->exec) {
 
         $clLicitacao  = db_utils::getDao("liclicita");
         $cllicanexopncp = db_utils::getDao("licanexopncp");
-        $clliccontrolepncp = db_utils::getDao("liccontrolepncp");
 
         //todas as licitacoes marcadas
         try {
@@ -105,16 +116,20 @@ switch ($oParam->exec) {
 
                 if ($rsApiPNCP->compraUri) {
                     //monto o codigo da compra no pncp
+                    $clliccontrolepncp = new cl_liccontrolepncp();
                     $l213_numerocontrolepncp = '17316563000196-1-' . str_pad(substr($rsApiPNCP->compraUri, 74), 6, '0', STR_PAD_LEFT) . '/' . $oDadosLicitacao->anocompra;
                     $clliccontrolepncp->l213_licitacao = $aLicitacao->codigo;
                     $clliccontrolepncp->l213_usuario = db_getsession('DB_id_usuario');
                     $clliccontrolepncp->l213_dtlancamento = date('Y-m-d', db_getsession('DB_datausu'));
                     $clliccontrolepncp->l213_numerocontrolepncp = $l213_numerocontrolepncp;
                     $clliccontrolepncp->l213_situacao = 1;
+                    $clliccontrolepncp->l213_numerocompra = substr($rsApiPNCP->compraUri, 74);
+                    $clliccontrolepncp->l213_anousu = $oDadosLicitacao->anocompra;
                     $clliccontrolepncp->l213_instit = db_getsession('DB_instit');
                     $clliccontrolepncp->incluir();
 
-                    $oRetorno->status  = 2;
+                    $oRetorno->status  = 1;
+                    $oRetorno->message = "Enviado com Sucesso !";
                 } else {
                     throw new Exception(utf8_decode($rsApiPNCP->message));
                 }
@@ -128,6 +143,8 @@ switch ($oParam->exec) {
 
     case 'RetificarAviso':
         $clLicitacao  = db_utils::getDao("liclicita");
+        $clliccontrolepncp = db_utils::getDao("liccontrolepncp");
+
         try {
             foreach ($oParam->aLicitacoes as $aLicitacao) {
                 //somente licitacoes que ja foram enviadas para pncp
@@ -138,7 +155,50 @@ switch ($oParam->exec) {
                 }
                 $clAvisoLicitacaoPNCP = new AvisoLicitacaoPNCP($oDadosLicitacao);
                 $oDadosRatificacao = $clAvisoLicitacaoPNCP->montarRetificacao();
-                $clAvisoLicitacaoPNCP->enviarRetificacao($oDadosRatificacao);
+                //envia Retificacao para pncp
+                $rsApiPNCP = $clAvisoLicitacaoPNCP->enviarRetificacao($oDadosRatificacao, substr($aLicitacao->numerocontrole, 17, -5), substr($aLicitacao->numerocontrole, 24));
+
+                if ($rsApiPNCP->compraUri == null) {
+                    //monto o codigo da compra no pncp
+                    $l213_numerocontrolepncp = $aLicitacao->numerocontrole;
+                    $clliccontrolepncp->l213_licitacao = $aLicitacao->codigo;
+                    $clliccontrolepncp->l213_usuario = db_getsession('DB_id_usuario');
+                    $clliccontrolepncp->l213_dtlancamento = date('Y-m-d', db_getsession('DB_datausu'));
+                    $clliccontrolepncp->l213_numerocontrolepncp = $l213_numerocontrolepncp;
+                    $clliccontrolepncp->l213_situacao = 2;
+                    $clliccontrolepncp->l213_numerocompra = substr($aLicitacao->numerocontrole, 17, -5);
+                    $clliccontrolepncp->l213_anousu = $oDadosLicitacao->anocompra;
+                    $clliccontrolepncp->l213_instit = db_getsession('DB_instit');
+                    $clliccontrolepncp->incluir();
+
+                    $oRetorno->status  = 1;
+                    $oRetorno->message = "Retificada com Sucesso !";
+                } else {
+                    throw new Exception(utf8_decode($rsApiPNCP->message));
+                }
+            }
+        } catch (Exception $eErro) {
+            $oRetorno->status  = 2;
+            $oRetorno->message = urlencode($eErro->getMessage());
+        }
+        break;
+
+    case 'excluiraviso':
+        $clliccontrolepncp = db_utils::getDao("liccontrolepncp");
+        try {
+            foreach ($oParam->aLicitacoes as $aLicitacao) {
+                $clAvisoLicitacaoPNCP = new AvisoLicitacaoPNCP();
+                //envia exclusao de aviso
+                $rsApiPNCP = $clAvisoLicitacaoPNCP->excluirAviso(substr($aLicitacao->numerocontrole, 17, -5), substr($aLicitacao->numerocontrole, 24));
+
+                if ($rsApiPNCP == null) {
+                    $clliccontrolepncp->excluir(null, "l213_licitacao = $aLicitacao->codigo");
+
+                    $oRetorno->status  = 1;
+                    $oRetorno->message = "Excluido com Sucesso !";
+                } else {
+                    throw new Exception(utf8_decode($rsApiPNCP->message));
+                }
             }
         } catch (Exception $eErro) {
             $oRetorno->status  = 2;

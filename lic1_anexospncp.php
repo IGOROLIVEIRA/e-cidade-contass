@@ -834,10 +834,6 @@ $oRotulo->label("l20_objeto");
       return false;
     }
 
-
-
-
-
     js_divCarregando('Aguarde... Salvando documento.', 'msgbox');
 
     var oParametros = new Object();

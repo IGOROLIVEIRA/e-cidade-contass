@@ -219,7 +219,7 @@ if (isset($incluir)) {
       if (pg_numrows($result) == 0) {
         echo "<script>
           alert('Usu·rio: Item $codigo_item sem dotaÁ„o vinculada.');
-          top.corpo.location.href='lic1_fornec001.php?chavepesquisa=$l20_codigo';
+          CurrentWindow.corpo.location.href='lic1_fornec001.php?chavepesquisa=$l20_codigo';
         </script>";
 
         exit;
@@ -263,7 +263,7 @@ if (isset($incluir)) {
         if ($quatrs == 0) {
           echo "<script>
                       alert('A LicitaÁ„o selecionada È decorrente da Lei n˙mero 14133/2021, sendo assim, È necess·rio anexar no mÌ≠nimo um documento na rotina Anexos Envio PNCP!!');
-                      top.corpo.location.href='lic1_fornec001.php?chavepesquisa=$l20_codigo';
+                      CurrentWindow.corpo.location.href='lic1_fornec001.php?chavepesquisa=$l20_codigo';
                     </script>";
 
           exit;
@@ -290,7 +290,7 @@ if (isset($incluir)) {
         if ($licita->l20_dtpublic == "" && $licita->l31_codigo == "") {
           echo "<script>
                        alert('N√£o permitido a inser√ß√£o de fornecedor na licita√ß√£o se os campos Data Publica√ß√£o DO e Resp. pela Publica√ß√£o n√£o estiverem preenchidos.');
-                       top.corpo.location.href='lic1_fornec001.php';
+                       CurrentWindow.corpo.location.href='lic1_fornec001.php';
 
                     </script>";
           exit;
@@ -317,7 +317,7 @@ if (isset($incluir)) {
           if ($clliclicitem->numrows == 0) {
             echo "<script>
                      alert('Impossivel incluir fornecedores!!Licita√ß√£o sem itens cadastrados!!');
-               top.corpo.location.href='lic1_fornec001.php';
+               CurrentWindow.corpo.location.href='lic1_fornec001.php';
                   </script>";
             exit;
           }

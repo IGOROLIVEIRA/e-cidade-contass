@@ -1,29 +1,4 @@
 <?php
-/*
- *     E-cidade Software Publico para Gestao Municipal
- *  Copyright (C) 2014  DBSeller Servicos de Informatica
- *                            www.dbseller.com.br
- *                         e-cidade@dbseller.com.br
- *
- *  Este programa e software livre; voce pode redistribui-lo e/ou
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
- *  publicada pela Free Software Foundation; tanto a versao 2 da
- *  Licenca como (a seu criterio) qualquer versao mais nova.
- *
- *  Este programa e distribuido na expectativa de ser util, mas SEM
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
- *  detalhes.
- *
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
- *  junto com este programa; se nao, escreva para a Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
- *  02111-1307, USA.
- *
- *  Copia da licenca no diretorio licenca/licenca_en.txt
- *                                licenca/licenca_pt.txt
- */
 //MODULO: acordos
 //CLASSE DA ENTIDADE acordo
 class cl_acordo
@@ -1072,7 +1047,7 @@ class cl_acordo
             $sql  .= $virgula . " ac16_adesaoregpreco = '$this->ac16_adesaoregpreco' ";
             $virgula = ",";
             if (($this->ac16_adesaoregpreco) == null) {
-                $this->erro_sql = " Campo Licitação Outro Orgï¿½o não informado.";
+                $this->erro_sql = " Campo Licitação Outro Orgão não informado.";
                 $this->erro_campo = "ac16_adesaoregpreco";
                 $this->erro_banco = "";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
@@ -2044,7 +2019,7 @@ class cl_acordo
     }
 
     /**
-     * Retorna os dados dos acordos para a integraï¿½ï¿½o com o portal da transparencia
+     * Retorna os dados dos acordos para a integração com o portal da transparencia
      *
      * @param  string $sCampos
      * @param  string $sOrdem
@@ -2129,7 +2104,7 @@ class cl_acordo
         return $sql;
     }
     /**
-     * Busca empenhos que foram vinculados ao acordo ou pela Execução do item
+     * Busca empenhos que foram vinculados ao acordo ou pela execução do item
      *
      * @param integer $iCodigoAcordo
      * @param string $sCampos
@@ -2367,7 +2342,7 @@ class cl_acordo
     }
 
     /**
-     * Retorna toda a movimentaï¿½ï¿½o do acordo com seus saldo.
+     * Retorna toda a movimentação do acordo com seus saldo.
      * @param $iAcordo
      * @return string
      */

@@ -15,7 +15,7 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
      *
      * @param \stdClass $dados
      */
-    function __construct($dados)
+    function __construct($dados = null)
     {
         parent::__construct($dados);
     }
@@ -41,7 +41,7 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
         $oDadosAPI->orcamentoSigiloso               = $oDado->orcamentosigiloso == 'f' ? 'false' : 'true';
         $oDadosAPI->dataAberturaProposta            = $this->formatDate($oDado->dataaberturaproposta);
         $oDadosAPI->dataEncerramentoProposta        = $this->formatDate($oDado->dataencerramentoproposta);
-        $oDadosAPI->amparoLegalId                   = 3;
+        $oDadosAPI->amparoLegalId                   = $oDado->amparolegalid;
         $oDadosAPI->linkSistemaOrigem               = $oDado->linksistemaorigem;
         //ITENS
         $vlrtotal = 0;
@@ -107,8 +107,7 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
         $oDadosAPI->linkSistemaOrigem               = $oDado->linksistemaorigem;
 
         $aDadosAPI = json_encode($oDadosAPI);
-        echo "<pre>";
-        print_r($aDadosAPI);
-        exit;
+
+        return $aDadosAPI;
     }
 }
