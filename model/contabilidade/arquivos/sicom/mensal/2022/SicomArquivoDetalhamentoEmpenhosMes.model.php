@@ -552,6 +552,8 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
             $oDadosEmpenho10->si106_despdeccontrato = 1;
             $oDadosEmpenho10->si106_nrocontrato = $oAcordoMigrado->ac16_numero; // campo 20
             $oDadosEmpenho10->si106_dtassinaturacontrato = $oAcordoMigrado->ac16_dataassinatura; // campo 21
+            $sUnidadeSub = str_pad($oAcordoMigrado->db01_orgao, 2, "0", STR_PAD_LEFT).str_pad($oAcordoMigrado->db01_unidade, 3, "0", STR_PAD_LEFT);
+            $oDadosEmpenho10->si106_codunidadesubrespcontrato = $sUnidadeSub == "00000" ? "" : $sUnidadeSub;
             //$oDadosEmpenho10->si106_nrosequencialtermoaditivo = $oAcordoMigrado->nrosequencialtermoaditivo; // campo 22
         }
       } elseif (((date('Y', strtotime($oEmpenho10->dtempenho)) <= date('Y', strtotime($oEmpenho10->dataassinaturatermoaditivo))
