@@ -44,4 +44,3 @@ db_postmemory($HTTP_POST_VARS);
 </body>
 
 </html>
-?>
