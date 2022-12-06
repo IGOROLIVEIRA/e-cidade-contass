@@ -4006,8 +4006,7 @@ class cl_liclicita
         liclicita.l20_recdocumentacao as dataAberturaProposta,
         liclicita.l20_recdocumentacao as dataEncerramentoProposta,
         liclicita.l20_amparolegal as amparoLegalId,
-        liclicita.l20_linkpncp as linkSistemaOrigem,
-        pc80_codproc
+        liclicita.l20_linkpncp as linkSistemaOrigem
         from liclicita
         join db_depart on coddepto=l20_codepartamento
         join db_config on codigo=instit
