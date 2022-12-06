@@ -643,7 +643,7 @@ if (isset($_POST["processar"])) {
         }
 
         if (document.getElementById('pc96_descricao').value == '') {
-            alert('Usuário: obrigatório preencher a descrição da importação.');
+            alert('Usuário: é necessário inserir uma descrição para a identificação dessa importação.');
             return false;
         }
 
