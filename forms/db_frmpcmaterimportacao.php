@@ -37,11 +37,15 @@ if (isset($_POST["salvar"])) {
     $tabela = $_POST['tabela'];
     $codele = $_POST['codele'];
 
+    $dataimportacao = $data[0];
     $pc01_data = $data[0];
     $pc01_data = explode("/", $pc01_data);
     $pc01_data = $pc01_data[2] . "-" . $pc01_data[1] . "-" . $pc01_data[0];
 
-    $itens = "";
+    $pc96_descricao = $_POST['descricaoimportacao'];
+    $rs_pc96_sequencial = db_query("select nextval('importacaoitens_pc96_sequencial_seq')");
+    $pc96_sequencial = pg_result($rs_pc96_sequencial, 0, 0);
+
 
     for ($i = 0; $i < count($descricao); $i++) {
         db_inicio_transacao();
@@ -61,7 +65,7 @@ if (isset($_POST["salvar"])) {
         $GLOBALS["HTTP_POST_VARS"]["pc01_obras"] = 'f';
         $GLOBALS["HTTP_POST_VARS"]["pc01_taxa"] = 'f';
         $GLOBALS["HTTP_POST_VARS"]["pc01_tabela"] = 'f';
-
+        $GLOBALS["HTTP_POST_VARS"]["pc01_ativo"] = 'f';
 
         $sqlerro = false;
 
@@ -73,7 +77,7 @@ if (isset($_POST["salvar"])) {
         $clpcmater->pc01_obras = $obra[$i] == "Sim" ? "true" : "false";
         $clpcmater->pc01_taxa   = $taxa[$i] == "Sim" ? "true" : "false";
         $clpcmater->pc01_tabela = $tabela[$i] == "Sim" ? "true" : "false";
-        $clpcmater->pc01_ativo =  "true";
+        $clpcmater->pc01_ativo =  'f';
         $clpcmater->pc01_conversao = 'f';
         $clpcmater->pc01_id_usuario =  db_getsession("DB_id_usuario");
         $clpcmater->pc01_libaut = 'f';
@@ -83,19 +87,18 @@ if (isset($_POST["salvar"])) {
         $clpcmater->pc01_obrigatorio = 'f';
         $clpcmater->pc01_liberaresumo = 'f';
 
-
-
         $clpcmater->incluir(null);
         if ($clpcmater->erro_status = "0") {
             db_msgbox($clpcmater->erro_msg);
             break;
         }
 
-
         $clpcmaterele->pc07_codmater = $clpcmater->pc01_codmater;
         $clpcmaterele->pc07_codele = $codele[$i];
         $clpcmaterele->incluir($clpcmater->pc01_codmater, $codele[$i]);
         $codigoitens .= $clpcmater->pc01_codmater . ",";
+
+        db_query("INSERT INTO importacaoitens values ($pc96_sequencial,'$pc96_descricao',$clpcmater->pc01_codmater)");
 
         db_fim_transacao(false);
     }
@@ -104,10 +107,15 @@ if (isset($_POST["salvar"])) {
 
     db_msgbox($clpcmater->erro_msg);
 
+
     echo "<script> 
 
     Filtros = '';
             Filtros += 'codigoitens='+'$codigoitens';
+            Filtros += '&codigoimportacao='+'$pc96_sequencial';
+            Filtros += '&descricao='+'$pc96_descricao';
+            Filtros += '&data='+'$dataimportacao';
+
 
     var jan = window.open('com2_relatorioimportacaoitens.php?'+Filtros, '', 'location=0, width='+(screen.availWidth - 5)+
                 'width='+(screen.availWidth - 5)+', scrollbars=1');
@@ -240,6 +248,9 @@ if (isset($_POST["processar"])) {
         $totalitens = $i;
         $arrayItensPlanilha = array();
 
+        $descricao = $_POST["pc96_descricao"];
+
+
         foreach ($dataArr as $keyRow => $Row) {
 
 
@@ -342,6 +353,16 @@ if (isset($_POST["processar"])) {
                                     <td>
                                         <?php
                                         db_inputdata("pc01_data", '', true, "text", 1, "", "dataI");
+                                        ?>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <b> Descrição da importação: </b>
+                                    </td>
+                                    <td>
+                                        <?php
+                                        db_input('pc96_descricao', 32, '', true, 'text', 1);
                                         ?>
                                     </td>
                                 </tr>
@@ -585,7 +606,12 @@ if (isset($_POST["processar"])) {
     </div>
     <?php
 
+    db_input('descricaoimportacao', 80, '', true, 'text', 1, 'style="display: none;"');
+
+
     if (isset($_POST["processar"])) {
+        echo "<script>document.getElementById('pc01_data').value = '$pc01_data'; </script>";
+        echo "<script>document.getElementById('descricaoimportacao').value = '" . $_POST['pc96_descricao'] . "'</script>";
         echo  "<input style='margin-top: 10px;' type='submit' id='salvar' name='salvar'  value='Salvar'>";
     } else {
         echo  "<input style='margin-top: -200px;' type='submit' id='salvar' value='Salvar' name='salvar'>";
@@ -613,6 +639,11 @@ if (isset($_POST["processar"])) {
 
         if (document.getElementById('pc01_data').value == '') {
             alert('Usuário: obrigatório preencher a data de cadastro dos itens.');
+            return false;
+        }
+
+        if (document.getElementById('pc96_descricao').value == '') {
+            alert('Usuário: obrigatório preencher a descrição da importação.');
             return false;
         }
 
