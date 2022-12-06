@@ -183,6 +183,10 @@ for ($i = 0; $i < 1; $i++) {
 
 $sheet->getStyle('A7:H1000')->applyFromArray($styleItens);
 $sheet->getStyle('A7:H1000')->getProtection()->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
+$sheet
+    ->getStyle('A7:H1000')
+    ->getAlignment()
+    ->setWrapText(true);
 
 $nomefile = "Itens" . db_getsession('DB_instit') . ".xlsx";
 
