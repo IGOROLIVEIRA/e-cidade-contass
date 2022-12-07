@@ -39,7 +39,7 @@ class GerarRSP extends GerarAM
                      si112_mes,
                      si112_instit
              FROM rsp102022
-             INNER JOIN empempenho ON e60_codemp::int8 = si112_nroempenho AND e60_anousu = si112_exercicioempenho
+             INNER JOIN empempenho ON (e60_codemp::int8, e60_instit, e60_anousu) = (si112_nroempenho, si112_instit, si112_exercicioempenho)
              WHERE si112_mes = " . $this->iMes . "
                AND si112_instit = " . db_getsession("DB_instit");
     $rsRSP10 = db_query($sSql);
@@ -72,7 +72,7 @@ class GerarRSP extends GerarAM
                      si115_mes,
                      si115_instit
               FROM rsp202022
-              INNER JOIN empempenho ON e60_codemp::int8 = si115_nroempenho AND e60_anousu = si115_exercicioempenho
+              INNER JOIN empempenho ON (e60_codemp::int8, e60_instit, e60_anousu) = (si115_nroempenho, si115_instit, si115_exercicioempenho)
               WHERE si115_mes = " . $this->iMes . "
                 AND si115_instit = " . db_getsession("DB_instit");
     $rsRSP20 = db_query($sSql4);
