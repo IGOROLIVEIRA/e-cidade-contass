@@ -325,33 +325,32 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                         <?
                                         $tipo = array();
                                         $tipo[0] = "Selecione";
-                                        
-                                            
-                                        
-                                            if (isset($l20_codtipocom) && $l20_codtipocom != "") {
-                                                $result_tipo = db_query("select * from amparolegal where l212_codigo in (select l213_amparo from amparocflicita where l213_modalidade = $l20_codtipocom)");
-                                            }else{
-                                                $result_tipo = db_query("select * from amparolegal");
-                                            }
-                                        
 
-                                        for($iIndiceTipo=0;$iIndiceTipo < pg_numrows($result_tipo);$iIndiceTipo++){
 
-                                          $oTipo = db_utils::fieldsMemory($result_tipo, $iIndiceTipo);
 
-                                          $tipo[$oTipo->l212_codigo] = $oTipo->l212_lei;
+                                        if (isset($l20_codtipocom) && $l20_codtipocom != "") {
+                                            $result_tipo = db_query("select * from amparolegal where l212_codigo in (select l213_amparo from amparocflicita where l213_modalidade = $l20_codtipocom)");
+                                        } else {
+                                            $result_tipo = db_query("select * from amparolegal");
+                                        }
+
+
+                                        for ($iIndiceTipo = 0; $iIndiceTipo < pg_numrows($result_tipo); $iIndiceTipo++) {
+
+                                            $oTipo = db_utils::fieldsMemory($result_tipo, $iIndiceTipo);
+
+                                            $tipo[$oTipo->l212_codigo] = $oTipo->l212_lei;
                                         }
 
                                         //db_selectrecord("l20_codtipocom", @$result_tipo, true, $db_opcao, "js_mostraRegistroPreco()");
                                         db_select("l212_codigo", $tipo, true, $db_opcao, "");
-                                        
-                                            if (isset($l20_amparolegal) && $l20_amparolegal != "") {
-                                                echo "<script>document.getElementById('l212_codigo').value=$l20_amparolegal;</script>";
-                                                
-                                            }
-                                        
+
+                                        if (isset($l20_amparolegal) && $l20_amparolegal != "") {
+                                            echo "<script>document.getElementById('l212_codigo').value=$l20_amparolegal;</script>";
+                                        }
+
                                         ?>
-                                        
+
                                     </td>
                                 </tr>
                                 <tr style="display:none;" id="respAvaliaBens">
@@ -633,20 +632,22 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                     </td>
                                 </tr>
 
-                                <tr style="display: none;" id="datasProposta">
-                                    <td nowrap title="Data Abertura Poposta">
-                                        <b>Data Abertura Proposta :</b>
+                                <tr>
+                                    <td>
+                                        <b class="dataabertura" style="display: none;">Data Abertura Proposta :</b>
                                     </td>
                                     <td>
                                         <?
 
-                                        db_inputdata("l20_dataaberproposta", @$l20_dataaberproposta_dia, @$l20_dataaberproposta_mes, @$l20_dataaberproposta_ano, true, 'text', $db_opcao);
+                                        db_inputdata("l20_dataaberproposta", @$l20_dataaberproposta_dia, @$l20_dataaberproposta_mes, @$l20_dataaberproposta_ano, true, 'text', $db_opcao, "style='display:none;' class='dataabertura'");
+                                        echo "<script> document.getElementById('dtjs_l20_dataaberproposta').style.display = 'none' </script>";
                                         ?>
-                                        <b> Data Encerramento Proposta: </b>
+                                        <b id="dataencerramentoid" class="dataencerramento" style="display: none;"> Data Encerramento Proposta: </b>
                                         <?
 
-                                        echo "&nbsp;";
-                                        db_inputdata("l20_dataencproposta", @$l20_dataencproposta_dia, @$l20_dataencproposta_mes, @$l20_dataencproposta_ano, true, 'text', $db_opcao);
+                                        db_inputdata("l20_dataencproposta", @$l20_dataencproposta_dia, @$l20_dataencproposta_mes, @$l20_dataencproposta_ano, true, 'text', $db_opcao, "style='display:none;' class='dataencerramento'");
+                                        echo "<script> document.getElementById('dtjs_l20_dataencproposta').style.display = 'none' </script>";
+
                                         ?>
                                     </td>
                                 </tr>
@@ -1206,7 +1207,6 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
     <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();">
 </form>
 <script>
- 
     var codigotribunal = 0;
     document.form1.l20_prazoentrega.style.backgroundColor = '#FFFFFF';
     document.form1.l20_condicoespag.style.backgroundColor = '#FFFFFF';
@@ -1233,7 +1233,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
         js_verificaDatasProposta();
 
-        
+
 
 
         var sel1 = document.forms[0].elements[proc];
@@ -1247,7 +1247,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
         var codigocompra = document.getElementById("l20_codtipocom").options[document.getElementById("l20_codtipocom").selectedIndex].text;
         var oParam = new Object();
         oParam.codigo = codigocompra;
-        
+
         var url = 'lic1_liclicita_consulta.php';
         var oAjax = new Ajax.Request(url, {
             method: 'post',
@@ -1294,38 +1294,38 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
         document.form1.modalidade_tribunal.value = oRetorno.tribunal;
 
         var l12_pncp = <? echo '"' . $l12_pncp . '"';      ?>;
-        
-        if(document.form1.l20_leidalicitacao.value == 1 && l12_pncp == 't'){
+
+        if (document.form1.l20_leidalicitacao.value == 1 && l12_pncp == 't') {
             document.getElementById("amparolegal").style.display = "";
-            if(oRetorno.numrows > 0){
+            if (oRetorno.numrows > 0) {
                 document.getElementById("amparolegal").style.display = "table_row";
                 let listaamparolegal = document.getElementById('l212_codigo').options;
-                for ($x=59;$x>0;$x--){
-                    
+                for ($x = 59; $x > 0; $x--) {
+
                     listaamparolegal.remove($x);
                 }
 
-                for ($x=0;$x<60;$x++){
-                    if(oRetorno.amparo[$x] != "" && oRetorno.amparo[$x] != null){
-                        
-                        listaamparolegal.add(new Option(oRetorno.amparo[$x],$x));
+                for ($x = 0; $x < 60; $x++) {
+                    if (oRetorno.amparo[$x] != "" && oRetorno.amparo[$x] != null) {
+
+                        listaamparolegal.add(new Option(oRetorno.amparo[$x], $x));
                     }
                 }
-            }else if(oRetorno.numrows == 0 && document.getElementById("l20_codtipocom").value != 99){
+            } else if (oRetorno.numrows == 0 && document.getElementById("l20_codtipocom").value != 99) {
                 document.getElementById("amparolegal").style.display = "none";
                 let listaamparolegal = document.getElementById('l212_codigo').options;
-                for ($x=59;$x>0;$x--){
-                    
+                for ($x = 59; $x > 0; $x--) {
+
                     listaamparolegal.remove($x);
                 }
             }
-        }else{
+        } else {
             document.getElementById("amparolegal").style.display = "none";
-                let listaamparolegal = document.getElementById('l212_codigo').options;
-                for ($x=59;$x>0;$x--){
-                    
-                    listaamparolegal.remove($x);
-                }
+            let listaamparolegal = document.getElementById('l212_codigo').options;
+            for ($x = 59; $x > 0; $x--) {
+
+                listaamparolegal.remove($x);
+            }
 
         }
         document.querySelector("#l212_codigo").value = oRetornoamparo;
@@ -1361,7 +1361,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             document.getElementById("l20_numeroconvidado").readOnly = true;
 
         }
-        
+
         //validação para responsável na modalidade Leilão
         if (oRetorno.tribunal == 54) {
 
@@ -1383,10 +1383,10 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             listaNatureza.remove(3);
             listaNatureza.remove(2);
             listaNatureza.remove(1);
-            listaNatureza.add(new Option('1- Obras e Serviços de Engenharia',1));
-            listaNatureza.add(new Option('2- Compras e Outros Serviços',2));
-            listaNatureza.add(new Option('3- Locação de Imóveis',3));
-            listaNatureza.add(new Option('7- Compras Para Obras e/ou Serviços de Engenharia',7));
+            listaNatureza.add(new Option('1- Obras e Serviços de Engenharia', 1));
+            listaNatureza.add(new Option('2- Compras e Outros Serviços', 2));
+            listaNatureza.add(new Option('3- Locação de Imóveis', 3));
+            listaNatureza.add(new Option('7- Compras Para Obras e/ou Serviços de Engenharia', 7));
 
             document.querySelector("#l20_naturezaobjeto").value = oRetornoNatu;
 
@@ -1495,7 +1495,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
 
         } else {
-            
+
             let listaNatureza = document.getElementById('l20_naturezaobjeto').options;
 
             listaNatureza.remove(7);
@@ -1505,13 +1505,13 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             listaNatureza.remove(3);
             listaNatureza.remove(2);
             listaNatureza.remove(1);
-            listaNatureza.add(new Option('1- Obras e Serviços de Engenharia',1));
-            listaNatureza.add(new Option('2- Compras e Outros Serviços',2));
-            listaNatureza.add(new Option('3- Locação de Imóveis',3));
-            listaNatureza.add(new Option('4- Concessão',4));
-            listaNatureza.add(new Option('5- Permissão',5));
-            listaNatureza.add(new Option('6- Alienação de Bens',6));
-            listaNatureza.add(new Option('7- Compras Para Obras e/ou Serviços de Engenharia',7));
+            listaNatureza.add(new Option('1- Obras e Serviços de Engenharia', 1));
+            listaNatureza.add(new Option('2- Compras e Outros Serviços', 2));
+            listaNatureza.add(new Option('3- Locação de Imóveis', 3));
+            listaNatureza.add(new Option('4- Concessão', 4));
+            listaNatureza.add(new Option('5- Permissão', 5));
+            listaNatureza.add(new Option('6- Alienação de Bens', 6));
+            listaNatureza.add(new Option('7- Compras Para Obras e/ou Serviços de Engenharia', 7));
 
             document.querySelector("#l20_naturezaobjeto").value = oRetornoNatu;
 
@@ -1789,11 +1789,37 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
         var l12_pncp = <? echo '"' . $l12_pncp . '"';      ?>;
 
-        if (document.getElementById('l20_leidalicitacao').value == "1" && codigotribunal == 101 && l12_pncp == "t") {
-            document.getElementById('datasProposta').style.display = '';
-        } else {
-            document.getElementById('datasProposta').style.display = 'none';
+        if (document.getElementById('l20_leidalicitacao').value == "1" && l12_pncp == "t" && (codigotribunal == 100 || codigotribunal == 101 || codigotribunal == 102 || codigotribunal == 103)) {
+            document.getElementById('dtjs_l20_dataaberproposta').style.display = '';
+            for (const s of document.getElementsByClassName("dataabertura")) {
+                s.style.display = '';
+            }
 
+        } else {
+            document.getElementById('dtjs_l20_dataaberproposta').style.display = 'none';
+            for (const s of document.getElementsByClassName("dataabertura")) {
+                s.style.display = 'none';
+            }
+        }
+
+        if (document.getElementById('l20_leidalicitacao').value == "1" && l12_pncp == "t" && document.getElementById("l20_codtipocomdescr").value != 99) {
+            document.getElementById('dtjs_l20_dataencproposta').style.display = '';
+            for (const s of document.getElementsByClassName("dataencerramento")) {
+                s.style.display = '';
+            }
+            if (codigotribunal != 100 && codigotribunal != 101 && codigotribunal != 102 && codigotribunal != 103) {
+                document.getElementById('l20_dataencproposta').style.marginLeft = '12px';
+                document.getElementById('dataencerramentoid').style.marginLeft = '-185px';
+            } else {
+                document.getElementById('l20_dataencproposta').style.marginLeft = '0px';
+                document.getElementById('dataencerramentoid').style.marginLeft = '0px';
+            }
+
+        } else {
+            document.getElementById('dtjs_l20_dataencproposta').style.display = 'none';
+            for (const s of document.getElementsByClassName("dataencerramento")) {
+                s.style.display = 'none';
+            }
         }
 
     }
@@ -2313,13 +2339,13 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             opcoesreg.remove(3);
             opcoesreg.remove(2);
             opcoesreg.remove(1);
-            opcoesreg.add(new Option('1- Menor Preço',1));
-            opcoesreg.add(new Option('2- Melhor Técnica',2));
-            opcoesreg.add(new Option('3- Técnica e Preço',3));
-            opcoesreg.add(new Option('4- Maior Lance ou Oferta',4));
-            opcoesreg.add(new Option('6- Maior Retorno Econômico',6));
-            opcoesreg.add(new Option('7- Maior desconto',7));
-            opcoesreg.add(new Option('8- Melhor técnica ou conteúdo artístico',8));
+            opcoesreg.add(new Option('1- Menor Preço', 1));
+            opcoesreg.add(new Option('2- Melhor Técnica', 2));
+            opcoesreg.add(new Option('3- Técnica e Preço', 3));
+            opcoesreg.add(new Option('4- Maior Lance ou Oferta', 4));
+            opcoesreg.add(new Option('6- Maior Retorno Econômico', 6));
+            opcoesreg.add(new Option('7- Maior desconto', 7));
+            opcoesreg.add(new Option('8- Melhor técnica ou conteúdo artístico', 8));
 
             document.querySelector("#l20_tipliticacao").value = oRetornoTipo;
 
@@ -2341,15 +2367,15 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             opcoesreg.remove(2);
             opcoesreg.remove(1);
 
-            opcoesreg.add(new Option('1- Menor Preço',1));
-            opcoesreg.add(new Option('2- Melhor Técnica',2));
-            opcoesreg.add(new Option('3- Técnica e Preço',3));
-            opcoesreg.add(new Option('4- Maior Lance ou Oferta',4));
+            opcoesreg.add(new Option('1- Menor Preço', 1));
+            opcoesreg.add(new Option('2- Melhor Técnica', 2));
+            opcoesreg.add(new Option('3- Técnica e Preço', 3));
+            opcoesreg.add(new Option('4- Maior Lance ou Oferta', 4));
 
             document.querySelector("#l20_tipliticacao").value = oRetornoTipo;
         }
-        js_ProcCod_l20_codtipocom('l20_codtipocomdescr','l20_codtipocom');
-        
+        js_ProcCod_l20_codtipocom('l20_codtipocomdescr', 'l20_codtipocom');
+
     }
 
     function limitaTextareacpro(valor) {
