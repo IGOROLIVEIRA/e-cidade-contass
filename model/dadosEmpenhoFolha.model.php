@@ -3356,7 +3356,6 @@ class dadosEmpenhoFolha {
       $iInstit = db_getsession('DB_instit');
     }  
     
-    
     $oDaoOrcParametro               = db_utils::getDao('orcparametro');
     $oDaoOrcElemento                = db_utils::getDao('orcelemento');
     $oDaoOrcDotacao                 = db_utils::getDao('orcdotacao');
@@ -3437,7 +3436,49 @@ class dadosEmpenhoFolha {
       $sCampos .= "         rh02_seqpes      as pessoalmov,                                         ";
       $sCampos .= "         {$sSigla}_pd     as pd,                                                 ";
       $sCampos .= "         {$sSigla}_quant  as quant,                                              ";
-      $sCampos .= "         {$sSigla}_valor  as valor,                                              ";
+
+      switch ($sSigla) {
+        case "r48":
+          $sTabela      = "gerfcom";
+          $sCampoPensao = "r52_valcom";
+        break;
+        case "r14":
+          $sTabela      = "gerfsal";
+          $sCampoPensao = "r52_valor";
+        break;
+        case "r35":
+          $sTabela      = "gerfs13";
+          $sCampoPensao = "r52_val13";
+        break;
+        case "r22":
+          $sTabela      = "gerfadi";
+          $sCampoPensao = "r52_valor";
+        break;
+        case "r20":
+          $sTabela      = "gerfres";
+          $sCampoPensao = "r52_valres";
+        break;                    
+      }    
+
+        $sQueryAbater = "
+        COALESCE((SELECT
+            SUM(somatorio.{$sSigla}_valor) as valor
+        FROM
+            pessoal.{$sTabela} as somatorio
+            INNER JOIN pessoal.basesr 
+            ON r09_rubric = {$sSigla}_rubric
+            AND r09_anousu = {$sSigla}_anousu 
+            AND r09_mesusu = {$sSigla}_mesusu
+            AND r09_instit = {$sSigla}_instit
+        WHERE
+            {$sSigla}_anousu = {$iAnoUsu}
+            AND {$sSigla}_mesusu = {$iMesUsu}
+            AND r09_base IN ('B501', 'B502')
+            AND {$sSigla}_instit = {$iInstit}
+            AND somatorio.{$sSigla}_regist = {$sTabela}.{$sSigla}_regist), 0)";
+
+
+      $sCampos .= "         COALESCE({$sSigla}_valor, 0) - {$sQueryAbater} as valor,                             ";
       $sCampos .= "         {$sSigla}_anousu as anousu,                                             ";
       $sCampos .= "         {$sSigla}_mesusu as mesusu,                                             ";     
       $sCampos .= "         {$sSigla}_semest as semestre,                                           ";
@@ -3465,7 +3506,7 @@ class dadosEmpenhoFolha {
                                                     $sWhereGerador,
                                                     $iInstit);
     }
-
+    
     $rsGerador = db_query($sSqlGerador);                                             
       
     if ( $rsGerador ) {
@@ -3478,6 +3519,9 @@ class dadosEmpenhoFolha {
             
           $oGerador = db_utils::fieldsMemory($rsGerador,$iInd);
           $iCaract  = $oGerador->caract;
+
+            if ($oGerador->valor == 0)
+                continue;
 
           //Agrupa recisão com salário
           if ($oGerador->sigla == 'r20') {
