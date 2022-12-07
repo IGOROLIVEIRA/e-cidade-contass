@@ -45,6 +45,24 @@ class Addtableliccontrolepncp extends AbstractMigration
             START 1
             CACHE 1;
 
+            CREATE TABLE liccontrolepncpitens(
+                l214_sequencial           int8 NOT NULL,
+                l214_numeroresultado      int8 NOT NULL,
+                l214_numerocompra         int8 NOT NULL,
+                l214_anousu               int8 NOT NULL,
+                l214_licitacao            int8 NOT NULL,
+                l214_ordem                int8 NOT NULL,
+                PRIMARY KEY (l214_sequencial)
+            );
+    
+                --criando sequencia
+                CREATE SEQUENCE liccontrolepncpitens_l214_sequencial_seq
+                INCREMENT 1
+                MINVALUE 1
+                MAXVALUE 9223372036854775807
+                START 1
+                CACHE 1;
+
         COMMIT;
         ";
         $this->execute($sql);

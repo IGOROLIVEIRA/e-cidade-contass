@@ -476,7 +476,6 @@ class cl_liccontrolepncp
                 $virgula = ",";
             }
         }
-        die($sql);
         return $sql;
     }
 

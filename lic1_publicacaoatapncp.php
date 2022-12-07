@@ -34,7 +34,7 @@ db_postmemory($HTTP_POST_VARS);
         <fieldset style="margin-top: 30px;">
             <legend>Publicacao de Resultado</legend>
             <?
-            include("forms/db_frmpublicacaoresultadopncp.php");
+            include("forms/db_formpublicaata.php");
             ?>
         </fieldset>
     </center>
