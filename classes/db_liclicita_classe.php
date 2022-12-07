@@ -4210,4 +4210,17 @@ class cl_liclicita
 
         return $sql;
     }
+
+    public function sql_query_ata_pncp($l20_codigo)
+    {
+        $sql = "SELECT   l221_numata AS numeroAtaRegistroPreco,
+                        l221_exercicio AS anoAta,
+                        l221_dataini AS dataAssinatura,
+                        l221_dataini AS dataVigenciaInicio,
+                        l221_datafinal AS dataVigenciaFim  
+        FROM licatareg
+        WHERE l221_licitacao = $l20_codigo";
+
+        return $sql;
+    }
 }
