@@ -2457,7 +2457,7 @@ class cl_acordo
         
         if (!empty($dbwhere)) {
             $ano = db_getsession("DB_anousu");
-            $dbwhere = " and {$dbwhere} and ac16_anousu = {$ano} ";
+            $dbwhere = " {$dbwhere} and ac16_anousu = {$ano} ";
         }
         
         $sSql .= "
@@ -2470,7 +2470,6 @@ class cl_acordo
         l20_edital||'/'||l20_anousu as processo,
         ac16_acordogrupo as categoriaProcessoId,
         false as receita,
-        db01_unidade as codigoUnidade,
         z01_cgccpf as niFornecedor,
         null as tipoPessoaFornecedor, /*verificar se'pessoa juridica gerar PJ se Fisica gerar PF se diferente gear PE*/
         z01_nome as nomeRazaoSocialFornecedor,
@@ -2498,21 +2497,22 @@ class cl_acordo
         join cgmtipoempresa on z03_numcgm=z01_numcgm
         join tipoempresa on db98_sequencial=z03_tipoempresa
         join db_config on codigo=instit
+        join liccontrolepncp on ac16_licitacao = l213_licitacao
         left join acocontratopncp on ac213_contrato = ac16_sequencial
-        where ac16_dataassinatura >='2022-01-01' and ac16_dataassinatura <='2022-12-31'
-        $dbwhere
+        where $dbwhere
         ";
-       
+      
         return $sSql;
     }
 
-    public function sql_ItensContrato_PCNP($aContratocodigo)
+    public function sql_DadosContrato_PCNP($aContratocodigo)
     {            
         $ano = db_getsession("DB_anousu");
-        $dbwhere = " and ac16_anousu = {$ano} and ac16_sequencial = {$aContratocodigo} ";
+        $dbwhere = " ac16_anousu = {$ano} and ac16_sequencial = {$aContratocodigo} ";
                
         $sSql = " select 
-        ac16_sequencial, 
+        ac16_sequencial,
+        l213_numerocompra, 
         ac213_numerocontrolepncp,      
         cgc as cnpjCompra,
         ac16_anousu as anoCompra,
@@ -2522,7 +2522,7 @@ class cl_acordo
         ac16_anousu as anoContrato,
         l20_edital||'/'||l20_anousu as processo,
         ac16_acordogrupo as categoriaProcessoId,
-        false as receita,
+        true as receita,
         db01_unidade as codigoUnidade,
         z01_cgccpf as niFornecedor,
         null as tipoPessoaFornecedor, /*verificar se'pessoa juridica gerar PJ se Fisica gerar PF se diferente gear PE*/
@@ -2534,7 +2534,7 @@ class cl_acordo
         null as informacaoComplementar,
         ac16_valor as valorInicial,
         ac16_qtdperiodo as numeroParcelas,
-        null as valorParcela,
+        0 as valorParcela,
         ac16_valor as valorGlobal,
         null as valorAcumulado,
         ac16_dataassinatura as dataAssinatura,
@@ -2551,12 +2551,69 @@ class cl_acordo
         join cgmtipoempresa on z03_numcgm=z01_numcgm
         join tipoempresa on db98_sequencial=z03_tipoempresa
         join db_config on codigo=instit
+        join liccontrolepncp on ac16_licitacao = l213_licitacao
         left join acocontratopncp on ac213_contrato = ac16_sequencial
-        where ac16_dataassinatura >='2022-01-01' and ac16_dataassinatura <='2022-12-31'
-        $dbwhere
+        where $dbwhere
         ";
-       
+   
         return $sSql;
     }
+
+    public function sql_query_pncp($aContratocodigo)
+    {            
+        $ano = db_getsession("DB_anousu");
+        $instituicao = db_getsession('DB_instit');
+        $dbwhere = " ac16_instit =  {$instituicao} and ac16_anousu = {$ano} ";
+               
+        $sSql = " select 
+        ac16_sequencial,
+        l213_numerocompra, 
+        ac213_numerocontrolepncp,
+        ac213_sequencialpncp,      
+        cgc as cnpjCompra,
+        ac16_anousu as anoCompra,
+        null as sequencialCompra,
+        ac16_acordocategoria as tipoContratoId,
+        ac16_numero as numeroContratoEmpenho,
+        ac16_anousu as anoContrato,
+        l20_edital||'/'||l20_anousu as processo,
+        ac16_acordogrupo as categoriaProcessoId,
+        true as receita,
+        db01_unidade as codigoUnidade,
+        z01_cgccpf as niFornecedor,
+        null as tipoPessoaFornecedor, /*verificar se'pessoa juridica gerar PJ se Fisica gerar PF se diferente gear PE*/
+        z01_nome as nomeRazaoSocialFornecedor,
+        null as niFornecedorSubContratado,
+        null as tipoPessoaFornecedorSubContratado,
+        null as nomeRazaoSocialFornecedorSubContratado,
+        ac16_objeto as objetoContrato,
+        null as informacaoComplementar,
+        ac16_valor as valorInicial,
+        ac16_qtdperiodo as numeroParcelas,
+        0 as valorParcela,
+        ac16_valor as valorGlobal,
+        null as valorAcumulado,
+        ac16_dataassinatura as dataAssinatura,
+        ac16_datainicio as dataVigenciaInicio,
+        ac16_datafim as datavigenciaFim,
+        null as identificadorCipi,
+        null as urlCipi
+        from acordo
+        join acordocategoria on ac50_sequencial=ac16_acordocategoria
+        join liclicita on l20_codigo = ac16_licitacao
+        join db_depart on coddepto=ac16_deptoresponsavel
+        join db_departorg on db01_coddepto=coddepto
+        join cgm on z01_numcgm=ac16_contratado
+        join cgmtipoempresa on z03_numcgm=z01_numcgm
+        join tipoempresa on db98_sequencial=z03_tipoempresa
+        join db_config on codigo=instit
+        join liccontrolepncp on ac16_licitacao = l213_licitacao
+        join acocontratopncp on ac213_contrato = ac16_sequencial
+        where $dbwhere
+        ";
+
+        return $sSql;
+    }
+
 
 }

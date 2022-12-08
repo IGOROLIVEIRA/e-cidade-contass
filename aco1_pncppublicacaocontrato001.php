@@ -176,6 +176,7 @@ db_app::load("time.js");
                 var contrato = new Object();
                 contrato.codigo = aCells[1].getValue();
                 contrato.processo = aCells[2].getValue();
+                contrato.sequencialpncp = aCells[6].getValue();
                 oParam.aContratos.push(contrato);
             }
         }

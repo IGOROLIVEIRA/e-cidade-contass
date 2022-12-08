@@ -27,6 +27,8 @@ class cl_acocontratopncp
     public $ac213_numerocontrolepncp = null;
     public $ac213_situacao = null;
     public $ac213_instit = 0;
+    public $ac213_ano = 0;
+    public $ac213_sequencialpncp = 0;
     // cria propriedade com as variaveis do arquivo 
     public $campos = "
                  ac213_sequencial = int8 = ac213_sequencial 
@@ -36,6 +38,8 @@ class cl_acocontratopncp
                  ac213_numerocontrolepncp = text = numero de controle do portal pncp 
                  ac213_situacao = int8 = situacao da licitacao pncp
                  ac213_instit = int8 = ac213_instit 
+                 ac213_ano =  int8 = ac213_ano 
+                 ac213_sequencialpncp = int8 = ac213_sequencialpncp 
                  ";
 
     //funcao construtor da classe 
@@ -76,6 +80,9 @@ class cl_acocontratopncp
             $this->ac213_numerocontrolepncp = ($this->ac213_numerocontrolepncp == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac213_numerocontrolepncp"] : $this->ac213_numerocontrolepncp);
             $this->ac213_situacao = ($this->ac213_situacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac213_situacao"] : $this->ac213_situacao);
             $this->ac213_instit = ($this->ac213_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac213_instit"] : $this->ac213_instit);
+            $this->ac213_ano = ($this->ac213_ano == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac213_ano"] : $this->ac213_ano);
+            $this->ac213_sequencialpncp = ($this->ac213_sequencialpncp == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac213_sequencialpncp"] : $this->ac213_sequencialpncp);
+                   
         } else {
         }
     }
@@ -84,10 +91,28 @@ class cl_acocontratopncp
     function incluir()
     {
         $this->atualizacampos();
-     
+        
         if ($this->ac213_contrato== null) {
             $this->erro_sql = " Campo ac213_contrato não informado.";
-            $this->erro_campo = "ac213_licitacao";
+            $this->erro_campo = "ac213_contrato";
+            $this->erro_banco = "";
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_status = "0";
+            return false;
+        }
+        if ($this->ac213_ano== null) {
+            $this->erro_sql = " Campo ac213_ano não informado.";
+            $this->erro_campo = "ac213_ano";
+            $this->erro_banco = "";
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_status = "0";
+            return false;
+        }
+        if ($this->ac213_sequencialpncp== null) {
+            $this->erro_sql = " Campo ac213_sequencialpncp não informado.";
+            $this->erro_campo = "ac213_sequencialpncp";
             $this->erro_banco = "";
             $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
@@ -180,6 +205,9 @@ class cl_acocontratopncp
                                       ,ac213_numerocontrolepncp
                                       ,ac213_situacao 
                                       ,ac213_instit 
+                                      ,ac213_ano
+                                      ,ac213_sequencialpncp
+     
                        )
                 values (
                                 $this->ac213_sequencial 
@@ -188,8 +216,12 @@ class cl_acocontratopncp
                                ," . ($this->ac213_dtlancamento == "null" || $this->ac213_dtlancamento == "" ? "null" : "'" . $this->ac213_dtlancamento . "'") . " 
                                ,'$this->ac213_numerocontrolepncp'
                                ,$this->ac213_situacao
-                               ,$this->ac213_instit 
+                               ,$this->ac213_instit
+                               ,$this->ac213_ano 
+                               ,$this->ac213_sequencialpncp 
+      
                       )";
+                      
         $result = db_query($sql);
         if ($result == false) {
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
@@ -239,12 +271,39 @@ class cl_acocontratopncp
                 return false;
             }
         }
-        if (trim($this->ac213_licitacao) != "" || isset($GLOBALS["HTTP_POST_VARS"]["ac213_licitacao"])) {
+             
+        if (trim($this->ac213_contrato) != "" || isset($GLOBALS["HTTP_POST_VARS"]["ac213_contrato"])) {
             $sql  .= $virgula . " ac213_contrato= $this->ac213_contrato";
             $virgula = ",";
             if (trim($this->ac213_licitacao) == null) {
-                $this->erro_sql = " Campo ac213_contratonão informado.";
+                $this->erro_sql = " Campo ac213_contrato não informado.";
                 $this->erro_campo = "ac213_licitacao";
+                $this->erro_banco = "";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+        }
+        if (trim($this->ac213_ano) != "" || isset($GLOBALS["HTTP_POST_VARS"]["ac213_ano"])) {
+            $sql  .= $virgula . " ac213_ano= $this->ac213_ano";
+            $virgula = ",";
+            if (trim($this->ac213_ano) == null) {
+                $this->erro_sql = " Campo ac213_ano não informado.";
+                $this->erro_campo = "ac213_ano";
+                $this->erro_banco = "";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+        }
+        if (trim($this->ac213_sequencialpncp) != "" || isset($GLOBALS["HTTP_POST_VARS"]["ac213_sequencialpncp"])) {
+            $sql  .= $virgula . " ac213_sequencialpncp= $this->ac213_sequencialpncp";
+            $virgula = ",";
+            if (trim($this->ac213_sequencialpncp) == null) {
+                $this->erro_sql = " Campo ac213_sequencialpncp não informado.";
+                $this->erro_campo = "ac213_sequencialpncp";
                 $this->erro_banco = "";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
@@ -450,7 +509,7 @@ class cl_acocontratopncp
                 $virgula = ",";
             }
         }
-        die($sql);
+        // die($sql);
         return $sql;
     }
 
