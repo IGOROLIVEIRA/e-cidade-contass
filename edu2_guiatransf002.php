@@ -77,7 +77,7 @@ if ($tipo == "TR") {
   $campos .= " censomunicnat.ed261_c_nome as ed47_i_censomunicnat,censoufnat.ed260_c_sigla as ed47_i_censoufnat, ";
   $campos .= " ed47_v_pai,ed47_v_mae,ed104_d_data as data_transf,ed104_t_obs as obs_transf, ";
   $campos .= " censomunic.ed261_c_nome as cidade,ed104_i_matricula as codigomatricula, ";
-  $campos .= " escolaproc.ed82_i_codigo as escola_destino,ed283_c_concletapa";
+  $campos .= " escolaproc.ed82_i_codigo as escola_destino,ed104_c_concletapa";
   $result  = $cltransfescolafora->sql_record($cltransfescolafora->sql_query("",
                                                                             $campos,
                                                                             "to_ascii(ed47_v_nome)",
@@ -182,7 +182,7 @@ for ($x=0;$x<$linhas;$x++) {
   $oDadosAlunos                       = new stdClass();
   $oDadosAlunos->aParagrafo           = $oParagrafo->getDocParagrafos();
 
-  if($ed283_c_concletapa == 2){
+  if($ed104_c_concletapa == 2){
     $sTexto = "Declaro para os devidos fins que se fizerem necessários que o(a) aluno(a) {$oParagrafo->nome_aluno} natural de {$oParagrafo->municipio_naturalidade}, no estado de {$oParagrafo->estado_naturalidade}, nascido(a) aos {$oParagrafo->dia_nascimento} de {$oParagrafo->mes_nascimento} do ano de {$oParagrafo->ano_nascimento}, filho(a) de {$oParagrafo->filiacao} concluiu em {$oParagrafo->dia_transferencia} de {$oParagrafo->mes_transferencia} de {$oParagrafo->ano_transferencia}, o(a) {$oParagrafo->etapa} do(a) {$oParagrafo->ensino} nesta escola, estando apto a matricular-se no {$sEtapaSeg} do(a) {$oParagrafo->ensino}, conforme legislação vigente.";
   } else{
     $sTexto = "Declaro para os devidos fins que se fizerem necessários que o(a) aluno(a) {$oParagrafo->nome_aluno} natural de {$oParagrafo->municipio_naturalidade}, no estado de {$oParagrafo->estado_naturalidade}, nascido(a) aos {$oParagrafo->dia_nascimento} de {$oParagrafo->mes_nascimento} do ano de {$oParagrafo->ano_nascimento}, filho(a) de {$oParagrafo->filiacao} cursou até {$oParagrafo->dia_transferencia} de {$oParagrafo->mes_transferencia} de {$oParagrafo->ano_transferencia}, o(a) {$oParagrafo->etapa} do(a) {$oParagrafo->ensino} nesta escola, estando apto a continuar seus estudos em qualquer instituição de ensino, conforme legislação vigente.";

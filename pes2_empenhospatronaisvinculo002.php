@@ -467,7 +467,7 @@ $head6      = "PERÍODO : " . $mes . " / " . $ano;
 
 // echo $sql;
 // exit;
-//echo "patronal --> $r33_ppatro" ; exit;
+// echo "patronal --> $r33_ppatro" ; exit;
 
 $result = pg_exec($sql);
 //db_criatabela($result);
