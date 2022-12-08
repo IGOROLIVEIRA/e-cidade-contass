@@ -64,18 +64,20 @@ $sWhereContratos = " and 1 = 1 ";
                 <?
                 if (isset($chave_l20_codigo) && (trim($chave_l20_codigo) != "")) {
                     $sql = "SELECT DISTINCT l20_codigo,
-                    l20_objeto
+                    l20_objeto,
+                    l213_numerocontrolepncp
                     FROM liclicita
                     INNER JOIN liclicitem ON l21_codliclicita = l20_codigo
                     INNER JOIN liccontrolepncp ON l213_licitacao = l20_codigo
-                    WHERE l20_codigo = $chave_l20_codigo and l20_instit=" . db_getsession('DB_instit');
+                    WHERE l20_codigo = $chave_l20_codigo and l20_licsituacao = 10 and l20_instit=" . db_getsession('DB_instit');
                 } else {
                     $sql = "SELECT DISTINCT l20_codigo,
-                    l20_objeto
+                    l20_objeto,
+                    l213_numerocontrolepncp
                     FROM liclicita
                     INNER JOIN liclicitem ON l21_codliclicita = l20_codigo
                     INNER JOIN liccontrolepncp ON l213_licitacao = l20_codigo
-                    WHERE l20_instit=" . db_getsession('DB_instit');
+                    WHERE  l20_licsituacao = 10 and l20_instit=" . db_getsession('DB_instit');
                 }
                 //die($sql);
                 db_lovrot($sql, 15, "()", "", $funcao_js);

@@ -13,19 +13,41 @@ db_app::load("estilos.css, grid.style.css");
             </td>
             <td>
                 <?
-                db_input('l20_codigo', 10, $Il20_codigo, true, 'text', 3, "")
+                db_input('l20_codigo', 10, $Il20_codigo, true, 'text', 3, "");
                 ?>
                 <?
-                db_input('l20_objeto', 80, $Il20_objeto, true, 'text', 3, '')
+                db_input('l20_objeto', 80, $Il20_objeto, true, 'text', 3, '');
                 ?>
             </td>
         </tr>
     </table>
+    </br>
     <input type="button" value="Processar" onclick="js_getItens();">
+    </br>
+
+    <table style="width: 100%">
+        <tr>
+            <td colspan="2">
+                <strong>Ambiente: </strong>
+                <select name="ambiente" id="ambiente">
+                    <option value="1">Ambiente de Homologao Externa (teste)</option>
+                    <option value="2">Ambiente de Produo</option>
+                </select>
+
+                <strong>Tipo: </strong>
+                <select name="tipo" id="tipo">
+                    <option value="1">Inclusão</option>
+                    <option value="2">Retificação</option>
+                </select>
+            </td>
+        </tr>
+    </table>
     <fieldset>
         <legend><b>Itens</b></legend>
         <div id='cntgriditens'></div>
     </fieldset>
+    </br>
+    <input type="button" value="Enviar para PNCP" onclick="js_enviarresultado();">
 </form>
 <script>
     function js_showGrid() {
@@ -38,7 +60,7 @@ db_app::load("estilos.css, grid.style.css");
         oGridItens.setCellAlign(new Array("center", "center", "center", "center", "center", 'center', 'center', 'center', 'center'));
         oGridItens.setCellWidth(new Array("5%", "5%", "35%", '15%', '5%', '25%', '15%', '8%', '8%'));
         oGridItens.setHeader(new Array("Código", "Ordem", "Material", "Lote", "CGM", "Fornecedores", "Unidade", "Qtde Licitada", "Valor Licitado"));
-        oGridItens.hasTotalValue = true;
+        oGridItens.hasTotalValue = false;
         oGridItens.show($('cntgriditens'));
 
         var width = $('cntgriditens').scrollWidth - 30;
@@ -94,48 +116,18 @@ db_app::load("estilos.css, grid.style.css");
             oRetornoitens.itens.each(function(oLinha, iLinha) {
                 seq++;
                 var aLinha = new Array();
-                aLinha[0] = oLinha.pc81_codprocitem;
-                aLinha[1] = oLinha.pc11_seq;
+                aLinha[0] = oLinha.pc01_codmater;
+                aLinha[1] = oLinha.l21_ordem;
                 aLinha[2] = oLinha.pc01_descrmater.urlDecode();
                 aLinha[3] = oLinha.l04_descricao.urlDecode();
                 aLinha[4] = oLinha.z01_numcgm;
                 aLinha[5] = oLinha.z01_nome.urlDecode();
                 aLinha[6] = oLinha.m61_descr;
-                aLinha[7] = oLinha.pc11_quant;
+                aLinha[7] = oLinha.pc23_quant;
                 aLinha[8] = oLinha.pc23_valor;
                 oGridItens.addRow(aLinha);
-                nTotal = nTotal + Number(oLinha.pc23_valor);
 
-                var sTextEvent = " ";
-
-                if (aLinha[2] !== '') {
-                    sTextEvent += "<b>Material: </b>" + aLinha[2];
-                } else {
-                    sTextEvent += "<b>Nenhum dado á mostrar</b>";
-                }
-
-                var oDadosHint = new Object();
-                oDadosHint.idLinha = `gridItensrowgridItens${iLinha}`;
-                oDadosHint.sText = sTextEvent;
-                aDadosHintGrid.push(oDadosHint);
-
-                /*LOTE*/
-                var sTextEventlote = " ";
-
-                if (aLinha[3] !== '') {
-                    sTextEventlote += "<b>Lote: </b>" + aLinha[3];
-                } else {
-                    sTextEventlote += "<b>Nenhum dado á mostrar</b>";
-                }
-
-                var oDadosHintlote = new Object();
-                oDadosHintlote.idLinha = `gridItensrowgridItens${iLinha}`;
-                oDadosHintlote.sTextlote = sTextEventlote;
-                aDadosHintGridlote.push(oDadosHintlote);
             });
-            document.getElementById('gridItenstotalValue').innerText = js_formatar(nTotal, 'f');
-            document.getElementById('valor').value = js_formatar(nTotal, 'f');
-
             oGridItens.renderRows();
 
             aDadosHintGrid.each(function(oHint, id) {
@@ -162,4 +154,51 @@ db_app::load("estilos.css, grid.style.css");
     }
 
     js_showGrid();
+
+    function js_enviarresultado() {
+        var aItensLicitacao = oGridItens.getSelection("object");
+
+        if (aItensLicitacao.length == 0) {
+            alert('Nenhum item Selecionado');
+            return false;
+        }
+
+        let tipo = $F('tipo');
+
+        var oParam = new Object();
+        if (tipo == 1) {
+            oParam.exec = "enviarResultado";
+        } else {
+            oParam.exec = "RetificarResultado";
+        }
+        oParam.ambiente = $F('ambiente');
+        oParam.aItensLicitacao = new Array();
+        oParam.iLicitacao = $F('l20_codigo');
+
+        for (var i = 0; i < aItensLicitacao.length; i++) {
+
+            with(aItensLicitacao[i]) {
+                var itemResultado = new Object();
+                itemResultado.pc01_codmater = aCells[1].getValue();
+                itemResultado.l21_ordem = aCells[2].getValue();
+                oParam.aItensLicitacao.push(itemResultado);
+            }
+        }
+
+        js_divCarregando('Aguarde, Enviando Resultado Itens', 'msgBox');
+        var oAjax = new Ajax.Request(
+            'lic1_envioresultadopncp.RPC.php', {
+                method: 'post',
+                parameters: 'json=' + Object.toJSON(oParam),
+                onComplete: js_returnEnvPncp
+            }
+        );
+
+        function js_returnEnvPncp(oAjax) {
+            js_removeObj('msgBox');
+            var oRetornoResultado = eval('(' + oAjax.responseText + ")");
+
+            alert(oRetornoResultado.message.urlDecode());
+        }
+    }
 </script>

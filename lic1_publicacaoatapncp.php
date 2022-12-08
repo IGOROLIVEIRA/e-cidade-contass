@@ -48,14 +48,14 @@ db_app::load("time.js");
                 </tr>
                 <tr>
                     <td colspan="2">
-                        <div id='cntgridlicitacoes'></div>
+                        <div id='cntgridlicitacoesrp'></div>
                     </td>
                 </tr>
             </table>
 
         </fieldset>
         </br>
-        <div id='cntgridlicitacoes'></div>
+        <div id='cntgridlicitacoesrp'></div>
 
         <input style="margin-left: 50%" type="button" value="Enviar para PNCP" onclick="js_enviar();">
     </form>
@@ -70,13 +70,13 @@ db_app::load("time.js");
         oGridLicitacao = new DBGrid('gridLicitacao');
         oGridLicitacao.nameInstance = 'oGridLicitacao';
         oGridLicitacao.setCheckbox(0);
-        oGridLicitacao.setCellAlign(new Array("center", "center", "Left", "Left", "Center"));
-        oGridLicitacao.setCellWidth(new Array("5%", "10%", "20%", "80%", "20%"));
-        oGridLicitacao.setHeader(new Array("Código", "Processo", "Modalidade", "Objeto", "Número de Controle"));
+        oGridLicitacao.setCellAlign(new Array("center", "center", "Left", "Left", "Center", "Center"));
+        oGridLicitacao.setCellWidth(new Array("5%", "10%", "20%", "80%", "20%", "20%"));
+        oGridLicitacao.setHeader(new Array("Código", "Processo", "Modalidade", "Objeto", "Número de Controle", "Número Ata PNCP"));
         oGridLicitacao.hasTotalValue = false;
-        oGridLicitacao.show($('cntgridlicitacoes'));
+        oGridLicitacao.show($('cntgridlicitacoesrp'));
 
-        var width = $('cntgridlicitacoes').scrollWidth - 30;
+        var width = $('cntgridlicitacoesrp').scrollWidth - 30;
         $("table" + oGridLicitacao.sName + "header").style.width = width;
         $(oGridLicitacao.sName + "body").style.width = width;
         $("table" + oGridLicitacao.sName + "footer").style.width = width;
@@ -86,7 +86,7 @@ db_app::load("time.js");
     function js_getLicitacoes() {
         oGridLicitacao.clearAll(true);
         var oParam = new Object();
-        oParam.exec = "getLicitacoes";
+        oParam.exec = "getLicitacoesRP";
         js_divCarregando('Aguarde, pesquisando Licitaes', 'msgBox');
         var oAjax = new Ajax.Request(
             'lic1_enviopncp.RPC.php', {
@@ -118,6 +118,7 @@ db_app::load("time.js");
                 aLinha[2] = oLinha.l03_descr.urlDecode();
                 aLinha[3] = oLinha.l20_objeto.urlDecode();
                 aLinha[4] = oLinha.l213_numerocontrolepncp;
+                aLinha[5] = oLinha.l215_ata;
                 oGridLicitacao.addRow(aLinha);
 
                 var sTextEvent = " ";
@@ -159,11 +160,11 @@ db_app::load("time.js");
 
         var oParam = new Object();
         if (tipo == 1) {
-            oParam.exec = "enviarAviso";
+            oParam.exec = "enviarAtaRP";
         } else if (tipo == 2) {
-            oParam.exec = "RetificarAviso";
+            oParam.exec = "retificarAtaRP";
         } else {
-            oParam.exec = "excluiraviso";
+            oParam.exec = "excluirAtaRP";
         }
         oParam.ambiente = $F('ambiente');
         oParam.aLicitacoes = new Array();
@@ -173,13 +174,14 @@ db_app::load("time.js");
             with(aLicitacoes[i]) {
                 var licitacao = new Object();
                 let numerocontrole = aCells[5].getValue();
-                if (tipo == '2' && numerocontrole.length == 1) {
-                    alert('Licitao Selecionada não esta presente no PNCP');
+                if ((tipo == '2' || tipo == '3') && numerocontrole.length == 1) {
+                    alert('Ata Selecionada não esta presente no PNCP');
                     return false;
                 }
                 licitacao.codigo = aCells[1].getValue();
                 licitacao.processo = aCells[2].getValue();
                 licitacao.numerocontrole = numerocontrole;
+                licitacao.numeroata = aCells[6].getValue();
                 oParam.aLicitacoes.push(licitacao);
             }
         }
@@ -197,13 +199,7 @@ db_app::load("time.js");
     function js_returnEnvPncp(oAjax) {
         js_removeObj('msgBox');
         var oRetornoLicitacoes = eval('(' + oAjax.responseText + ")");
-        if (oRetornoLicitacoes.status == '2') {
-            alert(oRetornoLicitacoes.message.urlDecode());
-            window.location.href = "lic1_pncpavisolicitacao001.php";
-        } else {
-            if (confirm(oRetornoLicitacoes.message.urlDecode())) {
-                window.location.href = "lic1_pncpavisolicitacao001.php";
-            }
-        }
+        alert(oRetornoLicitacoes.message.urlDecode());
+        window.location.href = "lic1_publicacaoatapncp.php";
     }
 </script>
