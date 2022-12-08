@@ -43,72 +43,43 @@ parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 $xordem  = '';
 $dbwhere = "1=1 ";
 
-if ($ordem == 'n') {
-  if ($tipo_ordem == 'a') {
-    $xordem = 'm60_codmater asc ';
-    $head5 = " ORDEM : NUMÉRICA - ASCENDENTE";
-  } else {
-    $xordem = 'm60_codmater desc ';
-    $head5 = " ORDEM : NUMÉRICA - DESCENDENTE";
-  }
-} else if ($ordem == 'a') {
-  if ($tipo_ordem == 'a') {
-    $xordem = 'm60_descr asc ';
-    $head5 = " ORDEM : ALFABÉTICA - ASCENDENTE";
-  } else {
-    $xordem = ' m60_descr desc ';
-    $head5 = " ORDEM : ALFABÉTICA - DESCENDENTE";
-  }
-}
 
-if (isset($listar_mat)&&trim($listar_mat)!="") {
-  if (trim($listar_mat) == "I") {
-    $head6    = " MATERIAIS: INATIVOS";
-    $dbwhere .= "and m60_ativo is false";
+  if ($si06_sequencial == "" || $si06_sequencial == null) {
+    if ($si06_anocadastro != "" && $si06_anocadastro != null) {
+      $head5   = " EXERCÍCIO: ".$si06_anocadastro;
+    }
+    if ($si06_modalidade == 1) {
+      $head6   = " MODALIDADE: CONCORRÊNCIA";
+    }else{
+      $head6   = " MODALIDADE: PREGÃO";
+    }
   }
-  
-  if (trim($listar_mat) == "A") {
-    $head6    = " MATERIAIS: ATIVOS";
-    $dbwhere .= "and m60_ativo is true";
-  }
-  
-  if (trim($listar_mat) == "T") {
-    $head6   = " MATERIAIS: TODOS";
-  }
-}
 
 $info_listar_serv = "";
 
-if ($listar_serv == "M") {
-  
-  $dbwhere          .= " and (pc01_servico is false or pc01_servico is null) ";
-  $info_listar_serv .= " LISTAR: SOMENTE MATERIAIS";
-  
-} else if ($listar_serv == "S") {
-  
-  $dbwhere          .= " and pc01_servico is true ";
-  $info_listar_serv .= " LISTAR: SOMENTE SERVIÇOS";
+if ($fornecedor == 1) {
+
+  $info_listar_serv .= " LISTAR: TODOS";
   
 } else {
-  $info_listar_serv = " LISTAR: TODOS";
+  $info_listar_serv = " LISTAR: FORNECEDOR";
 }
 
-$head3 = "MATERIAIS E ORIGEM ";
+$head3 = "ROL DE ADESãO A ATA DE REGISTRO DE PREÇO ";
 $head7 = "$info_listar_serv";
 
-$campos = " distinct m60_codmater,trim(m60_descr) as m60_descr,pc01_codmater,trim(pc01_descrmater) as pc01_descrmater";
 
-if ($listar_serv == "T") {
-  $sql = $clmatmater->sql_query_com(null, $campos, $xordem, $dbwhere);
-} else {
-  $sql = $clmatmater->sql_query_com_pcmater(null, $campos, $xordem, $dbwhere);
+
+if($si06_sequencial != "" && $si06_sequencial != null){
+  $rsAdesao = db_query("select * from adesaoregprecos where si06_sequencial =".$si06_sequencial);
+  
+}else{
+  $rsAdesao = db_query("select * from adesaoregprecos where si06_modalidade =".$si06_modalidade);
 }
-
-$result =$clmatmater->sql_record($sql);
 
 //$result =  $clmatmater->sql_record($clmatmater->sql_query_com(null,"*",$xordem,$dbwhere));
 //db_criatabela($result);exit;
-$xxnum = pg_numrows($result);
+$xxnum = pg_numrows($rsAdesao);
 if ($xxnum == 0) {
   db_redireciona('db_erros.php?fechar=true&db_erro=Não existem unidades cadastrados.');
 }
@@ -120,51 +91,101 @@ $pdf->setfillcolor(235);
 $pdf->setfont('arial','b',8);
 $troca = 1;
 $alt = 3.5;
-for ($x = 0; $x < pg_numrows($result); $x++) {
-  db_fieldsmemory($result,$x);
-  if ($pdf->gety() > $pdf->h - 30 || $troca != 0 ) {
-    $pdf->addpage();
-    $pdf->setfont('arial','b',7);
-    $pdf->cell(110,$alt,"Almoxarifado",1,0,"C",1);
-    $pdf->cell(80,$alt,"Compras",1,1,"C",1);
-    $pdf->cell(20,$alt,"Cod. Material",1,0,"C",1);
-    $pdf->cell(90,$alt,"Descrição",1,0,"C",1);
-    $pdf->cell(20,$alt,"Cod. Material",1,0,"C",1);
-    $pdf->cell(60,$alt,"Descrição",1,1,"C",1);
+$pdf->addpage();
+for ($x = 0; $x < pg_numrows($rsAdesao); $x++) {
+  db_fieldsmemory($rsAdesao,$x);
+
+
+    $rsAcordo = db_query("select * from acordo where ac16_adesaoregpreco = ".$si06_sequencial);
+    if(pg_numrows($rsAcordo)>0){
+      db_fieldsmemory($rsAcordo,0);
+    }
+    
+    
+    $pdf->setfont('arial','b',4);
+    $pdf->cell(10,$alt,"Seq",1,0,"C",1);
+    $pdf->cell(35,$alt,"Número do Processo de Adesão/ Exercício",1,0,"C",1);
+    $pdf->cell(80,$alt,"Objeto",1,0,"C",1);
+    $pdf->cell(20,$alt,"Fornecedor Ganhador",1,0,"C",1);
+    $pdf->cell(15,$alt,"Data de Adesão",1,0,"C",1);
+    $pdf->cell(15,$alt,"Data da Ata",1,0,"C",1);
+    $pdf->cell(15,$alt,"Órgão Gerenciador",1,1,"C",1);
     //$pdf->cell(20,$alt,$RLm61_abrev,1,1,"R",1);
-    $troca = 0;
-  }
+    
+  
   $pdf->setfont('arial','',5);
-  if (strlen($pc01_descrmater) > 55) {               
-     $aPc01_descrmater = quebrar_texto($pc01_descrmater,55);
-     $alt_novo = count($aPc01_descrmater)+0.5;                  
+  $asi06_objetoadesao = $si06_objetoadesao;
+  
+  if (strlen($si06_objetoadesao) > 70) {               
+     $asi06_objetoadesao = quebrar_texto($si06_objetoadesao,70);
+     $alt_novo = count($asi06_objetoadesao)+0.9;                  
   } else {
      $alt_novo = 2.5;
   }
   
-  $pdf->cell(20, ($alt*$alt_novo), $m60_codmater,1,0,"C",0);
-  $pdf->cell(90, ($alt*$alt_novo), $m60_descr, 1, 0, "L", 0);
-  $pdf->cell(20, ($alt*$alt_novo), $pc01_codmater,1,0,"C",0);
-  $i = 0.5;
-  if (strlen($pc01_descrmater) > 55) {
-                 $pos_x = $pdf->x;
-                 $pos_y = $pdf->y;
-                 foreach ($aPc01_descrmater as $pc01_descrmater_nova) {
-                         $pdf->cell(60,$alt+0.9,substr($pc01_descrmater_nova,0,55),'R',1,"L");
-                         $pdf->x=$pos_x;
-                         $i++;
-                         if($i == $alt_novo){
-                         	$pdf->cell('','','','B');
-                         }      
-                 }
-                 $pdf->x = $pdf->lMargin;
-  } else {
-                 $pdf->cell(60,($alt*$alt_novo),substr($pc01_descrmater,0,56),1,1,"L");
+  $pdf->cell(10, ($alt*$alt_novo), $si06_sequencial,1,0,"C",0);
+  $pdf->cell(35, ($alt*$alt_novo), $si06_numeroadm, 1, 0, "C", 0);
+  //$pdf->cell(80, ($alt*$alt_novo), $asi06_objetoadesao, 1, 0, "C", 0);
+  $altatual = $alt;
+  if (strlen($si06_objetoadesao) > 55) {
+    $pos_x = $pdf->x;
+    $pos_y = $pdf->y;
+    foreach ($asi06_objetoadesao as $si06_objetoadesao_nova) {
+            $pdf->cell(80,$alt+0.5,substr($si06_objetoadesao_nova,0,70),"",1,"L","");
+            $pdf->x=$pos_x;
+            $i++;
+            $altatual = $altatual + 0.5;
+            if($i == $alt_novo){
+              $pdf->cell('','','','B');
+            }      
+    }
+    $pdf->x = $pos_x+80;
+} else {
+    $pdf->cell(80,($alt*$alt_novo),substr($si06_objetoadesao,0,70),1,0,"L",0);
+}
+  $pdf->cell(20, ($alt*$alt_novo), $si06_cgm,1,0,"C",0);
+  $pdf->cell(15, ($alt*$alt_novo), $si06_dataadesao,1,0,"C",0);
+  $pdf->cell(15, ($alt*$alt_novo), $si06_dataata,1,0,"C",0);
+  $pdf->cell(15, ($alt*$alt_novo), $si06_orgaogerenciador,1,1,"C",0);
+
+  
+    $pdf->setfont('arial','b',4);
+    $pdf->cell(25,$alt,"Modalidade",1,0,"C",0);
+    $pdf->cell(25,$alt,"Numero Modalidade",1,0,"C",0);
+    $pdf->cell(25,$alt,"Número do Contrato/Exercício",1,0,"C",0);
+    $pdf->cell(65,$alt,"Vigência Contrato",1,0,"C",0);
+    $pdf->cell(25,$alt,"Valor Total do Contrato",1,0,"C",0);
+    $pdf->cell(25,$alt,"Edital",1,1,"C",0);
+    $alt_novo = 2.5;
+
+  $pdf->setfont('arial','',5);
+  if ($si06_modalidade == 1) {
+    $pdf->cell(25, ($alt*$alt_novo), "CONCORRÊNCIA",1,0,"C",0);
+  }else{
+    
+    $pdf->cell(25, ($alt*$alt_novo),"PREGÃO",1,0,"C",0);
   }
+  $pdf->cell(25, ($alt*$alt_novo), $si06_numlicitacao, 1, 0, "C", 0);
+  if(pg_numrows($rsAcordo)>0){
+    $pdf->cell(12.5, ($alt*$alt_novo), $ac16_numero, 1, 0, "C", 0);
+    $pdf->cell(12.5, ($alt*$alt_novo), $ac16_anousu, 1, 0, "C", 0);
+    $pdf->cell(32.5, ($alt*$alt_novo), $ac16_datainicio,1,0,"C",0);
+    $pdf->cell(32.5, ($alt*$alt_novo), $ac16_datafim,1,0,"C",0);
+    $pdf->cell(25, ($alt*$alt_novo), $ac16_valor,1,0,"C",0);
+  }else{
+    $pdf->cell(12.5, ($alt*$alt_novo), "", 1, 0, "C", 0);
+    $pdf->cell(12.5, ($alt*$alt_novo), "", 1, 0, "C", 0);
+    $pdf->cell(32.5, ($alt*$alt_novo), "",1,0,"C",0);
+    $pdf->cell(32.5, ($alt*$alt_novo), "",1,0,"C",0);
+    $pdf->cell(25, ($alt*$alt_novo), "",1,0,"C",0);
+  }
+  
+  $pdf->cell(25, ($alt*$alt_novo), $si06_edital,1,1,"C",0);
+  
+  $pdf->cell(25, 10, "",0,1,"C",0);
   $total ++;
 }
-$pdf->setfont('arial','b',8);
-$pdf->cell(0,$alt,"TOTAL DE REGISTROS  :  $total",'T',0,"L",0);
+
 $pdf->output();
 
 function quebrar_texto($texto,$tamanho){

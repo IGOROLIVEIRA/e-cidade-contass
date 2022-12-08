@@ -50,10 +50,12 @@ db_postmemory($HTTP_POST_VARS);
 function js_emite(){
   var qry = "";
 
-  qry  = 'ordem='+document.form1.ordem.value;
-  qry += '&tipo_ordem='+document.form1.tipo_ordem.value;
-  qry += '&listar_mat='+document.form1.listar_mat.value;
-  qry += '&listar_serv='+document.form1.listar_serv.value;
+ 
+  qry = 'si06_sequencial='+document.form1.si06_sequencial.value;
+  qry += '&si06_modalidade='+document.form1.si06_modalidade.value;
+  qry += '&si06_anocadastro='+document.form1.si06_anocadastro.value;
+  qry += '&fornecedor='+document.form1.fornecedor.value;
+
 
   jan  = window.open('com2_relatorioroldeadesao002.php?'+qry,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
   jan.moveTo(0,0);
@@ -71,111 +73,109 @@ function js_emite(){
     <td width="140">&nbsp;</td>
   </tr>
 </table>
-<center>
-<form name="form1" method="post" action="">
-<fieldset style="width: 480px;margin-top: 30px">
-            <legend><strong>Relatório de Recursos Orçamentarios</strong></legend>
-
-            <table>
-                <tr>
-                  <td align="left" nowrap title="<?= $Te60_numcgm ?>">
-                    <? db_ancora("Ata de Registro de Preço: ","js_pesquisaadesao(true);",1); ?>
-                  </td>
-                  <td align="left" nowrap>
-                    <? db_input("si06_sequencial", 6, $Isi06_sequencial, true, "text", 4, "onchange='js_pesquisaadesao(false);'");
-                    db_input("si06_objetoadesao", 40, "$Isi06_objetoadesao", true, "text", 3);
-                    ?></td>
-                </tr>
-                <tr>
-                  <td align="left" nowrap title="<?= $Te60_numcgm ?>">
-                    <? db_ancora("Modalidade: ","js_pesquisapc80_codproc(true);",1); ?>
-                  </td>
-                  <td align="left" nowrap>
-                    <? db_input("m51_numcgm", 6, $Ie60_numcgm, true, "text", 4, "onchange='js_pesquisae60_numcgm(false);'");
-                    db_input("z01_nome", 40, "$Iz01_nome", true, "text", 3);
-                    ?></td>
-                </tr>
-                <tr>
-                    <td style="font-weight: bolder;" >
-                        Exercício:
-                    </td>
-                    <td>
-                        <?
-                        db_input("pc80_codproc", 6, $Ipc80_codproc,true,"text",4,"onchange='js_pesquisapc80_codproc(false);'");
-                        ?>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <strong>Tipo de Relatório</strong>
-                    </td>
-                    <td>
-                        <?$iFornecedor = array(
-                            1=>"Não",
-                            2 =>"Sim");
-                        db_select("fornecedor",$iFornecedor,true,1,"");
-                        ?>
-                    </td>
-                </tr>
-            </table>
-        </fieldset>
-        </form>
-                        </center>
+  
+              
+          
+    
+ 
   <table  align="center">
     <form name="form1" method="post" action="" >
-      <tr>
-         <td >&nbsp;</td>
-         <td >&nbsp;</td>
-      </tr>
+    <center>
+    
+    <fieldset style="width: 480px;margin-top: 30px">
+      <legend><strong>Relatório de Recursos Orçamentarios</strong></legend>
+        
+            <tr>
+                <td align="left" nowrap title="<?= $Te60_numcgm ?>">
+                    <? db_ancora("Ata de Registro de Preço: ","js_pesquisaadesao(true);",1); ?>
+                </td>
+                <td align="left" nowrap>
+                  <? db_input("si06_sequencial", 6, $Isi06_sequencial, true, "text", 4, "onchange='js_pesquisaadesao(false);'");
+                    db_input("si06_objetoadesao", 40, "$Isi06_objetoadesao", true, "text", 3);
+                  ?>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                        <strong>Modalidade:</strong>
+                </td>
+                <td>
+                    <?$iModalidade = array(
+                      0=>"Selecione",
+                      1=>"Concorrência",
+                      2 =>"Pregão");
+                      db_select("si06_modalidade",$iModalidade,true,1,"style='width: 312px;'");
+                    ?>
+                </td>
+              </tr>
+              <tr>
+                <td style="font-weight: bolder;" >
+                  Exercício:
+                </td>
+                <td>
+                  <?
+                  db_input("si06_anocadastro", 6, $Isi06_anocadastro,true,"text",4,"");
+                  ?>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>Filtrar por fornecedor:</strong>
+                </td>
+                <td>
+                  <?$iFornecedor = array(
+                  1=>"Não",
+                  2 =>"Sim");
+                  db_select("lQuebraFornecedor",$iFornecedor,true,1,"style='width: 60px;'");
+                  ?>
+                </td>
 
-      <tr>
-        <td nowrap align='right'>
-         <b>Ordem :</b>
-        </td>
-        <td nowrap>
-	      <?
-          $x = array("n"=>"Numérica","a"=>"Alfabética");
-          db_select("ordem",$x,true,2); 
-	      ?>
-        </td>
-      </tr>
-      <tr>
-        <td nowrap align='right'>
-         <b>Tipo Ordem :</b>
-        </td>
-        <td nowrap>
-	      <?
-          $y = array("a"=>"Ascendente","d"=>"Descendente");
-          db_select("tipo_ordem",$y,true,2); 
-	      ?>
-        </td>
-      </tr>
-      <tr>
-        <td><b>Listar Materiais :</b></td>
-        <td nowrap>
-        <?
-          $x = array("T"=>"Todos","A"=>"Ativos","I"=>"Inativos");
-          db_select("listar_mat",$x,true,2);
-        ?>
-        </td>
-      <tr>
-        <td nowrap align='right'><b>Listar :</b></td>
-        <td nowrap>
-	       <? 
-	       $somente_serv = array("M"=>"Materiais", "T"=>"Todos", "S"=>"Serviços");
-	       db_select("listar_serv",$somente_serv,true,2);
-		   ?>
-        </td>		
-		
-      </tr>
+
+
+                <tr id='area_fornecedor' class='tr__cgm'>
+                    <td colspan="2">
+                        <fieldset>
+                            <legend>Fornecedores</legend>
+                            <table align="center" border="0">
+                                <tr>
+                                    <td>
+									                    <?php db_ancora('CGM',"js_pesquisa_fornelicitacao(true);",1); ?>
+                                    </td>
+                                    <td>
+                                    <?php
+                                      db_input('z01_numcgm',6,'',true,'text',4," onchange='js_pesquisa_fornelicitacao(false);'","");
+                                      db_input('z01_nome',25, '', true, 'text', 3,"","");
+                                    ?>
+                                        <input type="button" value="Lançar" id="btn-lancar-fornecedor"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                          <select name="fornecedor[]" id="fornecedor" size="5" multiple></select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="center" colspan="2">
+                                        <strong>Dois Cliques sobre o fornecedor o exclui.</strong>
+                                    </td>
+                                </tr>
+                              </table>
+                          </fieldset>
+                      </td>
+                  </tr>
+              </tr>
+              
+        
+      
       <tr><td colspan="2">&nbsp;</td></tr>
       <tr>
         <td colspan="2" align = "center"> 
-          <input  name="emite2" id="emite2" type="button" value="Processar" onclick="js_emite();" >
+          <input  name="emite2" id="emite2" type="button" value="Gerar Relatorio" onclick="js_emite();" >
         </td>
       </tr>
 
-      
+      </fieldset>
+        </center> 
 
   </form>
     </table>
@@ -186,6 +186,9 @@ function js_emite(){
 </html>
 
 <script>
+  if(document.getElementById('lQuebraFornecedor').value = 't'){
+    document.getElementById('area_fornecedor').style.display = '';
+}
 
     function js_pesquisaadesao(mostra){
         if(mostra==true){
@@ -214,4 +217,38 @@ function js_emite(){
         document.form1.pc80_codproc.value = chave1;
         db_iframe_pcproc.hide();
     }
+    function js_pesquisa_fornelicitacao(mostra){
+    if (mostra) {
+        js_OpenJanelaIframe('top.corpo','db_iframe_fornelicitacao','func_fornelicitacao.php?&funcao_js=parent.js_mostrafornelicitacao|z01_numcgm|z01_nome','Pesquisa',true);
+    } else {
+        if (document.form1.z01_numcgm.value != '') {
+            js_OpenJanelaIframe('','db_iframe_fornelicitacao','func_fornelicitacao.php?pesquisa_chave='+document.form1.z01_numcgm.value+'&funcao_js=parent.js_mostrafornelicitacao1','Pesquisa',false);
+        } else {
+            document.form1.z01_numcgm.value = '';
+            document.form1.z01_nome.value = '';
+        }
+    }
+}
+
+function js_mostrafornelicitacao1(chave, erro) {
+
+    if (erro) {
+        document.form1.z01_numcgm.focus();
+        document.form1.z01_numcgm.value = '';
+        return;
+    }
+
+    document.getElementById('z01_nome').value = chave;
+}
+
+function js_mostrafornelicitacao(chave1,chave2) {
+    document.form1.z01_numcgm.value = chave1;
+    document.form1.z01_nome.value = chave2;
+    db_iframe_fornelicitacao.hide();
+}
+if(document.getElementById('lQuebraFornecedor').value = 'f'){
+    document.getElementById('area_fornecedor').style.display = 'none';
+}
+
+
 </script>
