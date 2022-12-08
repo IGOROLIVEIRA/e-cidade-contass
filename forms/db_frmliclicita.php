@@ -632,25 +632,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                     </td>
                                 </tr>
 
-                                <tr>
-                                    <td>
-                                        <b class="dataabertura" style="display: none;">Data Abertura Proposta :</b>
-                                    </td>
-                                    <td>
-                                        <?
 
-                                        db_inputdata("l20_dataaberproposta", @$l20_dataaberproposta_dia, @$l20_dataaberproposta_mes, @$l20_dataaberproposta_ano, true, 'text', $db_opcao, "style='display:none;' class='dataabertura'");
-                                        echo "<script> document.getElementById('dtjs_l20_dataaberproposta').style.display = 'none' </script>";
-                                        ?>
-                                        <b id="dataencerramentoid" class="dataencerramento" style="display: none;"> Data Encerramento Proposta: </b>
-                                        <?
-
-                                        db_inputdata("l20_dataencproposta", @$l20_dataencproposta_dia, @$l20_dataencproposta_mes, @$l20_dataencproposta_ano, true, 'text', $db_opcao, "style='display:none;' class='dataencerramento'");
-                                        echo "<script> document.getElementById('dtjs_l20_dataencproposta').style.display = 'none' </script>";
-
-                                        ?>
-                                    </td>
-                                </tr>
 
                                 <!--
                                 <tr id="datenpc">
@@ -771,6 +753,25 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                     <td>
                                         <?
                                         db_inputdata('l20_recdocumentacao', @$l20_recdocumentacao_dia, @$l20_recdocumentacao_mes, @$l20_recdocumentacao_ano, true, 'text', $db_opcao, "");
+                                        ?>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <b class="dataabertura" style="display: none;">Data Abertura Proposta :</b>
+                                    </td>
+                                    <td>
+                                        <?
+
+                                        db_inputdata("l20_dataaberproposta", @$l20_dataaberproposta_dia, @$l20_dataaberproposta_mes, @$l20_dataaberproposta_ano, true, 'text', $db_opcao, "style='display:none;' class='dataabertura'");
+                                        echo "<script> document.getElementById('dtjs_l20_dataaberproposta').style.display = 'none' </script>";
+                                        ?>
+                                        <b id="dataencerramentoid" class="dataencerramento" style="display: none;"> Data Encerramento Proposta: </b>
+                                        <?
+
+                                        db_inputdata("l20_dataencproposta", @$l20_dataencproposta_dia, @$l20_dataencproposta_mes, @$l20_dataencproposta_ano, true, 'text', $db_opcao, "style='display:none;' class='dataencerramento'");
+                                        echo "<script> document.getElementById('dtjs_l20_dataencproposta').style.display = 'none' </script>";
+
                                         ?>
                                     </td>
                                 </tr>
@@ -2161,12 +2162,12 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
         var l12_pncp = <? echo '"' . $l12_pncp . '"';      ?>;
 
-        if (document.getElementById('l20_leidalicitacao').value == "1" && document.getElementById('l20_codtipocomdescr').value == "9" && l12_pncp == "t" && document.getElementById('l20_dataaberproposta').value == "") {
+        if (document.getElementById('l20_dataaberproposta').style.display == "" && document.getElementById('l20_dataaberproposta').value == "") {
             alert("Campo Data de Abertura da Proposta não Informado");
             return false;
         }
 
-        if (document.getElementById('l20_leidalicitacao').value == "1" && document.getElementById('l20_codtipocomdescr').value == "9" && l12_pncp == "t" && document.getElementById('l20_dataencproposta').value == "") {
+        if (document.getElementById('l20_dataencproposta').style.display == "" && document.getElementById('l20_dataencproposta').value == "") {
             alert("Campo Data de Encerramento da Proposta não Informado");
             return false;
         }
