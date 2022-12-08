@@ -277,9 +277,10 @@ foreach ($materiais as $material) {
   }
   $ivalorDisponivel = 'R$' . number_format(($material->total - $material->valorautorizado), 2, ',', '.');
   $oPdf->Cell(15, $iAlt, $material->ordem, 'TBR', 0, 'C', $iCorFundo);
-  $oPdf->Cell(25, $iAlt, $material->codigomaterial, 'TBR', 0, 'C', $iCorFundo);
-  $oPdf->Cell(150, $iAlt, $material->material, 'TBR', 0, 'L', $iCorFundo);
-  $oPdf->Cell(25, $iAlt, $material->qtd_total, 'TBR', 0, 'C', $iCorFundo);
+  $oPdf->Cell(20, $iAlt, $material->codigomaterial, 'TBR', 0, 'C', $iCorFundo);
+  $oPdf->Cell(140, $iAlt, $material->material, 'TBR', 0, 'L', $iCorFundo);
+  $oPdf->Cell(23, $iAlt, $material->qtd_total, 'TBR', 0, 'C', $iCorFundo);
+  $oPdf->Cell(25, $iAlt, 'R$' . number_format(($material->vlrunitario), 2, ',', '.'), 'TBR', 0, 'C', $iCorFundo);
   $oPdf->Cell(25, $iAlt, $ivalorTotal, 'TBR', 0, 'C', $iCorFundo);
   $oPdf->Cell(20, $iAlt, $iquantidadeDisponivel, 'TBR', 0, 'C', $iCorFundo);
   $oPdf->Cell(25, $iAlt, $ivalorDisponivel, 'TBR', 0, 'C', $iCorFundo);
@@ -329,6 +330,7 @@ function imprimirCabecalhoAcordos($oPdf, $iFonte, $iAlt, $lImprime, $material, $
 
   if ($lImprime) {
 
+    $oPdf->SetMargins(10, 0, 0);
     $oPdf->SetFont('Arial', 'B', $iFonte);
     $oPdf->SetFillColor(220);
 
@@ -356,16 +358,19 @@ function imprimirCabecalhoAcordos($oPdf, $iFonte, $iAlt, $lImprime, $material, $
     if ($material->licitacao != "") {
       $oPdf->Cell(50, $iAlt, 'Processo Licitatorio: ' . $material->licitacao . '/' . $material->ano_processo_licitatorio, 0, 0, 'L', 0);
     }
+    $oPdf->SetMargins(2, 0, 0);
 
     $oPdf->Ln();
     $oPdf->Ln();
     if ($oPdf->GetY() > 190) {
       $oPdf->AddPage('L');
     }
+
     $oPdf->Cell(15, $iAlt, 'Seq', 1, 0, 'C', 1);
-    $oPdf->Cell(25, $iAlt, 'Código', 1, 0, 'C', 1);
-    $oPdf->Cell(150, $iAlt, 'Descrição', 1, 0, 'C', 1);
-    $oPdf->Cell(25, $iAlt, 'Quantidade', 1, 0, 'C', 1);
+    $oPdf->Cell(20, $iAlt, 'Código', 1, 0, 'C', 1);
+    $oPdf->Cell(140, $iAlt, 'Descrição', 1, 0, 'C', 1);
+    $oPdf->Cell(23, $iAlt, 'Quantidade', 1, 0, 'C', 1);
+    $oPdf->Cell(25, $iAlt, 'Vlr. Unitário', 1, 0, 'C', 1);
     $oPdf->Cell(25, $iAlt, 'Vlr. Total', 1, 0, 'C', 1);
     $oPdf->Cell(20, $iAlt, 'Saldo', 1, 0, 'C', 1);
     $oPdf->Cell(25, $iAlt, 'Vlr. Disponível', 1, 0, 'C', 1);
