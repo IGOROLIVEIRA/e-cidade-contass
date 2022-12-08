@@ -11,7 +11,9 @@ require_once("std/DBTime.php");
 require_once("std/DBDate.php");
 require_once("classes/db_liclicita_classe.php");
 require_once("classes/db_liccontrolepncp_classe.php");
+require_once("classes/cl_licontroleatarppncp.php");
 require_once("model/licitacao/PNCP/AvisoLicitacaoPNCP.model.php");
+require_once("model/licitacao/PNCP/AtaRegistroprecoPNCP.model.php");
 
 db_app::import("configuracao.DBDepartamento");
 $oJson             = new services_json();
@@ -35,7 +37,7 @@ switch ($oParam->exec) {
                      AND l213_licitacao=l20_codigo)
         ORDER BY l213_sequencial DESC
         LIMIT 1) AS l213_numerocontrolepncp,l03_descr,l20_numero";
-        $rsLicitacaoAbertas = $clliclicita->sql_record($clliclicita->sql_query(null, $campos, 'l20_codigo desc', "l20_licsituacao = 0 and l03_pctipocompratribunal in (110,51,53,52,102,101,100,101) and liclicita.l20_leidalicitacao = 1 and l20_instit = " . db_getsession('DB_instit')));
+        $rsLicitacaoAbertas = $clliclicita->sql_record($clliclicita->sql_query(null, $campos, 'l20_codigo desc', "l03_pctipocompratribunal in (110,51,53,52,102,101,100,101) and liclicita.l20_leidalicitacao = 1 and l20_instit = " . db_getsession('DB_instit')));
 
         for ($iCont = 0; $iCont < pg_num_rows($rsLicitacaoAbertas); $iCont++) {
 
@@ -196,6 +198,153 @@ switch ($oParam->exec) {
                     $clliccontrolepncp->excluir(null, "l213_licitacao = $aLicitacao->codigo");
 
                     $oRetorno->status  = 1;
+                    $oRetorno->message = "Excluido com Sucesso !";
+                } else {
+                    throw new Exception(utf8_decode($rsApiPNCP->message));
+                }
+            }
+        } catch (Exception $eErro) {
+            $oRetorno->status  = 2;
+            $oRetorno->message = urlencode($eErro->getMessage());
+        }
+        break;
+    case 'getLicitacoesRP':
+        $clliclicita = new cl_liclicita();
+        $campos = "distinct l20_codigo,l20_edital,l20_objeto,(SELECT l213_numerocontrolepncp
+        FROM liccontrolepncp
+        WHERE l213_situacao = 1
+            AND l213_licitacao=l20_codigo
+            AND l213_licitacao NOT IN
+                (SELECT l213_licitacao
+                 FROM liccontrolepncp
+                 WHERE l213_situacao = 3
+                     AND l213_licitacao=l20_codigo)
+        ORDER BY l213_sequencial DESC
+        LIMIT 1) AS l213_numerocontrolepncp,l03_descr,l20_numero,l215_ata";
+        $rsLicitacaoAbertas = $clliclicita->sql_record($clliclicita->sql_query(null, $campos, 'l20_codigo desc', "l20_usaregistropreco ='t' and l03_pctipocompratribunal in (110,51,53,52,102,101,100,101) and l213_numerocontrolepncp is not null and liclicita.l20_leidalicitacao = 1 and l20_instit = " . db_getsession('DB_instit')));
+
+        for ($iCont = 0; $iCont < pg_num_rows($rsLicitacaoAbertas); $iCont++) {
+
+            $oLicitacaos = db_utils::fieldsMemory($rsLicitacaoAbertas, $iCont);
+            $oLicitacao      = new stdClass();
+            $oLicitacao->l20_codigo = $oLicitacaos->l20_codigo;
+            $oLicitacao->l20_edital = $oLicitacaos->l20_edital;
+            $oLicitacao->l20_objeto = urlencode($oLicitacaos->l20_objeto);
+            $oLicitacao->l213_numerocontrolepncp = $oLicitacaos->l213_numerocontrolepncp;
+            $oLicitacao->l03_descr = urlencode($oLicitacaos->l03_descr . ' - ' . $oLicitacaos->l20_numero);
+            $oLicitacao->l215_ata = $oLicitacaos->l215_ata;
+
+
+            $itens[] = $oLicitacao;
+        }
+        $oRetorno->licitacoes = $itens;
+        break;
+    case 'enviarAtaRP':
+        $clLicitacao  = db_utils::getDao("liclicita");
+        $cllicanexopncp = db_utils::getDao("licanexopncp");
+        try {
+            foreach ($oParam->aLicitacoes as $aLicitacao) {
+
+                //licitacao
+                $rsDadosEnvioAta = $clLicitacao->sql_record($clLicitacao->sql_query_ata_pncp($aLicitacao->codigo));
+
+                for ($licAta = 0; $licAta < pg_numrows($rsDadosEnvioAta); $licAta++) {
+                    $oDadosLicitacao = db_utils::fieldsMemory($rsDadosEnvioAta, $licAta);
+                    $clAtaRegistroprecoPNCP = new AtaRegistroprecoPNCP($oDadosLicitacao);
+                    //monta o json com os dados da licitacao
+                    $odadosEnvioAta = $clAtaRegistroprecoPNCP->montarDados();
+
+                    //envia para pncp
+                    $rsApiPNCP = $clAtaRegistroprecoPNCP->enviarAta($odadosEnvioAta, substr($aLicitacao->numerocontrole, 17, -5), substr($aLicitacao->numerocontrole, 24));
+                    $urlResutltado = explode('x-content-type-options', $rsApiPNCP[0]);
+
+                    if ($rsApiPNCP[1] == '201') {
+                        $clliccontroleatarppncp = new cl_licontroleatarppncp();
+                        $l215_ata = substr($urlResutltado[0], 86);
+                        $l215_numerocontrolepncp = '17316563000196-1-' . substr($aLicitacao->numerocontrole, 17, -5) . '/' . substr($aLicitacao->numerocontrole, 24) . '-' . str_pad($l215_ata, 6, '0', STR_PAD_LEFT);
+                        $clliccontroleatarppncp->l215_licitacao = $aLicitacao->codigo;
+                        $clliccontroleatarppncp->l215_usuario = db_getsession("DB_id_usuario");
+                        $clliccontroleatarppncp->l215_dtlancamento = date("Y-m-d", db_getsession("DB_datausu"));
+                        $clliccontroleatarppncp->l215_numerocontrolepncp = $l215_numerocontrolepncp;
+                        $clliccontroleatarppncp->l215_situacao = 1;
+                        $clliccontroleatarppncp->l215_ata = $l215_ata;
+                        $clliccontroleatarppncp->l215_anousu = substr($aLicitacao->numerocontrole, 24);
+
+                        $clliccontroleatarppncp->incluir();
+
+                        $oRetorno->status  = 1;
+                        $oRetorno->situacao = 1;
+                        $oRetorno->message = "Enviado com Sucesso !";
+                    } else {
+                        throw new Exception(utf8_decode($rsApiPNCP[0]));
+                    }
+                }
+            }
+        } catch (Exception $eErro) {
+            $oRetorno->status  = 2;
+            $oRetorno->message = urlencode($eErro->getMessage());
+        }
+        break;
+    case 'retificarAtaRP':
+        $clLicitacao  = db_utils::getDao("liclicita");
+        $cllicanexopncp = db_utils::getDao("licanexopncp");
+        try {
+            foreach ($oParam->aLicitacoes as $aLicitacao) {
+
+                //licitacao
+                $rsDadosEnvioAta = $clLicitacao->sql_record($clLicitacao->sql_query_ata_pncp($aLicitacao->codigo));
+
+                for ($licAta = 0; $licAta < pg_numrows($rsDadosEnvioAta); $licAta++) {
+                    $oDadosLicitacao = db_utils::fieldsMemory($rsDadosEnvioAta, $licAta);
+                    $clAtaRegistroprecoPNCP = new AtaRegistroprecoPNCP($oDadosLicitacao);
+                    //monta o json com os dados da licitacao
+                    $odadosEnvioAta = $clAtaRegistroprecoPNCP->montarDados();
+
+                    //envia para pncp
+                    $rsApiPNCP = $clAtaRegistroprecoPNCP->enviarRetificacaoAta($odadosEnvioAta, substr($aLicitacao->numerocontrole, 17, -5), substr($aLicitacao->numerocontrole, 24), $aLicitacao->numeroata);
+
+                    if ($rsApiPNCP[0] == '201') {
+                        $clliccontroleatarppncp = new cl_licontroleatarppncp();
+                        $l215_ata = substr($urlResutltado[0], 86);
+                        $l215_numerocontrolepncp = '17316563000196-1-' . substr($aLicitacao->numerocontrole, 17, -5) . '/' . substr($aLicitacao->numerocontrole, 24) . '-' . str_pad($aLicitacao->numeroata, 6, '0', STR_PAD_LEFT);
+
+                        $clliccontroleatarppncp->l215_licitacao = $aLicitacao->codigo;
+                        $clliccontroleatarppncp->l215_usuario = db_getsession("DB_id_usuario");
+                        $clliccontroleatarppncp->l215_dtlancamento = date("Y-m-d", db_getsession("DB_datausu"));
+                        $clliccontroleatarppncp->l215_numerocontrolepncp = $l215_numerocontrolepncp;
+                        $clliccontroleatarppncp->l215_situacao = 2;
+                        $clliccontroleatarppncp->l215_ata = $l215_ata;
+                        $clliccontroleatarppncp->l215_anousu = substr($aLicitacao->numerocontrole, 24);
+
+                        $clliccontroleatarppncp->incluir();
+
+                        $oRetorno->status  = 1;
+                        $oRetorno->situacao = 2;
+                        $oRetorno->message = "Retificado com Sucesso !";
+                    } else {
+                        throw new Exception(utf8_decode($rsApiPNCP[0]));
+                    }
+                }
+            }
+        } catch (Exception $eErro) {
+            $oRetorno->status  = 2;
+            $oRetorno->message = urlencode($eErro->getMessage());
+        }
+        break;
+
+    case 'excluirAtaRP':
+        $cllicontroleatarppncp = db_utils::getDao("licontroleatarppncp");
+        try {
+            foreach ($oParam->aLicitacoes as $aLicitacao) {
+                $clAtaRegistroprecoPNCP = new AtaRegistroprecoPNCP();
+                //envia exclusao de Atas
+                $rsApiPNCP = $clAtaRegistroprecoPNCP->excluirAta(substr($aLicitacao->numerocontrole, 17, -5), substr($aLicitacao->numerocontrole, 24), $aLicitacao->numeroata);
+
+                if ($rsApiPNCP == null) {
+                    $cllicontroleatarppncp->excluir(null, "l215_licitacao = $aLicitacao->codigo and l215_ata = $aLicitacao->numeroata");
+
+                    $oRetorno->status  = 1;
+                    $oRetorno->situacao = 3;
                     $oRetorno->message = "Excluido com Sucesso !";
                 } else {
                     throw new Exception(utf8_decode($rsApiPNCP->message));
