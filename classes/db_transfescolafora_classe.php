@@ -53,6 +53,7 @@ class cl_transfescolafora {
    var $ed104_t_obs = null;
    var $ed104_i_matricula = 0;
    var $ed104_c_situacao = null;
+   var $ed104_c_concletapa  = 0;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  ed104_i_codigo = int8 = Código
@@ -64,6 +65,7 @@ class cl_transfescolafora {
                  ed104_t_obs = text = Observações
                  ed104_i_matricula = int8 = Matrícula
                  ed104_c_situacao = char(1) = Situação
+                 ed104_c_concletapa = char(1) = Aluno concluindo etapa
                  ";
    //funcao construtor da classe
    function cl_transfescolafora() {
@@ -99,6 +101,7 @@ class cl_transfescolafora {
        $this->ed104_t_obs = ($this->ed104_t_obs == ""?@$GLOBALS["HTTP_POST_VARS"]["ed104_t_obs"]:$this->ed104_t_obs);
        $this->ed104_i_matricula = ($this->ed104_i_matricula == ""?@$GLOBALS["HTTP_POST_VARS"]["ed104_i_matricula"]:$this->ed104_i_matricula);
        $this->ed104_c_situacao = ($this->ed104_c_situacao == ""?@$GLOBALS["HTTP_POST_VARS"]["ed104_c_situacao"]:$this->ed104_c_situacao);
+       $this->ed104_c_concletapa = ($this->ed104_c_concletapa == ""?@$GLOBALS["HTTP_POST_VARS"]["ed104_c_concletapa"]:$this->ed104_c_concletapa);
      }else{
        $this->ed104_i_codigo = ($this->ed104_i_codigo == ""?@$GLOBALS["HTTP_POST_VARS"]["ed104_i_codigo"]:$this->ed104_i_codigo);
      }
@@ -169,6 +172,15 @@ class cl_transfescolafora {
        $this->erro_status = "0";
        return false;
      }
+     if($this->ed104_c_concletapa == null ){ 
+      $this->erro_sql = " Campo Aluno Concluindo Etapa nao Informado.";
+      $this->erro_campo = "ed104_c_concletapa";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
      if($ed104_i_codigo == "" || $ed104_i_codigo == null ){
        $result = db_query("select nextval('transfescolafora_ed104_i_codigo_seq')");
        if($result==false){
@@ -211,6 +223,7 @@ class cl_transfescolafora {
                                       ,ed104_t_obs
                                       ,ed104_i_matricula
                                       ,ed104_c_situacao
+                                      ,ed104_c_concletapa
                        )
                 values (
                                 $this->ed104_i_codigo
@@ -222,6 +235,7 @@ class cl_transfescolafora {
                                ,'$this->ed104_t_obs'
                                ,$this->ed104_i_matricula
                                ,'$this->ed104_c_situacao'
+                               ,$this->ed104_c_concletapa
                       )";
      $result = db_query($sql);
      if($result==false){
@@ -398,6 +412,19 @@ class cl_transfescolafora {
          return false;
        }
      }
+     if(trim($this->ed104_c_concletapa)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ed104_c_concletapa"])){ 
+      $sql  .= $virgula." ed104_c_concletapa = '$this->ed104_c_concletapa' ";
+      $virgula = ",";
+      if(trim($this->ed104_c_concletapa) == null ){ 
+        $this->erro_sql = " Campo Aluno Concluindo Etapa nao Informado.";
+        $this->erro_campo = "ed104_c_concletapa";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+    }
      $sql .= " where ";
      if($ed104_i_codigo!=null){
        $sql .= " ed104_i_codigo = $this->ed104_i_codigo";
@@ -592,6 +619,7 @@ class cl_transfescolafora {
      $sql .= "      inner join bairro  on  bairro.j13_codi = escola.ed18_i_bairro";
      $sql .= "      inner join ruas  on  ruas.j14_codigo = escola.ed18_i_rua";
      $sql .= "      inner join db_depart  on  db_depart.coddepto = escola.ed18_i_codigo";
+     $sql .= "      left join obstransferencia on obstransferencia.ed283_i_escola = escola.ed18_i_codigo";
      $sql2 = "";
      if (empty($dbwhere)) {
        if (!empty($ed104_i_codigo)) {

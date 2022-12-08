@@ -293,7 +293,12 @@ class SicomArquivoDetalhamentodeObras extends SicomArquivoBase implements iPadAr
       $clcadobras302022->si201_codorgaoresp = $oDados30->si09_codorgaotce;
       $clcadobras302022->si201_codobra = $oDados30->obr01_numeroobra;
       $clcadobras302022->si201_tipomedicao = $oDados30->obr03_tipomedicao;
-      $clcadobras302022->si201_descoutrostiposmed = $this->removeCaracteres($oDados30->obr03_outrostiposmedicao);
+      if($clcadobras302022->si201_tipomedicao == 9 ){
+        $clcadobras302022->si201_descoutrostiposmed = $this->removeCaracteres($oDados30->obr03_outrostiposmedicao);
+      }else{
+        $clcadobras302022->si201_descoutrostiposmed = "";
+      }
+
       $clcadobras302022->si201_nummedicao = $this->removeCaracteres($oDados30->obr03_nummedicao);
       $clcadobras302022->si201_descmedicao = $this->removeCaracteres($oDados30->obr03_descmedicao);
       $clcadobras302022->si201_dtiniciomedicao = $oDados30->obr03_dtiniciomedicao;

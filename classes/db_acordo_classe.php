@@ -1070,16 +1070,13 @@ class cl_acordo
         }
 
         if (($this->ac16_adesaoregpreco) != "" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_adesaoregpreco"])) {
-            $sql  .= $virgula . " ac16_adesaoregpreco = '$this->ac16_adesaoregpreco' ";
+            
+            if (($this->ac16_licoutroorgao) == null) {
+                $sql  .= $virgula . " ac16_adesaoregpreco = null ";
             $virgula = ",";
-            if (($this->ac16_adesaoregpreco) == null) {
-                $this->erro_sql = " Campo Licitação Outro Orgão não informado.";
-                $this->erro_campo = "ac16_adesaoregpreco";
-                $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
+            }else{
+                $$sql  .= $virgula . " ac16_adesaoregpreco = '$this->ac16_adesaoregpreco' ";
+                $virgula = ",";
             }
         }
 
