@@ -2540,14 +2540,15 @@ class cl_liclicita
         $sql .= "      left join habilitacaoforn   on l206_licitacao = l20_codigo";
         $sql .= "      left join cgm as cgmfornecedor on cgmfornecedor.z01_numcgm = l206_fornecedor";
         $sql .= "      left join liclicitem on l21_codliclicita = l20_codigo";
-        $sql .= "       left join pcorcamitemlic on pc26_liclicitem=l21_codigo";
-        $sql .= "       left join pcorcamitem on pc22_orcamitem=pc26_orcamitem";
-        $sql .= "       left join pcorcamjulg on pc24_orcamitem=pc22_orcamitem and pc24_pontuacao = 1";
-        $sql .= "       left join pcorcamforne on pc21_orcamforne=pc24_orcamforne";
-        $sql .= "       left join pcorcamval on pc23_orcamitem = pc22_orcamitem and pc23_orcamforne = pc21_orcamforne";
-        $sql .= "       left join pcorcam on pc20_codorc = pc22_codorc";
-        $sql .= "       left join acordo on ac16_licitacao = l20_codigo";
-        $sql .= "       left join licontroleatarppncp on l215_licitacao = l20_codigo";
+        $sql .= "      left join pcorcamitemlic on pc26_liclicitem=l21_codigo";
+        $sql .= "      left join pcorcamitem on pc22_orcamitem=pc26_orcamitem";
+        $sql .= "      left join pcorcamjulg on pc24_orcamitem=pc22_orcamitem and pc24_pontuacao = 1";
+        $sql .= "      left join pcorcamforne on pc21_orcamforne=pc24_orcamforne";
+        $sql .= "      left join pcorcamval on pc23_orcamitem = pc22_orcamitem and pc23_orcamforne = pc21_orcamforne";
+        $sql .= "      left join pcorcam on pc20_codorc = pc22_codorc";
+        $sql .= "      left join acordo on ac16_licitacao = l20_codigo";
+        $sql .= "      left join liccontrolepncp on l213_licitacao = l20_codigo";
+        $sql .= "      left join licontroleatarppncp on l215_licitacao = l20_codigo";
 
         $sql2 = "";
         if ($dbwhere == "") {
@@ -2578,7 +2579,6 @@ class cl_liclicita
                 $virgula = ",";
             }
         }
-        //print_r($sql);
         return $sql;
     }
 

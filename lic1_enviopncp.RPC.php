@@ -221,7 +221,7 @@ switch ($oParam->exec) {
                      AND l213_licitacao=l20_codigo)
         ORDER BY l213_sequencial DESC
         LIMIT 1) AS l213_numerocontrolepncp,l03_descr,l20_numero,l215_ata";
-        $rsLicitacaoAbertas = $clliclicita->sql_record($clliclicita->sql_query(null, $campos, 'l20_codigo desc', "l20_usaregistropreco ='t' and l03_pctipocompratribunal in (110,51,53,52,102,101,100,101) and liclicita.l20_leidalicitacao = 1 and l20_instit = " . db_getsession('DB_instit')));
+        $rsLicitacaoAbertas = $clliclicita->sql_record($clliclicita->sql_query(null, $campos, 'l20_codigo desc', "l20_usaregistropreco ='t' and l03_pctipocompratribunal in (110,51,53,52,102,101,100,101) and l213_numerocontrolepncp is not null and liclicita.l20_leidalicitacao = 1 and l20_instit = " . db_getsession('DB_instit')));
 
         for ($iCont = 0; $iCont < pg_num_rows($rsLicitacaoAbertas); $iCont++) {
 

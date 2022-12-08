@@ -199,6 +199,7 @@ db_app::load("time.js");
         var oRetornoLicitacoes = eval('(' + oAjax.responseText + ")");
         if (oRetornoLicitacoes.status == '2') {
             alert(oRetornoLicitacoes.message.urlDecode());
+            window.location.href = "lic1_pncpavisolicitacao001.php";
         } else {
             if (confirm(oRetornoLicitacoes.message.urlDecode())) {
                 window.location.href = "lic1_pncpavisolicitacao001.php";
