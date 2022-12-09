@@ -54,6 +54,18 @@ function js_emite(){
   qry = 'si06_sequencial='+document.form1.si06_sequencial.value;
   qry += '&si06_modalidade='+document.form1.si06_modalidade.value;
   qry += '&si06_anocadastro='+document.form1.si06_anocadastro.value;
+  let sFornecedores = '';
+
+    if(document.form1.lQuebraFornecedor.value == 't' && document.form1.fornecedor.options.length){
+        vrg    = '';
+    
+        for (let count = 0; count < document.form1.fornecedor.options.length; count++) {
+            sFornecedores += vrg + document.form1.fornecedor.options[count].value;
+            vrg =',';
+        }
+    }
+
+    qry += '&cgms='+sFornecedores;
   qry += '&fornecedor='+document.form1.fornecedor.value;
 
 
@@ -63,6 +75,19 @@ function js_emite(){
 
 </script>  
 <link href="estilos.css" rel="stylesheet" type="text/css">
+<style>
+#fornecedor{
+    width: 336px;
+}
+
+#lQuebraFornecedor{
+    width: 69px;
+}
+
+#status{
+    width: 200px;
+}
+</style>
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" bgcolor="#cccccc">
   <table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
@@ -75,15 +100,15 @@ function js_emite(){
 </table>
   
               
-          
+<center>         
     
- 
+<fieldset style="width: 480px;margin-top: 30px">
+      <legend><strong>Relatório de Recursos Orçamentarios</strong></legend>
   <table  align="center">
     <form name="form1" method="post" action="" >
-    <center>
     
-    <fieldset style="width: 480px;margin-top: 30px">
-      <legend><strong>Relatório de Recursos Orçamentarios</strong></legend>
+    
+    
         
             <tr>
                 <td align="left" nowrap title="<?= $Te60_numcgm ?>">
@@ -114,26 +139,26 @@ function js_emite(){
                 </td>
                 <td>
                   <?
-                  db_input("si06_anocadastro", 6, $Isi06_anocadastro,true,"text",4,"");
+                  db_input("si06_anocadastro", 6, $Isi06_anocadastro,true,"text",4,'onkeyup="js_validaCaracteres(this);onchange=js_limitaExercicio(this);"');
                   ?>
                 </td>
               </tr>
               <tr>
                 <td>
-                  <strong>Filtrar por fornecedor:</strong>
+                  <b>Filtrar por fornecedor:</b>
                 </td>
                 <td>
-                  <?$iFornecedor = array(
-                  1=>"Não",
-                  2 =>"Sim");
-                  db_select("lQuebraFornecedor",$iFornecedor,true,1,"style='width: 60px;'");
-                  ?>
+                    <select name="lQuebraFornecedor" id="lQuebraFornecedor" style="width: 60px;">
+                        <option value="f" selected>NÃO</option>
+                        <option value="t">SIM</option>
+                    </select>
                 </td>
+              </tr>
 
 
 
-                <tr id='area_fornecedor' class='tr__cgm'>
-                    <td colspan="2">
+              <tr id='area_fornecedor' class='tr__cgm'>
+                  <td colspan="2">
                         <fieldset>
                             <legend>Fornecedores</legend>
                             <table align="center" border="0">
@@ -162,8 +187,8 @@ function js_emite(){
                               </table>
                           </fieldset>
                       </td>
-                  </tr>
               </tr>
+              
               
         
       
@@ -174,21 +199,20 @@ function js_emite(){
         </td>
       </tr>
 
-      </fieldset>
-        </center> 
+      
 
   </form>
     </table>
 <?
   db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
 ?>
+</fieldset>
+        </center> 
 </body>
 </html>
 
 <script>
-  if(document.getElementById('lQuebraFornecedor').value = 't'){
-    document.getElementById('area_fornecedor').style.display = '';
-}
+  document.getElementsByClassName('tr__cgm')[0].style.display = 'none';
 
     function js_pesquisaadesao(mostra){
         if(mostra==true){
@@ -249,6 +273,71 @@ function js_mostrafornelicitacao(chave1,chave2) {
 if(document.getElementById('lQuebraFornecedor').value = 'f'){
     document.getElementById('area_fornecedor').style.display = 'none';
 }
+document.getElementById('lQuebraFornecedor').addEventListener('change', e => {
+    let oElemento = document.getElementsByClassName('tr__cgm')[0];
+
+    oElemento.style.display = e.target.value == 't' ? '' : 'none';
+
+    let fornecedor = document.getElementById('fornecedor');
+    if(fornecedor.options.length){
+      for(let count = 0; count < fornecedor.options.length; count++){
+          fornecedor.removeChild(fornecedor.childNodes[count]);
+      }
+    }
+
+});
+document.getElementById('btn-lancar-fornecedor').addEventListener('click', (e) => {
+    addOption(document.form1.z01_numcgm.value, document.form1.z01_nome.value);
+});
+
+function addOption(codigo, descricao) {
+
+    if (!codigo || !descricao) {
+        alert('Fornecedor inválido!');
+        limparCampos();
+        return;
+    }
+
+    let aOptions = document.getElementById("fornecedor");
+    let jaTem = Array.prototype.filter.call(aOptions.children, (o) => {
+        return o.value == codigo;
+    });
 
 
+    if (jaTem.length > 0) {
+        alert("Fornecedor já inserido.");
+        limparCampos();
+        return;
+    }
+
+    let option = document.createElement('option');
+    option.value = codigo;
+    option.innerHTML = codigo + ' - ' + descricao;
+    aOptions.appendChild(option);
+
+    limparCampos();
+
+}
+
+document.getElementById('fornecedor').addEventListener('dblclick', (e) => {
+  document.getElementById('fornecedor').removeChild(e.target);
+});
+
+function limparCampos() {
+    document.form1.z01_numcgm.value  = '';
+    document.form1.z01_nome.value  = '';
+}
+function js_validaCaracteres(objeto){
+    js_ValidaCamposText(objeto, 1);
+
+    if(/[^0-9]/.test(objeto.value)){
+        objeto.value = '';
+    }
+}
+function js_limitaExercicio(objeto){
+    if(objeto.value.length > 4 ){
+        alert('Este campo deve conter apenas 4 caracteres');
+        objeto.value = objeto.value.substr(0, 4);
+    }
+}
 </script>

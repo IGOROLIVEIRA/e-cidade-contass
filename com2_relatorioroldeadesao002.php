@@ -67,16 +67,30 @@ if ($fornecedor == 1) {
 
 $head3 = "ROL DE ADESãO A ATA DE REGISTRO DE PREÇO ";
 $head7 = "$info_listar_serv";
+$sWhere = "";
+$sAnd = "";
+if ($cgms) {
+  $sWhere .= $sAnd . " cgmfornecedor.z01_numcgm in (" . $cgms . ") ";
+  $sAnd = " and ";
+}
 
+if ($si06_anocadastro) {
+  $sWhere .= $sAnd . " si06_anocadastro =".$si06_anocadastro;
+  $sAnd = " and ";
+}
+
+if ($si06_modalidade) {
+  $sWhere .= $sAnd . " si06_modalidade =".$si06_modalidade;
+  $sAnd = " and ";
+}
 
 
 if($si06_sequencial != "" && $si06_sequencial != null){
   $rsAdesao = db_query("select * from adesaoregprecos where si06_sequencial =".$si06_sequencial);
   
 }else{
-  $rsAdesao = db_query("select * from adesaoregprecos where si06_modalidade =".$si06_modalidade);
+  $rsAdesao = db_query("select * from adesaoregprecos where ".$sWhere);
 }
-
 //$result =  $clmatmater->sql_record($clmatmater->sql_query_com(null,"*",$xordem,$dbwhere));
 //db_criatabela($result);exit;
 $xxnum = pg_numrows($rsAdesao);
@@ -95,18 +109,23 @@ $pdf->addpage();
 for ($x = 0; $x < pg_numrows($rsAdesao); $x++) {
   db_fieldsmemory($rsAdesao,$x);
 
-
+    $rsCgm = db_query("select * from cgm where z01_numcgm= ".$si06_cgm);
+    if(pg_numrows($rsCgm)>0){
+      db_fieldsmemory($rsCgm,0);
+    }
     $rsAcordo = db_query("select * from acordo where ac16_adesaoregpreco = ".$si06_sequencial);
     if(pg_numrows($rsAcordo)>0){
       db_fieldsmemory($rsAcordo,0);
     }
-    
+    if ($pdf->getY() >= 250) {
+      $pdf->Ln(100);
+    }
     
     $pdf->setfont('arial','b',4);
-    $pdf->cell(10,$alt,"Seq",1,0,"C",1);
+    $pdf->cell(5,$alt,"Seq",1,0,"C",1);
     $pdf->cell(35,$alt,"Número do Processo de Adesão/ Exercício",1,0,"C",1);
     $pdf->cell(80,$alt,"Objeto",1,0,"C",1);
-    $pdf->cell(20,$alt,"Fornecedor Ganhador",1,0,"C",1);
+    $pdf->cell(25,$alt,"Fornecedor Ganhador",1,0,"C",1);
     $pdf->cell(15,$alt,"Data de Adesão",1,0,"C",1);
     $pdf->cell(15,$alt,"Data da Ata",1,0,"C",1);
     $pdf->cell(15,$alt,"Órgão Gerenciador",1,1,"C",1);
@@ -118,20 +137,21 @@ for ($x = 0; $x < pg_numrows($rsAdesao); $x++) {
   
   if (strlen($si06_objetoadesao) > 70) {               
      $asi06_objetoadesao = quebrar_texto($si06_objetoadesao,70);
-     $alt_novo = count($asi06_objetoadesao)+0.9;                  
+     $alt_novo = count($asi06_objetoadesao)+0.9;                
   } else {
      $alt_novo = 2.5;
   }
   
-  $pdf->cell(10, ($alt*$alt_novo), $si06_sequencial,1,0,"C",0);
+  $pdf->cell(5, ($alt*$alt_novo), $si06_sequencial,1,0,"C",0);
   $pdf->cell(35, ($alt*$alt_novo), $si06_numeroadm, 1, 0, "C", 0);
   //$pdf->cell(80, ($alt*$alt_novo), $asi06_objetoadesao, 1, 0, "C", 0);
   $altatual = $alt;
-  if (strlen($si06_objetoadesao) > 55) {
-    $pos_x = $pdf->x;
+  $pos_x = $pdf->x;
     $pos_y = $pdf->y;
+  if (strlen($si06_objetoadesao) > 55) {
+    
     foreach ($asi06_objetoadesao as $si06_objetoadesao_nova) {
-            $pdf->cell(80,$alt+0.5,substr($si06_objetoadesao_nova,0,70),"",1,"L","");
+            $pdf->cell(80,$alt+0.5,substr($si06_objetoadesao_nova,0,70),"R",1,"L",0);
             $pdf->x=$pos_x;
             $i++;
             $altatual = $altatual + 0.5;
@@ -139,11 +159,43 @@ for ($x = 0; $x < pg_numrows($rsAdesao); $x++) {
               $pdf->cell('','','','B');
             }      
     }
-    $pdf->x = $pos_x+80;
-} else {
-    $pdf->cell(80,($alt*$alt_novo),substr($si06_objetoadesao,0,70),1,0,"L",0);
-}
-  $pdf->cell(20, ($alt*$alt_novo), $si06_cgm,1,0,"C",0);
+    $pdf->x = $pdf->x+80;
+  } else {
+      $pdf->cell(80,($alt*$alt_novo),$si06_objetoadesao,"R",1,"L",0);
+      $pdf->x = $pdf->x+120;
+  }
+  //$pdf->MultiCell(80,2,$si06_objetoadesao,1,0,"L",0);
+  
+  $pdf->y = $pos_y;
+  
+  /*if (pg_numrows($rsCgm) > 0) {
+    $pdf->cell(25, ($alt*$alt_novo), $z01_nome,1,0,"C",0);
+  }else{
+    
+    $pdf->cell(25, ($alt*$alt_novo), "",1,0,"C",0);
+  }*/
+  $pos_x = $pdf->x;
+  $pos_y = $pdf->y;
+  if (strlen($z01_nome) > 20) {               
+    $az01_nome = quebrar_texto($z01_nome,70);              
+  } 
+
+  if (strlen($z01_nome) > 20) {
+    
+    foreach ($az01_nome as $z01_nome_nova) {
+            $pdf->cell(25,$alt+0.5,substr($z01_nome_nova,0,20),"",1,"L",0);
+            $pdf->x=$pos_x;
+            $i++;
+            if($i == $alt_novo){
+              $pdf->cell('','','','B');
+            }      
+    }
+    $pdf->x = $pdf->x+25;
+  } else {
+      $pdf->cell(25,($alt*$alt_novo),$z01_nome,1,1,"L",0);
+      $pdf->x = $pdf->x+145;
+  }
+  $pdf->y = $pos_y;
   $pdf->cell(15, ($alt*$alt_novo), $si06_dataadesao,1,0,"C",0);
   $pdf->cell(15, ($alt*$alt_novo), $si06_dataata,1,0,"C",0);
   $pdf->cell(15, ($alt*$alt_novo), $si06_orgaogerenciador,1,1,"C",0);
@@ -167,14 +219,12 @@ for ($x = 0; $x < pg_numrows($rsAdesao); $x++) {
   }
   $pdf->cell(25, ($alt*$alt_novo), $si06_numlicitacao, 1, 0, "C", 0);
   if(pg_numrows($rsAcordo)>0){
-    $pdf->cell(12.5, ($alt*$alt_novo), $ac16_numero, 1, 0, "C", 0);
-    $pdf->cell(12.5, ($alt*$alt_novo), $ac16_anousu, 1, 0, "C", 0);
+    $pdf->cell(25, ($alt*$alt_novo), $ac16_numero."/".$ac16_anousu, 1, 0, "C", 0);
     $pdf->cell(32.5, ($alt*$alt_novo), $ac16_datainicio,1,0,"C",0);
     $pdf->cell(32.5, ($alt*$alt_novo), $ac16_datafim,1,0,"C",0);
-    $pdf->cell(25, ($alt*$alt_novo), $ac16_valor,1,0,"C",0);
+    $pdf->cell(25, ($alt*$alt_novo), 'R$' . number_format($ac16_valor, 2, ',', '.'),1,0,"C",0);
   }else{
-    $pdf->cell(12.5, ($alt*$alt_novo), "", 1, 0, "C", 0);
-    $pdf->cell(12.5, ($alt*$alt_novo), "", 1, 0, "C", 0);
+    $pdf->cell(25, ($alt*$alt_novo), "", 1, 0, "C", 0);
     $pdf->cell(32.5, ($alt*$alt_novo), "",1,0,"C",0);
     $pdf->cell(32.5, ($alt*$alt_novo), "",1,0,"C",0);
     $pdf->cell(25, ($alt*$alt_novo), "",1,0,"C",0);
