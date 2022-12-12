@@ -123,8 +123,8 @@ db_app::load("time.js");
                 oGridContrato.addRow(aLinha);
 
                 var sTextEvent = " ";
-                if (aLinha[3] !== '') {
-                    sTextEvent += "<b>objeto: </b>" + aLinha[3];
+                if (aLinha[1] !== '') {
+                    sTextEvent += "<b>objeto: </b>" + aLinha[1];
                 } else {
                     sTextEvent += "<b>Nenhum dado  mostrar</b>";
                 }
@@ -142,7 +142,7 @@ db_app::load("time.js");
                 oDBHint.setShowEvents(aEventsIn);
                 oDBHint.setHideEvents(aEventsOut);
                 oDBHint.setPosition('B', 'L');
-                oDBHint.setUseMouse(true);
+                oDBHint.setUseMouse(false);
                 oDBHint.make($(oHint.idLinha), 3);
             });
         }
@@ -196,8 +196,10 @@ db_app::load("time.js");
         var oRetornoContratos = eval('(' + oAjax.responseText + ")");
         if (oRetornoContratos.status == '2') {
             alert(oRetornoContratos.message.urlDecode());
+            // window.location.href = "aco1_pncppublicacaocontrato001.php";
         } else {
             alert('Enviado com Sucesso !');
+            window.location.href = "aco1_pncppublicacaocontrato001.php";
         }
     }
 </script>

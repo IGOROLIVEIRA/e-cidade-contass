@@ -2464,7 +2464,7 @@ class cl_acordo
         cgc as cnpjCompra,
         ac16_anousu as anoCompra,
         null as sequencialCompra,
-        ac16_acordocategoria as tipoContratoId,
+        l20_categoriaprocesso as tipoContratoId,
         ac16_numero as numeroContratoEmpenho,
         ac16_anousu as anoContrato,
         l20_edital||'/'||l20_anousu as processo,
@@ -2500,6 +2500,7 @@ class cl_acordo
         join liccontrolepncp on ac16_licitacao = l213_licitacao
         left join acocontratopncp on ac213_contrato = ac16_sequencial
         where $dbwhere
+        order by ac213_numerocontrolepncp desc
         ";
       
         return $sSql;
@@ -2517,7 +2518,7 @@ class cl_acordo
         cgc as cnpjCompra,
         ac16_anousu as anoCompra,
         null as sequencialCompra,
-        ac16_acordocategoria as tipoContratoId,
+        l20_categoriaprocesso as tipoContratoId,
         ac16_numero as numeroContratoEmpenho,
         ac16_anousu as anoContrato,
         l20_edital||'/'||l20_anousu as processo,
@@ -2573,7 +2574,7 @@ class cl_acordo
         cgc as cnpjCompra,
         ac16_anousu as anoCompra,
         null as sequencialCompra,
-        ac16_acordocategoria as tipoContratoId,
+        l20_categoriaprocesso as tipoContratoId,
         ac16_numero as numeroContratoEmpenho,
         ac16_anousu as anoContrato,
         l20_edital||'/'||l20_anousu as processo,

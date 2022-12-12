@@ -46,7 +46,7 @@ db_app::load("time.js");
                 <tr>
 
                 </tr>
-                <tr>
+                <tr height="100%">
                     <td colspan="2">
                         <div id='cntgridlicitacoes'></div>
                     </td>

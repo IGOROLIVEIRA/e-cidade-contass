@@ -172,9 +172,9 @@ class ContratoPNCP extends ModeloBasePNCP
         //aqui sera necessario informar o cnpj da instituicao de envio
         $cnpj = substr($dadosExtras->ac213_numerocontrolepncp,0,14);
         $ano = $dadosExtras->anocompra;
-        $sequencial = $dadosExtras->ac213_sequencialpncp;
-        // $sequencial = 2;
 
+        $sequencial = $dadosExtras->ac213_sequencialpncp;
+        
         $url = "https://treina.pncp.gov.br/pncp-api/v1/orgaos/" . $cnpj . "/contratos"."/".$ano."/".$sequencial;
         
         $method = 'PUT';
@@ -230,7 +230,7 @@ class ContratoPNCP extends ModeloBasePNCP
     {
        
         $token = $this->login();
-
+        
         //aqui sera necessario informar o cnpj da instituicao de envio
         $cnpj = substr($cnpj,0,14);
        

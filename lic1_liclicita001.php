@@ -53,6 +53,7 @@ require_once("classes/db_liclocal_classe.php");
 require_once("classes/db_liccomissao_classe.php");
 require_once("classes/db_condataconf_classe.php");
 require_once("classes/db_liccomissaocgm_classe.php");
+require_once("classes/db_liccategoriaprocesso_classe.php");
 
 include("classes/db_decretopregao_classe.php");
 
@@ -68,6 +69,7 @@ $clliclicitasituacao = new cl_liclicitasituacao;
 $clcflicita          = new cl_cflicita;
 $cldecretopregao     = new cl_decretopregao;
 $clliccomissaocgm     = new cl_liccomissaocgm;
+$cliccategoriaprocesso = new cl_liccategoriaprocesso;
 
 $db_opcao = 1;
 $db_botao = true;
