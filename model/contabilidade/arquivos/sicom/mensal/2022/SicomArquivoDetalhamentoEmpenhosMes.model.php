@@ -6,6 +6,7 @@ require_once("classes/db_emp112022_classe.php");
 require_once("classes/db_emp122022_classe.php");
 require_once("classes/db_emp302022_classe.php");
 require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2022/GerarEMP.model.php");
+require_once("model/empenho/EmpenhoFinanceiro.model.php");
 
 /**
  * detalhamento dos empenhos do mês Sicom Acompanhamento Mensal
@@ -371,7 +372,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
     $rsEmpenho10 = db_query($sSql);
 
     //    echo $sSql;
-    //    db_criatabela($rsEmpenho10);
+     //  db_criatabela($rsEmpenho10);
     //    exit;
 
     $aCaracteres = array("°", chr(13), chr(10), "'", ";");
@@ -514,8 +515,9 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
 
       $aAnoContrato = explode('-', $oEmpenho10->dtassinaturacontrato);
 
-      if ((date('Y', strtotime($oEmpenho10->dtempenho)) <= date('Y', strtotime($oEmpenho10->dataassinaturacontrato)) &&  date('m', strtotime($oEmpenho10->dtempenho)) < date('m', strtotime($oEmpenho10->dataassinaturacontrato)))
-        || $oEmpenho10->dataassinaturacontrato == null
+      if ((date('Y', strtotime($oEmpenho10->dtempenho)) <= date('Y', strtotime($oEmpenho10->dataassinaturacontrato))
+           &&  date('m', strtotime($oEmpenho10->dtempenho)) < date('m', strtotime($oEmpenho10->dataassinaturacontrato)))
+          || $oEmpenho10->dataassinaturacontrato == null
       ) {
 
         if ($oEmpenho10->despdeccontrato == 1 && $oEmpenho10->ac16_acordosituacao == 2) {
@@ -530,6 +532,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
         } else {
           $oDadosEmpenho10->si106_codorgaorespcontrato = ''; // campo 18
         }
+
         if (empty($oEmpenho10->manutac_codunidsubanterior)) {
           $oDadosEmpenho10->si106_codunidadesubrespcontrato = ''; // campo 19
           $oDadosEmpenho10->si106_nrocontrato = ''; // campo 20
@@ -541,7 +544,20 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
           $oDadosEmpenho10->si106_dtassinaturacontrato = $oEmpenho10->dataassinaturacontrato; // campo 21
           $oDadosEmpenho10->si106_nrosequencialtermoaditivo = $oEmpenho10->nrosequencialtermoaditivo; // campo 22
         }
-      } elseif (((date('Y', strtotime($oEmpenho10->dtempenho)) <= date('Y', strtotime($oEmpenho10->dataassinaturatermoaditivo)) &&  date('m', strtotime($oEmpenho10->dtempenho)) < date('m', strtotime($oEmpenho10->dataassinaturatermoaditivo)))
+        // PARA CONTRATOS MIGRADOS
+        $empModel = new EmpenhoFinanceiro();
+        $oAcordoMigrado = $empModel->getContratoSICOM($oEmpenho10->numemp);
+        //echo "<pre>";print_r($oAcordoMigrado);exit;
+        if($oAcordoMigrado){
+            $oDadosEmpenho10->si106_despdeccontrato = 1;
+            $oDadosEmpenho10->si106_nrocontrato = $oAcordoMigrado->ac16_numero; // campo 20
+            $oDadosEmpenho10->si106_dtassinaturacontrato = $oAcordoMigrado->ac16_dataassinatura; // campo 21
+            $sUnidadeSub = str_pad($oAcordoMigrado->db01_orgao, 2, "0", STR_PAD_LEFT).str_pad($oAcordoMigrado->db01_unidade, 3, "0", STR_PAD_LEFT);
+            $oDadosEmpenho10->si106_codunidadesubrespcontrato = $sUnidadeSub == "00000" ? "" : $sUnidadeSub;
+            //$oDadosEmpenho10->si106_nrosequencialtermoaditivo = $oAcordoMigrado->nrosequencialtermoaditivo; // campo 22
+        }
+      } elseif (((date('Y', strtotime($oEmpenho10->dtempenho)) <= date('Y', strtotime($oEmpenho10->dataassinaturatermoaditivo))
+        &&  date('m', strtotime($oEmpenho10->dtempenho)) < date('m', strtotime($oEmpenho10->dataassinaturatermoaditivo)))
         && $oEmpenho10->nrosequencialtermoaditivo != '') || ($oEmpenho10->dataassinaturatermoaditivo == '' && $oEmpenho10->nrosequencialtermoaditivo != '')) {
 
         $oDadosEmpenho10->si106_despdeccontrato = $oEmpenho10->despdeccontrato; // campo 17
@@ -565,6 +581,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
         $oDadosEmpenho10->si106_nrosequencialtermoaditivo = ''; // campo 22
 
       } else {
+
         $oDadosEmpenho10->si106_despdeccontrato = $oEmpenho10->despdeccontrato; // campo 17
         if ($oEmpenho10->despdeccontrato == 3) {
           $oDadosEmpenho10->si106_codorgaorespcontrato = $sCodorgao->codorgao; // campo 18
@@ -586,7 +603,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
         $oDadosEmpenho10->si106_nrosequencialtermoaditivo = $oEmpenho10->nrosequencialtermoaditivo; // campo 22
       }
 
-      
+
 
       $oDadosEmpenho10->si106_despdecconvenio = $oEmpenho10->despdecconvenio; // campo 23
       $oDadosEmpenho10->si106_nroconvenio = $oEmpenho10->nroconvenio; // campo 24
@@ -606,9 +623,9 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
       if ($oEmpenho10->despdeccontrato == 1 && $oEmpenho10->adesaoacordoseq != '') {
         $oDadosEmpenho10->si106_despdeclicitacao = $oEmpenho10->despdeclicitacao; // campo 29
         $oDadosEmpenho10->si106_nroprocessolicitatorio = $oEmpenho10->processoadesaoacordo; // campo 31
-        $oDadosEmpenho10->si106_exercicioprocessolicitatorio = $oEmpenho10->anoadesaoacordo; // campo 32  
+        $oDadosEmpenho10->si106_exercicioprocessolicitatorio = $oEmpenho10->anoadesaoacordo; // campo 32
       }
- 
+
       if ($oEmpenho10->si06_sequencial != '') {
         $oDadosEmpenho10->si106_despdeclicitacao = $oEmpenho10->despdeclicitacao; // campo 29
         $oDadosEmpenho10->si106_codunidadesubresplicit = $sCodSubAdesao->codunidadesubadesao; // campo 30
@@ -617,22 +634,22 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
 
       }
       if ($oEmpenho10->si06_sequencial == '' && $oEmpenho10->adesaoacordoseq == '') {
-        
+
           $oDadosEmpenho10->si106_despdeclicitacao = $oEmpenho10->despdeclicitacao; // campo 29
           $oDadosEmpenho10->si106_nroprocessolicitatorio = $oEmpenho10->l20_edital; // campo 31
           $oDadosEmpenho10->si106_exercicioprocessolicitatorio = $oEmpenho10->l20_anousu; // campo 32
-        
+
       }
       if($oEmpenho10->lic211_sequencial != ''){
 
 
-          
+
         if($oEmpenho10->despdeclicitacao != 9){
           $oDadosEmpenho10->si106_codorgaoresplicit = $oEmpenho10->lic211_codorgaoresplicit;
           $oDadosEmpenho10->si106_codunidadesubresplicit = $oEmpenho10->lic211_codunisubres; // campo 30
           $oDadosEmpenho10->si106_nroprocessolicitatorio = $oEmpenho10->lic211_numero; // campo 31
           $oDadosEmpenho10->si106_exercicioprocessolicitatorio = $oEmpenho10->lic211_anousu; // campo 32
-          
+
         }else{
           $oDadosEmpenho10->si106_despdeclicitacao = $oEmpenho10->despdeclicitacao; // campo 29
           $oDadosEmpenho10->si106_codorgaoresplicit = '';
@@ -641,7 +658,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
           $oDadosEmpenho10->si106_exercicioprocessolicitatorio = $oEmpenho10->lic211_anousu; // campo 32
         }
       }
-      
+
       $oDadosEmpenho10->si106_cpfordenador = substr($oEmpenho10->ordenador, 0, 11); // campo 34
 
       /*

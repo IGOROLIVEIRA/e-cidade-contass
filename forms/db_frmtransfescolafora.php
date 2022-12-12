@@ -186,7 +186,7 @@ $oClRotulo->label("nome");
         <td>
           <?
           $aConclEtapa = array("1" => "NÃO", "2" => "SIM");
-          db_select( 'ed283_c_concletapa', $aConclEtapa, true, @$db_opcao );
+          db_select( 'ed104_c_concletapa', $aConclEtapa, true, @$db_opcao );
           ?>
         </td>
       </tr>
@@ -469,7 +469,7 @@ $("ed52_d_fim").addClassName("field-size2");
 $("ed104_d_data").addClassName("field-size2");
 $("ed283_c_bolsafamilia").setAttribute("rel","ignore-css");
 $("ed283_c_bolsafamilia").addClassName("field-size2");
-$("ed283_c_concletapa").setAttribute("rel","ignore-css");
-$("ed283_c_concletapa").addClassName("field-size2");
+$("ed104_c_concletapa").setAttribute("rel","ignore-css");
+$("ed104_c_concletapa").addClassName("field-size2");
 
 </script>
