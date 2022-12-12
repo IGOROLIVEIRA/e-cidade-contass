@@ -1585,12 +1585,12 @@ ob_start();
                 <tr style='height:20px;'>
                     <td class="s3 bdleft bdright">Limite Máximo (incisios I, II e III, art.20 da LRF) - <%></td>
                     <td class="s5"><?php echo db_formatar($fRCLADP * 0.06, "f") ?></td>
-                    <td class="s5"><?php echo db_formatar((($fRCLADP * 0.06)/($fRecCorrLiq-$fCFRPB))*100, "f")." %" ?></td>
+                    <td class="s5"><?php echo db_formatar((($fRCLADP * 0.06)/($fRCLADP))*100, "f")." %" ?></td>
                 </tr>
                 <tr style='height:19px;'>
                         <td class="s3 bdleft bdright" colspan="1">Limite Prudencial (parágrado único, art 22 da LRF) - <%></td>
                         <td class="s5" colspan="1"><?= db_formatar(($fRCLADP * 0.06)*0.95, "f") ?></td>
-                        <td class="s5" colspan="1"><?= db_formatar(((($fRCLADP * 0.06)*0.95)/$fRCLADP), "f")." %" ?></td>
+                        <td class="s5" colspan="1"><?= db_formatar(((($fRCLADP * 0.06)*0.95)/$fRCLADP)*100, "f")." %" ?></td>
                 </tr>
                 <tr style='height:19px;'>
                         <td class="s3 bdleft bdright" colspan="1">Limite de Alerta (inciso II do §1º do art.59 da LRF) - <%></td>
@@ -1603,7 +1603,7 @@ ob_start();
                 <tr style='height:20px;'>
                     <td class="s3 bdleft bdright">Limite Máximo (incisios I, II e III, art.20 da LRF) - <%></td>
                     <td class="s5"><?php echo db_formatar($fRCLADP * 0.54, "f") ?></td>
-                    <td class="s5"><?php echo db_formatar((($fRCLADP * 0.54)/($fRecCorrLiq-$fCFRPB))*100, "f")." %" ?></td>
+                    <td class="s5"><?php echo db_formatar((($fRCLADP * 0.54)/($fRCLADP))*100, "f")." %" ?></td>
                 </tr>
                 <tr style='height:19px;'>
                         <td class="s3 bdleft bdright" colspan="1">Limite Prudencial (parágrado único, art 22 da LRF) - <%></td>
@@ -1621,7 +1621,7 @@ ob_start();
                 <tr style='height:20px;'>
                     <td class="s3 bdleft bdright">Limite Máximo (incisios I, II e III, art.20 da LRF) - <%></td>
                     <td class="s5"><?php echo db_formatar($fRCLADP * 0.6, "f") ?></td>
-                    <td class="s5"><?php echo db_formatar((($fRCLADP * 0.6)/($fRecCorrLiq-$fCFRPB))*100, "f")." %" ?></td>
+                    <td class="s5"><?php echo db_formatar((($fRCLADP * 0.6)/($fRCLADP))*100, "f")." %" ?></td>
                 </tr>
                 <tr style='height:19px;'>
                         <td class="s3 bdleft bdright" colspan="1">Limite Prudencial (parágrado único, art 22 da LRF) - <%></td>

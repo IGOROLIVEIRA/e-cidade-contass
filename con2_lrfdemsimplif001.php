@@ -28,17 +28,25 @@
 require("libs/db_stdlib.php");
 require("libs/db_conecta.php");
 include("libs/db_sessoes.php");
-include("libs/db_usuariosonline.php");
+include("libs/db_usuariosonline.php"); 
 include("dbforms/db_funcoes.php");
 include("libs/db_liborcamento.php");
 include("dbforms/db_classesgenericas.php");
+include("classes/db_orcparamrel_classe.php");
 
+$clorcparamrel   = new cl_orcparamrel;
 $clcriaabas      = new cl_criaabas;
 
 $clrotulo = new rotulocampo;
 $clrotulo->label('DBtxt21');
 $clrotulo->label('DBtxt22');
 
+$cod = $clorcparamrel->sql_record($clorcparamrel->sql_query_file("","o42_codparrel",""," o42_descrrel = 'Anexo VI - Demonstrativo Simplificado do Relatório de Gestão Fiscal - Estado, DF e Município ' "));
+
+if ($clorcparamrel->numrows > 0 )
+    db_fieldsmemory($cod,0);
+
+$codigoRelatorio = $o42_codparrel;
 
 db_postmemory($HTTP_POST_VARS);
 
@@ -53,12 +61,12 @@ if ($anousu <= 2007){
 } else if ($anousu <= 2009) {
   $codrel = 26;
 } else {
- $codrel = 4000004;
+ $codrel = $codigoRelatorio;
 }
 
 $oGet = db_utils::postMemory($_GET,0);
 if (isset($oGet->newlrf) && $oGet->newlrf == true) {
-    $codrel = 4000004;
+    $codrel = $codigoRelatorio;
 }
 
 ?>
