@@ -102,7 +102,7 @@ require_once("dbforms/db_classesgenericas.php");
                     <tr>
                                         <td  nowrap><b>&nbsp;&nbsp; Opção de Seleção :</b>
                                             <?php
-                                            $aSelecao = array(1 => "Somente Selecionados", 2 => "Menos os Selecionados");
+                                            $aSelecao = array(2 => "Menos os Selecionados", 1 => "Somente Selecionados");
                                             db_select("sTipoSelecao", $aSelecao, true, 1);
                                             ?>
                                         </td>
@@ -145,6 +145,15 @@ require_once("dbforms/db_classesgenericas.php");
                                             <?php
                                             $aReferencia = array(0 => "Selecione...", 1 => "Liquidação", 2 => "Nota Fiscal");
                                             db_select("sReferencia", $aReferencia, true, 1);
+                                            ?>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>Quebra:</b></td>
+                                        <td>
+                                            <?php
+                                            $aQuebra = array(1 => "Não", 2 => "Sim");
+                                            db_select("sQuebra", $aQuebra, true, 1);
                                             ?>
                                         </td>
                                     </tr>
@@ -265,8 +274,9 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
         dados['dtDataFinal']                 = $F('dtDataFinal');
         dados['sTipoImpressao']              = $F('sTipoImpressao');
         dados['sTipo']                       = $F('sTipo');
+        dados['sQuebra']                     = $F('sQuebra');
         dados['sTipoSelecao']                = $F('sTipoSelecao');
-        dados['sReferencia']                = $F('sReferencia');
+        dados['sReferencia']                 = $F('sReferencia');
 
         var name = new Date().getTime();
         OpenWithPost(dados, name);
