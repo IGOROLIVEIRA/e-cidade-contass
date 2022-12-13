@@ -102,13 +102,13 @@ if ((isset($atualizar) || isset($o50_estrutreceita)) && empty($incluir) && empty
     }
 </style>
 <?
-    if ($db_opcao == 1) {
-        $pg = "orc1_orcreceita001.php";
-    } else if ($db_opcao == 2 || $db_opcao == 22) {
-        $pg = "orc1_orcreceita002.php";
-    } else {
-        $pg = "orc1_orcreceita003.php";
-    }
+if ($db_opcao == 1) {
+    $pg = "orc1_orcreceita001.php";
+} else if ($db_opcao == 2 || $db_opcao == 22) {
+    $pg = "orc1_orcreceita002.php";
+} else {
+    $pg = "orc1_orcreceita003.php";
+}
 ?>
 <form name="form1" method="post" action="<?= $pg ?>">
     <center>
@@ -317,11 +317,11 @@ if ((isset($atualizar) || isset($o50_estrutreceita)) && empty($incluir) && empty
 </form>
 <script>
     <?
-        if (isset($nops)) {
+    if (isset($nops)) {
     ?>
         alert('Inclusão não permitida. Pois existe um nivel que não foi encontrado!');
     <?
-        }
+    }
     ?>
 
     function js_pesquisao70_concarpeculiar(mostra) {

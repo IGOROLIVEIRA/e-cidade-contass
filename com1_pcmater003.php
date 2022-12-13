@@ -42,89 +42,91 @@ $clpcgrupo = new cl_pcgrupo;
 $clpcsubgrupo = new cl_pcsubgrupo;
 $db_botao = false;
 $db_opcao = 33;
-if((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Excluir"){
+if ((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"]) == "Excluir") {
   db_inicio_transacao();
   $db_opcao = 3;
   $sqlerro = false;
   //rotina que exclui todos os registros do pcmaterele
-  if($sqlerro == false){
-       $clpcmaterele->pc07_codmater = $pc01_codmater;
-       $clpcmaterele->excluir($pc01_codmater); 
-       if($clpcmaterele->erro_status==0){
-	 db_msgbox('erro');
-         $sqlerro = true;
-       }	 
+  if ($sqlerro == false) {
+    $clpcmaterele->pc07_codmater = $pc01_codmater;
+    $clpcmaterele->excluir($pc01_codmater);
+    if ($clpcmaterele->erro_status == 0) {
+      db_msgbox('erro');
+      $sqlerro = true;
+    }
   }
-  
+  db_query("delete from importacaoitens where pc96_codmater = $pc01_codmater;");
   $clpcmater->excluir($pc01_codmater);
-  if($clpcmater->erro_status==0){
+  if ($clpcmater->erro_status == 0) {
     $sqlerro = true;
   }
 
   db_fim_transacao($sqlerro);
-}else if(isset($chavepesquisa)){
-   $db_opcao = 3;
-   $db_botao = true;
-   $result = $clpcmater->sql_record($clpcmater->sql_query($chavepesquisa)); 
-   db_fieldsmemory($result,0);
+} else if (isset($chavepesquisa)) {
+  $db_opcao = 3;
+  $db_botao = true;
+  $result = $clpcmater->sql_record($clpcmater->sql_query($chavepesquisa));
+  db_fieldsmemory($result, 0);
 
-   $result = $clpcmaterele->sql_record($clpcmaterele->sql_query_file($chavepesquisa)); 
-   $numrows = $clpcmaterele->numrows;
-   $coluna =  '';
-   $sep = '';
-   for($i=0; $i<$numrows; $i++){
-         db_fieldsmemory($result,$i);
-        $coluna .=  $sep.$pc07_codele;
-	$sep     = "XX";
-   }
-
+  $result = $clpcmaterele->sql_record($clpcmaterele->sql_query_file($chavepesquisa));
+  $numrows = $clpcmaterele->numrows;
+  $coluna =  '';
+  $sep = '';
+  for ($i = 0; $i < $numrows; $i++) {
+    db_fieldsmemory($result, $i);
+    $coluna .=  $sep . $pc07_codele;
+    $sep     = "XX";
+  }
 }
 ?>
 <html>
+
 <head>
-<title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta http-equiv="Expires" CONTENT="0">
-<script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
-<link href="estilos.css" rel="stylesheet" type="text/css">
+  <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Expires" CONTENT="0">
+  <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+  <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
-<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
-<table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-  <tr> 
-    <td width="360" height="18">&nbsp;</td>
-    <td width="263">&nbsp;</td>
-    <td width="25">&nbsp;</td>
-    <td width="140">&nbsp;</td>
-  </tr>
-</table>
-<center>
-<table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td>&nbsp;</td>
-  </tr> 
-  <tr> 
-    <td height="430" align="center" valign="top" bgcolor="#CCCCCC"> 
-      <?
-        include("forms/db_frmpcmater.php");
-      ?>
-    </td>
-  </tr>
-</table>
-</center>
-<?
-db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
-?>
+
+<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1">
+  <table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
+    <tr>
+      <td width="360" height="18">&nbsp;</td>
+      <td width="263">&nbsp;</td>
+      <td width="25">&nbsp;</td>
+      <td width="140">&nbsp;</td>
+    </tr>
+  </table>
+  <center>
+    <table width="790" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td height="430" align="center" valign="top" bgcolor="#CCCCCC">
+          <?
+          include("forms/db_frmpcmater.php");
+          ?>
+        </td>
+      </tr>
+    </table>
+  </center>
+  <?
+  db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit"));
+  ?>
 </body>
+
 </html>
 <?
-if((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Excluir"){
-  if($clpcmater->erro_status=="0"){
-    $clpcmater->erro(true,false);
-  }else{
-    $clpcmater->erro(true,true);
+if ((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"]) == "Excluir") {
+  if ($clpcmater->erro_status == "0") {
+    $clpcmater->erro(true, false);
+  } else {
+    $clpcmater->erro(true, true);
   };
 };
-if($db_opcao==33){
+if ($db_opcao == 33) {
   echo "<script>document.form1.pesquisar.click();</script>";
 }
 ?>

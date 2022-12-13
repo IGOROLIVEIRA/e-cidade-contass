@@ -661,6 +661,10 @@ if ($codprocesso) {
             echo "<script>alert('$erro_msg');</script>";
         }
     } else {
+        $rsliclicitem = db_query("select * from liclicitem where l21_codliclicita = $licitacao");
+        if (pg_numrows($rsliclicitem) == 0) {
+            db_query("UPDATE liclicita SET l20_orcsigiloso = null WHERE l20_codigo = $licitacao;");
+        }
         echo "<script>alert('Processo de Compra $codprocesso excluído com sucesso!');</script>";
     }
 }

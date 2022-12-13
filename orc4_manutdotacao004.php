@@ -145,9 +145,11 @@ if ((isset ($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"]) == "Inc
 											   o58_instit               = $o58_instit
 											   and o58_concarpeculiar   = '{$o58_concarpeculiar}'"
 											   ));
+											  
 		if ($clorcdotacao->numrows > 0) {
+			db_fieldsmemory($result, 0);
 			$erro_trans = true;
-			$clorcdotacao->erro_msg = "Dotação já Cadastrada.";
+			$clorcdotacao->erro_msg = "Dotação já Cadastrada. Reduzido: $o58_coddot";
 			$clorcdotacao->erro_status = 0;
 		} else {			
 
