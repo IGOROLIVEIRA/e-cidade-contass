@@ -55,28 +55,21 @@ $head3 = "Exame Aritmético";
 
 $head5= "Mês de Referência: $sMes";
 
-$head7= "Pasta Tipo: Slips";
-$head8= "Ordenado por: ";
+$head6= "Pasta Tipo: Slips";
+$head7= "Ordenado por:";
 
-$pdf = new PDF(); // abre a classe
-$pdf->Open(); // abre o relatorio
-//$pdf->AliasNbPages(); // gera alias para as paginas
-$pdf->AddPage('L'); // adiciona uma pagina
-$pdf->SetTextColor(0,0,0);
-$pdf->SetFillColor(235);
-$tam = '04';
 
 $where = "";
 if ($ordenar == 1) {
 	
-	$head8   += "Conta";
+	$head7   .= " Conta";
 	$sOrderBy = "credito";
 	$where    = "and saiu in ($conta)";
 	
 } else {
 	
-	$head8   += "Recurso";
-	$sOrderBy = "ff.o15_codigo";
+	$head7   .= " Recurso";
+	$sOrderBy = "c61_codigo";
 	$where    = "and ff.o15_codigo in ($recursos)";
 	
 } 
@@ -89,6 +82,30 @@ if ($ordenar == 1 && $conta == "") {
 		$where = "";
 	}
 	
+}
+
+if (isset($iTipo) && $iTipo != '') {
+    
+    if ($iTipo == 1) {
+        
+        $sWhere .= " and o15_codigo in (102, 202) ";
+        $sTipoPasta = "Saúde (102, 202)";
+
+    } elseif ($iTipo == 2) {
+
+        $sWhere .= " and o15_codigo in (101, 201) ";
+        $sTipoPasta = "Educação (101, 201)";
+
+    } elseif ($iTipo == 3) {
+        
+        $sWhere .= " and o15_codigo in (118, 119, 218, 219) ";
+        $sTipoPasta = "Fundeb (118, 119, 218, 219)";
+
+    } elseif ($iTipo == 4) {
+        $sWhere .= " and o15_codigo not in (101, 102, 118, 119, 202, 201, 218, 219) ";
+		$sTipoPasta = "Todos (101, 102, 118, 119, 202, 201, 218, 219)";
+    }
+
 }
 
 $sSqlSlips = "select h.c60_descr,ff.o15_descr,j.c61_codigo,k12_id, k12_autent, k12_data, k12_valor,
@@ -144,10 +161,20 @@ $sSqlSlips = "select h.c60_descr,ff.o15_descr,j.c61_codigo,k12_id, k12_autent, k
 					inner join conplano h on j.c61_codcon = h.c60_codcon 
 						and j.c61_anousu = h.c60_anousu 
 					inner join orctiporec ff on j.c61_codigo = ff.o15_codigo
-					where tipo = 'desp' ".$where."
+					where tipo = 'desp' ".$where." ".$sWhere."
 					order by tipo, ".$sOrderBy.", k12_data, k12_autent";
-
+					
 $rsResultSlips = db_query($sSqlSlips);
+
+$head8 = "Tipo Recursos: $sTipoPasta";
+
+$pdf = new PDF(); // abre a classe
+$pdf->Open(); // abre o relatorio
+//$pdf->AliasNbPages(); // gera alias para as paginas
+$pdf->AddPage('L'); // adiciona uma pagina
+$pdf->SetTextColor(0,0,0);
+$pdf->SetFillColor(235);
+$tam = '04';
 
 $pdf->SetFont("","B","");
 $pdf->Cell(250,$tam,"SLIPS DO MÊS",1,1,"C",1);		
@@ -162,7 +189,7 @@ for ($$iCont = 0; $iCont < pg_num_rows($rsResultSlips); $iCont++) {
     if ($ordenar == 1) {
 	    $pdf->Cell(250,$tam,"Conta: ".$oResultSlips->credito." - ".$oResultSlips->c60_descr,1,1,"L",1);
     }	else {
-    	$pdf->Cell(250,$tam,"Recurso: ".$oResultSlips->o15_descr,1,1,"L",1);
+    	$pdf->Cell(250,$tam,"Recurso: ".$oResultSlips->c61_codigo." - ".$oResultSlips->o15_descr,1,1,"L",1);
     }
 		$pdf->Cell(15,$tam,"Código SLIP",1,0,"C",1);
 		$pdf->Cell(105,$tam,"Descrição",1,0,"C",1);

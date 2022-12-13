@@ -900,6 +900,7 @@ class EmpenhoFinanceiro {
     return db_utils::fieldsMemory($rsBuscaElemento, 0)->e64_codele;
   }
 
+
   /**
    * verifica grupo do desdobramento do empenho  se pertence ao grupo provisao ferias
    * @return bool retorna true se o desdobramento previsao de ferias
@@ -1035,6 +1036,24 @@ class EmpenhoFinanceiro {
     $rsContrato = $oDaoEmpenhoContrato->sql_record($sSqlContrato);
     if ($oDaoEmpenhoContrato->numrows > 0) {
       return db_utils::fieldsMemory($rsContrato, 0)->e100_acordo;
+    }
+  }
+
+  /**
+   * Retorna o codigo do contrato vinculado ao empenho
+   * @return stdClass
+   */
+  public function getContratoSICOM($numemp) {
+
+    $oDaoEmpenhoContrato = db_utils::getDao("empempenhocontrato");
+    $sSqlContrato        = $oDaoEmpenhoContrato->sql_query(null,
+                                                                "*",
+                                                                null,
+                                                                "e100_numemp = {$numemp}"
+                                                                );
+    $rsContrato = $oDaoEmpenhoContrato->sql_record($sSqlContrato);
+    if ($oDaoEmpenhoContrato->numrows > 0) {
+      return db_utils::fieldsMemory($rsContrato, 0);
     }
   }
 
