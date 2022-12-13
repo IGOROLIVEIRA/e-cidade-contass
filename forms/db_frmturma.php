@@ -690,7 +690,7 @@ function js_pesquisaed132_censoetapa(mostra) {
   } else {
 
     js_OpenJanelaIframe('','db_iframe_censoetapa',
-    	                'func_censoetapaturma.php?abrevtipoensino='+document.form1.ed36_c_abrev.value + 
+    	                'func_censoetapaturma.php?abrevtipoensino='+document.form1.ed36_c_abrev.value +
                       '&iCursoEdu=' + $F('ed29_i_codigo') + '&iCalendario=' + $F('ed57_i_calendario') +
     	                '&funcao_js=parent.js_mostracensoetapa1|ed266_i_codigo|ed266_c_descr',
     	                'Pesquisa de Etapas do Censo',true);
