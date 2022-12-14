@@ -14,6 +14,12 @@ $aux_conta	 = new cl_arquivo_auxiliar;
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta http-equiv="Expires" CONTENT="0">
 <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+
+<style type="text/css">
+    #MesReferencia, #ExibirHistoricoDoEmpenho, #ordenar, #iTipo, #iRestosPagar {
+        width: 100px;
+    }
+</style>
 <link href="estilos.css" rel="stylesheet" type="text/css">
 
 </head>
@@ -59,6 +65,20 @@ $aux_conta	 = new cl_arquivo_auxiliar;
   	          <option value="2" id="2" >Recurso</option>
              </select>
              </td>
+            </tr>
+			<tr>
+                <td>
+                    <strong>Tipo:</strong>
+                </td>
+                <td>
+                    <select name="iTipo" id="iTipo">
+                        <option value="">Todos</option>
+                        <option value="1">Saúde</option>
+                        <option value="2">Educação</option>
+                        <option value="3">Fundeb</option>
+                        <option value="4">Geral</option>
+                    </select>
+                </td>
             </tr>
             
             <tr id="tb_recurso" style="visibility: hidden;">
@@ -161,10 +181,11 @@ function js_abre(){
 					query +='conta=';
 				}
 			}
-	  
+	   
 	   query += "&MesReferencia="+obj.MesReferencia.value;
 	   query += "&ordenar="+obj.ordenar.value;
-	
+	   query += "&iTipo="+obj.iTipo.value;
+			
 	   query += "&recursos="+js_campo_recebe_valores_recursos ();
 	   
 	   jan = window.open('emp2_examearitmeticoslip002.php?'+query,
