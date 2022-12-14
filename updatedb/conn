@@ -34,10 +34,6 @@ pmjanuaria_consulta    5432    prefeituras
 pmsaojoaomissoes       5432    prefeituras2
 pmcurraldedentro       5432    prefeituras2
 
-e-cidade               5432    pmubai
-
-e-cidade            5432    cmbhecid
-
 cmnavarro			5432    cmnavarro
 cmfranciscodumont		5432    cmnavarro
 
@@ -59,6 +55,7 @@ cmpatis				5432	e-cidade
 cmsantafe			5432	e-cidade
 cmsjponte			5432	e-cidade
 cmubai				5432	e-cidade
+e-cidade            5432    pmubai
 cmvarzelandia			5432	e-cidade
 converdegran			5432	e-cidade
 e-cidade-zerada-2019		5432	e-cidade
@@ -86,11 +83,6 @@ hrjanauba           5432    e-cidade
 cmitacambira        5432    e-cidade
 arsan    			5432	e-cidade
 cisame    			5432	e-cidade
-
-pmsaojoaomissoes    5432    e-cidadenovosclientes
-pmsantafeminas      5432    e-cidadenovosclientes
-pmnovaporteirinha   5432    e-cidadenovosclientes
-pmburitizeiro       5432    e-cidadenovosclientes
 
 e-cidade            5432    pmnovaporteirinha
 

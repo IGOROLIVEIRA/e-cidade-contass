@@ -103,6 +103,10 @@ if($db_opcao==1){
 }else{
   $pg="orc1_orcreceita003.php";
 }
+$db_opcaoNovo = $db_opcao; 
+if ($o134_orcamentoaprovado == 't' && $o70_valor > 0 && ($db_opcao == 2 || $db_opcao == 22 ))
+   $db_opcaoNovo = 3;
+
 ?>
 <form name="form1" method="post" action="<?=$pg?>">
 <center>
@@ -134,7 +138,7 @@ db_input('o70_codrec',6,$Io70_codrec,true,'text',3)
   <tr>
     <td nowrap title="<?=@$To70_codfon?>">
        <?
-       db_ancora('Estrutural da Receita',"js_pesquisao70_codfon(true);",$db_opcao);
+       db_ancora('Estrutural da Receita',"js_pesquisao70_codfon(true);",$db_opcaoNovo);
        ?>
     </td>
     <td colspan='2'>
@@ -144,7 +148,7 @@ db_input('o70_codrec',6,$Io70_codrec,true,'text',3)
    $clestrutura->mascara = false;
    $clestrutura->input   = true;
    $clestrutura->size    = 22;
-   $clestrutura->db_opcao= $db_opcao;
+   $clestrutura->db_opcao= $db_opcaoNovo;
    $clestrutura->estrutura('o50_estrutreceita');
 
   db_input('o57_descr',40,$Io57_descr,true,'text',3,'');
@@ -234,7 +238,7 @@ if((isset($atualizar) || isset($o50_estrutreceita)) && empty($cadastrado)&& empt
   <tr>
     <td nowrap title="<?=@$To70_codigo?>">
        <?
-       db_ancora(@$Lo70_codigo,"js_pesquisao70_codigo(true);",$db_opcao);
+       db_ancora(@$Lo70_codigo,"js_pesquisao70_codigo(true);",$db_opcaoNovo);
        ?>
     </td>
     <td colspan='2'>
@@ -242,7 +246,7 @@ if((isset($atualizar) || isset($o50_estrutreceita)) && empty($cadastrado)&& empt
 if($db_opcao == 1)
   db_input('o70_codigo',4,$Io70_codigo,true,'text',3," onchange='js_pesquisao70_codigo(false);'");
 else
-  db_input('o70_codigo',4,$Io70_codigo,true,'text',$db_opcao," onchange='js_pesquisao70_codigo(false);'");
+  db_input('o70_codigo',4,$Io70_codigo,true,'text',$db_opcaoNovo," onchange='js_pesquisao70_codigo(false);'");
 
 db_input('o15_descr',30,$Io15_descr,true,'text',3,'');
 ?>
@@ -254,7 +258,7 @@ db_input('o15_descr',30,$Io15_descr,true,'text',3,'');
     </td>
     <td>
 <?
-db_input('o70_valor',15,$Io70_valor,true,'text',$db_opcao,"")
+db_input('o70_valor',15,$Io70_valor,true,'text',$db_opcaoNovo,"")
 ?>
     </td>
   </tr>
@@ -265,7 +269,7 @@ db_input('o70_valor',15,$Io70_valor,true,'text',$db_opcao,"")
     <td>
 <?
 $x = array("f"=>"NAO","t"=>"SIM");
-db_select('o70_reclan',$x,true,$db_opcao,"");
+db_select('o70_reclan',$x,true,$db_opcaoNovo,"");
 ?>
     </td>
   </tr>
@@ -274,11 +278,11 @@ db_select('o70_reclan',$x,true,$db_opcao,"");
 ?>
   <tr>
     <td nowrap title="<?=@$To70_concarpeculiar?>"><?
-       db_ancora(@$Lo70_concarpeculiar,"js_pesquisao70_concarpeculiar(true);",$db_opcao);
+       db_ancora(@$Lo70_concarpeculiar,"js_pesquisao70_concarpeculiar(true);",$db_opcaoNovo);
     ?></td>
     <td colspan="2">
     <?
-      db_input("o70_concarpeculiar",10,$Io70_concarpeculiar,true,"text",$db_opcao,"onChange='js_pesquisao70_concarpeculiar(false);'");
+      db_input("o70_concarpeculiar",10,$Io70_concarpeculiar,true,"text",$db_opcaoNovo,"onChange='js_pesquisao70_concarpeculiar(false);'");
       db_input("c58_descr",50,0,true,"text",3);
     ?>
     </td>

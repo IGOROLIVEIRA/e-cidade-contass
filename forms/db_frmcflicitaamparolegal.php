@@ -89,7 +89,7 @@
 					pg_result($result, $i, "l212_codigo") . "
 							</td>
 
-                        <td style='text-align:left; background:#cddecd; border: 1px solid #a4a4a4;'>" .
+                        <td style='text-align:left; background:#cddecd; border: 1px solid #a4a4a4;padding-left: 25px;'>" .
 					pg_result($result, $i, "l212_lei") . "
                         </td>
 

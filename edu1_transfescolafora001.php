@@ -65,6 +65,7 @@ if (isset($incluir)) {
     $oDaoTransfEscolaFora->ed104_c_situacao  = "A";
     $oDaoTransfEscolaFora->ed104_i_usuario   = db_getsession("DB_id_usuario");
     $oDaoTransfEscolaFora->ed104_i_matricula = $matricula;
+    $oDaoTransfEscolaFora->ed104_c_concletapa = $ed104_c_concletapa;
     $oDaoTransfEscolaFora->incluir($ed104_i_codigo);
   
     if ($oDaoTransfEscolaFora->erro_status == '0') {
@@ -205,7 +206,7 @@ if (isset($incluir)) {
          $oDaoObsTransferencia->ed283_i_escola       = $iEscola;
          $oDaoObsTransferencia->ed283_c_bolsafamilia = $ed283_c_bolsafamilia;
          $oDaoObsTransferencia->ed283_t_mensagem     = $obs;
-         $oDaoObsTransferencia->incluir(null);     
+         $oDaoObsTransferencia->incluir(null);
        
          if ($oDaoObsTransferencia->erro_status == '0') {      
           

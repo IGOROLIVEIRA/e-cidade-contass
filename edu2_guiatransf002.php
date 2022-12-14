@@ -30,6 +30,7 @@ require_once("libs/db_app.utils.php");
 require_once("libs/db_stdlibwebseller.php");
 require_once("libs/db_libdocumento.php");
 require_once("dbforms/db_funcoes.php");
+include("edu_cabecalhoatolegal.php");
 
 $cltransfescolarede       = new cl_transfescolarede;
 $cltransfescolafora       = new cl_transfescolafora;
@@ -37,21 +38,15 @@ $clescoladiretor          = new cl_escoladiretor;
 $cldiarioavaliacao        = new cl_diarioavaliacao;
 $clprocavaliacao          = new cl_procavaliacao;
 $clmatricula              = new cl_matricula;
+$clserie                  = new cl_serie;
 $clprogressaoparcialaluno = new cl_progressaoparcialaluno();
 $escola                   = db_getsession("DB_coddepto");
 $resultedu                = eduparametros(db_getsession("DB_coddepto"));
 
-if ($diretor != "") {
+if ($diretor == "") {
 
-  $arr_assinatura = explode("|",$diretor);
-  $nome           = $arr_assinatura[1];
-  $atividade      = $arr_assinatura[0]." desta escola,";
-  $funcao         = $arr_assinatura[0].(trim($arr_assinatura[2])!=""?" ($arr_assinatura[2])":"");
-} else {
+  $nome      = "Diretor(a) ou Secretário(a) Escolar nº Reg ou Aut.";
 
-  $nome      = "......................................................................................";
-  $atividade = "";
-  $funcao    = "";
 }
 
 if ($tipo == "TR") {
@@ -82,7 +77,7 @@ if ($tipo == "TR") {
   $campos .= " censomunicnat.ed261_c_nome as ed47_i_censomunicnat,censoufnat.ed260_c_sigla as ed47_i_censoufnat, ";
   $campos .= " ed47_v_pai,ed47_v_mae,ed104_d_data as data_transf,ed104_t_obs as obs_transf, ";
   $campos .= " censomunic.ed261_c_nome as cidade,ed104_i_matricula as codigomatricula, ";
-  $campos .= " escolaproc.ed82_i_codigo as escola_destino";
+  $campos .= " escolaproc.ed82_i_codigo as escola_destino,ed104_c_concletapa";
   $result  = $cltransfescolafora->sql_record($cltransfescolafora->sql_query("",
                                                                             $campos,
                                                                             "to_ascii(ed47_v_nome)",
@@ -117,7 +112,7 @@ for ($x=0;$x<$linhas;$x++) {
   $pdf->addpage("P");
   if ($tipo == "TF") {
 
-  	$campos      = " ed47_i_codigo, ed47_c_bolsafamilia, serie.ed11_c_descr as descr_serie, ";
+  	$campos      = " ed47_i_codigo, ed47_c_bolsafamilia, serie.ed11_i_codigo codigo, serie.ed11_c_descr as descr_serie, ";
   	$campos     .= " ensino.ed10_c_descr as descr_ensino, ed10_c_abrev as abrev_ensino, ";
   	$campos     .= " matricula.ed60_i_turma as turmaorigem, turma.ed57_c_descr as descr_turma, ";
   	$campos     .= " matricula.ed60_c_parecer as neeparecer,";
@@ -129,6 +124,16 @@ for ($x=0;$x<$linhas;$x++) {
                                                                    )
                                                                  );
     db_fieldsmemory($result_matr,0);
+
+    $result_serieseg = $clserie->sql_record($clserie->sql_query_file("",
+                                                                     "serie.ed11_c_descr as serie_seg",
+                                                                     null,
+                                                                     "ed11_i_sequencia = (select ed11_i_sequencia from serie where ed11_i_codigo = {$codigo})+1 and ed11_i_codcenso is not null"
+                                                                     )
+                                                                    );
+
+    db_fieldsmemory($result_serieseg,0);
+
   }
 
   $dia_nasc             = substr($ed47_d_nasc,8,2);
@@ -142,8 +147,8 @@ for ($x=0;$x<$linhas;$x++) {
   $ed47_i_censoufnat    = $ed47_i_censoufnat!=""?$ed47_i_censoufnat:".........";
 
   $pdf->setfont('arial', 'b', 10);
-  $pdf->multicell(192, 1,  "",                      "LRT", "C", 0, 0);
-  $pdf->multicell(192, 10, "Guia de Transferência", "LR",  "C", 0, 0);
+  $pdf->multicell(192, 1,  "","LRT", "C", 0, 0);
+  $pdf->multicell(192, 120, "Declaração de Transferência", "LR",  "C", 0, 0);
   $pdf->setfont('arial', '', 9);
 
   $aFiliacao = array();
@@ -156,7 +161,8 @@ for ($x=0;$x<$linhas;$x++) {
   }
 
   $sEtapa  = $descr_serie;
-  $sEnsino =  "{$descr_ensino} - {$abrev_ensino}";
+  $sEtapaSeg = $serie_seg;
+  $sEnsino =  "{$descr_ensino}";
 
   unset($sTexto);
   $oParagrafo                         = new libdocumento(5010);
@@ -176,11 +182,15 @@ for ($x=0;$x<$linhas;$x++) {
   $oDadosAlunos                       = new stdClass();
   $oDadosAlunos->aParagrafo           = $oParagrafo->getDocParagrafos();
 
-  $sTexto = $oDadosAlunos->aParagrafo[1]->oParag->db02_texto;
+  if($ed104_c_concletapa == 2){
+    $sTexto = "Declaro para os devidos fins que se fizerem necessários que o(a) aluno(a) {$oParagrafo->nome_aluno} natural de {$oParagrafo->municipio_naturalidade}, no estado de {$oParagrafo->estado_naturalidade}, nascido(a) aos {$oParagrafo->dia_nascimento} de {$oParagrafo->mes_nascimento} do ano de {$oParagrafo->ano_nascimento}, filho(a) de {$oParagrafo->filiacao} concluiu em {$oParagrafo->dia_transferencia} de {$oParagrafo->mes_transferencia} de {$oParagrafo->ano_transferencia}, o(a) {$oParagrafo->etapa} do(a) {$oParagrafo->ensino} nesta escola, estando apto a matricular-se no {$sEtapaSeg} do(a) {$oParagrafo->ensino}, conforme legislação vigente.";
+  } else{
+    $sTexto = "Declaro para os devidos fins que se fizerem necessários que o(a) aluno(a) {$oParagrafo->nome_aluno} natural de {$oParagrafo->municipio_naturalidade}, no estado de {$oParagrafo->estado_naturalidade}, nascido(a) aos {$oParagrafo->dia_nascimento} de {$oParagrafo->mes_nascimento} do ano de {$oParagrafo->ano_nascimento}, filho(a) de {$oParagrafo->filiacao} cursou até {$oParagrafo->dia_transferencia} de {$oParagrafo->mes_transferencia} de {$oParagrafo->ano_transferencia}, o(a) {$oParagrafo->etapa} do(a) {$oParagrafo->ensino} nesta escola, estando apto a continuar seus estudos em qualquer instituição de ensino, conforme legislação vigente.";
+  }
   $altY   = $pdf->getY();
 
   $pdf->cell(6, 30, "", "L", 0, "R", 0);
-  $pdf->setXY(16,$altY);
+  $pdf->setXY(16,140);
   $pdf->multicell(180, 4, $sTexto, 0, "J", 0, 0);
   $pdf->setXY(196, $altY);
   $pdf->cell(6, 30, "", "R", 1, "R", 0);
@@ -201,61 +211,8 @@ for ($x=0;$x<$linhas;$x++) {
    }
  }
 
- $veraprovnulo = "";
- $campos       = "ed43_c_minimoaprov,";
- $campos      .= "ed72_i_valornota, ";
- $campos      .= "ed72_c_valorconceito,";
- $campos      .= "ed72_t_parecer,";
- $campos      .= "ed37_c_tipo";
- $where        = "ed60_i_codigo=$codigomatricula";
-
- $sSqlDiarioAvaliacao    = $cldiarioavaliacao->sql_query_guia("", $campos, "ed41_i_sequencia ASC", $where);
- $result_diarioavaliacao = $cldiarioavaliacao->sql_record($sSqlDiarioAvaliacao);
- $aprov                  = null;
-
- if ($cldiarioavaliacao->numrows > 0) {
-
-   for ($v = 0; $v < $cldiarioavaliacao->numrows; $v++) {
-
-     db_fieldsmemory($result_diarioavaliacao,$v);
-     if (trim($ed37_c_tipo) == "NOTA") {
-
-       if ($resultedu == 'S'){
-         $aproveitamento = $ed72_i_valornota != "" ? number_format($ed72_i_valornota, 2, ",", ".") : "";
-       } else {
-         $aproveitamento = $ed72_i_valornota != "" ? number_format($ed72_i_valornota, 0) : "";
-       }
-     } else if (trim($ed37_c_tipo) == "NIVEL") {
-       $aproveitamento = $ed72_c_valorconceito;
-     } else {
-       $aproveitamento = $ed72_t_parecer != "" ? "Parecer" : "";
-     }
-
-     $veraprovnulo .= $aproveitamento;
-     $aprov         = $ed43_c_minimoaprov;
-   }
- }
-
  $pdf->SetX(10);
  $pdf->setfillcolor(225);
-
- if ($tipo == "TR") {
-
-   $sDescricaoEnsino = explode(" - ", $descr_ensino_anterior);
-   $pdf->cell(192, 4, "Aproveitamento na Turma {$descr_turma} - {$sDescricaoEnsino[0]}", 1, 1, "C", 1);
- } else {
-   $pdf->cell(192, 4, "Aproveitamento na Turma {$descr_turma} - {$descr_serie}", 1, 1, "C", 1);
- }
-
- if ($aprov == 0) {
-
-   $a = "";
-   $b = "";
- } else {
-
-   $a = $aprov;
-   $b = "Mínimo para Aprovação:";
- }
 
  $iAno              = db_getsession("DB_anousu");
  $sSqlAnoCalendario = $clmatricula->sql_query($codigomatricula, "calendario.ed52_i_ano");
@@ -264,8 +221,6 @@ for ($x=0;$x<$linhas;$x++) {
  if ($rsAnoCalendario && $clmatricula->numrows > 0) {
    $iAnoCalendario = db_utils::fieldsMemory($rsAnoCalendario, 0)->ed52_i_ano;
  }
- GradeAproveitamentoPDF($codigomatricula,192, $pdf,"S", $iAno);
- $pdf->cell(192, 4, "{$b} {$a}", 1, 1, "C", 1);
 
  /**
   * Variáveis para controle da impressão da observação, limitando os caracteres impressos até determinado limite da
@@ -334,34 +289,6 @@ for ($x=0;$x<$linhas;$x++) {
    $oEscola        = new EscolaProcedencia($escola_destino);
    $sEscolaDestino = $oEscola->getNome();
  }
-
- $sObsFixa = "Período Letivo: {$sDataInicio} até {$sDataFim} Escola de Destino: {$sEscolaDestino}";
-
- if (empty($obs) && empty($sObsProgressaoParcialAluno) && empty($obs_transf) && empty($bolsa)) {
-  $sObservacao = ".......................................................................";
- } else {
-    $sObservacao = "OBS: ".(trim($obs_transf) != '' ? $obs_transf."\n" : '').
-                           (trim($sObsProgressaoParcialAluno) != '' ? $sObsProgressaoParcialAluno."\n" : '').
-                           (trim($obs) != '' ? $obs."\n" : '').
-                           (trim($bolsa) != '' ? $bolsa."\n" : '');
- }
-
- $sObservacao     .= $sObsFixa;
- $iTotalCaracteres = ceil(strlen($sObservacao));
- $iTotalLinhas     = ceil($iTotalCaracteres / $iCaracteresLinha);
-
- if ($iTotalLinhas > $iLimiteLinhas) {
-   $sObservacao = substr($sObservacao, 0, $iLimiteCaracteres);
- }
-
- $pdf->setfont('arial', '', 9);
- $pdf->SetXY(16, $pdf->GetY() + 4);
- $pdf->multicell(180, 4, $sObservacao, 0, "J", 0, 0);
- $pdf->setXY(196, $altY);
- $pdf->cell(6, 15, "", "R", 1, "R", 0);
- $pdf->multicell(192, 4, "", "LR", "J", 0, 0);
- $pdf->setfillcolor(225);
- $pdf->multicell(192, 20, "", "LR"," J", 0, 0);
 
  $completar = 240 - $pdf->getY();
  $pdf->multicell(192, $completar, "", "LR", "J", 0, 0);
