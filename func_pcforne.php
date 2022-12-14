@@ -139,6 +139,7 @@ $lValidaRepr = isset($validaRepresentante);
 			$orderName = isset($orderName) ? ' z01_nome ' : 'pc60_numcgm';
           $sql = $clpcforne->sql_query("",$campos, $orderName,"", $lValidaRepr);
         }
+       
         db_lovrot($sql,15,"()","",$funcao_js);
       } else {
         if ($pesquisa_chave != null && $pesquisa_chave != "") {
