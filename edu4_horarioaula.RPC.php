@@ -36,6 +36,7 @@ require_once ("libs/db_conecta.php");
 require_once ("libs/db_utils.php");
 require_once ("libs/db_sessoes.php");
 require_once ("libs/db_usuariosonline.php");
+require_once ("classes/db_periodoescola_classe.php");
 
 define( 'MSG_EDU4_HORARIOAULA_RPC', 'educacao.escola.edu4_horarioaulaRPC.' );
 
@@ -89,6 +90,37 @@ try {
       }
 
       break;
+
+      case 'getPeriodos':
+        /**
+         * Retorna os períodos de aula cadastrados na Secretaria da Educacao
+         */
+        $oDaoPeriodoEscola = new cl_periodoescola();
+        $sSqlPeriodo     = $oDaoPeriodoEscola->sql_query(null, "*", "ed17_h_inicio", " ed17_i_escola = ".$iEscola. " and ed17_i_turno=".$oParam->iTurno);
+        $rsPeriodo       = $oDaoPeriodoEscola->sql_record( $sSqlPeriodo );
+        $oRetorno->aPeriodos = array();
+        if ($rsPeriodo && $oDaoPeriodoEscola->numrows > 0)  {
+
+          $iLinhas = $oDaoPeriodoEscola->numrows;
+          for ($i = 0; $i < $iLinhas; $i++) {
+
+            $oDados                 = db_utils::fieldsMemory($rsPeriodo, $i);
+            $oPeriodo               = new stdClass();
+            $oPeriodo->iCodigo      = $oDados->ed17_i_codigo;
+            $oPeriodo->iEscola      = urlencode($oDados->ed17_i_escola);
+            $oPeriodo->iTurno       = urlencode($oDados->ed17_i_turno);
+            $oPeriodo->iPeriodoAula = urlencode($oDados->ed17_i_periodoaula);
+            $oPeriodo->hInicio      = urlencode($oDados->ed17_h_inicio);
+            $oPeriodo->hFim         = urlencode($oDados->ed17_h_fim);
+            $oPeriodo->sIdDuracao   = urlencode($oDados->ed17_duracao);
+            $oPeriodo->sDescricao   = urldecode($oDados->ed08_c_descr);
+            $oPerido->iOrdem        = $oDados->ed08_i_sequencia;
+
+            $oRetorno->aPeriodos[] = $oPeriodo;
+          }
+        }
+
+        break;
 
     case 'salvarPeriodoAula':
 
