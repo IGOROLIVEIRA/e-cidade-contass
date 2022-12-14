@@ -418,6 +418,28 @@ class Turma {
   }
 
   /**
+   * Busca as regencias da turma
+   * @throws BusinessException
+   * @return Regencia[]
+   */
+  public function getTumaDisciplinas() {
+
+    if (count($this->aDisciplinas) == 0) {
+
+      $oDaoDisciplina = new cl_regencia();
+      $sCampos        = " ed59_i_codigo, ed59_i_disciplina, ed232_c_descr";
+      $sWhere         = " ed59_i_turma = {$this->getCodigo()} ";
+      $sOrder         = 'ed59_basecomum desc, ed59_i_ordenacao, ed232_c_descr';
+      $sSqlDisciplina = $oDaoDisciplina->sql_query_disciplina_censo(null, $sCampos, $sOrder, $sWhere );
+      $rsDisciplina   = $oDaoDisciplina->sql_record($sSqlDisciplina);
+      $oDadosDisciplina = db_utils::getCollectionByRecord($rsDisciplina, false, false, true);
+      $this->aDisciplinas = $oDadosDisciplina;
+
+    }
+    return $this->aDisciplinas;
+  }
+
+  /**
    * Retorna a sala de aula
    * Sala de aula onde é lecionado as aulas da turma
    * @return Sala Sala de aula da Turma
@@ -1104,6 +1126,7 @@ class Turma {
                                                                                               $sCamposOutrosProfissionais,
                                                                                               '',
                                                                                               $sWhereOutrosProfissionais);
+                                                                                              echo $sSqlOutrosProfissionais;exit;
     $rsOutrosProfissionais = db_query( $sSqlOutrosProfissionais );
 
     if( !$rsOutrosProfissionais ) {

@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -165,7 +165,6 @@ switch ($oParam->exec) {
                                                                                                  );
     $rsDiasDaSemanaComAula     = $oDaoRegenciaHorario->sql_record($sSqlDiasDaSemanaComAula);
 
-
     $aDiasDeAula               = array();
     $iTotalDiasDaSemanaComAula = $oDaoRegenciaHorario->numrows;
     for ($iAula = 0; $iAula < $iTotalDiasDaSemanaComAula; $iAula++) {
@@ -199,6 +198,7 @@ switch ($oParam->exec) {
                                                                                            $sWhere
                                                                                           );
     $rsDatasCalendario   = $oDaoRegenciaHorario->sql_record($sSqlDatasCalendario);
+
     try {
 
       if ($oDaoRegenciaHorario->numrows == 0) {
@@ -217,6 +217,7 @@ switch ($oParam->exec) {
                                                  );
 
       $rsFeriado  = $oDaoFeriado->sql_record($sSqlFeriado);
+
       $aFeriados  = db_utils::getCollectionByRecord($rsFeriado);
 
       list($iAnoInicial, $iMesInicial, $iDiaInicial) = explode("-", $oDadosAnoLetivo->inicio);
@@ -244,12 +245,22 @@ switch ($oParam->exec) {
         /**
          * verificamos o dia é um feriado. caso seja passamos para o proximo dia.
          */
-        if ($iFeriado = db_stdClass::inCollection("data", $sDataFormatada, $aFeriados)) {
+        if ($iFeriado = db_stdClass::inCollection("data", $sDataFormatada, $aFeriados) ) {
 
           $oFeriado = $aFeriados[$iFeriado];
           if ($oFeriado->dia_letivo == 'N') {
              continue;
           }
+        }
+
+         /**
+         * verificamos o dia é um sabado letivo. caso seja passamos para o proximo dia.
+         */
+        if ($iDiaSemana == 6) {
+            $oFeriado = $aFeriados[$iFeriado];
+            if ($oFeriado->dia_letivo == 'N') {
+               continue;
+            }
         }
 
         /**
