@@ -469,13 +469,14 @@ $db_opcao_inf=1;
   function js_salvarItens(iCodNota, nValorOPComDesconto, nRetencoes, nQtdMovOP) {
 
     // nQtdMovOP: Erro para o caso de ter mais de uma movimentaçao
+    /*
     console.log(nQtdMovOP);
     if (nQtdMovOP > 1) {
       alert("Impossível inserir desconto.\n\nEsta Ordem de Pagamento está dividida em "+nQtdMovOP+" movimentações.");
       lErro = true;
       return false;
     }
-
+    */
 
     var nValorOP = nValorOPComDesconto - nRetencoes;
     var lErro    = false;
