@@ -8,7 +8,7 @@ class Oc18574 extends AbstractMigration
     public function up()
     {
         $sql = "BEGIN;
-        INSERT INTO db_itensmenu values ((select max(id_item)+1 from db_itensmenu),'Rol de Ades„o a Ata de Registro de PreÁo','Rol de Ades„o a Ata de Registro de PreÁo','com2_relatorioroldeadesao.php',1,1,'Rol de Ades„o a Ata de Registro de PreÁo','t');
+        INSERT INTO db_itensmenu values ((select max(id_item)+1 from db_itensmenu),'Rol de Ades√£o a Ata de Registro de Pre√ßo','Rol de Ades√£o a Ata de Registro de Pre√ßo','com2_relatorioroldeadesao.php',1,1,'Rol de Ades√£o a Ata de Registro de Pre√ßo','t');
         INSERT INTO db_menu VALUES(30,(select max(id_item) from db_itensmenu),431,28);
         COMMIT;";
 
