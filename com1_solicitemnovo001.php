@@ -219,19 +219,6 @@ if (isset($incluir) || isset($alterar)) {
 			}
 		}
 	}
-	//Remoção de validação de sequencial já cadastrado na solicitação de compra
-	/*
-	if (isset($incluir)) {
-		$sSqlItens = $clsolicitem->sql_query_serv(null, "pc16_codmater as codmater", null, "pc11_numero = {$pc11_numero} and pc11_seq = {$pc11_seq}");
-		$rsItens = $clsolicitem->sql_record($sSqlItens);
-		if ($clsolicitem->numrows > 0) {
-			$codmater = db_utils::fieldsMemory($rsItens, 0)->codmater;
-			$naodig = true;
-			$sqlerro = true;
-			$erro_msg = "O item $codmater já foi incluído com o sequencial $pc11_seq nesta solicitação.";
-		}
-	}
-	*/
 }
 
 if (isset($incluir) && $sqlerro == false) {
@@ -267,35 +254,6 @@ if (isset($incluir) && $sqlerro == false) {
 			$aItens[] = $oItem;
 		}
 	}
-
-	/*
-	if (count($aItens) == 0) {
-		$msg_alert = "AVISO \\n\\nTodos os itens selecionados ja foram cadastrados nesta solicitação.";
-		db_msgbox($msg_alert);
-		db_redireciona("com1_solicitemnovo001.php?pc11_numero=$pc11_numero");
-	}*/
-
-
-	// Ordenação dos arrays conforme sequencial
-
-	/*
-	usort(
-
-		$aItens,
-
-		function ($a, $b) {
-
-			if ($a->pc11_seq == $b->pc11_seq) return 0;
-
-			return (($a->pc11_seq < $b->pc11_seq) ? -1 : 1);
-		}
-	);
-
-
-	for ($i = 0; $i < count($aItens); $i++) {
-		$aItens[$i]->pc11_seq = $i + 1;
-	} */
-
 
 
 	$sResumoRegistro = "";
@@ -339,18 +297,6 @@ if (isset($incluir) && $sqlerro == false) {
 		$pc11_codigo = null;
 		$clsolicitem->incluir(empty($pc11_codigo) ? null : $pc11_codigo);
 
-
-		/*
-		$clsolicitem->pc11_numero = $pc11_numero;
-		$clsolicitem->pc11_seq    = $pc11_seq;
-		$clsolicitem->pc11_vlrun  = $pc11_vlrun;
-		$clsolicitem->pc11_liberado = "f";
-		$clsolicitem->pc11_prazo = addslashes(stripslashes(trim($pc11_prazo)));
-		$clsolicitem->pc11_pgto  = addslashes(stripslashes(trim($pc11_pgto)));
-		$clsolicitem->pc11_resum = addslashes(stripslashes(trim($sResumoRegistro)));
-		$clsolicitem->pc11_just  = addslashes(stripslashes(trim($pc11_just)));
-		$clsolicitem->incluir(empty($pc11_codigo) ? null : $pc11_codigo);
-		*/
 
 		$pc11_codigo = $clsolicitem->pc11_codigo;
 		$erro_msg = $clsolicitem->erro_msg;
@@ -729,47 +675,6 @@ db_fieldsmemory($result_pcparam1, 0);
 				}
 			}
 		}
-		// }
-		//---------------------------------------------------------------------------------------------------------------------------------------------
-		//---------------------------------------------------------------------------------------------------------------------------------------------
-		//---------------------------------------------------------------------------------------------------------------------------------------------
-
-		/* Ordenação do sequencial dos itens 
-		$aItens  = array();
-
-		$itens = db_query("select * from solicitem where pc11_numero = $pc11_numero;");
-		$quantidade_itens = pg_numrows($itens);
-
-		for ($i = 0; $i < $quantidade_itens; $i++) {
-			$item = db_utils::fieldsMemory($itens, $i);
-			$oItem = new stdClass();
-			$oItem->pc11_codigo = $item->pc11_codigo;
-			$oItem->pc11_seq = $item->pc11_seq;
-			$aItens[] = $oItem;
-		}
-
-		// Ordenação dos arrays conforme sequencial
-
-		usort(
-
-			$aItens,
-
-			function ($a, $b) {
-
-				if ($a->pc11_seq == $b->pc11_seq) return 0;
-
-				return (($a->pc11_seq < $b->pc11_seq) ? -1 : 1);
-			}
-		);
-
-		for ($i = 0; $i < count($aItens); $i++) {
-			$aItens[$i]->pc11_seq = $i + 1;
-			$sequencial = $aItens[$i]->pc11_seq;
-			$codigo = $aItens[$i]->pc11_codigo;
-			db_query("UPDATE solicitem SET pc11_seq = $sequencial WHERE pc11_codigo = $codigo");
-		} */
-
-
 
 		db_fim_transacao($sqlerro);
 
