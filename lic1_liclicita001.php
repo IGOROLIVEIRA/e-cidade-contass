@@ -55,6 +55,8 @@ require_once("classes/db_condataconf_classe.php");
 require_once("classes/db_liccomissaocgm_classe.php");
 require_once("classes/db_liccategoriaprocesso_classe.php");
 
+
+
 include("classes/db_decretopregao_classe.php");
 
 db_postmemory($HTTP_POST_VARS);
@@ -74,6 +76,24 @@ $cliccategoriaprocesso = new cl_liccategoriaprocesso;
 $db_opcao = 1;
 $db_botao = true;
 
+$oParamNumManual = db_query("select * from licitaparam;");
+$oParamNumManual = db_utils::fieldsmemory($oParamNumManual, 0);
+$l12_numeracaomanual = $oParamNumManual->l12_numeracaomanual;
+
+if ($l12_numeracaomanual == 't' && !isset($incluir)) {
+	$instit     = db_getsession("DB_instit");
+	$anousu     = db_getsession("DB_anousu");
+
+	$result_numgeral = $clpccflicitanum->sql_record($clpccflicitanum->sql_query_file(null, "*", null, "l24_instit=$instit and l24_anousu=$anousu"));
+	db_fieldsmemory($result_numgeral, 0);
+	$l20_edital = $l24_numero + 1;
+
+	$result_numedital = $clpccfeditalnum->sql_record($clpccfeditalnum->sql_query_file(null, "l47_numero", null, "l47_instit=$instit and l47_anousu=$anousu and l47_timestamp = (select max(l47_timestamp) from pccfeditalnum)"));
+	db_fieldsmemory($result_numedital, 0);
+	$l20_nroedital = $l47_numero + 1;
+}
+
+
 if (isset($incluir)) {
 
 	$oPost = db_utils::postmemory($_POST);
@@ -87,6 +107,34 @@ if (isset($incluir)) {
 	$aTipoLicNatProc = array(50, 48, 49, 53, 52, 54);
 
 	$erro_msg = '';
+
+	/*
+    Verificação de erros ao inserir numerações manualmente.
+  	*/
+	if ($l12_numeracaomanual == 't') {
+		$anousu = db_getsession("DB_anousu");
+		$instit     = db_getsession("DB_instit");
+		$oProcessoLicitatorio = db_query("select * from liclicita where l20_edital = $l20_edital and l20_anousu = $anousu and l20_instit = $instit;");
+		if (pg_numrows($oProcessoLicitatorio) > 0) {
+			$erro_msg .= "Já existe licitação com o processo licitatório número $l20_edital\n\n";
+			$sqlerro = true;
+			db_msgbox($erro_msg);
+		}
+
+		$oNumeracao = db_query("select * from liclicita where l20_numero = $l20_numero and l20_anousu = $anousu and l20_instit = $instit and l20_codtipocom = $l20_codtipocom;");
+		if (pg_numrows($oNumeracao) > 0) {
+			$erro_msg .= "Já existe licitação com a modalidade $l20_codtipocom numeração $l20_numero\n\n";
+			$sqlerro = true;
+			db_msgbox($erro_msg);
+		}
+
+		$oEdital = db_query("select * from liclicita where l20_anousu = $anousu and l20_instit = $instit and l20_nroedital = $l20_nroedital;");
+		if (pg_numrows($oNumeracao) > 0) {
+			$erro_msg .= "Já existe licitação com o edital $l20_nroedital\n\n";
+			$sqlerro = true;
+			db_msgbox($erro_msg);
+		}
+	}
 
 
 	/*
@@ -106,9 +154,9 @@ if (isset($incluir)) {
 	}
 	$oParamLicicita = db_stdClass::getParametro('licitaparam', array(db_getsession("DB_instit")));
 	$l12_pncp = $oParamLicicita[0]->l12_pncp;
-	
+
 	if ($l20_leidalicitacao == 1 && $l12_pncp == 't') {
-		if($oPost->l212_codigo == 0){
+		if ($oPost->l212_codigo == 0) {
 			$erro_msg .= 'Campo Amparo Legal não informado\n\n';
 			$sqlerro = true;
 		}

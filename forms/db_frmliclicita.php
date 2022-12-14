@@ -43,6 +43,7 @@ $clrotulo->label("l20_nroedital");
 require_once("libs/db_utils.php");
 require_once("std/db_stdClass.php");
 
+
 //verificação do tipo de usuário por login => .conttas 
 $lusuario = db_getsession("DB_login");
 $uLogin = explode(".", $lusuario, 2);
@@ -207,12 +208,25 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                     </td>
                                     <td>
                                         <?
-                                        db_input('l20_edital', 10, $Il20_edital, true, 'text', 3, "");
+
+                                        $bloqueianumeracoes;
+                                        if ($db_opcao == 1) {
+                                            $bloqueianumeracoes = 1;
+                                        }
+                                        if ($db_opcao == 2 || $db_opcao == 3) {
+                                            $bloqueianumeracoes = 3;
+                                        }
+
+                                        if ($l12_numeracaomanual == 'f') {
+                                            $bloqueianumeracoes = 3;
+                                        }
+
+                                        db_input('l20_edital', 10, $Il20_edital, true, 'text', $bloqueianumeracoes, "");
                                         ?>
 
                                         <strong>Numeração:</strong>
                                         <?
-                                        db_input('l20_numero', 10, $Il20_numero, true, 'text', 3, "");
+                                        db_input('l20_numero', 10, $Il20_numero, true, 'text',  $bloqueianumeracoes, "");
                                         ?>
                                         <?php if ($l20_anousu >= 2020 && $db_opcao == 2 || $l20_anousu == null && $db_opcao == 1) : ?>
                                             <span id="linha_nroedital">
@@ -221,7 +235,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                                 <?
                                                 $mostra = $l20_nroedital && $db_opcao == 2 || !$l20_nroedital && $db_opcao == 1
                                                     || db_getsession('DB_anousu') >= 2021 ? 3 : 1;
-                                                db_input('l20_nroedital', 10, $Il20_nroedital, true, 'text', $mostra, "");
+                                                db_input('l20_nroedital', 10, $Il20_nroedital, true, 'text', $bloqueianumeracoes, "");
                                                 ?>
                                             </span>
                                         <?php endif; ?>
@@ -1265,6 +1279,11 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
 
         var oRetorno = eval("(" + oAjax.responseText + ")");
+        var l12_numeracaomanual = <? echo '"' . $l12_numeracaomanual . '"';      ?>;
+
+        if (oRetorno.numeracao != "" && l12_numeracaomanual == 't') document.getElementById('l20_numero').value = parseInt(oRetorno.numeracao) + 1;
+
+
         var campo = document.getElementById("l20_codtipocomdescr").options[document.getElementById("l20_codtipocomdescr").selectedIndex].text;
         var vUsua = document.getElementById("vUsuario").value;
         var vInclu = document.getElementById("vInclu").value;
