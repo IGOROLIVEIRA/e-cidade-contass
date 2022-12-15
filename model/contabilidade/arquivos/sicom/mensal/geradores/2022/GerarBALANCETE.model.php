@@ -314,7 +314,8 @@ class GerarBALANCETE extends GerarAM
 
                     $aBALACETE18 = pg_fetch_array($rsBALANCETE18, $iCont18);
 
-                    if ($aBALACETE18['si185_reg10'] == $aBALACETE10['si177_sequencial']) {
+                    if (($aBALACETE18['si185_reg10'] == $aBALACETE10['si177_sequencial']) 
+                         && ($aBALACETE18['si185_saldoinicialfr'] != 0 || $aBALACETE18['si185_totaldebitosfr'] != 0 || $aBALACETE18['si185_totalcreditosfr'] != 0)) {
 
                         $aCSVBALANCETE18['si185_tiporegistro']            = $this->padLeftZero($aBALACETE18['si185_tiporegistro'], 2);
                         $aCSVBALANCETE18['si185_contacontabil']           = $this->padLeftZero($aBALACETE18['si185_contacontabil'], 9);
