@@ -783,6 +783,15 @@ ob_start();
                             </td>
                         </tr>
                         <tr>
+                            <td class="text-row" style="text-align: lefth; border-left: 1px SOLID #000000; width: 300px; padding-left: 20px;">18.6 - AUXÍLIO FINANCEIRO - OUTORGA CRÉDITO TRIBUTÁRIO ICMS - ART. 5º, INCISO V, EC Nº123/2022 - PRINCIPAL</td>
+                            <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;"><?php
+                                $aReceitas = getSaldoReceita(null, "sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado", null, "o57_fonte like '49517196101%'");
+                                $nReceita = count($aReceitas) > 0 ? $aReceitas[0]->saldo_arrecadado_acumulado : 0;
+                                $nContribuicaoFundeb += abs($nReceita);
+                                echo db_formatar(abs($nReceita), "f"); ?>
+                            </td>
+                        </tr>
+                        <tr>
                             <td class="subtitle-row" style="width: 300px;">19 - TOTAL DO RESULTADO LÍQUIDO DAS TRANSFERÊNCIAS DO FUNDEB ( 17 - 18 )</td>
                             <td class="subtitle-row" style="width: 100px; text-align: right;">
                                 <?php
