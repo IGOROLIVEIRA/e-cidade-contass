@@ -42,7 +42,7 @@ $db_opcao = 1;
 try {
     $anofolha = DBPessoal::getAnoFolha();
     $mesfolha = DBPessoal::getMesFolha();
-} catch(Exception $error) {
+} catch (Exception $error) {
     $anofolha = db_getsession("DB_anousu");
     $mesfolha = date("m", db_getsession("DB_datausu"));
 }
@@ -396,7 +396,7 @@ try {
         }
         if (!$F('z01_nome') || $F('z01_nome').toLowerCase().indexOf("não encontrado") > 0) {
             return;
-        } 
+        }
         var opt = document.createElement('option');
         opt.value = $F('rh01_regist');
         opt.innerHTML = $F('rh01_regist') + ' - ' + $F('z01_nome');
@@ -423,7 +423,7 @@ try {
         }
         if (!$F('z01_nomecgm') || $F('z01_nomecgm').toLowerCase().indexOf("não encontrado") > 0) {
             return;
-        } 
+        }
         var opt = document.createElement('option');
         opt.value = $F('z01_numcgm');
         opt.innerHTML = $F('z01_numcgm') + ' - ' + $F('z01_nomecgm');
@@ -451,7 +451,7 @@ try {
     }
 
     function js_alt_evento() {
-        if ((document.getElementById('evento').value == 'S1200' || document.getElementById('evento').value == 'S1202')) {
+        if ((document.getElementById('evento').value == 'S1200' || document.getElementById('evento').value == 'S1202' || document.getElementById('evento').value == 'S1207')) {
             if (document.getElementById('indapuracao_col').style.display == 'none') {
                 document.getElementById('indapuracao_col').style.display = 'inline';
             }
