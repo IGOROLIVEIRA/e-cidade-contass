@@ -53,8 +53,9 @@ class EventoS1202 extends EventoBase
             $oDadosAPI->evtRmnRPPS->indapuracao         = $this->indapuracao;
             $oDadosAPI->evtRmnRPPS->perapur             = $ano . '-' . $mes;
             if ($this->indapuracao == 2) {
-                $oDadosAPI->evtRmnRPPS->perapur         = $mes;
+                $oDadosAPI->evtRmnRPPS->perapur         = $ano;
             }
+
             $oDadosAPI->evtRmnRPPS->cpftrab             = $aDadosPorMatriculas[0]->cpftrab;
 
             $std = new \stdClass();
@@ -228,7 +229,7 @@ class EventoS1202 extends EventoBase
         if ($ponto == 3)
             $opcao = 'complementar';
         if ($ponto == 4)
-            $opcao = null;
+            $opcao = '13salario';
 
         switch ($opcao) {
             case 'salario':
@@ -368,10 +369,15 @@ class EventoS1202 extends EventoBase
     {
         $iAnoUsu = date("Y", db_getsession("DB_datausu"));
         $iMesusu = date("m", db_getsession("DB_datausu"));
-        if ($rh30_regime == 1 || $rh30_regime == 3)
-            $aPontos = array('salario', 'complementar', 'rescisao');
-        else
-            $aPontos = array('salario', 'complementar');
+        if ($rh30_regime == 1 || $rh30_regime == 3) {
+            $aPontos = array('13salario');
+            if ($this->indapuracao != 2)
+                $aPontos = array('salario', 'complementar', 'rescisao');
+        } else {
+            $aPontos = array('13salario');
+            if ($this->indapuracao != 2)
+                $aPontos = array('salario', 'complementar');
+        }
 
         foreach ($aPontos as $opcao) {
             switch ($opcao) {

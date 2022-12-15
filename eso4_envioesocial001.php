@@ -21,7 +21,7 @@ $clrotulo->label("o15_codigo");
 try {
     $anofolha = DBPessoal::getAnoFolha();
     $mesfolha = DBPessoal::getMesFolha();
-} catch(Exception $error) {
+} catch (Exception $error) {
     $anofolha = db_getsession("DB_anousu");
     $mesfolha = date("m", db_getsession("DB_datausu"));
 }
@@ -342,6 +342,12 @@ try {
         if (document.getElementById('S1200').checked) {
             document.getElementById('indapuracao_col').style.display = 'inline';
             document.getElementById('tppgto_col').style.display = 'none';
+            document.getElementById('tipo_col').style.display = 'inline';
+            return true;
+        }
+        if (document.getElementById('S1207').checked) {
+            document.getElementById('indapuracao_col').style.display = 'inline';
+            document.getElementById('tppgto_col').style.display = 'inline';
             document.getElementById('tipo_col').style.display = 'inline';
             return true;
         }
