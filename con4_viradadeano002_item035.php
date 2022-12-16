@@ -36,7 +36,7 @@ if ($sqlerro == false) {
 
 
   try {
-    $ano = $iAnoOrigem + 4;
+    $ano = $iAnoOrigem + 1;
     $sWhereexiste    = " l25_anousu = {$ano}";
     $sSqlDadosexiste = $oDaoPccflicitapar->sql_query_file( null, "*", null, $sWhereexiste );
     $rsDadosexiste   = db_query($sSqlDadosexiste);

@@ -110,7 +110,6 @@ $iInstituicaoSessao = db_getsession("DB_instit");
                 $sql = $clclabens->sql_query_file("",$campos,"t64_codcla", "t64_instit = {$iInstituicaoSessao}");
     	        }
             }
-            print_r($sql);
             db_lovrot($sql,15,"()","",$funcao_js);
           }else{
             if($pesquisa_chave!=null && $pesquisa_chave!=""){
