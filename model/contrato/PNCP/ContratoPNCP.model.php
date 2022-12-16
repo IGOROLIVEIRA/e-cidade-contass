@@ -31,7 +31,7 @@ class ContratoPNCP extends ModeloBasePNCP
         ( 
         'cnpjCompra'                               => '17316563000196',//$oDado->cnpjcompra,
         'anoCompra'                                => $oDado->anocompra,
-        'sequencialCompra'                         => $oDado->l213_numerocompra,
+        'sequencialCompra'                         => $oDado->sequencialcompra,
         'tipoContratoId'                           => $oDado->tipocontratoid,
         'numeroContratoEmpenho'                    => $oDado->numerocontratoempenho,
         'anoContrato'                              => $oDado->anocontrato,
@@ -76,7 +76,7 @@ class ContratoPNCP extends ModeloBasePNCP
         ( 
         'cnpjCompra'                               => '17316563000196',//$oDado->cnpjcompra,
         'anoCompra'                                => $oDado->anocompra,
-        'sequencialCompra'                         => $oDado->l213_numerocompra,
+        'sequencialCompra'                         => $oDado->sequencialcompra,
         'tipoContratoId'                           => $oDado->tipocontratoid,
         'numeroContratoEmpenho'                    => $oDado->numerocontratoempenho,
         'anoContrato'                              => $oDado->anocontrato,

@@ -2463,8 +2463,8 @@ class cl_acordo
         $sSql .= "
         cgc as cnpjCompra,
         ac16_anousu as anoCompra,
-        null as sequencialCompra,
-        l20_categoriaprocesso as tipoContratoId,
+        l213_numerocompra as sequencialCompra,
+        ac16_acordocategoria as tipoContratoId,
         ac16_numero as numeroContratoEmpenho,
         ac16_anousu as anoContrato,
         l20_edital||'/'||l20_anousu as processo,
@@ -2513,12 +2513,11 @@ class cl_acordo
                
         $sSql = " select 
         ac16_sequencial,
-        l213_numerocompra, 
         ac213_numerocontrolepncp,      
         cgc as cnpjCompra,
         ac16_anousu as anoCompra,
-        null as sequencialCompra,
-        l20_categoriaprocesso as tipoContratoId,
+        l213_numerocompra as sequencialCompra,
+        ac16_acordocategoria as tipoContratoId,
         ac16_numero as numeroContratoEmpenho,
         ac16_anousu as anoContrato,
         l20_edital||'/'||l20_anousu as processo,
@@ -2567,14 +2566,13 @@ class cl_acordo
         $dbwhere = " ac16_instit =  {$instituicao} and ac16_anousu = {$ano} ";
                
         $sSql = " select 
-        ac16_sequencial,
-        l213_numerocompra, 
+        ac16_sequencial, 
         ac213_numerocontrolepncp,
         ac213_sequencialpncp,      
         cgc as cnpjCompra,
         ac16_anousu as anoCompra,
-        null as sequencialCompra,
-        l20_categoriaprocesso as tipoContratoId,
+        l213_numerocompra as sequencialCompra,
+        ac16_acordocategoria as tipoContratoId,
         ac16_numero as numeroContratoEmpenho,
         ac16_anousu as anoContrato,
         l20_edital||'/'||l20_anousu as processo,
@@ -2614,6 +2612,106 @@ class cl_acordo
         ";
 
         return $sSql;
+    }
+
+    function sql_query_publicacaoEmpenho_pncp($campos = "*", $ordem = null, $dbwhere = "", $groupby = null)
+    {
+        $ano  = db_getsession("DB_anousu");
+        $sql  = "select
+                e60_numemp,  
+                ac213_numerocontrolepncp,  
+                z01_cgccpf as cnpjCompra,
+                e60_anousu as anoCompra,
+                l213_numerocompra as sequencialCompra,
+                7 as tipoContratoId,
+                e60_codemp as numeroContratoEmpenho,
+                e60_anousu as anoContrato,
+                l20_edital||'/'||l20_anousu as processo,
+                l20_categoriaprocesso as categoriaProcessoId,
+                false as receita,
+                01001 as codigoUnidade,
+                z01_cgccpf as niFornecedor,
+                case when length(trim(z01_cgccpf)) = 14 then 'PJ' 
+                        when length(trim(z01_cgccpf)) = 11 then 'PF' 
+                else 
+                        'PE' end as tipoPessoaFornecedor,
+                z01_nome as nomeRazaoSocialFornecedor,
+                null as niFornecedorSubContratado,
+                null as tipoPessoaFornecedorSubContratado,
+                null as nomeRazaoSocialFornecedorSubContratado,
+                l20_objeto as objetoContrato,
+                null as informacaoComplementar,
+                0 as valorParcela,
+                null as dataVigenciaInicio,
+                null as dataVigenciaFim,
+                null as dataAssinatura,
+                e60_vlremp as valorInicial,
+                e60_vlremp as valorGlobal,
+                null as numeroParcelas
+                from empempenho
+                join cgm on z01_numcgm = e60_numcgm
+                join empempaut on e61_numemp=e60_numemp
+                join empautoriza on e54_autori=e61_autori
+                left join liclicita on l20_codigo = e54_codlicitacao
+                left join liccontrolepncp on l20_codigo = l213_licitacao
+                left join acocontratopncp on ac213_contrato = e60_numemp
+                where e60_emiss >='$ano-01-01' and e60_emiss <='$ano-12-31' and l20_codigo is not null ";
+
+                if (!empty($dbwhere))
+                    $sql .= " and {$dbwhere} ";
+                      
+                if (!empty($ordem)) {
+                    $sql .= " order by {$ordem} ";
+                }        
+                
+                return $sql;
+    }
+
+    function sql_query_pncp_empenho($codigoempenho)
+    {
+        
+        $ano  = db_getsession("DB_anousu");
+        $sql  = "select
+                e60_numemp,  
+                ac213_numerocontrolepncp,  
+                z01_cgccpf as cnpjCompra,
+                e60_anousu as anoCompra,
+                l213_numerocompra as sequencialCompra,
+                7 as tipoContratoId,
+                e60_codemp as numeroContratoEmpenho,
+                e60_anousu as anoContrato,
+                l20_edital||'/'||l20_anousu as processo,
+                l20_categoriaprocesso as categoriaProcessoId,
+                false as receita,
+                01001 as codigoUnidade,
+                z01_cgccpf as niFornecedor,
+                case when length(trim(z01_cgccpf)) = 14 then 'PJ' 
+                        when length(trim(z01_cgccpf)) = 11 then 'PF' 
+                else 
+                        'PE' end as tipoPessoaFornecedor,
+                z01_nome as nomeRazaoSocialFornecedor,
+                null as niFornecedorSubContratado,
+                null as tipoPessoaFornecedorSubContratado,
+                null as nomeRazaoSocialFornecedorSubContratado,
+                l20_objeto as objetoContrato,
+                null as informacaoComplementar,
+                0 as valorParcela,
+                null as dataVigenciaInicio,
+                null as dataVigenciaFim,
+                null as dataAssinatura,
+                e60_vlremp as valorInicial,
+                e60_vlremp as valorGlobal,
+                null as numeroParcelas
+                from empempenho
+                join cgm on z01_numcgm = e60_numcgm
+                join empempaut on e61_numemp=e60_numemp
+                join empautoriza on e54_autori=e61_autori
+                left join liclicita on l20_codigo = e54_codlicitacao
+                left join liccontrolepncp on l20_codigo = l213_licitacao
+                left join acocontratopncp on ac213_contrato = e60_numemp
+                where e60_numemp = {$codigoempenho} and e60_emiss >='$ano-01-01' and e60_emiss <='$ano-12-31' ";       
+              
+                return $sql;
     }
 
 
