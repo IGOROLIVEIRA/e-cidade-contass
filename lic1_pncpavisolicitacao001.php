@@ -32,7 +32,6 @@ db_app::load("time.js");
                         <strong>Ambiente: </strong>
                         <select name="ambiente" id="ambiente">
                             <option value="1">Ambiente de Homologao Externa (teste)</option>
-                            <option value="2">Ambiente de Produo</option>
                         </select>
 
                         <strong>Tipo: </strong>
