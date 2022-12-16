@@ -113,7 +113,7 @@ for ($x=0;$x<$linhas;$x++) {
   if ($tipo == "TF") {
 
   	$campos      = " ed47_i_codigo, ed47_c_bolsafamilia, serie.ed11_i_codigo codigo, serie.ed11_c_descr as descr_serie, ";
-  	$campos     .= " ensino.ed10_c_descr as descr_ensino, ed10_c_abrev as abrev_ensino, ";
+  	$campos     .= " ensino.ed10_c_descr as descr_ensino, ed10_c_abrev as abrev_ensino,ed11_i_ensino ensino, ";
   	$campos     .= " matricula.ed60_i_turma as turmaorigem, turma.ed57_c_descr as descr_turma, ";
   	$campos     .= " matricula.ed60_c_parecer as neeparecer,";
   	$campos     .= " calendario.ed52_i_codigo";
@@ -128,7 +128,7 @@ for ($x=0;$x<$linhas;$x++) {
     $result_serieseg = $clserie->sql_record($clserie->sql_query_file("",
                                                                      "serie.ed11_c_descr as serie_seg",
                                                                      null,
-                                                                     "ed11_i_sequencia = (select ed11_i_sequencia from serie where ed11_i_codigo = {$codigo})+1 and ed11_i_codcenso is not null"
+                                                                     "ed11_i_sequencia = (select ed11_i_sequencia from serie where ed11_i_codigo = {$codigo})+1 and ed11_i_ensino = {$ensino}"
                                                                      )
                                                                     );
 
