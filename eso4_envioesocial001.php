@@ -345,6 +345,12 @@ try {
             document.getElementById('tipo_col').style.display = 'inline';
             return true;
         }
+        if (document.getElementById('S1202').checked) {
+            document.getElementById('indapuracao_col').style.display = 'inline';
+            document.getElementById('tppgto_col').style.display = 'inline';
+            document.getElementById('tipo_col').style.display = 'inline';
+            return true;
+        }
         if (document.getElementById('S1207').checked) {
             document.getElementById('indapuracao_col').style.display = 'inline';
             document.getElementById('tppgto_col').style.display = 'inline';
