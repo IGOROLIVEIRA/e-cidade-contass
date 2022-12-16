@@ -32,7 +32,6 @@ db_app::load("time.js");
                         <strong>Ambiente: </strong>
                         <select name="ambiente" id="ambiente">
                             <option value="1">Ambiente de Homologao Externa (teste)</option>
-                            <option value="2">Ambiente de Produção</option>
                         </select>
 
                         <strong>Tipo: </strong>
@@ -72,7 +71,7 @@ db_app::load("time.js");
         oGridEmpenho.setCheckbox(0);
         oGridEmpenho.setCellAlign(new Array("center", "center", "Center", "Left", "Center", "Center"));
         oGridEmpenho.setCellWidth(new Array("5%", "40%", "10%", "40%", "10%", "20%"));
-        oGridEmpenho.setHeader(new Array("Código", "Objeto", "Empenho","Fornecedor", "Licitação", "Número de Controle"));
+        oGridEmpenho.setHeader(new Array("Código", "Objeto", "Empenho", "Fornecedor", "Licitação", "Número de Controle"));
         oGridEmpenho.hasTotalValue = false;
         oGridEmpenho.show($('cntgridempenhos'));
 
@@ -177,7 +176,7 @@ db_app::load("time.js");
                 empenho.sequencialpncp = aCells[6].getValue();
                 empenho.codigo = aCells[1].getValue();
                 empenho.processo = aCells[2].getValue();
-                
+
                 oParam.aEmpenhos.push(empenho);
             }
         }
