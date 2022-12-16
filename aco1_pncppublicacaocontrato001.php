@@ -25,13 +25,14 @@ db_app::load("time.js");
 <body bgcolor=#CCCCCC>
     <form action="">
         <fieldset style="margin-top:50px;">
-            <legend>Publicao PNCP</legend>
+            <legend>Publição Contratos PNCP</legend>
             <table style="width:100%">
                 <tr>
                     <td colspan="2">
                         <strong>Ambiente: </strong>
                         <select name="ambiente" id="ambiente">
                             <option value="1">Ambiente de Homologao Externa (teste)</option>
+                            <option value="2">Ambiente de Produção</option>
                         </select>
 
                         <strong>Tipo: </strong>
@@ -45,16 +46,16 @@ db_app::load("time.js");
                 <tr>
 
                 </tr>
-                <tr height="100%">
+                <tr>
                     <td colspan="2">
-                        <div id='cntgridlicitacoes'></div>
+                        <div id='cntgridcontratos'></div>
                     </td>
                 </tr>
             </table>
 
         </fieldset>
         </br>
-        <div id='cntgridlicitacoes'></div>
+        <div id='cntgridcontratos'></div>
 
         <input style="margin-left: 50%" type="button" value="Enviar para PNCP" onclick="js_enviar();">
     </form>
@@ -66,91 +67,93 @@ db_app::load("time.js");
 </html>
 <script>
     function js_showGrid() {
-        oGridLicitacao = new DBGrid('gridLicitacao');
-        oGridLicitacao.nameInstance = 'oGridLicitacao';
-        oGridLicitacao.setCheckbox(0);
-        oGridLicitacao.setCellAlign(new Array("center", "center", "Left", "Left", "Center"));
-        oGridLicitacao.setCellWidth(new Array("5%", "10%", "20%", "80%", "20%"));
-        oGridLicitacao.setHeader(new Array("Código", "Processo", "Modalidade", "Objeto", "Número de Controle"));
-        oGridLicitacao.hasTotalValue = false;
-        oGridLicitacao.show($('cntgridlicitacoes'));
+        oGridContrato = new DBGrid('gridContrato');
+        oGridContrato.nameInstance = 'oGridContrato';
+        oGridContrato.setCheckbox(0);
+        oGridContrato.setCellAlign(new Array("center", "center", "Center", "Left", "Center", "Center"));
+        oGridContrato.setCellWidth(new Array("5%", "40%", "10%", "40%", "10%", "20%"));
+        oGridContrato.setHeader(new Array("Código", "Objeto", "Contato","Fornecedor", "Licitação", "Número de Controle"));
+        oGridContrato.hasTotalValue = false;
+        oGridContrato.show($('cntgridcontratos'));
 
-        var width = $('cntgridlicitacoes').scrollWidth - 30;
-        $("table" + oGridLicitacao.sName + "header").style.width = width;
-        $(oGridLicitacao.sName + "body").style.width = width;
-        $("table" + oGridLicitacao.sName + "footer").style.width = width;
+        var width = $('cntgridcontratos').scrollWidth - 30;
+        $("table" + oGridContrato.sName + "header").style.width = width;
+        $(oGridContrato.sName + "body").style.width = width;
+        $("table" + oGridContrato.sName + "footer").style.width = width;
     }
     js_showGrid();
 
-    function js_getLicitacoes() {
-        oGridLicitacao.clearAll(true);
+    function js_getContratos() {
+        oGridContrato.clearAll(true);
         var oParam = new Object();
-        oParam.exec = "getLicitacoes";
-        js_divCarregando('Aguarde, pesquisando Licitaes', 'msgBox');
+        oParam.exec = "getContratos";
+        js_divCarregando('Aguarde, pesquisando Contratos', 'msgBox');
         var oAjax = new Ajax.Request(
-            'lic1_enviopncp.RPC.php', {
+            'aco1_pncpenviocontrato.RPC.php', {
                 method: 'post',
                 parameters: 'json=' + Object.toJSON(oParam),
-                onComplete: js_retornoGetLicitacoes
+                onComplete: js_retornogetContratos
             }
         );
     }
 
-    function js_retornoGetLicitacoes(oAjax) {
+    function js_retornogetContratos(oAjax) {
 
         js_removeObj('msgBox');
-        oGridLicitacao.clearAll(true);
+        oGridContrato.clearAll(true);
         var aEventsIn = ["onmouseover"];
         var aEventsOut = ["onmouseout"];
         aDadosHintGrid = new Array();
 
-        var oRetornoLicitacoes = JSON.parse(oAjax.responseText);
+        var oRetornoContratos = JSON.parse(oAjax.responseText);
 
-        if (oRetornoLicitacoes.status == 1) {
+        if (oRetornoContratos.status == 1) {
 
             var seq = 0;
-            oRetornoLicitacoes.licitacoes.each(function(oLinha, iLinha) {
+            oRetornoContratos.contratos.each(function(oLinha, iLinha) {
+                // print_r(oLinha);exit;
                 seq++;
                 var aLinha = new Array();
-                aLinha[0] = oLinha.l20_codigo;
-                aLinha[1] = oLinha.l20_edital;
-                aLinha[2] = oLinha.l03_descr.urlDecode();
-                aLinha[3] = oLinha.l20_objeto.urlDecode();
-                aLinha[4] = oLinha.l213_numerocontrolepncp;
-                oGridLicitacao.addRow(aLinha);
+                aLinha[0] = oLinha.sequencial;
+                aLinha[1] = oLinha.objeto;
+                aLinha[2] = oLinha.contrato;
+                aLinha[3] = oLinha.fornecedor;
+                aLinha[4] = oLinha.licitacao;
+                aLinha[5] = oLinha.numerocontrolepncp;
+                oGridContrato.addRow(aLinha);
 
                 var sTextEvent = " ";
-                if (aLinha[3] !== '') {
-                    sTextEvent += "<b>objeto: </b>" + aLinha[3];
+                if (aLinha[1] !== '') {
+                    sTextEvent += "<b>objeto: </b>" + aLinha[1];
                 } else {
                     sTextEvent += "<b>Nenhum dado  mostrar</b>";
                 }
 
                 var oDadosHint = new Object();
-                oDadosHint.idLinha = `gridLicitacaorowgridLicitacao${iLinha}`;
+                oDadosHint.idLinha = `gridContratorowgridContrato${iLinha}`;
                 oDadosHint.sText = sTextEvent;
                 aDadosHintGrid.push(oDadosHint);
             });
 
-            oGridLicitacao.renderRows();
+            oGridContrato.renderRows();
             aDadosHintGrid.each(function(oHint, id) {
                 var oDBHint = eval("oDBHint_" + id + " = new DBHint('oDBHint_" + id + "')");
                 oDBHint.setText(oHint.sText);
                 oDBHint.setShowEvents(aEventsIn);
                 oDBHint.setHideEvents(aEventsOut);
                 oDBHint.setPosition('B', 'L');
-                oDBHint.setUseMouse(true);
+                oDBHint.setUseMouse(false);
                 oDBHint.make($(oHint.idLinha), 3);
             });
         }
     }
-    js_getLicitacoes();
+    js_getContratos();
 
     function js_enviar() {
-        var aLicitacoes = oGridLicitacao.getSelection("object");
+        var aContratos = oGridContrato.getSelection("object");
 
-        if (aLicitacoes.length == 0) {
-            alert('Nenhuma Licitao Selecionada');
+        if (aContratos.length == 0) {
+            alert('Nenhum Contrato Selecionado');
             return false;
         }
 
@@ -158,34 +161,29 @@ db_app::load("time.js");
 
         var oParam = new Object();
         if (tipo == 1) {
-            oParam.exec = "enviarAviso";
+            oParam.exec = "enviarContrato";
         } else if (tipo == 2) {
-            oParam.exec = "RetificarAviso";
+            oParam.exec = "RetificarContrato";
         } else {
-            oParam.exec = "excluiraviso";
+            oParam.exec = "ExcluirContrato";
         }
         oParam.ambiente = $F('ambiente');
-        oParam.aLicitacoes = new Array();
+        oParam.aContratos = new Array();
 
-        for (var i = 0; i < aLicitacoes.length; i++) {
+        for (var i = 0; i < aContratos.length; i++) {
 
-            with(aLicitacoes[i]) {
-                var licitacao = new Object();
-                let numerocontrole = aCells[5].getValue();
-                if (tipo == '2' && numerocontrole.length == 1) {
-                    alert('Licitao Selecionada não esta presente no PNCP');
-                    return false;
-                }
-                licitacao.codigo = aCells[1].getValue();
-                licitacao.processo = aCells[2].getValue();
-                licitacao.numerocontrole = numerocontrole;
-                oParam.aLicitacoes.push(licitacao);
+            with(aContratos[i]) {
+                var contrato = new Object();
+                contrato.codigo = aCells[1].getValue();
+                contrato.processo = aCells[2].getValue();
+                contrato.sequencialpncp = aCells[6].getValue();
+                oParam.aContratos.push(contrato);
             }
         }
 
-        js_divCarregando('Aguarde, Enviando Licitacoes', 'msgBox');
+        js_divCarregando('Aguarde, Enviando contratos', 'msgBox');
         var oAjax = new Ajax.Request(
-            'lic1_enviopncp.RPC.php', {
+            'aco1_pncpenviocontrato.RPC.php', {
                 method: 'post',
                 parameters: 'json=' + Object.toJSON(oParam),
                 onComplete: js_returnEnvPncp
@@ -195,14 +193,13 @@ db_app::load("time.js");
 
     function js_returnEnvPncp(oAjax) {
         js_removeObj('msgBox');
-        var oRetornoLicitacoes = eval('(' + oAjax.responseText + ")");
-        if (oRetornoLicitacoes.status == '2') {
-            alert(oRetornoLicitacoes.message.urlDecode());
-            window.location.href = "lic1_pncpavisolicitacao001.php";
+        var oRetornoContratos = eval('(' + oAjax.responseText + ")");
+        if (oRetornoContratos.status == '2') {
+            alert(oRetornoContratos.message.urlDecode());
+            // window.location.href = "aco1_pncppublicacaocontrato001.php";
         } else {
-            if (confirm(oRetornoLicitacoes.message.urlDecode())) {
-                window.location.href = "lic1_pncpavisolicitacao001.php";
-            }
+            alert('Enviado com Sucesso !');
+            window.location.href = "aco1_pncppublicacaocontrato001.php";
         }
     }
 </script>

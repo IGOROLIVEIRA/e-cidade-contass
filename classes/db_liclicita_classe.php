@@ -146,6 +146,7 @@ class cl_liclicita
     var $l20_dataencproposta_mes = null;
     var $l20_dataencproposta_ano = null;
     var $l20_amparolegal = null;
+    var $l20_categoriaprocesso = null;
 
     // cria propriedade com as variaveis do arquivo
     var $campos = "
@@ -220,6 +221,7 @@ class cl_liclicita
                  l20_dataaberproposta = date = Data encerramento Proposta;
                  l20_dataencproposta = date = Data encerramento Proposta;
                  l20_amparolegal = Amparo legal;
+                 l20_categoriaprocesso = text = Categoria Processo;
                  ";
 
     //funcao construtor da classe
@@ -413,6 +415,8 @@ class cl_liclicita
             $this->l20_codigo = ($this->l20_codigo == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_codigo"] : $this->l20_codigo);
         }
         $this->l20_amparolegal = ($this->l20_amparolegal == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_amparolegal"] : $this->l20_amparolegal);
+        $this->l20_categoriaprocesso = ($this->l20_categoriaprocesso == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_categoriaprocesso"] : $this->l20_categoriaprocesso);
+   
     }
 
     // funcao para inclusao aqui
@@ -1116,6 +1120,7 @@ class cl_liclicita
                 ,l20_dataaberproposta
                 ,l20_dataencproposta
                 ,l20_amparolegal
+                ,l20_categoriaprocesso
                        )
                 values (
                  $this->l20_codigo
@@ -1172,6 +1177,7 @@ class cl_liclicita
                 ," . ($this->l20_dataaberproposta == "null" || $this->l20_dataaberproposta == "" ? "null" : "'" . $this->l20_dataaberproposta . "'") . "
                 ," . ($this->l20_dataencproposta == "null" || $this->l20_dataencproposta == "" ? "null" : "'" . $this->l20_dataencproposta . "'") . "
                 ,$this->l20_amparolegal
+                ,$this->l20_categoriaprocesso
 
                       )";
         $result = db_query($sql);
@@ -1980,6 +1986,11 @@ class cl_liclicita
                 $this->erro_status = "0";
                 return false;
             }
+        }
+
+        if (trim($this->l20_categoriaprocesso != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_categoriaprocesso"]))) {
+            $sql .= $virgula . " l20_categoriaprocesso = $this->l20_categoriaprocesso ";
+            $virgula = ",";
         }
 
 

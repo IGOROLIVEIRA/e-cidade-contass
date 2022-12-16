@@ -25,13 +25,14 @@ db_app::load("time.js");
 <body bgcolor=#CCCCCC>
     <form action="">
         <fieldset style="margin-top:50px;">
-            <legend>Publicao PNCP</legend>
+            <legend>Publição Empenhos PNCP</legend>
             <table style="width:100%">
                 <tr>
                     <td colspan="2">
                         <strong>Ambiente: </strong>
                         <select name="ambiente" id="ambiente">
                             <option value="1">Ambiente de Homologao Externa (teste)</option>
+                            <option value="2">Ambiente de Produção</option>
                         </select>
 
                         <strong>Tipo: </strong>
@@ -45,16 +46,16 @@ db_app::load("time.js");
                 <tr>
 
                 </tr>
-                <tr height="100%">
+                <tr>
                     <td colspan="2">
-                        <div id='cntgridlicitacoes'></div>
+                        <div id='cntgridempenhos'></div>
                     </td>
                 </tr>
             </table>
 
         </fieldset>
         </br>
-        <div id='cntgridlicitacoes'></div>
+        <div id='cntgridempenhos'></div>
 
         <input style="margin-left: 50%" type="button" value="Enviar para PNCP" onclick="js_enviar();">
     </form>
@@ -66,91 +67,93 @@ db_app::load("time.js");
 </html>
 <script>
     function js_showGrid() {
-        oGridLicitacao = new DBGrid('gridLicitacao');
-        oGridLicitacao.nameInstance = 'oGridLicitacao';
-        oGridLicitacao.setCheckbox(0);
-        oGridLicitacao.setCellAlign(new Array("center", "center", "Left", "Left", "Center"));
-        oGridLicitacao.setCellWidth(new Array("5%", "10%", "20%", "80%", "20%"));
-        oGridLicitacao.setHeader(new Array("Código", "Processo", "Modalidade", "Objeto", "Número de Controle"));
-        oGridLicitacao.hasTotalValue = false;
-        oGridLicitacao.show($('cntgridlicitacoes'));
+        oGridEmpenho = new DBGrid('gridEmpenho');
+        oGridEmpenho.nameInstance = 'oGridEmpenho';
+        oGridEmpenho.setCheckbox(0);
+        oGridEmpenho.setCellAlign(new Array("center", "center", "Center", "Left", "Center", "Center"));
+        oGridEmpenho.setCellWidth(new Array("5%", "40%", "10%", "40%", "10%", "20%"));
+        oGridEmpenho.setHeader(new Array("Código", "Objeto", "Empenho","Fornecedor", "Licitação", "Número de Controle"));
+        oGridEmpenho.hasTotalValue = false;
+        oGridEmpenho.show($('cntgridempenhos'));
 
-        var width = $('cntgridlicitacoes').scrollWidth - 30;
-        $("table" + oGridLicitacao.sName + "header").style.width = width;
-        $(oGridLicitacao.sName + "body").style.width = width;
-        $("table" + oGridLicitacao.sName + "footer").style.width = width;
+        var width = $('cntgridempenhos').scrollWidth - 30;
+        $("table" + oGridEmpenho.sName + "header").style.width = width;
+        $(oGridEmpenho.sName + "body").style.width = width;
+        $("table" + oGridEmpenho.sName + "footer").style.width = width;
     }
     js_showGrid();
 
-    function js_getLicitacoes() {
-        oGridLicitacao.clearAll(true);
+    function js_getEmpenhos() {
+        oGridEmpenho.clearAll(true);
         var oParam = new Object();
-        oParam.exec = "getLicitacoes";
-        js_divCarregando('Aguarde, pesquisando Licitaes', 'msgBox');
+        oParam.exec = "getEmpenhos";
+        js_divCarregando('Aguarde, pesquisando Empenhos', 'msgBox');
         var oAjax = new Ajax.Request(
-            'lic1_enviopncp.RPC.php', {
+            'aco1_pncpenviocontrato.RPC.php', {
                 method: 'post',
                 parameters: 'json=' + Object.toJSON(oParam),
-                onComplete: js_retornoGetLicitacoes
+                onComplete: js_retornogetEmpenhos
             }
         );
     }
 
-    function js_retornoGetLicitacoes(oAjax) {
+    function js_retornogetEmpenhos(oAjax) {
 
         js_removeObj('msgBox');
-        oGridLicitacao.clearAll(true);
+        oGridEmpenho.clearAll(true);
         var aEventsIn = ["onmouseover"];
         var aEventsOut = ["onmouseout"];
         aDadosHintGrid = new Array();
 
-        var oRetornoLicitacoes = JSON.parse(oAjax.responseText);
+        var oRetornoEmpenhos = JSON.parse(oAjax.responseText);
 
-        if (oRetornoLicitacoes.status == 1) {
+        if (oRetornoEmpenhos.status == 1) {
 
             var seq = 0;
-            oRetornoLicitacoes.licitacoes.each(function(oLinha, iLinha) {
+            oRetornoEmpenhos.empenhos.each(function(oLinha, iLinha) {
+                // print_r(oLinha);exit;
                 seq++;
                 var aLinha = new Array();
-                aLinha[0] = oLinha.l20_codigo;
-                aLinha[1] = oLinha.l20_edital;
-                aLinha[2] = oLinha.l03_descr.urlDecode();
-                aLinha[3] = oLinha.l20_objeto.urlDecode();
-                aLinha[4] = oLinha.l213_numerocontrolepncp;
-                oGridLicitacao.addRow(aLinha);
+                aLinha[0] = oLinha.sequencial;
+                aLinha[1] = oLinha.objeto;
+                aLinha[2] = oLinha.empenho;
+                aLinha[3] = oLinha.fornecedor;
+                aLinha[4] = oLinha.licitacao;
+                aLinha[5] = oLinha.numerocontrolepncp;
+                oGridEmpenho.addRow(aLinha);
 
                 var sTextEvent = " ";
-                if (aLinha[3] !== '') {
-                    sTextEvent += "<b>objeto: </b>" + aLinha[3];
+                if (aLinha[1] !== '') {
+                    sTextEvent += "<b>objeto: </b>" + aLinha[1];
                 } else {
                     sTextEvent += "<b>Nenhum dado  mostrar</b>";
                 }
 
                 var oDadosHint = new Object();
-                oDadosHint.idLinha = `gridLicitacaorowgridLicitacao${iLinha}`;
+                oDadosHint.idLinha = `gridEmpenhorowgridEmpenho${iLinha}`;
                 oDadosHint.sText = sTextEvent;
                 aDadosHintGrid.push(oDadosHint);
             });
 
-            oGridLicitacao.renderRows();
+            oGridEmpenho.renderRows();
             aDadosHintGrid.each(function(oHint, id) {
                 var oDBHint = eval("oDBHint_" + id + " = new DBHint('oDBHint_" + id + "')");
                 oDBHint.setText(oHint.sText);
                 oDBHint.setShowEvents(aEventsIn);
                 oDBHint.setHideEvents(aEventsOut);
                 oDBHint.setPosition('B', 'L');
-                oDBHint.setUseMouse(true);
+                oDBHint.setUseMouse(false);
                 oDBHint.make($(oHint.idLinha), 3);
             });
         }
     }
-    js_getLicitacoes();
+    js_getEmpenhos();
 
     function js_enviar() {
-        var aLicitacoes = oGridLicitacao.getSelection("object");
+        var aEmpenhos = oGridEmpenho.getSelection("object");
 
-        if (aLicitacoes.length == 0) {
-            alert('Nenhuma Licitao Selecionada');
+        if (aEmpenhos.length == 0) {
+            alert('Nenhum Empenho Selecionado');
             return false;
         }
 
@@ -158,34 +161,30 @@ db_app::load("time.js");
 
         var oParam = new Object();
         if (tipo == 1) {
-            oParam.exec = "enviarAviso";
+            oParam.exec = "enviarEmpenho";
         } else if (tipo == 2) {
-            oParam.exec = "RetificarAviso";
+            oParam.exec = "RetificarEmpenho";
         } else {
-            oParam.exec = "excluiraviso";
+            oParam.exec = "ExcluirEmpenho";
         }
         oParam.ambiente = $F('ambiente');
-        oParam.aLicitacoes = new Array();
+        oParam.aEmpenhos = new Array();
 
-        for (var i = 0; i < aLicitacoes.length; i++) {
+        for (var i = 0; i < aEmpenhos.length; i++) {
 
-            with(aLicitacoes[i]) {
-                var licitacao = new Object();
-                let numerocontrole = aCells[5].getValue();
-                if (tipo == '2' && numerocontrole.length == 1) {
-                    alert('Licitao Selecionada não esta presente no PNCP');
-                    return false;
-                }
-                licitacao.codigo = aCells[1].getValue();
-                licitacao.processo = aCells[2].getValue();
-                licitacao.numerocontrole = numerocontrole;
-                oParam.aLicitacoes.push(licitacao);
+            with(aEmpenhos[i]) {
+                var empenho = new Object();
+                empenho.sequencialpncp = aCells[6].getValue();
+                empenho.codigo = aCells[1].getValue();
+                empenho.processo = aCells[2].getValue();
+                
+                oParam.aEmpenhos.push(empenho);
             }
         }
 
-        js_divCarregando('Aguarde, Enviando Licitacoes', 'msgBox');
+        js_divCarregando('Aguarde, Enviando empenhos', 'msgBox');
         var oAjax = new Ajax.Request(
-            'lic1_enviopncp.RPC.php', {
+            'aco1_pncpenviocontrato.RPC.php', {
                 method: 'post',
                 parameters: 'json=' + Object.toJSON(oParam),
                 onComplete: js_returnEnvPncp
@@ -195,14 +194,13 @@ db_app::load("time.js");
 
     function js_returnEnvPncp(oAjax) {
         js_removeObj('msgBox');
-        var oRetornoLicitacoes = eval('(' + oAjax.responseText + ")");
-        if (oRetornoLicitacoes.status == '2') {
-            alert(oRetornoLicitacoes.message.urlDecode());
-            window.location.href = "lic1_pncpavisolicitacao001.php";
+        var oRetornoEmpenhos = eval('(' + oAjax.responseText + ")");
+        if (oRetornoEmpenhos.status == '2') {
+            alert(oRetornoEmpenhos.message.urlDecode());
+            // window.location.href = "aco1_pncppublicacaocontrato001.php";
         } else {
-            if (confirm(oRetornoLicitacoes.message.urlDecode())) {
-                window.location.href = "lic1_pncpavisolicitacao001.php";
-            }
+            alert('Enviado com Sucesso !');
+            window.location.href = "lic1_publicacaoempenhopncp.php";
         }
     }
 </script>

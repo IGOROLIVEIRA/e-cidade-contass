@@ -48,6 +48,7 @@ require_once("classes/db_cflicita_classe.php");
 require_once("classes/db_homologacaoadjudica_classe.php");
 require_once("classes/db_liccomissaocgm_classe.php");
 require_once("classes/db_condataconf_classe.php");
+require_once("classes/db_liccategoriaprocesso_classe.php");
 include("classes/db_pcparam_classe.php");
 
 
@@ -72,6 +73,7 @@ $clliccomissaocgm     = new cl_liccomissaocgm;
 $clpccfeditalnum      = new cl_pccfeditalnum;
 $clpcprocitem         = new cl_pcprocitem;
 $clpcproc             = new cl_pcproc;
+$cliccategoriaprocesso = new cl_liccategoriaprocesso;
 $clpcparam  = new cl_pcparam;
 
 

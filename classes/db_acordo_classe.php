@@ -82,46 +82,46 @@ class cl_acordo
 
     // cria propriedade com as variaveis do arquivo
     var $campos = "
- ac16_sequencial = int4 = Acordo
- ac16_acordosituacao = int4 = Acordo Situação
- ac16_coddepto = int4 = Cï¿½digo Departamento
- ac16_numero = varchar(60) = Nï¿½mero
- ac16_anousu = int4 = Ano Exercï¿½cio
- ac16_dataassinatura = date = Data da Assinatura
- ac16_datapublicacao = date = Data Publicação
- ac16_contratado = int4 = Contratado
- ac16_datainicio = date = Data de Inï¿½cio
- ac16_datafim = date = Data de Fim
- ac16_resumoobjeto = varchar(50) = Resumo Objeto
- ac16_objeto = text = Objeto do Contrato
- ac16_instit = int4 = Instituição
- ac16_acordocomissao = int4 = Acordo Comissão
- ac16_lei = varchar(60) = Lei
- ac16_acordogrupo = int4 = Acordo Grupo
- ac16_origem = int4 = Origem
- ac16_qtdrenovacao = float8 = Quantidade de Renovação
- ac16_tipounidtempo = int4 = Unidade do Tempo
- ac16_deptoresponsavel = int4 = Departamento Responsï¿½vel
- ac16_numeroprocesso = varchar(60) = Numero do Processo
- ac16_periodocomercial = bool = Perãodo Comercial
- ac16_qtdperiodo = float8 = Quantidade do Perãodo de Vigï¿½ncia
- ac16_tipounidtempoperiodo = int4 = Tipo de Perãodo de Vigï¿½ncia
- ac16_acordocategoria = int4 = Acordo Categoria
- ac16_acordoclassificacao = int4 = Sequencial da Classificação do Contrato
- ac16_numeroacordo = int4 = Nï¿½mero do acordo
- ac16_valor = float8 = Valor do acordo
- ac16_tipoorigem = int8 = Tipo de Origem acordo
- ac16_formafornecimento = Forma de fornecimento acordo
- ac16_formapagamento = Forma de pagamento acordo
- ac16_veiculodivulgacao = varchar(50) = Veï¿½culo de divulgação
- ac16_datarescisao = date = Data Rescisão
- ac16_valorrescisao = float8 = Valor da rescisão do acordo
- ac16_semvigencia = bool = Contrato criado sem vigï¿½ncia
- ac16_licoutroorgao = int8 = licitacao de outros orgaos
- ac16_adesaoregpreco = int8 = adesao de registro de precos
- ac16_tipocadastro   = int8 = tipo de cadastro
- ac16_providencia = int4 = Status da Providência do Acordo
- ac16_datareferencia = date = Data de referência para geração do SICOM
+        ac16_sequencial = int4 = Acordo
+        ac16_acordosituacao = int4 = Acordo Situação
+        ac16_coddepto = int4 = Código Departamento
+        ac16_numero = varchar(60) = Número
+        ac16_anousu = int4 = Ano Exercícios
+        ac16_dataassinatura = date = Data da Assinatura
+        ac16_datapublicacao = date = Data Publicação
+        ac16_contratado = int4 = Contratado
+        ac16_datainicio = date = Data de Início
+        ac16_datafim = date = Data de Fim
+        ac16_resumoobjeto = varchar(50) = Resumo Objeto
+        ac16_objeto = text = Objeto do Contrato
+        ac16_instit = int4 = Instituição
+        ac16_acordocomissao = int4 = Acordo Comissão
+        ac16_lei = varchar(60) = Lei
+        ac16_acordogrupo = int4 = Acordo Grupo
+        ac16_origem = int4 = Origem
+        ac16_qtdrenovacao = float8 = Quantidade de Renovação
+        ac16_tipounidtempo = int4 = Unidade do Tempo
+        ac16_deptoresponsavel = int4 = Departamento Responsável
+        ac16_numeroprocesso = varchar(60) = Numero do Processo
+        ac16_periodocomercial = bool = Período Comercial
+        ac16_qtdperiodo = float8 = Quantidade do Período de Vigência
+        ac16_tipounidtempoperiodo = int4 = Tipo de Período de Vigência
+        ac16_acordocategoria = int4 = Acordo Categoria
+        ac16_acordoclassificacao = int4 = Sequencial da Classificação do Contrato
+        ac16_numeroacordo = int4 = Número do acordo
+        ac16_valor = float8 = Valor do acordo
+        ac16_tipoorigem = int8 = Tipo de Origem acordo
+        ac16_formafornecimento = Forma de fornecimento acordo
+        ac16_formapagamento = Forma de pagamento acordo
+        ac16_veiculodivulgacao = varchar(50) = Veículo de divulgação
+        ac16_datarescisao = date = Data Rescisão
+        ac16_valorrescisao = float8 = Valor da rescisão do acordo
+        ac16_semvigencia = bool = Contrato criado sem Vigência
+        ac16_licoutroorgao = int8 = licitacao de outros orgaos
+        ac16_adesaoregpreco = int8 = adesao de registro de precos
+        ac16_tipocadastro   = int8 = tipo de cadastro
+        ac16_providencia = int4 = Status da Providência do Acordo
+        ac16_datareferencia = date = Data de referência para geração do SICOM
  ";
     //funcao construtor da classe
     function cl_acordo()
@@ -240,7 +240,7 @@ class cl_acordo
             return false;
         }
         if ($this->ac16_coddepto == null) {
-            $this->erro_sql = " Campo Cï¿½digo Departamento não informado.";
+            $this->erro_sql = " Campo Código Departamento não informado.";
             $this->erro_campo = "ac16_coddepto";
             $this->erro_banco = "";
             $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
@@ -249,7 +249,7 @@ class cl_acordo
             return false;
         }
         if ($this->ac16_numero == null) {
-            $this->erro_sql = " Campo Nï¿½mero não informado.";
+            $this->erro_sql = " Campo Número não informado.";
             $this->erro_campo = "ac16_numero";
             $this->erro_banco = "";
             $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
@@ -258,7 +258,7 @@ class cl_acordo
             return false;
         }
         if ($this->ac16_anousu == null) {
-            $this->erro_sql = " Campo Ano Exercï¿½cio não informado.";
+            $this->erro_sql = " Campo Ano Exercícios não informado.";
             $this->erro_campo = "ac16_anousu";
             $this->erro_banco = "";
             $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
@@ -303,7 +303,7 @@ class cl_acordo
         }
 
         if ($this->ac16_datainicio == null) {
-            $this->erro_sql = " Campo Data de Inï¿½cio não informado.";
+            $this->erro_sql = " Campo Data de Início não informado.";
             $this->erro_campo = "ac16_datainicio_dia";
             $this->erro_banco = "";
             $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
@@ -387,7 +387,7 @@ class cl_acordo
             return false;
         }
         if ($this->ac16_deptoresponsavel == null) {
-            $this->erro_sql = " Campo Departamento Responsï¿½vel não informado.";
+            $this->erro_sql = " Campo Departamento Responsável não informado.";
             $this->erro_campo = "ac16_deptoresponsavel";
             $this->erro_banco = "";
             $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
@@ -396,7 +396,7 @@ class cl_acordo
             return false;
         }
         // if($this->ac16_periodocomercial == null ){
-        //     $this->erro_sql = " Campo Perãodo Comercial não informado.";
+        //     $this->erro_sql = " Campo Período Comercial não informado.";
         //     $this->erro_campo = "ac16_periodocomercial";
         //     $this->erro_banco = "";
         //     $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -462,8 +462,8 @@ class cl_acordo
         } else {
             $result = db_query("select last_value from acordo_ac16_sequencial_seq");
             if (($result != false) && (pg_result($result, 0, 0) < $ac16_sequencial)) {
-                $this->erro_sql = " Campo ac16_sequencial maior que ï¿½ltimo nï¿½mero da sequencia.";
-                $this->erro_banco = "Sequencia menor que este nï¿½mero.";
+                $this->erro_sql = " Campo ac16_sequencial maior que ultímo Número da sequencia.";
+                $this->erro_banco = "Sequencia menor que este Número.";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
@@ -566,12 +566,12 @@ class cl_acordo
         if ($result == false) {
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
             if (strpos(strtolower($this->erro_banco), "duplicate key") != 0) {
-                $this->erro_sql   = "Acordo ($this->ac16_sequencial) nao Incluï¿½do. Inclusao Abortada.";
+                $this->erro_sql   = "Acordo ($this->ac16_sequencial) nao Incluído. Inclusao Abortada.";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_banco = "Acordo jï¿½ Cadastrado";
+                $this->erro_banco = "Acordo já Cadastrado";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             } else {
-                $this->erro_sql   = "Acordo ($this->ac16_sequencial) nao Incluï¿½do. Inclusao Abortada.";
+                $this->erro_sql   = "Acordo ($this->ac16_sequencial) nao Incluído. Inclusao Abortada.";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             }
@@ -664,7 +664,7 @@ class cl_acordo
             $sql  .= $virgula . " ac16_coddepto = $this->ac16_coddepto ";
             $virgula = ",";
             if (trim($this->ac16_coddepto) == null) {
-                $this->erro_sql = " Campo Cï¿½digo Departamento não informado.";
+                $this->erro_sql = " Campo Código Departamento não informado.";
                 $this->erro_campo = "ac16_coddepto";
                 $this->erro_banco = "";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
@@ -677,7 +677,7 @@ class cl_acordo
             $sql  .= $virgula . " ac16_numero = '$this->ac16_numero' ";
             $virgula = ",";
             if (trim($this->ac16_numero) == null) {
-                $this->erro_sql = " Campo Nï¿½mero não informado.";
+                $this->erro_sql = " Campo Número não informado.";
                 $this->erro_campo = "ac16_numero";
                 $this->erro_banco = "";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
@@ -690,7 +690,7 @@ class cl_acordo
             $sql  .= $virgula . " ac16_anousu = $this->ac16_anousu ";
             $virgula = ",";
             if (trim($this->ac16_anousu) == null) {
-                $this->erro_sql = " Campo Ano Exercï¿½cio não informado.";
+                $this->erro_sql = " Campo Ano Exercícios não informado.";
                 $this->erro_campo = "ac16_anousu";
                 $this->erro_banco = "";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
@@ -747,7 +747,7 @@ class cl_acordo
             $sql  .= $virgula . " ac16_datainicio = '$this->ac16_datainicio' ";
             $virgula = ",";
             if (trim($this->ac16_datainicio) == null) {
-                $this->erro_sql = " Campo Data de Inï¿½cio não informado.";
+                $this->erro_sql = " Campo Data de Início não informado.";
                 $this->erro_campo = "ac16_datainicio_dia";
                 $this->erro_banco = "";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
@@ -760,7 +760,7 @@ class cl_acordo
                 $sql  .= $virgula . " ac16_datainicio = null ";
                 $virgula = ",";
                 if (trim($this->ac16_datainicio) == null) {
-                    $this->erro_sql = " Campo Data de Inï¿½cio não informado.";
+                    $this->erro_sql = " Campo Data de Início não informado.";
                     $this->erro_campo = "ac16_datainicio_dia";
                     $this->erro_banco = "";
                     $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
@@ -897,7 +897,7 @@ class cl_acordo
             $sql  .= $virgula . " ac16_deptoresponsavel = $this->ac16_deptoresponsavel ";
             $virgula = ",";
             if (trim($this->ac16_deptoresponsavel) == null) {
-                $this->erro_sql = " Campo Departamento Responsï¿½vel não informado.";
+                $this->erro_sql = " Campo Departamento Responsável não informado.";
                 $this->erro_campo = "ac16_deptoresponsavel";
                 $this->erro_banco = "";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
@@ -914,7 +914,7 @@ class cl_acordo
             $sql  .= $virgula . " ac16_periodocomercial = '$this->ac16_periodocomercial' ";
             $virgula = ",";
             // if(trim($this->ac16_periodocomercial) == null ){
-            //     $this->erro_sql = " Campo Perãodo Comercial não informado.";
+            //     $this->erro_sql = " Campo Período Comercial não informado.";
             //     $this->erro_campo = "ac16_periodocomercial";
             //     $this->erro_banco = "";
             //     $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -1273,7 +1273,7 @@ class cl_acordo
         $result = db_query($sql . $sql2);
         if ($result == false) {
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
-            $this->erro_sql   = "Acordo nao Excluï¿½do. Exclusão Abortada.\\n";
+            $this->erro_sql   = "Acordo nao Excluído. Exclusão Abortada.\\n";
             $this->erro_sql .= "Valores : " . $ac16_sequencial;
             $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
@@ -2440,4 +2440,279 @@ class cl_acordo
                         AND ac20_pcmater = $iCodMater";
         return $sSql;
     }
+
+    public function sql_Contrato_PCNP($si172_sequencial = null, $campos = "*", $ordem = null, $dbwhere = "", $groupby = null)
+    {
+        $sSql = "select ";
+        if ($campos != "*") {
+            $campos_sql = explode("#", $campos);
+            $virgula = "";
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sSql .= $virgula . $campos_sql[$i];
+                $virgula = ",";
+            }
+        } else {
+            $sSql .= $campos;
+        }
+        
+        if (!empty($dbwhere)) {
+            $ano = db_getsession("DB_anousu");
+            $dbwhere = " {$dbwhere} and ac16_anousu = {$ano} ";
+        }
+        
+        $sSql .= "
+        cgc as cnpjCompra,
+        ac16_anousu as anoCompra,
+        l213_numerocompra as sequencialCompra,
+        ac16_acordocategoria as tipoContratoId,
+        ac16_numero as numeroContratoEmpenho,
+        ac16_anousu as anoContrato,
+        l20_edital||'/'||l20_anousu as processo,
+        ac16_acordogrupo as categoriaProcessoId,
+        false as receita,
+        z01_cgccpf as niFornecedor,
+        null as tipoPessoaFornecedor, /*verificar se'pessoa juridica gerar PJ se Fisica gerar PF se diferente gear PE*/
+        z01_nome as nomeRazaoSocialFornecedor,
+        null as niFornecedorSubContratado,
+        null as tipoPessoaFornecedorSubContratado,
+        null as nomeRazaoSocialFornecedorSubContratado,
+        ac16_objeto as objetoContrato,
+        null as informacaoComplementar,
+        ac16_valor as valorInicial,
+        ac16_qtdperiodo as numeroParcelas,
+        null as valorParcela,
+        ac16_valor as valorGlobal,
+        null as valorAcumulado,
+        ac16_dataassinatura as dataAssinatura,
+        ac16_datainicio as dataVigenciaInicio,
+        ac16_datafim as datavigenciaFim,
+        null as identificadorCipi,
+        null as urlCipi
+        from acordo
+        join acordocategoria on ac50_sequencial=ac16_acordocategoria
+        join liclicita on l20_codigo = ac16_licitacao
+        join db_depart on coddepto=ac16_deptoresponsavel
+        join db_departorg on db01_coddepto=coddepto
+        join cgm on z01_numcgm=ac16_contratado
+        join cgmtipoempresa on z03_numcgm=z01_numcgm
+        join tipoempresa on db98_sequencial=z03_tipoempresa
+        join db_config on codigo=instit
+        join liccontrolepncp on ac16_licitacao = l213_licitacao
+        left join acocontratopncp on ac213_contrato = ac16_sequencial
+        where $dbwhere
+        order by ac213_numerocontrolepncp desc
+        ";
+      
+        return $sSql;
+    }
+
+    public function sql_DadosContrato_PCNP($aContratocodigo)
+    {            
+        $ano = db_getsession("DB_anousu");
+        $dbwhere = " ac16_anousu = {$ano} and ac16_sequencial = {$aContratocodigo} ";
+               
+        $sSql = " select 
+        ac16_sequencial,
+        ac213_numerocontrolepncp,      
+        cgc as cnpjCompra,
+        ac16_anousu as anoCompra,
+        l213_numerocompra as sequencialCompra,
+        ac16_acordocategoria as tipoContratoId,
+        ac16_numero as numeroContratoEmpenho,
+        ac16_anousu as anoContrato,
+        l20_edital||'/'||l20_anousu as processo,
+        ac16_acordogrupo as categoriaProcessoId,
+        true as receita,
+        db01_unidade as codigoUnidade,
+        z01_cgccpf as niFornecedor,
+        null as tipoPessoaFornecedor, /*verificar se'pessoa juridica gerar PJ se Fisica gerar PF se diferente gear PE*/
+        z01_nome as nomeRazaoSocialFornecedor,
+        null as niFornecedorSubContratado,
+        null as tipoPessoaFornecedorSubContratado,
+        null as nomeRazaoSocialFornecedorSubContratado,
+        ac16_objeto as objetoContrato,
+        null as informacaoComplementar,
+        ac16_valor as valorInicial,
+        ac16_qtdperiodo as numeroParcelas,
+        0 as valorParcela,
+        ac16_valor as valorGlobal,
+        null as valorAcumulado,
+        ac16_dataassinatura as dataAssinatura,
+        ac16_datainicio as dataVigenciaInicio,
+        ac16_datafim as datavigenciaFim,
+        null as identificadorCipi,
+        null as urlCipi
+        from acordo
+        join acordocategoria on ac50_sequencial=ac16_acordocategoria
+        join liclicita on l20_codigo = ac16_licitacao
+        join db_depart on coddepto=ac16_deptoresponsavel
+        join db_departorg on db01_coddepto=coddepto
+        join cgm on z01_numcgm=ac16_contratado
+        join cgmtipoempresa on z03_numcgm=z01_numcgm
+        join tipoempresa on db98_sequencial=z03_tipoempresa
+        join db_config on codigo=instit
+        join liccontrolepncp on ac16_licitacao = l213_licitacao
+        left join acocontratopncp on ac213_contrato = ac16_sequencial
+        where $dbwhere
+        ";
+   
+        return $sSql;
+    }
+
+    public function sql_query_pncp($aContratocodigo)
+    {            
+        $ano = db_getsession("DB_anousu");
+        $instituicao = db_getsession('DB_instit');
+        $dbwhere = " ac16_instit =  {$instituicao} and ac16_anousu = {$ano} ";
+               
+        $sSql = " select 
+        ac16_sequencial, 
+        ac213_numerocontrolepncp,
+        ac213_sequencialpncp,      
+        cgc as cnpjCompra,
+        ac16_anousu as anoCompra,
+        l213_numerocompra as sequencialCompra,
+        ac16_acordocategoria as tipoContratoId,
+        ac16_numero as numeroContratoEmpenho,
+        ac16_anousu as anoContrato,
+        l20_edital||'/'||l20_anousu as processo,
+        ac16_acordogrupo as categoriaProcessoId,
+        true as receita,
+        db01_unidade as codigoUnidade,
+        z01_cgccpf as niFornecedor,
+        null as tipoPessoaFornecedor, /*verificar se'pessoa juridica gerar PJ se Fisica gerar PF se diferente gear PE*/
+        z01_nome as nomeRazaoSocialFornecedor,
+        null as niFornecedorSubContratado,
+        null as tipoPessoaFornecedorSubContratado,
+        null as nomeRazaoSocialFornecedorSubContratado,
+        ac16_objeto as objetoContrato,
+        null as informacaoComplementar,
+        ac16_valor as valorInicial,
+        ac16_qtdperiodo as numeroParcelas,
+        0 as valorParcela,
+        ac16_valor as valorGlobal,
+        null as valorAcumulado,
+        ac16_dataassinatura as dataAssinatura,
+        ac16_datainicio as dataVigenciaInicio,
+        ac16_datafim as datavigenciaFim,
+        null as identificadorCipi,
+        null as urlCipi
+        from acordo
+        join acordocategoria on ac50_sequencial=ac16_acordocategoria
+        join liclicita on l20_codigo = ac16_licitacao
+        join db_depart on coddepto=ac16_deptoresponsavel
+        join db_departorg on db01_coddepto=coddepto
+        join cgm on z01_numcgm=ac16_contratado
+        join cgmtipoempresa on z03_numcgm=z01_numcgm
+        join tipoempresa on db98_sequencial=z03_tipoempresa
+        join db_config on codigo=instit
+        join liccontrolepncp on ac16_licitacao = l213_licitacao
+        join acocontratopncp on ac213_contrato = ac16_sequencial
+        where $dbwhere
+        ";
+
+        return $sSql;
+    }
+
+    function sql_query_publicacaoEmpenho_pncp($campos = "*", $ordem = null, $dbwhere = "", $groupby = null)
+    {
+        $ano  = db_getsession("DB_anousu");
+        $sql  = "select
+                e60_numemp,  
+                ac213_numerocontrolepncp,  
+                z01_cgccpf as cnpjCompra,
+                e60_anousu as anoCompra,
+                l213_numerocompra as sequencialCompra,
+                7 as tipoContratoId,
+                e60_codemp as numeroContratoEmpenho,
+                e60_anousu as anoContrato,
+                l20_edital||'/'||l20_anousu as processo,
+                l20_categoriaprocesso as categoriaProcessoId,
+                false as receita,
+                01001 as codigoUnidade,
+                z01_cgccpf as niFornecedor,
+                case when length(trim(z01_cgccpf)) = 14 then 'PJ' 
+                        when length(trim(z01_cgccpf)) = 11 then 'PF' 
+                else 
+                        'PE' end as tipoPessoaFornecedor,
+                z01_nome as nomeRazaoSocialFornecedor,
+                null as niFornecedorSubContratado,
+                null as tipoPessoaFornecedorSubContratado,
+                null as nomeRazaoSocialFornecedorSubContratado,
+                l20_objeto as objetoContrato,
+                null as informacaoComplementar,
+                0 as valorParcela,
+                null as dataVigenciaInicio,
+                null as dataVigenciaFim,
+                null as dataAssinatura,
+                e60_vlremp as valorInicial,
+                e60_vlremp as valorGlobal,
+                null as numeroParcelas
+                from empempenho
+                join cgm on z01_numcgm = e60_numcgm
+                join empempaut on e61_numemp=e60_numemp
+                join empautoriza on e54_autori=e61_autori
+                left join liclicita on l20_codigo = e54_codlicitacao
+                left join liccontrolepncp on l20_codigo = l213_licitacao
+                left join acocontratopncp on ac213_contrato = e60_numemp
+                where e60_emiss >='$ano-01-01' and e60_emiss <='$ano-12-31' and l20_codigo is not null ";
+
+                if (!empty($dbwhere))
+                    $sql .= " and {$dbwhere} ";
+                      
+                if (!empty($ordem)) {
+                    $sql .= " order by {$ordem} ";
+                }        
+                
+                return $sql;
+    }
+
+    function sql_query_pncp_empenho($codigoempenho)
+    {
+        
+        $ano  = db_getsession("DB_anousu");
+        $sql  = "select
+                e60_numemp,  
+                ac213_numerocontrolepncp,  
+                z01_cgccpf as cnpjCompra,
+                e60_anousu as anoCompra,
+                l213_numerocompra as sequencialCompra,
+                7 as tipoContratoId,
+                e60_codemp as numeroContratoEmpenho,
+                e60_anousu as anoContrato,
+                l20_edital||'/'||l20_anousu as processo,
+                l20_categoriaprocesso as categoriaProcessoId,
+                false as receita,
+                01001 as codigoUnidade,
+                z01_cgccpf as niFornecedor,
+                case when length(trim(z01_cgccpf)) = 14 then 'PJ' 
+                        when length(trim(z01_cgccpf)) = 11 then 'PF' 
+                else 
+                        'PE' end as tipoPessoaFornecedor,
+                z01_nome as nomeRazaoSocialFornecedor,
+                null as niFornecedorSubContratado,
+                null as tipoPessoaFornecedorSubContratado,
+                null as nomeRazaoSocialFornecedorSubContratado,
+                l20_objeto as objetoContrato,
+                null as informacaoComplementar,
+                0 as valorParcela,
+                null as dataVigenciaInicio,
+                null as dataVigenciaFim,
+                null as dataAssinatura,
+                e60_vlremp as valorInicial,
+                e60_vlremp as valorGlobal,
+                null as numeroParcelas
+                from empempenho
+                join cgm on z01_numcgm = e60_numcgm
+                join empempaut on e61_numemp=e60_numemp
+                join empautoriza on e54_autori=e61_autori
+                left join liclicita on l20_codigo = e54_codlicitacao
+                left join liccontrolepncp on l20_codigo = l213_licitacao
+                left join acocontratopncp on ac213_contrato = e60_numemp
+                where e60_numemp = {$codigoempenho} and e60_emiss >='$ano-01-01' and e60_emiss <='$ano-12-31' ";       
+              
+                return $sql;
+    }
+
+
 }
