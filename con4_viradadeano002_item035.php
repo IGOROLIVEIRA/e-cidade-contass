@@ -36,7 +36,7 @@ if ($sqlerro == false) {
 
 
   try {
-    $ano = $iAnoOrigem + 1;
+    $ano = $iAnoOrigem + 4;
     $sWhereexiste    = " l25_anousu = {$ano}";
     $sSqlDadosexiste = $oDaoPccflicitapar->sql_query_file( null, "*", null, $sWhereexiste );
     $rsDadosexiste   = db_query($sSqlDadosexiste);
@@ -49,7 +49,7 @@ if ($sqlerro == false) {
         $oDados = db_utils::fieldsMemory($rsDadosOrigem, $x);
         $oDaoPccflicitapar->l25_codcflicita = $oDados->l25_codcflicita;
         $oDaoPccflicitapar->l25_anousu = $oDados->l25_anousu +1;
-        $oDaoPccflicitapar->l25_numero = 1;
+        $oDaoPccflicitapar->l25_numero = '0';
         $oDaoPccflicitapar->incluir(null);
         if ($oDaoPccflicitapar->erro_status == "0") {
           throw new Exception("Erro os itens da Pccflicitapar!\n{$oDaoPccflicitapar->erro_msg}");
@@ -113,7 +113,7 @@ if ($sqlerro == false) {
         $oDados = db_utils::fieldsMemory($rsDadosOrigem, $x);
         $oDaoAcordogruponumeracao->ac03_acordogrupo = $oDados->ac03_acordogrupo;
         $oDaoAcordogruponumeracao->ac03_anousu = $oDados->ac03_anousu + 1;
-        $oDaoAcordogruponumeracao->ac03_numero = 1;
+        $oDaoAcordogruponumeracao->ac03_numero = '0';
         $oDaoAcordogruponumeracao->ac03_instit = db_getsession("DB_instit");
         $oDaoAcordogruponumeracao->incluir(null);
         if ($oDaoAcordogruponumeracao->erro_status == "0") {
