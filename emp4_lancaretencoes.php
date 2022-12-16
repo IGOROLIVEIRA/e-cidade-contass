@@ -607,7 +607,7 @@ function js_atualizaCampos (iNumRow) {
     $('e21_sequencialdescr').value          = aSelecionados[0][0];//descricao da retencao
     $('e23_deducao').value                  = js_strToFloat(aSelecionados[0][2]);//valor da deducao
     $('e21_aliquota').value                 = js_strToFloat(aSelecionados[0][4]);//aliquota da retencao
-    $('e23_valorretencao').value            = js_strToFloat(aSelecionados[0][5]);//valor retido da retencao
+    $('e23_valorretencao').value            = aSelecionados[0][5];//valor retido da retencao
     $('lancarretencao').disabled            = true;
     $('alterarretencao').disabled           = false;
     $('apagarretencao').disabled            = false;

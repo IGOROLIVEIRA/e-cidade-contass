@@ -44,6 +44,7 @@ $clorcreceita    = new cl_orcreceita;
 $clorcfontes     = new cl_orcfontes;
 $clorcparametro  = new cl_orcparametro;
 $clestrutura     = new cl_estrutura;
+$clorcsuplementacaoparametro  = new cl_orcsuplementacaoparametro;
 if(isset($atualizar)){
   $db_opcao = 2;
   $db_botao = true;
@@ -51,6 +52,14 @@ if(isset($atualizar)){
   $db_opcao = 22;
   $db_botao = false;
 } 
+
+function saberStatusDoOrcamento($clorcsuplementacaoparametro){
+	$result = $clorcsuplementacaoparametro->sql_record($clorcsuplementacaoparametro->sql_query(db_getsession("DB_anousu"),"*"));
+	db_fieldsmemory($result,0);
+}
+
+saberStatusDoOrcamento($clorcsuplementacaoparametro);
+
 if(isset($alterar)) {
 
   db_inicio_transacao();
@@ -89,9 +98,15 @@ if(isset($alterar)) {
     $sqlerro=true;
     $clorcreceita->erro_status='0';
     $erro_msg="Verifique o código da fonte!";
-  } 
+  }
+  if($o134_orcamentoaprovado == 't' && $o70_valor > 0){
+    $sqlerro=true;
+    $clorcreceita->erro_status = '0';
+    $erro_msg = "ORÇAMENTO APROVADO. O PROCEDIMENTO NÃO PODE SER REALIZADO..";
+    
+  }   
   
-// Faz update no recurso da conta conforme previsao
+  // Faz update no recurso da conta conforme previsao
   if($sqlerro==false) {  	  
       $rs_conplanoreduz = $clconplanoorcamentoanalitica->sql_record($clconplanoorcamentoanalitica->sql_query_file(null,null,"c61_reduz,c61_anousu","c61_codcon","c61_codcon=$o70_codfon and c61_instit=".db_getsession("DB_instit")));
       $rows             = $clconplanoorcamentoanalitica->numrows;
@@ -109,7 +124,8 @@ if(isset($alterar)) {
               }      
 	  	  }
 	  }	  	  
-  }  
+  }
+
   $db_botao = true;
   $db_opcao=2;  
   db_fim_transacao($sqlerro);

@@ -195,11 +195,15 @@ $codtribunal = $codtribunal->l03_pctipocompratribunal;
         }
         js_divCarregando('Aguarde, processando.....', 'msgbox');
         let oParam = new Object();
+        if (parent.procs.document.form1.l20_orcsigiloso.style.display == 'none') {
+            oParam.l20_orcsigiloso = 'null';
+        } else {
+            oParam.l20_orcsigiloso = parent.procs.document.form1.l20_orcsigiloso.value;
+        }
         oParam.licitacao = document.form1.licitacao.value;
         oParam.aItens = aItensFormatados;
         oParam.codprocant = document.form1.codprocant.value;
         oParam.tipojulg = document.form1.tipojulg.value;
-        oParam.valorsigiloso = parent.procs.document.form1.valorsigiloso.value;
         oParam.exec = 'insereItens';
 
         var oAjax = new Ajax.Request('lic4_licitacao.RPC.php', {

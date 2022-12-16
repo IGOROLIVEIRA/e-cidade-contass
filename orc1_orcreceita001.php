@@ -47,10 +47,19 @@ $clorcfontesdes               = new cl_orcfontesdes;
 $clorcparametro               = new cl_orcparametro;
 $clestrutura                  = new cl_estrutura;
 $clconcarpeculiar             = new cl_concarpeculiar;
+$clorcsuplementacaoparametro  = new cl_orcsuplementacaoparametro;
 
 $iAnoUsu  = db_getsession("DB_anousu");
 $db_opcao = 1;
 $db_botao = true;
+
+function saberStatusDoOrcamento($clorcsuplementacaoparametro){
+	$result = $clorcsuplementacaoparametro->sql_record($clorcsuplementacaoparametro->sql_query(db_getsession("DB_anousu"),"*"));
+	db_fieldsmemory($result,0);
+}
+
+saberStatusDoOrcamento($clorcsuplementacaoparametro);
+
 if(isset($incluir)) {
 
   $sqlerro=false;
@@ -75,6 +84,13 @@ if(isset($incluir)) {
       $oInstituicao = new Instituicao($oDadosReceita->o70_instit);
       $clorcreceita->erro_msg = "Receita {$o50_estrutreceita} já cadastrada para o ano de {$iAnoUsu} na instituição {$oInstituicao->getDescricao()}";
       $sqlerro = true;
+    }
+
+    if($o134_orcamentoaprovado == 't' && $o70_valor > 0){
+      $erro_trans = true;
+      $clorcreceita->erro_msg = "ORÇAMENTO APROVADO. O PROCEDIMENTO NÃO PODE SER REALIZADO..";
+      $sqlerro = true;
+      $clorcreceita->erro_status = 0;
     }
 
     if (!$sqlerro) {

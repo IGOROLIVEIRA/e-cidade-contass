@@ -837,8 +837,7 @@ switch ($oParam->exec) {
         break;
 
     case 'insereItens':
-        //ini_set('display_errors', 'On');
-        //error_reporting(E_ALL);
+
 
         $aItens = $oParam->aItens;
 
@@ -1671,6 +1670,16 @@ switch ($oParam->exec) {
                         }
                     }
                 }
+            }
+        }
+
+        if ($sqlerro == false) {
+            $rsOrcsigiloso = db_query("select l20_orcsigiloso from liclicita where l20_codigo = $oParam->licitacao;");
+            $ol20_orcsigiloso = db_utils::fieldsMemory($rsOrcsigiloso, 0);
+            $l20_orcsigiloso = $ol20_orcsigiloso->l20_orcsigiloso;
+            $oRetorno->l20_orcsigiloso = $l20_orcsigiloso;
+            if ($l20_orcsigiloso == null) {
+                db_query("UPDATE liclicita SET l20_orcsigiloso = $oParam->l20_orcsigiloso WHERE l20_codigo = $oParam->licitacao;");
             }
         }
 
