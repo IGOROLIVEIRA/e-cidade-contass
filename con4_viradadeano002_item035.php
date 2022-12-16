@@ -125,11 +125,13 @@ if ($sqlerro == false) {
     $sWhereexiste    = " p200_ano = {$ano}";
     $sSqlDadosexiste = $oDaoNumeracaotipoproc->sql_query_file( null, "*", null, $sWhereexiste );
     $rsDadosexiste   = db_query($sSqlDadosexiste);
+    
     if(pg_numrows($rsDadosexiste)==0){
 
       $sWhereOrigem    = " p200_ano = {$iAnoOrigem}";
       $sSqlDadosOrigem = $oDaoNumeracaotipoproc->sql_query_file( null, "*", null, $sWhereOrigem );
       $rsDadosOrigem   = db_query($sSqlDadosOrigem);
+      
       for($x=0;$x<pg_numrows($rsDadosOrigem);$x++){
         $oDados = db_utils::fieldsMemory($rsDadosOrigem, $x);
         $oDaoNumeracaotipoproc->p200_ano = $oDados->p200_ano + 1;
