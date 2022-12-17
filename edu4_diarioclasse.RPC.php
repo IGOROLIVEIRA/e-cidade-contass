@@ -155,7 +155,7 @@ switch ($oParam->exec) {
     $sWhereSubstituicao  = " {$sWhere} ";
     $sWhereSubstituicao .= " and ed322_rechumano in ({$sCodigoRecHumano})";
 
-    $sCampos                 = " distinct ed58_i_diasemana, ed59_i_serie as serie, ";
+    $sCampos                 = " distinct ed58_i_diasemana, ed59_i_serie as serie, ed58_d_data,";
     $sCampos                .= " trim(ed11_c_descr) as nome_etapa, ed57_i_codigo as codigo_turma, ";
     $sCampos                .= " ed57_c_descr as descricao_turma ";
 
@@ -182,6 +182,7 @@ switch ($oParam->exec) {
       $oTurma = new stdClass();
       $oTurma->codigo_turma     = $oDadosDiaSemana->codigo_turma."_".$oDadosDiaSemana->serie;
       $oTurma->codigo_serie     = $oDadosDiaSemana->serie;
+      $oTurma->data_letiva      = $oDadosDiaSemana->ed58_d_data;
       $oTurma->descricao_turma  = urlencode("{$oDadosDiaSemana->descricao_turma} ({$oDadosDiaSemana->nome_etapa})");
       $aDiasDeAula[$iDiaNaSemana]->turmas[] = $oTurma;
     }
@@ -261,6 +262,16 @@ switch ($oParam->exec) {
             if ($oFeriado->dia_letivo == 'N') {
                continue;
             }
+            $iFeriadoLetivoAulaRegente = false;
+            foreach( $aDiasDeAula[$iDiaSemana]->turmas as $turma){
+                if($turma->data_letiva == $sDataFormatada){
+                    $iFeriadoLetivoAulaRegente = true;
+                    continue;
+                }
+            }
+            if (!$iFeriadoLetivoAulaRegente) {
+                continue;
+            }
         }
 
         /**
@@ -271,8 +282,9 @@ switch ($oParam->exec) {
         $oDiaLetivo->diasemana = urlencode($aDiasSemana[$iDiaSemana]);
         $oDiaLetivo->turmas    = $aDiasDeAula[$iDiaSemana]->turmas;
         $aDiasLetivos[]        = $oDiaLetivo;
-      }
 
+
+      }
       $_SESSION["DIAS_LETIVOS_ESCOLA"] = $aDiasLetivos;
       $oRetorno->aDiasLetivos          = $aDiasLetivos;
       $oRetorno->dataatual             = date("Y-m-d", db_getsession("DB_datausu"));
@@ -292,9 +304,14 @@ switch ($oParam->exec) {
       if (isset($_SESSION["DIAS_LETIVOS_ESCOLA"])) {
 
         foreach ($_SESSION["DIAS_LETIVOS_ESCOLA"] as $oData) {
-
           if ($oData->data == $oParam->dtAula) {
-            $aTurmas = $oData->turmas;
+            foreach($oData->turmas as $oTurma){
+                if($oTurma->data_letiva && $oTurma->data_letiva == $oParam->dtAula){
+                  $aTurmas[] = $oTurma;
+                  break;
+                }
+                $aTurmas[] = $oTurma;
+            }
             break;
           }
         }
@@ -401,7 +418,7 @@ switch ($oParam->exec) {
     $sWhereSubstituicao  = " {$sWhere} ";
     $sWhereSubstituicao .= " and ed322_rechumano in({$iCodigoRecHumano})";
 
-    $sCampos           = " ed58_i_codigo    as sequencial, ";
+    $sCampos           = " ed58_i_codigo    as sequencial, ed58_d_data as data_letiva,";
     $sCampos          .= " ed08_c_descr     as descricao_periodo, ";
     $sCampos          .= " ed58_i_codigo    as codigo_regencia_periodo ";
 
@@ -411,8 +428,18 @@ switch ($oParam->exec) {
                                                                                           );
 
     $rsPeriodosAula  = $oDaoRegenciaHorario->sql_record($sSqlPeriodosAula);
-
-    $oRetorno->aPeriodosAulaDia  = db_utils::getCollectionByRecord($rsPeriodosAula, false, false, true);
+   // db_criatabela($rsPeriodosAula);
+    $aPeriodosAulaDia  = db_utils::getCollectionByRecord($rsPeriodosAula, false, false, false);
+    $aAulaDia = array();
+    foreach($aPeriodosAulaDia as $oAulaDia){
+      if($oAulaDia->data_letiva && $oAulaDia->data_letiva == $oParam->dtAula){
+        $aAulaDia[] = $oAulaDia;
+      }
+      if(!$oAulaDia->data_letiva){
+          $aAulaDia[] = $oAulaDia;
+      }
+    }
+    $oRetorno->aPeriodosAulaDia  = $aAulaDia;//db_utils::getCollectionByRecord($rsPeriodosAula, false, false, true);
     $aPeriodosAula               = array();
     foreach ($oRetorno->aPeriodosAulaDia as $oPeriodo) {
       $aPeriodosAula[] = $oPeriodo->codigo_regencia_periodo;
