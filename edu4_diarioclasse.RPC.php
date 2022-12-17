@@ -428,7 +428,7 @@ switch ($oParam->exec) {
                                                                                           );
 
     $rsPeriodosAula  = $oDaoRegenciaHorario->sql_record($sSqlPeriodosAula);
-   // db_criatabela($rsPeriodosAula);
+
     $aPeriodosAulaDia  = db_utils::getCollectionByRecord($rsPeriodosAula, false, false, false);
     $aAulaDia = array();
     foreach($aPeriodosAulaDia as $oAulaDia){
