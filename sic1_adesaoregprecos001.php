@@ -120,6 +120,7 @@ if (!$sqlerro) {
         $cladesaoregprecos->si06_cadinicial = 1;
         $cladesaoregprecos->si06_exercicioedital = db_getsession('DB_anousu');
       }
+      $cladesaoregprecos->si06_departamento = $si06_departamento;
       $cladesaoregprecos->incluir(null);
     }
     if ($cladesaoregprecos->erro_status == "0") {

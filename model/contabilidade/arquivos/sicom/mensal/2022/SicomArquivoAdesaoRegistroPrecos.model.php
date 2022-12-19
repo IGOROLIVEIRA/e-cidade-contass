@@ -38,7 +38,6 @@ class SicomArquivoAdesaoRegistroPrecos extends SicomArquivoBase implements iPadA
    */
   public function __construct()
   {
-
   }
 
   /**
@@ -227,7 +226,7 @@ class SicomArquivoAdesaoRegistroPrecos extends SicomArquivoBase implements iPadA
                  AND db01_anousu = o41_anousu
                  AND o41_instit = " . db_getsession("DB_instit") . "
                  JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu and o40_instit = " . db_getsession("DB_instit") . "
-                 WHERE db01_coddepto=pc80_depto and db01_anousu=" . db_getsession("DB_anousu") . " LIMIT 1) as codunidadesub
+                 WHERE db01_coddepto=si06_departamento and db01_anousu=" . db_getsession("DB_anousu") . " LIMIT 1) as codunidadesub
                 from adesaoregprecos
                 join cgm orgaogerenciador on si06_orgaogerenciador = orgaogerenciador.z01_numcgm
                 join cgm responsavel on si06_cgm = responsavel.z01_numcgm
@@ -265,13 +264,13 @@ class SicomArquivoAdesaoRegistroPrecos extends SicomArquivoBase implements iPadA
       $regadesao10->si67_cpfresponsavel = $oDados10->cpfresponsavel;
       $regadesao10->si67_descontotabela = $oDados10->si06_descontotabela;
       $regadesao10->si67_processoporlote = $oDados10->si06_processoporlote;
-      $regadesao10->si67_leidalicitacao = $oDados10->si06_leidalicitacao;  
+      $regadesao10->si67_leidalicitacao = $oDados10->si06_leidalicitacao;
       $regadesao10->si67_instit = db_getsession("DB_instit");
       $regadesao10->si67_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
 
       $regadesao10->incluir(null);
-       
-      
+
+
       if ($regadesao10->erro_status == 0) {
         throw new Exception($regadesao10->erro_msg);
       }
@@ -299,7 +298,6 @@ class SicomArquivoAdesaoRegistroPrecos extends SicomArquivoBase implements iPadA
         if ($regadesao11->erro_status == 0) {
           throw new Exception($regadesao11->erro_msg);
         }
-
       }
 
       $sSql = "select si07_numeroitem,
@@ -317,7 +315,7 @@ class SicomArquivoAdesaoRegistroPrecos extends SicomArquivoBase implements iPadA
         $regadesao12->si69_nroprocadesao = $oDados10->si06_numeroadm;
         $regadesao12->si69_exercicioadesao = substr($oDados10->exercicioadesao, 0, 4);
         $regadesao12->si69_coditem = $oDados12->coditem;
-        $regadesao12->si69_nroitem = $iCont12+1;
+        $regadesao12->si69_nroitem = $iCont12 + 1;
         $regadesao12->si69_instit = db_getsession("DB_instit");
         $regadesao12->si69_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
         $regadesao12->si69_reg10 = $regadesao10->si67_sequencial;
@@ -326,7 +324,6 @@ class SicomArquivoAdesaoRegistroPrecos extends SicomArquivoBase implements iPadA
         if ($regadesao12->erro_status == 0) {
           throw new Exception($regadesao12->erro_msg);
         }
-
       }
 
       $sSql = "select si07_numerolote,
@@ -353,7 +350,6 @@ class SicomArquivoAdesaoRegistroPrecos extends SicomArquivoBase implements iPadA
         if ($regadesao13->erro_status == 0) {
           throw new Exception($regadesao13->erro_msg);
         }
-
       }
 
       $sSql = "select * from (SELECT
@@ -438,7 +434,6 @@ ORDER BY pc11_seq) as matpreco on matpreco.pc01_codmater = matquan.pc01_codmater
         if ($regadesao14->erro_status == 0) {
           throw new Exception($regadesao14->erro_msg);
         }
-
       }
 
       $sSql = "select si07_numerolote,si07_precounitario,si07_quantidadelicitada,si07_quantidadeaderida,
@@ -506,15 +501,11 @@ where si07_sequencialadesao = {$oDados10->si06_sequencial}";
         if ($regadesao20->erro_status == 0) {
           throw new Exception($regadesao20->erro_msg);
         }
-
       }
-
     }
 
     $oGerarREGADESAO = new GerarREGADESAO();
     $oGerarREGADESAO->iMes = $this->sDataFinal['5'] . $this->sDataFinal['6'];;
     $oGerarREGADESAO->gerarDados();
-
   }
-
 }

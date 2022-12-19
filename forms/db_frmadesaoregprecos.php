@@ -311,6 +311,19 @@ if (strpos($_SERVER['HTTP_REFERER'], 'sic1_adesaoregprecos003.php')) {
         ?>
       </td>
     </tr>
+    <tr>
+      <td>
+        <?
+        db_ancora("Cod.Departamento", "js_pesquisasi06_departamento(true);", $db_opcao)
+        ?>
+      </td>
+      <td>
+        <?
+        db_input('si06_departamento', 10, '', true, 'text', $db_opcao, "onchange='js_pesquisasi06_departamento(false)';");
+        db_input('descricaodepartamento', 45, '', true, 'text', 3, "");
+        ?>
+      </td>
+    </tr>
   </table>
   </center>
 </fieldset>

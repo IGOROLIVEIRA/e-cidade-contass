@@ -58,6 +58,7 @@ class cl_adesaoregprecos
   var $si06_leidalicitacao = null;
   var $si06_anomodadm = null;
   var $si06_nummodadm = null;
+  var $si06_departamento = null;
 
   // cria propriedade com as variaveis do arquivo
   var $campos = "
@@ -86,6 +87,7 @@ class cl_adesaoregprecos
                  si06_leidalicitacao = int4 = Lei de licitacao
                  si06_anomodadm = int4 = Ano do Processo
                  si06_nummodadm = int8 = Numero Modalidade
+                 si06_departamento = int8 = codigo do departamento responsavel
                  ";
   //funcao construtor da classe 
   function cl_adesaoregprecos()
@@ -169,6 +171,7 @@ class cl_adesaoregprecos
       $this->si06_leidalicitacao = ($this->si06_leidalicitacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si06_leidalicitacao"] : $this->si06_leidalicitacao);
       $this->si06_anomodadm = ($this->si06_anomodadm == "" ? @$GLOBALS["HTTP_POST_VARS"]["si06_anomodadm"] : $this->si06_anomodadm);
       $this->si06_nummodadm = ($this->si06_nummodadm == "" ? @$GLOBALS["HTTP_POST_VARS"]["si06_nummodadm"] : $this->si06_nummodadm);
+      $this->si06_departamento = ($this->si06_departamento == "" ? @$GLOBALS["HTTP_POST_VARS"]["si06_departamento"] : $this->si06_departamento);
     } else {
       $this->si06_sequencial = ($this->si06_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["si06_sequencial"] : $this->si06_sequencial);
     }
@@ -335,15 +338,15 @@ class cl_adesaoregprecos
       $this->erro_status = "0";
       return false;
     }
-    /*if($this->si06_fornecedor == null ){
-       $this->erro_sql = " Campo Fornecedor nao Informado.";
-       $this->erro_campo = "si06_fornecedor";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
-     }*/
+    if ($this->si06_departamento == null) {
+      $this->erro_sql = " Campo Departamento nao Informado.";
+      $this->erro_campo = "si06_departamento";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
 
     if ($this->si06_processoporlote == null) {
       $this->erro_sql = " Campo Processo por Lote nao Informado.";
@@ -451,6 +454,7 @@ class cl_adesaoregprecos
                                       ,si06_leidalicitacao
                                       ,si06_anomodadm
                                       ,si06_nummodadm
+                                      ,si06_departamento
                        )
                 values (
                                 $this->si06_sequencial
@@ -479,6 +483,7 @@ class cl_adesaoregprecos
                                ,$this->si06_leidalicitacao
                                ,$this->si06_anomodadm
                                ,$this->si06_nummodadm
+                               ,$this->si06_departamento
 
                       )";
     $result = db_query($sql);
@@ -898,7 +903,19 @@ class cl_adesaoregprecos
         return false;
       }
     }
-
+    if (trim($this->si06_departamento) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si06_departamento"])) {
+      $sql  .= $virgula . " si06_departamento = $this->si06_departamento ";
+      $virgula = ",";
+      if (trim($this->si06_departamento) == null) {
+        $this->erro_sql = " Campo Departamento não Informado.";
+        $this->erro_campo = "si06_departamento";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+    }
 
     if (trim($this->si06_edital) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si06_edital"])) {
       $sql  .= $virgula . " si06_edital = $this->si06_edital ";
