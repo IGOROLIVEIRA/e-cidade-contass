@@ -52,7 +52,7 @@ if ($sqlerro == false) {
         $oDaoPccflicitapar->l25_numero = '0';
         $oDaoPccflicitapar->incluir(null);
         if ($oDaoPccflicitapar->erro_status == "0") {
-          throw new Exception("Erro os itens da Pccflicitapar!\n{$oDaoPccflicitapar->erro_msg}");
+          throw new Exception("Erro ao processar item 35!\n{$oDaoPccflicitapar->erro_msg}");
         }
         
       }
@@ -74,7 +74,7 @@ if ($sqlerro == false) {
         $oDaoMaterialestoquegrupoconta->m66_codconvpd = $oDados->m66_codconvpd;
         $oDaoMaterialestoquegrupoconta->incluir(null);
         if ($oDaoMaterialestoquegrupoconta->erro_status == "0") {
-          throw new Exception("Erro os itens da Pccflicitapar!\n{$oDaoMaterialestoquegrupoconta->erro_msg}");
+          throw new Exception("Erro ao processar item 35!\n{$oDaoMaterialestoquegrupoconta->erro_msg}");
         }
       }
     }
@@ -96,7 +96,7 @@ if ($sqlerro == false) {
         $oDaoClabensconplano->t86_anousudepreciacao = $oDados->t86_anousu +1;
         $oDaoClabensconplano->incluir(null);
         if ($oDaoClabensconplano->erro_status == "0") {
-          throw new Exception("Erro os itens da Pccflicitapar!\n{$oDaoClabensconplano->erro_msg}");
+          throw new Exception("Erro ao processar item 35!\n{$oDaoClabensconplano->erro_msg}");
         }
       }
     }
@@ -117,7 +117,7 @@ if ($sqlerro == false) {
         $oDaoAcordogruponumeracao->ac03_instit = db_getsession("DB_instit");
         $oDaoAcordogruponumeracao->incluir(null);
         if ($oDaoAcordogruponumeracao->erro_status == "0") {
-          throw new Exception("Erro os itens da Pccflicitapar!\n{$oDaoAcordogruponumeracao->erro_msg}");
+          throw new Exception("Erro ao processar item 35!\n{$oDaoAcordogruponumeracao->erro_msg}");
         }
       }
     }
@@ -139,7 +139,7 @@ if ($sqlerro == false) {
         $oDaoNumeracaotipoproc->p200_tipoproc = $oDados->p200_tipoproc;
         $oDaoNumeracaotipoproc->incluir(null);
         if ($oDaoNumeracaotipoproc->erro_status == "0") {
-          throw new Exception("Erro os itens da Pccflicitapar!\n{$oDaoNumeracaotipoproc->erro_msg}");
+          throw new Exception("Erro ao processar item 35!\n{$oDaoNumeracaotipoproc->erro_msg}");
         }
       }
     }
