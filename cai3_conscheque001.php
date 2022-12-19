@@ -349,6 +349,9 @@ function js_pesquisa(){
 	oPesquisa.k17_codigofim = $('k17_codigofim').value;
 	
 	oPesquisa.z01_numcgm 		= $('z01_numcgm').value;
+
+	oPesquisa.chanulados 		= $('chanulados').value;
+	
 	oPesquisa.dtini					= "";
 	oPesquisa.dtfim					= "";
 	if($('dtini').value != "" && $('dtfim').value != ""){
@@ -533,7 +536,17 @@ function js_hist_cheque(query){
  									db_input("z01_numcgm",6,1,true,"text",4,"onchange='js_pesquisa_cgm(false);'");
 	      					db_input("z01_nome2",30,"",true,"text",3);  
       						?>
-      				</td>
+      					</td>
+						  <tr>
+								<td><strong>Cheques Anulados:</strong></td>
+								<td>
+									<select name="chanulados" id="chanulados" onchange="mostra_campo()" >
+									    <option value="" id="1" >Selecione</option>
+										<option value="1" id="1" >SIM</option>
+										<option value="2" id="2" >NÃO</option>
+									</select>
+								</td>
+						  </tr>
  						</tr>
  					</table>
  				</td>
