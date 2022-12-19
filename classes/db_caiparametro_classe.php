@@ -66,6 +66,7 @@ class cl_caiparametro
     var $k29_contassemmovimento = 'f';
     var $k29_orctiporecfundeb = 0;
     var $k29_cotaunicafundeb = 'f';
+    var $k29_liquidacaodataanterior = 'f';
     // cria propriedade com as variaveis do arquivo
     var $campos = "
                  k29_instit = int4 = Instituição
@@ -82,6 +83,7 @@ class cl_caiparametro
                  k29_contassemmovimento = bool = Trazer Contas sem Movimento
                  k29_orctiporecfundeb = int4 = Recurso Fundeb
                  k29_cotaunicafundeb = bool = Conta única FUNDEB
+                 k29_liquidacaodataanterior = bool = Liquidação c/ data anterior a última liquidação
                  ";
     //funcao construtor da classe
     function cl_caiparametro()
@@ -140,6 +142,7 @@ class cl_caiparametro
             $this->k29_exibeobservacao = ($this->k29_exibeobservacao == "f" ? @$GLOBALS["HTTP_POST_VARS"]["k29_exibeobservacao"] : $this->k29_exibeobservacao);
             $this->k29_contassemmovimento = ($this->k29_contassemmovimento == "f" ? @$GLOBALS["HTTP_POST_VARS"]["k29_contassemmovimento"] : $this->k29_contassemmovimento);
             $this->k29_cotaunicafundeb = ($this->k29_cotaunicafundeb == "f" ? @$GLOBALS["HTTP_POST_VARS"]["k29_cotaunicafundeb"] : $this->k29_cotaunicafundeb);
+            $this->k29_liquidacaodataanterior = ($this->k29_liquidacaodataanterior == "f" ? @$GLOBALS["HTTP_POST_VARS"]["k29_liquidacaodataanterior"] : $this->k29_liquidacaodataanterior);
             $this->k29_orctiporecfundeb = ($this->k29_orctiporecfundeb == "" ? @$GLOBALS["HTTP_POST_VARS"]["k29_orctiporecfundeb"] : $this->k29_orctiporecfundeb);
         } else {
             $this->k29_instit = ($this->k29_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["k29_instit"] : $this->k29_instit);
@@ -242,9 +245,9 @@ class cl_caiparametro
             $this->erro_status = "0";
             return false;
         }
-        if ($this->k29_cotaunicafundeb == null) {
-            $this->erro_sql = " Campo Trazer Contas sem Movimento nao Informado.";
-            $this->erro_campo = "k29_cotaunicafundeb";
+        if ($this->k29_liquidacaodataanterior == null) {
+            $this->erro_sql = " Campo Liquidação c/ data anterior a última liquidação nao Informado.";
+            $this->erro_campo = "k29_liquidacaodataanterior";
             $this->erro_banco = "";
             $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
@@ -265,6 +268,7 @@ class cl_caiparametro
                                       ,k29_contassemmovimento
                                       ,k29_orctiporecfundeb
                                       ,k29_cotaunicafundeb
+                                      ,k29_liquidacaodataanterior
                                       ,k29_exibeobservacao
                        )
                 values (
@@ -281,6 +285,7 @@ class cl_caiparametro
                                ,'$this->k29_contassemmovimento'
                                ,$this->k29_orctiporecfundeb
                                ,$this->k29_cotaunicafundeb
+                               ,$this->k29_liquidacaodataanterior
                                ,$this->k29_exibeobservacao
                       )";
         $result = db_query($sql);
@@ -500,6 +505,19 @@ class cl_caiparametro
             if (trim($this->k29_cotaunicafundeb) == null) {
                 $this->erro_sql = " Campo Conta única FUNDEB nao Informado.";
                 $this->erro_campo = "k29_cotaunicafundeb";
+                $this->erro_banco = "";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+        }
+        if (trim($this->k29_liquidacaodataanterior) != "" || isset($GLOBALS["HTTP_POST_VARS"]["k29_liquidacaodataanterior"])) {
+            $sql  .= $virgula . " k29_liquidacaodataanterior = '$this->k29_liquidacaodataanterior' ";
+            $virgula = ",";
+            if (trim($this->k29_liquidacaodataanterior) == null) {
+                $this->erro_sql = " Campo Liquidação c/ data anterior a última liquidação nao Informado.";
+                $this->erro_campo = "k29_liquidacaodataanterior";
                 $this->erro_banco = "";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));

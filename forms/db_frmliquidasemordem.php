@@ -1019,6 +1019,14 @@ function validarVinculos(){
     saida += "<tr style='height:auto'><td>&nbsp;</td></tr>";
     $('dados').innerHTML          = saida;
 
+
+    // Condição de período
+    if (obj.bPermitidoLiquidacao == false) {
+        alert("Não é permitido liquidar com data anterior ao último lançamento de liquidação.");
+        $('confirmar').disabled = true;
+        return false;
+    }
+
     $('pesquisar').disabled = false;
     if (iTotItens == 0 && lLiberaItemLiquidacao) {
 
@@ -1149,6 +1157,8 @@ function validarVinculos(){
           $('confirmar').disabled = false;
           return false;
         }
+
+
 
         if (js_strToFloat($("saldo"+itens[i].value).innerHTML) < $F('qtdesol'+itens[i].value)) {
 
