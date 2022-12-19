@@ -523,7 +523,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
     document.getElementById('pc17_unid').value = document.getElementsByName("codigo_unidade[]")[indice].value;
     document.getElementById('pc11_servicoquantidade').value = document.getElementsByName("servicoquantidade[]")[indice].value;
     document.getElementById('pc11_codigo').value = document.getElementsByName("codigo[]")[indice].value;
-    $('eleSub').options[0] = new Option(document.getElementsByName("descrelemento[]")[indice].value.urlDecode(), document.getElementsByName("codele[]")[indice].value);
+    //$('eleSub').options[0] = new Option(document.getElementsByName("descrelemento[]")[indice].value.urlDecode(), document.getElementsByName("codele[]")[indice].value);
 
 
     if (servico == 't') {
@@ -572,9 +572,12 @@ if ((isset($opcao) && $opcao == "alterar")) {
 
 
 
-
     }
 
+    var options = document.querySelectorAll('#eleSub option');
+    options.forEach(o => o.remove());
+    js_buscarEle();
+    document.getElementById('eleSub').value = document.getElementsByName("codele[]")[indice].value;
 
 
   }
@@ -693,6 +696,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
     var oAjax = new Ajax.Request(
       sUrl, {
         method: 'post',
+        asynchronous: false,
         parameters: 'json=' + js_objectToJson(oRequest),
         onComplete: js_retornogetDados
       }
@@ -710,6 +714,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
       i = 1;
     }
 
+    /*
     if (oRetorno.dados.length == 1) {
       document.getElementById("eleSub").setAttribute("tabindex", "-1");
       document.getElementById("eleSub").setAttribute("aria-disabled", "true");
@@ -724,7 +729,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
       $('eleSub').style.background = "";
       $('eleSub').style.pointerEvents = "";
 
-    }
+    } */
 
     oRetorno.dados.forEach(function(oItem) {
       valor = oItem.codigo + " - " + oItem.elemento + " - " + oItem.nome.urlDecode();
@@ -733,21 +738,6 @@ if ((isset($opcao) && $opcao == "alterar")) {
       i++;
     });
 
-    document.getElementById("subEl").style.display = "table-row";
-
-    valorEle = document.getElementById("o56_codele_select_descr").value;
-    const val = valorEle.split("-");
-    const num = val[1].split(" ");
-    if ((num[1].substr(0, 7)) != (valorElem.substr(0, 7))) {
-      alert("Elemento do item selecionado diferente do item anterior, é necessário remover as dotações vinculadas ao item para a troca do material");
-      var input = document.querySelector("#db_opcao");
-      input.disabled = true;
-      document.getElementById("codeleRow").style.display = "table-row";
-      document.form1.o56_codele_select_descr.focus();
-    } else {
-      var input = document.querySelector("#db_opcao");
-      input.disabled = false;
-    }
 
   }
 
