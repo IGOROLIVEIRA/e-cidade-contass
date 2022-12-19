@@ -862,9 +862,6 @@ function js_saidaLiquidacao(oAjax){
     $('confirmar').disabled = false;
     obj      = eval("("+oAjax.responseText+")");
 
-
-    // Condição de período
-    alert("estou aqui");
     if (obj.bPermitidoLiquidacao == false) {
         alert("Não é permitido liquidar com data anterior ao último lançamento de liquidação.");
         $('confirmar').disabled = true;
