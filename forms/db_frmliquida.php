@@ -509,11 +509,19 @@ function js_consultaEmpenho(iEmpenho,operacao){
  /**
   * Preenche o formulário com os dados do empenho   
   */
-function js_saida(oAjax){
-  
+function js_saida(oAjax){  
    js_removeObj("msgBox"); 
+
     var iNumEmpOld = $F('e60_numemp');
     obj  = eval("("+oAjax.responseText+")");
+
+    // Condição de período
+    if (obj.bPermitidoLiquidacao == false) {
+        alert("Não é permitido liquidar com data anterior ao último lançamento de liquidação.");
+        $('confirmar').disabled = true;
+        return false;
+    }
+
     $('e60_codemp').value = obj.e60_codemp;
     $('e60_numemp').value = obj.e60_numemp;
     $('e60_numcgm').value = js_decodeUrl(obj.e60_numcgm);
@@ -855,6 +863,14 @@ function js_saidaLiquidacao(oAjax){
     obj      = eval("("+oAjax.responseText+")");
 
 
+    // Condição de período
+    alert("estou aqui");
+    if (obj.bPermitidoLiquidacao == false) {
+        alert("Não é permitido liquidar com data anterior ao último lançamento de liquidação.");
+        $('confirmar').disabled = true;
+        return false;
+    }
+
     if (obj.lErro == true) {
       alert(obj.sMensagem.urlDecode()); return false;
     }
@@ -882,8 +898,6 @@ function js_saidaLiquidacao(oAjax){
         document.form1.valordesconto.value = '';
         document.form1.competencia.value = '';
     }
- 
-
 
 }
 function js_decodeUrl(sTexto){
