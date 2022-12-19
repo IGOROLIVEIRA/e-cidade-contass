@@ -326,12 +326,12 @@ for ($inome = 0; $inome < pg_numrows($res_nome); $inome++) {
     from
     (
     select r01_regist                           as soma,
-           sum(base)                            as base,
+           sum(base - ded)                      as base,
            sum(ded)                             as ded,
            sum(dev)                             as dev,
            sum(desco)                           as desco,
-           sum(base)/100*$r33_ppatro   as parcela_patronal,
-           sum(base)/100* " . $campoextra . " AS campoextra,
+           sum(base - ded)/100*$r33_ppatro   as parcela_patronal,
+           sum(base - ded)/100* " . $campoextra . " AS campoextra,
            sum(nocivo) AS agentes_nocivos
     from
     (
@@ -404,7 +404,7 @@ for ($inome = 0; $inome < pg_numrows($res_nome); $inome++) {
     $cmpextra += $campoextra1;
     $agentes_nocivos += $agentes_nocivos1;
 }
-//echo $sql ; exit;
+// echo $base1," ",$tipo ; exit;
 if ($selautonomo == 'true') {
     $sql = $clrhautonomolanc->sql_query_file(null, "sum((rh89_valorserv*20/100)+rh89_valorretinss) as terceiros,sum(rh89_valorserv) as valor_servico", null, "(rh89_anousu,rh89_mesusu) = ({$ano},{$mes})");
     $rsTerceiros = $clrhautonomolanc->sql_record($sql);
