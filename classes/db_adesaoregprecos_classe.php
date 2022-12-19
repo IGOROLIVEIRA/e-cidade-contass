@@ -59,6 +59,8 @@ class cl_adesaoregprecos
   var $si06_anomodadm = null;
   var $si06_nummodadm = null;
   var $si06_departamento = null;
+  var $si06_codunidadesubant = null;
+
 
   // cria propriedade com as variaveis do arquivo
   var $campos = "
@@ -936,6 +938,10 @@ class cl_adesaoregprecos
     }
     if (trim($this->si06_exercicioedital) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si06_exercicioedital"])) {
       $sql  .= $virgula . " si06_exercicioedital = $this->si06_exercicioedital ";
+      $virgula = ",";
+    }
+    if (trim($this->si06_codunidadesubant) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si06_codunidadesubant"])) {
+      $sql  .= $virgula . " si06_codunidadesubant = '$this->si06_codunidadesubant'";
       $virgula = ",";
     }
     $sql .= " where ";

@@ -178,19 +178,6 @@ class SicomArquivoContratos extends SicomArquivoBase implements iPadArquivoBaseC
 
     public function getCodunidadesubrespAdesao($sequencial)
     {
-        //    $sSql = "select
-        //      case when o41_subunidade != 0 or not null then
-        //                                    lpad((case when o40_codtri = '0' or null then o40_orgao::varchar else o40_codtri end),2,0)||lpad((case when o41_codtri = '0' or null then o41_unidade::varchar else o41_codtri end),3,0)||lpad(o41_subunidade::integer,3,0)
-        //                                    else lpad((case when o40_codtri = '0' or null then o40_orgao::varchar else o40_codtri end),2,0)||lpad((case when o41_codtri = '0' or null then o41_unidade::varchar else o41_codtri end),3,0) end as codunidadesubresp
-        //                        from empempenhocontrato
-        //                      inner join empempenho on e60_numemp = e100_numemp
-        //            join empelemento on e64_numemp = e60_numemp
-        //            join orcdotacao on e60_coddot = o58_coddot and e60_anousu = o58_anousu
-        //            join orcunidade on o41_anousu = o58_anousu and o41_orgao = o58_orgao and o41_unidade = o58_unidade
-        //            join orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
-        //            where e100_acordo = {$iCodContratos}
-        //      ";
-
         /* Substituição do trecho acima pela mesma consulta utilizada no campo 4 do reg. 10 da REGADESAO */
         $sSql = "
 	  		SELECT
@@ -212,7 +199,8 @@ class SicomArquivoContratos extends SicomArquivoBase implements iPadArquivoBaseC
 				 JOIN orcunidade ON db01_orgao=o41_orgao AND db01_unidade=o41_unidade AND db01_anousu = o41_anousu AND o41_instit = " . db_getsession('DB_instit') . "
 				 JOIN orcorgao ON o40_orgao = o41_orgao AND o40_anousu = o41_anousu AND o40_instit = " . db_getsession('DB_instit') . "
 				 WHERE db01_coddepto=pc80_depto AND db01_anousu = " . db_getsession('DB_anousu') . "
-				 LIMIT 1) AS codunidadesubresp
+				 LIMIT 1) AS codunidadesubresp,
+                 si06_codunidadesubant
 			FROM adesaoregprecos
 			JOIN acordo on ac16_adesaoregpreco = si06_sequencial
 			JOIN cgm orgaogerenciador ON si06_orgaogerenciador = orgaogerenciador.z01_numcgm
@@ -222,10 +210,12 @@ class SicomArquivoContratos extends SicomArquivoBase implements iPadArquivoBaseC
 			WHERE si06_instit= " . db_getsession('DB_instit') . "
 		  		AND ac16_sequencial = " . $sequencial . "
 	  ";
-
-        $sCodunidadesubresp = db_utils::fieldsMemory(db_query($sSql), 0)->codunidadesubresp;
-
-        return $sCodunidadesubresp;
+        $rsCodunidadeSubAdesao = db_utils::fieldsMemory(db_query($sSql), 0);
+        if ($rsCodunidadeSubAdesao->si06_codunidadesubant != "") {
+            return $rsCodunidadeSubAdesao->si06_codunidadesubant;
+        } else {
+            return $rsCodunidadeSubAdesao->codunidadesubresp;
+        }
     }
 
     /**
@@ -564,9 +554,9 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             $clcontratos10->si83_tiporegistro = 10;
             $clcontratos10->si83_codcontrato = $oDados10->ac16_sequencial;
             $clcontratos10->si83_codorgao = $sCodorgao;
-            if($oDados10->manutac_codunidsubanterior != '' && $oDados10->manutac_codunidsubanterior != null){
+            if ($oDados10->manutac_codunidsubanterior != '' && $oDados10->manutac_codunidsubanterior != null) {
                 $clcontratos10->si83_codunidadesub = $oDados10->manutac_codunidsubanterior;
-            }else{
+            } else {
                 $clcontratos10->si83_codunidadesub = $sCodUnidade;
             }
             $clcontratos10->si83_nrocontrato = $oDados10->ac16_numeroacordo;
@@ -740,13 +730,13 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
 
                 if ($clcontratos10->si83_naturezaobjeto != 4 || $clcontratos10->si83_naturezaobjeto != 5) {
 
-                        /**
-                         * Acordos de origem manual e processo de compras e NO HOUVER empenho
-                         */
-                        foreach ($oAcordo->getItensPosicaoInicial() as $oItens) {
-                            foreach ($oItens->getDotacoes() as $oDotacao) {
+                    /**
+                     * Acordos de origem manual e processo de compras e NO HOUVER empenho
+                     */
+                    foreach ($oAcordo->getItensPosicaoInicial() as $oItens) {
+                        foreach ($oItens->getDotacoes() as $oDotacao) {
 
-                                $sSqlDotacoes = "SELECT distinct on (o58_coddot)
+                            $sSqlDotacoes = "SELECT distinct on (o58_coddot)
                                          o58_coddot,
                                          CASE WHEN o40_codtri = '0'
                                          OR NULL THEN o40_orgao::varchar ELSE o40_codtri END AS o58_orgao,
@@ -774,64 +764,63 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                                         JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
                                         where o58_coddot = {$oDotacao->dotacao}";
 
-                                $rsDados = db_query($sSqlDotacoes);
+                            $rsDados = db_query($sSqlDotacoes);
 
-                                for ($iContDot = 0; $iContDot < pg_num_rows($rsDados); $iContDot++) {
-                                    $oDadosElemento = db_utils::fieldsMemory($rsDados, $iContDot);
+                            for ($iContDot = 0; $iContDot < pg_num_rows($rsDados); $iContDot++) {
+                                $oDadosElemento = db_utils::fieldsMemory($rsDados, $iContDot);
 
-                                    $sHash = $oAcordo->getCodigo() . $sCodorgao . str_pad($oDadosElemento->o58_orgao, 2, "0", STR_PAD_LEFT) . str_pad($oDadosElemento->o58_unidade, 3, "0", STR_PAD_LEFT);
-                                    $sHash .= $oDadosElemento->o58_funcao . $oDadosElemento->o58_subfuncao . $oDadosElemento->o58_programa . $oDadosElemento->o58_projativ;
-                                    $sHash .= $oDadosElemento->o56_elemento . $oDadosElemento->o15_codtri;
+                                $sHash = $oAcordo->getCodigo() . $sCodorgao . str_pad($oDadosElemento->o58_orgao, 2, "0", STR_PAD_LEFT) . str_pad($oDadosElemento->o58_unidade, 3, "0", STR_PAD_LEFT);
+                                $sHash .= $oDadosElemento->o58_funcao . $oDadosElemento->o58_subfuncao . $oDadosElemento->o58_programa . $oDadosElemento->o58_projativ;
+                                $sHash .= $oDadosElemento->o56_elemento . $oDadosElemento->o15_codtri;
 
-                                    if (!isset($aDadosAgrupados12[$sHash])) {
+                                if (!isset($aDadosAgrupados12[$sHash])) {
 
-                                        $sCodUnidade = str_pad($oDadosElemento->o58_orgao, 2, "0", STR_PAD_LEFT) . str_pad($oDadosElemento->o58_unidade, 3, "0", STR_PAD_LEFT);
-                                        if ($oDadosElemento->o41_subunidade != 0 || $oDadosElemento->o41_subunidade = null) {
-                                            $sCodUnidade .= str_pad($oDadosElemento->o41_subunidade, 3, "0", STR_PAD_LEFT);
-                                        }
-                                        $result = db_dotacaosaldo(
-                                            8,
-                                            2,
-                                            2,
-                                            true,
-                                            " o58_coddot = {$oDadosElemento->o58_coddot} and o58_anousu = {$oAcordo->getAno()}",
-                                            $oAcordo->getAno(),
-                                            $oAcordo->getDataAssinatura(),
-                                            $oAcordo->getDataAssinatura()
-                                        );
-                                        if (pg_num_rows($result) > 0) {
-                                            $oDot = db_utils::fieldsMemory($result, 0);
-                                            $oDadosElemento->o58_valor = ($oDot->dot_ini + $oDot->suplementado_acumulado - $oDot->reduzido_acumulado) - $oDot->empenhado_acumulado + $oDot->anulado_acumulado;
-                                        }
-
-                                        $oContrato12 = new stdClass();
-                                        $oContrato12->si85_tiporegistro = 12;
-                                        $oContrato12->si85_reg10 = $clcontratos10->si83_sequencial;
-                                        $oContrato12->si85_codcontrato = $oAcordo->getCodigo();
-                                        $oContrato12->si85_codorgao = $sCodorgao;
-                                        if($oDados10->manutac_codunidsubanterior != '' && $oDados10->manutac_codunidsubanterior != null){
-                                            $oContrato12->si85_codunidadesub = $oDados10->manutac_codunidsubanterior;
-                                        }else{
-                                            $oContrato12->si85_codunidadesub = $sCodUnidade;
-                                        }
-                                        $oContrato12->si85_codfuncao = $oDadosElemento->o58_funcao;
-                                        $oContrato12->si85_codsubfuncao = $oDadosElemento->o58_subfuncao;
-                                        $oContrato12->si85_codprograma = $oDadosElemento->o58_programa;
-                                        $oContrato12->si85_idacao = $oDadosElemento->o58_projativ;
-                                        $oContrato12->si85_idsubacao = $oDadosElemento->o55_origemacao;
-                                        $oContrato12->si85_naturezadespesa = $oDadosElemento->o56_elemento;
-                                        $oContrato12->si85_codfontrecursos = $oDadosElemento->o15_codtri;
-                                        $oContrato12->si85_vlrecurso = $oDadosElemento->o58_valor;
-                                        $oContrato12->si85_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-                                        $oContrato12->si85_instit = db_getsession("DB_instit");
-                                        $aDadosAgrupados12[$sHash] = $oContrato12;
-                                    } else {
-                                        $aDadosAgrupados12[$sHash]->si85_vlrecurso += $oDadosElemento->o58_valor;
+                                    $sCodUnidade = str_pad($oDadosElemento->o58_orgao, 2, "0", STR_PAD_LEFT) . str_pad($oDadosElemento->o58_unidade, 3, "0", STR_PAD_LEFT);
+                                    if ($oDadosElemento->o41_subunidade != 0 || $oDadosElemento->o41_subunidade = null) {
+                                        $sCodUnidade .= str_pad($oDadosElemento->o41_subunidade, 3, "0", STR_PAD_LEFT);
                                     }
+                                    $result = db_dotacaosaldo(
+                                        8,
+                                        2,
+                                        2,
+                                        true,
+                                        " o58_coddot = {$oDadosElemento->o58_coddot} and o58_anousu = {$oAcordo->getAno()}",
+                                        $oAcordo->getAno(),
+                                        $oAcordo->getDataAssinatura(),
+                                        $oAcordo->getDataAssinatura()
+                                    );
+                                    if (pg_num_rows($result) > 0) {
+                                        $oDot = db_utils::fieldsMemory($result, 0);
+                                        $oDadosElemento->o58_valor = ($oDot->dot_ini + $oDot->suplementado_acumulado - $oDot->reduzido_acumulado) - $oDot->empenhado_acumulado + $oDot->anulado_acumulado;
+                                    }
+
+                                    $oContrato12 = new stdClass();
+                                    $oContrato12->si85_tiporegistro = 12;
+                                    $oContrato12->si85_reg10 = $clcontratos10->si83_sequencial;
+                                    $oContrato12->si85_codcontrato = $oAcordo->getCodigo();
+                                    $oContrato12->si85_codorgao = $sCodorgao;
+                                    if ($oDados10->manutac_codunidsubanterior != '' && $oDados10->manutac_codunidsubanterior != null) {
+                                        $oContrato12->si85_codunidadesub = $oDados10->manutac_codunidsubanterior;
+                                    } else {
+                                        $oContrato12->si85_codunidadesub = $sCodUnidade;
+                                    }
+                                    $oContrato12->si85_codfuncao = $oDadosElemento->o58_funcao;
+                                    $oContrato12->si85_codsubfuncao = $oDadosElemento->o58_subfuncao;
+                                    $oContrato12->si85_codprograma = $oDadosElemento->o58_programa;
+                                    $oContrato12->si85_idacao = $oDadosElemento->o58_projativ;
+                                    $oContrato12->si85_idsubacao = $oDadosElemento->o55_origemacao;
+                                    $oContrato12->si85_naturezadespesa = $oDadosElemento->o56_elemento;
+                                    $oContrato12->si85_codfontrecursos = $oDadosElemento->o15_codtri;
+                                    $oContrato12->si85_vlrecurso = $oDadosElemento->o58_valor;
+                                    $oContrato12->si85_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+                                    $oContrato12->si85_instit = db_getsession("DB_instit");
+                                    $aDadosAgrupados12[$sHash] = $oContrato12;
+                                } else {
+                                    $aDadosAgrupados12[$sHash]->si85_vlrecurso += $oDadosElemento->o58_valor;
                                 }
                             }
                         }
-                    
+                    }
                 }
 
                 foreach ($aDadosAgrupados12 as $oDadosReg12) {
@@ -893,7 +882,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                 throw new Exception($clcontratos13->erro_msg);
             }
         }
-        
+
 
         /*
          * Registro 20
@@ -1991,12 +1980,12 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
 
             $clcontratos40->si91_tiporegistro               = 40;
             $clcontratos40->si91_codorgao                   = $sCodorgao;
-            if($oDados40->manutac_codunidsubanterior != '' && $oDados40->manutac_codunidsubanterior != null){
+            if ($oDados40->manutac_codunidsubanterior != '' && $oDados40->manutac_codunidsubanterior != null) {
                 $clcontratos40->si91_codunidadesub  = $oDados40->manutac_codunidsubanterior;
-            }else{
+            } else {
                 $clcontratos40->si91_codunidadesub              = $sCodUnidadeSub;
             }
-            
+
             $clcontratos40->si91_nrocontrato                = $oDados40->ac16_numeroacordo;
             $clcontratos40->si91_dtassinaturacontoriginal   = $oDados40->ac16_dataassinatura;
             $clcontratos40->si91_datarescisao               = $oDados40->ac16_datarescisao;
