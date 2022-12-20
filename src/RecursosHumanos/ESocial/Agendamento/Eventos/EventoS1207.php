@@ -276,7 +276,7 @@ where
         if ($ponto == 3)
             $opcao = 'complementar';
         if ($ponto == 4)
-            $opcao = null;
+            $opcao = '13salario';
 
         switch ($opcao) {
             case 'salario':
@@ -416,10 +416,15 @@ where
     {
         $iAnoUsu = date("Y", db_getsession("DB_datausu"));
         $iMesusu = date("m", db_getsession("DB_datausu"));
-        if ($rh30_regime == 1 || $rh30_regime == 3)
-            $aPontos = array('salario', 'complementar', 'rescisao');
-        else
-            $aPontos = array('salario', 'complementar');
+        if ($rh30_regime == 1 || $rh30_regime == 3) {
+            $aPontos = array('13salario');
+            if ($this->indapuracao != 2)
+                $aPontos = array('salario', 'complementar', 'rescisao');
+        } else {
+            $aPontos = array('13salario');
+            if ($this->indapuracao != 2)
+                $aPontos = array('salario', 'complementar');
+        }
 
         foreach ($aPontos as $opcao) {
             switch ($opcao) {

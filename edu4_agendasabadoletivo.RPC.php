@@ -118,6 +118,7 @@ switch ($oParam->exec) {
       db_inicio_transacao();
 
       foreach($oParam->aPeriodos as $oPerido){
+
         $clregenciahorario = new cl_regenciahorario;
         $clregenciahorario->ed58_i_regencia  = $oParam->iRegencia;
         $clregenciahorario->ed58_i_diasemana = 7; //sempre sabado
@@ -125,6 +126,7 @@ switch ($oParam->exec) {
         $clregenciahorario->ed58_i_rechumano = $oParam->iRecHumano;
         $clregenciahorario->ed58_ativo       = "true";
         $clregenciahorario->ed58_tipovinculo = 2;
+        $clregenciahorario->ed58_d_data      = $oParam->dData;
         $clregenciahorario->incluir(null);
         $clregenciahorario->erro_msg;
 

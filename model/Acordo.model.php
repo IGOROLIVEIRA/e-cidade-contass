@@ -2439,7 +2439,7 @@ class Acordo
         }
         return true;
     }
-    
+
     public function anularAutorizacao2($iAutorizacao, $aItensEmpempItem = array())
     {
 
@@ -2477,7 +2477,7 @@ class Acordo
         $sql3 = "select pc01_liberarsaldoposicao from parametroscontratos";
         $rsparamcontrato = db_query($sql3);
         $oDadosparamcontrato = db_utils::fieldsMemory($rsparamcontrato, 0);
-        
+
 
 
 
@@ -2532,17 +2532,17 @@ class Acordo
                     {$oDadosacordoitemd->codigoposicao}
                     AND ac20_pcmater = {$oItem->ac20_pcmater} ");
 
-                    $oDadosItemUltimaPosicao = db_utils::fieldsMemory($ItemUltimaPosicao, 0);
+                $oDadosItemUltimaPosicao = db_utils::fieldsMemory($ItemUltimaPosicao, 0);
 
-                    $ItemAtualPosicao = db_query("
+                $ItemAtualPosicao = db_query("
                     SELECT ac20_sequencial,ac20_quantidade,ac20_valortotal,ac20_valorunitario,ac20_acordoposicao,ac20_servicoquantidade
                     FROM acordoitem
                     JOIN acordoposicao ON ac20_acordoposicao = ac26_sequencial
                     WHERE ac26_acordo = {$this->getCodigoAcordo()}
                     AND ac26_sequencial ={$oDadosacordoitem->ac20_acordoposicao}
                     AND ac20_pcmater = {$oItem->ac20_pcmater} ");
-                    
-                    $oDadosItemAtualPosicao = db_utils::fieldsMemory($ItemAtualPosicao, 0);
+
+                $oDadosItemAtualPosicao = db_utils::fieldsMemory($ItemAtualPosicao, 0);
                 //VERIFICA O PARAMETRO DO SALDO POR POSICAO E SE A POSICAO DO EMPENHO E DIFERENTE DA ULTIMA POSICAO DO ACORDO
                 if ($oDadosparamcontrato->pc01_liberarsaldoposicao == 'f' && pg_num_rows($rsparamcontrato) > 0) {
                     if ($oDadosItemAtualPosicao->ac20_acordoposicao != $oDadosItemUltimaPosicao->ac20_acordoposicao) {
@@ -2553,7 +2553,7 @@ class Acordo
                         $oDaoAcordoItemExecutadonovo->ac29_quantidade  = $oItem->quantidade * -1;
                         if ($oDadosItemUltimaPosicao->ac20_servicoquantidade == 'f' && $oDadosItemUltimaPosicao->pc01_servico == 't') {
                             $oDaoAcordoItemExecutadonovo->ac29_valor       = $oItem->valor * -1;
-                        }else{
+                        } else {
                             $oDaoAcordoItemExecutadonovo->ac29_valor       = ($oItem->quantidade * $oDadosItemUltimaPosicao->ac20_valorunitario) * -1;
                         }
                         $oDaoAcordoItemExecutadonovo->ac29_tipo        = 1;
@@ -2584,7 +2584,7 @@ class Acordo
                 if ($oDaoAcordoItemExecutadoAut->erro_status == 0) {
                     throw new Exception("Erro ao salvar movimentação do acordo!\nErro:{$oDaoExecucaoDotacao->erro_msg}");
                 }
-                
+
                 //$oItemContrato = $this->getUltimaPosicao()->getItemByCodigo($oItem->codigo);
                 $aDotacoes    = array();
                 $oDotacaoItem = null;
@@ -2767,7 +2767,7 @@ class Acordo
             for ($iAdesao = 0; $iAdesao < $oDaoAcordo->numrows; $iAdesao++) {
 
                 $iCodigoAdesao    = db_utils::fieldsMemory($rsAdesaovinculada, $iAdesao)->si06_sequencial;
-                $rsAdesao = $oDaoAdesaoregpreco->sql_record($oDaoAdesaoregpreco->sql_query($iCodigoAdesao, "si06_sequencial,si06_objetoadesao,si06_dataadesao,coddepto||'-'||descrdepto as departamento"));
+                $rsAdesao = $oDaoAdesaoregpreco->sql_record($oDaoAdesaoregpreco->sql_query($iCodigoAdesao, "distinct si06_sequencial,si06_objetoadesao,si06_dataadesao,coddepto||'-'||descrdepto as departamento"));
 
                 for ($i = 0; $i < $oDaoAdesaoregpreco->numrows; $i++) {
 
@@ -3200,7 +3200,7 @@ class Acordo
 
         $oNovaPosicao = new AcordoPosicao(null);
         $oNovaPosicao->setData(date("Y-m-d", db_getsession("DB_datausu")));
-        if($datareferencia)
+        if ($datareferencia)
             $oNovaPosicao->setData($datareferencia);
         $oNovaPosicao->setAcordo($this->getCodigoAcordo());
         $oNovaPosicao->setEmergencial(false);

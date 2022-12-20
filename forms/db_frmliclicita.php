@@ -2230,13 +2230,17 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
     function js_confirmadatas() {
 
         var l12_pncp = <? echo '"' . $l12_pncp . '"';      ?>;
+        var db_opcao = <? echo '"' . $db_opcao . '"';      ?>;
+        console.log(db_opcao);
 
-        if (document.getElementById('l20_leidalicitacao').value == "1" && document.getElementById('l20_codtipocomdescr').value == "9" && l12_pncp == "t" && document.getElementById('l20_dataaberproposta').value == "") {
+
+
+        if (document.getElementById('l20_dataaberproposta').style.display == "" && document.getElementById('l20_dataaberproposta').value == "" && db_opcao != 3) {
             alert("Campo Data de Abertura da Proposta não Informado");
             return false;
         }
 
-        if (document.getElementById('l20_dataencproposta').style.display == "" && document.getElementById('l20_dataencproposta').value == "") {
+        if (document.getElementById('l20_dataencproposta').style.display == "" && document.getElementById('l20_dataencproposta').value == "" && db_opcao != 3) {
             alert("Campo Data de Encerramento da Proposta não Informado");
             return false;
         }

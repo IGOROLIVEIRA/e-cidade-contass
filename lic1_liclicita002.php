@@ -738,7 +738,7 @@ if (isset($alterar)) {
             $dbquery = "l31_tipo = '1' and l31_licitacao = $l20_codigo";
             $clliccomissaocgm->excluir(null, $dbquery);
         }
-        if ($respEditalcodigo != "") {
+        if ($respEditalcodigo != "" && $l20_dtpubratificacao != "") {
             //excluir o reponsavel
             $dbquery = "l31_tipo = '2' and l31_licitacao = $l20_codigo";
             $clliccomissaocgm->excluir(null, $dbquery);
