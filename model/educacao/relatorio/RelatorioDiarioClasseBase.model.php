@@ -532,6 +532,22 @@ class RelatorioDiarioClasseBase extends PDF
     return $oDadosBasicos;
   }
 
+  private function getFeriadoLetivoDiarioClasse($oData){
+    $bFeriadoLetivo = false;
+    $clFeriado = new cl_feriado;
+    $sql = $clFeriado->sql_query_file(" feriado.* ","*", null, " ed54_i_calendario = ".$this->oTurma->getCalendario()->getCodigo());
+    $rsFeriados = $clFeriado->sql_record($sql);
+
+    $aFeriados = db_utils::getCollectionByRecord($rsFeriados, false, false, true);
+    foreach( $aFeriados as $oFeriado){
+      if($oData->getTimeStamp() == strtotime($oFeriado->ed54_d_data) && $oFeriado->ed54_c_dialetivo == 'N' ){
+        $bFeriadoLetivo = true;
+        continue;
+      }
+    }
+    return $bFeriadoLetivo;
+  }
+
   /**
    * Calcula a estrutura do SubCabçalho quando informado para controlar por frequência
    * @param          $oDadosEstrutura
@@ -543,6 +559,7 @@ class RelatorioDiarioClasseBase extends PDF
 
     $oPeriodoAvaliacao = $this->oAvaliacaoPeriodica->getPeriodoAvaliacao();
     $oGradeHorario     = new GradeHorario($this->oTurma, $this->oEtapa);
+
     $aDatasLetiva      = $oGradeHorario->getDiasDeAulaDaDisciplinaNoPeriodoDeAvaliacao($oRegencia->getDisciplina(), $oPeriodoAvaliacao);
 
     $aDiasOrganizados = array();
@@ -550,14 +567,15 @@ class RelatorioDiarioClasseBase extends PDF
     foreach ($aDatasLetiva as $oDataLetiva) {
       // Para cada periodo temos que repetir o dia letivo
       foreach ($oDataLetiva->aPeriodoAula as $oPeriodoAula) {
-
+        if($this->getFeriadoLetivoDiarioClasse($oDataLetiva->oData)){
+            continue;
+        }
         $oDataPeriodo           = new stdClass();
         $oDataPeriodo->oData    = $oDataLetiva->oData;
         $oDataPeriodo->iPeriodo = $oPeriodoAula->getPeriodoEscola()->getCodigo();
         $aDiasOrganizados[]     = $oDataPeriodo;
       }
     }
-
     /**
      * Se disciplina não tem Grade de horário configurada, retorna null;
      */
@@ -896,7 +914,7 @@ class RelatorioDiarioClasseBase extends PDF
   {
 
     if ($this->lExibirFaltas) {
-      
+
       $this->Cell($this->iLarguraColunaPadrao, 4, $sTitulo, 1, 0, "C");
     }
   }
@@ -1030,7 +1048,7 @@ class RelatorioDiarioClasseBase extends PDF
         } else {
           $this->imprimeSituacaoAluno($oDadosAluno->oMatricula->getSituacao(), $oEstrutura->iTamanhoGrade);
         }
-        
+
         $oAvaliacaoDisciplina = $this->getDiarioAvaliacaoDisciplinaAluno($oDadosAluno->oMatricula);
         $iFaltasPeriodo         = $oAvaliacaoDisciplina->getTotalFaltasPorPeriodo($this->oAvaliacaoPeriodica->getPeriodoAvaliacao());
 
@@ -1055,7 +1073,7 @@ class RelatorioDiarioClasseBase extends PDF
           $this->escreverColunaNumeroAluno();
           $this->escreverColunasAvaliacao(false);
           $this->escreverColunasDisciplinasGlobalizada(false);
-          $this->escreverColunaFalta($iFaltasPeriodo);
+          $this->escreverColunaFalta("");
 
           $this->ln();
         }
