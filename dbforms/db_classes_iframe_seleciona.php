@@ -246,7 +246,7 @@ if (file_exists(base64_decode($arquivo))) {
                                             for ($s = 0; $s < $numrows03; $s++) {
                                                 for ($w = 0; $w < sizeof($matriz02); $w++) {
                                                     $campo = pg_result($result03, $s, $matriz02[$w]);
-                                                    if ($campo == ${$matriz02}[$w]) {
+                                                    if ($campo == ${$matriz02[$w]}) {
                                                         $pode = " disabled   ";
                                                         $cr = " style=\"background-color:#DEB887\"";
                                                         $s = $numrows03;
