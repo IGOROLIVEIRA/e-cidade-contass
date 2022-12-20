@@ -213,15 +213,15 @@ if (isset($alterar)) {
         }
     }
     $oParamLicicita = db_stdClass::getParametro('licitaparam', array(db_getsession("DB_instit")));
-	$l12_pncp = $oParamLicicita[0]->l12_pncp;
-	
-	if ($l20_leidalicitacao == 1 && $l12_pncp == 't') {
-		if($oPost->l212_codigo == 0){
-			$erro_msg .= 'Campo Amparo Legal não informado\n\n';
-			$sqlerro = true;
+    $l12_pncp = $oParamLicicita[0]->l12_pncp;
+
+    if ($l20_leidalicitacao == 1 && $l12_pncp == 't') {
+        if ($oPost->l212_codigo == 0) {
+            $erro_msg .= 'Campo Amparo Legal não informado\n\n';
+            $sqlerro = true;
             $mostrar = 1;
-		}
-	}
+        }
+    }
 
     /*
       Verifica se o Campo "Natureza do Objeto" no foi selecionado.
@@ -434,7 +434,7 @@ if (isset($alterar)) {
             $sqlerro = true;
         }
     }
-    
+
     if ($sqlerro == false) {
         $clliclicita->l20_amparolegal       = $oPost->l212_codigo;
         $clliclicita->l20_numero       = $iNumero;
@@ -452,7 +452,7 @@ if (isset($alterar)) {
         }
     }
 
-   
+
     /**
      * Acoes na troca de tipo de julgamento
      *
@@ -736,7 +736,7 @@ if (isset($alterar)) {
             $dbquery = "l31_tipo = '1' and l31_licitacao = $l20_codigo";
             $clliccomissaocgm->excluir(null, $dbquery);
         }
-        if ($respEditalcodigo != "") {
+        if ($respEditalcodigo != "" && $l20_dtpubratificacao != "") {
             //excluir o reponsavel
             $dbquery = "l31_tipo = '2' and l31_licitacao = $l20_codigo";
             $clliccomissaocgm->excluir(null, $dbquery);
