@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: escola
@@ -49,6 +49,10 @@ class cl_regenciahorario {
    var $ed58_i_rechumano = 0;
    var $ed58_ativo = 'f';
    var $ed58_tipovinculo = 0;
+   var $ed58_d_data_dia = null;
+   var $ed58_d_data_mes = null;
+   var $ed58_d_data_ano = null;
+   var $ed58_d_data = null;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  ed58_i_codigo = int8 = Código
@@ -58,6 +62,7 @@ class cl_regenciahorario {
                  ed58_i_rechumano = int8 = Regente
                  ed58_ativo = bool = Ativo
                  ed58_tipovinculo = int4 = Forma de Vínculo
+                 ed58_d_data = date = Data
                  ";
    //funcao construtor da classe
    function cl_regenciahorario() {
@@ -84,6 +89,14 @@ class cl_regenciahorario {
        $this->ed58_i_rechumano = ($this->ed58_i_rechumano == ""?@$GLOBALS["HTTP_POST_VARS"]["ed58_i_rechumano"]:$this->ed58_i_rechumano);
        $this->ed58_ativo = ($this->ed58_ativo == "f"?@$GLOBALS["HTTP_POST_VARS"]["ed58_ativo"]:$this->ed58_ativo);
        $this->ed58_tipovinculo = ($this->ed58_tipovinculo == ""?@$GLOBALS["HTTP_POST_VARS"]["ed58_tipovinculo"]:$this->ed58_tipovinculo);
+       if($this->ed58_d_data == ""){
+        $this->ed58_d_data_dia = ($this->ed58_d_data_dia == ""?@$GLOBALS["HTTP_POST_VARS"]["ed58_d_data_dia"]:$this->ed58_d_data_dia);
+        $this->ed58_d_data_mes = ($this->ed58_d_data_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["ed58_d_data_mes"]:$this->ed58_d_data_mes);
+        $this->ed58_d_data_ano = ($this->ed58_d_data_ano == ""?@$GLOBALS["HTTP_POST_VARS"]["ed58_d_data_ano"]:$this->ed58_d_data_ano);
+        if($this->ed58_d_data_dia != ""){
+           $this->ed58_d_data = $this->ed58_d_data_ano."-".$this->ed58_d_data_mes."-".$this->ed58_d_data_dia;
+        }
+      }
      }else{
        $this->ed58_i_codigo = ($this->ed58_i_codigo == ""?@$GLOBALS["HTTP_POST_VARS"]["ed58_i_codigo"]:$this->ed58_i_codigo);
      }
@@ -185,6 +198,7 @@ class cl_regenciahorario {
                                       ,ed58_i_rechumano
                                       ,ed58_ativo
                                       ,ed58_tipovinculo
+                                      ,ed58_d_data
                        )
                 values (
                                 $this->ed58_i_codigo
@@ -194,6 +208,7 @@ class cl_regenciahorario {
                                ,$this->ed58_i_rechumano
                                ,'$this->ed58_ativo'
                                ,$this->ed58_tipovinculo
+                               ,".($this->ed58_d_data == "null" || $this->ed58_d_data == ""?"null":"'".$this->ed58_d_data."'")."
                       )";
      $result = db_query($sql);
      if($result==false){
@@ -1303,20 +1318,20 @@ class cl_regenciahorario {
     }
 
     $sSql .= " from regenciahorario ";
-    $sSql .= "      inner join regencia          on ed58_i_regencia      = ed59_i_codigo ";
-    $sSql .= "      inner join serie             on ed59_i_serie         = ed11_i_codigo";
-    $sSql .= "      inner join turma             on ed59_i_turma         = ed57_i_codigo ";
-    $sSql .= "      inner join calendario        on ed57_i_calendario    = ed52_i_codigo ";
-    $sSql .= "      inner join periodocalendario on ed53_i_calendario    = ed52_i_codigo ";
-    $sSql .= "      inner join disciplina        on ed59_i_disciplina    = ed12_i_codigo ";
-    $sSql .= "      inner join caddisciplina     on ed12_i_caddisciplina = ed232_i_codigo ";
-    $sSql .= "      inner join rechumano         on ed58_i_rechumano     = ed20_i_codigo ";
-    $sSql .= "      inner join periodoescola     on ed58_i_periodo       = ed17_i_codigo";
-    $sSql .= "      inner join periodoaula       on ed17_i_periodoaula   = ed08_i_codigo";
+    $sSql .= "      inner join regencia          on ed58_i_regencia      = ed59_i_codigo    ";
+    $sSql .= "      inner join serie             on ed59_i_serie         = ed11_i_codigo    ";
+    $sSql .= "      inner join turma             on ed59_i_turma         = ed57_i_codigo    ";
+    $sSql .= "      inner join calendario        on ed57_i_calendario    = ed52_i_codigo    ";
+    $sSql .= "      inner join periodocalendario on ed53_i_calendario    = ed52_i_codigo    ";
+    $sSql .= "      inner join disciplina        on ed59_i_disciplina    = ed12_i_codigo    ";
+    $sSql .= "      inner join caddisciplina     on ed12_i_caddisciplina = ed232_i_codigo   ";
+    $sSql .= "      inner join rechumano         on ed58_i_rechumano     = ed20_i_codigo    ";
+    $sSql .= "      inner join periodoescola     on ed58_i_periodo       = ed17_i_codigo    ";
+    $sSql .= "      inner join periodoaula       on ed17_i_periodoaula   = ed08_i_codigo    ";
     $sSql .= "      left join rechumanocgm       on ed285_i_rechumano    = ed58_i_rechumano ";
-    $sSql .= "      left join cgm                on ed285_i_cgm          = cgm.z01_numcgm ";
+    $sSql .= "      left join cgm                on ed285_i_cgm          = cgm.z01_numcgm   ";
     $sSql .= "      left join rechumanopessoal   on ed284_i_rechumano    = ed58_i_rechumano ";
-    $sSql .= "      left join rhpessoal          on ed284_i_rhpessoal    = rh01_regist ";
+    $sSql .= "      left join rhpessoal          on ed284_i_rhpessoal    = rh01_regist      ";
     $sSql .= "      left join cgm cgmpessoal     on rh01_numcgm          = cgmpessoal.z01_numcgm ";
     if ($sDbWhere == '') {
 
@@ -1342,21 +1357,21 @@ class cl_regenciahorario {
     }
     return $sSql;
   }
-  
+
   function sql_query_quadro_horario($iCodigo = null, $sCampos = '*', $sOrdem = null, $sDbWhere = '') {
-  
+
     $sSql = 'select ';
     if ($sCampos != '*') {
-  
+
       $sCamposSql = split('#', $sCampos);
       $sVirgula   = '';
       for ($iCont = 0; $iCont < sizeof($sCamposSql); $iCont++){
-  
+
         $sSql .= $sVirgula.$sCamposSql[$iCont];
         $virgula = ",";
-  
+
       }
-  
+
     } else {
       $sSql .= $sCampos;
     }
@@ -1391,26 +1406,26 @@ class cl_regenciahorario {
     $sSql .= '     on reccgm.rechumano = rechumano.ed20_i_codigo ';
     $sSql2 = '';
     if ($sDbWhere == '') {
-  
+
       if ($iCodigo != null ){
         $sSql2 .= " where regenciahorario.ed58_i_codigo = $iCodigo ";
       }
-  
+
     } elseif ($sDbWhere != '') {
       $sSql2 = " where $sDbWhere";
     }
     $sSql .= $sSql2;
-  
+
     if ($sOrdem != null) {
-  
+
       $sSql      .= ' order by ';
       $sCamposSql = split('#', $sOrdem);
       $sVirgula   = '';
       for ($iCont = 0; $iCont < sizeof($sCamposSql); $iCont++) {
-  
+
         $sSql    .= $sVirgula.$sCamposSql[$iCont];
         $sVirgula = ',';
-  
+
       }
     }
     return $sSql;

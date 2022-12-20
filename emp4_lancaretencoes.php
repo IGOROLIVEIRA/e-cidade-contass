@@ -417,6 +417,15 @@ function js_setValorBase() {
   $('e23_valorbase').value = nValorBase;
 }
 
+function ParseFloat(str,val) {
+      if(str % 1 != 0 && !isNaN(str % 1)){
+        str = str.toString();
+        str = str.slice(0, (str.indexOf(".")) + val + 1);
+        return Number(str);   
+      }
+      return Number(str); 
+    }
+
 function js_addRetencao() {
 
   /* Algumas regras:
@@ -533,15 +542,6 @@ function js_retornoaddRetencao(oAjax) {
            aBaseDeCalculo[e21_sequencial] = aMov;
          }
       }
-    }
-
-    function ParseFloat(str,val) {
-      if(str % 1 != 0 && !isNaN(str % 1)){
-        str = str.toString();
-        str = str.slice(0, (str.indexOf(".")) + val + 1);
-        return Number(str);   
-      }
-      return Number(str); 
     }
 
     gridRetencoes.renderRows();
@@ -849,6 +849,8 @@ function js_retornoCalculo(oAjax) {
   if (oRetorno.status == 1) {
 
     $('e23_valorretencao').value = new Number(oRetorno.nValorRetencao).toFixed(2);
+    if(oRetorno.nAliquota > 0)
+       $('e23_valorretencao').value = ParseFloat(oRetorno.nValorRetencao,2);
     $('e21_aliquota').value      = oRetorno.nAliquota;
     $('e23_valorbase').value     = oRetorno.nValorBase;
 

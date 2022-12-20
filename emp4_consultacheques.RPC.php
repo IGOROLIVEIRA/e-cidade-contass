@@ -55,7 +55,7 @@ if(isset($oParam->exec) && $oParam->exec == 'getCheques'){
 			$sWhere .= " and e91_cheque = '$oParam->e86_cheque' ";
 			$sWhere2 .= " and e93_cheque = '$oParam->e86_cheque' ";
 		}else{
-			$sWhere .= " e91_cheque = '$oParam->e86_cheque'' ";
+			$sWhere .= " e91_cheque = '$oParam->e86_cheque' ";
 			$sWhere2 .= " e93_cheque = '$oParam->e86_cheque' ";
 		}
 		
@@ -181,10 +181,10 @@ if(isset($oParam->exec) && $oParam->exec == 'getCheques'){
 		
 		if($sWhere != ""){
 			$sWhere  .= " and e86_data between '$oParam->dtini' and '$oParam->dtfim' ";
-			$sWhere2 .= " and e86_data between '$oParam->dtini' and '$oParam->dtfim' ";
+			$sWhere2 .= " and e88_data between '$oParam->dtini' and '$oParam->dtfim' ";
 		}else{
 			$sWhere  .= " e86_data between '$oParam->dtini' and '$oParam->dtfim' ";
-			$sWhere2 .= " e86_data between '$oParam->dtini' and '$oParam->dtfim' ";
+			$sWhere2 .= " e88_data between '$oParam->dtini' and '$oParam->dtfim' ";
 		}
 		
 	}else if(isset($oParam->dtini) && trim($oParam->dtini) != "" ) {
@@ -236,11 +236,23 @@ if(isset($oParam->exec) && $oParam->exec == 'getCheques'){
 	if (isset($oParam->o15_codigo) && trim($oParam->o15_codigo) != "" ) {
 	
 		if($sWhere != ""){
-			$sWhere .= " and e85_codtipo = $oParam->o15_codigo ";
-			$sWhere2 .= " and e85_codtipo = $oParam->o15_codigo ";
+			$sWhere .= " and (case
+							when cpreduzslip.c61_reduz is null then o58_codigo = $oParam->o15_codigo
+							else cpreduzslip.c61_codigo = $oParam->o15_codigo
+							end)  ";
+			$sWhere2 .= "and  (case
+							when cpreduzslip.c61_reduz is null then o58_codigo = $oParam->o15_codigo
+							else cpreduzslip.c61_codigo = $oParam->o15_codigo
+							end)  ";
 		}else{
-			$sWhere .= " e85_codtipo = $oParam->o15_codigo ";
-			$sWhere2 .= " e85_codtipo = $oParam->o15_codigo ";
+			$sWhere .= " (case
+							when cpreduzslip.c61_reduz is null then o58_codigo = $oParam->o15_codigo
+							else cpreduzslip.c61_codigo = $oParam->o15_codigo
+							end)  ";
+			$sWhere2 .= " (case
+							when cpreduzslip.c61_reduz is null then o58_codigo = $oParam->o15_codigo
+							else cpreduzslip.c61_codigo = $oParam->o15_codigo
+							end)  ";
 		}
 
 	}
@@ -250,6 +262,24 @@ if($sWhere != ""){
 	$sWhere = " where ".$sWhere;
 	$sWhere2 = " where ".$sWhere2;
 }
+
+function chequesAnulados($chanulados,$sWhere){
+	if($chanulados == 1 && $sWhere != ""){
+		return $sWherechequesAnulados = " and e91_ativo is false ";
+	}
+	if($chanulados == 1 && $sWhere == ""){
+		return $sWherechequesAnulados = " where e91_ativo is false ";
+	}
+	if($chanulados == 2 && $sWhere != ""){
+		return $sWherechequesAnulados = " and e91_ativo is true ";
+	}
+	if($chanulados == 2 && $sWhere == ""){
+		return $sWherechequesAnulados = " where e91_ativo is true ";
+	}
+	return;
+}
+
+$sWherechequesAnulados = chequesAnulados($oParam->chanulados,$sWhere);
 
 switch ($oParam->exec){
 	case 'getCheques':
@@ -293,6 +323,7 @@ switch ($oParam->exec){
     $sql .= "  inner join conplanoconta on contareduz.c61_codcon = c63_codcon ";
  		$sql .= "                          and contareduz.c61_anousu = c63_anousu ";
  		$sql .= " ".$sWhere." ";
+		$sql .= " ". $sWherechequesAnulados." ";
  		//$sql .= "  order by e86_data, e91_cheque, e81_numemp "; 
  		
  		$sql .= " union ";
@@ -313,9 +344,11 @@ switch ($oParam->exec){
     $sql .= "  e83_descr,	";
     $sql .= "  contareduz.c61_reduz,	";
     $sql .= "  c63_agencia,	";
-    $sql .= "  'Sim' as anulado	";
- 		$sql .= "  from empageconfchecanc	"; 
+    $sql .= "  case	when e91_ativo is true then 'Não'
+				else 'Sim' end as anulado	";
+ 	$sql .= "  from empageconfchecanc	"; 
     $sql .= "  inner join  empageconfcanc on e88_codmov  = e93_codmov	"; 
+	$sql .= "  inner join	empageconfche on e91_codmov = e93_codmov   ";
     $sql .= "  left  join empord       on e82_codmov  = e88_codmov 	";
     $sql .= "  left  join empageslip   on e88_codmov  = e89_codmov 	";
     $sql .= "  inner join empagemov    on e88_codmov  = e81_codmov 	";
@@ -337,11 +370,12 @@ switch ($oParam->exec){
     $sql .= "  inner join conplanoconta on contareduz.c61_codcon = c63_codcon ";
  		$sql .= "                          and contareduz.c61_anousu = c63_anousu ";
  		$sql .= " ".$sWhere2." ";
+		 $sql .= " ". $sWherechequesAnulados." ";
  		$sql .= "  order by e86_data, e91_cheque, empenho "; 
  		
  		//$sql .= "  limit 5 "; 
 		
- 		//echo "\n\n".$sql."\n\n";
+ 		// echo "\n\n".$sql."\n\n";exit;
  		
 		$rsSql = db_query($sql);
  		if(pg_num_rows($rsSql) > 0){
