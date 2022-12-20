@@ -1073,7 +1073,7 @@ class RelatorioDiarioClasseBase extends PDF
           $this->escreverColunaNumeroAluno();
           $this->escreverColunasAvaliacao(false);
           $this->escreverColunasDisciplinasGlobalizada(false);
-          $this->escreverColunaFalta($iFaltasPeriodo);
+          $this->escreverColunaFalta("");
 
           $this->ln();
         }
