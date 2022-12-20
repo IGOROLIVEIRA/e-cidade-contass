@@ -191,6 +191,36 @@ switch ($objJson->method) {
       }
     }
 
+    // Condição de validação dos empenhos
+    // Verificar data do sistema
+    $dtServidor = date('d-m-Y', DB_getsession('DB_datausu'));
+
+    // Verificar data da última liquidação
+    $sSqlLiquidados = 'SELECT e50_data as dtultimaliquidacao FROM pagordem WHERE e50_numemp = ' . $objJson->iEmpenho . ' ORDER BY e50_data LIMIT 1';
+    $rsLiquidados = pg_query($sSqlLiquidados);
+    if (@pg_num_rows($rsLiquidados) > 0)
+        db_fieldsmemory($rsLiquidados, 0);
+
+    // Verificar parametro do sistema
+    $clcaiparametro = new cl_caiparametro;
+    $rsCaiParametro = $clcaiparametro->sql_record(
+        $clcaiparametro->sql_query(
+            db_getsession('DB_instit'), 
+            'k29_liquidacaodataanterior',
+            null,
+            '')
+        );
+
+    if (@pg_num_rows($rsCaiParametro) > 0)
+        db_fieldsmemory($rsCaiParametro, 0);
+
+    $bPermitidoLiquidacao = true;
+    if ($k29_liquidacaodataanterior == 'f') {
+        if (date("Y-m-d", strtotime($dtServidor)) < $dtultimaliquidacao) {
+            $bPermitidoLiquidacao = false;
+        }   
+    }
+
     $oDaoEmpNota      = db_utils::getDao('empnota');
     $sWhereBuscaNotas = " e69_numemp = {$objJson->iEmpenho} ";
     $sSqlBuscaNotas   = $oDaoEmpNota->sql_query_elemento_patrimonio(null, "empnota.* ", null, $sWhereBuscaNotas);
@@ -236,6 +266,7 @@ switch ($objJson->method) {
       $oEmpenho->LiberadoLic = $lBloquear;
       $oEmpenho->Zerado = $zerado;
       $oEmpenho->Tipofornec = $tipofornec;
+      $oEmpenho->bPermitidoLiquidacao = $bPermitidoLiquidacao;
       echo $json->encode($oEmpenho);
     } else {
 
@@ -263,6 +294,7 @@ switch ($objJson->method) {
             $oEmpenho->LiberadoLic = $lBloquear;
             $oEmpenho->Zerado = $zerado;
             $oEmpenho->Tipofornec = $tipofornec;
+            $oEmpenho->bPermitidoLiquidacao = $bPermitidoLiquidacao;
             echo $json->encode($oEmpenho);
           } else {
 
@@ -274,6 +306,7 @@ switch ($objJson->method) {
             $oEmpenho->LiberadoLic = $lBloquear;
             $oEmpenho->Zerado = $zerado;
             $oEmpenho->Tipofornec = $tipofornec;
+            $oEmpenho->bPermitidoLiquidacao = $bPermitidoLiquidacao;
             echo $json->encode($oEmpenho);
           }
         }
@@ -289,6 +322,7 @@ switch ($objJson->method) {
         $oEmpenho->LiberadoLic = $lBloquear;
         $oEmpenho->Zerado = $zerado;
         $oEmpenho->Tipofornec = $tipofornec;
+        $oEmpenho->bPermitidoLiquidacao = $bPermitidoLiquidacao;
         echo $json->encode($oEmpenho);
       }
     }

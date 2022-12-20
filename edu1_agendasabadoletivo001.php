@@ -151,8 +151,8 @@ $db_opcao = 1;
   var oGridHorariosInclusos          = new DBGrid('gridHorariosInclusos');
   oGridHorariosInclusos.nameInstance = "oGridHorariosInclusos";
   oGridHorariosInclusos.setCellWidth( [ '42.5%', '42.5%', '15%'] );
-  oGridHorariosInclusos.setHeader( [ 'Turno', 'Horário', 'Ação' ] );
-  oGridHorariosInclusos.setCellAlign( [ 'left', 'left', 'center' ] );
+  oGridHorariosInclusos.setHeader( [ 'Data', 'Horário', 'Ação' ] );
+  oGridHorariosInclusos.setCellAlign( [ 'center', 'center', 'center' ] );
   oGridHorariosInclusos.setHeight(130);
   oGridHorariosInclusos.show($("cntGridHorariosInclusos"));
 
@@ -256,7 +256,7 @@ $db_opcao = 1;
             oRetorno.aDiasLetivos.each(function(oData, iSeq) {
                 var sData = js_formatar(oData.ed54_d_data, 'd');
                 var sDescricaoDia = sData + " - " + oData.ed54_c_diasemana.urlDecode();
-                oCboData.addItem(oData.data, sDescricaoDia);
+                oCboData.addItem(oData.ed54_d_data, sDescricaoDia);
             });
 
             oCboTurma.clearItens();
@@ -442,7 +442,8 @@ $db_opcao = 1;
 
         oRetorno.aSabodosLetivos.each(function(oSabado, iSeq) {
             var aLinha = [];
-            aLinha.push(oSabado.ed32_c_descr.urlDecode());
+            var sData = js_formatar(oSabado.ed58_d_data, 'd');
+            aLinha.push(sData+" "+oSabado.ed32_c_descr.urlDecode());
             aLinha.push(oSabado.ed17_h_inicio.urlDecode()+" até "+ oSabado.ed17_h_fim.urlDecode());
             aLinha.push("<input type='button' onclick=js_excluirsabado(\'" + oSabado.ed58_i_codigo + "\') value='E'/>")
             oGridHorariosInclusos.addRow(aLinha);
@@ -523,6 +524,7 @@ $db_opcao = 1;
     oParametros.exec = "salvarSabadoLetivo";
     oParametros.iRecHumano = oCboRegente.getValue();
     oParametros.iRegencia  = oCboDisciplina.getValue();
+    oParametros.dData      = oCboData.getValue();
     oParametros.aPeriodos  = aPeriodos;
 
     var oAjax = new Ajax.Request(sUrlRpc, {

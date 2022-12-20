@@ -151,6 +151,18 @@ db_app::load("prototype.js");
             </tr>
 
             <tr>
+                <td nowrap title="<?= @$Tk29_liquidacaodataanterior ?>">
+                    <?= @$Lk29_liquidacaodataanterior ?>
+                </td>
+                <td>
+                    <?
+                    $x = array('f' => 'Não', 't' => 'Sim');
+                    db_select('k29_liquidacaodataanterior', $x, true, $db_opcao, "");
+                    ?>
+                </td>
+            </tr> 
+
+            <tr>
                 <td>
                     <?php
                     db_ancora("<b>Recurso:</b>", "js_pesquisaRecurso(true)", 1);

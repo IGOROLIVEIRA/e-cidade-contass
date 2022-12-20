@@ -1366,11 +1366,11 @@ class cl_liclicita
         }
 
         if (trim($this->l20_dtpubratificacao != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_dtpubratificacao"])) && ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103)) {
-            if (trim($this->l20_numeroconvidado == null)) {
+            if (trim($this->l20_dtpubratificacao == null)) {
                 $sql .= $virgula . " l20_dtpubratificacao = null ";
                 $virgula = ",";
             } else {
-                $sql .= $virgula . " l20_dtpubratificacao = $this->l20_dtpubratificacao ";
+                $sql .= $virgula . " l20_dtpubratificacao = '$this->l20_dtpubratificacao' ";
                 $virgula = ",";
             }
         }

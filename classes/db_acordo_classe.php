@@ -1046,8 +1046,9 @@ class cl_acordo
         if (($this->ac16_adesaoregpreco) != "" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_adesaoregpreco"])) {
             $sql  .= $virgula . " ac16_adesaoregpreco = '$this->ac16_adesaoregpreco' ";
             $virgula = ",";
+
             if (($this->ac16_adesaoregpreco) == null) {
-                $this->erro_sql = " Campo Licitação Outro Orgão não informado.";
+                $this->erro_sql = " Campo adesão de registro de preço não informado.";
                 $this->erro_campo = "ac16_adesaoregpreco";
                 $this->erro_banco = "";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";

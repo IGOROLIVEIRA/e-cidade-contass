@@ -17,7 +17,7 @@
                 </tr>
                 <tr>
                     <td>
-                        <input type="checkbox" value="S1207" id="S1207" />
+                        <input type="checkbox" value="S1207" id="S1207" onclick="js_alt()" />
                         <label for="S1207">S-1207 - Benefícios - Entes Públicos</label><br>
                     </td>
                     <td>
