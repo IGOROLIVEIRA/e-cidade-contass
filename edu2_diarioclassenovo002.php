@@ -41,7 +41,6 @@ $oEtapa              = EtapaRepository::getEtapaByCodigo($oGet->iEtapa);
 $oAvaliacaoPeriodica = AvaliacaoPeriodicaRepository::getAvaliacaoPeriodicaByCodigo($oGet->iPeriodo);
 
 try {
-
   /**
    * Verifica o modelo selecionado, e seta as propriedades específicas de cada um
    */
