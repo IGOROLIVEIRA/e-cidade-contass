@@ -1129,7 +1129,7 @@ class cl_adesaoregprecos
     return $result;
   }
   // funcao do sql 
-  function sql_query($si06_sequencial = null, $campos = "si06_sequencial, si06_orgaogerenciador, si06_modalidade, si06_numeroprc, si06_numlicitacao, si06_dataadesao, si06_dataata, si06_datavalidade, si06_publicacaoaviso, si06_objetoadesao, si06_orgarparticipante, si06_cgm, si06_descontotabela, si06_numeroadm, si06_anomodadm,si06_nummodadm, si06_dataabertura, si06_processocompra, si06_fornecedor, cgm.z01_nome as z01_nomeorg, cgm.z01_nome as z01_nomef, c.z01_nome as z01_nomeresp, pc80_data", $ordem = null, $dbwhere = "")
+  function sql_query($si06_sequencial = null, $campos = "si06_sequencial, si06_orgaogerenciador, db_depart.descrdepto as descricaodepartamento,si06_modalidade, si06_numeroprc, si06_numlicitacao, si06_dataadesao, si06_dataata, si06_datavalidade, si06_publicacaoaviso, si06_objetoadesao, si06_orgarparticipante, si06_cgm, si06_descontotabela, si06_numeroadm, si06_anomodadm,si06_nummodadm, si06_dataabertura, si06_processocompra, si06_fornecedor, cgm.z01_nome as z01_nomeorg, cgm.z01_nome as z01_nomef, c.z01_nome as z01_nomeresp, pc80_data", $ordem = null, $dbwhere = "")
   {
     $sql = "select ";
     if ($campos != "*") {
@@ -1147,7 +1147,7 @@ class cl_adesaoregprecos
     $sql .= "      inner join cgm c on c.z01_numcgm = adesaoregprecos.si06_cgm";
     $sql .= "      inner join pcproc  on  pcproc.pc80_codproc = adesaoregprecos.si06_processocompra";
     $sql .= "      inner join db_usuarios  on  db_usuarios.id_usuario = pcproc.pc80_usuario";
-    $sql .= "      inner join db_depart  on  db_depart.coddepto = pcproc.pc80_depto";
+    $sql .= "      left join db_depart  on  db_depart.coddepto = adesaoregprecos.si06_departamento";
     $sql .= "      left join acordo on  acordo.ac16_adesaoregpreco = adesaoregprecos.si06_sequencial";
     $sql2 = "";
     // $dbwhere = "si06_instit = " . db_getsession("DB_instit");

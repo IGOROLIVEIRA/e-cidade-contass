@@ -55,6 +55,51 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
   {
   }
 
+  public function getCodunidadesubrespAdesao($sequencial, $departadesao)
+  {
+    if ($departadesao == false) {
+      $consulta = "INNER JOIN pcproc ON si06_processocompra = pc80_codproc";
+    } else {
+      $consulta = "INNER JOIN pcproc ON si06_processocompra = si06_departamento";
+    }
+    $sSql = " SELECT
+            (SELECT CASE
+            WHEN o41_subunidade != 0 OR NOT NULL
+              THEN lpad((CASE WHEN o40_codtri = '0' OR NULL THEN o40_orgao::varchar
+                                          ELSE o40_codtri
+            END),2,0)||lpad((CASE WHEN o41_codtri = '0' OR NULL THEN o41_unidade::varchar
+                                      ELSE o41_codtri
+            END),3,0)||lpad(o41_subunidade::integer,3,0)
+              ELSE lpad((CASE WHEN o40_codtri = '0' OR NULL THEN o40_orgao::varchar
+                                      ELSE o40_codtri
+            END),2,0)||lpad((CASE WHEN o41_codtri = '0' OR NULL THEN o41_unidade::varchar
+                                                ELSE o41_codtri
+            END),3,0) END AS codunidadesub
+            FROM db_departorg
+            JOIN infocomplementares ON si08_anousu = db01_anousu AND si08_instit = " . db_getsession('DB_instit') . "
+            JOIN orcunidade ON db01_orgao=o41_orgao AND db01_unidade=o41_unidade AND db01_anousu = o41_anousu AND o41_instit = " . db_getsession('DB_instit') . "
+            JOIN orcorgao ON o40_orgao = o41_orgao AND o40_anousu = o41_anousu AND o40_instit = " . db_getsession('DB_instit') . "
+            WHERE db01_coddepto=pc80_depto AND db01_anousu = " . db_getsession('DB_anousu') . "
+            LIMIT 1) AS codunidadesubresp,
+            si06_codunidadesubant
+            FROM adesaoregprecos
+            JOIN acordo on ac16_adesaoregpreco = si06_sequencial
+            JOIN cgm orgaogerenciador ON si06_orgaogerenciador = orgaogerenciador.z01_numcgm
+            JOIN cgm responsavel ON si06_cgm = responsavel.z01_numcgm
+                  " . $consulta . "
+                  LEFT JOIN infocomplementaresinstit ON adesaoregprecos.si06_instit = infocomplementaresinstit.si09_instit
+            WHERE si06_instit= " . db_getsession('DB_instit') . "
+                AND si06_sequencial = " . $sequencial . "";
+    $rsCodunidadeSubAdesao = db_query($sSql);
+    $oUnidadeSubAdesao = db_utils::fieldsMemory($rsCodunidadeSubAdesao, 0);
+
+    if ($oUnidadeSubAdesao->si06_codunidadesubant != "") {
+      return $oUnidadeSubAdesao->si06_codunidadesubant;
+    } else {
+      return $oUnidadeSubAdesao->codunidadesubresp;
+    }
+  }
+
   /**
    * selecionar os dados dos empenhos do mes para gerar o arquivo
    * @see iPadArquivoBase::gerarDados()
@@ -332,7 +377,9 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
         lic211_numero,
         lic211_anousu,
         lic211_codunisubres,
-        lic211_codorgaoresplicit
+        lic211_codorgaoresplicit,
+        adesaoregprecos.si06_departamento,
+        adesaoregprecos.si06_sequencial
 
         FROM empempenho
         JOIN orcdotacao ON e60_coddot = o58_coddot
@@ -371,9 +418,9 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
 
     $rsEmpenho10 = db_query($sSql);
 
-    //    echo $sSql;
-     //  db_criatabela($rsEmpenho10);
-    //    exit;
+    //echo $sSql;
+    // db_criatabela($rsEmpenho10);
+    //exit;
 
     $aCaracteres = array("°", chr(13), chr(10), "'", ";");
     // matriz de entrada
@@ -448,27 +495,13 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
       /*
         pegar codunidadesub referente ao departamento de cadastro do processo de compras vinculado a adesao
       */
+      if ($oEmpenho10->despdeclicitacao == "4") {
 
-      //var_dump($oEmpenho10->despDecLicitacao);exit;
-
-      // echo "<pre>";
-      // var_dump($oEmpenho10);
-      // exit;
-      if($oEmpenho10->despdeclicitacao == "4"){
-
-        $sSqlCodSubAdesao = "SELECT lpad((db01_orgao),2,0)||lpad((db01_unidade),3,0) as codunidadesubadesao
-                 FROM pcproc
-                 INNER JOIN db_departorg ON db01_coddepto = pc80_depto
-                 INNER JOIN adesaoregprecos ON si06_processocompra = pc80_codproc
-                 INNER JOIN empautoriza ON e54_adesaoregpreco = si06_sequencial
-                 INNER JOIN empempaut ON e61_autori = e54_autori
-                 INNER JOIN empempenho ON e60_numemp = e61_numemp
-                 WHERE date_part('year',pc80_data) = db01_anousu
-                 AND e60_numemp = " . $oEmpenho10->numemp;
-
-        $rsCodSubAdesao = db_query($sSqlCodSubAdesao);
-
-        $sCodSubAdesao = db_utils::fieldsMemory($rsCodSubAdesao, 0);
+        if ($oEmpenho10->si06_departamento == null) {
+          $sCodSubAdesao = $this->getCodunidadesubrespAdesao($oEmpenho10->si06_sequencial, false);
+        } else {
+          $sCodSubAdesao = $this->getCodunidadesubrespAdesao($oEmpenho10->si06_sequencial, true);
+        }
       }
 
       $sElemento = substr($oEmpenho10->naturezadadespesa, 0, 8);
@@ -516,8 +549,8 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
       $aAnoContrato = explode('-', $oEmpenho10->dtassinaturacontrato);
 
       if ((date('Y', strtotime($oEmpenho10->dtempenho)) <= date('Y', strtotime($oEmpenho10->dataassinaturacontrato))
-           &&  date('m', strtotime($oEmpenho10->dtempenho)) < date('m', strtotime($oEmpenho10->dataassinaturacontrato)))
-          || $oEmpenho10->dataassinaturacontrato == null
+          &&  date('m', strtotime($oEmpenho10->dtempenho)) < date('m', strtotime($oEmpenho10->dataassinaturacontrato)))
+        || $oEmpenho10->dataassinaturacontrato == null
       ) {
 
         if ($oEmpenho10->despdeccontrato == 1 && $oEmpenho10->ac16_acordosituacao == 2) {
@@ -548,13 +581,13 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
         $empModel = new EmpenhoFinanceiro();
         $oAcordoMigrado = $empModel->getContratoSICOM($oEmpenho10->numemp);
         //echo "<pre>";print_r($oAcordoMigrado);exit;
-        if($oAcordoMigrado){
-            $oDadosEmpenho10->si106_despdeccontrato = 1;
-            $oDadosEmpenho10->si106_nrocontrato = $oAcordoMigrado->ac16_numero; // campo 20
-            $oDadosEmpenho10->si106_dtassinaturacontrato = $oAcordoMigrado->ac16_dataassinatura; // campo 21
-            $sUnidadeSub = str_pad($oAcordoMigrado->db01_orgao, 2, "0", STR_PAD_LEFT).str_pad($oAcordoMigrado->db01_unidade, 3, "0", STR_PAD_LEFT);
-            $oDadosEmpenho10->si106_codunidadesubrespcontrato = $sUnidadeSub == "00000" ? "" : $sUnidadeSub;
-            //$oDadosEmpenho10->si106_nrosequencialtermoaditivo = $oAcordoMigrado->nrosequencialtermoaditivo; // campo 22
+        if ($oAcordoMigrado) {
+          $oDadosEmpenho10->si106_despdeccontrato = 1;
+          $oDadosEmpenho10->si106_nrocontrato = $oAcordoMigrado->ac16_numero; // campo 20
+          $oDadosEmpenho10->si106_dtassinaturacontrato = $oAcordoMigrado->ac16_dataassinatura; // campo 21
+          $sUnidadeSub = str_pad($oAcordoMigrado->db01_orgao, 2, "0", STR_PAD_LEFT) . str_pad($oAcordoMigrado->db01_unidade, 3, "0", STR_PAD_LEFT);
+          $oDadosEmpenho10->si106_codunidadesubrespcontrato = $sUnidadeSub == "00000" ? "" : $sUnidadeSub;
+          //$oDadosEmpenho10->si106_nrosequencialtermoaditivo = $oAcordoMigrado->nrosequencialtermoaditivo; // campo 22
         }
       } elseif (((date('Y', strtotime($oEmpenho10->dtempenho)) <= date('Y', strtotime($oEmpenho10->dataassinaturatermoaditivo))
         &&  date('m', strtotime($oEmpenho10->dtempenho)) < date('m', strtotime($oEmpenho10->dataassinaturatermoaditivo)))
@@ -635,22 +668,22 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
       }
       if ($oEmpenho10->si06_sequencial == '' && $oEmpenho10->adesaoacordoseq == '') {
 
-          $oDadosEmpenho10->si106_despdeclicitacao = $oEmpenho10->despdeclicitacao; // campo 29
-          $oDadosEmpenho10->si106_nroprocessolicitatorio = $oEmpenho10->l20_edital; // campo 31
-          $oDadosEmpenho10->si106_exercicioprocessolicitatorio = $oEmpenho10->l20_anousu; // campo 32
+        $oDadosEmpenho10->si106_despdeclicitacao = $oEmpenho10->despdeclicitacao; // campo 29
+        $oDadosEmpenho10->si106_nroprocessolicitatorio = $oEmpenho10->l20_edital; // campo 31
+        $oDadosEmpenho10->si106_exercicioprocessolicitatorio = $oEmpenho10->l20_anousu; // campo 32
 
       }
-      if($oEmpenho10->lic211_sequencial != ''){
+      if ($oEmpenho10->lic211_sequencial != '') {
 
 
 
-        if($oEmpenho10->despdeclicitacao != 9){
+        if ($oEmpenho10->despdeclicitacao != 9) {
           $oDadosEmpenho10->si106_codorgaoresplicit = $oEmpenho10->lic211_codorgaoresplicit;
           $oDadosEmpenho10->si106_codunidadesubresplicit = $oEmpenho10->lic211_codunisubres; // campo 30
           $oDadosEmpenho10->si106_nroprocessolicitatorio = $oEmpenho10->lic211_numero; // campo 31
           $oDadosEmpenho10->si106_exercicioprocessolicitatorio = $oEmpenho10->lic211_anousu; // campo 32
 
-        }else{
+        } else {
           $oDadosEmpenho10->si106_despdeclicitacao = $oEmpenho10->despdeclicitacao; // campo 29
           $oDadosEmpenho10->si106_codorgaoresplicit = '';
           $oDadosEmpenho10->si106_codunidadesubresplicit = ''; // campo 30

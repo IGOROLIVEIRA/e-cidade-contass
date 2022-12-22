@@ -285,7 +285,11 @@ class SicomArquivoAdesaoRegistroPrecos extends SicomArquivoBase implements iPadA
         $regadesao11 = new cl_regadesao112022();
         $regadesao11->si68_tiporegistro = 11;
         $regadesao11->si68_codorgao = $oDados10->codorgao;
-        $regadesao11->si68_codunidadesub = $oDados10->codunidadesub;
+        if ($oDados10->si06_codunidadesubant != "") {
+          $regadesao11->si68_codunidadesub = $oDados10->si06_codunidadesubant;
+        } else {
+          $regadesao11->si68_codunidadesub = $oDados10->codunidadesub;
+        }
         $regadesao11->si68_nroprocadesao = $oDados10->si06_numeroadm;
         $regadesao11->si68_exercicioadesao = substr($oDados10->exercicioadesao, 0, 4);
         $regadesao11->si68_nrolote = $oDados11->si07_numerolote;
@@ -311,7 +315,11 @@ class SicomArquivoAdesaoRegistroPrecos extends SicomArquivoBase implements iPadA
         $regadesao12 = new cl_regadesao122022();
         $regadesao12->si69_tiporegistro = 12;
         $regadesao12->si69_codorgao = $oDados10->codorgao;
-        $regadesao12->si69_codunidadesub = $oDados10->codunidadesub;
+        if ($oDados10->si06_codunidadesubant != "") {
+          $regadesao12->si69_codunidadesub = $oDados10->si06_codunidadesubant;
+        } else {
+          $regadesao12->si69_codunidadesub = $oDados10->codunidadesub;
+        }
         $regadesao12->si69_nroprocadesao = $oDados10->si06_numeroadm;
         $regadesao12->si69_exercicioadesao = substr($oDados10->exercicioadesao, 0, 4);
         $regadesao12->si69_coditem = $oDados12->coditem;
@@ -337,7 +345,11 @@ class SicomArquivoAdesaoRegistroPrecos extends SicomArquivoBase implements iPadA
         $regadesao13 = new cl_regadesao132022();
         $regadesao13->si70_tiporegistro = 13;
         $regadesao13->si70_codorgao = $oDados10->codorgao;
-        $regadesao13->si70_codunidadesub = $oDados10->codunidadesub;
+        if ($oDados10->si06_codunidadesubant != "") {
+          $regadesao13->si70_codunidadesub = $oDados10->si06_codunidadesubant;
+        } else {
+          $regadesao13->si70_codunidadesub = $oDados10->codunidadesub;
+        }
         $regadesao13->si70_nroprocadesao = $oDados10->si06_numeroadm;
         $regadesao13->si70_exercicioadesao = substr($oDados10->exercicioadesao, 0, 4);
         $regadesao13->si70_nrolote = $oDados13->si07_numerolote;
@@ -418,7 +430,11 @@ ORDER BY pc11_seq) as matpreco on matpreco.pc01_codmater = matquan.pc01_codmater
         $regadesao14 = new cl_regadesao142022();
         $regadesao14->si71_tiporegistro = 14;
         $regadesao14->si71_codorgao = $oDados10->codorgao;
-        $regadesao14->si71_codunidadesub = $oDados10->codunidadesub;
+        if ($oDados10->si06_codunidadesubant != "") {
+          $regadesao14->si71_codunidadesub = $oDados10->si06_codunidadesubant;
+        } else {
+          $regadesao14->si71_codunidadesub = $oDados10->codunidadesub;
+        }
         $regadesao14->si71_nroprocadesao = $oDados10->si06_numeroadm;
         $regadesao14->si71_exercicioadesao = substr($oDados10->exercicioadesao, 0, 4);
         $regadesao14->si71_nrolote = $oDados14->si07_numerolote;
@@ -451,7 +467,11 @@ where si07_sequencialadesao = {$oDados10->si06_sequencial}";
         $regadesao15 = new cl_regadesao152022();
         $regadesao15->si72_tiporegistro = 15;
         $regadesao15->si72_codorgao = $oDados10->codorgao;
-        $regadesao15->si72_codunidadesub = $oDados10->codunidadesub;
+        if ($oDados10->si06_codunidadesubant != "") {
+          $regadesao15->si72_codunidadesub = $oDados10->si06_codunidadesubant;
+        } else {
+          $regadesao15->si72_codunidadesub = $oDados10->codunidadesub;
+        }
         $regadesao15->si72_nroprocadesao = $oDados10->si06_numeroadm;
         $regadesao15->si72_exercicioadesao = substr($oDados10->exercicioadesao, 0, 4);
         $regadesao15->si72_nrolote = $oDados15->si07_numerolote;
@@ -486,7 +506,11 @@ where si07_sequencialadesao = {$oDados10->si06_sequencial}";
         $regadesao20 = new cl_regadesao202022();
         $regadesao20->si73_tiporegistro = 20;
         $regadesao20->si73_codorgao = $oDados10->codorgao;
-        $regadesao20->si73_codunidadesub = $oDados10->codunidadesub;
+        if ($oDados10->si06_codunidadesubant != "") {
+          $regadesao20->si73_codunidadesub = $oDados10->si06_codunidadesubant;
+        } else {
+          $regadesao20->si73_codunidadesub = $oDados10->codunidadesub;
+        }
         $regadesao20->si73_nroprocadesao = $oDados10->si06_numeroadm;
         $regadesao20->si73_exercicioadesao = substr($oDados10->exercicioadesao, 0, 4);
         $regadesao20->si73_nrolote = $oDados20->si07_numerolote;

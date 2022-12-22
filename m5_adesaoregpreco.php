@@ -25,6 +25,7 @@ if (isset($alterar)) {
         $sqlerro = true;
     } else {
         db_msgbox("Alteração Realizada com Sucesso !");
+        db_redireciona("m5_adesaoregpreco.php");
     }
 }
 ?>
@@ -41,7 +42,7 @@ if (isset($alterar)) {
 <body bgcolor="#CCCCCC">
     <center>
         <form name='form1' method="post" action="">
-            <fieldset style="width: 500px; margin-top: 30px">
+            <fieldset style="width: 600px; margin-top: 30px">
                 <legend>Adesão de Registro de Preços:</legend>
                 <table>
                     <tr>
@@ -52,7 +53,7 @@ if (isset($alterar)) {
                         </td>
                         <td>
                             <?
-                            db_input('e54_adesaoregpreco', 10, "", true, 'text', $db_opcao, "onchange='js_pesquisaaadesaoregpreco(false)';");
+                            db_input('e54_adesaoregpreco', 10, "", true, 'text', 3, "onchange='js_pesquisaaadesaoregpreco(false)';");
                             db_input('si06_objetoadesao', 40, "", true, 'text', 3);
                             ?>
                         </td>
@@ -80,7 +81,7 @@ if (isset($alterar)) {
 <script>
     function js_pesquisaaadesaoregpreco(mostra) {
         if (mostra == true) {
-            var sUrl = 'func_adesaoregprecos.php?funcao_js=parent.js_buscaadesaoregpreco|si06_sequencial|si06_objetoadesao';
+            var sUrl = 'func_adesaoregprecos.php?funcao_js=parent.js_buscaadesaoregpreco|si06_sequencial|si06_objetoadesao|si06_codunidadesubant';
             js_OpenJanelaIframe('', 'db_iframe_adesaoregprecos', sUrl, 'Pesquisar', true, '0');
         } else {
             if (document.form1.e54_adesaoregpreco.value != '') {
@@ -95,9 +96,11 @@ if (isset($alterar)) {
     /**
      * funcao para carregar adesao de registro de preco escolhida no campo
      * */
-    function js_buscaadesaoregpreco(sequencial, objeto) {
+    function js_buscaadesaoregpreco(sequencial, objeto, si06_codunidadesubant) {
+        console.log(si06_codunidadesubant);
         document.form1.e54_adesaoregpreco.value = sequencial;
         document.form1.si06_objetoadesao.value = objeto;
+        document.form1.si06_codunidadesubant.value = si06_codunidadesubant;
         db_iframe_adesaoregprecos.hide();
     }
 

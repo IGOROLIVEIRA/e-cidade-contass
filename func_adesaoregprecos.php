@@ -43,16 +43,16 @@ $cladesaoregprecos = new cl_adesaoregprecos;
               include("funcoes/db_func_adesaoregprecos.php");
             } else {
               $campos = "si06_sequencial,cgm.z01_nome as dl_Orgao_Gerenciador,si06_numeroprc,si06_anoproc,si06_numlicitacao,si06_dataadesao,si06_dataata,si06_objetoadesao,
-                      c.z01_nome as dl_Resp_Aprovacao,si06_numeroadm,si06_anocadastro,si06_nummodadm,si06_anomodadm";
+                      c.z01_nome as dl_Resp_Aprovacao,si06_numeroadm,si06_anocadastro,si06_nummodadm,si06_anomodadm,si06_codunidadesubant";
             }
           }
-          $sql = $cladesaoregprecos->sql_query_completo(null, $campos, null, "si06_instit = " . db_getsession("DB_instit"));
-          if(isset($adesao) && $adesao == 1){
-            $sql = $cladesaoregprecos->sql_query_file(null,"si06_sequencial,si06_numeroprc,si06_anoproc,si06_numlicitacao,si06_dataadesao,si06_dataata,si06_objetoadesao,
-            si06_numeroadm,si06_anocadastro,si06_nummodadm,si06_anomodadm");
+          $sql = $cladesaoregprecos->sql_query_completo(null, $campos, "si06_sequencial desc", "si06_instit = " . db_getsession("DB_instit"));
+          if (isset($adesao) && $adesao == 1) {
+            $sql = $cladesaoregprecos->sql_query_file(null, "si06_sequencial,si06_numeroprc,si06_anoproc,si06_numlicitacao,si06_dataadesao,si06_dataata,si06_objetoadesao,
+            si06_numeroadm,si06_anocadastro,si06_nummodadm,si06_anomodadm,si06_codunidadesubant", "si06_sequencial desc");
           }
           $repassa = array();
-
+          //die($sql);
           db_lovrot($sql, 15, "()", "", $funcao_js, "", "NoMe", $repassa);
         } else {
           if ($pesquisa_chave != null && $pesquisa_chave != "") {
