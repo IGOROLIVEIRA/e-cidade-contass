@@ -416,7 +416,6 @@ class cl_liclicita
         }
         $this->l20_amparolegal = ($this->l20_amparolegal == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_amparolegal"] : $this->l20_amparolegal);
         $this->l20_categoriaprocesso = ($this->l20_categoriaprocesso == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_categoriaprocesso"] : $this->l20_categoriaprocesso);
-   
     }
 
     // funcao para inclusao aqui
@@ -1177,7 +1176,7 @@ class cl_liclicita
                 ," . ($this->l20_dataaberproposta == "null" || $this->l20_dataaberproposta == "" ? "null" : "'" . $this->l20_dataaberproposta . "'") . "
                 ," . ($this->l20_dataencproposta == "null" || $this->l20_dataencproposta == "" ? "null" : "'" . $this->l20_dataencproposta . "'") . "
                 ,$this->l20_amparolegal
-                ,$this->l20_categoriaprocesso
+                ," . ($this->l20_categoriaprocesso == "null" || $this->l20_categoriaprocesso == "" ? "null" : "'" . $this->l20_categoriaprocesso . "'") . "
 
                       )";
         $result = db_query($sql);
