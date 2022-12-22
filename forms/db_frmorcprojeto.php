@@ -64,7 +64,14 @@ $clrotulo->label("o45_numlei");
             <?php if (db_getsession('DB_anousu') > 2021) { ?>
             <tr>
               <td  nowrap title="<?= @$To39_justi ?>"><?= @$Lo39_justi ?></td>
-              <td><? db_textarea('o39_justi', 0, 72, $Io39_justi, true, 'text', $db_opcao, "", "","",1000) ?></td>
+              <td><? db_textarea('o39_justi', 0, 72, $Io39_justi, true, 'text', $db_opcao, "onKeydown='js_validacaracter(this,event)' onKeyUp='js_validacaracter(this.value.length)' onchange='js_validacaracter(this.value.length)')", "","") ?></td>
+            </tr>
+            <tr>
+              <td align="right" colspan = "5">
+              <b>  Caracteres Digitados : </b>
+              <input type="text" name="obsdig" id="obsdig" size="3" value="0" disabled>
+              <b> - Limite 1000  </b>
+            </td>
             </tr>
             <tr style="display: none;">
               <td nowrap title="<?= @$To39_texto ?>"><?= @$Lo39_texto ?></td>
@@ -146,6 +153,22 @@ $clrotulo->label("o45_numlei");
 </form>
 </fieldset>
 <script>
+
+function js_incrementaCaracDig(contcaracteres){
+  document.getElementById('obsdig').value = contcaracteres;
+  return contcaracteres;
+}
+function js_validacaracter() {
+    let texto = document.getElementById("o39_justi").value;
+    if(texto){
+      var er = /[^a-z0-9]/gi;
+      texto = texto.replace(er, '')
+      contcaracteres = texto.length;
+      return js_incrementaCaracDig(contcaracteres);
+    }
+    return js_incrementaCaracDig(0);    
+  }
+
   document.getElementById('o39_tiposuplementacao').style.width = "15%";
   document.getElementById('o45_numlei').style.width = "84%";
   document.getElementById('o39_codlei').style.width = "15%";
@@ -232,7 +255,9 @@ $clrotulo->label("o45_numlei");
 
   function js_validaSubmit() {
 
-    if ( document.form1.o39_justi.value.length < 100) {
+    let contcaracteres = js_validacaracter();
+
+    if ( contcaracteres < 100) {
       alert("O campo Justificativa deve ter no mínimo 100 caracteres");
       event.preventDefault();
     }
