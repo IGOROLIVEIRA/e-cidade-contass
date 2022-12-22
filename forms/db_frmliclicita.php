@@ -315,6 +315,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                         ?>
                                     </td>
                                 </tr>
+                                <!-- Remoção temporária do trecho de código responsável pela categoria do processo 
                                 <tr style="display:table_row;" id="categoriaprocesso">
                                     <td>
                                         <b>
@@ -324,7 +325,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                         </b>
                                     </td>
                                     <td>
-                                        <?
+                                        <? /*
                                         $categoriaprocesso = array();
                                         $categoriaprocesso[0] = "Selecione";
 
@@ -332,7 +333,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
                                         for ($iIndiceTipo = 0; $iIndiceTipo < pg_numrows($result_categoriaprocesso); $iIndiceTipo++) {
                                             $oTipo = db_utils::fieldsMemory($result_categoriaprocesso, $iIndiceTipo);
-                                            $categoriaprocesso[$oTipo->l216_codigo] = $oTipo->l216_descr;   
+                                            $categoriaprocesso[$oTipo->l216_codigo] = $oTipo->l216_descr;
                                         }
                                         if ($cliccategoriaprocesso->numrows == 0) {
                                             db_msgbox("Nenhum Categoria de Processo cadastrada!!");
@@ -346,10 +347,10 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                             if (isset($l216_codigo) && $l216_codigo != "") {
                                                 echo "<script>document.form1.l20_categoriaprocesso.selected=$l216_codigo;</script>";
                                             }
-                                        }
+                                        } */
                                         ?>
                                     </td>
-                                </tr>
+                                </tr> -->
                                 <tr style="display:none;" id="amparolegal">
                                     <td nowrap title="Amparo Legal">
                                         <?
@@ -1311,7 +1312,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             document.getElementById("l20_codtipocom").disabled = true;
             document.getElementById("l20_codtipocomdescr").disabled = true;
         }
-        
+
         document.getElementById("respCondunome").style.width = "251px";
         document.getElementById("l20_descricaodep").style.width = "281px";
         document.getElementById("lprocsis").style.width = "85px";
@@ -1326,14 +1327,14 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
         document.getElementById("l212_codigo").style.width = "307px";
         document.getElementById("l20_tipojulg").style.width = "85px";
         document.getElementById("l20_tipoprocesso").style.width = "400px";
-        document.getElementById("l20_categoriaprocesso").style.width= "307px";
-        
+        document.getElementById("l20_categoriaprocesso").style.width = "307px";
+
         document.form1.modalidade_tribunal.value = oRetorno.tribunal;
 
         var l12_pncp = <? echo '"' . $l12_pncp . '"';      ?>;
 
         if (document.form1.l20_leidalicitacao.value == 1 && l12_pncp == 't') {
-            document.getElementById("categoriaprocesso").style.display = ""; 
+            document.getElementById("categoriaprocesso").style.display = "";
             document.getElementById("amparolegal").style.display = "";
             if (oRetorno.numrows > 0) {
                 document.getElementById("amparolegal").style.display = "table_row";
@@ -1357,19 +1358,19 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                 }
             }
 
-            
+
 
         } else {
             document.getElementById("categoriaprocesso").style.display = "none";
             document.getElementById("amparolegal").style.display = "none";
-            
+
             let listaamparolegal = document.getElementById('l212_codigo').options;
             for ($x = 59; $x > 0; $x--) {
 
                 listaamparolegal.remove($x);
             }
 
-            
+
 
         }
         document.querySelector("#l212_codigo").value = oRetornoamparo;
