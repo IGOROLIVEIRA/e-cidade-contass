@@ -133,6 +133,7 @@ if (isset($chavepesquisa)) {
          parent.document.formaba.templateata.disabled=false;
          parent.document.formaba.templateminuta.disabled=false;
          parent.document.formaba.faixavalores.disabled=false;
+         parent.document.formaba.amparolegal.disabled=false;
          CurrentWindow.corpo.iframe_pccflicitapar.location.href='lic1_pccflicitapar001.php?l25_codcflicita=" . @$l03_codigo . "';
          CurrentWindow.corpo.iframe_template.location.href='lic1_cflicitatemplate001.php?l35_cflicita=" . @$l03_codigo . "';
          CurrentWindow.corpo.iframe_templateata.location.href='lic1_cflicitatemplateata001.php?l37_cflicita=" . @$l03_codigo . "';

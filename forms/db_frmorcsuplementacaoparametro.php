@@ -60,6 +60,16 @@ $clorcsuplementacaoparametro->rotulo->label();
     <? db_input('o134_percentuallimiteloa',10,$Io134_percentuallimiteloa,true,'text',$db_opcao,"")?>
         </td>
       </tr>
+      <td nowrap title="<?=@$To134_orcamentoaprovado?>">
+          <?=@$Lo134_orcamentoaprovado?> 
+      </td>
+      <td >
+            <?
+              $aOrcamentoaprovado = array("f" => "Não", "t" => "Sim");
+              db_select("o134_orcamentoaprovado", $aOrcamentoaprovado, true, $db_opcao);
+            ?>
+          </td>
+      </tr>
       </table>
       </center>
 </fieldset>

@@ -53,6 +53,7 @@ require_once("classes/db_liclocal_classe.php");
 require_once("classes/db_liccomissao_classe.php");
 require_once("classes/db_condataconf_classe.php");
 require_once("classes/db_liccomissaocgm_classe.php");
+require_once("classes/db_liccategoriaprocesso_classe.php");
 
 include("classes/db_decretopregao_classe.php");
 
@@ -68,6 +69,7 @@ $clliclicitasituacao = new cl_liclicitasituacao;
 $clcflicita          = new cl_cflicita;
 $cldecretopregao     = new cl_decretopregao;
 $clliccomissaocgm     = new cl_liccomissaocgm;
+$cliccategoriaprocesso = new cl_liccategoriaprocesso;
 
 $db_opcao = 1;
 $db_botao = true;
@@ -102,7 +104,15 @@ if (isset($incluir)) {
 			$sqlerro = true;
 		}
 	}
-
+	$oParamLicicita = db_stdClass::getParametro('licitaparam', array(db_getsession("DB_instit")));
+	$l12_pncp = $oParamLicicita[0]->l12_pncp;
+	
+	if ($l20_leidalicitacao == 1 && $l12_pncp == 't') {
+		if($oPost->l212_codigo == 0){
+			$erro_msg .= 'Campo Amparo Legal não informado\n\n';
+			$sqlerro = true;
+		}
+	}
 	/*
     Verifica se o Campo "Natureza do Objeto" no foi selecionado.
   */
@@ -353,6 +363,7 @@ if (isset($incluir)) {
 		}
 
 		if ($sqlerro == false) {
+			$clliclicita->l20_amparolegal      	  =  $oPost->l212_codigo;
 			$clliclicita->l20_numero      	  =  $l20_numero;
 			$clliclicita->l20_edital      	  =  $l20_edital;
 			if ($anousu >= 2020) {

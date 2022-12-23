@@ -102,7 +102,7 @@ require_once("dbforms/db_classesgenericas.php");
                     <tr>
                                         <td  nowrap><b>&nbsp;&nbsp; Opção de Seleção :</b>
                                             <?php
-                                            $aSelecao = array(1 => "Somente Selecionados", 2 => "Menos os Selecionados");
+                                            $aSelecao = array(2 => "Menos os Selecionados", 1 => "Somente Selecionados");
                                             db_select("sTipoSelecao", $aSelecao, true, 1);
                                             ?>
                                         </td>

@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -155,7 +155,7 @@ switch ($oParam->exec) {
     $sWhereSubstituicao  = " {$sWhere} ";
     $sWhereSubstituicao .= " and ed322_rechumano in ({$sCodigoRecHumano})";
 
-    $sCampos                 = " distinct ed58_i_diasemana, ed59_i_serie as serie, ";
+    $sCampos                 = " distinct ed58_i_diasemana, ed59_i_serie as serie, ed58_d_data,";
     $sCampos                .= " trim(ed11_c_descr) as nome_etapa, ed57_i_codigo as codigo_turma, ";
     $sCampos                .= " ed57_c_descr as descricao_turma ";
 
@@ -164,7 +164,6 @@ switch ($oParam->exec) {
                                                                                                   $sWhereSubstituicao
                                                                                                  );
     $rsDiasDaSemanaComAula     = $oDaoRegenciaHorario->sql_record($sSqlDiasDaSemanaComAula);
-
 
     $aDiasDeAula               = array();
     $iTotalDiasDaSemanaComAula = $oDaoRegenciaHorario->numrows;
@@ -183,6 +182,7 @@ switch ($oParam->exec) {
       $oTurma = new stdClass();
       $oTurma->codigo_turma     = $oDadosDiaSemana->codigo_turma."_".$oDadosDiaSemana->serie;
       $oTurma->codigo_serie     = $oDadosDiaSemana->serie;
+      $oTurma->data_letiva      = $oDadosDiaSemana->ed58_d_data;
       $oTurma->descricao_turma  = urlencode("{$oDadosDiaSemana->descricao_turma} ({$oDadosDiaSemana->nome_etapa})");
       $aDiasDeAula[$iDiaNaSemana]->turmas[] = $oTurma;
     }
@@ -199,6 +199,7 @@ switch ($oParam->exec) {
                                                                                            $sWhere
                                                                                           );
     $rsDatasCalendario   = $oDaoRegenciaHorario->sql_record($sSqlDatasCalendario);
+
     try {
 
       if ($oDaoRegenciaHorario->numrows == 0) {
@@ -217,6 +218,7 @@ switch ($oParam->exec) {
                                                  );
 
       $rsFeriado  = $oDaoFeriado->sql_record($sSqlFeriado);
+
       $aFeriados  = db_utils::getCollectionByRecord($rsFeriado);
 
       list($iAnoInicial, $iMesInicial, $iDiaInicial) = explode("-", $oDadosAnoLetivo->inicio);
@@ -244,12 +246,32 @@ switch ($oParam->exec) {
         /**
          * verificamos o dia é um feriado. caso seja passamos para o proximo dia.
          */
-        if ($iFeriado = db_stdClass::inCollection("data", $sDataFormatada, $aFeriados)) {
+        if ($iFeriado = db_stdClass::inCollection("data", $sDataFormatada, $aFeriados) ) {
 
           $oFeriado = $aFeriados[$iFeriado];
           if ($oFeriado->dia_letivo == 'N') {
              continue;
           }
+        }
+
+         /**
+         * verificamos o dia é um sabado letivo. caso seja passamos para o proximo dia.
+         */
+        if ($iDiaSemana == 6) {
+            $oFeriado = $aFeriados[$iFeriado];
+            if ($oFeriado->dia_letivo == 'N') {
+               continue;
+            }
+            $iFeriadoLetivoAulaRegente = false;
+            foreach( $aDiasDeAula[$iDiaSemana]->turmas as $turma){
+                if($turma->data_letiva == $sDataFormatada){
+                    $iFeriadoLetivoAulaRegente = true;
+                    continue;
+                }
+            }
+            if (!$iFeriadoLetivoAulaRegente) {
+                continue;
+            }
         }
 
         /**
@@ -260,8 +282,9 @@ switch ($oParam->exec) {
         $oDiaLetivo->diasemana = urlencode($aDiasSemana[$iDiaSemana]);
         $oDiaLetivo->turmas    = $aDiasDeAula[$iDiaSemana]->turmas;
         $aDiasLetivos[]        = $oDiaLetivo;
-      }
 
+
+      }
       $_SESSION["DIAS_LETIVOS_ESCOLA"] = $aDiasLetivos;
       $oRetorno->aDiasLetivos          = $aDiasLetivos;
       $oRetorno->dataatual             = date("Y-m-d", db_getsession("DB_datausu"));
@@ -281,9 +304,14 @@ switch ($oParam->exec) {
       if (isset($_SESSION["DIAS_LETIVOS_ESCOLA"])) {
 
         foreach ($_SESSION["DIAS_LETIVOS_ESCOLA"] as $oData) {
-
           if ($oData->data == $oParam->dtAula) {
-            $aTurmas = $oData->turmas;
+            foreach($oData->turmas as $oTurma){
+                if($oTurma->data_letiva && $oTurma->data_letiva == $oParam->dtAula){
+                  $aTurmas[] = $oTurma;
+                  break;
+                }
+                $aTurmas[] = $oTurma;
+            }
             break;
           }
         }
@@ -390,7 +418,7 @@ switch ($oParam->exec) {
     $sWhereSubstituicao  = " {$sWhere} ";
     $sWhereSubstituicao .= " and ed322_rechumano in({$iCodigoRecHumano})";
 
-    $sCampos           = " ed58_i_codigo    as sequencial, ";
+    $sCampos           = " ed58_i_codigo    as sequencial, ed58_d_data as data_letiva,";
     $sCampos          .= " ed08_c_descr     as descricao_periodo, ";
     $sCampos          .= " ed58_i_codigo    as codigo_regencia_periodo ";
 
@@ -401,7 +429,17 @@ switch ($oParam->exec) {
 
     $rsPeriodosAula  = $oDaoRegenciaHorario->sql_record($sSqlPeriodosAula);
 
-    $oRetorno->aPeriodosAulaDia  = db_utils::getCollectionByRecord($rsPeriodosAula, false, false, true);
+    $aPeriodosAulaDia  = db_utils::getCollectionByRecord($rsPeriodosAula, false, false, false);
+    $aAulaDia = array();
+    foreach($aPeriodosAulaDia as $oAulaDia){
+      if($oAulaDia->data_letiva && $oAulaDia->data_letiva == $oParam->dtAula){
+        $aAulaDia[] = $oAulaDia;
+      }
+      if(!$oAulaDia->data_letiva){
+          $aAulaDia[] = $oAulaDia;
+      }
+    }
+    $oRetorno->aPeriodosAulaDia  = $aAulaDia;//db_utils::getCollectionByRecord($rsPeriodosAula, false, false, true);
     $aPeriodosAula               = array();
     foreach ($oRetorno->aPeriodosAulaDia as $oPeriodo) {
       $aPeriodosAula[] = $oPeriodo->codigo_regencia_periodo;

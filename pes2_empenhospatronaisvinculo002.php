@@ -588,7 +588,7 @@ if ($tab_prev != 0) {
     $pdf->cell(18 - $width_perc_extra, $alt, db_formatar($totalSalarioFamilia, 'f'), 0, 0, "R", 0);
     $pdf->cell(22 - $width_perc_extra, $alt, db_formatar($totalSalarioMaternidade, 'f'), 0, 0, "R", 0);
 }
-$pdf->cell(18 - $width_perc_extra, $alt, db_formatar($val_pat + $val_extra - $val_ded - $totalSalarioFamilia, 'f'), 0, 1, "R", 0);
+$pdf->cell(18 - $width_perc_extra, $alt, db_formatar($val_pat + $val_extra - $val_ded, 'f'), 0, 1, "R", 0);
 
 $pdf->Output();
 

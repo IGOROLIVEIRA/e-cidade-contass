@@ -298,6 +298,15 @@ $oRotuloSaltes->label();
                             ?>
                           </td>
                         </tr>
+                        <tr>
+                          <td><b>Tipo:</b></td>
+                          <td>
+                            <?php
+                            $aTipoRelatorio = array(1 => "PDF", 2 => "CSV");
+                            db_select("iTipoRelatorio", $aTipoRelatorio, true, 1);
+                            ?>
+                          </td>
+                        </tr>
                       </table>
                     </fieldset>
                   </td>
@@ -323,6 +332,7 @@ $oRotuloSaltes->label();
     var aCredoresSelecionados = $('credor');
     var sCredoresSelecionados = "";
     var sVirgula              = "";
+    var iTipoRelatorio        = $F('iTipoRelatorio');
 
 
     for (var iRowCredor = 0; iRowCredor < iTotalCredores; iRowCredor++) {
@@ -376,7 +386,9 @@ $oRotuloSaltes->label();
       var mapForm = document.createElement("form");
       mapForm.target = name;
       mapForm.method = "POST";
-      mapForm.action = "emp2_empenhospagos002.php";
+      mapForm.action = "emp2_empenhospagos003.php";
+      if(iTipoRelatorio == 1)
+        mapForm.action = "emp2_empenhospagos002.php";
       document.body.appendChild(mapForm);
 
       for(var key in dados){
@@ -411,6 +423,7 @@ $oRotuloSaltes->label();
     dados['iListaEmpenho']               = $F('iListaEmpenho');
     dados['iTipoBaixa']                  = $F('iTipoBaixa');
     dados['iPrestacaoConta']             = $F('iPrestacaoConta');
+    dados['iTipoRelatorio']              = $F('iTipoRelatorio');
     dados['filtra_despesa']              = filtra_despesa;
 
     var name = new Date().getTime();

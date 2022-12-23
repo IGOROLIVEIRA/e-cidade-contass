@@ -157,14 +157,6 @@ $oClRotulo->label("nome");
         </td>
       </tr>
       <tr>
-        <td>
-          <b>Emissor:</b>
-        </td>
-        <td>
-          <?=Assinatura(db_getsession("DB_coddepto"))?> (Informação para a Guia de Transferência)
-        </td>
-      </tr>
-      <tr>
         <?
            $sSqlObs     = $oDaoObsTransferencia->sql_query("",
                                                            "ed283_c_bolsafamilia,ed283_t_mensagem",
@@ -184,6 +176,17 @@ $oClRotulo->label("nome");
           <?
             $aOpBolFamilia = array("1" => "NÃO", "2" => "SIM");
             db_select( 'ed283_c_bolsafamilia', $aOpBolFamilia, true, @$db_opcao );
+          ?>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <b>Aluno concluindo etapa:</b>
+        </td>
+        <td>
+          <?
+          $aConclEtapa = array("1" => "NÃO", "2" => "SIM");
+          db_select( 'ed104_c_concletapa', $aConclEtapa, true, @$db_opcao );
           ?>
         </td>
       </tr>
@@ -464,8 +467,9 @@ $("ed82_c_nome").addClassName("field-size7");
 $("ed104_i_escolaorigem").addClassName("field-size2");
 $("ed52_d_fim").addClassName("field-size2");
 $("ed104_d_data").addClassName("field-size2");
-$("diretor").setAttribute("rel","ignore-css");
 $("ed283_c_bolsafamilia").setAttribute("rel","ignore-css");
 $("ed283_c_bolsafamilia").addClassName("field-size2");
+$("ed104_c_concletapa").setAttribute("rel","ignore-css");
+$("ed104_c_concletapa").addClassName("field-size2");
 
 </script>

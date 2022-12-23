@@ -83,16 +83,19 @@ if (isset($dtDataInicial)) {
   $sSqlNota .= " case when retencaotiporec.e21_retencaotipocalc in (5,6) then (coalesce(e23_valorretencao, 0))
 		            else 0 end as outrasretencoes, ";
   $sSqlNota .= " case when c71_coddoc = 904 then c71_data end as c71_data, ";
-  $sSqlNota .= " e69_nfserie, e21_descricao, e23_ativo, e71_anulado ";                                  
+  $sSqlNota .= " e69_nfserie, e21_descricao, e23_ativo,e71_anulado, o58_codigo,o58_projativ,o55_descr,o15_descr ";                                  
   $sSqlNota .= "       from empnota ";
   $sSqlNota .= "          inner join empempenho   on e69_numemp  = e60_numemp";
+  $sSqlNota .= "          inner join orcdotacao on  (o58_coddot,o58_anousu) = (e60_coddot,e60_anousu)";	
+  $sSqlNota .= "          inner join orcprojativ on (o55_projativ,o55_anousu) = (o58_projativ,o58_anousu)";
+  $sSqlNota .= "          inner join orctiporec on o15_codigo = o58_codigo";
   $sSqlNota .= "          inner join cgm as cgm   on e60_numcgm  = cgm.z01_numcgm";
   $sSqlNota .= "          inner join empnotaele   on e69_codnota = e70_codnota";
   $sSqlNota .= "          inner join orcelemento  on empnotaele.e70_codele = orcelemento.o56_codele";
   $sSqlNota .= "          left join conlancamemp on c75_numemp = e60_numemp ";
   $sSqlNota .= "          left join conlancamdoc on c71_codlan = c75_codlan and c71_coddoc = 904 ";
   $sSqlNota .= "          left  join pagordemnota on e71_codnota = e69_codnota";
-//   $sSqlNota .= "                                 and e71_anulado is false";
+  $sSqlNota .= "                                 and e71_anulado is false";
   $sSqlNota .= "          left  join pagordem    on  e71_codord = e50_codord";
   $sSqlNota .= "          left  join pagordemele  on e53_codord = e50_codord";
   $sSqlNota .= "          left join retencaopagordem on pagordem.e50_codord = retencaopagordem.e20_pagordem";
@@ -118,11 +121,19 @@ if (isset($dtDataInicial)) {
  if($sTipo == '1')
     $sSqlNota .= "  and ( retencaotiporec.e21_retencaotipocalc in (1,2,3,4,5,6,7) and e23_ativo = true ) ";
   elseif($sTipo == '2')   
-    $sSqlNota .= "  and ( retencaotiporec.e21_retencaotipocalc is null or ( retencaotiporec.e21_retencaotipocalc is null and e23_ativo = false ) or (  retencaotiporec.e21_retencaotipocalc is not null
+    $sSqlNota .= " and ( retencaotiporec.e21_retencaotipocalc is null or ( retencaotiporec.e21_retencaotipocalc is null and e23_ativo = false ) or (  retencaotiporec.e21_retencaotipocalc is not null
     and e23_ativo = false) ) ";
+
+ if ($sQuebra == 2){
+    $sSqlNota .= " and  c71_data is null  ";
+ }   
  
-  $sSqlNota .= "  group by     1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18";
-  $sSqlNota .= "  order by     3,1 ";
+  $sSqlNota .= "  group by     1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22";
+
+  if($sQuebra == 1)
+        $sSqlNota .= "  order by     3,1 ";
+  if($sQuebra == 2)
+        $sSqlNota .= " order by o58_projativ,o58_codigo";  
 
   $rsNota    = $oDaoEmpNota->sql_record($sSqlNota);
 //   echo $oDaoEmpNota->numrows ;
@@ -196,7 +207,7 @@ for ($i = 0; $i < pg_num_rows($rsTipoinstit); $i++) {
  * Nenhum dos parâmetros é obrigatório
  */
 
-$mPDF = new mpdf('', 'A4', 0, '', 15, 15, 20, 15, 5, 11);
+$mPDF = new mpdf('', 'A4-L', 0, '', 15, 15, 20, 15, 5, 11, 'L');
 
 /*Nome do relatório.*/
 $header = " <header>
@@ -343,10 +354,12 @@ $dataFinal = str_replace("/","-",db_formatar($dtDataFinal, "d"));
             <tbody>
             <tr style="height: 30px">
                 <th id="0R0" style="height: 30px;"></th>
+                <? if($sQuebra == 2) {?>
+                    <td class="s0" dir="ltr" ><font size="-1"> Credor </font></td> 
+                <? } ?>    
                 <td class="s0" dir="ltr" ><font size="-1"> Empenho </font></td>
                 <td class="s0" dir="ltr" ><font size="-1"> OP </font></td>
                 <td class="s0" dir="ltr" ><font size="-1"> Data OP </font></td>
-                <td class="s0" dir="ltr" ><font size="-1"> Data Estorno OP </font></td>
                 <td class="s0" dir="ltr" ><font size="-1"> Série da NF </font></td>
                 <td class="s0" dir="ltr" ><font size="-1"> Numero da NF</font></td>
                 <td class="s0" dir="ltr" ><font size="-1"> Data Emissão NF </font></td>                
@@ -389,8 +402,9 @@ $dataFinal = str_replace("/","-",db_formatar($dtDataFinal, "d"));
                 $oNotas->c71_data = implode("-", array_reverse(explode("-", $oNotas->c71_data)));
                 $oNotas->k12_data = implode("-", array_reverse(explode("-", $oNotas->k12_data)));
                 $oNotas->e69_dtnota = implode("-", array_reverse(explode("-", $oNotas->e69_dtnota)));
-                                                    
-                if (!isset($aFornecedores[$hash]) && $oNotas->e60_numcgm) {
+                
+                if($sQuebra == 1){                                        
+                 if (!isset($aFornecedores[$hash]) && $oNotas->e60_numcgm) {
                         if ($cont >= 1) {
                             $or = "OR" . $cont;
                         }
@@ -482,7 +496,6 @@ HTML;
                             <td class="s1" dir="ltr">$oNotas->e60_codemp/$oNotas->e60_anousu</td>
                             <td class="s1" dir="ltr">$oNotas->e50_codord</td>
                             <td class="s1" dir="ltr">$oNotas->e50_data</td>
-                            <td class="s3" dir="ltr">$dataestorno</td>
                             <td class="s1" dir="ltr">$oNotas->e69_nfserie</td>
                             <td class="s1" dir="ltr">$oNotas->e69_numero</td>
                             <td class="s1" dir="ltr">$oNotas->e69_dtnota</td>
@@ -498,7 +511,7 @@ HTML;
                             echo <<<HTML
                        
                             <tr>
-                                <td class="s0" colspan="8"><b>Total Fornecedor: </b></td>
+                                <td class="s0" colspan="7"><b>Total Fornecedor: </b></td>
                                 <td class="s0" ><b>R$ $totale70_vlrliq1</b></td>
                                 <td class="s0" ><b>R$ $totalvalor_inss1</b></td>
                                 <td class="s0" ><b>R$ $totalvalor_irrf1</b></td>
@@ -531,7 +544,7 @@ HTML;
                             $Geraltotale50_valordesconto = db_formatar($Geraltotale50_valordesconto, "f");
                             echo <<<HTML
                             <tr>
-                                <td class="s0" colspan="8"><b>Total Geral: </b></td>
+                                <td class="s0" colspan="7"><b>Total Geral: </b></td>
                                 <td class="s0" ><b>R$ $Geraltotale70_vlrliq</b></td>
                                 <td class="s0" ><b>R$ $Geraltotalvalor_inss</b></td>
                                 <td class="s0" ><b>R$ $Geraltotalvalor_irrf</b></td>
@@ -545,9 +558,180 @@ HTML;
                         }
                      
                     }
-} 
+                }
+                if($sQuebra == 2){
 
-                // exit;
+                    if($oNotas->e23_ativo == "f"){
+                        $oNotas->outrasretencoes = 0;
+                        $oNotas->valor_inss = 0;
+                        $oNotas->valor_irrf = 0;
+                    } 
+                                                
+                    if($auxo58_projativ != $oNotas->o58_projativ){
+              
+                        echo <<<HTML
+                       
+                        <tr>
+                            <td class="s2" colspan="20"><b>$oNotas->o58_projativ - $oNotas->o55_descr</b></td>
+                        </tr>
+                        
+                                          
+
+                        
+HTML;
+                    if($oNotas->o58_codigo == $auxo58_codigo){
+echo <<<HTML
+                 
+                        <tr>
+                             <td class="s1" colspan="20"><b>$oNotas->o58_codigo - $oNotas->o15_descr</b></td>
+                        </tr>                      
+
+                        
+HTML;
+                        }
+                    $auxo58_projativ = $oNotas->o58_projativ;
+                    }
+                    if($oNotas->o58_codigo != $auxo58_codigo){
+              
+                        echo <<<HTML
+                       
+                        <tr>
+                            <td class="s1" colspan="20"><b>$oNotas->o58_codigo - $oNotas->o15_descr</b></td>
+                        </tr>
+                       
+
+                        
+HTML;
+                    $auxo58_codigo = $oNotas->o58_codigo;
+                 
+                    } 
+                    if($oNotas->e50_codord == $oNotas2->e50_codord){
+                        $auxRetencoes += $oNotas->outrasretencoes;
+                        $auxInss += $oNotas->valor_inss;
+                        $auxIrrf += $oNotas->valor_irrf;  
+                        
+                        if($oNotas->outrasretencoes == 0)
+                            $descricao .= '';
+                        else{
+                            if($oNotas->e21_descricao != $oNotas2->e21_descricao){
+                                $quebradelinha ++;
+                                $descricao .= " R$ ".db_formatar($oNotas->outrasretencoes, "f")." - ".$oNotas->e21_descricao;
+                            }
+                            if($quebradelinha == 1){
+                                $descricao .= "<br/>";
+                                $quebradelinha = 0;
+                            }
+                        }   
+                      
+                    }else{ 
+                        $auxRetencoes += $oNotas->outrasretencoes;
+                        $auxInss += $oNotas->valor_inss;
+                        $auxIrrf +=$oNotas->valor_irrf;
+                        
+                        $totale50_valorremuneracao += $oNotas->e50_valorremuneracao;
+                        
+                        
+                        $totale70_vlrliq += $oNotas->e70_vlrliq;
+                        $totalvalor_inss += $auxInss;
+                        $totalvalor_irrf += $auxIrrf;
+                        $totaloutrasretencoes += $auxRetencoes;
+                        
+                        $Geraltotale70_vlrliq += $oNotas->e70_vlrliq;
+                        $Geraltotalvalor_inss += $auxInss;
+                        $Geraltotalvalor_irrf += $auxIrrf;
+                        $Geraltotaloutrasretencoes += $auxRetencoes;
+                        
+                        $oNotas->e70_vlrliq = db_formatar($oNotas->e70_vlrliq, "f");
+                        $totale70_vlrliq1 = db_formatar($totale70_vlrliq, "f");
+                        $totalvalor_inss1 = db_formatar($totalvalor_inss, "f");
+                        $totalvalor_irrf1 = db_formatar($totalvalor_irrf, "f");
+                        $totaloutrasretencoes1 = db_formatar($totaloutrasretencoes, "f");
+                        $auxRetencoes = db_formatar($auxRetencoes, "f");
+                        $auxInss = db_formatar($auxInss, "f");
+                        $auxIrrf = db_formatar($auxIrrf, "f");
+                        $oe70_vlrliq = db_formatar($oNotas->e70_vlrliq, "f");
+                        $oNotas->e50_valorremuneracao = db_formatar($oNotas->e50_valorremuneracao, "f");
+                        $totaloutrasretencoes1 = db_formatar($totaloutrasretencoes, "f");
+                        
+                        
+                        if($oNotas->outrasretencoes == 0 || $oNotas->outrasretencoes == '')
+                            $descricao .= '';
+                        else
+                            $descricao .= "R$ ".db_formatar($oNotas->outrasretencoes, "f")." - ".$oNotas->e21_descricao;
+                                
+                        echo <<<HTML
+                       <tr style="height: 20px">
+                            <th id="0R{$or}" style="height: 20px;" class="row-headers-background">
+                            <div class="row-header-wrapper" style="line-height: 20px">
+                            </th>
+                            <td class="s1" dir="ltr">$oNotas->e60_numcgm - $oNotas->z01_cgccpf - $oNotas->z01_nome</td>
+                            <td class="s1" dir="ltr">$oNotas->e60_codemp/$oNotas->e60_anousu</td>
+                            <td class="s1" dir="ltr">$oNotas->e50_codord</td>
+                            <td class="s1" dir="ltr">$oNotas->e50_data</td>
+                            <td class="s1" dir="ltr">$oNotas->e69_nfserie</td>
+                            <td class="s1" dir="ltr">$oNotas->e69_numero</td>
+                            <td class="s1" dir="ltr">$oNotas->e69_dtnota</td>
+                            <td class="s1" dir="ltr">R$ $oNotas->e70_vlrliq</td>
+                            <td class="s1" dir="ltr">R$ $auxInss</td>
+                            <td class="s1" dir="ltr">R$ $auxIrrf</td>
+                            <td class="s1" dir="ltr">R$ $auxRetencoes</td>
+                            <td class="s1" dir="ltr">$descricao</td>
+                        </tr> </br>                 
+HTML;
+
+                        if($oNotas->o58_codigo != $oNotas2->o58_codigo || $oNotas->o58_projativ != $oNotas2->o58_projativ){
+                            echo <<<HTML
+
+                            <tr>
+                                <td class="s0" colspan="8"><b>Total Fonte: </b></td>
+                                <td class="s0" ><b>R$ $totale70_vlrliq1</b></td>
+                                <td class="s0" ><b>R$ $totalvalor_inss1</b></td>
+                                <td class="s0" ><b>R$ $totalvalor_irrf1</b></td>
+                                <td class="s0" ><b>R$ $totaloutrasretencoes1</b></td>
+                                <td class="s0" ><b></b></td>
+                            
+                                
+                            </tr>
+HTML;
+
+                            $totale70_vlrliq = 0;
+                            $totalvalor_inss = 0;
+                            $totalvalor_irrf = 0;
+                            $totaloutrasretencoes = 0;
+                            $totale50_valorremuneracao = 0;
+                            $totale50_valordesconto = 0;
+
+                            }
+                            $auxRetencoes = 0;
+                            $auxInss = 0;
+                            $auxIrrf = 0; 
+                            $descricao = '';
+                            $quebradelinha = 0;
+                            if(($cont+1) == count($aFornecedores)){
+                                $Geraltotale70_vlrliq = db_formatar($Geraltotale70_vlrliq, "f");
+                                $Geraltotalvalor_inss = db_formatar($Geraltotalvalor_inss, "f");
+                                $Geraltotalvalor_irrf = db_formatar($Geraltotalvalor_irrf, "f");
+                                $Geraltotaloutrasretencoes = db_formatar($Geraltotaloutrasretencoes, "f");
+                                $Geraltotale50_valorremuneracao = db_formatar($Geraltotale50_valorremuneracao, "f");
+                                $Geraltotale50_valordesconto = db_formatar($Geraltotale50_valordesconto, "f");
+                                echo <<<HTML
+                                <tr>
+                                    <td class="s0" colspan="8"><b>Total Geral: </b></td>
+                                    <td class="s0" ><b>R$ $Geraltotale70_vlrliq</b></td>
+                                    <td class="s0" ><b>R$ $Geraltotalvalor_inss</b></td>
+                                    <td class="s0" ><b>R$ $Geraltotalvalor_irrf</b></td>
+                                    <td class="s0" ><b>R$ $Geraltotaloutrasretencoes</b></td>
+                                    <td class="s0" ><b></b></td>
+                                    
+                                </tr>
+HTML;
+
+} 
+                        }
+                    }
+                     } 
+
+              
             ?>
             </tbody>
         </table>

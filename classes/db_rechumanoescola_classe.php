@@ -543,6 +543,29 @@ class cl_rechumanoescola {
      return $sql;
   }
 
+  public function sql_query_professor ($ed75_i_codigo = null,$campos = "*", $ordem = null, $dbwhere = "") {
+
+    $sql  = "select {$campos}";
+    $sql .= "  from rechumanoescola ";
+    $sql .= "      inner join rechumano  on  rechumano.ed20_i_codigo = rechumanoescola.ed75_i_rechumano";
+    $sql .= "      left join rechumanopessoal  on  rechumanopessoal.ed284_i_rechumano = rechumano.ed20_i_codigo";
+    $sql .= "      left join rhpessoal  on  rhpessoal.rh01_regist = rechumanopessoal.ed284_i_rhpessoal";
+    $sql .= "      left join cgm as cgmrh on  cgmrh.z01_numcgm = rhpessoal.rh01_numcgm";
+    $sql2 = "";
+    if (empty($dbwhere)) {
+      if (!empty($ed75_i_codigo)) {
+        $sql2 .= " where rechumanoescola.ed75_i_codigo = $ed75_i_codigo ";
+      }
+    } else if (!empty($dbwhere)) {
+      $sql2 = " where $dbwhere";
+    }
+    $sql .= $sql2;
+    if (!empty($ordem)) {
+      $sql .= " order by {$ordem}";
+    }
+    return $sql;
+ }
+
 
   function sql_query_relacao_trabalho ( $ed75_i_codigo = null, $campos = "*", $ordem = null, $dbwhere = "") {
 

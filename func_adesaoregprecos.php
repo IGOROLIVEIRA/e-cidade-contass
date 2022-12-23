@@ -47,6 +47,10 @@ $cladesaoregprecos = new cl_adesaoregprecos;
             }
           }
           $sql = $cladesaoregprecos->sql_query_completo(null, $campos, null, "si06_instit = " . db_getsession("DB_instit"));
+          if(isset($adesao) && $adesao == 1){
+            $sql = $cladesaoregprecos->sql_query_file(null,"si06_sequencial,si06_numeroprc,si06_anoproc,si06_numlicitacao,si06_dataadesao,si06_dataata,si06_objetoadesao,
+            si06_numeroadm,si06_anocadastro,si06_nummodadm,si06_anomodadm");
+          }
           $repassa = array();
 
           db_lovrot($sql, 15, "()", "", $funcao_js, "", "NoMe", $repassa);

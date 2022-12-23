@@ -44,8 +44,17 @@ $clorctiporec = new cl_orctiporec;
 $clorcdotacaocontr = new cl_orcdotacaocontr;
 $clorcelemento = new cl_orcelemento;
 $clorcparametro = new cl_orcparametro;
+$clorcsuplementacaoparametro = new cl_orcsuplementacaoparametro;
 $db_opcao = 33;
 $db_botao = false;
+
+function saberStatusDoOrcamento($clorcsuplementacaoparametro){
+	$result = $clorcsuplementacaoparametro->sql_record($clorcsuplementacaoparametro->sql_query(db_getsession("DB_anousu"),"*"));
+	db_fieldsmemory($result,0);
+}
+
+saberStatusDoOrcamento($clorcsuplementacaoparametro);
+
 if((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Alterar"){
   db_inicio_transacao();
   $erro_trans = false;
@@ -68,6 +77,12 @@ if((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Alterar
   if($clorcdotacao->erro_status==0){
     $erro_trans=true;
   }
+
+  if($o134_orcamentoaprovado == 't' && $o58_valor > 0){
+		$erro_trans = true;
+		$clorcdotacao->erro_msg = "ORÇAMENTO APROVADO. O PROCEDIMENTO NÃO PODE SER REALIZADO..";
+		$clorcdotacao->erro_status = 0;
+	}	
 
   
   db_fim_transacao($erro_trans);

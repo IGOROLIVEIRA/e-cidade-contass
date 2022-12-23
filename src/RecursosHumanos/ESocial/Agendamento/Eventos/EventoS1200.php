@@ -160,7 +160,7 @@ class EventoS1200 extends EventoBase
         if ($ponto == 3)
             $opcao = 'complementar';
         if ($ponto == 4)
-            $opcao = null;
+            $opcao = '13salario';
 
         switch ($opcao) {
             case 'salario':
@@ -300,10 +300,15 @@ class EventoS1200 extends EventoBase
     {
         $iAnoUsu = date("Y", db_getsession("DB_datausu"));
         $iMesusu = date("m", db_getsession("DB_datausu"));
-        if ($rh30_regime == 1 || $rh30_regime == 3)
-            $aPontos = array('salario', 'complementar', 'rescisao');
-        else
-            $aPontos = array('salario', 'complementar');
+        if ($rh30_regime == 1 || $rh30_regime == 3) {
+            $aPontos = array('13salario');
+            if ($this->indapuracao != 2)
+                $aPontos = array('salario', 'complementar', 'rescisao');
+        } else {
+            $aPontos = array('13salario');
+            if ($this->indapuracao != 2)
+                $aPontos = array('salario', 'complementar');
+        }
 
         foreach ($aPontos as $opcao) {
             switch ($opcao) {
@@ -564,10 +569,10 @@ class EventoS1200 extends EventoBase
         rh51_cgcvinculo as nrInsc2,
         rh51_basefo as vlrRemunOE,
         'LOTA1' as codLotacao,
-        case when rh02_ocorre = '2' then 2
-        when rh02_ocorre = '3' then 3
-        when rh02_ocorre = '4' then 4
-        else '1'
+        case when rh02_ocorre = '02' then 2
+        when rh02_ocorre = '03' then 3
+        when rh02_ocorre = '04' then 4
+        else 1
         end as grauExp,
         rh30_regime,
         rh51_cgcvinculo,

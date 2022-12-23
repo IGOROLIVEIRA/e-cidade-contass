@@ -417,6 +417,15 @@ function js_setValorBase() {
   $('e23_valorbase').value = nValorBase;
 }
 
+function ParseFloat(str,val) {
+      if(str % 1 != 0 && !isNaN(str % 1)){
+        str = str.toString();
+        str = str.slice(0, (str.indexOf(".")) + val + 1);
+        return Number(str);   
+      }
+      return Number(str); 
+    }
+
 function js_addRetencao() {
 
   /* Algumas regras:
@@ -517,7 +526,7 @@ function js_retornoaddRetencao(oAjax) {
          aLinha[2]  = js_formatar(e23_deducao,'f');
          aLinha[3]  = js_formatar(e23_valorbase,'f');
          aLinha[4]  = js_formatar(e23_aliquota,'f');
-         aLinha[5]  = js_formatar(e23_valorretencao,'f');
+         aLinha[5]  = ParseFloat(e23_valorretencao,2);
          aLinha[6]  = e21_retencaotipocalc;
          aLinha[7]  = e21_retencaotiporecgrupo;
          gridRetencoes.addRow(aLinha);
@@ -598,7 +607,7 @@ function js_atualizaCampos (iNumRow) {
     $('e21_sequencialdescr').value          = aSelecionados[0][0];//descricao da retencao
     $('e23_deducao').value                  = js_strToFloat(aSelecionados[0][2]);//valor da deducao
     $('e21_aliquota').value                 = js_strToFloat(aSelecionados[0][4]);//aliquota da retencao
-    $('e23_valorretencao').value            = js_strToFloat(aSelecionados[0][5]);//valor retido da retencao
+    $('e23_valorretencao').value            = aSelecionados[0][5];//valor retido da retencao
     $('lancarretencao').disabled            = true;
     $('alterarretencao').disabled           = false;
     $('apagarretencao').disabled            = false;
@@ -840,6 +849,8 @@ function js_retornoCalculo(oAjax) {
   if (oRetorno.status == 1) {
 
     $('e23_valorretencao').value = new Number(oRetorno.nValorRetencao).toFixed(2);
+    if(oRetorno.nAliquota > 0)
+       $('e23_valorretencao').value = ParseFloat(oRetorno.nValorRetencao,2);
     $('e21_aliquota').value      = oRetorno.nAliquota;
     $('e23_valorbase').value     = oRetorno.nValorBase;
 

@@ -764,6 +764,7 @@ HTML;
                         $totalvalor_irrf = 0;
                         $totaloutrasretencoes = 0;
                         $totalpatronal = 0;
+                        $totalvalorliquido = 0;
                         
                         $totale50_valorremuneracao = 0;
                         $totalbasepatronal = 0;

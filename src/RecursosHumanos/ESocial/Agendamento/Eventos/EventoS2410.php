@@ -62,7 +62,8 @@ class EventoS2410 extends EventoBase
                 $oDadosAPI->evtCdBenIn->dsc                 = $oDados->dsc;
 
             $oDadosAPI->evtCdBenIn->indDecJud           = $oDados->inddecjud;
-            if ($oDados->rh02_rhtipoapos != 7) {
+
+            if ($oDados->rh02_rhtipoapos != 7 && $oDados->rh01_admiss_ano >= 2022 && $oDados->rh01_admiss_mes > 11) {
                 if ($oDados->rh30_vinculo == 'P') {
                     $oDadosAPI->evtCdBenIn->infopenmorte->tpPenMorte  = $oDados->tppenmorte;
                 }

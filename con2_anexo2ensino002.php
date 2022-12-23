@@ -275,9 +275,11 @@ $aReceitasTransferencias = array(
     array('1.7.1.1.52.0.1 - Cota-Parte do Imposto Sobre a Propriedade Territorial Rural - Principal', 'text', '417115201%'),
     array('1.7.1.1.55.0.1 - Cota-Parte do Imposto Sobre Operações de Crédito, Câmbio e Seguro, ou Relativas a Títulos ou Valores Mobiliários - Comercialização do Ouro - Principal', 'text', '417115501%'),
     array('1.7.1.9.51.0.1 - Transferência Financeira do ICMS - Desoneração - L.C. Nº 87/96 - Principal', 'text', '417195101%'),
+    array('1.7.1.9.61.0.1 - Auxílio Financeiro - Outorga Crédito Tributário ICMS - Art. 5º, Inciso V, EC nº 123/2022 - Principal', 'text', '417196101%'),
     array('1.7.2.1.50.0.1 - Cota-parte do ICMS - Principal', 'text', '417215001%'),
     array('1.7.2.1.51.0.1 - Cota-parte do IPVA - Principal', 'text', '417215101%'),
     array('1.7.2.1.52.0.1 - Cota-Parte do IPI - Municípios - Principal', 'text', '417215201%'),
+    
 );
 }else{
 $aReceitasImpostos = array(

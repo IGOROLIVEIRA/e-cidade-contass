@@ -59,13 +59,28 @@ $clorcsubfuncao    = new cl_orcsubfuncao;
 $clorcprograma     = new cl_orcprograma;
 $clorcprojativ     = new cl_orcprojativ;
 $clorctiporec      = new cl_orctiporec;
+$clorcsuplementacaoparametro = new cl_orcsuplementacaoparametro;
 $db_opcao          = 1;
 $db_botao          = true;
 $anousu            = db_getsession("DB_anousu");
 
+
+function saberStatusDoOrcamento($clorcsuplementacaoparametro){
+	$result = $clorcsuplementacaoparametro->sql_record($clorcsuplementacaoparametro->sql_query(db_getsession("DB_anousu"),"*"));
+	db_fieldsmemory($result,0);
+}
+
 if ((isset ($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"]) == "Incluir") {
 	
 	$erro_trans = false;
+
+	saberStatusDoOrcamento($clorcsuplementacaoparametro);
+
+	if($o134_orcamentoaprovado == 't' && $o58_valor > 0){
+		$erro_trans = true;
+		$clorcdotacao->erro_msg = "ORÇAMENTO APROVADO. O PROCEDIMENTO NÃO PODE SER REALIZADO..";
+		$clorcdotacao->erro_status = 0;
+	}	
 
 	if ($o58_orgao == "") {
 		$erro_trans = true;
@@ -130,9 +145,11 @@ if ((isset ($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"]) == "Inc
 											   o58_instit               = $o58_instit
 											   and o58_concarpeculiar   = '{$o58_concarpeculiar}'"
 											   ));
+											  
 		if ($clorcdotacao->numrows > 0) {
+			db_fieldsmemory($result, 0);
 			$erro_trans = true;
-			$clorcdotacao->erro_msg = "Dotação já Cadastrada.";
+			$clorcdotacao->erro_msg = "Dotação já Cadastrada. Reduzido: $o58_coddot";
 			$clorcdotacao->erro_status = 0;
 		} else {			
 

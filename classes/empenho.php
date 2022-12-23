@@ -6316,8 +6316,27 @@ class empenho {
   }
 
   public function buscaUltimoDocumentoExecutadoDoc($iSequencialEmpenho,$iDocumento, $iData) {
-
+    
     try{
+
+      $dtValidar = implode("-", array_reverse(explode("/", $iData)));
+     /**
+     * Verificamos se a data é menor que a data de encerramento da contabilidade
+     */
+      $sSqlDataEncerramento  = "select c99_data ";
+      $sSqlDataEncerramento .= "  from condataconf";
+      $sSqlDataEncerramento .= " where c99_anousu = ".db_getsession("DB_anousu");
+      $sSqlDataEncerramento .= "   and c99_instit = ".db_getsession("DB_instit");
+      $rsDataEncerramento    = db_query($sSqlDataEncerramento);
+
+      if (pg_num_rows($rsDataEncerramento) > 0) {
+
+        $dtDataEncerramento = db_utils::fieldsMemory($rsDataEncerramento, 0)->c99_data;
+  
+        if (db_strtotime($dtValidar) <= db_strtotime($dtDataEncerramento)) {
+          throw new Exception("Anulação não pode ser realizada nesta data. O período contábil já foi encerrado para envio do SICOM.");
+        }
+      }
 
       $oRetorno          = new stdClass();
       $aWhere = array(
