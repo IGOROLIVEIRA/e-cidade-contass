@@ -45,7 +45,7 @@ class Window extends Controller {
     }
 
     if (!$session->has('DB_instit')) {
-      throw new \Exception('InstituiÃ§Ã£o nÃ£o definida.');
+      throw new \Exception('Instituição não definida.');
     }
 
     $model = new ModelWindow();
@@ -56,7 +56,7 @@ class Window extends Controller {
     );
 
     if (empty($departamentos)) {
-      throw new ResponseException("UsuÃ¡rio sem departamento para acesso cadastrado!");
+      throw new ResponseException("Usuário sem departamento para acesso cadastrado!");
     }
 
     $codigoDepartamento = $departamentos[0]['coddepto'];
@@ -108,7 +108,7 @@ class Window extends Controller {
 
     // 404?
     if (empty($idMenu)) {
-      throw new ResponseException('PermissÃ£o para rotina nÃ£o encontrada.');
+      throw new ResponseException('Permissão para rotina não encontrada.');
     }
 
     $permissao = $menuModel->getPermissaoMenu(
@@ -116,7 +116,7 @@ class Window extends Controller {
     );
 
     if (!$permissao) {
-      throw new ResponseException('Sem permissÃ£o para acessar estÃ¡ rotina.');
+      throw new ResponseException('Sem permissão para acessar está rotina.');
     }
 
     $this->render();
@@ -153,9 +153,10 @@ class Window extends Controller {
 
         $data = implode('-', array_reverse(explode('/', $post->get('data'))));
 
-        if (strtotime($data) > time()) {
-          throw new \Exception('Data do Sistema nÃ£o pode ser maior que data do servidor.');
-        }
+        // Remover proibição de aumentar a data
+        // if (strtotime($data) > time()) {
+            // throw new \Exception('Data do Sistema não pode ser maior que data do servidor.');
+        // }
 
         $this->request->session()->set('DB_datausu', strtotime($data));
         $model->salvarDataUsuario($this->request->session()->get('DB_id_usuario'), $data);
@@ -236,7 +237,7 @@ class Window extends Controller {
     $lConfere = \Encriptacao::hash($this->request->post()->get('senha')) === $oUsuarioSistema->getSenha();
 
     if (!$lConfere) {
-      throw new ResponseException("Senha invÃ¡lida.");
+      throw new ResponseException("Senha inválida.");
     }
 
     $this->request->session()->set('blocked', false);
