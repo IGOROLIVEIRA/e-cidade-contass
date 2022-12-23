@@ -58,9 +58,9 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
   public function getCodunidadesubrespAdesao($sequencial, $departadesao)
   {
     if ($departadesao == false) {
-      $consulta = "INNER JOIN pcproc ON si06_processocompra = pc80_codproc";
+      $consulta = "pc80_depto";
     } else {
-      $consulta = "INNER JOIN pcproc ON si06_processocompra = si06_departamento";
+      $consulta = "si06_departamento";
     }
     $sSql = " SELECT
             (SELECT CASE
@@ -79,14 +79,14 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
             JOIN infocomplementares ON si08_anousu = db01_anousu AND si08_instit = " . db_getsession('DB_instit') . "
             JOIN orcunidade ON db01_orgao=o41_orgao AND db01_unidade=o41_unidade AND db01_anousu = o41_anousu AND o41_instit = " . db_getsession('DB_instit') . "
             JOIN orcorgao ON o40_orgao = o41_orgao AND o40_anousu = o41_anousu AND o40_instit = " . db_getsession('DB_instit') . "
-            WHERE db01_coddepto=pc80_depto AND db01_anousu = " . db_getsession('DB_anousu') . "
+            WHERE db01_coddepto=" . $consulta . " AND db01_anousu = " . db_getsession('DB_anousu') . "
             LIMIT 1) AS codunidadesubresp,
             si06_codunidadesubant
             FROM adesaoregprecos
             JOIN acordo on ac16_adesaoregpreco = si06_sequencial
             JOIN cgm orgaogerenciador ON si06_orgaogerenciador = orgaogerenciador.z01_numcgm
             JOIN cgm responsavel ON si06_cgm = responsavel.z01_numcgm
-                  " . $consulta . "
+            INNER JOIN pcproc ON si06_processocompra = pc80_codproc
                   LEFT JOIN infocomplementaresinstit ON adesaoregprecos.si06_instit = infocomplementaresinstit.si09_instit
             WHERE si06_instit= " . db_getsession('DB_instit') . "
                 AND si06_sequencial = " . $sequencial . "";
@@ -661,7 +661,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
 
       if ($oEmpenho10->si06_sequencial != '') {
         $oDadosEmpenho10->si106_despdeclicitacao = $oEmpenho10->despdeclicitacao; // campo 29
-        $oDadosEmpenho10->si106_codunidadesubresplicit = $sCodSubAdesao->codunidadesubadesao; // campo 30
+        $oDadosEmpenho10->si106_codunidadesubresplicit = $sCodSubAdesao; // campo 30
         $oDadosEmpenho10->si106_nroprocessolicitatorio = $oEmpenho10->processoadesao; // campo 31
         $oDadosEmpenho10->si106_exercicioprocessolicitatorio = $oEmpenho10->anoadesao; // campo 32
 
