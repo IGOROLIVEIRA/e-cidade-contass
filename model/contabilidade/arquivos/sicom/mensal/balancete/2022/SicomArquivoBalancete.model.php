@@ -2092,6 +2092,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                                 LEFT JOIN vinculopcasptce ON substr(c60_estrut,1,9) = c209_pcaspestrut
                                             WHERE c61_anousu =".db_getsession('DB_anousu')."
                                                 AND (c61_reduz = si96_codctb OR c61_codtce = si96_codctb)
+                                                AND c61_instit  = " . db_getsession("DB_instit") . "
                                             ORDER BY c60_estrut
                                             LIMIT 1) AS contacontabil,
                                             (SELECT c60_identificadorfinanceiro
@@ -2099,6 +2100,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                                 INNER JOIN conplanoreduz ON c61_codcon = c60_codcon AND c61_anousu = c60_anousu
                                                 WHERE c61_anousu =".db_getsession('DB_anousu')."
                                                     AND (c61_reduz = si96_codctb OR c61_codtce = si96_codctb)
+                                                    AND c61_instit = " . db_getsession("DB_instit") . "
                                                 ORDER BY c60_estrut
                                                 LIMIT 1) AS atributosf,
                                             si96_codctb AS codctb,
