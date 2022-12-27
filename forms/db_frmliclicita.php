@@ -224,9 +224,13 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                         db_input('l20_edital', 10, $Il20_edital, true, 'text', $bloqueianumeracoes, "");
                                         ?>
 
-                                        <strong>Numeração:</strong>
+                                        <strong id="txtNumeracao">Numeração:</strong>
                                         <?
                                         db_input('l20_numero', 10, $Il20_numero, true, 'text',  $bloqueianumeracoes, "");
+                                        if ($db_opcao == 1) {
+                                            echo "<script> document.getElementById('l20_numero').style.display = 'none'; </script>";
+                                            echo "<script> document.getElementById('txtNumeracao').style.display = 'none'; </script>";
+                                        }
                                         ?>
                                         <?php if ($l20_anousu >= 2020 && $db_opcao == 2 || $l20_anousu == null && $db_opcao == 1) : ?>
                                             <span id="linha_nroedital">
@@ -1223,6 +1227,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 </form>
 <script>
     var codigotribunal = 0;
+    var numeracaopreenchida = false;
     document.form1.l20_prazoentrega.style.backgroundColor = '#FFFFFF';
     document.form1.l20_condicoespag.style.backgroundColor = '#FFFFFF';
     document.form1.l20_local.style.backgroundColor = '#E6E4F1';
@@ -1245,7 +1250,11 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
     // alterando a função padrao para verificar  as opçoes de convite e de INEXIGIBILIDADE
     function js_ProcCod_l20_codtipocom(proc, res) {
 
+        document.getElementById('l20_numero').style.display = '';
+        document.getElementById('txtNumeracao').style.display = '';
+
         js_verificaDatasProposta();
+
 
         var sel1 = document.forms[0].elements[proc];
         var sel2 = document.forms[0].elements[res];
@@ -1271,6 +1280,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
     function js_retornolicitacao(oAjax) {
 
+
         var oRetornoNatu = document.getElementById("l20_naturezaobjeto").value;
         var oRetornoamparo = document.getElementById("l212_codigo").value;
         if (oRetornoNatu == 1) {
@@ -1281,8 +1291,8 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
         var oRetorno = eval("(" + oAjax.responseText + ")");
         var l12_numeracaomanual = <? echo '"' . $l12_numeracaomanual . '"';      ?>;
 
-        if (oRetorno.numeracao != "" && l12_numeracaomanual == 't') document.getElementById('l20_numero').value = parseInt(oRetorno.numeracao) + 1;
-
+        if (oRetorno.numeracao != "" && l12_numeracaomanual == 't' && numeracaopreenchida == false) document.getElementById('l20_numero').value = parseInt(oRetorno.numeracao) + 1;
+        numeracaopreenchida = false;
 
         var campo = document.getElementById("l20_codtipocomdescr").options[document.getElementById("l20_codtipocomdescr").selectedIndex].text;
         var vUsua = document.getElementById("vUsuario").value;
@@ -2052,9 +2062,6 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
         var l12_pncp = <? echo '"' . $l12_pncp . '"';      ?>;
         var db_opcao = <? echo '"' . $db_opcao . '"';      ?>;
-        console.log(db_opcao);
-
-
 
         if (document.getElementById('l20_dataaberproposta').style.display == "" && document.getElementById('l20_dataaberproposta').value == "" && db_opcao != 3) {
             alert("Campo Data de Abertura da Proposta não Informado");
@@ -2269,6 +2276,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
             document.querySelector("#l20_tipliticacao").value = oRetornoTipo;
         }
+        if (document.getElementById('l20_codtipocomdescr').value != 99) numeracaopreenchida = true;
         js_ProcCod_l20_codtipocom('l20_codtipocomdescr', 'l20_codtipocom');
 
     }
