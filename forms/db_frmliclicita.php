@@ -504,7 +504,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                     </td>
                                 </tr>
 
-                                <tr id="disputa" style="display:none;">
+                                <tr id="disputa">
                                     <td nowrap title="Modo de disputa">
                                         <b>Modo de disputa: </b>
                                     </td>
@@ -1228,14 +1228,10 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
     js_verificaDatasProposta();
 
-
     // alterando a função padrao para verificar  as opçoes de convite e de INEXIGIBILIDADE
     function js_ProcCod_l20_codtipocom(proc, res) {
 
         js_verificaDatasProposta();
-
-
-
 
         var sel1 = document.forms[0].elements[proc];
         var sel2 = document.forms[0].elements[res];
@@ -1291,7 +1287,6 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
         document.getElementById("l212_codigo").style.width = "307px";
         document.getElementById("l20_tipojulg").style.width = "85px";
         document.getElementById("l20_tipoprocesso").style.width = "400px";
-        //document.getElementById("l20_codtipocom").style.width="85px";
         document.form1.modalidade_tribunal.value = oRetorno.tribunal;
 
         var l12_pncp = <? echo '"' . $l12_pncp . '"';      ?>;
@@ -1335,18 +1330,13 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             document.form1.l20_numeroconvidado.style.backgroundColor = '#FFFFFF';
             document.getElementById("l20_numeroconvidado").readOnly = false;
             document.getElementById("convite1").style.display = "table-row";
-
             document.getElementById("numeroconvidado").style.display = "table-cell";
             document.getElementById("l20_tipliticacao").disabled = false;
             document.getElementById("l20_naturezaobjeto").disabled = false;
         } else {
             var campo = document.getElementById("l20_codtipocomdescr").options[document.getElementById("l20_codtipocomdescr").selectedIndex].text;
-
-
             document.getElementById("convite1").style.display = "none";
-
             if (campo == "CONCURSO") {
-
                 document.getElementById("tipolicitacao").style.display = 'none';
                 document.getElementById("licitacao1").style.display = "none";
                 document.getElementById("natureOB").style.display = "none";
@@ -1360,23 +1350,18 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             document.form1.l20_numeroconvidado.style.backgroundColor = '#E6E4F1';
             $("l20_numeroconvidado").value = "";
             document.getElementById("l20_numeroconvidado").readOnly = true;
-
         }
 
         //validação para responsável na modalidade Leilão
         if (oRetorno.tribunal == 54) {
-
             document.getElementById("respAvaliaBens").style.display = "table-row";
         } else {
-
             document.getElementById("respAvaliaBens").style.display = "none";
         }
 
         if (oRetorno.tribunal == 100 || oRetorno.tribunal == 101 || oRetorno.tribunal == 102 || oRetorno.tribunal == 103) {
-            //parent.document.getElementById('liclicpublicacoes').style.display = 'none';
 
             let listaNatureza = document.getElementById('l20_naturezaobjeto').options;
-
             listaNatureza.remove(7);
             listaNatureza.remove(6);
             listaNatureza.remove(5);
@@ -1388,112 +1373,42 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             listaNatureza.add(new Option('2- Compras e Outros Serviços', 2));
             listaNatureza.add(new Option('3- Locação de Imóveis', 3));
             listaNatureza.add(new Option('7- Compras Para Obras e/ou Serviços de Engenharia', 7));
-
             document.querySelector("#l20_naturezaobjeto").value = oRetornoNatu;
-
-
-
             document.form1.l20_justificativa.style.backgroundColor = '#FFFFFF ';
-
             document.form1.l20_razao.style.backgroundColor = '#FFFFFF ';
-
             document.getElementById("l20_justificativa").disabled = false;
-
             document.getElementById("l20_razao").disabled = false;
-
             document.getElementById("l20_tipoprocesso").disabled = false;
-
             document.getElementById("dispensa").style.display = 'block';
-
             document.getElementById("recdocumentacao").style.display = 'none';
-
-
-
             /*Demandas sicom 2016*/
             document.form1.l20_tipliticacao.style.display = 'none';
-
             document.form1.l20_tipnaturezaproced.style.display = 'none';
-
             document.form1.l20_criterioadjudicacao.style.display = 'none';
-
             document.form1.l20_numeroconvidado.style.display = 'none';
-
             document.form1.l20_dataaber.style.display = 'none';
-
             document.form1.dtjs_l20_dataaber.style.display = 'none';
-
-            //document.form1.l20_dtpublic.style.display = 'none';
-            //document.form1.dtjs_l20_dtpublic.style.display = 'none';
             document.form1.l20_recdocumentacao.style.display = 'none';
-
             document.form1.dtjs_l20_recdocumentacao.style.display = 'none';
-
-            //document.form1.l20_datapublicacao1.style.display = 'none';
-            //document.form1.dtjs_l20_datapublicacao1.style.display = 'none';
-            //document.form1.l20_nomeveiculo1.style.display = 'none';
-            //document.form1.l20_datapublicacao2.style.display = 'none';
-            //document.form1.dtjs_l20_datapublicacao2.style.display = 'none';
-            //document.form1.l20_nomeveiculo2.style.display = 'none';
             document.form1.l20_usaregistropreco.style.display = 'none';
-
             document.form1.l20_equipepregao.style.display = 'none';
-
             document.form1.l20_local.style.display = 'none';
-
             document.form1.l20_aceitabilidade.style.display = 'none';
-
-            //document.form1.recdocumentacao.style.display = 'none';
-
-
-
             document.getElementById("tipolicitacao").style.display = 'none';
-
             document.getElementById("tipnaturezaproced").style.display = 'none';
-
             document.getElementById("descontotab").style.display = 'none';
-
             document.getElementById("numeroconvidado").style.display = 'none';
-
             document.getElementById("dataaber").style.display = 'none';
-
-            //document.getElementById("dtpublic").style.display = 'none';
             document.getElementById("recdocumentacao").style.display = 'none';
-
-            //document.getElementById("datapublicacao1").style.display = 'none';
-            //document.getElementById("nomeveiculo1").style.display = 'none';
-            //document.getElementById("datapublicacao2").style.display = 'none';
-            //document.getElementById("nomeveiculo2").style.display = 'none';
             document.getElementById("usaregistropreco").style.display = 'none';
-
             document.getElementById("equipepregao").style.display = 'none';
-
             document.getElementById("local").style.display = 'none';
-
             document.getElementById("aceitabilidade").style.display = 'none';
-
-            //document.getElementById("datenpc").style.display = 'none';
-            //document.getElementById("linkpnpc").style.display = 'none';
-            //document.getElementById("diario").style.display = 'none';
-            //document.getElementById("dtpubedital").style.display = 'none';
-            //document.getElementById("linkedital").style.display = 'none';
-
             document.getElementById("respAutoProcesso").style.display = "table-row";
-
             document.getElementById("respAvaliaBens").style.display = "none";
-
             document.getElementById("respCondProcesso").style.display = "none";
-
             document.getElementById("respAberProcesso").style.display = "none";
-
             document.getElementById("respEmissaoEdi").style.display = "none";
-
-            //document.getElementById("respPublic").style.display = "none";
-            document.getElementById("disputa").style.display = "none";
-
-
-            //OC17312 toda vez que fizer uma alteração na modalidade a opção de lei de licitação volta para selecionar para que o usuario coloque novamente a lei
-
-
 
         } else {
 
@@ -1515,28 +1430,16 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             listaNatureza.add(new Option('7- Compras Para Obras e/ou Serviços de Engenharia', 7));
 
             document.querySelector("#l20_naturezaobjeto").value = oRetornoNatu;
-
-            //parent.document.getElementById('liclicpublicacoes').style.display = 'block';
             document.getElementById("l20_justificativa").disabled = true;
             document.getElementById("l20_razao").disabled = true;
             document.getElementById("l20_tipoprocesso").disabled = true;
             document.getElementById("dispensa").style.display = 'none';
-            //document.getElementById("datenpc").style.display = '';
-            //document.getElementById("linkpnpc").style.display = '';
-            //document.getElementById("diario").style.display = '';
-            //document.getElementById("dtpubedital").style.display = '';
-            //document.getElementById("linkedital").style.display = '';
-
             var codigo_lei = document.form1.l20_leidalicitacao.value;
             if (codigo_lei == 1) {
                 document.getElementById("disputa").style.display = '';
             }
 
-
-
-
             //OC17312toda vez que fizer uma alteração na modalidade a opção de lei de licitação volta para selecionar para que o usuario coloque novamente a lei
-
 
             /*Demandas sicom 2016*/
             document.form1.l20_tipliticacao.style.display = 'inline';
@@ -1545,32 +1448,17 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             document.form1.l20_numeroconvidado.style.display = 'inline';
             document.form1.l20_dataaber.style.display = 'inline';
             document.form1.dtjs_l20_dataaber.style.display = 'inline';
-            //document.form1.l20_dtpublic.style.display = 'inline';
-            //document.form1.dtjs_l20_dtpublic.style.display = 'inline';
             document.form1.l20_recdocumentacao.style.display = 'inline';
             document.form1.dtjs_l20_recdocumentacao.style.display = 'inline';
-            //document.form1.l20_datapublicacao1.style.display = 'inline';
-            //document.form1.dtjs_l20_datapublicacao1.style.display = 'inline';
-            //document.form1.l20_nomeveiculo1.style.display = 'inline';
-            //document.form1.l20_datapublicacao2.style.display = 'inline';
-            //document.form1.dtjs_l20_datapublicacao2.style.display = 'inline';
-            //document.form1.l20_nomeveiculo2.style.display = 'inline';
             document.form1.l20_usaregistropreco.style.display = 'inline';
             document.form1.l20_equipepregao.style.display = 'inline';
             document.form1.l20_local.style.display = 'inline';
             document.form1.l20_aceitabilidade.style.display = 'inline';
-
-            //document.getElementById("tipolicitacao").style.display='inline';
             document.getElementById("tipnaturezaproced").style.display = 'inline';
             document.getElementById("descontotab").style.display = 'inline';
             document.getElementById("numeroconvidado").style.display = 'inline';
             document.getElementById("dataaber").style.display = 'inline';
-            //document.getElementById("dtpublic").style.display = 'inline';
             document.getElementById("recdocumentacao").style.display = 'inline';
-            //document.getElementById("datapublicacao1").style.display = 'inline';
-            //document.getElementById("nomeveiculo1").style.display = 'inline';
-            //document.getElementById("datapublicacao2").style.display = 'inline';
-            //document.getElementById("nomeveiculo2").style.display = 'inline';
             document.getElementById("usaregistropreco").style.display = 'inline';
             document.getElementById("equipepregao").style.display = 'inline';
             document.getElementById("local").style.display = 'inline';
@@ -1580,8 +1468,6 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             document.getElementById("respCondProcesso").style.display = "table-row";
             document.getElementById("respAberProcesso").style.display = "table-row";
             document.getElementById("respEmissaoEdi").style.display = "table-row";
-            //document.getElementById("respPublic").style.display = "table-row";
-
         }
 
         let aModalidades = ['48', '49', '50', '52', '53', '54'];
@@ -1610,34 +1496,19 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
         }
     }
 
-
-    /*adequando os campos para evitar  o preenchimento pelo usuario caso nao seja um tipo de  INEXIGIBILIDADE*/
-    // document.getElementById("l20_veicdivulgacao").disabled=true;
-    // document.getElementById("l20_dtpubratificacao").disabled=true;
     document.getElementById("l20_justificativa").disabled = true;
     document.getElementById("l20_razao").disabled = true;
     document.getElementById("l20_tipoprocesso").disabled = true;
-    //document.getElementById("l20_dtpubratificacao").value='';
-
     /*para habiliatar o campo caso seja inex*/
 
     var campo = document.getElementById("l20_codtipocomdescr").options[document.getElementById("l20_codtipocomdescr").selectedIndex].text;
     campo = campo.replace(" ", "");
     if ([100, 101, 102, 103].includes(oRetorno.tribunal)) {
-        // if(oRetorno.tribunal==100 || oRetorno.tribunal==101 || oRetorno.tribunal==102 || oRetorno.tribunal==103){
-        //     document.getElementById("l20_veicdivulgacao").disabled=false;
-        //     document.getElementById("l20_dtpubratificacao").disabled=false;
         document.getElementById("l20_justificativa").disabled = false;
         document.getElementById("l20_razao").disabled = false;
         document.getElementById("l20_tipoprocesso").disabled = false;
-        //     document.getElementById("l20_dtpubratificacao").value='';
-        //
-        //     document.form1.l20_justificativa.style.backgroundColor='#FFFFFF ';
-        //     document.form1.l20_dtpubratificacao.style.backgroundColor='#FFFFFF ';
-        //     document.form1.l20_veicdivulgacao.style.backgroundColor='#FFFFFF ';
         document.form1.l20_justificativa.style.backgroundColor = '#FFFFFF ';
         document.form1.l20_razao.style.backgroundColor = '#FFFFFF ';
-
     }
 
     function js_busca() {
