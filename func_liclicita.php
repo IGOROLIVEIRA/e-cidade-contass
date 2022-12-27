@@ -228,7 +228,6 @@ $sWhereContratos = " and 1 = 1 ";
 
                 if ($itemobra == "true") {
                     $dbwhere .= " l20_naturezaobjeto in (1,7) and l20_licsituacao in (0,1,10,13) and";
-
                 }
 
                 if ($credenciamento == 'true') {

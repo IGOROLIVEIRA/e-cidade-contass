@@ -241,7 +241,7 @@ $oRotulo->label("l20_objeto");
           for (var iIndice = 0; iIndice < iDocumentos; iIndice++) {
 
             var oDocumento = oRetorno.aDocumentosVinculados[iIndice];
-            var sDescricaoDocumento = oDocumento.sDescricaoDocumento;
+            var sDescricaoDocumento = oDocumento.sDescricaoDocumento.urlDecode();
 
 
             var sHTMLBotoes = '<input type="button" value="Alterar" onClick="js_alterarDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\');" />  ';
